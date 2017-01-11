@@ -8,15 +8,17 @@
 #include <memory>
 #include <string>
 
-#include "base/optional.h"
 #include "base/scoped_observer.h"
 #include "base/supports_user_data.h"
 #include "base/threading/non_thread_safe.h"
 #include "components/autofill/core/browser/webdata/autofill_change.h"
 #include "components/autofill/core/browser/webdata/autofill_webdata_service_observer.h"
 #include "components/sync/model/metadata_change_list.h"
-#include "components/sync/model/model_error.h"
 #include "components/sync/model/model_type_sync_bridge.h"
+
+namespace syncer {
+class SyncError;
+}
 
 namespace autofill {
 
@@ -44,10 +46,10 @@ class AutocompleteSyncBridge : public base::SupportsUserData::Data,
   // syncer::ModelTypeService implementation.
   std::unique_ptr<syncer::MetadataChangeList> CreateMetadataChangeList()
       override;
-  base::Optional<syncer::ModelError> MergeSyncData(
+  syncer::SyncError MergeSyncData(
       std::unique_ptr<syncer::MetadataChangeList> metadata_change_list,
       syncer::EntityDataMap entity_data_map) override;
-  base::Optional<syncer::ModelError> ApplySyncChanges(
+  syncer::SyncError ApplySyncChanges(
       std::unique_ptr<syncer::MetadataChangeList> metadata_change_list,
       syncer::EntityChangeList entity_changes) override;
   void GetData(StorageKeyList storage_keys, DataCallback callback) override;

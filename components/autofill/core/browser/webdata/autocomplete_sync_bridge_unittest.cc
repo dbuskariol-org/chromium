@@ -28,6 +28,7 @@ using sync_pb::AutofillSpecifics;
 using sync_pb::EntitySpecifics;
 using syncer::EntityDataPtr;
 using syncer::EntityData;
+using syncer::SyncError;
 
 namespace autofill {
 
@@ -41,7 +42,9 @@ void VerifyEqual(const AutofillSpecifics& s1, const AutofillSpecifics& s2) {
 }
 
 void VerifyDataBatch(std::map<std::string, AutofillSpecifics> expected,
+                     SyncError error,
                      std::unique_ptr<syncer::DataBatch> batch) {
+  EXPECT_FALSE(error.IsSet());
   while (batch->HasNext()) {
     const syncer::KeyAndData& pair = batch->Next();
     auto iter = expected.find(pair.first);

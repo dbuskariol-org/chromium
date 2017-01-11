@@ -8,9 +8,7 @@
 
 #include "base/bind.h"
 #include "base/message_loop/message_loop.h"
-#include "base/optional.h"
 #include "base/run_loop.h"
-#include "components/sync/model/model_error.h"
 #include "components/sync/protocol/entity_metadata.pb.h"
 #include "components/sync/protocol/model_type_state.pb.h"
 #include "testing/gmock/include/gmock/gmock.h"
@@ -145,11 +143,11 @@ class ModelTypeStoreImplTest : public testing::Test {
         base::Bind(&CaptureResultAndRecords, &result, data_records));
     PumpLoop();
     ASSERT_EQ(ModelTypeStore::Result::SUCCESS, result);
-    base::Optional<ModelError> error;
-    store->ReadAllMetadata(
-        base::Bind(&CaptureErrorAndMetadataBatch, &error, metadata_batch));
+    SyncError sync_error;
+    store->ReadAllMetadata(base::Bind(&CaptureSyncErrorAndMetadataBatch,
+                                      &sync_error, metadata_batch));
     PumpLoop();
-    ASSERT_FALSE(error);
+    ASSERT_FALSE(sync_error.IsSet());
   }
 
   // Following functions capture parameters passed to callbacks into variables
@@ -169,12 +167,12 @@ class ModelTypeStoreImplTest : public testing::Test {
     *dst_records = std::move(records);
   }
 
-  static void CaptureErrorAndMetadataBatch(
-      base::Optional<ModelError>* dst_error,
+  static void CaptureSyncErrorAndMetadataBatch(
+      SyncError* dst_sync_error,
       std::unique_ptr<MetadataBatch>* dst_batch,
-      base::Optional<ModelError> error,
+      SyncError sync_error,
       std::unique_ptr<MetadataBatch> batch) {
-    *dst_error = error;
+    *dst_sync_error = sync_error;
     *dst_batch = std::move(batch);
   }
 
@@ -269,12 +267,12 @@ TEST_F(ModelTypeStoreImplTest, MissingModelTypeState) {
   PumpLoop();
   ASSERT_EQ(ModelTypeStore::Result::SUCCESS, result);
 
-  base::Optional<ModelError> error;
+  SyncError error;
   std::unique_ptr<MetadataBatch> metadata_batch;
   store()->ReadAllMetadata(
-      base::Bind(&CaptureErrorAndMetadataBatch, &error, &metadata_batch));
+      base::Bind(&CaptureSyncErrorAndMetadataBatch, &error, &metadata_batch));
   PumpLoop();
-  ASSERT_FALSE(error);
+  ASSERT_FALSE(error.IsSet());
   VerifyMetadata(std::move(metadata_batch), sync_pb::ModelTypeState(),
                  {{"id1", CreateEntityMetadata("metadata1")}});
 }
@@ -287,12 +285,12 @@ TEST_F(ModelTypeStoreImplTest, CorruptModelTypeState) {
   // Write a ModelTypeState that can't be parsed.
   WriteRawModelTypeState(store(), "unparseable");
 
-  base::Optional<ModelError> error;
+  SyncError error;
   std::unique_ptr<MetadataBatch> metadata_batch;
   store()->ReadAllMetadata(
-      base::Bind(&CaptureErrorAndMetadataBatch, &error, &metadata_batch));
+      base::Bind(&CaptureSyncErrorAndMetadataBatch, &error, &metadata_batch));
   PumpLoop();
-  ASSERT_TRUE(error);
+  ASSERT_TRUE(error.IsSet());
   VerifyMetadata(std::move(metadata_batch), sync_pb::ModelTypeState(),
                  std::map<std::string, sync_pb::EntityMetadata>());
 }
@@ -305,12 +303,12 @@ TEST_F(ModelTypeStoreImplTest, CorruptEntityMetadata) {
   // Write an EntityMetadata that can't be parsed.
   WriteRawMetadata(store(), "id", "unparseable");
 
-  base::Optional<ModelError> error;
+  SyncError error;
   std::unique_ptr<MetadataBatch> metadata_batch;
   store()->ReadAllMetadata(
-      base::Bind(&CaptureErrorAndMetadataBatch, &error, &metadata_batch));
+      base::Bind(&CaptureSyncErrorAndMetadataBatch, &error, &metadata_batch));
   PumpLoop();
-  ASSERT_TRUE(error);
+  ASSERT_TRUE(error.IsSet());
   VerifyMetadata(std::move(metadata_batch), sync_pb::ModelTypeState(),
                  std::map<std::string, sync_pb::EntityMetadata>());
 }

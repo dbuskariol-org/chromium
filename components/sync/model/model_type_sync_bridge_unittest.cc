@@ -8,6 +8,7 @@
 
 #include "base/bind.h"
 #include "base/memory/ptr_util.h"
+#include "components/sync/model/data_type_error_handler_mock.h"
 #include "components/sync/model/fake_model_type_change_processor.h"
 #include "components/sync/model/metadata_batch.h"
 #include "components/sync/model/stub_model_type_sync_bridge.h"
@@ -26,10 +27,15 @@ class MockModelTypeChangeProcessor : public FakeModelTypeChangeProcessor {
 
   void DisableSync() override { disabled_callback_.Run(); }
 
-  void OnMetadataLoaded(std::unique_ptr<MetadataBatch> batch) override {
+  void OnMetadataLoaded(SyncError error,
+                        std::unique_ptr<MetadataBatch> batch) override {
+    on_metadata_loaded_error_ = error;
     on_metadata_loaded_batch_ = std::move(batch);
   }
 
+  const SyncError& on_metadata_loaded_error() const {
+    return on_metadata_loaded_error_;
+  }
   MetadataBatch* on_metadata_loaded_batch() {
     return on_metadata_loaded_batch_.get();
   }
@@ -42,6 +48,7 @@ class MockModelTypeChangeProcessor : public FakeModelTypeChangeProcessor {
   // allows this information to reach somewhere safe instead.
   base::Closure disabled_callback_;
 
+  SyncError on_metadata_loaded_error_;
   std::unique_ptr<MetadataBatch> on_metadata_loaded_batch_;
 };
 
@@ -83,7 +90,7 @@ class ModelTypeSyncBridgeTest : public ::testing::Test {
 
   void OnSyncStarting() {
     bridge_.OnSyncStarting(
-        ModelErrorHandler(),
+        base::MakeUnique<DataTypeErrorHandlerMock>(),
         base::Bind(&ModelTypeSyncBridgeTest::OnProcessorStarted,
                    base::Unretained(this)));
   }
@@ -93,6 +100,7 @@ class ModelTypeSyncBridgeTest : public ::testing::Test {
 
  private:
   void OnProcessorStarted(
+      SyncError error,
       std::unique_ptr<ActivationContext> activation_context) {
     start_callback_called_ = true;
   }
@@ -120,6 +128,8 @@ TEST_F(ModelTypeSyncBridgeTest, DisableSync) {
   // processor about this.
   EXPECT_TRUE(bridge()->processor_disable_sync_called());
 
+  EXPECT_FALSE(
+      bridge()->change_processor()->on_metadata_loaded_error().IsSet());
   MetadataBatch* batch =
       bridge()->change_processor()->on_metadata_loaded_batch();
   EXPECT_NE(nullptr, batch);

@@ -71,6 +71,7 @@ void ModelTypeDebugInfo::MergeDataWithMetadata(
     SharedModelTypeProcessor* processor,
     const base::Callback<void(const ModelType,
                               std::unique_ptr<base::ListValue>)>& callback,
+    SyncError error,
     std::unique_ptr<DataBatch> batch) {
   std::unique_ptr<base::ListValue> all_nodes =
       base::MakeUnique<base::ListValue>();

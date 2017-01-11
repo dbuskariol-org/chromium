@@ -19,6 +19,7 @@
 #include "components/sync/model/entity_data.h"
 #include "components/sync/model/model_type_change_processor.h"
 #include "components/sync/model/mutable_data_batch.h"
+#include "components/sync/model/sync_error.h"
 #include "net/base/escape.h"
 
 namespace autofill {
@@ -104,63 +105,52 @@ AutocompleteSyncBridge::CreateMetadataChangeList() {
                                                       syncer::AUTOFILL);
 }
 
-base::Optional<syncer::ModelError> AutocompleteSyncBridge::MergeSyncData(
+syncer::SyncError AutocompleteSyncBridge::MergeSyncData(
     std::unique_ptr<syncer::MetadataChangeList> metadata_change_list,
     syncer::EntityDataMap entity_data_map) {
   DCHECK(thread_checker_.CalledOnValidThread());
   NOTIMPLEMENTED();
-  return {};
+  return syncer::SyncError();
 }
 
-base::Optional<syncer::ModelError> AutocompleteSyncBridge::ApplySyncChanges(
+syncer::SyncError AutocompleteSyncBridge::ApplySyncChanges(
     std::unique_ptr<syncer::MetadataChangeList> metadata_change_list,
     syncer::EntityChangeList entity_changes) {
   DCHECK(thread_checker_.CalledOnValidThread());
   NOTIMPLEMENTED();
-  return {};
+  return syncer::SyncError();
 }
 
 void AutocompleteSyncBridge::AutocompleteSyncBridge::GetData(
     StorageKeyList storage_keys,
     DataCallback callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
-  std::vector<AutofillEntry> entries;
-  if (!GetAutofillTable()->GetAllAutofillEntries(&entries)) {
-    change_processor()->ReportError(FROM_HERE,
-                                    "Failed to load entries from table.");
-    return;
-  }
-
   std::unordered_set<std::string> keys_set;
   for (const auto& key : storage_keys) {
     keys_set.insert(key);
   }
 
   auto batch = base::MakeUnique<syncer::MutableDataBatch>();
+  std::vector<AutofillEntry> entries;
+  GetAutofillTable()->GetAllAutofillEntries(&entries);
   for (const AutofillEntry& entry : entries) {
     std::string key = GetStorageKeyFromModel(entry.key());
     if (keys_set.find(key) != keys_set.end()) {
       batch->Put(key, CreateEntityData(entry));
     }
   }
-  callback.Run(std::move(batch));
+  callback.Run(syncer::SyncError(), std::move(batch));
 }
 
 void AutocompleteSyncBridge::GetAllData(DataCallback callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
-
-  std::vector<AutofillEntry> entries;
-  if (!GetAutofillTable()->GetAllAutofillEntries(&entries)) {
-    change_processor()->ReportError(FROM_HERE,
-                                    "Failed to load entries from table.");
-    return;
-  }
-
   auto batch = base::MakeUnique<syncer::MutableDataBatch>();
+  std::vector<AutofillEntry> entries;
+  GetAutofillTable()->GetAllAutofillEntries(&entries);
   for (const AutofillEntry& entry : entries) {
     batch->Put(GetStorageKeyFromModel(entry.key()), CreateEntityData(entry));
   }
-  callback.Run(std::move(batch));
+  callback.Run(syncer::SyncError(), std::move(batch));
 }
 
 std::string AutocompleteSyncBridge::GetClientTag(
