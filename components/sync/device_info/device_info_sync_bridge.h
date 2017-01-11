@@ -17,7 +17,6 @@
 #include "base/timer/timer.h"
 #include "components/sync/device_info/device_info_tracker.h"
 #include "components/sync/device_info/local_device_info_provider.h"
-#include "components/sync/model/model_error.h"
 #include "components/sync/model/model_type_store.h"
 #include "components/sync/model/model_type_sync_bridge.h"
 
@@ -26,6 +25,8 @@ class DeviceInfoSpecifics;
 }  // namespace sync_pb
 
 namespace syncer {
+
+class SyncError;
 
 // Sync bridge implementation for DEVICE_INFO model type. Handles storage of
 // device info and associated sync metadata, applying/merging foreign changes,
@@ -43,10 +44,10 @@ class DeviceInfoSyncBridge : public ModelTypeSyncBridge,
 
   // ModelTypeSyncBridge implementation.
   std::unique_ptr<MetadataChangeList> CreateMetadataChangeList() override;
-  ModelError MergeSyncData(
+  SyncError MergeSyncData(
       std::unique_ptr<MetadataChangeList> metadata_change_list,
       EntityDataMap entity_data_map) override;
-  ModelError ApplySyncChanges(
+  SyncError ApplySyncChanges(
       std::unique_ptr<MetadataChangeList> metadata_change_list,
       EntityChangeList entity_changes) override;
   void GetData(StorageKeyList storage_keys, DataCallback callback) override;
@@ -90,7 +91,7 @@ class DeviceInfoSyncBridge : public ModelTypeSyncBridge,
                       std::unique_ptr<ModelTypeStore> store);
   void OnReadAllData(ModelTypeStore::Result result,
                      std::unique_ptr<ModelTypeStore::RecordList> record_list);
-  void OnReadAllMetadata(ModelError error,
+  void OnReadAllMetadata(SyncError error,
                          std::unique_ptr<MetadataBatch> metadata_batch);
   void OnCommit(ModelTypeStore::Result result);
 
@@ -117,6 +118,10 @@ class DeviceInfoSyncBridge : public ModelTypeSyncBridge,
   // comparing it against the current time. |now| is passed into this method to
   // allow unit tests to control expected results.
   int CountActiveDevices(const base::Time now) const;
+
+  // Report an error starting up to sync if it tries to connect to this
+  // datatype, since these errors prevent us from knowing if sync is enabled.
+  void ReportStartupErrorToSync(const std::string& msg);
 
   // |local_device_info_provider_| isn't owned.
   const LocalDeviceInfoProvider* const local_device_info_provider_;

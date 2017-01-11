@@ -22,10 +22,10 @@ class StubModelTypeSyncBridge : public ModelTypeSyncBridge {
   ~StubModelTypeSyncBridge() override;
 
   std::unique_ptr<MetadataChangeList> CreateMetadataChangeList() override;
-  ModelError MergeSyncData(
+  SyncError MergeSyncData(
       std::unique_ptr<MetadataChangeList> metadata_change_list,
       EntityDataMap entity_data_map) override;
-  ModelError ApplySyncChanges(
+  SyncError ApplySyncChanges(
       std::unique_ptr<MetadataChangeList> metadata_change_list,
       EntityChangeList entity_changes) override;
   void GetData(StorageKeyList storage_keys, DataCallback callback) override;

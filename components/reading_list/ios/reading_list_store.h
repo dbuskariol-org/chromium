@@ -8,7 +8,6 @@
 #include "base/threading/non_thread_safe.h"
 #include "components/reading_list/ios/reading_list_model_storage.h"
 #include "components/reading_list/ios/reading_list_store_delegate.h"
-#include "components/sync/model/model_error.h"
 #include "components/sync/model/model_type_store.h"
 
 namespace syncer {
@@ -55,7 +54,7 @@ class ReadingListStore : public ReadingListModelStorage,
   // combine all change atomically, should save the metadata after the data
   // changes, so that this merge will be re-driven by sync if is not completely
   // saved during the current run.
-  syncer::ModelError MergeSyncData(
+  syncer::SyncError MergeSyncData(
       std::unique_ptr<syncer::MetadataChangeList> metadata_change_list,
       syncer::EntityDataMap entity_data_map) override;
 
@@ -64,7 +63,7 @@ class ReadingListStore : public ReadingListModelStorage,
   // |metadata_change_list| in case when some of the data changes are filtered
   // out, or even be empty in case when a commit confirmation is processed and
   // only the metadata needs to persisted.
-  syncer::ModelError ApplySyncChanges(
+  syncer::SyncError ApplySyncChanges(
       std::unique_ptr<syncer::MetadataChangeList> metadata_change_list,
       syncer::EntityChangeList entity_changes) override;
 
@@ -148,7 +147,7 @@ class ReadingListStore : public ReadingListModelStorage,
       syncer::ModelTypeStore::Result result,
       std::unique_ptr<syncer::ModelTypeStore::RecordList> entries);
   void OnDatabaseSave(syncer::ModelTypeStore::Result result);
-  void OnReadAllMetadata(syncer::ModelError error,
+  void OnReadAllMetadata(syncer::SyncError sync_error,
                          std::unique_ptr<syncer::MetadataBatch> metadata_batch);
 
   void AddEntryToBatch(syncer::MutableDataBatch* batch,

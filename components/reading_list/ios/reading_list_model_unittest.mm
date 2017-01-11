@@ -11,7 +11,6 @@
 #include "components/reading_list/ios/reading_list_model_storage.h"
 #include "components/reading_list/ios/reading_list_store_delegate.h"
 #include "components/sync/model/metadata_change_list.h"
-#include "components/sync/model/model_error.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace {
@@ -110,18 +109,18 @@ class TestReadingListStorage : public ReadingListModelStorage {
     return std::unique_ptr<syncer::MetadataChangeList>();
   }
 
-  syncer::ModelError MergeSyncData(
+  syncer::SyncError MergeSyncData(
       std::unique_ptr<syncer::MetadataChangeList> metadata_change_list,
       syncer::EntityDataMap entity_data_map) override {
     NOTREACHED();
-    return syncer::ModelError();
+    return syncer::SyncError();
   }
 
-  syncer::ModelError ApplySyncChanges(
+  syncer::SyncError ApplySyncChanges(
       std::unique_ptr<syncer::MetadataChangeList> metadata_change_list,
       syncer::EntityChangeList entity_changes) override {
     NOTREACHED();
-    return syncer::ModelError();
+    return syncer::SyncError();
   }
 
   void GetData(StorageKeyList storage_keys, DataCallback callback) override {

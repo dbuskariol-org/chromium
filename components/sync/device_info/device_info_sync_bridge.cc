@@ -18,8 +18,8 @@
 #include "components/sync/device_info/device_info_util.h"
 #include "components/sync/model/entity_change.h"
 #include "components/sync/model/metadata_batch.h"
-#include "components/sync/model/model_error.h"
 #include "components/sync/model/mutable_data_batch.h"
+#include "components/sync/model/sync_error.h"
 #include "components/sync/protocol/model_type_state.pb.h"
 #include "components/sync/protocol/sync.pb.h"
 
@@ -113,7 +113,7 @@ DeviceInfoSyncBridge::CreateMetadataChangeList() {
   return WriteBatch::CreateMetadataChangeList();
 }
 
-ModelError DeviceInfoSyncBridge::MergeSyncData(
+SyncError DeviceInfoSyncBridge::MergeSyncData(
     std::unique_ptr<MetadataChangeList> metadata_change_list,
     EntityDataMap entity_data_map) {
   DCHECK(has_provider_initialized_);
@@ -123,7 +123,7 @@ ModelError DeviceInfoSyncBridge::MergeSyncData(
   // If our dependency was yanked out from beneath us, we cannot correctly
   // handle this request, and all our data will be deleted soon.
   if (local_info == nullptr) {
-    return ModelError();
+    return SyncError();
   }
 
   // Local data should typically be near empty, with the only possible value
@@ -164,10 +164,10 @@ ModelError DeviceInfoSyncBridge::MergeSyncData(
 
   batch->TransferMetadataChanges(std::move(metadata_change_list));
   CommitAndNotify(std::move(batch), has_changes);
-  return ModelError();
+  return SyncError();
 }
 
-ModelError DeviceInfoSyncBridge::ApplySyncChanges(
+SyncError DeviceInfoSyncBridge::ApplySyncChanges(
     std::unique_ptr<MetadataChangeList> metadata_change_list,
     EntityChangeList entity_changes) {
   DCHECK(has_provider_initialized_);
@@ -176,7 +176,7 @@ ModelError DeviceInfoSyncBridge::ApplySyncChanges(
   // If our dependency was yanked out from beneath us, we cannot correctly
   // handle this request, and all our data will be deleted soon.
   if (local_info == nullptr) {
-    return ModelError();
+    return SyncError();
   }
 
   std::unique_ptr<WriteBatch> batch = store_->CreateWriteBatch();
@@ -203,7 +203,7 @@ ModelError DeviceInfoSyncBridge::ApplySyncChanges(
 
   batch->TransferMetadataChanges(std::move(metadata_change_list));
   CommitAndNotify(std::move(batch), has_changes);
-  return ModelError();
+  return SyncError();
 }
 
 void DeviceInfoSyncBridge::GetData(StorageKeyList storage_keys,
@@ -216,7 +216,7 @@ void DeviceInfoSyncBridge::GetData(StorageKeyList storage_keys,
       batch->Put(key, CopyToEntityData(*iter->second));
     }
   }
-  callback.Run(std::move(batch));
+  callback.Run(SyncError(), std::move(batch));
 }
 
 void DeviceInfoSyncBridge::GetAllData(DataCallback callback) {
@@ -224,7 +224,7 @@ void DeviceInfoSyncBridge::GetAllData(DataCallback callback) {
   for (const auto& kv : all_data_) {
     batch->Put(kv.first, CopyToEntityData(*kv.second));
   }
-  callback.Run(std::move(batch));
+  callback.Run(SyncError(), std::move(batch));
 }
 
 std::string DeviceInfoSyncBridge::GetClientTag(const EntityData& entity_data) {
@@ -343,8 +343,7 @@ void DeviceInfoSyncBridge::OnStoreCreated(
     store_->ReadAllData(base::Bind(&DeviceInfoSyncBridge::OnReadAllData,
                                    base::AsWeakPtr(this)));
   } else {
-    change_processor()->ReportError(FROM_HERE,
-                                    "ModelTypeStore creation failed.");
+    ReportStartupErrorToSync("ModelTypeStore creation failed.");
   }
 }
 
@@ -352,7 +351,7 @@ void DeviceInfoSyncBridge::OnReadAllData(
     Result result,
     std::unique_ptr<RecordList> record_list) {
   if (result != Result::SUCCESS) {
-    change_processor()->ReportError(FROM_HERE, "Initial load of data failed.");
+    ReportStartupErrorToSync("Initial load of data failed.");
     return;
   }
 
@@ -362,9 +361,7 @@ void DeviceInfoSyncBridge::OnReadAllData(
     if (specifics->ParseFromString(r.value)) {
       all_data_[specifics->cache_guid()] = std::move(specifics);
     } else {
-      change_processor()->ReportError(FROM_HERE,
-                                      "Failed to deserialize specifics.");
-      return;
+      ReportStartupErrorToSync("Failed to deserialize specifics.");
     }
   }
 
@@ -380,20 +377,16 @@ void DeviceInfoSyncBridge::LoadMetadataIfReady() {
 }
 
 void DeviceInfoSyncBridge::OnReadAllMetadata(
-    ModelError error,
+    SyncError error,
     std::unique_ptr<MetadataBatch> metadata_batch) {
-  if (error.IsSet()) {
-    change_processor()->ReportError(error);
-    return;
-  }
-
-  change_processor()->OnMetadataLoaded(std::move(metadata_batch));
+  change_processor()->OnMetadataLoaded(error, std::move(metadata_batch));
   ReconcileLocalAndStored();
 }
 
 void DeviceInfoSyncBridge::OnCommit(Result result) {
   if (result != Result::SUCCESS) {
-    change_processor()->ReportError(FROM_HERE, "Failed a write to store.");
+    change_processor()->CreateAndUploadError(FROM_HERE,
+                                             "Failed a write to store.");
   }
 }
 
@@ -477,6 +470,13 @@ int DeviceInfoSyncBridge::CountActiveDevices(const Time now) const {
                          return DeviceInfoUtil::IsActive(
                              GetLastUpdateTime(*pair.second), now);
                        });
+}
+
+void DeviceInfoSyncBridge::ReportStartupErrorToSync(const std::string& msg) {
+  // TODO(skym): Shouldn't need to log this here, reporting should always log.
+  LOG(WARNING) << msg;
+  change_processor()->OnMetadataLoaded(
+      change_processor()->CreateAndUploadError(FROM_HERE, msg), nullptr);
 }
 
 }  // namespace syncer
