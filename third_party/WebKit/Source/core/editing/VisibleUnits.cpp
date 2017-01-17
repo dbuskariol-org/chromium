@@ -2566,6 +2566,9 @@ LayoutRect localSelectionRectOfPositionTemplate(
 
   InlineBoxPosition boxPosition =
       computeInlineBoxPosition(position.position(), position.affinity());
+  // |boxPosition.inlineBox| can be null. See http://crbug.com/680428.
+  if (!boxPosition.inlineBox)
+    return LayoutRect();
 
   InlineTextBox* box = toInlineTextBox(boxPosition.inlineBox);
   if (layoutObject->style()->isHorizontalWritingMode()) {
