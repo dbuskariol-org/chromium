@@ -82,18 +82,29 @@ public class EmptyTabObserver implements TabObserver {
     public void onToggleFullscreenMode(Tab tab, boolean enable) { }
 
     @Override
-    public void onDidFailLoad(
-            Tab tab, boolean isMainFrame, int errorCode, String description, String failingUrl) {}
+    public void onDidFailLoad(Tab tab, boolean isProvisionalLoad, boolean isMainFrame,
+            int errorCode, String description, String failingUrl) { }
+
+    @Override
+    public void onDidStartProvisionalLoadForFrame(
+            Tab tab, boolean isMainFrame, String validatedUrl) {}
+
+    @Override
+    public void onDidCommitProvisionalLoadForFrame(Tab tab, long frameId, boolean isMainFrame,
+            String url, int transitionType) { }
+
+    @Override
+    public void onDidNavigateMainFrame(Tab tab, String url, String baseUrl,
+            boolean isNavigationToDifferentPage, boolean isFragmentNavigation, int statusCode) { }
 
     @Override
     public void onDidStartNavigation(
-            Tab tab, String url, boolean isInMainFrame, boolean isSamePage, boolean isErrorPage) {}
+            Tab tab, String url, boolean isInMainFrame, boolean isErrorPage) {}
 
     @Override
     public void onDidFinishNavigation(Tab tab, String url, boolean isInMainFrame,
-            boolean isErrorPage, boolean hasCommitted, boolean isSamePage,
-            boolean isFragmentNavigation, Integer pageTransition, int errorCode,
-            int httpStatusCode) {}
+            boolean isErrorPage, boolean hasCommitted, boolean isSamePage, Integer pageTransition,
+            int errorCode) {}
 
     @Override
     public void didFirstVisuallyNonEmptyPaint(Tab tab) {}
@@ -106,6 +117,9 @@ public class EmptyTabObserver implements TabObserver {
 
     @Override
     public void onDidDetachInterstitialPage(Tab tab) { }
+
+    @Override
+    public void onDidStartNavigationToPendingEntry(Tab tab, String url) { }
 
     @Override
     public void onBackgroundColorChanged(Tab tab, int color) { }

@@ -83,11 +83,9 @@ public class TabStateBrowserControlsVisibilityDelegate
             }
 
             @Override
-            public void onDidFinishNavigation(Tab tab, String url, boolean isInMainFrame,
-                    boolean isErrorPage, boolean hasCommitted, boolean isSamePage,
-                    boolean isFragmentNavigation, Integer pageTransition, int errorCode,
-                    int httpStatusCode) {
-                if (!hasCommitted || !isInMainFrame) return;
+            public void onDidCommitProvisionalLoadForFrame(Tab tab, long frameId,
+                    boolean isMainFrame, String url, int transitionType) {
+                if (!isMainFrame) return;
                 mHandler.removeMessages(MSG_ID_ENABLE_FULLSCREEN_AFTER_LOAD);
                 mHandler.sendEmptyMessageDelayed(
                         MSG_ID_ENABLE_FULLSCREEN_AFTER_LOAD, getLoadDelayMs());

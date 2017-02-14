@@ -9,7 +9,6 @@ import org.chromium.base.ThreadUtils;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.browser.WebContentsObserver;
 import org.chromium.net.NetError;
-import org.chromium.ui.base.PageTransition;
 
 import java.lang.ref.WeakReference;
 
@@ -66,8 +65,8 @@ public class AwWebContentsObserver extends WebContentsObserver {
     }
 
     @Override
-    public void didFailLoad(
-            boolean isMainFrame, int errorCode, String description, String failingUrl) {
+    public void didFailLoad(boolean isProvisionalLoad, boolean isMainFrame, int errorCode,
+            String description, String failingUrl, boolean wasIgnoredByHandler) {
         AwContentsClient client = mAwContentsClient.get();
         if (client == null) return;
         String unreachableWebDataUrl = AwContentsStatics.getUnreachableWebDataUrl();
@@ -88,30 +87,11 @@ public class AwWebContentsObserver extends WebContentsObserver {
     }
 
     @Override
-    public void didFinishNavigation(final String url, boolean isInMainFrame, boolean isErrorPage,
-            boolean hasCommitted, boolean isSamePage, boolean isFragmentNavigation,
-            Integer pageTransition, int errorCode, String errorDescription, int httpStatusCode) {
-        if (errorCode != 0) {
-            didFailLoad(isInMainFrame, errorCode, errorDescription, url);
-            return;
-        }
-
-        if (!hasCommitted) return;
-
-        mCommittedNavigation = true;
-
-        AwContentsClient client = mAwContentsClient.get();
-        if (hasCommitted && client != null) {
-            boolean isReload = pageTransition != null
-                    && ((pageTransition & PageTransition.CORE_MASK) == PageTransition.RELOAD);
-            client.getCallbackHelper().postDoUpdateVisitedHistory(url, isReload);
-        }
-
-        if (!isInMainFrame) return;
-
+    public void didNavigateMainFrame(final String url, String baseUrl,
+            boolean isNavigationToDifferentPage, boolean isFragmentNavigation, int statusCode) {
         // Only invoke the onPageCommitVisible callback when navigating to a different page,
         // but not when navigating to a different fragment within the same page.
-        if (!isSamePage) {
+        if (isNavigationToDifferentPage) {
             ThreadUtils.postOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -131,9 +111,21 @@ public class AwWebContentsObserver extends WebContentsObserver {
             });
         }
 
-        if (client != null && isFragmentNavigation) {
+        // This is here to emulate the Classic WebView firing onPageFinished for main frame
+        // navigations where only the hash fragment changes.
+        if (isFragmentNavigation) {
+            AwContentsClient client = mAwContentsClient.get();
+            if (client == null) return;
             client.getCallbackHelper().postOnPageFinished(url);
         }
+    }
+
+    @Override
+    public void didNavigateAnyFrame(String url, String baseUrl, boolean isReload) {
+        mCommittedNavigation = true;
+        final AwContentsClient client = mAwContentsClient.get();
+        if (client == null) return;
+        client.getCallbackHelper().postDoUpdateVisitedHistory(url, isReload);
     }
 
     public boolean didEverCommitNavigation() {
