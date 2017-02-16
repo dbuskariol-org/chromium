@@ -13,7 +13,6 @@
 #include "base/lazy_instance.h"
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/memory/memory_coordinator_client_registry.h"
 #include "base/memory/ptr_util.h"
 #include "base/memory/shared_memory.h"
 #include "base/metrics/histogram_macros.h"
@@ -1288,15 +1287,6 @@ void RendererBlinkPlatformImpl::workerContextCreated(
     const v8::Local<v8::Context>& worker) {
   GetContentClient()->renderer()->DidInitializeWorkerContextOnWorkerThread(
       worker);
-}
-
-//------------------------------------------------------------------------------
-void RendererBlinkPlatformImpl::requestPurgeMemory() {
-  // TODO(tasak|bashi): We should use ChildMemoryCoordinator here, but
-  // ChildMemoryCoordinator isn't always available as it's only initialized
-  // when kMemoryCoordinatorV0 is enabled.
-  // Use ChildMemoryCoordinator when memory coordinator is always enabled.
-  base::MemoryCoordinatorClientRegistry::GetInstance()->PurgeMemory();
 }
 
 }  // namespace content
