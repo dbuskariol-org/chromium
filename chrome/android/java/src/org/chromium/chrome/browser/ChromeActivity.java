@@ -848,7 +848,9 @@ public abstract class ChromeActivity extends AsyncInitializationActivity
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
-        VideoPersister.getInstance().attemptPersist(this);
+        if (mNativeInitialized) {
+            VideoPersister.getInstance().attemptPersist(this);
+        }
     }
 
     @Override
