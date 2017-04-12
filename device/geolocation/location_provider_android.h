@@ -6,12 +6,12 @@
 #define DEVICE_GEOLOCATION_LOCATION_PROVIDER_ANDROID_H_
 
 #include "base/compiler_specific.h"
-#include "base/memory/weak_ptr.h"
-#include "base/threading/thread_checker.h"
 #include "device/geolocation/geoposition.h"
 #include "device/geolocation/location_provider.h"
 
 namespace device {
+class AndroidLocationApiAdapter;
+struct Geoposition;
 
 // Location provider for Android using the platform provider over JNI.
 class LocationProviderAndroid : public LocationProvider {
@@ -19,10 +19,10 @@ class LocationProviderAndroid : public LocationProvider {
   LocationProviderAndroid();
   ~LocationProviderAndroid() override;
 
-  // Called by the LocationApiAdapterAndroid.
+  // Called by the AndroidLocationApiAdapter.
   void NotifyNewGeoposition(const Geoposition& position);
 
-  // LocationProvider implementation.
+  // LocationProvider.
   void SetUpdateCallback(
       const LocationProviderUpdateCallback& callback) override;
   bool StartProvider(bool high_accuracy) override;
@@ -31,12 +31,8 @@ class LocationProviderAndroid : public LocationProvider {
   void OnPermissionGranted() override;
 
  private:
-  base::ThreadChecker thread_checker_;
-
   Geoposition last_position_;
   LocationProviderUpdateCallback callback_;
-
-  base::WeakPtrFactory<LocationProviderAndroid> weak_ptr_factory_;
 };
 
 }  // namespace device

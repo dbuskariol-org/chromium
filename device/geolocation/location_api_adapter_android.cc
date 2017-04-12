@@ -14,8 +14,10 @@
 #include "jni/LocationProviderAdapter_jni.h"
 
 using base::android::AttachCurrentThread;
+using base::android::CheckException;
+using base::android::ClearException;
 using base::android::JavaParamRef;
-using device::LocationApiAdapterAndroid;
+using device::AndroidLocationApiAdapter;
 
 static void NewLocationAvailable(JNIEnv* env,
                                  const JavaParamRef<jclass>&,
@@ -30,7 +32,7 @@ static void NewLocationAvailable(JNIEnv* env,
                                  jdouble heading,
                                  jboolean has_speed,
                                  jdouble speed) {
-  LocationApiAdapterAndroid::OnNewLocationAvailable(
+  AndroidLocationApiAdapter::OnNewLocationAvailable(
       latitude, longitude, time_stamp, has_altitude, altitude, has_accuracy,
       accuracy, has_heading, heading, has_speed, speed);
 }
@@ -38,54 +40,77 @@ static void NewLocationAvailable(JNIEnv* env,
 static void NewErrorAvailable(JNIEnv* env,
                               const JavaParamRef<jclass>&,
                               const JavaParamRef<jstring>& message) {
-  LocationApiAdapterAndroid::OnNewErrorAvailable(env, message);
+  AndroidLocationApiAdapter::OnNewErrorAvailable(env, message);
 }
 
 namespace device {
 
-bool LocationApiAdapterAndroid::Start(OnGeopositionCB on_geoposition_callback,
-                                      bool high_accuracy) {
-  DCHECK(task_runner_->BelongsToCurrentThread());
-  DCHECK(on_geoposition_callback);
+AndroidLocationApiAdapter::AndroidLocationApiAdapter()
+    : location_provider_(NULL) {}
 
+AndroidLocationApiAdapter::~AndroidLocationApiAdapter() {
+  CHECK(!location_provider_);
+  CHECK(!task_runner_.get());
+  CHECK(java_location_provider_android_object_.is_null());
+}
+
+bool AndroidLocationApiAdapter::Start(
+    LocationProviderAndroid* location_provider,
+    bool high_accuracy) {
   JNIEnv* env = AttachCurrentThread();
+  if (!location_provider_) {
+    location_provider_ = location_provider;
+    CHECK(java_location_provider_android_object_.is_null());
+    CreateJavaObject(env);
+    {
+      base::AutoLock lock(lock_);
+      CHECK(!task_runner_.get());
+      task_runner_ = base::ThreadTaskRunnerHandle::Get();
+    }
+  }
+  // At this point we should have all our pre-conditions ready, and they'd only
+  // change in Stop() which must be called on the same thread as here.
+  CHECK(location_provider_);
+  CHECK(task_runner_.get());
+  CHECK(!java_location_provider_android_object_.is_null());
+  // We'll start receiving notifications from java in the main thread looper
+  // until Stop() is called.
+  return Java_LocationProviderAdapter_start(
+      env, java_location_provider_android_object_, high_accuracy);
+}
 
-  if (!on_geoposition_callback_) {
-    on_geoposition_callback_ = on_geoposition_callback;
-
-    DCHECK(java_location_provider_adapter_.is_null());
-    java_location_provider_adapter_.Reset(Java_LocationProviderAdapter_create(
-        env, base::android::GetApplicationContext()));
+void AndroidLocationApiAdapter::Stop() {
+  if (!location_provider_) {
+    CHECK(!task_runner_.get());
+    CHECK(java_location_provider_android_object_.is_null());
+    return;
   }
 
-  // At this point we should have all our pre-conditions ready, and they'd only
-  // change in Stop() which must be called on the same thread as here. We'll
-  // start receiving notifications from java in the main thread looper until
-  // Stop() is called.
-  DCHECK(!java_location_provider_adapter_.is_null());
-  return Java_LocationProviderAdapter_start(
-      env, java_location_provider_adapter_, high_accuracy);
-}
+  {
+    base::AutoLock lock(lock_);
+    task_runner_ = NULL;
+  }
 
-void LocationApiAdapterAndroid::Stop() {
-  DCHECK(task_runner_->BelongsToCurrentThread());
-  if (!on_geoposition_callback_)
-    return;
-
-  on_geoposition_callback_.Reset();
+  location_provider_ = NULL;
 
   JNIEnv* env = AttachCurrentThread();
-  Java_LocationProviderAdapter_stop(env, java_location_provider_adapter_);
-  java_location_provider_adapter_.Reset();
+  Java_LocationProviderAdapter_stop(env,
+                                    java_location_provider_android_object_);
+  java_location_provider_android_object_.Reset();
 }
 
 // static
-bool LocationApiAdapterAndroid::RegisterGeolocationService(JNIEnv* env) {
-  return RegisterNativesImpl(env);
+void AndroidLocationApiAdapter::NotifyProviderNewGeoposition(
+    const Geoposition& geoposition) {
+  // Called on the geolocation thread, safe to access location_provider_ here.
+  if (GetInstance()->location_provider_) {
+    CHECK(GetInstance()->task_runner_->BelongsToCurrentThread());
+    GetInstance()->location_provider_->NotifyNewGeoposition(geoposition);
+  }
 }
 
 // static
-void LocationApiAdapterAndroid::OnNewLocationAvailable(double latitude,
+void AndroidLocationApiAdapter::OnNewLocationAvailable(double latitude,
                                                        double longitude,
                                                        double time_stamp,
                                                        bool has_altitude,
@@ -112,7 +137,7 @@ void LocationApiAdapterAndroid::OnNewLocationAvailable(double latitude,
 }
 
 // static
-void LocationApiAdapterAndroid::OnNewErrorAvailable(JNIEnv* env,
+void AndroidLocationApiAdapter::OnNewErrorAvailable(JNIEnv* env,
                                                     jstring message) {
   Geoposition position_error;
   position_error.error_code = Geoposition::ERROR_CODE_POSITION_UNAVAILABLE;
@@ -122,24 +147,32 @@ void LocationApiAdapterAndroid::OnNewErrorAvailable(JNIEnv* env,
 }
 
 // static
-LocationApiAdapterAndroid* LocationApiAdapterAndroid::GetInstance() {
-  return base::Singleton<LocationApiAdapterAndroid>::get();
+AndroidLocationApiAdapter* AndroidLocationApiAdapter::GetInstance() {
+  return base::Singleton<AndroidLocationApiAdapter>::get();
 }
 
-LocationApiAdapterAndroid::LocationApiAdapterAndroid()
-    : task_runner_(base::ThreadTaskRunnerHandle::Get()) {
-  jni_thread_checker_.DetachFromThread();
+// static
+bool AndroidLocationApiAdapter::RegisterGeolocationService(JNIEnv* env) {
+  return RegisterNativesImpl(env);
 }
 
-LocationApiAdapterAndroid::~LocationApiAdapterAndroid() {
-  DCHECK(task_runner_->BelongsToCurrentThread());
+void AndroidLocationApiAdapter::CreateJavaObject(JNIEnv* env) {
+  // Create the Java LocationProviderAdapter object.
+  java_location_provider_android_object_.Reset(
+      Java_LocationProviderAdapter_create(
+          env, base::android::GetApplicationContext()));
+  CHECK(!java_location_provider_android_object_.is_null());
 }
 
-void LocationApiAdapterAndroid::OnNewGeopositionInternal(
+void AndroidLocationApiAdapter::OnNewGeopositionInternal(
     const Geoposition& geoposition) {
-  DCHECK(jni_thread_checker_.CalledOnValidThread());
-  task_runner_->PostTask(FROM_HERE,
-                         base::Bind(on_geoposition_callback_, geoposition));
+  base::AutoLock lock(lock_);
+  if (!task_runner_.get())
+    return;
+  task_runner_->PostTask(
+      FROM_HERE,
+      base::Bind(&AndroidLocationApiAdapter::NotifyProviderNewGeoposition,
+                 geoposition));
 }
 
 }  // namespace device
