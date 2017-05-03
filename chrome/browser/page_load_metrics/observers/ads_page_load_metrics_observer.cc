@@ -19,7 +19,8 @@
 
 namespace {
 
-const base::Feature kAdsFeature{"AdsMetrics", base::FEATURE_ENABLED_BY_DEFAULT};
+const base::Feature kAdsFeature{"AdsMetrics",
+                                base::FEATURE_DISABLED_BY_DEFAULT};
 
 bool FrameIsAd(content::NavigationHandle* navigation_handle) {
   content::RenderFrameHost* current_frame_host =
