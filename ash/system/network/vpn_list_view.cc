@@ -194,7 +194,7 @@ void VPNListNetworkEntry::UpdateFromNetworkState(
     // the network list in the UI has not been updated yet.
     return;
   }
-  RemoveAllChildViews(true);
+  Reset();
   disconnect_button_ = nullptr;
 
   gfx::ImageSkia image =
