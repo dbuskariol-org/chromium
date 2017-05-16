@@ -1042,11 +1042,7 @@ void ComputedStyle::updatePropertySpecificDifferences(
     diff.setZIndexChanged();
 
   if (m_rareNonInheritedData.get() != other.m_rareNonInheritedData.get()) {
-    // It's possible for the old and new style transform data to be equivalent
-    // while hasTransform() differs, as it checks a number of conditions aside
-    // from just the matrix, including but not limited to animation state.
-    if (hasTransform() != other.hasTransform() ||
-        !transformDataEquivalent(other) ||
+    if (!transformDataEquivalent(other) ||
         m_rareNonInheritedData->m_perspective !=
             other.m_rareNonInheritedData->m_perspective ||
         m_rareNonInheritedData->m_perspectiveOrigin !=

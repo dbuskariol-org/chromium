@@ -78,28 +78,4 @@ TEST(ComputedStyleTest, Preserve3dForceStackingContext) {
   EXPECT_TRUE(style->isStackingContext());
 }
 
-TEST(ComputedStyleTest, FirstPublicPseudoStyle) {
-  RefPtr<ComputedStyle> style = ComputedStyle::create();
-  style->setHasPseudoStyle(PseudoIdFirstLine);
-  EXPECT_TRUE(style->hasPseudoStyle(PseudoIdFirstLine));
-  EXPECT_TRUE(style->hasAnyPublicPseudoStyles());
-}
-
-TEST(ComputedStyleTest, LastPublicPseudoStyle) {
-  RefPtr<ComputedStyle> style = ComputedStyle::create();
-  style->setHasPseudoStyle(PseudoIdScrollbar);
-  EXPECT_TRUE(style->hasPseudoStyle(PseudoIdScrollbar));
-  EXPECT_TRUE(style->hasAnyPublicPseudoStyles());
-}
-
-TEST(ComputedStyleTest,
-     UpdatePropertySpecificDifferencesRespectsTransformAnimation) {
-  RefPtr<ComputedStyle> style = ComputedStyle::create();
-  RefPtr<ComputedStyle> other = ComputedStyle::clone(*style);
-  other->setHasCurrentTransformAnimation();
-  StyleDifference diff;
-  style->updatePropertySpecificDifferences(*other, diff);
-  EXPECT_TRUE(diff.transformChanged());
-}
-
 }  // namespace blink
