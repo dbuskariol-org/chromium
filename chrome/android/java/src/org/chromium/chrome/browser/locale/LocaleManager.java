@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.StrictMode;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 
@@ -114,14 +113,8 @@ public class LocaleManager {
      * Default constructor.
      */
     public LocaleManager() {
-        int state = SEARCH_ENGINE_PROMO_SHOULD_CHECK;
-        StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskReads();
-        try {
-            ContextUtils.getAppSharedPreferences().getInt(
-                    KEY_SEARCH_ENGINE_PROMO_SHOW_STATE, SEARCH_ENGINE_PROMO_SHOULD_CHECK);
-        } finally {
-            StrictMode.setThreadPolicy(oldPolicy);
-        }
+        int state = ContextUtils.getAppSharedPreferences().getInt(
+                KEY_SEARCH_ENGINE_PROMO_SHOW_STATE, SEARCH_ENGINE_PROMO_SHOULD_CHECK);
         mSearchEnginePromoCompleted = state == SEARCH_ENGINE_PROMO_CHECKED_AND_SHOWN;
     }
 
@@ -448,14 +441,8 @@ public class LocaleManager {
      * @return Whether we still have to check for whether search engine dialog is necessary.
      */
     public boolean needToCheckForSearchEnginePromo() {
-        int state = SEARCH_ENGINE_PROMO_SHOULD_CHECK;
-        StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskReads();
-        try {
-            ContextUtils.getAppSharedPreferences().getInt(
-                    KEY_SEARCH_ENGINE_PROMO_SHOW_STATE, SEARCH_ENGINE_PROMO_SHOULD_CHECK);
-        } finally {
-            StrictMode.setThreadPolicy(oldPolicy);
-        }
+        int state = ContextUtils.getAppSharedPreferences().getInt(
+                KEY_SEARCH_ENGINE_PROMO_SHOW_STATE, SEARCH_ENGINE_PROMO_SHOULD_CHECK);
         return state == SEARCH_ENGINE_PROMO_SHOULD_CHECK;
     }
 
