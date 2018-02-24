@@ -1,36 +1,12 @@
-# infra/config branch
+# 301. Permanent redirect.
 
-This branch contains chromium project-wide configurations
-for chrome-infra services.
-For example, [cr-buildbucket.cfg](cr-buildbucket.cfg) defines builders.
+This branch used to contain project-wide configurations for services of chrome
+infrastructure. All these config files were moved to `master` branch.
 
-## Making changes
+**Please update the old hyperlink through which you came here**.
 
-It is recommended to have a separate checkout for this branch, so switching
-to/from this branch does not populate/delete all files in the master branch.
+Newest version lives
+[here](https://chromium.googlesource.com/chromium/src/+/master/infra/config/global)
+or copy-paste URL below.
 
-Initial setup:
-
-```bash
-mkdir config
-cd config
-git init
-git remote add -t infra/config origin https://chromium.googlesource.com/chromium/src
-git config --add remote.origin.fetch '+refs/heads/infra/config:refs/remotes/origin/master'
-git fetch
-```
-
-Now you can create a new branch (or more than one) to make changes:
-
-```
-git new-branch some_feature
-# edit cr-buildbucket.cfg
-git commit -a
-git cl upload
-```
-
-To rebase your local branches on top of upstream:
-
-```
-git rebase-update
-```
+    https://chromium.googlesource.com/chromium/src/+/master/infra/config/global
