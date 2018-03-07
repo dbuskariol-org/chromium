@@ -494,7 +494,7 @@ int ChromeBrowserMainPartsWin::PreCreateThreads() {
   static crash_reporter::CrashKeyString<32> update_cohort_name("cohort-name");
   update_cohort_name.Set(base::UTF16ToUTF8(details.update_cohort_name()));
 
-  if (details.channel().find(L"canary") == 0) {
+  if (details.channel().find(L"beta") == 0) {
     content::RenderProcessHost::SetHungRendererAnalysisFunction(
         &DumpHungRendererProcessImpl);
   }
