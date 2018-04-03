@@ -147,7 +147,7 @@ class GetCookieListRequestTracker {
   }
 
  private:
-  void CrashToReportTimeout() { base::debug::DumpWithoutCrashing(); }
+  void CrashToReportTimeout() {}
 
   base::ElapsedTimer request_timer_;
   base::WeakPtrFactory<GetCookieListRequestTracker> weak_ptr_factory_;
