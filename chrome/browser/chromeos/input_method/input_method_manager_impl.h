@@ -194,8 +194,6 @@ class InputMethodManagerImpl : public InputMethodManager,
   void SetImeMenuFeatureEnabled(ImeMenuFeature feature, bool enabled) override;
   bool GetImeMenuFeatureEnabled(ImeMenuFeature feature) const override;
   void NotifyObserversImeExtraInputStateChange() override;
-  ui::InputMethodKeyboardController* GetInputMethodKeyboardController()
-      override;
 
   // chromeos::UserAddingScreen:
   void OnUserAddingStarted() override;

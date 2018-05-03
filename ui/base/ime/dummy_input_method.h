@@ -46,7 +46,6 @@ class DummyInputMethod : public InputMethod {
 
   void AddObserver(InputMethodObserver* observer) override;
   void RemoveObserver(InputMethodObserver* observer) override;
-  InputMethodKeyboardController* GetInputMethodKeyboardController() override;
 
   const std::vector<std::unique_ptr<KeyEvent>>& GetKeyEventsForTesting()
       override;

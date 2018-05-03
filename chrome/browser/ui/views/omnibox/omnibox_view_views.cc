@@ -43,7 +43,6 @@
 #include "ui/base/dragdrop/drag_drop_types.h"
 #include "ui/base/dragdrop/os_exchange_data.h"
 #include "ui/base/ime/input_method.h"
-#include "ui/base/ime/input_method_keyboard_controller.h"
 #include "ui/base/ime/text_edit_commands.h"
 #include "ui/base/ime/text_input_client.h"
 #include "ui/base/ime/text_input_type.h"
@@ -666,14 +665,7 @@ bool OmniboxViewViews::IsImeShowingPopup() const {
 }
 
 void OmniboxViewViews::ShowImeIfNeeded() {
-  if (auto* input_method = GetInputMethod())
-    input_method->ShowImeIfNeeded();
-}
-
-void OmniboxViewViews::HideImeIfNeeded() {
-  if (auto* input_method = GetInputMethod()) {
-    input_method->GetInputMethodKeyboardController()->DismissVirtualKeyboard();
-  }
+  GetInputMethod()->ShowImeIfNeeded();
 }
 
 int OmniboxViewViews::GetOmniboxTextLength() const {

@@ -252,7 +252,7 @@ class LocationBarView : public LocationBar,
   // views::ButtonListener:
   void ButtonPressed(views::Button* sender, const ui::Event& event) override;
 
-  static bool IsVirtualKeyboardVisible(views::Widget* widget);
+  static bool IsVirtualKeyboardVisible();
 
   // Returns the height available for user-entered text in the location bar.
   static int GetAvailableTextHeight();

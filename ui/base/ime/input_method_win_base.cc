@@ -11,12 +11,9 @@
 #include "base/auto_reset.h"
 #include "base/bind.h"
 #include "base/command_line.h"
-#include "base/memory/ptr_util.h"
-#include "base/win/windows_version.h"
 #include "ui/base/ime/ime_bridge.h"
 #include "ui/base/ime/ime_engine_handler_interface.h"
 #include "ui/base/ime/text_input_client.h"
-#include "ui/base/ime/win/on_screen_keyboard_display_manager_tab_tip.h"
 #include "ui/base/ime/win/tsf_input_scope.h"
 #include "ui/display/win/screen_win.h"
 #include "ui/events/event.h"
@@ -32,21 +29,11 @@ namespace {
 // is returned to IME for improving conversion accuracy.
 constexpr size_t kExtraNumberOfChars = 20;
 
-std::unique_ptr<InputMethodKeyboardController> CreateKeyboardController(
-    HWND toplevel_window_handle) {
-  if (base::win::GetVersion() >= base::win::VERSION_WIN8) {
-    return std::make_unique<OnScreenKeyboardDisplayManagerTabTip>(
-        toplevel_window_handle);
-  }
-  return nullptr;
-}
-
 }  // namespace
 
 InputMethodWinBase::InputMethodWinBase(internal::InputMethodDelegate* delegate,
                                        HWND toplevel_window_handle)
-    : InputMethodBase(delegate,
-                      CreateKeyboardController(toplevel_window_handle)),
+    : InputMethodBase(delegate),
       toplevel_window_handle_(toplevel_window_handle) {}
 
 InputMethodWinBase::~InputMethodWinBase() {}

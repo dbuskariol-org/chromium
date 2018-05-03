@@ -8,8 +8,9 @@
 
 namespace ui {
 
-InputMethodMac::InputMethodMac(internal::InputMethodDelegate* delegate)
-    : InputMethodBase(delegate) {}
+InputMethodMac::InputMethodMac(internal::InputMethodDelegate* delegate) {
+  SetDelegate(delegate);
+}
 
 InputMethodMac::~InputMethodMac() {
 }

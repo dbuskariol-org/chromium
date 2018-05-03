@@ -11,7 +11,6 @@
 #include "base/observer_list.h"
 #include "base/time/time.h"
 #include "ui/aura/window_observer.h"
-#include "ui/base/ime/input_method_keyboard_controller.h"
 #include "ui/base/ime/input_method_observer.h"
 #include "ui/base/ime/text_input_type.h"
 #include "ui/events/event.h"
@@ -65,10 +64,8 @@ enum class KeyboardControllerState {
 
 // Provides control of the virtual keyboard, including providing a container
 // and controlling visibility.
-class KEYBOARD_EXPORT KeyboardController
-    : public ui::InputMethodObserver,
-      public aura::WindowObserver,
-      public ui::InputMethodKeyboardController {
+class KEYBOARD_EXPORT KeyboardController : public ui::InputMethodObserver,
+                                           public aura::WindowObserver {
  public:
   // Different ways to hide the keyboard.
   enum HideReason {
@@ -198,15 +195,6 @@ class KEYBOARD_EXPORT KeyboardController
 
   void MoveToDisplayWithTransition(display::Display display,
                                    gfx::Rect new_bounds_in_local);
-
-  // InputMethodKeyboardController overrides.
-  bool DisplayVirtualKeyboard() override;
-  void DismissVirtualKeyboard() override;
-  void AddObserver(
-      ui::InputMethodKeyboardControllerObserver* observer) override;
-  void RemoveObserver(
-      ui::InputMethodKeyboardControllerObserver* observer) override;
-  bool IsKeyboardVisible() const override;
 
  private:
   // For access to Observer methods for simulation.

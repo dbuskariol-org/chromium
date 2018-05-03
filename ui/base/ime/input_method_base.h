@@ -35,6 +35,7 @@ class UI_BASE_IME_EXPORT InputMethodBase
       public base::SupportsWeakPtr<InputMethodBase>,
       public IMEInputContextHandlerInterface {
  public:
+  explicit InputMethodBase(internal::InputMethodDelegate* delegate = nullptr);
   ~InputMethodBase() override;
 
   // Overriden from InputMethod.
@@ -67,12 +68,7 @@ class UI_BASE_IME_EXPORT InputMethodBase
   void AddObserver(InputMethodObserver* observer) override;
   void RemoveObserver(InputMethodObserver* observer) override;
 
-  InputMethodKeyboardController* GetInputMethodKeyboardController() override;
-
  protected:
-  explicit InputMethodBase(internal::InputMethodDelegate* delegate = nullptr);
-  InputMethodBase(internal::InputMethodDelegate* delegate,
-                  std::unique_ptr<InputMethodKeyboardController> controller);
   virtual void OnWillChangeFocusedClient(TextInputClient* focused_before,
                                          TextInputClient* focused) {}
   virtual void OnDidChangeFocusedClient(TextInputClient* focused_before,
@@ -149,8 +145,6 @@ class UI_BASE_IME_EXPORT InputMethodBase
 
   // Screen bounds of a on-screen keyboard.
   gfx::Rect keyboard_bounds_;
-
-  std::unique_ptr<InputMethodKeyboardController> keyboard_controller_;
 
   DISALLOW_COPY_AND_ASSIGN(InputMethodBase);
 };

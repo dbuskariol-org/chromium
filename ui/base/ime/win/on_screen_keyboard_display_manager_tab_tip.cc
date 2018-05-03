@@ -20,7 +20,7 @@
 #include "base/win/scoped_co_mem.h"
 #include "base/win/win_util.h"
 #include "base/win/windows_version.h"
-#include "ui/base/ime/input_method_keyboard_controller_observer.h"
+#include "ui/base/ime/win/osk_display_observer.h"
 #include "ui/base/win/hidden_window.h"
 #include "ui/display/win/screen_win.h"
 #include "ui/gfx/geometry/dip_util.h"
@@ -47,8 +47,7 @@ namespace ui {
 // is displayed and move the main window up if it is obscured by the keyboard.
 class OnScreenKeyboardDetector {
  public:
-  OnScreenKeyboardDetector(
-      OnScreenKeyboardDisplayManagerTabTip* display_manager);
+  OnScreenKeyboardDetector();
   ~OnScreenKeyboardDetector();
 
   // Schedules a delayed task which detects if the on screen keyboard was
@@ -58,7 +57,14 @@ class OnScreenKeyboardDetector {
   // Dismisses the on screen keyboard. If a call to display the keyboard was
   // made, this function waits for the keyboard to become visible by retrying
   // upto a maximum of kDismissKeyboardMaxRetries.
-  void DismissKeyboard();
+  bool DismissKeyboard();
+
+  // Add/Remove keyboard observers.
+  // Please note that this class does not track the |observer| destruction. It
+  // is upto the classes which set up these observers to remove them when they
+  // are destroyed.
+  void AddObserver(OnScreenKeyboardObserver* observer);
+  void RemoveObserver(OnScreenKeyboardObserver* observer);
 
   // Returns true if the osk is visible.
   static bool IsKeyboardVisible();
@@ -85,7 +91,8 @@ class OnScreenKeyboardDetector {
   // The observer list is cleared out after this notification.
   void HandleKeyboardHidden();
 
-  OnScreenKeyboardDisplayManagerTabTip* display_manager_;
+  // Removes all observers from the list.
+  void ClearObservers();
 
   // The main window which displays the on screen keyboard.
   HWND main_window_ = nullptr;
@@ -100,6 +107,8 @@ class OnScreenKeyboardDetector {
   // to the DismissKeyboard() function for more information.
   int keyboard_dismiss_retry_count_ = 0;
 
+  base::ObserverList<OnScreenKeyboardObserver, false> observers_;
+
   // Should be the last member in the class. Helps ensure that tasks spawned
   // by this class instance are canceled when it is destroyed.
   base::WeakPtrFactory<OnScreenKeyboardDetector> keyboard_detector_factory_;
@@ -108,11 +117,12 @@ class OnScreenKeyboardDetector {
 };
 
 // OnScreenKeyboardDetector member definitions.
-OnScreenKeyboardDetector::OnScreenKeyboardDetector(
-    OnScreenKeyboardDisplayManagerTabTip* display_manager)
-    : display_manager_(display_manager), keyboard_detector_factory_(this) {}
+OnScreenKeyboardDetector::OnScreenKeyboardDetector()
+    : keyboard_detector_factory_(this) {}
 
-OnScreenKeyboardDetector::~OnScreenKeyboardDetector() {}
+OnScreenKeyboardDetector::~OnScreenKeyboardDetector() {
+  ClearObservers();
+}
 
 void OnScreenKeyboardDetector::DetectKeyboard(HWND main_window) {
   main_window_ = main_window;
@@ -129,7 +139,7 @@ void OnScreenKeyboardDetector::DetectKeyboard(HWND main_window) {
       kCheckOSKDelay);
 }
 
-void OnScreenKeyboardDetector::DismissKeyboard() {
+bool OnScreenKeyboardDetector::DismissKeyboard() {
   // We dismiss the virtual keyboard by generating the SC_CLOSE.
   HWND osk = ::FindWindow(kOSKClassName, nullptr);
   if (::IsWindow(osk) && ::IsWindowEnabled(osk)) {
@@ -137,7 +147,7 @@ void OnScreenKeyboardDetector::DismissKeyboard() {
     keyboard_dismiss_retry_count_ = 0;
     HandleKeyboardHidden();
     PostMessage(osk, WM_SYSCOMMAND, SC_CLOSE, 0);
-    return;
+    return true;
   }
 
   if (keyboard_detect_requested_) {
@@ -155,6 +165,16 @@ void OnScreenKeyboardDetector::DismissKeyboard() {
       keyboard_dismiss_retry_count_ = 0;
     }
   }
+  return false;
+}
+
+void OnScreenKeyboardDetector::AddObserver(OnScreenKeyboardObserver* observer) {
+  observers_.AddObserver(observer);
+}
+
+void OnScreenKeyboardDetector::RemoveObserver(
+    OnScreenKeyboardObserver* observer) {
+  observers_.RemoveObserver(observer);
 }
 
 // static
@@ -235,7 +255,8 @@ void OnScreenKeyboardDetector::HandleKeyboardVisible(
   DCHECK(!osk_visible_notification_received_);
   osk_visible_notification_received_ = true;
 
-  display_manager_->NotifyKeyboardVisible(occluded_rect);
+  for (OnScreenKeyboardObserver& observer : observers_)
+    observer.OnKeyboardVisible(occluded_rect);
 
   // Now that the keyboard is visible, run the task to detect if it was hidden.
   base::ThreadTaskRunnerHandle::Get()->PostDelayedTask(
@@ -247,19 +268,25 @@ void OnScreenKeyboardDetector::HandleKeyboardVisible(
 
 void OnScreenKeyboardDetector::HandleKeyboardHidden() {
   osk_visible_notification_received_ = false;
-  display_manager_->NotifyKeyboardHidden();
+  for (OnScreenKeyboardObserver& observer : observers_)
+    observer.OnKeyboardHidden();
+  ClearObservers();
+}
+
+void OnScreenKeyboardDetector::ClearObservers() {
+  for (auto& observer : observers_)
+    RemoveObserver(&observer);
 }
 
 // OnScreenKeyboardDisplayManagerTabTip member definitions.
-OnScreenKeyboardDisplayManagerTabTip::OnScreenKeyboardDisplayManagerTabTip(
-    HWND hwnd)
-    : hwnd_(hwnd) {
+OnScreenKeyboardDisplayManagerTabTip::OnScreenKeyboardDisplayManagerTabTip() {
   DCHECK_GE(base::win::GetVersion(), base::win::VERSION_WIN8);
 }
 
 OnScreenKeyboardDisplayManagerTabTip::~OnScreenKeyboardDisplayManagerTabTip() {}
 
-bool OnScreenKeyboardDisplayManagerTabTip::DisplayVirtualKeyboard() {
+bool OnScreenKeyboardDisplayManagerTabTip::DisplayVirtualKeyboard(
+    OnScreenKeyboardObserver* observer) {
   if (base::win::IsKeyboardPresentOnSlate(nullptr, ui::GetHiddenWindow()))
     return false;
 
@@ -275,25 +302,22 @@ bool OnScreenKeyboardDisplayManagerTabTip::DisplayVirtualKeyboard() {
   if (success) {
     // If multiple calls to DisplayVirtualKeyboard occur one after the other,
     // the last observer would be the one to get notifications.
-    keyboard_detector_ = std::make_unique<OnScreenKeyboardDetector>(this);
-    keyboard_detector_->DetectKeyboard(hwnd_);
+    keyboard_detector_ = std::make_unique<OnScreenKeyboardDetector>();
+    if (observer)
+      keyboard_detector_->AddObserver(observer);
+    keyboard_detector_->DetectKeyboard(::GetForegroundWindow());
   }
   return success;
 }
 
-void OnScreenKeyboardDisplayManagerTabTip::DismissVirtualKeyboard() {
-  if (keyboard_detector_)
-    keyboard_detector_->DismissKeyboard();
-}
-
-void OnScreenKeyboardDisplayManagerTabTip::AddObserver(
-    InputMethodKeyboardControllerObserver* observer) {
-  observers_.AddObserver(observer);
+bool OnScreenKeyboardDisplayManagerTabTip::DismissVirtualKeyboard() {
+  return keyboard_detector_ ? keyboard_detector_->DismissKeyboard() : false;
 }
 
 void OnScreenKeyboardDisplayManagerTabTip::RemoveObserver(
-    InputMethodKeyboardControllerObserver* observer) {
-  observers_.RemoveObserver(observer);
+    OnScreenKeyboardObserver* observer) {
+  if (keyboard_detector_)
+    keyboard_detector_->RemoveObserver(observer);
 }
 
 bool OnScreenKeyboardDisplayManagerTabTip::GetOSKPath(
@@ -363,17 +387,6 @@ bool OnScreenKeyboardDisplayManagerTabTip::GetOSKPath(
 
 bool OnScreenKeyboardDisplayManagerTabTip::IsKeyboardVisible() const {
   return OnScreenKeyboardDetector::IsKeyboardVisible();
-}
-
-void OnScreenKeyboardDisplayManagerTabTip::NotifyKeyboardVisible(
-    const gfx::Rect& occluded_rect) {
-  for (InputMethodKeyboardControllerObserver& observer : observers_)
-    observer.OnKeyboardVisible(occluded_rect);
-}
-
-void OnScreenKeyboardDisplayManagerTabTip::NotifyKeyboardHidden() {
-  for (InputMethodKeyboardControllerObserver& observer : observers_)
-    observer.OnKeyboardHidden();
 }
 
 }  // namespace ui

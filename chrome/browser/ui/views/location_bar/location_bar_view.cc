@@ -85,8 +85,6 @@
 #include "extensions/common/feature_switch.h"
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/base/dragdrop/drag_drop_types.h"
-#include "ui/base/ime/input_method.h"
-#include "ui/base/ime/input_method_keyboard_controller.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/material_design/material_design_controller.h"
 #include "ui/base/resource/resource_bundle.h"
@@ -112,6 +110,14 @@
 
 #if defined(OS_CHROMEOS)
 #include "chrome/browser/ui/views/location_bar/intent_picker_view.h"
+#endif
+
+#if defined(USE_AURA)
+#include "ui/keyboard/keyboard_util.h"
+#endif
+
+#if defined(OS_WIN)
+#include "ui/base/ime/win/osk_display_manager.h"
 #endif
 
 using content::WebContents;
@@ -743,12 +749,14 @@ WebContents* LocationBarView::GetWebContentsForBubbleIconView() {
 // LocationBarView, public static methods:
 
 // static
-bool LocationBarView::IsVirtualKeyboardVisible(views::Widget* widget) {
-  if (auto* input_method = widget->GetInputMethod()) {
-    return input_method->GetInputMethodKeyboardController()
-        ->IsKeyboardVisible();
-  }
+bool LocationBarView::IsVirtualKeyboardVisible() {
+#if defined(OS_WIN)
+  return ui::OnScreenKeyboardDisplayManager::GetInstance()->IsKeyboardVisible();
+#elif defined(USE_AURA)
+  return keyboard::IsKeyboardVisible();
+#else
   return false;
+#endif
 }
 
 // static
@@ -1208,8 +1216,7 @@ void LocationBarView::OnChanged() {
   location_icon_view_->set_show_tooltip(!GetOmniboxView()->IsEditingOrEmpty());
   clear_all_button_->SetVisible(
       GetToolbarModel()->input_in_progress() &&
-      (InTouchableMode() ||
-       LocationBarView::IsVirtualKeyboardVisible(GetWidget())));
+      (InTouchableMode() || LocationBarView::IsVirtualKeyboardVisible()));
   Layout();
   SchedulePaint();
 }

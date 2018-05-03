@@ -19,7 +19,7 @@ class OnScreenKeyboardTest : public ::testing::Test {
   std::unique_ptr<OnScreenKeyboardDisplayManagerTabTip>
   CreateOSKDisplayManager() {
     return std::unique_ptr<OnScreenKeyboardDisplayManagerTabTip>(
-        new OnScreenKeyboardDisplayManagerTabTip(nullptr));
+        new OnScreenKeyboardDisplayManagerTabTip());
   }
 };
 

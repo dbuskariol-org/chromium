@@ -45,6 +45,10 @@
 #include "ui/gfx/image/image.h"
 #include "url/url_util.h"
 
+#if defined(OS_WIN)
+#include "ui/base/ime/win/osk_display_manager.h"
+#endif
+
 using bookmarks::BookmarkModel;
 using metrics::OmniboxEventProto;
 
@@ -959,7 +963,7 @@ void OmniboxEditModel::OnKillFocus() {
   paste_state_ = NONE;
   control_key_state_ = UP;
 #if defined(OS_WIN)
-  view_->HideImeIfNeeded();
+  ui::OnScreenKeyboardDisplayManager::GetInstance()->DismissVirtualKeyboard();
 #endif
 }
 

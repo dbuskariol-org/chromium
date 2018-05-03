@@ -12,8 +12,10 @@
 
 namespace ui {
 
-InputMethodMinimal::InputMethodMinimal(internal::InputMethodDelegate* delegate)
-    : InputMethodBase(delegate) {}
+InputMethodMinimal::InputMethodMinimal(
+    internal::InputMethodDelegate* delegate) {
+  SetDelegate(delegate);
+}
 
 InputMethodMinimal::~InputMethodMinimal() {}
 
