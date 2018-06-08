@@ -106,7 +106,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling V8
   # and whatever else without interference from each other.
-  'v8_revision': 'd993e1971a0a9172aac9e6cc4f5ff3d2d1b2bea7',
+  'v8_revision': 'refs/heads/chromium/3453',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling swarming_client
   # and whatever else without interference from each other.
@@ -114,11 +114,11 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling ANGLE
   # and whatever else without interference from each other.
-  'angle_revision': '81970bc302dd81d56f72356eb4fcc56522f3abd1',
+  'angle_revision': 'refs/heads/chromium/3453',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling build tools
   # and whatever else without interference from each other.
-  'buildtools_revision': '6f4dae280c6a542acacd8db281decc5c0b2a9823',
+  'buildtools_revision': 'refs/heads/chromium/3453',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling SwiftShader
   # and whatever else without interference from each other.
@@ -126,7 +126,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling PDFium
   # and whatever else without interference from each other.
-  'pdfium_revision': '798b832f943da2b3ef1251c887e418e6f4c9bc09',
+  'pdfium_revision': 'refs/heads/chromium/3453',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling openmax_dl
   # and whatever else without interference from each other.
@@ -1041,7 +1041,7 @@ deps = {
     Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),
 
   'src-internal': {
-    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@fcf6e2b9826aaa0e8fa8f93d2239d351e162843c',
+    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@refs/heads/chromium/3453',
     'condition': 'checkout_src_internal',
   },
 
