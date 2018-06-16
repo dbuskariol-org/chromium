@@ -38,6 +38,7 @@ gclient_gn_args = [
 
 
 vars = {
+  "buildspec_platforms": "all",
   # Variable that can be used to support multiple build scenarios, like having
   # Chromium specific targets in a client project's GN file or sync dependencies
   # conditionally etc.
@@ -109,7 +110,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling V8
   # and whatever else without interference from each other.
-  'v8_revision': 'refs/heads/chromium/3462',
+  'v8_revision': '16e546092986e16070920cbba1b7e6daa5f45576',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling swarming_client
   # and whatever else without interference from each other.
@@ -117,11 +118,11 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling ANGLE
   # and whatever else without interference from each other.
-  'angle_revision': 'refs/heads/chromium/3462',
+  'angle_revision': '50cf2be0758b793dfb0b6ae4aaacc4fa62c4fa86',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling build tools
   # and whatever else without interference from each other.
-  'buildtools_revision': 'refs/heads/chromium/3462',
+  'buildtools_revision': '5941c1b3df96c1db756a2834343533335c394c4a',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling SwiftShader
   # and whatever else without interference from each other.
@@ -129,7 +130,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling PDFium
   # and whatever else without interference from each other.
-  'pdfium_revision': 'refs/heads/chromium/3462',
+  'pdfium_revision': 'ee3e3a4f3cbaa99ae3609f575ff9b2c329c5df2a',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling openmax_dl
   # and whatever else without interference from each other.
@@ -1044,7 +1045,7 @@ deps = {
     Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),
 
   'src-internal': {
-    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@refs/heads/chromium/3462',
+    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@b277efb4d0f94c9644b3680703adfe73a51864a7',
     'condition': 'checkout_src_internal',
   },
 
