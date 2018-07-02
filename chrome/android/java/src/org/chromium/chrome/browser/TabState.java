@@ -149,6 +149,8 @@ public class TabState {
     /** Whether the theme color was set for this tab. */
     private boolean mHasThemeColor;
 
+    public long currentRootTimestamp;
+
     /** @return Whether a Stable channel build of Chrome is being used. */
     private static boolean isStableChannelBuild() {
         if ("stable".equals(sChannelNameOverrideForTest)) return true;
@@ -289,6 +291,14 @@ public class TabState {
                 Log.w(TAG, "Failed to read theme color from tab state. "
                         + "Assuming theme color is white");
             }
+            try {
+                tabState.currentRootTimestamp = stream.readLong();
+            } catch (EOFException eof) {
+                // Could happen if reading a version of TabState without a theme color.
+                tabState.currentRootTimestamp = 0;
+                Log.w(TAG, "Failed to read current task timestamp from state. "
+                        + "Assuming 0");
+            }
             return tabState;
         } finally {
             stream.close();
@@ -354,6 +364,7 @@ public class TabState {
             dataOutputStream.writeLong(-1); // Obsolete sync ID.
             dataOutputStream.writeBoolean(state.shouldPreserve);
             dataOutputStream.writeInt(state.themeColor);
+            dataOutputStream.writeLong(state.currentRootTimestamp);
         } catch (FileNotFoundException e) {
             Log.w(TAG, "FileNotFoundException while attempting to save TabState.");
         } catch (IOException e) {

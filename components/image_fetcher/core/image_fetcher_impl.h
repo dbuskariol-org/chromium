@@ -16,6 +16,7 @@
 #include "components/image_fetcher/core/image_data_fetcher.h"
 #include "components/image_fetcher/core/image_decoder.h"
 #include "components/image_fetcher/core/image_fetcher.h"
+#include "content/public/browser/storage_partition.h"
 #include "net/traffic_annotation/network_traffic_annotation.h"
 #include "ui/gfx/geometry/size.h"
 #include "url/gurl.h"
