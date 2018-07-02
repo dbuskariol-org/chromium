@@ -17,11 +17,6 @@
 #include "base/bind_helpers.h"
 #include "base/macros.h"
 #include "cc/layers/layer.h"
-#include "cc/layers/picture_image_layer.h"
-#include "cc/paint/paint_flags.h"
-#include "cc/paint/paint_image_builder.h"
-#include "cc/paint/skia_paint_canvas.h"
-#include "chrome/browser/android/compositor/layer/autotab_layer.h"
 #include "chrome/browser/android/compositor/layer/thumbnail_layer.h"
 #include "chrome/browser/android/tab_android.h"
 #include "chrome/browser/android/thumbnail/thumbnail.h"
@@ -37,12 +32,10 @@
 #include "ui/gfx/android/java_bitmap.h"
 #include "ui/gfx/geometry/dip_util.h"
 #include "ui/gfx/geometry/rect.h"
-#include "ui/gfx/image/image.h"
 #include "url/gurl.h"
 
 using base::android::JavaParamRef;
 using base::android::JavaRef;
-using cc::UIResourceLayer;
 
 namespace {
 
@@ -120,11 +113,8 @@ TabContentManager::TabContentManager(JNIEnv* env,
                                      jint approximation_cache_size,
                                      jint compression_queue_max_size,
                                      jint write_queue_max_size,
-                                     jboolean use_approximation_thumbnail,
-                                     jfloat dp_to_px)
-    : dp_to_px_(dp_to_px),
-      weak_java_tab_content_manager_(env, obj),
-      weak_factory_(this) {
+                                     jboolean use_approximation_thumbnail)
+    : weak_java_tab_content_manager_(env, obj), weak_factory_(this) {
   thumbnail_cache_ = std::make_unique<ThumbnailCache>(
       static_cast<size_t>(default_cache_size),
       static_cast<size_t>(approximation_cache_size),
@@ -152,11 +142,6 @@ scoped_refptr<cc::Layer> TabContentManager::GetLiveLayer(int tab_id) {
 
 scoped_refptr<ThumbnailLayer> TabContentManager::GetStaticLayer(int tab_id) {
   return static_layer_cache_[tab_id];
-}
-
-scoped_refptr<AutoTabLayer> TabContentManager::GetAutoTabLayer(
-    int64_t timestamp) {
-  return autotab_layer_cache_[timestamp];
 }
 
 scoped_refptr<ThumbnailLayer> TabContentManager::GetOrCreateStaticLayer(
@@ -335,23 +320,6 @@ void TabContentManager::PutThumbnailIntoCache(int tab_id,
     thumbnail_cache_->Put(tab_id, bitmap, thumbnail_scale);
 }
 
-void TabContentManager::OnAutoTabResourceFetched(int64_t timestamp,
-                                                 const std::string& url,
-                                                 const std::string& title,
-                                                 const SkBitmap& favicon_bitmap,
-                                                 const gfx::Image& image) {
-  VLOG(0) << "Yusuf Received autotab resources for " << timestamp;
-  scoped_refptr<AutoTabLayer> layer = nullptr;
-  if (favicon_bitmap.isNull()) {
-    layer = AutoTabLayer::CreateWith(dp_to_px_, false, *(image.ToSkBitmap()),
-                                     title, url);
-  } else {
-    layer =
-        AutoTabLayer::CreateWith(dp_to_px_, true, favicon_bitmap, title, url);
-  }
-  autotab_layer_cache_[timestamp] = layer;
-}
-
 // ----------------------------------------------------------------------------
 // Native JNI methods
 // ----------------------------------------------------------------------------
@@ -362,12 +330,11 @@ jlong JNI_TabContentManager_Init(JNIEnv* env,
                                  jint approximation_cache_size,
                                  jint compression_queue_max_size,
                                  jint write_queue_max_size,
-                                 jboolean use_approximation_thumbnail,
-                                 jfloat dp_to_px) {
+                                 jboolean use_approximation_thumbnail) {
   TabContentManager* manager = new TabContentManager(
       env, obj, default_cache_size, approximation_cache_size,
       compression_queue_max_size, write_queue_max_size,
-      use_approximation_thumbnail, dp_to_px);
+      use_approximation_thumbnail);
   return reinterpret_cast<intptr_t>(manager);
 }
 

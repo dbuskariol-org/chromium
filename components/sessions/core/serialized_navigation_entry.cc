@@ -336,10 +336,6 @@ void SerializedNavigationEntry::WriteToPickle(int max_size,
     WriteStringToPickle(pickle, &bytes_written, max_size, entry.first);
     WriteStringToPickle(pickle, &bytes_written, max_size, entry.second);
   }
-
-  pickle->WriteInt64(task_id_);
-
-  pickle->WriteInt64(parent_task_id_);
 }
 
 bool SerializedNavigationEntry::ReadFromPickle(base::PickleIterator* iterator) {
@@ -419,20 +415,6 @@ bool SerializedNavigationEntry::ReadFromPickle(base::PickleIterator* iterator) {
         if (iterator->ReadString(&key) && iterator->ReadString(&value))
           extended_info_map_[key] = value;
       }
-    }
-
-    int64_t task_id_internal_value = 0;
-    if (iterator->ReadInt64(&task_id_internal_value)) {
-      task_id_ = task_id_internal_value;
-    } else {
-      task_id_ = 0;
-    }
-
-    int64_t parent_task_id_internal_value = -1;
-    if (iterator->ReadInt64(&parent_task_id_internal_value)) {
-      parent_task_id_ = parent_task_id_internal_value;
-    } else {
-      parent_task_id_ = -1;
     }
   }
 

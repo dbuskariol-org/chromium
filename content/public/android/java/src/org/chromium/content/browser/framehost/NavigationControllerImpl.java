@@ -67,13 +67,6 @@ import org.chromium.content_public.common.ResourceRequestBody;
     }
 
     @Override
-    public void goToIndex(int index) {
-        if (mNativeNavigationControllerAndroid != 0) {
-            nativeGoToIndex(mNativeNavigationControllerAndroid, index);
-        }
-    }
-
-    @Override
     public void goToNavigationIndex(int index) {
         if (mNativeNavigationControllerAndroid != 0) {
             nativeGoToNavigationIndex(mNativeNavigationControllerAndroid, index);
@@ -216,7 +209,6 @@ import org.chromium.content_public.common.ResourceRequestBody;
 
     @Override
     public NavigationEntry getEntryAtIndex(int index) {
-        if (index < 0) return null;
         if (mNativeNavigationControllerAndroid != 0) {
             return nativeGetEntryAtIndex(mNativeNavigationControllerAndroid, index);
         }
@@ -299,10 +291,9 @@ import org.chromium.content_public.common.ResourceRequestBody;
     }
 
     @CalledByNative
-    private static NavigationEntry createNavigationEntry(int index, String url, String virtualUrl,
-            String originalUrl, String title, Bitmap favicon, int transition, long timestamp, long taskID, long parentTaskID) {
-        return new NavigationEntry(
-                index, url, virtualUrl, originalUrl, title, favicon, transition, timestamp, taskID, parentTaskID);
+    private static NavigationEntry createNavigationEntry(int index, String url,
+            String virtualUrl, String originalUrl, String title, Bitmap favicon, int transition) {
+        return new NavigationEntry(index, url, virtualUrl, originalUrl, title, favicon, transition);
     }
 
     private native boolean nativeCanGoBack(long nativeNavigationControllerAndroid);
@@ -316,7 +307,6 @@ import org.chromium.content_public.common.ResourceRequestBody;
     private native void nativeGoBack(long nativeNavigationControllerAndroid);
     private native void nativeGoForward(long nativeNavigationControllerAndroid);
     private native void nativeGoToOffset(long nativeNavigationControllerAndroid, int offset);
-    private native void nativeGoToIndex(long nativeNavigationControllerAndroid, int index);
     private native void nativeGoToNavigationIndex(
             long nativeNavigationControllerAndroid, int index);
     private native void nativeCancelPendingReload(long nativeNavigationControllerAndroid);

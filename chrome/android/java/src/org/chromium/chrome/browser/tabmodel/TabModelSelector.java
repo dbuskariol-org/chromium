@@ -7,7 +7,6 @@ package org.chromium.chrome.browser.tabmodel;
 import android.support.annotation.Nullable;
 
 import org.chromium.base.VisibleForTesting;
-import org.chromium.chrome.browser.journey.JourneyManager;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabModel.TabLaunchType;
 import org.chromium.content_public.browser.LoadUrlParams;
@@ -31,8 +30,6 @@ public interface TabModelSelector {
          */
         boolean closeAllTabsRequest(boolean incognito);
     }
-
-    JourneyManager getJourneyManager();
 
     /**
      * Set the current model. This won't cause an animation, but will still change the stack that is

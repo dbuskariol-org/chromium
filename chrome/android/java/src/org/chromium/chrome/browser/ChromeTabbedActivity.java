@@ -11,8 +11,6 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.AppTask;
 import android.app.ActivityManager.RecentTaskInfo;
 import android.content.ComponentName;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -1669,14 +1667,6 @@ public class ChromeTabbedActivity
             getTabModelSelector().getModel(true).closeAllTabs();
             // TODO(nileshagrawal) Record unique action for this. See bug http://b/5542946.
             RecordUserAction.record("MobileMenuCloseAllTabs");
-        } else if (id == R.id.open_journey_id) {
-            if (getActivityTab() != null && getActivityTab().getCurrentRootTimestamp() != 0) {
-                ClipboardManager clipboard =
-                        (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("url", "https://chrome-memex-dev.appspot.com/?journeyMaxTimestamp=" + getActivityTab().getCurrentRootTimestamp() + "#journey");
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(this, R.string.url_copied, Toast.LENGTH_SHORT).show();
-            }
         } else if (id == R.id.focus_url_bar) {
             boolean isUrlBarVisible = !mLayoutManager.overviewVisible()
                     && (!isTablet() || getCurrentTabModel().getCount() != 0);
