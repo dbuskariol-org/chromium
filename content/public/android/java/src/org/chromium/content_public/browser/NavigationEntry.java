@@ -16,14 +16,17 @@ public class NavigationEntry {
     private final String mOriginalUrl;
     private final String mVirtualUrl;
     private final String mTitle;
+    private final long mTimestamp;
     private Bitmap mFavicon;
     private int mTransition;
+    private final long mTaskID;
+    private final long mParentTaskID;
 
     /**
      * Default constructor.
      */
     public NavigationEntry(int index, String url, String virtualUrl, String originalUrl,
-            String title, Bitmap favicon, int transition) {
+            String title, Bitmap favicon, int transition, long timestamp, long taskID, long parentTaskID) {
         mIndex = index;
         mUrl = url;
         mVirtualUrl = virtualUrl;
@@ -31,6 +34,9 @@ public class NavigationEntry {
         mTitle = title;
         mFavicon = favicon;
         mTransition = transition;
+        mTimestamp = timestamp;
+        mTaskID = taskID;
+        mParentTaskID = parentTaskID;
     }
 
     /**
@@ -86,6 +92,27 @@ public class NavigationEntry {
      */
     public Bitmap getFavicon() {
         return mFavicon;
+    }
+
+    /**
+     * @return The timestamp of the page.
+     */
+    public long getTimestamp() {
+        return mTimestamp;
+    }
+
+    /**
+     * @return The task ID of the page.
+     */
+    public long getTaskID() {
+        return mTaskID;
+    }
+
+    /**
+     * @return The parent task ID of the page.
+     */
+    public long getParentTaskID() {
+        return mParentTaskID;
     }
 
     /**

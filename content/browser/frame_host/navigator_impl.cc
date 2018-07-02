@@ -893,7 +893,7 @@ void NavigatorImpl::DidStartMainFrameNavigation(
       entry->set_should_replace_entry(pending_entry->should_replace_entry());
       entry->SetRedirectChain(pending_entry->GetRedirectChain());
     }
-
+    VLOG(0)<<"PARENT Setting pending entry from navigator impl";
     controller_->SetPendingEntry(std::move(entry));
     if (delegate_)
       delegate_->NotifyChangedNavigationState(content::INVALIDATE_TYPE_URL);

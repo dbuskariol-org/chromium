@@ -14,6 +14,7 @@ import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.compositor.LayerTitleCache;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
+import org.chromium.chrome.browser.compositor.layouts.components.LayoutAutotab;
 import org.chromium.chrome.browser.compositor.layouts.components.LayoutTab;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
@@ -65,6 +66,13 @@ public class TabListSceneLayer extends SceneLayer {
         nativeUpdateLayer(mNativePtr, getTabListBackgroundColor(context), viewport.left,
                 viewport.top, viewport.width(), viewport.height(), layerTitleCache,
                 tabContentManager, resourceManager);
+
+        LayoutAutotab[] autotabs = layout.getLayoutAutotabsToRender();
+        int autotabsCount = autotabs != null ? autotabs.length : 0;
+        for (int i = 0; i < autotabsCount; i++) {
+            LayoutAutotab a = autotabs[i];
+            nativePutAutoTabLayer(mNativePtr, R.drawable.ic_pin, 36 * dpToPx, a.getTimestamp(), a.isPinned(), a.getX(), a.getY());
+        }
 
         for (int i = 0; i < tabsCount; i++) {
             LayoutTab t = tabs[i];
@@ -189,4 +197,7 @@ public class TabListSceneLayer extends SceneLayer {
             boolean anonymizeToolbar, boolean showTabTitle, int toolbarTextBoxResource,
             int toolbarTextBoxBackgroundColor, float toolbarTextBoxAlpha, float toolbarAlpha,
             float toolbarYOffset, float sideBorderScale);
+    private native void nativePutAutoTabLayer(long nativeTabListSceneLayer, int pinResourceId,
+                                              float pinnedSize, long timestamp, boolean isPinned,
+                                              float x, float y);
 }

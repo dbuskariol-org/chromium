@@ -419,6 +419,20 @@ const FeatureEntry::Choice kChromeHomeSwipeLogicChoices[] = {
      switches::kChromeHomeSwipeLogicType, "velocity"},
 };
 
+const FeatureEntry::Choice kAutotabsImportantPagesHeuristicChoices[] = {
+    {flags_ui::kGenericExperimentChoiceDefault, "", ""},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicLeaves,
+     switches::kAutotabsImportantPagesHeuristicType, "Leaves"},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicBranches,
+     switches::kAutotabsImportantPagesHeuristicType, "Branches"},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicLastInTab,
+     switches::kAutotabsImportantPagesHeuristicType, "LastInTab"},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicLastInTask,
+     switches::kAutotabsImportantPagesHeuristicType, "LastInTask"},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicLeavesLasInTabNoSearch,
+     switches::kAutotabsImportantPagesHeuristicType, "LLiTNS"},
+};
+
 #endif  // OS_ANDROID
 
 const FeatureEntry::Choice kNumRasterThreadsChoices[] = {
@@ -1870,6 +1884,10 @@ const FeatureEntry kFeatureEntries[] = {
     {"chrome-home-swipe-logic", flag_descriptions::kChromeHomeSwipeLogicName,
      flag_descriptions::kChromeHomeSwipeLogicDescription, kOsAndroid,
      MULTI_VALUE_TYPE(kChromeHomeSwipeLogicChoices)},
+    {"autotabs-important-pages-heuristic",
+     flag_descriptions::kAutotabsImportantPagesHeuristic,
+     flag_descriptions::kAutotabsImportantPagesHeuristicDescription, kOsAndroid,
+     MULTI_VALUE_TYPE(kAutotabsImportantPagesHeuristicChoices)},
     {"enable-chrome-memex", flag_descriptions::kChromeMemexName,
      flag_descriptions::kChromeMemexDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kChromeMemexFeature)},
