@@ -2688,6 +2688,7 @@ void WebContentsImpl::CreateNewWindow(
     return;
   }
 
+  VLOG(0)<<"PARENT Creating new web contents OpenerSuppressed:"<<params.opener_suppressed;
   // Create the new web contents. This will automatically create the new
   // WebContentsView. In the future, we may want to create the view separately.
   CreateParams create_params(GetBrowserContext(), site_instance.get());
@@ -2774,13 +2775,16 @@ void WebContentsImpl::CreateNewWindow(
         raw_new_contents->weak_factory_.GetWeakPtr();
     if (delegate_) {
       gfx::Rect initial_rect;
-
+      VLOG(0)<<"PARENT Add new contents from new window created";
       delegate_->AddNewContents(this, std::move(new_contents),
                                 params.disposition, initial_rect,
                                 params.mimic_user_gesture, &was_blocked);
-      if (!weak_new_contents)
+      if (!weak_new_contents) {
+        VLOG(0)<<"PARENT Add new contents exiting after delegate call";
         return;  // The delegate deleted |new_contents| during AddNewContents().
+      }
     }
+
 
     if (!was_blocked) {
       OpenURLParams open_params(params.target_url, params.referrer,
@@ -2788,6 +2792,8 @@ void WebContentsImpl::CreateNewWindow(
                                 ui::PAGE_TRANSITION_LINK,
                                 true /* is_renderer_initiated */);
       open_params.user_gesture = params.mimic_user_gesture;
+      open_params.parent_task_id = GetController().GetLastCommittedEntry()->GetTaskID();
+      VLOG(0)<<"PARENT Putting parent task id "<<open_params.parent_task_id;
 
       if (delegate_ && !is_guest &&
           !delegate_->ShouldResumeRequestsForCreatedWindow()) {
@@ -2865,6 +2871,7 @@ void WebContentsImpl::ShowCreatedWindow(int process_id,
     base::WeakPtr<WebContentsImpl> weak_popup =
         raw_popup->weak_factory_.GetWeakPtr();
     if (delegate) {
+      VLOG(0)<<"PARENT Popup calling add new contents";
       delegate->AddNewContents(this, std::move(popup), disposition,
                                initial_rect, user_gesture, nullptr);
       if (!weak_popup)
@@ -3285,6 +3292,7 @@ void WebContentsImpl::ResetAutoResizeSize() {
 }
 
 WebContents* WebContentsImpl::OpenURL(const OpenURLParams& params) {
+  VLOG(0)<<"PARENT OPen url";
   if (!delegate_) {
     // Embedder can delay setting a delegate on new WebContents with
     // WebContentsDelegate::ShouldResumeRequestsForCreatedWindow. In the mean
@@ -4051,6 +4059,7 @@ void WebContentsImpl::ResumeLoadingCreatedWebContents() {
   // Resume blocked requests for both the RenderViewHost and RenderFrameHost.
   // TODO(brettw): It seems bogus to reach into here and initialize the host.
   if (is_resume_pending_) {
+    VLOG(0)<<"PARENT resume pending ";
     is_resume_pending_ = false;
     GetRenderViewHost()->GetWidget()->Init();
     GetMainFrame()->Init();
@@ -4398,7 +4407,7 @@ bool WebContentsImpl::ShouldAllowRunningInsecureContent(
 
 void WebContentsImpl::ViewSource(RenderFrameHostImpl* frame) {
   DCHECK_EQ(this, WebContents::FromRenderFrameHost(frame));
-
+  VLOG(0)<<"PARENT ViewSource";
   // Don't do anything if there is no |delegate_| that could accept and show the
   // new WebContents containing the view-source.
   if (!delegate_)
@@ -4413,11 +4422,13 @@ void WebContentsImpl::ViewSource(RenderFrameHostImpl* frame) {
                                             ->GetLastCommittedEntry());
   if (!last_committed_entry)
     return;
+  VLOG(0)<<"PARENT ViewSource 1";
 
   FrameNavigationEntry* frame_entry =
       last_committed_entry->GetFrameEntry(frame->frame_tree_node());
   if (!frame_entry)
     return;
+  VLOG(0)<<"PARENT ViewSource 2";
 
   // Any new WebContents opened while this WebContents is in fullscreen can be
   // used to confuse the user, so drop fullscreen.
@@ -4441,6 +4452,7 @@ void WebContentsImpl::ViewSource(RenderFrameHostImpl* frame) {
   navigation_entry->SetVirtualURL(GURL(content::kViewSourceScheme +
                                        std::string(":") +
                                        frame_entry->url().spec()));
+  navigation_entry->SetParentTaskID(last_committed_entry->GetTaskID());
 
   // Do not restore scroller position.
   // TODO(creis, lukasza, arthursonzogni): Do not reuse the original PageState,

@@ -2749,6 +2749,9 @@ To obtain new licenses, connect to the internet and play your downloaded content
       <message name="IDS_MENU_PREFERENCES" desc="Menu item for opening browser preferences. [CHAR-LIMIT=27]">
         Settings
       </message>
+      <message name="IDS_MENU_OPEN_JOURNEY" desc="Menu item for opening browser preferences. [CHAR-LIMIT=27]">
+        Open journey page
+      </message>
       <message name="IDS_MENU_CLOSE_ALL_TABS" desc="Menu item for closing all open tabs. [CHAR-LIMIT=27]">
         Close all tabs
       </message>

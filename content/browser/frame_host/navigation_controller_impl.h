@@ -442,6 +442,8 @@ class CONTENT_EXPORT NavigationControllerImpl : public NavigationController {
   // after the transient entry will become invalid if you navigate forward.
   int transient_entry_index_;
 
+  int64_t current_root_task_id_ = 0;
+
   // The delegate associated with the controller. Possibly NULL during
   // setup.
   NavigationControllerDelegate* delegate_;
