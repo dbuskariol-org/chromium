@@ -23,10 +23,6 @@ namespace cc {
 class Layer;
 }
 
-namespace gfx {
-class Image;
-}
-
 namespace ui {
 class UIResourceProvider;
 }
@@ -34,7 +30,6 @@ class UIResourceProvider;
 namespace android {
 
 class ThumbnailLayer;
-class AutoTabLayer;
 
 // A native component of the Java TabContentManager class.
 class TabContentManager : public ThumbnailCacheObserver {
@@ -48,8 +43,7 @@ class TabContentManager : public ThumbnailCacheObserver {
                     jint approximation_cache_size,
                     jint compression_queue_max_size,
                     jint write_queue_max_size,
-                    jboolean use_approximation_thumbnail,
-                    jfloat dp_to_px);
+                    jboolean use_approximation_thumbnail);
 
   virtual ~TabContentManager();
 
@@ -61,8 +55,6 @@ class TabContentManager : public ThumbnailCacheObserver {
   scoped_refptr<cc::Layer> GetLiveLayer(int tab_id);
 
   scoped_refptr<ThumbnailLayer> GetStaticLayer(int tab_id);
-
-  scoped_refptr<AutoTabLayer> GetAutoTabLayer(int64_t timestamp);
 
   // Get the static thumbnail from the cache, or the NTP.
   scoped_refptr<ThumbnailLayer> GetOrCreateStaticLayer(int tab_id,
@@ -76,12 +68,6 @@ class TabContentManager : public ThumbnailCacheObserver {
   // longer be served by the CompositorView.  If |layer| is NULL, will
   // make sure all live layers are detached.
   void DetachLiveLayer(int tab_id, scoped_refptr<cc::Layer> layer);
-
-  void OnAutoTabResourceFetched(int64_t timestamp,
-                                const std::string& url,
-                                const std::string& title,
-                                const SkBitmap& favicon_bitmap,
-                                const gfx::Image& image);
 
   // JNI methods.
   jboolean HasFullCachedThumbnail(
@@ -118,7 +104,6 @@ class TabContentManager : public ThumbnailCacheObserver {
   class TabReadbackRequest;
   // TODO(bug 714384) check sizes and consider using base::flat_map if these
   // layer maps are small.
-  using AutoTabLayerMap = std::map<int64_t, scoped_refptr<AutoTabLayer>>;
   using LayerMap = std::map<int, scoped_refptr<cc::Layer>>;
   using ThumbnailLayerMap = std::map<int, scoped_refptr<ThumbnailLayer>>;
   using TabReadbackRequestMap =
@@ -132,8 +117,6 @@ class TabContentManager : public ThumbnailCacheObserver {
   ThumbnailLayerMap static_layer_cache_;
   LayerMap live_layer_list_;
   TabReadbackRequestMap pending_tab_readbacks_;
-  AutoTabLayerMap autotab_layer_cache_;
-  float dp_to_px_;
 
   JavaObjectWeakGlobalRef weak_java_tab_content_manager_;
   base::WeakPtrFactory<TabContentManager> weak_factory_;

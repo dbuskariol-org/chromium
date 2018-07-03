@@ -52,8 +52,7 @@ class TabTasks {
 
   void UpdateWithNavigation(int nav_id,
                             ui::PageTransition transition,
-                            int64_t task_id,
-                            int64_t parent_task_id);
+                            int64_t global_id);
 
  private:
   // Removes navigation from nav_to_task_id_map_ that is oldest according to

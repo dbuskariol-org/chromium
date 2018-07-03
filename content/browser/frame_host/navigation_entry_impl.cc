@@ -274,8 +274,6 @@ NavigationEntryImpl::NavigationEntryImpl(
       restore_type_(RestoreType::NONE),
       is_overriding_user_agent_(false),
       http_status_code_(0),
-      task_id_(-1),
-      parent_task_id_(-1),
       is_renderer_initiated_(is_renderer_initiated),
       should_replace_entry_(false),
       should_clear_history_list_(false),
@@ -540,8 +538,6 @@ bool NavigationEntryImpl::GetIsOverridingUserAgent() const {
 }
 
 void NavigationEntryImpl::SetTimestamp(base::Time timestamp) {
-  VLOG(0) << "TIMESTAMP Set timestamp FOR ID " << unique_id_
-          << " to -------------------------------" << timestamp;
   timestamp_ = timestamp;
 }
 
@@ -585,23 +581,6 @@ void NavigationEntryImpl::AddExtraHeaders(
   if (!extra_headers_.empty())
     extra_headers_ += "\r\n";
   extra_headers_ += more_extra_headers;
-}
-
-void NavigationEntryImpl::SetTaskID(int64_t id) {
-  task_id_ = id;
-}
-
-int64_t NavigationEntryImpl::GetTaskID() const {
-  return task_id_;
-}
-
-void NavigationEntryImpl::SetParentTaskID(int64_t id) {
-  VLOG(0)<<"PARENT Setting parent task id to "<<id;
-  parent_task_id_ = id;
-}
-
-int64_t NavigationEntryImpl::GetParentTaskID() const {
-  return parent_task_id_;
 }
 
 void NavigationEntryImpl::SetCanLoadLocalResources(bool allow) {
@@ -681,8 +660,6 @@ std::unique_ptr<NavigationEntryImpl> NavigationEntryImpl::CloneAndReplace(
   // ResetForCommit: reload_type_
   copy->extra_data_ = extra_data_;
   copy->replaced_entry_data_ = replaced_entry_data_;
-  copy->task_id_ = task_id_;
-  copy->parent_task_id_ = parent_task_id_;
 
   return copy;
 }

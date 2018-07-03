@@ -48,18 +48,13 @@ JNI_NavigationControllerImpl_CreateJavaNavigationEntry(
   ScopedJavaLocalRef<jstring> j_title(
       ConvertUTF16ToJavaString(env, entry->GetTitle()));
   ScopedJavaLocalRef<jobject> j_bitmap;
-
-  int64_t timestamp_int64 =
-      entry->GetTimestamp().ToDeltaSinceWindowsEpoch().InMicroseconds() -
-      base::Time::UnixEpoch().ToDeltaSinceWindowsEpoch().InMicroseconds();
-
   const content::FaviconStatus& status = entry->GetFavicon();
   if (status.valid && status.image.ToSkBitmap()->computeByteSize() > 0)
     j_bitmap = gfx::ConvertToJavaBitmap(status.image.ToSkBitmap());
 
   return content::Java_NavigationControllerImpl_createNavigationEntry(
       env, index, j_url, j_virtual_url, j_original_url, j_title, j_bitmap,
-      entry->GetTransitionType(), timestamp_int64, entry->GetTaskID(), entry->GetParentTaskID());
+      entry->GetTransitionType());
 }
 
 static void JNI_NavigationControllerImpl_AddNavigationEntryToHistory(
@@ -128,12 +123,6 @@ void NavigationControllerAndroid::GoToOffset(JNIEnv* env,
                                              const JavaParamRef<jobject>& obj,
                                              jint offset) {
   navigation_controller_->GoToOffset(offset);
-}
-
-void NavigationControllerAndroid::GoToIndex(JNIEnv* env,
-                                             const JavaParamRef<jobject>& obj,
-                                             jint index) {
-  navigation_controller_->GoToIndex(index);
 }
 
 jboolean NavigationControllerAndroid::IsInitialNavigation(

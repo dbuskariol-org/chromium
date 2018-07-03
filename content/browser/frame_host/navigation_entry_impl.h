@@ -154,10 +154,6 @@ class CONTENT_EXPORT NavigationEntryImpl : public NavigationEntry {
   bool IsRestored() const override;
   std::string GetExtraHeaders() const override;
   void AddExtraHeaders(const std::string& extra_headers) override;
-  void SetTaskID(int64_t id) override;
-  int64_t GetTaskID() const override;
-  void SetParentTaskID(int64_t id) override;
-  int64_t GetParentTaskID() const override;
 
   // Creates a copy of this NavigationEntryImpl that can be modified
   // independently from the original.  Does not copy any value that would be
@@ -449,8 +445,6 @@ class CONTENT_EXPORT NavigationEntryImpl : public NavigationEntry {
   bool is_overriding_user_agent_;
   base::Time timestamp_;
   int http_status_code_;
-  int64_t task_id_;
-  int64_t parent_task_id_;
 
   // This member is not persisted with session restore because it is transient.
   // If the post request succeeds, this field is cleared since the same
