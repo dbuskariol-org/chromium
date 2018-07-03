@@ -34,8 +34,6 @@ public interface NavigationController {
      */
     void goToOffset(int offset);
 
-    void goToIndex(int index);
-
     /**
      * Navigates to the specified index in the navigation entry for this page.
      * @param index The navigation index to navigate to.

@@ -116,8 +116,6 @@ struct CONTENT_EXPORT OpenURLParams {
   // possible, i.e. if an app for the URL is installed.
   bool open_app_window_if_possible;
 
-  int64_t parent_task_id;
-
  private:
   OpenURLParams();
 };

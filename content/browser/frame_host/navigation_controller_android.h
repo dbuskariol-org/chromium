@@ -43,9 +43,6 @@ class CONTENT_EXPORT NavigationControllerAndroid {
   void GoToOffset(JNIEnv* env,
                   const base::android::JavaParamRef<jobject>& obj,
                   jint offset);
-  void GoToIndex(JNIEnv* env,
-                                               const base::android::JavaParamRef<jobject>& obj,
-                                               jint index);
   jboolean IsInitialNavigation(JNIEnv* env,
                                const base::android::JavaParamRef<jobject>& obj);
   void LoadIfNecessary(JNIEnv* env,

@@ -287,22 +287,6 @@ FrameMsg_Navigate_Type::Value GetNavigationType(
   }
 }
 
-// The criteria for whether a navigation will continue a task chain or start a
-// new one.
-bool DoesTransitionContinueTask(ui::PageTransition transition) {
-  if (ui::PageTransitionCoreTypeIs(transition, ui::PAGE_TRANSITION_LINK) ||
-      ui::PageTransitionCoreTypeIs(transition,
-                                   ui::PAGE_TRANSITION_AUTO_SUBFRAME) ||
-      ui::PageTransitionCoreTypeIs(transition,
-                                   ui::PAGE_TRANSITION_MANUAL_SUBFRAME) ||
-      ui::PageTransitionCoreTypeIs(transition,
-                                   ui::PAGE_TRANSITION_FORM_SUBMIT) ||
-      transition & ui::PAGE_TRANSITION_IS_REDIRECT_MASK) {
-    return true;
-  }
-  return false;
-}
-
 }  // namespace
 
 // NavigationControllerImpl ----------------------------------------------------
@@ -547,7 +531,6 @@ NavigationControllerImpl::GetEntryWithUniqueID(int nav_entry_id) const {
 
 void NavigationControllerImpl::SetPendingEntry(
     std::unique_ptr<NavigationEntryImpl> entry) {
-  VLOG(0)<<"PARENT Set pending entry";
   DiscardNonCommittedEntriesInternal();
   pending_entry_ = entry.release();
   DCHECK_EQ(-1, pending_entry_index_);
@@ -802,9 +785,6 @@ bool NavigationControllerImpl::RendererDidNavigate(
     bool is_same_document_navigation,
     NavigationHandleImpl* navigation_handle) {
   is_initial_navigation_ = false;
-  if (pending_entry_) {
-    VLOG(0)<<"PARENT Renderer did navigate with parent task id "<<pending_entry_->GetParentTaskID();
-  }
 
   // Save the previous state before we clobber it.
   bool overriding_user_agent_changed = false;
@@ -869,9 +849,7 @@ bool NavigationControllerImpl::RendererDidNavigate(
       last_committed_reload_time_ = base::Time();
     }
   }
-  VLOG(0) << "TIMESTAMP Renderer did navigate with details "
-             "type-------------------------------"
-          << details->type;
+
   switch (details->type) {
     case NAVIGATION_TYPE_NEW_PAGE:
       RendererDidNavigateToNewPage(rfh, params, details->is_same_document,
@@ -968,22 +946,6 @@ bool NavigationControllerImpl::RendererDidNavigate(
   // Remember the bindings the renderer process has at this point, so that
   // we do not grant this entry additional bindings if we come back to it.
   active_entry->SetBindings(rfh->GetEnabledBindings());
-
-  if (PageTransitionIsNewNavigation(active_entry->GetTransitionType())
-    && !rfh->GetParent() && details->type != NAVIGATION_TYPE_EXISTING_PAGE) {
-      active_entry->SetTaskID(active_entry->GetTimestamp()
-                             .ToDeltaSinceWindowsEpoch()
-                             .InMicroseconds());
-      if (last_committed_entry_index_ > 0
-          && DoesTransitionContinueTask(active_entry->GetTransitionType())) {
-        active_entry->SetParentTaskID(
-            GetEntryAtIndex(last_committed_entry_index_ - 1)->GetTaskID());
-      }
-      VLOG(0) << "TASKID"
-              << "Active entry is " <<last_committed_entry_index_<<":"<<details->type<<":"<<active_entry->GetURL();
-      VLOG(0) << "TASKID"
-              << " Current task ID is " << active_entry->GetTaskID() << ":"<<active_entry->GetParentTaskID();
-  }
 
   // Now prep the rest of the details for the notification and broadcast.
   details->entry = active_entry;
@@ -2541,8 +2503,6 @@ NavigationControllerImpl::CreateNavigationEntryFromLoadParams(
     entry->set_source_site_instance(
         static_cast<SiteInstanceImpl*>(params.source_site_instance.get()));
     entry->SetRedirectChain(params.redirect_chain);
-    entry->SetParentTaskID(params.parent_task_id);
-    VLOG(0)<<"PARENT Setting parent task ID to "<<params.parent_task_id;
   }
 
   // Set the FTN ID (only used in non-site-per-process, for tests).

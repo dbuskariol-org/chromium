@@ -191,8 +191,7 @@ class TabAndroid : public CoreTabHelperDelegate,
       jboolean is_renderer_initiated,
       jboolean should_replace_current_entry,
       jboolean has_user_gesture,
-      jboolean should_clear_history_list,
-      jlong parent_task_id);
+      jboolean should_clear_history_list);
   void SetActiveNavigationEntryTitleForUrl(
       JNIEnv* env,
       const base::android::JavaParamRef<jobject>& obj,

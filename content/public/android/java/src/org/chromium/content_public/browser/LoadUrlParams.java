@@ -43,7 +43,6 @@ public class LoadUrlParams {
     long mIntentReceivedTimestamp;
     boolean mHasUserGesture;
     boolean mShouldClearHistoryList;
-    long mParentTaskID;
 
     /**
      * Creates an instance with default page transition type.
@@ -480,13 +479,6 @@ public class LoadUrlParams {
         return mShouldClearHistoryList;
     }
 
-    public void setParentTaskID(long id) {
-        mParentTaskID = id;
-    }
-
-    public long getParentTaskID() {
-        return mParentTaskID;
-    }
     public boolean isBaseUrlDataScheme() {
         // If there's no base url set, but this is a data load then
         // treat the scheme as data:.

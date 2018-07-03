@@ -14,7 +14,6 @@
 #include "cc/layers/layer.h"
 #include "chrome/browser/android/background_tab_manager.h"
 #include "chrome/browser/android/compositor/tab_content_manager.h"
-#include "chrome/browser/android/journey/journey_info_fetcher.h"
 #include "chrome/browser/android/metrics/uma_utils.h"
 #include "chrome/browser/android/tab_web_contents_delegate_android.h"
 #include "chrome/browser/android/trusted_cdn.h"
@@ -561,8 +560,7 @@ TabAndroid::TabLoadStatus TabAndroid::LoadUrl(
     jboolean is_renderer_initiated,
     jboolean should_replace_current_entry,
     jboolean has_user_gesture,
-    jboolean should_clear_history_list,
-    jlong parent_task_id) {
+    jboolean should_clear_history_list) {
   if (!web_contents())
     return PAGE_LOAD_FAILED;
 
@@ -625,7 +623,6 @@ TabAndroid::TabLoadStatus TabAndroid::LoadUrl(
     load_params.should_replace_current_entry = should_replace_current_entry;
     load_params.has_user_gesture = has_user_gesture;
     load_params.should_clear_history_list = should_clear_history_list;
-    load_params.parent_task_id = parent_task_id;
     web_contents()->GetController().LoadURLWithParams(load_params);
   }
   return DEFAULT_PAGE_LOAD;
