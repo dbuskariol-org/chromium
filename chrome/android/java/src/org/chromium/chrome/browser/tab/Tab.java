@@ -88,6 +88,7 @@ import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModel.TabLaunchType;
 import org.chromium.chrome.browser.tabmodel.TabModel.TabSelectionType;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
+import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tabmodel.TabReparentingParams;
 import org.chromium.chrome.browser.util.ColorUtils;
 import org.chromium.chrome.browser.util.FeatureUtilities;
@@ -108,6 +109,8 @@ import org.chromium.content_public.browser.GestureStateListener;
 import org.chromium.content_public.browser.ImeAdapter;
 import org.chromium.content_public.browser.ImeEventObserver;
 import org.chromium.content_public.browser.LoadUrlParams;
+import org.chromium.content_public.browser.NavigationController;
+import org.chromium.content_public.browser.NavigationEntry;
 import org.chromium.content_public.browser.SelectionPopupController;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.browser.WebContentsAccessibility;
@@ -217,6 +220,9 @@ public class Tab
      * closed.
      */
     private int mParentId = INVALID_TAB_ID;
+
+    private long mCurrentRootTimestamp;
+    private long mPreviousRootTimestamp;
 
     /**
      * If this tab was opened from another tab in another Activity, this is the Intent that can be
@@ -648,6 +654,10 @@ public class Tab
         };
 
         mDisplayCutoutController = new DisplayCutoutController(this);
+
+        if (mParentId != INVALID_TAB_ID && getTabModelSelector().getTabById(mParentId) != null) {
+            mCurrentRootTimestamp = getTabModelSelector().getTabById(mParentId).getCurrentRootTimestamp();
+        }
     }
 
     private int calculateDefaultThemeColor() {
@@ -675,6 +685,71 @@ public class Tab
         mIsTitleDirectionRtl = mTitle != null
                 && LocalizationUtils.getFirstStrongCharacterDirection(mTitle)
                         == LocalizationUtils.RIGHT_TO_LEFT;
+        mCurrentRootTimestamp = state.currentRootTimestamp;
+    }
+
+    public long getCurrentRootTimestamp() {
+        return mCurrentRootTimestamp;
+    }
+
+    public long getPreviousRootTimestamp() {
+        return mPreviousRootTimestamp;
+    }
+
+    private static NavigationEntry getLastEntryWithinTaskForTab(Tab tab, int startIndex) {
+        if (tab == null) return null;
+        if (tab.getWebContents() == null
+                || tab.getWebContents().getNavigationController() == null) {
+            return null;
+        }
+
+        NavigationController controller = tab.getWebContents().getNavigationController();
+        int index = controller.getLastCommittedEntryIndex();
+
+        if (startIndex > index) return null;
+        if (startIndex == -1) startIndex = index;
+        NavigationEntry entry = null;
+        for (int i = startIndex; i >= 0; i--) {
+            entry = controller.getEntryAtIndex(i);
+            if (entry == null) continue;
+            android.util.Log.e("TASKTIMESTAMP",
+                    "JourneyManager.java#getTaskTimestampForTab : LOOKING AT " + entry.getUrl()
+                            + " TRANSITION IS " + entry.getTransition());
+            if (entry.getUrl().equals(UrlConstants.NTP_URL)) {
+                entry = controller.getEntryAtIndex(i + 1);
+                break;
+            }
+            if (entryStartsANewTask(entry) || entry.getTransition() == 8) break;
+        }
+        return entry;
+    }
+
+    private static long getTaskTimestampForTab(Tab tab, int startIndex) {
+        Tab currentTab = tab;
+        NavigationEntry entry = null;
+        do {
+            entry = getLastEntryWithinTaskForTab(currentTab, startIndex);
+            if (entry == null) return 0;
+            if (entry.getIndex() == 0) {
+                currentTab = TabModelUtils.getTabById(
+                        currentTab.getTabModelSelector().getModel(currentTab.isIncognito()),
+                        currentTab.getParentId());
+                android.util.Log.e("TASKTIMESTAMP",
+                        "JourneyManager.java#getTaskTimestampForTab : CHECKING PARENT TAB AND URL IS "
+                                + (currentTab == null ? "" : currentTab.getUrl()));
+            } else {
+                currentTab = null;
+            }
+        } while (currentTab != null);
+        android.util.Log.e("Yusuf",
+                "JourneyManager.java#getTaskTimestampForTab : Returning timestamp for "
+                        + entry.getUrl());
+        return entry.getTimestamp();
+    }
+
+    private static boolean entryStartsANewTask(NavigationEntry entry) {
+        assert entry != null;
+        return (entry.getTransition() & 0xFF) == 1 || (entry.getTransition() & 0xFF) == 5;
     }
 
     /**
@@ -775,7 +850,9 @@ public class Tab
                     //            from the native?
                     params.getReferrer() != null ? params.getReferrer().getPolicy() : 0,
                     params.getIsRendererInitiated(), params.getShouldReplaceCurrentEntry(),
-                    params.getHasUserGesture(), params.getShouldClearHistoryList());
+                    params.getHasUserGesture(),
+                    params.getShouldClearHistoryList(),
+                    params.getParentTaskID());
 
             for (TabObserver observer : mObservers) {
                 observer.onLoadUrl(this, params, loadType);
@@ -925,6 +1002,7 @@ public class Tab
         tabState.shouldPreserve = mShouldPreserve;
         tabState.timestampMillis = mTimestampMillis;
         tabState.themeColor = getThemeColor();
+        tabState.currentRootTimestamp = mCurrentRootTimestamp;
         return tabState;
     }
 
@@ -2226,7 +2304,13 @@ public class Tab
             if (isFrozen() && mFrozenContentsState != null) {
                 // Restore is needed for a tab that is loaded for the first time. WebContents will
                 // be restored from a saved state.
-                unfreezeContents();
+                if (unfreezeContents()) {
+                    if (mWebContents != null && mCurrentRootTimestamp == 0) {
+                        int index = getWebContents().getNavigationController().getLastCommittedEntryIndex();
+                        mCurrentRootTimestamp = getTaskTimestampForTab(this, -1);
+                    }
+                    for (TabObserver observer : mObservers) observer.onTabRestored(this);
+                }
             } else if (!needsReload()) {
                 return;
             }
@@ -2545,6 +2629,21 @@ public class Tab
         for (TabObserver observer : mObservers) observer.onNavigationEntriesDeleted(this);
     }
 
+    void notifyNavigationEntryCommitted() {
+        assert mWebContents.getNavigationController() != null;
+        int index = mWebContents.getNavigationController().getLastCommittedEntryIndex();
+        NavigationEntry entry = mWebContents.getNavigationController().getEntryAtIndex(index);
+        int transitionCore = entry.getTransition() & 0xFF;
+        boolean isBackOrForward = (entry.getTransition() & PageTransition.FORWARD_BACK) != 0;
+        boolean isNewRoot = !isBackOrForward && (transitionCore == 1 || transitionCore == 5
+                || transitionCore == 2 || transitionCore == 6);
+        if (isNewRoot) {
+            mPreviousRootTimestamp = mCurrentRootTimestamp;
+            mCurrentRootTimestamp = entry.getTimestamp();
+        }
+        for (TabObserver observer : mObservers) observer.onNavigationEntryCommitted(this, index, isNewRoot);
+    }
+
     /**
      * Returns the SnackbarManager for the activity that owns this Tab, if any. May
      * return null.
@@ -2702,7 +2801,7 @@ public class Tab
     /**
      * @return See {@link #mTimestampMillis}.
      */
-    private long getTimestampMillis() {
+    public long getTimestampMillis() {
         return mTimestampMillis;
     }
 
@@ -3517,7 +3616,7 @@ public class Tab
     private native int nativeLoadUrl(long nativeTabAndroid, String url, String extraHeaders,
             ResourceRequestBody postData, int transition, String referrerUrl, int referrerPolicy,
             boolean isRendererInitiated, boolean shoulReplaceCurrentEntry,
-            boolean hasUserGesture, boolean shouldClearHistoryList);
+            boolean hasUserGesture, boolean shouldClearHistoryList, long parentTaskID);
     private native void nativeSetActiveNavigationEntryTitleForUrl(long nativeTabAndroid, String url,
             String title);
     private native boolean nativePrint(

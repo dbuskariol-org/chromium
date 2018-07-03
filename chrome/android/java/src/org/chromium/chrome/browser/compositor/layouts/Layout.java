@@ -19,6 +19,7 @@ import org.chromium.chrome.browser.compositor.LayerTitleCache;
 import org.chromium.chrome.browser.compositor.animation.CompositorAnimationHandler;
 import org.chromium.chrome.browser.compositor.layouts.ChromeAnimation.Animatable;
 import org.chromium.chrome.browser.compositor.layouts.ChromeAnimation.Animation;
+import org.chromium.chrome.browser.compositor.layouts.components.LayoutAutotab;
 import org.chromium.chrome.browser.compositor.layouts.components.LayoutTab;
 import org.chromium.chrome.browser.compositor.layouts.components.VirtualView;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
@@ -108,6 +109,8 @@ public abstract class Layout implements TabContentManager.ThumbnailChangeListene
     /** The tabs currently being rendered as part of this layout. The tabs are
      * drawn using the same ordering as this array. */
     protected LayoutTab[] mLayoutTabs;
+
+    protected LayoutAutotab[] mLayoutAutotabs;
 
     // True means that the layout is going to hide as soon as the animation finishes.
     private boolean mIsHiding;
@@ -960,6 +963,13 @@ public abstract class Layout implements TabContentManager.ThumbnailChangeListene
      */
     public LayoutTab[] getLayoutTabsToRender() {
         return mLayoutTabs;
+    }
+
+    /**
+     * @return The {@link LayoutAutotab}s to be drawn.
+     */
+    public LayoutAutotab[] getLayoutAutotabsToRender() {
+        return mLayoutAutotabs;
     }
 
     /**

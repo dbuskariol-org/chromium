@@ -64,6 +64,8 @@ ContentSerializedNavigationBuilder::FromNavigationEntry(
   navigation.replaced_entry_data_ =
       ConvertReplacedEntryData(entry.GetReplacedEntryData());
   navigation.password_state_ = GetPasswordStateFromNavigation(entry);
+  navigation.task_id_ = entry.GetTaskID();
+  navigation.parent_task_id_ = entry.GetParentTaskID();
 
   for (const auto& handler_entry :
        ContentSerializedNavigationDriver::GetInstance()
@@ -108,6 +110,8 @@ ContentSerializedNavigationBuilder::ToNavigationEntry(
   entry->SetTimestamp(navigation->timestamp_);
   entry->SetHttpStatusCode(navigation->http_status_code_);
   entry->SetRedirectChain(navigation->redirect_chain_);
+  entry->SetTaskID(navigation->task_id_);
+  entry->SetParentTaskID(navigation->parent_task_id_);
 
   const ContentSerializedNavigationDriver::ExtendedInfoHandlerMap&
       extended_info_handlers = ContentSerializedNavigationDriver::GetInstance()

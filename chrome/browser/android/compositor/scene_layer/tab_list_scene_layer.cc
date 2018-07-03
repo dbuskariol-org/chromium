@@ -4,6 +4,9 @@
 
 #include "chrome/browser/android/compositor/scene_layer/tab_list_scene_layer.h"
 
+#include "base/android/jni_string.h"
+#include "cc/layers/picture_image_layer.h"
+#include "chrome/browser/android/compositor/layer/autotab_layer.h"
 #include "chrome/browser/android/compositor/layer/content_layer.h"
 #include "chrome/browser/android/compositor/layer/tab_layer.h"
 #include "chrome/browser/android/compositor/layer_title_cache.h"
@@ -39,6 +42,7 @@ void TabListSceneLayer::BeginBuildingFrame(JNIEnv* env,
   // matches PutTabLayer call order.
   for (auto tab : tab_map_)
     tab.second->layer()->RemoveFromParent();
+  own_tree_->RemoveAllChildren();
 
   used_tints_.clear();
 }
@@ -168,14 +172,14 @@ void TabListSceneLayer::PutTabLayer(JNIEnv* env,
         close_button_resource_id, shadow_resource_id, contour_resource_id,
         back_logo_resource_id, border_resource_id,
         border_inner_shadow_resource_id, tab_background_color, back_logo_color,
-        close_button_on_right, x, y, width, height, shadow_x, shadow_y,
-        shadow_width, shadow_height, pivot_x, pivot_y, rotation_x, rotation_y,
-        alpha, border_alpha, border_inner_shadow_alpha, contour_alpha,
-        shadow_alpha, close_alpha, border_scale, saturation, brightness,
-        close_btn_width, static_to_view_blend, content_width, content_height,
-        content_width, visible_content_height, show_toolbar,
-        default_theme_color, toolbar_background_color, close_button_color,
-        anonymize_toolbar, show_tab_title, toolbar_textbox_resource_id,
+        close_button_on_right, x, y, width, height, shadow_x, shadow_y, shadow_width,
+        shadow_height, pivot_x, pivot_y, rotation_x, rotation_y, alpha,
+        border_alpha, border_inner_shadow_alpha, contour_alpha, shadow_alpha,
+        close_alpha, border_scale, saturation, brightness, close_btn_width,
+        static_to_view_blend, content_width, content_height, content_width,
+        visible_content_height, show_toolbar, default_theme_color,
+        toolbar_background_color, close_button_color, anonymize_toolbar,
+        show_tab_title, toolbar_textbox_resource_id,
         toolbar_textbox_background_color, toolbar_textbox_alpha, toolbar_alpha,
         toolbar_y_offset, side_border_scale);
   }
@@ -184,6 +188,32 @@ void TabListSceneLayer::PutTabLayer(JNIEnv* env,
   gfx::RectF content(x, y, width, height);
 
   content_obscures_self_ |= content.Contains(self);
+}
+
+void TabListSceneLayer::PutAutoTabLayer(JNIEnv* env,
+                                        const base::android::JavaParamRef<jobject>& jobj,
+                                        jint pinned_resource_id,
+                                        jfloat pinned_size,
+                                        jlong j_timestamp,
+                                        jboolean is_pinned,
+                                        jfloat x,
+                                        jfloat y) {
+  int64_t timestamp = j_timestamp;
+  scoped_refptr<AutoTabLayer> autotab_layer = tab_content_manager_->GetAutoTabLayer(timestamp);
+  scoped_refptr<cc::Layer> layer = autotab_layer->layer();
+  if (layer) {
+    layer->SetPosition(gfx::PointF(x, y));
+    own_tree_->AddChild(layer);
+    if (is_pinned) {
+      scoped_refptr<cc::UIResourceLayer> pin_layer = cc::UIResourceLayer::Create();
+      pin_layer->SetIsDrawable(true);
+      pin_layer->SetBounds(gfx::Size(pinned_size, pinned_size));
+      pin_layer->SetUIResourceId(resource_manager_->GetUIResourceId(ui::ANDROID_RESOURCE_TYPE_STATIC, pinned_resource_id));
+      pin_layer->SetPosition(autotab_layer->GetPinPosition(pinned_size));
+      own_tree_->AddChild(pin_layer);
+
+    }
+  }
 }
 
 void TabListSceneLayer::OnDetach() {

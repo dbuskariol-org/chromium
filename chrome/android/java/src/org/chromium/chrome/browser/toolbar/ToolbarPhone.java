@@ -904,7 +904,12 @@ public class ToolbarPhone extends ToolbarLayout
                 return getToolbarDataProvider().getPrimaryColor();
             case VisualState.TAB_SWITCHER_NORMAL:
             case VisualState.TAB_SWITCHER_INCOGNITO:
-                if (usingHorizontalTabSwitcher()) return Color.TRANSPARENT;
+                if (usingHorizontalTabSwitcher()) {
+                    int colorId = visualState == VisualState.TAB_SWITCHER_NORMAL
+                            ? R.color.modern_primary_color
+                            : R.color.incognito_modern_primary_color;
+                    return ApiCompatibilityUtils.getColor(res, colorId);
+                }
 
                 if (mLocationBar.useModernDesign()) {
                     if (!DeviceClassManager.enableAccessibilityLayout()) return Color.TRANSPARENT;
