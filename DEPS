@@ -42,6 +42,8 @@ vars = {
   'checkout_telemetry_dependencies': False,
   'checkout_traffic_annotation_tools':
     'checkout_configuration == "default"',
+  'chrome_git':
+    'https://chrome-internal.googlesource.com',
   'chromium_git':
     'https://chromium.googlesource.com',
   'cros_board':
