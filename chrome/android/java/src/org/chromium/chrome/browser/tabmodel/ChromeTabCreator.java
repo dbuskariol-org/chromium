@@ -24,6 +24,7 @@ import org.chromium.chrome.browser.tabmodel.TabModel.TabSelectionType;
 import org.chromium.chrome.browser.util.IntentUtils;
 import org.chromium.components.url_formatter.UrlFormatter;
 import org.chromium.content_public.browser.LoadUrlParams;
+import org.chromium.content_public.browser.NavigationController;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.common.Referrer;
 import org.chromium.ui.base.PageTransition;
@@ -99,6 +100,12 @@ public class ChromeTabCreator extends TabCreatorManager.TabCreator {
         try {
             TraceEvent.begin("ChromeTabCreator.createNewTab");
             int parentId = parent != null ? parent.getId() : Tab.INVALID_TAB_ID;
+            if (parent!= null && parent.getWebContents() != null) {
+                NavigationController controller = parent.getWebContents().getNavigationController();
+                int index = controller.getLastCommittedEntryIndex();
+                loadUrlParams.setParentTaskID(controller.getEntryAtIndex(index).getTaskID());
+                android.util.Log.e("PARENT","Setting the parent task ID for parems to "+loadUrlParams.getParentTaskID());
+            }
 
             // Sanitize the url.
             loadUrlParams.setUrl(UrlFormatter.fixupUrl(loadUrlParams.getUrl()));

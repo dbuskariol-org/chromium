@@ -90,6 +90,8 @@ class SESSIONS_EXPORT SerializedNavigationEntry {
   bool is_overriding_user_agent() const { return is_overriding_user_agent_; }
   base::Time timestamp() const { return timestamp_; }
   void set_timestamp(base::Time timestamp) { timestamp_ = timestamp; }
+  int64_t task_id() const { return task_id_; }
+  int64_t parent_task_id() const { return parent_task_id_; }
 
   BlockedState blocked_state() const { return blocked_state_; }
   void set_blocked_state(BlockedState blocked_state) {
@@ -198,6 +200,8 @@ class SESSIONS_EXPORT SerializedNavigationEntry {
   BlockedState blocked_state_ = STATE_INVALID;
   PasswordState password_state_ = PASSWORD_STATE_UNKNOWN;
   std::set<std::string> content_pack_categories_;
+  int64_t task_id_;
+  int64_t parent_task_id_;
 
   // Provides storage for arbitrary key/value pairs used by features. This
   // data is not synced.

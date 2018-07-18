@@ -5,6 +5,7 @@
 package org.chromium.chrome.browser.tabmodel;
 
 import org.chromium.base.ObserverList;
+import org.chromium.chrome.browser.journey.JourneyManager;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabModel.TabLaunchType;
 import org.chromium.chrome.browser.tabmodel.TabModel.TabSelectionType;
@@ -231,6 +232,11 @@ public abstract class TabModelSelectorBase implements TabModelSelector {
         for (TabModelSelectorObserver listener : mObservers) {
             listener.onChange();
         }
+    }
+
+    @Override
+    public JourneyManager getJourneyManager() {
+        return null;
     }
 
     /**

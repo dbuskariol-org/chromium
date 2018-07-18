@@ -197,6 +197,8 @@ class NavigationController {
     // ContentBrowserClient::GetNavigationUIData.
     std::unique_ptr<NavigationUIData> navigation_ui_data;
 
+    int64_t parent_task_id;
+
     explicit LoadURLParams(const GURL& url);
     ~LoadURLParams();
 

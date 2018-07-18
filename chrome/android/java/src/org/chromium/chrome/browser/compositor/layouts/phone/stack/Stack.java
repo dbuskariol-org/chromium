@@ -814,7 +814,7 @@ public abstract class Stack implements ChromeAnimation.Animatable {
             discardDrag = amountX;
             scrollDrag = amountY;
         } else {
-            discardDrag = amountY;
+            discardDrag = amountY > 0 ? amountY : 0;
             scrollDrag = LocalizationUtils.isLayoutRtl() ? -amountX : amountX;
         }
         @DragLock
@@ -1099,6 +1099,7 @@ public abstract class Stack implements ChromeAnimation.Animatable {
             return;
         }
         int clicked = getTabIndexAtPositon(x, y, LayoutTab.getTouchSlop());
+        android.util.Log.e("HORZ","Clicked to tab with index "+clicked+" and x:y was "+x+":"+y);
         if (clicked >= 0) {
             // Check if the click was within the boundaries of the close button defined by its
             // visible coordinates.
@@ -2120,6 +2121,10 @@ public abstract class Stack implements ChromeAnimation.Animatable {
         mLayout.uiSelectingTab(time, tab != null ? tab.getId() : Tab.INVALID_TAB_ID);
     }
 
+    public boolean isInSwipe() {
+        return mInSwipe;
+    }
+
     /**
      * Fling from a swipe gesture.
      * @param time The current time of the app in ms.
@@ -2147,4 +2152,8 @@ public abstract class Stack implements ChromeAnimation.Animatable {
 
     @Override
     public void onPropertyAnimationFinished(@Property int prop) {}
+
+    public int getCenteredTabIndex(float x, float y) {
+        return getTabIndexAtPositon(x, y, LayoutTab.getTouchSlop());
+    }
 }

@@ -103,6 +103,15 @@ class TabListSceneLayer : public SceneLayer {
                    jfloat side_border_scale,
                    jboolean inset_border);
 
+  void PutAutoTabLayer(JNIEnv* env,
+                       const base::android::JavaParamRef<jobject>& jobj,
+                       jint pinned_resource_id,
+                       jfloat j_pinned_size,
+                       jlong j_timestamp,
+                       jboolean is_pinned,
+                       jfloat x,
+                       jfloat y);
+
   void OnDetach() override;
   bool ShouldShowBackground() override;
   SkColor GetBackgroundColor() override;

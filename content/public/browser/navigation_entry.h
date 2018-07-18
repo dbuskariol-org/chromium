@@ -234,6 +234,11 @@ class NavigationEntry {
 
   // Adds more extra headers (separated by \r\n) to send during the request.
   virtual void AddExtraHeaders(const std::string& extra_headers) = 0;
+
+  virtual void SetTaskID(int64_t id) = 0;
+  virtual int64_t GetTaskID() const = 0;
+  virtual void SetParentTaskID(int64_t id) = 0;
+  virtual int64_t GetParentTaskID() const = 0;
 };
 
 }  // namespace content

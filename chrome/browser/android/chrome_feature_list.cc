@@ -223,7 +223,7 @@ const base::Feature kChromeModernAlternateCardLayout{
     "ChromeModernAlternateCardLayout", base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kChromeModernDesign{"ChromeModernDesign",
-                                        base::FEATURE_DISABLED_BY_DEFAULT};
+                                        base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kChromeModernFullRoll{"ChromeModernFullRoll",
                                           base::FEATURE_DISABLED_BY_DEFAULT};
@@ -284,7 +284,7 @@ const base::Feature kHomePageButtonForceEnabled{
     "HomePageButtonForceEnabled", base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kHorizontalTabSwitcherAndroid{
-    "HorizontalTabSwitcherAndroid", base::FEATURE_DISABLED_BY_DEFAULT};
+    "HorizontalTabSwitcherAndroid", base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Makes "Add to Home screen" in the app menu generate an APK for the shortcut
 // URL which opens Chrome in fullscreen.

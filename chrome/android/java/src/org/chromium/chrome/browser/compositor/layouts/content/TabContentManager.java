@@ -116,9 +116,9 @@ public class TabContentManager {
 
         mPriorityTabIds = new int[mFullResThumbnailsMaxSize];
 
-        mNativeTabContentManager = nativeInit(defaultCacheSize,
-                approximationCacheSize, compressionQueueMaxSize, writeQueueMaxSize,
-                useApproximationThumbnails);
+        mNativeTabContentManager = nativeInit(defaultCacheSize, approximationCacheSize,
+                compressionQueueMaxSize, writeQueueMaxSize, useApproximationThumbnails,
+                mContext.getResources().getDisplayMetrics().density);
     }
 
     /**
@@ -293,7 +293,8 @@ public class TabContentManager {
 
     // Class Object Methods
     private native long nativeInit(int defaultCacheSize, int approximationCacheSize,
-            int compressionQueueMaxSize, int writeQueueMaxSize, boolean useApproximationThumbnail);
+            int compressionQueueMaxSize, int writeQueueMaxSize, boolean useApproximationThumbnail,
+            float dpToPx);
     private native boolean nativeHasFullCachedThumbnail(long nativeTabContentManager, int tabId);
     private native void nativeCacheTab(
             long nativeTabContentManager, Object tab, float thumbnailScale);

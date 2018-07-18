@@ -132,4 +132,10 @@ public class EmptyTabObserver implements TabObserver {
     @Override
     public void onBrowserControlsConstraintsUpdated(
             Tab tab, @BrowserControlsState int constraints) {}
+
+    @Override
+    public void onNavigationEntryCommitted(Tab tab, int index, boolean isNewRoot) {}
+
+    @Override
+    public void onTabRestored(Tab tab) {}
 }

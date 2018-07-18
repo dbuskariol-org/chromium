@@ -317,9 +317,10 @@ void LocalSessionEventHandlerImpl::UpdateTaskTracker(
     tab_delegate->GetSerializedNavigationAtIndex(i, &serialized_entry);
 
     int nav_id = serialized_entry.unique_id();
-    int64_t global_id = serialized_entry.timestamp().ToInternalValue();
+    int64_t task_id = serialized_entry.task_id();
+    VLOG(0)<<"TASKID Iterating over entries "<<i<<":"<<task_id<<":"<<serialized_entry.parent_task_id();
     tab_tasks->UpdateWithNavigation(
-        nav_id, tab_delegate->GetTransitionAtIndex(i), global_id);
+        nav_id, tab_delegate->GetTransitionAtIndex(i), task_id, serialized_entry.parent_task_id());
   }
 }
 

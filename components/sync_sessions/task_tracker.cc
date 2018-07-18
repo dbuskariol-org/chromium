@@ -10,26 +10,6 @@
 
 namespace sync_sessions {
 
-namespace {
-
-// The criteria for whether a navigation will continue a task chain or start a
-// new one.
-bool DoesTransitionContinueTask(ui::PageTransition transition) {
-  if (ui::PageTransitionCoreTypeIs(transition, ui::PAGE_TRANSITION_LINK) ||
-      ui::PageTransitionCoreTypeIs(transition,
-                                   ui::PAGE_TRANSITION_AUTO_SUBFRAME) ||
-      ui::PageTransitionCoreTypeIs(transition,
-                                   ui::PAGE_TRANSITION_MANUAL_SUBFRAME) ||
-      ui::PageTransitionCoreTypeIs(transition,
-                                   ui::PAGE_TRANSITION_FORM_SUBMIT) ||
-      transition & ui::PAGE_TRANSITION_IS_REDIRECT_MASK) {
-    return true;
-  }
-  return false;
-}
-
-}  // namespace
-
 TabTasks::TabTasks() {}
 
 TabTasks::TabTasks(const TabTasks& rhs)
@@ -42,11 +22,13 @@ std::vector<int64_t> TabTasks::GetTaskIdsForNavigation(int nav_id) const {
   std::vector<int64_t> task_id_chain;
   int next_id = nav_id;
   while (next_id != kInvalidNavID) {
+    VLOG(0)<<"TASKID Nav id inside GetTaskIds "<<next_id;
     auto next_nav_iter = nav_to_task_id_map_.find(next_id);
     if (next_nav_iter == nav_to_task_id_map_.end())
       break;
     const TaskIdAndParent& next_nav = next_nav_iter->second;
     DCHECK_NE(kInvalidGlobalID, next_nav.task_id);
+    VLOG(0)<<"TASKID Pushed back  "<<next_nav.task_id;
     task_id_chain.push_back(next_nav.task_id);
     next_id = next_nav.parent_nav_id;
     DCHECK_LE(task_id_chain.size(), static_cast<size_t>(kMaxNumTasksPerTab));
@@ -62,22 +44,23 @@ std::vector<int64_t> TabTasks::GetTaskIdsForNavigation(int nav_id) const {
 
 void TabTasks::UpdateWithNavigation(int nav_id,
                                     ui::PageTransition transition,
-                                    int64_t global_id) {
+                                    int64_t task_id,
+                                    int64_t parent_task_id) {
   DCHECK_NE(kInvalidNavID, nav_id);
-  DCHECK_NE(kInvalidGlobalID, global_id);
+  DCHECK_NE(kInvalidGlobalID, task_id);
 
   if (nav_to_task_id_map_.count(nav_id) == 0) {
     if (root_nav_id_ == kInvalidNavID)
       root_nav_id_ = nav_id;
-    DVLOG(1) << "Setting current task id to " << global_id;
-    nav_to_task_id_map_[nav_id].task_id = global_id;
-
-    if (DoesTransitionContinueTask(transition))
+    DVLOG(1) << "Setting current task id to " << task_id;
+    nav_to_task_id_map_[nav_id].task_id = task_id;
+    if (parent_task_id != -1) {
       nav_to_task_id_map_[nav_id].parent_nav_id = most_recent_nav_id_;
+    }
   }
   DVLOG(1) << "Setting most recent nav id to " << nav_id;
   most_recent_nav_id_ = nav_id;
-  nav_to_task_id_map_[nav_id].global_id = global_id;
+  nav_to_task_id_map_[nav_id].global_id = task_id;
 
   // Go through and drop the oldest navigations until kMaxNumTasksPerTab
   // navigations remain.

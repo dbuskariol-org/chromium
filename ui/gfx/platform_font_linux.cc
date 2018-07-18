@@ -47,6 +47,7 @@ sk_sp<SkTypeface> CreateSkTypeface(bool italic,
                                    bool* out_success) {
   DCHECK(family);
 
+  VLOG(0)<<"CREATING FONT!!!!!! "<<family->c_str();
   const int font_weight = (weight == Font::Weight::INVALID)
                               ? static_cast<int>(Font::Weight::NORMAL)
                               : static_cast<int>(weight);
@@ -56,11 +57,13 @@ sk_sp<SkTypeface> CreateSkTypeface(bool italic,
   sk_sp<SkTypeface> typeface =
       SkTypeface::MakeFromName(family->c_str(), sk_style);
   if (!typeface) {
+    VLOG(0)<<"Using fallback typeface!!!!!!";
     // A non-scalable font such as .pcf is specified. Fall back to a default
     // scalable font.
     typeface = sk_sp<SkTypeface>(SkTypeface::MakeFromName(
         kFallbackFontFamilyName, sk_style));
     if (!typeface) {
+      VLOG(0)<<"Not even getting fallback typeface!!!!!!";
       *out_success = false;
       return nullptr;
     }

@@ -10,6 +10,7 @@ import android.os.Handler;
 import org.chromium.base.VisibleForTesting;
 import org.chromium.chrome.browser.compositor.layouts.OverviewModeBehavior;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.journey.JourneyManager;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabModel.TabLaunchType;
 import org.chromium.chrome.browser.tabmodel.TabModel.TabSelectionType;
@@ -55,6 +56,8 @@ public class TabModelSelectorImpl extends TabModelSelectorBase implements TabMod
     private final TabModelSelectorUma mUma;
 
     private CloseAllTabsDelegate mCloseAllTabsDelegate;
+
+    private JourneyManager mJourneyManager;
 
     /**
      * Builds a {@link TabModelSelectorImpl} instance.
@@ -201,6 +204,7 @@ public class TabModelSelectorImpl extends TabModelSelectorBase implements TabMod
                 mTabSaver.addTabToSaveQueue(tab);
             }
         };
+        mJourneyManager = new JourneyManager(this, mTabContentManager);
     }
 
     /**
@@ -323,6 +327,7 @@ public class TabModelSelectorImpl extends TabModelSelectorBase implements TabMod
         mUma.destroy();
         super.destroy();
         mActiveState = false;
+        mJourneyManager.destroy();
     }
 
     @Override
@@ -441,5 +446,10 @@ public class TabModelSelectorImpl extends TabModelSelectorBase implements TabMod
      */
     public void removeTabPersistentStoreObserver(TabPersistentStoreObserver observer) {
         mTabSaver.removeObserver(observer);
+    }
+
+    @Override
+    public JourneyManager getJourneyManager() {
+        return mJourneyManager;
     }
 }

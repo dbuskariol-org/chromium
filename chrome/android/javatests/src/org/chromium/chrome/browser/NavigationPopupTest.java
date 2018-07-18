@@ -64,7 +64,7 @@ public class NavigationPopupTest {
     private static class TestNavigationEntry extends NavigationEntry {
         public TestNavigationEntry(int index, String url, String virtualUrl, String originalUrl,
                 String title, Bitmap favicon, int transition) {
-            super(index, url, virtualUrl, originalUrl, title, favicon, transition);
+            super(index, url, virtualUrl, originalUrl, title, favicon, transition, 0, -1, -1);
         }
     }
 
@@ -105,6 +105,10 @@ public class NavigationPopupTest {
 
         @Override
         public void goForward() {
+        }
+
+        @Override
+        public void goToIndex(int index) {
         }
 
         @Override
