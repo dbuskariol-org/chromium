@@ -53,9 +53,12 @@ class ApkMergeFailure(Exception):
   pass
 
 
-def UnpackApk(file_name, dst):
+def UnpackApk(file_name, dst, ignores=None):
   zippy = zipfile.ZipFile(file_name)
-  zippy.extractall(dst)
+  files_to_extract = zippy.namelist()
+  if ignores:
+    files_to_extract = [f for f in files_to_extract if os.path.basename(f) not in ignores]
+  zippy.extractall(dst, files_to_extract)
 
 
 def GetNonDirFiles(top, base_dir):
@@ -187,8 +190,10 @@ def MergeApk(args, tmp_apk, tmp_dir_32, tmp_dir_64):
   for f in args.loadable_module_64:
     expected_files[f] = not args.uncompress_shared_libraries
 
-  # need to unpack APKs to compare their contents
-  UnpackApk(args.apk_64bit, tmp_dir_64)
+  # Need to unpack APKs to compare their contents. Don't extract
+  # the files from the 64bit apk that we expect to replace
+  # with 32bit variant
+  UnpackApk(args.apk_64bit, tmp_dir_64, ignores=expected_files.keys())
   UnpackApk(args.apk_32bit, tmp_dir_32)
 
   ignores = ['META-INF', 'AndroidManifest.xml']
@@ -211,6 +216,10 @@ def MergeApk(args, tmp_apk, tmp_dir_32, tmp_dir_64):
 
   with zipfile.ZipFile(tmp_apk, 'w') as out_zip:
     exclude_patterns = ['META-INF/*']
+
+    # Exclude files from the 64bit apk that we expect to replace
+    # with the 32bit variant
+    exclude_patterns.extend(['*' + f for f in expected_files.keys()])
 
     # If there are libraries for which we don't want the 32 bit versions, we
     # should remove them here.
