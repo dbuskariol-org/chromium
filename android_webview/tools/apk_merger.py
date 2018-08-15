@@ -53,11 +53,12 @@ class ApkMergeFailure(Exception):
   pass
 
 
-def UnpackApk(file_name, dst, ignores=None):
+def UnpackApk(file_name, dst, skip_files=None):
   zippy = zipfile.ZipFile(file_name)
   files_to_extract = zippy.namelist()
-  if ignores:
-    files_to_extract = [f for f in files_to_extract if os.path.basename(f) not in ignores]
+  if skip_files:
+    files_to_extract = [f for f in files_to_extract
+                        if os.path.basename(f) not in skip_files]
   zippy.extractall(dst, files_to_extract)
 
 
@@ -193,7 +194,7 @@ def MergeApk(args, tmp_apk, tmp_dir_32, tmp_dir_64):
   # Need to unpack APKs to compare their contents. Don't extract
   # the files from the 64bit apk that we expect to replace
   # with 32bit variant
-  UnpackApk(args.apk_64bit, tmp_dir_64, ignores=expected_files.keys())
+  UnpackApk(args.apk_64bit, tmp_dir_64, skip_files=expected_files.keys())
   UnpackApk(args.apk_32bit, tmp_dir_32)
 
   ignores = ['META-INF', 'AndroidManifest.xml']
@@ -215,11 +216,12 @@ def MergeApk(args, tmp_apk, tmp_dir_32, tmp_dir_64):
   CheckFilesExpected(diff_files, expected_files, args.component_build)
 
   with zipfile.ZipFile(tmp_apk, 'w') as out_zip:
-    exclude_patterns = ['META-INF/*']
+    exclude_patterns = ['META-INF/*', '*snapshot_blob_32.bin']
 
     # Exclude files from the 64bit apk that we expect to replace
     # with the 32bit variant
-    exclude_patterns.extend(['*' + f for f in expected_files.keys()])
+    if args.ignore_path:
+      exclude_patterns.extend([p + '*' for p in args.ignore_path])
 
     # If there are libraries for which we don't want the 32 bit versions, we
     # should remove them here.
@@ -247,6 +249,7 @@ def main():
   parser.add_argument('--keystore_path', required=True, type=os.path.abspath)
   parser.add_argument('--key_name', required=True)
   parser.add_argument('--key_password', required=True)
+  parser.add_argument('--ignore_path', action='append', default=[])
   group = parser.add_mutually_exclusive_group(required=True)
   group.add_argument('--component-build', action='store_true')
   group.add_argument('--shared_library')
