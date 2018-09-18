@@ -122,12 +122,9 @@ FeedOfflineHost::FeedOfflineHost(OfflinePageModel* offline_page_model,
   DCHECK(prefetch_service_);
   DCHECK(!on_suggestion_consumed_.is_null());
   DCHECK(!on_suggestions_shown_.is_null());
-  offline_page_model_->AddObserver(this);
 }
 
-FeedOfflineHost::~FeedOfflineHost() {
-  offline_page_model_->RemoveObserver(this);
-}
+FeedOfflineHost::~FeedOfflineHost() = default;
 
 void FeedOfflineHost::Initialize(
     const base::RepeatingClosure& trigger_get_known_content,
