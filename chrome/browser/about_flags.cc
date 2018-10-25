@@ -433,6 +433,20 @@ const FeatureEntry::Choice kChromeHomeSwipeLogicChoices[] = {
      switches::kChromeHomeSwipeLogicType, "velocity"},
 };
 
+const FeatureEntry::Choice kAutotabsImportantPagesHeuristicChoices[] = {
+    {flags_ui::kGenericExperimentChoiceDefault, "", ""},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicLeaves,
+     switches::kAutotabsImportantPagesHeuristicType, "Leaves"},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicBranches,
+     switches::kAutotabsImportantPagesHeuristicType, "Branches"},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicLastInTab,
+     switches::kAutotabsImportantPagesHeuristicType, "LastInTab"},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicLastInTask,
+     switches::kAutotabsImportantPagesHeuristicType, "LastInTask"},
+    {flag_descriptions::kAutotabsImportantPagesHeuristicLeavesLasInTabNoSearch,
+     switches::kAutotabsImportantPagesHeuristicType, "LLiTNS"},
+};
+
 const FeatureEntry::Choice kForceUpdateMenuTypeChoices[] = {
     {flags_ui::kGenericExperimentChoiceDefault, "", ""},
     {flag_descriptions::kUpdateMenuTypeNone, switches::kForceUpdateMenuType,
@@ -2098,6 +2112,10 @@ const FeatureEntry kFeatureEntries[] = {
     {"chrome-home-swipe-logic", flag_descriptions::kChromeHomeSwipeLogicName,
      flag_descriptions::kChromeHomeSwipeLogicDescription, kOsAndroid,
      MULTI_VALUE_TYPE(kChromeHomeSwipeLogicChoices)},
+    {"autotabs-important-pages-heuristic",
+     flag_descriptions::kAutotabsImportantPagesHeuristic,
+     flag_descriptions::kAutotabsImportantPagesHeuristicDescription, kOsAndroid,
+     MULTI_VALUE_TYPE(kAutotabsImportantPagesHeuristicChoices)},
     {"enable-chrome-memex", flag_descriptions::kChromeMemexName,
      flag_descriptions::kChromeMemexDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kChromeMemexFeature)},
@@ -4298,6 +4316,12 @@ const FeatureEntry kFeatureEntries[] = {
          features::kLookalikeUrlNavigationSuggestions,
          kLookalikeUrlNavigationSuggestionsVariants,
          "LookalikeUrlNavigationSuggestions")},
+
+#if defined(OS_ANDROID)
+    {"collection-for-shopping", flag_descriptions::kCollectionForShoppingName,
+     flag_descriptions::kCollectionForShoppingDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kCollectionForShopping)},
+#endif
 
 #if defined(OS_ANDROID)
     {"long-press-back-for-history",

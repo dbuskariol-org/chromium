@@ -65,6 +65,8 @@ public class TabListSceneLayer extends SceneLayer {
                 viewport.top, viewport.width(), viewport.height(), layerTitleCache,
                 tabContentManager, resourceManager);
 
+        nativePutTabInfoLayer(mNativePtr);
+
         boolean isHTSEnabled =
                 ChromeFeatureList.isEnabled(ChromeFeatureList.HORIZONTAL_TAB_SWITCHER_ANDROID);
 
@@ -175,4 +177,6 @@ public class TabListSceneLayer extends SceneLayer {
             boolean showTabTitle, int toolbarTextBoxResource, int toolbarTextBoxBackgroundColor,
             float toolbarTextBoxAlpha, float toolbarAlpha, float toolbarYOffset,
             float sideBorderScale, boolean insetVerticalBorder);
+
+    private native void nativePutTabInfoLayer(long nativeTabListSceneLayer);
 }

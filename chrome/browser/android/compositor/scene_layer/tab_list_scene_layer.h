@@ -102,6 +102,9 @@ class TabListSceneLayer : public SceneLayer {
                    jfloat side_border_scale,
                    jboolean inset_border);
 
+  void PutTabInfoLayer(JNIEnv* env,
+                       const base::android::JavaParamRef<jobject>& jobj);
+
   void OnDetach() override;
   bool ShouldShowBackground() override;
   SkColor GetBackgroundColor() override;

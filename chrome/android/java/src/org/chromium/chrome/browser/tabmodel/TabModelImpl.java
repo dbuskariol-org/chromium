@@ -8,6 +8,7 @@ import org.chromium.base.ObserverList;
 import org.chromium.base.TraceEvent;
 import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.ntp.RecentlyClosedBridge;
 import org.chromium.chrome.browser.partnercustomizations.HomepageManager;
 import org.chromium.chrome.browser.tab.Tab;
@@ -66,6 +67,8 @@ public class TabModelImpl extends TabModelJniBridge {
      * Whether this tab model supports undoing.
      */
     private boolean mIsUndoSupported = true;
+
+    private TabGroupList mTabGroupList;
 
     public TabModelImpl(boolean incognito, boolean isTabbedActivity, TabCreator regularTabCreator,
             TabCreator incognitoTabCreator, TabModelSelectorUma uma,
@@ -202,6 +205,76 @@ public class TabModelImpl extends TabModelJniBridge {
     @Override
     public boolean closeTab(Tab tab) {
         return closeTab(tab, true, false, false);
+    }
+
+    @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
+        // This is a quick hack added for closing parent tabs from the tab strip. It is from coping
+        // the inner code from the private closeTab, startTabClosure, and removeTabAndSelectNext
+        // methods.
+        if (tabToClose == null) {
+            assert false : "Tab is null!";
+            return false;
+        }
+
+        if (!mTabs.contains(tabToClose)) {
+            assert false : "Tried to close a tab from another model!";
+            return false;
+        }
+
+        boolean canUndo = false;
+
+        canUndo &= supportsPendingClosures();
+
+        tabToClose.setClosing(true);
+
+        for (TabModelObserver obs : mObservers) obs.willCloseTab(tabToClose, animate);
+
+        @TabSelectionType
+        int selectionType = TabSelectionType.FROM_CLOSE;
+        boolean pauseMedia = canUndo;
+        boolean updateRewoundList = !canUndo;
+
+        final int closingTabIndex = indexOf(tabToClose);
+
+        Tab currentTabInModel = TabModelUtils.getCurrentTab(this);
+        Tab adjacentTabInModel = getTabAt(closingTabIndex == 0 ? 1 : closingTabIndex - 1);
+
+        // TODO(dtrainor): Update the list of undoable tabs instead of committing it.
+        if (updateRewoundList) commitAllTabClosures();
+
+        // Cancel or mute any media currently playing.
+        if (pauseMedia) {
+            WebContents webContents = tabToClose.getWebContents();
+            if (webContents != null) {
+                webContents.suspendAllMediaPlayers();
+                webContents.setAudioMuted(true);
+            }
+        }
+
+        mTabs.remove(tabToClose);
+
+        boolean nextIsIncognito = nextTab == null ? false : nextTab.isIncognito();
+        int nextTabId = nextTab == null ? Tab.INVALID_TAB_ID : nextTab.getId();
+        int nextTabIndex = nextTab == null
+                ? INVALID_TAB_INDEX
+                : TabModelUtils.getTabIndexById(
+                          mModelDelegate.getModel(nextIsIncognito), nextTabId);
+
+        if (nextTab != currentTabInModel) {
+            if (nextIsIncognito != isIncognito()) mIndex = indexOf(adjacentTabInModel);
+
+            TabModel nextModel = mModelDelegate.getModel(nextIsIncognito);
+            nextModel.setIndex(nextTabIndex, selectionType);
+        } else {
+            mIndex = nextTabIndex;
+        }
+
+        if (updateRewoundList) mRewoundList.resetRewoundState();
+
+        if (!canUndo) finalizeTabClosure(tabToClose, false);
+
+        return true;
     }
 
     private Tab findTabInAllTabModels(int tabId) {
@@ -759,5 +832,20 @@ public class TabModelImpl extends TabModelJniBridge {
         mRecentlyClosedBridge.openRecentlyClosedTab();
         // If there is only one tab, select it.
         if (getCount() == 1) setIndex(0, TabSelectionType.FROM_NEW);
+    }
+
+    @Override
+    public boolean isTabGroupEnabled() {
+        return mTabGroupList != null;
+    }
+
+    @Override
+    public int getTabGroupCount() {
+        return mTabGroupList.getCount();
+    }
+
+    @Override
+    public void setTabGroupList(TabGroupList tabGroupList) {
+        mTabGroupList = tabGroupList;
     }
 }

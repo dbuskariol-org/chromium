@@ -564,4 +564,11 @@
 
     <!-- Autofill Assistant dimensions -->
     <dimen name="autofill_assistant_details_image_size">60dp</dimen>
+
+    <dimen name="compound_drawable_padding">8dp</dimen>
+    <dimen name="chip_padding">8dp</dimen>
+    <dimen name="chip_icon_size">24dp</dimen>
+    <dimen name="chip_elevation">4dp</dimen>
+    <dimen name="chip_elevation_pressed">2dp</dimen>
+    <dimen name="chip_height">36dp</dimen>
 </resources>

@@ -107,6 +107,10 @@ void UpgradeNavigationFromV0ToV2(
     v2_pickle.WriteInt64(0);
     // search_terms
     v2_pickle.WriteString16(base::string16());
+    // task_id
+    v2_pickle.WriteInt64(0);
+    // parent_task_id
+    v2_pickle.WriteInt64(0);
 
     base::PickleIterator tab_navigation_pickle_iterator(v2_pickle);
     sessions::SerializedNavigationEntry nav;
@@ -206,6 +210,12 @@ void UpgradeNavigationFromV1ToV2(
 
     // Force output of search_terms
     v2_pickle.WriteString16(base::string16());
+
+    // Force output of task ID
+    v2_pickle.WriteInt64(0);
+
+    // Force output of parent task ID
+    v2_pickle.WriteInt64(0);
 
     base::PickleIterator tab_navigation_pickle_iterator(v2_pickle);
     sessions::SerializedNavigationEntry nav;
