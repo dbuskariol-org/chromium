@@ -66,6 +66,7 @@ import org.chromium.chrome.browser.compositor.layouts.LayoutManagerChromePhone;
 import org.chromium.chrome.browser.compositor.layouts.LayoutManagerChromeTablet;
 import org.chromium.chrome.browser.compositor.layouts.OverviewModeBehavior.OverviewModeObserver;
 import org.chromium.chrome.browser.compositor.layouts.phone.StackLayout;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.contextual_suggestions.PageViewTimer;
 import org.chromium.chrome.browser.cookies.CookiesFetcher;
 import org.chromium.chrome.browser.crypto.CipherFactory;
@@ -686,6 +687,8 @@ public class ChromeTabbedActivity
 
         if (!isWarmOnResume()) {
             SuggestionsMetrics.recordArticlesListVisible();
+        } else {
+            TabGroupList.recordTabGroupCount();
         }
 
         maybeStartMonitoringForScreenshots();
@@ -1452,6 +1455,8 @@ public class ChromeTabbedActivity
             getToolbarManager().setShouldUpdateToolbarPrimaryColor(false);
         } else if (FeatureUtilities.isBottomToolbarEnabled()) {
             getToolbarManager().enableBottomToolbar();
+        } else {
+            getToolbarManager().enableTabStripBottomToolbar();
         }
     }
 
@@ -1492,6 +1497,8 @@ public class ChromeTabbedActivity
 
                 TabModel model = mTabModelSelectorImpl.getModel(false);
                 TasksUma.recordTasksUma(model);
+
+                TabGroupList.recordTabGroupCount();
             }
         });
 

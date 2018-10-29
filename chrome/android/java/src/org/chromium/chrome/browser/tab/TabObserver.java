@@ -325,6 +325,9 @@ public interface TabObserver {
      */
     public void onNavigationEntriesDeleted(Tab tab);
 
+    public void onNavigationEntryCommitted(Tab tab, int index, boolean isNewRoot);
+
+    public void onTabRestored(Tab tab);
     /**
      * Called when the tab's browser controls constraints has been updated.
      * @param tab The notifying {@link Tab}.

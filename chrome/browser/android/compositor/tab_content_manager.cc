@@ -7,19 +7,33 @@
 #include <android/bitmap.h>
 #include <stddef.h>
 
+#include <list>
 #include <memory>
+#include <string>
 #include <utility>
 
+#include "base/android/callback_android.h"
 #include "base/android/jni_android.h"
 #include "base/android/jni_string.h"
 #include "base/android/scoped_java_ref.h"
 #include "base/bind.h"
 #include "base/bind_helpers.h"
 #include "base/macros.h"
+#include "base/strings/utf_string_conversions.h"
+#include "base/task/cancelable_task_tracker.h"
 #include "cc/layers/layer.h"
+#include "cc/layers/picture_image_layer.h"
+#include "cc/paint/paint_flags.h"
+#include "cc/paint/paint_image_builder.h"
+#include "cc/paint/skia_paint_canvas.h"
+#include "chrome/browser/android/compositor/layer/tabgroup_layer.h"
 #include "chrome/browser/android/compositor/layer/thumbnail_layer.h"
 #include "chrome/browser/android/tab_android.h"
 #include "chrome/browser/android/thumbnail/thumbnail.h"
+#include "chrome/browser/favicon/favicon_service_factory.h"
+#include "chrome/browser/profiles/profile_android.h"
+#include "components/favicon/core/favicon_service.h"
+#include "components/favicon_base/favicon_types.h"
 #include "content/public/browser/interstitial_page.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_view_host.h"
@@ -30,12 +44,19 @@
 #include "ui/android/resources/ui_resource_provider.h"
 #include "ui/android/view_android.h"
 #include "ui/gfx/android/java_bitmap.h"
+#include "ui/gfx/codec/png_codec.h"
 #include "ui/gfx/geometry/dip_util.h"
 #include "ui/gfx/geometry/rect.h"
+#include "ui/gfx/image/image.h"
+#include "ui/gfx/image/image_skia.h"
 #include "url/gurl.h"
 
 using base::android::JavaParamRef;
 using base::android::JavaRef;
+using base::android::ScopedJavaGlobalRef;
+using cc::UIResourceLayer;
+
+class Profile;
 
 namespace {
 
@@ -113,8 +134,11 @@ TabContentManager::TabContentManager(JNIEnv* env,
                                      jint approximation_cache_size,
                                      jint compression_queue_max_size,
                                      jint write_queue_max_size,
-                                     jboolean use_approximation_thumbnail)
-    : weak_java_tab_content_manager_(env, obj), weak_factory_(this) {
+                                     jboolean use_approximation_thumbnail,
+                                     jfloat dp_to_px)
+    : dp_to_px_(dp_to_px),
+      weak_java_tab_content_manager_(env, obj),
+      weak_factory_(this) {
   thumbnail_cache_ = std::make_unique<ThumbnailCache>(
       static_cast<size_t>(default_cache_size),
       static_cast<size_t>(approximation_cache_size),
@@ -142,6 +166,14 @@ scoped_refptr<cc::Layer> TabContentManager::GetLiveLayer(int tab_id) {
 
 scoped_refptr<ThumbnailLayer> TabContentManager::GetStaticLayer(int tab_id) {
   return static_layer_cache_[tab_id];
+}
+
+void TabContentManager::SetTabInfoLayer(const scoped_refptr<cc::Layer>& layer) {
+  tab_info_layer_ = layer;
+}
+
+scoped_refptr<cc::Layer> TabContentManager::GetTabInfoLayer() {
+  return tab_info_layer_;
 }
 
 scoped_refptr<ThumbnailLayer> TabContentManager::GetOrCreateStaticLayer(
@@ -242,6 +274,11 @@ void TabContentManager::CacheTab(JNIEnv* env,
   }
 }
 
+scoped_refptr<cc::UIResourceLayer> TabContentManager::CreateTabGroupLabelLayer(
+    float width) {
+  return TabGroupLayer::CreateTabGroupLabelLayer(dp_to_px_, width);
+}
+
 void TabContentManager::CacheTabWithBitmap(JNIEnv* env,
                                            const JavaParamRef<jobject>& obj,
                                            const JavaParamRef<jobject>& tab,
@@ -320,6 +357,29 @@ void TabContentManager::PutThumbnailIntoCache(int tab_id,
     thumbnail_cache_->Put(tab_id, bitmap, thumbnail_scale);
 }
 
+void TabContentManager::GetTabThumbnailFromCallback(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>& obj,
+    jint tab_id,
+    const base::android::JavaParamRef<jobject>& j_callback) {
+  thumbnail_cache_->DecompressThumbnailFromFile(
+      tab_id,
+      base::BindRepeating(&TabContentManager::TabThumbnailAvailableFromDisk,
+                          weak_factory_.GetWeakPtr(),
+                          ScopedJavaGlobalRef<jobject>(j_callback)));
+}
+
+void TabContentManager::TabThumbnailAvailableFromDisk(
+    ScopedJavaGlobalRef<jobject> j_callback,
+    bool result,
+    SkBitmap bitmap) {
+  ScopedJavaLocalRef<jobject> j_bitmap;
+  if (!bitmap.isNull() && result)
+    j_bitmap = gfx::ConvertToJavaBitmap(&bitmap);
+
+  RunObjectCallbackAndroid(j_callback, j_bitmap);
+}
+
 // ----------------------------------------------------------------------------
 // Native JNI methods
 // ----------------------------------------------------------------------------
@@ -330,12 +390,199 @@ jlong JNI_TabContentManager_Init(JNIEnv* env,
                                  jint approximation_cache_size,
                                  jint compression_queue_max_size,
                                  jint write_queue_max_size,
-                                 jboolean use_approximation_thumbnail) {
+                                 jboolean use_approximation_thumbnail,
+                                 jfloat dp_to_px) {
   TabContentManager* manager = new TabContentManager(
       env, obj, default_cache_size, approximation_cache_size,
       compression_queue_max_size, write_queue_max_size,
-      use_approximation_thumbnail);
+      use_approximation_thumbnail, dp_to_px);
   return reinterpret_cast<intptr_t>(manager);
+}
+
+// ----------------------------------------------------------------------------
+// Tab Group methods
+// ----------------------------------------------------------------------------
+scoped_refptr<cc::UIResourceLayer>
+TabContentManager::GetSelectedTabGroupTabLayer(float width, float height) {
+  if (!selected_tabgroup_tab_layer_) {
+    selected_tabgroup_tab_layer_ = cc::UIResourceLayer::Create();
+    selected_tabgroup_tab_layer_->SetIsDrawable(true);
+    selected_tabgroup_tab_layer_->SetBounds(gfx::Size(width, height));
+
+    SkBitmap border_bitmap;
+    border_bitmap.allocN32Pixels(width, height);
+    border_bitmap.eraseColor(SK_ColorTRANSPARENT);
+
+    SkCanvas canvas(border_bitmap);
+    SkRect dest_rect = SkRect::MakeWH(width, height);
+
+    SkPaint paint = SkPaint();
+    // Matching the tab strip tab focused color
+    SkColor modern_blue_600 = SkColorSetARGB(255, 26, 115, 232);
+    paint.setStyle(SkPaint::Style::kStroke_Style);
+    paint.setColor(modern_blue_600);
+    paint.setStrokeWidth(SkFloatToScalar(5 * dp_to_px_));
+    paint.setAntiAlias(true);
+
+    int radius = 20;
+    canvas.drawRRect(
+        SkRRect::MakeRectXY(dest_rect, radius * dp_to_px_, radius * dp_to_px_),
+        paint);
+    border_bitmap.setImmutable();
+    selected_tabgroup_tab_layer_->SetBitmap(border_bitmap);
+  }
+
+  return selected_tabgroup_tab_layer_;
+}
+
+scoped_refptr<cc::UIResourceLayer>
+TabContentManager::CreateTabGroupCreationLayer(float width) {
+  return TabGroupLayer::CreateTabGroupCreationLayer(dp_to_px_, width);
+}
+
+scoped_refptr<TabGroupLayer> TabContentManager::CreateTabGroupAddTabLayer(
+    cc::UIResourceId add_resource_id) {
+  if (tabgroup_layer_cache_.count(TabGroupLayer::ADD_TAB_IN_GROUP_TAB_ID) ==
+      0) {
+    tabgroup_layer_cache_[TabGroupLayer::ADD_TAB_IN_GROUP_TAB_ID] =
+        TabGroupLayer::CreateTabGroupAddTabLayer(dp_to_px_, add_resource_id);
+  }
+
+  return tabgroup_layer_cache_[TabGroupLayer::ADD_TAB_IN_GROUP_TAB_ID];
+}
+
+scoped_refptr<TabGroupLayer> TabContentManager::GetTabGroupLayer(
+    int64_t tab_id) {
+  return tabgroup_layer_cache_[tab_id];
+}
+
+const SkBitmap TabContentManager::CreateDummyBitmapForTabGroupTab(int width,
+                                                                  int height) {
+  SkBitmap bitmap;
+  bitmap.allocN32Pixels(width, height);
+  bitmap.eraseARGB(255, 255, 255, 255);
+  return bitmap;
+}
+
+void TabContentManager::CacheTabAsTabGroupTab(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>& obj,
+    jint tab_id,
+    jstring url,
+    jstring title,
+    const JavaParamRef<jobject>& j_profile) {
+  std::string tab_url = base::android::ConvertJavaStringToUTF8(env, url);
+  std::string tab_title = base::android::ConvertJavaStringToUTF8(env, title);
+  gfx::Image dummy_image(gfx::ImageSkia::CreateFrom1xBitmap(
+      CreateDummyBitmapForTabGroupTab(25, 10)));
+
+  if (tab_title == "")
+    tab_title = "Loading";
+
+  Profile* profile = ProfileAndroid::FromProfileAndroid(j_profile);
+  OnTabGroupResourceFetched(tab_id, tab_url, tab_title, SkBitmap(), dummy_image,
+                            profile);
+}
+
+void TabContentManager::RemoveTabGroupTabFromCache(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>& obj,
+    jint tab_id) {
+  tabgroup_layer_cache_.erase(tab_id);
+}
+
+void TabContentManager::OnTabGroupResourceFetched(
+    int64_t tab_id,
+    const std::string& url,
+    const std::string& title,
+    const SkBitmap& favicon_bitmap,
+    const gfx::Image& image,
+    Profile* profile) {
+  scoped_refptr<TabGroupLayer> layer = nullptr;
+  if (favicon_bitmap.isNull()) {
+    layer = TabGroupLayer::CreateWith(dp_to_px_, false, *(image.ToSkBitmap()),
+                                      title, url);
+  } else {
+    layer =
+        TabGroupLayer::CreateWith(dp_to_px_, true, favicon_bitmap, title, url);
+  }
+  tabgroup_layer_cache_[tab_id] = layer;
+  UpdateTabGroupTabFavicon(tab_id, url, profile);
+}
+
+void TabContentManager::UpdateTabGroupTabFavicon(int tab_id,
+                                                 std::string url,
+                                                 Profile* profile) {
+  favicon_base::FaviconRawBitmapCallback callback =
+      base::BindRepeating(&TabContentManager::OnFaviconImageFetched,
+                          weak_factory_.GetWeakPtr(), tab_id);
+
+  favicon::FaviconService* favicon_service =
+      FaviconServiceFactory::GetForProfile(profile,
+                                           ServiceAccessType::EXPLICIT_ACCESS);
+
+  favicon_service->GetRawFaviconForPageURL(
+      GURL(url),
+      {favicon_base::IconType::kFavicon, favicon_base::IconType::kTouchIcon,
+       favicon_base::IconType::kTouchPrecomposedIcon,
+       favicon_base::IconType::kWebManifestIcon},
+      0, true, callback, &cancelable_task_tracker_for_favicon_);
+}
+
+void TabContentManager::OnFaviconImageFetched(
+    int tab_id,
+    const favicon_base::FaviconRawBitmapResult& result) {
+  if (result.is_valid()) {
+    SkBitmap favicon_bitmap;
+    gfx::PNGCodec::Decode(result.bitmap_data->front(),
+                          result.bitmap_data->size(), &favicon_bitmap);
+    scoped_refptr<TabGroupLayer> tabgroup_layer = GetTabGroupLayer(tab_id);
+    if (tabgroup_layer.get())
+      tabgroup_layer->SetThumbnailBitmap(favicon_bitmap, true);
+  }
+}
+
+void TabContentManager::UpdateTabGroupTabTitle(JNIEnv* env,
+                                               const JavaParamRef<jobject>& obj,
+                                               jint tab_id,
+                                               jstring title) {
+  std::string tab_title = base::android::ConvertJavaStringToUTF8(env, title);
+  base::string16 title_text = base::string16();
+  base::UTF8ToUTF16(tab_title.c_str(), tab_title.length(), &title_text);
+  scoped_refptr<TabGroupLayer> tabgroup_layer = GetTabGroupLayer(tab_id);
+  if (tabgroup_layer.get())
+    tabgroup_layer->SetTitle(title_text);
+}
+
+void TabContentManager::UpdateTabGroupTabFavicon(
+    JNIEnv* env,
+    const JavaParamRef<jobject>& obj,
+    jint tab_id,
+    jstring url,
+    const JavaParamRef<jobject>& j_profile) {
+  std::string tab_url = base::android::ConvertJavaStringToUTF8(env, url);
+  base::string16 url_text = base::string16();
+
+  Profile* profile = ProfileAndroid::FromProfileAndroid(j_profile);
+  UpdateTabGroupTabFavicon(tab_id, tab_url, profile);
+}
+
+void TabContentManager::UpdateTabGroupTabUrl(JNIEnv* env,
+                                             const JavaParamRef<jobject>& obj,
+                                             jint tab_id,
+                                             jstring url) {
+  std::string tab_url = base::android::ConvertJavaStringToUTF8(env, url);
+  base::string16 url_text = base::string16();
+  base::UTF8ToUTF16(tab_url.c_str(), tab_url.length(), &url_text);
+  scoped_refptr<TabGroupLayer> tabgroup_layer = GetTabGroupLayer(tab_id);
+  if (tabgroup_layer.get())
+    tabgroup_layer->SetDomain(url_text);
+}
+
+void TabContentManager::ClearTabInfoLayer(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>& obj) {
+  SetTabInfoLayer(nullptr);
 }
 
 }  // namespace android

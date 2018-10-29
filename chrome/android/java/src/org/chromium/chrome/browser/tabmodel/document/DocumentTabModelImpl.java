@@ -257,6 +257,11 @@ public class DocumentTabModelImpl extends TabModelJniBridge implements DocumentT
     }
 
     @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
+        return false;
+    }
+
+    @Override
     public boolean closeTab(Tab tabToClose, boolean animate, boolean uponExit, boolean canUndo) {
         return false;
     }
