@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 The Chromium Authors. All rights reserved.
+     Use of this source code is governed by a BSD-style license that can be
+     found in the LICENSE file. -->
+
+<org.chromium.chrome.browser.contextual_suggestions.ToolbarView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/arrow"
+        android:layout_height="@dimen/bottom_sheet_peek_height"
+        android:layout_width="match_parent"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:src="@drawable/ic_expand_less_black_24dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:iconTint="@color/dark_mode_tint" />
+
+    <LinearLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_peek_height"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@android:color/white" >
+
+        <!-- Use 48dp width and 16dp end/start padding to produce a 16dp, centered icon. -->
+        <TextView
+             android:id="@+id/title"
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:layout_weight="1"
+             android:paddingStart="16dp"
+             android:singleLine="true"
+             android:ellipsize="end"
+             android:textAppearance="@style/BlackTitle1" />
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/close_button"
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/contextual_suggestions_toolbar_icon_size"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/btn_close"
+            android:scaleType="center"
+            android:contentDescription="@string/close"
+            app:iconTint="@color/dark_mode_tint" />
+   </LinearLayout>
+
+   <ImageView
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_shadow_height"
+        android:layout_marginTop="@dimen/bottom_sheet_peek_height"
+        android:src="@drawable/modern_toolbar_shadow"
+        android:scaleType="fitXY"
+        tools:ignore="ContentDescription"
+        android:visibility="gone" />
+
+</org.chromium.chrome.browser.contextual_suggestions.ToolbarView>

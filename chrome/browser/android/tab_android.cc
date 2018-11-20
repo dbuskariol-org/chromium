@@ -14,6 +14,7 @@
 #include "cc/layers/layer.h"
 #include "chrome/browser/android/background_tab_manager.h"
 #include "chrome/browser/android/compositor/tab_content_manager.h"
+#include "chrome/browser/android/journey/journey_info_fetcher.h"
 #include "chrome/browser/android/metrics/uma_utils.h"
 #include "chrome/browser/android/tab_web_contents_delegate_android.h"
 #include "chrome/browser/android/trusted_cdn.h"

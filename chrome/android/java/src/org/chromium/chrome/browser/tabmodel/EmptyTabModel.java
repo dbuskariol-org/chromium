@@ -48,6 +48,11 @@ public class EmptyTabModel implements TabModel {
     }
 
     @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
+        return false;
+    }
+
+    @Override
     public Tab getNextTabIfClosed(int id) {
         return null;
     }

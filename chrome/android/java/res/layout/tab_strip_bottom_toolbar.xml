@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 The Chromium Authors. All rights reserved.
+     Use of this source code is governed by a BSD-style license that can be
+     found in the LICENSE file. -->
+
+<org.chromium.chrome.browser.toolbar.ScrollingBottomViewResourceFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_toolbar_control_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/bottom_toolbar_height" >
+
+    <ImageView
+        android:id="@+id/bottom_toolbar_top_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_shadow_height"
+        android:src="@drawable/modern_toolbar_shadow"
+        android:scaleType="fitXY"
+        android:scaleY="-1"
+        tools:ignore="ContentDescription" />
+
+    <org.chromium.chrome.browser.widget.bottomsheet.TouchRestrictingFrameLayout
+        android:id="@+id/bottom_toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_toolbar_height"
+        android:layout_marginTop="@dimen/toolbar_shadow_height" >
+
+        <LinearLayout
+            android:id="@+id/bottom_sheet_toolbar"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/modern_primary_color"
+            android:layout_gravity="top|center_horizontal" >
+
+            <HorizontalScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:background="@color/modern_primary_color"
+                android:layout_weight="1"
+                android:scrollbars="none"
+                android:gravity="center_horizontal"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp" >
+
+                <LinearLayout
+                    android:id="@+id/scroll_container"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/modern_primary_color" >
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/second_button"
+                android:src="@drawable/new_tab_icon"
+                style="@style/BottomToolbarButton"
+                android:layout_gravity="end"
+                android:layout_weight="0"
+                android:elevation="10dp"
+                android:background="@android:color/white" />
+
+        </LinearLayout>
+
+    </org.chromium.chrome.browser.widget.bottomsheet.TouchRestrictingFrameLayout>
+
+</org.chromium.chrome.browser.toolbar.ScrollingBottomViewResourceFrameLayout>

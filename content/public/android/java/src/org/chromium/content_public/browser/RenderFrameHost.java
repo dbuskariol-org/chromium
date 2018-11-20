@@ -25,6 +25,9 @@ public interface RenderFrameHost {
      */
     void getCanonicalUrlForSharing(Callback<String> callback);
 
+    void getOpenGraphType(Callback<String> callback);
+    void getOpenGraphTitle(Callback<String> callback);
+    void getOpenGraphImageUrl(Callback<String> callback);
     /**
      * Returns an InterfaceProvider that provides access to interface implementations provided by
      * the corresponding RenderFrame. This provides access to interfaces implemented in the renderer

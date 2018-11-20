@@ -376,6 +376,12 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void GetCanonicalUrlForSharing(
       mojom::Frame::GetCanonicalUrlForSharingCallback callback);
 
+  void GetOGType(mojom::Frame::GetOGTypeCallback callback);
+
+  void GetOGTitle(mojom::Frame::GetOGTitleCallback callback);
+
+  void GetOGImageUrl(mojom::Frame::GetOGImageUrlCallback callback);
+
   // Returns the associated WebUI or null if none applies.
   WebUIImpl* web_ui() const { return web_ui_.get(); }
 

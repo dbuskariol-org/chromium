@@ -1023,6 +1023,23 @@ RenderFrameHostImpl::CreateInitiatorSpecificURLLoaderFactories() {
   return result;
 }
 
+void RenderFrameHostImpl::GetOGType(mojom::Frame::GetOGTypeCallback callback) {
+  DCHECK(frame_);
+  frame_->GetOGType(std::move(callback));
+}
+
+void RenderFrameHostImpl::GetOGTitle(
+    mojom::Frame::GetOGTitleCallback callback) {
+  DCHECK(frame_);
+  frame_->GetOGTitle(std::move(callback));
+}
+
+void RenderFrameHostImpl::GetOGImageUrl(
+    mojom::Frame::GetOGImageUrlCallback callback) {
+  DCHECK(frame_);
+  frame_->GetOGImageUrl(std::move(callback));
+}
+
 gfx::NativeView RenderFrameHostImpl::GetNativeView() {
   RenderWidgetHostView* view = render_view_host_->GetWidget()->GetView();
   if (!view)

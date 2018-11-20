@@ -162,6 +162,15 @@ void WebContentsObserverProxy::DidFinishNavigation(
   ScopedJavaLocalRef<jstring> jerror_description =
       ConvertUTF8ToJavaString(env, "");
 
+  if (!navigation_handle->GetSearchableFormURL().is_empty()) {
+    ScopedJavaLocalRef<jstring> jstring_searchable_form_url(
+        ConvertUTF8ToJavaString(
+            env, navigation_handle->GetSearchableFormURL().spec()));
+
+    Java_WebContentsObserverProxy_hasPerformedSearch(
+        env, java_observer_, jstring_searchable_form_url);
+  }
+
   Java_WebContentsObserverProxy_didFinishNavigation(
       env, java_observer_, jstring_url, navigation_handle->IsInMainFrame(),
       navigation_handle->IsErrorPage(), navigation_handle->HasCommitted(),

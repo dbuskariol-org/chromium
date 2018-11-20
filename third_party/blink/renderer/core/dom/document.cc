@@ -6204,6 +6204,63 @@ Color Document::ThemeColor() const {
   return Color();
 }
 
+String Document::OGType() const {
+  DEFINE_STATIC_LOCAL(AtomicString, og_type, ("og:type"));
+  DEFINE_STATIC_LOCAL(AtomicString, property_attr, ("property"));
+
+  auto* head = Document::head();
+  String type = "";
+  if (!head)
+    return type;
+
+  for (HTMLMetaElement& meta_element :
+       Traversal<HTMLMetaElement>::ChildrenOf(*head)) {
+    if (DeprecatedEqualIgnoringCase(meta_element.getAttribute(property_attr),
+                                    og_type)) {
+      type = meta_element.Content().GetString();
+    }
+  }
+  return type;
+}
+
+String Document::OGTitle() const {
+  DEFINE_STATIC_LOCAL(AtomicString, og_title, ("og:title"));
+  DEFINE_STATIC_LOCAL(AtomicString, property_attr, ("property"));
+
+  auto* head = Document::head();
+  String title = "";
+  if (!head)
+    return title;
+
+  for (HTMLMetaElement& meta_element :
+       Traversal<HTMLMetaElement>::ChildrenOf(*head)) {
+    if (DeprecatedEqualIgnoringCase(meta_element.getAttribute(property_attr),
+                                    og_title)) {
+      title = meta_element.Content().GetString();
+    }
+  }
+  return title;
+}
+
+String Document::OGImageUrl() const {
+  DEFINE_STATIC_LOCAL(AtomicString, og_image, ("og:image"));
+  DEFINE_STATIC_LOCAL(AtomicString, property_attr, ("property"));
+
+  auto* head = Document::head();
+  String imageUrl = "";
+  if (!head)
+    return imageUrl;
+
+  for (HTMLMetaElement& meta_element :
+       Traversal<HTMLMetaElement>::ChildrenOf(*head)) {
+    if (DeprecatedEqualIgnoringCase(meta_element.getAttribute(property_attr),
+                                    og_image)) {
+      imageUrl = meta_element.Content().GetString();
+    }
+  }
+  return imageUrl;
+}
+
 static HTMLLinkElement* GetLinkElement(const Document* doc,
                                        bool (*match_fn)(HTMLLinkElement&)) {
   HTMLHeadElement* head = doc->head();

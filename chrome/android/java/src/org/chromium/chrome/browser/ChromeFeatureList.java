@@ -68,6 +68,15 @@ public abstract class ChromeFeatureList {
             return enabled;
         }
 
+        // Force enable Horizontal Tab Switcher and disable Duet for user study.
+        // This overrides Finch and flags.
+        if (ChromeFeatureList.HORIZONTAL_TAB_SWITCHER_ANDROID.equals(featureName)) {
+            return true;
+        }
+        if (ChromeFeatureList.CHROME_DUET.equals(featureName)) {
+            return false;
+        }
+
         assert isInitialized();
         return nativeIsEnabled(featureName);
     }
@@ -175,6 +184,7 @@ public abstract class ChromeFeatureList {
     public static final String CHROME_SMART_SELECTION = "ChromeSmartSelection";
     public static final String CLEAR_OLD_BROWSING_DATA = "ClearOldBrowsingData";
     public static final String CLIPBOARD_CONTENT_SETTING = "ClipboardContentSetting";
+    public static final String COLLECTION_FOR_SHOPPING = "CollectionForShopping";
     public static final String COMMAND_LINE_ON_NON_ROOTED = "CommandLineOnNonRooted";
     public static final String CONTENT_SUGGESTIONS_FAVICONS_FROM_NEW_SERVER =
             "ContentSuggestionsFaviconsFromNewServer";

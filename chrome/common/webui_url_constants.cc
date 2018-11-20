@@ -77,6 +77,7 @@ const char kChromeUIHangUIHost[] = "uithreadhang";
 const char kChromeUIHelpHost[] = "help";
 const char kChromeUIHelpURL[] = "chrome://help/";
 const char kChromeUIHistoryHost[] = "history";
+const char kChromeUISummaryHost[] = "summary";
 const char kChromeUIHistoryURL[] = "chrome://history/";
 const char kChromeUIIdentityInternalsHost[] = "identity-internals";
 const char kChromeUIInspectHost[] = "inspect";
@@ -180,6 +181,7 @@ const char kChromeUINativeBookmarksURL[] = "chrome-native://bookmarks/";
 const char kChromeUINativeExploreURL[] = "chrome-native://explore";
 const char kChromeUINativeHistoryURL[] = "chrome-native://history/";
 const char kChromeUINativeNewTabURL[] = "chrome-native://newtab/";
+const char kChromeUINativeSummaryURL[] = "chrome-native://summary/";
 const char kChromeUINativePhysicalWebDiagnosticsURL[] =
     "chrome-native://physical-web-diagnostics/";
 const char kChromeUINativeScheme[] = "chrome-native";

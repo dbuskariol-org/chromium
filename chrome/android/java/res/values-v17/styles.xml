@@ -564,6 +564,9 @@
         <item name="android:layout_height">56dp</item>
         <item name="android:scaleType">center</item>
     </style>
+        <style name="BottomToolbarButton" parent="ToolbarButton">
+        <item name="android:layout_height">48dp</item>
+    </style>
     <style name="ToolbarMenuButtonPhone" parent="ToolbarButton">
         <item name="android:layout_gravity">top</item>
         <item name="android:paddingEnd">8dp</item>

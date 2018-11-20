@@ -66,6 +66,7 @@ import org.chromium.chrome.browser.compositor.layouts.LayoutManagerChromePhone;
 import org.chromium.chrome.browser.compositor.layouts.LayoutManagerChromeTablet;
 import org.chromium.chrome.browser.compositor.layouts.OverviewModeBehavior.OverviewModeObserver;
 import org.chromium.chrome.browser.compositor.layouts.phone.StackLayout;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.contextual_suggestions.PageViewTimer;
 import org.chromium.chrome.browser.cookies.CookiesFetcher;
 import org.chromium.chrome.browser.crypto.CipherFactory;
@@ -133,6 +134,7 @@ import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tabmodel.TabWindowManager;
+import org.chromium.chrome.browser.tasks.SummaryTracker;
 import org.chromium.chrome.browser.tasks.TasksUma;
 import org.chromium.chrome.browser.toolbar.ToolbarButtonInProductHelpController;
 import org.chromium.chrome.browser.toolbar.ToolbarControlContainer;
@@ -168,6 +170,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ChromeTabbedActivity
         extends ChromeActivity implements OverviewModeObserver, ScreenshotMonitorDelegate {
+    private SummaryTracker mSummaryTracker;
+
     @IntDef({BackPressedResult.NOTHING_HAPPENED, BackPressedResult.HELP_URL_CLOSED,
             BackPressedResult.MINIMIZED_NO_TAB_CLOSED, BackPressedResult.MINIMIZED_TAB_CLOSED,
             BackPressedResult.TAB_CLOSED, BackPressedResult.TAB_IS_NULL,
@@ -686,6 +690,8 @@ public class ChromeTabbedActivity
 
         if (!isWarmOnResume()) {
             SuggestionsMetrics.recordArticlesListVisible();
+        } else {
+            TabGroupList.recordTabGroupCount();
         }
 
         maybeStartMonitoringForScreenshots();
@@ -1443,6 +1449,13 @@ public class ChromeTabbedActivity
 
         mUndoBarPopupController = new UndoBarController(this, mTabModelSelectorImpl,
                 getSnackbarManager());
+
+        mSummaryTracker = new SummaryTracker(getTabModelSelector());
+    }
+
+    @Override
+    public SummaryTracker.TabSummary getCurrentTabSummary() {
+        return mSummaryTracker.getCurrentTabSummary();
     }
 
     @Override
@@ -1452,6 +1465,8 @@ public class ChromeTabbedActivity
             getToolbarManager().setShouldUpdateToolbarPrimaryColor(false);
         } else if (FeatureUtilities.isBottomToolbarEnabled()) {
             getToolbarManager().enableBottomToolbar();
+        } else {
+            getToolbarManager().enableTabStripBottomToolbar();
         }
     }
 
@@ -1492,6 +1507,8 @@ public class ChromeTabbedActivity
 
                 TabModel model = mTabModelSelectorImpl.getModel(false);
                 TasksUma.recordTasksUma(model);
+
+                TabGroupList.recordTabGroupCount();
             }
         });
 

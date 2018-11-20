@@ -86,6 +86,10 @@ class WebDocument : public WebNode {
   BLINK_EXPORT bool IsPluginDocument() const;
   BLINK_EXPORT WebURL BaseURL() const;
 
+  BLINK_EXPORT WebString OGType() const;
+  BLINK_EXPORT WebString OGTitle() const;
+  BLINK_EXPORT WebString OGImageUrl() const;
+
   // The firstPartyForCookies is used to compute whether this document
   // appears in a "third-party" context for the purpose of third-party
   // cookie blocking.

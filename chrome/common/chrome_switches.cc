@@ -82,6 +82,9 @@ const char kAutoOpenDevToolsForTabs[]       = "auto-open-devtools-for-tabs";
 const char kAutoSelectDesktopCaptureSource[] =
     "auto-select-desktop-capture-source";
 
+const char kAutotabsImportantPagesHeuristic[] =
+    "autotabs-important-pages-heuristic";
+
 // This flag causes the user engagement checks for showing app banners to be
 // bypassed. It is intended to be used by developers who wish to test that their
 // sites otherwise meet the criteria needed to show app banners.
@@ -762,6 +765,9 @@ const char kLocalNtpReload[]                = "local-ntp-reload";
 #if defined(OS_ANDROID)
 // Android authentication account type for SPNEGO authentication
 const char kAuthAndroidNegotiateAccountType[] = "auth-spnego-account-type";
+
+const char kAutotabsImportantPagesHeuristicType[] =
+    "autotabs-important-pages-heuristic";
 
 // Disables Contextual Search.
 const char kDisableContextualSearch[] = "disable-contextual-search";

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 The Chromium Authors. All rights reserved.
+     Use of this source code is governed by a BSD-style license that can be
+     found in the LICENSE file.
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/modern_grey_50"
+    android:gravity="center_horizontal"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/chip_padding"
+        android:padding="@dimen/chip_padding"
+        android:background="@color/modern_grey_50"
+        android:elevation="@dimen/chip_elevation">
+        <android.support.v7.widget.CardView
+            android:id="@+id/thumbnail_card"
+            android:layout_width="@dimen/summary_shot_width"
+            android:layout_height="@dimen/summary_shot_height"
+            android:layout_margin="@dimen/chip_padding"
+            android:padding="@dimen/chip_padding"
+            android:elevation="@dimen/chip_elevation"
+            android:layout_gravity="start|top">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start|top"/>
+        </android.support.v7.widget.CardView>
+        <org.chromium.chrome.browser.tasks.ChipGroup
+            android:id="@+id/chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="196dp"
+            android:padding="@dimen/chip_padding"/>
+    </android.support.v7.widget.CardView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="270dp">
+    <org.chromium.chrome.browser.tasks.ChipGroup
+        android:id="@+id/product_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"/>
+    </ScrollView>
+</FrameLayout>
+
+
+

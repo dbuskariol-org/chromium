@@ -187,6 +187,8 @@ public abstract class WebContentsObserver {
      */
     public void didReloadLoFiImages() {}
 
+    public void hasPerformedSearch(String searchableFormUrl) {}
+
     /**
      * Stop observing the web contents and clean up associated references.
      */

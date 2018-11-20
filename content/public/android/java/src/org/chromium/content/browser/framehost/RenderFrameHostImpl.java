@@ -80,6 +80,33 @@ public class RenderFrameHostImpl implements RenderFrameHost {
     }
 
     @Override
+    public void getOpenGraphType(Callback<String> callback) {
+        if (mNativeRenderFrameHostAndroid == 0) {
+            callback.onResult(null);
+            return;
+        }
+        nativeGetOGType(mNativeRenderFrameHostAndroid, callback);
+    }
+
+    @Override
+    public void getOpenGraphTitle(Callback<String> callback) {
+        if (mNativeRenderFrameHostAndroid == 0) {
+            callback.onResult(null);
+            return;
+        }
+        nativeGetOGTitle(mNativeRenderFrameHostAndroid, callback);
+    }
+
+    @Override
+    public void getOpenGraphImageUrl(Callback<String> callback) {
+        if (mNativeRenderFrameHostAndroid == 0) {
+            callback.onResult(null);
+            return;
+        }
+        nativeGetOGImageUrl(mNativeRenderFrameHostAndroid, callback);
+    }
+
+    @Override
     public InterfaceProvider getRemoteInterfaces() {
         return mInterfaceProvider;
     }
@@ -109,6 +136,12 @@ public class RenderFrameHostImpl implements RenderFrameHost {
 
     private native String nativeGetLastCommittedURL(long nativeRenderFrameHostAndroid);
     private native void nativeGetCanonicalUrlForSharing(
+            long nativeRenderFrameHostAndroid, Callback<String> callback);
+    private native void nativeGetOGType(
+            long nativeRenderFrameHostAndroid, Callback<String> callback);
+    private native void nativeGetOGTitle(
+            long nativeRenderFrameHostAndroid, Callback<String> callback);
+    private native void nativeGetOGImageUrl(
             long nativeRenderFrameHostAndroid, Callback<String> callback);
     private native UnguessableToken nativeGetAndroidOverlayRoutingToken(
             long nativeRenderFrameHostAndroid);

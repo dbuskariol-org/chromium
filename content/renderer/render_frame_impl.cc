@@ -3203,6 +3203,25 @@ void RenderFrameImpl::CancelBlockedRequests() {
   frame_request_blocker_->Cancel();
 }
 
+void RenderFrameImpl::GetOGType(GetOGTypeCallback callback) {
+  blink::WebString type = GetWebFrame()->GetDocument().OGType();
+  std::move(callback).Run(type.IsNull() ? base::EmptyString16()
+                                        : base::make_optional(type.Utf16()));
+}
+
+void RenderFrameImpl::GetOGTitle(GetOGTitleCallback callback) {
+  blink::WebString title = GetWebFrame()->GetDocument().OGTitle();
+  std::move(callback).Run(title.IsNull() ? base::EmptyString16()
+                                         : base::make_optional(title.Utf16()));
+}
+
+void RenderFrameImpl::GetOGImageUrl(GetOGImageUrlCallback callback) {
+  blink::WebString image_url = GetWebFrame()->GetDocument().OGImageUrl();
+  std::move(callback).Run(image_url.IsNull()
+                              ? base::EmptyString16()
+                              : base::make_optional(image_url.Utf16()));
+}
+
 void RenderFrameImpl::AllowBindings(int32_t enabled_bindings_flags) {
   if (IsMainFrame() && (enabled_bindings_flags & BINDINGS_POLICY_WEB_UI) &&
       !(enabled_bindings_ & BINDINGS_POLICY_WEB_UI)) {

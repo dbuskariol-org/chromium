@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.Callback;
@@ -173,6 +174,7 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
     private final ToolbarControlContainer mControlContainer;
 
     private BottomToolbarCoordinator mBottomToolbarCoordinator;
+    private TabStripBottomToolbarCoordinator mTabStripBottomToolbarCoordinator;
     private TabModelSelector mTabModelSelector;
     private TabModelSelectorObserver mTabModelSelectorObserver;
     private TabModelObserver mTabModelObserver;
@@ -366,6 +368,10 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
                 updateTabCount();
                 if (mBottomToolbarCoordinator != null) {
                     mBottomToolbarCoordinator.setIncognito(newModel.isIncognito());
+                }
+                if (mTabStripBottomToolbarCoordinator != null) {
+                    mTabStripBottomToolbarCoordinator.setIncognito(newModel.isIncognito());
+                    mTabStripBottomToolbarCoordinator.updateBottomBarButtons(newModel);
                 }
             }
 
@@ -792,6 +798,14 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         }
     }
 
+    public void enableTabStripBottomToolbar() {
+        if (!FeatureUtilities.isBottomToolbarEnabled()) {
+            mTabStripBottomToolbarCoordinator =
+                    new TabStripBottomToolbarCoordinator(mActivity.getFullscreenManager(),
+                            (ViewGroup) mActivity.findViewById(R.id.coordinator));
+        }
+    }
+
     /** Record that homepage button was used for IPH reasons */
     private void recordToolbarUseForIPH(String toolbarIPHEvent) {
         if (mTabModelSelector != null && mTabModelSelector.getCurrentTab() != null) {
@@ -1051,6 +1065,11 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
                         mLocationBar.getContainerView(), R.id.bottom_toolbar);
             }
 
+            if (mTabStripBottomToolbarCoordinator != null) {
+                mTabStripBottomToolbarCoordinator.initializeWithNative(
+                        mActivity, mTabModelSelector, mOverviewModeBehavior);
+            }
+
             onNativeLibraryReady();
             mInitializedWithNative = true;
         });
@@ -1062,9 +1081,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
      */
     public void showAppMenuUpdateBadge() {
         mToolbarProvider.whenLoaded((toolbar) -> toolbar.showAppMenuUpdateBadge());
-        if (mBottomToolbarCoordinator != null) {
-            mBottomToolbarCoordinator.showAppMenuUpdateBadge();
-        }
     }
 
     /**
@@ -1073,9 +1089,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
      */
     public void removeAppMenuUpdateBadge(boolean animate) {
         mToolbarProvider.whenLoaded((toolbar) -> toolbar.removeAppMenuUpdateBadge(animate));
-        if (mBottomToolbarCoordinator != null) {
-            mBottomToolbarCoordinator.removeAppMenuUpdateBadge();
-        }
     }
 
     /**
@@ -1083,10 +1096,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
      * TODO(amaralp): Only the top or bottom menu should be visible.
      */
     public boolean isShowingAppMenuUpdateBadge() {
-        if (mBottomToolbarCoordinator != null
-                && mBottomToolbarCoordinator.isShowingAppMenuUpdateBadge()) {
-            return true;
-        }
         if (mToolbar == null) return false;
         return mToolbar.isShowingAppMenuUpdateBadge();
     }
@@ -1166,9 +1175,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
      * @return The view containing the pop up menu button.
      */
     public View getMenuButton() {
-        if (mBottomToolbarCoordinator != null) {
-            return mBottomToolbarCoordinator.getMenuButtonWrapper().getImageButton();
-        }
         if (mToolbar != null) return mToolbar.getMenuButton();
         return null;
     }
@@ -1244,6 +1250,11 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         if (mBottomToolbarCoordinator != null) {
             mBottomToolbarCoordinator.destroy();
             mBottomToolbarCoordinator = null;
+        }
+
+        if (mTabStripBottomToolbarCoordinator != null) {
+            mTabStripBottomToolbarCoordinator.destroy();
+            mTabStripBottomToolbarCoordinator = null;
         }
 
         if (mOmniboxStartupMetrics != null) {
@@ -1343,6 +1354,10 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         if (!mTabRestoreCompleted || !mNativeLibraryReady) return;
         mToolbar.onStateRestored();
         updateTabCount();
+        if (mTabRestoreCompleted && mTabStripBottomToolbarCoordinator != null) {
+            mTabStripBottomToolbarCoordinator.updateBottomBarButtons(
+                    mTabModelSelector.getCurrentModel());
+        }
     }
 
     /**
@@ -1470,9 +1485,9 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         Tab currentTab = mLocationBarModel.getTab();
         if (currentTab == null) return;
         String homePageUrl = HomepageManager.getHomepageUri();
-        boolean isNewTabPageButtonEnabled = FeatureUtilities.isNewTabPageButtonEnabled();
+        boolean isNewTabPageButtonEnabled = true;
         if (TextUtils.isEmpty(homePageUrl) || isNewTabPageButtonEnabled) {
-            homePageUrl = UrlConstants.NTP_URL;
+            homePageUrl = UrlConstants.SUMMARY_URL;
         }
         if (isNewTabPageButtonEnabled) {
             recordToolbarUseForIPH(EventConstants.CLEAR_TAB_BUTTON_CLICKED);
@@ -1480,6 +1495,7 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             recordToolbarUseForIPH(EventConstants.HOMEPAGE_BUTTON_CLICKED);
         }
         currentTab.loadUrl(new LoadUrlParams(homePageUrl, PageTransition.HOME_PAGE));
+        setUrlBarFocus(false);
     }
 
     @Override
@@ -1663,7 +1679,11 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
     private void updateTabCount() {
         assert mToolbar != null;
         if (!mTabRestoreCompleted) return;
-        final int numberOfTabs = mTabModelSelector.getCurrentModel().getCount();
+
+        TabModel currentModel = mTabModelSelector.getCurrentModel();
+        int numberOfTabs = currentModel.getCount();
+        if (currentModel.isTabGroupEnabled()) numberOfTabs = currentModel.getTabGroupCount();
+
         mToolbar.updateTabCountVisuals(numberOfTabs);
     }
 
@@ -1683,6 +1703,11 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         updateBookmarkButtonStatus();
         if (mToolbar.getMenuButtonWrapper() != null) {
             mToolbar.getMenuButtonWrapper().setVisibility(View.VISIBLE);
+        }
+
+        if (mTabRestoreCompleted && mTabStripBottomToolbarCoordinator != null) {
+            mTabStripBottomToolbarCoordinator.updateBottomBarButtons(
+                    mTabModelSelector.getCurrentModel());
         }
     }
 

@@ -37,6 +37,42 @@ void OnGetCanonicalUrlForSharing(
 
   base::android::RunStringCallbackAndroid(jcallback, url->spec());
 }
+
+void OnGetOGType(const base::android::JavaRef<jobject>& jcallback,
+                 const base::Optional<base::string16>& type) {
+  if (!type) {
+    base::android::RunObjectCallbackAndroid(jcallback,
+                                            ScopedJavaLocalRef<jstring>());
+    return;
+  }
+
+  base::android::RunStringCallbackAndroid(jcallback,
+                                          base::UTF16ToUTF8(type.value()));
+}
+
+void OnGetOGTitle(const base::android::JavaRef<jobject>& jcallback,
+                  const base::Optional<base::string16>& title) {
+  if (!title) {
+    base::android::RunObjectCallbackAndroid(jcallback,
+                                            ScopedJavaLocalRef<jstring>());
+    return;
+  }
+
+  base::android::RunStringCallbackAndroid(jcallback,
+                                          base::UTF16ToUTF8(title.value()));
+}
+
+void OnGetOGImageUrl(const base::android::JavaRef<jobject>& jcallback,
+                     const base::Optional<base::string16>& image_url) {
+  if (!image_url) {
+    base::android::RunObjectCallbackAndroid(jcallback,
+                                            ScopedJavaLocalRef<jstring>());
+    return;
+  }
+
+  base::android::RunStringCallbackAndroid(jcallback,
+                                          base::UTF16ToUTF8(image_url.value()));
+}
 }  // namespace
 
 RenderFrameHostAndroid::RenderFrameHostAndroid(
@@ -84,6 +120,33 @@ void RenderFrameHostAndroid::GetCanonicalUrlForSharing(
     const base::android::JavaParamRef<jobject>& jcallback) const {
   render_frame_host_->GetCanonicalUrlForSharing(base::BindOnce(
       &OnGetCanonicalUrlForSharing,
+      base::android::ScopedJavaGlobalRef<jobject>(env, jcallback)));
+}
+
+void RenderFrameHostAndroid::GetOGType(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>&,
+    const base::android::JavaParamRef<jobject>& jcallback) const {
+  render_frame_host_->GetOGType(base::BindOnce(
+      &OnGetOGType,
+      base::android::ScopedJavaGlobalRef<jobject>(env, jcallback)));
+}
+
+void RenderFrameHostAndroid::GetOGTitle(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>&,
+    const base::android::JavaParamRef<jobject>& jcallback) const {
+  render_frame_host_->GetOGTitle(base::BindOnce(
+      &OnGetOGTitle,
+      base::android::ScopedJavaGlobalRef<jobject>(env, jcallback)));
+}
+
+void RenderFrameHostAndroid::GetOGImageUrl(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>&,
+    const base::android::JavaParamRef<jobject>& jcallback) const {
+  render_frame_host_->GetOGImageUrl(base::BindOnce(
+      &OnGetOGImageUrl,
       base::android::ScopedJavaGlobalRef<jobject>(env, jcallback)));
 }
 
