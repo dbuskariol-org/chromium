@@ -151,6 +151,14 @@ public abstract class ChromeSwitches {
     public static final String ALWAYS_EXTRACT_WEBAPK_RUNTIME_DEX_ON_STARTUP =
             "always-extract-webapk-dex-on-startup";
 
+    public static final String AUTOTABS_IMPORTANT_PAGES_HEURISTIC =
+            "autotabs-important-pages-heuristic";
+    public static final String AUTOTABS_IMPORTANT_PAGES_HEURISTIC_LEAVES = "Leaves";
+    public static final String AUTOTABS_IMPORTANT_PAGES_HEURISTIC_BRANCHES = "Branches";
+    public static final String AUTOTABS_IMPORTANT_PAGES_HEURISTIC_LAST_IN_TAB = "LastInTab";
+    public static final String AUTOTABS_IMPORTANT_PAGES_HEURISTIC_LAST_IN_TASK = "LastInTask";
+    public static final String AUTOTABS_IMPORTANT_PAGES_HEURISTIC_LLiTNS = "LLiTNS";
+
     /** Treats all WebAPKs as valid - useful only for local testing. */
     public static final String SKIP_WEBAPK_VERIFICATION = "skip-webapk-verification";
 

@@ -143,7 +143,8 @@ void TabLayer::SetProperties(int id,
                              float toolbar_alpha,
                              float toolbar_y_offset,
                              float side_border_scale,
-                             bool inset_border) {
+                             bool inset_border,
+                             std::vector<int>& ids) {
   if (alpha <= 0) {
     layer_->SetHideLayerAndSubtree(true);
     return;
@@ -335,30 +336,30 @@ void TabLayer::SetProperties(int id,
   //----------------------------------------------------------------------------
   // Handle Insetting the Top Border Component
   //----------------------------------------------------------------------------
-  if (inset_border) {
     float inset_diff = inset_border ? border_padding.y() : 0.f;
-    descaled_local_content_area.set_height(
-        descaled_local_content_area.height() - inset_diff);
-    scaled_local_content_area.set_height(scaled_local_content_area.height() -
-                                         inset_diff * content_scale);
-    shadow_size.set_height(shadow_size.height() - inset_diff);
-    border_size.set_height(border_size.height() - inset_diff);
-    border_inner_shadow_size.set_height(
-        border_inner_shadow_size.height() - inset_diff);
-    contour_size.set_height(contour_size.height() - inset_diff);
-    shadow_position.set_y(shadow_position.y() + inset_diff);
-    border_position.set_y(border_position.y() + inset_diff);
-    border_inner_shadow_position.set_y(
-        border_inner_shadow_position.y() + inset_diff);
-    contour_position.set_y(contour_position.y() + inset_diff);
-    close_button_position.set_y(close_button_position.y() + inset_diff);
-    title_position.set_y(title_position.y() + inset_diff);
+    if (inset_border) {
+      descaled_local_content_area.set_height(
+          descaled_local_content_area.height() - inset_diff);
+      scaled_local_content_area.set_height(scaled_local_content_area.height() -
+                                           inset_diff * content_scale);
+      shadow_size.set_height(shadow_size.height() - inset_diff);
+      border_size.set_height(border_size.height() - inset_diff);
+      border_inner_shadow_size.set_height(border_inner_shadow_size.height() -
+                                          inset_diff);
+      contour_size.set_height(contour_size.height() - inset_diff);
+      shadow_position.set_y(shadow_position.y() + inset_diff);
+      border_position.set_y(border_position.y() + inset_diff);
+      border_inner_shadow_position.set_y(border_inner_shadow_position.y() +
+                                         inset_diff);
+      contour_position.set_y(contour_position.y() + inset_diff);
+      close_button_position.set_y(close_button_position.y() + inset_diff);
+      title_position.set_y(title_position.y() + inset_diff);
 
-    // Scaled eventually, so have to descale the size difference first.
-    toolbar_position.set_y(toolbar_position.y() + inset_diff / content_scale);
-    content_position.set_y(content_position.y() + inset_diff / content_scale);
-    desired_content_size_pt.set_y(desired_content_size_pt.y() -
-                                  inset_diff / content_scale);
+      // Scaled eventually, so have to descale the size difference first.
+      toolbar_position.set_y(toolbar_position.y() + inset_diff / content_scale);
+      content_position.set_y(content_position.y() + inset_diff / content_scale);
+      desired_content_size_pt.set_y(desired_content_size_pt.y() -
+                                    inset_diff / content_scale);
   }
 
   const bool inset_toolbar = !inset_border;
@@ -435,15 +436,29 @@ void TabLayer::SetProperties(int id,
   close_button_->SetUIResourceId(close_btn_resource->ui_resource()->id());
 
   if (!back_visible) {
-    gfx::Rect rounded_descaled_content_area(
-        round(descaled_local_content_area.x()),
-        round(descaled_local_content_area.y()),
-        round(desired_content_size.width()),
-        round(desired_content_size.height()));
+    if (ids.size() == 0) {
+      gfx::Rect rounded_descaled_content_area(
+          round(descaled_local_content_area.x()),
+          round(descaled_local_content_area.y()),
+          round(desired_content_size.width()),
+          round(desired_content_size.height()));
 
-    content_->SetProperties(id, can_use_live_layer, static_to_view_blend,
-                            true, alpha, saturation,
-                            true, rounded_descaled_content_area);
+      content_->SetProperties(id, can_use_live_layer, static_to_view_blend,
+                              true, alpha, saturation, true,
+                              rounded_descaled_content_area);
+    } else {
+      gfx::Rect rounded_descaled_content_area(
+          round(descaled_local_content_area.x()),
+          round(descaled_local_content_area.y()),
+          round(desired_content_size.width()),
+          round(desired_content_size.height()));
+
+      content_->SetProperties(
+          id, can_use_live_layer, static_to_view_blend, true, alpha, saturation,
+          true, rounded_descaled_content_area, border_inner_shadow_resource, 1,
+          width, height, ids, border_inner_shadow_alpha, inset_diff);
+      front_border_inner_shadow_->SetIsDrawable(false);
+    }
   } else if (back_logo_resource) {
     back_logo_->SetUIResourceId(back_logo_resource->ui_resource()->id());
   }

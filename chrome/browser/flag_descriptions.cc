@@ -2285,6 +2285,19 @@ const char kAutofillAccessoryViewDescription[] =
     "Shows Autofill suggestions on top of the keyboard rather than in a "
     "dropdown.";
 
+const char kAutotabsImportantPagesHeuristic[] =
+    "Autotabs Important Pages Heuristic";
+const char kAutotabsImportantPagesHeuristicDescription[] =
+    "Various options for Autotabs Important Pages Heuristic.";
+const char kAutotabsImportantPagesHeuristicLeaves[] = "Include leaves only";
+const char kAutotabsImportantPagesHeuristicBranches[] = "Include branches only";
+const char kAutotabsImportantPagesHeuristicLastInTab[] =
+    "Include last in tab only";
+const char kAutotabsImportantPagesHeuristicLastInTask[] =
+    "Include last in task only";
+const char kAutotabsImportantPagesHeuristicLeavesLasInTabNoSearch[] =
+    "Leaves and last in tab with no search";
+
 const char kBackgroundLoaderForDownloadsName[] =
     "Enables background downloading of pages.";
 const char kBackgroundLoaderForDownloadsDescription[] =
@@ -2324,6 +2337,10 @@ const char kClearOldBrowsingDataName[] = "Clear older browsing data";
 const char kClearOldBrowsingDataDescription[] =
     "Enables clearing of browsing data which is older than a given time "
     "period.";
+
+const char kCollectionForShoppingName[] = "Collection for shopping";
+const char kCollectionForShoppingDescription[] =
+    "Make comparison shopping easier.";
 
 const char kContentSuggestionsCategoryOrderName[] =
     "Default content suggestions category order (e.g. on NTP)";

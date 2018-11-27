@@ -92,6 +92,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kChromeDuetFeature,
     &kChromeSmartSelection,
     &kChromeMemexFeature,
+    &kCollectionForShopping,
     &kCommandLineOnNonRooted,
     &kContentSuggestionsScrollToLoad,
     &kContentSuggestionsThumbnailDominantColor,
@@ -253,6 +254,9 @@ const base::Feature kChromeMemexFeature{"ChromeMemex",
 const base::Feature kChromeSmartSelection{"ChromeSmartSelection",
                                           base::FEATURE_ENABLED_BY_DEFAULT};
 
+const base::Feature kCollectionForShopping{"CollectionForShopping",
+                                           base::FEATURE_ENABLED_BY_DEFAULT};
+
 const base::Feature kCommandLineOnNonRooted{"CommandLineOnNonRooted",
                                             base::FEATURE_DISABLED_BY_DEFAULT};
 
@@ -321,7 +325,7 @@ const base::Feature kHomepageTile{"HomepageTile",
                                   base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kHorizontalTabSwitcherAndroid{
-    "HorizontalTabSwitcherAndroid", base::FEATURE_DISABLED_BY_DEFAULT};
+    "HorizontalTabSwitcherAndroid", base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Makes "Add to Home screen" in the app menu generate an APK for the shortcut
 // URL which opens Chrome in fullscreen.

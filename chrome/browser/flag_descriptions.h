@@ -116,6 +116,14 @@ extern const char kAutoplayPolicyNoUserGestureRequired[];
 extern const char kAutoplayPolicyUserGestureRequired[];
 extern const char kAutoplayPolicyDocumentUserActivation[];
 
+extern const char kAutotabsImportantPagesHeuristic[];
+extern const char kAutotabsImportantPagesHeuristicDescription[];
+extern const char kAutotabsImportantPagesHeuristicLeaves[];
+extern const char kAutotabsImportantPagesHeuristicBranches[];
+extern const char kAutotabsImportantPagesHeuristicLastInTab[];
+extern const char kAutotabsImportantPagesHeuristicLastInTask[];
+extern const char kAutotabsImportantPagesHeuristicLeavesLasInTabNoSearch[];
+
 extern const char kAv1DecoderName[];
 extern const char kAv1DecoderDescription[];
 
@@ -1402,6 +1410,9 @@ extern const char kChromeMemexDescription[];
 
 extern const char kClearOldBrowsingDataName[];
 extern const char kClearOldBrowsingDataDescription[];
+
+extern const char kCollectionForShoppingName[];
+extern const char kCollectionForShoppingDescription[];
 
 extern const char kContentSuggestionsCategoryOrderName[];
 extern const char kContentSuggestionsCategoryOrderDescription[];

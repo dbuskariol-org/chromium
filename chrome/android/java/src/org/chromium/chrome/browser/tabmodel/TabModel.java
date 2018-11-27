@@ -6,6 +6,7 @@ package org.chromium.chrome.browser.tabmodel;
 
 import android.support.annotation.IntDef;
 
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
 
@@ -107,6 +108,15 @@ public interface TabModel extends TabList {
      * @return true if the tab was found
      */
     public boolean closeTab(Tab tab);
+
+    /**
+     * Unregisters and destroys the specified tab, and then switches to |nextTab|.
+     * @param tabToClose The non-null tab to close
+     * @param nextTab The non-null tab to switch to next
+     * @param animate true iff the closing animation should be displayed
+     * @return true if the tab was found
+     */
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate);
 
     /**
      * Unregisters and destroys the specified tab, and then switches to the previous tab.
@@ -239,4 +249,22 @@ public interface TabModel extends TabList {
      * @param observer The observer to be unsubscribed.
      */
     void removeObserver(TabModelObserver observer);
+
+    default void
+        setTabGroupList(TabGroupList tabGroupList) {}
+
+    default TabGroupList
+        getTabGroupList() {
+            return null;
+        }
+
+    default boolean
+        isTabGroupEnabled() {
+            return false;
+        }
+
+    default int
+        getTabGroupCount() {
+            return 0;
+        }
 }

@@ -34,7 +34,7 @@ public class NonOverlappingStack extends Stack {
     /**
      * The scale the tabs should be shown at when there's exactly one tab open.
      */
-    private static final float SCALE_FRACTION_SINGLE_TAB = 0.80f;
+    private static final float SCALE_FRACTION_SINGLE_TAB = 0.8f;
 
     /**
      * The scale the tabs should be shown at when there are two or more tabs open.
@@ -86,7 +86,7 @@ public class NonOverlappingStack extends Stack {
      * How much the stack should adjust the x position of each LayoutTab in portrait mode (as a
      * fraction of the amount space that would be above and below the tab if it were centered).
      */
-    private static final float STACK_LANDSCAPE_Y_OFFSET_PROPORTION = 0.f;
+    private static final float STACK_LANDSCAPE_Y_OFFSET_PROPORTION = -0.25f;
 
     /**
      * Multiplier for adjusting the scrolling friction from the amount provided by

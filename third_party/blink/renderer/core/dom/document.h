@@ -1067,6 +1067,10 @@ class CORE_EXPORT Document : public ContainerNode,
 
   Color ThemeColor() const;
 
+  String OGType() const;
+  String OGTitle() const;
+  String OGImageUrl() const;
+
   // Returns the HTMLLinkElement currently in use for the Web Manifest.
   // Returns null if there is no such element.
   HTMLLinkElement* LinkManifest() const;

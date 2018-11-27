@@ -15,11 +15,13 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
+import org.chromium.base.Log;
 import org.chromium.base.VisibleForTesting;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeFeatureList;
+import org.chromium.chrome.browser.UrlConstants;
 import org.chromium.chrome.browser.compositor.LayerTitleCache;
 import org.chromium.chrome.browser.compositor.layouts.ChromeAnimation;
 import org.chromium.chrome.browser.compositor.layouts.ChromeAnimation.Animatable;
@@ -28,6 +30,9 @@ import org.chromium.chrome.browser.compositor.layouts.LayoutManager;
 import org.chromium.chrome.browser.compositor.layouts.LayoutRenderHost;
 import org.chromium.chrome.browser.compositor.layouts.LayoutUpdateHost;
 import org.chromium.chrome.browser.compositor.layouts.components.LayoutTab;
+import org.chromium.chrome.browser.compositor.layouts.components.LayoutTabInfo;
+import org.chromium.chrome.browser.compositor.layouts.components.LayoutTabInfoManager;
+import org.chromium.chrome.browser.compositor.layouts.components.TabGroupLayoutTabInfoManager;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.compositor.layouts.eventfilter.EventFilter;
 import org.chromium.chrome.browser.compositor.layouts.eventfilter.GestureEventFilter;
@@ -42,11 +47,13 @@ import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
 import org.chromium.chrome.browser.partnercustomizations.HomepageManager;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabList;
+import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.chrome.browser.util.MathUtils;
+import org.chromium.content_public.browser.LoadUrlParams;
 import org.chromium.ui.UiUtils;
 import org.chromium.ui.base.LocalizationUtils;
 import org.chromium.ui.resources.ResourceManager;
@@ -69,6 +76,7 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
         int INNER_MARGIN_PERCENT = 0;
         int STACK_SNAP = 1;
         int STACK_OFFSET_Y_PERCENT = 2;
+        int TOTAL_SCROLL_Y = 3;
     }
 
     @IntDef({DragDirection.NONE, DragDirection.HORIZONTAL, DragDirection.VERTICAL})
@@ -123,6 +131,9 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
 
     /** Rectangles that defines the area where each stack need to be laid out. */
     protected final ArrayList<RectF> mStackRects;
+    private float mTotalScrollY = 0.0f; // in dp.
+    private float mMinTotalScrollY = 0.0f; // in dp.
+    private float mTopOfTabInfoTotalScrollY; // in dp.
 
     private int mStackAnimationCount;
 
@@ -193,18 +204,44 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
 
     private StackLayoutGestureHandler mGestureHandler;
 
+    private int mFocusedTabIndex = -1;
+    private int mCenteredLayoutTabIndex = -1;
+    private int mLastAutotabScrollTabIndex = -1;
+
+    LayoutTabInfoManager mLayoutTabInfoManager;
+
+    private LayoutTabInfo getLayoutTabInfo() {
+        return mLayoutTabInfoManager.getLayoutTabInfo();
+    }
+
     private ChromeAnimation<Animatable> mLayoutAnimations;
+
+    private float getBottomOfCenteredTabInDp() {
+        if (mCenteredLayoutTabIndex < 0) {
+            return 0.0f;
+        }
+        LayoutTab layoutTab = mLayoutTabs[mCenteredLayoutTabIndex];
+        return layoutTab.getY() + layoutTab.getFinalContentHeight();
+    }
+
+    private float getTopOfLayoutTabInfoInDp() {
+        return getBottomOfCenteredTabInDp() + 20;
+    }
 
     private class StackLayoutGestureHandler implements GestureHandler {
         @Override
         public void onDown(float x, float y, boolean fromMouse, int buttons) {
+            if (shouldIgnoreTouchInput()) return;
             long time = time();
             mDragDirection = DragDirection.NONE;
             mLastOnDownX = x;
             mLastOnDownY = y;
             mLastOnDownTimeStamp = time;
+            if (mTotalScrollY == 0) {
+                mTopOfTabInfoTotalScrollY =
+                        getTopBrowserControlsHeight() - getTopOfLayoutTabInfoInDp();
+            }
 
-            if (shouldIgnoreTouchInput()) return;
             mStacks.get(getTabStackIndex()).onDown(time);
         }
 
@@ -215,6 +252,7 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
 
         @Override
         public void drag(float x, float y, float dx, float dy, float tx, float ty) {
+            android.util.Log.e("FLING", "Drag");
             if (shouldIgnoreTouchInput()) return;
 
             @SwipeMode
@@ -223,6 +261,21 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
             float amountX = dx;
             float amountY = dy;
             mInputMode = computeInputMode(time, x, y, amountX, amountY);
+
+            if (y > getTopOfLayoutTabInfoInDp()) {
+                cancelAnimation(StackLayoutBase.this, Property.TOTAL_SCROLL_Y);
+
+                mTotalScrollY = Math.max(mMinTotalScrollY, Math.min(0, mTotalScrollY + dy));
+                updateLayout(SystemClock.uptimeMillis(), 0);
+                requestUpdate();
+
+                int previousIndex = mLastAutotabScrollTabIndex;
+                mLastAutotabScrollTabIndex = mFocusedTabIndex;
+                if (previousIndex != mLastAutotabScrollTabIndex) {
+                    RecordUserAction.record("Autotabs.Scrolled");
+                }
+                return;
+            }
 
             if (mDragDirection == DragDirection.HORIZONTAL) amountY = 0;
             if (mDragDirection == DragDirection.VERTICAL) amountX = 0;
@@ -244,15 +297,73 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
         @Override
         public void click(float x, float y, boolean fromMouse, int buttons) {
             if (shouldIgnoreTouchInput()) return;
-
+            Log.e("HORZ", "Clicked index x:y was " + x + ":" + y);
             // Click event happens before the up event. mClicked is set to mute the up event.
             mClicked = true;
+            LayoutTabInfo layoutTabInfo = getLayoutTabInfo();
+            if (layoutTabInfo != null) {
+                Log.e("HORZ", "layoutTabInfo != null");
+                LayoutTabInfo.ClickCallback switchCallback = (int tabId) -> {
+                    cancelAnimation(StackLayoutBase.this, Property.TOTAL_SCROLL_Y);
+                    mTotalScrollY = 0;
+
+                    // Update mLastShownTabId in TabGroup.
+                    TabModel model = mTabModelSelector.getCurrentModel();
+                    Tab tab = TabModelUtils.getTabById(model, tabId);
+                    TabModelUtils.setIndex(model, model.indexOf(tab));
+                    // Update thumbnail (depend on mLastShownTabId).
+                    mStacks.get(getTabStackIndex(tabId)).updateStackTabs();
+                    updateLayout(LayoutManager.time(), 0);
+                    // Update mFocusedTabId in TabGroupLayoutTabInfo.
+                    buildTabInfo(mFocusedTabIndex, false);
+                    uiSelectingTab(LayoutManager.time(), tabId);
+                };
+                LayoutTabInfo.ClickCallback closeCallback = (int tabId) -> {
+                    TabModel model = mTabModelSelector.getCurrentModel();
+                    Tab tab = TabModelUtils.getTabById(model, tabId);
+                    if (tab == null) return;
+
+                    int currentStackIndex = getTabStackIndex(tabId);
+                    TabList tabList = mStacks.get(currentStackIndex).getTabList();
+                    if (tabList instanceof TabGroupList) {
+                        List<Integer> tabIdList =
+                                ((TabGroupList) tabList).getAllTabIdsInSameGroup(tabId);
+                        if (tabIdList.get(0) == tabId) {
+                            int newParentId = tabIdList.get(1);
+                            model.closeTab(
+                                    tab, TabModelUtils.getTabById(model, newParentId), false);
+                        } else {
+                            model.closeTab(tab, false, false, false);
+                        }
+                    }
+                    mStacks.get(currentStackIndex).updateStackTabs();
+                    updateLayout(LayoutManager.time(), 0);
+                    // This updates the layout of the tab group to reflect deleted entry.
+                    Log.e("HORZ", "click mFocusedTabIndex = %d", mFocusedTabIndex);
+                    buildTabInfo(mFocusedTabIndex, false);
+                };
+                LayoutTabInfo.ClickCallback newTabInGroupCallback = (int parentTabId) -> {
+                    TabModel currentTabModel = mTabModelSelector.getCurrentModel();
+                    Tab parentTab = TabModelUtils.getTabById(currentTabModel, parentTabId);
+                    currentTabModel.commitAllTabClosures();
+                    mTabModelSelector.openNewTab(new LoadUrlParams(UrlConstants.NTP_URL),
+                            TabModel.TabLaunchType.FROM_CHROME_UI, parentTab,
+                            mTabModelSelector.isIncognitoSelected());
+                };
+
+                if (layoutTabInfo.checkForClick((int) (x * mDpToPx), (int) (y * mDpToPx),
+                            switchCallback, closeCallback, newTabInGroupCallback)) {
+                    Log.e("HORZ", "checkForClick returned true");
+                    return;
+                }
+            }
             PortraitViewport viewportParams = getViewportParameters();
             final int stackIndexDeltaAt = viewportParams.getStackIndexDeltaAt(x, y);
             if (stackIndexDeltaAt == 0) {
                 mStacks.get(getTabStackIndex()).click(time(), x, y);
             } else {
                 final int newStackIndex = getTabStackIndex() + stackIndexDeltaAt;
+                android.util.Log.e("Yusuf", "StackLayoutBase.java#click : " + newStackIndex);
                 if (newStackIndex < 0 || newStackIndex >= mStacks.size()) return;
                 if (!mStacks.get(newStackIndex).isDisplayable()) return;
                 flingStacks(newStackIndex);
@@ -267,6 +378,37 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
             long time = time();
             float vx = velocityX;
             float vy = velocityY;
+
+            if (y > getTopOfLayoutTabInfoInDp()) {
+                float moveTo = Math.min(0, mTotalScrollY + 6 * velocityY * SWITCH_STACK_FLING_DT);
+                android.util.Log.e("FLING",
+                        "Start =" + -mTopOfTabInfoTotalScrollY + ": MoveTo = " + moveTo
+                                + ": mTotalScrollY = " + mTotalScrollY + ":" + velocityY);
+                if (mTotalScrollY > mTopOfTabInfoTotalScrollY && velocityY < 0) {
+                    moveTo = mTopOfTabInfoTotalScrollY;
+                    android.util.Log.e("FLING", "Snapping to beginning");
+                } else if (mTotalScrollY < mTopOfTabInfoTotalScrollY
+                        && moveTo > mTopOfTabInfoTotalScrollY) {
+                    moveTo = mTopOfTabInfoTotalScrollY;
+                    android.util.Log.e("FLING", "Snapping to beginning while going back");
+                } else if (mTotalScrollY >= mTopOfTabInfoTotalScrollY && velocityY > 0) {
+                    moveTo = 0;
+                    android.util.Log.e("FLING", "Snapping back to stack");
+                }
+                moveTo = Math.max(mMinTotalScrollY, moveTo);
+
+                android.util.Log.e("FLING", "Flinging in autotabs");
+                addToAnimation(StackLayoutBase.this, Property.TOTAL_SCROLL_Y, mTotalScrollY, moveTo,
+                        300, 0);
+
+                int previousIndex = mLastAutotabScrollTabIndex;
+                mLastAutotabScrollTabIndex = mFocusedTabIndex;
+                if (previousIndex != mLastAutotabScrollTabIndex) {
+                    RecordUserAction.record("Autotabs.Scrolled");
+                }
+                requestUpdate();
+                return;
+            }
 
             if (mInputMode == SwipeMode.NONE) {
                 mInputMode = computeInputMode(
@@ -289,6 +431,11 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
         @Override
         public void onLongPress(float x, float y) {
             if (shouldIgnoreTouchInput()) return;
+            LayoutTabInfo layoutTabInfo = getLayoutTabInfo();
+            if (layoutTabInfo != null
+                    && layoutTabInfo.checkForLongPress((int) (x * mDpToPx), (int) (y * mDpToPx))) {
+                return;
+            }
             mStacks.get(getTabStackIndex()).onLongPress(time(), x, y);
         }
 
@@ -299,6 +446,8 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
         }
 
         private void onUpOrCancel(long time) {
+            android.util.Log.e("FLING", "Up or Cancel");
+
             if (shouldIgnoreTouchInput()) return;
 
             int currentIndex = getTabStackIndex();
@@ -345,6 +494,7 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
         mStackRects = new ArrayList<RectF>();
         mViewContainer = new FrameLayout(getContext());
         mSceneLayer = new TabListSceneLayer();
+        mLayoutTabInfoManager = new TabGroupLayoutTabInfoManager();
     }
 
     /**
@@ -370,7 +520,7 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
      */
     protected void setTabLists(List<TabList> lists) {
         if (mStacks.size() > lists.size()) {
-            mStacks.subList(lists.size(), mStacks.size()).clear();
+            mStacks.subList(Math.max(0, lists.size()), mStacks.size()).clear();
         }
         while (mStacks.size() < lists.size()) {
             Stack stack;
@@ -387,7 +537,20 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
             mStacks.get(i).setTabList(lists.get(i));
         }
 
+        if (mLayoutTabInfoManager instanceof TabGroupLayoutTabInfoManager) {
+            ((TabGroupLayoutTabInfoManager) mLayoutTabInfoManager).setTabLists(lists);
+        }
+
         // mStackRects will get updated in updateLayout()
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if (mLayoutTabInfoManager != null) {
+            mLayoutTabInfoManager.destroy();
+            mLayoutTabInfoManager = null;
+        }
     }
 
     @Override
@@ -438,6 +601,7 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
     public void setTabModelSelector(TabModelSelector modelSelector, TabContentManager manager) {
         super.setTabModelSelector(modelSelector, manager);
         mSceneLayer.setTabModelSelector(modelSelector);
+        mLayoutTabInfoManager.setTabModelSelector(modelSelector, manager);
         resetScrollData();
 
         new TabModelSelectorTabModelObserver(mTabModelSelector) {
@@ -523,14 +687,18 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
                 RecordUserAction.record("MobileTabSwitched");
             }
         }
+        android.util.Log.e("CLICK", "onTabSelecting " + tabId);
 
         commitOutstandingModelState(time);
         if (tabId == Tab.INVALID_TAB_ID) tabId = mTabModelSelector.getCurrentTabId();
+        android.util.Log.e("CLICK", "0 onTabSelecting " + tabId);
         super.onTabSelecting(time, tabId);
         mStacks.get(getTabStackIndex()).tabSelectingEffect(time, tabId);
+        android.util.Log.e("CLICK", "1 onTabSelecting " + tabId);
         startMarginAnimation(false);
         startYOffsetAnimation(false);
         finishScrollStacks();
+        android.util.Log.e("CLICK", "2 onTabSelecting " + tabId);
     }
 
     @Override
@@ -543,6 +711,16 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
     @Override
     public void onTabsAllClosing(long time, boolean incognito) {
         super.onTabsAllClosing(time, incognito);
+    }
+
+    @Override
+    public void onTabModelSwitched(boolean toIncognitoTabModel) {
+        // Clear scrolling and focused tab state and rebuild tab info while the
+        // TabModel is switching. It will get updated once the transition
+        // animations complete.
+        mTotalScrollY = 0;
+        mFocusedTabIndex = -1;
+        buildTabInfo(mFocusedTabIndex, false);
     }
 
     @Override
@@ -620,11 +798,12 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
             boolean background, float originX, float originY) {
         super.onTabCreated(
                 time, id, tabIndex, sourceId, newIsIncognito, background, originX, originY);
-
         // Suppress startHiding()'s logging to the Tabs.TabOffsetOfSwitch histogram.
         mIsHidingBecauseOfNewTabCreation = true;
-        startHiding(id, false);
-        mStacks.get(getTabStackIndex(id)).tabCreated(time, id);
+        if (isActive()) startHiding(id, false);
+        if (mStacks.size() < getTabStackIndex(id)) {
+            mStacks.get(getTabStackIndex(id)).tabCreated(time, id);
+        }
 
         startMarginAnimation(false);
     }
@@ -637,9 +816,6 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
     @Override
     public void onTabRestored(long time, int tabId) {
         super.onTabRestored(time, tabId);
-        // Call show() so that new stack tabs and potentially new stacks get created.
-        // TODO(twellington): add animation for showing the restored tab.
-        show(time, false);
     }
 
     @Override
@@ -741,8 +917,19 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
                                    + mTabModelSelector.getModel(false).getCount()
                            < 2));
 
-        // Propagate the tab closure to the model.
-        TabModelUtils.closeTabById(mTabModelSelector.getModel(incognito), id, canUndo);
+        int currentStackIndex = getTabStackIndex(id);
+        TabList tabList = mStacks.get(currentStackIndex).getTabList();
+        if (tabList instanceof TabGroupList) {
+            canUndo = false;
+            List<Integer> tabIdList = ((TabGroupList) tabList).getAllTabIdsInSameGroup(id);
+            for (int i = 0; i < tabIdList.size(); i++) {
+                TabModelUtils.closeTabById(
+                        mTabModelSelector.getModel(incognito), tabIdList.get(i), canUndo);
+            }
+        } else {
+            // Propagate the tab closure to the model.
+            TabModelUtils.closeTabById(mTabModelSelector.getModel(incognito), id, canUndo);
+        }
     }
 
     public void uiDoneClosingAllTabs(boolean incognito) {
@@ -1194,6 +1381,11 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
     }
 
     @Override
+    public float getWidth() {
+        return super.getWidth();
+    }
+
+    @Override
     protected void updateLayout(long time, long dt) {
         super.updateLayout(time, dt);
         boolean needUpdate = false;
@@ -1208,7 +1400,7 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
         if (!mStackRects.isEmpty()) {
             mStackRects.get(0).left = viewport.getStack0Left();
             mStackRects.get(0).right = mStackRects.get(0).left + viewport.getWidth();
-            mStackRects.get(0).top = viewport.getStack0Top();
+            mStackRects.get(0).top = viewport.getStack0Top() + mTotalScrollY;
             mStackRects.get(0).bottom = mStackRects.get(0).top + viewport.getHeight();
         }
 
@@ -1270,6 +1462,37 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
             if (mLayoutTabs[i].updateSnap(dt)) needUpdate = true;
         }
 
+        int centeredTabIndex = getCenteredTabIndex();
+        if (centeredTabIndex != mFocusedTabIndex) {
+            mFocusedTabIndex = centeredTabIndex;
+            Log.e("HORZ", "updateLayout mFocusedTabIndex = %d", centeredTabIndex);
+            buildTabInfo(mFocusedTabIndex, true);
+        }
+
+        LayoutTabInfo layoutTabInfo = getLayoutTabInfo();
+        if (layoutTabInfo != null && mLayoutTabs != null && mLayoutTabs.length > 0) {
+            // TODO(acolwell) : Consider changing this so starting x,y offset doesn't
+            // need to be passed down and is completely handled by this object.
+            final int widthInPixels = (int) (getViewportParameters().getWidth() * mDpToPx);
+            final int heightInPixels = (int) (getViewportParameters().getHeight() * mDpToPx);
+            final int topYOffsetInPixels =
+                    (int) ((getViewportParameters().getStack0Top() + mTotalScrollY) * mDpToPx);
+            final int startingXOffsetInPixels = 0;
+            final int startingYOffsetInPixels = (int) (getTopOfLayoutTabInfoInDp() * mDpToPx);
+
+            int endingYOffsetInPixels = layoutTabInfo.computeLayout(
+                    startingXOffsetInPixels, startingYOffsetInPixels, widthInPixels);
+            assert endingYOffsetInPixels >= startingYOffsetInPixels;
+
+            final int contentHeightInPixels = endingYOffsetInPixels - topYOffsetInPixels;
+            float oldMinTotalScrollY = mMinTotalScrollY;
+            mMinTotalScrollY = Math.min((heightInPixels - contentHeightInPixels) / mDpToPx, 0);
+            if (oldMinTotalScrollY != mMinTotalScrollY && mTotalScrollY < mMinTotalScrollY) {
+                cancelAnimation(this, Property.TOTAL_SCROLL_Y);
+                addToAnimation(
+                        this, Property.TOTAL_SCROLL_Y, mTotalScrollY, mMinTotalScrollY, 300, 0);
+            }
+        }
         if (needUpdate) requestUpdate();
 
         // Since we've updated the positions of the stacks and tabs, let's go ahead and update
@@ -1295,6 +1518,31 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
      */
     public void setActiveStackState(int stackIndex) {
         mTemporarySelectedStack = stackIndex;
+    }
+
+    private void buildTabInfo(int focusedTabIndex, boolean shouldRecordUma) {
+        mCenteredLayoutTabIndex = -1;
+        if (mLayoutTabs == null || mLayoutTabs.length == 0 || focusedTabIndex == -1) {
+            mLayoutTabInfoManager.onTabFocused(null, false);
+            return;
+        }
+
+        Tab tab = TabModelUtils.getTabByIndex(
+                mStacks.get(getTabStackIndex()).getTabList(), focusedTabIndex);
+
+        mLayoutTabInfoManager.onTabFocused(tab, shouldRecordUma);
+        for (int i = 0; i < mLayoutTabs.length; ++i) {
+            if (mLayoutTabs[i].getId() == tab.getId()) {
+                mCenteredLayoutTabIndex = i;
+                break;
+            }
+        }
+    }
+
+    private int getCenteredTabIndex() {
+        if (!mIsActiveLayout) return -1;
+        return mStacks.get(getTabStackIndex())
+                .getCenteredTabIndex(getWidth() / 2, getHeight() / 2 + mTotalScrollY);
     }
 
     private void resetScrollData() {
@@ -1327,6 +1575,12 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
         // button on the toolbar to re-open it while we're still in the process of hiding the tab
         // switcher, we don't skip the logging.
         mIsActiveLayout = false;
+        mFocusedTabIndex = -1;
+
+        if (mTotalScrollY != 0) {
+            cancelAnimation(StackLayoutBase.this, Property.TOTAL_SCROLL_Y);
+            addToAnimation(StackLayoutBase.this, Property.TOTAL_SCROLL_Y, mTotalScrollY, 0, 300, 0);
+        }
 
         if (mCurrentTabIdWhenOpened == nextTabId) {
             RecordUserAction.record("MobileTabReturnedToCurrentTab");
@@ -1486,6 +1740,11 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
         return false;
     }
 
+    @Override
+    public ChromeFullscreenManager getFullscreenManager() {
+        return super.getFullscreenManager();
+    }
+
     /**
      * Sets properties for animations.
      * @param prop The property to update
@@ -1503,6 +1762,9 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
                 break;
             case Property.STACK_OFFSET_Y_PERCENT:
                 mStackOffsetYPercent = p;
+                break;
+            case Property.TOTAL_SCROLL_Y:
+                mTotalScrollY = p;
                 break;
         }
     }
@@ -1541,6 +1803,13 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
         super.updateSceneLayer(viewport, contentViewport, layerTitleCache, tabContentManager,
                 resourceManager, fullscreenManager);
         assert mSceneLayer != null;
+
+        LayoutTabInfo lti = getLayoutTabInfo();
+        if (lti != null) {
+            lti.updateLayer(tabContentManager, resourceManager);
+        } else {
+            tabContentManager.clearTabInfoLayer();
+        }
 
         mSceneLayer.pushLayers(getContext(), viewport, contentViewport, this, layerTitleCache,
                 tabContentManager, resourceManager, fullscreenManager);

@@ -93,6 +93,14 @@
             android:layout="@layout/bottom_toolbar" />
 
         <ViewStub
+            android:id="@+id/tab_strip_bottom_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:inflatedId="@+id/tab_strip_bottom_toolbar"
+            android:layout="@layout/tab_strip_bottom_toolbar" />
+
+        <ViewStub
             android:id="@+id/control_container_stub"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

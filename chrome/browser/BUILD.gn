@@ -2052,6 +2052,14 @@ jumbo_split_static_library("browser") {
       "android/compositor/layer/tab_handle_layer.h",
       "android/compositor/layer/tab_layer.cc",
       "android/compositor/layer/tab_layer.h",
+      "android/compositor/layer/tabgroup_content_layer.cc",
+      "android/compositor/layer/tabgroup_content_layer.h",
+      "android/compositor/layer/tabgroup_layer.cc",
+      "android/compositor/layer/tabgroup_layer.h",
+      "android/compositor/layer/tabgroup_layout_tab_info.cc",
+      "android/compositor/layer/tabgroup_layout_tab_info.h",
+      "android/compositor/layer/tabgroup_tab_content_layer.cc",
+      "android/compositor/layer/tabgroup_tab_content_layer.h",
       "android/compositor/layer/thumbnail_layer.cc",
       "android/compositor/layer/thumbnail_layer.h",
       "android/compositor/layer/toolbar_layer.cc",
@@ -2245,6 +2253,12 @@ jumbo_split_static_library("browser") {
       "android/instantapps/instant_apps_settings.h",
       "android/intent_helper.cc",
       "android/intent_helper.h",
+      "android/journey/autotab_thumbnail_fetcher.cc",
+      "android/journey/autotab_thumbnail_fetcher.h",
+      "android/journey/journey_info_fetcher.cc",
+      "android/journey/journey_info_fetcher.h",
+      "android/journey/journey_info_json_request.cc",
+      "android/journey/journey_info_json_request.h",
       "android/large_icon_bridge.cc",
       "android/large_icon_bridge.h",
       "android/locale/locale_manager.cc",
@@ -2539,6 +2553,7 @@ jumbo_split_static_library("browser") {
       "translate/android/translate_bridge.cc",
     ]
     deps += [
+      ":batch_get_switcher_journey_proto",
       ":client_discourse_context_proto",
       ":delta_file_proto",
       ":explore_sites_proto",
@@ -4638,6 +4653,7 @@ if (is_android) {
       "../android/java/src/org/chromium/chrome/browser/compositor/CompositorView.java",
       "../android/java/src/org/chromium/chrome/browser/compositor/LayerTitleCache.java",
       "../android/java/src/org/chromium/chrome/browser/compositor/bottombar/OverlayPanelContent.java",
+      "../android/java/src/org/chromium/chrome/browser/compositor/layouts/components/TabGroupLayoutTabInfo.java",
       "../android/java/src/org/chromium/chrome/browser/compositor/layouts/content/TabContentManager.java",
       "../android/java/src/org/chromium/chrome/browser/compositor/resources/ResourceFactory.java",
       "../android/java/src/org/chromium/chrome/browser/compositor/scene_layer/ContextualSearchSceneLayer.java",
@@ -4881,6 +4897,12 @@ if (is_android) {
   proto_library("delta_file_proto") {
     sources = [
       "android/proto/delta_file.proto",
+    ]
+  }
+
+  proto_library("batch_get_switcher_journey_proto") {
+    sources = [
+      "android/proto/batch_get_switcher_journey_from_pageload_request.proto",
     ]
   }
 

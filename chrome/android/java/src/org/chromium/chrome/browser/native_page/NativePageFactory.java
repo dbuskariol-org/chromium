@@ -24,6 +24,7 @@ import org.chromium.chrome.browser.ntp.RecentTabsPage;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
+import org.chromium.chrome.browser.tasks.SummaryPage;
 import org.chromium.content_public.browser.LoadUrlParams;
 
 import java.lang.annotation.Retention;
@@ -71,11 +72,15 @@ public class NativePageFactory {
                     new RecentTabsManager(tab, tab.getProfile(), activity);
             return new RecentTabsPage(activity, recentTabsManager);
         }
+
+        protected NativePage buildSummaryPage(ChromeActivity activity, Tab tab) {
+            return new SummaryPage(activity, new TabShim(tab));
+        }
     }
 
     @IntDef({NativePageType.NONE, NativePageType.CANDIDATE, NativePageType.NTP,
             NativePageType.BOOKMARKS, NativePageType.RECENT_TABS, NativePageType.DOWNLOADS,
-            NativePageType.HISTORY, NativePageType.EXPLORE})
+            NativePageType.HISTORY, NativePageType.EXPLORE, NativePageType.SUMMARY})
     @Retention(RetentionPolicy.SOURCE)
     public @interface NativePageType {
         int NONE = 0;
@@ -86,6 +91,7 @@ public class NativePageFactory {
         int DOWNLOADS = 5;
         int HISTORY = 6;
         int EXPLORE = 7;
+        int SUMMARY = 8;
     }
 
     private static @NativePageType int nativePageType(
@@ -114,6 +120,8 @@ public class NativePageFactory {
             return NativePageType.RECENT_TABS;
         } else if (UrlConstants.EXPLORE_HOST.equals(host)) {
             return NativePageType.EXPLORE;
+        } else if (UrlConstants.SUMMARY_HOST.equals(host)) {
+            return NativePageType.SUMMARY;
         } else {
             return NativePageType.NONE;
         }
@@ -166,6 +174,9 @@ public class NativePageFactory {
                 break;
             case NativePageType.EXPLORE:
                 page = sNativePageBuilder.buildExploreSitesPage(activity, tab);
+                break;
+            case NativePageType.SUMMARY:
+                page = sNativePageBuilder.buildSummaryPage(activity, tab);
                 break;
             default:
                 assert false;

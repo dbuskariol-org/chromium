@@ -17,10 +17,13 @@ import org.chromium.chrome.browser.compositor.LayerTitleCache;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
 import org.chromium.chrome.browser.compositor.layouts.components.LayoutTab;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.util.ColorUtils;
 import org.chromium.ui.resources.ResourceManager;
+
+import java.util.List;
 
 /**
  * A SceneLayer to render a tab stack.
@@ -66,6 +69,8 @@ public class TabListSceneLayer extends SceneLayer {
                 viewport.top, viewport.width(), viewport.height(), layerTitleCache,
                 tabContentManager, resourceManager);
 
+        nativePutTabInfoLayer(mNativePtr);
+
         boolean isHTSEnabled =
                 ChromeFeatureList.isEnabled(ChromeFeatureList.HORIZONTAL_TAB_SWITCHER_ANDROID);
 
@@ -91,6 +96,24 @@ public class TabListSceneLayer extends SceneLayer {
 
             int borderColorResource =
                     t.isIncognito() ? R.color.tab_back_incognito : R.color.tab_back;
+
+            int[] tabIds = new int[0];
+            if (mTabModelSelector != null) {
+                TabGroupList tabGroupList = mTabModelSelector.getCurrentModel().getTabGroupList();
+                if (tabGroupList != null) {
+                    List<Integer> ids = tabGroupList.getAllTabIdsInSameGroup(t.getId());
+                    // TODO(meiliang): modify not just show the first four, should be show the
+                    // currently selected tab and three other closest tabs
+                    int size = ids.size() >= 4 ? 4 : ids.size();
+                    if (size != 1) {
+                        tabIds = new int[size];
+                        for (int j = 0; j < size; j++) {
+                            tabIds[j] = ids.get(j);
+                        }
+                    }
+                }
+            }
+
             // TODO(dtrainor, clholgat): remove "* dpToPx" once the native part fully supports dp.
             nativePutTabLayer(mNativePtr, t.getId(), R.id.control_container,
                     R.drawable.btn_delete_24dp, R.drawable.tabswitcher_border_frame_shadow,
@@ -115,7 +138,7 @@ public class TabListSceneLayer extends SceneLayer {
                     t.getToolbarBackgroundColor(), closeButtonColor, t.anonymizeToolbar(),
                     t.isTitleNeeded(), urlBarBackgroundId, t.getTextBoxBackgroundColor(),
                     textBoxAlpha, t.getToolbarAlpha(), t.getToolbarYOffset() * dpToPx,
-                    t.getSideBorderScale(), t.insetBorderVertical());
+                    t.getSideBorderScale(), t.insetBorderVertical(), tabIds);
         }
         nativeFinishBuildingFrame(mNativePtr);
     }
@@ -179,5 +202,7 @@ public class TabListSceneLayer extends SceneLayer {
             int defaultThemeColor, int toolbarBackgroundColor, int closeButtonColor,
             boolean anonymizeToolbar, boolean showTabTitle, int toolbarTextBoxResource,
             int toolbarTextBoxBackgroundColor, float toolbarTextBoxAlpha, float toolbarAlpha,
-            float toolbarYOffset, float sideBorderScale, boolean insetVerticalBorder);
+            float toolbarYOffset, float sideBorderScale, boolean insetVerticalBorder, int[] ids);
+
+    private native void nativePutTabInfoLayer(long nativeTabListSceneLayer);
 }

@@ -77,7 +77,6 @@ import org.chromium.chrome.browser.util.MathUtils;
 import org.chromium.chrome.browser.util.ViewUtils;
 import org.chromium.chrome.browser.widget.animation.CancelAwareAnimatorListener;
 import org.chromium.components.feature_engagement.EventConstants;
-import org.chromium.ui.UiUtils;
 import org.chromium.ui.base.LocalizationUtils;
 import org.chromium.ui.interpolators.BakedBezierInterpolator;
 
@@ -379,13 +378,6 @@ public class ToolbarPhone
 
             mHomeButton = findViewById(R.id.home_button);
             changeIconToNTPIcon(mHomeButton);
-            if (FeatureUtilities.isBottomToolbarEnabled()) {
-                disableMenuButton();
-                if (mHomeButton != null) {
-                    UiUtils.removeViewFromParent(mHomeButton);
-                    mHomeButton = null;
-                }
-            }
 
             mUrlBar = (TextView) findViewById(R.id.url_bar);
 
@@ -455,12 +447,7 @@ public class ToolbarPhone
     private void inflateTabSwitchingResources() {
         mToggleTabStackButton = (ImageView) findViewById(R.id.tab_switcher_button);
         mNewTabButton = (NewTabButton) findViewById(R.id.new_tab_button);
-        if (FeatureUtilities.isBottomToolbarEnabled()) {
-            UiUtils.removeViewFromParent(mToggleTabStackButton);
-            UiUtils.removeViewFromParent(mNewTabButton);
-            mToggleTabStackButton = null;
-            mNewTabButton = null;
-        } else {
+
             mToggleTabStackButton.setClickable(false);
             mTabSwitcherButtonDrawable =
                     TabSwitcherDrawable.createTabSwitcherDrawable(getContext(), false);
@@ -468,7 +455,6 @@ public class ToolbarPhone
                     TabSwitcherDrawable.createTabSwitcherDrawable(getContext(), true);
             mToggleTabStackButton.setImageDrawable(mTabSwitcherButtonDrawable);
             mTabSwitcherModeViews.add(mNewTabButton);
-        }
     }
 
     private void enableTabSwitchingResources() {
@@ -503,7 +489,7 @@ public class ToolbarPhone
 
         getLocationBar().onNativeLibraryReady();
 
-        if (!FeatureUtilities.isBottomToolbarEnabled()) enableTabSwitchingResources();
+        enableTabSwitchingResources();
 
         if (mHomeButton != null) {
             changeIconToNTPIcon(mHomeButton);
@@ -825,6 +811,12 @@ public class ToolbarPhone
                 return getToolbarDataProvider().getPrimaryColor();
             case VisualState.TAB_SWITCHER_NORMAL:
             case VisualState.TAB_SWITCHER_INCOGNITO:
+                if (usingHorizontalTabSwitcher()) {
+                    int colorId = visualState == VisualState.TAB_SWITCHER_NORMAL
+                            ? R.color.modern_primary_color
+                            : R.color.incognito_modern_primary_color;
+                    return ApiCompatibilityUtils.getColor(res, colorId);
+                }
                 if (DeviceClassManager.enableAccessibilityLayout()) {
                     int colorId = visualState == VisualState.TAB_SWITCHER_NORMAL
                             ? R.color.modern_primary_color
@@ -1811,8 +1803,8 @@ public class ToolbarPhone
 
         // Don't inflate the incognito toggle button unless the horizontal tab switcher experiment
         // is enabled and the user actually enters the tab switcher.
-        if (!FeatureUtilities.isBottomToolbarEnabled() && mIncognitoToggleTabLayout == null
-                && mTabSwitcherState != STATIC_TAB && usingHorizontalTabSwitcher()
+        if (mIncognitoToggleTabLayout == null && mTabSwitcherState != STATIC_TAB
+                && usingHorizontalTabSwitcher()
                 && PrefServiceBridge.getInstance().isIncognitoModeEnabled()) {
             ViewStub incognitoToggleTabsStub = findViewById(R.id.incognito_tabs_stub);
             mIncognitoToggleTabLayout =
