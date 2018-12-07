@@ -4,7 +4,6 @@
 
 package org.chromium.chrome.browser.tabmodel;
 
-import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabModel.TabSelectionType;
 import org.chromium.content_public.browser.WebContents;
@@ -73,19 +72,9 @@ public class TabModelUtils {
     public static int getTabIndexById(TabList model, int tabId) {
         int count = model.getCount();
 
-        if (model instanceof TabGroupList) {
-            for (int i = 0; i < count; i++) {
-                List<Integer> tabIdWithinGroup =
-                        ((TabGroupList) model).getAllTabIdsInSameGroup(model.getTabAt(i).getId());
-                for (int id : tabIdWithinGroup) {
-                    if (id == tabId) return i;
-                }
-            }
-        } else {
-            for (int i = 0; i < count; i++) {
-                Tab tab = model.getTabAt(i);
-                if (tab.getId() == tabId) return i;
-            }
+        for (int i = 0; i < count; i++) {
+            Tab tab = model.getTabAt(i);
+            if (tab.getId() == tabId) return i;
         }
 
         return TabModel.INVALID_TAB_INDEX;
@@ -100,10 +89,6 @@ public class TabModelUtils {
     public static Tab getTabById(TabList model, int tabId) {
         int index = getTabIndexById(model, tabId);
         if (index == TabModel.INVALID_TAB_INDEX) return null;
-        return model.getTabAt(index);
-    }
-
-    public static Tab getTabByIndex(TabList model, int index) {
         return model.getTabAt(index);
     }
 

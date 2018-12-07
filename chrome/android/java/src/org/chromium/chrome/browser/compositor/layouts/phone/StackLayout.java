@@ -46,17 +46,15 @@ public class StackLayout extends StackLayoutBase {
 
     @Override
     protected boolean shouldIgnoreTouchInput() {
-        return mLayoutTabs == null || mAnimatingStackSwitch;
+        return mAnimatingStackSwitch;
     }
 
     @Override
     public void setTabModelSelector(TabModelSelector modelSelector, TabContentManager manager) {
         super.setTabModelSelector(modelSelector, manager);
         ArrayList<TabList> tabLists = new ArrayList<TabList>();
-
-        tabLists.add(new TabGroupList(modelSelector.getModel(false), manager, true));
-        tabLists.add(new TabGroupList(modelSelector.getModel(true), manager, true));
-
+        tabLists.add(modelSelector.getModel(false));
+        tabLists.add(modelSelector.getModel(true));
         setTabLists(tabLists);
     }
 
@@ -111,7 +109,6 @@ public class StackLayout extends StackLayoutBase {
 
     @Override
     public void onTabModelSwitched(boolean toIncognitoTabModel) {
-        super.onTabModelSwitched(toIncognitoTabModel);
         if (isHorizontalTabSwitcherFlagEnabled()) {
             // Don't allow switching between normal and incognito again until the animations finish.
             mAnimatingStackSwitch = true;

@@ -8,7 +8,6 @@
 #include "cc/layers/layer.h"
 #include "cc/layers/layer_collections.h"
 #include "cc/paint/filter_operations.h"
-#include "chrome/browser/android/compositor/layer/tabgroup_content_layer.h"
 #include "chrome/browser/android/compositor/layer/thumbnail_layer.h"
 #include "chrome/browser/android/compositor/tab_content_manager.h"
 #include "content/public/browser/android/compositor.h"
@@ -19,8 +18,7 @@ namespace android {
 // static
 scoped_refptr<ContentLayer> ContentLayer::Create(
     TabContentManager* tab_content_manager) {
-  // return base::WrapRefCounted(new TabGroupContentLayer(tab_content_manager));
-  return TabGroupContentLayer::Create(tab_content_manager);
+  return base::WrapRefCounted(new ContentLayer(tab_content_manager));
 }
 
 static void SetOpacityOnLeaf(scoped_refptr<cc::Layer> layer, float alpha) {

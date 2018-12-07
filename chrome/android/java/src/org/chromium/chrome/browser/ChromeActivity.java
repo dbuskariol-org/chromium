@@ -44,7 +44,6 @@ import org.chromium.base.Callback;
 import org.chromium.base.CommandLine;
 import org.chromium.base.ContextUtils;
 import org.chromium.base.DiscardableReferencePool;
-import org.chromium.base.Log;
 import org.chromium.base.StrictModeContext;
 import org.chromium.base.SysUtils;
 import org.chromium.base.TraceEvent;
@@ -62,8 +61,6 @@ import org.chromium.chrome.browser.autofill.keyboard_accessory.KeyboardAccessory
 import org.chromium.chrome.browser.autofill.keyboard_accessory.ManualFillingCoordinator;
 import org.chromium.chrome.browser.bookmarks.BookmarkModel;
 import org.chromium.chrome.browser.bookmarks.BookmarkUtils;
-import org.chromium.chrome.browser.collection.CollectionList;
-import org.chromium.chrome.browser.collection.CollectionManager;
 import org.chromium.chrome.browser.compositor.CompositorViewHolder;
 import org.chromium.chrome.browser.compositor.bottombar.OverlayPanel.StateChangeReason;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
@@ -136,7 +133,6 @@ import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tabmodel.TabWindowManager;
-import org.chromium.chrome.browser.tasks.SummaryTracker;
 import org.chromium.chrome.browser.toolbar.Toolbar;
 import org.chromium.chrome.browser.toolbar.ToolbarControlContainer;
 import org.chromium.chrome.browser.toolbar.ToolbarManager;
@@ -192,8 +188,7 @@ import javax.annotation.Nullable;
 public abstract class ChromeActivity<C extends ChromeActivityComponent>
         extends AsyncInitializationActivity
         implements TabCreatorManager, AccessibilityStateChangeListener, PolicyChangeListener,
-                   ContextualSearchTabPromotionDelegate, SnackbarManageable, SceneChangeObserver,
-                   CollectionList.OnListFragmentInteractionListener {
+                   ContextualSearchTabPromotionDelegate, SnackbarManageable, SceneChangeObserver {
     /**
      * Factory which creates the AppMenuHandler.
      */
@@ -277,7 +272,6 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
     private FindToolbarManager mFindToolbarManager;
     private BottomSheetController mBottomSheetController;
     private BottomSheet mBottomSheet;
-    private CollectionManager mCollectionManager;
     private ScrimView mScrimView;
     private float mStatusBarScrimFraction;
     private int mBaseStatusBarColor;
@@ -483,10 +477,6 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
         }
     }
 
-    public SummaryTracker.TabSummary getCurrentTabSummary() {
-        return null;
-    }
-
     @Override
     protected void initializeStartupMetrics() {
         mActivityTabStartupMetricsTracker = new ActivityTabStartupMetricsTracker(this);
@@ -678,8 +668,6 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
 
         if (mTabModelSelectorTabObserver != null) mTabModelSelectorTabObserver.destroy();
 
-        Context context = this;
-
         mTabModelSelectorTabObserver = new TabModelSelectorTabObserver(mTabModelSelector) {
             @Override
             public void didFirstVisuallyNonEmptyPaint(Tab tab) {
@@ -712,8 +700,6 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
             public void onPageLoadFinished(Tab tab) {
                 postDeferredStartupIfNeeded();
                 OfflinePageUtils.showOfflineSnackbarIfNecessary(tab);
-                // Does not work for searching again in the same tab.
-                Log.e("", "Collection onPageLoadFinished tagId = %d", tab.getId());
             }
 
             @Override
@@ -745,17 +731,6 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
         }
 
         mTabModelsInitialized = true;
-    }
-
-    @Override
-    public void onListFragmentInteraction(CollectionManager.CollectionItem item) {
-        Log.e("", "Collection clicked " + item.url);
-
-        Tab currentTab = getActivityTab();
-        if (currentTab == null) return;
-        LoadUrlParams params = new LoadUrlParams(item.url, PageTransition.AUTO_BOOKMARK);
-        currentTab.loadUrl(params);
-        mBottomSheetController.unexpandSheet();
     }
 
     /**
@@ -1459,7 +1434,8 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
         // to setup.
         mPageViewTimer = createPageViewTimer();
 
-        if (supportsContextualSuggestionsBottomSheet()) {
+        if (supportsContextualSuggestionsBottomSheet()
+                && FeatureUtilities.areContextualSuggestionsEnabled(this)) {
             getLayoutInflater().inflate(R.layout.bottom_sheet, coordinator);
             mBottomSheet = coordinator.findViewById(R.id.bottom_sheet);
             mBottomSheet.init(coordinator, this);
@@ -1471,13 +1447,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
                     getCompositorViewHolder().getLayoutManager().getOverlayPanelManager(),
                     !ChromeFeatureList.isEnabled(ChromeFeatureList.CONTEXTUAL_SUGGESTIONS_BUTTON));
 
-            if (CollectionManager.isEnabled()) {
-                mCollectionManager = new CollectionManager(this, mBottomSheetController);
-            }
-
-            if (FeatureUtilities.areContextualSuggestionsEnabled(this)) {
-                mComponent.resolveContextualSuggestionsCoordinator();
-            }
+            mComponent.resolveContextualSuggestionsCoordinator();
         }
     }
 

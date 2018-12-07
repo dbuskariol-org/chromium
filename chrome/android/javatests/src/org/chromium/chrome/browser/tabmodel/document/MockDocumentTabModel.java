@@ -34,12 +34,6 @@ public class MockDocumentTabModel implements DocumentTabModel {
     }
 
     @Override
-    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
-        Assert.fail();
-        return false;
-    }
-
-    @Override
     public boolean closeTab(Tab tab, boolean animate, boolean uponExit, boolean canUndo) {
         Assert.fail();
         return false;

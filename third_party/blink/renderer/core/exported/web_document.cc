@@ -105,18 +105,6 @@ WebString WebDocument::GetReferrer() const {
   return ConstUnwrap<Document>()->referrer();
 }
 
-WebString WebDocument::OGType() const {
-  return ConstUnwrap<Document>()->OGType();
-}
-
-WebString WebDocument::OGTitle() const {
-  return ConstUnwrap<Document>()->OGTitle();
-}
-
-WebString WebDocument::OGImageUrl() const {
-  return ConstUnwrap<Document>()->OGImageUrl();
-}
-
 SkColor WebDocument::ThemeColor() const {
   return ConstUnwrap<Document>()->ThemeColor().Rgb();
 }

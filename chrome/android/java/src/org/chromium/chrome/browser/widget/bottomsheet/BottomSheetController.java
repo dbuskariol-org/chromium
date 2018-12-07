@@ -12,7 +12,6 @@ import org.chromium.base.ApplicationStatus;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ActivityTabProvider;
 import org.chromium.chrome.browser.ActivityTabProvider.HintlessActivityTabObserver;
-import org.chromium.chrome.browser.collection.CollectionManager;
 import org.chromium.chrome.browser.compositor.bottombar.OverlayPanel;
 import org.chromium.chrome.browser.compositor.bottombar.OverlayPanelManager;
 import org.chromium.chrome.browser.compositor.bottombar.OverlayPanelManager.OverlayPanelManagerObserver;
@@ -109,9 +108,7 @@ public class BottomSheetController implements ApplicationStatus.ActivityStateLis
         final TabObserver tabObserver = new EmptyTabObserver() {
             @Override
             public void onPageLoadStarted(Tab tab, String url) {
-                if (!CollectionManager.isEnabled() || !CollectionManager.COLLECT_TO_LIST) {
-                    clearRequestsAndHide();
-                }
+                clearRequestsAndHide();
             }
 
             @Override
@@ -362,14 +359,6 @@ public class BottomSheetController implements ApplicationStatus.ActivityStateLis
             mOverlayPanelManager.getActivePanel().closePanel(
                     OverlayPanel.StateChangeReason.UNKNOWN, true);
         }
-    }
-
-    /**
-     * Unexpand the {@link BottomSheet}. If there is no content in the sheet, this is a noop.
-     */
-    public void unexpandSheet() {
-        if (mBottomSheet.getCurrentSheetContent() == null) return;
-        mBottomSheet.setSheetState(BottomSheet.SheetState.PEEK, true);
     }
 
     @Override

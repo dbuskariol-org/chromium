@@ -21,15 +21,6 @@ public class MockRenderFrameHost implements RenderFrameHost {
     public void getCanonicalUrlForSharing(Callback<String> callback) {}
 
     @Override
-    public void getOpenGraphType(Callback<String> callback) {}
-
-    @Override
-    public void getOpenGraphTitle(Callback<String> callback) {}
-
-    @Override
-    public void getOpenGraphImageUrl(Callback<String> callback) {}
-
-    @Override
     public InterfaceProvider getRemoteInterfaces() {
         return null;
     }
