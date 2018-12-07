@@ -681,6 +681,9 @@ extern const char kHarfbuzzRendertextDescription[];
 extern const char kHorizontalTabSwitcherAndroidName[];
 extern const char kHorizontalTabSwitcherAndroidDescription[];
 
+extern const char kTabGroupsAndTabStripName[];
+extern const char kTabGroupsAndTabStripDescription[];
+
 extern const char kViewsCastDialogName[];
 extern const char kViewsCastDialogDescription[];
 
@@ -1402,6 +1405,9 @@ extern const char kChromeMemexDescription[];
 
 extern const char kClearOldBrowsingDataName[];
 extern const char kClearOldBrowsingDataDescription[];
+
+extern const char kCollectionForShoppingName[];
+extern const char kCollectionForShoppingDescription[];
 
 extern const char kContentSuggestionsCategoryOrderName[];
 extern const char kContentSuggestionsCategoryOrderDescription[];

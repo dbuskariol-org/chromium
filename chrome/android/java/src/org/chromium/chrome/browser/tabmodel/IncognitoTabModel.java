@@ -6,6 +6,9 @@ package org.chromium.chrome.browser.tabmodel;
 
 import org.chromium.base.ObserverList;
 import org.chromium.base.ThreadUtils;
+import org.chromium.chrome.browser.ChromeFeatureList;
+import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.incognito.IncognitoNotificationManager;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
@@ -36,6 +39,7 @@ public class IncognitoTabModel implements TabModel {
     private final ObserverList<TabModelObserver> mObservers = new ObserverList<TabModelObserver>();
     private TabModel mDelegateModel;
     private boolean mIsAddingTab;
+    private TabGroupList mTabGroupList;
 
     /**
      * Constructor for IncognitoTabModel.
@@ -111,6 +115,13 @@ public class IncognitoTabModel implements TabModel {
     @Override
     public boolean closeTab(Tab tab) {
         boolean retVal = mDelegateModel.closeTab(tab);
+        destroyIncognitoIfNecessary();
+        return retVal;
+    }
+
+    @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
+        boolean retVal = mDelegateModel.closeTab(tabToClose, nextTab, animate);
         destroyIncognitoIfNecessary();
         return retVal;
     }
@@ -244,5 +255,25 @@ public class IncognitoTabModel implements TabModel {
 
     @Override
     public void openMostRecentlyClosedTab() {
+    }
+
+    @Override
+    public boolean isTabGroupEnabled() {
+        // Gating getTabGroupCount(), or could be true.
+        return mTabGroupList != null;
+    }
+
+    @Override
+    public int getTabGroupCount() {
+        return mTabGroupList.getCount();
+    }
+
+    @Override
+    public TabGroupList getTabGroupList(TabContentManager tabContentManager) {
+        if (!ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUPS_AND_TAB_STRIP)) return null;
+        if (mTabGroupList == null) {
+            mTabGroupList = new TabGroupList(this, tabContentManager);
+        }
+        return mTabGroupList;
     }
 }

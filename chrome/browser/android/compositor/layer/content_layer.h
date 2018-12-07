@@ -9,6 +9,7 @@
 
 #include "base/macros.h"
 #include "chrome/browser/android/compositor/layer/layer.h"
+#include "ui/android/resources/nine_patch_resource.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/size.h"
 
@@ -37,6 +38,23 @@ class ContentLayer : public Layer {
                      bool should_clip,
                      const gfx::Rect& clip);
 
+  virtual void SetProperties(
+      int id,
+      bool can_use_live_layer,
+      float static_to_view_blend,
+      bool should_override_content_alpha,
+      float content_alpha_override,
+      float saturation,
+      bool should_clip,
+      const gfx::Rect& clip,
+      ui::NinePatchResource* border_inner_shadow_resource,
+      int group_size,
+      float width,
+      float height,
+      std::vector<int>& tab_ids,
+      float border_inner_shadow_alpha,
+      int inset_diff) {}
+
   scoped_refptr<cc::Layer> layer() override;
 
   gfx::Size ComputeSize(int id) const;
@@ -44,15 +62,14 @@ class ContentLayer : public Layer {
  protected:
   explicit ContentLayer(TabContentManager* tab_content_manager);
   ~ContentLayer() override;
-
- private:
   // This is an intermediate shim layer whose children are
   // both the static and content layers (or either, or none, depending on which
   // is available).
-  scoped_refptr<cc::Layer> layer_;
 
+  scoped_refptr<cc::Layer> layer_;
   TabContentManager* tab_content_manager_;
 
+ private:
   DISALLOW_COPY_AND_ASSIGN(ContentLayer);
 };
 

@@ -8,6 +8,8 @@ import org.chromium.base.VisibleForTesting;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
 
+import java.util.List;
+
 /**
  * Singleton class intended to stub out Tab model before it has been created.
  */
@@ -44,6 +46,11 @@ public class EmptyTabModel implements TabModel {
 
     @Override
     public boolean closeTab(Tab tab) {
+        return false;
+    }
+
+    @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
         return false;
     }
 
@@ -102,6 +109,11 @@ public class EmptyTabModel implements TabModel {
 
     @Override
     public boolean closeTab(Tab tab, boolean animate, boolean uponExit, boolean canUndo) {
+        return false;
+    }
+
+    @Override
+    public boolean closeSomeTabs(List<Tab> tabs, boolean canUndo) {
         return false;
     }
 

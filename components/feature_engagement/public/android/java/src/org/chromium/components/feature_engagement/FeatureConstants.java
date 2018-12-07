@@ -70,6 +70,8 @@ public final class FeatureConstants {
     public static final String DOWNLOAD_INFOBAR_DOWNLOADS_ARE_FASTER_FEATURE =
             "IPH_DownloadInfoBarDownloadsAreFaster";
 
+    public static final String TAB_GROUP_BY_LONG_PRESS_FEATURE = "IPH_TabGroupUsingLongPress";
+
     /**
      * Do not instantiate.
      */

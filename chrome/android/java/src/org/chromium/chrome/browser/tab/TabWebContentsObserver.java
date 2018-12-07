@@ -345,10 +345,23 @@ public class TabWebContentsObserver extends TabWebContentsUserData {
         }
 
         @Override
+        public void navigationEntryCommitted() {
+            mTab.notifyNavigationEntryCommitted();
+        }
+
+        @Override
         public void destroy() {
             MediaCaptureNotificationService.updateMediaNotificationForTab(
                     mTab.getApplicationContext(), mTab.getId(), 0, mTab.getUrl());
             super.destroy();
+        }
+
+        @Override
+        public void hasPerformedSearch(String searchableFormUrl) {
+            RewindableIterator<TabObserver> observers = mTab.getTabObservers();
+            while (observers.hasNext()) {
+                observers.next().hasPerformedSearch(mTab, searchableFormUrl);
+            }
         }
     }
 }

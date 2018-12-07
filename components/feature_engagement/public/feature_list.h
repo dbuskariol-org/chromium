@@ -78,6 +78,8 @@ DEFINE_VARIATION_PARAM(kIPHNewTabPageButtonFeature, "IPH_NewTabPageButton");
 DEFINE_VARIATION_PARAM(kIPHPreviewsOmniboxUIFeature, "IPH_PreviewsOmniboxUI");
 DEFINE_VARIATION_PARAM(kIPHTranslateMenuButtonFeature,
                        "IPH_TranslateMenuButton");
+DEFINE_VARIATION_PARAM(kIPHTabGroupByLongPressFeature,
+                       "IPH_TabGroupUsingLongPress");
 #endif  // defined(OS_ANDROID)
 #if BUILDFLAG(ENABLE_DESKTOP_IN_PRODUCT_HELP)
 DEFINE_VARIATION_PARAM(kIPHBookmarkFeature, "IPH_Bookmark");
@@ -124,6 +126,7 @@ constexpr flags_ui::FeatureEntry::FeatureVariation
         VARIATION_ENTRY(kIPHNewTabPageButtonFeature),
         VARIATION_ENTRY(kIPHPreviewsOmniboxUIFeature),
         VARIATION_ENTRY(kIPHTranslateMenuButtonFeature),
+        VARIATION_ENTRY(kIPHTabGroupByLongPressFeature),
 #elif BUILDFLAG(ENABLE_DESKTOP_IN_PRODUCT_HELP)
         VARIATION_ENTRY(kIPHBookmarkFeature),
         VARIATION_ENTRY(kIPHIncognitoWindowFeature),

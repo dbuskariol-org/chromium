@@ -2008,7 +2008,7 @@ To change this setting, <ph name="BEGIN_LINK">&lt;resetlink&gt;</ph>reset sync<p
         Open in other window
       </message>
       <message name="IDS_CONTEXTMENU_OPEN_IN_NEW_TAB" desc="Context sensitive menu item to open the selected link in a new tab. [CHAR-LIMIT=30]">
-        Open in new tab
+        Open new tab in group 
       </message>
       <message name="IDS_CONTEXTMENU_OPEN_IN_INCOGNITO_TAB" desc="Context sensitive menu item to open the selected link in a new incognito tab. [CHAR-LIMIT=30]">
         Open in incognito tab
@@ -3805,6 +3805,9 @@ However, you aren’t invisible. Going private doesn’t hide your browsing from
       <message name="IDS_IPH_TRANSLATE_MENU_BUTTON_ACCESSIBILITY_TEXT" desc="The in-product-help accessibility text after a successful navigation prompting user to translate current page.">
         Translate this page to any language from the More options button
       </message>
+      <message name="IDS_IPH_TABGROUP_TEXT" desc="The in-product-help message for tab groups with long press after a search.">
+        Tap and hold links to start a group to compare pages easily
+      </message>
 
 
       <!-- Search Widget strings -->
@@ -3947,6 +3950,20 @@ However, you aren’t invisible. Going private doesn’t hide your browsing from
       </message>
       <message name="IDS_PREFS_AUTOFILL_ASSISTANT_SWITCH" desc="Title for the switch toggling whether Autofill Assistant is enabled. [CHAR-LIMIT=32]">
         Automate
+      </message>
+
+      <!-- Tab group -->
+      <message name="IDS_TABGROUP_EXPANDED_DESCRIPTION" desc="">
+        Placeholder
+      </message>
+      <message name="IDS_TABGROUP_EXPANDED_SHEET_OPENED_HALF" desc="">
+        placeholder
+      </message>
+      <message name="IDS_TABGROUP_EXPANDED_SHEET_OPENED_FULL" desc="">
+        placeholder
+      </message>
+      <message name="IDS_TABGROUP_EXPANDED_SHEET_CLOSED" desc="">
+        placeholder
       </message>
     </messages>
   </release>

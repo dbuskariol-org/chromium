@@ -106,6 +106,7 @@ import org.chromium.content_public.browser.GestureListenerManager;
 import org.chromium.content_public.browser.ImeAdapter;
 import org.chromium.content_public.browser.ImeEventObserver;
 import org.chromium.content_public.browser.LoadUrlParams;
+import org.chromium.content_public.browser.NavigationEntry;
 import org.chromium.content_public.browser.SelectionPopupController;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.browser.WebContentsAccessibility;
@@ -126,7 +127,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The basic Java representation of a tab.  Contains and manages a {@link ContentView}.
@@ -220,6 +223,11 @@ public class Tab
      * closed.
      */
     private int mParentId = INVALID_TAB_ID;
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     /**
      * If this tab was opened from another tab in another Activity, this is the Intent that can be
@@ -403,6 +411,19 @@ public class Tab
      */
     private @Nullable String mTrustedCdnPublisherUrl;
 
+    /**
+     * Holds references to extension objects that are associated with this tab.
+     */
+    private final Map<String, TabExtension> mTabExtensions = new HashMap<>();
+
+    public void addExtension(String type, TabExtension extension) {
+        mTabExtensions.put(type, extension);
+    }
+
+    public TabExtension getExtension(String type) {
+        return mTabExtensions.get(type);
+    }
+
     /** The current browser controls constraints. -1 if not set. */
     private @BrowserControlsState int mBrowserConstrolsConstraints = -1;
 
@@ -578,6 +599,18 @@ public class Tab
                 && LocalizationUtils.getFirstStrongCharacterDirection(mTitle)
                         == LocalizationUtils.RIGHT_TO_LEFT;
         mLaunchTypeAtCreation = state.tabLaunchTypeAtCreation;
+
+        for (Map.Entry<String, ByteBuffer> entry : state.tabExtensionState.entrySet()) {
+            TabExtension tabExtension =
+                    TabExtension.restoreTabExtension(entry.getKey(), entry.getValue().slice());
+            if (tabExtension == null) {
+                Log.e(TAG,
+                        "No tab extension found for tab extension state key '" + entry.getKey()
+                                + "'. Assuming information is deprecated and ignoring.");
+                continue;
+            }
+            mTabExtensions.put(tabExtension.getType(), tabExtension);
+        }
     }
 
     /**
@@ -814,6 +847,14 @@ public class Tab
         tabState.timestampMillis = mTimestampMillis;
         tabState.themeColor = getThemeColor();
         tabState.tabLaunchTypeAtCreation = mLaunchTypeAtCreation;
+
+        for (Map.Entry<String, TabExtension> entry : mTabExtensions.entrySet()) {
+            ByteBuffer buffer = entry.getValue().saveToByteBuffer();
+            if (buffer != null) {
+                tabState.tabExtensionState.put(entry.getKey(), buffer);
+            }
+        }
+
         return tabState;
     }
 
@@ -1858,6 +1899,9 @@ public class Tab
         // Update the title before destroying the tab. http://b/5783092
         updateTitle();
 
+        for (TabExtension extension : mTabExtensions.values()) extension.onTabDestroy();
+        mTabExtensions.clear();
+
         for (TabObserver observer : mObservers) observer.onDestroyed(this);
         mObservers.clear();
 
@@ -2028,7 +2072,9 @@ public class Tab
             if (isFrozen() && mFrozenContentsState != null) {
                 // Restore is needed for a tab that is loaded for the first time. WebContents will
                 // be restored from a saved state.
-                unfreezeContents();
+                if (unfreezeContents()) {
+                    for (TabObserver observer : mObservers) observer.onTabRestored(this);
+                }
             } else if (!needsReload()) {
                 return;
             }
@@ -2312,6 +2358,19 @@ public class Tab
         for (TabObserver observer : mObservers) observer.onNavigationEntriesDeleted(this);
     }
 
+    void notifyNavigationEntryCommitted() {
+        assert mWebContents.getNavigationController() != null;
+        int index = mWebContents.getNavigationController().getLastCommittedEntryIndex();
+        NavigationEntry entry = mWebContents.getNavigationController().getEntryAtIndex(index);
+        int transitionCore = entry.getTransition() & 0xFF;
+        boolean isBackOrForward = (entry.getTransition() & PageTransition.FORWARD_BACK) != 0;
+        boolean isNewRoot = !isBackOrForward
+                && (transitionCore == 1 || transitionCore == 5 || transitionCore == 2
+                           || transitionCore == 6);
+        for (TabObserver observer : mObservers)
+            observer.onNavigationEntryCommitted(this, index, isNewRoot);
+    }
+
     /**
      * Returns the SnackbarManager for the activity that owns this Tab, if any. May
      * return null.
@@ -2466,7 +2525,7 @@ public class Tab
     /**
      * @return See {@link #mTimestampMillis}.
      */
-    long getTimestampMillis() {
+    public long getTimestampMillis() {
         return mTimestampMillis;
     }
 

@@ -10,13 +10,17 @@ import android.graphics.Canvas;
 import android.view.View;
 import android.view.ViewGroup.MarginLayoutParams;
 
+import org.chromium.base.Callback;
 import org.chromium.base.CommandLine;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.JNINamespace;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeSwitches;
+import org.chromium.chrome.browser.UrlConstants;
 import org.chromium.chrome.browser.native_page.NativePage;
+import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
+import org.chromium.chrome.browser.tasks.SummaryPage;
 import org.chromium.ui.base.DeviceFormFactor;
 import org.chromium.ui.display.DisplayAndroid;
 
@@ -114,9 +118,9 @@ public class TabContentManager {
 
         mPriorityTabIds = new int[mFullResThumbnailsMaxSize];
 
-        mNativeTabContentManager = nativeInit(defaultCacheSize,
-                approximationCacheSize, compressionQueueMaxSize, writeQueueMaxSize,
-                useApproximationThumbnails);
+        mNativeTabContentManager = nativeInit(defaultCacheSize, approximationCacheSize,
+                compressionQueueMaxSize, writeQueueMaxSize, useApproximationThumbnails,
+                context.getResources().getDisplayMetrics().density);
     }
 
     /**
@@ -155,7 +159,7 @@ public class TabContentManager {
     private Bitmap readbackNativePage(final Tab tab, float scale) {
         Bitmap bitmap = null;
         NativePage page = tab.getNativePage();
-        if (page == null) {
+        if (page == null || page instanceof SummaryPage) {
             return bitmap;
         }
 
@@ -198,7 +202,6 @@ public class TabContentManager {
         } else {
             viewToDraw.draw(c);
         }
-
         return bitmap;
     }
 
@@ -210,6 +213,12 @@ public class TabContentManager {
     public boolean hasFullCachedThumbnail(int tabId) {
         if (mNativeTabContentManager == 0) return false;
         return nativeHasFullCachedThumbnail(mNativeTabContentManager, tabId);
+    }
+
+    public void getTabThumbnailFromCallback(int tabID, Callback<Bitmap> callback) {
+        if (mNativeTabContentManager == 0 || !mSnapshotsEnabled) return;
+
+        nativeGetTabThumbnailFromCallback(mNativeTabContentManager, tabID, callback);
     }
 
     /**
@@ -237,6 +246,7 @@ public class TabContentManager {
      * @param url   The current URL of the {@link Tab}.
      */
     public void invalidateIfChanged(int tabId, String url) {
+        if (UrlConstants.SUMMARY_URL.equals(url)) return;
         if (mNativeTabContentManager != 0) {
             nativeInvalidateIfChanged(mNativeTabContentManager, tabId, url);
         }
@@ -288,10 +298,38 @@ public class TabContentManager {
             listener.onThumbnailChange(tabId);
         }
     }
+    // TODO(meiliang) : move the following code to tabgroup related components
+    // Method for Tab Group
+    public void cacheTabAsTabGroupTab(long id, String url, String title) {
+        Profile profile = Profile.getLastUsedProfile().getOriginalProfile();
+        nativeCacheTabAsTabGroupTab(mNativeTabContentManager, id, url, title, profile);
+    }
+
+    public void removeTabGroupTabFromCache(long id) {
+        nativeRemoveTabGroupTabFromCache(mNativeTabContentManager, id);
+    }
+
+    public void updateTabGroupTabTitle(int tabId, String title) {
+        nativeUpdateTabGroupTabTitle(mNativeTabContentManager, tabId, title);
+    }
+
+    public void updateTabGroupTabUrl(int tabId, String url) {
+        nativeUpdateTabGroupTabUrl(mNativeTabContentManager, tabId, url);
+    }
+
+    public void updateTabGroupTabFavicon(int tabId, String url) {
+        Profile profile = Profile.getLastUsedProfile().getOriginalProfile();
+        nativeUpdateTabGroupTabFavicon(mNativeTabContentManager, tabId, url, profile);
+    }
+
+    public void clearTabInfoLayer() {
+        nativeClearTabInfoLayer(mNativeTabContentManager);
+    }
 
     // Class Object Methods
     private native long nativeInit(int defaultCacheSize, int approximationCacheSize,
-            int compressionQueueMaxSize, int writeQueueMaxSize, boolean useApproximationThumbnail);
+            int compressionQueueMaxSize, int writeQueueMaxSize, boolean useApproximationThumbnail,
+            float dpToPx);
     private native boolean nativeHasFullCachedThumbnail(long nativeTabContentManager, int tabId);
     private native void nativeCacheTab(
             long nativeTabContentManager, Object tab, float thumbnailScale);
@@ -303,4 +341,17 @@ public class TabContentManager {
             long nativeTabContentManager, int[] priority, int primaryTabId);
     private native void nativeRemoveTabThumbnail(long nativeTabContentManager, int tabId);
     private static native void nativeDestroy(long nativeTabContentManager);
+
+    private native void nativeCacheTabAsTabGroupTab(
+            long nativeTabContentManager, long tabId, String url, String title, Object profile);
+    private native void nativeRemoveTabGroupTabFromCache(long nativeTabContentManager, long tabId);
+    private native void nativeUpdateTabGroupTabFavicon(
+            long nativeTabContentManager, long tabId, String url, Object profile);
+    private native void nativeUpdateTabGroupTabTitle(
+            long nativeTabContentManager, long tabId, String title);
+    private native void nativeUpdateTabGroupTabUrl(
+            long nativeTabContentManager, long tabId, String url);
+    private native void nativeClearTabInfoLayer(long nativeTabContentManager);
+    private native void nativeGetTabThumbnailFromCallback(
+            long nativeTabContentManager, int tabId, Callback<Bitmap> callback);
 }

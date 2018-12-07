@@ -280,7 +280,7 @@ public class LocationBarModel implements ToolbarDataProvider {
     public Profile getProfile() {
         Profile lastUsedProfile = Profile.getLastUsedProfile();
         if (mIsIncognito) {
-            assert lastUsedProfile.hasOffTheRecordProfile();
+            // assert lastUsedProfile.hasOffTheRecordProfile();
             return lastUsedProfile.getOffTheRecordProfile();
         }
         return lastUsedProfile.getOriginalProfile();

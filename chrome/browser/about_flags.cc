@@ -3915,6 +3915,12 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(chrome::android::kHorizontalTabSwitcherAndroid)},
 #endif  // OS_ANDROID
 
+#if defined(OS_ANDROID)
+    {"enable-tabgroups-tabstrip", flag_descriptions::kTabGroupsAndTabStripName,
+     flag_descriptions::kTabGroupsAndTabStripDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kTabGroupsAndTabStrip)},
+#endif  // OS_ANDROID
+
 #if defined(OS_CHROMEOS)
     {"enable-home-launcher", flag_descriptions::kEnableHomeLauncherName,
      flag_descriptions::kEnableHomeLauncherDescription, kOsCrOS,
@@ -4309,6 +4315,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kLookalikeUrlNavigationSuggestionsDescription,
      kOsDesktop,
      FEATURE_VALUE_TYPE(features::kLookalikeUrlNavigationSuggestionsUI)},
+
+#if defined(OS_ANDROID)
+    {"collection-for-shopping", flag_descriptions::kCollectionForShoppingName,
+     flag_descriptions::kCollectionForShoppingDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kCollectionForShopping)},
+#endif
 
     {"sync-standalone-transport",
      flag_descriptions::kSyncStandaloneTransportName,
