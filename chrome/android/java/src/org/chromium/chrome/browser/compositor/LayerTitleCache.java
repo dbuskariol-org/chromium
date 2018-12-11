@@ -4,6 +4,7 @@
 
 package org.chromium.chrome.browser.compositor;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import org.chromium.base.annotations.JNINamespace;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.compositor.layouts.content.TitleBitmapFactory;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.favicon.FaviconHelper;
 import org.chromium.chrome.browser.favicon.FaviconHelper.DefaultFaviconHelper;
 import org.chromium.chrome.browser.favicon.FaviconHelper.FaviconImageCallback;
@@ -177,7 +179,18 @@ public class LayerTitleCache implements TitleCache {
      * @param tab The {@link Tab} to build a title for.
      * @return    The title to use.
      */
+    @SuppressLint("SetTextI18n")
     private String getTitleForTab(Tab tab, String defaultTitle) {
+        if (tab.getActivity() != null) {
+            TabGroupList groupList = mTabModelSelector.getCurrentModel().getTabGroupList(
+                    tab.getActivity().getTabContentManager());
+            if (groupList != null) {
+                int numTabs = groupList.getAllTabIdsInSameGroup(tab.getId()).size();
+                if (numTabs > 1) {
+                    return numTabs + " tabs";
+                }
+            }
+        }
         String title = tab.getTitle();
         if (TextUtils.isEmpty(title)) {
             title = tab.getUrl();

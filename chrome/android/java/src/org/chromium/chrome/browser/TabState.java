@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -169,6 +171,9 @@ public class TabState {
 
     /** Whether the theme color was set for this tab. */
     protected boolean mHasThemeColor;
+
+    /** Serialized state for TabExtensions. */
+    public Map<String, ByteBuffer> tabExtensionState = new HashMap<String, ByteBuffer>();
 
     /** @return Whether a Stable channel build of Chrome is being used. */
     private static boolean isStableChannelBuild() {
@@ -339,6 +344,34 @@ public class TabState {
                         "Failed to read tab launch type at creation from tab state. "
                                 + "Assuming tab launch type is null");
             }
+
+            int tabExtensionStateCount = 0;
+            try {
+                tabExtensionStateCount = stream.readInt();
+            } catch (EOFException eof) {
+                Log.w(TAG,
+                        "Failed to read tab extension state count from stream. "
+                                + "Assuming 0");
+            }
+            for (int i = 0; i < tabExtensionStateCount; ++i) {
+                try {
+                    String key = stream.readUTF();
+
+                    int value_size = stream.readInt();
+                    if (value_size < 0) {
+                        Log.w(TAG, "Invalid value size " + value_size + ". Exiting loop.");
+                        break;
+                    }
+                    ByteBuffer value = ByteBuffer.allocate(value_size);
+                    if (value_size > 0) {
+                        stream.readFully(value.array());
+                    }
+                    tabState.tabExtensionState.put(key, value);
+                } catch (EOFException eof) {
+                    Log.w(TAG, "Failed to read extension state. Exiting loop.");
+                    break;
+                }
+            }
             return tabState;
         } finally {
             stream.close();
@@ -405,6 +438,19 @@ public class TabState {
             dataOutputStream.writeInt(state.themeColor);
             dataOutputStream.writeInt(
                     state.tabLaunchTypeAtCreation != null ? state.tabLaunchTypeAtCreation : -1);
+
+            dataOutputStream.writeInt(state.tabExtensionState.size());
+            for (Map.Entry<String, ByteBuffer> entry : state.tabExtensionState.entrySet()) {
+                dataOutputStream.writeUTF(entry.getKey());
+                ByteBuffer value = entry.getValue();
+                byte[] bytes = value.array();
+                int offset = value.position() + value.arrayOffset();
+                int length = value.remaining();
+                dataOutputStream.writeInt(length);
+                if (length > 0) {
+                    dataOutputStream.write(bytes, offset, length);
+                }
+            }
         } catch (FileNotFoundException e) {
             Log.w(TAG, "FileNotFoundException while attempting to save TabState.");
         } catch (IOException e) {

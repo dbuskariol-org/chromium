@@ -83,6 +83,11 @@ public class SingleTabModel implements TabModel {
     }
 
     @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
+        return closeTab(tabToClose, false, false, false);
+    }
+
+    @Override
     public boolean closeTab(Tab tab, boolean animate, boolean uponExit, boolean canUndo) {
         if (mTab != null && mTab.getId() == tab.getId()) {
             completeActivity();

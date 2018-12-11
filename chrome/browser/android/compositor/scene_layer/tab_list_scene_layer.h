@@ -101,7 +101,12 @@ class TabListSceneLayer : public SceneLayer {
                    jfloat toolbar_alpha,
                    jfloat toolbar_y_offset,
                    jfloat side_border_scale,
-                   jboolean inset_border);
+                   jboolean inset_border,
+                   const base::android::JavaRef<jintArray>& tab_ids_list,
+                   int selected_tab_border_color);
+
+  void PutTabInfoLayer(JNIEnv* env,
+                       const base::android::JavaParamRef<jobject>& jobj);
 
   void OnDetach() override;
   bool ShouldShowBackground() override;

@@ -144,5 +144,14 @@ public class EmptyTabObserver implements TabObserver {
             Tab tab, @BrowserControlsState int constraints) {}
 
     @Override
+    public void onNavigationEntryCommitted(Tab tab, int index, boolean isNewRoot) {}
+
+    @Override
+    public void onTabRestored(Tab tab) {}
+
+    @Override
     public void didReloadLoFiImages(Tab tab) {}
+
+    @Override
+    public void hasPerformedSearch(Tab tab, String searchableFormUrl) {}
 }

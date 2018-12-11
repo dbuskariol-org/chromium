@@ -44,6 +44,19 @@ class RenderFrameHostAndroid : public base::SupportsUserData::Data {
       const base::android::JavaParamRef<jobject>&,
       const base::android::JavaParamRef<jobject>& jcallback) const;
 
+  void GetOGType(JNIEnv* env,
+                 const base::android::JavaParamRef<jobject>&,
+                 const base::android::JavaParamRef<jobject>& jcallback) const;
+
+  void GetOGTitle(JNIEnv* env,
+                  const base::android::JavaParamRef<jobject>&,
+                  const base::android::JavaParamRef<jobject>& jcallback) const;
+
+  void GetOGImageUrl(
+      JNIEnv* env,
+      const base::android::JavaParamRef<jobject>&,
+      const base::android::JavaParamRef<jobject>& jcallback) const;
+
   // Returns UnguessableToken.
   base::android::ScopedJavaLocalRef<jobject> GetAndroidOverlayRoutingToken(
       JNIEnv* env,

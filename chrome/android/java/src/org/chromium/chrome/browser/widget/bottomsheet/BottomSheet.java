@@ -30,6 +30,7 @@ import org.chromium.base.VisibleForTesting;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.TabLoadStatus;
+import org.chromium.chrome.browser.collection.CollectionManager;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager.FullscreenListener;
 import org.chromium.chrome.browser.native_page.NativePageHost;
@@ -737,6 +738,10 @@ public class BottomSheet extends FrameLayout
 
     @Override
     public float getMaxOffsetPx() {
+        if (CollectionManager.isEnabled() && !CollectionManager.COLLECT_TO_LIST) {
+            // Disable swiping up
+            return getPeekRatio() * mContainerHeight;
+        }
         return getFullRatio() * mContainerHeight;
     }
 

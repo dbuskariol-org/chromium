@@ -43,6 +43,8 @@ extern const base::Feature kIPHHomepageTileFeature;
 extern const base::Feature kIPHNewTabPageButtonFeature;
 extern const base::Feature kIPHPreviewsOmniboxUIFeature;
 extern const base::Feature kIPHTranslateMenuButtonFeature;
+extern const base::Feature kIPHTabGroupByLongPressFeature;
+extern const base::Feature kIPHTabStripForSwitchingFeature;
 #endif  // defined(OS_ANDROID)
 
 #if BUILDFLAG(ENABLE_DESKTOP_IN_PRODUCT_HELP)

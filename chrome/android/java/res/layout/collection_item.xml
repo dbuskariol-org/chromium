@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="180dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp">
+
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="140dp"
+            android:layout_height="120dp"
+            android:contentDescription="@string/clear_browsing_data_important_dialog_text"
+            app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceListItem" />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/star"
+        style="?android:attr/starStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end" />
+
+</FrameLayout>

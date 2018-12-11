@@ -96,6 +96,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kCCTResourcePrefetch,
     &kChromeDuetFeature,
     &kChromeSmartSelection,
+    &kCollectionForShopping,
     &kCommandLineOnNonRooted,
     &kContentSuggestionsScrollToLoad,
     &kContentSuggestionsThumbnailDominantColor,
@@ -144,6 +145,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kSpecialLocaleFeature,
     &kSpecialLocaleWrapper,
     &kTabReparenting,
+    &kTabGroupsAndTabStrip,
     &kTrustedWebActivity,
     &kTrustedWebActivityPostMessage,
     &kVideoPersistence,
@@ -255,6 +257,9 @@ const base::Feature kChromeDuetFeature{"ChromeDuet",
 const base::Feature kChromeSmartSelection{"ChromeSmartSelection",
                                           base::FEATURE_ENABLED_BY_DEFAULT};
 
+const base::Feature kCollectionForShopping{"CollectionForShopping",
+                                           base::FEATURE_ENABLED_BY_DEFAULT};
+
 const base::Feature kCommandLineOnNonRooted{"CommandLineOnNonRooted",
                                             base::FEATURE_DISABLED_BY_DEFAULT};
 
@@ -323,7 +328,7 @@ const base::Feature kHomepageTile{"HomepageTile",
                                   base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kHorizontalTabSwitcherAndroid{
-    "HorizontalTabSwitcherAndroid", base::FEATURE_DISABLED_BY_DEFAULT};
+    "HorizontalTabSwitcherAndroid", base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Makes "Add to Home screen" in the app menu generate an APK for the shortcut
 // URL which opens Chrome in fullscreen.
@@ -406,6 +411,9 @@ const base::Feature kSpecialLocaleWrapper{"SpecialLocaleWrapper",
 
 const base::Feature kTabReparenting{"TabReparenting",
                                     base::FEATURE_ENABLED_BY_DEFAULT};
+
+const base::Feature kTabGroupsAndTabStrip{"TabGroupsAndTabStrip",
+                                          base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kTrustedWebActivity{"TrustedWebActivity",
                                         base::FEATURE_ENABLED_BY_DEFAULT};

@@ -94,7 +94,9 @@ class TabLayer : public Layer {
                      float toolbar_alpha,
                      float toolbar_y_offset,
                      float side_border_scale,
-                     bool inset_border);
+                     bool inset_border,
+                     std::vector<int>& ids,
+                     int selected_tab_border_color);
 
   bool is_incognito() const { return incognito_; }
 

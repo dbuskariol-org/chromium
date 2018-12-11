@@ -12,6 +12,7 @@ import org.chromium.base.ApplicationStatus;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ActivityTabProvider;
 import org.chromium.chrome.browser.ActivityTabProvider.HintlessActivityTabObserver;
+import org.chromium.chrome.browser.collection.CollectionManager;
 import org.chromium.chrome.browser.compositor.bottombar.OverlayPanel;
 import org.chromium.chrome.browser.compositor.bottombar.OverlayPanelManager;
 import org.chromium.chrome.browser.compositor.bottombar.OverlayPanelManager.OverlayPanelManagerObserver;
@@ -108,7 +109,9 @@ public class BottomSheetController implements ApplicationStatus.ActivityStateLis
         final TabObserver tabObserver = new EmptyTabObserver() {
             @Override
             public void onPageLoadStarted(Tab tab, String url) {
-                clearRequestsAndHide();
+                if (!CollectionManager.isEnabled() || !CollectionManager.COLLECT_TO_LIST) {
+                    clearRequestsAndHide();
+                }
             }
 
             @Override
@@ -154,7 +157,6 @@ public class BottomSheetController implements ApplicationStatus.ActivityStateLis
                 if (mLastActivityTab != null) mLastActivityTab.removeObserver(tabObserver);
                 mLastActivityTab = tab;
                 mLastActivityTab.addObserver(tabObserver);
-                clearRequestsAndHide();
             }
         });
 
@@ -236,7 +238,8 @@ public class BottomSheetController implements ApplicationStatus.ActivityStateLis
         }
         mIsSuppressed = false;
 
-        if (mBottomSheet.getCurrentSheetContent() != null) {
+        if (mBottomSheet.getCurrentSheetContent() != null
+                && mBottomSheet.getCurrentSheetContent().isPeekStateEnabled()) {
             mBottomSheet.setSheetState(BottomSheet.SheetState.PEEK, true);
         } else {
             // In the event the previous content was hidden, try to show the next one.
@@ -284,8 +287,11 @@ public class BottomSheetController implements ApplicationStatus.ActivityStateLis
      */
     private boolean loadInternal(BottomSheetContent content) {
         if (content == mBottomSheet.getCurrentSheetContent()) return true;
-        if (mTabProvider.getActivityTab() == null) return false;
-
+        if (mTabProvider.getActivityTab() == null) {
+            // TODO(meiliang): temporary enable loading when activity tab is null, because
+            // BottomSheet for TabGroup can be shown at tab switcher mode.
+            // return false;
+        }
         BottomSheetContent shownContent = mBottomSheet.getCurrentSheetContent();
         boolean shouldSuppressExistingContent = shownContent != null
                 && content.getPriority() < shownContent.getPriority()
@@ -359,6 +365,19 @@ public class BottomSheetController implements ApplicationStatus.ActivityStateLis
             mOverlayPanelManager.getActivePanel().closePanel(
                     OverlayPanel.StateChangeReason.UNKNOWN, true);
         }
+    }
+
+    /**
+     * Unexpand the {@link BottomSheet}. If there is no content in the sheet, this is a noop.
+     */
+    public void unexpandSheet() {
+        if (mBottomSheet.getCurrentSheetContent() == null) return;
+        mBottomSheet.setSheetState(BottomSheet.SheetState.PEEK, true);
+    }
+
+    public void closeSheet() {
+        if (mBottomSheet.getCurrentSheetContent() == null) return;
+        mBottomSheet.setSheetState(BottomSheet.SheetState.HIDDEN, true);
     }
 
     @Override

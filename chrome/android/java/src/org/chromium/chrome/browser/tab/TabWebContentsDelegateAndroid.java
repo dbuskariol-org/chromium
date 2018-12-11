@@ -339,6 +339,7 @@ public class TabWebContentsDelegateAndroid extends WebContentsDelegateAndroid {
     @CalledByNative
     public boolean addNewContents(WebContents sourceWebContents, WebContents webContents,
             int disposition, Rect initialPosition, boolean userGesture) {
+        android.util.Log.e("PARENT", "Things are on java land now");
         assert mWebContentsUrlMapping.first == webContents;
 
         TabCreator tabCreator = mTab.getActivity().getTabCreator(mTab.isIncognito());
