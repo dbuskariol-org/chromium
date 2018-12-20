@@ -19774,6 +19774,11 @@ should be able to be added at any place in this file.
   <description>Please enter the description of this user action.</description>
 </action>
 
+<action name="TabGroup.Created.HighlightAndAdd">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
 <action name="TabGroup.Created.OpenInNewTab">
   <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
   <description>Tab group related, remove later.</description>
@@ -19799,14 +19804,34 @@ should be able to be added at any place in this file.
   <description>Tab group related, remove later.</description>
 </action>
 
-<action name="TabGroupSwitcher.CloseTab">
+<action name="TabGroupHighlight.ClickToSwitchMode">
   <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
   <description>Please enter the description of the metric.</description>
 </action>
 
+<action name="TabGroupHighlight.ExitHighlightMode">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroupHighlight.HighlightSelected">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroupHighlight.PromptDismissed">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroupSwitcher.CloseTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
 <action name="TabGroupSwitcher.NewTab">
   <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
-  <description>Please enter the description of the metric.</description>
+  <description>Tab group related, remove later.</description>
 </action>
 
 <action name="TabGroupSwitcher.SwitchTab">

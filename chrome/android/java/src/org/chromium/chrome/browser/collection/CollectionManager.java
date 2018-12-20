@@ -8,8 +8,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.IntDef;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageButton;
@@ -24,10 +26,13 @@ import org.json.JSONObject;
 import org.chromium.base.Callback;
 import org.chromium.base.Log;
 import org.chromium.base.ThreadUtils;
+import org.chromium.base.metrics.RecordHistogram;
+import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.ChromeTabbedActivity;
+import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.EmptyTabModelObserver;
@@ -39,6 +44,8 @@ import org.chromium.chrome.browser.util.UrlUtilities;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController;
 import org.chromium.content_public.browser.LoadUrlParams;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +72,7 @@ public class CollectionManager {
 
     private final Map<Tab, Boolean> mHasItems = new HashMap<>();
     private final Map<Tab, Boolean> mHasOverlay = new HashMap<>();
+    private final Map<Tab, Integer> mCollectionStageMap = new HashMap<>();
     private final List<CollectionItem> mAll = new ArrayList<>();
     private final List<CollectionItem> mStarred = new ArrayList<>();
     private final Set<WeakReference<Tab>> mTabs = new HashSet<>();
@@ -74,9 +82,19 @@ public class CollectionManager {
 
     private View mToolbarView;
     private TextView mTitle;
+    private AppCompatImageButton mCloseButton;
 
     @SuppressLint("StaticFieldLeak")
     private static CollectionManager sInstance;
+
+    @IntDef({Stage.NONE, Stage.PROMPTED, Stage.ENTERED, Stage.EXITED})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Stage {
+        int NONE = 0;
+        int PROMPTED = 1;
+        int ENTERED = 2;
+        int EXITED = 3;
+    }
 
     // TODO: Move to resource. Maybe minify.
     // Do not edit this string directly. The source of truth is merchant-list-extraction.js
@@ -94,12 +112,14 @@ public class CollectionManager {
             + "   priceCleanupPostfix + '?';\n"
             + "var priceRegexFull = new RegExp('^' + priceRegexTemplate + '$', 'i');\n"
             + "var priceRegex = new RegExp(priceRegexTemplate, 'i');\n"
-            + "var priceCleanupRegex = new RegExp('^((' + priceCleanupPrefix + ')\\\\s+)|' + priceCleanupPostfix + '$', 'i');\n"
+            + "var priceCleanupRegex = new RegExp('^((' + priceCleanupPrefix + ')\\\\s+)|' + "
+            + "priceCleanupPostfix + '$', 'i');\n"
             + "\n"
             + "function getLazyLoadingURL(image) {\n"
             + "  // FIXME: some lazy images in Nordstrom and Staples don't have URLs in the DOM.\n"
             + "  // TODO: add more lazy-loading attributes.\n"
-            + "  for (const attribute of ['data-src', 'data-img-url', 'data-config-src', 'data-echo', 'data-lazy']) {\n"
+            + "  for (const attribute of ['data-src', 'data-img-url', 'data-config-src', "
+            + "'data-echo', 'data-lazy']) {\n"
             + "    let url = image.getAttribute(attribute);\n"
             + "    if (url == null) continue;\n"
             + "    if (url.substr(0, 2) == '//') url = 'https:' + url;\n"
@@ -146,26 +166,36 @@ public class CollectionManager {
             + "}\n"
             + "\n"
             + "// Some sites e.g. CraigsList have multiple images per product\n"
-            + "function multipleImagesSupported(item) {\n"
-            + "  const href = window.location.href;\n"
-            + "  if (href == null) {\n"
-            + "    return false;\n"
+            + "function multipleImagesSupported(image) {\n"
+            + "  const src = image.getAttribute('src');\n"
+            + "  if (src != null) {\n"
+            + "    return src.includes('craigslist');\n"
             + "  }\n"
-            + "  return href.includes('craigslist');\n"
+            + "  const srcset = image.getAttribute('srcset');\n"
+            + "  if (srcset != null) {\n"
+            + "     return srcset.includes('target');\n"
+            + "  }\n"
+            + "  return false;\n"
             + "}\n"
             + "\n"
             + "function extractImage(item) {\n"
             + "  // Sometimes an item contains small icons, which need to be filtered out.\n"
             + "  // TODO: two pass getLargeImages() is probably too slow.\n"
             + "  let images = getLargeImages(item, 40);\n"
-            + "  if (images.length == 0) images = getLargeImages(item, 30, true);\n"
-            + "  if (!multipleImagesSupported(item)) {\n"
+            + "  if (images.length == 0) {\n"
+            + "    images = getLargeImages(item, 30, true);\n"
+            + "  }\n"
+            + "\n"
+            + "  if (images.length == 0) {\n"
+            + "    return null;\n"
+            + "  }\n"
+            + "  const image = images[0];\n"
+            + "  if (!multipleImagesSupported(image)) {\n"
             + "    console.assert(images.length == 1, 'image extraction error', item, images);\n"
             + "    if (images.length != 1) {\n"
             + "      return null;\n"
             + "    }\n"
             + "  }\n"
-            + "  const image = images[0];\n"
             + "  const lazyUrl = getLazyLoadingURL(image);\n"
             + "  if (lazyUrl != null) return lazyUrl;\n"
             + "\n"
@@ -178,13 +208,34 @@ public class CollectionManager {
             + "    if (!src.startsWith('data:'))\n"
             + "      return src;\n"
             + "  }\n"
-            + "  sourceSet = image.getAttribute('data-search-image-source-set');\n"
+            + "  let sourceSet = image.getAttribute('data-search-image-source-set');\n"
+            + "  if (sourceSet == null && image.parentElement.tagName == 'PICTURE') {\n"
+            + "    let sources = image.parentElement.querySelectorAll('source');\n"
+            + "    if (sources.length >= 1) {\n"
+            + "      sourceSet = getAbsoluteUrlOfSrcSet(sources[0]);\n"
+            + "    }\n"
+            + "  }\n"
             + "  if (sourceSet == null) return null;\n"
             + "  console.assert(sourceSet.includes(' '), 'image extraction error', image);\n"
             + "  // TODO: Pick the one with right pixel density?\n"
             + "  imageUrl = sourceSet.split(' ')[0];\n"
             + "  console.assert(imageUrl.length > 0, 'image extraction error', sourceSet);\n"
             + "  return imageUrl;\n"
+            + "}\n"
+            + "\n"
+            + "// Use self assigning trick to get absolute URL\n"
+            + "// https://github.com/chromium/dom-distiller/blob"
+            + "/ccfe233400cc214717ccc80973be431ab0e33cf7/java/org/chromium/distiller/DomUtil"
+            + ".java#L438\n"
+            + "function getAbsoluteUrlOfSrcSet(image) {\n"
+            + "    // preserve src\n"
+            + "    const backup = image.src;\n"
+            + "    // use self assigning trick\n"
+            + "    image.src = image.srcset;\n"
+            + "    // clean up and return absolute url\n"
+            + "    const ret = image.src;\n"
+            + "    image.src = backup;\n"
+            + "    return ret;\n"
             + "}\n"
             + "\n"
             + "function extractUrl(item) {\n"
@@ -222,7 +273,8 @@ public class CollectionManager {
             + "  }\n"
             + "  if (filtered.length == 0) return null;\n"
             + "  return filtered.reduce(function(a, b) {\n"
-            + "      return a.offsetHeight * a.offsetWidth > b.offsetHeight * b.offsetWidth ? a : b;\n"
+            + "      return a.offsetHeight * a.offsetWidth > b.offsetHeight * b.offsetWidth ? a :"
+            + " b;\n"
             + "  }).href;\n"
             + "}\n"
             + "\n"
@@ -280,8 +332,10 @@ public class CollectionManager {
             + "}\n"
             + "\n"
             + "/*\n"
-            + "  Returns top-ranked element with the following criteria, with decreasing priority:\n"
-            + "  - score based on whether ancestorIdAndClassNames contains \"title\", \"price\", etc.\n"
+            + "  Returns top-ranked element with the following criteria, with decreasing "
+            + "priority:\n"
+            + "  - score based on whether ancestorIdAndClassNames contains \"title\", \"price\", "
+            + "etc.\n"
             + "  - largest area\n"
             + "  - largest font size\n"
             + "  - longest text\n"
@@ -292,18 +346,24 @@ public class CollectionManager {
             + "    const negativeRegex = /price|model/i;\n"
             + "    const a_str = ancestorIdAndClassNames(a, b);\n"
             + "    const b_str = ancestorIdAndClassNames(b, a);\n"
-            + "    const a_score = (a_str.match(titleRegex) != null) - (a_str.match(negativeRegex) != null);\n"
-            + "    const b_score = (b_str.match(titleRegex) != null) - (b_str.match(negativeRegex) != null);\n"
+            + "    const a_score = (a_str.match(titleRegex) != null) - (a_str.match"
+            + "(negativeRegex) != null);\n"
+            + "    const b_score = (b_str.match(titleRegex) != null) - (b_str.match"
+            + "(negativeRegex) != null);\n"
             + "    console.log('className score', a_score, b_score, a_str, b_str, a, b);\n"
             + "\n"
             + "    if (a_score != b_score) {\n"
             + "      return a_score > b_score ? a : b;\n"
             + "    }\n"
             + "\n"
-            + "    // Use getBoundingClientRect() to avoid int rounding error in offsetHeight/Width.\n"
-            + "    const a_area = a.getBoundingClientRect().width * a.getBoundingClientRect().height;\n"
-            + "    const b_area = b.getBoundingClientRect().width * b.getBoundingClientRect().height;\n"
-            + "    console.log('getBoundingClientRect', a.getBoundingClientRect(), b.getBoundingClientRect(), a, b);\n"
+            + "    // Use getBoundingClientRect() to avoid int rounding error in "
+            + "offsetHeight/Width.\n"
+            + "    const a_area = a.getBoundingClientRect().width * a.getBoundingClientRect()"
+            + ".height;\n"
+            + "    const b_area = b.getBoundingClientRect().width * b.getBoundingClientRect()"
+            + ".height;\n"
+            + "    console.log('getBoundingClientRect', a.getBoundingClientRect(), b"
+            + ".getBoundingClientRect(), a, b);\n"
             + "\n"
             + "    if (a_area != b_area) {\n"
             + "      return a_area > b_area ? a : b;\n"
@@ -336,7 +396,8 @@ public class CollectionManager {
             + "    }\n"
             + "  }\n"
             + "\n"
-            + "  const possible_titles = item.querySelectorAll('a, span, p, div, h2, h3, h4, h5, strong');\n"
+            + "  const possible_titles = item.querySelectorAll('a, span, p, div, h2, h3, h4, h5, "
+            + "strong');\n"
             + "  let titles = [];\n"
             + "  for (const title of possible_titles) {\n"
             + "    if (hasNonInlineDescendents(title) &&\n"
@@ -347,7 +408,8 @@ public class CollectionManager {
             + "    if (title.innerText.trim().toLowerCase() == 'sponsored') continue;\n"
             + "    if (title.childElementCount > 0) {\n"
             + "      if (title.textContent.trim() == title.lastElementChild.textContent.trim()\n"
-            + "            || title.textContent.trim() == title.firstElementChild.textContent.trim()) {\n"
+            + "            || title.textContent.trim() == title.firstElementChild.textContent"
+            + ".trim()) {\n"
             + "        continue;\n"
             + "      }\n"
             + "    }\n"
@@ -391,7 +453,8 @@ public class CollectionManager {
             + "function anyLineThroughInAncentry(element, maxDepth = 2) {\n"
             + "  let depth = 0;\n"
             + "  while (element != null && element.tagName != 'BODY') {\n"
-            + "    if (window.getComputedStyle(element)['text-decoration'].indexOf('line-through') != -1)\n"
+            + "    if (window.getComputedStyle(element)['text-decoration'].indexOf"
+            + "('line-through') != -1)\n"
             + "      return true;\n"
             + "    element = element.parentElement;\n"
             + "    depth += 1;\n"
@@ -450,7 +513,8 @@ public class CollectionManager {
             + "      // Avoid matching the parent element of the real price element.\n"
             + "      // Otherwise adjustBeautifiedCents would break.\n"
             + "      if (price.innerText.trim() == price.lastElementChild.innerText.trim()\n"
-            + "            || price.innerText.trim() == price.firstElementChild.innerText.trim()) {\n"
+            + "            || price.innerText.trim() == price.firstElementChild.innerText.trim())"
+            + " {\n"
             + "        // If the wanted child is not scanned, change the querySelectorAll string.\n"
             + "        console.log('skip redundant parent', price);\n"
             + "        continue;\n"
@@ -579,12 +643,22 @@ public class CollectionManager {
             + "\n"
             + "function updateBookmarkIcon(img) {\n"
             + "  if (img.dataSaved) {\n"
-            + "    // based on https://material.io/tools/icons/static/icons/baseline-check_box-24px.svg\n"
+            + "    // based on https://material"
+            + ".io/tools/icons/static/icons/baseline-check_box-24px.svg\n"
             + "    // Conversion tool: https://codepen.io/elliz/details/ygvgay\n"
-            + "    img.src = \"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3e%3cpath d='M0 0h24v24H0z' fill='none'/%3e%3cpath d='M20 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' fill='rgb(26, 115, 232)'/%3e%3c/svg%3e\";\n"
+            + "    img.src = \"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3"
+            + ".org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3e%3cpath d='M0 "
+            + "0h24v24H0z' fill='none'/%3e%3cpath d='M20 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 "
+            + "2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19"
+            + " 8l-9 9z' fill='rgb(26, 115, 232)'/%3e%3c/svg%3e\";\n"
             + "  } else {\n"
-            + "    // based on https://material.io/tools/icons/static/icons/baseline-add_box-24px.svg\n"
-            + "    img.src = \"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3e%3cpath d='M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z' fill='rgb(128, 134, 138)'/%3e%3cpath d='M0 0h24v24H0z' fill='none'/%3e%3c/svg%3e\";\n"
+            + "    // based on https://material.io/tools/icons/static/icons/baseline-add_box-24px"
+            + ".svg\n"
+            + "    img.src = \"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3"
+            + ".org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3e%3cpath d='M19 3H5c-1"
+            + ".11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 "
+            + "10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z' fill='rgb(128, 134, 138)'/%3e%3cpath d='M0 "
+            + "0h24v24H0z' fill='none'/%3e%3c/svg%3e\";\n"
             + "  }\n"
             + "}\n"
             + "\n"
@@ -601,14 +675,16 @@ public class CollectionManager {
             + "  updateBookmarkIcon(img);\n"
             + "\n"
             + "  const item = img.parentElement.parentElement.parentElement;\n"
-            + "  console.assert(item.lastElementChild.className === overlayClassName, 'wrong item', item);\n"
+            + "  console.assert(item.lastElementChild.className === overlayClassName, 'wrong "
+            + "item', item);\n"
             + "  const extracted = extractItem(item);\n"
             + "  extracted['starred'] = img.dataSaved;\n"
             + "  const payload = encodeURIComponent(JSON.stringify(extracted));\n"
             + "  console.log(item);\n"
             + "  console.log(extractItem(item));\n"
             + "  window.location.href = \"intent:\" + payload +\n"
-            + "      \"#Intent;package=com.google.android.apps.chrome;action=com.google.chrome.COLLECT;end;\";\n"
+            + "      \"#Intent;package=com.google.android.apps.chrome;action=com.google.chrome"
+            + ".COLLECT;end;\";\n"
             + "}\n"
             + "\n"
             + "function commonAncestor(a, b) {\n"
@@ -674,7 +750,8 @@ public class CollectionManager {
             + "    output.set(item, extraction);\n"
             + "    extracted_items.push(item);\n"
             + "    if (overlay) {\n"
-            + "      const starred = typeof clank_all_starred_keys === \"object\" && extraction['imageUrl'] in clank_all_starred_keys;\n"
+            + "      const starred = typeof clank_all_starred_keys === \"object\" && "
+            + "extraction['imageUrl'] in clank_all_starred_keys;\n"
             + "      //console.log(starred, extraction['imageUrl'], clank_all_starred_keys);\n"
             + "      createOverlay(item, null);\n"
             + "      styleForOverlay();\n"
@@ -686,9 +763,11 @@ public class CollectionManager {
             + "  if (a === b) return 0;\n"
             + "  const position = a.compareDocumentPosition(b);\n"
             + "\n"
-            + "  if (position & Node.DOCUMENT_POSITION_FOLLOWING || position & Node.DOCUMENT_POSITION_CONTAINED_BY) {\n"
+            + "  if (position & Node.DOCUMENT_POSITION_FOLLOWING || position & Node"
+            + ".DOCUMENT_POSITION_CONTAINED_BY) {\n"
             + "    return -1;\n"
-            + "  } else if (position & Node.DOCUMENT_POSITION_PRECEDING || position & Node.DOCUMENT_POSITION_CONTAINS) {\n"
+            + "  } else if (position & Node.DOCUMENT_POSITION_PRECEDING || position & Node"
+            + ".DOCUMENT_POSITION_CONTAINS) {\n"
             + "    return 1;\n"
             + "  } else {\n"
             + "    return 0;\n"
@@ -766,6 +845,16 @@ public class CollectionManager {
             + "        .slick-slide\n"
             + "    `);\n"
             + "  }\n"
+            + "  // Target\n"
+            + "  if (items.length == 0) {\n"
+            + "    items = document.querySelectorAll(`[data-test='product-card'],\n"
+            + "      [class*=\"ProductRecWrapper\"]`\n"
+            + "    );\n"
+            + "    items = [...items].map(function (item) {\n"
+            + "      return item.parentElement;\n"
+            + "    });\n"
+            + "  }\n"
+            + "\n"
             + "  if (items.length == 0) {\n"
             + "    // Generic pattern\n"
             + "    const candidates = new Set();\n"
@@ -806,7 +895,8 @@ public class CollectionManager {
             + "  for (const item of items) {\n"
             + "    extractOneItem(item, extracted_items, processed, outputMap, overlay);\n"
             + "  }\n"
-            + "  const keysInDocOrder = Array.from(outputMap.keys()).sort(documentPositionComparator);\n"
+            + "  const keysInDocOrder = Array.from(outputMap.keys()).sort"
+            + "(documentPositionComparator);\n"
             + "  const output = [];\n"
             + "  for (const key of keysInDocOrder) {\n"
             + "    output.push(outputMap.get(key));\n"
@@ -831,7 +921,8 @@ public class CollectionManager {
             + "}\n"
             + "\n"
             + "function extractItems() {\n"
-            + "  return {'items': extractAllItems(true), 'isOverlayVisible': getOverlayVisibility()};\n"
+            + "  return {'items': extractAllItems(true), 'isOverlayVisible': getOverlayVisibility"
+            + "()};\n"
             + "}\n"
             + "\n";
 
@@ -867,6 +958,11 @@ public class CollectionManager {
                             () -> showBottomSheet(mFragmentManager, tab), 600);
                 }
             }
+
+            @Override
+            public void tabClosureCommitted(Tab tab) {
+                mCollectionStageMap.remove(tab);
+            }
         };
         chromeActivity.getCurrentTabModel().addObserver(tabModelObserver);
 
@@ -888,7 +984,18 @@ public class CollectionManager {
                     mHasItems.put(tab, hasItem);
                     Log.e(TAG, "put mHasItems = " + mHasItems + " tab = " + tab);
                     if (hasItem) {
+                        Boolean hasOverlay = mHasOverlay.get(tab);
+                        if (hasOverlay) {
+                            Log.i("MeilHighlightUma", "TabGroupHighlight.EnterHighlightMode");
+                            RecordHistogram.recordEnumeratedHistogram("TabGroupHighlightMode", 1, 2);
+                            mCollectionStageMap.put(mActivity.getActivityTab(), Stage.ENTERED);
+                        } else {
+                            Log.i("MeilHighlightUma", "TabGroupHighlight.PromptShown");
+                            RecordHistogram.recordEnumeratedHistogram("TabGroupHighlightMode", 0, 2);
+                            mCollectionStageMap.put(mActivity.getActivityTab(), Stage.PROMPTED);
+                        }
                         showBottomSheet(mFragmentManager, tab);
+
                     }
                 });
             }
@@ -905,6 +1012,22 @@ public class CollectionManager {
 
     public static void turnOnCollectionManager() {
         sCollectionManagerIsOn = true;
+    }
+
+    /**
+     * Handles tapping on the Android back button.
+     * @return Whether tapping the back button dismissed the highlighting mode or not.
+     */
+    public boolean handleBackPressed() {
+        Tab tab = mActivity.getActivityTab();
+        mCollectionStageMap.put(tab, Stage.EXITED);
+
+        if (hasOverlayOnCurrentTab()) {
+            closeBottomSheet();
+            setOverlayVisibility(false);
+            return true;
+        }
+        return false;
     }
 
     private void closeBottomSheet() {
@@ -926,6 +1049,15 @@ public class CollectionManager {
             tab.getTabModelSelector().openNewTab(loadUrlParams,
                     TabModel.TabLaunchType.FROM_LONGPRESS_BACKGROUND, tab, tab.isIncognito());
             closeBottomSheet();
+
+            Log.i("MeilHighlightUma", "TabGroupHighlight.HighlightSelected");
+            RecordUserAction.record("TabGroupHighlight.HighlightSelected");
+
+            if (isTriggerTabGroupCreation(tab.getId())) {
+                Log.i("MeilHighlightUma", "TabGroup.Created.HighlightAndAdd");
+                RecordUserAction.record("TabGroup.Created.HighlightAndAdd");
+            }
+
             ThreadUtils.postOnUiThreadDelayed(
                     ()
                             -> ToolbarButtonInProductHelpController.maybeShowTabStripIPH(
@@ -938,6 +1070,19 @@ public class CollectionManager {
         } else {
             removeStarredItem(item);
         }
+    }
+
+    private boolean isTriggerTabGroupCreation(int tabId) {
+        TabContentManager tabContentManager = mActivity.getTabContentManager();
+        TabGroupList tabGroupList =
+                mActivity.getTabModelSelector().getCurrentModel().getTabGroupList(
+                        tabContentManager);
+
+        if (tabGroupList != null) {
+            return tabGroupList.getAllTabIdsInSameGroup(tabId).size() == 2;
+        }
+
+        return false;
     }
 
     static public boolean isEnabled() {
@@ -1063,8 +1208,8 @@ public class CollectionManager {
                 if (mAllAdapter != null) mAllAdapter.notifyDataSetChanged();
                 Log.e(TAG, "Collection size = %d", mAll.size());
             }
-            if (hasItemsCallback != null) hasItemsCallback.onResult(items.size() >= 8);
             mHasOverlay.put(tab, isOverlayVisible);
+            if (hasItemsCallback != null) hasItemsCallback.onResult(items.size() >= 8);
             updateInfobarTitle();
         });
         mTabs.add(new WeakReference<>(tab));
@@ -1075,6 +1220,12 @@ public class CollectionManager {
         if (tab == null) return;
         if (!isAllowedUrl(tab.getUrl())) return;
         if (tab.getWebContents() == null) return;
+
+        if (visible) {
+            // Do extraction again to get newer (lazily-loaded) items.
+            extractItems(tab, true, null);
+            return;
+        }
 
         // TODO: evaluateJavaScriptForTests should not be used in prod.
         tab.getWebContents().evaluateJavaScriptForTests(
@@ -1108,10 +1259,14 @@ public class CollectionManager {
             // This color is R.color.modern_blue_600, but I'm too lazy to use resource.
             mToolbarView.setBackgroundColor(Color.rgb(26, 115, 232));
             mTitle.setTextColor(Color.WHITE);
+            mTitle.setTypeface(Typeface.create(mTitle.getTypeface(), Typeface.NORMAL));
+            mCloseButton.setImageResource(R.drawable.btn_close_white);
         } else {
             mTitle.setText("Compare these products");
             mToolbarView.setBackgroundColor(Color.WHITE);
-            mTitle.setTextColor(Color.BLACK);
+            mTitle.setTextColor(Color.rgb(26, 115, 232));
+            mTitle.setTypeface(mTitle.getTypeface(), Typeface.BOLD);
+            mCloseButton.setImageResource(R.drawable.btn_close);
         }
     }
 
@@ -1135,8 +1290,17 @@ public class CollectionManager {
 
             // toolbarView.setOnClickListener(v -> { mBottomSheetController.expandSheet(); });
 
-            AppCompatImageButton closeButton = mToolbarView.findViewById(R.id.close_button);
-            closeButton.setOnClickListener(v -> {
+            mCloseButton = mToolbarView.findViewById(R.id.close_button);
+            mCloseButton.setOnClickListener(v -> {
+                Tab tab = mActivity.getActivityTab();
+                if (mCollectionStageMap.get(tab) == Stage.PROMPTED) {
+                    Log.i("MeilHighlightUma", "PromptDismissed");
+                    RecordUserAction.record("TabGroupHighlight.PromptDismissed");
+                } else if (mCollectionStageMap.get(tab) == Stage.ENTERED) {
+                    Log.i("MeilHighlightUma", "ExitHighlightMode");
+                    RecordUserAction.record("TabGroupHighlight.ExitHighlightMode");
+                }
+                mCollectionStageMap.put(tab, Stage.EXITED);
                 closeBottomSheet();
                 setOverlayVisibility(false);
             });
@@ -1144,6 +1308,8 @@ public class CollectionManager {
             mTitle = mToolbarView.findViewById(R.id.title);
             mTitle.setOnClickListener((v) -> {
                 if (hasOverlayOnCurrentTab()) return;
+                Log.i("MeilHighlightUma", "TabGroupHighlight.ClickToSwitchMode");
+                RecordUserAction.record("TabGroupHighlight.ClickToSwitchMode");
                 setOverlayVisibility(true);
             });
 

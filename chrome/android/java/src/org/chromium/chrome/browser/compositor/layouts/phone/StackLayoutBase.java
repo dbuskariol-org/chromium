@@ -210,6 +210,8 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
 
     LayoutTabInfoManager mLayoutTabInfoManager;
 
+    private boolean mIsClosingTabGroup;
+
     private LayoutTabInfo getLayoutTabInfo() {
         return mLayoutTabInfoManager.getLayoutTabInfo();
     }
@@ -617,9 +619,24 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
 
     @Override
     public void onTabClosed(long time, int tabId, int nextTabId, boolean incognito) {
-        if (mTabModelSelector.getCurrentModel().getTabGroupList(mTabContentManager) == null) return;
+        TabGroupList tabGroupList =
+                mTabModelSelector.getCurrentModel().getTabGroupList(mTabContentManager);
+        if (tabGroupList == null) return;
         super.onTabClosed(time, tabId, nextTabId, incognito);
-        mStacks.get(getTabStackIndex()).updateStackTabs();
+
+        // When handling a permanent close, it triggers onTabClosed() at
+        // every tab closes. This method, StackLayoutBase#onTabClosed(), got triggered before the
+        // TabGroupList#onTabClosed() that updates the tab group list. So, TabGroupList is not sync
+        // yet. Therefore when we closing a tab group that cannot be recovered, we should update the
+        // StackTabs only after all tabs are closed within that group.
+        // As a result, we should update StackTabs only when one of the following cases happens:
+        //   1. Closing an individual tab (not belongs to a group) that cannot be undo.
+        //   2. Closing the currently selected tab within the a tab group.
+        //   3. Closing the whole tab group that cannot be undo, but only update StackTabs after
+        //      all the tabs closed within that group.
+        if (!mIsClosingTabGroup || tabGroupList.getAllTabIdsInSameGroup(tabId).size() == 0) {
+            mStacks.get(getTabStackIndex()).updateStackTabs();
+        }
         updateLayout(time, 0);
     }
 
@@ -939,12 +956,13 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
                 tabs.add(TabModelUtils.getTabById(
                         mTabModelSelector.getModel(incognito), tabIdList.get(i)));
             }
+            mIsClosingTabGroup = tabs.size() > 1;
             mTabModelSelector.getModel(incognito).closeSomeTabs(tabs, canUndo);
-
         } else {
             // Propagate the tab closure to the model.
             TabModelUtils.closeTabById(mTabModelSelector.getModel(incognito), id, canUndo);
         }
+        mIsClosingTabGroup = false;
     }
 
     public void uiDoneClosingAllTabs(boolean incognito) {
@@ -1489,24 +1507,12 @@ public abstract class StackLayoutBase extends Layout implements Animatable {
             // TODO(acolwell) : Consider changing this so starting x,y offset doesn't
             // need to be passed down and is completely handled by this object.
             final int widthInPixels = (int) (getViewportParameters().getWidth() * mDpToPx);
-            final int heightInPixels = (int) (getViewportParameters().getHeight() * mDpToPx);
-            final int topYOffsetInPixels =
-                    (int) ((getViewportParameters().getStack0Top() + mTotalScrollY) * mDpToPx);
             final int startingXOffsetInPixels = 0;
             final int startingYOffsetInPixels = (int) (getTopOfLayoutTabInfoInDp() * mDpToPx);
 
             int endingYOffsetInPixels = layoutTabInfo.computeLayout(
                     startingXOffsetInPixels, startingYOffsetInPixels, widthInPixels);
             assert endingYOffsetInPixels >= startingYOffsetInPixels;
-
-            final int contentHeightInPixels = endingYOffsetInPixels - topYOffsetInPixels;
-            float oldMinTotalScrollY = mMinTotalScrollY;
-            mMinTotalScrollY = Math.min((heightInPixels - contentHeightInPixels) / mDpToPx, 0);
-            if (oldMinTotalScrollY != mMinTotalScrollY && mTotalScrollY < mMinTotalScrollY) {
-                cancelAnimation(this, Property.TOTAL_SCROLL_Y);
-                addToAnimation(
-                        this, Property.TOTAL_SCROLL_Y, mTotalScrollY, mMinTotalScrollY, 300, 0);
-            }
         }
         if (needUpdate) requestUpdate();
 

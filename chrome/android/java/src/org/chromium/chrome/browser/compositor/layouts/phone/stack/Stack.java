@@ -1677,6 +1677,9 @@ public abstract class Stack implements ChromeAnimation.Animatable {
      * changes.
      */
     public void updateStackTabs() {
+        // This can be called before animation is done, we should clean up all the dying tabs before
+        // update.
+        cleanupStackTabState();
         final int count = mTabList.getCount();
         if (count == 0) {
             cleanupTabs();
@@ -1692,6 +1695,11 @@ public abstract class Stack implements ChromeAnimation.Animatable {
 
                 float maxContentWidth = -1.f;
                 float maxContentHeight = -1.f;
+
+                if (mStackTabs[i] != null && mStackTabs[i].getLayoutTab() != null) {
+                    maxContentWidth = mStackTabs[i].getLayoutTab().getMaxContentWidth();
+                    maxContentHeight = mStackTabs[i].getLayoutTab().getMaxContentHeight();
+                }
 
                 LayoutTab layoutTab = mLayout.createLayoutTab(tabId, isIncognito,
                         Layout.SHOW_CLOSE_BUTTON, needTitle, maxContentWidth, maxContentHeight);
