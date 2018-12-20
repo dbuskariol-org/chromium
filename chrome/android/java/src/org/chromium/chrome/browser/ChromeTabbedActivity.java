@@ -58,6 +58,7 @@ import org.chromium.chrome.browser.appmenu.AppMenuPropertiesDelegate;
 import org.chromium.chrome.browser.bookmarks.BookmarkUtils;
 import org.chromium.chrome.browser.browseractions.BrowserActionsService;
 import org.chromium.chrome.browser.browseractions.BrowserActionsTabModelSelector;
+import org.chromium.chrome.browser.collection.CollectionManager;
 import org.chromium.chrome.browser.compositor.CompositorViewHolder;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
 import org.chromium.chrome.browser.compositor.layouts.LayoutManager;
@@ -1781,6 +1782,10 @@ public class ChromeTabbedActivity
         }
 
         if (getManualFillingController().handleBackPress()) return true;
+
+        if (CollectionManager.getInstance() != null
+                && CollectionManager.getInstance().handleBackPressed())
+            return true;
 
         final Tab currentTab = getActivityTab();
 

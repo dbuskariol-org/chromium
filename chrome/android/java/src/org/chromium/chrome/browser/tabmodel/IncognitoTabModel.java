@@ -13,6 +13,8 @@ import org.chromium.chrome.browser.incognito.IncognitoNotificationManager;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
 
+import java.util.List;
+
 /**
  * A TabModel implementation that handles off the record tabs.
  *
@@ -60,6 +62,11 @@ public class IncognitoTabModel implements TabModel {
         mDelegateModel = mDelegate.createTabModel();
         for (TabModelObserver observer : mObservers) {
             mDelegateModel.addObserver(observer);
+        }
+
+        if (ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUPS_AND_TAB_STRIP)) {
+            assert mTabGroupList != null;
+            mDelegateModel.setTabGroupList(mTabGroupList);
         }
     }
 
@@ -129,6 +136,13 @@ public class IncognitoTabModel implements TabModel {
     @Override
     public boolean closeTab(Tab tab, boolean animate, boolean uponExit, boolean canUndo) {
         boolean retVal = mDelegateModel.closeTab(tab, animate, uponExit, canUndo);
+        destroyIncognitoIfNecessary();
+        return retVal;
+    }
+
+    @Override
+    public boolean closeSomeTabs(List<Tab> tabs, boolean canUndo) {
+        boolean retVal = mDelegateModel.closeSomeTabs(tabs, canUndo);
         destroyIncognitoIfNecessary();
         return retVal;
     }
@@ -258,14 +272,8 @@ public class IncognitoTabModel implements TabModel {
     }
 
     @Override
-    public boolean isTabGroupEnabled() {
-        // Gating getTabGroupCount(), or could be true.
-        return mTabGroupList != null;
-    }
-
-    @Override
     public int getTabGroupCount() {
-        return mTabGroupList.getCount();
+        return mDelegateModel.getCount();
     }
 
     @Override

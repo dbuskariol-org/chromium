@@ -412,7 +412,11 @@ public class BottomSheet extends FrameLayout
      */
     public boolean handleBackPress() {
         if (isSheetOpen()) {
-            setSheetState(SheetState.PEEK, true, StateChangeReason.BACK_PRESS);
+            if (mSheetContent.isPeekStateEnabled()) {
+                setSheetState(SheetState.PEEK, true, StateChangeReason.BACK_PRESS);
+            } else {
+                setSheetState(SheetState.HIDDEN, true, StateChangeReason.BACK_PRESS);
+            }
             return true;
         }
 

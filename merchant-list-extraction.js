@@ -64,26 +64,36 @@ function getVisibleElements(list) {
 }
 
 // Some sites e.g. CraigsList have multiple images per product
-function multipleImagesSupported(item) {
-  const href = window.location.href;
-  if (href == null) {
-    return false;
+function multipleImagesSupported(image) {
+  const src = image.getAttribute('src');
+  if (src != null) {
+    return src.includes('craigslist');
   }
-  return href.includes('craigslist');
+  const srcset = image.getAttribute('srcset');
+  if (srcset != null) {
+     return srcset.includes('target');
+  }
+  return false;
 }
 
 function extractImage(item) {
   // Sometimes an item contains small icons, which need to be filtered out.
   // TODO: two pass getLargeImages() is probably too slow.
   let images = getLargeImages(item, 40);
-  if (images.length == 0) images = getLargeImages(item, 30, true);
-  if (!multipleImagesSupported(item)) {
+  if (images.length == 0) {
+    images = getLargeImages(item, 30, true);
+  }
+
+  if (images.length == 0) {
+    return null;
+  }
+  const image = images[0];
+  if (!multipleImagesSupported(image)) {
     console.assert(images.length == 1, 'image extraction error', item, images);
     if (images.length != 1) {
       return null;
     }
   }
-  const image = images[0];
   const lazyUrl = getLazyLoadingURL(image);
   if (lazyUrl != null) return lazyUrl;
 
@@ -96,13 +106,32 @@ function extractImage(item) {
     if (!src.startsWith('data:'))
       return src;
   }
-  sourceSet = image.getAttribute('data-search-image-source-set');
+  let sourceSet = image.getAttribute('data-search-image-source-set');
+  if (sourceSet == null && image.parentElement.tagName == 'PICTURE') {
+    let sources = image.parentElement.querySelectorAll('source');
+    if (sources.length >= 1) {
+      sourceSet = getAbsoluteUrlOfSrcSet(sources[0]);
+    }
+  }
   if (sourceSet == null) return null;
   console.assert(sourceSet.includes(' '), 'image extraction error', image);
   // TODO: Pick the one with right pixel density?
   imageUrl = sourceSet.split(' ')[0];
   console.assert(imageUrl.length > 0, 'image extraction error', sourceSet);
   return imageUrl;
+}
+
+// Use self assigning trick to get absolute URL
+// https://github.com/chromium/dom-distiller/blob/ccfe233400cc214717ccc80973be431ab0e33cf7/java/org/chromium/distiller/DomUtil.java#L438
+function getAbsoluteUrlOfSrcSet(image) {
+    // preserve src
+    const backup = image.src;
+    // use self assigning trick
+    image.src = image.srcset;
+    // clean up and return absolute url
+    const ret = image.src;
+    image.src = backup;
+    return ret;
 }
 
 function extractUrl(item) {
@@ -684,6 +713,16 @@ function extractAllItems(overlay=false) {
         .slick-slide
     `);
   }
+  // Target
+  if (items.length == 0) {
+    items = document.querySelectorAll(`[data-test='product-card'],
+      [class*="ProductRecWrapper"]`
+    );
+    items = [...items].map(function (item) {
+      return item.parentElement;
+    });
+  }
+
   if (items.length == 0) {
     // Generic pattern
     const candidates = new Set();

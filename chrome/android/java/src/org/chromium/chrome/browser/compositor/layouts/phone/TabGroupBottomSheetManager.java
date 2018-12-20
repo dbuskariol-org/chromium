@@ -8,10 +8,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import org.chromium.base.Log;
+import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.collection.CollectionManager;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
@@ -45,6 +48,25 @@ public class TabGroupBottomSheetManager {
     private TabContentManager mTabContentManager;
 
     private OnTabGroupBottomSheetInteractionListener mInteractionListener;
+
+    private ItemTouchHelper.SimpleCallback mCallback = new ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END,
+            0) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+            int tabId = mRecyclerViewAdapter.onItemMove(fromPosition, toPosition);
+            int index = TabModelUtils.getTabIndexById(mTabModelSelector.getCurrentModel(), tabId);
+            mTabModelSelector.getCurrentModel().moveTabForDrag(
+                    tabId, index + (toPosition - fromPosition));
+            return true;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {}
+    };
 
     private static TabGroupBottomSheetManager sInstance;
 
@@ -108,6 +130,8 @@ public class TabGroupBottomSheetManager {
 
                     @Override
                     public void onTabCloseClicked(int tabId, int position) {
+                        Log.i("MeilUma", "TabGroupSwitcher.CloseTab");
+                        RecordUserAction.record("TabGroupSwitcher.CloseTab");
                         Tab tabToClose = TabModelUtils.getTabById(
                                 mTabModelSelector.getCurrentModel(), tabId);
                         int groupId = mTabModelSelector.getCurrentModel()
@@ -117,7 +141,8 @@ public class TabGroupBottomSheetManager {
                         int nextSelectedTabId = mTabModelSelector.getCurrentModel()
                                                         .getTabGroupList(mTabContentManager)
                                                         .getLastShownTabInGroup(groupId);
-                        mRecyclerViewAdapter.remove(nextSelectedTabId, position);
+                        mRecyclerViewAdapter.remove(
+                                position, nextSelectedTabId, nextSelectedTabId != tabId);
                         if (mRecyclerViewAdapter.getItemCount() == 1) {
                             closeTabGroupSheet();
                         }
@@ -127,6 +152,7 @@ public class TabGroupBottomSheetManager {
         tabGroupBottomSheetView.setLayoutManager(new GridLayoutManager(context, 2));
         tabGroupBottomSheetView.setHasFixedSize(true);
         tabGroupBottomSheetView.setAdapter(mRecyclerViewAdapter);
+        new ItemTouchHelper(mCallback).attachToRecyclerView(tabGroupBottomSheetView);
 
         mContent = new TabGroupBottomSheetContent(tabGroupBottomSheetView, toolbarView);
         mTabModelSelector = modelSelector;

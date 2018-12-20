@@ -161,7 +161,6 @@ public class TabGroupList implements TabList {
                 int groupId = getGroupId(tab.getId());
                 mTabGroupMap.get(groupId).setLastShownTabId(tab.getId());
             }
-
         });
 
         init();
@@ -299,7 +298,7 @@ public class TabGroupList implements TabList {
 
     public List<Integer> getAllTabIdsInSameGroup(int tabId) {
         TabGroup tabGroup = mTabGroupMap.get(getGroupId(tabId));
-        if (tabGroup == null) return null;
+        if (tabGroup == null) return new ArrayList<>();
         return tabGroup.getTabIdList();
     }
 
@@ -348,6 +347,11 @@ public class TabGroupList implements TabList {
             mGroupIdToIndexMap.remove(groupId);
             mGroupIndex--;
         }
+        dump();
+    }
+
+    public void onTabMoved() {
+        reorderGroups();
         dump();
     }
 
