@@ -110,7 +110,9 @@ public class TabListSceneLayer extends SceneLayer {
                     ids = tabGroupList.getAllTabIdsInSameGroup(t.getId());
                 }
             }
-            if (ids != null && ids.size() > 1) {
+            if (ids != null) {
+                // TODO(meiliang): modify not just show the first four, should be show the
+                // currently selected tab and three other closest tabs
                 tabIds = getVisibleTabIds(ids, t.getId());
             }
 

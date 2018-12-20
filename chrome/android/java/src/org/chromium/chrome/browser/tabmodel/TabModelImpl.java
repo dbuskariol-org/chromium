@@ -204,42 +204,6 @@ public class TabModelImpl extends TabModelJniBridge {
     }
 
     @Override
-    public void moveTabForDrag(int id, int newIndex) {
-        newIndex = MathUtils.clamp(newIndex, 0, mTabs.size());
-
-        int curIndex = TabModelUtils.getTabIndexById(this, id);
-
-        if (curIndex == INVALID_TAB_INDEX || curIndex == newIndex) {
-            return;
-        }
-
-        // TODO(dtrainor): Update the list of undoable tabs instead of committing it.
-        commitAllTabClosures();
-
-        Tab tab = mTabs.remove(curIndex);
-
-        if (newIndex == mTabs.size()) {
-            mTabs.add(tab);
-        } else {
-            mTabs.add(newIndex, tab);
-        }
-
-        if (curIndex == mIndex) {
-            mIndex = newIndex;
-        } else if (curIndex < mIndex && newIndex >= mIndex) {
-            --mIndex;
-        } else if (curIndex > mIndex && newIndex <= mIndex) {
-            ++mIndex;
-        }
-
-        mRewoundList.resetRewoundState();
-
-        if (mTabGroupList != null) mTabGroupList.onTabMoved();
-
-        for (TabModelObserver obs : mObservers) obs.didMoveTab(tab, newIndex, curIndex);
-    }
-
-    @Override
     public boolean closeTab(Tab tab) {
         return closeTab(tab, true, false, false);
     }
@@ -328,7 +292,7 @@ public class TabModelImpl extends TabModelJniBridge {
         if (tabToClose == null) return currentTab;
 
         Tab adjacentTab = null;
-        if (mTabGroupList != null && mTabGroupList.getAllTabIdsInSameGroup(id).size() > 1) {
+        if (mTabGroupList != null) {
             List<Integer> tabIdsInSameGroup = mTabGroupList.getAllTabIdsInSameGroup(id);
             int closingTabIndexInGroup = tabIdsInSameGroup.indexOf(id);
             if (closingTabIndexInGroup >= 0 && tabIdsInSameGroup.size() > 1) {
@@ -409,7 +373,7 @@ public class TabModelImpl extends TabModelJniBridge {
         int insertIndex = prevIndex + 1;
         if (mIndex >= insertIndex) mIndex++;
         mTabs.add(insertIndex, tab);
-        if (mTabGroupList != null) mTabGroupList.cancelTabClosure(tab);
+        mTabGroupList.cancelTabClosure(tab);
 
         WebContents webContents = tab.getWebContents();
         if (webContents != null) webContents.setAudioMuted(false);
@@ -904,8 +868,13 @@ public class TabModelImpl extends TabModelJniBridge {
     }
 
     @Override
+    public boolean isTabGroupEnabled() {
+        // Gating getTabGroupCount(), or could be true.
+        return mTabGroupList != null;
+    }
+
+    @Override
     public int getTabGroupCount() {
-        if (mTabGroupList == null) return 0;
         return mTabGroupList.getCount();
     }
 
@@ -920,17 +889,10 @@ public class TabModelImpl extends TabModelJniBridge {
     }
 
     private int tabGroupListIndexOf(Tab tab) {
-        if (tab == null) return INVALID_TAB_INDEX;
         return mTabGroupList != null ? mTabGroupList.indexOf(tab) : indexOf(tab);
     }
 
     private Tab tabGroupListGetTabAt(int index) {
         return mTabGroupList != null ? mTabGroupList.getTabAt(index) : getTabAt(index);
-    }
-
-    @Override
-    public void setTabGroupList(TabGroupList tabGroupList) {
-        assert mTabGroupList == null;
-        mTabGroupList = tabGroupList;
     }
 }

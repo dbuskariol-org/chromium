@@ -254,6 +254,10 @@ public interface TabModel extends TabList {
      */
     void removeObserver(TabModelObserver observer);
 
+    default boolean isTabGroupEnabled() {
+        return false;
+    }
+
     default TabGroupList getTabGroupList(TabContentManager tabContentManager) {
         return null;
     }
@@ -261,8 +265,4 @@ public interface TabModel extends TabList {
     default int getTabGroupCount() {
         return 0;
     }
-
-    default void setTabGroupList(TabGroupList tabGroupList) {}
-
-    default void moveTabForDrag(int id, int newIndex) {}
 }

@@ -11,20 +11,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Pager adapter for shopping collection bottom sheet.
- */
 public class CollectionPagerAdapter extends FragmentPagerAdapter {
     private List<CollectionList> mItems;
     static final boolean ONLY_SHOW_STARRED = true;
-    private static final boolean SHOW_NOTHING = true;
 
     CollectionPagerAdapter(FragmentManager fm, CollectionManager collectionManager) {
         super(fm);
 
         mItems = new ArrayList<>();
-        if (SHOW_NOTHING) return;
-
         if (!ONLY_SHOW_STARRED) {
             mItems.add(CollectionList.newInstance(2, collectionManager, false));
         }

@@ -57,29 +57,15 @@ public class TabGroupBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter
         notifyItemInserted(mItems.size() - 1);
     }
 
-    /**
-     * Remove {@link TabGroupBottomSheetItem} at {@code index} from the list, and update the
-     * selected tab to {@code nextSelectedTabId}.
-     * @param removeIndex Remove the item at this index.
-     * @param nextSelectedTabId The new selected tab id.
-     * @param shouldUpdateSelectedTab true if removing the currently selected tab.
-     */
-    public void remove(int removeIndex, int nextSelectedTabId, boolean shouldUpdateSelectedTab) {
-        if (shouldUpdateSelectedTab) {
-            updateSelectedTab(nextSelectedTabId);
-        }
-        mItems.remove(removeIndex);
-        notifyItemRemoved(removeIndex);
-    }
-
-    private void updateSelectedTab(int nextSelectedTabId) {
+    public void remove(int tabId, int index) {
         for (int i = 0; i < mItems.size(); i++) {
-            if (mItems.get(i).getTabId() == nextSelectedTabId) {
+            if (mItems.get(i).getTabId() == tabId) {
                 mItems.get(i).setSelected(true);
-                notifyItemChanged(i);
                 break;
             }
         }
+        mItems.remove(index);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -102,17 +88,6 @@ public class TabGroupBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public int getItemViewType(final int position) {
         return R.layout.tabgroup_bottom_sheet_item;
-    }
-
-    public int onItemMove(int fromPosition, int toPosition) {
-        TabGroupBottomSheetItem item = mItems.remove(fromPosition);
-        if (toPosition == mItems.size()) {
-            mItems.add(item);
-        } else {
-            mItems.add(toPosition, item);
-        }
-        notifyItemMoved(fromPosition, toPosition);
-        return item.getTabId();
     }
 
     /**

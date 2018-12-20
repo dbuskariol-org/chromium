@@ -409,11 +409,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             public void tabRemoved(Tab tab) {
                 refreshSelectedTab();
             }
-
-            @Override
-            public void didMoveTab(Tab tab, int newIndex, int curIndex) {
-                updateButtonStatus();
-            }
         };
 
         mTabObserver = new EmptyTabObserver() {
