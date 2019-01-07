@@ -163,7 +163,6 @@ class FastInkView::LayerTreeFrameSinkHolder
                  gfx::Transform());
     frame.render_pass_list.push_back(std::move(pass));
     holder->frame_sink_->SubmitCompositorFrame(std::move(frame),
-                                               /*hit_test_data_changed=*/true,
                                                /*show_hit_test_borders=*/false);
 
     // Delete sink holder immediately if not waiting for exported resources to
@@ -197,7 +196,6 @@ class FastInkView::LayerTreeFrameSinkHolder
         frame.metadata.local_surface_id_allocation_time;
     frame.metadata.frame_token = ++next_frame_token_;
     frame_sink_->SubmitCompositorFrame(std::move(frame),
-                                       /*hit_test_data_changed=*/true,
                                        /*show_hit_test_borders=*/false);
   }
 
