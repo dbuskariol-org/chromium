@@ -131,6 +131,20 @@ public class ToolbarButtonInProductHelpController implements Destroyable {
         maybeShowNTPButtonIPH();
     }
 
+    public static void maybeShowTabGroupingIPH(ChromeTabbedActivity activity) {
+        setupAndMaybeShowIPHForFeature(FeatureConstants.TAB_GROUP_BY_LONG_PRESS_FEATURE, 0,
+                R.string.iph_tabgroup_text, R.string.iph_tabgroup_text,
+                activity.getToolbarManager().getToolbarLayoutForTesting(), null,
+                Profile.getLastUsedProfile().getOriginalProfile(), activity);
+    }
+
+    public static void maybeShowTabStripIPH(ChromeTabbedActivity activity) {
+        setupAndMaybeShowIPHForFeature(FeatureConstants.TAB_STRIP_FOR_SWITCHING_FEATURE, 0,
+                R.string.iph_tabstrip_text, R.string.iph_tabstrip_text,
+                activity.findViewById(R.id.bottom_sheet_toolbar), null,
+                Profile.getLastUsedProfile().getOriginalProfile(), activity);
+    }
+
     private void maybeShowDownloadHomeIPH() {
         setupAndMaybeShowIPHForFeature(FeatureConstants.DOWNLOAD_HOME_FEATURE,
                 R.id.downloads_menu_id, R.string.iph_download_home_text,
@@ -169,9 +183,10 @@ public class ToolbarButtonInProductHelpController implements Destroyable {
             @StringRes int accessibilityStringId, View anchorView,
             @Nullable AppMenuHandler appMenuHandler, Profile profile, ChromeActivity activity) {
         final Tracker tracker = TrackerFactory.getTrackerForProfile(profile);
-        tracker.addOnInitializedCallback((Callback<Boolean>) success
-                -> maybeShowIPH(tracker, featureName, highlightMenuItemId, stringId,
-                        accessibilityStringId, anchorView, appMenuHandler, activity));
+        tracker.addOnInitializedCallback((Callback<Boolean>) success -> {
+            maybeShowIPH(tracker, featureName, highlightMenuItemId, stringId, accessibilityStringId,
+                    anchorView, appMenuHandler, activity);
+        });
     }
 
     private static void maybeShowIPH(Tracker tracker, String featureName,
@@ -196,9 +211,17 @@ public class ToolbarButtonInProductHelpController implements Destroyable {
 
             if (!tracker.shouldTriggerHelpUI(featureName)) return;
             ViewRectProvider rectProvider = new ViewRectProvider(anchorView);
+            android.util.Log.e("Yusuf", "About to show tab strip iph maybe 4");
 
-            TextBubble textBubble = new TextBubble(
-                    activity, anchorView, stringId, accessibilityStringId, rectProvider);
+            TextBubble textBubble;
+            if (TextUtils.equals(featureName, FeatureConstants.TAB_GROUP_BY_LONG_PRESS_FEATURE)) {
+                textBubble = new TextBubble(
+                        activity, anchorView, stringId, accessibilityStringId, false, rectProvider);
+            } else {
+                textBubble = new TextBubble(
+                        activity, anchorView, stringId, accessibilityStringId, rectProvider);
+            }
+
             textBubble.setDismissOnTouchInteraction(true);
             textBubble.addOnDismissListener(() -> anchorView.getHandler().postDelayed(() -> {
                 tracker.dismissed(featureName);

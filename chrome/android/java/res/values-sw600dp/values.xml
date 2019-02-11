@@ -13,7 +13,7 @@
     <item name="top_controls_hide_threshold" format="float" type="dimen">0.17</item>
 
     <!-- The number of thumbnails that the thumbnail cache can hold. -->
-    <integer name="default_thumbnail_cache_size">3</integer>
+    <integer name="default_thumbnail_cache_size">12</integer>
     <!-- The number of approximation thumbnails that the approximation cache can hold. -->
     <integer name="default_approximation_thumbnail_cache_size">32</integer>
     <!-- The maximum size of the write queue in the thumbnail cache. -->

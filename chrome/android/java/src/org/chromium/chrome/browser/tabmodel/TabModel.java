@@ -4,8 +4,14 @@
 
 package org.chromium.chrome.browser.tabmodel;
 
+import android.support.annotation.NonNull;
+
+import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
+
+import java.util.List;
 
 /**
  * TabModel organizes all the open tabs and allows you to create new ones.  Regular and Incognito
@@ -25,6 +31,15 @@ public interface TabModel extends TabList {
     public boolean closeTab(Tab tab);
 
     /**
+     * Unregisters and destroys the specified tab, and then switches to |nextTab|.
+     * @param tabToClose The non-null tab to close
+     * @param nextTab The non-null tab to switch to next
+     * @param animate true iff the closing animation should be displayed
+     * @return true if the tab was found
+     */
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate);
+
+    /**
      * Unregisters and destroys the specified tab, and then switches to the previous tab.
      *
      * @param tab The non-null tab to close
@@ -41,6 +56,8 @@ public interface TabModel extends TabList {
      * @return true if the tab was found
      */
     public boolean closeTab(Tab tab, boolean animate, boolean uponExit, boolean canUndo);
+
+    default public boolean closeSomeTabs(List<Tab> tabs, boolean canUndo) { return false; }
 
     /**
      * Returns which tab would be selected if the specified tab {@code id} were closed.
@@ -155,4 +172,24 @@ public interface TabModel extends TabList {
      * @param observer The observer to be unsubscribed.
      */
     void removeObserver(TabModelObserver observer);
+
+    /**
+     * @return A non-null {@link TabList} that can access all the opened {@link Tab}s in this model
+     * in their default insertion order. If it supports pending closures
+     * {@link #supportsPendingClosures()}, as this will exclude all pending closure tabs.
+     */
+    @NonNull
+    TabList getDefaultTabList();
+
+    default TabGroupList getTabGroupList(TabContentManager tabContentManager) {
+        return null;
+    }
+
+    default int getTabGroupCount() {
+        return 0;
+    }
+
+    default void setTabGroupList(TabGroupList tabGroupList) {}
+
+    default void moveTabForDrag(int id, int newIndex) {}
 }

@@ -44,6 +44,9 @@ public class UndoBarController implements SnackbarManager.SnackbarController {
     private static final int TAB_CLOSE_UNDO_TOAST_PRESSED = 2;
     private static final int TAB_CLOSE_UNDO_TOAST_COUNT = 5;
 
+    private static final int SINGLE_SNACKBAR_DURATION_MS = 6_000;
+    private static final int ALL_SNACKBAR_DURATION_MS = 20_000;
+
     private final TabModelSelector mTabModelSelector;
     private final TabModelObserver mTabModelObserver;
     private final SnackbarManager mSnackbarManager;
@@ -137,7 +140,8 @@ public class UndoBarController implements SnackbarManager.SnackbarController {
         mSnackbarManager.showSnackbar(
                 Snackbar.make(content, this, Snackbar.TYPE_ACTION, Snackbar.UMA_TAB_CLOSE_UNDO)
                         .setTemplateText(mContext.getString(R.string.undo_bar_close_message))
-                        .setAction(mContext.getString(R.string.undo), tabId));
+                        .setAction(mContext.getString(R.string.undo), tabId)
+                        .setDuration(SINGLE_SNACKBAR_DURATION_MS));
     }
 
     /**
@@ -153,7 +157,8 @@ public class UndoBarController implements SnackbarManager.SnackbarController {
         mSnackbarManager.showSnackbar(
                 Snackbar.make(content, this, Snackbar.TYPE_ACTION, Snackbar.UMA_TAB_CLOSE_ALL_UNDO)
                         .setTemplateText(mContext.getString(R.string.undo_bar_close_all_message))
-                        .setAction(mContext.getString(R.string.undo), closedTabs));
+                        .setAction(mContext.getString(R.string.undo), closedTabs)
+                        .setDuration(ALL_SNACKBAR_DURATION_MS));
     }
 
     /**

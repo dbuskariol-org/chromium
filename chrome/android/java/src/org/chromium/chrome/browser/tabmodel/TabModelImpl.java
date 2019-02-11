@@ -4,10 +4,14 @@
 
 package org.chromium.chrome.browser.tabmodel;
 
+import android.support.annotation.NonNull;
+
 import org.chromium.base.ObserverList;
 import org.chromium.base.TraceEvent;
+import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.ntp.RecentlyClosedBridge;
 import org.chromium.chrome.browser.partnercustomizations.HomepageManager;
 import org.chromium.chrome.browser.tab.Tab;
@@ -23,6 +27,45 @@ import java.util.List;
  * {@link ChromeTabbedActivity}.
  */
 public class TabModelImpl extends TabModelJniBridge {
+    private class DefaultList implements TabList {
+        @Override
+        public boolean isIncognito() {
+            return TabModelImpl.this.isIncognito();
+        }
+
+        @Override
+        public int index() {
+            if (TabModelImpl.this.index() != INVALID_TAB_INDEX) {
+                return mTabs.indexOf(TabModelUtils.getCurrentTab(TabModelImpl.this));
+            }
+            if (!mTabs.isEmpty()) return 0;
+            return INVALID_TAB_INDEX;
+        }
+
+        @Override
+        public int getCount() {
+            return mTabs.size();
+        }
+
+        @Override
+        public Tab getTabAt(int index) {
+            if (index < 0 || index >= mTabs.size()) return null;
+            return mTabs.get(index);
+        }
+
+        @Override
+        public int indexOf(Tab tab) {
+            if (tab == null) return INVALID_TAB_INDEX;
+            int retVal = mTabs.indexOf(tab);
+            return retVal == -1 ? INVALID_TAB_INDEX : retVal;
+        }
+
+        @Override
+        public boolean isClosurePending(int tabId) {
+            return TabModelImpl.this.isClosurePending(tabId);
+        }
+    }
+
     /**
      * The application ID used for tabs opened from an application that does not specify an app ID
      * in its VIEW intent extras.
@@ -58,6 +101,12 @@ public class TabModelImpl extends TabModelJniBridge {
     private final RewoundList mRewoundList = new RewoundList();
 
     /**
+     * A {@link TabList} that can access all the opened {@link Tab}s in this model in their original
+     * insertion order. This will exclude all pending closure tabs all the time.
+     */
+    private final TabList mDefaultList = new DefaultList();
+
+    /**
      * This specifies the current {@link Tab} in {@link #mTabs}.
      */
     private int mIndex = INVALID_TAB_INDEX;
@@ -66,6 +115,8 @@ public class TabModelImpl extends TabModelJniBridge {
      * Whether this tab model supports undoing.
      */
     private boolean mIsUndoSupported = true;
+
+    private TabGroupList mTabGroupList;
 
     public TabModelImpl(boolean incognito, boolean isTabbedActivity, TabCreator regularTabCreator,
             TabCreator incognitoTabCreator, TabModelSelectorUma uma,
@@ -116,6 +167,12 @@ public class TabModelImpl extends TabModelJniBridge {
     @Override
     public void removeObserver(TabModelObserver observer) {
         mObservers.removeObserver(observer);
+    }
+
+    @Override
+    @NonNull
+    public TabList getDefaultTabList() {
+        return mDefaultList;
     }
 
     /**
@@ -203,8 +260,115 @@ public class TabModelImpl extends TabModelJniBridge {
     }
 
     @Override
+    public void moveTabForDrag(int id, int newIndex) {
+        newIndex = MathUtils.clamp(newIndex, 0, mTabs.size());
+
+        int curIndex = TabModelUtils.getTabIndexById(this, id);
+
+        if (curIndex == INVALID_TAB_INDEX || curIndex == newIndex) {
+            return;
+        }
+
+        // TODO(dtrainor): Update the list of undoable tabs instead of committing it.
+        commitAllTabClosures();
+
+        Tab tab = mTabs.remove(curIndex);
+
+        if (newIndex == mTabs.size()) {
+            mTabs.add(tab);
+        } else {
+            mTabs.add(newIndex, tab);
+        }
+
+        if (curIndex == mIndex) {
+            mIndex = newIndex;
+        } else if (curIndex < mIndex && newIndex >= mIndex) {
+            --mIndex;
+        } else if (curIndex > mIndex && newIndex <= mIndex) {
+            ++mIndex;
+        }
+
+        mRewoundList.resetRewoundState();
+
+        if (mTabGroupList != null) mTabGroupList.onTabMoved();
+
+        for (TabModelObserver obs : mObservers) obs.didMoveTab(tab, newIndex, curIndex);
+    }
+
+    @Override
     public boolean closeTab(Tab tab) {
         return closeTab(tab, true, false, false);
+    }
+
+    @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
+        // This is a quick hack added for closing parent tabs from the tab strip. It is from coping
+        // the inner code from the private closeTab, startTabClosure, and removeTabAndSelectNext
+        // methods.
+        if (tabToClose == null) {
+            assert false : "Tab is null!";
+            return false;
+        }
+
+        if (!mTabs.contains(tabToClose)) {
+            assert false : "Tried to close a tab from another model!";
+            return false;
+        }
+
+        boolean canUndo = true;
+
+        canUndo &= supportsPendingClosures();
+
+        tabToClose.setClosing(true);
+
+        for (TabModelObserver obs : mObservers) obs.willCloseTab(tabToClose, animate);
+
+        @TabSelectionType
+        int selectionType = TabSelectionType.FROM_CLOSE;
+        boolean pauseMedia = canUndo;
+        boolean updateRewoundList = !canUndo;
+
+        final int closingTabIndex = tabGroupListIndexOf(tabToClose);
+
+        Tab currentTabInModel = TabModelUtils.getCurrentTab(this);
+        Tab adjacentTabInModel =
+                tabGroupListGetTabAt(closingTabIndex == 0 ? 1 : closingTabIndex - 1);
+
+        // TODO(dtrainor): Update the list of undoable tabs instead of committing it.
+        if (updateRewoundList) commitAllTabClosures();
+
+        // Cancel or mute any media currently playing.
+        if (pauseMedia) {
+            WebContents webContents = tabToClose.getWebContents();
+            if (webContents != null) {
+                webContents.suspendAllMediaPlayers();
+                webContents.setAudioMuted(true);
+            }
+        }
+
+        mTabs.remove(tabToClose);
+
+        boolean nextIsIncognito = nextTab == null ? false : nextTab.isIncognito();
+        int nextTabId = nextTab == null ? Tab.INVALID_TAB_ID : nextTab.getId();
+        int nextTabIndex = nextTab == null
+                ? INVALID_TAB_INDEX
+                : TabModelUtils.getTabIndexById(
+                          mModelDelegate.getModel(nextIsIncognito), nextTabId);
+
+        if (nextTab != currentTabInModel) {
+            if (nextIsIncognito != isIncognito()) mIndex = tabGroupListIndexOf(adjacentTabInModel);
+
+            TabModel nextModel = mModelDelegate.getModel(nextIsIncognito);
+            nextModel.setIndex(nextTabIndex, selectionType);
+        } else {
+            mIndex = nextTabIndex;
+        }
+
+        if (updateRewoundList) mRewoundList.resetRewoundState();
+
+        if (!canUndo) finalizeTabClosure(tabToClose, false);
+
+        return true;
     }
 
     private Tab findTabInAllTabModels(int tabId) {
@@ -219,8 +383,20 @@ public class TabModelImpl extends TabModelJniBridge {
         Tab currentTab = TabModelUtils.getCurrentTab(this);
         if (tabToClose == null) return currentTab;
 
-        int closingTabIndex = indexOf(tabToClose);
-        Tab adjacentTab = getTabAt((closingTabIndex == 0) ? 1 : closingTabIndex - 1);
+        Tab adjacentTab = null;
+        if (mTabGroupList != null && mTabGroupList.getAllTabIdsInSameGroup(id).size() > 1) {
+            List<Integer> tabIdsInSameGroup = mTabGroupList.getAllTabIdsInSameGroup(id);
+            int closingTabIndexInGroup = tabIdsInSameGroup.indexOf(id);
+            if (closingTabIndexInGroup >= 0 && tabIdsInSameGroup.size() > 1) {
+                int adjacentTabIndexInGroup =
+                        (closingTabIndexInGroup == 0) ? 1 : closingTabIndexInGroup - 1;
+                adjacentTab = TabModelUtils.getTabById(
+                        this, tabIdsInSameGroup.get(adjacentTabIndexInGroup));
+            }
+        } else {
+            int closingTabIndex = indexOf(tabToClose);
+            adjacentTab = getTabAt((closingTabIndex == 0) ? 1 : closingTabIndex - 1);
+        }
         Tab parentTab = findTabInAllTabModels(tabToClose.getParentId());
 
         // Determine which tab to select next according to these rules:
@@ -289,6 +465,7 @@ public class TabModelImpl extends TabModelJniBridge {
         int insertIndex = prevIndex + 1;
         if (mIndex >= insertIndex) mIndex++;
         mTabs.add(insertIndex, tab);
+        if (mTabGroupList != null) mTabGroupList.cancelTabClosure(tab);
 
         WebContents webContents = tab.getWebContents();
         if (webContents != null) webContents.setAudioMuted(false);
@@ -372,6 +549,22 @@ public class TabModelImpl extends TabModelJniBridge {
     }
 
     @Override
+    public boolean closeSomeTabs(List<Tab> tabs, boolean canUndo) {
+        for (Tab tab : tabs) {
+            if (!mTabs.contains(tab)) {
+                assert false : "Tried to close a tab from another model!";
+                return false;
+            }
+            tab.setClosing(true);
+            closeTab(tab, false, false, canUndo, false);
+        }
+        if (canUndo && supportsPendingClosures()) {
+            for (TabModelObserver obs : mObservers) obs.allTabsPendingClosure(tabs);
+        }
+        return true;
+    }
+
+    @Override
     public void closeAllTabs() {
         closeAllTabs(true, false);
     }
@@ -430,6 +623,7 @@ public class TabModelImpl extends TabModelJniBridge {
 
     @Override
     public Tab getTabAt(int index) {
+        // TODO(meiliang): use the structured list.
         // This will catch INVALID_TAB_INDEX and return null
         if (index < 0 || index >= mTabs.size()) return null;
         return mTabs.get(index);
@@ -438,6 +632,7 @@ public class TabModelImpl extends TabModelJniBridge {
     // Index of the given tab in the order of the tab stack.
     @Override
     public int indexOf(Tab tab) {
+        // TODO(meiliang): use the structured list.
         if (tab == null) return INVALID_TAB_INDEX;
         int retVal = mTabs.indexOf(tab);
         return retVal == -1 ? INVALID_TAB_INDEX : retVal;
@@ -536,10 +731,11 @@ public class TabModelImpl extends TabModelJniBridge {
                 || selectionType == TabSelectionType.FROM_EXIT;
 
         final int closingTabId = tab.getId();
-        final int closingTabIndex = indexOf(tab);
+        final int closingTabIndex = tabGroupListIndexOf(tab);
 
         Tab currentTabInModel = TabModelUtils.getCurrentTab(this);
-        Tab adjacentTabInModel = getTabAt(closingTabIndex == 0 ? 1 : closingTabIndex - 1);
+        Tab adjacentTabInModel =
+                tabGroupListGetTabAt(closingTabIndex == 0 ? 1 : closingTabIndex - 1);
         Tab nextTab = getNextTabIfClosed(closingTabId);
 
         // TODO(dtrainor): Update the list of undoable tabs instead of committing it.
@@ -555,6 +751,7 @@ public class TabModelImpl extends TabModelJniBridge {
         }
 
         mTabs.remove(tab);
+        if (mTabGroupList != null) mTabGroupList.onTabClosed(tab);
 
         boolean nextIsIncognito = nextTab == null ? false : nextTab.isIncognito();
         int nextTabId = nextTab == null ? Tab.INVALID_TAB_ID : nextTab.getId();
@@ -562,7 +759,7 @@ public class TabModelImpl extends TabModelJniBridge {
                 mModelDelegate.getModel(nextIsIncognito), nextTabId);
 
         if (nextTab != currentTabInModel) {
-            if (nextIsIncognito != isIncognito()) mIndex = indexOf(adjacentTabInModel);
+            if (nextIsIncognito != isIncognito()) mIndex = tabGroupListIndexOf(adjacentTabInModel);
 
             TabModel nextModel = mModelDelegate.getModel(nextIsIncognito);
             nextModel.setIndex(nextTabIndex, selectionType);
@@ -654,8 +851,9 @@ public class TabModelImpl extends TabModelJniBridge {
             mRewoundTabs.clear();
 
             if (TabModelImpl.this.supportsPendingClosures()) {
-                for (int i = 0; i < TabModelImpl.this.getCount(); i++) {
-                    mRewoundTabs.add(TabModelImpl.this.getTabAt(i));
+                TabList tabList = TabModelImpl.this.getDefaultTabList();
+                for (int i = 0; i < tabList.getCount(); i++) {
+                    mRewoundTabs.add(tabList.getTabAt(i));
                 }
             }
         }
@@ -671,7 +869,8 @@ public class TabModelImpl extends TabModelJniBridge {
          */
         public Tab getPendingRewindTab(int tabId) {
             if (!TabModelImpl.this.supportsPendingClosures()) return null;
-            if (TabModelUtils.getTabById(TabModelImpl.this, tabId) != null) return null;
+            if (TabModelUtils.getTabById(TabModelImpl.this.getDefaultTabList(), tabId) != null)
+                return null;
             return TabModelUtils.getTabById(this, tabId);
         }
 
@@ -683,7 +882,9 @@ public class TabModelImpl extends TabModelJniBridge {
             if (!hasPendingClosures()) return null;
 
             for (int i = 0; i < mRewoundTabs.size(); i++) {
-                Tab tab = i < TabModelImpl.this.getCount() ? TabModelImpl.this.getTabAt(i) : null;
+                Tab tab = i < TabModelImpl.this.getDefaultTabList().getCount()
+                        ? TabModelImpl.this.getDefaultTabList().getTabAt(i)
+                        : null;
                 Tab rewoundTab = mRewoundTabs.get(i);
 
                 if (tab == null || rewoundTab.getId() != tab.getId()) return rewoundTab;
@@ -712,7 +913,7 @@ public class TabModelImpl extends TabModelJniBridge {
 
         public boolean hasPendingClosures() {
             return TabModelImpl.this.supportsPendingClosures()
-                    && mRewoundTabs.size() > TabModelImpl.this.getCount();
+                    && mRewoundTabs.size() > TabModelImpl.this.getDefaultTabList().getCount();
         }
     }
 
@@ -735,6 +936,7 @@ public class TabModelImpl extends TabModelJniBridge {
 
     @Override
     public int getCount() {
+        // TODO(meiliang): use structured list.
         return mTabs.size();
     }
 
@@ -762,5 +964,36 @@ public class TabModelImpl extends TabModelJniBridge {
         mRecentlyClosedBridge.openRecentlyClosedTab();
         // If there is only one tab, select it.
         if (getCount() == 1) setIndex(0, TabSelectionType.FROM_NEW);
+    }
+
+    @Override
+    public int getTabGroupCount() {
+        if (mTabGroupList == null) return 0;
+        return mTabGroupList.getCount();
+    }
+
+    @Override
+    public TabGroupList getTabGroupList(TabContentManager tabContentManager) {
+        if (!ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUPS_AND_TAB_STRIP)) return null;
+
+        if (mTabGroupList == null) {
+            mTabGroupList = new TabGroupList(this, tabContentManager);
+        }
+        return mTabGroupList;
+    }
+
+    private int tabGroupListIndexOf(Tab tab) {
+        if (tab == null) return INVALID_TAB_INDEX;
+        return mTabGroupList != null ? mTabGroupList.indexOf(tab) : indexOf(tab);
+    }
+
+    private Tab tabGroupListGetTabAt(int index) {
+        return mTabGroupList != null ? mTabGroupList.getTabAt(index) : getTabAt(index);
+    }
+
+    @Override
+    public void setTabGroupList(TabGroupList tabGroupList) {
+        assert mTabGroupList == null;
+        mTabGroupList = tabGroupList;
     }
 }

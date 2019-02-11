@@ -1155,6 +1155,10 @@ const char kHorizontalTabSwitcherAndroidDescription[] =
     "Changes the layout of the Android tab switcher so tabs scroll "
     "horizontally instead of vertically.";
 
+const char kTabGroupsAndTabStripName[] = "Enable tab groups and tab strip";
+const char kTabGroupsAndTabStripDescription[] =
+    "Enable tab groups and tab strip for task management and comparison";
+
 const char kTabSwitcherOnReturnName[] = "Enable tab switcher on return";
 const char kTabSwitcherOnReturnDescription[] =
     "Enable tab switcher on return after specified time has elapsed";
@@ -2277,6 +2281,10 @@ const char kClearOldBrowsingDataName[] = "Clear older browsing data";
 const char kClearOldBrowsingDataDescription[] =
     "Enables clearing of browsing data which is older than a given time "
     "period.";
+
+const char kCollectionForShoppingName[] = "Collection for shopping";
+const char kCollectionForShoppingDescription[] =
+    "Make comparison shopping easier.";
 
 const char kContentSuggestionsCategoryOrderName[] =
     "Default content suggestions category order (e.g. on NTP)";

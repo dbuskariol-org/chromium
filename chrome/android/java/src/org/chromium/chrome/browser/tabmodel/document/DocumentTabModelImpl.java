@@ -6,6 +6,7 @@ package org.chromium.chrome.browser.tabmodel.document;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import org.chromium.base.ApplicationStatus;
@@ -256,6 +257,11 @@ public class DocumentTabModelImpl extends TabModelJniBridge implements DocumentT
     }
 
     @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
+        return false;
+    }
+
+    @Override
     public boolean closeTab(Tab tabToClose, boolean animate, boolean uponExit, boolean canUndo) {
         return false;
     }
@@ -347,6 +353,12 @@ public class DocumentTabModelImpl extends TabModelJniBridge implements DocumentT
 
     @Override
     public void removeObserver(TabModelObserver observer) {}
+
+    @Override
+    @NonNull
+    public TabList getDefaultTabList() {
+        return this;
+    }
 
     @Override
     public void openMostRecentlyClosedTab() {}

@@ -8,9 +8,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.Pair;
 
-import org.chromium.base.Log;
 import org.chromium.base.StreamUtil;
 import org.chromium.base.VisibleForTesting;
 import org.chromium.chrome.browser.ChromeVersionInfo;
@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -113,7 +115,7 @@ public class TabState {
         /**
          * Deletes navigation entries from this buffer matching predicate.
          * @param predicate Handle for a deletion predicate interpreted by native code.
-                            Only valid during this call frame.
+        Only valid during this call frame.
          * @return WebContentsState A new state or null if nothing changed.
          */
         @Nullable
@@ -137,6 +139,7 @@ public class TabState {
     /** Navigation history of the WebContents. */
     public WebContentsState contentsState;
     public int parentId = Tab.INVALID_TAB_ID;
+    public int rootId;
 
     public long timestampMillis = TIMESTAMP_NOT_SET;
     public String openerAppId;
@@ -152,6 +155,9 @@ public class TabState {
 
     /** Whether the theme color was set for this tab. */
     protected boolean mHasThemeColor;
+
+    /** Serialized state for TabExtensions. */
+    public Map<String, ByteBuffer> tabExtensionState = new HashMap<String, ByteBuffer>();
 
     /** @return Whether a Stable channel build of Chrome is being used. */
     private static boolean isStableChannelBuild() {
@@ -265,9 +271,8 @@ public class TabState {
                 // Skip ahead to avoid re-reading data that mmap'd.
                 long skipped = input.skip(size);
                 if (skipped != size) {
-                    Log.e(TAG,
-                            "Only skipped " + skipped + " bytes when " + size + " should've "
-                                    + "been skipped. Tab restore may fail.");
+                    Log.e(TAG, "Only skipped " + skipped + " bytes when " + size + " should've "
+                            + "been skipped. Tab restore may fail.");
                 }
             }
             tabState.parentId = stream.readInt();
@@ -287,9 +292,8 @@ public class TabState {
 
                 // Could happen if reading a version of a TabState that does not include the
                 // version id.
-                Log.w(TAG,
-                        "Failed to read saved state version id from tab state. Assuming "
-                                + "version " + tabState.contentsState.version());
+                Log.w(TAG, "Failed to read saved state version id from tab state. Assuming "
+                        + "version " + tabState.contentsState.version());
             }
             try {
                 // Skip obsolete sync ID.
@@ -301,9 +305,8 @@ public class TabState {
             } catch (EOFException eof) {
                 // Could happen if reading a version of TabState without this flag set.
                 tabState.shouldPreserve = false;
-                Log.w(TAG,
-                        "Failed to read shouldPreserve flag from tab state. "
-                                + "Assuming shouldPreserve is false");
+                Log.w(TAG, "Failed to read shouldPreserve flag from tab state. "
+                        + "Assuming shouldPreserve is false");
             }
             tabState.mIsIncognito = encrypted;
             try {
@@ -313,9 +316,8 @@ public class TabState {
                 // Could happen if reading a version of TabState without a theme color.
                 tabState.themeColor = Color.WHITE;
                 tabState.mHasThemeColor = false;
-                Log.w(TAG,
-                        "Failed to read theme color from tab state. "
-                                + "Assuming theme color is white");
+                Log.w(TAG, "Failed to read theme color from tab state. "
+                        + "Assuming theme color is white");
             }
             try {
                 tabState.tabLaunchTypeAtCreation = stream.readInt();
@@ -325,6 +327,42 @@ public class TabState {
                 Log.w(TAG,
                         "Failed to read tab launch type at creation from tab state. "
                                 + "Assuming tab launch type is null");
+            }
+            try {
+                tabState.rootId = stream.readInt();
+            } catch (EOFException eof) {
+                tabState.rootId = Tab.INVALID_TAB_ID;
+                Log.w(TAG,
+                        "Failed to read tab root id from tab state. "
+                                + "Assuming root id is Tab.INVALID_TAB_ID");
+            }
+
+            int tabExtensionStateCount = 0;
+            try {
+                tabExtensionStateCount = stream.readInt();
+            } catch (EOFException eof) {
+                Log.w(TAG,
+                        "Failed to read tab extension state count from stream. "
+                                + "Assuming 0");
+            }
+            for (int i = 0; i < tabExtensionStateCount; ++i) {
+                try {
+                    String key = stream.readUTF();
+
+                    int value_size = stream.readInt();
+                    if (value_size < 0) {
+                        Log.w(TAG, "Invalid value size " + value_size + ". Exiting loop.");
+                        break;
+                    }
+                    ByteBuffer value = ByteBuffer.allocate(value_size);
+                    if (value_size > 0) {
+                        stream.readFully(value.array());
+                    }
+                    tabState.tabExtensionState.put(key, value);
+                } catch (EOFException eof) {
+                    Log.w(TAG, "Failed to read extension state. Exiting loop.");
+                    break;
+                }
             }
             return tabState;
         } finally {
@@ -392,6 +430,20 @@ public class TabState {
             dataOutputStream.writeInt(state.themeColor);
             dataOutputStream.writeInt(
                     state.tabLaunchTypeAtCreation != null ? state.tabLaunchTypeAtCreation : -1);
+            dataOutputStream.writeInt(state.rootId);
+
+            dataOutputStream.writeInt(state.tabExtensionState.size());
+            for (Map.Entry<String, ByteBuffer> entry : state.tabExtensionState.entrySet()) {
+                dataOutputStream.writeUTF(entry.getKey());
+                ByteBuffer value = entry.getValue();
+                byte[] bytes = value.array();
+                int offset = value.position() + value.arrayOffset();
+                int length = value.remaining();
+                dataOutputStream.writeInt(length);
+                if (length > 0) {
+                    dataOutputStream.write(bytes, offset, length);
+                }
+            }
         } catch (FileNotFoundException e) {
             Log.w(TAG, "FileNotFoundException while attempting to save TabState.");
         } catch (IOException e) {
@@ -523,7 +575,8 @@ public class TabState {
                         name.substring(SAVED_TAB_STATE_FILE_PREFIX_INCOGNITO.length()));
                 return Pair.create(id, true);
             } else if (name.startsWith(SAVED_TAB_STATE_FILE_PREFIX)) {
-                int id = Integer.parseInt(name.substring(SAVED_TAB_STATE_FILE_PREFIX.length()));
+                int id = Integer.parseInt(
+                        name.substring(SAVED_TAB_STATE_FILE_PREFIX.length()));
                 return Pair.create(id, false);
             }
         } catch (NumberFormatException ex) {

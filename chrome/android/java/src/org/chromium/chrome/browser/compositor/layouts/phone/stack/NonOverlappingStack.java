@@ -86,7 +86,7 @@ public class NonOverlappingStack extends Stack {
      * How much the stack should adjust the x position of each LayoutTab in portrait mode (as a
      * fraction of the amount space that would be above and below the tab if it were centered).
      */
-    private static final float STACK_LANDSCAPE_Y_OFFSET_PROPORTION = 0.f;
+    private static final float STACK_LANDSCAPE_Y_OFFSET_PROPORTION = -0.25f;
 
     /**
      * Multiplier for adjusting the scrolling friction from the amount provided by

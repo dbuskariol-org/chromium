@@ -5,6 +5,7 @@
 package org.chromium.chrome.browser.toolbar;
 
 import org.chromium.base.ObserverList;
+import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabLaunchType;
@@ -149,7 +150,12 @@ public class TabCountProvider {
     }
 
     private void updateTabCount() {
-        final int tabCount = mTabModelSelector.getCurrentModel().getCount();
+        TabModel currentModel = mTabModelSelector.getCurrentModel();
+        int tabCount = currentModel.getCount();
+        if (ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUPS_AND_TAB_STRIP)) {
+            tabCount = currentModel.getTabGroupCount();
+        }
+
         final boolean isIncognito = mTabModelSelector.isIncognitoSelected();
 
         if (mTabCount == tabCount && mIsIncognito == isIncognito) return;

@@ -203,8 +203,8 @@ public class TabPersistentStoreTest {
         @Override
         public boolean closeAllTabsRequest(boolean incognito) {
             TabModel model = getModel(incognito);
-            while (model.getCount() > 0) {
-                Tab tabToClose = model.getTabAt(0);
+            while (model.getDefaultTabList().getCount() > 0) {
+                Tab tabToClose = model.getDefaultTabList().getTabAt(0);
                 model.closeTab(tabToClose, false, false, true);
             }
             return true;
@@ -534,8 +534,9 @@ public class TabPersistentStoreTest {
             }
         });
         mockObserver.stateLoadedCallback.waitForCallback(0, 1);
-        Assert.assertEquals(numExpectedTabs, mockSelector.getModel(false).getCount());
-        Assert.assertEquals(0, mockSelector.getModel(true).getCount());
+        Assert.assertEquals(
+                numExpectedTabs, mockSelector.getModel(false).getDefaultTabList().getCount());
+        Assert.assertEquals(0, mockSelector.getModel(true).getDefaultTabList().getCount());
     }
 
     @Test
@@ -577,8 +578,9 @@ public class TabPersistentStoreTest {
             }
         });
         mockObserver.stateLoadedCallback.waitForCallback(0, 1);
-        Assert.assertEquals(info.numRegularTabs, mockSelector.getModel(false).getCount());
-        Assert.assertEquals(0, mockSelector.getModel(true).getCount());
+        Assert.assertEquals(
+                info.numRegularTabs, mockSelector.getModel(false).getDefaultTabList().getCount());
+        Assert.assertEquals(0, mockSelector.getModel(true).getDefaultTabList().getCount());
     }
 
     @Test
@@ -649,7 +651,7 @@ public class TabPersistentStoreTest {
         ThreadUtils.runOnUiThreadBlocking(new Runnable() {
             @Override
             public void run() {
-                Tab tabToClose = regularModel.getTabAt(2);
+                Tab tabToClose = regularModel.getDefaultTabList().getTabAt(2);
                 regularModel.closeTab(tabToClose, false, false, true);
                 regularModel.cancelTabClosure(tabToClose.getId());
             }
@@ -753,11 +755,13 @@ public class TabPersistentStoreTest {
             }
         });
         mockObserver.stateLoadedCallback.waitForCallback(0, 1);
-        Assert.assertEquals(info.numRegularTabs, selector.getModel(false).getCount());
-        Assert.assertEquals(info.numIncognitoTabs, selector.getModel(true).getCount());
+        Assert.assertEquals(
+                info.numRegularTabs, selector.getModel(false).getDefaultTabList().getCount());
+        Assert.assertEquals(
+                info.numIncognitoTabs, selector.getModel(true).getDefaultTabList().getCount());
         for (int i = 0; i < numExpectedTabs; i++) {
-            Assert.assertEquals(
-                    info.contents[i].tabId, selector.getModel(false).getTabAt(i).getId());
+            Assert.assertEquals(info.contents[i].tabId,
+                    selector.getModel(false).getDefaultTabList().getTabAt(i).getId());
         }
 
         return selector;
@@ -785,6 +789,6 @@ public class TabPersistentStoreTest {
 
         // Cancel closing each tab.
         for (Integer id : closedTabIds) regularModel.cancelTabClosure(id);
-        Assert.assertEquals(info.numRegularTabs, regularModel.getCount());
+        Assert.assertEquals(info.numRegularTabs, regularModel.getDefaultTabList().getCount());
     }
 }

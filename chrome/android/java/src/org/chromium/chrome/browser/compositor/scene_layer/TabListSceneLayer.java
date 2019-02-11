@@ -17,10 +17,13 @@ import org.chromium.chrome.browser.compositor.LayerTitleCache;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
 import org.chromium.chrome.browser.compositor.layouts.components.LayoutTab;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.util.ColorUtils;
 import org.chromium.ui.resources.ResourceManager;
+
+import java.util.List;
 
 /**
  * A SceneLayer to render a tab stack.
@@ -66,6 +69,8 @@ public class TabListSceneLayer extends SceneLayer {
                 viewport.top, viewport.width(), viewport.height(), layerTitleCache,
                 tabContentManager, resourceManager);
 
+        nativePutTabInfoLayer(mNativePtr);
+
         boolean isHTSEnabled =
                 ChromeFeatureList.isEnabled(ChromeFeatureList.HORIZONTAL_TAB_SWITCHER_ANDROID);
 
@@ -91,6 +96,24 @@ public class TabListSceneLayer extends SceneLayer {
 
             int borderColorResource =
                     t.isIncognito() ? R.color.tab_back_incognito : R.color.tab_back;
+
+            int selectedTabBorderColor =
+                    ApiCompatibilityUtils.getColor(res, R.color.modern_blue_600);
+
+            int[] tabIds = new int[0];
+
+            List<Integer> ids = null;
+            if (mTabModelSelector != null) {
+                TabGroupList tabGroupList =
+                        mTabModelSelector.getCurrentModel().getTabGroupList(tabContentManager);
+                if (tabGroupList != null) {
+                    ids = tabGroupList.getAllTabIdsInSameGroup(t.getId());
+                }
+            }
+            if (ids != null && ids.size() > 1) {
+                tabIds = getVisibleTabIds(ids, t.getId());
+            }
+
             // TODO(dtrainor, clholgat): remove "* dpToPx" once the native part fully supports dp.
             nativePutTabLayer(mNativePtr, t.getId(), R.id.control_container,
                     R.drawable.btn_delete_24dp, R.drawable.tabswitcher_border_frame_shadow,
@@ -115,7 +138,8 @@ public class TabListSceneLayer extends SceneLayer {
                     t.getToolbarBackgroundColor(), closeButtonColor, t.anonymizeToolbar(),
                     t.isTitleNeeded(), urlBarBackgroundId, t.getTextBoxBackgroundColor(),
                     textBoxAlpha, t.getToolbarAlpha(), t.getToolbarYOffset() * dpToPx,
-                    t.getSideBorderScale(), t.insetBorderVertical());
+                    t.getSideBorderScale(), t.insetBorderVertical(), tabIds,
+                    selectedTabBorderColor);
         }
         nativeFinishBuildingFrame(mNativePtr);
     }
@@ -154,6 +178,24 @@ public class TabListSceneLayer extends SceneLayer {
         mNativePtr = 0;
     }
 
+    private int[] getVisibleTabIds(List<Integer> ids, int currentlySelectedTabId) {
+        int visibleTabIdsSize = Math.min(ids.size(), 4);
+        int[] visibleTabIds = new int[visibleTabIdsSize];
+        int currentSelectedTabIndex = ids.indexOf(currentlySelectedTabId);
+        int startIndex;
+        if (ids.size() - currentSelectedTabIndex >= visibleTabIdsSize) {
+            startIndex = currentSelectedTabIndex;
+        } else {
+            startIndex = ids.size() - visibleTabIdsSize;
+        }
+        int endIndex = startIndex + visibleTabIdsSize;
+        List<Integer> visibleIds = ids.subList(startIndex, endIndex);
+        for (int i = 0; i < visibleTabIdsSize; i++) {
+            visibleTabIds[i] = visibleIds.get(i);
+        }
+        return visibleTabIds;
+    }
+
     private native long nativeInit();
 
     private native void nativeBeginBuildingFrame(long nativeTabListSceneLayer);
@@ -179,5 +221,8 @@ public class TabListSceneLayer extends SceneLayer {
             int defaultThemeColor, int toolbarBackgroundColor, int closeButtonColor,
             boolean anonymizeToolbar, boolean showTabTitle, int toolbarTextBoxResource,
             int toolbarTextBoxBackgroundColor, float toolbarTextBoxAlpha, float toolbarAlpha,
-            float toolbarYOffset, float sideBorderScale, boolean insetVerticalBorder);
+            float toolbarYOffset, float sideBorderScale, boolean insetVerticalBorder, int[] ids,
+            int selectedTabBorderColor);
+
+    private native void nativePutTabInfoLayer(long nativeTabListSceneLayer);
 }

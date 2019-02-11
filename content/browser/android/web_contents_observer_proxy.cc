@@ -176,6 +176,16 @@ void WebContentsObserverProxy::DidFinishNavigation(
 
   // Remove after fixing https://crbug/905461.
   TRACE_EVENT0("browser", "Java_WebContentsObserverProxy_didFinishNavigation");
+
+  if (!navigation_handle->GetSearchableFormURL().is_empty()) {
+    ScopedJavaLocalRef<jstring> jstring_searchable_form_url(
+        ConvertUTF8ToJavaString(
+            env, navigation_handle->GetSearchableFormURL().spec()));
+
+    Java_WebContentsObserverProxy_hasPerformedSearch(
+        env, java_observer_, jstring_searchable_form_url);
+  }
+
   Java_WebContentsObserverProxy_didFinishNavigation(
       env, java_observer_, jstring_url, navigation_handle->IsInMainFrame(),
       navigation_handle->IsErrorPage(), navigation_handle->HasCommitted(),

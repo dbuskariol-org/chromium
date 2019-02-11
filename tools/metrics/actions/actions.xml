@@ -2444,6 +2444,11 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="Autotabs.Scrolled">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Please enter the description of the metric.</description>
+</action>
+
 <action name="Back">
   <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
   <description>Please enter the description of this user action.</description>
@@ -9985,6 +9990,11 @@ should be able to be added at any place in this file.
   <description>
     Recorded when the user activates an existing task from the shelf.
   </description>
+</action>
+
+<action name="LinkOpenedInNewTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related remove later</description>
 </action>
 
 <action name="LoadURL">
@@ -20037,6 +20047,71 @@ should be able to be added at any place in this file.
   <description>Please enter the description of this user action.</description>
 </action>
 
+<action name="TabGroup.Created.HighlightAndAdd">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroup.Created.OpenInNewTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroup.Created.TabSwitcher">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroup.ExpandedFromStrip">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroup.ExpandedFromTabSwitcher">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroup.SwitchToCurrentTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroupHighlight.ClickToSwitchMode">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Please enter the description of the metric.</description>
+</action>
+
+<action name="TabGroupHighlight.ExitHighlightMode">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroupHighlight.HighlightSelected">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroupHighlight.PromptDismissed">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroupSwitcher.CloseTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroupSwitcher.NewTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabGroupSwitcher.SwitchTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
 <action name="Tablet_BackButton">
   <owner>sammiequon@chromium.org</owner>
   <description>
@@ -20133,6 +20208,21 @@ should be able to be added at any place in this file.
 <action name="TabOverview_PressedCreateNewBrowserButton">
   <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
   <description>Please enter the description of this user action.</description>
+</action>
+
+<action name="TabStrip.CloseTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabStrip.NewTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
+</action>
+
+<action name="TabStrip.SwitchTab">
+  <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
+  <description>Tab group related, remove later.</description>
 </action>
 
 <action name="TaskManagement.OpenInChromeActionButtonClicked">

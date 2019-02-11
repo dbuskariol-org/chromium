@@ -56,9 +56,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This class handles saving and loading tab state from the persistent storage.
+ * This class handles saving and loading tab state from the persistent storage. It restores to and
+ * saves from a {@link TabModel} using {@code TabModel#getDefaultTabList()}, which is a
+ * {@link TabList} of all opened tabs in their original insertion order.
  */
 public class TabPersistentStore extends TabPersister {
+    // TODO(meiliang): Revisit after TabModelImpl changes, because saving and restoring depend on
+    // lots of the TabModelUtils methods, which depends on TabModel/TabList.
     private static final String TAG = "tabmodel";
 
     /**
@@ -363,8 +367,8 @@ public class TabPersistentStore extends TabPersister {
 
         try {
             long timeLoadingState = SystemClock.uptimeMillis();
-            assert mTabModelSelector.getModel(true).getCount() == 0;
-            assert mTabModelSelector.getModel(false).getCount() == 0;
+            assert mTabModelSelector.getModel(true).getDefaultTabList().getCount() == 0;
+            assert mTabModelSelector.getModel(false).getDefaultTabList().getCount() == 0;
             checkAndUpdateMaxTabId();
             DataInputStream stream;
             if (mPrefetchTabListTask != null) {
@@ -604,7 +608,7 @@ public class TabPersistentStore extends TabPersister {
             // Put any tabs being merged into this list at the end.
             // TODO(ltian): need to figure out a way to add merged tabs before Browser Actions tabs
             // when tab restore and Browser Actions tab merging happen at the same time.
-            restoredIndex = mTabModelSelector.getModel(isIncognito).getCount();
+            restoredIndex = mTabModelSelector.getModel(isIncognito).getDefaultTabList().getCount();
         } else if (restoredTabs.size() > 0
                 && tabToRestore.originalIndex > restoredTabs.keyAt(restoredTabs.size() - 1)) {
             // If the tab's index is too large, restore it at the end of the list.
@@ -613,8 +617,11 @@ public class TabPersistentStore extends TabPersister {
              // Otherwise try to find the tab we should restore before, if any.
             for (int i = 0; i < restoredTabs.size(); i++) {
                 if (restoredTabs.keyAt(i) > tabToRestore.originalIndex) {
-                    Tab nextTabByIndex = TabModelUtils.getTabById(model, restoredTabs.valueAt(i));
-                    restoredIndex = nextTabByIndex != null ? model.indexOf(nextTabByIndex) : -1;
+                    Tab nextTabByIndex = TabModelUtils.getTabById(
+                            model.getDefaultTabList(), restoredTabs.valueAt(i));
+                    restoredIndex = nextTabByIndex != null
+                            ? model.getDefaultTabList().indexOf(nextTabByIndex)
+                            : -1;
                     break;
                 }
             }
@@ -647,9 +654,11 @@ public class TabPersistentStore extends TabPersister {
         // was selected in the other model before the merge should be selected after the merge.
         if (setAsActive || (tabToRestore.fromMerge && restoredIndex == 0)) {
             boolean wasIncognitoTabModelSelected = mTabModelSelector.isIncognitoSelected();
-            int selectedModelTabCount = mTabModelSelector.getCurrentModel().getCount();
+            int selectedModelTabCount =
+                    mTabModelSelector.getCurrentModel().getDefaultTabList().getCount();
 
-            TabModelUtils.setIndex(model, TabModelUtils.getTabIndexById(model, tabId));
+            TabModelUtils.setIndex(
+                    model, TabModelUtils.getTabIndexById(model.getDefaultTabList(), tabId));
             boolean isIncognitoTabModelSelected = mTabModelSelector.isIncognitoSelected();
 
             // Setting the index will cause the tab's model to be selected. Set it back to the model
@@ -828,24 +837,26 @@ public class TabPersistentStore extends TabPersister {
         ThreadUtils.assertOnUiThread();
 
         TabModel incognitoModel = selector.getModel(true);
-        TabModelMetadata incognitoInfo = new TabModelMetadata(incognitoModel.index());
-        for (int i = 0; i < incognitoModel.getCount(); i++) {
-            incognitoInfo.ids.add(incognitoModel.getTabAt(i).getId());
-            incognitoInfo.urls.add(incognitoModel.getTabAt(i).getUrl());
+        TabList incognitoTabList = incognitoModel.getDefaultTabList();
+        TabModelMetadata incognitoInfo = new TabModelMetadata(incognitoTabList.index());
+        for (int i = 0; i < incognitoTabList.getCount(); i++) {
+            incognitoInfo.ids.add(incognitoTabList.getTabAt(i).getId());
+            incognitoInfo.urls.add(incognitoTabList.getTabAt(i).getUrl());
         }
 
         TabModel normalModel = selector.getModel(false);
-        TabModelMetadata normalInfo = new TabModelMetadata(normalModel.index());
-        for (int i = 0; i < normalModel.getCount(); i++) {
-            normalInfo.ids.add(normalModel.getTabAt(i).getId());
-            normalInfo.urls.add(normalModel.getTabAt(i).getUrl());
+        TabList normalTabList = normalModel.getDefaultTabList();
+        TabModelMetadata normalInfo = new TabModelMetadata(normalTabList.index());
+        for (int i = 0; i < normalTabList.getCount(); i++) {
+            normalInfo.ids.add(normalTabList.getTabAt(i).getId());
+            normalInfo.urls.add(normalTabList.getTabAt(i).getUrl());
         }
 
         // Cache the active tab id to be pre-loaded next launch.
         int activeTabId = Tab.INVALID_TAB_ID;
-        int activeIndex = normalModel.index();
+        int activeIndex = normalTabList.index();
         if (activeIndex != TabList.INVALID_TAB_INDEX) {
-            activeTabId = normalModel.getTabAt(activeIndex).getId();
+            activeTabId = normalTabList.getTabAt(activeIndex).getId();
         }
         // Always override the existing value in case there is no active tab.
         ContextUtils.getAppSharedPreferences().edit().putInt(
@@ -1264,8 +1275,10 @@ public class TabPersistentStore extends TabPersister {
             cleanUpPersistentData();
             onStateLoaded();
             mLoadTabTask = null;
-            Log.d(TAG, "Loaded tab lists; counts: " + mTabModelSelector.getModel(false).getCount()
-                    + "," + mTabModelSelector.getModel(true).getCount());
+            Log.d(TAG,
+                    "Loaded tab lists; counts: "
+                            + mTabModelSelector.getModel(false).getDefaultTabList().getCount() + ","
+                            + mTabModelSelector.getModel(true).getDefaultTabList().getCount());
         } else {
             TabRestoreDetails tabToRestore = mTabsToRestore.removeFirst();
             mLoadTabTask = new LoadTabTask(tabToRestore);

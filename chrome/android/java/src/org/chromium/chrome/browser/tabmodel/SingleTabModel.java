@@ -5,6 +5,7 @@
 package org.chromium.chrome.browser.tabmodel;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 
 import org.chromium.base.ActivityState;
 import org.chromium.base.ApiCompatibilityUtils;
@@ -86,6 +87,11 @@ public class SingleTabModel implements TabModel {
     @Override
     public boolean closeTab(Tab tab) {
         return closeTab(tab, false, false, false);
+    }
+
+    @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
+        return closeTab(tabToClose, false, false, false);
     }
 
     @Override
@@ -193,6 +199,12 @@ public class SingleTabModel implements TabModel {
     @Override
     public void removeObserver(TabModelObserver observer) {
         mObservers.removeObserver(observer);
+    }
+
+    @Override
+    @NonNull
+    public TabList getDefaultTabList() {
+        return this;
     }
 
     private static native void nativePermanentlyBlockAllNewWindows(Tab nativeTabAndroid);

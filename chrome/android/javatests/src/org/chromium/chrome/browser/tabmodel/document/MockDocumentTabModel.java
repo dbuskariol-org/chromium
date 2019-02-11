@@ -4,6 +4,8 @@
 
 package org.chromium.chrome.browser.tabmodel.document;
 
+import android.support.annotation.NonNull;
+
 import org.junit.Assert;
 
 import org.chromium.chrome.browser.profiles.Profile;
@@ -31,6 +33,12 @@ public class MockDocumentTabModel implements DocumentTabModel {
 
     @Override
     public boolean closeTab(Tab tab) {
+        Assert.fail();
+        return false;
+    }
+
+    @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
         Assert.fail();
         return false;
     }
@@ -117,6 +125,13 @@ public class MockDocumentTabModel implements DocumentTabModel {
     @Override
     public void removeObserver(TabModelObserver observer) {
         Assert.fail();
+    }
+
+    @Override
+    @NonNull
+    public TabList getDefaultTabList() {
+        Assert.fail();
+        return this;
     }
 
     @Override

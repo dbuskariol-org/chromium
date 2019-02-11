@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.Callback;
@@ -177,6 +178,7 @@ public class ToolbarManager
     private final ToolbarControlContainer mControlContainer;
 
     private BottomToolbarCoordinator mBottomToolbarCoordinator;
+    private TabStripBottomToolbarCoordinator mTabStripBottomToolbarCoordinator;
     private TabModelSelector mTabModelSelector;
     private TabModelSelectorObserver mTabModelSelectorObserver;
     private TabModelObserver mTabModelObserver;
@@ -365,6 +367,10 @@ public class ToolbarManager
             @Override
             public void onTabModelSelected(TabModel newModel, TabModel oldModel) {
                 refreshSelectedTab();
+                if (mTabStripBottomToolbarCoordinator != null) {
+                    mTabStripBottomToolbarCoordinator.setIncognito(newModel.isIncognito());
+                    mTabStripBottomToolbarCoordinator.updateBottomBarButtons(newModel);
+                }
             }
 
             @Override
@@ -405,6 +411,11 @@ public class ToolbarManager
             @Override
             public void tabRemoved(Tab tab) {
                 refreshSelectedTab();
+            }
+
+            @Override
+            public void didMoveTab(Tab tab, int newIndex, int curIndex) {
+                updateButtonStatus();
             }
         };
 
@@ -781,6 +792,14 @@ public class ToolbarManager
         if (mAppMenuButtonHelper != null) mAppMenuButtonHelper.setMenuShowsFromBottom(true);
     }
 
+    public void enableTabStripBottomToolbar() {
+        if (!FeatureUtilities.isBottomToolbarEnabled()) {
+            mTabStripBottomToolbarCoordinator =
+                    new TabStripBottomToolbarCoordinator(mActivity.getFullscreenManager(),
+                            (ViewGroup) mActivity.findViewById(R.id.coordinator));
+        }
+    }
+
     /** Record that homepage button was used for IPH reasons */
     private void recordToolbarUseForIPH(String toolbarIPHEvent) {
         if (mTabModelSelector != null && mTabModelSelector.getCurrentTab() != null) {
@@ -982,6 +1001,11 @@ public class ToolbarManager
                         mLocationBar.getContainerView(), R.id.bottom_toolbar);
             }
 
+            if (mTabStripBottomToolbarCoordinator != null) {
+                mTabStripBottomToolbarCoordinator.initializeWithNative(
+                        mActivity, mTabModelSelector, mOverviewModeBehavior);
+            }
+
             onNativeLibraryReady();
             mInitializedWithNative = true;
         });
@@ -993,9 +1017,6 @@ public class ToolbarManager
      */
     public void showAppMenuUpdateBadge() {
         mToolbar.showAppMenuUpdateBadge();
-        if (mBottomToolbarCoordinator != null) {
-            mBottomToolbarCoordinator.showAppMenuUpdateBadge();
-        }
     }
 
     /**
@@ -1004,9 +1025,6 @@ public class ToolbarManager
      */
     public void removeAppMenuUpdateBadge(boolean animate) {
         mToolbar.removeAppMenuUpdateBadge(animate);
-        if (mBottomToolbarCoordinator != null) {
-            mBottomToolbarCoordinator.removeAppMenuUpdateBadge();
-        }
     }
 
     /**
@@ -1014,10 +1032,6 @@ public class ToolbarManager
      * TODO(amaralp): Only the top or bottom menu should be visible.
      */
     public boolean isShowingAppMenuUpdateBadge() {
-        if (mBottomToolbarCoordinator != null
-                && mBottomToolbarCoordinator.isShowingAppMenuUpdateBadge()) {
-            return true;
-        }
         return mToolbar.isShowingAppMenuUpdateBadge();
     }
 
@@ -1095,9 +1109,6 @@ public class ToolbarManager
      * @return The view containing the pop up menu button.
      */
     public @Nullable View getMenuButton() {
-        if (mBottomToolbarCoordinator != null) {
-            return mBottomToolbarCoordinator.getMenuButtonWrapper().getImageButton();
-        }
         return mToolbar.getMenuButton();
     }
 
@@ -1169,6 +1180,11 @@ public class ToolbarManager
         if (mBottomToolbarCoordinator != null) {
             mBottomToolbarCoordinator.destroy();
             mBottomToolbarCoordinator = null;
+        }
+
+        if (mTabStripBottomToolbarCoordinator != null) {
+            mTabStripBottomToolbarCoordinator.destroy();
+            mTabStripBottomToolbarCoordinator = null;
         }
 
         if (mOmniboxStartupMetrics != null) {
@@ -1272,6 +1288,10 @@ public class ToolbarManager
     private void handleTabRestoreCompleted() {
         if (!mTabRestoreCompleted || !mNativeLibraryReady) return;
         mToolbar.onStateRestored();
+        if (mTabRestoreCompleted && mTabStripBottomToolbarCoordinator != null) {
+            mTabStripBottomToolbarCoordinator.updateBottomBarButtons(
+                    mTabModelSelector.getCurrentModel());
+        }
     }
 
     /**
@@ -1397,9 +1417,9 @@ public class ToolbarManager
         Tab currentTab = mLocationBarModel.getTab();
         if (currentTab == null) return;
         String homePageUrl = HomepageManager.getHomepageUri();
-        boolean isNewTabPageButtonEnabled = FeatureUtilities.isNewTabPageButtonEnabled();
+        boolean isNewTabPageButtonEnabled = true;
         if (TextUtils.isEmpty(homePageUrl) || isNewTabPageButtonEnabled) {
-            homePageUrl = UrlConstants.NTP_URL;
+            homePageUrl = UrlConstants.SUMMARY_URL;
         }
         if (isNewTabPageButtonEnabled) {
             recordToolbarUseForIPH(EventConstants.CLEAR_TAB_BUTTON_CLICKED);
@@ -1407,6 +1427,7 @@ public class ToolbarManager
             recordToolbarUseForIPH(EventConstants.HOMEPAGE_BUTTON_CLICKED);
         }
         currentTab.loadUrl(new LoadUrlParams(homePageUrl, PageTransition.HOME_PAGE));
+        setUrlBarFocus(false);
     }
 
     /**
@@ -1624,6 +1645,11 @@ public class ToolbarManager
         updateBookmarkButtonStatus();
         if (mToolbar.getMenuButtonWrapper() != null) {
             mToolbar.getMenuButtonWrapper().setVisibility(View.VISIBLE);
+        }
+
+        if (mTabRestoreCompleted && mTabStripBottomToolbarCoordinator != null) {
+            mTabStripBottomToolbarCoordinator.updateBottomBarButtons(
+                    mTabModelSelector.getCurrentModel());
         }
     }
 

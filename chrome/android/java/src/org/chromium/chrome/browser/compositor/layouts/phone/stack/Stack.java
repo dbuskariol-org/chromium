@@ -13,6 +13,7 @@ import android.support.annotation.IntDef;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
+import org.chromium.base.Log;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeFeatureList;
@@ -817,7 +818,7 @@ public abstract class Stack implements ChromeAnimation.Animatable {
             discardDrag = amountX;
             scrollDrag = amountY;
         } else {
-            discardDrag = amountY;
+            discardDrag = amountY > 0 ? amountY : 0;
             scrollDrag = LocalizationUtils.isLayoutRtl() ? -amountX : amountX;
         }
         @DragLock
@@ -1102,6 +1103,8 @@ public abstract class Stack implements ChromeAnimation.Animatable {
             return;
         }
         int clicked = getTabIndexAtPositon(x, y, LayoutTab.getTouchSlop());
+        android.util.Log.e(
+                "HORZ", "Clicked to tab with index " + clicked + " and x:y was " + x + ":" + y);
         if (clicked >= 0) {
             // Check if the click was within the boundaries of the close button defined by its
             // visible coordinates.
@@ -1123,8 +1126,10 @@ public abstract class Stack implements ChromeAnimation.Animatable {
                 RecordUserAction.record("MobileTabClosed");
             } else {
                 // Let the model know that a new {@link LayoutTab} was selected. The model will
-                // notify us if we need to do anything visual. setIndex() will possibly switch
-                // the models and broadcast the event.
+                // notify us if we need to do anything visual. setIndex() will possibly switch the
+                // models and broadcast the event.
+                Log.i("MeilUma", "TabGroup.SwitchToCurrentTab");
+                RecordUserAction.record("TabGroup.SwitchToCurrentTab");
                 mLayout.uiSelectingTab(time, mStackTabs[clicked].getId());
             }
         }
@@ -1672,6 +1677,55 @@ public abstract class Stack implements ChromeAnimation.Animatable {
         }
     }
 
+    /**
+     * Updates the {@link StackTab}s needed for display after the focused tab in the tab group
+     * changes.
+     */
+    public void updateStackTabs() {
+        // This can be called before animation is done, we should clean up all the dying tabs before
+        // update.
+        cleanupStackTabState();
+        final int count = mTabList.getCount();
+        if (count == 0) {
+            cleanupTabs();
+        } else {
+            final boolean isIncognito = mTabList.isIncognito();
+            final boolean needTitle = !mLayout.isHiding();
+            for (int i = 0; i < count; ++i) {
+                Tab tab = mTabList.getTabAt(i);
+                int tabId = tab != null ? tab.getId() : Tab.INVALID_TAB_ID;
+                if (mStackTabs[i].getId() == tabId) continue;
+                Log.e("weiyinchen", "updateStackTabs need to update mStackTabs[%d] with tab ID %d",
+                        mStackTabs[i].getId(), tabId);
+
+                float maxContentWidth = -1.f;
+                float maxContentHeight = -1.f;
+
+                if (mStackTabs[i] != null && mStackTabs[i].getLayoutTab() != null) {
+                    maxContentWidth = mStackTabs[i].getLayoutTab().getMaxContentWidth();
+                    maxContentHeight = mStackTabs[i].getLayoutTab().getMaxContentHeight();
+                }
+
+                LayoutTab layoutTab = mLayout.createLayoutTab(tabId, isIncognito,
+                        Layout.SHOW_CLOSE_BUTTON, needTitle, maxContentWidth, maxContentHeight);
+                layoutTab.setInsetBorderVertical(true);
+                layoutTab.setShowToolbar(true);
+                layoutTab.setToolbarAlpha(0.f);
+                layoutTab.setAnonymizeToolbar(!mIsStackForCurrentTabList || mTabList.index() != i);
+                layoutTab.setCloseButtonIsOnRight(isCloseButtonOnRight());
+
+                if (mStackTabs[i] == null) {
+                    mStackTabs[i] = new StackTab(layoutTab);
+                } else {
+                    mStackTabs[i].setLayoutTab(layoutTab);
+                }
+
+                mStackTabs[i].setNewIndex(i);
+                // The positioning, scaling, etc are handled in Layout.updateLayout().
+            }
+        }
+    }
+
     private StackTab findTabById(StackTab[] layoutTabs, int id) {
         if (layoutTabs == null) return null;
         final int count = layoutTabs.length;
@@ -2130,6 +2184,10 @@ public abstract class Stack implements ChromeAnimation.Animatable {
         mLayout.uiSelectingTab(time, tab != null ? tab.getId() : Tab.INVALID_TAB_ID);
     }
 
+    public boolean isInSwipe() {
+        return mInSwipe;
+    }
+
     /**
      * Fling from a swipe gesture.
      * @param time The current time of the app in ms.
@@ -2157,4 +2215,8 @@ public abstract class Stack implements ChromeAnimation.Animatable {
 
     @Override
     public void onPropertyAnimationFinished(@Property int prop) {}
+
+    public int getCenteredTabIndex(float x, float y) {
+        return getTabIndexAtPositon(x, y, LayoutTab.getTouchSlop());
+    }
 }

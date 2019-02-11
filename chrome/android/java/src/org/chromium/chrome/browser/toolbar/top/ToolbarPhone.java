@@ -63,8 +63,10 @@ import org.chromium.chrome.browser.omnibox.LocationBar;
 import org.chromium.chrome.browser.omnibox.LocationBarPhone;
 import org.chromium.chrome.browser.partnercustomizations.HomepageManager;
 import org.chromium.chrome.browser.partnercustomizations.PartnerBrowserCustomizations;
+import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
+import org.chromium.chrome.browser.toolbar.IncognitoToggleTabLayout;
 import org.chromium.chrome.browser.toolbar.KeyboardNavigationListener;
 import org.chromium.chrome.browser.toolbar.TabCountProvider;
 import org.chromium.chrome.browser.toolbar.TabCountProvider.TabCountObserver;
@@ -75,7 +77,6 @@ import org.chromium.chrome.browser.util.MathUtils;
 import org.chromium.chrome.browser.util.ViewUtils;
 import org.chromium.chrome.browser.widget.animation.CancelAwareAnimatorListener;
 import org.chromium.components.feature_engagement.EventConstants;
-import org.chromium.ui.UiUtils;
 import org.chromium.ui.base.LocalizationUtils;
 import org.chromium.ui.interpolators.BakedBezierInterpolator;
 
@@ -358,13 +359,6 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
             mToolbarButtonsContainer = (ViewGroup) findViewById(R.id.toolbar_buttons);
 
             mHomeButton = findViewById(R.id.home_button);
-            if (FeatureUtilities.isBottomToolbarEnabled()) {
-                disableMenuButton();
-                if (mHomeButton != null) {
-                    UiUtils.removeViewFromParent(mHomeButton);
-                    mHomeButton = null;
-                }
-            }
 
             mUrlBar = (TextView) findViewById(R.id.url_bar);
 
@@ -431,12 +425,7 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
 
     private void inflateTabSwitchingResources() {
         mToggleTabStackButton = findViewById(R.id.tab_switcher_button);
-        if (FeatureUtilities.isBottomToolbarEnabled()) {
-            UiUtils.removeViewFromParent(mToggleTabStackButton);
-            mToggleTabStackButton = null;
-        } else {
-            mToggleTabStackButton.setClickable(false);
-        }
+        mToggleTabStackButton.setClickable(false);
     }
 
     private void enableTabSwitchingResources() {
@@ -467,7 +456,7 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
 
         getLocationBar().onNativeLibraryReady();
 
-        if (!FeatureUtilities.isBottomToolbarEnabled()) enableTabSwitchingResources();
+        enableTabSwitchingResources();
 
         if (mHomeButton != null) {
             mHomeButton.setOnClickListener(this);
@@ -1715,7 +1704,6 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
 
     private void updateViewsForTabSwitcherMode() {
         setVisibility(mTabSwitcherState == STATIC_TAB ? View.VISIBLE : View.INVISIBLE);
-
         updateProgressBarVisibility();
         updateShadowVisibility();
         updateTabSwitcherButtonRipple();

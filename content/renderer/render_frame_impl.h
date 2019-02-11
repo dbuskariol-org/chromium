@@ -547,6 +547,9 @@ class CONTENT_EXPORT RenderFrameImpl
   void BlockRequests() override;
   void ResumeBlockedRequests() override;
   void CancelBlockedRequests() override;
+  void GetOGType(GetOGTypeCallback callback) override;
+  void GetOGTitle(GetOGTitleCallback callback) override;
+  void GetOGImageUrl(GetOGImageUrlCallback callback) override;
   void OnPortalActivated() override;
   void SetLifecycleState(blink::mojom::FrameLifecycleState state) override;
 

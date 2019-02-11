@@ -51673,6 +51673,11 @@ would be helpful to identify which type is being sent.
   <int value="3" label="Background (app in background)"/>
 </enum>
 
+<enum name="TabGroupHighlightMode">
+  <int value="0" label="TabGroupHighlight.PromptShown"/>
+  <int value="1" label="TabGroupHighlight.EnterHighlightMode"/>
+</enum>
+
 <enum name="TabLoadingState">
   <int value="0" label="Tab is not loading"/>
   <int value="1" label="Tab is loading"/>

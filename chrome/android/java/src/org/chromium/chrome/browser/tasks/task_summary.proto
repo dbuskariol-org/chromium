@@ -1,0 +1,30 @@
+// Copyright 2018 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// Protocol buffer definition for a thumbnail entry on disk, used for storing
+// thumbnail and its related data for caching.
+
+syntax = "proto2";
+
+package org.chromium.chrome.browser.tasks;
+
+option java_package = "org.chromium.chrome.browser.tasks";
+
+option optimize_for = LITE_RUNTIME;
+
+message SummaryInfo {
+  // Required
+  optional int32 summary_info_type = 1;
+  // Required
+  optional string text = 2;
+  // Required
+  optional string image_url = 3;
+  // Required
+  optional string url = 4;
+}
+
+message Summary {
+  // Required
+  repeated SummaryInfo info = 1;
+}

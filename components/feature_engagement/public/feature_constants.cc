@@ -59,6 +59,10 @@ const base::Feature kIPHPreviewsOmniboxUIFeature{
     "IPH_PreviewsOmniboxUI", base::FEATURE_DISABLED_BY_DEFAULT};
 const base::Feature kIPHTranslateMenuButtonFeature{
     "IPH_TranslateMenuButton", base::FEATURE_ENABLED_BY_DEFAULT};
+const base::Feature kIPHTabGroupByLongPressFeature{
+    "IPH_TabGroupUsingLongPress", base::FEATURE_ENABLED_BY_DEFAULT};
+const base::Feature kIPHTabStripForSwitchingFeature{
+    "IPH_TabStripForSwitching", base::FEATURE_ENABLED_BY_DEFAULT};
 #endif  // defined(OS_ANDROID)
 
 #if BUILDFLAG(ENABLE_DESKTOP_IN_PRODUCT_HELP)

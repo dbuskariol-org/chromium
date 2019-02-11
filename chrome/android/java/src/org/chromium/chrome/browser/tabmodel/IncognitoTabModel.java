@@ -4,11 +4,18 @@
 
 package org.chromium.chrome.browser.tabmodel;
 
+import android.support.annotation.NonNull;
+
 import org.chromium.base.ObserverList;
 import org.chromium.base.ThreadUtils;
+import org.chromium.chrome.browser.ChromeFeatureList;
+import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.compositor.layouts.phone.TabGroupList;
 import org.chromium.chrome.browser.incognito.IncognitoNotificationManager;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
+
+import java.util.List;
 
 /**
  * A TabModel implementation that handles off the record tabs.
@@ -36,6 +43,7 @@ public class IncognitoTabModel implements TabModel {
     private final ObserverList<TabModelObserver> mObservers = new ObserverList<TabModelObserver>();
     private TabModel mDelegateModel;
     private boolean mIsAddingTab;
+    private TabGroupList mTabGroupList;
 
     /**
      * Constructor for IncognitoTabModel.
@@ -56,6 +64,11 @@ public class IncognitoTabModel implements TabModel {
         mDelegateModel = mDelegate.createTabModel();
         for (TabModelObserver observer : mObservers) {
             mDelegateModel.addObserver(observer);
+        }
+
+        if (ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUPS_AND_TAB_STRIP)) {
+            assert mTabGroupList != null;
+            mDelegateModel.setTabGroupList(mTabGroupList);
         }
     }
 
@@ -116,8 +129,22 @@ public class IncognitoTabModel implements TabModel {
     }
 
     @Override
+    public boolean closeTab(Tab tabToClose, Tab nextTab, boolean animate) {
+        boolean retVal = mDelegateModel.closeTab(tabToClose, nextTab, animate);
+        destroyIncognitoIfNecessary();
+        return retVal;
+    }
+
+    @Override
     public boolean closeTab(Tab tab, boolean animate, boolean uponExit, boolean canUndo) {
         boolean retVal = mDelegateModel.closeTab(tab, animate, uponExit, canUndo);
+        destroyIncognitoIfNecessary();
+        return retVal;
+    }
+
+    @Override
+    public boolean closeSomeTabs(List<Tab> tabs, boolean canUndo) {
+        boolean retVal = mDelegateModel.closeSomeTabs(tabs, canUndo);
         destroyIncognitoIfNecessary();
         return retVal;
     }
@@ -235,6 +262,12 @@ public class IncognitoTabModel implements TabModel {
     }
 
     @Override
+    @NonNull
+    public TabList getDefaultTabList() {
+        return mDelegateModel.getDefaultTabList();
+    }
+
+    @Override
     public void removeTab(Tab tab) {
         mDelegateModel.removeTab(tab);
         // Call destroyIncognitoIfNecessary() in case the last incognito tab in this model is
@@ -244,5 +277,19 @@ public class IncognitoTabModel implements TabModel {
 
     @Override
     public void openMostRecentlyClosedTab() {
+    }
+
+    @Override
+    public int getTabGroupCount() {
+        return mDelegateModel.getCount();
+    }
+
+    @Override
+    public TabGroupList getTabGroupList(TabContentManager tabContentManager) {
+        if (!ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUPS_AND_TAB_STRIP)) return null;
+        if (mTabGroupList == null) {
+            mTabGroupList = new TabGroupList(this, tabContentManager);
+        }
+        return mTabGroupList;
     }
 }

@@ -4,8 +4,11 @@
 
 package org.chromium.chrome.test.util.browser.tabmodel;
 
+import android.support.annotation.NonNull;
+
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.EmptyTabModel;
+import org.chromium.chrome.browser.tabmodel.TabList;
 import org.chromium.chrome.browser.tabmodel.TabLaunchType;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabSelectionType;
@@ -58,6 +61,12 @@ public class MockTabModel extends EmptyTabModel {
                 mIndex++;
             }
         }
+    }
+
+    @NonNull
+    @Override
+    public TabList getDefaultTabList() {
+        return this;
     }
 
     @Override
