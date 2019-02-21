@@ -37,6 +37,7 @@ gclient_gn_args = [
 
 
 vars = {
+  "buildspec_platforms": "win-asan",
   # Variable that can be used to support multiple build scenarios, like having
   # Chromium specific targets in a client project's GN file or sync dependencies
   # conditionally etc.
@@ -130,7 +131,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling V8
   # and whatever else without interference from each other.
-  'v8_revision': 'refs/heads/chromium/3713',
+  'v8_revision': 'fee9be7abb565fc2f2ae7c20e7597bece4fc7144',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling swarming_client
   # and whatever else without interference from each other.
@@ -138,7 +139,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling ANGLE
   # and whatever else without interference from each other.
-  'angle_revision': 'refs/heads/chromium/3713',
+  'angle_revision': 'ffd399789203e28ea9a30e7f31c002fb5d38aa7b',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling SwiftShader
   # and whatever else without interference from each other.
@@ -146,7 +147,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling PDFium
   # and whatever else without interference from each other.
-  'pdfium_revision': 'refs/heads/chromium/3713',
+  'pdfium_revision': 'ce88174adfcfe75bf8760851943a612769f239c8',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling openmax_dl
   # and whatever else without interference from each other.
@@ -1316,7 +1317,7 @@ deps = {
     Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),
 
   'src-internal': {
-    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@refs/heads/chromium/3713',
+    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@41ea6a24cfda369e6595a4253a6524d72d6ce2e9',
     'condition': 'checkout_src_internal',
   },
 
