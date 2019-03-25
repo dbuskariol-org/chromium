@@ -38,6 +38,7 @@ gclient_gn_args = [
 
 
 vars = {
+  "buildspec_platforms": "android",
   # Variable that can be used to support multiple build scenarios, like having
   # Chromium specific targets in a client project's GN file or sync dependencies
   # conditionally etc.
@@ -133,7 +134,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling V8
   # and whatever else without interference from each other.
-  'v8_revision': 'refs/heads/chromium/3744',
+  'v8_revision': 'b346546b7795350b8c910ff06f9520e7f03224f0',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling swarming_client
   # and whatever else without interference from each other.
@@ -141,7 +142,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling ANGLE
   # and whatever else without interference from each other.
-  'angle_revision': 'refs/heads/chromium/3744',
+  'angle_revision': '2660b5031f1141534e8969a8bb93b3401fa870cd',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling SwiftShader
   # and whatever else without interference from each other.
@@ -149,7 +150,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling PDFium
   # and whatever else without interference from each other.
-  'pdfium_revision': 'refs/heads/chromium/3744',
+  'pdfium_revision': '69142e55c5e166808d77dc784a016cdf78331e31',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling openmax_dl
   # and whatever else without interference from each other.
@@ -1384,7 +1385,7 @@ deps = {
     Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),
 
   'src-internal': {
-    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@refs/heads/chromium/3744',
+    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@6ac6c7c51b94f467414cd2d5c47e5741c7e66382',
     'condition': 'checkout_src_internal',
   },
 
