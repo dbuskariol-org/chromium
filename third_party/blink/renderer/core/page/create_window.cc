@@ -223,7 +223,7 @@ static Frame* CreateNewWindow(LocalFrame& opener_frame,
   created = false;
 
   // Sandboxed frames cannot open new auxiliary browsing contexts.
-  if (opener_frame.GetDocument()->IsSandboxed(kSandboxPopups)) {
+  if (opener_frame.GetDocument()->IsSandboxed(WebSandboxFlags::kPopups)) {
     // FIXME: This message should be moved off the console once a solution to
     // https://bugs.webkit.org/show_bug.cgi?id=103274 exists.
     opener_frame.GetDocument()->AddConsoleMessage(ConsoleMessage::Create(
@@ -236,12 +236,12 @@ static Frame* CreateNewWindow(LocalFrame& opener_frame,
   }
 
   bool propagate_sandbox = opener_frame.GetDocument()->IsSandboxed(
-      kSandboxPropagatesToAuxiliaryBrowsingContexts);
+      WebSandboxFlags::kPropagatesToAuxiliaryBrowsingContexts);
   const SandboxFlags sandbox_flags =
       propagate_sandbox ? opener_frame.GetDocument()->GetSandboxFlags()
-                        : kSandboxNone;
+                        : WebSandboxFlags::kNone;
   bool not_sandboxed =
-      opener_frame.GetDocument()->GetSandboxFlags() == kSandboxNone;
+      opener_frame.GetDocument()->GetSandboxFlags() == WebSandboxFlags::kNone;
   FeaturePolicy::FeatureState opener_feature_state =
       (not_sandboxed || propagate_sandbox)
           ? opener_frame.GetDocument()->GetFeaturePolicy()->GetFeatureState()
