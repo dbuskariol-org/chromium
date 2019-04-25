@@ -302,7 +302,11 @@ public class WebViewChromiumAwInit {
         try (ScopedSysTraceEvent e = ScopedSysTraceEvent.scoped(
                      "WebViewChromiumAwInit.initPlatSupportLibrary")) {
             if (BuildInfo.isAtLeastQ()) {
-                AwDrawFnImpl.setDrawFnFunctionTable(DrawFunctor.getDrawFnFunctionTable());
+                try {
+                    AwDrawFnImpl.setDrawFnFunctionTable(DrawFunctor.getDrawFnFunctionTable());
+                } catch (Throwable exception) {
+                    // Not supported in AOSP yet.
+                }
             }
             DrawGLFunctor.setChromiumAwDrawGLFunction(AwContents.getAwDrawGLFunction());
             AwContents.setAwDrawSWFunctionTable(GraphicsUtils.getDrawSWFunctionTable());

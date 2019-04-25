@@ -13,6 +13,12 @@ import org.chromium.base.annotations.JNINamespace;
  */
 @JNINamespace("android_webview")
 public class AwDrawFnImpl implements AwFunctor {
+    private static boolean sEnabled;
+
+    public static boolean isEnabled() {
+        return sEnabled;
+    }
+
     private long mNativeAwDrawFnImpl;
     private final DrawFnAccess mAccess;
     private final int mHandle;
@@ -36,6 +42,7 @@ public class AwDrawFnImpl implements AwFunctor {
 
     public static void setDrawFnFunctionTable(long functionTablePointer) {
         nativeSetDrawFnFunctionTable(functionTablePointer);
+        sEnabled = true;
     }
 
     @Override

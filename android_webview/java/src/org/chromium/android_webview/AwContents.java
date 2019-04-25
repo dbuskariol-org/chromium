@@ -3461,7 +3461,7 @@ public class AwContents implements SmartClipProvider {
                 AwFunctor newFunctor;
                 AwDrawFnImpl.DrawFnAccess drawFnAccess =
                         mNativeDrawFunctorFactory.getDrawFnAccess();
-                if (drawFnAccess != null) {
+                if (AwDrawFnImpl.isEnabled() && drawFnAccess != null) {
                     newFunctor = new AwDrawFnImpl(drawFnAccess);
                 } else {
                     newFunctor = new AwGLFunctor(mNativeDrawFunctorFactory, mContainerView);
