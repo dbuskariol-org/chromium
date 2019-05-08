@@ -39,8 +39,10 @@ THREADS_ENABLED_BUILD_DIR = os.path.join(LLVM_BUILD_DIR, 'threads_enabled')
 COMPILER_RT_BUILD_DIR = os.path.join(LLVM_BUILD_DIR, 'compiler-rt')
 CLANG_DIR = os.path.join(LLVM_DIR, 'tools', 'clang')
 LLD_DIR = os.path.join(LLVM_DIR, 'tools', 'lld')
-# TODO(thakis): Use projects/compiler-rt on Linux too once tests pass there.
-if sys.platform in ['darwin', 'win32']:
+# compiler-rt is built as part of the regular LLVM build on Windows to get
+# the 64-bit runtime, and out-of-tree elsewhere.
+# TODO(thakis): Try to unify this.
+if sys.platform == 'win32':
   COMPILER_RT_DIR = os.path.join(LLVM_DIR, 'projects', 'compiler-rt')
 else:
   COMPILER_RT_DIR = os.path.join(LLVM_DIR, 'compiler-rt')
@@ -122,11 +124,7 @@ def Checkout(name, url, dir):
   print("Checking out %s r%s into '%s'" % (name, CLANG_REVISION, dir))
 
   command = ['svn', 'checkout', '--force', url + '@' + CLANG_REVISION, dir]
-  # The checkout command usually succeeds and produces lots of unininteresting
-  # output. Hence, pass `--quiet` on the first run and run an explicit command
-  # to print the revision we got afterwards on the first attempt.
-  if RunCommand(command + ['--quiet'], fail_hard=False):
-    RunCommand(['svnversion', dir])
+  if RunCommand(command, fail_hard=False):
     return
 
   if os.path.isdir(dir):
@@ -143,16 +141,20 @@ def CheckoutRepos(args):
 
   Checkout('LLVM', LLVM_REPO_URL + '/llvm/trunk', LLVM_DIR)
   Checkout('Clang', LLVM_REPO_URL + '/cfe/trunk', CLANG_DIR)
-  Checkout('LLD', LLVM_REPO_URL + '/lld/trunk', LLD_DIR)
-  # Remove compiler-rt at old location.
-  if (sys.platform == 'darwin' and
-      os.path.exists(os.path.join(LLVM_DIR, 'compiler-rt'))):
-    RmTree(os.path.join(LLVM_DIR, 'compiler-rt'))
+  if True:
+    Checkout('LLD', LLVM_REPO_URL + '/lld/trunk', LLD_DIR)
+  elif os.path.exists(LLD_DIR):
+    # In case someone sends a tryjob that temporary adds lld to the checkout,
+    # make sure it's not around on future builds.
+    RmTree(LLD_DIR)
   Checkout('compiler-rt', LLVM_REPO_URL + '/compiler-rt/trunk', COMPILER_RT_DIR)
   if sys.platform == 'darwin':
     # clang needs a libc++ checkout, else -stdlib=libc++ won't find includes
     # (i.e. this is needed for bootstrap builds).
     Checkout('libcxx', LLVM_REPO_URL + '/libcxx/trunk', LIBCXX_DIR)
+    # We used to check out libcxxabi on OS X; we no longer need that.
+    if os.path.exists(LIBCXXABI_DIR):
+      RmTree(LIBCXXABI_DIR)
 
 
 def DeleteChromeToolsShim():
@@ -262,7 +264,10 @@ def VerifyVersionOfBuiltClangMatchesVERSION():
   in an `if args.llvm_force_head_revision:` block inupdate. main() first)."""
   clang = os.path.join(LLVM_BUILD_DIR, 'bin', 'clang')
   if sys.platform == 'win32':
-    clang += '-cl.exe'
+    # TODO: Parse `clang-cl /?` output for built clang's version and check that
+    # to check the binary we're actually shipping? But clang-cl.exe is just
+    # a copy of clang.exe, so this does check the same thing.
+    clang += '.exe'
   version_out = subprocess.check_output([clang, '--version'])
   version_out = re.match(r'clang version ([0-9.]+)', version_out).group(1)
   if version_out != RELEASE_VERSION:
@@ -453,6 +458,11 @@ def main():
     cxxflags = ['-stdlib=libc++'] + cflags
     ldflags += ['-stdlib=libc++']
     deployment_target = '10.7'
+    # Running libc++ tests takes a long time. Since it was only needed for
+    # the install step above, don't build it as part of the main build.
+    # This makes running package.py over 10% faster (30 min instead of 34 min)
+    RmTree(LIBCXX_DIR)
+
 
   # If building at head, define a macro that plugins can use for #ifdefing
   # out code that builds at head, but not at CLANG_REVISION or vice versa.
@@ -537,16 +547,12 @@ def main():
       '-DCMAKE_INSTALL_PREFIX=' + LLVM_BUILD_DIR,
       '-DCHROMIUM_TOOLS_SRC=%s' % os.path.join(CHROMIUM_DIR, 'tools', 'clang'),
       '-DCHROMIUM_TOOLS=%s' % ';'.join(chrome_tools)]
-  if sys.platform == 'darwin':
-    cmake_args += ['-DCOMPILER_RT_ENABLE_IOS=ON',
-                   '-DSANITIZER_MIN_OSX_VERSION=10.7']
 
   EnsureDirExists(LLVM_BUILD_DIR)
   os.chdir(LLVM_BUILD_DIR)
   RmCmakeCache('.')
   RunCommand(['cmake'] + cmake_args + [LLVM_DIR],
              msvc_arch='x64', env=deployment_env)
-  # FIXME: are compiler-rt, fuzzer part of the default target?
   RunCommand(['ninja'], msvc_arch='x64')
 
   # Copy in the threaded versions of lld and other tools.
@@ -566,6 +572,44 @@ def main():
 
   VerifyVersionOfBuiltClangMatchesVERSION()
 
+  # Do an out-of-tree build of compiler-rt.
+  # On Windows, this is used to get the 32-bit ASan run-time.
+  # TODO(hans): Remove once the regular build above produces this.
+  # On Mac and Linux, this is used to get the regular 64-bit run-time.
+  # Do a clobbered build due to cmake changes.
+  if os.path.isdir(COMPILER_RT_BUILD_DIR):
+    RmTree(COMPILER_RT_BUILD_DIR)
+  os.makedirs(COMPILER_RT_BUILD_DIR)
+  os.chdir(COMPILER_RT_BUILD_DIR)
+  # TODO(thakis): Add this once compiler-rt can build with clang-cl (see
+  # above).
+  #if args.bootstrap and sys.platform == 'win32':
+    # The bootstrap compiler produces 64-bit binaries by default.
+    #cflags += ['-m32']
+    #cxxflags += ['-m32']
+  compiler_rt_args = base_cmake_args + [
+      '-DLLVM_ENABLE_THREADS=OFF',
+      '-DCMAKE_C_FLAGS=' + ' '.join(cflags),
+      '-DCMAKE_CXX_FLAGS=' + ' '.join(cxxflags)]
+  if sys.platform == 'darwin':
+    compiler_rt_args += ['-DCOMPILER_RT_ENABLE_IOS=ON']
+  if sys.platform != 'win32':
+    compiler_rt_args += ['-DLLVM_CONFIG_PATH=' +
+                         os.path.join(LLVM_BUILD_DIR, 'bin', 'llvm-config'),
+                        '-DSANITIZER_MIN_OSX_VERSION="10.7"']
+  # compiler-rt is part of the llvm checkout on Windows but a stand-alone
+  # directory elsewhere, see the TODO above COMPILER_RT_DIR.
+  RmCmakeCache('.')
+  RunCommand(['cmake'] + compiler_rt_args +
+             [LLVM_DIR if sys.platform == 'win32' else COMPILER_RT_DIR],
+             msvc_arch='x86', env=deployment_env)
+  RunCommand(['ninja', 'compiler-rt'], msvc_arch='x86')
+  if sys.platform != 'win32':
+    RunCommand(['ninja', 'fuzzer'])
+
+  # Copy select output to the main tree.
+  # TODO(hans): Make this (and the .gypi and .isolate files) version number
+  # independent.
   if sys.platform == 'win32':
     platform = 'windows'
   elif sys.platform == 'darwin':
@@ -573,57 +617,34 @@ def main():
   else:
     assert sys.platform.startswith('linux')
     platform = 'linux'
-  rt_lib_dst_dir = os.path.join(LLVM_BUILD_DIR, 'lib', 'clang',
-                                RELEASE_VERSION, 'lib', platform)
-
-  # Do an out-of-tree build of compiler-rt.
-  # On Windows, this is used to get the 32-bit ASan run-time.
-  # TODO(hans): Remove once the regular build above produces this.
-  if sys.platform != 'darwin':
-    if os.path.isdir(COMPILER_RT_BUILD_DIR):
-      RmTree(COMPILER_RT_BUILD_DIR)
-    os.makedirs(COMPILER_RT_BUILD_DIR)
-    os.chdir(COMPILER_RT_BUILD_DIR)
-    # TODO(thakis): Add this once compiler-rt can build with clang-cl (see
-    # above).
-    #if args.bootstrap and sys.platform == 'win32':
-      # The bootstrap compiler produces 64-bit binaries by default.
-      #cflags += ['-m32']
-      #cxxflags += ['-m32']
-    compiler_rt_args = base_cmake_args + [
-        '-DLLVM_ENABLE_THREADS=OFF',
-        '-DCMAKE_C_FLAGS=' + ' '.join(cflags),
-        '-DCMAKE_CXX_FLAGS=' + ' '.join(cxxflags)]
-    if sys.platform != 'win32':
-      compiler_rt_args += ['-DLLVM_CONFIG_PATH=' +
-                           os.path.join(LLVM_BUILD_DIR, 'bin', 'llvm-config'),
-                          ]
-    RmCmakeCache('.')
-    RunCommand(['cmake'] + compiler_rt_args +
-               [LLVM_DIR if sys.platform == 'win32' else COMPILER_RT_DIR],
-               msvc_arch='x86', env=deployment_env)
-    RunCommand(['ninja', 'compiler-rt'], msvc_arch='x86')
-
-    # Copy select output to the main tree.
-    # TODO(hans): Make this (and the .gypi and .isolate files) version number
-    # independent.
-    rt_lib_src_dir = os.path.join(COMPILER_RT_BUILD_DIR, 'lib', platform)
-    if sys.platform == 'win32':
-      # TODO(thakis): This too is due to compiler-rt being part of the checkout
-      # on Windows, see TODO above COMPILER_RT_DIR.
-      rt_lib_src_dir = os.path.join(COMPILER_RT_BUILD_DIR, 'lib', 'clang',
-                                    RELEASE_VERSION, 'lib', platform)
-    # Blacklists:
-    CopyDirectoryContents(os.path.join(rt_lib_src_dir, '..', '..', 'share'),
-                          os.path.join(rt_lib_dst_dir, '..', '..', 'share'))
-    # Headers:
-    if sys.platform != 'win32':
-      CopyDirectoryContents(
-          os.path.join(COMPILER_RT_BUILD_DIR, 'include/sanitizer'),
-          os.path.join(LLVM_BUILD_DIR, 'lib/clang', RELEASE_VERSION,
-                       'include/sanitizer'))
-    # Static and dynamic libraries:
-    CopyDirectoryContents(rt_lib_src_dir, rt_lib_dst_dir)
+  rt_lib_src_dir = os.path.join(COMPILER_RT_BUILD_DIR, 'lib', platform)
+  if sys.platform == 'win32':
+    # TODO(thakis): This too is due to compiler-rt being part of the checkout
+    # on Windows, see TODO above COMPILER_RT_DIR.
+    rt_lib_src_dir = os.path.join(COMPILER_RT_BUILD_DIR, 'lib', 'clang',
+                                  RELEASE_VERSION, 'lib', platform)
+  rt_lib_dst_dir = os.path.join(LLVM_BUILD_DIR, 'lib', 'clang', RELEASE_VERSION,
+                                'lib', platform)
+  # Blacklists:
+  CopyDirectoryContents(os.path.join(rt_lib_src_dir, '..', '..', 'share'),
+                        os.path.join(rt_lib_dst_dir, '..', '..', 'share'))
+  # Headers:
+  if sys.platform != 'win32':
+    CopyDirectoryContents(
+        os.path.join(COMPILER_RT_BUILD_DIR, 'include/sanitizer'),
+        os.path.join(LLVM_BUILD_DIR, 'lib/clang', RELEASE_VERSION,
+                     'include/sanitizer'))
+  # Static and dynamic libraries:
+  CopyDirectoryContents(rt_lib_src_dir, rt_lib_dst_dir)
+  if sys.platform == 'darwin':
+    for dylib in glob.glob(os.path.join(rt_lib_dst_dir, '*.dylib')):
+      # Fix LC_ID_DYLIB for the ASan dynamic libraries to be relative to
+      # @executable_path.
+      # TODO(glider): this is transitional. We'll need to fix the dylib
+      # name either in our build system, or in Clang. See also
+      # http://crbug.com/344836.
+      subprocess.call(['install_name_tool', '-id',
+                       '@executable_path/' + os.path.basename(dylib), dylib])
 
   if args.with_android:
     make_toolchain = os.path.join(
@@ -754,22 +775,7 @@ def main():
     if sys.platform == 'win32':
       CopyDiaDllTo(os.path.join(LLVM_BUILD_DIR, 'bin'))
     os.chdir(LLVM_BUILD_DIR)
-    test_targets = [ 'check-all' ]
-    if sys.platform == 'darwin':
-      # TODO(thakis): Run check-all on Darwin too, https://crbug.com/959361
-      test_targets = [ 'check-llvm', 'check-clang', 'check-lld' ]
-    RunCommand(['ninja'] + test_targets, msvc_arch='x64')
-
-  if sys.platform == 'darwin':
-    for dylib in glob.glob(os.path.join(rt_lib_dst_dir, '*.dylib')):
-      # Fix LC_ID_DYLIB for the ASan dynamic libraries to be relative to
-      # @executable_path.
-      # Has to happen after running tests.
-      # TODO(glider): this is transitional. We'll need to fix the dylib
-      # name either in our build system, or in Clang. See also
-      # http://crbug.com/344836.
-      subprocess.call(['install_name_tool', '-id',
-                       '@executable_path/' + os.path.basename(dylib), dylib])
+    RunCommand(['ninja', 'check-all'], msvc_arch='x64')
 
   WriteStampFile(PACKAGE_VERSION, STAMP_FILE)
   WriteStampFile(PACKAGE_VERSION, FORCE_HEAD_REVISION_FILE)

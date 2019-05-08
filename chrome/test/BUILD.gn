@@ -4557,10 +4557,11 @@ test("unit_tests") {
       "/DELAYLOAD:api-ms-win-core-winrt-l1-1-0.dll",
       "/DELAYLOAD:api-ms-win-core-winrt-string-l1-1-0.dll",
     ]
-
-    # TODO(https://crbug.com/958955): Fix dupes and remove this flag.
-    configs -= [ "//build/config/compiler:fatal_linker_warnings_win" ]
-    ldflags += [ "/FORCE:MultipleRes" ]
+    if (llvm_force_head_revision) {
+      # TODO(https://crbug.com/958955): Fix dupes and remove this flag.
+      ldflags += [ "/FORCE:MultipleRes" ]
+      configs -= [ "//build/config/compiler:fatal_linker_warnings_win" ]
+    }
 
     if (is_chrome_branded) {
       sources += [
@@ -5785,10 +5786,11 @@ if (!is_android && !is_fuchsia) {
       configs -= [ "//build/config/win:default_incremental_linking" ]
       configs +=
           [ "//build/config/win:default_large_module_incremental_linking" ]
-
-      # TODO(https://crbug.com/958955): Fix dupes and remove this flag.
-      configs -= [ "//build/config/compiler:fatal_linker_warnings_win" ]
-      ldflags = [ "/FORCE:MultipleRes" ]
+      if (llvm_force_head_revision) {
+        # TODO(https://crbug.com/958955): Fix dupes and remove this flag.
+        ldflags = [ "/FORCE:MultipleRes" ]
+        configs -= [ "//build/config/compiler:fatal_linker_warnings_win" ]
+      }
     } else {
       sources -= [ "../app/chrome_version.rc.version" ]
     }

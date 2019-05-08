@@ -17,6 +17,7 @@ near-tip-of-tree clang version:
 from __future__ import print_function
 import argparse
 import os
+import re
 import shutil
 import stat
 import sys
@@ -36,8 +37,8 @@ import zipfile
 # Do NOT CHANGE this if you don't know what you're doing -- see
 # https://chromium.googlesource.com/chromium/src/+/master/docs/updating_clang.md
 # Reverting problematic clang rolls is safe, though.
-CLANG_REVISION = '359912'
-CLANG_SUB_REVISION = 4
+CLANG_REVISION = '357692'
+CLANG_SUB_REVISION = 1
 
 PACKAGE_VERSION = '%s-%s' % (CLANG_REVISION, CLANG_SUB_REVISION)
 RELEASE_VERSION = '9.0.0'
