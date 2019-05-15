@@ -2089,11 +2089,6 @@ void RenderFrameHostImpl::OnDetach() {
   // descendant frames to execute unload handlers. Start executing those
   // handlers now.
   StartPendingDeletionOnSubtree();
-
-  // Ensure that deleted subframes are not visible from the others processes
-  // anymore.
-  frame_tree_node_->render_manager()->ResetProxyHosts();
-
   // Some children with no unload handler may be eligible for immediate
   // deletion. Cut the dead branches now. This is a performance optimization.
   PendingDeletionCheckCompletedOnSubtree();  // Can delete |this|.
@@ -2389,14 +2384,9 @@ void RenderFrameHostImpl::DetachFromProxy() {
   // Start pending deletion on this frame and its children.
   DeleteRenderFrame();
   StartPendingDeletionOnSubtree();
-
-  // Ensure that deleted subframes are not visible from the others processes
-  // anymore.
-  frame_tree_node()->render_manager()->ResetProxyHosts();
-
   // Some children with no unload handler may be eligible for immediate
   // deletion. Cut the dead branches now. This is a performance optimization.
-  PendingDeletionCheckCompletedOnSubtree();  // May delete |this|.
+  PendingDeletionCheckCompletedOnSubtree();
 }
 
 void RenderFrameHostImpl::OnBeforeUnloadACK(
@@ -4530,10 +4520,6 @@ void RenderFrameHostImpl::StartPendingDeletionOnSubtree() {
                 ? UnloadState::InProgress
                 : UnloadState::Completed;
       }
-
-      // Ensure that deleted subframes are not visible from the others processes
-      // anymore.
-      node->render_manager()->ResetProxyHosts();
     }
   }
 }
