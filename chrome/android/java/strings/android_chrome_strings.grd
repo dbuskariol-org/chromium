@@ -4104,6 +4104,30 @@ The site does NOT gain access to the camera. The camera images are only visible 
         Tab management
       </message>
 
+      <!-- Tab Suggestion Editor strings -->
+      <message name="IDS_TAB_SUGGESTION_EDITOR_SELECT_TABS" desc="Place Holder.">
+        Select tabs
+      </message>
+      <message name="IDS_TAB_SUGGESTION_EDITOR_GROUP_BUTTON" desc="Place Holder.">
+        Group
+      </message>
+      <message name="IDS_TAB_SUGGESTION_EDITOR_CLOSE_BUTTON" desc="Place Holder.">
+        Close
+      </message>
+      <message name="IDS_TAB_SUGGESTION_EDITOR_EMPTY_SUGGESTION" desc="Place Holder.">
+        Empty suggestion
+      </message>
+
+      <!-- Manual grouping selection strings -->
+      <message name="IDS_MENU_MANUAL_GROUPING_SELECTION" desc="Place Holder.">
+        Group tabs...
+      </message>
+
+      <!-- TabMari menu item strings -->
+      <message name="IDS_MENU_TABS_SUGGESTION" desc="Place Holder.">
+        Tabs suggestion...
+      </message>
+
       <message name="IDS_AUTOFILL_ASSISTANT_MODULE_TITLE"
   desc="Text shown when the Foo module is referenced in install start, success,
         failure UI (e.g. in IDS_MODULE_INSTALL_START_TEXT, which will expand to

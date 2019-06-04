@@ -23,6 +23,9 @@ import org.chromium.base.Log;
 import org.chromium.base.VisibleForTesting;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
+import org.chromium.chrome.browser.image_fetcher.ImageFetcher;
+import org.chromium.chrome.browser.image_fetcher.ImageFetcherConfig;
+import org.chromium.chrome.browser.image_fetcher.ImageFetcherFactory;
 import org.chromium.chrome.browser.native_page.NativePageFactory;
 import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
@@ -37,6 +40,7 @@ import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tabmodel.TabSelectionType;
 import org.chromium.chrome.browser.tasks.tab_groups.TabGroupUtils;
+import org.chromium.chrome.browser.widget.selection.SelectionDelegate;
 import org.chromium.chrome.browser.tasks.tabgroup.TabGroupModelFilter;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.components.feature_engagement.FeatureConstants;
@@ -57,6 +61,7 @@ import java.util.Map;
  * TODO(yusufo): Move some of the logic here to a parent component to make the above true.
  */
 class TabListMediator {
+    private final ImageFetcher mImageFetcher;
     private boolean mShownIPH;
 
     /**
@@ -124,6 +129,11 @@ class TabListMediator {
         @Nullable
         TabActionListener getCreateGroupButtonOnClickListener(Tab tab);
     }
+
+    /**
+     * An interface to get a SelectionDelegate that contains the selected items.
+     */
+    public interface SelectionDelegateProvider { SelectionDelegate getSelectionDelegate(); }
 
     /**
      * An interface to get the onClickListener for opening dialog when click on a grid card.
@@ -233,6 +243,8 @@ class TabListMediator {
 
     private final TabModelObserver mTabModelObserver;
 
+    private final SelectionDelegateProvider mSelectionDelegateProvider;
+
     private TabGroupModelFilter.Observer mTabGroupObserver;
 
     /**
@@ -254,6 +266,7 @@ class TabListMediator {
      * @param createGroupButtonProvider {@link CreateGroupButtonProvider} to provide "Create group"
      *                                   button information. It's null when "Create group" is not
      *                                   possible.
+     * @param selectionDelegateProvider
      * @param componentName This is a unique string to identify different components.
      */
     public TabListMediator(TabListModel model, TabModelSelector tabModelSelector,
@@ -261,6 +274,7 @@ class TabListMediator {
             TabListFaviconProvider tabListFaviconProvider, boolean closeRelatedTabs,
             @Nullable CreateGroupButtonProvider createGroupButtonProvider,
             @Nullable GridCardOnClickListenerProvider gridCardOnClickListenerProvider,
+            SelectionDelegateProvider selectionDelegateProvider,
             String componentName) {
         mTabModelSelector = tabModelSelector;
         mThumbnailProvider = thumbnailProvider;
@@ -271,6 +285,8 @@ class TabListMediator {
         mCreateGroupButtonProvider = createGroupButtonProvider;
         mGridCardOnClickListenerProvider = gridCardOnClickListenerProvider;
         mCloseAllRelatedTabs = closeRelatedTabs;
+        mSelectionDelegateProvider = selectionDelegateProvider;
+        mImageFetcher = ImageFetcherFactory.createImageFetcher(ImageFetcherConfig.DISK_CACHE_ONLY);
 
         mTabModelObserver = new EmptyTabModelObserver() {
             @Override
@@ -672,6 +688,10 @@ class TabListMediator {
                         .with(TabProperties.TAB_SELECTED_LISTENER, tabSelectedListener)
                         .with(TabProperties.TAB_CLOSED_LISTENER, mTabClosedListener)
                         .with(TabProperties.CREATE_GROUP_LISTENER, createGroupButtonOnClickListener)
+                        .with(TabProperties.TAB_SELECTION_DELEGATE,
+                                mSelectionDelegateProvider == null
+                                        ? null
+                                        : mSelectionDelegateProvider.getSelectionDelegate())
                         .with(TabProperties.ALPHA, 1f)
                         .build();
 
@@ -691,7 +711,12 @@ class TabListMediator {
                 tab.getUrl(), tab.isIncognito(), faviconCallback);
 
         if (mThumbnailProvider != null) {
-            ThumbnailFetcher callback = new ThumbnailFetcher(mThumbnailProvider, tab, isSelected);
+            ThumbnailFetcher callback;
+            if (tab.hasProductUrl()) {
+                callback = new ThumbnailFetcher((tab1, callback1, forceUpdate) -> mImageFetcher.fetchImage(tab1.getProductThumbnailUrl(), "LOL", callback1), tab, false);
+            } else {
+                callback = new ThumbnailFetcher(mThumbnailProvider, tab, isSelected);
+            }
             tabInfo.set(TabProperties.THUMBNAIL_FETCHER, callback);
         }
         tab.addObserver(mTabObserver);

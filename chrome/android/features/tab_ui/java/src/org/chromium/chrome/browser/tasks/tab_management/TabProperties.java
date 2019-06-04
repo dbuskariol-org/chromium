@@ -6,6 +6,7 @@ package org.chromium.chrome.browser.tasks.tab_management;
 
 import android.graphics.drawable.Drawable;
 
+import org.chromium.chrome.browser.widget.selection.SelectionDelegate;
 import org.chromium.ui.modelutil.PropertyKey;
 import org.chromium.ui.modelutil.PropertyModel;
 import org.chromium.ui.modelutil.PropertyModel.ReadableIntPropertyKey;
@@ -43,10 +44,14 @@ public class TabProperties {
     public static final PropertyModel.WritableFloatPropertyKey ALPHA =
             new PropertyModel.WritableFloatPropertyKey();
 
+    public static final WritableObjectPropertyKey<SelectionDelegate> TAB_SELECTION_DELEGATE =
+            new WritableObjectPropertyKey<>();
+
     public static final PropertyKey[] ALL_KEYS_TAB_GRID = new PropertyKey[] {TAB_ID,
             TAB_SELECTED_LISTENER, TAB_CLOSED_LISTENER, FAVICON, THUMBNAIL_FETCHER, IPH_PROVIDER,
-            TITLE, IS_SELECTED, CREATE_GROUP_LISTENER, ALPHA};
+            TITLE, IS_SELECTED, CREATE_GROUP_LISTENER, ALPHA, TAB_SELECTION_DELEGATE};
 
-    public static final PropertyKey[] ALL_KEYS_TAB_STRIP = new PropertyKey[] {
-            TAB_ID, TAB_SELECTED_LISTENER, TAB_CLOSED_LISTENER, FAVICON, IS_SELECTED, TITLE};
+    public static final PropertyKey[] ALL_KEYS_TAB_STRIP =
+            new PropertyKey[] {TAB_ID, TAB_SELECTED_LISTENER, TAB_CLOSED_LISTENER, FAVICON,
+                    IS_SELECTED, TITLE, TAB_SELECTION_DELEGATE};
 }
