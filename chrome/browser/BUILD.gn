@@ -309,8 +309,6 @@ jumbo_split_static_library("browser") {
     "command_updater_impl.h",
     "complex_tasks/task_tab_helper.cc",
     "complex_tasks/task_tab_helper.h",
-    "complex_tasks/utils/rest_endpoint_fetcher.cc",
-    "complex_tasks/utils/rest_endpoint_fetcher.h",
     "component_updater/chrome_component_updater_configurator.cc",
     "component_updater/chrome_component_updater_configurator.h",
     "component_updater/component_updater_prefs.cc",

@@ -393,37 +393,6 @@ const FeatureEntry::FeatureVariation kCCTModuleCacheVariations[] = {
 
 #endif  // OS_ANDROID
 
-#if defined(OS_ANDROID)
-const FeatureEntry::FeatureParam kCloseTabSuggestionsStale_4Hours[] = {
-    {"close_tab_suggestions_stale_time_ms", "14400000"}};
-const FeatureEntry::FeatureParam kCloseTabSuggestionsStale_8Hours[] = {
-    {"close_tab_suggestions_stale_time_ms", "28800000"}};
-const FeatureEntry::FeatureParam kCloseTabSuggestionsStale_7Days[] = {
-    {"close_tab_suggestions_stale_time_ms", "604800000"}};
-const FeatureEntry::FeatureVariation kCloseTabSuggestionsStaleVariations[] = {
-    {"4 hours", kCloseTabSuggestionsStale_4Hours,
-     base::size(kCloseTabSuggestionsStale_4Hours), nullptr},
-    {"8 hours", kCloseTabSuggestionsStale_8Hours,
-     base::size(kCloseTabSuggestionsStale_8Hours), nullptr},
-    {"7 days", kCloseTabSuggestionsStale_7Days,
-     base::size(kCloseTabSuggestionsStale_7Days), nullptr},
-};
-#endif  // OS_ANDROID
-
-#if defined(OS_ANDROID)
-const FeatureEntry::FeatureParam kShoppingAssistProvider_ContextualSearch[] = {
-    {"shopping_assist_provider", "ContextualSearch"}};
-const FeatureEntry::FeatureParam kShoppingAssistProvider_BuyableCorpus[] = {
-    {"shopping_assist_provider", "BuyableCorpus"}};
-
-const FeatureEntry::FeatureVariation kShoppingAssistProviderVariations[] = {
-    {"Contextual Search", kShoppingAssistProvider_ContextualSearch,
-     base::size(kShoppingAssistProvider_ContextualSearch), nullptr},
-    {"Buyable Corpus", kShoppingAssistProvider_BuyableCorpus,
-     base::size(kShoppingAssistProvider_BuyableCorpus), nullptr},
-};
-#endif  // OS_ANDROID
-
 const FeatureEntry::Choice kEnableGpuRasterizationChoices[] = {
     {flags_ui::kGenericExperimentChoiceDefault, "", ""},
     {flags_ui::kGenericExperimentChoiceEnabled,
@@ -1259,12 +1228,6 @@ const FeatureEntry kFeatureEntries[] = {
     {"shopping-assist", flag_descriptions::kShoppingAssistName,
      flag_descriptions::kShoppingAssistDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kShoppingAssist)},
-
-    {"shopping-assist-provider", flag_descriptions::kShoppingAssistProviderName,
-     flag_descriptions::kShoppingAssistProviderDescription, kOsAndroid,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(chrome::android::kShoppingAssistProvider,
-                                    kShoppingAssistProviderVariations,
-                                    "ShoppingAssistProvider")},
 #endif  // OS_ANDROID
     {"show-autofill-type-predictions",
      flag_descriptions::kShowAutofillTypePredictionsName,
@@ -2953,13 +2916,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kSupervisedUserCommittedInterstitials)},
 
 #if defined(OS_ANDROID)
-    {"enable-close-tab-suggestions-stale",
-     flag_descriptions::kCloseTabSuggestionsStaleName,
-     flag_descriptions::kCloseTabSuggestionsStaleDescription, kOsAndroid,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(chrome::android::kCloseTabSuggestionsStale,
-                                    kCloseTabSuggestionsStaleVariations,
-                                    "CloseSuggestionsStaleTab")},
-
     {"enable-horizontal-tab-switcher",
      flag_descriptions::kHorizontalTabSwitcherAndroidName,
      flag_descriptions::kHorizontalTabSwitcherAndroidDescription, kOsAndroid,

@@ -188,10 +188,7 @@ public class TabModelImpl extends TabModelJniBridge {
 
         int curIndex = TabModelUtils.getTabIndexById(this, id);
 
-        // TODO(meiliang): Undo the removed the curIndex == newIndex and curIndex + 1 == newIndex
-        // checks here, so we grouping two consecutive tabs, since that is waiting on the didMoveTab
-        // signal.
-        if (curIndex == INVALID_TAB_INDEX) {
+        if (curIndex == INVALID_TAB_INDEX || curIndex == newIndex || curIndex + 1 == newIndex) {
             return;
         }
 

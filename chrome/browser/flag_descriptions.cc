@@ -2101,16 +2101,6 @@ const char kClearOldBrowsingDataDescription[] =
     "Enables clearing of browsing data which is older than a given time "
     "period.";
 
-const char kCloseTabSuggestionsStaleName[] = "Suggest to close stale Tabs";
-const char kCloseTabSuggestionsStaleDescription[] =
-    "Suggests to the user to close Tabs that have not been used above a "
-    "threshold such as 1 day. The threshold is configurable.";
-
-const char kContentSuggestionsDebugLogName[] = "Content suggestions debug log";
-const char kContentSuggestionsDebugLogDescription[] =
-    "Enable content suggestions debug log accessible through "
-    "snippets-internals.";
-
 const char kContextualSearchDefinitionsName[] = "Contextual Search definitions";
 const char kContextualSearchDefinitionsDescription[] =
     "Enables tap-activated contextual definitions of words on a page to be "
@@ -2412,10 +2402,6 @@ const char kSetMarketUrlForTestingDescription[] =
 const char kShoppingAssistName[] = "Shopping assist exploration";
 const char kShoppingAssistDescription[] =
     "Show some shopping assistance when available";
-
-const char kShoppingAssistProviderName[] = "Shopping assist provider";
-const char kShoppingAssistProviderDescription[] =
-    "Control shopping assist data provider";
 
 const char kSiteIsolationForPasswordSitesName[] =
     "Site Isolation For Password Sites";

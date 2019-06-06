@@ -3,42 +3,23 @@
      Use of this source code is governed by a BSD-style license that can be
      found in the LICENSE file. -->
 
-<org.chromium.chrome.browser.tasks.tab_management.TabGroupUiToolbarView xmlns:android="http://schemas.android.com/apk/res/android"
+<org.chromium.chrome.browser.tasks.tab_management.TabGroupUiToolbarView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/modern_primary_color">
-    <org.chromium.chrome.browser.toolbar.TabSwitcherButtonView
-        android:id="@+id/tab_switcher_button"
-        style="@style/BottomToolbarButton"
-        android:layout_gravity="start"
-        android:contentDescription="@string/accessibility_toolbar_btn_tabswitcher_toggle_default" />
-    <org.chromium.chrome.browser.toolbar.bottom.SearchAccelerator
-        android:id="@+id/search_accelerator"
-        android:layout_width="@dimen/search_accelerator_width"
-        android:layout_height="@dimen/search_accelerator_height"
-        android:layout_gravity="center"
-        android:paddingTop="@dimen/search_accelerator_height_padding"
-        android:paddingBottom="@dimen/search_accelerator_height_padding"
-        android:gravity="center_horizontal"
-        android:contentDescription="@string/accessibility_toolbar_btn_search_accelerator" />
     <LinearLayout
         android:id="@+id/main_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
         android:orientation="horizontal"
-        android:background="@drawable/white_with_rounded_corners"
-        android:layout_gravity="center_horizontal"
-        android:elevation="4dp">
+        android:gravity="center_vertical">
         <org.chromium.ui.widget.ChromeImageView
             android:id="@+id/toolbar_left_button"
             style="@style/BottomToolbarButton"
             android:src="@drawable/ic_expand_less_black_24dp"
             app:tint="@color/standard_mode_tint"
-            android:visibility="gone"
             android:contentDescription="@string/accessibility_bottom_tab_strip_expand_tab_sheet" />
         <FrameLayout
             android:id="@+id/toolbar_container_view"
@@ -52,27 +33,4 @@
             android:src="@drawable/plus"
             android:contentDescription="@string/bottom_tab_grid_new_tab" />
    </LinearLayout>
-    <org.chromium.chrome.browser.toolbar.MenuButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:id="@+id/menu_button_wrapper">
-
-        <org.chromium.ui.widget.ChromeImageButton
-            android:id="@+id/menu_button"
-            style="@style/ToolbarMenuButtonPhone"
-            android:src="@drawable/ic_more_vert_black_24dp"
-            android:contentDescription="@string/accessibility_toolbar_btn_menu"
-            android:layout_gravity="center"
-            app:tint="@color/standard_mode_tint" />
-
-        <ImageView
-            android:id="@+id/menu_badge"
-            style="@style/ToolbarMenuButtonPhone"
-            android:src="@drawable/badge_update_dark"
-            tools:ignore="ContentDescription"
-            android:importantForAccessibility="no"
-            android:layout_gravity="center"
-            android:visibility="invisible" />
-    </org.chromium.chrome.browser.toolbar.MenuButton>
 </org.chromium.chrome.browser.tasks.tab_management.TabGroupUiToolbarView>

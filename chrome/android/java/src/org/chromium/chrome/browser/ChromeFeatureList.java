@@ -191,7 +191,6 @@ public abstract class ChromeFeatureList {
     public static final String CCT_REPORT_PARALLEL_REQUEST_STATUS =
             "CCTReportParallelRequestStatus";
     public static final String CCT_TARGET_TRANSLATE_LANGUAGE = "CCTTargetTranslateLanguage";
-    public static final String CLOSE_TAB_SUGGESTIONS_STALE = "CloseTabSuggestionsStale";
     public static final String CHROME_DUET = "ChromeDuet";
     public static final String CHROME_DUET_ADAPTIVE = "ChromeDuetAdaptive";
     public static final String DONT_AUTO_HIDE_BROWSER_CONTROLS = "DontAutoHideBrowserControls";
@@ -308,7 +307,6 @@ public abstract class ChromeFeatureList {
     public static final String SERVICE_MANAGER_FOR_DOWNLOAD = "ServiceManagerForDownload";
     public static final String SERVICE_WORKER_PAYMENT_APPS = "ServiceWorkerPaymentApps";
     public static final String SHOPPING_ASSIST = "ShoppingAssist";
-    public static final String SHOPPING_ASSIST_PROVIDER = "ShoppingAssistProvider";
     public static final String SHOW_TRUSTED_PUBLISHER_URL = "ShowTrustedPublisherURL";
     public static final String SSL_COMMITTED_INTERSTITIALS = "SSLCommittedInterstitials";
     public static final String SPANNABLE_INLINE_AUTOCOMPLETE = "SpannableInlineAutocomplete";

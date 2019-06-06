@@ -88,8 +88,6 @@ public class SelectableListLayout<E>
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             super.onItemRangeInserted(positionStart, itemCount);
-            // This is needed because onChanged() will not call when using notifyItemInserted().
-            onChanged();
             updateEmptyViewVisibility();
         }
 
@@ -356,11 +354,10 @@ public class SelectableListLayout<E>
      * Unlike ListView or GridView, RecyclerView does not provide default empty
      * view implementation. We need to check it ourselves.
      */
-    public void updateEmptyViewVisibility() {
+    private void updateEmptyViewVisibility() {
         int visible = mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
         mEmptyView.setVisibility(visible);
         mEmptyViewWrapper.setVisibility(visible);
-        mLoadingView.hideLoadingUI();
     }
 
     @VisibleForTesting

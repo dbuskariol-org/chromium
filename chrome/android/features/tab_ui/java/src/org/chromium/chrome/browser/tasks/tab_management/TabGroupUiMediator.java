@@ -6,7 +6,6 @@ package org.chromium.chrome.browser.tasks.tab_management;
 
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
-import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.ThemeColorProvider;
 import org.chromium.chrome.browser.UrlConstants;
 import org.chromium.chrome.browser.compositor.layouts.EmptyOverviewModeObserver;
@@ -110,7 +109,8 @@ public class TabGroupUiMediator {
 
             @Override
             public void didAddTab(Tab tab, int type) {
-                if (type == TabLaunchType.FROM_RESTORE) return;
+                if (type == TabLaunchType.FROM_CHROME_UI || type == TabLaunchType.FROM_RESTORE)
+                    return;
                 resetTabStripWithRelatedTabsForId(tab.getId());
             }
 
@@ -204,12 +204,9 @@ public class TabGroupUiMediator {
                                        .getRelatedTabList(id);
         if (listOfTabs.size() < 2) {
             mResetHandler.resetStripWithListOfTabs(null);
-            mToolbarPropertyModel.set(TabStripToolbarViewProperties.IS_MAIN_CONTENT_VISIBLE, false);
-            mIsTabGroupUiVisible = (ChromeFeatureList.isInitialized()
-                    && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST));
+            mIsTabGroupUiVisible = false;
         } else {
             mResetHandler.resetStripWithListOfTabs(listOfTabs);
-            mToolbarPropertyModel.set(TabStripToolbarViewProperties.IS_MAIN_CONTENT_VISIBLE, true);
             mIsTabGroupUiVisible = true;
         }
         mVisibilityController.setBottomControlsVisible(mIsTabGroupUiVisible);

@@ -61,19 +61,19 @@ public class TabListCoordinator implements Destroyable {
      * @param mode Modes of showing the list of tabs. Can be used in GRID or STRIP.
      * @param context The context to use for accessing {@link android.content.res.Resources}.
      * @param tabModelSelector {@link TabModelSelector} that will provide and receive signals about
-*                              the tabs concerned.
+     *                              the tabs concerned.
      * @param thumbnailProvider Provider to provide screenshot related details.
      * @param titleProvider Provider for a given tab's title.
      * @param createGroupButtonProvider {@link TabListMediator.CreateGroupButtonProvider}
-*         to provide "Create group" button.
-     * @param selectionDelegateProvider Provider to provide selected Tabs for TabSuggestionEditor.
-     * @param itemViewTypeCallback
+     *         to provide "Create group" button.
      * @param parentView {@link ViewGroup} The root view of the UI.
      * @param dynamicResourceLoader The {@link DynamicResourceLoader} to register dynamic UI
      *                              resource for compositor layer animation.
      * @param attachToParent Whether the UI should attach to root view.
      * @param layoutId ID of the layout resource.
      * @param componentName A unique string uses to identify different components for UMA recording.
+     *                      Recommended to use the class name or make sure the string is unique
+     *                      through actions.xml file.
      */
     TabListCoordinator(@TabListMode int mode, Context context, TabModelSelector tabModelSelector,
             @Nullable TabListMediator.ThumbnailProvider thumbnailProvider,
@@ -81,8 +81,6 @@ public class TabListCoordinator implements Destroyable {
             @Nullable TabListMediator.CreateGroupButtonProvider createGroupButtonProvider,
             @Nullable TabListMediator
                     .GridCardOnClickListenerProvider gridCardOnClickListenerProvider,
-            @Nullable TabListMediator.SelectionDelegateProvider selectionDelegateProvider,
-            @Nullable SimpleRecyclerViewMcpBase.ItemViewTypeCallback<PropertyModel> itemViewTypeCallback,
             @NonNull ViewGroup parentView, @Nullable DynamicResourceLoader dynamicResourceLoader,
             boolean attachToParent, @LayoutRes int layoutId, String componentName) {
         TabListModel tabListModel = new TabListModel();
@@ -93,7 +91,7 @@ public class TabListCoordinator implements Destroyable {
         if (mMode == TabListMode.GRID) {
             SimpleRecyclerViewMcpBase<PropertyModel, TabGridViewHolder, PropertyKey> mcp =
                     new SimpleRecyclerViewMcpBase<PropertyModel, TabGridViewHolder, PropertyKey>(
-                            itemViewTypeCallback, TabGridViewBinder::onBindViewHolder, tabListModel) {
+                            null, TabGridViewBinder::onBindViewHolder, tabListModel) {
                         @Override
                         public void onViewRecycled(TabGridViewHolder viewHolder) {
                             viewHolder.resetThumbnail();
@@ -104,7 +102,7 @@ public class TabListCoordinator implements Destroyable {
         } else if (mMode == TabListMode.STRIP) {
             SimpleRecyclerViewMcpBase<PropertyModel, TabStripViewHolder, PropertyKey> mcp =
                     new SimpleRecyclerViewMcpBase<>(
-                            itemViewTypeCallback, TabStripViewBinder::onBindViewHolder, tabListModel);
+                            null, TabStripViewBinder::onBindViewHolder, tabListModel);
             adapter = new RecyclerViewAdapter<>(mcp, TabStripViewHolder::create);
             mModelChangeProcessor = mcp;
         } else {
@@ -143,9 +141,9 @@ public class TabListCoordinator implements Destroyable {
 
         mMediator = new TabListMediator(tabListModel, tabModelSelector, thumbnailProvider,
                 titleProvider, tabListFaviconProvider, closeRelatedTabs, createGroupButtonProvider,
-                gridCardOnClickListenerProvider, selectionDelegateProvider, componentName);
+                gridCardOnClickListenerProvider, componentName);
 
-        if (mMode == TabListMode.GRID && selectionDelegateProvider == null) {
+        if (mMode == TabListMode.GRID) {
             ItemTouchHelper touchHelper = new ItemTouchHelper(mMediator.getItemTouchHelperCallback(
                     context.getResources().getDimension(R.dimen.swipe_to_dismiss_threshold)));
             touchHelper.attachToRecyclerView(mRecyclerView);

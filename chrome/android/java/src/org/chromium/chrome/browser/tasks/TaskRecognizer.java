@@ -8,42 +8,26 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import org.chromium.base.Log;
-import org.chromium.base.task.PostTask;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.compositor.bottombar.ephemeraltab.EphemeralTabPanel;
 import org.chromium.chrome.browser.contextualsearch.ContextualSearchContext;
 import org.chromium.chrome.browser.contextualsearch.ResolvedSearchTerm;
 import org.chromium.chrome.browser.contextualsearch.ResolvedSearchTerm.CardTag;
 import org.chromium.chrome.browser.contextualsearch.SimpleSearchTermResolver;
 import org.chromium.chrome.browser.contextualsearch.SimpleSearchTermResolver.ResolveResponse;
+import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
-import org.chromium.chrome.browser.tabmodel.TabLaunchType;
-import org.chromium.chrome.browser.tabmodel.TabModelSelector;
-import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabObserver;
-import org.chromium.chrome.browser.toolbar.bottom.SearchAccelerator;
-import org.chromium.content_public.browser.LoadUrlParams;
-import org.chromium.content_public.browser.NavigationHandle;
-import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.content_public.browser.WebContents;
-
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.AbstractMap;
-import java.util.List;
 
 /**
  * Recognizes that a Tab is associated with a product.
  * Uses requests through the SimpleSearchTermResolver to make a Contextual Search request to
  * get a card for a section of text.  If that card is a Product, then we may take action.
  */
-public class TaskRecognizer extends TabModelSelectorTabObserver
-        implements ResolveResponse, ShoppingProductsResolver.ResolveResponse {
-    private static final String TAG = "ctxs";
+public class TaskRecognizer extends EmptyTabObserver implements ResolveResponse {
+    // TODO(yusufo): Consider converting this to use HintlessActivityTabObserver.
+    private static final String TAG = "TaskRecognizer";
 
-    // TODO(yusufo): remove by end of April 2019 when the server should be returning CardTags.
+    // TODO(yusufo): remove when the server starts returning CardTags.
     private static final String UNICODE_STAR = "\u2605";
 
     /** Our singleton instance. */
@@ -54,26 +38,27 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
 
     /** A Context that is in use, or null. */
     private ContextualSearchContext mContext;
-    private SearchAccelerator mSearchAccelerator;
 
     /** Gets the singleton instance for this class. */
-    public static TaskRecognizer getInstance(TabModelSelector tabModelSelector) {
-        if (sInstance == null) sInstance = new TaskRecognizer(tabModelSelector);
+    public static TaskRecognizer getInstance(Tab tab) {
+        if (sInstance == null) sInstance = new TaskRecognizer(tab);
         return sInstance;
     }
 
     /**
      * Creates a {@link TaskRecognizer} for the given tab.
+     * @param tab The tab to work with.
      */
-    public static void createForTabModelSelector(TabModelSelector tabModelSelector) {
-        getInstance(tabModelSelector);
+    public static void createForTab(Tab tab) {
+        getInstance(tab);
     }
 
     /**
      * Constructs a Task Recognizer for the given Tab.
+     * @param tab The {@link Tab} to track with this helper.
      */
-    private TaskRecognizer(TabModelSelector selector) {
-        super(selector);
+    private TaskRecognizer(Tab tab) {
+        tab.addObserver(this);
     }
 
     /**
@@ -81,7 +66,6 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
      * @param tab The tab that might be about a product.  Must be the current front tab.
      */
     private void tryToShowProduct(Tab tab) {
-
         boolean isCurrentSelectedTab =
                 tab != null && tab.equals(tab.getActivity().getActivityTab());
         if (mTabInUse != null || !isCurrentSelectedTab) {
@@ -91,7 +75,7 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
         // TODO(yusufo): filter based on other criteria, e.g. Incognito.
         boolean inProgress = resolveTitleAndShowOverlay(tab, this);
         if (inProgress) {
-            Log.i(TAG, "Trying to show product info for tab: " + tab);
+            Log.v(TAG, "Trying to show product info for tab: " + tab);
             mTabInUse = tab;
         }
     }
@@ -104,77 +88,36 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
      * @return Whether we were able to issue a request.
      */
     private boolean resolveTitleAndShowOverlay(Tab tab, ResolveResponse responseCallback) {
+        if (mTabInUse != null) return false;
+
+        mTabInUse = tab;
         String pageTitle = tab.getTitle();
         String pageUrl = tab.getUrl();
         WebContents webContents = tab.getWebContents();
         if (TextUtils.isEmpty(pageTitle) || TextUtils.isEmpty(pageUrl) || webContents == null) {
-            Log.i(TAG, "ctxs not a good page. :-(");
+            Log.w(TAG, "not a good page. :-(");
             return false;
         }
 
-        String provider = ChromeFeatureList.getFieldTrialParamByFeature(
-                ChromeFeatureList.SHOPPING_ASSIST_PROVIDER, "shopping_assist_provider");
-
-        if (provider.equals("BuyableCorpus")) {
-            ShoppingProductsResolver.getInstance().startShoppingProductResolutionRequest(
-                    webContents, this, getUriWithoutPii(tab.getUrl()));
-
-        } else {
-            if (mContext != null) mContext.destroy();
-            int insertionPointLocation = pageTitle.length() / 2;
-            mContext = ContextualSearchContext.getContextForInsertionPoint(
-                    pageTitle, insertionPointLocation);
-            if (mContext == null) {
-                Log.i(TAG, "ctxs not a context. :-(");
-                return false;
-            }
-
-            Log.i(TAG, "ctxs startSearchTermResolutionRequest!");
-            SimpleSearchTermResolver.getInstance().startSearchTermResolutionRequest(
-                    webContents, mContext, responseCallback);
+        if (mContext != null) mContext.destroy();
+        int insertionPointLocation = pageTitle.length() / 2;
+        mContext = ContextualSearchContext.getContextForInsertionPoint(
+                pageTitle, insertionPointLocation);
+        if (mContext == null) {
+            Log.i(TAG, "not a context. :-(");
+            return false;
         }
 
-        mSearchAccelerator = tab.getActivity().findViewById(R.id.search_accelerator);
-        if (mSearchAccelerator != null) {
-            android.util.Log.e("ctxs", "Found the button !!");
-        }
-
+        Log.v(TAG, "startSearchTermResolutionRequest");
+        SimpleSearchTermResolver.getInstance().startSearchTermResolutionRequest(
+                webContents, mContext, responseCallback);
         return true;
-    }
-
-    private String getQuery(List<AbstractMap.SimpleEntry<String, String>> params)
-            throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-
-        for (AbstractMap.SimpleEntry<String, String> pair : params) {
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(pair.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
-        }
-
-        return result.toString();
-    }
-
-    private String getUriWithoutPii(String url) {
-        Uri uri = Uri.parse(url);
-        try {
-            URL u = new URL(uri.getScheme(), uri.getAuthority(), uri.getPort(), uri.getPath());
-            return u.toString();
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "getUriWithoutPii failed: %s", e);
-        }
-
-        return null;
     }
 
     /** @return Whether the given {@link ResolvedSearchTerm} identified a product. */
     private boolean looksLikeAProduct(ResolvedSearchTerm resolvedSearchTerm) {
+        Log.v(TAG,
+                "looksLikeAProduct: " + (resolvedSearchTerm.cardTagEnum() == CardTag.CT_PRODUCT));
         if (resolvedSearchTerm.cardTagEnum() == CardTag.CT_PRODUCT) return true;
 
         // Fallback onto our "has-a-star" hack.
@@ -183,24 +126,9 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
     }
 
     /**
-     * Creates an child tab for the given searchUrl using details from the given
+     * Creates an {@code EphemeralTab} for the given searchUrl using details from the given
+     * {@code ResolvedSearchterm}.
      */
-    private void createChildTabFor(Uri searchUrl) {
-        mTabInUse.getActivity().getTabCreator(false).createNewTab(
-                new LoadUrlParams(searchUrl.toString()), TabLaunchType.FROM_CHROME_UI, mTabInUse);
-    }
-
-    /** Shopping Assist's onResolveResponse  **/
-    @Override
-    public void onResolveResponse(ShoppingAssistServiceResponse.Product product) {
-        if (product != null && mSearchAccelerator != null) {
-            PostTask.runOrPostTask(UiThreadTaskTraits.USER_VISIBLE, () -> {
-                mSearchAccelerator.reset(product.getName(),
-                        view -> createChildTabFor(Uri.parse(product.getSearchUrl())));
-            });
-        }
-    }
-
     private void createEphemeralTabFor(
             Tab activeTab, ResolvedSearchTerm resolvedSearchTerm, Uri searchUrl) {
         EphemeralTabPanel displayPanel = activeTab.getActivity().getEphemeralTabPanel();
@@ -213,37 +141,21 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
     /** ResolveResponse overrides. */
     @Override
     public void onResolveResponse(ResolvedSearchTerm resolvedSearchTerm, Uri searchUri) {
-        if (looksLikeAProduct(resolvedSearchTerm)) {
-            if (mSearchAccelerator != null)
-                mSearchAccelerator.reset(
-                        resolvedSearchTerm.displayText(), view -> createChildTabFor(searchUri));
-
-            mTabInUse.setProductUrl(resolvedSearchTerm.displayText());
-            mTabInUse.setProductThumbnailUrl(resolvedSearchTerm.thumbnailUrl());
+        Tab activeTab = mTabInUse;
+        mTabInUse = null;
+        if (looksLikeAProduct(resolvedSearchTerm) && activeTab != null) {
+            createEphemeralTabFor(activeTab, resolvedSearchTerm, searchUri);
         }
     }
 
+    /** EmptyTabObserver overrides. */
     @Override
-    public void didFirstVisuallyNonEmptyPaint(Tab tab) {
+    public void onPageLoadFinished(Tab tab, String url) {
         tryToShowProduct(tab);
     }
 
     @Override
-    public void onDidStartNavigation(Tab tab, NavigationHandle navigationHandle) {
-        mSearchAccelerator = tab.getActivity().findViewById(R.id.search_accelerator);
-
-        if (navigationHandle.isInMainFrame() && !navigationHandle.isSameDocument()) {
-            if (mSearchAccelerator != null) mSearchAccelerator.reset(null, null);
-            tab.setProductUrl("");
-            tab.setProductThumbnailUrl("");
-        }
-    }
-
-    @Override
-    public void onShown(Tab tab, int type) {
-        mSearchAccelerator = tab.getActivity().findViewById(R.id.search_accelerator);
-        if (mSearchAccelerator == null) return;
-
-        mSearchAccelerator.reset(null, null);
+    public void onTitleUpdated(Tab tab) {
+        tryToShowProduct(tab);
     }
 }

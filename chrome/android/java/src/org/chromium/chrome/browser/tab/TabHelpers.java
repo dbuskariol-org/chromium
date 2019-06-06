@@ -37,6 +37,10 @@ public final class TabHelpers {
         TabThemeColorHelper.createForTab(tab);
         InterceptNavigationDelegateImpl.createForTab(tab);
         ContextualSearchTabHelper.createForTab(tab);
+        if (ChromeFeatureList.isInitialized()
+                && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)) {
+            TaskRecognizer.createForTab(tab);
+        }
         MediaSessionTabHelper.createForTab(tab);
         TaskTabHelper.createForTab(tab, parentTab);
 

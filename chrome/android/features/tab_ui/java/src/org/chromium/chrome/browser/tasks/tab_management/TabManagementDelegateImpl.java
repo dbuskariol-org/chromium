@@ -13,8 +13,6 @@ import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.ThemeColorProvider;
 import org.chromium.chrome.browser.metrics.UmaSessionStats;
-import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestions;
-import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsOrchestrator;
 
 /**
  * Impl class that will resolve components for tab management.
@@ -31,23 +29,12 @@ public class TabManagementDelegateImpl implements TabManagementDelegate {
         return new GridTabSwitcherCoordinator(activity, activity.getLifecycleDispatcher(),
                 activity.getToolbarManager(), activity.getTabModelSelector(),
                 activity.getTabContentManager(), activity.getCompositorViewHolder(),
-                activity.getFullscreenManager(), activity, activity::onBackPressed, activity);
+                activity.getFullscreenManager(), activity, activity::onBackPressed);
     }
 
     @Override
     public TabGroupUi createTabGroupUi(
             ViewGroup parentView, ThemeColorProvider themeColorProvider) {
         return new TabGroupUiCoordinator(parentView, themeColorProvider);
-    }
-
-    @Override
-    public TabSuggestions createTabSuggestions(ChromeActivity activity) {
-        return new TabSuggestionsOrchestrator();
-    }
-
-    @Override
-    public TabSuggestionEditorLayout createTabSuggestionEditorLayout(ChromeActivity activity) {
-        return new TabSuggestionEditorCoordinator(activity, activity.getCompositorViewHolder(),
-                activity.getTabModelSelector(), activity.getTabContentManager());
     }
 }

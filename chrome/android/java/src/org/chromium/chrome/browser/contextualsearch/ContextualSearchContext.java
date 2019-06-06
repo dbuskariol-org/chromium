@@ -95,19 +95,8 @@ public abstract class ContextualSearchContext {
         ContextualSearchContext context = new ChangeIgnoringContext();
         context.setSurroundingText(
                 "UTF-8", surroundingText, insertionPointOffset, insertionPointOffset);
-        int start;
-        int end;
-        if (context.getWordTapped() != null) {
-            start = context.getWordTappedOffset();
-            if (context.getWordFollowingTap() != null) {
-                end = context.getWordTappedOffset() + context.getWordTapped().length();
-            } else {
-                end = context.findWordEndOffset(insertionPointOffset);
-            }
-        } else {
-            start = context.findWordStartOffset(insertionPointOffset);
-            end = context.findWordEndOffset(insertionPointOffset);
-        }
+        int start = context.findWordStartOffset(insertionPointOffset);
+        int end = context.findWordEndOffset(insertionPointOffset);
         context.setSurroundingText("UTF-8", surroundingText, start, end, true);
         if (start < end && start >= 0 && end <= surroundingText.length()) {
             context.setInitialSelectedWord(surroundingText.substring(start, end));
@@ -120,13 +109,6 @@ public abstract class ContextualSearchContext {
         }
 
         // TODO(donnd): Consider hunting around for a valid word instead of just giving up.
-        // TODO(donnd): Clean up this verbose logging.
-        Log.i(TAG, "ctxs FAILED default query from '" + surroundingText + "'");
-        Log.i(TAG, "ctxs context.hasValidSelection: " + context.hasValidSelection());
-        Log.i(TAG,
-                "ctxs TextUtils.isEmpty(context.getWordTapped()): "
-                        + TextUtils.isEmpty(context.getWordTapped()));
-        Log.i(TAG, "ctxs selection: " + context.getInitialSelectedWord());
         return null;
     }
 
@@ -203,7 +185,10 @@ public abstract class ContextualSearchContext {
             analyzeTap(startOffset);
         }
         // Notify of an initial selection if it's not empty.
-        if (endOffset > startOffset) onSelectionChanged();
+        if (endOffset > startOffset) {
+            updateInitialSelectedWord();
+            onSelectionChanged();
+        }
         if (setNative) {
             nativeSetContent(getNativePointer(), mSurroundingText, mSelectionStartOffset,
                     mSelectionEndOffset);
