@@ -14,6 +14,9 @@ import static org.chromium.chrome.browser.tasks.tab_management.TabListContainerP
 import static org.chromium.chrome.browser.tasks.tab_management.TabListContainerProperties.VISIBILITY_LISTENER;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.ArrayMap;
+import android.widget.Toast;
 
 import org.chromium.base.ContextUtils;
 import org.chromium.base.ObserverList;
@@ -23,6 +26,7 @@ import org.chromium.chrome.browser.UrlConstants;
 import org.chromium.chrome.browser.compositor.CompositorViewHolder;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
 import org.chromium.chrome.browser.fullscreen.FullscreenManager;
+import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.EmptyTabModelObserver;
 import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
@@ -35,13 +39,19 @@ import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tabmodel.TabSelectionType;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabContext;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestions;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsOrchestrator;
 import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
 import org.chromium.chrome.browser.tasks.tabgroup.TabGroupModelFilter;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.content_public.browser.LoadUrlParams;
 import org.chromium.ui.modelutil.PropertyModel;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Mediator that is responsible for resetting the tab grid based on visibility and model
@@ -52,6 +62,7 @@ class GridTabSwitcherMediator
     // This should be the same as TabListCoordinator.GRID_LAYOUT_SPAN_COUNT for the selected tab
     // to be on the 2nd row.
     static final int INITIAL_SCROLL_INDEX_OFFSET = 2;
+    private static final int SOFT_HYPHEN_CHAR = '\u00AD';
 
     private static final int DEFAULT_TOP_PADDING = 0;
 
@@ -89,6 +100,11 @@ class GridTabSwitcherMediator
      */
     private boolean mShouldIgnoreNextSelect;
 
+    private GridTabSwitcherCoordinator.TabSuggestionBarController mTabSuggestionBarController;
+    private final TabSuggestions mTabSuggestionsProvider;
+    private TabContext mCurrentTabContext;
+    private TabSuggestion mCurrentTabSuggestion;
+
     /**
      * Interface to delegate resetting the tab grid.
      */
@@ -104,11 +120,13 @@ class GridTabSwitcherMediator
      * @param tabModelSelector {@link TabModelSelector} to observer for model and selection changes.
      * @param fullscreenManager {@link FullscreenManager} to use.
      * @param compositorViewHolder {@link CompositorViewHolder} to use.
+     * @param tabSuggestionBarController
      */
     GridTabSwitcherMediator(ResetHandler resetHandler, PropertyModel containerViewModel,
             TabModelSelector tabModelSelector, ChromeFullscreenManager fullscreenManager,
             CompositorViewHolder compositorViewHolder,
-            TabGridDialogMediator.ResetHandler tabGridDialogResetHandler) {
+            TabGridDialogMediator.ResetHandler tabGridDialogResetHandler,
+            GridTabSwitcherCoordinator.TabSuggestionBarController tabSuggestionBarController) {
         mResetHandler = resetHandler;
         mContainerViewModel = containerViewModel;
         mTabModelSelector = tabModelSelector;
@@ -123,6 +141,7 @@ class GridTabSwitcherMediator
                         mTabModelSelector.getTabModelFilterProvider().getCurrentTabModelFilter();
                 mResetHandler.resetWithTabList(currentTabModelFilter);
                 mContainerViewModel.set(IS_INCOGNITO, currentTabModelFilter.isIncognito());
+                fetchTabSuggestion();
             }
         };
         mTabModelSelector.addObserver(mTabModelSelectorObserver);
@@ -131,6 +150,14 @@ class GridTabSwitcherMediator
             @Override
             public void didAddTab(Tab tab, int type) {
                 mShouldIgnoreNextSelect = false;
+                // TODO: Make this a TabModelSelectorTabObserver.
+                tab.addObserver(new EmptyTabObserver() {
+                    @Override
+                    public void onLoadStarted(Tab tab, boolean toDifferentDocument) {
+                        fetchTabSuggestion();
+                    }
+                });
+                fetchTabSuggestion();
             }
 
             @Override
@@ -147,6 +174,19 @@ class GridTabSwitcherMediator
                     }
                     setVisibility(false);
                 }
+            }
+
+            @Override
+            public void didMoveTab(Tab tab, int newIndex, int curIndex) {
+                TabList tabList =
+                        mTabModelSelector.getTabModelFilterProvider().getCurrentTabModelFilter();
+                mResetHandler.resetWithTabList(tabList);
+                fetchTabSuggestion();
+            }
+
+            @Override
+            public void didCloseTab(int tabId, boolean incognito) {
+                fetchTabSuggestion();
             }
         };
 
@@ -170,6 +210,20 @@ class GridTabSwitcherMediator
 
         mCompositorViewHolder = compositorViewHolder;
         mTabGridDialogResetHandler = tabGridDialogResetHandler;
+
+        mTabSuggestionsProvider = new TabSuggestionsOrchestrator(tabModelSelector);
+        mCurrentTabContext = TabContext.createCurrentContext(tabModelSelector);
+        mTabSuggestionBarController = tabSuggestionBarController;
+    }
+
+    private void fetchTabSuggestion() {
+        mCurrentTabContext = TabContext.createCurrentContext(mTabModelSelector);
+        mTabSuggestionsProvider.getSuggestions(
+                mCurrentTabContext, res -> suggestionsCallback((List<TabSuggestion>) res));
+    }
+
+    private void suggestionsCallback(List<TabSuggestion> suggestions) {
+        mCurrentTabSuggestion = suggestions.size() > 0 ? suggestions.get(0) : null;
     }
 
     private void setVisibility(boolean isVisible) {
@@ -184,6 +238,88 @@ class GridTabSwitcherMediator
         Tab currentTab = mTabModelSelector.getCurrentTab();
         if (currentTab == null) return;
         mCompositorViewHolder.setContentOverlayVisibility(isVisible, true);
+    }
+
+    private void checkForSameProduct() {
+        TabList tabList = mTabModelSelector.getTabModelFilterProvider().getCurrentTabModelFilter();
+        Map<String, List<Integer>> productMap = new ArrayMap<>();
+        List<String> productsToCheck = new ArrayList<>();
+        for (int i = 0; i < tabList.getCount(); i++) {
+            Tab tab = tabList.getTabAt(i);
+            if (tab.hasProductUrl()) {
+
+                String productName = tab.getProductUrl();
+                String brandName = productName.substring(0,findWordEndOffset(0, productName));
+
+                if (productMap.get(brandName) == null) {
+                    List<Integer> list = new ArrayList<>();
+                    list.add(i);
+                    productMap.put(brandName, list);
+                } else {
+                    productMap.get(brandName).add(i);
+                    if (!productsToCheck.contains(brandName)) {
+                        productsToCheck.add(brandName);
+                    }
+                }
+            }
+        }
+        if (!productsToCheck.isEmpty()) {
+            String brands = "";
+            for (String brand : productsToCheck) {
+                if (TextUtils.isEmpty(brands)) {
+                    brands = brand;
+                } else {
+                    brands = brands + " and "+brand;
+                }
+            }
+            Toast.makeText(ContextUtils.getApplicationContext(), "Found similar products from "+brands, Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    /**
+     * @return The start of the word that contains the given initial offset, within the surrounding
+     *         text, or {@code INVALID_OFFSET} if not found.
+     */
+    private int findWordStartOffset(int initial, String text) {
+        // Scan before, aborting if we hit any ideographic letter.
+        for (int offset = initial - 1; offset >= 0; offset--) {
+            if (isWordBreakAtIndex(offset, text)) {
+                // The start of the word is after this word break.
+                return offset + 1;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Finds the offset of the end of the word that includes the given initial offset.
+     * NOTE: this is the index of the character just past the last character of the word,
+     * so a 3 character word "who" has start index 0 and end index 3.
+     * The character at the initial offset is examined and each one after that too until a non-word
+     * character is encountered, and that offset will be returned.
+     * @param initial The initial offset to scan from.
+     * @return The end of the word that contains the given initial offset, within the surrounding
+     *         text.
+     */
+    private int findWordEndOffset(int initial, String text) {
+        // Scan after, aborting if we hit any CJKV letter.
+        for (int offset = initial; offset < text.length(); offset++) {
+            if (isWordBreakAtIndex(offset, text)) {
+                // The end of the word is the offset of this word break.
+                return offset;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * @return Whether the character at the given index is a word-break.
+     */
+    private boolean isWordBreakAtIndex(int index, String text) {
+        return !Character.isLetterOrDigit(text.charAt(index))
+                && text.charAt(index) != SOFT_HYPHEN_CHAR;
     }
 
     @Override
@@ -223,6 +359,7 @@ class GridTabSwitcherMediator
         if (!animate) mContainerViewModel.set(ANIMATE_VISIBILITY_CHANGES, false);
         setVisibility(true);
         mContainerViewModel.set(ANIMATE_VISIBILITY_CHANGES, true);
+        // checkForSameProduct();
     }
 
     @Override
@@ -234,6 +371,15 @@ class GridTabSwitcherMediator
 
     @Override
     public void finishedShowing() {
+        TabContext tabContext = TabContext.createCurrentContext(mTabModelSelector);
+        if (mTabSuggestionBarController != null
+                && (mCurrentTabContext != null && mCurrentTabContext.equals(tabContext))
+                && mCurrentTabSuggestion != null) {
+            mTabSuggestionBarController.showTabSuggestionBar(mCurrentTabSuggestion);
+        } else {
+            fetchTabSuggestion();
+        }
+
         for (OverviewModeObserver observer : mObservers) {
             observer.onOverviewModeFinishedShowing();
         }
@@ -243,6 +389,7 @@ class GridTabSwitcherMediator
     @Override
     public void startedHiding(boolean isAnimating) {
         setContentOverlayVisibility(true);
+        mTabSuggestionBarController.dismissTabSuggestionBar();
         for (OverviewModeObserver observer : mObservers) {
             observer.onOverviewModeStartedHiding(true, false);
         }

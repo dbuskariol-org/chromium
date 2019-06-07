@@ -191,6 +191,7 @@ public abstract class ChromeFeatureList {
     public static final String CCT_REPORT_PARALLEL_REQUEST_STATUS =
             "CCTReportParallelRequestStatus";
     public static final String CCT_TARGET_TRANSLATE_LANGUAGE = "CCTTargetTranslateLanguage";
+    public static final String CLOSE_TAB_SUGGESTIONS_STALE = "CloseTabSuggestionsStale";
     public static final String CHROME_DUET = "ChromeDuet";
     public static final String CHROME_DUET_ADAPTIVE = "ChromeDuetAdaptive";
     public static final String DONT_AUTO_HIDE_BROWSER_CONTROLS = "DontAutoHideBrowserControls";
@@ -248,6 +249,7 @@ public abstract class ChromeFeatureList {
     public static final String INTENT_BLOCK_EXTERNAL_FORM_REDIRECT_NO_GESTURE =
             "IntentBlockExternalFormRedirectsNoGesture";
     public static final String INTEREST_FEED_CONTENT_SUGGESTIONS = "InterestFeedContentSuggestions";
+    public static final String INTERTAB_GROUPING_SUGGESTIONS = "InterTabGroupingSuggestions";
     public static final String JELLY_BEAN_SUPPORTED = "JellyBeanSupported";
     public static final String LOOKALIKE_NAVIGATION_URL_SUGGESTIONS_UI =
             "LookalikeUrlNavigationSuggestionsUI";
@@ -307,6 +309,7 @@ public abstract class ChromeFeatureList {
     public static final String SERVICE_MANAGER_FOR_DOWNLOAD = "ServiceManagerForDownload";
     public static final String SERVICE_WORKER_PAYMENT_APPS = "ServiceWorkerPaymentApps";
     public static final String SHOPPING_ASSIST = "ShoppingAssist";
+    public static final String SHOPPING_ASSIST_PROVIDER = "ShoppingAssistProvider";
     public static final String SHOW_TRUSTED_PUBLISHER_URL = "ShowTrustedPublisherURL";
     public static final String SSL_COMMITTED_INTERSTITIALS = "SSLCommittedInterstitials";
     public static final String SPANNABLE_INLINE_AUTOCOMPLETE = "SpannableInlineAutocomplete";
@@ -315,6 +318,7 @@ public abstract class ChromeFeatureList {
             "SwapPixelFormatToFixConvertFromTranslucent";
     public static final String TAB_ENGAGEMENT_REPORTING_ANDROID = "TabEngagementReportingAndroid";
     public static final String TAB_GROUPS_ANDROID = "TabGroupsAndroid";
+    public static final String TAB_GROUP_STORIES = "TabGroupStories";
     public static final String TAB_GROUPS_UI_IMPROVEMENTS_ANDROID =
             "TabGroupsUiImprovementsAndroid";
     public static final String TAB_GRID_LAYOUT_ANDROID = "TabGridLayoutAndroid";

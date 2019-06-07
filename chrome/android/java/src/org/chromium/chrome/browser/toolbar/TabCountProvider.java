@@ -43,7 +43,7 @@ public class TabCountProvider {
 
     private boolean mIsIncognito;
 
-    TabCountProvider() {
+    public TabCountProvider() {
         mTabCountObservers = new ObserverList<TabCountObserver>();
     }
 
@@ -81,7 +81,7 @@ public class TabCountProvider {
      * @param tabModelSelector The {@link TabModelSelectorObserver} that observes when the tab count
      *                         may have changed.
      */
-    void setTabModelSelector(TabModelSelector tabModelSelector) {
+    public void setTabModelSelector(TabModelSelector tabModelSelector) {
         mTabModelSelector = tabModelSelector;
 
         mTabModelSelectorObserver = new EmptyTabModelSelectorObserver() {
@@ -142,7 +142,7 @@ public class TabCountProvider {
     /**
      * Clean up any state when the TabCountProvider is destroyed.
      */
-    void destroy() {
+    public void destroy() {
         if (mTabModelFilterObserver != null) {
             mTabModelSelector.getTabModelFilterProvider().removeTabModelFilterObserver(
                     mTabModelFilterObserver);

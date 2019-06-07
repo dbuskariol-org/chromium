@@ -94,6 +94,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kAndroidSiteSettingsUIRefresh,
     &kBackgroundTaskSchedulerForBackgroundSync,
     &kCastDeviceFilter,
+    &kCloseTabSuggestionsStale,
     &kCCTBackgroundTab,
     &kCCTExternalLinkHandling,
     &kCCTModule,
@@ -144,6 +145,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kImprovedA2HS,
     &kInlineUpdateFlow,
     &kIntentBlockExternalFormRedirectsNoGesture,
+    &kInterTabGroupingSuggestions,
     &kJellyBeanSupported,
     &kNewPhotoPicker,
     &kNoCreditCardAbort,
@@ -165,12 +167,14 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kServiceManagerForBackgroundPrefetch,
     &kServiceManagerForDownload,
     &kShoppingAssist,
+    &kShoppingAssistProvider,
     &kSpannableInlineAutocomplete,
     &kSpecialLocaleWrapper,
     &kSpecialUserDecision,
     &kSwapPixelFormatToFixConvertFromTranslucent,
     &kTabEngagementReportingAndroid,
     &kTabGroupsAndroid,
+    &kTabGroupStories,
     &kTabGroupsUiImprovementsAndroid,
     &kTabGridLayoutAndroid,
     &kTabPersistentStoreTaskRunner,
@@ -280,6 +284,9 @@ const base::Feature kBackgroundTaskSchedulerForBackgroundSync{
 // Used in downstream code.
 const base::Feature kCastDeviceFilter{"CastDeviceFilter",
                                       base::FEATURE_DISABLED_BY_DEFAULT};
+
+const base::Feature kCloseTabSuggestionsStale{
+    "CloseTabSuggestionsStale", base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kCCTBackgroundTab{"CCTBackgroundTab",
                                       base::FEATURE_ENABLED_BY_DEFAULT};
@@ -441,6 +448,9 @@ const base::Feature kIntentBlockExternalFormRedirectsNoGesture{
     "IntentBlockExternalFormRedirectsNoGesture",
     base::FEATURE_DISABLED_BY_DEFAULT};
 
+const base::Feature kInterTabGroupingSuggestions{
+    "InterTabGroupingSuggestions", base::FEATURE_DISABLED_BY_DEFAULT};
+
 const base::Feature kJellyBeanSupported{"JellyBeanSupported",
                                         base::FEATURE_DISABLED_BY_DEFAULT};
 
@@ -506,6 +516,9 @@ const base::Feature kServiceManagerForDownload{
 const base::Feature kShoppingAssist{"ShoppingAssist",
                                     base::FEATURE_DISABLED_BY_DEFAULT};
 
+const base::Feature kShoppingAssistProvider{"ShoppingAssistProvider",
+                                            base::FEATURE_DISABLED_BY_DEFAULT};
+
 const base::Feature kSpannableInlineAutocomplete{
     "SpannableInlineAutocomplete", base::FEATURE_ENABLED_BY_DEFAULT};
 
@@ -523,10 +536,13 @@ const base::Feature kTabEngagementReportingAndroid{
     "TabEngagementReportingAndroid", base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kTabGroupsAndroid{"TabGroupsAndroid",
-                                      base::FEATURE_DISABLED_BY_DEFAULT};
+                                      base::FEATURE_ENABLED_BY_DEFAULT};
+
+const base::Feature kTabGroupStories{"TabGroupStories",
+                                     base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kTabGroupsUiImprovementsAndroid{
-    "TabGroupsUiImprovementsAndroid", base::FEATURE_DISABLED_BY_DEFAULT};
+    "TabGroupsUiImprovementsAndroid", base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kTabGridLayoutAndroid{"TabGridLayoutAndroid",
                                           base::FEATURE_DISABLED_BY_DEFAULT};
