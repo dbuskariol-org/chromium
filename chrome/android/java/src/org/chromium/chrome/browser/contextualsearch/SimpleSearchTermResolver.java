@@ -32,7 +32,6 @@ public class SimpleSearchTermResolver {
 
     // Pointer to the native instance of this class.
     private long mNativePointer;
-    private Tab mTabInUse;
     private ResolveResponse mResponseCallback;
 
     private ContextualSearchContext mContext;
@@ -103,6 +102,7 @@ public class SimpleSearchTermResolver {
             @QuickActionCategory final int quickActionCategory, final long loggedEventId,
             final String searchUrlFull, final String searchUrlPreload,
             @CardTag final int cocaCardTag) {
+        Log.i(TAG, "ctxs onSearchTermResolutionResponse!!!!!!!!!!!!!!!");
         ResolvedSearchTerm resolvedSearchTerm = new ResolvedSearchTerm(isNetworkUnavailable,
                 responseCode, searchTerm, displayText, alternateTerm, mid, doPreventPreload,
                 selectionStartAdjust, selectionEndAdjust, contextLanguage, thumbnailUrl, caption,
@@ -114,9 +114,9 @@ public class SimpleSearchTermResolver {
             mResponseCallback = null;
             assert responseCallback != null;
             Uri searchUrl = Uri.parse(makeSearchUrl(resolvedSearchTerm));
+            android.util.Log.e("ctxs",resolvedSearchTerm.toString());
             responseCallback.onResolveResponse(resolvedSearchTerm, searchUrl);
         }
-        mTabInUse = null;
     }
 
     /** Constructs the singleton instance. */

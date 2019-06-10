@@ -5,6 +5,7 @@
 package org.chromium.chrome.browser.tasks.tab_management;
 
 import org.chromium.chrome.browser.ChromeActivity;
+import org.chromium.chrome.browser.appmenu.AppMenuButtonHelper;
 import org.chromium.chrome.browser.toolbar.bottom.BottomControlsCoordinator;
 
 /**
@@ -13,6 +14,6 @@ import org.chromium.chrome.browser.toolbar.bottom.BottomControlsCoordinator;
  */
 public interface TabGroupUi {
     void initializeWithNative(ChromeActivity activity,
-            BottomControlsCoordinator.BottomControlsVisibilityController visibilityController);
+                              BottomControlsCoordinator.BottomControlsVisibilityController visibilityController, AppMenuButtonHelper appMenuButtonHelper);
     void destroy();
 }

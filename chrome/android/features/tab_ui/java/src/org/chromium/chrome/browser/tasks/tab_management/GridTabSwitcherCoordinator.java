@@ -16,11 +16,15 @@ import org.chromium.chrome.browser.gesturenav.HistoryNavigationDelegate;
 import org.chromium.chrome.browser.gesturenav.HistoryNavigationLayout;
 import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher;
 import org.chromium.chrome.browser.lifecycle.Destroyable;
+import org.chromium.chrome.browser.snackbar.Snackbar;
+import org.chromium.chrome.browser.snackbar.SnackbarManager;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabCreatorManager;
 import org.chromium.chrome.browser.tabmodel.TabList;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
+import org.chromium.chrome.browser.tabmodel.TabModelUtils;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
 import org.chromium.chrome.browser.toolbar.ToolbarManager;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.ui.modelutil.PropertyModel;
@@ -28,6 +32,7 @@ import org.chromium.ui.modelutil.PropertyModelChangeProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Parent coordinator that is responsible for showing a grid of tabs for the main TabSwitcher UI.
@@ -41,12 +46,111 @@ public class GridTabSwitcherCoordinator
     private final GridTabSwitcherMediator mMediator;
     private final MultiThumbnailCardProvider mMultiThumbnailCardProvider;
     private final TabGridDialogCoordinator mTabGridDialogCoordinator;
+    private final TabSuggestionEditorCoordinator mTabSuggestionEditorCoordinator;
+    private final SnackbarManager.SnackbarManageable mSnackbarManageable;
+    private final TabModelSelector mTabModelSelector;
+
+    class TabSuggestionBarController implements SnackbarManager.SnackbarController {
+        @Override
+        public void onAction(Object actionData) {
+            showTabSuggestionEditor((TabSuggestion) actionData);
+        }
+
+        @Override
+        public void onDismissNoAction(Object actionData) {}
+
+        public void showTabSuggestionBar(TabSuggestion tabSuggestion) {
+            mSnackbarManageable.getSnackbarManager().showSnackbar(
+                    Snackbar.make(buildSnackBarContent(tabSuggestion), this,
+                                    Snackbar.TYPE_PERSISTENT, Snackbar.UMA_TEST_SNACKBAR)
+                            .setAction("Review", tabSuggestion));
+        }
+
+        public void dismissTabSuggestionBar() {
+            mSnackbarManageable.getSnackbarManager().dismissSnackbars(this);
+        }
+
+        private String getActionString(TabSuggestion suggestion) {
+            switch (suggestion.getAction()) {
+                case TabSuggestion.TabSuggestionAction.GROUP:
+                    return "Group";
+                case TabSuggestion.TabSuggestionAction.CLOSE:
+                    return "Close";
+                default:
+                    assert false;
+            }
+            return "";
+        }
+
+        private String buildSnackBarContent(TabSuggestion suggestion) {
+            String action = "";
+            String suffix = "";
+            switch (suggestion.getAction()) {
+                case TabSuggestion.TabSuggestionAction.GROUP:
+                    action = getActionString(suggestion);
+                    suffix = "related tabs";
+                    break;
+                case TabSuggestion.TabSuggestionAction.CLOSE:
+                    action = getActionString(suggestion);
+                    suffix = "old tabs";
+                    break;
+                default:
+                    assert false : "Unsupported TabSuggestion action";
+            }
+            return action + " " + suggestion.getTabsInfo().size() + " " + suffix
+                    + getProviderString(suggestion);
+        }
+
+        private String getProviderString(TabSuggestion suggestion) {
+            return " - " + suggestion.getProviderName();
+        }
+    }
+
+    class UndoGroupBarController implements SnackbarManager.SnackbarController {
+        @Override
+        public void onAction(Object actionData) {
+            undoAction((Map<Integer, Integer>) actionData);
+        }
+
+        private void undoAction(Map<Integer, Integer> tabIdToTabIndex) {
+            for (Map.Entry<Integer, Integer> entry : tabIdToTabIndex.entrySet()) {
+                Tab tab = TabModelUtils.getTabById(
+                        mTabModelSelector.getCurrentModel(), entry.getKey());
+                tab.setRootId(tab.getId());
+                mTabModelSelector.getCurrentModel().moveTab(tab.getId(), entry.getValue());
+            }
+        }
+
+        @Override
+        public void onDismissNoAction(Object actionData) {}
+
+        public void showUndoBar(Map<Integer, Integer> tabIdToTabIndex) {
+            mSnackbarManageable.getSnackbarManager().showSnackbar(
+                    Snackbar.make(buildSnackBarContent(tabIdToTabIndex), this, Snackbar.TYPE_ACTION,
+                                    Snackbar.UMA_TEST_SNACKBAR)
+                            .setAction("Undo", tabIdToTabIndex));
+        }
+
+        private String buildSnackBarContent(Map<Integer, Integer> tabIdToTabIndex) {
+            return tabIdToTabIndex.size() + " tabs grouped";
+        }
+
+        public void dismissUndoBar() {
+            mSnackbarManageable.getSnackbarManager().dismissSnackbars(this);
+        }
+    }
+
+    private final TabSuggestionBarController mTabSuggestionBarController =
+            new TabSuggestionBarController();
+
+    private final UndoGroupBarController mUndoGroupBarController = new UndoGroupBarController();
 
     public GridTabSwitcherCoordinator(Context context,
             ActivityLifecycleDispatcher lifecycleDispatcher, ToolbarManager toolbarManager,
             TabModelSelector tabModelSelector, TabContentManager tabContentManager,
             CompositorViewHolder compositorViewHolder, ChromeFullscreenManager fullscreenManager,
-            TabCreatorManager tabCreatorManager, Runnable backPress) {
+            TabCreatorManager tabCreatorManager, Runnable backPress,
+            SnackbarManager.SnackbarManageable snackbarManageable) {
         PropertyModel containerViewModel = new PropertyModel(TabListContainerProperties.ALL_KEYS);
         TabListMediator.GridCardOnClickListenerProvider gridCardOnClickListenerProvider;
         if (FeatureUtilities.isTabGroupsAndroidUiImprovementsEnabled()) {
@@ -55,14 +159,14 @@ public class GridTabSwitcherCoordinator
 
             mMediator = new GridTabSwitcherMediator(this, containerViewModel, tabModelSelector,
                     fullscreenManager, compositorViewHolder,
-                    mTabGridDialogCoordinator.getResetHandler());
+                    mTabGridDialogCoordinator.getResetHandler(), mTabSuggestionBarController);
 
             gridCardOnClickListenerProvider = mMediator::getGridCardOnClickListener;
         } else {
             mTabGridDialogCoordinator = null;
 
             mMediator = new GridTabSwitcherMediator(this, containerViewModel, tabModelSelector,
-                    fullscreenManager, compositorViewHolder, null);
+                    fullscreenManager, compositorViewHolder, null, mTabSuggestionBarController);
 
             gridCardOnClickListenerProvider = null;
         }
@@ -83,7 +187,7 @@ public class GridTabSwitcherCoordinator
         mTabGridCoordinator = new TabListCoordinator(TabListCoordinator.TabListMode.GRID, context,
                 tabModelSelector, mMultiThumbnailCardProvider, titleProvider, true,
                 mMediator::getCreateGroupButtonOnClickListener, gridCardOnClickListenerProvider,
-                compositorViewHolder, compositorViewHolder.getDynamicResourceLoader(), true,
+        null, this::getItemViewType,compositorViewHolder, compositorViewHolder.getDynamicResourceLoader(), true,
                 org.chromium.chrome.tab_ui.R.layout.grid_tab_switcher_layout, COMPONENT_NAME);
 
         HistoryNavigationLayout navigation = compositorViewHolder.findViewById(
@@ -94,8 +198,24 @@ public class GridTabSwitcherCoordinator
         mContainerViewChangeProcessor = PropertyModelChangeProcessor.create(containerViewModel,
                 mTabGridCoordinator.getContainerView(), TabGridContainerViewBinder::bind);
 
+        mSnackbarManageable = snackbarManageable;
+        mTabSuggestionEditorCoordinator = new TabSuggestionEditorCoordinator(
+                context, compositorViewHolder, tabModelSelector, tabContentManager);
+        mTabSuggestionEditorCoordinator.addActionListener(
+                new TabSuggestionEditorCoordinator.ActionListener() {
+                    @Override
+                    public void doneAction(int actionType, Map<Integer, Integer> tabIdsToTabIndex) {
+                        mUndoGroupBarController.showUndoBar(tabIdsToTabIndex);
+                    }
+                });
+        mTabModelSelector = tabModelSelector;
+
         mLifecycleDispatcher = lifecycleDispatcher;
         mLifecycleDispatcher.register(this);
+    }
+
+    public int getItemViewType(PropertyModel item) {
+        return TabGridViewHolder.TabGridViewItemType.NORMAL_TAB;
     }
 
     /**
@@ -158,5 +278,14 @@ public class GridTabSwitcherCoordinator
         mContainerViewChangeProcessor.destroy();
         mMediator.destroy();
         mLifecycleDispatcher.unregister(this);
+    }
+
+    /**
+     * Reset the tab suggestion editor with the given {@link TabSuggestion}.
+     * @param tabSuggestion The {@link TabSuggestion} to show in the editor.
+     */
+    public void showTabSuggestionEditor(TabSuggestion tabSuggestion) {
+        mTabSuggestionEditorCoordinator.resetTabSuggestion(tabSuggestion);
+        mTabSuggestionEditorCoordinator.show();
     }
 }

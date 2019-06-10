@@ -42,7 +42,8 @@ class TabGridViewBinder {
             holder.title.setText(title);
             holder.closeButton.setContentDescription(holder.itemView.getResources().getString(
                     org.chromium.chrome.R.string.accessibility_tabstrip_btn_close_tab, title));
-        } else if (TabProperties.IS_SELECTED == propertyKey) {
+        } else if (TabProperties.IS_SELECTED == propertyKey
+                && holder.getItemViewType() == TabGridViewHolder.TabGridViewItemType.NORMAL_TAB) {
             Resources res = holder.itemView.getResources();
             Resources.Theme theme = holder.itemView.getContext().getTheme();
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -86,6 +87,8 @@ class TabGridViewBinder {
             if (provider != null) provider.showIPH(holder.thumbnail);
         } else if (TabProperties.TAB_ID == propertyKey) {
             holder.setTabId(item.get(TabProperties.TAB_ID));
+            holder.thumbnail.setImageResource(0);
+            holder.thumbnail.setMinimumHeight(holder.thumbnail.getWidth());
         } else if (TabProperties.CREATE_GROUP_LISTENER == propertyKey) {
             TabListMediator.TabActionListener listener =
                     item.get(TabProperties.CREATE_GROUP_LISTENER);
@@ -97,6 +100,16 @@ class TabGridViewBinder {
             holder.createGroupButton.setOnClickListener(view -> listener.run(holder.getTabId()));
         } else if (TabProperties.ALPHA == propertyKey) {
             holder.itemView.setAlpha(item.get(TabProperties.ALPHA));
+        } else if (TabProperties.TAB_SELECTION_DELEGATE == propertyKey) {
+            if (item.get(TabProperties.TAB_SELECTION_DELEGATE) != null) {
+                holder.tabGridView.setSelectionDelegate(
+                        item.get(TabProperties.TAB_SELECTION_DELEGATE));
+                holder.tabGridView.setItem(holder.getTabId());
+                holder.itemView.setOnClickListener(view -> holder.tabGridView.onClick());
+                holder.tabGridView.setSelectionOnLongClick(false);
+            } else {
+                holder.tabGridView.setOnLongClickListener(null);
+            }
         }
     }
 

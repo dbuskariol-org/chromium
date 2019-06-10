@@ -414,6 +414,7 @@ public class TabGroupModelFilter extends TabModelFilter {
     @Override
     protected void selectTab(Tab tab) {
         assert mAbsentSelectedTab == null;
+        if (tab == null) return;
         int groupId = tab.getRootId();
         if (mGroupIdToGroupMap.get(groupId) == null) {
             mAbsentSelectedTab = tab;
@@ -437,18 +438,18 @@ public class TabGroupModelFilter extends TabModelFilter {
         boolean reorderAllGroups = groupId == TabGroup.INVALID_GROUP_ID;
         if (reorderAllGroups) {
             mGroupIdToGroupIndexMap.clear();
+            mGroupIdToGroupMap.clear();
+            mActualGroupCount = 0;
         }
 
         TabModel tabModel = getTabModel();
         for (int i = 0; i < tabModel.getCount(); i++) {
             Tab tab = tabModel.getTabAt(i);
             if (reorderAllGroups) {
-                groupId = tab.getRootId();
-                if (!mGroupIdToGroupIndexMap.containsKey(groupId)) {
-                    mGroupIdToGroupIndexMap.put(groupId, mGroupIdToGroupIndexMap.size());
-                }
+                addTab(tab);
+            } else {
+                mGroupIdToGroupMap.get(groupId).moveToEndInGroup(tab.getId());
             }
-            mGroupIdToGroupMap.get(groupId).moveToEndInGroup(tab.getId());
         }
     }
 

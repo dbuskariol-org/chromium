@@ -111,6 +111,12 @@ public class GridTabSwitcherLayout
         }
 
         if (!showShrinkingAnimation) {
+            LayoutTab sourceLayoutTab = createLayoutTab(mTabModelSelector.getCurrentTabId(),
+                    mTabModelSelector.isIncognitoSelected(), NO_CLOSE_BUTTON, NEED_TITLE);
+            sourceLayoutTab.setDecorationAlpha(0);
+
+            mLayoutTabs = new LayoutTab[] {sourceLayoutTab};
+
             mGridController.showOverview(animate);
             return;
         }

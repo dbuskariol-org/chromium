@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.ThemeColorProvider;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestions;
 import org.chromium.components.module_installer.ModuleInterface;
 
 /**
@@ -18,4 +19,6 @@ import org.chromium.components.module_installer.ModuleInterface;
 public interface TabManagementDelegate {
     GridTabSwitcher createGridTabSwitcher(ChromeActivity activity);
     TabGroupUi createTabGroupUi(ViewGroup parentView, ThemeColorProvider themeColorProvider);
+    TabSuggestions createTabSuggestions(ChromeActivity activity);
+    TabSuggestionEditorLayout createTabSuggestionEditorLayout(ChromeActivity activity);
 }

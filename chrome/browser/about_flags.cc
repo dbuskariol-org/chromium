@@ -393,6 +393,48 @@ const FeatureEntry::FeatureVariation kCCTModuleCacheVariations[] = {
 
 #endif  // OS_ANDROID
 
+#if defined(OS_ANDROID)
+const FeatureEntry::FeatureParam kCloseTabSuggestionsStale_4Hours[] = {
+    {"close_tab_suggestions_stale_time_ms", "14400000"}};
+const FeatureEntry::FeatureParam kCloseTabSuggestionsStale_8Hours[] = {
+    {"close_tab_suggestions_stale_time_ms", "28800000"}};
+const FeatureEntry::FeatureParam kCloseTabSuggestionsStale_7Days[] = {
+    {"close_tab_suggestions_stale_time_ms", "604800000"}};
+const FeatureEntry::FeatureVariation kCloseTabSuggestionsStaleVariations[] = {
+    {"4 hours", kCloseTabSuggestionsStale_4Hours,
+     base::size(kCloseTabSuggestionsStale_4Hours), nullptr},
+    {"8 hours", kCloseTabSuggestionsStale_8Hours,
+     base::size(kCloseTabSuggestionsStale_8Hours), nullptr},
+    {"7 days", kCloseTabSuggestionsStale_7Days,
+     base::size(kCloseTabSuggestionsStale_7Days), nullptr},
+};
+#endif  // OS_ANDROID
+
+#if defined(OS_ANDROID)
+const FeatureEntry::FeatureParam kShoppingAssistProvider_ContextualSearch[] = {
+    {"shopping_assist_provider", "ContextualSearch"}};
+const FeatureEntry::FeatureParam kShoppingAssistProvider_BuyableCorpus[] = {
+    {"shopping_assist_provider", "BuyableCorpus"}};
+
+const FeatureEntry::FeatureVariation kShoppingAssistProviderVariations[] = {
+    {"Contextual Search", kShoppingAssistProvider_ContextualSearch,
+     base::size(kShoppingAssistProvider_ContextualSearch), nullptr},
+    {"Buyable Corpus", kShoppingAssistProvider_BuyableCorpus,
+     base::size(kShoppingAssistProvider_BuyableCorpus), nullptr},
+};
+const FeatureEntry::FeatureParam kShoppingAssist_EphemeralTab[] = {
+    {"shopping_assist_behavior", "EphemeralTab"}};
+const FeatureEntry::FeatureParam kShoppingAssist_TabInGroup[] = {
+    {"shopping_assist_behavior", "TabInAGroup"}};
+
+const FeatureEntry::FeatureVariation kShoppingAssistVariations[] = {
+    {"Ephemeral tab", kShoppingAssist_EphemeralTab,
+     base::size(kShoppingAssist_EphemeralTab), nullptr},
+    {"Tab in a group", kShoppingAssist_TabInGroup,
+     base::size(kShoppingAssist_TabInGroup), nullptr},
+};
+#endif  // OS_ANDROID
+
 const FeatureEntry::Choice kEnableGpuRasterizationChoices[] = {
     {flags_ui::kGenericExperimentChoiceDefault, "", ""},
     {flags_ui::kGenericExperimentChoiceEnabled,
@@ -1009,6 +1051,31 @@ const FeatureEntry::FeatureVariation kTabSwitcherOnReturnVariations[] = {
     {"60 minutes", kTabSwitcherOnReturn_60Minutes,
      base::size(kTabSwitcherOnReturn_60Minutes), nullptr},
 };
+
+const FeatureEntry::FeatureParam kInterTabGroupingSuggestions_XLow[] = {
+    {"intertab_suggestion_pmi_threshold", "1"}};
+const FeatureEntry::FeatureParam kInterTabGroupingSuggestions_Low[] = {
+    {"intertab_suggestion_pmi_threshold", "2"}};
+const FeatureEntry::FeatureParam kInterTabGroupingSuggestions_Med[] = {
+    {"intertab_suggestion_pmi_threshold", "3"}};
+const FeatureEntry::FeatureParam kInterTabGroupingSuggestions_High[] = {
+    {"intertab_suggestion_pmi_threshold", "5"}};
+const FeatureEntry::FeatureParam kInterTabGroupingSuggestions_XHigh[] = {
+    {"intertab_suggestion_pmi_threshold", "8"}};
+const FeatureEntry::FeatureVariation kInterTabGroupingSuggestionsVariations[] =
+    {
+        {"X-Low", kInterTabGroupingSuggestions_XLow,
+         base::size(kInterTabGroupingSuggestions_XLow), nullptr},
+        {"Low", kInterTabGroupingSuggestions_Low,
+         base::size(kInterTabGroupingSuggestions_Low), nullptr},
+        {"Med", kInterTabGroupingSuggestions_Med,
+         base::size(kInterTabGroupingSuggestions_Med), nullptr},
+        {"High", kInterTabGroupingSuggestions_High,
+         base::size(kInterTabGroupingSuggestions_High), nullptr},
+        {"X-High", kInterTabGroupingSuggestions_XHigh,
+         base::size(kInterTabGroupingSuggestions_XHigh), nullptr},
+};
+
 #endif  // OS_ANDROID
 
 const FeatureEntry::FeatureParam kVizHitTestDrawQuadEnabled[] = {
@@ -1250,7 +1317,15 @@ const FeatureEntry kFeatureEntries[] = {
                                     "ExploreSites")},
     {"shopping-assist", flag_descriptions::kShoppingAssistName,
      flag_descriptions::kShoppingAssistDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(chrome::android::kShoppingAssist)},
+     FEATURE_WITH_PARAMS_VALUE_TYPE(chrome::android::kShoppingAssist,
+                                    kShoppingAssistVariations,
+                                    "ShoppingAssist")},
+
+    {"shopping-assist-provider", flag_descriptions::kShoppingAssistProviderName,
+     flag_descriptions::kShoppingAssistProviderDescription, kOsAndroid,
+     FEATURE_WITH_PARAMS_VALUE_TYPE(chrome::android::kShoppingAssistProvider,
+                                    kShoppingAssistProviderVariations,
+                                    "ShoppingAssistProvider")},
 #endif  // OS_ANDROID
     {"show-autofill-type-predictions",
      flag_descriptions::kShowAutofillTypePredictionsName,
@@ -2955,6 +3030,13 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kSupervisedUserCommittedInterstitials)},
 
 #if defined(OS_ANDROID)
+    {"enable-close-tab-suggestions-stale",
+     flag_descriptions::kCloseTabSuggestionsStaleName,
+     flag_descriptions::kCloseTabSuggestionsStaleDescription, kOsAndroid,
+     FEATURE_WITH_PARAMS_VALUE_TYPE(chrome::android::kCloseTabSuggestionsStale,
+                                    kCloseTabSuggestionsStaleVariations,
+                                    "CloseSuggestionsStaleTab")},
+
     {"enable-horizontal-tab-switcher",
      flag_descriptions::kHorizontalTabSwitcherAndroidName,
      flag_descriptions::kHorizontalTabSwitcherAndroidDescription, kOsAndroid,
@@ -2989,6 +3071,14 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kTabEngagementReportingName,
      flag_descriptions::kTabEngagementReportingDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kTabEngagementReportingAndroid)},
+
+    {"enable-intertab-grouping-suggestions",
+     flag_descriptions::kInterTabGroupingSuggestionsName,
+     flag_descriptions::kInterTabGroupingSuggestionsDescription, kOsAndroid,
+     FEATURE_WITH_PARAMS_VALUE_TYPE(
+         chrome::android::kInterTabGroupingSuggestions,
+         kInterTabGroupingSuggestionsVariations,
+         "IntertabGroupingSuggestions")},
 #endif  // OS_ANDROID
 
     {"enable-built-in-module-all", flag_descriptions::kBuiltInModuleAllName,

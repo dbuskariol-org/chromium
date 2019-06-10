@@ -52,6 +52,19 @@ android_library("java") {
     "java/src/org/chromium/chrome/browser/tasks/tab_management/TabStripToolbarViewProperties.java",
     "java/src/org/chromium/chrome/browser/tasks/tab_management/TabStripViewBinder.java",
     "java/src/org/chromium/chrome/browser/tasks/tab_management/TabStripViewHolder.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/TabListFaviconProvider.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/suggestions/DuplicatePageTabSuggestionProvider.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/suggestions/StaleTabSuggestionProvider.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/suggestions/SessionTabSwitchesSuggestionProvider.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/suggestions/TabSuggestionProvider.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/suggestions/TabSuggestionsClientFetcher.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/suggestions/TabSuggestionsServerFetcher.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/suggestions/TabSuggestionsFetcher.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/suggestions/TabSuggestionsOrchestrator.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/suggestions/TabSuggestionsRanker.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/TabSuggestionEditorCoordinator.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/TabSuggestionEditorToolbar.java",
+    "java/src/org/chromium/chrome/browser/tasks/tab_management/TabGridView.java",
   ]
 
   deps = [

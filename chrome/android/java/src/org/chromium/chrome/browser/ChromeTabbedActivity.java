@@ -143,10 +143,15 @@ import org.chromium.chrome.browser.tabmodel.TabWindowManager;
 import org.chromium.chrome.browser.tasks.EngagementTimeUtil;
 import org.chromium.chrome.browser.tasks.JourneyManager;
 import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
+import org.chromium.chrome.browser.tasks.TaskRecognizer;
 import org.chromium.chrome.browser.tasks.TasksUma;
 import org.chromium.chrome.browser.tasks.tab_management.GridTabSwitcher;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementDelegate;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementModuleProvider;
+import org.chromium.chrome.browser.tasks.tab_management.TabSuggestionEditorLayout;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabContext;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestions;
 import org.chromium.chrome.browser.toolbar.ToolbarButtonInProductHelpController;
 import org.chromium.chrome.browser.toolbar.top.ToolbarControlContainer;
 import org.chromium.chrome.browser.touchless.TouchlessDelegate;
@@ -844,6 +849,9 @@ public class ChromeTabbedActivity
             mOverviewModeController.overrideOverviewModeController(mLayoutManager);
             mOverviewModeController.addOverviewModeObserver(this);
 
+            if (ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)) {
+                TaskRecognizer.createForTabModelSelector(getTabModelSelector());
+            }
             if (ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_ENGAGEMENT_REPORTING_ANDROID)) {
                 // The lifecycle of this object is managed by the lifecycle dispatcher.
                 new JourneyManager(getTabModelSelector(), getLifecycleDispatcher(),
@@ -906,6 +914,11 @@ public class ChromeTabbedActivity
         }
 
         return LanguageAskPrompt.maybeShowLanguageAskPrompt(this);
+    }
+
+    @Override
+    public boolean didFinishNativeInitialization() {
+        return super.didFinishNativeInitialization();
     }
 
     @Override
@@ -1838,10 +1851,39 @@ public class ChromeTabbedActivity
             RecordUserAction.record("MobileTabClosedUndoShortCut");
         } else if (id == R.id.enter_vr_id) {
             VrModuleProvider.getDelegate().enterVrIfNecessary();
+        } else if (id == R.id.manual_grouping_selection_id) {
+            TabSuggestionEditorLayout tabSuggestionEditorLayout =
+                    TabManagementModuleProvider.getDelegate()
+                            .createTabSuggestionEditorLayout(this);
+            TabModel currentModel = getTabModelSelector().getCurrentModel();
+            tabSuggestionEditorLayout.resetTabSuggestion(currentModel, 0, view -> {});
+            tabSuggestionEditorLayout.show();
+        } else if (id == R.id.tabs_suggestion_id) {
+            TabSuggestionEditorLayout tabSuggestionEditorLayout =
+                    TabManagementModuleProvider.getDelegate()
+                            .createTabSuggestionEditorLayout(this);
+
+            TabSuggestions tabSuggestionProvider =
+                    TabManagementModuleProvider.getDelegate().createTabSuggestions(this);
+
+            TabContext currentTabContext = TabContext.createCurrentContext(getTabModelSelector());
+
+            tabSuggestionProvider.getSuggestions(currentTabContext,
+                    res
+                    -> getSuggestionsCallback(
+                            (List<TabSuggestion>) res, tabSuggestionEditorLayout));
         } else {
             return super.onMenuOrKeyboardAction(id, fromMenu);
         }
         return true;
+    }
+
+    private void getSuggestionsCallback(List<TabSuggestion> tabSuggestions,
+            TabSuggestionEditorLayout tabSuggestionEditorLayout) {
+        if (tabSuggestions.size() > 0) {
+            tabSuggestionEditorLayout.resetTabSuggestion(tabSuggestions.get(0));
+        }
+        tabSuggestionEditorLayout.show();
     }
 
     @Override
