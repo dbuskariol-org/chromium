@@ -6,6 +6,7 @@ package org.chromium.chrome.browser.compositor.bottombar.ephemeraltab;
 
 import android.content.Context;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.view.MotionEvent;
 
 import org.chromium.base.SysUtils;
@@ -23,6 +24,7 @@ import org.chromium.chrome.browser.compositor.layouts.LayoutUpdateHost;
 import org.chromium.chrome.browser.compositor.layouts.eventfilter.OverlayPanelEventFilter;
 import org.chromium.chrome.browser.compositor.scene_layer.EphemeralTabSceneLayer;
 import org.chromium.chrome.browser.compositor.scene_layer.SceneOverlayLayer;
+import org.chromium.chrome.browser.externalnav.ExternalNavigationHandler;
 import org.chromium.chrome.browser.tab.SadTab;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabLaunchType;
@@ -30,6 +32,7 @@ import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabObserver;
 import org.chromium.chrome.browser.tabmodel.TabSelectionType;
+import org.chromium.components.navigation_interception.NavigationParams;
 import org.chromium.content_public.browser.LoadUrlParams;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.ui.base.PageTransition;
@@ -91,12 +94,10 @@ public class EphemeralTabPanel extends OverlayPanel {
             @Override
             public boolean onInterceptTouchEventInternal(MotionEvent e, boolean isKeyboardShowing) {
                 OverlayPanel panel = EphemeralTabPanel.this;
-                if (panel.isShowing() && panel.isPeeking()
-                        && panel.isCoordinateInsideBar(e.getX() * mPxToDp, e.getY() * mPxToDp)) {
+                if (panel.isShowing()) {
                     // Events go to base panel in peeked mode to scroll base page.
                     return super.onInterceptTouchEventInternal(e, isKeyboardShowing);
                 }
-                if (panel.isShowing() && panel.isMaximized()) return true;
                 return false;
             }
         };
@@ -111,6 +112,32 @@ public class EphemeralTabPanel extends OverlayPanel {
         @Override
         public void onMainFrameNavigation(String url, boolean isExternalUrl, boolean isFailure) {
             if (!isFailure) mUrl = url;
+            if (!isFailure) {
+                Uri uri = Uri.parse(mUrl);
+                if (uri.getAuthority().startsWith("www.google.com")) return;
+                // closePanel(StateChangeReason.TAB_PROMOTION, false);
+                // mActivity.getCurrentTabCreator().createNewTab(
+                //       new LoadUrlParams(mUrl, PageTransition.LINK), TabLaunchType.FROM_LINK,
+                //       mActivity.getActivityTabProvider().get());
+            }
+        }
+
+        @Override
+        public boolean shouldInterceptNavigation(
+                ExternalNavigationHandler externalNavHandler, NavigationParams navigationParams) {
+            android.util.Log.e("Yusuf",
+                    "Should intercept navigation with " + navigationParams.url + ":"
+                            + navigationParams.isMainFrame);
+
+            Uri uri = Uri.parse(navigationParams.url);
+            if (uri.getAuthority().startsWith("www.google.com"))
+                return super.shouldInterceptNavigation(externalNavHandler, navigationParams);
+
+            closePanel(StateChangeReason.TAB_PROMOTION, false);
+            mActivity.getCurrentTabCreator().createNewTab(
+                    new LoadUrlParams(navigationParams.url, PageTransition.LINK),
+                    TabLaunchType.FROM_LINK, mActivity.getActivityTabProvider().get());
+            return true;
         }
     }
 
@@ -168,7 +195,7 @@ public class EphemeralTabPanel extends OverlayPanel {
 
     @Override
     protected float getPeekedHeight() {
-        return getBarHeightPeeking() * 1.5f;
+        return getBarHeightPeeking() * 10f;
     }
 
     @Override

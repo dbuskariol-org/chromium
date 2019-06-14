@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import org.chromium.base.Log;
+import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.base.task.PostTask;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeFeatureList;
@@ -17,6 +18,7 @@ import org.chromium.chrome.browser.contextualsearch.ResolvedSearchTerm;
 import org.chromium.chrome.browser.contextualsearch.ResolvedSearchTerm.CardTag;
 import org.chromium.chrome.browser.contextualsearch.SimpleSearchTermResolver;
 import org.chromium.chrome.browser.contextualsearch.SimpleSearchTermResolver.ResolveResponse;
+import org.chromium.chrome.browser.search_engines.TemplateUrlService;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabLaunchType;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
@@ -81,9 +83,12 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
      * @param tab The tab that might be about a product.  Must be the current front tab.
      */
     private void tryToShowProduct(Tab tab) {
+        String provider = ChromeFeatureList.getFieldTrialParamByFeature(
+                ChromeFeatureList.SHOPPING_ASSIST_PROVIDER, "shopping_assist_provider");
 
         // TODO(yusufo): filter based on other criteria, e.g. Incognito.
-        boolean inProgress = resolveTitleAndShowOverlay(tab, this);
+        boolean inProgress =
+                resolveTitleAndShowOverlay(tab, this, !provider.equals("ChromeServices"));
         if (inProgress) {
             Log.i(TAG, "Trying to show product info for tab: " + tab);
             mTabInUse = tab;
@@ -97,7 +102,8 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
      * @param responseCallback The callback to call.
      * @return Whether we were able to issue a request.
      */
-    private boolean resolveTitleAndShowOverlay(Tab tab, ResolveResponse responseCallback) {
+    private boolean resolveTitleAndShowOverlay(
+            Tab tab, ResolveResponse responseCallback, boolean shouldUseContextualSearch) {
         String pageTitle = tab.getTitle();
         String pageUrl = tab.getUrl();
         WebContents webContents = tab.getWebContents();
@@ -106,10 +112,13 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
             return false;
         }
 
-        String provider = ChromeFeatureList.getFieldTrialParamByFeature(
-                ChromeFeatureList.SHOPPING_ASSIST_PROVIDER, "shopping_assist_provider");
+        if (TemplateUrlService.getInstance().isSearchResultsPageFromDefaultSearchProvider(
+                    pageUrl)) {
+            Log.e(TAG, "SRP Detected. Ignore.");
+            return false;
+        }
 
-        if (provider.equals("BuyableCorpus")) {
+        if (!shouldUseContextualSearch) {
             ShoppingProductsResolver.getInstance().startShoppingProductResolutionRequest(
                     webContents, this, getUriWithoutPii(tab.getUrl()));
 
@@ -189,18 +198,30 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
     public void onResolveResponse(ShoppingAssistServiceResponse.Product product) {
         String behavior = ChromeFeatureList.getFieldTrialParamByFeature(
                 ChromeFeatureList.SHOPPING_ASSIST_PROVIDER, "shopping_assist_behavior");
-        if (product != null && mSearchAccelerator != null) {
-            PostTask.runOrPostTask(UiThreadTaskTraits.USER_VISIBLE, () -> {
-                if (behavior.startsWith("TabInAGroup")) {
-                    mSearchAccelerator.reset(product.getName(),
-                            view -> createChildTabFor(Uri.parse(product.getSearchUrl())));
-                } else {
-                    mSearchAccelerator.reset(product.getName(),
-                            view
-                            -> createEphemeralTabFor(mTabInUse, product.getName(),
-                                    Uri.parse(product.getSearchUrl())));
-                }
-            });
+        if (product == null) {
+            Log.e(TAG, "Empty response from Memex. Falling back to ContextualSearch");
+            RecordUserAction.record("SearchAssist.FallbackStarted");
+            resolveTitleAndShowOverlay(mTabInUse, this, true);
+        } else {
+            if (mSearchAccelerator != null) {
+                RecordUserAction.record("SearchAssist.SuggestionShown");
+                PostTask.runOrPostTask(UiThreadTaskTraits.USER_VISIBLE, () -> {
+                    if (behavior.startsWith("TabInAGroup")) {
+                        mSearchAccelerator.reset(product.getName(), view -> {
+                            RecordUserAction.record("SearchAssist.SuggestionTapped");
+                            RecordUserAction.record("TabGroups.Created.SearchAssist");
+                            createChildTabFor(Uri.parse(product.getSearchUrl()));
+                        });
+                    } else {
+                        mSearchAccelerator.reset(product.getName(), view -> {
+                            RecordUserAction.record("SearchAssist.OpenedEphemeralTab");
+                            RecordUserAction.record("SearchAssist.SuggestionTapped");
+                            createEphemeralTabFor(mTabInUse, product.getName(),
+                                    Uri.parse(product.getSearchUrl()));
+                        });
+                    }
+                });
+            }
         }
     }
 
@@ -221,19 +242,24 @@ public class TaskRecognizer extends TabModelSelectorTabObserver
             String behavior = ChromeFeatureList.getFieldTrialParamByFeature(
                     ChromeFeatureList.SHOPPING_ASSIST, "shopping_assist_behavior");
             android.util.Log.e("Yusuf", "behavior is " + behavior);
-            if (mSearchAccelerator != null)
+            if (mSearchAccelerator != null) {
+                RecordUserAction.record("SearchAssist.SuggestionShown");
                 if (behavior.startsWith("TabInAGroup")) {
-                    mSearchAccelerator.reset(
-                            resolvedSearchTerm.displayText(), view -> createChildTabFor(searchUri));
-                } else {
-                    mSearchAccelerator.reset(resolvedSearchTerm.displayText(),
-                            view
-                            -> createEphemeralTabFor(
-                                    mTabInUse, resolvedSearchTerm.displayText(), searchUri));
-                }
+                    mSearchAccelerator.reset(resolvedSearchTerm.displayText(), view -> {
+                        RecordUserAction.record("SearchAssist.SuggestionTapped");
+                        RecordUserAction.record("TabGroups.Created.SearchAssist");
 
-            mTabInUse.setProductUrl(resolvedSearchTerm.displayText());
-            mTabInUse.setProductThumbnailUrl(resolvedSearchTerm.thumbnailUrl());
+                        createChildTabFor(searchUri);
+                    });
+                } else {
+                    mSearchAccelerator.reset(resolvedSearchTerm.displayText(), view -> {
+                        RecordUserAction.record("SearchAssist.OpenedEphemeralTab");
+                        RecordUserAction.record("SearchAssist.SuggestionTapped");
+                        createEphemeralTabFor(
+                                mTabInUse, resolvedSearchTerm.displayText(), searchUri);
+                    });
+                }
+            }
         }
     }
 

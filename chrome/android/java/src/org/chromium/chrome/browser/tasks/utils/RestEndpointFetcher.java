@@ -21,11 +21,12 @@ public class RestEndpointFetcher {
      * @param contentType content type being fetched e.g. "application/json"
      * @param scopes oath scopes
      * @param postData data to be posted to endpoint if method is POST
+     * @param timeout request timeout in milliseconds
      */
     public RestEndpointFetcher(String oathConsumerName, String url, String method,
-            String contentType, String[] scopes, String postData) {
+            String contentType, String[] scopes, String postData, long timeout) {
         nativeInit(this, Profile.getLastUsedProfile(), url, oathConsumerName, method, contentType,
-                scopes, postData);
+                scopes, postData, timeout);
     }
 
     public void fetchResponse(Callback<String> callback) {
@@ -46,7 +47,7 @@ public class RestEndpointFetcher {
 
     private native void nativeInit(RestEndpointFetcher restEndpointFetcher, Profile profile,
             String url, String oathConstumerName, String method, String contentType,
-            String[] scopes, String postData);
+            String[] scopes, String postData, long timeout);
     private native void nativeDestroy(long nativeRestEndpointFetcher);
     private native void nativeFetch(long nativeRestEndpointFetcher, Callback callback);
 }

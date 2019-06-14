@@ -318,6 +318,7 @@ public abstract class ChromeFeatureList {
     public static final String TAB_ENGAGEMENT_REPORTING_ANDROID = "TabEngagementReportingAndroid";
     public static final String TAB_GROUPS_ANDROID = "TabGroupsAndroid";
     public static final String TAB_GROUP_STORIES = "TabGroupStories";
+    public static final String TAB_GROUP_SUGGESTIONS = "TabGroupSuggestions";
     public static final String TAB_GROUPS_UI_IMPROVEMENTS_ANDROID =
             "TabGroupsUiImprovementsAndroid";
     public static final String TAB_GRID_LAYOUT_ANDROID = "TabGridLayoutAndroid";

@@ -24,16 +24,14 @@ public final class ShoppingAssistServiceResponse {
      * */
     public static final class Product {
         private final String mName;
-        private final String mMid;
         private final String mSearchUrl;
 
         /**
          * constructor
          * */
-        public Product(String name, String mid, String jackpotUrl) {
+        public Product(String name, String searchUrl) {
             mName = name;
-            mMid = mid;
-            mSearchUrl = jackpotUrl;
+            mSearchUrl = searchUrl;
         }
 
         /**
@@ -41,13 +39,6 @@ public final class ShoppingAssistServiceResponse {
          * */
         public String getName() {
             return mName;
-        }
-
-        /**
-         * Gets the product mid
-         * */
-        public String getMid() {
-            return mMid;
         }
 
         /**
@@ -75,8 +66,7 @@ public final class ShoppingAssistServiceResponse {
 
                     products.add(new ShoppingAssistServiceResponse.Product(
                             jsonProduct.optString("product_name", ""),
-                            jsonProduct.optString("mid", ""),
-                            jsonProduct.optString("immersive_jackpot", "")));
+                            jsonProduct.optString("search_url", "")));
                 }
             }
 

@@ -16,9 +16,10 @@ public final class ShoppingProductsResolver {
     private static final String[] SHOPPING_ASSIST_OAUTH_SCOPES =
             new String[] {"https://www.googleapis.com/auth/userinfo.email"};
     private static final String SHOPPING_ASSIST_URL =
-            "http://task-management-chrome.sandbox.google.com/shopping?offersonly=true&url=%s";
+            "https://task-management-chrome.sandbox.google.com/shopping?url=%s";
     private static final String SHOPPING_ASSIST_OAUTH_CONSUMER = "ShoppingAssist";
     private static final String TAG = "SHP_AST";
+    private static final long THIRTY_SECOND_TIMEOUT_MILLISECONDS = 30000;
 
     private static ShoppingProductsResolver sInstance;
 
@@ -46,7 +47,7 @@ public final class ShoppingProductsResolver {
             // start https request to fetch data from the service.
             RestEndpointFetcher shoppingEndpointFetcher = new RestEndpointFetcher(
                     SHOPPING_ASSIST_OAUTH_CONSUMER, String.format(SHOPPING_ASSIST_URL, url), "GET",
-                    "", SHOPPING_ASSIST_OAUTH_SCOPES, null);
+                    "", SHOPPING_ASSIST_OAUTH_SCOPES, null, THIRTY_SECOND_TIMEOUT_MILLISECONDS);
 
             shoppingEndpointFetcher.fetchResponse((response) -> {
                 Log.e(TAG, response);

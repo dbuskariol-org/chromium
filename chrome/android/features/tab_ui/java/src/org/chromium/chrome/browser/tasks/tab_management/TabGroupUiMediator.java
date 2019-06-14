@@ -5,6 +5,7 @@
 package org.chromium.chrome.browser.tasks.tab_management;
 
 import android.net.Uri;
+import android.text.TextUtils;
 
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
@@ -233,7 +234,21 @@ public class TabGroupUiMediator {
         List<Tab> listOfTabs = mTabModelSelector.getTabModelFilterProvider()
                                        .getCurrentTabModelFilter()
                                        .getRelatedTabList(id);
-        if (listOfTabs.size() < 2) {
+
+        boolean shouldNotShowStrip = (listOfTabs.size() < 2)
+                || (ChromeFeatureList.isInitialized()
+                        && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)
+                        && (!TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
+                                    ChromeFeatureList.SHOPPING_ASSIST, "shopping_assist_behavior"))
+                                        && !ChromeFeatureList
+                                                    .getFieldTrialParamByFeature(
+                                                            ChromeFeatureList.SHOPPING_ASSIST,
+                                                            "shopping_assist_behavior")
+                                                    .startsWith("TabInAGroup")
+                                || TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
+                                        ChromeFeatureList.SHOPPING_ASSIST,
+                                        "shopping_assist_behavior"))));
+        if (shouldNotShowStrip) {
             mResetHandler.resetStripWithListOfTabs(null);
             mToolbarPropertyModel.set(TabStripToolbarViewProperties.IS_MAIN_CONTENT_VISIBLE, false);
             mIsTabGroupUiVisible = (ChromeFeatureList.isInitialized()

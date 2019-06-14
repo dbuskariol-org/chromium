@@ -2475,7 +2475,11 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
 
         if (getMenuButtonWrapper() != null) {
             setMenuButtonHighlightDrawable();
-            if (!mIsBottomToolbarVisible) getMenuButtonWrapper().setVisibility(View.VISIBLE);
+            if (!mIsBottomToolbarVisible
+                    && !(ChromeFeatureList.isInitialized()
+                            && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST))) {
+                getMenuButtonWrapper().setVisibility(View.VISIBLE);
+            }
         }
 
         DrawableCompat.setTint(mLocationBarBackground,
@@ -2796,7 +2800,6 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
                 && (ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)
                         || ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUP_STORIES));
         mIsBottomToolbarVisible = isVisible;
-
         final int visibility = isVisible ? GONE : VISIBLE;
         mToggleTabStackButton.setVisibility(visibility);
         getMenuButtonWrapper().setVisibility(visibility);

@@ -7,6 +7,7 @@
 #include "base/android/callback_android.h"
 #include "base/android/jni_array.h"
 #include "base/android/jni_string.h"
+#include "base/time/time.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_android.h"
 #include "chrome/browser/signin/identity_manager_factory.h"
@@ -29,6 +30,7 @@ RestEndpointFetcher::RestEndpointFetcher(
     std::string method,
     std::string content_type,
     std::vector<std::string> scopes,
+    int64_t timeout,
     std::string post_data) {
   oath_consumer_name_ = oath_consumer_name;
   profile_ = profile;
@@ -40,6 +42,7 @@ RestEndpointFetcher::RestEndpointFetcher(
   url_loader_factory_ =
       content::BrowserContext::GetDefaultStoragePartition(profile)
           ->GetURLLoaderFactoryForBrowserProcess();
+  timeout_ = timeout;
   Java_RestEndpointFetcher_setNativePtr(env, obj,
                                         reinterpret_cast<intptr_t>(this));
 }
@@ -58,6 +61,10 @@ void RestEndpointFetcher::Fetch(
   }
   access_token_fetcher_.reset();
 
+  request_start_time_ = base::Time::Now();
+  LOG(INFO)
+      << "TabSuggestionsDetailed ******* Request/Response Logging *******";
+  LOG(INFO) << "TabSuggestionsDetailed Acquiring auth token";
   identity::AccessTokenFetcher::TokenCallback callback = base::BindOnce(
       &RestEndpointFetcher::OnAuthTokenFetched, base::Unretained(this),
       base::android::ScopedJavaGlobalRef<jobject>(env, jcallback));
@@ -97,8 +104,10 @@ void RestEndpointFetcher::OnAuthTokenFetched(
 
   simple_url_loader_ = network::SimpleURLLoader::Create(
       std::move(resource_request), traffic_annotation);
-  if (method_.compare("POST") == 0)
+  if (method_.compare("POST") == 0) {
+    LOG(INFO) << "TabSuggestionsDetailed post_data " << post_data_;
     simple_url_loader_->AttachStringForUpload(post_data_, content_type_);
+  }
   simple_url_loader_->SetRetryOptions(kNumRetries,
                                       network::SimpleURLLoader::RETRY_ON_5XX);
 
@@ -106,6 +115,8 @@ void RestEndpointFetcher::OnAuthTokenFetched(
       base::BindOnce(&RestEndpointFetcher::OnResponseFetched,
                      base::Unretained(this),
                      base::android::ScopedJavaGlobalRef<jobject>(jcaller));
+  simple_url_loader_->SetTimeoutDuration(
+      base::TimeDelta::FromMilliseconds(timeout_));
   simple_url_loader_->DownloadToStringOfUnboundedSizeUntilCrashAndDie(
       url_loader_factory_.get(), std::move(body_as_string_callback));
 }
@@ -115,6 +126,27 @@ void RestEndpointFetcher::OnResponseFetched(
     std::unique_ptr<std::string> response_body) {
   response_body_ =
       response_body ? std::move(*response_body) : "No response was found";
+
+  LOG(INFO) << "TabSuggestionsDetailed Time to get response : "
+            << (base::Time::Now() - request_start_time_).InSecondsF()
+            << " seconds";
+  if (simple_url_loader_->ResponseInfo() &&
+      simple_url_loader_->ResponseInfo()->headers) {
+    LOG(INFO) << "TabSuggestionsDetailed Response Code "
+              << simple_url_loader_->ResponseInfo()->headers->response_code();
+    std::string mtm_request_id_header;
+    if (!simple_url_loader_->ResponseInfo()->headers->GetNormalizedHeader(
+            "X-MTM-REQUEST-ID", &mtm_request_id_header))
+      mtm_request_id_header = "Unknown";
+    LOG(INFO) << "TabSuggestionsDetailed X-MTM-REQUEST-ID Header "
+              << mtm_request_id_header;
+  } else {
+    LOG(INFO) << "TabSuggestionsDetailed Headers unknown ";
+  }
+
+  LOG(INFO) << "TabSuggestionsDetailed Response " << response_body_;
+  LOG(INFO) << "TabSuggestionsDetailed *****************************";
+
   base::android::RunStringCallbackAndroid(jcaller, std::move(response_body_));
 }
 
@@ -138,7 +170,8 @@ static void JNI_RestEndpointFetcher_Init(
     const base::android::JavaParamRef<jstring>& jmethod,
     const base::android::JavaParamRef<jstring>& jcontent_type,
     const base::android::JavaParamRef<jobjectArray>& jscopes,
-    const base::android::JavaParamRef<jstring>& jpost_data) {
+    const base::android::JavaParamRef<jstring>& jpost_data,
+    const jlong jtimeout) {
   Profile* profile = ProfileAndroid::FromProfileAndroid(jprofile);
 
   RestEndpointFetcher::Builder builder;
@@ -157,5 +190,6 @@ static void JNI_RestEndpointFetcher_Init(
   builder.set_scopes(scopes);
   builder.set_post_data(
       base::android::ConvertJavaStringToUTF8(env, jpost_data));
+  builder.set_timeout(jtimeout);
   builder.build();
 }

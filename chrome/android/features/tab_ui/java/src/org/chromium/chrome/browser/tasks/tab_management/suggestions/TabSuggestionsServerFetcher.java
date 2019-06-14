@@ -39,6 +39,7 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
     private static final String CLOSE_KEY = "close";
     private static final String GROUP_KEY = "group";
     private static final String PROVIDER_NAME_KEY = "providerName";
+    private static final long THIRTY_SECOND_TIMEOUT_MILLISECONDS = 30000;
 
     private RestEndpointFetcher mRestEndpointFetcher;
 
@@ -70,8 +71,8 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
                 mRestEndpointFetcher.destroy();
             }
             android.util.Log.e("TabSuggestionsDetailed","Sending request with "+jsonRes.toString());
-            mRestEndpointFetcher = new RestEndpointFetcher(
-                    OATH_CONSUMER_NAME, ENDPOINT, METHOD, CONTENT_TYPE, SCOPES, jsonRes.toString());
+            mRestEndpointFetcher = new RestEndpointFetcher(OATH_CONSUMER_NAME, ENDPOINT, METHOD,
+                    CONTENT_TYPE, SCOPES, jsonRes.toString(), THIRTY_SECOND_TIMEOUT_MILLISECONDS);
             mRestEndpointFetcher.fetchResponse(res -> fetchCallback(res, callback));
         } catch (JSONException e) {
             // Soft failure for now so we don't crash the app and fall back on client side
@@ -81,7 +82,6 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
     }
 
     private void fetchCallback(String str, Callback<List<TabSuggestion>> callback) {
-        android.util.Log.e("TabSuggestionsDetailed","fetchCallback with "+str);
         mRestEndpointFetcher.destroy();
         List<TabSuggestion> suggestions = new LinkedList<>();
         JSONObject jsonResponse;

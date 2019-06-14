@@ -114,6 +114,7 @@ class GridTabSwitcherMediator
     private TabContext mCurrentTabContext;
     private TabSuggestion mCurrentTabSuggestion;
     private TabModelSelectorTabObserver mTabModelSelectorTabObserver;
+    private boolean mShouldServeTabsuggestion = true;
 
     /**
      * Interface to delegate resetting the tab grid.
@@ -154,6 +155,14 @@ class GridTabSwitcherMediator
                         mTabModelSelector.getTabModelFilterProvider().getCurrentTabModelFilter();
                 mResetHandler.resetWithTabList(currentTabModelFilter);
                 mContainerViewModel.set(IS_INCOGNITO, currentTabModelFilter.isIncognito());
+
+                if (newModel.isIncognito()) {
+                    mShouldServeTabsuggestion = false;
+                    mTabSuggestionBarController.dismissTabSuggestionBar();
+                } else {
+                    mShouldServeTabsuggestion = true;
+                }
+
                 fetchTabSuggestion();
             }
         };
@@ -233,6 +242,10 @@ class GridTabSwitcherMediator
     }
 
     private void fetchTabSuggestion() {
+        if (!mShouldServeTabsuggestion
+                || (ChromeFeatureList.isInitialized()
+                        && !ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUP_SUGGESTIONS)))
+            return;
         android.util.Log.e("TabSuggestionsDetailed","Fetch Tab Suggestion ");
         if (!mTabModelSelector.isTabStateInitialized()) return;
         mCurrentTabContext = TabContext.createCurrentContext(mTabModelSelector);
@@ -243,7 +256,8 @@ class GridTabSwitcherMediator
     private void suggestionsCallback(List<TabSuggestion> suggestions) {
         android.util.Log.e("TabSuggestionsDetailed","mCurrentTabSuggestion taking first from size of  "+suggestions.size());
         mCurrentTabSuggestion = suggestions.size() > 0 ? suggestions.get(0) : null;
-        if (mContainerViewModel.get(IS_VISIBLE) && mCurrentTabSuggestion != null) {
+        if (mContainerViewModel.get(IS_VISIBLE) && mCurrentTabSuggestion != null
+                && mShouldServeTabsuggestion) {
             mTabSuggestionBarController.showTabSuggestionBar(mCurrentTabSuggestion);
         }
     }
@@ -411,7 +425,7 @@ class GridTabSwitcherMediator
         android.util.Log.e("TabSuggestionsDetailed","Finishing showing!!!     "+(mTabSuggestionBarController != null)+":"+(mCurrentTabContext != null)+":"+(mCurrentTabContext.equals(tabContext))+":"+(mCurrentTabSuggestion != null));
         if (mTabSuggestionBarController != null
                 && (mCurrentTabContext != null && mCurrentTabContext.equals(tabContext))
-                && mCurrentTabSuggestion != null) {
+                && mCurrentTabSuggestion != null && mShouldServeTabsuggestion) {
             mTabSuggestionBarController.showTabSuggestionBar(mCurrentTabSuggestion);
             mCurrentTabSuggestion = null;
         } else {

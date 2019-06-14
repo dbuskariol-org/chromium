@@ -2,6 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#ifndef CHROME_BROWSER_COMPLEX_TASKS_UTILS_REST_ENDPOINT_FETCHER_H_
+#define CHROME_BROWSER_COMPLEX_TASKS_UTILS_REST_ENDPOINT_FETCHER_H_
+
 #include <string>
 #include <vector>
 
@@ -15,6 +18,10 @@ namespace identity {
 struct AccessTokenInfo;
 class IdentityManager;
 }  // namespace identity
+
+namespace base {
+class Time;
+}
 
 class GoogleServiceAuthError;
 class Profile;
@@ -31,6 +38,7 @@ class RestEndpointFetcher {
                       std::string method,
                       std::string content_type,
                       std::vector<std::string> scopes,
+                      int64_t timeout,
                       std::string post_data = "");
   ~RestEndpointFetcher();
 
@@ -48,7 +56,7 @@ class RestEndpointFetcher {
     RestEndpointFetcher* build() {
       return new RestEndpointFetcher(env_, *obj_, profile_, oath_consumer_name_,
                                      url_, method_, content_type_, scopes_,
-                                     post_data_);
+                                     timeout_, post_data_);
     }
 
     void set_oath_consumer_name(const std::string& oath_consumer_name) {
@@ -66,6 +74,8 @@ class RestEndpointFetcher {
     void set_scopes(const std::vector<std::string>& scopes) {
       scopes_ = scopes;
     }
+
+    void set_timeout(int64_t timeout) { timeout_ = timeout; }
 
     void set_post_data(const std::string& post_data) { post_data_ = post_data; }
 
@@ -87,6 +97,7 @@ class RestEndpointFetcher {
     JNIEnv* env_;
     const base::android::JavaParamRef<jobject>* obj_;
     Profile* profile_;
+    int64_t timeout_;
 
     DISALLOW_COPY_AND_ASSIGN(Builder);
   };
@@ -105,6 +116,8 @@ class RestEndpointFetcher {
       access_token_fetcher_;
   std::unique_ptr<network::SimpleURLLoader> simple_url_loader_;
   scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory_;
+  base::Time request_start_time_;
+  int64_t timeout_;
 
   void OnAuthTokenFetched(const base::android::JavaRef<jobject>& jcaller,
                           GoogleServiceAuthError error,
@@ -112,3 +125,5 @@ class RestEndpointFetcher {
   void OnResponseFetched(const base::android::JavaRef<jobject>& jcaller,
                          std::unique_ptr<std::string> response_body);
 };
+
+#endif  // CHROME_BROWSER_COMPLEX_TASKS_UTILS_REST_ENDPOINT_FETCHER_H_

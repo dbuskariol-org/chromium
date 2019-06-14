@@ -413,14 +413,14 @@ const FeatureEntry::FeatureVariation kCloseTabSuggestionsStaleVariations[] = {
 #if defined(OS_ANDROID)
 const FeatureEntry::FeatureParam kShoppingAssistProvider_ContextualSearch[] = {
     {"shopping_assist_provider", "ContextualSearch"}};
-const FeatureEntry::FeatureParam kShoppingAssistProvider_BuyableCorpus[] = {
-    {"shopping_assist_provider", "BuyableCorpus"}};
+const FeatureEntry::FeatureParam kShoppingAssistProvider_ChromeServices[] = {
+    {"shopping_assist_provider", "ChromeServices"}};
 
 const FeatureEntry::FeatureVariation kShoppingAssistProviderVariations[] = {
     {"Contextual Search", kShoppingAssistProvider_ContextualSearch,
      base::size(kShoppingAssistProvider_ContextualSearch), nullptr},
-    {"Buyable Corpus", kShoppingAssistProvider_BuyableCorpus,
-     base::size(kShoppingAssistProvider_BuyableCorpus), nullptr},
+    {"Chrome Services", kShoppingAssistProvider_ChromeServices,
+     base::size(kShoppingAssistProvider_ChromeServices), nullptr},
 };
 const FeatureEntry::FeatureParam kShoppingAssist_EphemeralTab[] = {
     {"shopping_assist_behavior", "EphemeralTab"}};
