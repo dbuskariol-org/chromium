@@ -361,6 +361,7 @@ class TabListMediator {
                 @Override
                 public void didMoveWithinGroup(
                         Tab movedTab, int tabModelOldIndex, int tabModelNewIndex) {
+                    if (movedTab == null) return;
                     int curPosition = mModel.indexFromId(movedTab.getId());
                     TabModel tabModel = mTabModelSelector.getCurrentModel();
 
@@ -369,7 +370,7 @@ class TabListMediator {
                     Tab destinationTab = tabModel.getTabAt(tabModelNewIndex > tabModelOldIndex
                                     ? tabModelNewIndex - 1
                                     : tabModelNewIndex + 1);
-
+                    if (destinationTab == null) return;
                     int newPosition = mModel.indexFromId(destinationTab.getId());
                     if (!isValidMovePosition(newPosition)) return;
                     mModel.move(curPosition, newPosition);

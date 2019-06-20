@@ -105,7 +105,7 @@ public abstract class OverlayPanelAnimation extends OverlayPanelBase {
         // setTranslationY(mIsShowingFirstRunFlow
         //      ? mSearchBarHeightDp : SEARCH_BAR_SLIDE_OFFSET_DP);
         // setInterpolator(BakedBezierInterpolator.FADE_IN_CURVE);
-        animatePanelToState(PanelState.PEEKED, reason);
+        animatePanelToState(PanelState.MAXIMIZED, reason);
     }
 
     @Override
