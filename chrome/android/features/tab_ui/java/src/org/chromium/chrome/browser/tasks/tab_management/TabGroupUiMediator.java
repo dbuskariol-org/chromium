@@ -236,19 +236,10 @@ public class TabGroupUiMediator {
                                        .getCurrentTabModelFilter()
                                        .getRelatedTabList(id);
 
-        boolean shouldNotShowStrip = (listOfTabs.size() < 2)
-                || (ChromeFeatureList.isInitialized()
-                        && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)
-                        && (!TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
-                                    ChromeFeatureList.SHOPPING_ASSIST, "shopping_assist_behavior"))
-                                        && !ChromeFeatureList
-                                                    .getFieldTrialParamByFeature(
-                                                            ChromeFeatureList.SHOPPING_ASSIST,
-                                                            "shopping_assist_behavior")
-                                                    .startsWith("TabInAGroup")
-                                || TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
-                                        ChromeFeatureList.SHOPPING_ASSIST,
-                                        "shopping_assist_behavior"))));
+        boolean shouldNotShowStrip = (listOfTabs.size() < 2) || (ChromeFeatureList.isInitialized() && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST) && (!TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
+                ChromeFeatureList.SHOPPING_ASSIST, "shopping_assist_behavior")) && !ChromeFeatureList.getFieldTrialParamByFeature(
+                ChromeFeatureList.SHOPPING_ASSIST, "shopping_assist_behavior").startsWith("TabInAGroup") || TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
+                ChromeFeatureList.SHOPPING_ASSIST, "shopping_assist_behavior"))));
         if (shouldNotShowStrip) {
             mResetHandler.resetStripWithListOfTabs(null);
             mToolbarPropertyModel.set(TabStripToolbarViewProperties.IS_MAIN_CONTENT_VISIBLE, false);

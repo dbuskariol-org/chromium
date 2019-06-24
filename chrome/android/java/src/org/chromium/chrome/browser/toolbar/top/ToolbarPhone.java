@@ -2475,9 +2475,7 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
 
         if (getMenuButtonWrapper() != null) {
             setMenuButtonHighlightDrawable();
-            if (!mIsBottomToolbarVisible
-                    && !(ChromeFeatureList.isInitialized()
-                            && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST))) {
+            if (!mIsBottomToolbarVisible && !(ChromeFeatureList.isInitialized() && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST))) {
                 getMenuButtonWrapper().setVisibility(View.VISIBLE);
             }
         }

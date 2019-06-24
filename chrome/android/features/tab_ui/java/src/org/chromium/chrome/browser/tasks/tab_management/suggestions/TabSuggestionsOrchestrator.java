@@ -4,11 +4,9 @@
 
 package org.chromium.chrome.browser.tasks.tab_management.suggestions;
 
-import org.chromium.base.Callback;
-import org.chromium.chrome.browser.ChromeVersionInfo;
+import org.chromium.chrome.browser.lifecycle.Destroyable;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,56 +14,88 @@ import java.util.List;
  * Represents the entry point for the TabSuggestions component. Responsible for
  * registering and invoking the different {@link TabSuggestionsFetcher}.
  */
-public final class TabSuggestionsOrchestrator implements TabSuggestions {
-    private TabSuggestionsClientFetcher mClientFetcher;
-    private TabSuggestionsServerFetcher mServerFetcher;
-    private List<TabSuggestion> mClientSuggestions;
-    private Callback<List<TabSuggestion>> mCallback;
+public final class TabSuggestionsOrchestrator implements TabSuggestions, Destroyable {
+    private List<TabSuggestionsFetcher> mTabSuggestionsFetchers;
+    private List<TabSuggestion> mPrefetchedResults = new LinkedList<>();
+    private TabContext mPrefetchedTabContext;
+    private TabContextObserver mTabContextObserver;
+    private TabModelSelector mTabModelSelector;
+    private static TabSuggestionsOrchestrator sTabSuggestionsOrchestrator;
 
-    public TabSuggestionsOrchestrator(TabModelSelector selector) {
-        mClientFetcher = new TabSuggestionsClientFetcher(selector);
-        mServerFetcher = new TabSuggestionsServerFetcher();
+    public static TabSuggestionsOrchestrator getInstance(TabModelSelector selector) {
+        if (sTabSuggestionsOrchestrator == null) {
+            sTabSuggestionsOrchestrator = new TabSuggestionsOrchestrator(selector);
+        }
+        return sTabSuggestionsOrchestrator;
+    }
+
+    private TabSuggestionsOrchestrator(TabModelSelector selector) {
+        mTabModelSelector = selector;
+        mTabSuggestionsFetchers = new LinkedList<>();
+        mTabSuggestionsFetchers.add(new TabSuggestionsClientFetcher(selector));
+        mTabSuggestionsFetchers.add(new TabSuggestionsServerFetcher());
+        mTabContextObserver = new TabContextObserver(selector, new Runnable() {
+            @Override
+            public void run() {
+                prefetchSuggestions();
+            }
+        });
     }
 
     @Override
-    public void getSuggestions(TabContext tabContext, Callback<List<TabSuggestion>> callback) {
-        mCallback = callback;
-        android.util.Log.e("TabSuggestionsDetailed","getSuggestions"+":"+System.currentTimeMillis());
-        if (ChromeVersionInfo.isOfficialBuild()) {
-            mClientFetcher.fetch(tabContext, res -> orchestratorCallbackClient(res));
-            mServerFetcher.fetch(tabContext, res -> orchestratorCallbackServer(res));
-        } else {
-            mClientFetcher.fetch(tabContext, res -> orchestratorCallbackClientOnly(res));
+    public List<TabSuggestion> getSuggestions(TabContext tabContext) {
+        android.util.Log.e("TabSuggestionsDetailed", "Getting the suggestions");
+        synchronized (mPrefetchedResults) {
+            if (tabContext.equals(mPrefetchedTabContext)) {
+                return aggregateResults(mPrefetchedResults);
+            }
+            return new LinkedList<>();
         }
     }
 
-    public void orchestratorCallbackClient(List<TabSuggestion> clientSuggestions) {
-        android.util.Log.e("TabSuggestionsDetailed","orchestratorCallbackClient with "+clientSuggestions.size()+":"+System.currentTimeMillis());
-        mClientSuggestions = clientSuggestions;
-    }
-
-    public void orchestratorCallbackServer(List<TabSuggestion> serverSuggestions) {
-        android.util.Log.e("TabSuggestionsDetailed","orchestratorCallbackServer with "+serverSuggestions.size()+":"+System.currentTimeMillis());
-        List<TabSuggestion> aggregatedSuggestions = new ArrayList<>();
-        aggregatedSuggestions.addAll(mClientSuggestions);
-        aggregatedSuggestions.addAll(serverSuggestions);
-        android.util.Log.e("TabSuggestionsDetailed","Aggregated suggestions list size "+aggregatedSuggestions.size());
-
-        // prune and rank suggestions
-        List<TabSuggestion> finalSuggestions = new ArrayList<>();
-        for (TabSuggestion suggestion : aggregatedSuggestions) {
-            // Additional checks to avoid user experience.
-            if (suggestion.getTabsInfo().size() > 1) {
-                finalSuggestions.add(suggestion);
+    private static List<TabSuggestion> aggregateResults(List<TabSuggestion> tabSuggestions) {
+        List<TabSuggestion> aggregated = new LinkedList<>();
+        android.util.Log.e("TabSuggestionsDetailed",
+                "Aggregated suggestions list size from all fetchers " + tabSuggestions.size());
+        for (TabSuggestion tabSuggestion : tabSuggestions) {
+            if (!tabSuggestion.getTabsInfo().isEmpty()) {
+                aggregated.add(tabSuggestion);
             }
         }
-        android.util.Log.e("TabSuggestionsDetailed","Final suggestions list size "+finalSuggestions.size());
-
-        finalSuggestions = TabSuggestionsRanker.getRankedSuggestions(finalSuggestions);
-        mCallback.onResult(finalSuggestions);
+        android.util.Log.e(
+                "TabSuggestionsDetailed", "Final suggestions list size " + aggregated.size());
+        return TabSuggestionsRanker.getRankedSuggestions(aggregated);
     }
 
-    public void orchestratorCallbackClientOnly(List<TabSuggestion> clientSuggestions) {
-        mCallback.onResult(TabSuggestionsRanker.getRankedSuggestions(clientSuggestions));
+    @Override
+    public void destroy() {
+        mTabContextObserver.destroy();
+    }
+
+    private void prefetchSuggestions() {
+        TabContext tabContext = TabContext.createCurrentContext(mTabModelSelector);
+        android.util.Log.e("TabSuggestionsDetailed",
+                "Prefetching Tab suggestions "
+                        + ":" + System.currentTimeMillis());
+        synchronized (mPrefetchedResults) {
+            mPrefetchedTabContext = tabContext;
+            mPrefetchedResults = new LinkedList<>();
+            for (TabSuggestionsFetcher tabSuggestionsFetcher : mTabSuggestionsFetchers) {
+                if (tabSuggestionsFetcher.isEnabled()) {
+                    tabSuggestionsFetcher.fetch(tabContext, res -> prefetchCallback(res));
+                }
+            }
+        }
+    }
+
+    public void prefetchCallback(TabSuggestionsFetcherResults suggestions) {
+        android.util.Log.e("TabSuggestionsDetailed",
+                "prefetchCallback with " + suggestions.getTabSuggestions().size() + ":"
+                        + System.currentTimeMillis());
+        synchronized (mPrefetchedResults) {
+            if (suggestions.getTabContext().equals(mPrefetchedTabContext)) {
+                mPrefetchedResults.addAll(suggestions.getTabSuggestions());
+            }
+        }
     }
 }

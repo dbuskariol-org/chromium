@@ -1766,6 +1766,10 @@ const char kTabGroupsUiImprovementsAndroidName[] = "Tab Groups UI Improvements";
 const char kTabGroupsUiImprovementsAndroidDescription[] =
     "Allows users to access new features in Tab Group UI.";
 
+const char kTabGroupsSuggestionsAndroidName[] = "Tab Groups Suggestions";
+const char kTabGroupsSuggestionsAndroidDescription[] =
+    "Enables tab group suggestions.";
+
 const char kTabToGTSAnimationAndroidName[] = "Enable Tab-to-GTS Animation";
 const char kTabToGTSAnimationAndroidDescription[] =
     "Allows users to see an animation when entering or leaving the "

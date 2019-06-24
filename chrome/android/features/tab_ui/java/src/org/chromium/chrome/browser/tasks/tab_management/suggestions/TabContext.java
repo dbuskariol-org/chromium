@@ -109,7 +109,9 @@ public class TabContext {
                 TabInfo otherTabInfo = (TabInfo) other;
                 return mId == otherTabInfo.getId()
                         && (mUrl == null ? otherTabInfo.getUrl() == null
-                                         : mUrl.equals(otherTabInfo.getUrl()));
+                                         : mUrl.equals(otherTabInfo.getUrl())
+                                                && mTimestampMillis
+                                                        == otherTabInfo.getTimestampMillis());
             }
 
             return false;

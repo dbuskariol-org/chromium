@@ -43,7 +43,6 @@ import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tabmodel.TabSelectionType;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabContext;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
-import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestions;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsOrchestrator;
 import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
 import org.chromium.chrome.browser.tasks.tabgroup.TabGroupModelFilter;
@@ -110,7 +109,7 @@ class GridTabSwitcherMediator
     private boolean mShouldIgnoreNextSelect;
 
     private GridTabSwitcherCoordinator.TabSuggestionBarController mTabSuggestionBarController;
-    private final TabSuggestions mTabSuggestionsProvider;
+    private final TabSuggestionsOrchestrator mTabSuggestionsProvider;
     private TabContext mCurrentTabContext;
     private TabSuggestion mCurrentTabSuggestion;
     private TabModelSelectorTabObserver mTabModelSelectorTabObserver;
@@ -172,7 +171,6 @@ class GridTabSwitcherMediator
             @Override
             public void didAddTab(Tab tab, int type) {
                 mShouldIgnoreNextSelect = false;
-                fetchTabSuggestion();
             }
 
             @Override
@@ -197,19 +195,6 @@ class GridTabSwitcherMediator
                 TabList tabList =
                         mTabModelSelector.getTabModelFilterProvider().getCurrentTabModelFilter();
                 mResetHandler.resetWithTabList(tabList);
-                fetchTabSuggestion();
-            }
-
-            @Override
-            public void didCloseTab(int tabId, boolean incognito) {
-                fetchTabSuggestion();
-            }
-        };
-
-        mTabModelSelectorTabObserver = new TabModelSelectorTabObserver(mTabModelSelector) {
-            @Override
-            public void didFirstVisuallyNonEmptyPaint(Tab tab) {
-                fetchTabSuggestion();
             }
         };
 
@@ -234,7 +219,7 @@ class GridTabSwitcherMediator
         mCompositorViewHolder = compositorViewHolder;
         mTabGridDialogResetHandler = tabGridDialogResetHandler;
 
-        mTabSuggestionsProvider = new TabSuggestionsOrchestrator(tabModelSelector);
+        mTabSuggestionsProvider = TabSuggestionsOrchestrator.getInstance(tabModelSelector);
         mCurrentTabContext = TabContext.createCurrentContext(tabModelSelector);
         mTabSuggestionBarController = tabSuggestionBarController;
         mClearTabListRunnable = () -> mResetHandler.resetWithTabList(null);
@@ -249,11 +234,8 @@ class GridTabSwitcherMediator
         android.util.Log.e("TabSuggestionsDetailed","Fetch Tab Suggestion ");
         if (!mTabModelSelector.isTabStateInitialized()) return;
         mCurrentTabContext = TabContext.createCurrentContext(mTabModelSelector);
-        mTabSuggestionsProvider.getSuggestions(
-                mCurrentTabContext, res -> suggestionsCallback((List<TabSuggestion>) res));
-    }
-
-    private void suggestionsCallback(List<TabSuggestion> suggestions) {
+        List<TabSuggestion> suggestions =
+                mTabSuggestionsProvider.getSuggestions(mCurrentTabContext);
         android.util.Log.e("TabSuggestionsDetailed","mCurrentTabSuggestion taking first from size of  "+suggestions.size());
         mCurrentTabSuggestion = suggestions.size() > 0 ? suggestions.get(0) : null;
         if (mContainerViewModel.get(IS_VISIBLE) && mCurrentTabSuggestion != null
@@ -473,7 +455,7 @@ class GridTabSwitcherMediator
      * Destroy any members that needs clean up.
      */
     public void destroy() {
-        mTabModelSelectorTabObserver.destroy();
+        mTabSuggestionsProvider.destroy();
         mTabModelSelector.removeObserver(mTabModelSelectorObserver);
         mFullscreenManager.removeListener(mFullscreenListener);
         mTabModelSelector.getTabModelFilterProvider().removeTabModelFilterObserver(

@@ -542,7 +542,7 @@ const base::Feature kTabGroupStories{"TabGroupStories",
                                      base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kTabGroupSuggestions{"TabGroupSuggestions",
-                                         base::FEATURE_DISABLED_BY_DEFAULT};
+                                     base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kTabGroupsUiImprovementsAndroid{
     "TabGroupsUiImprovementsAndroid", base::FEATURE_ENABLED_BY_DEFAULT};
