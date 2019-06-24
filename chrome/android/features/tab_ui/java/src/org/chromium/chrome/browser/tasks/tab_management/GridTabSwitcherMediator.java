@@ -492,22 +492,6 @@ class GridTabSwitcherMediator
     TabListMediator.TabActionListener getCreateGroupButtonOnClickListener(Tab tab) {
         if (!ableToCreateGroup(tab)) return null;
 
-
-        boolean shouldNotShowButton = (ChromeFeatureList.isInitialized()
-                && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)
-                && (!TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
-                ChromeFeatureList.SHOPPING_ASSIST, "shopping_assist_behavior"))
-                && !ChromeFeatureList
-                .getFieldTrialParamByFeature(
-                        ChromeFeatureList.SHOPPING_ASSIST,
-                        "shopping_assist_behavior")
-                .startsWith("TabInAGroup")
-                || TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
-                ChromeFeatureList.SHOPPING_ASSIST,
-                "shopping_assist_behavior"))));
-
-        if (shouldNotShowButton) return null;
-
         return tabId -> {
             Tab parentTab = TabModelUtils.getTabById(mTabModelSelector.getCurrentModel(), tabId);
             mTabModelSelector.getCurrentModel().commitAllTabClosures();
