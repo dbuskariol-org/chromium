@@ -6026,3 +6026,217 @@ crbug.com/938884 [ Win7 Mac ] http/tests/devtools/elements/styles-3/styles-add-b
 # Caused a revert of a good change.
 crbug.com/931533 media/video-played-collapse.html [ Pass Failure ]
 crbug.com/931533 virtual/video-surface-layer/media/video-played-collapse.html [ Pass Failure ]
+
+crbug.com/940797 external/wpt/signed-exchange/appcache/sxg-served-from-appcache.tentative.https.html [ Pass Failure ]
+crbug.com/940797 virtual/sxg-with-network-service/external/wpt/signed-exchange/appcache/sxg-served-from-appcache.tentative.https.html [ Pass Failure ]
+
+# Flaky failures due to <object> resources not always appearing in the timeline.
+crbug.com/941482 external/wpt/resource-timing/nested-context-navigations.html [ Pass Failure ]
+crbug.com/941482 virtual/omt-worker-fetch/external/wpt/resource-timing/nested-context-navigations.html [ Failure Pass ]
+
+# Test was blocking WPT importer
+crbug.com/941471 external/wpt/css/css-transforms/transform-flattening-001.html [ Pass Failure Crash ]
+
+crbug.com/940829 external/wpt/pointerevents/pointerevent_touch-action-table-test_touch-manual.html [ Timeout Pass ]
+
+# Sheriff 2019-03-14
+crbug.com/836242 [ Linux ] fast/loader/reload-zero-byte-plugin.html [ Pass Failure ]
+crbug.com/836242 [ Mac ] fast/loader/reload-zero-byte-plugin.html [ Pass Failure ]
+crbug.com/836242 [ Win ] fast/loader/reload-zero-byte-plugin.html [ Pass Failure ]
+crbug.com/806357 virtual/threaded/fast/events/pointerevents/pinch/pointerevent_touch-action-pinch_zoom_touch.html [ Pass Failure Crash ]
+crbug.com/941931 [ Linux Win ] http/tests/security/contentSecurityPolicy/1.1/plugintypes-affects-cross-site-child-disallowed.html [ Pass Failure ]
+crbug.com/942134 [ Win ] virtual/exotic-color-space/images/feature-policy-oversized-images.html [ Pass Failure ]
+
+# Sheriff 2019-03-15
+
+# Trooper 2019-03-19
+crbug.com/943388 [ Win ] http/tests/devtools/network/network-recording-after-reload-with-screenshots-enabled.js [ Pass Failure ]
+crbug.com/943388 [ Win ] virtual/nobinary-for-devtools/http/tests/devtools/network/network-recording-after-reload-with-screenshots-enabled.js [ Pass Failure ]
+
+# Sheriff 2019-03-20
+crbug.com/732103 [ Mac10.11 ] http/tests/shapedetection/shapedetection-cross-origin.html [ Timeout Pass ]
+crbug.com/943969 [ Win ] inspector-protocol/css/css-get-media-queries.js [ Pass Failure ]
+crbug.com/943969 [ Win ] virtual/nobinary-for-inspector-protocol/inspector-protocol/css/css-get-media-queries.js [ Pass Failure ]
+crbug.com/943969 [ Mac10.10 Mac10.11 ] inspector-protocol/css/css-get-media-queries.js [ Pass Failure ]
+crbug.com/943969 [ Mac10.10 Mac10.11 ] virtual/nobinary-for-inspector-protocol/inspector-protocol/css/css-get-media-queries.js [ Pass Failure ]
+
+crbug.com/945085 [ Mac10.13 ] printing/composited-thead-tfoot-repeat.html [ Failure Pass ]
+
+# Sheriff 2019-03-25
+crbug.com/944025 http/tests/preload/meta-viewport-device-width-link-headers.html [ Pass Failure ]
+crbug.com/945665 http/tests/devtools/elements/styles-3/styles-add-new-rule-tab.js [ Pass Failure ]
+crbug.com/945665 virtual/nobinary-for-devtools/http/tests/devtools/elements/styles-3/styles-add-new-rule-tab.js [ Pass Failure ]
+crbug.com/945665 http/tests/devtools/elements/styles-3/styles-add-new-rule.js [ Pass Failure ]
+crbug.com/945665 virtual/nobinary-for-devtools/http/tests/devtools/elements/styles-3/styles-add-new-rule.js [ Pass Failure ]
+crbug.com/945665 http/tests/devtools/elements/styles-3/styles-disable-inherited.js [ Pass Failure ]
+crbug.com/945665 virtual/nobinary-for-devtools/http/tests/devtools/elements/styles-3/styles-disable-inherited.js [ Pass Failure ]
+crbug.com/945665 [ Win7 ] http/tests/devtools/elements/styles-3/style-rule-from-imported-stylesheet.js  [ Failure Pass ]
+crbug.com/945665 [ Win7 ] virtual/nobinary-for-devtools/http/tests/devtools/elements/styles-3/style-rule-from-imported-stylesheet.js  [ Failure Pass ]
+crbug.com/945665 http/tests/devtools/elements/styles-3/styles-change-node-while-editing.js [ Pass Failure ]
+crbug.com/945665 virtual/nobinary-for-devtools/http/tests/devtools/elements/styles-3/styles-change-node-while-editing.js [ Pass Failure ]
+crbug.com/945629 http/tests/devtools/network/network-filters.js [ Pass Failure Timeout ]
+crbug.com/945629 virtual/nobinary-for-devtools/http/tests/devtools/network/network-filters.js [ Pass Failure Timeout ]
+
+# Sheriff 2019-03-26
+crbug.com/945774 external/wpt/content-security-policy/frame-ancestors/frame-ancestors-nested-cross-in-same-star-allow.html [ Pass Timeout ]
+crbug.com/945845 http/tests/security/inactive-document-with-empty-security-origin.html [ Timeout ]
+crbug.com/945845 virtual/outofblink-cors/http/tests/security/inactive-document-with-empty-security-origin.html [ Timeout ]
+
+# Tests using testRunner.useUnfortunateSynchronousResizeMode occasionally timeout,
+# but the test coverage is still good.
+crbug.com/919789 css3/viewport-percentage-lengths/viewport-percentage-lengths-resize.html [ Pass Timeout ]
+crbug.com/919789 compositing/transitions/transform-on-large-layer.html [ Pass Timeout ]
+crbug.com/919789 compositing/transitions/transform-on-large-layer-expected.html [ Pass Timeout ]
+crbug.com/919789 fast/autoresize/turn-off-autoresize.html [ Pass Timeout ]
+crbug.com/919789 fast/autoresize/basic.html [ Pass Timeout ]
+crbug.com/919789 fast/dom/viewport/resize-event-fired-window-resized.html [ Pass Timeout ]
+crbug.com/919789 fast/dom/Window/window-resize-contents.html [ Pass Timeout ]
+crbug.com/919789 virtual/user-activation-v2/fast/dom/Window/window-resize-contents.html [ Pass Timeout ]
+crbug.com/919789 fast/dom/rtl-scroll-to-leftmost-and-resize.html [ Pass Timeout ]
+crbug.com/919789 fast/dynamic/window-resize-scrollbars-test.html [ Pass Timeout ]
+crbug.com/919789 fast/events/resize-events-count.html [ Pass Timeout ]
+crbug.com/919789 fast/css-grid-layout/flex-content-sized-columns-resize.html [ Pass Timeout ]
+crbug.com/919789 fast/css-grid-layout/flex-content-sized-columns-resize-expected.html [ Pass Timeout ]
+crbug.com/919789 fast/text/line-break-between-text-nodes-with-inline-blocks.html [ Pass Timeout ]
+crbug.com/919789 images/image-click-scale-restore-zoomed-image.html [ Pass Timeout ]
+crbug.com/919789 images/image-zoom-to-25.html [ Pass Timeout ]
+crbug.com/919789 images/image-zoom-to-500.html [ Pass Timeout ]
+crbug.com/919789 media/controls/overflow-menu-hide-on-resize.html [ Pass Timeout ]
+crbug.com/919789 virtual/video-surface-layer/media/controls/overflow-menu-hide-on-resize.html [ Pass Timeout ]
+crbug.com/919789 paint/invalidation/resize-iframe-text.html [ Pass Timeout ]
+crbug.com/919789 paint/invalidation/scroll/scrollbar-damage-and-full-viewport-repaint.html [ Pass Timeout ]
+crbug.com/919789 paint/invalidation/window-resize/ [ Pass Timeout ]
+
+# Sheriff 2019-03-27
+crbug.com/835943 [ Release ] http/tests/appcache/non-html.xhtml [ Crash Pass Failure Timeout ]
+crbug.com/946323 [ Mac ] editing/caret/caret-painting-low-dpi.html [ Failure Pass ]
+crbug.com/946624 virtual/user-activation-v2/http/tests/media/autoplay/document-user-activation-cross-origin-feature-policy-header.html [ Failure Pass ]
+
+# Sheriff 2019-03-28
+crbug.com/946890 external/wpt/html/semantics/embedded-content/media-elements/location-of-the-media-resource/currentSrc.html [ Failure Pass Crash ]
+crbug.com/946990 http/tests/devtools/application-panel/storage-view-reports-quota.js [ Pass Timeout ]
+crbug.com/946990 virtual/nobinary-for-devtools/http/tests/devtools/application-panel/storage-view-reports-quota.js [ Pass Timeout ]
+crbug.com/946719 http/tests/serviceworker/resolve-after-window-close.html [ Crash Pass ]
+crbug.com/946714 [ Release ] http/tests/devtools/elements/styles-4/styles-live-locations-leak.js [ Pass Timeout ]
+crbug.com/946714 [ Release ] virtual/nobinary-for-devtools/http/tests/devtools/elements/styles-4/styles-live-locations-leak.js [ Pass Timeout ]
+crbug.com/946699 [ Release ] http/tests/devtools/network/network-filter-service-worker.js [ Pass Timeout ]
+crbug.com/946699 [ Release ] virtual/nobinary-for-devtools/http/tests/devtools/network/network-filter-service-worker.js [ Pass Timeout ]
+crbug.com/946700 [ Win7 Release ] http/tests/devtools/coverage/decorations-after-script-formatter.js [ Pass Timeout ]
+crbug.com/946700 [ Win7 Release ] virtual/nobinary-for-devtools/http/tests/devtools/coverage/decorations-after-script-formatter.js [ Pass Timeout ]
+crbug.com/946711 [ Release ] http/tests/devtools/editor/text-editor-search-switch-editor.js [ Crash Pass Timeout ]
+crbug.com/946711 [ Release ] virtual/nobinary-for-devtools/http/tests/devtools/editor/text-editor-search-switch-editor.js [ Crash Pass Timeout ]
+crbug.com/946712 [ Release ] http/tests/devtools/elements/styles-2/paste-property.js [ Crash Pass Timeout ]
+crbug.com/946712 [ Release ] virtual/nobinary-for-devtools/http/tests/devtools/elements/styles-2/paste-property.js [ Crash Pass Timeout ]
+crbug.com/946713 [ Release ] http/tests/devtools/extensions/extensions-resources.js [ Crash Pass Timeout ]
+crbug.com/946713 [ Release ] virtual/nobinary-for-devtools/http/tests/devtools/extensions/extensions-resources.js [ Crash Pass Timeout ]
+crbug.com/848799 [ Win7 ] http/tests/devtools/coverage/multiple-instances-merge.js [ Pass Timeout ]
+crbug.com/848799 [ Win7 ] virtual/nobinary-for-devtools/http/tests/devtools/coverage/multiple-instances-merge.js [ Pass Timeout ]
+crbug.com/947126 [ Mac10.13 ] virtual/video-surface-layer/media/video-played-ranges-1.html [ Pass Failure ]
+crbug.com/942411 [ Win7 Linux ] http/tests/devtools/network/network-search.js [ Pass Timeout ]
+crbug.com/942411 [ Win7 Linux ] virtual/nobinary-for-devtools/http/tests/devtools/network/network-search.js [ Pass Timeout ]
+crbug.com/947383 inspector-protocol/css/reattach-after-editing-styles.js [ Pass Timeout ]
+crbug.com/947383 virtual/nobinary-for-inspector-protocol/inspector-protocol/css/reattach-after-editing-styles.js [ Pass Timeout ]
+# Sheriff 2019-03-29
+crbug.com/947477 external/wpt/editing/run/removeformat.html [ Pass Crash Timeout ]
+
+# Adjusting v8 console implementation, pass failure until v8 change lands
+crbug.com/948257 external/wpt/console/console-label-conversion.any.html [ Pass Failure ]
+crbug.com/948257 external/wpt/console/console-label-conversion.any.worker.html [ Pass Failure ]
+crbug.com/948678 external/wpt/console/idlharness.any.html [ Pass Failure ]
+
+### external/wpt/fetch/sec-metadata/
+crbug.com/947023 external/wpt/fetch/sec-metadata/font.tentative.https.sub.html [ Pass Failure ]
+crbug.com/947023 external/wpt/fetch/sec-metadata/report.tentative.https.sub.html [ Pass Timeout ]
+crbug.com/947023 external/wpt/fetch/sec-metadata/xslt.tentative.https.sub.html [ Pass Failure ]
+
+# Sheriff 2019-04-02
+crbug.com/947690 [ Debug ] http/tests/history/back-during-beforeunload.html [ Pass Failure ]
+crbug.com/948785 [ Debug ] virtual/user-activation-v2/fast/events/pointerevents/pointer-event-consumed-touchstart-in-slop-region.html [ Pass Failure ]
+
+# Sheriff 2019-04-03
+crbug.com/947951 [ Win7 ] external/wpt/pointerevents/pointerevent_touch-action-inherit_child-auto-child-none_touch.html [ Pass Failure ]
+crbug.com/949167 external/wpt/html/semantics/links/links-created-by-a-and-area-elements/target_blank_implicit_noopener.html [ Pass Timeout ]
+crbug.com/949207 external/wpt/html/semantics/links/links-created-by-a-and-area-elements/target_blank_implicit_noopener_base.html [ Pass Timeout ]
+crbug.com/949440 [ Mac10.13 Debug ] http/tests/devtools/layers/layers-panel-mouse-events.js [ Pass Crash ]
+crbug.com/949440 [ Mac10.13 Debug ] http/tests/devtools/layers/layers-3d-view-hit-testing.js [ Pass Crash ]
+crbug.com/949440 [ Mac10.13 Debug ] virtual/nobinary-for-devtools/http/tests/devtools/layers/layers-3d-view-hit-testing.js [ Pass Crash ]
+crbug.com/949440 [ Mac10.13 Debug ] virtual/nobinary-for-devtools/http/tests/devtools/layers/layers-panel-mouse-events.js [ Pass Crash ]
+crbug.com/949442 [ Mac10.13 Debug ] external/wpt/accelerometer/Accelerometer.https.html [ Pass Failure ]
+crbug.com/949442 [ Mac10.13 Debug ] external/wpt/orientation-sensor/AbsoluteOrientationSensor.https.html [ Pass Failure ]
+crbug.com/949443 [ Mac10.13 Debug ] fast/block/inline-children-root-linebox-crash.html [ Pass Crash ]
+crbug.com/949444 [ Mac10.13 Debug ] fast/events/sequential-focus-navigation-starting-point.html [ Pass Crash ]
+crbug.com/949444 [ Mac10.13 Debug ] virtual/mouseevent_fractional/fast/events/sequential-focus-navigation-starting-point.html [ Pass Crash ]
+crbug.com/949444 [ Mac10.13 Debug ] virtual/user-activation-v2/fast/events/sequential-focus-navigation-starting-point.html [ Pass Crash ]
+crbug.com/949445 [ Mac ] fast/forms/text/input-text-scroll-left-on-blur.html [ Failure ]
+
+# Sheriff 2019-04-05
+crbug.com/ [ Win7 ] virtual/streams-native/http/tests/fetch/serviceworker/referrer-base-https-other-https.html [ Pass Timeout ]
+
+# Sheriff 2019-04-08
+crbug.com/946701 [ Win7 ] virtual/streams-native/http/tests/fetch/serviceworker-proxied/thorough/auth-base-https-other-https.html [ Pass Timeout ]
+crbug.com/950222 [ Win7 ] virtual/streams-native/http/tests/fetch/serviceworker-proxied/thorough/auth.html [ Pass Timeout ]
+crbug.com/947670 [ Win7 ] virtual/streams-native/http/tests/fetch/serviceworker-proxied/thorough/cors-preflight2-base-https-other-https.html [ Pass Timeout ]
+
+# Sheriff 2019-04-09
+crbug.com/946335 [ Linux Mac ] fast/filesystem/file-writer-abort-depth.html [ Pass Crash ]
+
+# Sheriff 2019-04-10
+crbug.com/951638 [ Linux ] virtual/mouseevent_fractional/fast/events/mouse-right-coords-in-zoom-and-scroll-right.html [ Pass Failure ]
+crbug.com/951638 [ Mac10.13 Debug ] virtual/mouseevent_fractional/fast/events/mouse-right-coords-in-zoom-and-scroll-right.html [ Pass Failure ]
+crbug.com/951638 [ Win7 ] virtual/mouseevent_fractional/fast/events/mouse-right-coords-in-zoom-and-scroll-right.html [ Pass Failure ]
+
+# Sheriff 2019-04-11
+crbug.com/951774 [ Linux ] virtual/video-surface-layer/media/controls/modern/overlay-play-button-tap-to-hide.html [ Pass Timeout ]
+crbug.com/951811 [ Mac10.13 ] external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-tokenization-top-left.html [ Pass Timeout ]
+crbug.com/802029 [ Mac10.13 Debug ] fast/dom/shadow/focus-controller-recursion-crash.html [ Pass Timeout ]
+
+# Sheriff 2019-04-15
+crbug.com/952708 external/wpt/css/css-paint-api/parse-input-arguments-018.https.html [ Pass Failure ]
+crbug.com/952717 [ Mac10.13 ] virtual/outofblink-cors/http/tests/xmlhttprequest/redirect-cross-origin-post.html [ Pass Timeout ]
+
+# Blob APIs 'text()', 'stream()', and 'arrayBuffer()' are not implemented yet
+crbug.com/945893 external/wpt/FileAPI/blob/Blob-stream.any.html [ Skip ]
+crbug.com/945893 external/wpt/FileAPI/blob/Blob-stream.any.worker.html [ Skip ]
+crbug.com/945893 external/wpt/FileAPI/blob/Blob-array-buffer.any.html [ Skip ]
+crbug.com/945893 external/wpt/FileAPI/blob/Blob-array-buffer.any.worker.html [ Skip ]
+crbug.com/945893 external/wpt/FileAPI/blob/Blob-text.any.html [ Skip ]
+crbug.com/945893 external/wpt/FileAPI/blob/Blob-text.any.worker.html [ Skip ]
+
+# Sheriff 2019-04-16
+crbug.com/953153 virtual/speech-with-unified-autoplay/external/wpt/speech-api/idlharness.window.html [ Pass Failure ]
+crbug.com/953153 external/wpt/speech-api/idlharness.window.html [ Pass Failure ]
+
+# portals-adopt-predecessor occasionally times out.
+crbug.com/952584 external/wpt/portals/portals-adopt-predecessor.html [ Pass Timeout ]
+
+# portals/csp/frame-src.sub.html crashes because of a race between cancelling a
+# speculative navigation in the browser, and committing the navigation in the
+# renderer.
+crbug.com/838348 external/wpt/portals/csp/frame-src.sub.html [ Pass Crash ]
+
+# Sheriff 2019-04-17
+crbug.com/953534 [ Mac ] virtual/layout_ng_experimental/external/wpt/css/css-flexbox/ttwf-reftest-flex-wrap.html [ Failure ]
+
+crbug.com/953479 external/wpt/css/cssom-view/offsetTopLeft-empty-inline.html [ Failure ]
+crbug.com/953479 external/wpt/css/cssom-view/offsetTopLeft-leading-space-inline.html [ Failure ]
+
+crbug.com/953591 [ Win ] css3/masking/mask-repeat-space-padding.html [ Pass Failure ]
+crbug.com/953591 [ Win ] fast/forms/datalist/input-appearance-range-with-transform.html [ Pass Failure ]
+crbug.com/953591 [ Win ] transforms/matrix-02.html [ Pass Failure ]
+crbug.com/938884 [ Win7 ] http/tests/devtools/elements/styles-3/styles-add-blank-property.js [ Timeout Pass ]
+crbug.com/938884 [ Win7 ] virtual/nobinary-for-devtools/http/tests/devtools/elements/styles-3/styles-add-blank-property.js [ Timeout Pass ]
+
+# Sheriff 2019-04-18
+crbug.com/954297 [ Linux Win ] http/tests/devtools/oopif/oopif-presentation-console-messages.js [ Pass Crash Timeout ]
+crbug.com/954297 [ Linux Win ] virtual/nobinary-for-devtools/http/tests/devtools/oopif/oopif-presentation-console-messages.js [ Pass Crash Timeout ]
+crbug.com/953994 [ Linux Win ] http/tests/security/svg-image-with-cached-remote-image.html [ Pass Crash ]
+crbug.com/953994 [ Linux Win ] virtual/outofblink-cors/http/tests/security/svg-image-with-cached-remote-image.html [ Pass Crash ]
+
+# This test might need to be removed.
+crbug.com/954349 fast/forms/autofocus-in-sandbox-with-allow-scripts.html [ Timeout ]
+
+# Failing because of revert of If931c1faff528a87d8a78808f30225ebe2377072.
+crbug.com/966345 external/wpt/webvtt/rendering/cues-with-video/processing-model/2_tracks.html [ Failure ]
+crbug.com/966345 external/wpt/webvtt/rendering/cues-with-video/processing-model/3_tracks.html [ Failure ]
+crbug.com/966345 external/wpt/webvtt/rendering/cues-with-video/processing-model/selectors/cue_function/class_object/class_white-space_normal_wrapped.html [ Failure ]
+crbug.com/966345 external/wpt/webvtt/rendering/cues-with-video/processing-model/selectors/cue_function/class_object/class_white-space_pre-line_wrapped.html [ Failure ]
