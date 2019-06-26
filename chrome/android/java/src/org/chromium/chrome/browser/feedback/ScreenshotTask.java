@@ -131,6 +131,11 @@ final class ScreenshotTask implements ScreenshotSource {
             return false;
         }
 
+        // Don't use compositor if the Tab Switcher is open.
+        if (chromeActivity.getOverviewModeBehavior().overviewVisible()) {
+            return false;
+        }
+
         // If the tab is null, assume in the tab switcher so a Compositor snapshot is good.
         if (currentTab == null) return true;
         // If the tab is not interactable, also assume in the tab switcher.

@@ -4081,6 +4081,10 @@ The site does NOT gain access to the camera. The camera images are only visible 
         Tabs suggestion...
       </message>
 
+      <message name="IDS_MENU_SUBMIT_FEEDBACK" desc="Submit feedback">
+        Submit feedback
+      </message>
+
       <message name="IDS_AUTOFILL_ASSISTANT_MODULE_TITLE"
   desc="Text shown when the Foo module is referenced in install start, success,
         failure UI (e.g. in IDS_MODULE_INSTALL_START_TEXT, which will expand to

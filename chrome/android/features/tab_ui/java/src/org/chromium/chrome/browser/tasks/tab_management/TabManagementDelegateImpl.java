@@ -42,7 +42,7 @@ public class TabManagementDelegateImpl implements TabManagementDelegate {
 
     @Override
     public TabSuggestions createTabSuggestions(ChromeActivity activity) {
-        return new TabSuggestionsOrchestrator(activity.getTabModelSelector());
+        return TabSuggestionsOrchestrator.getInstance(activity.getTabModelSelector());
     }
 
     @Override

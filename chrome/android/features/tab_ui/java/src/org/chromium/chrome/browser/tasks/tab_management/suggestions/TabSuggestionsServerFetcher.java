@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.chromium.base.Callback;
+import org.chromium.chrome.browser.ChromeVersionInfo;
 import org.chromium.chrome.browser.tasks.utils.RestEndpointFetcher;
 
 import java.util.LinkedList;
@@ -46,7 +47,7 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
     public TabSuggestionsServerFetcher() {}
 
     @Override
-    public void fetch(TabContext tabContext, Callback<List<TabSuggestion>> callback) {
+    public void fetch(TabContext tabContext, Callback<TabSuggestionsFetcherResults> callback) {
         JSONArray jsonTabs = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -73,7 +74,7 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
             android.util.Log.e("TabSuggestionsDetailed","Sending request with "+jsonRes.toString());
             mRestEndpointFetcher = new RestEndpointFetcher(OATH_CONSUMER_NAME, ENDPOINT, METHOD,
                     CONTENT_TYPE, SCOPES, jsonRes.toString(), THIRTY_SECOND_TIMEOUT_MILLISECONDS);
-            mRestEndpointFetcher.fetchResponse(res -> fetchCallback(res, callback));
+            mRestEndpointFetcher.fetchResponse(res -> fetchCallback(res, tabContext, callback));
         } catch (JSONException e) {
             // Soft failure for now so we don't crash the app and fall back on client side
             // providers.
@@ -81,7 +82,9 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
         }
     }
 
-    private void fetchCallback(String str, Callback<List<TabSuggestion>> callback) {
+    private void fetchCallback(
+            String str, TabContext tabContext, Callback<TabSuggestionsFetcherResults> callback) {
+        android.util.Log.e("TabSuggestionsDetailed","fetchCallback with "+str);
         mRestEndpointFetcher.destroy();
         List<TabSuggestion> suggestions = new LinkedList<>();
         JSONObject jsonResponse;
@@ -113,7 +116,7 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
                             "There was a problem parsing the JSON\n Details: %s", e.getMessage()));
         }
         android.util.Log.e("TabSuggestionsDetailed","fetchCallback sending "+suggestions.size());
-        callback.onResult(suggestions);
+        callback.onResult(new TabSuggestionsFetcherResults(suggestions, tabContext));
     }
 
     private static int getTabSuggestionAction(String action) {
@@ -126,5 +129,10 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
                 android.util.Log.e("Tabmari ", String.format("Unknown action: %s\n", action));
                 return -1;
         }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ChromeVersionInfo.isOfficialBuild();
     }
 }

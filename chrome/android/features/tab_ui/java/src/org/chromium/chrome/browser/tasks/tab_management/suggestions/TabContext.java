@@ -111,7 +111,6 @@ public class TabContext {
                         && (mUrl == null ? otherTabInfo.getUrl() == null
                                          : mUrl.equals(otherTabInfo.getUrl()));
             }
-
             return false;
         }
 

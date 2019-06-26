@@ -87,6 +87,7 @@ import org.chromium.chrome.browser.firstrun.FirstRunSignInProcessor;
 import org.chromium.chrome.browser.firstrun.FirstRunStatus;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
 import org.chromium.chrome.browser.fullscreen.ComposedBrowserControlsVisibilityDelegate;
+import org.chromium.chrome.browser.help.HelpAndFeedback;
 import org.chromium.chrome.browser.incognito.IncognitoNotificationManager;
 import org.chromium.chrome.browser.incognito.IncognitoTabHost;
 import org.chromium.chrome.browser.incognito.IncognitoTabHostRegistry;
@@ -213,6 +214,11 @@ public class ChromeTabbedActivity
     private static final String HELP_URL_PREFIX = "https://support.google.com/chrome/";
 
     private static final String WINDOW_INDEX = "window_index";
+
+    private static final String TAB_GROUP_SUGGESTIONS_CATEGORY_TAG =
+            "TabGroupSuggestionsCategoryTag";
+    private static final String TAB_GROUP_SUGGESTIONS_FEEDBACK_CONTEXT =
+            "TabGroupSuggestionsFeedbackContext";
 
     // How long to delay closing the current tab when our app is minimized.  Have to delay this
     // so that we don't show the contents of the next tab while minimizing.
@@ -1860,30 +1866,29 @@ public class ChromeTabbedActivity
             tabSuggestionEditorLayout.show();
         } else if (id == R.id.tabs_suggestion_id) {
             TabSuggestionEditorLayout tabSuggestionEditorLayout =
-                    TabManagementModuleProvider.getDelegate()
-                            .createTabSuggestionEditorLayout(this);
+                    TabManagementModuleProvider.getDelegate().createTabSuggestionEditorLayout(this);
 
             TabSuggestions tabSuggestionProvider =
                     TabManagementModuleProvider.getDelegate().createTabSuggestions(this);
 
             TabContext currentTabContext = TabContext.createCurrentContext(getTabModelSelector());
 
-            tabSuggestionProvider.getSuggestions(currentTabContext,
-                    res
-                    -> getSuggestionsCallback(
-                            (List<TabSuggestion>) res, tabSuggestionEditorLayout));
+            List<TabSuggestion> tabSuggestions =
+                    tabSuggestionProvider.getSuggestions(currentTabContext);
+            if (tabSuggestions.size() > 0) {
+                tabSuggestionEditorLayout.resetTabSuggestion(tabSuggestions.get(0));
+            }
+            tabSuggestionEditorLayout.show();
+        } else if (id == R.id.submit_feedback) {
+            HelpAndFeedback.getInstance(null /* Parameter not used */)
+                    .showFeedback(this, Profile.getLastUsedProfile(),
+                            null /* Parameter optional and not relevant */,
+                            TAB_GROUP_SUGGESTIONS_CATEGORY_TAG,
+                            TAB_GROUP_SUGGESTIONS_FEEDBACK_CONTEXT);
         } else {
             return super.onMenuOrKeyboardAction(id, fromMenu);
         }
         return true;
-    }
-
-    private void getSuggestionsCallback(List<TabSuggestion> tabSuggestions,
-            TabSuggestionEditorLayout tabSuggestionEditorLayout) {
-        if (tabSuggestions.size() > 0) {
-            tabSuggestionEditorLayout.resetTabSuggestion(tabSuggestions.get(0));
-        }
-        tabSuggestionEditorLayout.show();
     }
 
     @Override
