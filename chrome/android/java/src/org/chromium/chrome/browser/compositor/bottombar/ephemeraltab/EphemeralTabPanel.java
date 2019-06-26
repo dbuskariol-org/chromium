@@ -115,24 +115,28 @@ public class EphemeralTabPanel extends OverlayPanel {
             if (!isFailure) {
                 Uri uri = Uri.parse(mUrl);
                 if (uri.getAuthority().startsWith("www.google.com")) return;
-                //closePanel(StateChangeReason.TAB_PROMOTION, false);
-                //mActivity.getCurrentTabCreator().createNewTab(
-                 //       new LoadUrlParams(mUrl, PageTransition.LINK), TabLaunchType.FROM_LINK,
-                 //       mActivity.getActivityTabProvider().get());
+                // closePanel(StateChangeReason.TAB_PROMOTION, false);
+                // mActivity.getCurrentTabCreator().createNewTab(
+                //       new LoadUrlParams(mUrl, PageTransition.LINK), TabLaunchType.FROM_LINK,
+                //       mActivity.getActivityTabProvider().get());
             }
         }
 
         @Override
-        public boolean shouldInterceptNavigation(ExternalNavigationHandler externalNavHandler, NavigationParams navigationParams) {
-            android.util.Log.e("Yusuf","Should intercept navigation with "+navigationParams.url+":"+navigationParams.isMainFrame);
+        public boolean shouldInterceptNavigation(
+                ExternalNavigationHandler externalNavHandler, NavigationParams navigationParams) {
+            android.util.Log.e("Yusuf",
+                    "Should intercept navigation with " + navigationParams.url + ":"
+                            + navigationParams.isMainFrame);
 
             Uri uri = Uri.parse(navigationParams.url);
-            if (uri.getAuthority().startsWith("www.google.com")) return super.shouldInterceptNavigation(externalNavHandler, navigationParams);
+            if (uri.getAuthority().startsWith("www.google.com"))
+                return super.shouldInterceptNavigation(externalNavHandler, navigationParams);
 
             closePanel(StateChangeReason.TAB_PROMOTION, false);
             mActivity.getCurrentTabCreator().createNewTab(
-                   new LoadUrlParams(navigationParams.url, PageTransition.LINK), TabLaunchType.FROM_LINK,
-                   mActivity.getActivityTabProvider().get());
+                    new LoadUrlParams(navigationParams.url, PageTransition.LINK),
+                    TabLaunchType.FROM_LINK, mActivity.getActivityTabProvider().get());
             return true;
         }
     }
@@ -184,7 +188,6 @@ public class EphemeralTabPanel extends OverlayPanel {
         mTabModelObserver = null;
         mTabModelSelectorTabObserver = null;
     }
-
 
     private void closeTab() {
         closePanel(StateChangeReason.UNKNOWN, false);

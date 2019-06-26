@@ -25,7 +25,7 @@ public final class TabSuggestionsClientFetcher implements TabSuggestionsFetcher 
     }
 
     @Override
-    public void fetch(TabContext tabContext, Callback<TabSuggestionsFetcherResults> callback) {
+    public void fetch(TabContext tabContext, Callback<List<TabSuggestion>> callback) {
         List<TabSuggestion> retList = new ArrayList<>();
 
         for (TabSuggestionProvider provider : mClientSuggestionProviders) {
@@ -36,11 +36,6 @@ public final class TabSuggestionsClientFetcher implements TabSuggestionsFetcher 
                 retList.addAll(suggestions);
             }
         }
-        callback.onResult(new TabSuggestionsFetcherResults(retList, tabContext));
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+        callback.onResult(retList);
     }
 }

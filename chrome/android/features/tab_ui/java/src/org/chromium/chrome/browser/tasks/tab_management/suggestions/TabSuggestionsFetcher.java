@@ -6,11 +6,11 @@ package org.chromium.chrome.browser.tasks.tab_management.suggestions;
 
 import org.chromium.base.Callback;
 
+import java.util.List;
+
 /**
  * Defines the interface for suggestion fetchers.
  */
 public interface TabSuggestionsFetcher {
-    void fetch(TabContext tabContext, Callback<TabSuggestionsFetcherResults> callback);
-
-    boolean isEnabled();
+    void fetch(TabContext tabContext, Callback<List<TabSuggestion>> callback);
 }

@@ -1046,9 +1046,6 @@ extern const char kTabGroupsAndroidDescription[];
 extern const char kTabGroupsUiImprovementsAndroidName[];
 extern const char kTabGroupsUiImprovementsAndroidDescription[];
 
-extern const char kTabGroupsSuggestionsAndroidName[];
-extern const char kTabGroupsSuggestionsAndroidDescription[];
-
 extern const char kTabToGTSAnimationAndroidName[];
 extern const char kTabToGTSAnimationAndroidDescription[];
 

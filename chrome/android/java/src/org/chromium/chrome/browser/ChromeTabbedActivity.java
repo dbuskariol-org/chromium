@@ -1868,17 +1868,22 @@ public class ChromeTabbedActivity
 
             TabContext currentTabContext = TabContext.createCurrentContext(getTabModelSelector());
 
-            List<TabSuggestion> tabSuggestions =
-                    tabSuggestionProvider.getSuggestions(currentTabContext);
-            if (tabSuggestions.size() > 0) {
-                tabSuggestionEditorLayout.resetTabSuggestion(tabSuggestions.get(0));
-            }
-            tabSuggestionEditorLayout.show();
-
+            tabSuggestionProvider.getSuggestions(currentTabContext,
+                    res
+                    -> getSuggestionsCallback(
+                            (List<TabSuggestion>) res, tabSuggestionEditorLayout));
         } else {
             return super.onMenuOrKeyboardAction(id, fromMenu);
         }
         return true;
+    }
+
+    private void getSuggestionsCallback(List<TabSuggestion> tabSuggestions,
+            TabSuggestionEditorLayout tabSuggestionEditorLayout) {
+        if (tabSuggestions.size() > 0) {
+            tabSuggestionEditorLayout.resetTabSuggestion(tabSuggestions.get(0));
+        }
+        tabSuggestionEditorLayout.show();
     }
 
     @Override
