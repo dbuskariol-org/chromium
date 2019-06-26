@@ -27,7 +27,9 @@ public final class TabSuggestionsRanker {
             SuggestionProviders.META_TAG_SUGGESTION_PROVIDER,
             SuggestionProviders.SHOPPING_PRODUCT_PROVIDER,
             SuggestionProviders.SESSION_TAB_SWITCHES_SUGGESTION_PROVIDER,
-            SuggestionProviders.NEWS_SUGGESTION_PROVIDER})
+            SuggestionProviders.NEWS_SUGGESTION_PROVIDER,
+            SuggestionProviders.TASKS_SUGGESTION_PROVIDER,
+            SuggestionProviders.ARTICLES_SUGGESTION_PROVIDER})
     public @interface SuggestionProviders {
         String DUPLICATE_PAGE_SUGGESTION_PROVIDER = "DuplicatePageSuggestionProvider";
         String SESSION_TAB_SWITCHES_SUGGESTION_PROVIDER = "SessionTabSwitchesSuggestionProvider";
@@ -35,6 +37,8 @@ public final class TabSuggestionsRanker {
         String META_TAG_SUGGESTION_PROVIDER = "MetaTagSuggestionProvider";
         String SHOPPING_PRODUCT_PROVIDER = "ProductsSuggestionProvider";
         String NEWS_SUGGESTION_PROVIDER = "NewsSuggestionProvider";
+        String TASKS_SUGGESTION_PROVIDER = "SmartTasksSuggestionProvider";
+        String ARTICLES_SUGGESTION_PROVIDER = "ArticlesSuggestionProvider";
     }
 
     // TODO: move this mapping to config. crbug.com/959938
@@ -48,6 +52,8 @@ public final class TabSuggestionsRanker {
             put(SuggestionProviders.META_TAG_SUGGESTION_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
             put(SuggestionProviders.SHOPPING_PRODUCT_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
             put(SuggestionProviders.NEWS_SUGGESTION_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
+            put(SuggestionProviders.TASKS_SUGGESTION_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
+            put(SuggestionProviders.ARTICLES_SUGGESTION_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
         }
     };
 

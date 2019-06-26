@@ -63,7 +63,8 @@ public class GridTabSwitcherCoordinator
             mSnackbarManageable.getSnackbarManager().showSnackbar(
                     Snackbar.make(buildSnackBarContent(tabSuggestion), this,
                                     Snackbar.TYPE_PERSISTENT, Snackbar.UMA_TEST_SNACKBAR)
-                            .setAction("Review", tabSuggestion));
+                            .setAction("Review", tabSuggestion)
+                            .setSingleLine(false));
         }
 
         public void dismissTabSuggestionBar() {
