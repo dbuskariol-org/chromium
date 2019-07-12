@@ -50,9 +50,10 @@ public final class ShoppingProductsResolver {
                     "", SHOPPING_ASSIST_OAUTH_SCOPES, null, THIRTY_SECOND_TIMEOUT_MILLISECONDS);
 
             shoppingEndpointFetcher.fetchResponse((response) -> {
-                Log.e(TAG, response);
+                Log.e(TAG, response.getResponseString());
                 ShoppingAssistServiceResponse shoppingAssistResponse =
-                        ShoppingAssistServiceResponse.createFromJsonString(response);
+                        ShoppingAssistServiceResponse.createFromJsonString(
+                                response.getResponseString());
                 responseCallback.onResolveResponse(shoppingAssistResponse == null
                                 ? null
                                 : shoppingAssistResponse.getFirstProductOrNull());

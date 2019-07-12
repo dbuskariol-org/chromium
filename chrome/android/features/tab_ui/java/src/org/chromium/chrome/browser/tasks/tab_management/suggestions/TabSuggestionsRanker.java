@@ -7,7 +7,6 @@ package org.chromium.chrome.browser.tasks.tab_management.suggestions;
 import android.support.annotation.StringDef;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +14,6 @@ import java.util.Map;
  * Ranker which ranks all suggestions based on static rules.
  */
 public final class TabSuggestionsRanker {
-    private static final int DEFAULT_CLIENT_PROVIDER_SCORE = 100;
-    private static final int DEFAULT_SERVER_PROVIDER_SCORE = 200;
-
     /**
      * List of all known providers (server & client).
      * TODO: decouple server providers from client. crbug.com/970933
@@ -41,29 +37,15 @@ public final class TabSuggestionsRanker {
         String ARTICLES_SUGGESTION_PROVIDER = "ArticlesSuggestionProvider";
     }
 
-    // TODO: move this mapping to config. crbug.com/959938
-    private static Map<String, Integer> sScores = new HashMap<String, Integer>() {
-        {
-            put(SuggestionProviders.DUPLICATE_PAGE_SUGGESTION_PROVIDER,
-                    DEFAULT_CLIENT_PROVIDER_SCORE);
-            put(SuggestionProviders.STALE_TABS_SUGGESTION_PROVIDER, DEFAULT_CLIENT_PROVIDER_SCORE);
-            put(SuggestionProviders.SESSION_TAB_SWITCHES_SUGGESTION_PROVIDER,
-                    DEFAULT_CLIENT_PROVIDER_SCORE);
-            put(SuggestionProviders.META_TAG_SUGGESTION_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
-            put(SuggestionProviders.SHOPPING_PRODUCT_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
-            put(SuggestionProviders.NEWS_SUGGESTION_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
-            put(SuggestionProviders.TASKS_SUGGESTION_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
-            put(SuggestionProviders.ARTICLES_SUGGESTION_PROVIDER, DEFAULT_SERVER_PROVIDER_SCORE);
-        }
-    };
-
     /**
      * Ranks suggestions based on the number of tabs first and the score of the provider in case of
      * a tie. This logic is subject to change in the future.
      * @param suggestions to be ranked
+     * @param providerConfigs per-provider configurations
      * @return sorted suggestions list where first suggestion in the list is the most preferred
      */
-    public static List<TabSuggestion> getRankedSuggestions(List<TabSuggestion> suggestions) {
+    public static List<TabSuggestion> getRankedSuggestions(List<TabSuggestion> suggestions,
+            Map<String, TabSuggestionProviderConfiguration> providerConfigs) {
         if (suggestions.isEmpty()) {
             return suggestions;
         }
@@ -72,11 +54,11 @@ public final class TabSuggestionsRanker {
             if (a == b) return 0;
 
             if (a.getTabsInfo().size() == b.getTabsInfo().size()) {
-                int aScore = sScores.containsKey(a.getProviderName())
-                        ? sScores.get(a.getProviderName())
+                int aScore = providerConfigs.containsKey(a.getProviderName())
+                        ? providerConfigs.get(a.getProviderName()).getScore()
                         : 0;
-                int bScore = sScores.containsKey(b.getProviderName())
-                        ? sScores.get(b.getProviderName())
+                int bScore = providerConfigs.containsKey(b.getProviderName())
+                        ? providerConfigs.get(b.getProviderName()).getScore()
                         : 0;
 
                 return Integer.compare(bScore, aScore);

@@ -48,6 +48,6 @@ public class TabManagementDelegateImpl implements TabManagementDelegate {
     @Override
     public TabSuggestionEditorLayout createTabSuggestionEditorLayout(ChromeActivity activity) {
         return new TabSuggestionEditorCoordinator(activity, activity.getCompositorViewHolder(),
-                activity.getTabModelSelector(), activity.getTabContentManager());
+                activity.getTabModelSelector(), activity.getTabContentManager(), activity);
     }
 }

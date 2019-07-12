@@ -153,6 +153,7 @@ import org.chromium.chrome.browser.tasks.tab_management.TabSuggestionEditorLayou
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabContext;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestions;
+import org.chromium.chrome.browser.tasks.tabgroup.TabGroupConstants;
 import org.chromium.chrome.browser.toolbar.ToolbarButtonInProductHelpController;
 import org.chromium.chrome.browser.toolbar.top.ToolbarControlContainer;
 import org.chromium.chrome.browser.touchless.TouchlessDelegate;
@@ -214,11 +215,6 @@ public class ChromeTabbedActivity
     private static final String HELP_URL_PREFIX = "https://support.google.com/chrome/";
 
     private static final String WINDOW_INDEX = "window_index";
-
-    private static final String TAB_GROUP_SUGGESTIONS_CATEGORY_TAG =
-            "TabGroupSuggestionsCategoryTag";
-    private static final String TAB_GROUP_SUGGESTIONS_FEEDBACK_CONTEXT =
-            "TabGroupSuggestionsFeedbackContext";
 
     // How long to delay closing the current tab when our app is minimized.  Have to delay this
     // so that we don't show the contents of the next tab while minimizing.
@@ -1883,8 +1879,8 @@ public class ChromeTabbedActivity
             HelpAndFeedback.getInstance(null /* Parameter not used */)
                     .showFeedback(this, Profile.getLastUsedProfile(),
                             null /* Parameter optional and not relevant */,
-                            TAB_GROUP_SUGGESTIONS_CATEGORY_TAG,
-                            TAB_GROUP_SUGGESTIONS_FEEDBACK_CONTEXT);
+                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_CATEGORY_TAG,
+                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_FEEDBACK_CONTEXT);
         } else {
             return super.onMenuOrKeyboardAction(id, fromMenu);
         }

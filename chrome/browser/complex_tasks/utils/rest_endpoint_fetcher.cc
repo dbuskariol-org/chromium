@@ -15,6 +15,7 @@
 #include "content/public/browser/web_contents.h"
 #include "google_apis/gaia/gaia_urls.h"
 #include "jni/RestEndpointFetcher_jni.h"
+#include "jni/RestEndpointResponse_jni.h"
 #include "services/network/public/cpp/simple_url_loader.h"
 
 const char kContentTypeKey[] = "Content-Type";
@@ -147,7 +148,12 @@ void RestEndpointFetcher::OnResponseFetched(
   LOG(INFO) << "TabSuggestionsDetailed Response " << response_body_;
   LOG(INFO) << "TabSuggestionsDetailed *****************************";
 
-  base::android::RunStringCallbackAndroid(jcaller, std::move(response_body_));
+  base::android::RunObjectCallbackAndroid(
+      jcaller, Java_RestEndpointResponse_createRestEndpointResponse(
+                   base::android::AttachCurrentThread(),
+                   base::android::ConvertUTF8ToJavaString(
+                       base::android::AttachCurrentThread(),
+                       std::move(response_body_))));
 }
 
 void RestEndpointFetcher::Destroy(

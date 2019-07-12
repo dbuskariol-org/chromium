@@ -25,12 +25,19 @@ public final class TabSuggestion {
     private final List<TabContext.TabInfo> mTabsInfo;
     private final @TabSuggestionAction int mAction;
     private final String mProviderName;
+    private final Integer mTabGroupId;
 
     public TabSuggestion(List<TabContext.TabInfo> tabsInfo, @TabSuggestionAction int action,
             String providerName) {
+        this(tabsInfo, action, providerName, null);
+    }
+
+    public TabSuggestion(List<TabContext.TabInfo> tabsInfo, @TabSuggestionAction int action,
+            String providerName, Integer tabGroupId) {
         mTabsInfo = tabsInfo;
         mAction = action;
         mProviderName = providerName;
+        mTabGroupId = tabGroupId;
     }
 
     /**
@@ -52,5 +59,22 @@ public final class TabSuggestion {
      */
     public String getProviderName() {
         return mProviderName;
+    }
+
+    /**
+     * Checks if the suggestion is for an existing group
+     * @return true if the suggestion updates an existing group
+     */
+    public boolean hasExistingGroupId() {
+        return mTabGroupId != null;
+    }
+
+    /**
+     * If the suggestion is for an existing group, this will return the group id. Call @{link
+     * hasExistingGroupId} before calling this getter.
+     * @return existing group Id
+     */
+    public Integer getExistingTabGroupId() {
+        return mTabGroupId;
     }
 }

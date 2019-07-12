@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.chromium.base.Callback;
 import org.chromium.chrome.browser.ChromeVersionInfo;
 import org.chromium.chrome.browser.tasks.utils.RestEndpointFetcher;
+import org.chromium.chrome.browser.tasks.utils.RestEndpointResponse;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +35,8 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
     private static final String TIMESTAMP_KEY = "timestamp";
     private static final String REFERRER_KEY = "referrer";
     private static final String TABS_KEY = "tabs";
+    private static final String TAB_GROUPS_KEY = "tabGroups";
+    private static final String EXISTING_TAB_GROUP_ID_KEY = "existingTabGroupId";
     private static final String TAB_CONTEXT_KEY = "tabContext";
     private static final String SUGGESTIONS_KEY = "suggestions";
     private static final String ACTION_KEY = "action";
@@ -51,29 +54,22 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
         JSONArray jsonTabs = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         try {
-            for (TabContext.TabInfo tab : tabContext.getTabsInfo()) {
-                JSONObject jsonTab = new JSONObject();
-                jsonTab.put(ID_KEY, tab.getId());
-                jsonTab.put(ORIGINAL_URL_KEY, tab.getOriginalUrl());
-                jsonTab.put(REFERRER_KEY, tab.getReferrerUrl());
-                jsonTab.put(TIMESTAMP_KEY, tab.getTimestampMillis());
-                jsonTab.put(TITLE_KEY, tab.getTitle());
-                jsonTab.put(URL_KEY, tab.getUrl());
-                jsonTabs.put(jsonTab);
-            }
+            jsonObject.put(TABS_KEY, getTabsInfoJson(tabContext.getTabsInfo()));
+            jsonObject.put(TAB_GROUPS_KEY, getTabGroupsJson(tabContext.getTabGroups()));
 
-            jsonObject.put(TABS_KEY, jsonTabs);
             JSONObject jsonRes = new JSONObject();
             jsonRes.put(TAB_CONTEXT_KEY, jsonObject);
+
+            String json = jsonRes.toString();
 
             // destroy existing instance to avoid leaks on native side.
             if (mRestEndpointFetcher != null) {
                 android.util.Log.e("TabSuggestionsDetailed","DESTROYED OLD FETCHER");
                 mRestEndpointFetcher.destroy();
             }
-            android.util.Log.e("TabSuggestionsDetailed","Sending request with "+jsonRes.toString());
+            android.util.Log.e("TabSuggestionsDetailed","Sending request with " + json);
             mRestEndpointFetcher = new RestEndpointFetcher(OATH_CONSUMER_NAME, ENDPOINT, METHOD,
-                    CONTENT_TYPE, SCOPES, jsonRes.toString(), THIRTY_SECOND_TIMEOUT_MILLISECONDS);
+                    CONTENT_TYPE, SCOPES, json, THIRTY_SECOND_TIMEOUT_MILLISECONDS);
             mRestEndpointFetcher.fetchResponse(res -> fetchCallback(res, tabContext, callback));
         } catch (JSONException e) {
             // Soft failure for now so we don't crash the app and fall back on client side
@@ -82,14 +78,43 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
         }
     }
 
-    private void fetchCallback(
-            String str, TabContext tabContext, Callback<TabSuggestionsFetcherResults> callback) {
-        android.util.Log.e("TabSuggestionsDetailed","fetchCallback with "+str);
+    private JSONArray getTabsInfoJson(List<TabContext.TabInfo> tabs) throws JSONException {
+        JSONArray jsonTabs = new JSONArray();
+
+        for (TabContext.TabInfo tab : tabs) {
+            JSONObject jsonTab = new JSONObject();
+            jsonTab.put(ID_KEY, tab.getId());
+            jsonTab.put(ORIGINAL_URL_KEY, tab.getOriginalUrl());
+            jsonTab.put(REFERRER_KEY, tab.getReferrerUrl());
+            jsonTab.put(TIMESTAMP_KEY, tab.getTimestampMillis());
+            jsonTab.put(TITLE_KEY, tab.getTitle());
+            jsonTab.put(URL_KEY, tab.getUrl());
+            jsonTabs.put(jsonTab);
+        }
+        return jsonTabs;
+    }
+
+    private JSONArray getTabGroupsJson(List<TabContext.TabGroupInfo> groups) throws JSONException {
+        JSONArray jsonGroups = new JSONArray();
+
+        for (TabContext.TabGroupInfo group : groups) {
+            JSONObject jsonGroupObject = new JSONObject();
+            jsonGroupObject.put(ID_KEY, group.getId());
+            jsonGroupObject.put(TABS_KEY, getTabsInfoJson(group.getTabs()));
+            jsonGroups.put(jsonGroupObject);
+        }
+        return jsonGroups;
+    }
+
+    private void fetchCallback(RestEndpointResponse restEndpointResponse, TabContext tabContext,
+            Callback<TabSuggestionsFetcherResults> callback) {
+        android.util.Log.e("TabSuggestionsDetailed",
+                "fetchCallback with " + restEndpointResponse.getResponseString());
         mRestEndpointFetcher.destroy();
         List<TabSuggestion> suggestions = new LinkedList<>();
         JSONObject jsonResponse;
         try {
-            jsonResponse = new JSONObject(str);
+            jsonResponse = new JSONObject(restEndpointResponse.getResponseString());
             JSONArray jsonSuggestions = jsonResponse.getJSONArray(SUGGESTIONS_KEY);
 
             for (int i = 0; i < jsonSuggestions.length(); i++) {
@@ -105,8 +130,11 @@ public final class TabSuggestionsServerFetcher implements TabSuggestionsFetcher 
                 }
 
                 String action = (String) jsonSuggestion.get(ACTION_KEY);
+                int tabGroupId =
+                        jsonSuggestion.optInt(EXISTING_TAB_GROUP_ID_KEY, Integer.MIN_VALUE);
                 suggestions.add(new TabSuggestion(tabs, getTabSuggestionAction(action),
-                        (String) jsonSuggestion.get(PROVIDER_NAME_KEY)));
+                        (String) jsonSuggestion.get(PROVIDER_NAME_KEY),
+                        tabGroupId == Integer.MIN_VALUE ? null : tabGroupId));
             }
         } catch (JSONException e) {
             // Soft failure for now so we don't crash the app and fall back on client side

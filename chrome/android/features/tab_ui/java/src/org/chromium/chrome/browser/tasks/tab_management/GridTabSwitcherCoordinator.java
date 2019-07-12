@@ -4,10 +4,14 @@
 
 package org.chromium.chrome.browser.tasks.tab_management;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 
+import org.chromium.base.ContextUtils;
+import org.chromium.base.metrics.RecordHistogram;
+import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.compositor.CompositorViewHolder;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
@@ -25,6 +29,8 @@ import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsOrchestrator;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsRanker;
 import org.chromium.chrome.browser.toolbar.ToolbarManager;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.ui.modelutil.PropertyModel;
@@ -40,6 +46,12 @@ import java.util.Map;
 public class GridTabSwitcherCoordinator
         implements Destroyable, GridTabSwitcher, GridTabSwitcherMediator.ResetHandler {
     final static String COMPONENT_NAME = "GridTabSwitcher";
+
+    private static final String REVIEW_SUGGESTIONS_EVENT = "GridTabSwitcher.TappedReviewSuggestion";
+    private static final String SUGGESTION_SHOWN_EVENT = "EnteredTabSwitcher.SuggestionShown";
+    private static final String SUGGESTION_DISMISSED_EVENT = "SuggestionDismissed";
+    private static final String TAB_SUGGESTION_TAB_COUNT = "GridTabSwitcher.SuggestedTabsCount";
+
     private final PropertyModelChangeProcessor mContainerViewChangeProcessor;
     private final ActivityLifecycleDispatcher mLifecycleDispatcher;
     private final TabListCoordinator mTabGridCoordinator;
@@ -57,9 +69,13 @@ public class GridTabSwitcherCoordinator
         }
 
         @Override
-        public void onDismissNoAction(Object actionData) {}
+        public void onDismissNoAction(Object actionData) {
+            TabSuggestion suggestion = (TabSuggestion) actionData;
+            recordUserAction(suggestion.getProviderName(), SUGGESTION_DISMISSED_EVENT);
+        }
 
         public void showTabSuggestionBar(TabSuggestion tabSuggestion) {
+            recordUserAction(tabSuggestion.getProviderName(), SUGGESTION_SHOWN_EVENT);
             mSnackbarManageable.getSnackbarManager().showSnackbar(
                     Snackbar.make(buildSnackBarContent(tabSuggestion), this,
                                     Snackbar.TYPE_PERSISTENT, Snackbar.UMA_TEST_SNACKBAR)
@@ -71,34 +87,23 @@ public class GridTabSwitcherCoordinator
             mSnackbarManageable.getSnackbarManager().dismissSnackbars(this);
         }
 
-        private String getActionString(TabSuggestion suggestion) {
-            switch (suggestion.getAction()) {
-                case TabSuggestion.TabSuggestionAction.GROUP:
-                    return "Group";
-                case TabSuggestion.TabSuggestionAction.CLOSE:
-                    return "Close";
-                default:
-                    assert false;
+        private int getSuggestionStringResourceId(TabSuggestion suggestion) {
+            if ((TabSuggestionsRanker.SuggestionProviders.STALE_TABS_SUGGESTION_PROVIDER)
+                            .equals(suggestion.getProviderName())) {
+                return org.chromium.chrome.R.string.tab_suggestion_snackbar_close_stale;
+            } else if ((TabSuggestionsRanker.SuggestionProviders.DUPLICATE_PAGE_SUGGESTION_PROVIDER)
+                               .equals(suggestion.getProviderName())) {
+                return org.chromium.chrome.R.string.tab_suggestion_snackbar_close_duplicates;
+            } else {
+                assert suggestion.getAction() == TabSuggestion.TabSuggestionAction.GROUP;
+                return org.chromium.chrome.R.string.tab_suggestion_snackbar_group_related;
             }
-            return "";
         }
 
         private String buildSnackBarContent(TabSuggestion suggestion) {
-            String action = "";
-            String suffix = "";
-            switch (suggestion.getAction()) {
-                case TabSuggestion.TabSuggestionAction.GROUP:
-                    action = getActionString(suggestion);
-                    suffix = "related tabs";
-                    break;
-                case TabSuggestion.TabSuggestionAction.CLOSE:
-                    action = getActionString(suggestion);
-                    suffix = "old tabs";
-                    break;
-                default:
-                    assert false : "Unsupported TabSuggestion action";
-            }
-            return action + " " + suggestion.getTabsInfo().size() + " " + suffix
+            return ContextUtils.getApplicationContext().getResources().getString(
+                           getSuggestionStringResourceId(suggestion),
+                           suggestion.getTabsInfo().size())
                     + getProviderString(suggestion);
         }
 
@@ -150,8 +155,7 @@ public class GridTabSwitcherCoordinator
             ActivityLifecycleDispatcher lifecycleDispatcher, ToolbarManager toolbarManager,
             TabModelSelector tabModelSelector, TabContentManager tabContentManager,
             CompositorViewHolder compositorViewHolder, ChromeFullscreenManager fullscreenManager,
-            TabCreatorManager tabCreatorManager, Runnable backPress,
-            SnackbarManager.SnackbarManageable snackbarManageable) {
+            TabCreatorManager tabCreatorManager, Runnable backPress, Activity activity) {
         PropertyModel containerViewModel = new PropertyModel(TabListContainerProperties.ALL_KEYS);
         TabListMediator.GridCardOnClickListenerProvider gridCardOnClickListenerProvider;
         if (FeatureUtilities.isTabGroupsAndroidUiImprovementsEnabled()) {
@@ -199,9 +203,9 @@ public class GridTabSwitcherCoordinator
         mContainerViewChangeProcessor = PropertyModelChangeProcessor.create(containerViewModel,
                 mTabGridCoordinator.getContainerView(), TabGridContainerViewBinder::bind);
 
-        mSnackbarManageable = snackbarManageable;
+        mSnackbarManageable = (SnackbarManager.SnackbarManageable) activity;
         mTabSuggestionEditorCoordinator = new TabSuggestionEditorCoordinator(
-                context, compositorViewHolder, tabModelSelector, tabContentManager);
+                context, compositorViewHolder, tabModelSelector, tabContentManager, activity);
         mTabSuggestionEditorCoordinator.addActionListener(
                 new TabSuggestionEditorCoordinator.ActionListener() {
                     @Override
@@ -275,6 +279,7 @@ public class GridTabSwitcherCoordinator
 
     @Override
     public void destroy() {
+        mTabSuggestionEditorCoordinator.destroy();
         mTabGridCoordinator.destroy();
         mContainerViewChangeProcessor.destroy();
         mMediator.destroy();
@@ -288,5 +293,22 @@ public class GridTabSwitcherCoordinator
     public void showTabSuggestionEditor(TabSuggestion tabSuggestion) {
         mTabSuggestionEditorCoordinator.resetTabSuggestion(tabSuggestion);
         mTabSuggestionEditorCoordinator.show();
+        final String providerName = tabSuggestion.getProviderName();
+        recordCountHistogram(
+                providerName, TAB_SUGGESTION_TAB_COUNT, tabSuggestion.getTabsInfo().size());
+        recordUserAction(providerName, REVIEW_SUGGESTIONS_EVENT);
+    }
+
+    private void recordUserAction(String providerName, String userActionEvent) {
+        final String userAction =
+                String.format("%s.%s.%s", TabSuggestionsOrchestrator.TAB_SUGGESTIONS_UMA_PREFIX,
+                        providerName, userActionEvent);
+        RecordUserAction.record(userAction);
+    }
+
+    private void recordCountHistogram(String providerName, String histogramName, int count) {
+        final String histogram = String.format("%s.%s.%s",
+                TabSuggestionsOrchestrator.TAB_SUGGESTIONS_UMA_PREFIX, providerName, histogramName);
+        RecordHistogram.recordCountHistogram(histogram, count);
     }
 }

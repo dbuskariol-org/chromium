@@ -4076,13 +4076,24 @@ The site does NOT gain access to the camera. The camera images are only visible 
         Group tabs...
       </message>
 
-      <!-- TabMari menu item strings -->
+      <!-- Tab Suggestion menu item strings -->
       <message name="IDS_MENU_TABS_SUGGESTION" desc="Place Holder.">
         Tabs suggestion...
       </message>
 
       <message name="IDS_MENU_SUBMIT_FEEDBACK" desc="Submit feedback">
         Submit feedback
+      </message> 
+
+      <!-- Tab Suggestion Snackbar -->
+      <message name="IDS_TAB_SUGGESTION_SNACKBAR_CLOSE_DUPLICATES" desc="Text shown when there are duplicates tabs.">
+        <ph name="NUMBER_OF_TABS">%1$d<ex>35</ex></ph> of your tabs are duplicates. Close them?
+      </message>      
+      <message name="IDS_TAB_SUGGESTION_SNACKBAR_CLOSE_STALE" desc="Text shown when there are stale tabs to close.">
+        <ph name="NUMBER_OF_TABS">%1$d<ex>35</ex></ph> of your tabs haven't been used lately. Close them? 
+      </message>
+      <message name="IDS_TAB_SUGGESTION_SNACKBAR_GROUP_RELATED" desc="Text shown when there are related tabs to group.">
+        <ph name="NUMBER_OF_TABS">%1$d<ex>35</ex></ph> of your tabs seem similar. Group them together?
       </message>
 
       <message name="IDS_AUTOFILL_ASSISTANT_MODULE_TITLE"

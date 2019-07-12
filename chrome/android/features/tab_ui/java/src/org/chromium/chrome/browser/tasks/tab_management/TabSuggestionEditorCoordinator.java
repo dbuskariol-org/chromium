@@ -4,6 +4,7 @@
 
 package org.chromium.chrome.browser.tasks.tab_management;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -18,7 +19,13 @@ import android.view.WindowManager;
 import android.widget.PopupWindow;
 
 import org.chromium.base.ObserverList;
+import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.lifecycle.Destroyable;
+import org.chromium.chrome.browser.help.HelpAndFeedback;
+import org.chromium.chrome.browser.profiles.Profile;
+import org.chromium.chrome.browser.snackbar.Snackbar;
+import org.chromium.chrome.browser.snackbar.SnackbarManager;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabList;
 import org.chromium.chrome.browser.tabmodel.TabModelFilter;
@@ -26,6 +33,8 @@ import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabContext;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsOrchestrator;
+import org.chromium.chrome.browser.tasks.tabgroup.TabGroupConstants;
 import org.chromium.chrome.browser.widget.selection.SelectableListLayout;
 import org.chromium.chrome.browser.widget.selection.SelectionDelegate;
 import org.chromium.chrome.tab_ui.R;
@@ -42,8 +51,13 @@ import java.util.Set;
 /**
  * Coordinator that is responsible for showing a grid of tabs and a toolbar for the TabSuggestion.
  */
-public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout {
+public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout, Destroyable {
     static final String COMPONENT_NAME = "TabSuggestionEditor";
+
+    private static final String TAB_GROUP_SUGGESTION_ACCEPTED = "AcceptedTabGroupSuggestion";
+    private static final String TAB_CLOSE_SUGGESTION_ACCEPTED = "AcceptedTabCloseSuggestion";
+    private static final String TAB_SUGGESTION_MODIFIED_SELECTION = "ModifiedTabListSelection";
+
     private final Context mContext;
     private final TabListCoordinator mTabSuggestionListCoordinator;
     private final SelectableListLayout<Integer> mTabSuggestionEditorLayout;
@@ -52,21 +66,49 @@ public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout
     private PopupWindow mPopupWindow;
     private final TabModelSelector mTabModelSelector;
     private final View mParentView;
+    private SelectionDelegate.SelectionObserver<Integer> mTabSelectionObserver;
+    private final TabSuggestionEditorBarController mTabSuggestionsEditorBarController =
+            new TabSuggestionEditorBarController();
+    private final SnackbarManager.SnackbarManageable mSnackbarManageable;
 
     private final View.OnClickListener mClosingSuggestedTabsListener;
     private final View.OnClickListener mGroupingSuggestedTabsListener;
     private int mSuggestedTabCount;
     // Not handling landscape mode for now.
     private int mSpanCount = 2;
+    private String mCurrentProviderName;
 
     ObserverList<ActionListener> mActionListeners = new ObserverList<>();
+    private Activity mActivity;
 
     public interface ActionListener {
         void doneAction(int actionType, Map<Integer, Integer> tabIdsToTabIndex);
     }
 
+    class TabSuggestionEditorBarController implements SnackbarManager.SnackbarController {
+        @Override
+        public void onAction(Object actionData) {
+            HelpAndFeedback.getInstance(null /* Parameter not used */)
+                    .showFeedback(mActivity, Profile.getLastUsedProfile(),
+                            null /* Parameter optional and not relevant */,
+                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_CATEGORY_TAG,
+                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_FEEDBACK_CONTEXT);
+        }
+
+        @Override
+        public void onDismissNoAction(Object actionData) {}
+
+        public void showSnackBar() {
+            mSnackbarManageable.getSnackbarManager().showSnackbar(
+                    Snackbar.make("", this, Snackbar.TYPE_PERSISTENT, Snackbar.UMA_TEST_SNACKBAR)
+                            .setAction("Send feedback about this suggestion", null)
+                            .setSingleLine(true));
+        }
+    }
+
     public TabSuggestionEditorCoordinator(Context context, View parentView,
-            TabModelSelector tabModelSelector, TabContentManager tabContentManager) {
+            TabModelSelector tabModelSelector, TabContentManager tabContentManager,
+            Activity activity) {
         mContext = context;
         mParentView = parentView;
         mTabModelSelector = tabModelSelector;
@@ -77,6 +119,7 @@ public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout
         mTabSuggestionEditorLayout = LayoutInflater.from(context)
                                              .inflate(R.layout.tab_suggestion_editor_layout, null)
                                              .findViewById(R.id.selectable_list);
+        mActivity = activity;
         initializeSelectableListLayout();
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -84,12 +127,22 @@ public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout
                 .getDefaultDisplay()
                 .getMetrics(displayMetrics);
         mPopupWindow = new PopupWindow(mTabSuggestionEditorLayout, displayMetrics.widthPixels,
-                displayMetrics.heightPixels);
+                displayMetrics.heightPixels
+                        - (int) mContext.getResources().getDimension(R.dimen.snackbar_min_height));
+
+        mSnackbarManageable = new SnackbarManager.SnackbarManageable() {
+            @Override
+            public SnackbarManager getSnackbarManager() {
+                return new SnackbarManager(activity, mTabSuggestionEditorLayout);
+            }
+        };
 
         mClosingSuggestedTabsListener = view -> {
             List<Tab> selectedTabs = getSelectedTabs();
 
             mTabModelSelector.getCurrentModel().closeMultipleTabs(selectedTabs, true);
+
+            recordUserAction(TAB_CLOSE_SUGGESTION_ACCEPTED);
 
             if (mPopupWindow.isShowing()) mPopupWindow.dismiss();
 
@@ -119,6 +172,8 @@ public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout
                 mTabModelSelector.getCurrentModel().moveTab(selectedTab.getId(), newTabIndex);
             }
 
+            recordUserAction(TAB_GROUP_SUGGESTION_ACCEPTED);
+
             if (mPopupWindow.isShowing()) mPopupWindow.dismiss();
 
             for (ActionListener listener : mActionListeners) {
@@ -130,6 +185,20 @@ public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout
             Toast toast = Toast.makeText(mContext, text, Toast.LENGTH_SHORT);
             toast.show();
         };
+
+        mTabSelectionObserver = (selectedItems) -> {
+            // Don't record the first onSelectionStateChanged event (initial state).
+            if (selectedItems.size() == mSuggestedTabCount) return;
+
+            recordUserAction(TAB_SUGGESTION_MODIFIED_SELECTION);
+
+            // We only record this once the first time a user modifies the selection.
+            if (mTabSelectionDelegate != null) {
+                mTabSelectionDelegate.removeObserver(mTabSelectionObserver);
+                mTabSelectionObserver = null;
+            }
+        };
+        mTabSelectionDelegate.addObserver(mTabSelectionObserver);
     }
 
     private List<Tab> getSelectedTabs() {
@@ -164,6 +233,14 @@ public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout
         mTabSuggestionEditorToolbar.setExitListener(view -> mPopupWindow.dismiss());
 
         mTabSuggestionListCoordinator.resetWithListOfTabs(null);
+    }
+
+    @Override
+    public void destroy() {
+        if (mTabSelectionObserver != null) {
+            mTabSelectionDelegate.removeObserver(mTabSelectionObserver);
+            mTabSelectionObserver = null;
+        }
     }
 
     public SelectionDelegate<Integer> getSelectionDelegate() {
@@ -205,6 +282,7 @@ public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout
     public void resetTabSuggestion(TabSuggestion suggestion) {
         List<TabContext.TabInfo> suggestedTabsInfo = suggestion.getTabsInfo();
         mSuggestedTabCount = suggestedTabsInfo.size();
+        mCurrentProviderName = suggestion.getProviderName();
 
         List<Tab> tabs = new ArrayList<>();
         Set<Integer> suggestedTabIds = new HashSet<>();
@@ -260,10 +338,20 @@ public class TabSuggestionEditorCoordinator implements TabSuggestionEditorLayout
     @Override
     public void show() {
         mPopupWindow.showAtLocation(mParentView, Gravity.CENTER, 0, 0);
+        mTabSuggestionsEditorBarController.showSnackBar();
     }
 
     public void addActionListener(ActionListener listener) {
         mActionListeners.addObserver(listener);
+    }
+
+    private void recordUserAction(String userActionEvent) {
+        if (mCurrentProviderName == null || mCurrentProviderName.isEmpty()) return;
+
+        final String userAction =
+                String.format("%s.%s.%s", TabSuggestionsOrchestrator.TAB_SUGGESTIONS_UMA_PREFIX,
+                        mCurrentProviderName, userActionEvent);
+        RecordUserAction.record(userAction);
     }
 
     class SuggestedTabDividerItemDecoration extends RecyclerView.ItemDecoration {

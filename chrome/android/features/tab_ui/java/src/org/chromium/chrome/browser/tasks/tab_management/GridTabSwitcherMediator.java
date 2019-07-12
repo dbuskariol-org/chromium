@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import org.chromium.base.ContextUtils;
 import org.chromium.base.ObserverList;
+import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeFeatureList;
@@ -41,10 +42,10 @@ import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tabmodel.TabSelectionType;
+import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabContext;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsOrchestrator;
-import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
 import org.chromium.chrome.browser.tasks.tabgroup.TabGroupModelFilter;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.content_public.browser.LoadUrlParams;
@@ -66,6 +67,9 @@ class GridTabSwitcherMediator
     private static final int SOFT_HYPHEN_CHAR = '\u00AD';
 
     private static final int DEFAULT_TOP_PADDING = 0;
+
+    private static final String SUGGESTION_AVAILABILITY_HISTOGRAM_NAME = "SuggestionsAvailable";
+    private static final String SUGGESTION_TAB_COUNT = "AvailableSuggestionTabCount";
 
     /** Field trial parameter for the {@link TabListRecyclerView} cleanup delay. */
     private static final String CLEANUP_DELAY_PARAM = "cleanup-delay";
@@ -236,6 +240,7 @@ class GridTabSwitcherMediator
         mCurrentTabContext = TabContext.createCurrentContext(mTabModelSelector);
         List<TabSuggestion> suggestions =
                 mTabSuggestionsProvider.getSuggestions(mCurrentTabContext);
+        recordTabSuggestionMetrics(suggestions);
         android.util.Log.e("TabSuggestionsDetailed","mCurrentTabSuggestion taking first from size of  "+suggestions.size());
         mCurrentTabSuggestion = suggestions.size() > 0 ? suggestions.get(0) : null;
         if (mContainerViewModel.get(IS_VISIBLE) && mCurrentTabSuggestion != null
@@ -500,5 +505,21 @@ class GridTabSwitcherMediator
         return mTabModelSelector.getTabModelFilterProvider()
                 .getCurrentTabModelFilter()
                 .getRelatedTabList(tabId);
+    }
+
+    private void recordTabSuggestionMetrics(List<TabSuggestion> suggestions) {
+        recordCountHistogram(SUGGESTION_AVAILABILITY_HISTOGRAM_NAME, suggestions.size());
+
+        for (TabSuggestion suggestion : suggestions) {
+            final String providerCountName =
+                    String.format("%s.%s", suggestion.getProviderName(), SUGGESTION_TAB_COUNT);
+            recordCountHistogram(providerCountName, suggestion.getTabsInfo().size());
+        }
+    }
+
+    private void recordCountHistogram(String histogramName, int count) {
+        final String histogram = String.format(
+                "%s.%s", TabSuggestionsOrchestrator.TAB_SUGGESTIONS_UMA_PREFIX, histogramName);
+        RecordHistogram.recordCountHistogram(histogram, count);
     }
 }

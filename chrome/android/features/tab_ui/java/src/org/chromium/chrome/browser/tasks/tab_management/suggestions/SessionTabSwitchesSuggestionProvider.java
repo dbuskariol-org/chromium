@@ -31,6 +31,9 @@ class SessionTabSwitchesSuggestionProvider implements TabSuggestionProvider {
     /** PMI threshold property name. */
     private static final String PMI_THRESHOLD_PARAM_NAME = "intertab_suggestion_pmi_threshold";
 
+    /** PMI threshold default value. Value is the "Low" option in chrome://flags. */
+    private static final int DEFAULT_PMI_THRESHOLD = 2;
+
     /** The minimum amount of switches to a tab, from another, before considering suggesting. */
     private static final int MIN_NUMBER_OF_SWITCHES = 3;
 
@@ -53,7 +56,7 @@ class SessionTabSwitchesSuggestionProvider implements TabSuggestionProvider {
 
         mConfiguredPmiThreshold = ChromeFeatureList.getFieldTrialParamByFeatureAsInt(
                 ChromeFeatureList.INTERTAB_GROUPING_SUGGESTIONS, PMI_THRESHOLD_PARAM_NAME,
-                Integer.MAX_VALUE);
+                DEFAULT_PMI_THRESHOLD);
 
         mTabModelSelectorTabModelObserver = new TabModelSelectorTabModelObserver(selector) {
             @Override

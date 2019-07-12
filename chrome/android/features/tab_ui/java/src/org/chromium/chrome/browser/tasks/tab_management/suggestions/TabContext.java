@@ -20,14 +20,20 @@ public class TabContext {
      * Holds basic information about a tab group.
      */
     public static class TabGroupInfo {
+        private final int mId;
         private final List<TabInfo> mTabs;
 
-        public TabGroupInfo(List<TabInfo> tabs) {
+        public TabGroupInfo(int id, List<TabInfo> tabs) {
+            mId = id;
             mTabs = tabs;
         }
 
         public List<TabInfo> getTabs() {
             return mTabs;
+        }
+
+        public int getId() {
+            return mId;
         }
 
         @Override
@@ -45,7 +51,9 @@ public class TabContext {
 
         @Override
         public int hashCode() {
-            return 31 * (mTabs == null ? 0 : mTabs.hashCode());
+            int result = 31 * (mTabs == null ? 0 : mTabs.hashCode());
+            result = 31 * result + mId;
+            return result;
         }
     }
 
@@ -193,7 +201,8 @@ public class TabContext {
             List<Tab> relatedTabs = tabModelFilter.getRelatedTabList(currentTab.getId());
 
             if (relatedTabs != null && relatedTabs.size() > 1) {
-                existingGroups.add(new TabGroupInfo(createTabInfoList(relatedTabs)));
+                existingGroups.add(
+                        new TabGroupInfo(currentTab.getRootId(), createTabInfoList(relatedTabs)));
             } else {
                 tabs.add(TabInfo.createFromTab(currentTab));
             }

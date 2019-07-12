@@ -29,7 +29,7 @@ public class RestEndpointFetcher {
                 scopes, postData, timeout);
     }
 
-    public void fetchResponse(Callback<String> callback) {
+    public void fetchResponse(Callback<RestEndpointResponse> callback) {
         nativeFetch(mNativeRestEndpointFetcher, callback);
     }
 
