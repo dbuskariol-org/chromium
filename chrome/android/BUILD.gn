@@ -1757,6 +1757,8 @@ if (public_android_sdk) {
     android_manifest_dep = ":trichrome_library_android_manifest"
 
     if (trichrome_synchronized_proguard) {
+      shared_resources_whitelist_target = "//android_webview:system_webview_apk"
+      shared_resources_whitelist_locales = locales
       static_library_dependent_targets = [
         {
           name = "//android_webview:trichrome_webview_apk"
@@ -1778,6 +1780,8 @@ if (public_android_sdk) {
     android_manifest_dep = ":trichrome_library_android_manifest"
 
     if (trichrome_synchronized_proguard) {
+      shared_resources_whitelist_target = "//android_webview:system_webview_apk"
+      shared_resources_whitelist_locales = locales
       static_library_dependent_targets = [
         {
           name = "//android_webview:trichrome_webview_for_bundle_apk"
