@@ -14,6 +14,8 @@ import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.browser.ThemeColorProvider;
+import org.chromium.chrome.browser.appmenu.AppMenuButtonHelper;
+import org.chromium.chrome.browser.compositor.layouts.OverviewModeController;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher;
 import org.chromium.chrome.browser.lifecycle.PauseResumeWithNativeObserver;
@@ -22,7 +24,11 @@ import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabModelFilterProvider;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tasks.tabgroup.TabGroupModelFilter;
+import org.chromium.chrome.browser.toolbar.MenuButton;
+import org.chromium.chrome.browser.toolbar.TabCountProvider;
+import org.chromium.chrome.browser.toolbar.TabSwitcherButtonCoordinator;
 import org.chromium.chrome.browser.toolbar.bottom.BottomControlsCoordinator;
+import org.chromium.chrome.browser.toolbar.bottom.SearchAccelerator;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.chrome.tab_ui.R;
 import org.chromium.ui.modelutil.PropertyModel;
@@ -43,9 +49,12 @@ public class TabGroupUiCoordinator
     private TabGridSheetCoordinator mTabGridSheetCoordinator;
     private TabGridDialogCoordinator mTabGridDialogCoordinator;
     private TabListCoordinator mTabStripCoordinator;
+    private TabSwitcherButtonCoordinator mTabSwitcherButtonCoordinator;
     private TabGroupUiMediator mMediator;
     private TabStripToolbarCoordinator mTabStripToolbarCoordinator;
     private ActivityLifecycleDispatcher mActivityLifecycleDispatcher;
+    private TabCountProvider mTabCountProvider;
+    private AppMenuButtonHelper mAppMenuButtonHelper;
     private ChromeActivity mActivity;
 
     /**
@@ -58,6 +67,9 @@ public class TabGroupUiCoordinator
 
         mTabStripToolbarCoordinator =
                 new TabStripToolbarCoordinator(mContext, parentView, mTabStripToolbarModel);
+        mTabSwitcherButtonCoordinator =
+                new TabSwitcherButtonCoordinator((ViewGroup) mTabStripToolbarCoordinator.getView());
+        mTabCountProvider = new TabCountProvider();
     }
 
     /**
@@ -65,7 +77,8 @@ public class TabGroupUiCoordinator
      */
     @Override
     public void initializeWithNative(ChromeActivity activity,
-            BottomControlsCoordinator.BottomControlsVisibilityController visibilityController) {
+            BottomControlsCoordinator.BottomControlsVisibilityController visibilityController,
+            AppMenuButtonHelper appMenuButtonHelper) {
         if (ChromeFeatureList.isInitialized()) {
             UmaSessionStats.registerSyntheticFieldTrial(
                     ChromeFeatureList.TAB_GROUPS_ANDROID + SYNTHETIC_TRIAL_POSTFIX,
@@ -96,11 +109,29 @@ public class TabGroupUiCoordinator
             mTabGridDialogCoordinator = null;
         }
 
+        mAppMenuButtonHelper = appMenuButtonHelper;
+        makeMeADuet();
+
         mMediator = new TabGroupUiMediator(visibilityController, this, mTabStripToolbarModel,
                 tabModelSelector, activity,
                 ((ChromeTabbedActivity) activity).getOverviewModeBehavior(), mThemeColorProvider);
         mActivityLifecycleDispatcher = activity.getLifecycleDispatcher();
         mActivityLifecycleDispatcher.register(this);
+    }
+
+    private void makeMeADuet() {
+        mTabSwitcherButtonCoordinator.setTabSwitcherListener(view
+                -> ((OverviewModeController) mActivity.getOverviewModeBehavior())
+                           .showOverview(true));
+        mTabCountProvider.setTabModelSelector(mActivity.getTabModelSelector());
+        mTabSwitcherButtonCoordinator.setTabCountProvider(mTabCountProvider);
+        mTabSwitcherButtonCoordinator.setThemeColorProvider(mThemeColorProvider);
+        mAppMenuButtonHelper.setMenuShowsFromBottom(true);
+        ((MenuButton) mTabStripToolbarCoordinator.getView().findViewById(R.id.menu_button_wrapper))
+                .setAppMenuButtonHelper(mAppMenuButtonHelper);
+        ((SearchAccelerator) mTabStripToolbarCoordinator.getView().findViewById(
+                 R.id.search_accelerator))
+                .setOnClickListener(view -> mActivity.getTabCreator(false).launchNTP());
     }
 
     /**
@@ -112,6 +143,7 @@ public class TabGroupUiCoordinator
     @Override
     public void resetStripWithListOfTabs(List<Tab> tabs) {
         mTabStripCoordinator.resetWithListOfTabs(tabs);
+        mTabStripCoordinator.getContainerView().requestLayout();
     }
 
     /**
@@ -137,6 +169,11 @@ public class TabGroupUiCoordinator
         // Early return if the component hasn't initialized yet.
         if (mActivity == null) return;
 
+        if (mTabStripToolbarCoordinator.getView() != null)
+            ((MenuButton) mTabStripToolbarCoordinator.getView().findViewById(
+                     R.id.menu_button_wrapper))
+                    .destroy();
+
         mTabStripCoordinator.destroy();
         if (mTabGridSheetCoordinator != null) {
             mTabGridSheetCoordinator.destroy();
@@ -146,6 +183,7 @@ public class TabGroupUiCoordinator
         }
         mMediator.destroy();
         mActivityLifecycleDispatcher.unregister(this);
+        mTabCountProvider.destroy();
     }
 
     // PauseResumeWithNativeObserver implementation.

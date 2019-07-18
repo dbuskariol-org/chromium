@@ -153,7 +153,8 @@ public class BottomControlsCoordinator {
         }
 
         if (mTabGroupUi != null) {
-            mTabGroupUi.initializeWithNative(chromeActivity, mMediator::setBottomControlsVisible);
+            mTabGroupUi.initializeWithNative(
+                    chromeActivity, mMediator::setBottomControlsVisible, menuButtonHelper);
         }
     }
 

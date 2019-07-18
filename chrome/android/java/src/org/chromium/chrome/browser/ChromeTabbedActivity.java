@@ -83,6 +83,7 @@ import org.chromium.chrome.browser.feed.FeedProcessScopeFactory;
 import org.chromium.chrome.browser.firstrun.FirstRunSignInProcessor;
 import org.chromium.chrome.browser.firstrun.FirstRunStatus;
 import org.chromium.chrome.browser.fullscreen.ComposedBrowserControlsVisibilityDelegate;
+import org.chromium.chrome.browser.help.HelpAndFeedback;
 import org.chromium.chrome.browser.incognito.IncognitoNotificationManager;
 import org.chromium.chrome.browser.incognito.IncognitoTabHost;
 import org.chromium.chrome.browser.incognito.IncognitoTabHostRegistry;
@@ -139,10 +140,12 @@ import org.chromium.chrome.browser.tabmodel.TabWindowManager;
 import org.chromium.chrome.browser.tasks.EngagementTimeUtil;
 import org.chromium.chrome.browser.tasks.JourneyManager;
 import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
+import org.chromium.chrome.browser.tasks.TaskRecognizer;
 import org.chromium.chrome.browser.tasks.TasksUma;
 import org.chromium.chrome.browser.tasks.tab_management.GridTabSwitcher;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementDelegate;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementModuleProvider;
+import org.chromium.chrome.browser.tasks.tabgroup.TabGroupConstants;
 import org.chromium.chrome.browser.toolbar.ToolbarButtonInProductHelpController;
 import org.chromium.chrome.browser.toolbar.top.ToolbarControlContainer;
 import org.chromium.chrome.browser.touchless.TouchlessDelegate;
@@ -843,6 +846,9 @@ public class ChromeTabbedActivity
             mOverviewModeController.overrideOverviewModeController(mLayoutManager);
             mOverviewModeController.addOverviewModeObserver(this);
 
+            if (ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)) {
+                TaskRecognizer.createForTabModelSelector(getTabModelSelector());
+            }
             if (ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_ENGAGEMENT_REPORTING_ANDROID)) {
                 // The lifecycle of this object is managed by the lifecycle dispatcher.
                 new JourneyManager(getTabModelSelector(), getLifecycleDispatcher(),
@@ -904,6 +910,11 @@ public class ChromeTabbedActivity
         }
 
         return LanguageAskPrompt.maybeShowLanguageAskPrompt(this);
+    }
+
+    @Override
+    public boolean didFinishNativeInitialization() {
+        return super.didFinishNativeInitialization();
     }
 
     @Override
@@ -1822,6 +1833,12 @@ public class ChromeTabbedActivity
             RecordUserAction.record("MobileTabClosedUndoShortCut");
         } else if (id == R.id.enter_vr_id) {
             VrModuleProvider.getDelegate().enterVrIfNecessary();
+        } else if (id == R.id.submit_feedback) {
+            HelpAndFeedback.getInstance(null /* Parameter not used */)
+                    .showFeedback(this, Profile.getLastUsedProfile(),
+                            null /* Parameter optional and not relevant */,
+                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_CATEGORY_TAG,
+                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_FEEDBACK_CONTEXT);
         } else {
             return super.onMenuOrKeyboardAction(id, fromMenu);
         }

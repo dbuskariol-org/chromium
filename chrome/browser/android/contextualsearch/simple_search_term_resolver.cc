@@ -37,6 +37,7 @@ using content::WebContents;
 SimpleSearchTermResolver::SimpleSearchTermResolver(
     JNIEnv* env,
     const JavaRef<jobject>& obj) {
+  DVLOG(0) << "ctxs constructing native SimpleSearchTermResolver";
   java_instance_.Reset(obj);
   Profile* profile = ProfileManager::GetActiveUserProfile();
   delegate_.reset(new ContextualSearchDelegate(
@@ -62,6 +63,7 @@ void SimpleSearchTermResolver::StartSearchTermResolutionRequest(
     const JavaParamRef<jobject>& obj,
     const base::android::JavaParamRef<jobject>& j_contextual_search_context,
     const JavaParamRef<jobject>& j_base_web_contents) {
+  DVLOG(0) << "ctxs native StartSearchTermResolutionRequest";
   WebContents* base_web_contents =
       WebContents::FromJavaWebContents(j_base_web_contents);
   DCHECK(base_web_contents);
@@ -70,12 +72,14 @@ void SimpleSearchTermResolver::StartSearchTermResolutionRequest(
           j_contextual_search_context);
   delegate_->SetActiveContext(contextual_search_context);
   // Calls back to OnSearchTermResolutionResponse.
+  DVLOG(0) << "ctxs calling delegate StartSearchTermResolutionRequest";
   delegate_->StartSearchTermResolutionRequest(contextual_search_context,
                                               base_web_contents);
 }
 
 void SimpleSearchTermResolver::OnSearchTermResolutionResponse(
     const ResolvedSearchTerm& resolved_search_term) {
+  DVLOG(0) << "ctxs native OnSearchTermResolutionResponse";
   // Notify the Java UX of the result.
   JNIEnv* env = base::android::AttachCurrentThread();
   base::android::ScopedJavaLocalRef<jstring> j_search_term =
@@ -106,6 +110,7 @@ void SimpleSearchTermResolver::OnSearchTermResolutionResponse(
   base::android::ScopedJavaLocalRef<jstring> j_search_url_preload =
       base::android::ConvertUTF8ToJavaString(
           env, resolved_search_term.search_url_preload);
+  DVLOG(0) << "ctxs calling java OnSearchTermResolutionResponse";
   Java_SimpleSearchTermResolver_onSearchTermResolutionResponse(
       env, java_instance_, resolved_search_term.is_invalid,
       resolved_search_term.response_code, j_search_term, j_display_text,

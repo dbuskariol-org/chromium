@@ -10,8 +10,6 @@ import android.text.TextUtils;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Encapsulates the results of a server Resolve request into a single immutable object.
@@ -235,41 +233,33 @@ public class ResolvedSearchTerm {
 
     @Override
     public String toString() {
-        List<String> sections = buildTextSections();
-        return TextUtils.join(", ", sections);
-    }
+        if (mIsNetworkUnavailable) return "Network unavailable!";
+        if (mResponseCode != HttpURLConnection.HTTP_OK) return "ResponseCode: " + mResponseCode;
 
-    private List<String> buildTextSections() {
-        List<String> sections = new ArrayList<String>();
-        if (mIsNetworkUnavailable) {
-            sections.add("Network unavailable!");
-        } else if (mResponseCode != HttpURLConnection.HTTP_OK) {
-            sections.add("ResponseCode:" + mResponseCode);
-        } else {
-            if (mDoPreventPreload) sections.add("Preventing preload!");
-            if (!TextUtils.isEmpty(mSearchTerm)) sections.add("Search for '" + mSearchTerm + "'");
-            if (!TextUtils.isEmpty(mDisplayText))
-                sections.add("displayed as '" + mDisplayText + "'");
-            if (!TextUtils.isEmpty(mMid)) sections.add("MID:'" + mMid);
-            if (mSelectionStartAdjust != 0 || mSelectionEndAdjust != 0) {
-                sections.add(
-                        "selection adjust:" + mSelectionStartAdjust + "," + mSelectionEndAdjust);
-            }
-            if (!TextUtils.isEmpty(mContextLanguage) && mContextLanguage.equals("en")) {
-                sections.add("mContextLanguage:'" + mContextLanguage + "'");
-            }
-            if (!TextUtils.isEmpty(mThumbnailUrl)) sections.add("has thumbnail URL");
-            if (!TextUtils.isEmpty(mCaption)) sections.add("caption:'" + mCaption + "'");
-            if (!TextUtils.isEmpty(mQuickActionUri)) sections.add("has Quick Action URI");
-            if (!TextUtils.isEmpty(mQuickActionUri))
-                sections.add("quick Action Category:" + mQuickActionCategory);
-            if (mLoggedEventId != 0L) sections.add("has loggedEventId");
-            if (!TextUtils.isEmpty(mSearchUrlFull))
-                sections.add("search Url full:'" + mSearchUrlFull + "'");
-            if (!TextUtils.isEmpty(mSearchUrlPreload))
-                sections.add("search Url preload:'" + mSearchUrlPreload + "'");
-            if (mCardTagEnum != CardTag.CT_NONE) sections.add("Card-Tag:" + mCardTagEnum);
+        StringBuilder string = new StringBuilder();
+        if (mDoPreventPreload) string.append("Preventing preload!\n");
+        if (!TextUtils.isEmpty(mSearchTerm)) string.append("Search for '" + mSearchTerm + "', ");
+        if (!TextUtils.isEmpty(mDisplayText))
+            string.append("Displayed as '" + mDisplayText + "', ");
+        if (!TextUtils.isEmpty(mMid)) string.append("MID: '" + mMid + "', ");
+        if (mSelectionStartAdjust != 0 || mSelectionEndAdjust != 0) {
+            string.append("Selection adjust: " + mSelectionStartAdjust + ", " + mSelectionEndAdjust
+                    + ", ");
         }
-        return sections;
+        if (!TextUtils.isEmpty(mContextLanguage) && mContextLanguage.equals("en")) {
+            string.append("mContextLanguage: '" + mContextLanguage + "', ");
+        }
+        if (!TextUtils.isEmpty(mThumbnailUrl)) string.append("Has thumbnail URL, ");
+        if (!TextUtils.isEmpty(mCaption)) string.append("Caption: '" + mCaption + "', ");
+        if (!TextUtils.isEmpty(mQuickActionUri)) string.append("Has Quick Action URI, ");
+        if (!TextUtils.isEmpty(mQuickActionUri))
+            string.append("Quick Action Category " + mQuickActionCategory);
+        if (mLoggedEventId != 0L) string.append("Has loggedEventId, ");
+        if (!TextUtils.isEmpty(mSearchUrlFull))
+            string.append("Search Url full: '" + mSearchUrlFull + "', ");
+        if (!TextUtils.isEmpty(mSearchUrlPreload))
+            string.append("Search Url preload: '" + mSearchUrlPreload + "'");
+        if (mCardTagEnum != CardTag.CT_NONE) string.append("Card-Tag: " + mCardTagEnum);
+        return string.toString();
     }
 }

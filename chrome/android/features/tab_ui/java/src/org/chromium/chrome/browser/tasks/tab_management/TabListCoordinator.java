@@ -162,7 +162,7 @@ public class TabListCoordinator implements Destroyable {
                 createGroupButtonProvider, selectionDelegateProvider,
                 gridCardOnClickListenerProvider, dialogHandler, componentName);
 
-        if (mMode == TabListMode.GRID) {
+        if (mMode == TabListMode.GRID && selectionDelegateProvider == null) {
             ItemTouchHelper touchHelper = new ItemTouchHelper(mMediator.getItemTouchHelperCallback(
                     context.getResources().getDimension(R.dimen.swipe_to_dismiss_threshold),
                     context.getResources().getDimension(R.dimen.tab_grid_merge_threshold),

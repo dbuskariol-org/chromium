@@ -4,6 +4,7 @@
 
 package org.chromium.chrome.browser.tasks.tab_management;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
@@ -18,10 +19,14 @@ import org.chromium.chrome.browser.gesturenav.HistoryNavigationDelegate;
 import org.chromium.chrome.browser.gesturenav.HistoryNavigationLayout;
 import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher;
 import org.chromium.chrome.browser.lifecycle.Destroyable;
+import org.chromium.chrome.browser.snackbar.SnackbarManager;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabCreatorManager;
 import org.chromium.chrome.browser.tabmodel.TabList;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabContext;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsOrchestrator;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.chrome.tab_ui.R;
 import org.chromium.ui.modelutil.PropertyModel;
@@ -44,6 +49,10 @@ public class GridTabSwitcherCoordinator
     private final MultiThumbnailCardProvider mMultiThumbnailCardProvider;
     private final TabGridDialogCoordinator mTabGridDialogCoordinator;
     private final TabSelectionEditorCoordinator mTabSelectionEditorCoordinator;
+    private final UndoGroupSnackbarController mUndoGroupSnackbarController;
+    private final TabSuggestionCoordinator mTabSuggestionCoordinator;
+    private final SnackbarManager.SnackbarManageable mSnackbarManageable;
+    private final TabModelSelector mTabModelSelector;
 
     private final MenuOrKeyboardActionController
             .MenuOrKeyboardActionHandler mGridTabSwitcherMenuActionHandler =
@@ -54,6 +63,18 @@ public class GridTabSwitcherCoordinator
                         mTabSelectionEditorCoordinator.getController().show();
                         RecordUserAction.record("MobileMenuGroupTabs");
                         return true;
+                    } else if (id == R.id.tabs_suggestion_id) {
+                        TabSuggestionsOrchestrator provider =
+                                TabSuggestionsOrchestrator.getInstance(mTabModelSelector);
+                        TabContext currentTabContext =
+                                TabContext.createCurrentContext(mTabModelSelector);
+                        List<TabSuggestion> tabSuggestions =
+                                provider.getSuggestions(currentTabContext);
+                        if (tabSuggestions.size() > 0) {
+                            mTabSuggestionCoordinator.showTabSuggestion(tabSuggestions.get(0));
+                        } else {
+                            mTabSuggestionCoordinator.showEmptySuggestion();
+                        }
                     }
                     return false;
                 }
@@ -63,11 +84,17 @@ public class GridTabSwitcherCoordinator
             ActivityLifecycleDispatcher lifecycleDispatcher, TabModelSelector tabModelSelector,
             TabContentManager tabContentManager, CompositorViewHolder compositorViewHolder,
             ChromeFullscreenManager fullscreenManager, TabCreatorManager tabCreatorManager,
-            MenuOrKeyboardActionController menuOrKeyboardActionController, Runnable backPress) {
+            MenuOrKeyboardActionController menuOrKeyboardActionController, Runnable backPress,
+            Activity activity) {
         PropertyModel containerViewModel = new PropertyModel(TabListContainerProperties.ALL_KEYS);
 
         mTabSelectionEditorCoordinator = new TabSelectionEditorCoordinator(
-                context, compositorViewHolder, tabModelSelector, tabContentManager);
+                activity, context, compositorViewHolder, tabModelSelector, tabContentManager);
+
+        mSnackbarManageable = (SnackbarManager.SnackbarManageable) activity;
+        mTabModelSelector = tabModelSelector;
+        mTabSuggestionCoordinator = new TabSuggestionCoordinator(activity, context,
+                tabModelSelector, mSnackbarManageable, mTabSelectionEditorCoordinator);
 
         TabListMediator.GridCardOnClickListenerProvider gridCardOnClickListenerProvider;
         if (FeatureUtilities.isTabGroupsAndroidUiImprovementsEnabled()) {
@@ -78,17 +105,21 @@ public class GridTabSwitcherCoordinator
             mMediator = new GridTabSwitcherMediator(this, containerViewModel, tabModelSelector,
                     fullscreenManager, compositorViewHolder,
                     mTabGridDialogCoordinator.getResetHandler(),
-                    mTabSelectionEditorCoordinator.getController());
+                    mTabSelectionEditorCoordinator.getController(), mTabSuggestionCoordinator);
 
             gridCardOnClickListenerProvider = mMediator::getGridCardOnClickListener;
+
+            mUndoGroupSnackbarController =
+                    new UndoGroupSnackbarController(context, tabModelSelector, mSnackbarManageable);
         } else {
             mTabGridDialogCoordinator = null;
 
             mMediator = new GridTabSwitcherMediator(this, containerViewModel, tabModelSelector,
                     fullscreenManager, compositorViewHolder, null,
-                    mTabSelectionEditorCoordinator.getController());
+                    mTabSelectionEditorCoordinator.getController(), mTabSuggestionCoordinator);
 
             gridCardOnClickListenerProvider = null;
+            mUndoGroupSnackbarController = null;
         }
 
         mMultiThumbnailCardProvider =
@@ -190,6 +221,7 @@ public class GridTabSwitcherCoordinator
     public void destroy() {
         mMenuOrKeyboardActionController.unregisterMenuOrKeyboardActionHandler(
                 mGridTabSwitcherMenuActionHandler);
+        mTabSelectionEditorCoordinator.destroy();
         mTabGridCoordinator.destroy();
         mContainerViewChangeProcessor.destroy();
         if (mTabGridDialogCoordinator != null) {

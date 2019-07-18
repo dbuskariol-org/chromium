@@ -22,12 +22,12 @@ import org.chromium.chrome.tab_ui.R;
  */
 class TabSelectionEditorLayout extends SelectableListLayout<Integer> {
     private TabSelectionEditorToolbar mToolbar;
-    private final PopupWindow mWindow;
+    private PopupWindow mWindow;
     private View mParentView;
     private boolean mIsInitialized;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.ItemDecoration mItemDecoration;
 
-    // TODO(meiliang): inflates R.layout.tab_selection_editor_layout in
-    // TabSelectionEditorCoordinator.
     public TabSelectionEditorLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -35,7 +35,6 @@ class TabSelectionEditorLayout extends SelectableListLayout<Integer> {
         ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay()
                 .getMetrics(displayMetrics);
-        mWindow = new PopupWindow(this, displayMetrics.widthPixels, displayMetrics.heightPixels);
     }
 
     /**
@@ -51,11 +50,13 @@ class TabSelectionEditorLayout extends SelectableListLayout<Integer> {
     void initialize(View parentView, RecyclerView recyclerView, RecyclerView.Adapter adapter,
             SelectionDelegate<Integer> selectionDelegate) {
         mIsInitialized = true;
-        initializeRecyclerView(adapter, recyclerView);
+        mRecyclerView = initializeRecyclerView(adapter, recyclerView);
         mToolbar =
                 (TabSelectionEditorToolbar) initializeToolbar(R.layout.tab_selection_editor_toolbar,
                         selectionDelegate, 0, 0, 0, null, false, true);
+        initializeEmptyView(R.string.tab_selection_editor_empty_list, 0);
         mParentView = parentView;
+        mWindow = new PopupWindow(this, mParentView.getWidth(), mParentView.getHeight());
     }
 
     /**
@@ -79,5 +80,16 @@ class TabSelectionEditorLayout extends SelectableListLayout<Integer> {
      */
     public TabSelectionEditorToolbar getToolbar() {
         return mToolbar;
+    }
+
+    public void setItemDecoration(RecyclerView.ItemDecoration itemDecoration) {
+        if (itemDecoration == null) {
+            if (mItemDecoration == null) return;
+            mRecyclerView.removeItemDecoration(mItemDecoration);
+        } else {
+            if (itemDecoration == mItemDecoration) return;
+            mRecyclerView.addItemDecoration(itemDecoration);
+        }
+        mItemDecoration = itemDecoration;
     }
 }

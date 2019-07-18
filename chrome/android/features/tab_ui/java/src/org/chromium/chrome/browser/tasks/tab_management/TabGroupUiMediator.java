@@ -4,8 +4,12 @@
 
 package org.chromium.chrome.browser.tasks.tab_management;
 
+import android.net.Uri;
+import android.text.TextUtils;
+
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
+import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.ThemeColorProvider;
 import org.chromium.chrome.browser.compositor.layouts.EmptyOverviewModeObserver;
 import org.chromium.chrome.browser.compositor.layouts.OverviewModeBehavior;
@@ -114,6 +118,7 @@ public class TabGroupUiMediator {
             @Override
             public void restoreCompleted() {
                 Tab currentTab = mTabModelSelector.getCurrentTab();
+                if (currentTab == null) return;
                 resetTabStripWithRelatedTabsForId(currentTab.getId());
             }
         };
@@ -177,6 +182,38 @@ public class TabGroupUiMediator {
             Tab currentTab = mTabModelSelector.getCurrentTab();
             if (currentTab == null) return;
             mResetHandler.resetGridWithListOfTabs(getRelatedTabsForId(currentTab.getId()));
+            if (ChromeFeatureList.isInitialized()
+                    && ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUP_STORIES)) {
+                List<Tab> relatedTabs = mTabModelSelector.getTabModelFilterProvider()
+                                                .getCurrentTabModelFilter()
+                                                .getRelatedTabList(currentTab.getId());
+                String param = "?urls=[";
+                Tab storyTab = null;
+                for (Tab tab : relatedTabs) {
+                    if (tab.getUrl().startsWith(
+                                "http://task-management-chrome.sandbox.google.com/stamp")) {
+                        storyTab = tab;
+                        continue;
+                    }
+                    Uri uri = Uri.parse(tab.getUrl());
+                    String urlSansQuery = "%22" + uri.getScheme() + "://" + uri.getAuthority()
+                            + uri.getEncodedPath() + "%22,";
+                    param += urlSansQuery;
+                }
+                param = param.substring(0, param.length() - 1) + "]";
+                LoadUrlParams urlParams = new LoadUrlParams(
+                        "http://task-management-chrome.sandbox.google.com/stamp" + param);
+                if (storyTab != null) {
+                    storyTab.loadUrl(urlParams);
+                    mTabModelSelector.getCurrentModel().setIndex(
+                            mTabModelSelector.getCurrentModel().indexOf(storyTab),
+                            TabSelectionType.FROM_USER);
+                } else {
+                    mTabCreatorManager.getTabCreator(false).createNewTab(
+                            urlParams, TabLaunchType.FROM_CHROME_UI, currentTab);
+                }
+                return;
+            }
             RecordUserAction.record("TabGroup.ExpandedFromStrip");
         });
         mToolbarPropertyModel.set(TabStripToolbarViewProperties.ADD_CLICK_LISTENER, view -> {
@@ -199,11 +236,29 @@ public class TabGroupUiMediator {
         List<Tab> listOfTabs = mTabModelSelector.getTabModelFilterProvider()
                                        .getCurrentTabModelFilter()
                                        .getRelatedTabList(id);
-        if (listOfTabs.size() < 2) {
+
+        boolean shouldNotShowStrip = (listOfTabs.size() < 2)
+                || (ChromeFeatureList.isInitialized()
+                        && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)
+                        && (!TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
+                                    ChromeFeatureList.SHOPPING_ASSIST, "shopping_assist_behavior"))
+                                        && !ChromeFeatureList
+                                                    .getFieldTrialParamByFeature(
+                                                            ChromeFeatureList.SHOPPING_ASSIST,
+                                                            "shopping_assist_behavior")
+                                                    .startsWith("TabInAGroup")
+                                || TextUtils.isEmpty(ChromeFeatureList.getFieldTrialParamByFeature(
+                                        ChromeFeatureList.SHOPPING_ASSIST,
+                                        "shopping_assist_behavior"))));
+        if (shouldNotShowStrip) {
             mResetHandler.resetStripWithListOfTabs(null);
-            mIsTabGroupUiVisible = false;
+            mToolbarPropertyModel.set(TabStripToolbarViewProperties.IS_MAIN_CONTENT_VISIBLE, false);
+            mIsTabGroupUiVisible = (ChromeFeatureList.isInitialized()
+                    && (ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)
+                            || ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUP_STORIES)));
         } else {
             mResetHandler.resetStripWithListOfTabs(listOfTabs);
+            mToolbarPropertyModel.set(TabStripToolbarViewProperties.IS_MAIN_CONTENT_VISIBLE, true);
             mIsTabGroupUiVisible = true;
         }
         mVisibilityController.setBottomControlsVisible(mIsTabGroupUiVisible);

@@ -52,6 +52,7 @@ import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.TraceEvent;
 import org.chromium.base.VisibleForTesting;
 import org.chromium.chrome.R;
+import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.compositor.Invalidator;
 import org.chromium.chrome.browser.compositor.layouts.LayoutUpdateHost;
 import org.chromium.chrome.browser.device.DeviceClassManager;
@@ -2473,7 +2474,11 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
 
         if (getMenuButtonWrapper() != null) {
             setMenuButtonHighlightDrawable();
-            if (!mIsBottomToolbarVisible) getMenuButtonWrapper().setVisibility(View.VISIBLE);
+            if (!mIsBottomToolbarVisible
+                    && !(ChromeFeatureList.isInitialized()
+                            && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST))) {
+                getMenuButtonWrapper().setVisibility(View.VISIBLE);
+            }
         }
 
         DrawableCompat.setTint(mLocationBarBackground,
@@ -2767,8 +2772,10 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
 
     @Override
     public void onBottomToolbarVisibilityChanged(boolean isVisible) {
+        isVisible = ChromeFeatureList.isInitialized()
+                && (ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST)
+                        || ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUP_STORIES));
         mIsBottomToolbarVisible = isVisible;
-
         final int visibility = isVisible ? GONE : VISIBLE;
         mToggleTabStackButton.setVisibility(visibility);
         getMenuButtonWrapper().setVisibility(visibility);

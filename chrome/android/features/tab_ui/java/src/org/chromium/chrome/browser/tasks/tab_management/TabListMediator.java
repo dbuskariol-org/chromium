@@ -23,6 +23,9 @@ import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.image_fetcher.ImageFetcher;
+import org.chromium.chrome.browser.image_fetcher.ImageFetcherConfig;
+import org.chromium.chrome.browser.image_fetcher.ImageFetcherFactory;
 import org.chromium.chrome.browser.native_page.NativePageFactory;
 import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
@@ -56,6 +59,7 @@ import java.util.Map;
  * TODO(yusufo): Move some of the logic here to a parent component to make the above true.
  */
 class TabListMediator {
+    private final ImageFetcher mImageFetcher;
     private boolean mShownIPH;
 
     /**
@@ -345,6 +349,7 @@ class TabListMediator {
         mGridCardOnClickListenerProvider = gridCardOnClickListenerProvider;
         mTabGridDialogHandler = dialogHandler;
         mActionsOnAllRelatedTabs = actionOnRelatedTabs;
+        mImageFetcher = ImageFetcherFactory.createImageFetcher(ImageFetcherConfig.DISK_CACHE_ONLY);
 
         mTabModelObserver = new EmptyTabModelObserver() {
             @Override
@@ -415,6 +420,8 @@ class TabListMediator {
                 @Override
                 public void didMoveWithinGroup(
                         Tab movedTab, int tabModelOldIndex, int tabModelNewIndex) {
+                    if (tabModelNewIndex == tabModelOldIndex) return;
+                    if (movedTab == null) return;
                     int curPosition = mModel.indexFromId(movedTab.getId());
                     TabModel tabModel = mTabModelSelector.getCurrentModel();
 
@@ -423,7 +430,7 @@ class TabListMediator {
                     Tab destinationTab = tabModel.getTabAt(tabModelNewIndex > tabModelOldIndex
                                     ? tabModelNewIndex - 1
                                     : tabModelNewIndex + 1);
-
+                    if (destinationTab == null) return;
                     int newPosition = mModel.indexFromId(destinationTab.getId());
                     if (!isValidMovePosition(newPosition)) return;
                     mModel.move(curPosition, newPosition);
@@ -444,8 +451,12 @@ class TabListMediator {
                     }
                     if (mActionsOnAllRelatedTabs) {
                         Tab currentSelectedTab = mTabModelSelector.getCurrentTab();
-                        addTabInfoToModel(movedTab, mModel.size(),
-                                currentSelectedTab.getId() == movedTab.getId());
+                        int index = TabModelUtils.getTabIndexById(
+                                mTabModelSelector.getTabModelFilterProvider()
+                                        .getCurrentTabModelFilter(),
+                                movedTab.getId());
+                        addTabInfoToModel(
+                                movedTab, index, currentSelectedTab.getId() == movedTab.getId());
                         boolean isSelected = mTabModelSelector.getCurrentTabId()
                                 == filter.getTabAt(prevFilterIndex).getId();
                         updateTab(prevFilterIndex, filter.getTabAt(prevFilterIndex), isSelected,
@@ -476,7 +487,7 @@ class TabListMediator {
                 @Override
                 public void didMoveTabGroup(
                         Tab movedTab, int tabModelOldIndex, int tabModelNewIndex) {
-                    if (!mActionsOnAllRelatedTabs) return;
+                    if (!mActionsOnAllRelatedTabs || tabModelNewIndex == tabModelOldIndex) return;
                     TabGroupModelFilter filter =
                             (TabGroupModelFilter) mTabModelSelector.getTabModelFilterProvider()
                                     .getCurrentTabModelFilter();
@@ -513,6 +524,10 @@ class TabListMediator {
 
                     mModel.move(curPosition, newPosition);
                 }
+
+                @Override
+                public void didCreateGroup(
+                        List<Tab> tabs, List<Integer> tabOriginalIndex, boolean isSameGroup) {}
             };
 
             ((TabGroupModelFilter) mTabModelSelector.getTabModelFilterProvider().getTabModelFilter(

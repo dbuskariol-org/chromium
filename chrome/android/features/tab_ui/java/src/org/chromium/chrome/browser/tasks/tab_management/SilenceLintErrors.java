@@ -34,6 +34,11 @@ import org.chromium.chrome.R;
             R.string.undo_bar_group_tabs_message,
             R.string.menu_group_tabs,
             R.string.tab_grid_dialog_remove_from_group,
+            R.string.tab_suggestion_editor_close_button,
+            R.string.tab_suggestion_snackbar_close_duplicates,
+            R.string.tab_suggestion_snackbar_close_stale,
+            R.string.tab_suggestion_snackbar_group_related,
+            R.string.tab_selection_editor_empty_list,
     };
 
     private SilenceLintErrors() {}

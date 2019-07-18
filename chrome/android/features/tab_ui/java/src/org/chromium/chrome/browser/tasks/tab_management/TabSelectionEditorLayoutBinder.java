@@ -4,6 +4,8 @@
 
 package org.chromium.chrome.browser.tasks.tab_management;
 
+import android.support.v7.widget.RecyclerView;
+
 import org.chromium.ui.modelutil.PropertyKey;
 import org.chromium.ui.modelutil.PropertyModel;
 
@@ -25,12 +27,20 @@ public class TabSelectionEditorLayoutBinder {
             } else {
                 view.hide();
             }
-        } else if (TabSelectionEditorProperties.TOOLBAR_GROUP_BUTTON_LISTENER == propertyKey) {
+        } else if (TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_LISTENER == propertyKey) {
             view.getToolbar().setActionButtonOnClickListener(
-                    model.get(TabSelectionEditorProperties.TOOLBAR_GROUP_BUTTON_LISTENER));
+                    model.get(TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_LISTENER));
         } else if (TabSelectionEditorProperties.TOOLBAR_NAVIGATION_LISTENER == propertyKey) {
             view.getToolbar().setNavigationOnClickListener(
                     model.get(TabSelectionEditorProperties.TOOLBAR_NAVIGATION_LISTENER));
+        } else if (TabSelectionEditorProperties.ITEM_DECORATION == propertyKey) {
+            RecyclerView.ItemDecoration itemDecoration =
+                    model.get(TabSelectionEditorProperties.ITEM_DECORATION);
+            view.setItemDecoration(model.get(TabSelectionEditorProperties.ITEM_DECORATION));
+        } else if (TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_TEXT_RESOURCE
+                == propertyKey) {
+            view.getToolbar().setActionButtonTextResource(
+                    model.get(TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_TEXT_RESOURCE));
         }
     }
 }

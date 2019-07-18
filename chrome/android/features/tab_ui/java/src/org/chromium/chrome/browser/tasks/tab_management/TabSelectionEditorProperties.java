@@ -4,6 +4,7 @@
 
 package org.chromium.chrome.browser.tasks.tab_management;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import org.chromium.ui.modelutil.PropertyKey;
@@ -24,6 +25,18 @@ public class TabSelectionEditorProperties {
             .WritableObjectPropertyKey<View.OnClickListener> TOOLBAR_NAVIGATION_LISTENER =
             new PropertyModel.WritableObjectPropertyKey<>();
 
-    public static final PropertyKey[] ALL_KEYS = new PropertyKey[] {
-            IS_VISIBLE, TOOLBAR_GROUP_BUTTON_LISTENER, TOOLBAR_NAVIGATION_LISTENER};
+    public static final PropertyModel.WritableIntPropertyKey TOOLBAR_ACTION_BUTTON_TEXT_RESOURCE =
+            new PropertyModel.WritableIntPropertyKey();
+
+    public static final PropertyModel
+            .WritableObjectPropertyKey<RecyclerView.ItemDecoration> ITEM_DECORATION =
+            new PropertyModel.WritableObjectPropertyKey<>();
+
+    public static final PropertyModel
+            .WritableObjectPropertyKey<View.OnClickListener> TOOLBAR_ACTION_BUTTON_LISTENER =
+            new PropertyModel.WritableObjectPropertyKey<>();
+
+    public static final PropertyKey[] ALL_KEYS = new PropertyKey[] {IS_VISIBLE,
+            TOOLBAR_GROUP_BUTTON_LISTENER, TOOLBAR_NAVIGATION_LISTENER,
+            TOOLBAR_ACTION_BUTTON_TEXT_RESOURCE, ITEM_DECORATION, TOOLBAR_ACTION_BUTTON_LISTENER};
 }

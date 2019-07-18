@@ -4,12 +4,16 @@
 
 package org.chromium.chrome.browser.tasks.tab_management;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
+import org.chromium.chrome.browser.snackbar.Snackbar;
+import org.chromium.chrome.browser.snackbar.SnackbarManager;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.widget.selection.SelectionDelegate;
@@ -31,9 +35,16 @@ class TabSelectionEditorCoordinator {
      */
     interface TabSelectionEditorController {
         /**
-         * Shows the TabSelectionEditor.
+         * Shows the TabSelectionEditor with non-grouped tabs.
          */
         void show();
+
+        void showListOfTabs(List<Tab> tabs, int selectedTabCount,
+                RecyclerView.ItemDecoration itemDecoration, int actionButtonResource,
+                TabSelectionEditorToolbar.ActionButtonListener actionButtonOnClickListener,
+                boolean isAppendToDefaultListener);
+
+        void hide();
 
         /**
          * @return Whether or not the TabSelectionEditor consumed the event.
@@ -50,8 +61,9 @@ class TabSelectionEditorCoordinator {
     private final PropertyModel mModel = new PropertyModel(TabSelectionEditorProperties.ALL_KEYS);
     private final PropertyModelChangeProcessor mTabSelectionEditorLayoutChangeProcessor;
     private final TabSelectionEditorMediator mTabSelectionEditorMediator;
+    private final SnackbarManager.SnackbarManageable mTabSelectionEditorSnackbarManageable;
 
-    public TabSelectionEditorCoordinator(Context context, View parentView,
+    public TabSelectionEditorCoordinator(Activity activity, Context context, View parentView,
             TabModelSelector tabModelSelector, TabContentManager tabContentManager) {
         mContext = context;
         mParentView = parentView;
@@ -71,8 +83,22 @@ class TabSelectionEditorCoordinator {
         mTabSelectionEditorLayoutChangeProcessor = PropertyModelChangeProcessor.create(
                 mModel, mTabSelectionEditorLayout, TabSelectionEditorLayoutBinder::bind);
 
-        mTabSelectionEditorMediator = new TabSelectionEditorMediator(
-                mContext, mTabModelSelector, this::resetWithListOfTabs, mModel, mSelectionDelegate);
+        mTabSelectionEditorSnackbarManageable = new SnackbarManager.SnackbarManageable() {
+            private SnackbarManager mSnackbarManager =
+                    new SnackbarManager(activity, mTabSelectionEditorLayout);
+            @Override
+            public SnackbarManager getSnackbarManager() {
+                return mSnackbarManager;
+            }
+        };
+
+        mTabSelectionEditorMediator = new TabSelectionEditorMediator(mContext, mTabModelSelector,
+                this::resetWithListOfTabs, mModel, mSelectionDelegate,
+                mTabSelectionEditorSnackbarManageable);
+    }
+
+    public void destroy() {
+        mTabSelectionEditorMediator.destroy();
     }
 
     /**
@@ -95,6 +121,7 @@ class TabSelectionEditorCoordinator {
      */
     void resetWithListOfTabs(@Nullable List<Tab> tabs) {
         mTabListCoordinator.resetWithListOfTabs(tabs);
+        resetView(mTabListCoordinator.getContainerView());
     }
 
     /**
@@ -102,5 +129,16 @@ class TabSelectionEditorCoordinator {
      */
     TabSelectionEditorController getController() {
         return mTabSelectionEditorMediator;
+    }
+
+    void resetSnackbar(Snackbar snackbar) {
+        mTabSelectionEditorMediator.resetSnackbar(snackbar);
+    }
+
+    void resetView(TabListRecyclerView recyclerView) {
+        for (int i = 0; i < recyclerView.getChildCount(); i++) {
+            View view = recyclerView.getChildAt(i);
+            view.setVisibility(View.VISIBLE);
+        }
     }
 }

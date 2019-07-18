@@ -95,6 +95,10 @@
              android:title="@string/menu_close_all_incognito_tabs" />
          <item android:id="@+id/menu_group_tabs"
              android:title="@string/menu_group_tabs" />
+        <item android:id="@+id/tabs_suggestion_id"
+              android:title="@string/menu_tabs_suggestion" />
+         <item android:id="@+id/submit_feedback"
+              android:title="@string/menu_submit_feedback" />
          <item android:id="@id/preferences_id"
              android:title="@string/menu_preferences" />
     </group>

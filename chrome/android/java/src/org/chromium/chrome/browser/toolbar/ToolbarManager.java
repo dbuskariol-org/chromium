@@ -30,6 +30,7 @@ import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.base.task.PostTask;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeActivity;
+import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.browser.TabLoadStatus;
 import org.chromium.chrome.browser.ThemeColorProvider;
@@ -1014,6 +1015,8 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             // Allow the bottom toolbar to be focused in accessibility after the top toolbar.
             ApiCompatibilityUtils.setAccessibilityTraversalBefore(
                     mLocationBar.getContainerView(), R.id.bottom_toolbar);
+            android.util.Log.e("Yusuf", "Calling on bttom toolbar visibility changed from manager");
+            mToolbar.onBottomToolbarVisibilityChanged(false);
         }
 
         onNativeLibraryReady();
@@ -1734,7 +1737,10 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         mToolbar.updateForwardButtonVisibility(currentTab != null && currentTab.canGoForward());
         updateReloadState(tabCrashed);
         updateBookmarkButtonStatus();
-        if (mToolbar.getMenuButtonWrapper() != null && !isBottomToolbarVisible()) {
+        boolean shoppingAssistEnabled = ChromeFeatureList.isInitialized()
+                && ChromeFeatureList.isEnabled(ChromeFeatureList.SHOPPING_ASSIST);
+        if (mToolbar.getMenuButtonWrapper() != null && !isBottomToolbarVisible()
+                && !shoppingAssistEnabled) {
             mToolbar.getMenuButtonWrapper().setVisibility(View.VISIBLE);
         }
         mIdentityDiscController.updateButtonState(

@@ -17,6 +17,8 @@ import static org.chromium.chrome.browser.tasks.tab_management.TabListContainerP
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.ArrayMap;
 
 import org.chromium.base.ContextUtils;
 import org.chromium.base.ObserverList;
@@ -36,17 +38,24 @@ import org.chromium.chrome.browser.tabmodel.TabModelFilter;
 import org.chromium.chrome.browser.tabmodel.TabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
+import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tabmodel.TabSelectionType;
 import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabContext;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsOrchestrator;
 import org.chromium.chrome.browser.tasks.tabgroup.TabGroupModelFilter;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.chrome.browser.util.UrlConstants;
 import org.chromium.chrome.tab_ui.R;
 import org.chromium.content_public.browser.LoadUrlParams;
 import org.chromium.ui.modelutil.PropertyModel;
+import org.chromium.ui.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Mediator that is responsible for resetting the tab grid based on visibility and model
@@ -57,8 +66,14 @@ class GridTabSwitcherMediator
     // This should be the same as TabListCoordinator.GRID_LAYOUT_SPAN_COUNT for the selected tab
     // to be on the 2nd row.
     static final int INITIAL_SCROLL_INDEX_OFFSET = 2;
+    private static final int SOFT_HYPHEN_CHAR = '\u00AD';
 
     private static final int DEFAULT_TOP_PADDING = 0;
+
+    private static final String SUGGESTION_AVAILABILITY_HISTOGRAM_NAME = "SuggestionsAvailable";
+    private static final String SUGGESTION_TAB_COUNT = "AvailableSuggestionTabCount";
+
+    private static final String PROVIDER_STATUS_HISTOGRAM = "ProviderStatus";
 
     /** Field trial parameter for the {@link TabListRecyclerView} cleanup delay. */
     private static final String SOFT_CLEANUP_DELAY_PARAM = "soft-cleanup-delay";
@@ -111,6 +126,13 @@ class GridTabSwitcherMediator
     private int mTabIdwhenShown;
     private int mIndexInNewModelWhenSwitched;
 
+    private final TabSuggestionCoordinator mTabSuggestionCoordinator;
+    private final TabSuggestionsOrchestrator mTabSuggestionsProvider;
+    private TabContext mCurrentTabContext;
+    private TabSuggestion mCurrentTabSuggestion;
+    private TabModelSelectorTabObserver mTabModelSelectorTabObserver;
+    private boolean mShouldServeTabsuggestion = true;
+
     /**
      * Interface to delegate resetting the tab grid.
      */
@@ -139,13 +161,14 @@ class GridTabSwitcherMediator
      * @param compositorViewHolder {@link CompositorViewHolder} to use.
      * @param tabSelectionEditorController The controller that can control the visibility of the
      *                                     TabSelectionEditor.
+     * @param tabSuggestionCoordinator
      */
     GridTabSwitcherMediator(ResetHandler resetHandler, PropertyModel containerViewModel,
             TabModelSelector tabModelSelector, ChromeFullscreenManager fullscreenManager,
             CompositorViewHolder compositorViewHolder,
             TabGridDialogMediator.ResetHandler tabGridDialogResetHandler,
-            TabSelectionEditorCoordinator
-                    .TabSelectionEditorController tabSelectionEditorController) {
+            TabSelectionEditorCoordinator.TabSelectionEditorController tabSelectionEditorController,
+            TabSuggestionCoordinator tabSuggestionCoordinator) {
         mResetHandler = resetHandler;
         mContainerViewModel = containerViewModel;
         mTabModelSelector = tabModelSelector;
@@ -161,6 +184,15 @@ class GridTabSwitcherMediator
                         mTabModelSelector.getTabModelFilterProvider().getCurrentTabModelFilter();
                 mResetHandler.resetWithTabList(currentTabModelFilter, false);
                 mContainerViewModel.set(IS_INCOGNITO, currentTabModelFilter.isIncognito());
+
+                if (newModel.isIncognito()) {
+                    mShouldServeTabsuggestion = false;
+                    mTabSuggestionCoordinator.dismissTabSuggetionSnackbar();
+                } else {
+                    mShouldServeTabsuggestion = true;
+                }
+
+                fetchTabSuggestion();
             }
         };
         mTabModelSelector.addObserver(mTabModelSelectorObserver);
@@ -223,6 +255,9 @@ class GridTabSwitcherMediator
 
         mSoftClearTabListRunnable = mResetHandler::softCleanup;
         mClearTabListRunnable = () -> mResetHandler.resetWithTabList(null, false);
+        mTabSuggestionsProvider = TabSuggestionsOrchestrator.getInstance(tabModelSelector);
+        mCurrentTabContext = TabContext.createCurrentContext(tabModelSelector);
+        mTabSuggestionCoordinator = tabSuggestionCoordinator;
         mHandler = new Handler();
         mTabSelectionEditorController = tabSelectionEditorController;
     }
@@ -236,6 +271,37 @@ class GridTabSwitcherMediator
             return Integer.valueOf(delay);
         } catch (NumberFormatException e) {
             return DEFAULT_SOFT_CLEANUP_DELAY_MS;
+        }
+    }
+
+    private void fetchTabSuggestion() {
+        if (!mShouldServeTabsuggestion
+                || (ChromeFeatureList.isInitialized()
+                        && !ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_GROUP_SUGGESTIONS)))
+            return;
+        android.util.Log.e("TabSuggestionsDetailed", "Fetch Tab Suggestion ");
+        if (!mTabModelSelector.isTabStateInitialized()) return;
+        mCurrentTabContext = TabContext.createCurrentContext(mTabModelSelector);
+        List<TabSuggestion> suggestions =
+                mTabSuggestionsProvider.getSuggestions(mCurrentTabContext);
+        recordTabSuggestionMetrics(suggestions);
+        android.util.Log.e("TabSuggestionsDetailed",
+                "mCurrentTabSuggestion taking first from size of  " + suggestions.size());
+        mCurrentTabSuggestion = suggestions.size() > 0 ? suggestions.get(0) : null;
+        if (mContainerViewModel.get(IS_VISIBLE) && mCurrentTabSuggestion != null
+                && mShouldServeTabsuggestion) {
+            boolean recordedFirstSuggestionShown = false;
+            for (TabSuggestion suggestion : suggestions) {
+                // For the first suggestion, record available+shown, for others,
+                //  only record that the suggestion was available.
+                final String histogramName = String.format("%s.%s.%s",
+                        TabSuggestionsOrchestrator.TAB_SUGGESTIONS_UMA_PREFIX,
+                        suggestion.getProviderName(), PROVIDER_STATUS_HISTOGRAM);
+                RecordHistogram.recordCountHistogram(
+                        histogramName, recordedFirstSuggestionShown ? 1 : 2);
+                recordedFirstSuggestionShown = true;
+            }
+            mTabSuggestionCoordinator.showTabSuggestionSnackbar(mCurrentTabSuggestion);
         }
     }
 
@@ -312,6 +378,88 @@ class GridTabSwitcherMediator
         }
     }
 
+    private void checkForSameProduct() {
+        TabList tabList = mTabModelSelector.getTabModelFilterProvider().getCurrentTabModelFilter();
+        Map<String, List<Integer>> productMap = new ArrayMap<>();
+        List<String> productsToCheck = new ArrayList<>();
+        for (int i = 0; i < tabList.getCount(); i++) {
+            Tab tab = tabList.getTabAt(i);
+            if (tab.hasProductUrl()) {
+                String productName = tab.getProductUrl();
+                String brandName = productName.substring(0, findWordEndOffset(0, productName));
+
+                if (productMap.get(brandName) == null) {
+                    List<Integer> list = new ArrayList<>();
+                    list.add(i);
+                    productMap.put(brandName, list);
+                } else {
+                    productMap.get(brandName).add(i);
+                    if (!productsToCheck.contains(brandName)) {
+                        productsToCheck.add(brandName);
+                    }
+                }
+            }
+        }
+        if (!productsToCheck.isEmpty()) {
+            String brands = "";
+            for (String brand : productsToCheck) {
+                if (TextUtils.isEmpty(brands)) {
+                    brands = brand;
+                } else {
+                    brands = brands + " and " + brand;
+                }
+            }
+            Toast.makeText(ContextUtils.getApplicationContext(),
+                         "Found similar products from " + brands, Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+
+    /**
+     * @return The start of the word that contains the given initial offset, within the surrounding
+     *         text, or {@code INVALID_OFFSET} if not found.
+     */
+    private int findWordStartOffset(int initial, String text) {
+        // Scan before, aborting if we hit any ideographic letter.
+        for (int offset = initial - 1; offset >= 0; offset--) {
+            if (isWordBreakAtIndex(offset, text)) {
+                // The start of the word is after this word break.
+                return offset + 1;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Finds the offset of the end of the word that includes the given initial offset.
+     * NOTE: this is the index of the character just past the last character of the word,
+     * so a 3 character word "who" has start index 0 and end index 3.
+     * The character at the initial offset is examined and each one after that too until a non-word
+     * character is encountered, and that offset will be returned.
+     * @param initial The initial offset to scan from.
+     * @return The end of the word that contains the given initial offset, within the surrounding
+     *         text.
+     */
+    private int findWordEndOffset(int initial, String text) {
+        // Scan after, aborting if we hit any CJKV letter.
+        for (int offset = initial; offset < text.length(); offset++) {
+            if (isWordBreakAtIndex(offset, text)) {
+                // The end of the word is the offset of this word break.
+                return offset;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * @return Whether the character at the given index is a word-break.
+     */
+    private boolean isWordBreakAtIndex(int index, String text) {
+        return !Character.isLetterOrDigit(text.charAt(index))
+                && text.charAt(index) != SOFT_HYPHEN_CHAR;
+    }
+
     @Override
     public boolean overviewVisible() {
         return mContainerViewModel.get(IS_VISIBLE);
@@ -361,6 +509,7 @@ class GridTabSwitcherMediator
         mModelIndexWhenShown = mTabModelSelector.getCurrentModelIndex();
         mTabIdwhenShown = mTabModelSelector.getCurrentTabId();
         mContainerViewModel.set(ANIMATE_VISIBILITY_CHANGES, true);
+        // checkForSameProduct();
     }
 
     @Override
@@ -372,6 +521,21 @@ class GridTabSwitcherMediator
 
     @Override
     public void finishedShowing() {
+        TabContext tabContext = TabContext.createCurrentContext(mTabModelSelector);
+        android.util.Log.e("TabSuggestionsDetailed",
+                "Finishing showing!!!     " + (mTabSuggestionCoordinator != null) + ":"
+                        + (mCurrentTabContext != null) + ":"
+                        + (mCurrentTabContext.equals(tabContext)) + ":"
+                        + (mCurrentTabSuggestion != null));
+        if (mTabSuggestionCoordinator != null
+                && (mCurrentTabContext != null && mCurrentTabContext.equals(tabContext))
+                && mCurrentTabSuggestion != null && mShouldServeTabsuggestion) {
+            mTabSuggestionCoordinator.showTabSuggestionSnackbar(mCurrentTabSuggestion);
+            mCurrentTabSuggestion = null;
+        } else {
+            fetchTabSuggestion();
+        }
+
         for (OverviewModeObserver observer : mObservers) {
             observer.onOverviewModeFinishedShowing();
         }
@@ -381,6 +545,7 @@ class GridTabSwitcherMediator
     @Override
     public void startedHiding(boolean isAnimating) {
         setContentOverlayVisibility(true);
+        mTabSuggestionCoordinator.dismissTabSuggetionSnackbar();
         for (OverviewModeObserver observer : mObservers) {
             observer.onOverviewModeStartedHiding(true, false);
         }
@@ -431,6 +596,7 @@ class GridTabSwitcherMediator
      * Destroy any members that needs clean up.
      */
     public void destroy() {
+        mTabSuggestionsProvider.destroy();
         mTabModelSelector.removeObserver(mTabModelSelectorObserver);
         mFullscreenManager.removeListener(mFullscreenListener);
         mTabModelSelector.getTabModelFilterProvider().removeTabModelFilterObserver(
@@ -476,5 +642,21 @@ class GridTabSwitcherMediator
         return mTabModelSelector.getTabModelFilterProvider()
                 .getCurrentTabModelFilter()
                 .getRelatedTabList(tabId);
+    }
+
+    private void recordTabSuggestionMetrics(List<TabSuggestion> suggestions) {
+        recordCountHistogram(SUGGESTION_AVAILABILITY_HISTOGRAM_NAME, suggestions.size());
+
+        for (TabSuggestion suggestion : suggestions) {
+            final String providerCountName =
+                    String.format("%s.%s", suggestion.getProviderName(), SUGGESTION_TAB_COUNT);
+            recordCountHistogram(providerCountName, suggestion.getTabsInfo().size());
+        }
+    }
+
+    private void recordCountHistogram(String histogramName, int count) {
+        final String histogram = String.format(
+                "%s.%s", TabSuggestionsOrchestrator.TAB_SUGGESTIONS_UMA_PREFIX, histogramName);
+        RecordHistogram.recordCountHistogram(histogram, count);
     }
 }

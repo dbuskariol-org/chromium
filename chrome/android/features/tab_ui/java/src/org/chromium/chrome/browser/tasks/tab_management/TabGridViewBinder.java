@@ -65,6 +65,8 @@ class TabGridViewBinder {
             updateThumbnail(holder, item);
         } else if (TabProperties.TAB_ID == propertyKey) {
             holder.setTabId(item.get(TabProperties.TAB_ID));
+            holder.thumbnail.setImageResource(0);
+            holder.thumbnail.setMinimumHeight(holder.thumbnail.getWidth());
         }
 
         if (holder instanceof ClosableTabGridViewHolder) {

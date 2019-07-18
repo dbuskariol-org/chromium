@@ -82,6 +82,15 @@ public class TabGroupModelFilter extends TabModelFilter {
          *         moveTab} is in  before ungrouping.
          */
         void didMoveTabOutOfGroup(Tab movedTab, int prevFilterIndex);
+
+        /**
+         * This method is called after a group is created manually by user. Either using the
+         * TabSelectionEditor (Group tab menu item) or using drag and drop.
+         * @param tabs The list of modified {@link Tab}s.
+         * @param tabOriginalIndex The original tab index for each modified tab.
+         * @param isSameGroup Whether the given list is in a group already.
+         */
+        void didCreateGroup(List<Tab> tabs, List<Integer> tabOriginalIndex, boolean isSameGroup);
     }
 
     /**
@@ -279,8 +288,10 @@ public class TabGroupModelFilter extends TabModelFilter {
                         tabsToMerge.get(tabsToMerge.size() - 1), group.getLastShownTabId());
             }
         } else {
-            mergeListOfTabsToGroup(tabsToMerge, destinationTab);
+            mergeListOfTabsToGroup(tabsToMerge, destinationTab, true, false);
         }
+        // TODO(978508): Send didCreateGroup signal to activate the
+        // {@link UndoGroupSnackbarController}.
     }
 
     /**
@@ -291,21 +302,35 @@ public class TabGroupModelFilter extends TabModelFilter {
      *
      * @param tabs List of {@link Tab}s to be appended.
      * @param destinationTab The destination {@link Tab} to be append to.
+     * @param isSameGroup Whether the given list of {@link Tab}s belongs in the same group
+     *                    originally.
+     * @param notify Whether or not to notify observers about the merging events.
      */
-    public void mergeListOfTabsToGroup(List<Tab> tabs, Tab destinationTab) {
+    public void mergeListOfTabsToGroup(
+            List<Tab> tabs, Tab destinationTab, boolean isSameGroup, boolean notify) {
         int destinationGroupId = destinationTab.getRootId();
         int destinationIndexInTabModel = getTabModelDestinationIndex(destinationTab);
+        List<Integer> originalIndexes = new ArrayList<>();
 
         for (int i = 0; i < tabs.size(); i++) {
             Tab tab = tabs.get(i);
+            int index = TabModelUtils.getTabIndexById(getTabModel(), tab.getId());
+            assert index != TabModel.INVALID_TAB_INDEX;
+            originalIndexes.add(index);
+
             if (tab.getId() == destinationTab.getId()) continue;
 
-            int index = TabModelUtils.getTabIndexById(getTabModel(), tab.getId());
             boolean isMergingBackward = index < destinationIndexInTabModel;
 
             tab.setRootId(destinationGroupId);
             getTabModel().moveTab(tab.getId(),
                     isMergingBackward ? destinationIndexInTabModel : destinationIndexInTabModel++);
+        }
+
+        if (notify) {
+            for (Observer observer : mGroupFilterObserver) {
+                observer.didCreateGroup(tabs, originalIndexes, isSameGroup);
+            }
         }
     }
 
@@ -365,6 +390,26 @@ public class TabGroupModelFilter extends TabModelFilter {
         int firstTabIndexInTabModel =
                 TabModelUtils.getTabIndexById(getTabModel(), tabsToMerge.get(0).getId());
         return firstTabIndexInTabModel != destinationIndexInTabModel;
+    }
+
+    /**
+     * This method undo the given grouped {@link Tab}.
+     *
+     * @param tab undo this grouped {@link Tab}.
+     * @param originalIndex The tab index before grouped.
+     * @param originalGroupId The rootId before grouped.
+     */
+    public void undoGroupedTab(Tab tab, int originalIndex, int originalGroupId) {
+        int currentIndex = TabModelUtils.getTabIndexById(getTabModel(), tab.getId());
+        assert currentIndex != TabModel.INVALID_TAB_INDEX;
+
+        tab.setRootId(originalGroupId);
+        if (currentIndex == originalIndex) {
+            didMoveTab(tab, originalIndex, currentIndex);
+        } else {
+            if (currentIndex < originalIndex) originalIndex++;
+            getTabModel().moveTab(tab.getId(), originalIndex);
+        }
     }
 
     // TODO(crbug.com/951608): follow up with sessions count histogram for TabGroups.
@@ -483,6 +528,7 @@ public class TabGroupModelFilter extends TabModelFilter {
     @Override
     protected void selectTab(Tab tab) {
         assert mAbsentSelectedTab == null;
+        if (tab == null) return;
         int groupId = tab.getRootId();
         if (mGroupIdToGroupMap.get(groupId) == null) {
             mAbsentSelectedTab = tab;
@@ -506,18 +552,18 @@ public class TabGroupModelFilter extends TabModelFilter {
         boolean reorderAllGroups = groupId == TabGroup.INVALID_GROUP_ID;
         if (reorderAllGroups) {
             mGroupIdToGroupIndexMap.clear();
+            mGroupIdToGroupMap.clear();
+            mActualGroupCount = 0;
         }
 
         TabModel tabModel = getTabModel();
         for (int i = 0; i < tabModel.getCount(); i++) {
             Tab tab = tabModel.getTabAt(i);
             if (reorderAllGroups) {
-                groupId = tab.getRootId();
-                if (!mGroupIdToGroupIndexMap.containsKey(groupId)) {
-                    mGroupIdToGroupIndexMap.put(groupId, mGroupIdToGroupIndexMap.size());
-                }
+                addTab(tab);
+            } else {
+                mGroupIdToGroupMap.get(groupId).moveToEndInGroup(tab.getId());
             }
-            mGroupIdToGroupMap.get(groupId).moveToEndInGroup(tab.getId());
         }
     }
 

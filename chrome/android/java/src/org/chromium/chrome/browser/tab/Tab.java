@@ -67,6 +67,7 @@ import org.chromium.content_public.browser.LoadUrlParams;
 import org.chromium.content_public.browser.RenderWidgetHostView;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.browser.WebContentsAccessibility;
+import org.chromium.content_public.common.Referrer;
 import org.chromium.content_public.common.ResourceRequestBody;
 import org.chromium.ui.base.PageTransition;
 import org.chromium.ui.base.WindowAndroid;
@@ -237,6 +238,8 @@ public class Tab {
      */
     private String mTitle;
 
+    private Referrer mReferrer;
+
     /**
      * Whether didCommitProvisionalLoadForFrame() hasn't yet been called for the current native page
      * (page A). To decrease latency, we show native pages in both loadUrl() and
@@ -258,6 +261,30 @@ public class Tab {
     /** Whether or not the tab's active view is attached to the window. */
     private boolean mIsViewAttachedToWindow;
 
+    private String mProductUrl;
+
+    public String getProductUrl() {
+        return mProductUrl;
+    }
+
+    public void setProductUrl(String url) {
+        mProductUrl = url;
+    }
+
+    public boolean hasProductUrl() {
+        return !TextUtils.isEmpty(mProductUrl);
+    }
+
+    private String mProductThumbnailUrl;
+
+    public String getProductThumbnailUrl() {
+        return mProductThumbnailUrl;
+    }
+
+    public void setProductThumbnailUrl(String url) {
+        mProductThumbnailUrl = url;
+    }
+
     private final UserDataHost mUserDataHost = new UserDataHost();
 
     /**
@@ -270,6 +297,10 @@ public class Tab {
 
     public Context getThemedApplicationContext() {
         return mThemedApplicationContext;
+    }
+
+    public Referrer getReferrer() {
+        return mReferrer;
     }
 
     /**
@@ -289,7 +320,7 @@ public class Tab {
      * @param loadUrlParams Parameters used for a lazily loaded Tab.
      */
     @SuppressLint("HandlerLeak")
-    Tab(int id, Tab parent, boolean incognito, WindowAndroid window,
+    public Tab(int id, Tab parent, boolean incognito, WindowAndroid window,
             @Nullable @TabLaunchType Integer launchType,
             @Nullable @TabCreationState Integer creationState, LoadUrlParams loadUrlParams) {
         mId = TabIdManager.getInstance().generateValidId(id);
@@ -436,6 +467,7 @@ public class Tab {
                     params.getIsRendererInitiated(), params.getShouldReplaceCurrentEntry(),
                     params.getHasUserGesture(), params.getShouldClearHistoryList(),
                     params.getInputStartTimestamp(), params.getIntentReceivedTimestamp());
+            mReferrer = params.getReferrer();
 
             for (TabObserver observer : mObservers) {
                 observer.onLoadUrl(this, params, loadType);
@@ -1109,10 +1141,12 @@ public class Tab {
      * @param url URL that was loaded.
      */
     protected void didFinishPageLoad(String url) {
+        android.util.Log.e("ctxs", "Inside tab didFinishPageLoad " + getId());
         mIsTabStateDirty = true;
         updateTitle();
 
         for (TabObserver observer : mObservers) observer.onPageLoadFinished(this, url);
+
         mIsBeingRestored = false;
     }
 
@@ -1729,7 +1763,7 @@ public class Tab {
     /**
      * @return See {@link #mTimestampMillis}.
      */
-    long getTimestampMillis() {
+    public long getTimestampMillis() {
         return mTimestampMillis;
     }
 

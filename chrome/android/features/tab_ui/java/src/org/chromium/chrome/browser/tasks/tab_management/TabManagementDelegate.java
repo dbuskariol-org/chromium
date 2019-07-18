@@ -12,6 +12,7 @@ import org.chromium.chrome.browser.ThemeColorProvider;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
 import org.chromium.chrome.browser.compositor.layouts.LayoutRenderHost;
 import org.chromium.chrome.browser.compositor.layouts.LayoutUpdateHost;
+import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestions;
 import org.chromium.components.module_installer.ModuleInterface;
 
 /**
@@ -32,4 +33,5 @@ public interface TabManagementDelegate {
             LayoutRenderHost renderHost, GridTabSwitcher gridTabSwitcher);
     GridTabSwitcher createGridTabSwitcher(ChromeActivity activity);
     TabGroupUi createTabGroupUi(ViewGroup parentView, ThemeColorProvider themeColorProvider);
+    TabSuggestions createTabSuggestions(ChromeActivity activity);
 }

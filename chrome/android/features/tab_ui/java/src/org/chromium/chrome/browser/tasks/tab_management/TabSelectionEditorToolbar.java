@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import org.chromium.chrome.browser.widget.TintedDrawable;
 import org.chromium.chrome.browser.widget.selection.SelectableListToolbar;
+import org.chromium.chrome.browser.widget.selection.SelectionDelegate;
 import org.chromium.chrome.tab_ui.R;
 
 import java.util.Collections;
@@ -23,6 +24,10 @@ import java.util.List;
 class TabSelectionEditorToolbar extends SelectableListToolbar<Integer> {
     private static final List<Integer> sEmptyIntegerList = Collections.emptyList();
     private Button mGroupButton;
+
+    interface ActionButtonListener {
+        void run(SelectionDelegate selectionDelegate);
+    }
 
     public TabSelectionEditorToolbar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -51,6 +56,8 @@ class TabSelectionEditorToolbar extends SelectableListToolbar<Integer> {
     @Override
     public void onSelectionStateChange(List<Integer> selectedItems) {
         super.onSelectionStateChange(selectedItems);
+        // TODO(meiliang): Need to set the condition based on the action. e.g greater than 1 for
+        // grouping, and greater than 0 for closing.
         mGroupButton.setEnabled(selectedItems.size() > 1);
     }
 
@@ -71,5 +78,9 @@ class TabSelectionEditorToolbar extends SelectableListToolbar<Integer> {
      */
     public void setActionButtonOnClickListener(OnClickListener listener) {
         mGroupButton.setOnClickListener(listener);
+    }
+
+    public void setActionButtonTextResource(int buttonTextResource) {
+        mGroupButton.setText(buttonTextResource);
     }
 }

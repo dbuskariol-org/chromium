@@ -692,6 +692,9 @@ extern const char kIgnoreLitePageRedirectHintsBlacklistDescription[];
 extern const char kCompositorThreadedScrollbarScrollingName[];
 extern const char kCompositorThreadedScrollbarScrollingDescription[];
 
+extern const char kInterTabGroupingSuggestionsName[];
+extern const char kInterTabGroupingSuggestionsDescription[];
+
 extern const char kInProductHelpDemoModeChoiceName[];
 extern const char kInProductHelpDemoModeChoiceDescription[];
 
@@ -1081,6 +1084,9 @@ extern const char kTabGroupsAndroidDescription[];
 extern const char kTabGroupsUiImprovementsAndroidName[];
 extern const char kTabGroupsUiImprovementsAndroidDescription[];
 
+extern const char kTabGroupsSuggestionsAndroidName[];
+extern const char kTabGroupsSuggestionsAndroidDescription[];
+
 extern const char kTabToGTSAnimationAndroidName[];
 extern const char kTabToGTSAnimationAndroidDescription[];
 
@@ -1298,6 +1304,12 @@ extern const char kChromeDuetLabelsDescription[];
 extern const char kClearOldBrowsingDataName[];
 extern const char kClearOldBrowsingDataDescription[];
 
+extern const char kCloseTabSuggestionsStaleName[];
+extern const char kCloseTabSuggestionsStaleDescription[];
+
+extern const char kContentSuggestionsDebugLogName[];
+extern const char kContentSuggestionsDebugLogDescription[];
+
 extern const char kContextualSearchDefinitionsName[];
 extern const char kContextualSearchDefinitionsDescription[];
 
@@ -1470,6 +1482,9 @@ extern const char kSetMarketUrlForTestingDescription[];
 
 extern const char kShoppingAssistName[];
 extern const char kShoppingAssistDescription[];
+
+extern const char kShoppingAssistProviderName[];
+extern const char kShoppingAssistProviderDescription[];
 
 extern const char kSiteIsolationForPasswordSitesName[];
 extern const char kSiteIsolationForPasswordSitesDescription[];
