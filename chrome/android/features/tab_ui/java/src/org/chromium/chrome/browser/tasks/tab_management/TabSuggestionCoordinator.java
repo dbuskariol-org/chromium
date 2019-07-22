@@ -91,13 +91,7 @@ public class TabSuggestionCoordinator {
 
         private String buildSnackBarContent(TabSuggestion suggestion) {
             return ContextUtils.getApplicationContext().getResources().getString(
-                           getSuggestionStringResourceId(suggestion),
-                           suggestion.getTabsInfo().size())
-                    + getProviderString(suggestion);
-        }
-
-        private String getProviderString(TabSuggestion suggestion) {
-            return " - " + suggestion.getProviderName();
+                    getSuggestionStringResourceId(suggestion), suggestion.getTabsInfo().size());
         }
     }
 

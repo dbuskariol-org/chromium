@@ -81,10 +81,13 @@ void RestEndpointFetcher::OnAuthTokenFetched(
     GoogleServiceAuthError error,
     identity::AccessTokenInfo access_token_info) {
   if (error.state() != GoogleServiceAuthError::NONE) {
-    // TODO: (davidjm) come up with some better error reporting
-    // https://crbug.com/968209
-    base::android::RunStringCallbackAndroid(jcaller,
-                                            std::move("There was an error"));
+    base::android::RunObjectCallbackAndroid(
+        jcaller,
+        Java_RestEndpointResponse_createRestEndpointResponse(
+            base::android::AttachCurrentThread(),
+            base::android::ConvertUTF8ToJavaString(
+                base::android::AttachCurrentThread(), std::move("{}"))));
+    return;
   }
 
   access_token_ = access_token_info.token;

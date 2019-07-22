@@ -188,16 +188,23 @@ public class ChromeTabCreator extends TabCreatorManager.TabCreator {
         int position = TabModel.INVALID_TAB_INDEX;
         int index = TabModelUtils.getTabIndexById(mTabModel, parentId);
         if (index != TabModel.INVALID_TAB_INDEX) position = index + 1;
-
         boolean openInForeground = mOrderController.willOpenInForeground(type, mIncognito);
         TabDelegateFactory delegateFactory = parent == null ? createDefaultTabDelegateFactory()
                 : parent.getDelegateFactory();
-        Tab tab = TabBuilder.createLiveTab(!openInForeground)
-                          .setParent(parent)
-                          .setIncognito(mIncognito)
-                          .setWindow(mNativeWindow)
-                          .setLaunchType(type)
-                          .build();
+
+        TabBuilder tabBuilder = TabBuilder.createLiveTab(!openInForeground)
+                                        .setIncognito(mIncognito)
+                                        .setWindow(mNativeWindow)
+                                        .setLaunchType(type);
+
+        // only set the parent tab if the launch type allows a parent/child relationship.
+        if (type == TabLaunchType.FROM_LINK || type == TabLaunchType.FROM_LONGPRESS_BACKGROUND
+                || type == TabLaunchType.FROM_LONGPRESS_FOREGROUND) {
+            tabBuilder.setParent(parent);
+        }
+
+        Tab tab = tabBuilder.build();
+
         tab.initialize(webContents, delegateFactory, !openInForeground, null, false);
         mTabModel.addTab(tab, position, type);
         return true;

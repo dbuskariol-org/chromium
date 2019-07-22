@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -77,6 +78,20 @@ class TabGridViewHolder extends RecyclerView.ViewHolder {
 
     public void resetThumbnail() {
         thumbnail.setImageDrawable(null);
-        thumbnail.setMinimumHeight(thumbnail.getWidth());
+        if (thumbnail.getWidth() == 0) {
+            thumbnail.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        if (thumbnail.getViewTreeObserver().isAlive()) {
+                            thumbnail.getViewTreeObserver().removeOnPreDrawListener(this);
+                        }
+                        thumbnail.setMinimumHeight(thumbnail.getWidth());
+                        return true;
+                    }
+                });
+        } else {
+            thumbnail.setMinimumHeight(thumbnail.getWidth());
+        }
     }
 }

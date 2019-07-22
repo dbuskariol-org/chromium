@@ -126,7 +126,6 @@ public class TabGroupUiCoordinator
         mTabCountProvider.setTabModelSelector(mActivity.getTabModelSelector());
         mTabSwitcherButtonCoordinator.setTabCountProvider(mTabCountProvider);
         mTabSwitcherButtonCoordinator.setThemeColorProvider(mThemeColorProvider);
-        mAppMenuButtonHelper.setMenuShowsFromBottom(true);
         ((MenuButton) mTabStripToolbarCoordinator.getView().findViewById(R.id.menu_button_wrapper))
                 .setAppMenuButtonHelper(mAppMenuButtonHelper);
         ((SearchAccelerator) mTabStripToolbarCoordinator.getView().findViewById(

@@ -7,6 +7,7 @@ package org.chromium.chrome.browser.tasks.tab_management.suggestions;
 import org.chromium.chrome.browser.lifecycle.Destroyable;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +77,8 @@ public final class TabSuggestionsOrchestrator implements TabSuggestions, Destroy
             aggregated.add(tabSuggestion);
         }
         android.util.Log.e(TAG, "Final suggestions list size " + aggregated.size());
-        return TabSuggestionsRanker.getRankedSuggestions(aggregated, providerConfig);
+        Collections.shuffle(aggregated);
+        return aggregated;
     }
 
     @Override

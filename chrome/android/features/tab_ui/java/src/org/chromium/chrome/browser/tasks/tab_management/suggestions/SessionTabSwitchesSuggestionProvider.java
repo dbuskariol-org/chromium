@@ -18,6 +18,7 @@ import org.chromium.ui.base.PageTransition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,13 @@ class SessionTabSwitchesSuggestionProvider implements TabSuggestionProvider {
 
         if (mInterTabSwitches.isEmpty()) return null;
 
+        List<Integer> validTabIds = new ArrayList<>();
+        for (TabContext.TabInfo tabInfo : tabContext.getTabsInfo()) {
+            validTabIds.add(tabInfo.getId());
+        }
+
+        removeInvalidTrackedEntries(validTabIds);
+
         List<Pair<Integer, Integer>> candidatePairs = new ArrayList<>();
         for (Map.Entry<Pair<Integer, Integer>, Integer> entry : mInterTabSwitches.entrySet()) {
             if (entry.getValue() < MIN_NUMBER_OF_SWITCHES) continue;
@@ -112,6 +120,24 @@ class SessionTabSwitchesSuggestionProvider implements TabSuggestionProvider {
         }
 
         return suggestionsFromConnectedTabs(tabContext, adjacencyList);
+    }
+
+    private void removeInvalidTrackedEntries(List<Integer> validTabIds) {
+        Iterator<Map.Entry<Integer, Integer>> switchesIterator =
+                mSwitchesPerTab.entrySet().iterator();
+        while (switchesIterator.hasNext()) {
+            if (!validTabIds.contains(switchesIterator.next().getKey())) switchesIterator.remove();
+        }
+
+        Iterator<Map.Entry<Pair<Integer, Integer>, Integer>> interTabIterator =
+                mInterTabSwitches.entrySet().iterator();
+        while (interTabIterator.hasNext()) {
+            Map.Entry<Pair<Integer, Integer>, Integer> entry = interTabIterator.next();
+            if (!validTabIds.contains(entry.getKey().first)
+                    || !validTabIds.contains(entry.getKey().second)) {
+                interTabIterator.remove();
+            }
+        }
     }
 
     private List<TabSuggestion> suggestionsFromConnectedTabs(
