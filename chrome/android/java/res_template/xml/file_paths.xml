@@ -18,4 +18,5 @@
          content:// URIs for downloads. This may no longer work if/when users
          are allowed to save files elsewhere. -->
     <external-path name="downloads" path="Download/" />
+    <external-files-path name="external_files" path="Download/" />
 </paths>
