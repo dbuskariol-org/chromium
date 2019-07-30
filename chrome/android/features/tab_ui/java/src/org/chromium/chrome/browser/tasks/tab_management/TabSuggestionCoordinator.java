@@ -29,7 +29,6 @@ import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabContext;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestion;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsOrchestrator;
 import org.chromium.chrome.browser.tasks.tab_management.suggestions.TabSuggestionsRanker;
-import org.chromium.chrome.browser.tasks.tabgroup.TabGroupConstants;
 import org.chromium.chrome.browser.widget.selection.SelectionDelegate;
 import org.chromium.chrome.tab_ui.R;
 
@@ -98,11 +97,9 @@ public class TabSuggestionCoordinator {
     class TabSuggestionFeedbackBarController implements SnackbarManager.SnackbarController {
         @Override
         public void onAction(Object actionData) {
-            HelpAndFeedback.getInstance(null /* Parameter not used */)
-                    .showFeedback(mActivity, Profile.getLastUsedProfile(),
-                            null /* Parameter optional and not relevant */,
-                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_CATEGORY_TAG,
-                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_FEEDBACK_CONTEXT);
+            String helpContextId = HelpAndFeedback.getHelpContextIdFromUrl(mActivity, null, false);
+            HelpAndFeedback.getInstance(mActivity).show(
+                    mActivity, helpContextId, Profile.getLastUsedProfile(), null);
         }
 
         @Override
@@ -247,10 +244,12 @@ public class TabSuggestionCoordinator {
         int actionButtonTextResource = R.string.tab_selection_editor_group;
         TabSelectionEditorToolbar.ActionButtonListener actionButtonListener = null;
         boolean isAppendToDefaultListener = false;
+        int actionButtonEnablingThreshold = 0;
         switch (tabSuggestion.getAction()) {
             case TabSuggestion.TabSuggestionAction.GROUP:
                 isAppendToDefaultListener = true;
                 actionButtonListener = mGroupSuggestionListener;
+                actionButtonEnablingThreshold = 1;
                 break;
             case TabSuggestion.TabSuggestionAction.CLOSE:
                 actionButtonTextResource = R.string.tab_suggestion_editor_close_button;
@@ -264,7 +263,7 @@ public class TabSuggestionCoordinator {
                 mTabSuggestionFeedbackBarController.buildSnackbar());
         mTabSelectionEditorCoordinator.getController().showListOfTabs(tabs,
                 suggestedTabsInfo.size(), mItemDecoration, actionButtonTextResource,
-                actionButtonListener, isAppendToDefaultListener);
+                actionButtonListener, isAppendToDefaultListener, actionButtonEnablingThreshold);
         SelectionDelegate<Integer> selectionDelegate =
                 mTabSelectionEditorCoordinator.getSelectionDelegate();
 
@@ -307,7 +306,7 @@ public class TabSuggestionCoordinator {
 
     public void showEmptySuggestion() {
         mTabSelectionEditorCoordinator.getController().showListOfTabs(
-                null, 0, null, 0, null, false);
+                null, 0, null, 0, null, false, 0);
     }
 
     public void showTabSuggestionSnackbar(TabSuggestion tabSuggestion) {

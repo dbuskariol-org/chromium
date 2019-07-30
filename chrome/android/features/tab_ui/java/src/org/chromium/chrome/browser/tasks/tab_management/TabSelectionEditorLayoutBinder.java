@@ -41,6 +41,10 @@ public class TabSelectionEditorLayoutBinder {
                 == propertyKey) {
             view.getToolbar().setActionButtonTextResource(
                     model.get(TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_TEXT_RESOURCE));
+        } else if (TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_ENABLING_THRESHOLD
+                == propertyKey) {
+            view.getToolbar().setActionButtonEnablingThreshold(model.get(
+                    TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_ENABLING_THRESHOLD));
         }
     }
 }

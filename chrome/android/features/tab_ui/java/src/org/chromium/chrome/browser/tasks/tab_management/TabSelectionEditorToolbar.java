@@ -24,6 +24,7 @@ import java.util.List;
 class TabSelectionEditorToolbar extends SelectableListToolbar<Integer> {
     private static final List<Integer> sEmptyIntegerList = Collections.emptyList();
     private Button mGroupButton;
+    private int mActionButtonEnablingThreshold = 1;
 
     interface ActionButtonListener {
         void run(SelectionDelegate selectionDelegate);
@@ -56,9 +57,7 @@ class TabSelectionEditorToolbar extends SelectableListToolbar<Integer> {
     @Override
     public void onSelectionStateChange(List<Integer> selectedItems) {
         super.onSelectionStateChange(selectedItems);
-        // TODO(meiliang): Need to set the condition based on the action. e.g greater than 1 for
-        // grouping, and greater than 0 for closing.
-        mGroupButton.setEnabled(selectedItems.size() > 1);
+        mGroupButton.setEnabled(selectedItems.size() > mActionButtonEnablingThreshold);
     }
 
     @Override
@@ -82,5 +81,9 @@ class TabSelectionEditorToolbar extends SelectableListToolbar<Integer> {
 
     public void setActionButtonTextResource(int buttonTextResource) {
         mGroupButton.setText(buttonTextResource);
+    }
+
+    public void setActionButtonEnablingThreshold(int threshold) {
+        mActionButtonEnablingThreshold = threshold;
     }
 }

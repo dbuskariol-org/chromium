@@ -145,7 +145,6 @@ import org.chromium.chrome.browser.tasks.TasksUma;
 import org.chromium.chrome.browser.tasks.tab_management.GridTabSwitcher;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementDelegate;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementModuleProvider;
-import org.chromium.chrome.browser.tasks.tabgroup.TabGroupConstants;
 import org.chromium.chrome.browser.toolbar.ToolbarButtonInProductHelpController;
 import org.chromium.chrome.browser.toolbar.top.ToolbarControlContainer;
 import org.chromium.chrome.browser.touchless.TouchlessDelegate;
@@ -1834,11 +1833,10 @@ public class ChromeTabbedActivity
         } else if (id == R.id.enter_vr_id) {
             VrModuleProvider.getDelegate().enterVrIfNecessary();
         } else if (id == R.id.submit_feedback) {
-            HelpAndFeedback.getInstance(null /* Parameter not used */)
-                    .showFeedback(this, Profile.getLastUsedProfile(),
-                            null /* Parameter optional and not relevant */,
-                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_CATEGORY_TAG,
-                            TabGroupConstants.TAB_GROUP_SUGGESTIONS_FEEDBACK_CONTEXT);
+            String helpContextId = HelpAndFeedback.getHelpContextIdFromUrl(
+                    this, null, getCurrentTabModel().isIncognito());
+            HelpAndFeedback.getInstance(this).show(
+                    this, helpContextId, Profile.getLastUsedProfile(), null);
         } else {
             return super.onMenuOrKeyboardAction(id, fromMenu);
         }

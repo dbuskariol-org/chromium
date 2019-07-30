@@ -165,6 +165,7 @@ class TabSelectionEditorMediator
                 R.string.tab_selection_editor_group);
         mModel.set(TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_LISTENER,
                 mGroupButtonOnClickListener);
+        mModel.set(TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_ENABLING_THRESHOLD, 1);
         mModel.set(TabSelectionEditorProperties.IS_VISIBLE, true);
         mResetHandler.resetWithListOfTabs(getTabsToShow());
     }
@@ -188,7 +189,7 @@ class TabSelectionEditorMediator
     public void showListOfTabs(List<Tab> tabs, int selectedTabCount,
             RecyclerView.ItemDecoration itemDecoration, int actionButtonResource,
             TabSelectionEditorToolbar.ActionButtonListener actionButtonOnClickListener,
-            boolean isAppendToDefaultListener) {
+            boolean isAppendToDefaultListener, int actionButtonEnablingThreshold) {
         if (tabs == null) {
             mResetHandler.resetWithListOfTabs(tabs);
             mModel.set(TabSelectionEditorProperties.IS_VISIBLE, true);
@@ -198,6 +199,8 @@ class TabSelectionEditorMediator
         mModel.set(TabSelectionEditorProperties.ITEM_DECORATION, itemDecoration);
         mModel.set(TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_TEXT_RESOURCE,
                 actionButtonResource);
+        mModel.set(TabSelectionEditorProperties.TOOLBAR_ACTION_BUTTON_ENABLING_THRESHOLD,
+                actionButtonEnablingThreshold);
         View.OnClickListener onClickListener = view -> {
             if (isAppendToDefaultListener) {
                 mGroupButtonOnClickListener.onClick(view);

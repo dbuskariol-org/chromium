@@ -4,6 +4,9 @@
 
 package org.chromium.chrome.browser.tasks.tab_management;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -11,6 +14,8 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.PopupWindow;
 
 import org.chromium.chrome.browser.widget.selection.SelectableListLayout;
@@ -21,12 +26,16 @@ import org.chromium.chrome.tab_ui.R;
  * This class is used to show the {@link SelectableListLayout} in a {@link PopupWindow}.
  */
 class TabSelectionEditorLayout extends SelectableListLayout<Integer> {
+    public static final long BASE_ANIMATION_DURATION_MS = 218;
     private TabSelectionEditorToolbar mToolbar;
     private PopupWindow mWindow;
     private View mParentView;
     private boolean mIsInitialized;
     private RecyclerView mRecyclerView;
     private RecyclerView.ItemDecoration mItemDecoration;
+    private final Interpolator mInterpolator = new DecelerateInterpolator(1.0f);
+    private ObjectAnimator mSlideUpAnimator;
+    private ObjectAnimator mSlideDownAnimator;
 
     public TabSelectionEditorLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -57,6 +66,28 @@ class TabSelectionEditorLayout extends SelectableListLayout<Integer> {
         initializeEmptyView(R.string.tab_selection_editor_empty_list, 0);
         mParentView = parentView;
         mWindow = new PopupWindow(this, mParentView.getWidth(), mParentView.getHeight());
+
+        mSlideUpAnimator =
+                ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, mParentView.getHeight(), 0);
+        mSlideUpAnimator.setDuration(BASE_ANIMATION_DURATION_MS);
+        mSlideUpAnimator.setInterpolator(mInterpolator);
+        mSlideUpAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                mWindow.showAtLocation(mParentView, Gravity.CENTER, 0, 0);
+            }
+        });
+
+        mSlideDownAnimator =
+                ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, 0, mParentView.getHeight());
+        mSlideDownAnimator.setDuration(BASE_ANIMATION_DURATION_MS);
+        mSlideDownAnimator.setInterpolator(mInterpolator);
+        mSlideDownAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (mWindow.isShowing()) mWindow.dismiss();
+            }
+        });
     }
 
     /**
@@ -64,7 +95,8 @@ class TabSelectionEditorLayout extends SelectableListLayout<Integer> {
      */
     public void show() {
         assert mIsInitialized;
-        mWindow.showAtLocation(mParentView, Gravity.CENTER, 0, 0);
+        if (mWindow.isShowing()) return;
+        mSlideUpAnimator.start();
     }
 
     /**
@@ -72,7 +104,8 @@ class TabSelectionEditorLayout extends SelectableListLayout<Integer> {
      */
     public void hide() {
         assert mIsInitialized;
-        if (mWindow.isShowing()) mWindow.dismiss();
+        if (!mWindow.isShowing()) return;
+        mSlideDownAnimator.start();
     }
 
     /**

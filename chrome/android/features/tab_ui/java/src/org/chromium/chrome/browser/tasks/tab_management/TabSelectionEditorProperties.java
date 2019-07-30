@@ -36,7 +36,12 @@ public class TabSelectionEditorProperties {
             .WritableObjectPropertyKey<View.OnClickListener> TOOLBAR_ACTION_BUTTON_LISTENER =
             new PropertyModel.WritableObjectPropertyKey<>();
 
+    public static final PropertyModel
+            .WritableIntPropertyKey TOOLBAR_ACTION_BUTTON_ENABLING_THRESHOLD =
+            new PropertyModel.WritableIntPropertyKey();
+
     public static final PropertyKey[] ALL_KEYS = new PropertyKey[] {IS_VISIBLE,
             TOOLBAR_GROUP_BUTTON_LISTENER, TOOLBAR_NAVIGATION_LISTENER,
-            TOOLBAR_ACTION_BUTTON_TEXT_RESOURCE, ITEM_DECORATION, TOOLBAR_ACTION_BUTTON_LISTENER};
+            TOOLBAR_ACTION_BUTTON_TEXT_RESOURCE, ITEM_DECORATION, TOOLBAR_ACTION_BUTTON_LISTENER,
+            TOOLBAR_ACTION_BUTTON_ENABLING_THRESHOLD};
 }

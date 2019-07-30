@@ -42,7 +42,7 @@ class TabSelectionEditorCoordinator {
         void showListOfTabs(List<Tab> tabs, int selectedTabCount,
                 RecyclerView.ItemDecoration itemDecoration, int actionButtonResource,
                 TabSelectionEditorToolbar.ActionButtonListener actionButtonOnClickListener,
-                boolean isAppendToDefaultListener);
+                boolean isAppendToDefaultListener, int actionButtonEnablingThreshold);
 
         void hide();
 
