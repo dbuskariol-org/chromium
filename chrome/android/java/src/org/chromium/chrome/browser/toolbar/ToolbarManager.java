@@ -150,7 +150,9 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
     /** A means of tracking which mechanism is being used to focus the omnibox. */
     @IntDef({OmniboxFocusReason.OMNIBOX_TAP, OmniboxFocusReason.OMNIBOX_LONG_PRESS,
             OmniboxFocusReason.FAKE_BOX_TAP, OmniboxFocusReason.FAKE_BOX_LONG_PRESS,
-            OmniboxFocusReason.ACCELERATOR_TAP, OmniboxFocusReason.TAB_SWITCHER_OMNIBOX_TAP})
+            OmniboxFocusReason.ACCELERATOR_TAP, OmniboxFocusReason.TAB_SWITCHER_OMNIBOX_TAP,
+            OmniboxFocusReason.TASKS_SURFACE_FAKE_BOX_TAP,
+            OmniboxFocusReason.TASKS_SURFACE_FAKE_BOX_LONG_PRESS})
     @Retention(RetentionPolicy.SOURCE)
     public @interface OmniboxFocusReason {
         int OMNIBOX_TAP = 0;
@@ -159,7 +161,9 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         int FAKE_BOX_LONG_PRESS = 3;
         int ACCELERATOR_TAP = 4;
         int TAB_SWITCHER_OMNIBOX_TAP = 5;
-        int NUM_ENTRIES = 6;
+        int TASKS_SURFACE_FAKE_BOX_TAP = 6;
+        int TASKS_SURFACE_FAKE_BOX_LONG_PRESS = 7;
+        int NUM_ENTRIES = 8;
     }
     private static final EnumeratedHistogramSample ENUMERATED_FOCUS_REASON =
             new EnumeratedHistogramSample(
@@ -980,7 +984,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         mLocationBarModel.setShouldShowOmniboxInOverviewMode(
                 ReturnToChromeExperimentsUtil.shouldShowOmniboxOnTabSwitcher());
 
-
         assert controlsVisibilityDelegate != null;
         mControlsVisibilityDelegate = controlsVisibilityDelegate;
 
@@ -996,6 +999,7 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         if (layoutManager != null) {
             mLayoutManager = layoutManager;
             mLayoutManager.addSceneChangeObserver(mSceneChangeObserver);
+            mToolbar.setOverviewModeUiController(mLayoutManager.getOverviewModeUiController());
         }
 
         if (mBottomControlsCoordinator != null) {

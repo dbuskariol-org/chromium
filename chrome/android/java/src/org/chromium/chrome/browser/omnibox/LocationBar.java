@@ -11,6 +11,7 @@ import android.view.Window;
 
 import org.chromium.chrome.browser.ActivityTabProvider;
 import org.chromium.chrome.browser.WindowDelegate;
+import org.chromium.chrome.browser.compositor.layouts.OverviewModeUiController;
 import org.chromium.chrome.browser.ntp.NewTabPage;
 import org.chromium.chrome.browser.omnibox.UrlBar.UrlBarDelegate;
 import org.chromium.chrome.browser.profiles.Profile;
@@ -43,6 +44,12 @@ public interface LocationBar extends UrlBarDelegate {
      * Triggered when the current tab has changed to a {@link NewTabPage}.
      */
     void onTabLoadingNTP(NewTabPage ntp);
+
+    /**
+     * Triggered when loading the overview UI.
+     * @param controller The controller of the UI.
+     */
+    default void onLoadingOverview(OverviewModeUiController controller) {}
 
     /**
      * Called to set the autocomplete profile to a new profile.

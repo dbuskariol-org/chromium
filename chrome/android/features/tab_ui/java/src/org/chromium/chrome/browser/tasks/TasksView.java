@@ -5,15 +5,19 @@
 package org.chromium.chrome.browser.tasks;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v4.view.MarginLayoutParamsCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import org.chromium.base.ApiCompatibilityUtils;
+import org.chromium.chrome.browser.util.ColorUtils;
 import org.chromium.chrome.tab_ui.R;
 
 // The view of the tasks surface.
@@ -57,5 +61,23 @@ class TasksView extends LinearLayout {
 
     void setMoreTabsOnClicklistener(@Nullable View.OnClickListener listener) {
         findViewById(R.id.more_tabs).setOnClickListener(listener);
+    }
+
+    void setIncognitoMode(boolean isIncognito, boolean isVoiceSearchButtonVisible) {
+        Resources resources = mContext.getResources();
+        setBackgroundColor(ColorUtils.getPrimaryBackgroundColor(resources, isIncognito));
+        View searchBox = findViewById(R.id.search_box);
+        searchBox.setBackgroundResource(
+                isIncognito ? R.drawable.fake_search_box_bg_incognito : R.drawable.ntp_search_box);
+        int hintTextColor = isIncognito
+                ? ApiCompatibilityUtils.getColor(resources, R.color.locationbar_light_hint_text)
+                : ApiCompatibilityUtils.getColor(resources, R.color.locationbar_dark_hint_text);
+        ((TextView) searchBox.findViewById(R.id.search_box_text)).setHintTextColor(hintTextColor);
+
+        // Do not display voice search button in incognito mode.
+        if (isVoiceSearchButtonVisible) {
+            findViewById(R.id.voice_search_button)
+                    .setVisibility(isIncognito ? View.GONE : View.VISIBLE);
+        }
     }
 }

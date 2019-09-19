@@ -101,7 +101,7 @@ public class TabGroupModelFilter extends TabModelFilter {
      * group.
      */
     private class TabGroup {
-        private final static int INVALID_GROUP_ID = -1;
+        private static final int INVALID_GROUP_ID = -1;
         private final Set<Integer> mTabIds;
         private int mLastShownTabId;
         private int mGroupId;
@@ -609,6 +609,11 @@ public class TabGroupModelFilter extends TabModelFilter {
     @Override
     protected void removeTab(Tab tab) {
         closeTab(tab);
+    }
+
+    @Override
+    public boolean isTabModelRestored() {
+        return mTabRestoreCompleted || isIncognito();
     }
 
     @Override

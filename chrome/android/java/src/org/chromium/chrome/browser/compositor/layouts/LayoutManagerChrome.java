@@ -67,6 +67,9 @@ public class LayoutManagerChrome extends LayoutManager implements OverviewModeCo
     private boolean mCreatingNtp;
     private final ObserverList<OverviewModeObserver> mOverviewModeObservers;
 
+    @Nullable
+    private OverviewModeUiController mOverviewModeUiController;
+
     /**
      * Creates the {@link LayoutManagerChrome} instance.
      * @param host         A {@link LayoutManagerHost} instance.
@@ -95,6 +98,8 @@ public class LayoutManagerChrome extends LayoutManager implements OverviewModeCo
                 assert tabManagementDelegate != null;
                 mOverviewLayout = tabManagementDelegate.createStartSurfaceLayout(
                         context, this, renderHost, startSurface);
+                mOverviewModeUiController =
+                        tabManagementDelegate.createOverviewModeUiController(startSurface);
             } else {
                 mOverviewLayout = new StackLayout(context, this, renderHost);
             }
@@ -401,6 +406,11 @@ public class LayoutManagerChrome extends LayoutManager implements OverviewModeCo
     @Override
     public void removeOverviewModeObserver(OverviewModeObserver listener) {
         mOverviewModeObservers.removeObserver(listener);
+    }
+
+    @Override
+    public OverviewModeUiController getOverviewModeUiController() {
+        return mOverviewModeUiController;
     }
 
     /**

@@ -20,6 +20,7 @@ import org.chromium.chrome.browser.ThemeColorProvider;
 import org.chromium.chrome.browser.appmenu.AppMenuButtonHelper;
 import org.chromium.chrome.browser.compositor.Invalidator;
 import org.chromium.chrome.browser.compositor.layouts.LayoutManager;
+import org.chromium.chrome.browser.compositor.layouts.OverviewModeUiController;
 import org.chromium.chrome.browser.fullscreen.BrowserStateBrowserControlsVisibilityDelegate;
 import org.chromium.chrome.browser.omnibox.LocationBar;
 import org.chromium.chrome.browser.partnercustomizations.HomepageManager;
@@ -58,6 +59,8 @@ public class TopToolbarCoordinator implements Toolbar {
      * after ToolbarLayout is inflated.
      */
     private @Nullable TabSwitcherModeTTCoordinatorPhone mTabSwitcherModeCoordinatorPhone;
+    @Nullable
+    private OverviewModeUiController mOverviewModeUiController;
 
     private HomepageManager.HomepageStateListener mHomepageStateListener =
             new HomepageManager.HomepageStateListener() {
@@ -207,6 +210,22 @@ public class TopToolbarCoordinator implements Toolbar {
     @Override
     public int getPrimaryColor() {
         return mToolbarLayout.getToolbarDataProvider().getPrimaryColor();
+    }
+
+    @Override
+    public void setOverviewModeUiController(OverviewModeUiController controller) {
+        assert mOverviewModeUiController == null;
+        mOverviewModeUiController = controller;
+        if (mTabSwitcherModeCoordinatorPhone != null && mOverviewModeUiController != null) {
+            mOverviewModeUiController.setBottomBarDelegate(
+                    new OverviewModeUiController.BottomBarDelegate() {
+                        @Override
+                        public void setOmniboxVisibility(boolean isVisible) {
+                            mToolbarLayout.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
+                        }
+                    });
+            getLocationBar().onLoadingOverview(mOverviewModeUiController);
+        }
     }
 
     @Override
@@ -486,6 +505,9 @@ public class TopToolbarCoordinator implements Toolbar {
                 && mToolbarLayout.getToolbarDataProvider().isInOverviewAndShowingOmnibox()
                 && mTabSwitcherModeCoordinatorPhone != null) {
             mTabSwitcherModeCoordinatorPhone.setTabSwitcherToolbarVisibility(!hasFocus);
+            if (mOverviewModeUiController != null) {
+                mOverviewModeUiController.onUrlFocusChange(hasFocus);
+            }
         }
     }
 

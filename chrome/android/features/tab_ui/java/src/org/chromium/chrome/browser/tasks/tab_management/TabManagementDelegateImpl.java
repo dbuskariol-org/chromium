@@ -16,14 +16,17 @@ import org.chromium.chrome.browser.ThemeColorProvider;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
 import org.chromium.chrome.browser.compositor.layouts.LayoutRenderHost;
 import org.chromium.chrome.browser.compositor.layouts.LayoutUpdateHost;
+import org.chromium.chrome.browser.compositor.layouts.OverviewModeUiController;
 import org.chromium.chrome.browser.metrics.UmaSessionStats;
 import org.chromium.chrome.browser.tabmodel.TabModel;
+import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
 import org.chromium.chrome.browser.tasks.TasksSurface;
 import org.chromium.chrome.browser.tasks.TasksSurfaceCoordinator;
 import org.chromium.chrome.browser.tasks.tab_groups.TabGroupModelFilter;
 import org.chromium.chrome.features.start_surface.StartSurface;
 import org.chromium.chrome.features.start_surface.StartSurfaceCoordinator;
 import org.chromium.chrome.features.start_surface.StartSurfaceLayout;
+import org.chromium.chrome.features.start_surface.StartSurfaceUiController;
 import org.chromium.ui.modelutil.PropertyModel;
 
 /**
@@ -77,6 +80,15 @@ public class TabManagementDelegateImpl implements TabManagementDelegate {
     @Override
     public StartSurface createStartSurface(ChromeActivity activity) {
         return new StartSurfaceCoordinator(activity);
+    }
+
+    @Override
+    public OverviewModeUiController createOverviewModeUiController(StartSurface startSurface) {
+        if (ReturnToChromeExperimentsUtil.shouldShowOmniboxOnTabSwitcher()) {
+            return new StartSurfaceUiController(startSurface);
+        }
+
+        return null;
     }
 
     @Override

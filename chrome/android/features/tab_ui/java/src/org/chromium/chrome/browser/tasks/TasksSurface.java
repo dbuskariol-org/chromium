@@ -7,6 +7,7 @@ package org.chromium.chrome.browser.tasks;
 import android.view.ViewGroup;
 
 import org.chromium.chrome.browser.compositor.layouts.Layout;
+import org.chromium.chrome.browser.omnibox.LocationBarVoiceRecognitionHandler;
 import org.chromium.chrome.browser.tasks.tab_management.TabSwitcher;
 
 /**
@@ -15,6 +16,30 @@ import org.chromium.chrome.browser.tasks.tab_management.TabSwitcher;
  *  {@link TasksSurfaceCoordinator}.
  */
 public interface TasksSurface {
+    /** The delegate for the fake search box on the tasks surface. */
+    public interface FakeSearchBoxDelegate {
+        /**
+         * Interface to request focusing on the URL bar.
+         * @param pastedText The text to be pasted in the Omnibox or null.
+         * */
+        void requestUrlFocus(String pastedText);
+    }
+
+    /** The interface to control the fake search box. */
+    public interface FakeSearchBoxController {
+        /**
+         * Set the search box delegate.
+         * @param delegate The given delegate.
+         */
+        void setDelegate(FakeSearchBoxDelegate delegate);
+
+        /**
+         * Set the voice recognition handler.
+         * @param voiceRecognitionHandler The given {@link LocationBarVoiceRecognitionHandler}
+         */
+        void setVoiceRecognitionHandler(LocationBarVoiceRecognitionHandler voiceRecognitionHandler);
+    }
+
     /**
      * Set the listener to get the {@link Layout#onTabSelecting} event from the Grid Tab Switcher.
      * @param listener The {@link TabSwitcher.OnTabSelectingListener} to use.
@@ -36,4 +61,9 @@ public interface TasksSurface {
      * @return The surface's container {@link ViewGroup}.
      */
     ViewGroup getContainerView();
+
+    /**
+     * @return {@link FakeSearchBoxController} that interacts with the search box.
+     */
+    FakeSearchBoxController getFakeSearchBoxController();
 }

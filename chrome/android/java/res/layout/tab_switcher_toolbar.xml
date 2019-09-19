@@ -78,15 +78,17 @@
             android:layout_gravity="top"
             android:contentDescription="@string/accessibility_toolbar_btn_tabswitcher_toggle_default" />
 
-        <Switch
+        <org.chromium.chrome.browser.toolbar.top.CustomLengthSwitch
             android:id="@+id/incognito_switch"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="2dp"
             android:thumb="@drawable/incognito_switch"
             android:track="@drawable/incognito_switch_track"
+            android:switchMinWidth="0dp"
             android:visibility="gone"/>
 
         <include layout="@layout/menu_button" />

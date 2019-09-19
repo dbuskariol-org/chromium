@@ -5,9 +5,11 @@
 package org.chromium.chrome.browser.toolbar.top;
 
 import android.graphics.Rect;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import org.chromium.chrome.browser.compositor.layouts.OverviewModeUiController;
 import org.chromium.chrome.browser.widget.ToolbarProgressBar;
 
 /**
@@ -114,4 +116,10 @@ public interface Toolbar {
      * @return The primary color to use for the background drawable.
      */
     int getPrimaryColor();
+
+    /**
+     * Set the {@link OverviewModeUiController}
+     * @param controller The controller.
+     */
+    void setOverviewModeUiController(@Nullable OverviewModeUiController controller);
 }

@@ -9,6 +9,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -911,6 +912,15 @@ public class LayoutManager implements LayoutUpdateHost, LayoutProvider,
      */
     public void addSceneOverlayToBack(SceneOverlay overlay) {
         mStaticLayout.addSceneOverlayToBack(overlay);
+    }
+
+    /**
+     * @return {@link OverviewModeUiController} to interact with the overview mode UI or null if it
+     *         is not interactable.
+     */
+    @Nullable
+    public OverviewModeUiController getOverviewModeUiController() {
+        return null;
     }
 
     /**

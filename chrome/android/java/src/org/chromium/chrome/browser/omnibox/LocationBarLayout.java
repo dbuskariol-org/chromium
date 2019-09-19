@@ -35,6 +35,7 @@ import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ActivityTabProvider;
 import org.chromium.chrome.browser.ChromeSwitches;
 import org.chromium.chrome.browser.WindowDelegate;
+import org.chromium.chrome.browser.compositor.layouts.OverviewModeUiController;
 import org.chromium.chrome.browser.locale.LocaleManager;
 import org.chromium.chrome.browser.native_page.NativePage;
 import org.chromium.chrome.browser.native_page.NativePageFactory;
@@ -74,9 +75,10 @@ import java.util.List;
  * This class represents the location bar where the user types in URLs and
  * search terms.
  */
-public class LocationBarLayout extends FrameLayout
-        implements OnClickListener, LocationBar, AutocompleteDelegate, FakeboxDelegate,
-                   LocationBarVoiceRecognitionHandler.Delegate {
+public class LocationBarLayout
+        extends FrameLayout implements OnClickListener, LocationBar, AutocompleteDelegate,
+                                       FakeboxDelegate, LocationBarVoiceRecognitionHandler.Delegate,
+                                       OverviewModeUiController.FakeSearchBoxDelegate {
     protected ImageButton mDeleteButton;
     protected ImageButton mMicButton;
     protected View mUrlBar;
@@ -534,6 +536,10 @@ public class LocationBarLayout extends FrameLayout
 
     @Override
     public void requestUrlFocusFromFakebox(String pastedText) {
+        requestUrlFocusFromFakebox(pastedText, true);
+    }
+
+    private void requestUrlFocusFromFakebox(String pastedText, boolean fromNtp) {
         mUrlFocusedFromFakebox = true;
         if (mUrlHasFocus && mUrlFocusedWithoutAnimations) {
             handleUrlFocusAnimation(mUrlHasFocus);
@@ -542,14 +548,17 @@ public class LocationBarLayout extends FrameLayout
         }
 
         if (pastedText != null) {
-            ToolbarManager.recordOmniboxFocusReason(
-                    ToolbarManager.OmniboxFocusReason.FAKE_BOX_LONG_PRESS);
+            ToolbarManager.recordOmniboxFocusReason(fromNtp
+                            ? ToolbarManager.OmniboxFocusReason.FAKE_BOX_LONG_PRESS
+                            : ToolbarManager.OmniboxFocusReason.TASKS_SURFACE_FAKE_BOX_LONG_PRESS);
             // This must be happen after requestUrlFocus(), which changes the selection.
             mUrlCoordinator.setUrlBarData(UrlBarData.forNonUrlText(pastedText),
                     UrlBar.ScrollType.NO_SCROLL, UrlBarCoordinator.SelectionState.SELECT_END);
             mAutocompleteCoordinator.onTextChangedForAutocomplete();
         } else {
-            ToolbarManager.recordOmniboxFocusReason(ToolbarManager.OmniboxFocusReason.FAKE_BOX_TAP);
+            ToolbarManager.recordOmniboxFocusReason(fromNtp
+                            ? ToolbarManager.OmniboxFocusReason.FAKE_BOX_TAP
+                            : ToolbarManager.OmniboxFocusReason.TASKS_SURFACE_FAKE_BOX_TAP);
         }
     }
 
@@ -562,6 +571,17 @@ public class LocationBarLayout extends FrameLayout
     public boolean isCurrentPage(NativePage nativePage) {
         assert nativePage != null;
         return nativePage == mToolbarDataProvider.getNewTabPageForCurrentTab();
+    }
+
+    // Implements OverviewModeUiController.FakeSearchBoxDelegate.
+    @Override
+    public void requestUrlFocus(String pastedText) {
+        requestUrlFocusFromFakebox(pastedText, false);
+        if (pastedText == null) {
+            // This must be happen after requestUrlFocus(), which changes the selection.
+            mUrlCoordinator.setUrlBarData(UrlBarData.forNonUrlText(pastedText),
+                    UrlBar.ScrollType.NO_SCROLL, UrlBarCoordinator.SelectionState.SELECT_END);
+        }
     }
 
     @Override
@@ -937,7 +957,9 @@ public class LocationBarLayout extends FrameLayout
         // side is initialized
         assert mNativeInitialized : "Loading URL before native side initialized";
 
-        if (ReturnToChromeExperimentsUtil.willHandleLoadUrlFromLocationBar(url, transition)) return;
+        if (ReturnToChromeExperimentsUtil.willHandleLoadUrlFromStartSurface(url, transition)) {
+            return;
+        }
 
         if (currentTab != null
                 && (currentTab.isNativePage() || NewTabPage.isNTPUrl(currentTab.getUrl()))) {
@@ -1083,6 +1105,13 @@ public class LocationBarLayout extends FrameLayout
     public void onTabLoadingNTP(NewTabPage ntp) {
         ntp.setFakeboxDelegate(this);
         ntp.setVoiceRecognitionHandler(mVoiceRecognitionHandler);
+    }
+
+    @Override
+    public void onLoadingOverview(OverviewModeUiController controller) {
+        if (controller == null) return;
+        controller.setFakeSearchBoxDelegate(this);
+        controller.setVoiceRecognitionHandler(mVoiceRecognitionHandler);
     }
 
     @Override

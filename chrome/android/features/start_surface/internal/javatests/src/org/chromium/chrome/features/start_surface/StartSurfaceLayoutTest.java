@@ -75,7 +75,6 @@ import java.util.List;
         "force-fieldtrials=Study/Group"})
 @Restriction(UiRestriction.RESTRICTION_TYPE_PHONE)
 public class StartSurfaceLayoutTest {
-    private static final String TAG = "SSLayoutTest";
     private static final String BASE_PARAMS = "force-fieldtrial-params="
             + "Study.Group:soft-cleanup-delay/0/cleanup-delay/0/skip-slow-zooming/false"
             + "/zooming-min-sdk-version/19/zooming-min-memory-mb/512";
@@ -113,6 +112,12 @@ public class StartSurfaceLayoutTest {
 
         mActivityTestRule.getActivity().getTabContentManager().setCaptureMinRequestTimeForTesting(
                 0);
+
+        CriteriaHelper.pollUiThread(Criteria.equals(true,
+                mActivityTestRule.getActivity()
+                        .getTabModelSelector()
+                        .getTabModelFilterProvider()
+                        .getCurrentTabModelFilter()::isTabModelRestored));
     }
 
     @Test
@@ -340,8 +345,9 @@ public class StartSurfaceLayoutTest {
             if (mActivityTestRule.getActivity()
                             .getTabContentManager()
                             .getPendingReadbacksForTesting()
-                    > 0)
+                    > 0) {
                 break;
+            }
 
             // Restart Chrome.
             // Although we're destroying the activity, the Application will still live on since its
@@ -537,9 +543,10 @@ public class StartSurfaceLayoutTest {
         // Native tabs need to be invalidated first to trigger thumbnail taking, so skip them.
         boolean checkThumbnail = !currentTab.isNativePage();
 
-        if (checkThumbnail)
+        if (checkThumbnail) {
             mActivityTestRule.getActivity().getTabContentManager().removeTabThumbnail(
                     currentTab.getId());
+        }
 
         int count = getCaptureCount();
         waitForCaptureRateControl();

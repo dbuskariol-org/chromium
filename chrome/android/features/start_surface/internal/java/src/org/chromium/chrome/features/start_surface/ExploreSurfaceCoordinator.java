@@ -18,6 +18,7 @@ import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.feed.FeedProcessScopeFactory;
 import org.chromium.chrome.browser.feed.FeedSurfaceCoordinator;
 import org.chromium.chrome.browser.feed.StreamLifecycleManager;
+import org.chromium.chrome.browser.ntp.snippets.SectionHeaderView;
 import org.chromium.chrome.browser.offlinepages.OfflinePageBridge;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.start_surface.R;
@@ -58,7 +59,7 @@ class ExploreSurfaceCoordinator implements FeedSurfaceCoordinator.FeedSurfaceDel
         mFeedSurfaceCreator = new FeedSurfaceCreator() {
             @Override
             public FeedSurfaceCoordinator createFeedSurfaceCoordinator() {
-                return internalCreateFeedSurfaceCoordinator();
+                return internalCreateFeedSurfaceCoordinator(headerContainerView != null);
             }
         };
     }
@@ -82,9 +83,10 @@ class ExploreSurfaceCoordinator implements FeedSurfaceCoordinator.FeedSurfaceDel
         return false;
     }
 
-    private FeedSurfaceCoordinator internalCreateFeedSurfaceCoordinator() {
-        if (mExploreSurfaceNavigationDelegate == null)
+    private FeedSurfaceCoordinator internalCreateFeedSurfaceCoordinator(boolean hasHeader) {
+        if (mExploreSurfaceNavigationDelegate == null) {
             mExploreSurfaceNavigationDelegate = new ExploreSurfaceNavigationDelegate(mActivity);
+        }
 
         ExploreSurfaceActionHandler exploreSurfaceActionHandler =
                 new ExploreSurfaceActionHandler(mExploreSurfaceNavigationDelegate,
@@ -92,8 +94,14 @@ class ExploreSurfaceCoordinator implements FeedSurfaceCoordinator.FeedSurfaceDel
                         FeedProcessScopeFactory.getFeedOfflineIndicator(),
                         OfflinePageBridge.getForProfile(Profile.getLastUsedProfile()),
                         FeedProcessScopeFactory.getFeedLoggingBridge());
-        return new FeedSurfaceCoordinator(
-                mActivity, null, null, null, exploreSurfaceActionHandler, false, this);
+        SectionHeaderView sectionHeaderView = null;
+        if (hasHeader) {
+            LayoutInflater inflater = LayoutInflater.from(mActivity);
+            sectionHeaderView =
+                    (SectionHeaderView) inflater.inflate(R.layout.ss_feed_header, null, false);
+        }
+        return new FeedSurfaceCoordinator(mActivity, null, null, null, sectionHeaderView,
+                exploreSurfaceActionHandler, false, this);
         // TODO(crbug.com/982018): Customize surface background for incognito and dark mode.
         // TODO(crbug.com/982018): Hide signin promo UI in incognito mode.
     }

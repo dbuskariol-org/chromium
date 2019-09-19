@@ -81,13 +81,15 @@ final class NtpStreamLifecycleManager extends StreamLifecycleManager {
     /** @return Whether the {@link Stream} can be shown. */
     @Override
     protected boolean canShow() {
-        return super.canShow() && !mTab.isHidden();
+        return super.canShow() && FeedProcessScopeFactory.areArticlesVisibleDuringSession()
+                && !mTab.isHidden();
     }
 
     /** @return Whether the {@link Stream} can be activated. */
     @Override
     protected boolean canActivate() {
-        return super.canActivate() && mTab.isUserInteractable();
+        return super.canActivate() && FeedProcessScopeFactory.areArticlesVisibleDuringSession()
+                && mTab.isUserInteractable();
     }
 
     /**

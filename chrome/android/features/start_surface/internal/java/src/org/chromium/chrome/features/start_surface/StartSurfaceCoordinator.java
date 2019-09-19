@@ -4,98 +4,101 @@
 
 package org.chromium.chrome.features.start_surface;
 
-import static org.chromium.chrome.browser.tasks.TasksSurfaceProperties.MORE_TABS_CLICK_LISTENER;
 import static org.chromium.chrome.features.start_surface.StartSurfaceProperties.TOP_BAR_HEIGHT;
 
-import android.view.ViewGroup;
+import android.support.v4.widget.NestedScrollView;
+import android.view.LayoutInflater;
 
-import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
 
 import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.ChromeFeatureList;
-import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
+import org.chromium.chrome.browser.omnibox.LocationBarVoiceRecognitionHandler;
 import org.chromium.chrome.browser.tasks.TasksSurface;
 import org.chromium.chrome.browser.tasks.TasksSurfaceProperties;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementModuleProvider;
 import org.chromium.chrome.browser.tasks.tab_management.TabSwitcher;
 import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.chrome.start_surface.R;
+import org.chromium.ui.modelutil.PropertyKey;
 import org.chromium.ui.modelutil.PropertyModel;
+import org.chromium.ui.modelutil.PropertyModelChangeProcessor;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Root coordinator that is responsible for showing start surfaces, like a grid of Tabs, explore
  * surface and the bottom bar to switch between them.
  */
 public class StartSurfaceCoordinator implements StartSurface {
-    @IntDef({SurfaceMode.NO_START_SURFACE, SurfaceMode.TASKS_ONLY, SurfaceMode.TWO_PANES,
-            SurfaceMode.SINGLE_PANE})
-    @Retention(RetentionPolicy.SOURCE)
-    @interface SurfaceMode {
-        int NO_START_SURFACE = 0;
-        int TASKS_ONLY = 1;
-        int TWO_PANES = 2;
-        int SINGLE_PANE = 3;
-    }
-
     private final ChromeActivity mActivity;
-    private final @SurfaceMode int mSurfaceMode;
     private final StartSurfaceMediator mStartSurfaceMediator;
+    private final @StartSurfaceMediator.SurfaceMode int mSurfaceMode;
 
-    // Non-null in SurfaceMode.TASKS_ONLY, SurfaceMode.TWO_PANES and SurfaceMode.SINGLE_PANE modes.
+    // Non-null in StartSurfaceMediator.SurfaceMode.TASKS_ONLY,
+    // StartSurfaceMediator.SurfaceMode.TWO_PANES and StartSurfaceMediator.SurfaceMode.SINGLE_PANE
+    // modes.
     @Nullable
     private TasksSurface mTasksSurface;
 
-    // Non-null in SurfaceMode.TASKS_ONLY, SurfaceMode.TWO_PANES and SurfaceMode.SINGLE_PANE modes.
+    // Non-null in StartSurfaceMediator.SurfaceMode.TASKS_ONLY,
+    // StartSurfaceMediator.SurfaceMode.TWO_PANES and StartSurfaceMediator.SurfaceMode.SINGLE_PANE
+    // modes.
     @Nullable
-    private PropertyModel mTasksSurfacePropertyModel;
+    private PropertyModelChangeProcessor mTasksSurfacePropertyModelChangeProcessor;
 
-    // Non-null in SurfaceMode.SINGLE_PANE mode to show more tabs.
+    // Non-null in StartSurfaceMediator.SurfaceMode.SINGLE_PANE mode to show more tabs.
     @Nullable
     private TasksSurface mSecondaryTasksSurface;
 
-    // Non-null in SurfaceMode.SINGLE_PANE mode to show more tabs.
+    // Non-null in StartSurfaceMediator.SurfaceMode.SINGLE_PANE mode to show more tabs.
     @Nullable
-    private PropertyModel mSecondaryTasksSurfacePropertyModel;
+    private PropertyModelChangeProcessor mSecondaryTasksSurfacePropertyModelChangeProcessor;
 
-    // Non-null in SurfaceMode.NO_START_SURFACE to show the tabs.
+    // Non-null in StartSurfaceMediator.SurfaceMode.NO_START_SURFACE to show the tabs.
     @Nullable
     private TabSwitcher mTabSwitcher;
 
-    // Non-null in SurfaceMode.TWO_PANES mode.
+    // Non-null in StartSurfaceMediator.SurfaceMode.TWO_PANES mode.
     @Nullable
     private BottomBarCoordinator mBottomBarCoordinator;
 
-    // Non-null in SurfaceMode.TWO_PANES and SurfaceMode.SINGLE_PANE modes.
+    // Non-null in StartSurfaceMediator.SurfaceMode.TWO_PANES and
+    // StartSurfaceMediator.SurfaceMode.SINGLE_PANE modes.
     @Nullable
     private ExploreSurfaceCoordinator mExploreSurfaceCoordinator;
 
-    // Non-null in SurfaceMode.TWO_PANES and SurfaceMode.SINGLE_PANE modes.
+    // Non-null in StartSurfaceMediator.SurfaceMode.TWO_PANES and
+    // StartSurfaceMediator.SurfaceMode.SINGLE_PANE modes.
     // TODO(crbug.com/982018): Get rid of this reference since the mediator keeps a reference to it.
     @Nullable
     private PropertyModel mPropertyModel;
 
-    // Used to remember TabSwitcher.OnTabSelectingListener in SurfaceMode.SINGLE_PANE mode for more
-    // tabs surface if necessary.
+    // Used to remember TabSwitcher.OnTabSelectingListener in
+    // StartSurfaceMediator.SurfaceMode.SINGLE_PANE mode for more tabs surface if necessary.
     @Nullable
     private TabSwitcher.OnTabSelectingListener mOnTabSelectingListener;
+
+    // Used to remember TasksSurface.FakeSearchBoxDelegate in
+    // StartSurfaceMediator.SurfaceMode.SINGLE_PANE mode for more tabs surface if necessary.
+    @Nullable
+    private TasksSurface.FakeSearchBoxDelegate mFakeSearchBoxDelegate;
+
+    // Used to remember LocationBarVoiceRecognitionHandler in
+    // StartSurfaceMediator.SurfaceMode.SINGLE_PANE mode for more tabs surface if necessary.
+    @Nullable
+    private LocationBarVoiceRecognitionHandler mVoiceRecognitionHandler;
 
     public StartSurfaceCoordinator(ChromeActivity activity) {
         mActivity = activity;
         mSurfaceMode = computeSurfaceMode();
 
-        if (mSurfaceMode == SurfaceMode.NO_START_SURFACE) {
+        if (mSurfaceMode == StartSurfaceMediator.SurfaceMode.NO_START_SURFACE) {
             // Create Tab switcher directly to save one layer in the view hierarchy.
             mTabSwitcher = TabManagementModuleProvider.getDelegate().createGridTabSwitcher(
                     mActivity, mActivity.getCompositorViewHolder());
         } else {
-            mSecondaryTasksSurfacePropertyModel =
-                    new PropertyModel(TasksSurfaceProperties.ALL_KEYS);
-            mTasksSurface = TabManagementModuleProvider.getDelegate().createTasksSurface(mActivity,
-                    mSurfaceMode == SurfaceMode.SINGLE_PANE, mSecondaryTasksSurfacePropertyModel);
             createAndSetStartSurface();
         }
 
@@ -116,16 +119,10 @@ public class StartSurfaceCoordinator implements StartSurface {
                 mExploreSurfaceCoordinator == null
                         ? null
                         : mExploreSurfaceCoordinator.getFeedSurfaceCreator(),
-                mSurfaceMode == SurfaceMode.SINGLE_PANE ? this::initializeSecondaryTasksSurface
-                                                        : null,
-                mSurfaceMode == SurfaceMode.SINGLE_PANE);
-
-        // TODO(crbug.com/982018): Consider merging mSecondaryTasksSurfacePropertyModel with
-        // mPropertyModel, so mStartSurfaceMediator can set MORE_TABS_CLICK_LISTENER by itself.
-        if (mSurfaceMode == SurfaceMode.SINGLE_PANE) {
-            mSecondaryTasksSurfacePropertyModel.set(
-                    MORE_TABS_CLICK_LISTENER, mStartSurfaceMediator);
-        }
+                mSurfaceMode == StartSurfaceMediator.SurfaceMode.SINGLE_PANE
+                        ? this::initializeSecondaryTasksSurface
+                        : null,
+                mSurfaceMode);
     }
 
     // Implements StartSurface.
@@ -139,7 +136,7 @@ public class StartSurfaceCoordinator implements StartSurface {
 
         // Set OnTabSelectingListener to the more tabs tasks surface as well if it has been
         // instantiated, otherwise remember it for the future instantiation.
-        if (mSurfaceMode == SurfaceMode.SINGLE_PANE) {
+        if (mSurfaceMode == StartSurfaceMediator.SurfaceMode.SINGLE_PANE) {
             if (mSecondaryTasksSurface == null) {
                 mOnTabSelectingListener = listener;
             } else {
@@ -162,75 +159,133 @@ public class StartSurfaceCoordinator implements StartSurface {
         return mTabSwitcher.getTabListDelegate();
     }
 
-    private @SurfaceMode int computeSurfaceMode() {
+    void setFakeSearchBoxDelegate(TasksSurface.FakeSearchBoxDelegate fakeSearchBoxDelegate) {
+        mFakeSearchBoxDelegate = fakeSearchBoxDelegate;
+        if (mTasksSurface != null) {
+            mTasksSurface.getFakeSearchBoxController().setDelegate(mFakeSearchBoxDelegate);
+        }
+        if (mSecondaryTasksSurface != null) {
+            mSecondaryTasksSurface.getFakeSearchBoxController().setDelegate(mFakeSearchBoxDelegate);
+        }
+    }
+
+    void setVoiceRecognitionHandler(LocationBarVoiceRecognitionHandler voiceRecognitionHandler) {
+        mVoiceRecognitionHandler = voiceRecognitionHandler;
+        if (mTasksSurface != null) {
+            mTasksSurface.getFakeSearchBoxController().setVoiceRecognitionHandler(
+                    mVoiceRecognitionHandler);
+        }
+        if (mSecondaryTasksSurface != null) {
+            mSecondaryTasksSurface.getFakeSearchBoxController().setVoiceRecognitionHandler(
+                    mVoiceRecognitionHandler);
+        }
+    }
+
+    void setDelegate(StartSurfaceMediator.Delegate delegate) {
+        mStartSurfaceMediator.setDelegate(delegate);
+    }
+
+    void onUrlFocusChange(boolean hasFocus) {
+        if (mTasksSurface != null) {
+            mStartSurfaceMediator.onUrlFocusChange(hasFocus);
+        }
+    }
+
+    private @StartSurfaceMediator.SurfaceMode int computeSurfaceMode() {
         String feature = ChromeFeatureList.getFieldTrialParamByFeature(
                 ChromeFeatureList.START_SURFACE_ANDROID, "start_surface_variation");
 
         // Do not enable two panes when the bottom bar is enabled since it will
         // overlap the two panes' bottom bar.
         if (feature.equals("twopanes") && !FeatureUtilities.isBottomToolbarEnabled()) {
-            return SurfaceMode.TWO_PANES;
+            return StartSurfaceMediator.SurfaceMode.TWO_PANES;
         }
 
-        if (feature.equals("single")) return SurfaceMode.SINGLE_PANE;
+        if (feature.equals("single")) return StartSurfaceMediator.SurfaceMode.SINGLE_PANE;
 
-        // TODO(crbug.com/982018): Add the task only surface variation.
-        return SurfaceMode.NO_START_SURFACE;
+        if (feature.equals("tasksonly")) return StartSurfaceMediator.SurfaceMode.TASKS_ONLY;
+
+        return StartSurfaceMediator.SurfaceMode.NO_START_SURFACE;
     }
 
     private void createAndSetStartSurface() {
-        assert mTasksSurface != null;
+        ArrayList<PropertyKey> allProperties =
+                new ArrayList<>(Arrays.asList(TasksSurfaceProperties.ALL_KEYS));
+        allProperties.addAll(Arrays.asList(StartSurfaceProperties.ALL_KEYS));
+        mPropertyModel = new PropertyModel(allProperties);
+        mPropertyModel.set(TOP_BAR_HEIGHT,
+                mActivity.getResources().getDimensionPixelSize(R.dimen.toolbar_height_no_shadow));
+
+        mTasksSurface = TabManagementModuleProvider.getDelegate().createTasksSurface(mActivity,
+                mSurfaceMode == StartSurfaceMediator.SurfaceMode.SINGLE_PANE, mPropertyModel);
 
         // The tasks surface is added to the explore surface in the single pane mode below.
-        if (mSurfaceMode != SurfaceMode.SINGLE_PANE) {
-            mActivity.getCompositorViewHolder().addView(mTasksSurface.getContainerView());
+        if (mSurfaceMode != StartSurfaceMediator.SurfaceMode.SINGLE_PANE) {
+            // TODO(crbug.com/1000295): Put TasksSurface view inside Tab switcher recycler view.
+            // This is a temporarily solution to make the TasksSurfaceView scroll together with the
+            // Tab switcher, however this solution has performance issue when the Tab switcher is in
+            // Grid mode, which is a launcher blocker. Check the bug details.
+            mTasksSurfacePropertyModelChangeProcessor = PropertyModelChangeProcessor.create(
+                    mPropertyModel,
+                    new TasksSurfaceViewBinder.ViewHolder(mActivity.getCompositorViewHolder(),
+                            (NestedScrollView) LayoutInflater.from(mActivity).inflate(
+                                    R.layout.ss_explore_scroll_container,
+                                    mActivity.getCompositorViewHolder(), false),
+                            mTasksSurface.getContainerView()),
+                    TasksSurfaceViewBinder::bind);
         }
 
-        // There is nothing else to do for SurfaceMode.TASKS_ONLY for now.
-        if (mSurfaceMode != SurfaceMode.TWO_PANES && mSurfaceMode != SurfaceMode.SINGLE_PANE) {
+        // There is nothing else to do for SurfaceMode.TASKS_ONLY.
+        if (mSurfaceMode == StartSurfaceMediator.SurfaceMode.TASKS_ONLY) {
             return;
         }
 
-        mPropertyModel = new PropertyModel(StartSurfaceProperties.ALL_KEYS);
-
-        if (mSurfaceMode == SurfaceMode.TWO_PANES) {
+        if (mSurfaceMode == StartSurfaceMediator.SurfaceMode.TWO_PANES) {
             mBottomBarCoordinator = new BottomBarCoordinator(
                     mActivity, mActivity.getCompositorViewHolder(), mPropertyModel);
         }
 
-        int toolbarHeight =
-                mActivity.getResources().getDimensionPixelSize(R.dimen.toolbar_height_no_shadow);
-        int topControlsHeight =
-                ReturnToChromeExperimentsUtil.shouldShowOmniboxOnTabSwitcher() ? toolbarHeight : 0;
-
-        // Do not hide the top tab switcher toolbar on the single pane start surface for now.
-        if (mSurfaceMode == SurfaceMode.SINGLE_PANE) topControlsHeight += toolbarHeight;
-        mPropertyModel.set(TOP_BAR_HEIGHT, topControlsHeight);
-
         // Create the explore surface.
-        // TODO(crbug.com/982018): This is a hack to hide the top tab switcher toolbar in
-        // the SurfaceMode.TWO_PANES mode explore surface. Remove it after deciding on where to put
-        // the omnibox.
-        ViewGroup exploreSurfaceContainer = mSurfaceMode == SurfaceMode.SINGLE_PANE
-                ? mActivity.getCompositorViewHolder()
-                : (ViewGroup) mActivity.getCompositorViewHolder().getParent();
-        mExploreSurfaceCoordinator = new ExploreSurfaceCoordinator(mActivity,
-                exploreSurfaceContainer,
-                mSurfaceMode == SurfaceMode.SINGLE_PANE ? mTasksSurface.getContainerView() : null,
-                mPropertyModel);
+        mExploreSurfaceCoordinator =
+                new ExploreSurfaceCoordinator(mActivity, mActivity.getCompositorViewHolder(),
+                        mSurfaceMode == StartSurfaceMediator.SurfaceMode.SINGLE_PANE
+                                ? mTasksSurface.getContainerView()
+                                : null,
+                        mPropertyModel);
     }
 
     private TabSwitcher.Controller initializeSecondaryTasksSurface() {
-        assert mSurfaceMode == SurfaceMode.SINGLE_PANE;
+        assert mSurfaceMode == StartSurfaceMediator.SurfaceMode.SINGLE_PANE;
         assert mSecondaryTasksSurface == null;
 
-        mSecondaryTasksSurfacePropertyModel = new PropertyModel(TasksSurfaceProperties.ALL_KEYS);
+        PropertyModel propertyModel = new PropertyModel(TasksSurfaceProperties.ALL_KEYS);
+        mStartSurfaceMediator.setSecondaryTasksSurfacePropertyModel(propertyModel);
         mSecondaryTasksSurface = TabManagementModuleProvider.getDelegate().createTasksSurface(
-                mActivity, false, mSecondaryTasksSurfacePropertyModel);
-        mActivity.getCompositorViewHolder().addView(mSecondaryTasksSurface.getContainerView());
+                mActivity, false, propertyModel);
+        // TODO(crbug.com/1000295): Put TasksSurface view inside Tab switcher recycler view.
+        // This is a temporarily solution to make the TasksSurfaceView scroll together with the
+        // Tab switcher, however this solution has performance issue when the Tab switcher is in
+        // Grid mode, which is a launcher blocker. Check the bug details.
+        mSecondaryTasksSurfacePropertyModelChangeProcessor = PropertyModelChangeProcessor.create(
+                mPropertyModel,
+                new SecondaryTasksSurfaceViewBinder.ViewHolder(mActivity.getCompositorViewHolder(),
+                        (NestedScrollView) LayoutInflater.from(mActivity).inflate(
+                                R.layout.ss_explore_scroll_container,
+                                mActivity.getCompositorViewHolder(), false),
+                        mSecondaryTasksSurface.getContainerView()),
+                SecondaryTasksSurfaceViewBinder::bind);
         if (mOnTabSelectingListener != null) {
             mSecondaryTasksSurface.setOnTabSelectingListener(mOnTabSelectingListener);
             mOnTabSelectingListener = null;
+        }
+        if (mFakeSearchBoxDelegate != null) {
+            mSecondaryTasksSurface.getFakeSearchBoxController().setDelegate(mFakeSearchBoxDelegate);
+            mFakeSearchBoxDelegate = null;
+        }
+        if (mVoiceRecognitionHandler != null) {
+            mSecondaryTasksSurface.getFakeSearchBoxController().setVoiceRecognitionHandler(
+                    mVoiceRecognitionHandler);
+            mVoiceRecognitionHandler = null;
         }
         return mSecondaryTasksSurface.getController();
     }

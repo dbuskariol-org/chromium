@@ -8,6 +8,7 @@ import static org.chromium.chrome.browser.tasks.TasksSurfaceProperties.IS_TAB_CA
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementModuleProvider;
@@ -24,6 +25,8 @@ public class TasksSurfaceCoordinator implements TasksSurface {
     private final TabSwitcher mTabSwitcher;
     private final TasksView mView;
     private final PropertyModelChangeProcessor mPropertyModelChangeProcessor;
+    private final MostVisitedListCoordinator mMostVisitedList;
+    private final TasksSurfaceMediator mMediator;
 
     public TasksSurfaceCoordinator(
             ChromeActivity activity, boolean isTabCarousel, PropertyModel propertyModel) {
@@ -38,6 +41,12 @@ public class TasksSurfaceCoordinator implements TasksSurface {
             mTabSwitcher = TabManagementModuleProvider.getDelegate().createGridTabSwitcher(
                     activity, mView.getTabSwitcherContainer());
         }
+
+        // TODO(mattsimmons): Handle incognito/dark theming.
+        LinearLayout mvTilesLayout = mView.findViewById(R.id.mv_tiles_layout);
+        mMostVisitedList = new MostVisitedListCoordinator(activity, mvTilesLayout);
+
+        mMediator = new TasksSurfaceMediator(propertyModel);
     }
 
     @Override
@@ -58,5 +67,10 @@ public class TasksSurfaceCoordinator implements TasksSurface {
     @Override
     public ViewGroup getContainerView() {
         return mView;
+    }
+
+    @Override
+    public FakeSearchBoxController getFakeSearchBoxController() {
+        return mMediator;
     }
 }

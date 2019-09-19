@@ -2188,10 +2188,6 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
 
                 if (getToolbarDataProvider().shouldShowLocationBarInOverviewMode()) {
                     mLocationBar.updateStatusIcon();
-
-                    if (getToolbarDataProvider().isInOverviewAndShowingOmnibox()) {
-                        mUrlBar.setText("");
-                    }
                 }
             }
         });

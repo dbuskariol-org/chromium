@@ -5,6 +5,7 @@
 package org.chromium.chrome.browser.tasks.tab_management;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.ViewGroup;
 
 import org.chromium.chrome.browser.ChromeActivity;
@@ -12,6 +13,7 @@ import org.chromium.chrome.browser.ThemeColorProvider;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
 import org.chromium.chrome.browser.compositor.layouts.LayoutRenderHost;
 import org.chromium.chrome.browser.compositor.layouts.LayoutUpdateHost;
+import org.chromium.chrome.browser.compositor.layouts.OverviewModeUiController;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tasks.TasksSurface;
 import org.chromium.chrome.browser.tasks.tab_groups.TabGroupModelFilter;
@@ -78,6 +80,14 @@ public interface TabManagementDelegate {
      * @return the {@link StartSurface}
      */
     StartSurface createStartSurface(ChromeActivity activity);
+
+    /**
+     * Create {@link OverviewModeUiController} for the given start surface.
+     * @param startSurface The given {@link StartSurface}
+     * @return The {@link OverviewModeUiController}
+     */
+    @Nullable
+    OverviewModeUiController createOverviewModeUiController(StartSurface startSurface);
 
     /**
      * Create a {@link TabGroupModelFilter} for the given {@link TabModel}.
