@@ -37,17 +37,18 @@ public final class ReturnToChromeExperimentsUtil {
      * @return true if past threshold, false if not past threshold or experiment cannot be loaded.
      */
     public static boolean shouldShowTabSwitcher(final long lastBackgroundedTimeMillis) {
+        if (!FeatureUtilities.isTabSwitcherOnReturnEnabled()) return false;
+
         if (lastBackgroundedTimeMillis == -1) {
-            // No last background timestamp set, use control behavior.
-            return false;
+            // No last background timestamp set, which should be after the first run.
+            return true;
         }
 
         int tabSwitcherAfterMillis = ChromeFeatureList.getFieldTrialParamByFeatureAsInt(
                 ChromeFeatureList.TAB_SWITCHER_ON_RETURN, TAB_SWITCHER_ON_RETURN_MS, -1);
-
         if (tabSwitcherAfterMillis < 0) {
-            // If no value for experiment, use control behavior.
-            return false;
+            // Default to 60 minutes.
+            tabSwitcherAfterMillis = 3600000;
         }
 
         long expirationTime = lastBackgroundedTimeMillis + tabSwitcherAfterMillis;

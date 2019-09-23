@@ -7,6 +7,7 @@ package org.chromium.chrome.features.start_surface;
 import static org.chromium.chrome.browser.tasks.TasksSurfaceProperties.IS_FAKE_SEARCH_BOX_VISIBLE;
 import static org.chromium.chrome.browser.tasks.TasksSurfaceProperties.IS_INCOGNITO;
 import static org.chromium.chrome.browser.tasks.TasksSurfaceProperties.IS_MV_TILES_VISIBLE;
+import static org.chromium.chrome.browser.tasks.TasksSurfaceProperties.IS_TAB_CAROUSEL_VISIBLE;
 import static org.chromium.chrome.browser.tasks.TasksSurfaceProperties.MORE_TABS_CLICK_LISTENER;
 import static org.chromium.chrome.features.start_surface.StartSurfaceProperties.BOTTOM_BAR_CLICKLISTENER;
 import static org.chromium.chrome.features.start_surface.StartSurfaceProperties.BOTTOM_BAR_HEIGHT;
@@ -26,6 +27,8 @@ import org.chromium.base.ContextUtils;
 import org.chromium.base.ObserverList;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.browser.feed.FeedSurfaceCoordinator;
+import org.chromium.chrome.browser.tab.Tab;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelObserver;
 import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
@@ -79,6 +82,7 @@ class StartSurfaceMediator
 
     private final ObserverList<StartSurface.OverviewModeObserver> mObservers = new ObserverList<>();
     private final TabSwitcher.Controller mController;
+    private final TabModelSelector mTabModelSelector;
     private final OverlayVisibilityHandler mOverlayVisibilityHandler;
     @Nullable
     private final PropertyModel mPropertyModel;
@@ -103,6 +107,7 @@ class StartSurfaceMediator
             @Nullable SecondaryTasksSurfaceInitializer secondaryTasksSurfaceInitializer,
             @SurfaceMode int surfaceMode) {
         mController = controller;
+        mTabModelSelector = tabModelSelector;
         mOverlayVisibilityHandler = overlayVisibilityHandler;
         mPropertyModel = propertyModel;
         mFeedSurfaceCreator = feedSurfaceCreator;
@@ -133,12 +138,34 @@ class StartSurfaceMediator
                         }
                     });
 
+            mIsIncognito = mTabModelSelector.isIncognitoSelected();
             if (mSurfaceMode == SurfaceMode.SINGLE_PANE) {
                 mPropertyModel.set(MORE_TABS_CLICK_LISTENER, this);
-            }
 
-            mIsIncognito = tabModelSelector.isIncognitoSelected();
-            tabModelSelector.addObserver(new EmptyTabModelSelectorObserver() {
+                TabModel normalTabModel = mTabModelSelector.getModel(false);
+                normalTabModel.addObserver(new EmptyTabModelObserver() {
+                    @Override
+                    public void willCloseTab(Tab tab, boolean animate) {
+                        if (!mPropertyModel.get(IS_SHOWING_OVERVIEW)) return;
+
+                        // Hide the more Tabs view when the last Tab will be closed.
+                        if (normalTabModel.getCount() <= 1
+                                // Secondary tasks surface is used as the main surface in incognito
+                                // mode.
+                                && !mIsIncognito) {
+                            assert mSurfaceMode == SurfaceMode.SINGLE_PANE;
+
+                            if (mSecondaryTasksSurfaceController != null
+                                    && mSecondaryTasksSurfaceController.overviewVisible()) {
+                                setSecondaryTasksSurfaceVisibility(false);
+                                setExploreSurfaceVisibility(true);
+                            }
+                            mPropertyModel.set(IS_TAB_CAROUSEL_VISIBLE, false);
+                        }
+                    }
+                });
+            }
+            mTabModelSelector.addObserver(new EmptyTabModelSelectorObserver() {
                 @Override
                 public void onTabModelSelected(TabModel newModel, TabModel oldModel) {
                     updateIncognitoMode(newModel.isIncognito());
@@ -222,6 +249,9 @@ class StartSurfaceMediator
                     setSecondaryTasksSurfaceVisibility(true);
                 } else {
                     setExploreSurfaceVisibility(true);
+
+                    mPropertyModel.set(IS_TAB_CAROUSEL_VISIBLE,
+                            mTabModelSelector.getModel(false).getCount() > 0);
                 }
             } else if (mSurfaceMode == SurfaceMode.TWO_PANES) {
                 RecordUserAction.record("StartSurface.TwoPanes");

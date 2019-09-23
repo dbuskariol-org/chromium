@@ -9,6 +9,7 @@ import org.chromium.base.ThreadUtils;
 import org.chromium.chrome.browser.incognito.IncognitoNotificationManager;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
+import org.chromium.chrome.browser.util.FeatureUtilities;
 
 import java.util.List;
 
@@ -81,7 +82,8 @@ public class IncognitoTabModel implements TabModel {
      */
     protected void destroyIncognitoIfNecessary() {
         ThreadUtils.assertOnUiThread();
-        if (!isEmpty() || mDelegateModel instanceof EmptyTabModel || mIsAddingTab) {
+        if (!isEmpty() || mDelegateModel instanceof EmptyTabModel || mIsAddingTab
+                || FeatureUtilities.isStartSurfaceEnabled()) {
             return;
         }
 

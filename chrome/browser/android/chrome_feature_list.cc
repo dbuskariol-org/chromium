@@ -542,7 +542,7 @@ const base::Feature kTabGroupsUiImprovementsAndroid{
     "TabGroupsUiImprovementsAndroid", base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kTabGridLayoutAndroid{"TabGridLayoutAndroid",
-                                          base::FEATURE_DISABLED_BY_DEFAULT};
+                                          base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kTabReparenting{"TabReparenting",
                                     base::FEATURE_ENABLED_BY_DEFAULT};
@@ -551,7 +551,7 @@ const base::Feature kTabSwitcherLongpressMenu{
     "TabSwitcherLongpressMenu", base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kTabSwitcherOnReturn{"TabSwitcherOnReturn",
-                                         base::FEATURE_DISABLED_BY_DEFAULT};
+                                         base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kTabToGTSAnimation{"TabToGTSAnimation",
                                        base::FEATURE_DISABLED_BY_DEFAULT};
@@ -567,7 +567,7 @@ const base::Feature kTrustedWebActivityNotificationDelegationEnrolment{
     base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kStartSurfaceAndroid{"StartSurfaceAndroid",
-                                         base::FEATURE_DISABLED_BY_DEFAULT};
+                                         base::FEATURE_ENABLED_BY_DEFAULT};
 
 // If enabled, keep logging and reporting UMA while chrome is backgrounded.
 const base::Feature kUmaBackgroundSessions{"UMABackgroundSessions",

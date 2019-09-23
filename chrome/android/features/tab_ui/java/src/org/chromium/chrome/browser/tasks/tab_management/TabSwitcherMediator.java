@@ -272,10 +272,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
 
         // TODO(crbug.com/982018): Let the start surface pass in the parameter and add unit test for
         // it. This is a temporary solution to keep this change minimum.
-        String feature = ChromeFeatureList.getFieldTrialParamByFeature(
-                ChromeFeatureList.START_SURFACE_ANDROID, "start_surface_variation");
-        mShowTabsInMruOrder = feature.equals("twopanes") || feature.equals("single")
-                || feature.equals("tasksonly");
+        mShowTabsInMruOrder = FeatureUtilities.isStartSurfaceEnabled();
     }
 
     /**

@@ -82,6 +82,7 @@ public class FeatureUtilities {
     private static Boolean sIsStartSurfaceEnabled;
     private static Boolean sIsTabGroupsAndroidEnabled;
     private static Boolean sIsTabToGtsAnimationEnabled;
+    private static Boolean sIsTabSwitcherOnReturnEnabled;
     private static Boolean sFeedEnabled;
     private static Boolean sServiceManagerForBackgroundPrefetch;
     private static Boolean sIsNetworkServiceWarmUpEnabled;
@@ -183,6 +184,7 @@ public class FeatureUtilities {
         cacheSwapPixelFormatToFixConvertFromTranslucentEnabled();
         cacheReachedCodeProfilerTrialGroup();
         cacheStartSurfaceEnabled();
+        cacheTabSwitcherOnReturnEnabled();
         cacheClickToCallOpenDialerDirectlyEnabled();
 
         if (isHighEndPhone()) cacheGridTabSwitcherEnabled();
@@ -482,9 +484,28 @@ public class FeatureUtilities {
             ChromePreferenceManager prefManager = ChromePreferenceManager.getInstance();
 
             sIsStartSurfaceEnabled = prefManager.readBoolean(
-                    ChromePreferenceManager.START_SURFACE_ENABLED_KEY, false);
+                    ChromePreferenceManager.START_SURFACE_ENABLED_KEY, true);
         }
         return sIsStartSurfaceEnabled;
+    }
+
+    private static void cacheTabSwitcherOnReturnEnabled() {
+        ChromePreferenceManager.getInstance().writeBoolean(
+                ChromePreferenceManager.TAB_SWITCHER_ON_RETURN_ENABLED_KEY,
+                ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_SWITCHER_ON_RETURN));
+    }
+
+    /**
+     * @return Whether the Tab switcher on return is enabled.
+     */
+    public static boolean isTabSwitcherOnReturnEnabled() {
+        if (sIsTabSwitcherOnReturnEnabled == null) {
+            ChromePreferenceManager prefManager = ChromePreferenceManager.getInstance();
+
+            sIsTabSwitcherOnReturnEnabled = prefManager.readBoolean(
+                    ChromePreferenceManager.TAB_SWITCHER_ON_RETURN_ENABLED_KEY, true);
+        }
+        return sIsTabSwitcherOnReturnEnabled;
     }
 
     private static void cacheGridTabSwitcherEnabled() {
@@ -507,7 +528,7 @@ public class FeatureUtilities {
             ChromePreferenceManager prefManager = ChromePreferenceManager.getInstance();
 
             sIsGridTabSwitcherEnabled = prefManager.readBoolean(
-                    ChromePreferenceManager.GRID_TAB_SWITCHER_ENABLED_KEY, false);
+                    ChromePreferenceManager.GRID_TAB_SWITCHER_ENABLED_KEY, true);
         }
         // TODO(yusufo): AccessibilityLayout check should not be here and the flow should support
         // changing that setting while Chrome is alive.
@@ -548,7 +569,7 @@ public class FeatureUtilities {
             sIsTabGroupsAndroidEnabled &= isHighEndPhone();
         }
 
-        return sIsTabGroupsAndroidEnabled;
+        return sIsTabGroupsAndroidEnabled && !isStartSurfaceEnabled();
     }
 
     /**
@@ -580,6 +601,7 @@ public class FeatureUtilities {
         Log.d(TAG, "GTS.MinSdkVersion = " + GridTabSwitcherUtil.getMinSdkVersion());
         Log.d(TAG, "GTS.MinMemoryMB = " + GridTabSwitcherUtil.getMinMemoryMB());
         return ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_TO_GTS_ANIMATION)
+                && !isStartSurfaceEnabled()
                 && Build.VERSION.SDK_INT >= GridTabSwitcherUtil.getMinSdkVersion()
                 && SysUtils.amountOfPhysicalMemoryKB() / 1024
                 >= GridTabSwitcherUtil.getMinMemoryMB();

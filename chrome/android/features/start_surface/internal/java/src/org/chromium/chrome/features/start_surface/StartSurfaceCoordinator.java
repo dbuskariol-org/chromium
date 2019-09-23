@@ -192,6 +192,10 @@ public class StartSurfaceCoordinator implements StartSurface {
     }
 
     private @StartSurfaceMediator.SurfaceMode int computeSurfaceMode() {
+        if (!FeatureUtilities.isStartSurfaceEnabled()) {
+            return StartSurfaceMediator.SurfaceMode.NO_START_SURFACE;
+        }
+
         String feature = ChromeFeatureList.getFieldTrialParamByFeature(
                 ChromeFeatureList.START_SURFACE_ANDROID, "start_surface_variation");
 
@@ -205,7 +209,7 @@ public class StartSurfaceCoordinator implements StartSurface {
 
         if (feature.equals("tasksonly")) return StartSurfaceMediator.SurfaceMode.TASKS_ONLY;
 
-        return StartSurfaceMediator.SurfaceMode.NO_START_SURFACE;
+        return StartSurfaceMediator.SurfaceMode.SINGLE_PANE;
     }
 
     private void createAndSetStartSurface() {

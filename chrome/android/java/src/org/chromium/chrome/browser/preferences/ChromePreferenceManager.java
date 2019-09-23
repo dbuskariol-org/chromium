@@ -322,6 +322,13 @@ public class ChromePreferenceManager {
     public static final String START_SURFACE_ENABLED_KEY = "start_surface_enabled";
 
     /**
+     * Whether or not the Tab switcher on return is enabled.
+     * Default value is false.
+     */
+    public static final String TAB_SWITCHER_ON_RETURN_ENABLED_KEY =
+            "tab_switcher_on_return_enabled";
+
+    /**
      * Whether or not the grid tab switcher is enabled.
      * Default value is false.
      */

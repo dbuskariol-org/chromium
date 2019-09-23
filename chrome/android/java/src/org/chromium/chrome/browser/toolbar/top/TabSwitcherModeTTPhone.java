@@ -94,6 +94,12 @@ public class TabSwitcherModeTTPhone extends OptimizedFrameLayout
 
             UiUtils.removeViewFromParent(mNewTabViewButton);
             mNewTabViewButton = null;
+        } else if (FeatureUtilities.isStartSurfaceEnabled()) {
+            UiUtils.removeViewFromParent(mNewTabImageButton);
+            mNewTabImageButton.destroy();
+            mNewTabImageButton = null;
+
+            mNewTabViewButton.setOnClickListener(this);
         } else {
             // TODO(twellington): Try to make NewTabButton responsible for handling its own clicks.
             //                    TabSwitcherBottomToolbarCoordinator also uses NewTabButton and

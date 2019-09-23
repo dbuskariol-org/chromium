@@ -296,6 +296,11 @@ public class AppMenuPropertiesDelegateImpl implements AppMenuPropertiesDelegate 
         disableEnableMenuItem(menu, R.id.new_incognito_tab_menu_id, true,
                 PrefServiceBridge.getInstance().isIncognitoModeEnabled(),
                 PrefServiceBridge.getInstance().isIncognitoModeManaged());
+
+        if (FeatureUtilities.isStartSurfaceEnabled()) {
+            disableEnableMenuItem(menu, R.id.new_tab_menu_id, false, false, false);
+            disableEnableMenuItem(menu, R.id.new_incognito_tab_menu_id, false, false, false);
+        }
     }
 
     /**
