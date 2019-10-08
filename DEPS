@@ -39,6 +39,7 @@ gclient_gn_args = [
 
 
 vars = {
+  "buildspec_platforms": "linux64, mac64, win, win64",
   # Variable that can be used to support multiple build scenarios, like having
   # Chromium specific targets in a client project's GN file or sync dependencies
   # conditionally etc.
@@ -171,7 +172,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling V8
   # and whatever else without interference from each other.
-  'v8_revision': 'refs/heads/chromium/3936',
+  'v8_revision': '62fdbf47faaec6de6db1867667af75f86f439772',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling swarming_client
   # and whatever else without interference from each other.
@@ -179,7 +180,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling ANGLE
   # and whatever else without interference from each other.
-  'angle_revision': 'refs/heads/chromium/3936',
+  'angle_revision': '6acfca3ad3e322638970a6301f39f5b4262a0cdd',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling SwiftShader
   # and whatever else without interference from each other.
@@ -187,7 +188,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling PDFium
   # and whatever else without interference from each other.
-  'pdfium_revision': 'refs/heads/chromium/3936',
+  'pdfium_revision': 'e5c62b37f645cec436a0b08cad7c9f185f5694f3',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling BoringSSL
   # and whatever else without interference from each other.
@@ -1532,7 +1533,7 @@ deps = {
     Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),
 
   'src-internal': {
-    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@refs/heads/chromium/3936',
+    'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git@3862f2ddeb3fd7f4f40db11929ca5e63ef2111c1',
     'condition': 'checkout_src_internal',
   },
 
