@@ -5,7 +5,6 @@
 <translation id="1010200102790553230">Wczytaj stronę później</translation>
 <translation id="1015730422737071372">Podaj dodatkowe informacje</translation>
 <translation id="1021110881106174305">Akceptowane karty</translation>
-<translation id="1023523064224774104">Przeglądarka Chromium wykryła, że strona, na której przed chwilą wpisano hasło, jest podejrzana. Zresetuj hasło teraz.</translation>
 <translation id="1032854598605920125">Obróć w prawo</translation>
 <translation id="1035334672863811645">zaloguj się w Chrome</translation>
 <translation id="1036348656032585052">Wyłącz</translation>
@@ -122,6 +121,7 @@
 <translation id="1501859676467574491">Pokaż karty z konta Google</translation>
 <translation id="1507202001669085618">&lt;p&gt;Ten komunikat pojawia się, jeśli do połączenia z internetem wymagane jest zalogowanie się w portalu Wi-Fi.&lt;/p&gt;
     &lt;p&gt;Aby naprawić błąd, kliknij &lt;strong&gt;Połącz&lt;/strong&gt; na stronie, którą chcesz otworzyć.&lt;/p&gt;</translation>
+<translation id="1513706915089223971">Lista wpisów historii</translation>
 <translation id="1517433312004943670">Numer telefonu jest wymagany</translation>
 <translation id="1517500485252541695">Akceptowane karty kredytowe i debetowe</translation>
 <translation id="1519264250979466059">Data kompilacji</translation>
@@ -307,6 +307,7 @@
 <translation id="2410754574180102685">Government-Legal</translation>
 <translation id="2413528052993050574">Ten serwer nie mógł udowodnić, że należy do <ph name="DOMAIN" />. Jego certyfikat bezpieczeństwa mógł zostać odwołany. Może to być spowodowane błędną konfiguracją lub przechwyceniem połączenia przez atakującego.</translation>
 <translation id="2438874542388153331">Cztery otwory po prawej</translation>
+<translation id="245044156129055925">Przed chwilą wpisano hasło na stronie wprowadzającej w błąd. Chromium zaleca natychmiastową zmianę hasła.</translation>
 <translation id="2463193859425327265">Zmień stronę główną</translation>
 <translation id="2463739503403862330">Wpisz</translation>
 <translation id="2465402087343596252">Architecture-E</translation>
@@ -617,6 +618,9 @@
 <translation id="397105322502079400">Obliczanie...</translation>
 <translation id="3973234410852337861">Strona <ph name="HOST_NAME" /> jest zablokowana</translation>
 <translation id="3981540111851280311">Domena <ph name="ENROLLMENT_DOMAIN" /> włączyła w Twojej przeglądarce dostępną w Chrome ochronę przed zagrożeniami dla firm. Ta funkcja ma dostęp do niektórych Twoich danych.</translation>
+<translation id="3987405730340719549">Według Chrome ta strona może być fałszywa.
+
+    Jeśli uważasz, że ten komunikat pojawił się w wyniku pomyłki, wejdź na https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals</translation>
 <translation id="3987940399970879459">Mniej niż 1 MB</translation>
 <translation id="3990250421422698716">Odsunięcie poszczególnych kopii</translation>
 <translation id="40103911065039147">{URL_count,plural, =1{1 strona w pobliżu}few{# strony w pobliżu}many{# stron w pobliżu}other{# strony w pobliżu}}</translation>
@@ -769,6 +773,7 @@
 <translation id="4728558894243024398">Platforma</translation>
 <translation id="4731967714531604179">Prc2 (koperta)</translation>
 <translation id="4736825316280949806">Uruchom ponownie Chromium</translation>
+<translation id="4737433075782228085">Ta strona jest podejrzana.</translation>
 <translation id="473775607612524610">Aktualizuj</translation>
 <translation id="4738601419177586157">Propozycja wyszukiwania: <ph name="TEXT" /></translation>
 <translation id="4742407542027196863">Zarządzaj hasłami…</translation>
@@ -875,7 +880,6 @@
 <translation id="5230733896359313003">Adres wysyłki</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">Zamknij</translation>
 <translation id="5250209940322997802">„Połącz z siecią”</translation>
 <translation id="5251803541071282808">Chmura</translation>
 <translation id="5252000469029418751">C7 (koperta)</translation>
@@ -995,6 +999,9 @@
 <translation id="5813119285467412249">&amp;Ponów dodanie</translation>
 <translation id="583281660410589416">Nieznany</translation>
 <translation id="5838278095973806738">Nie podawaj żadnych informacji poufnych (takich jak hasła czy dane kart kredytowych) w tej witrynie, bo osoby atakujące będą mogły je wykraść.</translation>
+<translation id="5855253129151731373">Nazwa hosta tej witryny jest podobna do <ph name="LOOKALIKE_DOMAIN" />. Złośliwe strony czasami podszywają się pod inne, wprowadzając niewielkie i trudne do zauważenia zmiany w nazwie domeny.
+
+    Jeśli uważasz, że ten komunikat pojawił się w wyniku pomyłki, wejdź na https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals</translation>
 <translation id="5860033963881614850">Wyłączone</translation>
 <translation id="5863847714970149516">Otwierana strona może próbować obciążyć Cię płatnością</translation>
 <translation id="5866257070973731571">Dodaj numer telefonu</translation>
@@ -1017,7 +1024,6 @@
 <translation id="5946937721014915347">Otwieram <ph name="SITE_NAME" />…</translation>
 <translation id="5947933617628957894">Tak, dodaj</translation>
 <translation id="5951495562196540101">Nie można zarejestrować się przy użyciu konta klienta (w pakiecie dostępna jest licencja).</translation>
-<translation id="5966900314707961320">Gdy to ustawienie jest włączone, witryny nie mogą używać plików cookie, które śledzą Twoje działania w sieci</translation>
 <translation id="5967592137238574583">Edytuj dane kontaktowe</translation>
 <translation id="5967867314010545767">Usuń z historii</translation>
 <translation id="5975083100439434680">Pomniejsz</translation>
@@ -1106,6 +1112,7 @@
 <translation id="6401136357288658127">Ta zasada została wycofana. Zalecamy używanie zasady <ph name="NEW_POLICY" />.</translation>
 <translation id="6404511346730675251">Edytuj zakładkę</translation>
 <translation id="6406765186087300643">C0 (koperta)</translation>
+<translation id="6409754798200046165">Przed chwilą wpisano hasło na stronie wprowadzającej w błąd. Chrome zaleca natychmiastową zmianę hasła.</translation>
 <translation id="6410264514553301377">Wpisz datę ważności i kod CVC karty <ph name="CREDIT_CARD" /></translation>
 <translation id="6415778972515849510">Chromium może Ci pomóc w zabezpieczeniu Twojego konta Google i zmianie hasła.</translation>
 <translation id="6427730057873428458">Składanie od góry i od dołu do środka</translation>
@@ -1403,6 +1410,7 @@ Dodatkowe informacje:
 <translation id="7932579305932748336">Powłoka</translation>
 <translation id="79338296614623784">Wpisz prawidłowy numer telefonu</translation>
 <translation id="7934052535022478634">Płatność została zrealizowana</translation>
+<translation id="7935031712718413217">Ten URL może służyć do podszywania się</translation>
 <translation id="7935318582918952113">DOM Distiller</translation>
 <translation id="7937554595067888181">Ważna do <ph name="EXPIRATION_DATE_ABBR" /></translation>
 <translation id="7938958445268990899">Certyfikat serwera nie jest jeszcze ważny.</translation>
@@ -1457,7 +1465,6 @@ Dodatkowe informacje:
 <translation id="8184538546369750125">Użyj globalnej wartości domyślnej (Zezwalaj)</translation>
 <translation id="8194797478851900357">&amp;Cofnij przeniesienie</translation>
 <translation id="8197543752516192074">Przetłumacz stronę</translation>
-<translation id="8197899142098070286">Przeglądarka Chrome wykryła, że strona, na której przed chwilą wpisano hasło, jest podejrzana. Zresetuj hasło teraz.</translation>
 <translation id="8201077131113104583">Nieprawidłowy URL aktualizowania dla rozszerzenia o identyfikatorze „<ph name="EXTENSION_ID" />”.</translation>
 <translation id="8202097416529803614">Podsumowanie zamówienia</translation>
 <translation id="8202370299023114387">Konflikt</translation>

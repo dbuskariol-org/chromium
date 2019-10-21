@@ -5,8 +5,6 @@
 <translation id="1010200102790553230">Зареждане на страницата по-късно</translation>
 <translation id="1015730422737071372">Въвеждане на допълнителни подробности</translation>
 <translation id="1021110881106174305">Приемани карти</translation>
-<translation id="1023523064224774104">Chromium установи, че току-що сте въвели паролата си в подозрителен
-          сайт. Моля, задайте нова парола сега!</translation>
 <translation id="1032854598605920125">Завъртане по часовниковата стрелка</translation>
 <translation id="1035334672863811645">Влезте в Chrome</translation>
 <translation id="1036348656032585052">Изключване</translation>
@@ -123,6 +121,7 @@
 <translation id="1501859676467574491">Показване на картите от профила ви в Google</translation>
 <translation id="1507202001669085618">&lt;p&gt;Ще виждате това съобщение за грешка, ако използвате портал за Wi-Fi, където трябва да влезете в профил, преди да можете да преминете онлайн.&lt;/p&gt;
 &lt;p&gt;За да отстраните грешката, кликнете върху &lt;strong&gt;Свързване&lt;/strong&gt; на страницата, която опитвате да отворите.&lt;/p&gt;</translation>
+<translation id="1513706915089223971">Списък на записите в историята</translation>
 <translation id="1517433312004943670">Телефонният номер е задължителен</translation>
 <translation id="1517500485252541695">Приемани кредитни и дебитни карти</translation>
 <translation id="1519264250979466059">Дата на версията</translation>
@@ -308,6 +307,7 @@
 <translation id="2410754574180102685">Government-Legal</translation>
 <translation id="2413528052993050574">Сървърът не можа да докаже, че е <ph name="DOMAIN" />; възможно е сертификатът му за сигурност да е оттеглен. Това може да се дължи на неправилно конфигуриране или на прихващане на връзката ви от атакуващ.</translation>
 <translation id="2438874542388153331">Четворно перфориране отдясно</translation>
+<translation id="245044156129055925">Току-що въведохте паролата си в измамнически сайт. Chromium препоръчва да я промените сега.</translation>
 <translation id="2463193859425327265">Промяна на началната страница</translation>
 <translation id="2463739503403862330">Попълване</translation>
 <translation id="2465402087343596252">Architecture-E</translation>
@@ -616,6 +616,9 @@
 <translation id="397105322502079400">Изчислява се...</translation>
 <translation id="3973234410852337861">Хостът <ph name="HOST_NAME" /> е блокиран</translation>
 <translation id="3981540111851280311"><ph name="ENROLLMENT_DOMAIN" /> активира защитата срещу заплахи на Chrome Enterprise в браузъра ви. Функцията има достъп до някои от данните ви.</translation>
+<translation id="3987405730340719549">Chrome установи, че този сайт може да е фалшив или измамнически.
+
+    Ако смятате, че това е грешка, моля, посетете https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
 <translation id="3987940399970879459">По-малко от 1 МБ</translation>
 <translation id="3990250421422698716">Разделно офсетово отпечатване</translation>
 <translation id="40103911065039147">{URL_count,plural, =1{1 уеб страница в близост}other{# уеб страници в близост}}</translation>
@@ -768,6 +771,7 @@
 <translation id="4728558894243024398">Платформа</translation>
 <translation id="4731967714531604179">Prc2 (плик)</translation>
 <translation id="4736825316280949806">Рестартирайте Chromium.</translation>
+<translation id="4737433075782228085">Тази страница е подозрителна.</translation>
 <translation id="473775607612524610">Актуализиране</translation>
 <translation id="4738601419177586157">Предложение за търсене на „<ph name="TEXT" />“</translation>
 <translation id="4742407542027196863">Управление на паролите…</translation>
@@ -874,7 +878,6 @@
 <translation id="5230733896359313003">Адрес за доставка</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12 x 19</translation>
-<translation id="5234764350956374838">Отхвърляне</translation>
 <translation id="5250209940322997802">„Свързване с мрежа“</translation>
 <translation id="5251803541071282808">Облак</translation>
 <translation id="5252000469029418751">C7 (плик)</translation>
@@ -994,6 +997,9 @@
 <translation id="5813119285467412249">&amp;Възстановяване на добавянето</translation>
 <translation id="583281660410589416">Неизвестно</translation>
 <translation id="5838278095973806738">Не ви препоръчваме да въвеждате поверителна информация в този сайт (например пароли или номера на кредитни карти), тъй като може да бъде открадната от извършители на атаки.</translation>
+<translation id="5855253129151731373">Името на хоста за този сайт наподобява това на <ph name="LOOKALIKE_DOMAIN" />. Понякога извършителите на атаки имитират сайтове, като правят незначителни, труднозабележими промени в името на домейна.
+
+    Ако смятате, че това е грешка, моля, посетете https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
 <translation id="5860033963881614850">Изключено</translation>
 <translation id="5863847714970149516">На страницата, която искате да посетите, е възможно да ви бъдат удържани средства</translation>
 <translation id="5866257070973731571">Добавяне на телефонен номер</translation>
@@ -1016,7 +1022,6 @@
 <translation id="5946937721014915347">Отваря се <ph name="SITE_NAME" />…</translation>
 <translation id="5947933617628957894">Да, искам</translation>
 <translation id="5951495562196540101">Не е възможно регистриране с профил на потребител (налице е лиценз в пакет).</translation>
-<translation id="5966900314707961320">Когато тази функция е включена, сайтовете не могат да използват „бисквитки“, които проследяват активността ви в мрежата</translation>
 <translation id="5967592137238574583">Редактиране на информацията за връзка</translation>
 <translation id="5967867314010545767">Премахване от историята</translation>
 <translation id="5975083100439434680">Намаляване на мащаба</translation>
@@ -1105,6 +1110,7 @@
 <translation id="6401136357288658127">Това правило е оттеглено. Вместо него използвайте <ph name="NEW_POLICY" />.</translation>
 <translation id="6404511346730675251">Редактиране на отметката</translation>
 <translation id="6406765186087300643">C0 (плик)</translation>
+<translation id="6409754798200046165">Току-що въведохте паролата си в измамнически сайт. Chrome препоръчва да я промените сега.</translation>
 <translation id="6410264514553301377">Въвеждане на датата на валидност и кода за проверка за <ph name="CREDIT_CARD" /></translation>
 <translation id="6415778972515849510">Chromium може да ви помогне да защитите профила си в Google и да промените паролата си.</translation>
 <translation id="6427730057873428458">Сгъване на двата края навътре</translation>
@@ -1402,6 +1408,7 @@
 <translation id="7932579305932748336">Покритие</translation>
 <translation id="79338296614623784">Въведете валиден телефонен номер</translation>
 <translation id="7934052535022478634">Плащането бе извършено</translation>
+<translation id="7935031712718413217">URL адрес с потенциален спуфинг</translation>
 <translation id="7935318582918952113">DOM Distiller</translation>
 <translation id="7937554595067888181">Изтича на <ph name="EXPIRATION_DATE_ABBR" /></translation>
 <translation id="7938958445268990899">Сертификатът на сървъра още не е валиден.</translation>
@@ -1456,7 +1463,6 @@
 <translation id="8184538546369750125">Използване на глобалната стандартна стойност (разрешаване)</translation>
 <translation id="8194797478851900357">&amp;Отмяна на преместването</translation>
 <translation id="8197543752516192074">Превод на страницата</translation>
-<translation id="8197899142098070286">Chrome установи, че току-що сте въвели паролата си в подозрителен сайт. Моля, задайте нова парола сега!</translation>
 <translation id="8201077131113104583">Невалиден URL адрес за актуализиране на разширението с идентификационен номер <ph name="EXTENSION_ID" />.</translation>
 <translation id="8202097416529803614">Обобщена информация за поръчката</translation>
 <translation id="8202370299023114387">Конфликт</translation>

@@ -5,7 +5,6 @@
 <translation id="1010200102790553230">保存网页以供日后加载</translation>
 <translation id="1015730422737071372">提供其他详细信息</translation>
 <translation id="1021110881106174305">接受的信用卡</translation>
-<translation id="1023523064224774104">Chromium 检测到，您刚刚在一个可疑的网站中输入了密码。请立即重置您的密码！</translation>
 <translation id="1032854598605920125">顺时针旋转</translation>
 <translation id="1035334672863811645">登录 Chrome</translation>
 <translation id="1036348656032585052">关闭</translation>
@@ -855,7 +854,6 @@
 <translation id="5230733896359313003">送货地址</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">关闭</translation>
 <translation id="5250209940322997802">“连接到网络”</translation>
 <translation id="5251803541071282808">云端</translation>
 <translation id="5252000469029418751">C7 (Envelope)</translation>
@@ -997,7 +995,6 @@
 <translation id="5946937721014915347">正在打开 <ph name="SITE_NAME" />…</translation>
 <translation id="5947933617628957894">添加</translation>
 <translation id="5951495562196540101">无法通过消费者帐号注册（有封装的许可）。</translation>
-<translation id="5966900314707961320">此项处于开启状态时，网站无法使用 Cookie 来跟踪您在网上的活动</translation>
 <translation id="5967592137238574583">修改联系信息</translation>
 <translation id="5967867314010545767">从历史记录中移除</translation>
 <translation id="5975083100439434680">缩小</translation>
@@ -1436,7 +1433,6 @@
 <translation id="8184538546369750125">使用全局默认设置（允许）</translation>
 <translation id="8194797478851900357">撤消移动(&amp;U)</translation>
 <translation id="8197543752516192074">翻译网页</translation>
-<translation id="8197899142098070286">Chrome 检测到，您刚刚在一个可疑的网站中输入了密码。请立即重置您的密码！</translation>
 <translation id="8201077131113104583">ID 为“<ph name="EXTENSION_ID" />”的扩展程序的更新网址无效。</translation>
 <translation id="8202097416529803614">订单摘要</translation>
 <translation id="8202370299023114387">冲突</translation>

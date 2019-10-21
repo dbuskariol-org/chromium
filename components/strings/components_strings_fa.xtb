@@ -5,8 +5,6 @@
 <translation id="1010200102790553230">بار کردن صفحه در فرصتی دیگر</translation>
 <translation id="1015730422737071372">جزئیات بیشتری ارائه دهید</translation>
 <translation id="1021110881106174305">کارت‌های قابل‌ قبول</translation>
-<translation id="1023523064224774104">‏Chromium تشخیص داده است که اخیراً گذرواژه‌تان را در سایتی
-          مشکوک وارد کرده‌اید. لطفاً همین‌الان گذرواژه‌تان را بازنشانی کنید!</translation>
 <translation id="1032854598605920125">چرخش در جهت عقربه‌های ساعت</translation>
 <translation id="1035334672863811645">‏ورود به سیستم Chrome</translation>
 <translation id="1036348656032585052">خاموش کردن</translation>
@@ -875,7 +873,6 @@
 <translation id="5230733896359313003">نشانی تحویل کالا</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">لغو کردن</translation>
 <translation id="5250209940322997802">«به شبکه متصل شوید»</translation>
 <translation id="5251803541071282808">Cloud</translation>
 <translation id="5252000469029418751">C7 (Envelope)</translation>
@@ -1017,7 +1014,6 @@
 <translation id="5946937721014915347">درحال باز کردن <ph name="SITE_NAME" />…</translation>
 <translation id="5947933617628957894">بله، اضافه شود</translation>
 <translation id="5951495562196540101">نمی‌توان با حساب مصرف‌کننده ثبت‌نام کرد (مجوز بسته‌بندی دردسترس است).</translation>
-<translation id="5966900314707961320">وقتی روشن باشد، سایت‌ها نمی‌توانند از کوکی‌هایی استفاده کنند که شما را در وب ردیابی می‌کند</translation>
 <translation id="5967592137238574583">ویرایش اطلاعات تماس</translation>
 <translation id="5967867314010545767">حذف از سابقه</translation>
 <translation id="5975083100439434680">دورنمایی کردن</translation>
@@ -1457,7 +1453,6 @@
 <translation id="8184538546369750125">استفاده از پیش‌فرض جهانی (مجاز)</translation>
 <translation id="8194797478851900357">&amp;واگرد انتقال</translation>
 <translation id="8197543752516192074">ترجمه صفحه</translation>
-<translation id="8197899142098070286">‏Chrome تشخیص داده است که اخیراً گذرواژه‌تان را در سایتی مشکوک وارد کرده‌اید. لطفاً همین‌الان گذرواژه‌تان را بازنشانی کنید!</translation>
 <translation id="8201077131113104583">نشانی وب به‌روزرسانی نامعتبر برای برنامه افزودنی با شناسه «<ph name="EXTENSION_ID" />».</translation>
 <translation id="8202097416529803614">خلاصه سفارش</translation>
 <translation id="8202370299023114387">اختلال</translation>

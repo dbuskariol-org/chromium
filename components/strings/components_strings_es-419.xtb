@@ -5,8 +5,6 @@
 <translation id="1010200102790553230">Cargar la página más tarde</translation>
 <translation id="1015730422737071372">Proporciona más detalles</translation>
 <translation id="1021110881106174305">Tarjetas aceptadas</translation>
-<translation id="1023523064224774104">Chromium detectó que acabas de ingresar tu contraseña en un sitio
-          sospechoso. Restablece la contraseña ahora.</translation>
 <translation id="1032854598605920125">Girar a la derecha</translation>
 <translation id="1035334672863811645">acceder a Chrome</translation>
 <translation id="1036348656032585052">Desactivar</translation>
@@ -875,7 +873,6 @@
 <translation id="5230733896359313003">Dirección de envío</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">Rechazar</translation>
 <translation id="5250209940322997802">"Conectarse a una red"</translation>
 <translation id="5251803541071282808">Nube</translation>
 <translation id="5252000469029418751">C7 (Envelope)</translation>
@@ -1017,7 +1014,6 @@
 <translation id="5946937721014915347">Abriendo <ph name="SITE_NAME" />…</translation>
 <translation id="5947933617628957894">Sí, agregar</translation>
 <translation id="5951495562196540101">No se puede realizar la inscripción con una cuenta personal (licencia de paquete disponible).</translation>
-<translation id="5966900314707961320">Cuando esta opción está activada, los sitios no pueden usar cookies para rastrearte en la Web</translation>
 <translation id="5967592137238574583">Editar la información de contacto</translation>
 <translation id="5967867314010545767">Eliminar del historial</translation>
 <translation id="5975083100439434680">Alejar</translation>
@@ -1457,7 +1453,6 @@ Detalles adicionales:
 <translation id="8184538546369750125">Usar configuración global predeterminada (Permitir)</translation>
 <translation id="8194797478851900357">&amp;Deshacer Mover</translation>
 <translation id="8197543752516192074">Traducir página</translation>
-<translation id="8197899142098070286">Chrome detectó que acabas de ingresar tu contraseña en un sitio sospechoso. Restablece la contraseña ahora.</translation>
 <translation id="8201077131113104583">URL de actualización no válida para la extensión con ID "<ph name="EXTENSION_ID" />"</translation>
 <translation id="8202097416529803614">Resumen del pedido</translation>
 <translation id="8202370299023114387">Conflicto</translation>

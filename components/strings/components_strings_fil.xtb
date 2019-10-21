@@ -5,8 +5,6 @@
 <translation id="1010200102790553230">I-load ang page sa ibang pagkakataon</translation>
 <translation id="1015730422737071372">Magbigay ng mga karagdagang detalye</translation>
 <translation id="1021110881106174305">Mga tinatanggap na card</translation>
-<translation id="1023523064224774104">Natukoy ng Chromium na kakatapos mo lang ilagay ang iyong password sa isang site na
-          kahina-hinala. Paki-reset ang iyong password ngayon!</translation>
 <translation id="1032854598605920125">I-rotate pakanan</translation>
 <translation id="1035334672863811645">mag-sign in sa Chrome</translation>
 <translation id="1036348656032585052">I-off</translation>
@@ -862,7 +860,6 @@
 <translation id="5230733896359313003">Address na Padadalhan</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">Balewalain</translation>
 <translation id="5250209940322997802">"Kumonekta sa network"</translation>
 <translation id="5251803541071282808">Cloud</translation>
 <translation id="5252000469029418751">C7 (Envelope)</translation>
@@ -1004,7 +1001,6 @@
 <translation id="5946937721014915347">Binubuksan ang <ph name="SITE_NAME" />…</translation>
 <translation id="5947933617628957894">Oo, idagdag</translation>
 <translation id="5951495562196540101">Hindi maka-enroll gamit ang account ng consumer (may available na naka-package na lisensya).</translation>
-<translation id="5966900314707961320">Kapag naka-on, hindi makakagamit ang mga site ng cookies na sumusubaybay sa iyo sa buong web</translation>
 <translation id="5967592137238574583">I-edit ang Impormasyon ng Contact</translation>
 <translation id="5967867314010545767">Alisin sa history</translation>
 <translation id="5975083100439434680">Mag-zoom out</translation>
@@ -1444,7 +1440,6 @@ Mga karagdagang detalye:
 <translation id="8184538546369750125">Gamitin ang pangkalahatang default (Payagan)</translation>
 <translation id="8194797478851900357">&amp;I-undo ang Paglilipat</translation>
 <translation id="8197543752516192074">Isalin ang Page</translation>
-<translation id="8197899142098070286">Natukoy ng Chrome na kakatapos mo lang ilagay ang iyong password sa isang site na kahina-hinala. Paki-reset ang iyong password ngayon!</translation>
 <translation id="8201077131113104583">Di-wastong URL ng update para sa extension na may ID na "<ph name="EXTENSION_ID" />."</translation>
 <translation id="8202097416529803614">Buod ng order</translation>
 <translation id="8202370299023114387">Hindi pagkakasundo</translation>

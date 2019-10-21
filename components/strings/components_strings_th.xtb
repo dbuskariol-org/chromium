@@ -5,7 +5,6 @@
 <translation id="1010200102790553230">โหลดหน้าภายหลัง</translation>
 <translation id="1015730422737071372">ให้รายละเอียดเพิ่มเติม</translation>
 <translation id="1021110881106174305">บัตรที่ยอมรับ</translation>
-<translation id="1023523064224774104">Chromium ตรวจพบว่าคุณเพิ่งใส่รหัสผ่านในเว็บไซต์ที่ไม่น่าไว้ใจ โปรดรีเซ็ตรหัสผ่านเดี๋ยวนี้</translation>
 <translation id="1032854598605920125">หมุนตามเข็มนาฬิกา</translation>
 <translation id="1035334672863811645">ลงชื่อเข้าใช้ Chrome</translation>
 <translation id="1036348656032585052">ปิด</translation>
@@ -858,7 +857,6 @@
 <translation id="5230733896359313003">ที่อยู่ในการจัดส่ง</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">ปิด</translation>
 <translation id="5250209940322997802">"เชื่อมต่อกับเครือข่าย"</translation>
 <translation id="5251803541071282808">ระบบคลาวด์</translation>
 <translation id="5252000469029418751">C7 (ซองจดหมาย)</translation>
@@ -1000,7 +998,6 @@
 <translation id="5946937721014915347">กำลังเปิด <ph name="SITE_NAME" />…</translation>
 <translation id="5947933617628957894">เพิ่มเลย</translation>
 <translation id="5951495562196540101">ลงทะเบียนด้วยบัญชีผู้ใช้ทั่วไปไม่ได้ (มีใบอนุญาตแบบแพ็กเกจ)</translation>
-<translation id="5966900314707961320">เมื่อเปิดใช้ เว็บไซต์ต่างๆ จะใช้คุกกี้ที่ติดตามคุณในอินเทอร์เน็ตไม่ได้</translation>
 <translation id="5967592137238574583">แก้ไขข้อมูลติดต่อ</translation>
 <translation id="5967867314010545767">ลบจากประวัติการเข้าชม</translation>
 <translation id="5975083100439434680">ย่อ</translation>
@@ -1440,7 +1437,6 @@
 <translation id="8184538546369750125">ใช้ค่าเริ่มต้นสากล (อนุญาต)</translation>
 <translation id="8194797478851900357">&amp;เลิกทำการย้าย</translation>
 <translation id="8197543752516192074">แปลหน้าเว็บ</translation>
-<translation id="8197899142098070286">Chrome ตรวจพบว่าคุณเพิ่งใส่รหัสผ่านในเว็บไซต์ที่ไม่น่าไว้ใจ โปรดรีเซ็ตรหัสผ่านเดี๋ยวนี้</translation>
 <translation id="8201077131113104583">การอัปเดต URL ไม่ถูกต้องสำหรับส่วนขยายรหัส "<ph name="EXTENSION_ID" />"</translation>
 <translation id="8202097416529803614">ข้อมูลสรุปคำสั่งซื้อ</translation>
 <translation id="8202370299023114387">ความขัดแย้ง</translation>

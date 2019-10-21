@@ -5,8 +5,6 @@
 <translation id="1010200102790553230">Tải trang vào lúc khác</translation>
 <translation id="1015730422737071372">Cung cấp chi tiết bổ sung</translation>
 <translation id="1021110881106174305">Thẻ được chấp nhận</translation>
-<translation id="1023523064224774104">Chromium phát hiện thấy bạn vừa nhập mật khẩu vào một trang web
-          đáng ngờ. Vui lòng đặt lại mật khẩu của bạn ngay bây giờ!</translation>
 <translation id="1032854598605920125">Xoay theo chiều kim đồng hồ</translation>
 <translation id="1035334672863811645">đăng nhập vào Chrome</translation>
 <translation id="1036348656032585052">Tắt</translation>
@@ -876,7 +874,6 @@
 <translation id="5230733896359313003">Địa chỉ giao hàng</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">Loại bỏ</translation>
 <translation id="5250209940322997802">"Kết nối với mạng"</translation>
 <translation id="5251803541071282808">Đám mây</translation>
 <translation id="5252000469029418751">C7 (Phong bì)</translation>
@@ -1018,7 +1015,6 @@
 <translation id="5946937721014915347">Đang mở <ph name="SITE_NAME" />…</translation>
 <translation id="5947933617628957894">Có, thêm</translation>
 <translation id="5951495562196540101">Không thể đăng ký bằng tài khoản người dùng thông thường (có sẵn giấy phép theo gói).</translation>
-<translation id="5966900314707961320">Khi tính năng này đang bật, các trang web không thể dùng cookie theo dõi bạn trên web</translation>
 <translation id="5967592137238574583">Chỉnh sửa thông tin liên hệ</translation>
 <translation id="5967867314010545767">Xóa khỏi lịch sử</translation>
 <translation id="5975083100439434680">Thu nhỏ</translation>
@@ -1458,7 +1454,6 @@ Thông tin chi tiết bổ sung:
 <translation id="8184538546369750125">Sử dụng cài đặt mặc định chung (Cho phép)</translation>
 <translation id="8194797478851900357">&amp;Hoàn tác di chuyển</translation>
 <translation id="8197543752516192074">Dịch trang</translation>
-<translation id="8197899142098070286">Chrome phát hiện thấy bạn vừa nhập mật khẩu vào một trang web đáng ngờ. Vui lòng đặt lại mật khẩu của bạn ngay bây giờ!</translation>
 <translation id="8201077131113104583">URL cập nhật không hợp lệ cho tiện ích có ID "<ph name="EXTENSION_ID" />".</translation>
 <translation id="8202097416529803614">Tóm tắt đơn đặt hàng</translation>
 <translation id="8202370299023114387">Xung đột</translation>

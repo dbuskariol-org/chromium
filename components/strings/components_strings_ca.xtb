@@ -5,8 +5,6 @@
 <translation id="1010200102790553230">Carrega la pàgina més tard</translation>
 <translation id="1015730422737071372">Proporcioneu més informació</translation>
 <translation id="1021110881106174305">Targetes acceptades</translation>
-<translation id="1023523064224774104">Chromium ha detectat que has escrit la contrasenya en un lloc
-          sospitós. Restableix la contrasenya ara.</translation>
 <translation id="1032854598605920125">Gira en sentit horari</translation>
 <translation id="1035334672863811645">Inicia la sessió a Chrome</translation>
 <translation id="1036348656032585052">Desactiva</translation>
@@ -860,7 +858,6 @@
 <translation id="5230733896359313003">Adreça d'enviament</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">Omet</translation>
 <translation id="5250209940322997802">"Connecteu-vos a la xarxa"</translation>
 <translation id="5251803541071282808">Núvol</translation>
 <translation id="5252000469029418751">C7 (sobre)</translation>
@@ -1002,7 +999,6 @@
 <translation id="5946937721014915347">S'està obrint <ph name="SITE_NAME" />…</translation>
 <translation id="5947933617628957894">Sí, afegeix</translation>
 <translation id="5951495562196540101">El dispositiu no es pot inscriure amb un compte de consumidor (hi ha una llicència associada disponible).</translation>
-<translation id="5966900314707961320">Quan està activada, els llocs web no poden utilitzar galetes que facin un seguiment de la teva activitat al web</translation>
 <translation id="5967592137238574583">Edita la informació de contacte</translation>
 <translation id="5967867314010545767">Elimina de l'historial</translation>
 <translation id="5975083100439434680">Redueix</translation>
@@ -1442,7 +1438,6 @@ Detalls addicionals:
 <translation id="8184538546369750125">Utilitza l'opció predeterminada global (Permet)</translation>
 <translation id="8194797478851900357">&amp;Desfés el moviment</translation>
 <translation id="8197543752516192074">Tradueix la pàgina</translation>
-<translation id="8197899142098070286">Chrome ha detectat que has escrit la contrasenya en un lloc sospitós. Restableix la contrasenya ara.</translation>
 <translation id="8201077131113104583">L'URL d'actualització per a l'extensió amb identificador "<ph name="EXTENSION_ID" />" no és vàlid.</translation>
 <translation id="8202097416529803614">Resum de la comanda</translation>
 <translation id="8202370299023114387">Conflicte</translation>

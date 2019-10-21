@@ -5,7 +5,6 @@
 <translation id="1010200102790553230">페이지 나중에 로드하기</translation>
 <translation id="1015730422737071372">추가 세부정보 제공</translation>
 <translation id="1021110881106174305">사용할 수 있는 카드</translation>
-<translation id="1023523064224774104">Chromium에서 방금 의심스러운 사이트에 비밀번호를 입력했음을 감지했습니다. 지금 바로 비밀번호를 재설정하세요.</translation>
 <translation id="1032854598605920125">시계 방향으로 회전</translation>
 <translation id="1035334672863811645">Chrome에 로그인</translation>
 <translation id="1036348656032585052">사용 중지</translation>
@@ -873,7 +872,6 @@
 <translation id="5230733896359313003">배송지 주소</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">숨기기</translation>
 <translation id="5250209940322997802">'네트워크에 연결'</translation>
 <translation id="5251803541071282808">클라우드</translation>
 <translation id="5252000469029418751">C7(봉투)</translation>
@@ -1015,7 +1013,6 @@
 <translation id="5946937721014915347"><ph name="SITE_NAME" /> 여는 중…</translation>
 <translation id="5947933617628957894">예, 추가합니다</translation>
 <translation id="5951495562196540101">일반 계정으로 등록할 수 없습니다(패키지 라이선스 사용 가능).</translation>
-<translation id="5966900314707961320">사용 설정하면 사이트가 웹 전반에서 사용자를 추적하는 쿠키를 사용할 수 없습니다.</translation>
 <translation id="5967592137238574583">연락처 정보 수정</translation>
 <translation id="5967867314010545767">기록에서 삭제</translation>
 <translation id="5975083100439434680">축소</translation>
@@ -1454,7 +1451,6 @@
 <translation id="8184538546369750125">전체 기본값 사용(허용)</translation>
 <translation id="8194797478851900357">이동 실행 취소(&amp;U)</translation>
 <translation id="8197543752516192074">페이지 번역</translation>
-<translation id="8197899142098070286">Chrome에서 방금 의심스러운 사이트에 비밀번호를 입력했음을 감지했습니다. 지금 바로 비밀번호를 재설정하세요.</translation>
 <translation id="8201077131113104583">ID가 '<ph name="EXTENSION_ID" />'인 확장 프로그램에 대한 잘못된 업데이트 URL</translation>
 <translation id="8202097416529803614">주문 요약</translation>
 <translation id="8202370299023114387">충돌</translation>

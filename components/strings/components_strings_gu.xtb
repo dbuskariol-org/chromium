@@ -5,7 +5,6 @@
 <translation id="1010200102790553230">પેજ પછીથી લોડ કરો</translation>
 <translation id="1015730422737071372">અતિરિક્ત વિગતો પ્રદાન કરો</translation>
 <translation id="1021110881106174305">સ્વીકારેલ કાર્ડ</translation>
-<translation id="1023523064224774104">Chromiumને જાણવા મળ્યું કે તમે અત્યારે જે સાઇટમાં તમારો પાસવર્ડ દાખલ કર્યો તે શંકાસ્પદ છે. કૃપા કરીને તમારો પાસવર્ડ હમણાં જ રીસેટ કરો!</translation>
 <translation id="1032854598605920125">ઘડિયાળની દિશામાં ફેરવો</translation>
 <translation id="1035334672863811645">Chrome માં સાઇન ઇન કરો</translation>
 <translation id="1036348656032585052">બંધ કરો</translation>
@@ -870,7 +869,6 @@
 <translation id="5230733896359313003">વિતરણ માટેનું સરનામું</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">કાઢી નાખો</translation>
 <translation id="5250209940322997802">"નેટવર્ક સાથે કનેક્ટ કરો"</translation>
 <translation id="5251803541071282808">મેઘ</translation>
 <translation id="5252000469029418751">C7 (એન્વલપ)</translation>
@@ -1012,7 +1010,6 @@
 <translation id="5946937721014915347"><ph name="SITE_NAME" /> ખોલી રહ્યાં છે…</translation>
 <translation id="5947933617628957894">હા, ઉમેરો</translation>
 <translation id="5951495562196540101">ઉપભોક્તા એકાઉન્ટ સાથે નોંધણી કરાવી શકાતી નથી (પૅકેજમાં લાઇસન્સ ઉપલબ્ધ છે).</translation>
-<translation id="5966900314707961320">જ્યારે ચાલુ કરવામાં આવે, ત્યારે સાઇટ તમને વેબ પર બધે ટ્રૅક કરી શકે એવી કુકીનો ઉપયોગ કરી શકશે નહીં</translation>
 <translation id="5967592137238574583">સંપર્ક માહિતીમાં ફેરફાર કરો</translation>
 <translation id="5967867314010545767">ઇતિહાસમાંથી દૂર કરો</translation>
 <translation id="5975083100439434680">ઝૂમ ઘટાડો</translation>
@@ -1452,7 +1449,6 @@
 <translation id="8184538546369750125">વૈશ્વિક ડિફોલ્ટનો ઉપયોગ કરો (મંજૂરી આપો)</translation>
 <translation id="8194797478851900357">&amp;ખસેડવું પૂર્વવત્‌ કરો</translation>
 <translation id="8197543752516192074">પેજનો અનુવાદ કરો</translation>
-<translation id="8197899142098070286">Chromeને જાણવા મળ્યું કે તમે અત્યારે જે સાઇટમાં તમારો પાસવર્ડ દાખલ કર્યો તે શંકાસ્પદ છે. કૃપા કરીને તમારો પાસવર્ડ હમણાં જ રીસેટ કરો!</translation>
 <translation id="8201077131113104583">ID "<ph name="EXTENSION_ID" />" સાથેના એક્સટેન્શન માટે અમાન્ય અપડેટ URL.</translation>
 <translation id="8202097416529803614">ઓર્ડરનો સારાંશ</translation>
 <translation id="8202370299023114387">વિરોધ</translation>

@@ -5,7 +5,6 @@
 <translation id="1010200102790553230">後でページを読み込む</translation>
 <translation id="1015730422737071372">詳細を報告する</translation>
 <translation id="1021110881106174305">利用可能なカード</translation>
-<translation id="1023523064224774104">不審なサイトでパスワードを入力しました。今すぐパスワードを再設定してください。</translation>
 <translation id="1032854598605920125">時計回りに回転</translation>
 <translation id="1035334672863811645">Chrome にログイン</translation>
 <translation id="1036348656032585052">オフにする</translation>
@@ -859,7 +858,6 @@
 <translation id="5230733896359313003">配送先住所</translation>
 <translation id="5230815978613972521">B8</translation>
 <translation id="5233045608889518621">12x19</translation>
-<translation id="5234764350956374838">閉じる</translation>
 <translation id="5250209940322997802">「ネットワークに接続してください」</translation>
 <translation id="5251803541071282808">クラウド</translation>
 <translation id="5252000469029418751">C7（封筒）</translation>
@@ -1001,7 +999,6 @@
 <translation id="5946937721014915347"><ph name="SITE_NAME" /> を開いています…</translation>
 <translation id="5947933617628957894">はい、追加します</translation>
 <translation id="5951495562196540101">一般ユーザー向けアカウントでは登録できません（ライセンス パッケージが利用可能です）。</translation>
-<translation id="5966900314707961320">オンにすると、サイトは Cookie を使用してあなたをウェブ上でトラッキングできなくなります</translation>
 <translation id="5967592137238574583">連絡先情報の編集</translation>
 <translation id="5967867314010545767">履歴から削除</translation>
 <translation id="5975083100439434680">縮小する</translation>
@@ -1441,7 +1438,6 @@
 <translation id="8184538546369750125">グローバルのデフォルト値（[許可]）を使用</translation>
 <translation id="8194797478851900357">移動の取り消し（&amp;U）</translation>
 <translation id="8197543752516192074">ページを翻訳する</translation>
-<translation id="8197899142098070286">不審なサイトでパスワードを入力しました。今すぐパスワードを再設定してください。</translation>
 <translation id="8201077131113104583">ID「<ph name="EXTENSION_ID" />」の拡張機能に対する無効な更新 URL です。</translation>
 <translation id="8202097416529803614">ご注文概要</translation>
 <translation id="8202370299023114387">競合</translation>
