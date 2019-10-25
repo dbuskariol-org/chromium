@@ -4577,7 +4577,7 @@ Zanim włączysz VR na tej stronie, sprawdź, czy można uznać ją za zaufaną.
 <translation id="7737238973539693982">Usuń Linuksa (Beta)</translation>
 <translation id="7740996059027112821">Standardowa</translation>
 <translation id="7744047395460924128">Zobacz swoją historię drukowania</translation>
-<translation id="7746457520633464754">Aby wykrywać niebezpieczne aplikacje i witryny, Chrome wysyła do Google adresy URL i część zawartości niektórych odwiedzanych przez Ciebie stron, a także niektóre informacje o systemie.</translation>
+<translation id="7746457520633464754">Aby wykrywać niebezpieczne aplikacje i witryny, Chrome wysyła do Google adresy URL i część zawartości niektórych odwiedzanych przez Ciebie stron, a także niektóre informacje o systemie</translation>
 <translation id="7750228210027921155">Obraz w obrazie</translation>
 <translation id="7751260505918304024">Pokaż wszystkie</translation>
 <translation id="7754704193130578113">Pytaj przed pobraniem, gdzie zapisać każdy plik</translation>
@@ -5578,6 +5578,7 @@ Przechowuj plik klucza w bezpiecznym miejscu. Będzie on potrzebny do utworzenia
 <translation id="9130015405878219958">Wprowadzono nieprawidłowy tryb.</translation>
 <translation id="9131487537093447019">Wysyłanie wiadomości do urządzeń Bluetooth i odbieranie ich z tych urządzeń</translation>
 <translation id="9134304429738380103">Tak, zgadzam się.</translation>
+<translation id="9135090785674039430">Gdy to ustawienie jest włączone, strony internetowe nie mogą używać plików cookie śledzących, co robisz w sieci. Niektóre strony mogą nie działać.</translation>
 <translation id="9137013805542155359">Pokaż tekst oryginalny</translation>
 <translation id="9137157311132182254">Preferowana wyszukiwarka</translation>
 <translation id="9137248913990643158">Aby użyć tej aplikacji, najpierw uruchom Chrome i zaloguj się w nim.</translation>

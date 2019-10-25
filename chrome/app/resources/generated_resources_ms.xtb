@@ -1273,7 +1273,7 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="2814489978934728345">Berhenti memuatkan halaman ini</translation>
 <translation id="281504910091592009">Lihat dan urus kata laluan yang disimpan dalam <ph name="BEGIN_LINK" />Akaun Google<ph name="END_LINK" /> anda</translation>
 <translation id="2815693974042551705">Folder penanda halaman</translation>
-<translation id="2816319641769218778">Untuk menyimpan kata laluan ke Akaun Google anda, hidupkan penyegerakan.</translation>
+<translation id="2816319641769218778">Untuk menyimpan kata laluan pada Akaun Google anda, hidupkan penyegerakan.</translation>
 <translation id="2818476747334107629">Butiran pencetak</translation>
 <translation id="2820957248982571256">Mengimbas…</translation>
 <translation id="2822634587701817431">Kecilkan / Kembangkan</translation>
@@ -2436,7 +2436,7 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="4552089082226364758">Flash</translation>
 <translation id="4554591392113183336">Sambungan luar ialah versi yang sama atau lebih rendah berbanding yang sedia ada.</translation>
 <translation id="4555769855065597957">Bayang</translation>
-<translation id="4555863373929230635">Untuk menyimpan kata laluan ke Akaun Google anda, log masuk dan aktifkan penyegerakan.</translation>
+<translation id="4555863373929230635">Untuk menyimpan kata laluan pada Akaun Google anda, log masuk dan aktifkan penyegerakan.</translation>
 <translation id="4558426062282641716">Kebenaran autolancar diminta</translation>
 <translation id="4558491878126948419">Dapatkan petua <ph name="DEVICE_TYPE" /> dan kemas kini tentang produk Google serta kongsi maklum balas. Hentikan langganan pada bila-bila masa.</translation>
 <translation id="4559617833001311418">Tapak ini mengakses penderia gerakan atau cahaya anda.</translation>
@@ -5548,7 +5548,7 @@ perubahan ini berlaku, anda mungkin tidak mahukannya.</translation>
 <translation id="9076283476770535406">Tapak mungkin mengandungi kandungan dewasa</translation>
 <translation id="9076523132036239772">Maaf, e-mel atau kata laluan anda tidak dapat disahkan. Cuba menyambung ke rangkaian dahulu.</translation>
 <translation id="9084064520949870008">Buka sebagai Tetingkap</translation>
-<translation id="9085256200913095638">Duplikasi Tab yang Dipilih</translation>
+<translation id="9085256200913095638">Buat Pendua untuk Tab yang Dipilih</translation>
 <translation id="9088234649737575428"><ph name="PLUGIN_NAME" /> disekat oleh dasar perusahaan</translation>
 <translation id="9088917181875854783">Sila sahkan bahawa kekunci laluan ini dipaparkan pada "<ph name="DEVICE_NAME" />":</translation>
 <translation id="9094033019050270033">Kemaskinikan kata laluan</translation>
@@ -5581,6 +5581,7 @@ perubahan ini berlaku, anda mungkin tidak mahukannya.</translation>
 <translation id="9130015405878219958">Mod tidak sah dimasukkan.</translation>
 <translation id="9131487537093447019">Hantar mesej kepada dan terima mesej daripada peranti Bluetooth.</translation>
 <translation id="9134304429738380103">Ya, saya ikut serta.</translation>
+<translation id="9135090785674039430">Apabila dihidupkan, tapak tidak dapat menggunakan kuki yang menjejaki anda di seluruh web. Sesetengah tapak web mungkin akan rosak.</translation>
 <translation id="9137013805542155359">Paparkan asal</translation>
 <translation id="9137157311132182254">Enjin carian pilihan</translation>
 <translation id="9137248913990643158">Sila mulakan dan log masuk ke Chrome sebelum menggunakan apl ini.</translation>

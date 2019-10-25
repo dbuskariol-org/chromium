@@ -842,7 +842,7 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
       Si esta política no está configurada o tiene asignado el valor "True", los usuarios podrán usar esta función.
 
       En cambio, si tiene asignado el valor "False", no podrán usarla.</translation>
-<translation id="2437706973218087361">Esta política controla una función de seguridad de TLS 1.3 que protege las conexiones frente a ataques de cambio a versión inferior. Es retrocompatible y no afectará a las conexiones de servidores y proxies que cumplan con TLS 1.2. Sin embargo, las versiones anteriores de algunos proxies que interceptan TLS tienen un error de implementación que provoca que sean incompatibles.
+<translation id="2437706973218087361">Esta política controla una función de seguridad de TLS 1.3 que protege las conexiones frente a ataques de cambio a versión inferior. Es retrocompatible y no afectará a las conexiones de servidores y proxies que cumplan con el protocolo TLS 1.2. Sin embargo, las versiones anteriores de algunos proxies que interceptan TLS tienen un error de implementación que provoca que los proxies sean incompatibles.
 
       Si se le asigna el valor "True", <ph name="PRODUCT_NAME" /> habilitará estas protecciones de seguridad en todas las conexiones.
 
@@ -850,7 +850,7 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
 
       Se puede usar esta política para probar cualquier proxy afectado y actualizarlo. Los proxies afectados deberían mostrar el código de error ERR_TLS13_DOWNGRADE_DETECTED cuando falle la conexión. En una versión posterior de <ph name="PRODUCT_NAME" /> se habilitará esta opción de forma predeterminada.
 
-      Cuando se habilite de forma predeterminada, los administradores que necesiten más tiempo para actualizar los proxies afectados podrán usar esta política para inhabilitar temporalmente esta función de seguridad. Esta política se eliminará a partir de la versión 85.
+      Cuando se habilite de forma predeterminada, los administradores que necesiten más tiempo para actualizar los proxies afectados podrán usar esta política para inhabilitar temporalmente esta función de seguridad. Esta política se eliminará después de la versión 85.
       </translation>
 <translation id="2438609638493026652">Habilita el envío de informes de eventos clave durante la instalación de aplicaciones para Android a Google. Solo se registran eventos de aplicaciones cuya instalación haya provocado la política.
 
@@ -870,7 +870,7 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
 <translation id="2463365186486772703">Configuración regional de la aplicación</translation>
 <translation id="2463832514638083341">Esta política determina el tiempo, en número de días, durante el que se almacenarán en el dispositivo los metadatos de los trabajos de impresión.
 
-      Si se le asigna el valor -1, los metadatos de los trabajos de impresión se almacenarán indefinidamente. Si se le asigna el valor 0, los metadatos de los trabajos de impresión no se almacenarán. Cualquier otro valor que se asigne a esta política determinará el tiempo durante el que se almacenarán en el dispositivo los metadatos de los trabajos de impresión completados.
+      Si se le asigna el valor -1, los metadatos de los trabajos de impresión se almacenarán indefinidamente. Si se le asigna el valor 0, los metadatos de los trabajos de impresión no se almacenarán. Cualquier otro valor que se asigne a esta política determinará el tiempo durante el que se almacenarán en el dispositivo los metadatos de los trabajos de impresión completados.
 
       Si no se le asigna ningún valor, se usará el periodo predeterminado (90 días) para los dispositivos <ph name="PRODUCT_OS_NAME" />.
 
@@ -1442,10 +1442,10 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
           Si no se le asigna ningún valor a esta política, se usará para todos los sitios web el valor general predeterminado de la política "DefaultCookiesSetting" (si se ha establecido) o el valor personalizado que haya definido el usuario (en caso contrario).
 
           Consulta también las políticas "CookiesBlockedForUrls" y "CookiesSessionOnlyForUrls". Ten en cuenta que no puede haber patrones de URL en conflicto entre estas políticas, ya que no se especifica qué política prevalece.</translation>
-<translation id="3367344043837603960">Esta política controla que el proceso de audio se ponga en zona de pruebas.
+<translation id="3367344043837603960">Esta política controla la zona de pruebas de audio.
       Si se habilita esta política, el proceso de audio se ejecutará en una zona de pruebas.
       Si se inhabilita, el proceso de audio se ejecutará sin pasar por la zona de pruebas y el módulo WebRTC de procesamiento de audio se ejecutará en el proceso de renderización.
-      Esto dejará a los usuarios expuestos ante riesgos de seguridad relacionados con la ejecución de la pila de audio sin pasar por la zona de pruebas.
+      Esto dejará a los usuarios expuestos ante riesgos de seguridad relacionados con la ejecución del subsistema de audio sin pasar por la zona de pruebas.
       Si no se define esta política, se usará la configuración predeterminada para la zona de pruebas de audio, que puede variar según la plataforma.
       El objetivo de esta política es ofrecer a las empresas la posibilidad de inhabilitar la zona de pruebas de audio si usan configuraciones de software de seguridad que interfieren con la zona de pruebas.</translation>
 <translation id="3373364525435227558">Establece una o varias configuraciones regionales recomendadas para sesiones administradas, lo que permite a los usuarios seleccionar fácilmente una de estas configuraciones.
@@ -3994,7 +3994,7 @@ Si esta opción no está establecida o está establecida en True, los dispositiv
       Si se le asigna el valor "False", se inhabilitan las actualizaciones de los componentes. Sin embargo, algunos componentes quedan exentos de esta política: no se inhabilitarán las actualizaciones de cualquier componente que no contenga ningún código ejecutable, que no influya en el funcionamiento del navegador de forma significativa o que sea esencial para su seguridad.
       Entre los ejemplos de estos componentes se incluyen las listas de revocación de certificados y los datos de navegación segura.
       Consulta la página https://developers.google.com/safe-browsing para obtener más información sobre la función Navegación Segura.</translation>
-<translation id="75599127817486754">Indica la lista de patrones de URL en los que deberá comprobarse si el contenido subido contiene software malicioso.  Esta política solo se utilizará si se asigna a la política <ph name="SEND_FILES_FOR_MALWARE_CHECK_POLICY_NAME" /> un valor que permita o implemente obligatoriamente las comprobaciones de software malicioso en el contenido subido.
+<translation id="75599127817486754">Indica la lista de patrones de URL en los que deberá comprobarse si el contenido subido tiene software malicioso.  Esta política solo se utilizará si se asigna a la política <ph name="SEND_FILES_FOR_MALWARE_CHECK_POLICY_NAME" /> un valor que permita o implemente obligatoriamente las comprobaciones de software malicioso en el contenido subido.
 
       Si no se define esta política o se le asigna una lista vacía de patrones de URL, no se comprobará si el contenido subido contiene software malicioso.
 

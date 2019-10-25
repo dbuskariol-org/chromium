@@ -2595,7 +2595,7 @@ Google에 전송됩니다.  사용 중지되면 이 정보가 Google에 전송�
 <translation id="5219844027738217407">Android 앱의 경우 이 정책은 마이크에만 영향을 줍니다. 이 정책이 true로 설정되면 마이크는 모든 앱에서 음소거되며 예외는 없습니다.</translation>
 <translation id="5220124265517241823">업로드한 파일, 클립보드에서 붙여넣은 데이터 또는 드래그 앤 드롭한 데이터가 민감한 정보 보호 규칙을 위반하는지 검사하지 않아도 되는 URL 패턴의 목록입니다.  이 정책은 <ph name="CHECK_CONTENT_COMPLIANCE_POLICY_NAME" />이(가) 사용 설정된 경우에만 사용됩니다.
 
-      정책이 설정되지 않거나 빈 URL 패턴 목록으로 설정되면 모든 콘텐츠가 민감한 정보 보호 규칙을 위반하는지 검사합니다.
+      정책이 설정되지 않거나 빈 URL 패턴 목록으로 설정되면 모든 콘텐츠에 대해 민감한 정보 보호 규칙을 위반하는지 검사합니다.
 
       URL 패턴의 형식은 https://www.chromium.org/administrators/url-blacklist-filter-format에 설명되어 있는 'URLBlacklist' 정책과 동일합니다.
       </translation>

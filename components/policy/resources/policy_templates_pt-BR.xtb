@@ -1406,7 +1406,7 @@ Se você desativar esta configuração ou deixá-la sem definição, todas as p�
           Se esta política não for definida, o valor global padrão será usado para todos os sites da política "DefaultCookiesSetting", caso ela tenha sido definida, ou a partir das configurações pessoais do usuário, caso não tenha sido definida.
 
           Consulte também as políticas "CookiesBlockedForUrls" e "CookiesSessionOnlyForUrls". Não pode haver padrões de URL conflitantes entre essas três políticas. Não é definido qual política tem precedência.</translation>
-<translation id="3367344043837603960">Esta política controla o processo de áudio colocado no sandbox.
+<translation id="3367344043837603960">Esta política controla o sandbox do processo de áudio
       Se esta política for ativada, o processo de áudio será executado no sandbox.
       Se esta política for desativada, o processo de áudio será executado fora do sandbox, e o módulo de processamento de áudio WebRTC será executado no processo do renderizador.
       Essa opção deixa os usuários vulneráveis a riscos de segurança relacionados à execução da pilha de áudio fora do sandbox.

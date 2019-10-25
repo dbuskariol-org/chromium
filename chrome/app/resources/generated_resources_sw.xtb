@@ -3201,7 +3201,7 @@ Hakikisha kwamba unaamini tovuti hii kabla ya kuingia katika VR.</translation>
 <translation id="5701080607174488915">Hitilafu imetokea wakati wa kuleta sera kutoka kwenye seva.</translation>
 <translation id="5701381305118179107">Katikati</translation>
 <translation id="5702898740348134351">&amp;Badilisha Mitambo ya Kutafuta...</translation>
-<translation id="570302979952009979">Chagua jina jipya la alama hii ya kidole</translation>
+<translation id="570302979952009979">Ichagulie alama hii ya kidole jina</translation>
 <translation id="5704875434923668958">Inasawazisha kwenye</translation>
 <translation id="5707185214361380026">Haijafaulu kupakia kiendelezi kutoka:</translation>
 <translation id="5708171344853220004">Jina la Microsoft Principal</translation>
@@ -4683,7 +4683,7 @@ Hakikisha kwamba unaamini tovuti hii kabla ya kuingia katika VR.</translation>
 <translation id="7853747251428735">Zana Zaidi</translation>
 <translation id="7857117644404132472">Ongeza kighairi</translation>
 <translation id="7857949311770343000">Je, huu ndio ukurasa wa kichupo kipya uliokuwa ukiutarajia?</translation>
-<translation id="7859938049767853383"><ph name="FILE_NAME" /> ni kubwa mno kuweza kufanyiwa uchanganuzi katika wingu na imezuiwa kufunguka.</translation>
+<translation id="7859938049767853383"><ph name="FILE_NAME" /> ni kubwa mno haiwezi kufanyiwa uchanganuzi katika wingu na imezuiwa kufunguka.</translation>
 <translation id="786073089922909430">Huduma: <ph name="ARC_PROCESS_NAME" /></translation>
 <translation id="7861215335140947162">&amp;Vipakuzi</translation>
 <translation id="7868378670806575181">{NUM_COOKIES,plural, =1{Kidakuzi 1}other{Vidakuzi #}}</translation>
@@ -5576,6 +5576,7 @@ Sidhani tovuti hii inapaswa kuzuiwa!</translation>
 <translation id="9130015405878219958">Modi batili imeingizwa.</translation>
 <translation id="9131487537093447019">Tuma na upokee barua kutoka kwenye vifaa vya Bluetooth.</translation>
 <translation id="9134304429738380103">Ndiyo, ninakubali.</translation>
+<translation id="9135090785674039430">Ikiwashwa, tovuti haziwezi kutumia vidakuzi vinavyokufuatilia kwenye wavuti. Baadhi ya tovuti huenda zikaacha kufanya kazi.</translation>
 <translation id="9137013805542155359">Onyesha asili</translation>
 <translation id="9137157311132182254">Mtambo wa kutafuta unaopendelea</translation>
 <translation id="9137248913990643158">Tafadhali anza na uingie katika Chrome kabla ya kutumia programu hii.</translation>

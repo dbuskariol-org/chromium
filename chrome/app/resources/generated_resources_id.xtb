@@ -1273,7 +1273,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="2814489978934728345">Berhenti membuka halaman ini</translation>
 <translation id="281504910091592009">Lihat dan kelola sandi tersimpan di <ph name="BEGIN_LINK" />Akun Google<ph name="END_LINK" /></translation>
 <translation id="2815693974042551705">Folder bookmark</translation>
-<translation id="2816319641769218778">Untuk menyimpan sandi ke Akun Google, aktifkan sinkronisasi.</translation>
+<translation id="2816319641769218778">Untuk menyimpan sandi ke Akun Google Anda, aktifkan sinkronisasi.</translation>
 <translation id="2818476747334107629">Detail printer</translation>
 <translation id="2820957248982571256">Memindai...</translation>
 <translation id="2822634587701817431">Ciutkan/Luaskan</translation>
@@ -2434,7 +2434,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="4552089082226364758">Flash</translation>
 <translation id="4554591392113183336">Versi ekstensi eksternal sama atau lebih rendah dibandingkan yang sudah ada.</translation>
 <translation id="4555769855065597957">Bayangan</translation>
-<translation id="4555863373929230635">Untuk menyimpan sandi ke Akun Google, login dan aktifkan sinkronisasi.</translation>
+<translation id="4555863373929230635">Untuk menyimpan sandi ke Akun Google Anda, login dan aktifkan sinkronisasi.</translation>
 <translation id="4558426062282641716">Diminta izin peluncuran otomatis</translation>
 <translation id="4558491878126948419">Dapatkan tips <ph name="DEVICE_TYPE" /> dan info terbaru terkait produk Google serta berikan masukan. Anda dapat berhenti berlangganan kapan saja.</translation>
 <translation id="4559617833001311418">Situs ini mengakses sensor gerakan atau sensor cahaya Anda.</translation>
@@ -3218,7 +3218,7 @@ Pastikan Anda memercayai situs ini sebelum masuk ke VR.</translation>
 <translation id="572155275267014074">Setelan Android</translation>
 <translation id="5722086096420375088">Hijau dan putih</translation>
 <translation id="5722930212736070253">Yah! Zip Archiver mengalami error.</translation>
-<translation id="572328651809341494">Tab baru-baru ini</translation>
+<translation id="572328651809341494">Tab terbaru</translation>
 <translation id="5723508132121499792">Tidak ada apl latar belakang yang sedang berjalan</translation>
 <translation id="5727728807527375859">Ekstensi, aplikasi, dan tema dapat membahayakan komputer. Yakin ingin lanjut?</translation>
 <translation id="5729712731028706266">&amp;Lihat</translation>
@@ -3482,7 +3482,7 @@ Pastikan Anda memercayai situs ini sebelum masuk ke VR.</translation>
 <translation id="6096047740730590436">Buka yang dimaksimalkan</translation>
 <translation id="6096326118418049043">X.500 Name</translation>
 <translation id="6097480669505687979">Jika Anda tidak mengosongkan ruang penyimpanan, pengguna dan data dapat otomatis dihapus.</translation>
-<translation id="6098793583803863900">Pemindaian konten berbahaya pada file tidak dikenal sedang berlangsung.</translation>
+<translation id="6098793583803863900">File tidak dikenal sedang dipindai untuk mendeteksi konten berbahaya.</translation>
 <translation id="6100736666660498114">Menu mulai</translation>
 <translation id="6101226222197207147">Aplikasi baru ditambahkan (<ph name="EXTENSION_NAME" />)</translation>
 <translation id="6102043788063419338">File ini diblokir oleh Perlindungan Lanjutan.</translation>
@@ -4078,7 +4078,7 @@ Pastikan Anda memercayai situs ini sebelum masuk ke VR.</translation>
 <translation id="7003723821785740825">Menyiapkan cara tercepat untuk membuka kunci perangkat</translation>
 <translation id="7003844668372540529">Produk <ph name="PRODUCT_ID" /> tak dikenal dari <ph name="VENDOR_NAME" /></translation>
 <translation id="7004402701596653846">Situs dapat menggunakan MIDI</translation>
-<translation id="7004499039102548441">Tab Baru-baru Ini</translation>
+<translation id="7004499039102548441">Tab Terbaru</translation>
 <translation id="7005848115657603926">Rentang halaman tidak valid, gunakan <ph name="EXAMPLE_PAGE_RANGE" /></translation>
 <translation id="7006634003215061422">Batas bawah</translation>
 <translation id="7007648447224463482">Buka semua di jendela baru</translation>
@@ -4685,7 +4685,7 @@ Pastikan Anda memercayai situs ini sebelum masuk ke VR.</translation>
 <translation id="7853747251428735">Alat Lain&amp;nya</translation>
 <translation id="7857117644404132472">Tambahkan pengecualian</translation>
 <translation id="7857949311770343000">Apakah ini halaman tab baru yang Anda harapkan?</translation>
-<translation id="7859938049767853383"><ph name="FILE_NAME" /> berukuran terlalu besar untuk pemindaian cloud dan telah diblokir agar tidak dapat dibuka.</translation>
+<translation id="7859938049767853383">Ukuran <ph name="FILE_NAME" /> terlalu besar untuk pemindaian cloud dan telah diblokir agar tidak dapat dibuka.</translation>
 <translation id="786073089922909430">Layanan: <ph name="ARC_PROCESS_NAME" /></translation>
 <translation id="7861215335140947162">Un&amp;duhan</translation>
 <translation id="7868378670806575181">{NUM_COOKIES,plural, =1{1 cookie}other{# cookie}}</translation>

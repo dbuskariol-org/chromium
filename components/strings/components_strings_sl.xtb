@@ -552,7 +552,6 @@
 <translation id="3655670868607891010">Če se to pogosto zgodi, poskusite <ph name="HELP_LINK" />.</translation>
 <translation id="3658742229777143148">Različica</translation>
 <translation id="366077651725703012">Posodobi kreditno kartico</translation>
-<translation id="3672525478985456967">Ime tega spletnega mesta je podobno imenu <ph name="LOOKALIKE_DOMAIN" />. Napadalci včasih poskušajo posnemati spletna mesta, tako da skoraj neopazno spremenijo ime domene.</translation>
 <translation id="3676592649209844519">ID naprave:</translation>
 <translation id="3677008721441257057">Ali ste mislili &lt;a href="#" id="dont-proceed-link"&gt;<ph name="DOMAIN" />&lt;/a&gt;?</translation>
 <translation id="3678029195006412963">Zahteve ni bilo mogoče podpisati</translation>
@@ -618,7 +617,7 @@
 <translation id="397105322502079400">Izračunavanje …</translation>
 <translation id="3973234410852337861">Spletno mesto <ph name="HOST_NAME" /> je blokirano</translation>
 <translation id="3981540111851280311">Domena <ph name="ENROLLMENT_DOMAIN" /> je v brskalniku omogočila Chromovo funkcijo zaščite pred grožnjami za podjetja. Chromova funkcija zaščite pred grožnjami za podjetja ima dostop do nekaterih vaših podatkov.</translation>
-<translation id="3987405730340719549">Chrome je ugotovil, da je to spletno mesto morda lažni ali goljufivo.
+<translation id="3987405730340719549">Chrome je ugotovil, da je to spletno mesto morda lažno ali goljufivo.
 
     Če menite, da je opozorilo prikazano pomotoma, obiščite https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
 <translation id="3987940399970879459">Manj kot 1 MB</translation>
@@ -773,7 +772,6 @@
 <translation id="4728558894243024398">Okolje</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
 <translation id="4736825316280949806">Znova zaženite Chromium</translation>
-<translation id="4737433075782228085">Ta stran je sumljiva.</translation>
 <translation id="473775607612524610">Posodobi</translation>
 <translation id="4738601419177586157">Predlog za iskanje poizvedbe <ph name="TEXT" /></translation>
 <translation id="4742407542027196863">Upravljaj gesla …</translation>

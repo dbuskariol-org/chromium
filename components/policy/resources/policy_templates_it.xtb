@@ -405,17 +405,17 @@ Se la norma viene impostata su true, il valore della chiave manifest required_pl
 Se la norma non viene configurata o viene impostata su false, la chiave manifest required_platform_version viene ignorata e l'aggiornamento automatico prosegue normalmente.
 
 Avviso. Non è consigliato delegare il controllo della versione di <ph name="PRODUCT_OS_NAME" /> a un'app kiosk, poiché potrebbe impedire al dispositivo di ricevere aggiornamenti software e correzioni di sicurezza fondamentali. Delegare il controllo della versione di <ph name="PRODUCT_OS_NAME" /> potrebbe mettere a rischio gli utenti.</translation>
-<translation id="1669584285557771729">Se questo criterio viene impostato, consente di controllare il tipo di lente d'ingrandimento che viene attivata.
+<translation id="1669584285557771729">Se questo criterio viene impostato, consente di controllare il tipo di lente d'ingrandimento che viene attivato.
 
-          Se questo criterio viene impostato su "Schermo intero", la lente d'ingrandimento sarà sempre attiva in modalità lente d'ingrandimento a schermo intero sulla schermata di accesso.
+          Se questo criterio viene impostato su "Schermo intero", la lente d'ingrandimento sarà sempre attiva in modalità Lente d'ingrandimento a schermo intero sulla schermata di accesso.
 
-          Se questo criterio viene impostato su "Inserito nel dock", la lente d'ingrandimento verrà sempre attivata in modalità lente d'ingrandimento ancorata sulla schermata di accesso.
+          Se questo criterio viene impostato su "Ancorata", la lente d'ingrandimento verrà sempre attivata in modalità Lente d'ingrandimento ancorata sulla schermata di accesso.
 
           Se questo criterio è impostato su "Nessuno", la lente d'ingrandimento sarà sempre disattivata sulla schermata di accesso.
 
           Se imposti questo criterio, gli utenti non potranno modificarlo né ignorarlo.
 
-          Se questo criterio non viene impostato, inizialmente la dettatura sarà disattivata sulla schermata di accesso, anche se l'utente potrà attivarla in qualsiasi momento.</translation>
+          Se questo criterio non viene impostato, inizialmente la dettatura è disattivata nella schermata di accesso, ma l'utente può attivarla in qualsiasi momento.</translation>
 <translation id="1675002386741412210">Supportato su:</translation>
 <translation id="1695708467571967752">Questo criterio consente di stabilire se gli utenti possono o meno riprodurre contenuti multimediali con il dispositivo bloccato.
 
@@ -810,7 +810,7 @@ Questa norma viene rispettata soltanto se la norma "DefaultSearchProviderEnabled
       Quando questa norma non è configurata o è impostata su True, gli utenti possono utilizzare la funzione Condivisioni file di rete.
 
       Quando questa norma è impostata su False, gli utenti non possono utilizzare la funzione Condivisioni file di rete.</translation>
-<translation id="2437706973218087361">Questo criterio controlla una funzionalità di sicurezza nel protocollo TLS 1.3 che protegge le connessioni da attacchi di downgrade. È compatibile con versioni precedenti e non interesserà le connessioni a server o proxy conformi TLS 1.2. Tuttavia, un difetto di implementazione nelle versioni precedenti di alcuni proxy che intercettano connessioni TLS li rende incompatibili.
+<translation id="2437706973218087361">Questo criterio controlla una funzionalità di sicurezza nel protocollo TLS 1.3 che protegge le connessioni da attacchi di downgrade. È compatibile con le versioni precedenti e non interesserà le connessioni a server o proxy TLS 1.2 conformi. Tuttavia, un difetto di implementazione nelle versioni precedenti di alcuni proxy che intercettano connessioni TLS li rende incompatibili.
 
       Se questo criterio è impostato su True, <ph name="PRODUCT_NAME" /> attiverà queste protezioni di sicurezza per tutte le connessioni.
 
@@ -836,7 +836,7 @@ Questa norma viene rispettata soltanto se la norma "DefaultSearchProviderEnabled
 <translation id="2454228136871844693">Ottimizza per aumentare la stabilità.</translation>
 <translation id="2463034609187171371">Attiva i pacchetti di crittografia DHE in TLS</translation>
 <translation id="2463365186486772703">Lingua dell'applicazione</translation>
-<translation id="2463832514638083341">Questo criterio controlla come i metadati di lunghi processi di stampa vengono memorizzati sul dispositivo con valore espresso in giorni.
+<translation id="2463832514638083341">Questo criterio controlla per quanto tempo i metadati dei processi di stampa vengono memorizzati sul dispositivo, con valore espresso in giorni.
 
       Quando questo criterio viene impostato sul valore -1, i metadati dei processi di stampa vengono memorizzati per un periodo di tempo indefinito. Quando questo criterio viene impostato sul valore 0, i metadati dei processi di stampa non vengono memorizzati. Quando questo criterio viene impostato su un qualsiasi altro valore, specifica il periodo di tempo durante il quale i metadati dei processi di stampa completati vengono memorizzati sul dispositivo.
 
@@ -1369,7 +1369,7 @@ Il valore della norma deve essere specificato in millisecondi. I valori devono e
       Se l'impostazione è disattivata, gli utenti non possono attivare il proxy e il computer non può condividere le stampanti con <ph name="CLOUD_PRINT_NAME" />.</translation>
 <translation id="3303653927512453822">Ti consente di ripristinare il comportamento <ph name="ATTRIBUTE_SAMESITE_NAME" /> precedente per tutti i cookie. Se ripristini il comportamento precedente, i cookie per cui non è specificato un attributo <ph name="ATTRIBUTE_SAMESITE_NAME" /> vengono considerati come se avessero il valore "<ph name="ATTRIBUTE_VALUE_SAMESITE_NONE" />"; viene inoltre rimosso il requisito che richiede che i cookie "<ph name="ATTRIBUTE_VALUE_SAMESITE_NONE" />" abbiano l'attributo "<ph name="ATTRIBUTE_SECURE_NAME" />". Per una descrizione completa, visita la pagina https://www.chromium.org/administrators/policy-list-3/cookie-legacy-samesite-policies.
 
-          Se questo criterio non viene impostato, il comportamento <ph name="ATTRIBUTE_SAMESITE_NAME" /> predefinito per i cookie che non hanno un attributo <ph name="ATTRIBUTE_SAMESITE_NAME" /> dipenderà dalla configurazione personale dell'utente della funzionalità <ph name="FEATURE_NAME_SAMESITE_BY_DEFAULT_COOKIES" />, che potrebbe essere impostata in base a una prova sul campo o tramite l'attivazione o disattivazione del flag <ph name="FLAG_NAME_SAMESITE_BY_DEFAULT_COOKIES" />.</translation>
+          Se questo criterio non viene impostato, il comportamento <ph name="ATTRIBUTE_SAMESITE_NAME" /> predefinito per i cookie per cui non è specificato un attributo <ph name="ATTRIBUTE_SAMESITE_NAME" /> dipenderà dalla configurazione personale dell'utente della funzionalità <ph name="FEATURE_NAME_SAMESITE_BY_DEFAULT_COOKIES" />, che potrebbe essere impostata in base a una prova pubblica o tramite l'attivazione o disattivazione del flag <ph name="FLAG_NAME_SAMESITE_BY_DEFAULT_COOKIES" />.</translation>
 <translation id="3307971460556020865">Blocca i caricamenti e i download di file di grandi dimensioni</translation>
 <translation id="3312206664202507568">Consente di attivare una pagina su chrome://password-change che permette agli utenti SAML di cambiare le loro password SAML all'interno della sessione, il che assicura che le password SAML e quelle per la schermata di blocco rimangano sincronizzate.
 
@@ -1389,7 +1389,7 @@ Il valore della norma deve essere specificato in millisecondi. I valori devono e
           Se questa norma non viene impostata, per tutti i siti verrà utilizzato il valore predefinito globale della norma "DefaultCookiesSetting", se è impostata, oppure verrà utilizzata la configurazione personale dell'utente.
 
           Vedi anche le norme "CookiesBlockedForUrls" e "CookiesSessionOnlyForUrls". Tieni presente che non ci deve essere conflitto di pattern URL tra queste tre norme. Non viene specificato quale norma debba avere la precedenza.</translation>
-<translation id="3367344043837603960">Questo criterio controlla il processo audio limitato tramite sandbox.
+<translation id="3367344043837603960">Questo criterio controlla la sandbox del processo audio.
       Se questo criterio viene attivato, il processo audio verrà eseguito con limitazione tramite sandbox.
       Se il criterio viene disattivato, il processo audio verrà eseguito senza limitazione tramite sandbox e il modulo di elaborazione audio WebRTC verrà eseguito nel processo di rendering.
       Ciò espone gli utenti a rischi di sicurezza correlati all'esecuzione dello stack audio senza limitazione tramite sandbox.
@@ -2559,7 +2559,7 @@ Se la norma non viene impostata, <ph name="PRODUCT_NAME" /> caricherà tutti gli
 <translation id="5290940294294002042">Specifica un elenco di plug-in che l'utente può attivare o disattivare</translation>
 <translation id="5306186200045823863">Considera attendibile l'infrastruttura PKI precedente di Symantec Corporation</translation>
 <translation id="5307432759655324440">Disponibilità della modalità di navigazione in incognito</translation>
-<translation id="5311275381462687162">Impostazione del comportamento dei cookie <ph name="ATTRIBUTE_SAMESITE_NAME" /> precedente predefinito</translation>
+<translation id="5311275381462687162">Impostazione del comportamento precedente predefinito <ph name="ATTRIBUTE_SAMESITE_NAME" /> per i cookie</translation>
 <translation id="5318185076587284965">Attiva l'utilizzo dei server relay per l'host di accesso remoto</translation>
 <translation id="5323128137188992869">Consente di trasmettere contenuti al dispositivo usando <ph name="PRODUCT_NAME" />.
 
@@ -3275,7 +3275,7 @@ Il valore della norma deve essere specificato in millisecondi. I valori devono e
       </translation>
 <translation id="6598235178374410284">Immagine avatar utente</translation>
 <translation id="6603004149426829878">Consente di inviare sempre al server i segnali relativi alla posizione disponibili durante le operazioni per stabilire il fuso orario</translation>
-<translation id="6628043374475466084">Pattern URL per non eseguire il confronto tra i contenuti caricati e le regole relative alla protezione dei dati sensibili</translation>
+<translation id="6628043374475466084">Pattern URL per non eseguire il controllo della presenza di violazioni delle regole relative alla protezione dei dati sensibili nei contenuti caricati</translation>
 <translation id="6628120204569232711">Segnala lo stato di archiviazione</translation>
 <translation id="6628646143828354685">Permette di stabilire se consentire o meno l'accesso ai dispositivi Bluetooth nelle vicinanze. L'accesso può essere bloccato completamente oppure l'utente può ricevere una richiesta ogni volta che un sito web desidera accedere ai dispositivi Bluetooth vicini.
 
@@ -4627,7 +4627,7 @@ https://www.w3.org/TR/secure-contexts/
       Questa norma viene applicata soltanto per gli utenti che si sono autenticati tramite SAML.
 
       Il valore della norma deve essere specificato in secondi.</translation>
-<translation id="9021334785554745279">Pattern URL per effettuare il confronto tra i contenuti scaricati e le regole relative alla protezione dei dati sensibili</translation>
+<translation id="9021334785554745279">Pattern URL per il controllo della presenza di violazioni delle regole relative alla protezione dei dati sensibili nei contenuti scaricati</translation>
 <translation id="9035086760683255833">Consente di attivare la funzione di accessibilità di evidenziazione dell'elemento attivo tramite tastiera.
 
           Questa funzione consente di evidenziare l'elemento attivo impostato tramite tastiera.

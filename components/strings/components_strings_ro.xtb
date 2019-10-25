@@ -550,7 +550,6 @@
 <translation id="3655670868607891010">Dacă această pagină se afișează în mod frecvent, încercați <ph name="HELP_LINK" />.</translation>
 <translation id="3658742229777143148">Versiune</translation>
 <translation id="366077651725703012">Actualizează cardul de credit</translation>
-<translation id="3672525478985456967">Numele acestui site este similar cu cel al site-ului <ph name="LOOKALIKE_DOMAIN" />. Uneori, atacatorii imită site-uri aducând modificări mici, greu de observat, numelui de domeniu.</translation>
 <translation id="3676592649209844519">ID dispozitiv:</translation>
 <translation id="3677008721441257057">Ai vrut să accesezi &lt;a href="#" id="dont-proceed-link"&gt;<ph name="DOMAIN" />&lt;/a&gt;?</translation>
 <translation id="3678029195006412963">Solicitarea nu a putut fi semnată</translation>
@@ -771,7 +770,6 @@
 <translation id="4728558894243024398">Platformă</translation>
 <translation id="4731967714531604179">Prc2 (Plic)</translation>
 <translation id="4736825316280949806">repornește Chromium;</translation>
-<translation id="4737433075782228085">Această pagină este suspectă.</translation>
 <translation id="473775607612524610">Actualizează</translation>
 <translation id="4738601419177586157">Sugestie de căutare <ph name="TEXT" /></translation>
 <translation id="4742407542027196863">Gestionează parolele…</translation>

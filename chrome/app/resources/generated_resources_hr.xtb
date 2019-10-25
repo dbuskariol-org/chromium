@@ -203,7 +203,7 @@
 <translation id="1289513325360489062">Ne mogu pristupiti podacima ove web-lokacije</translation>
 <translation id="1293264513303784526">USB-C uređaj (lijevi priključak)</translation>
 <translation id="1293556467332435079">Datoteke</translation>
-<translation id="1296911687402551044">Pričvrsti odabranu karticu</translation>
+<translation id="1296911687402551044">Prikvači odabranu karticu</translation>
 <translation id="1297175357211070620">Odredište</translation>
 <translation id="1300415640239881824">Domena <ph name="DOMAIN" /> traži da Google provjeri i potvrdi identitet vašeg uređaja kako bi utvrdio ispunjava li uvjete za poboljšanu reprodukciju zaštićenog sadržaja.</translation>
 <translation id="1300806585489372370">Da biste promijenili tu postavku, najprije <ph name="BEGIN_LINK" />uključite identifikatore<ph name="END_LINK" /></translation>
@@ -5580,6 +5580,7 @@ Mislim da ta web-lokacija ne bi trebala biti blokirana!</translation>
 <translation id="9130015405878219958">Unesen je nevažeći način.</translation>
 <translation id="9131487537093447019">slati poruke na Bluetooth uređaje i primati poruke s njih</translation>
 <translation id="9134304429738380103">Da, pristajem.</translation>
+<translation id="9135090785674039430">Kad je ta značajka uključena, web-lokacije ne mogu upotrebljavati kolačiće koji vas prate na webu. Neke web-lokacije možda neće funkcionirati pravilno.</translation>
 <translation id="9137013805542155359">Prikaži original</translation>
 <translation id="9137157311132182254">Željena tražilica</translation>
 <translation id="9137248913990643158">Pokrenite Chrome i prijavite se na njega da biste mogli upotrebljavati tu aplikaciju.</translation>

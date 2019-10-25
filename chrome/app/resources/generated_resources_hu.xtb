@@ -3485,7 +3485,7 @@ Győződjön meg arról, hogy nem ad ki bizalmas adatokat.</translation>
 <translation id="6096047740730590436">Megnyitás teljes méretben</translation>
 <translation id="6096326118418049043">X.500 név</translation>
 <translation id="6097480669505687979">Ha nem szabadít fel tárhelyet, előfordulhat, hogy a rendszer automatikusan eltávolít bizonyos felhasználókat és adatokat.</translation>
-<translation id="6098793583803863900">Folyamatban van az ismeretlen fájl veszélyes tartalmakat kereső ellenőrzése.</translation>
+<translation id="6098793583803863900">A rendszer veszélyes tartalmakat keres egy ismeretlen fájlban.</translation>
 <translation id="6100736666660498114">Start menü</translation>
 <translation id="6101226222197207147">Új alkalmazás hozzáadva (<ph name="EXTENSION_NAME" />)</translation>
 <translation id="6102043788063419338">Ezt a fájlt letiltotta a Speciális védelem.</translation>

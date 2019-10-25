@@ -541,7 +541,6 @@
 <translation id="3655670868607891010">Если эта проблема возникает часто, изучите <ph name="HELP_LINK" />.</translation>
 <translation id="3658742229777143148">Версия</translation>
 <translation id="366077651725703012">Изменить данные кредитной карты</translation>
-<translation id="3672525478985456967">Имя этого сайта похоже на <ph name="LOOKALIKE_DOMAIN" />. Иногда злоумышленники создают копии сайтов и вносят незаметные изменения в их доменное имя.</translation>
 <translation id="3676592649209844519">Идентификатор устройства:</translation>
 <translation id="3677008721441257057">Возможно, вы хотели открыть сайт &lt;a href="#" id="dont-proceed-link"&gt;<ph name="DOMAIN" />&lt;/a&gt;?</translation>
 <translation id="3678029195006412963">Не удалось подписать запрос</translation>
@@ -756,7 +755,6 @@
 <translation id="4728558894243024398">Платформа</translation>
 <translation id="4731967714531604179">Prc2 (конверт)</translation>
 <translation id="4736825316280949806">Перезапустите Chromium.</translation>
-<translation id="4737433075782228085">Это подозрительная страница.</translation>
 <translation id="473775607612524610">Обновить</translation>
 <translation id="4738601419177586157">Подсказка при поиске "<ph name="TEXT" />"</translation>
 <translation id="4742407542027196863">Управление паролями</translation>
@@ -982,7 +980,7 @@
 <translation id="5813119285467412249">&amp;Повторить добавление</translation>
 <translation id="583281660410589416">Неизвестно</translation>
 <translation id="5838278095973806738">Не сообщайте этому сайту конфиденциальную информацию (например, пароли и номера банковских карт). К ней могут получить доступ злоумышленники.</translation>
-<translation id="5855253129151731373">Имя хоста этого сайта похоже на <ph name="LOOKALIKE_DOMAIN" />. Иногда злоумышленники создают копии сайтов и вносят незаметные изменения в их доменное имя.
+<translation id="5855253129151731373">Имя хоста этого сайта похоже на <ph name="LOOKALIKE_DOMAIN" />. Иногда злоумышленники создают копии сайтов, слегка изменяя доменное имя.
 
     Если вы думаете, что это сообщение показано по ошибке, заполните форму на странице https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
 <translation id="5860033963881614850">ВЫКЛ</translation>
@@ -1393,7 +1391,7 @@
 <translation id="7932579305932748336">Покрытие</translation>
 <translation id="79338296614623784">Укажите действительный номер телефона.</translation>
 <translation id="7934052535022478634">Платеж обработан</translation>
-<translation id="7935031712718413217">Возможный спуфинг URL</translation>
+<translation id="7935031712718413217">Возможная подмена URL</translation>
 <translation id="7935318582918952113">DOM Distiller</translation>
 <translation id="7937554595067888181">Действует до <ph name="EXPIRATION_DATE_ABBR" /></translation>
 <translation id="7938958445268990899">Сертификат сервера еще не действителен.</translation>

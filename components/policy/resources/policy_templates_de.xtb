@@ -864,13 +864,13 @@ Falls die Richtlinie auf "false" gesetzt wird, kann eine verzögerungsfreie auto
 <translation id="2454228136871844693">Für eine optimale Stabilität.</translation>
 <translation id="2463034609187171371">DHE-Verschlüsselungssammlungen in TLS aktivieren</translation>
 <translation id="2463365186486772703">Gebietsschema der App</translation>
-<translation id="2463832514638083341">Mit dieser Richtlinie wird in Tagen festgelegt, wie lange Metadaten von Druckaufträgen auf einem Gerät gespeichert werden.
+<translation id="2463832514638083341">Mit dieser Richtlinie wird festgelegt, wie lange (in Tagen) Metadaten von Druckaufträgen auf einem Gerät gespeichert werden.
 
-      Wenn sie auf einen Wert von "-1" festgelegt wird, werden die Metadaten der Druckaufträge über einen unbegrenzten Zeitraum gespeichert. Wird die Richtlinie auf "0" gesetzt, findet keine Speicherung der Druckauftrags-Metadaten statt. Wenn sie auf einen anderen Wert festgelegt wird, gibt dieser den Zeitraum an, über den die Metadaten abgeschlossener Druckaufträge auf dem Gerät gespeichert werden.
+      Bei einem Wert von "-1" werden die Metadaten der Druckaufträge über einen unbegrenzten Zeitraum gespeichert. Wird die Richtlinie auf "0" gesetzt, findet keine Speicherung der Druckauftrags-Metadaten statt. Jeder andere Wert gibt den Zeitraum an, über den die Metadaten abgeschlossener Druckaufträge auf dem Gerät gespeichert werden.
 
       Wenn die Richtlinie nicht konfiguriert ist, gilt für <ph name="PRODUCT_OS_NAME" />-Geräte der standardmäßige Zeitraum von 90 Tagen.
 
-      Der Wert der Richtlinie wird in Tagen angegeben.</translation>
+      Denken Sie daran, den Wert der Richtlinie in Tagen anzugeben.</translation>
 <translation id="2466131534462628618">Captive-Portal-Authentifizierung ignoriert Proxy</translation>
 <translation id="2466697858869282874">Hiermit werden Verfügbarkeit und Verhalten der Updatefunktion für die <ph name="TPM_FIRMWARE_UPDATE_TPM" />-Firmware konfiguriert.
 
@@ -1423,7 +1423,7 @@ Ist die Richtlinie deaktiviert oder nicht konfiguriert, kann WebDriver nicht kom
       Wird sie deaktiviert, erfolgt die Ausführung nicht in einer Sandbox und das WebRTC-Audioverarbeitungsmodul wird im Renderer-Prozess ausgeführt.
       Dadurch entstehen Sicherheitsrisiken für den Nutzer, die auf die Ausführung des Audio-Stacks ohne Sandbox zurückzuführen sind.
       Wenn die Richtlinie nicht konfiguriert wird, kommt die Standardkonfiguration für die Audio-Sandbox zum Einsatz, die je nach Plattform variiert.
-      Mit dieser Richtlinie sollen Unternehmen die Möglichkeit erhalten, die Audio-Sandbox zu deaktivieren, falls sie Softwarekonfigurationen für die Sicherheit einsetzen, die einen Konflikt mit der Sandbox verursachen.</translation>
+      Mit dieser Richtlinie sollen Unternehmen die Möglichkeit erhalten, die Audio-Sandbox zu deaktivieren, falls sie Softwarekonfigurationen für die Sicherheit einsetzen, die mit der Sandbox in Konflikt stehen könnten.</translation>
 <translation id="3373364525435227558">Mit dieser Richtlinie werden ein oder mehrere empfohlene Sprachen für eine verwaltete Sitzung festgelegt. Nutzer können sich dann ganz einfach für eine entscheiden.
 
 Nutzer können eine Sprache und ein Tastaturlayout auswählen, bevor sie eine verwaltete Sitzung starten. Standardmäßig werden alle Sprachen in alphabetischer Reihenfolge aufgeführt, die von <ph name="PRODUCT_OS_NAME" /> unterstützt werden. Sie können diese Richtlinie verwenden, um eine Gruppe empfohlener Sprachen an den Anfang der Liste zu verschieben.
@@ -3871,7 +3871,7 @@ Die Richtlinienwerte sollten in % angegeben werden und zwischen 0 und 100 liegen
       Wurde "false" festgelegt, sind Komponentenupdates deaktiviert. Für einige Komponenten gelten diese Richtlinien aber nicht: Updates von Komponenten, die keinen ausführbaren Code enthalten, das Browserverhalten nicht maßgeblich verändern oder die Sicherheit nicht gefährden, werden nicht deaktiviert.
       Beispiele für solche Komponenten sind die Zertifikatssperrlisten sowie Safe Browsing-Daten.
       Weitere Informationen zu Safe Browsing finden Sie unter https://developers.google.com/safe-browsing.</translation>
-<translation id="75599127817486754">Eine Liste mit URL-Mustern, für die hochgeladene Inhalte auf Malware geprüft werden müssen.  Sie wird nur verwendet, wenn "<ph name="SEND_FILES_FOR_MALWARE_CHECK_POLICY_NAME" />" auf einen Wert gesetzt ist, mit dem Malwareprüfungen für Uploads zugelassen oder erzwungen werden.
+<translation id="75599127817486754">Eine Liste mit URL-Mustern, für die hochgeladene Inhalte auf Malware geprüft werden müssen.  Sie wird nur verwendet, wenn "<ph name="SEND_FILES_FOR_MALWARE_CHECK_POLICY_NAME" />" ein Wert ist, mit dem Malwareprüfungen für Uploads zugelassen oder erzwungen werden.
 
       Wenn diese Richtlinie nicht konfiguriert oder eine leere Liste festgelegt ist, werden hochgeladene Inhalte nicht auf Malware geprüft.
 

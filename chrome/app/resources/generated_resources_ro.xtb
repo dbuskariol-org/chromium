@@ -1349,7 +1349,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="2923234477033317484">Elimină acest cont</translation>
 <translation id="2926085873880284723">Restabilește comenzile rapide prestabilite</translation>
 <translation id="2927017729816812676">Stocarea pentru memoria cache</translation>
-<translation id="2931157624143513983">Potrivește în funcție de zona în care se poate printa</translation>
+<translation id="2931157624143513983">Potrivește în funcție de zona care se poate printa</translation>
 <translation id="2932085390869194046">Sugerează o parolă...</translation>
 <translation id="2932330436172705843"><ph name="PROFILE_DISPLAY_NAME" /> (cont pentru copii)</translation>
 <translation id="2932483646085333864">Deconectează-te și conectează-te din nou pentru a începe sincronizarea</translation>
@@ -4229,7 +4229,7 @@ Asigură-te că site-ul este de încredere înainte să intri în RV.</translati
 <translation id="7221869452894271364">Reîncarcă această pagină</translation>
 <translation id="7222204278952406003">Chrome este browserul prestabilit</translation>
 <translation id="7222232353993864120">Adresa de e-mail</translation>
-<translation id="7223859049862598735">Chrome blochează accesul la cookie-urile care pot fi folosite pentru a te urmări pe web</translation>
+<translation id="7223859049862598735">Chrome blochează cookie-urile care pot fi folosite pentru a te urmări pe web</translation>
 <translation id="7225179976675429563">Lipsește tipul de rețea</translation>
 <translation id="7227028316978186866"><ph name="DEVICE_NAME" /> (Furnizor: <ph name="VENDOR_ID" />, Produs: <ph name="PRODUCT_ID" />)</translation>
 <translation id="7228479291753472782">Controlează setările care precizează dacă site-urile pot utiliza funcții, cum ar fi localizarea geografică, microfonul, camera foto etc.</translation>

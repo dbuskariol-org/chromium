@@ -624,7 +624,7 @@
 <translation id="2024476116966025075">Configurar el nombre de dominio requerido para los clientes de acceso remoto</translation>
 <translation id="2030905906517501646">Palabra clave del proveedor de búsqueda predeterminado</translation>
 <translation id="203096360153626918">Esta política no tiene efecto en las apps de Android. Podrán implementar el modo de pantalla completa, incluso si esta política se establece como <ph name="FALSE" />.</translation>
-<translation id="2043749682619281558">Habilita la función de resaltar el cursor en la pantalla de acceso</translation>
+<translation id="2043749682619281558">Habilita la función para resaltar el cursor en la pantalla de acceso</translation>
 <translation id="2043770014371753404">Impresoras empresariales inhabilitadas</translation>
 <translation id="2050629715135525072">Controla la capacidad que tiene un usuario conectado a un host de acceso remoto para transferir archivos entre el cliente y el host. Esto no se aplica a las conexiones de asistencia remota, que no admiten la transferencia de archivos.
 
@@ -633,7 +633,7 @@
 <translation id="2061810934846663491">Configurar los nombres de dominio obligatorios para hosts de acceso remoto</translation>
 <translation id="2063663607822994541">Configura la cantidad de memoria que puede usar una única instancia de <ph name="PRODUCT_NAME" /> antes de que se empiecen a descartar las pestañas (es decir, se liberará la memoria que utiliza la pestaña y se deberá volver a cargar cuando se seleccione) para ahorrar memoria.
 
-      Si estableces la política, el navegador comenzará a descartar pestañas para ahorrar memoria cuando se supere el límite. Sin embargo, no hay garantía de que el navegador se ejecute siempre por debajo del límite. Cualquier valor por debajo de 2048 se redondeará a 2048.
+      Si estableces la política, el navegador comenzará a descartar pestañas para ahorrar memoria cuando se supere el límite. Sin embargo, no hay garantía de que el navegador se ejecute siempre por debajo del límite. Se redondeará a 2048 cualquier valor por debajo de 2048.
 
       Si no estableces esta política, el navegador solo comenzará a ahorrar memoria cuando detecte que queda poca cantidad de memoria física disponible en la máquina.</translation>
 <translation id="206623763829450685">Especifica qué esquemas de autenticación de HTTP son compatibles con <ph name="PRODUCT_NAME" />.
@@ -799,7 +799,7 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
       Si esta configuración se habilita, el historial de navegación no se guarda. También se inhabilita la sincronización de pestañas.
 
       Si esta configuración se inhabilita o no se establece, se guarda el historial de navegación.</translation>
-<translation id="2423038190900972331">Controla cómo <ph name="PRODUCT_NAME" /> revisa los datos que se cargan, descargan, pegan del portapapeles o arrastran y sueltan para detectar si se infringen las normas relacionadas con la protección de datos sensibles.
+<translation id="2423038190900972331">Controla cómo revisa <ph name="PRODUCT_NAME" /> los datos que se cargan, descargan, pegan del portapapeles o arrastran y sueltan para detectar si se infringen las normas relacionadas con la protección de datos sensibles.
 
       Si no se establece esta política o se le asigna el valor "Ninguna", <ph name="PRODUCT_NAME" /> no revisará los datos para detectar si se infringen las normas relacionadas con la protección de datos sensibles.
 
@@ -825,11 +825,11 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
       Cuando no se configura o se establece como verdadera, los usuarios podrán usar esta función.
 
       Cuando se establece como falsa, los usuarios no podrán usar esta función.</translation>
-<translation id="2437706973218087361">Esta política controla una función de seguridad en TLS 1.3 que protege las conexiones contra ataques para cambiar a una versión anterior. Se trata de una retrocompatibilidad y no afecta las conexiones a proxies o servidores TLS 1.2 que cumplan con las normas. Sin embargo, las versiones anteriores de algunos proxies de intercepción TLS tienen una falla en la implementación que genera la incompatibilidad.
+<translation id="2437706973218087361">Esta política controla una función de seguridad en TLS 1.3 que protege las conexiones contra ataques para cambiar a una versión anterior. Esta función es retrocompatible y no afecta las conexiones a proxies o servidores que cumplen con el protocolo TLS 1.2. Sin embargo, las versiones anteriores de algunos proxies de intercepción TLS tienen una falla en la implementación que genera la incompatibilidad.
 
       Si se establece esta política como verdadera, <ph name="PRODUCT_NAME" /> habilitará estas protecciones de seguridad para todas las conexiones.
 
-      Si se establece como falsa o no se establece, <ph name="PRODUCT_NAME" /> inhabilitará estas protecciones de seguridad para las conexiones autenticadas con certificados de CA instalados de forma local. Estas protecciones están siempre habilitadas para las conexiones autenticadas con los certificados de CA que cuenten con la confianza pública.
+      Si se establece como falsa o no se establece, <ph name="PRODUCT_NAME" /> inhabilitará estas protecciones de seguridad para las conexiones autenticadas con certificados de CA instalados de forma local. Estas protecciones están siempre habilitadas para las conexiones autenticadas con los certificados de CA con confianza pública.
 
       Es posible que esta política se utilice para probar proxies afectados y actualizarlos. Se espera que los proxies afectados generen un error en las conexiones (código de error: ERR_TLS13_DOWNGRADE_DETECTED). En una versión posterior de <ph name="PRODUCT_NAME" />, se habilitará esta opción de forma predeterminada.
 
@@ -968,9 +968,9 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
       Si se inhabilita, <ph name="PRODUCT_NAME" /> verificará los certificados de servidores mediante el verificador de certificados heredado que incluye la plataforma.
       Si no se establece, es posible que se utilice el verificador de certificados integrado o el heredado.
 
-      Se planea quitar esta política en la versión <ph name="PRODUCT_OS_NAME" /> 81, cuando se quite la compatibilidad del verificador de certificados heredado de <ph name="PRODUCT_OS_NAME" />.
+      Se planea quitar esta política en la versión <ph name="PRODUCT_OS_NAME" /> 81, cuando se quite la compatibilidad con el verificador de certificados heredado de <ph name="PRODUCT_OS_NAME" />.
 
-      Se planea quitar esta política en la versión <ph name="PRODUCT_NAME" /> 83 para Linux, cuando se quite la compatibilidad del verificador de certificados heredado de Linux.
+      Se planea quitar esta política en la versión <ph name="PRODUCT_NAME" /> 83 para Linux, cuando se quite la compatibilidad con el verificador de certificados heredado de Linux.
       </translation>
 <translation id="2586162458524426376">
       Esta política se aplica a la pantalla de acceso. Consulta también la política <ph name="ISOLATE_ORIGINS_POLICY_NAME" />, que se aplica a la sesión de usuario.
@@ -1405,10 +1405,10 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
           Si no se configura esta política, se usará el valor global predeterminado para todos los sitios ya sea de la política "DefaultCookiesSetting" (si está configurada) o de otro tipo de configuración personal del usuario.
 
           Consulta también las políticas "CookiesBlockedForUrls" y "CookiesSessionOnlyForUrls". Ten en cuenta que no debe haber patrones de URL en conflicto entre estas tres políticas. No se especifica qué política tiene prioridad.</translation>
-<translation id="3367344043837603960">Esta política controla el proceso de audio en zona de pruebas.
-      Si se habilita esta política, se ejecutará el proceso de audio en zona de pruebas.
+<translation id="3367344043837603960">Esta política controla la zona de pruebas del proceso de audio.
+      Si se habilita esta política, se ejecutará el proceso de audio en la zona de pruebas.
       Si se inhabilita esta política, se ejecutará el proceso de audio fuera de la zona de pruebas y se ejecutará el módulo de procesamiento de audio WebRTC en el proceso de renderizado.
-      Esta acción deja a los usuarios desprotegidos ante los riesgos de seguridad relacionados con la ejecución de las pilas de audio fuera de la zona de pruebas.
+      Esta acción deja a los usuarios desprotegidos ante los riesgos de seguridad relacionados con la ejecución de los subsistemas de audio fuera de la zona de pruebas.
       Si no se establece esta política, se utilizará la configuración predeterminada para la zona de pruebas de audio, que puede diferir según la plataforma.
       Esta política permite que las empresas inhabiliten la zona de pruebas de audio si utilizan configuraciones de software de seguridad que interfieran con la zona de pruebas.</translation>
 <translation id="3373364525435227558">Establece una o más configuraciones regionales para una sesión administrada y permite que los usuarios elijan fácilmente una de estas configuraciones regionales.
@@ -1964,15 +1964,15 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
 <translation id="4171331498167688968">Si la política se establece como falsa, se permitirá que el software de terceros introduzca código ejecutable en los procesos de Chrome. Si la política no se establece o se establece como verdadera, el software de terceros no podrá introducir código ejecutable en los procesos de Chrome.
 
       Más allá del valor de esta política, el navegador por el momento no impedirá que software de terceros introduzca código ejecutable en los procesos en una máquina que se una a un dominio <ph name="MS_AD_NAME" />.</translation>
-<translation id="417956245902013347">Habilita la función de accesibilidad de resaltar el signo de intercalación en la pantalla de acceso.
+<translation id="417956245902013347">Habilita la función de accesibilidad para resaltar el signo de intercalación en la pantalla de acceso.
 
-          Si se establece esta política como verdadera, la función de resaltar el signo de intercalación estará siempre habilitada en la pantalla de acceso.
+          Si se establece esta política como verdadera, la función para resaltar el signo de intercalación estará siempre habilitada en la pantalla de acceso.
 
           Si se establece esta política como falsa, esta función estará siempre inhabilitada en la pantalla de acceso.
 
           Si la estableces, los usuarios no podrán cambiarla ni anularla.
 
-          Si no la estableces, la función de resaltar el signo de intercalación estará inicialmente inhabilitada en la pantalla de acceso, pero el usuario podrá habilitarla en cualquier momento.</translation>
+          Si no la estableces, la función para resaltar el signo de intercalación estará inicialmente inhabilitada en la pantalla de acceso, pero el usuario podrá habilitarla en cualquier momento.</translation>
 <translation id="4183229833636799228">Configuración predeterminada de <ph name="FLASH_PLUGIN_NAME" /></translation>
 <translation id="4192388905594723944">URL para la validación del token de autenticación del cliente de acceso remoto</translation>
 <translation id="420007931282384740">Establece la función de accesibilidad del teclado en pantalla como predeterminada en la pantalla de acceso.
@@ -2223,7 +2223,7 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
       Si no se establece esta política o se inhabilita, no se crean ni cargan las solicitudes de instalación de extensiones.
       Si se habilita, se crean las solicitudes de instalación de extensiones y se cargan a la Consola del administrador de Google.
 
-      Si los usuarios intentan instalar una extensión que <ph name="EXTENSION_INSTALL_WHITELIST" /> ni <ph name="EXTENSION_SETTINGS" /> la incluyeron en sus listas blancas, se crearán las solicitudes de instalación de extensiones.
+      Si los usuarios intentan instalar una extensión que <ph name="EXTENSION_INSTALL_WHITELIST" /> y <ph name="EXTENSION_SETTINGS" /> no incluyeron en sus listas blancas, se crearán las solicitudes de instalación de extensiones.
 
       Esta política solo es válida si la máquina está inscrita en <ph name="CLOUD_MANAGEMENT_ENROLLMENT_TOKEN" />, y se habilita <ph name="CLOUD_REPORTING_ENABLED" />.</translation>
 <translation id="4639407427807680016">Nombres de hosts de mensajería nativa que deben excluirse de la lista negra</translation>
@@ -2496,7 +2496,7 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
 <translation id="5183383917553127163">Te permite especificar las extensiones que no están sujetas a la lista negra. El valor de lista negra de * significa que todas las extensiones están en la lista negra y los usuarios sólo pueden instalar extensiones que figuran en la lista blanca. De manera predeterminada, todas las extensiones se encuentran en la lista blanca. Sin embargo, si todas las extensiones se han agregado a la lista negra mediante una política, la lista blanca se puede utilizar para anular dicha política.</translation>
 <translation id="519247340330463721">Configura las políticas relacionadas con la Navegación segura.</translation>
 <translation id="5192837635164433517">Permite el uso de páginas alternativas de error integradas en <ph name="PRODUCT_NAME" /> (por ejemplo, "página no encontrada") y evita que los usuarios cambien esta configuración. Si se habilita esta configuración, se usarán páginas alternativas de error. Si se inhabilita esta configuración, no se usarán páginas alternativas de error. Si se habilita o inhabilita esta configuración, los usuarios no podrán cambiar ni anular esta configuración en <ph name="PRODUCT_NAME" />. Si esta política no se configura, se habilitará esta opción, pero el usuario podrá cambiarla.</translation>
-<translation id="5196520640744454600">Habilitar las teclas especiales en la pantalla de acceso</translation>
+<translation id="5196520640744454600">Habilita las teclas especiales en la pantalla de acceso</translation>
 <translation id="5196805177499964601">Bloquear modo de programador.
 
       Si la política se establece en True, <ph name="PRODUCT_OS_NAME" /> impedirá que el dispositivo se inicie en modo de programador. El sistema no se iniciará y mostrará una pantalla de error cuando se active la opción de programador.
@@ -2915,13 +2915,11 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
       Si no se establece esta política o si se establece en false, <ph name="PRODUCT_NAME" /> utilizará la configuración para comprobar la revocación en línea actual.</translation>
 <translation id="5728154254076636808">Habilita la creación de las copias de itinerancia para los datos de perfil de <ph name="PRODUCT_NAME" /></translation>
 <translation id="5732972008943405952">Importar el formulario de Autocompletar del navegador predeterminado en la primera ejecución</translation>
-<translation id="574098933844699859">Especifica si se muestra (o se oculta) siempre la información del sistema (p. ej., la versión del Sistema operativo Chrome o el
-      número de serie del dispositivo) en la pantalla de acceso.
+<translation id="574098933844699859">Especifica si se muestra (o se oculta) siempre la información del sistema (p. ej., la versión del Sistema operativo Chrome o el número de serie del dispositivo) en la pantalla de acceso.
 
       Si se establece la política como verdadera, se mostrará la información del sistema de manera forzada.
       Si se establece como falsa, se ocultará la información de manera forzada.
-      Si no se establece, se aplicará el comportamiento predeterminado
-      (se mostrará en Canary y el canal para desarrolladores). Los usuarios pueden activar o desactivar la visibilidad en función de una operación específica (p. ej., Alt-V).</translation>
+      Si no se establece, se aplicará el comportamiento predeterminado (se mostrará en Canary y el canal para desarrolladores). Los usuarios pueden activar o desactivar la visibilidad en función de una operación específica (p. ej., Alt-V).</translation>
 <translation id="5741810844420698449">Si se configura esta política, se especifica la acción que realizará <ph name="PRODUCT_OS_NAME" /> cuando el usuario cierre la tapa del dispositivo.
 
           Si no se configura esta política, se implementará la acción predeterminada, es decir, la suspensión.
@@ -3043,13 +3041,13 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
 <translation id="6076099373507468537">Define la lista de dispositivos USB que tienen autorización para separarse del controlador en modo kernel para usarse a través de la API chrome.usb directamente en la aplicación web. Las entradas son pares formados por el identificador del producto y del proveedor USB que permiten reconocer un hardware específico.
 
       Si esta política no se configura, la lista de dispositivos USB que se pueden separar está vacía.</translation>
-<translation id="607726879389885889">Esta política controla el comportamiento de <ph name="PRODUCT_NAME" /> cuando un usuario intenta cargar o descargar archivos que son demasiado grandes (50 MB o más) para analizar si tienen software malicioso o si se infringen las normas relacionadas con la protección de datos sensibles.  Esta restricción solo se aplica a los archivos que deban analizarse conforme a lo determinado en <ph name="SEND_FILES_FOR_MALWARE_CHECK_POLICY_NAME" />, <ph name="CHECK_CONTENT_COMPLIANCE_POLICY_NAME" /> y las políticas que controlan la lista de dominios en los que se hayan habilitado las comprobaciones.
+<translation id="607726879389885889">Esta política controla el comportamiento de <ph name="PRODUCT_NAME" /> cuando un usuario intenta cargar o descargar archivos demasiado grandes (50 MB o más) para analizar si tienen software malicioso o si se infringen las normas relacionadas con la protección de datos sensibles.  Esta restricción solo se aplica a los archivos que deban analizarse conforme a lo determinado en <ph name="SEND_FILES_FOR_MALWARE_CHECK_POLICY_NAME" />, <ph name="CHECK_CONTENT_COMPLIANCE_POLICY_NAME" /> y las políticas que controlan la lista de dominios en los que se hayan habilitado las comprobaciones.
 
       Si no se establece esta política o se le asigna el valor "Ninguno", <ph name="PRODUCT_NAME" /> permitirá que el usuario cargue o descargue archivos de cualquier tamaño.
 
       Si se le asigna el valor "Bloquear descargas grandes", se borrarán los archivos que sean demasiado grandes para analizarse antes de que estén disponibles para el usuario.  Dado que no siempre se puede determinar el tamaño antes de la descarga, es posible que <ph name="PRODUCT_NAME" /> descargue los archivos y, luego, determine si cumplen con el límite de tamaño permitido.
 
-      Si se le asigna a esta política el valor "Bloquear cargas grandes", no se podrán seleccionar para su carga los archivos que sean demasiado grandes para analizarse.
+      Si se le asigna a esta política el valor "Bloquear cargas grandes", no se podrá seleccionar la carga de los archivos que sean demasiado grandes para analizarse.
 
       Si se le asigna el valor "Bloquear las cargas y descargas grandes", <ph name="PRODUCT_NAME" /> se comportará conforme a las reglas descritas en "Bloquear descargas grandes" y "Bloquear cargas grandes".
       </translation>
@@ -3452,7 +3450,7 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
       </translation>
 <translation id="6922884955650325312">Bloquear el complemento <ph name="FLASH_PLUGIN_NAME" /></translation>
 <translation id="6923366716660828830">Especifica el nombre del proveedor de búsqueda predeterminado. Si se deja vacío o si no se configura, se usará el nombre de host especificado por la URL de búsqueda. Esta política solo se considera si la política "DefaultSearchProviderEnabled" está habilitada.</translation>
-<translation id="6923731550900440989">Habilita la función de resaltar el signo de intercalación en la pantalla de acceso</translation>
+<translation id="6923731550900440989">Habilita la función para resaltar el signo de intercalación en la pantalla de acceso</translation>
 <translation id="6924223708804692571">Permite forzar la habilitación del corrector ortográfico de idiomas. Se omitirán los idiomas que no se reconozcan en esa lista.
 
       Si habilitas esta política, se inhabilitará el corrector ortográfico para los idiomas especificados. El usuario podrá habilitar o inhabilitar el corrector ortográfico para los idiomas que no están en la lista.
@@ -3815,7 +3813,7 @@ Si se selecciona "U2F_EXTENDED", el segundo factor integrado proporcionará func
       </translation>
 <translation id="7372831798009983116">Habilita la función de accesibilidad de clic automático</translation>
 <translation id="737655323154569539">Restringe el tamaño de la página de impresión. Si la política no se configura o se establece con un valor vacío, no se aplicará ninguna restricción.</translation>
-<translation id="7382191643394429934">Permite la impresión con y sin gráficos de fondo</translation>
+<translation id="7382191643394429934">Permitir la impresión con y sin gráficos de fondo</translation>
 <translation id="7389872682701720082">Si habilitas esta opción, se ejecutarán siempre los complementos actualizados.
 
       Si no se habilita o no se configura esta opción, se solicitará permiso a los usuarios para ejecutar complementos que requieran autorización (estos complementos pueden comprometer la seguridad).</translation>

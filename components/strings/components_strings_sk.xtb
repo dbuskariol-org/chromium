@@ -538,7 +538,6 @@
 <translation id="3655670868607891010">Ak sa vám táto stránka zobrazuje často, skúste použiť tieto stránky <ph name="HELP_LINK" />.</translation>
 <translation id="3658742229777143148">Verzia</translation>
 <translation id="366077651725703012">Aktualizovať kreditnú kartu</translation>
-<translation id="3672525478985456967">Zdá sa, že názov tohto webu sa podobá doméne <ph name="LOOKALIKE_DOMAIN" />. Útočníci niekedy weby napodobňujú tak, že v názve domény vykonajú drobné, ťažko odhaliteľné zmeny.</translation>
 <translation id="3676592649209844519">ID zariadenia:</translation>
 <translation id="3677008721441257057">Mysleli ste doménu &lt;a href="#" id="dont-proceed-link"&gt;<ph name="DOMAIN" />&lt;/a&gt;?</translation>
 <translation id="3678029195006412963">Požiadavku sa nepodarilo podpísať</translation>
@@ -753,7 +752,6 @@
 <translation id="4728558894243024398">Platforma</translation>
 <translation id="4731967714531604179">Prc2 (obálka)</translation>
 <translation id="4736825316280949806">Reštartujte Chromium</translation>
-<translation id="4737433075782228085">Táto stránka je podozrivá.</translation>
 <translation id="473775607612524610">Aktualizovať</translation>
 <translation id="4738601419177586157">Návrh vyhľadávania <ph name="TEXT" /></translation>
 <translation id="4742407542027196863">Spravovať heslá…</translation>
