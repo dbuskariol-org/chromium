@@ -153,8 +153,6 @@ class ASH_EXPORT LockScreenMediaControlsView
   // Hide the controls because of |reason|.
   void Hide(HideReason reason);
 
-  void HideArtwork();
-
   // Set whether the controls should be shown and record the reason why.
   void SetShown(Shown shown);
 
@@ -227,10 +225,6 @@ class ASH_EXPORT LockScreenMediaControlsView
 
   // Automatically hides the controls a few seconds if no media playing.
   std::unique_ptr<base::OneShotTimer> hide_controls_timer_;
-
-  // Make artwork view invisible if there is no artwork update after receiving
-  // an empty artwork.
-  std::unique_ptr<base::OneShotTimer> hide_artwork_timer_;
 
   // Caches the text to be read by screen readers describing the media controls
   // view.
