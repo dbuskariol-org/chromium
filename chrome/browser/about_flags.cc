@@ -4685,19 +4685,32 @@ const FeatureEntry kFeatureEntries[] = {
 class FlagsStateSingleton {
  public:
   FlagsStateSingleton()
-      : flags_state_(kFeatureEntries, base::size(kFeatureEntries)) {}
+      : flags_state_(std::make_unique<flags_ui::FlagsState>(
+            kFeatureEntries,
+            base::size(kFeatureEntries),
+            base::Bind(&FlagsStateSingleton::IsFlagExpired))) {}
   ~FlagsStateSingleton() {}
+
+  static bool IsFlagExpired(const flags_ui::FeatureEntry& entry) {
+    return flags::IsFlagExpired(entry.internal_name);
+  }
 
   static FlagsStateSingleton* GetInstance() {
     return base::Singleton<FlagsStateSingleton>::get();
   }
 
   static flags_ui::FlagsState* GetFlagsState() {
-    return &GetInstance()->flags_state_;
+    return GetInstance()->flags_state_.get();
+  }
+
+  void RebuildState(const std::vector<flags_ui::FeatureEntry>& entries) {
+    flags_state_ = std::make_unique<flags_ui::FlagsState>(
+        entries.data(), entries.size(),
+        base::Bind(&FlagsStateSingleton::IsFlagExpired));
   }
 
  private:
-  flags_ui::FlagsState flags_state_;
+  std::unique_ptr<flags_ui::FlagsState> flags_state_;
 
   DISALLOW_COPY_AND_ASSIGN(FlagsStateSingleton);
 };
