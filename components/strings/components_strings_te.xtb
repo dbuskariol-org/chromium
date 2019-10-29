@@ -277,6 +277,7 @@
 <translation id="2257315177824333709">క్షమించండి, మీ కార్డ్‌ను ప్రస్తుతం సేవ్ చేయలేకపోయాము</translation>
 <translation id="2262243747453050782">HTTP ఎర్రర్</translation>
 <translation id="2263079731045660823">Chrome సెట్టింగ్‌లలో క్రెడిట్ కార్డ్ స్వీయ పూరింపు సమాచారాన్ని అప్‌డేట్ చేయండి</translation>
+<translation id="2267047181501709434">మీ గుర్తింపును ధృవీకరిస్తోంది...</translation>
 <translation id="2270484714375784793">ఫోన్ నంబర్</translation>
 <translation id="2277103315734023688">ముందుకు జరుపు</translation>
 <translation id="2283340219607151381">చిరునామాలను సేవ్ చేసి, పూరించండి</translation>
@@ -284,6 +285,7 @@
 <translation id="2292556288342944218">మీ ఇంటర్నెట్ యాక్సెస్ బ్లాక్ చేయబడింది</translation>
 <translation id="2297722699537546652">B5 (ఎన్వలప్)</translation>
 <translation id="2310021320168182093">Chou2 (ఎన్వలప్)</translation>
+<translation id="2315864634253056100">ఈ సైట్ పేరు చాలా వరకు <ph name="LOOKALIKE_DOMAIN" /> లాగానే కనిపిస్తోంది. దాడి చేసే వారు కొన్నిసార్లు వెబ్ చిరునామాను అంత తేలికగా పసిగట్టలేని విధంగా మార్చి, నకిలీ సైట్‌లను రూపొందిస్తారు.</translation>
 <translation id="2316887270356262533">1 MB కంటే తక్కువ స్థలాన్ని ఖాళీ చేస్తుంది. మీ తదుపరి సందర్శనలో కొన్ని సైట్‌లు మరింత నెమ్మదిగా లోడ్ కావచ్చు.</translation>
 <translation id="2317259163369394535"><ph name="DOMAIN" />కు వినియోగదారు పేరు మరియు పాస్‌వర్డ్ అవసరం.</translation>
 <translation id="2317583587496011522">డెబిట్ కార్డ్‌లు ఆమోదించబడతాయి.</translation>
@@ -476,6 +478,7 @@
 <translation id="3229041911291329567">మీ పరికరం, బ్రౌజర్‌ల వెర్షన్ సమాచారం</translation>
 <translation id="323107829343500871"><ph name="CREDIT_CARD" /> కార్డ్ CVCని నమోదు చేయండి</translation>
 <translation id="3234666976984236645">ఈ సైట్‌లో ఎప్పుడూ ముఖ్యమైన కంటెంట్‌ను గుర్తించు</translation>
+<translation id="3262069459091978471"><ph name="SUGGESTED_DOMAIN" /> అనే పేరు చాలా వరకు <ph name="LOOKALIKE_DOMAIN" /> లాగానే కనిపిస్తోంది. దాడి చేసే వారు కొన్నిసార్లు ఒకే విధంగా కనిపించే URLలను ఉపయోగించడం ద్వారా నకిలీ సైట్‌లను రూపొందిస్తారు.</translation>
 <translation id="3270847123878663523">&amp;మళ్లీ క్రమం చేయడాన్ని రద్దు చేయి</translation>
 <translation id="3274521967729236597">పా-కాయ్</translation>
 <translation id="3281668902344226640">మీ సేవ్ చేసిన చెల్లింపు పద్ధతులను ధృవీకరించడానికి Touch IDని ఉపయోగించండి.</translation>
@@ -1493,6 +1496,7 @@
 <translation id="830498451218851433">సగం ఫోల్డ్</translation>
 <translation id="8307358339886459768">చిన్న-ఫోటో</translation>
 <translation id="8308427013383895095">నెట్‌వర్క్ కనెక్షన్‌తో సమస్య ఉన్నందున అనువాదం విఫలమైంది.</translation>
+<translation id="831207732689920588">ఈ పేజీ అనుమానాస్పదమైనది (Chrome ద్వారా ఫ్లాగ్ చేయబడింది).</translation>
 <translation id="8332188693563227489"><ph name="HOST_NAME" />కి యాక్సెస్ నిరాకరించబడింది</translation>
 <translation id="8340095855084055290"><ph name="EXPIRATION_MONTH" />/<ph name="EXPIRATION_YEAR" /></translation>
 <translation id="834457929814110454">మీ భద్రతకు వాటిల్లే ఆపదల గురించి మీకు అర్థం అయ్యి ఉంటే, హానికర ప్రోగ్రామ్‌లు తీసివేయబడటానికి ముందే మీరు <ph name="BEGIN_LINK" />ఈ సైట్‌ను సందర్శించవచ్చు<ph name="END_LINK" />.</translation>
@@ -1549,7 +1553,6 @@
 <translation id="8718314106902482036">చెల్లింపు పూర్తి కాలేదు</translation>
 <translation id="8719263113926255150"><ph name="ENTITY" />, <ph name="DESCRIPTION" />, శోధన సూచన</translation>
 <translation id="8719528812645237045">ఎగువ భాగంలో అనేక రంధ్రాలు</translation>
-<translation id="8723954843026426558"><ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> నిబంధనలు &amp; షరతులు, గోప్యతా విధానం, ఉపసంహరణ హక్కుకు నేను అంగీకరిస్తున్నాను</translation>
 <translation id="8725066075913043281">మళ్ళీ ప్రయత్నించండి</translation>
 <translation id="8728672262656704056">మీరు ఇప్పుడు అజ్ఞాత మోడ్‌లో ఉన్నారు</translation>
 <translation id="8730621377337864115">పూర్తయింది</translation>
@@ -1583,6 +1586,7 @@
 <translation id="8903921497873541725">దగ్గరికి జూమ్ చెయ్యి</translation>
 <translation id="890485472659500557">ఇంజినీరింగ్-C</translation>
 <translation id="8912362522468806198">Google ఖాతా</translation>
+<translation id="8918231688545606538">ఈ పేజీ అనుమానాస్పదంగా ఉంది</translation>
 <translation id="892588693504540538">కుడివైపు ఎగువ భాగంలో రంధ్రం</translation>
 <translation id="8931333241327730545">మీరు ఈ కార్డ్‌ను మీ Google ఖాతాకు సేవ్ చేయాలనుకుంటున్నారా?</translation>
 <translation id="8932102934695377596">మీ గడియారం సమయం గతంలో ఉంది</translation>

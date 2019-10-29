@@ -275,6 +275,7 @@
 <translation id="2257315177824333709">Жао нам је, тренутно не можемо да сачувамо картицу</translation>
 <translation id="2262243747453050782">HTTP грешка</translation>
 <translation id="2263079731045660823">Ажурирајте информације о кредитним картицама за аутоматско попуњавање у подешавањима Chrome-а</translation>
+<translation id="2267047181501709434">Верификује се идентитет...</translation>
 <translation id="2270484714375784793">Број телефона</translation>
 <translation id="2277103315734023688">Премотај унапред</translation>
 <translation id="2283340219607151381">Чувај и уноси адресе</translation>
@@ -1552,7 +1553,6 @@
 <translation id="8718314106902482036">Плаћање није довршено</translation>
 <translation id="8719263113926255150"><ph name="ENTITY" />, <ph name="DESCRIPTION" />, предлог за претрагу</translation>
 <translation id="8719528812645237045">Вишеструко бушење на врху</translation>
-<translation id="8723954843026426558">Прихватам услове и одредбе, политику приватности и право на одустајање за <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /></translation>
 <translation id="8725066075913043281">Пробајте поново</translation>
 <translation id="8728672262656704056">Прешли сте у режим Без архивирања</translation>
 <translation id="8730621377337864115">Готово</translation>

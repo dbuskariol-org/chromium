@@ -275,6 +275,7 @@
 <translation id="2257315177824333709">தற்போது உங்கள் கார்டு விவரங்களைச் சேமிக்க இயலாது</translation>
 <translation id="2262243747453050782">HTTP பிழை</translation>
 <translation id="2263079731045660823">Chrome அமைப்புகளில் கிரெடிட் கார்டுத் தன்னிரப்பித் தகவலைப் புதுப்பிக்கவும்</translation>
+<translation id="2267047181501709434">உங்கள் அடையாளத்தைச் சரிபார்க்கிறது...</translation>
 <translation id="2270484714375784793">தொலைபேசி எண்</translation>
 <translation id="2277103315734023688">முன்செல்</translation>
 <translation id="2283340219607151381">முகவரிகளைச் சேமித்துத் தானாக நிரப்பு</translation>
@@ -282,6 +283,7 @@
 <translation id="2292556288342944218">உங்கள் இணைய அணுகல் தடுக்கப்பட்டது</translation>
 <translation id="2297722699537546652">B5 (என்வலப்)</translation>
 <translation id="2310021320168182093">Chou2 (என்வலப்)</translation>
+<translation id="2315864634253056100">இந்தத் தளத்தின் பெயரும் <ph name="LOOKALIKE_DOMAIN" /> என்ற தளத்தின் பெயரும் ஒரே மாதிரியாக இருப்பது போல் தெரிகிறது. தீங்கிழைப்பவர்கள் சில நேரங்களில் கண்டுபிடிக்கவே முடியாத அளவிற்கு வலை முகவரியை சிறிது மாற்றி போலியான தளங்களை உருவாக்குவார்கள்.</translation>
 <translation id="2316887270356262533">1 மெ.பை. அளவிற்கும் குறைவான இடத்தைக் காலியாக்கும். நீங்கள் அடுத்த முறை பார்வையிடும் போது, சில தளங்கள் மிகவும் மெதுவாக ஏற்றப்படலாம்.</translation>
 <translation id="2317259163369394535"><ph name="DOMAIN" />க்குப் பயனர்பெயரும் கடவுச்சொல்லும் தேவை.</translation>
 <translation id="2317583587496011522">டெபிட் கார்டுகள் ஏற்கப்படுகின்றன.</translation>
@@ -465,6 +467,7 @@
 <translation id="3229041911291329567">உங்கள் சாதனம் மற்றும் உலாவியின் பதிப்புத் தகவல்</translation>
 <translation id="323107829343500871"><ph name="CREDIT_CARD" /> இன் CVC எண்ணை உள்ளிடவும்</translation>
 <translation id="3234666976984236645">இந்தத் தளத்தின் முக்கிய உள்ளடக்கத்தை எப்போதும் இயக்கவும்</translation>
+<translation id="3262069459091978471"><ph name="LOOKALIKE_DOMAIN" /> தளத்தின் பெயர் <ph name="SUGGESTED_DOMAIN" />மைப் போலவே உள்ளது. தீங்கிழைப்பவர்கள் சில நேரங்களில் ஒரே மாதிரியான URLகளைப் பயன்படுத்தி போலியான தளங்களை உருவாக்குவார்கள்.</translation>
 <translation id="3270847123878663523">&amp;மறுவரிசைப்படுத்தலைச் செயல்தவிர்</translation>
 <translation id="3274521967729236597">Pa-Kai</translation>
 <translation id="3281668902344226640">நீங்கள் சேமித்துள்ள பேமெண்ட் முறைகளைச் சரிபார்க்க Touch ஐடியைப் பயன்படுத்தவும்.</translation>
@@ -1476,6 +1479,7 @@
 <translation id="830498451218851433">ஃபோல்டு ஹாஃப்</translation>
 <translation id="8307358339886459768">Small-Photo</translation>
 <translation id="8308427013383895095">நெட்வொர்க் இணைப்பில் ஒரு சிக்கல் இருப்பதால் மொழிபெயர்ப்பு தோல்வியடைந்தது.</translation>
+<translation id="831207732689920588">இந்தப் பக்கம் சந்தேகத்திற்குரியதாக உள்ளது (Chrome கொடியிட்டுள்ளது).</translation>
 <translation id="8332188693563227489"><ph name="HOST_NAME" /> க்கான அணுகல் மறுக்கப்பட்டது</translation>
 <translation id="8340095855084055290"><ph name="EXPIRATION_MONTH" />/<ph name="EXPIRATION_YEAR" /></translation>
 <translation id="834457929814110454">உங்கள் பாதுகாப்பிற்கான ஆபத்தைப் புரிந்துகொண்டால், தீங்கான நிரல்களை அகற்றும் முன் <ph name="BEGIN_LINK" />இந்தத் தளத்தைப் பார்வையிடலாம்<ph name="END_LINK" />.</translation>
@@ -1532,7 +1536,6 @@
 <translation id="8718314106902482036">பேமெண்ட் முடியவில்லை</translation>
 <translation id="8719263113926255150"><ph name="ENTITY" />, <ph name="DESCRIPTION" />, தேடல் பரிந்துரை</translation>
 <translation id="8719528812645237045">மல்டிப்பில் பஞ்ச் டாப்</translation>
-<translation id="8723954843026426558">விதிமுறைகள் &amp; நிபந்தனைகள், தனியுரிமைக் கொள்கை, <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> டொமைனைத் திரும்பப்பெறும் உரிமை ஆகியவற்றை ஏற்கிறேன்</translation>
 <translation id="8725066075913043281">மீண்டும் முயற்சிக்கவும்</translation>
 <translation id="8728672262656704056">மறைநிலைக்குச் சென்றுவிட்டீர்கள்</translation>
 <translation id="8730621377337864115">முடிந்தது</translation>
@@ -1566,6 +1569,7 @@
 <translation id="8903921497873541725">பெரிதாக்கு</translation>
 <translation id="890485472659500557">Engineering-C</translation>
 <translation id="8912362522468806198">Google கணக்கு</translation>
+<translation id="8918231688545606538">இந்தப் பக்கம் சந்தேகத்திற்குரியதாக உள்ளது</translation>
 <translation id="892588693504540538">பஞ்ச் டாப் ரைட்</translation>
 <translation id="8931333241327730545">இந்தக் கார்டை உங்கள் Google கணக்கில் சேமிக்க வேண்டுமா?</translation>
 <translation id="8932102934695377596">உங்கள் கடிகாரம் மிகவும் பின்தங்கி இருக்கிறது</translation>

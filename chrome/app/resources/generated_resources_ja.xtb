@@ -2822,7 +2822,6 @@ VR を開始する前に、信頼できるサイトかどうかを確認して�
 <translation id="5142961317498132443">認証</translation>
 <translation id="5143374789336132547">拡張機能「<ph name="EXTENSION_NAME" />」により、ホームボタンをクリックしたときに表示されるページが変更されました。</translation>
 <translation id="5143712164865402236">全画面表示にする</translation>
-<translation id="5145461783043820456">サードパーティの Cookie のブロックはオンになっています</translation>
 <translation id="514575469079499857">IP アドレスを使用して現在地を特定する（デフォルト）</translation>
 <translation id="5146995429444047494"><ph name="ORIGIN" /> の通知をブロックしました</translation>
 <translation id="5150254825601720210">Netscape 証明書 SSL サーバー名</translation>
@@ -5580,6 +5579,7 @@ VR を開始する前に、信頼できるサイトかどうかを確認して�
 <translation id="9130015405878219958">入力されたモードが無効です。</translation>
 <translation id="9131487537093447019">Bluetooth デバイスとのメッセージの送受信。</translation>
 <translation id="9134304429738380103">利用する</translation>
+<translation id="9135090785674039430">オンにすると、サイトは Cookie を使用してあなたをウェブ上でトラッキングできなくなります。ウェブサイトによっては機能が損なわれる場合もあります。</translation>
 <translation id="9137013805542155359">原文のページを表示</translation>
 <translation id="9137157311132182254">優先する検索エンジン</translation>
 <translation id="9137248913990643158">このアプリを使用するには、Chrome を起動してログインしてください。</translation>

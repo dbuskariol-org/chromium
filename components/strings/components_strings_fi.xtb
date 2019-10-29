@@ -275,6 +275,7 @@
 <translation id="2257315177824333709">Korttia ei voi juuri nyt tallentaa</translation>
 <translation id="2262243747453050782">HTTP-virhe</translation>
 <translation id="2263079731045660823">Päivitä luottokorttien automaattiset täyttötiedot Chrome-asetuksissa</translation>
+<translation id="2267047181501709434">Henkilöllisyyttäsi vahvistetaan…</translation>
 <translation id="2270484714375784793">Puhelinnumero</translation>
 <translation id="2277103315734023688">Kelaa eteenpäin</translation>
 <translation id="2283340219607151381">Tallenna ja täytä osoitteet</translation>
@@ -1554,7 +1555,6 @@ Lisätietoja:
 <translation id="8718314106902482036">Maksua ei suoritettu loppuun</translation>
 <translation id="8719263113926255150"><ph name="ENTITY" />, <ph name="DESCRIPTION" />, hakuehdotus</translation>
 <translation id="8719528812645237045">Useita reikiä yläreunassa</translation>
-<translation id="8723954843026426558">Hyväksyn palvelun <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> käyttöehdot, tietosuojakäytännön ja peruutusoikeuden.</translation>
 <translation id="8725066075913043281">Yritä uudelleen</translation>
 <translation id="8728672262656704056">Olet muuttunut näkymättömäksi</translation>
 <translation id="8730621377337864115">Valmis</translation>
