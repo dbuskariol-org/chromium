@@ -39,6 +39,9 @@ class ToolbarAccountIconContainerView : public ToolbarIconContainerView,
   AvatarToolbarButton* avatar_button() { return avatar_; }
 
  private:
+  // ToolbarIconContainerView:
+  const views::View::Views& GetChildren() const override;
+
   SkColor GetIconColor() const;
 
   PageActionIconContainerView* page_action_icon_container_view_ = nullptr;
