@@ -369,6 +369,11 @@ const char kUseMultiloginEndpointName[] = "Use Multilogin endpoint.";
 const char kUseMultiloginEndpointDescription[] =
     "Use Gaia OAuth multilogin for identity consistency.";
 
+const char kUseWKWebViewLoadingName[] =
+    "Use WKWebView.loading for WebState::IsLoading";
+const char kUseWKWebViewLoadingDescription[] =
+    "Enables using WKWebView.loading for WebState::IsLoading";
+
 const char kWalletServiceUseSandboxName[] = "Use Google Payments sandbox";
 const char kWalletServiceUseSandboxDescription[] =
     "Uses the sandbox service for Google Payments API calls.";
