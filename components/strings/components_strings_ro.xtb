@@ -111,7 +111,6 @@
 <translation id="1430915738399379752">Printează</translation>
 <translation id="1442386063175183758">Îndoire tip fereastră spre dreapta</translation>
 <translation id="1442987760062738829">Perforare</translation>
-<translation id="1450011005989029586">Parola ta a fost expusă în urma încălcării securității datelor pe site-ul sau în aplicația folosită. Chrome îți recomandă <ph name="BOLD" /> pe <ph name="ORIGIN" /> acum.</translation>
 <translation id="1455413310270022028">Radieră</translation>
 <translation id="1463543813647160932">5x7</translation>
 <translation id="1472675084647422956">Afișați mai multe</translation>
@@ -688,7 +687,6 @@
 <translation id="4258748452823770588">Semnătură greșită</translation>
 <translation id="4261046003697461417">Nu se pot face adnotări în documentele protejate</translation>
 <translation id="4265872034478892965">Permisă de administrator</translation>
-<translation id="4270615291506829403">schimbarea parolei</translation>
 <translation id="4275830172053184480">Reporniți gadgetul</translation>
 <translation id="4277028893293644418">Resetează parola</translation>
 <translation id="4279811152705618813">Dispozitivul <ph name="DEVICE_TYPE" /> este gestionat de <ph name="ENROLLMENT_DOMAIN" /></translation>
@@ -768,7 +766,6 @@
 <translation id="4708268264240856090">Conexiunea a fost întreruptă</translation>
 <translation id="4712404868219726379">Windows Hello</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />să rulezi Diagnostice rețea Windows<ph name="END_LINK" />;</translation>
-<translation id="4725851834065990915">Parola ta a fost expusă în urma încălcării securității datelor pe site-ul sau în aplicația folosită. Chrome recomandă să verifici acum parolele salvate.</translation>
 <translation id="4726672564094551039">Reîncărcați politicile</translation>
 <translation id="4728558894243024398">Platformă</translation>
 <translation id="4731967714531604179">Prc2 (Plic)</translation>
@@ -1186,7 +1183,6 @@
 <translation id="679355240208270552">Valoare ignorată, deoarece politica nu a activat căutarea prestabilită.</translation>
 <translation id="681021252041861472">Câmp obligatoriu</translation>
 <translation id="6810899417690483278">ID-ul de personalizare</translation>
-<translation id="6819440013020405090">Parola ta a fost expusă în urma încălcării securității datelor pe site-ul sau în aplicația folosită. Chrome recomandă să verifici parolele salvate și să-ți schimbi parola în <ph name="ORIGIN" />.</translation>
 <translation id="6825578344716086703">Ai încercat să accesezi <ph name="DOMAIN" />, dar serverul a prezentat un certificat semnat folosind un algoritm de semnare slab (cum ar fi SHA-1). Acest lucru înseamnă că este posibil ca datele de conectare de securitate prezentate de server să fie falsificate sau ca serverul să nu fie cel așteptat (este posibil să comunici cu un atacator).</translation>
 <translation id="6826370046007623921">Prevenirea pierderii datelor</translation>
 <translation id="6831043979455480757">Tradu</translation>
@@ -1229,7 +1225,6 @@
 <translation id="7064851114919012435">Informații de contact</translation>
 <translation id="7075452647191940183">Solicitarea este prea mare</translation>
 <translation id="7079718277001814089">Acest site conține programe malware</translation>
-<translation id="70850504851191913">A fost raportată încălcarea securității datelor</translation>
 <translation id="7087282848513945231">Comitat</translation>
 <translation id="7090678807593890770">Caută <ph name="LINK" /> pe Google</translation>
 <translation id="7108338896283013870">Ascunde</translation>

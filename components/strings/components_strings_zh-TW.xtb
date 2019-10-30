@@ -111,7 +111,6 @@
 <translation id="1430915738399379752">列印</translation>
 <translation id="1442386063175183758">右半邊對折</translation>
 <translation id="1442987760062738829">打孔</translation>
-<translation id="1450011005989029586">你使用的某個網站或應用程式發生資料侵害事件，因此你的密碼已遭洩露。Chrome 建議你立即前往 <ph name="ORIGIN" /> <ph name="BOLD" />。</translation>
 <translation id="1455413310270022028">橡皮擦</translation>
 <translation id="1463543813647160932">5x7</translation>
 <translation id="1472675084647422956">顯示更多</translation>
@@ -675,7 +674,6 @@
 <translation id="4258748452823770588">簽名有誤</translation>
 <translation id="4261046003697461417">無法加註受保護的文件</translation>
 <translation id="4265872034478892965">依據管理員的設定允許</translation>
-<translation id="4270615291506829403">變更你的密碼</translation>
 <translation id="4275830172053184480">重新啟動裝置</translation>
 <translation id="4277028893293644418">重設密碼</translation>
 <translation id="4279811152705618813">你的 <ph name="DEVICE_TYPE" /> 是由 <ph name="ENROLLMENT_DOMAIN" /> 管理</translation>
@@ -754,7 +752,6 @@
 <translation id="4708268264240856090">您的連線已中斷</translation>
 <translation id="4712404868219726379">Windows Hello</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />執行 Windows 網路診斷<ph name="END_LINK" /></translation>
-<translation id="4725851834065990915">由於你使用的某個網站或應用程式發生了資料侵害事件，你的密碼已外洩。Chrome 建議你立即檢查已儲存的密碼。</translation>
 <translation id="4726672564094551039">重新載入政策</translation>
 <translation id="4728558894243024398">平台</translation>
 <translation id="4731967714531604179">Prc2 (信封)</translation>
@@ -1172,7 +1169,6 @@
 <translation id="679355240208270552">由於政策未啟用預設搜尋設定，因此遭到忽略。</translation>
 <translation id="681021252041861472">必填欄位</translation>
 <translation id="6810899417690483278">自訂 ID</translation>
-<translation id="6819440013020405090">由於你使用的某個網站或應用程式發生了資料侵害事件，你的密碼已外洩。Chrome 建議你檢查已儲存的密碼，並且變更 <ph name="ORIGIN" /> 的密碼。</translation>
 <translation id="6825578344716086703">你嘗試連上 <ph name="DOMAIN" />，但伺服器的憑證是以防護力薄弱的簽章演算法 (例如 SHA-1) 進行簽署。這代表伺服器提供的安全性憑證可能遭到偽造，而且這個伺服器可能並不是你的目標伺服器 (你的連線對象可能是攻擊者的電腦)。</translation>
 <translation id="6826370046007623921">資料遺失防護</translation>
 <translation id="6831043979455480757">翻譯</translation>
@@ -1215,7 +1211,6 @@
 <translation id="7064851114919012435">聯絡資訊</translation>
 <translation id="7075452647191940183">要求過大</translation>
 <translation id="7079718277001814089">這個網站含有惡意軟體</translation>
-<translation id="70850504851191913">系統回報了資料侵害事件</translation>
 <translation id="7087282848513945231">郡/縣</translation>
 <translation id="7090678807593890770">請透過 Google 搜尋「<ph name="LINK" />」</translation>
 <translation id="7108338896283013870">隱藏</translation>

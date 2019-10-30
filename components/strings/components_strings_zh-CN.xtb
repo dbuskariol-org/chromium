@@ -111,7 +111,6 @@
 <translation id="1430915738399379752">打印</translation>
 <translation id="1442386063175183758">关门折（右侧）</translation>
 <translation id="1442987760062738829">打孔</translation>
-<translation id="1450011005989029586">您使用的某个网站或应用发生了数据泄露，导致您的密码外泄。Chrome 建议您立即在 <ph name="ORIGIN" /> 上<ph name="BOLD" />。</translation>
 <translation id="1455413310270022028">橡皮擦</translation>
 <translation id="1463543813647160932">5x7</translation>
 <translation id="1472675084647422956">显示更多</translation>
@@ -283,7 +282,7 @@
 <translation id="2292556288342944218">您被禁止访问互联网</translation>
 <translation id="2297722699537546652">B5 (Envelope)</translation>
 <translation id="2310021320168182093">Chou2 (Envelope)</translation>
-<translation id="2315864634253056100">此网站的域名看起来和 <ph name="LOOKALIKE_DOMAIN" /> 很相似。攻击者有时会对网址做些令人难以发现的更改来仿冒网站。</translation>
+<translation id="2315864634253056100">此网站的域名看起来和 <ph name="LOOKALIKE_DOMAIN" /> 很相似。攻击者有时会对网址做些令人难以察觉的更改来仿冒网站。</translation>
 <translation id="2316887270356262533">释放了不到 1 MB。当您下次访问时，某些网站的加载速度可能会更慢。</translation>
 <translation id="2317259163369394535"><ph name="DOMAIN" /> 要求提供用户名和密码。</translation>
 <translation id="2317583587496011522">接受借记卡。</translation>
@@ -671,7 +670,6 @@
 <translation id="4258748452823770588">签名无效</translation>
 <translation id="4261046003697461417">无法为受保护的文档添加注释</translation>
 <translation id="4265872034478892965">您的管理员允许</translation>
-<translation id="4270615291506829403">更改您的密码</translation>
 <translation id="4275830172053184480">重启您的设备</translation>
 <translation id="4277028893293644418">重置密码</translation>
 <translation id="4279811152705618813">您的 <ph name="DEVICE_TYPE" /> 由 <ph name="ENROLLMENT_DOMAIN" /> 管理</translation>
@@ -750,7 +748,6 @@
 <translation id="4708268264240856090">您的连接已中断</translation>
 <translation id="4712404868219726379">Windows Hello</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />运行 Windows 网络诊断<ph name="END_LINK" /></translation>
-<translation id="4725851834065990915">您使用的某个网站或应用发生了数据泄露，导致您的密码被外泄。Chrome 建议您立即检查已保存的密码。</translation>
 <translation id="4726672564094551039">重新加载政策</translation>
 <translation id="4728558894243024398">平台</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
@@ -1167,7 +1164,6 @@
 <translation id="679355240208270552">由于政策未启用默认搜索引擎，因此政策值已被忽略。</translation>
 <translation id="681021252041861472">必填字段</translation>
 <translation id="6810899417690483278">自定义 ID</translation>
-<translation id="6819440013020405090">您使用的某个网站或应用发生了数据泄露，导致您的密码被外泄。Chrome 建议您检查并更改您在 <ph name="ORIGIN" /> 上保存的密码。</translation>
 <translation id="6825578344716086703">您尝试访问的是 <ph name="DOMAIN" />，但是服务器出示的证书是使用弱签名算法（例如 SHA-1）签署的。这意味着服务器出示的安全凭据可能是伪造的，因此这可能并不是您想要访问的服务器（您可能正在与攻击者进行通信）。</translation>
 <translation id="6826370046007623921">数据泄露防护</translation>
 <translation id="6831043979455480757">翻译</translation>
@@ -1210,7 +1206,6 @@
 <translation id="7064851114919012435">联系信息</translation>
 <translation id="7075452647191940183">请求过大</translation>
 <translation id="7079718277001814089">此网站包含恶意软件</translation>
-<translation id="70850504851191913">已报告数据泄露</translation>
 <translation id="7087282848513945231">县</translation>
 <translation id="7090678807593890770">请在 Google 中搜索“<ph name="LINK" />”</translation>
 <translation id="7108338896283013870">隐藏</translation>

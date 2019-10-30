@@ -111,7 +111,6 @@
 <translation id="1430915738399379752">印刷</translation>
 <translation id="1442386063175183758">右観音折り</translation>
 <translation id="1442987760062738829">パンチ</translation>
-<translation id="1450011005989029586">ご利用のサイトまたはアプリでのデータ侵害により、パスワードが流出しました。今すぐ <ph name="ORIGIN" /> の<ph name="BOLD" />ことをおすすめします。</translation>
 <translation id="1455413310270022028">消しゴム</translation>
 <translation id="1463543813647160932">5×7</translation>
 <translation id="1472675084647422956">表示項目を増やす</translation>
@@ -675,7 +674,6 @@
 <translation id="4258748452823770588">署名が不適切です</translation>
 <translation id="4261046003697461417">保護されたドキュメントに注釈を追加することはできません</translation>
 <translation id="4265872034478892965">管理者によって許可</translation>
-<translation id="4270615291506829403">パスワードを変更する</translation>
 <translation id="4275830172053184480">デバイスの再起動</translation>
 <translation id="4277028893293644418">パスワードを再設定</translation>
 <translation id="4279811152705618813">この <ph name="DEVICE_TYPE" /> は <ph name="ENROLLMENT_DOMAIN" /> によって管理されています</translation>
@@ -754,7 +752,6 @@
 <translation id="4708268264240856090">接続が中断されました</translation>
 <translation id="4712404868219726379">Windows Hello</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows ネットワーク診断ツールを実行する<ph name="END_LINK" /></translation>
-<translation id="4725851834065990915">ご利用のサイトまたはアプリでのデータ侵害により、パスワード情報が漏洩しました。保存したパスワードをすぐに確認することをおすすめします。</translation>
 <translation id="4726672564094551039">ポリシーを再読み込み</translation>
 <translation id="4728558894243024398">プラットフォーム</translation>
 <translation id="4731967714531604179">Prc2（封筒）</translation>
@@ -1172,7 +1169,6 @@
 <translation id="679355240208270552">ポリシーによって既定の検索エンジンが有効になっていないため、無視されました。</translation>
 <translation id="681021252041861472">必須項目</translation>
 <translation id="6810899417690483278">カスタム ID</translation>
-<translation id="6819440013020405090">ご利用のサイトまたはアプリでのデータ侵害により、パスワード情報が漏洩しました。保存したパスワードを確認して、<ph name="ORIGIN" /> のパスワードを変更することをおすすめします。</translation>
 <translation id="6825578344716086703"><ph name="DOMAIN" /> にアクセスしようとしましたが、脆弱な署名アルゴリズム（SHA-1 など）を使用して署名された証明書がサーバーから提示されました。このセキュリティ認証情報は偽装されたものである可能性があり、アクセスしようとしたサーバーとは別のサーバーが応答している可能性があります（悪意のあるユーザーと通信している可能性があります）。</translation>
 <translation id="6826370046007623921">データ損失の防止</translation>
 <translation id="6831043979455480757">翻訳</translation>
@@ -1215,7 +1211,6 @@
 <translation id="7064851114919012435">連絡先情報</translation>
 <translation id="7075452647191940183">リクエストが大きすぎます</translation>
 <translation id="7079718277001814089">このサイトには不正なソフトウェアが含まれています</translation>
-<translation id="70850504851191913">データ侵害が報告されました</translation>
 <translation id="7087282848513945231">郡</translation>
 <translation id="7090678807593890770"><ph name="LINK" /> を Google で検索してください</translation>
 <translation id="7108338896283013870">非表示</translation>

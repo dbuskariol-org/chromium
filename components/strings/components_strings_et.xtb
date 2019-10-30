@@ -111,7 +111,6 @@
 <translation id="1430915738399379752">Printimine</translation>
 <translation id="1442386063175183758">Paremalt väravakujuliselt volditud</translation>
 <translation id="1442987760062738829">Auk</translation>
-<translation id="1450011005989029586">Teie kasutatava saidi või rakenduse andmetega seotud rikkumine paljastas teie parooli. Chrome soovitab saidil <ph name="ORIGIN" /> kohe <ph name="BOLD" />.</translation>
 <translation id="1455413310270022028">Kustutuskumm</translation>
 <translation id="1463543813647160932">5 x 7</translation>
 <translation id="1472675084647422956">Kuva rohkem</translation>
@@ -690,7 +689,6 @@
 <translation id="4258748452823770588">Sobimatu allkiri</translation>
 <translation id="4261046003697461417">Kaitstud dokumentidele ei saa märkusi lisada</translation>
 <translation id="4265872034478892965">Lubas administraator</translation>
-<translation id="4270615291506829403">parooli muuta</translation>
 <translation id="4275830172053184480">Taaskäivitage seade</translation>
 <translation id="4277028893293644418">Lähtesta parool</translation>
 <translation id="4279811152705618813">Teie seadet <ph name="DEVICE_TYPE" /> haldab <ph name="ENROLLMENT_DOMAIN" /></translation>
@@ -770,7 +768,6 @@
 <translation id="4708268264240856090">Teie ühendus katkes</translation>
 <translation id="4712404868219726379">Windows Hello</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windowsi võrgudiagnostika käitamine<ph name="END_LINK" /></translation>
-<translation id="4725851834065990915">Teie kasutatava saidi või rakenduse andmetega seotud rikkumine paljastas teie parooli. Chrome soovitab teil salvestatud paroole kohe kontrollida.</translation>
 <translation id="4726672564094551039">Laadi reeglid uuesti</translation>
 <translation id="4728558894243024398">Platvorm</translation>
 <translation id="4731967714531604179">Prc2 (ümbrik)</translation>
@@ -1188,7 +1185,6 @@
 <translation id="679355240208270552">Seda eiratakse, kuna vaikeotsing ei ole reegliga lubatud.</translation>
 <translation id="681021252041861472">Kohustuslik väli</translation>
 <translation id="6810899417690483278">Kohandamise ID</translation>
-<translation id="6819440013020405090">Teie kasutatava saidi või rakenduse andmetega seotud rikkumine paljastas teie parooli. Chrome soovitab salvestatud paroole kontrollida ja teenuse <ph name="ORIGIN" /> parooli muuta.</translation>
 <translation id="6825578344716086703">Püüdsite jõuda domeenile <ph name="DOMAIN" />, kuid server esitas sertifikaadi, mis on allkirjastatud nõrga allkirjaalgoritmiga (nt SHA-1). See tähendab, et serveri esitatud turvamandaadid võivad olla võltsitud ja server ei pruugi olla see, mida eeldate (võimalik, et suhtlete ründajaga).</translation>
 <translation id="6826370046007623921">Andmekao vältimine</translation>
 <translation id="6831043979455480757">Tõlgi</translation>
@@ -1231,7 +1227,6 @@
 <translation id="7064851114919012435">Kontaktteave</translation>
 <translation id="7075452647191940183">Taotlus on liiga suur</translation>
 <translation id="7079718277001814089">See sait sisaldab pahavara</translation>
-<translation id="70850504851191913">Teatati andmetega seotud rikkumisest</translation>
 <translation id="7087282848513945231">Maakond</translation>
 <translation id="7090678807593890770">Sisestage Google'isse otsing <ph name="LINK" /></translation>
 <translation id="7108338896283013870">Peida</translation>

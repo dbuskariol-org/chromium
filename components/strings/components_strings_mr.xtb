@@ -111,7 +111,6 @@
 <translation id="1430915738399379752">प्रिंट</translation>
 <translation id="1442386063175183758">राइट गेट फोल्ड</translation>
 <translation id="1442987760062738829">पंच</translation>
-<translation id="1450011005989029586">तुम्ही वापरता त्या साइट किंवा अॅपवरील डेटा भंगामुळे तुमचा पासवर्ड उघड झाला आहे. Chrome शिफारशी <ph name="BOLD" /> आता <ph name="ORIGIN" /> वर आहेत.</translation>
 <translation id="1455413310270022028">खोडरबर</translation>
 <translation id="1463543813647160932">5x7</translation>
 <translation id="1472675084647422956">अधिक दर्शवा</translation>
@@ -689,7 +688,6 @@
 <translation id="4258748452823770588">खराब स्वाक्षरी</translation>
 <translation id="4261046003697461417">संरक्षित दस्तऐवजमध्ये भाष्य केले जाऊ शकत नाही</translation>
 <translation id="4265872034478892965">तुमच्या अॅडमिनिस्ट्रेटरकडून परवानगी असलेले</translation>
-<translation id="4270615291506829403">तुमचा पासवर्ड बदलत आहे</translation>
 <translation id="4275830172053184480">तुमचा डिव्हाइस रीस्टार्ट करा</translation>
 <translation id="4277028893293644418">पासवर्ड रीसेट करा</translation>
 <translation id="4279811152705618813">तुमचा <ph name="DEVICE_TYPE" /> <ph name="ENROLLMENT_DOMAIN" /> द्वारे व्यवस्थापित केला आहे</translation>
@@ -769,7 +767,6 @@
 <translation id="4708268264240856090">आपल्या कनेक्शनमध्ये व्यत्यय आला</translation>
 <translation id="4712404868219726379">Windows Hello</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows नेटवर्क निदान चालविणे<ph name="END_LINK" /></translation>
-<translation id="4725851834065990915">तुम्ही वापरता त्या साइट किंवा अॅपवरील डेटा भंगामुळे तुमचा पासवर्ड उघड झाला आहे. Chrome आता तुमचे सेव्ह केलेले पासवर्ड तपासण्याची शिफारस करते.</translation>
 <translation id="4726672564094551039">धोरणे रीलोड करा</translation>
 <translation id="4728558894243024398">प्लॅटफॉर्म</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
@@ -1188,7 +1185,6 @@
 <translation id="679355240208270552">दुर्लक्ष केले कारण डीफॉल्ट शोध धोरणाने सुरू केलेले नाही</translation>
 <translation id="681021252041861472">या जागा भरणे आवश्यक</translation>
 <translation id="6810899417690483278">सानुकूलीकरण आयडी</translation>
-<translation id="6819440013020405090">तुम्ही वापरता त्या साइट किंवा अॅपवरील डेटा भंगामुळे तुमचा पासवर्ड उघड झाला आहे. Chrome तुमचे <ph name="ORIGIN" /> वर सेव्ह केलेले पासवर्ड तपासण्याची आणि तुमचे पासवर्ड बदलण्याची शिफारस करते.</translation>
 <translation id="6825578344716086703">तुम्ही <ph name="DOMAIN" /> वर पोहोचण्याचा प्रयत्न केला, परंतु सर्व्हरने एका कमकुवत स्वाक्षरी अल्गोरिदमचा (जसे SHA-1) वापर करून स्वाक्षरीकृत केलेले प्रमाणपत्र सादर केले. याचा अर्थ असा आहे, की सर्व्हरने सादर केलेली सुरक्षितता क्रेडेंशियल बनावट असू शकतात आणि हा सर्व्हर तुम्ही अपेक्षा करत असलेला नसेल. (तुम्ही कदाचित एखाद्या हल्लेखोराशी संभाषण करत आहात).</translation>
 <translation id="6826370046007623921">डेटा गमावण्यास प्रतिबंध</translation>
 <translation id="6831043979455480757">भाषांतर करा</translation>
@@ -1231,7 +1227,6 @@
 <translation id="7064851114919012435">संपर्क माहिती</translation>
 <translation id="7075452647191940183">विनंती खूपच मोठी आहे</translation>
 <translation id="7079718277001814089">या साइटमध्ये मालवेअर आहे</translation>
-<translation id="70850504851191913">डेटा भंगाची तक्रार केली आहे</translation>
 <translation id="7087282848513945231">परगणा</translation>
 <translation id="7090678807593890770">Google वर <ph name="LINK" /> शोधा</translation>
 <translation id="7108338896283013870">लपवा</translation>

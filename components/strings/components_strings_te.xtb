@@ -113,7 +113,6 @@
 <translation id="1430915738399379752">ముద్రించు</translation>
 <translation id="1442386063175183758">కుడివైపు గేట్ ఫోల్డ్</translation>
 <translation id="1442987760062738829">రంధ్రం</translation>
-<translation id="1450011005989029586">మీరు ఉపయోగించిన సైట్ లేదా యాప్‌లో జరిగిన డేటా ఉల్లంఘన వల్ల మీ పాస్‌వర్డ్ బహిర్గతం అయ్యింది. <ph name="ORIGIN" /> మీద <ph name="BOLD" /> ఇప్పుడే Chrome సిఫార్సు చేస్తోంది.</translation>
 <translation id="1455413310270022028">ఎరేజర్</translation>
 <translation id="1463543813647160932">5x7</translation>
 <translation id="1472675084647422956">మరిన్ని చూపించు</translation>
@@ -690,7 +689,6 @@
 <translation id="4258748452823770588">చెల్లని సంతకం</translation>
 <translation id="4261046003697461417">రక్షణలో ఉన్న పత్రాలకు అదనపు గమనికలను జోడించలేరు</translation>
 <translation id="4265872034478892965">మీ నిర్వాహకులు అనుమతించారు</translation>
-<translation id="4270615291506829403">మీ పాస్‌వర్డ్ మార్పు</translation>
 <translation id="4275830172053184480">మీ పరికరాన్ని పునఃప్రారంభించండి</translation>
 <translation id="4277028893293644418">పాస్‌వర్డ్‌ను రీసెట్ చేయి</translation>
 <translation id="4279811152705618813">మీ <ph name="DEVICE_TYPE" /> పరికరం <ph name="ENROLLMENT_DOMAIN" /> నిర్వహణలో ఉంది</translation>
@@ -770,7 +768,6 @@
 <translation id="4708268264240856090">మీ కనెక్షన్‌కు అంతరాయం ఏర్పడింది</translation>
 <translation id="4712404868219726379">Windows Hell</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows నెట్‌వర్క్ సమస్య విశ్లేషణలను అమలు చేయడం<ph name="END_LINK" /></translation>
-<translation id="4725851834065990915">మీరు ఉపయోగించిన సైట్ లేదా యాప్‌లో జరిగిన డేటా ఉల్లంఘన వల్ల మీ పాస్‌వర్డ్ బహిర్గతం అయ్యింది. మీ సేవ్ చేసిన పాస్‌వర్డ్‌లను తనిఖీ చేయమని Chrome సిఫార్సు చేస్తోంది.</translation>
 <translation id="4726672564094551039">విధానాలను మళ్లీ లోడ్ చేయి</translation>
 <translation id="4728558894243024398">ప్లాట్‌ఫారమ్</translation>
 <translation id="4731967714531604179">Prc2 (ఎన్వలప్)</translation>
@@ -1188,7 +1185,6 @@
 <translation id="679355240208270552">విధానం ప్రకారం డిఫాల్ట్ శోధన ప్రారంభించబడలేదు కాబట్టి, ఇది విస్మరించబడింది.</translation>
 <translation id="681021252041861472">అవసరమైన ఫీల్డ్</translation>
 <translation id="6810899417690483278">అనుకూలీకరణ ID</translation>
-<translation id="6819440013020405090">మీరు ఉపయోగించిన సైట్ లేదా యాప్‌లో జరిగిన డేటా ఉల్లంఘన వల్ల మీ పాస్‌వర్డ్ బహిర్గతం అయ్యింది. సేవ్ చేసిన మీ పాస్‌వర్డ్‌లను తనిఖీ చేయమని మరియు <ph name="ORIGIN" />లో మీ పాస్‌వర్డ్‌ను మార్చమని Chrome సిఫార్సు చేస్తోంది.</translation>
 <translation id="6825578344716086703"><ph name="DOMAIN" />ను చేరుకోవడానికి మీరు ప్రయత్నించారు, కానీ సర్వర్ (SHA-1 వంటి) బలహీనమైన సంతకం అల్గారిథమ్‌ను ఉపయోగించి సంతకం చేసిన ప్రమాణపత్రాన్ని అందించింది. అంటే సర్వర్ అందించిన భద్రత ఆధారాలు నకిలీ కావచ్చు మరియు సర్వర్ మీరు ఊహించిన సర్వర్ కాకపోవచ్చు (మీరు హ్యాకర్‌తో పరస్పర చర్య చేస్తుండవచ్చు).</translation>
 <translation id="6826370046007623921">డేటా నష్టం నివారణ</translation>
 <translation id="6831043979455480757">అనువదించు</translation>
@@ -1231,7 +1227,6 @@
 <translation id="7064851114919012435">సంప్రదింపు సమాచారం</translation>
 <translation id="7075452647191940183">అభ్యర్థన చాలా పెద్దదిగా ఉంది</translation>
 <translation id="7079718277001814089">ఈ సైట్‌లో మాల్వేర్ ఉంది</translation>
-<translation id="70850504851191913">డేటా ఉల్లంఘన నివేదించబడింది</translation>
 <translation id="7087282848513945231">కౌంటి</translation>
 <translation id="7090678807593890770"><ph name="LINK" /> కోసం Googleలో వెతకండి</translation>
 <translation id="7108338896283013870">దాచిపెట్టు</translation>

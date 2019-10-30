@@ -111,7 +111,6 @@
 <translation id="1430915738399379752">In</translation>
 <translation id="1442386063175183758">Gấp dạng cửa bên phải</translation>
 <translation id="1442987760062738829">Đục lỗ</translation>
-<translation id="1450011005989029586">Một sự cố rò rỉ dữ liệu trên trang web hoặc ứng dụng bạn dùng đã làm lộ mật khẩu của bạn. Bạn nên <ph name="BOLD" /> trên <ph name="ORIGIN" /> ngay bây giờ.</translation>
 <translation id="1455413310270022028">Tẩy</translation>
 <translation id="1463543813647160932">5x7</translation>
 <translation id="1472675084647422956">Hiển thị thêm</translation>
@@ -690,7 +689,6 @@
 <translation id="4258748452823770588">Chữ ký không hợp lệ</translation>
 <translation id="4261046003697461417">Không thể chú thích tài liệu được bảo vệ</translation>
 <translation id="4265872034478892965">Được quản trị viên cho phép</translation>
-<translation id="4270615291506829403">thay đổi mật khẩu</translation>
 <translation id="4275830172053184480">Khởi động lại thiết bị của bạn</translation>
 <translation id="4277028893293644418">Đặt lại mật khẩu</translation>
 <translation id="4279811152705618813"><ph name="DEVICE_TYPE" /> của bạn do <ph name="ENROLLMENT_DOMAIN" /> quản lý</translation>
@@ -770,7 +768,6 @@
 <translation id="4708268264240856090">Kết nối của bạn bị gián đoạn</translation>
 <translation id="4712404868219726379">Windows Hello</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Chạy Chẩn đoán mạng của Windows<ph name="END_LINK" /></translation>
-<translation id="4725851834065990915">Một sự cố rò rỉ dữ liệu trên trang web hoặc ứng dụng bạn dùng đã làm lộ mật khẩu của bạn. Bạn nên kiểm tra mật khẩu đã lưu ngay bây giờ.</translation>
 <translation id="4726672564094551039">Tải lại chính sách</translation>
 <translation id="4728558894243024398">Nền tảng</translation>
 <translation id="4731967714531604179">Prc2 (Phong bì)</translation>
@@ -1188,7 +1185,6 @@
 <translation id="679355240208270552">Đã bỏ qua vì chính sách đã tắt tìm kiếm mặc định.</translation>
 <translation id="681021252041861472">Trường bắt buộc</translation>
 <translation id="6810899417690483278">ID tùy chỉnh</translation>
-<translation id="6819440013020405090">Một sự cố rò rỉ dữ liệu trên trang web hoặc ứng dụng bạn dùng đã làm lộ mật khẩu của bạn. Bạn nên kiểm tra mật khẩu đã lưu và đổi mật khẩu dùng trên <ph name="ORIGIN" />.</translation>
 <translation id="6825578344716086703">Bạn đã cố gắng truy cập vào <ph name="DOMAIN" /> nhưng máy chủ xuất trình một chứng chỉ được ký bằng một thuật toán chữ ký yếu (chẳng hạn như SHA-1). Điều này có nghĩa là thông tin đăng nhập bảo mật mà máy chủ xuất trình có thể đã bị giả mạo và máy chủ đó có thể không phải là máy chủ mà bạn mong đợi (bạn có thể đang kết nối với kẻ tấn công).</translation>
 <translation id="6826370046007623921">Ngăn chặn mất dữ liệu</translation>
 <translation id="6831043979455480757">Dịch</translation>
@@ -1231,7 +1227,6 @@
 <translation id="7064851114919012435">Thông tin liên hệ</translation>
 <translation id="7075452647191940183">Yêu cầu quá lớn</translation>
 <translation id="7079718277001814089">Trang web này có chứa phần mềm độc hại</translation>
-<translation id="70850504851191913">Đã báo cáo sự cố rò rỉ dữ liệu</translation>
 <translation id="7087282848513945231">Hạt</translation>
 <translation id="7090678807593890770">Tìm kiếm <ph name="LINK" /> trên Google</translation>
 <translation id="7108338896283013870">Ẩn</translation>

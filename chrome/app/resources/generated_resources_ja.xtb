@@ -2957,7 +2957,6 @@ VR を開始する前に、信頼できるサイトかどうかを確認して�
 <translation id="5360150013186312835">ツールバーに表示</translation>
 <translation id="5362741141255528695">秘密鍵ファイルを選択します。</translation>
 <translation id="5363109466694494651">Powerwash を実行して以前のバージョンに戻す</translation>
-<translation id="5365716706805792666">Google ではお使いのパスワードがデータ侵害の対象になっていたかを確認できます。この機能は、Google アカウントでログインするとオンになります。</translation>
 <translation id="5365881113273618889">選択したフォルダには、機密ファイルが含まれています。このフォルダに対する永続的な書き込みアクセス権を「<ph name="APP_NAME" />」に付与してもよろしいですか？</translation>
 <translation id="5367091008316207019">ファイルを読み取っています...</translation>
 <translation id="5368720394188453070">スマートフォンがロックされています。ログインするにはロックを解除してしてください。</translation>
@@ -4428,7 +4427,6 @@ VR を開始する前に、信頼できるサイトかどうかを確認して�
 <translation id="7506541170099744506">この <ph name="DEVICE_TYPE" /> は組織の管理対象として登録されました。</translation>
 <translation id="7507930499305566459">ステータス レスポンダ証明書</translation>
 <translation id="7508054832109420082">プリンタへのアクセスを許可する</translation>
-<translation id="7510943789645525906">使用しているパスワードがデータ侵害を受けた場合に警告する</translation>
 <translation id="7513029293694390567">保存されている認証情報を使用してウェブサイトに自動的にログインします。この機能が無効になっている場合は、ウェブサイトにログインするときに毎回確認を求められます。</translation>
 <translation id="7514239104543605883">デバイスにコピー</translation>
 <translation id="7514365320538308">ダウンロード</translation>
@@ -4730,7 +4728,6 @@ VR を開始する前に、信頼できるサイトかどうかを確認して�
 <translation id="7926423016278357561">これは私ではありません。</translation>
 <translation id="7928836894214140642"><ph name="ENROLLMENT_DOMAIN" /> で管理</translation>
 <translation id="7930294771522048157">保存したお支払い方法がここに表示されます</translation>
-<translation id="7930681627240672853">パスワードの安全性を確認</translation>
 <translation id="79312157130859720"><ph name="APP_NAME" /> が画面と音声を共有しています。</translation>
 <translation id="7931318309563332511">不明</translation>
 <translation id="793293630927785390">新しい Wi-Fi ネットワーク ダイアログ</translation>
@@ -4803,7 +4800,6 @@ VR を開始する前に、信頼できるサイトかどうかを確認して�
 <translation id="8014154204619229810">現在アップデータを実行中です。しばらくしてから更新して、もう一度ご確認ください。</translation>
 <translation id="8014206674403687691"><ph name="IDS_SHORT_PRODUCT_NAME" /> を以前のインストール バージョンに戻せません。デバイスでもう一度 Powerwash を実行してみてください。</translation>
 <translation id="8014210335923519270">システム情報と使用状況が Google に送信され、<ph name="IDS_SHORT_PRODUCT_NAME" /> とそのセキュリティの向上に役立てられます</translation>
-<translation id="8015780634880457457">Google ではお使いのパスワードがデータ侵害の対象になっていたかを確認できます</translation>
 <translation id="8016266267177410919">一時ストレージ</translation>
 <translation id="8017335670460187064"><ph name="LABEL" /></translation>
 <translation id="8017679124341497925">ショートカットを編集しました</translation>

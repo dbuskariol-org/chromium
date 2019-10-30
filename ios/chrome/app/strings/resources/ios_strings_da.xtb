@@ -202,7 +202,6 @@
 <translation id="3783017676699494206">Gem billede</translation>
 <translation id="3789841737615482174">Installer</translation>
 <translation id="385051799172605136">Tilbage</translation>
-<translation id="3886946236301294521">Advarer dig, hvis en adgangskode, du bruger, har været berørt af et brud på datasikkerheden.</translation>
 <translation id="3897092660631435901">Menu</translation>
 <translation id="3915450441834151894">Websiteoplysninger</translation>
 <translation id="3922310737605261887">Søg efter kopieret tekst</translation>
@@ -301,7 +300,6 @@ Hvis du vil ændre denne indstilling, skal du <ph name="BEGIN_LINK" />nulstille 
 <translation id="5300589172476337783">Vis</translation>
 <translation id="5317780077021120954">Gem</translation>
 <translation id="5327248766486351172">Navn</translation>
-<translation id="5365716706805792666">Google kan tjekke, om dine adgangskoder har været involveret i et brud på datasikkerheden. Denne funktion aktiveres, når du logger ind med din Google-konto.</translation>
 <translation id="5388358297987318779">Åbn billede</translation>
 <translation id="5407969256130905701">Kassér ændringer</translation>
 <translation id="5409365236829784218">Der er ingen installerede apps, der kan åbne denne fil.</translation>
@@ -333,7 +331,6 @@ Handoff skal være aktiveret i afsnittet Generelt i Indstillinger, og dine enhed
 <translation id="5854790677617711513">Ældre end 30 dage</translation>
 <translation id="5857090052475505287">Ny mappe</translation>
 <translation id="5857770089550859117">Angiv adgangssætningen for at påbegynde synkroniseringen.</translation>
-<translation id="5859444426865731878">Google kan tjekke, om dine adgangskoder har været berørt af et brud på datasikkerheden.</translation>
 <translation id="5860033963881614850">Fra</translation>
 <translation id="5869029295770560994">OK</translation>
 <translation id="5871497086027727873">1 bogmærke blev flyttet</translation>
@@ -482,7 +479,6 @@ Dine data blev krypteret med din adgangssætning til synkronisering d. <ph name=
 <translation id="7859704718976024901">Browserhistorik</translation>
 <translation id="7887198238286927132">Af hensyn til beskyttelsen af dine personlige oplysninger autofylder Chrome ikke dette felt.</translation>
 <translation id="7918293828610777738">Din læseliste er tilgængelig offline. Du kan føje en side til din læseliste ved at trykke på <ph name="SHARE_OPENING_ICON" /> og derefter <ph name="READ_LATER_TEXT" />.</translation>
-<translation id="7930681627240672853">Tjek, om din adgangskode er blevet afsløret</translation>
 <translation id="7938254975914653459">FaceTime</translation>
 <translation id="7939128259257418052">Eksportér adgangskoder…</translation>
 <translation id="7947953824732555851">Acceptér og log ind</translation>

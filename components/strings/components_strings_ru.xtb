@@ -111,7 +111,6 @@
 <translation id="1430915738399379752">Печать</translation>
 <translation id="1442386063175183758">Фальцовка правой четверти</translation>
 <translation id="1442987760062738829">Отверстие</translation>
-<translation id="1450011005989029586">Ваш пароль для этого сайта или приложения стал известен посторонним в результате утечки данных. Рекомендуем <ph name="BOLD" /> в сервисе <ph name="ORIGIN" /> прямо сейчас.</translation>
 <translation id="1455413310270022028">Ластик</translation>
 <translation id="1463543813647160932">5x7</translation>
 <translation id="1472675084647422956">Показать больше...</translation>
@@ -275,7 +274,7 @@
 <translation id="2257315177824333709">Сейчас невозможно сохранить карту.</translation>
 <translation id="2262243747453050782">Ошибка HTTP</translation>
 <translation id="2263079731045660823">Обновить данные автозаполнения для кредитной карты в настройках Chrome</translation>
-<translation id="2267047181501709434">Проверка личных данных…</translation>
+<translation id="2267047181501709434">Проверка данных…</translation>
 <translation id="2270484714375784793">Номер телефона</translation>
 <translation id="2277103315734023688">Перемотать вперед</translation>
 <translation id="2283340219607151381">Сохранять и автоматически подставлять адреса</translation>
@@ -674,7 +673,6 @@
 <translation id="4258748452823770588">Подпись недействительна</translation>
 <translation id="4261046003697461417">Недоступно, так как документ защищен</translation>
 <translation id="4265872034478892965">Разрешено администратором</translation>
-<translation id="4270615291506829403">изменить пароль</translation>
 <translation id="4275830172053184480">Перезапуск устройства</translation>
 <translation id="4277028893293644418">Сбросить пароль</translation>
 <translation id="4279811152705618813">Ваше устройство <ph name="DEVICE_TYPE" /> находится под управлением домена <ph name="ENROLLMENT_DOMAIN" /></translation>
@@ -753,7 +751,6 @@
 <translation id="4708268264240856090">Соединение прервано</translation>
 <translation id="4712404868219726379">Windows Hello</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Выполните диагностику сети в Windows<ph name="END_LINK" /></translation>
-<translation id="4725851834065990915">Ваш пароль для этого сайта или приложения стал известен посторонним в результате утечки данных. Проверьте безопасность сохраненных паролей.</translation>
 <translation id="4726672564094551039">Повторно загрузить политики</translation>
 <translation id="4728558894243024398">Платформа</translation>
 <translation id="4731967714531604179">Prc2 (конверт)</translation>
@@ -1171,7 +1168,6 @@
 <translation id="679355240208270552">Игнорируется, так как в правиле не задан поиск по умолчанию.</translation>
 <translation id="681021252041861472">Обязательное поле</translation>
 <translation id="6810899417690483278">Идентификатор персонализации</translation>
-<translation id="6819440013020405090">Ваш пароль для этого сайта или приложения стал известен посторонним в результате утечки данных. Проверьте безопасность сохраненных паролей и смените пароль для <ph name="ORIGIN" />.</translation>
 <translation id="6825578344716086703">Вы пытаетесь обратиться к серверу в домене <ph name="DOMAIN" />, но его сертификат подписан с помощью ненадежного алгоритма (например, SHA-1). Это означает, что учетные данные безопасности и сам сервер могут оказаться поддельными. Возможно, вы имеете дело со злоумышленниками.</translation>
 <translation id="6826370046007623921">Предотвращение потери данных</translation>
 <translation id="6831043979455480757">Перевести</translation>
@@ -1214,7 +1210,6 @@
 <translation id="7064851114919012435">Контактные данные</translation>
 <translation id="7075452647191940183">Запрос слишком велик.</translation>
 <translation id="7079718277001814089">Этот сайт содержит вредоносное ПО</translation>
-<translation id="70850504851191913">Сообщение об утечке данных</translation>
 <translation id="7087282848513945231">Округ</translation>
 <translation id="7090678807593890770">Выполните поиск по запросу <ph name="LINK" /> в Google</translation>
 <translation id="7108338896283013870">Скрыть</translation>

@@ -111,7 +111,6 @@
 <translation id="1430915738399379752">Nyomtatás</translation>
 <translation id="1442386063175183758">Jobb oldalon kihajtható</translation>
 <translation id="1442987760062738829">Lyukasztás</translation>
-<translation id="1450011005989029586">Az Ön által használt egyik webhelyen vagy alkalmazásban történt adatvédelmi incidensben nyilvánosságra került az Ön jelszava. A Chrome azt javasolja, hogy <ph name="BOLD" /> most a(z) <ph name="ORIGIN" /> webhelyen.</translation>
 <translation id="1455413310270022028">Radír</translation>
 <translation id="1463543813647160932">5×7</translation>
 <translation id="1472675084647422956">Továbbiak megjelenítése</translation>
@@ -686,7 +685,6 @@
 <translation id="4258748452823770588">Rossz aláírás</translation>
 <translation id="4261046003697461417">A védett dokumentumoknál nem lehetséges a jegyzetelés</translation>
 <translation id="4265872034478892965">A rendszergazda engedélyezte</translation>
-<translation id="4270615291506829403">módosítsa jelszavát</translation>
 <translation id="4275830172053184480">Indítsa újra az eszközt</translation>
 <translation id="4277028893293644418">Jelszó visszaállítása</translation>
 <translation id="4279811152705618813"><ph name="DEVICE_TYPE" /> eszközét a(z) <ph name="ENROLLMENT_DOMAIN" /> kezeli</translation>
@@ -766,7 +764,6 @@
 <translation id="4708268264240856090">Kapcsolata megszakadt</translation>
 <translation id="4712404868219726379">Windows Hello</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />A Windows Hálózati diagnosztika futtatása<ph name="END_LINK" /></translation>
-<translation id="4725851834065990915">Az Ön által használt egyik webhelyen vagy alkalmazásban történt adatvédelmi incidensben nyilvánosságra került az Ön jelszava. A Chrome azt javasolja, hogy azonnal ellenőrizze mentett jelszavait.</translation>
 <translation id="4726672564094551039">Házirendek újratöltése</translation>
 <translation id="4728558894243024398">Platform</translation>
 <translation id="4731967714531604179">Prc2 (boríték)</translation>
@@ -1184,7 +1181,6 @@
 <translation id="679355240208270552">Figyelmen kívül hagyva, mert az alapértelmezett keresőmotort nem engedélyezi a házirend.</translation>
 <translation id="681021252041861472">Kötelező mező</translation>
 <translation id="6810899417690483278">Testreszabás-azonosító</translation>
-<translation id="6819440013020405090">Az Ön által használt egyik webhelyen vagy alkalmazásban történt adatvédelmi incidensben nyilvánosságra került az Ön jelszava. A Chrome azt javasolja, hogy ellenőrizze mentett jelszavait, és módosítsa a(z) <ph name="ORIGIN" /> webhelyen használt jelszavát.</translation>
 <translation id="6825578344716086703">Megpróbálta elérni a(z) <ph name="DOMAIN" /> webhelyet, de a szerver gyenge aláírási algoritmust használó tanúsítványt mutatott be. Ez alapján elképzelhető, hogy a szerver által megadott biztonsági tanúsítványt meghamisították, és a szerver nem az, amelyikre számított (lehet, hogy éppen valamilyen támadóval kommunikál).</translation>
 <translation id="6826370046007623921">Adatszivárgás elleni védelem</translation>
 <translation id="6831043979455480757">Fordítás</translation>
@@ -1227,7 +1223,6 @@
 <translation id="7064851114919012435">Kapcsolatfelvételi adatok</translation>
 <translation id="7075452647191940183">A kérés túl nagy</translation>
 <translation id="7079718277001814089">A webhely rosszindulatú programokat tartalmaz</translation>
-<translation id="70850504851191913">Adatvédelmi incidens jelentve</translation>
 <translation id="7087282848513945231">Megye</translation>
 <translation id="7090678807593890770">Keresés a Google-on a következőre: <ph name="LINK" /></translation>
 <translation id="7108338896283013870">Elrejtés</translation>
