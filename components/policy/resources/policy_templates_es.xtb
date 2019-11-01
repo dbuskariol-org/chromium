@@ -3,11 +3,11 @@
 <translationbundle lang="es">
 <translation id="1001649754854402482">Permite habilitar las mitigaciones de comprobación de <ph name="CORS" /> en la nueva implementación de <ph name="CORS" />. Así, las extensiones continúan siendo compatibles y <ph name="PRODUCT_NAME" /> puede enviar encabezados definidos sin comprobaciones de <ph name="CORS" />.
 
-      Si esta lista se deja vacía, <ph name="PRODUCT_NAME" /> intentará ejecutar extensiones de formas compatibles y no introducirá cambios de <ph name="API" /> en <ph name="PRODUCT_NAME" /> 79, tal y como se explica en <ph name="WEB_REQUEST_API_MANUAL" />.
+      Si esta lista se deja vacía, <ph name="PRODUCT_NAME" /> intentará ejecutar las extensiones de forma compatible y no introducirá cambios de <ph name="API" /> en <ph name="PRODUCT_NAME" /> 79, tal y como se explica en <ph name="WEB_REQUEST_API_MANUAL" />.
 
       Si la lista se configura para que tenga nombres de encabezado de solicitud <ph name="HTTP" />, la comprobación de <ph name="CORS" /> ignorará los encabezados de la lista y habilitará la mitigación en el caso de las extensiones.
 
-      Si no se asigna ningún valor a esta lista, no se aplicará ninguna de las dos mitigaciones explicadas arriba.
+      Si no se establece esta lista, no se aplicará ninguna de las dos mitigaciones explicadas arriba.
 
       Para consultar más información sobre <ph name="CORS" />, visita <ph name="CORS_HELP_URL" />.</translation>
 <translation id="1002439864875515590">Si se asigna una cadena en blanco a esta política o no se configura, <ph name="PRODUCT_OS_NAME" /> no mostrará la opción de autocompletar los datos durante el flujo de inicio de sesión del usuario.
@@ -712,7 +712,7 @@ Si esta política se establece en True, <ph name="PRODUCT_OS_NAME" /> intentará
 <translation id="214901426630414675">Restringir impresión por las dos caras</translation>
 <translation id="2149330464730004005">Habilitar impresión en color</translation>
 <translation id="2156132677421487971">Configura las políticas de <ph name="PRODUCT_NAME" />, una función que permite que los usuarios envíen contenido de las pestañas, los sitios web o el escritorio desde el navegador a pantallas y sistemas de sonido remotos.</translation>
-<translation id="2156755242840687300">Habilita los servidores de impresión externos</translation>
+<translation id="2156755242840687300">Servidores de impresión externos habilitados</translation>
 <translation id="2166472654199325139">No filtrar el contenido para adultos de los sitios web</translation>
 <translation id="2168397434410358693">Retraso de inactividad cuando el dispositivo está conectado a la red</translation>
 <translation id="217013996107840632">Parámetros de línea de comandos para cambiar desde el navegador alternativo.</translation>
@@ -825,7 +825,7 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
 
       Si se asigna el valor "True" a esta política, cuando aparezca un mensaje de confirmación de protocolo externo, el usuario podrá elegir que la opción "Siempre abierto" se aplique al protocolo, y no se le volverá a solicitar la confirmación.
 
-      Si no se define esta política o se le asigna el valor "False", la casilla Siempre abierto no aparecerá y el usuario verá un mensaje de confirmación cada vez que se invoque un protocolo externo.</translation>
+      Si no se establece esta política o se le asigna el valor "False", la casilla Siempre abierto no aparecerá y el usuario verá un mensaje de confirmación cada vez que se invoque un protocolo externo.</translation>
 <translation id="2411817661175306360">La advertencia de protección de contraseña está desactivada</translation>
 <translation id="2411919772666155530">Bloquear notificaciones en estos sitios</translation>
 <translation id="2418507228189425036">Permite inhabilitar el almacenamiento del historial de navegación de <ph name="PRODUCT_NAME" /> e impide que los usuarios modifiquen esta opción.
@@ -887,7 +887,7 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
 
           Es posible anular la aplicación de esta política en patrones de URL concretos usando las políticas "InsecureContentAllowedForUrls" e "InsecureContentBlockedForUrls".
 
-          Si no se asigna ningún valor a esta política, los usuarios podrán añadir excepciones para permitir contenido mixto bloqueable.</translation>
+          Si no se establece esta política, los usuarios podrán añadir excepciones para permitir contenido mixto bloqueable.</translation>
 <translation id="2463034609187171371">Habilita los conjuntos de cifrado DHE en TLS</translation>
 <translation id="2463365186486772703">Configuración regional de la aplicación</translation>
 <translation id="2463832514638083341">Esta política determina el tiempo, en número de días, durante el que se almacenarán en el dispositivo los metadatos de los trabajos de impresión.
@@ -962,7 +962,7 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
       Si esta opción se habilita o no se configura, los usuarios podrán imprimir.
 
       Si se inhabilita, los usuarios no podrán imprimir desde <ph name="PRODUCT_NAME" />. La impresión está inhabilitada en el menú de herramientas, las extensiones, las aplicaciones JavaScript, etc. Aún es posible imprimir desde complementos que omiten <ph name="PRODUCT_NAME" /> al imprimir. Por ejemplo, algunas aplicaciones Flash incluyen la opción de impresión en el menú contextual, que no está incluida en esta política.</translation>
-<translation id="2517466659416174529">Permite inmovilizar las pestañas en segundo plano</translation>
+<translation id="2517466659416174529">Permite inmovilizar las pestañas que están en segundo plano</translation>
 <translation id="2518231489509538392">Permitir reproducción de audio</translation>
 <translation id="2521581787935130926">Mostrar el acceso directo de aplicaciones en la barra de marcadores</translation>
 <translation id="2529659024053332711">Permite especificar el comportamiento del navegador al iniciarlo.
@@ -1223,11 +1223,11 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
 <translation id="2872961005593481000">Apagar</translation>
 <translation id="2873651257716068683">Anula el tamaño de impresión de página predeterminado. Si el tamaño de la página no está disponible, se ignora la política.</translation>
 <translation id="2874209944580848064">Nota para los dispositivos <ph name="PRODUCT_OS_NAME" /> compatibles con las aplicaciones de Android:</translation>
-<translation id="2875192972412983412">Permite especificar el subconjunto de servidores de impresión a los que se solicitará información sobre impresoras de servidor.
+<translation id="2875192972412983412">Permite especificar el subconjunto de servidores de impresión a los que se solicitará información sobre impresoras del servidor.
 
-      Si se usa esta política, solo las impresoras de servidor cuyos ID coincidan con los valores incluidos en esta política estarán disponibles para el usuario.
+      Si se usa esta política, solo las impresoras del servidor cuyos ID coincidan con los valores incluidos en esta política estarán disponibles para el usuario.
 
-      Los ID deben coincidir con el campo id del archivo definido en la política <ph name="EXTERNAL_PRINT_SERVERS_POLICY" />.
+      Los ID deben coincidir con el campo "id" del archivo definido en la política <ph name="EXTERNAL_PRINT_SERVERS_POLICY" />.
 
       Si no se define esta política, no se realiza la filtración y se tienen en cuenta todos los servidores de impresión.</translation>
 <translation id="2877225735001246144">Inhabilitar la consulta de nombre canónico en negociación de autenticación Kerberos</translation>
@@ -1875,7 +1875,7 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
       Si se establece la política de fondo de pantalla del dispositivo, el dispositivo Chrome OS descargará y utilizará la imagen de fondo en la pantalla de inicio de sesión si ningún usuario ha iniciado sesión en el dispositivo. Una vez que el usuario inicie sesión, se aplicará la política de fondo de pantalla del usuario.
 
       Si no se define la política de fondo de pantalla del dispositivo, pero sí se define la política de fondo de pantalla del usuario, esta última decidirá qué contenido se mostrará.</translation>
-<translation id="3964298692570794635">Se usa para permitir el contenido no seguro en los sitios web</translation>
+<translation id="3964298692570794635">Permite el contenido no seguro en estos sitios web</translation>
 <translation id="3964606652985594895">Envía estadísticas e identificadores de hardware de los dispositivos de almacenamiento.
 
       Si se asigna el valor "false" a esta política o no se le asigna ninguno, no se enviará ninguna estadística.
@@ -2962,9 +2962,9 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
 
       El archivo se descargará y se almacenará en caché. Se usa un hash criptográfico para verificar la integridad de la descarga. Se volverá a descargar el archivo cada vez que se cambie la URL o el hash.
 
-      Si se asigna un valor correcto a esta política, los dispositivos intentarán solicitar información a los servidores de impresión sobre impresoras disponibles usando el protocolo IPP.
+      Si se asigna un valor correcto a esta política, los dispositivos intentarán solicitar información a los servidores de impresión especificados sobre las impresoras disponibles usando el protocolo IPP.
 
-      Si no se define esta política o se le asigna un valor incorrecto, los usuarios no verán ningún servidor de impresión.
+      Si no se define esta política o se le asigna un valor incorrecto, los usuarios no verán ninguna impresora del servidor.
 
       Actualmente, el número máximo de servidores de impresión es 16. Solo se solicitará información a los 16 primeros servidores de la lista.
       </translation>
@@ -3155,9 +3155,9 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
 <translation id="5961137303188584693">Dirección NIC MAC integrada en el dispositivo</translation>
 <translation id="5966615072639944554">Extensiones con permiso para utilizar la API de confirmación remota</translation>
 <translation id="5983708779415553259">Comportamiento predeterminado de sitios no incluidos en un paquete de contenido</translation>
-<translation id="5997107377032983906">Permite configurar una lista de patrones de URL que definan sitios web en los que no se pueda mostrar contenido mixto (es decir, contenido HTTP en sitios web HTTPS) bloqueable (es decir, activo).
+<translation id="5997107377032983906">Permite crear una lista de patrones de URL que especifiquen sitios web que pueden mostrar contenido mixto (es decir, contenido HTTP en sitios web HTTPS) bloqueable (es decir, activo).
 
-          Si no se asigna ningún valor a esta política, el contenido mixto bloqueable se bloqueará, pero los usuarios podrán establecer excepciones para permitir el contenido en determinados sitios web.</translation>
+          Si no se establece esta política, el contenido mixto bloqueable se bloqueará, pero los usuarios podrán establecer excepciones para permitir el contenido en determinados sitios web.</translation>
 <translation id="5997543603646547632">Utilizar reloj de formato de 24 horas de forma predeterminada</translation>
 <translation id="5997846976342452720">Especificar si se debe inhabilitar el buscador de complementos (obsoleta)</translation>
 <translation id="5998198091336830580">Esta política forma parte del siguiente grupo atómico (solo se aplicarán las políticas de la fuente que tenga mayor prioridad del grupo):</translation>
@@ -3278,7 +3278,7 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
 
       Si se asigna el valor "True" a esta política, se usa la implementación antigua, la cual debería ser compatible con las versiones anteriores.
 
-      Si se asigna el valor False, o no se establece, se usa la nueva implementación, lo que podría causar distintos problemas de compatibilidad según la empresa.
+      Si se asigna el valor "False", o no se establece, se usa la nueva implementación, lo que podría causar distintos problemas de compatibilidad según la empresa.
 
       Esta política se eliminará después de dos hitos.
 
@@ -3530,9 +3530,9 @@ Si la política está establecida en False, no se informará sobre los usuarios.
 <translation id="6786747875388722282">Extensiones</translation>
 <translation id="6786967369487349613">Especificar el directorio de perfiles de itinerancia</translation>
 <translation id="6795485990775913659">Permitir imprimir solo sin PIN</translation>
-<translation id="6800064234889290465">Permite configurar una lista de patrones de URL que definan sitios web en los que no se pueda mostrar contenido mixto (es decir, contenido HTTP en sitios web HTTPS) bloqueable (es decir, activo).
+<translation id="6800064234889290465">Permite crear una lista de patrones de URL que especifiquen sitios web que no pueden mostrar contenido mixto (es decir, contenido HTTP en sitios web HTTPS) bloqueable (es decir, activo).
 
-          Si no se asigna ningún valor a esta política, el contenido mixto bloqueable se bloqueará, pero los usuarios podrán establecer excepciones para permitir el contenido en determinados sitios web.</translation>
+          Si no se establece esta política, el contenido mixto bloqueable se bloqueará, pero los usuarios podrán establecer excepciones para permitir el contenido en determinados sitios web.</translation>
 <translation id="6810445994095397827">Bloquear JavaScript en estos sitios</translation>
 <translation id="6813263547126514821">Encendido y apagado</translation>
 <translation id="681446116407619279">Esquemas de autenticación admitidos</translation>
@@ -4432,7 +4432,7 @@ Si la política está establecida en False, no se informará sobre la lista de i
 
       Si la política se habilita, las páginas podrán enviar solicitudes XHR síncronas durante el cierre de la página.
 
-      Si la política se inhabilita o no se le asigna ningún valor, las páginas no podrán enviar solicitudes XHR síncronas durante el cierre de la página.
+      Si la política se inhabilita o no se establece, las páginas no podrán enviar solicitudes XHR síncronas durante el cierre de la página.
 
       Esta política se eliminará de la versión 82 de Chrome.
 
@@ -4648,11 +4648,11 @@ Te recomendamos que utilices GPO para configurar la política en Windows, aunque
       Si no se asigna ningún valor a esta política o se le asigna el valor "True", todos los usuarios podrán utilizar ARC (a menos que se haya inhabilitado de otra forma).
 
       Los cambios de esta política solo se podrán aplicar cuando ARC no se esté ejecutando, p. ej. cuando Chrome OS se está iniciando.</translation>
-<translation id="8606263947930257189">Permite controlar si <ph name="PRODUCT_NAME" /> puede inmovilizar pestañas que hayan estado en segundo plano durante un mínimo de 5 minutos.
+<translation id="8606263947930257189">Permite controlar si <ph name="PRODUCT_NAME" /> puede inmovilizar las pestañas que hayan estado en segundo plano durante un mínimo de 5 minutos.
 
-      Si se asigna el valor "True" a esta política, las pestañas que hayan estado en segundo plano durante un mínimo de 5 minutos podrían inmovilizarse. Inmovilizar las pestañas reduce el consumo de la CPU, la batería y la memoria. <ph name="PRODUCT_NAME" /> usa métodos heurísticos para evitar inmovilizar pestañas que realicen funciones útiles en segundo plano, como mostrar notificaciones, reproducir sonidos o reproducir vídeos en streaming. Los desarrolladores web pueden inhabilitar la inmovilización en sus sitios web (https://chromium.googlesource.com/chromium/src/+/HEAD/chrome/browser/performance_manager/docs/freezing_opt_out_opt_in.md).
+      Si se asigna el valor "true" a esta política, las pestañas que hayan estado en segundo plano durante un mínimo de 5 minutos podrían inmovilizarse. Inmovilizar las pestañas reduce el consumo de CPU, batería y memoria. <ph name="PRODUCT_NAME" /> usa métodos heurísticos para evitar inmovilizar pestañas que realicen funciones útiles en segundo plano, como mostrar notificaciones, reproducir sonidos o vídeos en streaming. Los desarrolladores web pueden inhabilitar la inmovilización en sus sitios web (https://chromium.googlesource.com/chromium/src/+/HEAD/chrome/browser/performance_manager/docs/freezing_opt_out_opt_in.md).
 
-      Si se le asigna el valor "False" a esta política, no se inmovilizará ninguna pestaña.</translation>
+      Si se asigna el valor "false" a esta política, no se inmovilizará ninguna pestaña.</translation>
 <translation id="8615400197788843468">Habilita la función de inicio de sesión restringido de <ph name="PRODUCT_NAME" /> en G Suite e impide que los usuarios cambien esta opción.
 
 Si configuras esta opción, el usuario solo podrá acceder a las aplicaciones de Google con cuentas de los dominios especificados. Recuerda que para dar permiso a las cuentas de gmail.com/googlemail.com, debes añadir "consumer_accounts" (sin comillas) a la lista de dominios.

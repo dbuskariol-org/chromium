@@ -174,6 +174,7 @@
 <translation id="173080396488393970">Este tipo de cartão não é suportado</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Experimente contactar o gestor do sistema.</translation>
+<translation id="1739107442478692187">Ocorreu uma violação de dados num site ou numa aplicação que utiliza. O Chrome recomenda que verifique as palavras-passe guardadas e que altere a sua palavra-passe em <ph name="ORIGIN" /> agora.</translation>
 <translation id="1740951997222943430">Introduza um mês de expiração válido</translation>
 <translation id="1743520634839655729">Para pagar mais rapidamente da próxima vez, guarde o cartão, o nome e o endereço de faturação na sua Conta Google e neste dispositivo.</translation>
 <translation id="1743570585616704562">Não reconhecida</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Falta de correspondência de domínio</translation>
 <translation id="2096368010154057602">Departamento</translation>
 <translation id="2099652385553570808">Agrafo triplo à esquerda</translation>
+<translation id="2100280972184758440">A sua palavra-passe foi comprometida</translation>
 <translation id="2102134110707549001">Sugerir palavra-passe forte…</translation>
 <translation id="2108755909498034140">Reiniciar o computador</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">Ignorada porque foi substituída por <ph name="POLICY_NAME" /> .</translation>
 <translation id="2119505898009119320">Emitido para: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Perfurar na parte inferior direita</translation>
+<translation id="2124528555835617522">Ocorreu uma violação de dados num site ou numa aplicação que utiliza. O Chrome recomenda que verifique agora as palavras-passe guardadas.</translation>
 <translation id="2129079103035905234">Sensores de movimentos</translation>
 <translation id="213826338245044447">Marcadores de Telemóvel</translation>
 <translation id="214556005048008348">Cancelar pagamento</translation>
@@ -484,6 +487,7 @@
 <translation id="3282497668470633863">Adicionar nome no cartão</translation>
 <translation id="3287510313208355388">Transferir quando estiver online</translation>
 <translation id="3293642807462928945">Saiba mais acerca da política <ph name="POLICY_NAME" /></translation>
+<translation id="3295439534709115864">Ocorreu uma violação de dados num site ou numa aplicação que utiliza. O Chrome recomenda a alteração da palavra-passe em <ph name="ORIGIN" /> agora.</translation>
 <translation id="3303855915957856445">Não foram encontrados resultados da pesquisa</translation>
 <translation id="3320021301628644560">Adicionar endereço de faturação</translation>
 <translation id="3324983252691184275">Carmesim</translation>

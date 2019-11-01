@@ -773,7 +773,7 @@ Si ce paramètre n'est pas défini, les utilisateurs peuvent choisir d'utiliser 
 
       Cette règle a une incidence sur tous les types d'entrée vidéo, et pas uniquement sur la caméra intégrée.</translation>
 <translation id="2201555246697292490">Configurer la liste blanche de messagerie native</translation>
-<translation id="220280840901385239">Autoriser les utilisateurs à ajouter des exceptions afin de permettre l'affichage de contenu mixte</translation>
+<translation id="220280840901385239">Autoriser les utilisateurs à ajouter des exceptions afin de permettre l'affichage de contenu mixte blocable</translation>
 <translation id="2204753382813641270">Règle pour masquer automatiquement l'étagère</translation>
 <translation id="2208976000652006649">Paramètres pour l'URL de recherche utilisant POST</translation>
 <translation id="2214880135980649323">Lorsque cette règle est activée, les extensions installées dans le cadre des règles de l'entreprise sont autorisées à utiliser l'API Enterprise Hardware Platform.

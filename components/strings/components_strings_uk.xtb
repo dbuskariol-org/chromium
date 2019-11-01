@@ -174,6 +174,7 @@
 <translation id="173080396488393970">Цей тип картки не підтримується</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Зв’яжіться із системним адміністратором.</translation>
+<translation id="1739107442478692187">На сайті чи в додатку, якими ви користуєтеся, виявлено порушення безпеки даних. Chrome радить перевірити збережені паролі та негайно змінити їх на сайті <ph name="ORIGIN" />.</translation>
 <translation id="1740951997222943430">Введіть дійсний місяць закінчення терміну дії</translation>
 <translation id="1743520634839655729">Щоб наступного разу платити швидше, збережіть дані картки, ім’я та платіжну адресу в обліковому записі Google і на цьому пристрої.</translation>
 <translation id="1743570585616704562">Не розпізнано</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Невідповідність домену</translation>
 <translation id="2096368010154057602">Департамент</translation>
 <translation id="2099652385553570808">Скріпити тричі ліворуч</translation>
+<translation id="2100280972184758440">Ваш пароль було зламано</translation>
 <translation id="2102134110707549001">Запропонувати надійний пароль…</translation>
 <translation id="2108755909498034140">Перезавантажте комп’ютер</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">Правило ігнорується, оскільки його замінено правилом <ph name="POLICY_NAME" />.</translation>
 <translation id="2119505898009119320">Кому видано: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Пробити отвір унизу праворуч</translation>
+<translation id="2124528555835617522">На сайті чи в додатку, якими ви користуєтеся, виявлено порушення безпеки даних. Chrome радить негайно перевірити збережені паролі.</translation>
 <translation id="2129079103035905234">Датчики руху</translation>
 <translation id="213826338245044447">Закладки на мобільному</translation>
 <translation id="214556005048008348">Скасувати оплату</translation>
@@ -474,6 +477,7 @@
 <translation id="3282497668470633863">Додати ім’я на кредитній картці</translation>
 <translation id="3287510313208355388">Завантажити після відновлення інтернет-з’єднання</translation>
 <translation id="3293642807462928945">Докладніше про правило <ph name="POLICY_NAME" /></translation>
+<translation id="3295439534709115864">На сайті чи в додатку, якими ви користуєтеся, виявлено порушення безпеки даних. Chrome радить негайно змінити пароль на сайті <ph name="ORIGIN" />.</translation>
 <translation id="3303855915957856445">Немає результатів</translation>
 <translation id="3320021301628644560">Додати платіжну адресу</translation>
 <translation id="3324983252691184275">Малиновий</translation>

@@ -174,6 +174,7 @@
 <translation id="173080396488393970">Denne korttype understøttes ikke</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Prøv at kontakte systemadministratoren.</translation>
+<translation id="1739107442478692187">Der opstod et brud på datasikkerheden på et website eller i en app, du bruger. Chrome anbefaler, at du tjekker dine gemte adgangskoder og ændrer din adgangskode til <ph name="ORIGIN" /> med det samme.</translation>
 <translation id="1740951997222943430">Angiv en gyldig udløbsmåned</translation>
 <translation id="1743520634839655729">Gem dit kort, dit navn og din faktureringsadresse på din Google-konto og denne enhed for at betale hurtigere næste gang.</translation>
 <translation id="1743570585616704562">Ikke genkendt</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Uoverensstemmelse mellem domæner</translation>
 <translation id="2096368010154057602">Afdeling</translation>
 <translation id="2099652385553570808">Trehæftning i venstre side</translation>
+<translation id="2100280972184758440">Din adgangskode blev kompromitteret</translation>
 <translation id="2102134110707549001">Foreslå stærk adgangskode…</translation>
 <translation id="2108755909498034140">Genstart computeren</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">Ignoreret, da den blev tilsidesat af <ph name="POLICY_NAME" /> .</translation>
 <translation id="2119505898009119320">Udstedt til: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Hul nederst til højre</translation>
+<translation id="2124528555835617522">Der opstod et brud på datasikkerheden på et website eller i en app, du bruger. Chrome anbefaler, at du tjekker dine gemte adgangskoder med det samme.</translation>
 <translation id="2129079103035905234">Bevægelsessensorer</translation>
 <translation id="213826338245044447">Bogmærker på mobil</translation>
 <translation id="214556005048008348">Annuller betaling</translation>
@@ -484,6 +487,7 @@
 <translation id="3282497668470633863">Tilføj navn på kort</translation>
 <translation id="3287510313208355388">Download, når du er online</translation>
 <translation id="3293642807462928945">Få flere oplysninger om politikken <ph name="POLICY_NAME" /></translation>
+<translation id="3295439534709115864">Der opstod et brud på datasikkerheden på et website eller i en app, du bruger. Chrome anbefaler, at du ændrer din adgangskode på <ph name="ORIGIN" /> med det samme.</translation>
 <translation id="3303855915957856445">Der blev ikke fundet nogen søgeresultater</translation>
 <translation id="3320021301628644560">Tilføj faktureringsadresse</translation>
 <translation id="3324983252691184275">Højrød</translation>

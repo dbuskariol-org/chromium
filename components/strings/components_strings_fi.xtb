@@ -174,6 +174,7 @@
 <translation id="173080396488393970">Tätä korttityyppiä ei tueta.</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Ota yhteyttä järjestelmänvalvojaan.</translation>
+<translation id="1739107442478692187">Käyttämälläsi sivustolla tai sovelluksessa tapahtui tietosuojaloukkaus. Chrome suosittelee, että tarkistat tallennetut salasanasi ja vaihdat salasanan heti (<ph name="ORIGIN" />).</translation>
 <translation id="1740951997222943430">Anna kelvollinen viimeinen voimassaolokuukausi.</translation>
 <translation id="1743520634839655729">Jos haluat maksaa nopeammin ensi kerralla, tallenna kortti, nimi ja laskutusosoite Google-tilillesi ja tälle laitteelle.</translation>
 <translation id="1743570585616704562">Ei tunnistettu</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Verkkotunnukset eivät ole yhteensopivat</translation>
 <translation id="2096368010154057602">Osasto</translation>
 <translation id="2099652385553570808">Kolme niittiä vasemmalla</translation>
+<translation id="2100280972184758440">Salasanasi vaarantui</translation>
 <translation id="2102134110707549001">Ehdota vahvaa salasanaa…</translation>
 <translation id="2108755909498034140">Käynnistä tietokone uudelleen.</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">Ei käytetä – käytännön <ph name="POLICY_NAME" /> ohittama.</translation>
 <translation id="2119505898009119320">Myönnetty: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Reikä oikeassa alakulmassa</translation>
+<translation id="2124528555835617522">Käyttämälläsi sivustolla tai sovelluksessa tapahtui tietosuojaloukkaus. Chrome suosittelee, että tarkistat tallennetut salasanasi heti.</translation>
 <translation id="2129079103035905234">Liiketunnistimet</translation>
 <translation id="213826338245044447">Mobiilikirjanmerkit</translation>
 <translation id="214556005048008348">Peruuta maksu</translation>
@@ -485,6 +488,7 @@
 <translation id="3282497668470633863">Lisää kortissa oleva nimi</translation>
 <translation id="3287510313208355388">Lataa, kun verkkoyhteys on muodostettu</translation>
 <translation id="3293642807462928945">Lisätietoja käytännöstä: <ph name="POLICY_NAME" /></translation>
+<translation id="3295439534709115864">Käyttämälläsi sivustolla tai sovelluksessa tapahtui tietosuojaloukkaus. Chrome suosittelee, että vaihdat salasanan heti (<ph name="ORIGIN" />).</translation>
 <translation id="3303855915957856445">Ei hakutuloksia</translation>
 <translation id="3320021301628644560">Lisää laskutusosoite</translation>
 <translation id="3324983252691184275">Karmiininpunainen</translation>

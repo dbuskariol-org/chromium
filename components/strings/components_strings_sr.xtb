@@ -174,6 +174,7 @@
 <translation id="173080396488393970">Овај тип картице није подржан</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Покушајте да контактирате администратора система.</translation>
+<translation id="1739107442478692187">Дошло је до упада у податке на сајту или у апликацији коју користите. Chrome препоручује да проверите сачуване лозинке и да одмах промените лозинку на <ph name="ORIGIN" />.</translation>
 <translation id="1740951997222943430">Унесите важећи месец истека</translation>
 <translation id="1743520634839655729">Да бисте следећи пут платили брже, сачувајте картицу, име и адресу за обрачун на Google налогу и овом уређају.</translation>
 <translation id="1743570585616704562">Није препознат</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Домени се не подударају</translation>
 <translation id="2096368010154057602">Одсек</translation>
 <translation id="2099652385553570808">Троструко спајање на левој страни</translation>
+<translation id="2100280972184758440">Ваша лозинка је угрожена</translation>
 <translation id="2102134110707549001">Предложи јаку лозинку…</translation>
 <translation id="2108755909498034140">Поново покрените рачунар</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">Занемарују се јер су замењене смерницама <ph name="POLICY_NAME" />.</translation>
 <translation id="2119505898009119320">Издато за: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Бушење у доњем десном углу</translation>
+<translation id="2124528555835617522">Дошло је до упада у податке на сајту или у апликацији коју користите. Chrome препоручује да одмах проверите сачуване лозинке.</translation>
 <translation id="2129079103035905234">Сензори за покрет</translation>
 <translation id="213826338245044447">Мобилни обележивачи</translation>
 <translation id="214556005048008348">Откажи плаћање</translation>
@@ -484,6 +487,7 @@
 <translation id="3282497668470633863">Додајте име на картици</translation>
 <translation id="3287510313208355388">Преузми када сам онлајн</translation>
 <translation id="3293642807462928945">Сазнајте више о смерницама <ph name="POLICY_NAME" /></translation>
+<translation id="3295439534709115864">Дошло је до упада у податке на сајту или у апликацији коју користите. Chrome препоручује да одмах промените лозинку на <ph name="ORIGIN" />.</translation>
 <translation id="3303855915957856445">Нису пронађени резултати претраге</translation>
 <translation id="3320021301628644560">Додајте адресу за обрачун</translation>
 <translation id="3324983252691184275">Јаркоцрвена</translation>

@@ -795,11 +795,11 @@ Jika kebijakan ini tidak disetel, setelan kebijakan berarti diaktifkan, lihat de
 <translation id="2345547870894930157">Aktifkan DNS-over-HTTPS tanpa fallback yang tidak aman</translation>
 <translation id="237494535617297575">Memungkinkan Anda menyetel daftar pola url yang menentukan situs yang tidak diizinkan untuk menampilkan pemberitahuan. Jika kebijakan ini tidak disetel, nilai default global akan digunakan untuk semua situs, baik dari kebijakan 'DefaultNotificationsSetting', jika disetel, atau konfigurasi pribadi pengguna.</translation>
 <translation id="2386362615870139244">Izinkan penguncian layar saat bangun</translation>
-<translation id="2398554235599593694"> Kebijakan ini mengontrol apakah kotak centang "Selalu buka" ditampilkan atau tidak pada perintah konfirmasi peluncuran protokol eksternal.
+<translation id="2398554235599593694"> Kebijakan ini mengontrol apakah kotak centang "Always open" ditampilkan atau tidak pada perintah konfirmasi peluncuran protokol eksternal.
 
-      Jika kebijakan ini ditetapkan ke True, saat konfirmasi protokol eksternal ditampilkan, pengguna dapat memilih untuk "Selalu buka" protokol tanpa perintah konfirmasi di waktu mendatang.
+      Jika kebijakan ini ditetapkan ke True, saat konfirmasi protokol eksternal ditampilkan, pengguna dapat memilih untuk "Always open" protokol tanpa perintah konfirmasi di waktu mendatang.
 
-      Jika kebijakan ini ditetapkan ke False atau tidak ditetapkan, kotak centang "Selalu buka" tidak akan ditampilkan dan pengguna akan diminta untuk mengonfirmasi setiap kali protokol eksternal dipanggil.</translation>
+      Jika kebijakan ini ditetapkan ke False atau tidak ditetapkan, kotak centang "Always open" tidak akan ditampilkan dan pengguna akan diminta untuk mengonfirmasi setiap kali protokol eksternal dipanggil.</translation>
 <translation id="2411817661175306360">Peringatan perlindungan sandi nonaktif</translation>
 <translation id="2411919772666155530">Mencekal pemberitahuan di situs ini</translation>
 <translation id="2418507228189425036">Menonaktifkan penyimpanan histori browser di <ph name="PRODUCT_NAME" /> dan mencegah pengguna mengubah setelan ini.
@@ -3165,7 +3165,7 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
           <ph name="PROXY_HELP_URL" />.</translation>
 <translation id="6172059022423179562">Menggunakan implementasi <ph name="CORS" /> lama, bukan <ph name="CORS" /> baru.
 
-      Jika setelan ini ditetapkan ke True, implementasi lama yang digunakan seharusnya kompatibel dengan versi sebelumnya.
+      Jika setelan ini ditetapkan ke True, implementasi lama akan digunakan yang seharusnya kompatibel dengan versi sebelumnya.
 
       Jika setelan ini ditetapkan ke False atau tidak ditetapkan, implementasi baru yang digunakan dapat menyebabkan potensi masalah kompatibilitas khusus bagi perusahaan.
 
@@ -4574,7 +4574,7 @@ Pengguna tidak dapat mengubah atau mengganti setelan ini.</translation>
 <translation id="8759829385824155666">Jenis enkripsi Kerberos yang diizinkan</translation>
 <translation id="8764119899999036911">Menentukan apakah Kerberos SPN yang dihasilkan didasarkan pada nama DNS kanonik atau nama asli yang dimasukkan. Jika Anda mengaktifkan setelan ini, pencarian CNAME akan dilewati dan nama server akan digunakan seperti saat dimasukkan. Jika Anda menonaktifkan setelan ini atau membiarkannya tidak disetel, nama kanonik server akan ditentukan melalui pencarian CNAME.</translation>
 <translation id="8764477907716150749">Kebijakan ini untuk penggunaan internal oleh <ph name="PRODUCT_NAME" /> sendiri.</translation>
-<translation id="8777369558049831576">Menampilkan kotak centang "Selalu buka" pada dialog protokol eksternal.</translation>
+<translation id="8777369558049831576">Menampilkan kotak centang "Always open" pada dialog protokol eksternal.</translation>
 <translation id="877773134585155834">Membuat daftar ID aplikasi yang ditampilkan <ph name="PRODUCT_OS_NAME" /> sebagai aplikasi yang dipasangi pin di kotak peluncur.
 
       Aplikasi Chrome ditetapkan berdasarkan ID, misalnya "pjkljhegncpnkpknbcohdijeoejaedia", Aplikasi Android berdasarkan nama paketnya, misalnya "com.google.android.gm", dan Aplikasi Web ditetapkan berdasarkan URL yang digunakan dalam WebAppInstallForceList, misalnya "https://google.com/maps".

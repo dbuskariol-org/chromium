@@ -174,6 +174,7 @@
 <translation id="173080396488393970">This type of card isn’t supported</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Try contacting the system admin.</translation>
+<translation id="1739107442478692187">A data breach occurred on a site or app that you use. Chrome recommends checking your saved passwords and changing your password on <ph name="ORIGIN" /> now.</translation>
 <translation id="1740951997222943430">Enter a valid expiry month</translation>
 <translation id="1743520634839655729">To pay faster next time, save your card, name and billing address to your Google Account and to this device.</translation>
 <translation id="1743570585616704562">Not recognised</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Domain mismatch</translation>
 <translation id="2096368010154057602">Department</translation>
 <translation id="2099652385553570808">Triple staple left</translation>
+<translation id="2100280972184758440">Your password was compromised</translation>
 <translation id="2102134110707549001">Suggest strong password…</translation>
 <translation id="2108755909498034140">Restart your computer</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">Ignored because it was overridden by <ph name="POLICY_NAME" />.</translation>
 <translation id="2119505898009119320">Issued to: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Punch bottom right</translation>
+<translation id="2124528555835617522">A data breach occurred on a site or app that you use. Chrome recommends checking your saved passwords now.</translation>
 <translation id="2129079103035905234">Motion Sensors</translation>
 <translation id="213826338245044447">Mobile Bookmarks</translation>
 <translation id="214556005048008348">Cancel payment</translation>
@@ -476,6 +479,7 @@
 <translation id="3282497668470633863">Add name on card</translation>
 <translation id="3287510313208355388">Download when online</translation>
 <translation id="3293642807462928945">Learn more about <ph name="POLICY_NAME" /> policy</translation>
+<translation id="3295439534709115864">A data breach occurred on a site or app that you use. Chrome recommends changing your password on <ph name="ORIGIN" /> now.</translation>
 <translation id="3303855915957856445">No search results found</translation>
 <translation id="3320021301628644560">Add billing address</translation>
 <translation id="3324983252691184275">Crimson</translation>

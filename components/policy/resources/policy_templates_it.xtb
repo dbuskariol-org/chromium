@@ -2847,13 +2847,13 @@ Se questa impostazione viene disattivata o non viene impostata, sia gli utenti l
 
       Questo criterio consente di specificare le configurazioni dei server di stampa esterni sui dispositivi <ph name="PRODUCT_OS_NAME" /> come file JSON.
 
-      Le dimensioni del file non devono superare 1 MB e il file deve contenere un array di registri (oggetti JSON). Ogni registro deve contenere i campi "id", "url" e "display_name" con stringhe come valori. I valori dei campi "id" devono essere univoci.
+      Le dimensioni del file non devono superare 1 MB e il file deve contenere un array di record (oggetti JSON). Ogni record deve contenere i campi "id", "url" e "display_name" con stringhe come valori. I valori dei campi "id" devono essere univoci.
 
       Il file viene scaricato e memorizzato nella cache. L'hash di crittografia viene utilizzato per verificare l'integrità del download. Il file viene scaricato nuovamente ogni volta che l'URL o l'hash cambiano.
 
       Se viene impostato un valore corretto per questo criterio, i dispositivi proveranno a richiedere ai server di stampa specificati le stampanti disponibili che utilizzano il protocollo IPP.
 
-      Se questo criterio non viene impostato o viene impostato un valore sbagliato, non ci saranno stampanti visibili agli utenti.
+      Se questo criterio non viene impostato o viene impostato un valore sbagliato, nessuna stampante sarà visibile agli utenti.
 
       Attualmente, il numero di server di stampa è limitato a 16. Verranno inviate richieste solo ai primi 16 server di stampa dell'elenco.
       </translation>
@@ -4042,7 +4042,7 @@ Nota. Attualmente i riavvii automatici vengono attivati soltanto durante la visu
 <translation id="7774768074957326919">Utilizza le impostazioni proxy di sistema</translation>
 <translation id="7777535871204167559">Considera i dispositivi di archiviazione esterni come di sola lettura</translation>
 <translation id="7788511847830146438">Per profilo</translation>
-<translation id="7792973482799545782">Non consentire il caricamento di contenuti misti bloccabili nei siti</translation>
+<translation id="7792973482799545782">Non consentire il caricamento di contenuti misti bloccabili in nessun sito</translation>
 <translation id="780603170519840350">Disattiva l'applicazione dei requisiti di Certificate Transparency per un elenco di hash subjectPublicKeyInfo.
 
       Questa norma consente di disattivare i requisiti di divulgazione di Certificate Transparency per le catene di certificati che contengono certificati con uno degli hash subjectPublicKeyInfo specificati. Fa sì che i certificati che altrimenti sarebbero considerati non attendibili, in quanto non adeguatamente resi pubblici, continuino a essere utilizzati per gli host aziendali.
