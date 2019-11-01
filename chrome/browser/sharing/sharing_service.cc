@@ -68,6 +68,16 @@ std::string GetDeviceType(sync_pb::SyncEnums::DeviceType type) {
   return l10n_util::GetStringUTF8(device_type_message_id);
 }
 
+std::string CapitalizeWords(const std::string& sentence) {
+  std::string capitalized_sentence;
+  bool use_upper_case = true;
+  for (char ch : sentence) {
+    capitalized_sentence += (use_upper_case ? toupper(ch) : ch);
+    use_upper_case = !isalpha(ch);
+  }
+  return capitalized_sentence;
+}
+
 struct DeviceNames {
   std::string full_name;
   std::string short_name;
@@ -79,6 +89,7 @@ DeviceNames GetDeviceNames(const syncer::DeviceInfo* device) {
   DeviceNames device_names;
 
   base::SysInfo::HardwareInfo hardware_info = device->hardware_info();
+  hardware_info.manufacturer = CapitalizeWords(hardware_info.manufacturer);
 
   // The model might be empty if other device is still on M78 or lower with sync
   // turned on.
