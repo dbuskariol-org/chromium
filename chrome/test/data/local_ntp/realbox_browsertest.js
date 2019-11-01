@@ -646,7 +646,7 @@ test.realbox.testRemoveIcon = function() {
   assertEquals(0, $(test.realbox.IDS.REALBOX_MATCHES).children.length);
 };
 
-test.realbox.testPressEnterOnResult = function() {
+test.realbox.testPressEnterOnSelectedMatch = function() {
   test.realbox.realboxEl.value = 'hello world';
   test.realbox.realboxEl.dispatchEvent(new CustomEvent('input'));
 
@@ -656,6 +656,9 @@ test.realbox.testPressEnterOnResult = function() {
 
   const matchEls = $(test.realbox.IDS.REALBOX_MATCHES).children;
   assertEquals(1, matchEls.length);
+
+  // First match is selected.
+  assertTrue(matchEls[0].classList.contains(test.realbox.CLASSES.SELECTED));
 
   let clicked = false;
   matchEls[0].onclick = () => clicked = true;
@@ -673,9 +676,41 @@ test.realbox.testPressEnterOnResult = function() {
   assertTrue(clicked);
 };
 
+test.realbox.testPressEnterNoSelectedMatch = function() {
+  test.realbox.realboxEl.value = 'hello world';
+  test.realbox.realboxEl.dispatchEvent(new CustomEvent('input'));
+
+  const matches =
+      [test.realbox.getSearchMatch({allowedToBeDefaultMatch: false})];
+  chrome.embeddedSearch.searchBox.onqueryautocompletedone(
+      {input: test.realbox.realboxEl.value, matches});
+
+  const matchEls = $(test.realbox.IDS.REALBOX_MATCHES).children;
+  assertEquals(1, matchEls.length);
+
+  // First match is not selected.
+  assertFalse(matchEls[0].classList.contains(test.realbox.CLASSES.SELECTED));
+
+  let clicked = false;
+  matchEls[0].onclick = () => clicked = true;
+
+  const enter = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    key: 'Enter',
+    target: matchEls[0],
+  });
+  test.realbox.realboxEl.dispatchEvent(enter);
+  assertFalse(enter.defaultPrevented);
+
+  assertFalse(clicked);
+};
+
 test.realbox.testArrowDownMovesFocus = function() {
   test.realbox.realboxEl.value = 'hello ';
   test.realbox.realboxEl.dispatchEvent(new CustomEvent('input'));
+
+  test.realbox.realboxEl.focus();
 
   chrome.embeddedSearch.searchBox.onqueryautocompletedone({
     input: test.realbox.realboxEl.value,
@@ -687,7 +722,12 @@ test.realbox.testArrowDownMovesFocus = function() {
     ],
   });
 
-  test.realbox.realboxEl.focus();
+  const matchEls = $(test.realbox.IDS.REALBOX_MATCHES).children;
+  assertEquals(4, matchEls.length);
+
+  // First match is selected but does not get the focus.
+  assertTrue(matchEls[0].classList.contains(test.realbox.CLASSES.SELECTED));
+  assertEquals(document.activeElement, test.realbox.realboxEl);
 
   const arrowDown = new KeyboardEvent('keydown', {
     bubbles: true,
@@ -696,9 +736,6 @@ test.realbox.testArrowDownMovesFocus = function() {
   });
   test.realbox.realboxEl.dispatchEvent(arrowDown);
   assertTrue(arrowDown.defaultPrevented);
-
-  const matchEls = $(test.realbox.IDS.REALBOX_MATCHES).children;
-  assertEquals(4, matchEls.length);
 
   // Arrow up/down while focus is in realbox should not focus matches.
   assertTrue(matchEls[1].classList.contains(test.realbox.CLASSES.SELECTED));

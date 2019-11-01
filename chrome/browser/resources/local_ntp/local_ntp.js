@@ -1088,7 +1088,8 @@ function onDeleteAutocompleteMatch(result) {
     return matchEl.classList.contains(CLASSES.SELECTED);
   });
 
-  const wasFocused = matchEls[selected].contains(document.activeElement);
+  const wasFocused =
+      matchEls[selected] && matchEls[selected].contains(document.activeElement);
 
   populateAutocompleteMatches(result.matches);
   matchElBeingDeleted = null;
@@ -1101,7 +1102,7 @@ function onDeleteAutocompleteMatch(result) {
   }
 
   const newMatchEls = Array.from($(IDS.REALBOX_MATCHES).children);
-  const newSelected = Math.min(newMatchEls.length - 1, selected);
+  const newSelected = Math.max(Math.min(newMatchEls.length - 1, selected), 0);
   const newSelectedEl = newMatchEls[newSelected];
 
   selectMatchEl(newSelectedEl);
@@ -1174,7 +1175,9 @@ function onQueryAutocompleteDone(result) {
     return;
   }
 
-  selectMatchEl(assert($(IDS.REALBOX_MATCHES).firstElementChild));
+  if (result.matches[0].allowedToBeDefaultMatch) {
+    selectMatchEl(assert($(IDS.REALBOX_MATCHES).firstElementChild));
+  }
 
   // If the user is deleting content, don't quickly re-suggest the same
   // output.
@@ -1202,7 +1205,7 @@ function onRealboxCutCopy(e) {
   });
 
   const selectedMatch = autocompleteMatches[selected];
-  if (!selectedMatch.isSearchType) {
+  if (selectedMatch && !selectedMatch.isSearchType) {
     e.clipboardData.setData('text/plain', selectedMatch.destinationUrl);
     e.preventDefault();
     if (e.type === 'cut') {
@@ -1302,14 +1305,16 @@ function onRealboxWrapperKeydown(e) {
   const selected = matchEls.findIndex(matchEl => {
     return matchEl.classList.contains(CLASSES.SELECTED);
   });
-  assert(autocompleteMatches[selected]);
 
   if (key === 'Delete') {
-    if (e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey &&
-        autocompleteMatches[selected].supportsDeletion) {
-      matchElBeingDeleted = matchEls[selected];
-      window.chrome.embeddedSearch.searchBox.deleteAutocompleteMatch(selected);
-      e.preventDefault();
+    if (e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey) {
+      const selectedMatch = autocompleteMatches[selected];
+      if (selectedMatch && selectedMatch.supportsDeletion) {
+        matchElBeingDeleted = matchEls[selected];
+        window.chrome.embeddedSearch.searchBox.deleteAutocompleteMatch(
+            selected);
+        e.preventDefault();
+      }
     }
     return;
   }
