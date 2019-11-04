@@ -21,19 +21,23 @@
 #include "services/network/network_service.h"
 #include "services/network/public/mojom/network_context.mojom.h"
 #include "services/network/public/mojom/network_service.mojom.h"
+#include "third_party/blink/public/common/loader/url_loader_throttle.h"
 #include "third_party/blink/public/common/user_agent/user_agent_metadata.h"
 #include "url/gurl.h"
 #include "url/origin.h"
 #include "weblayer/browser/browser_controller_impl.h"
 #include "weblayer/browser/browser_main_parts_impl.h"
 #include "weblayer/browser/weblayer_content_browser_overlay_manifest.h"
+#include "weblayer/common/features.h"
 #include "weblayer/public/fullscreen_delegate.h"
 #include "weblayer/public/main.h"
 
 #if defined(OS_ANDROID)
-#include "base/android/apk_assets.h"
 #include "base/android/path_utils.h"
+#include "components/crash/content/browser/crash_handler_host_linux.h"
+#include "ui/base/resource/resource_bundle_android.h"
 #include "weblayer/browser/android_descriptors.h"
+#include "weblayer/browser/safe_browsing/safe_browsing_service.h"
 #endif
 
 #if defined(OS_LINUX) || defined(OS_ANDROID)
@@ -44,6 +48,19 @@
 #include "sandbox/win/src/sandbox.h"
 #include "services/service_manager/sandbox/win/sandbox_win.h"
 #endif
+
+namespace {
+
+bool IsSafebrowsingSupported() {
+  // TODO(timvolodine): consider the non-android case, see crbug.com/1015809.
+  // TODO(timvolodine): consider refactoring this out into safe_browsing/.
+#if defined(OS_ANDROID)
+  return true;
+#endif
+  return false;
+}
+
+}  // namespace
 
 namespace weblayer {
 
@@ -143,17 +160,56 @@ void ContentBrowserClientImpl::OnNetworkServiceCreated(
 #endif
 }
 
+std::vector<std::unique_ptr<blink::URLLoaderThrottle>>
+ContentBrowserClientImpl::CreateURLLoaderThrottles(
+    const network::ResourceRequest& request,
+    content::BrowserContext* browser_context,
+    const base::RepeatingCallback<content::WebContents*()>& wc_getter,
+    content::NavigationUIData* navigation_ui_data,
+    int frame_tree_node_id) {
+  std::vector<std::unique_ptr<blink::URLLoaderThrottle>> result;
+
+  if (base::FeatureList::IsEnabled(features::kWebLayerSafeBrowsing) &&
+      IsSafebrowsingSupported()) {
+#if defined(OS_ANDROID)
+    if (!safe_browsing_service_) {
+      // TODO(timvolodine): consider creating SafeBrowsingService elsewhere
+      // (especially in multiplatform support).
+      // Note: Initialize() needs to happen on UI thread.
+      safe_browsing_service_ =
+          std::make_unique<SafeBrowsingService>(GetUserAgent());
+      safe_browsing_service_->Initialize();
+    }
+
+    result.push_back(safe_browsing_service_->CreateURLLoaderThrottle(
+        browser_context->GetResourceContext(), wc_getter, frame_tree_node_id));
+#endif
+  }
+
+  return result;
+}
+
 #if defined(OS_LINUX) || defined(OS_ANDROID)
 void ContentBrowserClientImpl::GetAdditionalMappedFilesForChildProcess(
     const base::CommandLine& command_line,
     int child_process_id,
     content::PosixFileDescriptorInfo* mappings) {
 #if defined(OS_ANDROID)
-  mappings->ShareWithRegion(
-      kPakDescriptor,
-      base::GlobalDescriptors::GetInstance()->Get(kPakDescriptor),
-      base::GlobalDescriptors::GetInstance()->GetRegion(kPakDescriptor));
-#endif
+  base::MemoryMappedFile::Region region;
+  int fd = ui::GetMainAndroidPackFd(&region);
+  mappings->ShareWithRegion(kWebLayerMainPakDescriptor, fd, region);
+
+  fd = ui::GetCommonResourcesPackFd(&region);
+  mappings->ShareWithRegion(kWebLayer100PercentPakDescriptor, fd, region);
+
+  fd = ui::GetLocalePackFd(&region);
+  mappings->ShareWithRegion(kWebLayerLocalePakDescriptor, fd, region);
+
+  int crash_signal_fd =
+      crashpad::CrashHandlerHost::Get()->GetDeathSignalSocket();
+  if (crash_signal_fd >= 0)
+    mappings->Share(service_manager::kCrashDumpSignal, crash_signal_fd);
+#endif  // defined(OS_ANDROID)
 }
 #endif  // defined(OS_LINUX) || defined(OS_ANDROID)
 

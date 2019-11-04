@@ -26,7 +26,7 @@ import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.base.test.util.CallbackHelper;
 import org.chromium.content_public.browser.test.util.CriteriaHelper;
 import org.chromium.net.test.EmbeddedTestServer;
-import org.chromium.weblayer.shell.WebLayerShellActivity;
+import org.chromium.weblayer.shell.InstrumentationActivity;
 
 import java.io.File;
 
@@ -34,14 +34,15 @@ import java.io.File;
  * Tests that file inputs work as expected.
  */
 @RunWith(BaseJUnit4ClassRunner.class)
-public class FileInputTest {
+public class InputTypesTest {
     @Rule
-    public WebLayerShellActivityTestRule mActivityTestRule = new WebLayerShellActivityTestRule();
+    public InstrumentationActivityTestRule mActivityTestRule =
+            new InstrumentationActivityTestRule();
 
     private EmbeddedTestServer mTestServer;
     private File mTempFile;
 
-    private class FileIntentInterceptor implements WebLayerShellActivity.IntentInterceptor {
+    private class FileIntentInterceptor implements InstrumentationActivity.IntentInterceptor {
         public Intent mLastIntent;
 
         private Intent mResponseIntent;
@@ -82,8 +83,8 @@ public class FileInputTest {
         mTestServer.addDefaultHandlers("weblayer/test/data");
         Assert.assertTrue(mTestServer.start(0));
 
-        WebLayerShellActivity activity =
-                mActivityTestRule.launchShellWithUrl(mTestServer.getURL("/file_input.html"));
+        InstrumentationActivity activity =
+                mActivityTestRule.launchShellWithUrl(mTestServer.getURL("/input_types.html"));
         mTempFile = File.createTempFile("file", null);
         activity.setIntentInterceptor(mIntentInterceptor);
 
@@ -102,7 +103,7 @@ public class FileInputTest {
     public void testFileInputBasic() {
         String id = "input_file";
 
-        openInputWithId(id);
+        openFileInputWithId(id);
 
         Assert.assertFalse(getContentIntent().hasCategory(Intent.CATEGORY_OPENABLE));
 
@@ -115,12 +116,12 @@ public class FileInputTest {
         String id = "input_file";
 
         // First add a file.
-        openInputWithId(id);
+        openFileInputWithId(id);
         waitForNumFiles(id, 1);
 
         // Now cancel the intent.
         mIntentInterceptor.setResponse(Activity.RESULT_CANCELED, null);
-        openInputWithId(id);
+        openFileInputWithId(id);
         waitForNumFiles(id, 0);
     }
 
@@ -129,7 +130,7 @@ public class FileInputTest {
     public void testFileInputText() {
         String id = "input_text";
 
-        openInputWithId(id);
+        openFileInputWithId(id);
 
         Assert.assertTrue(getContentIntent().hasCategory(Intent.CATEGORY_OPENABLE));
 
@@ -141,7 +142,7 @@ public class FileInputTest {
     public void testFileInputAny() {
         String id = "input_any";
 
-        openInputWithId(id);
+        openFileInputWithId(id);
 
         Assert.assertFalse(getContentIntent().hasCategory(Intent.CATEGORY_OPENABLE));
 
@@ -160,7 +161,7 @@ public class FileInputTest {
         mIntentInterceptor.setResponse(Activity.RESULT_OK, response);
         String id = "input_file_multiple";
 
-        openInputWithId(id);
+        openFileInputWithId(id);
 
         Intent contentIntent = getContentIntent();
         Assert.assertFalse(contentIntent.hasCategory(Intent.CATEGORY_OPENABLE));
@@ -175,7 +176,7 @@ public class FileInputTest {
     public void testFileInputImage() {
         String id = "input_image";
 
-        openInputWithId(id);
+        openFileInputWithId(id);
 
         Assert.assertEquals(
                 MediaStore.ACTION_IMAGE_CAPTURE, mIntentInterceptor.mLastIntent.getAction());
@@ -188,7 +189,7 @@ public class FileInputTest {
     public void testFileInputAudio() {
         String id = "input_audio";
 
-        openInputWithId(id);
+        openFileInputWithId(id);
 
         Assert.assertEquals(MediaStore.Audio.Media.RECORD_SOUND_ACTION,
                 mIntentInterceptor.mLastIntent.getAction());
@@ -196,7 +197,19 @@ public class FileInputTest {
         waitForNumFiles(id, 1);
     }
 
-    private void openInputWithId(String id) {
+    @Test
+    @SmallTest
+    public void testColorInput() {
+        // Just make sure we don't crash when opening the color picker.
+        mActivityTestRule.executeScriptSync("var done = false; document.onclick = function() {"
+                + "document.getElementById('input_color').click(); done = true;}");
+        EventUtils.simulateTouchCenterOfView(
+                mActivityTestRule.getActivity().getWindow().getDecorView());
+        CriteriaHelper.pollInstrumentationThread(
+                () -> { return mActivityTestRule.executeScriptAndExtractBoolean("done"); });
+    }
+
+    private void openFileInputWithId(String id) {
         // We need to click the input after user input, otherwise it won't open due to security
         // policy.
         mActivityTestRule.executeScriptSync(

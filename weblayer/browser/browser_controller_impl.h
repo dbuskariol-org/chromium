@@ -36,6 +36,11 @@ class BrowserControllerImpl : public BrowserController,
                               public content::WebContentsDelegate,
                               public content::WebContentsObserver {
  public:
+  // TODO(sky): investigate a better way to not have so many ifdefs.
+#if defined(OS_ANDROID)
+  BrowserControllerImpl(ProfileImpl* profile,
+                        const base::android::JavaParamRef<jobject>& java_impl);
+#endif
   explicit BrowserControllerImpl(ProfileImpl* profile);
   ~BrowserControllerImpl() override;
 
@@ -69,17 +74,22 @@ class BrowserControllerImpl : public BrowserController,
   void AddObserver(BrowserObserver* observer) override;
   void RemoveObserver(BrowserObserver* observer) override;
   NavigationController* GetNavigationController() override;
+  void ExecuteScript(const base::string16& script,
+                     JavaScriptResultCallback callback) override;
 #if !defined(OS_ANDROID)
   void AttachToView(views::WebView* web_view) override;
 #endif
 
   // content::WebContentsDelegate:
-  void LoadingStateChanged(content::WebContents* source,
-                           bool to_different_document) override;
   void LoadProgressChanged(content::WebContents* source,
                            double progress) override;
   void DidNavigateMainFramePostCommit(
       content::WebContents* web_contents) override;
+  content::ColorChooser* OpenColorChooser(
+      content::WebContents* web_contents,
+      SkColor color,
+      const std::vector<blink::mojom::ColorSuggestionPtr>& suggestions)
+      override;
   void RunFileChooser(content::RenderFrameHost* render_frame_host,
                       std::unique_ptr<content::FileSelectListener> listener,
                       const blink::mojom::FileChooserParams& params) override;
@@ -112,6 +122,7 @@ class BrowserControllerImpl : public BrowserController,
   base::ObserverList<BrowserObserver>::Unchecked observers_;
 #if defined(OS_ANDROID)
   TopControlsContainerView* top_controls_container_view_ = nullptr;
+  base::android::ScopedJavaGlobalRef<jobject> java_impl_;
 #endif
 
   bool is_fullscreen_ = false;

@@ -24,7 +24,7 @@ import org.chromium.weblayer_private.aidl.ObjectWrapper;
 
 /**
  * Represents a web-browser. More specifically, owns a NavigationController, and allows configuring
- * state of the browser, such as delegates and observers.
+ * state of the browser, such as delegates and callbacks.
  */
 public final class BrowserController {
     /** The top level key of the JSON object returned by executeScript(). */
@@ -33,7 +33,7 @@ public final class BrowserController {
     private final IBrowserController mImpl;
     private FullscreenDelegateClientImpl mFullscreenDelegateClient;
     private final NavigationController mNavigationController;
-    private final ObserverList<BrowserObserver> mObservers;
+    private final ObserverList<BrowserCallback> mCallbacks;
     private DownloadDelegateClientImpl mDownloadDelegateClient;
 
     BrowserController(IBrowserController impl) {
@@ -44,11 +44,12 @@ public final class BrowserController {
             throw new APICallException(e);
         }
 
-        mObservers = new ObserverList<BrowserObserver>();
+        mCallbacks = new ObserverList<BrowserCallback>();
         mNavigationController = NavigationController.create(mImpl);
     }
 
     public void setDownloadDelegate(@Nullable DownloadDelegate delegate) {
+        ThreadCheck.ensureOnUiThread();
         try {
             if (delegate != null) {
                 mDownloadDelegateClient = new DownloadDelegateClientImpl(delegate);
@@ -63,6 +64,7 @@ public final class BrowserController {
     }
 
     public void setFullscreenDelegate(@Nullable FullscreenDelegate delegate) {
+        ThreadCheck.ensureOnUiThread();
         try {
             if (delegate != null) {
                 mFullscreenDelegateClient = new FullscreenDelegateClientImpl(delegate);
@@ -77,6 +79,7 @@ public final class BrowserController {
     }
 
     public DownloadDelegate getDownloadDelegate() {
+        ThreadCheck.ensureOnUiThread();
         return mDownloadDelegateClient != null ? mDownloadDelegateClient.getDelegate() : null;
     }
 
@@ -87,6 +90,7 @@ public final class BrowserController {
      */
     public void executeScript(
             @NonNull String script, @Nullable ValueCallback<JSONObject> callback) {
+        ThreadCheck.ensureOnUiThread();
         try {
             ValueCallback<String> stringCallback = (String result) -> {
                 if (callback == null) {
@@ -109,25 +113,24 @@ public final class BrowserController {
 
     @Nullable
     public FullscreenDelegate getFullscreenDelegate() {
+        ThreadCheck.ensureOnUiThread();
         return mFullscreenDelegateClient != null ? mFullscreenDelegateClient.getDelegate() : null;
-    }
-
-    @Override
-    protected void finalize() {
-        // TODO(sky): figure out right assertion here if mProfile is non-null.
     }
 
     @NonNull
     public NavigationController getNavigationController() {
+        ThreadCheck.ensureOnUiThread();
         return mNavigationController;
     }
 
-    public void addObserver(@Nullable BrowserObserver observer) {
-        mObservers.addObserver(observer);
+    public void registerBrowserCallback(@Nullable BrowserCallback callback) {
+        ThreadCheck.ensureOnUiThread();
+        mCallbacks.addObserver(callback);
     }
 
-    public void removeObserver(@Nullable BrowserObserver observer) {
-        mObservers.removeObserver(observer);
+    public void unregisterBrowserCallback(@Nullable BrowserCallback callback) {
+        ThreadCheck.ensureOnUiThread();
+        mCallbacks.removeObserver(callback);
     }
 
     IBrowserController getIBrowserController() {
@@ -138,27 +141,13 @@ public final class BrowserController {
         @Override
         public void visibleUrlChanged(String url) {
             Uri uri = Uri.parse(url);
-            for (BrowserObserver observer : mObservers) {
-                observer.visibleUrlChanged(uri);
-            }
-        }
-
-        @Override
-        public void loadingStateChanged(boolean isLoading, boolean toDifferentDocument) {
-            for (BrowserObserver observer : mObservers) {
-                observer.loadingStateChanged(isLoading, toDifferentDocument);
-            }
-        }
-
-        @Override
-        public void loadProgressChanged(double progress) {
-            for (BrowserObserver observer : mObservers) {
-                observer.loadProgressChanged(progress);
+            for (BrowserCallback callback : mCallbacks) {
+                callback.visibleUrlChanged(uri);
             }
         }
     }
 
-    private final class DownloadDelegateClientImpl extends IDownloadDelegateClient.Stub {
+    private static final class DownloadDelegateClientImpl extends IDownloadDelegateClient.Stub {
         private final DownloadDelegate mDelegate;
 
         DownloadDelegateClientImpl(DownloadDelegate delegate) {
@@ -177,7 +166,7 @@ public final class BrowserController {
         }
     }
 
-    private final class FullscreenDelegateClientImpl extends IFullscreenDelegateClient.Stub {
+    private static final class FullscreenDelegateClientImpl extends IFullscreenDelegateClient.Stub {
         private FullscreenDelegate mDelegate;
 
         /* package */ FullscreenDelegateClientImpl(FullscreenDelegate delegate) {

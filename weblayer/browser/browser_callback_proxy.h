@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef WEBLAYER_BROWSER_BROWSER_OBSERVER_PROXY_H_
-#define WEBLAYER_BROWSER_BROWSER_OBSERVER_PROXY_H_
+#ifndef WEBLAYER_BROWSER_BROWSER_CALLBACK_PROXY_H_
+#define WEBLAYER_BROWSER_BROWSER_CALLBACK_PROXY_H_
 
 #include <jni.h>
 
@@ -15,28 +15,25 @@ namespace weblayer {
 
 class BrowserController;
 
-// BrowserObserverProxy forwards all BrowserObserver functions to the Java
-// side. There is one BrowserObserverProxy per BrowserController.
-class BrowserObserverProxy : public BrowserObserver {
+// BrowserCallbackProxy forwards all BrowserObserver functions to the Java
+// side. There is one BrowserCallbackProxy per BrowserController.
+class BrowserCallbackProxy : public BrowserObserver {
  public:
-  BrowserObserverProxy(JNIEnv* env,
+  BrowserCallbackProxy(JNIEnv* env,
                        jobject obj,
                        BrowserController* browser_controller);
-  ~BrowserObserverProxy() override;
+  ~BrowserCallbackProxy() override;
 
   // BrowserObserver:
   void DisplayedUrlChanged(const GURL& url) override;
-  void LoadingStateChanged(bool is_loading,
-                           bool to_different_document) override;
-  void LoadProgressChanged(double progress) override;
 
  private:
   BrowserController* browser_controller_;
   base::android::ScopedJavaGlobalRef<jobject> java_observer_;
 
-  DISALLOW_COPY_AND_ASSIGN(BrowserObserverProxy);
+  DISALLOW_COPY_AND_ASSIGN(BrowserCallbackProxy);
 };
 
 }  // namespace weblayer
 
-#endif  // WEBLAYER_BROWSER_BROWSER_OBSERVER_PROXY_H_
+#endif  // WEBLAYER_BROWSER_BROWSER_CALLBACK_PROXY_H_

@@ -17,6 +17,7 @@
 
 namespace weblayer {
 
+class SafeBrowsingService;
 struct MainParams;
 
 class ContentBrowserClientImpl : public content::ContentBrowserClient {
@@ -43,6 +44,13 @@ class ContentBrowserClientImpl : public content::ContentBrowserClient {
       const base::FilePath& relative_partition_path) override;
   void OnNetworkServiceCreated(
       network::mojom::NetworkService* network_service) override;
+  std::vector<std::unique_ptr<blink::URLLoaderThrottle>>
+  CreateURLLoaderThrottles(
+      const network::ResourceRequest& request,
+      content::BrowserContext* browser_context,
+      const base::RepeatingCallback<content::WebContents*()>& wc_getter,
+      content::NavigationUIData* navigation_ui_data,
+      int frame_tree_node_id) override;
 
 #if defined(OS_LINUX) || defined(OS_ANDROID)
   void GetAdditionalMappedFilesForChildProcess(
@@ -53,6 +61,10 @@ class ContentBrowserClientImpl : public content::ContentBrowserClient {
 
  private:
   MainParams* params_;
+
+#if defined(OS_ANDROID)
+  std::unique_ptr<SafeBrowsingService> safe_browsing_service_;
+#endif
 };
 
 }  // namespace weblayer

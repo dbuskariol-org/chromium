@@ -8,9 +8,8 @@ import android.app.Activity;
 import android.app.Instrumentation.ActivityMonitor;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
@@ -22,20 +21,20 @@ import org.chromium.base.test.util.CallbackHelper;
 import org.chromium.content_public.browser.test.util.CriteriaHelper;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
 import org.chromium.weblayer.BrowserController;
-import org.chromium.weblayer.BrowserObserver;
 import org.chromium.weblayer.Navigation;
-import org.chromium.weblayer.NavigationObserver;
-import org.chromium.weblayer.shell.WebLayerShellActivity;
+import org.chromium.weblayer.NavigationCallback;
+import org.chromium.weblayer.WebLayer;
+import org.chromium.weblayer.shell.InstrumentationActivity;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.TimeoutException;
 
 /**
- * ActivityTestRule for WebLayerShellActivity.
+ * ActivityTestRule for InstrumentationActivity.
  *
- * Test can use this ActivityTestRule to launch or get WebLayerShellActivity.
+ * Test can use this ActivityTestRule to launch or get InstrumentationActivity.
  */
-public class WebLayerShellActivityTestRule extends ActivityTestRule<WebLayerShellActivity> {
+public class InstrumentationActivityTestRule extends ActivityTestRule<InstrumentationActivity> {
     private static final class NavigationWaiter {
         private String mUrl;
         private BrowserController mController;
@@ -43,7 +42,7 @@ public class WebLayerShellActivityTestRule extends ActivityTestRule<WebLayerShel
         private boolean mDoneLoading;
         private CallbackHelper mCallbackHelper = new CallbackHelper();
 
-        private NavigationObserver mNavigationObserver = new NavigationObserver() {
+        private NavigationCallback mNavigationCallback = new NavigationCallback() {
             @Override
             public void navigationCompleted(Navigation navigation) {
                 if (navigation.getUri().toString().equals(mUrl)) {
@@ -51,11 +50,9 @@ public class WebLayerShellActivityTestRule extends ActivityTestRule<WebLayerShel
                     checkComplete();
                 }
             }
-        };
 
-        private BrowserObserver mBrowserObserver = new BrowserObserver() {
             @Override
-            public void loadingStateChanged(boolean isLoading, boolean toDifferentDocument) {
+            public void loadStateChanged(boolean isLoading, boolean toDifferentDocument) {
                 mDoneLoading = !isLoading;
                 checkComplete();
             }
@@ -68,8 +65,8 @@ public class WebLayerShellActivityTestRule extends ActivityTestRule<WebLayerShel
 
         public void navigateAndWait() {
             TestThreadUtils.runOnUiThreadBlocking(() -> {
-                mController.addObserver(mBrowserObserver);
-                mController.getNavigationController().addObserver(mNavigationObserver);
+                mController.getNavigationController().registerNavigationCallback(
+                        mNavigationCallback);
                 mController.getNavigationController().navigate(Uri.parse(mUrl));
             });
             try {
@@ -78,8 +75,8 @@ public class WebLayerShellActivityTestRule extends ActivityTestRule<WebLayerShel
                 throw new RuntimeException(e);
             }
             TestThreadUtils.runOnUiThreadBlocking(() -> {
-                mController.removeObserver(mBrowserObserver);
-                mController.getNavigationController().removeObserver(mNavigationObserver);
+                mController.getNavigationController().unregisterNavigationCallback(
+                        mNavigationCallback);
             });
         }
 
@@ -103,56 +100,71 @@ public class WebLayerShellActivityTestRule extends ActivityTestRule<WebLayerShel
         }
     }
 
-    public WebLayerShellActivityTestRule() {
-        super(WebLayerShellActivity.class, false, false);
+    public InstrumentationActivityTestRule() {
+        super(InstrumentationActivity.class, false, false);
+    }
+
+    public WebLayer getWebLayer() {
+        return TestThreadUtils.runOnUiThreadBlockingNoException(() -> {
+            return WebLayer
+                    .create(InstrumentationRegistry.getTargetContext().getApplicationContext())
+                    .get();
+        });
     }
 
     /**
-     * Starts the WebLayer activity and completely loads the given URL (this calls
-     * navigateAndWait()).
+     * Starts the WebLayer activity with the given extras Bundle and completely loads the given URL
+     * (this calls navigateAndWait()).
      */
-    public WebLayerShellActivity launchShellWithUrl(String url) {
+    public InstrumentationActivity launchShellWithUrl(String url, Bundle extras) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.putExtras(extras);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // Prevent URL from being loaded on start.
-        intent.putExtra(WebLayerShellActivity.EXTRA_NO_LOAD, true);
         intent.setComponent(
                 new ComponentName(InstrumentationRegistry.getInstrumentation().getTargetContext(),
-                        WebLayerShellActivity.class));
-        WebLayerShellActivity activity = launchActivity(intent);
+                        InstrumentationActivity.class));
+        InstrumentationActivity activity = launchActivity(intent);
         Assert.assertNotNull(activity);
         if (url != null) navigateAndWait(url);
         return activity;
     }
 
     /**
+     * Starts the WebLayer activity and completely loads the given URL (this calls
+     * navigateAndWait()).
+     */
+    public InstrumentationActivity launchShellWithUrl(String url) {
+        return launchShellWithUrl(url, new Bundle());
+    }
+
+    /**
      * Loads the given URL in the shell.
      */
     public void navigateAndWait(String url) {
-        NavigationWaiter waiter = new NavigationWaiter(url, getActivity().getBrowserController());
+        navigateAndWait(getActivity().getBrowserController(), url);
+    }
+
+    public void navigateAndWait(BrowserController controller, String url) {
+        NavigationWaiter waiter = new NavigationWaiter(url, controller);
         waiter.navigateAndWait();
     }
 
     /**
-     * Rotates the Activity, blocking until the Activity is re-created.
+     * Recreates the Activity, blocking until finished.
      * After calling this, getActivity() returns the new Activity.
      */
-    public void rotateActivity() {
+    public void recreateActivity() {
         Activity activity = getActivity();
 
-        ActivityMonitor monitor = new ActivityMonitor(WebLayerShellActivity.class.getName(),
-                null, false);
+        ActivityMonitor monitor =
+                new ActivityMonitor(InstrumentationActivity.class.getName(), null, false);
         InstrumentationRegistry.getInstrumentation().addMonitor(monitor);
 
-        int current = activity.getResources().getConfiguration().orientation;
-        int requested = current == Configuration.ORIENTATION_LANDSCAPE ?
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT :
-                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-        activity.setRequestedOrientation(requested);
-        CriteriaHelper.pollUiThread(() ->
-            monitor.getLastActivity() != null && monitor.getLastActivity() != activity
-        );
+        TestThreadUtils.runOnUiThreadBlocking(activity::recreate);
+
+        CriteriaHelper.pollUiThread(
+                () -> monitor.getLastActivity() != null && monitor.getLastActivity() != activity);
         InstrumentationRegistry.getInstrumentation().removeMonitor(monitor);
 
         // There is no way to rotate the activity using ActivityTestRule or even notify it.
@@ -206,5 +218,12 @@ public class WebLayerShellActivityTestRule extends ActivityTestRule<WebLayerShel
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public InstrumentationActivity launchWithProfile(String profileName) {
+        Bundle extras = new Bundle();
+        extras.putString(InstrumentationActivity.EXTRA_PROFILE_NAME, profileName);
+        String url = "data:text,foo";
+        return launchShellWithUrl(url, extras);
     }
 }
