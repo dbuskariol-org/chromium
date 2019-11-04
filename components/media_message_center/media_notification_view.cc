@@ -274,6 +274,7 @@ void MediaNotificationView::ButtonPressed(views::Button* sender,
                                           const ui::Event& event) {
   if (sender == header_row_) {
     SetExpanded(!expanded_);
+    container_->OnHeaderClicked();
     return;
   }
 
@@ -364,6 +365,10 @@ void MediaNotificationView::UpdateWithMediaArtwork(
   PreferredSizeChanged();
   Layout();
   SchedulePaint();
+}
+
+views::Button* MediaNotificationView::GetHeaderRowForTesting() const {
+  return header_row_;
 }
 
 void MediaNotificationView::UpdateActionButtonsVisibility() {
