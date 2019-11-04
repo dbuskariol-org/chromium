@@ -925,6 +925,7 @@
 <translation id="2326931316514688470">重新載入應用程式(&amp;R)</translation>
 <translation id="2327492829706409234">啟用應用程式</translation>
 <translation id="2329597144923131178">登入後，即可從您使用的任何裝置取得自己的書籤、歷史記錄、密碼和其他設定。</translation>
+<translation id="2330129964253841015">當密碼遭到外洩時發出警告</translation>
 <translation id="2332131598580221120">前往商店查看</translation>
 <translation id="2332192922827071008">開啟偏好設定</translation>
 <translation id="2332742915001411729">重設為預設值</translation>
@@ -973,6 +974,7 @@
 <translation id="2395616325548404795">你的 <ph name="DEVICE_TYPE" /> 已成功註冊企業管理服務，但無法傳送資產和位置資訊。請前往管理控制台，為這個裝置手動輸入這些資訊。</translation>
 <translation id="2396783860772170191">輸入 4 位數 PIN 碼 (0000-9999)</translation>
 <translation id="2399939490305346086">安全金鑰登入資料</translation>
+<translation id="2407481962792080328">登入 Google 帳戶時，系統會啟用這項功能</translation>
 <translation id="2408955596600435184">請輸入你的 PIN 碼</translation>
 <translation id="241082044617551207">不明的外掛程式</translation>
 <translation id="2412593942846481727">有可用的更新</translation>
@@ -1426,6 +1428,7 @@
 <translation id="3038612606416062604">手動新增印表機</translation>
 <translation id="3038675903128704560">不允許任何網站使用外掛程式存取你的電腦</translation>
 <translation id="3039491566278747710">無法在裝置上安裝離線政策。</translation>
+<translation id="3043581297103810752">來自 <ph name="ORIGIN" /></translation>
 <translation id="3045447014237878114">這個網站已自動下載多個檔案</translation>
 <translation id="3046910703532196514">完整的網頁</translation>
 <translation id="304747341537320566">語音引擎</translation>

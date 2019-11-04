@@ -182,6 +182,7 @@
 <translation id="2321958826496381788">拖曳滑桿，將文字調整到適當的字體大小。當你輕觸兩下文字段落時，瀏覽器至少應呈現這樣的字體大小。</translation>
 <translation id="2323763861024343754">網站儲存資料量</translation>
 <translation id="2328985652426384049">無法登入</translation>
+<translation id="2330129964253841015">當密碼遭到外洩時發出警告</translation>
 <translation id="2349710944427398404">Chrome 使用的資料總量，包括帳戶、書籤和儲存的設定</translation>
 <translation id="2353636109065292463">檢查你的網際網路連線</translation>
 <translation id="2359808026110333948">繼續</translation>
@@ -189,6 +190,7 @@
 <translation id="2387895666653383613">文字大小</translation>
 <translation id="2394602618534698961">你下載的檔案會顯示在這裡</translation>
 <translation id="2402980924095424747"><ph name="MEGABYTES" /> MB</translation>
+<translation id="2407481962792080328">登入 Google 帳戶時，系統會啟用這項功能</translation>
 <translation id="2410754283952462441">選擇帳戶</translation>
 <translation id="2414886740292270097">深色</translation>
 <translation id="2416359993254398973">Chrome 需要相關權限，才能讓這個網站使用你的攝影機。</translation>

@@ -173,6 +173,7 @@
 <translation id="173080396488393970">इस तरह का कार्ड काम नहीं करता</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">सिस्टम व्यवस्थापक से संपर्क करने का प्रयास करें.</translation>
+<translation id="1739107442478692187">आप जो साइट या ऐप्लिकेशन इस्तेमाल करते हैं उसमें डेटा का उल्लंघन हुआ है. Chrome सुझाव देता है कि आप अपने सेव किए हुए पासवर्ड की जांच करते रहें और अब उसे <ph name="ORIGIN" /> पर बदलते रहें.</translation>
 <translation id="1740951997222943430">खत्म होने का मान्य महीना डालें</translation>
 <translation id="1743520634839655729">अगली बार तेज़ी से भुगतान करने के लिए, अपने कार्ड, नाम और बिलिंग पते को अपने 'Google खाते' में और इस डिवाइस में सेव करें.</translation>
 <translation id="1743570585616704562">उंगली की पहचान नहीं हो सकी</translation>
@@ -237,6 +238,7 @@
 <translation id="2094505752054353250">डोमेन का गलत-मिलान</translation>
 <translation id="2096368010154057602">विभाग</translation>
 <translation id="2099652385553570808">बाईं ओर ट्रिपल स्टेपल</translation>
+<translation id="2100280972184758440">आपका पासवर्ड गलत तरीके से इस्तेमाल किया गया</translation>
 <translation id="2102134110707549001">मज़बूत पासवर्ड सुझाएं…</translation>
 <translation id="2108755909498034140">अपना कंप्यूटर फिर से चालू करें</translation>
 <translation id="2111256659903765347">सुपर-ए</translation>
@@ -244,6 +246,7 @@
 <translation id="2114841414352855701">ध्यान नहीं दिया गया क्योंकि यह <ph name="POLICY_NAME" /> द्वारा ओवरराइड की गई थी.</translation>
 <translation id="2119505898009119320">इसको जारी: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">नीचे दाईं ओर पंच</translation>
+<translation id="2124528555835617522">आप जो साइट या ऐप्लिकेशन इस्तेमाल करते हैं उसमें डेटा का उल्लंघन हुआ है. Chrome सुझाव देता है कि आप अपने सेव किए हुए पासवर्ड की अभी जांच करें.</translation>
 <translation id="2129079103035905234">हलचल पकड़ने वाले सेंसर</translation>
 <translation id="213826338245044447">मोबाइल बुकमार्क</translation>
 <translation id="214556005048008348">भुगतान न करें</translation>
@@ -479,6 +482,7 @@
 <translation id="3282497668470633863">कार्ड पर नाम जोड़ें</translation>
 <translation id="3287510313208355388">ऑनलाइन होने पर डाउनलोड करें</translation>
 <translation id="3293642807462928945"><ph name="POLICY_NAME" /> नीति के बारे में ज़्यादा जानें</translation>
+<translation id="3295439534709115864">आप जो साइट या ऐप्लिकेशन इस्तेमाल करते हैं उसमें डेटा का उल्लंघन हुआ है. Chrome सुझाव देता है कि आप <ph name="ORIGIN" /> पर अभी अपना पासवर्ड बदलें.</translation>
 <translation id="3303855915957856445">कोई खोज नतीजे नहीं मिले</translation>
 <translation id="3320021301628644560">बिलिंग पता जोड़ें</translation>
 <translation id="3324983252691184275">गहरा लाल</translation>

@@ -174,6 +174,7 @@
 <translation id="173080396488393970">Loại thẻ này không được hỗ trợ</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Thử liên hệ với quản trị viên hệ thống.</translation>
+<translation id="1739107442478692187">Một sự cố rò rỉ dữ liệu đã xảy ra trên trang web hoặc ứng dụng bạn dùng. Bạn nên kiểm tra mật khẩu đã lưu và đổi mật khẩu dùng trên <ph name="ORIGIN" /> ngay bây giờ.</translation>
 <translation id="1740951997222943430">Nhập tháng hết hạn hợp lệ</translation>
 <translation id="1743520634839655729">Để thanh toán nhanh hơn vào lần tới, hãy lưu địa chỉ thanh toán, tên và thẻ vào thiết bị này và Tài khoản Google của bạn.</translation>
 <translation id="1743570585616704562">Không nhận dạng được</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Miền không khớp</translation>
 <translation id="2096368010154057602">Khu vực hành chính</translation>
 <translation id="2099652385553570808">Dập 3 ghim bên trái</translation>
+<translation id="2100280972184758440">Mật khẩu của bạn đã bị lộ</translation>
 <translation id="2102134110707549001">Đề xuất mật khẩu mạnh…</translation>
 <translation id="2108755909498034140">Khởi động lại máy tính của bạn</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">Bỏ qua vì đã bị <ph name="POLICY_NAME" /> ghi đè.</translation>
 <translation id="2119505898009119320">Cấp cho: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Đục lỗ dưới cùng bên phải</translation>
+<translation id="2124528555835617522">Một sự cố rò rỉ dữ liệu đã xảy ra trên trang web hoặc ứng dụng bạn dùng. Bạn nên kiểm tra mật khẩu đã lưu ngay bây giờ.</translation>
 <translation id="2129079103035905234">Cảm biến chuyển động</translation>
 <translation id="213826338245044447">Dấu trang trên thiết bị di động</translation>
 <translation id="214556005048008348">Hủy thanh toán</translation>
@@ -484,6 +487,7 @@
 <translation id="3282497668470633863">Thêm tên trên thẻ</translation>
 <translation id="3287510313208355388">Tải xuống khi trực tuyến</translation>
 <translation id="3293642807462928945">Hãy tìm hiểu thêm về chính sách <ph name="POLICY_NAME" /></translation>
+<translation id="3295439534709115864">Một sự cố rò rỉ dữ liệu đã xảy ra trên trang web hoặc ứng dụng bạn dùng. Bạn nên đổi mật khẩu dùng trên <ph name="ORIGIN" /> ngay bây giờ.</translation>
 <translation id="3303855915957856445">Không tìm thấy kết quả tìm kiếm nào</translation>
 <translation id="3320021301628644560">Thêm địa chỉ thanh toán</translation>
 <translation id="3324983252691184275">Đỏ thẫm</translation>

@@ -922,6 +922,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="2326931316514688470">&amp;Volver a cargar la aplicación</translation>
 <translation id="2327492829706409234">Habilitar aplicación</translation>
 <translation id="2329597144923131178">Accede a tu cuenta para ver los favoritos, el historial, las contraseñas y otras opciones de configuración en todos los dispositivos.</translation>
+<translation id="2330129964253841015">Advertirme si se vulneran las contraseñas</translation>
 <translation id="2332131598580221120">Ver en Chrome Web Store</translation>
 <translation id="2332192922827071008">Abrir preferencias</translation>
 <translation id="2332742915001411729">Restablecer configuración de zoom predeterminada</translation>
@@ -970,6 +971,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="2395616325548404795">Tu dispositivo <ph name="DEVICE_TYPE" /> se inscribió correctamente para la administración empresarial, pero se produjo un error al intentar enviar la información de la ubicación y del recurso. Ingresa los datos manualmente en la Consola del administrador del dispositivo.</translation>
 <translation id="2396783860772170191">Ingresa un PIN de 4 dígitos (0000-9999)</translation>
 <translation id="2399939490305346086">Datos de acceso de la llave de seguridad</translation>
+<translation id="2407481962792080328">Se activa esta función cuando accedes a tu Cuenta de Google</translation>
 <translation id="2408955596600435184">Ingresa tu PIN</translation>
 <translation id="241082044617551207">Complemento desconocido</translation>
 <translation id="2412593942846481727">Actualización disponible</translation>
@@ -1424,6 +1426,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="3038612606416062604">Agregar una impresora manualmente</translation>
 <translation id="3038675903128704560">No permitir que los sitios usen complementos para acceder a tu computadora</translation>
 <translation id="3039491566278747710">No se pudo instalar la política sin conexión en el dispositivo.</translation>
+<translation id="3043581297103810752">De <ph name="ORIGIN" /></translation>
 <translation id="3045447014237878114">Este sitio descargó varios archivos automáticamente</translation>
 <translation id="3046910703532196514">Página web, completa</translation>
 <translation id="304747341537320566">Motores de comentarios de texto a voz</translation>

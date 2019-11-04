@@ -174,6 +174,7 @@
 <translation id="173080396488393970">이 유형의 카드는 지원되지 않습니다.</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">시스템 관리자에게 문의하세요.</translation>
+<translation id="1739107442478692187">사용 중인 사이트 또는 앱에서 정보 유출이 발생했습니다. 저장된 비밀번호를 확인하고 지금 바로 <ph name="ORIGIN" />의 비밀번호를 변경하는 것이 좋습니다.</translation>
 <translation id="1740951997222943430">올바른 만료 월을 입력하세요.</translation>
 <translation id="1743520634839655729">다음번에 더 빠르게 결제할 수 있도록 Google 계정과 기기에 카드, 이름, 청구서 수신 주소를 저장하세요.</translation>
 <translation id="1743570585616704562">인식할 수 없음</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">도메인이 일치하지 않음</translation>
 <translation id="2096368010154057602">부서</translation>
 <translation id="2099652385553570808">왼쪽 트리플 스테이플</translation>
+<translation id="2100280972184758440">비밀번호가 도용됨</translation>
 <translation id="2102134110707549001">강력한 비밀번호 추천...</translation>
 <translation id="2108755909498034140">컴퓨터 다시 시작</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701"><ph name="POLICY_NAME" />이(가) 우선 적용되었기 때문에 무시됩니다.</translation>
 <translation id="2119505898009119320">발급 대상: <ph name="ORGANIZATION" />[<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">오른쪽 하단 펀칭</translation>
+<translation id="2124528555835617522">사용 중인 사이트 또는 앱에서 정보 유출이 발생했습니다. 지금 바로 저장된 비밀번호를 확인하는 것이 좋습니다.</translation>
 <translation id="2129079103035905234">움직임 감지 센서</translation>
 <translation id="213826338245044447">모바일 북마크</translation>
 <translation id="214556005048008348">결제 취소</translation>
@@ -482,6 +485,7 @@
 <translation id="3282497668470633863">카드 명의 추가</translation>
 <translation id="3287510313208355388">온라인 상태일 때 다운로드</translation>
 <translation id="3293642807462928945"><ph name="POLICY_NAME" /> 정책에 관해 자세히 알아보기</translation>
+<translation id="3295439534709115864">사용 중인 사이트 또는 앱에서 정보 유출이 발생했습니다. 지금 바로 <ph name="ORIGIN" />의 비밀번호를 변경하는 것이 좋습니다.</translation>
 <translation id="3303855915957856445">검색결과 없음</translation>
 <translation id="3320021301628644560">청구지 주소 추가</translation>
 <translation id="3324983252691184275">진홍색</translation>

@@ -636,11 +636,6 @@ Se esta configuração for deixada sem definição, os usuários poderão optar 
           Se essa configuração for desativada, a transferência de arquivos não será permitida. Se essa configuração for ativada ou não for definida, a transferência de arquivos será permitida.</translation>
 <translation id="2057317273526988987">Permitir acesso a uma lista de URLs</translation>
 <translation id="2061810934846663491">Configurar os nomes de domínio obrigatórios para hosts de acesso remoto</translation>
-<translation id="2063663607822994541">Configurar a quantidade de memória que uma única instância do <ph name="PRODUCT_NAME" /> pode usar antes que as abas comecem a ser descartadas (isto é, a memória usada por uma aba será liberada, e a aba terá que ser recarregada ao ser aberta novamente) para economizar memória.
-
-      Se a política for definida, o navegador começará a descartar abas para economizar memória quando o limite for excedido. Entretanto, não há garantia de que o navegador seja sempre executado dentro dos limites. Qualquer valor abaixo de 2.048 será arredondado para esse número.
-
-      Se esta política não for definida, o navegador só começará a economizar memória quando detectar que a quantidade de memória física da máquina está baixa.</translation>
 <translation id="206623763829450685">Especifica quais esquemas de autenticação HTTP são compatíveis com <ph name="PRODUCT_NAME" />.
 
           Os valores possíveis são "básico", "resumo", "ntlm" e "negociar". Separe valores múltiplos com vírgulas.

@@ -174,6 +174,7 @@
 <translation id="173080396488393970">不支援這種信用卡類型</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">建議您與系統管理員聯絡。</translation>
+<translation id="1739107442478692187">你使用的網站或應用程式發生資料侵害事件。Chrome 建議你檢查儲存的密碼，並立即變更 <ph name="ORIGIN" /> 上的密碼。</translation>
 <translation id="1740951997222943430">請輸入有效的到期月份</translation>
 <translation id="1743520634839655729">只要將你的卡片資訊、姓名與帳單地址儲存到你的 Google 帳戶中和這部裝置上，下次即可更快完成付款程序。</translation>
 <translation id="1743570585616704562">無法識別</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">網域不符</translation>
 <translation id="2096368010154057602">部門</translation>
 <translation id="2099652385553570808">三釘 (左側)</translation>
+<translation id="2100280972184758440">你的密碼已遭外洩</translation>
 <translation id="2102134110707549001">建議高強度密碼…</translation>
 <translation id="2108755909498034140">重新啟動電腦</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">由於政策被「<ph name="POLICY_NAME" />」覆寫了，因此遭到略過。</translation>
 <translation id="2119505898009119320">核發對象：<ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">打孔 (右下方)</translation>
+<translation id="2124528555835617522">你使用的網站或應用程式發生資料侵害事件。Chrome 建議你立即檢查已儲存的密碼。</translation>
 <translation id="2129079103035905234">動作感應器</translation>
 <translation id="213826338245044447">行動版書籤</translation>
 <translation id="214556005048008348">取消付款</translation>
@@ -474,6 +477,7 @@
 <translation id="3282497668470633863">新增持卡人姓名</translation>
 <translation id="3287510313208355388">等到可連線時再下載網頁內容</translation>
 <translation id="3293642807462928945">進一步瞭解 <ph name="POLICY_NAME" /> 政策</translation>
+<translation id="3295439534709115864">你使用的網站或應用程式發生資料侵害事件。Chrome 建議你立即變更 <ph name="ORIGIN" /> 上的密碼。</translation>
 <translation id="3303855915957856445">找不到相符的搜尋結果</translation>
 <translation id="3320021301628644560">新增帳單地址</translation>
 <translation id="3324983252691184275">深紅色</translation>

@@ -174,6 +174,7 @@
 <translation id="173080396488393970">Denna korttyp stöds inte</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Kontakta systemadministratören.</translation>
+<translation id="1739107442478692187">Ett dataintrång skedde på en webbplats eller i en app du använder. Om du har återanvänt lösenordet på andra webbplatser rekommenderas du i Chrome att återställa lösenordet på <ph name="ORIGIN" /> nu.</translation>
 <translation id="1740951997222943430">Ange en giltig utgångsmånad</translation>
 <translation id="1743520634839655729">Spara kortet, faktureringsadressen och namnet i Google-kontot och på enheten så går det snabbare att betala nästa gång.</translation>
 <translation id="1743570585616704562">Identifierades inte</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Domänen matchar inte</translation>
 <translation id="2096368010154057602">Departement</translation>
 <translation id="2099652385553570808">Tre häftklamrar till vänster</translation>
+<translation id="2100280972184758440">Ditt lösenord har läckt ut</translation>
 <translation id="2102134110707549001">Föreslå ett starkt lösenord …</translation>
 <translation id="2108755909498034140">Starta om datorn</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">Ignoreras eftersom den åsidosätts av <ph name="POLICY_NAME" />.</translation>
 <translation id="2119505898009119320">Utfärdat till: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Hål nere till höger</translation>
+<translation id="2124528555835617522">Ett dataintrång skedde på en webbplats eller i en app du använder. Du rekommenderas i Chrome att kontrollera dina sparade lösenord nu.</translation>
 <translation id="2129079103035905234">Rörelsesensorer</translation>
 <translation id="213826338245044447">Bokmärken i mobilen</translation>
 <translation id="214556005048008348">Avbryt betalningen</translation>
@@ -484,6 +487,7 @@
 <translation id="3282497668470633863">Lägg till namnet på kortet</translation>
 <translation id="3287510313208355388">Ladda ned när du är online</translation>
 <translation id="3293642807462928945">Läs mer om principen <ph name="POLICY_NAME" /></translation>
+<translation id="3295439534709115864">Ett dataintrång skedde på en webbplats eller i en app du använder. Du rekommenderas i Chrome att ändra lösenordet på <ph name="ORIGIN" /> nu.</translation>
 <translation id="3303855915957856445">Inga sökresultat hittades</translation>
 <translation id="3320021301628644560">Lägg till faktureringsadress</translation>
 <translation id="3324983252691184275">Karmosinröd</translation>

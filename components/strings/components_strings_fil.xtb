@@ -174,6 +174,7 @@
 <translation id="173080396488393970">Hindi sinusuportahan ang uri ng card na ito</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Subukang makipag-ugnayan sa admin ng system.</translation>
+<translation id="1739107442478692187">May nangyaring paglabag sa data sa isang site o app na ginagamit mo. Inirerekomenda ng Chrome na suriin ngayon ang iyong mga naka-save na password at palitan ang password mo sa <ph name="ORIGIN" />.</translation>
 <translation id="1740951997222943430">Maglagay ng wastong buwan ng pag-expire</translation>
 <translation id="1743520634839655729">Para mas mabilis na makapagbayad sa susunod, i-save ang iyong card, pangalan, at billing address sa Google Account mo at sa device na ito.</translation>
 <translation id="1743570585616704562">Hindi nakilala</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Maling pagtutugma sa domain</translation>
 <translation id="2096368010154057602">Kagawaran</translation>
 <translation id="2099652385553570808">Triple staple left</translation>
+<translation id="2100280972184758440">Nakompromiso ang iyong password</translation>
 <translation id="2102134110707549001">Magmungkahi ng Malakas na Password...</translation>
 <translation id="2108755909498034140">I-restart ang iyong computer</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">Binalewala dahil na-override ito ng <ph name="POLICY_NAME" />.</translation>
 <translation id="2119505898009119320">Ibinigay sa: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Punch bottom right</translation>
+<translation id="2124528555835617522">May nangyaring paglabag sa data sa isang site o app na ginagamit mo. Inirerekomenda ng Chrome na suriin ngayon ang iyong mga naka-save na password.</translation>
 <translation id="2129079103035905234">Mga Sensor ng Paggalaw</translation>
 <translation id="213826338245044447">Mga Bookmark sa Mobile</translation>
 <translation id="214556005048008348">Kanselahin ang pagbabayad</translation>
@@ -476,6 +479,7 @@
 <translation id="3282497668470633863">Magdagdag ng pangalan sa card</translation>
 <translation id="3287510313208355388">I-download kapag online</translation>
 <translation id="3293642807462928945">Matuto pa tungkol sa patakarang <ph name="POLICY_NAME" /></translation>
+<translation id="3295439534709115864">May nangyaring paglabag sa data sa isang site o app na ginagamit mo. Inirerekomenda ng Chrome na baguhin ngayon ang iyong password sa <ph name="ORIGIN" />.</translation>
 <translation id="3303855915957856445">Walang nakitang resulta ng paghahanap</translation>
 <translation id="3320021301628644560">Magdagdag ng billing address</translation>
 <translation id="3324983252691184275">Crimson</translation>

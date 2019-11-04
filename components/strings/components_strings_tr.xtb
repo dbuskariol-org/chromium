@@ -174,6 +174,7 @@
 <translation id="173080396488393970">Bu kart türü desteklenmiyor</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Sistem yöneticisiyle iletişime geçmeyi deneyin.</translation>
+<translation id="1739107442478692187">Kullandığınız bir site veya uygulamada veri ihlali oluştu. Chrome, kayıtlı şifrelerinizi hemen kontrol etmenizi ve <ph name="ORIGIN" /> şifrenizi değiştirmenizi öneriyor.</translation>
 <translation id="1740951997222943430">Geçerli bir son kullanma ayı girin</translation>
 <translation id="1743520634839655729">Gelecek sefer daha hızlı ödeme yapabilmek için kartınızı, adınızı ve fatura adresinizi Google hesabınıza kaydedin.</translation>
 <translation id="1743570585616704562">Tanınmadı</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">Alan adı uyuşmazlığı</translation>
 <translation id="2096368010154057602">Bölüm</translation>
 <translation id="2099652385553570808">Solda üçlü tel zımba</translation>
+<translation id="2100280972184758440">Şifrenizin güvenliği ihlal edildi</translation>
 <translation id="2102134110707549001">Güçlü Şifre Öner…</translation>
 <translation id="2108755909498034140">Bilgisayarınızı yeniden başlatın</translation>
 <translation id="2111256659903765347">Super-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701"><ph name="POLICY_NAME" /> tarafından geçersiz kılındığı için yoksayıldı.</translation>
 <translation id="2119505898009119320">Verildiği kuruluş: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]</translation>
 <translation id="2119867082804433120">Sağ altta delik</translation>
+<translation id="2124528555835617522">Kullandığınız bir site veya uygulamada veri ihlali oluştu. Chrome, kayıtlı şifrelerinizi hemen kontrol etmenizi öneriyor.</translation>
 <translation id="2129079103035905234">Hareket Sensörleri</translation>
 <translation id="213826338245044447">Mobil Yer İşaretleri</translation>
 <translation id="214556005048008348">Ödemeyi iptal et</translation>
@@ -480,6 +483,7 @@
 <translation id="3282497668470633863">Kart üzerindeki ismi ekle</translation>
 <translation id="3287510313208355388">Çevrimiçi olduğunda indir</translation>
 <translation id="3293642807462928945"><ph name="POLICY_NAME" /> politikası ile ilgili daha fazla bilgi edinin</translation>
+<translation id="3295439534709115864">Kullandığınız bir site veya uygulamada veri ihlali oluştu. Chrome, <ph name="ORIGIN" /> şifrenizi hemen değiştirmenizi öneriyor.</translation>
 <translation id="3303855915957856445">Arama sonucu bulunamadı</translation>
 <translation id="3320021301628644560">Fatura adresi ekle</translation>
 <translation id="3324983252691184275">Kızıl</translation>

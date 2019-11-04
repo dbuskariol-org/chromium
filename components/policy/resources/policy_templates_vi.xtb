@@ -648,11 +648,6 @@
           Nếu bạn tắt tùy chọn cài đặt này, thì người dùng sẽ không được phép chuyển tệp. Nếu bạn bật hoặc không đặt tùy chọn cài đặt này, thì người dùng có thể chuyển tệp.</translation>
 <translation id="2057317273526988987">Cho phép truy cập vào một danh sách các URL</translation>
 <translation id="2061810934846663491">Định cấu hình tên miền bắt buộc cho máy chủ truy cập từ xa</translation>
-<translation id="2063663607822994541">Định cấu hình dung lượng bộ nhớ mà một phiên bản <ph name="PRODUCT_NAME" /> có thể sử dụng trước khi các tab bắt đầu bị hủy (nghĩa là dung lượng bộ nhớ mà tab sử dụng sẽ được giải phóng và tab sẽ phải tải lại khi chuyển đổi) để tiết kiệm bộ nhớ.
-
-      Nếu bạn đặt chính sách này, thì trình duyệt sẽ bắt đầu hủy các tab để tiết kiệm bộ nhớ sau khi vượt quá giới hạn. Tuy nhiên, không thể đảm bảo rằng trình duyệt sẽ luôn chạy trong mức giới hạn. Mọi giá trị chưa đầy 2048 sẽ được làm tròn thành 2048.
-
-      Nếu bạn không đặt chính sách này, thì trình duyệt sẽ chỉ bắt đầu cố gắng tiết kiệm bộ nhớ sau khi phát hiện thấy rằng dung lượng bộ nhớ thực trên máy ở mức thấp.</translation>
 <translation id="206623763829450685">Chỉ định các cơ chế xác thực HTTP mà <ph name="PRODUCT_NAME" /> hỗ trợ.
 
           Các giá trị có thể có là 'basic', 'digest', 'ntlm' và 'negotiate'. Phân tách nhiều giá trị bằng dấu phẩy.

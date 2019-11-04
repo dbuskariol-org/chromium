@@ -645,11 +645,6 @@ Si esta política se establece en True, <ph name="PRODUCT_OS_NAME" /> intentará
           Si se inhabilita esta opción, no se permitirá la transferencia de archivos. Si se habilita esta opción o no se configura, se permitirá la transferencia de archivos.</translation>
 <translation id="2057317273526988987">Permitir el acceso a una lista de URL</translation>
 <translation id="2061810934846663491">Configurar los nombres de dominio obligatorios para hosts de acceso remoto</translation>
-<translation id="2063663607822994541">Configura la cantidad de memoria que una única instancia de <ph name="PRODUCT_NAME" /> puede usar antes de que se empiecen a descartar pestañas (es decir, se liberará la memoria que usa una pestaña y esta se tendrá que volver a cargar cuando se vuelva a acceder a ella) para ahorrar memoria.
-
-      Si se define esta política, el navegador empezará a descartar pestañas para ahorrar memoria cuando se supere el límite de memoria. Sin embargo, no se garantiza que el navegador se ejecute siempre por debajo de ese límite. Cualquier valor que sea inferior a 2048 se establecerá como 2048.
-
-      Si no se define esta política, el navegador solo intentará ahorrar memoria cuando detecte que la cantidad de memoria física del equipo es baja.</translation>
 <translation id="206623763829450685">Especifica los esquemas de autenticación HTTP admitidos por <ph name="PRODUCT_NAME" />.
 
           Los valores posibles son "basic", "digest", "ntlm" y "negotiate". Si hay varios valores, se deben separar con comas.
