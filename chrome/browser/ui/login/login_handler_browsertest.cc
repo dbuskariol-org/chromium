@@ -1752,7 +1752,7 @@ IN_PROC_BROWSER_TEST_F(LoginPromptBrowserTest, PromptWithNoVisibleEntry) {
 
 // Tests that when HTTP Auth committed interstitials are enabled, a prompt
 // triggered by a subframe can be cancelled.
-IN_PROC_BROWSER_TEST_P(LoginPromptBrowserTest, PromptFromSubframe) {
+IN_PROC_BROWSER_TEST_F(LoginPromptBrowserTest, PromptFromSubframe) {
   ASSERT_TRUE(embedded_test_server()->Start());
 
   content::WebContents* contents =
