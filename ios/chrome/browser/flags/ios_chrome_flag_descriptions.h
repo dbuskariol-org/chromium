@@ -324,11 +324,6 @@ extern const char kUseDdljsonApiDescription[];
 extern const char kUseMultiloginEndpointName[];
 extern const char kUseMultiloginEndpointDescription[];
 
-// Title and description for the flag to enable using WKWebView.loading for
-// WebState::IsLoading.
-extern const char kUseWKWebViewLoadingName[];
-extern const char kUseWKWebViewLoadingDescription[];
-
 // Title and description for the flag to control if Google Payments API calls
 // should use the sandbox servers.
 extern const char kWalletServiceUseSandboxName[];
