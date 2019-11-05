@@ -330,11 +330,7 @@ void AssistantManagerServiceImpl::EnableHotword(bool enable) {
 }
 
 void AssistantManagerServiceImpl::SetArcPlayStoreEnabled(bool enable) {
-  if (GetState() != State::RUNNING) {
-    // Skip setting play store status if libassistant is not ready. The status
-    // will be set when it is ready.
-    return;
-  }
+  DCHECK(GetState() == State::RUNNING);
   // Both LibAssistant and Chrome threads may access |display_connection_|.
   // |display_connection_| is thread safe.
   if (assistant::features::IsAppSupportEnabled())
@@ -1162,6 +1158,8 @@ void AssistantManagerServiceImpl::OnStartFinished() {
   if (!assistant_manager_ || (GetState() == State::RUNNING))
     return;
 
+  SetStateAndInformObservers(State::RUNNING);
+
   if (is_first_init) {
     is_first_init = false;
     // Only sync status at the first init to prevent unexpected corner cases.
@@ -1182,12 +1180,10 @@ void AssistantManagerServiceImpl::OnStartFinished() {
   if (media_manager)
     media_manager->AddListener(this);
 
-  if (assistant_state()->arc_play_store_enabled().has_value())
-    SetArcPlayStoreEnabled(assistant_state()->arc_play_store_enabled().value());
-
   RegisterAlarmsTimersListener();
 
-  SetStateAndInformObservers(State::RUNNING);
+  if (assistant_state()->arc_play_store_enabled().has_value())
+    SetArcPlayStoreEnabled(assistant_state()->arc_play_store_enabled().value());
 }
 
 void AssistantManagerServiceImpl::OnAndroidAppListRefreshed(
