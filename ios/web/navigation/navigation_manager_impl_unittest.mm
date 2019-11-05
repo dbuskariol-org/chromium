@@ -22,7 +22,6 @@
 #include "ios/web/public/navigation/navigation_item.h"
 #include "ios/web/public/test/fakes/test_browser_state.h"
 #import "ios/web/public/test/fakes/test_navigation_manager.h"
-#import "ios/web/public/test/fakes/test_web_state.h"
 #import "ios/web/public/web_client.h"
 #import "ios/web/test/fakes/crw_fake_back_forward_list.h"
 #import "ios/web/test/fakes/crw_fake_session_controller_delegate.h"
@@ -80,7 +79,6 @@ class MockNavigationManagerDelegate : public NavigationManagerDelegate {
   }
 
   void SetWKWebView(id web_view) { mock_web_view_ = web_view; }
-  void SetWebState(WebState* web_state) { web_state_ = web_state; }
 
   MOCK_METHOD0(ClearTransientContent, void());
   MOCK_METHOD0(ClearDialogs, void());
@@ -102,7 +100,7 @@ class MockNavigationManagerDelegate : public NavigationManagerDelegate {
   MOCK_METHOD0(GetPendingItem, NavigationItemImpl*());
 
  private:
-  WebState* GetWebState() override { return web_state_; }
+  WebState* GetWebState() override { return nullptr; }
 
   id<CRWWebViewNavigationProxy> GetWebViewNavigationProxy() const override {
     return mock_web_view_;
@@ -110,7 +108,6 @@ class MockNavigationManagerDelegate : public NavigationManagerDelegate {
 
   CRWSessionController* session_controller_;
   id mock_web_view_;
-  WebState* web_state_ = nullptr;
 };
 
 }  // namespace
@@ -195,9 +192,8 @@ class NavigationManagerTest
   base::HistogramTester histogram_tester_;
   CRWFakeSessionControllerDelegate* session_controller_delegate_ = nil;
 
- protected:
+ private:
   TestBrowserState browser_state_;
-  TestWebState web_state_;
   MockNavigationManagerDelegate delegate_;
   std::unique_ptr<NavigationManagerImpl> manager_;
   CRWSessionController* controller_;
@@ -1875,9 +1871,6 @@ TEST_P(NavigationManagerTest, ReloadWithUserAgentType) {
 
 // Tests that ReloadWithUserAgentType does not expose internal URLs.
 TEST_P(NavigationManagerTest, ReloadWithUserAgentTypeOnIntenalUrl) {
-  delegate_.SetWebState(&web_state_);
-  web_state_.SetLoading(true);
-
   GURL url = wk_navigation_util::CreateRedirectUrl(GURL("http://www.1.com"));
   navigation_manager()->AddPendingItem(
       url, Referrer(), ui::PAGE_TRANSITION_TYPED,
@@ -2234,9 +2227,6 @@ TEST_P(NavigationManagerTest, VisibleItemIsTransientItemIfPresent) {
 }
 
 TEST_P(NavigationManagerTest, PendingItemIsVisibleIfNewAndUserInitiated) {
-  delegate_.SetWebState(&web_state_);
-  web_state_.SetLoading(true);
-
   navigation_manager()->AddPendingItem(
       GURL("http://www.url.com/0"), Referrer(), ui::PAGE_TRANSITION_TYPED,
       web::NavigationInitiationType::BROWSER_INITIATED,
@@ -2262,9 +2252,6 @@ TEST_P(NavigationManagerTest, PendingItemIsVisibleIfNewAndUserInitiated) {
 }
 
 TEST_P(NavigationManagerTest, PendingItemIsNotVisibleIfNotUserInitiated) {
-  delegate_.SetWebState(&web_state_);
-  web_state_.SetLoading(true);
-
   navigation_manager()->AddPendingItem(
       GURL("http://www.url.com/0"), Referrer(), ui::PAGE_TRANSITION_TYPED,
       web::NavigationInitiationType::RENDERER_INITIATED,
@@ -2309,8 +2296,6 @@ TEST_P(NavigationManagerTest, PendingItemIsNotVisibleIfNotNewNavigation) {
   }
   ASSERT_EQ(0, navigation_manager()->GetPendingItemIndex());
 
-  delegate_.SetWebState(&web_state_);
-  web_state_.SetLoading(true);
   OCMExpect([mock_web_view_ URL])
       .andReturn([[NSURL alloc] initWithString:@"http://www.url.com/0"]);
   ASSERT_TRUE(navigation_manager()->GetVisibleItem());
@@ -2321,9 +2306,6 @@ TEST_P(NavigationManagerTest, PendingItemIsNotVisibleIfNotNewNavigation) {
 }
 
 TEST_P(NavigationManagerTest, VisibleItemDefaultsToLastCommittedItem) {
-  delegate_.SetWebState(&web_state_);
-  web_state_.SetLoading(true);
-
   navigation_manager()->AddPendingItem(
       GURL("http://www.url.com/0"), Referrer(), ui::PAGE_TRANSITION_TYPED,
       web::NavigationInitiationType::RENDERER_INITIATED,

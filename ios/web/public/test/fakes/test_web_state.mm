@@ -201,9 +201,7 @@ const GURL& TestWebState::GetLastCommittedURL() const {
 }
 
 GURL TestWebState::GetCurrentURL(URLVerificationTrustLevel* trust_level) const {
-  if (trust_level) {
-    *trust_level = trust_level_;
-  }
+  *trust_level = trust_level_;
   return url_;
 }
 

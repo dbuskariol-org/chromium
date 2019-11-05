@@ -426,11 +426,7 @@ enum class BackForwardNavigationType {
   context->SetIsPost([self.navigationHandler isCurrentNavigationItemPOST]);
   context->SetIsSameDocument(sameDocumentNavigation);
 
-  // If WKWebView.loading is used for WebState::IsLoading, do not set it for
-  // renderer-initated navigation otherwise WebState::IsLoading will remain true
-  // after hash change in the web page.
-  if (!IsWKInternalUrl(requestURL) && !placeholderNavigation &&
-      (!web::features::UseWKWebViewLoading() || !rendererInitiated)) {
+  if (!IsWKInternalUrl(requestURL) && !placeholderNavigation) {
     self.webState->SetIsLoading(true);
   }
 
@@ -481,13 +477,12 @@ enum class BackForwardNavigationType {
     // loading placeholder URL.
     return;
   }
-  if (!web::features::UseWKWebViewLoading()) {
-    if (![self.navigationHandler.navigationStates
-                lastNavigationWithPendingItemInNavigationContext]) {
-      self.webState->SetIsLoading(false);
-    } else {
-      // There is another pending navigation, so the state is still loading.
-    }
+
+  if (![self.navigationHandler.navigationStates
+              lastNavigationWithPendingItemInNavigationContext]) {
+    self.webState->SetIsLoading(false);
+  } else {
+    // There is another pending navigation, so the state is still loading.
   }
 
   self.webState->OnPageLoaded(currentURL, YES);
