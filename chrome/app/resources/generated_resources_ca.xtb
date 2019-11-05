@@ -2293,6 +2293,7 @@ en almenys <ph name="INSTALL_SIZE" /> d'espai lliure. Per alliberar espai, supri
 <translation id="4316850752623536204">Lloc web per a desenvolupadors</translation>
 <translation id="4320177379694898372">No hi ha connexió a Internet</translation>
 <translation id="4321442524549817090">M&amp;ostra l'URL</translation>
+<translation id="4322394346347055525">Tanca les altres pestanyes</translation>
 <translation id="4324577459193912240">Fitxer incomplet</translation>
 <translation id="4325237902968425115">S'està desinstal·lant <ph name="LINUX_APP_NAME" />...</translation>
 <translation id="4330191372652740264">Aigua glaçada</translation>
@@ -3980,6 +3981,7 @@ Assegureu-vos que no es pugui accedir a informació sensible.</translation>
 <translation id="6850286078059909152">Color del text</translation>
 <translation id="6851497530878285708">Aplicació activada</translation>
 <translation id="6853388645642883916">S'ha posat l'actualitzador en repòs.</translation>
+<translation id="68541483639528434">Tanca les altres pestanyes</translation>
 <translation id="6856623341093082836">Configura i ajusta la precisió de la pantalla tàctil</translation>
 <translation id="6857699260879628349">Obtén informació de configuració</translation>
 <translation id="6860097299815761905">Config. servidor interm.</translation>

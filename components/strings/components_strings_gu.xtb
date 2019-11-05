@@ -174,6 +174,7 @@
 <translation id="173080396488393970">આ પ્રકારનું કાર્ડ સમર્થિત નથી</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">સિસ્ટમ વ્યવસ્થાપકનો સંપર્ક કરવાનો પ્રયાસ કરો.</translation>
+<translation id="1739107442478692187">તમે જે સાઇટ અથવા ઍપનો ઉપયોગ કરો છો તેના પર ડેટાનું ઉલ્લંઘન થયું છે. Chrome તમને તરત જ તમારા સાચવેલા પાસવર્ડ ચેક કરવાનો અને <ph name="ORIGIN" /> પરનો તમારો પાસવર્ડ બદલવાનો સુઝાવ આપે છે.</translation>
 <translation id="1740951997222943430">એક માન્ય સમાપ્તિ મહિનો દાખલ કરો</translation>
 <translation id="1743520634839655729">આગલી વખતે વધુ ઝડપથી ચુકવણી કરવા માટે, તમારા કાર્ડ, નામ અને બિલિંગ સરનામાને તમારા Google એકાઉન્ટ અને આ ઉપકરણ પર સાચવો.</translation>
 <translation id="1743570585616704562">ઓળખાયેલ નથી</translation>
@@ -238,6 +239,7 @@
 <translation id="2094505752054353250">ડોમેન મેળ ખાતું નથી</translation>
 <translation id="2096368010154057602">વિભાગ</translation>
 <translation id="2099652385553570808">ડાબી બાજુએ ત્રણ સ્ટેપલ લગાવો</translation>
+<translation id="2100280972184758440">તમારા પાસવર્ડમાં ચેડાં થયાં હતા</translation>
 <translation id="2102134110707549001">સશક્ત પાસવર્ડ સૂચવો…</translation>
 <translation id="2108755909498034140">તમારું કમ્પ્યુટર પુનઃપ્રારંભ કરો</translation>
 <translation id="2111256659903765347">સુપર-A</translation>
@@ -245,6 +247,7 @@
 <translation id="2114841414352855701">અવગણ્યું કારણ કે તે <ph name="POLICY_NAME" /> દ્વારા ઓવરરાઇડ થયું હતું.</translation>
 <translation id="2119505898009119320">આપવામાં આવ્યું છે: <ph name="ORGANIZATION" /> [<ph name="JURISDICTION" />]ને</translation>
 <translation id="2119867082804433120">નીચે જમણી બાજુએ કાણું પાડો</translation>
+<translation id="2124528555835617522">તમે જે સાઇટ અથવા ઍપનો ઉપયોગ કરો છો તેના પર ડેટાનું ઉલ્લંઘન થયું છે. Chrome તમને તરત જ તમારા સાચવેલા પાસવર્ડ ચેક કરવાનો સુઝાવ આપે છે.</translation>
 <translation id="2129079103035905234">મોશન સેન્સર</translation>
 <translation id="213826338245044447">મોબાઇલ બુકમાર્ક્સ</translation>
 <translation id="214556005048008348">ચુકવણી રદ કરો</translation>
@@ -482,6 +485,7 @@
 <translation id="3282497668470633863">કાર્ડ પર નામ ઉમેરો</translation>
 <translation id="3287510313208355388">ઑનલાઇન હોય ત્યારે ડાઉનલોડ કરો</translation>
 <translation id="3293642807462928945"><ph name="POLICY_NAME" /> નીતિ વિશે વધુ જાણો</translation>
+<translation id="3295439534709115864">તમે જે સાઇટ અથવા ઍપનો ઉપયોગ કરો છો તેના પર ડેટાનું ઉલ્લંઘન થયું છે. Chrome તરત જ <ph name="ORIGIN" /> પરનો તમારો પાસવર્ડ બદલવાનો સુઝાવ આપે છે.</translation>
 <translation id="3303855915957856445">કોઈ શોધ પરિણામો મળ્યાં નથી</translation>
 <translation id="3320021301628644560">બિલિંગ સરનામું ઉમેરો</translation>
 <translation id="3324983252691184275">કિરમજી</translation>

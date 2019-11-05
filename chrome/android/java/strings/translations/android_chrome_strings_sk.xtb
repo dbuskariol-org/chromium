@@ -182,7 +182,7 @@
 <translation id="2321958826496381788">Presúvajte posúvač, dokým nebude čítanie tohto textu pohodlné. Po dvojitom klepnutí na odsek by mal byť text aspoň takto veľký.</translation>
 <translation id="2323763861024343754">Úložisko webu</translation>
 <translation id="2328985652426384049">Nedá sa prihlásiť</translation>
-<translation id="2330129964253841015">Upozorniť v prípade napadnutia hesiel</translation>
+<translation id="2330129964253841015">Upozorňovať pri odhalení hesiel</translation>
 <translation id="2349710944427398404">Celkové dáta využívané Chromom vrátane účtov, záložiek a uložených nastavení</translation>
 <translation id="2353636109065292463">Kontroluje sa internetové pripojenie</translation>
 <translation id="2359808026110333948">Pokračovať</translation>
@@ -1000,7 +1000,7 @@ Web NEZÍSKA prístup k fotoaparátu. Obrázky fotoaparátu sú viditeľné iba
 <translation id="8413126021676339697">Zobraziť celú históriu</translation>
 <translation id="8427875596167638501">Karta ukážky je dopoly otvorená</translation>
 <translation id="8428213095426709021">Nastavenia</translation>
-<translation id="8438566539970814960">Zlepšovať vyhľadávania a prehliadanie</translation>
+<translation id="8438566539970814960">Zlepšovať vyhľadávanie a prehliadanie</translation>
 <translation id="8441146129660941386">Pretočiť dozadu</translation>
 <translation id="8443209985646068659">Chrome sa nedá aktualizovať</translation>
 <translation id="8445448999790540984">Heslá sa nepodarilo exportovať</translation>

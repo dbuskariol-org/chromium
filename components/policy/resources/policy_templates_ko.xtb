@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="ko">
-<translation id="1001649754854402482">새로운 <ph name="CORS" /> 구현에서 <ph name="CORS" /> 확인 완화를 사용 설정하여 확장 프로그램이 호환되는 행동을 유지하도록 허용하고 <ph name="PRODUCT_NAME" />에서 <ph name="CORS" /> 확인 없이 지정된 헤더를 전송하도록 허용합니다.
+<translation id="1001649754854402482">새로운 <ph name="CORS" /> 구현에서 <ph name="CORS" /> 확인 완화를 사용 설정하여 확장 프로그램이 호환되는 동작을 유지하도록 허용하고 <ph name="PRODUCT_NAME" />에서 <ph name="CORS" /> 확인 없이 지정된 헤더를 전송하도록 허용합니다.
 
       이 목록이 Empty로 설정되어 있으면 <ph name="PRODUCT_NAME" />은(는) 호환되는 방식으로 확장 프로그램을 실행하도록 시도하고 <ph name="WEB_REQUEST_API_MANUAL" />에 설명된 것처럼 <ph name="PRODUCT_NAME" /> 79의 <ph name="API" /> 변경사항을 적용하지 않습니다.
 
@@ -888,7 +888,7 @@ Google에 전송됩니다.  사용 중지되면 이 정보가 Google에 전송�
 <translation id="2454228136871844693">안정성에 최적화합니다.</translation>
 <translation id="2458754120470702975">사용자가 특정 사이트에 혼합 콘텐츠를 허용하는 예외를 추가할 수 있는지 여부를 설정할 수 있게 합니다.
 
-          'InsecureContentAllowedForUrls' 정책 및 'InsecureContentBlockedForUrls' 정책을 사용하는 특정 URL 패턴은 이 정책보다 우선 적용됩니다.
+          'InsecureContentAllowedForUrls' 정책 및 'InsecureContentBlockedForUrls' 정책을 사용하면 특정 URL 패턴에서 이 정책을 무시할 수 있습니다.
 
           이 정책을 설정하지 않으면 사용자는 차단 가능한 혼합 콘텐츠를 허용하는 예외를 추가할 수 있습니다.</translation>
 <translation id="2463034609187171371">TLS에서 DHE 암호화 기술을 사용 설정합니다.</translation>
@@ -3158,9 +3158,9 @@ Google에 전송됩니다.  사용 중지되면 이 정보가 Google에 전송�
 <translation id="5961137303188584693">기기의 내장 NIC MAC 주소</translation>
 <translation id="5966615072639944554">원격 인증 API를 사용하도록 허용된 확장 프로그램입니다.</translation>
 <translation id="5983708779415553259">사이트에 대한 기본 동작이 콘텐츠 팩에 없음</translation>
-<translation id="5997107377032983906">차단 가능한 혼합 콘텐츠(예: HTTPS 사이트의 HTTP 콘텐츠) 표시가 허용되는 사이트를 지정하는 URL 패턴 목록을 설정할 수 있습니다.
+<translation id="5997107377032983906">차단 가능한(즉, 활성) 혼합 콘텐츠(예: HTTPS 사이트의 HTTP 콘텐츠) 표시가 허용되는 사이트를 지정하는 URL 패턴 목록을 설정할 수 있습니다.
 
-          이 정책을 설정하지 않으면 차단 가능한 혼합 콘텐츠가 차단되지만 사용자는 특정 사이트에 허용 가능한 예외를 설정할 수 있습니다.</translation>
+          이 정책을 설정하지 않으면 차단 가능한 혼합 콘텐츠가 차단되지만 사용자는 특정 사이트를 허용하도록 예외를 설정할 수 있습니다.</translation>
 <translation id="5997543603646547632">기본적으로 24시간 표기법 사용</translation>
 <translation id="5997846976342452720">플러그인 Finder 사용 중지 여부 지정(지원 중단됨)</translation>
 <translation id="5998198091336830580">이 정책은 다음 그룹의 일부입니다. 그룹에서 우선순위가 가장 높은 출처의 정책만 적용됩니다.</translation>
@@ -3534,9 +3534,9 @@ Google에 전송됩니다.  사용 중지되면 이 정보가 Google에 전송�
 <translation id="6786747875388722282">확장 프로그램</translation>
 <translation id="6786967369487349613">로밍 프로필 디렉터리를 설정합니다.</translation>
 <translation id="6795485990775913659">PIN이 없으면 인쇄만 허용</translation>
-<translation id="6800064234889290465">차단 가능한 혼합 콘텐츠(예: HTTPS 사이트의 HTTP 콘텐츠) 표시가 허용되지 않는 사이트를 지정하는 URL 패턴 목록을 설정할 수 있습니다.
+<translation id="6800064234889290465">차단 가능한(즉, 활성) 혼합 콘텐츠(예: HTTPS 사이트의 HTTP 콘텐츠) 표시가 허용되지 않는 사이트를 지정하는 URL 패턴 목록을 설정할 수 있습니다.
 
-          이 정책을 설정하지 않으면 차단 가능한 혼합 콘텐츠가 차단되지만 사용자는 특정 사이트에 허용 가능한 예외를 설정할 수 있습니다.</translation>
+          이 정책을 설정하지 않으면 차단 가능한 혼합 콘텐츠가 차단되지만 사용자는 특정 사이트를 허용하도록 예외를 설정할 수 있습니다.</translation>
 <translation id="6810445994095397827">이 사이트에서 자바스크립트 차단</translation>
 <translation id="6813263547126514821">전원 및 종료</translation>
 <translation id="681446116407619279">지원되는 인증 스키마</translation>
@@ -4438,7 +4438,7 @@ Google에 전송됩니다.  사용 중지되면 이 정보가 Google에 전송�
 
       이 정책을 설정하지 않는 경우 'URLBlacklist' 정책의 차단 목록에 예외가 적용되지 않습니다.</translation>
 <translation id="8176035528522326671">기업 사용자에게 기본 멀티 프로필 사용자만 허용(기업에서 관리하는 사용자에 대한 기본 동작임)</translation>
-<translation id="8176620453475617465">이 정책은 관리자가 페이지를 닫는 중에 페이지에서 동기 XHR 요청을 전송하도록 허용할 수 있습니다.
+<translation id="8176620453475617465">이 정책은 페이지를 닫는 중에 페이지에서 동기 XHR 요청을 전송하도록 관리자가 지정할 수 있게 합니다.
 
       정책이 사용 설정되어 있으면 페이지를 닫는 중에 페이지에서 동기 XHR 요청을 전송할 수 있습니다.
 

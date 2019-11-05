@@ -921,6 +921,7 @@
 <translation id="2326931316514688470">ઍપ્લિકેશન &amp;ફરીથી લોડ કરો</translation>
 <translation id="2327492829706409234">ઍપ ચાલુ કરો</translation>
 <translation id="2329597144923131178">તમારા તમામ ઉપકરણો પર તમારા બુકમાર્ક્સ, ઇતિહાસ, પાસવર્ડ્સ અને અન્ય સેટિંગ્સ મેળવવા માટે સાઇન ઇન કરો.</translation>
+<translation id="2330129964253841015">જો પાસવર્ડમાં ચેડાં થાય તો તમને ચેતવણી આપવામાં આવશે</translation>
 <translation id="2332131598580221120">સ્ટોરમાં જુઓ</translation>
 <translation id="2332192922827071008">પસંદગીઓ ખોલો</translation>
 <translation id="2332742915001411729">ડિફોલ્ટ પર ફરીથી સેટ કરો</translation>
@@ -969,6 +970,7 @@
 <translation id="2395616325548404795">એન્ટરપ્રાઇઝ સંચાલન માટે તમારા <ph name="DEVICE_TYPE" /> ની સફળતાપૂર્વક નોંધણી કરવામાં આવી, પરંતુ તેની એસેટ અને સ્થાન માહિતી મોકલવામાં નિષ્ફળ થયાં. કૃપા કરીને આ ઉપકરણ માટે તમારા Admin console માંથી આ માહિતી જાતે દાખલ કરો.</translation>
 <translation id="2396783860772170191">4 અંકનો પિન (0000-9999) દાખલ કરો</translation>
 <translation id="2399939490305346086">સુરક્ષા કોડનો સાઇન ઇન ડેટા</translation>
+<translation id="2407481962792080328">જ્યારે તમે તમારા Google એકાઉન્ટમાં સાઇન ઇન કરો છો, ત્યારે આ સુવિધા ચાલુ કરવામાં આવે છે</translation>
 <translation id="2408955596600435184">તમારો PIN દાખલ કરો</translation>
 <translation id="241082044617551207">અજ્ઞાત પ્લગિન</translation>
 <translation id="2412593942846481727">અપડેટ ઉપલબ્ધ છે</translation>
@@ -1423,6 +1425,7 @@
 <translation id="3038612606416062604">પ્રિન્ટરને મેન્યુઅલી ઉમેરો</translation>
 <translation id="3038675903128704560">તમારા કમ્પ્યુટરને ઍક્સેસ કરવા માટે કોઈપણ સાઇટને પ્લગ-ઇનનો ઉપયોગ કરવાની મંજૂરી આપશો નહીં</translation>
 <translation id="3039491566278747710">ડિવાઇસ પર ઇન્ટરનેટ વગર નીતિ ઇન્સ્ટૉલ કરવામાં નિષ્ફળ ગયું.</translation>
+<translation id="3043581297103810752"><ph name="ORIGIN" />માંથી</translation>
 <translation id="3045447014237878114">આ સાઇટે એકથી વધુ ફાઇલો આપમેળે ડાઉનલોડ કરી છે</translation>
 <translation id="3046910703532196514">વેબપેજ, પૂર્ણ</translation>
 <translation id="304747341537320566">વાણી એન્જિનો</translation>
@@ -2289,6 +2292,7 @@
 <translation id="4316850752623536204">વિકાસકર્તા વેબસાઇટ</translation>
 <translation id="4320177379694898372">કોઈ ઇન્ટરનેટ કનેક્શન નથી</translation>
 <translation id="4321442524549817090">URL બ&amp;તાવો</translation>
+<translation id="4322394346347055525">અન્ય ટૅબ્સને બંધ કરો</translation>
 <translation id="4324577459193912240">ફાઇલ અધૂરી છે</translation>
 <translation id="4325237902968425115"><ph name="LINUX_APP_NAME" />ને અનઇન્સ્ટૉલ કરી રહ્યાં છીએ...</translation>
 <translation id="4330191372652740264">બરફનું પાણી</translation>
@@ -3976,6 +3980,7 @@ USB ડિવાઇસ</translation>
 <translation id="6850286078059909152">ટેક્સ્ટનો રંગ</translation>
 <translation id="6851497530878285708">ઍપ ચાલુ કરી</translation>
 <translation id="6853388645642883916">અપડેટકર્તા નિષ્ક્રિય છે</translation>
+<translation id="68541483639528434">અન્ય ટૅબ્સને બંધ કરો</translation>
 <translation id="6856623341093082836">તમારી ટચસ્ક્રીનની સચોટતાને સેટ કરો અને સમાયોજિત કરો</translation>
 <translation id="6857699260879628349">ગોઠવણીની માહિતી મેળવો</translation>
 <translation id="6860097299815761905">પ્રૉક્સી સેટિંગ...</translation>

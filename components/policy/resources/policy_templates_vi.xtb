@@ -3,9 +3,9 @@
 <translationbundle lang="vi">
 <translation id="1001649754854402482">Bật tùy chọn giảm thiểu kiểm tra <ph name="CORS" /> trong quy trình triển khai <ph name="CORS" /> mới, cho phép Tiện ích duy trì hành vi tương thích và cho phép <ph name="PRODUCT_NAME" /> gửi tiêu đề đã chỉ định mà không cần kiểm tra <ph name="CORS" />.
 
-      Nếu bạn đặt danh sách này thành trống, thì <ph name="PRODUCT_NAME" /> sẽ cố chạy Tiện ích theo cách thức tương thích và không đưa ra những thay đổi về <ph name="API" /> đối với <ph name="PRODUCT_NAME" /> 79 như giải thích tại <ph name="WEB_REQUEST_API_MANUAL" />.
+      Nếu bạn đặt danh sách này thành trống, thì <ph name="PRODUCT_NAME" /> sẽ cố chạy Tiện ích theo cách thức tương thích và không làm thay đổi <ph name="API" /> đối với <ph name="PRODUCT_NAME" /> 79 như giải thích tại <ph name="WEB_REQUEST_API_MANUAL" />.
 
-      Nếu bạn đặt danh sách này thành có tên tiêu đề yêu cầu <ph name="HTTP" />, thì quá trình kiểm tra <ph name="CORS" /> sẽ bỏ qua các tiêu đề có trong danh sách và bật tùy chọn giảm thiểu cho Tiện ích.
+      Nếu bạn đặt danh sách này thành có tên tiêu đề yêu cầu <ph name="HTTP" />, thì quá trình kiểm tra <ph name="CORS" /> sẽ bật tùy chọn giảm thiểu cho Tiện ích và bỏ qua các tiêu đề có trong danh sách.
 
       Nếu bạn không đặt danh sách này, thì cả hai tùy chọn giảm thiểu giải thích ở trên đều không áp dụng.
 
@@ -710,7 +710,7 @@
 <translation id="214901426630414675">Hạn chế chế độ in hai mặt</translation>
 <translation id="2149330464730004005">Bật chế độ in màu</translation>
 <translation id="2156132677421487971">Định cấu hình các chính sách cho <ph name="PRODUCT_NAME" />, một tính năng cho phép người dùng gửi nội dung của các tab, trang web hoặc màn hình từ trình duyệt đến màn hình và hệ thống âm thanh từ xa.</translation>
-<translation id="2156755242840687300">Đã bật máy chủ máy in bên ngoài</translation>
+<translation id="2156755242840687300">Máy chủ máy in bên ngoài được bật</translation>
 <translation id="2166472654199325139">Không lọc các trang web có nội dung người lớn</translation>
 <translation id="2168397434410358693">Độ trễ lúc không sử dụng khi chạy trên nguồn AC</translation>
 <translation id="217013996107840632">Các tham số dòng lệnh để chuyển từ trình duyệt thay thế.</translation>
@@ -882,7 +882,7 @@
 <translation id="2454228136871844693">Tối ưu hóa cho độ ổn định.</translation>
 <translation id="2458754120470702975">Cho phép bạn thiết lập việc người dùng có thể thêm trường hợp ngoại lệ để cho phép nội dung hỗn hợp trên các trang cụ thể hay không.
 
-          Có thể ghi đè chính sách này cho các mẫu URL cụ thể bằng chính sách 'InsecureContentAllowedForUrls' và 'InsecureContentBlockedForUrls'.
+          Bạn có thể ghi đè chính sách này cho các mẫu URL cụ thể bằng chính sách 'InsecureContentAllowedForUrls' và 'InsecureContentBlockedForUrls'.
 
           Nếu bạn không đặt chính sách này, thì người dùng sẽ được phép thêm trường hợp ngoại lệ để cho phép nội dung hỗn hợp có thể chặn"</translation>
 <translation id="2463034609187171371">Bật bộ thuật toán mật mã DHE trong TLS</translation>
@@ -959,7 +959,7 @@
       Nếu cài đặt này được bật hoặc không được định cấu hình, người dùng có thể in.
 
       Nếu cài đặt này bị tắt, người dùng không thể in từ <ph name="PRODUCT_NAME" />. In bị tắt trong menu cờ lê, tiện ích, ứng dụng JavaScript, v.v.  <ph name="PRODUCT_NAME" /> trong khi in. Để biết ví dụ, ứng dụng Flash nhất định có tùy chọn in trong menu ngữ cảnh, không chịu sự điều chỉnh của chính sách này.</translation>
-<translation id="2517466659416174529">Cho phép đóng băng các tab chạy ngầm</translation>
+<translation id="2517466659416174529">Cho phép đóng băng các tab chạy trong nền</translation>
 <translation id="2518231489509538392">Cho phép phát âm thanh</translation>
 <translation id="2521581787935130926">Hiển thị lối tắt ứng dụng trong thanh dấu trang</translation>
 <translation id="2529659024053332711">Cho phép bạn chỉ định hành vi khi khởi động.
@@ -1218,7 +1218,7 @@ Khi chính sách này được đặt thành false hoặc không được địn
 <translation id="2872961005593481000">Tắt</translation>
 <translation id="2873651257716068683">Ghi đè kích thước trang in mặc định. Nếu không có kích thước trang in này thì chính sách sẽ bị bỏ qua.</translation>
 <translation id="2874209944580848064">Lưu ý dành cho thiết bị <ph name="PRODUCT_OS_NAME" /> hỗ trợ ứng dụng Android:</translation>
-<translation id="2875192972412983412">Chỉ định tập hợp con các máy chủ máy in sẽ truy vấn cho máy chủ máy in.
+<translation id="2875192972412983412">Chỉ định tập hợp con các máy chủ máy in sẽ được truy vấn khi hệ thống tìm máy chủ máy in.
 
       Nếu bạn sử dụng chính sách này, thì chỉ những máy chủ máy in có mã nhận dạng khớp với các giá trị trong chính sách này mới được cung cấp cho người dùng.
 
@@ -4638,9 +4638,9 @@ Bạn nên định cấu hình chính sách trên Windows qua GPO, mặc dù vi�
       Nếu bạn không đặt hoặc đặt chính sách thành true thì tất cả người dùng sẽ được phép sử dụng ARC (trừ khi ARC bị tắt bởi các phương tiện khác).
 
       Các thay đổi đối với chính sách sẽ chỉ được áp dụng trong khi ARC không chạy, ví dụ như khi Chrome OS đang khởi động.</translation>
-<translation id="8606263947930257189">Kiểm soát việc <ph name="PRODUCT_NAME" /> có thể đóng băng các tab chạy ngầm trong tối thiểu 5 phút hay không.
+<translation id="8606263947930257189">Kiểm soát việc <ph name="PRODUCT_NAME" /> có thể đóng băng các tab chạy trong nền trong tối thiểu 5 phút hay không.
 
-      Nếu bạn đặt chính sách này thành true, thì các tab chạy ngầm trong tối thiểu 5 phút có thể bị đóng băng. Việc đóng băng tab sẽ giúp giảm mức sử dụng CPU, pin và bộ nhớ. <ph name="PRODUCT_NAME" /> sử dụng kỹ thuật phỏng đoán để tránh đóng băng các tab chạy ngầm hữu ích (ví dụ: hiển thị thông báo, phát âm thanh, phát trực tuyến video). Các nhà phát triển web cũng có thể chọn không đóng băng trang web của mình (https://chromium.googlesource.com/chromium/src/+/HEAD/chrome/browser/performance_manager/docs/freezing_opt_out_opt_in.md).
+      Nếu bạn đặt chính sách này thành true, thì các tab chạy trong nền trong tối thiểu 5 phút có thể bị đóng băng. Việc đóng băng tab sẽ giúp giảm mức sử dụng CPU, pin và bộ nhớ. <ph name="PRODUCT_NAME" /> sử dụng kỹ thuật "tự nghiệm học" để tránh đóng băng các tab hữu ích chạy trong nền (ví dụ: hiển thị thông báo, phát âm thanh, phát video trực tuyến). Các nhà phát triển web cũng có thể chọn không đóng băng trang web của mình (https://chromium.googlesource.com/chromium/src/+/HEAD/chrome/browser/performance_manager/docs/freezing_opt_out_opt_in.md).
 
       Nếu bạn đặt chính sách thành false thì sẽ không có tab nào bị đóng băng.</translation>
 <translation id="8615400197788843468">Bật tính năng hạn chế đăng nhập của <ph name="PRODUCT_NAME" /> trong G Suite và ngăn người dùng thay đổi tùy chọn cài đặt này.

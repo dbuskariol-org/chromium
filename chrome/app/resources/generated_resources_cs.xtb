@@ -2292,6 +2292,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="4316850752623536204">Webové stránky vývojáře</translation>
 <translation id="4320177379694898372">Žádné připojení k internetu</translation>
 <translation id="4321442524549817090">Z&amp;obrazit adresu URL</translation>
+<translation id="4322394346347055525">Zavřít ostatní karty</translation>
 <translation id="4324577459193912240">Soubor je neúplný</translation>
 <translation id="4325237902968425115">Odinstalace aplikace <ph name="LINUX_APP_NAME" />...</translation>
 <translation id="4330191372652740264">Ledová voda</translation>
@@ -3977,6 +3978,7 @@ Před přechodem do režimu virtuální reality zkontrolujte, zda tomuto webu d�
 <translation id="6850286078059909152">Barva textu</translation>
 <translation id="6851497530878285708">Aplikace povolena</translation>
 <translation id="6853388645642883916">Nástroj na aktualizaci je v režimu spánku</translation>
+<translation id="68541483639528434">Zavřít ostatní karty</translation>
 <translation id="6856623341093082836">Nastavit a upravit přesnost dotykové obrazovky</translation>
 <translation id="6857699260879628349">Zobrazit konfigurační údaje</translation>
 <translation id="6860097299815761905">Nastavení proxy serveru...</translation>
@@ -5151,7 +5153,7 @@ Svůj soubor klíče uchovávejte na bezpečném místě. Budete jej potřebovat
 <translation id="8546541260734613940">[*.]example.com</translation>
 <translation id="854655314928502177">Adresa URL automatického zjišťování webového proxy serveru:</translation>
 <translation id="8546930481464505581">Přizpůsobit dotykovou plochu</translation>
-<translation id="8547013269961688403">Zapnout lupu celé obrazovky</translation>
+<translation id="8547013269961688403">Povolit zvětšení obrazovky</translation>
 <translation id="85486688517848470">Podržením vyhledávacího tlačítka přepnete chování tlačítek v horním řádku</translation>
 <translation id="8549457076611407730">{NUM_ITEMS,plural, =1{1 položka}few{# položky}many{# položky}other{# položek}}</translation>
 <translation id="8551388862522347954">Licence</translation>
