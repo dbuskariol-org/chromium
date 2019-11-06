@@ -8,9 +8,11 @@
 #include "base/logging.h"
 #include "content/public/browser/file_select_listener.h"
 #include "content/public/browser/interstitial_page.h"
+#include "content/public/browser/navigation_controller.h"
 #include "content/public/browser/render_view_host.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/common/browser_controls_state.h"
+#include "ui/base/window_open_disposition.h"
 #include "weblayer/browser/file_select_helper.h"
 #include "weblayer/browser/isolated_world_ids.h"
 #include "weblayer/browser/navigation_controller_impl.h"
@@ -18,6 +20,7 @@
 #include "weblayer/public/browser_observer.h"
 #include "weblayer/public/download_delegate.h"
 #include "weblayer/public/fullscreen_delegate.h"
+#include "weblayer/public/new_browser_delegate.h"
 
 #if !defined(OS_ANDROID)
 #include "ui/views/controls/webview/webview.h"
@@ -35,6 +38,27 @@
 namespace weblayer {
 
 namespace {
+
+NewBrowserDisposition NewBrowserDispositionFromWindowDisposition(
+    WindowOpenDisposition disposition) {
+  // WindowOpenDisposition has a *ton* of types, but the following are really
+  // the only ones that should be hit for this code path.
+  switch (disposition) {
+    case WindowOpenDisposition::NEW_FOREGROUND_TAB:
+      return NewBrowserDisposition::kForeground;
+    case WindowOpenDisposition::NEW_BACKGROUND_TAB:
+      return NewBrowserDisposition::kBackground;
+    case WindowOpenDisposition::NEW_POPUP:
+      return NewBrowserDisposition::kNewPopup;
+    case WindowOpenDisposition::NEW_WINDOW:
+      return NewBrowserDisposition::kNewWindow;
+    default:
+      // The set of allowed types are in
+      // ContentBrowserClientImpl::CanCreateWindow().
+      NOTREACHED();
+      return NewBrowserDisposition::kForeground;
+  }
+}
 
 // Pointer value of this is used as a key in base::SupportsUserData for
 // WebContents. Value of the key is an instance of |UserData|.
@@ -67,14 +91,23 @@ BrowserControllerImpl::BrowserControllerImpl(
 }
 #endif
 
-BrowserControllerImpl::BrowserControllerImpl(ProfileImpl* profile)
-    : profile_(profile) {
+BrowserControllerImpl::BrowserControllerImpl(
+    ProfileImpl* profile,
+    std::unique_ptr<content::WebContents> web_contents)
+    : profile_(profile), web_contents_(std::move(web_contents)) {
 #if defined(OS_ANDROID)
   g_last_browser_controller = this;
 #endif
-  content::WebContents::CreateParams create_params(
-      profile_->GetBrowserContext());
-  web_contents_ = content::WebContents::Create(create_params);
+  if (web_contents_) {
+    // This code path is hit when the page requests a new tab, which should
+    // only be possible from the same profile.
+    DCHECK_EQ(profile_->GetBrowserContext(),
+              web_contents_->GetBrowserContext());
+  } else {
+    content::WebContents::CreateParams create_params(
+        profile_->GetBrowserContext());
+    web_contents_ = content::WebContents::Create(create_params);
+  }
   std::unique_ptr<UserData> user_data = std::make_unique<UserData>();
   user_data->controller = this;
   web_contents_->SetUserData(&kWebContentsUserDataKey, std::move(user_data));
@@ -86,8 +119,10 @@ BrowserControllerImpl::BrowserControllerImpl(ProfileImpl* profile)
 }
 
 BrowserControllerImpl::~BrowserControllerImpl() {
-  // Destruct this now to avoid it calling back when this object is partially
-  // destructed.
+  // Destruct WebContents now to avoid it calling back when this object is
+  // partially destructed. DidFinishNavigation can be called while destroying
+  // WebContents, so stop observing first.
+  Observe(nullptr);
   web_contents_.reset();
 }
 
@@ -123,6 +158,11 @@ void BrowserControllerImpl::SetFullscreenDelegate(
   content::RenderViewHost* host = web_contents_->GetRenderViewHost();
   if (had_delegate != has_delegate && host)
     host->OnWebkitPreferencesChanged();
+}
+
+void BrowserControllerImpl::SetNewBrowserDelegate(
+    NewBrowserDelegate* delegate) {
+  new_browser_delegate_ = delegate;
 }
 
 void BrowserControllerImpl::AddObserver(BrowserObserver* observer) {
@@ -190,6 +230,19 @@ void BrowserControllerImpl::ExecuteScript(
 }
 
 #endif
+
+content::WebContents* BrowserControllerImpl::OpenURLFromTab(
+    content::WebContents* source,
+    const content::OpenURLParams& params) {
+  if (params.disposition != WindowOpenDisposition::CURRENT_TAB) {
+    NOTIMPLEMENTED();
+    return nullptr;
+  }
+
+  source->GetController().LoadURLWithParams(
+      content::NavigationController::LoadURLParams(params));
+  return source;
+}
 
 void BrowserControllerImpl::LoadProgressChanged(content::WebContents* source,
                                                 double progress) {
@@ -271,6 +324,24 @@ blink::mojom::DisplayMode BrowserControllerImpl::GetDisplayMode(
     const content::WebContents* web_contents) {
   return is_fullscreen_ ? blink::mojom::DisplayMode::kFullscreen
                         : blink::mojom::DisplayMode::kBrowser;
+}
+
+void BrowserControllerImpl::AddNewContents(
+    content::WebContents* source,
+    std::unique_ptr<content::WebContents> new_contents,
+    WindowOpenDisposition disposition,
+    const gfx::Rect& initial_rect,
+    bool user_gesture,
+    bool* was_blocked) {
+  if (!new_browser_delegate_)
+    return;
+
+  std::unique_ptr<BrowserController> browser =
+      std::make_unique<BrowserControllerImpl>(profile_,
+                                              std::move(new_contents));
+  new_browser_delegate_->OnNewBrowser(
+      std::move(browser),
+      NewBrowserDispositionFromWindowDisposition(disposition));
 }
 
 void BrowserControllerImpl::DidFinishNavigation(

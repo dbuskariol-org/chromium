@@ -4,14 +4,9 @@
 
 package org.chromium.weblayer_private;
 
-import android.content.Context;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.webkit.ValueCallback;
-import android.widget.FrameLayout;
 
 import org.chromium.base.Callback;
 import org.chromium.base.annotations.CalledByNative;
@@ -23,8 +18,8 @@ import org.chromium.ui.base.ViewAndroidDelegate;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.weblayer_private.aidl.IBrowserController;
 import org.chromium.weblayer_private.aidl.IBrowserControllerClient;
-import org.chromium.weblayer_private.aidl.IDownloadDelegateClient;
-import org.chromium.weblayer_private.aidl.IFullscreenDelegateClient;
+import org.chromium.weblayer_private.aidl.IDownloadCallbackClient;
+import org.chromium.weblayer_private.aidl.IFullscreenCallbackClient;
 import org.chromium.weblayer_private.aidl.INavigationControllerClient;
 import org.chromium.weblayer_private.aidl.IObjectWrapper;
 import org.chromium.weblayer_private.aidl.ObjectWrapper;
@@ -33,32 +28,19 @@ import org.chromium.weblayer_private.aidl.ObjectWrapper;
  * Implementation of IBrowserController.
  */
 @JNINamespace("weblayer")
-public final class BrowserControllerImpl extends IBrowserController.Stub
-        implements TopControlsContainerView.Listener,
-                   WebContentsGestureStateTracker.OnGestureStateChangedListener {
+public final class BrowserControllerImpl extends IBrowserController.Stub {
     private long mNativeBrowserController;
 
-    // TODO: move mContentViewRenderView, mContentView, mTopControlsContainerView to
-    // BrowserFragmentControllerImpl.
-    // This view is the main view (returned from the fragment's onCreateView()).
-    private ContentViewRenderView mContentViewRenderView;
-    // One of these is needed per WebContents.
-    private ContentView mContentView;
-    // Child of mContentViewRenderView, holds top-view from client.
-    private TopControlsContainerView mTopControlsContainerView;
     private ProfileImpl mProfile;
     private WebContents mWebContents;
     private BrowserCallbackProxy mBrowserCallbackProxy;
     private NavigationControllerImpl mNavigationController;
-    private DownloadDelegateProxy mDownloadDelegateProxy;
-    private FullscreenDelegateProxy mFullscreenDelegateProxy;
-    private WebContentsGestureStateTracker mGestureStateTracker;
-    /**
-     * The value of mCachedDoBrowserControlsShrinkRendererSize is set when
-     * WebContentsGestureStateTracker begins a gesture. This is necessary as the values should only
-     * change once a gesture is no longer under way.
-     */
-    private boolean mCachedDoBrowserControlsShrinkRendererSize;
+    private DownloadCallbackProxy mDownloadCallbackProxy;
+    private FullscreenCallbackProxy mFullscreenCallbackProxy;
+    private ViewAndroidDelegate mViewAndroidDelegate;
+    // BrowserFragmentControllerImpl this BrowserControllerImpl is in. This is only null during
+    // creation.
+    private BrowserFragmentControllerImpl mFragment;
 
     private static class InternalAccessDelegateImpl
             implements ViewEventSink.InternalAccessDelegate {
@@ -81,49 +63,60 @@ public final class BrowserControllerImpl extends IBrowserController.Stub
         public void onScrollChanged(int lPix, int tPix, int oldlPix, int oldtPix) {}
     }
 
-    public BrowserControllerImpl(
-            Context context, ProfileImpl profile, WindowAndroid windowAndroid) {
+    public BrowserControllerImpl(ProfileImpl profile, WindowAndroid windowAndroid) {
         mProfile = profile;
-
-        mContentViewRenderView = new ContentViewRenderView(context);
-
-        mContentViewRenderView.onNativeLibraryLoaded(
-                windowAndroid, ContentViewRenderView.MODE_SURFACE_VIEW);
-
         mNativeBrowserController = BrowserControllerImplJni.get().createBrowserController(
                 profile.getNativeProfile(), this);
         mWebContents = BrowserControllerImplJni.get().getWebContents(
                 mNativeBrowserController, BrowserControllerImpl.this);
-        mTopControlsContainerView =
-                new TopControlsContainerView(context, mWebContents, mContentViewRenderView, this);
-        mContentView = ContentView.createContentView(
-                context, mWebContents, mTopControlsContainerView.getEventOffsetHandler());
-        ViewAndroidDelegate viewAndroidDelegate = new ViewAndroidDelegate(mContentView) {
+        mViewAndroidDelegate = new ViewAndroidDelegate(null) {
             @Override
             public void onTopControlsChanged(int topControlsOffsetY, int topContentOffsetY) {
-                mTopControlsContainerView.onTopControlsChanged(
-                        topControlsOffsetY, topContentOffsetY);
+                BrowserFragmentViewController viewController = getViewController();
+                if (viewController != null) {
+                    viewController.onTopControlsChanged(topControlsOffsetY, topContentOffsetY);
+                }
             }
         };
-        mWebContents.initialize("", viewAndroidDelegate, new InternalAccessDelegateImpl(),
+        mWebContents.initialize("", mViewAndroidDelegate, new InternalAccessDelegateImpl(),
                 windowAndroid, WebContents.createDefaultInternalsHolder());
+    }
 
-        mContentViewRenderView.setCurrentWebContents(mWebContents);
+    /**
+     * Sets the BrowserFragmentControllerImpl this BrowserControllerImpl is contained in.
+     */
+    public void attachToFragment(BrowserFragmentControllerImpl fragment) {
+        mFragment = fragment;
+        mWebContents.setTopLevelNativeWindow(fragment.getWindowAndroid());
+        mViewAndroidDelegate.setContainerView(fragment.getViewAndroidDelegateContainerView());
+    }
 
-        mContentViewRenderView.addView(mContentView,
-                new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY));
+    public BrowserFragmentControllerImpl getFragment() {
+        return mFragment;
+    }
 
+    /**
+     * Called when this BrowserControllerImpl becomes the active BrowserControllerImpl.
+     */
+    public void onDidGainActive(long topControlsContainerViewHandle) {
+        // attachToFragment() must be called before activate().
+        assert mFragment != null;
         BrowserControllerImplJni.get().setTopControlsContainerView(mNativeBrowserController,
-                BrowserControllerImpl.this, mTopControlsContainerView.getNativeHandle());
-        mContentView.addView(mTopControlsContainerView,
-                new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT,
-                        Gravity.FILL_HORIZONTAL | Gravity.TOP));
-
+                BrowserControllerImpl.this, topControlsContainerViewHandle);
         mWebContents.onShow();
-        mContentView.requestFocus();
+    }
 
-        mGestureStateTracker = new WebContentsGestureStateTracker(mContentView, mWebContents, this);
+    /**
+     * Called when this BrowserControllerImpl is no longer the active BrowserControllerImpl.
+     */
+    public void onDidLoseActive() {
+        mWebContents.onHide();
+        BrowserControllerImplJni.get().setTopControlsContainerView(
+                mNativeBrowserController, BrowserControllerImpl.this, 0);
+    }
+
+    public WebContents getWebContents() {
+        return mWebContents;
     }
 
     long getNativeBrowserController() {
@@ -139,60 +132,37 @@ public final class BrowserControllerImpl extends IBrowserController.Stub
     }
 
     @Override
-    public void onTopControlsCompletelyShownOrHidden() {
-        adjustWebContentsHeightIfNecessary();
-    }
-
-    @Override
-    public void onGestureStateChanged() {
-        if (mGestureStateTracker.isInGestureOrScroll()) {
-            mCachedDoBrowserControlsShrinkRendererSize =
-                    mTopControlsContainerView.isTopControlVisible();
-        }
-        adjustWebContentsHeightIfNecessary();
-    }
-
-    private void adjustWebContentsHeightIfNecessary() {
-        if (mGestureStateTracker.isInGestureOrScroll()
-                || !mTopControlsContainerView.isTopControlsCompletelyShownOrHidden()) {
-            return;
-        }
-        mContentViewRenderView.setWebContentsHeightDelta(
-                mTopControlsContainerView.getTopContentOffset());
-    }
-
-    @Override
     public void setClient(IBrowserControllerClient client) {
         mBrowserCallbackProxy = new BrowserCallbackProxy(mNativeBrowserController, client);
     }
 
     @Override
-    public void setDownloadDelegateClient(IDownloadDelegateClient client) {
+    public void setDownloadCallbackClient(IDownloadCallbackClient client) {
         if (client != null) {
-            if (mDownloadDelegateProxy == null) {
-                mDownloadDelegateProxy =
-                        new DownloadDelegateProxy(mNativeBrowserController, client);
+            if (mDownloadCallbackProxy == null) {
+                mDownloadCallbackProxy =
+                        new DownloadCallbackProxy(mNativeBrowserController, client);
             } else {
-                mDownloadDelegateProxy.setClient(client);
+                mDownloadCallbackProxy.setClient(client);
             }
-        } else if (mDownloadDelegateProxy != null) {
-            mDownloadDelegateProxy.destroy();
-            mDownloadDelegateProxy = null;
+        } else if (mDownloadCallbackProxy != null) {
+            mDownloadCallbackProxy.destroy();
+            mDownloadCallbackProxy = null;
         }
     }
 
     @Override
-    public void setFullscreenDelegateClient(IFullscreenDelegateClient client) {
+    public void setFullscreenCallbackClient(IFullscreenCallbackClient client) {
         if (client != null) {
-            if (mFullscreenDelegateProxy == null) {
-                mFullscreenDelegateProxy =
-                        new FullscreenDelegateProxy(mNativeBrowserController, client);
+            if (mFullscreenCallbackProxy == null) {
+                mFullscreenCallbackProxy =
+                        new FullscreenCallbackProxy(mNativeBrowserController, client);
             } else {
-                mFullscreenDelegateProxy.setClient(client);
+                mFullscreenCallbackProxy.setClient(client);
             }
-        } else if (mFullscreenDelegateProxy != null) {
-            mFullscreenDelegateProxy.destroy();
-            mFullscreenDelegateProxy = null;
+        } else if (mFullscreenCallbackProxy != null) {
+            mFullscreenCallbackProxy.destroy();
+            mFullscreenCallbackProxy = null;
         }
     }
 
@@ -213,49 +183,36 @@ public final class BrowserControllerImpl extends IBrowserController.Stub
     }
 
     public void destroy() {
-        BrowserControllerImplJni.get().setTopControlsContainerView(
-                mNativeBrowserController, BrowserControllerImpl.this, 0);
-        mTopControlsContainerView.destroy();
-        mContentViewRenderView.destroy();
         if (mBrowserCallbackProxy != null) {
             mBrowserCallbackProxy.destroy();
             mBrowserCallbackProxy = null;
         }
-        if (mDownloadDelegateProxy != null) {
-            mDownloadDelegateProxy.destroy();
-            mDownloadDelegateProxy = null;
+        if (mDownloadCallbackProxy != null) {
+            mDownloadCallbackProxy.destroy();
+            mDownloadCallbackProxy = null;
         }
-        if (mFullscreenDelegateProxy != null) {
-            mFullscreenDelegateProxy.destroy();
-            mFullscreenDelegateProxy = null;
+        if (mFullscreenCallbackProxy != null) {
+            mFullscreenCallbackProxy.destroy();
+            mFullscreenCallbackProxy = null;
         }
-        mGestureStateTracker.destroy();
         mNavigationController = null;
         BrowserControllerImplJni.get().deleteBrowserController(mNativeBrowserController);
         mNativeBrowserController = 0;
     }
 
-    public void setTopView(IObjectWrapper viewWrapper) {
-        View view = ObjectWrapper.unwrap(viewWrapper, View.class);
-        mTopControlsContainerView.setView(view);
-    }
-
-    /** Returns top-level View this Controller works with */
-    public View getView() {
-        return mContentViewRenderView;
-    }
-
-    public void setSupportsEmbedding(boolean enable, IObjectWrapper callback) {
-        mContentViewRenderView.requestMode(enable ? ContentViewRenderView.MODE_TEXTURE_VIEW
-                                                  : ContentViewRenderView.MODE_SURFACE_VIEW,
-                (ValueCallback<Boolean>) ObjectWrapper.unwrap(callback, ValueCallback.class));
-    }
-
     @CalledByNative
     private boolean doBrowserControlsShrinkRendererSize() {
-        return (mGestureStateTracker.isInGestureOrScroll())
-                ? mCachedDoBrowserControlsShrinkRendererSize
-                : mTopControlsContainerView.isTopControlVisible();
+        BrowserFragmentViewController viewController = getViewController();
+        return viewController != null && viewController.doBrowserControlsShrinkRendererSize();
+    }
+
+    /**
+     * Returns the BrowserFragmentViewController for this BrowserControllerImpl, but only if this
+     * the active BrowserControllerImpl.
+     */
+    private BrowserFragmentViewController getViewController() {
+        return (mFragment.getActiveBrowserController() == this) ? mFragment.getViewController()
+                                                                : null;
     }
 
     @NativeMethods

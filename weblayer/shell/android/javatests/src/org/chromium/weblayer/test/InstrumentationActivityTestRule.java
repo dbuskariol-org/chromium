@@ -27,6 +27,7 @@ import org.chromium.weblayer.WebLayer;
 import org.chromium.weblayer.shell.InstrumentationActivity;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -40,6 +41,7 @@ public class InstrumentationActivityTestRule extends ActivityTestRule<Instrument
         private BrowserController mController;
         private boolean mNavigationComplete;
         private boolean mDoneLoading;
+        private boolean mContentfulPaint;
         private CallbackHelper mCallbackHelper = new CallbackHelper();
 
         private NavigationCallback mNavigationCallback = new NavigationCallback() {
@@ -56,11 +58,20 @@ public class InstrumentationActivityTestRule extends ActivityTestRule<Instrument
                 mDoneLoading = !isLoading;
                 checkComplete();
             }
+
+            @Override
+            public void onFirstContentfulPaint() {
+                mContentfulPaint = true;
+                checkComplete();
+            }
         };
 
-        public NavigationWaiter(String url, BrowserController controller) {
+        // |waitForPaint| should generally be set to true, unless there is a specific reason for
+        // onFirstContentfulPaint to not fire.
+        public NavigationWaiter(String url, BrowserController controller, boolean waitForPaint) {
             mUrl = url;
             mController = controller;
+            if (!waitForPaint) mContentfulPaint = true;
         }
 
         public void navigateAndWait() {
@@ -70,7 +81,8 @@ public class InstrumentationActivityTestRule extends ActivityTestRule<Instrument
                 mController.getNavigationController().navigate(Uri.parse(mUrl));
             });
             try {
-                mCallbackHelper.waitForCallback(0);
+                mCallbackHelper.waitForCallback(
+                        0, 1, CallbackHelper.WAIT_TIMEOUT_SECONDS * 2, TimeUnit.SECONDS);
             } catch (TimeoutException e) {
                 throw new RuntimeException(e);
             }
@@ -81,7 +93,7 @@ public class InstrumentationActivityTestRule extends ActivityTestRule<Instrument
         }
 
         private void checkComplete() {
-            if (mNavigationComplete && mDoneLoading) {
+            if (mNavigationComplete && mDoneLoading && mContentfulPaint) {
                 mCallbackHelper.notifyCalled();
             }
         }
@@ -113,10 +125,10 @@ public class InstrumentationActivityTestRule extends ActivityTestRule<Instrument
     }
 
     /**
-     * Starts the WebLayer activity with the given extras Bundle and completely loads the given URL
-     * (this calls navigateAndWait()).
+     * Starts the WebLayer activity with the given extras Bundle. This does not create and load
+     * WebLayer.
      */
-    public InstrumentationActivity launchShellWithUrl(String url, Bundle extras) {
+    public InstrumentationActivity launchShell(Bundle extras) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.putExtras(extras);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -124,8 +136,18 @@ public class InstrumentationActivityTestRule extends ActivityTestRule<Instrument
         intent.setComponent(
                 new ComponentName(InstrumentationRegistry.getInstrumentation().getTargetContext(),
                         InstrumentationActivity.class));
-        InstrumentationActivity activity = launchActivity(intent);
+        return launchActivity(intent);
+    }
+
+    /**
+     * Starts the WebLayer activity with the given extras Bundle and completely loads the given URL
+     * (this calls navigateAndWait()).
+     */
+    public InstrumentationActivity launchShellWithUrl(String url, Bundle extras) {
+        InstrumentationActivity activity = launchShell(extras);
         Assert.assertNotNull(activity);
+        TestThreadUtils.runOnUiThreadBlocking(
+                () -> { activity.createWebLayer(activity.getApplication(), null).get(); });
         if (url != null) navigateAndWait(url);
         return activity;
     }
@@ -142,11 +164,11 @@ public class InstrumentationActivityTestRule extends ActivityTestRule<Instrument
      * Loads the given URL in the shell.
      */
     public void navigateAndWait(String url) {
-        navigateAndWait(getActivity().getBrowserController(), url);
+        navigateAndWait(getActivity().getBrowserController(), url, true /* waitForPaint */);
     }
 
-    public void navigateAndWait(BrowserController controller, String url) {
-        NavigationWaiter waiter = new NavigationWaiter(url, controller);
+    public void navigateAndWait(BrowserController controller, String url, boolean waitForPaint) {
+        NavigationWaiter waiter = new NavigationWaiter(url, controller, waitForPaint);
         waiter.navigateAndWait();
     }
 

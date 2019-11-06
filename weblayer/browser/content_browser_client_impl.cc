@@ -12,12 +12,16 @@
 #include "base/path_service.h"
 #include "base/stl_util.h"
 #include "build/build_config.h"
+#include "components/security_interstitials/content/ssl_cert_reporter.h"
+#include "components/security_interstitials/content/ssl_error_navigation_throttle.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/devtools_manager_delegate.h"
+#include "content/public/browser/navigation_throttle.h"
 #include "content/public/browser/network_service_instance.h"
 #include "content/public/common/service_names.mojom.h"
 #include "content/public/common/user_agent.h"
 #include "content/public/common/web_preferences.h"
+#include "content/public/common/window_container_type.mojom.h"
 #include "services/network/network_service.h"
 #include "services/network/public/mojom/network_context.mojom.h"
 #include "services/network/public/mojom/network_service.mojom.h"
@@ -27,6 +31,7 @@
 #include "url/origin.h"
 #include "weblayer/browser/browser_controller_impl.h"
 #include "weblayer/browser/browser_main_parts_impl.h"
+#include "weblayer/browser/ssl_error_handler.h"
 #include "weblayer/browser/weblayer_content_browser_overlay_manifest.h"
 #include "weblayer/common/features.h"
 #include "weblayer/public/fullscreen_delegate.h"
@@ -59,6 +64,16 @@ bool IsSafebrowsingSupported() {
 #endif
   return false;
 }
+
+bool IsInHostedApp(content::WebContents* web_contents) {
+  return false;
+}
+
+class SSLCertReporterImpl : public SSLCertReporter {
+ public:
+  void ReportInvalidCertificateChain(
+      const std::string& serialized_report) override {}
+};
 
 }  // namespace
 
@@ -187,6 +202,66 @@ ContentBrowserClientImpl::CreateURLLoaderThrottles(
   }
 
   return result;
+}
+
+bool ContentBrowserClientImpl::CanCreateWindow(
+    content::RenderFrameHost* opener,
+    const GURL& opener_url,
+    const GURL& opener_top_level_frame_url,
+    const url::Origin& source_origin,
+    content::mojom::WindowContainerType container_type,
+    const GURL& target_url,
+    const content::Referrer& referrer,
+    const std::string& frame_name,
+    WindowOpenDisposition disposition,
+    const blink::mojom::WindowFeatures& features,
+    bool user_gesture,
+    bool opener_suppressed,
+    bool* no_javascript_access) {
+  *no_javascript_access = false;
+
+  content::WebContents* web_contents =
+      content::WebContents::FromRenderFrameHost(opener);
+
+  // Block popups if there is no NewBrowserDelegate.
+  BrowserControllerImpl* browser =
+      BrowserControllerImpl::FromWebContents(web_contents);
+  if (!browser || !browser->has_new_browser_delegate())
+    return false;
+
+  if (container_type == content::mojom::WindowContainerType::BACKGROUND) {
+    // TODO(https://crbug.com/1019923): decide if WebLayer needs to support
+    // background tabs.
+    return false;
+  }
+
+  // WindowOpenDisposition has a *ton* of types, but the following are really
+  // the only ones that should be hit for this code path.
+  switch (disposition) {
+    case WindowOpenDisposition::NEW_FOREGROUND_TAB:
+      FALLTHROUGH;
+    case WindowOpenDisposition::NEW_BACKGROUND_TAB:
+      FALLTHROUGH;
+    case WindowOpenDisposition::NEW_POPUP:
+      FALLTHROUGH;
+    case WindowOpenDisposition::NEW_WINDOW:
+      break;
+    default:
+      return false;
+  }
+
+  // TODO(https://crbug.com/1019922): support proper popup blocking.
+  return user_gesture;
+}
+
+std::vector<std::unique_ptr<content::NavigationThrottle>>
+ContentBrowserClientImpl::CreateThrottlesForNavigation(
+    content::NavigationHandle* handle) {
+  std::vector<std::unique_ptr<content::NavigationThrottle>> throttles;
+  throttles.push_back(std::make_unique<SSLErrorNavigationThrottle>(
+      handle, std::make_unique<SSLCertReporterImpl>(),
+      base::Bind(&HandleSSLError), base::Bind(&IsInHostedApp)));
+  return throttles;
 }
 
 #if defined(OS_LINUX) || defined(OS_ANDROID)
