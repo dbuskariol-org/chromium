@@ -1320,6 +1320,7 @@ void NavigationRequest::ResetForCrossDocumentRestart() {
   }
 
   // Reset the states of the NavigationRequest.
+  StopCommitTimeout();
   state_ = NOT_STARTED;
   handle_state_ = NOT_CREATED;
 
