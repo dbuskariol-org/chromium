@@ -3839,7 +3839,7 @@ Pred prechodom do VR skontrolujte, či tomuto webu dôverujete.</translation>
 <translation id="6639554308659482635">Pamäť nástroja SQLite</translation>
 <translation id="6641138807883536517">Náhodne generované heslo bezpečnostného modulu nie je k dispozícii. Po použití funkcie Powerwash je to normálne.</translation>
 <translation id="6643016212128521049">Vymazať</translation>
-<translation id="6644512095122093795">Ponúknuť uloženie hesiel</translation>
+<translation id="6644512095122093795">Ponúkať ukladanie hesiel</translation>
 <translation id="6644513150317163574">Neplatný formát webovej adresy. Keď sa použije overenie jediným prihlásením, server musí byť špecifikovaný ako názov hostiteľa.</translation>
 <translation id="6644846457769259194">Zariadenie sa aktualizuje (<ph name="PROGRESS_PERCENT" />)</translation>
 <translation id="6645437135153136856">Vybrané zariadenie v službe Google Cloud Print už nie je podporované. <ph name="BR" /> Skúste túto tlačiareň nakonfigurovať v nastaveniach systému počítača.</translation>

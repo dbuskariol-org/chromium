@@ -924,7 +924,7 @@
 <translation id="2326931316514688470">Пере&amp;загрузить приложение</translation>
 <translation id="2327492829706409234">Включить приложение</translation>
 <translation id="2329597144923131178">Войдите, чтобы синхронизировать закладки, пароли, историю и т. д. на всех устройствах.</translation>
-<translation id="2330129964253841015">Сообщать о компрометации паролей</translation>
+<translation id="2330129964253841015">Сообщать об утечке паролей</translation>
 <translation id="2332131598580221120">Открыть в Интернет-магазине</translation>
 <translation id="2332192922827071008">Открыть настройки</translation>
 <translation id="2332742915001411729">Сбросить</translation>
@@ -1427,7 +1427,7 @@
 <translation id="3038612606416062604">Добавление принтера вручную</translation>
 <translation id="3038675903128704560">Запретить сайтам использовать плагин для доступа к компьютеру</translation>
 <translation id="3039491566278747710">Не удалось применить к устройству политику работы в офлайн-режиме.</translation>
-<translation id="3043581297103810752">С сайта <ph name="ORIGIN" /></translation>
+<translation id="3043581297103810752">Откуда: <ph name="ORIGIN" /></translation>
 <translation id="3045447014237878114">Этот сайт автоматически скачал несколько файлов</translation>
 <translation id="3046910703532196514">Веб-страница полностью</translation>
 <translation id="304747341537320566">Синтезаторы речи</translation>

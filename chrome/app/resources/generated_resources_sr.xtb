@@ -1752,7 +1752,7 @@
 <translation id="3552780134252864554">Брише се на излазу</translation>
 <translation id="3555812735919707620">Уклони додатак</translation>
 <translation id="3556000484321257665">Претраживач је промењен у <ph name="URL" />.</translation>
-<translation id="3556433843310711081">Менаџер може да га деблокира за вас</translation>
+<translation id="3556433843310711081">Менаџер може да га одблокира за вас</translation>
 <translation id="3557101512409028104">Подесите ограничења за веб-сајтове и време испред екрана помоћу Family Link-а</translation>
 <translation id="3559262020195162408">Инсталирање смерница на уређају није успело.</translation>
 <translation id="3560034655160545939">&amp;Провера правописа</translation>
@@ -3225,7 +3225,7 @@
 <translation id="5723508132121499792">Није покренута ниједна позадинска апликација</translation>
 <translation id="5727728807527375859">Додаци, апликације и теме могу да оштете рачунар. Желите ли стварно да наставите?</translation>
 <translation id="5729712731028706266">&amp;Прикажи</translation>
-<translation id="5732392974455271431">Родитељи могу да га деблокирају за тебе</translation>
+<translation id="5732392974455271431">Родитељи могу да га одблокирају за тебе</translation>
 <translation id="5734362860645681824">Комуникације</translation>
 <translation id="5734697361979786483">Додај дељење датотека</translation>
 <translation id="5736796278325406685">Унесите важеће корисничко име</translation>
@@ -4583,7 +4583,7 @@
 <translation id="7750228210027921155">Слика у слици</translation>
 <translation id="7751260505918304024">Прикажи све</translation>
 <translation id="7754704193130578113">Питај где треба сачувати сваку датотеку пре преузимања</translation>
-<translation id="7755287808199759310">Родитељ може да га деблокира за тебе</translation>
+<translation id="7755287808199759310">Родитељ може да га одблокира за тебе</translation>
 <translation id="7757787379047923882">Текст дељен са уређаја <ph name="DEVICE_NAME" /></translation>
 <translation id="7758143121000533418">Family Link</translation>
 <translation id="7758450972308449809">Прилагодите границе приказа</translation>

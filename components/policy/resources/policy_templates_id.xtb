@@ -691,6 +691,11 @@ Jika kebijakan ini tidak disetel, setelan kebijakan berarti diaktifkan, lihat de
 <translation id="2149330464730004005">Aktifkan pencetakan warna</translation>
 <translation id="2156132677421487971">Mengonfigurasi kebijakan untuk <ph name="PRODUCT_NAME" />, fitur yang memungkinkan pengguna mengirim konten tab, situs, atau desktop dari browser ke sistem suara dan layar jarak jauh.</translation>
 <translation id="2156755242840687300">Server cetak eksternal diaktifkan</translation>
+<translation id="2160336427036785721">Mengonfigurasi jumlah memori yang dapat digunakan oleh satu instance <ph name="PRODUCT_NAME" /> sebelum tab mulai dihapus (artinya, memori yang digunakan oleh tab akan dibebaskan dan tab harus dimuat ulang saat dialihkan) untuk menghemat memori.
+
+      Jika kebijakan ini ditetapkan, browser akan mulai menghapus tab untuk menghemat memori setelah melampaui batas. Namun, tidak ada jaminan bahwa browser selalu berjalan di bawah batas. Setiap nilai yang kurang dari 1024 akan dibulatkan ke 1024.
+
+      Jika kebijakan ini tidak ditetapkan, browser hanya akan mulai mencoba menghemat memori setelah mendeteksi bahwa perangkatnya memiliki jumlah memori fisik yang rendah.</translation>
 <translation id="2166472654199325139">Jangan filter konten khusus dewasa dari situs</translation>
 <translation id="2168397434410358693">Menunda waktu menganggur saat menggunakan daya AC</translation>
 <translation id="217013996107840632">Parameter baris perintah untuk beralih dari browser alternatif.</translation>
@@ -2863,15 +2868,15 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
           Kebijakan ini hanya berpengaruh jika <ph name="POWER_SMART_DIM_ENABLED_POLICY_NAME" /> dinonaktifkan. Jika tidak demikian, kebijakan ini akan diabaikan karena penundaan peredupan layar ditentukan oleh model machine learning.
 
           Faktor skalanya harus 100% atau lebih. Nilai yang akan membuat penundaan peredupan layar dalam mode presentasi menjadi lebih singkat daripada penundaan peredupan layar biasa tidak diizinkan.</translation>
-<translation id="5590988845778885692">Memberikan konfigurasi server cetak yang tersedia.
+<translation id="5590988845778885692">Menyediakan konfigurasi server cetak yang tersedia.
 
-      Kebijakan ini memungkinkan Anda memberikan konfigurasi server cetak eksternal bagi perangkat <ph name="PRODUCT_OS_NAME" /> sebagai file JSON.
+      Kebijakan ini memungkinkan Anda menyediakan konfigurasi server cetak eksternal untuk perangkat <ph name="PRODUCT_OS_NAME" /> sebagai file JSON.
 
       Ukuran file tidak boleh lebih dari 1 MB dan harus berisi array data (objek JSON). Setiap data harus berisi kolom "id", "url", dan "display_name" dengan string sebagai nilai. Nilai kolom "id" harus bersifat unik.
 
       File didownload dan disimpan di cache. Hash kriptografi digunakan untuk memverifikasi integritas download. File akan didownload ulang setiap kali URL atau hash berubah.
 
-      Jika kebijakan ini ditetapkan ke nilai yang benar, perangkat akan mencoba mengkueri server cetak tertentu untuk printer yang tersedia menggunakan protokol IPP.
+      Jika kebijakan ini ditetapkan ke nilai yang benar, perangkat akan mencoba mengirimkan kueri pada server cetak tertentu untuk printer yang tersedia menggunakan protokol IPP.
 
       Jika kebijakan ini tidak ditetapkan atau ditetapkan ke nilai yang salah, pengguna tidak dapat melihat server printer.
 
@@ -3136,6 +3141,10 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
       Perhatikan bahwa kebijakan ini diabaikan dan layanan lokasi Google akan selalu dinonaktifkan jika kebijakan <ph name="DEFAULT_GEOLOCATION_SETTING_POLICY_NAME" /> ditetapkan ke <ph name="BLOCK_GEOLOCATION_SETTING" />.</translation>
 <translation id="6141402445226505817">Selalu gunakan deteksi perkiraan kasar zona waktu</translation>
 <translation id="6145799962557135888">Memungkinkan Anda menyetel daftar pola url yang menentukan situs yang tidak diizinkan untuk menjalankan JavaScript. Jika kebijakan ini tidak disetel, nilai default global akan digunakan untuk semua situs, baik dari kebijakan 'DefaultJavaScriptSetting', jika disetel, ataupun dari konfigurasi pribadi pengguna.</translation>
+<translation id="614616930188030377">Pola dalam daftar ini akan dicocokkan dengan asal keamanan URL yang meminta.
+      Jika kecocokan ditemukan atau chrome://flags/#enable-webrtc-hide-local-ips-with-mdns Nonaktif, alamat IP lokal akan ditampilkan dalam kandidat WebRTC ICE.
+      Jika tidak, alamat IP lokal akan disembunyikan dengan hostname mDNS.
+      Perlu diingat bahwa kebijakan ini akan melemahkan perlindungan IP lokal jika dibutuhkan oleh administrator.</translation>
 <translation id="614662973812186053">Kebijakan ini juga mengontrol pengumpulan data diagnostik dan penggunaan Android.</translation>
 <translation id="6153048425064249648">Kebijakan ini mengontrol pelaporan cloud <ph name="PRODUCT_NAME" /> yang mengupload informasi tentang operasi browser ke konsol Google Admin.
 
@@ -4089,6 +4098,7 @@ Cara yang diharapkan terkait penggunaan kebijakan ini adalah merotasi konfiguras
           Jika kebijakan ini tidak ditetapkan, mode kontras tinggi akan dinonaktifkan saat layar login ditampilkan pertama kali. Pengguna dapat mengaktifkan atau menonaktifkan mode kontras tinggi kapan saja dan statusnya di layar login tetap bertahan walaupun pengguna sudah berbeda.
 
           Catatan: <ph name="DEVICE_LOGIN_SCREEN_HIGH_CONTRAST_ENABLED_POLICY_NAME" /> akan mengganti kebijakan ini jika kebijakan tersebut ditentukan.</translation>
+<translation id="7846952520291088817">URL yang akan menampilkan IP lokal dalam kandidat WebRTC ICE</translation>
 <translation id="7858404742201086014">Jika setelan ini diaktifkan, plugin yang sudah tidak berlaku akan digunakan sebagai plugin normal.
 
       Jika setelan ini dinonaktifkan, plugin yang sudah tidak berlaku tidak akan digunakan dan pengguna tidak akan dimintai izin untuk menjalankannya.

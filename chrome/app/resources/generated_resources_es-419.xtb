@@ -971,7 +971,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="2395616325548404795">Tu dispositivo <ph name="DEVICE_TYPE" /> se inscribió correctamente para la administración empresarial, pero se produjo un error al intentar enviar la información de la ubicación y del recurso. Ingresa los datos manualmente en la Consola del administrador del dispositivo.</translation>
 <translation id="2396783860772170191">Ingresa un PIN de 4 dígitos (0000-9999)</translation>
 <translation id="2399939490305346086">Datos de acceso de la llave de seguridad</translation>
-<translation id="2407481962792080328">Se activa esta función cuando accedes a tu Cuenta de Google</translation>
+<translation id="2407481962792080328">Esta función se activa cuando accedes a tu Cuenta de Google</translation>
 <translation id="2408955596600435184">Ingresa tu PIN</translation>
 <translation id="241082044617551207">Complemento desconocido</translation>
 <translation id="2412593942846481727">Actualización disponible</translation>
@@ -4225,7 +4225,7 @@ Asegúrate de que este sitio sea de confianza antes de entrar en el modo RV.</tr
 <translation id="7220019174139618249">No se pueden exportar las contraseñas a "<ph name="FOLDER" />"</translation>
 <translation id="722055596168483966">Personalizar los servicios de Google</translation>
 <translation id="7221855153210829124">Mostrar notificaciones</translation>
-<translation id="7221869452894271364">Cargar esta página de nuevo</translation>
+<translation id="7221869452894271364">Volver a cargar esta página</translation>
 <translation id="7222204278952406003">Chrome es el navegador predeterminado</translation>
 <translation id="7222232353993864120">Dirección de correo electrónico</translation>
 <translation id="7223859049862598735">Chrome bloqueó cookies que pueden usarse para rastrearte en la Web</translation>

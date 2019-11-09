@@ -776,7 +776,7 @@
 <translation id="2129825002735785149">プラグインを更新</translation>
 <translation id="2131077480075264">「<ph name="APP_NAME" />」は「<ph name="IMPORT_NAME" />」で許可されていないためインストールできません</translation>
 <translation id="21354425047973905">PIN を非表示</translation>
-<translation id="2135456203358955318">拡大鏡（ドッキング）</translation>
+<translation id="2135456203358955318">ドッキング拡大鏡</translation>
 <translation id="2135787500304447609">再開(&amp;R)</translation>
 <translation id="2136372518715274136">新しいパスワードを入力</translation>
 <translation id="2136476978468204130">入力したパスフレーズが正しくありません</translation>
@@ -4312,7 +4312,7 @@ VR を開始する前に、信頼できるサイトかどうかを確認して�
 <translation id="7328867076235380839">無効な組み合わせです</translation>
 <translation id="7329154610228416156">保護されていない URL（<ph name="BLOCKED_URL" />）を使用するよう設定されているため、ログインできませんでした。管理者にお問い合わせください。</translation>
 <translation id="7334190995941642545">Smart Lock は現在ご利用いただけません。しばらくしてからもう一度お試しください。</translation>
-<translation id="7334274148831027933">拡大鏡（ドッキング）を有効にする</translation>
+<translation id="7334274148831027933">ドッキング拡大鏡を有効にする</translation>
 <translation id="7335974957018254119">スペルチェックを使用する言語</translation>
 <translation id="7336799713063880535">通知をブロックしました。</translation>
 <translation id="7338630283264858612">デバイスのシリアル番号が無効です。</translation>
@@ -5158,7 +5158,7 @@ VR を開始する前に、信頼できるサイトかどうかを確認して�
 <translation id="8546541260734613940">[*.]example.com</translation>
 <translation id="854655314928502177">ウェブプロキシ自動検出 URL:</translation>
 <translation id="8546930481464505581">Touch Bar をカスタマイズ</translation>
-<translation id="8547013269961688403">拡大鏡（全画面）を有効にする</translation>
+<translation id="8547013269961688403">全画面拡大鏡を有効にする</translation>
 <translation id="85486688517848470">キーボードの最上段にあるキーの動作を切り替えるには、検索キーを押したままにします</translation>
 <translation id="8549457076611407730">{NUM_ITEMS,plural, =1{1 個のアイテム}other{# 個のアイテム}}</translation>
 <translation id="8551388862522347954">ライセンス</translation>
