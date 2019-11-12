@@ -1261,7 +1261,8 @@ void TabStripModel::ExecuteContextMenuCommand(int context_index,
     }
 
     case CommandCloseOtherTabs: {
-      ReentrancyCheck reentrancy_check(&reentrancy_guard_);
+      DCHECK(!reentrancy_guard_);
+      base::AutoReset<bool> resetter(&reentrancy_guard_, true);
 
       base::RecordAction(UserMetricsAction("TabContextMenu_CloseOtherTabs"));
       InternalCloseTabs(GetWebContentsesByIndices(GetIndicesClosedByCommand(
