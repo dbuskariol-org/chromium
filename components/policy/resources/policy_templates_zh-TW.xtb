@@ -1190,7 +1190,7 @@
 <translation id="2872961005593481000">關閉</translation>
 <translation id="2873651257716068683">覆寫預設列印頁面大小。如果設定的頁面大小不適用，系統會忽略這項政策。</translation>
 <translation id="2874209944580848064">支援 Android 裝置的 <ph name="PRODUCT_OS_NAME" />裝置注意事項：</translation>
-<translation id="2875192972412983412">指定系統尋找伺服器印表機時要查詢的列印伺服器子集。
+<translation id="2875192972412983412">指定系統尋找伺服器印表機時，要查詢符合何種條件的列印伺服器。
 
       如果使用這項政策，使用者只能使用 ID 符合本政策值的伺服器印表機。
 
@@ -3118,9 +3118,9 @@
 <translation id="6141402445226505817">一律使用約略時區偵測功能</translation>
 <translation id="6145799962557135888">允許你設定網址模式清單，指定可以執行 JavaScript 的網站。如果未設定這項政策，系統會從「DefaultJavaScriptSetting」政策 (如果有設定的話) 或使用者的個人設定，將通用預設值套用至所有網站。</translation>
 <translation id="614616930188030377">系統會將這份清單中的模式與要求網址的安全性來源進行比對。
-      如果找到相符項目，或 chrome://flags/#enable-webrtc-hide-local-ips-with-mdns 已停用，本機 IP 位址就會顯示在 WebRTC ICE 候選項目中。
-      否則系統會使用 mDNS 主機名稱隱藏本機 IP 位址。
-      請注意，這項政策會降低系統對本機 IP 的保護程度 (如果管理員需要使用的話)。</translation>
+      如果找到相符的結果，或你已停用 chrome://flags/#enable-webrtc-hide-local-ips-with-mdns，系統就會在 WebRTC ICE 候選項目中顯示本機 IP 位址。
+      否則系統會透過 mDNS 主機名稱隱藏本機 IP 位址。
+      請注意，如果系統管理員必須使用此政策，此政策將降低系統對本機 IP 的保護程度。</translation>
 <translation id="614662973812186053">這項政策也可以控制 Android 使用資料和診斷資料的收集設定。</translation>
 <translation id="6153048425064249648">這項政策可控管 <ph name="PRODUCT_NAME" /> 雲端報告功能，該功能會將瀏覽器運作資訊上傳到 Google 管理控制台。
 
@@ -4071,7 +4071,7 @@
           如果不設定這項政策，系統會在初次顯示登入畫面時停用高對比模式。使用者隨時可以啟用或停用高對比模式，且所有使用者的登入畫面將一律維持相同的狀態。
 
           注意：如果指定 <ph name="DEVICE_LOGIN_SCREEN_HIGH_CONTRAST_ENABLED_POLICY_NAME" />，這項政策會遭到覆寫。</translation>
-<translation id="7846952520291088817">可在 WebRTC ICE 候選項目中顯示本機 IP 的網址</translation>
+<translation id="7846952520291088817">會在 WebRTC ICE 候選項目中顯示本機 IP 的網址</translation>
 <translation id="7858404742201086014">如果啟用這項設定，系統會將舊版外掛程式視為一般外掛程式執行。
 
       如果停用這項設定，則系統不會使用舊版外掛程式，也不會徵求使用者許可來執行這些外掛程式。

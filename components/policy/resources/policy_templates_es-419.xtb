@@ -698,7 +698,7 @@
 <translation id="2149330464730004005">Habilitar la impresión a color</translation>
 <translation id="2156132677421487971">Configura las políticas para <ph name="PRODUCT_NAME" />, una función que permite que los usuarios envíen el contenido de las pestañas, los sitios o el escritorio del navegador a pantallas y sistemas de sonido remotos.</translation>
 <translation id="2156755242840687300">Habilita los servidores de impresión externos</translation>
-<translation id="2160336427036785721">Configura la cantidad de memoria que puede usar una única instancia de <ph name="PRODUCT_NAME" /> antes de que se empiecen a descartar las pestañas (es decir, se liberará la memoria que utiliza la pestaña y se deberá volver a cargar cuando se seleccione) para ahorrar memoria.
+<translation id="2160336427036785721">Configura la cantidad de memoria que puede usar una única instancia de <ph name="PRODUCT_NAME" /> antes de que se empiecen a descartar las pestañas (es decir que se liberará la memoria que utiliza la pestaña, la cual se deberá volver a cargar cuando se seleccione), a fin de ahorrar memoria.
 
       Si estableces la política, el navegador comenzará a descartar pestañas para ahorrar memoria cuando se supere el límite. Sin embargo, no hay garantía de que el navegador se ejecute siempre por debajo del límite. Se redondeará a 1024 cualquier valor por debajo de 1024.
 
@@ -868,7 +868,7 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
 <translation id="2454228136871844693">Optimiza la estabilidad.</translation>
 <translation id="2458754120470702975">Permite establecer si los usuarios pueden agregar excepciones para habilitar contenido mixto en sitios específicos.
 
-          Puede anularse esta política para patrones de URL específicos mediante las políticas "InsecureContentAllowedForUrls" y "InsecureContentBlockedForUrls".
+          Esta política puede anularse para patrones de URL específicos mediante las políticas "InsecureContentAllowedForUrls" y "InsecureContentBlockedForUrls".
 
           Si no se establece esta política, los usuarios podrán agregar excepciones para permitir contenido mixto bloqueable.</translation>
 <translation id="2463034609187171371">Permitir los paquetes de encriptación DHE en TLS</translation>
@@ -3140,7 +3140,7 @@ Esta política no se aplica a las aplicaciones de kiosko; estas se migran de for
 <translation id="614616930188030377">Se compararán los patrones de esta lista con el origen de seguridad de la URL solicitante.
       Si se encuentra una coincidencia o se inhabilita la opción chrome://flags/#enable-webrtc-hide-local-ips-with-mdns, se mostrarán las direcciones IP locales en los candidatos ICE de WebRTC.
       De lo contrario, se ocultarán las direcciones IP locales con nombres de host de mDNS.
-      Ten en cuenta que esta política afecta la protección de las IP locales, en el caso de que las necesiten los administradores.</translation>
+      Ten en cuenta que esta política afecta la protección de las IP locales, si los administradores la habilitan.</translation>
 <translation id="614662973812186053">Esta política también controla la recopilación de datos de diagnóstico y uso de Android.</translation>
 <translation id="6153048425064249648">Esta política controla los informes en la nube de <ph name="PRODUCT_NAME" />, que suben información sobre el funcionamiento del navegador a la consola del Administrador de Google.
 

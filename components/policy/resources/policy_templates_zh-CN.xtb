@@ -3,7 +3,7 @@
 <translationbundle lang="zh-CN">
 <translation id="1001649754854402482">在新版 <ph name="CORS" /> 实现方案中启用 <ph name="CORS" /> 检查缓解功能，从而允许扩展程序保持兼容的行为，并允许 <ph name="PRODUCT_NAME" /> 无需进行 <ph name="CORS" /> 检查便可发送指定标头。
 
-      如果此列表设为空，<ph name="PRODUCT_NAME" /> 会尝试以兼容的方式运行扩展程序，而不会为 <ph name="PRODUCT_NAME" /> 79 引入 <ph name="WEB_REQUEST_API_MANUAL" /> 中所述的 <ph name="API" /> 更改。
+      如果此列表设为空，<ph name="PRODUCT_NAME" /> 会尝试以兼容的方式运行扩展程序，而不会激活 <ph name="PRODUCT_NAME" /> 79 中引入的 <ph name="API" /> 更改（如 <ph name="WEB_REQUEST_API_MANUAL" /> 所述）。
 
       如果此列表设为包含 <ph name="HTTP" /> 请求标头名称，则 <ph name="CORS" /> 检查将会忽略所列的标头，并会为扩展程序启用缓解功能。
 
@@ -773,7 +773,7 @@
 
       如果此政策设为 True，当系统显示外部协议确认提示时，用户可选择“始终打开”该协议，以使系统不再显示此类提示。
 
-      如果此政策设为 False 或未设置，系统将不会显示“始终打开”复选框，但每次调用外部协议时都会提示用户。</translation>
+      如果此政策设为 False 或未设置，系统将不会显示“始终打开”复选框，并且在每次调用外部协议时都会提示用户。</translation>
 <translation id="2411817661175306360">密码保护服务警告功能处于关闭状态</translation>
 <translation id="2411919772666155530">阻止在这些网站上显示通知</translation>
 <translation id="2418507228189425036">停用 <ph name="PRODUCT_NAME" /> 中的浏览记录保存功能，并禁止用户更改此设置。
@@ -3004,7 +3004,7 @@
 <translation id="5961137303188584693">设备的内置 NIC MAC 地址</translation>
 <translation id="5966615072639944554">允许扩展程序使用 Remote Attestation API</translation>
 <translation id="5983708779415553259">非任何内容包内的网站的默认行为</translation>
-<translation id="5997107377032983906">让您能够设置一系列网址格式，以指定允许哪些网站显示可屏蔽的（例如主动型）混合内容（例如 HTTPS 网站上的 HTTP 内容）。
+<translation id="5997107377032983906">让您能够设置一系列网址格式，以指定允许哪些网站显示可屏蔽的（即主动型）混合内容（即 HTTPS 网站上的 HTTP 内容）。
 
           如果未设置此政策，可屏蔽的混合内容将遭到屏蔽，但用户将能设置例外情况以允许在特定网站上显示此类内容。</translation>
 <translation id="5997543603646547632">默认情况下，使用24小时制</translation>
@@ -3080,7 +3080,7 @@
 <translation id="6145799962557135888">可让您设置网址格式的列表，这些网址格式用于指定允许运行 JavaScript 的网站。在未设置此政策的情况下，如果设置了“DefaultJavaScriptSetting”政策，那么将对该政策中的所有网站使用全局默认值，否则将对用户个人配置中的所有网站使用全局默认值。</translation>
 <translation id="614616930188030377">系统会将此列表中的网址格式与请求网址的安全来源进行比对。
       如果找到了匹配项或者 chrome://flags/#enable-webrtc-hide-local-ips-with-mdns 已停用，本地 IP 地址就会显示在 WebRTC ICE 候选路径中。
-      否则，本地 IP 地址将会隐而不见，被 mDNS 主机名取代。
+      否则，本地 IP 地址将会隐藏，被 mDNS 主机名取代。
       请注意，此政策会削弱对本地 IP 的保护（如果管理员需要这样做）。</translation>
 <translation id="614662973812186053">此政策亦用于控制对 Android 使用情况和诊断数据的收集。</translation>
 <translation id="6153048425064249648">此政策用于控制可将浏览器操作信息上传到 Google 管理控制台的 <ph name="PRODUCT_NAME" /> 云端报告。
@@ -3365,7 +3365,7 @@
 <translation id="6786747875388722282">扩展程序</translation>
 <translation id="6786967369487349613">设置漫游个人资料目录</translation>
 <translation id="6795485990775913659">仅允许在没有 PIN 码的情况下打印</translation>
-<translation id="6800064234889290465">让您能够设置一系列网址格式，以指定不允许哪些网站显示可屏蔽的（例如主动型）混合内容（例如 HTTPS 网站上的 HTTP 内容）。
+<translation id="6800064234889290465">让您能够设置一系列网址格式，以指定不允许哪些网站显示可屏蔽的（即主动型）混合内容（即 HTTPS 网站上的 HTTP 内容）。
 
           如果未设置此政策，可屏蔽的混合内容将遭到屏蔽，但用户将能设置例外情况以允许在特定网站上显示此类内容。</translation>
 <translation id="6810445994095397827">在这些网站上阻止 JavaScript</translation>

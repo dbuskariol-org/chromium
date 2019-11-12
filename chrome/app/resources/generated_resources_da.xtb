@@ -2232,7 +2232,7 @@ Vil du starte <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="4208390505124702064">Søg på <ph name="SITE_NAME" /></translation>
 <translation id="4209092469652827314">Stor</translation>
 <translation id="4209251085232852247">Slået fra</translation>
-<translation id="4209464433672152343">Dokumenter <ph name="BEGIN_LINK_HELP" />sendes til Google<ph name="END_LINK_HELP" />, hvor de gøres klar til udskrivning. Du kan se, redigere og administrere dine printere og din printerhistorik via <ph name="BEGIN_LINK_DASHBOARD" />betjeningspanelet for Google Cloudprinter<ph name="END_LINK_DASHBOARD" />.</translation>
+<translation id="4209464433672152343">Dokumenter <ph name="BEGIN_LINK_HELP" />sendes til Google<ph name="END_LINK_HELP" />, hvor de gøres klar til udskrivning. Du kan se, redigere og administrere dine printere og din printerhistorik via <ph name="BEGIN_LINK_DASHBOARD" />kontrolpanelet for Google Cloudprinter<ph name="END_LINK_DASHBOARD" />.</translation>
 <translation id="4210048056321123003">Downloader den virtuelle maskine</translation>
 <translation id="421182450098841253">&amp;Vis bogmærkelinjen</translation>
 <translation id="4211851069413100178">Send brugs- og diagnosticeringsdata. Hjælp med at forbedre din Android-oplevelse ved automatisk at sende diagnosticerings- og enhedsdata samt data om brug af apps til Google. Dataene bruges til forbedring af bl.a. systemets og appens stabilitet. Visse samlede data hjælper også Google-apps og -partnere, f.eks. Android-udviklere. Denne <ph name="BEGIN_LINK1" />indstilling<ph name="END_LINK1" /> håndhæves af ejeren. Ejeren kan vælge at sende diagnosticerings- og brugsdata for denne enhed til Google. Hvis indstillingen til yderligere web- og appaktivitet er aktiveret, gemmes disse data muligvis på din Google-konto. <ph name="BEGIN_LINK2" />Få flere oplysninger<ph name="END_LINK2" /></translation>
@@ -2670,7 +2670,7 @@ Vil du starte <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="4907161631261076876">Denne fil er ikke downloadet på almindelig vis og kan være farlig.</translation>
 <translation id="4907306957610201395">Tilladelseskategori</translation>
 <translation id="4908811072292128752">Åbn en ny fane for at se to websites på én gang</translation>
-<translation id="4909038193460299775">Eftersom denne konto administreres af <ph name="DOMAIN" />, slettes dine bogmærker, din historik, dine adgangskoder og andre indstillinger på denne enhed. Dine data vil dog fortsat være gemt på din Google-konto og kan administreres i <ph name="BEGIN_LINK" />Google Betjeningspanel<ph name="END_LINK" />.</translation>
+<translation id="4909038193460299775">Eftersom denne konto administreres af <ph name="DOMAIN" />, slettes dine bogmærker, din historik, dine adgangskoder og andre indstillinger på denne enhed. Dine data vil dog fortsat være gemt på din Google-konto og kan administreres i <ph name="BEGIN_LINK" />Google Kontrolpanel<ph name="END_LINK" />.</translation>
 <translation id="4909359680501173791">Du er tilmeldt</translation>
 <translation id="4912643508233590958">Aktivering efter dvale</translation>
 <translation id="491691592645955587">Skift til en sikker browser</translation>
@@ -3874,7 +3874,7 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="6686817083349815241">Gem din adgangskode</translation>
 <translation id="6690659332373509948">Filen kan ikke parses: <ph name="FILE_NAME" /></translation>
 <translation id="6690751852586194791">Vælg en administreret bruger, der skal føjes til denne enhed.</translation>
-<translation id="6691331417640343772">Administrer synkroniserede data i Google Betjeningspanel</translation>
+<translation id="6691331417640343772">Administrer synkroniserede data i Google Kontrolpanel</translation>
 <translation id="6691541770654083180">Jorden</translation>
 <translation id="6691936601825168937">&amp;Frem</translation>
 <translation id="6697492270171225480">Se forslag til lignende sider, når en side ikke kan findes</translation>
@@ -4828,7 +4828,7 @@ Opbevar din nøglefil på et sikkert sted. Du skal bruge den til at oprette nye 
 <translation id="8042142357103597104">Tekstens gennemsigtighed</translation>
 <translation id="8044262338717486897"><ph name="LINUX_APP_NAME" /> svarer ikke.</translation>
 <translation id="8044899503464538266">Langsom</translation>
-<translation id="8045253504249021590">Synkronisering er blevet stoppet via Google Betjeningspanel.</translation>
+<translation id="8045253504249021590">Synkronisering er blevet stoppet via Google Kontrolpanel.</translation>
 <translation id="8045923671629973368">Angiv et app-id eller webadressen til Chrome Webshop</translation>
 <translation id="804786196054284061">Slutbrugerlicensaftale</translation>
 <translation id="8049705080247101012">Google har markeret "<ph name="EXTENSION_NAME" />" som skadelig, og installationen blev forhindret</translation>
@@ -5426,7 +5426,7 @@ Opbevar din nøglefil på et sikkert sted. Du skal bruge den til at oprette nye 
 <translation id="890616557918890486">Skift kilde</translation>
 <translation id="8909833622202089127">Websitet sporer din placering</translation>
 <translation id="8910146161325739742">Del din skærm</translation>
-<translation id="8910222113987937043">Ændringer af bogmærker, historik, adgangskoder og andre indstillinger synkroniseres ikke længere med din Google-konto. Dine eksisterende data er dog stadig gemt på din Google-konto og kan administreres i <ph name="BEGIN_LINK" />Google Betjeningspanel<ph name="END_LINK" />.</translation>
+<translation id="8910222113987937043">Ændringer af bogmærker, historik, adgangskoder og andre indstillinger synkroniseres ikke længere med din Google-konto. Dine eksisterende data er dog stadig gemt på din Google-konto og kan administreres i <ph name="BEGIN_LINK" />Google Kontrolpanel<ph name="END_LINK" />.</translation>
 <translation id="8912362522468806198">Google-konto</translation>
 <translation id="8912793549644936705">Stræk</translation>
 <translation id="8912810933860534797">Aktivér automatisk scanning</translation>
@@ -5657,7 +5657,7 @@ Opbevar din nøglefil på et sikkert sted. Du skal bruge den til at oprette nye 
 <translation id="964286338916298286">Din it-administrator har deaktiveret Chrome Goodies for din enhed.</translation>
 <translation id="964439421054175458">{NUM_APLLICATIONS,plural, =1{App}one{App}other{Apps}}</translation>
 <translation id="965211523698323809">Send og modtag sms-beskeder fra din <ph name="DEVICE_TYPE" /> <ph name="LINK_BEGIN" />Få flere oplysninger<ph name="LINK_END" /></translation>
-<translation id="967007123645306417">Du logges ud af dine Google-konti. Ændringer af bogmærker, historik, adgangskoder og andre indstillinger synkroniseres ikke længere med din Google-konto. Dine eksisterende data er dog stadig gemt på din Google-konto og kan administreres i <ph name="BEGIN_LINK" />Google Betjeningspanel<ph name="END_LINK" />.</translation>
+<translation id="967007123645306417">Du logges ud af dine Google-konti. Ændringer af bogmærker, historik, adgangskoder og andre indstillinger synkroniseres ikke længere med din Google-konto. Dine eksisterende data er dog stadig gemt på din Google-konto og kan administreres i <ph name="BEGIN_LINK" />Google Kontrolpanel<ph name="END_LINK" />.</translation>
 <translation id="967624055006145463">Lagrede data</translation>
 <translation id="968000525894980488">Aktivér Google Play-tjenester.</translation>
 <translation id="968037381421390582">Ind&amp;sæt, og søg efter "<ph name="SEARCH_TERMS" />"</translation>

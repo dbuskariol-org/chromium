@@ -3,7 +3,7 @@
 <translationbundle lang="fr">
 <translation id="1001649754854402482">Atténuer les vérifications <ph name="CORS" /> dans la nouvelle mise en œuvre de <ph name="CORS" />, ce qui permet aux extensions de conserver un comportement compatible, et à <ph name="PRODUCT_NAME" /> d'envoyer les en-têtes spécifiés sans vérifications <ph name="CORS" />.
 
-      Si aucun paramètre d'atténuation n'est indiqué dans la liste, <ph name="PRODUCT_NAME" /> essaie d'exécuter les extensions de manière compatible, et n'introduit pas de modifications de <ph name="API" /> pour <ph name="PRODUCT_NAME" /> 79 (comme indiqué dans le <ph name="WEB_REQUEST_API_MANUAL" />).
+      Si aucun paramètre d'atténuation n'est indiqué dans la liste, <ph name="PRODUCT_NAME" /> essaie d'exécuter les extensions de manière compatible, et n'introduit pas de modifications de <ph name="API" /> pour <ph name="PRODUCT_NAME" /> 79 (comme indiqué à la page <ph name="WEB_REQUEST_API_MANUAL" />).
 
       Si cette liste est définie pour contenir le nom d'en-têtes de requêtes <ph name="HTTP" />, les vérifications <ph name="CORS" /> ignorent les en-têtes répertoriés en plus d'être atténuées pour les extensions.
 
@@ -3230,10 +3230,10 @@ Si l'option "Forcé" est sélectionnée, les pages peuvent être ouvertes UNIQUE
 <translation id="6145799962557135888">Permet de définir une liste de formats d'URL spécifiant les sites qui sont autorisés à exécuter JavaScript. 
 
 Si cette règle n'est pas configurée, la valeur par défaut globale sera utilisée pour tous les sites à partir de la règle "DefaultJavaScriptSetting", si elle est définie, ou à défaut, à partir de la configuration personnelle de l'utilisateur.</translation>
-<translation id="614616930188030377">Les modèles de cette liste sont rapprochés de la source de sécurité de l'URL à l'origine de la demande.
+<translation id="614616930188030377">Les modèles de cette liste sont comparés à la source de sécurité de l'URL à l'origine de la demande.
       En cas de correspondance ou si chrome://flags/#enable-webrtc-hide-local-ips-with-mdns est désactivé, les candidats WebRTC ICE affichent les adresses IP locales.
       Sinon, les adresses IP locales sont masquées avec les noms d'hôte mDNS.
-      Veuillez noter que cette règle affaiblit la protection des adresses IP locales, dans le cas où celle-ci serait requise par les administrateurs.</translation>
+      Veuillez noter que cette règle affaiblit la protection des adresses IP locales, dans le cas où celle-ci serait requise par les administrateurs.</translation>
 <translation id="614662973812186053">Cette règle permet également de contrôler la collecte des données d'utilisation et de diagnostic sur les appareils Android.</translation>
 <translation id="6153048425064249648">Cette règle permet de contrôler la création de rapports dans le cloud pour <ph name="PRODUCT_NAME" />, qui transmet des informations sur le fonctionnement du navigateur à la console d'administration Google.
 
@@ -3285,7 +3285,7 @@ Si cette règle n'est pas configurée, la valeur par défaut globale sera utilis
 
       Si cette règle est définie sur "False" ou si elle n'est pas configurée, la nouvelle mise en œuvre utilisée peut causer des problèmes de compatibilité spécifiques à l'entreprise.
 
-      Cette règle sera supprimée après quelques jalons.
+      Cette règle sera supprimée après quelques étapes intermédiaires.
 
       Pour en savoir plus sur <ph name="CORS" />, consultez la page <ph name="CORS_HELP_URL" />.</translation>
 <translation id="6178075938488052838">Cette règle permet de contrôler les utilisateurs autorisés à démarrer une session <ph name="PRODUCT_OS_NAME" />. Elle n'empêche pas les utilisateurs de se connecter à un autre compte Google sur un appareil Android. Pour ce faire, configurez la règle <ph name="ACCOUNT_TYPES_WITH_MANAGEMENT_DISABLED_CLOUDDPC_POLICY_NAME" /> propre à Android via <ph name="ARC_POLICY_POLICY_NAME" />.</translation>
