@@ -439,6 +439,10 @@ bool X11Window::IsTranslucentWindowOpacitySupported() const {
   return ui::XVisualManager::GetInstance()->ArgbVisualAvailable();
 }
 
+void X11Window::LowerXWindow() {
+  XWindow::LowerWindow();
+}
+
 bool X11Window::CanDispatchEvent(const PlatformEvent& xev) {
 #if defined(USE_X11)
   return XWindow::IsTargetedBy(*xev);
