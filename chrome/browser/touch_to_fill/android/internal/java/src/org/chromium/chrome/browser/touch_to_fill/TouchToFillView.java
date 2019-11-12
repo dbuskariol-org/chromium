@@ -82,7 +82,7 @@ class TouchToFillView implements BottomSheet.BottomSheetContent {
         if (isVisible) {
             mBottomSheetController.getBottomSheet().addObserver(mBottomSheetObserver);
             mBottomSheetController.requestShowContent(this, false);
-        } else {
+        } else if (mBottomSheetController.isSheetOpen()) {
             mBottomSheetController.hideContent(this, false);
         }
     }
