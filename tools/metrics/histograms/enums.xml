@@ -18495,6 +18495,7 @@ Called by update_net_error_codes.py.-->
   <int value="634" label="InsecureContentAllowedForUrls"/>
   <int value="635" label="InsecureContentBlockedForUrls"/>
   <int value="640" label="WebRtcLocalIpsAllowedUrls"/>
+  <int value="645" label="ClickToCallEnabled"/>
 </enum>
 
 <enum name="EnterprisePolicyInvalidations">
