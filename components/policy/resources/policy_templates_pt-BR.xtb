@@ -3124,9 +3124,9 @@ Se esta política não for definida, qualquer plug-in que corresponder aos padr�
 <translation id="6141402445226505817">Sempre usar detecção de fuso horário aproximada</translation>
 <translation id="6145799962557135888">Permite que você defina uma lista de padrões de URL que especificam sites com permissão para executar o JavaScript. Se esta política for deixada sem definição, o valor padrão global será utilizado para todos os sites a partir da política "DefaultJavaScriptSetting", caso esta tenha sido definida, ou a partir das configurações pessoais do usuário, caso não tenha sido definida.</translation>
 <translation id="614616930188030377">Os padrões desta lista serão comparados com a origem de segurança do URL solicitante.
-      Se uma correspondência for encontrada ou se a opção chrome://flags/#enable-webrtc-hide-local-ips-with-mdns estiver desativada, os endereços IP locais serão mostrados nos candidatos ICE do WebRTC.
-      Caso contrário, os endereços IP locais serão ocultados com os nomes de host de mDNS.
-      Observe que esta política enfraquece a proteção dos IPs locais, se exigida pelos administradores.</translation>
+      Se uma correspondência for encontrada ou a opção chrome://flags/#enable-webrtc-hide-local-ips-with-mdns estiver desativada, os endereços IP locais serão mostrados nos candidatos ICE do WebRTC.
+      Caso contrário, os endereços IP locais serão ocultos com os nomes de host de mDNS.
+      Observe que, se exigida pelos administradores, esta política enfraquece a proteção dos IPs locais.</translation>
 <translation id="614662973812186053">Esta política também controla a coleta de dados de uso e diagnóstico do Android.</translation>
 <translation id="6153048425064249648">Esta política controla a geração de relatórios em nuvem do <ph name="PRODUCT_NAME" />, que faz upload de informações sobre a operação do navegador no Google Admin Console.
 
