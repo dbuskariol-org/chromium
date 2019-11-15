@@ -50,9 +50,10 @@ void BluetoothAdapterFactoryWrapper::AcquireAdapter(
   DCHECK(!GetAdapter(observer));
 
   AddAdapterObserver(observer);
-  if (adapter_) {
+  if (adapter_.get()) {
     base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(std::move(callback), adapter_));
+        FROM_HERE,
+        base::BindOnce(std::move(callback), base::Unretained(adapter_.get())));
     return;
   }
 
@@ -98,7 +99,7 @@ void BluetoothAdapterFactoryWrapper::OnGetAdapter(
   DCHECK(thread_checker_.CalledOnValidThread());
 
   set_adapter(adapter);
-  std::move(continuation).Run(adapter_);
+  std::move(continuation).Run(adapter_.get());
 }
 
 bool BluetoothAdapterFactoryWrapper::HasAdapter(
