@@ -902,6 +902,15 @@
           如果啟用或不設定這項政策，使用某些指令列標記啟動 Chrome 時，系統會顯示安全性警告。
 
           在 Windows 上，這項政策僅適用於已加入 <ph name="MS_AD_NAME" /> 網域的 Windows 執行個體，或是已註冊裝置管理服務的 Windows 10 專業版或企業版執行個體。</translation>
+<translation id="2480971699591919564">啟用「點選通話」功能，讓登入 Google 帳戶的使用者可以將電話號碼從 Chrome 桌面傳送到 Android 裝置。詳情請參閱說明中心文章：https://support.google.com/chrome/answer/9430554?hl=zh-TW。
+
+      如果將這項政策設為啟用，Chrome 使用者便可以將電話號碼傳送到 Android 裝置。
+
+      如果將這項政策設為停用，Chrome 使用者則無法將電話號碼傳送到 Android 裝置。
+
+      設好這項政策後，使用者即無法變更或覆寫設定。
+
+      如果不設定這項政策，系統在預設狀態下會啟用「點選通話」功能。</translation>
 <translation id="2482676533225429905">內建訊息傳遞</translation>
 <translation id="2483146640187052324">無論使用任何網路連線，皆預測網路動作</translation>
 <translation id="2484208301968418871">這項政策可決定是否套用安全網站網址篩選器。
@@ -1881,6 +1890,7 @@
 <translation id="4075864623710596000">這份清單中指定的主機名稱會從 HTTP 嚴格傳輸安全性政策檢查作業中排除，該檢查可能會將要求從 HTTP 升級為 HTTPS。這項政策只允許單一標籤主機名稱。主機名稱必須標準化：任何 IDN 都必須轉換為單一標籤格式，且所有 ASCII 字母都必須使用小寫。這項政策只適用於指定的主機名稱，不適用於指定主機名稱的子網域。</translation>
 <translation id="408029843066770167">允許向 Google 時間服務傳送查詢</translation>
 <translation id="408076456549153854">允許登入瀏覽器</translation>
+<translation id="4082498585300984671">啟用「點選通話」功能</translation>
 <translation id="40853027210512570">覆寫 <ph name="PRODUCT_NAME" /> 的預設印表機選取規則。
 
       這項政策可讓你決定在 <ph name="PRODUCT_NAME" /> 中首次透過設定檔使用列印功能時，選取預設印表機的規則。

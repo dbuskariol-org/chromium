@@ -927,6 +927,15 @@ Google에 전송됩니다.  사용 중지되면 이 정보가 Google에 전송�
           이 정책이 사용되거나 설정되지 않으면 Chrome을 실행할 때 특정 명령줄 플래그가 사용되면 보안 경고가 표시됩니다.
 
           Windows의 경우 이 정책은 <ph name="MS_AD_NAME" /> 도메인에 참여하는 Windows 인스턴스 또는 기기 관리에 등록된 Windows 10 Pro/Enterprise 인스턴스에서만 사용할 수 있습니다.</translation>
+<translation id="2480971699591919564">사용자가 로그인되어 있으면 Chrome 데스크톱에서 Android 기기로 전화번호를 전송하도록 허용하는 클릭 투 콜 기능을 사용 설정합니다. 자세한 내용은 고객센터 도움말을 참고하세요. https://support.google.com/chrome/answer/9430554?hl=ko
+
+      이 정책이 사용 설정된 경우 Chrome 사용자가 Android 기기로 전화번호를 전송할 수 있습니다.
+
+      사용 중지된 경우 Chrome 사용자가 Android 기기로 전화번호를 전송할 수 없습니다.
+
+      정책이 설정되면 사용자가 이를 변경하거나 재정의할 수 없습니다.
+
+      정책을 설정하지 않으면 클릭 투 콜 기능이 기본적으로 사용 설정됩니다.</translation>
 <translation id="2482676533225429905">기본 메시지</translation>
 <translation id="2483146640187052324">모든 네트워크 연결의 네트워크 활동 예측</translation>
 <translation id="2484208301968418871">이 정책은 SafeSites URL 필터 적용 방식을 제어합니다.
@@ -1950,6 +1959,7 @@ Google에 전송됩니다.  사용 중지되면 이 정보가 Google에 전송�
 <translation id="4075864623710596000">이 목록에 지정된 호스트 이름은 http에서 https로 요청을 업그레이드할 가능성이 있는 HSTS 정책 검사에서 제외됩니다. 이 정책에는 단일 라벨 호스트 이름만 허용됩니다. 호스트 이름은 표준화되어야 합니다. 모든 IDN은 A 라벨 형식으로 변환되어야 하며 모든 ASCII 문자는 소문자여야 합니다. 이 정책은 지정된 특정 호스트 이름에만 적용되며 지정된 이름의 하위 도메인에는 적용되지 않습니다.</translation>
 <translation id="408029843066770167">Google 시간 서비스에 쿼리 허용</translation>
 <translation id="408076456549153854">브라우저 로그인 사용</translation>
+<translation id="4082498585300984671">클릭 투 콜 기능 사용 설정</translation>
 <translation id="40853027210512570"><ph name="PRODUCT_NAME" /> 기본 프린터 선택 규칙을 재정의합니다.
 
       이 정책은 프로필을 통해 인쇄 기능을 처음으로 사용할 때 <ph name="PRODUCT_NAME" />에서 기본 프린터를 선택하는 규칙을 결정합니다.
