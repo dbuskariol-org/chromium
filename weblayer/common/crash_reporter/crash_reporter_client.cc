@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "weblayer/common/crash_reporter_client.h"
+#include "weblayer/common/crash_reporter/crash_reporter_client.h"
 
 #include <stdint.h>
 
@@ -34,7 +34,7 @@ class CrashReporterClientImpl : public crash_reporter::CrashReporterClient {
   void GetProductNameAndVersion(std::string* product_name,
                                 std::string* version,
                                 std::string* channel) override {
-    *version = PRODUCT_VERSION;
+    *version = version_info::GetVersionNumber();
     *product_name = "WebLayer";
     *channel =
         version_info::GetChannelString(version_info::android::GetChannel());

@@ -26,6 +26,7 @@ import org.chromium.weblayer.LoadError;
 import org.chromium.weblayer.Navigation;
 import org.chromium.weblayer.NavigationCallback;
 import org.chromium.weblayer.NavigationController;
+import org.chromium.weblayer.NavigationState;
 import org.chromium.weblayer.shell.InstrumentationActivity;
 
 import java.util.ArrayList;
@@ -52,14 +53,18 @@ public class NavigationTest {
         public static class NavigationCallbackHelper extends CallbackHelper {
             private Uri mUri;
             private boolean mIsSameDocument;
+            private int mHttpStatusCode;
             private List<Uri> mRedirectChain;
             private @LoadError int mLoadError;
+            private @NavigationState int mNavigationState;
 
             public void notifyCalled(Navigation navigation) {
                 mUri = navigation.getUri();
                 mIsSameDocument = navigation.isSameDocument();
+                mHttpStatusCode = navigation.getHttpStatusCode();
                 mRedirectChain = navigation.getRedirectChain();
                 mLoadError = navigation.getLoadError();
+                mNavigationState = navigation.getState();
                 notifyCalled();
             }
 
@@ -86,6 +91,15 @@ public class NavigationTest {
                 waitForCallback(currentCallCount);
                 assertEquals(mUri.toString(), uri);
                 assertEquals(mLoadError, loadError);
+            }
+
+            public int getHttpStatusCode() {
+                return mHttpStatusCode;
+            }
+
+            @NavigationState
+            public int getNavigationState() {
+                return mNavigationState;
             }
         }
 
@@ -188,6 +202,7 @@ public class NavigationTest {
         mCallback.onReadyToCommitCallback.assertCalledWith(curCommittedCount, URL2);
         mCallback.onCompletedCallback.assertCalledWith(curCompletedCount, URL2);
         mCallback.onFirstContentfulPaintCallback.waitForCallback(curOnFirstContentfulPaintCount);
+        assertEquals(mCallback.onCompletedCallback.getHttpStatusCode(), 200);
     }
 
     @Test
@@ -365,6 +380,8 @@ public class NavigationTest {
 
         mCallback.onCompletedCallback.assertCalledWith(
                 curCompletedCount, url, LoadError.HTTP_CLIENT_ERROR);
+        assertEquals(mCallback.onCompletedCallback.getHttpStatusCode(), 404);
+        assertEquals(mCallback.onCompletedCallback.getNavigationState(), NavigationState.COMPLETE);
     }
 
     private void setNavigationCallback(InstrumentationActivity activity) {
