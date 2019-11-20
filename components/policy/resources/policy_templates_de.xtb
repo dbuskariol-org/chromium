@@ -2325,11 +2325,6 @@ Wenn die Richtlinie auf "FALSE" gesetzt oder nicht festgelegt wird, führt die T
           Wenn Sie diese Richtlinie konfigurieren, kann sie vom Nutzer nicht geändert oder überschrieben werden.
 
           Ist die Richtlinie nicht konfiguriert, ist "Mono-Audio" anfangs deaktiviert, kann jedoch vom Nutzer jederzeit aktiviert werden.</translation>
-<translation id="4759650396863318477">Hiermit kann der Zeitraum in Millisekunden festgelegt werden, in dem Nutzer benachrichtigt werden, dass <ph name="PRODUCT_NAME" /> oder <ph name="PRODUCT_OS_NAME" /> für ein Update neu gestartet werden muss.
-
-      Während dieses Zeitraums werden Nutzer wiederholt über die Notwendigkeit eines Updates informiert. Auf <ph name="PRODUCT_OS_NAME" />-Geräten erscheint entsprechend der Richtlinie "<ph name="RELAUNCH_HEADS_UP_PERIOD_POLICY_NAME" />" eine Neustartbenachrichtigung in der Taskleiste. In <ph name="PRODUCT_NAME" />-Browsern ändert sich das App-Menü, sobald ein Drittel des Benachrichtigungszeitraums abgelaufen ist, um zu zeigen, dass ein Neustart nötig ist. Die Farbe dieser Benachrichtigung ändert sich, sobald zwei Drittel des Benachrichtigungszeitraums vergangen sind. Wenn der ganze Zeitraum abgelaufen ist, ändert sich die Farbe erneut. Für die zusätzlichen Benachrichtigungen, die über die Richtlinie "<ph name="RELAUNCH_NOTIFICATION_POLICY_NAME" />" aktiviert werden, gilt derselbe Zeitplan.
-
-      Wenn die Richtlinie nicht konfiguriert ist, kommt für <ph name="PRODUCT_OS_NAME" />-Geräte der standardmäßige Zeitraum von 345.600.000 Millisekunden (vier Tage) zum Einsatz. Für <ph name="PRODUCT_NAME" />-Geräte sind es 604.800.000 (eine Woche).</translation>
 <translation id="4771144269610910963">Mit dieser Richtlinie können Sie den Tiefenscan von Nutzerdownloads mit Safe Browsing verwalten. Wenn sie nicht konfiguriert oder auf die Standardeinstellung "Dateien nicht scannen" festgelegt wird, werden Downloads von Nutzern nicht von Safe Browsing gescannt.
 
       Ist "Nutzerdownloads zum Scannen senden" festgelegt, werden die Downloads von Nutzern über das Netzwerk zum Scannen auf Malware an Safe Browsing gesendet.
@@ -4241,9 +4236,6 @@ Auf nicht verwalteten Geräten dürfen virtuelle Maschinen ausgeführt werden.</
       Falls für die Richtlinie "True" ausgewählt ist, verwendet das Gerät das 24-Stunden-Uhrzeitformat. Ist für die Richtlinie "False" konfiguriert, wird das 12-Stunden-Uhrzeitformat verwendet.
 
       Ist die Richtlinie nicht konfiguriert, wird standardmäßig das 24-Stunden-Uhrzeitformat verwendet.</translation>
-<translation id="8113421140338762630">Diese Richtlinie ermöglicht, den Zeitraum zwischen der ersten Benachrichtigung zum Neustart eines <ph name="PRODUCT_OS_NAME" />-Geräts, um eine ausstehende Aktualisierung anzuwenden, und dem Ende des durch die Richtlinie "<ph name="RELAUNCH_NOTIFICATION_PERIOD_POLICY_NAME" />" vorgegebenen Zeitraums in Millisekunden festzulegen.
-
-      Wenn sie nicht konfiguriert wird, kommt der standardmäßige Zeitraum von 86.400.000 Millisekunden (ein Tag) für <ph name="PRODUCT_OS_NAME" />-Geräte zum Einsatz.</translation>
 <translation id="8114382167597081590">Eingeschränkten Modus auf YouTube nicht erzwingen</translation>
 <translation id="8118665053362250806">Cache-Größe für Mediendatenträger festlegen</translation>
 <translation id="8124468781472887384">Richtlinie für den Zugriff auf die Konfiguration von an Geräte gebundenen Druckern.</translation>

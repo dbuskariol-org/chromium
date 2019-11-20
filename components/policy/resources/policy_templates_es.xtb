@@ -2376,11 +2376,6 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
           Si se asigna un valor a esta política, los usuarios no podrán cambiarla ni anularla.
 
           Si no se le asigna ningún valor, el audio en mono se inhabilitará al inicio, pero el usuario podrá habilitarlo en cualquier momento.</translation>
-<translation id="4759650396863318477">Permite establecer el periodo de tiempo (en milisegundos) durante el que los usuarios recibirán una notificación informándoles de que deben reiniciar <ph name="PRODUCT_NAME" /> o un dispositivo <ph name="PRODUCT_OS_NAME" /> para aplicar una actualización pendiente.
-
-      Durante este periodo de tiempo, se informará de forma reiterada al usuario de que la actualización es necesaria. En el caso de los dispositivos <ph name="PRODUCT_OS_NAME" />, se mostrará una notificación de reinicio en la bandeja del sistema de acuerdo con la política <ph name="RELAUNCH_HEADS_UP_PERIOD_POLICY_NAME" />. En el caso de los navegadores <ph name="PRODUCT_NAME" />, el menú de aplicaciones cambiará para indicar que es necesario reiniciar cuando haya transcurrido un tercio del periodo de notificación. Esta notificación cambiará de color cuando hayan transcurrido dos tercios del periodo de notificación y, de nuevo, cuando este periodo haya finalizado. Las notificaciones adicionales habilitadas por la política <ph name="RELAUNCH_NOTIFICATION_POLICY_NAME" /> siguen esta misma programación.
-
-      Si no se asigna ningún valor, se usará el periodo predeterminado de 345.600.000 milisegundos (cuatro días) para los dispositivos <ph name="PRODUCT_OS_NAME" /> y de 604.800.000 milisegundos (una semana) para <ph name="PRODUCT_NAME" />.</translation>
 <translation id="4771144269610910963">Esta política controla el análisis profundo de las descargas de usuario con Navegación Segura. Si no se le asigna ningún valor o se le asigna el valor predeterminado "No analizar archivos", las descargas de usuario no se analizarán con Navegación Segura.
 
       Si se le asigna el valor "Enviar descargas de usuario para analizarlas", las descargas de usuario se enviarán a Navegación Segura a través de la red para realizar un análisis de software malicioso.
@@ -4372,9 +4367,6 @@ Esta política configura el formato de reloj que se debe utilizar en la pantalla
 Si la política está establecida en True, el dispositivo utilizará un formato de reloj de 24 horas. Si la política está establecida en False, el dispositivo utilizará el formato de reloj de 12 horas.
 
 Si no se establece la política, el dispositivo tendrá un formato de reloj de 24 horas de forma predeterminada.</translation>
-<translation id="8113421140338762630">Permite definir el periodo (en milisegundos) que transcurre entre la primera notificación que avisa de que un dispositivo <ph name="PRODUCT_OS_NAME" /> debe reiniciarse para aplicar una actualización pendiente y la finalización del periodo especificado en la política <ph name="RELAUNCH_NOTIFICATION_PERIOD_POLICY_NAME" />.
-
-      Si no se le asigna ningún valor, se usará el periodo predeterminado, que es de 86.400.000 milisegundos (un día), para los dispositivos <ph name="PRODUCT_OS_NAME" />.</translation>
 <translation id="8114382167597081590">No aplicar el modo restringido en YouTube</translation>
 <translation id="8118665053362250806">Establecer tamaño de caché de disco de medios</translation>
 <translation id="8124468781472887384">Política de acceso a la configuración de las impresoras de dispositivos.</translation>

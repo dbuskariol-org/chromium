@@ -2303,11 +2303,6 @@
           設定這項政策後，使用者即無法變更或覆寫。
 
           如果不設定這項政策，系統預設會停用單聲道音訊，但使用者隨時可以啟用這項功能。</translation>
-<translation id="4759650396863318477">你可以設定時間範圍 (以毫秒為單位)，系統會在這段時間內通知使用者必須重新啟動 <ph name="PRODUCT_NAME" /> 或 <ph name="PRODUCT_OS_NAME" />裝置，才能套用未安裝的更新。
-
-      在你設定的時間範圍內，使用者會持續收到更新通知。在 <ph name="PRODUCT_OS_NAME" />裝置上，系統會根據 <ph name="RELAUNCH_HEADS_UP_PERIOD_POLICY_NAME" /> 政策，在系統匣中顯示重新啟動通知。在 <ph name="PRODUCT_NAME" /> 瀏覽器中，當通知時間過了三分之一後，應用程式選單會有所變更，表示瀏覽器需要重新啟動。這項通知會在時間過了三分之二後變更顏色，並於時間結束後再次變色。由 <ph name="RELAUNCH_NOTIFICATION_POLICY_NAME" /> 政策啟用的其他通知也會遵循相同的時間表。
-
-      如果不設定，<ph name="PRODUCT_OS_NAME" />裝置的預設通知期間為 345600000 毫秒 (四天)，<ph name="PRODUCT_NAME" /> 的預設通知期間則為 604800000 毫秒 (一週)。</translation>
 <translation id="4771144269610910963">這項政策可控管安全瀏覽功能是否要對使用者下載的內容進行深度掃描。如果不設定這項政策，或設為預設的「不要掃描檔案」，安全瀏覽功能將不會掃描使用者下載的內容。
 
       如果將這項政策設為「傳送使用者下載內容以供掃描」，系統會將使用者下載的內容透過網路傳送給安全瀏覽功能，進行惡意軟體掃描。
@@ -4203,9 +4198,6 @@
       如果你將這項政策設為 True，裝置將使用 24 小時制時鐘格式；如果設為 False，裝置將使用 12 小時制時鐘格式。
 
       如未設定這項政策，裝置在預設狀態下會使用 24 小時制時鐘格式。</translation>
-<translation id="8113421140338762630">這項政策可讓你設定時間範圍 (以毫秒為單位)，指定從系統第一次通知使用者重新啟動 <ph name="PRODUCT_OS_NAME" />裝置以套用待處理的更新開始，到 <ph name="RELAUNCH_NOTIFICATION_PERIOD_POLICY_NAME" /> 政策指定的結束時間為止，兩者之間的時間範圍。
-
-      如果未設定，<ph name="PRODUCT_OS_NAME" />裝置會使用 86400000 毫秒 (一天) 做為預設時間範圍。</translation>
 <translation id="8114382167597081590">不強制執行 YouTube 嚴格篩選模式</translation>
 <translation id="8118665053362250806">設定媒體磁碟快取大小</translation>
 <translation id="8124468781472887384">裝置印表機設定存取權政策。</translation>

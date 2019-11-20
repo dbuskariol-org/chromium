@@ -2319,11 +2319,6 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
           Jika Anda menetapkan kebijakan ini, pengguna tidak dapat mengubah atau menggantinya.
 
           Jika kebijakan ini tidak ditetapkan, audio mono mula-mula akan dinonaktifkan, tetapi dapat diaktifkan oleh pengguna kapan saja.</translation>
-<translation id="4759650396863318477">Memungkinkan Anda menyetel jangka waktu, dalam milidetik, untuk memberi tahu pengguna bahwa <ph name="PRODUCT_NAME" /> harus diluncurkan ulang atau bahwa perangkat <ph name="PRODUCT_OS_NAME" /> harus dimulai ulang untuk menerapkan update yang tertunda.
-
-      Selama jangka waktu ini, pengguna akan berulang kali diberi tahu tentang perlunya update. Untuk perangkat <ph name="PRODUCT_OS_NAME" />, notifikasi mulai ulang akan muncul di baki sistem sesuai dengan kebijakan <ph name="RELAUNCH_HEADS_UP_PERIOD_POLICY_NAME" />. Untuk browser <ph name="PRODUCT_NAME" />, menu aplikasi berubah untuk menunjukkan bahwa peluncuran ulang diperlukan setelah sepertiga periode notifikasi berlalu. Warna notifikasi akan berubah setelah dua pertiga periode notifikasi berlalu, dan berubah lagi setelah seluruh periode notifikasi berlalu. Notifikasi tambahan yang diaktifkan oleh kebijakan <ph name="RELAUNCH_NOTIFICATION_POLICY_NAME" /> mengikuti jadwal yang sama seperti ini.
-
-      Jika tidak disetel, periode default 345600000 milidetik (empat hari) digunakan untuk perangkat <ph name="PRODUCT_OS_NAME" /> dan 604800000 milidetik (satu minggu) untuk <ph name="PRODUCT_NAME" />.</translation>
 <translation id="4771144269610910963">Kebijakan ini mengontrol pemindaian mendalam pada hasil download pengguna dengan Safe Browsing. Jika tidak ditetapkan, atau ditetapkan ke default, 'Jangan pindai file', hasil download pengguna tidak akan dipindai oleh Safe Browsing.
 
       Jika ditetapkan ke 'Kirim hasil download pengguna untuk pemindaian', hasil download pengguna akan dikirimkan melalui jaringan ke Safe Browsing untuk pemindaian malware.
@@ -4227,9 +4222,6 @@ Cara yang diharapkan terkait penggunaan kebijakan ini adalah merotasi konfiguras
       Jika kebijakan ini disetel ke true, perangkat akan menggunakan format 24 jam. Jika kebijakan disetel ke false, perangkat akan menggunakan format 12 jam.
 
       Jika kebijakan ini tidak disetel, perangkat akan menggunakan format default 24 jam.</translation>
-<translation id="8113421140338762630">Memungkinkan Anda menentukan jangka waktu, dalam milidetik, antara notifikasi pertama bahwa perangkat <ph name="PRODUCT_OS_NAME" /> harus dimulai ulang untuk menerapkan update tertunda dan akhir dari jangka waktu yang ditentukan oleh kebijakan <ph name="RELAUNCH_NOTIFICATION_PERIOD_POLICY_NAME" />.
-
-      Jika tidak ditetapkan, jangka waktu default 86.400.000 milidetik (satu hari) akan digunakan untuk perangkat <ph name="PRODUCT_OS_NAME" />.</translation>
 <translation id="8114382167597081590">Jangan terapkan Mode Terbatas di YouTube</translation>
 <translation id="8118665053362250806">Menyetel ukuran cache disk media</translation>
 <translation id="8124468781472887384">Kebijakan akses konfigurasi printer untuk perangkat.</translation>

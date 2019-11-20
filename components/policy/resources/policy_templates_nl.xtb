@@ -2366,11 +2366,6 @@
           Als je dit beleid instelt, kunnen gebruikers het niet wijzigen of overschrijven.
 
           Als dit beleid niet is ingesteld, is de functie voor monogeluid in eerste instantie uitgeschakeld, maar kan de gebruiker deze op elk gewenst moment inschakelen.</translation>
-<translation id="4759650396863318477">Hiermee kun je de periode in milliseconden instellen waarin gebruikers een melding ontvangen dat <ph name="PRODUCT_NAME" /> opnieuw moet worden gestart of dat een <ph name="PRODUCT_OS_NAME" />-apparaat opnieuw moet worden opgestart om een in behandeling zijnde update uit te voeren.
-
-      Gedurende deze periode krijgt de gebruiker regelmatig de melding dat er een update moet worden uitgevoerd. In het geval van <ph name="PRODUCT_OS_NAME" />-apparaten wordt een melding over opnieuw opstarten weergegeven in het systeemvak, in overeenstemming met het <ph name="RELAUNCH_HEADS_UP_PERIOD_POLICY_NAME" />-beleid. In het geval van <ph name="PRODUCT_NAME" />-browsers wordt het app-menu gewijzigd om aan te geven dat er opnieuw moet worden opgestart zodra een derde van de meldingsperiode is verstreken. Deze melding krijgt een andere kleur zodra twee derde van de meldingsperiode is verstreken en dit gebeurt nogmaals als de volledige periode is verstreken. Hetzelfde schema wordt gehanteerd voor aanvullende meldingen die door het <ph name="RELAUNCH_NOTIFICATION_POLICY_NAME" />-beleid zijn ingeschakeld.
-
-      Als dit beleid niet is ingesteld, wordt de standaardperiode van 345.600.000 milliseconden (vier dagen) voor <ph name="PRODUCT_OS_NAME" />-apparaten en een periode van 604.800.000 milliseconden (één week) voor <ph name="PRODUCT_NAME" /> gebruikt.</translation>
 <translation id="4771144269610910963">Met dit beleid worden uitgebreide scans van gebruikersdownloads met Safe Browsing beheerd. Als dit beleid niet is ingesteld of op de standaardinstelling 'Bestanden niet scannen' staat, worden gebruikersdownloads niet gescand door Safe Browsing.
 
       Als 'Gebruikersdownloads sturen voor scannen' is ingesteld, worden gebruikersdownloads via het netwerk naar Safe Browsing gestuurd om ze te scannen op malware.
@@ -4345,9 +4340,6 @@ Geheugengegevens worden in alle gevallen aan de pagina gerapporteerd, afgezien v
       Als het beleid wordt ingesteld op 'True', gebruikt het apparaat een 24-uursnotatie. Als het beleid wordt ingesteld op 'False', gebruikt het apparaat een 12-uursnotatie.
 
       Als dit beleid niet wordt ingesteld, gebruikt het apparaat standaard een 24-uursnotatie.</translation>
-<translation id="8113421140338762630">Hiermee kun je de periode in milliseconden instellen tussen de eerste melding dat een <ph name="PRODUCT_OS_NAME" />-apparaat opnieuw moet worden gestart om een update in behandeling toe te passen en het eind van de periode zoals vermeld in het <ph name="RELAUNCH_NOTIFICATION_PERIOD_POLICY_NAME" />-beleid.
-
-      Als dit beleid niet is ingesteld, wordt de standaardperiode van 86400000 milliseconden (één dag) gebruikt voor <ph name="PRODUCT_OS_NAME" />-apparaten.</translation>
 <translation id="8114382167597081590">'Beperkte modus' niet afdwingen op YouTube</translation>
 <translation id="8118665053362250806">Grootte voor mediaschijfcache instellen</translation>
 <translation id="8124468781472887384">Toegangsbeleid voor configuratie van apparaatprinters.</translation>
