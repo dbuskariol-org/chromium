@@ -48,6 +48,7 @@ Polymer({
 
   listeners: {
     'add-automatic-printer': 'onAddAutomaticPrinter_',
+    'query-discovered-printer': 'onQueryDiscoveredPrinter_',
   },
 
   /** @override */
@@ -100,6 +101,27 @@ Polymer({
   },
 
   /**
+   * @param {!CustomEvent<{item: !PrinterListEntry}>} e
+   * @private
+   */
+  onQueryDiscoveredPrinter_: function(e) {
+    const item = e.detail.item;
+    this.setActivePrinter_(item);
+
+    // This is a workaround to ensure type safety on the params of the casted
+    // function. We do this because the closure compiler does not work well with
+    // rejected js promises.
+    const queryDiscoveredPrinterFailed = /** @type {!Function}) */(
+        this.onQueryDiscoveredPrinterFailed_.bind(this));
+    settings.CupsPrintersBrowserProxyImpl.getInstance()
+        .addDiscoveredPrinter(item.printerInfo.printerId)
+        .then(
+            this.onQueryDiscoveredPrinterSucceeded_.bind(this,
+                item.printerInfo.printerName),
+            queryDiscoveredPrinterFailed);
+  },
+
+  /**
    * Retrieves the index of |item| in |nearbyPrinters_| and sets that printer as
    * the active printer.
    * @param {!PrinterListEntry} item
@@ -140,7 +162,29 @@ Polymer({
   },
 
   /**
-   * @return {boolean} Returns true if noPrinterMessage should be visible.
+   * Handler for queryDiscoveredPrinter success.
+   * @param {string} printerName
+   * @param {!PrinterSetupResult} result
+   * @private
+   */
+  onQueryDiscoveredPrinterSucceeded_: function(printerName, result) {
+    this.fire(
+        'show-cups-printer-toast',
+        {resultCode: result, printerName: printerName});
+  },
+
+  /**
+   * Handler for queryDiscoveredPrinter failure.
+   * @param {!CupsPrinterInfo} printer
+   * @private
+   */
+  onQueryDiscoveredPrinterFailed_: function(printer) {
+    this.fire('open-manufacturer-model-dialog-for-specified-printer',
+        {item: /** @type {CupsPrinterInfo} */(printer)});
+  },
+
+  /**
+   * @return {boolean} Returns true if the no search message should be visible.
    * @private
    */
   shouldShowNoNearbyPrinterMessage_: function() {
