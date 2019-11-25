@@ -163,8 +163,8 @@ public final class WebLayerImpl extends IWebLayer.Stub {
     }
 
     @Override
-    public IProfile getProfile(String profilePath) {
-        return mProfileManager.getProfile(profilePath);
+    public IProfile getProfile(String profileName) {
+        return mProfileManager.getProfile(profileName);
     }
 
     @Override
