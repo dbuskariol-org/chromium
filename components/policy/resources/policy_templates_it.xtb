@@ -4339,7 +4339,7 @@ Se attivi questa impostazione, le pagine non saranno sottoposte a scansione per 
 Se disattivi questa impostazione, le pagine saranno sottoposte a scansione per i metatag.
 
 Se questa norma non viene impostata, le pagine saranno sottoposte a scansione per i metatag.</translation>
-<translation id="829641334878002866">Ti consente di impostare il periodo di tempo, in millisecondi, tra la prima notifica che informa che un dispositivo <ph name="PRODUCT_OS_NAME" /> deve essere riavviato per applicare un aggiornamento in sospeso e la fine del periodo di tempo specificato dal criterio <ph name="RELAUNCH_NOTIFICATION_PERIOD_POLICY_NAME" />.
+<translation id="829641334878002866">Ti consente di impostare il periodo di tempo, in millisecondi, tra la prima notifica relativa alla necessità di riavviare un dispositivo <ph name="PRODUCT_OS_NAME" /> per applicare un aggiornamento in sospeso e la fine del periodo di tempo specificato dal criterio <ph name="RELAUNCH_NOTIFICATION_PERIOD_POLICY_NAME" />.
 
       Se non è impostato, per i dispositivi <ph name="PRODUCT_OS_NAME" /> viene utilizzato il periodo predefinito di 259200000 millisecondi (tre giorni).</translation>
 <translation id="8300455783946254851">Consente di disattivare la sincronizzazione di Google Drive nell'app File di <ph name="PRODUCT_OS_NAME" /> utilizzando una connessione alla rete dati quando questa norma viene impostata su True. In tal caso, i dati vengono sincronizzati con Google Drive solo in presenza di una connessione alla rete Wi-Fi o Ethernet.
