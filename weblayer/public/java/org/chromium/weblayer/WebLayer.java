@@ -45,6 +45,9 @@ public final class WebLayer {
 
     private static ListenableFuture<WebLayer> sFuture;
 
+    @Nullable
+    private static ClassLoader sRemoteClassLoader;
+
     private final IWebLayer mImpl;
 
     /**
@@ -88,7 +91,7 @@ public final class WebLayer {
             try {
                 // Just in case the app passed an Activity context.
                 appContext = appContext.getApplicationContext();
-                ClassLoader remoteClassLoader = createRemoteClassLoader(appContext);
+                ClassLoader remoteClassLoader = getOrCreateRemoteClassLoader(appContext);
                 IWebLayer iWebLayer = connectToWebLayerImplementation(remoteClassLoader);
                 sFuture = new WebLayerLoadFuture(iWebLayer, appContext);
             } catch (Exception e) {
@@ -227,14 +230,18 @@ public final class WebLayer {
     /**
      * Creates a ClassLoader for the remote (weblayer implementation) side.
      */
-    static ClassLoader createRemoteClassLoader(Context appContext)
+    static ClassLoader getOrCreateRemoteClassLoader(Context appContext)
             throws PackageManager.NameNotFoundException, ReflectiveOperationException {
+        if (sRemoteClassLoader != null) {
+            return sRemoteClassLoader;
+        }
         String implPackageName = getImplPackageName(appContext);
         if (implPackageName == null) {
-            return createRemoteClassLoaderFromWebViewFactory(appContext);
+            sRemoteClassLoader = createRemoteClassLoaderFromWebViewFactory(appContext);
         } else {
-            return createRemoteClassLoaderFromPackage(appContext, implPackageName);
+            sRemoteClassLoader = createRemoteClassLoaderFromPackage(appContext, implPackageName);
         }
+        return sRemoteClassLoader;
     }
 
     /**
