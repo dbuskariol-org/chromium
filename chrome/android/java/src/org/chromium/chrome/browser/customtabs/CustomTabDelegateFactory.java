@@ -297,12 +297,7 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
     @Override
     public ExternalNavigationHandler createExternalNavigationHandler(Tab tab) {
         if (mIsOpenedByChrome) {
-            mNavigationDelegate = new ExternalNavigationDelegateImpl(tab) {
-                @Override
-                public boolean isOnCustomTab() {
-                    return true;
-                }
-            };
+            mNavigationDelegate = new ExternalNavigationDelegateImpl(tab);
         } else {
             mNavigationDelegate = new CustomTabNavigationDelegate(
                     tab, TabAssociatedApp.getAppId(tab), mExternalAuthUtils);
