@@ -3152,7 +3152,7 @@ Wenn diese Einstellung deaktiviert oder nicht konfiguriert ist, wird kein Proxy 
       Beachten Sie, dass mit dieser Richtlinie lediglich der Status der Standortdienste von Google bei der erstmaligen Einrichtung festgelegt wird. Danach kann der Nutzer die Android-Einstellungen öffnen und die Standortdienste aktivieren oder deaktivieren.
 
       Beachten Sie, dass die Richtlinie ignoriert wird und die Standortdienste von Google immer deaktiviert sind, wenn die Richtlinie "<ph name="DEFAULT_GEOLOCATION_SETTING_POLICY_NAME" />" auf "<ph name="BLOCK_GEOLOCATION_SETTING" />" festgelegt ist.</translation>
-<translation id="6141402445226505817">Immer die grobe Erkennung der Zeitzone verwenden</translation>
+<translation id="6141402445226505817">Immer die ungefähre Erkennung der Zeitzone verwenden</translation>
 <translation id="6145799962557135888">Ermöglicht Ihnen die Zusammenstellung einer Liste mit URL-Mustern, die Websites angeben, denen die Ausführung von JavaScript gestattet ist. Wenn diese Richtlinie nicht konfiguriert ist, kommt für alle Websites entweder der globale Standardwert der Richtlinie "DefaultJavaScriptSetting", falls konfiguriert, oder der persönlichen Konfiguration des Nutzers zum Einsatz.</translation>
 <translation id="614616930188030377">Muster in dieser Liste werden mit der Sicherheitsherkunft der anfragenden URL abgeglichen.
       Wenn Übereinstimmungen gefunden werden oder chrome://flags/#enable-webrtc-hide-local-ips-with-mdns deaktiviert ist, werden die lokalen IP-Adressen in WebRTC ICE-Kandidaten angezeigt.

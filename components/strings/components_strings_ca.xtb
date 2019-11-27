@@ -174,7 +174,7 @@
 <translation id="173080396488393970">Aquest tipus de targeta no s'admet</translation>
 <translation id="1734864079702812349">Amex</translation>
 <translation id="1734878702283171397">Proveu de contactar amb l'administrador del sistema.</translation>
-<translation id="1739107442478692187">S'ha produït una violació de les dades en un lloc web o en una aplicació que fas servir. Chrome et recomana que comprovis les contrasenyes desades i que canviïs la contrasenya del lloc web <ph name="ORIGIN" /> ara mateix.</translation>
+<translation id="1739107442478692187">S'ha produït una violació de les dades en un lloc web o en una aplicació que fas servir. Chrome et recomana que comprovis les contrasenyes desades i que canviïs la contrasenya per a <ph name="ORIGIN" /> ara.</translation>
 <translation id="1740951997222943430">Introdueix un mes de caducitat vàlid</translation>
 <translation id="1743520634839655729">Perquè la propera vegada puguis pagar més ràpidament, desa la targeta, el nom i l'adreça de facturació al Compte de Google i en aquest dispositiu.</translation>
 <translation id="1743570585616704562">No s'ha reconegut</translation>
@@ -476,7 +476,7 @@
 <translation id="3282497668470633863">Afegeix el titular de la targeta</translation>
 <translation id="3287510313208355388">Baixa quan estigui en línia</translation>
 <translation id="3293642807462928945">Més informació sobre la política <ph name="POLICY_NAME" /></translation>
-<translation id="3295439534709115864">S'ha produït una violació de les dades en un lloc web o en una aplicació que fas servir. Chrome et recomana que canviïs la contrasenya del lloc web <ph name="ORIGIN" />.</translation>
+<translation id="3295439534709115864">S'ha produït una violació de les dades en un lloc web o en una aplicació que fas servir. Chrome et recomana que canviïs la contrasenya per a <ph name="ORIGIN" /> ara.</translation>
 <translation id="3303855915957856445">No s'ha trobat cap resultat de la cerca</translation>
 <translation id="3320021301628644560">Afegeix una adreça de facturació</translation>
 <translation id="3324983252691184275">Carmesí</translation>
