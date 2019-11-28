@@ -17,6 +17,7 @@
 #include "components/version_info/version_info.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/devtools_manager_delegate.h"
+#include "content/public/browser/generated_code_cache_settings.h"
 #include "content/public/browser/navigation_throttle.h"
 #include "content/public/browser/network_service_instance.h"
 #include "content/public/common/content_switches.h"
@@ -33,6 +34,7 @@
 #include "url/origin.h"
 #include "weblayer/browser/browser_main_parts_impl.h"
 #include "weblayer/browser/i18n_util.h"
+#include "weblayer/browser/profile_impl.h"
 #include "weblayer/browser/ssl_error_handler.h"
 #include "weblayer/browser/tab_impl.h"
 #include "weblayer/browser/weblayer_content_browser_overlay_manifest.h"
@@ -182,6 +184,8 @@ ContentBrowserClientImpl::CreateNetworkContext(
     base::FilePath cookie_path = context->GetPath();
     cookie_path = cookie_path.Append(FILE_PATH_LITERAL("Cookies"));
     context_params->cookie_path = cookie_path;
+    context_params->http_cache_path =
+        ProfileImpl::GetCachePath(context).Append(FILE_PATH_LITERAL("Cache"));
   }
   content::GetNetworkService()->CreateNetworkContext(
       network_context.BindNewPipeAndPassReceiver(), std::move(context_params));
@@ -282,6 +286,17 @@ ContentBrowserClientImpl::CreateThrottlesForNavigation(
       handle, std::make_unique<SSLCertReporterImpl>(),
       base::Bind(&HandleSSLError), base::Bind(&IsInHostedApp)));
   return throttles;
+}
+
+content::GeneratedCodeCacheSettings
+ContentBrowserClientImpl::GetGeneratedCodeCacheSettings(
+    content::BrowserContext* context) {
+  DCHECK(context);
+  // If we pass 0 for size, disk_cache will pick a default size using the
+  // heuristics based on available disk size. These are implemented in
+  // disk_cache::PreferredCacheSize in net/disk_cache/cache_util.cc.
+  return content::GeneratedCodeCacheSettings(
+      true, 0, ProfileImpl::GetCachePath(context));
 }
 
 #if defined(OS_LINUX) || defined(OS_ANDROID)
