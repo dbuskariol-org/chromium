@@ -212,7 +212,7 @@ public class WebLayerShellActivity extends FragmentActivity {
         });
         tab.registerTabCallback(new TabCallback() {
             @Override
-            public void onVisibleUrlChanged(Uri uri) {
+            public void onVisibleUriChanged(Uri uri) {
                 mUrlView.setText(uri.toString());
             }
         });
@@ -230,12 +230,13 @@ public class WebLayerShellActivity extends FragmentActivity {
         });
         tab.setDownloadCallback(new DownloadCallback() {
             @Override
-            public void onDownloadRequested(String url, String userAgent, String contentDisposition,
+            public boolean onInterceptDownload(Uri uri, String userAgent, String contentDisposition,
                     String mimetype, long contentLength) {
-                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                DownloadManager.Request request = new DownloadManager.Request(uri);
                 request.setNotificationVisibility(
                         DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 getSystemService(DownloadManager.class).enqueue(request);
+                return true;
             }
         });
         tab.setErrorPageCallback(new ErrorPageCallback() {
