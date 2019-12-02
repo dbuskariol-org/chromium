@@ -926,7 +926,6 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="2326931316514688470">&amp;Ricarica app</translation>
 <translation id="2327492829706409234">Attiva applicazione</translation>
 <translation id="2329597144923131178">Accedi per visualizzare i tuoi Preferiti, la cronologia, le password e altre impostazioni su tutti i tuoi dispositivi.</translation>
-<translation id="2330129964253841015">Ricevi un avviso in caso di compromissione delle password</translation>
 <translation id="2332131598580221120">Visualizza nello store</translation>
 <translation id="2332192922827071008">Apri Preferenze</translation>
 <translation id="2332742915001411729">Ripristina impostazioni predefinite</translation>
@@ -4073,6 +4072,7 @@ Prima di accedere alla VR, verifica che questo sito sia attendibile.</translatio
 <translation id="6990778048354947307">Tema scuro</translation>
 <translation id="6991665348624301627">Seleziona una destinazione</translation>
 <translation id="6992554835374084304">Attiva il controllo ortografico avanzato</translation>
+<translation id="6995899638241819463">Ricevi un avviso se le password vengono esposte a causa di una violazione dei dati</translation>
 <translation id="6997642619627518301">Log delle attività - <ph name="NAME_PH" /></translation>
 <translation id="6997707937646349884">Sui tuoi dispositivi:</translation>
 <translation id="6998793565256476099">Registra il dispositivo per le videoconferenze</translation>

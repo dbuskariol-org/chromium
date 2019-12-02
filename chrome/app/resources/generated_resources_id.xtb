@@ -870,7 +870,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="2238379619048995541">Data Status Frekuensi</translation>
 <translation id="2239921694246509981">Tambahkan pengguna yang dilindungi</translation>
 <translation id="2241053333139545397">Membaca dan mengubah data Anda di sejumlah situs web</translation>
-<translation id="2241634353105152135">Hanya sekali</translation>
+<translation id="2241634353105152135">Sekali ini saja</translation>
 <translation id="2242687258748107519">Info File</translation>
 <translation id="2246549592927364792">Dapatkan deskripsi gambar dari Google?</translation>
 <translation id="2249605167705922988">misal: 1-5, 8, 11-13</translation>
@@ -926,7 +926,6 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="2326931316514688470">&amp;Muat ulang aplikasi</translation>
 <translation id="2327492829706409234">Aktifkan aplikasi</translation>
 <translation id="2329597144923131178">Login untuk mendapatkan bookmark, histori, sandi, dan setelan Anda lainnya di semua perangkat.</translation>
-<translation id="2330129964253841015">Berikan peringatan jika sandi disusupi</translation>
 <translation id="2332131598580221120">Lihat di toko</translation>
 <translation id="2332192922827071008">Buka Preferensi</translation>
 <translation id="2332742915001411729">Setel ulang ke default</translation>
@@ -1889,7 +1888,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="3726137731714254362">Menghapus folder dari sini akan menghentikan berbagi tetapi tidak akan menghapus file.</translation>
 <translation id="3727148787322499904">Perubahan pada setelan ini akan berpengaruh pada semua jaringan bersama</translation>
 <translation id="3727187387656390258">Periksa pop-up</translation>
-<translation id="372722114124766626">Sekali Saja</translation>
+<translation id="372722114124766626">Sekali Ini Saja</translation>
 <translation id="3729303374699765035">Tanyakan saat situs ingin menemukan perangkat Bluetooth di sekitar</translation>
 <translation id="3729506734996624908">Situs yang diizinkan</translation>
 <translation id="3731997362820527097">Pilih kunci keamanan</translation>
@@ -4072,6 +4071,7 @@ Pastikan Anda memercayai situs ini sebelum masuk ke VR.</translation>
 <translation id="6990778048354947307">Tema Gelap</translation>
 <translation id="6991665348624301627">Pilih tujuan</translation>
 <translation id="6992554835374084304">Aktifkan fitur periksa ejaan yang disempurnakan</translation>
+<translation id="6995899638241819463">Berikan peringatan jika sandi terungkap saat terjadi pelanggaran data</translation>
 <translation id="6997642619627518301"><ph name="NAME_PH" /> - Log Aktivitas</translation>
 <translation id="6997707937646349884">Di perangkat Anda:</translation>
 <translation id="6998793565256476099">Daftarkan perangkat untuk konferensi video</translation>
