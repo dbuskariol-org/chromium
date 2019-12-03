@@ -1,4 +1,0 @@
-include_rules = [
-  "+components/crash/android/java",
-  "+components/minidump_uploader",
-]
