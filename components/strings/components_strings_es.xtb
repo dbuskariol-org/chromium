@@ -799,7 +799,7 @@
 <translation id="4854362297993841467">Este método de entrega no está disponible. Selecciona otro.</translation>
 <translation id="4876188919622883022">Vista simplificada</translation>
 <translation id="4876305945144899064">Ningún nombre de usuario</translation>
-<translation id="4877083676943085827">{COUNT,plural, =0{Ninguno}=1{<ph name="EXAMPLE_DOMAIN_1" />}=2{<ph name="EXAMPLE_DOMAIN_1" /> y <ph name="EXAMPLE_DOMAIN_2" />}other{<ph name="EXAMPLE_DOMAIN_1" />, <ph name="EXAMPLE_DOMAIN_2" /> <ph name="AND_MORE" />}}</translation>
+<translation id="4877083676943085827">{COUNT,plural, =0{No hay}=1{<ph name="EXAMPLE_DOMAIN_1" />}=2{<ph name="EXAMPLE_DOMAIN_1" /> y <ph name="EXAMPLE_DOMAIN_2" />}other{<ph name="EXAMPLE_DOMAIN_1" />, <ph name="EXAMPLE_DOMAIN_2" /> <ph name="AND_MORE" />}}</translation>
 <translation id="4877422487531841831">Búsqueda de <ph name="TEXT" /></translation>
 <translation id="4879491255372875719">Automático (predeterminado)</translation>
 <translation id="4880827082731008257">Buscar en el historial</translation>
@@ -1004,7 +1004,7 @@
 <translation id="5855253129151731373">El nombre de host de este sitio web se parece al de <ph name="LOOKALIKE_DOMAIN" />. Los atacantes a veces imitan a otros sitios web haciendo pequeños cambios difíciles de ver en el nombre del dominio.
 
     Si crees que puede tratarse de un error, ve a https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
-<translation id="5860033963881614850">No</translation>
+<translation id="5860033963881614850">Desactivado</translation>
 <translation id="5863847714970149516">Es posible que la página a la que vas a acceder intente aplicar algún cargo</translation>
 <translation id="5866257070973731571">Añade un número de teléfono</translation>
 <translation id="5866898949289125849">Estás viendo una página de las herramientas para desarrolladores</translation>

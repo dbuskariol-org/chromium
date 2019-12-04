@@ -819,6 +819,11 @@
 <translation id="2303795211377219696">Automatisch aanvullen inschakelen voor creditcards</translation>
 <translation id="2309390639296060546">Standaardinstelling voor geolocatie</translation>
 <translation id="2327252517317514801">Domeinen definiëren voor toegang tot G Suite</translation>
+<translation id="2328573323851533589">Dit beleid kan worden gebruikt om controle op gegevenslekken gedwongen in of uit te schakelen in <ph name="PRODUCT_NAME" />.
+
+          Ook als dit beleid is ingesteld op True, wordt het gedrag niet geactiveerd als Safe Browsing is uitgeschakeld (op basis van beleid of door de gebruiker). Gebruik het beleid <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" /> om Safe Browsing gedwongen in te schakelen.
+
+          Als dit beleid is in- of uitgeschakeld, kunnen gebruikers het niet wijzigen of overschrijven in <ph name="PRODUCT_NAME" />. Als dit beleid niet is ingesteld, is controle op gegevenslekken toegestaan (maar kan door de gebruiker worden uitgeschakeld).</translation>
 <translation id="2345547870894930157">DNS-over-HTTPS zonder onveilige fallback inschakelen</translation>
 <translation id="237494535617297575">Hiermee kun je een lijst met URL-patronen opgeven van sites waarop meldingen mogen worden weergegeven.
 

@@ -1053,7 +1053,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="2501173422421700905">Sertifikat Ditahan</translation>
 <translation id="2501278716633472235">Kembali</translation>
 <translation id="2501797496290880632">Ketik pintasan</translation>
-<translation id="2502441965851148920">Pembaruan otomatis diaktifkan. Pembaruan manual dinonaktifkan oleh administrator.</translation>
+<translation id="2502441965851148920">Update otomatis diaktifkan. Update manual dinonaktifkan oleh administrator.</translation>
 <translation id="2505127913256479918">Akun yang diawasi ini akan segera dihapus</translation>
 <translation id="2505324914378689427">{SCREEN_INDEX,plural, =1{Layar #}other{Layar #}}</translation>
 <translation id="2505402373176859469"><ph name="RECEIVED_AMOUNT" /> dari <ph name="TOTAL_SIZE" /></translation>
@@ -4059,7 +4059,7 @@ Pastikan Anda memercayai situs ini sebelum masuk ke VR.</translation>
 <translation id="6974609594866392343">Mode demo offline</translation>
 <translation id="6977381486153291903">Revisi firmware</translation>
 <translation id="6978121630131642226">Mesin Telusur</translation>
-<translation id="6979044105893951891">Luncurkan dan tutup sesi tamu yang dikelola</translation>
+<translation id="6979044105893951891">Luncurkan dan tutup sesi tamu terkelola</translation>
 <translation id="6979440798594660689">Matikan (default)</translation>
 <translation id="6979737339423435258">Semua</translation>
 <translation id="6981982820502123353">Aksesibilitas</translation>

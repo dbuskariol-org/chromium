@@ -826,6 +826,11 @@ Si cette règle n'est pas configurée, le paramètre "BlockPopups" est utilisé 
 <translation id="2303795211377219696">Activer la saisie automatique pour les cartes de crédit</translation>
 <translation id="2309390639296060546">Paramètre de géolocalisation par défaut</translation>
 <translation id="2327252517317514801">Définir les domaines autorisés à accéder à G Suite</translation>
+<translation id="2328573323851533589">Cette règle peut être utilisée pour forcer l'activation ou la désactivation de la vérification de fuite d'identifiants dans <ph name="PRODUCT_NAME" />.
+
+          Sachez que même si cette règle est définie sur "True", ce comportement ne se déclenchera pas si la navigation sécurisée est désactivée (par la règle ou l'utilisateur). Pour forcer l'activation de la navigation sécurisée, utilisez la règle <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" />.
+
+          Si cette règle est activée ou désactivée, les utilisateurs ne peuvent pas la modifier ni l'ignorer dans <ph name="PRODUCT_NAME" />. Si cette règle n'est pas définie, la vérification de fuite d'identifiants est autorisée (l'utilisateur peut la désactiver).</translation>
 <translation id="2345547870894930157">Activer DNS-over-HTTPS sans solution de secours à risque</translation>
 <translation id="237494535617297575">Permet de définir une liste de formats d'URL spécifiant les sites qui sont autorisés à afficher des notifications. 
 

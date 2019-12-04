@@ -766,6 +766,11 @@
 <translation id="2303795211377219696">允许使用“自动填充”功能填写信用卡信息</translation>
 <translation id="2309390639296060546">默认地理位置设置</translation>
 <translation id="2327252517317514801">指定可访问 G Suite 的网域</translation>
+<translation id="2328573323851533589">此政策可用于在 <ph name="PRODUCT_NAME" /> 中强制启用/强制停用凭据泄露检查功能。
+
+          请注意：如果“安全浏览”功能已（无论是被政策还是被用户）停用，那么即使此政策设为 True，也不会触发相应行为。若想强制开启“安全浏览”功能，请使用 <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" /> 政策。
+
+          如果您启用了或停用了此政策，用户将无法在 <ph name="PRODUCT_NAME" /> 中更改或覆盖它。如果您未设置此政策，系统将允许执行凭据泄露检查（但该功能可被用户关闭）。</translation>
 <translation id="2345547870894930157">启用 DNS-over-HTTPS，且禁止改用不安全的查询</translation>
 <translation id="237494535617297575">可让您设置网址格式的列表，这些网址格式用于指定允许显示通知的网站。在未设置此政策的情况下，如果设置了“DefaultNotificationsSetting”政策，那么将对该政策中的所有网站使用全局默认值，否则将对用户个人配置中的所有网站使用全局默认值。</translation>
 <translation id="2386362615870139244">允许使用屏幕唤醒锁定</translation>

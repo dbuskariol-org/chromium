@@ -819,6 +819,11 @@
 <translation id="2303795211377219696">Bật tính năng Tự động điền cho thẻ tín dụng</translation>
 <translation id="2309390639296060546">Cài đặt vị trí địa lý mặc định</translation>
 <translation id="2327252517317514801">Xác định miền được phép truy cập vào G Suite</translation>
+<translation id="2328573323851533589">Chính sách này có thể dùng để buộc bật hoặc buộc tắt tính năng kiểm tra rò rỉ thông tin đăng nhập trong <ph name="PRODUCT_NAME" />.
+
+          Xin lưu ý rằng ngay cả khi bạn đặt chính sách này thành True, thì chính sách này cũng không kích hoạt việc buộc bật hoặc buộc tắt tính năng kiểm tra rò rỉ thông tin đăng nhập nếu tùy chọn Duyệt web an toàn bị tắt (theo chính sách hoặc do người dùng). Để buộc bật tùy chọn Duyệt web an toàn, hãy dùng chính sách <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" />.
+
+          Nếu bạn bật hoặc tắt chính sách này, thì người dùng sẽ không thể thay đổi hoặc ghi đè chính sách này trong <ph name="PRODUCT_NAME" />. Nếu bạn không đặt chính sách này, thì hệ thống sẽ cho phép kiểm tra rò rỉ thông tin đăng nhập (nhưng người dùng có thể tắt tính năng này).</translation>
 <translation id="2345547870894930157">Bật chế độ DNS qua HTTPS không có phương án dự phòng cho truy vấn không an toàn</translation>
 <translation id="237494535617297575">Cho phép bạn thiết lập danh sách các mẫu url chỉ định những trang web được phép hiển thị thông báo.
 

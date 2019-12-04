@@ -786,6 +786,11 @@ Questa norma viene rispettata soltanto se la norma "DefaultSearchProviderEnabled
 <translation id="2303795211377219696">Attiva la Compilazione automatica per le carte di credito</translation>
 <translation id="2309390639296060546">Impostazione di geolocalizzazione predefinita</translation>
 <translation id="2327252517317514801">Definisci i domini autorizzati ad accedere a G Suite</translation>
+<translation id="2328573323851533589">Questo criterio può essere usato per l'attivazione o la disattivazione forzata del controllo della divulgazione di credenziali in <ph name="PRODUCT_NAME" />.
+
+          Tieni presente che, anche se questo criterio viene impostato su True, il comportamento non viene attivato se la funzionalità Navigazione sicura viene disattivata (tramite criterio o dall'utente). Per l'attivazione forzata della funzionalità Navigazione sicura, usa il criterio <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" />.
+
+          Se questo criterio viene attivato o disattivato, gli utenti non possono modificarlo o ignorarlo in <ph name="PRODUCT_NAME" />. Se questo criterio non viene impostato, viene consentito il controllo della divulgazione di credenziali (che può però essere disattivato dall'utente).</translation>
 <translation id="2345547870894930157">Attiva DNS over HTTPS senza fallback non sicuro</translation>
 <translation id="237494535617297575">Consente di impostare un elenco di pattern URL che specificano i siti autorizzati a visualizzare notifiche. Se questa norma non viene impostata, per tutti i siti verrà utilizzato il valore predefinito globale della norma "DefaultNotificationsSetting", se è impostata, oppure verrà utilizzata la configurazione personale dell'utente.</translation>
 <translation id="2386362615870139244">Consenti Wakelock dello schermo</translation>

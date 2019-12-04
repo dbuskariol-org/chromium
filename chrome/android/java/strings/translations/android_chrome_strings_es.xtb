@@ -654,7 +654,7 @@ Asegúrate de que este sitio web sea de confianza antes de acceder al modo de re
 <translation id="5853623416121554550">en pausa</translation>
 <translation id="5854790677617711513">Más de 30 días</translation>
 <translation id="5858741533101922242">Chrome no ha podido activar el adaptador Bluetooth</translation>
-<translation id="5860033963881614850">No</translation>
+<translation id="5860033963881614850">Desactivado</translation>
 <translation id="5862731021271217234">Activa la sincronización para ver las pestañas de tus otros dispositivos</translation>
 <translation id="5864174910718532887">Detalles: ordenados por nombre del sitio web</translation>
 <translation id="5864419784173784555">Esperando otra descarga…</translation>
@@ -699,7 +699,7 @@ Asegúrate de que este sitio web sea de confianza antes de acceder al modo de re
 <translation id="6206551242102657620">La conexión es segura. Información del sitio web</translation>
 <translation id="6210748933810148297">¿No eres <ph name="EMAIL" />?</translation>
 <translation id="6221633008163990886">Desbloquea el dispositivo para exportar las contraseñas</translation>
-<translation id="6232535412751077445">Al habilitar la opción No realizar seguimiento, se incluirá una solicitud con el tráfico de navegación. El efecto dependerá de si algún sitio web responde a la solicitud y de cómo se interpreta.
+<translation id="6232535412751077445">Al habilitar la opción No hacer seguimiento, se incluirá una solicitud con el tráfico de navegación. El efecto dependerá de si algún sitio web responde a la solicitud y de cómo se interpreta.
 
 Por ejemplo, algunos sitios web pueden responder a la solicitud mostrándote anuncios no basados en otros sitios web que hayas visitado. Muchos sitios web seguirán recopilando y utilizando tus datos de navegación (por ejemplo, para mejorar la seguridad, para proporcionar contenido, anuncios y recomendaciones, o para generar estadísticas de informes).</translation>
 <translation id="624789221780392884">Actualización lista</translation>

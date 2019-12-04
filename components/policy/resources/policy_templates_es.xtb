@@ -816,6 +816,11 @@ Si no se establece esta política, el teclado en pantalla estará inhabilitado i
 <translation id="2303795211377219696">Habilitar la función Autocompletar para tarjetas de crédito</translation>
 <translation id="2309390639296060546">Configuración de ubicación geográfica predeterminada</translation>
 <translation id="2327252517317514801">Definir los dominios autorizados para acceder a G Suite</translation>
+<translation id="2328573323851533589">Esta política se puede utilizar para habilitar o inhabilitar de forma forzada la comprobación de filtraciones de credenciales en <ph name="PRODUCT_NAME" />.
+
+          Ten en cuenta que aunque se le asigne el valor "True" a esta política, este comportamiento no se activará si se ha inhabilitado la Navegación Segura, ya sea por obra de una política o del propio usuario. Para activar la Navegación Segura de forma forzosa, utiliza la política <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" />.
+
+          Si esta política está habilitada o inhabilitada, los usuarios no podrán cambiarla ni anularla en <ph name="PRODUCT_NAME" />. Si no se define esta política, se permitirá la comprobación de filtraciones de credenciales, pero el usuario podrá desactivarla.</translation>
 <translation id="2345547870894930157">Habilitar DNS-over-HTTPS sin alternativa insegura</translation>
 <translation id="237494535617297575">Permite establecer una lista de patrones de URL que especifiquen sitios que puedan mostrar notificaciones.
 

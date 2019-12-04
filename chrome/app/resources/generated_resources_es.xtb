@@ -1027,7 +1027,7 @@ Puedes gestionar la configuración de esta cuenta instalando la aplicación Fami
 <translation id="2470702053775288986">Extensiones no admitidas inhabilitadas</translation>
 <translation id="2473195200299095979">Traducir esta página</translation>
 <translation id="2475982808118771221">Se ha producido un error.</translation>
-<translation id="2476578072172137802">Configuración del sitio web</translation>
+<translation id="2476578072172137802">Configuración de sitios web</translation>
 <translation id="2478176599153288112">Permisos de archivos multimedia para "<ph name="EXTENSION" />"</translation>
 <translation id="247949520305900375">Compartir audio</translation>
 <translation id="2480868415629598489">Modificar los datos que se copian y se pegan</translation>
@@ -1128,7 +1128,7 @@ Puedes gestionar la configuración de esta cuenta instalando la aplicación Fami
 <translation id="2612676031748830579">Número de la tarjeta</translation>
 <translation id="2616366145935564096">Leer y modificar tus datos en <ph name="WEBSITE_1" /></translation>
 <translation id="2617342710774726426">La tarjeta SIM está bloqueada</translation>
-<translation id="2619761439309613843">Actualización diaria</translation>
+<translation id="2619761439309613843">Actualiz. diaria</translation>
 <translation id="2620436844016719705">Sistema</translation>
 <translation id="26224892172169984">No permitir que los sitios web procesen protocolos</translation>
 <translation id="2624142942574147739">Esta página tiene acceso a la cámara y al micrófono.</translation>
@@ -1388,7 +1388,7 @@ Puedes gestionar la configuración de esta cuenta instalando la aplicación Fami
 <translation id="2989474696604907455">no conectado</translation>
 <translation id="2989786307324390836">DER binario codificado, certificado único</translation>
 <translation id="2992931425024192067">Mostrar todo el contenido de las notificaciones</translation>
-<translation id="2993517869960930405">Información de la aplicación</translation>
+<translation id="2993517869960930405">Información de la app</translation>
 <translation id="299483336428448530">Instalada por tus padres.</translation>
 <translation id="2996286169319737844">Se han cifrado los datos con tu contraseña de Google. El cifrado no incluye los métodos de pago ni las direcciones de Google Pay.</translation>
 <translation id="2996722619877761919">Cambiar a borde largo</translation>
@@ -1605,7 +1605,7 @@ Puedes gestionar la configuración de esta cuenta instalando la aplicación Fami
 <translation id="3325910708063135066">La cámara y el micrófono están desactivados en las Preferencias del Sistema de Mac</translation>
 <translation id="3328489342742826322">Al restaurar una copia de seguridad, se eliminarán las aplicaciones y los datos actuales de Linux de la carpeta Archivos de Linux.</translation>
 <translation id="3331321258768829690">(<ph name="UTCOFFSET" />) <ph name="LONGTZNAME" /> (<ph name="EXEMPLARCITY" />)</translation>
-<translation id="3331974543021145906">Información de la aplicación</translation>
+<translation id="3331974543021145906">Información de la app</translation>
 <translation id="3334632933872291866"><ph name="WINDOW_TITLE" /> - Reproduciendo vídeo en modo imagen en imagen</translation>
 <translation id="3335947283844343239">Volver a abrir pestaña cerrada</translation>
 <translation id="3336664756920573711">Desbloquea tu <ph name="DEVICE_TYPE" /> con tu teléfono Android</translation>
@@ -2592,7 +2592,7 @@ Puedes gestionar la configuración de esta cuenta instalando la aplicación Fami
 <translation id="4798236378408895261">Adjuntar <ph name="BEGIN_LINK" />registros de Bluetooth<ph name="END_LINK" /> (opción interna de Google)</translation>
 <translation id="4801448226354548035">Ocultar cuentas</translation>
 <translation id="4801512016965057443">Permitir la itinerancia de datos móviles</translation>
-<translation id="4804818685124855865">Desvincular</translation>
+<translation id="4804818685124855865">Desconectar</translation>
 <translation id="4804827417948292437">Aguacate</translation>
 <translation id="4807098396393229769">Titular de la tarjeta</translation>
 <translation id="4808667324955055115">Pop-ups bloqueados</translation>
@@ -2826,7 +2826,7 @@ Asegúrate de que este sitio web sea de confianza antes de acceder al modo de re
 <translation id="5142961317498132443">Autenticación</translation>
 <translation id="5143374789336132547">La extensión <ph name="EXTENSION_NAME" /> ha cambiado la página que se muestra al hacer clic en el botón Página de inicio.</translation>
 <translation id="5143712164865402236">Activar pantalla completa</translation>
-<translation id="514575469079499857">Usar tu dirección IP para determinar la ubicación (opción predeterminada)</translation>
+<translation id="514575469079499857">Usar dirección IP para determinar ubicación (predeterminado)</translation>
 <translation id="5146995429444047494">Las notificaciones de <ph name="ORIGIN" /> están bloqueadas</translation>
 <translation id="5150254825601720210">Nombre de servidor SSL de certificado de Netscape</translation>
 <translation id="5151354047782775295">Libera espacio en el disco o puede que se eliminen automáticamente ciertos datos</translation>
@@ -2906,7 +2906,7 @@ Asegúrate de que este sitio web sea de confianza antes de acceder al modo de re
 <translation id="5280174558369304332">Extensiones que se quitarán:</translation>
 <translation id="5280426389926346830">¿Quieres crear un acceso directo?</translation>
 <translation id="528208740344463258">Para descargar y utilizar aplicaciones de Android, primero debes instalar esta actualización. Mientras se actualiza tu <ph name="DEVICE_TYPE" />, no podrás usarlo. Tu <ph name="DEVICE_TYPE" /> se reiniciará cuando se complete la instalación.</translation>
-<translation id="5282733140964383898">Al habilitar la opción No realizar seguimiento, se incluirá una solicitud con tu tráfico de navegación. El efecto dependerá de si un sitio web responde a la solicitud y de cómo se interprete. Por ejemplo, algunos sitios web pueden responder a la solicitud mostrándote anuncios que no están basados en otros sitios web que has visitado. Muchos sitios web seguirán recogiendo y utilizando tus datos de navegación para, por ejemplo, mejorar la seguridad, proporcionar contenido, servicios, anuncios y recomendaciones sobre sus sitios web, y generar estadísticas de informes. <ph name="BEGIN_LINK" />Más información<ph name="END_LINK" /></translation>
+<translation id="5282733140964383898">Al habilitar la opción No hacer seguimiento, se incluirá una solicitud con tu tráfico de navegación. El efecto dependerá de si un sitio web responde a la solicitud y de cómo se interprete. Por ejemplo, algunos sitios web pueden responder a la solicitud mostrándote anuncios que no están basados en otros sitios web que has visitado. Muchos sitios web seguirán recogiendo y utilizando tus datos de navegación para, por ejemplo, mejorar la seguridad, proporcionar contenido, servicios, anuncios y recomendaciones sobre sus sitios web, y generar estadísticas de informes. <ph name="BEGIN_LINK" />Más información<ph name="END_LINK" /></translation>
 <translation id="5283049351426079445">¿Seguro que quieres instalar <ph name="APP_NAME" />?</translation>
 <translation id="5283677936944177147">¡Vaya! El sistema no ha podido determinar el número de serie o el modelo del dispositivo.</translation>
 <translation id="5284445933715251131">Seguir descargando</translation>
@@ -3285,7 +3285,7 @@ Asegúrate de que este sitio web sea de confianza antes de acceder al modo de re
 <translation id="5816434091619127343">Los cambios solicitados en la impresora harían que no se pudiera usar.</translation>
 <translation id="5817918615728894473">Vincular</translation>
 <translation id="5821565227679781414">Crear acceso directo</translation>
-<translation id="5825412242012995131">Activado (opción recomendada)</translation>
+<translation id="5825412242012995131">Activado (recomendado)</translation>
 <translation id="5826395379250998812">Conecta tu <ph name="DEVICE_TYPE" /> al teléfono. <ph name="LINK_BEGIN" />Más información<ph name="LINK_END" /></translation>
 <translation id="5826507051599432481">Nombre común (CN)</translation>
 <translation id="5826993284769733527">Semitransparente</translation>
@@ -3316,7 +3316,7 @@ Asegúrate de que este sitio web sea de confianza antes de acceder al modo de re
 <translation id="5857171483910641802">Se sugieren accesos directos a los sitios web que visitas más a menudo</translation>
 <translation id="5858490737742085133">Terminal</translation>
 <translation id="585979798156957858">Tecla meta externa</translation>
-<translation id="5860033963881614850">No</translation>
+<translation id="5860033963881614850">Desactivado</translation>
 <translation id="5860491529813859533">Activar</translation>
 <translation id="5860494867054883682">Actualizando el canal del dispositivo a <ph name="CHANNEL_NAME" /> (<ph name="PROGRESS_PERCENT" />)</translation>
 <translation id="5862109781435984885">Mostrar herramientas del lápiz óptico en la estantería</translation>
@@ -3386,7 +3386,7 @@ Exponente público (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bits):
 <translation id="5956585768868398362">¿Es esta la página de búsqueda que esperabas?</translation>
 <translation id="5957613098218939406">Más opciones</translation>
 <translation id="5957987129450536192">Toca el icono Enunciar Selección, situado junto a la imagen de tu perfil, y selecciona la parte que quieres escuchar.</translation>
-<translation id="5958529069007801266">Usuario supervisado</translation>
+<translation id="5958529069007801266">Usuario supervis.</translation>
 <translation id="5959471481388474538">Red no disponible</translation>
 <translation id="595959584676692139">Vuelve a cargar la página para usar esta extensión</translation>
 <translation id="5963453369025043595"><ph name="NUM_HANDLES" /> (<ph name="NUM_KILOBYTES_LIVE" /> máximo)</translation>
@@ -3461,7 +3461,7 @@ Exponente público (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bits):
 <translation id="6061882183774845124">Enviar el enlace a tus dispositivos</translation>
 <translation id="6064217302520318294">Bloqueo de pantalla</translation>
 <translation id="6065289257230303064">Atributos de directorio de la entidad receptora del certificado</translation>
-<translation id="6069671174561668781">Establecer fondo de pantalla</translation>
+<translation id="6069671174561668781">Fondo de pantalla</translation>
 <translation id="6071181508177083058">confirmar contraseña</translation>
 <translation id="6071576563962215370">El sistema no ha podido establecer el bloqueo de atributos del tiempo de instalación del dispositivo.</translation>
 <translation id="6073451960410192870">Detener grabación</translation>
@@ -4094,7 +4094,7 @@ Exponente público (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bits):
 <translation id="7017219178341817193">Añadir una nueva página</translation>
 <translation id="7017354871202642555">No se puede establecer un modo después de crear una ventana.</translation>
 <translation id="7018275672629230621">Leer y modificar tu historial de navegación</translation>
-<translation id="7019805045859631636">Rápido</translation>
+<translation id="7019805045859631636">Rápida</translation>
 <translation id="7022562585984256452">Se ha establecido tu página de inicio.</translation>
 <translation id="7025190659207909717">Administración de servicio de datos para móviles</translation>
 <translation id="7027891519253193555">¿La página no está en <ph name="LANGUAGE" />?</translation>
@@ -4611,7 +4611,7 @@ Exponente público (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bits):
 <translation id="7784067724422331729">La configuración de seguridad de tu ordenador ha bloqueado este archivo.</translation>
 <translation id="7784796923038949829">No se pueden leer ni cambiar los datos del sitio web</translation>
 <translation id="778480864305029524">Para utilizar la conexión compartida instantánea, activa las notificaciones de Servicios de Google Play.</translation>
-<translation id="7786207843293321886">Salir de la sesión de invitado</translation>
+<translation id="7786207843293321886">Cerrar sesión de invitado</translation>
 <translation id="7786889348652477777">&amp;Volver a cargar aplicación</translation>
 <translation id="7787308148023287649">Mostrar en otra pantalla</translation>
 <translation id="7788298548579301890">Otro programa de tu ordenador ha añadido una aplicación que puede cambiar el funcionamiento de Chrome.
@@ -4829,7 +4829,7 @@ Guarda tu archivo de clave en un lugar seguro, ya que lo necesitarás para crear
 <translation id="803771048473350947">Archivo</translation>
 <translation id="8042142357103597104">Opacidad del texto</translation>
 <translation id="8044262338717486897"><ph name="LINUX_APP_NAME" /> no responde.</translation>
-<translation id="8044899503464538266">Lento</translation>
+<translation id="8044899503464538266">Lenta</translation>
 <translation id="8045253504249021590">La sincronización se ha detenido mediante el Panel de Control de Google.</translation>
 <translation id="8045923671629973368">Introducir el ID de la aplicación o la URL de Chrome Web Store</translation>
 <translation id="804786196054284061">Acuerdo de licencia de usuario final</translation>

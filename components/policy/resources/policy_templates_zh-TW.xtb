@@ -801,6 +801,11 @@
 <translation id="2303795211377219696">啟用信用卡的自動填入功能</translation>
 <translation id="2309390639296060546">預設地理位置設定</translation>
 <translation id="2327252517317514801">定義可存取 G Suite 的網域</translation>
+<translation id="2328573323851533589">這項政策可用於強制啟用或強制停用 <ph name="PRODUCT_NAME" /> 中的憑證外洩檢查功能。
+
+          請注意，如果安全瀏覽功能已停用 (無論是根據政策設定或使用者自行停用)，即使這項政策設為 True，也不會觸發對應的行為。如要強制啟用安全瀏覽功能，請使用 <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" /> 政策。
+
+          將這項政策設為啟用或停用後，使用者即無法在 <ph name="PRODUCT_NAME" /> 中變更或覆寫設定。如果不設定這項政策，系統可執行憑證外洩檢查功能 (但使用者可自行停用)。</translation>
 <translation id="2345547870894930157">啟用 DNS-over-HTTPS，而且禁止改用不安全查詢</translation>
 <translation id="237494535617297575">允許你設定網址模式清單，指定可以展示通知的網站。如果未設定這項政策，系統會從「DefaultNotificationsSetting」政策 (如果有設定的話) 或使用者的個人設定，將通用預設值套用至所有網站。</translation>
 <translation id="2386362615870139244">允許使用螢幕喚醒鎖</translation>
