@@ -1196,6 +1196,11 @@
     "expiry_milestone": 80
   },
   {
+    "name": "enable-duet-tabstrip-integration",
+    "owners": [ "memex-team@google.com" ],
+    "expiry_milestone": 84
+  },
+  {
     "name": "enable-encryption-migration",
     "owners": [ "fukino" ],
     "expiry_milestone": 76
