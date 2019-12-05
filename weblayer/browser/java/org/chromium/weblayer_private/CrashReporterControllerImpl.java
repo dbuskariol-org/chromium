@@ -20,6 +20,7 @@ import org.chromium.components.crash.browser.ChildProcessCrashObserver;
 import org.chromium.components.minidump_uploader.CrashFileManager;
 import org.chromium.weblayer_private.interfaces.ICrashReporterController;
 import org.chromium.weblayer_private.interfaces.ICrashReporterControllerClient;
+import org.chromium.weblayer_private.interfaces.IObjectWrapper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,15 +41,14 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
 
     @Nullable
     private ICrashReporterControllerClient mClient;
-    private final CrashFileManager mCrashFileManager;
+    private CrashFileManager mCrashFileManager;
+    private boolean mIsNativeInitialized;
 
     private static class Holder {
         static CrashReporterControllerImpl sInstance = new CrashReporterControllerImpl();
     }
 
     private CrashReporterControllerImpl() {
-        mCrashFileManager = new CrashFileManager(new File(PathUtils.getCacheDirectory()));
-
         ChildProcessCrashObserver.registerCrashCallback(
                 new ChildProcessCrashObserver.ChildCrashedCallback() {
                     @Override
@@ -58,8 +58,17 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
                 });
     }
 
-    public static CrashReporterControllerImpl getInstance() {
+    public static CrashReporterControllerImpl getInstance(IObjectWrapper appContextWrapper) {
+        // This is a no-op if init has already happened.
+        WebLayerImpl.minimalInitForContext(appContextWrapper);
         return Holder.sInstance;
+    }
+
+    public void notifyNativeInitialized() {
+        mIsNativeInitialized = true;
+        if (mClient != null) {
+            processNewMinidumps();
+        }
     }
 
     @Override
@@ -77,7 +86,7 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
     @Override
     public void uploadCrash(String localId) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-            File minidumpFile = mCrashFileManager.getCrashFileWithLocalId(localId);
+            File minidumpFile = getCrashFileManager().getCrashFileWithLocalId(localId);
             MinidumpUploader.Result result = new MinidumpUploader().upload(minidumpFile);
             if (result.mSuccess) {
                 CrashFileManager.markUploadSuccess(minidumpFile);
@@ -129,7 +138,9 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
     @Override
     public void setClient(ICrashReporterControllerClient client) {
         mClient = client;
-        processNewMinidumps();
+        if (mIsNativeInitialized) {
+            processNewMinidumps();
+        }
     }
 
     /** Start an async task to import crashes, and notify if any are found. */
@@ -148,7 +159,7 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
 
     /** Delete a crash report (and any sidecar file) given its local ID. */
     private void deleteCrashOnBackgroundThread(String localId) {
-        File minidumpFile = mCrashFileManager.getCrashFileWithLocalId(localId);
+        File minidumpFile = getCrashFileManager().getCrashFileWithLocalId(localId);
         File sidecarFile = sidecarFile(localId);
         if (minidumpFile != null) {
             CrashFileManager.deleteFile(minidumpFile);
@@ -167,8 +178,9 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
      * @return An array of local IDs for crashes that are ready to be uploaded.
      */
     private String[] getPendingMinidumpsOnBackgroundThread() {
-        mCrashFileManager.cleanOutAllNonFreshMinidumpFiles();
-        File[] pendingMinidumps = mCrashFileManager.getMinidumpsReadyForUpload(MAX_UPLOAD_RETRIES);
+        getCrashFileManager().cleanOutAllNonFreshMinidumpFiles();
+        File[] pendingMinidumps =
+                getCrashFileManager().getMinidumpsReadyForUpload(MAX_UPLOAD_RETRIES);
         ArrayList<String> localIds = new ArrayList<>(pendingMinidumps.length);
         for (File minidump : pendingMinidumps) {
             localIds.add(CrashFileManager.getCrashLocalIdFromFileName(minidump.getName()));
@@ -186,7 +198,7 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
      */
     private String[] processNewMinidumpsOnBackgroundThread() {
         Map<String, Map<String, String>> crashesInfoMap =
-                mCrashFileManager.importMinidumpsCrashKeys();
+                getCrashFileManager().importMinidumpsCrashKeys();
         ArrayList<String> localIds = new ArrayList<>(crashesInfoMap.size());
         for (Map.Entry<String, Map<String, String>> entry : crashesInfoMap.entrySet()) {
             JSONObject crashKeysJson = new JSONObject(entry.getValue());
@@ -196,7 +208,7 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
             localIds.add(CrashFileManager.getCrashLocalIdFromFileName(uuid + ".dmp"));
             writeSidecar(uuid, crashKeysJson);
         }
-        for (File minidump : mCrashFileManager.getMinidumpsSansLogcat()) {
+        for (File minidump : getCrashFileManager().getMinidumpsSansLogcat()) {
             CrashFileManager.trySetReadyForUpload(minidump);
         }
         return localIds.toArray(new String[0]);
@@ -209,7 +221,7 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
      * with the crash. All crash keys and values are strings.
      */
     private @Nullable File sidecarFile(String localId) {
-        File minidumpFile = mCrashFileManager.getCrashFileWithLocalId(localId);
+        File minidumpFile = getCrashFileManager().getCrashFileWithLocalId(localId);
         if (minidumpFile == null) {
             return null;
         }
@@ -249,5 +261,16 @@ public final class CrashReporterControllerImpl extends ICrashReporterController.
         } catch (IOException | JSONException e) {
             return null;
         }
+    }
+
+    private CrashFileManager getCrashFileManager() {
+        if (mCrashFileManager == null) {
+            File cacheDir = new File(PathUtils.getCacheDirectory());
+            // Make sure the cache dir has been created, since this may be called before WebLayer
+            // has been initialized.
+            cacheDir.mkdir();
+            mCrashFileManager = new CrashFileManager(cacheDir);
+        }
+        return mCrashFileManager;
     }
 }
