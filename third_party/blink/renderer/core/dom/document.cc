@@ -275,8 +275,6 @@
 #include "third_party/blink/renderer/core/svg/svg_use_element.h"
 #include "third_party/blink/renderer/core/svg_element_factory.h"
 #include "third_party/blink/renderer/core/svg_names.h"
-#include "third_party/blink/renderer/core/timing/dom_window_performance.h"
-#include "third_party/blink/renderer/core/timing/window_performance.h"
 #include "third_party/blink/renderer/core/trustedtypes/trusted_html.h"
 #include "third_party/blink/renderer/core/xml/parser/xml_document_parser.h"
 #include "third_party/blink/renderer/core/xml_names.h"
@@ -7321,9 +7319,6 @@ void Document::TasksWereUnpaused() {
 
   if (scripted_animation_controller_)
     scripted_animation_controller_->Unpause();
-
-  if (dom_window_)
-    DOMWindowPerformance::performance(*dom_window_)->ResumeSuspendedObservers();
 }
 
 bool Document::TasksNeedPause() {
