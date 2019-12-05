@@ -619,7 +619,7 @@
 <translation id="3964661563329879394">{COUNT,plural, =0{Ninguno}=1{De 1 sitio web }other{De # sitios web }}</translation>
 <translation id="397105322502079400">Calculando...</translation>
 <translation id="3973234410852337861">La página <ph name="HOST_NAME" /> está bloqueada</translation>
-<translation id="3981540111851280311"><ph name="ENROLLMENT_DOMAIN" /> ha habilitado la protección contra amenazas de Chrome Enterprise en tu navegador. La protección contra amenazas de Chrome Enterprise tiene acceso a algunos de tus datos.</translation>
+<translation id="3981540111851280311"><ph name="ENROLLMENT_DOMAIN" /> ha habilitado la protección de Chrome Enterprise contra amenazas en tu navegador. La protección de Chrome Enterprise contra amenazas tiene acceso a algunos de tus datos.</translation>
 <translation id="3987405730340719549">Chrome ha determinado que este sitio web podría ser falso o fraudulento.
 
     Si crees que puede tratarse de un error, ve a https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
@@ -1123,7 +1123,7 @@
 <translation id="6433490469411711332">Editar información de contacto</translation>
 <translation id="6433595998831338502">La página <ph name="HOST_NAME" /> ha rechazado la conexión.</translation>
 <translation id="6434309073475700221">Rechazar</translation>
-<translation id="6435221585574090192">Comparte con tu administrador los datos de actividades relacionadas con la seguridad que marque la protección contra amenazas de Chrome Enterprise. Estos datos pueden incluir las URL de páginas, los nombres y metadatos de archivos, y tu nombre de usuario en el dispositivo y en Chrome.</translation>
+<translation id="6435221585574090192">Comparte con tu administrador los datos de actividades relacionadas con la seguridad que marque la protección de Chrome Enterprise contra amenazas. Estos datos pueden incluir URL de páginas, nombres y metadatos de archivos, y tu nombre de usuario en el dispositivo y en Chrome.</translation>
 <translation id="6440503408713884761">Ignorada</translation>
 <translation id="6446163441502663861">Kahu (sobre)</translation>
 <translation id="6446608382365791566">Añadir más información</translation>
@@ -1353,7 +1353,7 @@ Más información:
 <translation id="7610193165460212391">El valor <ph name="VALUE" /> se encuentra fuera del intervalo.</translation>
 <translation id="7613889955535752492">Caducidad: <ph name="EXPIRATION_MONTH" />/<ph name="EXPIRATION_YEAR" /></translation>
 <translation id="7615602087246926389">Has usado anteriormente otra versión de la contraseña de tu cuenta de Google para el cifrado de datos. Introdúcela a continuación.</translation>
-<translation id="7625784245512586808">Protección contra amenazas de Chrome Enterprise</translation>
+<translation id="7625784245512586808">Protección de Chrome Enterprise contra amenazas</translation>
 <translation id="7633909222644580952">Datos de rendimiento e informes sobre fallos</translation>
 <translation id="7637571805876720304">¿Quitar tarjeta de crédito de Chromium?</translation>
 <translation id="7638605456503525968">Puertos serie</translation>
@@ -1631,7 +1631,7 @@ Más información:
 <translation id="9080712759204168376">Resumen del pedido</translation>
 <translation id="9089260154716455634">Política fuera del horario:</translation>
 <translation id="9095388113577226029">Más idiomas...</translation>
-<translation id="9098981495403789647">Tu administrador ha habilitado la protección contra amenazas de Chrome Enterprise en tu navegador. La protección contra amenazas de Chrome Enterprise tiene acceso a algunos de tus datos.</translation>
+<translation id="9098981495403789647">Tu administrador ha habilitado la protección de Chrome Enterprise contra amenazas en tu navegador. La protección de Chrome Enterprise contra amenazas tiene acceso a algunos de tus datos.</translation>
 <translation id="9103872766612412690"><ph name="SITE" /> utiliza normalmente el cifrado para proteger tu información. Cuando Chromium intentó establecer conexión con <ph name="SITE" />, el sitio web devolvió unas credenciales inusuales e incorrectas. Esto puede ocurrir si un atacante intenta suplantar la identidad de <ph name="SITE" /> o si una pantalla de inicio de sesión Wi-Fi interrumpe la conexión. Tu información sigue estando protegida, ya que Chromium detuvo la conexión antes de que se intercambiaran datos.</translation>
 <translation id="9106062320799175032">Añade una dirección de facturación</translation>
 <translation id="9114524666733003316">Confirmando tarjeta...</translation>

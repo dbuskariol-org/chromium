@@ -266,7 +266,7 @@
 <translation id="2212735316055980242">നയം കണ്ടെത്തിയില്ല</translation>
 <translation id="2213606439339815911">എൻട്രികൾ ലഭ്യമാക്കുന്നു...</translation>
 <translation id="2215727959747642672">ഫയൽ എഡിറ്റ് ചെയ്യൽ</translation>
-<translation id="2218879909401188352">നിലവിൽ <ph name="BEGIN_BOLD" /><ph name="SITE" /><ph name="END_BOLD" /> എന്നതിലുള്ള അക്രമികൾക്ക് നിങ്ങളുടെ ഉപകരണം കേടുവരുത്തുന്ന ആപ്പുകൾ ഇൻസ്‌റ്റാൾ ചെയ്യാനോ മൊബൈൽ ബില്ലിലേക്ക് നിങ്ങളറിയാതെ നിരക്കുകൾ ചേർക്കാനോ നിങ്ങളുടെ വ്യക്തിഗത വിവരങ്ങൾ മോഷ്‌ടിക്കാനോ കഴിയും. <ph name="BEGIN_LEARN_MORE_LINK" />കൂടുതലറിയുക<ph name="END_LEARN_MORE_LINK" /></translation>
+<translation id="2218879909401188352">നിലവിൽ {<ph name="BEGIN_BOLD" /><ph name="SITE" /><ph name="END_BOLD" /> എന്നതിലുള്ള അക്രമികൾക്ക് നിങ്ങളുടെ ഉപകരണം കേടുവരുത്തുന്ന ആപ്പുകൾ ഇൻസ്‌റ്റാൾ ചെയ്യാനോ മൊബൈൽ ബില്ലിലേക്ക് നിങ്ങളറിയാതെ നിരക്കുകൾ ചേർക്കാനോ നിങ്ങളുടെ വ്യക്തിഗത വിവരങ്ങൾ മോഷ്‌ടിക്കാനോ കഴിയും. <ph name="BEGIN_LEARN_MORE_LINK" />കൂടുതലറിയുക<ph name="END_LEARN_MORE_LINK" /></translation>
 <translation id="2224337661447660594">ഇന്റർനെറ്റ് ഇല്ല</translation>
 <translation id="2230458221926704099"><ph name="BEGIN_LINK" />ഡയഗണോസ്‌റ്റിക്‌സ് ആപ്പ്<ph name="END_LINK" /> ഉപയോഗിച്ച് കണകഷൻ പ്രശ്‌നം പരിഹരിക്കുക</translation>
 <translation id="2239100178324503013">ഇപ്പോൾ അയയ്‌ക്കുക</translation>

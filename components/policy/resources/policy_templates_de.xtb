@@ -814,11 +814,11 @@ Diese Richtlinie gilt auch für Komponentenerweiterungen, zum Beispiel die Hango
 <translation id="2303795211377219696">AutoFill für Kreditkarten aktivieren</translation>
 <translation id="2309390639296060546">Standardeinstellung für "Standortbestimmung"</translation>
 <translation id="2327252517317514801">Domains definieren, die auf die G Suite zugreifen dürfen</translation>
-<translation id="2328573323851533589">Mit dieser Richtlinie kann die Datenleckprüfung für Anmeldedaten in <ph name="PRODUCT_NAME" /> zwingend aktiviert oder deaktiviert werden.
+<translation id="2328573323851533589">Mit dieser Richtlinie kann die Aktivierung oder Deaktivierung der Datenleckprüfung für Anmeldedaten in <ph name="PRODUCT_NAME" /> erzwungen werden.
 
-          Selbst wenn diese Richtlinie auf "true" gesetzt ist, findet sie jedoch keine Anwendung, wenn SafeBrowsing durch die Richtlinie oder den Nutzer deaktiviert ist. Verwenden Sie die <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" />-Richtlinie, um SafeBrowsing zwingend zu aktivieren.
+          Selbst wenn diese Richtlinie auf "true" gesetzt ist, findet sie jedoch keine Anwendung, wenn SafeBrowsing per Richtlinie oder vom Nutzer deaktiviert wurde. Wenn Sie die Aktivierung von SafeBrowsing erzwingen möchten, verwenden Sie die Richtlinie "<ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" />".
 
-          Wenn diese Richtlinie aktiviert oder deaktiviert ist, können Nutzer sie in <ph name="PRODUCT_NAME" /> nicht ändern oder überschreiben. Wenn sie nicht festgelegt ist, ist die Datenleckprüfung für Anmeldedaten zulässig, kann jedoch vom Nutzer deaktiviert werden.</translation>
+          Ist diese Richtlinie aktiviert oder deaktiviert, können Nutzer sie in <ph name="PRODUCT_NAME" /> nicht ändern oder überschreiben. Wenn sie nicht festgelegt ist, ist die Datenleckprüfung für Anmeldedaten zulässig, kann jedoch vom Nutzer deaktiviert werden.</translation>
 <translation id="2345547870894930157">DoH-Modus ohne unsicheres Fallback-Verhalten aktivieren</translation>
 <translation id="237494535617297575">Ermöglicht Ihnen die Zusammenstellung einer Liste mit URL-Mustern, die Websites angeben, denen das Anzeigen von Benachrichtigungen gestattet ist. Wenn diese Richtlinie nicht konfiguriert ist, kommt für alle Websites entweder der globale Standardwert der Richtlinie "DefaultNotificationsSetting", sofern konfiguriert, oder der persönlichen Konfiguration des Nutzers zum Einsatz.</translation>
 <translation id="2386362615870139244">Bildschirm-Wakelocks zulassen</translation>

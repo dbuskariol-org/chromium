@@ -795,7 +795,7 @@
 <translation id="4923417429809017348">Цю сторінку перекладено з невідомої мови оригіналу такою мовою: <ph name="LANGUAGE_LANGUAGE" /></translation>
 <translation id="4923459931733593730">Оплата</translation>
 <translation id="4926049483395192435">Потрібно вказати.</translation>
-<translation id="4926159001844873046">Повідомлення із сайту <ph name="SITE" /></translation>
+<translation id="4926159001844873046">Повідомлення з <ph name="SITE" /></translation>
 <translation id="4926340098269537727"><ph name="ACTIVE_MATCH" /> з <ph name="TOTAL_MATCHCOUNT" /></translation>
 <translation id="4943872375798546930">Не знайдено жодного результату</translation>
 <translation id="4950898438188848926">Кнопка перемикання вкладки: натисніть Enter, щоб перейти на відкриту вкладку, <ph name="TAB_SWITCH_FOCUSED_FRIENDLY_MATCH_TEXT" /></translation>

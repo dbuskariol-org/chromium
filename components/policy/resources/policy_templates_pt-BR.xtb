@@ -804,7 +804,7 @@ Se você desativar esta configuração ou deixá-la sem definição, todas as p�
 <translation id="2327252517317514801">Definir os domínios autorizados a acessar o G Suite</translation>
 <translation id="2328573323851533589">Esta política pode ser usada para ativar ou desativar forçadamente a verificação de vazamento de credenciais no <ph name="PRODUCT_NAME" />.
 
-          Mesmo se a política não for definida como verdadeira, o comportamento não será acionado se o Navegação segura for desativado, seja pela política ou pelo usuário. Para forçar o Navegação segura, use a política <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" />.
+          Mesmo se a política for definida como verdadeira, o comportamento não será acionado se o Navegação segura for desativado, seja pela política ou pelo usuário. Para forçar o Navegação segura, use a política <ph name="SAFE_BROWSING_ENABLED_POLICY_NAME" />.
 
           Se esta política for ativada ou desativada, o usuário não poderá mudá-la nem substituí-la no <ph name="PRODUCT_NAME" />. Se esta política não for definida, a verificação de vazamento será permitida, mas poderá ser desativada pelo usuário.</translation>
 <translation id="2345547870894930157">Ativar DNS sobre HTTPS sem substituto inseguro</translation>
