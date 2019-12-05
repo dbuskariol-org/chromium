@@ -1578,6 +1578,7 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/tab/BrowserControlsVisibilityDelegate.java",
   "java/src/org/chromium/chrome/browser/tab/ChildBackgroundTabShowObserver.java",
   "java/src/org/chromium/chrome/browser/tab/EmptyTabObserver.java",
+  "java/src/org/chromium/chrome/browser/tab/TabHidingType.java",
   "java/src/org/chromium/chrome/browser/tab/InterceptNavigationDelegateImpl.java",
   "java/src/org/chromium/chrome/browser/tab/SadTab.java",
   "java/src/org/chromium/chrome/browser/tab/SadTabView.java",
