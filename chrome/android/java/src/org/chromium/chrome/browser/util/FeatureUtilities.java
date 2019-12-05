@@ -381,7 +381,7 @@ public class FeatureUtilities {
         return isFlagEnabled(BOTTOM_TOOLBAR_ENABLED_KEY, false)
                 && !DeviceFormFactor.isNonMultiDisplayContextOnTablet(
                         ContextUtils.getApplicationContext())
-                && !isTabGroupsAndroidEnabled();
+                && (isDuetTabStripIntegrationAndroidEnabled() || !isTabGroupsAndroidEnabled());
     }
 
     /**
@@ -397,7 +397,7 @@ public class FeatureUtilities {
      */
     public static boolean isAdaptiveToolbarEnabled() {
         return isFlagEnabled(ADAPTIVE_TOOLBAR_ENABLED_KEY, true) && isBottomToolbarEnabled()
-                && !isGridTabSwitcherEnabled();
+                && (isDuetTabStripIntegrationAndroidEnabled() || !isGridTabSwitcherEnabled());
     }
 
     /**
