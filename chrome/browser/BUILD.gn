@@ -1105,6 +1105,8 @@ jumbo_static_library("browser") {
     "performance_manager/decorators/frame_priority_decorator.h",
     "performance_manager/decorators/frozen_frame_aggregator.cc",
     "performance_manager/decorators/frozen_frame_aggregator.h",
+    "performance_manager/decorators/helpers/page_live_state_decorator_helper.cc",
+    "performance_manager/decorators/helpers/page_live_state_decorator_helper.h",
     "performance_manager/decorators/page_aggregator.cc",
     "performance_manager/decorators/page_aggregator.h",
     "performance_manager/decorators/page_almost_idle_decorator.cc",
