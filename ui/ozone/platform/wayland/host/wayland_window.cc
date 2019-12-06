@@ -388,7 +388,7 @@ void WaylandWindow::Show(bool inactive) {
 }
 
 void WaylandWindow::Hide() {
-  if (!is_tooltip_) {
+  if (is_tooltip_) {
     tooltip_subsurface_.reset();
   } else {
     if (child_window_)
