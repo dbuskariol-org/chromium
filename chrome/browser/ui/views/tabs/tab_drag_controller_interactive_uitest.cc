@@ -2519,6 +2519,8 @@ IN_PROC_BROWSER_TEST_P(DetachToBrowserTabDragControllerTest,
   // bounds are different from the maximized bound's origin.
   browser()->window()->SetBounds(browser()->window()->GetBounds() +
                                  gfx::Vector2d(100, 50));
+  BrowserView::GetBrowserViewForBrowser(browser())
+      ->DisableTopControlsSlideForTesting();
   ash::ShellTestApi().SetTabletModeEnabledForTest(true);
 
   DragWindowAndVerifyOffset(this, GetTabStripForBrowser(browser()), 1);
@@ -2527,6 +2529,8 @@ IN_PROC_BROWSER_TEST_P(DetachToBrowserTabDragControllerTest,
 
 IN_PROC_BROWSER_TEST_P(DetachToBrowserTabDragControllerTest,
                        OffsetForDraggingRightSnappedWindowInTabletMode) {
+  BrowserView::GetBrowserViewForBrowser(browser())
+      ->DisableTopControlsSlideForTesting();
   ash::ShellTestApi().SetTabletModeEnabledForTest(true);
 
   // Right snap the browser window.
