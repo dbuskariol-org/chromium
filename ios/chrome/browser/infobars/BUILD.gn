@@ -48,6 +48,8 @@ source_set("overlays") {
     "//base",
     "//components/infobars/core",
     "//ios/chrome/browser/overlays",
+    "//ios/chrome/browser/overlays/public/infobar_banner",
+    "//ios/chrome/browser/passwords:infobar_delegates",
     "//ios/web/public",
   ]
 }
