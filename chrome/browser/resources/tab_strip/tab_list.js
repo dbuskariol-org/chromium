@@ -408,10 +408,10 @@ class TabListElement extends CustomElement {
     this.draggedItem_ = /** @type {!TabElement} */ (draggedItem);
     this.draggedItem_.setDragging(true);
     event.dataTransfer.effectAllowed = 'move';
+    const draggedItemRect = this.draggedItem_.getBoundingClientRect();
     event.dataTransfer.setDragImage(
-        this.draggedItem_.getDragImage(),
-        event.pageX - this.draggedItem_.offsetLeft,
-        event.pageY - this.draggedItem_.offsetTop);
+        this.draggedItem_.getDragImage(), event.clientX - draggedItemRect.left,
+        event.clientY - draggedItemRect.top);
   }
 
   /** @private */
