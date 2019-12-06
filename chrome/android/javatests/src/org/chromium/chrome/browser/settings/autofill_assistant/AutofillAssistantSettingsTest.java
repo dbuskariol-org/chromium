@@ -37,7 +37,7 @@ import org.chromium.content_public.browser.test.util.TestThreadUtils;
  * Tests for the "Autofill Assisatnt" settings screen.
  */
 @RunWith(BaseJUnit4ClassRunner.class)
-public class AutofillAssistantPreferencesTest {
+public class AutofillAssistantSettingsTest {
     @Rule
     public final ChromeBrowserTestRule mBrowserTestRule = new ChromeBrowserTestRule();
 
@@ -55,7 +55,7 @@ public class AutofillAssistantPreferencesTest {
     private void setAutofillAssistantSwitch(boolean value) {
         ContextUtils.getAppSharedPreferences()
                 .edit()
-                .putBoolean(AutofillAssistantPreferences.PREF_AUTOFILL_ASSISTANT_SWITCH, value)
+                .putBoolean(AutofillAssistantSettings.PREF_AUTOFILL_ASSISTANT_SWITCH, value)
                 .apply();
     }
 
@@ -66,7 +66,7 @@ public class AutofillAssistantPreferencesTest {
      */
     private boolean getAutofillAssistantSwitch(boolean defaultValue) {
         return ContextUtils.getAppSharedPreferences().getBoolean(
-                AutofillAssistantPreferences.PREF_AUTOFILL_ASSISTANT_SWITCH, defaultValue);
+                AutofillAssistantSettings.PREF_AUTOFILL_ASSISTANT_SWITCH, defaultValue);
     }
 
     /**
@@ -81,14 +81,14 @@ public class AutofillAssistantPreferencesTest {
 
         final SettingsActivity settingsActivity = SettingsActivityTest.startSettingsActivity(
                 InstrumentationRegistry.getInstrumentation(),
-                AutofillAssistantPreferences.class.getName());
+                AutofillAssistantSettings.class.getName());
 
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            AutofillAssistantPreferences autofillAssistantPrefs =
-                    (AutofillAssistantPreferences) settingsActivity.getMainFragment();
+            AutofillAssistantSettings autofillAssistantPrefs =
+                    (AutofillAssistantSettings) settingsActivity.getMainFragment();
             ChromeSwitchPreference onOffSwitch =
                     (ChromeSwitchPreference) autofillAssistantPrefs.findPreference(
-                            AutofillAssistantPreferences.PREF_AUTOFILL_ASSISTANT_SWITCH);
+                            AutofillAssistantSettings.PREF_AUTOFILL_ASSISTANT_SWITCH);
             Assert.assertTrue(onOffSwitch.isChecked());
 
             onOffSwitch.performClick();
@@ -102,13 +102,13 @@ public class AutofillAssistantPreferencesTest {
 
         final SettingsActivity settingsActivity2 = SettingsActivityTest.startSettingsActivity(
                 InstrumentationRegistry.getInstrumentation(),
-                AutofillAssistantPreferences.class.getName());
+                AutofillAssistantSettings.class.getName());
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            AutofillAssistantPreferences autofillAssistantPrefs =
-                    (AutofillAssistantPreferences) settingsActivity2.getMainFragment();
+            AutofillAssistantSettings autofillAssistantPrefs =
+                    (AutofillAssistantSettings) settingsActivity2.getMainFragment();
             ChromeSwitchPreference onOffSwitch =
                     (ChromeSwitchPreference) autofillAssistantPrefs.findPreference(
-                            AutofillAssistantPreferences.PREF_AUTOFILL_ASSISTANT_SWITCH);
+                            AutofillAssistantSettings.PREF_AUTOFILL_ASSISTANT_SWITCH);
             Assert.assertFalse(onOffSwitch.isChecked());
         });
     }
