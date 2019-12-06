@@ -564,11 +564,6 @@
     "args": ["--enable-features=AudioServiceOutOfProcess,AudioServiceSandbox,WebRtcApmInAudioService"]
   },
   {
-    "prefix": "scheduler",
-    "bases": ["wpt_internal/scheduler"],
-    "args": ["--enable-features=BlinkSchedulerDisableAntiStarvationForPriorities"]
-  },
-  {
     "prefix": "cross-origin-isolation",
     "bases": ["external/wpt/html/cross-origin-embedder-policy"],
     "args": ["--enable-features=CrossOriginIsolation"]

@@ -5868,10 +5868,6 @@ crbug.com/989717 [ Fuchsia ] http/tests/preload/avoid_delaying_onload_link_prelo
 crbug.com/991243 [ Linux ] external/wpt/workers/semantics/multiple-workers/003.html [ Pass Timeout ]
 crbug.com/991243 [ Linux ] virtual/omt-worker-fetch/external/wpt/workers/semantics/multiple-workers/003.html [ Pass Timeout ]
 
-# Expected failure for experimental Scheduling API when running without the
-# BlinkSchedulerDisableAntiStarvationForPriorities feature.
-crbug.com/979017 wpt_internal/scheduler/task_order.html [ Failure ]
-
 # Expected failures for forced colors mode tests when the corresponding flags
 # are not enabled.
 crbug.com/970285 external/wpt/forced-colors-mode [ Failure ]
