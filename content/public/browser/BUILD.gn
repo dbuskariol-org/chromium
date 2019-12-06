@@ -412,6 +412,7 @@ jumbo_source_set("browser_sources") {
   }
 
   public_deps = [
+    "//build:chromecast_buildflags",
     "//components/download/public/common:public",
     "//content/public/common:common_sources",
     "//ipc",

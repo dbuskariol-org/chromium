@@ -448,6 +448,7 @@ jumbo_source_set("unit_tests") {
   deps = [
     ":modules",
     ":modules_testing",
+    "//build:chromecast_buildflags",
     "//media:test_support",
     "//net:quic_test_tools",
     "//services/device/public/cpp:test_support",

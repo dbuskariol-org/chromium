@@ -10,6 +10,7 @@
 #include "base/strings/stringprintf.h"
 #include "base/trace_event/trace_event.h"
 #include "base/unguessable_token.h"
+#include "build/chromecast_buildflags.h"
 #include "components/crash/core/common/crash_key.h"
 #include "media/audio/audio_device_description.h"
 #include "services/audio/input_stream.h"
@@ -126,7 +127,7 @@ void StreamFactory::CreateOutputStream(
   // This is required for multizone audio playback on Cast devices.
   // See //chromecast/media/cast_audio_manager.h for more information.
   const std::string device_id_or_group_id =
-#if defined(IS_CHROMECAST)
+#if BUILDFLAG(IS_CHROMECAST)
       (::media::AudioDeviceDescription::IsCommunicationsDevice(
            output_device_id) ||
        group_id.is_empty())
