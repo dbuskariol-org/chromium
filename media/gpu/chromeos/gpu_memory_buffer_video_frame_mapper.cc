@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "media/gpu/linux/gpu_memory_buffer_video_frame_mapper.h"
+#include "media/gpu/chromeos/gpu_memory_buffer_video_frame_mapper.h"
 
 #include "base/bind.h"
 #include "base/memory/ptr_util.h"

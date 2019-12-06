@@ -322,7 +322,7 @@ if (use_v4l2_codec || use_vaapi) {
 
     # generic_dmabuf_video_frame_mapper
     if (use_v4l2_codec || use_vaapi) {
-      deps += [ "//media/gpu/linux:video_frame_mapper" ]
+      deps += [ "//media/gpu/chromeos:video_frame_mapper" ]
     }
 
     # vaapi_dmabuf_video_frame_mapper
