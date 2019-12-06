@@ -160,12 +160,12 @@ const blink::WebMediaStreamTrack& FakeRTCRtpReceiverImpl::Track() const {
   return track_;
 }
 
-blink::WebVector<blink::WebString> FakeRTCRtpReceiverImpl::StreamIds() const {
-  blink::WebVector<blink::WebString> web_stream_ids(stream_ids_.size());
+WebVector<String> FakeRTCRtpReceiverImpl::StreamIds() const {
+  WebVector<String> wtf_stream_ids(stream_ids_.size());
   for (size_t i = 0; i < stream_ids_.size(); ++i) {
-    web_stream_ids[i] = blink::WebString::FromUTF8(stream_ids_[i]);
+    wtf_stream_ids[i] = String::FromUTF8(stream_ids_[i]);
   }
-  return web_stream_ids;
+  return wtf_stream_ids;
 }
 
 blink::WebVector<std::unique_ptr<RTCRtpSource>>

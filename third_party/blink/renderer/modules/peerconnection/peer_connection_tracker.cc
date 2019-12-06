@@ -94,7 +94,9 @@ static String SerializeAnswerOptions(blink::RTCAnswerOptionsPlatform* options) {
   return result.ToString();
 }
 
-static String SerializeMediaStreamIds(
+// TODO(crbug.com/787254): Remove this variant of this function
+// when RTCRptSenderPlatform::StreamIds returns WebVector<String>.
+static String SerializeMediaStreamIdsDeprecated(
     const blink::WebVector<blink::WebString>& stream_ids) {
   if (!stream_ids.size())
     return "[]";
@@ -105,6 +107,23 @@ static String SerializeMediaStreamIds(
       result.Append(",");
     result.Append("'");
     result.Append(String(stream_id));
+    result.Append("'");
+  }
+  result.Append("]");
+  return result.ToString();
+}
+
+static String SerializeMediaStreamIds(
+    const blink::WebVector<String>& stream_ids) {
+  if (!stream_ids.size())
+    return "[]";
+  StringBuilder result;
+  result.Append("[");
+  for (const auto& stream_id : stream_ids) {
+    if (result.length() > 2u)
+      result.Append(",");
+    result.Append("'");
+    result.Append(stream_id);
     result.Append("'");
   }
   result.Append("]");
@@ -147,7 +166,7 @@ static String SerializeSender(const String& indent,
   // streams:['id,'id'],
   result.Append(indent);
   result.Append("  streams:");
-  result.Append(SerializeMediaStreamIds(sender.StreamIds()));
+  result.Append(SerializeMediaStreamIdsDeprecated(sender.StreamIds()));
   result.Append(",\n");
   result.Append(indent);
   result.Append("}");

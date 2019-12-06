@@ -133,9 +133,7 @@ class DummyRTCRtpReceiverPlatform : public RTCRtpReceiverPlatform {
     return dummy;
   }
   const WebMediaStreamTrack& Track() const override { return track_; }
-  WebVector<WebString> StreamIds() const override {
-    return WebVector<WebString>();
-  }
+  WebVector<String> StreamIds() const override { return WebVector<String>(); }
   WebVector<std::unique_ptr<RTCRtpSource>> GetSources() override {
     return WebVector<std::unique_ptr<RTCRtpSource>>();
   }

@@ -1999,10 +1999,10 @@ MediaStreamVector RTCPeerConnection::getRemoteStreams() const {
   return remote_streams;
 }
 
-MediaStream* RTCPeerConnection::getRemoteStreamById(const WebString& id) const {
+MediaStream* RTCPeerConnection::getRemoteStreamById(const String& id) const {
   for (const auto& rtp_receiver : rtp_receivers_) {
     for (const auto& stream : rtp_receiver->streams()) {
-      if (static_cast<WebString>(stream->id()) == id) {
+      if (stream->id() == id) {
         return stream;
       }
     }
@@ -2995,7 +2995,7 @@ void RTCPeerConnection::DidModifyTransceivers(
 
 void RTCPeerConnection::SetAssociatedMediaStreams(
     RTCRtpReceiver* receiver,
-    const WebVector<WebString>& stream_ids,
+    const WebVector<String>& stream_ids,
     HeapVector<std::pair<Member<MediaStream>, Member<MediaStreamTrack>>>*
         remove_list,
     HeapVector<std::pair<Member<MediaStream>, Member<MediaStreamTrack>>>*
@@ -3006,7 +3006,7 @@ void RTCPeerConnection::SetAssociatedMediaStreams(
   for (const auto& stream_id : stream_ids) {
     MediaStream* curr_stream = nullptr;
     for (const auto& known_stream : known_streams) {
-      if (static_cast<WebString>(known_stream->id()) == stream_id) {
+      if (known_stream->id() == stream_id) {
         curr_stream = known_stream;
         break;
       }

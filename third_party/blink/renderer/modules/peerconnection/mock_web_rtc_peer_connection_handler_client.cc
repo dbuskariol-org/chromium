@@ -38,15 +38,14 @@ void MockWebRTCPeerConnectionHandlerClient::didGenerateICECandidateWorker(
 
 void MockWebRTCPeerConnectionHandlerClient::didAddReceiverWorker(
     std::unique_ptr<RTCRtpReceiverPlatform>* web_rtp_receiver) {
-  blink::WebVector<blink::WebString> stream_ids =
-      (*web_rtp_receiver)->StreamIds();
+  WebVector<String> stream_ids = (*web_rtp_receiver)->StreamIds();
   DCHECK_EQ(1u, stream_ids.size());
   remote_stream_id_ = stream_ids[0];
 }
 
 void MockWebRTCPeerConnectionHandlerClient::didRemoveReceiverWorker(
     std::unique_ptr<RTCRtpReceiverPlatform>* web_rtp_receiver) {
-  remote_stream_id_ = blink::WebString();
+  remote_stream_id_ = String();
 }
 
 }  // namespace blink

@@ -75,8 +75,8 @@ class FakeRTCRtpReceiverImpl : public RTCRtpReceiverPlatform {
   rtc::scoped_refptr<webrtc::DtlsTransportInterface> DtlsTransport() override;
   webrtc::DtlsTransportInformation DtlsTransportInformation() override;
   const blink::WebMediaStreamTrack& Track() const override;
-  blink::WebVector<blink::WebString> StreamIds() const override;
-  blink::WebVector<std::unique_ptr<RTCRtpSource>> GetSources() override;
+  WebVector<String> StreamIds() const override;
+  WebVector<std::unique_ptr<RTCRtpSource>> GetSources() override;
   void GetStats(blink::WebRTCStatsReportCallback,
                 const blink::WebVector<webrtc::NonStandardGroupId>&) override;
   std::unique_ptr<webrtc::RtpParameters> GetParameters() const override;

@@ -88,10 +88,10 @@ class MockWebRTCPeerConnectionHandlerClient
     return candidate_mline_index_;
   }
   const std::string& candidate_mid() const { return candidate_mid_; }
-  const blink::WebString& remote_stream_id() const { return remote_stream_id_; }
+  const String& remote_stream_id() const { return remote_stream_id_; }
 
  private:
-  blink::WebString remote_stream_id_;
+  String remote_stream_id_;
   std::string candidate_sdp_;
   base::Optional<uint16_t> candidate_mline_index_;
   std::string candidate_mid_;

@@ -200,7 +200,7 @@ class MODULES_EXPORT RTCPeerConnection final
   MediaStreamVector getLocalStreams() const;
   // A remote stream is any stream associated with a receiver.
   MediaStreamVector getRemoteStreams() const;
-  MediaStream* getRemoteStreamById(const WebString&) const;
+  MediaStream* getRemoteStreamById(const String&) const;
   bool IsRemoteStream(MediaStream* stream) const;
 
   void addStream(ScriptState*,
@@ -454,7 +454,7 @@ class MODULES_EXPORT RTCPeerConnection final
   // https://w3c.github.io/webrtc-pc/#set-associated-remote-streams
   void SetAssociatedMediaStreams(
       RTCRtpReceiver* receiver,
-      const WebVector<WebString>& stream_ids,
+      const WebVector<String>& stream_ids,
       HeapVector<std::pair<Member<MediaStream>, Member<MediaStreamTrack>>>*
           remove_list,
       HeapVector<std::pair<Member<MediaStream>, Member<MediaStreamTrack>>>*
