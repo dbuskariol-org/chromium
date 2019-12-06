@@ -9,7 +9,8 @@
 #include "base/bind_helpers.h"
 #include "base/files/scoped_file.h"
 #include "base/posix/eintr_wrapper.h"
-#include "build/build_config.h"
+#include "gpu/ipc/common/gpu_client_ids.h"
+#include "gpu/ipc/service/gpu_memory_buffer_factory.h"
 #include "media/base/color_plane_layout.h"
 #include "media/base/format_utils.h"
 #include "media/base/scopedfd_helper.h"
@@ -20,16 +21,9 @@
 #include "ui/gfx/linux/native_pixmap_dmabuf.h"
 #include "ui/gfx/native_pixmap.h"
 
-#if defined(OS_LINUX)
-#include "gpu/ipc/common/gpu_client_ids.h"
-#include "gpu/ipc/service/gpu_memory_buffer_factory.h"
-#endif  // defined(OS_LINUX)
-
 namespace media {
 
 namespace {
-
-#if defined(OS_LINUX)
 
 scoped_refptr<VideoFrame> CreateVideoFrameGpu(
     gpu::GpuMemoryBufferFactory* factory,
@@ -93,7 +87,6 @@ scoped_refptr<VideoFrame> CreateVideoFrameGpu(
                      gpu::kPlatformVideoFramePoolClientId));
   return frame;
 }
-#endif  // defined(OS_LINUX)
 
 }  // namespace
 
