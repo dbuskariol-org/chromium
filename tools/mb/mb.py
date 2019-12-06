@@ -1220,6 +1220,7 @@ class MetaBuildWrapper(object):
               'Google Chrome Helper (Renderer).app/',
               'Google Chrome Helper.app/',
               'Google Chrome.app/',
+              'GoogleUpdate.app/',
               'blink_deprecated_test_plugin.plugin/',
               'blink_test_plugin.plugin/',
               'corb_test_plugin.plugin/',
