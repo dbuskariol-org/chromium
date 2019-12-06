@@ -532,10 +532,8 @@ TEST(AXLanguageDetectionTest, LanguageDetectionDetectOnly) {
   {
     AXNode* node5 = tree.GetFromId(5);
     EXPECT_TRUE(node5->IsText());
-    // Inherited languages are not stored in lang info, but removal of empty
-    // LanguageInfo(s) occurs during labelling. So we expect this to be empty.
-    ASSERT_NE(node5->GetLanguageInfo(), nullptr);
-    EXPECT_TRUE(node5->GetLanguageInfo()->language.empty());
+    // Inherited languages are not stored in lang info.
+    ASSERT_EQ(node5->GetLanguageInfo(), nullptr);
     EXPECT_EQ(node5->GetLanguage(), "fr");
   }
 }

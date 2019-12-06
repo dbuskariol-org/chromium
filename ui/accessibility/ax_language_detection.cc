@@ -118,19 +118,6 @@ void AXLanguageDetectionManager::DetectLanguageForSubtree(
 void AXLanguageDetectionManager::DetectLanguageForSubtreeInternal(
     AXNode* node) {
   if (node->IsText()) {
-    AXLanguageInfo* lang_info = node->GetLanguageInfo();
-    if (!lang_info) {
-      // TODO(chrishall): consider space optimisations.
-      // Currently we keep these language info instances around until
-      // destruction of the containing node, this is due to us treating AXNode
-      // as otherwise read-only and so we store any detected language
-      // information on lang info.
-      node->SetLanguageInfo(std::make_unique<AXLanguageInfo>());
-      lang_info = node->GetLanguageInfo();
-    } else {
-      lang_info->detected_languages.clear();
-    }
-
     // TODO(chrishall): implement strategy for nodes which are too small to get
     // reliable language detection results. Consider combination of
     // concatenation and bubbling up results.
@@ -143,16 +130,31 @@ void AXLanguageDetectionManager::DetectLanguageForSubtreeInternal(
     const auto results = language_identifier_.FindTopNMostFreqLangs(
         text, kMaxDetectedLanguagesPerSpan);
 
+    std::vector<std::string> reliable_results;
+
     for (const auto res : results) {
       // The output of FindTopNMostFreqLangs is already sorted by byte count,
       // this seems good enough for now.
       // Only consider results which are 'reliable', this will also remove
       // 'unknown'.
       if (res.is_reliable) {
-        lang_info->detected_languages.push_back(res.language);
+        reliable_results.push_back(res.language);
       }
     }
-    lang_info_stats_.Add(lang_info->detected_languages);
+
+    // Only allocate a(n) LanguageInfo if we have results worth keeping.
+    if (reliable_results.size()) {
+      AXLanguageInfo* lang_info = node->GetLanguageInfo();
+      if (lang_info) {
+        lang_info->detected_languages.clear();
+      } else {
+        node->SetLanguageInfo(std::make_unique<AXLanguageInfo>());
+        lang_info = node->GetLanguageInfo();
+      }
+
+      lang_info->detected_languages = std::move(reliable_results);
+      lang_info_stats_.Add(lang_info->detected_languages);
+    }
   }
 
   // TODO(chrishall): refactor this as textnodes only ever have inline text
