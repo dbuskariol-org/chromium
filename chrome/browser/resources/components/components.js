@@ -2,7 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-'use strict';
+import './strings.m.js';
+
+import {addWebUIListener, isChromeOS, sendWithPromise} from 'chrome://resources/js/cr.m.js';
+import {loadTimeData} from 'chrome://resources/js/load_time_data.m.js';
+import {$} from 'chrome://resources/js/util.m.js';
 
 /**
  * An array of the latest component data including ID, name, status and
@@ -33,7 +37,7 @@ function renderTemplate(componentsData) {
  * components.
  */
 function requestComponentsData() {
-  cr.sendWithPromise('requestComponentsData').then(returnComponentsData);
+  sendWithPromise('requestComponentsData').then(returnComponentsData);
 }
 
 /**
@@ -81,7 +85,7 @@ function returnComponentsData(componentsData) {
   }
 
   // Disable some controls for Guest mode in ChromeOS.
-  if (cr.isChromeOS && loadTimeData.getBoolean('isGuest')) {
+  if (isChromeOS && loadTimeData.getBoolean('isGuest')) {
     document.querySelectorAll('[guest-disabled]').forEach(function(element) {
       element.disabled = true;
     });
@@ -134,6 +138,6 @@ function handleCheckUpdate(node) {
 
 // Get data and have it displayed upon loading.
 document.addEventListener('DOMContentLoaded', function() {
-  cr.addWebUIListener('component-event', onComponentEvent);
+  addWebUIListener('component-event', onComponentEvent);
   requestComponentsData();
 });
