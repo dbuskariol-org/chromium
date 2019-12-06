@@ -7,6 +7,7 @@
 #include "base/json/json_reader.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/values.h"
+#include "components/omnibox/browser/autocomplete_match.h"
 #include "components/omnibox/browser/test_scheme_classifier.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -153,4 +154,33 @@ TEST(SearchSuggestionParserTest, ParseSuggestResults) {
     ASSERT_EQ("#424242", suggestion_result.image_dominant_color());
     ASSERT_EQ("http://example.com/a.png", suggestion_result.image_url());
   }
+}
+
+TEST(SearchSuggestionParserTest, SuggestClassification) {
+  AutocompleteMatch::ACMatchClassification none_classification(
+      0, AutocompleteMatch::ACMatchClassification::NONE);
+
+  SearchSuggestionParser::SuggestResult result(
+      base::ASCIIToUTF16("foobar"), AutocompleteMatchType::SEARCH_SUGGEST, 0,
+      false, 400, true, base::string16());
+  AutocompleteMatch dummy_match;
+  dummy_match.ValidateClassifications(result.match_contents(),
+                                      result.match_contents_class());
+
+  // Re-classify the match contents, as the ZeroSuggestProvider does.
+  result.ClassifyMatchContents(true, base::string16());
+  dummy_match.ValidateClassifications(result.match_contents(),
+                                      result.match_contents_class());
+
+  // Make sure that searching text-not-found still gives valid classifications,
+  // if we don't allow the code to bold everything.
+  result.ClassifyMatchContents(false, base::ASCIIToUTF16("apple"));
+  dummy_match.ValidateClassifications(result.match_contents(),
+                                      result.match_contents_class());
+
+  // Make sure that searching text-not-found still gives valid classifications,
+  // if we don't allow the code to bold everything.
+  result.ClassifyMatchContents(true, base::ASCIIToUTF16("foobar"));
+  dummy_match.ValidateClassifications(result.match_contents(),
+                                      result.match_contents_class());
 }
