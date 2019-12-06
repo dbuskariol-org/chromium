@@ -5,6 +5,7 @@
 #include "chromeos/components/quick_answers/search_result_parsers/result_parser.h"
 
 #include "base/values.h"
+#include "chromeos/components/quick_answers/search_result_parsers/definition_result_parser.h"
 #include "chromeos/components/quick_answers/search_result_parsers/translation_result_parser.h"
 #include "chromeos/components/quick_answers/search_result_parsers/unit_conversion_result_parser.h"
 
@@ -37,9 +38,11 @@ const Value* ResultParser::GetFirstListElement(const Value& value,
 std::unique_ptr<ResultParser> ResultParserFactory::Create(
     int one_namespace_type) {
   switch (static_cast<ResultType>(one_namespace_type)) {
+    case ResultType::kDefinitionResult:
+      return std::make_unique<DefinitionResultParser>();
     case ResultType::kTranslationResult:
       return std::make_unique<TranslationResultParser>();
-    case ResultType::kUnitCconverterResult:
+    case ResultType::kUnitConvertionResult:
       return std::make_unique<UnitConversionResultParser>();
       // TODO(llin): Add other result parsers.
   }
