@@ -115,10 +115,7 @@ def android_builder(*, name, **kwargs):
 android_builder(
     name = 'android-kitkat-arm-rel',
     goma_jobs = goma.jobs.J150,
-    tryjob = tryjob(
-        # TODO(https://crbug.com/1024641) Make non-experimental
-        experiment_percentage = 1,
-    ),
+    tryjob = tryjob(),
 )
 
 android_builder(
@@ -127,10 +124,7 @@ android_builder(
     goma_jobs = goma.jobs.J300,
     ssd = True,
     use_java_coverage = True,
-    tryjob = tryjob(
-        # TODO(https://crbug.com/1024641) Make non-experimental
-        experiment_percentage = 1,
-    ),
+    tryjob = tryjob(),
 )
 
 
@@ -145,19 +139,13 @@ def chromiumos_builder(*, name, **kwargs):
 chromiumos_builder(
     name = 'chromeos-amd64-generic-rel',
     goma_enable_ats = True,
-    tryjob = tryjob(
-        # TODO(https://crbug.com/1024641) Make non-experimental
-        experiment_percentage = 1,
-    ),
+    tryjob = tryjob(),
 )
 
 chromiumos_builder(
     name = 'linux-chromeos-rel',
     goma_jobs = goma.jobs.J150,
-    tryjob = tryjob(
-        # TODO(https://crbug.com/1024641) Make non-experimental
-        experiment_percentage = 1,
-    ),
+    tryjob = tryjob(),
     use_clang_coverage = True,
 )
 
@@ -181,8 +169,6 @@ linux_builder(
     },
     tryjob = tryjob(
         disable_reuse = True,
-        # TODO(https://crbug.com/1024637) Make non-experimental
-        experiment_percentage = 100,
     ),
 )
 
@@ -190,10 +176,7 @@ linux_builder(
     name = 'linux-rel',
     goma_backend = goma.backend.RBE_PROD,
     goma_jobs = goma.jobs.J150,
-    tryjob = tryjob(
-        # TODO(https://crbug.com/1024637) Make non-experimental
-        experiment_percentage = 1,
-    ),
+    tryjob = tryjob(),
     use_clang_coverage = True,
 )
 
@@ -217,10 +200,7 @@ def mac_builder(
 mac_builder(
     name = 'mac-rel',
     goma_jobs = goma.jobs.J150,
-    tryjob = tryjob(
-        # TODO(https://crbug.com/1024641) Make non-experimental
-        experiment_percentage = 1,
-    ),
+    tryjob = tryjob(),
 )
 
 def mac_ios_builder(*, name, executable=luci.recipe(name = 'ios/try'), **kwargs):
@@ -241,10 +221,7 @@ def mac_ios_builder(*, name, executable=luci.recipe(name = 'ios/try'), **kwargs)
 
 mac_ios_builder(
     name = 'ios-simulator',
-    tryjob = tryjob(
-        # TODO(https://crbug.com/1024641) Make non-experimental
-        experiment_percentage = 1,
-    ),
+    tryjob = tryjob(),
 )
 
 
@@ -262,8 +239,5 @@ win_builder(
     goma_jobs = goma.jobs.J150,
     os = os.WINDOWS_10,
     ssd = True,
-    tryjob = tryjob(
-        # TODO(https://crbug.com/1024641) Make non-experimental
-        experiment_percentage = 1,
-    ),
+    tryjob = tryjob(),
 )
