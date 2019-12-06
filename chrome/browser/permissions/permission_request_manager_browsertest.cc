@@ -742,7 +742,7 @@ IN_PROC_BROWSER_TEST_F(PermissionRequestManagerBrowserTest_AnimatedIcon,
 IN_PROC_BROWSER_TEST_F(PermissionRequestManagerBrowserTest,
                        LoudPendingRequestsQueued) {
   MockPermissionRequest request1(
-      "request1", PermissionRequestType::PERMISSION_CLIPBOARD_READ,
+      "request1", PermissionRequestType::PERMISSION_CLIPBOARD_READ_WRITE,
       PermissionRequestGestureType::UNKNOWN);
   GetPermissionRequestManager()->AddRequest(&request1);
   base::RunLoop().RunUntilIdle();
