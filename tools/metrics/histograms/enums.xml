@@ -6035,8 +6035,8 @@ Unknown properties are collapsed to zero. -->
 </enum>
 
 <enum name="BooleanAutofillFillAfterSuggestion">
-  <int value="0" label="User chose to fill"/>
-  <int value="1" label="User did not choose to fill"/>
+  <int value="0" label="User did not choose to fill"/>
+  <int value="1" label="User chose to fill"/>
 </enum>
 
 <enum name="BooleanAutofillFillingAcceptance">
