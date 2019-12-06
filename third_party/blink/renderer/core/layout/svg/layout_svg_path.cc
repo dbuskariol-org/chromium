@@ -89,7 +89,7 @@ void LayoutSVGPath::UpdateMarkers() {
   if (marker_positions_.IsEmpty())
     return;
 
-  const float stroke_width = StrokeWidth();
+  const float stroke_width = StrokeWidthForMarkerUnits();
   FloatRect boundaries;
   for (const auto& position : marker_positions_) {
     if (LayoutSVGResourceMarker* marker =
