@@ -33,7 +33,6 @@
 
 // Tests the icon appearance of extension actions with the toolbar redesign.
 // Extensions that don't want to run should have their icons grayscaled.
-// Overflowed extensions that want to run should have an additional decoration.
 TEST_P(ToolbarActionsBarUnitTest, ExtensionActionWantsToRunAppearance) {
   CreateAndAddExtension("extension",
                         extensions::ExtensionBuilder::ActionType::PAGE_ACTION);
@@ -59,27 +58,45 @@ TEST_P(ToolbarActionsBarUnitTest, ExtensionActionWantsToRunAppearance) {
   EXPECT_FALSE(image_source->grayscale());
   EXPECT_FALSE(image_source->paint_page_action_decoration());
   EXPECT_FALSE(image_source->paint_blocked_actions_decoration());
+}
+
+// Tests that overflowed extensions with page actions that want to run have an
+// additional decoration.
+TEST_P(ToolbarActionsBarUnitTest, OverflowedPageActionAppearance) {
+  CreateAndAddExtension("extension",
+                        extensions::ExtensionBuilder::ActionType::PAGE_ACTION);
+  EXPECT_EQ(1u, toolbar_actions_bar()->GetIconCount());
+  EXPECT_EQ(0u, overflow_bar()->GetIconCount());
+
+  AddTab(browser(), GURL("chrome://newtab"));
+
+  const gfx::Size size = toolbar_actions_bar()->GetViewSize();
+  content::WebContents* web_contents =
+      browser()->tab_strip_model()->GetActiveWebContents();
 
   toolbar_model()->SetVisibleIconCount(0u);
   EXPECT_EQ(0u, toolbar_actions_bar()->GetIconCount());
   EXPECT_EQ(1u, overflow_bar()->GetIconCount());
 
-  action = static_cast<ExtensionActionViewController*>(
-      overflow_bar()->GetActions()[0]);
+  ExtensionActionViewController* action =
+      static_cast<ExtensionActionViewController*>(
+          overflow_bar()->GetActions()[0]);
+  std::unique_ptr<IconWithBadgeImageSource> image_source =
+      action->GetIconImageSourceForTesting(web_contents, size);
+  EXPECT_TRUE(image_source->grayscale());
+  EXPECT_FALSE(image_source->paint_page_action_decoration());
+  EXPECT_FALSE(image_source->paint_blocked_actions_decoration());
+
+  SetActionWantsToRunOnTab(action->extension_action(), web_contents, true);
   image_source = action->GetIconImageSourceForTesting(web_contents, size);
   EXPECT_FALSE(image_source->grayscale());
   EXPECT_TRUE(image_source->paint_page_action_decoration());
   EXPECT_FALSE(image_source->paint_blocked_actions_decoration());
-
-  SetActionWantsToRunOnTab(action->extension_action(), web_contents, false);
-  image_source = action->GetIconImageSourceForTesting(web_contents, size);
-  EXPECT_TRUE(image_source->grayscale());
-  EXPECT_FALSE(image_source->paint_page_action_decoration());
-  EXPECT_FALSE(image_source->paint_blocked_actions_decoration());
 }
 
-TEST_P(ToolbarActionsBarUnitTest, ExtensionActionBlockedActions) {
-  scoped_refptr<const extensions::Extension> browser_action_ext =
+// Tests the appearance of browser actions with blocked script actions.
+TEST_P(ToolbarActionsBarUnitTest, BrowserActionBlockedActions) {
+  scoped_refptr<const extensions::Extension> extension =
       extensions::ExtensionBuilder("browser action")
           .SetAction(extensions::ExtensionBuilder::ActionType::BROWSER_ACTION)
           .SetLocation(extensions::Manifest::INTERNAL)
@@ -88,26 +105,26 @@ TEST_P(ToolbarActionsBarUnitTest, ExtensionActionBlockedActions) {
 
   extensions::ExtensionService* service =
       extensions::ExtensionSystem::Get(profile())->extension_service();
-  service->GrantPermissions(browser_action_ext.get());
-  service->AddExtension(browser_action_ext.get());
-  extensions::ScriptingPermissionsModifier permissions_modifier_browser_ext(
-      profile(), browser_action_ext);
-  permissions_modifier_browser_ext.SetWithholdHostPermissions(true);
+  service->GrantPermissions(extension.get());
+  service->AddExtension(extension.get());
+  extensions::ScriptingPermissionsModifier permissions_modifier(profile(),
+                                                                extension);
+  permissions_modifier.SetWithholdHostPermissions(true);
 
   ASSERT_EQ(1u, toolbar_actions_bar()->GetIconCount());
   AddTab(browser(), GURL("https://www.google.com/"));
 
-  ExtensionActionViewController* browser_action =
+  ExtensionActionViewController* action_controller =
       static_cast<ExtensionActionViewController*>(
           toolbar_actions_bar()->GetActions()[0]);
-  EXPECT_EQ(browser_action_ext.get(), browser_action->extension());
+  EXPECT_EQ(extension.get(), action_controller->extension());
 
   content::WebContents* web_contents =
       browser()->tab_strip_model()->GetActiveWebContents();
   ASSERT_TRUE(web_contents);
   const gfx::Size size = toolbar_actions_bar()->GetViewSize();
   std::unique_ptr<IconWithBadgeImageSource> image_source =
-      browser_action->GetIconImageSourceForTesting(web_contents, size);
+      action_controller->GetIconImageSourceForTesting(web_contents, size);
   EXPECT_FALSE(image_source->grayscale());
   EXPECT_FALSE(image_source->paint_page_action_decoration());
   EXPECT_FALSE(image_source->paint_blocked_actions_decoration());
@@ -116,78 +133,120 @@ TEST_P(ToolbarActionsBarUnitTest, ExtensionActionBlockedActions) {
       extensions::ExtensionActionRunner::GetForWebContents(web_contents);
   ASSERT_TRUE(action_runner);
   action_runner->RequestScriptInjectionForTesting(
-      browser_action_ext.get(), extensions::UserScript::DOCUMENT_IDLE,
+      extension.get(), extensions::UserScript::DOCUMENT_IDLE,
       base::DoNothing());
   image_source =
-      browser_action->GetIconImageSourceForTesting(web_contents, size);
+      action_controller->GetIconImageSourceForTesting(web_contents, size);
   EXPECT_FALSE(image_source->grayscale());
   EXPECT_FALSE(image_source->paint_page_action_decoration());
   EXPECT_TRUE(image_source->paint_blocked_actions_decoration());
 
-  action_runner->RunForTesting(browser_action_ext.get());
+  action_runner->RunForTesting(extension.get());
   image_source =
-      browser_action->GetIconImageSourceForTesting(web_contents, size);
+      action_controller->GetIconImageSourceForTesting(web_contents, size);
   EXPECT_FALSE(image_source->grayscale());
   EXPECT_FALSE(image_source->paint_page_action_decoration());
   EXPECT_FALSE(image_source->paint_blocked_actions_decoration());
+}
 
-  scoped_refptr<const extensions::Extension> page_action_ext =
+// Tests the appearance of page actions with blocked script actions.
+TEST_P(ToolbarActionsBarUnitTest, PageActionBlockedActions) {
+  scoped_refptr<const extensions::Extension> extension =
       extensions::ExtensionBuilder("page action")
           .SetAction(extensions::ExtensionBuilder::ActionType::PAGE_ACTION)
           .SetLocation(extensions::Manifest::INTERNAL)
           .AddPermission("https://www.google.com/*")
           .Build();
-  service->GrantPermissions(page_action_ext.get());
-  service->AddExtension(page_action_ext.get());
-  extensions::ScriptingPermissionsModifier permissions_modifier_page_action(
-      profile(), page_action_ext);
-  permissions_modifier_page_action.SetWithholdHostPermissions(true);
+  extensions::ExtensionService* service =
+      extensions::ExtensionSystem::Get(profile())->extension_service();
 
-  ASSERT_EQ(2u, toolbar_actions_bar()->GetIconCount());
-  ExtensionActionViewController* page_action =
+  service->GrantPermissions(extension.get());
+  service->AddExtension(extension.get());
+  extensions::ScriptingPermissionsModifier permissions_modifier(profile(),
+                                                                extension);
+  permissions_modifier.SetWithholdHostPermissions(true);
+  AddTab(browser(), GURL("https://www.google.com/"));
+
+  ASSERT_EQ(1u, toolbar_actions_bar()->GetIconCount());
+  ExtensionActionViewController* action_controller =
       static_cast<ExtensionActionViewController*>(
-          toolbar_actions_bar()->GetActions()[1]);
-  EXPECT_EQ(browser_action_ext.get(), browser_action->extension());
+          toolbar_actions_bar()->GetActions()[0]);
+  EXPECT_EQ(extension.get(), action_controller->extension());
 
-  image_source = page_action->GetIconImageSourceForTesting(web_contents, size);
+  content::WebContents* web_contents =
+      browser()->tab_strip_model()->GetActiveWebContents();
+  const gfx::Size size = toolbar_actions_bar()->GetViewSize();
+  std::unique_ptr<IconWithBadgeImageSource> image_source =
+      action_controller->GetIconImageSourceForTesting(web_contents, size);
   EXPECT_TRUE(image_source->grayscale());
   EXPECT_FALSE(image_source->paint_page_action_decoration());
   EXPECT_FALSE(image_source->paint_blocked_actions_decoration());
 
+  extensions::ExtensionActionRunner* action_runner =
+      extensions::ExtensionActionRunner::GetForWebContents(web_contents);
   action_runner->RequestScriptInjectionForTesting(
-      page_action_ext.get(), extensions::UserScript::DOCUMENT_IDLE,
+      extension.get(), extensions::UserScript::DOCUMENT_IDLE,
       base::DoNothing());
-  image_source = page_action->GetIconImageSourceForTesting(web_contents, size);
+  image_source =
+      action_controller->GetIconImageSourceForTesting(web_contents, size);
   EXPECT_FALSE(image_source->grayscale());
   EXPECT_FALSE(image_source->paint_page_action_decoration());
   EXPECT_TRUE(image_source->paint_blocked_actions_decoration());
+}
+
+// Tests the appearance of page actions with blocked actions in the overflow
+// menu.
+TEST_P(ToolbarActionsBarUnitTest, PageActionBlockedActionsInOverflow) {
+  scoped_refptr<const extensions::Extension> extension =
+      extensions::ExtensionBuilder("page action")
+          .SetAction(extensions::ExtensionBuilder::ActionType::PAGE_ACTION)
+          .SetLocation(extensions::Manifest::INTERNAL)
+          .AddPermission("https://www.google.com/*")
+          .Build();
+
+  extensions::ExtensionService* service =
+      extensions::ExtensionSystem::Get(profile())->extension_service();
+
+  service->GrantPermissions(extension.get());
+  service->AddExtension(extension.get());
+  extensions::ScriptingPermissionsModifier permissions_modifier(profile(),
+                                                                extension);
+  permissions_modifier.SetWithholdHostPermissions(true);
+  AddTab(browser(), GURL("https://www.google.com/"));
 
   // Overflow the page action and set the page action as wanting to run. We
   // shouldn't show the page action decoration because we are showing the
   // blocked action decoration (and should only show one at a time).
   toolbar_model()->SetVisibleIconCount(0u);
   EXPECT_EQ(0u, toolbar_actions_bar()->GetIconCount());
-  EXPECT_EQ(2u, overflow_bar()->GetIconCount());
-  ExtensionActionViewController* overflow_page_action =
+  EXPECT_EQ(1u, overflow_bar()->GetIconCount());
+  ExtensionActionViewController* action_controller =
       static_cast<ExtensionActionViewController*>(
-          overflow_bar()->GetActions()[1]);
-  SetActionWantsToRunOnTab(overflow_page_action->extension_action(),
-                           web_contents, true);
+          overflow_bar()->GetActions()[0]);
+
+  content::WebContents* web_contents =
+      browser()->tab_strip_model()->GetActiveWebContents();
+  SetActionWantsToRunOnTab(action_controller->extension_action(), web_contents,
+                           true);
+
+  const gfx::Size size = toolbar_actions_bar()->GetViewSize();
+  std::unique_ptr<IconWithBadgeImageSource> image_source =
+      action_controller->GetIconImageSourceForTesting(web_contents, size);
+  EXPECT_FALSE(image_source->grayscale());
+  EXPECT_TRUE(image_source->paint_page_action_decoration());
+  EXPECT_FALSE(image_source->paint_blocked_actions_decoration());
+
+  extensions::ExtensionActionRunner* action_runner =
+      extensions::ExtensionActionRunner::GetForWebContents(web_contents);
+  action_runner->RequestScriptInjectionForTesting(
+      extension.get(), extensions::UserScript::DOCUMENT_IDLE,
+      base::DoNothing());
+
   image_source =
-      overflow_page_action->GetIconImageSourceForTesting(web_contents, size);
+      action_controller->GetIconImageSourceForTesting(web_contents, size);
   EXPECT_FALSE(image_source->grayscale());
   EXPECT_FALSE(image_source->paint_page_action_decoration());
   EXPECT_TRUE(image_source->paint_blocked_actions_decoration());
-
-  SetActionWantsToRunOnTab(overflow_page_action->extension_action(),
-                           web_contents, false);
-  toolbar_model()->SetVisibleIconCount(2u);
-
-  action_runner->RunForTesting(page_action_ext.get());
-  image_source = page_action->GetIconImageSourceForTesting(web_contents, size);
-  EXPECT_FALSE(image_source->grayscale());
-  EXPECT_FALSE(image_source->paint_page_action_decoration());
-  EXPECT_FALSE(image_source->paint_blocked_actions_decoration());
 }
 
 TEST_P(ToolbarActionsBarUnitTest, ExtensionActionContextMenu) {
