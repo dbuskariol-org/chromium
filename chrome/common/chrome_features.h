@@ -76,9 +76,6 @@ COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kBlockRepeatedNotificationPermissionPrompts;
 
 COMPONENT_EXPORT(CHROME_FEATURES)
-extern const base::Feature kBrowserHangFixesExperiment;
-
-COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kBundledConnectionHelpFeature;
 
 COMPONENT_EXPORT(CHROME_FEATURES)

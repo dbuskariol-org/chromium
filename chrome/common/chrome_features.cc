@@ -106,11 +106,6 @@ const base::Feature kBlockRepeatedNotificationPermissionPrompts{
     "BlockRepeatedNotificationPermissionPrompts",
     base::FEATURE_ENABLED_BY_DEFAULT};
 
-// Fixes for browser hang bugs are deployed in a field trial in order to measure
-// their impact. See crbug.com/478209.
-const base::Feature kBrowserHangFixesExperiment{
-    "BrowserHangFixesExperiment", base::FEATURE_DISABLED_BY_DEFAULT};
-
 // Enables or disables redirecting users who get an interstitial when
 // accessing https://support.google.com/chrome/answer/6098869 to local
 // connection help content.
