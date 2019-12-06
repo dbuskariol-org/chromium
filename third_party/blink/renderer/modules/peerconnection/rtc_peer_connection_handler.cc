@@ -834,7 +834,9 @@ class RTCPeerConnectionHandler::WebRtcSetDescriptionObserverImpl
 class RTCPeerConnectionHandler::Observer
     : public GarbageCollected<RTCPeerConnectionHandler::Observer>,
       public PeerConnectionObserver,
-      public blink::RtcEventLogOutputSink {
+      public RtcEventLogOutputSink {
+  USING_GARBAGE_COLLECTED_MIXIN(Observer);
+
  public:
   Observer(const base::WeakPtr<RTCPeerConnectionHandler>& handler,
            scoped_refptr<base::SingleThreadTaskRunner> task_runner)
@@ -854,7 +856,7 @@ class RTCPeerConnectionHandler::Observer
     }
   }
 
-  void Trace(Visitor* visitor) {}
+  void Trace(Visitor* visitor) override {}
 
  protected:
   // TODO(hbos): Remove once no longer mandatory to implement.
