@@ -2527,10 +2527,6 @@ void AddPrintingStrings(content::WebUIDataSource* html_source) {
   html_source->AddString(
       "printingCUPSPrintPpdLearnMoreUrl",
       GetHelpUrlWithBoard(chrome::kCupsPrintPPDLearnMoreURL));
-
-  html_source->AddBoolean(
-      "updatedCupsPrintersUiEnabled",
-      base::FeatureList::IsEnabled(features::kCupsPrintersUiOverhaul));
 #endif
 }
 
