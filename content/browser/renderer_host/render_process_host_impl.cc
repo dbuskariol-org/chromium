@@ -2255,7 +2255,7 @@ void RenderProcessHostImpl::RegisterMojoInterfaces() {
 
   AddUIThreadInterface(
       registry.get(),
-      base::BindRepeating(&P2PSocketDispatcherHost::BindRequest,
+      base::BindRepeating(&P2PSocketDispatcherHost::BindReceiver,
                           base::Unretained(p2p_socket_dispatcher_host_.get())));
 
 #if BUILDFLAG(ENABLE_MDNS)
