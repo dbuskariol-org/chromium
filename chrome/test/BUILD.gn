@@ -1354,6 +1354,7 @@ if (!is_android) {
       "../browser/ui/webui/policy_ui_browsertest.cc",
       "../browser/ui/webui/prefs_internals_browsertest.cc",
       "../browser/ui/webui/profile_helper_browsertest.cc",
+      "../browser/ui/webui/settings/settings_clear_browsing_data_handler_browsertest.cc",
       "../browser/ui/webui/settings/settings_ui_browsertest.cc",
       "../browser/ui/webui/signin/user_manager_ui_browsertest.cc",
       "../browser/ui/webui/webui_load_timer_browsertest.cc",
