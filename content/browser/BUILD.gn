@@ -1797,6 +1797,8 @@ jumbo_source_set("browser") {
     "tracing/tracing_ui.h",
     "url_loader_factory_getter.cc",
     "url_loader_factory_getter.h",
+    "url_loader_factory_params_helper.cc",
+    "url_loader_factory_params_helper.h",
     "utility_process_host.cc",
     "utility_process_host.h",
     "utility_process_host_receiver_bindings.cc",
