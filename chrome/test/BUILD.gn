@@ -5311,8 +5311,6 @@ if (!is_android) {
     testonly = true
 
     sources = [
-      "../browser/permissions/permission_request_manager_test_api.cc",
-      "../browser/permissions/permission_request_manager_test_api.h",
       "../browser/ssl/cert_verifier_browser_test.cc",
       "../browser/ssl/cert_verifier_browser_test.h",
       "../browser/ui/search/instant_test_utils.cc",
@@ -5336,6 +5334,8 @@ if (!is_android) {
       "base/ui_test_utils.h",
       "base/web_ui_browser_test.cc",
       "base/web_ui_browser_test.h",
+      "permissions/permission_request_manager_test_api.cc",
+      "permissions/permission_request_manager_test_api.h",
     ]
 
     configs += [ "//build/config:precompiled_headers" ]

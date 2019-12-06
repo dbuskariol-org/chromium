@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_MANAGER_TEST_API_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_MANAGER_TEST_API_H_
+#ifndef CHROME_TEST_PERMISSIONS_PERMISSION_REQUEST_MANAGER_TEST_API_H_
+#define CHROME_TEST_PERMISSIONS_PERMISSION_REQUEST_MANAGER_TEST_API_H_
 
 #include "base/macros.h"
 #include "chrome/browser/permissions/permission_request_manager.h"
@@ -27,8 +27,8 @@ class PermissionRequestManagerTestApi {
   // NOTIFICATIONS, GEOLOCATON, or PLUGINS.
   void AddSimpleRequest(ContentSettingsType type);
 
-  // Return the bubble window for the permission prompt or null if there is no
-  // prompt currently showing.
+  // Return the NativeWindow for the permission prompt bubble, or nullptr if
+  // there is no prompt currently showing.
   gfx::NativeWindow GetPromptWindow();
 
   void SimulateWebContentsDestroyed();
@@ -41,4 +41,4 @@ class PermissionRequestManagerTestApi {
 
 }  // namespace test
 
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_MANAGER_TEST_API_H_
+#endif  // CHROME_TEST_PERMISSIONS_PERMISSION_REQUEST_MANAGER_TEST_API_H_

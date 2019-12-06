@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_request_manager_test_api.h"
+#include "chrome/test/permissions/permission_request_manager_test_api.h"
 
 #include <memory>
 
@@ -10,6 +10,12 @@
 #include "chrome/browser/permissions/permission_request_impl.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
+
+#if defined(TOOLKIT_VIEWS)
+#include "chrome/browser/ui/views/permission_bubble/permission_prompt_bubble_view.h"
+#include "chrome/browser/ui/views/permission_bubble/permission_prompt_impl.h"
+#include "ui/views/widget/widget.h"
+#endif
 
 namespace test {
 namespace {
@@ -57,7 +63,16 @@ void PermissionRequestManagerTestApi::AddSimpleRequest(
 }
 
 gfx::NativeWindow PermissionRequestManagerTestApi::GetPromptWindow() {
-  return manager_->view_ ? manager_->view_->GetNativeWindow() : nullptr;
+#if defined(TOOLKIT_VIEWS)
+  PermissionPromptImpl* prompt =
+      static_cast<PermissionPromptImpl*>(manager_->view_.get());
+  return prompt ? prompt->prompt_bubble_for_testing()
+                      ->GetWidget()
+                      ->GetNativeWindow()
+                : nullptr;
+#else
+  NOTIMPLEMENTED();
+#endif
 }
 
 void PermissionRequestManagerTestApi::SimulateWebContentsDestroyed() {
