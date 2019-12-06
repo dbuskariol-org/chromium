@@ -158,8 +158,9 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
       base::StringPiece scheme,
       bool is_embedded_origin_secure) override;
   void OverrideURLLoaderFactoryParams(
-      content::RenderProcessHost* process,
+      content::BrowserContext* browser_context,
       const url::Origin& origin,
+      bool is_for_isolated_world,
       network::mojom::URLLoaderFactoryParams* factory_params) override;
   void GetAdditionalWebUISchemes(
       std::vector<std::string>* additional_schemes) override;

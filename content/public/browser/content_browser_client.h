@@ -379,8 +379,9 @@ class CONTENT_EXPORT ContentBrowserClient {
   //   In this case |origin| is the origin of the isolated world and the
   //   |request_initiator_site_lock| is the origin committed in the frame.
   virtual void OverrideURLLoaderFactoryParams(
-      RenderProcessHost* process,
+      BrowserContext* browser_context,
       const url::Origin& origin,
+      bool is_for_isolated_world,
       network::mojom::URLLoaderFactoryParams* factory_params);
 
   // Returns a list additional WebUI schemes, if any.  These additional schemes

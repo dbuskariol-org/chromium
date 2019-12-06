@@ -1631,12 +1631,13 @@ bool ChromeContentBrowserClient::
 }
 
 void ChromeContentBrowserClient::OverrideURLLoaderFactoryParams(
-    content::RenderProcessHost* process,
+    content::BrowserContext* browser_context,
     const url::Origin& origin,
+    bool is_for_isolated_world,
     network::mojom::URLLoaderFactoryParams* factory_params) {
 #if BUILDFLAG(ENABLE_EXTENSIONS)
   ChromeContentBrowserClientExtensionsPart::OverrideURLLoaderFactoryParams(
-      process, origin, factory_params);
+      browser_context, origin, is_for_isolated_world, factory_params);
 #endif
 }
 

@@ -39,7 +39,8 @@ network::mojom::URLLoaderFactoryParamsPtr CreateParams(
     const base::Optional<base::UnguessableToken>& top_frame_token,
     const base::Optional<net::NetworkIsolationKey>& network_isolation_key,
     network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy,
-    bool allow_universal_access_from_file_urls) {
+    bool allow_universal_access_from_file_urls,
+    bool is_for_isolated_world) {
   DCHECK(process);
 
   // "chrome-guest://..." is never used as a main or isolated world origin.
@@ -76,8 +77,9 @@ network::mojom::URLLoaderFactoryParamsPtr CreateParams(
     params->is_corb_enabled = true;
   }
 
-  GetContentClient()->browser()->OverrideURLLoaderFactoryParams(process, origin,
-                                                                params.get());
+  GetContentClient()->browser()->OverrideURLLoaderFactoryParams(
+      process->GetBrowserContext(), origin, is_for_isolated_world,
+      params.get());
 
   return params;
 }
@@ -98,7 +100,8 @@ network::mojom::URLLoaderFactoryParamsPtr URLLoaderFactoryParamsHelper::Create(
                       false,         // is_trusted
                       top_frame_token, network_isolation_key,
                       cross_origin_embedder_policy,
-                      preferences.allow_universal_access_from_file_urls);
+                      preferences.allow_universal_access_from_file_urls,
+                      false);  // is_for_isolated_world
 }
 
 // static
@@ -117,7 +120,8 @@ URLLoaderFactoryParamsHelper::CreateForIsolatedWorld(
                       false,                  // is_trusted
                       top_frame_token, network_isolation_key,
                       cross_origin_embedder_policy,
-                      preferences.allow_universal_access_from_file_urls);
+                      preferences.allow_universal_access_from_file_urls,
+                      true);  // is_for_isolated_world
 }
 
 network::mojom::URLLoaderFactoryParamsPtr
@@ -134,7 +138,8 @@ URLLoaderFactoryParamsHelper::CreateForPrefetch(
                       top_frame_token,
                       base::nullopt,  // network_isolation_key
                       cross_origin_embedder_policy,
-                      preferences.allow_universal_access_from_file_urls);
+                      preferences.allow_universal_access_from_file_urls,
+                      false);  // is_for_isolated_world
 }
 
 // static
@@ -153,7 +158,8 @@ URLLoaderFactoryParamsHelper::CreateForWorker(
                       base::nullopt,  // top_frame_token
                       network_isolation_key,
                       network::mojom::CrossOriginEmbedderPolicy::kNone,
-                      false);  // allow_universal_access_from_file_urls
+                      false,   // allow_universal_access_from_file_urls
+                      false);  // is_for_isolated_world
 }
 
 // static
@@ -186,7 +192,8 @@ URLLoaderFactoryParamsHelper::CreateForRendererProcess(
       false,                        // is_trusted
       top_frame_token, network_isolation_key,
       network::mojom::CrossOriginEmbedderPolicy::kNone,
-      false);  // allow_universal_access_from_file_urls
+      false,   // allow_universal_access_from_file_urls
+      false);  // is_for_isolated_world
 }
 
 }  // namespace content
