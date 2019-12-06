@@ -16,6 +16,7 @@
 #include "ui/events/event_utils.h"
 #include "ui/events/ozone/events_ozone.h"
 #include "ui/gfx/geometry/point_f.h"
+#include "ui/ozone/platform/wayland/common/wayland_util.h"
 #include "ui/ozone/platform/wayland/host/shell_object_factory.h"
 #include "ui/ozone/platform/wayland/host/shell_popup_wrapper.h"
 #include "ui/ozone/platform/wayland/host/shell_surface_wrapper.h"
@@ -27,26 +28,6 @@
 #include "ui/platform_window/platform_window_handler/wm_drop_handler.h"
 
 namespace ui {
-
-namespace {
-
-// Translates bounds relative to top level window to specified parent.
-gfx::Rect TranslateBoundsToParentCoordinates(const gfx::Rect& child_bounds,
-                                             const gfx::Rect& parent_bounds) {
-  return gfx::Rect(gfx::Point(child_bounds.x() - parent_bounds.x(),
-                              child_bounds.y() - parent_bounds.y()),
-                   child_bounds.size());
-}
-
-// Translates bounds relative to parent window to top level window.
-gfx::Rect TranslateBoundsToTopLevelCoordinates(const gfx::Rect& child_bounds,
-                                               const gfx::Rect& parent_bounds) {
-  return gfx::Rect(gfx::Point(child_bounds.x() + parent_bounds.x(),
-                              child_bounds.y() + parent_bounds.y()),
-                   child_bounds.size());
-}
-
-}  // namespace
 
 WaylandWindow::WaylandWindow(PlatformWindowDelegate* delegate,
                              WaylandConnection* connection)
@@ -243,7 +224,7 @@ void WaylandWindow::CreateAndShowTooltipSubSurface() {
   const auto parent_bounds_dip =
       gfx::ScaleToRoundedRect(parent_window->GetBounds(), 1.0 / ui_scale_);
   auto new_bounds_dip =
-      TranslateBoundsToParentCoordinates(bounds_px_, parent_bounds_dip);
+      wl::TranslateBoundsToParentCoordinates(bounds_px_, parent_bounds_dip);
   auto bounds_px =
       gfx::ScaleToRoundedRect(new_bounds_dip, ui_scale_ / buffer_scale_);
 
@@ -737,7 +718,7 @@ void WaylandWindow::HandlePopupConfigure(const gfx::Rect& bounds_dip) {
     // window, which automatically becomes the same as relative to an origin of
     // a display.
     new_bounds_dip = gfx::ScaleToRoundedRect(
-        TranslateBoundsToTopLevelCoordinates(
+        wl::TranslateBoundsToTopLevelCoordinates(
             gfx::ScaleToRoundedRect(new_bounds_dip, buffer_scale_),
             parent_window_->GetBounds()),
         1.0 / buffer_scale_);
@@ -962,7 +943,7 @@ gfx::Rect WaylandWindow::AdjustPopupWindowPosition() const {
   const gfx::Rect parent_bounds_dip =
       gfx::ScaleToRoundedRect(parent_window_->GetBounds(), 1.0 / ui_scale_);
   gfx::Rect new_bounds_dip =
-      TranslateBoundsToParentCoordinates(bounds_px_, parent_bounds_dip);
+      wl::TranslateBoundsToParentCoordinates(bounds_px_, parent_bounds_dip);
 
   // Chromium may decide to position nested menu windows on the left side
   // instead of the right side of parent menu windows when the size of the
