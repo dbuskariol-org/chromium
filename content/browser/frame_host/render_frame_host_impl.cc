@@ -1175,6 +1175,7 @@ void RenderFrameHostImpl::AudioContextPlaybackStopped(int audio_context_id) {
 
 // The current frame went into the BackForwardCache.
 void RenderFrameHostImpl::EnterBackForwardCache() {
+  TRACE_EVENT0("navigation", "RenderFrameHostImpl::EnterBackForwardCache");
   DCHECK(IsBackForwardCacheEnabled());
   DCHECK(!is_in_back_forward_cache_);
   is_in_back_forward_cache_ = true;
@@ -1204,6 +1205,7 @@ void RenderFrameHostImpl::EnterBackForwardCache() {
 
 // The frame as been restored from the BackForwardCache.
 void RenderFrameHostImpl::LeaveBackForwardCache() {
+  TRACE_EVENT0("navigation", "RenderFrameHostImpl::LeaveBackForwardCache");
   DCHECK(IsBackForwardCacheEnabled());
   DCHECK(is_in_back_forward_cache_);
   is_in_back_forward_cache_ = false;
@@ -3796,6 +3798,8 @@ void RenderFrameHostImpl::EvictFromBackForwardCacheWithReasons(
     metrics->MarkNotRestoredWithReason(can_store);
 
   if (!in_back_forward_cache) {
+    TRACE_EVENT0("navigation", "BackForwardCache_EvictAfterDocumentRestored");
+
     BackForwardCacheMetrics::RecordEvictedAfterDocumentRestored(
         BackForwardCacheMetrics::EvictedAfterDocumentRestoredReason::
             kByJavaScript);

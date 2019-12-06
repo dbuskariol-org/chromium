@@ -616,6 +616,8 @@ bool RenderFrameHostManager::DeleteFromPendingList(
 
 void RenderFrameHostManager::RestoreFromBackForwardCache(
     std::unique_ptr<BackForwardCacheImpl::Entry> entry) {
+  TRACE_EVENT0("navigation",
+               "RenderFrameHostManager::RestoreFromBackForwardCache");
   // Matched in CommitPending().
   entry->render_frame_host->GetProcess()->AddPendingView();
 

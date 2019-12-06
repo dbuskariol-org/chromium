@@ -3892,6 +3892,8 @@ void NavigationRequest::SetSourceSiteInstanceToInitiatorIfNeeded() {
 }
 
 void NavigationRequest::RestartBackForwardCachedNavigation() {
+  TRACE_EVENT0("navigation",
+               "NavigationRequest::RestartBackForwardCachedNavigation");
   CHECK(IsServedFromBackForwardCache());
   restarting_back_forward_cached_navigation_ = true;
   base::PostTask(
@@ -3901,6 +3903,8 @@ void NavigationRequest::RestartBackForwardCachedNavigation() {
 }
 
 void NavigationRequest::RestartBackForwardCachedNavigationImpl() {
+  TRACE_EVENT0("navigation",
+               "NavigationRequest::RestartBackForwardCachedNavigationImpl");
   RenderFrameHostImpl* rfh = rfh_restored_from_back_forward_cache();
   CHECK(rfh);
   CHECK_EQ(rfh->frame_tree_node()->navigation_request(), this);

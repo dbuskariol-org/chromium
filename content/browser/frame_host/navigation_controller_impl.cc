@@ -2576,6 +2576,7 @@ void NavigationControllerImpl::NavigateToExistingPendingEntry(
   // BackForwardCache:
   // Navigate immediately if the document is in the BackForwardCache.
   if (back_forward_cache_.GetEntry(nav_entry_id)) {
+    TRACE_EVENT0("navigation", "BackForwardCache_CreateNavigationRequest");
     DCHECK_EQ(reload_type, ReloadType::NONE);
     auto navigation_request = CreateNavigationRequestFromEntry(
         root, pending_entry_, pending_entry_->GetFrameEntry(root),
