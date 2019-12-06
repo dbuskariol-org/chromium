@@ -4768,10 +4768,17 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kAutofillEnableVirtualCardDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(autofill::features::kAutofillEnableVirtualCard)},
 
+#if defined(OS_CHROMEOS)
+    {"account-id-migration", flag_descriptions::kAccountIdMigrationName,
+     flag_descriptions::kAccountIdMigrationDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(switches::kAccountIdMigration)},
+#endif  // defined(OS_CHROMEOS)
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the
     // AboutFlagsHistogramTest unit test to verify this process).
+
 };
 
 class FlagsStateSingleton : public flags_ui::FlagsState::Delegate {

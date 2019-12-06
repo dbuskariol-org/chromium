@@ -62,6 +62,9 @@ extern const char kAccessibilityExposeDisplayNoneDescription[];
 extern const char kAccessibilityInternalsPageImprovementsName[];
 extern const char kAccessibilityInternalsPageImprovementsDescription[];
 
+extern const char kAccountIdMigrationName[];
+extern const char kAccountIdMigrationDescription[];
+
 extern const char kAllowInsecureLocalhostName[];
 extern const char kAllowInsecureLocalhostDescription[];
 

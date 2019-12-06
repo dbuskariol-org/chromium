@@ -37042,6 +37042,7 @@ from previous Chrome versions.
   <int value="-762738927" label="LogJsConsoleMessages:enabled"/>
   <int value="-762687134" label="ExperimentalCrostiniUI:enabled"/>
   <int value="-759830869" label="enable-tab-discarding"/>
+  <int value="-758917191" label="AccountIdMigration:enabled"/>
   <int value="-758048639" label="InfiniteSessionRestore:enabled"/>
   <int value="-757946835"
       label="OmniboxUIExperimentShowSuggestionFavicons:enabled"/>
@@ -37698,6 +37699,7 @@ from previous Chrome versions.
   <int value="79503461" label="disable-account-consistency"/>
   <int value="79595680" label="OmniboxTabSwitchSuggestions:enabled"/>
   <int value="79729295" label="WebBundles:enabled"/>
+  <int value="82303171" label="AccountIdMigration:disabled"/>
   <int value="83422372"
       label="ChromeHomePersonalizedOmniboxSuggestions:enabled"/>
   <int value="84911198" label="ScanCardsInWebPayments:disabled"/>

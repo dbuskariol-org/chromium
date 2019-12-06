@@ -39,6 +39,11 @@ const char kAccessibilityInternalsPageImprovementsName[] =
 const char kAccessibilityInternalsPageImprovementsDescription[] =
     "Improvements to the chrome://accessibility page.";
 
+const char kAccountIdMigrationName[] = "Account ID migration";
+const char kAccountIdMigrationDescription[] =
+    "Migrate to use Gaia ID instead of the email as the account identifer for "
+    "the Identity Manager.";
+
 const char kAllowInsecureLocalhostName[] =
     "Allow invalid certificates for resources loaded from localhost.";
 const char kAllowInsecureLocalhostDescription[] =
