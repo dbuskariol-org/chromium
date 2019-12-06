@@ -417,7 +417,7 @@ class CONTENT_EXPORT IndexedDBBackingStore {
       bool* exists) WARN_UNUSED_RESULT;
 
   // Public for IndexedDBActiveBlobRegistry::MarkBlobInactive.
-  virtual void ReportBlobUnused(int64_t database_id, int64_t blob_key);
+  virtual void ReportBlobUnused(int64_t database_id, int64_t blob_number);
 
   base::FilePath GetBlobFileName(int64_t database_id, int64_t key) const;
 

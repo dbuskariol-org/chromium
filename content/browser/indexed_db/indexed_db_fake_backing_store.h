@@ -80,7 +80,7 @@ class IndexedDBFakeBackingStore : public IndexedDBBackingStore {
                                         int64_t index_id,
                                         const blink::IndexedDBKey&,
                                         const RecordIdentifier&) override;
-  void ReportBlobUnused(int64_t database_id, int64_t blob_key) override;
+  void ReportBlobUnused(int64_t database_id, int64_t blob_number) override;
   std::unique_ptr<Cursor> OpenObjectStoreKeyCursor(
       Transaction* transaction,
       int64_t database_id,

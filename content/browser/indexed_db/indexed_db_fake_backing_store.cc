@@ -121,7 +121,7 @@ leveldb::Status IndexedDBFakeBackingStore::PutIndexDataForRecord(
 }
 
 void IndexedDBFakeBackingStore::ReportBlobUnused(int64_t database_id,
-                                                 int64_t blob_key) {}
+                                                 int64_t blob_number) {}
 
 std::unique_ptr<IndexedDBBackingStore::Cursor>
 IndexedDBFakeBackingStore::OpenObjectStoreKeyCursor(
