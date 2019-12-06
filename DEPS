@@ -797,11 +797,6 @@ deps = {
       'dep_type': 'cipd',
   },
 
-  'src/third_party/bison': {
-      'url': Var('chromium_git') + '/chromium/deps/bison.git' + '@' + '083c9a45e4affdd5464ee2b224c2df649c6e26c3',
-      'condition': 'checkout_win',
-  },
-
   'src/third_party/boringssl/src':
     Var('boringssl_git') + '/boringssl.git' + '@' +  Var('boringssl_revision'),
 
