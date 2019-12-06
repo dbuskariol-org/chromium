@@ -130,7 +130,8 @@ class SharedImageSubMemoryTracker : public gpu::MemoryTracker {
   ~SharedImageSubMemoryTracker() override { DCHECK(!size_); }
 
   // MemoryTracker implementation:
-  void TrackMemoryAllocatedChange(uint64_t delta) override {
+  void TrackMemoryAllocatedChange(int64_t delta) override {
+    DCHECK(delta >= 0 || size_ >= static_cast<uint64_t>(-delta));
     uint64_t old_size = size_;
     size_ += delta;
     DCHECK(observer_);
