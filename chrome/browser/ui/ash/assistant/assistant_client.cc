@@ -23,13 +23,13 @@
 #include "components/session_manager/core/session_manager.h"
 #include "content/public/browser/audio_service.h"
 #include "content/public/browser/browser_context.h"
+#include "content/public/browser/media_session_service.h"
 #include "content/public/browser/network_service_instance.h"
 #include "content/public/browser/service_process_host.h"
 #include "content/public/browser/system_connector.h"
 #include "content/public/common/content_switches.h"
 #include "services/device/public/mojom/constants.mojom.h"
 #include "services/identity/public/mojom/identity_service.mojom.h"
-#include "services/media_session/public/mojom/constants.mojom.h"
 
 namespace {
 
@@ -206,15 +206,14 @@ void AssistantClient::RequestIdentityAccessor(
 
 void AssistantClient::RequestAudioFocusManager(
     mojo::PendingReceiver<media_session::mojom::AudioFocusManager> receiver) {
-  content::GetSystemConnector()->Connect(media_session::mojom::kServiceName,
-                                         std::move(receiver));
+  content::GetMediaSessionService().BindAudioFocusManager(std::move(receiver));
 }
 
 void AssistantClient::RequestMediaControllerManager(
     mojo::PendingReceiver<media_session::mojom::MediaControllerManager>
         receiver) {
-  content::GetSystemConnector()->Connect(media_session::mojom::kServiceName,
-                                         std::move(receiver));
+  content::GetMediaSessionService().BindMediaControllerManager(
+      std::move(receiver));
 }
 
 void AssistantClient::RequestNetworkConfig(

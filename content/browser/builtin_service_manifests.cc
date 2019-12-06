@@ -16,7 +16,6 @@
 #include "media/mojo/services/cdm_manifest.h"
 #include "media/mojo/services/media_manifest.h"
 #include "services/device/public/cpp/manifest.h"
-#include "services/media_session/public/cpp/manifest.h"
 #include "services/service_manager/public/cpp/manifest_builder.h"
 
 namespace content {
@@ -32,7 +31,6 @@ const std::vector<service_manager::Manifest>& GetBuiltinServiceManifests() {
           media::GetMediaManifest(),
           media::GetMediaRendererManifest(),
           device::GetManifest(),
-          media_session::GetManifest(),
       }};
   return *manifests;
 }

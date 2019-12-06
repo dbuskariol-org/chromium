@@ -56,9 +56,6 @@
 #include "mojo/public/cpp/system/invitation.h"
 #include "services/device/device_service.h"
 #include "services/device/public/mojom/constants.mojom.h"
-#include "services/media_session/media_session_service.h"
-#include "services/media_session/public/cpp/features.h"
-#include "services/media_session/public/mojom/constants.mojom.h"
 #include "services/network/public/cpp/cross_thread_pending_shared_url_loader_factory.h"
 #include "services/network/public/mojom/network_service_test.mojom.h"
 #include "services/network/public/mojom/url_loader.mojom.h"
@@ -223,50 +220,6 @@ class DeviceServiceURLLoaderFactory : public network::SharedURLLoaderFactory {
   DISALLOW_COPY_AND_ASSIGN(DeviceServiceURLLoaderFactory);
 };
 
-using InProcessServiceFactory =
-    base::RepeatingCallback<std::unique_ptr<service_manager::Service>(
-        service_manager::mojom::ServiceRequest request)>;
-
-void LaunchInProcessServiceOnSequence(
-    const InProcessServiceFactory& factory,
-    service_manager::mojom::ServiceRequest request) {
-  service_manager::Service::RunAsyncUntilTermination(
-      factory.Run(std::move(request)));
-}
-
-void LaunchInProcessService(
-    scoped_refptr<base::SequencedTaskRunner> task_runner,
-    const InProcessServiceFactory& factory,
-    service_manager::mojom::ServiceRequest request) {
-  task_runner->PostTask(
-      FROM_HERE, base::BindOnce(&LaunchInProcessServiceOnSequence, factory,
-                                std::move(request)));
-}
-
-// Temporary helper to reduce churn when moving away from Content packaged
-// services.
-using InProcessServiceMap = std::map<
-    std::string,
-    base::RepeatingCallback<void(service_manager::mojom::ServiceRequest)>>;
-InProcessServiceMap& GetInProcessServiceMap() {
-  static base::NoDestructor<InProcessServiceMap> services;
-  return *services;
-}
-
-void RegisterInProcessService(
-    const std::string& service_name,
-    scoped_refptr<base::SequencedTaskRunner> task_runner,
-    const InProcessServiceFactory& factory) {
-  GetInProcessServiceMap()[service_name] = base::BindRepeating(
-      &LaunchInProcessService, std::move(task_runner), factory);
-}
-
-std::unique_ptr<service_manager::Service> CreateMediaSessionService(
-    service_manager::mojom::ServiceRequest request) {
-  return std::make_unique<media_session::MediaSessionService>(
-      std::move(request));
-}
-
 // A ServiceProcessHost implementation which uses the Service Manager's builtin
 // service executable launcher. Not yet intended for use in production Chrome,
 // hence availability is gated behind a flag.
@@ -320,13 +273,6 @@ class BrowserServiceManagerDelegate
       const service_manager::Identity& identity,
       mojo::PendingReceiver<service_manager::mojom::Service> receiver)
       override {
-    const auto& service_map = GetInProcessServiceMap();
-    auto it = service_map.find(identity.name());
-    if (it != service_map.end()) {
-      it->second.Run(std::move(receiver));
-      return true;
-    }
-
     main_thread_task_runner_->PostTask(
         FROM_HERE, base::BindOnce(main_thread_request_handler_, identity,
                                   std::move(receiver)));
@@ -451,7 +397,6 @@ class ServiceManagerContext::InProcessServiceManagerContext
 
   void ShutDownOnServiceManagerThread() {
     service_manager_.reset();
-    GetInProcessServiceMap().clear();
   }
 
   void StartServicesOnServiceManagerThread(
@@ -501,13 +446,6 @@ ServiceManagerContext::ServiceManagerContext(
       service_manager_thread_task_runner_));
   auto* system_connection = ServiceManagerConnection::GetForProcess();
   SetSystemConnector(system_connection->GetConnector()->Clone());
-
-  if (base::FeatureList::IsEnabled(
-          media_session::features::kMediaSessionService)) {
-    RegisterInProcessService(media_session::mojom::kServiceName,
-                             base::SequencedTaskRunnerHandle::Get(),
-                             base::BindRepeating(&CreateMediaSessionService));
-  }
 
   // This is safe to assign directly from any thread, because
   // ServiceManagerContext must be constructed before anyone can call

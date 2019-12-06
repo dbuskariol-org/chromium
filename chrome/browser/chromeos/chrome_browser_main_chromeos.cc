@@ -180,6 +180,7 @@
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/media_capture_devices.h"
+#include "content/public/browser/media_session_service.h"
 #include "content/public/browser/network_service_instance.h"
 #include "content/public/browser/notification_service.h"
 #include "content/public/browser/system_connector.h"
@@ -531,8 +532,12 @@ void ChromeBrowserMainPartsChromeos::PreMainMessageLoopRun() {
   system_token_certdb_initializer_ =
       std::make_unique<SystemTokenCertDBInitializer>();
 
+  mojo::PendingRemote<media_session::mojom::MediaControllerManager>
+      media_controller_manager;
+  content::GetMediaSessionService().BindMediaControllerManager(
+      media_controller_manager.InitWithNewPipeAndPassReceiver());
   CrasAudioHandler::Initialize(
-      content::GetSystemConnector(),
+      std::move(media_controller_manager),
       new AudioDevicesPrefHandlerImpl(g_browser_process->local_state()));
 
   content::MediaCaptureDevices::GetInstance()->AddVideoCaptureObserver(

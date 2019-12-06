@@ -1456,7 +1456,7 @@ int BrowserMainLoop::BrowserThreadsStarted() {
 
   if (MediaKeysListenerManager::IsMediaKeysListenerManagerEnabled()) {
     media_keys_listener_manager_ =
-        std::make_unique<MediaKeysListenerManagerImpl>(GetSystemConnector());
+        std::make_unique<MediaKeysListenerManagerImpl>();
   }
 
 #if defined(OS_MACOSX)
