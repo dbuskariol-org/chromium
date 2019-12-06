@@ -1788,6 +1788,10 @@
       status: "experimental",
     },
     {
+      name: "WebCodecs",
+      status: "test",
+    },
+    {
       name: "WebGL2ComputeContext",
       status: "experimental",
     },
