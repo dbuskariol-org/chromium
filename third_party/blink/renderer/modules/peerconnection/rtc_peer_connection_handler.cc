@@ -832,13 +832,14 @@ class RTCPeerConnectionHandler::WebRtcSetDescriptionObserverImpl
 // and checks for the existence of the RTCPeerConnectionHandler instance before
 // delivering callbacks on the main thread.
 class RTCPeerConnectionHandler::Observer
-    : public WTF::ThreadSafeRefCounted<RTCPeerConnectionHandler::Observer>,
+    : public GarbageCollected<RTCPeerConnectionHandler::Observer>,
       public PeerConnectionObserver,
       public blink::RtcEventLogOutputSink {
  public:
   Observer(const base::WeakPtr<RTCPeerConnectionHandler>& handler,
            scoped_refptr<base::SingleThreadTaskRunner> task_runner)
       : handler_(handler), main_thread_(task_runner) {}
+  ~Observer() override = default;
 
   // When an RTC event log is sent back from PeerConnection, it arrives here.
   void OnWebRtcEventLogWrite(const std::string& output) override {
@@ -846,17 +847,16 @@ class RTCPeerConnectionHandler::Observer
       main_thread_->PostTask(
           FROM_HERE,
           base::BindOnce(
-              &RTCPeerConnectionHandler::Observer::OnWebRtcEventLogWrite, this,
-              output));
+              &RTCPeerConnectionHandler::Observer::OnWebRtcEventLogWrite,
+              WrapCrossThreadPersistent(this), output));
     } else if (handler_) {
       handler_->OnWebRtcEventLogWrite(output);
     }
   }
 
- protected:
-  friend class WTF::ThreadSafeRefCounted<RTCPeerConnectionHandler::Observer>;
-  ~Observer() override = default;
+  void Trace(Visitor* visitor) {}
 
+ protected:
   // TODO(hbos): Remove once no longer mandatory to implement.
   void OnSignalingChange(PeerConnectionInterface::SignalingState) override {}
   void OnAddStream(rtc::scoped_refptr<MediaStreamInterface>) override {}
@@ -867,7 +867,8 @@ class RTCPeerConnectionHandler::Observer
     main_thread_->PostTask(
         FROM_HERE,
         base::BindOnce(
-            &RTCPeerConnectionHandler::Observer::OnDataChannelImpl, this,
+            &RTCPeerConnectionHandler::Observer::OnDataChannelImpl,
+            WrapCrossThreadPersistent(this),
             base::WrapRefCounted<DataChannelInterface>(data_channel.get())));
   }
 
@@ -877,7 +878,7 @@ class RTCPeerConnectionHandler::Observer
           FROM_HERE,
           base::BindOnce(
               &RTCPeerConnectionHandler::Observer::OnRenegotiationNeeded,
-              this));
+              WrapCrossThreadPersistent(this)));
     } else if (handler_) {
       handler_->OnRenegotiationNeeded();
     }
@@ -889,9 +890,10 @@ class RTCPeerConnectionHandler::Observer
       PeerConnectionInterface::IceConnectionState new_state) override {
     if (!main_thread_->BelongsToCurrentThread()) {
       main_thread_->PostTask(
-          FROM_HERE, base::BindOnce(&RTCPeerConnectionHandler::Observer::
-                                        OnStandardizedIceConnectionChange,
-                                    this, new_state));
+          FROM_HERE,
+          base::BindOnce(&RTCPeerConnectionHandler::Observer::
+                             OnStandardizedIceConnectionChange,
+                         WrapCrossThreadPersistent(this), new_state));
     } else if (handler_) {
       handler_->OnIceConnectionChange(new_state);
     }
@@ -903,8 +905,8 @@ class RTCPeerConnectionHandler::Observer
       main_thread_->PostTask(
           FROM_HERE,
           base::BindOnce(
-              &RTCPeerConnectionHandler::Observer::OnConnectionChange, this,
-              new_state));
+              &RTCPeerConnectionHandler::Observer::OnConnectionChange,
+              WrapCrossThreadPersistent(this), new_state));
     } else if (handler_) {
       handler_->OnConnectionChange(new_state);
     }
@@ -916,8 +918,8 @@ class RTCPeerConnectionHandler::Observer
       main_thread_->PostTask(
           FROM_HERE,
           base::BindOnce(
-              &RTCPeerConnectionHandler::Observer::OnIceGatheringChange, this,
-              new_state));
+              &RTCPeerConnectionHandler::Observer::OnIceGatheringChange,
+              WrapCrossThreadPersistent(this), new_state));
     } else if (handler_) {
       handler_->OnIceGatheringChange(new_state);
     }
@@ -932,11 +934,12 @@ class RTCPeerConnectionHandler::Observer
 
     main_thread_->PostTask(
         FROM_HERE,
-        base::BindOnce(
-            &RTCPeerConnectionHandler::Observer::OnIceCandidateImpl, this,
-            String::FromUTF8(sdp), String::FromUTF8(candidate->sdp_mid()),
-            candidate->sdp_mline_index(), candidate->candidate().component(),
-            candidate->candidate().address().family()));
+        base::BindOnce(&RTCPeerConnectionHandler::Observer::OnIceCandidateImpl,
+                       WrapCrossThreadPersistent(this), String::FromUTF8(sdp),
+                       String::FromUTF8(candidate->sdp_mid()),
+                       candidate->sdp_mline_index(),
+                       candidate->candidate().component(),
+                       candidate->candidate().address().family()));
   }
 
   void OnIceCandidateError(const std::string& host_candidate,
@@ -946,9 +949,9 @@ class RTCPeerConnectionHandler::Observer
     main_thread_->PostTask(
         FROM_HERE,
         base::BindOnce(
-            &RTCPeerConnectionHandler::Observer::OnIceCandidateErrorImpl, this,
-            String::FromUTF8(host_candidate), String::FromUTF8(url), error_code,
-            String::FromUTF8(error_text)));
+            &RTCPeerConnectionHandler::Observer::OnIceCandidateErrorImpl,
+            WrapCrossThreadPersistent(this), String::FromUTF8(host_candidate),
+            String::FromUTF8(url), error_code, String::FromUTF8(error_text)));
   }
 
   void OnDataChannelImpl(scoped_refptr<DataChannelInterface> channel) {
@@ -984,8 +987,8 @@ class RTCPeerConnectionHandler::Observer
     main_thread_->PostTask(
         FROM_HERE,
         base::BindOnce(
-            &RTCPeerConnectionHandler::Observer::OnInterestingUsageImpl, this,
-            usage_pattern));
+            &RTCPeerConnectionHandler::Observer::OnInterestingUsageImpl,
+            WrapCrossThreadPersistent(this), usage_pattern));
   }
 
   void OnInterestingUsageImpl(int usage_pattern) {
@@ -1073,9 +1076,9 @@ bool RTCPeerConnectionHandler::Initialize(
   CopyConstraintsIntoRtcConfiguration(options, &configuration_);
 
   peer_connection_observer_ =
-      base::MakeRefCounted<Observer>(weak_factory_.GetWeakPtr(), task_runner_);
+      MakeGarbageCollected<Observer>(weak_factory_.GetWeakPtr(), task_runner_);
   native_peer_connection_ = dependency_factory_->CreatePeerConnection(
-      configuration_, frame_, peer_connection_observer_.get());
+      configuration_, frame_, peer_connection_observer_);
 
   if (!native_peer_connection_.get()) {
     LOG(ERROR) << "Failed to initialize native PeerConnection.";
@@ -1103,11 +1106,11 @@ bool RTCPeerConnectionHandler::InitializeForTest(
   configuration_ = server_configuration;
 
   peer_connection_observer_ =
-      base::MakeRefCounted<Observer>(weak_factory_.GetWeakPtr(), task_runner_);
+      MakeGarbageCollected<Observer>(weak_factory_.GetWeakPtr(), task_runner_);
   CopyConstraintsIntoRtcConfiguration(options, &configuration_);
 
   native_peer_connection_ = dependency_factory_->CreatePeerConnection(
-      configuration_, nullptr, peer_connection_observer_.get());
+      configuration_, nullptr, peer_connection_observer_);
   if (!native_peer_connection_.get()) {
     LOG(ERROR) << "Failed to initialize native PeerConnection.";
     return false;
@@ -2006,8 +2009,7 @@ void RTCPeerConnectionHandler::StartEventLog(int output_period_ms) {
   // or find a way to be able to use it.
   // https://crbug.com/775415
   native_peer_connection_->StartRtcEventLog(
-      std::make_unique<RtcEventLogOutputSinkProxy>(
-          peer_connection_observer_.get()),
+      std::make_unique<RtcEventLogOutputSinkProxy>(peer_connection_observer_),
       output_period_ms);
 }
 
