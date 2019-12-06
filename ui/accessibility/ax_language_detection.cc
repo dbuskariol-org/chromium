@@ -125,7 +125,6 @@ void AXLanguageDetectionManager::DetectLanguageForSubtreeInternal(
       // destruction of the containing node, this is due to us treating AXNode
       // as otherwise read-only and so we store any detected language
       // information on lang info.
-
       node->SetLanguageInfo(std::make_unique<AXLanguageInfo>());
       lang_info = node->GetLanguageInfo();
     } else {
@@ -137,6 +136,10 @@ void AXLanguageDetectionManager::DetectLanguageForSubtreeInternal(
     // concatenation and bubbling up results.
     auto text = node->GetStringAttribute(ax::mojom::StringAttribute::kName);
 
+    // FindTopNMostFreqLangs will pad the results with
+    // NNetLanguageIdentifier::kUnknown in order to reach the requested number
+    // of languages, this means we cannot rely on the results' length and we
+    // have to filter the results.
     const auto results = language_identifier_.FindTopNMostFreqLangs(
         text, kMaxDetectedLanguagesPerSpan);
 
@@ -184,6 +187,12 @@ void AXLanguageDetectionManager::LabelLanguageForSubtreeInternal(AXNode* node) {
   // If the lang_info->language is already set then we have no more work to do
   // for this node.
   if (lang_info && lang_info->language.empty()) {
+    // We assign the highest probability language which is both:
+    // 1) reliably detected for this node, and
+    // 2) one of the top (kMaxDetectedLanguagesPerPage) languages on this page.
+    //
+    // This helps guard against false positives for nodes which have noisy
+    // language detection results in isolation.
     for (const auto& lang : lang_info->detected_languages) {
       if (lang_info_stats_.CheckLanguageWithinTop(lang)) {
         lang_info->language = lang;
@@ -191,43 +200,20 @@ void AXLanguageDetectionManager::LabelLanguageForSubtreeInternal(AXNode* node) {
       }
     }
 
-    // TODO(chrishall): consider obeying the author declared lang tag in some
-    // cases, either based on proximity or based on common language detection
-    // error cases.
-
-    // If language is still empty then we failed to detect a language from
-    // this node, we will instead try construct a language from other sources
-    // including any lang attribute and any language from the parent tree.
+    // After attempting labelling we no longer need the detected results in
+    // LanguageInfo, as they have no future use.
     if (lang_info->language.empty()) {
-      const auto& lang_attr =
-          node->GetStringAttribute(ax::mojom::StringAttribute::kLanguage);
-      if (!lang_attr.empty()) {
-        lang_info->language = lang_attr;
-      } else {
-        // We call GetLanguage() on our parent which will return a detected
-        // language if it has one, otherwise it will search up the tree for a
-        // kLanguage attribute.
-        //
-        // This means that lang attributes are inherited indefinitely but
-        // detected language is only inherited one level.
-        //
-        // Currently we only attach detected language to text nodes, once we
-        // start attaching detected language on other nodes we need to rethink
-        // this. We may want to attach detected language information once we
-        // consider combining multiple smaller text nodes into one larger one.
-        //
-        // TODO(chrishall): reconsider detected language inheritance.
-        AXNode* parent = node->parent();
-        if (parent) {
-          const auto& parent_lang = parent->GetLanguage();
-          if (!parent_lang.empty()) {
-            lang_info->language = parent_lang;
-          }
-        }
-      }
+      // If no language was assigned then LanguageInfo as a whole can safely be
+      // destroyed.
+      node->ClearLanguageInfo();
+    } else {
+      // Otherwise, if we assigned a language then we need to keep
+      // LanguageInfo.language, but we can clear the detected results.
+      lang_info->detected_languages.clear();
     }
   }
 
+  // Recurse into children to continue labelling.
   for (AXNode* child : node->children()) {
     LabelLanguageForSubtreeInternal(child);
   }
