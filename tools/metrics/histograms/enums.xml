@@ -21873,7 +21873,7 @@ Called by update_net_error_codes.py.-->
   <int value="54" label="kDownloadsShelf"/>
   <int value="55" label="kDeleted_EasyUnlockPrivate"/>
   <int value="56" label="kEchoPrivate"/>
-  <int value="57" label="kEmbeddedExtensionOptions"/>
+  <int value="57" label="kDeleted_EmbeddedExtensionOptions"/>
   <int value="58" label="kEnterprisePlatformKeys"/>
   <int value="59" label="kEnterprisePlatformKeysPrivate"/>
   <int value="60" label="kDeleted_ExperienceSamplingPrivate"/>
