@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "base/feature_list.h"
 #include "base/files/file_util.h"
 #include "base/macros.h"
 #include "base/path_service.h"
@@ -296,8 +297,10 @@ IN_PROC_BROWSER_TEST_F(SingleClientStandaloneTransportSyncTest,
 class SingleClientStandaloneTransportOsSyncTest : public OsSyncTest {
  public:
   SingleClientStandaloneTransportOsSyncTest() : OsSyncTest(SINGLE_CLIENT) {
-    // Don't auto-start sync.
-    scoped_features_.InitAndEnableFeature(switches::kSyncManualStartChromeOS);
+    // Enable the Wi-Fi type and don't auto-start browser sync.
+    scoped_features_.InitWithFeatures(
+        {switches::kSyncWifiConfigurations, switches::kSyncManualStartChromeOS},
+        {});
   }
   ~SingleClientStandaloneTransportOsSyncTest() override = default;
 
@@ -328,6 +331,8 @@ IN_PROC_BROWSER_TEST_F(SingleClientStandaloneTransportOsSyncTest,
   EXPECT_TRUE(active_types.Has(syncer::ARC_PACKAGE));
   EXPECT_TRUE(active_types.Has(syncer::OS_PREFERENCES));
   EXPECT_TRUE(active_types.Has(syncer::OS_PRIORITY_PREFERENCES));
+  EXPECT_TRUE(active_types.Has(syncer::PRINTERS));
+  EXPECT_TRUE(active_types.Has(syncer::WIFI_CONFIGURATIONS));
 
   // Verify that a few browser non-transport-mode types are not active.
   EXPECT_FALSE(active_types.Has(syncer::BOOKMARKS));
@@ -358,6 +363,8 @@ IN_PROC_BROWSER_TEST_F(SingleClientStandaloneTransportOsSyncTest,
   EXPECT_FALSE(active_types.Has(syncer::ARC_PACKAGE));
   EXPECT_FALSE(active_types.Has(syncer::OS_PREFERENCES));
   EXPECT_FALSE(active_types.Has(syncer::OS_PRIORITY_PREFERENCES));
+  EXPECT_FALSE(active_types.Has(syncer::PRINTERS));
+  EXPECT_FALSE(active_types.Has(syncer::WIFI_CONFIGURATIONS));
 
   // Browser non-transport-mode types are active.
   EXPECT_TRUE(active_types.Has(syncer::BOOKMARKS));
