@@ -423,9 +423,7 @@ ChromeSyncClient::CreateDataTypeControllers(syncer::SyncService* sync_service) {
 #if defined(OS_CHROMEOS)
   if (arc::IsArcAllowedForProfile(profile_) &&
       !arc::IsArcAppSyncFlowDisabled()) {
-    // TODO(https://crbug.com/1031549): Make this type run in transport-only
-    // mode for SplitSettingsSync.
-    controllers.push_back(std::make_unique<ArcPackageSyncModelTypeController>(
+    controllers.push_back(ArcPackageSyncModelTypeController::Create(
         model_type_store_factory,
         GetSyncableServiceForType(syncer::ARC_PACKAGE), dump_stack,
         sync_service, profile_));
