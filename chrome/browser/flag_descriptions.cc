@@ -2367,10 +2367,6 @@ const char kAndroidSetupSearchEngineName[] = "Android setup search engine";
 const char kAndroidSetupSearchEngineDescription[] =
     "Enables search engine selection at Android setup.";
 
-const char kAndroidSurfaceControl[] = "Use Android SurfaceControl";
-const char kAndroidSurfaceControlDescription[] =
-    "Use the SurfaceControl API for supporting overlays on Android";
-
 const char kAppNotificationStatusMessagingName[] =
     "App notification status messaging";
 const char kAppNotificationStatusMessagingDescription[] =

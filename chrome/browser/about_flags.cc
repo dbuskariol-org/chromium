@@ -1474,9 +1474,6 @@ const FeatureEntry kFeatureEntries[] = {
     {"clear-old-browsing-data", flag_descriptions::kClearOldBrowsingDataName,
      flag_descriptions::kClearOldBrowsingDataDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(features::kClearOldBrowsingData)},
-    {"enable-surfacecontrol", flag_descriptions::kAndroidSurfaceControl,
-     flag_descriptions::kAndroidSurfaceControlDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(features::kAndroidSurfaceControl)},
 #endif  // OS_ANDROID
 #if BUILDFLAG(ENABLE_NACL)
     {"enable-nacl", flag_descriptions::kNaclName,

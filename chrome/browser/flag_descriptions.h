@@ -1397,9 +1397,6 @@ extern const char kAndroidAutofillAccessibilityDescription[];
 extern const char kAndroidSetupSearchEngineName[];
 extern const char kAndroidSetupSearchEngineDescription[];
 
-extern const char kAndroidSurfaceControl[];
-extern const char kAndroidSurfaceControlDescription[];
-
 extern const char kAppNotificationStatusMessagingName[];
 extern const char kAppNotificationStatusMessagingDescription[];
 
