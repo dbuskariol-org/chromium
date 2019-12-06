@@ -230,9 +230,6 @@ class GFX_EXPORT RenderTextHarfBuzz : public RenderText {
   RangeF GetCursorSpan(const Range& text_range) override;
   size_t GetLineContainingCaret(const SelectionModel& caret) override;
 
-  // ICU grapheme iterator for the layout text. Can be null in case of an error.
-  base::i18n::BreakIterator* GetGraphemeIterator();
-
  protected:
   // RenderText:
   int GetDisplayTextBaseline() override;
