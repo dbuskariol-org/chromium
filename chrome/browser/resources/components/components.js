@@ -31,10 +31,9 @@ function renderTemplate(componentsData) {
 /**
  * Asks the C++ ComponentsDOMHandler to get details about the installed
  * components.
- * The ComponentsDOMHandler should reply to returnComponentsData() (below).
  */
 function requestComponentsData() {
-  chrome.send('requestComponentsData');
+  cr.sendWithPromise('requestComponentsData').then(returnComponentsData);
 }
 
 /**
@@ -93,8 +92,7 @@ function returnComponentsData(componentsData) {
 }
 
 /**
- * This event function is called from component UI indicating changed state
- * of component updater service.
+ * Listener called when state of component updater service changes.
  * @param {Object} eventArgs Contains event and component ID. Component ID is
  * optional.
  */
@@ -135,4 +133,7 @@ function handleCheckUpdate(node) {
 }
 
 // Get data and have it displayed upon loading.
-document.addEventListener('DOMContentLoaded', requestComponentsData);
+document.addEventListener('DOMContentLoaded', function() {
+  cr.addWebUIListener('component-event', onComponentEvent);
+  requestComponentsData();
+});
