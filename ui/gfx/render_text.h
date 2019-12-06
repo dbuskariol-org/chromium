@@ -465,7 +465,7 @@ class GFX_EXPORT RenderText {
 
   // Returns true if the position is a valid logical index into text(), and is
   // also a valid grapheme boundary, which may be used as a cursor position.
-  virtual bool IsValidCursorIndex(size_t index) = 0;
+  bool IsValidCursorIndex(size_t index);
 
   // Returns true if the position is a valid logical index into text(). Indices
   // amid multi-character graphemes are allowed here, unlike IsValidCursorIndex.
@@ -488,6 +488,9 @@ class GFX_EXPORT RenderText {
   // the display rect if necessary. These bounds are in local coordinates.
   // Subsequent text, cursor, or bounds changes may invalidate returned values.
   const Rect& GetUpdatedCursorBounds();
+
+  // Returns true of the current index is at the start of a grapheme.
+  bool IsGraphemeBoundary(size_t index);
 
   // Given an |index| in text(), return the next or previous grapheme boundary
   // in logical order (i.e. the nearest cursorable index). The return value is

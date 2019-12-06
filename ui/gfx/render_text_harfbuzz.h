@@ -245,7 +245,6 @@ class GFX_EXPORT RenderTextHarfBuzz : public RenderText {
   SelectionModel AdjacentLineSelectionModel(
       const SelectionModel& selection,
       VisualCursorDirection direction) override;
-  bool IsValidCursorIndex(size_t index) override;
   void OnLayoutTextAttributeChanged(bool text_changed) override;
   void OnDisplayTextAttributeChanged() override;
   void EnsureLayout() override;

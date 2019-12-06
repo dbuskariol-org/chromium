@@ -1762,15 +1762,6 @@ SelectionModel RenderTextHarfBuzz::AdjacentLineSelectionModel(
   return next;
 }
 
-bool RenderTextHarfBuzz::IsValidCursorIndex(size_t index) {
-  if (index == 0 || index == text().length())
-    return true;
-  if (!IsValidLogicalIndex(index))
-    return false;
-  base::i18n::BreakIterator* grapheme_iterator = GetGraphemeIterator();
-  return !grapheme_iterator || grapheme_iterator->IsGraphemeBoundary(index);
-}
-
 void RenderTextHarfBuzz::OnLayoutTextAttributeChanged(bool text_changed) {
   RenderText::OnLayoutTextAttributeChanged(text_changed);
 

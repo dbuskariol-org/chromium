@@ -827,7 +827,7 @@ bool RenderText::SelectRange(const Range& range) {
   uint32_t text_length = static_cast<uint32_t>(text().length());
   Range sel(std::min(range.start(), text_length),
             std::min(range.end(), text_length));
-  // Allow selection bounds at valid indicies amid multi-character graphemes.
+  // Allow selection bounds at valid indices amid multi-character graphemes.
   if (!IsValidLogicalIndex(sel.start()) || !IsValidLogicalIndex(sel.end()))
     return false;
   LogicalCursorDirection affinity =
@@ -1021,6 +1021,11 @@ bool RenderText::IsValidLogicalIndex(size_t index) const {
        IsValidCodePointIndex(text(), index));
 }
 
+bool RenderText::IsValidCursorIndex(size_t index) {
+  return index == 0 || index == text().length() ||
+         (IsValidLogicalIndex(index) && IsGraphemeBoundary(index));
+}
+
 Rect RenderText::GetCursorBounds(const SelectionModel& caret,
                                  bool insert_mode) {
   EnsureLayout();
@@ -1071,28 +1076,59 @@ const Rect& RenderText::GetUpdatedCursorBounds() {
   return cursor_bounds_;
 }
 
-size_t RenderText::IndexOfAdjacentGrapheme(size_t index,
-                                           LogicalCursorDirection direction) {
-  if (index > text().length())
-    return text().length();
+bool RenderText::IsGraphemeBoundary(size_t index) {
+  if (index >= text().length())
+    return true;
 
   EnsureLayout();
 
+  DCHECK(!text_to_display_indices_.empty());
+
+  // The function std::lower_bound(...) finds the first not less than |index|.
+  auto iter = std::lower_bound(text_to_display_indices_.begin(),
+                               text_to_display_indices_.end(), index,
+                               [](const TextToDisplayIndex& lhs, size_t rhs) {
+                                 return lhs.text_index < rhs;
+                               });
+
+  return (iter != text_to_display_indices_.end() && iter->text_index == index);
+}
+
+size_t RenderText::IndexOfAdjacentGrapheme(size_t index,
+                                           LogicalCursorDirection direction) {
+  if (text_.empty())
+    return 0;
+  if (index > text_.length())
+    return text_.length();
+
+  EnsureLayout();
+
+  DCHECK(!text_to_display_indices_.empty());
+
+  // The function std::lower_bound(...) finds the first not less than |index|.
+  auto iter = std::lower_bound(text_to_display_indices_.begin(),
+                               text_to_display_indices_.end(), index,
+                               [](const TextToDisplayIndex& lhs, size_t rhs) {
+                                 return lhs.text_index < rhs;
+                               });
+
   if (direction == CURSOR_FORWARD) {
-    while (index < text().length()) {
-      index++;
-      if (IsValidCursorIndex(index))
-        return index;
-    }
-    return text().length();
+    // |index| is already a grapheme boundary. Move to the next grapheme.
+    if (iter != text_to_display_indices_.end() && iter->text_index == index)
+      ++iter;
+    if (iter == text_to_display_indices_.end())
+      return text_.length();
+    DCHECK_LT(index, iter->text_index);
+  } else {
+    DCHECK_EQ(direction, CURSOR_BACKWARD);
+    if (iter != text_to_display_indices_.begin())
+      --iter;
+    if (iter == text_to_display_indices_.begin())
+      return 0;
+    DCHECK_GT(index, iter->text_index);
   }
 
-  while (index > 0) {
-    index--;
-    if (IsValidCursorIndex(index))
-      return index;
-  }
-  return 0;
+  return iter->text_index;
 }
 
 SelectionModel RenderText::GetSelectionModelForSelectionStart() const {
