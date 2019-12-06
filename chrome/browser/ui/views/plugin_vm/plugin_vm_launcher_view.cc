@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "base/optional.h"
+#include "base/strings/string_number_conversions.h"
 #include "base/strings/utf_string_conversions.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_image_manager.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_image_manager_factory.h"
@@ -379,14 +380,44 @@ base::string16 PluginVmLauncherView::GetMessage() const {
     case State::FINISHED:
       return l10n_util::GetStringUTF16(IDS_PLUGIN_VM_LAUNCHER_FINISHED_MESSAGE);
     case State::ERROR:
+      using Reason = plugin_vm::PluginVmImageManager::FailureReason;
       DCHECK(reason_);
       switch (*reason_) {
-        case plugin_vm::PluginVmImageManager::FailureReason::NOT_ALLOWED:
+        default:
+        case Reason::LOGIC_ERROR:
+        case Reason::SIGNAL_NOT_CONNECTED:
+        case Reason::OPERATION_IN_PROGRESS:
+        case Reason::UNEXPECTED_DISK_IMAGE_STATUS:
+        case Reason::INVALID_DISK_IMAGE_STATUS_RESPONSE:
+        case Reason::DISPATCHER_NOT_AVAILABLE:
+        case Reason::CONCIERGE_NOT_AVAILABLE:
+          return l10n_util::GetStringFUTF16(
+              IDS_PLUGIN_VM_LAUNCHER_ERROR_MESSAGE_LOGIC_ERROR,
+              base::NumberToString16(
+                  static_cast<std::underlying_type_t<Reason>>(*reason_)));
+        case Reason::NOT_ALLOWED:
           return l10n_util::GetStringUTF16(
               IDS_PLUGIN_VM_LAUNCHER_NOT_ALLOWED_MESSAGE);
-        default:
-          return l10n_util::GetStringUTF16(
-              IDS_PLUGIN_VM_LAUNCHER_ERROR_MESSAGE);
+        case Reason::INVALID_IMAGE_URL:
+        case Reason::HASH_MISMATCH:
+          return l10n_util::GetStringFUTF16(
+              IDS_PLUGIN_VM_LAUNCHER_ERROR_MESSAGE_CONFIG_ERROR,
+              base::NumberToString16(
+                  static_cast<std::underlying_type_t<Reason>>(*reason_)));
+        case Reason::DOWNLOAD_FAILED_UNKNOWN:
+        case Reason::DOWNLOAD_FAILED_NETWORK:
+        case Reason::DOWNLOAD_FAILED_ABORTED:
+          return l10n_util::GetStringFUTF16(
+              IDS_PLUGIN_VM_LAUNCHER_ERROR_MESSAGE_DOWNLOAD_FAILED,
+              base::NumberToString16(
+                  static_cast<std::underlying_type_t<Reason>>(*reason_)));
+        case Reason::COULD_NOT_OPEN_IMAGE:
+        case Reason::INVALID_IMPORT_RESPONSE:
+        case Reason::IMAGE_IMPORT_FAILED:
+          return l10n_util::GetStringFUTF16(
+              IDS_PLUGIN_VM_LAUNCHER_ERROR_MESSAGE_INSTALLING_FAILED,
+              base::NumberToString16(
+                  static_cast<std::underlying_type_t<Reason>>(*reason_)));
       }
   }
 }
