@@ -767,8 +767,8 @@ std::unique_ptr<NavigationRequest> NavigationRequest::CreateRendererInitiated(
           false,  // is_browser_initiated
           network::mojom::IPAddressSpace::kUnknown,
           GURL() /* web_bundle_physical_url */,
-          GURL() /* base_url_override_for_web_bundle */
-      );
+          GURL() /* base_url_override_for_web_bundle */,
+          frame_tree_node->pending_frame_policy());
   std::unique_ptr<NavigationRequest> navigation_request(new NavigationRequest(
       frame_tree_node, std::move(common_params), std::move(begin_params),
       std::move(commit_params),
@@ -819,7 +819,7 @@ std::unique_ptr<NavigationRequest> NavigationRequest::CreateForCommit(
           std::vector<int>() /* initiator_origin_trial_features */,
           std::string() /* href_translate */,
           false /* is_history_navigation_in_new_child_frame */,
-          base::TimeTicks::Now(), base::nullopt /* frame policy */);
+          base::TimeTicks::Now());
   mojom::CommitNavigationParamsPtr commit_params =
       mojom::CommitNavigationParams::New(
           params.origin, params.is_overriding_user_agent, params.redirects,
@@ -843,7 +843,8 @@ std::unique_ptr<NavigationRequest> NavigationRequest::CreateForCommit(
           false,  // is_browser_initiated
           network::mojom::IPAddressSpace::kUnknown,
           GURL() /* web_bundle_physical_url */,
-          GURL() /* base_url_override_for_web_bundle */
+          GURL() /* base_url_override_for_web_bundle */,
+          base::nullopt /* frame policy */
       );
   mojom::BeginNavigationParamsPtr begin_params =
       mojom::BeginNavigationParams::New();

@@ -779,7 +779,7 @@ std::unique_ptr<WebContentsImpl> WebContentsImpl::CreateWithOpener(
   blink::FramePolicy frame_policy(new_root->pending_frame_policy());
   frame_policy.sandbox_flags |= params.starting_sandbox_flags;
   new_root->SetPendingFramePolicy(frame_policy);
-  new_root->CommitPendingFramePolicy();
+  new_root->CommitFramePolicy(frame_policy);
 
   // This may be true even when opener is null, such as when opening blocked
   // popups.
