@@ -327,14 +327,6 @@ bool SecurityOrigin::CanAccess(const SecurityOrigin* other,
     return true;
   }
 
-  // TODO(1027191): We need to exit early in this case, as it looks like we're
-  // not correctly persisting the `agent_cluster_id_` when swapping from a
-  // remote to local frame (see `WebFrameTest.NavigateRemoteToLocalWithOpener`).
-  if (IsOpaque() || other->IsOpaque()) {
-    detail = AccessResultDomainDetail::kDomainNotRelevant;
-    return nonce_if_opaque_ == other->nonce_if_opaque_;
-  }
-
   bool can_access = IsSameOriginDomainWith(other, detail);
 
   // Compare that the clusters are the same.
