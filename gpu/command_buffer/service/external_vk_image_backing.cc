@@ -516,7 +516,12 @@ void ExternalVkImageBacking::Destroy() {
       context_state()->MakeCurrent(nullptr, true /* need_gl */);
     texture_->RemoveLightweightRef(have_context());
   }
+
   if (texture_passthrough_) {
+    // Ensure that a context is current before releasing |texture_passthrough_|,
+    // it calls glDeleteTextures.
+    if (!gl::GLContext::GetCurrent())
+      context_state()->MakeCurrent(nullptr, true /* need_gl */);
     if (!have_context())
       texture_passthrough_->MarkContextLost();
     texture_passthrough_ = nullptr;
