@@ -231,15 +231,11 @@ class SkiaOutputSurfaceImplOnGpu::ScopedPromiseImageAccess {
     begin_semaphores_.reserve(image_contexts_.size());
     // We may need one more space for the swap buffer semaphore.
     end_semaphores_.reserve(image_contexts_.size() + 1);
-    // TODO(penghuang): gather begin read access semaphores from shared images.
-    // https://crbug.com/944194
     impl_on_gpu_->BeginAccessImages(image_contexts_, &begin_semaphores_,
                                     &end_semaphores_);
   }
 
   ~ScopedPromiseImageAccess() {
-    // TODO(penghuang): end shared image access with meaningful semaphores.
-    // https://crbug.com/944194
     impl_on_gpu_->EndAccessImages(image_contexts_);
   }
 
@@ -324,7 +320,6 @@ scoped_refptr<gpu::SyncPointClientState> CreateSyncPointClientState(
 std::unique_ptr<gpu::SharedImageRepresentationFactory>
 CreateSharedImageRepresentationFactory(SkiaOutputSurfaceDependency* deps,
                                        gpu::MemoryTracker* memory_tracker) {
-  // TODO(https://crbug.com/899905): Use a real MemoryTracker, not nullptr.
   return std::make_unique<gpu::SharedImageRepresentationFactory>(
       deps->GetSharedImageManager(), memory_tracker);
 }
