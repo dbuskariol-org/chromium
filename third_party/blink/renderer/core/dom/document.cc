@@ -41,6 +41,7 @@
 #include "components/performance_manager/public/mojom/coordination_unit.mojom-blink.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "mojo/public/cpp/bindings/remote.h"
+#include "net/base/registry_controlled_domains/registry_controlled_domain.h"
 #include "services/metrics/public/cpp/mojo_ukm_recorder.h"
 #include "services/metrics/public/cpp/ukm_builders.h"
 #include "services/metrics/public/cpp/ukm_source_id.h"
@@ -8662,6 +8663,18 @@ bool Document::InForcedColorsMode() const {
          Platform::Current()->ThemeEngine() &&
          Platform::Current()->ThemeEngine()->GetForcedColors() !=
              ForcedColors::kNone;
+}
+
+bool Document::IsCrossSiteSubframe() const {
+  // It'd be nice to avoid the url::Origin temporaries, but that would require
+  // exposing the net internal helper.
+  // TODO: If the helper gets exposed, we could do this without any new
+  // allocations using StringUTF8Adaptor.
+  return TopFrameOrigin() &&
+         !net::registry_controlled_domains::SameDomainOrHost(
+             TopFrameOrigin()->ToUrlOrigin(),
+             GetSecurityOrigin()->ToUrlOrigin(),
+             net::registry_controlled_domains::INCLUDE_PRIVATE_REGISTRIES);
 }
 
 void Document::CountUse(mojom::WebFeature feature) const {

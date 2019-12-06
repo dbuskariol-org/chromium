@@ -935,6 +935,12 @@ _CONFIG = [
         'paths': ['third_party/blink/renderer/modules/webaudio/audio_worklet_thread.cc'],
         'allowed': ['base::ThreadPriority'],
     },
+    {
+        'paths': ['third_party/blink/renderer/core/dom/document.cc'],
+        'allowed': [
+            'net::registry_controlled_domains::.+',
+        ],
+    },
 ]
 
 
