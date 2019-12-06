@@ -2000,7 +2000,6 @@ if (!is_android) {
         "../browser/ui/views/translate/translate_bubble_test_utils_views.cc",
         "../browser/ui/views/translate/translate_bubble_view_browsertest.cc",
         "../browser/ui/views/translate/translate_language_browsertest.cc",
-        "../browser/ui/views/web_dialog_view_browsertest.cc",
       ]
       if (!is_chromeos) {
         sources += [
@@ -5099,10 +5098,13 @@ test("unit_tests") {
   if (toolkit_views) {
     deps += [
       "//components/web_modal:test_support",
+      "//content/test:test_support",
       "//ui/views",
       "//ui/views:test_support",
+      "//ui/web_dialogs:test_support",
     ]
     sources += [
+      "../../ui/views/controls/webview/web_dialog_view_unittest.cc",
       "../../ui/views/controls/webview/webview_unittest.cc",
       "../browser/ui/views/accelerator_table_unittest.cc",
       "../browser/ui/views/accelerator_table_unittest_mac.mm",
@@ -5529,8 +5531,11 @@ if (!is_android) {
       "../browser/ui/startup/startup_browser_creator_interactive_uitest.cc",
       "../browser/ui/translate/translate_bubble_test_utils.h",
       "../browser/ui/views/accessibility/navigation_accessibility_uitest_win.cc",
+      "../browser/ui/views/content_test_utils.cc",
+      "../browser/ui/views/content_test_utils.h",
       "../browser/ui/views/permission_bubble/permission_bubble_views_interactive_uitest_mac.mm",
       "../browser/ui/views/tabs/tab_spinner_interactive_uitest.cc",
+      "../browser/ui/views/web_dialog_view_browsertest.cc",
       "../browser/webauth_interactive_uitest.cc",
       "//ui/base/clipboard/clipboard_unittest.cc",
       "base/always_on_top_window_killer_win.cc",
