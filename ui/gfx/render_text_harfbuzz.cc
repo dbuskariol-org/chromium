@@ -1586,8 +1586,14 @@ RangeF RenderTextHarfBuzz::GetCursorSpan(const Range& text_range) {
 
   internal::TextRunHarfBuzz* run = run_list->runs()[run_index].get();
 
+  size_t next_grapheme_start = valid_range.end();
+  if (!IsValidCursorIndex(next_grapheme_start)) {
+    next_grapheme_start =
+        IndexOfAdjacentGrapheme(next_grapheme_start, CURSOR_FORWARD);
+  }
+
   Range display_range(TextIndexToDisplayIndex(valid_range.start()),
-                      TextIndexToDisplayIndex(valid_range.end()));
+                      TextIndexToDisplayIndex(next_grapheme_start));
 
   // Although highly likely, there's no guarantee that a single text run is used
   // for the entire cursor span. For example, Unicode Variation Selectors are
