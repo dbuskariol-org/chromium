@@ -425,6 +425,9 @@
       'Fuchsia x64', # https://crbug.com/961457
       # chromium.fyi
       'android-code-coverage-native', # crbug/1018431
+      'fuchsia-fyi-arm64-rel',  # https://crbug.com/961457
+      'fuchsia-fyi-x64-dbg',  # https://crbug.com/961457
+      'fuchsia-fyi-x64-rel',  # https://crbug.com/961457
     ],
     'modifications': {
       'android-pie-arm64-rel': {
