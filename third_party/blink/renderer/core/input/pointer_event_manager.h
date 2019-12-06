@@ -248,7 +248,7 @@ class CORE_EXPORT PointerEventManager final
   // See "PREVENT MOUSE EVENT flag" in the spec:
   //   https://w3c.github.io/pointerevents/#compatibility-mapping-with-mouse-events
   bool prevent_mouse_event_for_pointer_type_
-      [static_cast<size_t>(WebPointerProperties::PointerType::kLastEntry) + 1];
+      [static_cast<size_t>(WebPointerProperties::PointerType::kMaxValue) + 1];
 
   // Set upon scrolling starts when sending a pointercancel, prevents PE
   // dispatches for non-hovering pointers until all of them become inactive.
