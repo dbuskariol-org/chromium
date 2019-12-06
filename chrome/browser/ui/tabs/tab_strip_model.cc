@@ -1756,6 +1756,17 @@ void TabStripModel::AddToNewGroupImpl(const std::vector<int>& indices,
 
 void TabStripModel::AddToExistingGroupImpl(const std::vector<int>& indices,
                                            TabGroupId group) {
+  // Do nothing if the "existing" group can't be found. This would only happen
+  // if the existing group is closed programmatically while the user is
+  // interacting with the UI - e.g. if a group close operation is started by an
+  // extension while the user clicks "Add to existing group" in the context
+  // menu.
+  // If this happens, the browser should not crash. So here we just make it a
+  // no-op, since we don't want to create unintended side effects in this rare
+  // corner case.
+  if (!group_model_->ContainsTabGroup(group))
+    return;
+
   int destination_index = -1;
   for (int i = contents_data_.size() - 1; i >= 0; i--) {
     if (contents_data_[i]->group() == group) {
