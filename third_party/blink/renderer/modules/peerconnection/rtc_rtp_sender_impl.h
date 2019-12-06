@@ -12,11 +12,11 @@
 #include "base/callback.h"
 #include "base/single_thread_task_runner.h"
 #include "third_party/blink/public/platform/web_media_stream_track.h"
-#include "third_party/blink/public/platform/web_rtc_stats.h"
 #include "third_party/blink/renderer/modules/modules_export.h"
 #include "third_party/blink/renderer/modules/peerconnection/webrtc_media_stream_track_adapter_map.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_rtp_sender_platform.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_rtp_transceiver_platform.h"
+#include "third_party/blink/renderer/platform/peerconnection/rtc_stats.h"
 #include "third_party/webrtc/api/peer_connection_interface.h"
 #include "third_party/webrtc/api/rtp_sender_interface.h"
 #include "third_party/webrtc/api/scoped_refptr.h"
@@ -142,7 +142,7 @@ class MODULES_EXPORT RTCRtpSenderImpl : public blink::RTCRtpSenderPlatform {
   void SetParameters(blink::WebVector<webrtc::RtpEncodingParameters>,
                      webrtc::DegradationPreference,
                      blink::RTCVoidRequest*) override;
-  void GetStats(blink::WebRTCStatsReportCallback,
+  void GetStats(RTCStatsReportCallback,
                 const blink::WebVector<webrtc::NonStandardGroupId>&) override;
   void SetStreams(const WebVector<String>& stream_ids) override;
 

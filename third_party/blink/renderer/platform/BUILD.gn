@@ -531,7 +531,6 @@ jumbo_component("platform") {
     "exported/web_prerender.cc",
     "exported/web_prerendering_support.cc",
     "exported/web_resource_timing_info.cc",
-    "exported/web_rtc_stats.cc",
     "exported/web_runtime_features.cc",
     "exported/web_security_origin.cc",
     "exported/web_string.cc",

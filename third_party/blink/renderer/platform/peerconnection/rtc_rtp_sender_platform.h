@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "third_party/blink/public/platform/web_rtc_stats.h"
+#include "third_party/blink/renderer/platform/peerconnection/rtc_stats.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 #include "third_party/webrtc/api/dtls_transport_interface.h"
@@ -49,7 +49,7 @@ class PLATFORM_EXPORT RTCRtpSenderPlatform {
   virtual void SetParameters(blink::WebVector<webrtc::RtpEncodingParameters>,
                              webrtc::DegradationPreference,
                              RTCVoidRequest*) = 0;
-  virtual void GetStats(blink::WebRTCStatsReportCallback,
+  virtual void GetStats(RTCStatsReportCallback,
                         const WebVector<webrtc::NonStandardGroupId>&) = 0;
   virtual void SetStreams(const WebVector<String>& stream_ids) = 0;
 };

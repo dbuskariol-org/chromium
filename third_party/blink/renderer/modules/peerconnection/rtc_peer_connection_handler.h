@@ -17,7 +17,6 @@
 #include "base/memory/weak_ptr.h"
 #include "base/single_thread_task_runner.h"
 #include "third_party/blink/public/platform/web_media_stream_source.h"
-#include "third_party/blink/public/platform/web_rtc_stats.h"
 #include "third_party/blink/renderer/modules/modules_export.h"
 #include "third_party/blink/renderer/modules/peerconnection/media_stream_track_metrics.h"
 #include "third_party/blink/renderer/modules/peerconnection/rtc_rtp_receiver_impl.h"
@@ -26,6 +25,7 @@
 #include "third_party/blink/renderer/modules/peerconnection/webrtc_media_stream_track_adapter_map.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_peer_connection_handler_client.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_peer_connection_handler_platform.h"
+#include "third_party/blink/renderer/platform/peerconnection/rtc_stats.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_stats_request.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_stats_response_base.h"
 #include "third_party/webrtc/api/stats/rtc_stats.h"
@@ -144,7 +144,7 @@ class MODULES_EXPORT RTCPeerConnectionHandler
   void RestartIce() override;
 
   void GetStats(RTCStatsRequest* request) override;
-  void GetStats(blink::WebRTCStatsReportCallback callback,
+  void GetStats(RTCStatsReportCallback callback,
                 const blink::WebVector<webrtc::NonStandardGroupId>&
                     exposed_group_ids) override;
   webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>>

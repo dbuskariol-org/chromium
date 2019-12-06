@@ -107,7 +107,7 @@ void FakeRTCRtpSenderImpl::SetParameters(
 }
 
 void FakeRTCRtpSenderImpl::GetStats(
-    blink::WebRTCStatsReportCallback,
+    RTCStatsReportCallback,
     const blink::WebVector<webrtc::NonStandardGroupId>&) {
   NOTIMPLEMENTED();
 }
@@ -174,7 +174,7 @@ FakeRTCRtpReceiverImpl::GetSources() {
 }
 
 void FakeRTCRtpReceiverImpl::GetStats(
-    blink::WebRTCStatsReportCallback,
+    RTCStatsReportCallback,
     const blink::WebVector<webrtc::NonStandardGroupId>&) {
   NOTIMPLEMENTED();
 }

@@ -9,8 +9,8 @@
 
 #include "base/bind.h"
 #include "base/logging.h"
-#include "third_party/blink/public/platform/web_rtc_stats.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_dtmf_sender_handler.h"
+#include "third_party/blink/renderer/platform/peerconnection/rtc_stats.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_void_request.h"
 #include "third_party/blink/renderer/platform/wtf/thread_safe_ref_counted.h"
 
@@ -258,7 +258,7 @@ class RTCRtpSenderImpl::RTCRtpSenderInternal
   }
 
   void GetStats(
-      blink::WebRTCStatsReportCallback callback,
+      RTCStatsReportCallback callback,
       const blink::WebVector<webrtc::NonStandardGroupId>& exposed_group_ids) {
     signaling_task_runner_->PostTask(
         FROM_HERE,
@@ -325,7 +325,7 @@ class RTCRtpSenderImpl::RTCRtpSenderInternal
   }
 
   void GetStatsOnSignalingThread(
-      blink::WebRTCStatsReportCallback callback,
+      RTCStatsReportCallback callback,
       const blink::WebVector<webrtc::NonStandardGroupId>& exposed_group_ids) {
     native_peer_connection_->GetStats(
         webrtc_sender_.get(),
@@ -474,7 +474,7 @@ void RTCRtpSenderImpl::SetParameters(
 }
 
 void RTCRtpSenderImpl::GetStats(
-    blink::WebRTCStatsReportCallback callback,
+    RTCStatsReportCallback callback,
     const blink::WebVector<webrtc::NonStandardGroupId>& exposed_group_ids) {
   internal_->GetStats(std::move(callback), exposed_group_ids);
 }

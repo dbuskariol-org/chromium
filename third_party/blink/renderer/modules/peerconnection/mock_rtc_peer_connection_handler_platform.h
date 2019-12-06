@@ -58,7 +58,7 @@ class MockRTCPeerConnectionHandlerPlatform
                        scoped_refptr<RTCIceCandidatePlatform>) override;
   void RestartIce() override;
   void GetStats(RTCStatsRequest*) override;
-  void GetStats(WebRTCStatsReportCallback,
+  void GetStats(RTCStatsReportCallback,
                 const WebVector<webrtc::NonStandardGroupId>&) override;
   webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>>
   AddTransceiverWithTrack(const WebMediaStreamTrack&,

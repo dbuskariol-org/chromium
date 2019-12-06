@@ -27,7 +27,6 @@
 #include "third_party/blink/public/platform/modules/mediastream/web_platform_media_stream_track.h"
 #include "third_party/blink/public/platform/platform.h"
 #include "third_party/blink/public/platform/web_media_constraints.h"
-#include "third_party/blink/public/platform/web_rtc_stats.h"
 #include "third_party/blink/public/platform/web_string.h"
 #include "third_party/blink/public/platform/web_url.h"
 #include "third_party/blink/renderer/modules/mediastream/media_stream_constraints_util.h"
@@ -48,6 +47,7 @@
 #include "third_party/blink/renderer/platform/peerconnection/rtc_rtp_transceiver_platform.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_session_description_platform.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_session_description_request.h"
+#include "third_party/blink/renderer/platform/peerconnection/rtc_stats.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_void_request.h"
 #include "third_party/blink/renderer/platform/scheduler/public/post_cross_thread_task.h"
 #include "third_party/blink/renderer/platform/wtf/cross_thread_functional.h"
@@ -482,7 +482,7 @@ void GetStatsOnSignalingThread(
 void GetRTCStatsOnSignalingThread(
     const scoped_refptr<base::SingleThreadTaskRunner>& main_thread,
     scoped_refptr<webrtc::PeerConnectionInterface> native_peer_connection,
-    blink::WebRTCStatsReportCallback callback,
+    RTCStatsReportCallback callback,
     const blink::WebVector<webrtc::NonStandardGroupId>& exposed_group_ids) {
   TRACE_EVENT0("webrtc", "GetRTCStatsOnSignalingThread");
 
@@ -1655,7 +1655,7 @@ void RTCPeerConnectionHandler::GetStats(
 }
 
 void RTCPeerConnectionHandler::GetStats(
-    blink::WebRTCStatsReportCallback callback,
+    RTCStatsReportCallback callback,
     const blink::WebVector<webrtc::NonStandardGroupId>& exposed_group_ids) {
   DCHECK(task_runner_->RunsTasksInCurrentSequence());
   signaling_thread()->PostTask(
