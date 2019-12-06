@@ -1158,6 +1158,8 @@ void SplitViewController::OnTabletModeStarting() {
 }
 
 void SplitViewController::OnTabletModeStarted() {
+  DCHECK_EQ(IsCurrentScreenOrientationPrimary(), IsLayoutRightSideUp());
+  is_previous_layout_right_side_up_ = IsCurrentScreenOrientationPrimary();
   // If splitview is active when tablet mode is starting, do the clamshell mode
   // splitview to tablet mode splitview transition by adding the split view
   // divider bar and also adjust the |divider_position_| so that it's on one of
@@ -1186,6 +1188,11 @@ void SplitViewController::OnTabletModeEnding() {
     EndSplitView();
     Shell::Get()->overview_controller()->EndOverview();
   }
+}
+
+void SplitViewController::OnTabletModeEnded() {
+  DCHECK(IsLayoutRightSideUp());
+  is_previous_layout_right_side_up_ = true;
 }
 
 void SplitViewController::OnTabletControllerDestroyed() {

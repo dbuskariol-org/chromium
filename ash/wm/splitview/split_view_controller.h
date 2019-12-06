@@ -242,6 +242,7 @@ class ASH_EXPORT SplitViewController : public aura::WindowObserver,
   void OnTabletModeStarting() override;
   void OnTabletModeStarted() override;
   void OnTabletModeEnding() override;
+  void OnTabletModeEnded() override;
   void OnTabletControllerDestroyed() override;
 
   // AccessibilityObserver:
@@ -472,6 +473,8 @@ class ASH_EXPORT SplitViewController : public aura::WindowObserver,
   SnapPosition default_snap_position_ = NONE;
 
   // Whether the previous layout is right-side-up (see |IsLayoutRightSideUp|).
+  // Consistent with |IsLayoutRightSideUp|, |is_previous_layout_right_side_up_|
+  // is always true in clamshell mode.
   bool is_previous_layout_right_side_up_ = true;
 
   // True when the divider is being dragged (not during its snap animation).
