@@ -14,6 +14,7 @@
 #include "ui/gfx/geometry/rect.h"
 #include "ui/ozone/platform/wayland/host/wayland_connection.h"
 #include "ui/ozone/platform/wayland/host/wayland_pointer.h"
+#include "ui/ozone/platform/wayland/host/wayland_surface.h"
 #include "ui/ozone/platform/wayland/host/wayland_window.h"
 #include "ui/ozone/platform/wayland/host/xdg_surface_wrapper_impl.h"
 
@@ -290,8 +291,10 @@ bool XDGPopupWrapperImpl::InitializeStable(WaylandConnection* connection,
         wayland_window_->parent_window()->shell_popup());
     parent_xdg_surface = popup->xdg_surface();
   } else {
+    WaylandSurface* wayland_surface =
+        static_cast<WaylandSurface*>(wayland_window_->parent_window());
     parent_xdg_surface = reinterpret_cast<XDGSurfaceWrapperImpl*>(
-        wayland_window_->parent_window()->shell_surface());
+        wayland_surface->shell_surface());
   }
 
   if (!parent_xdg_surface)
@@ -405,8 +408,10 @@ bool XDGPopupWrapperImpl::InitializeV6(WaylandConnection* connection,
         wayland_window_->parent_window()->shell_popup());
     parent_xdg_surface = popup->xdg_surface();
   } else {
+    WaylandSurface* wayland_surface =
+        static_cast<WaylandSurface*>(wayland_window_->parent_window());
     parent_xdg_surface = reinterpret_cast<XDGSurfaceWrapperImpl*>(
-        wayland_window_->parent_window()->shell_surface());
+        wayland_surface->shell_surface());
   }
 
   if (!parent_xdg_surface)

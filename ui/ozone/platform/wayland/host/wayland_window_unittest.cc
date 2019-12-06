@@ -26,6 +26,7 @@
 #include "ui/ozone/platform/wayland/test/test_wayland_server_thread.h"
 #include "ui/ozone/platform/wayland/test/wayland_test.h"
 #include "ui/ozone/test/mock_platform_window_delegate.h"
+#include "ui/platform_window/platform_window_handler/wm_move_resize_handler.h"
 #include "ui/platform_window/platform_window_init_properties.h"
 
 using ::testing::_;
@@ -249,7 +250,6 @@ TEST_P(WaylandWindowTest, MaximizeAndRestore) {
   SendConfigureEvent(kMaximizedBounds.width(), kMaximizedBounds.height(), 2,
                      inactive_maximized.get());
   Sync();
-  EXPECT_FALSE(window_->is_active());
   VerifyAndClearExpectations();
 
   EXPECT_CALL(*xdg_surface_, SetWindowGeometry(0, 0, kMaximizedBounds.width(),
@@ -259,7 +259,6 @@ TEST_P(WaylandWindowTest, MaximizeAndRestore) {
   SendConfigureEvent(kMaximizedBounds.width(), kMaximizedBounds.height(), 3,
                      active_maximized.get());
   Sync();
-  EXPECT_TRUE(window_->is_active());
   VerifyAndClearExpectations();
 
   EXPECT_CALL(*xdg_surface_, SetWindowGeometry(0, 0, kNormalBounds.width(),
@@ -703,21 +702,17 @@ TEST_P(WaylandWindowTest, ConfigureEventWithNulledSize) {
 }
 
 TEST_P(WaylandWindowTest, OnActivationChanged) {
-  EXPECT_FALSE(window_->is_active());
-
   {
     ScopedWlArray states = InitializeWlArrayWithActivatedState();
     EXPECT_CALL(delegate_, OnActivationChanged(Eq(true)));
     SendConfigureEvent(0, 0, 1, states.get());
     Sync();
-    EXPECT_TRUE(window_->is_active());
   }
 
   ScopedWlArray states;
   EXPECT_CALL(delegate_, OnActivationChanged(Eq(false)));
   SendConfigureEvent(0, 0, 2, states.get());
   Sync();
-  EXPECT_FALSE(window_->is_active());
 }
 
 TEST_P(WaylandWindowTest, OnAcceleratedWidgetDestroy) {
@@ -847,7 +842,7 @@ TEST_P(WaylandWindowTest, CanDispatchEventToMenuWindowNested) {
 
 TEST_P(WaylandWindowTest, DispatchWindowMove) {
   EXPECT_CALL(*GetXdgSurface(), Move(_));
-  window_->DispatchHostWindowDragMovement(HTCAPTION, gfx::Point());
+  ui::GetWmMoveResizeHandler(*window_)->DispatchHostWindowDragMovement(HTCAPTION, gfx::Point());
 }
 
 // Makes sure hit tests are converted into right edges.
@@ -855,11 +850,14 @@ TEST_P(WaylandWindowTest, DispatchWindowResize) {
   std::vector<int> hit_test_values;
   InitializeWithSupportedHitTestValues(&hit_test_values);
 
+  auto* wm_move_resize_handler = ui::GetWmMoveResizeHandler(*window_);
+
   for (const int value : hit_test_values) {
     {
       uint32_t direction = wl::IdentifyDirection(*(connection_.get()), value);
       EXPECT_CALL(*GetXdgSurface(), Resize(_, Eq(direction)));
-      window_->DispatchHostWindowDragMovement(value, gfx::Point());
+      wm_move_resize_handler->DispatchHostWindowDragMovement(value,
+                                                             gfx::Point());
     }
   }
 }

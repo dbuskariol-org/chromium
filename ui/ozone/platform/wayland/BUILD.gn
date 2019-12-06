@@ -91,6 +91,8 @@ source_set("wayland") {
     "host/wayland_shm.h",
     "host/wayland_shm_buffer.cc",
     "host/wayland_shm_buffer.h",
+    "host/wayland_surface.cc",
+    "host/wayland_surface.h",
     "host/wayland_touch.cc",
     "host/wayland_touch.h",
     "host/wayland_window.cc",

@@ -6,6 +6,7 @@
 
 #include <memory>
 
+#include "ui/ozone/platform/wayland/host/wayland_surface.h"
 #include "ui/ozone/platform/wayland/host/wayland_window.h"
 
 namespace ui {
@@ -15,12 +16,30 @@ std::unique_ptr<WaylandWindow> WaylandWindow::Create(
     PlatformWindowDelegate* delegate,
     WaylandConnection* connection,
     PlatformWindowInitProperties properties) {
-  // TODO(msisov): once WaylandWindow becomes a base class, add switch cases to
-  // create different Wayland windows.
-  std::unique_ptr<WaylandWindow> window(
-      new WaylandWindow(delegate, connection));
-  return window->Initialize(std::move(properties)) ? std::move(window)
-                                                   : nullptr;
+  std::unique_ptr<WaylandWindow> window;
+  switch (properties.type) {
+    case PlatformWindowType::kMenu:
+    case PlatformWindowType::kPopup:
+      // TODO(msisov): Add WaylandPopup.
+      window.reset(new WaylandWindow(delegate, connection));
+      break;
+    case PlatformWindowType::kTooltip:
+      // TODO(msisov): Add WaylandSubsurface.
+      window.reset(new WaylandWindow(delegate, connection));
+      break;
+    case PlatformWindowType::kWindow:
+    case PlatformWindowType::kBubble:
+    case PlatformWindowType::kDrag:
+      // TODO(msisov): Figure out what kind of surface we need to create for
+      // bubble and drag windows.
+      window.reset(new WaylandSurface(delegate, connection));
+      break;
+    default:
+      NOTREACHED();
+      break;
+  }
+  return window && window->Initialize(std::move(properties)) ? std::move(window)
+                                                             : nullptr;
 }
 
 }  // namespace ui
