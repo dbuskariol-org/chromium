@@ -101,7 +101,6 @@ class GpuClient;
 
 namespace content {
 class AgentMetricsCollectorHost;
-class BrowserPluginMessageFilter;
 class CodeCacheHostImpl;
 class FileSystemManagerImpl;
 class IndexedDBDispatcherHost;
@@ -989,9 +988,6 @@ class CONTENT_EXPORT RenderProcessHostImpl
   scoped_refptr<RenderWidgetHelper> widget_helper_;
 
   scoped_refptr<RenderFrameMessageFilter> render_frame_message_filter_;
-
-  // The filter for messages coming from the browser plugin.
-  scoped_refptr<BrowserPluginMessageFilter> bp_message_filter_;
 
   // Used in single-process mode.
   std::unique_ptr<base::Thread> in_process_renderer_;

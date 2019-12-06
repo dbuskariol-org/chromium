@@ -6258,21 +6258,6 @@ ui::AXTreeID RenderFrameHostImpl::RoutingIDToAXTreeID(int routing_id) {
   return rfh->GetAXTreeID();
 }
 
-ui::AXTreeID RenderFrameHostImpl::BrowserPluginInstanceIDToAXTreeID(
-    int instance_id) {
-  RenderFrameHostImpl* guest = static_cast<RenderFrameHostImpl*>(
-      delegate()->GetGuestByInstanceID(this, instance_id));
-  if (!guest)
-    return ui::AXTreeIDUnknown();
-
-  // Create a mapping from the guest to its embedder's AX Tree ID, and
-  // explicitly update the guest to propagate that mapping immediately.
-  guest->set_browser_plugin_embedder_ax_tree_id(GetAXTreeID());
-  guest->UpdateAXTreeData();
-
-  return guest->GetAXTreeID();
-}
-
 void RenderFrameHostImpl::AXContentNodeDataToAXNodeData(
     const AXContentNodeData& src,
     ui::AXNodeData* dst) {
@@ -6289,11 +6274,6 @@ void RenderFrameHostImpl::AXContentNodeDataToAXNodeData(
         dst->string_attributes.push_back(
             std::make_pair(ax::mojom::StringAttribute::kChildTreeId,
                            RoutingIDToAXTreeID(value).ToString()));
-        break;
-      case AX_CONTENT_ATTR_CHILD_BROWSER_PLUGIN_INSTANCE_ID:
-        dst->string_attributes.push_back(std::make_pair(
-            ax::mojom::StringAttribute::kChildTreeId,
-            BrowserPluginInstanceIDToAXTreeID(value).ToString()));
         break;
       case AX_CONTENT_INT_ATTRIBUTE_LAST:
         NOTREACHED();

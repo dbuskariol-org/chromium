@@ -84,7 +84,6 @@
 #include "content/browser/browser_child_process_host_impl.h"
 #include "content/browser/browser_main.h"
 #include "content/browser/browser_main_loop.h"
-#include "content/browser/browser_plugin/browser_plugin_message_filter.h"
 #include "content/browser/cache_storage/cache_storage_context_impl.h"
 #include "content/browser/child_process_security_policy_impl.h"
 #include "content/browser/code_cache/generated_code_cache.h"
@@ -1833,10 +1832,6 @@ void RenderProcessHostImpl::ResetChannelProxy() {
 void RenderProcessHostImpl::CreateMessageFilters() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   MediaInternals* media_internals = MediaInternals::GetInstance();
-  // Add BrowserPluginMessageFilter to ensure it gets the first stab at messages
-  // from guests.
-  bp_message_filter_ = new BrowserPluginMessageFilter(GetID());
-  AddFilter(bp_message_filter_.get());
 
   scoped_refptr<RenderMessageFilter> render_message_filter =
       base::MakeRefCounted<RenderMessageFilter>(

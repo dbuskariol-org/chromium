@@ -561,8 +561,6 @@ jumbo_source_set("browser") {
     "browser_plugin/browser_plugin_embedder.h",
     "browser_plugin/browser_plugin_guest.cc",
     "browser_plugin/browser_plugin_guest.h",
-    "browser_plugin/browser_plugin_message_filter.cc",
-    "browser_plugin/browser_plugin_message_filter.h",
     "browser_plugin/browser_plugin_popup_menu_helper_mac.h",
     "browser_plugin/browser_plugin_popup_menu_helper_mac.mm",
     "browser_process_sub_thread.cc",

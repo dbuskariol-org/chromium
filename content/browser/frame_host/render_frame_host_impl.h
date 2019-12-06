@@ -1675,10 +1675,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // unique AXTreeID.
   ui::AXTreeID RoutingIDToAXTreeID(int routing_id);
 
-  // Map a browser plugin instance ID to the AXTreeID of the plugin's
-  // main frame.
-  ui::AXTreeID BrowserPluginInstanceIDToAXTreeID(int routing_id);
-
   // Convert the content-layer-specific AXContentNodeData to a general-purpose
   // AXNodeData structure.
   void AXContentNodeDataToAXNodeData(const AXContentNodeData& src,

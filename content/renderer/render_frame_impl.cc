@@ -91,8 +91,6 @@
 #include "content/public/renderer/renderer_ppapi_host.h"
 #include "content/renderer/accessibility/aom_content_ax_tree.h"
 #include "content/renderer/accessibility/render_accessibility_impl.h"
-#include "content/renderer/browser_plugin/browser_plugin.h"
-#include "content/renderer/browser_plugin/browser_plugin_manager.h"
 #include "content/renderer/compositor/layer_tree_view.h"
 #include "content/renderer/content_security_policy_util.h"
 #include "content/renderer/context_menu_params_builder.h"
@@ -2974,15 +2972,6 @@ blink::WebPlugin* RenderFrameImpl::CreatePlugin(
     const blink::WebPluginParams& params,
     std::unique_ptr<content::PluginInstanceThrottler> throttler) {
 #if BUILDFLAG(ENABLE_PLUGINS)
-  if (info.type == WebPluginInfo::PLUGIN_TYPE_BROWSER_PLUGIN) {
-    // |delegate| deletes itself.
-    BrowserPluginDelegate* delegate =
-        GetContentClient()->renderer()->CreateBrowserPluginDelegate(
-            this, info, params.mime_type.Utf8(), GURL(params.url));
-    return BrowserPluginManager::Get()->CreateBrowserPlugin(
-        this, delegate->GetWeakPtr());
-  }
-
   base::Optional<url::Origin> origin_lock;
   if (GetContentClient()->renderer()->IsOriginIsolatedPepperPlugin(info.path)) {
     origin_lock = url::Origin::Create(GURL(params.url));
@@ -3084,14 +3073,6 @@ void RenderFrameImpl::PluginDidStopLoading() {
 
 bool RenderFrameImpl::IsFTPDirectoryListing() {
   return frame_->GetDocumentLoader()->IsListingFtpDirectory();
-}
-
-void RenderFrameImpl::AttachGuest(int element_instance_id) {
-  BrowserPluginManager::Get()->Attach(element_instance_id);
-}
-
-void RenderFrameImpl::DetachGuest(int element_instance_id) {
-  BrowserPluginManager::Get()->Detach(element_instance_id);
 }
 
 void RenderFrameImpl::SetSelectedText(const base::string16& selection_text,
@@ -3872,18 +3853,6 @@ blink::WebPlugin* RenderFrameImpl::CreatePlugin(
   if (GetContentClient()->renderer()->OverrideCreatePlugin(this, params,
                                                            &plugin)) {
     return plugin;
-  }
-
-  if (params.mime_type.ContainsOnlyASCII() &&
-      params.mime_type.Ascii() == kBrowserPluginMimeType) {
-    // |delegate| deletes itself.
-    BrowserPluginDelegate* delegate =
-        GetContentClient()->renderer()->CreateBrowserPluginDelegate(
-            this, WebPluginInfo(), kBrowserPluginMimeType, GURL(params.url));
-    if (!delegate)
-      return nullptr;
-    return BrowserPluginManager::Get()->CreateBrowserPlugin(
-        this, delegate->GetWeakPtr());
   }
 
 #if BUILDFLAG(ENABLE_PLUGINS)
