@@ -439,7 +439,7 @@ ${node}\\
 {separator}\\
 % endif
 % endfor
-{separator_last}\\
+{separator_last}\
 """,
             element_nodes=element_nodes_gensym,
             separator=separator,
