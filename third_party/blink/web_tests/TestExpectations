@@ -4584,15 +4584,6 @@ crbug.com/769056 virtual/text-antialias/emoji-web-font.html [ Failure ]
 # Paint-timing tests timeout without threaded-compositing, so skip them.
 crbug.com/720047 external/wpt/paint-timing [ Skip ]
 
-# This feature is disabled currently, these tests should be enabled once the
-# feature has been enabled by default.
-crbug.com/694855 media/audio-src-suspend-after-have-metadata.html [ Skip ]
-crbug.com/694855 media/video-src-skip-suspend-after-have-metadata.html [ Skip ]
-crbug.com/694855 media/video-src-suspend-after-have-metadata.html [ Skip ]
-crbug.com/694855 virtual/audio-service/media/audio-src-suspend-after-have-metadata.html [ Skip ]
-crbug.com/694855 virtual/audio-service/media/video-src-skip-suspend-after-have-metadata.html [ Skip ]
-crbug.com/694855 virtual/audio-service/media/video-src-suspend-after-have-metadata.html [ Skip ]
-
 ### See crbug.com/891427 comment near the top of this file:
 ###crbug.com/849979 media/video-layer-crash.html [ Pass Timeout ]
 
