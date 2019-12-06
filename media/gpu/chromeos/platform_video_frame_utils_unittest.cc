@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "media/gpu/chromeos/platform_video_frame_utils.h"
+
 #include <stddef.h>
 #include <stdint.h>
 
 #include <utility>
 #include <vector>
-
-#include "testing/gtest/include/gtest/gtest.h"
 
 #include "base/files/file.h"
 #include "base/files/file_path.h"
@@ -22,7 +22,7 @@
 #include "media/base/video_frame.h"
 #include "media/base/video_frame_layout.h"
 #include "media/base/video_types.h"
-#include "media/gpu/linux/platform_video_frame_utils.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "ui/gfx/buffer_types.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/size.h"

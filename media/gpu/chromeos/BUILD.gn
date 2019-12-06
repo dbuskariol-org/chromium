@@ -29,10 +29,6 @@ source_set("chromeos") {
     "//media/gpu:common",
   ]
 
-  if (use_vaapi || use_v4l2_codec) {
-    deps += [ "//media/gpu/linux:common" ]
-  }
-
   if (use_vaapi) {
     deps += [ "//media/gpu/vaapi" ]
   }
@@ -61,6 +57,8 @@ source_set("common") {
     "mailbox_video_frame_converter.h",
     "platform_video_frame_pool.cc",
     "platform_video_frame_pool.h",
+    "platform_video_frame_utils.cc",
+    "platform_video_frame_utils.h",
     "video_decoder_pipeline.cc",
     "video_decoder_pipeline.h",
     "video_frame_converter.cc",
@@ -75,13 +73,15 @@ source_set("common") {
   deps = [
     ":fourcc",
     "//base",
+    "//gpu/ipc/common:common",
     "//media",
     "//media/gpu:buildflags",
     "//media/gpu:command_buffer_helper",
     "//media/gpu:common",
     "//media/gpu:video_frame_mapper_common",
-    "//media/gpu/linux:common",
     "//third_party/libyuv",
+    "//ui/gfx:buffer_types",
+    "//ui/gfx:memory_buffer",
     "//ui/gfx/geometry",
     "//ui/gl",
   ]
@@ -128,15 +128,20 @@ source_set("unit_tests") {
     ":common",
     "//base",
     "//base/test:test_support",
+    "//media",
     "//media/gpu:buildflags",
     "//skia",
     "//testing/gmock",
     "//testing/gtest",
+    "//ui/gfx:buffer_types",
+    "//ui/gfx:memory_buffer",
+    "//ui/gfx/geometry",
   ]
   sources = [
     "fourcc_unittests.cc",
     "mailbox_video_frame_converter_unittest.cc",
     "platform_video_frame_pool_unittest.cc",
+    "platform_video_frame_utils_unittest.cc",
   ]
 }
 

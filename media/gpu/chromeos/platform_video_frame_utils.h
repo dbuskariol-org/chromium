@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_GPU_LINUX_PLATFORM_VIDEO_FRAME_UTILS_H_
-#define MEDIA_GPU_LINUX_PLATFORM_VIDEO_FRAME_UTILS_H_
+#ifndef MEDIA_GPU_CHROMEOS_PLATFORM_VIDEO_FRAME_UTILS_H_
+#define MEDIA_GPU_CHROMEOS_PLATFORM_VIDEO_FRAME_UTILS_H_
 
 #include "base/memory/scoped_refptr.h"
 #include "media/base/video_frame.h"
@@ -53,4 +53,4 @@ CreateNativePixmapDmaBuf(const VideoFrame* video_frame);
 
 }  // namespace media
 
-#endif  // MEDIA_GPU_LINUX_PLATFORM_VIDEO_FRAME_UTILS_H_
+#endif  // MEDIA_GPU_CHROMEOS_PLATFORM_VIDEO_FRAME_UTILS_H_
