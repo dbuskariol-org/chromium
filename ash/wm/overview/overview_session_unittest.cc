@@ -5541,6 +5541,24 @@ TEST_P(SplitViewOverviewSessionInClamshellTest, ResizeWindowTest) {
   EXPECT_FALSE(split_view_controller()->InSplitViewMode());
 }
 
+// Test that overview and clamshell split view end if you double click the edge
+// of the split view window where it meets the overview grid.
+TEST_P(SplitViewOverviewSessionInClamshellTest, HorizontalMaximizeTest) {
+  const gfx::Rect bounds(400, 400);
+  std::unique_ptr<aura::Window> snapped_window(
+      CreateWindowWithHitTestComponent(HTRIGHT, bounds));
+  std::unique_ptr<aura::Window> overview_window = CreateTestWindow(bounds);
+  ToggleOverview();
+  split_view_controller()->SnapWindow(snapped_window.get(),
+                                      SplitViewController::LEFT);
+  EXPECT_TRUE(overview_controller()->InOverviewSession());
+  EXPECT_TRUE(split_view_controller()->InSplitViewMode());
+  ui::test::EventGenerator(Shell::GetPrimaryRootWindow(), snapped_window.get())
+      .DoubleClickLeftButton();
+  EXPECT_FALSE(overview_controller()->InOverviewSession());
+  EXPECT_FALSE(split_view_controller()->InSplitViewMode());
+}
+
 // Test that when laptop splitview mode is active, moving the snapped window
 // will end splitview and overview at the same time.
 TEST_P(SplitViewOverviewSessionInClamshellTest, MoveWindowTest) {
