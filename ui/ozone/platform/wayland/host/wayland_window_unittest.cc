@@ -150,20 +150,19 @@ class WaylandWindowTest : public WaylandTest {
     return result;
   }
 
-  bool CreateWaylandWindowWithParams(PlatformWindowType type,
-                                     gfx::AcceleratedWidget parent_widget,
-                                     const gfx::Rect bounds,
-                                     MockPlatformWindowDelegate* delegate,
-                                     std::unique_ptr<WaylandWindow>* window) {
+  std::unique_ptr<WaylandWindow> CreateWaylandWindowWithParams(
+      PlatformWindowType type,
+      gfx::AcceleratedWidget parent_widget,
+      const gfx::Rect bounds,
+      MockPlatformWindowDelegate* delegate) {
     PlatformWindowInitProperties properties;
     // TODO(msisov): use a fancy method to calculate position of a popup window.
     properties.bounds = bounds;
     properties.type = type;
     properties.parent_widget = parent_widget;
 
-    *window = std::make_unique<WaylandWindow>(delegate, connection_.get());
-
-    return (*window)->Initialize(std::move(properties));
+    return WaylandWindow::Create(delegate, connection_.get(),
+                                 std::move(properties));
   }
 
   void InitializeWithSupportedHitTestValues(std::vector<int>* hit_tests) {
@@ -736,27 +735,29 @@ TEST_P(WaylandWindowTest, CanCreateMenuWindow) {
   ASSERT_TRUE(connection_->pointer() && connection_->touch());
   window_->SetPointerFocus(true);
 
-  std::unique_ptr<WaylandWindow> menu_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  std::unique_ptr<WaylandWindow> menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, gfx::kNullAcceleratedWidget,
-      gfx::Rect(0, 0, 10, 10), &menu_window_delegate, &menu_window));
+      gfx::Rect(0, 0, 10, 10), &menu_window_delegate);
+  EXPECT_TRUE(menu_window);
 
   Sync();
 
   window_->SetPointerFocus(false);
   window_->set_touch_focus(false);
 
-  EXPECT_FALSE(CreateWaylandWindowWithParams(
+  menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, gfx::kNullAcceleratedWidget,
-      gfx::Rect(0, 0, 10, 10), &menu_window_delegate, &menu_window));
+      gfx::Rect(0, 0, 10, 10), &menu_window_delegate);
+  EXPECT_FALSE(menu_window);
 
   Sync();
 
   window_->set_touch_focus(true);
 
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, gfx::kNullAcceleratedWidget,
-      gfx::Rect(0, 0, 10, 10), &menu_window_delegate, &menu_window));
+      gfx::Rect(0, 0, 10, 10), &menu_window_delegate);
+  EXPECT_TRUE(menu_window);
 
   Sync();
 }
@@ -767,29 +768,30 @@ TEST_P(WaylandWindowTest, CreateAndDestroyNestedMenuWindow) {
   EXPECT_CALL(menu_window_delegate, OnAcceleratedWidgetAvailable(_))
       .WillOnce(SaveArg<0>(&menu_window_widget));
 
-  std::unique_ptr<WaylandWindow> menu_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  std::unique_ptr<WaylandWindow> menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, widget_, gfx::Rect(0, 0, 10, 10),
-      &menu_window_delegate, &menu_window));
+      &menu_window_delegate);
+  EXPECT_TRUE(menu_window);
   ASSERT_NE(menu_window_widget, gfx::kNullAcceleratedWidget);
 
   Sync();
 
   MockPlatformWindowDelegate nested_menu_window_delegate;
-  std::unique_ptr<WaylandWindow> nested_menu_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
-      PlatformWindowType::kMenu, menu_window_widget, gfx::Rect(20, 0, 10, 10),
-      &nested_menu_window_delegate, &nested_menu_window));
+  std::unique_ptr<WaylandWindow> nested_menu_window =
+      CreateWaylandWindowWithParams(
+          PlatformWindowType::kMenu, menu_window_widget,
+          gfx::Rect(20, 0, 10, 10), &nested_menu_window_delegate);
+  EXPECT_TRUE(nested_menu_window);
 
   Sync();
 }
 
 TEST_P(WaylandWindowTest, CanDispatchEventToMenuWindowNonNested) {
   MockPlatformWindowDelegate menu_window_delegate;
-  std::unique_ptr<WaylandWindow> menu_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  std::unique_ptr<WaylandWindow> menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, widget_, gfx::Rect(0, 0, 10, 10),
-      &menu_window_delegate, &menu_window));
+      &menu_window_delegate);
+  EXPECT_TRUE(menu_window);
 
   wl_seat_send_capabilities(server_.seat()->resource(),
                             WL_SEAT_CAPABILITY_POINTER);
@@ -812,18 +814,19 @@ TEST_P(WaylandWindowTest, CanDispatchEventToMenuWindowNested) {
   EXPECT_CALL(menu_window_delegate, OnAcceleratedWidgetAvailable(_))
       .WillOnce(SaveArg<0>(&menu_window_widget));
 
-  std::unique_ptr<WaylandWindow> menu_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  std::unique_ptr<WaylandWindow> menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, widget_, gfx::Rect(0, 0, 10, 10),
-      &menu_window_delegate, &menu_window));
+      &menu_window_delegate);
+  EXPECT_TRUE(menu_window);
 
   Sync();
 
   MockPlatformWindowDelegate nested_menu_window_delegate;
-  std::unique_ptr<WaylandWindow> nested_menu_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
-      PlatformWindowType::kMenu, menu_window_widget, gfx::Rect(20, 0, 10, 10),
-      &nested_menu_window_delegate, &nested_menu_window));
+  std::unique_ptr<WaylandWindow> nested_menu_window =
+      CreateWaylandWindowWithParams(
+          PlatformWindowType::kMenu, menu_window_widget,
+          gfx::Rect(20, 0, 10, 10), &nested_menu_window_delegate);
+  EXPECT_TRUE(nested_menu_window);
 
   Sync();
 
@@ -903,10 +906,10 @@ TEST_P(WaylandWindowTest, AdjustPopupBounds) {
   MockPlatformWindowDelegate menu_window_delegate;
   gfx::Rect menu_window_bounds(gfx::Point(440, 76),
                                menu_window_positioner.size);
-  std::unique_ptr<WaylandWindow> menu_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  std::unique_ptr<WaylandWindow> menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, toplevel_window->GetWidget(),
-      menu_window_bounds, &menu_window_delegate, &menu_window));
+      menu_window_bounds, &menu_window_delegate);
+  EXPECT_TRUE(menu_window);
 
   Sync();
 
@@ -924,10 +927,11 @@ TEST_P(WaylandWindowTest, AdjustPopupBounds) {
   MockPlatformWindowDelegate nested_menu_window_delegate;
   gfx::Rect nested_menu_window_bounds(gfx::Point(723, 156),
                                       nested_menu_window_positioner.size);
-  std::unique_ptr<WaylandWindow> nested_menu_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
-      PlatformWindowType::kMenu, menu_window_widget, nested_menu_window_bounds,
-      &nested_menu_window_delegate, &nested_menu_window));
+  std::unique_ptr<WaylandWindow> nested_menu_window =
+      CreateWaylandWindowWithParams(
+          PlatformWindowType::kMenu, menu_window_widget,
+          nested_menu_window_bounds, &nested_menu_window_delegate);
+  EXPECT_TRUE(nested_menu_window);
 
   Sync();
 
@@ -985,9 +989,10 @@ TEST_P(WaylandWindowTest, AdjustPopupBounds) {
   // side. Thus, we have to check that anchor rect is correct.
   nested_menu_window.reset();
   nested_menu_window_bounds.set_origin({723, 258});
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  nested_menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, menu_window_widget, nested_menu_window_bounds,
-      &nested_menu_window_delegate, &nested_menu_window));
+      &nested_menu_window_delegate);
+  EXPECT_TRUE(nested_menu_window);
 
   Sync();
 
@@ -1050,9 +1055,10 @@ TEST_P(WaylandWindowTest, AdjustPopupBounds) {
   window_->SetBounds(gfx::Rect(0, 0, 2493, 1413));
 
   menu_window_bounds.set_origin({2206, 67});
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, toplevel_window->GetWidget(),
-      menu_window_bounds, &menu_window_delegate, &menu_window));
+      menu_window_bounds, &menu_window_delegate);
+  EXPECT_TRUE(menu_window);
 
   Sync();
 
@@ -1066,9 +1072,10 @@ TEST_P(WaylandWindowTest, AdjustPopupBounds) {
   Sync();
 
   nested_menu_window_bounds.set_origin({1905, 147});
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  nested_menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, menu_window_widget, nested_menu_window_bounds,
-      &nested_menu_window_delegate, &nested_menu_window));
+      &nested_menu_window_delegate);
+  EXPECT_TRUE(nested_menu_window);
 
   Sync();
 
@@ -1096,9 +1103,10 @@ TEST_P(WaylandWindowTest, AdjustPopupBounds) {
 
   nested_menu_window.reset();
 
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  nested_menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, menu_window_widget, nested_menu_window_bounds,
-      &nested_menu_window_delegate, &nested_menu_window));
+      &nested_menu_window_delegate);
+  EXPECT_TRUE(nested_menu_window);
 
   Sync();
 
@@ -1174,10 +1182,10 @@ TEST_P(WaylandWindowTest, TooltipSimpleParent) {
   VerifyAndClearExpectations();
 
   gfx::Rect tooltip_window_bounds(gfx::Point(15, 15), gfx::Size(10, 10));
-  std::unique_ptr<WaylandWindow> tooltip_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  std::unique_ptr<WaylandWindow> tooltip_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kTooltip, window_->GetWidget(), tooltip_window_bounds,
-      &delegate_, &tooltip_window));
+      &delegate_);
+  EXPECT_TRUE(tooltip_window);
 
   window_->SetPointerFocus(true);
 
@@ -1199,18 +1207,18 @@ TEST_P(WaylandWindowTest, TooltipNestedParent) {
   VerifyAndClearExpectations();
 
   gfx::Rect menu_window_bounds(gfx::Point(10, 10), gfx::Size(100, 100));
-  std::unique_ptr<WaylandWindow> menu_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  std::unique_ptr<WaylandWindow> menu_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kMenu, window_->GetWidget(), menu_window_bounds,
-      &delegate_, &menu_window));
+      &delegate_);
+  EXPECT_TRUE(menu_window);
 
   VerifyAndClearExpectations();
 
   gfx::Rect tooltip_window_bounds(gfx::Point(15, 15), gfx::Size(10, 10));
-  std::unique_ptr<WaylandWindow> tooltip_window;
-  EXPECT_TRUE(CreateWaylandWindowWithParams(
+  std::unique_ptr<WaylandWindow> tooltip_window = CreateWaylandWindowWithParams(
       PlatformWindowType::kTooltip, menu_window->GetWidget(),
-      tooltip_window_bounds, &delegate_, &tooltip_window));
+      tooltip_window_bounds, &delegate_);
+  EXPECT_TRUE(tooltip_window);
 
   VerifyAndClearExpectations();
 

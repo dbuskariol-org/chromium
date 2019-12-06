@@ -40,13 +40,16 @@ class WaylandWindow : public PlatformWindow,
                       public WmMoveResizeHandler,
                       public WmDragHandler {
  public:
-  WaylandWindow(PlatformWindowDelegate* delegate,
-                WaylandConnection* connection);
   ~WaylandWindow() override;
 
-  static WaylandWindow* FromSurface(wl_surface* surface);
+  // A factory method that can create any of the derived types of WaylandWindow
+  // (WaylandSurface, WaylandPopup and WaylandSubsurface).
+  static std::unique_ptr<WaylandWindow> Create(
+      PlatformWindowDelegate* delegate,
+      WaylandConnection* connection,
+      PlatformWindowInitProperties properties);
 
-  bool Initialize(PlatformWindowInitProperties properties);
+  static WaylandWindow* FromSurface(wl_surface* surface);
 
   // Updates the surface buffer scale of the window.  Top level windows take
   // scale from the output attached to either their current display or the
@@ -167,6 +170,12 @@ class WaylandWindow : public PlatformWindow,
 
  private:
   FRIEND_TEST_ALL_PREFIXES(WaylandScreenTest, SetBufferScale);
+
+  WaylandWindow(PlatformWindowDelegate* delegate,
+                WaylandConnection* connection);
+
+  // Initializes the WaylandWindow with supplied properties.
+  bool Initialize(PlatformWindowInitProperties properties);
 
   void SetBoundsDip(const gfx::Rect& bounds_dip);
   void SetBufferScale(int32_t scale, bool update_bounds);

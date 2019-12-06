@@ -66,72 +66,6 @@ WaylandWindow* WaylandWindow::FromSurface(wl_surface* surface) {
       wl_proxy_get_user_data(reinterpret_cast<wl_proxy*>(surface)));
 }
 
-bool WaylandWindow::Initialize(PlatformWindowInitProperties properties) {
-  // Properties contain DIP bounds but the buffer scale is initially 1 so it's
-  // OK to assign.  The bounds will be recalculated when the buffer scale
-  // changes.
-  DCHECK_EQ(buffer_scale_, 1);
-  bounds_px_ = properties.bounds;
-  opacity_ = properties.opacity;
-
-  surface_.reset(wl_compositor_create_surface(connection_->compositor()));
-  if (!surface_) {
-    LOG(ERROR) << "Failed to create wl_surface";
-    return false;
-  }
-  wl_surface_set_user_data(surface_.get(), this);
-  AddSurfaceListener();
-
-  connection_->wayland_window_manager()->AddWindow(GetWidget(), this);
-
-  ui::PlatformWindowType ui_window_type = properties.type;
-  switch (ui_window_type) {
-    case ui::PlatformWindowType::kMenu:
-    case ui::PlatformWindowType::kPopup:
-      parent_window_ = GetParentWindow(properties.parent_widget);
-
-      // Popups need to know their scale earlier to position themselves.
-      if (!parent_window_) {
-        LOG(ERROR) << "Failed to get a parent window for this popup";
-        return false;
-      }
-
-      SetBufferScale(parent_window_->buffer_scale_, false);
-      ui_scale_ = parent_window_->ui_scale_;
-
-      // TODO(msisov, jkim): Handle notification windows, which are marked
-      // as popup windows as well. Those are the windows that do not have
-      // parents and pop up when the browser receives a notification.
-      CreateShellPopup();
-      break;
-    case ui::PlatformWindowType::kTooltip:
-      // Tooltips subsurfaces are created on demand, upon ::Show calls.
-      is_tooltip_ = true;
-      break;
-    case ui::PlatformWindowType::kWindow:
-    case ui::PlatformWindowType::kBubble:
-    case ui::PlatformWindowType::kDrag:
-      // TODO(msisov): Figure out what kind of surface we need to create for
-      // bubble and drag windows.
-      CreateShellSurface();
-      break;
-  }
-
-  if (shell_surface_ && !properties.wm_class_class.empty())
-    shell_surface_->SetAppId(properties.wm_class_class);
-
-  connection_->ScheduleFlush();
-
-  PlatformEventSource::GetInstance()->AddPlatformEventDispatcher(this);
-  delegate_->OnAcceleratedWidgetAvailable(GetWidget());
-
-  // Will do nothing for popups because they have got their scale above.
-  UpdateBufferScale(false);
-
-  MaybeUpdateOpaqueRegion();
-  return true;
-}
-
 void WaylandWindow::UpdateBufferScale(bool update_bounds) {
   DCHECK(connection_->wayland_output_manager());
   const auto* screen = connection_->wayland_output_manager()->wayland_screen();
@@ -771,6 +705,72 @@ void WaylandWindow::OnDragLeave() {
 void WaylandWindow::OnDragSessionClose(uint32_t dnd_action) {
   std::move(drag_closed_callback_).Run(dnd_action);
   connection_->ResetPointerFlags();
+}
+
+bool WaylandWindow::Initialize(PlatformWindowInitProperties properties) {
+  // Properties contain DIP bounds but the buffer scale is initially 1 so it's
+  // OK to assign.  The bounds will be recalculated when the buffer scale
+  // changes.
+  DCHECK_EQ(buffer_scale_, 1);
+  bounds_px_ = properties.bounds;
+  opacity_ = properties.opacity;
+
+  surface_.reset(wl_compositor_create_surface(connection_->compositor()));
+  if (!surface_) {
+    LOG(ERROR) << "Failed to create wl_surface";
+    return false;
+  }
+  wl_surface_set_user_data(surface_.get(), this);
+  AddSurfaceListener();
+
+  connection_->wayland_window_manager()->AddWindow(GetWidget(), this);
+
+  ui::PlatformWindowType ui_window_type = properties.type;
+  switch (ui_window_type) {
+    case ui::PlatformWindowType::kMenu:
+    case ui::PlatformWindowType::kPopup:
+      parent_window_ = GetParentWindow(properties.parent_widget);
+
+      // Popups need to know their scale earlier to position themselves.
+      if (!parent_window_) {
+        LOG(ERROR) << "Failed to get a parent window for this popup";
+        return false;
+      }
+
+      SetBufferScale(parent_window_->buffer_scale_, false);
+      ui_scale_ = parent_window_->ui_scale_;
+
+      // TODO(msisov, jkim): Handle notification windows, which are marked
+      // as popup windows as well. Those are the windows that do not have
+      // parents and pop up when the browser receives a notification.
+      CreateShellPopup();
+      break;
+    case ui::PlatformWindowType::kTooltip:
+      // Tooltips subsurfaces are created on demand, upon ::Show calls.
+      is_tooltip_ = true;
+      break;
+    case ui::PlatformWindowType::kWindow:
+    case ui::PlatformWindowType::kBubble:
+    case ui::PlatformWindowType::kDrag:
+      // TODO(msisov): Figure out what kind of surface we need to create for
+      // bubble and drag windows.
+      CreateShellSurface();
+      break;
+  }
+
+  if (shell_surface_ && !properties.wm_class_class.empty())
+    shell_surface_->SetAppId(properties.wm_class_class);
+
+  connection_->ScheduleFlush();
+
+  PlatformEventSource::GetInstance()->AddPlatformEventDispatcher(this);
+  delegate_->OnAcceleratedWidgetAvailable(GetWidget());
+
+  // Will do nothing for popups because they have got their scale above.
+  UpdateBufferScale(false);
+
+  MaybeUpdateOpaqueRegion();
+  return true;
 }
 
 void WaylandWindow::SetBoundsDip(const gfx::Rect& bounds_dip) {

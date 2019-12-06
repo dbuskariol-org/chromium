@@ -189,12 +189,12 @@ class WaylandBufferManagerTest : public WaylandTest {
 
   std::unique_ptr<WaylandWindow> CreateWindow() {
     testing::Mock::VerifyAndClearExpectations(&delegate_);
-    auto new_window =
-        std::make_unique<WaylandWindow>(&delegate_, connection_.get());
     PlatformWindowInitProperties properties;
     properties.bounds = gfx::Rect(0, 0, 800, 600);
     properties.type = PlatformWindowType::kWindow;
-    EXPECT_TRUE(new_window->Initialize(std::move(properties)));
+    auto new_window = WaylandWindow::Create(&delegate_, connection_.get(),
+                                            std::move(properties));
+    EXPECT_TRUE(new_window);
 
     Sync();
 
