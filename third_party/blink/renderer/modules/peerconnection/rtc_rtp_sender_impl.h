@@ -172,7 +172,7 @@ class MODULES_EXPORT RTCRtpSenderOnlyTransceiver
   RTCRtpTransceiverPlatformImplementationType ImplementationType()
       const override;
   uintptr_t Id() const override;
-  WebString Mid() const override;
+  String Mid() const override;
   std::unique_ptr<RTCRtpSenderPlatform> Sender() const override;
   std::unique_ptr<RTCRtpReceiverPlatform> Receiver() const override;
   bool Stopped() const override;

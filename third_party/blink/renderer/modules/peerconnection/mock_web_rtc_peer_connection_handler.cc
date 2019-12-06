@@ -216,7 +216,7 @@ class MockWebRTCPeerConnectionHandler::DummyRTCRtpTransceiverPlatform
     return RTCRtpTransceiverPlatformImplementationType::kFullTransceiver;
   }
   uintptr_t Id() const override { return internal_->id(); }
-  WebString Mid() const override { return WebString(); }
+  String Mid() const override { return String(); }
   std::unique_ptr<RTCRtpSenderPlatform> Sender() const override {
     return internal_->Sender();
   }

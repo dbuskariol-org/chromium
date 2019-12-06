@@ -335,9 +335,9 @@ uintptr_t RTCRtpReceiverOnlyTransceiver::Id() const {
   return 0u;
 }
 
-blink::WebString RTCRtpReceiverOnlyTransceiver::Mid() const {
+String RTCRtpReceiverOnlyTransceiver::Mid() const {
   NOTIMPLEMENTED();
-  return blink::WebString();
+  return String();
 }
 
 std::unique_ptr<blink::RTCRtpSenderPlatform>

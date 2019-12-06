@@ -217,8 +217,8 @@ uintptr_t FakeRTCRtpTransceiverImpl::Id() const {
   return 0u;
 }
 
-blink::WebString FakeRTCRtpTransceiverImpl::Mid() const {
-  return mid_ ? blink::WebString::FromUTF8(*mid_) : blink::WebString();
+String FakeRTCRtpTransceiverImpl::Mid() const {
+  return mid_ ? String::FromUTF8(*mid_) : String();
 }
 
 std::unique_ptr<blink::RTCRtpSenderPlatform> FakeRTCRtpTransceiverImpl::Sender()
