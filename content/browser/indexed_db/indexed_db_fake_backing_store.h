@@ -30,7 +30,7 @@ class IndexedDBFakeBackingStore : public IndexedDBBackingStore {
   IndexedDBFakeBackingStore(
       BlobFilesCleanedCallback blob_files_cleaned,
       ReportOutstandingBlobsCallback report_outstanding_blobs,
-      base::SequencedTaskRunner* task_runner);
+      scoped_refptr<base::SequencedTaskRunner> task_runner);
   ~IndexedDBFakeBackingStore() override;
 
   leveldb::Status DeleteDatabase(

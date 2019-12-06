@@ -1478,7 +1478,7 @@ RenderProcessHostImpl::RenderProcessHostImpl(
               storage_partition_impl_->GetIndexedDBContext(),
               ChromeBlobStorageContext::GetRemoteFor(browser_context)),
           base::OnTaskRunnerDeleter(
-              storage_partition_impl_->GetIndexedDBContext()->TaskRunner())),
+              storage_partition_impl_->GetIndexedDBContext()->IDBTaskRunner())),
       channel_connected_(false),
       sent_render_process_ready_(false),
       push_messaging_manager_(
@@ -1895,7 +1895,7 @@ void RenderProcessHostImpl::BindIndexedDB(
   // the IDB task runner deleter's task will be run after the next call,
   // guaranteeing that the usage of base::Unretained(indexed_db_factory_.get())
   // here is safe.
-  indexed_db_factory_->context()->TaskRunner()->PostTask(
+  indexed_db_factory_->context()->IDBTaskRunner()->PostTask(
       FROM_HERE,
       base::BindOnce(&IndexedDBDispatcherHost::AddReceiver,
                      base::Unretained(indexed_db_factory_.get()), GetID(),

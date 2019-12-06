@@ -45,8 +45,6 @@
 #include "content/browser/indexed_db/indexed_db_reporting.h"
 #include "content/browser/indexed_db/indexed_db_tracing.h"
 #include "content/browser/indexed_db/indexed_db_value.h"
-#include "content/public/browser/browser_task_traits.h"
-#include "content/public/browser/browser_thread.h"
 #include "content/public/common/content_features.h"
 #include "net/base/load_flags.h"
 #include "net/traffic_annotation/network_traffic_annotation.h"
@@ -528,16 +526,18 @@ IndexedDBBackingStore::IndexedDBBackingStore(
     std::unique_ptr<TransactionalLevelDBDatabase> db,
     BlobFilesCleanedCallback blob_files_cleaned,
     ReportOutstandingBlobsCallback report_outstanding_blobs,
-    base::SequencedTaskRunner* task_runner)
+    scoped_refptr<base::SequencedTaskRunner> idb_task_runner,
+    scoped_refptr<base::SequencedTaskRunner> io_task_runner)
     : backing_store_mode_(backing_store_mode),
       transactional_leveldb_factory_(transactional_leveldb_factory),
       origin_(origin),
       blob_path_(blob_path),
       origin_identifier_(ComputeOriginIdentifier(origin)),
-      task_runner_(task_runner),
+      idb_task_runner_(idb_task_runner),
+      io_task_runner_(io_task_runner),
       db_(std::move(db)),
       blob_files_cleaned_(std::move(blob_files_cleaned)) {
-  DCHECK(task_runner_->RunsTasksInCurrentSequence());
+  DCHECK(idb_task_runner_->RunsTasksInCurrentSequence());
   if (backing_store_mode == Mode::kInMemory)
     blob_path_ = FilePath();
   active_blob_registry_ = std::make_unique<IndexedDBActiveBlobRegistry>(
@@ -1487,15 +1487,14 @@ class LocalWriteClosure : public base::RefCountedThreadSafe<LocalWriteClosure> {
         idb_task_runner_(std::move(idb_task_runner)),
         file_path_(std::move(file_path)),
         last_modified_(last_modified) {
-    DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
+    DCHECK_CALLED_ON_VALID_THREAD(io_thread_checker_);
   }
 
   // Called on the IO thread.
   void Run(base::File::Error rv,
            int64_t bytes,
            FileWriterDelegate::WriteProgressStatus write_status) {
-    DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
-
+    DCHECK_CALLED_ON_VALID_THREAD(io_thread_checker_);
     DCHECK_GE(bytes, 0);
     bytes_written_ += bytes;
     if (write_status == FileWriterDelegate::SUCCESS_IO_PENDING)
@@ -1553,7 +1552,6 @@ class LocalWriteClosure : public base::RefCountedThreadSafe<LocalWriteClosure> {
       const FilePath& file_path,
       mojo::SharedRemote<blink::mojom::Blob> blob,
       const base::Time& last_modified) {
-    DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
     std::unique_ptr<storage::FileStreamWriter> writer =
         storage::FileStreamWriter::CreateForLocalFile(
             idb_task_runner.get(), file_path, 0,
@@ -1591,7 +1589,7 @@ class LocalWriteClosure : public base::RefCountedThreadSafe<LocalWriteClosure> {
 
  private:
   virtual ~LocalWriteClosure() {
-    DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
+    DCHECK_CALLED_ON_VALID_THREAD(io_thread_checker_);
     // Make sure the last reference to a ChainedBlobWriter is released (and
     // deleted) on the IDB sequence since it owns a transaction which has
     // sequence affinity.
@@ -1609,6 +1607,8 @@ class LocalWriteClosure : public base::RefCountedThreadSafe<LocalWriteClosure> {
 
   FilePath file_path_;
   base::Time last_modified_;
+
+  THREAD_CHECKER(io_thread_checker_);
 
   DISALLOW_COPY_AND_ASSIGN(LocalWriteClosure);
 };
@@ -1650,16 +1650,17 @@ bool IndexedDBBackingStore::WriteBlobFile(
       // TODO(ericu): Complain quietly; timestamp's probably not vital.
     }
 
-    task_runner_->PostTask(
+    idb_task_runner_->PostTask(
         FROM_HERE, base::BindOnce(&ChainedBlobWriter::ReportWriteCompletion,
                                   chained_blob_writer, true, info.size));
   } else {
     DCHECK(descriptor.blob());
-    base::PostTask(
-        FROM_HERE, {content::BrowserThread::IO},
+
+    io_task_runner_->PostTask(
+        FROM_HERE,
         base::BindOnce(&LocalWriteClosure::WriteBlobToFileOnIOThread,
                        base::WrapRefCounted(chained_blob_writer),
-                       chained_blob_writer->GetFlushPolicy(), task_runner_,
+                       chained_blob_writer->GetFlushPolicy(), idb_task_runner_,
                        path, descriptor.blob(), descriptor.last_modified()));
   }
   return true;
@@ -2960,7 +2961,7 @@ IndexedDBBackingStore::Transaction::Transaction(
       committing_(false),
       durability_(durability) {
   DCHECK(!backing_store_ ||
-         backing_store_->task_runner()->RunsTasksInCurrentSequence());
+         backing_store_->idb_task_runner()->RunsTasksInCurrentSequence());
 }
 
 IndexedDBBackingStore::Transaction::~Transaction() {
@@ -3112,7 +3113,7 @@ Status IndexedDBBackingStore::Transaction::CommitPhaseOne(
   IDB_TRACE("IndexedDBBackingStore::Transaction::CommitPhaseOne");
   DCHECK(transaction_.get());
   DCHECK(backing_store_);
-  DCHECK(backing_store_->task_runner()->RunsTasksInCurrentSequence());
+  DCHECK(backing_store_->idb_task_runner()->RunsTasksInCurrentSequence());
 
   Status s;
 
