@@ -27,6 +27,7 @@
 #include "components/signin/public/identity_manager/identity_manager.h"
 #include "components/signin/public/identity_manager/primary_account_mutator.h"
 #include "components/sync/base/bind_to_task_runner.h"
+#include "components/sync/base/model_type.h"
 #include "components/sync/base/report_unrecoverable_error.h"
 #include "components/sync/base/stop_source.h"
 #include "components/sync/base/sync_base_switches.h"
@@ -49,6 +50,10 @@
 #include "components/version_info/version_info_values.h"
 #include "crypto/ec_private_key.h"
 #include "services/network/public/cpp/shared_url_loader_factory.h"
+
+#if defined(OS_CHROMEOS)
+#include "chromeos/constants/chromeos_features.h"
+#endif
 
 namespace syncer {
 
@@ -1331,30 +1336,7 @@ void ProfileSyncService::ConfigureDataTypeManager(ConfigureReason reason) {
   ModelTypeSet types = GetPreferredDataTypes();
   // In transport-only mode, only a subset of data types is supported.
   if (use_transport_only_mode) {
-    ModelTypeSet allowed_types = {USER_CONSENTS, SECURITY_EVENTS};
-
-    if (autofill_enable_account_wallet_storage_) {
-      if (!GetUserSettings()->IsUsingSecondaryPassphrase() ||
-          base::FeatureList::IsEnabled(
-              switches::
-                  kSyncAllowWalletDataInTransportModeWithCustomPassphrase)) {
-        allowed_types.Put(AUTOFILL_WALLET_DATA);
-      }
-    }
-
-    if (enable_passwords_account_storage_ &&
-        base::FeatureList::IsEnabled(switches::kSyncUSSPasswords)) {
-      if (!GetUserSettings()->IsUsingSecondaryPassphrase()) {
-        allowed_types.Put(PASSWORDS);
-      }
-    }
-
-    if (base::FeatureList::IsEnabled(
-            switches::kSyncDeviceInfoInTransportMode)) {
-      allowed_types.Put(DEVICE_INFO);
-    }
-
-    types = Intersection(types, allowed_types);
+    types = Intersection(types, GetModelTypesForTransportOnlyMode());
     configure_context.sync_mode = SyncMode::kTransportOnly;
   }
   data_type_manager_->Configure(types, configure_context);
@@ -1385,6 +1367,44 @@ void ProfileSyncService::ConfigureDataTypeManager(ConfigureReason reason) {
       }
     }
   }
+}
+
+ModelTypeSet ProfileSyncService::GetModelTypesForTransportOnlyMode() const {
+  ModelTypeSet allowed_types = {USER_CONSENTS, SECURITY_EVENTS};
+
+  if (autofill_enable_account_wallet_storage_) {
+    if (!GetUserSettings()->IsUsingSecondaryPassphrase() ||
+        base::FeatureList::IsEnabled(
+            switches::
+                kSyncAllowWalletDataInTransportModeWithCustomPassphrase)) {
+      allowed_types.Put(AUTOFILL_WALLET_DATA);
+    }
+  }
+
+  if (enable_passwords_account_storage_ &&
+      base::FeatureList::IsEnabled(switches::kSyncUSSPasswords)) {
+    if (!GetUserSettings()->IsUsingSecondaryPassphrase()) {
+      allowed_types.Put(PASSWORDS);
+    }
+  }
+
+  if (base::FeatureList::IsEnabled(switches::kSyncDeviceInfoInTransportMode)) {
+    allowed_types.Put(DEVICE_INFO);
+  }
+
+  // Outside the #if so non-Chrome OS developers will hit it before uploading.
+  static_assert(40 == ModelType::NUM_ENTRIES,
+                "If a new ModelType is Chrome OS-only and uses OS sync "
+                "consent, add it below.");
+#if defined(OS_CHROMEOS)
+  // Chrome OS system types are not tied to browser sync-the-feature.
+  if (chromeos::features::IsSplitSettingsSyncEnabled()) {
+    // TODO(jamescook): APP_LIST, ARC_PACKAGE, PRINTERS, WIFI_CONFIGURATIONS.
+    allowed_types.PutAll({OS_PREFERENCES, OS_PRIORITY_PREFERENCES});
+  }
+#endif  // defined(OS_CHROMEOS)
+
+  return allowed_types;
 }
 
 UserShare* ProfileSyncService::GetUserShare() const {
