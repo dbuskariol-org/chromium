@@ -35,10 +35,6 @@ class WaylandConnection;
 class ShellPopupWrapper;
 class ShellSurfaceWrapper;
 
-namespace {
-class XDGShellObjectFactory;
-}  // namespace
-
 class WaylandWindow : public PlatformWindow,
                       public PlatformEventDispatcher,
                       public WmMoveResizeHandler,
@@ -228,9 +224,6 @@ class WaylandWindow : public PlatformWindow,
   WaylandConnection* connection_;
   WaylandWindow* parent_window_ = nullptr;
   WaylandWindow* child_window_ = nullptr;
-
-  // Creates xdg objects based on xdg shell version.
-  std::unique_ptr<XDGShellObjectFactory> xdg_shell_objects_factory_;
 
   wl::Object<wl_surface> surface_;
   wl::Object<wl_subsurface> tooltip_subsurface_;

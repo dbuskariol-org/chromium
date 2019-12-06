@@ -16,6 +16,7 @@
 #include "ui/events/event_utils.h"
 #include "ui/events/ozone/events_ozone.h"
 #include "ui/gfx/geometry/point_f.h"
+#include "ui/ozone/platform/wayland/host/shell_object_factory.h"
 #include "ui/ozone/platform/wayland/host/shell_popup_wrapper.h"
 #include "ui/ozone/platform/wayland/host/shell_surface_wrapper.h"
 #include "ui/ozone/platform/wayland/host/wayland_buffer_manager_host.h"
@@ -23,49 +24,11 @@
 #include "ui/ozone/platform/wayland/host/wayland_cursor_position.h"
 #include "ui/ozone/platform/wayland/host/wayland_output_manager.h"
 #include "ui/ozone/platform/wayland/host/wayland_pointer.h"
-#include "ui/ozone/platform/wayland/host/xdg_popup_wrapper_impl.h"
-#include "ui/ozone/platform/wayland/host/xdg_surface_wrapper_impl.h"
 #include "ui/platform_window/platform_window_handler/wm_drop_handler.h"
 
 namespace ui {
 
 namespace {
-
-// Factory, which decides which version type of xdg object to build.
-class XDGShellObjectFactory {
- public:
-  XDGShellObjectFactory() = default;
-  ~XDGShellObjectFactory() = default;
-
-  std::unique_ptr<ShellPopupWrapper> CreateXDGPopup(
-      WaylandConnection* connection,
-      WaylandWindow* wayland_window,
-      const gfx::Rect& bounds) {
-    std::unique_ptr<XDGSurfaceWrapperImpl> surface =
-        std::make_unique<XDGSurfaceWrapperImpl>(wayland_window);
-    if (connection->shell()) {
-      surface->InitializeStable(connection, wayland_window->surface(), false);
-      std::unique_ptr<XDGPopupWrapperImpl> popup =
-          std::make_unique<XDGPopupWrapperImpl>(std::move(surface),
-                                                wayland_window);
-      popup->InitializeStable(connection, wayland_window->surface(),
-                              wayland_window->parent_window(), bounds);
-      return popup;
-    }
-    DCHECK(connection->shell_v6());
-
-    surface->InitializeV6(connection, wayland_window->surface(), false);
-    std::unique_ptr<XDGPopupWrapperImpl> popup =
-        std::make_unique<XDGPopupWrapperImpl>(std::move(surface),
-                                              wayland_window);
-    popup->InitializeV6(connection, wayland_window->surface(),
-                        wayland_window->parent_window(), bounds);
-    return popup;
-  }
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(XDGShellObjectFactory);
-};
 
 // Translates bounds relative to top level window to specified parent.
 gfx::Rect TranslateBoundsToParentCoordinates(const gfx::Rect& child_bounds,
@@ -89,7 +52,6 @@ WaylandWindow::WaylandWindow(PlatformWindowDelegate* delegate,
                              WaylandConnection* connection)
     : delegate_(delegate),
       connection_(connection),
-      xdg_shell_objects_factory_(new XDGShellObjectFactory()),
       state_(PlatformWindowState::kNormal),
       pending_state_(PlatformWindowState::kUnknown) {
   // Set a class property key, which allows |this| to be used for interactive
@@ -124,8 +86,6 @@ WaylandWindow* WaylandWindow::FromSurface(wl_surface* surface) {
 }
 
 bool WaylandWindow::Initialize(PlatformWindowInitProperties properties) {
-  DCHECK(xdg_shell_objects_factory_);
-
   // Properties contain DIP bounds but the buffer scale is initially 1 so it's
   // OK to assign.  The bounds will be recalculated when the buffer scale
   // changes.
@@ -244,35 +204,19 @@ void WaylandWindow::CreateShellPopup() {
 
   auto bounds_px = AdjustPopupWindowPosition();
 
-  shell_popup_ =
-      xdg_shell_objects_factory_->CreateXDGPopup(connection_, this, bounds_px);
-
-  if (!shell_popup_) {
+  ShellObjectFactory factory;
+  shell_popup_ = factory.CreateShellPopupWrapper(connection_, this, bounds_px);
+  if (!shell_popup_)
     CHECK(false) << "Failed to create Wayland shell popup";
-  }
 
   parent_window_->set_child_window(this);
 }
 
 void WaylandWindow::CreateShellSurface() {
-  std::unique_ptr<XDGSurfaceWrapperImpl> xdg_surface =
-      std::make_unique<XDGSurfaceWrapperImpl>(this);
-  if (!xdg_surface) {
-    CHECK(false) << "Failed to create Wayland shell surface";
-    return;
-  }
-
-  if (connection_->shell()) {
-    if (!xdg_surface->InitializeStable(connection_, surface_.get())) {
-      CHECK(false) << "Failed to initialize Wayland shell surface";
-    }
-  } else {
-    DCHECK(connection_->shell_v6());
-    if (!xdg_surface->InitializeV6(connection_, surface_.get())) {
-      CHECK(false) << "Failed to initialize Wayland shell surface";
-    }
-  }
-  shell_surface_ = std::move(xdg_surface);
+  ShellObjectFactory factory;
+  shell_surface_ = factory.CreateShellSurfaceWrapper(connection_, this);
+  if (!shell_surface_)
+    CHECK(false) << "Failed to initialize Wayland shell surface";
 }
 
 void WaylandWindow::CreateAndShowTooltipSubSurface() {
