@@ -3757,26 +3757,6 @@ String AXNodeObject::Description(ax::mojom::NameFrom name_from,
     }
   }
 
-  // aria-help.
-  // FIXME: this is not part of the official standard, but it's needed because
-  // the built-in date/time controls use it.
-  description_from = ax::mojom::DescriptionFrom::kAttribute;
-  if (description_sources) {
-    description_sources->push_back(
-        DescriptionSource(found_description, html_names::kAriaHelpAttr));
-    description_sources->back().type = description_from;
-  }
-  const AtomicString& help = GetAttribute(html_names::kAriaHelpAttr);
-  if (!help.IsEmpty()) {
-    description = help;
-    if (description_sources) {
-      found_description = true;
-      description_sources->back().text = description;
-    } else {
-      return description;
-    }
-  }
-
   description_from = ax::mojom::DescriptionFrom::kUninitialized;
 
   if (found_description) {

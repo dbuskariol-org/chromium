@@ -24582,7 +24582,7 @@ Called by update_net_error_codes.py.-->
   <int value="2085" label="ARIAFlowToAttribute"/>
   <int value="2086" label="ARIAGrabbedAttribute"/>
   <int value="2087" label="ARIAHasPopupAttribute"/>
-  <int value="2088" label="ARIAHelpAttribute"/>
+  <int value="2088" label="OBSOLETE_ARIAHelpAttribute"/>
   <int value="2089" label="ARIAHiddenAttribute"/>
   <int value="2090" label="ARIAInvalidAttribute"/>
   <int value="2091" label="ARIAKeyShortcutsAttribute"/>
