@@ -74,12 +74,12 @@ blink::WebMediaStreamTrack FakeRTCRtpSenderImpl::Track() const {
                    : blink::WebMediaStreamTrack();  // null
 }
 
-blink::WebVector<blink::WebString> FakeRTCRtpSenderImpl::StreamIds() const {
-  blink::WebVector<blink::WebString> web_stream_ids(stream_ids_.size());
+WebVector<String> FakeRTCRtpSenderImpl::StreamIds() const {
+  WebVector<String> wtf_stream_ids(stream_ids_.size());
   for (size_t i = 0; i < stream_ids_.size(); ++i) {
-    web_stream_ids[i] = blink::WebString::FromUTF8(stream_ids_[i]);
+    wtf_stream_ids[i] = String::FromUTF8(stream_ids_[i]);
   }
-  return web_stream_ids;
+  return wtf_stream_ids;
 }
 
 void FakeRTCRtpSenderImpl::ReplaceTrack(blink::WebMediaStreamTrack with_track,
@@ -112,8 +112,7 @@ void FakeRTCRtpSenderImpl::GetStats(
   NOTIMPLEMENTED();
 }
 
-void FakeRTCRtpSenderImpl::SetStreams(
-    const blink::WebVector<blink::WebString>& stream_ids) {
+void FakeRTCRtpSenderImpl::SetStreams(const WebVector<String>& stream_ids) {
   NOTIMPLEMENTED();
 }
 

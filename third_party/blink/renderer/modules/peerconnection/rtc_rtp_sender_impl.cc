@@ -440,12 +440,12 @@ blink::WebMediaStreamTrack RTCRtpSenderImpl::Track() const {
   return track_ref ? track_ref->web_track() : blink::WebMediaStreamTrack();
 }
 
-blink::WebVector<blink::WebString> RTCRtpSenderImpl::StreamIds() const {
+WebVector<String> RTCRtpSenderImpl::StreamIds() const {
   const auto& stream_ids = internal_->state().stream_ids();
-  blink::WebVector<blink::WebString> web_stream_ids(stream_ids.size());
+  WebVector<String> wtf_stream_ids(stream_ids.size());
   for (size_t i = 0; i < stream_ids.size(); ++i)
-    web_stream_ids[i] = blink::WebString::FromUTF8(stream_ids[i]);
-  return web_stream_ids;
+    wtf_stream_ids[i] = String::FromUTF8(stream_ids[i]);
+  return wtf_stream_ids;
 }
 
 void RTCRtpSenderImpl::ReplaceTrack(blink::WebMediaStreamTrack with_track,
@@ -479,8 +479,7 @@ void RTCRtpSenderImpl::GetStats(
   internal_->GetStats(std::move(callback), exposed_group_ids);
 }
 
-void RTCRtpSenderImpl::SetStreams(
-    const blink::WebVector<blink::WebString>& stream_ids) {
+void RTCRtpSenderImpl::SetStreams(const WebVector<String>& stream_ids) {
   std::vector<std::string> ids;
   for (auto stream_id : stream_ids)
     ids.emplace_back(stream_id.Utf8());

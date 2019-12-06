@@ -70,8 +70,8 @@ class DummyRTCRtpSenderPlatform : public RTCRtpSenderPlatform {
     return dummy;
   }
   WebMediaStreamTrack Track() const override { return internal_->track(); }
-  WebVector<WebString> StreamIds() const override {
-    return std::vector<WebString>({WebString::FromUTF8("DummyStringId")});
+  WebVector<String> StreamIds() const override {
+    return std::vector<String>({String::FromUTF8("DummyStringId")});
   }
   void ReplaceTrack(WebMediaStreamTrack, RTCVoidRequest*) override {}
   std::unique_ptr<RtcDtmfSenderHandler> GetDtmfSender() const override {
@@ -85,8 +85,7 @@ class DummyRTCRtpSenderPlatform : public RTCRtpSenderPlatform {
                      RTCVoidRequest*) override {}
   void GetStats(WebRTCStatsReportCallback,
                 const WebVector<webrtc::NonStandardGroupId>&) override {}
-  void SetStreams(
-      const blink::WebVector<blink::WebString>& stream_ids) override {}
+  void SetStreams(const WebVector<String>& stream_ids) override {}
 
  private:
   scoped_refptr<DummyRtpSenderInternal> internal_;
