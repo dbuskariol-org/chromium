@@ -21572,6 +21572,8 @@ Called by update_net_error_codes.py.-->
   <int value="22" label="PENDING_ADD_FAILED"/>
   <int value="23" label="DOWNLOADER_ADD_FAILED"/>
   <int value="24" label="IN_PROGRESS"/>
+  <int value="25" label="CRX_FETCH_URL_EMPTY"/>
+  <int value="26" label="CRX_FETCH_URL_INVALID"/>
 </enum>
 
 <enum name="ExtensionInstallationStage">
