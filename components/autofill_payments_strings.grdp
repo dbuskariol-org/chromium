@@ -478,4 +478,11 @@
     From Google Pay
   </message>
 
+  <!-- Cloud token related strings (Desktop only) -->
+  <if expr="not is_ios and not is_android">
+    <message name="IDS_AUTOFILL_CLOUD_TOKEN_DROPDOWN_OPTION_LABEL" desc="Text shown in the button in the Autofill dropdown menu when a credit card form field is queried, to offer the option to use a virtual card.">
+      Use a virtual card number...
+    </message>
+  </if>
+
 </grit-part>
