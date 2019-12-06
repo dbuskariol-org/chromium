@@ -287,10 +287,10 @@ class MODULES_EXPORT RTCPeerConnection final
   // RTCPeerConnectionHandlerClient
   void NegotiationNeeded() override;
   void DidGenerateICECandidate(scoped_refptr<RTCIceCandidatePlatform>) override;
-  void DidFailICECandidate(const WebString& host_candidate,
-                           const WebString& url,
+  void DidFailICECandidate(const String& host_candidate,
+                           const String& url,
                            int error_code,
-                           const WebString& error_text) override;
+                           const String& error_text) override;
   void DidChangeSignalingState(
       webrtc::PeerConnectionInterface::SignalingState) override;
   void DidChangeIceGatheringState(

@@ -2029,7 +2029,7 @@ void RTCPeerConnectionHandler::OnWebRtcEventLogWrite(
 }
 
 scoped_refptr<DataChannelInterface> RTCPeerConnectionHandler::CreateDataChannel(
-    const blink::WebString& label,
+    const String& label,
     const webrtc::DataChannelInit& init) {
   DCHECK(task_runner_->RunsTasksInCurrentSequence());
   TRACE_EVENT0("webrtc", "RTCPeerConnectionHandler::createDataChannel");

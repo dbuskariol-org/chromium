@@ -2701,10 +2701,10 @@ void RTCPeerConnection::DidGenerateICECandidate(
       RTCIceCandidate::Create(std::move(platform_candidate));
   ScheduleDispatchEvent(RTCPeerConnectionIceEvent::Create(ice_candidate));
 }
-void RTCPeerConnection::DidFailICECandidate(const WebString& host_candidate,
-                                            const WebString& url,
+void RTCPeerConnection::DidFailICECandidate(const String& host_candidate,
+                                            const String& url,
                                             int error_code,
-                                            const WebString& error_text) {
+                                            const String& error_text) {
   DCHECK(!closed_);
   DCHECK(GetExecutionContext()->IsContextThread());
   ScheduleDispatchEvent(RTCPeerConnectionIceErrorEvent::Create(

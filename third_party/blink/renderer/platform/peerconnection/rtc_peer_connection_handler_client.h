@@ -36,6 +36,7 @@
 #include "base/memory/scoped_refptr.h"
 #include "third_party/blink/public/platform/web_vector.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
+#include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 #include "third_party/webrtc/api/peer_connection_interface.h"
 #include "third_party/webrtc/api/sctp_transport_interface.h"
 
@@ -44,7 +45,6 @@ namespace blink {
 class RTCIceCandidatePlatform;
 class RTCRtpTransceiverPlatform;
 class RTCRtpReceiverPlatform;
-class WebString;
 
 struct PLATFORM_EXPORT WebRTCSctpTransportSnapshot {
   rtc::scoped_refptr<webrtc::SctpTransportInterface> transport;
@@ -61,10 +61,10 @@ class PLATFORM_EXPORT RTCPeerConnectionHandlerClient {
   virtual void NegotiationNeeded() = 0;
   virtual void DidGenerateICECandidate(
       scoped_refptr<RTCIceCandidatePlatform>) = 0;
-  virtual void DidFailICECandidate(const WebString& host_candidate,
-                                   const WebString& url,
+  virtual void DidFailICECandidate(const String& host_candidate,
+                                   const String& url,
                                    int error_code,
-                                   const WebString& error_text) = 0;
+                                   const String& error_text) = 0;
   virtual void DidChangeSignalingState(
       webrtc::PeerConnectionInterface::SignalingState) = 0;
   virtual void DidChangeIceGatheringState(

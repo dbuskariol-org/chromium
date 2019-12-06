@@ -160,7 +160,7 @@ class MODULES_EXPORT RTCPeerConnectionHandler
       blink::RTCRtpSenderPlatform* web_sender) override;
 
   scoped_refptr<webrtc::DataChannelInterface> CreateDataChannel(
-      const blink::WebString& label,
+      const String& label,
       const webrtc::DataChannelInit& init) override;
   void Stop() override;
   webrtc::PeerConnectionInterface* NativePeerConnection() override;

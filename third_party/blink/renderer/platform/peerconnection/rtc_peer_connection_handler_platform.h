@@ -37,6 +37,7 @@
 #include "third_party/blink/public/platform/web_rtc_stats.h"
 #include "third_party/blink/public/platform/web_vector.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
+#include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 #include "third_party/webrtc/api/peer_connection_interface.h"
 #include "third_party/webrtc/api/rtc_error.h"
 #include "third_party/webrtc/api/rtp_transceiver_interface.h"
@@ -62,7 +63,6 @@ class WebLocalFrame;
 class WebMediaConstraints;
 class WebMediaStream;
 class WebMediaStreamTrack;
-class WebString;
 
 class PLATFORM_EXPORT RTCPeerConnectionHandlerPlatform {
  public:
@@ -125,7 +125,7 @@ class PLATFORM_EXPORT RTCPeerConnectionHandlerPlatform {
   virtual void GetStats(WebRTCStatsReportCallback,
                         const WebVector<webrtc::NonStandardGroupId>&) = 0;
   virtual scoped_refptr<webrtc::DataChannelInterface> CreateDataChannel(
-      const WebString& label,
+      const String& label,
       const webrtc::DataChannelInit&) = 0;
   virtual webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>>
   AddTransceiverWithTrack(const WebMediaStreamTrack&,
