@@ -1222,7 +1222,7 @@ void RTCPeerConnection::UpdateIceConnectionState() {
   auto new_state = ComputeIceConnectionState();
   if (ice_connection_state_ != new_state) {
     peer_handler_->TrackIceConnectionStateChange(
-        WebRTCPeerConnectionHandler::IceConnectionStateVersion::kDefault,
+        RTCPeerConnectionHandlerPlatform::IceConnectionStateVersion::kDefault,
         new_state);
   }
   ChangeIceConnectionState(new_state);
@@ -2732,11 +2732,11 @@ void RTCPeerConnection::DidChangeIceConnectionState(
   if (sdp_semantics_ == webrtc::SdpSemantics::kUnifiedPlan) {
     // Unified plan relies on UpdateIceConnectionState() instead.
     peer_handler_->TrackIceConnectionStateChange(
-        WebRTCPeerConnectionHandler::IceConnectionStateVersion::kLegacy,
+        RTCPeerConnectionHandlerPlatform::IceConnectionStateVersion::kLegacy,
         new_state);
   } else {
     peer_handler_->TrackIceConnectionStateChange(
-        WebRTCPeerConnectionHandler::IceConnectionStateVersion::kDefault,
+        RTCPeerConnectionHandlerPlatform::IceConnectionStateVersion::kDefault,
         new_state);
     ChangeIceConnectionState(new_state);
   }

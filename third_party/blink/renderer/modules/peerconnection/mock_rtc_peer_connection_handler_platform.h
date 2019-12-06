@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_WEB_RTC_PEER_CONNECTION_HANDLER_H_
-#define THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_WEB_RTC_PEER_CONNECTION_HANDLER_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_RTC_PEER_CONNECTION_HANDLER_PLATFORM_H_
+#define THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_RTC_PEER_CONNECTION_HANDLER_PLATFORM_H_
 
 #include <memory>
 #include <string>
 
 #include "base/single_thread_task_runner.h"
-#include "third_party/blink/public/platform/web_rtc_peer_connection_handler.h"
+#include "third_party/blink/renderer/platform/peerconnection/rtc_peer_connection_handler_platform.h"
 #include "third_party/blink/renderer/platform/testing/testing_platform_support.h"
 #include "third_party/blink/renderer/platform/wtf/vector.h"
 #include "third_party/webrtc/api/peer_connection_interface.h"
@@ -20,10 +20,11 @@ namespace blink {
 // TODO(https://crbug.com/908461): This is currently implemented as NO-OPs or to
 // create dummy objects whose methods return default values. Consider renaming
 // the class, changing it to be GMOCK friendly or deleting it.
-class MockWebRTCPeerConnectionHandler : public WebRTCPeerConnectionHandler {
+class MockRTCPeerConnectionHandlerPlatform
+    : public RTCPeerConnectionHandlerPlatform {
  public:
-  MockWebRTCPeerConnectionHandler();
-  ~MockWebRTCPeerConnectionHandler() override;
+  MockRTCPeerConnectionHandlerPlatform();
+  ~MockRTCPeerConnectionHandlerPlatform() override;
 
   bool Initialize(const webrtc::PeerConnectionInterface::RTCConfiguration&,
                   const WebMediaConstraints&) override;
@@ -82,7 +83,7 @@ class MockWebRTCPeerConnectionHandler : public WebRTCPeerConnectionHandler {
       const base::RepeatingClosure& closure,
       const char* trace_event_name) override;
   void TrackIceConnectionStateChange(
-      WebRTCPeerConnectionHandler::IceConnectionStateVersion version,
+      RTCPeerConnectionHandlerPlatform::IceConnectionStateVersion version,
       webrtc::PeerConnectionInterface::IceConnectionState state) override;
 
  private:
@@ -93,4 +94,4 @@ class MockWebRTCPeerConnectionHandler : public WebRTCPeerConnectionHandler {
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_WEB_RTC_PEER_CONNECTION_HANDLER_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_RTC_PEER_CONNECTION_HANDLER_PLATFORM_H_

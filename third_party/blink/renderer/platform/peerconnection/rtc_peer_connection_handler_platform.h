@@ -28,14 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_RTC_PEER_CONNECTION_HANDLER_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_RTC_PEER_CONNECTION_HANDLER_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_PEERCONNECTION_RTC_PEER_CONNECTION_HANDLER_PLATFORM_H_
+#define THIRD_PARTY_BLINK_RENDERER_PLATFORM_PEERCONNECTION_RTC_PEER_CONNECTION_HANDLER_PLATFORM_H_
 
 #include <memory>
 #include <string>
 
 #include "third_party/blink/public/platform/web_rtc_stats.h"
 #include "third_party/blink/public/platform/web_vector.h"
+#include "third_party/blink/renderer/platform/platform_export.h"
 #include "third_party/webrtc/api/peer_connection_interface.h"
 #include "third_party/webrtc/api/rtc_error.h"
 #include "third_party/webrtc/api/rtp_transceiver_interface.h"
@@ -44,7 +45,7 @@
 namespace webrtc {
 enum class RTCErrorType;
 struct DataChannelInit;
-}
+}  // namespace webrtc
 
 namespace blink {
 
@@ -63,7 +64,7 @@ class WebMediaStream;
 class WebMediaStreamTrack;
 class WebString;
 
-class WebRTCPeerConnectionHandler {
+class PLATFORM_EXPORT RTCPeerConnectionHandlerPlatform {
  public:
   enum class IceConnectionStateVersion {
     // Only applicable in Unified Plan when the JavaScript-exposed
@@ -76,7 +77,7 @@ class WebRTCPeerConnectionHandler {
     kDefault,
   };
 
-  virtual ~WebRTCPeerConnectionHandler() = default;
+  virtual ~RTCPeerConnectionHandlerPlatform() = default;
 
   virtual bool Initialize(
       const webrtc::PeerConnectionInterface::RTCConfiguration&,
@@ -164,4 +165,4 @@ class WebRTCPeerConnectionHandler {
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_RTC_PEER_CONNECTION_HANDLER_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_PLATFORM_PEERCONNECTION_RTC_PEER_CONNECTION_HANDLER_PLATFORM_H_

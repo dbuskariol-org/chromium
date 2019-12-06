@@ -28,14 +28,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_PEERCONNECTION_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
+#define THIRD_PARTY_BLINK_RENDERER_PLATFORM_PEERCONNECTION_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
 
 #include <memory>
 
 #include "base/memory/scoped_refptr.h"
-#include "third_party/blink/public/platform/web_common.h"
 #include "third_party/blink/public/platform/web_vector.h"
+#include "third_party/blink/renderer/platform/platform_export.h"
 #include "third_party/webrtc/api/peer_connection_interface.h"
 #include "third_party/webrtc/api/sctp_transport_interface.h"
 
@@ -46,7 +46,7 @@ class RTCRtpTransceiverPlatform;
 class RTCRtpReceiverPlatform;
 class WebString;
 
-struct BLINK_PLATFORM_EXPORT WebRTCSctpTransportSnapshot {
+struct PLATFORM_EXPORT WebRTCSctpTransportSnapshot {
   rtc::scoped_refptr<webrtc::SctpTransportInterface> transport;
   webrtc::SctpTransportInformation sctp_transport_state =
       webrtc::SctpTransportInformation(webrtc::SctpTransportState::kNew);
@@ -54,9 +54,9 @@ struct BLINK_PLATFORM_EXPORT WebRTCSctpTransportSnapshot {
       webrtc::DtlsTransportInformation(webrtc::DtlsTransportState::kNew);
 };
 
-class BLINK_PLATFORM_EXPORT WebRTCPeerConnectionHandlerClient {
+class PLATFORM_EXPORT RTCPeerConnectionHandlerClient {
  public:
-  virtual ~WebRTCPeerConnectionHandlerClient();
+  virtual ~RTCPeerConnectionHandlerClient();
 
   virtual void NegotiationNeeded() = 0;
   virtual void DidGenerateICECandidate(
@@ -90,4 +90,4 @@ class BLINK_PLATFORM_EXPORT WebRTCPeerConnectionHandlerClient {
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_PLATFORM_PEERCONNECTION_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_

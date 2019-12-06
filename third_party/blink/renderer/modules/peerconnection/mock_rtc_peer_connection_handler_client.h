@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_WEB_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
-#define THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_WEB_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
+#define THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
 
 #include <memory>
 #include <string>
@@ -12,20 +12,20 @@
 #include "base/macros.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "third_party/blink/public/platform/web_media_stream.h"
-#include "third_party/blink/public/platform/web_rtc_peer_connection_handler_client.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_ice_candidate_platform.h"
+#include "third_party/blink/renderer/platform/peerconnection/rtc_peer_connection_handler_client.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_rtp_receiver_platform.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_rtp_transceiver_platform.h"
 
 namespace blink {
 
-class MockWebRTCPeerConnectionHandlerClient
-    : public blink::WebRTCPeerConnectionHandlerClient {
+class MockRTCPeerConnectionHandlerClient
+    : public RTCPeerConnectionHandlerClient {
  public:
-  MockWebRTCPeerConnectionHandlerClient();
-  ~MockWebRTCPeerConnectionHandlerClient() override;
+  MockRTCPeerConnectionHandlerClient();
+  ~MockRTCPeerConnectionHandlerClient() override;
 
-  // WebRTCPeerConnectionHandlerClient implementation.
+  // RTCPeerConnectionHandlerClient implementation.
   MOCK_METHOD0(NegotiationNeeded, void());
   MOCK_METHOD1(DidGenerateICECandidate,
                void(scoped_refptr<RTCIceCandidatePlatform> candidate));
@@ -96,9 +96,9 @@ class MockWebRTCPeerConnectionHandlerClient
   base::Optional<uint16_t> candidate_mline_index_;
   std::string candidate_mid_;
 
-  DISALLOW_COPY_AND_ASSIGN(MockWebRTCPeerConnectionHandlerClient);
+  DISALLOW_COPY_AND_ASSIGN(MockRTCPeerConnectionHandlerClient);
 };
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_WEB_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_PEERCONNECTION_MOCK_RTC_PEER_CONNECTION_HANDLER_CLIENT_H_

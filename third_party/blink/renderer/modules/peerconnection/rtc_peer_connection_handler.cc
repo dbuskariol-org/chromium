@@ -1006,7 +1006,7 @@ class RTCPeerConnectionHandler::Observer
 };
 
 RTCPeerConnectionHandler::RTCPeerConnectionHandler(
-    blink::WebRTCPeerConnectionHandlerClient* client,
+    RTCPeerConnectionHandlerClient* client,
     blink::PeerConnectionDependencyFactory* dependency_factory,
     scoped_refptr<base::SingleThreadTaskRunner> task_runner)
     : initialize_called_(false),
@@ -2166,16 +2166,16 @@ void RTCPeerConnectionHandler::OnIceConnectionChange(
 }
 
 void RTCPeerConnectionHandler::TrackIceConnectionStateChange(
-    WebRTCPeerConnectionHandler::IceConnectionStateVersion version,
+    RTCPeerConnectionHandlerPlatform::IceConnectionStateVersion version,
     webrtc::PeerConnectionInterface::IceConnectionState state) {
   if (!peer_connection_tracker_)
     return;
   switch (version) {
-    case WebRTCPeerConnectionHandler::IceConnectionStateVersion::kLegacy:
+    case RTCPeerConnectionHandlerPlatform::IceConnectionStateVersion::kLegacy:
       peer_connection_tracker_->TrackLegacyIceConnectionStateChange(this,
                                                                     state);
       break;
-    case WebRTCPeerConnectionHandler::IceConnectionStateVersion::kDefault:
+    case RTCPeerConnectionHandlerPlatform::IceConnectionStateVersion::kDefault:
       peer_connection_tracker_->TrackIceConnectionStateChange(this, state);
       break;
   }
