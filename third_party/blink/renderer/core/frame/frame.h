@@ -120,7 +120,7 @@ class CORE_EXPORT Frame : public GarbageCollected<Frame> {
   FrameTree& Tree() const;
   ChromeClient& GetChromeClient() const;
 
-  virtual SecurityContext* GetSecurityContext() const = 0;
+  virtual const SecurityContext* GetSecurityContext() const = 0;
 
   Frame* FindUnsafeParentScrollPropagationBoundary();
 
