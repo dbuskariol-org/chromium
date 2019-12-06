@@ -469,9 +469,9 @@ DragWindowFromShelfController::GetSnapPosition(
       const int min_drag_distance = started_in_snap_region
                                         ? kMinDragDistanceInSnapRegion
                                         : kMinDragDistanceOutsideSnapRegion;
-      if ((IsPhysicalLeftOrTop(snap_position) &&
+      if ((SplitViewController::IsPhysicalLeftOrTop(snap_position) &&
            distance > -min_drag_distance) ||
-          (!IsPhysicalLeftOrTop(snap_position) &&
+          (!SplitViewController::IsPhysicalLeftOrTop(snap_position) &&
            distance < min_drag_distance)) {
         snap_position = SplitViewController::NONE;
       }

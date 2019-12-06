@@ -5650,6 +5650,47 @@ TEST_P(SplitViewOverviewSessionInClamshellTest,
                 .width());
 }
 
+// Tests that on a display in portrait orientation, clamshell split view still
+// uses snap positions on the left and right.
+TEST_P(SplitViewOverviewSessionInClamshellTest,
+       PortraitClamshellSplitViewSnapPositionsTest) {
+  UpdateDisplay("800x600/l");
+  const int height = 800 - ShelfConfig::Get()->shelf_size();
+  ASSERT_EQ(gfx::Rect(0, 0, 600, height),
+            screen_util::GetDisplayWorkAreaBoundsInScreenForActiveDeskContainer(
+                Shell::GetPrimaryRootWindow()));
+  // Check that snapped window bounds represent snapping on the left and right.
+  const gfx::Rect left_snapped_bounds(0, 0, 300, height);
+  EXPECT_EQ(
+      left_snapped_bounds,
+      split_view_controller()->GetSnappedWindowBoundsInScreen(
+          SplitViewController::LEFT, /*window_for_minimum_size=*/nullptr));
+  const gfx::Rect right_snapped_bounds(300, 0, 300, height);
+  EXPECT_EQ(
+      right_snapped_bounds,
+      split_view_controller()->GetSnappedWindowBoundsInScreen(
+          SplitViewController::RIGHT, /*window_for_minimum_size=*/nullptr));
+  // Switch from clamshell mode to tablet mode and then back to clamshell mode.
+  display::test::DisplayManagerTestApi(Shell::Get()->display_manager())
+      .SetFirstDisplayAsInternalDisplay();
+  TabletModeControllerTestApi tablet_mode_controller_test_api;
+  tablet_mode_controller_test_api.DetachAllMice();
+  EXPECT_FALSE(tablet_mode_controller_test_api.IsTabletModeStarted());
+  tablet_mode_controller_test_api.OpenLidToAngle(315.0f);
+  EXPECT_TRUE(tablet_mode_controller_test_api.IsTabletModeStarted());
+  tablet_mode_controller_test_api.OpenLidToAngle(90.0f);
+  EXPECT_FALSE(tablet_mode_controller_test_api.IsTabletModeStarted());
+  // Check the snapped window bounds again. They should be the same as before.
+  EXPECT_EQ(
+      left_snapped_bounds,
+      split_view_controller()->GetSnappedWindowBoundsInScreen(
+          SplitViewController::LEFT, /*window_for_minimum_size=*/nullptr));
+  EXPECT_EQ(
+      right_snapped_bounds,
+      split_view_controller()->GetSnappedWindowBoundsInScreen(
+          SplitViewController::RIGHT, /*window_for_minimum_size=*/nullptr));
+}
+
 // Tests that the ratio between the divider position and the work area width is
 // the same before and after changing the display orientation in clamshell mode.
 TEST_P(SplitViewOverviewSessionInClamshellTest, DisplayOrientationChangeTest) {
