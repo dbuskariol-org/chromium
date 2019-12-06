@@ -1,3 +1,6 @@
 include_rules = [
+  "-android_webview",
+  "+android_webview/common",
+  "+android_webview/common_jni_headers",
   "+content/public/gpu",
 ]
