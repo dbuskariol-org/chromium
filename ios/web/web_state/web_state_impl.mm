@@ -836,11 +836,6 @@ void WebStateImpl::Reload() {
   [web_controller_ reloadWithRendererInitiatedNavigation:NO];
 }
 
-void WebStateImpl::OnNavigationItemsPruned(size_t pruned_item_count) {
-  for (auto& observer : observers_)
-    observer.NavigationItemsPruned(this, pruned_item_count);
-}
-
 void WebStateImpl::OnNavigationItemCommitted(NavigationItem* item) {
   if (wk_navigation_util::IsWKInternalUrl(item->GetURL()))
     return;

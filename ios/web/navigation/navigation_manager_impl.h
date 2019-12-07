@@ -78,7 +78,6 @@ class NavigationManagerImpl : public NavigationManager {
   // Helper functions for notifying WebStateObservers of changes.
   // TODO(stuartmorgan): Make these private once the logic triggering them moves
   // into this layer.
-  virtual void OnNavigationItemsPruned(size_t pruned_item_count) = 0;
   virtual void OnNavigationItemCommitted() = 0;
 
   // Called when a navigation has started.
