@@ -426,6 +426,7 @@ crbug.com/907599 [ mac nvidia debug ] conformance/textures/video/tex-2d-rgb-rgb-
 crbug.com/1022831 [ mac nvidia-0xfe9 ] deqp/functional/gles3/vertexarrays/single_attribute.usage.stream_draw.html [ RetryOnFailure ]
 crbug.com/1022831 [ mac nvidia-0xfe9 ] deqp/functional/gles3/vertexarrays/single_attribute.usage.dynamic_copy.html [ RetryOnFailure ]
 crbug.com/1022831 [ mac nvidia-0xfe9 ] deqp/functional/gles3/shaderloop_while.html [ RetryOnFailure ]
+crbug.com/1027534 [ mac nvidia-0xfe9 ] conformance2/rendering/uniform-block-buffer-size.html [ RetryOnFailure ]
 
 # Mac AMD
 # TODO(kbr): uncomment the following two exepectations after test
