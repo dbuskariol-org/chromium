@@ -3395,21 +3395,53 @@ be describing additional metrics about the same event.
     <summary>
       The count of system font family match attempts that failed.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="SystemFontFamilySuccesses">
     <summary>
       The count of system font family match attempts that succeeded.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="WebFontFamilyFailures">
     <summary>
       The count of web font family match attempts that failed.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="WebFontFamilySuccesses">
     <summary>
       The count of web font family match attempts that succeeded.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
 </event>
 
