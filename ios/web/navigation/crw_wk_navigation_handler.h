@@ -89,11 +89,6 @@ class WKBackForwardListItemHolder;
 - (void)navigationHandlerUpdateSSLStatusForCurrentNavigationItem:
     (CRWWKNavigationHandler*)navigationHandler;
 
-// Instructs the delegate to update the HTML5 history state of the page using
-// the current NavigationItem.
-- (void)navigationHandlerUpdateHTML5HistoryState:
-    (CRWWKNavigationHandler*)navigationHandler;
-
 // Notifies the delegate that navigation has finished.
 - (void)navigationHandler:(CRWWKNavigationHandler*)navigationHandler
       didFinishNavigation:(web::NavigationContextImpl*)context;

@@ -776,7 +776,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
     self.webStateImpl->SetIsLoading(true);
   }
   self.webStateImpl->OnNavigationStarted(context.get());
-  [self updateHTML5HistoryState];
   [self setDocumentURL:URL context:context.get()];
   context->SetHasCommitted(true);
   self.webStateImpl->OnNavigationFinished(context.get());
@@ -992,54 +991,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
     action();
   }
   [_pendingLoadCompleteActions removeAllObjects];
-}
-
-#pragma mark - JavaScript history manipulation
-// Updates the HTML5 history state of the page using the current NavigationItem.
-// For same-document navigations and navigations affected by
-// window.history.[push/replace]State(), the URL and serialized state object
-// will be updated to the current NavigationItem's values.  A popState event
-// will be triggered for all same-document navigations.  Additionally, a
-// hashchange event will be triggered for same-document navigations where the
-// only difference between the current and previous URL is the fragment.
-// TODO(crbug.com/788465): Verify that the history state management here are not
-// needed for WKBasedNavigationManagerImpl and delete this method. The
-// OnNavigationItemCommitted() call is likely the only thing that needs to be
-// retained.
-- (void)updateHTML5HistoryState {
-  // TODO(crbug.com/1029306): Clean up legacy JS navigation code.
-  return;
-}
-
-// Generates the JavaScript string used to manually dispatch a popstate event,
-// using |stateObjectJSON| as the event parameter.
-- (NSString*)javaScriptToDispatchPopStateWithObject:(NSString*)stateObjectJSON {
-  std::string outState;
-  base::EscapeJSONString(base::SysNSStringToUTF8(stateObjectJSON), true,
-                         &outState);
-  return [NSString stringWithFormat:@"__gCrWeb.dispatchPopstateEvent(%@);",
-                                    base::SysUTF8ToNSString(outState)];
-}
-// Generates the JavaScript string used to manually dispatch a hashchange event,
-// using |oldURL| and |newURL| as the event parameters.
-- (NSString*)javaScriptToDispatchHashChangeWithOldURL:(const GURL&)oldURL
-                                               newURL:(const GURL&)newURL {
-  return [NSString
-      stringWithFormat:@"__gCrWeb.dispatchHashchangeEvent(\'%s\', \'%s\');",
-                       oldURL.spec().c_str(), newURL.spec().c_str()];
-}
-// Injects JavaScript to update the URL and state object of the webview to the
-// values found in the current NavigationItem.  A hashchange event will be
-// dispatched if |dispatchHashChange| is YES, and a popstate event will be
-// dispatched if |sameDocument| is YES.  Upon the script's completion, resets
-// |urlOnStartLoading_| and |_lastRegisteredRequestURL| to the current
-// NavigationItem's URL.  This is necessary so that sites that depend on URL
-// params/fragments continue to work correctly and that checks for the URL don't
-// incorrectly trigger |-webPageChangedWithContext| calls.
-- (void)injectHTML5HistoryScriptWithHashChange:(BOOL)dispatchHashChange
-                        sameDocumentNavigation:(BOOL)sameDocumentNavigation {
-  // TODO(crbug.com/1029306): Clean up legacy JS navigation code.
-  return;
 }
 
 #pragma mark - CRWWebControllerContainerViewDelegate
@@ -1688,11 +1639,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   [self updateSSLStatusForCurrentNavigationItem];
 }
 
-- (void)navigationHandlerUpdateHTML5HistoryState:
-    (CRWWKNavigationHandler*)navigationHandler {
-  [self updateHTML5HistoryState];
-}
-
 - (void)navigationObserver:(CRWWebViewNavigationObserver*)navigationObserver
        didFinishNavigation:(web::NavigationContextImpl*)context {
   [self didFinishNavigation:context];
@@ -2030,11 +1976,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 - (void)JSNavigationHandler:(CRWJSNavigationHandler*)navigationHandler
         didFinishNavigation:(web::NavigationContextImpl*)context {
   [self didFinishNavigation:context];
-}
-
-- (void)JSNavigationHandlerReloadWithRendererInitiatedNavigation:
-    (CRWJSNavigationHandler*)navigationHandler {
-  [self reloadWithRendererInitiatedNavigation:YES];
 }
 
 #pragma mark - Testing-Only Methods

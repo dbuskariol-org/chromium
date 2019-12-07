@@ -2313,7 +2313,6 @@ TEST_F(NavigationManagerTest, CommitNonNilPendingItem) {
       [CRWFakeBackForwardList itemWithURLString:@"http://www.url.com/new"];
   mock_wk_list_.forwardList = nil;
   ASSERT_EQ(1, navigation_manager()->GetLastCommittedItemIndex());
-
   ASSERT_EQ(2, navigation_manager()->GetItemCount());
 
   // Emulate 2 simultanious navigations to verify that pending item index does

@@ -890,16 +890,15 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
     self.webStateImpl->OnNavigationFinished(context);
   }
 
-  // Do not update the HTML5 history state or states of the last committed item
-  // for placeholder page because the actual navigation item will not be
-  // committed until WebUI is shown.
+  // Do not update the states of the last committed item for placeholder page
+  // because the actual navigation item will not be committed until the native
+  // content or WebUI is shown.
   if (context && !context->IsPlaceholderNavigation() &&
       !context->IsLoadingErrorPage() &&
       !context->GetUrl().SchemeIs(url::kAboutScheme) &&
       !IsRestoreSessionUrl(context->GetUrl())) {
     [self.delegate
         navigationHandlerUpdateSSLStatusForCurrentNavigationItem:self];
-    [self.delegate navigationHandlerUpdateHTML5HistoryState:self];
     if (!context->IsLoadingErrorPage() && !IsRestoreSessionUrl(webViewURL)) {
       [self setLastCommittedNavigationItemTitle:webView.title];
     }
