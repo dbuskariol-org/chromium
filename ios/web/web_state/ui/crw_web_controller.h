@@ -7,7 +7,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "ios/web/navigation/crw_session_controller.h"
 #include "ios/web/public/deprecated/url_verification_constants.h"
 #import "ios/web/web_state/ui/crw_touch_tracking_recognizer.h"
 #import "ios/web/web_state/ui/crw_web_view_navigation_proxy.h"
@@ -29,6 +28,7 @@ class GURL;
 
 namespace web {
 class NavigationItem;
+class NavigationItemImpl;
 class WebState;
 class WebStateImpl;
 }
@@ -39,8 +39,7 @@ class WebStateImpl;
 // web view.
 // This is an abstract class which must not be instantiated directly.
 // TODO(stuartmorgan): Move all of the navigation APIs out of this class.
-@interface CRWWebController
-    : NSObject <CRWSessionControllerDelegate, CRWTouchTrackingDelegate>
+@interface CRWWebController : NSObject <CRWTouchTrackingDelegate>
 
 // Whether or not a UIWebView is allowed to exist in this CRWWebController.
 // Defaults to NO; this should be enabled before attempting to access the view.

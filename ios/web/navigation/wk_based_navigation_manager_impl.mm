@@ -33,8 +33,6 @@
 #error "This file requires ARC support."
 #endif
 
-@class CRWSessionController;
-
 namespace {
 
 void SetNavigationItemInWKItem(WKBackForwardListItem* wk_item,
@@ -72,9 +70,6 @@ WKBasedNavigationManagerImpl::WKBasedNavigationManagerImpl()
       web_view_cache_(this) {}
 
 WKBasedNavigationManagerImpl::~WKBasedNavigationManagerImpl() = default;
-
-void WKBasedNavigationManagerImpl::SetSessionController(
-    CRWSessionController* session_controller) {}
 
 void WKBasedNavigationManagerImpl::InitializeSession() {}
 
@@ -131,11 +126,6 @@ void WKBasedNavigationManagerImpl::FinalizeSessionRestore() {
   }
   restore_session_completion_callbacks_.clear();
   LoadIfNecessary();
-}
-
-CRWSessionController* WKBasedNavigationManagerImpl::GetSessionController()
-    const {
-  return nil;
 }
 
 void WKBasedNavigationManagerImpl::AddTransientItem(const GURL& url) {

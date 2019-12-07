@@ -207,8 +207,6 @@ NSString* const kScriptMessageName = @"crwebinvoke";
 
 // Session Information
 // -------------------
-// Returns NavigationManager's session controller.
-@property(weak, nonatomic, readonly) CRWSessionController* sessionController;
 // The associated NavigationManagerImpl.
 @property(nonatomic, readonly) NavigationManagerImpl* navigationManagerImpl;
 // TODO(crbug.com/692871): Remove these functions and replace with more
@@ -521,11 +519,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 
 #pragma mark Navigation and Session Information
 
-- (CRWSessionController*)sessionController {
-  NavigationManagerImpl* navigationManager = self.navigationManagerImpl;
-  return navigationManager ? navigationManager->GetSessionController() : nil;
-}
-
 - (NavigationManagerImpl*)navigationManagerImpl {
   return self.webStateImpl ? &(self.webStateImpl->GetNavigationManagerImpl())
                            : nil;
@@ -712,10 +705,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   } else if (!_currentURLLoadWasTrigerred) {
     [self ensureContainerViewCreated];
 
-    // This method reloads last committed item, so make than item also pending.
-    self.sessionController.pendingItemIndex =
-        self.sessionController.lastCommittedItemIndex;
-
     // TODO(crbug.com/796608): end the practice of calling |loadCurrentURL|
     // when it is possible there is no current URL. If the call performs
     // necessary initialization, break that out.
@@ -884,13 +873,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
                   }];
 }
 
-#pragma mark - CRWSessionControllerDelegate (Public)
-
-- (web::NavigationItemImpl*)pendingItemForSessionController:
-    (CRWSessionController*)sessionController {
-  return [self lastPendingItemForNewNavigation];
-}
-
 #pragma mark - CRWTouchTrackingDelegate (Public)
 
 - (void)touched:(BOOL)touched {
@@ -1013,7 +995,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 }
 
 #pragma mark - JavaScript history manipulation
-
 // Updates the HTML5 history state of the page using the current NavigationItem.
 // For same-document navigations and navigations affected by
 // window.history.[push/replace]State(), the URL and serialized state object
@@ -1026,45 +1007,8 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 // OnNavigationItemCommitted() call is likely the only thing that needs to be
 // retained.
 - (void)updateHTML5HistoryState {
-  web::NavigationItemImpl* currentItem = self.currentNavItem;
-  if (!currentItem)
-    return;
-
-  // Same-document navigations must trigger a popState event.
-  CRWSessionController* sessionController = self.sessionController;
-  BOOL sameDocumentNavigation = [sessionController
-      isSameDocumentNavigationBetweenItem:sessionController.currentItem
-                                  andItem:sessionController.previousItem];
-  // WKWebView doesn't send hashchange events for same-document non-BFLI
-  // navigations, so one must be dispatched manually for hash change same-
-  // document navigations.
-  const GURL URL = currentItem->GetURL();
-  web::NavigationItem* previousItem = self.sessionController.previousItem;
-  const GURL oldURL = previousItem ? previousItem->GetURL() : GURL();
-  BOOL shouldDispatchHashchange = sameDocumentNavigation && previousItem &&
-                                  (web::GURLByRemovingRefFromGURL(URL) ==
-                                   web::GURLByRemovingRefFromGURL(oldURL));
-  // The URL and state object must be set for same-document navigations and
-  // NavigationItems that were created or updated by calls to pushState() or
-  // replaceState().
-  BOOL shouldUpdateState = sameDocumentNavigation ||
-                           currentItem->IsCreatedFromPushState() ||
-                           currentItem->HasStateBeenReplaced();
-  if (!shouldUpdateState)
-    return;
-
-  // TODO(stuartmorgan): Make CRWSessionController manage this internally (or
-  // remove it; it's not clear this matches other platforms' behavior).
-  self.navigationManagerImpl->OnNavigationItemCommitted();
-  // Record that a same-document hashchange event will be fired.  This flag will
-  // be reset when resonding to the hashchange message.  Note that resetting the
-  // flag in the completion block below is too early, as that block is called
-  // before hashchange event listeners have a chance to fire.
-  self.JSNavigationHandler.dispatchingSameDocumentHashChangeEvent =
-      shouldDispatchHashchange;
-  // Inject the JavaScript to update the state on the browser side.
-  [self injectHTML5HistoryScriptWithHashChange:shouldDispatchHashchange
-                        sameDocumentNavigation:sameDocumentNavigation];
+  // TODO(crbug.com/1029306): Clean up legacy JS navigation code.
+  return;
 }
 
 // Generates the JavaScript string used to manually dispatch a popstate event,
@@ -1076,7 +1020,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   return [NSString stringWithFormat:@"__gCrWeb.dispatchPopstateEvent(%@);",
                                     base::SysUTF8ToNSString(outState)];
 }
-
 // Generates the JavaScript string used to manually dispatch a hashchange event,
 // using |oldURL| and |newURL| as the event parameters.
 - (NSString*)javaScriptToDispatchHashChangeWithOldURL:(const GURL&)oldURL
@@ -1085,7 +1028,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
       stringWithFormat:@"__gCrWeb.dispatchHashchangeEvent(\'%s\', \'%s\');",
                        oldURL.spec().c_str(), newURL.spec().c_str()];
 }
-
 // Injects JavaScript to update the URL and state object of the webview to the
 // values found in the current NavigationItem.  A hashchange event will be
 // dispatched if |dispatchHashChange| is YES, and a popstate event will be
@@ -1096,27 +1038,8 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 // incorrectly trigger |-webPageChangedWithContext| calls.
 - (void)injectHTML5HistoryScriptWithHashChange:(BOOL)dispatchHashChange
                         sameDocumentNavigation:(BOOL)sameDocumentNavigation {
-  web::NavigationItemImpl* currentItem = self.currentNavItem;
-  if (!currentItem)
-    return;
-
-  const GURL URL = currentItem->GetURL();
-  NSString* stateObject = currentItem->GetSerializedStateObject();
-  NSMutableString* script = [NSMutableString
-      stringWithString:[self.JSNavigationHandler
-                           javaScriptToReplaceWebViewURL:URL
-                                         stateObjectJSON:stateObject]];
-  if (sameDocumentNavigation) {
-    [script
-        appendString:[self javaScriptToDispatchPopStateWithObject:stateObject]];
-  }
-  if (dispatchHashChange) {
-    web::NavigationItemImpl* previousItem = self.sessionController.previousItem;
-    const GURL oldURL = previousItem ? previousItem->GetURL() : GURL();
-    [script appendString:[self javaScriptToDispatchHashChangeWithOldURL:oldURL
-                                                                 newURL:URL]];
-  }
-  [_jsInjector executeJavaScript:script completionHandler:nil];
+  // TODO(crbug.com/1029306): Clean up legacy JS navigation code.
+  return;
 }
 
 #pragma mark - CRWWebControllerContainerViewDelegate
@@ -1765,6 +1688,11 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   [self updateSSLStatusForCurrentNavigationItem];
 }
 
+- (void)navigationHandlerUpdateHTML5HistoryState:
+    (CRWWKNavigationHandler*)navigationHandler {
+  [self updateHTML5HistoryState];
+}
+
 - (void)navigationObserver:(CRWWebViewNavigationObserver*)navigationObserver
        didFinishNavigation:(web::NavigationContextImpl*)context {
   [self didFinishNavigation:context];
@@ -1973,11 +1901,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 - (void)navigationHandlerUpdateSSLStatusForCurrentNavigationItem:
     (CRWWKNavigationHandler*)navigationHandler {
   [self updateSSLStatusForCurrentNavigationItem];
-}
-
-- (void)navigationHandlerUpdateHTML5HistoryState:
-    (CRWWKNavigationHandler*)navigationHandler {
-  [self updateHTML5HistoryState];
 }
 
 - (void)navigationHandler:(CRWWKNavigationHandler*)navigationHandler

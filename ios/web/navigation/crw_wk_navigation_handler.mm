@@ -14,7 +14,6 @@
 #import "ios/web/js_messaging/crw_js_injector.h"
 #import "ios/web/js_messaging/web_frames_manager_impl.h"
 #import "ios/web/navigation/crw_pending_navigation_info.h"
-#import "ios/web/navigation/crw_session_controller.h"
 #import "ios/web/navigation/crw_wk_navigation_states.h"
 #include "ios/web/navigation/error_retry_state_machine.h"
 #import "ios/web/navigation/navigation_context_impl.h"
@@ -107,8 +106,6 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
     CRWCertVerificationController* certVerificationController;
 // Returns the docuemnt URL from self.delegate.
 @property(nonatomic, readonly, assign) GURL documentURL;
-// Returns the session controller from self.navigationManagerImpl.
-@property(nonatomic, readonly, weak) CRWSessionController* sessionController;
 // Returns the js injector from self.delegate.
 @property(nonatomic, readonly, weak) CRWJSInjector* JSInjector;
 
@@ -865,19 +862,6 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
     // didFailProvisionalNavigation. As a result web::NavigationContext for this
     // navigation does not exist anymore. Find correct navigation item and make
     // it committed.
-    if (!web::GetWebClient()->IsSlimNavigationManagerEnabled()) {
-      bool found_correct_navigation_item = false;
-      for (size_t i = 0; i < self.sessionController.items.size(); i++) {
-        web::NavigationItem* item = self.sessionController.items[i].get();
-        found_correct_navigation_item = item->GetURL() == webViewURL;
-        if (found_correct_navigation_item) {
-          [self.sessionController goToItemAtIndex:i
-                         discardNonCommittedItems:NO];
-          break;
-        }
-      }
-      DCHECK(found_correct_navigation_item);
-    }
     [self resetDocumentSpecificState];
     [self.delegate navigationHandlerDidStartLoading:self];
   } else if (context) {
@@ -889,16 +873,6 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
     if (isLastNavigation ||
         self.navigationManagerImpl->GetPendingItemIndex() == -1) {
       [self webPageChangedWithContext:context webView:webView];
-    } else if (!web::GetWebClient()->IsSlimNavigationManagerEnabled()) {
-      // WKWebView has more than one in progress navigation, and committed
-      // navigation was not the latest. Change last committed item to one that
-      // corresponds to committed navigation.
-      int itemIndex = web::GetCommittedItemIndexWithUniqueID(
-          self.navigationManagerImpl, context->GetNavigationItemUniqueID());
-      // Do not discard pending entry, because another pending navigation is
-      // still in progress and will commit or fail soon.
-      [self.sessionController goToItemAtIndex:itemIndex
-                     discardNonCommittedItems:NO];
     }
   }
 
@@ -1169,12 +1143,6 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
   return self.navigationManagerImpl
              ? self.navigationManagerImpl->GetCurrentItemImpl()
              : nullptr;
-}
-
-- (CRWSessionController*)sessionController {
-  return self.navigationManagerImpl
-             ? self.navigationManagerImpl->GetSessionController()
-             : nil;
 }
 
 // This method should be called on receiving WKNavigationDelegate callbacks. It

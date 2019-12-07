@@ -16,8 +16,6 @@
 #import "ios/web/common/crw_content_view.h"
 #include "ios/web/common/url_util.h"
 #import "ios/web/js_messaging/crw_js_injector.h"
-#import "ios/web/navigation/crw_session_controller.h"
-#import "ios/web/navigation/legacy_navigation_manager_impl.h"
 #import "ios/web/navigation/navigation_context_impl.h"
 #import "ios/web/navigation/navigation_item_impl.h"
 #import "ios/web/navigation/session_storage_builder.h"
@@ -61,8 +59,6 @@ std::unique_ptr<WebState> WebState::Create(const CreateParams& params) {
 
   // Initialize the new session.
   web_state->GetNavigationManagerImpl().InitializeSession();
-  web_state->GetNavigationManagerImpl().GetSessionController().delegate =
-      web_state->GetWebController();
 
   return web_state;
 }
@@ -88,11 +84,7 @@ WebStateImpl::WebStateImpl(const CreateParams& params,
       interstitial_(nullptr),
       created_with_opener_(params.created_with_opener),
       weak_factory_(this) {
-  if (web::GetWebClient()->IsSlimNavigationManagerEnabled()) {
-    navigation_manager_ = std::make_unique<WKBasedNavigationManagerImpl>();
-  } else {
-    navigation_manager_ = std::make_unique<LegacyNavigationManagerImpl>();
-  }
+  navigation_manager_ = std::make_unique<WKBasedNavigationManagerImpl>();
 
   navigation_manager_->SetDelegate(this);
   navigation_manager_->SetBrowserState(params.browser_state);
@@ -898,8 +890,6 @@ void WebStateImpl::RestoreSessionStorage(CRWSessionStorage* session_storage) {
     restored_session_storage_ = session_storage;
   SessionStorageBuilder session_storage_builder;
   session_storage_builder.ExtractSessionState(this, session_storage);
-  GetNavigationManagerImpl().GetSessionController().delegate =
-      GetWebController();
 }
 
 }  // namespace web
