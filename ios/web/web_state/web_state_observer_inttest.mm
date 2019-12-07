@@ -19,9 +19,6 @@
 #include "ios/web/common/features.h"
 #include "ios/web/navigation/web_kit_constants.h"
 #include "ios/web/navigation/wk_navigation_util.h"
-#import "ios/web/public/deprecated/crw_native_content_holder.h"
-#import "ios/web/public/deprecated/test_native_content.h"
-#import "ios/web/public/deprecated/test_native_content_provider.h"
 #import "ios/web/public/navigation/navigation_context.h"
 #import "ios/web/public/navigation/navigation_item.h"
 #import "ios/web/public/navigation/navigation_manager.h"
@@ -558,61 +555,6 @@ ACTION_P7(VerifySameDocumentFinishedContext,
   EXPECT_EQ(url, item->GetURL());
 }
 
-// Verifies correctness of |NavigationContext| (|arg1|) for new page navigation
-// to native URLs passed to |DidStartNavigation|. Stores |NavigationContext| in
-// |context| pointer.
-ACTION_P4(VerifyNewNativePageStartedContext, web_state, url, context, nav_id) {
-  *context = arg1;
-  ASSERT_TRUE(*context);
-  EXPECT_EQ(web_state, arg0);
-  EXPECT_EQ(web_state, (*context)->GetWebState());
-  *nav_id = (*context)->GetNavigationId();
-  EXPECT_NE(0, *nav_id);
-  EXPECT_EQ(url, (*context)->GetUrl());
-  EXPECT_TRUE((*context)->HasUserGesture());
-  EXPECT_TRUE(
-      PageTransitionCoreTypeIs(ui::PageTransition::PAGE_TRANSITION_TYPED,
-                               (*context)->GetPageTransition()));
-  EXPECT_FALSE((*context)->IsSameDocument());
-  EXPECT_FALSE((*context)->HasCommitted());
-  EXPECT_FALSE((*context)->IsDownload());
-  EXPECT_FALSE((*context)->IsPost());
-  EXPECT_FALSE((*context)->GetError());
-  EXPECT_FALSE((*context)->IsRendererInitiated());
-  EXPECT_FALSE((*context)->GetResponseHeaders());
-  ASSERT_TRUE(web_state->IsLoading());
-  NavigationManager* navigation_manager = web_state->GetNavigationManager();
-  NavigationItem* item = navigation_manager->GetPendingItem();
-  EXPECT_EQ(url, item->GetURL());
-}
-
-// Verifies correctness of |NavigationContext| (|arg1|) for new page navigation
-// to native URLs passed to |DidFinishNavigation|. Asserts that
-// |NavigationContext| the same as |context|.
-ACTION_P4(VerifyNewNativePageFinishedContext, web_state, url, context, nav_id) {
-  ASSERT_EQ(*context, arg1);
-  ASSERT_TRUE(*context);
-  EXPECT_EQ(web_state, arg0);
-  EXPECT_EQ(web_state, (*context)->GetWebState());
-  EXPECT_EQ(*nav_id, (*context)->GetNavigationId());
-  EXPECT_EQ(url, (*context)->GetUrl());
-  EXPECT_TRUE((*context)->HasUserGesture());
-  EXPECT_TRUE(
-      PageTransitionCoreTypeIs(ui::PageTransition::PAGE_TRANSITION_TYPED,
-                               (*context)->GetPageTransition()));
-  EXPECT_FALSE((*context)->IsSameDocument());
-  EXPECT_TRUE((*context)->HasCommitted());
-  EXPECT_FALSE((*context)->IsDownload());
-  EXPECT_FALSE((*context)->IsPost());
-  EXPECT_FALSE((*context)->GetError());
-  EXPECT_FALSE((*context)->IsRendererInitiated());
-  EXPECT_FALSE((*context)->GetResponseHeaders());
-  NavigationManager* navigation_manager = web_state->GetNavigationManager();
-  NavigationItem* item = navigation_manager->GetLastCommittedItem();
-  EXPECT_TRUE(!item->GetTimestamp().is_null());
-  EXPECT_EQ(url, item->GetURL());
-}
-
 // Verifies correctness of |NavigationContext| (|arg1|) for reload navigation
 // passed to |DidStartNavigation|. Stores |NavigationContext| in |context|
 // pointer.
@@ -885,15 +827,6 @@ class WebStateObserverTest
     decider_ = std::make_unique<StrictMock<PolicyDeciderMock>>(web_state());
     scoped_observer_.Add(web_state());
 
-    // Stub out NativeContent objects.
-    provider_ = [[TestNativeContentProvider alloc] init];
-    content_ = [[TestNativeContent alloc] initWithURL:GURL::EmptyGURL()
-                                           virtualURL:GURL::EmptyGURL()];
-
-    WebStateImpl* web_state_impl = reinterpret_cast<WebStateImpl*>(web_state());
-    [web_state_impl->GetWebController() nativeContentHolder].nativeProvider =
-        provider_;
-
     test_server_ = std::make_unique<EmbeddedTestServer>();
     test_server_->RegisterRequestHandler(
         base::BindRepeating(&net::test_server::HandlePrefixedRequest, "/form",
@@ -913,8 +846,6 @@ class WebStateObserverTest
   }
 
  protected:
-  TestNativeContentProvider* provider_;
-  TestNativeContent* content_;
   std::unique_ptr<StrictMock<PolicyDeciderMock>> decider_;
   StrictMock<WebStateObserverMock> observer_;
   std::unique_ptr<EmbeddedTestServer> test_server_;
@@ -1727,160 +1658,6 @@ TEST_P(WebStateObserverTest, StateNavigation) {
           &nav_id, ui::PageTransition::PAGE_TRANSITION_CLIENT_REDIRECT,
           /*renderer_initiated=*/true));
   ExecuteJavaScript(@"window.history.replaceState('', 'Test', '1.html')");
-}
-
-// Tests native content navigation.
-TEST_P(WebStateObserverTest, NativeContentNavigation) {
-  // UseWKWebViewLoading should be shipped with slim-nav, and native content
-  // will be deprecated after slim-nav.
-  if (web::features::UseWKWebViewLoading()) {
-    return;
-  }
-
-  GURL url(url::SchemeHostPort(kTestNativeContentScheme, "ui", 0).Serialize());
-  NavigationContext* context = nullptr;
-  int32_t nav_id = 0;
-  EXPECT_CALL(observer_, DidStartLoading(web_state()));
-  EXPECT_CALL(observer_, DidStartNavigation(web_state(), _))
-      .WillOnce(VerifyNewNativePageStartedContext(web_state(), url, &context,
-                                                  &nav_id));
-  // No ShouldAllowRequest/ShouldAllowResponse callbacks for native content
-  // navigations.
-  EXPECT_CALL(observer_, DidFinishNavigation(web_state(), _))
-      .WillOnce(VerifyNewNativePageFinishedContext(web_state(), url, &context,
-                                                   &nav_id));
-  EXPECT_CALL(observer_, TitleWasSet(web_state()))
-      .WillOnce(VerifyTitle("Test Title"));
-  EXPECT_CALL(observer_, DidStopLoading(web_state()));
-  EXPECT_CALL(observer_,
-              PageLoaded(web_state(), PageLoadCompletionStatus::SUCCESS));
-  [provider_ setController:content_ forURL:url];
-  ASSERT_TRUE(LoadUrl(url));
-}
-
-// Tests native content reload navigation.
-TEST_P(WebStateObserverTest, NativeContentReload) {
-  // UseWKWebViewLoading should be shipped after slim-nav, and native content
-  // will be deprecated after slim-nav.
-  if (web::features::UseWKWebViewLoading()) {
-    return;
-  }
-
-  GURL url(url::SchemeHostPort(kTestNativeContentScheme, "ui", 0).Serialize());
-  EXPECT_CALL(observer_, DidStartLoading(web_state()));
-  EXPECT_CALL(observer_, DidStartNavigation(web_state(), _));
-  // No ShouldAllowRequest/ShouldAllowResponse callbacks for native content
-  // navigations.
-  EXPECT_CALL(observer_, DidFinishNavigation(web_state(), _));
-  EXPECT_CALL(observer_, TitleWasSet(web_state()))
-      .WillOnce(VerifyTitle("Test Title"));
-  EXPECT_CALL(observer_, DidStopLoading(web_state()));
-  EXPECT_CALL(observer_,
-              PageLoaded(web_state(), PageLoadCompletionStatus::SUCCESS));
-  [provider_ setController:content_ forURL:url];
-  ASSERT_TRUE(LoadUrl(url));
-
-  // Reload native content.
-  NavigationContext* context = nullptr;
-  int32_t nav_id = 0;
-  EXPECT_CALL(observer_, DidStartLoading(web_state()));
-  // No ShouldAllowRequest callbacks for native content navigations.
-  EXPECT_CALL(observer_, DidStartNavigation(web_state(), _))
-      .WillOnce(
-          VerifyReloadStartedContext(web_state(), url, &context, &nav_id));
-  // No ShouldAllowResponse callbacks for native content navigations.
-  EXPECT_CALL(observer_, DidFinishNavigation(web_state(), _))
-      .WillOnce(VerifyReloadFinishedContext(web_state(), url, &context, &nav_id,
-                                            false /* is_web_page */));
-  EXPECT_CALL(observer_, DidStopLoading(web_state()));
-  EXPECT_CALL(observer_,
-              PageLoaded(web_state(), PageLoadCompletionStatus::SUCCESS));
-  web_state()->GetNavigationManager()->Reload(ReloadType::NORMAL,
-                                              /*check_for_repost=*/false);
-}
-
-// Tests WasTitleSet callback triggered when navigating back to native content
-// from web content.
-TEST_P(WebStateObserverTest, GoBackToNativeContent) {
-  // UseWKWebViewLoading should be shipped after slim-nav, and native content
-  // will be deprecated after slim-nav.
-  if (web::features::UseWKWebViewLoading()) {
-    return;
-  }
-
-  // Load a native content URL.
-  GURL url(url::SchemeHostPort(kTestNativeContentScheme, "ui", 0).Serialize());
-  EXPECT_CALL(observer_, DidStartLoading(web_state()));
-  EXPECT_CALL(observer_, DidStartNavigation(web_state(), _));
-  // No ShouldAllowRequest/ShouldAllowResponse callbacks for native content
-  // navigations.
-  EXPECT_CALL(observer_, DidFinishNavigation(web_state(), _));
-  EXPECT_CALL(observer_, TitleWasSet(web_state()))
-      .WillOnce(VerifyTitle("Test Title"));
-  EXPECT_CALL(observer_, DidStopLoading(web_state()));
-  EXPECT_CALL(observer_,
-              PageLoaded(web_state(), PageLoadCompletionStatus::SUCCESS));
-  [provider_ setController:content_ forURL:url];
-  ASSERT_TRUE(LoadUrl(url));
-
-  // Load a web navigation.
-  const GURL web_url = test_server_->GetURL("/echoall");
-
-  // Perform new page navigation.
-  NavigationContext* context = nullptr;
-  int32_t nav_id = 0;
-  EXPECT_CALL(observer_, DidStartLoading(web_state()));
-  WebStatePolicyDecider::RequestInfo expected_request_info(
-      ui::PageTransition::PAGE_TRANSITION_TYPED,
-      /*target_main_frame=*/true, /*has_user_gesture=*/false);
-  EXPECT_CALL(*decider_,
-              ShouldAllowRequest(_, RequestInfoMatch(expected_request_info)))
-      .WillOnce(Return(true));
-  EXPECT_CALL(observer_, DidStartNavigation(web_state(), _))
-      .WillOnce(VerifyPageStartedContext(
-          web_state(), web_url, ui::PageTransition::PAGE_TRANSITION_TYPED,
-          &context, &nav_id));
-  EXPECT_CALL(*decider_, ShouldAllowResponse(_, /*for_main_frame=*/true))
-      .WillOnce(Return(true));
-  if (GetWebClient()->IsSlimNavigationManagerEnabled()) {
-    EXPECT_CALL(observer_, DidChangeBackForwardState(web_state()));
-  }
-  EXPECT_CALL(observer_, DidFinishNavigation(web_state(), _))
-      .WillOnce(VerifyNewPageFinishedContext(
-          web_state(), web_url, kExpectedMimeType, /*content_is_html=*/true,
-          &context, &nav_id));
-  EXPECT_CALL(observer_, TitleWasSet(web_state()))
-      .WillOnce(VerifyTitle(web_url.GetContent()));
-  EXPECT_CALL(observer_, TitleWasSet(web_state()))
-      .WillOnce(VerifyTitle("EmbeddedTestServer - EchoAll"));
-  EXPECT_CALL(observer_, DidStopLoading(web_state()));
-  EXPECT_CALL(observer_,
-              PageLoaded(web_state(), PageLoadCompletionStatus::SUCCESS));
-  ASSERT_TRUE(LoadUrl(web_url));
-
-  // Going back to native content should trigger TitleWasSet.
-  if (GetWebClient()->IsSlimNavigationManagerEnabled()) {
-    EXPECT_CALL(observer_, DidChangeBackForwardState(web_state())).Times(2);
-    // TODO(crbug.com/867095): fix this extra callback triggered by placeholder
-    // URL load.
-    EXPECT_CALL(observer_,
-                PageLoaded(web_state(), PageLoadCompletionStatus::SUCCESS));
-  }
-  EXPECT_CALL(observer_, DidStartLoading(web_state()));
-  EXPECT_CALL(observer_, DidStartNavigation(web_state(), _));
-  // No ShouldAllowRequest/ShouldAllowResponse callbacks for native content
-  // navigations.
-  EXPECT_CALL(observer_, DidFinishNavigation(web_state(), _));
-  // This call is required to make sure WebStateObservers update their cached
-  // version of current title.
-  EXPECT_CALL(observer_, TitleWasSet(web_state()))
-      .WillOnce(VerifyTitle("Test Title"));
-  EXPECT_CALL(observer_, DidStopLoading(web_state()));
-  EXPECT_CALL(observer_,
-              PageLoaded(web_state(), PageLoadCompletionStatus::SUCCESS));
-  ASSERT_TRUE(ExecuteBlockAndWaitForLoad(url, ^{
-    navigation_manager()->GoBack();
-  }));
 }
 
 // Tests successful navigation to a new page with post HTTP method.

@@ -27,11 +27,6 @@
 #import "ios/web/navigation/navigation_item_impl.h"
 #import "ios/web/navigation/navigation_manager_impl.h"
 #import "ios/web/navigation/wk_navigation_action_policy_util.h"
-#import "ios/web/public/deprecated/crw_native_content.h"
-#import "ios/web/public/deprecated/crw_native_content_holder.h"
-#import "ios/web/public/deprecated/crw_native_content_provider.h"
-#import "ios/web/public/deprecated/test_native_content.h"
-#import "ios/web/public/deprecated/test_native_content_provider.h"
 #include "ios/web/public/deprecated/url_verification_constants.h"
 #import "ios/web/public/download/download_controller.h"
 #import "ios/web/public/download/download_task.h"
@@ -1086,87 +1081,6 @@ TEST_P(CRWWebControllerPolicyDeciderTest, ClosedWebStateInShouldAllowRequest) {
 }
 
 INSTANTIATE_TEST_SUITES(CRWWebControllerPolicyDeciderTest);
-
-// Test fixture for testing CRWWebController presenting native content.
-class CRWWebControllerNativeContentTest
-    : public ProgrammaticWebTestWithWebController {
- protected:
-  void SetUp() override {
-    ProgrammaticWebTestWithWebController::SetUp();
-    mock_native_provider_ = [[TestNativeContentProvider alloc] init];
-    [[web_controller() nativeContentHolder]
-        setNativeProvider:mock_native_provider_];
-  }
-
-  void Load(const GURL& URL) {
-    TestWebStateObserver observer(web_state());
-    NavigationManagerImpl& navigation_manager =
-        [web_controller() webStateImpl]->GetNavigationManagerImpl();
-    navigation_manager.AddPendingItem(
-        URL, Referrer(), ui::PAGE_TRANSITION_TYPED,
-        NavigationInitiationType::BROWSER_INITIATED,
-        NavigationManager::UserAgentOverrideOption::INHERIT);
-    [web_controller() loadCurrentURLWithRendererInitiatedNavigation:NO];
-
-    // Native URL is loaded asynchronously with WKBasedNavigationManager. Wait
-    // for navigation to finish before asserting.
-    if (GetWebClient()->IsSlimNavigationManagerEnabled()) {
-      TestWebStateObserver* observer_ptr = &observer;
-      ASSERT_TRUE(WaitUntilConditionOrTimeout(kWaitForPageLoadTimeout, ^{
-        return observer_ptr->did_finish_navigation_info() != nullptr;
-      }));
-    }
-  }
-
-  TestNativeContentProvider* mock_native_provider_;
-};
-
-// Tests WebState and NavigationManager correctly return native content URL.
-TEST_P(CRWWebControllerNativeContentTest, NativeContentURL) {
-  GURL url_to_load(kTestAppSpecificURL);
-  TestNativeContent* content =
-      [[TestNativeContent alloc] initWithURL:url_to_load virtualURL:GURL()];
-  [mock_native_provider_ setController:content forURL:url_to_load];
-  Load(url_to_load);
-  URLVerificationTrustLevel trust_level = kNone;
-  GURL gurl = [web_controller() currentURLWithTrustLevel:&trust_level];
-  EXPECT_EQ(gurl, url_to_load);
-  EXPECT_EQ(kAbsolute, trust_level);
-  EXPECT_EQ([web_controller() webState]->GetVisibleURL(), url_to_load);
-  NavigationManagerImpl& navigationManager =
-      [web_controller() webStateImpl]->GetNavigationManagerImpl();
-  EXPECT_EQ(navigationManager.GetVisibleItem()->GetURL(), url_to_load);
-  EXPECT_EQ(navigationManager.GetVisibleItem()->GetVirtualURL(), url_to_load);
-  EXPECT_EQ(navigationManager.GetLastCommittedItem()->GetURL(), url_to_load);
-  EXPECT_EQ(navigationManager.GetLastCommittedItem()->GetVirtualURL(),
-            url_to_load);
-}
-
-// Tests WebState and NavigationManager correctly return native content URL and
-// VirtualURL
-TEST_P(CRWWebControllerNativeContentTest, NativeContentVirtualURL) {
-  GURL url_to_load(kTestAppSpecificURL);
-  GURL virtual_url(kTestURLString);
-  TestNativeContent* content =
-      [[TestNativeContent alloc] initWithURL:virtual_url
-                                  virtualURL:virtual_url];
-  [mock_native_provider_ setController:content forURL:url_to_load];
-  Load(url_to_load);
-  URLVerificationTrustLevel trust_level = kNone;
-  GURL gurl = [web_controller() currentURLWithTrustLevel:&trust_level];
-  EXPECT_EQ(gurl, virtual_url);
-  EXPECT_EQ(kAbsolute, trust_level);
-  EXPECT_EQ([web_controller() webState]->GetVisibleURL(), virtual_url);
-  NavigationManagerImpl& navigationManager =
-      [web_controller() webStateImpl]->GetNavigationManagerImpl();
-  EXPECT_EQ(navigationManager.GetVisibleItem()->GetURL(), url_to_load);
-  EXPECT_EQ(navigationManager.GetVisibleItem()->GetVirtualURL(), virtual_url);
-  EXPECT_EQ(navigationManager.GetLastCommittedItem()->GetURL(), url_to_load);
-  EXPECT_EQ(navigationManager.GetLastCommittedItem()->GetVirtualURL(),
-            virtual_url);
-}
-
-INSTANTIATE_TEST_SUITES(CRWWebControllerNativeContentTest);
 
 // Test fixture for window.open tests.
 class WindowOpenByDomTest : public ProgrammaticWebTestWithWebController {

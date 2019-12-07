@@ -35,7 +35,6 @@
 #import "ios/web/navigation/wk_back_forward_list_item_holder.h"
 #import "ios/web/navigation/wk_navigation_util.h"
 #import "ios/web/public/deprecated/crw_context_menu_delegate.h"
-#import "ios/web/public/deprecated/crw_native_content_provider.h"
 #include "ios/web/public/js_messaging/web_frame_util.h"
 #import "ios/web/public/ui/crw_web_view_scroll_view_proxy.h"
 #import "ios/web/public/ui/page_display_state.h"
@@ -43,8 +42,6 @@
 #import "ios/web/security/crw_cert_verification_controller.h"
 #import "ios/web/security/crw_ssl_status_updater.h"
 #import "ios/web/web_state/page_viewport_state.h"
-#import "ios/web/web_state/ui/controller/crw_legacy_native_content_controller.h"
-#import "ios/web/web_state/ui/controller/crw_legacy_native_content_controller_delegate.h"
 #import "ios/web/web_state/ui/crw_context_menu_controller.h"
 #import "ios/web/web_state/ui/crw_swipe_recognizer_provider.h"
 #import "ios/web/web_state/ui/crw_web_controller_container_view.h"
@@ -92,7 +89,6 @@ NSString* const kScriptMessageName = @"crwebinvoke";
 @interface CRWWebController () <CRWWKNavigationHandlerDelegate,
                                 CRWContextMenuDelegate,
                                 CRWJSInjectorDelegate,
-                                CRWLegacyNativeContentControllerDelegate,
                                 CRWSSLStatusUpdaterDataSource,
                                 CRWSSLStatusUpdaterDelegate,
                                 CRWWebControllerContainerViewDelegate,
@@ -168,8 +164,6 @@ NSString* const kScriptMessageName = @"crwebinvoke";
 // The current page state of the web view. Writing to this property
 // asynchronously applies the passed value to the current web view.
 @property(nonatomic, readwrite) web::PageDisplayState pageDisplayState;
-@property(nonatomic, strong)
-    CRWLegacyNativeContentController* legacyNativeController;
 
 @property(nonatomic, strong, readonly)
     CRWWebViewNavigationObserver* webViewNavigationObserver;
@@ -310,9 +304,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
     _faviconManager = std::make_unique<web::FaviconManager>(_webStateImpl);
     _jsWindowErrorManager =
         std::make_unique<web::JsWindowErrorManager>(_webStateImpl);
-    _legacyNativeController =
-        [[CRWLegacyNativeContentController alloc] initWithWebState:webState];
-    _legacyNativeController.delegate = self;
     [[NSNotificationCenter defaultCenter]
         addObserver:self
            selector:@selector(orientationDidChange)
@@ -359,8 +350,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   // Deferring WKProcessPool deallocation may lead to issues with cookie
   // clearing and and Browsing Data Partitioning implementation.
   @autoreleasepool {
-    [self.legacyNativeController
-        setNativeControllerWebUsageEnabled:_webUsageEnabled];
     if (enabled) {
       // Don't create the web view; let it be lazy created as needed.
 
@@ -466,14 +455,7 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 
 - (web::PageDisplayState)pageDisplayState {
   web::PageDisplayState displayState;
-  // If a native controller is present, record its display state instead of that
-  // of the underlying placeholder webview.
-  if ([self.legacyNativeController hasController]) {
-    displayState.scroll_state().set_content_offset(
-        [self.legacyNativeController contentOffset]);
-    displayState.scroll_state().set_content_inset(
-        [self.legacyNativeController contentInset]);
-  } else if (self.webView) {
+  if (self.webView) {
     displayState.set_scroll_state(web::PageScrollState(
         self.scrollPosition, self.webScrollView.contentInset));
     UIScrollView* scrollView = self.webScrollView;
@@ -598,7 +580,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   [self.JSNavigationHandler close];
   [self.requestController close];
   self.swipeRecognizerProvider = nil;
-  [self.legacyNativeController close];
   [self.requestController close];
   [self.webViewNavigationObserver close];
 
@@ -644,8 +625,8 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   DCHECK(trustLevel) << "Verification of the trustLevel state is mandatory";
 
   // The web view URL is the current URL only if it is neither a placeholder URL
-  // (used to hold WKBackForwardListItem for WebUI and Native Content views) nor
-  // a restore_session.html (used to replay session history in WKWebView).
+  // (used to hold WKBackForwardListItem for WebUI) nor a restore_session.html
+  // (used to replay session history in WKWebView).
   // TODO(crbug.com/738020): Investigate if this method is still needed and if
   // it can be implemented using NavigationManager API after removal of legacy
   // navigation stack.
@@ -655,9 +636,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   }
   // Any non-web URL source is trusted.
   *trustLevel = web::URLVerificationTrustLevel::kAbsolute;
-  if ([self.legacyNativeController hasController]) {
-    return [self.legacyNativeController URL];
-  }
   web::NavigationItem* item =
       self.navigationManagerImpl
           ->GetLastCommittedItemInCurrentOrRestoredSession();
@@ -704,7 +682,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 
   [self.webView stopLoading];
   [self.navigationHandler stopLoading];
-  [self.legacyNativeController stopLoading];
 }
 
 - (void)loadCurrentURLWithRendererInitiatedNavigation:(BOOL)rendererInitiated {
@@ -777,7 +754,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 
 - (void)wasShown {
   self.visible = YES;
-  [self.legacyNativeController wasShown];
 }
 
 - (void)wasHidden {
@@ -785,11 +761,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   if (_isBeingDestroyed)
     return;
   [self recordStateInHistory];
-  [self.legacyNativeController wasHidden];
-}
-
-- (id<CRWNativeContentHolder>)nativeContentHolder {
-  return self.legacyNativeController;
 }
 
 - (void)setKeepsRenderProcessAlive:(BOOL)keepsRenderProcessAlive {
@@ -1018,8 +989,8 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 
 - (void)loadCompleteWithSuccess:(BOOL)loadSuccess
                      forContext:(web::NavigationContextImpl*)context {
-  // The webView may have been torn down (or replaced by a native view). Be
-  // safe and do nothing if that's happened.
+  // The webView may have been torn down. Be safe and do nothing if that's
+  // happened.
   if (self.navigationHandler.navigationState != web::WKNavigationState::STARTED)
     return;
 
@@ -1148,89 +1119,11 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   [_jsInjector executeJavaScript:script completionHandler:nil];
 }
 
-#pragma mark - CRWLegacyNativeContentControllerDelegate
-
-- (BOOL)legacyNativeContentControllerWebUsageEnabled:
-    (CRWLegacyNativeContentController*)contentController {
-  return [self webUsageEnabled];
-}
-
-- (void)legacyNativeContentControllerRemoveWebView:
-    (CRWLegacyNativeContentController*)contentController {
-  [self removeWebView];
-}
-
-- (void)legacyNativeContentControllerDidStartLoading:
-    (CRWLegacyNativeContentController*)contentController {
-  [self didStartLoading];
-}
-
-- (web::NavigationContextImpl*)
-     legacyNativeContentController:
-         (CRWLegacyNativeContentController*)contentController
-    loadPlaceholderInWebViewForURL:(const GURL&)originalURL
-                 rendererInitiated:(BOOL)rendererInitiated
-                        forContext:(std::unique_ptr<web::NavigationContextImpl>)
-                                       originalContext {
-  return [self.navigationHandler
-      loadPlaceholderInWebViewForURL:originalURL
-                   rendererInitiated:rendererInitiated
-                          forContext:std::move(originalContext)];
-}
-
-- (std::unique_ptr<web::NavigationContextImpl>)
-    legacyNativeContentController:
-        (CRWLegacyNativeContentController*)contentController
-        registerLoadRequestForURL:(const GURL&)requestURL
-                         referrer:(const web::Referrer&)referrer
-                       transition:(ui::PageTransition)transition
-           sameDocumentNavigation:(BOOL)sameDocumentNavigation
-                   hasUserGesture:(BOOL)hasUserGesture
-                rendererInitiated:(BOOL)rendererInitiated
-            placeholderNavigation:(BOOL)placeholderNavigation {
-  return [_requestController registerLoadRequestForURL:requestURL
-                                              referrer:referrer
-                                            transition:transition
-                                sameDocumentNavigation:sameDocumentNavigation
-                                        hasUserGesture:hasUserGesture
-                                     rendererInitiated:rendererInitiated
-                                 placeholderNavigation:placeholderNavigation];
-}
-
-- (void)legacyNativeContentController:
-            (CRWLegacyNativeContentController*)contentController
-                setNativeContentTitle:(NSString*)title {
-  [self.navigationHandler setLastCommittedNavigationItemTitle:title];
-}
-
-- (void)legacyNativeContentController:
-            (CRWLegacyNativeContentController*)contentController
-               nativeContentDidChange:
-                   (id<CRWNativeContent>)previousNativeController {
-  [_containerView nativeContentDidChange:previousNativeController];
-}
-
-- (void)legacyNativeContentController:
-            (CRWLegacyNativeContentController*)contentController
-    nativeContentLoadDidFinishWithURL:(const GURL&)targetURL
-                              context:(web::NavigationContextImpl*)context {
-  self.navigationHandler.navigationState = web::WKNavigationState::FINISHED;
-  [_requestController didFinishWithURL:targetURL
-                           loadSuccess:YES
-                               context:context];
-}
-
 #pragma mark - CRWWebControllerContainerViewDelegate
 
 - (CRWWebViewProxyImpl*)contentViewProxyForContainerView:
     (CRWWebControllerContainerView*)containerView {
   return _webViewProxy;
-}
-
-- (UIEdgeInsets)nativeContentInsetsForContainerView:
-    (CRWWebControllerContainerView*)containerView {
-  return [[self nativeContentHolder].nativeProvider
-      nativeContentInsetForWebState:self.webState];
 }
 
 - (BOOL)shouldKeepRenderProcessAliveForContainerView:
@@ -1241,16 +1134,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 - (void)containerView:(CRWWebControllerContainerView*)containerView
     storeWebViewInWindow:(UIView*)viewToStash {
   [web::GetWebClient()->GetWindowedContainer() addSubview:viewToStash];
-}
-
-- (void)containerViewResetNativeController:
-    (CRWWebControllerContainerView*)containerView {
-  [self.legacyNativeController resetNativeController];
-}
-
-- (id<CRWNativeContentHolder>)containerViewNativeContentHolder:
-    (CRWWebControllerContainerView*)containerView {
-  return self.nativeContentHolder;
 }
 
 #pragma mark - JavaScript message Helpers (Private)
@@ -1579,10 +1462,9 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
     return;
 
   DCHECK(!_isBeingDestroyed);
-  // Create the top-level parent view, which will contain the content (whether
-  // native or web). Note, this needs to be created with a non-zero size
-  // to allow for (native) subviews with autosize constraints to be correctly
-  // processed.
+  // Create the top-level parent view, which will contain the content. Note,
+  // this needs to be created with a non-zero size to allow for subviews with
+  // autosize constraints to be correctly processed.
   _containerView =
       [[CRWWebControllerContainerView alloc] initWithDelegate:self];
 
@@ -1650,12 +1532,7 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   // should be loaded in this web view, display it immediately.  Otherwise, it
   // will be displayed when the pending load is committed.
   if (![_containerView webViewContentView]) {
-    web::NavigationItem* visibleItem =
-        self.navigationManagerImpl->GetVisibleItem();
-    const GURL& visibleURL =
-        visibleItem ? visibleItem->GetURL() : GURL::EmptyGURL();
-    if (![self.legacyNativeController shouldLoadURLInNativeView:visibleURL])
-      [self displayWebView];
+    [self displayWebView];
   }
 
   return self.webView;
@@ -1736,7 +1613,7 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 
 #pragma mark - WKNavigationDelegate Helpers
 
-// Called when a page (native or web) has actually started loading (i.e., for
+// Called when a page has actually started loading (i.e., for
 // a web page the document has actually changed), or after the load request has
 // been registered for a non-document-changing URL change. Updates internal
 // state not specific to web pages.
@@ -2042,12 +1919,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
   return self.jsInjector;
 }
 
-- (CRWLegacyNativeContentController*)
-    legacyNativeContentControllerForNavigationHandler:
-        (CRWWKNavigationHandler*)navigationHandler {
-  return self.legacyNativeController;
-}
-
 - (CRWCertVerificationController*)
     certVerificationControllerForNavigationHandler:
         (CRWWKNavigationHandler*)navigationHandler {
@@ -2068,11 +1939,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
            setDocumentURL:(const GURL&)newURL
                   context:(web::NavigationContextImpl*)context {
   [self setDocumentURL:newURL context:context];
-}
-
-- (BOOL)navigationHandler:(CRWWKNavigationHandler*)navigationHandler
-    shouldLoadURLInNativeView:(const GURL&)url {
-  return [self.legacyNativeController shouldLoadURLInNativeView:url];
 }
 
 - (void)navigationHandlerRequirePageReconstruction:
@@ -2181,12 +2047,6 @@ typedef void (^ViewportStateCompletion)(const web::PageViewportState*);
 - (web::UserInteractionState*)webRequestControllerUserInteractionState:
     (CRWWebRequestController*)requestController {
   return &_userInteractionState;
-}
-
-- (CRWLegacyNativeContentController*)
-    webRequestControllerLegacyNativeContentController:
-        (CRWWebRequestController*)requestController {
-  return self.legacyNativeController;
 }
 
 - (void)webRequestControllerRecordStateInHistory:

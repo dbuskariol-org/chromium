@@ -1429,17 +1429,17 @@ TEST_P(NavigationManagerTest, OverrideUserAgentWithInheritAfterDesktop) {
 }
 
 // Tests that the UserAgentType is propagated to subsequent NavigationItems if
-// a native URL exists in between navigations.
+// an app specific URL exists in between navigations.
 TEST_P(NavigationManagerTest, UserAgentTypePropagationPastNativeItems) {
   // This test manipuates the WKBackForwardListItems in mock_wk_list_ directly
   // because it relies on the associated NavigationItems.
   WKBackForwardListItem* wk_item1 =
       [CRWFakeBackForwardList itemWithURLString:@"http://www.1.com"];
 
-  // GURL::Replacements that will replace a GURL's scheme with the test native
-  // scheme.
-  GURL::Replacements native_scheme_replacement;
-  native_scheme_replacement.SetSchemeStr(kTestNativeContentScheme);
+  // GURL::Replacements that will replace a GURL's scheme with the test app
+  // specific scheme.
+  GURL::Replacements app_specific_scheme_replacement;
+  app_specific_scheme_replacement.SetSchemeStr(kTestAppSpecificScheme);
 
   // Create two non-native navigations that are separated by a native one.
   navigation_manager()->AddPendingItem(
@@ -1453,7 +1453,8 @@ TEST_P(NavigationManagerTest, UserAgentTypePropagationPastNativeItems) {
   NavigationItem* item1 = navigation_manager()->GetLastCommittedItem();
   ASSERT_EQ(web::UserAgentType::MOBILE, item1->GetUserAgentType());
 
-  GURL item2_url = item1->GetURL().ReplaceComponents(native_scheme_replacement);
+  GURL item2_url =
+      item1->GetURL().ReplaceComponents(app_specific_scheme_replacement);
   navigation_manager()->AddPendingItem(
       item2_url, Referrer(), ui::PAGE_TRANSITION_TYPED,
       web::NavigationInitiationType::BROWSER_INITIATED,
@@ -1491,7 +1492,8 @@ TEST_P(NavigationManagerTest, UserAgentTypePropagationPastNativeItems) {
                           /*update_inherited_user_agent =*/true);
   ASSERT_EQ(web::UserAgentType::DESKTOP, item2->GetUserAgentType());
 
-  GURL item3_url = item2->GetURL().ReplaceComponents(native_scheme_replacement);
+  GURL item3_url =
+      item2->GetURL().ReplaceComponents(app_specific_scheme_replacement);
   navigation_manager()->AddPendingItem(
       item3_url, Referrer(), ui::PAGE_TRANSITION_TYPED,
       web::NavigationInitiationType::BROWSER_INITIATED,

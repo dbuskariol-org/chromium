@@ -24,8 +24,6 @@
 #import "ios/web/navigation/wk_based_navigation_manager_impl.h"
 #import "ios/web/navigation/wk_navigation_util.h"
 #include "ios/web/public/browser_state.h"
-#import "ios/web/public/deprecated/crw_native_content.h"
-#import "ios/web/public/deprecated/crw_native_content_holder.h"
 #include "ios/web/public/favicon/favicon_url.h"
 #import "ios/web/public/navigation/navigation_item.h"
 #import "ios/web/public/navigation/web_state_policy_decider.h"
@@ -259,8 +257,7 @@ bool WebStateImpl::IsBeingDestroyed() const {
 
 void WebStateImpl::OnPageLoaded(const GURL& url, bool load_success) {
   // Navigation manager loads internal URLs to restore session history and
-  // create back-forward entries for Native View and WebUI. Do not trigger
-  // external callbacks.
+  // create back-forward entries for WebUI. Do not trigger external callbacks.
   if (wk_navigation_util::IsWKInternalUrl(url))
     return;
 
@@ -675,13 +672,11 @@ GURL WebStateImpl::GetCurrentURL(URLVerificationTrustLevel* trust_level) const {
       navigation_manager_->GetLastCommittedItemImpl();
   GURL lastCommittedURL;
   if (item) {
-    if ([[web_controller_ nativeContentHolder].nativeController
-            respondsToSelector:@selector(virtualURL)] ||
-        wk_navigation_util::IsPlaceholderUrl(item->GetURL()) ||
+    if (wk_navigation_util::IsPlaceholderUrl(item->GetURL()) ||
         item->error_retry_state_machine().state() ==
             ErrorRetryState::kReadyToDisplayError) {
-      // For native content, or when webView.URL is a placeholder URL,
-      // |currentURLWithTrustLevel:| returns virtual URL if one is available.
+      // When webView.URL is a placeholder URL, |currentURLWithTrustLevel:|
+      // returns virtual URL if one is available.
       lastCommittedURL = item->GetVirtualURL();
     } else {
       // Otherwise document URL is returned.
@@ -752,8 +747,7 @@ void WebStateImpl::TakeSnapshot(const gfx::RectF& rect,
 
 void WebStateImpl::OnNavigationStarted(web::NavigationContextImpl* context) {
   // Navigation manager loads internal URLs to restore session history and
-  // create back-forward entries for Native View and WebUI. Do not trigger
-  // external callbacks.
+  // create back-forward entries for WebUI. Do not trigger external callbacks.
   if (context->IsPlaceholderNavigation() ||
       wk_navigation_util::IsRestoreSessionUrl(context->GetUrl())) {
     return;
@@ -765,8 +759,7 @@ void WebStateImpl::OnNavigationStarted(web::NavigationContextImpl* context) {
 
 void WebStateImpl::OnNavigationFinished(web::NavigationContextImpl* context) {
   // Navigation manager loads internal URLs to restore session history and
-  // create back-forward entries for Native View and WebUI. Do not trigger
-  // external callbacks.
+  // create back-forward entries for WebUI. Do not trigger external callbacks.
   if (context->IsPlaceholderNavigation() ||
       wk_navigation_util::IsRestoreSessionUrl(context->GetUrl())) {
     return;
