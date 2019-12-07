@@ -482,6 +482,7 @@ crbug.com/679058 [ mac amd ] deqp/functional/gles3/texturespecification/teximage
 crbug.com/642822 [ mac amd ] conformance2/rendering/clipping-wide-points.html [ Failure ]
 
 crbug.com/1005593 [ mac amd ] deqp/functional/gles3/shaderstruct.html [ RetryOnFailure ]
+crbug.com/1026588 [ mac amd ] deqp/functional/gles3/shaderoperator/sequence.html [ RetryOnFailure ]
 
 # Mac Intel
 crbug.com/886970 [ mac intel-0xa2e ] conformance/rendering/canvas-alpha-bug.html [ Failure ]
