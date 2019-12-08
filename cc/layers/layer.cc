@@ -883,6 +883,7 @@ void Layer::SetTransform(const gfx::Transform& transform) {
 
 void Layer::SetTransformOrigin(const gfx::Point3F& transform_origin) {
   DCHECK(IsPropertyChangeAllowed());
+  DCHECK(!layer_tree_host_ || !layer_tree_host_->IsUsingLayerLists());
   if (inputs_.transform_origin == transform_origin)
     return;
   inputs_.transform_origin = transform_origin;
@@ -892,19 +893,17 @@ void Layer::SetTransformOrigin(const gfx::Point3F& transform_origin) {
 
   SetSubtreePropertyChanged();
 
-  if (!layer_tree_host_->IsUsingLayerLists()) {
-    if (has_transform_node_) {
-      TransformNode* transform_node =
-          layer_tree_host_->property_trees()->transform_tree.Node(
-              transform_tree_index_);
-      DCHECK_EQ(transform_tree_index(), transform_node->id);
-      transform_node->origin = transform_origin;
-      transform_node->needs_local_transform_update = true;
-      transform_node->transform_changed = true;
-      layer_tree_host_->property_trees()->transform_tree.set_needs_update(true);
-    } else {
-      SetPropertyTreesNeedRebuild();
-    }
+  if (has_transform_node_) {
+    TransformNode* transform_node =
+        layer_tree_host_->property_trees()->transform_tree.Node(
+            transform_tree_index_);
+    DCHECK_EQ(transform_tree_index(), transform_node->id);
+    transform_node->origin = transform_origin;
+    transform_node->needs_local_transform_update = true;
+    transform_node->transform_changed = true;
+    layer_tree_host_->property_trees()->transform_tree.set_needs_update(true);
+  } else {
+    SetPropertyTreesNeedRebuild();
   }
 
   SetNeedsCommit();

@@ -494,7 +494,6 @@ void GraphicsLayer::SetupContentsLayer(cc::Layer* contents_layer) {
   DCHECK(contents_layer);
   SetContentsLayer(contents_layer);
 
-  contents_layer_->SetTransformOrigin(FloatPoint3D());
   contents_layer_->SetUseParentBackfaceVisibility(true);
 
   // It is necessary to call SetDrawsContent() as soon as we receive the new
