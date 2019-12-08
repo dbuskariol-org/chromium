@@ -357,7 +357,7 @@ void Layer::SetBounds(const gfx::Size& size) {
   // Rounded corner clipping, bounds clipping and mask clipping can result in
   // new areas of subtrees being exposed on a bounds change. Ensure the damaged
   // areas are updated.
-  if (masks_to_bounds() || IsMaskedByChild() || HasRoundedCorner()) {
+  if (masks_to_bounds() || mask_layer() || HasRoundedCorner()) {
     SetSubtreePropertyChanged();
     SetPropertyTreesNeedRebuild();
   }
@@ -569,8 +569,7 @@ gfx::RectF Layer::EffectiveClipRect() {
 
   // Layer needs to clip to its bounds as well apply a clip rect. Intersect the
   // two to get the effective clip.
-  if (masks_to_bounds() || IsMaskedByChild() ||
-      filters().HasFilterThatMovesPixels())
+  if (masks_to_bounds() || mask_layer() || filters().HasFilterThatMovesPixels())
     return gfx::IntersectRects(layer_bounds, clip_rect_f);
 
   // Clip rect is the only clip effecting the layer.
@@ -596,6 +595,8 @@ void Layer::SetMaskLayer(scoped_refptr<PictureLayer> mask_layer) {
     mask_layer->inputs_.position = gfx::PointF();
     mask_layer->SetIsDrawable(true);
     mask_layer->SetBlendMode(SkBlendMode::kDstIn);
+    // This flag will be updated in PropertyTreeBuilder.
+    mask_layer->SetIsBackdropFilterMask(false);
     AddChild(mask_layer);
   }
   inputs_.mask_layer = mask_layer.get();
