@@ -600,15 +600,6 @@ void GraphicsLayer::SetSize(const gfx::Size& size) {
   // Note that we don't resize m_contentsLayer. It's up the caller to do that.
 }
 
-
-bool GraphicsLayer::MasksToBounds() const {
-  return CcLayer()->masks_to_bounds();
-}
-
-void GraphicsLayer::SetMasksToBounds(bool masks_to_bounds) {
-  CcLayer()->SetMasksToBounds(masks_to_bounds);
-}
-
 void GraphicsLayer::SetDrawsContent(bool draws_content) {
   // NOTE: This early-exit is only correct because we also properly call
   // cc::Layer::SetIsDrawable() whenever |contents_layer_| is set to a new

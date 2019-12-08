@@ -515,6 +515,7 @@ SkColor Layer::SafeOpaqueBackgroundColor() const {
 
 void Layer::SetMasksToBounds(bool masks_to_bounds) {
   DCHECK(IsPropertyChangeAllowed());
+  DCHECK(!layer_tree_host_ || !layer_tree_host_->IsUsingLayerLists());
   if (inputs_.masks_to_bounds == masks_to_bounds)
     return;
   inputs_.masks_to_bounds = masks_to_bounds;
