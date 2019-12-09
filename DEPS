@@ -1493,7 +1493,7 @@ deps = {
     Var('chromium_git') + '/external/khronosgroup/webgl.git' + '@' + 'dd55f3ca8f2ea716ca917a4aaf36f0729fe902b1',
 
   'src/third_party/webrtc':
-    Var('webrtc_git') + '/src.git' + '@' + 'dfbfb46062458cf4a86318e698ce1d1dab145753',
+    Var('webrtc_git') + '/src.git' + '@' + '00d0f178c2e0eb4b28b87d09716c5d6c6edb81ab',
 
   'src/third_party/libgifcodec':
      Var('skia_git') + '/libgifcodec' + '@'+  Var('libgifcodec_revision'),
