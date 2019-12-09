@@ -81,7 +81,7 @@ class SVGScriptElement final : public SVGElement,
   bool NomoduleAttributeValue() const override { return false; }
   String SourceAttributeValue() const override;
   String TypeAttributeValue() const override;
-  String TextFromChildren() override;
+  String ChildTextContent() override;
   bool HasSourceAttribute() const override;
   bool IsConnected() const override;
   bool HasChildren() const override;

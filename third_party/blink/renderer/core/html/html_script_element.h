@@ -85,7 +85,7 @@ class CORE_EXPORT HTMLScriptElement final : public HTMLElement,
   String IntegrityAttributeValue() const override;
   String ReferrerPolicyAttributeValue() const override;
   String ImportanceAttributeValue() const override;
-  String TextFromChildren() override;
+  String ChildTextContent() override;
   bool AsyncAttributeValue() const override;
   bool DeferAttributeValue() const override;
   bool HasSourceAttribute() const override;

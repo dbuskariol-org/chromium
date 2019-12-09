@@ -52,7 +52,7 @@ class CORE_EXPORT ScriptElementBase : public GarbageCollectedMixin {
   virtual String ReferrerPolicyAttributeValue() const = 0;
   virtual String ImportanceAttributeValue() const = 0;
 
-  virtual String TextFromChildren() = 0;
+  virtual String ChildTextContent() = 0;
   virtual bool HasSourceAttribute() const = 0;
   virtual bool IsConnected() const = 0;
   virtual bool HasChildren() const = 0;

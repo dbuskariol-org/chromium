@@ -201,8 +201,8 @@ String HTMLScriptElement::ImportanceAttributeValue() const {
   return FastGetAttribute(html_names::kImportanceAttr);
 }
 
-String HTMLScriptElement::TextFromChildren() {
-  return Element::TextFromChildren();
+String HTMLScriptElement::ChildTextContent() {
+  return TextFromChildren();
 }
 
 bool HTMLScriptElement::AsyncAttributeValue() const {

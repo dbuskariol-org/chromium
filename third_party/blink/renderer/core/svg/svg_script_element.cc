@@ -107,8 +107,8 @@ String SVGScriptElement::TypeAttributeValue() const {
   return getAttribute(svg_names::kTypeAttr).GetString();
 }
 
-String SVGScriptElement::TextFromChildren() {
-  return Element::TextFromChildren();
+String SVGScriptElement::ChildTextContent() {
+  return TextFromChildren();
 }
 
 bool SVGScriptElement::HasSourceAttribute() const {

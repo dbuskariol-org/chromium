@@ -289,7 +289,7 @@ bool ScriptLoader::PrepareScript(const TextPosition& script_start_position,
     non_blocking_ = true;
 
   // <spec step="4">Let source text be the element's child text content.</spec>
-  const String source_text = element_->TextFromChildren();
+  const String source_text = element_->ChildTextContent();
 
   // <spec step="5">If the element has no src attribute, and source text is the
   // empty string, then return. The script is not executed.</spec>
@@ -387,7 +387,7 @@ bool ScriptLoader::PrepareScript(const TextPosition& script_start_position,
   if (!element_->HasSourceAttribute() &&
       !element_->AllowInlineScriptForCSP(element_->GetNonceForElement(),
                                          position.line_,
-                                         element_->TextFromChildren())) {
+                                         element_->ChildTextContent())) {
     return false;
   }
 
@@ -611,7 +611,7 @@ bool ScriptLoader::PrepareScript(const TextPosition& script_start_position,
     // <spec step="24.1">Let src be the value of the element's src
     // attribute.</spec>
     //
-    // This step is done later as ScriptElementBase::TextFromChildren():
+    // This step is done later as ScriptElementBase::ChildTextContent():
     // - in ScriptLoader::PrepareScript() (Step 26, 6th Clause),
     // - in HTMLParserScriptRunner::ProcessScriptElementInternal()
     //   (Duplicated code of Step 26, 6th Clause),
@@ -634,7 +634,7 @@ bool ScriptLoader::PrepareScript(const TextPosition& script_start_position,
       // parse result, given source text, base URL and settings object. [spec
       // text]
       PendingImportMap* pending_import_map = PendingImportMap::CreateInline(
-          *element_, element_->TextFromChildren(), base_url);
+          *element_, element_->ChildTextContent(), base_url);
 
       // Because we currently support inline import maps only, the pending
       // import map is ready immediately and thus we call `register an import
@@ -662,7 +662,7 @@ bool ScriptLoader::PrepareScript(const TextPosition& script_start_position,
         }
 
         prepared_pending_script_ = ClassicPendingScript::CreateInline(
-            element_, position, base_url, element_->TextFromChildren(),
+            element_, position, base_url, element_->ChildTextContent(),
             script_location_type, options);
 
         // <spec step="25.2.A.2">Set the script's script to script.</spec>
@@ -690,7 +690,7 @@ bool ScriptLoader::PrepareScript(const TextPosition& script_start_position,
         // be the result of creating a JavaScript module script using source
         // text, settings object, base URL, and options.</spec>
         ModuleScript* module_script = JSModuleScript::Create(
-            ParkableString(element_->TextFromChildren().Impl()), nullptr,
+            ParkableString(element_->ChildTextContent().Impl()), nullptr,
             ScriptSourceLocationType::kInline, modulator, source_url, base_url,
             options, position);
 
