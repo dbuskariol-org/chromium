@@ -1115,6 +1115,13 @@ blink::UserAgentMetadata GetUserAgentMetadata() {
   metadata.architecture = content::BuildCpuInfo();
   metadata.model = content::BuildModelInfo();
 
+  // TODO(crbug.com/1031511): Integrate DevTools and "Request Desktop Site"
+  metadata.mobile = false;
+#if defined(OS_ANDROID)
+  metadata.mobile = base::CommandLine::ForCurrentProcess()->HasSwitch(
+      switches::kUseMobileUserAgent);
+#endif
+
   return metadata;
 }
 

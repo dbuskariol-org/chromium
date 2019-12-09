@@ -25672,6 +25672,7 @@ Called by update_net_error_codes.py.-->
   <int value="3113" label="NonWebbyMixedContent"/>
   <int value="3114" label="V8SharedArrayBufferConstructed"/>
   <int value="3115" label="ScrollSnapCausesScrollOnInitialLayout"/>
+  <int value="3116" label="ClientHintsUAMobile"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
@@ -25760,6 +25761,7 @@ Called by update_net_error_codes.py.-->
   <int value="66" label="WebXr"/>
   <int value="67" label="PublicKeyCredentials"/>
   <int value="68" label="Clipboard"/>
+  <int value="69" label="ClientHintUAMobile"/>
 </enum>
 
 <enum name="FeaturePolicyImageCompressionFormat">
