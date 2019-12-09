@@ -354,13 +354,6 @@ const base::Feature kBlinkHeapIncrementalMarking{
 const base::Feature kBlinkHeapIncrementalMarkingStress{
     "BlinkHeapIncrementalMarkingStress", base::FEATURE_DISABLED_BY_DEFAULT};
 
-// Enables a delay before BufferingBytesConsumer begins reading from its
-// underlying consumer when instantiated with CreateWithDelay().
-const base::Feature kBufferingBytesConsumerDelay{
-    "BufferingBytesConsumerDelay", base::FEATURE_ENABLED_BY_DEFAULT};
-const base::FeatureParam<int> kBufferingBytesConsumerDelayMilliseconds{
-    &kBufferingBytesConsumerDelay, "milliseconds", 50};
-
 // Enables removing AppCache delays when triggering requests when the HTML was
 // not fetched from AppCache.
 const base::Feature kVerifyHTMLFetchedFromAppCacheBeforeDelay{
