@@ -173,8 +173,9 @@ blink::UserAgentMetadata ContentBrowserClientImpl::GetUserAgentMetadata() {
   metadata.full_version = version_info::GetVersionNumber();
   metadata.major_version = version_info::GetMajorVersionNumber();
   metadata.platform = version_info::GetOSType();
-  metadata.architecture = content::BuildCpuInfo();
-  metadata.model = content::BuildModelInfo();
+
+  metadata.architecture = "";
+  metadata.model = "";
 
   return metadata;
 }
