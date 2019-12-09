@@ -1384,13 +1384,6 @@ inline bool IsAtShadowBoundary(const Element* element) {
 // These macros do the same as their NODE equivalents but additionally provide a
 // template specialization for isElementOfType<>() so that the Traversal<> API
 // works for these Element types.
-#define DEFINE_ELEMENT_TYPE_CASTS(thisType, predicate)            \
-  template <>                                                     \
-  inline bool IsElementOfType<const thisType>(const Node& node) { \
-    return node.predicate;                                        \
-  }                                                               \
-  DEFINE_NODE_TYPE_CASTS(thisType, predicate)
-
 #define DEFINE_ELEMENT_TYPE_CASTS_WITH_FUNCTION(thisType)         \
   template <>                                                     \
   inline bool IsElementOfType<const thisType>(const Node& node) { \
