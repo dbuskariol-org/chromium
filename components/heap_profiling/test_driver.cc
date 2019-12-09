@@ -48,15 +48,15 @@ const char kThreadName[] = "kThreadName";
 //
 // Make some specific allocations in Browser to do a deeper test of the
 // allocation tracking.
-constexpr int kMallocAllocSize = 7907;
+constexpr int kMallocAllocSize = 797;
 constexpr int kMallocAllocCount = 157;
 
 constexpr int kVariadicAllocCount = 157;
 
 // The sample rate should not affect the sampled allocations. Intentionally
 // choose an odd number.
-constexpr int kSampleRate = 7777;
-constexpr int kSamplingAllocSize = 1000;
+constexpr int kSampleRate = 777;
+constexpr int kSamplingAllocSize = 100;
 constexpr int kSamplingAllocCount = 1000;
 const char kSamplingAllocTypeName[] = "kSamplingAllocTypeName";
 
@@ -757,6 +757,16 @@ void TestDriver::MakeTestAllocations() {
 
   base::PlatformThread::SetName(kThreadName);
 
+  // Profiling is turned on by default with a sampling interval of 1MB. We reset
+  // the sampling interval, but the change isn't picked by the thread-local
+  // cache until we make a sufficient number of allocations. This is an
+  // implementation limitation, but it's easy to work around by making a couple
+  // of large allocations.
+  constexpr int kFourMegsAllocation = 1 << 22;
+  for (int i = 0; i < 10; ++i) {
+    leaks_.push_back(static_cast<char*>(malloc(kFourMegsAllocation)));
+  }
+
   // In sampling mode, only sampling allocations are relevant.
   if (!IsRecordingAllAllocations()) {
     leaks_.reserve(kSamplingAllocCount);
@@ -791,8 +801,8 @@ void TestDriver::MakeTestAllocations() {
     TRACE_EVENT0(kTestCategory, kVariadicEvent);
 
     for (int i = 0; i < kVariadicAllocCount; ++i) {
-      leaks_.push_back(new char[i + 8000]);  // Variadic allocation.
-      total_variadic_allocations_ += i + 8000;
+      leaks_.push_back(new char[i + 800]);  // Variadic allocation.
+      total_variadic_allocations_ += i + 800;
     }
   }
 
