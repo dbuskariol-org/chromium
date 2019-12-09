@@ -5094,7 +5094,6 @@ crbug.com/845610 [ Win ] http/tests/inspector-protocol/target/target-browser-con
 
 # Sheriff 2018-05-25
 crbug.com/846547 fast/webgl/webgl-composite-modes.html [ Pass Failure ]
-crbug.com/846471 http/tests/devtools/coverage/reveal-autoformat.js [ Pass Timeout ]
 crbug.com/846656 external/wpt/css/selectors/focus-visible-002-manual.html [ Pass Timeout ]
 
 # Sheriff 2018-05-28
@@ -6193,6 +6192,7 @@ crbug.com/993790 external/wpt/document-policy/required-policy/required-document-
 # Temporary suppression to allow devtools-frontend changes
 crbug.com/1029489 http/tests/devtools/elements/elements-linkify-attributes.js [ Pass Failure ]
 crbug.com/1030258 http/tests/devtools/resource-har-conversion.js [ Pass Failure ]
+crbug.com/1022013 http/tests/devtools/coverage/reveal-autoformat.js [ Pass Failure ]
 
 crbug.com/1029521 virtual/threaded/external/wpt/web-animations/timing-model/animations/updating-the-finished-state.html [ Pass Failure Timeout ]
 
