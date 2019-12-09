@@ -38,6 +38,7 @@
 #include "gpu/GLES2/gl2extchromium.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "ui/gfx/overlay_transform.h"
 
 using testing::_;
 using testing::AnyNumber;
@@ -4028,6 +4029,70 @@ TEST_F(DisplayTest, DrawOcclusionWithRoundedCornerPartialOcclude) {
     EXPECT_EQ(expected_visible_rect_3, quad_list.ElementAt(3)->visible_rect);
     EXPECT_EQ(expected_visible_rect_4, quad_list.ElementAt(4)->visible_rect);
   }
+  TearDownDisplay();
+}
+
+TEST_F(DisplayTest, DisplayTransformHint) {
+  SetUpSoftwareDisplay(RendererSettings());
+
+  StubDisplayClient client;
+  display_->Initialize(&client, manager_.surface_manager());
+
+  id_allocator_.GenerateId();
+  LocalSurfaceId local_surface_id(
+      id_allocator_.GetCurrentLocalSurfaceIdAllocation().local_surface_id());
+  display_->SetLocalSurfaceId(local_surface_id, 1.f);
+
+  constexpr gfx::Size kSize = gfx::Size(100, 80);
+  constexpr gfx::Size kTransposedSize =
+      gfx::Size(kSize.height(), kSize.width());
+
+  display_->Resize(kSize);
+
+  const struct {
+    bool support_display_transform;
+    gfx::OverlayTransform display_transform_hint;
+    gfx::Size expected_size;
+  } kTestCases[] = {
+      // Output size is always the display size when output surface does not
+      // support display transform hint.
+      {false, gfx::OVERLAY_TRANSFORM_NONE, kSize},
+      {false, gfx::OVERLAY_TRANSFORM_ROTATE_90, kSize},
+      {false, gfx::OVERLAY_TRANSFORM_ROTATE_180, kSize},
+      {false, gfx::OVERLAY_TRANSFORM_ROTATE_270, kSize},
+
+      // Output size is transposed on 90/270 degree rotation when output surface
+      // supports display transform hint.
+      {true, gfx::OVERLAY_TRANSFORM_NONE, kSize},
+      {true, gfx::OVERLAY_TRANSFORM_ROTATE_90, kTransposedSize},
+      {true, gfx::OVERLAY_TRANSFORM_ROTATE_180, kSize},
+      {true, gfx::OVERLAY_TRANSFORM_ROTATE_270, kTransposedSize},
+  };
+
+  size_t expected_frame_sent = 0u;
+  for (const auto& test : kTestCases) {
+    SCOPED_TRACE(testing::Message()
+                 << "support_display_transform="
+                 << test.support_display_transform
+                 << ", display_transform_hint=" << test.display_transform_hint);
+
+    output_surface_->set_support_display_transform_hint(
+        test.support_display_transform);
+
+    constexpr gfx::Rect kOutputRect(gfx::Point(0, 0), kSize);
+    constexpr gfx::Rect kDamageRect(10, 10, 1, 1);
+    CompositorFrame frame = CompositorFrameBuilder()
+                                .AddRenderPass(kOutputRect, kDamageRect)
+                                .Build();
+    frame.metadata.display_transform_hint = test.display_transform_hint;
+    support_->SubmitCompositorFrame(local_surface_id, std::move(frame));
+
+    display_->DrawAndSwap();
+    EXPECT_EQ(++expected_frame_sent, output_surface_->num_sent_frames());
+    EXPECT_EQ(test.expected_size,
+              software_output_device_->viewport_pixel_size());
+  }
+
   TearDownDisplay();
 }
 
