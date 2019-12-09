@@ -1434,9 +1434,6 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
                 mActivityTabProvider, mScrimView, sheetViewSupplier, panelManagerSupplier,
                 getFullscreenManager(), getWindow(), getWindowAndroid().getKeyboardDelegate());
 
-        ((BottomContainer) findViewById(R.id.bottom_container))
-                .setBottomSheetController(mBottomSheetController);
-
         ChromeFullscreenManager.FullscreenListener fullscreenListener =
                 new ChromeFullscreenManager.FullscreenListener() {
                     @Override
