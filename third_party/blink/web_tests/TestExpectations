@@ -4482,6 +4482,7 @@ crbug.com/937746 [ Mac ] virtual/web-components-v0-disabled/fast/events/menu-key
 # the virtual/web-components-v0-disabled suite here:
 ###crbug.com/937746 virtual/web-components-v0-disabled/my/test/here [ Skip ]
 
+crbug.com/937746 virtual/web-components-v0-disabled/fast/events/before-unload-return-value-from-listener.html [ Skip ]
 
 # ====== End web-components-v0-disabled virtual suite tests ======
 
