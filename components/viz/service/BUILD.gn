@@ -62,18 +62,8 @@ viz_component("service") {
     "display/overlay_candidate_list.h",
     "display/overlay_candidate_validator.cc",
     "display/overlay_candidate_validator.h",
-    "display/overlay_candidate_validator_strategy.cc",
-    "display/overlay_candidate_validator_strategy.h",
     "display/overlay_processor.cc",
     "display/overlay_processor.h",
-    "display/overlay_strategy_fullscreen.cc",
-    "display/overlay_strategy_fullscreen.h",
-    "display/overlay_strategy_single_on_top.cc",
-    "display/overlay_strategy_single_on_top.h",
-    "display/overlay_strategy_underlay.cc",
-    "display/overlay_strategy_underlay.h",
-    "display/overlay_strategy_underlay_cast.cc",
-    "display/overlay_strategy_underlay_cast.h",
     "display/program_binding.cc",
     "display/program_binding.h",
     "display/renderer_utils.cc",
@@ -259,6 +249,28 @@ viz_component("service") {
 
     deps += [ "//ui/accelerated_widget_mac" ]
     libs = [ "IOSurface.framework" ]
+  }
+
+  if (is_linux || is_android || use_ozone) {
+    sources += [
+      "display/overlay_candidate_validator_strategy.cc",
+      "display/overlay_candidate_validator_strategy.h",
+      "display/overlay_processor_using_strategy.cc",
+      "display/overlay_processor_using_strategy.h",
+    ]
+  }
+
+  if (is_android || use_ozone) {
+    sources += [
+      "display/overlay_strategy_fullscreen.cc",
+      "display/overlay_strategy_fullscreen.h",
+      "display/overlay_strategy_single_on_top.cc",
+      "display/overlay_strategy_single_on_top.h",
+      "display/overlay_strategy_underlay.cc",
+      "display/overlay_strategy_underlay.h",
+      "display/overlay_strategy_underlay_cast.cc",
+      "display/overlay_strategy_underlay_cast.h",
+    ]
   }
 
   if (is_android) {
