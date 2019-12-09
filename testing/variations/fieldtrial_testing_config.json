@@ -4112,8 +4112,10 @@
                     "enable_features": [
                         "OmniboxDisplayTitleForCurrentUrl",
                         "OmniboxDocumentProvider",
+                        "OmniboxEnableClipboardProviderTextSuggestions",
                         "OmniboxLocalEntitySuggestions",
                         "OmniboxMaxURLMatches",
+                        "OmniboxRemoveSuggestionsFromClipboard",
                         "OmniboxRichEntitySuggestions",
                         "OmniboxUIExperimentMaxAutocompleteMatches",
                         "QueryInOmnibox"
