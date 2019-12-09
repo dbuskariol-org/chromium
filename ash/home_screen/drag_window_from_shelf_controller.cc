@@ -61,9 +61,6 @@ constexpr float kReturnToMaximizedStandardThreshold = 164.f;
 // The scroll update threshold to restart the show overview timer.
 constexpr float kScrollUpdateOverviewThreshold = 2.f;
 
-// The scroll update threshold to update the dragged window's transform.
-constexpr float kScrollUpdateWindowThreshold = 0.6f;
-
 }  // namespace
 
 // Hide all visible windows expect the dragged windows or the window showing in
@@ -155,14 +152,7 @@ void DragWindowFromShelfController::Drag(const gfx::PointF& location_in_screen,
   if (!drag_started_)
     return;
 
-  // We can still get scroll update event with very small |scroll_x| and
-  // |scroll_y| even if the finger is still. To avoid the jittering effort,
-  // only update the window's transform when scroll update distance is larger
-  // than kScrollUpdateWindowThreshold.
-  if (std::abs(scroll_x) > kScrollUpdateWindowThreshold ||
-      std::abs(scroll_y) > kScrollUpdateWindowThreshold) {
-    UpdateDraggedWindow(location_in_screen);
-  }
+  UpdateDraggedWindow(location_in_screen);
 
   // Open overview if the window has been dragged far enough and the scroll
   // delta has decreased to kOpenOverviewThreshold or less.
