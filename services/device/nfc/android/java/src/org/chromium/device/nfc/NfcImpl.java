@@ -130,7 +130,7 @@ public class NfcImpl implements Nfc {
 
         mDelegate.trackActivityForHost(mHostId, onActivityUpdatedCallback);
 
-        if (!mHasPermission || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (!mHasPermission) {
             Log.w(TAG, "NFC operations are not permitted.");
             mNfcAdapter = null;
             mNfcManager = null;
@@ -422,8 +422,6 @@ public class NfcImpl implements Nfc {
      * @see android.nfc.NfcAdapter#enableReaderMode
      */
     private void enableReaderModeIfNeeded() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
-
         if (mReaderCallbackHandler != null || mActivity == null || mNfcAdapter == null) return;
 
         // Do not enable reader mode, if there are no active push / watch operations.
@@ -443,8 +441,6 @@ public class NfcImpl implements Nfc {
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void disableReaderMode() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
-
         // There is no API that could query whether reader mode is enabled for adapter.
         // If mReaderCallbackHandler is null, reader mode is not enabled.
         if (mReaderCallbackHandler == null) return;
