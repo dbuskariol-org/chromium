@@ -3451,28 +3451,6 @@
             ]
         }
     ],
-    "LookalikeUrlNavigationSuggestionsUIV2": [
-        {
-            "platforms": [
-                "linux",
-                "mac",
-                "windows",
-                "android",
-                "chromeos"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "params": {
-                        "topsites": "true"
-                    },
-                    "enable_features": [
-                        "LookalikeUrlNavigationSuggestionsUI"
-                    ]
-                }
-            ]
-        }
-    ],
     "LowPriorityIframes2": [
         {
             "platforms": [
