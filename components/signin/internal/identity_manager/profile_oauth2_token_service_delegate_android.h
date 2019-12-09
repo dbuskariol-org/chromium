@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SIGNIN_INTERNAL_IDENTITY_MANAGER_OAUTH2_TOKEN_SERVICE_DELEGATE_ANDROID_H_
-#define COMPONENTS_SIGNIN_INTERNAL_IDENTITY_MANAGER_OAUTH2_TOKEN_SERVICE_DELEGATE_ANDROID_H_
+#ifndef COMPONENTS_SIGNIN_INTERNAL_IDENTITY_MANAGER_PROFILE_OAUTH2_TOKEN_SERVICE_DELEGATE_ANDROID_H_
+#define COMPONENTS_SIGNIN_INTERNAL_IDENTITY_MANAGER_PROFILE_OAUTH2_TOKEN_SERVICE_DELEGATE_ANDROID_H_
 
 #include <map>
 #include <memory>
@@ -27,16 +27,16 @@
 // See |ProfileOAuth2TokenServiceDelegate| for usage details.
 //
 // Note: requests should be started from the UI thread.
-class OAuth2TokenServiceDelegateAndroid
+class ProfileOAuth2TokenServiceDelegateAndroid
     : public ProfileOAuth2TokenServiceDelegate {
  public:
-  OAuth2TokenServiceDelegateAndroid(
+  ProfileOAuth2TokenServiceDelegateAndroid(
       AccountTrackerService* account_tracker_service,
       const base::android::JavaRef<jobject>& account_manager_facade);
-  ~OAuth2TokenServiceDelegateAndroid() override;
+  ~ProfileOAuth2TokenServiceDelegateAndroid() override;
 
-  // Creates a new instance of the OAuth2TokenServiceDelegateAndroid.
-  static OAuth2TokenServiceDelegateAndroid* Create();
+  // Creates a new instance of the ProfileOAuth2TokenServiceDelegateAndroid.
+  static ProfileOAuth2TokenServiceDelegateAndroid* Create();
 
   // Returns a reference to the corresponding Java OAuth2TokenService object.
   base::android::ScopedJavaLocalRef<jobject> GetJavaObject() override;
@@ -45,7 +45,7 @@ class OAuth2TokenServiceDelegateAndroid
   // tests.  This prevents the token service from building the java objects
   // which require prior initialization (AccountManagerFacade)
   // TODO(crbug.com/1009957) Remove disable_interation_with_system_accounts_
-  // from OAuth2TokenServiceDelegateAndroid
+  // from ProfileOAuth2TokenServiceDelegateAndroid
   static void set_disable_interaction_with_system_accounts() {
     disable_interaction_with_system_accounts_ = true;
   }
@@ -145,10 +145,10 @@ class OAuth2TokenServiceDelegateAndroid
   // For testing, disables the creation of the java counterpart, see
   // set_disable_interaction_with_system_accounts().
   // TODO(crbug.com/1009957) Remove disable_interation_with_system_accounts_
-  // from OAuth2TokenServiceDelegateAndroid
+  // from ProfileOAuth2TokenServiceDelegateAndroid
   static bool disable_interaction_with_system_accounts_;
 
-  DISALLOW_COPY_AND_ASSIGN(OAuth2TokenServiceDelegateAndroid);
+  DISALLOW_COPY_AND_ASSIGN(ProfileOAuth2TokenServiceDelegateAndroid);
 };
 
-#endif  // COMPONENTS_SIGNIN_INTERNAL_IDENTITY_MANAGER_OAUTH2_TOKEN_SERVICE_DELEGATE_ANDROID_H_
+#endif  // COMPONENTS_SIGNIN_INTERNAL_IDENTITY_MANAGER_PROFILE_OAUTH2_TOKEN_SERVICE_DELEGATE_ANDROID_H_

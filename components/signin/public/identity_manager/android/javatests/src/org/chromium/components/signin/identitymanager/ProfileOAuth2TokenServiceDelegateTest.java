@@ -26,20 +26,21 @@ import org.chromium.components.signin.test.util.AccountManagerTestRule;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
-/** Tests for OAuth2TokenService. */
+/** Tests for ProfileOAuth2TokenServiceDelegate. */
 @RunWith(BaseJUnit4ClassRunner.class)
-public class OAuth2TokenServiceTest {
+public class ProfileOAuth2TokenServiceDelegateTest {
     private AdvancedMockContext mContext;
 
     @Rule
     public AccountManagerTestRule mAccountManagerTestRule = new AccountManagerTestRule();
-    private OAuth2TokenService mOAuth2TokenService;
+    private ProfileOAuth2TokenServiceDelegate mProfileOAuth2TokenServiceDelegate;
 
     /**
      * Class handling GetAccessToken callbacks and providing a blocking {@link
      * #getToken()}.
      */
-    class GetAccessTokenCallbackForTest implements OAuth2TokenService.GetAccessTokenCallback {
+    class GetAccessTokenCallbackForTest
+            implements ProfileOAuth2TokenServiceDelegate.GetAccessTokenCallback {
         private String mToken;
         final CountDownLatch mTokenRetrievedCountDown = new CountDownLatch(1);
 
@@ -72,7 +73,8 @@ public class OAuth2TokenServiceTest {
     @Before
     public void setUp() {
         mContext = new AdvancedMockContext(InstrumentationRegistry.getTargetContext());
-        mOAuth2TokenService = new OAuth2TokenService(0 /*nativeOAuth2TokenServiceDelegate*/,
+        mProfileOAuth2TokenServiceDelegate = new ProfileOAuth2TokenServiceDelegate(
+                0 /*nativeProfileOAuth2TokenServiceDelegateDelegate*/,
                 null /* AccountTrackerService */, AccountManagerFacade.get());
     }
 
@@ -85,7 +87,7 @@ public class OAuth2TokenServiceTest {
     @SmallTest
     @Feature({"Sync"})
     public void testGetAccountsNoAccountsRegistered() {
-        String[] accounts = OAuth2TokenService.getAccounts();
+        String[] accounts = ProfileOAuth2TokenServiceDelegate.getAccounts();
         Assert.assertEquals("There should be no accounts registered", 0, accounts.length);
     }
 
@@ -97,11 +99,11 @@ public class OAuth2TokenServiceTest {
         AccountHolder accountHolder1 = AccountHolder.builder(account1).build();
         mAccountManagerTestRule.addAccount(accountHolder1);
 
-        String[] sysAccounts = mOAuth2TokenService.getSystemAccountNames();
+        String[] sysAccounts = mProfileOAuth2TokenServiceDelegate.getSystemAccountNames();
         Assert.assertEquals("There should be one registered account", 1, sysAccounts.length);
         Assert.assertEquals("The account should be " + account1, account1.name, sysAccounts[0]);
 
-        String[] accounts = OAuth2TokenService.getAccounts();
+        String[] accounts = ProfileOAuth2TokenServiceDelegate.getAccounts();
         Assert.assertEquals("There should be zero registered account", 0, accounts.length);
     }
 
@@ -116,14 +118,14 @@ public class OAuth2TokenServiceTest {
         AccountHolder accountHolder2 = AccountHolder.builder(account2).build();
         mAccountManagerTestRule.addAccount(accountHolder2);
 
-        String[] sysAccounts = mOAuth2TokenService.getSystemAccountNames();
+        String[] sysAccounts = mProfileOAuth2TokenServiceDelegate.getSystemAccountNames();
         Assert.assertEquals("There should be one registered account", 2, sysAccounts.length);
         Assert.assertTrue("The list should contain " + account1,
                 Arrays.asList(sysAccounts).contains(account1.name));
         Assert.assertTrue("The list should contain " + account2,
                 Arrays.asList(sysAccounts).contains(account2.name));
 
-        String[] accounts = OAuth2TokenService.getAccounts();
+        String[] accounts = ProfileOAuth2TokenServiceDelegate.getAccounts();
         Assert.assertEquals("There should be zero registered account", 0, accounts.length);
     }
 
@@ -157,8 +159,9 @@ public class OAuth2TokenServiceTest {
         mAccountManagerTestRule.addAccount(accountHolder);
         GetAccessTokenCallbackForTest callback = new GetAccessTokenCallbackForTest();
 
-        ThreadUtils.runOnUiThreadBlocking(
-                () -> { mOAuth2TokenService.getAccessToken(account, scope, callback); });
+        ThreadUtils.runOnUiThreadBlocking(() -> {
+            mProfileOAuth2TokenServiceDelegate.getAccessToken(account, scope, callback);
+        });
 
         Assert.assertEquals(expectedToken, callback.getToken());
     }

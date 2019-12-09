@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/signin/internal/identity_manager/oauth2_token_service_delegate_android.h"
+#include "components/signin/internal/identity_manager/profile_oauth2_token_service_delegate_android.h"
 
 #include "components/sync_preferences/testing_pref_service_syncable.h"
 #include "testing/gmock/include/gmock/gmock.h"
@@ -19,11 +19,12 @@ namespace signin {
 namespace {
 const std::vector<CoreAccountId> kEmptyVector;
 class OAuth2TokenServiceDelegateAndroidForTest
-    : public OAuth2TokenServiceDelegateAndroid {
+    : public ProfileOAuth2TokenServiceDelegateAndroid {
  public:
   OAuth2TokenServiceDelegateAndroidForTest(
       AccountTrackerService* account_tracker_service)
-      : OAuth2TokenServiceDelegateAndroid(account_tracker_service, nullptr) {}
+      : ProfileOAuth2TokenServiceDelegateAndroid(account_tracker_service,
+                                                 nullptr) {}
   MOCK_METHOD1(SetAccounts, void(const std::vector<CoreAccountId>&));
 };
 

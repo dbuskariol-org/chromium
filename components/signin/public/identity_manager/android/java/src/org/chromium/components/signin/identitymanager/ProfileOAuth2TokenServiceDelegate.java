@@ -31,14 +31,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Java instance for the native OAuth2TokenService.
+ * Java instance for the native ProfileOAuth2TokenServiceDelegate.
  * <p/>
  * This class forwards calls to request or invalidate access tokens made by native code to
  * AccountManagerFacade and forwards callbacks to native code.
  * <p/>
  */
 @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
-public final class OAuth2TokenService
+public final class ProfileOAuth2TokenServiceDelegate
         implements AccountTrackerService.OnSystemAccountsSeededListener {
     private static final String TAG = "OAuth2TokenService";
 
@@ -66,7 +66,7 @@ public final class OAuth2TokenService
 
     private static final String OAUTH2_SCOPE_PREFIX = "oauth2:";
 
-    private final long mNativeOAuth2TokenServiceDelegate;
+    private final long mNativeProfileOAuth2TokenServiceDelegate;
     private final AccountTrackerService mAccountTrackerService;
     private final AccountManagerFacade mAccountManagerFacade;
 
@@ -76,10 +76,10 @@ public final class OAuth2TokenService
     private String mPendingUpdateAccountId;
 
     @VisibleForTesting
-    public OAuth2TokenService(long nativeOAuth2TokenServiceDelegate,
+    ProfileOAuth2TokenServiceDelegate(long nativeProfileOAuth2TokenServiceDelegateDelegate,
             AccountTrackerService accountTrackerService,
             AccountManagerFacade accountManagerFacade) {
-        mNativeOAuth2TokenServiceDelegate = nativeOAuth2TokenServiceDelegate;
+        mNativeProfileOAuth2TokenServiceDelegate = nativeProfileOAuth2TokenServiceDelegateDelegate;
         mAccountTrackerService = accountTrackerService;
         mAccountManagerFacade = accountManagerFacade;
 
@@ -90,12 +90,14 @@ public final class OAuth2TokenService
     }
 
     @CalledByNative
-    private static OAuth2TokenService create(long nativeOAuth2TokenServiceDelegate,
+    private static ProfileOAuth2TokenServiceDelegate create(
+            long nativeProfileOAuth2TokenServiceDelegateDelegate,
             AccountTrackerService accountTrackerService,
             AccountManagerFacade accountManagerFacade) {
-        assert nativeOAuth2TokenServiceDelegate != 0;
-        return new OAuth2TokenService(
-                nativeOAuth2TokenServiceDelegate, accountTrackerService, accountManagerFacade);
+        assert nativeProfileOAuth2TokenServiceDelegateDelegate != 0;
+        return new ProfileOAuth2TokenServiceDelegate(
+                nativeProfileOAuth2TokenServiceDelegateDelegate, accountTrackerService,
+                accountManagerFacade);
     }
 
     private Account getAccountOrNullFromUsername(String username) {
@@ -118,8 +120,8 @@ public final class OAuth2TokenService
     @CalledByNative
     @VisibleForTesting
     String[] getSystemAccountNames() {
-        // TODO(https://crbug.com/768366): Remove this after adding cache to account manager facade.
-        // This function is called by native code on UI thread.
+        // TODO(https://crbug.com/768366): Remove this after adding cache to account manager
+        // facade. This function is called by native code on UI thread.
         try (StrictModeContext ignored = StrictModeContext.allowDiskReads()) {
             List<String> accountNames = mAccountManagerFacade.tryGetGoogleAccountNames();
             return accountNames.toArray(new String[accountNames.size()]);
@@ -142,7 +144,8 @@ public final class OAuth2TokenService
      * Called by native to retrieve OAuth2 tokens.
      * @param username The native username (email address).
      * @param scope The scope to get an auth token for (without Android-style 'oauth2:' prefix).
-     * @param nativeCallback The pointer to the native callback that should be run upon completion.
+     * @param nativeCallback The pointer to the native callback that should be run upon
+     *         completion.
      */
     @MainThread
     @CalledByNative
@@ -151,7 +154,8 @@ public final class OAuth2TokenService
         Account account = getAccountOrNullFromUsername(username);
         if (account == null) {
             ThreadUtils.postOnUiThread(() -> {
-                OAuth2TokenServiceJni.get().onOAuth2TokenFetched(null, false, nativeCallback);
+                ProfileOAuth2TokenServiceDelegateJni.get().onOAuth2TokenFetched(
+                        null, false, nativeCallback);
             });
             return;
         }
@@ -159,20 +163,21 @@ public final class OAuth2TokenService
         getAccessToken(account, oauth2Scope, new GetAccessTokenCallback() {
             @Override
             public void onGetTokenSuccess(String token) {
-                OAuth2TokenServiceJni.get().onOAuth2TokenFetched(token, false, nativeCallback);
+                ProfileOAuth2TokenServiceDelegateJni.get().onOAuth2TokenFetched(
+                        token, false, nativeCallback);
             }
 
             @Override
             public void onGetTokenFailure(boolean isTransientError) {
-                OAuth2TokenServiceJni.get().onOAuth2TokenFetched(
+                ProfileOAuth2TokenServiceDelegateJni.get().onOAuth2TokenFetched(
                         null, isTransientError, nativeCallback);
             }
         });
     }
 
     /**
-     * Call this method to retrieve an OAuth2 access token for the given account and scope. Please
-     * note that this method expects a scope with 'oauth2:' prefix.
+     * Call this method to retrieve an OAuth2 access token for the given account and scope.
+     * Please note that this method expects a scope with 'oauth2:' prefix.
      * @param account the account to get the access token for.
      * @param scope The scope to get an auth token for (with Android-style 'oauth2:' prefix).
      * @param callback called on successful and unsuccessful fetching of auth token.
@@ -283,8 +288,9 @@ public final class OAuth2TokenService
         }
 
         // Temporarily allowing disk read while fixing. TODO: http://crbug.com/618096.
-        // This function is called in RefreshTokenIsAvailable of OAuth2TokenService which is
-        // expected to be called in the UI thread synchronously.
+        // This function is called in RefreshTokenIsAvailable of
+        // ProfileOAuth2TokenServiceDelegate which is expected to be called in the UI thread
+        // synchronously.
         try (StrictModeContext ignored = StrictModeContext.allowDiskReads()) {
             return AccountManagerFacade.get().hasAccountForName(accountName);
         }
@@ -317,8 +323,8 @@ public final class OAuth2TokenService
     }
 
     private void reloadAllAccountsWithPrimaryAccountAfterSeeding(@Nullable String accountId) {
-        OAuth2TokenServiceJni.get().reloadAllAccountsWithPrimaryAccountAfterSeeding(
-                mNativeOAuth2TokenServiceDelegate, accountId);
+        ProfileOAuth2TokenServiceDelegateJni.get().reloadAllAccountsWithPrimaryAccountAfterSeeding(
+                mNativeProfileOAuth2TokenServiceDelegate, accountId);
     }
 
     private static String[] getStoredAccounts() {
@@ -350,8 +356,8 @@ public final class OAuth2TokenService
     /**
      * A helper class to encapsulate network connection retry logic for AuthTasks.
      *
-     * The task will be run on the background thread. If it encounters a transient error, it will
-     * wait for a network change and retry up to MAX_TRIES times.
+     * The task will be run on the background thread. If it encounters a transient error, it
+     * will wait for a network change and retry up to MAX_TRIES times.
      */
     private static class ConnectionRetry<T>
             implements NetworkChangeNotifier.ConnectionTypeObserver {
@@ -423,6 +429,6 @@ public final class OAuth2TokenService
     interface Natives {
         void onOAuth2TokenFetched(String authToken, boolean isTransientError, long nativeCallback);
         void reloadAllAccountsWithPrimaryAccountAfterSeeding(
-                long nativeOAuth2TokenServiceDelegateAndroid, @Nullable String accountId);
+                long nativeProfileOAuth2TokenServiceDelegateAndroid, @Nullable String accountId);
     }
 }
