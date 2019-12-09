@@ -2,9 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/modules/screen_enumeration/screen_manager.h"
+#include "third_party/blink/renderer/modules/screen_enumeration/global_screen_enumeration.h"
 
+#include "mojo/public/cpp/bindings/remote.h"
+#include "third_party/blink/public/common/browser_interface_broker_proxy.h"
+#include "third_party/blink/public/mojom/screen_enumeration/screen_enumeration.mojom-blink.h"
+#include "third_party/blink/renderer/bindings/core/v8/script_promise.h"
 #include "third_party/blink/renderer/bindings/core/v8/script_promise_resolver.h"
+#include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/core/frame/screen.h"
 #include "third_party/blink/renderer/platform/bindings/exception_state.h"
 #include "third_party/blink/renderer/platform/bindings/script_state.h"
@@ -19,6 +24,7 @@ namespace {
 
 void DidGetDisplays(
     ScriptPromiseResolver* resolver,
+    mojo::Remote<mojom::blink::ScreenEnumeration>,
     WTF::Vector<display::mojom::blink::DisplayPtr> backend_displays,
     int64_t primary_id,
     bool success) {
@@ -38,29 +44,28 @@ void DidGetDisplays(
 
 }  // namespace
 
-ScreenManager::ScreenManager(
-    mojo::Remote<mojom::blink::ScreenEnumeration> backend)
-    : backend_(std::move(backend)) {
-  backend_.set_disconnect_handler(WTF::Bind(
-      &ScreenManager::OnBackendDisconnected, WrapWeakPersistent(this)));
-}
+// static
+ScriptPromise GlobalScreenEnumeration::getScreens(
+    ScriptState* script_state,
+    LocalDOMWindow&,
+    ExceptionState& exception_state) {
+  // TODO(msw): Cache the backend connection.
+  mojo::Remote<mojom::blink::ScreenEnumeration> backend;
+  ExecutionContext::From(script_state)
+      ->GetBrowserInterfaceBroker()
+      .GetInterface(backend.BindNewPipeAndPassReceiver());
 
-ScriptPromise ScreenManager::getScreens(ScriptState* script_state,
-                                        ExceptionState& exception_state) {
-  if (!backend_) {
+  if (!backend) {
     exception_state.ThrowDOMException(DOMExceptionCode::kInvalidStateError,
-                                      "ScreenManager backend went away");
+                                      "ScreenEnumeration backend unavailable");
     return ScriptPromise();
   }
 
   auto* resolver = MakeGarbageCollected<ScriptPromiseResolver>(script_state);
-  backend_->GetDisplays(WTF::Bind(&DidGetDisplays, WrapPersistent(resolver)));
-
+  auto* raw_backend = backend.get();
+  raw_backend->GetDisplays(
+      WTF::Bind(&DidGetDisplays, WrapPersistent(resolver), std::move(backend)));
   return resolver->Promise();
-}
-
-void ScreenManager::OnBackendDisconnected() {
-  backend_.reset();
 }
 
 }  // namespace blink
