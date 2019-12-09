@@ -1344,6 +1344,7 @@ Element* Node::FlatTreeParentForChildDirty() const {
               const_cast<V0InsertionPoint*>(ResolveReprojection(this))) {
         return insertion_point;
       }
+      return nullptr;
     }
   }
   return ParentOrShadowHostElement();
