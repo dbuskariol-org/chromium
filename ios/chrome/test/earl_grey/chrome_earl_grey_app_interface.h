@@ -47,6 +47,9 @@
 // or one of |view|'s ancestors.  If no guide is found, returns nil.
 + (NamedGuide*)guideWithName:(NSString*)name view:(UIView*)view;
 
+// Loads |URL| as if it was opened from an external application.
++ (void)openURLFromExternalApp:(NSString*)URL;
+
 #pragma mark - Tab Utilities (EG2)
 
 // Selects tab with given index in current mode (incognito or main
@@ -134,6 +137,9 @@
 
 // Returns a unique identifier for the next Tab.
 + (NSString*)nextTabID;
+
+// Returns the index of active tab in normal mode.
++ (NSUInteger)indexOfActiveNormalTab;
 
 #pragma mark - WebState Utilities (EG2)
 
