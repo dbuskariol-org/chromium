@@ -2610,7 +2610,7 @@ TEST_P(OverviewSessionTest, ShadowBounds) {
   // Add three windows which in overview mode will be considered wide, tall and
   // normal. Set top view insets to 0 so it is easy to check the ratios of the
   // shadows match the ratios of the untransformed windows.
-  UpdateDisplay("400x400");
+  UpdateDisplay("800x800");
   std::unique_ptr<aura::Window> wide(
       CreateTestWindowInShellWithDelegate(nullptr, -1, gfx::Rect(400, 100)));
   std::unique_ptr<aura::Window> tall(
@@ -2635,7 +2635,7 @@ TEST_P(OverviewSessionTest, ShadowBounds) {
 
   // Verify all the shadows are within the bounds of their respective item
   // widgets when the overview windows are positioned without animations.
-  SetGridBounds(grid, gfx::Rect(200, 400));
+  SetGridBounds(grid, gfx::Rect(400, 800));
   grid->PositionWindows(false);
   EXPECT_TRUE(contains(wide_widget, wide_item));
   EXPECT_TRUE(contains(tall_widget, tall_item));
@@ -2648,7 +2648,7 @@ TEST_P(OverviewSessionTest, ShadowBounds) {
 
   // Verify all the shadows are within the bounds of their respective item
   // widgets when the overview windows are positioned with animations.
-  SetGridBounds(grid, gfx::Rect(200, 400));
+  SetGridBounds(grid, gfx::Rect(400, 800));
   grid->PositionWindows(true);
   base::RunLoop().RunUntilIdle();
   EXPECT_TRUE(contains(wide_widget, wide_item));

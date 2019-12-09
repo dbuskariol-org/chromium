@@ -48,6 +48,7 @@
 #include "ui/compositor/scoped_layer_animation_settings.h"
 #include "ui/compositor_extra/shadow.h"
 #include "ui/gfx/geometry/safe_integer_conversions.h"
+#include "ui/gfx/geometry/size_conversions.h"
 #include "ui/gfx/transform_util.h"
 #include "ui/views/controls/button/image_button.h"
 #include "ui/views/layout/layout_provider.h"
@@ -727,7 +728,8 @@ void OverviewItem::DestroyPhantomsForDragging() {
   phantoms_for_dragging_.reset();
 }
 
-void OverviewItem::SetShadowBounds(base::Optional<gfx::Rect> bounds_in_screen) {
+void OverviewItem::SetShadowBounds(
+    base::Optional<gfx::RectF> bounds_in_screen) {
   // Shadow is normally turned off during animations and reapplied when they
   // are finished. On destruction, |shadow_| is cleaned up before
   // |transform_window_|, which may call this function, so early exit if
@@ -745,7 +747,8 @@ void OverviewItem::SetShadowBounds(base::Optional<gfx::Rect> bounds_in_screen) {
       gfx::Rect(item_widget_->GetNativeWindow()->GetTargetBounds().size());
   bounds_in_item.Inset(kOverviewMargin, kOverviewMargin);
   bounds_in_item.Inset(0, kHeaderHeightDp, 0, 0);
-  bounds_in_item.ClampToCenteredSize(bounds_in_screen.value().size());
+  bounds_in_item.ClampToCenteredSize(
+      gfx::ToRoundedSize(bounds_in_screen->size()));
 
   shadow_->SetContentBounds(bounds_in_item);
 }
@@ -776,10 +779,10 @@ void OverviewItem::UpdateRoundedCornersAndShadow() {
            ->GetAnimator()
            ->is_animating();
 
-  SetShadowBounds(should_show_shadow
-                      ? base::make_optional(gfx::ToEnclosedRect(
-                            transform_window_.GetTransformedBounds()))
-                      : base::nullopt);
+  SetShadowBounds(
+      should_show_shadow
+          ? base::make_optional(transform_window_.GetTransformedBounds())
+          : base::nullopt);
   if (transform_window_.IsMinimized()) {
     overview_item_view_->UpdatePreviewRoundedCorners(
         should_show_rounded_corners,
