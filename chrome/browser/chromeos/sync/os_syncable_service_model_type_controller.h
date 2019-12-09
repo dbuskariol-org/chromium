@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_SYNC_OS_PREFERENCES_MODEL_TYPE_CONTROLLER_H_
-#define CHROME_BROWSER_CHROMEOS_SYNC_OS_PREFERENCES_MODEL_TYPE_CONTROLLER_H_
+#ifndef CHROME_BROWSER_CHROMEOS_SYNC_OS_SYNCABLE_SERVICE_MODEL_TYPE_CONTROLLER_H_
+#define CHROME_BROWSER_CHROMEOS_SYNC_OS_SYNCABLE_SERVICE_MODEL_TYPE_CONTROLLER_H_
 
 #include <memory>
 
@@ -19,15 +19,17 @@ namespace syncer {
 class ModelTypeSyncBridge;
 class SyncableService;
 class SyncService;
-}
+}  // namespace syncer
 
-// Controls syncing of ModelTypes OS_PREFERENCES and OS_PRIORITY_PREFERENCES.
-// Runs in sync transport-mode and is tied to the OS sync feature.
+// Controls syncing of Chrome OS ModelTypes that run in sync transport-only
+// mode and are tied to the OS sync feature consent (APP_LIST, OS_PREFERENCES,
+// and OS_PRIORITY_PREFERENCES).
 // TODO(http://crbug.com/1031549): This should derive from
 // SyncableServiceBasedModelTypeController when it supports transport-mode.
-class OsPreferencesModelTypeController : public syncer::ModelTypeController {
+class OsSyncableServiceModelTypeController
+    : public syncer::ModelTypeController {
  public:
-  static std::unique_ptr<OsPreferencesModelTypeController> Create(
+  static std::unique_ptr<OsSyncableServiceModelTypeController> Create(
       syncer::ModelType type,
       syncer::OnceModelTypeStoreFactory store_factory,
       base::WeakPtr<syncer::SyncableService> syncable_service,
@@ -35,19 +37,19 @@ class OsPreferencesModelTypeController : public syncer::ModelTypeController {
       PrefService* pref_service,
       syncer::SyncService* sync_service);
 
-  ~OsPreferencesModelTypeController() override;
+  ~OsSyncableServiceModelTypeController() override;
 
-  OsPreferencesModelTypeController(const OsPreferencesModelTypeController&) =
-      delete;
-  OsPreferencesModelTypeController& operator=(
-      const OsPreferencesModelTypeController&) = delete;
+  OsSyncableServiceModelTypeController(
+      const OsSyncableServiceModelTypeController&) = delete;
+  OsSyncableServiceModelTypeController& operator=(
+      const OsSyncableServiceModelTypeController&) = delete;
 
   // DataTypeController:
   PreconditionState GetPreconditionState() const override;
 
  private:
   // See implementation comment in Create().
-  OsPreferencesModelTypeController(
+  OsSyncableServiceModelTypeController(
       syncer::ModelType type,
       std::unique_ptr<syncer::ModelTypeSyncBridge> bridge,
       PrefService* pref_service,
@@ -63,4 +65,4 @@ class OsPreferencesModelTypeController : public syncer::ModelTypeController {
   PrefChangeRegistrar pref_registrar_;
 };
 
-#endif  // CHROME_BROWSER_CHROMEOS_SYNC_OS_PREFERENCES_MODEL_TYPE_CONTROLLER_H_
+#endif  // CHROME_BROWSER_CHROMEOS_SYNC_OS_SYNCABLE_SERVICE_MODEL_TYPE_CONTROLLER_H_
