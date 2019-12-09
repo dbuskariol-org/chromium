@@ -19,8 +19,8 @@
 #include "base/task/post_task.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "build/build_config.h"
+#include "components/services/storage/dom_storage/local_storage_impl.h"
 #include "components/services/storage/public/cpp/constants.h"
-#include "content/browser/dom_storage/local_storage_context_mojo.h"
 #include "content/browser/dom_storage/session_storage_context_mojo.h"
 #include "content/browser/dom_storage/session_storage_namespace_impl.h"
 #include "content/public/browser/browser_task_traits.h"
@@ -111,9 +111,8 @@ scoped_refptr<DOMStorageContextWrapper> DOMStorageContextWrapper::Create(
       base::CreateSingleThreadTaskRunner({BrowserThread::IO});
 
   // TODO(https://crbug.com/1000959): This should be bound in an instance of
-  // the Storage Service. For now we bind it alone on the IO thread, because the
-  // LocalStorageContextMojo implementation still has some details that must
-  // run on that thread.
+  // the Storage Service. For now we bind it alone on the IO thread because
+  // that's where the implementation has effectively lived for some time.
   mojo::Remote<storage::mojom::LocalStorageControl> local_storage_control;
   mojo_task_runner->PostTask(
       FROM_HERE,
@@ -122,7 +121,7 @@ scoped_refptr<DOMStorageContextWrapper> DOMStorageContextWrapper::Create(
              mojo::PendingReceiver<storage::mojom::LocalStorageControl>
                  receiver) {
             // Deletes itself on shutdown completion.
-            new LocalStorageContextMojo(
+            new storage::LocalStorageImpl(
                 storage_root,
                 base::CreateSingleThreadTaskRunner({BrowserThread::IO}),
                 base::CreateSequencedTaskRunner(

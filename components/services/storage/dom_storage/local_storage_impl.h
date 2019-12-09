@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_DOM_STORAGE_LOCAL_STORAGE_CONTEXT_MOJO_H_
-#define CONTENT_BROWSER_DOM_STORAGE_LOCAL_STORAGE_CONTEXT_MOJO_H_
+#ifndef COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_LOCAL_STORAGE_IMPL_H_
+#define COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_LOCAL_STORAGE_IMPL_H_
 
 #include <stdint.h>
 #include <map>
@@ -22,24 +22,19 @@
 #include "components/services/storage/dom_storage/async_dom_storage_database.h"
 #include "components/services/storage/dom_storage/dom_storage_database.h"
 #include "components/services/storage/public/mojom/local_storage_control.mojom.h"
-#include "content/common/content_export.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/receiver.h"
 #include "mojo/public/cpp/bindings/remote.h"
 #include "third_party/blink/public/mojom/dom_storage/storage_area.mojom.h"
 #include "url/origin.h"
 
-namespace content {
+namespace storage {
 
-// Used for mojo-based LocalStorage implementation (can be disabled with
-// --disable-mojo-local-storage for now).
-// Created on the UI thread, but all further methods are called on the task
-// runner passed to the constructor. Furthermore since destruction of this class
-// can involve asynchronous steps, it can only be deleted by calling
-// ShutdownAndDelete (on the correct task runner).
-class CONTENT_EXPORT LocalStorageContextMojo
-    : public base::trace_event::MemoryDumpProvider,
-      public storage::mojom::LocalStorageControl {
+// The Local Storage implementation. An instance of this class exists for each
+// storage partition using Local Storage, managing storage for all origins
+// within the partition.
+class LocalStorageImpl : public base::trace_event::MemoryDumpProvider,
+                         public mojom::LocalStorageControl {
  public:
   static base::FilePath LegacyDatabaseFileNameFromOrigin(
       const url::Origin& origin);
@@ -52,11 +47,10 @@ class CONTENT_EXPORT LocalStorageContextMojo
   // |legacy_task_runner| must support blocking operations and its tasks must
   // be able to block shutdown. If valid, |receiver| will be bound to this
   // object to allow for remote control via the LocalStorageControl interface.
-  LocalStorageContextMojo(
-      const base::FilePath& storage_root,
-      scoped_refptr<base::SequencedTaskRunner> task_runner,
-      scoped_refptr<base::SequencedTaskRunner> legacy_task_runner,
-      mojo::PendingReceiver<storage::mojom::LocalStorageControl> receiver);
+  LocalStorageImpl(const base::FilePath& storage_root,
+                   scoped_refptr<base::SequencedTaskRunner> task_runner,
+                   scoped_refptr<base::SequencedTaskRunner> legacy_task_runner,
+                   mojo::PendingReceiver<mojom::LocalStorageControl> receiver);
 
   void FlushOriginForTesting(const url::Origin& origin);
 
@@ -75,7 +69,7 @@ class CONTENT_EXPORT LocalStorageContextMojo
   // Clears unused storage areas, when thresholds are reached.
   void PurgeUnusedAreasIfNeeded();
 
-  // storage::mojom::LocalStorageControl implementation:
+  // mojom::LocalStorageControl implementation:
   void BindStorageArea(
       const url::Origin& origin,
       mojo::PendingReceiver<blink::mojom::StorageArea> receiver) override;
@@ -86,8 +80,7 @@ class CONTENT_EXPORT LocalStorageContextMojo
   void Flush(FlushCallback callback) override;
   void PurgeMemory() override;
   void ApplyPolicyUpdates(
-      std::vector<storage::mojom::LocalStoragePolicyUpdatePtr> policy_updates)
-      override;
+      std::vector<mojom::LocalStoragePolicyUpdatePtr> policy_updates) override;
   void ForceKeepSessionState() override;
 
   // base::trace_event::MemoryDumpProvider implementation.
@@ -99,8 +92,7 @@ class CONTENT_EXPORT LocalStorageContextMojo
 
   // Access the underlying DomStorageDatabase. May be null if the database is
   // not yet open.
-  const base::SequenceBound<storage::DomStorageDatabase>&
-  GetDatabaseForTesting() const {
+  const base::SequenceBound<DomStorageDatabase>& GetDatabaseForTesting() const {
     return database_->database();
   }
 
@@ -113,7 +105,7 @@ class CONTENT_EXPORT LocalStorageContextMojo
 
   class StorageAreaHolder;
 
-  ~LocalStorageContextMojo() override;
+  ~LocalStorageImpl() override;
 
   // Runs |callback| immediately if already connected to a database, otherwise
   // delays running |callback| untill after a connection has been established.
@@ -134,12 +126,11 @@ class CONTENT_EXPORT LocalStorageContextMojo
   // The (possibly delayed) implementation of GetUsage(). Can be called directly
   // from that function, or through |on_database_open_callbacks_|.
   void RetrieveStorageUsage(GetUsageCallback callback);
-  void OnGotMetaData(
-      GetUsageCallback callback,
-      std::vector<storage::DomStorageDatabase::KeyValuePair> data);
+  void OnGotMetaData(GetUsageCallback callback,
+                     std::vector<DomStorageDatabase::KeyValuePair> data);
 
   void OnGotStorageUsageForShutdown(
-      std::vector<storage::mojom::LocalStorageUsageInfoPtr> usage);
+      std::vector<mojom::LocalStorageUsageInfoPtr> usage);
   void OnShutdownComplete(leveldb::Status status);
 
   void GetStatistics(size_t* total_cache_size, size_t* unused_area_count);
@@ -174,7 +165,7 @@ class CONTENT_EXPORT LocalStorageContextMojo
 
   base::trace_event::MemoryAllocatorDumpGuid memory_dump_id_;
 
-  std::unique_ptr<storage::AsyncDomStorageDatabase> database_;
+  std::unique_ptr<AsyncDomStorageDatabase> database_;
   bool tried_to_recreate_during_open_ = false;
   bool in_memory_ = false;
 
@@ -198,11 +189,11 @@ class CONTENT_EXPORT LocalStorageContextMojo
   // Name of an extra histogram to log open results to, if not null.
   const char* open_result_histogram_ = nullptr;
 
-  mojo::Receiver<storage::mojom::LocalStorageControl> control_receiver_{this};
+  mojo::Receiver<mojom::LocalStorageControl> control_receiver_{this};
 
-  base::WeakPtrFactory<LocalStorageContextMojo> weak_ptr_factory_{this};
+  base::WeakPtrFactory<LocalStorageImpl> weak_ptr_factory_{this};
 };
 
-}  // namespace content
+}  // namespace storage
 
-#endif  // CONTENT_BROWSER_DOM_STORAGE_LOCAL_STORAGE_CONTEXT_MOJO_H_
+#endif  // COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_LOCAL_STORAGE_IMPL_H_
