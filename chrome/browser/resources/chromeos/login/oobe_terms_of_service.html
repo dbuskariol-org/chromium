@@ -49,7 +49,8 @@
       </div>
       <div slot="footer" class="flex layout center-justified vertical">
         <div hidden="[[!isLoading_(uiState)]]">
-          <throbber-notice text-key="termsOfServiceLoading">
+          <throbber-notice id="termsOfServiceLoadingThrobber"
+              text="[[i18nDynamic(locale, termsOfServiceLoading)]]">
           </throbber-notice>
         </div>
         <webview id="termsOfServiceFrame" hidden="[[isLoading_(uiState)]]"
