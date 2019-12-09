@@ -16,14 +16,12 @@
     <!-- Dialog for normal confirmation -->
     <oobe-dialog id="enableAdbSideloadDialog" role="dialog" has-buttons
         footer-shrinkable
+        title-key="enableAdbSideloadingSetupTitle"
         aria-label$="[[i18nDynamic(locale, 'enableAdbSideloadingSetupTitle')]]"
         hidden="[[!isState_(uiState_, 'setup')]]">
       <hd-iron-icon slot="oobe-icon"
           icon1x="oobe-32:alert" icon2x="oobe-64:alert">
       </hd-iron-icon>
-      <h1 slot="title">
-        [[i18nDynamic(locale, 'enableAdbSideloadingSetupTitle')]]
-      </h1>
       <div slot="subtitle">
         <div>
           [[i18nDynamic(locale, 'enableAdbSideloadingSetupMessage')]]
@@ -53,14 +51,12 @@
     <!-- Dialog for error -->
     <oobe-dialog id="enableAdbSideloadErrorDialog" role="dialog" has-buttons
         footer-shrinkable
+        title-key="enableAdbSideloadingErrorTitle"
         aria-label$="[[i18nDynamic(locale, 'enableAdbSideloadingSetupTitle')]]"
         hidden="[[!isState_(uiState_, 'error')]]">
       <hd-iron-icon slot="oobe-icon"
           icon1x="oobe-32:alert" icon2x="oobe-64:alert">
       </hd-iron-icon>
-      <h1 slot="title">
-        [[i18nDynamic(locale, 'enableAdbSideloadingErrorTitle')]]
-      </h1>
       <div slot="subtitle">
         [[i18nDynamic(locale, 'enableAdbSideloadingErrorMessage')]]
         <a href="#" on-tap="onLearnMoreTap_">
