@@ -19,8 +19,6 @@
 #include "components/services/storage/dom_storage/legacy_dom_storage_database.h"
 #include "components/services/storage/dom_storage/storage_area_test_util.h"
 #include "components/services/storage/public/cpp/constants.h"
-#include "content/public/browser/browser_thread.h"
-#include "content/public/browser/storage_usage_info.h"
 #include "content/public/test/browser_task_environment.h"
 #include "content/public/test/test_utils.h"
 #include "mojo/public/cpp/bindings/associated_binding.h"
@@ -29,7 +27,6 @@
 #include "mojo/public/cpp/bindings/pending_associated_receiver.h"
 #include "mojo/public/cpp/bindings/remote.h"
 #include "mojo/public/cpp/bindings/self_owned_associated_receiver.h"
-#include "storage/browser/test/mock_special_storage_policy.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/leveldatabase/env_chromium.h"
 #include "third_party/leveldatabase/src/include/leveldb/db.h"
@@ -106,8 +103,7 @@ class TestLevelDBObserver : public blink::mojom::StorageAreaObserver {
 
 class LocalStorageContextMojoTest : public testing::Test {
  public:
-  LocalStorageContextMojoTest()
-      : mock_special_storage_policy_(new MockSpecialStoragePolicy()) {
+  LocalStorageContextMojoTest() {
     EXPECT_TRUE(temp_path_.CreateUniqueTempDir());
   }
 
@@ -128,7 +124,7 @@ class LocalStorageContextMojoTest : public testing::Test {
     if (!context_) {
       context_ = new LocalStorageContextMojo(
           storage_path(), base::ThreadTaskRunnerHandle::Get(), task_runner_,
-          special_storage_policy(), /*receiver=*/mojo::NullReceiver());
+          /*receiver=*/mojo::NullReceiver());
     }
 
     return context_;
@@ -138,10 +134,6 @@ class LocalStorageContextMojoTest : public testing::Test {
     context_->ShutdownAndDelete();
     context_ = nullptr;
     RunUntilIdle();
-  }
-
-  MockSpecialStoragePolicy* special_storage_policy() {
-    return mock_special_storage_policy_.get();
   }
 
   void WaitForDatabaseOpen() {
@@ -300,8 +292,6 @@ class LocalStorageContextMojoTest : public testing::Test {
       base::ThreadTaskRunnerHandle::Get()};
 
   LocalStorageContextMojo* context_ = nullptr;
-
-  scoped_refptr<MockSpecialStoragePolicy> mock_special_storage_policy_;
 
   DISALLOW_COPY_AND_ASSIGN(LocalStorageContextMojoTest);
 };
@@ -840,7 +830,11 @@ TEST_F(LocalStorageContextMojoTest, ShutdownClearsData) {
   // Make sure all data gets committed to the DB.
   RunUntilIdle();
 
-  special_storage_policy()->AddSessionOnly(origin1.GetURL());
+  std::vector<storage::mojom::LocalStoragePolicyUpdatePtr> updates;
+  updates.push_back(storage::mojom::LocalStoragePolicyUpdate::New(
+      origin1, /*purge_on_shutdown=*/true));
+  context()->ApplyPolicyUpdates(std::move(updates));
+
   ShutdownContext();
 
   // Data from origin2 should exist, including meta-data, but nothing should
@@ -857,7 +851,7 @@ TEST_F(LocalStorageContextMojoTest, ShutdownClearsData) {
 
 TEST_F(LocalStorageContextMojoTest, InMemory) {
   auto* context = new LocalStorageContextMojo(
-      base::FilePath(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      base::FilePath(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   auto key = StdStringToUint8Vector("key");
   auto value = StdStringToUint8Vector("value");
@@ -879,17 +873,17 @@ TEST_F(LocalStorageContextMojoTest, InMemory) {
 
   // Re-opening should get fresh data.
   context = new LocalStorageContextMojo(
-      base::FilePath(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      base::FilePath(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   EXPECT_FALSE(DoTestGet(context, key, &result));
   context->ShutdownAndDelete();
 }
 
 TEST_F(LocalStorageContextMojoTest, InMemoryInvalidPath) {
-  auto* context = new LocalStorageContextMojo(
-      base::FilePath(FILE_PATH_LITERAL("../../")),
-      base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
-      /*receiver=*/mojo::NullReceiver());
+  auto* context =
+      new LocalStorageContextMojo(base::FilePath(FILE_PATH_LITERAL("../../")),
+                                  base::ThreadTaskRunnerHandle::Get(), nullptr,
+                                  /*receiver=*/mojo::NullReceiver());
   auto key = StdStringToUint8Vector("key");
   auto value = StdStringToUint8Vector("value");
 
@@ -912,7 +906,7 @@ TEST_F(LocalStorageContextMojoTest, InMemoryInvalidPath) {
 
 TEST_F(LocalStorageContextMojoTest, OnDisk) {
   auto* context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   auto key = StdStringToUint8Vector("key");
   auto value = StdStringToUint8Vector("value");
@@ -932,7 +926,7 @@ TEST_F(LocalStorageContextMojoTest, OnDisk) {
 
   // Should be able to re-open.
   context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   EXPECT_TRUE(DoTestGet(context, key, &result));
   EXPECT_EQ(value, result);
@@ -942,7 +936,7 @@ TEST_F(LocalStorageContextMojoTest, OnDisk) {
 TEST_F(LocalStorageContextMojoTest, InvalidVersionOnDisk) {
   // Create context and add some data to it.
   auto* context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   auto key = StdStringToUint8Vector("key");
   auto value = StdStringToUint8Vector("value");
@@ -972,7 +966,7 @@ TEST_F(LocalStorageContextMojoTest, InvalidVersionOnDisk) {
 
   // Make sure data is gone.
   context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   EXPECT_FALSE(DoTestGet(context, key, &result));
 
@@ -985,7 +979,7 @@ TEST_F(LocalStorageContextMojoTest, InvalidVersionOnDisk) {
 
   // Data should have been preserved now.
   context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   EXPECT_TRUE(DoTestGet(context, key, &result));
   EXPECT_EQ(value, result);
@@ -995,7 +989,7 @@ TEST_F(LocalStorageContextMojoTest, InvalidVersionOnDisk) {
 TEST_F(LocalStorageContextMojoTest, CorruptionOnDisk) {
   // Create context and add some data to it.
   auto* context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   auto key = StdStringToUint8Vector("key");
   auto value = StdStringToUint8Vector("value");
@@ -1022,7 +1016,7 @@ TEST_F(LocalStorageContextMojoTest, CorruptionOnDisk) {
 
   // Make sure data is gone.
   context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   EXPECT_FALSE(DoTestGet(context, key, &result));
 
@@ -1035,7 +1029,7 @@ TEST_F(LocalStorageContextMojoTest, CorruptionOnDisk) {
 
   // Data should have been preserved now.
   context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
   EXPECT_TRUE(DoTestGet(context, key, &result));
   EXPECT_EQ(value, result);
@@ -1044,7 +1038,7 @@ TEST_F(LocalStorageContextMojoTest, CorruptionOnDisk) {
 
 TEST_F(LocalStorageContextMojoTest, RecreateOnCommitFailure) {
   auto* context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
 
   base::Optional<base::RunLoop> open_loop;
@@ -1187,7 +1181,7 @@ TEST_F(LocalStorageContextMojoTest, RecreateOnCommitFailure) {
 
 TEST_F(LocalStorageContextMojoTest, DontRecreateOnRepeatedCommitFailure) {
   auto* context = new LocalStorageContextMojo(
-      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr, nullptr,
+      storage_path(), base::ThreadTaskRunnerHandle::Get(), nullptr,
       /*receiver=*/mojo::NullReceiver());
 
   // Ensure that the opened database always fails on write.

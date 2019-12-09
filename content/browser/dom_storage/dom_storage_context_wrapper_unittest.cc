@@ -40,7 +40,8 @@ class DOMStorageContextWrapperTest : public testing::Test {
     session_storage_context->PretendToConnectForTesting();
     context_ = new DOMStorageContextWrapper(
         fake_mojo_task_runner_, session_storage_context,
-        mojo::Remote<storage::mojom::LocalStorageControl>());
+        mojo::Remote<storage::mojom::LocalStorageControl>(),
+        /*special_storage_policy=*/nullptr);
   }
 
   void TearDown() override {

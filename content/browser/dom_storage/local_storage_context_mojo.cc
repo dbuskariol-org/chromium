@@ -38,7 +38,6 @@
 #include "components/services/storage/public/cpp/constants.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
 #include "sql/database.h"
-#include "storage/browser/quota/special_storage_policy.h"
 #include "storage/common/database/database_identifier.h"
 #include "third_party/leveldatabase/env_chromium.h"
 #include "third_party/leveldatabase/leveldb_chrome.h"
@@ -462,12 +461,10 @@ LocalStorageContextMojo::LocalStorageContextMojo(
     const base::FilePath& storage_root,
     scoped_refptr<base::SequencedTaskRunner> task_runner,
     scoped_refptr<base::SequencedTaskRunner> legacy_task_runner,
-    scoped_refptr<storage::SpecialStoragePolicy> special_storage_policy,
     mojo::PendingReceiver<storage::mojom::LocalStorageControl> receiver)
     : directory_(storage_root.empty()
                      ? storage_root
                      : storage_root.Append(storage::kLocalStoragePath)),
-      special_storage_policy_(std::move(special_storage_policy)),
       leveldb_task_runner_(base::CreateSequencedTaskRunner(
           {base::ThreadPool(), base::MayBlock(),
            base::TaskShutdownBehavior::BLOCK_SHUTDOWN})),
@@ -612,11 +609,7 @@ void LocalStorageContextMojo::ShutdownAndDelete() {
     return;  // Keep everything.
   }
 
-  bool has_session_only_origins =
-      special_storage_policy_.get() &&
-      special_storage_policy_->HasSessionOnlyOrigins();
-
-  if (has_session_only_origins) {
+  if (!origins_to_purge_on_shutdown_.empty()) {
     RetrieveStorageUsage(
         base::BindOnce(&LocalStorageContextMojo::OnGotStorageUsageForShutdown,
                        base::Unretained(this)));
@@ -644,6 +637,17 @@ void LocalStorageContextMojo::PurgeMemory() {
   size_t purged_size_kib = (total_cache_size - final_total_cache_size) / 1024;
   RecordCachePurgedHistogram(CachePurgeReason::AggressivePurgeTriggered,
                              purged_size_kib);
+}
+
+void LocalStorageContextMojo::ApplyPolicyUpdates(
+    std::vector<storage::mojom::LocalStoragePolicyUpdatePtr> policy_updates) {
+  for (const auto& update : policy_updates) {
+    GURL url = update->origin.GetURL();
+    if (!update->purge_on_shutdown)
+      origins_to_purge_on_shutdown_.erase(url);
+    else
+      origins_to_purge_on_shutdown_.insert(std::move(url));
+  }
 }
 
 void LocalStorageContextMojo::PurgeUnusedAreasIfNeeded() {
@@ -1064,11 +1068,8 @@ void LocalStorageContextMojo::OnGotStorageUsageForShutdown(
     std::vector<storage::mojom::LocalStorageUsageInfoPtr> usage) {
   std::vector<url::Origin> origins_to_delete;
   for (const auto& info : usage) {
-    if (special_storage_policy_->IsStorageProtected(info->origin.GetURL()))
-      continue;
-    if (!special_storage_policy_->IsStorageSessionOnly(info->origin.GetURL()))
-      continue;
-    origins_to_delete.push_back(info->origin);
+    if (base::Contains(origins_to_purge_on_shutdown_, info->origin.GetURL()))
+      origins_to_delete.push_back(info->origin);
   }
 
   if (!origins_to_delete.empty()) {

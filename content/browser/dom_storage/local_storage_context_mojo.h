@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -27,10 +28,6 @@
 #include "mojo/public/cpp/bindings/remote.h"
 #include "third_party/blink/public/mojom/dom_storage/storage_area.mojom.h"
 #include "url/origin.h"
-
-namespace storage {
-class SpecialStoragePolicy;
-}
 
 namespace content {
 
@@ -59,7 +56,6 @@ class CONTENT_EXPORT LocalStorageContextMojo
       const base::FilePath& storage_root,
       scoped_refptr<base::SequencedTaskRunner> task_runner,
       scoped_refptr<base::SequencedTaskRunner> legacy_task_runner,
-      scoped_refptr<storage::SpecialStoragePolicy> special_storage_policy,
       mojo::PendingReceiver<storage::mojom::LocalStorageControl> receiver);
 
   void FlushOriginForTesting(const url::Origin& origin);
@@ -89,6 +85,9 @@ class CONTENT_EXPORT LocalStorageContextMojo
   void CleanUpStorage(CleanUpStorageCallback callback) override;
   void Flush(FlushCallback callback) override;
   void PurgeMemory() override;
+  void ApplyPolicyUpdates(
+      std::vector<storage::mojom::LocalStoragePolicyUpdatePtr> policy_updates)
+      override;
   void ForceKeepSessionState() override;
 
   // base::trace_event::MemoryDumpProvider implementation.
@@ -170,7 +169,6 @@ class CONTENT_EXPORT LocalStorageContextMojo
   bool database_initialized_ = false;
 
   bool force_keep_session_state_ = false;
-  scoped_refptr<storage::SpecialStoragePolicy> special_storage_policy_;
 
   const scoped_refptr<base::SequencedTaskRunner> leveldb_task_runner_;
 
@@ -193,6 +191,9 @@ class CONTENT_EXPORT LocalStorageContextMojo
   // whole database is thrown away.
   int commit_error_count_ = 0;
   bool tried_to_recover_from_commit_errors_ = false;
+
+  // The set of (origin) URLs whose storage should be cleared on shutdown.
+  std::set<GURL> origins_to_purge_on_shutdown_;
 
   // Name of an extra histogram to log open results to, if not null.
   const char* open_result_histogram_ = nullptr;
