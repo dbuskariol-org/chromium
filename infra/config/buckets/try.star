@@ -232,10 +232,6 @@ android_builder(
 )
 
 android_builder(
-    name = 'android_compile_rel',
-)
-
-android_builder(
     name = 'android_compile_x64_dbg',
     tryjob = tryjob(
         location_regexp = [
