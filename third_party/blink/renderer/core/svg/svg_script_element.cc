@@ -93,6 +93,8 @@ bool SVGScriptElement::IsURLAttribute(const Attribute& attribute) const {
 void SVGScriptElement::FinishParsingChildren() {
   SVGElement::FinishParsingChildren();
   have_fired_load_ = true;
+  DCHECK(script_text_internal_slot_.IsEmpty());
+  script_text_internal_slot_ = TextFromChildren();
 }
 
 bool SVGScriptElement::HaveLoadedRequiredResources() {
@@ -109,6 +111,10 @@ String SVGScriptElement::TypeAttributeValue() const {
 
 String SVGScriptElement::ChildTextContent() {
   return TextFromChildren();
+}
+
+String SVGScriptElement::ScriptTextInternalSlot() const {
+  return script_text_internal_slot_;
 }
 
 bool SVGScriptElement::HasSourceAttribute() const {
