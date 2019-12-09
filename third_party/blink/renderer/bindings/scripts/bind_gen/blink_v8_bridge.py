@@ -5,12 +5,10 @@
 import web_idl
 
 from . import name_style
-from .code_node import CodeNode
 from .code_node import SymbolDefinitionNode
 from .code_node import SymbolNode
-from .code_node import SymbolScopeNode
 from .code_node import TextNode
-from .code_node import UnlikelyExitNode
+from .code_node_cxx import CxxUnlikelyIfNode
 from .codegen_format import format_template as _format
 
 
@@ -192,9 +190,9 @@ def make_v8_to_blink_value(blink_var_name,
     def create_definition(symbol_node):
         return SymbolDefinitionNode(symbol_node, [
             TextNode(text),
-            UnlikelyExitNode(
-                cond=TextNode("${exception_state}.HadException()"),
-                body=SymbolScopeNode([TextNode("return;")])),
+            CxxUnlikelyIfNode(
+                cond="${exception_state}.HadException()",
+                body=TextNode("return;")),
         ])
 
     return SymbolNode(blink_var_name, definition_constructor=create_definition)
@@ -220,9 +218,9 @@ def make_v8_to_blink_value_variadic(blink_var_name, v8_array,
     def create_definition(symbol_node):
         return SymbolDefinitionNode(symbol_node, [
             TextNode(text),
-            UnlikelyExitNode(
-                cond=TextNode("${exception_state}.HadException()"),
-                body=SymbolScopeNode([TextNode("return;")])),
+            CxxUnlikelyIfNode(
+                cond="${exception_state}.HadException()",
+                body=TextNode("return;")),
         ])
 
     return SymbolNode(blink_var_name, definition_constructor=create_definition)
