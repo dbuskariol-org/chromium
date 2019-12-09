@@ -724,7 +724,7 @@ TEST_P(ExtensionActionViewControllerUnitTest, TestGetIconWithNullWebContents) {
   EXPECT_FALSE(icon.IsEmpty());
 }
 
-INSTANTIATE_TEST_SUITE_P(,
+INSTANTIATE_TEST_SUITE_P(All,
                          ExtensionActionViewControllerUnitTest,
                          testing::Values(ToolbarType::kExtensionsMenu,
                                          ToolbarType::kLegacyToolbar));
