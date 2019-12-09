@@ -3060,21 +3060,21 @@ TEST_F(AXPositionTest, CreatePositionAtPageBoundaryWithTreePosition) {
       AXBoundaryBehavior::StopAtLastAnchorBoundary);
   EXPECT_NE(nullptr, test_position);
   EXPECT_TRUE(test_position->IsTreePosition());
-  EXPECT_EQ(page_2_text_data.id, test_position->anchor_id());
-  EXPECT_EQ(0, test_position->child_index());
+  EXPECT_EQ(page_1_data.id, test_position->anchor_id());
+  EXPECT_EQ(1, test_position->child_index());
 
   test_position = test_position->CreateNextPageEndPosition(
       AXBoundaryBehavior::CrossBoundary);
   EXPECT_NE(nullptr, test_position);
   EXPECT_TRUE(test_position->IsTreePosition());
-  EXPECT_EQ(page_3_text_data.id, test_position->anchor_id());
+  EXPECT_EQ(page_2_text_data.id, test_position->anchor_id());
   EXPECT_EQ(0, test_position->child_index());
 
   test_position = test_position->CreateNextPageEndPosition(
       AXBoundaryBehavior::StopIfAlreadyAtBoundary);
   EXPECT_NE(nullptr, test_position);
   EXPECT_TRUE(test_position->IsTreePosition());
-  EXPECT_EQ(page_3_text_data.id, test_position->anchor_id());
+  EXPECT_EQ(page_2_text_data.id, test_position->anchor_id());
   EXPECT_EQ(0, test_position->child_index());
 
   // StopAtLastAnchorBoundary shouldn't move past the end of the document.
@@ -5789,8 +5789,8 @@ INSTANTIATE_TEST_SUITE_P(
         CreatePositionAtTextBoundaryTestParam{
             AXTextBoundary::kLineEnd, AXTextBoundaryDirection::kBackwards,
             AXBoundaryBehavior::CrossBoundary,
-            "TextPosition anchor_id=6 text_offset=6 affinity=downstream "
-            "annotated_text=Line 1<>"},
+            "TextPosition anchor_id=7 text_offset=0 affinity=downstream "
+            "annotated_text=<\n>"},
         CreatePositionAtTextBoundaryTestParam{
             AXTextBoundary::kLineEnd, AXTextBoundaryDirection::kForwards,
             AXBoundaryBehavior::CrossBoundary,
@@ -6320,8 +6320,6 @@ INSTANTIATE_TEST_SUITE_P(
              "TextPosition anchor_id=1 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1\nLine 2",
              "TextPosition anchor_id=1 text_offset=0 "
-             "affinity=downstream annotated_text=<L>ine 1\nLine 2",
-             "TextPosition anchor_id=1 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1\nLine 2"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
@@ -6338,10 +6336,8 @@ INSTANTIATE_TEST_SUITE_P(
              "affinity=downstream annotated_text=Line <1>\nLine 2",
              "TextPosition anchor_id=4 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1\nLine 2",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>"}},
+             "TextPosition anchor_id=4 text_offset=0 "
+             "affinity=downstream annotated_text=<L>ine 1\nLine 2"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
               return position->CreatePreviousWordStartPosition(
@@ -6351,10 +6347,8 @@ INSTANTIATE_TEST_SUITE_P(
             5 /* text_offset */,
             {"TextPosition anchor_id=5 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>"}},
+             "TextPosition anchor_id=5 text_offset=0 "
+             "affinity=downstream annotated_text=<L>ine 1"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
               return position->CreatePreviousWordStartPosition(
@@ -6368,10 +6362,8 @@ INSTANTIATE_TEST_SUITE_P(
              "affinity=downstream annotated_text=Line <1>",
              "TextPosition anchor_id=6 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>"}}));
+             "TextPosition anchor_id=6 text_offset=0 "
+             "affinity=downstream annotated_text=<L>ine 1"}}));
 
 INSTANTIATE_TEST_SUITE_P(
     CreateNextWordEndPositionWithBoundaryBehaviorCrossBoundary,
@@ -7193,8 +7185,6 @@ INSTANTIATE_TEST_SUITE_P(
              "TextPosition anchor_id=1 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1\nLine 2",
              "TextPosition anchor_id=1 text_offset=0 "
-             "affinity=downstream annotated_text=<L>ine 1\nLine 2",
-             "TextPosition anchor_id=1 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1\nLine 2"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
@@ -7207,10 +7197,8 @@ INSTANTIATE_TEST_SUITE_P(
              "affinity=downstream annotated_text=Line 1\n<L>ine 2",
              "TextPosition anchor_id=4 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1\nLine 2",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>"}},
+             "TextPosition anchor_id=4 text_offset=0 "
+             "affinity=downstream annotated_text=<L>ine 1\nLine 2"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
               return position->CreatePreviousLineStartPosition(
@@ -7220,10 +7208,8 @@ INSTANTIATE_TEST_SUITE_P(
             5 /* text_offset */,
             {"TextPosition anchor_id=5 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>"}},
+             "TextPosition anchor_id=5 text_offset=0 "
+             "affinity=downstream annotated_text=<L>ine 1"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
               return position->CreatePreviousLineStartPosition(
@@ -7235,10 +7221,8 @@ INSTANTIATE_TEST_SUITE_P(
              "affinity=downstream annotated_text=<L>ine 2",
              "TextPosition anchor_id=6 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>"}}));
+             "TextPosition anchor_id=6 text_offset=0 "
+             "affinity=downstream annotated_text=<L>ine 1"}}));
 
 INSTANTIATE_TEST_SUITE_P(
     CreateNextLineEndPositionWithBoundaryBehaviorCrossBoundary,
@@ -7505,8 +7489,8 @@ INSTANTIATE_TEST_SUITE_P(
             }),
             INLINE_BOX2_ID,
             0 /* text_offset */,
-            {"TextPosition anchor_id=6 text_offset=6 "
-             "affinity=downstream annotated_text=Line 1<>",
+            {"TextPosition anchor_id=7 text_offset=0 "
+             "affinity=downstream annotated_text=<\n>",
              "NullPosition"}}));
 
 INSTANTIATE_TEST_SUITE_P(
@@ -7709,8 +7693,8 @@ INSTANTIATE_TEST_SUITE_P(
             }),
             INLINE_BOX2_ID,
             0 /* text_offset */,
-            {"TextPosition anchor_id=6 text_offset=6 "
-             "affinity=downstream annotated_text=Line 1<>",
+            {"TextPosition anchor_id=7 text_offset=0 "
+             "affinity=downstream annotated_text=<\n>",
              "TextPosition anchor_id=2 text_offset=0 "
              "affinity=downstream annotated_text=<>",
              "TextPosition anchor_id=2 text_offset=0 "
@@ -8085,10 +8069,8 @@ INSTANTIATE_TEST_SUITE_P(
              "affinity=downstream annotated_text=Line 1\n<L>ine 2",
              "TextPosition anchor_id=4 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1\nLine 2",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>"}},
+             "TextPosition anchor_id=4 text_offset=0 "
+             "affinity=downstream annotated_text=<L>ine 1\nLine 2"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
               return position->CreatePreviousParagraphStartPosition(
@@ -8098,10 +8080,8 @@ INSTANTIATE_TEST_SUITE_P(
             5 /* text_offset */,
             {"TextPosition anchor_id=5 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>"}},
+             "TextPosition anchor_id=5 text_offset=0 "
+             "affinity=downstream annotated_text=<L>ine 1"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
               return position->CreatePreviousParagraphStartPosition(
@@ -8113,10 +8093,8 @@ INSTANTIATE_TEST_SUITE_P(
              "affinity=downstream annotated_text=<L>ine 2",
              "TextPosition anchor_id=6 text_offset=0 "
              "affinity=downstream annotated_text=<L>ine 1",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>",
-             "TextPosition anchor_id=2 text_offset=0 "
-             "affinity=downstream annotated_text=<>"}}));
+             "TextPosition anchor_id=6 text_offset=0 "
+             "affinity=downstream annotated_text=<L>ine 1"}}));
 
 INSTANTIATE_TEST_SUITE_P(
     CreateNextParagraphEndPositionWithBoundaryBehaviorCrossBoundary,
@@ -8608,8 +8586,7 @@ INSTANTIATE_TEST_SUITE_P(
              "affinity=upstream annotated_text=Line 1\n<L>ine 2",
              "TextPosition anchor_id=3 text_offset=0 "
              "affinity=downstream annotated_text=<>",
-             // The following text position is equal to the previous one.
-             "TextPosition anchor_id=2 text_offset=0 "
+             "TextPosition anchor_id=3 text_offset=0 "
              "affinity=downstream annotated_text=<>"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
@@ -8631,8 +8608,7 @@ INSTANTIATE_TEST_SUITE_P(
             5 /* text_offset on the last character of "Line 1". */,
             {"TextPosition anchor_id=3 text_offset=0 "
              "affinity=downstream annotated_text=<>",
-             // The following text position is equal to the previous one.
-             "TextPosition anchor_id=2 text_offset=0 "
+             "TextPosition anchor_id=3 text_offset=0 "
              "affinity=downstream annotated_text=<>"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
@@ -8645,8 +8621,7 @@ INSTANTIATE_TEST_SUITE_P(
              "affinity=downstream annotated_text=\n<>",
              "TextPosition anchor_id=3 text_offset=0 "
              "affinity=downstream annotated_text=<>",
-             // The following text position is equal to the previous one.
-             "TextPosition anchor_id=2 text_offset=0 "
+             "TextPosition anchor_id=3 text_offset=0 "
              "affinity=downstream annotated_text=<>"}},
         TextNavigationTestParam{
             base::BindRepeating([](const TestPositionType& position) {
@@ -8657,8 +8632,7 @@ INSTANTIATE_TEST_SUITE_P(
             0 /* text_offset */,
             {"TextPosition anchor_id=3 text_offset=0 "
              "affinity=downstream annotated_text=<>",
-             // The following text position is equal to the previous one.
-             "TextPosition anchor_id=2 text_offset=0 "
+             "TextPosition anchor_id=3 text_offset=0 "
              "affinity=downstream annotated_text=<>"}}));
 
 }  // namespace ui

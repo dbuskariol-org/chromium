@@ -919,15 +919,40 @@ STDMETHODIMP AXPlatformNodeTextRangeProviderWin::GetChildren(
 // static
 bool AXPlatformNodeTextRangeProviderWin::AtStartOfLinePredicate(
     const AXPositionInstance& position) {
-  return !position->IsIgnored() &&
+  return !position->IsIgnored() && position->AtStartOfAnchor() &&
          (position->AtStartOfLine() || position->AtStartOfInlineBlock());
 }
 
 // static
 bool AXPlatformNodeTextRangeProviderWin::AtEndOfLinePredicate(
     const AXPositionInstance& position) {
-  return !position->IsIgnored() &&
+  return !position->IsIgnored() && position->AtEndOfAnchor() &&
          (position->AtEndOfLine() || position->AtStartOfInlineBlock());
+}
+
+// static
+AXPlatformNodeTextRangeProviderWin::AXPositionInstance
+AXPlatformNodeTextRangeProviderWin::GetNextTextBoundaryPosition(
+    const AXPositionInstance& position,
+    AXTextBoundary boundary_type,
+    AXBoundaryBehavior boundary_behavior,
+    AXTextBoundaryDirection boundary_direction) {
+  // Override At[Start|End]OfLinePredicate for behavior specific to UIA.
+  switch (boundary_type) {
+    case AXTextBoundary::kLineStart:
+      return position->CreateBoundaryStartPosition(
+          boundary_behavior, boundary_direction,
+          base::BindRepeating(&AtStartOfLinePredicate),
+          base::BindRepeating(&AtEndOfLinePredicate));
+    case AXTextBoundary::kLineEnd:
+      return position->CreateBoundaryEndPosition(
+          boundary_behavior, boundary_direction,
+          base::BindRepeating(&AtStartOfLinePredicate),
+          base::BindRepeating(&AtEndOfLinePredicate));
+    default:
+      return position->CreatePositionAtTextBoundary(
+          boundary_type, boundary_direction, boundary_behavior);
+  }
 }
 
 base::string16 AXPlatformNodeTextRangeProviderWin::GetString(
@@ -982,42 +1007,10 @@ AXPlatformNodeTextRangeProviderWin::MoveEndpointByLine(
     bool is_start_endpoint,
     const int count,
     int* units_moved) {
-  DCHECK_NE(count, 0);
-  const bool going_forward = count > 0;
-
-  AXPositionInstance current_endpoint = endpoint->Clone();
-  for (int iteration = 0; iteration < std::abs(count); ++iteration) {
-    AXPositionInstance next_endpoint;
-    if (is_start_endpoint) {
-      next_endpoint = current_endpoint->CreateBoundaryStartPosition(
-          AXBoundaryBehavior::StopAtLastAnchorBoundary,
-          going_forward ? AXTextBoundaryDirection::kForwards
-                        : AXTextBoundaryDirection::kBackwards,
-          base::BindRepeating(&AtStartOfLinePredicate),
-          base::BindRepeating(&AtEndOfLinePredicate));
-    } else {
-      next_endpoint = current_endpoint->CreateBoundaryEndPosition(
-          AXBoundaryBehavior::StopAtLastAnchorBoundary,
-          going_forward ? AXTextBoundaryDirection::kForwards
-                        : AXTextBoundaryDirection::kBackwards,
-          base::BindRepeating(&AtStartOfLinePredicate),
-          base::BindRepeating(&AtEndOfLinePredicate));
-    }
-    DCHECK(!next_endpoint->IsNullPosition());
-
-    // Since AXBoundaryBehavior::StopAtLastAnchorBoundary forces the next text
-    // boundary position to be different than the input position, the only case
-    // where these are equal is when they're already located at the last anchor
-    // boundary. In such case, there is no next position to move to.
-    if (*current_endpoint == *next_endpoint) {
-      *units_moved = going_forward ? iteration : -iteration;
-      return current_endpoint;
-    }
-    current_endpoint = std::move(next_endpoint);
-  }
-
-  *units_moved = count;
-  return current_endpoint;
+  return MoveEndpointByUnitHelper(
+      std::move(endpoint),
+      is_start_endpoint ? AXTextBoundary::kLineStart : AXTextBoundary::kLineEnd,
+      count, units_moved);
 }
 
 AXPlatformNodeTextRangeProviderWin::AXPositionInstance
@@ -1082,24 +1075,28 @@ AXPlatformNodeTextRangeProviderWin::MoveEndpointByUnitHelper(
     const int count,
     int* units_moved) {
   DCHECK_NE(count, 0);
-  const bool going_forward = count > 0;
+  const AXTextBoundaryDirection boundary_direction =
+      (count > 0) ? AXTextBoundaryDirection::kForwards
+                  : AXTextBoundaryDirection::kBackwards;
 
-  AXPositionInstance current_endpoint = endpoint->Clone();
+  // Most of the methods used to create the next/previous position go back and
+  // forth creating a leaf text position and rooting the result to the original
+  // position's anchor; avoid this by normalizing to a leaf text position.
+  AXPositionInstance current_endpoint = endpoint->AsLeafTextPosition();
+
   for (int iteration = 0; iteration < std::abs(count); ++iteration) {
-    AXPositionInstance next_endpoint =
-        current_endpoint->CreatePositionAtTextBoundary(
-            boundary_type,
-            going_forward ? AXTextBoundaryDirection::kForwards
-                          : AXTextBoundaryDirection::kBackwards,
-            AXBoundaryBehavior::StopAtLastAnchorBoundary);
-    DCHECK(!next_endpoint->IsNullPosition());
+    AXPositionInstance next_endpoint = GetNextTextBoundaryPosition(
+        current_endpoint, boundary_type,
+        AXBoundaryBehavior::StopAtLastAnchorBoundary, boundary_direction);
+    DCHECK(next_endpoint->IsLeafTextPosition());
 
     // Since AXBoundaryBehavior::StopAtLastAnchorBoundary forces the next text
     // boundary position to be different than the input position, the only case
     // where these are equal is when they're already located at the last anchor
     // boundary. In such case, there is no next position to move to.
-    if (*current_endpoint == *next_endpoint) {
-      *units_moved = going_forward ? iteration : -iteration;
+    if (next_endpoint->GetAnchor() == current_endpoint->GetAnchor() &&
+        *next_endpoint == *current_endpoint) {
+      *units_moved = (count > 0) ? iteration : -iteration;
       return current_endpoint;
     }
     current_endpoint = std::move(next_endpoint);
