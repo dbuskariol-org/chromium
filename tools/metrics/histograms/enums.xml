@@ -29679,6 +29679,13 @@ Called by update_net_error_codes.py.-->
   <int value="1" label="Google CAPTCHA solved"/>
 </enum>
 
+<enum name="GoogleDocsExtensionAvailablity">
+  <int value="0" label="Available, Regular mode"/>
+  <int value="1" label="Not Available, Regular mode"/>
+  <int value="2" label="Available, Incognito mode"/>
+  <int value="3" label="Not Available, Incognito mode"/>
+</enum>
+
 <enum name="GoogleFaviconServerRequestStatus">
   <int value="0" label="Success"/>
   <int value="1" label="Failure (connection error, no HTTP response)"/>
