@@ -21,7 +21,7 @@ import org.chromium.chrome.browser.settings.SettingsUtils;
  * Settings fragment that displays information about Chrome languages, which allow users to
  * seamlessly find and manage their languages preferences across platforms.
  */
-public class LanguagesPreferences
+public class LanguageSettings
         extends PreferenceFragmentCompat implements AddLanguageFragment.Launcher {
     private static final int REQUEST_CODE_ADD_LANGUAGES = 1;
 
@@ -31,7 +31,7 @@ public class LanguagesPreferences
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        getActivity().setTitle(R.string.prefs_languages);
+        getActivity().setTitle(R.string.language_settings);
         SettingsUtils.addPreferencesFromResource(this, R.xml.languages_preferences);
 
         LanguageListPreference mLanguageListPref =
