@@ -102,10 +102,8 @@ void AppServiceInstanceRegistryHelper::OnInstances(const std::string& app_id,
                                                    aura::Window* window,
                                                    const std::string& launch_id,
                                                    apps::InstanceState state) {
-  if (proxy_->AppRegistryCache().GetAppType(app_id) ==
-      apps::mojom::AppType::kUnknown) {
+  if (app_id.empty())
     return;
-  }
 
   std::unique_ptr<apps::Instance> instance =
       std::make_unique<apps::Instance>(app_id, window);
