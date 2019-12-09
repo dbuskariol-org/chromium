@@ -224,7 +224,7 @@ public class NFCTest {
         assertEquals(1, emptyMojoNdefMessage.data.length);
         assertEquals(NdefMessageUtils.RECORD_TYPE_EMPTY, emptyMojoNdefMessage.data[0].recordType);
         assertEquals(null, emptyMojoNdefMessage.data[0].mediaType);
-        assertEquals(true, emptyMojoNdefMessage.data[0].id.isEmpty());
+        assertEquals(null, emptyMojoNdefMessage.data[0].id);
         assertNull(emptyMojoNdefMessage.data[0].encoding);
         assertNull(emptyMojoNdefMessage.data[0].lang);
         assertEquals(0, emptyMojoNdefMessage.data[0].data.length);
