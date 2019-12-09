@@ -48,7 +48,7 @@ public final class FeedJournalStorageConformanceTest extends JournalStorageConfo
         }
 
         @Override
-        public void read(String journalName, Consumer < Result < List<byte[]>>> consumer) {
+        public void read(String journalName, Consumer<Result<List<byte[]>>> consumer) {
             ConsumerSyncWrapper.waitForConsumer(
                     consumer, (wrapper) -> { super.read(journalName, wrapper); }, TIMEOUT);
         }
@@ -66,7 +66,7 @@ public final class FeedJournalStorageConformanceTest extends JournalStorageConfo
         }
 
         @Override
-        public void getAllJournals(Consumer < Result < List<String>>> consumer) {
+        public void getAllJournals(Consumer<Result<List<String>>> consumer) {
             ConsumerSyncWrapper.waitForConsumer(
                     consumer, (wrapper) -> { super.getAllJournals(wrapper); }, TIMEOUT);
         }

@@ -49,9 +49,10 @@ import java.util.List;
  * {@link org.chromium.chrome.browser.feed.FeedNewTabPageTest}.
  */
 @RunWith(ChromeJUnit4ClassRunner.class)
-@CommandLineFlags.Add(ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE)
-@Features.EnableFeatures(ChromeFeatureList.INTEREST_FEED_CONTENT_SUGGESTIONS)
-public class FeedNewTabPageCardRenderTest {
+@CommandLineFlags
+        .Add(ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE)
+        @Features.EnableFeatures(ChromeFeatureList.INTEREST_FEED_CONTENT_SUGGESTIONS)
+        public class FeedNewTabPageCardRenderTest {
     private static final String TEST_FEED_DATA_BASE_PATH = "/chrome/test/data/android/feed/";
 
     @Rule

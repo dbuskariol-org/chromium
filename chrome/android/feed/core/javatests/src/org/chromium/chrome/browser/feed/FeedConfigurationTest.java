@@ -305,7 +305,8 @@ public class FeedConfigurationTest {
     @CommandLineFlags.
     Add({"enable-features=InterestFeedContentSuggestions<Trial", "force-fieldtrials=Trial/Group",
             "force-fieldtrial-params=Trial.Group:session_lifetime_ms/60000"})
-    public void testSessionLifetimeMs() {
+    public void
+    testSessionLifetimeMs() {
         Assert.assertEquals(60000, FeedConfiguration.getSessionLifetimeMs());
     }
 
@@ -394,7 +395,8 @@ public class FeedConfigurationTest {
     @CommandLineFlags.
     Add({"enable-features=InterestFeedContentSuggestions<Trial", "force-fieldtrials=Trial/Group",
             "force-fieldtrial-params=Trial.Group:view_log_threshold/0.33"})
-    public void testViewLogThreshold() {
+    public void
+    testViewLogThreshold() {
         Assert.assertEquals(
                 0.33d, FeedConfiguration.getViewLogThreshold(), ASSERT_EQUALS_DOUBLE_DELTA);
     }

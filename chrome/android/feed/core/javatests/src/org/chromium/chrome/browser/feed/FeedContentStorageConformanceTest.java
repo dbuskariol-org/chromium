@@ -44,19 +44,19 @@ public final class FeedContentStorageConformanceTest extends ContentStorageConfo
         }
 
         @Override
-        public void getAllKeys(Consumer < Result < List<String>>> consumer) {
+        public void getAllKeys(Consumer<Result<List<String>>> consumer) {
             ConsumerSyncWrapper.waitForConsumer(
                     consumer, (wrapper) -> { super.getAllKeys(wrapper); }, TIMEOUT);
         }
 
         @Override
-        public void get(List<String> keys, Consumer < Result < Map<String, byte[]>>> consumer) {
+        public void get(List<String> keys, Consumer<Result<Map<String, byte[]>>> consumer) {
             ConsumerSyncWrapper.waitForConsumer(
                     consumer, (wrapper) -> { super.get(keys, wrapper); }, TIMEOUT);
         }
 
         @Override
-        public void getAll(String prefix, Consumer < Result < Map<String, byte[]>>> consumer) {
+        public void getAll(String prefix, Consumer<Result<Map<String, byte[]>>> consumer) {
             ConsumerSyncWrapper.waitForConsumer(
                     consumer, (wrapper) -> { super.getAll(prefix, wrapper); }, TIMEOUT);
         }
