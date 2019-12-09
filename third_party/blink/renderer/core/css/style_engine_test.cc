@@ -2484,4 +2484,33 @@ TEST_F(StyleEngineTest, RemoveStyleRecalcRootFromFlatTree) {
   EXPECT_FALSE(GetStyleRecalcRoot());
 }
 
+TEST_F(StyleEngineTest, SlottedWithEnsuredStyleOutsideFlatTree) {
+  ScopedFlatTreeStyleRecalcForTest scope(true);
+
+  GetDocument().body()->SetInnerHTMLFromString(R"HTML(
+    <div id="host"><span></span></div>
+  )HTML");
+
+  auto* host = GetDocument().getElementById("host");
+  auto* span = To<Element>(host->firstChild());
+
+  ShadowRoot& shadow_root =
+      host->AttachShadowRootInternal(ShadowRootType::kOpen);
+  shadow_root.SetInnerHTMLFromString(R"HTML(
+    <div><slot name="default"></slot></div>
+  )HTML");
+
+  UpdateAllLifecyclePhases();
+
+  // Ensure style outside the flat tree.
+  const ComputedStyle* style = span->EnsureComputedStyle();
+  ASSERT_TRUE(style);
+  EXPECT_TRUE(style->IsEnsuredOutsideFlatTree());
+
+  span->setAttribute("slot", "default");
+  GetDocument().GetSlotAssignmentEngine().RecalcSlotAssignments();
+  EXPECT_EQ(span, GetStyleRecalcRoot());
+  EXPECT_FALSE(span->GetComputedStyle());
+}
+
 }  // namespace blink

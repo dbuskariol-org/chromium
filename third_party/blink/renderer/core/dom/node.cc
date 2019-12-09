@@ -3256,6 +3256,14 @@ void Node::FlatTreeParentChanged() {
     DCHECK(GetDocument().MayContainV0Shadow());
     return;
   }
+  if (const ComputedStyle* style = GetComputedStyle()) {
+    // We are moving a node with ensured computed style into the flat tree.
+    // Clear ensured styles so that we can use IsEnsuredOutsideFlatTree() to
+    // determine that we are outside the flat tree before updating the style
+    // recalc root in MarkAncestorsWithChildNeedsStyleRecalc().
+    if (style->IsEnsuredOutsideFlatTree())
+      DetachLayoutTree();
+  }
   // The node changed the flat tree position by being slotted to a new slot or
   // slotted for the first time. We need to recalc style since the inheritance
   // parent may have changed.
