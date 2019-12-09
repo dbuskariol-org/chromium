@@ -164,7 +164,7 @@ void AppListPresenterImpl::Dismiss(base::TimeTicks event_time_stamp) {
   delegate_->OnClosing();
 
   OnVisibilityWillChange(GetTargetVisibility(), GetDisplayId());
-  view_->SetState(ash::AppListViewState::kClosed);
+  view_->SetState(AppListViewState::kClosed);
   base::RecordAction(base::UserMetricsAction("Launcher_Dismiss"));
 }
 
@@ -172,7 +172,7 @@ bool AppListPresenterImpl::HandleCloseOpenFolder() {
   return is_target_visibility_show_ && view_ && view_->HandleCloseOpenFolder();
 }
 
-ash::ShelfAction AppListPresenterImpl::ToggleAppList(
+ShelfAction AppListPresenterImpl::ToggleAppList(
     int64_t display_id,
     AppListShowSource show_source,
     base::TimeTicks event_time_stamp) {
@@ -182,21 +182,21 @@ ash::ShelfAction AppListPresenterImpl::ToggleAppList(
   // animation can be reversed.
   if (is_target_visibility_show_) {
     if (request_fullscreen) {
-      if (view_->app_list_state() == ash::AppListViewState::kPeeking) {
-        view_->SetState(ash::AppListViewState::kFullscreenAllApps);
-        return ash::SHELF_ACTION_APP_LIST_SHOWN;
-      } else if (view_->app_list_state() == ash::AppListViewState::kHalf) {
-        view_->SetState(ash::AppListViewState::kFullscreenSearch);
-        return ash::SHELF_ACTION_APP_LIST_SHOWN;
+      if (view_->app_list_state() == AppListViewState::kPeeking) {
+        view_->SetState(AppListViewState::kFullscreenAllApps);
+        return SHELF_ACTION_APP_LIST_SHOWN;
+      } else if (view_->app_list_state() == AppListViewState::kHalf) {
+        view_->SetState(AppListViewState::kFullscreenSearch);
+        return SHELF_ACTION_APP_LIST_SHOWN;
       }
     }
     Dismiss(event_time_stamp);
-    return ash::SHELF_ACTION_APP_LIST_DISMISSED;
+    return SHELF_ACTION_APP_LIST_DISMISSED;
   }
   Show(display_id, event_time_stamp);
   if (request_fullscreen)
-    view_->SetState(ash::AppListViewState::kFullscreenAllApps);
-  return ash::SHELF_ACTION_APP_LIST_SHOWN;
+    view_->SetState(AppListViewState::kFullscreenAllApps);
+  return SHELF_ACTION_APP_LIST_SHOWN;
 }
 
 bool AppListPresenterImpl::IsVisibleDeprecated() const {
@@ -222,8 +222,7 @@ void AppListPresenterImpl::UpdateYPositionAndOpacity(int y_position_in_screen,
     view_->UpdateYPositionAndOpacity(y_position_in_screen, background_opacity);
 }
 
-void AppListPresenterImpl::EndDragFromShelf(
-    ash::AppListViewState app_list_state) {
+void AppListPresenterImpl::EndDragFromShelf(AppListViewState app_list_state) {
   if (view_)
     view_->EndDragFromShelf(app_list_state);
 }
