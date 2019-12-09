@@ -8,10 +8,12 @@
 
 #include "services/device/public/mojom/nfc.mojom-blink.h"
 #include "third_party/blink/renderer/bindings/core/v8/script_promise_resolver.h"
+#include "third_party/blink/renderer/bindings/core/v8/source_location.h"
 #include "third_party/blink/renderer/core/dom/abort_signal.h"
+#include "third_party/blink/renderer/core/dom/dom_exception.h"
+#include "third_party/blink/renderer/core/events/error_event.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
 #include "third_party/blink/renderer/modules/event_target_modules.h"
-#include "third_party/blink/renderer/modules/nfc/ndef_error_event.h"
 #include "third_party/blink/renderer/modules/nfc/ndef_message.h"
 #include "third_party/blink/renderer/modules/nfc/ndef_reading_event.h"
 #include "third_party/blink/renderer/modules/nfc/ndef_scan_options.h"
@@ -164,19 +166,18 @@ void NDEFReader::OnReading(const String& serial_number,
       MakeGarbageCollected<NDEFMessage>(message)));
 }
 
-void NDEFReader::OnError(device::mojom::blink::NDEFErrorType error) {
-  DispatchEvent(*MakeGarbageCollected<NDEFErrorEvent>(
-      event_type_names::kError, NDEFErrorTypeToDOMException(error)));
-}
-
 void NDEFReader::OnMojoConnectionError() {
   // If |resolver_| has already settled this rejection is silently ignored.
   if (resolver_) {
     resolver_->Reject(NDEFErrorTypeToDOMException(
         device::mojom::blink::NDEFErrorType::NOT_SUPPORTED));
   }
+
   // Dispatches an error event.
-  OnError(device::mojom::blink::NDEFErrorType::NOT_SUPPORTED);
+  ErrorEvent* error = ErrorEvent::Create(
+      "No NFC adapter or cannot establish connection.",
+      SourceLocation::Capture(GetExecutionContext()), nullptr);
+  DispatchEvent(*error);
 }
 
 void NDEFReader::ContextDestroyed(ExecutionContext*) {
