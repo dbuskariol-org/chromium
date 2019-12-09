@@ -6525,8 +6525,8 @@ if (is_chromeos) {
       "../common/string_matching/tokenized_string_fuzzer.cc",
     ]
     deps = [
-      "//ash/public/cpp",
       "//base",
+      "//chrome/common/string_matching",
     ]
   }
 }
