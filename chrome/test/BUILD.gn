@@ -5492,6 +5492,7 @@ if (!is_android) {
       "../browser/extensions/extension_fullscreen_apitest.cc",
       "../browser/extensions/extension_function_test_utils.cc",
       "../browser/extensions/extension_keybinding_apitest.cc",
+      "../browser/extensions/omnibox_focus_interactive_test.cc",
       "../browser/extensions/window_open_interactive_apitest.cc",
       "../browser/global_keyboard_shortcuts_mac_browsertest.mm",
       "../browser/mouse_events_interactive_uitest.cc",
