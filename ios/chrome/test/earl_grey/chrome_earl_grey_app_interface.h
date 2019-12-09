@@ -327,9 +327,6 @@
 // invoked from test code, as the EG test code runs in a separate process and
 // must query Chrome for the state.
 
-// Returns YES if SlimNavigationManager feature is enabled.
-+ (BOOL)isSlimNavigationManagerEnabled WARN_UNUSED_RESULT;
-
 // Returns YES if BlockNewTabPagePendingLoad feature is enabled.
 + (BOOL)isBlockNewTabPagePendingLoadEnabled WARN_UNUSED_RESULT;
 

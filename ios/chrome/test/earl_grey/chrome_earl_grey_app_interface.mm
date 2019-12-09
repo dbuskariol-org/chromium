@@ -574,10 +574,6 @@ using chrome_test_util::BrowserCommandDispatcherForMainBVC;
 
 #pragma mark - Check features (EG2)
 
-+ (BOOL)isSlimNavigationManagerEnabled {
-  return base::FeatureList::IsEnabled(web::features::kSlimNavigationManager);
-}
-
 + (BOOL)isBlockNewTabPagePendingLoadEnabled {
   return base::FeatureList::IsEnabled(kBlockNewTabPagePendingLoad);
 }

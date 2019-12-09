@@ -422,9 +422,6 @@ id ExecuteJavaScript(NSString* javascript, NSError* __autoreleasing* out_error);
 
 #pragma mark - Feature enables checkers (EG2)
 
-// Returns YES if SlimNavigationManager feature is enabled.
-- (BOOL)isSlimNavigationManagerEnabled WARN_UNUSED_RESULT;
-
 // Returns YES if BlockNewTabPagePendingLoad feature is enabled.
 - (BOOL)isBlockNewTabPagePendingLoadEnabled WARN_UNUSED_RESULT;
 

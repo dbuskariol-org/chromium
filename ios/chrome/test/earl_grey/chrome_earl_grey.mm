@@ -730,10 +730,6 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeEarlGreyAppInterface)
 
 #pragma mark - Check features (EG2)
 
-- (BOOL)isSlimNavigationManagerEnabled {
-  return [ChromeEarlGreyAppInterface isSlimNavigationManagerEnabled];
-}
-
 - (BOOL)isBlockNewTabPagePendingLoadEnabled {
   return [ChromeEarlGreyAppInterface isBlockNewTabPagePendingLoadEnabled];
 }
