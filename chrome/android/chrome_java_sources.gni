@@ -1845,6 +1845,7 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/widget/DateDividedAdapter.java",
   "java/src/org/chromium/chrome/browser/widget/FeatureHighlightProvider.java",
   "java/src/org/chromium/chrome/browser/widget/NumberRollView.java",
+  "java/src/org/chromium/chrome/browser/widget/RoundedIconGenerator.java",
   "java/src/org/chromium/chrome/browser/widget/ScrimView.java",
   "java/src/org/chromium/chrome/browser/widget/ThumbnailDiskStorage.java",
   "java/src/org/chromium/chrome/browser/widget/ThumbnailGenerator.java",

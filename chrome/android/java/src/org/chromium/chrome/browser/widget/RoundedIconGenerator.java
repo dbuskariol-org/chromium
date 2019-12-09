@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ui.widget;
+package org.chromium.chrome.browser.widget;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -29,7 +29,7 @@ import java.util.Locale;
  * having a centered character drawn on top of it.
  */
 public class RoundedIconGenerator {
-    private static final String TAG = RoundedIconGenerator.class.getSimpleName();
+    private static final String TAG = "RoundedIconGenerator";
 
     private final int mIconWidthPx;
     private final int mIconHeightPx;

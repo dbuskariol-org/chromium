@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.test.ui;
+package org.chromium.ui.test.util;
 
 import android.support.test.rule.ActivityTestRule;
 
@@ -13,7 +13,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import org.chromium.chrome.test.DisableNativeTestRule;
+import org.chromium.base.test.DisableNativeTestRule;
 
 /**
  * Test case to instrument DummyUiActivity for UI testing scenarios.
@@ -61,8 +61,7 @@ public class DummyUiActivityTestCase {
     }
 
     // Override this to tear down after test.
-    public void tearDownTest() throws Exception {
-    }
+    public void tearDownTest() throws Exception {}
 
     public DummyUiActivity getActivity() {
         return mActivity;
