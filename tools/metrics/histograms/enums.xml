@@ -35746,6 +35746,11 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="3" label="Main dialog accepted"/>
 </enum>
 
+<enum name="LocalFrameRootPurgeSignal">
+  <int value="0" label="Initial"/>
+  <int value="1" label="Multiple"/>
+</enum>
+
 <enum name="LocalRendererSinkStates">
   <int value="0" label="SinkStarted"/>
   <int value="1" label="SinkNeverStarted"/>

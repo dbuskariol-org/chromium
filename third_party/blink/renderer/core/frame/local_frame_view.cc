@@ -283,6 +283,9 @@ LocalFrameView::LocalFrameView(LocalFrame& frame, IntRect frame_rect)
   if (frame_->Owner() &&
       frame_->Owner()->ScrollingMode() == ScrollbarMode::kAlwaysOff)
     SetCanHaveScrollbars(false);
+
+  if (frame_->IsLocalRoot())
+    MemoryPressureListenerRegistry::Instance().RegisterClient(this);
 }
 
 LocalFrameView::~LocalFrameView() {
@@ -4387,6 +4390,27 @@ void LocalFrameView::UpdateLayerDebugInfoEnabled() {
     layer_debug_info_enabled_ = should_enable;
     SetPaintArtifactCompositorNeedsUpdate();
   }
+}
+
+// These are reported to UMA server. Do not renumber or reuse values.
+enum LocalFrameRootPurgeSignal {
+  kInitial = 0,
+  kMultiple = 1,
+  // Note: Only add new values immediately before this line.
+  kSignalCount
+};
+
+void LocalFrameView::OnPurgeMemory() {
+  DCHECK(frame_->IsLocalRoot());
+
+  auto initial_or_multiple = received_memory_pressure_purge_signal_
+                                 ? LocalFrameRootPurgeSignal::kMultiple
+                                 : LocalFrameRootPurgeSignal::kInitial;
+  UMA_HISTOGRAM_ENUMERATION(
+      "Memory.Experimental.Renderer.LocalFrameRootPurgeSignal",
+      initial_or_multiple, LocalFrameRootPurgeSignal::kSignalCount);
+  if (!received_memory_pressure_purge_signal_)
+    received_memory_pressure_purge_signal_ = true;
 }
 
 }  // namespace blink
