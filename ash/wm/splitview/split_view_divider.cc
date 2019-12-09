@@ -37,9 +37,9 @@ namespace ash {
 
 namespace {
 
-// The distance to the divider edge in which a touch gesture will be considered
-// as a valid event on the divider.
-constexpr int kDividerEdgeInsetForTouch = 8;
+// Distance from the divider's center point that reserved for splitview
+// resizing in landscape orientation.
+constexpr int kDistanceForSplitViewResize = 32;
 
 // The window targeter that is installed on the always on top container window
 // when the split view mode is active.
@@ -56,7 +56,8 @@ class AlwaysOnTopWindowTargeter : public aura::WindowTargeter {
     if (target == divider_window_) {
       *hit_test_rect_mouse = *hit_test_rect_touch = gfx::Rect(target->bounds());
       hit_test_rect_touch->Inset(
-          gfx::Insets(-kDividerEdgeInsetForTouch, -kDividerEdgeInsetForTouch));
+          gfx::Insets(-SplitViewDivider::kDividerEdgeInsetForTouch,
+                      -SplitViewDivider::kDividerEdgeInsetForTouch));
       return true;
     }
     return aura::WindowTargeter::GetHitTestRects(target, hit_test_rect_mouse,
@@ -167,6 +168,8 @@ class DividerView : public views::View, public views::ViewTargeterDelegate {
         break;
       case ui::ET_GESTURE_TAP_DOWN:
       case ui::ET_GESTURE_SCROLL_BEGIN:
+        if (!divider_->IsInsideLandscapeResizableArea(location))
+          break;
         controller_->StartResize(location);
         OnResizeStatusChanged();
         break;
@@ -361,6 +364,14 @@ void SplitViewDivider::OnWindowDragStarted(aura::Window* dragged_window) {
 void SplitViewDivider::OnWindowDragEnded() {
   is_dragging_window_ = false;
   SetAlwaysOnTop(true);
+}
+
+bool SplitViewDivider::IsInsideLandscapeResizableArea(
+    const gfx::Point& location) {
+  const gfx::Point center_point =
+      GetDividerBoundsInScreen(/*is_dragging=*/false).CenterPoint();
+  return location.y() >= center_point.y() - kDistanceForSplitViewResize &&
+         location.y() <= center_point.y() + kDistanceForSplitViewResize;
 }
 
 void SplitViewDivider::OnWindowDestroying(aura::Window* window) {
