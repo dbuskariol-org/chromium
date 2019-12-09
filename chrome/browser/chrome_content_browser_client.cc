@@ -2967,9 +2967,9 @@ bool ChromeContentBrowserClient::CanCreateWindow(
     return false;
   }
 
-  BlockedWindowParams blocked_params(target_url, source_origin, referrer,
-                                     frame_name, disposition, features,
-                                     user_gesture, opener_suppressed);
+  BlockedWindowParams blocked_params(
+      target_url, source_origin, opener->GetSiteInstance(), referrer,
+      frame_name, disposition, features, user_gesture, opener_suppressed);
   NavigateParams nav_params = blocked_params.CreateNavigateParams(web_contents);
   return !MaybeBlockPopup(web_contents, &opener_top_level_frame_url,
                           &nav_params, nullptr /*=open_url_params*/,
