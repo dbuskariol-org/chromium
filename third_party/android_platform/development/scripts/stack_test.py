@@ -70,22 +70,36 @@ class FakeSymbolizer:
       return [('??', '??:0:0')]
 
     namespace = basename.split('.')[0].replace('lib', '', 1)
+
+    # Determine if the lib is a secondary ABI library, in which case, preface
+    # its namespace with '32'.
+    if 'android_clang_' in file:
+      namespace += '32'
+
     method_name = '{}::Func_{:X}'.format(namespace, address)
     return [(method_name, '{}.cc:1:1'.format(namespace))]
 
 
 class StackDecodeTest(unittest.TestCase):
-
   def setUp(self):
+    self._num_libraries = 0
     self._temp_dir = tempfile.mkdtemp()
 
   def tearDown(self):
     shutil.rmtree(self._temp_dir)
 
   def _MakeElf(self, file):
+    # Make the unstripped lib directory in case stack.py looks for it.
+    dir = os.path.join(os.path.dirname(file), 'lib.unstripped')
+    if not os.path.exists(dir):
+      os.makedirs(dir)
+
     # Create a library slightly less than 4K in size, so that when added to an
-    # APK archive, all libraries end up on 4K boundaries.
-    data = '\x7fELF' + ' ' * 0xE00
+    # APK archive, all libraries end up on 4K boundaries. Also, make each
+    # library a slightly different size, since stack.py may utilize size when
+    # matching up libraries.
+    data = '\x7fELF' + ' ' * (0xE00 - self._num_libraries)
+    self._num_libraries += 1
     with open(file, 'wb') as f:
       f.write(data)
 
@@ -226,6 +240,41 @@ class StackDecodeTest(unittest.TestCase):
     expected = textwrap.dedent('''
       00000474   art_function+40          /system/lib/libart.so
       00000474   <UNKNOWN>                /system/lib/libart.so
+      ''')
+    self._RunCase(input, expected, apks)
+
+  def test_MultiArchPrimaryAbi(self):
+    apks = {
+        'monochrome.apk': [
+            'libmonochrome.so', 'android_clang_arm/libmonochrome.so'
+        ],
+    }
+    # With both architectures present, verify that the correct ABI output and
+    # directory is chosen, even if identically-named libraries exist in both.
+    input = textwrap.dedent('''
+      DEBUG : #01 pc 00000174  /path==/base.apk (offset 0x00001000)
+      ''')
+    expected = textwrap.dedent('''
+      00000174   monochrome::Func_174         monochrome.cc:1:1
+      ''')
+    self._RunCase(input, expected, apks)
+
+  def test_MultiArchSecondary(self):
+    apks = {
+        'monochrome.apk': [
+            'libmonochrome.so', 'android_clang_arm/libmonochrome.so'
+        ],
+    }
+    # With both architectures present, verify that the secondary ABI output
+    # directory is chosen when appropriate, even if identically-named libraries
+    # exist in both. This must be a different test from the primary ABI case,
+    # since in practice, traces are from a single ABI (and the script relies on
+    # this).
+    input = textwrap.dedent('''
+      DEBUG : #02 pc 00000274  /path==/base.apk (offset 0x00002000)
+      ''')
+    expected = textwrap.dedent('''
+      00000274   monochrome32::Func_274       monochrome32.cc:1:1
       ''')
     self._RunCase(input, expected, apks)
 
