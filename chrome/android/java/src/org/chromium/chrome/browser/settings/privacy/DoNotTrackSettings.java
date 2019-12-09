@@ -16,7 +16,7 @@ import org.chromium.chrome.browser.settings.SettingsUtils;
 /**
  * Fragment to manage 'Do Not Track' preference and to explain to the user what it does.
  */
-public class DoNotTrackPreference extends PreferenceFragmentCompat {
+public class DoNotTrackSettings extends PreferenceFragmentCompat {
     // Must match key in do_not_track_preferences.xml.
     private static final String PREF_DO_NOT_TRACK_SWITCH = "do_not_track_switch";
 

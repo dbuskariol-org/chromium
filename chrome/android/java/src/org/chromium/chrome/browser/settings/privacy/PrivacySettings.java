@@ -31,7 +31,7 @@ import org.chromium.ui.text.SpanApplier;
 /**
  * Fragment to keep track of the all the privacy related preferences.
  */
-public class PrivacyPreferences
+public class PrivacySettings
         extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
     private static final String PREF_CAN_MAKE_PAYMENT = "can_make_payment";
     private static final String PREF_NETWORK_PREDICTIONS = "preload_pages";
@@ -146,8 +146,8 @@ public class PrivacyPreferences
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        MenuItem help = menu.add(
-                Menu.NONE, R.id.menu_id_targeted_help, Menu.NONE, R.string.menu_help);
+        MenuItem help =
+                menu.add(Menu.NONE, R.id.menu_id_targeted_help, Menu.NONE, R.string.menu_help);
         help.setIcon(VectorDrawableCompat.create(
                 getResources(), R.drawable.ic_help_and_feedback, getActivity().getTheme()));
     }

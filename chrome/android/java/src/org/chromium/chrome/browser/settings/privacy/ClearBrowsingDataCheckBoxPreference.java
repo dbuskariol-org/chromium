@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings;
+package org.chromium.chrome.browser.settings.privacy;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
@@ -18,12 +18,13 @@ import android.widget.TextView;
 
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.chrome.R;
+import org.chromium.chrome.browser.settings.ChromeBaseCheckBoxPreference;
 import org.chromium.chrome.browser.util.AccessibilityUtil;
 import org.chromium.ui.text.NoUnderlineClickableSpan;
 import org.chromium.ui.text.SpanApplier;
 
 /**
- * A preference representing one browsing data type in ClearBrowsingDataPreferences.
+ * A preference representing one browsing data type in ClearBrowsingDataFragment.
  * This class allows clickable links inside the checkbox summary.
  */
 public class ClearBrowsingDataCheckBoxPreference extends ChromeBaseCheckBoxPreference {

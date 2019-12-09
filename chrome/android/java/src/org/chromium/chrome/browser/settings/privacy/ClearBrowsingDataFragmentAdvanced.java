@@ -12,12 +12,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A more advanced version of {@link ClearBrowsingDataPreferences} with more dialog options and less
+ * A more advanced version of {@link ClearBrowsingDataFragment} with more dialog options and less
  * explanatory text.
  */
-public class ClearBrowsingDataPreferencesAdvanced extends ClearBrowsingDataPreferences {
+public class ClearBrowsingDataFragmentAdvanced extends ClearBrowsingDataFragment {
     @Override
-    protected int getPreferenceType() {
+    protected int getClearBrowsingDataTabType() {
         return ClearBrowsingDataTab.ADVANCED;
     }
 

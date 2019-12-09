@@ -36,7 +36,6 @@ import org.chromium.chrome.browser.historyreport.AppIndexingReporter;
 import org.chromium.chrome.browser.multiwindow.MultiWindowUtils;
 import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
-import org.chromium.chrome.browser.settings.ClearBrowsingDataCheckBoxPreference;
 import org.chromium.chrome.browser.settings.SettingsUtils;
 import org.chromium.chrome.browser.settings.SpinnerPreference;
 import org.chromium.chrome.browser.settings.privacy.BrowsingDataCounterBridge.BrowsingDataCounterCallback;
@@ -49,33 +48,34 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Preference screen that allows the user to clear browsing data.
+ * Settings screen that allows the user to clear browsing data.
  * The user can choose which types of data to clear (history, cookies, etc), and the time range
  * from which to clear data.
  */
-public abstract class ClearBrowsingDataPreferences extends PreferenceFragmentCompat
+public abstract class ClearBrowsingDataFragment extends PreferenceFragmentCompat
         implements BrowsingDataBridge.OnClearBrowsingDataListener,
                    Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
     /**
      * Represents a single item in the dialog.
      */
-    private static class Item implements BrowsingDataCounterCallback,
-                                         Preference.OnPreferenceClickListener {
+    private static class Item
+            implements BrowsingDataCounterCallback, Preference.OnPreferenceClickListener {
         private static final int MIN_DP_FOR_ICON = 360;
-        private final ClearBrowsingDataPreferences mParent;
+        private final ClearBrowsingDataFragment mParent;
         private final @DialogOption int mOption;
         private final ClearBrowsingDataCheckBoxPreference mCheckbox;
         private BrowsingDataCounterBridge mCounter;
         private boolean mShouldAnnounceCounterResult;
 
-        public Item(Context context, ClearBrowsingDataPreferences parent, @DialogOption int option,
+        public Item(Context context, ClearBrowsingDataFragment parent, @DialogOption int option,
                 ClearBrowsingDataCheckBoxPreference checkbox, boolean selected, boolean enabled) {
             super();
             mParent = parent;
             mOption = option;
             mCheckbox = checkbox;
             mCounter = new BrowsingDataCounterBridge(this,
-                    ClearBrowsingDataPreferences.getDataType(mOption), mParent.getPreferenceType());
+                    ClearBrowsingDataFragment.getDataType(mOption),
+                    mParent.getClearBrowsingDataTabType());
 
             mCheckbox.setOnPreferenceClickListener(this);
             mCheckbox.setEnabled(enabled);
@@ -84,7 +84,7 @@ public abstract class ClearBrowsingDataPreferences extends PreferenceFragmentCom
             int dp = mParent.getResources().getConfiguration().smallestScreenWidthDp;
             if (dp >= MIN_DP_FOR_ICON) {
                 mCheckbox.setIcon(SettingsUtils.getTintedIcon(
-                        context, ClearBrowsingDataPreferences.getIcon(option)));
+                        context, ClearBrowsingDataFragment.getIcon(option)));
             }
         }
 
@@ -107,8 +107,8 @@ public abstract class ClearBrowsingDataPreferences extends PreferenceFragmentCom
             mParent.updateButtonState();
             mShouldAnnounceCounterResult = true;
             BrowsingDataBridge.getInstance().setBrowsingDataDeletionPreference(
-                    ClearBrowsingDataPreferences.getDataType(mOption), mParent.getPreferenceType(),
-                    mCheckbox.isChecked());
+                    ClearBrowsingDataFragment.getDataType(mOption),
+                    mParent.getClearBrowsingDataTabType(), mCheckbox.isChecked());
             return true;
         }
 
@@ -171,7 +171,7 @@ public abstract class ClearBrowsingDataPreferences extends PreferenceFragmentCom
     public static final String PREF_CLEAR_BUTTON = "clear_button";
 
     /** The tag used for logging. */
-    public static final String TAG = "ClearBrowsingDataPreferences";
+    public static final String TAG = "ClearBrowsingDataFragment";
 
     /** The histogram for the dialog about other forms of browsing history. */
     private static final String DIALOG_HISTOGRAM =
@@ -381,10 +381,9 @@ public abstract class ClearBrowsingDataPreferences extends PreferenceFragmentCom
     protected abstract List<Integer> getDialogOptions();
 
     /**
-     * Returns whether this preference page is a basic or advanced tab in order to use separate
-     * preferences.
+     * Returns whether is a basic or advanced Clear Browsing Data tab.
      */
-    protected abstract int getPreferenceType();
+    protected abstract @ClearBrowsingDataTab int getClearBrowsingDataTabType();
 
     /**
      * Returns the Array of time periods. Options are displayed in the same order as they appear
@@ -420,7 +419,7 @@ public abstract class ClearBrowsingDataPreferences extends PreferenceFragmentCom
      */
     private boolean isOptionSelectedByDefault(@DialogOption int option) {
         return BrowsingDataBridge.getInstance().getBrowsingDataDeletionPreference(
-                getDataType(option), getPreferenceType());
+                getDataType(option), getClearBrowsingDataTabType());
     }
 
     /**
@@ -507,7 +506,8 @@ public abstract class ClearBrowsingDataPreferences extends PreferenceFragmentCom
             }
 
             BrowsingDataBridge.getInstance().setBrowsingDataDeletionTimePeriod(
-                    getPreferenceType(), ((TimePeriodSpinnerOption) value).getTimePeriod());
+                    getClearBrowsingDataTabType(),
+                    ((TimePeriodSpinnerOption) value).getTimePeriod());
             return true;
         }
         return false;
@@ -533,13 +533,14 @@ public abstract class ClearBrowsingDataPreferences extends PreferenceFragmentCom
         List<Integer> options = getDialogOptions();
         mItems = new Item[options.size()];
         for (int i = 0; i < options.size(); i++) {
-            @DialogOption int option = options.get(i);
+            @DialogOption
+            int option = options.get(i);
             boolean enabled = true;
 
             // It is possible to disable the deletion of browsing history.
             if (option == DialogOption.CLEAR_HISTORY
                     && !PrefServiceBridge.getInstance().getBoolean(
-                               Pref.ALLOW_DELETING_BROWSER_HISTORY)) {
+                            Pref.ALLOW_DELETING_BROWSER_HISTORY)) {
                 enabled = false;
                 BrowsingDataBridge.getInstance().setBrowsingDataDeletionPreference(
                         getDataType(DialogOption.CLEAR_HISTORY), ClearBrowsingDataTab.BASIC, false);
@@ -566,7 +567,7 @@ public abstract class ClearBrowsingDataPreferences extends PreferenceFragmentCom
         TimePeriodSpinnerOption[] spinnerOptions = getTimePeriodSpinnerOptions();
         @TimePeriod
         int selectedTimePeriod = BrowsingDataBridge.getInstance().getBrowsingDataDeletionTimePeriod(
-                getPreferenceType());
+                getClearBrowsingDataTabType());
         int spinnerOptionIndex = -1;
         for (int i = 0; i < spinnerOptions.length; ++i) {
             if (spinnerOptions[i].getTimePeriod() == selectedTimePeriod) {

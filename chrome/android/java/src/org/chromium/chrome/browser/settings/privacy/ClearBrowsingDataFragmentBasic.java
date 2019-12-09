@@ -10,7 +10,6 @@ import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.browsing_data.ClearBrowsingDataTab;
-import org.chromium.chrome.browser.settings.ClearBrowsingDataCheckBoxPreference;
 import org.chromium.chrome.browser.sync.ProfileSyncService;
 import org.chromium.chrome.browser.tab.TabLaunchType;
 import org.chromium.chrome.browser.tabmodel.document.TabDelegate;
@@ -23,10 +22,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A simpler version of {@link ClearBrowsingDataPreferences} with fewer dialog options and more
+ * A simpler version of {@link ClearBrowsingDataFragment} with fewer dialog options and more
  * explanatory text.
  */
-public class ClearBrowsingDataPreferencesBasic extends ClearBrowsingDataPreferences {
+public class ClearBrowsingDataFragmentBasic extends ClearBrowsingDataFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +59,7 @@ public class ClearBrowsingDataPreferencesBasic extends ClearBrowsingDataPreferen
     }
 
     @Override
-    protected int getPreferenceType() {
+    protected int getClearBrowsingDataTabType() {
         return ClearBrowsingDataTab.BASIC;
     }
 
