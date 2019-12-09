@@ -312,6 +312,9 @@
 // otherwise returns object representing execution result.
 + (id)executeJavaScript:(NSString*)javaScript error:(NSError**)error;
 
+// Returns the user agent that should be used for the mobile version.
++ (NSString*)mobileUserAgentString;
+
 #pragma mark - Accessibility Utilities (EG2)
 
 // Verifies that all interactive elements on screen (or at least one of their

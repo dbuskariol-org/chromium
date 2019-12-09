@@ -403,6 +403,9 @@ id ExecuteJavaScript(NSString* javascript, NSError* __autoreleasing* out_error);
 // induced.
 - (id)executeJavaScript:(NSString*)javaScript;
 
+// Returns the user agent that should be used for the mobile version.
+- (NSString*)mobileUserAgentString;
+
 #pragma mark - Cookie Utilities (EG2)
 
 // Returns cookies as key value pairs, where key is a cookie name and value is a

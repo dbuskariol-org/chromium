@@ -554,6 +554,11 @@ using chrome_test_util::BrowserCommandDispatcherForMainBVC;
   return blockResult;
 }
 
++ (NSString*)mobileUserAgentString {
+  return base::SysUTF8ToNSString(
+      web::GetWebClient()->GetUserAgent(web::UserAgentType::MOBILE));
+}
+
 #pragma mark - Accessibility Utilities (EG2)
 
 + (NSError*)verifyAccessibilityForCurrentScreen {

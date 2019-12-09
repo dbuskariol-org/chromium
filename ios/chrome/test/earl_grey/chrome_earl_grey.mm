@@ -710,6 +710,10 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeEarlGreyAppInterface)
   return result;
 }
 
+- (NSString*)mobileUserAgentString {
+  return [ChromeEarlGreyAppInterface mobileUserAgentString];
+}
+
 #pragma mark - URL Utilities (EG2)
 
 - (NSString*)displayTitleForURL:(const GURL&)URL {
