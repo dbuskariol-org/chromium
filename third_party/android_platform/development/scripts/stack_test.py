@@ -24,9 +24,11 @@ sys.path.insert(1,
                 constants.host_paths.ANDROID_PLATFORM_DEVELOPMENT_SCRIPTS_PATH)
 import stack
 
-_ZIPALIGN_PATH = os.path.join(
-    constants.DIR_SOURCE_ROOT, 'third_party', 'android_sdk', 'public',
-    'build-tools', constants.ANDROID_SDK_BUILD_TOOLS_VERSION, 'zipalign')
+# Use Python-based zipalign so that these tests can run on the Presubmit bot.
+sys.path.insert(
+    1, os.path.join(constants.DIR_SOURCE_ROOT, 'build', 'android', 'gyp'))
+from util import zipalign
+
 
 # These tests exercise stack.py by generating fake APKs (zip-aligned archives),
 # full of fake .so files (with ELF headers), and using a fake symbolizer.
@@ -105,8 +107,8 @@ class StackDecodeTest(unittest.TestCase):
 
   # Build a dummy APK with native libraries in it.
   def _MakeApk(self, apk, libs, apk_dir, out_dir):
-    unaligned_apk = os.path.join(self._temp_dir, 'unaligned_apk')
-    with zipfile.ZipFile(unaligned_apk, 'w') as archive:
+    apk_file = os.path.join(apk_dir, apk)
+    with zipfile.ZipFile(apk_file, 'w') as archive:
       for lib in libs:
         # Make an ELF-format .so file. The fake symbolizer will fudge functions
         # for libraries that exist.
@@ -114,12 +116,12 @@ class StackDecodeTest(unittest.TestCase):
         self._MakeElf(library_file)
 
         # Add the library to the APK.
-        archive.write(library_file, lib, compress_type=None)
-
-    # Zip-align the APK so library offsets are round numbers.
-    apk_file = os.path.join(apk_dir, apk)
-    subprocess.check_output(
-        [_ZIPALIGN_PATH, '-p', '-f', '4', unaligned_apk, apk_file])
+        zipalign.AddToZipHermetic(
+            archive,
+            lib,
+            src_path=library_file,
+            compress=False,
+            alignment=0x1000)
 
   # Accept either a multi-line string or a list of strings, strip leading and
   # trailing whitespace, and return the strings as a list.
