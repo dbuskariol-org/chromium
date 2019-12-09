@@ -1051,7 +1051,7 @@ def generate_interfaces(web_idl_database, output_dirs):
     filename = "v8_example_interface.cc"
     filepath = os.path.join(output_dirs['core'], filename)
 
-    interface = web_idl_database.find("TestNamespace")
+    interface = web_idl_database.find("KeyboardEvent")
 
     cg_context = CodeGenContext(interface=interface)
 
