@@ -42,13 +42,11 @@
       <div slot="bottom-buttons" class="flex layout horizontal">
         <div class="flex"></div>
         <oobe-text-button border on-tap="onCancelTap_"
-            id="enable-adb-sideloading-cancel-button">
-          [[i18nDynamic(locale, 'enableAdbSideloadingCancelButton')]]
-        </oobe-text-button>
+            text-key="enableAdbSideloadingCancelButton"
+            id="enable-adb-sideloading-cancel-button"></oobe-text-button>
         <oobe-text-button inverse on-tap="onEnableTap_" class="focus-on-show"
-            id="enable-adb-sideloading-ok-button">
-          [[i18nDynamic(locale, 'enableAdbSideloadingConfirmButton')]]
-        </oobe-text-button>
+            text-key="enableAdbSideloadingConfirmButton"
+            id="enable-adb-sideloading-ok-button"></oobe-text-button>
       </div>
     </oobe-dialog>
 
@@ -78,9 +76,8 @@
       </div>
       <div slot="bottom-buttons" class="flex layout horizontal">
         <div class="flex"></div>
-        <oobe-text-button inverse on-tap="onCancelTap_" class="focus-on-show">
-          [[i18nDynamic(locale, 'enableAdbSideloadingOkButton')]]
-        </oobe-text-button>
+        <oobe-text-button inverse on-tap="onCancelTap_" class="focus-on-show"
+            text-key="enableAdbSideloadingOkButton"></oobe-text-button>
       </div>
     </oobe-dialog>
   </template>

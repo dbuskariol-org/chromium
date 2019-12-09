@@ -60,13 +60,11 @@
           <div slot="bottom-buttons" class="flex layout horizontal">
             <div class="flex"></div>
             <oobe-text-button border id="skip-button" on-tap="onSkip_"
-                hidden="[[isSkipHidden_()]]">
-              <div>[[i18nDynamic(locale,'migrationButtonSkip')]]</div>
+                hidden="[[isSkipHidden_()]]" text-key="migrationButtonSkip">
             </oobe-text-button>
             <oobe-text-button inverse id="upgrade-button" on-tap="onUpgrade_"
-                disabled="[[isUpdateDisabled_(isEnoughBattery, isSkipped)]]">
-              <div>[[i18nDynamic(locale,'migrationButtonUpdate')]]</div>
-            </oobe-text-button>
+                disabled="[[isUpdateDisabled_(isEnoughBattery, isSkipped)]]"
+                text-key="migrationButtonUpdate"></oobe-text-button>
           </div>
         </template>
       </oobe-dialog>
@@ -105,13 +103,11 @@
         <div slot="bottom-buttons" class="flex layout horizontal">
           <div class="flex"></div>
 <if expr="_google_chrome">
-          <oobe-text-button border on-tap="onReportAnIssue_">
-            <div>[[i18nDynamic(locale,'migrationButtonReportAnIssue')]]</div>
-          </oobe-text-button>
+          <oobe-text-button border on-tap="onReportAnIssue_"
+              text-key="migrationButtonReportAnIssue"></oobe-text-button>
 </if>
           <oobe-text-button inverse id="restart-button"
-              on-tap="onRestartOnFailure_">
-            <div>[[i18nDynamic(locale,'migrationButtonRestart')]]</div>
+              on-tap="onRestartOnFailure_" text-key="migrationButtonRestart">
           </oobe-text-button>
         </div>
       </oobe-dialog>
@@ -139,15 +135,13 @@
           <div class="flex"></div>
           <template is="dom-if" if="[[!isResuming]]">
             <oobe-text-button inverse id="insufficient-space-skip-button"
-                on-tap="onSkip_">
-              <div>[[i18nDynamic(locale,'migrationButtonContinue')]]</div>
+                on-tap="onSkip_" text-key="migrationButtonContinue">
             </oobe-text-button>
           </template>
           <template is="dom-if" if="[[isResuming]]">
             <oobe-text-button inverse id="insufficient-space-restart-button"
-                on-tap="onRestartOnLowStorage_">
-              <div>[[i18nDynamic(locale,'migrationButtonRestart')]]</div>
-            </oobe-text-button>
+                on-tap="onRestartOnLowStorage_"
+                text-key="migrationButtonRestart"></oobe-text-button>
           </template>
         </div>
       </oobe-dialog>

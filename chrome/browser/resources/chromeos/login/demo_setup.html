@@ -31,16 +31,12 @@
         <oobe-back-button inverse on-click="onCloseClicked_"
             disabled="[[isPowerwashRequired_]]"></oobe-back-button>
         <oobe-text-button id="retryButton" on-tap="onRetryClicked_"
+            text-key="demoSetupErrorScreenRetryButtonLabel"
             inverse hidden="[[isPowerwashRequired_]]">
-          <div>
-            [[i18nDynamic(locale, 'demoSetupErrorScreenRetryButtonLabel')]]
-          </div>
         </oobe-text-button>
         <oobe-text-button id="powerwashButton" on-tap="onPowerwashClicked_"
+            text-key="demoSetupErrorScreenPowerwashButtonLabel"
             inverse hidden="[[!isPowerwashRequired_]]">
-          <div>
-            [[i18nDynamic(locale, 'demoSetupErrorScreenPowerwashButtonLabel')]]
-          </div>
         </oobe-text-button>
       </div>
     </oobe-dialog>

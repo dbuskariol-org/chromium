@@ -99,10 +99,8 @@
           </div>
           <div slot="bottom-buttons" class="layout horizontal end-justified">
             <oobe-text-button inverse id="success-done-button"
-                on-tap="onEnrollmentFinished_"
-                class="focus-on-show">
-              <div>[[i18nDynamic(locale, 'oauthEnrollDone')]]</div>
-            </oobe-text-button>
+                text-key="oauthEnrollDone" on-tap="onEnrollmentFinished_"
+                class="focus-on-show"></oobe-text-button>
           </div>
         </oobe-dialog>
       </div>
@@ -137,10 +135,8 @@
             </cr-input>
           </div>
           <div slot="bottom-buttons" class="layout horizontal end-justified">
-            <oobe-text-button id="attributes-skip" on-tap="skipAttributes_">
-              <div>
-                [[i18nDynamic(locale, 'oauthEnrollSkip')]]
-              </div>
+            <oobe-text-button id="attributes-skip"
+                text-key="oauthEnrollSkip" on-tap="skipAttributes_">
             </oobe-text-button>
             <div class="flex"></div>
             <oobe-next-button id="attributes-submit"

@@ -30,17 +30,11 @@
       </div>
       <div slot="bottom-buttons" class="layout horizontal end-justified">
         <oobe-text-button id="dont-enroll-button"
-            on-tap="onDontEnrollButtonPressed_">
-          <div>
-            [[i18nDynamic(locale, 'oobePackagedLicenseDontEnroll')]]
-          </div>
-        </oobe-text-button>
+            text-key="oobePackagedLicenseDontEnroll"
+            on-tap="onDontEnrollButtonPressed_"></oobe-text-button>
         <oobe-text-button id="enroll-button"
-            inverse on-tap="onEnrollButtonPressed_">
-          <div>
-            [[i18nDynamic(locale, 'oobePackagedLicenseEnroll')]]
-          </div>
-        </oobe-text-button>
+            text-key="oobePackagedLicenseEnroll"
+            inverse on-tap="onEnrollButtonPressed_"></oobe-text-button>
       </div>
     </oobe-dialog>
   </template>
