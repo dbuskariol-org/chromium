@@ -90,20 +90,6 @@ ScriptPromise NDEFReader::scan(ScriptState* script_state,
     return ScriptPromise();
   }
 
-  // 9.4 If the reader.[[Id]] is not an empty string and it is not a valid URL
-  // pattern, then reject p with a "SyntaxError" DOMException and return p.
-  // TODO(https://crbug.com/520391): Instead of NDEFScanOptions#url, introduce
-  // and use NDEFScanOptions#id to do the filtering after we add support for
-  // writing NDEFRecord#id.
-  if (options->hasId() && !options->id().IsEmpty()) {
-    KURL pattern_url(options->id());
-    if (!pattern_url.IsValid() || pattern_url.Protocol() != "https") {
-      exception_state.ThrowDOMException(DOMExceptionCode::kSyntaxError,
-                                        "Invalid URL pattern was provided.");
-      return ScriptPromise();
-    }
-  }
-
   // TODO(https://crbug.com/520391): With the note in
   // https://w3c.github.io/web-nfc/#the-ndefreader-and-ndefwriter-objects,
   // successive invocations of NDEFReader.scan() with new options should replace
