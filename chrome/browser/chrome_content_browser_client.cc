@@ -634,10 +634,6 @@ const char* const kPredefinedAllowedSocketOrigins[] = {
     "algkcnfjnajfhgimadimbjhmpaeohhln",  // Secure Shell Extension (dev)
     "iodihamcpbpeioajjeobimgagajmlibd",  // Secure Shell Extension (stable)
     "bglhmjfplikpjnfoegeomebmfnkjomhe",  // see crbug.com/122126
-    "gbchcmhmhahfdphkhkmpfmihenigjmpp",  // Chrome Remote Desktop
-    "kgngmbheleoaphbjbaiobfdepmghbfah",  // Pre-release Chrome Remote Desktop
-    "odkaodonbgfohohmklejpjiejmcipmib",  // Dogfood Chrome Remote Desktop
-    "ojoimpklfciegopdfgeenehpalipignm",  // Chromoting canary
     "cbkkbcmdlboombapidmoeolnmdacpkch",  // see crbug.com/129089
     "hhnbmknkdabfoieppbbljkhkfjcmcbjh",  // see crbug.com/134099
     "mablfbjkhmhkmefkjjacnbaikjkipphg",  // see crbug.com/134099
