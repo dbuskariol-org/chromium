@@ -103,9 +103,9 @@ There is no length prefix; just read until you run out of data.
 If the blobKey is `DatabaseMetaDataKey::kAllBlobsKey`, the whole
 database should be deleted.
 
-### BlobData (value)
+### BlobEntry (value)
 
-Blob data is zero-or-more instances of the structure:
+A blob entry is zero-or-more instances of the structure:
 
 ```
 {
@@ -302,7 +302,7 @@ followed the encoded IDB primary key.
 
 key                                                  | value
 -----------------------------------------------------|-------
-«database id, object store id, 3, user key (IDBKey)» | BlobData
+«database id, object store id, 3, user key (IDBKey)» | BlobEntry
 
 
 ## Index data
