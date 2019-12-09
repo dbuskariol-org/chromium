@@ -972,8 +972,9 @@ IN_PROC_BROWSER_TEST_P(CrossSiteDocumentBlockingTest, SharedWorker) {
 // web page that get proxied by the AppCache to the network (falling back to the
 // network because they are not covered by the AppCache manifest) should still
 // be subject to CORB.
+// TODO(crbug.com/1030837): re-enable test once flakiness is addressed.
 IN_PROC_BROWSER_TEST_P(CrossSiteDocumentBlockingTest,
-                       AppCache_NetworkFallback) {
+                       DISABLED_AppCache_NetworkFallback) {
   embedded_test_server()->StartAcceptingConnections();
 
   // Prepare to intercept the network request at the IPC layer.
@@ -1046,7 +1047,9 @@ IN_PROC_BROWSER_TEST_P(CrossSiteDocumentBlockingTest,
 // subject to CORB.
 //
 // This is a regression test for https://crbug.com/927471.
-IN_PROC_BROWSER_TEST_P(CrossSiteDocumentBlockingTest, AppCache_InManifest) {
+// TODO(crbug.com/1030837): re-enable test once flakiness is addressed.
+IN_PROC_BROWSER_TEST_P(CrossSiteDocumentBlockingTest,
+                       DISABLED_AppCache_InManifest) {
   embedded_test_server()->StartAcceptingConnections();
 
   // Load the AppCached page and wait until the AppCache is populated (this will
@@ -1070,8 +1073,9 @@ IN_PROC_BROWSER_TEST_P(CrossSiteDocumentBlockingTest, AppCache_InManifest) {
 
 // Tests that renderer will be terminated if it asks AppCache to initiate a
 // request with an invalid |request_initiator|.
+// TODO(crbug.com/1030837): re-enable test once flakiness is addressed.
 IN_PROC_BROWSER_TEST_P(CrossSiteDocumentBlockingTest,
-                       AppCache_InitiatorEnforcement) {
+                       DISABLED_AppCache_InitiatorEnforcement) {
   embedded_test_server()->StartAcceptingConnections();
 
   // No kills are expected unless the fetch requesting process is locked to a
@@ -1125,8 +1129,9 @@ IN_PROC_BROWSER_TEST_P(CrossSiteDocumentBlockingTest,
 
 // Tests that renderer will be terminated if it asks AppCache to initiate a
 // cross-origin request with network::mojom::RequestMode::kNavigate.
+// TODO(crbug.com/1030837): re-enable test once flakiness is addressed.
 IN_PROC_BROWSER_TEST_P(CrossSiteDocumentBlockingTest,
-                       AppCache_NoNavigationsEnforcement) {
+                       DISABLED_AppCache_NoNavigationsEnforcement) {
   embedded_test_server()->StartAcceptingConnections();
 
   // No kills are expected unless the fetch requesting process is locked to a
