@@ -2871,7 +2871,7 @@ DispatchEventResult Node::DispatchDOMActivateEvent(int detail,
 void Node::DispatchSimulatedClick(Event* underlying_event,
                                   SimulatedClickMouseEventOptions event_options,
                                   SimulatedClickCreationScope scope) {
-  if (auto* element = IsElementNode() ? ToElement(this) : parentElement()) {
+  if (auto* element = IsElementNode() ? To<Element>(this) : parentElement()) {
     element->ActivateDisplayLockIfNeeded(
         DisplayLockActivationReason::kSimulatedClick);
   }

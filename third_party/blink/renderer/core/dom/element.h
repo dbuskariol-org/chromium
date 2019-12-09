@@ -1237,27 +1237,6 @@ struct DowncastTraits<Element> {
   static bool AllowFrom(const Node& node) { return node.IsElementNode(); }
 };
 
-// Type casting.
-template <typename T>
-inline T& ToElement(Node& node) {
-  SECURITY_DCHECK(IsElementOfType<const T>(node));
-  return static_cast<T&>(node);
-}
-template <typename T>
-inline T* ToElement(Node* node) {
-  SECURITY_DCHECK(!node || IsElementOfType<const T>(*node));
-  return static_cast<T*>(node);
-}
-template <typename T>
-inline const T& ToElement(const Node& node) {
-  SECURITY_DCHECK(IsElementOfType<const T>(node));
-  return static_cast<const T&>(node);
-}
-template <typename T>
-inline const T* ToElement(const Node* node) {
-  SECURITY_DCHECK(!node || IsElementOfType<const T>(*node));
-  return static_cast<const T*>(node);
-}
 
 inline bool IsDisabledFormControl(const Node* node) {
   auto* element = DynamicTo<Element>(node);
