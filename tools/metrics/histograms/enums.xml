@@ -14406,6 +14406,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="10" label="new_tab"/>
   <int value="11" label="close_tab"/>
   <int value="12" label="close_all_tabs"/>
+  <int value="13" label="find_in_page"/>
 </enum>
 
 <enum name="DirectCompositionVideoPresentationMode">
