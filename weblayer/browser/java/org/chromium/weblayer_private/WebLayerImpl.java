@@ -137,6 +137,8 @@ public final class WebLayerImpl extends IWebLayer.Stub {
 
         UmaUtils.recordMainEntryPointTime();
 
+        LibraryLoader.getInstance().setLibraryProcessType(LibraryProcessType.PROCESS_WEBLAYER);
+
         Context appContext = minimalInitForContext(appContextWrapper);
         PackageInfo packageInfo = WebViewFactory.getLoadedPackageInfo();
 
@@ -180,7 +182,7 @@ public final class WebLayerImpl extends IWebLayer.Stub {
 
         // TODO: Validate that doing this disk IO on the main thread is necessary.
         try (StrictModeContext ignored = StrictModeContext.allowDiskReads()) {
-            LibraryLoader.getInstance().ensureInitialized(LibraryProcessType.PROCESS_WEBLAYER);
+            LibraryLoader.getInstance().ensureInitialized();
         }
         GmsBridge.getInstance().setSafeBrowsingHandler();
     }
