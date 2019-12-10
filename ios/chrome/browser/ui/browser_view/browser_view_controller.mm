@@ -3416,7 +3416,8 @@ NSString* const kBrowserViewControllerSnackbarCategory =
         VoiceSearchNavigationTabHelper::FromWebState(current_web_state)
             ->IsExpectingVoiceSearch();
     new_tab_page_uma::RecordActionFromOmnibox(
-        self.browserState, URL, transitionType, isExpectingVoiceSearch);
+        self.browserState, current_web_state, URL, transitionType,
+        isExpectingVoiceSearch);
   }
 }
 
