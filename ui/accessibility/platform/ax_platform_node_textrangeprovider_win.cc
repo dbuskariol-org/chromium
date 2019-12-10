@@ -1114,22 +1114,22 @@ void AXPlatformNodeTextRangeProviderWin::NormalizeAsUnignoredTextRange() {
     return;
 
   if (start_->IsIgnored()) {
-    AXPositionInstance normalized_start = start_->AsUnignoredTextPosition(
-        AXNodePosition::AdjustmentBehavior::kMoveRight);
+    AXPositionInstance normalized_start = start_->AsUnignoredPosition(
+        AXPositionAdjustmentBehavior::kMoveForwards);
     if (normalized_start->IsNullPosition()) {
-      normalized_start = start_->AsUnignoredTextPosition(
-          AXNodePosition::AdjustmentBehavior::kMoveLeft);
+      normalized_start = start_->AsUnignoredPosition(
+          AXPositionAdjustmentBehavior::kMoveBackwards);
     }
     if (!normalized_start->IsNullPosition())
       start_ = std::move(normalized_start);
   }
 
   if (end_->IsIgnored()) {
-    AXPositionInstance normalized_end = end_->AsUnignoredTextPosition(
-        AXNodePosition::AdjustmentBehavior::kMoveRight);
+    AXPositionInstance normalized_end =
+        end_->AsUnignoredPosition(AXPositionAdjustmentBehavior::kMoveForwards);
     if (normalized_end->IsNullPosition()) {
-      normalized_end = end_->AsUnignoredTextPosition(
-          AXNodePosition::AdjustmentBehavior::kMoveLeft);
+      normalized_end = end_->AsUnignoredPosition(
+          AXPositionAdjustmentBehavior::kMoveBackwards);
     }
     if (!normalized_end->IsNullPosition())
       end_ = std::move(normalized_end);
@@ -1163,14 +1163,16 @@ void AXPlatformNodeTextRangeProviderWin::NormalizeTextRange() {
   // So we want to create a collapsed range by setting |normalized_end| to
   // |normalized_start|.
   if (!normalized_start->IsNullPosition() &&
-      !normalized_end->IsNullPosition() && *normalized_end < *normalized_start)
+      !normalized_end->IsNullPosition() &&
+      *normalized_end < *normalized_start) {
     normalized_end = normalized_start->Clone();
+  }
 
-  if (!normalized_start->IsNullPosition())
+  if (!normalized_start->IsNullPosition() &&
+      !normalized_end->IsNullPosition()) {
     start_ = std::move(normalized_start);
-
-  if (!normalized_end->IsNullPosition())
     end_ = std::move(normalized_end);
+  }
 
   DCHECK_LE(*start_, *end_);
 }
