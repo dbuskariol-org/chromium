@@ -378,7 +378,8 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
 #if defined(OS_WIN)
   bool PreSpawnRenderer(sandbox::TargetPolicy* policy,
                         RendererSpawnFlags flags) override;
-  base::string16 GetAppContainerSidForSandboxType(int sandbox_type) override;
+  base::string16 GetAppContainerSidForSandboxType(
+      service_manager::SandboxType sandbox_type) override;
   bool IsRendererCodeIntegrityEnabled() override;
 #endif
   void ExposeInterfacesToRenderer(

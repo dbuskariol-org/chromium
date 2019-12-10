@@ -447,7 +447,7 @@ class RendererSandboxedProcessLauncherDelegate
 #endif  // BUILDFLAG(USE_ZYGOTE_HANDLE)
 
   service_manager::SandboxType GetSandboxType() override {
-    return service_manager::SANDBOX_TYPE_RENDERER;
+    return service_manager::SandboxType::kRenderer;
   }
 
 #if defined(OS_WIN)

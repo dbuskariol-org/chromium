@@ -206,8 +206,6 @@
 #include "components/google/core/common/google_util.h"
 #include "components/language/core/browser/pref_names.h"
 #include "components/metrics/client_info.h"
-#include "components/nacl/common/buildflags.h"
-#include "components/nacl/common/nacl_constants.h"
 #include "components/net_log/chrome_net_log.h"
 #include "components/page_load_metrics/browser/metrics_navigation_throttle.h"
 #include "components/page_load_metrics/browser/metrics_web_contents_observer.h"
@@ -3582,30 +3580,32 @@ void ChromeContentBrowserClient::GetAdditionalMappedFilesForChildProcess(
 
 #if defined(OS_WIN)
 base::string16 ChromeContentBrowserClient::GetAppContainerSidForSandboxType(
-    int sandbox_type) {
+    service_manager::SandboxType sandbox_type) {
   // TODO(wfh): Add support for more process types here. crbug.com/499523
   switch (sandbox_type) {
-    case service_manager::SANDBOX_TYPE_RENDERER:
+    case service_manager::SandboxType::kRenderer:
       return base::string16(install_static::GetSandboxSidPrefix()) +
              L"129201922";
-    case service_manager::SANDBOX_TYPE_UTILITY:
+    case service_manager::SandboxType::kUtility:
       return base::string16();
-    case service_manager::SANDBOX_TYPE_GPU:
+    case service_manager::SandboxType::kGpu:
       return base::string16();
-    case service_manager::SANDBOX_TYPE_PPAPI:
+    case service_manager::SandboxType::kPpapi:
       return base::string16(install_static::GetSandboxSidPrefix()) +
              L"129201925";
-#if BUILDFLAG(ENABLE_NACL)
-    case PROCESS_TYPE_NACL_LOADER:
+    case service_manager::SandboxType::kInvalid:
+    case service_manager::SandboxType::kNoSandbox:
+    case service_manager::SandboxType::kNoSandboxAndElevatedPrivileges:
+    case service_manager::SandboxType::kXrCompositing:
+    case service_manager::SandboxType::kNetwork:
+    case service_manager::SandboxType::kCdm:
+    case service_manager::SandboxType::kPdfCompositor:
+    case service_manager::SandboxType::kProfiling:
+    case service_manager::SandboxType::kAudio:
+      // Should never reach here.
+      CHECK(0);
       return base::string16();
-    case PROCESS_TYPE_NACL_BROKER:
-      return base::string16();
-#endif
   }
-
-  // Should never reach here.
-  CHECK(0);
-  return base::string16();
 }
 
 bool ChromeContentBrowserClient::PreSpawnRenderer(sandbox::TargetPolicy* policy,

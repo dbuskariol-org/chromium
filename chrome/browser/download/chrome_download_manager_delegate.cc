@@ -271,7 +271,7 @@ void ConnectToQuarantineService(
         std::move(receiver),
         content::ServiceProcessHost::Options()
             .WithDisplayName("Quarantine Service")
-            .WithSandboxType(service_manager::SANDBOX_TYPE_NO_SANDBOX)
+            .WithSandboxType(service_manager::SandboxType::kNoSandbox)
             .Pass());
     return;
   }
