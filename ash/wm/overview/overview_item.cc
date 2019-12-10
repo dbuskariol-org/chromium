@@ -351,7 +351,7 @@ void OverviewItem::SetBounds(const gfx::RectF& target_bounds,
   if (transform_window_.IsMinimized()) {
     item_widget_->GetNativeWindow()->layer()->GetAnimator()->StopAnimating();
 
-    gfx::Rect minimized_bounds = gfx::ToEnclosedRect(target_bounds);
+    gfx::Rect minimized_bounds = ToStableSizeRoundedRect(target_bounds);
     minimized_bounds.Inset(-kWindowMargin, -kWindowMargin);
     OverviewAnimationType minimized_animation_type =
         is_first_update ? OVERVIEW_ANIMATION_NONE : new_animation_type;
@@ -458,7 +458,7 @@ void OverviewItem::SetBounds(const gfx::RectF& target_bounds,
     SetWidgetBoundsAndMaybeAnimateTransform(
         cannot_snap_widget_.get(),
         cannot_snap_widget_->GetBoundsCenteredIn(
-            gfx::ToEnclosingRect(GetWindowTargetBoundsWithInsets())),
+            ToStableSizeRoundedRect(GetWindowTargetBoundsWithInsets())),
         new_animation_type, nullptr);
   }
 
@@ -565,7 +565,7 @@ void OverviewItem::UpdateCannotSnapWarningVisibility() {
                                   ? SPLITVIEW_ANIMATION_OVERVIEW_ITEM_FADE_IN
                                   : SPLITVIEW_ANIMATION_OVERVIEW_ITEM_FADE_OUT);
   const gfx::Rect bounds =
-      gfx::ToEnclosingRect(GetWindowTargetBoundsWithInsets());
+      ToStableSizeRoundedRect(GetWindowTargetBoundsWithInsets());
   cannot_snap_widget_->SetBoundsCenteredIn(bounds, /*animate=*/false);
 }
 
@@ -631,7 +631,7 @@ gfx::Rect OverviewItem::GetBoundsOfSelectedItem() {
   ScaleUpSelectedItem(OVERVIEW_ANIMATION_NONE);
   gfx::RectF selected_bounds = transform_window_.GetTransformedBounds();
   SetBounds(original_bounds, OVERVIEW_ANIMATION_NONE);
-  return gfx::ToEnclosedRect(selected_bounds);
+  return ToStableSizeRoundedRect(selected_bounds);
 }
 
 void OverviewItem::ScaleUpSelectedItem(OverviewAnimationType animation_type) {
@@ -1175,7 +1175,7 @@ void OverviewItem::SetItemBounds(const gfx::RectF& target_bounds,
   // Do not set transform for drop target, set bounds instead.
   if (overview_grid_->IsDropTargetWindow(window)) {
     window->SetBoundsInScreen(
-        gfx::ToEnclosedRect(GetWindowTargetBoundsWithInsets()),
+        ToStableSizeRoundedRect(GetWindowTargetBoundsWithInsets()),
         WindowState::Get(window)->GetDisplay());
     window->SetTransform(gfx::Transform());
     return;
@@ -1279,7 +1279,7 @@ void OverviewItem::UpdateHeaderLayout(OverviewAnimationType animation_type) {
   const gfx::Point origin = gfx::ToRoundedPoint(item_bounds.origin());
   item_bounds.set_origin(gfx::PointF());
   item_bounds.Inset(-kWindowMargin, -kWindowMargin);
-  widget_window->SetBounds(gfx::ToEnclosedRect(item_bounds));
+  widget_window->SetBounds(ToStableSizeRoundedRect(item_bounds));
 
   gfx::Transform label_transform;
   label_transform.Translate(origin.x(), origin.y());

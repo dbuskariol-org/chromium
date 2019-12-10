@@ -214,7 +214,7 @@ class OverviewSessionTest : public MultiDisplayOverviewAndSplitViewTest {
     gfx::Transform transform(gfx::TransformAboutPivot(
         gfx::ToFlooredPoint(bounds.origin()), window->layer()->transform()));
     transform.TransformRect(&bounds);
-    return gfx::ToEnclosingRect(bounds);
+    return ToStableSizeRoundedRect(bounds);
   }
 
   gfx::Rect GetTransformedTargetBounds(aura::Window* window) {
@@ -225,7 +225,7 @@ class OverviewSessionTest : public MultiDisplayOverviewAndSplitViewTest {
         gfx::TransformAboutPivot(gfx::ToFlooredPoint(bounds.origin()),
                                  window->layer()->GetTargetTransform()));
     transform.TransformRect(&bounds);
-    return gfx::ToEnclosingRect(bounds);
+    return ToStableSizeRoundedRect(bounds);
   }
 
   gfx::Rect GetTransformedBoundsInRootWindow(aura::Window* window) {
@@ -1662,6 +1662,42 @@ TEST_P(OverviewSessionTest, NoWindowsIndicatorPosition) {
   expected_y = (400 - ShelfConfig::Get()->shelf_size()) / 2;
   EXPECT_EQ(gfx::Point(150, (400 - ShelfConfig::Get()->shelf_size()) / 2),
             no_windows_widget->GetWindowBoundsInScreen().CenterPoint());
+}
+
+// Tests that toggling overview on removes any resize shadows that may have been
+// present.
+TEST_P(OverviewSessionTest, DragMinimizedWindowHasStableSize) {
+  UpdateDisplay("1920x1200*1.7777777");
+  EnterTabletMode();
+  std::unique_ptr<aura::Window> window(CreateTestWindow());
+
+  WindowState::Get(window.get())->Minimize();
+  ToggleOverview();
+  OverviewItem* overview_item = GetOverviewItemForWindow(window.get());
+  auto* widget = overview_item->item_widget();
+
+  gfx::Rect workarea =
+      display::Screen::GetScreen()->GetPrimaryDisplay().work_area();
+
+  gfx::PointF drag_point(workarea.CenterPoint());
+  overview_session()->InitiateDrag(overview_item, drag_point,
+                                   /*is_touch_dragging=*/true);
+  gfx::Size target_size =
+      GetTransformedTargetBounds(widget->GetNativeWindow()).size();
+
+  drag_point.Offset(0, 10.5f);
+  overview_session()->Drag(overview_item, drag_point);
+  gfx::Size new_target_size =
+      GetTransformedTargetBounds(widget->GetNativeWindow()).size();
+  EXPECT_EQ(target_size, new_target_size);
+  target_size = new_target_size;
+
+  drag_point.Offset(0, 10.5f);
+  overview_session()->Drag(overview_item, drag_point);
+  EXPECT_EQ(target_size,
+            GetTransformedTargetBounds(widget->GetNativeWindow()).size());
+
+  overview_session()->CompleteDrag(overview_item, drag_point);
 }
 
 class HotseatDisabledOverviewSessionTest : public OverviewSessionTest {
