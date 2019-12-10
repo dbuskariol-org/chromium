@@ -930,6 +930,8 @@ DeveloperPrivateUpdateExtensionConfigurationFunction::Run() {
         modifier.RemoveAllGrantedHostPermissions();
         break;
       case developer::HOST_ACCESS_ON_SPECIFIC_SITES:
+        if (modifier.HasBroadGrantedHostPermissions())
+          modifier.RemoveBroadGrantedHostPermissions();
         modifier.SetWithholdHostPermissions(true);
         break;
       case developer::HOST_ACCESS_ON_ALL_SITES:
