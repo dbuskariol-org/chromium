@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/infobars/infobar_banner_overlay_request_factory_impl.h"
+#import "ios/chrome/browser/infobars/overlays/infobar_banner_overlay_request_factory_impl.h"
 
 #include "components/infobars/core/infobar.h"
 #include "components/infobars/core/infobar_delegate.h"

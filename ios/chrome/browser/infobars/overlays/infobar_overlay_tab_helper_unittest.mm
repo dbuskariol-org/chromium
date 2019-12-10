@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/infobars/infobar_overlay_tab_helper.h"
+#import "ios/chrome/browser/infobars/overlays/infobar_overlay_tab_helper.h"
 
 #import <Foundation/Foundation.h>
 
 #include "components/infobars/core/infobar.h"
 #include "components/infobars/core/infobar_delegate.h"
-#import "ios/chrome/browser/infobars/infobar_banner_overlay_request_factory.h"
 #include "ios/chrome/browser/infobars/infobar_manager_impl.h"
+#import "ios/chrome/browser/infobars/overlays/infobar_banner_overlay_request_factory.h"
 #include "ios/chrome/browser/overlays/public/overlay_request.h"
 #import "ios/chrome/browser/overlays/public/overlay_request_queue.h"
 #include "ios/chrome/browser/overlays/test/fake_overlay_user_data.h"

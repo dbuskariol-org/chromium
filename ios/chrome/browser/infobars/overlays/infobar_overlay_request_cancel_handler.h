@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_INFOBARS_INFOBAR_OVERLAY_REQUEST_CANCEL_HANDLER_H_
-#define IOS_CHROME_BROWSER_INFOBARS_INFOBAR_OVERLAY_REQUEST_CANCEL_HANDLER_H_
+#ifndef IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_INFOBAR_OVERLAY_REQUEST_CANCEL_HANDLER_H_
+#define IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_INFOBAR_OVERLAY_REQUEST_CANCEL_HANDLER_H_
 
 #include "base/scoped_observer.h"
 #include "components/infobars/core/infobar_manager.h"
@@ -45,4 +45,4 @@ class InfobarOverlayRequestCancelHandler : public OverlayRequestCancelHandler {
   RemovalObserver removal_observer_;
 };
 
-#endif  // IOS_CHROME_BROWSER_INFOBARS_INFOBAR_OVERLAY_REQUEST_CANCEL_HANDLER_H_
+#endif  // IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_INFOBAR_OVERLAY_REQUEST_CANCEL_HANDLER_H_

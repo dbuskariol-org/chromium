@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_INFOBARS_INFOBAR_OVERLAY_TAB_HELPER_H_
-#define IOS_CHROME_BROWSER_INFOBARS_INFOBAR_OVERLAY_TAB_HELPER_H_
+#ifndef IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_INFOBAR_OVERLAY_TAB_HELPER_H_
+#define IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_INFOBAR_OVERLAY_TAB_HELPER_H_
 
 #include <memory>
 
@@ -64,4 +64,4 @@ class InfobarOverlayTabHelper
   // corresponding WebState's InfoBarManagerImpl.
   OverlayRequestScheduler overlay_request_scheduler_;
 };
-#endif  // IOS_CHROME_BROWSER_INFOBARS_INFOBAR_OVERLAY_TAB_HELPER_H_
+#endif  // IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_INFOBAR_OVERLAY_TAB_HELPER_H_
