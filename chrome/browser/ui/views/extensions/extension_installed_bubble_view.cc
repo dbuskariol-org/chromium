@@ -487,12 +487,6 @@ bool ExtensionInstalledBubble::ShouldShow() {
   return true;
 }
 
-gfx::Point ExtensionInstalledBubble::GetAnchorPoint(
-    gfx::NativeWindow window) const {
-  NOTREACHED();  // There is always an anchor view.
-  return gfx::Point();
-}
-
 std::unique_ptr<BubbleUi> ExtensionInstalledBubble::BuildBubbleUi() {
   return base::WrapUnique(new ExtensionInstalledBubbleUi(this));
 }
