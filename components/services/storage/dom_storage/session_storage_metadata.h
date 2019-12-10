@@ -1,8 +1,9 @@
 // Copyright 2018 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-#ifndef CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_METADATA_H_
-#define CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_METADATA_H_
+
+#ifndef COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_METADATA_H_
+#define COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_METADATA_H_
 
 #include <stdint.h>
 #include <map>
@@ -12,14 +13,13 @@
 #include "base/memory/ref_counted.h"
 #include "components/services/storage/dom_storage/async_dom_storage_database.h"
 #include "components/services/storage/dom_storage/dom_storage_database.h"
-#include "content/common/content_export.h"
 #include "url/origin.h"
 
-namespace content {
+namespace storage {
 
 // Holds the metadata information for a session storage database. This includes
 // logic for parsing and saving database content.
-class CONTENT_EXPORT SessionStorageMetadata {
+class SessionStorageMetadata {
  public:
   // Version 0 represents the old SessionStorageDatabase where we never stored a
   // version. This class stores '0' as the version in this case. Version 1
@@ -45,7 +45,7 @@ class CONTENT_EXPORT SessionStorageMetadata {
   // The |DeleteNamespace| and |DeleteArea| methods can destroy any MapData
   // objects who are no longer referenced by another namespace.
   // Maps (and thus MapData objects) can only be shared for the same origin.
-  class CONTENT_EXPORT MapData : public base::RefCounted<MapData> {
+  class MapData : public base::RefCounted<MapData> {
    public:
     explicit MapData(int64_t map_number, url::Origin origin);
 
@@ -87,8 +87,7 @@ class CONTENT_EXPORT SessionStorageMetadata {
 
   // For a new database, this saves the database version, clears the metadata,
   // and returns the operations needed to save to disk.
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>
-  SetupNewDatabase();
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> SetupNewDatabase();
 
   // This parses the database version from the bytes that were stored on
   // disk, or if there was no version saved then passes a base::nullopt. This
@@ -100,8 +99,7 @@ class CONTENT_EXPORT SessionStorageMetadata {
   // Returns |true| if the parsing is correct and we support the version read.
   bool ParseDatabaseVersion(
       base::Optional<std::vector<uint8_t>> value,
-      std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>*
-          upgrade_tasks);
+      std::vector<AsyncDomStorageDatabase::BatchDatabaseTask>* upgrade_tasks);
 
   // Parses all namespaces and maps, and stores all metadata locally. This
   // invalidates all NamespaceEntry and MapData objects. If there is a parsing
@@ -110,9 +108,8 @@ class CONTENT_EXPORT SessionStorageMetadata {
   // will be populated in |upgrade_tasks|. This call is not necessary on new
   // databases.
   bool ParseNamespaces(
-      std::vector<storage::DomStorageDatabase::KeyValuePair> values,
-      std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>*
-          upgrade_tasks);
+      std::vector<DomStorageDatabase::KeyValuePair> values,
+      std::vector<AsyncDomStorageDatabase::BatchDatabaseTask>* upgrade_tasks);
 
   // Parses the next map id from the given bytes. If that fails, then it uses
   // the next available id from parsing the namespaces. This call is not
@@ -129,8 +126,7 @@ class CONTENT_EXPORT SessionStorageMetadata {
   scoped_refptr<MapData> RegisterNewMap(
       NamespaceEntry namespace_entry,
       const url::Origin& origin,
-      std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>*
-          save_tasks);
+      std::vector<AsyncDomStorageDatabase::BatchDatabaseTask>* save_tasks);
 
   // Registers an origin-map in the |destination_namespace| from every
   // origin-map in the |source_namespace|. The |destination_namespace| must have
@@ -140,8 +136,7 @@ class CONTENT_EXPORT SessionStorageMetadata {
   void RegisterShallowClonedNamespace(
       NamespaceEntry source_namespace,
       NamespaceEntry destination_namespace,
-      std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>*
-          save_tasks);
+      std::vector<AsyncDomStorageDatabase::BatchDatabaseTask>* save_tasks);
 
   // Deletes the given namespace and any maps that no longer have any
   // references. This will invalidate all NamespaceEntry objects for the
@@ -150,8 +145,7 @@ class CONTENT_EXPORT SessionStorageMetadata {
   // deletions to disk if run.
   void DeleteNamespace(
       const std::string& namespace_id,
-      std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>*
-          save_tasks);
+      std::vector<AsyncDomStorageDatabase::BatchDatabaseTask>* save_tasks);
 
   // This returns a BatchDatabaseTask to remove the metadata entry for this
   // namespace-origin area. If the map at this entry isn't referenced by any
@@ -160,8 +154,7 @@ class CONTENT_EXPORT SessionStorageMetadata {
   void DeleteArea(
       const std::string& namespace_id,
       const url::Origin& origin,
-      std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>*
-          save_tasks);
+      std::vector<AsyncDomStorageDatabase::BatchDatabaseTask>* save_tasks);
 
   NamespaceEntry GetOrCreateNamespaceEntry(const std::string& namespace_id);
 
@@ -189,6 +182,6 @@ class CONTENT_EXPORT SessionStorageMetadata {
   NamespaceOriginMap namespace_origin_map_;
 };
 
-}  // namespace content
+}  // namespace storage
 
-#endif  // CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_METADATA_H_
+#endif  // COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_METADATA_H_

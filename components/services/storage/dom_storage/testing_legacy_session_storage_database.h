@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_DATABASE_H_
-#define CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_DATABASE_H_
+#ifndef COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_TESTING_LEGACY_SESSION_STORAGE_DATABASE_H_
+#define COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_TESTING_LEGACY_SESSION_STORAGE_DATABASE_H_
 
 #include <stdint.h>
 
@@ -39,26 +39,30 @@ namespace base {
 namespace trace_event {
 class ProcessMemoryDump;
 }
-}
+}  // namespace base
 
-namespace content {
+namespace storage {
 
-// SessionStorageDatabase holds the data from multiple namespaces and multiple
-// origins. All DOMStorageAreas for session storage share the same
-// SessionStorageDatabase.
-
+// A legacy implementation of Session Storage used only in tests to provide
+// coverage of session storage migration code.
+//
 // This class is not thread safe. Read-only methods (ReadAreaValues,
 // ReadNamespacesAndOrigins, and OnMemoryDump) may be called on any thread.
 // Methods that modify the database must be called on the same thread.
-class SessionStorageDatabase
-    : public base::RefCountedDeleteOnSequence<SessionStorageDatabase> {
+class TestingLegacySessionStorageDatabase
+    : public base::RefCountedDeleteOnSequence<
+          TestingLegacySessionStorageDatabase> {
  public:
   // |file_path| is the path to the directory where the database will be
   // created. |commit_task_runner| is the runner on which methods which modify
   // the database must be run and where this object will be deleted.
-  SessionStorageDatabase(
+  TestingLegacySessionStorageDatabase(
       const base::FilePath& file_path,
       scoped_refptr<base::SequencedTaskRunner> commit_task_runner);
+  TestingLegacySessionStorageDatabase(
+      const TestingLegacySessionStorageDatabase&) = delete;
+  TestingLegacySessionStorageDatabase& operator=(
+      const TestingLegacySessionStorageDatabase&) = delete;
 
   // Reads the (key, value) pairs for |namespace_id| and |origin|. |result| is
   // assumed to be empty and any duplicate keys will be overwritten. If the
@@ -68,7 +72,7 @@ class SessionStorageDatabase
       const std::string& namespace_id,
       const std::vector<std::string>& original_permanent_namespace_ids,
       const url::Origin& origin,
-      storage::LegacyDomStorageValuesMap* result);
+      LegacyDomStorageValuesMap* result);
 
   // Updates the data for |namespace_id| and |origin|. Will remove all keys
   // before updating the database if |clear_all_first| is set. Then all entries
@@ -79,7 +83,7 @@ class SessionStorageDatabase
   bool CommitAreaChanges(const std::string& namespace_id,
                          const url::Origin& origin,
                          bool clear_all_first,
-                         const storage::LegacyDomStorageValuesMap& changes);
+                         const LegacyDomStorageValuesMap& changes);
 
   // Creates shallow copies of the areas for |namespace_id| and associates them
   // with |new_namespace_id|.
@@ -107,13 +111,13 @@ class SessionStorageDatabase
 
  private:
   class DBOperation;
-  friend class SessionStorageDatabase::DBOperation;
-  friend class SessionStorageDatabaseTest;
-  friend class base::RefCountedDeleteOnSequence<SessionStorageDatabase>;
-  friend class base::DeleteHelper<SessionStorageDatabase>;
+  friend class TestingLegacySessionStorageDatabase::DBOperation;
+  friend class base::RefCountedDeleteOnSequence<
+      TestingLegacySessionStorageDatabase>;
+  friend class base::DeleteHelper<TestingLegacySessionStorageDatabase>;
   FRIEND_TEST_ALL_PREFIXES(DOMStorageAreaParamTest, ShallowCopyWithBacking);
 
-  ~SessionStorageDatabase();
+  ~TestingLegacySessionStorageDatabase();
 
   // Opens the database at file_path_ if it exists already and creates it if
   // |create_if_needed| is true. Returns true if the database was opened, false
@@ -186,11 +190,11 @@ class SessionStorageDatabase
   // be empty.
   bool ReadMap(const std::string& map_id,
                const leveldb::ReadOptions& options,
-               storage::LegacyDomStorageValuesMap* result,
+               LegacyDomStorageValuesMap* result,
                bool only_keys);
   // Writes |values| into the map |map_id|.
   void WriteValuesToMap(const std::string& map_id,
-                        const storage::LegacyDomStorageValuesMap& values,
+                        const LegacyDomStorageValuesMap& values,
                         leveldb::WriteBatch* batch);
 
   bool GetMapRefCount(const std::string& map_id, int64_t* ref_count);
@@ -243,10 +247,8 @@ class SessionStorageDatabase
 
   // Used to check methods that run on the commit sequence.
   SEQUENCE_CHECKER(sequence_checker_);
-
-  DISALLOW_COPY_AND_ASSIGN(SessionStorageDatabase);
 };
 
-}  // namespace content
+}  // namespace storage
 
-#endif  // CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_DATABASE_H_
+#endif  // COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_TESTING_LEGACY_SESSION_STORAGE_DATABASE_H_

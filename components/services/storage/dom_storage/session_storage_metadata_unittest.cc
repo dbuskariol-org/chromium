@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/dom_storage/session_storage_metadata.h"
+#include "components/services/storage/dom_storage/session_storage_metadata.h"
 
 #include "base/bind.h"
 #include "base/files/scoped_temp_dir.h"
@@ -18,7 +18,7 @@
 #include "components/services/storage/dom_storage/async_dom_storage_database.h"
 #include "components/services/storage/dom_storage/dom_storage_database.h"
 #include "components/services/storage/dom_storage/legacy_dom_storage_database.h"
-#include "content/browser/dom_storage/session_storage_database.h"
+#include "components/services/storage/dom_storage/testing_legacy_session_storage_database.h"
 #include "mojo/public/cpp/bindings/strong_associated_binding.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -29,7 +29,7 @@
 #include "url/gurl.h"
 #include "url/origin.h"
 
-namespace content {
+namespace storage {
 namespace {
 
 std::vector<uint8_t> StdStringToUint8Vector(const std::string& s) {
@@ -60,7 +60,7 @@ class SessionStorageMetadataTest : public testing::Test {
         test_origin1_(url::Origin::Create(GURL("http://host1:1/"))),
         test_origin2_(url::Origin::Create(GURL("http://host2:2/"))) {
     base::RunLoop loop;
-    database_ = storage::AsyncDomStorageDatabase::OpenInMemory(
+    database_ = AsyncDomStorageDatabase::OpenInMemory(
         base::nullopt, "SessionStorageMetadataTest",
         base::CreateSequencedTaskRunner({base::MayBlock(), base::ThreadPool()}),
         base::BindLambdaForTesting([&](leveldb::Status) { loop.Quit(); }));
@@ -81,12 +81,12 @@ class SessionStorageMetadataTest : public testing::Test {
   void ReadMetadataFromDatabase(SessionStorageMetadata* metadata) {
     std::vector<uint8_t> version_value;
     std::vector<uint8_t> next_map_id_value;
-    std::vector<storage::DomStorageDatabase::KeyValuePair> namespace_entries;
+    std::vector<DomStorageDatabase::KeyValuePair> namespace_entries;
 
     base::RunLoop loop;
     database_->database().PostTaskWithThisObject(
         FROM_HERE,
-        base::BindLambdaForTesting([&](const storage::DomStorageDatabase& db) {
+        base::BindLambdaForTesting([&](const DomStorageDatabase& db) {
           EXPECT_TRUE(db.Get(database_version_key_, &version_value).ok());
           EXPECT_TRUE(db.Get(next_map_id_key_, &next_map_id_value).ok());
           EXPECT_TRUE(
@@ -95,8 +95,7 @@ class SessionStorageMetadataTest : public testing::Test {
         }));
     loop.Run();
 
-    std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>
-        migration_tasks;
+    std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> migration_tasks;
     EXPECT_TRUE(
         metadata->ParseDatabaseVersion(version_value, &migration_tasks));
     EXPECT_TRUE(migration_tasks.empty());
@@ -123,7 +122,7 @@ class SessionStorageMetadataTest : public testing::Test {
     base::RunLoop loop;
     database_->database().PostTaskWithThisObject(
         FROM_HERE,
-        base::BindLambdaForTesting([&](const storage::DomStorageDatabase& db) {
+        base::BindLambdaForTesting([&](const DomStorageDatabase& db) {
           db.Put(StdStringToUint8Vector(std::string("namespace-") +
                                         test_namespace1_id_ + "-" +
                                         test_origin1_.GetURL().spec()),
@@ -157,11 +156,11 @@ class SessionStorageMetadataTest : public testing::Test {
   }
 
   std::map<std::vector<uint8_t>, std::vector<uint8_t>> GetDatabaseContents() {
-    std::vector<storage::DomStorageDatabase::KeyValuePair> entries;
+    std::vector<DomStorageDatabase::KeyValuePair> entries;
     base::RunLoop loop;
     database_->database().PostTaskWithThisObject(
         FROM_HERE,
-        base::BindLambdaForTesting([&](const storage::DomStorageDatabase& db) {
+        base::BindLambdaForTesting([&](const DomStorageDatabase& db) {
           leveldb::Status status = db.GetPrefixed({}, &entries);
           ASSERT_TRUE(status.ok());
           loop.Quit();
@@ -174,9 +173,8 @@ class SessionStorageMetadataTest : public testing::Test {
     return contents;
   }
 
-  void RunBatch(
-      std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> tasks,
-      base::OnceCallback<void(leveldb::Status)> callback) {
+  void RunBatch(std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> tasks,
+                base::OnceCallback<void(leveldb::Status)> callback) {
     base::RunLoop loop;
     database_->RunBatchDatabaseTasks(
         std::move(tasks),
@@ -194,7 +192,7 @@ class SessionStorageMetadataTest : public testing::Test {
   std::string test_namespace3_id_;
   url::Origin test_origin1_;
   url::Origin test_origin2_;
-  std::unique_ptr<storage::AsyncDomStorageDatabase> database_;
+  std::unique_ptr<AsyncDomStorageDatabase> database_;
 
   std::vector<uint8_t> database_version_key_;
   std::vector<uint8_t> next_map_id_key_;
@@ -203,7 +201,7 @@ class SessionStorageMetadataTest : public testing::Test {
 
 TEST_F(SessionStorageMetadataTest, SaveNewMetadata) {
   SessionStorageMetadata metadata;
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> tasks =
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> tasks =
       metadata.SetupNewDatabase();
 
   leveldb::Status status;
@@ -252,7 +250,7 @@ TEST_F(SessionStorageMetadataTest, SaveNewMap) {
   SessionStorageMetadata metadata;
   ReadMetadataFromDatabase(&metadata);
 
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
   auto ns1_entry = metadata.GetOrCreateNamespaceEntry(test_namespace1_id_);
   auto map_data = metadata.RegisterNewMap(ns1_entry, test_origin1_, &tasks);
   ASSERT_TRUE(map_data);
@@ -286,7 +284,7 @@ TEST_F(SessionStorageMetadataTest, ShallowCopies) {
   auto ns1_entry = metadata.GetOrCreateNamespaceEntry(test_namespace1_id_);
   auto ns3_entry = metadata.GetOrCreateNamespaceEntry(test_namespace3_id_);
 
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
   metadata.RegisterShallowClonedNamespace(ns1_entry, ns3_entry, &tasks);
 
   leveldb::Status status;
@@ -322,7 +320,7 @@ TEST_F(SessionStorageMetadataTest, DeleteNamespace) {
   SessionStorageMetadata metadata;
   ReadMetadataFromDatabase(&metadata);
 
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
   metadata.DeleteNamespace(test_namespace1_id_, &tasks);
   leveldb::Status status;
   RunBatch(std::move(tasks), base::BindOnce(&ErrorCallback, &status));
@@ -356,7 +354,7 @@ TEST_F(SessionStorageMetadataTest, DeleteArea) {
   ReadMetadataFromDatabase(&metadata);
 
   // First delete an area with a shared map.
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
   metadata.DeleteArea(test_namespace1_id_, test_origin1_, &tasks);
   leveldb::Status status;
   RunBatch(std::move(tasks), base::BindOnce(&ErrorCallback, &status));
@@ -438,8 +436,9 @@ class SessionStorageMetadataMigrationTest : public testing::Test {
     leveldb::Status s =
         leveldb_env::OpenDB(options, temp_path_.GetPath().AsUTF8Unsafe(), &db);
     ASSERT_TRUE(s.ok()) << s.ToString();
-    old_ss_database_ = base::MakeRefCounted<SessionStorageDatabase>(
-        temp_path_.GetPath(), base::ThreadTaskRunnerHandle::Get().get());
+    old_ss_database_ =
+        base::MakeRefCounted<TestingLegacySessionStorageDatabase>(
+            temp_path_.GetPath(), base::ThreadTaskRunnerHandle::Get().get());
     old_ss_database_->SetDatabaseForTesting(std::move(db));
   }
 
@@ -453,7 +452,7 @@ class SessionStorageMetadataMigrationTest : public testing::Test {
   std::string test_namespace2_id_;
   url::Origin test_origin1_;
   std::unique_ptr<leveldb::Env> in_memory_env_;
-  scoped_refptr<SessionStorageDatabase> old_ss_database_;
+  scoped_refptr<TestingLegacySessionStorageDatabase> old_ss_database_;
 
   std::vector<uint8_t> database_version_key_;
   std::vector<uint8_t> next_map_id_key_;
@@ -483,7 +482,7 @@ TEST_F(SessionStorageMetadataMigrationTest, MigrateV0ToV1) {
   base::string16 key2 = base::ASCIIToUTF16("key2");
   key2.push_back(0xd83d);
   key2.push_back(0xde00);
-  storage::LegacyDomStorageValuesMap data;
+  LegacyDomStorageValuesMap data;
   data[key] = base::NullableString16(value, false);
   data[key2] = base::NullableString16(value, false);
   EXPECT_TRUE(old_ss_database_->CommitAreaChanges(test_namespace1_id_,
@@ -497,8 +496,7 @@ TEST_F(SessionStorageMetadataMigrationTest, MigrateV0ToV1) {
   std::string db_value;
   leveldb::Status s = db()->Get(options, leveldb::Slice("version"), &db_value);
   EXPECT_TRUE(s.IsNotFound());
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>
-      migration_tasks;
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> migration_tasks;
   EXPECT_TRUE(metadata.ParseDatabaseVersion(base::nullopt, &migration_tasks));
   EXPECT_FALSE(migration_tasks.empty());
   EXPECT_EQ(1ul, migration_tasks.size());
@@ -509,7 +507,7 @@ TEST_F(SessionStorageMetadataMigrationTest, MigrateV0ToV1) {
   metadata.ParseNextMapId(StdStringToUint8Vector(db_value));
 
   // Get all keys-value pairs with the given key prefix
-  std::vector<storage::DomStorageDatabase::KeyValuePair> values;
+  std::vector<DomStorageDatabase::KeyValuePair> values;
   {
     std::unique_ptr<leveldb::Iterator> it(db()->NewIterator(options));
     it->Seek(leveldb::Slice("namespace-"));
@@ -525,7 +523,7 @@ TEST_F(SessionStorageMetadataMigrationTest, MigrateV0ToV1) {
   EXPECT_EQ(2ul, migration_tasks.size());
 
   leveldb::WriteBatch batch;
-  storage::DomStorageDatabase* null_db = nullptr;
+  DomStorageDatabase* null_db = nullptr;
 
   // Run the tasks on our local batch object. Note that these migration tasks
   // only manipulate |batch|, so it's safe enough to pass them a reference to a
@@ -543,4 +541,4 @@ TEST_F(SessionStorageMetadataMigrationTest, MigrateV0ToV1) {
 
 }  // namespace
 
-}  // namespace content
+}  // namespace storage

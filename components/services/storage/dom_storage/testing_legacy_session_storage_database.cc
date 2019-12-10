@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/dom_storage/session_storage_database.h"
+#include "components/services/storage/dom_storage/testing_legacy_session_storage_database.h"
 
 #include <inttypes.h>
 #include <stddef.h>
@@ -20,7 +20,7 @@
 #include "base/trace_event/memory_dump_manager.h"
 #include "base/trace_event/process_memory_dump.h"
 #include "build/build_config.h"
-#include "content/browser/dom_storage/session_storage_metadata.h"
+#include "components/services/storage/dom_storage/session_storage_metadata.h"
 #include "third_party/leveldatabase/env_chromium.h"
 #include "third_party/leveldatabase/leveldb_chrome.h"
 #include "third_party/leveldatabase/src/include/leveldb/db.h"
@@ -67,7 +67,7 @@ enum SessionStorageUMA {
 // | namespace-3-origin2            | 2 (shallow copy)                   |
 // | next-map-id                    | 4                                  |
 
-namespace content {
+namespace storage {
 
 // This class keeps track of ongoing operations across different threads. When
 // DB inconsistency is detected, we need to 1) make sure no new operations start
@@ -76,9 +76,10 @@ namespace content {
 // the run, and will be recreated during the next run. We cannot hope to recover
 // during this run, since the upper layer will have a different idea about what
 // should be in the database.
-class SessionStorageDatabase::DBOperation {
+class TestingLegacySessionStorageDatabase::DBOperation {
  public:
-  explicit DBOperation(SessionStorageDatabase* session_storage_database)
+  explicit DBOperation(
+      TestingLegacySessionStorageDatabase* session_storage_database)
       : session_storage_database_(session_storage_database) {
     base::AutoLock auto_lock(session_storage_database_->db_lock_);
     ++session_storage_database_->operation_count_;
@@ -100,13 +101,13 @@ class SessionStorageDatabase::DBOperation {
   }
 
  private:
-  SessionStorageDatabase* session_storage_database_;
+  TestingLegacySessionStorageDatabase* session_storage_database_;
 };
 
-SessionStorageDatabase::SessionStorageDatabase(
+TestingLegacySessionStorageDatabase::TestingLegacySessionStorageDatabase(
     const base::FilePath& file_path,
     scoped_refptr<base::SequencedTaskRunner> commit_task_runner)
-    : RefCountedDeleteOnSequence<SessionStorageDatabase>(
+    : RefCountedDeleteOnSequence<TestingLegacySessionStorageDatabase>(
           std::move(commit_task_runner)),
       file_path_(file_path),
       db_error_(false),
@@ -116,17 +117,17 @@ SessionStorageDatabase::SessionStorageDatabase(
   DETACH_FROM_SEQUENCE(sequence_checker_);
 }
 
-SessionStorageDatabase::~SessionStorageDatabase() {
+TestingLegacySessionStorageDatabase::~TestingLegacySessionStorageDatabase() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-  base::ScopedAllowBaseSyncPrimitives allow_base_sync_primitives;
+  base::ScopedAllowBaseSyncPrimitivesForTesting allow_base_sync_primitives;
   db_.reset();
 }
 
-void SessionStorageDatabase::ReadAreaValues(
+void TestingLegacySessionStorageDatabase::ReadAreaValues(
     const std::string& namespace_id,
     const std::vector<std::string>& original_permanent_namespace_ids,
     const url::Origin& origin,
-    storage::LegacyDomStorageValuesMap* result) {
+    LegacyDomStorageValuesMap* result) {
   // We don't create a database if it doesn't exist. In that case, there is
   // nothing to be added to the result.
   if (!LazyOpen(false))
@@ -169,11 +170,11 @@ void SessionStorageDatabase::ReadAreaValues(
   db_->ReleaseSnapshot(options.snapshot);
 }
 
-bool SessionStorageDatabase::CommitAreaChanges(
+bool TestingLegacySessionStorageDatabase::CommitAreaChanges(
     const std::string& namespace_id,
     const url::Origin& origin,
     bool clear_all_first,
-    const storage::LegacyDomStorageValuesMap& changes) {
+    const LegacyDomStorageValuesMap& changes) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   // Even if |changes| is empty, we need to write the appropriate placeholders
   // in the database, so that it can be later shallow-copied successfully.
@@ -199,8 +200,8 @@ bool SessionStorageDatabase::CommitAreaChanges(
     if (!GetMapRefCount(map_id, &ref_count))
       return false;
     if (ref_count > 1) {
-      if (!DeepCopyArea(namespace_id, origin, !clear_all_first,
-                        &map_id, &batch))
+      if (!DeepCopyArea(namespace_id, origin, !clear_all_first, &map_id,
+                        &batch))
         return false;
     } else if (clear_all_first) {
       if (!ClearMap(map_id, &batch))
@@ -216,7 +217,7 @@ bool SessionStorageDatabase::CommitAreaChanges(
 
   WriteValuesToMap(map_id, changes, &batch);
 
-  base::ScopedAllowBaseSyncPrimitives allow_base_sync_primitives;
+  base::ScopedAllowBaseSyncPrimitivesForTesting allow_base_sync_primitives;
   leveldb::Status s = db_->Write(leveldb::WriteOptions(), &batch);
   UMA_HISTOGRAM_ENUMERATION("SessionStorageDatabase.Commit",
                             leveldb_env::GetLevelDBStatusUMAValue(s),
@@ -224,7 +225,7 @@ bool SessionStorageDatabase::CommitAreaChanges(
   return DatabaseErrorCheck(s.ok());
 }
 
-bool SessionStorageDatabase::CloneNamespace(
+bool TestingLegacySessionStorageDatabase::CloneNamespace(
     const std::string& namespace_id,
     const std::string& new_namespace_id) {
   // Go through all origins in the namespace |namespace_id|, create placeholders
@@ -266,13 +267,14 @@ bool SessionStorageDatabase::CloneNamespace(
       return false;
     AddAreaToNamespace(new_namespace_id, origin, map_id, &batch);
   }
-  base::ScopedAllowBaseSyncPrimitives allow_base_sync_primitives;
+  base::ScopedAllowBaseSyncPrimitivesForTesting allow_base_sync_primitives;
   leveldb::Status s = db_->Write(leveldb::WriteOptions(), &batch);
   return DatabaseErrorCheck(s.ok());
 }
 
-bool SessionStorageDatabase::DeleteArea(const std::string& namespace_id,
-                                        const url::Origin& origin) {
+bool TestingLegacySessionStorageDatabase::DeleteArea(
+    const std::string& namespace_id,
+    const url::Origin& origin) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (!LazyOpen(false)) {
     // No need to create the database if it doesn't exist.
@@ -282,12 +284,13 @@ bool SessionStorageDatabase::DeleteArea(const std::string& namespace_id,
   leveldb::WriteBatch batch;
   if (!DeleteAreaHelper(namespace_id, origin.GetURL().spec(), &batch))
     return false;
-  base::ScopedAllowBaseSyncPrimitives allow_base_sync_primitives;
+  base::ScopedAllowBaseSyncPrimitivesForTesting allow_base_sync_primitives;
   leveldb::Status s = db_->Write(leveldb::WriteOptions(), &batch);
   return DatabaseErrorCheck(s.ok());
 }
 
-bool SessionStorageDatabase::DeleteNamespace(const std::string& namespace_id) {
+bool TestingLegacySessionStorageDatabase::DeleteNamespace(
+    const std::string& namespace_id) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   {
     // The caller should have called other methods to open the DB before this
@@ -311,12 +314,12 @@ bool SessionStorageDatabase::DeleteNamespace(const std::string& namespace_id) {
       return false;
   }
   batch.Delete(NamespaceStartKey(namespace_id));
-  base::ScopedAllowBaseSyncPrimitives allow_base_sync_primitives;
+  base::ScopedAllowBaseSyncPrimitivesForTesting allow_base_sync_primitives;
   leveldb::Status s = db_->Write(leveldb::WriteOptions(), &batch);
   return DatabaseErrorCheck(s.ok());
 }
 
-bool SessionStorageDatabase::ReadNamespacesAndOrigins(
+bool TestingLegacySessionStorageDatabase::ReadNamespacesAndOrigins(
     std::map<std::string, std::vector<url::Origin>>* namespaces_and_origins) {
   if (!LazyOpen(true))
     return false;
@@ -358,7 +361,7 @@ bool SessionStorageDatabase::ReadNamespacesAndOrigins(
     // "<namespaceid>" parts from the keys.
     if (current_namespace_start_key.empty() ||
         key.substr(0, current_namespace_start_key.length()) !=
-        current_namespace_start_key) {
+            current_namespace_start_key) {
       // The key is of the form "namespace-<namespaceid>-" for a new
       // <namespaceid>.
       current_namespace_start_key = key;
@@ -380,7 +383,7 @@ bool SessionStorageDatabase::ReadNamespacesAndOrigins(
   return true;
 }
 
-void SessionStorageDatabase::OnMemoryDump(
+void TestingLegacySessionStorageDatabase::OnMemoryDump(
     base::trace_event::ProcessMemoryDump* pmd) {
   base::AutoLock lock(db_lock_);
   if (!db_)
@@ -401,13 +404,13 @@ void SessionStorageDatabase::OnMemoryDump(
                  tracker_dump->GetSizeInternal());
 }
 
-void SessionStorageDatabase::SetDatabaseForTesting(
+void TestingLegacySessionStorageDatabase::SetDatabaseForTesting(
     std::unique_ptr<leveldb::DB> db) {
   CHECK(!db_);
   db_ = std::move(db);
 }
 
-bool SessionStorageDatabase::LazyOpen(bool create_if_needed) {
+bool TestingLegacySessionStorageDatabase::LazyOpen(bool create_if_needed) {
   base::AutoLock auto_lock(db_lock_);
   if (db_error_ || is_inconsistent_) {
     // Don't try to open a database that we know has failed already.
@@ -478,7 +481,7 @@ bool SessionStorageDatabase::LazyOpen(bool create_if_needed) {
   return true;
 }
 
-leveldb::Status SessionStorageDatabase::TryToOpen(
+leveldb::Status TestingLegacySessionStorageDatabase::TryToOpen(
     std::unique_ptr<leveldb::DB>* db) {
   leveldb_env::Options options;
   // The directory exists but a valid leveldb database might not exist inside it
@@ -518,16 +521,16 @@ leveldb::Status SessionStorageDatabase::TryToOpen(
       "Cannot read a database that is a higher schema version.", dummy);
 }
 
-bool SessionStorageDatabase::IsOpen() const {
+bool TestingLegacySessionStorageDatabase::IsOpen() const {
   return db_.get() != nullptr;
 }
 
-bool SessionStorageDatabase::CallerErrorCheck(bool ok) const {
+bool TestingLegacySessionStorageDatabase::CallerErrorCheck(bool ok) const {
   DCHECK(ok);
   return ok;
 }
 
-bool SessionStorageDatabase::ConsistencyCheck(bool ok) {
+bool TestingLegacySessionStorageDatabase::ConsistencyCheck(bool ok) {
   if (ok)
     return true;
   base::AutoLock auto_lock(db_lock_);
@@ -539,7 +542,7 @@ bool SessionStorageDatabase::ConsistencyCheck(bool ok) {
   return false;
 }
 
-bool SessionStorageDatabase::DatabaseErrorCheck(bool ok) {
+bool TestingLegacySessionStorageDatabase::DatabaseErrorCheck(bool ok) {
   if (ok)
     return true;
   base::AutoLock auto_lock(db_lock_);
@@ -549,13 +552,14 @@ bool SessionStorageDatabase::DatabaseErrorCheck(bool ok) {
   return false;
 }
 
-bool SessionStorageDatabase::CreateNamespace(const std::string& namespace_id,
-                                             bool ok_if_exists,
-                                             leveldb::WriteBatch* batch) {
+bool TestingLegacySessionStorageDatabase::CreateNamespace(
+    const std::string& namespace_id,
+    bool ok_if_exists,
+    leveldb::WriteBatch* batch) {
   leveldb::Slice namespace_prefix = NamespacePrefix();
   std::string dummy;
-  leveldb::Status s = db_->Get(leveldb::ReadOptions(), namespace_prefix,
-                               &dummy);
+  leveldb::Status s =
+      db_->Get(leveldb::ReadOptions(), namespace_prefix, &dummy);
   if (!DatabaseErrorCheck(s.ok() || s.IsNotFound()))
     return false;
   if (s.IsNotFound())
@@ -572,7 +576,7 @@ bool SessionStorageDatabase::CreateNamespace(const std::string& namespace_id,
   return CallerErrorCheck(ok_if_exists);
 }
 
-bool SessionStorageDatabase::GetAreasInNamespace(
+bool TestingLegacySessionStorageDatabase::GetAreasInNamespace(
     const std::string& namespace_id,
     std::map<std::string, std::string>* areas) {
   std::string namespace_start_key = NamespaceStartKey(namespace_id);
@@ -604,15 +608,16 @@ bool SessionStorageDatabase::GetAreasInNamespace(
   return true;
 }
 
-void SessionStorageDatabase::AddAreaToNamespace(const std::string& namespace_id,
-                                                const std::string& origin,
-                                                const std::string& map_id,
-                                                leveldb::WriteBatch* batch) {
+void TestingLegacySessionStorageDatabase::AddAreaToNamespace(
+    const std::string& namespace_id,
+    const std::string& origin,
+    const std::string& map_id,
+    leveldb::WriteBatch* batch) {
   std::string namespace_key = NamespaceKey(namespace_id, origin);
   batch->Put(namespace_key, map_id);
 }
 
-bool SessionStorageDatabase::DeleteAreaHelper(
+bool TestingLegacySessionStorageDatabase::DeleteAreaHelper(
     const std::string& namespace_id,
     const std::string& origin,
     leveldb::WriteBatch* batch) {
@@ -650,10 +655,12 @@ bool SessionStorageDatabase::DeleteAreaHelper(
   return true;
 }
 
-bool SessionStorageDatabase::GetMapForArea(const std::string& namespace_id,
-                                           const std::string& origin,
-                                           const leveldb::ReadOptions& options,
-                                           bool* exists, std::string* map_id) {
+bool TestingLegacySessionStorageDatabase::GetMapForArea(
+    const std::string& namespace_id,
+    const std::string& origin,
+    const leveldb::ReadOptions& options,
+    bool* exists,
+    std::string* map_id) {
   std::string namespace_key = NamespaceKey(namespace_id, origin);
   leveldb::Status s = db_->Get(options, namespace_key, map_id);
   if (s.IsNotFound()) {
@@ -664,10 +671,11 @@ bool SessionStorageDatabase::GetMapForArea(const std::string& namespace_id,
   return DatabaseErrorCheck(s.ok());
 }
 
-bool SessionStorageDatabase::CreateMapForArea(const std::string& namespace_id,
-                                              const url::Origin& origin,
-                                              std::string* map_id,
-                                              leveldb::WriteBatch* batch) {
+bool TestingLegacySessionStorageDatabase::CreateMapForArea(
+    const std::string& namespace_id,
+    const url::Origin& origin,
+    std::string* map_id,
+    leveldb::WriteBatch* batch) {
   leveldb::Slice next_map_id_key = NextMapIdKey();
   leveldb::Status s = db_->Get(leveldb::ReadOptions(), next_map_id_key, map_id);
   if (!DatabaseErrorCheck(s.ok() || s.IsNotFound()))
@@ -688,10 +696,11 @@ bool SessionStorageDatabase::CreateMapForArea(const std::string& namespace_id,
   return true;
 }
 
-bool SessionStorageDatabase::ReadMap(const std::string& map_id,
-                                     const leveldb::ReadOptions& options,
-                                     storage::LegacyDomStorageValuesMap* result,
-                                     bool only_keys) {
+bool TestingLegacySessionStorageDatabase::ReadMap(
+    const std::string& map_id,
+    const leveldb::ReadOptions& options,
+    LegacyDomStorageValuesMap* result,
+    bool only_keys) {
   std::unique_ptr<leveldb::Iterator> it(db_->NewIterator(options));
   std::string map_start_key = MapRefCountKey(map_id);
   it->Seek(map_start_key);
@@ -727,9 +736,9 @@ bool SessionStorageDatabase::ReadMap(const std::string& map_id,
   return true;
 }
 
-void SessionStorageDatabase::WriteValuesToMap(
+void TestingLegacySessionStorageDatabase::WriteValuesToMap(
     const std::string& map_id,
-    const storage::LegacyDomStorageValuesMap& values,
+    const LegacyDomStorageValuesMap& values,
     leveldb::WriteBatch* batch) {
   for (auto it = values.begin(); it != values.end(); ++it) {
     base::NullableString16 value = it->second;
@@ -746,19 +755,21 @@ void SessionStorageDatabase::WriteValuesToMap(
   }
 }
 
-bool SessionStorageDatabase::GetMapRefCount(const std::string& map_id,
-                                            int64_t* ref_count) {
+bool TestingLegacySessionStorageDatabase::GetMapRefCount(
+    const std::string& map_id,
+    int64_t* ref_count) {
   std::string ref_count_string;
-  leveldb::Status s = db_->Get(leveldb::ReadOptions(),
-                               MapRefCountKey(map_id), &ref_count_string);
+  leveldb::Status s = db_->Get(leveldb::ReadOptions(), MapRefCountKey(map_id),
+                               &ref_count_string);
   if (!ConsistencyCheck(s.ok()))
     return false;
   bool conversion_ok = base::StringToInt64(ref_count_string, ref_count);
   return ConsistencyCheck(conversion_ok);
 }
 
-bool SessionStorageDatabase::IncreaseMapRefCount(const std::string& map_id,
-                                                 leveldb::WriteBatch* batch) {
+bool TestingLegacySessionStorageDatabase::IncreaseMapRefCount(
+    const std::string& map_id,
+    leveldb::WriteBatch* batch) {
   // Increase the ref count for the map.
   int64_t old_ref_count;
   if (!GetMapRefCount(map_id, &old_ref_count))
@@ -767,9 +778,10 @@ bool SessionStorageDatabase::IncreaseMapRefCount(const std::string& map_id,
   return true;
 }
 
-bool SessionStorageDatabase::DecreaseMapRefCount(const std::string& map_id,
-                                                 int decrease,
-                                                 leveldb::WriteBatch* batch) {
+bool TestingLegacySessionStorageDatabase::DecreaseMapRefCount(
+    const std::string& map_id,
+    int decrease,
+    leveldb::WriteBatch* batch) {
   // Decrease the ref count for the map.
   int64_t ref_count;
   if (!GetMapRefCount(map_id, &ref_count))
@@ -788,22 +800,23 @@ bool SessionStorageDatabase::DecreaseMapRefCount(const std::string& map_id,
   return true;
 }
 
-bool SessionStorageDatabase::ClearMap(const std::string& map_id,
-                                      leveldb::WriteBatch* batch) {
-  storage::LegacyDomStorageValuesMap values;
+bool TestingLegacySessionStorageDatabase::ClearMap(const std::string& map_id,
+                                                   leveldb::WriteBatch* batch) {
+  LegacyDomStorageValuesMap values;
   if (!ReadMap(map_id, leveldb::ReadOptions(), &values, true))
     return false;
-  for (storage::LegacyDomStorageValuesMap::const_iterator it = values.begin();
+  for (LegacyDomStorageValuesMap::const_iterator it = values.begin();
        it != values.end(); ++it)
     batch->Delete(MapKey(map_id, base::UTF16ToUTF8(it->first)));
   return true;
 }
 
-bool SessionStorageDatabase::DeepCopyArea(const std::string& namespace_id,
-                                          const url::Origin& origin,
-                                          bool copy_data,
-                                          std::string* map_id,
-                                          leveldb::WriteBatch* batch) {
+bool TestingLegacySessionStorageDatabase::DeepCopyArea(
+    const std::string& namespace_id,
+    const url::Origin& origin,
+    bool copy_data,
+    std::string* map_id,
+    leveldb::WriteBatch* batch) {
   // Example, data before deep copy:
   // | namespace-1- (1 = namespace id)| dummy               |
   // | namespace-1-origin1            | 1 (mapid)           |
@@ -824,7 +837,7 @@ bool SessionStorageDatabase::DeepCopyArea(const std::string& namespace_id,
 
   // Read the values from the old map here. If we don't need to copy the data,
   // this can stay empty.
-  storage::LegacyDomStorageValuesMap values;
+  LegacyDomStorageValuesMap values;
   if (copy_data && !ReadMap(*map_id, leveldb::ReadOptions(), &values, false))
     return false;
   if (!DecreaseMapRefCount(*map_id, 1, batch))
@@ -838,32 +851,35 @@ bool SessionStorageDatabase::DeepCopyArea(const std::string& namespace_id,
   return true;
 }
 
-std::string SessionStorageDatabase::NamespaceStartKey(
+std::string TestingLegacySessionStorageDatabase::NamespaceStartKey(
     const std::string& namespace_id) {
   return base::StringPrintf("namespace-%s-", namespace_id.c_str());
 }
 
-std::string SessionStorageDatabase::NamespaceKey(
-    const std::string& namespace_id, const std::string& origin) {
+std::string TestingLegacySessionStorageDatabase::NamespaceKey(
+    const std::string& namespace_id,
+    const std::string& origin) {
   return base::StringPrintf("namespace-%s-%s", namespace_id.c_str(),
                             origin.c_str());
 }
 
-const char* SessionStorageDatabase::NamespacePrefix() {
+const char* TestingLegacySessionStorageDatabase::NamespacePrefix() {
   return "namespace-";
 }
 
-std::string SessionStorageDatabase::MapRefCountKey(const std::string& map_id) {
+std::string TestingLegacySessionStorageDatabase::MapRefCountKey(
+    const std::string& map_id) {
   return base::StringPrintf("map-%s-", map_id.c_str());
 }
 
-std::string SessionStorageDatabase::MapKey(const std::string& map_id,
-                                           const std::string& key) {
+std::string TestingLegacySessionStorageDatabase::MapKey(
+    const std::string& map_id,
+    const std::string& key) {
   return base::StringPrintf("map-%s-%s", map_id.c_str(), key.c_str());
 }
 
-const char* SessionStorageDatabase::NextMapIdKey() {
+const char* TestingLegacySessionStorageDatabase::NextMapIdKey() {
   return "next-map-id";
 }
 
-}  // namespace content
+}  // namespace storage
