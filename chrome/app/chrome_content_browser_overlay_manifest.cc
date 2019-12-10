@@ -20,7 +20,6 @@
 #include "chrome/browser/ui/webui/usb_internals/usb_internals.mojom.h"
 #include "chrome/common/available_offline_content.mojom.h"
 #include "chrome/common/cache_stats_recorder.mojom.h"
-#include "chrome/common/media_router/mojom/media_router.mojom.h"
 #include "chrome/common/net_benchmarking.mojom.h"
 #include "components/data_reduction_proxy/core/common/data_reduction_proxy.mojom.h"
 #include "components/metrics/public/mojom/call_stack_profile_collector.mojom.h"
@@ -124,8 +123,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 cros::mojom::CameraAppDeviceProvider,
 #endif
                 media::mojom::MediaEngagementScoreDetailsProvider,
-                media_router::mojom::MediaRouter,
-
                 // WebUI-only interfaces go below this line. These should be
                 // brokered through a dedicated interface, but they're here
                 // for for now.
