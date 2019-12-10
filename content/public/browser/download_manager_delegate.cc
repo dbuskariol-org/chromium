@@ -33,7 +33,7 @@ bool DownloadManagerDelegate::ShouldCompleteDownload(
 
 bool DownloadManagerDelegate::ShouldOpenDownload(
     download::DownloadItem* item,
-    const DownloadOpenDelayedCallback& callback) {
+    DownloadOpenDelayedCallback callback) {
   return true;
 }
 

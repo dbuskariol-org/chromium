@@ -48,7 +48,9 @@ bool DownloadItemImplDelegate::ShouldCompleteDownload(
 
 bool DownloadItemImplDelegate::ShouldOpenDownload(
     DownloadItemImpl* download,
-    const ShouldOpenDownloadCallback& callback) {
+    ShouldOpenDownloadCallback callback) {
+  // TODO(qinmin): When this returns false it means this should run the callback
+  // at some point.
   return false;
 }
 

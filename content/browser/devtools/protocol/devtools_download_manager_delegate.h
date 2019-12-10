@@ -44,7 +44,7 @@ class CONTENT_EXPORT DevToolsDownloadManagerDelegate
       content::DownloadTargetCallback* callback) override;
   bool ShouldOpenDownload(
       download::DownloadItem* item,
-      const content::DownloadOpenDelayedCallback& callback) override;
+      content::DownloadOpenDelayedCallback callback) override;
   void GetNextId(content::DownloadIdCallback callback) override;
 
  private:

@@ -33,7 +33,7 @@ class COMPONENTS_DOWNLOAD_EXPORT DownloadItemImplDelegate {
  public:
   // The boolean argument indicates whether or not the download was
   // actually opened.
-  typedef base::Callback<void(bool)> ShouldOpenDownloadCallback;
+  using ShouldOpenDownloadCallback = base::OnceCallback<void(bool)>;
 
   DownloadItemImplDelegate();
   virtual ~DownloadItemImplDelegate();
@@ -60,9 +60,10 @@ class COMPONENTS_DOWNLOAD_EXPORT DownloadItemImplDelegate {
                                       const base::Closure& complete_callback);
 
   // Allows the delegate to override the opening of a download. If it returns
-  // true then it's reponsible for opening the item.
+  // true then it's responsible for opening the item, and the |callback| is not
+  // run.
   virtual bool ShouldOpenDownload(DownloadItemImpl* download,
-                                  const ShouldOpenDownloadCallback& callback);
+                                  ShouldOpenDownloadCallback callback);
 
   // Tests if a file type should be opened automatically.
   virtual bool ShouldOpenFileBasedOnExtension(const base::FilePath& path);

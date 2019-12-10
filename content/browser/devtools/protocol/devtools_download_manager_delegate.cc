@@ -128,7 +128,7 @@ bool DevToolsDownloadManagerDelegate::DetermineDownloadTarget(
 
 bool DevToolsDownloadManagerDelegate::ShouldOpenDownload(
     download::DownloadItem* item,
-    const content::DownloadOpenDelayedCallback& callback) {
+    content::DownloadOpenDelayedCallback callback) {
   DevToolsDownloadManagerHelper* download_helper =
       DevToolsDownloadManagerHelper::FromWebContents(
           DownloadItemUtils::GetWebContents(item));
@@ -136,7 +136,10 @@ bool DevToolsDownloadManagerDelegate::ShouldOpenDownload(
   if (download_helper)
     return true;
   if (proxy_download_delegate_)
-    return proxy_download_delegate_->ShouldOpenDownload(item, callback);
+    return proxy_download_delegate_->ShouldOpenDownload(item,
+                                                        std::move(callback));
+  // TODO(qinmin): When this returns false it means this should run the callback
+  // at some point.
   return false;
 }
 

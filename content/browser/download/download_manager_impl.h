@@ -217,7 +217,7 @@ class CONTENT_EXPORT DownloadManagerImpl
                               const base::Closure& complete_callback) override;
   bool ShouldOpenFileBasedOnExtension(const base::FilePath& path) override;
   bool ShouldOpenDownload(download::DownloadItemImpl* item,
-                          const ShouldOpenDownloadCallback& callback) override;
+                          ShouldOpenDownloadCallback callback) override;
   void CheckForFileRemoval(download::DownloadItemImpl* download_item) override;
   std::string GetApplicationClientIdForFileScanning() const override;
   void ResumeInterruptedDownload(

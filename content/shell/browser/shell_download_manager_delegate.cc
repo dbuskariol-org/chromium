@@ -98,7 +98,7 @@ bool ShellDownloadManagerDelegate::DetermineDownloadTarget(
 
 bool ShellDownloadManagerDelegate::ShouldOpenDownload(
     download::DownloadItem* item,
-    const DownloadOpenDelayedCallback& callback) {
+    DownloadOpenDelayedCallback callback) {
   return true;
 }
 

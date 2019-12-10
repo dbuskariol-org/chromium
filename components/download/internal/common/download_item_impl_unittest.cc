@@ -77,8 +77,12 @@ class MockDelegate : public DownloadItemImplDelegate {
                     DownloadItemImplDelegate::DownloadTargetCallback&));
   MOCK_METHOD2(ShouldCompleteDownload,
                bool(DownloadItemImpl*, const base::Closure&));
-  MOCK_METHOD2(ShouldOpenDownload,
-               bool(DownloadItemImpl*, const ShouldOpenDownloadCallback&));
+  bool ShouldOpenDownload(DownloadItemImpl* item,
+                          ShouldOpenDownloadCallback cb) override {
+    return ShouldOpenDownload_(item, cb);
+  }
+  MOCK_METHOD2(ShouldOpenDownload_,
+               bool(DownloadItemImpl*, ShouldOpenDownloadCallback&));
   MOCK_METHOD1(ShouldOpenFileBasedOnExtension, bool(const base::FilePath&));
   MOCK_METHOD1(CheckForFileRemoval, void(DownloadItemImpl*));
 
@@ -102,7 +106,7 @@ class MockDelegate : public DownloadItemImplDelegate {
   void SetDefaultExpectations() {
     EXPECT_CALL(*this, ShouldOpenFileBasedOnExtension(_))
         .WillRepeatedly(Return(false));
-    EXPECT_CALL(*this, ShouldOpenDownload(_, _)).WillRepeatedly(Return(true));
+    EXPECT_CALL(*this, ShouldOpenDownload_(_, _)).WillRepeatedly(Return(true));
     EXPECT_CALL(*this, IsOffTheRecord()).WillRepeatedly(Return(false));
   }
 };
@@ -276,7 +280,7 @@ class DownloadItemTest : public testing::Test {
     mock_delegate()->VerifyAndClearExpectations();
     EXPECT_CALL(*mock_delegate(), ShouldOpenFileBasedOnExtension(_))
         .WillRepeatedly(Return(false));
-    EXPECT_CALL(*mock_delegate(), ShouldOpenDownload(_, _))
+    EXPECT_CALL(*mock_delegate(), ShouldOpenDownload_(_, _))
         .WillRepeatedly(Return(true));
 
     return mock_download_file;
@@ -1863,7 +1867,7 @@ TEST_F(DownloadItemTest, CompleteDelegate_ReturnTrue) {
                 base::BindOnce(std::move(cb), DOWNLOAD_INTERRUPT_REASON_NONE,
                                base::FilePath(kDummyTargetPath)));
           }));
-  EXPECT_CALL(*mock_delegate(), ShouldOpenDownload(item, _))
+  EXPECT_CALL(*mock_delegate(), ShouldOpenDownload_(item, _))
       .WillOnce(Return(true));
   EXPECT_CALL(*download_file, FullPath())
       .WillOnce(ReturnRefOfCopy(base::FilePath()));
@@ -1909,7 +1913,7 @@ TEST_F(DownloadItemTest, CompleteDelegate_BlockOnce) {
                 base::BindOnce(std::move(cb), DOWNLOAD_INTERRUPT_REASON_NONE,
                                base::FilePath(kDummyTargetPath)));
           }));
-  EXPECT_CALL(*mock_delegate(), ShouldOpenDownload(item, _))
+  EXPECT_CALL(*mock_delegate(), ShouldOpenDownload_(item, _))
       .WillOnce(Return(true));
   EXPECT_CALL(*download_file, FullPath())
       .WillOnce(ReturnRefOfCopy(base::FilePath()));
@@ -1958,7 +1962,7 @@ TEST_F(DownloadItemTest, CompleteDelegate_SetDanger) {
                 base::BindOnce(std::move(cb), DOWNLOAD_INTERRUPT_REASON_NONE,
                                base::FilePath(kDummyTargetPath)));
           }));
-  EXPECT_CALL(*mock_delegate(), ShouldOpenDownload(item, _))
+  EXPECT_CALL(*mock_delegate(), ShouldOpenDownload_(item, _))
       .WillOnce(Return(true));
   EXPECT_CALL(*download_file, FullPath())
       .WillOnce(ReturnRefOfCopy(base::FilePath()));
@@ -2016,7 +2020,7 @@ TEST_F(DownloadItemTest, CompleteDelegate_BlockTwice) {
                 base::BindOnce(std::move(cb), DOWNLOAD_INTERRUPT_REASON_NONE,
                                base::FilePath(kDummyTargetPath)));
           }));
-  EXPECT_CALL(*mock_delegate(), ShouldOpenDownload(item, _))
+  EXPECT_CALL(*mock_delegate(), ShouldOpenDownload_(item, _))
       .WillOnce(Return(true));
   EXPECT_CALL(*download_file, FullPath())
       .WillOnce(ReturnRefOfCopy(base::FilePath()));

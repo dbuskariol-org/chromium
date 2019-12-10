@@ -67,7 +67,7 @@ using DownloadTargetCallback = base::OnceCallback<void(
     download::DownloadInterruptReason interrupt_reason)>;
 
 // Called when a download delayed by the delegate has completed.
-using DownloadOpenDelayedCallback = base::Callback<void(bool)>;
+using DownloadOpenDelayedCallback = base::OnceCallback<void(bool)>;
 
 // On failure, |next_id| is equal to kInvalidId.
 using DownloadIdCallback = base::OnceCallback<void(uint32_t /* next_id */)>;
@@ -115,11 +115,12 @@ class CONTENT_EXPORT DownloadManagerDelegate {
                                       base::OnceClosure complete_callback);
 
   // Allows the delegate to override opening the download. If this function
-  // returns false, the delegate needs to call callback when it's done
-  // with the item, and is responsible for opening it.  This function is called
-  // after the final rename, but before the download state is set to COMPLETED.
+  // returns false, the delegate needs to call |callback| when it's done
+  // with the item, and is responsible for opening it. When it returns true,
+  // the callback will not be used. This function is called after the final
+  // rename, but before the download state is set to COMPLETED.
   virtual bool ShouldOpenDownload(download::DownloadItem* item,
-                                  const DownloadOpenDelayedCallback& callback);
+                                  DownloadOpenDelayedCallback callback);
 
   // Checks and hands off the downloading to be handled by another system based
   // on mime type. Returns true if the download was intercepted.

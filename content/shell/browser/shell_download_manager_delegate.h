@@ -28,7 +28,7 @@ class ShellDownloadManagerDelegate : public DownloadManagerDelegate {
   bool DetermineDownloadTarget(download::DownloadItem* download,
                                DownloadTargetCallback* callback) override;
   bool ShouldOpenDownload(download::DownloadItem* item,
-                          const DownloadOpenDelayedCallback& callback) override;
+                          DownloadOpenDelayedCallback callback) override;
   void GetNextId(DownloadIdCallback callback) override;
 
   // Inhibits prompting and sets the default download path.

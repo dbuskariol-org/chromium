@@ -424,7 +424,7 @@ void InProgressDownloadManager::ResumeInterruptedDownload(
 
 bool InProgressDownloadManager::ShouldOpenDownload(
     DownloadItemImpl* item,
-    const ShouldOpenDownloadCallback& callback) {
+    ShouldOpenDownloadCallback callback) {
   return true;
 }
 

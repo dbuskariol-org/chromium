@@ -90,7 +90,7 @@ class ChromeDownloadManagerDelegate
                               base::OnceClosure complete_callback) override;
   bool ShouldOpenDownload(
       download::DownloadItem* item,
-      const content::DownloadOpenDelayedCallback& callback) override;
+      content::DownloadOpenDelayedCallback callback) override;
   bool InterceptDownloadIfApplicable(
       const GURL& url,
       const std::string& user_agent,

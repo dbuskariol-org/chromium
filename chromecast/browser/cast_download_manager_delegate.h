@@ -28,7 +28,7 @@ class CastDownloadManagerDelegate : public content::DownloadManagerDelegate,
                               base::OnceClosure complete_callback) override;
   bool ShouldOpenDownload(
       download::DownloadItem* item,
-      const content::DownloadOpenDelayedCallback& callback) override;
+      content::DownloadOpenDelayedCallback callback) override;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(CastDownloadManagerDelegate);

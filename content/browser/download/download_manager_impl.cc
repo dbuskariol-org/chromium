@@ -428,14 +428,14 @@ bool DownloadManagerImpl::ShouldOpenFileBasedOnExtension(
 
 bool DownloadManagerImpl::ShouldOpenDownload(
     download::DownloadItemImpl* item,
-    const ShouldOpenDownloadCallback& callback) {
+    ShouldOpenDownloadCallback callback) {
   if (!delegate_)
     return true;
 
   // Relies on DownloadItemImplDelegate::ShouldOpenDownloadCallback and
   // DownloadManagerDelegate::DownloadOpenDelayedCallback "just happening"
   // to have the same type :-}.
-  return delegate_->ShouldOpenDownload(item, callback);
+  return delegate_->ShouldOpenDownload(item, std::move(callback));
 }
 
 void DownloadManagerImpl::SetDelegate(DownloadManagerDelegate* delegate) {

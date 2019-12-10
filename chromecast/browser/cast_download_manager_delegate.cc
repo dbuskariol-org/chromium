@@ -50,7 +50,9 @@ bool CastDownloadManagerDelegate::ShouldCompleteDownload(
 
 bool CastDownloadManagerDelegate::ShouldOpenDownload(
     download::DownloadItem* item,
-    const content::DownloadOpenDelayedCallback& callback) {
+    content::DownloadOpenDelayedCallback callback) {
+  // TODO(qinmin): When this returns false it means this should run the callback
+  // at some point.
   return false;
 }
 

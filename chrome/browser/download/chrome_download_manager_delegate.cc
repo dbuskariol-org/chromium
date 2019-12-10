@@ -555,7 +555,8 @@ bool ChromeDownloadManagerDelegate::ShouldCompleteDownload(
 }
 
 bool ChromeDownloadManagerDelegate::ShouldOpenDownload(
-    DownloadItem* item, const content::DownloadOpenDelayedCallback& callback) {
+    DownloadItem* item,
+    content::DownloadOpenDelayedCallback callback) {
 #if BUILDFLAG(ENABLE_EXTENSIONS)
   if (download_crx_util::IsExtensionDownload(*item) &&
       !extensions::WebstoreInstaller::GetAssociatedApproval(*item)) {
@@ -569,7 +570,7 @@ bool ChromeDownloadManagerDelegate::ShouldOpenDownload(
         extensions::NOTIFICATION_CRX_INSTALLER_DONE,
         content::Source<extensions::CrxInstaller>(crx_installer.get()));
 
-    crx_installers_[crx_installer.get()] = callback;
+    crx_installers_[crx_installer.get()] = std::move(callback);
     // The status text and percent complete indicator will change now
     // that we are installing a CRX.  Update observers so that they pick
     // up the change.
@@ -1214,9 +1215,9 @@ void ChromeDownloadManagerDelegate::Observe(
   scoped_refptr<extensions::CrxInstaller> installer =
       content::Source<extensions::CrxInstaller>(source).ptr();
   content::DownloadOpenDelayedCallback callback =
-      crx_installers_[installer.get()];
+      std::move(crx_installers_[installer.get()]);
   crx_installers_.erase(installer.get());
-  callback.Run(installer->did_handle_successfully());
+  std::move(callback).Run(installer->did_handle_successfully());
 #endif
 }
 
