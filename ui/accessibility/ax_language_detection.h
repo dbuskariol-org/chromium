@@ -169,8 +169,14 @@ class AX_EXPORT AXLanguageDetectionManager {
  private:
   AXLanguageInfoStats lang_info_stats_;
 
+  // Perform detection for subtree rooted at subtree_root.
   void DetectLanguageForSubtree(AXNode* subtree_root);
+  // Perform detection for node. Will not descend into children.
+  void DetectLanguageForNode(AXNode* node);
+  // Perform labelling for subtree rooted at subtree_root.
   void LabelLanguageForSubtree(AXNode* subtree_root);
+  // Perform labelling for node. Will not descend into children.
+  void LabelLanguageForNode(AXNode* node);
 
   // This language identifier is constructed with a default minimum byte length
   // of chrome_lang_id::NNetLanguageIdentifier::kMinNumBytesToConsider and is
