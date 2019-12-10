@@ -690,7 +690,14 @@ crbug.com/799016 external/wpt/css/css-align/baseline-rules/synthesized-baseline-
 # Layout team disagrees with the spec for this particular test.
 crbug.com/591099 external/wpt/css/css-ui/text-overflow-015.html [ Failure ]
 
+# [css-flexbox]
+
 crbug.com/1003506 external/wpt/css/css-flexbox/percentage-heights-007.html [ Failure ]
+crbug.com/1025630 [ Mac ] external/wpt/css/css-flexbox/select-element-zero-height-001.html [ Failure ]
+crbug.com/1025630 [ Mac ] external/wpt/css/css-flexbox/select-element-zero-height-002.html [ Failure ]
+crbug.com/1025630 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/select-element-zero-height-001.html [ Failure ]
+crbug.com/1025630 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/select-element-zero-height-002.html [ Failure ]
+
 
 # ====== Layout team owned tests to here ======
 
@@ -2755,10 +2762,6 @@ crbug.com/626703 [ Win ] external/wpt/html/semantics/document-metadata/the-link-
 crbug.com/626703 [ Linux ] external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-load-events.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-load-events.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-load-events.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/css/css-flexbox/select-element-zero-height-001.html [ Failure ]
-crbug.com/626703 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/select-element-zero-height-001.html [ Failure ]
-crbug.com/626703 [ Mac ] external/wpt/css/css-flexbox/select-element-zero-height-002.html [ Failure ]
-crbug.com/626703 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/select-element-zero-height-002.html [ Failure ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/input-events/input-events-typing.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/mathml/relations/html5-tree/css-inline-style-dynamic.tentative.html [ Failure ]
 crbug.com/626703 [ Linux ] external/wpt/input-events/input-events-typing.html [ Timeout ]
