@@ -159,6 +159,8 @@ source_set("eg_tests") {
   ]
   testonly = true
   sources = [
+    "bookmark_earl_grey_utils.h",
+    "bookmark_earl_grey_utils.mm",
     "bookmarks_egtest.mm",
   ]
   deps = [
