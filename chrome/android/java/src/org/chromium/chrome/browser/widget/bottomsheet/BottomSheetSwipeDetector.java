@@ -9,8 +9,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
+import org.chromium.base.MathUtils;
 import org.chromium.base.ThreadUtils;
-import org.chromium.chrome.browser.util.MathUtils;
 
 /**
  * A class that determines whether a sequence of motion events is a valid swipe in the context of a
