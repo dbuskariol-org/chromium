@@ -235,13 +235,21 @@ Polymer({
   },
 
   /**
+   * Invisible when capturing AND we have a shortcut.
+   * @return {boolean} Whether the clear button is invisible.
+   * @private
+   */
+  computeClearInvisible_: function() {
+    return this.capturing_ && !!this.shortcut;
+  },
+
+  /**
+   * Hidden when no shortcut is set.
    * @return {boolean} Whether the clear button is hidden.
    * @private
    */
   computeClearHidden_: function() {
-    // We don't want to show the clear button if the input is currently
-    // capturing a new shortcut or if there is no shortcut to clear.
-    return this.capturing_ || !this.shortcut;
+    return !this.shortcut;
   },
 
   /**
