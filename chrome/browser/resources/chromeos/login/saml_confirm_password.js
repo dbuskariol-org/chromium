@@ -5,8 +5,6 @@
 Polymer({
   is: 'saml-confirm-password',
 
-  behaviors: [OobeI18nBehavior],
-
   properties: {
     email: String,
 
