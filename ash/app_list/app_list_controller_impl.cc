@@ -1341,7 +1341,7 @@ gfx::Rect AppListControllerImpl::SnapBoundsToDisplayEdge(
   return screen_util::SnapBoundsToDisplayEdge(bounds, window);
 }
 
-int AppListControllerImpl::GetShelfHeight() {
+int AppListControllerImpl::GetShelfSize() {
   return ShelfConfig::Get()->system_shelf_size();
 }
 
