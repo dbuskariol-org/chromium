@@ -514,6 +514,7 @@ if (is_android) {
       ":test_support_ui_android",
       "//chrome:chrome_android_core",
       "//chrome/android:app_hooks_java",
+      "//chrome/browser/profiling_host:profiling_browsertests",
       "//components/crash/android:crashpad_main",
 
       # TODO(crbug.com/961849): This is needed for ShellManager which is what
