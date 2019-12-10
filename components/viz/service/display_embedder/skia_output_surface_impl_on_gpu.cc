@@ -896,7 +896,8 @@ bool SkiaOutputSurfaceImplOnGpu::FinishPaintCurrentFrame(
 }
 
 void SkiaOutputSurfaceImplOnGpu::ScheduleOutputSurfaceAsOverlay(
-    const OverlayProcessor::OutputSurfaceOverlayPlane& output_surface_plane) {
+    const OverlayProcessorInterface::OutputSurfaceOverlayPlane&
+        output_surface_plane) {
   DCHECK(!output_surface_plane_);
   output_surface_plane_ = output_surface_plane;
 }

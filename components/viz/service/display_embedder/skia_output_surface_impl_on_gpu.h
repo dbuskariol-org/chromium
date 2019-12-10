@@ -19,7 +19,7 @@
 #include "components/viz/service/display/external_use_client.h"
 #include "components/viz/service/display/output_surface.h"
 #include "components/viz/service/display/output_surface_frame.h"
-#include "components/viz/service/display/overlay_processor.h"
+#include "components/viz/service/display/overlay_processor_interface.h"
 #include "components/viz/service/display_embedder/skia_output_device.h"
 #include "components/viz/service/display_embedder/skia_output_surface_dependency.h"
 #include "gpu/command_buffer/common/mailbox.h"
@@ -137,7 +137,8 @@ class SkiaOutputSurfaceImplOnGpu : public gpu::ImageTransportSurfaceDelegate,
       base::OnceClosure on_finished,
       base::Optional<gfx::Rect> draw_rectangle);
   void ScheduleOutputSurfaceAsOverlay(
-      const OverlayProcessor::OutputSurfaceOverlayPlane& output_surface_plane);
+      const OverlayProcessorInterface::OutputSurfaceOverlayPlane&
+          output_surface_plane);
   void SwapBuffers(
       OutputSurfaceFrame frame,
       base::OnceCallback<bool()> deferred_framebuffer_draw_closure);
@@ -279,7 +280,7 @@ class SkiaOutputSurfaceImplOnGpu : public gpu::ImageTransportSurfaceDelegate,
   std::unique_ptr<SkiaOutputDevice> output_device_;
   base::Optional<SkiaOutputDevice::ScopedPaint> scoped_output_device_paint_;
 
-  base::Optional<OverlayProcessor::OutputSurfaceOverlayPlane>
+  base::Optional<OverlayProcessorInterface::OutputSurfaceOverlayPlane>
       output_surface_plane_;
 
   base::flat_map<RenderPassId, OffscreenSurface> offscreen_surfaces_;
