@@ -1061,8 +1061,8 @@ void SyncTest::SetupMockGaiaResponses() {
 
 void SyncTest::SetOAuth2TokenResponse(const std::string& response_data,
                                       net::HttpStatusCode status_code,
-                                      net::URLRequestStatus::Status status) {
-  network::URLLoaderCompletionStatus completion_status(status);
+                                      net::Error net_error) {
+  network::URLLoaderCompletionStatus completion_status(net_error);
   completion_status.decoded_body_length = response_data.size();
 
   std::string response = base::StringPrintf("HTTP/1.1 %d %s\r\n", status_code,
