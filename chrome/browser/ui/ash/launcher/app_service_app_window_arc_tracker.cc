@@ -8,8 +8,10 @@
 #include "ash/public/cpp/multi_user_window_manager.h"
 #include "ash/public/cpp/shelf_types.h"
 #include "ash/public/cpp/window_properties.h"
+#include "base/time/time.h"
 #include "chrome/browser/apps/app_service/app_service_proxy.h"
 #include "chrome/browser/apps/app_service/app_service_proxy_factory.h"
+#include "chrome/browser/chromeos/arc/arc_optin_uma.h"
 #include "chrome/browser/chromeos/arc/arc_util.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/app_list/arc/arc_app_utils.h"
@@ -254,6 +256,9 @@ void AppServiceAppWindowArcTracker::AttachControllerToWindow(
   window->SetProperty(ash::kArcPackageNameKey,
                       new std::string(info->package_name()));
   window->SetProperty(ash::kAppIDKey, new std::string(shelf_id.app_id));
+
+  if (info->app_shelf_id().app_id() == arc::kPlayStoreAppId)
+    HandlePlayStoreLaunch(info);
 }
 
 void AppServiceAppWindowArcTracker::AddCandidateWindow(aura::Window* window) {
@@ -276,4 +281,45 @@ ash::ShelfID AppServiceAppWindowArcTracker::GetShelfId(int task_id) const {
 void AppServiceAppWindowArcTracker::CheckAndAttachControllers() {
   for (auto* window : arc_window_candidates_)
     AttachControllerToWindow(window);
+}
+
+void AppServiceAppWindowArcTracker::OnArcOptInManagementCheckStarted() {
+  // In case of retry this time is updated and we measure only successful run.
+  opt_in_management_check_start_time_ = base::Time::Now();
+}
+
+void AppServiceAppWindowArcTracker::OnArcSessionStopped(
+    arc::ArcStopReason stop_reason) {
+  opt_in_management_check_start_time_ = base::Time();
+}
+
+void AppServiceAppWindowArcTracker::HandlePlayStoreLaunch(
+    ArcAppWindowInfo* app_window_info) {
+  arc::Intent intent;
+  if (!arc::ParseIntent(app_window_info->launch_intent(), &intent))
+    return;
+
+  if (!opt_in_management_check_start_time_.is_null()) {
+    if (intent.HasExtraParam(arc::kInitialStartParam)) {
+      DCHECK(!arc::IsRobotOrOfflineDemoAccountMode());
+      arc::UpdatePlayStoreShownTimeDeprecated(
+          base::Time::Now() - opt_in_management_check_start_time_,
+          app_service_controller_->owner()->profile());
+      VLOG(1) << "Play Store is initially shown.";
+    }
+    opt_in_management_check_start_time_ = base::Time();
+    return;
+  }
+
+  for (const auto& param : intent.extra_params()) {
+    int64_t start_request_ms;
+    if (sscanf(param.c_str(), arc::kRequestStartTimeParamTemplate,
+               &start_request_ms) != 1)
+      continue;
+    const base::TimeDelta launch_time =
+        base::TimeTicks::Now() - base::TimeTicks() -
+        base::TimeDelta::FromMilliseconds(start_request_ms);
+    DCHECK_GE(launch_time, base::TimeDelta());
+    arc::UpdatePlayStoreLaunchTime(launch_time);
+  }
 }

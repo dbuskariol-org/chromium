@@ -12,11 +12,16 @@
 #include <vector>
 
 #include "ash/public/cpp/shelf_types.h"
+#include "chrome/browser/chromeos/arc/session/arc_session_manager.h"
 #include "chrome/browser/ui/app_list/arc/arc_app_list_prefs.h"
 #include "components/arc/arc_util.h"
 
 namespace aura {
 class window;
+}
+
+namespace base {
+class Time;
 }
 
 class AppServiceAppWindowLauncherController;
@@ -27,8 +32,8 @@ class Profile;
 //
 // TODO(crbug.com/1011235):
 // 1. Add ActiveUserChanged to handle the user switch case.
-// 2. Add PlatStore launch handling
-class AppServiceAppWindowArcTracker : public ArcAppListPrefs::Observer {
+class AppServiceAppWindowArcTracker : public ArcAppListPrefs::Observer,
+                                      public arc::ArcSessionManager::Observer {
  public:
   explicit AppServiceAppWindowArcTracker(
       AppServiceAppWindowLauncherController* app_service_controller);
@@ -74,6 +79,12 @@ class AppServiceAppWindowArcTracker : public ArcAppListPrefs::Observer {
   // are ARC app windows and have task id.
   void CheckAndAttachControllers();
 
+  // arc::ArcSessionManager::Observer:
+  void OnArcOptInManagementCheckStarted() override;
+  void OnArcSessionStopped(arc::ArcStopReason stop_reason) override;
+
+  void HandlePlayStoreLaunch(ArcAppWindowInfo* app_window_info);
+
   Profile* const observed_profile_;
   AppServiceAppWindowLauncherController* const app_service_controller_;
 
@@ -88,6 +99,12 @@ class AppServiceAppWindowArcTracker : public ArcAppListPrefs::Observer {
   std::set<aura::Window*> arc_window_candidates_;
 
   int active_task_id_ = arc::kNoTaskId;
+
+  // The time when the ARC OptIn management check was started. This happens
+  // right after user agrees the ToS or in some cases for managed user when ARC
+  // starts for the first time. OptIn management check is preceding step before
+  // ARC container is actually started.
+  base::Time opt_in_management_check_start_time_;
 };
 
 #endif  // CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_WINDOW_ARC_TRACKER_H_
