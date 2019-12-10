@@ -2090,6 +2090,9 @@ extern const char kEnableParentalControlsSettingsDescription[];
 extern const char kEnablePlayStoreSearchName[];
 extern const char kEnablePlayStoreSearchDescription[];
 
+extern const char kEnableQuickAnswersName[];
+extern const char kEnableQuickAnswersDescription[];
+
 extern const char kEnableVideoPlayerNativeControlsName[];
 extern const char kEnableVideoPlayerNativeControlsDescription[];
 

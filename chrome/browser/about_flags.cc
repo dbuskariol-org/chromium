@@ -3766,6 +3766,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kEnableAssistantLauncherUIName,
      flag_descriptions::kEnableAssistantLauncherUIDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(app_list_features::kEnableAssistantLauncherUI)},
+
+    {"enable-quick-answers", flag_descriptions::kEnableQuickAnswersName,
+     flag_descriptions::kEnableQuickAnswersDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kQuickAnswers)},
 #endif  // defined(OS_CHROMEOS)
 
 #if BUILDFLAG(ENABLE_CLICK_TO_CALL)

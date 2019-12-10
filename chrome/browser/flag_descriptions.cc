@@ -3536,6 +3536,10 @@ const char kEnablePlayStoreSearchName[] = "Enable Play Store search";
 const char kEnablePlayStoreSearchDescription[] =
     "Enable Play Store search in launcher.";
 
+const char kEnableQuickAnswersName[] = "Enable Quick Answers";
+const char kEnableQuickAnswersDescription[] =
+    "Enable the Quick Answers feature";
+
 const char kEnableVideoPlayerNativeControlsName[] =
     "Enable native controls in video player app";
 const char kEnableVideoPlayerNativeControlsDescription[] =
