@@ -1433,22 +1433,6 @@
             ]
         }
     ],
-    "BoostThreadPriorityOnLibraryLoadingAndBackgroundMode": [
-        {
-            "platforms": [
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "BoostPriorityAndBackgroundThreadMode",
-                    "enable_features": [
-                        "BoostThreadPriorityOnLibraryLoading",
-                        "WindowsThreadModeBackground"
-                    ]
-                }
-            ]
-        }
-    ],
     "BrowserBlacklist": [
         {
             "platforms": [
