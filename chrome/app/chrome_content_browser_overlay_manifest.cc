@@ -114,7 +114,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 chromeos::crostini_installer::mojom::PageHandlerFactory,
                 chromeos::crostini_upgrader::mojom::PageHandlerFactory,
                 chromeos::machine_learning::mojom::PageHandler,
-                chromeos::media_perception::mojom::MediaPerception,
                 chromeos::multidevice_setup::mojom::MultiDeviceSetup,
                 chromeos::multidevice_setup::mojom::PrivilegedHostDeviceSetter,
                 chromeos::network_config::mojom::CrosNetworkConfig,

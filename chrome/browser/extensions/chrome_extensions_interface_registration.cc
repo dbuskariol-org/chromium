@@ -24,14 +24,11 @@
 #if defined(OS_CHROMEOS)
 #include "base/task/post_task.h"
 #include "chrome/common/pref_names.h"
-#include "chromeos/services/media_perception/public/mojom/media_perception.mojom.h"
 #include "components/arc/intent_helper/arc_intent_helper_bridge.h"
 #include "components/chromeos_camera/camera_app_helper_impl.h"
 #include "components/prefs/pref_service.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/media_device_id.h"
-#include "extensions/browser/api/extensions_api_client.h"
-#include "extensions/browser/api/media_perception_private/media_perception_api_delegate.h"
 #include "media/capture/video/chromeos/camera_app_device_provider_impl.h"
 #include "media/capture/video/chromeos/mojom/camera_app.mojom.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
@@ -125,25 +122,6 @@ void RegisterChromeInterfacesForExtension(
     const Extension* extension) {
   DCHECK(extension);
 #if defined(OS_CHROMEOS)
-
-  if (extension->permissions_data()->HasAPIPermission(
-          APIPermission::kMediaPerceptionPrivate)) {
-    extensions::ExtensionsAPIClient* client =
-        extensions::ExtensionsAPIClient::Get();
-    extensions::MediaPerceptionAPIDelegate* delegate = nullptr;
-    if (client)
-      delegate = client->GetMediaPerceptionAPIDelegate();
-    if (delegate) {
-      // Note that it is safe to use base::Unretained here because |delegate| is
-      // owned by the |client|, which is instantiated by the
-      // ChromeExtensionsBrowserClient, which in turn is owned and lives as long
-      // as the BrowserProcessImpl.
-      registry->AddInterface(
-          base::BindRepeating(&extensions::MediaPerceptionAPIDelegate::
-                                  ForwardMediaPerceptionReceiver,
-                              base::Unretained(delegate)));
-    }
-  }
   if (extension->id().compare(extension_misc::kChromeCameraAppId) == 0 ||
       extension->id().compare(extension_misc::kChromeCameraAppDevId) == 0) {
     registry->AddInterface(

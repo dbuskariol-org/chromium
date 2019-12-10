@@ -16,6 +16,9 @@
 #include "extensions/common/permissions/permissions_data.h"
 
 #if defined(OS_CHROMEOS)
+#include "chromeos/services/media_perception/public/mojom/media_perception.mojom.h"
+#include "extensions/browser/api/extensions_api_client.h"
+#include "extensions/browser/api/media_perception_private/media_perception_api_delegate.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 
 #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
@@ -67,6 +70,25 @@ void PopulateChromeFrameBindersForExtension(
         base::BindRepeating(&BindInputEngineManager));
   }
 #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
+
+  if (extension->permissions_data()->HasAPIPermission(
+          APIPermission::kMediaPerceptionPrivate)) {
+    extensions::ExtensionsAPIClient* client =
+        extensions::ExtensionsAPIClient::Get();
+    extensions::MediaPerceptionAPIDelegate* delegate = nullptr;
+    if (client)
+      delegate = client->GetMediaPerceptionAPIDelegate();
+    if (delegate) {
+      // Note that it is safe to use base::Unretained here because |delegate| is
+      // owned by the |client|, which is instantiated by the
+      // ChromeExtensionsBrowserClient, which in turn is owned and lives as long
+      // as the BrowserProcessImpl.
+      binder_map->Add<chromeos::media_perception::mojom::MediaPerception>(
+          base::BindRepeating(&extensions::MediaPerceptionAPIDelegate::
+                                  ForwardMediaPerceptionReceiver,
+                              base::Unretained(delegate)));
+    }
+  }
 #endif
 }
 
