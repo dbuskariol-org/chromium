@@ -314,10 +314,9 @@
 
   self.pageInfoCoordinator = [[PageInfoLegacyCoordinator alloc]
       initWithBaseViewController:self.viewController
-                    browserState:self.browserState];
-  self.pageInfoCoordinator.dispatcher = self.dispatcher;
+                         browser:self.browser];
   self.pageInfoCoordinator.presentationProvider = self.viewController;
-  self.pageInfoCoordinator.webStateList = self.browser->GetWebStateList();
+  [self.pageInfoCoordinator start];
 
   self.passKitCoordinator = [[PassKitCoordinator alloc]
       initWithBaseViewController:self.viewController];
