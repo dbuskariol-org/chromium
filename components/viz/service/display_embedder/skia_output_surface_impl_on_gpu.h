@@ -210,6 +210,11 @@ class SkiaOutputSurfaceImplOnGpu : public gpu::ImageTransportSurfaceDelegate,
     dependency_->PostTaskToClientThread(std::move(closure));
   }
 
+  void ReadbackDone() {
+    DCHECK_GT(num_readbacks_pending_, 0);
+    num_readbacks_pending_--;
+  }
+
  private:
   class ScopedPromiseImageAccess;
   class OffscreenSurface;
@@ -245,6 +250,8 @@ class SkiaOutputSurfaceImplOnGpu : public gpu::ImageTransportSurfaceDelegate,
   SkSurface* output_sk_surface() const {
     return scoped_output_device_paint_->sk_surface();
   }
+
+  void CheckReadbackCompletion();
 
   SkiaOutputSurfaceDependency* const dependency_;
   scoped_refptr<gpu::gles2::FeatureInfo> feature_info_;
@@ -299,6 +306,9 @@ class SkiaOutputSurfaceImplOnGpu : public gpu::ImageTransportSurfaceDelegate,
   std::vector<std::unique_ptr<SkDeferredDisplayList>> destroy_after_swap_;
 
   const gpu::ContextUrl copier_active_url_;
+
+  int num_readbacks_pending_ = 0;
+  bool readback_poll_pending_ = false;
 
   THREAD_CHECKER(thread_checker_);
 
