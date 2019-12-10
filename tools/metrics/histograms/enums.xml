@@ -54708,7 +54708,7 @@ Called by update_net_trust_anchors.py.-->
   </int>
   <int value="1" label="NoLock">
     |request_initiator_site_lock| is missing - see https://crbug.com/891872 and
-    RenderProcessHostImpl::CreateURLLoaderFactoryWithOptionalOrigin.
+    RenderProcessHostImpl::CreateURLLoaderFactoryForRendererProcess.
   </int>
   <int value="2" label="NoInitiator">|request_initiator| is missing.</int>
   <int value="3" label="CompatibleLock">
