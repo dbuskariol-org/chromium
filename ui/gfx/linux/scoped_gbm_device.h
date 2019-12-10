@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_OZONE_COMMON_LINUX_SCOPED_GBM_DEVICE_H_
-#define UI_OZONE_COMMON_LINUX_SCOPED_GBM_DEVICE_H_
+#ifndef UI_GFX_LINUX_SCOPED_GBM_DEVICE_H_
+#define UI_GFX_LINUX_SCOPED_GBM_DEVICE_H_
 
 #include <gbm.h>
 
@@ -19,4 +19,4 @@ using ScopedGbmDevice = std::unique_ptr<gbm_device, GbmDeviceDeleter>;
 
 }  // namespace ui
 
-#endif  // UI_OZONE_COMMON_LINUX_SCOPED_GBM_DEVICE_H_
+#endif  // UI_GFX_LINUX_SCOPED_GBM_DEVICE_H_

@@ -5,7 +5,7 @@
 import("//build/config/ui.gni")
 import("//ui/ozone/ozone.gni")
 
-assert(ozone_platform_gbm || ozone_platform_wayland)
+assert(use_x11 || ozone_platform_gbm || ozone_platform_wayland)
 
 source_set("drm") {
   sources = [
@@ -25,6 +25,7 @@ source_set("gbm") {
     "gbm_buffer.h",
     "gbm_device.h",
     "gbm_wrapper.cc",
+    "gbm_wrapper.h",
     "scoped_gbm_device.cc",
     "scoped_gbm_device.h",
   ]
@@ -33,10 +34,10 @@ source_set("gbm") {
     ":drm",
     "//base:base",
     "//build/config/linux/libdrm",
+    "//skia",
     "//third_party/minigbm",
     "//ui/gfx:buffer_types",
     "//ui/gfx:memory_buffer",
     "//ui/gfx/geometry:geometry",
-    "//ui/ozone:ozone_base",
   ]
 }

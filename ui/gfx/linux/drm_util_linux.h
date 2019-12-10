@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_OZONE_COMMON_LINUX_DRM_UTIL_LINUX_H_
-#define UI_OZONE_COMMON_LINUX_DRM_UTIL_LINUX_H_
+#ifndef UI_GFX_LINUX_DRM_UTIL_LINUX_H_
+#define UI_GFX_LINUX_DRM_UTIL_LINUX_H_
 
 #include "ui/gfx/buffer_types.h"
 
@@ -17,4 +17,4 @@ bool IsValidBufferFormat(uint32_t current_format);
 
 }  // namespace ui
 
-#endif  // UI_OZONE_COMMON_LINUX_DRM_UTIL_LINUX_H__
+#endif  // UI_GFX_LINUX_DRM_UTIL_LINUX_H__

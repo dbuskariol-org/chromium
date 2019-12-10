@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/ozone/common/linux/gbm_wrapper.h"
+#include "ui/gfx/linux/gbm_wrapper.h"
 
 #include <gbm.h>
 #include <memory>
@@ -11,9 +11,9 @@
 #include "base/posix/eintr_wrapper.h"
 #include "third_party/skia/include/core/SkSurface.h"
 #include "ui/gfx/buffer_format_util.h"
-#include "ui/ozone/common/linux/drm_util_linux.h"
-#include "ui/ozone/common/linux/gbm_buffer.h"
-#include "ui/ozone/common/linux/gbm_device.h"
+#include "ui/gfx/linux/drm_util_linux.h"
+#include "ui/gfx/linux/gbm_buffer.h"
+#include "ui/gfx/linux/gbm_device.h"
 
 #if !defined(MINIGBM)
 #include <fcntl.h>

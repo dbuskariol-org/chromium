@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/ozone/common/linux/drm_util_linux.h"
+#include "ui/gfx/linux/drm_util_linux.h"
 
 #include <drm_fourcc.h>
 
@@ -10,7 +10,7 @@
 
 #ifndef DRM_FORMAT_INVALID
 // TODO(mcasas): Remove when uprevving //third_party/libdrm.
-#define DRM_FORMAT_INVALID  0
+#define DRM_FORMAT_INVALID 0
 #endif
 
 #ifndef DRM_FORMAT_P010
