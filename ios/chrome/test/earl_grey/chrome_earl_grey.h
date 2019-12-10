@@ -81,6 +81,10 @@ id ExecuteJavaScript(NSString* javascript, NSError* __autoreleasing* out_error);
 
 #pragma mark - Navigation Utilities (EG2)
 
+// Instructs the application delegate to open |URL| with default opening
+// options.
+- (void)applicationOpenURL:(const GURL&)URL;
+
 // Loads |URL| in the current WebState with transition type
 // ui::PAGE_TRANSITION_TYPED, and if waitForCompletion is YES
 // waits for the loading to complete within a timeout.

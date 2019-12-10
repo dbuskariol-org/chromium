@@ -74,6 +74,13 @@ using chrome_test_util::BrowserCommandDispatcherForMainBVC;
       @"Clearing browser cache for main tabs timed out");
 }
 
++ (void)applicationOpenURL:(NSString*)spec {
+  UIApplication* application = UIApplication.sharedApplication;
+  [application.delegate application:application
+                            openURL:[NSURL URLWithString:spec]
+                            options:[NSDictionary dictionary]];
+}
+
 + (void)startLoadingURL:(NSString*)spec {
   chrome_test_util::LoadUrl(GURL(base::SysNSStringToUTF8(spec)));
 }

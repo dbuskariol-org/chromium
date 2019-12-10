@@ -284,6 +284,11 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeEarlGreyAppInterface)
   EG_TEST_HELPER_ASSERT_TRUE(pageLoaded, kWaitForPageToFinishLoadingError);
 }
 
+- (void)applicationOpenURL:(const GURL&)URL {
+  NSString* spec = base::SysUTF8ToNSString(URL.spec());
+  [ChromeEarlGreyAppInterface applicationOpenURL:spec];
+}
+
 - (void)loadURL:(const GURL&)URL waitForCompletion:(BOOL)wait {
   NSString* spec = base::SysUTF8ToNSString(URL.spec());
   [ChromeEarlGreyAppInterface startLoadingURL:spec];
