@@ -168,6 +168,13 @@ public final class WebLayerImpl extends IWebLayer.Stub {
             }
         }
 
+        // Creating the Android shared preferences object causes I/O. Prewarm during
+        // initialization to avoid this occurring randomly later.
+        // TODO: Do this on a background thread.
+        try (StrictModeContext ignored = StrictModeContext.allowDiskWrites()) {
+            ContextUtils.getAppSharedPreferences();
+        }
+
         DeviceUtils.addDeviceSpecificUserAgentSwitch();
         ContentUriUtils.setFileProviderUtil(new FileProviderHelper());
 
