@@ -11,7 +11,6 @@
 #include "base/bind.h"
 #include "base/feature_list.h"
 #include "base/logging.h"
-#include "build/branding_buildflags.h"
 #include "chrome/common/extensions/extension_constants.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/render_frame_host.h"
@@ -25,7 +24,6 @@
 #if defined(OS_CHROMEOS)
 #include "base/task/post_task.h"
 #include "chrome/common/pref_names.h"
-#include "chromeos/services/ime/public/mojom/input_engine.mojom.h"
 #include "chromeos/services/media_perception/public/mojom/media_perception.mojom.h"
 #include "components/arc/intent_helper/arc_intent_helper_bridge.h"
 #include "components/chromeos_camera/camera_app_helper_impl.h"
@@ -38,23 +36,11 @@
 #include "media/capture/video/chromeos/mojom/camera_app.mojom.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
-#include "ui/base/ime/chromeos/extension_ime_util.h"
-#include "ui/base/ime/chromeos/input_method_manager.h"
 #endif
 
 namespace extensions {
 namespace {
 #if defined(OS_CHROMEOS)
-
-#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
-// Resolves InputEngineManager request in InputMethodManager.
-void BindInputEngineManager(
-    chromeos::ime::mojom::InputEngineManagerRequest request,
-    content::RenderFrameHost* source) {
-  chromeos::input_method::InputMethodManager::Get()->ConnectInputEngineManager(
-      std::move(request));
-}
-#endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
 
 // Translates the renderer-side source ID to video device id.
 void TranslateVideoDeviceId(
@@ -139,13 +125,6 @@ void RegisterChromeInterfacesForExtension(
     const Extension* extension) {
   DCHECK(extension);
 #if defined(OS_CHROMEOS)
-
-#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
-  // Registry InputEngineManager for official Google XKB Input only.
-  if (extension->id() == chromeos::extension_ime_util::kXkbExtensionId) {
-    registry->AddInterface(base::BindRepeating(&BindInputEngineManager));
-  }
-#endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
 
   if (extension->permissions_data()->HasAPIPermission(
           APIPermission::kMediaPerceptionPrivate)) {
