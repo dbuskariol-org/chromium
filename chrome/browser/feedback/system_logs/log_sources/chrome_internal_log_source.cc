@@ -40,6 +40,7 @@
 #if defined(OS_CHROMEOS)
 #include "ash/public/mojom/constants.mojom.h"
 #include "chrome/browser/chromeos/arc/arc_util.h"
+#include "chrome/browser/chromeos/arc/policy/arc_policy_bridge.h"
 #include "chrome/browser/chromeos/login/demo_mode/demo_session.h"
 #include "chrome/browser/metrics/chromeos_metrics_provider.h"
 #include "chromeos/dbus/util/version_loader.h"
@@ -67,6 +68,9 @@ constexpr char kPowerApiListKey[] = "chrome.power extensions";
 constexpr char kDataReductionProxyKey[] = "data_reduction_proxy";
 constexpr char kChromeVersionTag[] = "CHROME VERSION";
 #if defined(OS_CHROMEOS)
+constexpr char kArcPolicyComplianceReportKey[] =
+    "CHROMEOS_ARC_POLICY_COMPLIANCE_REPORT";
+constexpr char kArcPolicyKey[] = "CHROMEOS_ARC_POLICY";
 constexpr char kChromeOsFirmwareVersion[] = "CHROMEOS_FIRMWARE_VERSION";
 constexpr char kChromeEnrollmentTag[] = "ENTERPRISE_ENROLLED";
 constexpr char kHWIDKey[] = "HWID";
@@ -249,7 +253,7 @@ ChromeInternalLogSource::ChromeInternalLogSource()
   content::GetSystemConnector()->Connect(
       ash::mojom::kServiceName,
       cros_display_config_.BindNewPipeAndPassReceiver());
-#endif
+#endif  // defined(OS_CHROMEOS)
 }
 
 ChromeInternalLogSource::~ChromeInternalLogSource() {
@@ -288,10 +292,12 @@ void ChromeInternalLogSource::Fetch(SysLogsSourceCallback callback) {
 
 #if defined(OS_CHROMEOS)
   // Store ARC enabled status.
-  response->emplace(kArcStatusKey, arc::IsArcPlayStoreEnabledForProfile(
-                                       ProfileManager::GetLastUsedProfile())
-                                       ? "enabled"
-                                       : "disabled");
+  bool is_arc_enabled = arc::IsArcPlayStoreEnabledForProfile(
+      ProfileManager::GetLastUsedProfile());
+  response->emplace(kArcStatusKey, is_arc_enabled ? "enabled" : "disabled");
+  if (is_arc_enabled) {
+    PopulateArcPolicyStatus(response.get());
+  }
   response->emplace(kAccountTypeKey, GetPrimaryAccountTypeString());
   response->emplace(kDemoModeConfigKey,
                     chromeos::DemoSession::DemoConfigToString(
@@ -433,6 +439,17 @@ void ChromeInternalLogSource::PopulateLocalStateSettings(
     return;
 
   response->emplace(kLocalStateSettingsResponseKey, serialized_settings);
+}
+
+void ChromeInternalLogSource::PopulateArcPolicyStatus(
+    SystemLogsResponse* response) {
+  response->emplace(kArcPolicyKey, arc::ArcPolicyBridge::GetForBrowserContext(
+                                       ProfileManager::GetLastUsedProfile())
+                                       ->get_arc_policy_for_reporting());
+  response->emplace(kArcPolicyComplianceReportKey,
+                    arc::ArcPolicyBridge::GetForBrowserContext(
+                        ProfileManager::GetLastUsedProfile())
+                        ->get_arc_policy_compliance_report());
 }
 
 #endif  // defined(OS_CHROMEOS)
