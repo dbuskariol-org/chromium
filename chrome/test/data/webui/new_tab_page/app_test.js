@@ -49,4 +49,11 @@ suite('NewTabPageAppTest', () => {
     await wait;
     assertFalse(toastManager.isToastOpen);
   });
+
+  test('clicking customize button opens customize dialog', async () => {
+    assertFalse(!!app.shadowRoot.querySelector('ntp-customize-dialog'));
+    app.$.customizeButton.click();
+    await flushTasks();
+    assertTrue(!!app.shadowRoot.querySelector('ntp-customize-dialog'));
+  });
 });

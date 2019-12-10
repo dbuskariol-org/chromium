@@ -56,6 +56,11 @@ content::WebUIDataSource* CreateNewTabPageUiHtmlSource() {
       {"nameField", IDS_NTP_CUSTOM_LINKS_NAME},
       {"restoreDefaultLinks", IDS_NTP_CONFIRM_MSG_RESTORE_DEFAULTS},
       {"urlField", IDS_NTP_CUSTOM_LINKS_URL},
+
+      // Customize button and dialog.
+      {"customizeButton", IDS_NTP_CUSTOMIZE_BUTTON_LABEL},
+      {"cancelButton", IDS_CANCEL},
+      {"doneButton", IDS_DONE},
   };
   AddLocalizedStringsBulk(source, kStrings);
 

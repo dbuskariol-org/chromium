@@ -50,3 +50,15 @@ var NewTabPageMostVisitedTest = class extends NewTabPageBrowserTest {
 TEST_F('NewTabPageMostVisitedTest', 'All', function() {
   mocha.run();
 });
+
+// eslint-disable-next-line no-var
+var NewTabPageCustomizeDialogTest = class extends NewTabPageBrowserTest {
+  /** @override */
+  get browsePreload() {
+    return 'chrome://new-tab-page/test_loader.html?module=new_tab_page/customize_dialog_test.js';
+  }
+};
+
+TEST_F('NewTabPageCustomizeDialogTest', 'All', function() {
+  mocha.run();
+});

@@ -10,6 +10,7 @@ js_type_check("closure_compile") {
   deps = [
     ":app",
     ":browser_proxy",
+    ":customize_dialog",
   ]
 }
 
@@ -45,6 +46,14 @@ js_library("most_visited") {
   ]
 }
 
+js_library("customize_dialog") {
+  deps = [
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/cr_elements/cr_button:cr_button.m",
+    "//ui/webui/resources/cr_elements/cr_dialog:cr_dialog.m",
+  ]
+}
+
 polymer_modulizer("app") {
   js_file = "app.js"
   html_file = "app.html"
@@ -57,9 +66,16 @@ polymer_modulizer("most_visited") {
   html_type = "v3-ready"
 }
 
+polymer_modulizer("customize_dialog") {
+  js_file = "customize_dialog.js"
+  html_file = "customize_dialog.html"
+  html_type = "v3-ready"
+}
+
 group("polymer3_elements") {
   deps = [
     ":app_module",
+    ":customize_dialog_module",
     ":most_visited_module",
   ]
 }

@@ -21,6 +21,9 @@
       <include name="IDR_NEW_TAB_PAGE_MOST_VISITED_JS"
           file="${root_gen_dir}/chrome/browser/resources/new_tab_page/most_visited.js"
           use_base_dir="false" type="BINDATA" compress="gzip" />
+      <include name="IDR_NEW_TAB_PAGE_CUSTOMIZE_DIALOG_JS"
+          file="${root_gen_dir}/chrome/browser/resources/new_tab_page/customize_dialog.js"
+          use_base_dir="false" type="BINDATA" compress="gzip" />
     </includes>
     <structures>
       <structure name="IDR_NEW_TAB_PAGE_NEW_TAB_PAGE_HTML"

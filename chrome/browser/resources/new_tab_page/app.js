@@ -4,6 +4,8 @@
 
 import './strings.m.js';
 import './most_visited.js';
+import './customize_dialog.js';
+import 'chrome://resources/cr_elements/cr_button/cr_button.m.js';
 import 'chrome://resources/cr_elements/shared_style_css.m.js';
 
 import {getToastManager} from 'chrome://resources/cr_elements/cr_toast/cr_toast_manager.m.js';
@@ -20,6 +22,13 @@ class NewTabPageApp extends PolymerElement {
     return html`{__html_template__}`;
   }
 
+  static get properties() {
+    return {
+      /** @private */
+      showCustomizeDialog_: Boolean,
+    };
+  }
+
   get pageHandler_() {
     return BrowserProxy.getInstance().handler;
   }
@@ -34,6 +43,16 @@ class NewTabPageApp extends PolymerElement {
   onUndoClick_() {
     getToastManager().hide();
     this.pageHandler_.undoMostVisitedTileAction();
+  }
+
+  /** @private */
+  onCustomizeClick_() {
+    this.showCustomizeDialog_ = true;
+  }
+
+  /** @private */
+  onCustomizeDialogClose_() {
+    this.showCustomizeDialog_ = false;
   }
 }
 
