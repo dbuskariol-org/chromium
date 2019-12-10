@@ -47127,6 +47127,25 @@ Called by update_net_trust_anchors.py.-->
   </int>
 </enum>
 
+<enum name="OptimizationGuidePredictionManagerModelStatus">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Model for target is available">
+    The prediction model for the optimization target is loaded and available for
+    evaluation.
+  </int>
+  <int value="2" label="Store is available but does not contain the model">
+    The store is initialized but the model does not exist for the optimization
+    target.
+  </int>
+  <int value="3" label="Store is available but the model is not loaded yet">
+    The store is initialized but the model has not been loaded into memory yet.
+  </int>
+  <int value="4" label="Store is unvailable and model availability is unknown">
+    The store is not yet initialized and it is unknown if it contains a model
+    for the optimization target or not.
+  </int>
+</enum>
+
 <enum name="OptimizationGuideProcessHintsResult">
   <int value="0" label="Success">
     Hints were processed and at least one supported hint was stored.
