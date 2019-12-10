@@ -37,11 +37,6 @@ void AdaptTitleForBookmark(const sync_pb::SyncEntity& update_entity,
 void AdaptGuidForBookmark(const sync_pb::SyncEntity& update_entity,
                           sync_pb::EntitySpecifics* specifics);
 
-// Analogous to AdaptGuidForBookmark() but deals with EntityData structs.
-// |entity_data| must not be null.
-// TODO(crbug.com/1007199): Reconcile with AdaptGuidForBookmark().
-void AdaptGuidForBookmarkEntityData(EntityData* entity_data);
-
 }  // namespace syncer
 
 #endif  // COMPONENTS_SYNC_ENGINE_IMPL_BOOKMARK_UPDATE_PREPROCESSING_H_

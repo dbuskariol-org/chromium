@@ -142,25 +142,4 @@ void AdaptGuidForBookmark(const sync_pb::SyncEntity& update_entity,
   }
 }
 
-void AdaptGuidForBookmarkEntityData(EntityData* entity_data) {
-  DCHECK(entity_data);
-  DCHECK(entity_data->specifics.has_bookmark());
-  DCHECK(!entity_data->specifics.has_encrypted());
-
-  if (entity_data->is_deleted() ||
-      !entity_data->server_defined_unique_tag.empty()) {
-    return;
-  }
-
-  if (entity_data->specifics.bookmark().has_guid()) {
-    LogGuidSource(BookmarkGuidSource::kSpecifics);
-  } else if (base::IsValidGUID(entity_data->originator_client_item_id)) {
-    entity_data->specifics.mutable_bookmark()->set_guid(
-        entity_data->originator_client_item_id);
-    LogGuidSource(BookmarkGuidSource::kValidOCII);
-  } else {
-    LogGuidSource(BookmarkGuidSource::kLeftEmpty);
-  }
-}
-
 }  // namespace syncer

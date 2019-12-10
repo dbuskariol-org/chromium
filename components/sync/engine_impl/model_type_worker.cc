@@ -29,22 +29,6 @@
 
 namespace syncer {
 
-namespace {
-
-void AdaptUpdateForCompatibilityAfterDecryption(
-    ModelType model_type,
-    const sync_pb::SyncEntity& update_entity,
-    sync_pb::EntitySpecifics* specifics,
-    bool specifics_were_encrypted) {
-  DCHECK(specifics);
-  if (model_type == BOOKMARKS) {
-    AdaptTitleForBookmark(update_entity, specifics, specifics_were_encrypted);
-    AdaptGuidForBookmark(update_entity, specifics);
-  }
-}
-
-}  // namespace
-
 ModelTypeWorker::ModelTypeWorker(
     ModelType type,
     const sync_pb::ModelTypeState& initial_state,
@@ -185,8 +169,9 @@ SyncerError ModelTypeWorker::ProcessGetUpdatesResponse(
         pending_updates_.push_back(std::move(response_data));
         break;
       case DECRYPTION_PENDING:
+        // Cannot decrypt now, copy the sync entity for later decryption.
         entries_pending_decryption_[update_entity->id_string()] =
-            std::move(response_data);
+            *update_entity;
         break;
       case FAILED_TO_DECRYPT:
         // Failed to decrypt the entity. Likely it is corrupt. Move on.
@@ -206,8 +191,54 @@ ModelTypeWorker::DecryptionStatus ModelTypeWorker::PopulateUpdateResponseData(
     ModelType model_type,
     const sync_pb::SyncEntity& update_entity,
     UpdateResponseData* response_data) {
-  response_data->response_version = update_entity.version();
   auto data = std::make_unique<syncer::EntityData>();
+
+  // Deleted entities must use the default instance of EntitySpecifics in
+  // order for EntityData to correctly reflect that they are deleted.
+  const sync_pb::EntitySpecifics& specifics =
+      update_entity.deleted() ? sync_pb::EntitySpecifics::default_instance()
+                              : update_entity.specifics();
+  bool specifics_were_encrypted = false;
+
+  if (specifics.password().has_encrypted()) {
+    // Passwords use their own legacy encryption scheme.
+    DCHECK(cryptographer);
+    // TODO(crbug.com/516866): If we switch away from the password legacy
+    // encryption, this method and DecryptStoredEntities() )should be already
+    // ready for that change. Add unit test for this future-proofness.
+
+    // Make sure the worker defers password entities if the encryption key
+    // hasn't been received yet.
+    if (!cryptographer->CanDecrypt(specifics.password().encrypted())) {
+      return DECRYPTION_PENDING;
+    }
+    if (!DecryptPasswordSpecifics(*cryptographer, specifics,
+                                  &data->specifics)) {
+      return FAILED_TO_DECRYPT;
+    }
+    response_data->encryption_key_name =
+        specifics.password().encrypted().key_name();
+    specifics_were_encrypted = true;
+  } else if (specifics.has_encrypted()) {
+    // Check if specifics are encrypted and try to decrypt if so.
+    // Deleted entities should not be encrypted.
+    DCHECK(!update_entity.deleted());
+    if (!cryptographer || !cryptographer->CanDecrypt(specifics.encrypted())) {
+      // Can't decrypt right now.
+      return DECRYPTION_PENDING;
+    }
+    // Encrypted and we know the key.
+    if (!DecryptSpecifics(*cryptographer, specifics, &data->specifics)) {
+      return FAILED_TO_DECRYPT;
+    }
+    response_data->encryption_key_name = specifics.encrypted().key_name();
+    specifics_were_encrypted = true;
+  } else {
+    // No encryption.
+    data->specifics = specifics;
+  }
+
+  response_data->response_version = update_entity.version();
   // Prepare the message for the model thread.
   data->id = update_entity.id_string();
   data->client_tag_hash =
@@ -224,74 +255,17 @@ ModelTypeWorker::DecryptionStatus ModelTypeWorker::PopulateUpdateResponseData(
   data->originator_cache_guid = update_entity.originator_cache_guid();
   data->originator_client_item_id = update_entity.originator_client_item_id();
 
-  // Adapt the update for compatibility (all except specifics that may need
-  // encryption).
+  // Adapt the update for compatibility.
   if (model_type == BOOKMARKS) {
     AdaptUniquePositionForBookmark(update_entity, data.get());
+    AdaptTitleForBookmark(update_entity, &data->specifics,
+                          specifics_were_encrypted);
+    AdaptGuidForBookmark(update_entity, &data->specifics);
   }
   // TODO(crbug.com/881289): Generate client tag hash for wallet data.
 
-  // Deleted entities must use the default instance of EntitySpecifics in
-  // order for EntityData to correctly reflect that they are deleted.
-  const sync_pb::EntitySpecifics& specifics =
-      update_entity.deleted() ? sync_pb::EntitySpecifics::default_instance()
-                              : update_entity.specifics();
-
-  // Passwords use their own legacy encryption scheme.
-  if (specifics.password().has_encrypted()) {
-    DCHECK(cryptographer);
-    // TODO(crbug.com/516866): If we switch away from the password legacy
-    // encryption, this method and DecryptStoredEntities() )should be already
-    // ready for that change. Add unit test for this future-proofness.
-
-    // Make sure the worker defers password entities if the encryption key
-    // hasn't been received yet.
-    if (!cryptographer->CanDecrypt(specifics.password().encrypted())) {
-      data->specifics = specifics;
-      response_data->entity = std::move(data);
-      return DECRYPTION_PENDING;
-    }
-    response_data->encryption_key_name =
-        specifics.password().encrypted().key_name();
-    if (!DecryptPasswordSpecifics(*cryptographer, specifics,
-                                  &data->specifics)) {
-      return FAILED_TO_DECRYPT;
-    }
-    AdaptUpdateForCompatibilityAfterDecryption(
-        model_type, update_entity, &data->specifics,
-        /*specifics_were_encrypted=*/true);
-    response_data->entity = std::move(data);
-    return SUCCESS;
-  }
-
-  // Check if specifics are encrypted and try to decrypt if so.
-  if (!specifics.has_encrypted()) {
-    // No encryption.
-    data->specifics = specifics;
-    AdaptUpdateForCompatibilityAfterDecryption(
-        model_type, update_entity, &data->specifics,
-        /*specifics_were_encrypted=*/false);
-    response_data->entity = std::move(data);
-    return SUCCESS;
-  }
-  // Deleted entities should not be encrypted.
-  DCHECK(!update_entity.deleted());
-  if (cryptographer && cryptographer->CanDecrypt(specifics.encrypted())) {
-    // Encrypted and we know the key.
-    if (!DecryptSpecifics(*cryptographer, specifics, &data->specifics)) {
-      return FAILED_TO_DECRYPT;
-    }
-    AdaptUpdateForCompatibilityAfterDecryption(
-        model_type, update_entity, &data->specifics,
-        /*specifics_were_encrypted=*/true);
-    response_data->entity = std::move(data);
-    response_data->encryption_key_name = specifics.encrypted().key_name();
-    return SUCCESS;
-  }
-  // Can't decrypt right now.
-  data->specifics = specifics;
   response_data->entity = std::move(data);
-  return DECRYPTION_PENDING;
+  return SUCCESS;
 }
 
 void ModelTypeWorker::ApplyUpdates(StatusController* status) {
@@ -475,57 +449,26 @@ bool ModelTypeWorker::UpdateEncryptionKeyName() {
 void ModelTypeWorker::DecryptStoredEntities() {
   for (auto it = entries_pending_decryption_.begin();
        it != entries_pending_decryption_.end();) {
-    const UpdateResponseData& encrypted_update = *it->second;
-    const EntityData& data = *encrypted_update.entity;
-    DCHECK(!data.is_deleted());
+    const sync_pb::SyncEntity& encrypted_update = it->second;
 
-    sync_pb::EntitySpecifics specifics;
-    std::string encryption_key_name;
-
-    if (data.specifics.password().has_encrypted()) {
-      encryption_key_name = data.specifics.password().encrypted().key_name();
-      if (!cryptographer_->CanDecrypt(data.specifics.password().encrypted())) {
-        ++it;
-        continue;
-      }
-      if (!DecryptPasswordSpecifics(*cryptographer_, data.specifics,
-                                    &specifics)) {
-        // Decryption error should be permanent (e.g. corrupt data), since
-        // CanDecrypt() above claims decryption keys are up-to-date. Let's
-        // ignore this update to avoid blocking other updates.
+    auto response_data = std::make_unique<UpdateResponseData>();
+    switch (PopulateUpdateResponseData(cryptographer_.get(), type_,
+                                       encrypted_update, response_data.get())) {
+      case SUCCESS:
+        pending_updates_.push_back(std::move(response_data));
         it = entries_pending_decryption_.erase(it);
-        continue;
-      }
-    } else {
-      DCHECK(data.specifics.has_encrypted());
-      encryption_key_name = data.specifics.encrypted().key_name();
-
-      if (!cryptographer_->CanDecrypt(data.specifics.encrypted())) {
+        break;
+      case DECRYPTION_PENDING:
+        // Still cannot decrypt, move on and keep this one for later.
         ++it;
-        continue;
-      }
-
-      if (!DecryptSpecifics(*cryptographer_, data.specifics, &specifics)) {
+        break;
+      case FAILED_TO_DECRYPT:
         // Decryption error should be permanent (e.g. corrupt data), since
-        // CanDecrypt() above claims decryption keys are up-to-date. Let's
-        // ignore this update to avoid blocking other updates.
+        // decryption keys are up-to-date. Let's ignore this update to avoid
+        // blocking other updates.
         it = entries_pending_decryption_.erase(it);
-        continue;
-      }
+        break;
     }
-
-    auto decrypted_update = std::make_unique<UpdateResponseData>();
-    decrypted_update->response_version = encrypted_update.response_version;
-    decrypted_update->encryption_key_name = encryption_key_name;
-    decrypted_update->entity = std::move(it->second->entity);
-    decrypted_update->entity->specifics = std::move(specifics);
-
-    if (decrypted_update->entity->specifics.has_bookmark()) {
-      AdaptGuidForBookmarkEntityData(decrypted_update->entity.get());
-    }
-
-    pending_updates_.push_back(std::move(decrypted_update));
-    it = entries_pending_decryption_.erase(it);
   }
 }
 
