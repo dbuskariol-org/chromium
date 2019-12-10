@@ -954,6 +954,7 @@ void SkiaOutputSurfaceImplOnGpu::SwapBuffers(
     output_device_->SwapBuffers(buffer_presented_callback_,
                                 std::move(frame.latency_info));
   }
+  context_state_->UpdateSkiaOwnedMemorySize();
   destroy_after_swap_.clear();
 }
 
