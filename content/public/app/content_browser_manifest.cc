@@ -147,6 +147,7 @@ const service_manager::Manifest& GetContentBrowserManifest() {
           .RequireCapability("device", "device:usb_test")
           .RequireCapability("device", "device:vibration")
           .RequireCapability("device", "device:wake_lock")
+          .RequireCapability("device", "device_service")
           .RequireCapability("media_session", "media_session:app")
           .RequireCapability("video_capture", "capture")
           .RequireCapability("video_capture", "tests")
