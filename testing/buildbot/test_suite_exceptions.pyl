@@ -1927,7 +1927,7 @@
       'Mac FYI Retina Release (NVIDIA)',
     ],
   },
-  'webgl2_conformance_tests': {
+  'webgl2_conformance_validating_tests': {
     'remove_from': [
       # The Mac NVIDIA Retina bots don't have the capacity to run
       # this test suite on mac_optional_gpu_tests_rel.
