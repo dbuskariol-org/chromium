@@ -251,7 +251,7 @@ XrResult xrCreateSwapchain(XrSession session,
             XR_ERROR_VALIDATION_FAILURE,
             "XrSwapchainCreateInfo usageFlags is not "
             "XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT");
-  RETURN_IF(create_info->format != DXGI_FORMAT_R8G8B8A8_UNORM,
+  RETURN_IF(create_info->format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
             XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED,
             "XrSwapchainCreateInfo format unsupported");
   RETURN_IF(create_info->sampleCount != OpenXrTestHelper::kSwapCount,
