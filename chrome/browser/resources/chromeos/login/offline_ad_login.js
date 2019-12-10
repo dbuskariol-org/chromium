@@ -72,9 +72,9 @@ Polymer({
      */
     userNameLabel: {type: String, value: ''},
     /**
-     * ID of localized welcome message on top of the UI.
+     * Welcome message on top of the UI.
      */
-    adWelcomeMessageKey: String,
+    adWelcomeMessage: String,
     /**
      * Error message for the machine name input.
      */

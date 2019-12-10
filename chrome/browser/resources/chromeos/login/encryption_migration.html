@@ -24,10 +24,12 @@
       </oobe-dialog>
     </template>
     <template is="dom-if" if="[[isReady_(uiState)]]">
-      <oobe-dialog tabindex="0" id="ready-dialog" has-buttons
-          title-key="migrationReadyTitle"
-          subtitle-key="migrationReadyDescription">
+      <oobe-dialog tabindex="0" id="ready-dialog" has-buttons>
         <iron-icon slot="oobe-icon" class="warning-icon"></iron-icon>
+        <h1 slot="title">[[i18nDynamic(locale,'migrationReadyTitle')]]</h1>
+        <div slot="subtitle">
+          [[i18nDynamic(locale,'migrationReadyDescription')]]
+        </div>
         <template is="dom-if" if="[[isEnoughBattery]]">
           <div slot="footer" class="layout vertical center center-justified">
             <img srcset="images/security_update_1x.png 1x,
@@ -69,10 +71,12 @@
       </oobe-dialog>
     </template>
     <template is="dom-if" if="[[isMigrating_(uiState)]]">
-      <oobe-dialog id="migrating-dialog" tabindex="0"
-          title-key="migrationMigratingTitle"
-          subtitle-key="migrationMigratingDescription">
+      <oobe-dialog id="migrating-dialog" tabindex="0">
         <iron-icon slot="oobe-icon" class="chrome-logo"></iron-icon>
+        <h1 slot="title">[[i18nDynamic(locale,'migrationMigratingTitle')]]</h1>
+        <div slot="subtitle">
+          [[i18nDynamic(locale,'migrationMigratingDescription')]]
+        </div>
         <div slot="footer" class="flex layout vertical">
           <paper-progress id="migration-progress"
               value="[[progress]]" max="1" step="0.001"
@@ -87,11 +91,13 @@
       </oobe-dialog>
     </template>
     <template is="dom-if" if="[[isMigrationFailed_(uiState)]]">
-      <oobe-dialog id="error-dialog" tabindex="0" has-buttons
-          title-key="migrationFailedTitle"
-          subtitle-key="migrationFailedSubtitle">
+      <oobe-dialog id="error-dialog" tabindex="0" has-buttons>
         <iron-icon icon="cr:warning" slot="oobe-icon" class="warning">
         </iron-icon>
+        <h1 slot="title">[[i18nDynamic(locale,'migrationFailedTitle')]]</h1>
+        <div slot="subtitle">
+          [[i18nDynamic(locale,'migrationFailedSubtitle')]]
+        </div>
         <div slot="footer">
           <div>[[i18nDynamic(locale,'migrationFailedMessage')]]</div>
         </div>
@@ -110,10 +116,12 @@
       </oobe-dialog>
     </template>
     <template is="dom-if" if="[[isNotEnoughSpace_(uiState)]]">
-      <oobe-dialog id="insufficient-space-dialog" tabindex="0" has-buttons
-          title-key="migrationReadyTitle"
-          subtitle-key="migrationReadyDescription">
+      <oobe-dialog id="insufficient-space-dialog" tabindex="0" has-buttons>
         <iron-icon slot="oobe-icon" class="chrome-logo"></iron-icon>
+        <h1 slot="title">[[i18nDynamic(locale,'migrationReadyTitle')]]</h1>
+        <div slot="subtitle">
+          [[i18nDynamic(locale,'migrationReadyDescription')]]
+        </div>
         <div slot="footer" class="layout vertical" aria-live="polite">
           <div class="warning">
             [[i18nDynamic(locale,'migrationNospaceWarningLabel')]]
