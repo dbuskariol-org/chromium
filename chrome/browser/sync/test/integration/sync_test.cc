@@ -120,6 +120,7 @@ void SetURLLoaderFactoryForTest(
   account_manager->SetUrlLoaderFactoryForTests(url_loader_factory);
 #endif  // defined(OS_CHROMEOS)
 }
+
 class FakePerUserTopicRegistrationManager
     : public syncer::PerUserTopicRegistrationManager {
  public:
@@ -132,7 +133,7 @@ class FakePerUserTopicRegistrationManager
             /*migrate_prefs=*/false) {}
   ~FakePerUserTopicRegistrationManager() override = default;
 
-  void UpdateRegisteredTopics(const syncer::Topics& topics,
+  void UpdateSubscribedTopics(const syncer::Topics& topics,
                               const std::string& instance_id_token) override {}
 
  private:
