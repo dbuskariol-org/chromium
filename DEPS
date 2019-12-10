@@ -439,7 +439,7 @@ deps = {
     'packages': [
       {
         'package': 'chromium/chrome/test/chromedriver/cipd',
-        'version': 'PCCG9OmVmpDaf9oaKhJ3sSxXgINilZ9qpl4oaRU0R60C',
+        'version': 'tLMjWvOcbQX4nMo5WnMsKWn0aaVludzuSX9yiVFUCoUC',
       }
     ],
     'condition': 'checkout_android',
