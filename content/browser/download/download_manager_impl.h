@@ -212,7 +212,7 @@ class CONTENT_EXPORT DownloadManagerImpl
 
   // Overridden from DownloadItemImplDelegate
   void DetermineDownloadTarget(download::DownloadItemImpl* item,
-                               const DownloadTargetCallback& callback) override;
+                               DownloadTargetCallback callback) override;
   bool ShouldCompleteDownload(download::DownloadItemImpl* item,
                               const base::Closure& complete_callback) override;
   bool ShouldOpenFileBasedOnExtension(const base::FilePath& path) override;

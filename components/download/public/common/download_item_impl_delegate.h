@@ -43,14 +43,14 @@ class COMPONENTS_DOWNLOAD_EXPORT DownloadItemImplDelegate {
   void Detach();
 
   using DownloadTargetCallback =
-      base::Callback<void(const base::FilePath& target_path,
-                          DownloadItem::TargetDisposition disposition,
-                          DownloadDangerType danger_type,
-                          const base::FilePath& intermediate_path,
-                          DownloadInterruptReason interrupt_reason)>;
+      base::OnceCallback<void(const base::FilePath& target_path,
+                              DownloadItem::TargetDisposition disposition,
+                              DownloadDangerType danger_type,
+                              const base::FilePath& intermediate_path,
+                              DownloadInterruptReason interrupt_reason)>;
   // Request determination of the download target from the delegate.
   virtual void DetermineDownloadTarget(DownloadItemImpl* download,
-                                       const DownloadTargetCallback& callback);
+                                       DownloadTargetCallback callback);
 
   // Allows the delegate to delay completion of the download.  This function
   // will either return true (if the download may complete now) or will return

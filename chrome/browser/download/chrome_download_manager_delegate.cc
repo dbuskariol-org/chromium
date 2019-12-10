@@ -291,14 +291,15 @@ bool IsDangerTypeBlocked(download::DownloadDangerType danger_type) {
 
 void OnCheckExistingDownloadPathDone(
     std::unique_ptr<DownloadTargetInfo> target_info,
-    const content::DownloadTargetCallback& callback,
+    content::DownloadTargetCallback callback,
     bool file_exists) {
   if (file_exists)
     target_info->result = download::DOWNLOAD_INTERRUPT_REASON_USER_CANCELED;
 
-  callback.Run(target_info->target_path, target_info->target_disposition,
-               target_info->danger_type, target_info->intermediate_path,
-               target_info->result);
+  std::move(callback).Run(target_info->target_path,
+                          target_info->target_disposition,
+                          target_info->danger_type,
+                          target_info->intermediate_path, target_info->result);
 }
 
 }  // namespace
@@ -405,17 +406,16 @@ void ChromeDownloadManagerDelegate::ReturnNextId(
 
 bool ChromeDownloadManagerDelegate::DetermineDownloadTarget(
     DownloadItem* download,
-    const content::DownloadTargetCallback& callback) {
+    content::DownloadTargetCallback* callback) {
   if (download->GetTargetFilePath().empty() &&
       download->GetMimeType() == kPDFMimeType && !download->HasUserGesture()) {
     ReportPDFLoadStatus(PDFLoadStatus::kTriggeredNoGestureDriveByDownload);
   }
 
   DownloadTargetDeterminer::CompletionCallback target_determined_callback =
-      base::Bind(&ChromeDownloadManagerDelegate::OnDownloadTargetDetermined,
-                 weak_ptr_factory_.GetWeakPtr(),
-                 download->GetId(),
-                 callback);
+      base::BindOnce(&ChromeDownloadManagerDelegate::OnDownloadTargetDetermined,
+                     weak_ptr_factory_.GetWeakPtr(), download->GetId(),
+                     std::move(*callback));
   base::FilePath download_path =
       GetPlatformDownloadPath(profile_, download, PLATFORM_TARGET_PATH);
   DownloadPathReservationTracker::FilenameConflictAction action =
@@ -426,7 +426,7 @@ bool ChromeDownloadManagerDelegate::DetermineDownloadTarget(
 #endif
   DownloadTargetDeterminer::Start(download, download_path, action,
                                   download_prefs_.get(), this,
-                                  target_determined_callback);
+                                  std::move(target_determined_callback));
   return true;
 }
 
@@ -811,7 +811,7 @@ void ChromeDownloadManagerDelegate::ReserveVirtualPath(
     const base::FilePath& virtual_path,
     bool create_directory,
     DownloadPathReservationTracker::FilenameConflictAction conflict_action,
-    const DownloadTargetDeterminerDelegate::ReservedPathCallback& callback) {
+    DownloadTargetDeterminerDelegate::ReservedPathCallback callback) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   DCHECK(!virtual_path.empty());
 
@@ -819,7 +819,7 @@ void ChromeDownloadManagerDelegate::ReserveVirtualPath(
   base::PathService::Get(chrome::DIR_USER_DOCUMENTS, &document_dir);
   DownloadPathReservationTracker::GetReservedPath(
       download, virtual_path, download_prefs_->DownloadPath(), document_dir,
-      create_directory, conflict_action, callback);
+      create_directory, conflict_action, std::move(callback));
 }
 
 void ChromeDownloadManagerDelegate::RequestConfirmation(
@@ -1222,7 +1222,7 @@ void ChromeDownloadManagerDelegate::Observe(
 
 void ChromeDownloadManagerDelegate::OnDownloadTargetDetermined(
     uint32_t download_id,
-    const content::DownloadTargetCallback& callback,
+    content::DownloadTargetCallback callback,
     std::unique_ptr<DownloadTargetInfo> target_info) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   DownloadItem* item = download_manager_->GetDownload(download_id);
@@ -1251,7 +1251,7 @@ void ChromeDownloadManagerDelegate::OnDownloadTargetDetermined(
   DownloadPathReservationTracker::CheckDownloadPathForExistingDownload(
       target_path, item,
       base::BindOnce(&OnCheckExistingDownloadPathDone, std::move(target_info),
-                     callback));
+                     std::move(callback)));
 }
 
 bool ChromeDownloadManagerDelegate::IsOpenInBrowserPreferreredForFile(

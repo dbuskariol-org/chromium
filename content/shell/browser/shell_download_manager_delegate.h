@@ -26,7 +26,7 @@ class ShellDownloadManagerDelegate : public DownloadManagerDelegate {
 
   void Shutdown() override;
   bool DetermineDownloadTarget(download::DownloadItem* download,
-                               const DownloadTargetCallback& callback) override;
+                               DownloadTargetCallback* callback) override;
   bool ShouldOpenDownload(download::DownloadItem* item,
                           const DownloadOpenDelayedCallback& callback) override;
   void GetNextId(DownloadIdCallback callback) override;
@@ -48,10 +48,10 @@ class ShellDownloadManagerDelegate : public DownloadManagerDelegate {
                                const base::FilePath& suggested_directory,
                                FilenameDeterminedCallback callback);
   void OnDownloadPathGenerated(uint32_t download_id,
-                               const DownloadTargetCallback& callback,
+                               DownloadTargetCallback callback,
                                const base::FilePath& suggested_path);
   void ChooseDownloadPath(uint32_t download_id,
-                          const DownloadTargetCallback& callback,
+                          DownloadTargetCallback callback,
                           const base::FilePath& suggested_path);
 
   DownloadManager* download_manager_;

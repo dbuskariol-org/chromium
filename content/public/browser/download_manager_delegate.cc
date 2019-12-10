@@ -16,7 +16,7 @@ void DownloadManagerDelegate::GetNextId(DownloadIdCallback callback) {
 
 bool DownloadManagerDelegate::DetermineDownloadTarget(
     download::DownloadItem* item,
-    const DownloadTargetCallback& callback) {
+    DownloadTargetCallback* callback) {
   return false;
 }
 

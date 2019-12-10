@@ -31,12 +31,13 @@ void DownloadItemImplDelegate::Detach() {
 
 void DownloadItemImplDelegate::DetermineDownloadTarget(
     DownloadItemImpl* download,
-    const DownloadTargetCallback& callback) {
+    DownloadTargetCallback callback) {
   // TODO(rdsmith/asanka): Do something useful if forced file path is null.
   base::FilePath target_path(download->GetForcedFilePath());
-  callback.Run(target_path, DownloadItem::TARGET_DISPOSITION_OVERWRITE,
-               DOWNLOAD_DANGER_TYPE_NOT_DANGEROUS, target_path,
-               DOWNLOAD_INTERRUPT_REASON_NONE);
+  std::move(callback).Run(target_path,
+                          DownloadItem::TARGET_DISPOSITION_OVERWRITE,
+                          DOWNLOAD_DANGER_TYPE_NOT_DANGEROUS, target_path,
+                          DOWNLOAD_INTERRUPT_REASON_NONE);
 }
 
 bool DownloadItemImplDelegate::ShouldCompleteDownload(

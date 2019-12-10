@@ -59,12 +59,12 @@ using SavePackagePathPickedCallback =
 //     results in the download being marked cancelled. Any other value results
 //     in the download being marked as interrupted. The other fields are only
 //     considered valid if |interrupt_reason| is NONE.
-using DownloadTargetCallback =
-    base::Callback<void(const base::FilePath& target_path,
-                        download::DownloadItem::TargetDisposition disposition,
-                        download::DownloadDangerType danger_type,
-                        const base::FilePath& intermediate_path,
-                        download::DownloadInterruptReason interrupt_reason)>;
+using DownloadTargetCallback = base::OnceCallback<void(
+    const base::FilePath& target_path,
+    download::DownloadItem::TargetDisposition disposition,
+    download::DownloadDangerType danger_type,
+    const base::FilePath& intermediate_path,
+    download::DownloadInterruptReason interrupt_reason)>;
 
 // Called when a download delayed by the delegate has completed.
 using DownloadOpenDelayedCallback = base::Callback<void(bool)>;
@@ -100,7 +100,7 @@ class CONTENT_EXPORT DownloadManagerDelegate {
   // If the download should be canceled, |callback| should be invoked with an
   // empty |target_path| argument.
   virtual bool DetermineDownloadTarget(download::DownloadItem* item,
-                                       const DownloadTargetCallback& callback);
+                                       DownloadTargetCallback* callback);
 
   // Tests if a file type should be opened automatically.
   virtual bool ShouldOpenFileBasedOnExtension(const base::FilePath& path);
