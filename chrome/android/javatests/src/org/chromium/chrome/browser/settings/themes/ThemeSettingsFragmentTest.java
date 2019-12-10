@@ -29,7 +29,6 @@ import org.chromium.chrome.browser.night_mode.NightModeUtils;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.settings.SettingsActivity;
 import org.chromium.chrome.browser.settings.SettingsActivityTest;
-import org.chromium.chrome.browser.settings.themes.ThemePreferences.ThemeSetting;
 import org.chromium.chrome.browser.ui.widget.RadioButtonWithDescription;
 import org.chromium.chrome.browser.ui.widget.RadioButtonWithDescriptionLayout;
 import org.chromium.chrome.test.ChromeJUnit4RunnerDelegate;
@@ -41,13 +40,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Tests for ThemePreferences.
+ * Tests for ThemeSettingsFragment.
  */
 // clang-format off
 @Features.EnableFeatures(ANDROID_NIGHT_MODE)
 @RunWith(ParameterizedRunner.class)
 @ParameterAnnotations.UseRunnerDelegate(ChromeJUnit4RunnerDelegate.class)
-public class ThemePreferencesTest extends DummyUiActivityTestCase {
+public class ThemeSettingsFragmentTest extends DummyUiActivityTestCase {
     // clang-format on
     @ParameterAnnotations.ClassParameter
     private static List<ParameterSet> sClassParams =
@@ -55,10 +54,10 @@ public class ThemePreferencesTest extends DummyUiActivityTestCase {
                     new ParameterSet().value(true).name("DefaultLightEnabled"));
 
     private boolean mDefaultToLight;
-    private ThemePreferences mFragment;
+    private ThemeSettingsFragment mFragment;
     private RadioButtonGroupThemePreference mPreference;
 
-    public ThemePreferencesTest(boolean defaultToLight) {
+    public ThemeSettingsFragmentTest(boolean defaultToLight) {
         mDefaultToLight = defaultToLight;
         FeatureUtilities.setNightModeDefaultToLightForTesting(defaultToLight);
     }
@@ -69,10 +68,11 @@ public class ThemePreferencesTest extends DummyUiActivityTestCase {
         SharedPreferencesManager.getInstance().removeKey(UI_THEME_SETTING_KEY);
         SharedPreferencesManager.getInstance().removeKey(DARKEN_WEBSITES_ENABLED_KEY);
         SettingsActivity settingsActivity = SettingsActivityTest.startSettingsActivity(
-                InstrumentationRegistry.getInstrumentation(), ThemePreferences.class.getName());
-        mFragment = (ThemePreferences) settingsActivity.getMainFragment();
+                InstrumentationRegistry.getInstrumentation(),
+                ThemeSettingsFragment.class.getName());
+        mFragment = (ThemeSettingsFragment) settingsActivity.getMainFragment();
         mPreference = (RadioButtonGroupThemePreference) mFragment.findPreference(
-                ThemePreferences.PREF_UI_THEME_PREF);
+                ThemeSettingsFragment.PREF_UI_THEME_PREF);
     }
 
     @Override
@@ -98,8 +98,7 @@ public class ThemePreferencesTest extends DummyUiActivityTestCase {
                 return;
             }
 
-            int expectedDefaultTheme =
-                    mDefaultToLight ? ThemeSetting.LIGHT : ThemeSetting.SYSTEM_DEFAULT;
+            int expectedDefaultTheme = mDefaultToLight ? ThemeType.LIGHT : ThemeType.SYSTEM_DEFAULT;
             Assert.assertEquals("Incorrect default theme setting.", expectedDefaultTheme,
                     NightModeUtils.getThemeSetting());
             assertButtonCheckedCorrectly(
@@ -109,7 +108,7 @@ public class ThemePreferencesTest extends DummyUiActivityTestCase {
             Assert.assertEquals(R.id.system_default, getButton(0).getId());
             selectButton(0);
             assertButtonCheckedCorrectly("System default", 0);
-            Assert.assertEquals(ThemeSetting.SYSTEM_DEFAULT, mPreference.getSetting());
+            Assert.assertEquals(ThemeType.SYSTEM_DEFAULT, mPreference.getSetting());
             Assert.assertEquals(mPreference.getSetting(),
                     SharedPreferencesManager.getInstance().readInt(UI_THEME_SETTING_KEY));
 
@@ -117,7 +116,7 @@ public class ThemePreferencesTest extends DummyUiActivityTestCase {
             Assert.assertEquals(R.id.light, getButton(1).getId());
             selectButton(1);
             assertButtonCheckedCorrectly("Light", 1);
-            Assert.assertEquals(ThemeSetting.LIGHT, mPreference.getSetting());
+            Assert.assertEquals(ThemeType.LIGHT, mPreference.getSetting());
             Assert.assertEquals(mPreference.getSetting(),
                     SharedPreferencesManager.getInstance().readInt(UI_THEME_SETTING_KEY));
 
@@ -125,7 +124,7 @@ public class ThemePreferencesTest extends DummyUiActivityTestCase {
             Assert.assertEquals(R.id.dark, getButton(2).getId());
             selectButton(2);
             assertButtonCheckedCorrectly("Dark", 2);
-            Assert.assertEquals(ThemeSetting.DARK, mPreference.getSetting());
+            Assert.assertEquals(ThemeType.DARK, mPreference.getSetting());
             Assert.assertEquals(mPreference.getSetting(),
                     SharedPreferencesManager.getInstance().readInt(UI_THEME_SETTING_KEY));
         });
@@ -147,8 +146,7 @@ public class ThemePreferencesTest extends DummyUiActivityTestCase {
             LinearLayout checkboxContainer = mPreference.getCheckboxContainerForTesting();
             RadioButtonWithDescriptionLayout group = mPreference.getGroupForTesting();
 
-            int expectedDefaultTheme =
-                    mDefaultToLight ? ThemeSetting.LIGHT : ThemeSetting.SYSTEM_DEFAULT;
+            int expectedDefaultTheme = mDefaultToLight ? ThemeType.LIGHT : ThemeType.SYSTEM_DEFAULT;
             Assert.assertEquals("Incorrect default theme setting.", expectedDefaultTheme,
                     NightModeUtils.getThemeSetting());
             assertButtonCheckedCorrectly(
@@ -209,7 +207,7 @@ public class ThemePreferencesTest extends DummyUiActivityTestCase {
     }
 
     private boolean isRestUnchecked(int selectedIndex) {
-        for (int i = 0; i < ThemeSetting.NUM_ENTRIES; i++) {
+        for (int i = 0; i < ThemeType.NUM_ENTRIES; i++) {
             if (i != selectedIndex && getButton(i).isChecked()) {
                 return false;
             }

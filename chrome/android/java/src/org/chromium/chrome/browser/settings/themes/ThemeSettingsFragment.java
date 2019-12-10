@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
-import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
 
 import org.chromium.chrome.R;
@@ -21,34 +20,16 @@ import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.settings.SettingsUtils;
 import org.chromium.ui.UiUtils;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
 /**
  * Fragment to manage the theme user settings.
  */
-public class ThemePreferences extends PreferenceFragmentCompat {
-    /**
-     * Theme preference variations. This is also used for histograms and should therefore be treated
-     * as append-only. See DarkThemePreferences in tools/metrics/histograms/enums.xml.
-     */
-    @IntDef({ThemeSetting.SYSTEM_DEFAULT, ThemeSetting.LIGHT, ThemeSetting.DARK})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface ThemeSetting {
-        // Values are used for indexing tables - should start from 0 and can't have gaps.
-        int SYSTEM_DEFAULT = 0;
-        int LIGHT = 1;
-        int DARK = 2;
-
-        int NUM_ENTRIES = 3;
-    }
-
+public class ThemeSettingsFragment extends PreferenceFragmentCompat {
     static final String PREF_UI_THEME_PREF = "ui_theme_pref";
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         SettingsUtils.addPreferencesFromResource(this, R.xml.theme_preferences);
-        getActivity().setTitle(R.string.prefs_themes);
+        getActivity().setTitle(R.string.theme_settings);
 
         SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance();
         RadioButtonGroupThemePreference radioButtonGroupThemePreference =
