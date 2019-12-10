@@ -442,6 +442,8 @@ crbug.com/417223 external/wpt/css/css-position/position-relative-table-tr-left-a
 crbug.com/417223 external/wpt/css/css-position/position-relative-table-tr-left.html [ Failure ]
 crbug.com/417223 external/wpt/css/css-position/position-relative-table-tr-top-absolute-child.html [ Failure ]
 crbug.com/417223 external/wpt/css/css-position/position-relative-table-tr-top.html [ Failure ]
+crbug.com/845235 external/wpt/css/css-position/position-absolute-center-001.tentative.html [ Failure ]
+crbug.com/845235 external/wpt/css/css-position/position-absolute-center-002.tentative.html [ Failure ]
 
 crbug.com/949909 external/wpt/css/css-text-decor/text-emphasis-color-001.xht [ Failure ]
 crbug.com/949909 external/wpt/css/css-text-decor/text-emphasis-position-above-left-001.xht [ Failure ]
@@ -1343,7 +1345,6 @@ crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/negative-overflow.html 
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/order-painting.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/overflow-auto-resizes-correctly.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/percentage-height-replaced-element.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/position-absolute-child.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/relpos-with-percentage-top.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/style-change.html [ Failure ]
 
@@ -1379,8 +1380,6 @@ crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/order_v
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/overflow-top-left.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/percentage-heights-007.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/percentage-heights-quirks-node.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/position-absolute-001.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/position-absolute-002.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/quirks-auto-block-size-with-percentage-item.html [ Pass Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/scrollbars-auto.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/scrollbars.html [ Failure ]
