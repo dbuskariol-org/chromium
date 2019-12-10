@@ -968,6 +968,13 @@
       },
     },
   },
+  'monochrome_apk_checker': {
+    'remove_from': [
+      # Don't run on trybots, which don't use proguard.
+      # https://crbug.com/1029936.
+      'android-kitkat-arm-rel',
+    ],
+  },
   'monochrome_public_test_ar_apk': {
     'modifications': {
       'Nougat Phone Tester': {
