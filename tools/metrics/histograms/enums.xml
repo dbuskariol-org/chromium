@@ -4914,6 +4914,7 @@ Unknown properties are collapsed to zero. -->
   <int value="-438850149" label="PermissionRequestManager"/>
   <int value="72716222" label="WebBluetooth"/>
   <int value="88001126" label="MixedContentSettingsTabHelper"/>
+  <int value="362309862" label="OomInterventionTabHelper"/>
   <int value="671363579" label="banners::AppBannerManager"/>
   <int value="990438262" label="MediaWebContentsObserver::OnMediaPlaying"/>
   <int value="1683256665" label="NativeFileSystem"/>
