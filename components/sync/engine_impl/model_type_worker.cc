@@ -12,147 +12,24 @@
 
 #include "base/bind.h"
 #include "base/format_macros.h"
-#include "base/guid.h"
 #include "base/logging.h"
-#include "base/metrics/histogram_functions.h"
-#include "base/metrics/histogram_macros.h"
 #include "base/strings/stringprintf.h"
 #include "base/threading/thread_restrictions.h"
 #include "base/trace_event/memory_usage_estimator.h"
 #include "components/sync/base/cancelation_signal.h"
 #include "components/sync/base/client_tag_hash.h"
-#include "components/sync/base/hash_util.h"
 #include "components/sync/base/model_type.h"
 #include "components/sync/base/time.h"
 #include "components/sync/base/unique_position.h"
 #include "components/sync/engine/model_type_processor.h"
+#include "components/sync/engine_impl/bookmark_update_preprocessing.h"
 #include "components/sync/engine_impl/commit_contribution.h"
 #include "components/sync/engine_impl/non_blocking_type_commit_contribution.h"
-#include "components/sync/engine_impl/syncer_proto_util.h"
 #include "components/sync/protocol/proto_memory_estimations.h"
 
 namespace syncer {
 
 namespace {
-
-// Enumeration of possible values for the positioning schemes used in Sync
-// entities. Used in UMA metrics. Do not re-order or delete these entries; they
-// are used in a UMA histogram. Please edit SyncPositioningScheme in enums.xml
-// if a value is added.
-enum class SyncPositioningScheme {
-  UNIQUE_POSITION = 0,
-  POSITION_IN_PARENT = 1,
-  INSERT_AFTER_ITEM_ID = 2,
-  MISSING = 3,
-  kMaxValue = MISSING
-};
-
-// Used in metrics: "Sync.BookmarkGUIDSource". These values are persisted to
-// logs. Entries should not be renumbered and numeric values should never be
-// reused.
-enum class BookmarkGUIDSource {
-  // GUID came from specifics.
-  kSpecifics = 0,
-  // GUID came from originator_client_item_id and is valid.
-  kValidOCII = 1,
-  // GUID not found in the specifics and originator_client_item_id is invalid,
-  // so field left empty.
-  kLeftEmpty = 2,
-
-  kMaxValue = kLeftEmpty,
-};
-
-inline void LogGUIDSource(BookmarkGUIDSource source) {
-  base::UmaHistogramEnumeration("Sync.BookmarkGUIDSource2", source);
-}
-
-void AdaptUniquePositionForBookmarks(const sync_pb::SyncEntity& update_entity,
-                                     syncer::EntityData* data) {
-  DCHECK(data);
-  bool has_position_scheme = false;
-  SyncPositioningScheme sync_positioning_scheme;
-  if (update_entity.has_unique_position()) {
-    data->unique_position = update_entity.unique_position();
-    has_position_scheme = true;
-    sync_positioning_scheme = SyncPositioningScheme::UNIQUE_POSITION;
-  } else if (update_entity.has_position_in_parent() ||
-             update_entity.has_insert_after_item_id()) {
-    bool missing_originator_fields = false;
-    if (!update_entity.has_originator_cache_guid() ||
-        !update_entity.has_originator_client_item_id()) {
-      DLOG(ERROR) << "Update is missing requirements for bookmark position.";
-      missing_originator_fields = true;
-    }
-
-    std::string suffix = missing_originator_fields
-                             ? UniquePosition::RandomSuffix()
-                             : GenerateSyncableBookmarkHash(
-                                   update_entity.originator_cache_guid(),
-                                   update_entity.originator_client_item_id());
-
-    if (update_entity.has_position_in_parent()) {
-      data->unique_position =
-          UniquePosition::FromInt64(update_entity.position_in_parent(), suffix)
-              .ToProto();
-      has_position_scheme = true;
-      sync_positioning_scheme = SyncPositioningScheme::POSITION_IN_PARENT;
-    } else {
-      // If update_entity has insert_after_item_id, use 0 index.
-      DCHECK(update_entity.has_insert_after_item_id());
-      data->unique_position = UniquePosition::FromInt64(0, suffix).ToProto();
-      has_position_scheme = true;
-      sync_positioning_scheme = SyncPositioningScheme::INSERT_AFTER_ITEM_ID;
-    }
-  } else if (SyncerProtoUtil::ShouldMaintainPosition(update_entity) &&
-             !update_entity.deleted()) {
-    DLOG(ERROR) << "Missing required position information in update.";
-    has_position_scheme = true;
-    sync_positioning_scheme = SyncPositioningScheme::MISSING;
-  }
-  if (has_position_scheme) {
-    UMA_HISTOGRAM_ENUMERATION("Sync.Entities.PositioningScheme",
-                              sync_positioning_scheme);
-  }
-}
-
-void AdaptTitleForBookmarks(const sync_pb::SyncEntity& update_entity,
-                            sync_pb::EntitySpecifics* specifics,
-                            bool specifics_were_encrypted) {
-  DCHECK(specifics);
-  if (specifics_were_encrypted || update_entity.deleted()) {
-    // If encrypted, the name field is never populated (unencrypted) for privacy
-    // reasons. Encryption was also introduced after moving the name out of
-    // SyncEntity so this hack is not needed at all.
-    return;
-  }
-  // Legacy clients populate the name field in the SyncEntity instead of the
-  // title field in the BookmarkSpecifics.
-  if (!specifics->bookmark().has_title() && !update_entity.name().empty()) {
-    specifics->mutable_bookmark()->set_title(update_entity.name());
-  }
-}
-
-void AdaptGuidForBookmarks(const sync_pb::SyncEntity& update_entity,
-                           sync_pb::EntitySpecifics* specifics) {
-  DCHECK(specifics);
-  // Tombstones and permanent entities don't have a GUID.
-  if (update_entity.deleted() ||
-      !update_entity.server_defined_unique_tag().empty()) {
-    return;
-  }
-  // Legacy clients don't populate the guid field in the BookmarkSpecifics, so
-  // we use the originator_client_item_id instead, if it is a valid GUID.
-  // Otherwise, we leave the field empty.
-  if (specifics->bookmark().has_guid()) {
-    LogGUIDSource(BookmarkGUIDSource::kSpecifics);
-  } else if (base::IsValidGUID(update_entity.originator_client_item_id())) {
-    specifics->mutable_bookmark()->set_guid(
-        update_entity.originator_client_item_id());
-    LogGUIDSource(BookmarkGUIDSource::kValidOCII);
-  } else {
-    LogGUIDSource(BookmarkGUIDSource::kLeftEmpty);
-  }
-}
 
 void AdaptUpdateForCompatibilityAfterDecryption(
     ModelType model_type,
@@ -161,8 +38,8 @@ void AdaptUpdateForCompatibilityAfterDecryption(
     bool specifics_were_encrypted) {
   DCHECK(specifics);
   if (model_type == BOOKMARKS) {
-    AdaptTitleForBookmarks(update_entity, specifics, specifics_were_encrypted);
-    AdaptGuidForBookmarks(update_entity, specifics);
+    AdaptTitleForBookmark(update_entity, specifics, specifics_were_encrypted);
+    AdaptGuidForBookmark(update_entity, specifics);
   }
 }
 
@@ -350,7 +227,7 @@ ModelTypeWorker::DecryptionStatus ModelTypeWorker::PopulateUpdateResponseData(
   // Adapt the update for compatibility (all except specifics that may need
   // encryption).
   if (model_type == BOOKMARKS) {
-    AdaptUniquePositionForBookmarks(update_entity, data.get());
+    AdaptUniquePositionForBookmark(update_entity, data.get());
   }
   // TODO(crbug.com/881289): Generate client tag hash for wallet data.
 
@@ -642,20 +519,11 @@ void ModelTypeWorker::DecryptStoredEntities() {
     decrypted_update->encryption_key_name = encryption_key_name;
     decrypted_update->entity = std::move(it->second->entity);
     decrypted_update->entity->specifics = std::move(specifics);
-    // TODO(crbug.com/1007199): Reconcile with AdaptGuidForBookmarks().
-    if (decrypted_update->entity->specifics.has_bookmark() &&
-        decrypted_update->entity->server_defined_unique_tag.empty()) {
-      if (decrypted_update->entity->specifics.bookmark().has_guid()) {
-        LogGUIDSource(BookmarkGUIDSource::kSpecifics);
-      } else if (base::IsValidGUID(
-                     decrypted_update->entity->originator_client_item_id)) {
-        decrypted_update->entity->specifics.mutable_bookmark()->set_guid(
-            decrypted_update->entity->originator_client_item_id);
-        LogGUIDSource(BookmarkGUIDSource::kValidOCII);
-      } else {
-        LogGUIDSource(BookmarkGUIDSource::kLeftEmpty);
-      }
+
+    if (decrypted_update->entity->specifics.has_bookmark()) {
+      AdaptGuidForBookmarkEntityData(decrypted_update->entity.get());
     }
+
     pending_updates_.push_back(std::move(decrypted_update));
     it = entries_pending_decryption_.erase(it);
   }
