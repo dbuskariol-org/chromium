@@ -4,8 +4,9 @@
     <iron-icon slot="oobe-icon" icon="cr:warning" class="warning">
     </iron-icon>
     <div slot="bottom-buttons" class="layout horizontal end-justified">
-      <oobe-text-button id="tpm-restart-button" inverse
-          text-key="errorTpmFailureRebootButton">
+      <oobe-text-button id="tpm-restart-button" inverse>
+        <div id="tmp-error-reboot-text"
+            i18n-content="errorTpmFailureRebootButton"></div>
       </oobe-text-button>
     </div>
   </oobe-dialog>

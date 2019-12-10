@@ -36,7 +36,9 @@
       </iron-icon>
       <div slot="bottom-buttons" class="layout horizontal end-justified">
         <oobe-text-button id="accept-button" on-tap="onAcceptAndContinue_"
-            text-key="supervisionTransitionButton" inverse></oobe-text-button>
+            inverse>
+          <div>[[i18nDynamic(locale,'supervisionTransitionButton')]]</div>
+        </oobe-text-button>
       </div>
     </oobe-dialog>
   </template>

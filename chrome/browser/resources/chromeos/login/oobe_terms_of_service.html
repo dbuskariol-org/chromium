@@ -61,9 +61,12 @@
         <oobe-back-button id="backButton" disabled="[[backButtonDisabled_]]"
             on-tap="onTosBackButtonPressed_"></oobe-back-button>
         <oobe-text-button id="acceptButton" inverse
-            text-key="termsOfServiceAcceptButton"
             disabled="[[acceptButtonDisabled_]]"
-            on-tap="onTermsOfServiceAccepted_"></oobe-text-button>
+            on-tap="onTermsOfServiceAccepted_">
+            <div>
+              [[i18nDynamic(locale, 'termsOfServiceAcceptButton')]]
+            </div>
+        </oobe-text-button>
       </div>
     </oobe-dialog>
   </template>

@@ -105,8 +105,10 @@
         </div>
       </div>
       <div slot="bottom-buttons" class="layout horizontal end-justified">
-        <oobe-text-button id="ok-button-language" text-key="oobeOKButtonText"
-            inverse on-tap="closeLanguageSection_"></oobe-text-button>
+        <oobe-text-button id="ok-button-language"
+        inverse on-tap="closeLanguageSection_">
+          <div>[[i18nDynamic(locale, 'oobeOKButtonText')]]</div>
+        </oobe-text-button>
       </div>
     </oobe-dialog>
     <oobe-dialog id="accessibilityScreen" role="dialog" hidden has-buttons
@@ -227,8 +229,9 @@
       </div>
       <div slot="bottom-buttons" class="layout horizontal end-justified">
         <oobe-text-button id="ok-button-accessibility"
-            text-key="oobeOKButtonText" inverse
-            on-tap="closeAccessibilitySection_"></oobe-text-button>
+        inverse on-tap="closeAccessibilitySection_">
+          <div>[[i18nDynamic(locale, 'oobeOKButtonText')]]</div>
+        </oobe-text-button>
       </div>
     </oobe-dialog>
     <oobe-dialog id="timezoneScreen" role="dialog" hidden has-buttons
@@ -252,8 +255,10 @@
         </div>
       </div>
       <div slot="bottom-buttons" class="layout horizontal end-justified">
-        <oobe-text-button id="ok-button-timezone" text-key="oobeOKButtonText"
-            inverse on-tap="closeTimezoneSection_"></oobe-text-button>
+        <oobe-text-button id="ok-button-timezone"
+        inverse on-tap="closeTimezoneSection_">
+          <div>[[i18nDynamic(locale, 'oobeOKButtonText')]]</div>
+        </oobe-text-button>
       </div>
     </oobe-dialog>
     <oobe-dialog id="oobeAdvancedOptionsScreen" role="dialog" hidden has-buttons
@@ -287,9 +292,10 @@
         </div>
       </div>
       <div slot="bottom-buttons" class="layout horizontal end-justified">
-        <oobe-text-button id="ok-button-advanced-options"
-            text-key="oobeOKButtonText" inverse
-            on-tap="closeAdvancedOptionsSection_"></oobe-text-button>
+        <oobe-text-button  id="ok-button-advanced-options"
+        inverse on-tap="closeAdvancedOptionsSection_">
+          <div>[[i18nDynamic(locale, 'oobeOKButtonText')]]</div>
+        </oobe-text-button>
       </div>
     </oobe-dialog>
   </template>

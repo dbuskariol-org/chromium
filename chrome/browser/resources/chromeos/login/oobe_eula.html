@@ -57,8 +57,10 @@
         <div class="flex">
         </div>
         <oobe-text-button id="acceptButton" inverse on-tap="eulaAccepted_"
-            disabled="[[acceptButtonDisabled]]"
-            text-key="oobeEulaAcceptAndContinueButtonText">
+            disabled="[[acceptButtonDisabled]]">
+          <div>
+            [[i18nDynamic(locale, 'oobeEulaAcceptAndContinueButtonText')]]
+          </div>
         </oobe-text-button>
       </div>
     </oobe-dialog>
@@ -96,8 +98,11 @@
       <div slot="bottom-buttons" class="flex layout horizontal">
         <div class="flex"></div>
         <oobe-text-button id="settings-close-button" inverse
-            text-key="eulaSystemInstallationSettingsOkButton"
-            on-tap="onInstallationSettingsCloseClicked_"></oobe-text-button>
+            on-tap="onInstallationSettingsCloseClicked_">
+          <div>
+            [[i18nDynamic(locale, 'eulaSystemInstallationSettingsOkButton')]]
+          </div>
+        </oobe-text-button>
       </div>
     </oobe-dialog>
   </template>
