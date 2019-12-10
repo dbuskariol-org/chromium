@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_AREA_IMPL_H_
-#define CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_AREA_IMPL_H_
+#ifndef COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_AREA_IMPL_H_
+#define COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_AREA_IMPL_H_
 
 #include <vector>
 
@@ -11,7 +11,6 @@
 #include "base/memory/ref_counted.h"
 #include "base/optional.h"
 #include "components/services/storage/dom_storage/session_storage_metadata.h"
-#include "content/common/content_export.h"
 #include "mojo/public/cpp/bindings/associated_receiver.h"
 #include "mojo/public/cpp/bindings/pending_associated_receiver.h"
 #include "mojo/public/cpp/bindings/pending_associated_remote.h"
@@ -19,7 +18,8 @@
 #include "third_party/blink/public/mojom/dom_storage/storage_area.mojom.h"
 #include "url/origin.h"
 
-namespace content {
+namespace storage {
+
 class SessionStorageDataMap;
 
 // This class provides session storage access to the renderer by binding to the
@@ -38,30 +38,29 @@ class SessionStorageDataMap;
 // During forking, this class is responsible for dealing with moving its
 // observers from the SessionStorageDataMap's StorageArea to the new forked
 // SessionStorageDataMap's StorageArea.
-class CONTENT_EXPORT SessionStorageAreaImpl : public blink::mojom::StorageArea {
+class SessionStorageAreaImpl : public blink::mojom::StorageArea {
  public:
-  using RegisterNewAreaMap = base::RepeatingCallback<
-      scoped_refptr<storage::SessionStorageMetadata::MapData>(
-          storage::SessionStorageMetadata::NamespaceEntry namespace_entry,
+  using RegisterNewAreaMap =
+      base::RepeatingCallback<scoped_refptr<SessionStorageMetadata::MapData>(
+          SessionStorageMetadata::NamespaceEntry namespace_entry,
           const url::Origin& origin)>;
 
   // Creates a area for the given |namespace_entry|-|origin| data area. All
   // StorageArea calls are delegated to the |data_map|. The
   // |register_new_map_callback| is called when a shared |data_map| needs to be
   // forked for the copy-on-write behavior and a new map needs to be registered.
-  SessionStorageAreaImpl(
-      storage::SessionStorageMetadata::NamespaceEntry namespace_entry,
-      url::Origin origin,
-      scoped_refptr<SessionStorageDataMap> data_map,
-      RegisterNewAreaMap register_new_map_callback);
+  SessionStorageAreaImpl(SessionStorageMetadata::NamespaceEntry namespace_entry,
+                         url::Origin origin,
+                         scoped_refptr<SessionStorageDataMap> data_map,
+                         RegisterNewAreaMap register_new_map_callback);
   ~SessionStorageAreaImpl() override;
 
   // Creates a shallow copy clone for the new namespace entry.
   // This doesn't change the refcount of the underlying map - that operation
   // must be done using
-  // storage::SessionStorageMetadata::RegisterShallowClonedNamespace.
+  // SessionStorageMetadata::RegisterShallowClonedNamespace.
   std::unique_ptr<SessionStorageAreaImpl> Clone(
-      storage::SessionStorageMetadata::NamespaceEntry namespace_entry);
+      SessionStorageMetadata::NamespaceEntry namespace_entry);
 
   void Bind(
       mojo::PendingAssociatedReceiver<blink::mojom::StorageArea> receiver);
@@ -101,7 +100,7 @@ class CONTENT_EXPORT SessionStorageAreaImpl : public blink::mojom::StorageArea {
   void CreateNewMap(NewMapType map_type,
                     const base::Optional<std::string>& delete_all_source);
 
-  storage::SessionStorageMetadata::NamespaceEntry namespace_entry_;
+  SessionStorageMetadata::NamespaceEntry namespace_entry_;
   url::Origin origin_;
   scoped_refptr<SessionStorageDataMap> shared_data_map_;
   RegisterNewAreaMap register_new_map_callback_;
@@ -112,6 +111,6 @@ class CONTENT_EXPORT SessionStorageAreaImpl : public blink::mojom::StorageArea {
   DISALLOW_COPY_AND_ASSIGN(SessionStorageAreaImpl);
 };
 
-}  // namespace content
+}  // namespace storage
 
-#endif  // CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_AREA_IMPL_H_
+#endif  // COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_AREA_IMPL_H_

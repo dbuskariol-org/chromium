@@ -2,20 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/dom_storage/session_storage_data_map.h"
+#include "components/services/storage/dom_storage/session_storage_data_map.h"
 
 #include "base/system/sys_info.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
 #include "components/services/storage/dom_storage/dom_storage_constants.h"
 
-namespace content {
+namespace storage {
 
 // static
 scoped_refptr<SessionStorageDataMap> SessionStorageDataMap::CreateFromDisk(
     Listener* listener,
-    scoped_refptr<storage::SessionStorageMetadata::MapData> map_data,
-    storage::AsyncDomStorageDatabase* database) {
+    scoped_refptr<SessionStorageMetadata::MapData> map_data,
+    AsyncDomStorageDatabase* database) {
   return base::WrapRefCounted(new SessionStorageDataMap(
       listener, std::move(map_data), database, false));
 }
@@ -23,8 +23,8 @@ scoped_refptr<SessionStorageDataMap> SessionStorageDataMap::CreateFromDisk(
 // static
 scoped_refptr<SessionStorageDataMap> SessionStorageDataMap::CreateEmpty(
     Listener* listener,
-    scoped_refptr<storage::SessionStorageMetadata::MapData> map_data,
-    storage::AsyncDomStorageDatabase* database) {
+    scoped_refptr<SessionStorageMetadata::MapData> map_data,
+    AsyncDomStorageDatabase* database) {
   return base::WrapRefCounted(
       new SessionStorageDataMap(listener, std::move(map_data), database, true));
 }
@@ -32,7 +32,7 @@ scoped_refptr<SessionStorageDataMap> SessionStorageDataMap::CreateEmpty(
 // static
 scoped_refptr<SessionStorageDataMap> SessionStorageDataMap::CreateClone(
     Listener* listener,
-    scoped_refptr<storage::SessionStorageMetadata::MapData> map_data,
+    scoped_refptr<SessionStorageMetadata::MapData> map_data,
     scoped_refptr<SessionStorageDataMap> clone_from) {
   return base::WrapRefCounted(new SessionStorageDataMap(
       listener, std::move(map_data), std::move(clone_from)));
@@ -44,16 +44,16 @@ void SessionStorageDataMap::DidCommit(leveldb::Status status) {
 
 SessionStorageDataMap::SessionStorageDataMap(
     Listener* listener,
-    scoped_refptr<storage::SessionStorageMetadata::MapData> map_data,
-    storage::AsyncDomStorageDatabase* database,
+    scoped_refptr<SessionStorageMetadata::MapData> map_data,
+    AsyncDomStorageDatabase* database,
     bool is_empty)
     : listener_(listener),
       map_data_(std::move(map_data)),
       storage_area_impl_(
-          std::make_unique<storage::StorageAreaImpl>(database,
-                                                     map_data_->KeyPrefix(),
-                                                     this,
-                                                     GetOptions())),
+          std::make_unique<StorageAreaImpl>(database,
+                                            map_data_->KeyPrefix(),
+                                            this,
+                                            GetOptions())),
       storage_area_ptr_(storage_area_impl_.get()) {
   if (is_empty)
     storage_area_impl_->InitializeAsEmpty();
@@ -64,7 +64,7 @@ SessionStorageDataMap::SessionStorageDataMap(
 
 SessionStorageDataMap::SessionStorageDataMap(
     Listener* listener,
-    scoped_refptr<storage::SessionStorageMetadata::MapData> map_data,
+    scoped_refptr<SessionStorageMetadata::MapData> map_data,
     scoped_refptr<SessionStorageDataMap> forking_from)
     : listener_(listener),
       clone_from_data_map_(std::move(forking_from)),
@@ -99,7 +99,7 @@ void SessionStorageDataMap::OnMapLoaded(leveldb::Status) {
 }
 
 // static
-storage::StorageAreaImpl::Options SessionStorageDataMap::GetOptions() {
+StorageAreaImpl::Options SessionStorageDataMap::GetOptions() {
   // Delay for a moment after a value is set in anticipation
   // of other values being set, so changes are batched.
   constexpr const base::TimeDelta kCommitDefaultDelaySecs =
@@ -107,15 +107,13 @@ storage::StorageAreaImpl::Options SessionStorageDataMap::GetOptions() {
 
   // To avoid excessive IO we apply limits to the amount of data being
   // written and the frequency of writes.
-  storage::StorageAreaImpl::Options options;
-  options.max_size = storage::kPerStorageAreaQuota +
-                     storage::kPerStorageAreaOverQuotaAllowance;
+  StorageAreaImpl::Options options;
+  options.max_size = kPerStorageAreaQuota + kPerStorageAreaOverQuotaAllowance;
   options.default_commit_delay = kCommitDefaultDelaySecs;
-  options.max_bytes_per_hour = storage::kPerStorageAreaQuota;
+  options.max_bytes_per_hour = kPerStorageAreaQuota;
   options.max_commits_per_hour = 60;
-  options.cache_mode =
-      storage::StorageAreaImpl::CacheMode::KEYS_ONLY_WHEN_POSSIBLE;
+  options.cache_mode = StorageAreaImpl::CacheMode::KEYS_ONLY_WHEN_POSSIBLE;
   return options;
 }
 
-}  // namespace content
+}  // namespace storage

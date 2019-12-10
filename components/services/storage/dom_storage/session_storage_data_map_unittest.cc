@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/dom_storage/session_storage_data_map.h"
+#include "components/services/storage/dom_storage/session_storage_data_map.h"
 
 #include <map>
 #include <vector>
@@ -23,7 +23,7 @@
 #include "testing/gtest/include/gtest/gtest.h"
 #include "url/gurl.h"
 
-namespace content {
+namespace storage {
 
 namespace {
 
@@ -94,7 +94,7 @@ class SessionStorageDataMapTest : public testing::Test {
   SessionStorageDataMapTest()
       : test_origin_(url::Origin::Create(GURL("http://host1.com:1"))) {
     base::RunLoop loop;
-    database_ = storage::AsyncDomStorageDatabase::OpenInMemory(
+    database_ = AsyncDomStorageDatabase::OpenInMemory(
         base::nullopt, "SessionStorageDataMapTest",
         base::CreateSequencedTaskRunner({base::MayBlock(), base::ThreadPool()}),
         base::BindLambdaForTesting([&](leveldb::Status status) {
@@ -104,7 +104,7 @@ class SessionStorageDataMapTest : public testing::Test {
     loop.Run();
 
     database_->database().PostTaskWithThisObject(
-        FROM_HERE, base::BindOnce([](const storage::DomStorageDatabase& db) {
+        FROM_HERE, base::BindOnce([](const DomStorageDatabase& db) {
           // Should show up in first map.
           leveldb::Status status =
               db.Put(MakeBytes("map-1-key1"), MakeBytes("data1"));
@@ -119,11 +119,11 @@ class SessionStorageDataMapTest : public testing::Test {
   ~SessionStorageDataMapTest() override = default;
 
   std::map<std::string, std::string> GetDatabaseContents() {
-    std::vector<storage::DomStorageDatabase::KeyValuePair> entries;
+    std::vector<DomStorageDatabase::KeyValuePair> entries;
     base::RunLoop loop;
     database_->database().PostTaskWithThisObject(
         FROM_HERE,
-        base::BindLambdaForTesting([&](const storage::DomStorageDatabase& db) {
+        base::BindLambdaForTesting([&](const DomStorageDatabase& db) {
           leveldb::Status status = db.GetPrefixed({}, &entries);
           ASSERT_TRUE(status.ok());
           loop.Quit();
@@ -143,7 +143,7 @@ class SessionStorageDataMapTest : public testing::Test {
   base::test::TaskEnvironment task_environment_;
   testing::StrictMock<MockListener> listener_;
   url::Origin test_origin_;
-  std::unique_ptr<storage::AsyncDomStorageDatabase> database_;
+  std::unique_ptr<AsyncDomStorageDatabase> database_;
 };
 
 }  // namespace
@@ -156,8 +156,8 @@ TEST_F(SessionStorageDataMapTest, BasicEmptyCreation) {
   scoped_refptr<SessionStorageDataMap> map =
       SessionStorageDataMap::CreateFromDisk(
           &listener_,
-          base::MakeRefCounted<storage::SessionStorageMetadata::MapData>(
-              1, test_origin_),
+          base::MakeRefCounted<SessionStorageMetadata::MapData>(1,
+                                                                test_origin_),
           database_.get());
 
   bool success;
@@ -189,8 +189,7 @@ TEST_F(SessionStorageDataMapTest, ExplicitlyEmpty) {
 
   scoped_refptr<SessionStorageDataMap> map = SessionStorageDataMap::CreateEmpty(
       &listener_,
-      base::MakeRefCounted<storage::SessionStorageMetadata::MapData>(
-          1, test_origin_),
+      base::MakeRefCounted<SessionStorageMetadata::MapData>(1, test_origin_),
       database_.get());
 
   bool success;
@@ -221,8 +220,8 @@ TEST_F(SessionStorageDataMapTest, Clone) {
   scoped_refptr<SessionStorageDataMap> map1 =
       SessionStorageDataMap::CreateFromDisk(
           &listener_,
-          base::MakeRefCounted<storage::SessionStorageMetadata::MapData>(
-              1, test_origin_),
+          base::MakeRefCounted<SessionStorageMetadata::MapData>(1,
+                                                                test_origin_),
           database_.get());
 
   EXPECT_CALL(listener_,
@@ -234,8 +233,8 @@ TEST_F(SessionStorageDataMapTest, Clone) {
   scoped_refptr<SessionStorageDataMap> map2 =
       SessionStorageDataMap::CreateClone(
           &listener_,
-          base::MakeRefCounted<storage::SessionStorageMetadata::MapData>(
-              2, test_origin_),
+          base::MakeRefCounted<SessionStorageMetadata::MapData>(2,
+                                                                test_origin_),
           map1);
 
   bool success;
@@ -265,4 +264,4 @@ TEST_F(SessionStorageDataMapTest, Clone) {
   EXPECT_EQ(3u, GetDatabaseContents().size());
 }
 
-}  // namespace content
+}  // namespace storage

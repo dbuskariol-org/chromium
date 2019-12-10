@@ -2,20 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/dom_storage/session_storage_area_impl.h"
+#include "components/services/storage/dom_storage/session_storage_area_impl.h"
 
 #include "base/bind.h"
 #include "base/logging.h"
 #include "base/memory/ptr_util.h"
 #include "base/metrics/histogram_macros.h"
-#include "content/browser/dom_storage/session_storage_data_map.h"
+#include "components/services/storage/dom_storage/session_storage_data_map.h"
 #include "mojo/public/cpp/bindings/associated_remote.h"
 #include "third_party/leveldatabase/env_chromium.h"
 
-namespace content {
+namespace storage {
 
 SessionStorageAreaImpl::SessionStorageAreaImpl(
-    storage::SessionStorageMetadata::NamespaceEntry namespace_entry,
+    SessionStorageMetadata::NamespaceEntry namespace_entry,
     url::Origin origin,
     scoped_refptr<SessionStorageDataMap> data_map,
     RegisterNewAreaMap register_new_map_callback)
@@ -42,7 +42,7 @@ void SessionStorageAreaImpl::Bind(
 }
 
 std::unique_ptr<SessionStorageAreaImpl> SessionStorageAreaImpl::Clone(
-    storage::SessionStorageMetadata::NamespaceEntry namespace_entry) {
+    SessionStorageMetadata::NamespaceEntry namespace_entry) {
   DCHECK(namespace_entry_ != namespace_entry);
   return base::WrapUnique(new SessionStorageAreaImpl(
       namespace_entry, origin_, shared_data_map_, register_new_map_callback_));
@@ -156,4 +156,4 @@ void SessionStorageAreaImpl::CreateNewMap(
     shared_data_map_->AddBindingReference();
 }
 
-}  // namespace content
+}  // namespace storage
