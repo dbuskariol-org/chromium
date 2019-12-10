@@ -117,7 +117,7 @@ void AXLanguageDetectionManager::DetectLanguageForSubtree(
 // will not check feature flag.
 void AXLanguageDetectionManager::DetectLanguageForSubtreeInternal(
     AXNode* node) {
-  if (node->IsText()) {
+  if (node->data().role == ax::mojom::Role::kStaticText) {
     // TODO(chrishall): implement strategy for nodes which are too small to get
     // reliable language detection results. Consider combination of
     // concatenation and bubbling up results.
@@ -155,11 +155,15 @@ void AXLanguageDetectionManager::DetectLanguageForSubtreeInternal(
       lang_info->detected_languages = std::move(reliable_results);
       lang_info_stats_.Add(lang_info->detected_languages);
     }
+
+    // Do not visit the children of kStaticText(s) as they don't have
+    // interesting children for language detection.
+    // Since kInlineTextBox(es) contain text from their parent, any detection on
+    // them is redundant. Instead they can inherit the detected language.
+    return;
   }
 
-  // TODO(chrishall): refactor this as textnodes only ever have inline text
-  // boxes as children. This means we don't need to recurse except for
-  // inheritance which can be handled elsewhere.
+  // Otherwise, recurse into children for detection.
   for (AXNode* child : node->children()) {
     DetectLanguageForSubtreeInternal(child);
   }
