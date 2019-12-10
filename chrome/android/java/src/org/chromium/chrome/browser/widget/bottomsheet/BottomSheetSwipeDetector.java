@@ -21,7 +21,7 @@ import org.chromium.base.ThreadUtils;
  * swipe or fling is converted into a sequence of calls to
  * {@link SwipeableBottomSheet#setSheetOffset(float, boolean)}.
  */
-public class BottomSheetSwipeDetector extends GestureDetector.SimpleOnGestureListener {
+class BottomSheetSwipeDetector extends GestureDetector.SimpleOnGestureListener {
     /** The minimum y/x ratio that a scroll must have to be considered vertical. */
     private static final float MIN_VERTICAL_SCROLL_SLOPE = 2.0f;
 
