@@ -2213,6 +2213,11 @@
     "expiry_milestone": 76
   },
   {
+    "name": "extension-checkup",
+    "owners": ["archanasimha" ],
+    "expiry_milestone": 82
+  },
+  {
     "name": "extension-content-verification",
     "owners": [ "//extensions/OWNERS" ],
     "expiry_milestone": 86

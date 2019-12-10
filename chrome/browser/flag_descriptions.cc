@@ -1057,6 +1057,10 @@ const char kExtensionContentVerificationEnforce[] =
 const char kExtensionContentVerificationEnforceStrict[] =
     "Enforce strict (hard fail if we can't get hashes)";
 
+const char kExtensionsCheckupName[] = "Extensions Checkup";
+const char kExtensionsCheckupDescription[] =
+    "Enable the extensions checkup experiment";
+
 const char kExtensionsToolbarMenuName[] = "Extensions Toolbar Menu";
 const char kExtensionsToolbarMenuDescription[] =
     "Enable a separate toolbar button and menu for extensions";
