@@ -19,7 +19,7 @@ struct ASH_PUBLIC_EXPORT ImeInfo {
   ~ImeInfo();
 
   // True if the IME is a third-party extension.
-  bool third_party;
+  bool third_party = false;
 
   // ID that identifies the IME (e.g., "t:latn-post", "pinyin", "hangul").
   std::string id;
@@ -43,7 +43,7 @@ struct ASH_PUBLIC_EXPORT ImeMenuItem {
   ~ImeMenuItem();
 
   // True if the item is selected / enabled.
-  bool checked;
+  bool checked = false;
 
   // The key which identifies the property controlled by the menu item, e.g.
   // "InputMode.HalfWidthKatakana".

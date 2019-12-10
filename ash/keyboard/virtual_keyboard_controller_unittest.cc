@@ -118,6 +118,8 @@ TEST_F(VirtualKeyboardControllerTest,
 
   // Keyset should be reset to none.
   EXPECT_EQ(chromeos::input_method::ImeKeyset::kNone, client.last_keyset_);
+
+  Shell::Get()->ime_controller()->SetClient(nullptr);
 }
 
 TEST_F(VirtualKeyboardControllerTest,
