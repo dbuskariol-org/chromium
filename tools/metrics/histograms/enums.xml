@@ -31446,6 +31446,16 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="143196163" label="AUDCLNT_S_POSITION_STALLED"/>
 </enum>
 
+<enum name="HstsInfo">
+  <int value="0" label="HSTS was disabled and the results matched the spec"/>
+  <int value="1" label="HSTS was enabled and the results matched the spec"/>
+  <int value="2"
+      label="HSTS should have been enabled via the header but was not"/>
+  <int value="3"
+      label="HSTS should have been enabled via the header, was not, but it
+             matched the static list."/>
+</enum>
+
 <enum name="HttpAuthCount">
   <int value="0" label="Basic Start"/>
   <int value="1" label="Basic Reject"/>
