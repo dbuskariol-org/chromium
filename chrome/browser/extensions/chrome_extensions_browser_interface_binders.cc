@@ -5,6 +5,7 @@
 #include "chrome/browser/extensions/chrome_extensions_browser_interface_binders.h"
 
 #include "base/bind.h"
+#include "build/branding_buildflags.h"
 #include "chrome/browser/media/router/media_router_feature.h"       // nogncheck
 #include "chrome/browser/media/router/mojo/media_router_desktop.h"  // nogncheck
 #include "chrome/common/media_router/mojom/media_router.mojom.h"
@@ -14,7 +15,33 @@
 #include "extensions/common/permissions/api_permission.h"
 #include "extensions/common/permissions/permissions_data.h"
 
+#if defined(OS_CHROMEOS)
+#include "mojo/public/cpp/bindings/pending_receiver.h"
+
+#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+#include "chromeos/services/ime/public/mojom/input_engine.mojom.h"
+#include "ui/base/ime/chromeos/extension_ime_util.h"
+#include "ui/base/ime/chromeos/input_method_manager.h"
+#endif
+#endif
+
 namespace extensions {
+
+namespace {
+#if defined(OS_CHROMEOS)
+
+#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+// Resolves InputEngineManager receiver in InputMethodManager.
+void BindInputEngineManager(
+    content::RenderFrameHost* render_frame_host,
+    mojo::PendingReceiver<chromeos::ime::mojom::InputEngineManager> receiver) {
+  chromeos::input_method::InputMethodManager::Get()->ConnectInputEngineManager(
+      std::move(receiver));
+}
+#endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
+
+#endif
+}  // namespace
 
 void PopulateChromeFrameBindersForExtension(
     service_manager::BinderMapWithContext<content::RenderFrameHost*>*
@@ -30,6 +57,17 @@ void PopulateChromeFrameBindersForExtension(
         base::BindRepeating(&media_router::MediaRouterDesktop::BindToReceiver,
                             base::RetainedRef(extension), context));
   }
+
+#if defined(OS_CHROMEOS)
+
+#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+  // Registry InputEngineManager for official Google XKB Input only.
+  if (extension->id() == chromeos::extension_ime_util::kXkbExtensionId) {
+    binder_map->Add<chromeos::ime::mojom::InputEngineManager>(
+        base::BindRepeating(&BindInputEngineManager));
+  }
+#endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
+#endif
 }
 
 }  // namespace extensions
