@@ -345,6 +345,10 @@ void RemoteFrame::Focus() {
   FocusImpl();
 }
 
+void RemoteFrame::SetReceivedUserGestureBeforeNavigation(bool value) {
+  SetDocumentHasReceivedUserGestureBeforeNavigation(value);
+}
+
 bool RemoteFrame::IsIgnoredForHitTest() const {
   HTMLFrameOwnerElement* owner = DeprecatedLocalOwner();
   if (!owner || !owner->GetLayoutObject())

@@ -87,7 +87,7 @@ class CORE_EXPORT RemoteFrame final : public Frame,
   void SetInsecureRequestPolicy(WebInsecureRequestPolicy);
   void SetInsecureNavigationsSet(const WebVector<unsigned>&);
 
-  // blink::mojom::LocalFrame overrides:
+  // blink::mojom::RemoteFrame overrides:
   void WillEnterFullscreen() override;
   void ResetReplicatedContentSecurityPolicy() override;
   void EnforceInsecureNavigationsSet(const WTF::Vector<uint32_t>& set) override;
@@ -97,6 +97,7 @@ class CORE_EXPORT RemoteFrame final : public Frame,
   void DispatchLoadEventForFrameOwner() override;
   void Collapse(bool collapsed) final;
   void Focus() override;
+  void SetReceivedUserGestureBeforeNavigation(bool value) override;
 
  private:
   // Frame protected overrides:
