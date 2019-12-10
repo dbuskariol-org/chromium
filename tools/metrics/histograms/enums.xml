@@ -11282,14 +11282,6 @@ Called by update_net_error_codes.py.-->
 </enum>
 
 <enum name="CorsAccessCheckError">
-  <summary>The CORS check results for each request.</summary>
-  <int value="0" label="CORS request was permitted"/>
-  <int value="1" label="CORS request was not permitted"/>
-  <int value="2" label="CORS preflight permitted a CORS request"/>
-  <int value="3" label="CORS preflight didn't permit a CORS request"/>
-</enum>
-
-<enum name="CorsAccessCheckResult">
   <summary>
     The detailed error type for CORS check failures. See
     services/network/public/mojom/cors.mojom for detailed information.
@@ -11318,6 +11310,14 @@ Called by update_net_error_codes.py.-->
   <int value="21" label="kMethodDisallowedByPreflightResponse"/>
   <int value="22" label="kHeaderDisallowedByPreflightResponse"/>
   <int value="23" label="kRedirectContainsCredentials"/>
+</enum>
+
+<enum name="CorsAccessCheckResult">
+  <summary>The CORS check results for each request.</summary>
+  <int value="0" label="CORS request was permitted"/>
+  <int value="1" label="CORS request was not permitted"/>
+  <int value="2" label="CORS preflight permitted a CORS request"/>
+  <int value="3" label="CORS preflight didn't permit a CORS request"/>
 </enum>
 
 <enum name="CorsCompletionStatus">
