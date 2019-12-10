@@ -631,7 +631,7 @@ void AddCrostiniStrings(content::WebUIDataSource* html_source,
   html_source->AddBoolean(
       "showCrostiniExportImport",
       crostini::CrostiniFeatures::Get()->IsExportImportUIAllowed(profile));
-  html_source->AddBoolean("ArcAdbSideloadingSupported",
+  html_source->AddBoolean("arcAdbSideloadingSupported",
                           base::FeatureList::IsEnabled(
                               chromeos::features::kArcAdbSideloadingFeature));
   html_source->AddBoolean("isOwnerProfile",
