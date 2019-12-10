@@ -152,12 +152,12 @@ XrResult xrCreateInstance(const XrInstanceCreateInfo* create_info,
       "XrInstanceCreateInfo ApiLayer is not supported by this version of test");
 
   RETURN_IF(create_info->enabledExtensionCount !=
-                OpenXrTestHelper::NumExtensionsSupported(),
+                OpenXrTestHelper::kNumExtensionsSupported,
             XR_ERROR_VALIDATION_FAILURE, "enabledExtensionCount invalid");
 
   for (uint32_t i = 0; i < create_info->enabledExtensionCount; i++) {
     bool valid_extension = false;
-    for (size_t j = 0; j < OpenXrTestHelper::NumExtensionsSupported(); j++) {
+    for (size_t j = 0; j < OpenXrTestHelper::kNumExtensionsSupported; j++) {
       if (strcmp(create_info->enabledExtensionNames[i],
                  OpenXrTestHelper::kExtensions[j]) == 0) {
         valid_extension = true;
@@ -381,24 +381,24 @@ XrResult xrEnumerateInstanceExtensionProperties(
   DVLOG(2) << __FUNCTION__;
 
   RETURN_IF(
-      property_capacity_input < OpenXrTestHelper::NumExtensionsSupported() &&
+      property_capacity_input < OpenXrTestHelper::kNumExtensionsSupported &&
           property_capacity_input != 0,
       XR_ERROR_SIZE_INSUFFICIENT, "XrExtensionProperties array is too small");
 
   RETURN_IF(property_count_output == nullptr, XR_ERROR_VALIDATION_FAILURE,
             "property_count_output is nullptr");
-  *property_count_output = OpenXrTestHelper::NumExtensionsSupported();
+  *property_count_output = OpenXrTestHelper::kNumExtensionsSupported;
   if (property_capacity_input == 0) {
     return XR_SUCCESS;
   }
 
   RETURN_IF(
-      property_capacity_input != OpenXrTestHelper::NumExtensionsSupported(),
+      property_capacity_input != OpenXrTestHelper::kNumExtensionsSupported,
       XR_ERROR_VALIDATION_FAILURE,
-      "property_capacity_input is neither 0 or NumExtensionsSupported()");
+      "property_capacity_input is neither 0 or kNumExtensionsSupported");
   RETURN_IF(properties == nullptr, XR_ERROR_VALIDATION_FAILURE,
             "XrExtensionProperties is nullptr");
-  for (uint32_t i = 0; i < OpenXrTestHelper::NumExtensionsSupported(); i++) {
+  for (uint32_t i = 0; i < OpenXrTestHelper::kNumExtensionsSupported; i++) {
     properties[i].type = XR_TYPE_EXTENSION_PROPERTIES;
     errno_t error = strcpy_s(properties[i].extensionName,
                              base::size(properties[i].extensionName),
@@ -425,14 +425,14 @@ XrResult xrEnumerateViewConfigurationViews(
             "xrEnumerateViewConfigurationViews viewConfigurationType invalid");
   RETURN_IF(view_count_output == nullptr, XR_ERROR_VALIDATION_FAILURE,
             "view_count_output is nullptr");
-  *view_count_output = OpenXrTestHelper::NumViews();
+  *view_count_output = OpenXrTestHelper::kNumViews;
   if (view_capacity_input == 0) {
     return XR_SUCCESS;
   }
 
-  RETURN_IF(view_capacity_input != OpenXrTestHelper::NumViews(),
+  RETURN_IF(view_capacity_input != OpenXrTestHelper::kNumViews,
             XR_ERROR_VALIDATION_FAILURE,
-            "view_capacity_input is neither 0 or NumViews()");
+            "view_capacity_input is neither 0 or kNumViews");
   RETURN_IF(views == nullptr, XR_ERROR_VALIDATION_FAILURE,
             "XrViewConfigurationView is nullptr");
   views[0] = OpenXrTestHelper::kViewConfigurationViews[0];
