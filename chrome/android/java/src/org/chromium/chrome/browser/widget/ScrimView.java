@@ -137,6 +137,17 @@ public class ScrimView extends View implements View.OnClickListener {
         void onScrimVisibilityChanged(boolean visible);
     }
 
+    /**
+     * An empty implementation of the ScrimObserver interface.
+     */
+    public static class EmptyScrimObserver implements ScrimObserver {
+        @Override
+        public void onScrimClick() {}
+
+        @Override
+        public void onScrimVisibilityChanged(boolean visible) {}
+    }
+
     /** The duration for the fading animation. */
     private static final int FADE_DURATION_MS = 300;
 

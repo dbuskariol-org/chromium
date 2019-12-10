@@ -365,6 +365,15 @@ public class BottomSheetController implements Destroyable {
         mSheetInitializer = null;
     }
 
+    /**
+     * Create a ScrimParams anchoring on the bottom-sheet view.
+     * @param scrimObserver The scrimObserver to set for the ScrimParams.
+     */
+    public ScrimParams createScrimParams(ScrimObserver scrimObserver) {
+        return new ScrimParams(/*anchorView=*/mBottomSheet, /*showInFrontOfAnchorView=*/false,
+                /*affectsStatusBar=*/true, /*topMargin=*/0, /*observer*/ scrimObserver);
+    }
+
     // Destroyable implementation.
     @Override
     public void destroy() {
