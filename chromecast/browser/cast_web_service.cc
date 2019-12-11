@@ -29,12 +29,13 @@ namespace chromecast {
 
 namespace {
 
-uint32_t mask = content::StoragePartition::REMOVE_DATA_MASK_APPCACHE |
-                content::StoragePartition::REMOVE_DATA_MASK_COOKIES |
-                content::StoragePartition::REMOVE_DATA_MASK_FILE_SYSTEMS |
-                content::StoragePartition::REMOVE_DATA_MASK_INDEXEDDB |
-                content::StoragePartition::REMOVE_DATA_MASK_LOCAL_STORAGE |
-                content::StoragePartition::REMOVE_DATA_MASK_WEBSQL;
+uint32_t remove_data_mask =
+    content::StoragePartition::REMOVE_DATA_MASK_APPCACHE |
+    content::StoragePartition::REMOVE_DATA_MASK_COOKIES |
+    content::StoragePartition::REMOVE_DATA_MASK_FILE_SYSTEMS |
+    content::StoragePartition::REMOVE_DATA_MASK_INDEXEDDB |
+    content::StoragePartition::REMOVE_DATA_MASK_LOCAL_STORAGE |
+    content::StoragePartition::REMOVE_DATA_MASK_WEBSQL;
 
 }  // namespace
 
@@ -102,7 +103,8 @@ void CastWebService::ClearLocalStorage(base::OnceClosure callback) {
             cookie_delete_filter->session_control =
                 network::mojom::CookieDeletionSessionControl::IGNORE_CONTROL;
             partition->ClearData(
-                mask, content::StoragePartition::QUOTA_MANAGED_STORAGE_MASK_ALL,
+                remove_data_mask,
+                content::StoragePartition::QUOTA_MANAGED_STORAGE_MASK_ALL,
                 content::StoragePartition::OriginMatcherFunction(),
                 std::move(cookie_delete_filter), true /*perform_cleanup*/,
                 base::Time::Min(), base::Time::Max(), std::move(cb));
