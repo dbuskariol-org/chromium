@@ -237,6 +237,8 @@ android_library("chrome_java") {
     "$google_play_services_package:google_play_services_gcm_java",
     "$google_play_services_package:google_play_services_iid_java",
     "$google_play_services_package:google_play_services_tasks_java",
+    "$google_play_services_package:google_play_services_vision_common_java",
+    "$google_play_services_package:google_play_services_vision_java",
     "//base:base_java",
     "//base:jni_java",
     "//chrome/android/features/keyboard_accessory:public_java",
