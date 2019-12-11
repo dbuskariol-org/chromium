@@ -1926,7 +1926,7 @@
       },
       'chromeos-amd64-generic-rel': {
         'swarming': {
-          'shards': 6,
+          'shards': 12,
         },
       },
     },
