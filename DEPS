@@ -235,7 +235,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': '8953fbe6c549e29f8ff5755615981db3d1795384',
+  'catapult_revision': '129810e298bb5720ad5d2aaeadedce26711c7dba',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling libFuzzer
   # and whatever else without interference from each other.
@@ -911,7 +911,7 @@ deps = {
   },
 
   'src/third_party/ffmpeg':
-    Var('chromium_git') + '/chromium/third_party/ffmpeg.git' + '@' + '252792a1ff65deadc4e627e59ce80b8811c5a5de',
+    Var('chromium_git') + '/chromium/third_party/ffmpeg.git' + '@' + '68b4dfdbd607fdd33b9b8e3515f039d97677dd1c',
 
   'src/third_party/flac':
     Var('chromium_git') + '/chromium/deps/flac.git' + '@' + 'af862024c8c8fa0ae07ced05e89013d881b00596',
