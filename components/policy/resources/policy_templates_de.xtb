@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="de">
-<translation id="1001649754854402482">Erlaubt die Einschränkung von <ph name="CORS" />-Prüfungen in der neuen <ph name="CORS" />-Implementierung, wodurch Erweiterungen kompatibles Verhalten beibehalten können und <ph name="PRODUCT_NAME" /> angegebene Header ohne <ph name="CORS" />-Prüfungen senden kann.
-
-      Wird diese Liste leergelassen, versucht <ph name="PRODUCT_NAME" />, Erweiterungen auf kompatible Weise auszuführen und setzt keine <ph name="API" />-Änderungen für Version 79 von <ph name="PRODUCT_NAME" /> um, wie unter <ph name="WEB_REQUEST_API_MANUAL" /> erläutert.
-
-      Wenn diese Liste die <ph name="HTTP" />-Headernamen von Anfragen enthält, werden diese bei der <ph name="CORS" />-Prüfung ignoriert und die Einschränkung von Prüfungen für Erweiterungen aktiviert.
-
-      Ist die Liste nicht konfiguriert, wird keine der beiden zuvor beschriebenen Einschränkungen angewendet.
-
-      Details zu <ph name="CORS" /> erhalten Sie unter <ph name="CORS_HELP_URL" />.</translation>
 <translation id="1002439864875515590">Wenn diese Richtlinie auf einen leeren String festgelegt oder nicht konfiguriert ist, zeigt <ph name="PRODUCT_OS_NAME" /> beim Nutzeranmeldeprozess keine Option zur automatischen Vervollständigung an.
       Ist diese Richtlinie auf einen String festgelegt, der einen Domainnamen darstellt, dann zeigt <ph name="PRODUCT_OS_NAME" /> beim Nutzeranmeldeprozess eine Option zum automatischen Vervollständigen an. In diesem Fall muss der Nutzer nur einen Nutzernamen eingeben und kann die Domainnamenserweiterung weglassen.  Der Nutzer kann diese Domainnamenserweiterung überschreiben.
       Ist der Wert der Richtlinie keine gültige Domain, dann wird die Richtlinie nicht angewendet.</translation>
@@ -2276,15 +2267,6 @@ Diese Richtlinie hat keine Auswirkungen darauf, ob die lokalen Nutzerdaten auf d
 
       Aktuell werden folgende Datentypen unterstützt: "bookmarks", "preferences", "passwords", "autofill", "themes", "typedUrls", "extensions", "apps", "tabs" und "wifiConfiguration". Bei diesen Namen muss die Groß- und Kleinschreibung beachtet werden.</translation>
 <translation id="4454820008017317557">Symbol von <ph name="PRODUCT_NAME" /> in der Symbolleiste anzeigen</translation>
-<translation id="4458977366860064210">Hiermit kann die alte <ph name="CORS" />-Implementierung statt des neuen <ph name="CORS" /> verwendet werden.
-
-      Wenn diese Einstellung auf "true" festgelegt ist, wird die alte Implementierung verwendet, die kompatibel mit vorherigen Versionen sein sollte.
-
-      Wird die Richtlinie auf "false" gesetzt oder nicht konfiguriert, kommt die neue Implementierung zum Einsatz, die bei Chrome Enterprise-Nutzern zu Kompatibilitätsproblemen führen kann.
-
-      Die Richtlinie wird nach einigen Meilensteinen entfernt.
-
-      Details zu <ph name="CORS" /> erhalten Sie unter <ph name="CORS_HELP_URL" />.</translation>
 <translation id="4467952432486360968">Drittanbieter-Cookies blockieren</translation>
 <translation id="4474167089968829729">Aktiviert das Speichern von Passwörtern im Passwortmanager</translation>
 <translation id="4476769083125004742">Wenn diese Richtlinie auf <ph name="BLOCK_GEOLOCATION_SETTING" /> gesetzt ist, haben Android-Apps keinen Zugriff auf Standortdaten. Wenn Sie diese Richtlinie auf einen anderen Wert setzen oder sie nicht konfigurieren, wird der Nutzer um seine Zustimmung gebeten, wenn eine Android-App auf Standortdaten zugreifen möchte.</translation>

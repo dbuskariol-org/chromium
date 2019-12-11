@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="pt-BR">
-<translation id="1001649754854402482">Ative as mitigações de verificação de <ph name="CORS" /> na nova implementação de <ph name="CORS" />, permitindo que as extensões mantenham um comportamento compatível e permitindo que o <ph name="PRODUCT_NAME" /> envie cabeçalhos especificados sem verificações de <ph name="CORS" />.
-
-      Se esta lista é definida como vazia, o <ph name="PRODUCT_NAME" /> tenta executar extensões de maneiras compatíveis e não introduzirá mudanças de <ph name="API" /> para o <ph name="PRODUCT_NAME" /> 79, conforme explicado em <ph name="WEB_REQUEST_API_MANUAL" />.
-
-      Se esta lista é definida para ter nomes de cabeçalho de solicitação <ph name="HTTP" />, a inspeção <ph name="CORS" /> ignora os cabeçalhos listados e ativa a mitigação para extensões.
-
-      Se esta lista não for definida, nenhuma das duas mitigações explicadas acima será aplicada.
-
-      Para saber detalhes sobre <ph name="CORS" />, acesse: <ph name="CORS_HELP_URL" />.</translation>
 <translation id="1002439864875515590">Se esta política for definida como uma string em branco ou não for configurada, a opção de preenchimento automático não será exibida no <ph name="PRODUCT_OS_NAME" /> durante o fluxo de login do usuário.
       Se esta política for definida como uma string que representa um nome de domínio, uma opção de preenchimento automático será exibida no <ph name="PRODUCT_OS_NAME" /> durante o login, permitindo que o usuário digite apenas o nome dele sem a extensão de nome de domínio.  O usuário não poderá substituir essa extensão de nome de domínio.
       Se o valor da política não for um domínio válido, a política não será aplicada.</translation>
@@ -2270,15 +2261,6 @@ Quando a |IdleAction| não for definida, a ação padrão de suspensão será re
 
       Atualmente, os tipos de dados para esta política são: "bookmarks", "preferences", "passwords", "autofill", "themes", "typedUrls", "extensions", "apps", "tabs" e "wifiConfiguration". Esses nomes diferenciam letras maiúsculas de minúsculas.</translation>
 <translation id="4454820008017317557">Mostrar o ícone da barra de ferramentas do <ph name="PRODUCT_NAME" /></translation>
-<translation id="4458977366860064210">Usar a implementação legada de <ph name="CORS" /> em vez do novo <ph name="CORS" />.
-
-      Se esta configuração for definida como verdadeira, a implementação legada será usada e precisará ser compatível com versões anteriores.
-
-      Se esta configuração for definida como falsa ou não for definida, a nova implementação será usada e poderá causar possíveis problemas de compatibilidade específicos da empresa.
-
-      Esta política será removida depois de alguns marcos.
-
-      Para ver detalhes sobre <ph name="CORS" />, acesse: <ph name="CORS_HELP_URL" />.</translation>
 <translation id="4467952432486360968">Bloquear cookies de terceiros</translation>
 <translation id="4474167089968829729">Ativar salvamento de senhas no gerenciador de senhas</translation>
 <translation id="4476769083125004742">Se esta política for definida como <ph name="BLOCK_GEOLOCATION_SETTING" />, os apps Android não poderão acessar as informações de local. Se você configurar essa política para qualquer outro valor ou deixá-la sem definição, será solicitado o consentimento do usuário quando um app Android quiser acessar as informações de local.</translation>

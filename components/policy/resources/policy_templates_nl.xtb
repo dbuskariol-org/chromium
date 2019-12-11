@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="nl">
-<translation id="1001649754854402482">Schakel <ph name="CORS" />-controlebeperkingen voor de nieuwe <ph name="CORS" />-implementatie in, waardoor extensies geschikt gedrag kunnen behouden en <ph name="PRODUCT_NAME" /> toestemming heeft om opgegeven headers te verzenden zonder <ph name="CORS" />-controle.
-
-      Als deze lijst leeg is, probeert <ph name="PRODUCT_NAME" /> extensies op geschikte manieren uit te voeren en worden er geen <ph name="API" />-wijzingen geïntroduceerd voor <ph name="PRODUCT_NAME" /> 79, zoals uitgelegd in <ph name="WEB_REQUEST_API_MANUAL" />.
-
-      Als deze lijst is ingesteld voor headernamen van <ph name="HTTP" />-verzoeken, negeert de <ph name="CORS" />-controle de vermelde headers om de beperking voor extensies in te schakelen.
-
-      Als deze lijst niet is ingesteld, worden beide beperkingen (zoals hierboven uitgelegd) niet toegepast.
-
-      Ga voor meer informatie over <ph name="CORS" /> naar: <ph name="CORS_HELP_URL" />.</translation>
 <translation id="1002439864875515590">Als dit beleid is ingesteld op een lege tekenreeks of niet is geconfigureerd, geeft <ph name="PRODUCT_OS_NAME" /> geen optie voor automatisch aanvullen weer tijdens het inlogproces van de gebruiker.
       Als dit beleid is ingesteld op een tekenreeks die een domeinnaam vertegenwoordigt, geeft <ph name="PRODUCT_OS_NAME" /> een optie voor automatisch aanvullen weer tijdens het inlogproces van de gebruiker, waarbij de gebruiker alleen zijn gebruikersnaam hoeft te typen zonder de domeinnaamextensie.  De gebruiker kan deze domeinnaamextensie overschrijven.
       Als de waarde van het beleid geen geldig domein is, wordt het beleid niet toegepast.</translation>
@@ -2314,15 +2305,6 @@
 
       De huidige gegevenstypen voor dit beleid zijn: 'bookmarks', 'preferences', 'passwords', 'autofill', 'themes', 'typedUrls', 'extensions', 'apps', 'tabs', 'wifiConfiguration'. Die namen zijn hoofdlettergevoelig.</translation>
 <translation id="4454820008017317557">Het werkbalkpictogram van <ph name="PRODUCT_NAME" /> weergeven</translation>
-<translation id="4458977366860064210">Gebruik de verouderde <ph name="CORS" />-implementatie in plaats van de nieuwe <ph name="CORS" />.
-
-      Als deze instelling is ingesteld op True, wordt de verouderde implementatie gebruikt die zou moeten werken met eerdere versies.
-
-      Als deze instelling is ingesteld op False of niet is ingesteld, wordt de nieuwe implementatie gebruikt die mogelijk ondernemingsspecifieke compatibiliteitsproblemen kan veroorzaken.
-
-      Dit beleid wordt na een aantal mijlpalen verwijderd.
-
-      Ga naar <ph name="CORS_HELP_URL" /> voor meer informatie over <ph name="CORS" />.</translation>
 <translation id="4467952432486360968">Indirecte cookies blokkeren</translation>
 <translation id="4474167089968829729">Opslaan van wachtwoorden in Wachtwoordmanager inschakelen</translation>
 <translation id="4476769083125004742">Als dit beleid wordt ingesteld op <ph name="BLOCK_GEOLOCATION_SETTING" />, hebben de Android-apps geen toegang tot locatiegegevens. Als je een andere waarde voor dit beleid instelt of het beleid niet instelt, wordt de gebruiker om toestemming gevraagd wanneer een Android-app toegang tot locatiegegevens probeert te krijgen.</translation>

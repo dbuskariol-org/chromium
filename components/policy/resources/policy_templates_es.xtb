@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="es">
-<translation id="1001649754854402482">Permite habilitar las mitigaciones de comprobación de <ph name="CORS" /> en la nueva implementación de <ph name="CORS" />. Así, las extensiones continúan siendo compatibles y <ph name="PRODUCT_NAME" /> puede enviar encabezados definidos sin comprobaciones de <ph name="CORS" />.
-
-      Si esta lista se deja vacía, <ph name="PRODUCT_NAME" /> intentará ejecutar las extensiones de forma compatible y no introducirá cambios de <ph name="API" /> en <ph name="PRODUCT_NAME" /> 79, tal y como se explica en <ph name="WEB_REQUEST_API_MANUAL" />.
-
-      Si la lista se configura para que tenga nombres de encabezado de solicitud <ph name="HTTP" />, la comprobación de <ph name="CORS" /> ignorará los encabezados de la lista y habilitará la mitigación en el caso de las extensiones.
-
-      Si no se establece esta lista, no se aplicará ninguna de las dos mitigaciones explicadas arriba.
-
-      Para consultar más información sobre <ph name="CORS" />, visita <ph name="CORS_HELP_URL" />.</translation>
 <translation id="1002439864875515590">Si se asigna una cadena en blanco a esta política o no se configura, <ph name="PRODUCT_OS_NAME" /> no mostrará la opción de autocompletar los datos durante el flujo de inicio de sesión del usuario.
       Si se le asigna una cadena que representa un nombre de dominio, <ph name="PRODUCT_OS_NAME" /> mostrará la opción de autocompletar los datos durante el inicio de sesión del usuario, por lo que el usuario podrá introducir únicamente su nombre de usuario sin la extensión de nombre de dominio.  El usuario podrá sobrescribir esta extensión de nombre de dominio.
       Si el valor de esta política no es un dominio válido, no se aplicará la política.</translation>
@@ -2327,15 +2318,6 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
 
       Los tipos de datos actuales para esta política son los siguientes: "bookmarks", "preferences", "passwords", "autofill", "themes", "typedUrls", "extensions", "apps", "tabs" y "wifiConfiguration". Estos nombres distinguen entre mayúsculas y minúsculas.</translation>
 <translation id="4454820008017317557">Mostrar el icono de la barra de herramientas de <ph name="PRODUCT_NAME" /></translation>
-<translation id="4458977366860064210">Permite usar la implementación antigua de <ph name="CORS" /> en vez de la nueva implementación de <ph name="CORS" />.
-
-      Si se asigna el valor "True" a esta política, se usa la implementación antigua, la cual debería ser compatible con las versiones anteriores.
-
-      Si se le asigna el valor "False", o no se establece, se usa la nueva implementación, lo que podría causar distintos problemas de compatibilidad según la empresa.
-
-      Esta política se eliminará después de dos hitos.
-
-      Para consultar más información sobre <ph name="CORS" />, visita <ph name="CORS_HELP_URL" />.</translation>
 <translation id="4467952432486360968">Bloquear cookies de terceros</translation>
 <translation id="4474167089968829729">Habilitar el almacenamiento de contraseñas en el administrador de contraseñas</translation>
 <translation id="4476769083125004742">Si se asigna el valor <ph name="BLOCK_GEOLOCATION_SETTING" /> a esta política, las aplicaciones para Android no tendrán acceso a la información sobre la ubicación. Si se le asigna cualquier otro valor o no se configura, el usuario tendrá que dar su consentimiento cuando una aplicación para Android quiera acceder a los datos de ubicación.</translation>

@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="id">
-<translation id="1001649754854402482">Mengaktifkan mitigasi pemeriksaan <ph name="CORS" /> dalam implementasi <ph name="CORS" /> yang baru, sehingga memungkinkan Ekstensi tetap kompatibel, dan mengizinkan <ph name="PRODUCT_NAME" /> mengirim header tertentu tanpa pemeriksaan <ph name="CORS" />.
-
-      Jika daftar ini dibiarkan kosong, <ph name="PRODUCT_NAME" /> akan mencoba menjalankan Ekstensi secara kompatibel, dan tidak menerapkan perubahan <ph name="API" /> untuk <ph name="PRODUCT_NAME" /> 79 seperti yang dijelaskan dalam <ph name="WEB_REQUEST_API_MANUAL" />.
-
-      Jika daftar ini ditetapkan untuk memiliki nama header permintaan <ph name="HTTP" />, pemeriksaan <ph name="CORS" /> akan mengabaikan header yang tercantum dan mengaktifkan mitigasi untuk Ekstensi.
-
-      Jika daftar ini tidak ditetapkan, kedua mitigasi yang dijelaskan di atas tidak akan diterapkan.
-
-      Untuk mengetahui detail tentang <ph name="CORS" />, buka: <ph name="CORS_HELP_URL" />.</translation>
 <translation id="1002439864875515590">Jika kebijakan ini disetel sebagai string kosong atau tidak dikonfigurasi, <ph name="PRODUCT_OS_NAME" /> tidak akan menampilkan opsi pelengkapan otomatis selama alur login pengguna.
       Jika kebijakan ini disetel ke string yang mewakili nama domain, <ph name="PRODUCT_OS_NAME" /> akan menampilkan opsi pelengkapan otomatis selama proses login pengguna, sehingga pengguna dapat mengetikkan nama penggunanya saja tanpa ekstensi nama domain.  Pengguna dapat mengganti ekstensi nama domain ini.
       Jika nilai kebijakan bukan domain yang valid, kebijakan tidak akan diterapkan.</translation>
@@ -2275,15 +2266,6 @@ Jika kebijakan ini tidak disetel, setelan default-nya tidak diizinkan bagi pengg
 
       Jenis data saat ini untuk kebijakan ini adalah: "bookmarks", "preferences", "passwords", "autofill", "themes", "typedUrls", "extensions", "apps", "tabs", "wifiConfiguration". Nama-nama tersebut peka huruf besar atau kecil.</translation>
 <translation id="4454820008017317557">Tampilkan ikon toolbar <ph name="PRODUCT_NAME" /></translation>
-<translation id="4458977366860064210">Menggunakan implementasi <ph name="CORS" /> lama, bukan <ph name="CORS" /> baru.
-
-      Jika setelan ini ditetapkan ke True, implementasi lama yang digunakan seharusnya kompatibel dengan versi sebelumnya.
-
-      Jika setelan ini ditetapkan ke False atau tidak ditetapkan, implementasi baru yang digunakan dapat menyebabkan potensi masalah kompatibilitas khusus perusahaan.
-
-      Kebijakan ini akan dihapus setelah beberapa peristiwa penting.
-
-      Untuk mengetahui detail tentang <ph name="CORS" />, kunjungi: <ph name="CORS_HELP_URL" />.</translation>
 <translation id="4467952432486360968">Cekal cookie pihak ketiga</translation>
 <translation id="4474167089968829729">Aktifkan penyimpanan sandi di pengelola sandi</translation>
 <translation id="4476769083125004742">Jika kebijakan ini disetel ke <ph name="BLOCK_GEOLOCATION_SETTING" />, aplikasi Android tidak dapat mengakses informasi lokasi. Jika Anda menyetel kebijakan ini ke nilai lain atau tidak menyetel kebijakan, pengguna akan dimintai persetujuan ketika aplikasi Android ingin mengakses informasi lokasi.</translation>

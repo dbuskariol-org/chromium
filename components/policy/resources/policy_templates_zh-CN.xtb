@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="zh-CN">
-<translation id="1001649754854402482">在新版 <ph name="CORS" /> 实现方案中启用 <ph name="CORS" /> 检查缓解功能，从而允许扩展程序保持兼容的行为，并允许 <ph name="PRODUCT_NAME" /> 无需进行 <ph name="CORS" /> 检查便可发送指定标头。
-
-      如果此列表设为空，<ph name="PRODUCT_NAME" /> 会尝试以兼容的方式运行扩展程序，而不会激活 <ph name="PRODUCT_NAME" /> 79 中引入的 <ph name="API" /> 更改（如 <ph name="WEB_REQUEST_API_MANUAL" /> 所述）。
-
-      如果此列表设为包含 <ph name="HTTP" /> 请求标头名称，则 <ph name="CORS" /> 检查将会忽略所列的标头，并会为扩展程序启用缓解功能。
-
-      如果此列表未设置，系统将不会应用上文介绍的两项缓解功能。
-
-      如需详细了解 <ph name="CORS" />，请访问 <ph name="CORS_HELP_URL" />。</translation>
 <translation id="1002439864875515590">如果此政策设为一个空字符串或未配置，<ph name="PRODUCT_OS_NAME" />将不会在用户登录期间显示自动填充选项。
       如果此政策设为一个表示域名的字符串，<ph name="PRODUCT_OS_NAME" />将在用户登录期间显示自动填充选项，让用户可以只输入自己的用户名，而不必输入域名扩展名。用户可以覆盖此域名扩展名。
       如果此政策的值不是一个有效的域名，系统便不会应用此政策。</translation>
@@ -2231,15 +2222,6 @@
 
       此政策当前可用的数据类型为：“bookmarks”、“preferences”、“passwords”、“autofill”、“themes”、“typedUrls”、“apps”、“tabs”、“wifiConfiguration”。这些名称区分大小写！</translation>
 <translation id="4454820008017317557">显示 <ph name="PRODUCT_NAME" /> 工具栏图标</translation>
-<translation id="4458977366860064210">使用旧版 <ph name="CORS" /> 实现方案，而非新版 <ph name="CORS" />。
-
-      如果此设置设为 True，系统会使用旧版实现方案（此版实现方案应该会与以往的版本兼容）。
-
-      如果此设置设为 False 或未设置，系统会使用新版实现方案（此版实现方案可能会导致出现特定于企业的兼容性问题）。
-
-      在几个里程碑后，此政策将被移除。
-
-      如需详细了解 <ph name="CORS" />，请访问 <ph name="CORS_HELP_URL" />。</translation>
 <translation id="4467952432486360968">阻止第三方 Cookie</translation>
 <translation id="4474167089968829729">允许将密码保存到密码管理器</translation>
 <translation id="4476769083125004742">如果此政策设为 <ph name="BLOCK_GEOLOCATION_SETTING" />，Android 应用将无法使用位置信息。如果此政策设为任何其他值或未设置，那么当 Android 应用想使用位置信息时，它会询问用户是否同意。</translation>

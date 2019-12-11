@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="zh-TW">
-<translation id="1001649754854402482">在新版 <ph name="CORS" /> 模式中啟用 <ph name="CORS" /> 檢查安全防護措施，讓擴充功能保持相容行為，並允許 <ph name="PRODUCT_NAME" /> 不需經過 <ph name="CORS" /> 檢查即可傳送指定標頭。
-
-      如果將這份清單設為空白，<ph name="PRODUCT_NAME" /> 會嘗試以相容方式執行擴充功能，且不會採用 <ph name="PRODUCT_NAME" /> 第 79 版的 <ph name="API" /> 變更，詳情請參閱 <ph name="WEB_REQUEST_API_MANUAL" />。
-
-      如果將這份清單設為具有 <ph name="HTTP" /> 要求標頭名稱，則 <ph name="CORS" /> 檢查將忽略此處列出的標頭，並啟用擴充功能的安全防護措施。
-
-      如果未設定這份清單，則不會套用上述兩種安全防護措施。
-
-      如要進一步瞭解 <ph name="CORS" />，請前往：<ph name="CORS_HELP_URL" />。</translation>
 <translation id="1002439864875515590">如果將這項政策設為空白字串或不設定，<ph name="PRODUCT_OS_NAME" />將不會在使用者登入流程中顯示自動完成選項。
       如果將這項政策設為代表網域名稱的字串，<ph name="PRODUCT_OS_NAME" />將會在使用者登入流程中顯示自動完成選項，使用者只需輸入自己的使用者名稱 (不含網域名稱延伸部分) 即可。使用者可以覆寫這個網域名稱的延伸部分。
       如果這項政策的值不是有效網域，系統就不會套用這項政策。</translation>
@@ -2249,15 +2240,6 @@
 
       這項政策目前涵蓋的資料類型為：「bookmarks」、「preferences」、「passwords」、「autofill」、「themes」、「typedUrls」、「extensions」、「apps」、「tabs」、「wifiConfiguration」。這些名稱有大小寫之分。</translation>
 <translation id="4454820008017317557">顯示 <ph name="PRODUCT_NAME" /> 工具列圖示</translation>
-<translation id="4458977366860064210">使用舊版 <ph name="CORS" /> 導入作業，而不使用新版 <ph name="CORS" />。
-
-     如果將這項政策設為 True，系統會使用舊版導入作業，該作業應與先前的版本相容。
-
-      如果將這項政策設為 False 或不予設定，系統會使用新版導入作業，這可能會導致企業特定的相容性問題。
-
-      這項政策將在日後的版本中移除。
-
-      如要進一步瞭解 <ph name="CORS" />，請前往：<ph name="CORS_HELP_URL" />。</translation>
 <translation id="4467952432486360968">封鎖第三方 Cookie</translation>
 <translation id="4474167089968829729">允許將密碼儲存到密碼管理員</translation>
 <translation id="4476769083125004742">如果將這項政策設為 <ph name="BLOCK_GEOLOCATION_SETTING" />，Android 應用程式將無法存取位置資訊。如果將這項政策設為任何其他值或不予設定，當 Android 應用程式要存取位置資訊時，會詢問使用者是否同意。</translation>

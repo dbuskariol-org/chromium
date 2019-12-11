@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="ko">
-<translation id="1001649754854402482">새로운 <ph name="CORS" /> 구현에서 <ph name="CORS" /> 확인 완화를 사용 설정하여 확장 프로그램이 호환되는 동작을 유지하도록 허용하고 <ph name="PRODUCT_NAME" />에서 <ph name="CORS" /> 확인 없이 지정된 헤더를 전송하도록 허용합니다.
-
-      이 목록이 Empty로 설정되어 있으면 <ph name="PRODUCT_NAME" />은(는) 호환되는 방식으로 확장 프로그램을 실행하도록 시도하고 <ph name="WEB_REQUEST_API_MANUAL" />에 설명된 것처럼 <ph name="PRODUCT_NAME" /> 79의 <ph name="API" /> 변경사항을 적용하지 않습니다.
-
-      목록이 <ph name="HTTP" /> 요청 헤더 이름을 가지도록 설정되어 있으면 <ph name="CORS" /> 검사에서 등록된 헤더를 무시하고 확장 프로그램의 완화를 사용 설정합니다.
-
-      목록이 설정되지 않으면 위에서 설명된 완화가 모두 적용되지 않습니다.
-
-      <ph name="CORS" />의 세부사항을 확인하려면 <ph name="CORS_HELP_URL" /> 페이지를 참조하세요.</translation>
 <translation id="1002439864875515590">이 정책이 빈 문자열로 설정되거나 구성되지 않으면 <ph name="PRODUCT_OS_NAME" />이(가) 사용자 로그인 절차에서 자동 완성 옵션을 표시하지 않습니다.
       이 정책이 도메인 이름을 나타내는 문자열로 설정된 경우 <ph name="PRODUCT_OS_NAME" />이(가) 사용자 로그인 절차에서 자동 완성 옵션을 표시하여 사용자가 도메인 이름 확장자 없이 사용자 이름만 입력할 수 있게 합니다.  사용자는 이 도메인 이름 확장자를 덮어쓸 수 있습니다.
       정책 값이 유효한 도메인이 아닌 경우 정책이 적용되지 않습니다.</translation>
@@ -2321,15 +2312,6 @@ Google에 전송됩니다.  사용 중지되면 이 정보가 Google에 전송�
 
       이 정책의 현재 데이터 유형은 'bookmarks', 'preferences', 'passwords', 'autofill', 'themes', 'typedUrls', 'extensions', 'apps', 'tabs', 'wifiConfiguration'입니다. 이름은 대소문자를 구분합니다.</translation>
 <translation id="4454820008017317557"><ph name="PRODUCT_NAME" /> 툴바 아이콘 표시</translation>
-<translation id="4458977366860064210">새 <ph name="CORS" /> 대신 기존 <ph name="CORS" /> 구현을 사용합니다.
-
-      이 설정이 True로 설정되어 있으면 이전 버전과 호환되어야 하는 기존 구현이 사용됩니다.
-
-      이 설정이 False로 설정되어 있거나 설정되어 있지 않으면 기업별 호환성 문제를 일으킬 수 있는 새 구현이 사용됩니다.
-
-      이 정책은 얼마간의 주요 시점이 지난 후 삭제됩니다.
-
-      <ph name="CORS" />의 세부사항을 확인하려면 <ph name="CORS_HELP_URL" /> 페이지를 참조하세요.</translation>
 <translation id="4467952432486360968">제3자 쿠키 차단</translation>
 <translation id="4474167089968829729">비밀번호 관리자에 비밀번호 저장 기능 사용</translation>
 <translation id="4476769083125004742">이 정책이 <ph name="BLOCK_GEOLOCATION_SETTING" />(으)로 설정되는 경우 Android 앱에서 위치 정보에 액세스할 수 없습니다. 이 정책을 다른 값으로 설정하거나 설정하지 않은 채로 두면 Android 앱에서 위치 정보에 액세스하려고 할 때 사용자에게 동의를 요청하는 메시지가 표시됩니다.</translation>

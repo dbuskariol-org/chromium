@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="it">
-<translation id="1001649754854402482">Consente di attivare le mitigazioni dei controlli <ph name="CORS" /> nella nuova implementazione <ph name="CORS" />, consentendo alle estensioni di mantenere un comportamento compatibile e a <ph name="PRODUCT_NAME" /> di inviare le intestazioni specificate senza controlli <ph name="CORS" />.
-
-      Se questo elenco viene lasciato vuoto, <ph name="PRODUCT_NAME" /> prova a eseguire le estensioni in modalità compatibili e non introduce modifiche <ph name="API" /> per la versione 79 di <ph name="PRODUCT_NAME" />, come spiegato all'indirizzo <ph name="WEB_REQUEST_API_MANUAL" />.
-
-      Se per questo elenco vengono impostati nomi di intestazioni di richieste <ph name="HTTP" />, il controllo <ph name="CORS" /> ignorerà le intestazioni elencate e attiverà la mitigazione per le estensioni.
-
-      Se questo elenco non viene impostato, entrambe le mitigazioni spiegate sopra non vengono applicate.
-
-      Per informazioni dettagliate su <ph name="CORS" />, visita la pagina <ph name="CORS_HELP_URL" />.</translation>
 <translation id="1002439864875515590">Se questa norma non viene configurata o se viene impostata una stringa vuota, non verrà mostrata un'opzione di completamento automatico durante il flusso di accesso dell'utente in <ph name="PRODUCT_OS_NAME" />.
       Se per questa norma viene impostata una stringa che rappresenta un nome di dominio, durante l'accesso dell'utente in <ph name="PRODUCT_OS_NAME" /> verrà mostrata un'opzione di completamento automatico che consentirà all'utente di digitare soltanto il nome utente senza l'estensione del nome di dominio.  L'utente potrà sovrascrivere l'estensione del nome di dominio.
       Se il valore della norma non è un dominio valido, la norma non sarà applicata.</translation>
@@ -2251,15 +2242,6 @@ Questa norma viene rispettata soltanto se la norma "DefaultSearchProviderEnabled
 
       Attualmente i tipi di dati per questo criterio sono: "bookmarks", "preferences", "passwords", "autofill", "themes", "typedUrls", "extensions", "apps", "tabs", "wifiConfiguration". Tali nomi fanno distinzione tra maiuscole e minuscole.</translation>
 <translation id="4454820008017317557">Mostra l'icona della barra degli strumenti di <ph name="PRODUCT_NAME" /></translation>
-<translation id="4458977366860064210">Consente di usare l'implementazione <ph name="CORS" /> legacy al posto della nuova implementazione <ph name="CORS" />.
-
-      Se questo criterio è impostato su True, viene usata l'implementazione legacy, che dovrebbe essere compatibile con le versioni precedenti.
-
-      Se questo criterio è impostato su False o non è impostato, viene usata la nuova implementazione, che potrebbe causare problemi di compatibilità per le aziende.
-
-      Questo criterio verrà rimosso dopo un paio di aggiornamenti.
-
-      Per informazioni dettagliate su <ph name="CORS" />, visita la pagina <ph name="CORS_HELP_URL" />.</translation>
 <translation id="4467952432486360968">Blocca cookie di terze parti</translation>
 <translation id="4474167089968829729">Attiva il salvataggio delle password in Gestione password</translation>
 <translation id="4476769083125004742">Se la norma viene impostata su <ph name="BLOCK_GEOLOCATION_SETTING" />, le app Android non possono accedere ai dati sulla posizione. Se la norma viene impostata su qualsiasi altro valore o non viene impostata, all'utente viene chiesta l'autorizzazione quando un'app Android vuole accedere ai dati sulla posizione.</translation>

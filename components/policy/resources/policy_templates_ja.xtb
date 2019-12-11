@@ -1,15 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE translationbundle>
 <translationbundle lang="ja">
-<translation id="1001649754854402482">新しい <ph name="CORS" /> の実装で <ph name="CORS" /> チェックの緩和措置を有効にして、拡張機能の互換性のある動作が保たれるように、また <ph name="PRODUCT_NAME" /> で <ph name="CORS" /> チェックなしに指定ヘッダーが送信されるようにします。
-
-      このリストを空に設定した場合、<ph name="PRODUCT_NAME" /> では拡張機能が互換性を保つように実行され、<ph name="PRODUCT_NAME" /> 79 での <ph name="API" /> の変更（<ph name="WEB_REQUEST_API_MANUAL" /> を参照）は適用されません。
-
-      このリストを <ph name="HTTP" /> リクエスト ヘッダー名を含めて設定した場合は、拡張機能向けの緩和措置が有効になることに加えて、リストにあるヘッダーが <ph name="CORS" /> チェックで無視されます。
-
-      このリストを設定しない場合、上記の緩和措置はいずれも適用されません。
-
-      <ph name="CORS" /> の詳細については、<ph name="CORS_HELP_URL" /> をご覧ください。</translation>
 <translation id="1002439864875515590">このポリシーが空の文字列または未設定の場合は、<ph name="PRODUCT_OS_NAME" /> でユーザーのログインフロー時にオートコンプリートのオプションは表示されません。
       このポリシーがドメイン名を表す文字列に設定されている場合は、<ph name="PRODUCT_OS_NAME" /> でユーザーがログインする際にオートコンプリートのオプションが表示されます。この場合、ユーザーはドメイン名の部分を省略してユーザー名を入力するだけで済みます。また、ユーザーはこのドメイン名の部分を上書きすることもできます。
       ポリシーの値が有効なドメインではない場合、ポリシーは適用されません。</translation>
@@ -2270,15 +2261,6 @@
 
       現在、このポリシーで指定できるデータタイプは次のとおりです。"bookmarks"、"preferences"、"passwords"、"autofill"、"themes"、"typedUrls"、"extensions"、"apps"、"tabs"、"wifiConfiguration"データタイプの名前では大文字と小文字が区別されます。</translation>
 <translation id="4454820008017317557"><ph name="PRODUCT_NAME" /> ツールバー アイコンを表示する</translation>
-<translation id="4458977366860064210">新しい <ph name="CORS" /> の実装ではなく以前の <ph name="CORS" /> の実装を使用します。
-
-      True に設定した場合は、以前のバージョンと互換性のある以前の実装が使用されます。
-
-      False または未設定のままにした場合は新しい実装が使用されますが、その場合、互換性に関する企業特有の問題が発生する可能性があります。
-
-      このポリシーは数回のマイルストーンを経て削除される予定です。
-
-      <ph name="CORS" /> の詳細については、<ph name="CORS_HELP_URL" /> をご覧ください。</translation>
 <translation id="4467952432486360968">サードパーティの Cookie をブロックする</translation>
 <translation id="4474167089968829729">パスワード マネージャへのパスワード保存を有効にする</translation>
 <translation id="4476769083125004742">このポリシーを <ph name="BLOCK_GEOLOCATION_SETTING" /> に設定した場合、Android アプリは位置情報にアクセスできません。このポリシーを他の値に設定するか未設定のままにした場合、Android アプリで位置情報へのアクセスが必要になったときには、ユーザーに同意が求められます。</translation>
