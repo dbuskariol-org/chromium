@@ -124,6 +124,7 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/browserservices/BrowserServicesActivityTabController.java",
   "java/src/org/chromium/chrome/browser/browserservices/BrowserServicesIntentDataProvider.java",
   "java/src/org/chromium/chrome/browser/browserservices/BrowserServicesMetrics.java",
+  "java/src/org/chromium/chrome/browser/browserservices/BrowserServicesStore.java",
   "java/src/org/chromium/chrome/browser/browserservices/ClearDataDialogActivity.java",
   "java/src/org/chromium/chrome/browser/browserservices/ClearDataDialogResultRecorder.java",
   "java/src/org/chromium/chrome/browser/browserservices/ClientAppBroadcastReceiver.java",
