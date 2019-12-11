@@ -6074,8 +6074,6 @@ crbug.com/1025944 [ Linux ] external/wpt/pointerevents/pointerlock/pointerevent_
 # Timeout media preload test until preloading media destinations gets enabled.
 crbug.com/977033 http/tests/priorities/resource-load-priorities-media-preload.html [ Timeout ]
 
-crbug.com/1016815 external/wpt/longtask-timing/buffered-flag.window.html [ Failure ]
-
 # Sheriff 2019-11-21
 crbug.com/1027287 css3/filters/effect-reference-image-lazy-attach.html [ Pass Failure ]
 

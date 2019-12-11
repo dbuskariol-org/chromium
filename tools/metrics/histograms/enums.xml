@@ -25698,6 +25698,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3116" label="ClientHintsUAMobile"/>
   <int value="3117"
       label="V8VideoPlaybackQuality_CorruptedVideoFrames_AttributeGetter"/>
+  <int value="3118" label="LongTaskBufferFull"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
