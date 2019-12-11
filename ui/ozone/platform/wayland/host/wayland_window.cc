@@ -75,45 +75,6 @@ gfx::AcceleratedWidget WaylandWindow::GetWidget() const {
     return gfx::kNullAcceleratedWidget;
   return surface_.id();
 }
-
-void WaylandWindow::CreateAndShowTooltipSubSurface() {
-  // Since Aura does not not provide a reference parent window, needed by
-  // Wayland, we get the current focused window to place and show the tooltips.
-  auto* parent_window =
-      connection_->wayland_window_manager()->GetCurrentFocusedWindow();
-
-  // Tooltip creation is an async operation. By the time Aura actually creates
-  // the tooltip, it is possible that the user has already moved the
-  // mouse/pointer out of the window that triggered the tooptip. In this case,
-  // parent_window is NULL.
-  if (!parent_window)
-    return;
-
-  wl_subcompositor* subcompositor = connection_->subcompositor();
-  DCHECK(subcompositor);
-  tooltip_subsurface_.reset(wl_subcompositor_get_subsurface(
-      subcompositor, surface_.get(), parent_window->surface()));
-
-  // Chromium positions tooltip windows in screen coordinates, but Wayland
-  // requires them to be in local surface coordinates aka relative to parent
-  // window.
-  const auto parent_bounds_dip =
-      gfx::ScaleToRoundedRect(parent_window->GetBounds(), 1.0 / ui_scale_);
-  auto new_bounds_dip =
-      wl::TranslateBoundsToParentCoordinates(bounds_px_, parent_bounds_dip);
-  auto bounds_px =
-      gfx::ScaleToRoundedRect(new_bounds_dip, ui_scale_ / buffer_scale_);
-
-  DCHECK(tooltip_subsurface_);
-  // Convert position to DIP.
-  wl_subsurface_set_position(tooltip_subsurface_.get(),
-                             bounds_px.x() / buffer_scale_,
-                             bounds_px.y() / buffer_scale_);
-  wl_subsurface_set_desync(tooltip_subsurface_.get());
-  wl_surface_commit(parent_window->surface());
-  connection_->ScheduleFlush();
-}
-
 void WaylandWindow::SetPointerFocus(bool focus) {
   has_pointer_focus_ = focus;
 
@@ -125,19 +86,11 @@ void WaylandWindow::SetPointerFocus(bool focus) {
 }
 
 void WaylandWindow::Show(bool inactive) {
-  DCHECK(is_tooltip_);
-  CreateAndShowTooltipSubSurface();
-
-  UpdateBufferScale(false);
+  NOTREACHED();
 }
 
 void WaylandWindow::Hide() {
-  DCHECK(is_tooltip_);
-  tooltip_subsurface_.reset();
-
-  // Detach buffer from surface in order to completely shutdown menus and
-  // tooltips, and release resources.
-  connection_->buffer_manager_host()->ResetSurfaceContents(GetWidget());
+  NOTREACHED();
 }
 
 void WaylandWindow::Close() {
@@ -145,7 +98,8 @@ void WaylandWindow::Close() {
 }
 
 bool WaylandWindow::IsVisible() const {
-  return !!tooltip_subsurface_;
+  NOTREACHED();
+  return false;
 }
 
 void WaylandWindow::PrepareForShutdown() {}
@@ -305,7 +259,7 @@ uint32_t WaylandWindow::DispatchEvent(const PlatformEvent& native_event) {
     // Parent window of the main menu window is not a menu, but rather an
     // xdg surface.
     DCHECK(!wl::IsMenuType(parent_window_->type()) ||
-           !parent_window_->is_tooltip_);
+           parent_window_->type() != PlatformWindowType::kTooltip);
     auto* window =
         connection_->wayland_window_manager()->GetCurrentFocusedWindow();
     if (window) {
@@ -376,9 +330,6 @@ bool WaylandWindow::Initialize(PlatformWindowInitProperties properties) {
   AddSurfaceListener();
 
   connection_->wayland_window_manager()->AddWindow(GetWidget(), this);
-
-  if (type_ == ui::PlatformWindowType::kTooltip)
-    is_tooltip_ = true;
 
   if (!OnInitialize(std::move(properties)))
     return false;
@@ -542,10 +493,6 @@ void WaylandWindow::MaybeUpdateOpaqueRegion() {
 
 bool WaylandWindow::IsOpaqueWindow() const {
   return opacity_ == ui::PlatformWindowOpacity::kOpaqueWindow;
-}
-
-bool WaylandWindow::OnInitialize(PlatformWindowInitProperties properties) {
-  return true;
 }
 
 // static

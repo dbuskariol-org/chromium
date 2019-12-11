@@ -178,10 +178,6 @@ class WaylandWindow : public PlatformWindow, public PlatformEventDispatcher {
   // Initializes the WaylandWindow with supplied properties.
   bool Initialize(PlatformWindowInitProperties properties);
 
-  // Creates (if necessary) and show subsurface window, to host
-  // tooltip's content.
-  void CreateAndShowTooltipSubSurface();
-
   // Returns a root parent window.
   WaylandWindow* GetRootParentWindow();
 
@@ -202,7 +198,7 @@ class WaylandWindow : public PlatformWindow, public PlatformEventDispatcher {
   bool IsOpaqueWindow() const;
 
   // Additional initialization of derived classes.
-  virtual bool OnInitialize(PlatformWindowInitProperties properties);
+  virtual bool OnInitialize(PlatformWindowInitProperties properties) = 0;
 
   // wl_surface_listener
   static void Enter(void* data,
@@ -218,7 +214,6 @@ class WaylandWindow : public PlatformWindow, public PlatformEventDispatcher {
   WaylandWindow* child_window_ = nullptr;
 
   wl::Object<wl_surface> surface_;
-  wl::Object<wl_subsurface> tooltip_subsurface_;
 
   // The current cursor bitmap (immutable).
   scoped_refptr<BitmapCursorOzone> bitmap_;
@@ -242,8 +237,6 @@ class WaylandWindow : public PlatformWindow, public PlatformEventDispatcher {
 
   // Stores current opacity of the window. Set on ::Initialize call.
   ui::PlatformWindowOpacity opacity_;
-
-  bool is_tooltip_ = false;
 
   // For top level window, stores IDs of outputs that the window is currently
   // rendered at.
