@@ -644,8 +644,8 @@ void StyleAdjuster::AdjustComputedStyle(StyleResolverState& state,
     AdjustStateForRenderSubtree(style, element);
 
   if (style.IsColorInternalText()) {
-    style.ResolveInternalTextColor(
-        LayoutTheme::GetTheme().RootElementColor(style.UsedColorScheme()));
+    style.ResolveInternalTextColor(LayoutTheme::GetTheme().RootElementColor(
+        style.UsedColorSchemeForInitialColors()));
   }
 
   // Make sure our z-index value is only applied if the object is positioned.
