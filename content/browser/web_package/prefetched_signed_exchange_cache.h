@@ -14,7 +14,6 @@
 #include "content/common/prefetched_signed_exchange_info.mojom.h"
 #include "net/base/hash_value.h"
 #include "services/network/public/cpp/url_loader_completion_status.h"
-#include "services/network/public/mojom/url_response_head.mojom-forward.h"
 #include "services/network/public/mojom/url_response_head.mojom.h"
 #include "storage/browser/blob/blob_data_handle.h"
 #include "url/gurl.h"

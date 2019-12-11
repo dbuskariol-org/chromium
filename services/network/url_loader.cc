@@ -1007,7 +1007,7 @@ void URLLoader::OnResponseStarted(net::URLRequest* url_request, int net_error) {
     // Parse the Content-Security-Policy headers.
     ContentSecurityPolicy policy;
     if (policy.Parse(url_request_->url(), *url_request_->response_headers()))
-      response_->content_security_policy = std::move(policy);
+      response_->content_security_policy = policy.TakeContentSecurityPolicy();
   }
 
   // Parse the Cross-Origin-Opener-Policy header.
