@@ -274,16 +274,7 @@ uint32_t Fourcc::ToVAFourCC() const {
 
 #endif  // BUILDFLAG(USE_VAAPI)
 
-bool operator==(uint32_t lhs, const Fourcc& rhs) {
-  return rhs == lhs;
-}
 bool operator!=(const Fourcc& lhs, const Fourcc& rhs) {
-  return !(lhs == rhs);
-}
-bool operator!=(uint32_t lhs, const Fourcc& rhs) {
-  return !(rhs == lhs);
-}
-bool operator!=(const Fourcc& lhs, uint32_t rhs) {
   return !(lhs == rhs);
 }
 

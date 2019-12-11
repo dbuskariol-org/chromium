@@ -120,9 +120,6 @@ class MEDIA_GPU_EXPORT Fourcc {
   ~Fourcc();
 
   bool operator==(const Fourcc& rhs) const { return value_ == rhs.value_; }
-  bool operator==(uint32_t rhs) const {
-    return static_cast<uint32_t>(value_) == rhs;
-  }
   explicit operator bool() const { return value_ != Fourcc::INVALID; }
 
   // Factory methods:
@@ -173,10 +170,7 @@ class MEDIA_GPU_EXPORT Fourcc {
   Value value_;
 };
 
-MEDIA_GPU_EXPORT bool operator==(uint32_t lhs, const Fourcc& rhs);
 MEDIA_GPU_EXPORT bool operator!=(const Fourcc& lhs, const Fourcc& rhs);
-MEDIA_GPU_EXPORT bool operator!=(uint32_t lhs, const Fourcc& rhs);
-MEDIA_GPU_EXPORT bool operator!=(const Fourcc& lhs, uint32_t rhs);
 
 }  // namespace media
 
