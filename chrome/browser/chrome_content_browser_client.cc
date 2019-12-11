@@ -579,6 +579,10 @@
 #include "device/vr/public/mojom/isolated_xr_service.mojom.h"
 #endif
 
+#if BUILDFLAG(ENABLE_WEBUI_TAB_STRIP)
+#include "chrome/browser/ui/webui/tab_strip/chrome_content_browser_client_tab_strip_part.h"
+#endif
+
 using base::FileDescriptor;
 using content::BrowserThread;
 using content::BrowserURLHandler;
@@ -1140,6 +1144,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient(
 #if defined(OS_CHROMEOS)
   extra_parts_.push_back(new ChromeContentBrowserClientChromeOsPart);
 #endif  // defined(OS_CHROMEOS)
+
+#if BUILDFLAG(ENABLE_WEBUI_TAB_STRIP)
+  extra_parts_.push_back(new ChromeContentBrowserClientTabStripPart);
+#endif
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
   extra_parts_.push_back(new ChromeContentBrowserClientExtensionsPart);
