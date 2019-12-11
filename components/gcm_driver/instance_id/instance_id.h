@@ -46,8 +46,8 @@ class InstanceID {
     // Other errors.
     UNKNOWN_ERROR = 7,
 
-    // Used for UMA. Keep LAST_RESULT up to date and sync with histograms.xml.
-    LAST_RESULT = UNKNOWN_ERROR
+    // Used for UMA. Keep kMaxValue up to date and sync with histograms.xml.
+    kMaxValue = UNKNOWN_ERROR
   };
 
   // Flags to be used to create a token. These might be platform specific.
