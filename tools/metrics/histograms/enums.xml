@@ -33136,6 +33136,7 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="8" label="Secure download initiated by inferred-insecure source"/>
   <int value="9"
       label="Insecure download initiated by inferred-insecure source"/>
+  <int value="10" label="Download ignored as not relevant for blocking"/>
 </enum>
 
 <enum name="InsignificantPlaybackReason">
