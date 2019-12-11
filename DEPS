@@ -184,7 +184,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling ANGLE
   # and whatever else without interference from each other.
-  'angle_revision': 'd6053daa6203bd9ab467711662652368f5f28cc8',
+  'angle_revision': 'caa6eccde3ee90fcec9254c86060404c29b7d51a',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling SwiftShader
   # and whatever else without interference from each other.
@@ -235,7 +235,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': '129810e298bb5720ad5d2aaeadedce26711c7dba',
+  'catapult_revision': '31f486139053e50d0bf052ba04301fbd1728e84c',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling libFuzzer
   # and whatever else without interference from each other.
