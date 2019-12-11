@@ -1412,7 +1412,7 @@ class ChromeSitePerProcessTestWithVerifiedUserActivation
  public:
   ChromeSitePerProcessTestWithVerifiedUserActivation() {
     feature_list_.InitAndEnableFeature(
-        features::kBrowserVerifiedUserActivation);
+        features::kBrowserVerifiedUserActivationMouse);
   }
 
  private:

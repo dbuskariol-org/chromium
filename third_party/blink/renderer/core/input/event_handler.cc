@@ -761,7 +761,9 @@ WebInputEventResult EventHandler::HandleMousePressEvent(
     return WebInputEventResult::kHandledSuppressed;
   }
 
-  LocalFrame::NotifyUserActivation(frame_, true);
+  LocalFrame::NotifyUserActivation(
+      frame_,
+      RuntimeEnabledFeatures::BrowserVerifiedUserActivationMouseEnabled());
 
   if (RuntimeEnabledFeatures::MiddleClickAutoscrollEnabled()) {
     // We store whether middle click autoscroll is in progress before calling
