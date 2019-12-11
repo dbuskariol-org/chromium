@@ -91,6 +91,9 @@ vars = {
   # the gn arg 'use_clang_coverage').
   'checkout_clang_coverage_tools': False,
 
+  # Fetch clang-tidy into the same bin/ directory as our clang binary.
+  'checkout_clang_tidy': False,
+
   # By default do not check out the Oculus SDK. Only available for Googlers.
   'checkout_oculus_sdk' : 'checkout_src_internal and checkout_win',
 
@@ -3498,6 +3501,15 @@ hooks = [
     'condition': 'checkout_clang_coverage_tools',
     'action': ['python', 'src/tools/clang/scripts/update.py',
                '--package=coverage_tools'],
+  },
+  {
+    # This is also supposed to support the same set of platforms as 'clang'
+    # above. LLVM ToT support isn't provided at the moment.
+    'name': 'clang_tidy',
+    'pattern': '.',
+    'condition': 'checkout_clang_tidy',
+    'action': ['python', 'src/tools/clang/scripts/update.py',
+               '--package=clang-tidy'],
   },
   {
     # Mac doesn't use lld so it's not included in the default clang bundle
