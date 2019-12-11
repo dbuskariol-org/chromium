@@ -408,14 +408,29 @@ void FlexLayout::InitializeChildData(
 
     // In vertical layouts it's important to consider height-for-width type
     // calculations when evaluating the base/preferred size of the child view.
-    const base::Optional<int> preferred_cross_size =
-        orientation() == LayoutOrientation::kVertical ? available_cross
-                                                      : base::nullopt;
-    flex_child.preferred_size = Normalize(
-        orientation(),
-        flex_child.flex.rule().Run(
-            child,
-            Denormalize(orientation(), {base::nullopt, preferred_cross_size})));
+    if (orientation() == LayoutOrientation::kVertical) {
+      flex_child.preferred_size = Normalize(
+          orientation(),
+          flex_child.flex.rule().Run(
+              child,
+              Denormalize(orientation(), {base::nullopt, available_cross})));
+
+      // In non-stretch environments, we don't want the cross-axis preferred
+      // size to exceed the default preferred, or the cross-axis to shrink below
+      // the default preferred.
+      if (cross_axis_alignment() != LayoutAlignment::kStretch) {
+        const NormalizedSize default_preferred =
+            Normalize(orientation(), flex_child.flex.rule().Run(child, {}));
+        flex_child.preferred_size.set_main(std::max(
+            flex_child.preferred_size.main(), default_preferred.main()));
+        flex_child.preferred_size.set_cross(std::min(
+            flex_child.preferred_size.cross(), default_preferred.cross()));
+      }
+    } else {
+      // Just use the default preferred size.
+      flex_child.preferred_size =
+          Normalize(orientation(), flex_child.flex.rule().Run(child, {}));
+    }
 
     // gfx::Size calculation depends on whether flex is allowed.
     if (main_axis_bounded) {

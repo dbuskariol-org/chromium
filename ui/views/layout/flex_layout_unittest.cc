@@ -2508,7 +2508,8 @@ TEST_F(FlexLayoutTest, GetAvailableSize_Flex_DifferentWeights) {
 
 // Specific Regression Cases ---------------------------------------------------
 
-// Test case (and example code) for crbug.com/1012119.
+// Test case (and example code) for crbug.com/1012119:
+// "FlexLayout ignores custom flex rule if it contradicts preferred size"
 TEST_F(FlexLayoutTest, FlexRuleContradictsPreferredSize) {
   const FlexSpecification custom_spec = FlexSpecification::ForCustomRule(
       base::BindRepeating([](const View*, const SizeBounds& maximum_size) {
@@ -2545,6 +2546,66 @@ TEST_F(FlexLayoutTest, FlexRuleContradictsPreferredSize) {
 
   host_->SetSize({1, 100});
   expected = {{}, {0, 0, 1, 100}};
+  EXPECT_EQ(expected, GetChildBounds());
+}
+
+// Test case (and example code) for crbug.com/1012136:
+// "FlexLayout makes children with preferred main axis size 0 invisible even if
+//  they are kUnbounded"
+TEST_F(FlexLayoutTest, PreferredSizeZeroPreventsFlex_Horizontal) {
+  const FlexSpecification spec_scale = FlexSpecification::ForSizeRule(
+      MinimumFlexSizeRule::kScaleToZero, MaximumFlexSizeRule::kUnbounded);
+  const FlexSpecification spec_snap =
+      FlexSpecification::ForSizeRule(MinimumFlexSizeRule::kPreferredSnapToZero,
+                                     MaximumFlexSizeRule::kUnbounded);
+
+  layout_->SetOrientation(LayoutOrientation::kHorizontal);
+
+  layout_->SetCrossAxisAlignment(LayoutAlignment::kStart);
+  AddChild(gfx::Size(10, 10));
+  View* const v1 = AddChild(gfx::Size(0, 10));
+  View* const v2 = AddChild(gfx::Size(0, 10));
+  v1->SetProperty(kFlexBehaviorKey, spec_scale);
+  v2->SetProperty(kFlexBehaviorKey, spec_snap);
+
+  host_->SetSize({30, 15});
+  std::vector<gfx::Rect> expected{
+      {0, 0, 10, 10}, {10, 0, 10, 10}, {20, 0, 10, 10}};
+  EXPECT_EQ(expected, GetChildBounds());
+
+  layout_->SetCrossAxisAlignment(LayoutAlignment::kStretch);
+  host_->Layout();
+  expected = {{0, 0, 10, 15}, {10, 0, 10, 15}, {20, 0, 10, 15}};
+  EXPECT_EQ(expected, GetChildBounds());
+}
+
+// Test case (and example code) for crbug.com/1012136:
+// "FlexLayout makes children with preferred main axis size 0 invisible even if
+//  they are kUnbounded"
+TEST_F(FlexLayoutTest, PreferredSizeZeroPreventsFlex_Vertical) {
+  const FlexSpecification spec_scale = FlexSpecification::ForSizeRule(
+      MinimumFlexSizeRule::kScaleToZero, MaximumFlexSizeRule::kUnbounded);
+  const FlexSpecification spec_snap =
+      FlexSpecification::ForSizeRule(MinimumFlexSizeRule::kPreferredSnapToZero,
+                                     MaximumFlexSizeRule::kUnbounded);
+
+  layout_->SetOrientation(LayoutOrientation::kVertical);
+
+  layout_->SetCrossAxisAlignment(LayoutAlignment::kStart);
+  AddChild(gfx::Size(10, 10));
+  View* const v1 = AddChild(gfx::Size(10, 0));
+  View* const v2 = AddChild(gfx::Size(10, 0));
+  v1->SetProperty(kFlexBehaviorKey, spec_scale);
+  v2->SetProperty(kFlexBehaviorKey, spec_snap);
+
+  host_->SetSize({15, 30});
+  std::vector<gfx::Rect> expected{
+      {0, 0, 10, 10}, {0, 10, 10, 10}, {0, 20, 10, 10}};
+  EXPECT_EQ(expected, GetChildBounds());
+
+  layout_->SetCrossAxisAlignment(LayoutAlignment::kStretch);
+  host_->Layout();
+  expected = {{0, 0, 15, 10}, {0, 10, 15, 10}, {0, 20, 15, 10}};
   EXPECT_EQ(expected, GetChildBounds());
 }
 
