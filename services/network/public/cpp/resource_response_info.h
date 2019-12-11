@@ -23,6 +23,7 @@
 #include "net/nqe/effective_connection_type.h"
 #include "services/network/public/cpp/content_security_policy.h"
 #include "services/network/public/cpp/http_raw_request_response_info.h"
+#include "services/network/public/mojom/cross_origin_opener_policy.mojom.h"
 #include "services/network/public/mojom/fetch_api.mojom-shared.h"
 #include "url/gurl.h"
 
@@ -212,6 +213,10 @@ struct COMPONENT_EXPORT(NETWORK_CPP) ResourceResponseInfo {
 
   // The parsed content security policy from the response headers.
   ContentSecurityPolicy content_security_policy;
+
+  // The parsed Cross-Origin-Opener-Policy from the response headers.
+  mojom::CrossOriginOpenerPolicy cross_origin_opener_policy =
+      mojom::CrossOriginOpenerPolicy::kUnsafeNone;
 
   // NOTE: When adding or changing fields here, also update
   // ResourceResponse::DeepCopy in resource_response.cc.
