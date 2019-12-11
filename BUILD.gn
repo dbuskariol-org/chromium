@@ -834,6 +834,10 @@ if ((is_linux || is_win) && enable_remoting && !use_ozone) {
       "//remoting/host:host",
       "//tools/traffic_annotation/summary:annotations_xml",
     ]
+
+    if (is_win) {
+      deps += [ "//chrome/chrome_cleaner:shipped_binaries" ]
+    }
   }
 }
 
