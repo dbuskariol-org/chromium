@@ -6080,3 +6080,7 @@ crbug.com/1032451 virtual/threaded-no-composited-antialiasing/animations/stabili
 crbug.com/963183 http/tests/devtools/security/origin-view-ct-compliance.js [ Pass Failure ]
 crbug.com/963183 http/tests/devtools/security/security-details-updated-with-security-state.js [ Pass Failure ]
 crbug.com/963183 http/tests/devtools/security/security-explanation-ordering.js [ Pass Failure ]
+
+# Temporarily disabled to land DOM breakpoint changes in DevTools
+crbug.com/963183 http/tests/devtools/sources/debugger-breakpoints/dom-breakpoints.js [ Pass Failure ]
+crbug.com/963183 http/tests/devtools/a11y-axe-core/sources/dom-breakpoints-pane-a11y-test.js [ Pass Failure ]
