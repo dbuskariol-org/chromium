@@ -4,6 +4,7 @@
 
 #include "base/run_loop.h"
 #include "base/strings/string_number_conversions.h"
+#include "build/build_config.h"
 #include "chrome/browser/vr/test/mock_xr_device_hook_base.h"
 #include "chrome/browser/vr/test/multi_class_browser_test.h"
 #include "chrome/browser/vr/test/webxr_vr_browser_test.h"
@@ -959,7 +960,14 @@ IN_PROC_BROWSER_TEST_F(WebXrVrWmrBrowserTest, TestVoiceSelectRegistered) {
 // Test that controller input is registered via WebXR's input method.
 // Equivalent to
 // WebXrVrInputTest#testControllerClicksRegisteredOnDaydream_WebXr.
-WEBXR_VR_ALL_RUNTIMES_BROWSER_TEST_F(TestControllerInputRegistered) {
+// Fails on Win only.  http://crbug.com/1033087
+#if defined(OS_WIN)
+#define MAYBE_TestControllerInputRegistered \
+  DISABLED_TestControllerInputRegistered
+#else
+#define MAYBE_TestControllerInputRegistered TestControllerInputRegistered
+#endif
+WEBXR_VR_ALL_RUNTIMES_BROWSER_TEST_F(MAYBE_TestControllerInputRegistered) {
   WebXrControllerInputMock my_mock;
 
   unsigned int controller_index = my_mock.CreateAndConnectMinimalGamepad();
