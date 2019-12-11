@@ -6079,3 +6079,7 @@ crbug.com/963183 http/tests/devtools/security/security-explanation-ordering.js [
 # Temporarily disabled to land DOM breakpoint changes in DevTools
 crbug.com/963183 http/tests/devtools/sources/debugger-breakpoints/dom-breakpoints.js [ Pass Failure ]
 crbug.com/963183 http/tests/devtools/a11y-axe-core/sources/dom-breakpoints-pane-a11y-test.js [ Pass Failure ]
+
+# Temporarily disabled for landing frontend security sidepanel changes in DevTools
+crbug.com/963183 http/tests/devtools/security/interstitial-sidebar.js [ Pass Failure ]
+crbug.com/963183 http/tests/devtools/security/mixed-content-sidebar.js [ Pass Failure ]
