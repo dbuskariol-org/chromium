@@ -6078,3 +6078,8 @@ crbug.com/963183 http/tests/devtools/unit/list-control-equal-height.js [ Skip  ]
 
 # Sheriff 2019-12-10
 crbug.com/1032451 virtual/threaded-no-composited-antialiasing/animations/stability/animation-iteration-event-destroy-renderer.html [ Pass Timeout ]
+
+# Temporarily disabled for landing security button fixes change in devtools
+crbug.com/963183 http/tests/devtools/security/origin-view-ct-compliance.js [ Pass Failure ]
+crbug.com/963183 http/tests/devtools/security/security-details-updated-with-security-state.js [ Pass Failure ]
+crbug.com/963183 http/tests/devtools/security/security-explanation-ordering.js [ Pass Failure ]
