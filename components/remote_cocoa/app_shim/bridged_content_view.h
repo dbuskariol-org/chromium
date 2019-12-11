@@ -52,6 +52,7 @@ REMOTE_COCOA_APP_SHIM_EXPORT
 
 @property(readonly, nonatomic) remote_cocoa::NativeWidgetNSWindowBridge* bridge;
 @property(assign, nonatomic) BOOL drawMenuBackgroundForBlur;
+@property(assign, nonatomic) NSEvent* keyDownEventForTesting;
 
 // Initialize the NSView -> views::View bridge. |viewToHost| must be non-NULL.
 - (instancetype)initWithBridge:(remote_cocoa::NativeWidgetNSWindowBridge*)bridge

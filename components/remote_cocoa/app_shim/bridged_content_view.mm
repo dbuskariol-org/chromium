@@ -161,6 +161,7 @@ ui::TextEditCommand GetTextEditCommandForMenuAction(SEL action) {
 
 @synthesize bridge = bridge_;
 @synthesize drawMenuBackgroundForBlur = drawMenuBackgroundForBlur_;
+@synthesize keyDownEventForTesting = keyDownEvent_;
 
 - (instancetype)initWithBridge:(remote_cocoa::NativeWidgetNSWindowBridge*)bridge
                         bounds:(gfx::Rect)bounds {
