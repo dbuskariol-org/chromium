@@ -189,6 +189,15 @@ class AutocompleteMediator
                 (suggestion) -> onSelection(suggestion, 0), iconBridgeSupplier);
         mEntitySuggestionProcessor =
                 new EntitySuggestionProcessor(mContext, this, imageFetcherSupplier);
+
+        mOverviewModeObserver = new EmptyOverviewModeObserver() {
+            @Override
+            public void onOverviewModeStartedShowing(boolean showToolbar) {
+                if (mDataProvider.shouldShowLocationBarInOverviewMode()) {
+                    AutocompleteControllerJni.get().prefetchZeroSuggestResults();
+                }
+            }
+        };
     }
 
     public void destroy() {
@@ -352,17 +361,9 @@ class AutocompleteMediator
      *         listen to state changes.
      */
     public void setOverviewModeBehavior(OverviewModeBehavior overviewModeBehavior) {
-        assert overviewModeBehavior != null;
+        assert mOverviewModeBehavior == null;
 
         mOverviewModeBehavior = overviewModeBehavior;
-        mOverviewModeObserver = new EmptyOverviewModeObserver() {
-            @Override
-            public void onOverviewModeStartedShowing(boolean showToolbar) {
-                if (mDataProvider.shouldShowLocationBarInOverviewMode()) {
-                    AutocompleteControllerJni.get().prefetchZeroSuggestResults();
-                }
-            }
-        };
         mOverviewModeBehavior.addOverviewModeObserver(mOverviewModeObserver);
     }
 
