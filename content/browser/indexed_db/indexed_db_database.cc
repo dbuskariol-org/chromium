@@ -1125,6 +1125,8 @@ Status IndexedDBDatabase::PutOperation(
   DCHECK_NE(transaction->mode(), blink::mojom::IDBTransactionMode::ReadOnly);
   bool key_was_generated = false;
   Status s = Status::OK();
+  transaction->set_in_flight_memory(transaction->in_flight_memory() -
+                                    params->value.SizeEstimate());
 
   if (!IsObjectStoreIdInMetadata(params->object_store_id)) {
     IndexedDBDatabaseError error = CreateError(
