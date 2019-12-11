@@ -233,17 +233,18 @@ class SubresourceLoader : public network::mojom::URLLoader,
     handler_->MaybeFallbackForSubresourceRedirect(
         redirect_info,
         base::BindOnce(&SubresourceLoader::ContinueOnReceiveRedirect,
-                       weak_factory_.GetWeakPtr(),
-                       network::ResourceResponseHead(response_head)));
+                       weak_factory_.GetWeakPtr(), std::move(response_head)));
   }
 
   void ContinueOnReceiveRedirect(
-      const network::ResourceResponseHead& response_head,
+      network::mojom::URLResponseHeadPtr response_head,
       SingleRequestURLLoaderFactory::RequestHandler handler) {
-    if (handler)
+    if (handler) {
       CreateAndStartAppCacheLoader(std::move(handler));
-    else
-      remote_client_->OnReceiveRedirect(redirect_info_, response_head);
+    } else {
+      remote_client_->OnReceiveRedirect(redirect_info_,
+                                        std::move(response_head));
+    }
   }
 
   void OnUploadProgress(int64_t current_position,
@@ -273,7 +274,7 @@ class SubresourceLoader : public network::mojom::URLLoader,
       return;
     }
     handler_->MaybeFallbackForSubresourceResponse(
-        network::ResourceResponseHead(),
+        network::mojom::URLResponseHead::New(),
         base::BindOnce(&SubresourceLoader::ContinueOnComplete,
                        weak_factory_.GetWeakPtr(), status));
   }
