@@ -21,11 +21,11 @@ class AppServiceAppWindowLauncherItemController
   AppServiceAppWindowLauncherItemController& operator=(
       const AppServiceAppWindowLauncherItemController&) = delete;
 
-  // aura::WindowObserver overrides:
-  void OnWindowTitleChanged(aura::Window* window) override;
-
   // AppWindowLauncherItemController:
   AppMenuItems GetAppMenuItems(int event_flags) override;
+
+  // aura::WindowObserver overrides:
+  void OnWindowTitleChanged(aura::Window* window) override;
 
  private:
   bool IsChromeApp();
