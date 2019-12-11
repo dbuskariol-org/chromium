@@ -8,9 +8,7 @@
 #include "base/ios/ios_util.h"
 #include "base/strings/sys_string_conversions.h"
 #include "components/strings/grit/components_strings.h"
-#include "ios/chrome/browser/browser_state/chrome_browser_state.h"
 #import "ios/chrome/browser/ui/bookmarks/bookmark_earl_grey_utils.h"
-#import "ios/chrome/browser/ui/bookmarks/bookmark_path_cache.h"
 #import "ios/chrome/browser/ui/bookmarks/bookmark_ui_constants.h"
 #import "ios/chrome/browser/ui/table_view/feature_flags.h"
 #include "ios/chrome/grit/ios_strings.h"
@@ -47,12 +45,7 @@ using chrome_test_util::OmniboxText;
 - (void)tearDown {
   [super tearDown];
   [ChromeEarlGrey clearBookmarks];
-  // Clear position cache so that Bookmarks starts at the root folder in next
-  // test.
-  ios::ChromeBrowserState* browser_state =
-      chrome_test_util::GetOriginalBrowserState();
-  [BookmarkPathCache
-      clearBookmarkTopMostRowCacheWithPrefService:browser_state->GetPrefs()];
+  [BookmarkEarlGreyUtils clearBookmarksPositionCache];
 }
 
 #pragma mark - BookmarksTestFolders Tests

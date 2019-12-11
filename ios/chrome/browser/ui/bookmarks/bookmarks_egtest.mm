@@ -8,9 +8,7 @@
 #include "base/ios/ios_util.h"
 #include "components/prefs/pref_service.h"
 #include "components/strings/grit/components_strings.h"
-#include "ios/chrome/browser/browser_state/chrome_browser_state.h"
 #import "ios/chrome/browser/ui/bookmarks/bookmark_earl_grey_utils.h"
-#import "ios/chrome/browser/ui/bookmarks/bookmark_path_cache.h"
 #import "ios/chrome/browser/ui/bookmarks/bookmark_ui_constants.h"
 #import "ios/chrome/browser/ui/popup_menu/popup_menu_constants.h"
 #import "ios/chrome/browser/ui/table_view/feature_flags.h"
@@ -22,6 +20,7 @@
 #import "ios/chrome/test/earl_grey/chrome_test_case.h"
 #import "ios/testing/earl_grey/earl_grey_test.h"
 #import "ios/web/public/test/http_server/http_server.h"
+#include "net/base/net_errors.h"
 #include "ui/base/l10n/l10n_util.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
@@ -48,12 +47,7 @@ using chrome_test_util::OmniboxText;
 - (void)tearDown {
   [super tearDown];
   [ChromeEarlGrey clearBookmarks];
-  // Clear position cache so that Bookmarks starts at the root folder in next
-  // test.
-  ios::ChromeBrowserState* browser_state =
-      chrome_test_util::GetOriginalBrowserState();
-  [BookmarkPathCache
-      clearBookmarkTopMostRowCacheWithPrefService:browser_state->GetPrefs()];
+  [BookmarkEarlGreyUtils clearBookmarksPositionCache];
 }
 
 #pragma mark - BookmarksTestCase Tests

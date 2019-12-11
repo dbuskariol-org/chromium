@@ -56,6 +56,9 @@ id<GREYMatcher> SearchIconButton();
 // Methods used for the EarlGrey tests.
 @interface BookmarkEarlGreyUtils : NSObject
 
+// Clear Bookmarks top most row position cache.
++ (void)clearBookmarksPositionCache;
+
 // Navigates to the bookmark manager UI.
 + (void)openBookmarks;
 

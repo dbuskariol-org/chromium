@@ -15,6 +15,7 @@
 #include "ios/chrome/browser/bookmarks/bookmark_model_factory.h"
 #include "ios/chrome/browser/browser_state/chrome_browser_state.h"
 #include "ios/chrome/browser/pref_names.h"
+#import "ios/chrome/browser/ui/bookmarks/bookmark_path_cache.h"
 #import "ios/chrome/browser/ui/bookmarks/bookmark_ui_constants.h"
 #import "ios/chrome/browser/ui/bookmarks/bookmark_utils_ios.h"
 #import "ios/chrome/browser/ui/popup_menu/popup_menu_constants.h"
@@ -121,6 +122,13 @@ id<GREYMatcher> SearchIconButton() {
 }
 
 @implementation BookmarkEarlGreyUtils
+
++ (void)clearBookmarksPositionCache {
+  ios::ChromeBrowserState* browser_state =
+      chrome_test_util::GetOriginalBrowserState();
+  [BookmarkPathCache
+      clearBookmarkTopMostRowCacheWithPrefService:browser_state->GetPrefs()];
+}
 
 + (void)openBookmarks {
   // Opens the bookmark manager.
