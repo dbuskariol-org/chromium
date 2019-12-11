@@ -151,22 +151,6 @@ void HostsUsingFeatures::Value::RecordETLDPlus1ToRappor(const KURL& url) {
   if (Get(Feature::kGetUserMediaSecureHost))
     Platform::Current()->RecordRapporURL(
         "PowerfulFeatureUse.ETLDPlus1.GetUserMedia.Secure", WebURL(url));
-  if (Get(Feature::kRTCPeerConnectionAudio))
-    Platform::Current()->RecordRapporURL("RTCPeerConnection.Audio",
-                                         WebURL(url));
-  if (Get(Feature::kRTCPeerConnectionVideo))
-    Platform::Current()->RecordRapporURL("RTCPeerConnection.Video",
-                                         WebURL(url));
-  if (Get(Feature::kRTCPeerConnectionDataChannel))
-    Platform::Current()->RecordRapporURL("RTCPeerConnection.DataChannel",
-                                         WebURL(url));
-  if (Get(Feature::kRTCPeerConnectionUsed) &&
-      !Get(Feature::kRTCPeerConnectionAudio) &&
-      !Get(Feature::kRTCPeerConnectionVideo) &&
-      !Get(Feature::kRTCPeerConnectionDataChannel)) {
-    Platform::Current()->RecordRapporURL("RTCPeerConnection.Unconnected",
-                                         WebURL(url));
-  }
 }
 
 }  // namespace blink

@@ -3146,10 +3146,6 @@ void RTCPeerConnection::ChangeIceConnectionState(
   }
   ice_connection_state_ = ice_connection_state;
   DispatchEvent(*Event::Create(event_type_names::kIceconnectionstatechange));
-  if (ice_connection_state_ ==
-      webrtc::PeerConnectionInterface::kIceConnectionConnected) {
-    RecordRapporMetrics();
-  }
 }
 
 webrtc::PeerConnectionInterface::IceConnectionState
@@ -3315,28 +3311,6 @@ void RTCPeerConnection::DispatchScheduledEvents() {
   }
 
   events.clear();
-}
-
-void RTCPeerConnection::RecordRapporMetrics() {
-  Document* document = To<Document>(GetExecutionContext());
-  for (const auto& component : tracks_.Keys()) {
-    switch (component->Source()->GetType()) {
-      case MediaStreamSource::kTypeAudio:
-        HostsUsingFeatures::CountAnyWorld(
-            *document, HostsUsingFeatures::Feature::kRTCPeerConnectionAudio);
-        break;
-      case MediaStreamSource::kTypeVideo:
-        HostsUsingFeatures::CountAnyWorld(
-            *document, HostsUsingFeatures::Feature::kRTCPeerConnectionVideo);
-        break;
-      default:
-        NOTREACHED();
-    }
-  }
-
-  if (has_data_channels_)
-    HostsUsingFeatures::CountAnyWorld(
-        *document, HostsUsingFeatures::Feature::kRTCPeerConnectionDataChannel);
 }
 
 void RTCPeerConnection::Trace(blink::Visitor* visitor) {
