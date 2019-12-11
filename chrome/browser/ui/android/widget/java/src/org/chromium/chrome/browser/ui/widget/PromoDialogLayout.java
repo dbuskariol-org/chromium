@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.chromium.chrome.browser.ui.widget.PromoDialog.DialogParams;
+import org.chromium.components.browser_ui.widget.BoundedLinearLayout;
 
 /**
  * Lays out a promo dialog that is shown when Clank starts up.
