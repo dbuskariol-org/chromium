@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.annotation.Config;
 
+import org.chromium.chrome.browser.favicon.LargeIconBridge;
 import org.chromium.chrome.browser.omnibox.OmniboxSuggestionType;
 import org.chromium.chrome.browser.omnibox.suggestions.OmniboxSuggestion;
 import org.chromium.chrome.browser.omnibox.suggestions.basic.SuggestionViewProperties.SuggestionIcon;
@@ -80,12 +81,15 @@ public class BasicSuggestionProcessorTest {
     Resources mResources;
     @Mock
     SuggestionHost mSuggestionHost;
+    @Mock
+    LargeIconBridge mIconBridge;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         doReturn(mResources).when(mContext).getResources();
-        mProcessor = new BasicSuggestionProcessor(mContext, mSuggestionHost, null);
+        mProcessor =
+                new BasicSuggestionProcessor(mContext, mSuggestionHost, null, () -> mIconBridge);
     }
 
     /*

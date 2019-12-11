@@ -17,6 +17,7 @@ import android.view.View;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ApiCompatibilityUtils;
+import org.chromium.base.Supplier;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeFeatureList;
@@ -30,7 +31,6 @@ import org.chromium.chrome.browser.omnibox.suggestions.SuggestionCommonPropertie
 import org.chromium.chrome.browser.omnibox.suggestions.SuggestionProcessor;
 import org.chromium.chrome.browser.omnibox.suggestions.basic.SuggestionViewProperties.SuggestionIcon;
 import org.chromium.chrome.browser.omnibox.suggestions.basic.SuggestionViewProperties.SuggestionTextContainer;
-import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.ui.modelutil.PropertyModel;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class BasicSuggestionProcessor implements SuggestionProcessor {
     private final Context mContext;
     private final SuggestionHost mSuggestionHost;
     private final UrlBarEditingTextStateProvider mUrlBarEditingTextProvider;
-    private LargeIconBridge mLargeIconBridge;
+    private final Supplier<LargeIconBridge> mIconBridgeSupplier;
     private boolean mEnableSuggestionFavicons;
     private final int mDesiredFaviconWidthPx;
 
@@ -51,12 +51,14 @@ public class BasicSuggestionProcessor implements SuggestionProcessor {
      * @param editingTextProvider A means of accessing the text in the omnibox.
      */
     public BasicSuggestionProcessor(Context context, SuggestionHost suggestionHost,
-            UrlBarEditingTextStateProvider editingTextProvider) {
+            UrlBarEditingTextStateProvider editingTextProvider,
+            Supplier<LargeIconBridge> iconBridgeSupplier) {
         mContext = context;
         mDesiredFaviconWidthPx = mContext.getResources().getDimensionPixelSize(
                 R.dimen.omnibox_suggestion_favicon_size);
         mSuggestionHost = suggestionHost;
         mUrlBarEditingTextProvider = editingTextProvider;
+        mIconBridgeSupplier = iconBridgeSupplier;
     }
 
     @Override
@@ -107,16 +109,6 @@ public class BasicSuggestionProcessor implements SuggestionProcessor {
         // Experiment: controls presence of certain answer icon types.
         mEnableSuggestionFavicons =
                 ChromeFeatureList.isEnabled(ChromeFeatureList.OMNIBOX_SHOW_SUGGESTION_FAVICONS);
-    }
-
-    /**
-     * Updates the profile used for extracting website favicons.
-     * @param profile The profile to be used.
-     */
-    public void setProfile(Profile profile) {
-        if (mEnableSuggestionFavicons) {
-            mLargeIconBridge = new LargeIconBridge(profile);
-        }
     }
 
     /**
@@ -221,9 +213,10 @@ public class BasicSuggestionProcessor implements SuggestionProcessor {
 
         // Include site favicon if we are presenting URL and have favicon available.
         // TODO(gangwu): Create a saparate processor for clipboard suggestions.
-        if (mLargeIconBridge != null && suggestion.getUrl() != null
+        final LargeIconBridge iconBridge = mIconBridgeSupplier.get();
+        if (iconBridge != null && suggestion.getUrl() != null
                 && suggestion.getType() != OmniboxSuggestionType.CLIPBOARD_TEXT) {
-            mLargeIconBridge.getLargeIconForUrl(suggestion.getUrl(), mDesiredFaviconWidthPx,
+            iconBridge.getLargeIconForUrl(suggestion.getUrl(), mDesiredFaviconWidthPx,
                     (Bitmap icon, int fallbackColor, boolean isFallbackColorDefault,
                             int iconType) -> {
                         if (icon != null) {
@@ -273,7 +266,6 @@ public class BasicSuggestionProcessor implements SuggestionProcessor {
         }
 
         if (suggestion.getType() == OmniboxSuggestionType.SEARCH_SUGGEST_TAIL) {
-            String fillIntoEdit = suggestion.getFillIntoEdit();
             final String ellipsisPrefix = "\u2026 ";
             suggestedQuery = ellipsisPrefix + suggestedQuery;
             // Offset the match classifications by the length of the ellipsis prefix to ensure
