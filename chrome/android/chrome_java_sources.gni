@@ -1531,7 +1531,6 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/snackbar/SnackbarCollection.java",
   "java/src/org/chromium/chrome/browser/snackbar/SnackbarManager.java",
   "java/src/org/chromium/chrome/browser/snackbar/SnackbarView.java",
-  "java/src/org/chromium/chrome/browser/snackbar/TemplatePreservingTextView.java",
   "java/src/org/chromium/chrome/browser/snackbar/smartlockautosignin/AutoSigninSnackbarController.java",
   "java/src/org/chromium/chrome/browser/snackbar/undo/UndoBarController.java",
   "java/src/org/chromium/chrome/browser/ssl/CaptivePortalHelper.java",
