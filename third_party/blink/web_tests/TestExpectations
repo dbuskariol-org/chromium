@@ -6008,7 +6008,6 @@ crbug.com/1015187 virtual/cross-origin-isolation/external/wpt/html/cross-origin-
 crbug.com/1015187 [ Linux Mac ] external/wpt/html/cross-origin-embedder-policy/none.https.html [ Pass Failure Timeout ]
 
 # Sheriff 2019-11-29
-crbug.com/1027436 [ Mac ] inspector-protocol/heap-profiler/heap-snapshot-with-detached-dom-tree.js [ Pass Timeout ]
 crbug.com/1019079 virtual/gpu/fast/canvas/OffscreenCanvas-placeholder-createImageBitmap.html [ Pass Failure ]
 crbug.com/1019079 fast/canvas/OffscreenCanvas-placeholder-createImageBitmap.html [ Pass Failure ]
 crbug.com/1027435 [ Mac ] external/wpt/html/cross-origin-opener-policy/popup-none.https.html [ Pass Timeout ]
@@ -6085,3 +6084,13 @@ crbug.com/963183 http/tests/devtools/security/mixed-content-sidebar.js [ Pass Fa
 # Temporarily disabled for landing frontend source map reporting changes in DevTools
 crbug.com/1030746 http/tests/devtools/sourcemap-section-warning.js [ Pass Failure ]
 crbug.com/1030746 http/tests/devtools/sources/debugger-ui/sourcemap-src-not-loaded.js [ Pass Failure ]
+
+# Temporarily disabled for landing changes to front_end/common in DevTools
+crbug.com/1006759 inspector-protocol/heap-profiler/heap-samples-in-snapshot.js [ Pass Failure ]
+crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-merged-nodes.js [ Pass Failure ]
+crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-active-dom-object.js [ Pass Failure ]
+crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-detached-dom-tree.js [ Pass Failure ]
+crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-detached-iframe.js [ Pass Failure ]
+crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-event-listener.js [ Pass Failure ]
+crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-multiple-retainers.js [ Pass Failure ]
+crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-no-detached-iframe.js [ Pass Failure ]
