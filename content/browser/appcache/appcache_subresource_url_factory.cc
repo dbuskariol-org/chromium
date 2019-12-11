@@ -384,21 +384,14 @@ void AppCacheSubresourceURLFactory::CreateLoaderAndStart(
       !policy->CanAccessDataForOrigin(appcache_host_->process_id(),
                                       request.request_initiator.value()) &&
       policy->HasSecurityState(appcache_host_->process_id())) {
-    const char* scheme_exception =
-        GetContentClient()
-            ->browser()
-            ->GetInitiatorSchemeBypassingDocumentBlocking();
-    if (!scheme_exception ||
-        request.request_initiator.value().scheme() != scheme_exception) {
-      static auto* initiator_origin_key = base::debug::AllocateCrashKeyString(
-          "initiator_origin", base::debug::CrashKeySize::Size64);
-      base::debug::SetCrashKeyString(
-          initiator_origin_key, request.request_initiator.value().Serialize());
+    static auto* initiator_origin_key = base::debug::AllocateCrashKeyString(
+        "initiator_origin", base::debug::CrashKeySize::Size64);
+    base::debug::SetCrashKeyString(
+        initiator_origin_key, request.request_initiator.value().Serialize());
 
-      mojo::ReportBadMessage(
-          "APPCACHE_SUBRESOURCE_URL_FACTORY_INVALID_INITIATOR");
-      return;
-    }
+    mojo::ReportBadMessage(
+        "APPCACHE_SUBRESOURCE_URL_FACTORY_INVALID_INITIATOR");
+    return;
   }
 
   // Subresource requests from renderer processes should not be allowed to use
