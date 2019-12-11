@@ -31,8 +31,8 @@ class VIZ_SERVICE_EXPORT OverlayCandidateValidatorStrategy {
 
   // Populates a list of strategies that may work with this validator. Should be
   // called at most once.
-  virtual OverlayProcessorUsingStrategy::StrategyList
-  InitializeStrategies() = 0;
+  virtual OverlayProcessorUsingStrategy::StrategyList InitializeStrategies(
+      OverlayProcessorUsingStrategy* processor) = 0;
 
   // A list of possible overlay candidates is presented to this function.
   // The expected result is that those candidates that can be in a separate
