@@ -2310,9 +2310,16 @@ bool LayerTreeHostImpl::DrawLayers(FrameData* frame) {
   }
 #endif
 
-  frame_trackers_.NotifySubmitFrame(
-      compositor_frame.metadata.frame_token, frame->has_missing_content,
-      frame->begin_frame_ack, frame->origin_begin_main_frame_args);
+  // In some cases (e.g. for android-webviews), the frame-submission happens
+  // outside of begin-impl frame pipeline. Avoid notifying the trackers in such
+  // cases.
+  if (impl_thread_phase_ == ImplThreadPhase::INSIDE_IMPL_FRAME) {
+    frame_trackers_.NotifySubmitFrame(
+        compositor_frame.metadata.frame_token, frame->has_missing_content,
+        frame->begin_frame_ack, frame->origin_begin_main_frame_args);
+  }
+
+
   if (!mutator_host_->NextFrameHasPendingRAF())
     frame_trackers_.StopSequence(FrameSequenceTrackerType::kRAF);
 
@@ -2725,6 +2732,7 @@ void LayerTreeHostImpl::DidFinishImplFrame() {
     frame_trackers_.NotifyMainFrameCausedNoDamage(
         current_begin_frame_tracker_.Current());
   }
+  frame_trackers_.NotifyFrameEnd(current_begin_frame_tracker_.Current());
   impl_thread_phase_ = ImplThreadPhase::IDLE;
   current_begin_frame_tracker_.Finish();
 }
