@@ -6146,10 +6146,6 @@ crbug.com/1032451 virtual/threaded-no-composited-antialiasing/animations/stabili
 crbug.com/963183 http/tests/devtools/sources/debugger-breakpoints/dom-breakpoints.js [ Pass Failure ]
 crbug.com/963183 http/tests/devtools/a11y-axe-core/sources/dom-breakpoints-pane-a11y-test.js [ Pass Failure ]
 
-# Temporarily disabled for landing frontend security sidepanel changes in DevTools
-crbug.com/963183 http/tests/devtools/security/interstitial-sidebar.js [ Pass Failure ]
-crbug.com/963183 http/tests/devtools/security/mixed-content-sidebar.js [ Pass Failure ]
-
 # Temporarily disabled for landing frontend source map reporting changes in DevTools
 crbug.com/1030746 http/tests/devtools/sourcemap-section-warning.js [ Pass Failure ]
 crbug.com/1030746 http/tests/devtools/sources/debugger-ui/sourcemap-src-not-loaded.js [ Pass Failure ]
