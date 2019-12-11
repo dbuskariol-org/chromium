@@ -67,19 +67,14 @@ using testing::Return;
 using testing::SizeIs;
 using testing::UnorderedElementsAre;
 
-// Base64 encodings of the server IDs, used as ids in WalletMetadataSpecifics
-// (these are suitable for syncing, because they are valid UTF-8).
-const char kAddr1SpecificsId[] = "YWRkcjHvv74=";
-const char kCard1SpecificsId[] = "Y2FyZDHvv74=";
-
 // Represents a Payments customer id.
 const char kCustomerDataId[] = "deadbeef";
 const char kCustomerDataId2[] = "deadcafe";
 
-// Unique sync tags for the server IDs.
-const char kAddr1SyncTag[] = "YWRkcjHvv74=";
-const char kCard1SyncTag[] = "Y2FyZDHvv74=";
-const char kCustomerDataSyncTag[] = "deadbeef";
+// Unique client tags for the server data.
+const char kAddr1ClientTag[] = "YWRkcjHvv74=";
+const char kCard1ClientTag[] = "Y2FyZDHvv74=";
+const char kCustomerDataClientTag[] = "deadbeef";
 
 const char kLocaleString[] = "en-US";
 const base::Time kJune2017 = base::Time::FromDoubleT(1497552271);
@@ -325,46 +320,47 @@ class AutofillWalletSyncBridgeTest : public testing::Test {
 // The following 3 tests make sure client tags stay stable.
 TEST_F(AutofillWalletSyncBridgeTest, GetClientTagForAddress) {
   AutofillWalletSpecifics specifics =
-      CreateAutofillWalletSpecificsForAddress(kAddr1SpecificsId);
+      CreateAutofillWalletSpecificsForAddress(kAddr1ClientTag);
   EXPECT_EQ(bridge()->GetClientTag(*SpecificsToEntity(specifics)),
-            kAddr1SyncTag);
+            kAddr1ClientTag);
 }
 
 TEST_F(AutofillWalletSyncBridgeTest, GetClientTagForCard) {
   AutofillWalletSpecifics specifics =
-      CreateAutofillWalletSpecificsForCard(kCard1SpecificsId);
+      CreateAutofillWalletSpecificsForCard(kCard1ClientTag);
   EXPECT_EQ(bridge()->GetClientTag(*SpecificsToEntity(specifics)),
-            kCard1SyncTag);
+            kCard1ClientTag);
 }
 
 TEST_F(AutofillWalletSyncBridgeTest, GetClientTagForCustomerData) {
   AutofillWalletSpecifics specifics =
       CreateAutofillWalletSpecificsForPaymentsCustomerData(
-          kCustomerDataSyncTag);
+          kCustomerDataClientTag);
   EXPECT_EQ(bridge()->GetClientTag(*SpecificsToEntity(specifics)),
-            kCustomerDataSyncTag);
+            kCustomerDataClientTag);
 }
 
 // The following 3 tests make sure storage keys stay stable.
 TEST_F(AutofillWalletSyncBridgeTest, GetStorageKeyForAddress) {
   AutofillWalletSpecifics specifics1 =
-      CreateAutofillWalletSpecificsForAddress(kAddr1SpecificsId);
+      CreateAutofillWalletSpecificsForAddress(kAddr1ClientTag);
   EXPECT_EQ(bridge()->GetStorageKey(*SpecificsToEntity(specifics1)),
-            kAddr1SpecificsId);
+            kAddr1ClientTag);
 }
 
 TEST_F(AutofillWalletSyncBridgeTest, GetStorageKeyForCard) {
   AutofillWalletSpecifics specifics2 =
-      CreateAutofillWalletSpecificsForCard(kCard1SpecificsId);
+      CreateAutofillWalletSpecificsForCard(kCard1ClientTag);
   EXPECT_EQ(bridge()->GetStorageKey(*SpecificsToEntity(specifics2)),
-            kCard1SpecificsId);
+            kCard1ClientTag);
 }
 
 TEST_F(AutofillWalletSyncBridgeTest, GetStorageKeyForCustomerData) {
   AutofillWalletSpecifics specifics3 =
-      CreateAutofillWalletSpecificsForPaymentsCustomerData(kCustomerDataId);
+      CreateAutofillWalletSpecificsForPaymentsCustomerData(
+          kCustomerDataClientTag);
   EXPECT_EQ(bridge()->GetStorageKey(*SpecificsToEntity(specifics3)),
-            kCustomerDataId);
+            kCustomerDataClientTag);
 }
 
 TEST_F(AutofillWalletSyncBridgeTest,

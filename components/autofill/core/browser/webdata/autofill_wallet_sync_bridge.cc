@@ -21,6 +21,7 @@
 #include "components/autofill/core/browser/webdata/autofill_webdata_service.h"
 #include "components/autofill/core/common/autofill_util.h"
 #include "components/sync/base/data_type_histogram.h"
+#include "components/sync/base/hash_util.h"
 #include "components/sync/driver/sync_driver_switches.h"
 #include "components/sync/model/entity_data.h"
 #include "components/sync/model/mutable_data_batch.h"
@@ -37,55 +38,28 @@ namespace {
 // Address to this variable used as the user data key.
 static int kAutofillWalletSyncBridgeUserDataKey = 0;
 
-std::string GetSpecificsIdFromAutofillWalletSpecifics(
-    const AutofillWalletSpecifics& specifics) {
-  switch (specifics.type()) {
-    case AutofillWalletSpecifics::MASKED_CREDIT_CARD:
-      return specifics.masked_card().id();
-    case AutofillWalletSpecifics::POSTAL_ADDRESS:
-      return specifics.address().id();
-    case AutofillWalletSpecifics::CUSTOMER_DATA:
-      return specifics.customer_data().id();
-    case AutofillWalletSpecifics::CREDIT_CARD_CLOUD_TOKEN_DATA:
-      return specifics.cloud_token_data().masked_card_id();
-    case AutofillWalletSpecifics::UNKNOWN:
-      NOTREACHED();
-      return std::string();
-  }
-  return std::string();
-}
-
-std::string GetSpecificsIdFromAutofillProfile(const AutofillProfile& profile) {
-  // Both server_id and specifics_id are _not_ base64 encoded.
+std::string GetClientTagFromAutofillProfile(const AutofillProfile& profile) {
+  // Both server_id and client_tag are _not_ base64 encoded.
   return profile.server_id();
 }
 
-std::string GetSpecificsIdFromCreditCard(const CreditCard& card) {
-  // Both server_id and specifics_id are _not_ base64 encoded.
+std::string GetClientTagFromCreditCard(const CreditCard& card) {
+  // Both server_id and client_tag are _not_ base64 encoded.
   return card.server_id();
 }
 
-std::string GetSpecificsIdFromPaymentsCustomerData(
+std::string GetClientTagFromPaymentsCustomerData(
     const PaymentsCustomerData& customer_data) {
-  // Both customer_id and specifics_id are _not_ base64 encoded.
+  // Both customer_id and client_tag are _not_ base64 encoded.
   return customer_data.customer_id;
 }
 
-// Returns the client tag for wallet data specifics id.
-std::string GetClientTagForWalletDataSpecificsId(
-    const std::string& specifics_id) {
-  // Unlike for the wallet_metadata model type, the wallet_data expects
-  // specifics id directly as client tags.
-  return specifics_id;
-}
-
 // Returns the storage key to be used for wallet data for the specified wallet
-// data |specifics_id|.
-std::string GetStorageKeyForWalletDataSpecificsId(
-    const std::string& specifics_id) {
-  // We use the (non-base64-encoded) |specifics_id| directly as the storage key,
+// data |client_tag|.
+std::string GetStorageKeyForWalletDataClientTag(const std::string& client_tag) {
+  // We use the (non-base64-encoded) |client_tag| directly as the storage key,
   // this function only hides this definition from all its call sites.
-  return specifics_id;
+  return client_tag;
 }
 
 // Creates a EntityData object corresponding to the specified |address|.
@@ -95,7 +69,7 @@ std::unique_ptr<EntityData> CreateEntityDataFromAutofillServerProfile(
   auto entity_data = std::make_unique<EntityData>();
   entity_data->name =
       "Server profile " +
-      GetBase64EncodedId(GetSpecificsIdFromAutofillProfile(address));
+      GetBase64EncodedId(GetClientTagFromAutofillProfile(address));
 
   AutofillWalletSpecifics* wallet_specifics =
       entity_data->specifics.mutable_autofill_wallet();
@@ -110,7 +84,7 @@ std::unique_ptr<EntityData> CreateEntityDataFromCard(const CreditCard& card,
                                                      bool enforce_utf8) {
   auto entity_data = std::make_unique<EntityData>();
   entity_data->name =
-      "Server card " + GetBase64EncodedId(GetSpecificsIdFromCreditCard(card));
+      "Server card " + GetBase64EncodedId(GetClientTagFromCreditCard(card));
 
   AutofillWalletSpecifics* wallet_specifics =
       entity_data->specifics.mutable_autofill_wallet();
@@ -126,7 +100,7 @@ std::unique_ptr<EntityData> CreateEntityDataFromPaymentsCustomerData(
   auto entity_data = std::make_unique<EntityData>();
   entity_data->name =
       "Payments customer data " +
-      GetBase64EncodedId(GetSpecificsIdFromPaymentsCustomerData(customer_data));
+      GetBase64EncodedId(GetClientTagFromPaymentsCustomerData(customer_data));
 
   AutofillWalletSpecifics* wallet_specifics =
       entity_data->specifics.mutable_autofill_wallet();
@@ -226,16 +200,15 @@ std::string AutofillWalletSyncBridge::GetClientTag(
     const syncer::EntityData& entity_data) {
   DCHECK(entity_data.specifics.has_autofill_wallet());
 
-  return GetClientTagForWalletDataSpecificsId(
-      GetSpecificsIdFromAutofillWalletSpecifics(
-          entity_data.specifics.autofill_wallet()));
+  return syncer::GetUnhashedClientTagFromAutofillWalletSpecifics(
+      entity_data.specifics.autofill_wallet());
 }
 
 std::string AutofillWalletSyncBridge::GetStorageKey(
     const syncer::EntityData& entity_data) {
   DCHECK(entity_data.specifics.has_autofill_wallet());
-  return GetStorageKeyForWalletDataSpecificsId(
-      GetSpecificsIdFromAutofillWalletSpecifics(
+  return GetStorageKeyForWalletDataClientTag(
+      syncer::GetUnhashedClientTagFromAutofillWalletSpecifics(
           entity_data.specifics.autofill_wallet()));
 }
 
@@ -280,19 +253,19 @@ void AutofillWalletSyncBridge::GetAllDataImpl(DataCallback callback,
 
   auto batch = std::make_unique<syncer::MutableDataBatch>();
   for (const std::unique_ptr<AutofillProfile>& entry : profiles) {
-    batch->Put(GetStorageKeyForWalletDataSpecificsId(
-                   GetSpecificsIdFromAutofillProfile(*entry)),
+    batch->Put(GetStorageKeyForWalletDataClientTag(
+                   GetClientTagFromAutofillProfile(*entry)),
                CreateEntityDataFromAutofillServerProfile(*entry, enforce_utf8));
   }
   for (const std::unique_ptr<CreditCard>& entry : cards) {
-    batch->Put(GetStorageKeyForWalletDataSpecificsId(
-                   GetSpecificsIdFromCreditCard(*entry)),
-               CreateEntityDataFromCard(*entry, enforce_utf8));
+    batch->Put(
+        GetStorageKeyForWalletDataClientTag(GetClientTagFromCreditCard(*entry)),
+        CreateEntityDataFromCard(*entry, enforce_utf8));
   }
 
   if (customer_data) {
-    batch->Put(GetStorageKeyForWalletDataSpecificsId(
-                   GetSpecificsIdFromPaymentsCustomerData(*customer_data)),
+    batch->Put(GetStorageKeyForWalletDataClientTag(
+                   GetClientTagFromPaymentsCustomerData(*customer_data)),
                CreateEntityDataFromPaymentsCustomerData(*customer_data));
   }
   std::move(callback).Run(std::move(batch));
