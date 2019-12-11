@@ -4,6 +4,7 @@
 
 #include "chrome/browser/ui/ash/launcher/app_service_instance_registry_helper.h"
 
+#include <set>
 #include <string>
 #include <vector>
 
@@ -13,6 +14,7 @@
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_manager.h"
 #include "chrome/browser/ui/browser.h"
+#include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/browser_list.h"
 #include "chrome/browser/web_applications/components/web_app_helpers.h"
 #include "chrome/common/chrome_features.h"
@@ -106,6 +108,19 @@ void AppServiceInstanceRegistryHelper::OnTabClosing(
 
   OnInstances(app_id, GetWindow(contents), std::string(),
               apps::InstanceState::kDestroyed);
+}
+
+void AppServiceInstanceRegistryHelper::OnBrowserRemoved() {
+  std::set<aura::Window*> windows =
+      proxy_->InstanceRegistry().GetWindows(extension_misc::kChromeAppId);
+  for (auto* window : windows) {
+    if (!chrome::FindBrowserWithWindow(window)) {
+      // The browser is removed if the window can't be found, so update the
+      // Chrome window instance as destroyed.
+      OnInstances(extension_misc::kChromeAppId, window, std::string(),
+                  apps::InstanceState::kDestroyed);
+    }
+  }
 }
 
 void AppServiceInstanceRegistryHelper::OnInstances(const std::string& app_id,

@@ -50,6 +50,10 @@ class AppServiceInstanceRegistryHelper {
   // instance will be removed from App Service InstanceRegistry.
   void OnTabClosing(content::WebContents* contents);
 
+  // Notifies the AppService InstanceRegistry that the browser is closed. The
+  // instance will be removed from App Service InstanceRegistry.
+  void OnBrowserRemoved();
+
   // Helper function to update App Service InstanceRegistry.
   void OnInstances(const std::string& app_id,
                    aura::Window* window,
