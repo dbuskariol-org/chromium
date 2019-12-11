@@ -1297,6 +1297,10 @@ linux_builder(
 )
 
 linux_builder(
+    name = 'linux-wpt-fyi-rel',
+)
+
+linux_builder(
     name = 'tricium-metrics-analysis',
     executable = luci.recipe(name = 'tricium_metrics'),
 )
