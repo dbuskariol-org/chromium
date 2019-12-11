@@ -84,48 +84,10 @@ OverlayCandidateValidatorStrategy::Create(
 #endif
 }
 
-bool OverlayCandidateValidatorStrategy::AttemptWithStrategies(
-    const SkMatrix44& output_color_matrix,
-    const OverlayProcessorInterface::FilterOperationsMap&
-        render_pass_backdrop_filters,
-    DisplayResourceProvider* resource_provider,
-    RenderPassList* render_pass_list,
-    PrimaryPlane* primary_plane,
-    OverlayCandidateList* candidates,
-    std::vector<gfx::Rect>* content_bounds) {
-  last_successful_strategy_ = nullptr;
-  for (const auto& strategy : strategies_) {
-    if (strategy->Attempt(output_color_matrix, render_pass_backdrop_filters,
-                          resource_provider, render_pass_list, primary_plane,
-                          candidates, content_bounds)) {
-      // This function is used by underlay strategy to mark the primary plane as
-      // enable_blending.
-      strategy->AdjustOutputSurfaceOverlay(primary_plane);
-      UMA_HISTOGRAM_ENUMERATION("Viz.DisplayCompositor.OverlayStrategy",
-                                strategy->GetUMAEnum());
-      last_successful_strategy_ = strategy.get();
-      return true;
-    }
-  }
-  UMA_HISTOGRAM_ENUMERATION("Viz.DisplayCompositor.OverlayStrategy",
-                            OverlayStrategy::kNoStrategyUsed);
-  return false;
-}
-
 gfx::Rect
 OverlayCandidateValidatorStrategy::GetOverlayDamageRectForOutputSurface(
     const OverlayCandidate& candidate) const {
   return ToEnclosedRect(candidate.display_rect);
-}
-
-bool OverlayCandidateValidatorStrategy::
-    StrategyNeedsOutputSurfacePlaneRemoved() {
-  // The full screen strategy will remove the output surface as an overlay
-  // plane.
-  if (last_successful_strategy_)
-    return last_successful_strategy_->RemoveOutputSurfaceAsOverlay();
-
-  return false;
 }
 
 OverlayCandidateValidatorStrategy::OverlayCandidateValidatorStrategy() =
