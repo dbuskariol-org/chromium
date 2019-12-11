@@ -12,8 +12,8 @@
 namespace metrics {
 namespace structured {
 
-// A base class for generated structured metrics event objects.
-// This class should not be used directly.
+// A base class for generated structured metrics event objects. This class
+// should not be used directly.
 class EventBase {
  public:
   EventBase(const EventBase& other);
@@ -35,14 +35,14 @@ class EventBase {
   // Stores all information about a single metric: name hash, value, and a
   // specifier of the value type.
   struct Metric {
-    Metric();
+    Metric(uint64_t name_hash, MetricType type);
     ~Metric();
 
-    MetricType type;
     // First 8 bytes of the MD5 hash of the metric name, as defined in
     // structured.xml. This is calculated by
     // tools/metrics/structured/codegen.py.
     uint64_t name_hash;
+    MetricType type;
 
     // TODO(crbug.com/10116655): Replace this with a base::Value.
     // All possible value types a metric can take. Exactly one of these should
@@ -52,6 +52,18 @@ class EventBase {
     std::string string_value;
     int int_value;
   };
+
+  void AddStringMetric(uint64_t name_hash, const std::string& value) {
+    Metric metric(name_hash, MetricType::STRING);
+    metric.string_value = value;
+    metrics_.push_back(metric);
+  }
+
+  void AddIntMetric(uint64_t name_hash, int value) {
+    Metric metric(name_hash, MetricType::INT);
+    metric.int_value = value;
+    metrics_.push_back(metric);
+  }
 
   // First 8 bytes of the MD5 hash of the event name, as defined in
   // structured.xml. This is calculated by tools/metrics/structured/codegen.py.

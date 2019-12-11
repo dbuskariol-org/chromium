@@ -17,7 +17,8 @@ void EventBase::Record() {
   Recorder::GetInstance()->Record(std::move(*this));
 }
 
-EventBase::Metric::Metric() = default;
+EventBase::Metric::Metric(uint64_t name_hash, MetricType type)
+    : name_hash(name_hash), type(type) {}
 EventBase::Metric::~Metric() = default;
 
 }  // namespace structured

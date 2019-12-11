@@ -24,6 +24,7 @@ static_library("structured") {
     "//base",
     "//components/metrics",
     "//components/prefs",
+    "//tools/metrics/structured:structured_events",
   ]
 }
 
