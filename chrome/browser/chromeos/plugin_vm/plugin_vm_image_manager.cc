@@ -15,7 +15,6 @@
 #include "base/strings/string_util.h"
 #include "base/task/post_task.h"
 #include "base/task/task_traits.h"
-#include "chrome/browser/chromeos/plugin_vm/plugin_vm_drive_image_download_service.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_manager.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_metrics_util.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_pref_names.h"
@@ -107,37 +106,12 @@ void PluginVmImageManager::StartDownload() {
     OnDownloadFailed(FailureReason::INVALID_IMAGE_URL);
     return;
   }
-
-  using_drive_download_service_ = IsDriveUrl(url);
-
-  if (using_drive_download_service_) {
-    if (!drive_download_service_) {
-      drive_download_service_ =
-          std::make_unique<PluginVmDriveImageDownloadService>(this, profile_);
-    } else {
-      drive_download_service_->ResetState();
-    }
-
-    drive_download_service_->StartDownload(
-        GetIdFromDriveUrl(url),
-        base::BindOnce(&PluginVmImageManager::OnDownloadStarted,
-                       weak_ptr_factory_.GetWeakPtr()),
-        base::BindOnce(&PluginVmImageManager::OnDownloadFailed,
-                       weak_ptr_factory_.GetWeakPtr()));
-  } else {
-    download_service_->StartDownload(GetDownloadParams(url));
-  }
+  download_service_->StartDownload(GetDownloadParams(url));
 }
 
 void PluginVmImageManager::CancelDownload() {
   state_ = State::DOWNLOAD_CANCELLED;
-
-  if (using_drive_download_service_) {
-    DCHECK(drive_download_service_);
-    drive_download_service_->CancelDownload();
-  } else {
-    download_service_->CancelDownload(current_download_guid_);
-  }
+  download_service_->CancelDownload(current_download_guid_);
 }
 
 void PluginVmImageManager::OnDlcDownloadProgressUpdated(double progress) {
@@ -208,10 +182,6 @@ void PluginVmImageManager::OnDownloadCancelled() {
 
   RemoveTemporaryPluginVmImageArchiveIfExists();
   current_download_guid_.clear();
-  if (using_drive_download_service_) {
-    drive_download_service_->ResetState();
-    using_drive_download_service_ = false;
-  }
   if (observer_)
     observer_->OnDownloadCancelled();
 
@@ -222,12 +192,6 @@ void PluginVmImageManager::OnDownloadFailed(FailureReason reason) {
   state_ = State::DOWNLOAD_FAILED;
   RemoveTemporaryPluginVmImageArchiveIfExists();
   current_download_guid_.clear();
-
-  if (using_drive_download_service_) {
-    drive_download_service_->ResetState();
-    using_drive_download_service_ = false;
-  }
-
   if (observer_)
     observer_->OnDownloadFailed(reason);
 }
@@ -569,8 +533,30 @@ download::DownloadParams PluginVmImageManager::GetDownloadParams(
   params.callback = base::BindRepeating(&PluginVmImageManager::OnStartDownload,
                                         weak_ptr_factory_.GetWeakPtr());
 
-  params.traffic_annotation = net::MutableNetworkTrafficAnnotationTag(
-      kPluginVmNetworkTrafficAnnotation);
+  net::NetworkTrafficAnnotationTag traffic_annotation =
+      net::DefineNetworkTrafficAnnotation("plugin_vm_image_download", R"(
+        semantics {
+          sender: "Plugin VM image manager"
+          description: "Request to download Plugin VM image is sent in order "
+            "to allow user to run Plugin VM."
+          trigger: "User clicking on Plugin VM icon when Plugin VM is not yet "
+            "installed."
+          data: "Request to download Plugin VM image. Sends cookies to "
+            "authenticate the user."
+          destination: WEBSITE
+        }
+        policy {
+          cookies_allowed: YES
+          cookies_store: "user"
+          chrome_policy {
+            PluginVmImage {
+              PluginVmImage: "{'url': 'example.com', 'hash': 'sha256hash'}"
+            }
+          }
+        }
+      )");
+  params.traffic_annotation =
+      net::MutableNetworkTrafficAnnotationTag(traffic_annotation);
 
   // RequestParams
   params.request_params.url = url;
@@ -618,22 +604,16 @@ bool PluginVmImageManager::VerifyDownload(
 }
 
 void PluginVmImageManager::RemoveTemporaryPluginVmImageArchiveIfExists() {
-  if (using_drive_download_service_) {
-    drive_download_service_->RemoveTemporaryArchive(base::BindOnce(
-        &PluginVmImageManager::OnTemporaryPluginVmImageArchiveRemoved,
-        weak_ptr_factory_.GetWeakPtr()));
-  } else {
-    if (!downloaded_plugin_vm_image_archive_.empty()) {
-      base::PostTaskAndReplyWithResult(
-          FROM_HERE,
-          {base::ThreadPool(), base::TaskPriority::USER_VISIBLE,
-           base::MayBlock()},
-          base::BindOnce(&base::DeleteFile, downloaded_plugin_vm_image_archive_,
-                         false /* recursive */),
-          base::BindOnce(
-              &PluginVmImageManager::OnTemporaryPluginVmImageArchiveRemoved,
-              weak_ptr_factory_.GetWeakPtr()));
-    }
+  if (!downloaded_plugin_vm_image_archive_.empty()) {
+    base::PostTaskAndReplyWithResult(
+        FROM_HERE,
+        {base::ThreadPool(), base::TaskPriority::USER_VISIBLE,
+         base::MayBlock()},
+        base::BindOnce(&base::DeleteFile, downloaded_plugin_vm_image_archive_,
+                       false /* recursive */),
+        base::BindOnce(
+            &PluginVmImageManager::OnTemporaryPluginVmImageArchiveRemoved,
+            weak_ptr_factory_.GetWeakPtr()));
   }
 }
 

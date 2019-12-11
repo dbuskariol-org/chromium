@@ -272,10 +272,6 @@ void PluginVmManager::OnListVms(
 }
 
 void PluginVmManager::StartVm() {
-  // If the download from Drive got interrupted, ensure that the temporary image
-  // and the containing directory get deleted.
-  RemoveDriveDownloadDirectoryIfExists();
-
   pending_start_vm_ = false;
 
   vm_tools::plugin_dispatcher::StartVmRequest request;
