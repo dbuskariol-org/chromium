@@ -239,7 +239,7 @@ const KeyframeEffectModelBase* GetKeyframeEffectModelBase(
     model = ToInertEffect(effect)->Model();
   if (!model || !model->IsKeyframeEffectModel())
     return nullptr;
-  return ToKeyframeEffectModelBase(model);
+  return To<KeyframeEffectModelBase>(model);
 }
 
 }  // namespace

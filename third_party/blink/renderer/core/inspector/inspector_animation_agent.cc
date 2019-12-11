@@ -281,8 +281,8 @@ blink::Animation* InspectorAnimationAgent::AnimationClone(
     // Clone EffectModel.
     // TODO(samli): Determine if this is an animations bug.
     if (old_model->IsStringKeyframeEffectModel()) {
-      StringKeyframeEffectModel* old_string_keyframe_model =
-          ToStringKeyframeEffectModel(old_model);
+      auto* old_string_keyframe_model =
+          To<StringKeyframeEffectModel>(old_model);
       KeyframeVector old_keyframes = old_string_keyframe_model->GetFrames();
       StringKeyframeVector new_keyframes;
       for (auto& old_keyframe : old_keyframes)
@@ -290,8 +290,8 @@ blink::Animation* InspectorAnimationAgent::AnimationClone(
       new_model =
           MakeGarbageCollected<StringKeyframeEffectModel>(new_keyframes);
     } else if (old_model->IsTransitionKeyframeEffectModel()) {
-      TransitionKeyframeEffectModel* old_transition_keyframe_model =
-          ToTransitionKeyframeEffectModel(old_model);
+      auto* old_transition_keyframe_model =
+          To<TransitionKeyframeEffectModel>(old_model);
       KeyframeVector old_keyframes = old_transition_keyframe_model->GetFrames();
       TransitionKeyframeVector new_keyframes;
       for (auto& old_keyframe : old_keyframes)
