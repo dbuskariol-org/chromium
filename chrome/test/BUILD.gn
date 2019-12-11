@@ -2005,6 +2005,7 @@ if (!is_android) {
         "../browser/ui/views/translate/translate_bubble_test_utils_views.cc",
         "../browser/ui/views/translate/translate_bubble_view_browsertest.cc",
         "../browser/ui/views/translate/translate_language_browsertest.cc",
+        "../browser/ui/views/web_apps/bookmark_app_uninstall_dialog_browsertest.cc",
       ]
       if (!is_chromeos) {
         sources += [
