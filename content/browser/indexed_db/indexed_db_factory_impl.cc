@@ -27,6 +27,7 @@
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/system/sys_info.h"
+#include "base/timer/elapsed_timer.h"
 #include "base/timer/timer.h"
 #include "components/services/storage/indexed_db/leveldb/leveldb_factory.h"
 #include "components/services/storage/indexed_db/scopes/leveldb_scopes.h"
@@ -655,6 +656,9 @@ IndexedDBFactoryImpl::GetOrOpenOriginFactory(
             IndexedDBDatabaseError(), IndexedDBDataLossInfo(),
             /*was_cold_open=*/false};
   }
+  UMA_HISTOGRAM_ENUMERATION(
+      indexed_db::kBackingStoreActionUmaName,
+      indexed_db::IndexedDBAction::kBackingStoreOpenAttempt);
 
   bool is_incognito_and_in_memory = data_directory.empty();
   base::FilePath blob_path;
@@ -677,6 +681,8 @@ IndexedDBFactoryImpl::GetOrOpenOriginFactory(
   IndexedDBDataLossInfo data_loss_info;
   std::unique_ptr<IndexedDBBackingStore> backing_store;
   bool disk_full = false;
+  base::ElapsedTimer open_timer;
+  leveldb::Status first_try_status;
   for (int i = 0; i < kNumOpenTries; ++i) {
     LevelDBScopesOptions scopes_options;
     scopes_options.lock_manager = lock_manager.get();
@@ -689,11 +695,14 @@ IndexedDBFactoryImpl::GetOrOpenOriginFactory(
           factory->OnDatabaseError(origin, s, nullptr);
         },
         origin, weak_factory_.GetWeakPtr());
+    const bool is_first_attempt = i == 0;
     std::tie(backing_store, s, data_loss_info, disk_full) =
         OpenAndVerifyIndexedDBBackingStore(
             origin, data_directory, database_path, blob_path,
-            std::move(scopes_options), &scopes_factory,
-            /*is_first_attempt=*/i == 0, create_if_missing);
+            std::move(scopes_options), &scopes_factory, is_first_attempt,
+            create_if_missing);
+    if (LIKELY(is_first_attempt))
+      first_try_status = s;
     if (LIKELY(s.ok()))
       break;
     DCHECK(!backing_store);
@@ -709,6 +718,17 @@ IndexedDBFactoryImpl::GetOrOpenOriginFactory(
       IndexedDBBackingStore::RecordCorruptionInfo(data_directory, origin,
                                                   sanitized_message);
     }
+  }
+
+  UMA_HISTOGRAM_ENUMERATION(
+      "WebCore.IndexedDB.BackingStore.OpenFirstTryResult",
+      leveldb_env::GetLevelDBStatusUMAValue(first_try_status),
+      leveldb_env::LEVELDB_STATUS_MAX);
+
+  if (LIKELY(first_try_status.ok())) {
+    UMA_HISTOGRAM_TIMES(
+        "WebCore.IndexedDB.BackingStore.OpenFirstTrySuccessTime",
+        open_timer.Elapsed());
   }
 
   if (UNLIKELY(!s.ok())) {

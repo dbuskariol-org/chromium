@@ -31832,6 +31832,18 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="20" label="Duplicate entry"/>
 </enum>
 
+<enum name="IDBAction">
+  <int value="0" label="BackingStoreOpenAttempt">
+    Recorded when the there is an attempt to open the backing store from disk,
+    where it wasn't previously opened. This can happen during the API calls
+    IDBFactory::Open, GetDatabaseNames, GetDatabaseInfo, and DeleteDatabase.
+  </int>
+  <int value="1" label="DatabaseDeleteAttempt">
+    Recorded when there is an attempt to delete the database using the
+    IDBFactory::DeleteDatabase API.
+  </int>
+</enum>
+
 <enum name="IDBContextForcedCloseReason">
   <int value="0" label="DeleteOrigin">
     A request was made to delete the data for an origin.
