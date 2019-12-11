@@ -37,21 +37,23 @@ bool ConvertAnimationEffects(
   // Currently we only support KeyframeEffect.
   if (effects.IsAnimationEffect()) {
     auto* const effect = effects.GetAsAnimationEffect();
-    if (!effect->IsKeyframeEffect()) {
+    auto* key_frame = DynamicTo<KeyframeEffect>(effect);
+    if (!key_frame) {
       error_string = "Effect must be a KeyframeEffect object";
       return false;
     }
-    keyframe_effects.push_back(ToKeyframeEffect(effect));
+    keyframe_effects.push_back(key_frame);
   } else {
     const HeapVector<Member<AnimationEffect>>& effect_sequence =
         effects.GetAsAnimationEffectSequence();
     keyframe_effects.ReserveInitialCapacity(effect_sequence.size());
     for (const auto& effect : effect_sequence) {
-      if (!effect->IsKeyframeEffect()) {
+      auto* key_frame = DynamicTo<KeyframeEffect>(*effect);
+      if (!key_frame) {
         error_string = "Effects must all be KeyframeEffect objects";
         return false;
       }
-      keyframe_effects.push_back(ToKeyframeEffect(effect));
+      keyframe_effects.push_back(key_frame);
     }
   }
 
