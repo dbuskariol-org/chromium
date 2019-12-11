@@ -130,8 +130,8 @@ class MockFrameHost : public mojom::FrameHost {
 
   void AdoptPortal(const base::UnguessableToken&,
                    AdoptPortalCallback callback) override {
-    std::move(callback).Run(MSG_ROUTING_NONE, FrameReplicationState(),
-                            base::UnguessableToken());
+    std::move(callback).Run(MSG_ROUTING_NONE, viz::FrameSinkId(),
+                            FrameReplicationState(), base::UnguessableToken());
   }
 
   void IssueKeepAliveHandle(
