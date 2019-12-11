@@ -166,7 +166,7 @@ class MockPeerConnectionTracker : public PeerConnectionTracker {
            const webrtc::PeerConnectionInterface::RTCConfiguration& config));
   MOCK_METHOD4(TrackAddIceCandidate,
                void(RTCPeerConnectionHandler* pc_handler,
-                    scoped_refptr<RTCIceCandidatePlatform> candidate,
+                    RTCIceCandidatePlatform* candidate,
                     Source source,
                     bool succeeded));
   MOCK_METHOD4(TrackAddTransceiver,
@@ -788,7 +788,7 @@ TEST_F(RTCPeerConnectionHandlerTest, setConfigurationError) {
 }
 
 TEST_F(RTCPeerConnectionHandlerTest, addICECandidate) {
-  scoped_refptr<RTCIceCandidatePlatform> candidate =
+  RTCIceCandidatePlatform* candidate =
       RTCIceCandidatePlatform::Create(kDummySdp, "sdpMid", 1);
 
   EXPECT_CALL(*mock_tracker_.get(),

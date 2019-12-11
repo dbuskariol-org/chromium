@@ -213,7 +213,7 @@ RTCAnswerOptionsPlatform* ConvertToRTCAnswerOptionsPlatform(
                                            : true);
 }
 
-scoped_refptr<RTCIceCandidatePlatform> ConvertToRTCIceCandidatePlatform(
+RTCIceCandidatePlatform* ConvertToRTCIceCandidatePlatform(
     ExecutionContext* context,
     const RTCIceCandidateInitOrRTCIceCandidate& candidate) {
   DCHECK(!candidate.IsNull());
@@ -1767,7 +1767,7 @@ ScriptPromise RTCPeerConnection::addIceCandidate(
     return ScriptPromise();
   }
 
-  scoped_refptr<RTCIceCandidatePlatform> platform_candidate =
+  RTCIceCandidatePlatform* platform_candidate =
       ConvertToRTCIceCandidatePlatform(ExecutionContext::From(script_state),
                                        candidate);
 
@@ -1804,7 +1804,7 @@ ScriptPromise RTCPeerConnection::addIceCandidate(
     return ScriptPromise();
   }
 
-  scoped_refptr<RTCIceCandidatePlatform> platform_candidate =
+  RTCIceCandidatePlatform* platform_candidate =
       ConvertToRTCIceCandidatePlatform(ExecutionContext::From(script_state),
                                        candidate);
 
@@ -2693,12 +2693,11 @@ void RTCPeerConnection::MaybeFireNegotiationNeeded() {
 }
 
 void RTCPeerConnection::DidGenerateICECandidate(
-    scoped_refptr<RTCIceCandidatePlatform> platform_candidate) {
+    RTCIceCandidatePlatform* platform_candidate) {
   DCHECK(!closed_);
   DCHECK(GetExecutionContext()->IsContextThread());
   DCHECK(platform_candidate);
-  RTCIceCandidate* ice_candidate =
-      RTCIceCandidate::Create(std::move(platform_candidate));
+  RTCIceCandidate* ice_candidate = RTCIceCandidate::Create(platform_candidate);
   ScheduleDispatchEvent(RTCPeerConnectionIceEvent::Create(ice_candidate));
 }
 void RTCPeerConnection::DidFailICECandidate(const String& host_candidate,

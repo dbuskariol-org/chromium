@@ -326,7 +326,7 @@ webrtc::RTCErrorType MockRTCPeerConnectionHandlerPlatform::SetConfiguration(
 
 void MockRTCPeerConnectionHandlerPlatform::AddICECandidate(
     RTCVoidRequest*,
-    scoped_refptr<RTCIceCandidatePlatform>) {}
+    RTCIceCandidatePlatform*) {}
 
 void MockRTCPeerConnectionHandlerPlatform::RestartIce() {}
 
