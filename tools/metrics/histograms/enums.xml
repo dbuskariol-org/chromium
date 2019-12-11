@@ -25044,13 +25044,15 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="2498" label="ServiceWorkerImportScriptNotInstalled"/>
   <int value="2499" label="NestedDedicatedWorker"/>
   <int value="2500" label="ClientHintsMetaAcceptCHLifetime"/>
-  <int value="2501" label="DOMNodeRemovedEventDelayed"/>
-  <int value="2502" label="DOMNodeRemovedEventHandlerAccessDetachingNode"/>
-  <int value="2503" label="DOMNodeRemovedEventListenedAtNonTarget"/>
-  <int value="2504" label="DOMNodeRemovedFromDocumentEventDelayed"/>
+  <int value="2501" label="OBSOLETE_DOMNodeRemovedEventDelayed"/>
+  <int value="2502"
+      label="OBSOLETE_DOMNodeRemovedEventHandlerAccessDetachingNode"/>
+  <int value="2503" label="OBSOLETE_DOMNodeRemovedEventListenedAtNonTarget"/>
+  <int value="2504" label="OBSOLETE_DOMNodeRemovedFromDocumentEventDelayed"/>
   <int value="2505"
-      label="DOMNodeRemovedFromDocumentEventHandlerAccessDetachingNode"/>
-  <int value="2506" label="DOMNodeRemovedFromDocumentEventListenedAtNonTarget"/>
+      label="OBSOLETE_DOMNodeRemovedFromDocumentEventHandlerAccessDetachingNode"/>
+  <int value="2506"
+      label="OBSOLETE_DOMNodeRemovedFromDocumentEventListenedAtNonTarget"/>
   <int value="2507" label="CSSFillAvailableLogicalWidth"/>
   <int value="2508" label="CSSFillAvailableLogicalHeight"/>
   <int value="2509" label="PopupOpenWhileFileChooserOpened"/>
