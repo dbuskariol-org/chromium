@@ -6073,9 +6073,6 @@ crbug.com/878878 [ Mac ] virtual/threaded/fast/scroll-snap/snaps-for-different-k
 crbug.com/878878 virtual/threaded/fast/scroll-snap/animate-fling-to-snap-points.html [ Failure Pass Timeout ]
 crbug.com/878878 virtual/threaded/fast/scroll-snap/snap-scrolls-visual-viewport.html [ Failure Pass ]
 
-# DevTools ListControl (disabled temporarily as part of workflow)
-crbug.com/963183 http/tests/devtools/unit/list-control-equal-height.js [ Skip  ]
-
 # Sheriff 2019-12-10
 crbug.com/1032451 virtual/threaded-no-composited-antialiasing/animations/stability/animation-iteration-event-destroy-renderer.html [ Pass Timeout ]
 
