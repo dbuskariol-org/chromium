@@ -48,7 +48,7 @@
         android:layout_weight="1"
         android:visibility="gone" />
 
-    <org.chromium.chrome.browser.ui.widget.DualControlLayout
+    <org.chromium.components.browser_ui.widget.DualControlLayout
         android:id="@+id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,6 +71,6 @@
             android:layout_height="wrap_content"
             style="?attr/buttonBarNegativeButtonStyle" />
 
-    </org.chromium.chrome.browser.ui.widget.DualControlLayout>
+    </org.chromium.components.browser_ui.widget.DualControlLayout>
 
 </org.chromium.chrome.browser.modaldialog.ModalDialogView>

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ui.widget;
+package org.chromium.components.browser_ui.widget;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -24,8 +24,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.chromium.base.test.BaseJUnit4ClassRunner;
-import org.chromium.chrome.browser.ui.widget.DualControlLayout.DualControlLayoutAlignment;
-import org.chromium.chrome.browser.ui.widget.test.R;
+import org.chromium.components.browser_ui.widget.DualControlLayout.DualControlLayoutAlignment;
+import org.chromium.components.browser_ui.widget.test.R;
 
 /**
  * Tests for DualControlLayout.

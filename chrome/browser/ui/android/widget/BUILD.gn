@@ -11,7 +11,6 @@ android_library("java") {
     "java/src/org/chromium/chrome/browser/ui/widget/ClipDrawableProgressBar.java",
     "java/src/org/chromium/chrome/browser/ui/widget/CompositeTouchDelegate.java",
     "java/src/org/chromium/chrome/browser/ui/widget/ContextMenuDialog.java",
-    "java/src/org/chromium/chrome/browser/ui/widget/DualControlLayout.java",
     "java/src/org/chromium/chrome/browser/ui/widget/FadingShadow.java",
     "java/src/org/chromium/chrome/browser/ui/widget/FadingShadowView.java",
     "java/src/org/chromium/chrome/browser/ui/widget/LoadingView.java",
@@ -99,7 +98,6 @@ android_library("ui_widget_java_tests") {
   testonly = true
 
   java_files = [
-    "java/src/org/chromium/chrome/browser/ui/widget/DualControlLayoutTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/PromoDialogTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/RadioButtonLayoutTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/RadioButtonWithDescriptionLayoutTest.java",
