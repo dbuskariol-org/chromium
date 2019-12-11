@@ -346,6 +346,7 @@ group("gn_all") {
       "//ui/android:ui_junit_tests",
       "//weblayer/public/java:client_aar",
       "//weblayer/shell/android:weblayer_shell_apk",
+      "//weblayer/shell/android:weblayer_support_apk",
     ]
     deps -= [
       "//net:net_perftests",
