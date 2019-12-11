@@ -13,13 +13,15 @@
 #include "chrome/test/base/interactive_test_utils.h"
 #include "ui/views/focus/focus_manager.h"
 #include "ui/views/view.h"
+#include "url/gurl.h"
 
 using WebAppFrameToolbarInteractiveUITest = WebAppFrameToolbarTest;
 
 // Verifies that for minimal-ui web apps, the toolbar keyboard focus cycles
 // between the Reload and app menu buttons.
 IN_PROC_BROWSER_TEST_F(WebAppFrameToolbarInteractiveUITest, CycleFocus) {
-  InstallAndLaunchWebApp();
+  const GURL app_url("https://test.org");
+  InstallAndLaunchWebApp(app_url);
 
   // Test relies on browser window activation, while platform such as Linux's
   // window activation is asynchronous.

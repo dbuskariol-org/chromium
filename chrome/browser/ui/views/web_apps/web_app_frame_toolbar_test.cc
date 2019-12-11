@@ -16,6 +16,7 @@
 #include "content/public/test/test_navigation_observer.h"
 #include "ui/views/widget/widget.h"
 #include "ui/views/window/non_client_view.h"
+#include "url/gurl.h"
 
 WebAppFrameToolbarTest::WebAppFrameToolbarTest() {
   scoped_feature_list_.InitWithFeatures({features::kDesktopMinimalUI}, {});
@@ -23,21 +24,17 @@ WebAppFrameToolbarTest::WebAppFrameToolbarTest() {
 
 WebAppFrameToolbarTest::~WebAppFrameToolbarTest() = default;
 
-GURL WebAppFrameToolbarTest::GetAppURL() const {
-  return GURL("https://test.org");
-}
-
-void WebAppFrameToolbarTest::InstallAndLaunchWebApp() {
+void WebAppFrameToolbarTest::InstallAndLaunchWebApp(const GURL& app_url) {
   auto web_app_info = std::make_unique<WebApplicationInfo>();
-  web_app_info->app_url = GetAppURL();
-  web_app_info->scope = GetAppURL().GetWithoutFilename();
+  web_app_info->app_url = app_url;
+  web_app_info->scope = app_url.GetWithoutFilename();
   web_app_info->title = base::ASCIIToUTF16("A minimal-ui app");
   web_app_info->display_mode = web_app::DisplayMode::kMinimalUi;
   web_app_info->open_as_window = true;
 
   web_app::AppId app_id =
       web_app::InstallWebApp(browser()->profile(), std::move(web_app_info));
-  content::TestNavigationObserver navigation_observer(GetAppURL());
+  content::TestNavigationObserver navigation_observer(app_url);
   navigation_observer.StartWatchingNewWebContents();
   app_browser_ = web_app::LaunchWebAppBrowser(browser()->profile(), app_id);
   navigation_observer.WaitForNavigationFinished();

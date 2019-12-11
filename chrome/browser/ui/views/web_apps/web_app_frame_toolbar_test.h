@@ -7,11 +7,11 @@
 
 #include "base/test/scoped_feature_list.h"
 #include "chrome/test/base/in_process_browser_test.h"
-#include "url/gurl.h"
 
 class Browser;
 class BrowserNonClientFrameView;
 class BrowserView;
+class GURL;
 class WebAppFrameToolbarView;
 
 class WebAppFrameToolbarTest : public InProcessBrowserTest {
@@ -19,9 +19,7 @@ class WebAppFrameToolbarTest : public InProcessBrowserTest {
   WebAppFrameToolbarTest();
   ~WebAppFrameToolbarTest() override;
 
-  GURL GetAppURL() const;
-
-  void InstallAndLaunchWebApp();
+  void InstallAndLaunchWebApp(const GURL& app_url);
 
   Browser* app_browser() { return app_browser_; }
   BrowserView* browser_view() { return browser_view_; }
