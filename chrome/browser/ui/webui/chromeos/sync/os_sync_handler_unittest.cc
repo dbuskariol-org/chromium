@@ -24,6 +24,7 @@
 #include "testing/gtest/include/gtest/gtest.h"
 
 using base::DictionaryValue;
+using content::TestWebUI;
 using syncer::UserSelectableOsType;
 using syncer::UserSelectableOsTypeSet;
 using syncer::UserSelectableTypeSet;
@@ -38,16 +39,13 @@ class BrowserContext;
 
 namespace {
 
-enum FeatureConfig { FEATURE_ENABLED, FEATURE_DISABLED };
 enum SyncAllConfig { SYNC_ALL_OS_TYPES, CHOOSE_WHAT_TO_SYNC };
 
 // Creates a dictionary with the key/value pairs appropriate for a call to
 // HandleSetOsSyncDatatypes().
-DictionaryValue CreateOsSyncPrefs(FeatureConfig feature,
-                                  SyncAllConfig sync_all,
+DictionaryValue CreateOsSyncPrefs(SyncAllConfig sync_all,
                                   UserSelectableOsTypeSet types) {
   DictionaryValue result;
-  result.SetBoolean("featureEnabled", feature == FEATURE_ENABLED);
   result.SetBoolean("syncAllOsTypes", sync_all == SYNC_ALL_OS_TYPES);
   // Add all of our data types.
   result.SetBoolean("osAppsSynced", types.Has(UserSelectableOsType::kOsApps));
@@ -126,12 +124,6 @@ class OsSyncHandlerTest : public ChromeRenderViewHostTestHarness {
         .WillByDefault(Return(syncer::SyncService::TransportState::ACTIVE));
     ON_CALL(*mock_sync_service_, IsAuthenticatedAccountPrimary())
         .WillByDefault(Return(true));
-    ON_CALL(*mock_sync_service_, GetSetupInProgressHandle())
-        .WillByDefault(
-            Return(ByMove(std::make_unique<syncer::SyncSetupInProgressHandle>(
-                base::BindRepeating(
-                    &OsSyncHandlerTest::OnSetupInProgressHandleDestroyed,
-                    base::Unretained(this))))));
 
     // Configure user settings with the sync feature on and all types enabled.
     user_settings_ = mock_sync_service_->GetMockUserSettings();
@@ -160,23 +152,19 @@ class OsSyncHandlerTest : public ChromeRenderViewHostTestHarness {
         GetIdentityTestEnvironmentFactories();
   }
 
-  void OnSetupInProgressHandleDestroyed() {
-    in_progress_handle_destroyed_count_++;
-  }
-
   // Expects that an "os-sync-prefs-changed" event was sent to the WebUI and
   // returns the data passed to that event.
-  const DictionaryValue* ExpectOsSyncPrefsSent() {
-    const content::TestWebUI::CallData& call_data = *web_ui_.call_data().back();
+  void ExpectOsSyncPrefsSent(bool* feature_enabled,
+                             const DictionaryValue** os_sync_prefs) {
+    const TestWebUI::CallData& call_data = *web_ui_.call_data().back();
     EXPECT_EQ("cr.webUIListenerCallback", call_data.function_name());
 
     std::string event;
     EXPECT_TRUE(call_data.arg1()->GetAsString(&event));
     EXPECT_EQ(event, "os-sync-prefs-changed");
 
-    const DictionaryValue* dictionary = nullptr;
-    EXPECT_TRUE(call_data.arg2()->GetAsDictionary(&dictionary));
-    return dictionary;
+    EXPECT_TRUE(call_data.arg2()->GetAsBoolean(feature_enabled));
+    EXPECT_TRUE(call_data.arg3()->GetAsDictionary(os_sync_prefs));
   }
 
   void NotifySyncStateChanged() {
@@ -187,26 +175,34 @@ class OsSyncHandlerTest : public ChromeRenderViewHostTestHarness {
   syncer::MockSyncService* mock_sync_service_ = nullptr;
   std::unique_ptr<IdentityTestEnvironmentProfileAdaptor>
       identity_test_env_adaptor_;
-  content::TestWebUI web_ui_;
+  TestWebUI web_ui_;
   TestWebUIProvider test_web_ui_provider_;
   std::unique_ptr<TestChromeWebUIControllerFactory> test_web_ui_factory_;
   std::unique_ptr<OSSyncHandler> handler_;
-
-  int in_progress_handle_destroyed_count_ = 0;
 };
 
 TEST_F(OsSyncHandlerTest, OsSyncPrefsSentOnNavigateToPage) {
   handler_->HandleDidNavigateToOsSyncPage(nullptr);
+
   ASSERT_EQ(1U, web_ui_.call_data().size());
-  ExpectOsSyncPrefsSent();
+  const TestWebUI::CallData& call_data = *web_ui_.call_data().back();
+
+  std::string event_name = call_data.arg1()->GetString();
+  EXPECT_EQ(event_name, "os-sync-prefs-changed");
+
+  bool feature_enabled = call_data.arg2()->GetBool();
+  EXPECT_TRUE(feature_enabled);
 }
 
 TEST_F(OsSyncHandlerTest, OsSyncPrefsWhenFeatureIsDisabled) {
   ON_CALL(*user_settings_, GetOsSyncFeatureEnabled())
       .WillByDefault(Return(false));
   handler_->HandleDidNavigateToOsSyncPage(nullptr);
-  const DictionaryValue* os_sync_prefs = ExpectOsSyncPrefsSent();
-  CheckBool(os_sync_prefs, "featureEnabled", false);
+
+  ASSERT_EQ(1U, web_ui_.call_data().size());
+  const TestWebUI::CallData& call_data = *web_ui_.call_data().back();
+  bool feature_enabled = call_data.arg2()->GetBool();
+  EXPECT_FALSE(feature_enabled);
 }
 
 TEST_F(OsSyncHandlerTest, OpenConfigPageBeforeSyncEngineInitialized) {
@@ -227,14 +223,11 @@ TEST_F(OsSyncHandlerTest, OpenConfigPageBeforeSyncEngineInitialized) {
   NotifySyncStateChanged();
 
   // Update for sync prefs is sent.
-  EXPECT_EQ(1U, web_ui_.call_data().size());
-  ExpectOsSyncPrefsSent();
-}
+  ASSERT_EQ(1U, web_ui_.call_data().size());
+  const TestWebUI::CallData& call_data = *web_ui_.call_data().back();
 
-TEST_F(OsSyncHandlerTest, NavigateAwayDestroysInProgressHandle) {
-  handler_->HandleDidNavigateToOsSyncPage(nullptr);
-  handler_->HandleDidNavigateAwayFromOsSyncPage(nullptr);
-  EXPECT_EQ(1, in_progress_handle_destroyed_count_);
+  std::string event_name = call_data.arg1()->GetString();
+  EXPECT_EQ(event_name, "os-sync-prefs-changed");
 }
 
 // Tests that signals not related to user intention to configure sync don't
@@ -246,18 +239,40 @@ TEST_F(OsSyncHandlerTest, OnlyStartEngineWhenConfiguringSync) {
   NotifySyncStateChanged();
 }
 
-TEST_F(OsSyncHandlerTest, UserDisablesFeature) {
-  base::ListValue list_args;
-  list_args.Append(CreateOsSyncPrefs(FEATURE_DISABLED, SYNC_ALL_OS_TYPES,
-                                     UserSelectableOsTypeSet::All()));
+TEST_F(OsSyncHandlerTest, UserDisablesFeatureThenNavigatesAway) {
+  handler_->HandleDidNavigateToOsSyncPage(nullptr);
+
+  // The pref isn't set immediately.
+  EXPECT_CALL(*user_settings_, SetOsSyncFeatureEnabled(_)).Times(0);
+  base::ListValue args;
+  args.Append(base::Value(false));  // feature_enabled
+  handler_->HandleSetOsSyncFeatureEnabled(&args);
+  Mock::VerifyAndClearExpectations(user_settings_);
+
+  // The pref is set when the user navigates away.
   EXPECT_CALL(*user_settings_, SetOsSyncFeatureEnabled(false));
-  handler_->HandleSetOsSyncDatatypes(&list_args);
+  handler_->HandleDidNavigateAwayFromOsSyncPage(nullptr);
+}
+
+TEST_F(OsSyncHandlerTest, UserDisablesFeatureThenClosesSettings) {
+  handler_->HandleDidNavigateToOsSyncPage(nullptr);
+
+  // The pref isn't set immediately.
+  EXPECT_CALL(*user_settings_, SetOsSyncFeatureEnabled(_)).Times(0);
+  base::ListValue args;
+  args.Append(base::Value(false));  // feature_enabled
+  handler_->HandleSetOsSyncFeatureEnabled(&args);
+  Mock::VerifyAndClearExpectations(user_settings_);
+
+  // The pref is set when the settings window closes and destroys the handler.
+  EXPECT_CALL(*user_settings_, SetOsSyncFeatureEnabled(false));
+  handler_.reset();
 }
 
 TEST_F(OsSyncHandlerTest, TestSyncEverything) {
   base::ListValue list_args;
-  list_args.Append(CreateOsSyncPrefs(FEATURE_ENABLED, SYNC_ALL_OS_TYPES,
-                                     UserSelectableOsTypeSet::All()));
+  list_args.Append(
+      CreateOsSyncPrefs(SYNC_ALL_OS_TYPES, UserSelectableOsTypeSet::All()));
   EXPECT_CALL(*user_settings_,
               SetSelectedOsTypes(/*sync_all_os_types=*/true, _));
   handler_->HandleSetOsSyncDatatypes(&list_args);
@@ -269,8 +284,7 @@ TEST_F(OsSyncHandlerTest, TestSyncIndividualTypes) {
   for (UserSelectableOsType type : UserSelectableOsTypeSet::All()) {
     UserSelectableOsTypeSet types = {type};
     base::ListValue list_args;
-    list_args.Append(
-        CreateOsSyncPrefs(FEATURE_ENABLED, CHOOSE_WHAT_TO_SYNC, types));
+    list_args.Append(CreateOsSyncPrefs(CHOOSE_WHAT_TO_SYNC, types));
     EXPECT_CALL(*user_settings_, SetSelectedOsTypes(false, types));
 
     handler_->HandleSetOsSyncDatatypes(&list_args);
@@ -280,8 +294,8 @@ TEST_F(OsSyncHandlerTest, TestSyncIndividualTypes) {
 
 TEST_F(OsSyncHandlerTest, TestSyncAllManually) {
   base::ListValue list_args;
-  list_args.Append(CreateOsSyncPrefs(FEATURE_ENABLED, CHOOSE_WHAT_TO_SYNC,
-                                     UserSelectableOsTypeSet::All()));
+  list_args.Append(
+      CreateOsSyncPrefs(CHOOSE_WHAT_TO_SYNC, UserSelectableOsTypeSet::All()));
   EXPECT_CALL(*user_settings_,
               SetSelectedOsTypes(false, UserSelectableOsTypeSet::All()));
   handler_->HandleSetOsSyncDatatypes(&list_args);
@@ -290,8 +304,12 @@ TEST_F(OsSyncHandlerTest, TestSyncAllManually) {
 TEST_F(OsSyncHandlerTest, ShowSetupSyncEverything) {
   handler_->HandleDidNavigateToOsSyncPage(nullptr);
 
-  const DictionaryValue* dictionary = ExpectOsSyncPrefsSent();
+  bool feature_enabled;
+  const DictionaryValue* dictionary;
+  ExpectOsSyncPrefsSent(&feature_enabled, &dictionary);
+  EXPECT_TRUE(feature_enabled);
   CheckBool(dictionary, "syncAllOsTypes", true);
+  CheckBool(dictionary, "osAppsRegistered", true);
   CheckBool(dictionary, "osPreferencesRegistered", true);
   CheckBool(dictionary, "printersRegistered", true);
   CheckBool(dictionary, "wifiConfigurationsRegistered", true);
@@ -304,7 +322,10 @@ TEST_F(OsSyncHandlerTest, ShowSetupManuallySyncAll) {
       .WillByDefault(Return(false));
   handler_->HandleDidNavigateToOsSyncPage(nullptr);
 
-  const DictionaryValue* dictionary = ExpectOsSyncPrefsSent();
+  bool feature_enabled;
+  const DictionaryValue* dictionary;
+  ExpectOsSyncPrefsSent(&feature_enabled, &dictionary);
+  EXPECT_TRUE(feature_enabled);
   CheckConfigDataTypeArguments(dictionary, CHOOSE_WHAT_TO_SYNC,
                                UserSelectableOsTypeSet::All());
 }
@@ -318,7 +339,10 @@ TEST_F(OsSyncHandlerTest, ShowSetupSyncForAllTypesIndividually) {
 
     handler_->HandleDidNavigateToOsSyncPage(nullptr);
 
-    const DictionaryValue* dictionary = ExpectOsSyncPrefsSent();
+    bool feature_enabled;
+    const DictionaryValue* dictionary;
+    ExpectOsSyncPrefsSent(&feature_enabled, &dictionary);
+    EXPECT_TRUE(feature_enabled);
     CheckConfigDataTypeArguments(dictionary, CHOOSE_WHAT_TO_SYNC, types);
     Mock::VerifyAndClearExpectations(mock_sync_service_);
   }
