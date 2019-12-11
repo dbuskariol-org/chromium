@@ -161,7 +161,12 @@ source_set("eg_tests") {
   sources = [
     "bookmark_earl_grey_utils.h",
     "bookmark_earl_grey_utils.mm",
+    "bookmarks_accessibility_egtest.mm",
     "bookmarks_egtest.mm",
+    "bookmarks_entries_egtest.mm",
+    "bookmarks_folders_egtest.mm",
+    "bookmarks_promo_egtest.mm",
+    "bookmarks_search_egtest.mm",
   ]
   deps = [
     ":bookmarks_ui",
