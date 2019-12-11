@@ -854,7 +854,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
         if (!mStarted) return; // Sync state reporting should work only in started state.
         if (mContextReporter != null || getActivityTab() == null) return;
 
-        final SyncController syncController = SyncController.get(this);
+        final SyncController syncController = SyncController.get();
         final ProfileSyncService syncService = ProfileSyncService.get();
 
         if (syncController != null && syncController.isSyncingUrlsWithKeystorePassphrase()) {
