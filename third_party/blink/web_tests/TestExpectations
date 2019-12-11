@@ -6046,13 +6046,6 @@ crbug.com/1024976 virtual/audio-service/media/video-no-audio.html [ Pass Failure
 # Sheriff 2019-10-31
 crbug.com/1020036 [ Debug ] external/wpt/lifecycle/freeze.html [ Failure Pass ]
 
-# Temporarily disabled for landing datagrid Changes in devtools
-crbug.com/963183 http/tests/devtools/network/network-close-request-view.js [ Pass Failure ]
-crbug.com/963183 http/tests/devtools/network/network-cookies-pane.js [ Pass Timeout Failure ]
-crbug.com/963183 http/tests/devtools/network/preview-searchable.js [ Pass Failure ]
-crbug.com/963183 http/tests/devtools/network/waterfall-header-height-updates.js [ Pass Failure ]
-crbug.com/963183 http/tests/devtools/network/network-search.js [ Pass Timeout Failure ]
-
 # Temporarily disabled for landing productregistry removal in devtools
 crbug.com/1011466 http/tests/devtools/console/console-format-classes.js [ Pass Failure ]
 crbug.com/1011466 http/tests/devtools/modules-load-initial.js [ Pass Failure ]
