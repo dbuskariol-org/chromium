@@ -110,9 +110,6 @@ void HostsUsingFeatures::Value::Aggregate(HostsUsingFeatures::Value other) {
 }
 
 void HostsUsingFeatures::Value::RecordHostToRappor(const String& host) {
-  if (Get(Feature::kFullscreenInsecureHost))
-    Platform::Current()->RecordRappor(
-        "PowerfulFeatureUse.Host.Fullscreen.Insecure", host);
   if (Get(Feature::kGeolocationInsecureHost))
     Platform::Current()->RecordRappor(
         "PowerfulFeatureUse.Host.Geolocation.Insecure", host);
