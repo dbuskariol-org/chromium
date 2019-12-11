@@ -76,6 +76,7 @@ class CORE_EXPORT RemoteFrame final : public Frame,
   RemoteFrameClient* Client() const;
 
   bool IsIgnoredForHitTest() const;
+  void UpdateHitTestOcclusionData();
 
   void DidChangeVisibleToHitTesting() override;
 
