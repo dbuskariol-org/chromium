@@ -119,23 +119,6 @@ class RTCStatsReportIterationSource final
 
 }  // namespace
 
-WebVector<webrtc::NonStandardGroupId> GetExposedGroupIdsDeprecated(
-    const ScriptState* script_state) {
-  const ExecutionContext* context = ExecutionContext::From(script_state);
-  DCHECK(context->IsContextThread());
-  WebVector<webrtc::NonStandardGroupId> enabled_origin_trials;
-  if (RuntimeEnabledFeatures::RtcAudioJitterBufferMaxPacketsEnabled(context)) {
-    enabled_origin_trials.emplace_back(
-        webrtc::NonStandardGroupId::kRtcAudioJitterBufferMaxPackets);
-  }
-  if (RuntimeEnabledFeatures::RTCStatsRelativePacketArrivalDelayEnabled(
-          context)) {
-    enabled_origin_trials.emplace_back(
-        webrtc::NonStandardGroupId::kRtcStatsRelativePacketArrivalDelay);
-  }
-  return enabled_origin_trials;
-}
-
 Vector<webrtc::NonStandardGroupId> GetExposedGroupIds(
     const ScriptState* script_state) {
   const ExecutionContext* context = ExecutionContext::From(script_state);
