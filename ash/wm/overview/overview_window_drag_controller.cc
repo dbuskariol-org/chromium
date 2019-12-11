@@ -338,6 +338,8 @@ void OverviewWindowDragController::ResetGesture() {
     }
     item_->overview_grid()->RemoveDropTarget();
     if (should_allow_split_view_) {
+      SplitViewController::Get(Shell::GetPrimaryRootWindow())
+          ->OnWindowDragCanceled();
       overview_session_->UpdateSplitViewDragIndicatorsWindowDraggingStates(
           item_->overview_grid()->root_window(), /*is_dragging=*/false,
           SplitViewDragIndicators::WindowDraggingState::kNoDrag,
