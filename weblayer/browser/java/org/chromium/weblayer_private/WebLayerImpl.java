@@ -201,22 +201,26 @@ public final class WebLayerImpl extends IWebLayer.Stub {
 
     @Override
     public void setRemoteDebuggingEnabled(boolean enabled) {
+        StrictModeWorkaround.apply();
         WebLayerImplJni.get().setRemoteDebuggingEnabled(enabled);
     }
 
     @Override
     public boolean isRemoteDebuggingEnabled() {
+        StrictModeWorkaround.apply();
         return WebLayerImplJni.get().isRemoteDebuggingEnabled();
     }
 
     @Override
     public ICrashReporterController getCrashReporterControllerV80(IObjectWrapper appContext) {
+        StrictModeWorkaround.apply();
         return getCrashReporterController(appContext, null);
     }
 
     @Override
     public ICrashReporterController getCrashReporterController(
             IObjectWrapper appContext, IObjectWrapper remoteContext) {
+        StrictModeWorkaround.apply();
         // This is a no-op if init has already happened.
         WebLayerImpl.minimalInitForContext(appContext, remoteContext);
         return CrashReporterControllerImpl.getInstance();
