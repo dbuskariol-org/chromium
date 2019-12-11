@@ -675,6 +675,8 @@ SplitViewController::SnapPosition OverviewWindowDragController::GetSnapPosition(
   // bar.
   SplitViewController* split_view_controller =
       SplitViewController::Get(GetRootWindowBeingDraggedIn());
+  if (!split_view_controller->CanSnapWindow(item_->GetWindow()))
+    return SplitViewController::NONE;
   if (split_view_controller->InSplitViewMode()) {
     const int position =
         gfx::ToRoundedInt(SplitViewController::IsLayoutHorizontal()
