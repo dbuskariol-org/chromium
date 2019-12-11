@@ -485,16 +485,8 @@ void GetRTCStatsOnSignalingThread(
     RTCStatsReportCallback callback,
     const Vector<webrtc::NonStandardGroupId>& exposed_group_ids) {
   TRACE_EVENT0("webrtc", "GetRTCStatsOnSignalingThread");
-
-  // TODO(crbug.com/787254): Remove this conversion routine when
-  // CreateRTCStatsCollectorCallback gets switched over to work on
-  // WTF::Vector (instead of WebVector).
-  WebVector<webrtc::NonStandardGroupId> exposed_group_ids_copy;
-  for (auto id : exposed_group_ids)
-    exposed_group_ids_copy.emplace_back(id);
-
   native_peer_connection->GetStats(CreateRTCStatsCollectorCallback(
-      main_thread, std::move(callback), std::move(exposed_group_ids_copy)));
+      main_thread, std::move(callback), exposed_group_ids));
 }
 
 void ConvertOfferOptionsToWebrtcOfferOptions(

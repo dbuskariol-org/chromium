@@ -326,18 +326,10 @@ class RTCRtpSenderImpl::RTCRtpSenderInternal
   void GetStatsOnSignalingThread(
       RTCStatsReportCallback callback,
       const Vector<webrtc::NonStandardGroupId>& exposed_group_ids) {
-    // TODO(crbug.com/787254): Remove this conversion routine, when
-    // CreateRTCStatsCollectorCallback() operates over WTF::Vector, instead of
-    // WebVector.
-    WebVector<webrtc::NonStandardGroupId> exposed_group_ids_copy(
-        static_cast<WTF::wtf_size_t>(exposed_group_ids.size()));
-    for (WTF::wtf_size_t i = 0; i < exposed_group_ids.size(); ++i)
-      exposed_group_ids_copy[i] = exposed_group_ids[i];
-
     native_peer_connection_->GetStats(
         webrtc_sender_.get(),
         CreateRTCStatsCollectorCallback(main_task_runner_, std::move(callback),
-                                        std::move(exposed_group_ids_copy)));
+                                        exposed_group_ids));
   }
 
   void SetParametersOnSignalingThread(
