@@ -60,6 +60,7 @@ class AppServiceInstanceRegistryHelper {
   bool IsWebApp(const std::string& app_id) const;
 
  private:
+  std::string GetAppId(content::WebContents* contents) const;
   aura::Window* GetWindow(content::WebContents* contents);
 
   apps::AppServiceProxy* proxy_ = nullptr;
