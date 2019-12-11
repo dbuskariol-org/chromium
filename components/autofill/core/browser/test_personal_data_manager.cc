@@ -47,7 +47,7 @@ std::string TestPersonalDataManager::SaveImportedCreditCard(
 }
 
 void TestPersonalDataManager::AddVPA(const std::string& profile) {
-  num_times_save_vpa_called_++;
+  num_times_save_upi_id_called_++;
 }
 
 void TestPersonalDataManager::AddProfile(const AutofillProfile& profile) {
