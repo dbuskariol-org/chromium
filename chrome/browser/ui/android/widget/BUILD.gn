@@ -105,6 +105,7 @@ android_library("ui_widget_java_tests") {
     "java/src/org/chromium/chrome/browser/ui/widget/RadioButtonWithDescriptionLayoutTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/highlight/ViewHighlighterTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/MoreProgressButtonTest.java",
+    "java/src/org/chromium/chrome/browser/ui/widget/WrappingLayoutTest.java",
   ]
   deps = [
     ":java",
