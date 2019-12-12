@@ -439,12 +439,6 @@ class CONTENT_EXPORT ServiceWorkerContainerHost final
   enum class ClientPhase { kInitial, kResponseCommitted, kExecutionReady };
   void TransitionToClientPhase(ClientPhase new_phase);
 
-  // For service worker clients. Returns false if it's not yet time to send the
-  // renderer information about the controller. Basically returns false if this
-  // client is still loading so due to potential redirects the initial
-  // controller has not yet been decided.
-  bool IsControllerDecided() const;
-
   // Sets the controller to |controller_registration_->active_version()| or null
   // if there is no associated registration.
   //

@@ -349,7 +349,7 @@ void ServiceWorkerContainerHost::OnExecutionReady() {
   // because 1) the controller might have changed since navigation commit due to
   // skipWaiting(), and 2) the UseCounter might have changed since navigation
   // commit, in such cases the updated information was prevented being sent due
-  // to false ServiceWorkerContainerHost::IsControllerDecided().
+  // to false is_execution_ready().
   // TODO(leonhsl): Create some layout tests covering the above case 1), in
   // which case we may also need to set |notify_controllerchange| correctly.
   SendSetControllerServiceWorker(false /* notify_controllerchange */);
@@ -488,7 +488,7 @@ void ServiceWorkerContainerHost::CountFeature(
   DCHECK(IsContainerForClient());
 
   // And only when loading finished so the controller is really settled.
-  if (!IsControllerDecided())
+  if (!is_execution_ready())
     return;
 
   container_->CountFeature(feature);
@@ -1101,37 +1101,6 @@ void ServiceWorkerContainerHost::TransitionToClientPhase(
   client_phase_ = new_phase;
 }
 
-bool ServiceWorkerContainerHost::IsControllerDecided() const {
-  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-  DCHECK(IsContainerForClient());
-
-  if (is_execution_ready())
-    return true;
-
-  // TODO(falken): This function just becomes |is_execution_ready()|
-  // when NetworkService is enabled, so remove/simplify it when
-  // non-NetworkService code is removed.
-
-  switch (client_type()) {
-    case blink::mojom::ServiceWorkerClientType::kWindow:
-      // |this| is hosting a reserved client undergoing navigation. Don't send
-      // the controller since it can be changed again before the final
-      // response. The controller will be sent on navigation commit. See
-      // CommitNavigation in frame.mojom.
-      return false;
-    case blink::mojom::ServiceWorkerClientType::kDedicatedWorker:
-    case blink::mojom::ServiceWorkerClientType::kSharedWorker:
-      // When PlzWorker is enabled, the controller will be sent when the
-      // response is committed to the renderer.
-      return false;
-    case blink::mojom::ServiceWorkerClientType::kAll:
-      NOTREACHED();
-  }
-
-  NOTREACHED();
-  return true;
-}
-
 void ServiceWorkerContainerHost::UpdateController(
     bool notify_controllerchange) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
@@ -1153,7 +1122,7 @@ void ServiceWorkerContainerHost::UpdateController(
   // SetController message should be sent only for clients.
   DCHECK(IsContainerForClient());
 
-  if (!IsControllerDecided())
+  if (!is_execution_ready())
     return;
 
   SendSetControllerServiceWorker(notify_controllerchange);
