@@ -17320,7 +17320,7 @@
 
       When the policy is set to disabled or not set, pages are not allowed to show popups while they are being unloaded, as per the spec (https://html.spec.whatwg.org/#apis-for-creating-and-navigating-browsing-contexts-by-name).
 
-      This policy will be removed in Chrome 82.
+      This policy will be removed in Chrome 88.
 
       See https://www.chromestatus.com/feature/5989473649164288 .''',
     },
@@ -18652,7 +18652,7 @@
 
       When the policy is set to disabled or not set, pages are not allowed to send synchronous XHR requests during page dismissal.
 
-      This policy will be removed in Chrome 82.
+      This policy will be removed in Chrome 88.
 
       See https://www.chromestatus.com/feature/4664843055398912 .''',
     },
