@@ -412,8 +412,7 @@ public class LocationBarModel implements ToolbarDataProvider, ToolbarCommonPrope
                 // is NONE, but the security indicator should be shown on all devices.
                 if (mNativeLocationBarModelAndroid != 0
                         && SecurityStateModel.isSchemeCryptographic(url)) {
-                    return SecurityStateModel.shouldDowngradeNeutralStylingForWebContents(
-                                   getActiveWebContents(), url)
+                    return SecurityStateModel.shouldDowngradeNeutralStyling(securityLevel, url)
                             ? R.drawable.omnibox_not_secure_warning
                             : R.drawable.omnibox_info;
                 }
@@ -426,8 +425,7 @@ public class LocationBarModel implements ToolbarDataProvider, ToolbarCommonPrope
                 if (mNativeLocationBarModelAndroid == 0) {
                     return R.drawable.omnibox_info;
                 }
-                if (SecurityStateModel.shouldDowngradeNeutralStylingForWebContents(
-                            getActiveWebContents(), url)) {
+                if (SecurityStateModel.shouldDowngradeNeutralStyling(securityLevel, url)) {
                     return R.drawable.omnibox_not_secure_warning;
                 }
                 return R.drawable.omnibox_info;
