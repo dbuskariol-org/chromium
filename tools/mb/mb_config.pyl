@@ -1196,7 +1196,8 @@
     ],
 
     'android_release_trybot_fastbuild': [
-      'android', 'release_trybot', 'strip_debug_info', 'android_fastbuild'
+      'android', 'release_trybot', 'strip_debug_info', 'android_fastbuild',
+      'android_no_proguard',
     ],
 
     'android_release_trybot_x86': [
