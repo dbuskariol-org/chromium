@@ -278,6 +278,13 @@ color_utils::HSL ThemeProperties::GetDefaultTint(int id,
   if ((id == TINT_FRAME) && incognito)
     return {-1, 0.7, 0.075};  // #DEE1E6 -> kGoogleGrey900
   if (id == TINT_FRAME_INACTIVE) {
+    // |dark_mode| is only true here when attempting to tint the Windows native
+    // frame color while in dark mode.  The goal in this case is to match the
+    // difference between Chrome default dark mode active and inactive frames,
+    // so return a shift that matches that.
+    if (dark_mode)
+      return {0.59, 0.53, 0.567};  // kGoogleGrey900 -> kGoogleGrey800
+
     if (incognito)
       return {0.57, 0.65, 0.1405};  // #DEE1E6 -> kGoogleGrey800
     return {-1, -1, 0.642};         // #DEE1E6 -> #E7EAED
