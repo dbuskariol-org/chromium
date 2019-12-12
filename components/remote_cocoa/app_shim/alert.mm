@@ -28,9 +28,9 @@ const int kMessageTextMaxSlots = 2000;
 // going away. Is responsible for cleaning itself up.
 @interface AlertBridgeHelper : NSObject <NSAlertDelegate> {
  @private
-  base::scoped_nsobject<NSAlert> _alert;
-  remote_cocoa::AlertBridge* _alertBridge;  // Weak.
-  base::scoped_nsobject<NSTextField> _textField;
+  base::scoped_nsobject<NSAlert> alert_;
+  remote_cocoa::AlertBridge* alertBridge_;  // Weak.
+  base::scoped_nsobject<NSTextField> textField_;
 }
 @property(assign, nonatomic) remote_cocoa::AlertBridge* alertBridge;
 
@@ -48,11 +48,11 @@ const int kMessageTextMaxSlots = 2000;
 @end
 
 @implementation AlertBridgeHelper
-@synthesize alertBridge = _alertBridge;
+@synthesize alertBridge = alertBridge_;
 
 - (void)initAlert:(AlertBridgeInitParams*)params {
-  _alert.reset([[NSAlert alloc] init]);
-  [_alert setDelegate:self];
+  alert_.reset([[NSAlert alloc] init]);
+  [alert_ setDelegate:self];
 
   if (params->hide_application_icon)
     [self setBlankIcon];
@@ -79,23 +79,23 @@ const int kMessageTextMaxSlots = 2000;
     }
   }
 
-  [_alert setInformativeText:informative_text];
+  [alert_ setInformativeText:informative_text];
   NSString* message_text = l10n_util::FixUpWindowsStyleLabel(params->title);
-  [_alert setMessageText:message_text];
-  [_alert addButtonWithTitle:l10n_util::FixUpWindowsStyleLabel(
+  [alert_ setMessageText:message_text];
+  [alert_ addButtonWithTitle:l10n_util::FixUpWindowsStyleLabel(
                                  params->primary_button_text)];
 
   if (params->secondary_button_text) {
     NSButton* other =
-        [_alert addButtonWithTitle:l10n_util::FixUpWindowsStyleLabel(
+        [alert_ addButtonWithTitle:l10n_util::FixUpWindowsStyleLabel(
                                        *params->secondary_button_text)];
     [other setKeyEquivalent:@"\e"];
   }
   if (params->check_box_text) {
-    [_alert setShowsSuppressionButton:YES];
+    [alert_ setShowsSuppressionButton:YES];
     NSString* suppression_title =
         l10n_util::FixUpWindowsStyleLabel(*params->check_box_text);
-    [[_alert suppressionButton] setTitle:suppression_title];
+    [[alert_ suppressionButton] setTitle:suppression_title];
   }
 
   // Fix RTL dialogs.
@@ -123,13 +123,13 @@ const int kMessageTextMaxSlots = 2000;
     // Force layout of the dialog. NSAlert leaves its dialog alone once laid
     // out; if this is not done then all the modifications that are to come will
     // be un-done when the dialog is finally displayed.
-    [_alert layout];
+    [alert_ layout];
 
     // Locate the NSTextFields that implement the text display. These are
     // actually available as the ivars |_messageField| and |_informationField|
     // of the NSAlert, but it is safer (and more forward-compatible) to search
     // for them in the subviews.
-    for (NSView* view in [[[_alert window] contentView] subviews]) {
+    for (NSView* view in [[[alert_ window] contentView] subviews]) {
       NSTextField* text_field = base::mac::ObjCCast<NSTextField>(view);
       if ([[text_field stringValue] isEqualTo:message_text])
         message_text_field = text_field;
@@ -181,22 +181,22 @@ const int kMessageTextMaxSlots = 2000;
 - (void)setBlankIcon {
   NSImage* image =
       [[[NSImage alloc] initWithSize:NSMakeSize(1, 1)] autorelease];
-  [_alert setIcon:image];
+  [alert_ setIcon:image];
 }
 
 - (NSAlert*)alert {
-  return _alert;
+  return alert_;
 }
 
 - (void)addTextFieldWithPrompt:(NSString*)prompt {
-  DCHECK(!_textField);
-  _textField.reset(
+  DCHECK(!textField_);
+  textField_.reset(
       [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 300, 22)]);
-  [[_textField cell] setLineBreakMode:NSLineBreakByTruncatingTail];
-  [[self alert] setAccessoryView:_textField];
-  [[_alert window] setInitialFirstResponder:_textField];
+  [[textField_ cell] setLineBreakMode:NSLineBreakByTruncatingTail];
+  [[self alert] setAccessoryView:textField_];
+  [[alert_ window] setInitialFirstResponder:textField_];
 
-  [_textField setStringValue:prompt];
+  [textField_ setStringValue:prompt];
 }
 
 // |contextInfo| is the JavaScriptAppModalDialogCocoa that owns us.
@@ -205,13 +205,13 @@ const int kMessageTextMaxSlots = 2000;
         contextInfo:(void*)contextInfo {
   switch (returnCode) {
     case NSAlertFirstButtonReturn:  // OK
-      _alertBridge->SendResultAndDestroy(AlertDisposition::PRIMARY_BUTTON);
+      alertBridge_->SendResultAndDestroy(AlertDisposition::PRIMARY_BUTTON);
       break;
     case NSAlertSecondButtonReturn:  // Cancel
-      _alertBridge->SendResultAndDestroy(AlertDisposition::SECONDARY_BUTTON);
+      alertBridge_->SendResultAndDestroy(AlertDisposition::SECONDARY_BUTTON);
       break;
     case NSModalResponseStop:  // Window was closed underneath us
-      _alertBridge->SendResultAndDestroy(AlertDisposition::CLOSE);
+      alertBridge_->SendResultAndDestroy(AlertDisposition::CLOSE);
       break;
     default:
       NOTREACHED();
@@ -219,8 +219,8 @@ const int kMessageTextMaxSlots = 2000;
 }
 
 - (void)showAlert {
-  DCHECK(_alertBridge);
-  _alertBridge->SetAlertHasShown();
+  DCHECK(alertBridge_);
+  alertBridge_->SetAlertHasShown();
   NSAlert* alert = [self alert];
   [alert layout];
   [[alert window] recalculateKeyViewLoop];
@@ -236,13 +236,13 @@ const int kMessageTextMaxSlots = 2000;
 }
 
 - (void)closeWindow {
-  DCHECK(_alertBridge);
+  DCHECK(alertBridge_);
   [NSApp endSheet:[[self alert] window]];
 }
 
 - (base::string16)input {
-  if (_textField)
-    return base::SysNSStringToUTF16([_textField stringValue]);
+  if (textField_)
+    return base::SysNSStringToUTF16([textField_ stringValue]);
   return base::string16();
 }
 

@@ -30,24 +30,24 @@ REMOTE_COCOA_APP_SHIM_EXPORT
                                                  NSServicesMenuRequestor> {
  @private
   // Weak, reset by clearView.
-  remote_cocoa::NativeWidgetNSWindowBridge* _bridge;
+  remote_cocoa::NativeWidgetNSWindowBridge* bridge_;
 
   // A tracking area installed to enable mouseMoved events.
-  ui::ScopedCrTrackingArea _cursorTrackingArea;
+  ui::ScopedCrTrackingArea cursorTrackingArea_;
 
   // The keyDown event currently being handled, nil otherwise.
-  NSEvent* _keyDownEvent;
+  NSEvent* keyDownEvent_;
 
   // Whether there's an active key down event which is not handled yet.
-  BOOL _hasUnhandledKeyDownEvent;
+  BOOL hasUnhandledKeyDownEvent_;
 
   // Whether any -insertFoo: selector (e.g. -insertNewLine:) was passed to
   // -doCommandBySelector: during the processing of this keyDown. These must
   // always be dispatched as a ui::KeyEvent in -keyDown:.
-  BOOL _wantsKeyHandledForInsert;
+  BOOL wantsKeyHandledForInsert_;
 
   // The last tooltip text, used to limit updates.
-  base::string16 _lastTooltipText;
+  base::string16 lastTooltipText_;
 }
 
 @property(readonly, nonatomic) remote_cocoa::NativeWidgetNSWindowBridge* bridge;

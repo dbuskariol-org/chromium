@@ -80,15 +80,15 @@
 
 @implementation NativeWidgetMacNSWindow {
  @private
-  base::scoped_nsobject<CommandDispatcher> _commandDispatcher;
-  base::scoped_nsprotocol<id<UserInterfaceItemCommandHandler>> _commandHandler;
-  id<WindowTouchBarDelegate> _touchBarDelegate;  // Weak.
-  uint64_t _bridgedNativeWidgetId;
-  remote_cocoa::NativeWidgetNSWindowBridge* _bridge;
-  BOOL _willUpdateRestorableState;
+  base::scoped_nsobject<CommandDispatcher> commandDispatcher_;
+  base::scoped_nsprotocol<id<UserInterfaceItemCommandHandler>> commandHandler_;
+  id<WindowTouchBarDelegate> touchBarDelegate_;  // Weak.
+  uint64_t bridgedNativeWidgetId_;
+  remote_cocoa::NativeWidgetNSWindowBridge* bridge_;
+  BOOL willUpdateRestorableState_;
 }
-@synthesize bridgedNativeWidgetId = _bridgedNativeWidgetId;
-@synthesize bridge = _bridge;
+@synthesize bridgedNativeWidgetId = bridgedNativeWidgetId_;
+@synthesize bridge = bridge_;
 
 - (instancetype)initWithContentRect:(NSRect)contentRect
                           styleMask:(NSUInteger)windowStyle
@@ -99,7 +99,7 @@
                                styleMask:windowStyle
                                  backing:bufferingType
                                    defer:deferCreation])) {
-    _commandDispatcher.reset([[CommandDispatcher alloc] initWithOwner:self]);
+    commandDispatcher_.reset([[CommandDispatcher alloc] initWithOwner:self]);
   }
   return self;
 }
@@ -108,7 +108,7 @@
 // inserting a symbol on NativeWidgetMacNSWindow and should be kept even if it
 // does nothing.
 - (void)dealloc {
-  _willUpdateRestorableState = YES;
+  willUpdateRestorableState_ = YES;
   [NSObject cancelPreviousPerformRequestsWithTarget:self];
   [super dealloc];
 }
@@ -116,7 +116,7 @@
 // Public methods.
 
 - (void)setCommandDispatcherDelegate:(id<CommandDispatcherDelegate>)delegate {
-  [_commandDispatcher setDelegate:delegate];
+  [commandDispatcher_ setDelegate:delegate];
 }
 
 - (void)sheetDidEnd:(NSWindow*)sheet
@@ -131,7 +131,7 @@
 }
 
 - (void)setWindowTouchBarDelegate:(id<WindowTouchBarDelegate>)delegate {
-  _touchBarDelegate = delegate;
+  touchBarDelegate_ = delegate;
 }
 
 // Private methods.
@@ -142,14 +142,14 @@
 
 - (BOOL)hasViewsMenuActive {
   bool hasMenuController = false;
-  if (_bridge)
-    _bridge->host()->GetHasMenuController(&hasMenuController);
+  if (bridge_)
+    bridge_->host()->GetHasMenuController(&hasMenuController);
   return hasMenuController;
 }
 
 - (id<NSAccessibility>)rootAccessibilityObject {
   id<NSAccessibility> obj =
-      _bridge ? _bridge->host_helper()->GetNativeViewAccessible() : nil;
+      bridge_ ? bridge_->host_helper()->GetNativeViewAccessible() : nil;
   // We should like to DCHECK that the object returned implemements the
   // NSAccessibility protocol, but the NSAccessibilityRemoteUIElement interface
   // does not conform.
@@ -172,8 +172,8 @@
 
 - (BOOL)_isTitleHidden {
   bool shouldShowWindowTitle = YES;
-  if (_bridge)
-    _bridge->host()->GetShouldShowWindowTitle(&shouldShowWindowTitle);
+  if (bridge_)
+    bridge_->host()->GetShouldShowWindowTitle(&shouldShowWindowTitle);
   return !shouldShowWindowTitle;
 }
 
@@ -190,22 +190,22 @@
 // down, so check for a delegate.
 - (BOOL)canBecomeKeyWindow {
   bool canBecomeKey = NO;
-  if (_bridge)
-    _bridge->host()->GetCanWindowBecomeKey(&canBecomeKey);
+  if (bridge_)
+    bridge_->host()->GetCanWindowBecomeKey(&canBecomeKey);
   return canBecomeKey;
 }
 
 - (BOOL)canBecomeMainWindow {
-  if (!_bridge)
+  if (!bridge_)
     return NO;
 
   // Dialogs and bubbles shouldn't take large shadows away from their parent.
-  if (_bridge->parent())
+  if (bridge_->parent())
     return NO;
 
   bool canBecomeKey = NO;
-  if (_bridge)
-    _bridge->host()->GetCanWindowBecomeKey(&canBecomeKey);
+  if (bridge_)
+    bridge_->host()->GetCanWindowBecomeKey(&canBecomeKey);
   return canBecomeKey;
 }
 
@@ -217,9 +217,9 @@
   // https://crbug.com/941506.
   if (![NSThread isMainThread])
     return [super hasKeyAppearance];
-  if (_bridge) {
+  if (bridge_) {
     bool isAlwaysRenderWindowAsKey = NO;
-    _bridge->host()->GetAlwaysRenderWindowAsKey(&isAlwaysRenderWindowAsKey);
+    bridge_->host()->GetAlwaysRenderWindowAsKey(&isAlwaysRenderWindowAsKey);
     if (isAlwaysRenderWindowAsKey)
       return YES;
   }
@@ -231,7 +231,7 @@
 // allowing any native subview to retain firstResponder status.
 - (void)sendEvent:(NSEvent*)event {
   // Let CommandDispatcher check if this is a redispatched event.
-  if ([_commandDispatcher preSendEvent:event])
+  if ([commandDispatcher_ preSendEvent:event])
     return;
 
   NSEventType type = [event type];
@@ -278,7 +278,7 @@
 // NSResponder implementation.
 
 - (BOOL)performKeyEquivalent:(NSEvent*)event {
-  return [_commandDispatcher performKeyEquivalent:event];
+  return [commandDispatcher_ performKeyEquivalent:event];
 }
 
 - (void)cursorUpdate:(NSEvent*)theEvent {
@@ -302,7 +302,7 @@
 }
 
 - (NSTouchBar*)makeTouchBar API_AVAILABLE(macos(10.12.2)) {
-  return _touchBarDelegate ? [_touchBarDelegate makeTouchBar] : nil;
+  return touchBarDelegate_ ? [touchBarDelegate_ makeTouchBar] : nil;
 }
 
 // Called when the window is the delegate of the archiver passed to
@@ -319,7 +319,7 @@
 }
 
 - (void)saveRestorableState {
-  if (!_bridge)
+  if (!bridge_)
     return;
   if (![self _isConsideredOpenForPersistentState])
     return;
@@ -332,9 +332,9 @@
   [encoder finishEncoding];
 
   auto* bytes = static_cast<uint8_t const*>(restorableStateData.get().bytes);
-  _bridge->host()->OnWindowStateRestorationDataChanged(
+  bridge_->host()->OnWindowStateRestorationDataChanged(
       std::vector<uint8_t>(bytes, bytes + restorableStateData.get().length));
-  _willUpdateRestorableState = NO;
+  willUpdateRestorableState_ = NO;
 }
 
 // AppKit calls -invalidateRestorableState when a property of the window which
@@ -342,15 +342,15 @@
 - (void)invalidateRestorableState {
   [super invalidateRestorableState];
   if ([self _isConsideredOpenForPersistentState]) {
-    if (_willUpdateRestorableState)
+    if (willUpdateRestorableState_)
       return;
-    _willUpdateRestorableState = YES;
+    willUpdateRestorableState_ = YES;
     [self performSelectorOnMainThread:@selector(saveRestorableState)
                            withObject:nil
                         waitUntilDone:NO
                                 modes:@[ NSDefaultRunLoopMode ]];
-  } else if (_willUpdateRestorableState) {
-    _willUpdateRestorableState = NO;
+  } else if (willUpdateRestorableState_) {
+    willUpdateRestorableState_ = NO;
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
   }
 }
@@ -365,11 +365,11 @@
 // CommandDispatchingWindow implementation.
 
 - (void)setCommandHandler:(id<UserInterfaceItemCommandHandler>)commandHandler {
-  _commandHandler.reset([commandHandler retain]);
+  commandHandler_.reset([commandHandler retain]);
 }
 
 - (CommandDispatcher*)commandDispatcher {
-  return _commandDispatcher.get();
+  return commandDispatcher_.get();
 }
 
 - (BOOL)defaultPerformKeyEquivalent:(NSEvent*)event {
@@ -382,19 +382,19 @@
 }
 
 - (void)commandDispatch:(id)sender {
-  [_commandDispatcher dispatch:sender forHandler:_commandHandler];
+  [commandDispatcher_ dispatch:sender forHandler:commandHandler_];
 }
 
 - (void)commandDispatchUsingKeyModifiers:(id)sender {
-  [_commandDispatcher dispatchUsingKeyModifiers:sender
-                                     forHandler:_commandHandler];
+  [commandDispatcher_ dispatchUsingKeyModifiers:sender
+                                     forHandler:commandHandler_];
 }
 
 // NSWindow overrides (NSUserInterfaceItemValidations implementation)
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
-  return [_commandDispatcher validateUserInterfaceItem:item
-                                            forHandler:_commandHandler];
+  return [commandDispatcher_ validateUserInterfaceItem:item
+                                            forHandler:commandHandler_];
 }
 
 // NSWindow overrides (NSAccessibility informal protocol implementation).
@@ -414,10 +414,10 @@
   // properties on the NSWindow and repeats them when focusing an item in the
   // RootView's a11y group. See http://crbug.com/748221.
   id superFocus = [super accessibilityFocusedUIElement];
-  if (!_bridge || superFocus != self)
+  if (!bridge_ || superFocus != self)
     return superFocus;
 
-  return _bridge->host_helper()->GetNativeViewAccessible();
+  return bridge_->host_helper()->GetNativeViewAccessible();
 }
 
 - (NSString*)accessibilityTitle {

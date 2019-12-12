@@ -93,11 +93,11 @@ NSSavePanel* g_last_created_panel_for_testing = nil;
  @private
   // The file dialog to which this target object corresponds. Weak reference
   // since the dialog_ will stay alive longer than this object.
-  NSSavePanel* _dialog;
+  NSSavePanel* dialog_;
 
   // An array whose each item corresponds to an array of different extensions in
   // an extension group.
-  base::scoped_nsobject<NSArray> _fileTypeLists;
+  base::scoped_nsobject<NSArray> fileTypeLists_;
 }
 
 - (id)initWithDialog:(NSSavePanel*)dialog fileTypeLists:(NSArray*)fileTypeLists;
@@ -130,21 +130,21 @@ NSSavePanel* g_last_created_panel_for_testing = nil;
 - (id)initWithDialog:(NSSavePanel*)dialog
        fileTypeLists:(NSArray*)fileTypeLists {
   if ((self = [super init])) {
-    _dialog = dialog;
-    _fileTypeLists.reset([fileTypeLists retain]);
+    dialog_ = dialog;
+    fileTypeLists_.reset([fileTypeLists retain]);
   }
   return self;
 }
 
 - (void)popupAction:(id)sender {
   NSUInteger index = [sender indexOfSelectedItem];
-  if (index < [_fileTypeLists count]) {
+  if (index < [fileTypeLists_ count]) {
     // For save dialogs, this causes the first item in the allowedFileTypes
     // array to be used as the extension for the save panel.
-    [_dialog setAllowedFileTypes:[_fileTypeLists objectAtIndex:index]];
+    [dialog_ setAllowedFileTypes:[fileTypeLists_ objectAtIndex:index]];
   } else {
     // The user selected "All files" option.
-    [_dialog setAllowedFileTypes:nil];
+    [dialog_ setAllowedFileTypes:nil];
   }
 }
 

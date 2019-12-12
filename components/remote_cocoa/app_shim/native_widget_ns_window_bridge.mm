@@ -67,8 +67,8 @@ constexpr auto kUIPaintTimeout = base::TimeDelta::FromSeconds(5);
 // -[NSWindow close] when the animation ends, releasing itself.
 @interface ViewsNSWindowCloseAnimator : NSObject <NSAnimationDelegate> {
  @private
-  base::scoped_nsobject<NSWindow> _window;
-  base::scoped_nsobject<NSAnimation> _animation;
+  base::scoped_nsobject<NSWindow> window_;
+  base::scoped_nsobject<NSAnimation> animation_;
 }
 + (void)closeWindowWithAnimation:(NSWindow*)window;
 @end
@@ -77,12 +77,12 @@ constexpr auto kUIPaintTimeout = base::TimeDelta::FromSeconds(5);
 
 - (instancetype)initWithWindow:(NSWindow*)window {
   if ((self = [super init])) {
-    _window.reset([window retain]);
-    _animation.reset(
+    window_.reset([window retain]);
+    animation_.reset(
         [[ConstrainedWindowAnimationHide alloc] initWithWindow:window]);
-    [_animation setDelegate:self];
-    [_animation setAnimationBlockingMode:NSAnimationNonblocking];
-    [_animation startAnimation];
+    [animation_ setDelegate:self];
+    [animation_ setAnimationBlockingMode:NSAnimationNonblocking];
+    [animation_ startAnimation];
   }
   return self;
 }
@@ -92,8 +92,8 @@ constexpr auto kUIPaintTimeout = base::TimeDelta::FromSeconds(5);
 }
 
 - (void)animationDidEnd:(NSAnimation*)animation {
-  [_window close];
-  [_animation setDelegate:nil];
+  [window_ close];
+  [animation_ setDelegate:nil];
   [self release];
 }
 @end
@@ -115,24 +115,24 @@ constexpr auto kUIPaintTimeout = base::TimeDelta::FromSeconds(5);
 @implementation ModalShowAnimationWithLayer {
   // This is the "real" delegate, but this class acts as the NSAnimationDelegate
   // to avoid a separate object.
-  remote_cocoa::NativeWidgetNSWindowBridge* _bridgedNativeWidget;
+  remote_cocoa::NativeWidgetNSWindowBridge* bridgedNativeWidget_;
 }
 - (instancetype)initWithBridgedNativeWidget:
     (remote_cocoa::NativeWidgetNSWindowBridge*)widget {
   if ((self = [super initWithWindow:widget->ns_window()])) {
-    _bridgedNativeWidget = widget;
+    bridgedNativeWidget_ = widget;
     [self setDelegate:self];
   }
   return self;
 }
 - (void)dealloc {
-  DCHECK(!_bridgedNativeWidget);
+  DCHECK(!bridgedNativeWidget_);
   [super dealloc];
 }
 - (void)animationDidEnd:(NSAnimation*)animation {
-  DCHECK(_bridgedNativeWidget);
-  _bridgedNativeWidget->OnShowAnimationComplete();
-  _bridgedNativeWidget = nullptr;
+  DCHECK(bridgedNativeWidget_);
+  bridgedNativeWidget_->OnShowAnimationComplete();
+  bridgedNativeWidget_ = nullptr;
   [self setDelegate:nil];
 }
 - (void)stopAnimation {

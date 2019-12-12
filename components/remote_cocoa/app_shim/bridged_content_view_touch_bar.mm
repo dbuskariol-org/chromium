@@ -28,8 +28,8 @@ NSString* const kTouchBarCancelId = @"com.google.chrome-CANCEL";
 
 - (void)touchBarButtonAction:(id)sender {
   ui::DialogButton type = static_cast<ui::DialogButton>([sender tag]);
-  if (_bridge)
-    _bridge->host()->DoDialogButtonAction(type);
+  if (bridge_)
+    bridge_->host()->DoDialogButtonAction(type);
 }
 
 // NSTouchBarDelegate protocol implementation.
@@ -37,7 +37,7 @@ NSString* const kTouchBarCancelId = @"com.google.chrome-CANCEL";
 - (NSTouchBarItem*)touchBar:(NSTouchBar*)touchBar
       makeItemForIdentifier:(NSTouchBarItemIdentifier)identifier
     API_AVAILABLE(macos(10.12.2)) {
-  if (!_bridge)
+  if (!bridge_)
     return nil;
 
   if ([identifier isEqualToString:kTouchBarDialogButtonsGroupId]) {
@@ -66,7 +66,7 @@ NSString* const kTouchBarCancelId = @"com.google.chrome-CANCEL";
   base::string16 buttonLabel;
   bool isButtonEnabled = false;
   bool isButtonDefault = false;
-  _bridge->host()->GetDialogButtonInfo(type, &buttonExists, &buttonLabel,
+  bridge_->host()->GetDialogButtonInfo(type, &buttonExists, &buttonLabel,
                                        &isButtonEnabled, &isButtonDefault);
   if (!buttonExists)
     return nil;
@@ -95,11 +95,11 @@ NSString* const kTouchBarCancelId = @"com.google.chrome-CANCEL";
 // NSTouchBarProvider protocol implementation (via NSResponder category).
 
 - (NSTouchBar*)makeTouchBar {
-  if (!_bridge)
+  if (!bridge_)
     return nil;
 
   bool buttonsExist = false;
-  _bridge->host()->GetDoDialogButtonsExist(&buttonsExist);
+  bridge_->host()->GetDoDialogButtonsExist(&buttonsExist);
   if (!buttonsExist)
     return nil;
 

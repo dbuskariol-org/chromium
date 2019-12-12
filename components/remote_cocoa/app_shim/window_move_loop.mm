@@ -23,7 +23,7 @@
 // access.
 @interface WeakCocoaWindowMoveLoop : NSObject {
  @private
-  base::WeakPtr<remote_cocoa::CocoaWindowMoveLoop> _weak;
+  base::WeakPtr<remote_cocoa::CocoaWindowMoveLoop> weak_;
 }
 @end
 
@@ -31,13 +31,13 @@
 - (instancetype)initWithWeakPtr:
     (const base::WeakPtr<remote_cocoa::CocoaWindowMoveLoop>&)weak {
   if ((self = [super init])) {
-    _weak = weak;
+    weak_ = weak;
   }
   return self;
 }
 
 - (base::WeakPtr<remote_cocoa::CocoaWindowMoveLoop>&)weak {
-  return _weak;
+  return weak_;
 }
 @end
 

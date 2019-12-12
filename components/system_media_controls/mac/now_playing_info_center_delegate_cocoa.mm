@@ -20,12 +20,12 @@
 @end
 
 @implementation NowPlayingInfoCenterDelegateCocoa {
-  base::scoped_nsobject<NSMutableDictionary> _nowPlayingInfo;
+  base::scoped_nsobject<NSMutableDictionary> nowPlayingInfo_;
 }
 
 - (instancetype)init {
   if (self = [super init]) {
-    _nowPlayingInfo.reset([[NSMutableDictionary alloc] init]);
+    nowPlayingInfo_.reset([[NSMutableDictionary alloc] init]);
     [self resetNowPlayingInfo];
     [self updateNowPlayingInfo];
   }
@@ -33,7 +33,7 @@
 }
 
 - (void)resetNowPlayingInfo {
-  [_nowPlayingInfo removeAllObjects];
+  [nowPlayingInfo_ removeAllObjects];
   [self initializeNowPlayingInfoValues];
   [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = nil;
 }
@@ -44,17 +44,17 @@
 }
 
 - (void)setTitle:(NSString*)title {
-  [_nowPlayingInfo setObject:title forKey:MPMediaItemPropertyTitle];
+  [nowPlayingInfo_ setObject:title forKey:MPMediaItemPropertyTitle];
   [self updateNowPlayingInfo];
 }
 
 - (void)setArtist:(NSString*)artist {
-  [_nowPlayingInfo setObject:artist forKey:MPMediaItemPropertyArtist];
+  [nowPlayingInfo_ setObject:artist forKey:MPMediaItemPropertyArtist];
   [self updateNowPlayingInfo];
 }
 
 - (void)setAlbum:(NSString*)album {
-  [_nowPlayingInfo setObject:album forKey:MPMediaItemPropertyAlbumTitle];
+  [nowPlayingInfo_ setObject:album forKey:MPMediaItemPropertyAlbumTitle];
   [self updateNowPlayingInfo];
 }
 
@@ -64,23 +64,23 @@
 }
 
 - (void)initializeNowPlayingInfoValues {
-  [_nowPlayingInfo setObject:[NSNumber numberWithDouble:0]
+  [nowPlayingInfo_ setObject:[NSNumber numberWithDouble:0]
                       forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
-  [_nowPlayingInfo setObject:[NSNumber numberWithDouble:0]
+  [nowPlayingInfo_ setObject:[NSNumber numberWithDouble:0]
                       forKey:MPNowPlayingInfoPropertyPlaybackRate];
-  [_nowPlayingInfo setObject:[NSNumber numberWithDouble:0]
+  [nowPlayingInfo_ setObject:[NSNumber numberWithDouble:0]
                       forKey:MPMediaItemPropertyPlaybackDuration];
 #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
   [nowPlayingInfo_ setObject:@"Chrome" forKey:MPMediaItemPropertyTitle];
 #else
-  [_nowPlayingInfo setObject:@"Chromium" forKey:MPMediaItemPropertyTitle];
+  [nowPlayingInfo_ setObject:@"Chromium" forKey:MPMediaItemPropertyTitle];
 #endif
-  [_nowPlayingInfo setObject:@"" forKey:MPMediaItemPropertyArtist];
-  [_nowPlayingInfo setObject:@"" forKey:MPMediaItemPropertyAlbumTitle];
+  [nowPlayingInfo_ setObject:@"" forKey:MPMediaItemPropertyArtist];
+  [nowPlayingInfo_ setObject:@"" forKey:MPMediaItemPropertyAlbumTitle];
 }
 
 - (void)updateNowPlayingInfo {
-  [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = _nowPlayingInfo;
+  [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = nowPlayingInfo_;
 }
 
 @end

@@ -19,27 +19,27 @@
     (remote_cocoa::NativeWidgetNSWindowBridge*)parent {
   DCHECK(parent);
   if ((self = [super init])) {
-    _parent = parent;
+    parent_ = parent;
   }
   return self;
 }
 
 - (NSCursor*)cursor {
-  return _cursor.get();
+  return cursor_.get();
 }
 
 - (void)setCursor:(NSCursor*)newCursor {
-  if (_cursor.get() == newCursor)
+  if (cursor_.get() == newCursor)
     return;
 
-  _cursor.reset([newCursor retain]);
+  cursor_.reset([newCursor retain]);
 
   // The window has a tracking rect that was installed in -[BridgedContentView
   // initWithView:] that uses the NSTrackingCursorUpdate option. In the case
   // where the window is the key window, that tracking rect will cause
   // -cursorUpdate: to be sent up the responder chain, which will cause the
   // cursor to be set when the message gets to the NativeWidgetMacNSWindow.
-  NSWindow* window = _parent->ns_window();
+  NSWindow* window = parent_->ns_window();
   [window resetCursorRects];
 
   // However, if this window isn't the key window, that tracking area will have
@@ -70,18 +70,18 @@
 }
 
 - (void)onWindowOrderChanged:(NSNotification*)notification {
-  _parent->OnVisibilityChanged();
+  parent_->OnVisibilityChanged();
 }
 
 - (void)onSystemControlTintChanged:(NSNotification*)notification {
-  _parent->OnSystemControlTintChanged();
+  parent_->OnSystemControlTintChanged();
 }
 
 - (void)sheetDidEnd:(NSWindow*)sheet
          returnCode:(NSInteger)returnCode
         contextInfo:(void*)contextInfo {
   [sheet orderOut:nil];
-  _parent->OnWindowWillClose();
+  parent_->OnWindowWillClose();
 }
 
 // NSWindowDelegate implementation.
@@ -90,7 +90,7 @@
   // Cocoa should already have sent an (unexpected) windowDidExitFullScreen:
   // notification, and the attempt to get back into fullscreen should fail.
   // Nothing to do except verify |parent_| is no longer trying to fullscreen.
-  DCHECK(!_parent->target_fullscreen_state());
+  DCHECK(!parent_->target_fullscreen_state());
 }
 
 - (void)windowDidFailToExitFullScreen:(NSWindow*)window {
@@ -98,36 +98,36 @@
   // windowDidExitFullScreen:. Also, failing to exit fullscreen just dumps the
   // window out of fullscreen without an animation; still sending the expected,
   // windowDidExitFullScreen: notification. So, again, nothing to do here.
-  DCHECK(!_parent->target_fullscreen_state());
+  DCHECK(!parent_->target_fullscreen_state());
 }
 
 - (void)windowDidResize:(NSNotification*)notification {
-  _parent->OnSizeChanged();
+  parent_->OnSizeChanged();
 }
 
 - (void)windowDidMove:(NSNotification*)notification {
   // Note: windowDidMove: is sent only once at the end of a window drag. There
   // is also windowWillMove: sent at the start, also once. When the window is
   // being moved by the WindowServer live updates are not provided.
-  _parent->OnPositionChanged();
+  parent_->OnPositionChanged();
 }
 
 - (void)windowDidBecomeKey:(NSNotification*)notification {
-  _parent->OnWindowKeyStatusChangedTo(true);
+  parent_->OnWindowKeyStatusChangedTo(true);
 }
 
 - (void)windowDidResignKey:(NSNotification*)notification {
-  _parent->OnWindowKeyStatusChangedTo(false);
+  parent_->OnWindowKeyStatusChangedTo(false);
 }
 
 - (BOOL)windowShouldClose:(id)sender {
   bool canWindowClose = true;
-  _parent->host()->GetCanWindowClose(&canWindowClose);
+  parent_->host()->GetCanWindowClose(&canWindowClose);
   return canWindowClose;
 }
 
 - (void)windowWillClose:(NSNotification*)notification {
-  NSWindow* window = _parent->ns_window();
+  NSWindow* window = parent_->ns_window();
   if (NSWindow* sheetParent = [window sheetParent]) {
     // On no! Something called -[NSWindow close] on a sheet rather than calling
     // -[NSWindow endSheet:] on its parent. If the modal session is not ended
@@ -142,7 +142,7 @@
         })));
   }
   DCHECK([window isEqual:[notification object]]);
-  _parent->OnWindowWillClose();
+  parent_->OnWindowWillClose();
   // |self| may be deleted here (it's NSObject, so who really knows).
   // |parent_| _will_ be deleted for sure.
 
@@ -154,29 +154,29 @@
 }
 
 - (void)windowDidMiniaturize:(NSNotification*)notification {
-  _parent->host()->OnWindowMiniaturizedChanged(true);
-  _parent->OnVisibilityChanged();
+  parent_->host()->OnWindowMiniaturizedChanged(true);
+  parent_->OnVisibilityChanged();
 }
 
 - (void)windowDidDeminiaturize:(NSNotification*)notification {
-  _parent->host()->OnWindowMiniaturizedChanged(false);
-  _parent->OnVisibilityChanged();
+  parent_->host()->OnWindowMiniaturizedChanged(false);
+  parent_->OnVisibilityChanged();
 }
 
 - (void)windowDidChangeBackingProperties:(NSNotification*)notification {
-  _parent->OnBackingPropertiesChanged();
+  parent_->OnBackingPropertiesChanged();
 }
 
 - (void)windowWillEnterFullScreen:(NSNotification*)notification {
-  _parent->OnFullscreenTransitionStart(true);
+  parent_->OnFullscreenTransitionStart(true);
 }
 
 - (void)windowDidEnterFullScreen:(NSNotification*)notification {
-  _parent->OnFullscreenTransitionComplete(true);
+  parent_->OnFullscreenTransitionComplete(true);
 }
 
 - (void)windowWillExitFullScreen:(NSNotification*)notification {
-  _parent->OnFullscreenTransitionStart(false);
+  parent_->OnFullscreenTransitionStart(false);
 }
 
 - (void)windowDidExitFullScreen:(NSNotification*)notification {
@@ -191,7 +191,7 @@
                                     afterDelay:0];
   }
 
-  _parent->OnFullscreenTransitionComplete(false);
+  parent_->OnFullscreenTransitionComplete(false);
 }
 
 // Allow non-resizable windows (without NSResizableWindowMask) to fill the
@@ -209,7 +209,7 @@
     willPositionSheet:(NSWindow*)sheet
             usingRect:(NSRect)defaultSheetLocation {
   int32_t sheetPositionY = 0;
-  _parent->host()->GetSheetOffsetY(&sheetPositionY);
+  parent_->host()->GetSheetOffsetY(&sheetPositionY);
   NSView* view = [window contentView];
   NSPoint pointInView = NSMakePoint(0, NSMaxY([view bounds]) - sheetPositionY);
   NSPoint pointInWindow = [view convertPoint:pointInView toView:nil];
