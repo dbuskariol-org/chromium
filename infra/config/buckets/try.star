@@ -303,6 +303,7 @@ def angle_builder(*, name, **kwargs):
   return try_builder(
       name = name,
       builderless = False,
+      goma_backend = goma.backend.RBE_PROD,
       mastername = 'tryserver.chromium.angle',
       service_account = 'chromium-try-gpu-builder@chops-service-accounts.iam.gserviceaccount.com',
       **kwargs
@@ -310,85 +311,70 @@ def angle_builder(*, name, **kwargs):
 
 angle_builder(
     name = 'android_angle_deqp_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'android_angle_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'android_angle_vk32_deqp_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'android_angle_vk32_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'android_angle_vk64_deqp_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'android_angle_vk64_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'fuchsia-angle-rel',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'linux-angle-rel',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'linux_angle_deqp_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'linux_angle_ozone_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 angle_builder(
     name = 'mac-angle-rel',
     cores = None,
-    goma_backend = goma.backend.RBE_PROD,
     os = os.MAC_ANY,
 )
 
 angle_builder(
     name = 'win-angle-deqp-rel-32',
-    goma_backend = goma.backend.RBE_PROD,
     goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
 
 angle_builder(
     name = 'win-angle-deqp-rel-64',
-    goma_backend = goma.backend.RBE_PROD,
     goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
 
 angle_builder(
     name = 'win-angle-rel-32',
-    goma_backend = goma.backend.RBE_PROD,
     goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
 
 angle_builder(
     name = 'win-angle-rel-64',
-    goma_backend = goma.backend.RBE_PROD,
     goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
@@ -537,6 +523,7 @@ def dawn_builder(*, name, **kwargs):
       name = name,
       builderless = False,
       cores = None,
+      goma_backend = goma.backend.RBE_PROD,
       mastername = 'tryserver.chromium.dawn',
       service_account = 'chromium-try-gpu-builder@chops-service-accounts.iam.gserviceaccount.com',
       **kwargs
@@ -544,7 +531,6 @@ def dawn_builder(*, name, **kwargs):
 
 dawn_builder(
     name = 'dawn-linux-x64-deps-rel',
-    goma_backend = goma.backend.RBE_PROD,
     tryjob = tryjob(
         location_regexp = [
             '.+/[+]/gpu/.+',
@@ -560,7 +546,6 @@ dawn_builder(
 
 dawn_builder(
     name = 'dawn-mac-x64-deps-rel',
-    goma_backend = goma.backend.RBE_PROD,
     os = os.MAC_ANY,
     tryjob = tryjob(
         location_regexp = [
@@ -577,7 +562,6 @@ dawn_builder(
 
 dawn_builder(
     name = 'dawn-win10-x64-deps-rel',
-    goma_backend = goma.backend.RBE_PROD,
     goma_enable_ats = True,
     os = os.WINDOWS_ANY,
     tryjob = tryjob(
@@ -595,7 +579,6 @@ dawn_builder(
 
 dawn_builder(
     name = 'dawn-win10-x86-deps-rel',
-    goma_backend = goma.backend.RBE_PROD,
     goma_enable_ats = True,
     os = os.WINDOWS_ANY,
     tryjob = tryjob(
@@ -613,18 +596,15 @@ dawn_builder(
 
 dawn_builder(
     name = 'linux-dawn-rel',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 dawn_builder(
     name = 'mac-dawn-rel',
-    goma_backend = goma.backend.RBE_PROD,
     os = os.MAC_ANY,
 )
 
 dawn_builder(
     name = 'win-dawn-rel',
-    goma_backend = goma.backend.RBE_PROD,
     goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
