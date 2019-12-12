@@ -895,63 +895,6 @@ bool ServiceWorkerContainerHost::is_execution_ready() const {
   return client_phase_ == ClientPhase::kExecutionReady;
 }
 
-void ServiceWorkerContainerHost::SetExecutionReady() {
-  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-  DCHECK(!is_execution_ready());
-  TransitionToClientPhase(ClientPhase::kExecutionReady);
-  RunExecutionReadyCallbacks();
-}
-
-void ServiceWorkerContainerHost::TransitionToClientPhase(
-    ClientPhase new_phase) {
-  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-  if (client_phase_ == new_phase)
-    return;
-  switch (client_phase_) {
-    case ClientPhase::kInitial:
-      DCHECK_EQ(new_phase, ClientPhase::kResponseCommitted);
-      break;
-    case ClientPhase::kResponseCommitted:
-      DCHECK_EQ(new_phase, ClientPhase::kExecutionReady);
-      break;
-    case ClientPhase::kExecutionReady:
-      NOTREACHED();
-      break;
-  }
-  client_phase_ = new_phase;
-}
-
-bool ServiceWorkerContainerHost::IsControllerDecided() const {
-  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-  DCHECK(IsContainerForClient());
-
-  if (is_execution_ready())
-    return true;
-
-  // TODO(falken): This function just becomes |is_execution_ready()|
-  // when NetworkService is enabled, so remove/simplify it when
-  // non-NetworkService code is removed.
-
-  switch (client_type()) {
-    case blink::mojom::ServiceWorkerClientType::kWindow:
-      // |this| is hosting a reserved client undergoing navigation. Don't send
-      // the controller since it can be changed again before the final
-      // response. The controller will be sent on navigation commit. See
-      // CommitNavigation in frame.mojom.
-      return false;
-    case blink::mojom::ServiceWorkerClientType::kDedicatedWorker:
-    case blink::mojom::ServiceWorkerClientType::kSharedWorker:
-      // When PlzWorker is enabled, the controller will be sent when the
-      // response is committed to the renderer.
-      return false;
-    case blink::mojom::ServiceWorkerClientType::kAll:
-      NOTREACHED();
-  }
-
-  NOTREACHED();
-  return true;
-}
-
 void ServiceWorkerContainerHost::SetContainerProcessId(
     int container_process_id) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
@@ -1124,12 +1067,69 @@ void ServiceWorkerContainerHost::ReturnRegistrationForReadyIfNeeded() {
           scoped_refptr<ServiceWorkerRegistration>(registration)));
 }
 
+void ServiceWorkerContainerHost::SetExecutionReady() {
+  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
+  DCHECK(!is_execution_ready());
+  TransitionToClientPhase(ClientPhase::kExecutionReady);
+  RunExecutionReadyCallbacks();
+}
+
 void ServiceWorkerContainerHost::RunExecutionReadyCallbacks() {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   std::vector<ExecutionReadyCallback> callbacks;
   execution_ready_callbacks_.swap(callbacks);
   base::ThreadTaskRunnerHandle::Get()->PostTask(
       FROM_HERE, base::BindOnce(&RunCallbacks, std::move(callbacks)));
+}
+
+void ServiceWorkerContainerHost::TransitionToClientPhase(
+    ClientPhase new_phase) {
+  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
+  if (client_phase_ == new_phase)
+    return;
+  switch (client_phase_) {
+    case ClientPhase::kInitial:
+      DCHECK_EQ(new_phase, ClientPhase::kResponseCommitted);
+      break;
+    case ClientPhase::kResponseCommitted:
+      DCHECK_EQ(new_phase, ClientPhase::kExecutionReady);
+      break;
+    case ClientPhase::kExecutionReady:
+      NOTREACHED();
+      break;
+  }
+  client_phase_ = new_phase;
+}
+
+bool ServiceWorkerContainerHost::IsControllerDecided() const {
+  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
+  DCHECK(IsContainerForClient());
+
+  if (is_execution_ready())
+    return true;
+
+  // TODO(falken): This function just becomes |is_execution_ready()|
+  // when NetworkService is enabled, so remove/simplify it when
+  // non-NetworkService code is removed.
+
+  switch (client_type()) {
+    case blink::mojom::ServiceWorkerClientType::kWindow:
+      // |this| is hosting a reserved client undergoing navigation. Don't send
+      // the controller since it can be changed again before the final
+      // response. The controller will be sent on navigation commit. See
+      // CommitNavigation in frame.mojom.
+      return false;
+    case blink::mojom::ServiceWorkerClientType::kDedicatedWorker:
+    case blink::mojom::ServiceWorkerClientType::kSharedWorker:
+      // When PlzWorker is enabled, the controller will be sent when the
+      // response is committed to the renderer.
+      return false;
+    case blink::mojom::ServiceWorkerClientType::kAll:
+      NOTREACHED();
+  }
+
+  NOTREACHED();
+  return true;
 }
 
 void ServiceWorkerContainerHost::UpdateController(
