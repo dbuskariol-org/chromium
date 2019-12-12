@@ -2983,7 +2983,6 @@ jumbo_static_library("browser") {
       "//components/send_tab_to_self",
       "//components/signin/internal/identity_manager",  # see android/signin/DEPS
       "//media/mojo/clients",
-      "//media/mojo/mojom:constants",
       "//rlz:rlz_utils",
       "//sandbox",
       "//sandbox:sandbox_buildflags",
@@ -4753,10 +4752,7 @@ jumbo_static_library("browser") {
     }
 
     if (mojo_media_host == "browser") {
-      deps += [
-        "//media/mojo/mojom:constants",
-        "//media/mojo/services",
-      ]
+      deps += [ "//media/mojo/services" ]
     }
   }
 

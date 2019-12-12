@@ -10,10 +10,13 @@
 #include "base/bind.h"
 #include "base/logging.h"
 #include "base/macros.h"
+#include "base/no_destructor.h"
 #include "base/strings/string_util.h"
+#include "base/time/time.h"
 #include "content/browser/frame_host/render_frame_host_delegate.h"
 #include "content/browser/frame_host/render_frame_host_impl.h"
 #include "content/public/browser/content_browser_client.h"
+#include "content/public/browser/media_service.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/system_connector.h"
 #include "content/public/common/content_client.h"
@@ -55,9 +58,9 @@
 
 namespace content {
 
-#if BUILDFLAG(ENABLE_LIBRARY_CDMS) && defined(OS_MACOSX)
-
 namespace {
+
+#if BUILDFLAG(ENABLE_LIBRARY_CDMS) && defined(OS_MACOSX)
 
 #if BUILDFLAG(ENABLE_CDM_HOST_VERIFICATION)
 // TODO(xhwang): Move this to a common place.
@@ -113,9 +116,42 @@ class SeatbeltExtensionTokenProviderImpl
   DISALLOW_COPY_AND_ASSIGN(SeatbeltExtensionTokenProviderImpl);
 };
 
-}  // namespace
-
 #endif  // BUILDFLAG(ENABLE_LIBRARY_CDMS) && defined(OS_MACOSX)
+
+// The amount of time to allow the secondary Media Service instance to idle
+// before tearing it down. Only used if the Content embedder defines how to
+// launch a secondary Media Service instance.
+constexpr base::TimeDelta kSecondaryInstanceIdleTimeout =
+    base::TimeDelta::FromSeconds(5);
+
+void MaybeLaunchSecondaryMediaService(
+    mojo::Remote<media::mojom::MediaService>* remote) {
+  *remote = GetContentClient()->browser()->RunSecondaryMediaService();
+  if (*remote) {
+    // If the embedder provides a secondary Media Service instance, it may run
+    // out-of-process. Make sure we reset on disconnect to allow restart of
+    // crashed instances, and reset on idle to allow for release of resources
+    // when the service instance goes unused for a while.
+    remote->reset_on_disconnect();
+    remote->reset_on_idle_timeout(kSecondaryInstanceIdleTimeout);
+  } else {
+    // The embedder doesn't provide a secondary Media Service instance. Bind
+    // permanently to a disconnected pipe which discards all calls.
+    ignore_result(remote->BindNewPipeAndPassReceiver());
+  }
+}
+
+// Returns a remote handle to the secondary Media Service instance, if the
+// Content embedder defines how to create one. If not, this returns a non-null
+// but non-functioning MediaService reference which discards all calls.
+media::mojom::MediaService& GetSecondaryMediaService() {
+  static base::NoDestructor<mojo::Remote<media::mojom::MediaService>> remote;
+  if (!*remote)
+    MaybeLaunchSecondaryMediaService(remote.get());
+  return *remote->get();
+}
+
+}  // namespace
 
 MediaInterfaceProxy::MediaInterfaceProxy(
     RenderFrameHost* render_frame_host,
@@ -131,14 +167,10 @@ MediaInterfaceProxy::MediaInterfaceProxy(
       base::BindRepeating(&MediaInterfaceProxy::GetFrameServices,
                           base::Unretained(this), base::Token(), std::string());
   media_interface_factory_ptr_ = std::make_unique<MediaInterfaceFactoryHolder>(
-      media::mojom::kMediaServiceName, create_interface_provider_cb);
-
-#if BUILDFLAG(ENABLE_CAST_RENDERER)
-  media_renderer_interface_factory_ptr_ =
-      std::make_unique<MediaInterfaceFactoryHolder>(
-          media::mojom::kMediaRendererServiceName,
-          std::move(create_interface_provider_cb));
-#endif  // BUILDFLAG(ENABLE_CAST_RENDERER)
+      base::BindRepeating(&GetMediaService), create_interface_provider_cb);
+  secondary_interface_factory_ = std::make_unique<MediaInterfaceFactoryHolder>(
+      base::BindRepeating(&GetSecondaryMediaService),
+      create_interface_provider_cb);
 
   receiver_.set_disconnect_handler(std::move(error_handler));
 
@@ -182,8 +214,10 @@ void MediaInterfaceProxy::CreateCastRenderer(
     mojo::PendingReceiver<media::mojom::Renderer> receiver) {
   DCHECK(thread_checker_.CalledOnValidThread());
 
-  // CastRenderer is always hosted in "media_renderer" service.
-  InterfaceFactory* factory = media_renderer_interface_factory_ptr_->Get();
+  // CastRenderer is always hosted in the secondary Media Service instance.
+  // This may not be running in some test environments (e.g.
+  // content_browsertests) even though renderers may still request to bind it.
+  InterfaceFactory* factory = secondary_interface_factory_->Get();
   if (factory)
     factory->CreateCastRenderer(overlay_plane_id, std::move(receiver));
 }
@@ -238,8 +272,10 @@ void MediaInterfaceProxy::CreateCdm(
   auto* factory = GetCdmFactory(key_system);
 #elif BUILDFLAG(ENABLE_CAST_RENDERER)
   // CDM service lives together with renderer service if cast renderer is
-  // enabled, because cast renderer creates its own audio/video decoder.
-  auto* factory = media_renderer_interface_factory_ptr_->Get();
+  // enabled, because cast renderer creates its own audio/video decoder. Note
+  // that in content_browsertests (and Content Shell in general) we don't have
+  // an a cast renderer and this interface will be unbound.
+  auto* factory = secondary_interface_factory_->Get();
 #else
   // CDM service lives together with audio/video decoder service.
   auto* factory = media_interface_factory_ptr_->Get();
