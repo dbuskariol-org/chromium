@@ -1717,6 +1717,11 @@ foreach(_component, _components) {
   material_component_string_bundle("material_component_${_component}_bundle") {
     component_dir = "src/components/${_component}/src"
     component_name = "Material${_component}"
+
+    # Only MaterialTabs.bundle contains translation.
+    if (component_name == "MaterialTabs") {
+      component_locales = ios_packed_locales_as_mac_outputs
+    }
   }
 }
 
