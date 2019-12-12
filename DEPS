@@ -4000,6 +4000,17 @@ hooks = [
     ],
   },
   {
+    'name': 'subresource-filter-ruleset',
+    'pattern': '.',
+    'action': [ 'python',
+                'src/third_party/depot_tools/download_from_google_storage.py',
+                '--no_resume',
+                '--no_auth',
+                '--bucket', 'chromium-ads-detection',
+                '-s', 'src/third_party/subresource-filter-ruleset/data/UnindexedRules.sha1',
+    ],
+  },
+  {
     'name': 'Fetch ChromeOS-specific orderfile for Chrome',
     'pattern': '.',
     'condition': 'checkout_chromeos or checkout_simplechrome',
