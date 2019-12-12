@@ -103,6 +103,7 @@
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/content_browser_client.h"
+#include "content/public/browser/device_service.h"
 #include "content/public/browser/download_manager.h"
 #include "content/public/browser/file_select_listener.h"
 #include "content/public/browser/focused_node_details.h"
@@ -120,7 +121,6 @@
 #include "content/public/browser/security_style_explanations.h"
 #include "content/public/browser/ssl_status.h"
 #include "content/public/browser/storage_partition.h"
-#include "content/public/browser/system_connector.h"
 #include "content/public/browser/web_contents_delegate.h"
 #include "content/public/browser/web_contents_receiver_set.h"
 #include "content/public/browser/web_ui_controller.h"
@@ -144,10 +144,8 @@
 #include "net/url_request/url_request_context.h"
 #include "net/url_request/url_request_context_getter.h"
 #include "ppapi/buildflags/buildflags.h"
-#include "services/device/public/mojom/constants.mojom.h"
 #include "services/metrics/public/cpp/ukm_recorder.h"
 #include "services/network/public/cpp/features.h"
-#include "services/service_manager/public/cpp/connector.h"
 #include "services/service_manager/public/cpp/interface_provider.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/frame/sandbox_flags.h"
@@ -3311,13 +3309,10 @@ RenderFrameHost* WebContentsImpl::GetGuestByInstanceID(
 }
 
 device::mojom::GeolocationContext* WebContentsImpl::GetGeolocationContext() {
-  if (geolocation_context_)
-    return geolocation_context_.get();
-
-  service_manager::Connector* connector = GetSystemConnector();
-  auto receiver = geolocation_context_.BindNewPipeAndPassReceiver();
-  if (connector)
-    connector->Connect(device::mojom::kServiceName, std::move(receiver));
+  if (!geolocation_context_) {
+    GetDeviceService().BindGeolocationContext(
+        geolocation_context_.BindNewPipeAndPassReceiver());
+  }
   return geolocation_context_.get();
 }
 
