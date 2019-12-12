@@ -435,11 +435,12 @@ TEST_F(DragWindowFromShelfControllerTest, WallpaperBlurDuringDragging) {
       RootWindowController::ForWindow(window->GetRootWindow())
           ->wallpaper_widget_controller()
           ->wallpaper_view();
-  EXPECT_EQ(wallpaper_view->blur_sigma(), kWallpaperBlurSigma);
+  EXPECT_EQ(wallpaper_view->blur_sigma(), overview_constants::kBlurSigma);
 
   EndDrag(shelf_bounds.CenterPoint(),
           /*velocity_y=*/base::nullopt);
-  EXPECT_EQ(wallpaper_view->blur_sigma(), kWallpaperClearBlurSigma);
+  EXPECT_EQ(wallpaper_view->blur_sigma(),
+            wallpaper_constants::kClear.blur_sigma);
 }
 
 // Test overview is hidden during dragging and shown when drag slows down or
