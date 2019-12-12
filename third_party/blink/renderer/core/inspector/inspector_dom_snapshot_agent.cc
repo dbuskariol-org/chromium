@@ -226,6 +226,10 @@ protocol::Response InspectorDOMSnapshotAgent::captureSnapshot(
     std::unique_ptr<protocol::Array<protocol::DOMSnapshot::DocumentSnapshot>>*
         documents,
     std::unique_ptr<protocol::Array<String>>* strings) {
+  // This function may kick the layout, but external clients may call this
+  // function outside of the layout phase.
+  FontCachePurgePreventer fontCachePurgePreventer;
+
   Document* main_document = inspected_frames_->Root()->GetDocument();
   if (!main_document)
     return Response::Error("Document is not available");
