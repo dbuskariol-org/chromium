@@ -154,7 +154,7 @@ PhysicalRect NGPhysicalBoxFragment::ScrollableOverflow() const {
     TextDirection container_direction = Style().Direction();
     for (const auto& child_fragment : Children()) {
       PhysicalRect child_overflow =
-          child_fragment->ScrollableOverflowForPropagation(layout_object);
+          child_fragment->ScrollableOverflowForPropagation(*this);
       if (child_fragment->Style() != Style()) {
         PhysicalOffset relative_offset = ComputeRelativeOffset(
             child_fragment->Style(), container_writing_mode,
@@ -219,14 +219,14 @@ PhysicalRect NGPhysicalBoxFragment::ScrollableOverflowFromChildren() const {
     PhysicalRect child_scrollable_overflow;
     if (child->IsFloatingOrOutOfFlowPositioned()) {
       child_scrollable_overflow =
-          child->ScrollableOverflowForPropagation(layout_object);
+          child->ScrollableOverflowForPropagation(*this);
       child_scrollable_overflow.offset +=
           ComputeRelativeOffset(child->Style(), writing_mode, direction, size);
     } else if (children_inline && child->IsLineBox()) {
       DCHECK(child->IsLineBox());
       child_scrollable_overflow =
-          To<NGPhysicalLineBoxFragment>(*child).ScrollableOverflow(
-              layout_object, &style, size);
+          To<NGPhysicalLineBoxFragment>(*child).ScrollableOverflow(*this,
+                                                                   style);
       if (padding_strut) {
         PhysicalRect linebox_rect(child.Offset(), child->Size());
         if (lineboxes_enclosing_rect)
