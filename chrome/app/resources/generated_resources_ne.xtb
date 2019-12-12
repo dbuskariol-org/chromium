@@ -281,6 +281,7 @@
 <translation id="1397500194120344683">कुनै पनि योग्य यन्त्र छैन। <ph name="LINK_BEGIN" />थप जान्नुहोस्।<ph name="LINK_END" /></translation>
 <translation id="1398853756734560583">अधिकतम बनाउनुहोस्</translation>
 <translation id="1399511500114202393">प्रयोगकर्ताको प्रमाणपत्र छैन</translation>
+<translation id="1403519882106291341">Google Chrome OS का सर्तहरू</translation>
 <translation id="140520891692800925"><ph name="PROFILE_DISPLAY_NAME" /> (निरीक्षण गरिएको)</translation>
 <translation id="1405779994569073824">क्र्यास भयो।</translation>
 <translation id="1406500794671479665">रुजू गर्दै...</translation>
@@ -2170,7 +2171,6 @@
 <translation id="4036778507053569103">सर्भरबाट डाउनलोड गरिएको नीति अमान्य छ।</translation>
 <translation id="4037084878352560732">घोडा</translation>
 <translation id="4037889604535939429">व्यक्तिलाई सम्पादन गर्नुहोस्</translation>
-<translation id="4042264909745389898">Google Chrome OS का सर्तहरू</translation>
 <translation id="4042863763121826131">{NUM_PAGES,plural, =1{पृष्ठबाट बाहिरिनुहोस्}other{पृष्ठहरूबाट बाहिरिनुहोस्}}</translation>
 <translation id="4044612648082411741">आफ्नो प्रमाणपत्रको पासवर्ड प्रविष्टि गर्नुहोस्</translation>
 <translation id="404493185430269859">पूर्वनिर्धारित खोज इन्जिन</translation>
