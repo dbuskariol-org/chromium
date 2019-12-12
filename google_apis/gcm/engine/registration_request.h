@@ -22,12 +22,12 @@
 
 namespace net {
 class HttpRequestHeaders;
-}
+}  // namespace net
 
 namespace network {
 class SharedURLLoaderFactory;
 class SimpleURLLoader;
-}
+}  // namespace network
 
 namespace gcm {
 
@@ -36,7 +36,7 @@ class GCMStatsRecorder;
 // Registration request is used to obtain registration IDs for applications that
 // want to use GCM. It requires a set of parameters to be specified to identify
 // the Chrome instance, the user, the application and a set of senders that will
-// be authorized to address the application using it's assigned registration ID.
+// be authorized to address the application using its assigned registration ID.
 class GCM_EXPORT RegistrationRequest {
  public:
   // This enum is also used in an UMA histogram (GCMRegistrationRequestStatus
