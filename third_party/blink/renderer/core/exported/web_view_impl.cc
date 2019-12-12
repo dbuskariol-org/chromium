@@ -2087,32 +2087,6 @@ void WebViewImpl::SetInitialFocus(bool reverse) {
       reverse ? kWebFocusTypeBackward : kWebFocusTypeForward);
 }
 
-void WebViewImpl::ClearFocusedElement() {
-  Frame* frame = FocusedCoreFrame();
-
-  auto* local_frame = DynamicTo<LocalFrame>(frame);
-  if (!local_frame)
-    return;
-
-  Document* document = local_frame->GetDocument();
-  if (!document)
-    return;
-
-  Element* old_focused_element = document->FocusedElement();
-  document->ClearFocusedElement();
-  if (!old_focused_element)
-    return;
-
-  // If a text field has focus, we need to make sure the selection controller
-  // knows to remove selection from it. Otherwise, the text field is still
-  // processing keyboard events even though focus has been moved to the page and
-  // keystrokes get eaten as a result.
-  document->UpdateStyleAndLayoutTree();
-  if (HasEditableStyle(*old_focused_element) ||
-      old_focused_element->IsTextControl())
-    local_frame->Selection().Clear();
-}
-
 // TODO(dglazkov): Remove and replace with Node:hasEditableStyle.
 // http://crbug.com/612560
 static bool IsElementEditable(const Element* element) {
