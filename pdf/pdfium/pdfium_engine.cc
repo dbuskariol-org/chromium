@@ -3510,8 +3510,9 @@ bool PDFiumEngine::IsPointInEditableFormTextArea(FPDF_PAGE page,
            form_type == FPDF_FORMFIELD_XFA_COMBOBOX;
 #endif  // defined(PDF_ENABLE_XFA)
 
+  const FS_POINTF point = {page_x, page_y};
   ScopedFPDFAnnotation annot(
-      FPDFAnnot_GetFormFieldAtPoint(form(), page, page_x, page_y));
+      FPDFAnnot_GetFormFieldAtPoint(form(), page, &point));
   if (!annot)
     return false;
 
