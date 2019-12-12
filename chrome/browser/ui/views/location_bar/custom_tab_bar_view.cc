@@ -173,17 +173,18 @@ CustomTabBarView::CustomTabBarView(BrowserView* browser_view,
   base::Optional<SkColor> optional_theme_color =
       browser_->app_controller()->GetThemeColor();
 
+  const bool dark_mode = GetNativeTheme()->ShouldUseDarkColors();
   const SkColor default_frame_color =
 #if defined(OS_CHROMEOS)
       // Ash system frames differ from ChromeOS browser frames.
       ash::kDefaultFrameColor;
 #else
-      ThemeProperties::GetDefaultColor(ThemeProperties::COLOR_FRAME, false);
+      ThemeProperties::GetDefaultColor(ThemeProperties::COLOR_FRAME, false,
+                                       dark_mode);
 #endif
 
   title_bar_color_ = optional_theme_color.value_or(default_frame_color);
 
-  const bool dark_mode = GetNativeTheme()->ShouldUseDarkColors();
   background_color_ = dark_mode ? default_frame_color : SK_ColorWHITE;
 
   SetBackground(views::CreateSolidBackground(background_color_));
