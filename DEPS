@@ -175,7 +175,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Skia
   # and whatever else without interference from each other.
-  'skia_revision': '20b177a9bf2affa58e1216a5eee5e294a4cfff09',
+  'skia_revision': 'c514e7d9be6e97b3976dcde3eec527127a5f5713',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling V8
   # and whatever else without interference from each other.
@@ -1295,7 +1295,7 @@ deps = {
   },
 
   'src/third_party/perfetto':
-    Var('android_git') + '/platform/external/perfetto.git' + '@' + '0d8d5b611014448707cba1b6628f941736a89d22',
+    Var('android_git') + '/platform/external/perfetto.git' + '@' + 'db09dc1d2a596c8a9cd9bcbe6d18558095d4f431',
 
   'src/third_party/perl': {
       'url': Var('chromium_git') + '/chromium/deps/perl.git' + '@' + '6f3e5028eb65d0b4c5fdd792106ac4c84eee1eb3',
