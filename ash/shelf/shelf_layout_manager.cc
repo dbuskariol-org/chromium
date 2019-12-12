@@ -755,15 +755,17 @@ ShelfBackgroundType ShelfLayoutManager::GetShelfBackgroundType() const {
   const bool app_list_is_visible =
       Shell::Get()->app_list_controller() &&
       Shell::Get()->app_list_controller()->IsVisible();
+  const bool in_overview =
+      Shell::Get()->overview_controller() &&
+      Shell::Get()->overview_controller()->InOverviewSession();
   if (IsTabletModeEnabled()) {
     if (app_list_is_visible) {
       // If the home launcher is shown or mostly shown, show the home launcher
-      // background. If it is mostly hidden, show the in-app background.
-      if (Shell::Get()
-              ->app_list_controller()
-              ->home_launcher_transition_state() ==
-          AppListControllerImpl::HomeLauncherTransitionState::kMostlyHidden) {
-        return ShelfBackgroundType::kInApp;
+      // background. If it is mostly hidden, show the in-app or overview
+      // background.
+      if (!Shell::Get()->app_list_controller()->GetTargetVisibility()) {
+        return in_overview ? ShelfBackgroundType::kOverview
+                           : ShelfBackgroundType::kInApp;
       }
       return ShelfBackgroundType::kHomeLauncher;
     } else if (Shell::Get()
@@ -785,10 +787,8 @@ ShelfBackgroundType ShelfLayoutManager::GetShelfBackgroundType() const {
     return ShelfBackgroundType::kMaximized;
   }
 
-  if (Shell::Get()->overview_controller() &&
-      Shell::Get()->overview_controller()->InOverviewSession()) {
+  if (in_overview)
     return ShelfBackgroundType::kOverview;
-  }
 
   return ShelfBackgroundType::kDefaultBg;
 }
@@ -1239,8 +1239,11 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
         case AppListControllerImpl::HomeLauncherTransitionState::kFinished:
           // Consider the AppList visible if it is beginning to show. Also
           // detect the case where the last window is being minimized.
-          if (app_list_visible)
+          if (app_list_controller->GetTargetVisibility() ||
+              (!in_overview &&
+               app_list_controller->ShouldHomeLauncherBeVisible())) {
             return HotseatState::kShown;
+          }
 
           // Show the hotseat if the shelf view's context menu is showing.
           if (shelf_widget_->hotseat_widget()->IsShowingShelfMenu())
@@ -1248,8 +1251,10 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
 
           if (in_split_view)
             return HotseatState::kHidden;
+
           if (in_overview)
             return HotseatState::kExtended;
+
           if (visibility_state == SHELF_AUTO_HIDE) {
             if (auto_hide_state == SHELF_AUTO_HIDE_HIDDEN ||
                 should_hide_hotseat_) {
@@ -1261,6 +1266,7 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
               !should_hide_hotseat_) {
             return HotseatState::kExtended;
           }
+
           // If none of the conditions above were met means that the state
           // changed because of an action other than a user intervention.
           // We should hide the hotseat and reset the |is_manually extended|
