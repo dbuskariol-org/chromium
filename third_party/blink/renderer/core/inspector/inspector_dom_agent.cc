@@ -173,6 +173,9 @@ bool InspectorDOMAgent::GetPseudoElementType(PseudoId pseudo_id,
     case kPseudoIdAfter:
       *type = protocol::DOM::PseudoTypeEnum::After;
       return true;
+    case kPseudoIdMarker:
+      *type = protocol::DOM::PseudoTypeEnum::Marker;
+      return RuntimeEnabledFeatures::CSSMarkerPseudoElementEnabled();
     case kPseudoIdBackdrop:
       *type = protocol::DOM::PseudoTypeEnum::Backdrop;
       return true;
