@@ -1333,7 +1333,6 @@ crbug.com/591099 external/wpt/css/css-flexbox/flexbox_align-items-stretch-3.html
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/auto-height-column-with-border-and-padding.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flex-align-vertical-writing-mode.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flex-align.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flex-order.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flexbox-baseline-margins.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flexbox-baseline.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flexbox-overflow-auto.html [ Failure ]
@@ -1344,13 +1343,11 @@ crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/order-painting.html [ F
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/overflow-auto-resizes-correctly.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/percentage-height-replaced-element.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/relpos-with-percentage-top.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/style-change.html [ Failure ]
 
 ### virtual/layout_ng_flex_box/css3/flexbox/mozilla/
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/mozilla/flexbox-items-as-stacking-contexts-2.html [ Failure ]
 
 ### virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/Flexible-order.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/align-items-004.htm [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/align-items-baseline-overflow-non-visible.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/anonymous-flex-item-001.html [ Failure ]
@@ -1364,17 +1361,12 @@ crbug.com/998080 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-mi
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-minimum-height-flex-items-015.html [ Failure ]
 crbug.com/249112 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-minimum-width-flex-items-005.xht [ Failure ]
 crbug.com/249112 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-minimum-width-flex-items-007.xht [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-order.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_align-items-baseline.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_inline.html [ Failure ]
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_justifycontent-center-overflow.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_order-box.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_order.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_rtl-order.html [ Skip ]
 crbug.com/336604 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_visibility-collapse-line-wrapping.html [ Failure ]
 crbug.com/336604 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_visibility-collapse.html [ Failure ]
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/negative-margins-001.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/order_value.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/overflow-top-left.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/percentage-heights-007.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/percentage-heights-quirks-node.html [ Failure ]
@@ -1389,10 +1381,6 @@ crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/hittest
 ### virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/getcomputedstyle/
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/getcomputedstyle/flexbox_computedstyle_flex-basis-0percent.html [ Failure ]
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/getcomputedstyle/flexbox_computedstyle_flex-shorthand-number.html [ Failure ]
-
-### virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/order/
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/order/order-with-column-reverse.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/order/order-with-row-reverse.html [ Failure ]
 
 # Fieldset in NG
 #
