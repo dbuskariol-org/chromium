@@ -33,6 +33,8 @@ viz_component("service") {
     "display/display_resource_provider.h",
     "display/display_scheduler.cc",
     "display/display_scheduler.h",
+    "display/display_scheduler_base.cc",
+    "display/display_scheduler_base.h",
     "display/draw_polygon.cc",
     "display/draw_polygon.h",
     "display/dynamic_geometry_binding.cc",
