@@ -4388,6 +4388,12 @@ Unknown properties are collapsed to zero. -->
   <int value="10" label="All Bits"/>
 </enum>
 
+<enum name="AutofillMigrateUserOptedInToWalletSync">
+  <int value="0" label="Not migrated"/>
+  <int value="1" label="Migrated from canonical email"/>
+  <int value="2" label="Migrated from non canonical email"/>
+</enum>
+
 <enum name="AutofillPredictionSource">
   <int value="0" label="PREDICTION_SOURCE_UNKNOWN"/>
   <int value="1" label="PREDICTION_SOURCE_HEURISTIC"/>
