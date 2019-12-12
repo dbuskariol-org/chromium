@@ -10779,6 +10779,31 @@
           If this policy is left unset, the virtual keyboard is disabled on the login screen initially but can be enabled by the user anytime.''',
     },
     {
+      'name': 'PrimaryMouseButtonSwitch',
+      'owners': ['amraboelkher@chromium.org', 'emaxx@chromium.org'],
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'supported_on': ['chrome_os:81-'],
+      'features': {
+        'can_be_recommended': True,
+        'dynamic_refresh': True,
+        'per_profile': True,
+      },
+      'example_value': True,
+      'id': 655,
+      'caption': '''Switch the primary mouse button to the right button''',
+      'tags': [],
+      'desc': '''Switch the primary mouse button to the right button.
+
+          If this policy is set to enabled, the right button of the mouse will always be the primary key.
+
+          If this policy is set to disabled, the left button of the mouse will always be the primary key.
+
+          If you set this policy, users cannot change or override it.
+
+          If this policy is left unset, the left button of the mouse will be the primary key initially, but can be switched by the user anytime.'''
+    },
+    {
       'name': 'SharedClipboardEnabled',
       'owners': ['mvanouwerkerk@chromium.org', 'yasmo@chromium.org'],
       'type': 'main',
@@ -20104,6 +20129,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 654,
+  'highest_id_currently_used': 655,
   'highest_atomic_group_id_currently_used': 38
 }
