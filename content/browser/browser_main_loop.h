@@ -76,9 +76,7 @@ class NetworkChangeNotifier;
 
 namespace viz {
 class CompositingModeReporterImpl;
-class FrameSinkManagerImpl;
 class HostFrameSinkManager;
-class ServerSharedBitmapManager;
 }  // namespace viz
 
 namespace content {
@@ -205,13 +203,6 @@ class CONTENT_EXPORT BrowserMainLoop {
   viz::HostFrameSinkManager* host_frame_sink_manager() const {
     return host_frame_sink_manager_.get();
   }
-
-  // TODO(crbug.com/657959): This will be removed once there are no users, as
-  // SurfaceManager is being moved out of process.
-  viz::FrameSinkManagerImpl* GetFrameSinkManager() const;
-
-  // This returns null when the display compositor is out of process.
-  viz::ServerSharedBitmapManager* GetServerSharedBitmapManager() const;
 #endif
 
   // Binds a receiver to the singleton CompositingModeReporter.
@@ -384,18 +375,7 @@ class CONTENT_EXPORT BrowserMainLoop {
   std::unique_ptr<content::TracingControllerImpl> tracing_controller_;
   scoped_refptr<responsiveness::Watcher> responsiveness_watcher_;
 #if !defined(OS_ANDROID)
-  // A SharedBitmapManager used to sharing and mapping IDs to shared memory
-  // between processes for software compositing. When the display compositor is
-  // in the browser process, then |server_shared_bitmap_manager_| is set, and
-  // when it is in the viz process, then it is null.
-  std::unique_ptr<viz::ServerSharedBitmapManager> server_shared_bitmap_manager_;
   std::unique_ptr<viz::HostFrameSinkManager> host_frame_sink_manager_;
-  // This is owned here so that SurfaceManager will be accessible in process
-  // when display is in the same process. Other than using SurfaceManager,
-  // access to |in_process_frame_sink_manager_| should happen via
-  // |host_frame_sink_manager_| instead which uses Mojo. See
-  // http://crbug.com/657959.
-  std::unique_ptr<viz::FrameSinkManagerImpl> frame_sink_manager_impl_;
 
   // Reports on the compositing mode in the system for clients to submit
   // resources of the right type. This is null if the display compositor
