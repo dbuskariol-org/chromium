@@ -1610,11 +1610,6 @@ const FeatureEntry kFeatureEntries[] = {
          kSimplifiedServerVariations,
          "ContextualSearchSimplifiedServer")},
 
-    {"contextual-search-translation-model",
-     flag_descriptions::kContextualSearchTranslationModelName,
-     flag_descriptions::kContextualSearchTranslationModelDescription,
-     kOsAndroid,
-     FEATURE_VALUE_TYPE(chrome::android::kContextualSearchTranslationModel)},
     {"direct-actions", flag_descriptions::kDirectActionsName,
      flag_descriptions::kDirectActionsDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kDirectActions)},

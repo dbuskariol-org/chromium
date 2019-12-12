@@ -331,8 +331,6 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/contextualsearch/ContextualSearchSelectionHandler.java",
   "java/src/org/chromium/chrome/browser/contextualsearch/ContextualSearchTabHelper.java",
   "java/src/org/chromium/chrome/browser/contextualsearch/ContextualSearchTapState.java",
-  "java/src/org/chromium/chrome/browser/contextualsearch/ContextualSearchTranslateController.java",
-  "java/src/org/chromium/chrome/browser/contextualsearch/ContextualSearchTranslateInterface.java",
   "java/src/org/chromium/chrome/browser/contextualsearch/ContextualSearchTranslation.java",
   "java/src/org/chromium/chrome/browser/contextualsearch/ContextualSearchTranslationImpl.java",
   "java/src/org/chromium/chrome/browser/contextualsearch/ContextualSearchUma.java",
