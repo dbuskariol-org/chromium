@@ -55,12 +55,6 @@ void WaylandPopup::Show(bool inactive) {
 
   set_keyboard_focus(true);
 
-  // When showing a sub-menu after it has been previously shown and hidden,
-  // Wayland sends SetBounds prior to Show, and |bounds_px| takes the pixel
-  // bounds.  This makes a difference against the normal flow when the
-  // window is created (see |Initialize|).  To equalize things, rescale
-  // |bounds_px_| to DIP.  It will be adjusted while creating the popup.
-  SetBounds(gfx::ScaleToRoundedRect(GetBounds(), 1.0 / ui_scale()));
   if (!CreateShellPopup()) {
     Close();
     return;
@@ -180,8 +174,9 @@ gfx::Rect WaylandPopup::AdjustPopupWindowPosition() {
   // to be in local surface coordinates a.k.a relative to parent window.
   const gfx::Rect parent_bounds_dip =
       gfx::ScaleToRoundedRect(parent_window()->GetBounds(), 1.0 / ui_scale());
-  gfx::Rect new_bounds_dip =
-      wl::TranslateBoundsToParentCoordinates(GetBounds(), parent_bounds_dip);
+  gfx::Rect new_bounds_dip = wl::TranslateBoundsToParentCoordinates(
+      gfx::ScaleToRoundedRect(GetBounds(), 1.0 / ui_scale()),
+      parent_bounds_dip);
 
   // Chromium may decide to position nested menu windows on the left side
   // instead of the right side of parent menu windows when the size of the
