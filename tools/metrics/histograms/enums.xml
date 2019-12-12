@@ -25708,6 +25708,8 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3117"
       label="V8VideoPlaybackQuality_CorruptedVideoFrames_AttributeGetter"/>
   <int value="3118" label="LongTaskBufferFull"/>
+  <int value="3119" label="HTMLMetaElementMonetization"/>
+  <int value="3120" label="HTMLLinkElementMonetization"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">

@@ -49,7 +49,8 @@ LinkRelAttribute::LinkRelAttribute()
       is_manifest_(false),
       is_module_preload_(false),
       is_service_worker_(false),
-      is_canonical_(false) {}
+      is_canonical_(false),
+      is_monetization_(false) {}
 
 LinkRelAttribute::LinkRelAttribute(const String& rel) : LinkRelAttribute() {
   if (rel.IsEmpty())
@@ -99,6 +100,8 @@ LinkRelAttribute::LinkRelAttribute(const String& rel) : LinkRelAttribute() {
       is_service_worker_ = true;
     } else if (DeprecatedEqualIgnoringCase(link_type, "canonical")) {
       is_canonical_ = true;
+    } else if (DeprecatedEqualIgnoringCase(link_type, "monetization")) {
+      is_monetization_ = true;
     }
     // Adding or removing a value here requires you to update
     // RelList::supportedTokens()
