@@ -63,30 +63,28 @@ OverlayCandidateValidatorOzone::OverlayCandidateValidatorOzone(
 
 OverlayCandidateValidatorOzone::~OverlayCandidateValidatorOzone() {}
 
-OverlayProcessorUsingStrategy::StrategyList
-OverlayCandidateValidatorOzone::InitializeStrategies() {
-  OverlayProcessorUsingStrategy::StrategyList strategies;
+void OverlayCandidateValidatorOzone::InitializeStrategies() {
   for (OverlayStrategy strategy : available_strategies_) {
     switch (strategy) {
       case OverlayStrategy::kFullscreen:
-        strategies.push_back(std::make_unique<OverlayStrategyFullscreen>(this));
+        strategies_.push_back(
+            std::make_unique<OverlayStrategyFullscreen>(this));
         break;
       case OverlayStrategy::kSingleOnTop:
-        strategies.push_back(
+        strategies_.push_back(
             std::make_unique<OverlayStrategySingleOnTop>(this));
         break;
       case OverlayStrategy::kUnderlay:
-        strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
+        strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
         break;
       case OverlayStrategy::kUnderlayCast:
-        strategies.push_back(
+        strategies_.push_back(
             std::make_unique<OverlayStrategyUnderlayCast>(this));
         break;
       default:
         NOTREACHED();
     }
   }
-  return strategies;
 }
 
 bool OverlayCandidateValidatorOzone::NeedsSurfaceOccludingDamageRect() const {

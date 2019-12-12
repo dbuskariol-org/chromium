@@ -84,9 +84,8 @@ OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
     : OverlayProcessorInterface(),
       overlay_validator_(std::move(overlay_validator)),
       skia_output_surface_(skia_output_surface) {
-  DCHECK(strategies_.empty());
   if (overlay_validator_)
-    strategies_ = overlay_validator_->InitializeStrategies();
+    overlay_validator_->InitializeStrategies();
 }
 #else  // defined(USE_OZONE)
 OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
@@ -94,9 +93,8 @@ OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
     std::unique_ptr<OverlayCandidateValidatorStrategy> overlay_validator)
     : OverlayProcessorInterface(),
       overlay_validator_(std::move(overlay_validator)) {
-  DCHECK(strategies_.empty());
   if (overlay_validator_)
-    strategies_ = overlay_validator_->InitializeStrategies();
+    overlay_validator_->InitializeStrategies();
 }
 #endif
 
@@ -150,7 +148,7 @@ void OverlayProcessorUsingStrategy::ProcessForOverlays(
   // Only if that fails, attempt hardware overlay strategies.
   bool success = false;
   if (overlay_validator_) {
-    success = AttemptWithStrategies(
+    success = overlay_validator_->AttemptWithStrategies(
         output_color_matrix, render_pass_backdrop_filters, resource_provider,
         render_passes, output_surface_plane, candidates, content_bounds);
   }
@@ -247,7 +245,7 @@ void OverlayProcessorUsingStrategy::UpdateDamageRect(
 
 void OverlayProcessorUsingStrategy::AdjustOutputSurfaceOverlay(
     base::Optional<OutputSurfaceOverlayPlane>* output_surface_plane) {
-  if (!output_surface_plane || !output_surface_plane->has_value())
+  if (!output_surface_plane->has_value())
     return;
 
   // This is used by the surface control implementation to adjust the display
@@ -258,9 +256,10 @@ void OverlayProcessorUsingStrategy::AdjustOutputSurfaceOverlay(
 
   // If the overlay candidates cover the entire screen, the
   // |output_surface_plane| could be removed.
-  if (last_successful_strategy_ &&
-      last_successful_strategy_->RemoveOutputSurfaceAsOverlay())
+  if (overlay_validator_ &&
+      overlay_validator_->StrategyNeedsOutputSurfacePlaneRemoved()) {
     output_surface_plane->reset();
+  }
 }
 
 bool OverlayProcessorUsingStrategy::NeedsSurfaceOccludingDamageRect() const {
@@ -284,33 +283,5 @@ void OverlayProcessorUsingStrategy::SetSoftwareMirrorMode(
     bool software_mirror_mode) {
   if (overlay_validator_)
     overlay_validator_->SetSoftwareMirrorMode(software_mirror_mode);
-}
-
-bool OverlayProcessorUsingStrategy::AttemptWithStrategies(
-    const SkMatrix44& output_color_matrix,
-    const OverlayProcessorInterface::FilterOperationsMap&
-        render_pass_backdrop_filters,
-    DisplayResourceProvider* resource_provider,
-    RenderPassList* render_pass_list,
-    OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
-    OverlayCandidateList* candidates,
-    std::vector<gfx::Rect>* content_bounds) {
-  last_successful_strategy_ = nullptr;
-  for (const auto& strategy : strategies_) {
-    if (strategy->Attempt(output_color_matrix, render_pass_backdrop_filters,
-                          resource_provider, render_pass_list, primary_plane,
-                          candidates, content_bounds)) {
-      // This function is used by underlay strategy to mark the primary plane as
-      // enable_blending.
-      strategy->AdjustOutputSurfaceOverlay(primary_plane);
-      UMA_HISTOGRAM_ENUMERATION("Viz.DisplayCompositor.OverlayStrategy",
-                                strategy->GetUMAEnum());
-      last_successful_strategy_ = strategy.get();
-      return true;
-    }
-  }
-  UMA_HISTOGRAM_ENUMERATION("Viz.DisplayCompositor.OverlayStrategy",
-                            OverlayStrategy::kNoStrategyUsed);
-  return false;
 }
 }  // namespace viz

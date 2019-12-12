@@ -2284,11 +2284,8 @@ class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
   };
   class Validator : public OverlayCandidateValidatorStrategy {
    public:
-    OverlayProcessorUsingStrategy::StrategyList InitializeStrategies()
-        override {
-      OverlayProcessorUsingStrategy::StrategyList strategies;
-      strategies.push_back(std::make_unique<Strategy>());
-      return strategies;
+    void InitializeStrategies() override {
+      strategies_.push_back(std::make_unique<Strategy>());
     }
 
     MOCK_CONST_METHOD0(NeedsSurfaceOccludingDamageRect, bool());
@@ -2301,11 +2298,17 @@ class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
     // coordinates if necessary.
     void CheckOverlaySupport(const PrimaryPlane* primary_plane,
                              OverlayCandidateList* surfaces) override {}
+
+    Strategy& strategy() {
+      auto* strategy = strategies_.back().get();
+      return *(static_cast<Strategy*>(strategy));
+    }
   };
 
   Strategy& strategy() {
-    auto* strategy = strategies_.back().get();
-    return *(static_cast<Strategy*>(strategy));
+    auto* validator =
+        static_cast<const Validator*>(GetOverlayCandidateValidator());
+    return const_cast<Validator*>(validator)->strategy();
   }
 
   TestOverlayProcessor()
@@ -2473,12 +2476,9 @@ class SingleOverlayOnTopProcessor : public OverlayProcessorUsingStrategy {
  public:
   class SingleOverlayValidator : public OverlayCandidateValidatorStrategy {
    public:
-    OverlayProcessorUsingStrategy::StrategyList InitializeStrategies()
-        override {
-      OverlayProcessorUsingStrategy::StrategyList strategies;
-      strategies.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
-      strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
-      return strategies;
+    void InitializeStrategies() override {
+      strategies_.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
+      strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
     }
 
     bool NeedsSurfaceOccludingDamageRect() const override { return true; }
@@ -3108,12 +3108,9 @@ class ContentBoundsOverlayProcessor : public OverlayProcessorUsingStrategy {
    public:
     explicit Validator(const std::vector<gfx::Rect>& content_bounds)
         : content_bounds_(content_bounds) {}
-    OverlayProcessorUsingStrategy::StrategyList InitializeStrategies()
-        override {
-      OverlayProcessorUsingStrategy::StrategyList strategies;
-      strategies.push_back(
+    void InitializeStrategies() override {
+      strategies_.push_back(
           std::make_unique<Strategy>(std::move(content_bounds_)));
-      return strategies;
     }
 
     // Empty mock methods since this test set up uses strategies, which are only
@@ -3129,6 +3126,8 @@ class ContentBoundsOverlayProcessor : public OverlayProcessorUsingStrategy {
     void CheckOverlaySupport(const PrimaryPlane* primary_plane,
                              OverlayCandidateList* surfaces) override {}
 
+    Strategy& strategy() { return static_cast<Strategy&>(*strategies_.back()); }
+
    private:
     std::vector<gfx::Rect> content_bounds_;
   };
@@ -3139,7 +3138,11 @@ class ContentBoundsOverlayProcessor : public OverlayProcessorUsingStrategy {
             nullptr,
             std::make_unique<Validator>(content_bounds)) {}
 
-  Strategy& strategy() { return static_cast<Strategy&>(*strategies_.back()); }
+  Strategy& strategy() {
+    DCHECK(overlay_validator_);
+    auto* validator = overlay_validator_.get();
+    return static_cast<Validator*>(validator)->strategy();
+  }
 };
 
 class GLRendererSwapWithBoundsTest : public GLRendererTest {

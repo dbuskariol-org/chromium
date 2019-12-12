@@ -71,12 +71,7 @@ const gfx::BufferFormat kDefaultBufferFormat = gfx::BufferFormat::RGBA_8888;
 
 class TestOverlayCandidateValidator : public OverlayCandidateValidatorStrategy {
  public:
-  using StrategyList = OverlayProcessorUsingStrategy::StrategyList;
-
-  StrategyList InitializeStrategies() override {
-    StrategyList empty;
-    return empty;
-  }
+  size_t GetStrategyCount() const { return strategies_.size(); }
 
   bool NeedsSurfaceOccludingDamageRect() const override { return false; }
   void CheckOverlaySupport(const PrimaryPlane* primary_plane,
@@ -85,10 +80,8 @@ class TestOverlayCandidateValidator : public OverlayCandidateValidatorStrategy {
 
 class FullscreenOverlayValidator : public TestOverlayCandidateValidator {
  public:
-  StrategyList InitializeStrategies() override {
-    StrategyList strategies;
-    strategies.push_back(std::make_unique<OverlayStrategyFullscreen>(this));
-    return strategies;
+  void InitializeStrategies() override {
+    strategies_.push_back(std::make_unique<OverlayStrategyFullscreen>(this));
   }
   bool NeedsSurfaceOccludingDamageRect() const override { return true; }
   void CheckOverlaySupport(const PrimaryPlane* primary_plane,
@@ -101,11 +94,9 @@ class SingleOverlayValidator : public TestOverlayCandidateValidator {
  public:
   SingleOverlayValidator() : expected_rects_(1, gfx::RectF(kOverlayRect)) {}
 
-  StrategyList InitializeStrategies() override {
-    StrategyList strategies;
-    strategies.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
-    strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
-    return strategies;
+  void InitializeStrategies() override {
+    strategies_.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
+    strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
   }
   bool NeedsSurfaceOccludingDamageRect() const override { return true; }
   void CheckOverlaySupport(const PrimaryPlane* primary_plane,
@@ -148,38 +139,30 @@ class SingleOverlayValidator : public TestOverlayCandidateValidator {
 
 class SingleOnTopOverlayValidator : public SingleOverlayValidator {
  public:
-  StrategyList InitializeStrategies() override {
-    StrategyList strategies;
-    strategies.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
-    return strategies;
+  void InitializeStrategies() override {
+    strategies_.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
   }
 };
 
 class UnderlayOverlayValidator : public SingleOverlayValidator {
  public:
-  StrategyList InitializeStrategies() override {
-    StrategyList strategies;
-    strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
-    return strategies;
+  void InitializeStrategies() override {
+    strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
   }
 };
 
 class TransparentUnderlayOverlayValidator : public SingleOverlayValidator {
  public:
-  StrategyList InitializeStrategies() override {
-    StrategyList strategies;
-    strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(
+  void InitializeStrategies() override {
+    strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
         this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
-    return strategies;
   }
 };
 
 class UnderlayCastOverlayValidator : public SingleOverlayValidator {
  public:
-  StrategyList InitializeStrategies() override {
-    StrategyList strategies;
-    strategies.push_back(std::make_unique<OverlayStrategyUnderlayCast>(this));
-    return strategies;
+  void InitializeStrategies() override {
+    strategies_.push_back(std::make_unique<OverlayStrategyUnderlayCast>(this));
   }
 };
 
@@ -190,7 +173,14 @@ class DefaultOverlayProcessor : public OverlayProcessorUsingStrategy {
             nullptr,
             std::make_unique<SingleOverlayValidator>()) {}
 
-  size_t GetStrategyCount() const { return strategies_.size(); }
+  size_t GetStrategyCount() const {
+    if (auto* validator = overlay_validator_.get()) {
+      return static_cast<TestOverlayCandidateValidator*>(validator)
+          ->GetStrategyCount();
+    }
+
+    return 0;
+  }
 };
 
 class OverlayOutputSurface : public OutputSurface {

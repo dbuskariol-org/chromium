@@ -38,12 +38,9 @@ OverlayCandidateValidatorSurfaceControl::
 OverlayCandidateValidatorSurfaceControl::
     ~OverlayCandidateValidatorSurfaceControl() = default;
 
-OverlayProcessorUsingStrategy::StrategyList
-OverlayCandidateValidatorSurfaceControl::InitializeStrategies() {
-  OverlayProcessorUsingStrategy::StrategyList strategies;
-  strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(
+void OverlayCandidateValidatorSurfaceControl::InitializeStrategies() {
+  strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
       this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
-  return strategies;
 }
 
 bool OverlayCandidateValidatorSurfaceControl::NeedsSurfaceOccludingDamageRect()
