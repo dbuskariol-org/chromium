@@ -199,6 +199,8 @@ source_set("eg_test_support") {
   configs += [ "//build/config/compiler:enable_arc" ]
   testonly = true
   sources = [
+    "bookmark_earl_grey_ui.h",
+    "bookmark_earl_grey_ui.mm",
     "bookmark_earl_grey_utils.h",
     "bookmark_earl_grey_utils.mm",
   ]
