@@ -18665,7 +18665,6 @@
         'minimum': 1024,
       },
       'supported_on': ['chrome.win:79-', 'chrome.mac:79-'],
-      'future': True,
       'features': {
         'dynamic_refresh': True,
         'per_profile': False,
