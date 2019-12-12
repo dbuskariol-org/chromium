@@ -855,6 +855,8 @@ gpu_mac_builder(
 def gpu_win_builder(*, name, os=os.WINDOWS_ANY, **kwargs):
   return gpu_builder(
       name = name,
+      goma_backend = goma.backend.RBE_PROD,
+      goma_enable_ats = True,
       mastername = 'tryserver.chromium.win',
       os = os,
       **kwargs
@@ -862,123 +864,83 @@ def gpu_win_builder(*, name, os=os.WINDOWS_ANY, **kwargs):
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win-xr-builder-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-intel-dqp-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-intel-exp-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-intel-rel-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-nvidia-dbg-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-nvidia-dqp-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-nvidia-dx12vk-dbg-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-nvidia-dx12vk-rel-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-nvidia-exp-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-nvidia-skgl-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-nvidia-rel-32',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win10-nvidia-rel-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win7-amd-dbg-32',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win7-amd-dqp-32',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win7-amd-rel-32',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win7-nvidia-dqp-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win7-nvidia-rel-32',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-fyi-try-win7-nvidia-rel-64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'gpu-try-win10-nvidia-rel',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_win_builder(
     name = 'win_optional_gpu_tests_rel',
     builderless = True,
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     os = os.WINDOWS_DEFAULT,
     tryjob = tryjob(
         location_regexp = [
@@ -1538,50 +1500,49 @@ def swangle_windows_builder(*, name, **kwargs):
   return swangle_builder(
       name = name,
       os = os.WINDOWS_DEFAULT,
+      goma_backend = goma.backend.RBE_PROD,
+      goma_enable_ats = True,
       **kwargs
   )
 
 swangle_windows_builder(
     name = 'win-swangle-try-tot-angle-x64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-tot-angle-x86',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-tot-swiftshader-x64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-tot-swiftshader-x86',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-x64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-x86',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 
-def win_builder(*, name, builderless=True, os=os.WINDOWS_DEFAULT, **kwargs):
+def win_builder(
+    *,
+    name,
+    builderless=True,
+    goma_backend=goma.backend.RBE_PROD,
+    goma_enable_ats=True,
+    os=os.WINDOWS_DEFAULT,
+    **kwargs):
   return try_builder(
       name = name,
       builderless = builderless,
+      goma_backend = goma_backend,
+      goma_enable_ats = goma_enable_ats,
       mastername = 'tryserver.chromium.win',
       os = os,
       **kwargs
@@ -1589,22 +1550,16 @@ def win_builder(*, name, builderless=True, os=os.WINDOWS_DEFAULT, **kwargs):
 
 win_builder(
     name = 'win-annotator-rel',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 win_builder(
     name = 'win-asan',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     goma_jobs = goma.jobs.J150,
 )
 
 win_builder(
     name = 'win-celab-try-rel',
     executable = luci.recipe(name = 'celab'),
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     properties = {
         'exclude': 'chrome_only',
         'pool_name': 'celab-chromium-try',
@@ -1617,23 +1572,17 @@ win_builder(
     name = 'win-libfuzzer-asan-rel',
     builderless = False,
     executable = luci.recipe(name = 'chromium_libfuzzer_trybot'),
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     os = os.WINDOWS_ANY,
     tryjob = tryjob(),
 )
 
 win_builder(
     name = 'win10_chromium_x64_dbg_ng',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     os = os.WINDOWS_10,
 )
 
 win_builder(
     name = 'win10_chromium_x64_rel_ng_exp',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     builderless = False,
     os = os.WINDOWS_ANY,
 )
@@ -1641,48 +1590,34 @@ win_builder(
 win_builder(
     name = 'win7-rel',
     execution_timeout = time.hour * 9 / 2,  # 4.5 (can't multiply float * duration)
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     goma_jobs = goma.jobs.J300,
     ssd = True,
 )
 
 win_builder(
     name = 'win_archive',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 win_builder(
     name = 'win_chromium_compile_dbg_ng',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     goma_jobs = goma.jobs.J150,
     tryjob = tryjob(),
 )
 
 win_builder(
     name = 'win_chromium_compile_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 win_builder(
     name = 'win_chromium_dbg_ng',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 win_builder(
     name = 'win_chromium_x64_rel_ng',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 win_builder(
     name = 'win_mojo',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 win_builder(
@@ -1690,11 +1625,11 @@ win_builder(
     builderless = False,
     cores = 32,
     executable = luci.recipe(name = 'chromium_upload_clang'),
+    goma_backend = None,
+    goma_enable_ats = False,
     os = os.WINDOWS_ANY,
 )
 
 win_builder(
     name = 'win_x64_archive',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )

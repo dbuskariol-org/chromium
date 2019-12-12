@@ -1397,36 +1397,30 @@ fyi_mac_builder(
 def fyi_windows_builder(*, name, os=os.WINDOWS_DEFAULT, **kwargs):
   return fyi_builder(
       name = name,
+      goma_backend = goma.backend.RBE_PROD,
+      goma_enable_ats = True,
       os = os,
       **kwargs
   )
 
 fyi_windows_builder(
     name = 'Win 10 Fast Ring',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     os = os.WINDOWS_10,
 )
 
 fyi_windows_builder(
     name = 'win32-arm64-rel',
     cpu = cpu.X86,
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     goma_jobs = goma.jobs.J150,
 )
 
 fyi_windows_builder(
     name = 'win-annotator-rel',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     execution_timeout = 16 * time.hour,
 )
 
 fyi_windows_builder(
     name = 'Mojo Windows',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 
@@ -1774,62 +1768,46 @@ def gpu_fyi_windows_builder(*, name, **kwargs):
   return gpu_fyi_builder(
       name = name,
       builderless = True,
+      goma_backend = goma.backend.RBE_PROD,
+      goma_enable_ats = True,
       os = os.WINDOWS_ANY,
       **kwargs
   )
 
 gpu_fyi_windows_builder(
     name = 'GPU FYI Win Builder',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_fyi_windows_builder(
     name = 'GPU FYI Win Builder (dbg)',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_fyi_windows_builder(
     name = 'GPU FYI Win dEQP Builder',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 Builder',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 Builder (dbg)',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 dEQP Builder',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 DX12 Vulkan Builder',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 DX12 Vulkan Builder (dbg)',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 gpu_fyi_windows_builder(
     name = 'GPU FYI XR Win x64 Builder',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 
@@ -2233,50 +2211,42 @@ swangle_linux_builder(
 def swangle_windows_builder(*, name, **kwargs):
   return swangle_builder(
       name = name,
+      goma_backend = goma.backend.RBE_PROD,
+      goma_enable_ats = True,
       os = os.WINDOWS_DEFAULT,
       **kwargs
   )
 
 swangle_windows_builder(
     name = 'win-swangle-tot-angle-x64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-tot-angle-x86',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-tot-swiftshader-x64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-tot-swiftshader-x86',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-x64',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-x86',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 
 def win_builder(*, name, os=os.WINDOWS_DEFAULT, **kwargs):
   return builder(
       name = name,
+      goma_backend = goma.backend.RBE_PROD,
+      goma_enable_ats = True,
       mastername = 'chromium.win',
       os = os,
       **kwargs
@@ -2284,31 +2254,23 @@ def win_builder(*, name, os=os.WINDOWS_DEFAULT, **kwargs):
 
 win_builder(
     name = 'WebKit Win10',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
 
 win_builder(
     name = 'Win Builder',
     cores = 32,
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
 
 win_builder(
     name = 'Win Builder (dbg)',
     cores = 32,
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
 
 win_builder(
     name = 'Win x64 Builder (dbg)',
     cores = 32,
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
 
@@ -2335,6 +2297,4 @@ win_builder(
     name = 'Windows deterministic',
     executable = luci.recipe(name = 'swarming/deterministic_build'),
     execution_timeout = 6 * time.hour,
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
 )
