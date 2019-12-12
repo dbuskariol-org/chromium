@@ -219,12 +219,8 @@ DragWindowFromShelfController::EndDrag(const gfx::PointF& location_in_screen,
       SplitViewController::Get(Shell::GetPrimaryRootWindow());
   const bool in_overview = overview_controller->InOverviewSession();
   const bool in_splitview = split_view_controller->InSplitViewMode();
-  const bool drop_window_in_overview =
-      ShouldDropWindowInOverview(location_in_screen, velocity_y);
-  SplitViewController::SnapPosition snap_position =
-      GetSnapPositionOnDragEnd(location_in_screen, velocity_y);
-
   base::Optional<ShelfWindowDragResult> window_drag_result;
+
   if (ShouldGoToHomeScreen(location_in_screen, velocity_y)) {
     DCHECK(!in_splitview);
     if (in_overview) {
@@ -242,16 +238,13 @@ DragWindowFromShelfController::EndDrag(const gfx::PointF& location_in_screen,
     ScaleDownWindowAfterDrag();
     window_drag_result = ShelfWindowDragResult::kGoToHomeScreen;
   } else {
-    if (drop_window_in_overview)
-      window_drag_result = ShelfWindowDragResult::kGoToOverviewMode;
-    else if (snap_position != SplitViewController::NONE)
-      window_drag_result = ShelfWindowDragResult::kGoToSplitviewMode;
-    // For window that may drop in overview or snap in split screen, restore its
-    // original backdrop mode.
-    window_->SetProperty(kBackdropWindowMode, original_backdrop_mode_);
+    window_drag_result = ShelfWindowDragResult::kGoToOverviewMode;
   }
 
-  OnDragEnded(location_in_screen, drop_window_in_overview, snap_position);
+  OnDragEnded(location_in_screen,
+              ShouldDropWindowInOverview(location_in_screen, velocity_y),
+              GetSnapPositionOnDragEnd(location_in_screen, velocity_y));
+
   return window_drag_result;
 }
 
