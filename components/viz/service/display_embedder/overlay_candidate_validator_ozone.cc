@@ -1,8 +1,12 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/viz/service/display/overlay_processor_ozone.h"
+#include "components/viz/service/display_embedder/overlay_candidate_validator_ozone.h"
+
+#include <stddef.h>
+
+#include <utility>
 
 #include "components/viz/service/display/overlay_candidate_list.h"
 #include "components/viz/service/display/overlay_strategy_fullscreen.h"
@@ -18,7 +22,7 @@ namespace {
 // TODO(weiliangc): When difference between primary plane and non-primary plane
 // can be internalized, merge these two helper functions.
 void ConvertToOzoneOverlaySurface(
-    const OverlayProcessorInterface::OutputSurfaceOverlayPlane& primary_plane,
+    const OverlayCandidateValidatorOzone::PrimaryPlane& primary_plane,
     ui::OverlaySurfaceCandidate* ozone_candidate) {
   ozone_candidate->transform = primary_plane.transform;
   ozone_candidate->format = primary_plane.format;
@@ -51,56 +55,46 @@ void ConvertToOzoneOverlaySurface(
 // overlays configurations.
 // |available_strategies| is a list of overlay strategies that should be
 // initialized by InitializeStrategies.
-OverlayProcessorOzone::OverlayProcessorOzone(
-    bool overlay_enabled,
+OverlayCandidateValidatorOzone::OverlayCandidateValidatorOzone(
     std::unique_ptr<ui::OverlayCandidatesOzone> overlay_candidates,
     std::vector<OverlayStrategy> available_strategies)
-    : OverlayProcessorUsingStrategy(
-          nullptr,
-          std::unique_ptr<OverlayCandidateValidatorStrategy>()),
-      overlay_enabled_(overlay_enabled),
-      overlay_candidates_(std::move(overlay_candidates)),
-      available_strategies_(std::move(available_strategies)) {
-  if (overlay_enabled_)
-    InitializeStrategies();
-}
+    : overlay_candidates_(std::move(overlay_candidates)),
+      available_strategies_(std::move(available_strategies)) {}
 
-OverlayProcessorOzone::~OverlayProcessorOzone() = default;
+OverlayCandidateValidatorOzone::~OverlayCandidateValidatorOzone() {}
 
-void OverlayProcessorOzone::InitializeStrategies() {
+OverlayProcessorUsingStrategy::StrategyList
+OverlayCandidateValidatorOzone::InitializeStrategies() {
+  OverlayProcessorUsingStrategy::StrategyList strategies;
   for (OverlayStrategy strategy : available_strategies_) {
     switch (strategy) {
       case OverlayStrategy::kFullscreen:
-        strategies_.push_back(
-            std::make_unique<OverlayStrategyFullscreen>(this));
+        strategies.push_back(std::make_unique<OverlayStrategyFullscreen>(this));
         break;
       case OverlayStrategy::kSingleOnTop:
-        strategies_.push_back(
+        strategies.push_back(
             std::make_unique<OverlayStrategySingleOnTop>(this));
         break;
       case OverlayStrategy::kUnderlay:
-        strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
+        strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
         break;
       case OverlayStrategy::kUnderlayCast:
-        strategies_.push_back(
+        strategies.push_back(
             std::make_unique<OverlayStrategyUnderlayCast>(this));
         break;
       default:
         NOTREACHED();
     }
   }
+  return strategies;
 }
 
-bool OverlayProcessorOzone::IsOverlaySupported() const {
-  return overlay_enabled_;
-}
-
-bool OverlayProcessorOzone::NeedsSurfaceOccludingDamageRect() const {
+bool OverlayCandidateValidatorOzone::NeedsSurfaceOccludingDamageRect() const {
   return true;
 }
 
-void OverlayProcessorOzone::CheckOverlaySupport(
-    const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
+void OverlayCandidateValidatorOzone::CheckOverlaySupport(
+    const PrimaryPlane* primary_plane,
     OverlayCandidateList* surfaces) {
   // SW mirroring copies out of the framebuffer, so we can't remove any
   // quads for overlaying, otherwise the output is incorrect.
@@ -161,13 +155,8 @@ void OverlayProcessorOzone::CheckOverlaySupport(
   }
 }
 
-void OverlayProcessorOzone::SetSoftwareMirrorMode(bool enabled) {
+void OverlayCandidateValidatorOzone::SetSoftwareMirrorMode(bool enabled) {
   software_mirror_active_ = enabled;
-}
-
-gfx::Rect OverlayProcessorOzone::GetOverlayDamageRectForOutputSurface(
-    const OverlayCandidate& overlay) const {
-  return ToEnclosedRect(overlay.display_rect);
 }
 
 }  // namespace viz

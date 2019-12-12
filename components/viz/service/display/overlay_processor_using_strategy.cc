@@ -84,7 +84,9 @@ OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
     : OverlayProcessorInterface(),
       overlay_validator_(std::move(overlay_validator)),
       skia_output_surface_(skia_output_surface) {
-  InitializeStrategies();
+  DCHECK(strategies_.empty());
+  if (overlay_validator_)
+    strategies_ = overlay_validator_->InitializeStrategies();
 }
 #else  // defined(USE_OZONE)
 OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
@@ -92,15 +94,11 @@ OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
     std::unique_ptr<OverlayCandidateValidatorStrategy> overlay_validator)
     : OverlayProcessorInterface(),
       overlay_validator_(std::move(overlay_validator)) {
-  InitializeStrategies();
-}
-#endif
-
-void OverlayProcessorUsingStrategy::InitializeStrategies() {
   DCHECK(strategies_.empty());
   if (overlay_validator_)
-    strategies_ = overlay_validator_->InitializeStrategies(this);
+    strategies_ = overlay_validator_->InitializeStrategies();
 }
+#endif
 
 OverlayProcessorUsingStrategy::~OverlayProcessorUsingStrategy() = default;
 
@@ -150,9 +148,12 @@ void OverlayProcessorUsingStrategy::ProcessForOverlays(
   }
 
   // Only if that fails, attempt hardware overlay strategies.
-  bool success = AttemptWithStrategies(
-      output_color_matrix, render_pass_backdrop_filters, resource_provider,
-      render_passes, output_surface_plane, candidates, content_bounds);
+  bool success = false;
+  if (overlay_validator_) {
+    success = AttemptWithStrategies(
+        output_color_matrix, render_pass_backdrop_filters, resource_provider,
+        render_passes, output_surface_plane, candidates, content_bounds);
+  }
 
   if (success) {
     UpdateDamageRect(candidates, previous_frame_underlay_rect_,
@@ -189,7 +190,7 @@ void OverlayProcessorUsingStrategy::UpdateDamageRect(
   for (const OverlayCandidate& overlay : *candidates) {
     if (overlay.plane_z_order >= 0) {
       const gfx::Rect overlay_display_rect =
-          GetOverlayDamageRectForOutputSurface(overlay);
+          overlay_validator_->GetOverlayDamageRectForOutputSurface(overlay);
       // If an overlay candidate comes from output surface, its z-order should
       // be 0.
       overlay_damage_rect_.Union(overlay_display_rect);
@@ -213,7 +214,8 @@ void OverlayProcessorUsingStrategy::UpdateDamageRect(
       // However, if the underlay is unoccluded, we check if the damage is due
       // to a solid-opaque-transparent quad. If so, then we subtract this
       // damage.
-      this_frame_underlay_rect = GetOverlayDamageRectForOutputSurface(overlay);
+      this_frame_underlay_rect =
+          overlay_validator_->GetOverlayDamageRectForOutputSurface(overlay);
 
       bool same_underlay_rect =
           this_frame_underlay_rect == previous_frame_underlay_rect;
@@ -278,6 +280,12 @@ void OverlayProcessorUsingStrategy::SetValidatorViewportSize(
     overlay_validator_->SetViewportSize(size);
 }
 
+void OverlayProcessorUsingStrategy::SetSoftwareMirrorMode(
+    bool software_mirror_mode) {
+  if (overlay_validator_)
+    overlay_validator_->SetSoftwareMirrorMode(software_mirror_mode);
+}
+
 bool OverlayProcessorUsingStrategy::AttemptWithStrategies(
     const SkMatrix44& output_color_matrix,
     const OverlayProcessorInterface::FilterOperationsMap&
@@ -304,20 +312,5 @@ bool OverlayProcessorUsingStrategy::AttemptWithStrategies(
   UMA_HISTOGRAM_ENUMERATION("Viz.DisplayCompositor.OverlayStrategy",
                             OverlayStrategy::kNoStrategyUsed);
   return false;
-}
-
-void OverlayProcessorUsingStrategy::CheckOverlaySupport(
-    const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
-    OverlayCandidateList* candidate_list) {
-  if (overlay_validator_)
-    overlay_validator_->CheckOverlaySupport(primary_plane, candidate_list);
-}
-
-gfx::Rect OverlayProcessorUsingStrategy::GetOverlayDamageRectForOutputSurface(
-    const OverlayCandidate& overlay) const {
-  if (overlay_validator_)
-    return overlay_validator_->GetOverlayDamageRectForOutputSurface(overlay);
-
-  return ToEnclosedRect(overlay.display_rect);
 }
 }  // namespace viz

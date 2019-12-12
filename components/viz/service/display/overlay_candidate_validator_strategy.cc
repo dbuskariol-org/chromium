@@ -15,9 +15,32 @@
 #include "gpu/config/gpu_feature_info.h"
 #endif
 
+#if defined(USE_OZONE)
+#include "components/viz/service/display_embedder/overlay_candidate_validator_ozone.h"
+#include "ui/ozone/public/overlay_manager_ozone.h"
+#include "ui/ozone/public/ozone_platform.h"
+#endif
+
 namespace viz {
 
 namespace {
+#if defined(USE_OZONE)
+std::unique_ptr<OverlayCandidateValidatorOzone>
+CreateOverlayCandidateValidatorOzone(
+    gpu::SurfaceHandle surface_handle,
+    const RendererSettings& renderer_settings) {
+  if (renderer_settings.overlay_strategies.empty())
+    return nullptr;
+
+  auto* overlay_manager = ui::OzonePlatform::GetInstance()->GetOverlayManager();
+  std::unique_ptr<ui::OverlayCandidatesOzone> overlay_candidates =
+      overlay_manager->CreateOverlayCandidates(surface_handle);
+  return std::make_unique<OverlayCandidateValidatorOzone>(
+      std::move(overlay_candidates),
+      std::move(renderer_settings.overlay_strategies));
+}
+#endif
+
 #if defined(OS_ANDROID)
 std::unique_ptr<OverlayCandidateValidatorAndroid>
 CreateOverlayCandidateValidatorAndroid(
@@ -47,7 +70,10 @@ OverlayCandidateValidatorStrategy::Create(
   if (surface_handle == gpu::kNullSurfaceHandle)
     return nullptr;
 
-#if defined(OS_ANDROID)
+#if defined(USE_OZONE)
+  return CreateOverlayCandidateValidatorOzone(surface_handle,
+                                              renderer_settings);
+#elif defined(OS_ANDROID)
   if (capabilities.supports_surfaceless) {
     return std::make_unique<OverlayCandidateValidatorSurfaceControl>();
   } else {
