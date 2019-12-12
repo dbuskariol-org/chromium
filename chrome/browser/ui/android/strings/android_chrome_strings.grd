@@ -462,8 +462,8 @@ CHAR-LIMIT guidelines:
         Cancel sync
       </message>
 
-      <!-- Search engine preferences -->
-      <message name="IDS_PREFS_SEARCH_ENGINE" desc="Title for Search Engine preferences. [CHAR-LIMIT=32]">
+      <!-- Search engine settings -->
+      <message name="IDS_SEARCH_ENGINE_SETTINGS" desc="Title for Search Engine settings. [CHAR-LIMIT=32]">
         Search engine
       </message>
       <message name="IDS_SEARCH_ENGINE_LOCATION_AND_NOTIFICATIONS_ALLOWED" desc="The text of a link displayed when location and notifications permissions for a particular search engine are allowed.">

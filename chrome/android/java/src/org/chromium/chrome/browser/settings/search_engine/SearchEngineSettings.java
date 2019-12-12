@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings;
+package org.chromium.chrome.browser.settings.search_engine;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -18,7 +18,7 @@ import org.chromium.chrome.R;
  *
  * TODO(crbug.com/988877): Add on scroll shadow to action bar.
  */
-public class SearchEnginePreference extends ListFragment {
+public class SearchEngineSettings extends ListFragment {
     private SearchEngineAdapter mSearchEngineAdapter;
 
     @VisibleForTesting
@@ -39,7 +39,7 @@ public class SearchEnginePreference extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.prefs_search_engine);
+        getActivity().setTitle(R.string.search_engine_settings);
         mSearchEngineAdapter = new SearchEngineAdapter(getActivity());
         setListAdapter(mSearchEngineAdapter);
     }

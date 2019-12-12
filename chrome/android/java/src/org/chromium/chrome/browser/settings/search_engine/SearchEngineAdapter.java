@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings;
+package org.chromium.chrome.browser.settings.search_engine;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -32,6 +32,7 @@ import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ContentSettingsType;
 import org.chromium.chrome.browser.locale.LocaleManager;
 import org.chromium.chrome.browser.search_engines.TemplateUrlServiceFactory;
+import org.chromium.chrome.browser.settings.SettingsLauncher;
 import org.chromium.chrome.browser.settings.website.ContentSettingValues;
 import org.chromium.chrome.browser.settings.website.PermissionInfo;
 import org.chromium.chrome.browser.settings.website.SingleWebsitePreferences;
@@ -51,11 +52,11 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
-* A custom adapter for listing search engines.
-*/
+ * A custom adapter for listing search engines.
+ */
 public class SearchEngineAdapter extends BaseAdapter
         implements TemplateUrlService.LoadListener, TemplateUrlService.TemplateUrlServiceObserver,
-                OnClickListener {
+                   OnClickListener {
     private static final String TAG = "SearchEngines";
 
     private static final int VIEW_TYPE_ITEM = 0;
@@ -110,8 +111,8 @@ public class SearchEngineAdapter extends BaseAdapter
      */
     public SearchEngineAdapter(Context context) {
         mContext = context;
-        mLayoutInflater = (LayoutInflater) mContext.getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
+        mLayoutInflater =
+                (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     /**
@@ -158,7 +159,7 @@ public class SearchEngineAdapter extends BaseAdapter
             mHasLoadObserver = true;
             templateUrlService.registerLoadListener(this);
             templateUrlService.load();
-            return;  // Flow continues in onTemplateUrlServiceLoaded below.
+            return; // Flow continues in onTemplateUrlServiceLoaded below.
         }
 
         List<TemplateUrl> templateUrls = templateUrlService.getTemplateUrls();
@@ -272,7 +273,7 @@ public class SearchEngineAdapter extends BaseAdapter
             if (templateUrl.getIsPrepopulated() == targetTemplateUrl.getIsPrepopulated()
                     && TextUtils.equals(templateUrl.getKeyword(), targetTemplateUrl.getKeyword())
                     && TextUtils.equals(
-                               templateUrl.getShortName(), targetTemplateUrl.getShortName())) {
+                            templateUrl.getShortName(), targetTemplateUrl.getShortName())) {
                 return true;
             }
         }
@@ -288,7 +289,7 @@ public class SearchEngineAdapter extends BaseAdapter
             TemplateUrl templateUrl = templateUrls.get(i);
             if (!containsTemplateUrl(mPrepopulatedSearchEngines, templateUrl)
                     && !SearchEngineAdapter.containsTemplateUrl(
-                               mRecentSearchEngines, templateUrl)) {
+                            mRecentSearchEngines, templateUrl)) {
                 return true;
             }
         }
