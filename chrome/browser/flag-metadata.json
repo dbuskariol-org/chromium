@@ -2530,11 +2530,6 @@
     "expiry_milestone": 77
   },
   {
-    "name": "manual-password-generation-android",
-    "owners": [ "ioanap" ],
-    "expiry_milestone": 80
-  },
-  {
     "name": "media-app",
     "owners": [ "//chromeos/components/media_app_ui/OWNERS" ],
     "expiry_milestone": 90

@@ -28,7 +28,6 @@ extern const base::Feature kFillOnAccountSelect;
 extern const base::Feature kGooglePasswordManager;
 extern const base::Feature kLeakDetection;
 extern const base::Feature kLeakHistory;
-extern const base::Feature kManualPasswordGenerationAndroid;
 extern const base::Feature kPasswordEditingAndroid;
 extern const base::Feature kPasswordImport;
 extern const base::Feature kPasswordManagerOnboardingAndroid;
