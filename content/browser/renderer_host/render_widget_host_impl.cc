@@ -79,6 +79,7 @@
 #include "content/common/widget_messages.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/browser_thread.h"
+#include "content/public/browser/device_service.h"
 #include "content/public/browser/keyboard_event_processing_result.h"
 #include "content/public/browser/native_web_keyboard_event.h"
 #include "content/public/browser/notification_service.h"
@@ -127,10 +128,7 @@
 
 #if defined(OS_MACOSX)
 #include "content/browser/renderer_host/input/fling_scheduler_mac.h"
-#include "content/public/browser/system_connector.h"
-#include "services/device/public/mojom/constants.mojom.h"
 #include "services/device/public/mojom/wake_lock_provider.mojom.h"
-#include "services/service_manager/public/cpp/connector.h"
 #include "ui/accelerated_widget_mac/window_resize_helper_mac.h"
 #endif
 
@@ -3063,19 +3061,13 @@ void RenderWidgetHostImpl::DidProcessFrame(uint32_t frame_token) {
 device::mojom::WakeLock* RenderWidgetHostImpl::GetWakeLock() {
   // Here is a lazy binding, and will not reconnect after connection error.
   if (!wake_lock_) {
-    mojo::PendingReceiver<device::mojom::WakeLock> receiver =
-        wake_lock_.BindNewPipeAndPassReceiver();
-    // In some testing contexts, the system Connector isn't3 initialized.
-    if (GetSystemConnector()) {
-      mojo::Remote<device::mojom::WakeLockProvider> wake_lock_provider;
-      GetSystemConnector()->Connect(
-          device::mojom::kServiceName,
-          wake_lock_provider.BindNewPipeAndPassReceiver());
-      wake_lock_provider->GetWakeLockWithoutContext(
-          device::mojom::WakeLockType::kPreventDisplaySleep,
-          device::mojom::WakeLockReason::kOther, "GetSnapshot",
-          std::move(receiver));
-    }
+    mojo::Remote<device::mojom::WakeLockProvider> wake_lock_provider;
+    GetDeviceService().BindWakeLockProvider(
+        wake_lock_provider.BindNewPipeAndPassReceiver());
+    wake_lock_provider->GetWakeLockWithoutContext(
+        device::mojom::WakeLockType::kPreventDisplaySleep,
+        device::mojom::WakeLockReason::kOther, "GetSnapshot",
+        wake_lock_.BindNewPipeAndPassReceiver());
   }
   return wake_lock_.get();
 }
