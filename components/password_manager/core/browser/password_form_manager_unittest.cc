@@ -343,6 +343,7 @@ class PasswordFormManagerTest : public testing::Test,
     saved_match_.password_element = ASCIIToUTF16("field2");
     saved_match_.is_public_suffix_match = false;
     saved_match_.scheme = PasswordForm::Scheme::kHtml;
+    saved_match_.in_store = PasswordForm::Store::kProfileStore;
 
     psl_saved_match_ = saved_match_;
     psl_saved_match_.origin = psl_origin;
