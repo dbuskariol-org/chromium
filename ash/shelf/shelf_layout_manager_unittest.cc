@@ -4034,7 +4034,8 @@ TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInOverview) {
 }
 
 TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInSplitViewWithOverview) {
-  GetPrimaryShelf()->SetAutoHideBehavior(GetParam());
+  Shelf* const shelf = GetPrimaryShelf();
+  shelf->SetAutoHideBehavior(GetParam());
   TabletModeControllerTestApi().EnterTabletMode();
 
   std::unique_ptr<aura::Window> window =
@@ -4048,19 +4049,7 @@ TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInSplitViewWithOverview) {
       SplitViewController::Get(Shell::GetPrimaryRootWindow());
   split_view_controller->SnapWindow(window.get(), SplitViewController::LEFT);
 
-  Shelf* const shelf = GetPrimaryShelf();
-
-  // TODO(https://crbug.com/1032669): Replace the drag with SwipeUpOnShelf()
-  //     once the issue is fixed - for now offset the drag start point to ensure
-  //     it's not over the split view divider.
-  gfx::Rect display_bounds =
-      display::Screen::GetScreen()->GetPrimaryDisplay().bounds();
-  gfx::Point start = display_bounds.bottom_center() + gfx::Vector2d(100, 0);
-  gfx::Point end = start + gfx::Vector2d(0, -80);
-  const base::TimeDelta kTimeDelta = base::TimeDelta::FromMilliseconds(100);
-  const int kNumScrollSteps = 4;
-  GetEventGenerator()->GestureScrollSequence(start, end, kTimeDelta,
-                                             kNumScrollSteps);
+  SwipeUpOnShelf();
 
   EXPECT_TRUE(split_view_controller->InSplitViewMode());
   EXPECT_TRUE(overview_controller->InOverviewSession());
@@ -4072,20 +4061,7 @@ TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInSplitViewWithOverview) {
     EXPECT_EQ(SHELF_VISIBLE, shelf->GetVisibilityState());
   }
 
-  // Drag from the hotseat to the bezel, the hotseat should hide.
-  // TODO(https://crbug.com/1032669): Replace the drag with
-  // DragHotseatDownToBezel()
-  //     once the issue is fixed - for now offset the drag start point to ensure
-  //     it's not over the split view divider.
-  gfx::Rect shelf_widget_bounds = GetShelfWidget()->GetWindowBoundsInScreen();
-  gfx::Rect hotseat_bounds =
-      GetShelfWidget()->hotseat_widget()->GetWindowBoundsInScreen();
-  start = hotseat_bounds.top_center() + gfx::Vector2d(100, 0);
-  end = gfx::Point(shelf_widget_bounds.x() + shelf_widget_bounds.width() / 2,
-                   shelf_widget_bounds.bottom() + 1) +
-        gfx::Vector2d(100, 0);
-  GetEventGenerator()->GestureScrollSequence(start, end, kTimeDelta,
-                                             kNumScrollSteps);
+  DragHotseatDownToBezel();
 
   EXPECT_TRUE(split_view_controller->InSplitViewMode());
   EXPECT_TRUE(overview_controller->InOverviewSession());
@@ -4097,14 +4073,7 @@ TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInSplitViewWithOverview) {
     EXPECT_EQ(SHELF_VISIBLE, shelf->GetVisibilityState());
   }
 
-  // Swiping up on shelf should move hotseat back into extended state.
-  // TODO(https://crbug.com/1032669): Replace the drag with SwipeUpOnShelf()
-  //     once the issue is fixed - for now offset the drag start point to ensure
-  //     it's not over the split view divider.
-  start = display_bounds.bottom_center() + gfx::Vector2d(100, 0);
-  end = start + gfx::Vector2d(0, -80);
-  GetEventGenerator()->GestureScrollSequence(start, end, kTimeDelta,
-                                             kNumScrollSteps);
+  SwipeUpOnShelf();
 
   EXPECT_TRUE(split_view_controller->InSplitViewMode());
   EXPECT_TRUE(overview_controller->InOverviewSession());
@@ -4118,7 +4087,8 @@ TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInSplitViewWithOverview) {
 }
 
 TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInSplitView) {
-  GetPrimaryShelf()->SetAutoHideBehavior(GetParam());
+  Shelf* const shelf = GetPrimaryShelf();
+  shelf->SetAutoHideBehavior(GetParam());
   TabletModeControllerTestApi().EnterTabletMode();
 
   std::unique_ptr<aura::Window> window1 =
@@ -4133,19 +4103,7 @@ TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInSplitView) {
   split_view_controller->SnapWindow(window2.get(), SplitViewController::RIGHT);
   EXPECT_TRUE(split_view_controller->InSplitViewMode());
 
-  Shelf* const shelf = GetPrimaryShelf();
-
-  // TODO(https://crbug.com/1032669): Replace the drag with SwipeUpOnShelf()
-  //     once the issue is fixed - for now offset the drag start point to ensure
-  //     it's not over the split view divider.
-  gfx::Rect display_bounds =
-      display::Screen::GetScreen()->GetPrimaryDisplay().bounds();
-  gfx::Point start = display_bounds.bottom_center() + gfx::Vector2d(100, 0);
-  gfx::Point end = start + gfx::Vector2d(0, -80);
-  const base::TimeDelta kTimeDelta = base::TimeDelta::FromMilliseconds(100);
-  const int kNumScrollSteps = 4;
-  GetEventGenerator()->GestureScrollSequence(start, end, kTimeDelta,
-                                             kNumScrollSteps);
+  SwipeUpOnShelf();
 
   EXPECT_TRUE(split_view_controller->InSplitViewMode());
   EXPECT_EQ(HotseatState::kExtended, GetShelfLayoutManager()->hotseat_state());
@@ -4156,20 +4114,7 @@ TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInSplitView) {
     EXPECT_EQ(SHELF_VISIBLE, shelf->GetVisibilityState());
   }
 
-  // Drag from the hotseat to the bezel, the hotseat and shelf should hide.
-  // TODO(https://crbug.com/1032669): Replace the drag with
-  // DragHotseatDownToBezel()
-  //     once the issue is fixed - for now offset the drag start point to ensure
-  //     it's not over the split view divider.
-  gfx::Rect shelf_widget_bounds = GetShelfWidget()->GetWindowBoundsInScreen();
-  gfx::Rect hotseat_bounds =
-      GetShelfWidget()->hotseat_widget()->GetWindowBoundsInScreen();
-  start = hotseat_bounds.top_center() + gfx::Vector2d(100, 0);
-  end = gfx::Point(shelf_widget_bounds.x() + shelf_widget_bounds.width() / 2,
-                   shelf_widget_bounds.bottom() + 1) +
-        gfx::Vector2d(100, 0);
-  GetEventGenerator()->GestureScrollSequence(start, end, kTimeDelta,
-                                             kNumScrollSteps);
+  DragHotseatDownToBezel();
 
   EXPECT_TRUE(split_view_controller->InSplitViewMode());
   EXPECT_EQ(HotseatState::kHidden, GetShelfLayoutManager()->hotseat_state());
@@ -4180,14 +4125,7 @@ TEST_P(HotseatShelfLayoutManagerTest, SwipeOnHotseatInSplitView) {
     EXPECT_EQ(SHELF_VISIBLE, shelf->GetVisibilityState());
   }
 
-  // Swiping up on shelf should move hotseat back into extended state.
-  // TODO(https://crbug.com/1032669): Replace the drag with SwipeUpOnShelf()
-  //     once the issue is fixed - for now offset the drag start point to ensure
-  //     it's not over the split view divider.
-  start = display_bounds.bottom_center() + gfx::Vector2d(100, 0);
-  end = start + gfx::Vector2d(0, -80);
-  GetEventGenerator()->GestureScrollSequence(start, end, kTimeDelta,
-                                             kNumScrollSteps);
+  SwipeUpOnShelf();
 
   EXPECT_TRUE(split_view_controller->InSplitViewMode());
   EXPECT_EQ(HotseatState::kExtended, GetShelfLayoutManager()->hotseat_state());
