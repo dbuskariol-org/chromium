@@ -112,8 +112,8 @@ import java.util.Set;
  */
 public class PaymentRequestImpl
         implements PaymentRequest, PaymentRequestUI.Client, PaymentAppFactoryDelegate,
-                   PaymentApp.PaymentRequestUpdateEventCallback, PaymentInstrument.AbortCallback,
-                   PaymentInstrument.InstrumentDetailsCallback,
+                   PaymentAppFactoryParams, PaymentApp.PaymentRequestUpdateEventCallback,
+                   PaymentInstrument.AbortCallback, PaymentInstrument.InstrumentDetailsCallback,
                    PaymentResponseHelper.PaymentResponseRequesterDelegate, FocusChangedObserver,
                    NormalizedAddressRequestDelegate, SettingsAutofillAndPaymentsObserver.Observer,
                    PaymentHandlerHostDelegate, PaymentDetailsConverter.MethodChecker,
@@ -659,7 +659,7 @@ public class PaymentRequestImpl
             // Don't show any UI. Resolve .canMakePayment() with "false". Reject .show() with
             // "NotSupportedError".
             mQueryForQuota = new HashMap<>();
-            onDoneCreatingPaymentApps();
+            onDoneCreatingPaymentApps(/*factory=*/null);
             return;
         }
 
@@ -675,7 +675,7 @@ public class PaymentRequestImpl
             // Don't show any UI. Resolve .canMakePayment() with "false". Reject .show() with
             // "NotSupportedError".
             mQueryForQuota = new HashMap<>();
-            onDoneCreatingPaymentApps();
+            onDoneCreatingPaymentApps(/*factory=*/null);
             return;
         }
 
@@ -759,7 +759,7 @@ public class PaymentRequestImpl
             mHaveRequestedAutofillData &= haveCompleteContactInfo;
         }
 
-        PaymentAppFactory.getInstance().create(/*delegate=*/this);
+        PaymentAppService.getInstance().create(/*delegate=*/this);
 
         // Log the various types of payment methods that were requested by the merchant.
         boolean requestedMethodGoogle = false;
@@ -2462,50 +2462,50 @@ public class PaymentRequestImpl
         if (mNativeObserverForTest != null) mNativeObserverForTest.onConnectionTerminated();
     }
 
-    // PaymentAppFactoryDelegate implementation.
+    // PaymentAppFactoryParams implementation.
     @Override
     public WebContents getWebContents() {
         return mWebContents;
     }
 
-    // PaymentAppFactoryDelegate implementation.
+    // PaymentAppFactoryParams implementation.
     @Override
     public Map<String, PaymentMethodData> getMethodData() {
         return mMethodData;
     }
 
-    // PaymentAppFactoryDelegate implementation.
+    // PaymentAppFactoryParams implementation.
     @Override
     public String getId() {
         return mId;
     }
 
-    // PaymentAppFactoryDelegate implementation.
+    // PaymentAppFactoryParams implementation.
     @Override
     public String getTopLevelOrigin() {
         return mTopLevelOrigin;
     }
 
-    // PaymentAppFactoryDelegate implementation.
+    // PaymentAppFactoryParams implementation.
     @Override
     public String getPaymentRequestOrigin() {
         return mPaymentRequestOrigin;
     }
 
-    // PaymentAppFactoryDelegate implementation.
+    // PaymentAppFactoryParams implementation.
     @Override
     @Nullable
     public byte[][] getCertificateChain() {
         return mCertificateChain;
     }
 
-    // PaymentAppFactoryDelegate implementation.
+    // PaymentAppFactoryParams implementation.
     @Override
     public Map<String, PaymentDetailsModifier> getModifiers() {
         return mModifiers == null ? new HashMap<>() : Collections.unmodifiableMap(mModifiers);
     }
 
-    // PaymentAppFactoryDelegate implementation.
+    // PaymentAppFactoryParams implementation.
     @Override
     public boolean getMayCrawl() {
         return !mUserCanAddCreditCard
@@ -2513,9 +2513,15 @@ public class PaymentRequestImpl
                         ChromeFeatureList.WEB_PAYMENTS_ALWAYS_ALLOW_JUST_IN_TIME_PAYMENT_APP);
     }
 
-    // PaymentAppFactoryDelegate implementation.
+    // PaymentAppFactoryParams implementation.
     @Override
     public PaymentApp.PaymentRequestUpdateEventCallback getPaymentRequestUpdateEventCallback() {
+        return this;
+    }
+
+    // PaymentAppFactoryDelegate implementation.
+    @Override
+    public PaymentAppFactoryParams getParams() {
         return this;
     }
 
@@ -2577,7 +2583,7 @@ public class PaymentRequestImpl
 
     // PaymentAppFactoryDelegate implementation.
     @Override
-    public void onDoneCreatingPaymentApps() {
+    public void onDoneCreatingPaymentApps(PaymentAppFactoryInterface factory /* Unused */) {
         mIsFinishedQueryingPaymentApps = true;
 
         if (mClient == null || disconnectIfNoPaymentMethodsSupported()) return;

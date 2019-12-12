@@ -25,7 +25,7 @@ import java.util.Set;
 /**
  * Builds instances of payment apps.
  */
-public class PaymentAppFactory {
+public class PaymentAppFactory implements PaymentAppFactoryInterface {
     private static PaymentAppFactory sInstance;
 
     /**
@@ -146,20 +146,15 @@ public class PaymentAppFactory {
         }
     }
 
-    /**
-     * Creates payment apps for the |delegate|.
-     *
-     * @param delegate Provides information about payment request and receives a list of payment
-     * apps.
-     */
+    // PaymentAppFactoryInterface implementation.
+    @Override
     public void create(PaymentAppFactoryDelegate delegate) {
-        create(delegate.getWebContents(), delegate.getMethodData(), delegate.getMayCrawl(),
-                /*callback=*/new Aggregator(delegate));
+        create(delegate.getParams().getWebContents(), delegate.getParams().getMethodData(),
+                delegate.getParams().getMayCrawl(), /*callback=*/new Aggregator(delegate));
     }
 
     /** Collects, filters, and returns payment apps to the PaymentAppFactoryDelegate. */
-    private static final class Aggregator
-            implements PaymentAppCreatedCallback, InstrumentsCallback {
+    private final class Aggregator implements PaymentAppCreatedCallback, InstrumentsCallback {
         private final PaymentAppFactoryDelegate mDelegate;
         private final List<PaymentApp> mApps = new ArrayList<>();
         private List<PaymentApp> mPendingApps;
@@ -196,7 +191,7 @@ public class PaymentAppFactory {
             for (int i = 0; i < mApps.size(); i++) {
                 PaymentApp app = mApps.get(i);
                 Map<String, PaymentMethodData> appMethods = filterMerchantMethodData(
-                        mDelegate.getMethodData(), app.getAppMethodNames());
+                        mDelegate.getParams().getMethodData(), app.getAppMethodNames());
                 if (appMethods == null || !app.supportsMethodsAndData(appMethods)) {
                     mPendingApps.remove(app);
                 } else {
@@ -207,7 +202,7 @@ public class PaymentAppFactory {
             mDelegate.onCanMakePaymentCalculated(!queryApps.isEmpty());
 
             if (queryApps.isEmpty()) {
-                mDelegate.onDoneCreatingPaymentApps();
+                mDelegate.onDoneCreatingPaymentApps(PaymentAppFactory.this);
                 return;
             }
 
@@ -215,10 +210,12 @@ public class PaymentAppFactory {
                 PaymentApp app = q.getKey();
                 Map<String, PaymentMethodData> paymentMethods = q.getValue();
                 app.setPaymentRequestUpdateEventCallback(
-                        mDelegate.getPaymentRequestUpdateEventCallback());
-                app.getInstruments(mDelegate.getId(), paymentMethods, mDelegate.getTopLevelOrigin(),
-                        mDelegate.getPaymentRequestOrigin(), mDelegate.getCertificateChain(),
-                        mDelegate.getModifiers(), /*callback=*/this);
+                        mDelegate.getParams().getPaymentRequestUpdateEventCallback());
+                app.getInstruments(mDelegate.getParams().getId(), paymentMethods,
+                        mDelegate.getParams().getTopLevelOrigin(),
+                        mDelegate.getParams().getPaymentRequestOrigin(),
+                        mDelegate.getParams().getCertificateChain(),
+                        mDelegate.getParams().getModifiers(), /*callback=*/this);
             }
         }
 
@@ -279,7 +276,7 @@ public class PaymentAppFactory {
         /**
          * Filter out merchant method data that's not relevant to a payment app. Can return null.
          */
-        private static Map<String, PaymentMethodData> filterMerchantMethodData(
+        private Map<String, PaymentMethodData> filterMerchantMethodData(
                 Map<String, PaymentMethodData> merchantMethodData, Set<String> appMethods) {
             Map<String, PaymentMethodData> result = null;
             for (String method : appMethods) {
@@ -301,7 +298,7 @@ public class PaymentAppFactory {
                     PaymentInstrument instrument = instruments.get(i);
                     Set<String> instrumentMethodNames =
                             new HashSet<>(instrument.getInstrumentMethodNames());
-                    instrumentMethodNames.retainAll(mDelegate.getMethodData().keySet());
+                    instrumentMethodNames.retainAll(mDelegate.getParams().getMethodData().keySet());
                     if (!instrumentMethodNames.isEmpty()) {
                         mDelegate.onPaymentAppCreated(instrument);
                     } else {
@@ -316,7 +313,7 @@ public class PaymentAppFactory {
                 mDelegate.onAdditionalTextResourceId(additionalTextResourceId);
             }
 
-            if (mPendingApps.isEmpty()) mDelegate.onDoneCreatingPaymentApps();
+            if (mPendingApps.isEmpty()) mDelegate.onDoneCreatingPaymentApps(PaymentAppFactory.this);
         }
     }
 }
