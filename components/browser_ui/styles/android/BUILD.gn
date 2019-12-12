@@ -7,7 +7,7 @@ import("//ui/android/features.gni")
 
 android_library("java") {
   java_files =
-      [ "java/src/org/chromium/chrome/browser/ui/styles/ChromeColors.java" ]
+      [ "java/src/org/chromium/components/browser_ui/styles/ChromeColors.java" ]
   deps = [
     ":java_resources",
     "//base:base_java",
@@ -20,7 +20,7 @@ android_library("java") {
 }
 
 android_resources("java_resources") {
-  custom_package = "org.chromium.chrome.browser.ui.styles"
+  custom_package = "org.chromium.components.browser_ui.styles"
   resource_dirs = [ "java/res" ]
   deps = [
     "//third_party/android_deps:com_android_support_design_java",
