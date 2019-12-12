@@ -146,7 +146,6 @@ jumbo_static_library("browser") {
     "password_form_manager_for_ui.h",
     "password_form_metrics_recorder.cc",
     "password_form_metrics_recorder.h",
-    "password_form_user_action.h",
     "password_generation_frame_helper.cc",
     "password_generation_frame_helper.h",
     "password_generation_manager.cc",

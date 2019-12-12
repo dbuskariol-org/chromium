@@ -715,8 +715,6 @@ TEST_P(PasswordFormManagerTest, CreatePendingCredentialsEmptyStore) {
       form_manager_->GetPendingCredentials();
   CheckPendingCredentials(parsed_submitted_form_, pending_credentials);
   EXPECT_GE(pending_credentials.date_last_used, kNow);
-  EXPECT_EQ(UserAction::kOverrideUsernameAndPassword,
-            form_manager_->GetMetricsRecorder()->GetUserAction());
 }
 
 // Tests creating pending credentials when new credentials are submitted and the
@@ -729,8 +727,6 @@ TEST_P(PasswordFormManagerTest, CreatePendingCredentialsNewCredentials) {
       form_manager_->ProvisionallySave(submitted_form_, &driver_, nullptr));
   CheckPendingCredentials(parsed_submitted_form_,
                           form_manager_->GetPendingCredentials());
-  EXPECT_EQ(UserAction::kOverrideUsernameAndPassword,
-            form_manager_->GetMetricsRecorder()->GetUserAction());
 }
 
 // Tests that when submitted credentials are equal to already saved one then
@@ -754,8 +750,6 @@ TEST_P(PasswordFormManagerTest, CreatePendingCredentialsAlreadySaved) {
         form_manager_->ProvisionallySave(submitted_form_, &driver_, nullptr));
     CheckPendingCredentials(/* expected */ saved_match_,
                             form_manager_->GetPendingCredentials());
-    EXPECT_EQ(is_incognito ? UserAction::kChoose : UserAction::kNone,
-              form_manager_->GetMetricsRecorder()->GetUserAction());
   }
 }
 
@@ -779,8 +773,6 @@ TEST_P(PasswordFormManagerTest, CreatePendingCredentialsPSLMatchSaved) {
   EXPECT_TRUE(
       form_manager_->ProvisionallySave(submitted_form_, &driver_, nullptr));
   CheckPendingCredentials(expected, form_manager_->GetPendingCredentials());
-  EXPECT_EQ(UserAction::kChoosePslMatch,
-            form_manager_->GetMetricsRecorder()->GetUserAction());
 }
 
 // Tests creating pending credentials when new credentials are different only in
@@ -798,8 +790,6 @@ TEST_P(PasswordFormManagerTest, CreatePendingCredentialsPasswordOverridden) {
   EXPECT_TRUE(
       form_manager_->ProvisionallySave(submitted_form_, &driver_, nullptr));
   CheckPendingCredentials(expected, form_manager_->GetPendingCredentials());
-  EXPECT_EQ(UserAction::kOverridePassword,
-            form_manager_->GetMetricsRecorder()->GetUserAction());
 }
 
 // Tests that when submitted credentials are equal to already saved one then
@@ -818,8 +808,6 @@ TEST_P(PasswordFormManagerTest, CreatePendingCredentialsUpdate) {
   EXPECT_TRUE(
       form_manager_->ProvisionallySave(submitted_form, &driver_, nullptr));
   CheckPendingCredentials(expected, form_manager_->GetPendingCredentials());
-  EXPECT_EQ(UserAction::kOverridePassword,
-            form_manager_->GetMetricsRecorder()->GetUserAction());
 }
 
 // Tests creating pending credentials when a change password form is submitted

@@ -7016,6 +7016,9 @@ be describing additional metrics about the same event.
     </summary>
   </metric>
   <metric name="User.ActionSimplified">
+    <obsolete>
+      Deprecated as of 12/11/2019.
+    </obsolete>
     <summary>
       Records what the user does with a form. Recorded values correspond to the
       enum password_manager::UserAction.

@@ -48339,6 +48339,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="PasswordManagerActionsTakenV3">
+  <obsolete>
+    Deprecated as of 12/11/2019.
+  </obsolete>
   <summary>
     The value is a combination of three different options - what did the
     password manager do, what did the user do, and was the form submitted (and
