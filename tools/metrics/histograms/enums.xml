@@ -66454,6 +66454,11 @@ Full version information for the fingerprint enum values:
   <int value="2" label="Tab selected in tab strip"/>
 </enum>
 
+<enum name="WebUITabStripCloseTabActions">
+  <int value="0" label="Tap on close button"/>
+  <int value="1" label="Swiped to close"/>
+</enum>
+
 <enum name="WebUITabStripOpenActions">
   <int value="0" label="Tap on tab counter"/>
 </enum>
