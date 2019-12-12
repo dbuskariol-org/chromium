@@ -4741,8 +4741,8 @@ crbug.com/757955 http/tests/devtools/tracing/timeline-paint/layer-tree.js [ Pass
 
 # This test has a fixed number of time which can depend on performance.
 
-crbug.com/669329 http/tests/devtools/tracing/timeline-js/timeline-runtime-stats.js [ Pass Failure Crash ]
-crbug.com/669329 virtual/threaded/http/tests/devtools/tracing/timeline-js/timeline-runtime-stats.js [ Pass Failure Crash ]
+crbug.com/669329 http/tests/devtools/tracing/timeline-js/timeline-runtime-stats.js [ Pass Failure Crash Timeout ]
+crbug.com/669329 virtual/threaded/http/tests/devtools/tracing/timeline-js/timeline-runtime-stats.js [ Pass Failure Crash Timeout ]
 
 crbug.com/799619 [ Debug ] http/tests/devtools/profiler/heap-snapshot-inspect-dom-wrapper.js [ Pass Timeout ]
 
