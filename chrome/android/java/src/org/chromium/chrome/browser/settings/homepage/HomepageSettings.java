@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings;
+package org.chromium.chrome.browser.settings.homepage;
 
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
@@ -13,11 +13,13 @@ import androidx.annotation.VisibleForTesting;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.flags.FeatureUtilities;
 import org.chromium.chrome.browser.partnercustomizations.HomepageManager;
+import org.chromium.chrome.browser.settings.ChromeSwitchPreference;
+import org.chromium.chrome.browser.settings.SettingsUtils;
 
 /**
  * Fragment that allows the user to configure homepage related preferences.
  */
-public class HomepagePreferences extends PreferenceFragmentCompat {
+public class HomepageSettings extends PreferenceFragmentCompat {
     @VisibleForTesting
     public static final String PREF_HOMEPAGE_SWITCH = "homepage_switch";
     private static final String PREF_HOMEPAGE_EDIT = "homepage_edit";

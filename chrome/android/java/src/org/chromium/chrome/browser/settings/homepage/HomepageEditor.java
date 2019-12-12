@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings;
+package org.chromium.chrome.browser.settings.homepage;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +16,7 @@ import android.widget.EditText;
 
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.partnercustomizations.HomepageManager;
+import org.chromium.chrome.browser.settings.SettingsUtils;
 import org.chromium.components.url_formatter.UrlFormatter;
 
 /**
@@ -28,8 +29,8 @@ public class HomepageEditor extends Fragment implements TextWatcher {
     private Button mResetButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHomepageManager = HomepageManager.getInstance();
         getActivity().setTitle(R.string.options_homepage_edit_title);
@@ -47,8 +48,7 @@ public class HomepageEditor extends Fragment implements TextWatcher {
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    }
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -57,8 +57,7 @@ public class HomepageEditor extends Fragment implements TextWatcher {
     }
 
     @Override
-    public void afterTextChanged(Editable s) {
-    }
+    public void afterTextChanged(Editable s) {}
 
     private void initializeSaveCancelResetButtons(View v) {
         mResetButton = (Button) v.findViewById(R.id.homepage_reset);
