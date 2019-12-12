@@ -180,8 +180,7 @@ base::Value HistoryEntryToValue(
   // Pass the timestamps in a list.
   base::Value timestamps(base::Value::Type::LIST);
   for (int64_t timestamp : entry.all_timestamps) {
-    timestamps.GetList().push_back(
-        base::Value(base::Time::FromInternalValue(timestamp).ToJsTime()));
+    timestamps.Append(base::Time::FromInternalValue(timestamp).ToJsTime());
   }
   result.SetKey("allTimestamps", std::move(timestamps));
 
@@ -412,7 +411,7 @@ void BrowsingHistoryHandler::OnQueryComplete(
   DCHECK(tracker);
   base::Value results_value(base::Value::Type::LIST);
   for (const BrowsingHistoryService::HistoryEntry& entry : results) {
-    results_value.GetList().push_back(
+    results_value.Append(
         HistoryEntryToValue(entry, bookmark_model, profile, tracker, clock_));
   }
 
