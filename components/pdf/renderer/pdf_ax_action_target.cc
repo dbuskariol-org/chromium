@@ -56,12 +56,14 @@ bool PdfAXActionTarget::Click() const {
   PP_PdfAccessibilityActionData pdf_action_data = {};
 
   if ((target_plugin_node_.data().role != ax::mojom::Role::kLink) ||
-      !pdf_accessibility_tree_source_->GetPdfLinkInfoFromAXNode(
+      !pdf_accessibility_tree_source_->GetPdfAnnotationInfoFromAXNode(
           target_plugin_node_.data().id, &pdf_action_data.page_index,
-          &pdf_action_data.link_index)) {
+          &pdf_action_data.annotation_index)) {
     return false;
   }
 
+  pdf_action_data.annotation_type =
+      PP_PdfAccessibilityAnnotationType::PP_PDF_LINK;
   pdf_action_data.action = PP_PdfAccessibilityAction::PP_PDF_DO_DEFAULT_ACTION;
   pdf_accessibility_tree_source_->HandleAction(pdf_action_data);
   return true;

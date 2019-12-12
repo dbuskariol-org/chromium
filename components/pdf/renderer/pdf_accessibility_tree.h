@@ -51,9 +51,9 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
       const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
       const ppapi::PdfAccessibilityPageObjects& page_objects);
   void HandleAction(const PP_PdfAccessibilityActionData& action_data);
-  bool GetPdfLinkInfoFromAXNode(int32_t ax_node_id,
-                                uint32_t* page_index,
-                                uint32_t* link_index_in_page) const;
+  bool GetPdfAnnotationInfoFromAXNode(int32_t ax_node_id,
+                                      uint32_t* page_index,
+                                      uint32_t* annotation_index_in_page) const;
 
   // PluginAXTreeSource implementation.
   bool GetTreeData(ui::AXTreeData* tree_data) const override;
@@ -148,14 +148,14 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
   gfx::Transform* MakeTransformFromViewInfo();
   void AddWordStartsAndEnds(ui::AXNodeData* inline_text_box);
 
-  // Stores the page index and link index in the page.
-  struct LinkInfo {
-    LinkInfo(uint32_t page_index, uint32_t link_index);
-    LinkInfo(const LinkInfo& other);
-    ~LinkInfo();
+  // Stores the page index and annotation index in the page.
+  struct AnnotationInfo {
+    AnnotationInfo(uint32_t page_index, uint32_t annotation_index);
+    AnnotationInfo(const AnnotationInfo& other);
+    ~AnnotationInfo();
 
     uint32_t page_index;
-    uint32_t link_index;
+    uint32_t annotation_index;
   };
 
   ui::AXTreeData tree_data_;
@@ -187,9 +187,9 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
   // character within its page. Used to find the node associated with
   // the start or end of a selection.
   std::map<int32_t, uint32_t> node_id_to_char_index_in_page_;
-  // Map between AXNode id to link object. Used to find the link
+  // Map between AXNode id to annotation object. Used to find the annotation
   // object to which an action can be passed.
-  std::map<int32_t, LinkInfo> node_id_to_link_info_;
+  std::map<int32_t, AnnotationInfo> node_id_to_annotation_info_;
   bool invalid_plugin_message_received_ = false;
 };
 

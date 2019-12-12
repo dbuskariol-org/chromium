@@ -2012,12 +2012,15 @@ void PDFiumEngine::HandleAccessibilityAction(
     }
     case PP_PdfAccessibilityAction::PP_PDF_DO_DEFAULT_ACTION: {
       if (PageIndexInBounds(action_data.page_index)) {
-        PDFiumPage::LinkTarget target;
-        PDFiumPage::Area area =
-            pages_[action_data.page_index]->GetLinkTargetAtIndex(
-                action_data.link_index, &target);
-        NavigateToLinkDestination(area, target,
-                                  WindowOpenDisposition::CURRENT_TAB);
+        if (action_data.annotation_type ==
+            PP_PdfAccessibilityAnnotationType::PP_PDF_LINK) {
+          PDFiumPage::LinkTarget target;
+          PDFiumPage::Area area =
+              pages_[action_data.page_index]->GetLinkTargetAtIndex(
+                  action_data.annotation_index, &target);
+          NavigateToLinkDestination(area, target,
+                                    WindowOpenDisposition::CURRENT_TAB);
+        }
       }
       break;
     }
