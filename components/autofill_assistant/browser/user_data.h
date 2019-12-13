@@ -21,6 +21,7 @@ class CreditCard;
 }  // namespace autofill
 
 namespace autofill_assistant {
+class UserModel;
 
 // GENERATED_JAVA_ENUM_PACKAGE: (
 // org.chromium.chrome.browser.autofill_assistant.user_data)
@@ -145,7 +146,7 @@ struct CollectUserDataOptions {
   std::vector<UserFormSectionProto> additional_appended_sections;
   base::Optional<GenericUserInterfaceProto> generic_user_interface;
 
-  base::OnceCallback<void(UserData*)> confirm_callback;
+  base::OnceCallback<void(UserData*, const UserModel*)> confirm_callback;
   base::OnceCallback<void(int)> additional_actions_callback;
   base::OnceCallback<void(int)> terms_link_callback;
 };
