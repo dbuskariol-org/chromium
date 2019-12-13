@@ -224,8 +224,6 @@ public abstract class ChromeFeatureList {
             "ContextualSearchMlTapSuppression";
     public static final String CONTEXTUAL_SEARCH_LONGPRESS_RESOLVE =
             "ContextualSearchLongpressResolve";
-    public static final String CONTEXTUAL_SEARCH_SIMPLIFIED_SERVER =
-            "ContextualSearchSimplifiedServer";
     public static final String CONTEXTUAL_SEARCH_SECOND_TAP = "ContextualSearchSecondTap";
     public static final String CONTEXTUAL_SEARCH_TAP_DISABLE_OVERRIDE =
             "ContextualSearchTapDisableOverride";

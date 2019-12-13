@@ -1116,13 +1116,6 @@ const FeatureEntry::FeatureVariation kExploreSitesVariations[] = {
      base::size(kExploreSitesDenseTitleBottom), nullptr},
     {"Dense Title Right", kExploreSitesDenseTitleRight,
      base::size(kExploreSitesDenseTitleRight), nullptr}};
-
-const FeatureEntry::FeatureParam kSimplifiedServerAllCocaCards = {
-    contextual_search::kContextualCardsVersionParamName,
-    contextual_search::kContextualCardsSimplifiedServerWithDiagnosticChar};
-const FeatureEntry::FeatureVariation kSimplifiedServerVariations[] = {
-    {"and allow all CoCa cards", &kSimplifiedServerAllCocaCards, 1, nullptr}};
-
 const FeatureEntry::FeatureParam kLongpressResolvePreserveTap = {
     contextual_search::kLongpressResolveParamName,
     contextual_search::kLongpressResolvePreserveTap};
@@ -1603,16 +1596,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kContextualSearchSecondTapName,
      flag_descriptions::kContextualSearchSecondTapDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kContextualSearchSecondTap)},
-
-    {"contextual-search-simplified-server",
-     flag_descriptions::kContextualSearchSimplifiedServerName,
-     flag_descriptions::kContextualSearchSimplifiedServerDescription,
-     kOsAndroid,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(
-         chrome::android::kContextualSearchSimplifiedServer,
-         kSimplifiedServerVariations,
-         "ContextualSearchSimplifiedServer")},
-
     {"direct-actions", flag_descriptions::kDirectActionsName,
      flag_descriptions::kDirectActionsDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kDirectActions)},
