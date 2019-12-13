@@ -5,7 +5,9 @@
 #ifndef COMPONENTS_PDF_RENDERER_PDF_ACCESSIBILITY_TREE_H_
 #define COMPONENTS_PDF_RENDERER_PDF_ACCESSIBILITY_TREE_H_
 
+#include <map>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "base/optional.h"
@@ -115,10 +117,6 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
       base::span<const ppapi::PdfAccessibilityImageInfo> images,
       ui::AXNodeData* para_node);
 
-  void ComputeParagraphAndHeadingThresholds(
-      const std::vector<ppapi::PdfAccessibilityTextRunInfo>& text_runs,
-      float* out_heading_font_size_threshold,
-      float* out_paragraph_spacing_threshold);
   std::string GetTextRunCharsAsUTF8(
       const ppapi::PdfAccessibilityTextRunInfo& text_run,
       const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
@@ -193,6 +191,6 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
   bool invalid_plugin_message_received_ = false;
 };
 
-}  // namespace pdf;
+}  // namespace pdf
 
 #endif  // COMPONENTS_PDF_RENDERER_PDF_ACCESSIBILITY_TREE_H_

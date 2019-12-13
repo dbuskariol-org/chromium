@@ -143,6 +143,43 @@ class LineHelper {
   DISALLOW_COPY_AND_ASSIGN(LineHelper);
 };
 
+void ComputeParagraphAndHeadingThresholds(
+    const std::vector<ppapi::PdfAccessibilityTextRunInfo>& text_runs,
+    float* out_heading_font_size_threshold,
+    float* out_paragraph_spacing_threshold) {
+  // Scan over the font sizes and line spacing within this page and
+  // set heuristic thresholds so that text larger than the median font
+  // size can be marked as a heading, and spacing larger than the median
+  // line spacing can be a paragraph break.
+  std::vector<float> font_sizes;
+  std::vector<float> line_spacings;
+  for (size_t i = 0; i < text_runs.size(); ++i) {
+    font_sizes.push_back(text_runs[i].style.font_size);
+    if (i > 0) {
+      const auto& cur = text_runs[i].bounds;
+      const auto& prev = text_runs[i - 1].bounds;
+      if (cur.point.y > prev.point.y + prev.size.height / 2)
+        line_spacings.push_back(cur.point.y - prev.point.y);
+    }
+  }
+  if (font_sizes.size() > 2) {
+    std::sort(font_sizes.begin(), font_sizes.end());
+    float median_font_size = font_sizes[font_sizes.size() / 2];
+    if (median_font_size > kMinimumFontSize) {
+      *out_heading_font_size_threshold =
+          median_font_size * kHeadingFontSizeRatio;
+    }
+  }
+  if (line_spacings.size() > 4) {
+    std::sort(line_spacings.begin(), line_spacings.end());
+    float median_line_spacing = line_spacings[line_spacings.size() / 2];
+    if (median_line_spacing > kMinimumLineSpacing) {
+      *out_paragraph_spacing_threshold =
+          median_line_spacing * kParagraphLineSpacingRatio;
+    }
+  }
+}
+
 void FinishStaticNode(ui::AXNodeData** static_text_node,
                       std::string* static_text) {
   // If we're in the middle of building a static text node, finish it before
@@ -686,43 +723,6 @@ void PdfAccessibilityTree::FindNodeOffset(uint32_t page_index,
         *out_node_char_index = page_char_index - char_index;
         return;
       }
-    }
-  }
-}
-
-void PdfAccessibilityTree::ComputeParagraphAndHeadingThresholds(
-    const std::vector<ppapi::PdfAccessibilityTextRunInfo>& text_runs,
-    float* out_heading_font_size_threshold,
-    float* out_paragraph_spacing_threshold) {
-  // Scan over the font sizes and line spacing within this page and
-  // set heuristic thresholds so that text larger than the median font
-  // size can be marked as a heading, and spacing larger than the median
-  // line spacing can be a paragraph break.
-  std::vector<float> font_sizes;
-  std::vector<float> line_spacings;
-  for (size_t i = 0; i < text_runs.size(); ++i) {
-    font_sizes.push_back(text_runs[i].style.font_size);
-    if (i > 0) {
-      const auto& cur = text_runs[i].bounds;
-      const auto& prev = text_runs[i - 1].bounds;
-      if (cur.point.y > prev.point.y + prev.size.height / 2)
-        line_spacings.push_back(cur.point.y - prev.point.y);
-    }
-  }
-  if (font_sizes.size() > 2) {
-    std::sort(font_sizes.begin(), font_sizes.end());
-    float median_font_size = font_sizes[font_sizes.size() / 2];
-    if (median_font_size > kMinimumFontSize) {
-      *out_heading_font_size_threshold =
-          median_font_size * kHeadingFontSizeRatio;
-    }
-  }
-  if (line_spacings.size() > 4) {
-    std::sort(line_spacings.begin(), line_spacings.end());
-    float median_line_spacing = line_spacings[line_spacings.size() / 2];
-    if (median_line_spacing > kMinimumLineSpacing) {
-      *out_paragraph_spacing_threshold =
-          median_line_spacing * kParagraphLineSpacingRatio;
     }
   }
 }
