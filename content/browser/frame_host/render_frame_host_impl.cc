@@ -936,6 +936,8 @@ RenderFrameHostImpl::RenderFrameHostImpl(
     // FrameTreeNode has changed its current RenderFrameHost.
     parent_ = frame_tree_node_->parent()->current_frame_host();
 
+    cross_origin_embedder_policy_ = parent_->cross_origin_embedder_policy();
+
     // New child frames should inherit the nav_entry_id of their parent.
     set_nav_entry_id(
         frame_tree_node_->parent()->current_frame_host()->nav_entry_id());
