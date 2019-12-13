@@ -4,6 +4,7 @@
 
 #include "content/browser/media/media_interface_proxy.h"
 
+#include <map>
 #include <memory>
 #include <string>
 
@@ -18,13 +19,11 @@
 #include "content/public/browser/content_browser_client.h"
 #include "content/public/browser/media_service.h"
 #include "content/public/browser/render_frame_host.h"
-#include "content/public/browser/system_connector.h"
+#include "content/public/browser/service_process_host.h"
 #include "content/public/common/content_client.h"
 #include "media/mojo/buildflags.h"
-#include "media/mojo/mojom/constants.mojom.h"
 #include "media/mojo/mojom/media_service.mojom.h"
 #include "media/mojo/services/media_interface_provider.h"
-#include "services/service_manager/public/cpp/connector.h"
 
 #if BUILDFLAG(ENABLE_MOJO_CDM)
 #include "content/public/browser/browser_context.h"
@@ -35,6 +34,8 @@
 #endif
 
 #if BUILDFLAG(ENABLE_LIBRARY_CDMS)
+#include "base/threading/sequence_local_storage_slot.h"
+#include "base/time/time.h"
 #include "content/browser/media/cdm_storage_impl.h"
 #include "content/browser/media/key_system_support_impl.h"
 #include "content/public/common/cdm_info.h"
@@ -59,6 +60,39 @@
 namespace content {
 
 namespace {
+
+#if BUILDFLAG(ENABLE_LIBRARY_CDMS)
+// How long an instance of the CDM service is allowed to sit idle before we
+// disconnect and effectively kill it.
+constexpr base::TimeDelta kCdmServiceIdleTimeout =
+    base::TimeDelta::FromSeconds(5);
+
+// Gets an instance of the CDM service for the CDM identified by |guid|.
+// Instances are started lazily as needed.
+media::mojom::CdmService& GetCdmServiceForGuid(const base::Token& guid) {
+  // NOTE: Sequence-local storage is used to limit the lifetime of these Remote
+  // objects to that of the UI-thread sequence. This ensures the Remotes are
+  // destroyed when the task environment is torn down and reinitialized, e.g.,
+  // between unit tests.
+  static base::NoDestructor<base::SequenceLocalStorageSlot<
+      std::map<base::Token, mojo::Remote<media::mojom::CdmService>>>>
+      slot;
+  auto& remotes = slot->GetOrCreateValue();
+  auto& remote = remotes[guid];
+  if (!remote) {
+    ServiceProcessHost::Launch(
+        remote.BindNewPipeAndPassReceiver(),
+        ServiceProcessHost::Options()
+            .WithDisplayName("Content Decryption Module Service")
+            .WithSandboxType(service_manager::SandboxType::kCdm)
+            .Pass());
+    remote.reset_on_disconnect();
+    remote.reset_on_idle_timeout(kCdmServiceIdleTimeout);
+  }
+
+  return *remote.get();
+}
+#endif
 
 #if BUILDFLAG(ENABLE_LIBRARY_CDMS) && defined(OS_MACOSX)
 
@@ -388,11 +422,7 @@ media::mojom::CdmFactory* MediaInterfaceProxy::ConnectToCdmService(
 
   DCHECK(!cdm_factory_map_.count(cdm_guid));
 
-  // TODO(slan): Use the BrowserContext Connector instead. See crbug.com/638950.
-  mojo::Remote<media::mojom::CdmService> cdm_service;
-  GetSystemConnector()->Connect(service_manager::ServiceFilter::ByNameWithId(
-                                    media::mojom::kCdmServiceName, cdm_guid),
-                                cdm_service.BindNewPipeAndPassReceiver());
+  media::mojom::CdmService& cdm_service = GetCdmServiceForGuid(cdm_guid);
 
 #if defined(OS_MACOSX)
   // LoadCdm() should always be called before CreateInterfaceFactory().
@@ -402,14 +432,14 @@ media::mojom::CdmFactory* MediaInterfaceProxy::ConnectToCdmService(
       std::make_unique<SeatbeltExtensionTokenProviderImpl>(cdm_path),
       token_provider_remote.InitWithNewPipeAndPassReceiver());
 
-  cdm_service->LoadCdm(cdm_path, std::move(token_provider_remote));
+  cdm_service.LoadCdm(cdm_path, std::move(token_provider_remote));
 #else
-  cdm_service->LoadCdm(cdm_path);
+  cdm_service.LoadCdm(cdm_path);
 #endif  // defined(OS_MACOSX)
 
   mojo::Remote<media::mojom::CdmFactory> cdm_factory_remote;
-  cdm_service->CreateCdmFactory(cdm_factory_remote.BindNewPipeAndPassReceiver(),
-                                GetFrameServices(cdm_guid, cdm_file_system_id));
+  cdm_service.CreateCdmFactory(cdm_factory_remote.BindNewPipeAndPassReceiver(),
+                               GetFrameServices(cdm_guid, cdm_file_system_id));
   cdm_factory_remote.set_disconnect_handler(
       base::BindOnce(&MediaInterfaceProxy::OnCdmServiceConnectionError,
                      base::Unretained(this), cdm_guid));

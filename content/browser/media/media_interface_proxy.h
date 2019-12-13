@@ -149,8 +149,9 @@ class MediaInterfaceProxy : public media::mojom::InterfaceFactory {
   std::unique_ptr<MediaInterfaceFactoryHolder> secondary_interface_factory_;
 
 #if BUILDFLAG(ENABLE_LIBRARY_CDMS)
-  // CDM GUID to CDM InterfaceFactoryRemote mapping, where the InterfaceFactory
-  // instances live in the standalone kCdmServiceName service instances.
+  // CDM GUID to CDM InterfaceFactory Remotes mapping, where the
+  // InterfaceFactory instances live in the standalone CDM Service instances.
+  // These map entries effectively own the corresponding service processes.
   std::map<base::Token, mojo::Remote<media::mojom::CdmFactory>>
       cdm_factory_map_;
 #endif  // BUILDFLAG(ENABLE_LIBRARY_CDMS)

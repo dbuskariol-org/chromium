@@ -150,19 +150,6 @@ jumbo_component("services") {
   }
 }
 
-source_set("cdm_manifest") {
-  sources = [
-    "cdm_manifest.cc",
-    "cdm_manifest.h",
-  ]
-  deps = [
-    "//base",
-    "//media/mojo/mojom",
-    "//media/mojo/mojom:constants",
-    "//services/service_manager/public/cpp",
-  ]
-}
-
 source_set("unit_tests") {
   testonly = true
 
@@ -235,7 +222,6 @@ test("media_service_unittests") {
     "//media/mojo/clients",
     "//media/mojo/common",
     "//media/mojo/mojom",
-    "//media/mojo/mojom:constants",
     "//mojo/core/test:run_all_unittests",
     "//services/service_manager/public/cpp",
     "//services/service_manager/public/cpp/test:test_support",

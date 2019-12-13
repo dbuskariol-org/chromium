@@ -12,8 +12,6 @@
 #include "content/public/common/content_client.h"
 #include "content/public/common/content_features.h"
 #include "content/public/common/service_names.mojom.h"
-#include "media/mojo/buildflags.h"
-#include "media/mojo/services/cdm_manifest.h"
 #include "services/device/public/cpp/manifest.h"
 #include "services/service_manager/public/cpp/manifest_builder.h"
 
@@ -24,9 +22,6 @@ const std::vector<service_manager::Manifest>& GetBuiltinServiceManifests() {
       std::vector<service_manager::Manifest>{
           GetContentBrowserManifest(),
 
-#if BUILDFLAG(ENABLE_LIBRARY_CDMS)
-          media::GetCdmManifest(),
-#endif
           device::GetManifest(),
       }};
   return *manifests;
