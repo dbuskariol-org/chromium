@@ -17,7 +17,8 @@ OverlayCandidateValidatorAndroid::OverlayCandidateValidatorAndroid() {}
 OverlayCandidateValidatorAndroid::~OverlayCandidateValidatorAndroid() {}
 
 OverlayProcessorUsingStrategy::StrategyList
-OverlayCandidateValidatorAndroid::InitializeStrategies() {
+OverlayCandidateValidatorAndroid::InitializeStrategies(
+    OverlayProcessorUsingStrategy* processor) {
   OverlayProcessorUsingStrategy::StrategyList strategies;
   // For Android, we do not have the ability to skip an overlay, since the
   // texture is already in a SurfaceView.  Ideally, we would honor a 'force
@@ -27,7 +28,8 @@ OverlayCandidateValidatorAndroid::InitializeStrategies() {
   // a dummy resource that has no relation to what the overlay contains.
   // https://crbug.com/842931 .
   strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(
-      this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
+      processor,
+      OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
   return strategies;
 }
 
