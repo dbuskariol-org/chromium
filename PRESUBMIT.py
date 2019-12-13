@@ -424,7 +424,6 @@ _NOT_CONVERTED_TO_MODERN_BIND_AND_CALLBACK = '|'.join((
   '^ui/base/',
   '^ui/compositor/',
   '^ui/display/',
-  '^weblayer/',
 ))
 
 # Format: Sequence of tuples containing:
