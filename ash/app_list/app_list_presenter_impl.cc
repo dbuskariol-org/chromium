@@ -454,14 +454,8 @@ void AppListPresenterImpl::OnWindowFocused(aura::Window* gained_focus,
 
   if (delegate_->IsTabletMode()) {
     if (visible != delegate_->IsVisible()) {
-      if (app_list_gained_focus) {
+      if (app_list_gained_focus)
         view_->OnHomeLauncherGainingFocusWithoutAnimation();
-      } else {
-        // In tablet mode, when |AppList| lost focus after other new App window
-        // opened, we should perform "back" action on the active page, e.g.
-        // close the search box or the embedded Assistant UI if it's opened.
-        view_->Back();
-      }
 
       OnVisibilityChanged(visible, GetDisplayId());
     }
