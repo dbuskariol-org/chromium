@@ -1088,17 +1088,13 @@ void PdfAccessibilityTree::HandleAction(
   }
 }
 
-bool PdfAccessibilityTree::GetPdfAnnotationInfoFromAXNode(
-    int32_t ax_node_id,
-    uint32_t* page_index,
-    uint32_t* annotation_index_in_page) const {
+base::Optional<PdfAccessibilityTree::AnnotationInfo>
+PdfAccessibilityTree::GetPdfAnnotationInfoFromAXNode(int32_t ax_node_id) const {
   auto iter = node_id_to_annotation_info_.find(ax_node_id);
   if (iter == node_id_to_annotation_info_.end())
-    return false;
+    return base::nullopt;
 
-  *page_index = iter->second.page_index;
-  *annotation_index_in_page = iter->second.annotation_index;
-  return true;
+  return AnnotationInfo(iter->second.page_index, iter->second.annotation_index);
 }
 
 }  // namespace pdf

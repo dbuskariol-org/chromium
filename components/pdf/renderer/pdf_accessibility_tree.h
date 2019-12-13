@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 
+#include "base/optional.h"
 #include "content/public/renderer/plugin_ax_tree_source.h"
 #include "ppapi/c/pp_instance.h"
 #include "ppapi/c/private/ppb_pdf.h"
@@ -41,6 +42,16 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
       const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
       const ppapi::PdfAccessibilityPageObjects& page_objects);
 
+  // Stores the page index and annotation index in the page.
+  struct AnnotationInfo {
+    AnnotationInfo(uint32_t page_index, uint32_t annotation_index);
+    AnnotationInfo(const AnnotationInfo& other);
+    ~AnnotationInfo();
+
+    uint32_t page_index;
+    uint32_t annotation_index;
+  };
+
   void SetAccessibilityViewportInfo(
       const PP_PrivateAccessibilityViewportInfo& viewport_info);
   void SetAccessibilityDocInfo(
@@ -51,9 +62,8 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
       const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
       const ppapi::PdfAccessibilityPageObjects& page_objects);
   void HandleAction(const PP_PdfAccessibilityActionData& action_data);
-  bool GetPdfAnnotationInfoFromAXNode(int32_t ax_node_id,
-                                      uint32_t* page_index,
-                                      uint32_t* annotation_index_in_page) const;
+  base::Optional<AnnotationInfo> GetPdfAnnotationInfoFromAXNode(
+      int32_t ax_node_id) const;
 
   // PluginAXTreeSource implementation.
   bool GetTreeData(ui::AXTreeData* tree_data) const override;
@@ -147,16 +157,6 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
   content::RenderAccessibility* GetRenderAccessibility();
   gfx::Transform* MakeTransformFromViewInfo();
   void AddWordStartsAndEnds(ui::AXNodeData* inline_text_box);
-
-  // Stores the page index and annotation index in the page.
-  struct AnnotationInfo {
-    AnnotationInfo(uint32_t page_index, uint32_t annotation_index);
-    AnnotationInfo(const AnnotationInfo& other);
-    ~AnnotationInfo();
-
-    uint32_t page_index;
-    uint32_t annotation_index;
-  };
 
   ui::AXTreeData tree_data_;
   ui::AXTree tree_;
