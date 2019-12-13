@@ -2574,7 +2574,9 @@
     },
 
     'v8_pointer_compression': {
-      'gn_args': 'v8_enable_pointer_compression=true',
+      # TODO(machenbach): Temporarily toggle pointer-compression off while it
+      # is on by default.
+      'gn_args': 'v8_enable_pointer_compression=false',
     },
 
     'vr': {
