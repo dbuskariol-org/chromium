@@ -449,7 +449,8 @@ def make_check_argument_length(cg_context):
     T = TextNode
 
     idl_type = cg_context.attribute.idl_type
-    if not (idl_type.does_include_nullable_type or idl_type.unwrap().is_any or
+    if not (idl_type.does_include_nullable_or_dict or idl_type.unwrap().is_any
+            or
             "TreatNonObjectAsNull" in idl_type.unwrap().extended_attributes):
         # ES undefined in ${info}[0] will cause a TypeError anyway, so omit the
         # check against the number of arguments.
@@ -663,8 +664,7 @@ def _make_overload_dispatcher_per_arg_size(items):
         dispatch_if("{value}->IsUndefined()")
 
     # 12.3. if V is null or undefined, ...
-    func_like = find(
-        lambda t, u: t.does_include_nullable_type or u.is_dictionary)
+    func_like = find(lambda t, u: t.does_include_nullable_or_dict)
     if func_like:
         dispatch_if("{value}->IsNullOrUndefined()")
 
