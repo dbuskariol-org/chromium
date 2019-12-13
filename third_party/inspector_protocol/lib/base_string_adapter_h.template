@@ -93,8 +93,6 @@ class {{config.lib.export_macro}} StringUtil {
     return builder.toString();
   }
 
-  static std::unique_ptr<Value> parseMessage(const std::string& message, bool binary);
-
   static String fromUTF8(const uint8_t* data, size_t length) {
     return std::string(reinterpret_cast<const char*>(data), length);
   }
