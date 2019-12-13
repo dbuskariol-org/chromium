@@ -538,9 +538,6 @@ MainThreadSchedulerImpl::AnyThread::AnyThread(
           &main_thread_scheduler_impl->tracing_controller_) {}
 
 MainThreadSchedulerImpl::SchedulingSettings::SchedulingSettings() {
-  high_priority_input =
-      base::FeatureList::IsEnabled(kHighPriorityInputOnMainThread);
-
   low_priority_background_page =
       base::FeatureList::IsEnabled(kLowPriorityForBackgroundPages);
   best_effort_background_page =

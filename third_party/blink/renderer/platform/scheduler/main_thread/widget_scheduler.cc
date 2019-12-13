@@ -16,10 +16,7 @@ WidgetScheduler::WidgetScheduler(
           MainThreadTaskQueue::QueueType::kInput)
           .SetShouldMonitorQuiescence(true)
           .SetFixedPriority(
-              main_thread_scheduler->scheduling_settings().high_priority_input
-                  ? base::make_optional(
-                        TaskQueue::QueuePriority::kHighestPriority)
-                  : base::nullopt));
+              base::make_optional(TaskQueue::QueuePriority::kHighestPriority)));
   input_task_runner_ =
       input_task_queue_->CreateTaskRunner(TaskType::kMainThreadTaskQueueInput);
   input_task_queue_enabled_voter_ =
