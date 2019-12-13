@@ -3114,6 +3114,11 @@ const char kUseXpsForPrintingName[] = "Use XPS for printing";
 const char kUseXpsForPrintingDescription[] =
     "When enabled, use XPS printing API instead of the GDI print API.";
 
+const char kUseXpsForPrintingFromPdfName[] = "Use XPS for printing from PDF";
+const char kUseXpsForPrintingFromPdfDescription[] =
+    "When enabled, use XPS printing API instead of the GDI print API when "
+    "printing PDF documents.";
+
 #if BUILDFLAG(ENABLE_SPELLCHECK)
 const char kWinUseBrowserSpellCheckerName[] =
     "Use the Windows OS spell checker";

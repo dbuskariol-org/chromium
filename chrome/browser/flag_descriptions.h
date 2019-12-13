@@ -1823,6 +1823,9 @@ extern const char kUseWinrtMidiApiDescription[];
 extern const char kUseXpsForPrintingName[];
 extern const char kUseXpsForPrintingDescription[];
 
+extern const char kUseXpsForPrintingFromPdfName[];
+extern const char kUseXpsForPrintingFromPdfDescription[];
+
 #if BUILDFLAG(ENABLE_SPELLCHECK)
 extern const char kWinUseBrowserSpellCheckerName[];
 extern const char kWinUseBrowserSpellCheckerDescription[];

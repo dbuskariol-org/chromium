@@ -3344,6 +3344,11 @@ const FeatureEntry kFeatureEntries[] = {
     {"use-xps-for-printing", flag_descriptions::kUseXpsForPrintingName,
      flag_descriptions::kUseXpsForPrintingDescription, kOsWin,
      FEATURE_VALUE_TYPE(printing::features::kUseXpsForPrinting)},
+
+    {"use-xps-for-printing-from-pdf",
+     flag_descriptions::kUseXpsForPrintingFromPdfName,
+     flag_descriptions::kUseXpsForPrintingFromPdfDescription, kOsWin,
+     FEATURE_VALUE_TYPE(printing::features::kUseXpsForPrintingFromPdf)},
 #endif // defined(OS_WIN)
 #endif // BUILDFLAG(ENABLE_PRINTING)
 

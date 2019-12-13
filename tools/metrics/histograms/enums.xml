@@ -36338,6 +36338,7 @@ from previous Chrome versions.
   <int value="-1731149013" label="AndroidMessagesIntegration:enabled"/>
   <int value="-1729926412" label="enable-webusb-notifications"/>
   <int value="-1729808721" label="SubresourceRedirect:enabled"/>
+  <int value="-1728605240" label="UseXpsForPrintingFromPdf:enabled"/>
   <int value="-1727530898" label="LookalikeUrlNavigationSuggestionsUI:enabled"/>
   <int value="-1727173228" label="OmniboxZeroSuggestionsOnNTP:enabled"/>
   <int value="-1725507605" label="enable-web-midi"/>
@@ -38574,6 +38575,7 @@ from previous Chrome versions.
   <int value="1118109174" label="enable-launcher-search-provider-api"/>
   <int value="1120428727" label="TabGridLayoutAndroid:enabled"/>
   <int value="1126061778" label="CaptureThumbnailOnLoadFinished:enabled"/>
+  <int value="1126956909" label="UseXpsForPrintingFromPdf:disabled"/>
   <int value="1127085005" label="TreatUnsafeDownloadsAsActive:enabled"/>
   <int value="1127183523" label="PassiveEventListenersDueToFling:enabled"/>
   <int value="1127427821" label="OmniboxEntitySuggestions:disabled"/>
