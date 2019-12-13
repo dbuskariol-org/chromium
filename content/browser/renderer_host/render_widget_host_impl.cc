@@ -2428,11 +2428,6 @@ TouchEmulator* RenderWidgetHostImpl::GetExistingTouchEmulator() {
 
 void RenderWidgetHostImpl::OnTextInputStateChanged(
     const TextInputState& params) {
-  if (delegate_ && delegate_->GetInputEventShim()) {
-    delegate_->GetInputEventShim()->DidTextInputStateChange(params);
-    return;
-  }
-
   if (view_)
     view_->TextInputStateChanged(params);
 }
@@ -2490,11 +2485,6 @@ void RenderWidgetHostImpl::OnProcessSwapMessage(const IPC::Message& message) {
 void RenderWidgetHostImpl::OnLockMouse(bool user_gesture,
                                        bool privileged,
                                        bool request_unadjusted_movement) {
-  if (delegate_ && delegate_->GetInputEventShim()) {
-    delegate_->GetInputEventShim()->DidLockMouse(user_gesture, privileged);
-    return;
-  }
-
   if (pending_mouse_lock_request_) {
     Send(new WidgetMsg_LockMouse_ACK(routing_id_, false));
     return;
@@ -2522,11 +2512,6 @@ void RenderWidgetHostImpl::OnLockMouse(bool user_gesture,
 }
 
 void RenderWidgetHostImpl::OnUnlockMouse() {
-  if (delegate_ && delegate_->GetInputEventShim()) {
-    delegate_->GetInputEventShim()->DidUnlockMouse();
-    return;
-  }
-
   // Got unlock request from renderer. Will update |is_last_unlocked_by_target_|
   // for silent re-lock.
   const bool was_mouse_locked = !pending_mouse_lock_request_ && IsMouseLocked();
@@ -2643,11 +2628,6 @@ void RenderWidgetHostImpl::DecrementInFlightEventCount(
 }
 
 void RenderWidgetHostImpl::OnHasTouchEventHandlers(bool has_handlers) {
-  if (delegate_ && delegate_->GetInputEventShim()) {
-    delegate_->GetInputEventShim()->DidSetHasTouchEventHandlers(has_handlers);
-    return;
-  }
-
   input_router_->OnHasTouchEventHandlers(has_handlers);
   has_touch_handler_ = has_handlers;
 }

@@ -107,7 +107,6 @@
 #include "content/public/browser/download_manager.h"
 #include "content/public/browser/file_select_listener.h"
 #include "content/public/browser/focused_node_details.h"
-#include "content/public/browser/guest_mode.h"
 #include "content/public/browser/invalidate_type.h"
 #include "content/public/browser/javascript_dialog_manager.h"
 #include "content/public/browser/keyboard_event_processing_result.h"
@@ -1738,6 +1737,10 @@ void WebContentsImpl::DispatchBeforeUnload(bool auto_cancel) {
   GetMainFrame()->DispatchBeforeUnload(before_unload_type, false);
 }
 
+bool WebContentsImpl::IsInnerWebContentsForGuest() {
+  return !!browser_plugin_guest_;
+}
+
 void WebContentsImpl::AttachInnerWebContents(
     std::unique_ptr<WebContents> inner_web_contents,
     RenderFrameHost* render_frame_host,
@@ -2031,7 +2034,7 @@ void WebContentsImpl::Init(const WebContents::CreateParams& params) {
   WebContentsViewDelegate* delegate =
       GetContentClient()->browser()->GetWebContentsViewDelegate(this);
 
-  if (GuestMode::IsCrossProcessFrameGuest(this)) {
+  if (browser_plugin_guest_) {
     view_.reset(new WebContentsViewChildFrame(
         this, delegate, &render_view_host_delegate_view_));
   } else {
@@ -3484,16 +3487,6 @@ void WebContentsImpl::ResetAutoResizeSize() {
   auto_resize_size_ = gfx::Size();
 }
 
-InputEventShim* WebContentsImpl::GetInputEventShim() const {
-  // The only thing that intercepts text input and mouse lock is the
-  // BrowserPluginGuest. Delegate to the BrowserPluginGuest logic for
-  // whether or not it needs to shim these events.
-  if (browser_plugin_guest_) {
-    return browser_plugin_guest_->GetInputEventShim();
-  }
-  return nullptr;
-}
-
 WebContents* WebContentsImpl::OpenURL(const OpenURLParams& params) {
 #if DCHECK_IS_ON()
   DCHECK(params.Valid());
@@ -4147,10 +4140,6 @@ gfx::Size WebContentsImpl::GetPreferredSize() {
 }
 
 bool WebContentsImpl::GotResponseToLockMouseRequest(bool allowed) {
-  if (!GuestMode::IsCrossProcessFrameGuest(GetWebContents()) &&
-      GetBrowserPluginGuest())
-    return GetBrowserPluginGuest()->LockMouse(allowed);
-
   if (mouse_lock_widget_) {
     if (mouse_lock_widget_->delegate()->GetAsWebContents() != this) {
       return mouse_lock_widget_->delegate()
@@ -6167,8 +6156,9 @@ void WebContentsImpl::EnsureOpenerProxiesExist(RenderFrameHost* source_rfh) {
     // then we should not create a RenderView. AttachToOuterWebContentsFrame()
     // already created a RenderFrameProxyHost for that purpose.
     if (GetBrowserPluginEmbedder() &&
-        GuestMode::IsCrossProcessFrameGuest(source_web_contents))
+        source_web_contents->browser_plugin_guest_) {
       return;
+    }
 
     if (this != source_web_contents && GetBrowserPluginGuest()) {
       // We create a RenderFrameProxyHost for the embedder in the guest's render
@@ -6236,12 +6226,6 @@ void WebContentsImpl::SetFocusedFrame(FrameTreeNode* node,
       SetAsFocusedWebContentsIfNecessary();
   } else if (!GetOuterWebContents()) {
     // This is an outermost WebContents.
-    SetAsFocusedWebContentsIfNecessary();
-  } else if (!GuestMode::IsCrossProcessFrameGuest(this) &&
-             GetOuterWebContents()) {
-    // TODO(lfg, paulmeyer): Allows BrowserPlugins to set themselves as the
-    // focused WebContents. This works around a bug in FindRequestManager that
-    // doesn't support properly traversing BrowserPlugins.
     SetAsFocusedWebContentsIfNecessary();
   }
 }
