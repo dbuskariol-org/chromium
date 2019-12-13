@@ -411,10 +411,6 @@ _NOT_CONVERTED_TO_MODERN_BIND_AND_CALLBACK = '|'.join((
   '^third_party/blink/',
   '^tools/clang/base_bind_rewriters/',  # Intentional.
   '^tools/gdb/gdb_chrome.py',  # Intentional.
-  '^ui/accelerated_widget_mac/',
-  '^ui/base/',
-  '^ui/compositor/',
-  '^ui/display/',
 ))
 
 # Format: Sequence of tuples containing:
