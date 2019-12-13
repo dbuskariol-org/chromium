@@ -13,7 +13,7 @@
 #include "components/arc/mojom/wake_lock.mojom.h"
 #include "components/arc/session/connection_observer.h"
 #include "components/keyed_service/core/keyed_service.h"
-#include "mojo/public/cpp/bindings/binding.h"
+#include "mojo/public/cpp/bindings/receiver.h"
 #include "mojo/public/cpp/bindings/remote.h"
 #include "services/device/public/mojom/wake_lock.mojom.h"
 #include "services/device/public/mojom/wake_lock_provider.mojom.h"
@@ -79,7 +79,7 @@ class ArcWakeLockBridge : public KeyedService,
   std::map<device::mojom::WakeLockType, std::unique_ptr<WakeLockRequester>>
       wake_lock_requesters_;
 
-  mojo::Binding<mojom::WakeLockHost> binding_;
+  mojo::Receiver<mojom::WakeLockHost> receiver_{this};
 
   base::WeakPtrFactory<ArcWakeLockBridge> weak_ptr_factory_{this};
 
