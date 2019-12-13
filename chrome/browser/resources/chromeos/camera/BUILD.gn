@@ -116,6 +116,7 @@ copy("chrome_camera_app_js") {
     "src/js/intent.js",
     "src/js/main.js",
     "src/js/metrics.js",
+    "src/js/namespace.js",
     "src/js/nav.js",
     "src/js/sound.js",
     "src/js/state.js",

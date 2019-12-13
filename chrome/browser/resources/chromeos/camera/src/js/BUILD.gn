@@ -24,6 +24,7 @@ js_type_check("compile_resources") {
     ":intent",
     ":main",
     ":metrics",
+    ":namespace",
     ":nav",
     ":sound",
     ":state",
@@ -107,6 +108,9 @@ js_library("background_ops") {
     ":chrome_util",
     ":intent",
   ]
+}
+
+js_library("namespace") {
 }
 
 js_library("toast") {
