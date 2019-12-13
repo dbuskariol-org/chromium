@@ -2060,6 +2060,11 @@
     "expiry_milestone": -1
   },
   {
+    "name": "enable-web-payments-minimal-ui",
+    "owners": [ "rouslan", "web-payments-team@google.com" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "enable-webassembly-baseline",
     "owners": [ "clemensb", "wasm-team@google.com" ],
     "expiry_milestone": 83

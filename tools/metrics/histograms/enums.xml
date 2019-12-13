@@ -38823,6 +38823,7 @@ from previous Chrome versions.
   <int value="1411679884"
       label="AutofillLocalCardMigrationUsesStrikeSystemV2:enabled"/>
   <int value="1413158119" label="WebRtcRemoteEventLog:disabled"/>
+  <int value="1413334779" label="WebPaymentsMinimalUI:enabled"/>
   <int value="1413948819" label="NupPrinting:enabled"/>
   <int value="1415806054" label="WebAssemblyCodeGC:enabled"/>
   <int value="1416592483" label="ash-enable-mirrored-screen"/>
@@ -39143,6 +39144,7 @@ from previous Chrome versions.
   <int value="1832552562" label="EnableVirtualKeyboardUkm:enabled"/>
   <int value="1834968807" label="OmniboxAutocompleteTitles:enabled"/>
   <int value="1835523483" label="OmniboxUIExperimentSwapTitleAndUrl:enabled"/>
+  <int value="1837330563" label="WebPaymentsMinimalUI:disabled"/>
   <int value="1838990777" label="V8Future:enabled"/>
   <int value="1839740266" label="LocationHardReload:disabled"/>
   <int value="1841793150" label="TwoPanesStartSurfaceAndroid:enabled"/>

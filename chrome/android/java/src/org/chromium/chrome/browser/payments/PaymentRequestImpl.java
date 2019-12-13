@@ -1093,8 +1093,7 @@ public class PaymentRequestImpl
             return false;
         }
 
-        return PaymentsExperimentalFeatures.isEnabled(
-                ChromeFeatureList.WEB_PAYMENT_MICROTRANSACTION);
+        return ChromeFeatureList.isEnabled(ChromeFeatureList.WEB_PAYMENTS_MINIMAL_UI);
     }
 
     /**
