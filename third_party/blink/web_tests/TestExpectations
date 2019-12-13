@@ -6127,3 +6127,14 @@ crbug.com/963183 http/tests/devtools/unit/viewport-datagrid-items-expandable-att
 # Temporarily disabled for landing changes to treeoutline in DevTools
 crbug.com/1033213 http/tests/devtools/security/interstitial-sidebar.js [ Pass Failure ]
 crbug.com/1033213 http/tests/devtools/security/mixed-content-sidebar.js [ Pass Failure ]
+
+# Temporarily disabled for landing changes to source formatter in DevTools
+crbug.com/1004203 http/tests/devtools/sources/debugger-ui/script-formatter-breakpoints-2.js [ Pass Failure ]
+crbug.com/1004203 http/tests/devtools/sources/debugger-ui/script-formatter-breakpoints-3.js [ Pass Failure ]
+crbug.com/1004203 http/tests/devtools/sources/formatter-css.js [ Pass Failure ]
+crbug.com/1004203 http/tests/devtools/sources/formatter-js.js [ Pass Failure ]
+crbug.com/1004203 http/tests/devtools/sources/inline-styles-scripts-locations.js [ Pass Failure ]
+crbug.com/1004203 http/tests/devtools/startup/sources/debugger/linkifier.js [ Pass Failure ]
+crbug.com/1004203 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-1.js [ Pass Failure ]
+crbug.com/1004203 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-4.js [ Pass Failure ]
+crbug.com/1004203 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-inline-with-sourceURL.js [ Pass Failure ]
