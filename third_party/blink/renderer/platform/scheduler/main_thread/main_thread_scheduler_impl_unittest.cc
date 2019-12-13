@@ -3212,10 +3212,7 @@ TEST_F(MainThreadSchedulerImplTest, Tracing) {
       FROM_HERE, base::BindOnce(NullTask),
       base::TimeDelta::FromMilliseconds(10));
 
-  std::unique_ptr<base::trace_event::ConvertableToTraceFormat> value =
-      scheduler_->AsValue(base::TimeTicks());
-  EXPECT_TRUE(value);
-  EXPECT_FALSE(value->ToString().empty());
+  EXPECT_FALSE(scheduler_->ToString().empty());
 }
 
 void RecordingTimeTestTask(

@@ -647,6 +647,8 @@ class PLATFORM_EXPORT MainThreadSchedulerImpl
       base::TimeTicks optional_now) const;
   void CreateTraceEventObjectSnapshotLocked() const;
 
+  std::string ToString() const;
+
   static bool ShouldPrioritizeInputEvent(const WebInputEvent& web_input_event);
 
   // The amount of time which idle periods can continue being scheduled when the
@@ -774,6 +776,9 @@ class PLATFORM_EXPORT MainThreadSchedulerImpl
   // Dispatch the callbacks which requested to be executed after the current
   // task.
   void DispatchOnTaskCompletionCallbacks();
+
+  void AsValueIntoLocked(base::trace_event::TracedValue*,
+                         base::TimeTicks optional_now) const;
 
   // Indicates that scheduler has been shutdown.
   // It should be accessed only on the main thread, but couldn't be a member

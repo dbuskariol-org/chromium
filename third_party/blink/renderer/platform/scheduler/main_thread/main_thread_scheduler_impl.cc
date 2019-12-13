@@ -1939,13 +1939,26 @@ void MainThreadSchedulerImpl::CreateTraceEventObjectSnapshotLocked() const {
 
 std::unique_ptr<base::trace_event::ConvertableToTraceFormat>
 MainThreadSchedulerImpl::AsValueLocked(base::TimeTicks optional_now) const {
+  auto state = std::make_unique<base::trace_event::TracedValue>();
+  AsValueIntoLocked(state.get(), optional_now);
+  return std::move(state);
+}
+
+std::string MainThreadSchedulerImpl::ToString() const {
+  base::AutoLock lock(any_thread_lock_);
+  base::trace_event::TracedValueJSON value;
+  AsValueIntoLocked(&value, base::TimeTicks());
+  return value.ToJSON();
+}
+
+void MainThreadSchedulerImpl::AsValueIntoLocked(
+    base::trace_event::TracedValue* state,
+    base::TimeTicks optional_now) const {
   helper_.CheckOnValidThread();
   any_thread_lock_.AssertAcquired();
 
   if (optional_now.is_null())
     optional_now = helper_.NowTicks();
-  std::unique_ptr<base::trace_event::TracedValue> state(
-      new base::trace_event::TracedValue());
   state->SetBoolean(
       "has_visible_render_widget_with_touch_handler",
       main_thread_only().has_visible_render_widget_with_touch_handler);
@@ -2009,13 +2022,13 @@ MainThreadSchedulerImpl::AsValueLocked(base::TimeTicks optional_now) const {
   state->BeginDictionary("page_schedulers");
   for (PageSchedulerImpl* page_scheduler : main_thread_only().page_schedulers) {
     state->BeginDictionaryWithCopiedName(PointerToString(page_scheduler));
-    page_scheduler->AsValueInto(state.get());
+    page_scheduler->AsValueInto(state);
     state->EndDictionary();
   }
   state->EndDictionary();
 
   state->BeginDictionary("policy");
-  main_thread_only().current_policy.AsValueInto(state.get());
+  main_thread_only().current_policy.AsValueInto(state);
   state->EndDictionary();
 
   // TODO(skyostil): Can we somehow trace how accurate these estimates were?
@@ -2031,14 +2044,12 @@ MainThreadSchedulerImpl::AsValueLocked(base::TimeTicks optional_now) const {
           .InMillisecondsF());
   state->SetBoolean("in_idle_period", any_thread().in_idle_period);
 
-  any_thread().user_model.AsValueInto(state.get());
-  render_widget_scheduler_signals_.AsValueInto(state.get());
+  any_thread().user_model.AsValueInto(state);
+  render_widget_scheduler_signals_.AsValueInto(state);
 
   state->BeginDictionary("task_queue_throttler");
-  task_queue_throttler_->AsValueInto(state.get(), optional_now);
+  task_queue_throttler_->AsValueInto(state, optional_now);
   state->EndDictionary();
-
-  return std::move(state);
 }
 
 bool MainThreadSchedulerImpl::TaskQueuePolicy::IsQueueEnabled(
