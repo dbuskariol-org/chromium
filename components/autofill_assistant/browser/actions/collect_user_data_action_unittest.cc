@@ -63,7 +63,7 @@ using ::testing::SizeIs;
 
 void SetRequiredTermsFields(CollectUserDataProto* data,
                             bool request_terms_and_conditions) {
-  data->set_thirdparty_privacy_notice_text("privacy");
+  data->set_privacy_notice_text("privacy");
 
   if (request_terms_and_conditions) {
     data->set_accept_terms_and_conditions_text("terms and conditions");
@@ -134,7 +134,7 @@ TEST_F(CollectUserDataActionTest, FailsForMissingPrivacyText) {
 TEST_F(CollectUserDataActionTest, SucceedsForPrivacyTextPresent) {
   ActionProto action_proto;
   auto* collect_user_data_proto = action_proto.mutable_collect_user_data();
-  collect_user_data_proto->set_thirdparty_privacy_notice_text("privacy");
+  collect_user_data_proto->set_privacy_notice_text("privacy");
   collect_user_data_proto->set_request_terms_and_conditions(false);
 
   ON_CALL(mock_action_delegate_, CollectUserData(_))
@@ -162,7 +162,7 @@ TEST_F(CollectUserDataActionTest, SucceedsForPrivacyTextPresent) {
 TEST_F(CollectUserDataActionTest, FailsForMissingTermsAcceptTextIfRequired) {
   ActionProto action_proto;
   auto* collect_user_data_proto = action_proto.mutable_collect_user_data();
-  collect_user_data_proto->set_thirdparty_privacy_notice_text("privacy");
+  collect_user_data_proto->set_privacy_notice_text("privacy");
   collect_user_data_proto->set_request_terms_and_conditions(true);
   collect_user_data_proto->set_terms_require_review_text("terms review");
 
@@ -176,7 +176,7 @@ TEST_F(CollectUserDataActionTest, FailsForMissingTermsAcceptTextIfRequired) {
 TEST_F(CollectUserDataActionTest, FailsForMissingTermsReviewTextIfRequired) {
   ActionProto action_proto;
   auto* collect_user_data_proto = action_proto.mutable_collect_user_data();
-  collect_user_data_proto->set_thirdparty_privacy_notice_text("privacy");
+  collect_user_data_proto->set_privacy_notice_text("privacy");
   collect_user_data_proto->set_request_terms_and_conditions(true);
   collect_user_data_proto->set_accept_terms_and_conditions_text(
       "terms and conditions");
@@ -192,7 +192,7 @@ TEST_F(CollectUserDataActionTest, FailsForMissingTermsReviewTextIfRequired) {
 TEST_F(CollectUserDataActionTest, SucceedsForCheckboxIfReviewTextMissing) {
   ActionProto action_proto;
   auto* collect_user_data_proto = action_proto.mutable_collect_user_data();
-  collect_user_data_proto->set_thirdparty_privacy_notice_text("privacy");
+  collect_user_data_proto->set_privacy_notice_text("privacy");
   collect_user_data_proto->set_request_terms_and_conditions(true);
   collect_user_data_proto->set_accept_terms_and_conditions_text(
       "terms and conditions");
@@ -223,7 +223,7 @@ TEST_F(CollectUserDataActionTest, SucceedsForCheckboxIfReviewTextMissing) {
 TEST_F(CollectUserDataActionTest, SucceedsForAllTermsTextPresent) {
   ActionProto action_proto;
   auto* collect_user_data_proto = action_proto.mutable_collect_user_data();
-  collect_user_data_proto->set_thirdparty_privacy_notice_text("privacy");
+  collect_user_data_proto->set_privacy_notice_text("privacy");
   collect_user_data_proto->set_request_terms_and_conditions(true);
   collect_user_data_proto->set_accept_terms_and_conditions_text(
       "terms and conditions");

@@ -215,7 +215,7 @@ public class AutofillAssistantGenericUiTest {
                                          .setGenericUserInterface(
                                                  GenericUserInterfaceProto.newBuilder().setRootView(
                                                          rootView))
-                                         .setThirdpartyPrivacyNoticeText(
+                                         .setPrivacyNoticeText(
                                                  "Chrome will send selected data to example.com")
                                          .setRequestTermsAndConditions(false))
                          .build());
@@ -321,7 +321,7 @@ public class AutofillAssistantGenericUiTest {
                                                          .setModel(ModelProto.newBuilder()
                                                                            .addAllValues(
                                                                                    modelValues)))
-                                         .setThirdpartyPrivacyNoticeText(
+                                         .setPrivacyNoticeText(
                                                  "Chrome will send selected data to example.com")
                                          .setRequestTermsAndConditions(false))
                          .build());
@@ -462,7 +462,7 @@ public class AutofillAssistantGenericUiTest {
                                                          .setModel(ModelProto.newBuilder()
                                                                            .addAllValues(
                                                                                    modelValues)))
-                                         .setThirdpartyPrivacyNoticeText(
+                                         .setPrivacyNoticeText(
                                                  "Chrome will send selected data to example.com")
                                          .setRequestTermsAndConditions(false))
                          .build());
