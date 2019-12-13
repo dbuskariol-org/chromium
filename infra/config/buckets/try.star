@@ -1421,10 +1421,6 @@ mac_ios_builder(
 )
 
 mac_ios_builder(
-    name = 'ios-slimnav',
-)
-
-mac_ios_builder(
     name = 'ios13-beta-simulator',
 )
 

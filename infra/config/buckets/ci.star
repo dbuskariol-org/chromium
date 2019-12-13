@@ -1961,10 +1961,6 @@ mac_ios_builder(
     name = 'ios-simulator-xcode-clang',
 )
 
-mac_ios_builder(
-    name = 'ios-slimnav',
-)
-
 
 def memory_builder(
     *,
