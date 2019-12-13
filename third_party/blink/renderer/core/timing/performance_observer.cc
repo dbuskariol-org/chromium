@@ -132,7 +132,8 @@ void PerformanceObserver::observe(const PerformanceObserverInit* observer_init,
     if (entry_types == PerformanceEntry::kInvalid) {
       return;
     }
-    if (observer_init->buffered()) {
+    if (RuntimeEnabledFeatures::PerformanceObserverBufferedFlagEnabled() &&
+        observer_init->buffered()) {
       String message =
           "The PerformanceObserver does not support buffered flag with "
           "the entryTypes argument.";
@@ -176,14 +177,24 @@ void PerformanceObserver::observe(const PerformanceObserverInit* observer_init,
           mojom::ConsoleMessageLevel::kWarning, message));
       return;
     }
-    if (observer_init->buffered()) {
-      // Append all entries of this type to the current performance_entries_
-      // to be returned on the next callback.
-      performance_entries_.AppendVector(performance_->getBufferedEntriesByType(
-          AtomicString(observer_init->type())));
-      std::sort(performance_entries_.begin(), performance_entries_.end(),
-                PerformanceEntry::StartTimeCompareLessThan);
-      is_buffered = true;
+    if (RuntimeEnabledFeatures::PerformanceObserverBufferedFlagEnabled() &&
+        observer_init->buffered()) {
+      if (entry_type == PerformanceEntry::kLongTask) {
+        String message =
+            "Buffered flag does not support the 'longtask' entry type.";
+        GetExecutionContext()->AddConsoleMessage(ConsoleMessage::Create(
+            mojom::ConsoleMessageSource::kJavaScript,
+            mojom::ConsoleMessageLevel::kWarning, message));
+      } else {
+        // Append all entries of this type to the current performance_entries_
+        // to be returned on the next callback.
+        performance_entries_.AppendVector(
+            performance_->getBufferedEntriesByType(
+                AtomicString(observer_init->type())));
+        std::sort(performance_entries_.begin(), performance_entries_.end(),
+                  PerformanceEntry::StartTimeCompareLessThan);
+        is_buffered = true;
+      }
     }
     filter_options_ |= entry_type;
   }
