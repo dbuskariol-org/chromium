@@ -1935,6 +1935,11 @@ const char kShowAutofillTypePredictionsDescription[] =
     "Annotates web forms with Autofill field type predictions as placeholder "
     "text.";
 
+const char kShowOverdrawFeedbackName[] = "Show overdraw feedback";
+const char kShowOverdrawFeedbackDescription[] =
+    "Visualize overdraw by color-coding elements based on if they have other "
+    "elements drawn underneath.";
+
 const char kSkiaRendererName[] = "Skia API for OOP-D compositing";
 const char kSkiaRendererDescription[] =
     "If enabled, the display compositor will use Skia as the graphics API "

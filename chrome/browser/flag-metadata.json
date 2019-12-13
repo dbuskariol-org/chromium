@@ -3282,6 +3282,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "show-overdraw-feedback",
+    "owners": [ "andrescj", "chromeos-gfx@google.com" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "show-sync-paused-reason-cookies-cleared-on-exit",
     "owners": [ "msalama" ],
     "expiry_milestone": 85
