@@ -4420,18 +4420,6 @@
   {
     'name': 'tryserver.chromium.android',
     'machines': {
-      'android-marshmallow-arm64-coverage-rel': {
-        'mixins': [
-          'code-coverage',
-          'marshmallow',
-          'bullhead',
-        ],
-        'test_suites': {
-          'gtest_tests': 'android_instrumentation_tests',
-          'junit_tests': 'chromium_junit_tests',
-        },
-        'os_type': 'android',
-      },
       'android-opus-kitkat-arm-rel': {
         'mixins': [
           'kitkat',

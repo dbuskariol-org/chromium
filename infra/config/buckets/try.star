@@ -134,14 +134,6 @@ android_builder(
 )
 
 android_builder(
-    name = 'android-marshmallow-arm64-coverage-rel',
-    cores = 16,
-    goma_jobs = goma.jobs.J300,
-    ssd = True,
-    use_java_coverage = True,
-)
-
-android_builder(
     name = 'android-marshmallow-x86-fyi-rel',
 )
 
