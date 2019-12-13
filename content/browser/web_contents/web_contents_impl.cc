@@ -2064,7 +2064,7 @@ void WebContentsImpl::Init(const WebContents::CreateParams& params) {
 #endif
 
   // BrowserPluginGuest::Init needs to be called after this WebContents has
-  // a RenderWidgetHostViewGuest. That is, |view_->CreateView| above.
+  // a RenderWidgetHostViewChildFrame. That is, |view_->CreateView| above.
   if (browser_plugin_guest_)
     browser_plugin_guest_->Init();
 
