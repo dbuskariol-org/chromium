@@ -80,13 +80,14 @@ public class NotificationTriggerBackgroundTaskTest {
 
         assertEquals(TaskIds.NOTIFICATION_TRIGGER_JOB_ID, taskInfo.getTaskId());
         assertTrue(taskInfo.isPersisted());
-        assertFalse(taskInfo.isPeriodic());
         assertTrue(taskInfo.shouldUpdateCurrent());
         assertEquals(TaskInfo.NetworkType.NONE, taskInfo.getRequiredNetworkType());
-        assertEquals(delay, taskInfo.getOneOffInfo().getWindowStartTimeMs());
-        assertEquals(delay, taskInfo.getOneOffInfo().getWindowEndTimeMs());
         assertEquals(timestamp,
                 taskInfo.getExtras().getLong(NotificationTriggerBackgroundTask.KEY_TIMESTAMP));
+        TaskInfo.TimingInfo timingInfo = taskInfo.getTimingInfo();
+        assertTrue(timingInfo instanceof TaskInfo.ExactInfo);
+        TaskInfo.ExactInfo exactTimingInfo = (TaskInfo.ExactInfo) timingInfo;
+        assertEquals(timestamp, exactTimingInfo.getTriggerAtMs());
     }
 
     @Test
