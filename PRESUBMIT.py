@@ -291,7 +291,6 @@ _NOT_CONVERTED_TO_MODERN_BIND_AND_CALLBACK = '|'.join((
   '^components/assist_ranker/',
   '^components/autofill/',
   '^components/autofill_assistant/',
-  '^components/bookmarks/',
   '^components/browser_watcher/',
   '^components/browsing_data/',
   '^components/cast_channel/',
