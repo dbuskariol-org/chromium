@@ -11,7 +11,6 @@ import android.util.Pair;
 import androidx.browser.trusted.sharing.ShareData;
 import androidx.browser.trusted.sharing.ShareTarget;
 
-import org.chromium.base.Function;
 import org.chromium.base.Promise;
 import org.chromium.chrome.browser.browserservices.BrowserServicesIntentDataProvider;
 import org.chromium.chrome.browser.browserservices.TrustedWebActivityUmaRecorder;
@@ -68,25 +67,24 @@ public class TwaSharingController {
             return Promise.fulfilled(false);
         }
 
-        return mVerifierDelegate.verify(shareTarget.action)
-                .then((Function<Boolean, Boolean>) (verified) -> {
-                    if (!verified) {
-                        return false;
-                    }
-                    WebApkInfo.ShareTarget target = toShareTargetInternal(shareTarget);
-                    if (target.isShareMethodPost()) {
-                        boolean success = sendPost(shareData, target);
-                        if (success) {
-                            mUmaRecorder.recordShareTargetRequest(ShareRequestMethod.POST);
-                        }
-                        return success;
-                    }
+        return mVerifierDelegate.verify(shareTarget.action).then(
+                (Promise.Function<Boolean, Boolean>) (verified) -> {
+            if (!verified) {
+                return false;
+            }
+            WebApkInfo.ShareTarget target = toShareTargetInternal(shareTarget);
+            if (target.isShareMethodPost()) {
+                boolean success = sendPost(shareData, target);
+                if (success) {
+                    mUmaRecorder.recordShareTargetRequest(ShareRequestMethod.POST);
+                }
+                return success;
+            }
 
-                    mNavigationController.navigate(
-                            computeStartUrlForGETShareTarget(shareData, target));
-                    mUmaRecorder.recordShareTargetRequest(ShareRequestMethod.GET);
-                    return true;
-                });
+            mNavigationController.navigate(computeStartUrlForGETShareTarget(shareData, target));
+            mUmaRecorder.recordShareTargetRequest(ShareRequestMethod.GET);
+            return true;
+        });
     }
 
     /**
