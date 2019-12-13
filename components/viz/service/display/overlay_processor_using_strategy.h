@@ -114,8 +114,10 @@ class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
       std::unique_ptr<OverlayValidator> overlay_validator);
 
  protected:
-  StrategyList strategies_;
   std::unique_ptr<OverlayValidator> overlay_validator_;
+
+  StrategyList strategies_;
+  Strategy* last_successful_strategy_ = nullptr;
 
   gfx::Rect overlay_damage_rect_;
   gfx::Rect previous_frame_underlay_rect_;
@@ -128,6 +130,23 @@ class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
                         bool previous_frame_underlay_was_unoccluded,
                         const QuadList* quad_list,
                         gfx::Rect* damage_rect);
+
+  // Iterate through a list of strategies and attempt to overlay with each.
+  // Returns true if one of the attempts is successful. Has to be called after
+  // InitializeStrategies(). A |primary_plane| represents the output surface's
+  // buffer that comes from |BufferQueue|. It is passed in here so it could be
+  // pass through to hardware through CheckOverlaySupport. It is not passed in
+  // as a const member because the underlay strategy changes the
+  // |primary_plane|'s blending setting.
+  bool AttemptWithStrategies(
+      const SkMatrix44& output_color_matrix,
+      const OverlayProcessorInterface::FilterOperationsMap&
+          render_pass_backdrop_filters,
+      DisplayResourceProvider* resource_provider,
+      RenderPassList* render_pass_list,
+      OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
+      OverlayCandidateList* candidates,
+      std::vector<gfx::Rect>* content_bounds);
 
 #if defined(OS_ANDROID)
   SkiaOutputSurface* skia_output_surface_;

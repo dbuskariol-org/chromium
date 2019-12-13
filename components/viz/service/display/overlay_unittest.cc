@@ -71,7 +71,12 @@ const gfx::BufferFormat kDefaultBufferFormat = gfx::BufferFormat::RGBA_8888;
 
 class TestOverlayCandidateValidator : public OverlayCandidateValidatorStrategy {
  public:
-  size_t GetStrategyCount() const { return strategies_.size(); }
+  using StrategyList = OverlayProcessorUsingStrategy::StrategyList;
+
+  StrategyList InitializeStrategies() override {
+    StrategyList empty;
+    return empty;
+  }
 
   bool NeedsSurfaceOccludingDamageRect() const override { return false; }
   void CheckOverlaySupport(const PrimaryPlane* primary_plane,
@@ -80,8 +85,10 @@ class TestOverlayCandidateValidator : public OverlayCandidateValidatorStrategy {
 
 class FullscreenOverlayValidator : public TestOverlayCandidateValidator {
  public:
-  void InitializeStrategies() override {
-    strategies_.push_back(std::make_unique<OverlayStrategyFullscreen>(this));
+  StrategyList InitializeStrategies() override {
+    StrategyList strategies;
+    strategies.push_back(std::make_unique<OverlayStrategyFullscreen>(this));
+    return strategies;
   }
   bool NeedsSurfaceOccludingDamageRect() const override { return true; }
   void CheckOverlaySupport(const PrimaryPlane* primary_plane,
@@ -94,9 +101,11 @@ class SingleOverlayValidator : public TestOverlayCandidateValidator {
  public:
   SingleOverlayValidator() : expected_rects_(1, gfx::RectF(kOverlayRect)) {}
 
-  void InitializeStrategies() override {
-    strategies_.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
-    strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
+  StrategyList InitializeStrategies() override {
+    StrategyList strategies;
+    strategies.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
+    strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
+    return strategies;
   }
   bool NeedsSurfaceOccludingDamageRect() const override { return true; }
   void CheckOverlaySupport(const PrimaryPlane* primary_plane,
@@ -139,30 +148,38 @@ class SingleOverlayValidator : public TestOverlayCandidateValidator {
 
 class SingleOnTopOverlayValidator : public SingleOverlayValidator {
  public:
-  void InitializeStrategies() override {
-    strategies_.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
+  StrategyList InitializeStrategies() override {
+    StrategyList strategies;
+    strategies.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
+    return strategies;
   }
 };
 
 class UnderlayOverlayValidator : public SingleOverlayValidator {
  public:
-  void InitializeStrategies() override {
-    strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
+  StrategyList InitializeStrategies() override {
+    StrategyList strategies;
+    strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
+    return strategies;
   }
 };
 
 class TransparentUnderlayOverlayValidator : public SingleOverlayValidator {
  public:
-  void InitializeStrategies() override {
-    strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
+  StrategyList InitializeStrategies() override {
+    StrategyList strategies;
+    strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(
         this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
+    return strategies;
   }
 };
 
 class UnderlayCastOverlayValidator : public SingleOverlayValidator {
  public:
-  void InitializeStrategies() override {
-    strategies_.push_back(std::make_unique<OverlayStrategyUnderlayCast>(this));
+  StrategyList InitializeStrategies() override {
+    StrategyList strategies;
+    strategies.push_back(std::make_unique<OverlayStrategyUnderlayCast>(this));
+    return strategies;
   }
 };
 
@@ -173,14 +190,7 @@ class DefaultOverlayProcessor : public OverlayProcessorUsingStrategy {
             nullptr,
             std::make_unique<SingleOverlayValidator>()) {}
 
-  size_t GetStrategyCount() const {
-    if (auto* validator = overlay_validator_.get()) {
-      return static_cast<TestOverlayCandidateValidator*>(validator)
-          ->GetStrategyCount();
-    }
-
-    return 0;
-  }
+  size_t GetStrategyCount() const { return strategies_.size(); }
 };
 
 class OverlayOutputSurface : public OutputSurface {
