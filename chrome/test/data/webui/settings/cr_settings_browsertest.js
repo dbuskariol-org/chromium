@@ -980,10 +980,11 @@ TEST_F('CrSettingsPrivacyPageTest', 'CertificateManagerTests', function() {
 GEN('#endif');
 
 GEN('#if !defined(OS_CHROMEOS)');
-TEST_F('CrSettingsPrivacyPageTest', 'ClearBrowsingDataTestsDice', function() {
-  settings_privacy_page.registerClearBrowsingDataTestsDice();
-  mocha.run();
-});
+TEST_F(
+    'CrSettingsPrivacyPageTest', 'ClearBrowsingDataTestsDesktop', function() {
+      settings_privacy_page.registerClearBrowsingDataTestsDesktop();
+      mocha.run();
+    });
 GEN('#endif');
 
 /**

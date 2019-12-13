@@ -402,9 +402,9 @@ cr.define('settings_privacy_page', function() {
     });
   }
 
-  function registerClearBrowsingDataTestsDice() {
+  function registerClearBrowsingDataTestsDesktop() {
     assert(!cr.isChromeOS);
-    suite('ClearBrowsingDataDice', function() {
+    suite('ClearBrowsingDataDesktop', function() {
       /** @type {settings.TestClearBrowsingDataBrowserProxy} */
       let testBrowserProxy;
 
@@ -413,12 +413,6 @@ cr.define('settings_privacy_page', function() {
 
       /** @type {SettingsClearBrowsingDataDialogElement} */
       let element;
-
-      suiteSetup(function() {
-        loadTimeData.overrideValues({
-          diceEnabled: true,
-        });
-      });
 
       setup(function() {
         testBrowserProxy = new TestClearBrowsingDataBrowserProxy();
@@ -438,7 +432,7 @@ cr.define('settings_privacy_page', function() {
         element.remove();
       });
 
-      test('ClearBrowsingDataSyncAccountInfoDice', function() {
+      test('ClearBrowsingDataSyncAccountInfoDesktop', function() {
         // Not syncing: the footer is hidden.
         cr.webUIListenerCallback('sync-status-changed', {
           signedIn: false,
@@ -497,7 +491,7 @@ cr.define('settings_privacy_page', function() {
         assertVisible(element.$$('#sync-other-error-info'), true);
       });
 
-      test('ClearBrowsingDataPauseSyncDice', function() {
+      test('ClearBrowsingDataPauseSyncDesktop', function() {
         cr.webUIListenerCallback('sync-status-changed', {
           signedIn: true,
           hasError: false,
@@ -514,7 +508,7 @@ cr.define('settings_privacy_page', function() {
         assertEquals(1, testSyncBrowserProxy.getCallCount('pauseSync'));
       });
 
-      test('ClearBrowsingDataStartSignInDice', function() {
+      test('ClearBrowsingDataStartSignInDesktop', function() {
         cr.webUIListenerCallback('sync-status-changed', {
           signedIn: true,
           hasError: true,
@@ -532,7 +526,7 @@ cr.define('settings_privacy_page', function() {
         assertEquals(1, testSyncBrowserProxy.getCallCount('startSignIn'));
       });
 
-      test('ClearBrowsingDataHandlePassphraseErrorDice', function() {
+      test('ClearBrowsingDataHandlePassphraseErrorDesktop', function() {
         cr.webUIListenerCallback('sync-status-changed', {
           signedIn: true,
           hasError: true,
@@ -558,12 +552,6 @@ cr.define('settings_privacy_page', function() {
 
       /** @type {SettingsClearBrowsingDataDialogElement} */
       let element;
-
-      suiteSetup(function() {
-        loadTimeData.overrideValues({
-          diceEnabled: false,
-        });
-      });
 
       setup(function() {
         testBrowserProxy = new TestClearBrowsingDataBrowserProxy();
@@ -737,44 +725,50 @@ cr.define('settings_privacy_page', function() {
         });
       });
 
-      // When Dice is disabled, the footer is never shown.
-      test('ClearBrowsingDataSyncAccountInfo', function() {
-        assertTrue(element.$$('#clearBrowsingDataDialog').open);
+      if (cr.isChromeOS) {
+        // On ChromeOS the footer is never shown.
+        test('ClearBrowsingDataSyncAccountInfo', function() {
+          assertTrue(element.$$('#clearBrowsingDataDialog').open);
 
-        // Not syncing.
-        cr.webUIListenerCallback('sync-status-changed', {
-          signedIn: false,
-          hasError: false,
-        });
-        Polymer.dom.flush();
-        assertTrue(element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+          // Not syncing.
+          cr.webUIListenerCallback('sync-status-changed', {
+            signedIn: false,
+            hasError: false,
+          });
+          Polymer.dom.flush();
+          assertTrue(
+              element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
 
-        // Syncing.
-        cr.webUIListenerCallback('sync-status-changed', {
-          signedIn: true,
-          hasError: false,
-        });
-        Polymer.dom.flush();
-        assertTrue(element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+          // Syncing.
+          cr.webUIListenerCallback('sync-status-changed', {
+            signedIn: true,
+            hasError: false,
+          });
+          Polymer.dom.flush();
+          assertTrue(
+              element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
 
-        // Sync passphrase error.
-        cr.webUIListenerCallback('sync-status-changed', {
-          signedIn: true,
-          hasError: true,
-          statusAction: settings.StatusAction.ENTER_PASSPHRASE,
-        });
-        Polymer.dom.flush();
-        assertTrue(element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+          // Sync passphrase error.
+          cr.webUIListenerCallback('sync-status-changed', {
+            signedIn: true,
+            hasError: true,
+            statusAction: settings.StatusAction.ENTER_PASSPHRASE,
+          });
+          Polymer.dom.flush();
+          assertTrue(
+              element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
 
-        // Other sync error.
-        cr.webUIListenerCallback('sync-status-changed', {
-          signedIn: true,
-          hasError: true,
-          statusAction: settings.StatusAction.NO_ACTION,
+          // Other sync error.
+          cr.webUIListenerCallback('sync-status-changed', {
+            signedIn: true,
+            hasError: true,
+            statusAction: settings.StatusAction.NO_ACTION,
+          });
+          Polymer.dom.flush();
+          assertTrue(
+              element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
         });
-        Polymer.dom.flush();
-        assertTrue(element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
-      });
+      }
     });
   }
 
@@ -897,7 +891,7 @@ cr.define('settings_privacy_page', function() {
 
   return {
     registerNativeCertificateManagerTests,
-    registerClearBrowsingDataTestsDice,
+    registerClearBrowsingDataTestsDesktop,
     registerClearBrowsingDataTests,
     registerPrivacyPageTests,
     registerPrivacyPageSoundTests,
