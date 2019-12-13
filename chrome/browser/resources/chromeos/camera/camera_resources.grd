@@ -27,7 +27,6 @@
       <structure name="IDR_CAMERA_ERROR_JS" file="src/js/device/error.js" type="chrome_html" />
       <structure name="IDR_CAMERA_FILENAMER_JS" file="src/js/models/filenamer.js" type="chrome_html" />
       <structure name="IDR_CAMERA_FILESYSTEM_JS" file="src/js/models/filesystem.js" type="chrome_html" />
-      <structure name="IDR_CAMERA_GALLERY_JS" file="src/js/models/gallery.js" type="chrome_html" />
       <structure name="IDR_CAMERA_GALLERYBUTTON_JS" file="src/js/gallerybutton.js" type="chrome_html" />
       <structure name="IDR_CAMERA_IMAGECAPTURE_JS" file="src/js/mojo/image_capture.js" type="chrome_html" />
       <structure name="IDR_CAMERA_INTENT_JS" file="src/js/intent.js" type="chrome_html" />

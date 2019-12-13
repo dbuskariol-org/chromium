@@ -48,7 +48,6 @@ js_library("intent") {
 js_library("gallerybutton") {
   deps = [
     ":chrome_util",
-    "models:gallery",
   ]
   externs_list = [
     "$externs_path/file_manager_private.js",
@@ -78,7 +77,6 @@ js_library("main") {
     ":type",
     "device:constraints_preferrer",
     "device:device_info_updater",
-    "models:gallery",
     "views:camera",
     "views:camera_intent",
     "views:dialog",
