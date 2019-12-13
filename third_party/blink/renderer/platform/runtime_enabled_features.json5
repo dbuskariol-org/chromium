@@ -1392,6 +1392,10 @@
       status: "experimental",
     },
     {
+      // Enabled when blink::features::kRawClipboard is enabled.
+      name: "RawClipboard",
+    },
+    {
       name: "ReducedReferrerGranularity",
     },
     {

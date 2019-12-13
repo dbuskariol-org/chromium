@@ -3109,6 +3109,11 @@
     "expiry_milestone": 83
   },
   {
+    "name": "raw-clipboard",
+    "owners": ["huangdarwin", "pwnall"],
+    "expiry_milestone": 84
+  },
+  {
     "name": "reader-mode-heuristics",
     "owners": [ "mdjones", "wychen" ],
     // This flag is a utility for testing Reader Mode heuristics or force

@@ -1727,6 +1727,11 @@ const char kQuietNotificationPromptsDescription[] =
     "When a site wishes to show notifications, the usual modal dialog is "
     "replaced with a quieter version.";
 
+const char kRawClipboardName[] = "Raw Clipboard";
+const char kRawClipboardDescription[] =
+    "Allows raw / unsanitized clipboard content to be read and written. "
+    "See https://github.com/WICG/raw-clipboard-access.";
+
 const char kReducedReferrerGranularityName[] =
     "Reduce default 'referer' header granularity.";
 const char kReducedReferrerGranularityDescription[] =
