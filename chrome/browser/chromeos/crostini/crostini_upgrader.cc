@@ -188,9 +188,6 @@ void CrostiniUpgrader::OnUpgrade(CrostiniResult result) {
     }
     return;
   }
-  for (auto& observer : upgrader_observers_) {
-    observer.OnUpgradeSucceeded();
-  }
 }
 
 void CrostiniUpgrader::OnRestore(CrostiniResult result) {
