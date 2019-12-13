@@ -240,7 +240,7 @@ def _make_reflect_accessor_func_name(cg_context):
         return "setAttribute"
 
 
-def _make_reflect_process_enumerated_attributes(cg_context):
+def _make_reflect_process_keyword_state(cg_context):
     # https://html.spec.whatwg.org/C/#keywords-and-enumerated-attributes
 
     assert isinstance(cg_context, CodeGenContext)
@@ -293,6 +293,9 @@ def _make_reflect_process_enumerated_attributes(cg_context):
         branches.append(
             cond=True,
             body=F("${return_value} = {};", constant(invalid_default)))
+    else:
+        branches.append(
+            cond=True, body=F("${return_value} = {};", constant("")))
 
     return SequenceNode(nodes)
 
@@ -426,7 +429,7 @@ def bind_return_value(code_node, cg_context):
 
         if "ReflectOnly" in cg_context.member_like.extended_attributes:
             # [ReflectOnly]
-            node = _make_reflect_process_enumerated_attributes(cg_context)
+            node = _make_reflect_process_keyword_state(cg_context)
             if node:
                 nodes.append(T(""))
                 nodes.append(node)
