@@ -1187,12 +1187,6 @@ fyi_coverage_builder(
 )
 
 fyi_coverage_builder(
-    name = 'chromeos-vm-code-coverage',
-    ssd = True,
-    use_clang_coverage = True,
-)
-
-fyi_coverage_builder(
     name = 'ios-simulator-code-coverage',
     caches = [XCODE_IOS_11_CACHE],
     cores = None,

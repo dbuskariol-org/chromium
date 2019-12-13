@@ -205,7 +205,6 @@
       'android-code-coverage-native': 'gpu_tests_android_release_bot_minimal_symbols_arm64_fastbuild_native_coverage',
       'chromeos-amd64-generic-rel-vm-tests': 'cros_chrome_sdk_dcheck_always_on',
       'chromeos-kevin-rel-hw-tests': 'cros_chrome_sdk',
-      'chromeos-vm-code-coverage': 'cros_chrome_sdk_coverage',
       'linux-bfcache-debug': 'debug_bot',
       'linux-oor-cors-rel': 'release_bot_minimal_symbols',
       'linux-chromeos-code-coverage': 'chromeos_with_codecs_release_bot_coverage',
@@ -1501,10 +1500,6 @@
 
     'cros_chrome_sdk_dcheck_always_on': [
       'cros_chrome_sdk', 'dcheck_always_on',
-    ],
-
-    'cros_chrome_sdk_coverage': [
-      'cros_chrome_sdk', 'use_clang_coverage',
     ],
 
     'cros_chrome_sdk_cfi_thin_lto': [
