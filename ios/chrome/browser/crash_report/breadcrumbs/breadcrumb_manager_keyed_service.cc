@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/crash_report/breadcrumbs/breadcrumb_manager.h"
+#include "ios/chrome/browser/crash_report/breadcrumbs/breadcrumb_manager_keyed_service.h"
 
 #include "base/strings/stringprintf.h"
 #include "base/time/time_to_iso8601.h"
 #include "ios/chrome/browser/crash_report/breadcrumbs/breadcrumb_manager_observer.h"
+#include "ios/web/public/browser_state.h"
 
 namespace {
 
@@ -28,7 +29,8 @@ base::Time EventBucket(const base::Time& time) {
 
 }  // namespace
 
-std::list<std::string> BreadcrumbManager::GetEvents(size_t event_count_limit) {
+std::list<std::string> BreadcrumbManagerKeyedService::GetEvents(
+    size_t event_count_limit) {
   DropOldEvents();
 
   std::list<std::string> events;
@@ -46,7 +48,7 @@ std::list<std::string> BreadcrumbManager::GetEvents(size_t event_count_limit) {
   return events;
 }
 
-void BreadcrumbManager::AddEvent(const std::string& event) {
+void BreadcrumbManagerKeyedService::AddEvent(const std::string& event) {
   base::Time time = base::Time::Now();
   base::Time bucket_time = EventBucket(time);
 
@@ -58,8 +60,8 @@ void BreadcrumbManager::AddEvent(const std::string& event) {
   }
 
   std::string timestamp = base::TimeToISO8601(time);
-  std::string event_log =
-      base::StringPrintf("%s %s", timestamp.c_str(), event.c_str());
+  std::string event_log = base::StringPrintf(
+      "%s %s %s", timestamp.c_str(), browsing_mode_.c_str(), event.c_str());
   event_buckets_.back().second.push_back(event_log);
 
   DropOldEvents();
@@ -69,7 +71,7 @@ void BreadcrumbManager::AddEvent(const std::string& event) {
   }
 }
 
-void BreadcrumbManager::DropOldEvents() {
+void BreadcrumbManagerKeyedService::DropOldEvents() {
   static const base::TimeDelta kMessageExpirationTime =
       base::TimeDelta::FromMinutes(20);
 
@@ -83,14 +85,20 @@ void BreadcrumbManager::DropOldEvents() {
   }
 }
 
-BreadcrumbManager::BreadcrumbManager() = default;
+BreadcrumbManagerKeyedService::BreadcrumbManagerKeyedService(
+    web::BrowserState* browser_state)
+    // Set "I" for Incognito (Chrome branded OffTheRecord implementation) and
+    // "N" for Normal browsing mode.
+    : browsing_mode_(browser_state->IsOffTheRecord() ? "I" : "N") {}
 
-BreadcrumbManager::~BreadcrumbManager() = default;
+BreadcrumbManagerKeyedService::~BreadcrumbManagerKeyedService() = default;
 
-void BreadcrumbManager::AddObserver(BreadcrumbManagerObserver* observer) {
+void BreadcrumbManagerKeyedService::AddObserver(
+    BreadcrumbManagerObserver* observer) {
   observers_.AddObserver(observer);
 }
 
-void BreadcrumbManager::RemoveObserver(BreadcrumbManagerObserver* observer) {
+void BreadcrumbManagerKeyedService::RemoveObserver(
+    BreadcrumbManagerObserver* observer) {
   observers_.RemoveObserver(observer);
 }
