@@ -9,6 +9,7 @@
 #include "ash/app_list/app_list_metrics.h"
 #include "ash/app_list/app_list_view_delegate.h"
 #include "ash/app_list/views/app_list_main_view.h"
+#include "ash/app_list/views/apps_container_view.h"
 #include "ash/app_list/views/contents_view.h"
 #include "ash/public/cpp/app_list/app_list_features.h"
 #include "ash/public/cpp/app_list/app_list_switches.h"
@@ -64,6 +65,26 @@ void DidPresentCompositorFrame(base::TimeTicks event_time_stamp,
     UMA_HISTOGRAM_TIMES(kAppListHideInputLatencyHistogram, input_latency);
   }
 }
+
+// Implicit animation observer that runs a scoped closure runner, and deletes
+// itself when the observed implicit animations complete.
+class CallbackRunnerLayerAnimationObserver
+    : public ui::ImplicitAnimationObserver {
+ public:
+  explicit CallbackRunnerLayerAnimationObserver(
+      base::ScopedClosureRunner closure_runner)
+      : closure_runner_(std::move(closure_runner)) {}
+  ~CallbackRunnerLayerAnimationObserver() override = default;
+
+  // ui::ImplicitAnimationObserver:
+  void OnImplicitAnimationsCompleted() override {
+    closure_runner_.RunAndReset();
+    delete this;
+  }
+
+ private:
+  base::ScopedClosureRunner closure_runner_;
+};
 
 }  // namespace
 
@@ -266,6 +287,16 @@ void AppListPresenterImpl::UpdateYPositionAndOpacityForHomeLauncher(
   if (!callback.is_null()) {
     settings.emplace(layer->GetAnimator());
     callback.Run(&settings.value());
+
+    // Disable suggestion chips blur during animations to improve performance.
+    base::ScopedClosureRunner blur_disabler =
+        view_->app_list_main_view()
+            ->contents_view()
+            ->GetAppsContainerView()
+            ->DisableSuggestionChipsBlur();
+    // The observer will delete itself when the animations are completed.
+    settings->AddObserver(
+        new CallbackRunnerLayerAnimationObserver(std::move(blur_disabler)));
   }
 
   // The animation metrics reporter will run for opacity and transform
@@ -313,6 +344,16 @@ void AppListPresenterImpl::UpdateScaleAndOpacityForHomeLauncher(
   if (!callback.is_null()) {
     settings.emplace(layer->GetAnimator());
     callback.Run(&settings.value());
+
+    // Disable suggestion chips blur during animations to improve performance.
+    base::ScopedClosureRunner blur_disabler =
+        view_->app_list_main_view()
+            ->contents_view()
+            ->GetAppsContainerView()
+            ->DisableSuggestionChipsBlur();
+    // The observer will delete itself when the animations are completed.
+    settings->AddObserver(
+        new CallbackRunnerLayerAnimationObserver(std::move(blur_disabler)));
   }
 
   // The animation metrics reporter will run for opacity and transform
