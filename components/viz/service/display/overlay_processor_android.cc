@@ -1,25 +1,30 @@
-// Copyright 2015 The Chromium Authors. All rights reserved.
+// Copyright 2019 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/viz/service/display_embedder/overlay_candidate_validator_android.h"
-
-#include <memory>
+#include "components/viz/service/display/overlay_processor_android.h"
 
 #include "components/viz/service/display/overlay_candidate_list.h"
+#include "components/viz/service/display/overlay_candidate_validator_strategy.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
 #include "ui/gfx/geometry/rect_conversions.h"
 
 namespace viz {
 
-OverlayCandidateValidatorAndroid::OverlayCandidateValidatorAndroid() {}
+OverlayProcessorAndroid::OverlayProcessorAndroid(
+    SkiaOutputSurface* skia_output_surface,
+    bool enable_overlay)
+    : OverlayProcessorUsingStrategy(
+          skia_output_surface,
+          std::unique_ptr<OverlayCandidateValidatorStrategy>()),
+      overlay_enabled_(enable_overlay) {
+  if (overlay_enabled_)
+    InitializeStrategies();
+}
 
-OverlayCandidateValidatorAndroid::~OverlayCandidateValidatorAndroid() {}
+OverlayProcessorAndroid::~OverlayProcessorAndroid() {}
 
-OverlayProcessorUsingStrategy::StrategyList
-OverlayCandidateValidatorAndroid::InitializeStrategies(
-    OverlayProcessorUsingStrategy* processor) {
-  OverlayProcessorUsingStrategy::StrategyList strategies;
+void OverlayProcessorAndroid::InitializeStrategies() {
   // For Android, we do not have the ability to skip an overlay, since the
   // texture is already in a SurfaceView.  Ideally, we would honor a 'force
   // overlay' flag that FromDrawQuad would also check.
@@ -27,16 +32,23 @@ OverlayCandidateValidatorAndroid::InitializeStrategies(
   // the underlying overlay is opaque anyway; the candidate is referring to
   // a dummy resource that has no relation to what the overlay contains.
   // https://crbug.com/842931 .
-  strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(
-      processor,
-      OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
-  return strategies;
+  strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
+      this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
 }
 
-void OverlayCandidateValidatorAndroid::CheckOverlaySupport(
-    const PrimaryPlane* primary_plane,
+bool OverlayProcessorAndroid::IsOverlaySupported() const {
+  return overlay_enabled_;
+}
+
+bool OverlayProcessorAndroid::NeedsSurfaceOccludingDamageRect() const {
+  return false;
+}
+
+void OverlayProcessorAndroid::CheckOverlaySupport(
+    const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
     OverlayCandidateList* candidates) {
-  // There should only be at most a single overlay candidate: the video quad.
+  // There should only be at most a single overlay candidate: the
+  // video quad.
   // There's no check that the presented candidate is really a video frame for
   // a fullscreen video. Instead it's assumed that if a quad is marked as
   // overlayable, it's a fullscreen video quad.
@@ -61,9 +73,9 @@ void OverlayCandidateValidatorAndroid::CheckOverlaySupport(
     candidate.plane_z_order = -1;
   }
 }
-
-bool OverlayCandidateValidatorAndroid::NeedsSurfaceOccludingDamageRect() const {
-  return false;
+gfx::Rect OverlayProcessorAndroid::GetOverlayDamageRectForOutputSurface(
+    const OverlayCandidate& overlay) const {
+  return ToEnclosedRect(overlay.display_rect);
 }
 
 }  // namespace viz
