@@ -72,12 +72,6 @@ WebThreadScheduler::CompositorTaskRunner() {
 }
 
 scoped_refptr<base::SingleThreadTaskRunner>
-WebThreadScheduler::InputTaskRunner() {
-  NOTREACHED();
-  return nullptr;
-}
-
-scoped_refptr<base::SingleThreadTaskRunner>
 WebThreadScheduler::IPCTaskRunner() {
   NOTREACHED();
   return nullptr;

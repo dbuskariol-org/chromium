@@ -660,11 +660,6 @@ MainThreadSchedulerImpl::DefaultTaskRunner() {
   return helper_.DefaultTaskRunner();
 }
 
-scoped_refptr<base::SingleThreadTaskRunner>
-MainThreadSchedulerImpl::InputTaskRunner() {
-  return nullptr;
-}
-
 scoped_refptr<SingleThreadIdleTaskRunner>
 MainThreadSchedulerImpl::IdleTaskRunner() {
   return idle_helper_.IdleTaskRunner();

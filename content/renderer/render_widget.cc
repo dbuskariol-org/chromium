@@ -1937,7 +1937,7 @@ void RenderWidget::InitCompositing(const ScreenInfo& screen_info) {
   // without a compositor thread.
   if (for_frame() && compositor_thread_scheduler) {
     compositor_input_task_runner =
-        compositor_thread_scheduler->InputTaskRunner();
+        compositor_thread_scheduler->DefaultTaskRunner();
   }
 
   input_event_queue_ = base::MakeRefCounted<MainThreadEventQueue>(

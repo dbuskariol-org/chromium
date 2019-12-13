@@ -236,7 +236,6 @@ jumbo_source_set("unit_tests") {
     "main_thread/queueing_time_estimator_unittest.cc",
     "main_thread/render_widget_signals_unittest.cc",
     "main_thread/user_model_unittest.cc",
-    "worker/compositor_thread_scheduler_unittest.cc",
     "worker/worker_scheduler_proxy_unittest.cc",
     "worker/worker_scheduler_unittest.cc",
     "worker/worker_thread_scheduler_unittest.cc",

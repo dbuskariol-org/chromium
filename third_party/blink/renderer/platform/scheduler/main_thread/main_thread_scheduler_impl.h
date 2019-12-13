@@ -96,9 +96,6 @@ class PLATFORM_EXPORT MainThreadSchedulerImpl
   struct SchedulingSettings {
     SchedulingSettings();
 
-    // High priority input experiment.
-    bool high_priority_input;
-
     // Background page priority experiment (crbug.com/848835).
     bool low_priority_background_page;
     bool best_effort_background_page;
@@ -241,7 +238,6 @@ class PLATFORM_EXPORT MainThreadSchedulerImpl
 
   // WebThreadScheduler implementation:
   scoped_refptr<base::SingleThreadTaskRunner> DefaultTaskRunner() override;
-  scoped_refptr<base::SingleThreadTaskRunner> InputTaskRunner() override;
 
   // The following functions are defined in both WebThreadScheduler and
   // ThreadScheduler, and have the same function signatures -- see above.

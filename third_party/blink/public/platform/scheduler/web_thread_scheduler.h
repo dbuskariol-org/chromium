@@ -79,9 +79,6 @@ class BLINK_PLATFORM_EXPORT WebThreadScheduler {
   // Returns the compositor task runner.
   virtual scoped_refptr<base::SingleThreadTaskRunner> CompositorTaskRunner();
 
-  // Returns the input task runner.
-  virtual scoped_refptr<base::SingleThreadTaskRunner> InputTaskRunner();
-
   virtual scoped_refptr<base::SingleThreadTaskRunner> IPCTaskRunner();
 
   // Returns the cleanup task runner, which is for cleaning up.
