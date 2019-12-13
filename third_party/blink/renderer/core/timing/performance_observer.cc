@@ -132,8 +132,7 @@ void PerformanceObserver::observe(const PerformanceObserverInit* observer_init,
     if (entry_types == PerformanceEntry::kInvalid) {
       return;
     }
-    if (RuntimeEnabledFeatures::PerformanceObserverBufferedFlagEnabled() &&
-        observer_init->buffered()) {
+    if (observer_init->buffered()) {
       String message =
           "The PerformanceObserver does not support buffered flag with "
           "the entryTypes argument.";
@@ -177,8 +176,7 @@ void PerformanceObserver::observe(const PerformanceObserverInit* observer_init,
           mojom::ConsoleMessageLevel::kWarning, message));
       return;
     }
-    if (RuntimeEnabledFeatures::PerformanceObserverBufferedFlagEnabled() &&
-        observer_init->buffered()) {
+    if (observer_init->buffered()) {
       if (entry_type == PerformanceEntry::kLongTask) {
         String message =
             "Buffered flag does not support the 'longtask' entry type.";

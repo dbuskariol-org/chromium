@@ -885,12 +885,6 @@ void Performance::NotifyObserversOfEntry(PerformanceEntry& entry) const {
     UseCounter::Count(GetExecutionContext(), WebFeature::kPaintTimingObserved);
 }
 
-void Performance::NotifyObserversOfEntries(PerformanceEntryVector& entries) {
-  for (const auto& entry : entries) {
-    NotifyObserversOfEntry(*entry.Get());
-  }
-}
-
 bool Performance::HasObserverFor(
     PerformanceEntry::EntryType filter_type) const {
   return observer_filter_options_ & filter_type;

@@ -346,7 +346,6 @@ class CORE_EXPORT Performance : public EventTargetWithInlineData {
   void FireResourceTimingBufferFull(TimerBase*);
 
   void NotifyObserversOfEntry(PerformanceEntry&) const;
-  void NotifyObserversOfEntries(PerformanceEntryVector&);
 
   void DeliverObservationsTimerFired(TimerBase*);
 
