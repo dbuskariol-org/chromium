@@ -30,6 +30,15 @@ def blink_class_name(idl_definition):
         return name_style.class_(idl_definition.identifier)
 
 
+def v8_bridge_class_name(idl_definition):
+    """
+    Returns the name of V8-from/to-Blink bridge class.
+    """
+    assert isinstance(idl_definition, web_idl.Interface)
+
+    return name_style.class_("v8", idl_definition.identifier)
+
+
 def blink_type_info(idl_type):
     """
     Returns the types of Blink implementation corresponding to the given IDL
