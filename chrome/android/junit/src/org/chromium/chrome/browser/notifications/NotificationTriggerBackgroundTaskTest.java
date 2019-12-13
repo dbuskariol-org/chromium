@@ -79,7 +79,6 @@ public class NotificationTriggerBackgroundTaskTest {
         TaskInfo taskInfo = taskInfoCaptor.getValue();
 
         assertEquals(TaskIds.NOTIFICATION_TRIGGER_JOB_ID, taskInfo.getTaskId());
-        assertEquals(NotificationTriggerBackgroundTask.class, taskInfo.getBackgroundTaskClass());
         assertTrue(taskInfo.isPersisted());
         assertFalse(taskInfo.isPeriodic());
         assertTrue(taskInfo.shouldUpdateCurrent());
