@@ -747,7 +747,9 @@ std::unique_ptr<WebContentsImpl> WebContentsImpl::CreateWithOpener(
     bool sandbox_propagates_to_auxilary_context =
         (opener_flags & inherit_flag) == inherit_flag;
     if (sandbox_propagates_to_auxilary_context)
-      new_root->SetPendingFramePolicy({opener_flags, {}});
+      new_root->SetPendingFramePolicy({opener_flags,
+                                       {} /* container_policy */,
+                                       {} /* required_document_policy */});
     if (opener_flags == blink::WebSandboxFlags::kNone ||
         sandbox_propagates_to_auxilary_context) {
       // TODO(ekaramad, iclelland): Do not propagate feature policies from non-
