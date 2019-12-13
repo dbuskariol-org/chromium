@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chromecast/media/cma/backend/interleaved_channel_mixer.h"
+#include "chromecast/media/audio/interleaved_channel_mixer.h"
 
 #include "base/logging.h"
 #include "media/base/channel_mixing_matrix.h"

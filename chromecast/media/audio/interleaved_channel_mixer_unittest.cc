@@ -7,7 +7,7 @@
 #include <tuple>
 
 #include "base/logging.h"
-#include "chromecast/media/cma/backend/interleaved_channel_mixer.h"
+#include "chromecast/media/audio/interleaved_channel_mixer.h"
 #include "media/base/audio_bus.h"
 #include "media/base/audio_sample_types.h"
 #include "media/base/channel_layout.h"

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chromecast/media/cma/backend/audio_resampler.h"
+#include "chromecast/media/audio/audio_resampler.h"
 
 #include <algorithm>
 
@@ -13,6 +13,7 @@
 #include "media/base/decoder_buffer.h"
 
 namespace chromecast {
+namespace media {
 
 namespace {
 constexpr size_t kMaxChannels = 8;
@@ -127,4 +128,5 @@ scoped_refptr<media::DecoderBufferBase> AudioResampler::ShortenBuffer(
   return base::MakeRefCounted<media::DecoderBufferAdapter>(cut_buffer);
 }
 
+}  // namespace media
 }  // namespace chromecast

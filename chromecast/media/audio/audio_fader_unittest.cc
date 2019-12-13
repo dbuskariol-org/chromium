@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "base/macros.h"
-#include "chromecast/media/cma/backend/audio_fader.h"
+#include "chromecast/media/audio/audio_fader.h"
 #include "media/base/audio_bus.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"

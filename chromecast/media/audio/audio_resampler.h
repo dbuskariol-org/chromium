@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROMECAST_MEDIA_CMA_BACKEND_AUDIO_RESAMPLER_H_
-#define CHROMECAST_MEDIA_CMA_BACKEND_AUDIO_RESAMPLER_H_
+#ifndef CHROMECAST_MEDIA_AUDIO_AUDIO_RESAMPLER_H_
+#define CHROMECAST_MEDIA_AUDIO_AUDIO_RESAMPLER_H_
 
 #include <stdint.h>
 
@@ -11,10 +11,8 @@
 #include "base/memory/ref_counted.h"
 
 namespace chromecast {
-
 namespace media {
 class DecoderBufferBase;
-}  // namespace media
 
 // The audio resampler allows us to apply small changes to the rate of audio
 // playback via (supposedly) imperceptible changes.
@@ -49,6 +47,7 @@ class AudioResampler {
   DISALLOW_COPY_AND_ASSIGN(AudioResampler);
 };
 
+}  // namespace media
 }  // namespace chromecast
 
-#endif  // CHROMECAST_MEDIA_CMA_BACKEND_AUDIO_RESAMPLER_H_
+#endif  // CHROMECAST_MEDIA_AUDIO_AUDIO_RESAMPLER_H_
