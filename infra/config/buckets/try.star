@@ -405,15 +405,11 @@ blink_builder(
 
 blink_builder(
     name = 'win10-blink-rel',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
 
 blink_builder(
     name = 'win7-blink-rel',
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
 
@@ -1472,37 +1468,49 @@ swangle_linux_builder(
 )
 
 
-def swangle_windows_builder(*, name, **kwargs):
+def swangle_windows_builder(*, name, goma_backend=goma.backend.RBE_PROD, goma_enable_ats=True, **kwargs):
   return swangle_builder(
       name = name,
       os = os.WINDOWS_DEFAULT,
-      goma_backend = goma.backend.RBE_PROD,
-      goma_enable_ats = True,
+      goma_backend = goma_backend,
+      goma_enable_ats = goma_enable_ats,
       **kwargs
   )
 
 swangle_windows_builder(
     name = 'win-swangle-try-tot-angle-x64',
+    goma_backend = None,
+    goma_enable_ats = False,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-tot-angle-x86',
+    goma_backend = None,
+    goma_enable_ats = False,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-tot-swiftshader-x64',
+    goma_backend = None,
+    goma_enable_ats = False,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-tot-swiftshader-x86',
+    goma_backend = None,
+    goma_enable_ats = False,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-x64',
+    goma_backend = None,
+    goma_enable_ats = False,
 )
 
 swangle_windows_builder(
     name = 'win-swangle-try-x86',
+    goma_backend = None,
+    goma_enable_ats = False,
 )
 
 
