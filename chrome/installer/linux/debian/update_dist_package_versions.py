@@ -30,7 +30,9 @@ SUPPORTED_DEBIAN_RELEASES = {
 SUPPORTED_UBUNTU_RELEASES = {
     'Ubuntu 14.04 (Trusty)': 'trusty',
     'Ubuntu 16.04 (Xenial)': 'xenial',
-    'Ubuntu 17.10 (Artful)': 'artful',
+    'Ubuntu 18.04 (Bionic)': 'bionic',
+    'Ubuntu 19.04 (Disco)': 'disco',
+    'Ubuntu 19.10 (Eoan)': 'eoan',
 }
 
 PACKAGE_FILTER = set([
