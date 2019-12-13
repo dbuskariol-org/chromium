@@ -6138,3 +6138,6 @@ crbug.com/1004203 http/tests/devtools/startup/sources/debugger/linkifier.js [ Pa
 crbug.com/1004203 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-1.js [ Pass Failure ]
 crbug.com/1004203 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-4.js [ Pass Failure ]
 crbug.com/1004203 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-inline-with-sourceURL.js [ Pass Failure ]
+
+# Sheriff 2019-12-13
+crbug.com/1032451 [ Win7 ] virtual/webrtc-wpt-plan-b/external/wpt/webrtc/idlharness.https.window.html [ Failure ]
