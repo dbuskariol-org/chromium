@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.modaldialog;
+package org.chromium.components.browser_ui.modaldialog;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import org.chromium.base.Callback;
 import org.chromium.base.Log;
-import org.chromium.chrome.R;
 import org.chromium.components.browser_ui.widget.BoundedLinearLayout;
 import org.chromium.components.browser_ui.widget.FadingEdgeScrollView;
 import org.chromium.ui.UiUtils;

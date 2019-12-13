@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.modaldialog;
+package org.chromium.components.browser_ui.modaldialog;
 
+import android.app.Activity;
 import android.content.res.Resources;
 
 import androidx.annotation.Nullable;
 
 import org.junit.Assert;
 
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ChromeActivity;
+import org.chromium.components.browser_ui.modaldialog.test.R;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
 import org.chromium.ui.modaldialog.ModalDialogManager;
@@ -40,8 +40,8 @@ public class ModalDialogTestUtils {
     /**
      * @return A {@link PropertyModel} of a modal dialog that is used for testing.
      */
-    public static PropertyModel createDialog(
-            ChromeActivity activity, String title, @Nullable TestDialogDismissedObserver observer) {
+    public static PropertyModel createDialog(Activity activity, ModalDialogManager manager,
+            String title, @Nullable TestDialogDismissedObserver observer) {
         return TestThreadUtils.runOnUiThreadBlockingNoException(() -> {
             ModalDialogProperties.Controller controller = new ModalDialogProperties.Controller() {
                 @Override
@@ -55,8 +55,7 @@ public class ModalDialogTestUtils {
                     switch (buttonType) {
                         case ModalDialogProperties.ButtonType.POSITIVE:
                         case ModalDialogProperties.ButtonType.NEGATIVE:
-                            activity.getModalDialogManager().dismissDialog(
-                                    model, DialogDismissalCause.UNKNOWN);
+                            manager.dismissDialog(model, DialogDismissalCause.UNKNOWN);
                             break;
                         default:
                             Assert.fail("Unknown button type: " + buttonType);

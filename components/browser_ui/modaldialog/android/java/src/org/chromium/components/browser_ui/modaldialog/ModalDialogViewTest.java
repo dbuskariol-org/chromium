@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.modaldialog;
+package org.chromium.components.browser_ui.modaldialog;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -33,9 +33,9 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.base.test.util.Feature;
-import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
-import org.chromium.chrome.test.R;
+import org.chromium.components.browser_ui.modaldialog.test.R;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
 import org.chromium.ui.modaldialog.ModalDialogProperties;
 import org.chromium.ui.modelutil.PropertyModel;
@@ -44,7 +44,7 @@ import org.chromium.ui.test.util.DummyUiActivityTestCase;
 /**
  * Tests for {@link ModalDialogView}.
  */
-@RunWith(ChromeJUnit4ClassRunner.class)
+@RunWith(BaseJUnit4ClassRunner.class)
 public class ModalDialogViewTest extends DummyUiActivityTestCase {
     private Resources mResources;
     private PropertyModel.Builder mModelBuilder;
