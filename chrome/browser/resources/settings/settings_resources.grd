@@ -541,6 +541,12 @@
                    type="chrome_html" />
       </if>
       <if expr="chromeos">
+        <structure name="IDR_SETTINGS_LOCALIZED_STRING_WITH_LINK_JS"
+                   file="chromeos/localized_string_with_link/localized_string_with_link.js"
+                   type="chrome_html" />
+        <structure name="IDR_SETTINGS_LOCALIZED_STRING_WITH_LINK_HTML"
+                   file="chromeos/localized_string_with_link/localized_string_with_link.html"
+                   type="chrome_html" />
         <structure name="IDR_SETTINGS_DEVICE_BROWSER_PROXY_HTML"
                    file="device_page/device_page_browser_proxy.html"
                    type="chrome_html" />
