@@ -409,14 +409,6 @@ _NOT_CONVERTED_TO_MODERN_BIND_AND_CALLBACK = '|'.join((
   '^remoting/test/',
   '^services/',
   '^third_party/blink/',
-  '^third_party/crashpad/crashpad/test/gtest_main.cc',
-  '^third_party/leveldatabase/leveldb_chrome.cc',
-  '^third_party/boringssl/gtest_main_chromium.cc',
-  '^third_party/cacheinvalidation/overrides/' +
-     'google/cacheinvalidation/deps/callback.h',
-  '^third_party/libaddressinput/chromium/chrome_address_validator.cc',
-  '^third_party/zlib/google/',
-  '^tools/android/',
   '^tools/clang/base_bind_rewriters/',  # Intentional.
   '^tools/gdb/gdb_chrome.py',  # Intentional.
   '^ui/accelerated_widget_mac/',
