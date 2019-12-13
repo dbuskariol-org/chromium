@@ -11,6 +11,7 @@
 #include "base/i18n/message_formatter.h"
 #include "base/i18n/number_formatting.h"
 #include "base/logging.h"
+#include "base/metrics/histogram_macros.h"
 #include "base/scoped_observer.h"
 #include "chrome/app/chrome_command_ids.h"
 #include "chrome/app/vector_icons/vector_icons.h"
@@ -395,6 +396,9 @@ void WebUITabStripContainerView::ButtonPressed(views::Button* sender,
     }
   } else if (sender->GetID() == VIEW_ID_WEBUI_TAB_STRIP_NEW_TAB_BUTTON) {
     chrome::ExecuteCommand(browser_, IDC_NEW_TAB);
+    UMA_HISTOGRAM_ENUMERATION(
+        "Tab.NewTab", TabStripModel::NEW_TAB_BUTTON_IN_TOOLBAR_FOR_TOUCH,
+        TabStripModel::NEW_TAB_ENUM_COUNT);
 
     if (iph_tracker_->ShouldTriggerHelpUI(
             feature_engagement::kIPHWebUITabStripFeature)) {
