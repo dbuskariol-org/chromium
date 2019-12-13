@@ -37,6 +37,7 @@
 #include "third_party/blink/renderer/platform/scheduler/main_thread/main_thread.h"
 #include "third_party/blink/renderer/platform/scheduler/main_thread/page_scheduler_impl.h"
 #include "third_party/blink/renderer/platform/scheduler/main_thread/task_type_names.h"
+#include "third_party/blink/renderer/platform/scheduler/main_thread/widget_scheduler.h"
 #include "third_party/blink/renderer/platform/scheduler/public/event_loop.h"
 #include "v8/include/v8.h"
 
@@ -206,19 +207,8 @@ MainThreadSchedulerImpl::MainThreadSchedulerImpl(
           helper_.NewTaskQueue(MainThreadTaskQueue::QueueCreationParams(
                                    MainThreadTaskQueue::QueueType::kCompositor)
                                    .SetShouldMonitorQuiescence(true))),
-      input_task_queue_(helper_.NewTaskQueue(
-          MainThreadTaskQueue::QueueCreationParams(
-              MainThreadTaskQueue::QueueType::kInput)
-              .SetShouldMonitorQuiescence(true)
-              .SetFixedPriority(
-                  scheduling_settings_.high_priority_input
-                      ? base::make_optional(
-                            TaskQueue::QueuePriority::kHighestPriority)
-                      : base::nullopt))),
       compositor_task_queue_enabled_voter_(
           compositor_task_queue_->CreateQueueEnabledVoter()),
-      input_task_queue_enabled_voter_(
-          input_task_queue_->CreateQueueEnabledVoter()),
       memory_purge_task_queue_(helper_.NewTaskQueue(
           MainThreadTaskQueue::QueueCreationParams(
               MainThreadTaskQueue::QueueType::kIdle)
@@ -246,8 +236,6 @@ MainThreadSchedulerImpl::MainThreadSchedulerImpl(
   task_runners_.emplace(helper_.DefaultMainThreadTaskQueue(), nullptr);
   task_runners_.emplace(compositor_task_queue_,
                         compositor_task_queue_->CreateQueueEnabledVoter());
-  task_runners_.emplace(input_task_queue_,
-                        input_task_queue_->CreateQueueEnabledVoter());
 
   v8_task_queue_ = NewTaskQueue(MainThreadTaskQueue::QueueCreationParams(
       MainThreadTaskQueue::QueueType::kV8));
@@ -262,8 +250,6 @@ MainThreadSchedulerImpl::MainThreadSchedulerImpl(
       TaskType::kMainThreadTaskQueueCompositor);
   control_task_runner_ = helper_.ControlMainThreadTaskQueue()->CreateTaskRunner(
       TaskType::kMainThreadTaskQueueControl);
-  input_task_runner_ =
-      input_task_queue_->CreateTaskRunner(TaskType::kMainThreadTaskQueueInput);
   ipc_task_runner_ =
       ipc_task_queue_->CreateTaskRunner(TaskType::kMainThreadTaskQueueIPC);
   cleanup_task_runner_ = cleanup_task_queue_->CreateTaskRunner(
@@ -662,6 +648,11 @@ std::unique_ptr<Thread> MainThreadSchedulerImpl::CreateMainThread() {
   return std::make_unique<MainThread>(this);
 }
 
+std::unique_ptr<WebWidgetScheduler>
+MainThreadSchedulerImpl::CreateWidgetScheduler() {
+  return std::make_unique<WidgetScheduler>(this);
+}
+
 scoped_refptr<base::SingleThreadTaskRunner>
 MainThreadSchedulerImpl::ControlTaskRunner() {
   return control_task_runner_;
@@ -674,8 +665,7 @@ MainThreadSchedulerImpl::DefaultTaskRunner() {
 
 scoped_refptr<base::SingleThreadTaskRunner>
 MainThreadSchedulerImpl::InputTaskRunner() {
-  helper_.CheckOnValidThread();
-  return input_task_runner_;
+  return nullptr;
 }
 
 scoped_refptr<SingleThreadIdleTaskRunner>
@@ -707,11 +697,6 @@ scoped_refptr<MainThreadTaskQueue>
 MainThreadSchedulerImpl::CompositorTaskQueue() {
   helper_.CheckOnValidThread();
   return compositor_task_queue_;
-}
-
-scoped_refptr<MainThreadTaskQueue> MainThreadSchedulerImpl::InputTaskQueue() {
-  helper_.CheckOnValidThread();
-  return input_task_queue_;
 }
 
 scoped_refptr<MainThreadTaskQueue> MainThreadSchedulerImpl::V8TaskQueue() {

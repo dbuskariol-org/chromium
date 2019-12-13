@@ -36,6 +36,7 @@ namespace blink {
 namespace scheduler {
 
 enum class WebRendererProcessType;
+class WebWidgetScheduler;
 
 class BLINK_PLATFORM_EXPORT WebThreadScheduler {
  public:
@@ -94,6 +95,10 @@ class BLINK_PLATFORM_EXPORT WebThreadScheduler {
 
   // Creates a WebThread implementation for the renderer main thread.
   virtual std::unique_ptr<Thread> CreateMainThread();
+
+  // Creates a WebWidgetScheduler implementation. Must be called from the main
+  // thread.
+  virtual std::unique_ptr<WebWidgetScheduler> CreateWidgetScheduler();
 
   // Returns a new WebRenderWidgetSchedulingState.  The signals from this will
   // be used to make scheduling decisions.

@@ -170,6 +170,7 @@ class PLATFORM_EXPORT MainThreadSchedulerImpl
 
   // WebThreadScheduler implementation:
   std::unique_ptr<Thread> CreateMainThread() override;
+  std::unique_ptr<WebWidgetScheduler> CreateWidgetScheduler() override;
   // Note: this is also shared by the ThreadScheduler interface.
   scoped_refptr<base::SingleThreadTaskRunner> IPCTaskRunner() override;
   scoped_refptr<base::SingleThreadTaskRunner> CleanupTaskRunner() override;
@@ -432,7 +433,6 @@ class PLATFORM_EXPORT MainThreadSchedulerImpl
   scoped_refptr<MainThreadTaskQueue> ControlTaskQueue();
   scoped_refptr<MainThreadTaskQueue> DefaultTaskQueue();
   scoped_refptr<MainThreadTaskQueue> CompositorTaskQueue();
-  scoped_refptr<MainThreadTaskQueue> InputTaskQueue();
   scoped_refptr<MainThreadTaskQueue> V8TaskQueue();
   // A control task queue which also respects virtual time. Only available if
   // virtual time has been enabled.
@@ -801,12 +801,9 @@ class PLATFORM_EXPORT MainThreadSchedulerImpl
 
   const scoped_refptr<MainThreadTaskQueue> control_task_queue_;
   const scoped_refptr<MainThreadTaskQueue> compositor_task_queue_;
-  const scoped_refptr<MainThreadTaskQueue> input_task_queue_;
   scoped_refptr<MainThreadTaskQueue> virtual_time_control_task_queue_;
   std::unique_ptr<base::sequence_manager::TaskQueue::QueueEnabledVoter>
       compositor_task_queue_enabled_voter_;
-  std::unique_ptr<base::sequence_manager::TaskQueue::QueueEnabledVoter>
-      input_task_queue_enabled_voter_;
 
   using TaskQueueVoterMap = std::map<
       scoped_refptr<MainThreadTaskQueue>,
@@ -822,7 +819,6 @@ class PLATFORM_EXPORT MainThreadSchedulerImpl
   scoped_refptr<base::SingleThreadTaskRunner> v8_task_runner_;
   scoped_refptr<base::SingleThreadTaskRunner> compositor_task_runner_;
   scoped_refptr<base::SingleThreadTaskRunner> control_task_runner_;
-  scoped_refptr<base::SingleThreadTaskRunner> input_task_runner_;
   scoped_refptr<base::SingleThreadTaskRunner> ipc_task_runner_;
   scoped_refptr<base::SingleThreadTaskRunner> cleanup_task_runner_;
 
