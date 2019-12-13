@@ -3832,8 +3832,6 @@ test("unit_tests") {
       "../browser/media_galleries/win/mtp_device_delegate_impl_win_unittest.cc",
       "../browser/media_galleries/win/mtp_device_object_enumerator_unittest.cc",
       "../browser/memory/enterprise_memory_limit_evaluator_unittest.cc",
-      "../browser/memory/memory_pressure_monitor_utils_unittest.cc",
-      "../browser/memory/memory_pressure_monitor_win_unittest.cc",
       "../browser/memory/swap_thrashing_monitor_delegate_win_unittest.cc",
       "../browser/metrics/desktop_session_duration/desktop_session_duration_tracker_unittest.cc",
       "../browser/metrics/tab_stats_data_store_unittest.cc",
@@ -5053,7 +5051,6 @@ test("unit_tests") {
     sources += [
       "../browser/notifications/win/notification_image_retainer_unittest.cc",
       "../browser/notifications/win/notification_template_builder_unittest.cc",
-      "../browser/performance_monitor/wmi_refresher_unittest.cc",
       "../browser/ui/input_method/input_method_engine_unittest.cc",
     ]
     deps += [
