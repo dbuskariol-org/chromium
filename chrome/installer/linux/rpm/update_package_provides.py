@@ -35,8 +35,10 @@ PACKAGE_FILTER = [
     "libcairo.so",
     "libcups.so",
     "libdbus-1.so",
+    "libdrm.so.2",
     "libdl.so",
     "libexpat.so",
+    "libgbm.so.1",
     "libgcc_s.so",
     "libgdk-3.so",
     "libgdk_pixbuf-2.0.so",
@@ -57,6 +59,7 @@ PACKAGE_FILTER = [
     "libstdc++.so",
     "libuuid.so",
     "libxcb.so",
+    "libxcb-dri3.so.0",
     "rtld(GNU_HASH)",
 ]
 
