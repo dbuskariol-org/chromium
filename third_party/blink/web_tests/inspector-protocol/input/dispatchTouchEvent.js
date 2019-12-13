@@ -157,13 +157,6 @@
     }]
   });
   await dispatchEvent({
-    type: 'touchEnd',
-    touchPoints: [{
-      x: 100,
-      y: 100
-    }]
-  });
-  await dispatchEvent({
     type: 'touchCancel',
     touchPoints: [{
       x: 100,
@@ -277,6 +270,44 @@
   });
   await dispatchEvent({
     type: 'touchCancel',
+    touchPoints: []
+  });
+
+  testRunner.log('\n------- Sequence ------');
+  await dispatchEvent({
+    type: 'touchStart',
+    touchPoints: [{
+      x: 100,
+      y: 100,
+      id: 1
+    }]
+  });
+  await dispatchEvent({
+    type: 'touchStart',
+    touchPoints: [{
+      x: 150,
+      y: 100,
+      id: 2
+    }]
+  });
+  await dispatchEvent({
+    type: 'touchMove',
+    touchPoints: [{
+      x: 100,
+      y: 150,
+      id: 1
+    }]
+  });
+  await dispatchEvent({
+    type: 'touchEnd',
+    touchPoints: [{
+      x: 150,
+      y: 100,
+      id: 2
+    }]
+  });
+  await dispatchEvent({
+    type: 'touchEnd',
     touchPoints: []
   });
 
