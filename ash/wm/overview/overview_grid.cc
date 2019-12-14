@@ -197,6 +197,7 @@ std::unique_ptr<views::Widget> CreateDropTargetWidget(
   auto widget = std::make_unique<views::Widget>();
   widget->set_focus_on_creation(false);
   widget->Init(std::move(params));
+  widget->SetVisibilityAnimationTransition(views::Widget::ANIMATE_NONE);
   // |OverviewGrid::PositionWindows| will set the bounds of the drop target,
   // overwriting the size that we set here. However, the drop target bounds
   // computation will use the aspect ratio from the size that we set here.
