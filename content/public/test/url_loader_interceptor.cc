@@ -458,9 +458,6 @@ URLLoaderInterceptor::URLLoaderInterceptor(
   DCHECK(!BrowserThread::IsThreadInitialized(BrowserThread::UI) ||
          BrowserThread::CurrentlyOn(BrowserThread::UI));
   use_runloop_ = !ready_callback;
-  RenderFrameHostImpl::SetNetworkFactoryForTesting(base::BindRepeating(
-      &URLLoaderInterceptor::CreateURLLoaderFactoryForRenderProcessHost,
-      base::Unretained(this)));
   RenderProcessHostImpl::SetNetworkFactoryForTesting(base::BindRepeating(
       &URLLoaderInterceptor::CreateURLLoaderFactoryForRenderProcessHost,
       base::Unretained(this)));
@@ -511,8 +508,6 @@ URLLoaderInterceptor::~URLLoaderInterceptor() {
   DCHECK(BrowserThread::CurrentlyOn(BrowserThread::UI));
   io_thread_->UnsetParent();
 
-  RenderFrameHostImpl::SetNetworkFactoryForTesting(
-      RenderFrameHostImpl::CreateNetworkFactoryCallback());
   RenderProcessHostImpl::SetNetworkFactoryForTesting(
       RenderProcessHostImpl::CreateNetworkFactoryCallback());
 

@@ -253,13 +253,6 @@ typedef std::unordered_map<GlobalFrameRoutingId,
 base::LazyInstance<RoutingIDFrameMap>::DestructorAtExit g_routing_id_frame_map =
     LAZY_INSTANCE_INITIALIZER;
 
-RenderFrameHostImpl::CreateNetworkFactoryCallback&
-GetCreateNetworkFactoryCallbackForRenderFrame() {
-  static base::NoDestructor<RenderFrameHostImpl::CreateNetworkFactoryCallback>
-      s_callback;
-  return *s_callback;
-}
-
 using TokenFrameMap = std::unordered_map<base::UnguessableToken,
                                          RenderFrameHostImpl*,
                                          base::UnguessableTokenHash>;
@@ -849,19 +842,6 @@ RenderFrameHostImpl* RenderFrameHostImpl::FromOverlayRoutingToken(
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   auto it = g_token_frame_map.Get().find(token);
   return it == g_token_frame_map.Get().end() ? nullptr : it->second;
-}
-
-// static
-void RenderFrameHostImpl::SetNetworkFactoryForTesting(
-    const CreateNetworkFactoryCallback& create_network_factory_callback) {
-  DCHECK(!BrowserThread::IsThreadInitialized(BrowserThread::UI) ||
-         BrowserThread::CurrentlyOn(BrowserThread::UI));
-  DCHECK(create_network_factory_callback.is_null() ||
-         GetCreateNetworkFactoryCallbackForRenderFrame().is_null())
-      << "It is not expected that this is called with non-null callback when "
-      << "another overriding callback is already set.";
-  GetCreateNetworkFactoryCallbackForRenderFrame() =
-      create_network_factory_callback;
 }
 
 // static
@@ -5324,18 +5304,6 @@ void RenderFrameHostImpl::CommitNavigation(
 
       subresource_loader_factories->pending_appcache_factory() =
           appcache_remote.Unbind();
-
-      // Inject test intermediary if needed.
-      if (!GetCreateNetworkFactoryCallbackForRenderFrame().is_null()) {
-        mojo::PendingRemote<network::mojom::URLLoaderFactory> original_factory =
-            std::move(subresource_loader_factories->pending_appcache_factory());
-        mojo::PendingReceiver<network::mojom::URLLoaderFactory> new_receiver =
-            subresource_loader_factories->pending_appcache_factory()
-                .InitWithNewPipeAndPassReceiver();
-        GetCreateNetworkFactoryCallbackForRenderFrame().Run(
-            std::move(new_receiver), GetProcess()->GetID(),
-            std::move(original_factory));
-      }
     }
 
     non_network_url_loader_factories_.clear();
