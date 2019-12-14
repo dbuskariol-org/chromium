@@ -2227,6 +2227,12 @@ const char kUsernameFirstFlowDescription[] =
     "flows where a user has to type username first on one page and then "
     "password on another page";
 
+const char kUsePreferredIntervalForVideoName[] =
+    "Use preferred interval for video";
+const char kUsePreferredIntervalForVideoDescription[] =
+    "When enabled, the composition rate will be changed based on the videos' "
+    "actual fps.";
+
 const char kUseSearchClickForRightClickName[] =
     "Use Search+Click for right click";
 const char kUseSearchClickForRightClickDescription[] =

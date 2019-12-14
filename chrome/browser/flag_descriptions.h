@@ -1307,6 +1307,9 @@ extern const char kUnsafeWebGPUDescription[];
 extern const char kUiPartialSwapName[];
 extern const char kUiPartialSwapDescription[];
 
+extern const char kUsePreferredIntervalForVideoName[];
+extern const char kUsePreferredIntervalForVideoDescription[];
+
 extern const char kUseSearchClickForRightClickName[];
 extern const char kUseSearchClickForRightClickDescription[];
 

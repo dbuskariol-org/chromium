@@ -3628,6 +3628,11 @@
     "expiry_milestone": 76
   },
   {
+    "name": "use-preferred-interval-for-video",
+    "owners": [ "jiahe.zhang@intel.com", "khushalsagar" ],
+    "expiry_milestone": 82
+  },
+  {
     "name": "use-search-click-for-right-click",
     "owners": [ "khorimoto", "zentaro" ],
     "expiry_milestone": 85

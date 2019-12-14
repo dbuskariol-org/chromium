@@ -3290,6 +3290,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kSimplifyHttpsIndicatorDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(omnibox::kSimplifyHttpsIndicator)},
 
+    {"use-preferred-interval-for-video",
+     flag_descriptions::kUsePreferredIntervalForVideoName,
+     flag_descriptions::kUsePreferredIntervalForVideoDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(features::kUsePreferredIntervalForVideo)},
+
 #if defined(OS_WIN)
     {"enable-gpu-appcontainer", flag_descriptions::kEnableGpuAppcontainerName,
      flag_descriptions::kEnableGpuAppcontainerDescription, kOsWin,
