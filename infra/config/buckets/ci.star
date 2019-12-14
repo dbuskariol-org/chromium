@@ -1350,6 +1350,7 @@ fyi_windows_builder(
 
 fyi_windows_builder(
     name = 'win-annotator-rel',
+    builderless = True,
     execution_timeout = 16 * time.hour,
 )
 
@@ -2076,6 +2077,7 @@ memory_builder(
     cores = 32,
     goma_backend = None,
     goma_enable_ats = False,
+    builderless = True,
     os = os.WINDOWS_DEFAULT,
 )
 
@@ -2201,6 +2203,7 @@ win_builder(
 win_builder(
     name = 'Win x64 Builder (dbg)',
     cores = 32,
+    builderless = True,
     os = os.WINDOWS_ANY,
 )
 

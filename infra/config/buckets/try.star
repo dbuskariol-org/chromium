@@ -1223,7 +1223,7 @@ linux_builder(
 
 linux_builder(
     name = 'linux_upload_clang',
-    builderless = False,
+    builderless = True,
     cores = 32,
     executable = luci.recipe(name = 'chromium_upload_clang'),
     goma_backend = None,
