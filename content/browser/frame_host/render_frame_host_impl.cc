@@ -1506,9 +1506,7 @@ RenderFrameHostImpl::CreateURLLoaderFactoriesForIsolatedWorlds(
   for (const url::Origin& isolated_world_origin : isolated_world_origins) {
     network::mojom::URLLoaderFactoryParamsPtr factory_params =
         URLLoaderFactoryParamsHelper::CreateForIsolatedWorld(
-            GetProcess(), isolated_world_origin, main_world_origin,
-            GetTopFrameToken(), network_isolation_key_,
-            cross_origin_embedder_policy_, preferences);
+            this, isolated_world_origin, main_world_origin);
 
     mojo::PendingRemote<network::mojom::URLLoaderFactory> factory_remote;
     CreateNetworkServiceDefaultFactoryAndObserve(
@@ -4330,10 +4328,7 @@ RenderFrameHostImpl::CreateCrossOriginPrefetchLoaderFactoryBundle() {
       network::features::kPrefetchMainResourceNetworkIsolationKey));
 
   network::mojom::URLLoaderFactoryParamsPtr factory_params =
-      URLLoaderFactoryParamsHelper::CreateForPrefetch(
-          GetProcess(), last_committed_origin_, GetTopFrameToken(),
-          cross_origin_embedder_policy_,
-          GetRenderViewHost()->GetWebkitPreferences());
+      URLLoaderFactoryParamsHelper::CreateForPrefetch(this);
 
   mojo::PendingRemote<network::mojom::URLLoaderFactory> pending_default_factory;
   bool bypass_redirect_checks = false;
@@ -6133,10 +6128,8 @@ void RenderFrameHostImpl::NavigationRequestCancelled(
 network::mojom::URLLoaderFactoryParamsPtr
 RenderFrameHostImpl::CreateURLLoaderFactoryParamsForMainWorld(
     const url::Origin& main_world_origin) {
-  return URLLoaderFactoryParamsHelper::Create(
-      GetProcess(), main_world_origin, GetTopFrameToken(),
-      network_isolation_key_, cross_origin_embedder_policy_,
-      GetRenderViewHost()->GetWebkitPreferences());
+  return URLLoaderFactoryParamsHelper::CreateForFrame(this, main_world_origin,
+                                                      GetProcess());
 }
 
 bool RenderFrameHostImpl::CreateNetworkServiceDefaultFactoryAndObserve(
