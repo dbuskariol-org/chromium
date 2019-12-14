@@ -395,6 +395,9 @@ void LocalFrameView::Dispose() {
   ukm_aggregator_.reset();
   layout_shift_tracker_->Dispose();
 
+  if (frame_->IsLocalRoot())
+    MemoryPressureListenerRegistry::Instance().UnregisterClient(this);
+
 #if DCHECK_IS_ON()
   has_been_disposed_ = true;
 #endif
