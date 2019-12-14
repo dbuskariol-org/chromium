@@ -954,6 +954,131 @@ TEST_F(RenderTextTest, AppendTextKeepsStyles) {
       test_api()->font_size_overrides().EqualsForTesting(expected_font_size));
 }
 
+TEST_F(RenderTextTest, SelectRangeColored) {
+  RenderText* render_text = GetRenderText();
+  render_text->SetText(ASCIIToUTF16("abcdef"));
+  render_text->SetColor(SK_ColorBLACK);
+  render_text->set_selection_color(SK_ColorRED);
+
+  std::vector<TestSkiaTextRenderer::TextLog> text_log;
+
+  render_text->SelectRange(Range(0, 1));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(2u, text_log.size());
+  EXPECT_EQ(1u, text_log[0].glyph_count);
+  EXPECT_EQ(5u, text_log[1].glyph_count);
+  EXPECT_EQ(SK_ColorRED, text_log[0].color);
+  EXPECT_EQ(SK_ColorBLACK, text_log[1].color);
+
+  render_text->SelectRange(Range(1, 3));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(3u, text_log.size());
+  EXPECT_EQ(1u, text_log[0].glyph_count);
+  EXPECT_EQ(2u, text_log[1].glyph_count);
+  EXPECT_EQ(3u, text_log[2].glyph_count);
+  EXPECT_EQ(SK_ColorBLACK, text_log[0].color);
+  EXPECT_EQ(SK_ColorRED, text_log[1].color);
+  EXPECT_EQ(SK_ColorBLACK, text_log[2].color);
+
+  render_text->ClearSelection();
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(1u, text_log.size());
+  EXPECT_EQ(6u, text_log[0].glyph_count);
+  EXPECT_EQ(SK_ColorBLACK, text_log[0].color);
+}
+
+TEST_F(RenderTextTest, SelectRangeColoredGrapheme) {
+  RenderText* render_text = GetRenderText();
+  render_text->SetText(WideToUTF16(L"x\u0065\u0301y"));
+  render_text->SetColor(SK_ColorBLACK);
+  render_text->set_selection_color(SK_ColorRED);
+
+  std::vector<TestSkiaTextRenderer::TextLog> text_log;
+
+  render_text->SelectRange(Range(0, 1));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(2u, text_log.size());
+  EXPECT_EQ(1u, text_log[0].glyph_count);
+  EXPECT_EQ(2u, text_log[1].glyph_count);
+  EXPECT_EQ(SK_ColorRED, text_log[0].color);
+  EXPECT_EQ(SK_ColorBLACK, text_log[1].color);
+
+  render_text->SelectRange(Range(2, 3));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(1u, text_log.size());
+  EXPECT_EQ(3u, text_log[0].glyph_count);
+  EXPECT_EQ(SK_ColorBLACK, text_log[0].color);
+
+  render_text->SelectRange(Range(2, 4));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(2u, text_log.size());
+  EXPECT_EQ(2u, text_log[0].glyph_count);
+  EXPECT_EQ(1u, text_log[1].glyph_count);
+  EXPECT_EQ(SK_ColorBLACK, text_log[0].color);
+  EXPECT_EQ(SK_ColorRED, text_log[1].color);
+}
+
+TEST_F(RenderTextTest, SetCompositionRangeColored) {
+  RenderText* render_text = GetRenderText();
+  render_text->SetText(ASCIIToUTF16("abcdef"));
+
+  std::vector<TestSkiaTextRenderer::TextLog> text_log;
+
+  render_text->SetCompositionRange(Range(0, 1));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(2u, text_log.size());
+  EXPECT_EQ(1u, text_log[0].glyph_count);
+  EXPECT_EQ(5u, text_log[1].glyph_count);
+
+  render_text->SetCompositionRange(Range(1, 3));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(3u, text_log.size());
+  EXPECT_EQ(1u, text_log[0].glyph_count);
+  EXPECT_EQ(2u, text_log[1].glyph_count);
+  EXPECT_EQ(3u, text_log[2].glyph_count);
+
+  render_text->SetCompositionRange(Range::InvalidRange());
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(1u, text_log.size());
+  EXPECT_EQ(6u, text_log[0].glyph_count);
+}
+
+TEST_F(RenderTextTest, SetCompositionRangeColoredGrapheme) {
+  RenderText* render_text = GetRenderText();
+  render_text->SetText(WideToUTF16(L"x\u0065\u0301y"));
+
+  std::vector<TestSkiaTextRenderer::TextLog> text_log;
+
+  render_text->SetCompositionRange(Range(0, 1));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(2u, text_log.size());
+  EXPECT_EQ(1u, text_log[0].glyph_count);
+  EXPECT_EQ(2u, text_log[1].glyph_count);
+
+  render_text->SetCompositionRange(Range(2, 3));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(1u, text_log.size());
+  EXPECT_EQ(3u, text_log[0].glyph_count);
+
+  render_text->SetCompositionRange(Range(2, 4));
+  DrawVisualText();
+  renderer()->GetTextLogAndReset(&text_log);
+  ASSERT_EQ(2u, text_log.size());
+  EXPECT_EQ(2u, text_log[0].glyph_count);
+  EXPECT_EQ(1u, text_log[1].glyph_count);
+}
+
 void TestVisualCursorMotionInObscuredField(
     RenderText* render_text,
     const base::string16& text,
