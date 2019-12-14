@@ -6190,22 +6190,8 @@ bool RenderFrameHostImpl::CreateNetworkServiceDefaultFactoryInternal(
       this, false /* is_navigation */, false /* is_download */,
       &default_factory_receiver);
 
-  mojo::Remote<network::mojom::URLLoaderFactory> original_factory;
-
-  bool factory_callback_is_null =
-      GetCreateNetworkFactoryCallbackForRenderFrame().is_null();
-  mojo::PendingReceiver<network::mojom::URLLoaderFactory> factory_receiver =
-      factory_callback_is_null ? std::move(default_factory_receiver)
-                               : original_factory.BindNewPipeAndPassReceiver();
-
-  GetProcess()->CreateURLLoaderFactory(std::move(factory_receiver),
+  GetProcess()->CreateURLLoaderFactory(std::move(default_factory_receiver),
                                        std::move(params));
-
-  if (!factory_callback_is_null) {
-    GetCreateNetworkFactoryCallbackForRenderFrame().Run(
-        std::move(default_factory_receiver), GetProcess()->GetID(),
-        original_factory.Unbind());
-  }
 
   return bypass_redirect_checks;
 }
