@@ -58,7 +58,7 @@ int ViewModelUtils::DetermineMoveIndex(const ViewModelBase& model,
   // For indices after the current index ignore the bounds of the view being
   // dragged. This keeps the view from bouncing around as moved.
   const int delta = primary_axis_coordinate(
-      is_horizontal, (*std::next(iter)).ideal_bounds.origin() -
+      is_horizontal, std::next(iter)->ideal_bounds.origin() -
                          iter->ideal_bounds.origin().OffsetFromOrigin());
 
   for (++iter; iter != entries.end(); ++iter) {
