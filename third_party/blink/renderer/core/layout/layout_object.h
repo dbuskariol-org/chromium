@@ -669,8 +669,6 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
   bool IsListBox() const { return IsOfType(kLayoutObjectListBox); }
   bool IsListItem() const { return IsOfType(kLayoutObjectListItem); }
   bool IsListMarker() const { return IsOfType(kLayoutObjectListMarker); }
-  bool IsMathML() const { return IsOfType(kLayoutObjectMathML); }
-  bool IsMathMLRoot() const { return IsOfType(kLayoutObjectMathMLRoot); }
   bool IsMedia() const { return IsOfType(kLayoutObjectMedia); }
   bool IsMenuList() const { return IsOfType(kLayoutObjectMenuList); }
   bool IsProgress() const { return IsOfType(kLayoutObjectProgress); }
@@ -2493,8 +2491,6 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
     kLayoutObjectListBox,
     kLayoutObjectListItem,
     kLayoutObjectListMarker,
-    kLayoutObjectMathML,
-    kLayoutObjectMathMLRoot,
     kLayoutObjectMedia,
     kLayoutObjectMenuList,
     kLayoutObjectNGBlockFlow,

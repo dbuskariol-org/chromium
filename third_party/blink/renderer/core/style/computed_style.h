@@ -2117,10 +2117,8 @@ class ComputedStyle : public ComputedStyleBase,
 
   bool IsDisplayTableType() const { return IsDisplayTableType(Display()); }
 
-  bool IsDisplayMathType() const { return IsDisplayMathBox(Display()); }
-
   bool BlockifiesChildren() const {
-    return IsDisplayFlexibleOrGridBox() || IsDisplayMathType() ||
+    return IsDisplayFlexibleOrGridBox() || IsDisplayMathBox(Display()) ||
            IsDisplayLayoutCustomBox() ||
            (Display() == EDisplay::kContents && IsInBlockifyingDisplay());
   }

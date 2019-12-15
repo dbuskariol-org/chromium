@@ -962,7 +962,7 @@
     },
     {
       name: "MathMLCore",
-      status:"experimental",
+      status:"test",
       depends_on: ["LayoutNG"],
     },
     {
