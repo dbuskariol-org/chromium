@@ -132,8 +132,6 @@ static_library("test_support") {
     "base/search_test_utils.h",
     "base/test_launcher_utils.cc",
     "base/test_launcher_utils.h",
-    "base/test_service_manager_listener.cc",
-    "base/test_service_manager_listener.h",
     "base/test_switches.cc",
     "base/test_switches.h",
     "base/testing_browser_process.cc",
