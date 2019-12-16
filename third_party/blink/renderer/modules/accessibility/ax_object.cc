@@ -1519,6 +1519,7 @@ bool AXObject::IsSubWidget() const {
 bool AXObject::SupportsARIASetSizeAndPosInSet() const {
   switch (RoleValue()) {
     case ax::mojom::Role::kArticle:
+    case ax::mojom::Role::kComment:
     case ax::mojom::Role::kListBoxOption:
     case ax::mojom::Role::kListItem:
     case ax::mojom::Role::kMenuItem:
