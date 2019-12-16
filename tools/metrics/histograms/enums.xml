@@ -52935,6 +52935,18 @@ Called by update_net_trust_anchors.py.-->
   <int value="21" label="QUIC_CHROMIUM_CLIENT_SESSION_CLOSE_SESSION_ON_ERROR"/>
 </enum>
 
+<enum name="QuickAnswersLoadStatus">
+  <int value="0" label="kNetworkError"/>
+  <int value="1" label="kNoResult"/>
+  <int value="2" label="kSuccess"/>
+</enum>
+
+<enum name="QuickAnswersResultType">
+  <int value="5493" label="kDefinitionResult"/>
+  <int value="6613" label="kTranslationResult"/>
+  <int value="13668" label="kUnitConversionResult"/>
+</enum>
+
 <enum name="QuickofficeErrorTypes">
   <int value="0" label="doc uncaught js exception"/>
   <int value="1" label="docx uncaught js exception"/>
