@@ -41,9 +41,7 @@
 #include "chrome/common/conflicts/module_event_sink_win.mojom.h"
 #endif
 
-#if defined(OS_ANDROID)
-#include "chrome/browser/ui/webui/explore_sites_internals/explore_sites_internals.mojom.h"
-#else
+#if !defined(OS_ANDROID)
 #include "chrome/browser/ui/webui/app_management/app_management.mojom.h"
 #endif
 
@@ -118,9 +116,7 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 downloads::mojom::PageHandlerFactory,
                 feed_internals::mojom::PageHandler,
                 new_tab_page::mojom::PageHandlerFactory,
-#if defined(OS_ANDROID)
-                explore_sites_internals::mojom::PageHandler,
-#else
+#if !defined(OS_ANDROID)
                 app_management::mojom::PageHandlerFactory,
 #endif
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \

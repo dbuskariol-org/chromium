@@ -57,6 +57,8 @@
 #include "chrome/browser/android/contextualsearch/contextual_search_observer.h"
 #include "chrome/browser/android/dom_distiller/distiller_ui_handle_android.h"
 #include "chrome/browser/offline_pages/android/offline_page_auto_fetcher.h"
+#include "chrome/browser/ui/webui/explore_sites_internals/explore_sites_internals.mojom.h"
+#include "chrome/browser/ui/webui/explore_sites_internals/explore_sites_internals_ui.h"
 #include "chrome/common/offline_page_auto_fetcher.mojom.h"
 #include "components/contextual_search/content/browser/contextual_search_js_api_service_impl.h"
 #include "components/contextual_search/content/common/mojom/contextual_search_js_api_service.mojom.h"
@@ -317,6 +319,9 @@ void PopulateChromeFrameBinders(
   map->Add<blink::mojom::ShareService>(base::BindRepeating(
       &ForwardToJavaWebContents<blink::mojom::ShareService>));
 
+  map->Add<contextual_search::mojom::ContextualSearchJsApiService>(
+      base::BindRepeating(&BindContextualSearchObserver));
+
 #if BUILDFLAG(ENABLE_UNHANDLED_TAP)
   map->Add<blink::mojom::UnhandledTapNotifier>(
       base::BindRepeating(&BindUnhandledTapWebContentsObserver));
@@ -333,11 +338,6 @@ void PopulateChromeFrameBinders(
     map->Add<payments::mojom::PaymentRequest>(
         base::BindRepeating(&payments::CreatePaymentRequest));
   }
-#endif
-
-#if defined(OS_ANDROID)
-  map->Add<contextual_search::mojom::ContextualSearchJsApiService>(
-      base::BindRepeating(&BindContextualSearchObserver));
 #endif
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
@@ -364,6 +364,12 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<
       MediaEngagementUI, media::mojom::MediaEngagementScoreDetailsProvider>(
       map);
+
+#if defined(OS_ANDROID)
+  RegisterWebUIControllerInterfaceBinder<
+      explore_sites::ExploreSitesInternalsUI,
+      explore_sites_internals::mojom::PageHandler>(map);
+#endif
 }
 
 }  // namespace internal
