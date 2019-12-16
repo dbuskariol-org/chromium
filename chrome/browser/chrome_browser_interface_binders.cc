@@ -12,6 +12,7 @@
 #include "chrome/browser/accessibility/accessibility_labels_service_factory.h"
 #include "chrome/browser/bad_message.h"
 #include "chrome/browser/dom_distiller/dom_distiller_service_factory.h"
+#include "chrome/browser/engagement/site_engagement_details.mojom.h"
 #include "chrome/browser/language/translate_frame_binder.h"
 #include "chrome/browser/media/media_engagement_score_details.mojom.h"
 #include "chrome/browser/navigation_predictor/navigation_predictor.h"
@@ -21,6 +22,7 @@
 #include "chrome/browser/ssl/insecure_sensitive_input_driver_factory.h"
 #include "chrome/browser/ui/webui/bluetooth_internals/bluetooth_internals.mojom.h"
 #include "chrome/browser/ui/webui/bluetooth_internals/bluetooth_internals_ui.h"
+#include "chrome/browser/ui/webui/engagement/site_engagement_ui.h"
 #include "chrome/browser/ui/webui/interventions_internals/interventions_internals.mojom.h"
 #include "chrome/browser/ui/webui/interventions_internals/interventions_internals_ui.h"
 #include "chrome/browser/ui/webui/media/media_engagement_ui.h"
@@ -377,6 +379,9 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<
       MediaEngagementUI, media::mojom::MediaEngagementScoreDetailsProvider>(
       map);
+
+  RegisterWebUIControllerInterfaceBinder<
+      SiteEngagementUI, ::mojom::SiteEngagementDetailsProvider>(map);
 
 #if defined(OS_ANDROID)
   RegisterWebUIControllerInterfaceBinder<

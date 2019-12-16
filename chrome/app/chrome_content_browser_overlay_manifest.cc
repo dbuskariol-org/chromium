@@ -7,7 +7,6 @@
 #include "base/command_line.h"
 #include "base/no_destructor.h"
 #include "build/build_config.h"
-#include "chrome/browser/engagement/site_engagement_details.mojom.h"
 #include "chrome/browser/media/media_engagement_score_details.mojom.h"
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
 #include "chrome/browser/ui/webui/feed_internals/feed_internals.mojom.h"
@@ -114,7 +113,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 app_management::mojom::PageHandlerFactory,
 #endif
                 mojom::OmniboxPageHandler, mojom::ResetPasswordHandler,
-                mojom::SiteEngagementDetailsProvider,
                 mojom::UsbInternalsPageHandler,
                 snippets_internals::mojom::PageHandlerFactory>())
         .Build()
