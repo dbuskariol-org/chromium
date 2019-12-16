@@ -1216,6 +1216,11 @@ const char kIgnoreLitePageRedirectHintsBlacklistDescription[] =
     "Ignore blacklist decisions made by Optimization Hints for Lite Page "
     "Redirect previews";
 
+const char kImprovedCookieControlsForThirdPartyCookieBlockingName[] =
+    "Enable improved UI for third-party cookie blocking";
+const char kImprovedCookieControlsForThirdPartyCookieBlockingDescription[] =
+    "Enables an improved UI for existing third-party cookie blocking users.";
+
 const char kImpulseScrollAnimationsName[] = "Impulse-style scroll animations";
 const char kImpulseScrollAnimationsDescription[] =
     "Replaces the default scroll animation with Impulse-style scroll "
@@ -2933,11 +2938,6 @@ const char kImprovedCookieControlsName[] =
     "Enable improved cookie controls UI in incognito mode";
 const char kImprovedCookieControlsDescription[] =
     "Improved UI in Incognito mode for third-party cookie blocking.";
-
-const char kImprovedCookieControlsForThirdPartyCookieBlockingName[] =
-    "Enable improved UI for third-party cookie blocking";
-const char kImprovedCookieControlsForThirdPartyCookieBlockingDescription[] =
-    "Enables an improved UI for existing third-party cookie blocking users.";
 
 const char kEnableReaderModeName[] = "Enable Reader Mode";
 const char kEnableReaderModeDescription[] =
