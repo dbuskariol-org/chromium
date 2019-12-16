@@ -1292,6 +1292,12 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
   // all the unique RenderWidgetHostViews.
   std::set<RenderWidgetHostView*> GetRenderWidgetHostViewsInTree();
 
+  // Traverses all the WebContents in the WebContentsTree and creates a set of
+  // all the unique RenderWidgetHostViews.
+  std::set<RenderWidgetHostView*> GetRenderWidgetHostViewsInWebContentsTree();
+  void GetRenderWidgetHostViewsInWebContentsTree(
+      std::set<RenderWidgetHostView*>& result);
+
   // Called with the result of a DownloadImage() request.
   void OnDidDownloadImage(ImageDownloadCallback callback,
                           int id,
@@ -1384,9 +1390,15 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
   // These functions are helpers in managing a hierarchy of WebContents
   // involved in rendering inner WebContents.
 
-  // Registers FrameSinkIds for all WebContents in the subtree of
-  // WebContentsTree, rooted at |contents|.
+  // The following functions register and unregister FrameSinkIds for all
+  // WebContents in the subtree of WebContentsTree rooted at |contents|. They
+  // are used when attaching/detaching an inner web contents. Frame sink ids are
+  // initially registered when a view is created, and they are registered with
+  // the outermost WebContents, which changes when attaching/detaching a
+  // WebContents so we need to unregister and reregister these ids for all
+  // persisting views in the WebContents.
   void RecursivelyRegisterFrameSinkIds();
+  void RecursivelyUnregisterFrameSinkIds();
 
   // When multiple WebContents are present within a tab or window, a single one
   // is focused and will route keyboard events in most cases to a RenderWidget
