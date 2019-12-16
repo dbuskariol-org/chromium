@@ -177,6 +177,9 @@ struct URLResponseHead {
   // will be removed in the future.
   bool is_legacy_tls_version = false;
 
+  // https://fetch.spec.whatwg.org/#concept-response-timing-allow-passed
+  bool timing_allow_passed = false;
+
   // If the request received an authentication challenge, the challenge info is
   // recorded here.
   AuthChallengeInfo? auth_challenge_info;
