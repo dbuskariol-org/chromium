@@ -3091,8 +3091,9 @@ IN_PROC_BROWSER_TEST_F(GeolocationBackForwardCacheBrowserTest,
 // Test that a page which has an inflight geolocation query can be bfcached,
 // and verify that the page does not observe any geolocation while the page
 // was inside bfcache.
+// The test is flaky on multiple platforms: crbug.com/1033270
 IN_PROC_BROWSER_TEST_F(GeolocationBackForwardCacheBrowserTest,
-                       CancelGeolocationRequestInFlight) {
+                       DISABLED_CancelGeolocationRequestInFlight) {
   ASSERT_TRUE(embedded_test_server()->Start());
   GURL url_a(embedded_test_server()->GetURL("/title1.html"));
   GURL url_b(embedded_test_server()->GetURL("b.com", "/title1.html"));
