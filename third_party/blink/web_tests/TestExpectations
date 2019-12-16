@@ -733,6 +733,7 @@ crbug.com/591099 paint/invalidation/scroll/fixed-under-composited-fixed-scrolled
 crbug.com/591099 virtual/mouseevent_fractional/fast/events/touch/compositor-touch-hit-rects-continuation.html [ Failure ]
 crbug.com/591099 virtual/mouseevent_fractional/fast/events/touch/compositor-touch-hit-rects-list-translate.html [ Failure ]
 crbug.com/591099 virtual/mouseevent_fractional/fast/events/touch/compositor-touch-hit-rects.html [ Failure ]
+crbug.com/591099 external/wpt/paint-timing/sibling-painting-first-image.html [ Failure ]
 crbug.com/591099 virtual/paint-timing/external/wpt/paint-timing/sibling-painting-first-image.html [ Failure ]
 crbug.com/591099 virtual/scalefactor200/css3/filters/composited-layer-child-bounds-after-composited-to-sw-shadow-change.html [ Failure ]
 
@@ -4711,9 +4712,6 @@ crbug.com/799619 [ Debug ] http/tests/devtools/profiler/heap-snapshot-inspect-do
 crbug.com/769347 [ Mac ] fast/dom/inert/inert-node-is-uneditable.html [ Failure ]
 
 crbug.com/769056 virtual/text-antialias/emoji-web-font.html [ Failure ]
-
-# Paint-timing tests timeout without threaded-compositing, so skip them.
-crbug.com/720047 external/wpt/paint-timing [ Skip ]
 
 ### See crbug.com/891427 comment near the top of this file:
 ###crbug.com/849979 media/video-layer-crash.html [ Pass Timeout ]
