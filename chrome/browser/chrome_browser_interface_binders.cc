@@ -21,6 +21,8 @@
 #include "chrome/browser/ssl/insecure_sensitive_input_driver_factory.h"
 #include "chrome/browser/ui/webui/bluetooth_internals/bluetooth_internals.mojom.h"
 #include "chrome/browser/ui/webui/bluetooth_internals/bluetooth_internals_ui.h"
+#include "chrome/browser/ui/webui/interventions_internals/interventions_internals.mojom.h"
+#include "chrome/browser/ui/webui/interventions_internals/interventions_internals_ui.h"
 #include "chrome/browser/ui/webui/media/media_engagement_ui.h"
 #include "chrome/common/prerender.mojom.h"
 #include "components/dom_distiller/content/browser/distillability_driver.h"
@@ -353,6 +355,10 @@ void PopulateChromeWebUIFrameBinders(
     service_manager::BinderMapWithContext<content::RenderFrameHost*>* map) {
   RegisterWebUIControllerInterfaceBinder<BluetoothInternalsUI,
                                          ::mojom::BluetoothInternalsHandler>(
+      map);
+
+  RegisterWebUIControllerInterfaceBinder<
+      InterventionsInternalsUI, ::mojom::InterventionsInternalsPageHandler>(
       map);
 
   RegisterWebUIControllerInterfaceBinder<

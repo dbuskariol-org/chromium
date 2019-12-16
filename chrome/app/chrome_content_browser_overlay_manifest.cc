@@ -10,7 +10,6 @@
 #include "chrome/browser/engagement/site_engagement_details.mojom.h"
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
 #include "chrome/browser/ui/webui/feed_internals/feed_internals.mojom.h"
-#include "chrome/browser/ui/webui/interventions_internals/interventions_internals.mojom.h"
 #include "chrome/browser/ui/webui/new_tab_page/new_tab_page.mojom.h"
 #include "chrome/browser/ui/webui/omnibox/omnibox.mojom.h"
 #include "chrome/browser/ui/webui/reset_password/reset_password.mojom.h"
@@ -131,7 +130,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
 #if defined(OS_CHROMEOS)
                 add_supervision::mojom::AddSupervisionHandler,
 #endif
-                mojom::InterventionsInternalsPageHandler,
                 mojom::OmniboxPageHandler, mojom::ResetPasswordHandler,
                 mojom::SiteEngagementDetailsProvider,
                 mojom::UsbInternalsPageHandler,
