@@ -9,7 +9,7 @@ namespace features {
 // Enables an animated avatar button (also called identity pill). See
 // https://crbug.com/967317
 const base::Feature kAnimatedAvatarButton{"AnimatedAvatarButton",
-                                          base::FEATURE_DISABLED_BY_DEFAULT};
+                                          base::FEATURE_ENABLED_BY_DEFAULT};
 // Enables an animated avatar button on the sign-in trigger. This feature is
 // guarded by kAnimatedAvatarButton and serves as a kill-switch. See
 // https://crbug.com/967317
