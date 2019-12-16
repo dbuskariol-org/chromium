@@ -45,11 +45,6 @@
 #include "chrome/browser/ui/webui/app_management/app_management.mojom.h"
 #endif
 
-#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
-    defined(OS_CHROMEOS)
-#include "chrome/browser/ui/webui/discards/discards.mojom.h"
-#endif
-
 const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
   static base::NoDestructor<service_manager::Manifest> manifest {
     service_manager::ManifestBuilder()
@@ -117,10 +112,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 new_tab_page::mojom::PageHandlerFactory,
 #if !defined(OS_ANDROID)
                 app_management::mojom::PageHandlerFactory,
-#endif
-#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
-    defined(OS_CHROMEOS)
-                discards::mojom::DetailsProvider, discards::mojom::GraphDump,
 #endif
                 mojom::OmniboxPageHandler, mojom::ResetPasswordHandler,
                 mojom::SiteEngagementDetailsProvider,
