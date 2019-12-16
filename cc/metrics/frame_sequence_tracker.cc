@@ -92,6 +92,32 @@ std::string GetFrameSequenceLengthHistogramName(FrameSequenceTrackerType type) {
                            static_cast<int>(type))});
 }
 
+bool ShouldReportForAnimation(FrameSequenceTrackerType sequence_type,
+                              FrameSequenceMetrics::ThreadType thread_type) {
+  if (sequence_type == FrameSequenceTrackerType::kCompositorAnimation)
+    return thread_type == FrameSequenceMetrics::ThreadType::kCompositor;
+
+  if (sequence_type == FrameSequenceTrackerType::kMainThreadAnimation ||
+      sequence_type == FrameSequenceTrackerType::kRAF)
+    return thread_type == FrameSequenceMetrics::ThreadType::kMain;
+
+  return false;
+}
+
+bool ShouldReportForInteraction(FrameSequenceTrackerType sequence_type,
+                                FrameSequenceMetrics::ThreadType thread_type) {
+  // For touch/wheel scroll, the slower thread is the one we want to report. For
+  // pinch-zoom, it's the compositor-thread.
+  if (sequence_type == FrameSequenceTrackerType::kTouchScroll ||
+      sequence_type == FrameSequenceTrackerType::kWheelScroll)
+    return thread_type == FrameSequenceMetrics::ThreadType::kSlower;
+
+  if (sequence_type == FrameSequenceTrackerType::kPinchZoom)
+    return thread_type == FrameSequenceMetrics::ThreadType::kCompositor;
+
+  return false;
+}
+
 }  // namespace
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -723,6 +749,27 @@ base::Optional<int> FrameSequenceMetrics::ThroughputData::ReportHistogram(
 
   const int percent =
       static_cast<int>(100 * data.frames_produced / data.frames_expected);
+
+  const bool is_animation =
+      ShouldReportForAnimation(sequence_type, thread_type);
+  const bool is_interaction =
+      ShouldReportForInteraction(sequence_type, thread_type);
+
+  if (is_animation) {
+    UMA_HISTOGRAM_PERCENTAGE("Graphics.Smoothness.Throughput.AllAnimations",
+                             percent);
+  }
+
+  if (is_interaction) {
+    UMA_HISTOGRAM_PERCENTAGE("Graphics.Smoothness.Throughput.AllInteractions",
+                             percent);
+  }
+
+  if (is_animation || is_interaction) {
+    UMA_HISTOGRAM_PERCENTAGE("Graphics.Smoothness.Throughput.AllSequences",
+                             percent);
+  }
+
   const char* thread_name =
       thread_type == ThreadType::kCompositor
           ? "CompositorThread"
