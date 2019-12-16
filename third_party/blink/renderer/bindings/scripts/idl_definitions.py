@@ -842,8 +842,7 @@ def ext_attributes_node_to_extended_attributes(node):
     # overloading, and thus are stored in temporary lists.
     # However, Named Constructors cannot be overloaded, and thus do not have
     # a list.
-    # FIXME: move Constructor logic into separate function, instead of modifying
-    #        extended attributes in-place.
+    # TODO(bashi): Remove |constructors| and |custom_constructors|.
     constructors = []
     custom_constructors = []
     extended_attributes = {}
@@ -862,9 +861,8 @@ def ext_attributes_node_to_extended_attributes(node):
         child = child_node(extended_attribute_node)
         child_class = child and child.GetClass()
         if name == 'Constructor':
-            if child_class and child_class != 'Arguments':
-                raise ValueError('Constructor only supports Arguments as child, but has child of class: %s' % child_class)
-            constructors.append(child)
+            raise ValueError('[Constructor] is deprecated. Use constructor '
+                             'operations')
         elif name == 'CustomConstructor':
             if child_class and child_class != 'Arguments':
                 raise ValueError('[CustomConstructor] only supports Arguments as child, but has child of class: %s' % child_class)
@@ -909,6 +907,8 @@ def extended_attributes_to_constructors(extended_attributes):
 
     Auxiliary function for IdlInterface.__init__.
     """
+
+    # TODO(bashi): Remove 'Constructors' and 'CustomConstructors'.
 
     constructor_list = extended_attributes.get('Constructors', [])
     constructors = [
