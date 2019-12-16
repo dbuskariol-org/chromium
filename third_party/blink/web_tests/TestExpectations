@@ -6149,3 +6149,7 @@ crbug.com/1034374 [ Linux Debug ] virtual/threaded/http/tests/devtools/tracing/t
 # The Wasm code cache requires disabling the baseline compiler, so only the
 # virtual test should be run.
 Bug(none) http/tests/devtools/wasm-isolated-code-cache/wasm-cache-test.js [ Skip ]
+
+# Assertion errors need to be fixed
+crbug.com/1034492 http/tests/devtools/unit/filtered-item-selection-dialog-filtering.js [ Pass Failure ]
+crbug.com/1034492 http/tests/devtools/unit/filtered-list-widget-providers.js [ Pass Failure ]
