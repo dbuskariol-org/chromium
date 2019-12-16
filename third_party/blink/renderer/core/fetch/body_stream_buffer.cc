@@ -99,24 +99,51 @@ class BodyStreamBuffer::LoaderClient final
   DISALLOW_COPY_AND_ASSIGN(LoaderClient);
 };
 
-BodyStreamBuffer::BodyStreamBuffer(ScriptState* script_state,
+// Use a Create() method to split construction from initialisation.
+// Initialisation may result in nested calls to ContextDestroyed() and so is not
+// safe to do during construction.
+
+// static
+BodyStreamBuffer* BodyStreamBuffer::Create(ScriptState* script_state,
+                                           BytesConsumer* consumer,
+                                           AbortSignal* signal) {
+  auto* buffer = MakeGarbageCollected<BodyStreamBuffer>(PassKey(), script_state,
+                                                        consumer, signal);
+  buffer->Init();
+  return buffer;
+}
+
+BodyStreamBuffer::BodyStreamBuffer(PassKey,
+                                   ScriptState* script_state,
                                    BytesConsumer* consumer,
                                    AbortSignal* signal)
     : UnderlyingSourceBase(script_state),
       script_state_(script_state),
       consumer_(consumer),
       signal_(signal),
-      made_from_readable_stream_(false) {
+      made_from_readable_stream_(false) {}
+
+void BodyStreamBuffer::Init() {
+  DCHECK(consumer_);
+
   stream_ =
       ReadableStream::CreateWithCountQueueingStrategy(script_state_, this, 0);
   stream_broken_ = !stream_;
 
+  // ContextDestroyed() can be called inside the ReadableStream constructor when
+  // a worker thread is being terminated. See https://crbug.com/1007162 for
+  // details. If consumer_ is null, assume that this happened and this object
+  // will never actually be used, and so it is fine to skip the rest of
+  // initialisation.
+  if (!consumer_)
+    return;
+
   consumer_->SetClient(this);
-  if (signal) {
-    if (signal->aborted()) {
+  if (signal_) {
+    if (signal_->aborted()) {
       Abort();
     } else {
-      signal->AddAlgorithm(
+      signal_->AddAlgorithm(
           WTF::Bind(&BodyStreamBuffer::Abort, WrapWeakPersistent(this)));
     }
   }
@@ -244,10 +271,8 @@ void BodyStreamBuffer::Tee(BodyStreamBuffer** branch1,
   }
   BytesConsumerTee(ExecutionContext::From(script_state_), handle, &dest1,
                    &dest2);
-  *branch1 =
-      MakeGarbageCollected<BodyStreamBuffer>(script_state_, dest1, signal_);
-  *branch2 =
-      MakeGarbageCollected<BodyStreamBuffer>(script_state_, dest2, signal_);
+  *branch1 = BodyStreamBuffer::Create(script_state_, dest1, signal_);
+  *branch2 = BodyStreamBuffer::Create(script_state_, dest2, signal_);
 }
 
 ScriptPromise BodyStreamBuffer::pull(ScriptState* script_state) {
