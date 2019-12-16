@@ -8,6 +8,7 @@
 #include "base/no_destructor.h"
 #include "build/build_config.h"
 #include "chrome/browser/engagement/site_engagement_details.mojom.h"
+#include "chrome/browser/media/media_engagement_score_details.mojom.h"
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
 #include "chrome/browser/ui/webui/feed_internals/feed_internals.mojom.h"
 #include "chrome/browser/ui/webui/new_tab_page/new_tab_page.mojom.h"
@@ -113,7 +114,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 // WebUI-only interfaces go below this line. These should be
                 // brokered through a dedicated interface, but they're here
                 // for for now.
-                downloads::mojom::PageHandlerFactory,
                 feed_internals::mojom::PageHandler,
                 new_tab_page::mojom::PageHandlerFactory,
 #if !defined(OS_ANDROID)

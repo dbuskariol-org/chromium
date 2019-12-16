@@ -72,6 +72,8 @@
 #else
 #include "chrome/browser/badging/badge_manager.h"
 #include "chrome/browser/payments/payment_request_factory.h"
+#include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
+#include "chrome/browser/ui/webui/downloads/downloads_ui.h"
 #endif
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
@@ -369,6 +371,10 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<
       explore_sites::ExploreSitesInternalsUI,
       explore_sites_internals::mojom::PageHandler>(map);
+#else
+  RegisterWebUIControllerInterfaceBinder<DownloadsUI,
+                                         downloads::mojom::PageHandlerFactory>(
+      map);
 #endif
 }
 
