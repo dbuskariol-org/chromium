@@ -89,6 +89,11 @@
 #include "chrome/browser/ui/webui/discards/discards_ui.h"
 #endif
 
+#if defined(OS_CHROMEOS)
+#include "chrome/browser/ui/webui/chromeos/machine_learning/machine_learning_internals_page_handler.mojom.h"
+#include "chrome/browser/ui/webui/chromeos/machine_learning/machine_learning_internals_ui.h"
+#endif
+
 #if BUILDFLAG(ENABLE_EXTENSIONS)
 #include "extensions/browser/api/mime_handler_private/mime_handler_private.h"
 #include "extensions/browser/guest_view/mime_handler_view/mime_handler_view_guest.h"
@@ -397,6 +402,10 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<
       chromeos::AddSupervisionUI,
       add_supervision::mojom::AddSupervisionHandler>(map);
+
+  RegisterWebUIControllerInterfaceBinder<
+      chromeos::machine_learning::MachineLearningInternalsUI,
+      chromeos::machine_learning::mojom::PageHandler>(map);
 #endif  // defined(OS_CHROMEOS)
 
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \

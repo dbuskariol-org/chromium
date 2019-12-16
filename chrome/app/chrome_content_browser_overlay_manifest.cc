@@ -28,7 +28,6 @@
 #if defined(OS_CHROMEOS)
 #include "chrome/browser/ui/webui/chromeos/crostini_installer/crostini_installer.mojom.h"
 #include "chrome/browser/ui/webui/chromeos/crostini_upgrader/crostini_upgrader.mojom.h"
-#include "chrome/browser/ui/webui/chromeos/machine_learning/machine_learning_internals_page_handler.mojom.h"
 #include "chromeos/services/cellular_setup/public/mojom/cellular_setup.mojom.h"
 #include "chromeos/services/media_perception/public/mojom/media_perception.mojom.h"
 #include "chromeos/services/multidevice_setup/public/mojom/multidevice_setup.mojom.h"
@@ -99,7 +98,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 chromeos::cellular_setup::mojom::CellularSetup,
                 chromeos::crostini_installer::mojom::PageHandlerFactory,
                 chromeos::crostini_upgrader::mojom::PageHandlerFactory,
-                chromeos::machine_learning::mojom::PageHandler,
                 chromeos::multidevice_setup::mojom::MultiDeviceSetup,
                 chromeos::multidevice_setup::mojom::PrivilegedHostDeviceSetter,
                 chromeos::network_config::mojom::CrosNetworkConfig,
