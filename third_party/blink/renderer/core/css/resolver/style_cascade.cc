@@ -121,6 +121,10 @@ void StyleCascade::Apply() {
 void StyleCascade::Apply(Animator& animator) {
   Resolver resolver(animator);
 
+  // Affects the computed value of 'color', hence needs to happen before
+  // high-priority properties.
+  Apply(GetCSSPropertyColorScheme(), resolver);
+
   // TODO(crbug.com/985031): Set bits ::Add-time to know if we need to do this.
   ApplyHighPriority(resolver);
 
