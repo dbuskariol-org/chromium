@@ -6150,3 +6150,4 @@ crbug.com/1033387 [ Mac ] http/tests/portals/crbug-1031677.html [ Pass Timeout ]
 
 # Sheriff 2019-12-16
 crbug.com/1034374 [ Linux Debug ] http/tests/devtools/tracing/timeline-worker-events.js [ Pass Failure ]
+crbug.com/1034374 [ Linux Debug ] virtual/threaded/http/tests/devtools/tracing/timeline-worker-events.js [ Pass Failure ]
