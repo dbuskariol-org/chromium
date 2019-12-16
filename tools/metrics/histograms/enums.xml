@@ -16727,6 +16727,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="24" label="P-384"/>
   <int value="25" label="P-521"/>
   <int value="29" label="X25519"/>
+  <int value="16696" label="CECPQ2"/>
 </enum>
 
 <enum name="EdidColorSpaceChecksOutcome">
