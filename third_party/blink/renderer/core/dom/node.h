@@ -81,8 +81,9 @@ class WebPluginContainerImpl;
 struct PhysicalRect;
 
 const int kDOMNodeTypeShift = 1;
-const int kNodeStyleChangeShift = 18;
-const int kNodeCustomElementShift = 20;
+const int kElementNamespaceTypeShift = 4;
+const int kNodeStyleChangeShift = 17;
+const int kNodeCustomElementShift = 19;
 
 // Values for kChildNeedsStyleRecalcFlag, controlling whether a node gets its
 // style recalculated.
@@ -283,9 +284,15 @@ class CORE_EXPORT Node : public EventTarget {
     return GetDOMNodeType() == DOMNodeType::kDocumentFragment;
   }
 
-  bool IsHTMLElement() const { return GetFlag(kIsHTMLFlag); }
-  bool IsMathMLElement() const { return GetFlag(kIsMathMLFlag); }
-  bool IsSVGElement() const { return GetFlag(kIsSVGFlag); }
+  bool IsHTMLElement() const {
+    return GetElementNamespaceType() == ElementNamespaceType::kHTML;
+  }
+  bool IsMathMLElement() const {
+    return GetElementNamespaceType() == ElementNamespaceType::kMathML;
+  }
+  bool IsSVGElement() const {
+    return GetElementNamespaceType() == ElementNamespaceType::kSVG;
+  }
 
   DISABLE_CFI_PERF bool IsPseudoElement() const {
     return GetPseudoId() != kPseudoIdNone;
@@ -917,52 +924,50 @@ class CORE_EXPORT Node : public EventTarget {
 
     // Node type flags. These never change once created.
     kDOMNodeTypeMask = 0x7 << kDOMNodeTypeShift,
-    kIsHTMLFlag = 1 << 4,
-    kIsMathMLFlag = 1 << 5,
-    kIsSVGFlag = 1 << 6,
-    kIsV0InsertionPointFlag = 1 << 7,
+    kElementNamespaceTypeMask = 0x3 << kElementNamespaceTypeShift,
+    kIsV0InsertionPointFlag = 1 << 6,
 
     // Changes based on if the element should be treated like a link,
     // ex. When setting the href attribute on an <a>.
-    kIsLinkFlag = 1 << 8,
+    kIsLinkFlag = 1 << 7,
 
     // Changes based on :hover, :active and :focus state.
-    kIsUserActionElementFlag = 1 << 9,
+    kIsUserActionElementFlag = 1 << 8,
 
     // Tree state flags. These change when the element is added/removed
     // from a DOM tree.
-    kIsConnectedFlag = 1 << 10,
-    kIsInShadowTreeFlag = 1 << 11,
+    kIsConnectedFlag = 1 << 9,
+    kIsInShadowTreeFlag = 1 << 10,
 
     // Set by the parser when the children are done parsing.
-    kIsFinishedParsingChildrenFlag = 1 << 12,
+    kIsFinishedParsingChildrenFlag = 1 << 11,
 
     // Flags related to recalcStyle.
-    kHasCustomStyleCallbacksFlag = 1 << 13,
-    kChildNeedsStyleInvalidationFlag = 1 << 14,
-    kNeedsStyleInvalidationFlag = 1 << 15,
-    kChildNeedsDistributionRecalcFlag = 1 << 16,
-    kChildNeedsStyleRecalcFlag = 1 << 17,
+    kHasCustomStyleCallbacksFlag = 1 << 12,
+    kChildNeedsStyleInvalidationFlag = 1 << 13,
+    kNeedsStyleInvalidationFlag = 1 << 14,
+    kChildNeedsDistributionRecalcFlag = 1 << 15,
+    kChildNeedsStyleRecalcFlag = 1 << 16,
     kStyleChangeMask = 0x3 << kNodeStyleChangeShift,
 
     kCustomElementStateMask = 0x3 << kNodeCustomElementShift,
 
-    kHasNameOrIsEditingTextFlag = 1 << 22,
-    kHasEventTargetDataFlag = 1 << 23,
+    kHasNameOrIsEditingTextFlag = 1 << 21,
+    kHasEventTargetDataFlag = 1 << 22,
 
-    kV0CustomElementFlag = 1 << 24,
-    kV0CustomElementUpgradedFlag = 1 << 25,
+    kV0CustomElementFlag = 1 << 23,
+    kV0CustomElementUpgradedFlag = 1 << 24,
 
-    kNeedsReattachLayoutTree = 1 << 26,
-    kChildNeedsReattachLayoutTree = 1 << 27,
+    kNeedsReattachLayoutTree = 1 << 25,
+    kChildNeedsReattachLayoutTree = 1 << 26,
 
-    kHasDuplicateAttributes = 1 << 28,
+    kHasDuplicateAttributes = 1 << 27,
 
-    kForceReattachLayoutTree = 1 << 29,
+    kForceReattachLayoutTree = 1 << 28,
 
     kDefaultNodeFlags = kIsFinishedParsingChildrenFlag,
 
-    // 3 bits remaining.
+    // 4 bits remaining.
   };
 
   bool GetFlag(NodeFlags mask) const { return node_flags_ & mask; }
@@ -983,6 +988,17 @@ class CORE_EXPORT Node : public EventTarget {
     return static_cast<DOMNodeType>(node_flags_ & kDOMNodeTypeMask);
   }
 
+  enum class ElementNamespaceType {
+    kOther = 0,
+    kHTML = 1 << kElementNamespaceTypeShift,
+    kMathML = 2 << kElementNamespaceTypeShift,
+    kSVG = 3 << kElementNamespaceTypeShift,
+  };
+  ElementNamespaceType GetElementNamespaceType() const {
+    return static_cast<ElementNamespaceType>(node_flags_ &
+                                             kElementNamespaceTypeMask);
+  }
+
  protected:
   enum ConstructionType {
     kCreateOther =
@@ -997,9 +1013,12 @@ class CORE_EXPORT Node : public EventTarget {
         kDefaultNodeFlags |
         static_cast<NodeFlags>(DOMNodeType::kDocumentFragment),
     kCreateShadowRoot = kCreateDocumentFragment | kIsInShadowTreeFlag,
-    kCreateHTMLElement = kCreateElement | kIsHTMLFlag,
-    kCreateMathMLElement = kCreateElement | kIsMathMLFlag,
-    kCreateSVGElement = kCreateElement | kIsSVGFlag,
+    kCreateHTMLElement =
+        kCreateElement | static_cast<NodeFlags>(ElementNamespaceType::kHTML),
+    kCreateMathMLElement =
+        kCreateElement | static_cast<NodeFlags>(ElementNamespaceType::kMathML),
+    kCreateSVGElement =
+        kCreateElement | static_cast<NodeFlags>(ElementNamespaceType::kSVG),
     kCreateDocument = kCreateContainer | kIsConnectedFlag,
     kCreateV0InsertionPoint = kCreateHTMLElement | kIsV0InsertionPointFlag,
     kCreateEditingText = kCreateText | kHasNameOrIsEditingTextFlag,
