@@ -10,6 +10,7 @@
 #include "build/build_config.h"
 #include "chrome/browser/accessibility/accessibility_labels_service.h"
 #include "chrome/browser/accessibility/accessibility_labels_service_factory.h"
+#include "chrome/browser/bad_message.h"
 #include "chrome/browser/dom_distiller/dom_distiller_service_factory.h"
 #include "chrome/browser/language/translate_frame_binder.h"
 #include "chrome/browser/navigation_predictor/navigation_predictor.h"
@@ -17,6 +18,8 @@
 #include "chrome/browser/prerender/prerender_contents.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ssl/insecure_sensitive_input_driver_factory.h"
+#include "chrome/browser/ui/webui/bluetooth_internals/bluetooth_internals.mojom.h"
+#include "chrome/browser/ui/webui/bluetooth_internals/bluetooth_internals_ui.h"
 #include "chrome/common/prerender.mojom.h"
 #include "components/dom_distiller/content/browser/distillability_driver.h"
 #include "components/dom_distiller/content/browser/distiller_javascript_service_impl.h"
@@ -29,7 +32,9 @@
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
+#include "content/public/browser/web_ui_controller.h"
 #include "content/public/common/content_features.h"
+#include "content/public/common/url_constants.h"
 #include "extensions/buildflags/buildflags.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "services/image_annotation/public/mojom/image_annotation.mojom.h"
@@ -71,6 +76,43 @@
 
 namespace chrome {
 namespace internal {
+
+namespace {
+
+// Registers a binder in |map| that binds |Interface| iff the RenderFrameHost
+// has a WebUIController of type |WebUIControllerSubclass|.
+// TODO(calamity): Allow binding of N WebUIControllers to M Interfaces.
+template <typename WebUIControllerSubclass, typename Interface>
+void RegisterWebUIControllerInterfaceBinder(
+    service_manager::BinderMapWithContext<content::RenderFrameHost*>* map) {
+  map->Add<Interface>(
+      base::BindRepeating([](content::RenderFrameHost* host,
+                             mojo::PendingReceiver<Interface> receiver) {
+        auto* contents = content::WebContents::FromRenderFrameHost(host);
+        content::WebUI* web_ui = contents->GetWebUI();
+
+        // Performs a safe downcast to the concrete WebUIController subclass.
+        WebUIControllerSubclass* concrete_controller =
+            web_ui ? web_ui->GetController()->GetAs<WebUIControllerSubclass>()
+                   : nullptr;
+
+        // This is expected to be called only for main frames and for the right
+        // WebUI pages matching the same WebUI associated to the
+        // RenderFrameHost.
+        if (host->GetParent() || !concrete_controller) {
+          ReceivedBadMessage(
+              host->GetProcess(),
+              bad_message::BadMessageReason::RFH_INVALID_WEB_UI_CONTROLLER);
+          return;
+        }
+
+        // Fails to compile if |WebUIControllerSubclass| does not implement the
+        // appropriate overload for |Interface|.
+        concrete_controller->BindInterface(std::move(receiver));
+      }));
+}
+
+}  // namespace
 
 #if BUILDFLAG(ENABLE_UNHANDLED_TAP)
 void BindUnhandledTapWebContentsObserver(
@@ -303,6 +345,13 @@ void PopulateChromeFrameBinders(
 
   map->Add<network_hints::mojom::NetworkHintsHandler>(
       base::BindRepeating(&BindNetworkHintsHandler));
+}
+
+void PopulateChromeWebUIFrameBinders(
+    service_manager::BinderMapWithContext<content::RenderFrameHost*>* map) {
+  RegisterWebUIControllerInterfaceBinder<BluetoothInternalsUI,
+                                         ::mojom::BluetoothInternalsHandler>(
+      map);
 }
 
 }  // namespace internal
