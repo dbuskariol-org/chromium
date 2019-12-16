@@ -16110,6 +16110,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="14" label="SENSITIVE_CONTENT_BLOCK"/>
   <int value="15" label="DEEP_SCANNED_SAFE"/>
   <int value="16" label="DEEP_SCANNED_OPENED_DANGEROUS"/>
+  <int value="17" label="PROMPT_FOR_SCANNING"/>
 </enum>
 
 <enum name="DownloadLocationDialogResult">
@@ -55674,7 +55675,6 @@ Called by update_net_trust_anchors.py.-->
   <int value="31" label="SENSITIVE_CONTENT_WARNING"/>
   <int value="32" label="SENSITIVE_CONTENT_BLOCK"/>
   <int value="33" label="DEEP_SCANNED_SAFE"/>
-  <int value="34" label="DEEP_SCANNED_OPENED_DANGEROUS"/>
 </enum>
 
 <enum name="SBClientDownloadCheckResult">
