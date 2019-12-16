@@ -408,11 +408,12 @@ Browser* CreateApplicationWindow(Profile* profile,
   return new Browser(browser_params);
 }
 
-WebContents* NavigateApplicationWindow(Browser* browser,
-                                       const apps::AppLaunchParams& params,
-                                       const GURL& default_url,
-                                       WindowOpenDisposition disposition) {
-  const Extension* const extension = GetExtension(browser->profile(), params);
+WebContents* ShowApplicationWindow(Profile* profile,
+                                   const apps::AppLaunchParams& params,
+                                   const GURL& default_url,
+                                   Browser* browser,
+                                   WindowOpenDisposition disposition) {
+  const Extension* const extension = GetExtension(profile, params);
   ui::PageTransition transition =
       (extension ? ui::PAGE_TRANSITION_AUTO_BOOKMARK
                  : ui::PAGE_TRANSITION_AUTO_TOPLEVEL);
@@ -421,7 +422,7 @@ WebContents* NavigateApplicationWindow(Browser* browser,
 
   if (extension && extension->from_bookmark()) {
     web_app::FileHandlerManager& file_handler_manager =
-        web_app::WebAppProviderBase::GetProviderBase(browser->profile())
+        web_app::WebAppProviderBase::GetProviderBase(profile)
             ->file_handler_manager();
     url = file_handler_manager
               .GetMatchingFileHandlerURL(params.app_id, params.launch_files)
@@ -434,13 +435,24 @@ WebContents* NavigateApplicationWindow(Browser* browser,
 
   WebContents* web_contents = nav_params.navigated_or_inserted_contents;
 
-  // TODO(https://crbug.com/1032443):
-  // Eventually move this to browser_navigator.cc: CreateTargetContents().
+  extensions::HostedAppBrowserController::SetAppPrefsForWebContents(
+      browser->app_controller(), web_contents);
   if (extension && extension->from_bookmark()) {
     web_app::WebAppTabHelper* tab_helper =
         web_app::WebAppTabHelper::FromWebContents(web_contents);
     DCHECK(tab_helper);
     tab_helper->SetAppId(extension->id());
+  }
+
+  browser->window()->Show();
+
+  // TODO(jcampan): http://crbug.com/8123 we should not need to set the initial
+  //                focus explicitly.
+  web_contents->SetInitialFocus();
+
+  if (base::FeatureList::IsEnabled(blink::features::kFileHandlingAPI)) {
+    web_launch::WebLaunchFilesHelper::SetLaunchPaths(web_contents, url,
+                                                     params.launch_files);
   }
 
   return web_contents;
@@ -450,16 +462,8 @@ WebContents* OpenApplicationWindow(Profile* profile,
                                    const apps::AppLaunchParams& params,
                                    const GURL& url) {
   Browser* browser = CreateApplicationWindow(profile, params, url);
-  WebContents* web_contents = NavigateApplicationWindow(
-      browser, params, url, WindowOpenDisposition::NEW_FOREGROUND_TAB);
-
-  if (base::FeatureList::IsEnabled(blink::features::kFileHandlingAPI)) {
-    web_launch::WebLaunchFilesHelper::SetLaunchPaths(
-        web_contents, web_contents->GetURL(), params.launch_files);
-  }
-
-  browser->window()->Show();
-  return web_contents;
+  return ShowApplicationWindow(profile, params, url, browser,
+                               WindowOpenDisposition::NEW_FOREGROUND_TAB);
 }
 
 void OpenApplicationWithReenablePrompt(Profile* profile,

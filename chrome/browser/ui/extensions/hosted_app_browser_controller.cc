@@ -54,9 +54,12 @@ bool IsSameHostAndPort(const GURL& app_url, const GURL& page_url) {
          app_url.port() == page_url.port();
 }
 
-// Set preferences that are unique to app windows.
-void SetAppPrefsForWebContents(web_app::AppBrowserController* controller,
-                               content::WebContents* web_contents) {
+}  // namespace
+
+// static
+void HostedAppBrowserController::SetAppPrefsForWebContents(
+    web_app::AppBrowserController* controller,
+    content::WebContents* web_contents) {
   web_contents->GetMutableRendererPrefs()->can_accept_load_drops = false;
   web_contents->SyncRendererPrefs();
 
@@ -73,8 +76,9 @@ void SetAppPrefsForWebContents(web_app::AppBrowserController* controller,
   web_contents->NotifyPreferencesChanged();
 }
 
-// Clear preferences that are unique to app windows.
-void ClearAppPrefsForWebContents(content::WebContents* web_contents) {
+// static
+void HostedAppBrowserController::ClearAppPrefsForWebContents(
+    content::WebContents* web_contents) {
   web_contents->GetMutableRendererPrefs()->can_accept_load_drops = true;
   web_contents->SyncRendererPrefs();
 
@@ -83,8 +87,6 @@ void ClearAppPrefsForWebContents(content::WebContents* web_contents) {
 
   web_contents->NotifyPreferencesChanged();
 }
-
-}  // namespace
 
 HostedAppBrowserController::HostedAppBrowserController(Browser* browser)
     : AppBrowserController(
@@ -271,12 +273,13 @@ void HostedAppBrowserController::OnReceivedInitialURL() {
 
 void HostedAppBrowserController::OnTabInserted(content::WebContents* contents) {
   AppBrowserController::OnTabInserted(contents);
-  SetAppPrefsForWebContents(this, contents);
+  extensions::HostedAppBrowserController::SetAppPrefsForWebContents(this,
+                                                                    contents);
 }
 
 void HostedAppBrowserController::OnTabRemoved(content::WebContents* contents) {
   AppBrowserController::OnTabRemoved(contents);
-  ClearAppPrefsForWebContents(contents);
+  extensions::HostedAppBrowserController::ClearAppPrefsForWebContents(contents);
 }
 
 }  // namespace extensions

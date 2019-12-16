@@ -35,12 +35,12 @@ Browser* CreateApplicationWindow(Profile* profile,
                                  const apps::AppLaunchParams& params,
                                  const GURL& url);
 
-// Navigate application window to application url, but do not show it yet.
-content::WebContents* NavigateApplicationWindow(
-    Browser* browser,
-    const apps::AppLaunchParams& params,
-    const GURL& url,
-    WindowOpenDisposition disposition);
+// Show the application window that's already created.
+content::WebContents* ShowApplicationWindow(Profile* profile,
+                                            const apps::AppLaunchParams& params,
+                                            const GURL& url,
+                                            Browser* browser,
+                                            WindowOpenDisposition disposition);
 
 // Open the application in a way specified by |params| in a new window.
 content::WebContents* OpenApplicationWindow(Profile* profile,
