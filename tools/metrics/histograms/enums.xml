@@ -62143,6 +62143,7 @@ would be helpful to identify which type is being sent.
   <int value="0" label="Token was empty"/>
   <int value="1" label="Token stayed unchanged"/>
   <int value="2" label="Token has changed"/>
+  <int value="3" label="Token was cleared"/>
 </enum>
 
 <enum name="TouchActions">
