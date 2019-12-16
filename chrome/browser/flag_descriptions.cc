@@ -2538,9 +2538,6 @@ const char kDirectActionsName[] = "Direct actions";
 const char kDirectActionsDescription[] =
     "Enables direct actions (Android Q and more).";
 
-const char kDownloadRenameName[] = "Enable download rename";
-const char kDownloadRenameDescription[] = "Enables rename option for downloads";
-
 const char kDuetTabStripIntegrationAndroidName[] = "Duet-TabStrip Integration";
 const char kDuetTabStripIntegrationAndroidDescription[] =
     "Allows users to access integration of Duet and TabStrip.";

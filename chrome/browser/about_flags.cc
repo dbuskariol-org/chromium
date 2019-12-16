@@ -3210,12 +3210,6 @@ const FeatureEntry kFeatureEntries[] = {
          download::features::kUseDownloadOfflineContentProvider)},
 
 #if defined(OS_ANDROID)
-    {"download-rename", flag_descriptions::kDownloadRenameName,
-     flag_descriptions::kDownloadRenameDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(chrome::android::kDownloadRename)},
-#endif
-
-#if defined(OS_ANDROID)
     {"update-notification-scheduling-integration",
      flag_descriptions::kUpdateNotificationSchedulingIntegrationName,
      flag_descriptions::kUpdateNotificationSchedulingIntegrationDescription,
@@ -3331,8 +3325,8 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kUseXpsForPrintingFromPdfName,
      flag_descriptions::kUseXpsForPrintingFromPdfDescription, kOsWin,
      FEATURE_VALUE_TYPE(printing::features::kUseXpsForPrintingFromPdf)},
-#endif // defined(OS_WIN)
-#endif // BUILDFLAG(ENABLE_PRINTING)
+#endif  // defined(OS_WIN)
+#endif  // BUILDFLAG(ENABLE_PRINTING)
 
     {"autofill-profile-client-validation",
      flag_descriptions::kAutofillProfileClientValidationName,
