@@ -2543,6 +2543,15 @@ void RenderFrameHostImpl::DidFocusFrame() {
   if (!is_active())
     return;
 
+  // We need to handle receiving this IPC from a frame that is inside a portal
+  // despite there being a renderer side check (see Document::IsFocusAllowed).
+  // This is because the IPC to notify a page that it is inside a portal (see
+  // WebContentsImpl::NotifyInsidePortal) may race with portal activation, and
+  // we may run into a situation where a frame inside a portal doesn't know it's
+  // inside a portal yet and allows focus.
+  if (InsidePortal())
+    return;
+
   delegate_->SetFocusedFrame(frame_tree_node_, GetSiteInstance());
 }
 
@@ -4025,6 +4034,10 @@ bool RenderFrameHostImpl::GetSuddenTerminationDisablerState(
     case blink::mojom::SuddenTerminationDisablerType::kUnloadHandler:
       return has_unload_handler_;
   }
+}
+
+bool RenderFrameHostImpl::InsidePortal() {
+  return GetRenderViewHost()->GetDelegate()->IsPortal();
 }
 
 void RenderFrameHostImpl::OnDidFinishDocumentLoad() {

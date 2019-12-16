@@ -8375,6 +8375,9 @@ bool Document::IsLazyLoadPolicyEnforced() const {
 }
 
 bool Document::IsFocusAllowed() const {
+  if (frame_ && frame_->GetPage()->InsidePortal())
+    return false;
+
   if (!frame_ || frame_->IsMainFrame() ||
       LocalFrame::HasTransientUserActivation(frame_)) {
     // 'autofocus' runs Element::focus asynchronously at which point the

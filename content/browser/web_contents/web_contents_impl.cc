@@ -1881,6 +1881,10 @@ void WebContentsImpl::ReattachToOuterWebContentsFrame() {
   GetMainFrame()->UpdateAXTreeData();
 }
 
+void WebContentsImpl::NotifyInsidePortal(bool inside_portal) {
+  SendPageMessage(new PageMsg_SetInsidePortal(MSG_ROUTING_NONE, inside_portal));
+}
+
 void WebContentsImpl::DidChangeVisibleSecurityState() {
   if (delegate_)
     delegate_->VisibleSecurityStateChanged(this);
@@ -6203,6 +6207,7 @@ void WebContentsImpl::EnsureOpenerProxiesExist(RenderFrameHost* source_rfh) {
 }
 
 void WebContentsImpl::SetAsFocusedWebContentsIfNecessary() {
+  DCHECK(!portal());
   // Only change focus if we are not currently focused.
   WebContentsImpl* old_contents = GetFocusedWebContents();
   if (old_contents == this)
@@ -6231,6 +6236,7 @@ void WebContentsImpl::SetAsFocusedWebContentsIfNecessary() {
 
 void WebContentsImpl::SetFocusedFrame(FrameTreeNode* node,
                                       SiteInstance* source) {
+  DCHECK(!portal());
   frame_tree_.SetFocusedFrame(node, source);
 
   if (auto* inner_contents = node_.GetInnerWebContentsInFrame(node)) {

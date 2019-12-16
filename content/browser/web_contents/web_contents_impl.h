@@ -1105,6 +1105,10 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
   void set_portal(Portal* portal) { portal_ = portal; }
   Portal* portal() const { return portal_; }
 
+  // Sends a page message to notify every process in the frame tree if the
+  // web contents is a portal web contents.
+  void NotifyInsidePortal(bool inside_portal);
+
   // Notifies observers that AppCache was accessed. Public so AppCache code can
   // call this directly.
   void OnAppCacheAccessed(const GURL& manifest_url, bool blocked_by_policy);

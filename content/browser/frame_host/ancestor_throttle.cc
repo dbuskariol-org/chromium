@@ -174,11 +174,8 @@ NavigationThrottle::ThrottleCheckResult AncestorThrottle::ProcessResponseImpl(
     bool is_response_check) {
   NavigationRequest* request = NavigationRequest::From(navigation_handle());
 
-  bool is_portal = request->frame_tree_node()
-                       ->current_frame_host()
-                       ->GetRenderViewHost()
-                       ->GetDelegate()
-                       ->IsPortal();
+  bool is_portal =
+      request->frame_tree_node()->current_frame_host()->InsidePortal();
   if (request->IsInMainFrame() && !is_portal) {
     // Allow main frame navigations.
     return NavigationThrottle::PROCEED;
@@ -230,7 +227,7 @@ NavigationThrottle::ThrottleCheckResult AncestorThrottle::ProcessResponseImpl(
                 navigation_handle()->IsFormSubmission())) {
           return NavigationThrottle::BLOCK_RESPONSE;
         }
-        if (parent->GetRenderViewHost()->GetDelegate()->IsPortal()) {
+        if (parent->InsidePortal()) {
           parent = parent->ParentOrOuterDelegateFrame();
         } else {
           parent = parent->GetParent();
