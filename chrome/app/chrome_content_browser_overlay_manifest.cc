@@ -8,7 +8,6 @@
 #include "base/no_destructor.h"
 #include "build/build_config.h"
 #include "chrome/browser/engagement/site_engagement_details.mojom.h"
-#include "chrome/browser/media/media_engagement_score_details.mojom.h"
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
 #include "chrome/browser/ui/webui/feed_internals/feed_internals.mojom.h"
 #include "chrome/browser/ui/webui/interventions_internals/interventions_internals.mojom.h"
@@ -114,7 +113,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 chromeos::multidevice_setup::mojom::PrivilegedHostDeviceSetter,
                 chromeos::network_config::mojom::CrosNetworkConfig,
 #endif
-                media::mojom::MediaEngagementScoreDetailsProvider,
                 // WebUI-only interfaces go below this line. These should be
                 // brokered through a dedicated interface, but they're here
                 // for for now.

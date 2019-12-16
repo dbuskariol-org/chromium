@@ -13,6 +13,7 @@
 #include "chrome/browser/bad_message.h"
 #include "chrome/browser/dom_distiller/dom_distiller_service_factory.h"
 #include "chrome/browser/language/translate_frame_binder.h"
+#include "chrome/browser/media/media_engagement_score_details.mojom.h"
 #include "chrome/browser/navigation_predictor/navigation_predictor.h"
 #include "chrome/browser/predictors/network_hints_handler_impl.h"
 #include "chrome/browser/prerender/prerender_contents.h"
@@ -20,6 +21,7 @@
 #include "chrome/browser/ssl/insecure_sensitive_input_driver_factory.h"
 #include "chrome/browser/ui/webui/bluetooth_internals/bluetooth_internals.mojom.h"
 #include "chrome/browser/ui/webui/bluetooth_internals/bluetooth_internals_ui.h"
+#include "chrome/browser/ui/webui/media/media_engagement_ui.h"
 #include "chrome/common/prerender.mojom.h"
 #include "components/dom_distiller/content/browser/distillability_driver.h"
 #include "components/dom_distiller/content/browser/distiller_javascript_service_impl.h"
@@ -351,6 +353,10 @@ void PopulateChromeWebUIFrameBinders(
     service_manager::BinderMapWithContext<content::RenderFrameHost*>* map) {
   RegisterWebUIControllerInterfaceBinder<BluetoothInternalsUI,
                                          ::mojom::BluetoothInternalsHandler>(
+      map);
+
+  RegisterWebUIControllerInterfaceBinder<
+      MediaEngagementUI, media::mojom::MediaEngagementScoreDetailsProvider>(
       map);
 }
 
