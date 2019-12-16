@@ -76,6 +76,11 @@
 #include "chrome/browser/ui/webui/downloads/downloads_ui.h"
 #endif
 
+#if defined(OS_CHROMEOS)
+#include "chrome/browser/ui/webui/chromeos/add_supervision/add_supervision.mojom.h"
+#include "chrome/browser/ui/webui/chromeos/add_supervision/add_supervision_ui.h"
+#endif
+
 #if BUILDFLAG(ENABLE_EXTENSIONS)
 #include "extensions/browser/api/mime_handler_private/mime_handler_private.h"
 #include "extensions/browser/guest_view/mime_handler_view/mime_handler_view_guest.h"
@@ -376,6 +381,12 @@ void PopulateChromeWebUIFrameBinders(
                                          downloads::mojom::PageHandlerFactory>(
       map);
 #endif
+
+#if defined(OS_CHROMEOS)
+  RegisterWebUIControllerInterfaceBinder<
+      chromeos::AddSupervisionUI,
+      add_supervision::mojom::AddSupervisionHandler>(map);
+#endif  // defined(OS_CHROMEOS)
 }
 
 }  // namespace internal

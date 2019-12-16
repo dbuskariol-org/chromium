@@ -27,7 +27,6 @@
 #include "services/service_manager/public/cpp/manifest_builder.h"
 
 #if defined(OS_CHROMEOS)
-#include "chrome/browser/ui/webui/chromeos/add_supervision/add_supervision.mojom.h"
 #include "chrome/browser/ui/webui/chromeos/crostini_installer/crostini_installer.mojom.h"
 #include "chrome/browser/ui/webui/chromeos/crostini_upgrader/crostini_upgrader.mojom.h"
 #include "chrome/browser/ui/webui/chromeos/machine_learning/machine_learning_internals_page_handler.mojom.h"
@@ -122,9 +121,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
     defined(OS_CHROMEOS)
                 discards::mojom::DetailsProvider, discards::mojom::GraphDump,
-#endif
-#if defined(OS_CHROMEOS)
-                add_supervision::mojom::AddSupervisionHandler,
 #endif
                 mojom::OmniboxPageHandler, mojom::ResetPasswordHandler,
                 mojom::SiteEngagementDetailsProvider,
