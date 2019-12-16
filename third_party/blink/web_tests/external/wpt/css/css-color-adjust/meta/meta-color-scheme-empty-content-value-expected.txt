@@ -1,4 +1,4 @@
 This is a testharness.js-based test.
-FAIL Computed root color-scheme should be normal assert_equals: expected (string) "normal" but got (undefined) undefined
+FAIL Meta color-scheme with empty content attribute has no effect. assert_equals: expected (string) "normal" but got (undefined) undefined
 Harness: the test ran to completion.
 
