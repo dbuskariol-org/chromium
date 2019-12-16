@@ -80,8 +80,9 @@ class V8ScrollStateCallback;
 class WebPluginContainerImpl;
 struct PhysicalRect;
 
-const int kNodeStyleChangeShift = 19;
-const int kNodeCustomElementShift = 21;
+const int kDOMNodeTypeShift = 1;
+const int kNodeStyleChangeShift = 18;
+const int kNodeCustomElementShift = 20;
 
 // Values for kChildNeedsStyleRecalcFlag, controlling whether a node gets its
 // style recalculated.
@@ -269,10 +270,19 @@ class CORE_EXPORT Node : public EventTarget {
   void SetComputedStyle(scoped_refptr<const ComputedStyle> computed_style);
 
   // Other methods (not part of DOM)
+  bool IsTextNode() const { return GetDOMNodeType() == DOMNodeType::kText; }
+  bool IsContainerNode() const {
+    auto type = GetDOMNodeType();
+    return type == DOMNodeType::kContainer || type == DOMNodeType::kElement ||
+           type == DOMNodeType::kDocumentFragment;
+  }
+  bool IsElementNode() const {
+    return GetDOMNodeType() == DOMNodeType::kElement;
+  }
+  bool IsDocumentFragment() const {
+    return GetDOMNodeType() == DOMNodeType::kDocumentFragment;
+  }
 
-  bool IsElementNode() const { return GetFlag(kIsElementFlag); }
-  bool IsContainerNode() const { return GetFlag(kIsContainerFlag); }
-  bool IsTextNode() const { return GetFlag(kIsTextFlag); }
   bool IsHTMLElement() const { return GetFlag(kIsHTMLFlag); }
   bool IsMathMLElement() const { return GetFlag(kIsMathMLFlag); }
   bool IsSVGElement() const { return GetFlag(kIsSVGFlag); }
@@ -335,7 +345,6 @@ class CORE_EXPORT Node : public EventTarget {
 
   bool IsDocumentNode() const;
   bool IsTreeScope() const;
-  bool IsDocumentFragment() const { return GetFlag(kIsDocumentFragmentFlag); }
   bool IsShadowRoot() const { return IsDocumentFragment() && IsTreeScope(); }
   bool IsV0InsertionPoint() const { return GetFlag(kIsV0InsertionPointFlag); }
 
@@ -907,58 +916,54 @@ class CORE_EXPORT Node : public EventTarget {
     kHasRareDataFlag = 1,
 
     // Node type flags. These never change once created.
-    kIsTextFlag = 1 << 1,
-    kIsContainerFlag = 1 << 2,
-    kIsElementFlag = 1 << 3,
+    kDOMNodeTypeMask = 0x7 << kDOMNodeTypeShift,
     kIsHTMLFlag = 1 << 4,
     kIsMathMLFlag = 1 << 5,
     kIsSVGFlag = 1 << 6,
-    kIsDocumentFragmentFlag = 1 << 7,
-    kIsV0InsertionPointFlag = 1 << 8,
+    kIsV0InsertionPointFlag = 1 << 7,
 
     // Changes based on if the element should be treated like a link,
     // ex. When setting the href attribute on an <a>.
-    kIsLinkFlag = 1 << 9,
+    kIsLinkFlag = 1 << 8,
 
     // Changes based on :hover, :active and :focus state.
-    kIsUserActionElementFlag = 1 << 10,
+    kIsUserActionElementFlag = 1 << 9,
 
     // Tree state flags. These change when the element is added/removed
     // from a DOM tree.
-    kIsConnectedFlag = 1 << 11,
-    kIsInShadowTreeFlag = 1 << 12,
+    kIsConnectedFlag = 1 << 10,
+    kIsInShadowTreeFlag = 1 << 11,
 
     // Set by the parser when the children are done parsing.
-    kIsFinishedParsingChildrenFlag = 1 << 13,
+    kIsFinishedParsingChildrenFlag = 1 << 12,
 
     // Flags related to recalcStyle.
-    kHasCustomStyleCallbacksFlag = 1 << 14,
-    kChildNeedsStyleInvalidationFlag = 1 << 15,
-    kNeedsStyleInvalidationFlag = 1 << 16,
-    kChildNeedsDistributionRecalcFlag = 1 << 17,
-    kChildNeedsStyleRecalcFlag = 1 << 18,
-    kStyleChangeMask =
-        1 << kNodeStyleChangeShift | 1 << (kNodeStyleChangeShift + 1),
+    kHasCustomStyleCallbacksFlag = 1 << 13,
+    kChildNeedsStyleInvalidationFlag = 1 << 14,
+    kNeedsStyleInvalidationFlag = 1 << 15,
+    kChildNeedsDistributionRecalcFlag = 1 << 16,
+    kChildNeedsStyleRecalcFlag = 1 << 17,
+    kStyleChangeMask = 0x3 << kNodeStyleChangeShift,
 
     kCustomElementStateMask = 0x3 << kNodeCustomElementShift,
 
-    kHasNameOrIsEditingTextFlag = 1 << 23,
-    kHasEventTargetDataFlag = 1 << 24,
+    kHasNameOrIsEditingTextFlag = 1 << 22,
+    kHasEventTargetDataFlag = 1 << 23,
 
-    kV0CustomElementFlag = 1 << 25,
-    kV0CustomElementUpgradedFlag = 1 << 26,
+    kV0CustomElementFlag = 1 << 24,
+    kV0CustomElementUpgradedFlag = 1 << 25,
 
-    kNeedsReattachLayoutTree = 1 << 27,
-    kChildNeedsReattachLayoutTree = 1 << 28,
+    kNeedsReattachLayoutTree = 1 << 26,
+    kChildNeedsReattachLayoutTree = 1 << 27,
 
-    kHasDuplicateAttributes = 1 << 29,
+    kHasDuplicateAttributes = 1 << 28,
 
-    kForceReattachLayoutTree = 1 << 30,
+    kForceReattachLayoutTree = 1 << 29,
 
     kDefaultNodeFlags = kIsFinishedParsingChildrenFlag,
-  };
 
-  // 0 bits remaining.
+    // 3 bits remaining.
+  };
 
   bool GetFlag(NodeFlags mask) const { return node_flags_ & mask; }
   void SetFlag(bool f, NodeFlags mask) {
@@ -967,15 +972,31 @@ class CORE_EXPORT Node : public EventTarget {
   void SetFlag(NodeFlags mask) { node_flags_ |= mask; }
   void ClearFlag(NodeFlags mask) { node_flags_ &= ~mask; }
 
+  enum class DOMNodeType {
+    kOther = 0,
+    kText = 1 << kDOMNodeTypeShift,
+    kContainer = 2 << kDOMNodeTypeShift,
+    kElement = 3 << kDOMNodeTypeShift,
+    kDocumentFragment = 4 << kDOMNodeTypeShift,
+  };
+  DOMNodeType GetDOMNodeType() const {
+    return static_cast<DOMNodeType>(node_flags_ & kDOMNodeTypeMask);
+  }
+
  protected:
   enum ConstructionType {
-    kCreateOther = kIsFinishedParsingChildrenFlag,
-    kCreateText = kDefaultNodeFlags | kIsTextFlag,
-    kCreateContainer = kDefaultNodeFlags | kIsContainerFlag,
-    kCreateElement = kCreateContainer | kIsElementFlag,
-    kCreateShadowRoot =
-        kCreateContainer | kIsDocumentFragmentFlag | kIsInShadowTreeFlag,
-    kCreateDocumentFragment = kCreateContainer | kIsDocumentFragmentFlag,
+    kCreateOther =
+        kDefaultNodeFlags | static_cast<NodeFlags>(DOMNodeType::kOther),
+    kCreateText =
+        kDefaultNodeFlags | static_cast<NodeFlags>(DOMNodeType::kText),
+    kCreateContainer =
+        kDefaultNodeFlags | static_cast<NodeFlags>(DOMNodeType::kContainer),
+    kCreateElement =
+        kDefaultNodeFlags | static_cast<NodeFlags>(DOMNodeType::kElement),
+    kCreateDocumentFragment =
+        kDefaultNodeFlags |
+        static_cast<NodeFlags>(DOMNodeType::kDocumentFragment),
+    kCreateShadowRoot = kCreateDocumentFragment | kIsInShadowTreeFlag,
     kCreateHTMLElement = kCreateElement | kIsHTMLFlag,
     kCreateMathMLElement = kCreateElement | kIsMathMLFlag,
     kCreateSVGElement = kCreateElement | kIsSVGFlag,
