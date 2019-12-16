@@ -205,7 +205,7 @@ uint32_t Fourcc::ToV4L2PixFmt() const {
 
 #if BUILDFLAG(USE_VAAPI)
 // static
-Fourcc Fourcc::FromVAFourCC(uint32_t va_fourcc) {
+base::Optional<Fourcc> Fourcc::FromVAFourCC(uint32_t va_fourcc) {
   switch (va_fourcc) {
     case VA_FOURCC_I420:
       return Fourcc(Fourcc::YU12);
@@ -228,8 +228,8 @@ Fourcc Fourcc::FromVAFourCC(uint32_t va_fourcc) {
     case VA_FOURCC_ARGB:
       return Fourcc(Fourcc::RGB4);
   }
-  DLOG(WARNING) << "Unmapped VAFourCC: " << FourccToString(va_fourcc);
-  return Fourcc();
+  DVLOGF(3) << "Unmapped VAFourCC: " << FourccToString(va_fourcc);
+  return base::nullopt;
 }
 
 uint32_t Fourcc::ToVAFourCC() const {

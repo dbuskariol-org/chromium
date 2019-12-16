@@ -142,8 +142,8 @@ class MEDIA_GPU_EXPORT Fourcc {
 #endif  // BUILDFLAG(USE_V4L2_CODEC)
 #if BUILDFLAG(USE_VAAPI)
   // Converts a VAFourCC to Fourcc.
-  // Returns Fourcc::INVALID for invalid input.
-  static Fourcc FromVAFourCC(uint32_t va_fourcc);
+  // Returns nullopt for invalid input.
+  static base::Optional<Fourcc> FromVAFourCC(uint32_t va_fourcc);
 #endif  // BUILDFLAG(USE_VAAPI)
 
   // Value getters:
