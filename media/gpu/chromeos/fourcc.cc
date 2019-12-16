@@ -50,8 +50,9 @@ base::Optional<Fourcc> Fourcc::FromUint32(uint32_t fourcc) {
 }
 
 // static
-Fourcc Fourcc::FromVideoPixelFormat(VideoPixelFormat pixel_format,
-                                    bool single_planar) {
+base::Optional<Fourcc> Fourcc::FromVideoPixelFormat(
+    VideoPixelFormat pixel_format,
+    bool single_planar) {
   if (single_planar) {
     switch (pixel_format) {
       case PIXEL_FORMAT_ARGB:
@@ -134,9 +135,9 @@ Fourcc Fourcc::FromVideoPixelFormat(VideoPixelFormat pixel_format,
         break;
     }
   }
-  NOTREACHED() << "Unmapped " << VideoPixelFormatToString(pixel_format)
-               << " for " << (single_planar ? "single-planar" : "multi-planar");
-  return Fourcc();
+  DVLOGF(3) << "Unmapped " << VideoPixelFormatToString(pixel_format) << " for "
+            << (single_planar ? "single-planar" : "multi-planar");
+  return base::nullopt;
 }
 
 VideoPixelFormat Fourcc::ToVideoPixelFormat() const {
@@ -183,7 +184,7 @@ VideoPixelFormat Fourcc::ToVideoPixelFormat() const {
     case Fourcc::MM21:
       return PIXEL_FORMAT_NV12;
   }
-  DLOG(WARNING) << "Unmapped Fourcc: " << ToString();
+  NOTREACHED() << "Unmapped Fourcc: " << ToString();
   return PIXEL_FORMAT_UNKNOWN;
 }
 

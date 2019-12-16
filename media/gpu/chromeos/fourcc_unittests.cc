@@ -91,24 +91,24 @@ TEST(FourccTest, V4L2PixFmtToVideoPixelFormat) {
 TEST(FourccTest, VideoPixelFormatToV4L2PixFmt) {
   EXPECT_EQ(
       V4L2_PIX_FMT_NV12,
-      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_NV12, true).ToV4L2PixFmt());
+      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_NV12, true)->ToV4L2PixFmt());
   EXPECT_EQ(
       V4L2_PIX_FMT_NV12M,
-      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_NV12, false).ToV4L2PixFmt());
+      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_NV12, false)->ToV4L2PixFmt());
 
   EXPECT_EQ(
       V4L2_PIX_FMT_YUV420,
-      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_I420, true).ToV4L2PixFmt());
+      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_I420, true)->ToV4L2PixFmt());
   EXPECT_EQ(
       V4L2_PIX_FMT_YUV420M,
-      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_I420, false).ToV4L2PixFmt());
+      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_I420, false)->ToV4L2PixFmt());
 
   EXPECT_EQ(
       V4L2_PIX_FMT_YVU420,
-      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_YV12, true).ToV4L2PixFmt());
+      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_YV12, true)->ToV4L2PixFmt());
   EXPECT_EQ(
       V4L2_PIX_FMT_YVU420M,
-      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_YV12, false).ToV4L2PixFmt());
+      Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_YV12, false)->ToV4L2PixFmt());
 }
 #endif  // BUILDFLAG(USE_V4L2_CODEC)
 
@@ -136,23 +136,23 @@ TEST(FourccTest, VAFourCCToVideoPixelFormat) {
 
 TEST(FourccTest, VideoPixelFormatToVAFourCC) {
   EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_I420),
-            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_I420).ToVAFourCC());
+            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_I420)->ToVAFourCC());
   EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_NV12),
-            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_NV12).ToVAFourCC());
+            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_NV12)->ToVAFourCC());
   EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_NV21),
-            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_NV21).ToVAFourCC());
+            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_NV21)->ToVAFourCC());
   EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_YV12),
-            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_YV12).ToVAFourCC());
+            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_YV12)->ToVAFourCC());
   EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_YUY2),
-            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_YUY2).ToVAFourCC());
+            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_YUY2)->ToVAFourCC());
   EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_RGBA),
-            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_ABGR).ToVAFourCC());
+            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_ABGR)->ToVAFourCC());
   EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_RGBX),
-            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_XBGR).ToVAFourCC());
+            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_XBGR)->ToVAFourCC());
   EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_BGRA),
-            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_ARGB).ToVAFourCC());
+            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_ARGB)->ToVAFourCC());
   EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_BGRX),
-            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_XRGB).ToVAFourCC());
+            Fourcc::FromVideoPixelFormat(PIXEL_FORMAT_XRGB)->ToVAFourCC());
 }
 #endif  // BUILDFLAG(USE_VAAPI)
 
