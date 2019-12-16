@@ -42,7 +42,6 @@
 #include "chromeos/services/assistant/assistant_settings_manager_impl.h"
 #include "chromeos/services/assistant/utils.h"
 #include "services/device/public/mojom/battery_monitor.mojom.h"
-#include "services/device/public/mojom/constants.mojom.h"
 #endif
 
 namespace chromeos {
