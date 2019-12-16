@@ -580,8 +580,11 @@ size_t V4L2VideoEncodeAccelerator::CopyIntoOutputBuffer(
       case H264NALU::kIDRSlice:
         // Only inject if we have both headers cached, and enough space for both
         // the headers and the NALU itself.
-        if (cached_sps_.empty() || cached_pps_.empty() ||
-            cached_h264_header_size_ + nalu.size + kH264StartCodeSize >
+        if (cached_sps_.empty() || cached_pps_.empty()) {
+          VLOGF(1) << "Cannot inject IDR slice without SPS and PPS";
+          break;
+        }
+        if (cached_h264_header_size_ + nalu.size + kH264StartCodeSize >
                 remaining_dst_size) {
           VLOGF(1) << "Not enough space to inject a stream header before IDR";
           break;
