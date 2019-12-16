@@ -115,6 +115,7 @@
 <translation id="4812940957355064477">Skriv inn et tall.</translation>
 <translation id="4912536737030637138">bibliografioppføring</translation>
 <translation id="492244087561876220">kommentar</translation>
+<translation id="4971739861736909480"><ph name="ACCNAME" /> er valgt</translation>
 <translation id="4975562563186953947"><ph name="SELECTED_COUNT" /> er valgt</translation>
 <translation id="4992066212339426712">Slå på lyden</translation>
 <translation id="49969490063480558">Skriv inn en del etterfulgt av «<ph name="ATSIGN" />». «<ph name="INVALIDADDRESS" />» er ufullstendig.</translation>
@@ -219,6 +220,7 @@
 <translation id="7888071071722539607">Inkluder en «<ph name="ATSIGN" />» i e-postadressen. «<ph name="INVALIDADDRESS" />» mangler en «<ph name="ATSIGN" />».</translation>
 <translation id="7891486169920085145">vindusdeler</translation>
 <translation id="795667975304826397">Ingen fil valgt</translation>
+<translation id="7962328325860248200"><ph name="ACCNAME" /> er ikke valgt</translation>
 <translation id="8034303206267677282">sterk</translation>
 <translation id="8053789581856978548">søketekstfelt</translation>
 <translation id="8057695513531652401">merknad</translation>

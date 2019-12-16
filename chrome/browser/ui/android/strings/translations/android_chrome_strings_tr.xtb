@@ -24,7 +24,6 @@
 <translation id="1171770572613082465">"Popüler siteler" düğmesine dokunarak popüler web sitelerini görün</translation>
 <translation id="1173894706177603556">Yeniden adlandır</translation>
 <translation id="1178581264944972037">Duraklat</translation>
-<translation id="118069123878619799">- boyunuz gibi fiziksel özellikleriniz</translation>
 <translation id="1181037720776840403">Kaldır</translation>
 <translation id="1188239144602654184">AR'ye gir</translation>
 <translation id="1197267115302279827">Yer işaretlerini taşı</translation>
@@ -472,6 +471,7 @@ Diğer Google hizmetlerinden yapılan aramalar ve etkinlikler gibi Google hesab�
 <translation id="4565377596337484307">Şifreyi gizle</translation>
 <translation id="4570913071927164677">Ayrıntılar</translation>
 <translation id="4572422548854449519">Yönetilen hesapta oturum açın</translation>
+<translation id="4574741712540401491">•  <ph name="LIST_ITEM_TEXT" /></translation>
 <translation id="4583164079174244168">{MINUTES,plural, =1{# dakika önce}other{# dakika önce}}</translation>
 <translation id="4587589328781138893">Siteler</translation>
 <translation id="4594952190837476234">Bu çevrimdışı sayfa <ph name="CREATION_TIME" /> tarihli olup web'deki sürümden farklı olabilir.</translation>
@@ -652,7 +652,6 @@ Bu ayarı değiştirmek için <ph name="BEGIN_LINK" />senkronizasyonu sıfırlay
 <translation id="5809361687334836369">{HOURS,plural, =1{# saat önce}other{# saat önce}}</translation>
 <translation id="5810288467834065221">Telif hakkı <ph name="YEAR" /> Google LLC. Tüm hakları saklıdır.</translation>
 <translation id="5817918615728894473">Eşle</translation>
-<translation id="5819762621475381970">- odanızın düzeni</translation>
 <translation id="583281660410589416">Bilinmiyor</translation>
 <translation id="5833984609253377421">Bağlantıyı paylaş</translation>
 <translation id="5836192821815272682">Chrome Güncellemesi indiriliyor…</translation>
@@ -753,6 +752,7 @@ Bu ayarı değiştirmek için <ph name="BEGIN_LINK" />senkronizasyonu sıfırlay
 <translation id="6545017243486555795">Tüm Verileri Temizle</translation>
 <translation id="6545864417968258051">Bluetooth taraması</translation>
 <translation id="6560414384669816528">Sogou ile arama</translation>
+<translation id="656065428026159829">Daha fazla göster</translation>
 <translation id="6566259936974865419">Chrome <ph name="GIGABYTES" /> GB tasarruf sağladı</translation>
 <translation id="6573096386450695060">Her zaman izin ver</translation>
 <translation id="6573431926118603307">Diğer cihazlarınızda Chrome ile açtığınız sekmeler burada görünür.</translation>
@@ -849,6 +849,7 @@ Bu ayarı değiştirmek için <ph name="BEGIN_LINK" />senkronizasyonu sıfırlay
 <translation id="7293171162284876153">Senkronizasyonu başlatmak için "Chrome verilerimi senkronize et" ayarını etkinleştirin.</translation>
 <translation id="729975465115245577">Cihazınızda şifreler dosyasını depolayacak bir uygulama yok.</translation>
 <translation id="7302081693174882195">Ayrıntılar: Tasarruf edilen veri miktarına göre sıralı</translation>
+<translation id="7302486331832100261">Genelde bildirimleri engelliyorsunuz. İzin vermek için Ayrıntılar'a dokunun.</translation>
 <translation id="7328017930301109123">Chrome, Basit modda sayfaları daha hızlı yükler ve yüzde 60'a kadar daha az veri kullanır.</translation>
 <translation id="7333031090786104871">Önceki siteyi ekleme işlemi devam ediyor.</translation>
 <translation id="7352939065658542140">VİDEO</translation>

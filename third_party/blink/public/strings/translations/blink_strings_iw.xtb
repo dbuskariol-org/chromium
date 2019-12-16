@@ -115,6 +115,7 @@
 <translation id="4812940957355064477">יש להזין מספר.</translation>
 <translation id="4912536737030637138">ערך ביבליוגרפי</translation>
 <translation id="492244087561876220">תגובה</translation>
+<translation id="4971739861736909480">הפריט <ph name="ACCNAME" /> נבחר</translation>
 <translation id="4975562563186953947"><ph name="SELECTED_COUNT" /> נבחרו</translation>
 <translation id="4992066212339426712">בטל השתקה</translation>
 <translation id="49969490063480558">הזן חלק ולאחריו '<ph name="ATSIGN" />'‏. השדה '<ph name="INVALIDADDRESS" />' אינו מלא.</translation>
@@ -219,6 +220,7 @@
 <translation id="7888071071722539607">כלול '<ph name="ATSIGN" />' בכתובת האימייל. ב-'<ph name="INVALIDADDRESS" />' חסר '<ph name="ATSIGN" />'.</translation>
 <translation id="7891486169920085145">מפצל</translation>
 <translation id="795667975304826397">לא נבחר קובץ</translation>
+<translation id="7962328325860248200">הפריט <ph name="ACCNAME" /> לא נבחר</translation>
 <translation id="8034303206267677282">חשוב</translation>
 <translation id="8053789581856978548">שדה טקסט לחיפוש</translation>
 <translation id="8057695513531652401">הודעה</translation>

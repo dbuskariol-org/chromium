@@ -134,7 +134,6 @@ xizmatlarini sizga moslashtirish maqsadlarida foydalanishi mumkin. Bu ruxsatni m
 <translation id="1177863135347784049">Boshqa</translation>
 <translation id="1178581264944972037">Pauza</translation>
 <translation id="117916940443676133">Elektron kalit PIN kod bilan himoyalanmagan. Kirish maʼlumotlarini boshqarish uchun avval PIN kod yarating.</translation>
-<translation id="118069123878619799">- boʻy kabi jismoniy xususiyatlaringiz</translation>
 <translation id="1181037720776840403">Olib tashlash</translation>
 <translation id="1183237619868651138"><ph name="EXTERNAL_CRX_FILE" /> faylini lokal keshga o‘rnatib bo‘lmayapti.</translation>
 <translation id="1185924365081634987">Mazkur tarmoq xatoligini tuzatish uchun <ph name="GUEST_SIGNIN_LINK_START" />mehmon rejimida kirib<ph name="GUEST_SIGNIN_LINK_END" /> ko‘ring.</translation>
@@ -1891,7 +1890,6 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="3678156199662914018">Kengaytma: <ph name="EXTENSION_NAME" /></translation>
 <translation id="3681311097828166361">Fikr-mulohaza uchun rahmat! Hozir internet bilan aloqa yo‘qligi sababli xabaringiz keyinroq yuboriladi.</translation>
 <translation id="3682824389861648626">Harakat chegarasi</translation>
-<translation id="3683023058278427253">Domeningizga turli litsenziyalar topdik. Davom etish uchun ulardan birini tanlang.</translation>
 <translation id="3683524264665795342"><ph name="APP_NAME" /> ekraningizga ulanmoqchi</translation>
 <translation id="368789413795732264">Faylni yozishda xatolik yuz berdi: <ph name="ERROR_TEXT" />.</translation>
 <translation id="3688507211863392146">Ilovada ochilgan ma’lumotlarni fayl va jildlarga yozish</translation>
@@ -2155,7 +2153,6 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="4013132157686828973">“<ph name="CLIENT_NAME" />” ushbu brauzerdagi nosozliklarni aniqlamoqda</translation>
 <translation id="4014432863917027322">“<ph name="EXTENSION_NAME" />” kengaytmasi tiklansinmi?</translation>
 <translation id="4015163439792426608">Kengaytmalar ishlatasizmi? Qulay joydan <ph name="BEGIN_LINK" />kengaytmalarni boshqaring<ph name="END_LINK" />.</translation>
-<translation id="4020106588733303597">Tizim mavjud litsenziyalarni yuklay olmadi.</translation>
 <translation id="4020327272915390518">Parametrlar menyusi</translation>
 <translation id="4021279097213088397">–</translation>
 <translation id="4022426551683927403">&amp;Lug‘atga qo‘shish</translation>
@@ -2658,7 +2655,6 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="4823484602432206655">Foydalanuvchilar va qurilmalar sozlamalarini ko‘rish va o‘zgartirish</translation>
 <translation id="4824958205181053313">Sinxronizatsiya bekor qilinsinmi?</translation>
 <translation id="4827675678516992122">Ulanmadi</translation>
-<translation id="4828937774870308359">Teskari</translation>
 <translation id="4829768588131278040">PIN kod o‘rnatish</translation>
 <translation id="4830502475412647084">OS yangilanishi o‘rnatilmoqda</translation>
 <translation id="4830573902900904548"><ph name="DEVICE_TYPE" /> qurilmasi <ph name="NETWORK_NAME" /> tarmog‘i orqali internetga ulana olmayapti. Boshqa tarmoqni tanlang. <ph name="LEARN_MORE_LINK_START" />Batafsil<ph name="LEARN_MORE_LINK_END" /></translation>
@@ -2757,7 +2753,6 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="4953689047182316270">Maxsus imkoniyatlar ishlatilishi</translation>
 <translation id="4953808748584563296">Standart to‘q sariq avatar</translation>
 <translation id="4955710816792587366">PIN kod tanlang</translation>
-<translation id="4955814292505481804">Yillik</translation>
 <translation id="4959262764292427323">Google hisobingizga saqlangan parollardan har qanday qurilmada foydalanishingiz mumkin.</translation>
 <translation id="4960294539892203357"><ph name="WINDOW_TITLE" /> - <ph name="PROFILE_NAME" /></translation>
 <translation id="496185450405387901">Bu ilova administrator tomonidan oʻrnatilgan.</translation>
@@ -3239,7 +3234,6 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="5659593005791499971">Email</translation>
 <translation id="5659833766619490117">Bu sahifa tarjima qilinmadi</translation>
 <translation id="5660204307954428567"><ph name="DEVICE_NAME" /> qurilmasiga ulansinmi?</translation>
-<translation id="5662477687021125631">Doimiy</translation>
 <translation id="5667546120811588575">Google Play sozlanmoqda</translation>
 <translation id="5669267381087807207">Faollashtirilmoqda</translation>
 <translation id="5669691691057771421">Yangi PIN kodni kiriting</translation>
@@ -3341,7 +3335,6 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="5815645614496570556">X.400 manzili</translation>
 <translation id="5816434091619127343">So‘ralgan o‘zgartirishlar printerni ishdan chiqarishi mumkin.</translation>
 <translation id="5817918615728894473">Ulanish</translation>
-<translation id="5819762621475381970">- xonangiz dizayni</translation>
 <translation id="5821565227679781414">Yorliq yaratish</translation>
 <translation id="5825412242012995131">Yoqilgan (tavsiya etiladi)</translation>
 <translation id="5826395379250998812"><ph name="DEVICE_TYPE" /> qurilmasiga telefoningizni ulang. <ph name="LINK_BEGIN" />Batafsil<ph name="LINK_END" /></translation>
@@ -3974,7 +3967,6 @@ Ochiq eksponenta (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bit):
 <translation id="674632704103926902">Teginib tortish imkoniyatini yoqish</translation>
 <translation id="6748217015615267851">Videoni renderlash vositasi: <ph name="RENDERER_URL" /></translation>
 <translation id="6748465660675848252">Agar davom etsangiz, faqat sinxronlangan ma’lumotlar qayta tiklanadi. Qurilmadagi ma’lumotlar esa tiklanmaydi.</translation>
-<translation id="6748775883310276718">Yagona ilova uchun kiosk</translation>
 <translation id="6751344591405861699"><ph name="WINDOW_TITLE" /> (Inkognito)</translation>
 <translation id="6757101664402245801">URL manzilidan nusxa olindi.</translation>
 <translation id="6758056191028427665">Bizga fikr-mulohaza yuboring.</translation>
@@ -4945,7 +4937,6 @@ Kalit faylini ishonchli joyda saqlang. U kengaytmaning yangi versiyalarini yarat
 <translation id="8108526232944491552">{COUNT,plural, =0{Tashqi cookie fayllar yoʻq}=1{1 ta tashqi cookie fayl bloklandi}other{# ta tashqi cookie fayl bloklandi}}</translation>
 <translation id="810875025413331850">Yaqin-atrofda hech qanday qurilma topilmadi.</translation>
 <translation id="8111155949205007504">Bu parolni iPhone’ga ulashish</translation>
-<translation id="8113043281354018522">Litsenziya turini tanlang</translation>
 <translation id="8114875720387900039">Gorizontal ajratish</translation>
 <translation id="8116972784401310538">&amp;Xatcho‘plar menejeri</translation>
 <translation id="8117620576188476503">Ulanishlar, yangilanishlar va sozlamalarni holat qatoridan boshqarish. Bu oynani Alt+Shift+S tugmalar birikmasini bosib ochishingiz mumkin.</translation>
@@ -5661,7 +5652,6 @@ Kalit faylini ishonchli joyda saqlang. U kengaytmaning yangi versiyalarini yarat
 <translation id="9121814364785106365">Qadalgan ichki oyna sifatida ochish</translation>
 <translation id="9122176249172999202"><ph name="IDS_SHORT_PRODUCT_NAME" /> pauza qilindi</translation>
 <translation id="9124003689441359348">Saqlangan parollar shu yerda turadi</translation>
-<translation id="9125466540846359910"><ph name="LICENSE_TYPE" /> (<ph name="LICENSE_COUNT" /> ta qoldi)</translation>
 <translation id="9128317794749765148">Oxirigacha sozlanmadi</translation>
 <translation id="9128870381267983090">Tarmoqqa ulanish</translation>
 <translation id="9130015405878219958">Noto‘g‘ri rejim ko‘rsatildi.</translation>

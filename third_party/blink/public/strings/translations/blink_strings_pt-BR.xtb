@@ -115,6 +115,7 @@
 <translation id="4812940957355064477">Insira um número.</translation>
 <translation id="4912536737030637138">entrada bibliográfica</translation>
 <translation id="492244087561876220">comentário</translation>
+<translation id="4971739861736909480">Item <ph name="ACCNAME" /> selecionado</translation>
 <translation id="4975562563186953947"><ph name="SELECTED_COUNT" /> selecionados</translation>
 <translation id="4992066212339426712">Ativar som</translation>
 <translation id="49969490063480558">Insira uma parte depois de "<ph name="ATSIGN" />". "<ph name="INVALIDADDRESS" />" está incompleto.</translation>
@@ -219,6 +220,7 @@
 <translation id="7888071071722539607">Inclua um "<ph name="ATSIGN" />" no endereço de e-mail. "<ph name="INVALIDADDRESS" />" está com um "<ph name="ATSIGN" />" faltando.</translation>
 <translation id="7891486169920085145">divisor</translation>
 <translation id="795667975304826397">Nenhum arquivo selecionado</translation>
+<translation id="7962328325860248200">Item <ph name="ACCNAME" /> não selecionado</translation>
 <translation id="8034303206267677282">forte</translation>
 <translation id="8053789581856978548">campo de texto da pesquisa</translation>
 <translation id="8057695513531652401">aviso</translation>

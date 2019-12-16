@@ -24,7 +24,6 @@
 <translation id="1171770572613082465">មើល​គេហទំព័រ​ពេញនិយម ដោយ​ចុច​ប៊ូតុង "គេហទំព័រ​ពេញនិយម"</translation>
 <translation id="1173894706177603556">ប្តូរឈ្មោះ</translation>
 <translation id="1178581264944972037">ផ្អាក</translation>
-<translation id="118069123878619799">- លក្ខណៈ​ពិសេស​ផ្នែករាងកាយ​របស់អ្នក ដូចជា​កម្ពស់​ជាដើម</translation>
 <translation id="1181037720776840403">ដកចេញ</translation>
 <translation id="1188239144602654184">ចូល AR</translation>
 <translation id="1197267115302279827">ផ្លាស់ទីចំណាំ</translation>
@@ -472,6 +471,7 @@
 <translation id="4565377596337484307">លាក់​ពាក្យ​សម្ងាត់</translation>
 <translation id="4570913071927164677">ព័ត៌មាន​លម្អិត</translation>
 <translation id="4572422548854449519">ចូលទៅគណនីដែលបានគ្រប់គ្រង</translation>
+<translation id="4574741712540401491">•  <ph name="LIST_ITEM_TEXT" /></translation>
 <translation id="4583164079174244168">{MINUTES,plural, =1{# នាទីមុន}other{# នាទីមុន}}</translation>
 <translation id="4587589328781138893">ទំព័រ</translation>
 <translation id="4594952190837476234">ទំព័រ​សម្រាប់​ប្រើពេលគ្មានអ៊ីនធឺណិតនេះ​បង្កើតឡើងនៅថ្ងៃទី <ph name="CREATION_TIME" /> ហើយ​វាអាច​ខុស​ពី​កំណែ​សម្រាប់​ប្រើពេលមានអ៊ីនធឺណិត។</translation>
@@ -652,7 +652,6 @@
 <translation id="5809361687334836369">{HOURS,plural, =1{# ម៉ោងមុន}other{# ម៉ោងមុន}}</translation>
 <translation id="5810288467834065221">រក្សា​សិទ្ធិ <ph name="YEAR" /> Google LLC ។ រក្សាសិទ្ធិ​គ្រប់យ៉ាង។</translation>
 <translation id="5817918615728894473">ផ្គូផ្គង</translation>
-<translation id="5819762621475381970">- ប្លង់​បន្ទប់​របស់អ្នក</translation>
 <translation id="583281660410589416">មិនស្គាល់</translation>
 <translation id="5833984609253377421">ចែក​រំលែក​តំណ</translation>
 <translation id="5836192821815272682">កំពុងទាញយក​កំណែថ្មី Chrome …</translation>

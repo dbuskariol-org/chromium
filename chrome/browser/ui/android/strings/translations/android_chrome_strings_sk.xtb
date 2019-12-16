@@ -24,7 +24,6 @@
 <translation id="1171770572613082465">Klepnutím na tlačidlo Hlavné weby zobrazíte obľúbené webové stránky</translation>
 <translation id="1173894706177603556">Premenovať</translation>
 <translation id="1178581264944972037">Pozastaviť</translation>
-<translation id="118069123878619799">– vašich fyzických vlastnostiach, napríklad výške</translation>
 <translation id="1181037720776840403">Odstrániť</translation>
 <translation id="1188239144602654184">Spustiť VR</translation>
 <translation id="1197267115302279827">Presunúť záložky</translation>
@@ -472,6 +471,7 @@ Váš účet Google môže mať na adrese <ph name="BEGIN_LINK" />myactivity.goo
 <translation id="4565377596337484307">Skryť heslo</translation>
 <translation id="4570913071927164677">Podrobnosti</translation>
 <translation id="4572422548854449519">Prihlásenie do spravovaného účtu</translation>
+<translation id="4574741712540401491">•  <ph name="LIST_ITEM_TEXT" /></translation>
 <translation id="4583164079174244168">{MINUTES,plural, =1{pred # minútou}few{pred # minútami}many{pred # minútou}other{pred # minútami}}</translation>
 <translation id="4587589328781138893">Weby</translation>
 <translation id="4594952190837476234">Táto offline stránka je z <ph name="CREATION_TIME" /> a líši sa od online verzie.</translation>
@@ -652,7 +652,6 @@ Ak chcete toto nastavenie zmeniť, <ph name="BEGIN_LINK" />resetujte synchroniz�
 <translation id="5809361687334836369">{HOURS,plural, =1{pred # hodinou}few{pred # hodinami}many{pred # hodinou}other{pred # hodinami}}</translation>
 <translation id="5810288467834065221">Copyright <ph name="YEAR" /> Google LLC. Všetky práva vyhradené.</translation>
 <translation id="5817918615728894473">Párovať</translation>
-<translation id="5819762621475381970">– rozložení vašej miestnosti</translation>
 <translation id="583281660410589416">Neznáme</translation>
 <translation id="5833984609253377421">Zdieľať odkaz</translation>
 <translation id="5836192821815272682">Sťahuje sa aktualizácia Chromu…</translation>

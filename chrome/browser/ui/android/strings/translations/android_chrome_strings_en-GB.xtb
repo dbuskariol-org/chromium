@@ -24,7 +24,6 @@
 <translation id="1171770572613082465">See popular websites by tapping the 'Top sites' button</translation>
 <translation id="1173894706177603556">Rename</translation>
 <translation id="1178581264944972037">Pause</translation>
-<translation id="118069123878619799">- your physical features, such as height</translation>
 <translation id="1181037720776840403">Remove</translation>
 <translation id="1188239144602654184">Enter AR</translation>
 <translation id="1197267115302279827">Move bookmarks</translation>
@@ -472,6 +471,7 @@ Your Google Account may have other forms of browsing history such as searches an
 <translation id="4565377596337484307">Hide password</translation>
 <translation id="4570913071927164677">Details</translation>
 <translation id="4572422548854449519">Sign in to managed account</translation>
+<translation id="4574741712540401491">•  <ph name="LIST_ITEM_TEXT" /></translation>
 <translation id="4583164079174244168">{MINUTES,plural, =1{# minute ago}other{# minutes ago}}</translation>
 <translation id="4587589328781138893">Sites</translation>
 <translation id="4594952190837476234">This offline page is from <ph name="CREATION_TIME" /> and may differ from the online version.</translation>
@@ -652,7 +652,6 @@ To change this setting, <ph name="BEGIN_LINK" />reset sync<ph name="END_LINK" />
 <translation id="5809361687334836369">{HOURS,plural, =1{# hour ago}other{# hours ago}}</translation>
 <translation id="5810288467834065221">Copyright <ph name="YEAR" /> Google LLC. All rights reserved.</translation>
 <translation id="5817918615728894473">Pair</translation>
-<translation id="5819762621475381970">- the layout of your room</translation>
 <translation id="583281660410589416">Unknown</translation>
 <translation id="5833984609253377421">Share link</translation>
 <translation id="5836192821815272682">Downloading Chrome Update…</translation>

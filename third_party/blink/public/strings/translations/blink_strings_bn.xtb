@@ -115,6 +115,7 @@
 <translation id="4812940957355064477">দয়া করে একটি সংখ্যা লিখুন৷</translation>
 <translation id="4912536737030637138">বিবলিওগ্রাফি এন্ট্রি</translation>
 <translation id="492244087561876220">মন্তব্য</translation>
+<translation id="4971739861736909480"><ph name="ACCNAME" />টি বেছে নেওয়া হয়েছে</translation>
 <translation id="4975562563186953947"><ph name="SELECTED_COUNT" />টি নির্বাচিত</translation>
 <translation id="4992066212339426712">সশব্দ করুন</translation>
 <translation id="49969490063480558">দয়া করে '<ph name="ATSIGN" />' অনুসরণ করে একটি অংশ লিখুন৷ '<ph name="INVALIDADDRESS" />' অসম্পূর্ণ৷</translation>
@@ -219,6 +220,7 @@
 <translation id="7888071071722539607">ইমেল আইডিতে অনুগ্রহ করে একটি '<ph name="ATSIGN" />' অন্তর্ভুক্ত করুন৷ '<ph name="INVALIDADDRESS" />'-তে একটি '<ph name="ATSIGN" />' অনুপস্থিত৷</translation>
 <translation id="7891486169920085145">স্প্লিটার</translation>
 <translation id="795667975304826397">কোনও ফাইল চয়ন করা হয় নি</translation>
+<translation id="7962328325860248200"><ph name="ACCNAME" /> বেছে নেওয়া হয়নি</translation>
 <translation id="8034303206267677282">প্রভাবশালী</translation>
 <translation id="8053789581856978548">সার্চ পাঠ্য ফিল্ড</translation>
 <translation id="8057695513531652401">বিজ্ঞপ্তি</translation>

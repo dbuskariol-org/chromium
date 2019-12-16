@@ -115,6 +115,7 @@
 <translation id="4812940957355064477">Fut një numër.</translation>
 <translation id="4912536737030637138">hyrje bibliografike</translation>
 <translation id="492244087561876220">koment</translation>
+<translation id="4971739861736909480">Përzgjedhur: <ph name="ACCNAME" /></translation>
 <translation id="4975562563186953947"><ph name="SELECTED_COUNT" /> të përzgjedhur</translation>
 <translation id="4992066212339426712">Aktivizo zërin</translation>
 <translation id="49969490063480558">Fut një pjesë pas "<ph name="ATSIGN" />". "<ph name="INVALIDADDRESS" />" është e paplotë.</translation>
@@ -219,6 +220,7 @@
 <translation id="7888071071722539607">Përfshi një "<ph name="ATSIGN" />" në adresën e mail-it. Te "<ph name="INVALIDADDRESS" />" mungon një "<ph name="ATSIGN" />".</translation>
 <translation id="7891486169920085145">ndarësi</translation>
 <translation id="795667975304826397">Nuk u zgjodh asnjë skedar</translation>
+<translation id="7962328325860248200"><ph name="ACCNAME" /> nuk është zgjedhur</translation>
 <translation id="8034303206267677282">e fortë</translation>
 <translation id="8053789581856978548">fusha për kërkim teksti</translation>
 <translation id="8057695513531652401">njoftim</translation>

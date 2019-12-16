@@ -115,6 +115,7 @@
 <translation id="4812940957355064477">Нэг тоо оруулна уу.</translation>
 <translation id="4912536737030637138">ном зүйн хэсэг</translation>
 <translation id="492244087561876220">тайлбар</translation>
+<translation id="4971739861736909480"><ph name="ACCNAME" />-г сонголоо</translation>
 <translation id="4975562563186953947"><ph name="SELECTED_COUNT" /> сонгогдсон</translation>
 <translation id="4992066212339426712">Дууг нээх</translation>
 <translation id="49969490063480558"><ph name="ATSIGN" /> -ны дараа байгаа хэсгийг оруулна уу. " <ph name="INVALIDADDRESS" /> " нь бүрэн бус байна.</translation>
@@ -219,6 +220,7 @@
 <translation id="7888071071722539607">Имэйл хаягт "<ph name="ATSIGN" />"-ыг оруулж өгнө үү. '<ph name="INVALIDADDRESS" />'-д <ph name="ATSIGN" /> дутуу байна.</translation>
 <translation id="7891486169920085145">задлагч</translation>
 <translation id="795667975304826397">Ямар ч файл сонгогдоогүй байна</translation>
+<translation id="7962328325860248200"><ph name="ACCNAME" />-г сонгоогүй</translation>
 <translation id="8034303206267677282">маш сайн</translation>
 <translation id="8053789581856978548">текстийн талбар хайх</translation>
 <translation id="8057695513531652401">мэдэгдэл</translation>

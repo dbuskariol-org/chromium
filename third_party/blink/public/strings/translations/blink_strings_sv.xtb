@@ -115,6 +115,7 @@
 <translation id="4812940957355064477">Ange ett nummer.</translation>
 <translation id="4912536737030637138">bibliografipost</translation>
 <translation id="492244087561876220">kommentar</translation>
+<translation id="4971739861736909480"><ph name="ACCNAME" /> har valts</translation>
 <translation id="4975562563186953947"><ph name="SELECTED_COUNT" /> valda</translation>
 <translation id="4992066212339426712">Slå på ljudet</translation>
 <translation id="49969490063480558">Ange en del följt av <ph name="ATSIGN" />. <ph name="INVALIDADDRESS" /> är ofullständig.</translation>
@@ -219,6 +220,7 @@
 <translation id="7888071071722539607">Inkludera ett <ph name="ATSIGN" /> i e-postadressen. <ph name="INVALIDADDRESS" /> saknar ett <ph name="ATSIGN" />.</translation>
 <translation id="7891486169920085145">delare</translation>
 <translation id="795667975304826397">Ingen fil har valts</translation>
+<translation id="7962328325860248200"><ph name="ACCNAME" /> har inte markerats</translation>
 <translation id="8034303206267677282">starkt</translation>
 <translation id="8053789581856978548">fält för söktext</translation>
 <translation id="8057695513531652401">anmärkning</translation>

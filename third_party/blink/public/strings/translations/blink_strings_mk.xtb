@@ -115,6 +115,7 @@
 <translation id="4812940957355064477">Внесете број.</translation>
 <translation id="4912536737030637138">библиографски запис</translation>
 <translation id="492244087561876220">коментар</translation>
+<translation id="4971739861736909480"><ph name="ACCNAME" />, избрано</translation>
 <translation id="4975562563186953947">Избрани: <ph name="SELECTED_COUNT" /></translation>
 <translation id="4992066212339426712">Вклучи звук</translation>
 <translation id="49969490063480558">Внесете дел по „<ph name="ATSIGN" />“. Адресата „<ph name="INVALIDADDRESS" />“ е некомплетна.</translation>
@@ -219,6 +220,7 @@
 <translation id="7888071071722539607">Опфатете „<ph name="ATSIGN" />“ во адресата на е-пошта. Во „<ph name="INVALIDADDRESS" />“ недостига „<ph name="ATSIGN" />“.</translation>
 <translation id="7891486169920085145">разделница</translation>
 <translation id="795667975304826397">Нема избрана датотека</translation>
+<translation id="7962328325860248200"><ph name="ACCNAME" />, не е избрано</translation>
 <translation id="8034303206267677282">силно</translation>
 <translation id="8053789581856978548">пребарај текстуално поле</translation>
 <translation id="8057695513531652401">напомена</translation>

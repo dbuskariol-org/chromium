@@ -115,6 +115,7 @@
 <translation id="4812940957355064477">Lütfen bir sayı girin.</translation>
 <translation id="4912536737030637138">kaynakça girişi</translation>
 <translation id="492244087561876220">yorum</translation>
+<translation id="4971739861736909480"><ph name="ACCNAME" /> seçildi</translation>
 <translation id="4975562563186953947"><ph name="SELECTED_COUNT" /> öğe seçildi</translation>
 <translation id="4992066212339426712">Sesi aç</translation>
 <translation id="49969490063480558">Lütfen "<ph name="ATSIGN" />" işaretinden sonra gelen kısmı ekleyin. "<ph name="INVALIDADDRESS" />", tam bir adres değil.</translation>
@@ -219,6 +220,7 @@
 <translation id="7888071071722539607">Lütfen e-posta adresine bir "<ph name="ATSIGN" />" işareti ekleyin. "<ph name="INVALIDADDRESS" />" adresinde "<ph name="ATSIGN" />" eksik.</translation>
 <translation id="7891486169920085145">ayırıcı</translation>
 <translation id="795667975304826397">Dosya seçilmedi</translation>
+<translation id="7962328325860248200"><ph name="ACCNAME" /> seçilmedi</translation>
 <translation id="8034303206267677282">önemli</translation>
 <translation id="8053789581856978548">arama metni alanı</translation>
 <translation id="8057695513531652401">bildirim</translation>

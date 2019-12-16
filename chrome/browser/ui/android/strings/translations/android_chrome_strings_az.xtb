@@ -24,7 +24,6 @@
 <translation id="1171770572613082465">"Popluyar saytlar" seçiminə klikləyin və məşhur saytlara baxın</translation>
 <translation id="1173894706177603556">Adını dəyişin</translation>
 <translation id="1178581264944972037">Durdurun</translation>
-<translation id="118069123878619799">- boy kimi fiziki göstəriciləriniz</translation>
 <translation id="1181037720776840403">Silin</translation>
 <translation id="1188239144602654184">AR-ə başlayın</translation>
 <translation id="1197267115302279827">Əlfəcinləri köçürün</translation>
@@ -472,6 +471,7 @@ Axtarış terminini nizamlamaq üçün basıb saxlamaqla seçim edin. Axtarış�
 <translation id="4565377596337484307">Parolu gizlədin</translation>
 <translation id="4570913071927164677">Ətraflı</translation>
 <translation id="4572422548854449519">İdarə olunan hesablara daxil olun</translation>
+<translation id="4574741712540401491">•  <ph name="LIST_ITEM_TEXT" /></translation>
 <translation id="4583164079174244168">{MINUTES,plural, =1{# dəqiqə öncə}other{# dəqiqə öncə}}</translation>
 <translation id="4587589328781138893">Saytlar</translation>
 <translation id="4594952190837476234">Bu səhifə <ph name="CREATION_TIME" /> tarixində yaradılıb və onlayn versiyadan fərqli ola bilər.</translation>
@@ -652,7 +652,6 @@ Ayarı dəyişmək üçün <ph name="BEGIN_LINK" />sinxronizasiyanı sıfırlay�
 <translation id="5809361687334836369">{HOURS,plural, =1{# saat öncə}other{# saat öncə}}</translation>
 <translation id="5810288467834065221">Müəllif hüquqları <ph name="YEAR" /> Google MMC. Bütün hüquqlar qorunur.</translation>
 <translation id="5817918615728894473">Cütləndirin</translation>
-<translation id="5819762621475381970">- otağınızın tərtibatı</translation>
 <translation id="583281660410589416">Naməlum</translation>
 <translation id="5833984609253377421">Linki paylaşın</translation>
 <translation id="5836192821815272682">Chrome Güncəlləməsi Endirilir…</translation>
@@ -751,6 +750,7 @@ Ayarı dəyişmək üçün <ph name="BEGIN_LINK" />sinxronizasiyanı sıfırlay�
 <translation id="6545017243486555795">Bütün Datanı Silin</translation>
 <translation id="6545864417968258051">Bluetooth skanı</translation>
 <translation id="6560414384669816528">Sogou ilə axtarış</translation>
+<translation id="656065428026159829">Daha çoxuna baxın</translation>
 <translation id="6566259936974865419">Chrome <ph name="GIGABYTES" /> GB qədər yaddaşa qənaət etdi</translation>
 <translation id="6573096386450695060">Həmişə icazə verin</translation>
 <translation id="6573431926118603307">Başqa cihaz ilə Chrome'da açdığınız panellər burada görünəcək.</translation>
@@ -847,6 +847,7 @@ Ayarı dəyişmək üçün <ph name="BEGIN_LINK" />sinxronizasiyanı sıfırlay�
 <translation id="7293171162284876153">Sinxronizasiyanı başlatmaq üçün "Chrome datasını sinxronizasiya edin" seçimini aktiv edin.</translation>
 <translation id="729975465115245577">Cihazda parollar faylını saxlamaq üçün tətbiq yoxdur.</translation>
 <translation id="7302081693174882195">Məlumat: Yadda saxlanmış data həcminə görə çeşidlənib</translation>
+<translation id="7302486331832100261">Adətən bildirişləri bloklayırsınız. İcazə vermək üçün Detallar seçiminə toxunun.</translation>
 <translation id="7328017930301109123">Layt rejimində Chrome səhifələri daha tez yükləyir və dataya 60 faizədək qənaət edir.</translation>
 <translation id="7333031090786104871">Əvvəlki sayt hələ əlavə olunur</translation>
 <translation id="7352939065658542140">VİDEO</translation>
