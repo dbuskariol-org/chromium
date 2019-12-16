@@ -4191,14 +4191,6 @@
           'isolated_scripts': 'chromium_webkit_isolated_scripts',
         },
       },
-      'devtools_frontend_linux_blink_light_rel': {
-        'mixins': [
-          'linux-xenial',
-        ],
-        'test_suites': {
-          'isolated_scripts': 'devtools_webkit_isolated_scripts',
-        },
-      },
     },
   },
   {
