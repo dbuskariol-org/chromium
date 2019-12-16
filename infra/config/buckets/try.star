@@ -682,21 +682,6 @@ gpu_android_builder(
 
 gpu_android_builder(
     name = 'gpu-fyi-try-android-p-pixel-2-skv-32',
-    tryjob = tryjob(
-        # Some locations disabled due to limited capacity.
-        location_regexp = [
-            #'.+/[+]/cc/.+',
-            '.+/[+]/components/viz/.+',
-            '.+/[+]/content/test/gpu/gpu_tests/.+py',
-            '.+/[+]/content/test/gpu/gpu_tests/test_expectations/pixel_expectations.txt',
-            '.+/[+]/gpu/vulkan/.+',
-            #'.+/[+]/media/gpu/.+',
-            '.+/[+]/services/viz/.+',
-            #'.+/[+]/third_party/blink/renderer/platform/graphics/gpu/.+',
-            #'.+/[+]/third_party/skia/src/gpu/.+',
-            #'.+/[+]/third_party/skia/include/gpu/.+',
-        ],
-    ),
 )
 
 gpu_android_builder(
