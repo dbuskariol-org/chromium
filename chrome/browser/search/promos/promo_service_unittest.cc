@@ -356,7 +356,7 @@ TEST_F(PromoServiceTest, ServeExtensionsPromo) {
   promo.promo_html =
       "<div>" + l10n_util::GetStringUTF8(IDS_EXTENSIONS_PROMO_PERFORMANCE) +
       "</div>";
-  promo.can_open_privileged_links = true;
+  promo.can_open_extensions_page = true;
 
   EXPECT_EQ(service()->promo_data(), promo);
   EXPECT_EQ(service()->promo_status(), PromoService::Status::OK_WITH_PROMO);

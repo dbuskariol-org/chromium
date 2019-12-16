@@ -1013,7 +1013,13 @@ function injectPromo(promo) {
 
   const link = promoContainer.querySelector('a');
   if (link) {
-    link.onclick = function() {
+    link.onclick = e => {
+      const url = new URL(link.href);
+      if (promo.canOpenExtensionsPage && url.origin == 'chrome://extensions') {
+        ntpApiHandle.openExtensionsPage(
+            e.button, e.altKey, e.ctrlKey, e.metaKey, e.shiftKey);
+        e.preventDefault();
+      }
       ntpApiHandle.logEvent(LOG_TYPE.NTP_MIDDLE_SLOT_PROMO_LINK_CLICKED);
     };
   }
