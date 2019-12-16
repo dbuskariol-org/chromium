@@ -3224,13 +3224,6 @@ const FeatureEntry kFeatureEntries[] = {
          chrome::android::kUpdateNotificationSchedulingIntegration)},
 #endif
 
-    {"download-resumption-without-strong-validators",
-     flag_descriptions::kDownloadResumptionWithoutStrongValidatorsName,
-     flag_descriptions::kDownloadResumptionWithoutStrongValidatorsDescription,
-     kOsAll,
-     FEATURE_VALUE_TYPE(
-         download::features::kAllowDownloadResumptionWithoutStrongValidators)},
-
     {"tab-hover-cards", flag_descriptions::kTabHoverCardsName,
      flag_descriptions::kTabHoverCardsDescription, kOsDesktop,
      FEATURE_WITH_PARAMS_VALUE_TYPE(features::kTabHoverCards,
