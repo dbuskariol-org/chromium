@@ -54,12 +54,9 @@ bool IsSameHostAndPort(const GURL& app_url, const GURL& page_url) {
          app_url.port() == page_url.port();
 }
 
-}  // namespace
-
-// static
-void HostedAppBrowserController::SetAppPrefsForWebContents(
-    web_app::AppBrowserController* controller,
-    content::WebContents* web_contents) {
+// Set preferences that are unique to app windows.
+void SetAppPrefsForWebContents(web_app::AppBrowserController* controller,
+                               content::WebContents* web_contents) {
   web_contents->GetMutableRendererPrefs()->can_accept_load_drops = false;
   web_contents->SyncRendererPrefs();
 
@@ -76,9 +73,8 @@ void HostedAppBrowserController::SetAppPrefsForWebContents(
   web_contents->NotifyPreferencesChanged();
 }
 
-// static
-void HostedAppBrowserController::ClearAppPrefsForWebContents(
-    content::WebContents* web_contents) {
+// Clear preferences that are unique to app windows.
+void ClearAppPrefsForWebContents(content::WebContents* web_contents) {
   web_contents->GetMutableRendererPrefs()->can_accept_load_drops = true;
   web_contents->SyncRendererPrefs();
 
@@ -87,6 +83,8 @@ void HostedAppBrowserController::ClearAppPrefsForWebContents(
 
   web_contents->NotifyPreferencesChanged();
 }
+
+}  // namespace
 
 HostedAppBrowserController::HostedAppBrowserController(Browser* browser)
     : AppBrowserController(
@@ -273,13 +271,12 @@ void HostedAppBrowserController::OnReceivedInitialURL() {
 
 void HostedAppBrowserController::OnTabInserted(content::WebContents* contents) {
   AppBrowserController::OnTabInserted(contents);
-  extensions::HostedAppBrowserController::SetAppPrefsForWebContents(this,
-                                                                    contents);
+  SetAppPrefsForWebContents(this, contents);
 }
 
 void HostedAppBrowserController::OnTabRemoved(content::WebContents* contents) {
   AppBrowserController::OnTabRemoved(contents);
-  extensions::HostedAppBrowserController::ClearAppPrefsForWebContents(contents);
+  ClearAppPrefsForWebContents(contents);
 }
 
 }  // namespace extensions
