@@ -45136,6 +45136,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="5" label="PSB 10MHz-wide"/>
   <int value="6" label="PSB 5MHz-wide"/>
   <int value="7" label="802.11ac"/>
+  <int value="8" label="802.11ax"/>
 </enum>
 
 <enum name="NetworkPortalResult">
