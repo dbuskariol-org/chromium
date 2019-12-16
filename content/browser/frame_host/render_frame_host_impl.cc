@@ -4095,9 +4095,9 @@ void RenderFrameHostImpl::OnUpdateUserActivationState(
   frame_tree_node_->UpdateUserActivationState(update_type);
 }
 
-void RenderFrameHostImpl::ReceivedUserGestureBeforeNavigationChanged(
+void RenderFrameHostImpl::HadStickyUserActivationBeforeNavigationChanged(
     bool value) {
-  frame_tree_node_->OnSetHasReceivedUserGestureBeforeNavigation(value);
+  frame_tree_node_->OnSetHadStickyUserActivationBeforeNavigation(value);
 }
 
 void RenderFrameHostImpl::OnScrollRectToVisibleInParentFrame(

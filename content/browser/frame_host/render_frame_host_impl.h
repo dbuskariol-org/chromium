@@ -1296,7 +1296,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void SuddenTerminationDisablerChanged(
       bool present,
       blink::mojom::SuddenTerminationDisablerType disabler_type) override;
-  void ReceivedUserGestureBeforeNavigationChanged(bool value) override;
+  void HadStickyUserActivationBeforeNavigationChanged(bool value) override;
 
  protected:
   friend class RenderFrameHostFactory;
