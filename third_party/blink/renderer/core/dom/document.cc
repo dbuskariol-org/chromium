@@ -7290,6 +7290,15 @@ void Document::AddConsoleMessageImpl(ConsoleMessage* console_message,
   frame_->Console().AddMessage(console_message, discard_duplicates);
 }
 
+void Document::TasksWerePaused() {}
+
+void Document::TasksWereUnpaused() {}
+
+bool Document::TasksNeedPause() {
+  Page* page = GetPage();
+  return page && page->Paused();
+}
+
 void Document::AddToTopLayer(Element* element, const Element* before) {
   if (element->IsInTopLayer())
     return;
