@@ -3,9 +3,22 @@
 // found in the LICENSE file.
 
 #include "printing/backend/cups_helper.h"
+
 #include "printing/backend/print_backend.h"
+#include "printing/printing_utils.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
+
+namespace {
+
+// Returns true if the papers have the same name, vendor ID, and size.
+bool PapersEqual(const printing::PrinterSemanticCapsAndDefaults::Paper& lhs,
+                 const printing::PrinterSemanticCapsAndDefaults::Paper& rhs) {
+  return lhs.display_name == rhs.display_name &&
+         lhs.vendor_id == rhs.vendor_id && lhs.size_um == rhs.size_um;
+}
+
+}  // namespace
 
 TEST(PrintBackendCupsHelperTest, TestPpdParsingNoColorDuplexShortEdge) {
   const char kTestPpdData[] =
@@ -32,7 +45,7 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingNoColorDuplexShortEdge) {
       "*CloseGroup: General\n";
 
   printing::PrinterSemanticCapsAndDefaults caps;
-  EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+  EXPECT_TRUE(printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
   EXPECT_TRUE(caps.collate_capable);
   EXPECT_TRUE(caps.collate_default);
   EXPECT_TRUE(caps.copies_capable);
@@ -61,7 +74,7 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingNoColorDuplexSimples) {
       "*CloseGroup: General\n";
 
   printing::PrinterSemanticCapsAndDefaults caps;
-  EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+  EXPECT_TRUE(printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
   EXPECT_TRUE(caps.collate_capable);
   EXPECT_TRUE(caps.collate_default);
   EXPECT_TRUE(caps.copies_capable);
@@ -89,7 +102,7 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingNoColorNoDuplex) {
       "*CloseGroup: General\n";
 
   printing::PrinterSemanticCapsAndDefaults caps;
-  EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+  EXPECT_TRUE(printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
   EXPECT_TRUE(caps.collate_capable);
   EXPECT_TRUE(caps.collate_default);
   EXPECT_TRUE(caps.copies_capable);
@@ -124,7 +137,7 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingColorTrueDuplexShortEdge) {
       "*CloseGroup: General\n";
 
   printing::PrinterSemanticCapsAndDefaults caps;
-  EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+  EXPECT_TRUE(printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
   EXPECT_TRUE(caps.collate_capable);
   EXPECT_TRUE(caps.collate_default);
   EXPECT_TRUE(caps.copies_capable);
@@ -165,7 +178,7 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingColorFalseDuplexLongEdge) {
       "*CloseGroup: General\n";
 
   printing::PrinterSemanticCapsAndDefaults caps;
-  EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+  EXPECT_TRUE(printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
   EXPECT_TRUE(caps.collate_capable);
   EXPECT_TRUE(caps.collate_default);
   EXPECT_TRUE(caps.copies_capable);
@@ -181,7 +194,7 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingPageSize) {
   const char kTestPpdData[] =
       "*PPD-Adobe: \"4.3\"\n\n"
       "*OpenUI *PageSize: PickOne\n"
-      "*DefaultPageSize: Letter\n"
+      "*DefaultPageSize: Legal\n"
       "*PageSize Letter/US Letter: \""
       "  <</DeferredMediaSelection true /PageSize [612 792] "
       "  /ImagingBBox null /MediaClass null >> setpagedevice\"\n"
@@ -190,13 +203,13 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingPageSize) {
       "  <</DeferredMediaSelection true /PageSize [612 1008] "
       "  /ImagingBBox null /MediaClass null >> setpagedevice\"\n"
       "*End\n"
-      "*DefaultPaperDimension: Letter\n"
+      "*DefaultPaperDimension: Legal\n"
       "*PaperDimension Letter/US Letter: \"612   792\"\n"
       "*PaperDimension Legal/US Legal: \"612  1008\"\n\n"
       "*CloseUI: *PageSize\n\n";
 
   printing::PrinterSemanticCapsAndDefaults caps;
-  EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+  EXPECT_TRUE(printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
   ASSERT_EQ(2UL, caps.papers.size());
   EXPECT_EQ("Letter", caps.papers[0].vendor_id);
   EXPECT_EQ("US Letter", caps.papers[0].display_name);
@@ -206,6 +219,57 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingPageSize) {
   EXPECT_EQ("US Legal", caps.papers[1].display_name);
   EXPECT_EQ(215900, caps.papers[1].size_um.width());
   EXPECT_EQ(355600, caps.papers[1].size_um.height());
+  EXPECT_TRUE(PapersEqual(caps.papers[1], caps.default_paper));
+}
+
+TEST(PrintBackendCupsHelperTest, TestPpdParsingPageSizeNoDefaultSpecified) {
+  const char kTestPpdData[] =
+      R"(*PPD-Adobe: "4.3"
+*OpenUI *PageSize: PickOne
+*PageSize A3/ISO A3: "
+  << /DeferredMediaSelection true /PageSize [842 1191]
+  /ImagingBBox null >> setpagedevice"
+*End
+*PageSize A4/ISO A4: "
+  << /DeferredMediaSelection true /PageSize [595 842]
+  /ImagingBBox null >> setpagedevice"
+*End
+*PageSize Legal/US Legal: "
+  << /DeferredMediaSelection true /PageSize [612 1008]
+  /ImagingBBox null >> setpagedevice"
+*End
+*PageSize Letter/US Letter: "
+  << /DeferredMediaSelection true /PageSize [612 792]
+  /ImagingBBox null >> setpagedevice"
+*End
+*PaperDimension A3/ISO A3: "842 1191"
+*PaperDimension A4/ISO A4: "595 842"
+*PaperDimension Legal/US Legal: "612 1008"
+*PaperDimension Letter/US Letter: "612 792"
+*CloseUI: *PageSize)";
+
+  {
+    printing::PrinterSemanticCapsAndDefaults caps;
+    EXPECT_TRUE(
+        printing::ParsePpdCapabilities("test", "en-US", kTestPpdData, &caps));
+    ASSERT_EQ(4UL, caps.papers.size());
+    EXPECT_EQ("Letter", caps.papers[3].vendor_id);
+    EXPECT_EQ("US Letter", caps.papers[3].display_name);
+    EXPECT_EQ(215900, caps.papers[3].size_um.width());
+    EXPECT_EQ(279400, caps.papers[3].size_um.height());
+    EXPECT_TRUE(PapersEqual(caps.papers[3], caps.default_paper));
+  }
+  {
+    printing::PrinterSemanticCapsAndDefaults caps;
+    EXPECT_TRUE(
+        printing::ParsePpdCapabilities("test", "en-UK", kTestPpdData, &caps));
+    ASSERT_EQ(4UL, caps.papers.size());
+    EXPECT_EQ("A4", caps.papers[1].vendor_id);
+    EXPECT_EQ("ISO A4", caps.papers[1].display_name);
+    EXPECT_EQ(209903, caps.papers[1].size_um.width());
+    EXPECT_EQ(297039, caps.papers[1].size_um.height());
+    EXPECT_TRUE(PapersEqual(caps.papers[1], caps.default_paper));
+  }
 }
 
 TEST(PrintBackendCupsHelperTest, TestPpdParsingBrotherPrinters) {
@@ -221,7 +285,8 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingBrotherPrinters) {
         "*CloseUI: *BRPrintQuality\n\n";
 
     printing::PrinterSemanticCapsAndDefaults caps;
-    EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+    EXPECT_TRUE(
+        printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
     EXPECT_TRUE(caps.color_changeable);
     EXPECT_TRUE(caps.color_default);
     EXPECT_EQ(printing::BROTHER_BRSCRIPT3_COLOR, caps.color_model);
@@ -239,7 +304,8 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingBrotherPrinters) {
         "*CloseUI: *BRMonoColor\n\n";
 
     printing::PrinterSemanticCapsAndDefaults caps;
-    EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+    EXPECT_TRUE(
+        printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
     EXPECT_TRUE(caps.color_changeable);
     EXPECT_TRUE(caps.color_default);
     EXPECT_EQ(printing::BROTHER_CUPS_COLOR, caps.color_model);
@@ -257,7 +323,8 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingBrotherPrinters) {
         "*CloseUI: *BRDuplex\n\n";
 
     printing::PrinterSemanticCapsAndDefaults caps;
-    EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+    EXPECT_TRUE(
+        printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
     EXPECT_THAT(caps.duplex_modes, testing::UnorderedElementsAre(
                                        printing::SIMPLEX, printing::LONG_EDGE,
                                        printing::SHORT_EDGE));
@@ -277,7 +344,8 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingSamsungPrinters) {
         "*CloseUI: *ColorMode\n\n";
 
     printing::PrinterSemanticCapsAndDefaults caps;
-    EXPECT_TRUE(printing::ParsePpdCapabilities("test", kTestPpdData, &caps));
+    EXPECT_TRUE(
+        printing::ParsePpdCapabilities("test", "", kTestPpdData, &caps));
     EXPECT_TRUE(caps.color_changeable);
     EXPECT_TRUE(caps.color_default);
     EXPECT_EQ(printing::COLORMODE_COLOR, caps.color_model);
