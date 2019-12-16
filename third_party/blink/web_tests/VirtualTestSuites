@@ -410,7 +410,7 @@
   {
     "prefix": "wasm-site-isolated-code-cache",
     "bases": ["http/tests/devtools/wasm-isolated-code-cache"],
-    "args": ["--enable-features=IsolatedCodeCache",
+    "args": ["--enable-features=IsolatedCodeCache,WasmCodeCache",
              "--disable-features=WebAssemblyBaseline",
              "--site-per-process"]
   },
