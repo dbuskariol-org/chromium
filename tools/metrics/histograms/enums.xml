@@ -18929,6 +18929,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="653" label="NTPCustomBackgroundEnabled"/>
   <int value="654" label="DNSInterceptionChecksEnabled"/>
   <int value="655" label="PrimaryMouseButtonSwitch"/>
+  <int value="656" label="ReportDeviceCpuInfo"/>
 </enum>
 
 <enum name="EnterprisePolicyInvalidations">
