@@ -43,7 +43,7 @@ const base::Feature kNewTabstripAnimation{"NewTabstripAnimation",
 // Enables the new version of the profile menu(aka user menu).
 // https://crbug.com/966388
 const base::Feature kProfileMenuRevamp{"ProfileMenuRevamp",
-                                       base::FEATURE_DISABLED_BY_DEFAULT};
+                                       base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Enables a more prominent active tab title in dark mode to aid with
 // accessibility.
