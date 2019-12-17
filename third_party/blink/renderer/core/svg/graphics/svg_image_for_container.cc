@@ -54,7 +54,8 @@ void SVGImageForContainer::DrawPattern(GraphicsContext& context,
                                        const FloatPoint& phase,
                                        SkBlendMode op,
                                        const FloatRect& dst_rect,
-                                       const FloatSize& repeat_spacing) {
+                                       const FloatSize& repeat_spacing,
+                                       RespectImageOrientationEnum) {
   image_->DrawPatternForContainer(context, container_size_, zoom_, src_rect,
                                   scale, phase, op, dst_rect, repeat_spacing,
                                   url_);

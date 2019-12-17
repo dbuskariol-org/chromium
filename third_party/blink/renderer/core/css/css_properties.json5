@@ -1975,7 +1975,7 @@
       runtime_flag: "ImageOrientation",
       field_group: "*",
       field_template: "primitive",
-      default_value: "false",
+      default_value: "true",
       name_for_methods: "RespectImageOrientation",
       type_name: "bool",
       converter: "ConvertImageOrientation",

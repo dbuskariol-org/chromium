@@ -2934,30 +2934,12 @@ bool LayoutObject::IsRooted() const {
 
 RespectImageOrientationEnum LayoutObject::ShouldRespectImageOrientation(
     const LayoutObject* layout_object) {
-  if (!layout_object)
-    return kDoNotRespectImageOrientation;
-
-  // Respect the image's orientation if it's being used as a full-page image or
-  // it's an <img> and the setting to respect it everywhere is set or the <img>
-  // has image-orientation: from-image style. FIXME: crbug.com/498233
-  if (layout_object->GetDocument().IsImageDocument())
-    return kRespectImageOrientation;
-
-  if (!IsA<HTMLImageElement>(layout_object->GetNode()))
-    return kDoNotRespectImageOrientation;
-
-  if (layout_object->GetDocument().GetSettings() &&
-      layout_object->GetDocument()
-          .GetSettings()
-          ->GetShouldRespectImageOrientation())
-    return kRespectImageOrientation;
-
-  if (layout_object->Style() &&
-      layout_object->StyleRef().RespectImageOrientation() ==
+  if (layout_object && layout_object->Style() &&
+      layout_object->StyleRef().RespectImageOrientation() !=
           kRespectImageOrientation)
-    return kRespectImageOrientation;
+    return kDoNotRespectImageOrientation;
 
-  return kDoNotRespectImageOrientation;
+  return kRespectImageOrientation;
 }
 
 LayoutObject* LayoutObject::Container(AncestorSkipInfo* skip_info) const {

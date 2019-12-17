@@ -103,7 +103,8 @@ class SVGImageForContainer final : public Image {
                    const FloatPoint&,
                    SkBlendMode,
                    const FloatRect&,
-                   const FloatSize& repeat_spacing) override;
+                   const FloatSize& repeat_spacing,
+                   RespectImageOrientationEnum) override;
 
  private:
   SVGImageForContainer(SVGImage* image,

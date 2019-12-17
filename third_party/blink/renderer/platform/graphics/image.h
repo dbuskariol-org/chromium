@@ -277,7 +277,8 @@ class PLATFORM_EXPORT Image : public ThreadSafeRefCounted<Image> {
                            const FloatPoint& phase,
                            SkBlendMode,
                            const FloatRect&,
-                           const FloatSize& repeat_spacing);
+                           const FloatSize& repeat_spacing,
+                           RespectImageOrientationEnum);
 
   // Creates and initializes a PaintImageBuilder with the metadata flags for the
   // PaintImage.
