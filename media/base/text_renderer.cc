@@ -103,12 +103,11 @@ void TextRenderer::AddTextStream(DemuxerStream* text_stream,
   DCHECK(pending_eos_set_.find(text_stream) ==
          pending_eos_set_.end());
 
-  AddTextTrackDoneCB done_cb =
-      BindToCurrentLoop(base::Bind(&TextRenderer::OnAddTextTrackDone,
-                                   weak_factory_.GetWeakPtr(),
-                                   text_stream));
+  AddTextTrackDoneCB done_cb = BindToCurrentLoop(
+      base::BindOnce(&TextRenderer::OnAddTextTrackDone,
+                     weak_factory_.GetWeakPtr(), text_stream));
 
-  add_text_track_cb_.Run(config, done_cb);
+  add_text_track_cb_.Run(config, std::move(done_cb));
 }
 
 void TextRenderer::RemoveTextStream(DemuxerStream* text_stream) {

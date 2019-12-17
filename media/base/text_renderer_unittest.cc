@@ -87,7 +87,7 @@ class TextRendererTest : public testing::Test {
   }
 
   void OnAddTextTrack(const TextTrackConfig& config,
-                      const AddTextTrackDoneCB& done_cb) {
+                      AddTextTrackDoneCB done_cb) {
     base::Closure destroy_cb =
         base::Bind(&TextRendererTest::OnDestroyTextTrack,
                    base::Unretained(this), text_tracks_.size());
@@ -96,7 +96,7 @@ class TextRendererTest : public testing::Test {
     // text renderer deallocates them.
     text_tracks_.push_back(new FakeTextTrack(destroy_cb, config));
     std::unique_ptr<TextTrack> text_track(text_tracks_.back());
-    done_cb.Run(std::move(text_track));
+    std::move(done_cb).Run(std::move(text_track));
   }
 
   void RemoveTextTrack(unsigned idx) {
