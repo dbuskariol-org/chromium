@@ -101,7 +101,6 @@ class MockDataSource final : public mojom::BundleDataSource {
 
  private:
   // Implements mojom::BundledDataSource.
-  void GetSize(GetSizeCallback callback) override {}
   void Read(uint64_t offset, uint64_t length, ReadCallback callback) override {}
 
   mojo::Receiver<mojom::BundleDataSource> receiver_;

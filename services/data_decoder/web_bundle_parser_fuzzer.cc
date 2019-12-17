@@ -23,16 +23,13 @@ class DataSource : public data_decoder::mojom::BundleDataSource {
  public:
   DataSource(const uint8_t* data, size_t size) : data_(data), size_(size) {}
 
-  void GetSize(GetSizeCallback callback) override {
-    std::move(callback).Run(size_);
-  }
-
   void Read(uint64_t offset, uint64_t length, ReadCallback callback) override {
-    if (offset + length > size_) {
+    if (offset >= size_) {
       std::move(callback).Run(base::nullopt);
       return;
     }
     const uint8_t* start = data_ + offset;
+    length = std::min(length, size_ - offset);
     std::move(callback).Run(std::vector<uint8_t>(start, start + length));
   }
 
