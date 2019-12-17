@@ -69,6 +69,8 @@
 #include "chrome/browser/offline_pages/android/offline_page_auto_fetcher.h"
 #include "chrome/browser/ui/webui/explore_sites_internals/explore_sites_internals.mojom.h"
 #include "chrome/browser/ui/webui/explore_sites_internals/explore_sites_internals_ui.h"
+#include "chrome/browser/ui/webui/snippets_internals/snippets_internals.mojom.h"
+#include "chrome/browser/ui/webui/snippets_internals/snippets_internals_ui.h"
 #include "chrome/common/offline_page_auto_fetcher.mojom.h"
 #include "components/contextual_search/content/browser/contextual_search_js_api_service_impl.h"
 #include "components/contextual_search/content/common/mojom/contextual_search_js_api_service.mojom.h"
@@ -405,6 +407,9 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<
       explore_sites::ExploreSitesInternalsUI,
       explore_sites_internals::mojom::PageHandler>(map);
+
+  RegisterWebUIControllerInterfaceBinder<
+      SnippetsInternalsUI, snippets_internals::mojom::PageHandlerFactory>(map);
 #else
   RegisterWebUIControllerInterfaceBinder<DownloadsUI,
                                          downloads::mojom::PageHandlerFactory>(

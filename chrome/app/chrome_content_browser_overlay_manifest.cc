@@ -11,7 +11,6 @@
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
 #include "chrome/browser/ui/webui/omnibox/omnibox.mojom.h"
 #include "chrome/browser/ui/webui/reset_password/reset_password.mojom.h"
-#include "chrome/browser/ui/webui/snippets_internals/snippets_internals.mojom.h"
 #include "chrome/common/available_offline_content.mojom.h"
 #include "chrome/common/cache_stats_recorder.mojom.h"
 #include "chrome/common/net_benchmarking.mojom.h"
@@ -105,8 +104,7 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
 #if !defined(OS_ANDROID)
                 app_management::mojom::PageHandlerFactory,
 #endif
-                mojom::OmniboxPageHandler, mojom::ResetPasswordHandler,
-                snippets_internals::mojom::PageHandlerFactory>())
+                mojom::OmniboxPageHandler, mojom::ResetPasswordHandler>())
         .Build()
   };
   return *manifest;
