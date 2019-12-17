@@ -123,7 +123,7 @@ public class IdentityManagerIntegrationTest {
         AccountIdProvider provider = AccountIdProvider.getInstance();
         String[] accountNames = {mTestAccount1.getName(), mTestAccount2.getName()};
         String[] accountIds = {mTestAccount1.getGaiaId(), mTestAccount2.getGaiaId()};
-        IdentityServicesProvider.getAccountTrackerService().syncForceRefreshForTest(
+        IdentityServicesProvider.get().getAccountTrackerService().syncForceRefreshForTest(
                 accountIds, accountNames);
     }
 

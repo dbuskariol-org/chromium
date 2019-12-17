@@ -114,7 +114,7 @@ public class SigninHelper {
     private SigninHelper() {
         mProfileSyncService = ProfileSyncService.get();
         mSigninManager = IdentityServicesProvider.get().getSigninManager();
-        mAccountTrackerService = IdentityServicesProvider.getAccountTrackerService();
+        mAccountTrackerService = IdentityServicesProvider.get().getAccountTrackerService();
         mChromeSigninController = ChromeSigninController.get();
     }
 

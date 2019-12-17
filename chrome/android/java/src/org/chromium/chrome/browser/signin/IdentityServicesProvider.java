@@ -44,7 +44,7 @@ public class IdentityServicesProvider {
     }
 
     /** Getter for {@link AccountTrackerService} instance. */
-    private AccountTrackerService getAccountTrackerServiceInternal() {
+    public AccountTrackerService getAccountTrackerService() {
         ThreadUtils.assertOnUiThread();
         AccountTrackerService result = IdentityServicesProviderJni.get().getAccountTrackerService(
                 Profile.getLastUsedProfile());
@@ -59,11 +59,6 @@ public class IdentityServicesProvider {
                 IdentityServicesProviderJni.get().getSigninManager(Profile.getLastUsedProfile());
         assert result != null;
         return result;
-    }
-
-    /** Getter for {@link AccountTrackerService} instance. */
-    public static AccountTrackerService getAccountTrackerService() {
-        return get().getAccountTrackerServiceInternal();
     }
 
     @NativeMethods

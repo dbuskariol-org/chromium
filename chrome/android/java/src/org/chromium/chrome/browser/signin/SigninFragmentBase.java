@@ -413,7 +413,7 @@ public abstract class SigninFragmentBase
         // as this is needed for the previous account check.
         final long seedingStartTime = SystemClock.elapsedRealtime();
         final AccountTrackerService accountTrackerService =
-                IdentityServicesProvider.getAccountTrackerService();
+                IdentityServicesProvider.get().getAccountTrackerService();
         if (accountTrackerService.checkAndSeedSystemAccounts()) {
             recordAccountTrackerServiceSeedingTime(seedingStartTime);
             runStateMachineAndSignin(settingsClicked);
