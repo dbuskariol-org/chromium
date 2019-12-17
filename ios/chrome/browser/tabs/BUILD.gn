@@ -141,6 +141,8 @@ source_set("unit_tests") {
     "//ios/chrome/browser/history:tab_helper",
     "//ios/chrome/browser/infobars",
     "//ios/chrome/browser/main",
+    "//ios/chrome/browser/main",
+    "//ios/chrome/browser/main:test_support",
     "//ios/chrome/browser/ntp",
     "//ios/chrome/browser/sessions",
     "//ios/chrome/browser/sessions:serialisation",
