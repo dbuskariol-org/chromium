@@ -34,6 +34,7 @@
 #include "components/dom_distiller/content/common/mojom/distillability_service.mojom.h"
 #include "components/dom_distiller/content/common/mojom/distiller_javascript_service.mojom.h"
 #include "components/dom_distiller/core/dom_distiller_service.h"
+#include "components/feed/buildflags.h"
 #include "components/performance_manager/performance_manager_tab_helper.h"
 #include "components/performance_manager/public/mojom/coordination_unit.mojom.h"
 #include "components/translate/content/common/translate.mojom.h"
@@ -50,6 +51,11 @@
 #include "third_party/blink/public/mojom/loader/navigation_predictor.mojom.h"
 #include "third_party/blink/public/mojom/payments/payment_request.mojom.h"
 #include "third_party/blink/public/public_buildflags.h"
+
+#if BUILDFLAG(ENABLE_FEED_IN_CHROME)
+#include "chrome/browser/ui/webui/feed_internals/feed_internals.mojom.h"
+#include "chrome/browser/ui/webui/feed_internals/feed_internals_ui.h"
+#endif  // BUILDFLAG(ENABLE_FEED_IN_CHROME)
 
 #if BUILDFLAG(ENABLE_UNHANDLED_TAP)
 #include "chrome/browser/android/contextualsearch/unhandled_tap_notifier_impl.h"
@@ -425,6 +431,12 @@ void PopulateChromeWebUIFrameBinders(
 
   RegisterWebUIControllerInterfaceBinder<DiscardsUI,
                                          discards::mojom::GraphDump>(map);
+#endif
+
+#if BUILDFLAG(ENABLE_FEED_IN_CHROME)
+  RegisterWebUIControllerInterfaceBinder<FeedInternalsUI,
+                                         feed_internals::mojom::PageHandler>(
+      map);
 #endif
 }
 
