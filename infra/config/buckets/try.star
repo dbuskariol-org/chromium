@@ -1238,7 +1238,7 @@ def mac_builder(
     *,
     name,
     cores=None,
-    goma_backend = goma.backend.RBE_PROD,
+    goma_backend=goma.backend.RBE_PROD,
     os=os.MAC_ANY,
     **kwargs):
   return try_builder(
@@ -1247,6 +1247,7 @@ def mac_builder(
       goma_backend = goma_backend,
       mastername = 'tryserver.chromium.mac',
       os = os,
+      ssd = True,
       **kwargs
   )
 
@@ -1254,26 +1255,29 @@ mac_builder(
     name = 'mac-osxbeta-rel',
     builderless = True,
     os = os.MAC_DEFAULT,
-    ssd = True,
 )
 
-# NOTE: the following 3 trybots aren't sensitive to Mac version on which
+# NOTE: the following 4 trybots aren't sensitive to Mac version on which
 # they are built, hence no additional dimension is specified.
 # The 10.xx version translates to which bots will run isolated tests.
 mac_builder(
     name = 'mac_chromium_10.10',
+    builderless = True,
 )
 
 mac_builder(
     name = 'mac_chromium_10.12_rel_ng',
+    builderless = True,
 )
 
 mac_builder(
     name = 'mac_chromium_10.13_rel_ng',
+    builderless = True,
 )
 
 mac_builder(
     name = 'mac_chromium_10.14_rel_ng',
+    builderless = True,
 )
 
 mac_builder(
@@ -1290,16 +1294,17 @@ mac_builder(
     builderless = True,
     goma_jobs = goma.jobs.J150,
     os = os.MAC_10_13,
-    ssd = True,
     tryjob = tryjob(),
 )
 
 mac_builder(
     name = 'mac_chromium_compile_rel_ng',
+    builderless = True,
 )
 
 mac_builder(
     name = 'mac_chromium_dbg_ng',
+    builderless = True,
 )
 
 mac_builder(
