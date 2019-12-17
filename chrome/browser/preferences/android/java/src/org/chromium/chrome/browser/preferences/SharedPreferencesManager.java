@@ -22,6 +22,7 @@ import java.util.Set;
 /**
  * Layer over android {@link SharedPreferences}.
  */
+@SuppressWarnings("UseSharedPreferencesManagerFromChromeCheck")
 public class SharedPreferencesManager {
     private static class LazyHolder {
         static final SharedPreferencesManager INSTANCE = new SharedPreferencesManager();
