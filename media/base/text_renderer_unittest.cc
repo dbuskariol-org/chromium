@@ -58,7 +58,7 @@ class TextRendererTest : public testing::Test {
         task_environment_.GetMainThreadTaskRunner(),
         base::Bind(&TextRendererTest::OnAddTextTrack, base::Unretained(this))));
     text_renderer_->Initialize(
-        base::Bind(&TextRendererTest::OnEnd, base::Unretained(this)));
+        base::BindRepeating(&TextRendererTest::OnEnd, base::Unretained(this)));
   }
 
   void Destroy() {

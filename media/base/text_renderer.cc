@@ -34,7 +34,7 @@ TextRenderer::~TextRenderer() {
     std::move(pause_cb_).Run();
 }
 
-void TextRenderer::Initialize(const base::Closure& ended_cb) {
+void TextRenderer::Initialize(const base::RepeatingClosure& ended_cb) {
   DCHECK(task_runner_->BelongsToCurrentThread());
   DCHECK(ended_cb);
   DCHECK_EQ(kUninitialized, state_)  << "state_ " << state_;
