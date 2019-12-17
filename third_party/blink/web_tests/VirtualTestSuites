@@ -40,7 +40,10 @@
     "bases": ["external/wpt/css/css-paint-api",
               "http/tests/csspaint"],
     "args": ["--enable-threaded-compositing",
-             "--enable-blink-features=OffMainThreadCSSPaint"]
+             "--enable-blink-features=OffMainThreadCSSPaint",
+	     "--enable-gpu-rasterization",
+	     "--enable-oop-rasterization",
+	     "--enable-accelerated-2d-canvas"]
   },
   {
     "prefix": "prefer_compositing_to_lcd_text",
