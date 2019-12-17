@@ -4079,8 +4079,17 @@ The site does NOT gain access to the camera. The camera images are only visible 
         Download
       </message>
 
+      <!-- Sharing Hub -->
       <message name="IDS_SHARING_MORE_ICON_LABEL" desc="Icon label for the More button in the sharing hub.">
         More
+      </message>
+
+      <message name="IDS_SHARING_COPY_URL" desc="Label for the Copy URL button in the sharing hub.">
+        Copy link
+      </message>
+
+      <message name="IDS_LINK_COPIED" desc="Text shown in the toast notification when Copy Link is selected in the sharing hub.">
+        Link Copied
       </message>
 
       <!-- Chime DFM module strings -->

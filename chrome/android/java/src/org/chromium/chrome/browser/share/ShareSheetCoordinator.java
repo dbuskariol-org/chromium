@@ -5,6 +5,9 @@
 package org.chromium.chrome.browser.share;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.content.res.AppCompatResources;
 import android.view.View.OnClickListener;
@@ -13,11 +16,14 @@ import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ActivityTabProvider;
 import org.chromium.chrome.browser.send_tab_to_self.SendTabToSelfShareActivity;
 import org.chromium.chrome.browser.share.qrcode.QrCodeCoordinator;
+import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabLaunchType;
 import org.chromium.chrome.browser.tabmodel.TabCreatorManager;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController;
 import org.chromium.content_public.browser.LoadUrlParams;
+import org.chromium.content_public.browser.NavigationEntry;
 import org.chromium.ui.modelutil.PropertyModel;
+import org.chromium.ui.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -91,6 +97,26 @@ public class ShareSheetCoordinator {
                                             mBottomSheetController);
                                 });
         models.add(sttsPropertyModel);
+
+        // Copy URL
+        PropertyModel copyPropertyModel = createPropertyModel(
+                AppCompatResources.getDrawable(activity, R.drawable.ic_content_copy_black),
+                activity.getResources().getString(R.string.sharing_copy_url), (params) -> {
+                    mBottomSheetController.hideContent(bottomSheet, true);
+                    Tab tab = mActivityTabProvider.get();
+                    NavigationEntry entry =
+                            tab.getWebContents().getNavigationController().getVisibleEntry();
+                    ClipboardManager clipboard =
+                            (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(entry.getTitle(), entry.getUrl());
+                    clipboard.setPrimaryClip(clip);
+
+                    Toast toast =
+                            Toast.makeText(activity, R.string.link_copied, Toast.LENGTH_SHORT);
+                    toast.show();
+                });
+        models.add(copyPropertyModel);
+
         return models;
     }
 
