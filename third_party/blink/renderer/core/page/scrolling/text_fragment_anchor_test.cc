@@ -56,10 +56,10 @@ class TextFragmentAnchorTest : public SimTest {
   }
 
   void SimulateClick(int x, int y) {
-    WebMouseEvent event(
-        WebInputEvent::kMouseDown, WebFloatPoint(x, y), WebFloatPoint(x, y),
-        WebPointerProperties::Button::kLeft, 0,
-        WebInputEvent::Modifiers::kLeftButtonDown, base::TimeTicks::Now());
+    WebMouseEvent event(WebInputEvent::kMouseDown, gfx::PointF(x, y),
+                        gfx::PointF(x, y), WebPointerProperties::Button::kLeft,
+                        0, WebInputEvent::Modifiers::kLeftButtonDown,
+                        base::TimeTicks::Now());
     event.SetFrameScale(1);
     GetDocument().GetFrame()->GetEventHandler().HandleMousePressEvent(event);
   }
@@ -68,8 +68,8 @@ class TextFragmentAnchorTest : public SimTest {
     WebGestureEvent event(WebInputEvent::kGestureTap,
                           WebInputEvent::kNoModifiers, base::TimeTicks::Now(),
                           WebGestureDevice::kTouchscreen);
-    event.SetPositionInWidget(FloatPoint(x, y));
-    event.SetPositionInScreen(FloatPoint(x, y));
+    event.SetPositionInWidget(gfx::PointF(x, y));
+    event.SetPositionInScreen(gfx::PointF(x, y));
     event.SetFrameScale(1);
     GetDocument().GetFrame()->GetEventHandler().HandleGestureEvent(event);
   }

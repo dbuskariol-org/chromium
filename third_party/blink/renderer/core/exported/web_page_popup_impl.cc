@@ -446,8 +446,8 @@ WebInputEventResult WebPagePopupImpl::HandleGestureEvent(
     return WebInputEventResult::kNotHandled;
   if ((event.GetType() == WebInputEvent::kGestureTap ||
        event.GetType() == WebInputEvent::kGestureTapDown) &&
-      !IsViewportPointInWindow(event.PositionInWidget().x,
-                               event.PositionInWidget().y)) {
+      !IsViewportPointInWindow(event.PositionInWidget().x(),
+                               event.PositionInWidget().y())) {
     Cancel();
     return WebInputEventResult::kNotHandled;
   }
@@ -458,8 +458,8 @@ WebInputEventResult WebPagePopupImpl::HandleGestureEvent(
 
 void WebPagePopupImpl::HandleMouseDown(LocalFrame& main_frame,
                                        const WebMouseEvent& event) {
-  if (IsViewportPointInWindow(event.PositionInWidget().x,
-                              event.PositionInWidget().y))
+  if (IsViewportPointInWindow(event.PositionInWidget().x(),
+                              event.PositionInWidget().y()))
     PageWidgetEventHandler::HandleMouseDown(main_frame, event);
   else
     Cancel();
@@ -468,8 +468,8 @@ void WebPagePopupImpl::HandleMouseDown(LocalFrame& main_frame,
 WebInputEventResult WebPagePopupImpl::HandleMouseWheel(
     LocalFrame& main_frame,
     const WebMouseWheelEvent& event) {
-  if (IsViewportPointInWindow(event.PositionInWidget().x,
-                              event.PositionInWidget().y))
+  if (IsViewportPointInWindow(event.PositionInWidget().x(),
+                              event.PositionInWidget().y()))
     return PageWidgetEventHandler::HandleMouseWheel(main_frame, event);
   Cancel();
   return WebInputEventResult::kNotHandled;

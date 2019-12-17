@@ -35,10 +35,10 @@ class TextFragmentAnchorMetricsTest : public SimTest {
   }
 
   void SimulateClick(int x, int y) {
-    WebMouseEvent event(
-        WebInputEvent::kMouseDown, WebFloatPoint(x, y), WebFloatPoint(x, y),
-        WebPointerProperties::Button::kLeft, 0,
-        WebInputEvent::Modifiers::kLeftButtonDown, base::TimeTicks::Now());
+    WebMouseEvent event(WebInputEvent::kMouseDown, gfx::PointF(x, y),
+                        gfx::PointF(x, y), WebPointerProperties::Button::kLeft,
+                        0, WebInputEvent::Modifiers::kLeftButtonDown,
+                        base::TimeTicks::Now());
     event.SetFrameScale(1);
     GetDocument().GetFrame()->GetEventHandler().HandleMousePressEvent(event);
   }
