@@ -53,12 +53,10 @@
 #elif defined(OS_MACOSX)
 #include "components/viz/service/display/overlay_processor_mac.h"
 #elif defined(OS_ANDROID) || defined(USE_OZONE)
-#include "components/viz/service/display/overlay_candidate_validator_strategy.h"
 #include "components/viz/service/display/overlay_processor_using_strategy.h"
 #include "components/viz/service/display/overlay_strategy_single_on_top.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
 #else  // Default
-#include "components/viz/service/display/overlay_candidate_validator_strategy.h"
 #include "components/viz/service/display/overlay_processor_using_strategy.h"
 #endif
 
@@ -2282,30 +2280,13 @@ class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
              OverlayCandidateList* candidates,
              std::vector<gfx::Rect>* content_bounds));
   };
-  class Validator : public OverlayCandidateValidatorStrategy {
-   public:
-    OverlayProcessorUsingStrategy::StrategyList InitializeStrategies(
-        OverlayProcessorUsingStrategy* processor) override {
-      OverlayProcessorUsingStrategy::StrategyList strategies;
-      return strategies;
-    }
 
-    MOCK_CONST_METHOD0(NeedsSurfaceOccludingDamageRect, bool());
-
-    // A list of possible overlay candidates is presented to this function.
-    // The expected result is that those candidates that can be in a separate
-    // plane are marked with |overlay_handled| set to true, otherwise they are
-    // to be traditionally composited. Candidates with |overlay_handled| set to
-    // true must also have their |display_rect| converted to integer
-    // coordinates if necessary.
-    void CheckOverlaySupport(const PrimaryPlane* primary_plane,
-                             OverlayCandidateList* surfaces) override {}
-  };
-
-  void InitializeStrategies() override {
-    strategies_.push_back(std::make_unique<Strategy>());
-  }
-
+  // A list of possible overlay candidates is presented to this function.
+  // The expected result is that those candidates that can be in a separate
+  // plane are marked with |overlay_handled| set to true, otherwise they are
+  // to be traditionally composited. Candidates with |overlay_handled| set to
+  // true must also have their |display_rect| converted to integer
+  // coordinates if necessary.
   void CheckOverlaySupport(
       const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
       OverlayCandidateList* surfaces) override {}
@@ -2315,18 +2296,16 @@ class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
     return *(static_cast<Strategy*>(strategy));
   }
 
-  TestOverlayProcessor()
-      : OverlayProcessorUsingStrategy(
-            nullptr,
-            std::make_unique<TestOverlayProcessor::Validator>()) {
-    InitializeStrategies();
+  MOCK_CONST_METHOD0(NeedsSurfaceOccludingDamageRect, bool());
+  TestOverlayProcessor() : OverlayProcessorUsingStrategy(nullptr) {
+    strategies_.push_back(std::make_unique<Strategy>());
   }
   ~TestOverlayProcessor() override = default;
 };
 #else  // Default to no overlay.
 class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
  public:
-  TestOverlayProcessor() : OverlayProcessorUsingStrategy(nullptr, nullptr) {}
+  TestOverlayProcessor() : OverlayProcessorUsingStrategy(nullptr) {}
   ~TestOverlayProcessor() override = default;
 };
 #endif
@@ -2480,17 +2459,11 @@ TEST_F(GLRendererTest, DontOverlayWithCopyRequests) {
 #if defined(OS_ANDROID) || defined(USE_OZONE)
 class SingleOverlayOnTopProcessor : public OverlayProcessorUsingStrategy {
  public:
-  SingleOverlayOnTopProcessor()
-      : OverlayProcessorUsingStrategy(
-            nullptr,
-            std::unique_ptr<OverlayCandidateValidatorStrategy>()) {
-    InitializeStrategies();
-  }
-
-  void InitializeStrategies() override {
+  SingleOverlayOnTopProcessor() : OverlayProcessorUsingStrategy(nullptr) {
     strategies_.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
     strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
   }
+
   bool NeedsSurfaceOccludingDamageRect() const override { return true; }
 
   void CheckOverlaySupport(
@@ -3103,14 +3076,8 @@ class ContentBoundsOverlayProcessor : public OverlayProcessorUsingStrategy {
 
   explicit ContentBoundsOverlayProcessor(
       const std::vector<gfx::Rect>& content_bounds)
-      : OverlayProcessorUsingStrategy(
-            nullptr,
-            std::unique_ptr<OverlayCandidateValidatorStrategy>()),
+      : OverlayProcessorUsingStrategy(nullptr),
         content_bounds_(content_bounds) {
-    InitializeStrategies();
-  }
-
-  void InitializeStrategies() override {
     strategies_.push_back(
         std::make_unique<Strategy>(std::move(content_bounds_)));
   }

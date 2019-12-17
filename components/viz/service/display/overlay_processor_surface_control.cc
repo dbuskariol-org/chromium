@@ -2,14 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/viz/service/display_embedder/overlay_candidate_validator_surface_control.h"
+#include "components/viz/service/display/overlay_processor_surface_control.h"
 
-#include "cc/base/math_util.h"
 #include "components/viz/service/display/overlay_candidate_list.h"
-#include "components/viz/service/display/overlay_strategy_fullscreen.h"
-#include "components/viz/service/display/overlay_strategy_single_on_top.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
-#include "components/viz/service/display/renderer_utils.h"
 #include "ui/gfx/geometry/rect_conversions.h"
 #include "ui/gfx/overlay_transform_utils.h"
 #include "ui/gl/android/android_surface_control_compat.h"
@@ -33,37 +29,37 @@ gfx::RectF ClipFromOrigin(gfx::RectF input) {
 
 }  // namespace
 
-OverlayCandidateValidatorSurfaceControl::
-    OverlayCandidateValidatorSurfaceControl() = default;
-OverlayCandidateValidatorSurfaceControl::
-    ~OverlayCandidateValidatorSurfaceControl() = default;
-
-OverlayProcessorUsingStrategy::StrategyList
-OverlayCandidateValidatorSurfaceControl::InitializeStrategies(
-    OverlayProcessorUsingStrategy* processor) {
-  OverlayProcessorUsingStrategy::StrategyList strategies;
-  strategies.push_back(std::make_unique<OverlayStrategyUnderlay>(
-      processor,
-      OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
-  return strategies;
+OverlayProcessorSurfaceControl::OverlayProcessorSurfaceControl(
+    bool enable_overlay)
+    : OverlayProcessorUsingStrategy(nullptr), overlay_enabled_(enable_overlay) {
+  if (overlay_enabled_) {
+    strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
+        this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
+  }
 }
 
-bool OverlayCandidateValidatorSurfaceControl::NeedsSurfaceOccludingDamageRect()
-    const {
+OverlayProcessorSurfaceControl::~OverlayProcessorSurfaceControl() {}
+
+bool OverlayProcessorSurfaceControl::IsOverlaySupported() const {
+  return overlay_enabled_;
+}
+
+bool OverlayProcessorSurfaceControl::NeedsSurfaceOccludingDamageRect() const {
   return true;
 }
 
-void OverlayCandidateValidatorSurfaceControl::CheckOverlaySupport(
-    const PrimaryPlane* primary_plane,
-    OverlayCandidateList* surfaces) {
-  DCHECK(!surfaces->empty());
+void OverlayProcessorSurfaceControl::CheckOverlaySupport(
+    const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
+    OverlayCandidateList* candidates) {
+  DCHECK(!candidates->empty());
 
-  for (auto& candidate : *surfaces) {
+  for (auto& candidate : *candidates) {
     if (!gl::SurfaceControl::SupportsColorSpace(candidate.color_space)) {
       candidate.overlay_handled = false;
       return;
     }
 
+    // Check if screen rotation matches.
     if (candidate.transform != display_transform_) {
       candidate.overlay_handled = false;
       return;
@@ -97,49 +93,42 @@ void OverlayCandidateValidatorSurfaceControl::CheckOverlaySupport(
   }
 }
 
-void OverlayCandidateValidatorSurfaceControl::AdjustOutputSurfaceOverlay(
-    PrimaryPlane* output_surface_plane) {
-  DCHECK(output_surface_plane);
-  DCHECK(
-      gl::SurfaceControl::SupportsColorSpace(output_surface_plane->color_space))
+void OverlayProcessorSurfaceControl::AdjustOutputSurfaceOverlay(
+    base::Optional<OutputSurfaceOverlayPlane>* output_surface_plane) {
+  // For surface control, we should always have a valid |output_surface_plane|
+  // here.
+  DCHECK(output_surface_plane && output_surface_plane->has_value());
+
+  OutputSurfaceOverlayPlane& plane = output_surface_plane->value();
+  DCHECK(gl::SurfaceControl::SupportsColorSpace(plane.color_space))
       << "The main overlay must only use color space supported by the "
          "device";
 
-  DCHECK_EQ(output_surface_plane->transform, gfx::OVERLAY_TRANSFORM_NONE);
-  DCHECK(output_surface_plane->display_rect ==
-         ClipFromOrigin(output_surface_plane->display_rect));
+  DCHECK_EQ(plane.transform, gfx::OVERLAY_TRANSFORM_NONE);
+  DCHECK(plane.display_rect == ClipFromOrigin(plane.display_rect));
 
-  output_surface_plane->transform = display_transform_;
+  plane.transform = display_transform_;
   const gfx::Transform display_inverse = gfx::OverlayTransformToTransform(
       gfx::InvertOverlayTransform(display_transform_),
       gfx::SizeF(viewport_size_));
-  display_inverse.TransformRect(&output_surface_plane->display_rect);
-  output_surface_plane->display_rect =
-      gfx::RectF(gfx::ToEnclosingRect(output_surface_plane->display_rect));
+  display_inverse.TransformRect(&plane.display_rect);
+  plane.display_rect = gfx::RectF(gfx::ToEnclosingRect(plane.display_rect));
+
+  // Call the base class implementation.
+  OverlayProcessorUsingStrategy::AdjustOutputSurfaceOverlay(
+      output_surface_plane);
 }
 
-void OverlayCandidateValidatorSurfaceControl::SetDisplayTransform(
-    gfx::OverlayTransform transform) {
-  display_transform_ = transform;
-}
-
-void OverlayCandidateValidatorSurfaceControl::SetViewportSize(
-    const gfx::Size& viewport_size) {
-  viewport_size_ = viewport_size;
-}
-
-gfx::Rect
-OverlayCandidateValidatorSurfaceControl::GetOverlayDamageRectForOutputSurface(
+gfx::Rect OverlayProcessorSurfaceControl::GetOverlayDamageRectForOutputSurface(
     const OverlayCandidate& candidate) const {
   // Should only be called after ProcessForOverlays on handled candidates.
   DCHECK(candidate.overlay_handled);
-  // When the overlay is handled by the validator, we transform its display rect
-  // to the logical screen space (used by the ui when preparing the frame) that
-  // the SurfaceControl expects it to be in. So in order to provide a damage
-  // rect which maps to the OutputSurface's main plane, we need to undo that
-  // transformation.
-  // But only if the overlay is in handled state, since the modification above
-  // is only applied when we mark the overlay as handled.
+  // We transform the candidate's display rect to the logical screen space (used
+  // by the ui when preparing the frame) that the SurfaceControl expects it to
+  // be in. So in order to provide a damage rect which maps to the
+  // OutputSurface's main plane, we need to undo that transformation. But only
+  // if the overlay is in handled state, since the modification above is only
+  // applied when we mark the overlay as handled.
   gfx::Size viewport_size_pre_display_transform(viewport_size_.height(),
                                                 viewport_size_.width());
   auto transform = gfx::OverlayTransformToTransform(
@@ -147,6 +136,16 @@ OverlayCandidateValidatorSurfaceControl::GetOverlayDamageRectForOutputSurface(
   gfx::RectF transformed_rect(candidate.display_rect);
   transform.TransformRect(&transformed_rect);
   return gfx::ToEnclosedRect(transformed_rect);
+}
+
+void OverlayProcessorSurfaceControl::SetDisplayTransformHint(
+    gfx::OverlayTransform transform) {
+  display_transform_ = transform;
+}
+
+void OverlayProcessorSurfaceControl::SetViewportSize(
+    const gfx::Size& viewport_size) {
+  viewport_size_ = viewport_size;
 }
 
 }  // namespace viz

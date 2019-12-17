@@ -129,7 +129,7 @@ class VIZ_SERVICE_EXPORT OverlayProcessorInterface {
 
   // These two functions are used by Android SurfaceControl.
   virtual void SetDisplayTransformHint(gfx::OverlayTransform transform) {}
-  virtual void SetValidatorViewportSize(const gfx::Size& size) {}
+  virtual void SetViewportSize(const gfx::Size& size) {}
 
  protected:
   OverlayProcessorInterface() {}

@@ -5,7 +5,6 @@
 #include "components/viz/service/display/overlay_processor_android.h"
 
 #include "components/viz/service/display/overlay_candidate_list.h"
-#include "components/viz/service/display/overlay_candidate_validator_strategy.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
 #include "ui/gfx/geometry/rect_conversions.h"
 
@@ -14,27 +13,22 @@ namespace viz {
 OverlayProcessorAndroid::OverlayProcessorAndroid(
     SkiaOutputSurface* skia_output_surface,
     bool enable_overlay)
-    : OverlayProcessorUsingStrategy(
-          skia_output_surface,
-          std::unique_ptr<OverlayCandidateValidatorStrategy>()),
+    : OverlayProcessorUsingStrategy(skia_output_surface),
       overlay_enabled_(enable_overlay) {
-  if (overlay_enabled_)
-    InitializeStrategies();
+  if (overlay_enabled_) {
+    // For Android, we do not have the ability to skip an overlay, since the
+    // texture is already in a SurfaceView.  Ideally, we would honor a 'force
+    // overlay' flag that FromDrawQuad would also check.
+    // For now, though, just skip the opacity check.  We really have no idea if
+    // the underlying overlay is opaque anyway; the candidate is referring to
+    // a dummy resource that has no relation to what the overlay contains.
+    // https://crbug.com/842931 .
+    strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
+        this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
+  }
 }
 
 OverlayProcessorAndroid::~OverlayProcessorAndroid() {}
-
-void OverlayProcessorAndroid::InitializeStrategies() {
-  // For Android, we do not have the ability to skip an overlay, since the
-  // texture is already in a SurfaceView.  Ideally, we would honor a 'force
-  // overlay' flag that FromDrawQuad would also check.
-  // For now, though, just skip the opacity check.  We really have no idea if
-  // the underlying overlay is opaque anyway; the candidate is referring to
-  // a dummy resource that has no relation to what the overlay contains.
-  // https://crbug.com/842931 .
-  strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
-      this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
-}
 
 bool OverlayProcessorAndroid::IsOverlaySupported() const {
   return overlay_enabled_;

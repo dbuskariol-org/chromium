@@ -24,7 +24,6 @@ class VIZ_SERVICE_EXPORT OverlayProcessorAndroid
   OverlayProcessorAndroid(SkiaOutputSurface* skia_output_surface,
                           bool enable_overlay);
   ~OverlayProcessorAndroid() override;
-  void InitializeStrategies() override;
 
   bool IsOverlaySupported() const override;
 
@@ -32,7 +31,7 @@ class VIZ_SERVICE_EXPORT OverlayProcessorAndroid
 
   // Override OverlayProcessorUsingStrategy.
   void SetDisplayTransformHint(gfx::OverlayTransform transform) override {}
-  void SetValidatorViewportSize(const gfx::Size& size) override {}
+  void SetViewportSize(const gfx::Size& size) override {}
 
   void CheckOverlaySupport(
       const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,

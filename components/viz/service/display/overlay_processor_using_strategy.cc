@@ -14,7 +14,6 @@
 #include "components/viz/service/display/display_resource_provider.h"
 #include "components/viz/service/display/output_surface.h"
 #include "components/viz/service/display/overlay_candidate_list.h"
-#include "components/viz/service/display/overlay_candidate_validator_strategy.h"
 #include "components/viz/service/display/overlay_strategy_single_on_top.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
 #include "components/viz/service/display/skia_output_surface.h"
@@ -79,33 +78,20 @@ OverlayStrategy OverlayProcessorUsingStrategy::Strategy::GetUMAEnum() const {
 
 #if defined(OS_ANDROID)
 OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
-    SkiaOutputSurface* skia_output_surface,
-    std::unique_ptr<OverlayCandidateValidatorStrategy> overlay_validator)
-    : OverlayProcessorInterface(),
-      overlay_validator_(std::move(overlay_validator)),
-      skia_output_surface_(skia_output_surface) {
-  InitializeStrategies();
-}
+    SkiaOutputSurface* skia_output_surface)
+    : OverlayProcessorInterface(), skia_output_surface_(skia_output_surface) {}
 #else  // defined(USE_OZONE)
 OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
-    SkiaOutputSurface* skia_output_surface,
-    std::unique_ptr<OverlayCandidateValidatorStrategy> overlay_validator)
-    : OverlayProcessorInterface(),
-      overlay_validator_(std::move(overlay_validator)) {
-  InitializeStrategies();
-}
+    SkiaOutputSurface* skia_output_surface)
+    : OverlayProcessorInterface() {}
 #endif
-
-void OverlayProcessorUsingStrategy::InitializeStrategies() {
-  DCHECK(strategies_.empty());
-  if (overlay_validator_)
-    strategies_ = overlay_validator_->InitializeStrategies(this);
-}
 
 OverlayProcessorUsingStrategy::~OverlayProcessorUsingStrategy() = default;
 
 bool OverlayProcessorUsingStrategy::IsOverlaySupported() const {
-  return !!overlay_validator_;
+  // Expected to be overridden.
+  // TODO(weiliangc): Once added a stub class, make this pure virtual.
+  return false;
 }
 
 gfx::Rect OverlayProcessorUsingStrategy::GetAndResetOverlayDamage() {
@@ -248,12 +234,6 @@ void OverlayProcessorUsingStrategy::AdjustOutputSurfaceOverlay(
   if (!output_surface_plane || !output_surface_plane->has_value())
     return;
 
-  // This is used by the surface control implementation to adjust the display
-  // transform and the display rect.
-  if (overlay_validator_)
-    overlay_validator_->AdjustOutputSurfaceOverlay(
-        &(output_surface_plane->value()));
-
   // If the overlay candidates cover the entire screen, the
   // |output_surface_plane| could be removed.
   if (last_successful_strategy_ &&
@@ -262,20 +242,9 @@ void OverlayProcessorUsingStrategy::AdjustOutputSurfaceOverlay(
 }
 
 bool OverlayProcessorUsingStrategy::NeedsSurfaceOccludingDamageRect() const {
-  return overlay_validator_ &&
-         overlay_validator_->NeedsSurfaceOccludingDamageRect();
-}
-
-void OverlayProcessorUsingStrategy::SetDisplayTransformHint(
-    gfx::OverlayTransform transform) {
-  if (overlay_validator_)
-    overlay_validator_->SetDisplayTransform(transform);
-}
-
-void OverlayProcessorUsingStrategy::SetValidatorViewportSize(
-    const gfx::Size& size) {
-  if (overlay_validator_)
-    overlay_validator_->SetViewportSize(size);
+  // Expected to be overridden.
+  // TODO(weiliangc): Once added a stub class, make this pure virtual.
+  return false;
 }
 
 bool OverlayProcessorUsingStrategy::AttemptWithStrategies(
@@ -306,18 +275,8 @@ bool OverlayProcessorUsingStrategy::AttemptWithStrategies(
   return false;
 }
 
-void OverlayProcessorUsingStrategy::CheckOverlaySupport(
-    const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
-    OverlayCandidateList* candidate_list) {
-  if (overlay_validator_)
-    overlay_validator_->CheckOverlaySupport(primary_plane, candidate_list);
-}
-
 gfx::Rect OverlayProcessorUsingStrategy::GetOverlayDamageRectForOutputSurface(
     const OverlayCandidate& overlay) const {
-  if (overlay_validator_)
-    return overlay_validator_->GetOverlayDamageRectForOutputSurface(overlay);
-
   return ToEnclosedRect(overlay.display_rect);
 }
 }  // namespace viz
