@@ -6,6 +6,7 @@
 
 #include <stddef.h>
 
+#include "base/bind.h"
 #include "base/callback.h"
 #include "base/memory/scoped_refptr.h"
 #include "media/base/video_types.h"
@@ -97,26 +98,21 @@ std::unique_ptr<ImageProcessor> ImageProcessorFactory::Create(
     size_t num_buffers,
     scoped_refptr<base::SequencedTaskRunner> client_task_runner,
     ImageProcessor::ErrorCB error_cb) {
-  std::unique_ptr<ImageProcessor> image_processor;
+  std::vector<ImageProcessor::CreateBackendCB> create_funcs;
 #if BUILDFLAG(USE_VAAPI)
-  image_processor = VaapiImageProcessor::Create(input_config, output_config,
-                                                preferred_output_modes,
-                                                client_task_runner, error_cb);
-  if (image_processor)
-    return image_processor;
+  create_funcs.push_back(base::BindRepeating(&VaapiImageProcessor::Create));
 #endif  // BUILDFLAG(USE_VAAPI)
 #if BUILDFLAG(USE_V4L2_CODEC)
-  for (auto output_mode : preferred_output_modes) {
-    image_processor = V4L2ImageProcessor::Create(
-        client_task_runner, V4L2Device::Create(), input_config, output_config,
-        output_mode, num_buffers, error_cb);
-    if (image_processor)
-      return image_processor;
-  }
+  create_funcs.push_back(base::BindRepeating(
+      &V4L2ImageProcessor::Create, V4L2Device::Create(), num_buffers));
 #endif  // BUILDFLAG(USE_V4L2_CODEC)
-  for (auto output_mode : preferred_output_modes) {
-    image_processor = LibYUVImageProcessor::Create(
-        input_config, output_config, output_mode, client_task_runner, error_cb);
+  create_funcs.push_back(base::BindRepeating(&LibYUVImageProcessor::Create));
+
+  std::unique_ptr<ImageProcessor> image_processor;
+  for (auto& create_func : create_funcs) {
+    image_processor = ImageProcessor::Create(
+        std::move(create_func), input_config, output_config,
+        preferred_output_modes, error_cb, client_task_runner);
     if (image_processor)
       return image_processor;
   }
