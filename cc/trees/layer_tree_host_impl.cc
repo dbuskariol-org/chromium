@@ -3906,12 +3906,6 @@ InputHandler::ScrollStatus LayerTreeHostImpl::ScrollBegin(
   ScrollNode* scrolling_node = nullptr;
   bool scroll_on_main_thread = false;
 
-  // TODO(bokan): This appears Mac-specific - from
-  // https://codereview.chromium.org/2486673008 Suspect it is unnecessary - a
-  // fling should just produce GSUs without an intermediate GSB and GSE.
-  if (scroll_state->is_in_inertial_phase())
-    scrolling_node = CurrentlyScrollingNode();
-
   if (!scrolling_node) {
     ClearCurrentlyScrollingNode();
 
