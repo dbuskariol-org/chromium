@@ -1506,10 +1506,6 @@ SelectionModel RenderTextHarfBuzz::FindCursorPosition(
   return LineSelectionModel(line_index, CURSOR_RIGHT);
 }
 
-bool RenderTextHarfBuzz::IsSelectionSupported() const {
-  return true;
-}
-
 std::vector<Rect> RenderTextHarfBuzz::GetSubstringBounds(const Range& range) {
   EnsureLayout();
   DCHECK(!update_display_run_list_);
