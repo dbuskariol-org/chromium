@@ -6160,7 +6160,7 @@ crbug.com/1034492 http/tests/devtools/unit/soft-drop-down.js [ Pass Failure ]
 
 # Sheriff 2019-12-17
 crbug.com/1034841 external/wpt/webxr/xrSession_requestAnimationFrame_getViewerPose.https.html [ Pass Failure Timeout ]
-crbug.com/1034789 [ Mac10.13 ] virtual/web-components-v0-disabled/fast/events/no-fake-mousemove.html [ Pass Timeout ]
+crbug.com/1034789 [ Mac10.13 ] virtual/web-components-v0-disabled/fast/events/no-fake-mousemove.html [ Pass Timeout Failure ]
 crbug.com/1034789 [ Mac10.13 ] http/tests/security/frameNavigation/xss-ALLOWED-parent-navigation-change-async.html [ Pass Timeout ]
 crbug.com/1034789 [ Mac10.13 ] virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Timeout ]
 crbug.com/1034789 [ Mac10.13 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
