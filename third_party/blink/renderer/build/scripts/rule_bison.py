@@ -33,8 +33,8 @@
 # found in the LICENSE file.
 
 # usage: rule_bison.py INPUT_FILE OUTPUT_DIR BISON_EXE
-# INPUT_FILE is a path to either XPathGrammar.y.
-# OUTPUT_DIR is where the bison-generated .cpp and .h files should be placed.
+# INPUT_FILE is a path to either xpath_grammar.y.
+# OUTPUT_DIR is where the bison-generated .cc and .h files should be placed.
 
 import errno
 import os
@@ -59,7 +59,7 @@ def modify_file(path, prefix_lines, suffix_lines, replace_list=[]):
 
 
 def main():
-    assert len(sys.argv) == 4 or len(sys.argv) == 5
+    assert len(sys.argv) == 4
 
     input_file = sys.argv[1]
     output_dir = sys.argv[2]
@@ -76,59 +76,36 @@ def main():
     assert input_name == 'xpath_grammar.y'
     prefix = {'xpath_grammar.y': 'xpathyy'}[input_name]
 
-    new_input_root = os.path.splitext(input_name)[0] + '_generated'
+    # Output name without directory and extension.
+    output_basename = os.path.splitext(input_name)[0] + '_generated'
 
-    # The generated .h will be in a different location depending on the bison
-    # version.
-    output_h_tries = [
-        os.path.join(output_dir, new_input_root + '.cpp.h'),
-        os.path.join(output_dir, new_input_root + '.hpp'),
-        os.path.join(output_dir, new_input_root + '.hh'),
-    ]
-
-    for output_h_try in output_h_tries:
-        try:
-            os.unlink(output_h_try)
-        except OSError, e:
-            if e.errno != errno.ENOENT:
-                raise
-
-    output_cc = os.path.join(output_dir, new_input_root + '.cc')
+    output_cc = os.path.join(output_dir, output_basename + '.cc')
+    BISON_HEADER_EXT = '.hh'
+    original_output_h = os.path.join(output_dir,
+                                     output_basename + BISON_HEADER_EXT)
 
     return_code = subprocess.call([bison_exe, '-d', '-p', prefix, input_file,
                                    '-o', output_cc])
     assert return_code == 0
-
-    # Find the name that bison used for the generated header file.
-    output_h_tmp = None
-    for output_h_try in output_h_tries:
-        try:
-            os.stat(output_h_try)
-            output_h_tmp = output_h_try
-            break
-        except OSError, e:
-            if e.errno != errno.ENOENT:
-                raise
-
-    assert output_h_tmp is not None
+    # If the file doesn't exist, this raise an OSError.
+    os.stat(original_output_h)
 
     # The generated files contain references to the original "foo.hh" for
     # #include and #line. We replace them with "foo.h".
-    (output_h_basename, output_h_tmp_ext) = os.path.splitext(output_h_tmp)
-    output_h_basename = os.path.basename(output_h_basename)
-    common_replace_list = [(output_h_basename + output_h_tmp_ext, output_h_basename + '.h')]
+    common_replace_list = [(output_basename + BISON_HEADER_EXT,
+                            output_basename + '.h')]
 
     # Rewrite the generated header with #include guards.
     CLANG_FORMAT_DISABLE_LINE = "// clang-format off"
-    output_h = os.path.join(output_dir, new_input_root + '.h')
+    output_h = os.path.join(output_dir, output_basename + '.h')
     header_guard = NameStyleConverter(output_h).to_header_guard()
-    modify_file(output_h_tmp,
+    modify_file(original_output_h,
                 [CLANG_FORMAT_DISABLE_LINE,
                  '#ifndef %s' % header_guard,
                  '#define %s' % header_guard],
                 ['#endif  // %s' % header_guard],
                 replace_list=common_replace_list)
-    os.rename(output_h_tmp, output_h)
+    os.rename(original_output_h, output_h)
 
     modify_file(output_cc, [CLANG_FORMAT_DISABLE_LINE], [],
                 replace_list=common_replace_list)
