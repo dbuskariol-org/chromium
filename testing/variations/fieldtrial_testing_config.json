@@ -5600,6 +5600,9 @@
             "experiments": [
                 {
                     "name": "Enabled",
+                    "params": {
+                        "SafeBrowsingRealTimeUrlLookupMemoryThresholdMb": "4096"
+                    },
                     "enable_features": [
                         "SafeBrowsingRealTimeUrlLookupEnabled"
                     ]
