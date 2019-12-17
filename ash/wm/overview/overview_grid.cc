@@ -512,10 +512,7 @@ void OverviewGrid::PositionWindows(
     // might need animation even if the grid needs animation.
     if (animate && transition == OverviewSession::OverviewTransition::kEnter)
       should_animate_item = window_item->should_animate_when_entering();
-    // Do not do the bounds animation for the drop target. We'll do the opacity
-    // animation by ourselves.
-    if (IsDropTargetWindow(window_item->GetWindow()))
-      should_animate_item = false;
+
     if (animate && transition == OverviewSession::OverviewTransition::kEnter) {
       if (window_item->should_animate_when_entering() &&
           !has_non_cover_animating) {
