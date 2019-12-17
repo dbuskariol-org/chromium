@@ -98,14 +98,23 @@ for outputHTry in outputHTries:
 assert outputHTmp != None
 
 
-def modifyFile(path, prefixLines, suffixLines):
+def modifyFile(path, prefixLines, suffixLines, replace_list=[]):
     prefixLines = map(lambda s: s + '\n', prefixLines)
     suffixLines = map(lambda s: s + '\n', suffixLines)
     with open(path, 'r') as f:
         oldLines = f.readlines()
+    for i in range(len(oldLines)):
+        for src, dest in replace_list:
+            oldLines[i] = oldLines[i].replace(src, dest)
     newLines = prefixLines + oldLines + suffixLines
     with open(path, 'w') as f:
         f.writelines(newLines)
+
+# The generated files contain references to the original "foo.hh" for #include and
+# #line. We replace them with "foo.h".
+(output_h_basename, output_h_tmp_ext) = os.path.splitext(outputHTmp)
+output_h_basename = os.path.basename(output_h_basename)
+common_replace_list = [(output_h_basename + output_h_tmp_ext, output_h_basename + '.h')]
 
 # Rewrite the generated header with #include guards.
 kClangFormatDisableLine = "// clang-format off"
@@ -115,8 +124,10 @@ modifyFile(outputHTmp,
            [kClangFormatDisableLine,
             '#ifndef %s' % headerGuard,
             '#define %s' % headerGuard,
-            ], ['#endif  // %s' % headerGuard]
+            ], ['#endif  // %s' % headerGuard],
+           replace_list=common_replace_list
            )
 os.rename(outputHTmp, outputH)
 
-modifyFile(outputCpp, [kClangFormatDisableLine], [])
+modifyFile(outputCpp, [kClangFormatDisableLine], [],
+           replace_list=common_replace_list)

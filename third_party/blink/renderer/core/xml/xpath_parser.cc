@@ -39,6 +39,9 @@
 namespace blink {
 namespace xpath {
 
+using xpathyy::YyParser;
+using TokenType = xpathyy::YyParser::token;
+
 Parser* Parser::current_parser_ = nullptr;
 
 enum XMLCat { kNameStart, kNameCont, kNotPartOfName };
@@ -119,20 +122,20 @@ bool Parser::IsBinaryOperatorContext() const {
   switch (last_token_type_) {
     case 0:
     case '@':
-    case AXISNAME:
+    case TokenType::AXISNAME:
     case '(':
     case '[':
     case ',':
-    case AND:
-    case OR:
-    case MULOP:
+    case TokenType::AND:
+    case TokenType::OR:
+    case TokenType::MULOP:
     case '/':
-    case SLASHSLASH:
+    case TokenType::SLASHSLASH:
     case '|':
-    case PLUS:
-    case MINUS:
-    case EQOP:
-    case RELOP:
+    case TokenType::PLUS:
+    case TokenType::MINUS:
+    case TokenType::EQOP:
+    case TokenType::RELOP:
       return false;
     default:
       return true;
@@ -190,12 +193,12 @@ Token Parser::LexString() {
       if (value.IsNull())
         value = "";
       ++next_pos_;  // Consume the char.
-      return Token(LITERAL, value);
+      return Token(TokenType::LITERAL, value);
     }
   }
 
   // Ouch, went off the end -- report error.
-  return Token(XPATH_ERROR);
+  return Token(TokenType::XPATH_ERROR);
 }
 
 Token Parser::LexNumber() {
@@ -216,7 +219,8 @@ Token Parser::LexNumber() {
     }
   }
 
-  return Token(NUMBER, data_.Substring(start_pos, next_pos_ - start_pos));
+  return Token(TokenType::NUMBER,
+               data_.Substring(start_pos, next_pos_ - start_pos));
 }
 
 bool Parser::LexNCName(String& name) {
@@ -292,62 +296,69 @@ Token Parser::NextTokenInternal() {
     case '.': {
       char next = PeekAheadHelper();
       if (next == '.')
-        return MakeTokenAndAdvance(DOTDOT, 2);
+        return MakeTokenAndAdvance(TokenType::DOTDOT, 2);
       if (next >= '0' && next <= '9')
         return LexNumber();
       return MakeTokenAndAdvance('.');
     }
     case '/':
       if (PeekAheadHelper() == '/')
-        return MakeTokenAndAdvance(SLASHSLASH, 2);
+        return MakeTokenAndAdvance(TokenType::SLASHSLASH, 2);
       return MakeTokenAndAdvance('/');
     case '+':
-      return MakeTokenAndAdvance(PLUS);
+      return MakeTokenAndAdvance(TokenType::PLUS);
     case '-':
-      return MakeTokenAndAdvance(MINUS);
+      return MakeTokenAndAdvance(TokenType::MINUS);
     case '=':
-      return MakeTokenAndAdvance(EQOP, EqTestOp::kOpcodeEqual);
+      return MakeTokenAndAdvance(TokenType::EQOP, EqTestOp::kOpcodeEqual);
     case '!':
-      if (PeekAheadHelper() == '=')
-        return MakeTokenAndAdvance(EQOP, EqTestOp::kOpcodeNotEqual, 2);
-      return Token(XPATH_ERROR);
+      if (PeekAheadHelper() == '=') {
+        return MakeTokenAndAdvance(TokenType::EQOP, EqTestOp::kOpcodeNotEqual,
+                                   2);
+      }
+      return Token(TokenType::XPATH_ERROR);
     case '<':
-      if (PeekAheadHelper() == '=')
-        return MakeTokenAndAdvance(RELOP, EqTestOp::kOpcodeLessOrEqual, 2);
-      return MakeTokenAndAdvance(RELOP, EqTestOp::kOpcodeLessThan);
+      if (PeekAheadHelper() == '=') {
+        return MakeTokenAndAdvance(TokenType::RELOP,
+                                   EqTestOp::kOpcodeLessOrEqual, 2);
+      }
+      return MakeTokenAndAdvance(TokenType::RELOP, EqTestOp::kOpcodeLessThan);
     case '>':
-      if (PeekAheadHelper() == '=')
-        return MakeTokenAndAdvance(RELOP, EqTestOp::kOpcodeGreaterOrEqual, 2);
-      return MakeTokenAndAdvance(RELOP, EqTestOp::kOpcodeGreaterThan);
+      if (PeekAheadHelper() == '=') {
+        return MakeTokenAndAdvance(TokenType::RELOP,
+                                   EqTestOp::kOpcodeGreaterOrEqual, 2);
+      }
+      return MakeTokenAndAdvance(TokenType::RELOP,
+                                 EqTestOp::kOpcodeGreaterThan);
     case '*':
       if (IsBinaryOperatorContext())
-        return MakeTokenAndAdvance(MULOP, NumericOp::kOP_Mul);
+        return MakeTokenAndAdvance(TokenType::MULOP, NumericOp::kOP_Mul);
       ++next_pos_;
-      return Token(NAMETEST, "*");
+      return Token(TokenType::NAMETEST, "*");
     case '$': {  // $ QName
       next_pos_++;
       String name;
       if (!LexQName(name))
-        return Token(XPATH_ERROR);
-      return Token(VARIABLEREFERENCE, name);
+        return Token(TokenType::XPATH_ERROR);
+      return Token(TokenType::VARIABLEREFERENCE, name);
     }
   }
 
   String name;
   if (!LexNCName(name))
-    return Token(XPATH_ERROR);
+    return Token(TokenType::XPATH_ERROR);
 
   SkipWS();
   // If we're in an operator context, check for any operator names
   if (IsBinaryOperatorContext()) {
     if (name == "and")  // ### hash?
-      return Token(AND);
+      return Token(TokenType::AND);
     if (name == "or")
-      return Token(OR);
+      return Token(TokenType::OR);
     if (name == "mod")
-      return Token(MULOP, NumericOp::kOP_Mod);
+      return Token(TokenType::MULOP, NumericOp::kOP_Mod);
     if (name == "div")
-      return Token(MULOP, NumericOp::kOP_Div);
+      return Token(TokenType::MULOP, NumericOp::kOP_Div);
   }
 
   // See whether we are at a :
@@ -360,9 +371,9 @@ Token Parser::NextTokenInternal() {
       // It might be an axis name.
       Step::Axis axis;
       if (IsAxisName(name, axis))
-        return Token(AXISNAME, axis);
+        return Token(TokenType::AXISNAME, axis);
       // Ugh, :: is only valid in axis names -> error
-      return Token(XPATH_ERROR);
+      return Token(TokenType::XPATH_ERROR);
     }
 
     // Seems like this is a fully qualified qname, or perhaps the * modified
@@ -370,13 +381,13 @@ Token Parser::NextTokenInternal() {
     SkipWS();
     if (PeekCurHelper() == '*') {
       next_pos_++;
-      return Token(NAMETEST, name + ":*");
+      return Token(TokenType::NAMETEST, name + ":*");
     }
 
     // Make a full qname.
     String n2;
     if (!LexNCName(n2))
-      return Token(XPATH_ERROR);
+      return Token(TokenType::XPATH_ERROR);
 
     name = name + ":" + n2;
   }
@@ -388,16 +399,16 @@ Token Parser::NextTokenInternal() {
     // Either node type of function name
     if (IsNodeTypeName(name)) {
       if (name == "processing-instruction")
-        return Token(PI, name);
+        return Token(TokenType::PI, name);
 
-      return Token(NODETYPE, name);
+      return Token(TokenType::NODETYPE, name);
     }
     // Must be a function name.
-    return Token(FUNCTIONNAME, name);
+    return Token(TokenType::FUNCTIONNAME, name);
   }
 
   // At this point, it must be NAMETEST.
-  return Token(NAMETEST, name);
+  return Token(TokenType::NAMETEST, name);
 }
 
 Token Parser::NextToken() {
@@ -422,29 +433,28 @@ void Parser::Reset(const String& data) {
 }
 
 int Parser::Lex(void* data) {
-  YYSTYPE* yylval = static_cast<YYSTYPE*>(data);
+  auto* yylval = static_cast<YyParser::semantic_type*>(data);
   Token tok = NextToken();
 
   switch (tok.type) {
-    case AXISNAME:
-      yylval->axis = tok.axis;
+    case TokenType::AXISNAME:
+      yylval->build<Step::Axis>() = tok.axis;
       break;
-    case MULOP:
-      yylval->num_op = tok.numop;
+    case TokenType::MULOP:
+      yylval->build<NumericOp::Opcode>() = tok.numop;
       break;
-    case RELOP:
-    case EQOP:
-      yylval->eq_op = tok.eqop;
+    case TokenType::RELOP:
+    case TokenType::EQOP:
+      yylval->build<EqTestOp::Opcode>() = tok.eqop;
       break;
-    case NODETYPE:
-    case PI:
-    case FUNCTIONNAME:
-    case LITERAL:
-    case VARIABLEREFERENCE:
-    case NUMBER:
-    case NAMETEST:
-      yylval->str = new String(tok.str);
-      RegisterString(yylval->str);
+    case TokenType::NODETYPE:
+    case TokenType::PI:
+    case TokenType::FUNCTIONNAME:
+    case TokenType::LITERAL:
+    case TokenType::VARIABLEREFERENCE:
+    case TokenType::NUMBER:
+    case TokenType::NAMETEST:
+      yylval->build<String>() = String(tok.str);
       break;
   }
 
@@ -478,12 +488,10 @@ Expression* Parser::ParseStatement(const String& statement,
 
   Parser* old_parser = current_parser_;
   current_parser_ = this;
-  int parse_error = xpathyyparse(this);
+  int parse_error = YyParser(this).parse();
   current_parser_ = old_parser;
 
   if (parse_error) {
-    strings_.clear();
-
     top_expr_ = nullptr;
 
     if (got_namespace_error_)
@@ -496,27 +504,10 @@ Expression* Parser::ParseStatement(const String& statement,
           "The string '" + statement + "' is not a valid XPath expression.");
     return nullptr;
   }
-  DCHECK_EQ(strings_.size(), 0u);
   Expression* result = top_expr_;
   top_expr_ = nullptr;
 
   return result;
-}
-
-void Parser::RegisterString(String* s) {
-  if (!s)
-    return;
-
-  DCHECK(!strings_.Contains(s));
-  strings_.insert(base::WrapUnique(s));
-}
-
-void Parser::DeleteString(String* s) {
-  if (!s)
-    return;
-
-  DCHECK(strings_.Contains(s));
-  strings_.erase(s);
 }
 
 }  // namespace xpath
