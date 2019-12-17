@@ -6,6 +6,7 @@
 #define COMPONENTS_PERFORMANCE_MANAGER_PERFORMANCE_MANAGER_REGISTRY_IMPL_H_
 
 #include "base/containers/flat_set.h"
+#include "base/observer_list.h"
 #include "base/sequence_checker.h"
 #include "components/performance_manager/embedder/performance_manager_registry.h"
 #include "components/performance_manager/performance_manager_tab_helper.h"
@@ -17,6 +18,8 @@ class WebContents;
 }  // namespace content
 
 namespace performance_manager {
+
+class PerformanceManagerMainThreadObserver;
 
 class PerformanceManagerRegistryImpl
     : public PerformanceManagerRegistry,
@@ -33,6 +36,11 @@ class PerformanceManagerRegistryImpl
   // Returns the only instance of PerformanceManagerRegistryImpl living in this
   // process, or nullptr if there is none.
   static PerformanceManagerRegistryImpl* GetInstance();
+
+  // Adds / removes an observer that is notified when a PageNode is created on
+  // the main thread.
+  void AddObserver(PerformanceManagerMainThreadObserver* observer);
+  void RemoveObserver(PerformanceManagerMainThreadObserver* observer);
 
   // PerformanceManagerRegistry:
   void CreatePageNodeForWebContents(
@@ -56,6 +64,8 @@ class PerformanceManagerRegistryImpl
   // data. Used to destroy all user data when the registry is destroyed.
   base::flat_set<content::WebContents*> web_contents_;
   base::flat_set<content::RenderProcessHost*> render_process_hosts_;
+
+  base::ObserverList<PerformanceManagerMainThreadObserver> observers_;
 };
 
 }  // namespace performance_manager

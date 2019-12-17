@@ -7,6 +7,7 @@
 #include "base/stl_util.h"
 #include "components/performance_manager/performance_manager_tab_helper.h"
 #include "components/performance_manager/public/performance_manager.h"
+#include "components/performance_manager/public/performance_manager_main_thread_observer.h"
 #include "content/public/browser/render_process_host.h"
 
 namespace performance_manager {
@@ -38,6 +39,16 @@ PerformanceManagerRegistryImpl* PerformanceManagerRegistryImpl::GetInstance() {
   return g_instance;
 }
 
+void PerformanceManagerRegistryImpl::AddObserver(
+    PerformanceManagerMainThreadObserver* observer) {
+  observers_.AddObserver(observer);
+}
+
+void PerformanceManagerRegistryImpl::RemoveObserver(
+    PerformanceManagerMainThreadObserver* observer) {
+  observers_.RemoveObserver(observer);
+}
+
 void PerformanceManagerRegistryImpl::CreatePageNodeForWebContents(
     content::WebContents* web_contents) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
@@ -53,6 +64,9 @@ void PerformanceManagerRegistryImpl::CreatePageNodeForWebContents(
         PerformanceManagerTabHelper::FromWebContents(web_contents);
     DCHECK(tab_helper);
     tab_helper->SetDestructionObserver(this);
+
+    for (auto& observer : observers_)
+      observer.OnPageNodeCreatedForWebContents(web_contents);
   }
 }
 
