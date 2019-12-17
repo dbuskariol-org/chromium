@@ -71,7 +71,6 @@ class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
   gfx::Rect GetAndResetOverlayDamage() final;
 
   // Override OverlayProcessor.
-  // TODO(weiliangc): Once added a stub class, make this pure virtual.
   void SetDisplayTransformHint(gfx::OverlayTransform transform) override {}
   void SetViewportSize(const gfx::Size& size) override {}
 
@@ -97,8 +96,7 @@ class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
   void AdjustOutputSurfaceOverlay(
       base::Optional<OutputSurfaceOverlayPlane>* output_surface_plane) override;
 
-  explicit OverlayProcessorUsingStrategy(
-      SkiaOutputSurface* skia_output_surface);
+  OverlayProcessorUsingStrategy();
 
   // A list of possible overlay candidates is presented to this function.
   // The expected result is that those candidates that can be in a separate
@@ -106,7 +104,6 @@ class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
   // to be traditionally composited. Candidates with |overlay_handled| set to
   // true must also have their |display_rect| converted to integer
   // coordinates if necessary.
-  // TODO(weiliangc): Once added a stub class, make this pure virtual.
   virtual void CheckOverlaySupport(
       const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
       OverlayCandidateList* candidate_list) = 0;
@@ -147,9 +144,11 @@ class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
       OverlayCandidateList* candidates,
       std::vector<gfx::Rect>* content_bounds);
 
-#if defined(OS_ANDROID)
-  SkiaOutputSurface* skia_output_surface_;
-#endif
+  // Used by Android pre-SurfaceControl to notify promotion hints.
+  virtual void NotifyOverlayPromotion(
+      DisplayResourceProvider* resource_provider,
+      const OverlayCandidateList& candidate_list) const;
+
   DISALLOW_COPY_AND_ASSIGN(OverlayProcessorUsingStrategy);
 };
 

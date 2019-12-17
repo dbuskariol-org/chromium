@@ -46,8 +46,6 @@ class VIZ_SERVICE_EXPORT OverlayCandidateList
   // Set of resources that have requested a promotion hint that also have quads
   // that use them.
   ResourceIdSet promotion_hint_requestor_set_;
-  // base::flat_set<DisplayResourceProvider::ScopedReadLockSharedImage>
-  //     promotion_requestors_shared_image_;
 
   // Helper to insert |candidate| into |promotion_hint_info_|.
   void AddPromotionHint(const OverlayCandidate& candidate);
@@ -57,12 +55,13 @@ class VIZ_SERVICE_EXPORT OverlayCandidateList
       const DisplayResourceProvider* resource_provider,
       const DrawQuad* quad);
 
-  std::vector<
-      std::unique_ptr<DisplayResourceProvider::ScopedReadLockSharedImage>>
-  ConvertLocalPromotionToMailboxKeyed(
+  using SharedImageLocks = std::vector<
+      std::unique_ptr<DisplayResourceProvider::ScopedReadLockSharedImage>>;
+
+  SharedImageLocks ConvertLocalPromotionToMailboxKeyed(
       DisplayResourceProvider* resource_provider,
       base::flat_set<gpu::Mailbox>* promotion_denied,
-      base::flat_map<gpu::Mailbox, gfx::Rect>* possible_promotions);
+      base::flat_map<gpu::Mailbox, gfx::Rect>* possible_promotions) const;
 };
 
 }  // namespace viz

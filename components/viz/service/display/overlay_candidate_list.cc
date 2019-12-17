@@ -48,11 +48,11 @@ void OverlayCandidateList::AddToPromotionHintRequestorSetIfNeeded(
   promotion_hint_requestor_set_.insert(id);
 }
 
-std::vector<std::unique_ptr<DisplayResourceProvider::ScopedReadLockSharedImage>>
+OverlayCandidateList::SharedImageLocks
 OverlayCandidateList::ConvertLocalPromotionToMailboxKeyed(
     DisplayResourceProvider* resource_provider,
     base::flat_set<gpu::Mailbox>* promotion_denied,
-    base::flat_map<gpu::Mailbox, gfx::Rect>* possible_promotions) {
+    base::flat_map<gpu::Mailbox, gfx::Rect>* possible_promotions) const {
   DCHECK(empty() || size() == 1u);
   std::vector<
       std::unique_ptr<DisplayResourceProvider::ScopedReadLockSharedImage>>

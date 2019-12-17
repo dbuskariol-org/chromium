@@ -2299,7 +2299,7 @@ class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
   }
 
   MOCK_CONST_METHOD0(NeedsSurfaceOccludingDamageRect, bool());
-  TestOverlayProcessor() : OverlayProcessorUsingStrategy(nullptr) {
+  TestOverlayProcessor() : OverlayProcessorUsingStrategy() {
     strategies_.push_back(std::make_unique<Strategy>());
   }
   ~TestOverlayProcessor() override = default;
@@ -2461,7 +2461,7 @@ TEST_F(GLRendererTest, DontOverlayWithCopyRequests) {
 #if defined(OS_ANDROID) || defined(USE_OZONE)
 class SingleOverlayOnTopProcessor : public OverlayProcessorUsingStrategy {
  public:
-  SingleOverlayOnTopProcessor() : OverlayProcessorUsingStrategy(nullptr) {
+  SingleOverlayOnTopProcessor() : OverlayProcessorUsingStrategy() {
     strategies_.push_back(std::make_unique<OverlayStrategySingleOnTop>(this));
     strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(this));
   }
@@ -3079,8 +3079,7 @@ class ContentBoundsOverlayProcessor : public OverlayProcessorUsingStrategy {
 
   explicit ContentBoundsOverlayProcessor(
       const std::vector<gfx::Rect>& content_bounds)
-      : OverlayProcessorUsingStrategy(nullptr),
-        content_bounds_(content_bounds) {
+      : OverlayProcessorUsingStrategy(), content_bounds_(content_bounds) {
     strategies_.push_back(
         std::make_unique<Strategy>(std::move(content_bounds_)));
   }

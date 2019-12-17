@@ -16,55 +16,10 @@
 #include "components/viz/service/display/overlay_candidate_list.h"
 #include "components/viz/service/display/overlay_strategy_single_on_top.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
-#include "components/viz/service/display/skia_output_surface.h"
 #include "ui/gfx/geometry/rect_conversions.h"
 #include "ui/gfx/transform.h"
 
 namespace viz {
-
-namespace {
-
-#if defined(OS_ANDROID)
-// Utility class to make sure that we notify resource that they're promotable
-// before returning from ProcessForOverlays.
-class SendPromotionHintsBeforeReturning {
- public:
-  SendPromotionHintsBeforeReturning(DisplayResourceProvider* resource_provider,
-                                    OverlayCandidateList* candidates,
-                                    SkiaOutputSurface* skia_output_surface)
-      : resource_provider_(resource_provider),
-        candidates_(candidates),
-        skia_output_surface_(skia_output_surface) {}
-  ~SendPromotionHintsBeforeReturning() {
-    if (skia_output_surface_) {
-      base::flat_set<gpu::Mailbox> promotion_denied;
-      base::flat_map<gpu::Mailbox, gfx::Rect> possible_promotions;
-      auto locks = candidates_->ConvertLocalPromotionToMailboxKeyed(
-          resource_provider_, &promotion_denied, &possible_promotions);
-
-      std::vector<gpu::SyncToken> locks_sync_tokens;
-      for (auto& read_lock : locks)
-        locks_sync_tokens.push_back(read_lock->sync_token());
-
-      skia_output_surface_->SendOverlayPromotionNotification(
-          std::move(locks_sync_tokens), std::move(promotion_denied),
-          std::move(possible_promotions));
-    } else {
-      resource_provider_->SendPromotionHints(
-          candidates_->promotion_hint_info_map_,
-          candidates_->promotion_hint_requestor_set_);
-    }
-  }
-
- private:
-  DisplayResourceProvider* resource_provider_;
-  OverlayCandidateList* candidates_;
-  SkiaOutputSurface* skia_output_surface_;
-
-  DISALLOW_COPY_AND_ASSIGN(SendPromotionHintsBeforeReturning);
-};
-#endif
-}  // namespace
 
 // Default implementation of whether a strategy would remove the output surface
 // as overlay plane.
@@ -76,15 +31,8 @@ OverlayStrategy OverlayProcessorUsingStrategy::Strategy::GetUMAEnum() const {
   return OverlayStrategy::kUnknown;
 }
 
-#if defined(OS_ANDROID)
-OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
-    SkiaOutputSurface* skia_output_surface)
-    : OverlayProcessorInterface(), skia_output_surface_(skia_output_surface) {}
-#else  // defined(USE_OZONE)
-OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
-    SkiaOutputSurface* skia_output_surface)
+OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy()
     : OverlayProcessorInterface() {}
-#endif
 
 OverlayProcessorUsingStrategy::~OverlayProcessorUsingStrategy() = default;
 
@@ -93,6 +41,10 @@ gfx::Rect OverlayProcessorUsingStrategy::GetAndResetOverlayDamage() {
   overlay_damage_rect_ = gfx::Rect();
   return result;
 }
+
+void OverlayProcessorUsingStrategy::NotifyOverlayPromotion(
+    DisplayResourceProvider* resource_provider,
+    const CandidateList& candidates) const {}
 
 void OverlayProcessorUsingStrategy::ProcessForOverlays(
     DisplayResourceProvider* resource_provider,
@@ -106,14 +58,6 @@ void OverlayProcessorUsingStrategy::ProcessForOverlays(
     gfx::Rect* damage_rect,
     std::vector<gfx::Rect>* content_bounds) {
   TRACE_EVENT0("viz", "OverlayProcessorUsingStrategy::ProcessForOverlays");
-#if defined(OS_ANDROID)
-  // Be sure to send out notifications, regardless of whether we get to
-  // processing for overlays or not.  If we don't, then we should notify that
-  // they are not promotable.
-  SendPromotionHintsBeforeReturning notifier(resource_provider, candidates,
-                                             skia_output_surface_);
-#endif
-
   DCHECK(candidates->empty());
 
   RenderPass* render_pass = render_passes->back().get();
@@ -126,6 +70,7 @@ void OverlayProcessorUsingStrategy::ProcessForOverlays(
     // being invoked.  Also reset |previous_frame_underlay_was_unoccluded_|.
     previous_frame_underlay_rect_ = gfx::Rect();
     previous_frame_underlay_was_unoccluded_ = false;
+    NotifyOverlayPromotion(resource_provider, *candidates);
     return;
   }
 
@@ -148,6 +93,7 @@ void OverlayProcessorUsingStrategy::ProcessForOverlays(
     previous_frame_underlay_was_unoccluded_ = false;
   }
 
+  NotifyOverlayPromotion(resource_provider, *candidates);
   TRACE_COUNTER1(TRACE_DISABLED_BY_DEFAULT("viz.debug.overlay_planes"),
                  "Scheduled overlay planes", candidates->size());
 }

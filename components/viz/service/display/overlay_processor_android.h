@@ -40,6 +40,11 @@ class VIZ_SERVICE_EXPORT OverlayProcessorAndroid
       const OverlayCandidate& overlay) const override;
 
  private:
+  void NotifyOverlayPromotion(
+      DisplayResourceProvider* resource_provider,
+      const OverlayCandidateList& candidate_list) const override;
+
+  SkiaOutputSurface* const skia_output_surface_;
   const bool overlay_enabled_;
 };
 }  // namespace viz

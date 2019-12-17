@@ -55,7 +55,7 @@ OverlayProcessorOzone::OverlayProcessorOzone(
     bool overlay_enabled,
     std::unique_ptr<ui::OverlayCandidatesOzone> overlay_candidates,
     std::vector<OverlayStrategy> available_strategies)
-    : OverlayProcessorUsingStrategy(nullptr),
+    : OverlayProcessorUsingStrategy(),
       overlay_enabled_(overlay_enabled),
       overlay_candidates_(std::move(overlay_candidates)),
       available_strategies_(std::move(available_strategies)) {

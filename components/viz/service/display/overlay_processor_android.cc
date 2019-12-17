@@ -6,14 +6,15 @@
 
 #include "components/viz/service/display/overlay_candidate_list.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
+#include "components/viz/service/display/skia_output_surface.h"
 #include "ui/gfx/geometry/rect_conversions.h"
 
 namespace viz {
-
 OverlayProcessorAndroid::OverlayProcessorAndroid(
     SkiaOutputSurface* skia_output_surface,
     bool enable_overlay)
-    : OverlayProcessorUsingStrategy(skia_output_surface),
+    : OverlayProcessorUsingStrategy(),
+      skia_output_surface_(skia_output_surface),
       overlay_enabled_(enable_overlay) {
   if (overlay_enabled_) {
     // For Android, we do not have the ability to skip an overlay, since the
@@ -70,6 +71,29 @@ void OverlayProcessorAndroid::CheckOverlaySupport(
 gfx::Rect OverlayProcessorAndroid::GetOverlayDamageRectForOutputSurface(
     const OverlayCandidate& overlay) const {
   return ToEnclosedRect(overlay.display_rect);
+}
+
+void OverlayProcessorAndroid::NotifyOverlayPromotion(
+    DisplayResourceProvider* resource_provider,
+    const CandidateList& candidates) const {
+  if (skia_output_surface_) {
+    base::flat_set<gpu::Mailbox> promotion_denied;
+    base::flat_map<gpu::Mailbox, gfx::Rect> possible_promotions;
+    auto locks = candidates.ConvertLocalPromotionToMailboxKeyed(
+        resource_provider, &promotion_denied, &possible_promotions);
+
+    std::vector<gpu::SyncToken> locks_sync_tokens;
+    for (auto& read_lock : locks)
+      locks_sync_tokens.push_back(read_lock->sync_token());
+
+    skia_output_surface_->SendOverlayPromotionNotification(
+        std::move(locks_sync_tokens), std::move(promotion_denied),
+        std::move(possible_promotions));
+  } else {
+    resource_provider->SendPromotionHints(
+        candidates.promotion_hint_info_map_,
+        candidates.promotion_hint_requestor_set_);
+  }
 }
 
 }  // namespace viz

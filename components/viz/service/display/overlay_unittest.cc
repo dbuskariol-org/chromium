@@ -71,7 +71,7 @@ const gfx::BufferFormat kDefaultBufferFormat = gfx::BufferFormat::RGBA_8888;
 class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
  public:
   using PrimaryPlane = OverlayProcessorInterface::OutputSurfaceOverlayPlane;
-  TestOverlayProcessor() : OverlayProcessorUsingStrategy(nullptr) {}
+  TestOverlayProcessor() : OverlayProcessorUsingStrategy() {}
   ~TestOverlayProcessor() override = default;
 
   bool IsOverlaySupported() const override { return true; }

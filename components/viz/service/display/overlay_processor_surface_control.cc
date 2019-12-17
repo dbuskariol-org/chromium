@@ -31,7 +31,7 @@ gfx::RectF ClipFromOrigin(gfx::RectF input) {
 
 OverlayProcessorSurfaceControl::OverlayProcessorSurfaceControl(
     bool enable_overlay)
-    : OverlayProcessorUsingStrategy(nullptr), overlay_enabled_(enable_overlay) {
+    : OverlayProcessorUsingStrategy(), overlay_enabled_(enable_overlay) {
   if (overlay_enabled_) {
     strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
         this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
