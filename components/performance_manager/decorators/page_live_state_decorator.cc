@@ -26,6 +26,9 @@ class PageLiveStateDataImpl
 
   // PageLiveStateDecorator::Data:
   bool IsAttachedToUSB() const override { return is_attached_to_usb_; }
+  bool IsConnectedToBluetoothDevice() const override {
+    return is_connected_to_bluetooth_device_;
+  }
   bool IsCapturingVideo() const override { return is_capturing_video_; }
   bool IsCapturingAudio() const override { return is_capturing_audio_; }
   bool IsBeingMirrored() const override { return is_being_mirrored_; }
@@ -34,6 +37,10 @@ class PageLiveStateDataImpl
 
   void set_is_attached_to_usb(bool is_attached_to_usb) {
     is_attached_to_usb_ = is_attached_to_usb;
+  }
+  void set_is_connected_to_bluetooth_device(
+      bool is_connected_to_bluetooth_device) {
+    is_connected_to_bluetooth_device_ = is_connected_to_bluetooth_device;
   }
   void set_is_capturing_video(bool is_capturing_video) {
     is_capturing_video_ = is_capturing_video;
@@ -60,6 +67,7 @@ class PageLiveStateDataImpl
   explicit PageLiveStateDataImpl(const PageNodeImpl* page_node) {}
 
   bool is_attached_to_usb_ = false;
+  bool is_connected_to_bluetooth_device_ = false;
   bool is_capturing_video_ = false;
   bool is_capturing_audio_ = false;
   bool is_being_mirrored_ = false;
@@ -101,6 +109,15 @@ void PageLiveStateDecorator::OnWebContentsAttachedToUSBChanged(
   SetPropertyForWebContents(contents,
                             &PageLiveStateDataImpl::set_is_attached_to_usb,
                             is_attached_to_usb);
+}
+
+// static
+void PageLiveStateDecorator::OnIsConnectedToBluetoothDeviceChanged(
+    content::WebContents* contents,
+    bool is_connected_to_bluetooth_device) {
+  SetPropertyForWebContents(
+      contents, &PageLiveStateDataImpl::set_is_connected_to_bluetooth_device,
+      is_connected_to_bluetooth_device);
 }
 
 // static

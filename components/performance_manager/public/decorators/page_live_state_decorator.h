@@ -35,6 +35,11 @@ class PageLiveStateDecorator {
   static void OnWebContentsAttachedToUSBChanged(content::WebContents* contents,
                                                 bool is_attached_to_usb);
 
+  // Must be called when the connected to Bluetooth device state changes.
+  static void OnIsConnectedToBluetoothDeviceChanged(
+      content::WebContents* contents,
+      bool is_connected_to_bluetooth_device);
+
   // Functions that should be called by a MediaStreamCaptureIndicator::Observer.
   static void OnIsCapturingVideoChanged(content::WebContents* contents,
                                         bool is_capturing_video);
@@ -59,6 +64,7 @@ class PageLiveStateDecorator::Data {
   Data& operator=(const Data&) = delete;
 
   virtual bool IsAttachedToUSB() const = 0;
+  virtual bool IsConnectedToBluetoothDevice() const = 0;
   virtual bool IsCapturingVideo() const = 0;
   virtual bool IsCapturingAudio() const = 0;
   virtual bool IsBeingMirrored() const = 0;

@@ -65,6 +65,12 @@ TEST_F(PageLiveStateDecoratorTest, OnWebContentsAttachedToUSBChanged) {
       &PageLiveStateDecorator::OnWebContentsAttachedToUSBChanged);
 }
 
+TEST_F(PageLiveStateDecoratorTest, OnIsConnectedToBluetoothDeviceChanged) {
+  EndToEndPropertyTest(
+      contents(), &PageLiveStateDecorator::Data::IsConnectedToBluetoothDevice,
+      &PageLiveStateDecorator::OnIsConnectedToBluetoothDeviceChanged);
+}
+
 TEST_F(PageLiveStateDecoratorTest, OnIsCapturingVideoChanged) {
   EndToEndPropertyTest(contents(),
                        &PageLiveStateDecorator::Data::IsCapturingVideo,
