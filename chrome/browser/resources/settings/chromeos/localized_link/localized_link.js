@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 /**
- * @fileoverview 'localized-string-with-link' takes a localized string that
+ * @fileoverview 'settings-localized-link' takes a localized string that
  * contains exactly one anchor tag, and labels the string contained within the
  * anchor tag with the entire localized string. The string should not be bound
  * by element tags. The string should not contain any elements other than the
@@ -16,7 +16,7 @@
  */
 
 Polymer({
-  is: 'localized-string-with-link',
+  is: 'settings-localized-link',
 
   properties: {
     /**
@@ -68,13 +68,13 @@ Polymer({
         ariaLabelledByIds.push(node.id);
         return;
       }
-      // All nodes except text nodes and an element anchor node are not allowed.
-      assertNotReached('localized-string-with-link has invalid node types');
+      // Only text and <a> nodes are allowed.
+      assertNotReached('settings-localized-link has invalid node types');
     });
 
     const anchorTags = tempEl.getElementsByTagName('a');
     assert(anchorTags.length == 1,
-        'localized-string-with-link should contain exactly one anchor tag');
+        'settings-localized-link should contain exactly one anchor tag');
     anchorTags[0].setAttribute('aria-labelledby', ariaLabelledByIds.join(' '));
 
     if (linkUrl != '') {

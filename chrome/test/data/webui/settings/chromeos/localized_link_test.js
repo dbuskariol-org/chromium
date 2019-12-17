@@ -2,31 +2,30 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-suite('localized-string-with-link', function() {
+suite('localized_link', function() {
   let localizedStringWithLink;
 
-  function GetLocalizedStringWithLinkElementHtml(
-      localizedString, linkUrl = '') {
-    return `<localized-string-with-link localized-string="${localizedString}"` +
-        ` link-url="${linkUrl}"></localized-string-with-link>`;
+  function GetLocalizedStringWithLinkElementHtml(localizedString, linkUrl) {
+    return `<settings-localized-link localized-string="${localizedString}"` +
+        ` link-url="${linkUrl}"></settings-localized-link>`;
   }
 
   test('LinkFirst', function() {
     document.body.innerHTML =
-        GetLocalizedStringWithLinkElementHtml(`<a>first link</a> then text`);
+        GetLocalizedStringWithLinkElementHtml(`<a>first link</a>then text`, ``);
     localizedStringWithLink =
-        document.body.querySelector('localized-string-with-link');
+        document.body.querySelector('settings-localized-link');
     assertEquals(
         localizedStringWithLink.$.container.innerHTML,
         `<a id="id0" aria-labelledby="id0 id1">first link</a>` +
-            `<span id="id1" aria-hidden="true"> then text</span>`);
+            `<span id="id1" aria-hidden="true">then text</span>`);
   });
 
   test('TextLinkText', function() {
     document.body.innerHTML = GetLocalizedStringWithLinkElementHtml(
-        `first text <a>then link</a> then more text`);
+        `first text <a>then link</a> then more text`, ``);
     localizedStringWithLink =
-        document.body.querySelector('localized-string-with-link');
+        document.body.querySelector('settings-localized-link');
     assertEquals(
         localizedStringWithLink.$.container.innerHTML,
         `<span id="id0" aria-hidden="true">first text </span>` +
@@ -36,12 +35,12 @@ suite('localized-string-with-link', function() {
 
   test('LinkLast', function() {
     document.body.innerHTML =
-        GetLocalizedStringWithLinkElementHtml(`first text <a>then link</a>`);
+        GetLocalizedStringWithLinkElementHtml(`first text<a>then link</a>`, ``);
     localizedStringWithLink =
-        document.body.querySelector('localized-string-with-link');
+        document.body.querySelector('settings-localized-link');
     assertEquals(
         localizedStringWithLink.$.container.innerHTML,
-        `<span id="id0" aria-hidden="true">first text </span>` +
+        `<span id="id0" aria-hidden="true">first text</span>` +
             `<a id="id1" aria-labelledby="id0 id1">then link</a>`);
   });
 
@@ -49,7 +48,7 @@ suite('localized-string-with-link', function() {
     document.body.innerHTML = GetLocalizedStringWithLinkElementHtml(
         `<a>populated link</a>`, `http://google.com`);
     localizedStringWithLink =
-        document.body.querySelector('localized-string-with-link');
+        document.body.querySelector('settings-localized-link');
     assertEquals(
         localizedStringWithLink.$.container.innerHTML,
         `<a id="id0" aria-labelledby="id0" href="http://google.com" ` +
@@ -58,9 +57,9 @@ suite('localized-string-with-link', function() {
 
   test('PrepopulatedLink', function() {
     document.body.innerHTML = GetLocalizedStringWithLinkElementHtml(
-        `<a href='http://google.com'>pre-populated link</a>`);
+        `<a href='http://google.com'>pre-populated link</a>`, ``);
     localizedStringWithLink =
-        document.body.querySelector('localized-string-with-link');
+        document.body.querySelector('settings-localized-link');
     assertEquals(
         localizedStringWithLink.$.container.innerHTML,
         `<a href="http://google.com" id="id0" aria-labelledby="id0">` +
