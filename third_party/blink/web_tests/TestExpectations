@@ -2669,9 +2669,6 @@ crbug.com/1012627 [ Win7 ] external/wpt/css/css-text/line-breaking/line-breaking
 crbug.com/1029514 external/wpt/html/semantics/embedded-content/the-video-element/resize-during-playback.html [ Pass Failure ]
 
 # ====== New tests from wpt-importer added here ======
-crbug.com/626703 [ Linux ] external/wpt/css/css-pseudo/marker-content-013.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/css/css-pseudo/marker-content-013.html [ Timeout ]
-crbug.com/626703 [ Win ] external/wpt/css/css-pseudo/marker-content-013.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/css/motion/offset-anchor-transform-box-fill-box-003.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/motion/offset-anchor-transform-box-fill-box-003.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/motion/offset-anchor-transform-box-fill-box-003.html [ Failure ]
