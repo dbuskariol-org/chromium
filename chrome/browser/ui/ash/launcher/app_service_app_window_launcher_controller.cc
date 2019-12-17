@@ -349,10 +349,6 @@ void AppServiceAppWindowLauncherController::UnregisterAppWindow(
 void AppServiceAppWindowLauncherController::AddAppWindowToShelf(
     AppWindowBase* app_window) {
   const ash::ShelfID shelf_id = app_window->shelf_id();
-  // Internal Camera app does not have own window. Either ARC or extension
-  // window controller would add window to controller.
-  if (shelf_id.app_id == ash::kInternalAppIdCamera)
-    return;
 
   AppWindowLauncherItemController* item_controller =
       owner()->shelf_model()->GetAppWindowLauncherItemController(shelf_id);
@@ -377,10 +373,6 @@ void AppServiceAppWindowLauncherController::AddAppWindowToShelf(
 void AppServiceAppWindowLauncherController::RemoveAppWindowFromShelf(
     AppWindowBase* app_window) {
   const ash::ShelfID shelf_id = app_window->shelf_id();
-  // Internal Camera app does not have own window. Either ARC or extension
-  // window controller would remove window from controller.
-  if (shelf_id.app_id == ash::kInternalAppIdCamera)
-    return;
 
   UnregisterAppWindow(app_window);
 

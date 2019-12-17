@@ -142,9 +142,6 @@ apps::AppLaunchParams CreateAppLaunchParamsForIntent(
 // is empty, the session_id is used.
 std::string GetLaunchId(extensions::AppWindow* app_window) {
   std::string launch_id;
-  if (app_window->extension_id() == extension_misc::kChromeCameraAppId)
-    return launch_id;
-
   if (app_window->show_in_shelf()) {
     if (!app_window->window_key().empty()) {
       launch_id = app_window->window_key();
