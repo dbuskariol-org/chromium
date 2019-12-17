@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.nfc.NfcAdapter;
 import android.os.Process;
 
+import androidx.annotation.VisibleForTesting;
+
 import org.chromium.base.ContextUtils;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
@@ -25,6 +27,8 @@ import org.chromium.ui.base.WindowAndroid;
  * This class should be used only on the UI thread.
  */
 public class NfcSystemLevelSetting {
+    private static Boolean sSystemNfcSettingForTesting;
+
     @CalledByNative
     private static boolean isNfcAccessPossible() {
         Context context = ContextUtils.getApplicationContext();
@@ -39,7 +43,11 @@ public class NfcSystemLevelSetting {
     }
 
     @CalledByNative
-    private static boolean isNfcSystemLevelSettingEnabled() {
+    public static boolean isNfcSystemLevelSettingEnabled() {
+        if (sSystemNfcSettingForTesting != null) {
+            return sSystemNfcSettingForTesting;
+        }
+
         if (!isNfcAccessPossible()) return false;
 
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(ContextUtils.getApplicationContext());
@@ -64,6 +72,12 @@ public class NfcSystemLevelSetting {
                 ()
                         -> NfcSystemLevelSettingJni.get().onNfcSystemLevelPromptCompleted(
                                 nativeCallback));
+    }
+
+    /** Disable/enable Android NFC setting for testing use only. */
+    @VisibleForTesting
+    public static void setNfcSettingForTesting(Boolean enabled) {
+        sSystemNfcSettingForTesting = enabled;
     }
 
     @NativeMethods
