@@ -1249,6 +1249,7 @@ linux_builder(
 def mac_builder(
     *,
     name,
+    builderless=True,
     cores=None,
     goma_backend=goma.backend.RBE_PROD,
     os=os.MAC_ANY,
@@ -1259,13 +1260,13 @@ def mac_builder(
       goma_backend = goma_backend,
       mastername = 'tryserver.chromium.mac',
       os = os,
+      builderless = builderless,
       ssd = True,
       **kwargs
   )
 
 mac_builder(
     name = 'mac-osxbeta-rel',
-    builderless = True,
     os = os.MAC_DEFAULT,
 )
 
@@ -1274,22 +1275,18 @@ mac_builder(
 # The 10.xx version translates to which bots will run isolated tests.
 mac_builder(
     name = 'mac_chromium_10.10',
-    builderless = True,
 )
 
 mac_builder(
     name = 'mac_chromium_10.12_rel_ng',
-    builderless = True,
 )
 
 mac_builder(
     name = 'mac_chromium_10.13_rel_ng',
-    builderless = True,
 )
 
 mac_builder(
     name = 'mac_chromium_10.14_rel_ng',
-    builderless = True,
 )
 
 mac_builder(
@@ -1303,7 +1300,6 @@ mac_builder(
 
 mac_builder(
     name = 'mac_chromium_compile_dbg_ng',
-    builderless = True,
     goma_jobs = goma.jobs.J150,
     os = os.MAC_10_13,
     tryjob = tryjob(),
@@ -1311,16 +1307,15 @@ mac_builder(
 
 mac_builder(
     name = 'mac_chromium_compile_rel_ng',
-    builderless = True,
 )
 
 mac_builder(
     name = 'mac_chromium_dbg_ng',
-    builderless = True,
 )
 
 mac_builder(
     name = 'mac_upload_clang',
+    builderless = False,
     caches = [
         swarming.cache(
             name = 'xcode_mac_9a235',
