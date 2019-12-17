@@ -47,6 +47,8 @@ static_library("performance_manager") {
     "performance_manager_lock_observer.cc",
     "performance_manager_lock_observer.h",
     "performance_manager_registry.cc",
+    "performance_manager_registry_impl.cc",
+    "performance_manager_registry_impl.h",
     "performance_manager_tab_helper.cc",
     "performance_manager_tab_helper.h",
     "process_node_source.cc",
