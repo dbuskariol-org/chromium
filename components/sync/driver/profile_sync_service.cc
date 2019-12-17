@@ -1399,10 +1399,9 @@ ModelTypeSet ProfileSyncService::GetModelTypesForTransportOnlyMode() const {
 #if defined(OS_CHROMEOS)
   // Chrome OS system types are not tied to browser sync-the-feature.
   if (chromeos::features::IsSplitSettingsSyncEnabled()) {
-    // TODO(jamescook): WEB_APPS
     allowed_types.PutAll({APP_LIST, APP_SETTINGS, APPS, ARC_PACKAGE,
                           OS_PREFERENCES, OS_PRIORITY_PREFERENCES, PRINTERS,
-                          WIFI_CONFIGURATIONS});
+                          WEB_APPS, WIFI_CONFIGURATIONS});
   }
 #endif  // defined(OS_CHROMEOS)
 
