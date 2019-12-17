@@ -21,8 +21,10 @@ js_library("google_assistant_browser_proxy") {
 js_library("google_assistant_page") {
   deps = [
     ":google_assistant_browser_proxy",
-    "../prefs:prefs_behavior",
+    "../../prefs:prefs_behavior",
     "//ui/webui/resources/js:cr",
+    "//ui/webui/resources/js:i18n_behavior",
     "//ui/webui/resources/js:load_time_data",
+    "//ui/webui/resources/js:web_ui_listener_behavior",
   ]
 }

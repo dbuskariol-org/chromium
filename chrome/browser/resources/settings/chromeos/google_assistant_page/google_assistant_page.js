@@ -96,10 +96,8 @@ Polymer({
       value: false,
     },
 
-    /** @private */
-    dspHotwordState_: {
-      type: DspHotwordState,
-    }
+    /** @private {DspHotwordState} */
+    dspHotwordState_: Number,
   },
 
   observers: [
@@ -199,8 +197,8 @@ Polymer({
         !loadTimeData.getBoolean('voiceMatchDisabled') &&
         this.getPref('settings.voice_interaction.hotword.enabled.value') &&
         (this.getPref(
-          'settings.voice_interaction.activity_control.consent_status.value') ==
-            ConsentStatus.kActivityControlAccepted);
+             'settings.voice_interaction.activity_control.consent_status.value') ==
+         ConsentStatus.kActivityControlAccepted);
 
     const hotwordEnabled =
         this.getPref('settings.voice_interaction.hotword.enabled');

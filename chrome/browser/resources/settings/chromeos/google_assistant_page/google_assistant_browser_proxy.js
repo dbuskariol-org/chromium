@@ -11,7 +11,7 @@ cr.define('settings', function() {
   /** @interface */
   class GoogleAssistantBrowserProxy {
     /** Launches into the Google Assistant app settings. */
-    launchGoogleAssistantSettings() {}
+    showGoogleAssistantSettings() {}
 
     /** Retrain the Assistant voice model. */
     retrainAssistantVoiceModel() {}
