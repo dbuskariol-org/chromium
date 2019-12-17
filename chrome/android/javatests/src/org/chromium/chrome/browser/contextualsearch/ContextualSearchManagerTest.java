@@ -2897,7 +2897,17 @@ public class ContextualSearchManagerTest {
     @Feature({"ContextualSearch"})
     public void testDictionaryDefinitions() throws InterruptedException, TimeoutException {
         runDictionaryCardTest(CardTag.CT_DEFINITION);
-        closePanel();
+    }
+
+    /**
+     * Tests that the flow for showing dictionary definitions works, and that tapping in the
+     * bar just opens the panel instead of taking some action.
+     */
+    @Test
+    @SmallTest
+    @Feature({"ContextualSearch"})
+    public void testContextualDictionaryDefinitions()
+            throws InterruptedException, TimeoutException {
         runDictionaryCardTest(CardTag.CT_CONTEXTUAL_DEFINITION);
     }
 
