@@ -18,7 +18,6 @@
 
 namespace media {
 
-Fourcc::Fourcc() : value_(Fourcc::INVALID) {}
 Fourcc::Fourcc(Fourcc::Value fourcc) : value_(fourcc) {}
 Fourcc::~Fourcc() = default;
 Fourcc& Fourcc::operator=(const Fourcc& other) = default;
@@ -142,8 +141,6 @@ base::Optional<Fourcc> Fourcc::FromVideoPixelFormat(
 
 VideoPixelFormat Fourcc::ToVideoPixelFormat() const {
   switch (value_) {
-    case Fourcc::INVALID:
-      return PIXEL_FORMAT_UNKNOWN;
     case Fourcc::AR24:
       return PIXEL_FORMAT_ARGB;
     case Fourcc::AB24:
@@ -234,8 +231,6 @@ base::Optional<Fourcc> Fourcc::FromVAFourCC(uint32_t va_fourcc) {
 
 base::Optional<uint32_t> Fourcc::ToVAFourCC() const {
   switch (value_) {
-    case Fourcc::INVALID:
-      return base::nullopt;
     case Fourcc::YU12:
       return VA_FOURCC_I420;
     case Fourcc::NV12:
@@ -280,7 +275,6 @@ bool operator!=(const Fourcc& lhs, const Fourcc& rhs) {
 
 bool Fourcc::IsMultiPlanar() const {
   switch (value_) {
-    case INVALID:
     case AR24:
     case AB24:
     case XR24:

@@ -52,7 +52,7 @@ std::unique_ptr<ImageProcessor> CreateV4L2ImageProcessorWithInputCandidates(
     supported_fourccs.push_back(*fourcc);
   }
 
-  const Fourcc output_fourcc = out_format_picker.Run(supported_fourccs);
+  const auto output_fourcc = out_format_picker.Run(supported_fourccs);
   if (!output_fourcc)
     return nullptr;
 
@@ -72,14 +72,14 @@ std::unique_ptr<ImageProcessor> CreateV4L2ImageProcessorWithInputCandidates(
     gfx::Size output_size(visible_size.width(), visible_size.height());
     size_t num_planes = 0;
     if (!V4L2ImageProcessor::TryOutputFormat(
-            input_fourcc.ToV4L2PixFmt(), output_fourcc.ToV4L2PixFmt(),
+            input_fourcc.ToV4L2PixFmt(), output_fourcc->ToV4L2PixFmt(),
             input_size, &output_size, &num_planes)) {
       VLOGF(2) << "Failed to get output size and plane count of IP";
       continue;
     }
 
     return v4l2_vda_helpers::CreateImageProcessor(
-        input_fourcc, output_fourcc, input_size, output_size, visible_size,
+        input_fourcc, *output_fourcc, input_size, output_size, visible_size,
         num_buffers, V4L2Device::Create(), ImageProcessor::OutputMode::IMPORT,
         std::move(client_task_runner), std::move(error_cb));
   }

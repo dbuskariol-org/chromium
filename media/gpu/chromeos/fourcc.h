@@ -108,19 +108,13 @@ class MEDIA_GPU_EXPORT Fourcc {
     // Maps to V4L2_PIX_FMT_MM21.
     // It is used for MT8183 hardware video decoder.
     MM21 = ComposeFourcc('M', 'M', '2', '1'),
-
-    // Invalid
-    INVALID = 0,
   };
 
-  // Constructor for invalid Fourcc.
-  Fourcc();
   explicit Fourcc(Fourcc::Value fourcc);
   Fourcc& operator=(const Fourcc& fourcc);
   ~Fourcc();
 
   bool operator==(const Fourcc& rhs) const { return value_ == rhs.value_; }
-  explicit operator bool() const { return value_ != Fourcc::INVALID; }
 
   // Factory methods:
 
