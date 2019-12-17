@@ -8939,6 +8939,9 @@ Please help our engineers fix this problem. Tell us what happened right before y
       </if>
 
       <!-- NFC permission -->
+      <message name="IDS_NFC_PERMISSION_FRAGMENT" desc="Permission request shown if the user is visiting a site that wants to use NFC. Follows a prompt: 'This site would like to:'">
+        Use NFC devices
+      </message>
       <if expr="is_android">
         <message name="IDS_NFC_INFOBAR_TEXT" desc="Text requesting permission for a site to use NFC">
           <ph name="URL">$1<ex>google.com</ex></ph> wants to send and receive info when you tap your phone on an NFC device
