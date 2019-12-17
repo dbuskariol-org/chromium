@@ -434,13 +434,13 @@ ExternalVkImageBacking::ExternalVkImageBacking(
     const GrVkYcbcrConversionInfo& ycbcr_info,
     base::Optional<WGPUTextureFormat> wgpu_format,
     base::Optional<uint32_t> memory_type_index)
-    : SharedImageBacking(mailbox,
-                         format,
-                         size,
-                         color_space,
-                         usage,
-                         memory_size,
-                         false /* is_thread_safe */),
+    : ClearTrackingSharedImageBacking(mailbox,
+                                      format,
+                                      size,
+                                      color_space,
+                                      usage,
+                                      memory_size,
+                                      false /* is_thread_safe */),
       context_state_(context_state),
       backend_texture_(size.width(),
                        size.height(),
@@ -579,14 +579,6 @@ void ExternalVkImageBacking::EndAccess(bool readonly,
       latest_content_ = kInVkImage | kInGLTexture;
     }
   }
-}
-
-bool ExternalVkImageBacking::IsCleared() const {
-  return is_cleared_;
-}
-
-void ExternalVkImageBacking::SetCleared() {
-  is_cleared_ = true;
 }
 
 void ExternalVkImageBacking::Update(std::unique_ptr<gfx::GpuFence> in_fence) {
@@ -751,7 +743,7 @@ ExternalVkImageBacking::ProduceGLTexture(SharedImageManager* manager,
     texture_->sampler_state_.wrap_s = GL_CLAMP_TO_EDGE;
     // If the backing is already cleared, no need to clear it again.
     gfx::Rect cleared_rect;
-    if (is_cleared_)
+    if (IsCleared())
       cleared_rect = gfx::Rect(size());
 
     texture_->SetLevelInfo(GL_TEXTURE_2D, 0, internal_format, size().width(),
