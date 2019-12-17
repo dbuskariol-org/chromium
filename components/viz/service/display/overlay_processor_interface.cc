@@ -19,7 +19,7 @@
 #include "ui/ozone/public/overlay_manager_ozone.h"
 #include "ui/ozone/public/ozone_platform.h"
 #else
-#include "components/viz/service/display/overlay_processor_using_strategy.h"
+#include "components/viz/service/display/overlay_processor_stub.h"
 #endif
 
 namespace viz {
@@ -123,9 +123,7 @@ OverlayProcessorInterface::CreateOverlayProcessor(
                                                      overlay_enabled);
   }
 #else  // Default
-  // TODO(weiliangc): Add a stub class for the default case for platforms where
-  // we could not overlay.
-  return std::make_unique<OverlayProcessorUsingStrategy>(skia_output_surface);
+  return std::make_unique<OverlayProcessorStub>();
 #endif
 }
 

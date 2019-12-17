@@ -68,14 +68,7 @@ class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
 
   ~OverlayProcessorUsingStrategy() override;
 
-  // TODO(weiliangc): Once added a stub class, make this pure virtual.
-  bool IsOverlaySupported() const override;
   gfx::Rect GetAndResetOverlayDamage() final;
-
-  // Returns true if the platform supports hw overlays and surface occluding
-  // damage rect needs to be computed since it will be used by overlay
-  // processor.
-  bool NeedsSurfaceOccludingDamageRect() const override;
 
   // Override OverlayProcessor.
   // TODO(weiliangc): Once added a stub class, make this pure virtual.
@@ -116,7 +109,7 @@ class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
   // TODO(weiliangc): Once added a stub class, make this pure virtual.
   virtual void CheckOverlaySupport(
       const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
-      OverlayCandidateList* candidate_list) {}
+      OverlayCandidateList* candidate_list) = 0;
 
  protected:
   virtual gfx::Rect GetOverlayDamageRectForOutputSurface(

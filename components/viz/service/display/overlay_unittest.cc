@@ -74,6 +74,7 @@ class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
   TestOverlayProcessor() : OverlayProcessorUsingStrategy(nullptr) {}
   ~TestOverlayProcessor() override = default;
 
+  bool IsOverlaySupported() const override { return true; }
   bool NeedsSurfaceOccludingDamageRect() const override { return false; }
   void CheckOverlaySupport(const PrimaryPlane* primary_plane,
                            OverlayCandidateList* surfaces) override {}

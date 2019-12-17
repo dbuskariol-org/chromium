@@ -88,12 +88,6 @@ OverlayProcessorUsingStrategy::OverlayProcessorUsingStrategy(
 
 OverlayProcessorUsingStrategy::~OverlayProcessorUsingStrategy() = default;
 
-bool OverlayProcessorUsingStrategy::IsOverlaySupported() const {
-  // Expected to be overridden.
-  // TODO(weiliangc): Once added a stub class, make this pure virtual.
-  return false;
-}
-
 gfx::Rect OverlayProcessorUsingStrategy::GetAndResetOverlayDamage() {
   gfx::Rect result = overlay_damage_rect_;
   overlay_damage_rect_ = gfx::Rect();
@@ -239,12 +233,6 @@ void OverlayProcessorUsingStrategy::AdjustOutputSurfaceOverlay(
   if (last_successful_strategy_ &&
       last_successful_strategy_->RemoveOutputSurfaceAsOverlay())
     output_surface_plane->reset();
-}
-
-bool OverlayProcessorUsingStrategy::NeedsSurfaceOccludingDamageRect() const {
-  // Expected to be overridden.
-  // TODO(weiliangc): Once added a stub class, make this pure virtual.
-  return false;
 }
 
 bool OverlayProcessorUsingStrategy::AttemptWithStrategies(

@@ -57,7 +57,7 @@
 #include "components/viz/service/display/overlay_strategy_single_on_top.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
 #else  // Default
-#include "components/viz/service/display/overlay_processor_using_strategy.h"
+#include "components/viz/service/display/overlay_processor_stub.h"
 #endif
 
 using testing::_;
@@ -2281,6 +2281,8 @@ class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
              std::vector<gfx::Rect>* content_bounds));
   };
 
+  bool IsOverlaySupported() const override { return true; }
+
   // A list of possible overlay candidates is presented to this function.
   // The expected result is that those candidates that can be in a separate
   // plane are marked with |overlay_handled| set to true, otherwise they are
@@ -2303,9 +2305,9 @@ class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
   ~TestOverlayProcessor() override = default;
 };
 #else  // Default to no overlay.
-class TestOverlayProcessor : public OverlayProcessorUsingStrategy {
+class TestOverlayProcessor : public OverlayProcessorStub {
  public:
-  TestOverlayProcessor() : OverlayProcessorUsingStrategy(nullptr) {}
+  TestOverlayProcessor() : OverlayProcessorStub() {}
   ~TestOverlayProcessor() override = default;
 };
 #endif
@@ -2465,6 +2467,7 @@ class SingleOverlayOnTopProcessor : public OverlayProcessorUsingStrategy {
   }
 
   bool NeedsSurfaceOccludingDamageRect() const override { return true; }
+  bool IsOverlaySupported() const override { return true; }
 
   void CheckOverlaySupport(
       const OverlayProcessorInterface::OutputSurfaceOverlayPlane* primary_plane,
@@ -3086,6 +3089,7 @@ class ContentBoundsOverlayProcessor : public OverlayProcessorUsingStrategy {
   // Empty mock methods since this test set up uses strategies, which are only
   // for ozone and android.
   MOCK_CONST_METHOD0(NeedsSurfaceOccludingDamageRect, bool());
+  bool IsOverlaySupported() const override { return true; }
 
   // A list of possible overlay candidates is presented to this function.
   // The expected result is that those candidates that can be in a separate
