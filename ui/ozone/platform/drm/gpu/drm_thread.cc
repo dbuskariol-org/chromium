@@ -297,9 +297,7 @@ void DrmThread::MoveCursor(gfx::AcceleratedWidget widget,
 void DrmThread::CheckOverlayCapabilities(
     gfx::AcceleratedWidget widget,
     const OverlaySurfaceCandidateList& overlays,
-    base::OnceCallback<void(gfx::AcceleratedWidget,
-                            const OverlaySurfaceCandidateList&,
-                            const OverlayStatusList&)> callback) {
+    OverlayCapabilitiesCallback callback) {
   TRACE_EVENT0("drm,hwoverlays", "DrmThread::CheckOverlayCapabilities");
 
   std::move(callback).Run(
