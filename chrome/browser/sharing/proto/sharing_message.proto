@@ -5,13 +5,13 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "org.chromium.components.sync.protocol";
+option java_package = "org.chromium.chrome.browser.sharing.proto";
 
-import "sharing_click_to_call_message.proto";
-import "sharing_peer_connection_messages.proto";
-import "sharing_remote_copy_message.proto";
-import "sharing_shared_clipboard_message.proto";
-import "sharing_sms_fetch_message.proto";
+import "click_to_call_message.proto";
+import "peer_connection_messages.proto";
+import "remote_copy_message.proto";
+import "shared_clipboard_message.proto";
+import "sms_fetch_message.proto";
 
 package chrome_browser_sharing;
 
