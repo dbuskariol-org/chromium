@@ -3670,6 +3670,8 @@
       name: "-webkit-border-image",
       property_methods: ["ParseSingleValue", "CSSValueFromComputedStyleInternal"],
       style_builder_custom_functions: ["value"],
+      slots: ["border-image-outset", "border-image-repeat", "border-image-slice",
+              "border-image-source", "border-image-width"]
     },
     {
       name: "-webkit-border-vertical-spacing",

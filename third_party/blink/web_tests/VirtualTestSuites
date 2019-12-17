@@ -569,7 +569,12 @@
               "external/wpt/css/css-logical/logicalprops-block-size-vlr.html",
               "external/wpt/css/css-logical/logicalprops-block-size.html",
               "external/wpt/css/css-logical/logicalprops-inline-size-vlr.html",
-              "external/wpt/css/css-logical/logicalprops-inline-size.html"],
+              "external/wpt/css/css-logical/logicalprops-inline-size.html",
+              "fast/borders/border-image-outset-in-shorthand.html",
+              "fast/borders/border-image-repeat-round.html",
+              "fast/borders/border-image-repeat.html",
+              "fast/borders/border-image-slices.html",
+              "fast/borders/border-image-source.html"],
     "args": ["--enable-blink-features=CSSCascade"]
   },
   {

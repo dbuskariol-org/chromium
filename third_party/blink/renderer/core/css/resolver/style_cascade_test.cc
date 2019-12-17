@@ -1912,6 +1912,69 @@ TEST_F(StyleCascadeTest, WritingModePriority) {
   EXPECT_EQ("vertical-lr", cascade.ComputedValue("-webkit-writing-mode"));
 }
 
+TEST_F(StyleCascadeTest, WebkitBorderImageCascadeOrder) {
+  String gradient1("linear-gradient(rgb(0, 0, 0), rgb(0, 128, 0))");
+  String gradient2("linear-gradient(rgb(0, 0, 0), rgb(0, 200, 0))");
+
+  TestCascade cascade(GetDocument());
+  cascade.Add("-webkit-border-image", gradient1 + " round 40 / 10px / 20px",
+              Origin::kAuthor);
+  cascade.Add("border-image-source", gradient2, Origin::kAuthor);
+  cascade.Add("border-image-slice", "20", Origin::kAuthor);
+  cascade.Add("border-image-width", "6px", Origin::kAuthor);
+  cascade.Add("border-image-outset", "4px", Origin::kAuthor);
+  cascade.Add("border-image-repeat", "space", Origin::kAuthor);
+  cascade.Apply();
+
+  EXPECT_EQ(gradient2, cascade.ComputedValue("border-image-source"));
+  EXPECT_EQ("20", cascade.ComputedValue("border-image-slice"));
+  EXPECT_EQ("6px", cascade.ComputedValue("border-image-width"));
+  EXPECT_EQ("4px", cascade.ComputedValue("border-image-outset"));
+  EXPECT_EQ("space", cascade.ComputedValue("border-image-repeat"));
+}
+
+TEST_F(StyleCascadeTest, WebkitBorderImageReverseCascadeOrder) {
+  String gradient1("linear-gradient(rgb(0, 0, 0), rgb(0, 128, 0))");
+  String gradient2("linear-gradient(rgb(0, 0, 0), rgb(0, 200, 0))");
+
+  TestCascade cascade(GetDocument());
+  cascade.Add("border-image-source", gradient2, Origin::kAuthor);
+  cascade.Add("border-image-slice", "20", Origin::kAuthor);
+  cascade.Add("border-image-width", "6px", Origin::kAuthor);
+  cascade.Add("border-image-outset", "4px", Origin::kAuthor);
+  cascade.Add("border-image-repeat", "space", Origin::kAuthor);
+  cascade.Add("-webkit-border-image", gradient1 + " round 40 / 10px / 20px",
+              Origin::kAuthor);
+  cascade.Apply();
+
+  EXPECT_EQ(gradient1, cascade.ComputedValue("border-image-source"));
+  EXPECT_EQ("40 fill", cascade.ComputedValue("border-image-slice"));
+  EXPECT_EQ("10px", cascade.ComputedValue("border-image-width"));
+  EXPECT_EQ("20px", cascade.ComputedValue("border-image-outset"));
+  EXPECT_EQ("round", cascade.ComputedValue("border-image-repeat"));
+}
+
+TEST_F(StyleCascadeTest, WebkitBorderImageMixedOrder) {
+  String gradient1("linear-gradient(rgb(0, 0, 0), rgb(0, 128, 0))");
+  String gradient2("linear-gradient(rgb(0, 0, 0), rgb(0, 200, 0))");
+
+  TestCascade cascade(GetDocument());
+  cascade.Add("border-image-source", gradient2, Origin::kAuthor);
+  cascade.Add("border-image-width", "6px", Origin::kAuthor);
+  cascade.Add("-webkit-border-image", gradient1 + " round 40 / 10px / 20px",
+              Origin::kAuthor);
+  cascade.Add("border-image-slice", "20", Origin::kAuthor);
+  cascade.Add("border-image-outset", "4px", Origin::kAuthor);
+  cascade.Add("border-image-repeat", "space", Origin::kAuthor);
+  cascade.Apply();
+
+  EXPECT_EQ(gradient1, cascade.ComputedValue("border-image-source"));
+  EXPECT_EQ("20", cascade.ComputedValue("border-image-slice"));
+  EXPECT_EQ("10px", cascade.ComputedValue("border-image-width"));
+  EXPECT_EQ("4px", cascade.ComputedValue("border-image-outset"));
+  EXPECT_EQ("space", cascade.ComputedValue("border-image-repeat"));
+}
+
 TEST_F(StyleCascadeTest, AllLogicalPropertiesSlot) {
   using Origin = StyleCascade::Origin;
 
