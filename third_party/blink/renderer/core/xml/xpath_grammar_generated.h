@@ -350,13 +350,13 @@ namespace xpathyy {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
-      // NODETYPE
-      // PI
-      // FUNCTIONNAME
-      // LITERAL
-      // VARIABLEREFERENCE
-      // NUMBER
-      // NAMETEST
+      // kNodeType
+      // kPI
+      // kFunctionName
+      // kLiteral
+      // kVariableReference
+      // kNumber
+      // kNameTest
       char dummy1[sizeof (String)];
 
       // ArgumentList
@@ -396,14 +396,14 @@ namespace xpathyy {
       // AbbreviatedStep
       char dummy7[sizeof (blink::Persistent<blink::xpath::Step>)];
 
-      // EQOP
-      // RELOP
+      // kEqOp
+      // kRelOp
       char dummy8[sizeof (blink::xpath::EqTestOp::Opcode)];
 
-      // MULOP
+      // kMulOp
       char dummy9[sizeof (blink::xpath::NumericOp::Opcode)];
 
-      // AXISNAME
+      // kAxisName
       // AxisSpecifier
       char dummy10[sizeof (blink::xpath::Step::Axis)];
     };
@@ -444,24 +444,24 @@ namespace xpathyy {
     {
       enum yytokentype
       {
-        MULOP = 258,
-        EQOP = 259,
-        RELOP = 260,
-        PLUS = 261,
-        MINUS = 262,
-        OR = 263,
-        AND = 264,
-        AXISNAME = 265,
-        NODETYPE = 266,
-        PI = 267,
-        FUNCTIONNAME = 268,
-        LITERAL = 269,
-        VARIABLEREFERENCE = 270,
-        NUMBER = 271,
-        DOTDOT = 272,
-        SLASHSLASH = 273,
-        NAMETEST = 274,
-        XPATH_ERROR = 275
+        kMulOp = 258,
+        kEqOp = 259,
+        kRelOp = 260,
+        kPlus = 261,
+        kMinus = 262,
+        kOr = 263,
+        kAnd = 264,
+        kAxisName = 265,
+        kNodeType = 266,
+        kPI = 267,
+        kFunctionName = 268,
+        kLiteral = 269,
+        kVariableReference = 270,
+        kNumber = 271,
+        kDotDot = 272,
+        kSlashSlash = 273,
+        kNameTest = 274,
+        kXPathError = 275
       };
     };
 
@@ -645,13 +645,13 @@ namespace xpathyy {
         // Type destructor.
 switch (yytype)
     {
-      case 11: // NODETYPE
-      case 12: // PI
-      case 13: // FUNCTIONNAME
-      case 14: // LITERAL
-      case 15: // VARIABLEREFERENCE
-      case 16: // NUMBER
-      case 19: // NAMETEST
+      case 11: // kNodeType
+      case 12: // kPI
+      case 13: // kFunctionName
+      case 14: // kLiteral
+      case 15: // kVariableReference
+      case 16: // kNumber
+      case 19: // kNameTest
         value.template destroy< String > ();
         break;
 
@@ -698,16 +698,16 @@ switch (yytype)
         value.template destroy< blink::Persistent<blink::xpath::Step> > ();
         break;
 
-      case 4: // EQOP
-      case 5: // RELOP
+      case 4: // kEqOp
+      case 5: // kRelOp
         value.template destroy< blink::xpath::EqTestOp::Opcode > ();
         break;
 
-      case 3: // MULOP
+      case 3: // kMulOp
         value.template destroy< blink::xpath::NumericOp::Opcode > ();
         break;
 
-      case 10: // AXISNAME
+      case 10: // kAxisName
       case 36: // AxisSpecifier
         value.template destroy< blink::xpath::Step::Axis > ();
         break;
@@ -788,71 +788,71 @@ switch (yytype)
       symbol_type (int tok)
         : super_type(token_type (tok))
       {
-        YYASSERT (tok == 0 || tok == token::PLUS || tok == token::MINUS || tok == token::OR || tok == token::AND || tok == token::DOTDOT || tok == token::SLASHSLASH || tok == token::XPATH_ERROR || tok == 47 || tok == 64 || tok == 40 || tok == 41 || tok == 91 || tok == 93 || tok == 46 || tok == 44 || tok == 124);
+        YYASSERT (tok == 0 || tok == token::kPlus || tok == token::kMinus || tok == token::kOr || tok == token::kAnd || tok == token::kDotDot || tok == token::kSlashSlash || tok == token::kXPathError || tok == 47 || tok == 64 || tok == 40 || tok == 41 || tok == 91 || tok == 93 || tok == 46 || tok == 44 || tok == 124);
       }
 #else
       symbol_type (int tok)
         : super_type(token_type (tok))
       {
-        YYASSERT (tok == 0 || tok == token::PLUS || tok == token::MINUS || tok == token::OR || tok == token::AND || tok == token::DOTDOT || tok == token::SLASHSLASH || tok == token::XPATH_ERROR || tok == 47 || tok == 64 || tok == 40 || tok == 41 || tok == 91 || tok == 93 || tok == 46 || tok == 44 || tok == 124);
+        YYASSERT (tok == 0 || tok == token::kPlus || tok == token::kMinus || tok == token::kOr || tok == token::kAnd || tok == token::kDotDot || tok == token::kSlashSlash || tok == token::kXPathError || tok == 47 || tok == 64 || tok == 40 || tok == 41 || tok == 91 || tok == 93 || tok == 46 || tok == 44 || tok == 124);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       symbol_type (int tok, String v)
         : super_type(token_type (tok), std::move (v))
       {
-        YYASSERT (tok == token::NODETYPE || tok == token::PI || tok == token::FUNCTIONNAME || tok == token::LITERAL || tok == token::VARIABLEREFERENCE || tok == token::NUMBER || tok == token::NAMETEST);
+        YYASSERT (tok == token::kNodeType || tok == token::kPI || tok == token::kFunctionName || tok == token::kLiteral || tok == token::kVariableReference || tok == token::kNumber || tok == token::kNameTest);
       }
 #else
       symbol_type (int tok, const String& v)
         : super_type(token_type (tok), v)
       {
-        YYASSERT (tok == token::NODETYPE || tok == token::PI || tok == token::FUNCTIONNAME || tok == token::LITERAL || tok == token::VARIABLEREFERENCE || tok == token::NUMBER || tok == token::NAMETEST);
+        YYASSERT (tok == token::kNodeType || tok == token::kPI || tok == token::kFunctionName || tok == token::kLiteral || tok == token::kVariableReference || tok == token::kNumber || tok == token::kNameTest);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       symbol_type (int tok, blink::xpath::EqTestOp::Opcode v)
         : super_type(token_type (tok), std::move (v))
       {
-        YYASSERT (tok == token::EQOP || tok == token::RELOP);
+        YYASSERT (tok == token::kEqOp || tok == token::kRelOp);
       }
 #else
       symbol_type (int tok, const blink::xpath::EqTestOp::Opcode& v)
         : super_type(token_type (tok), v)
       {
-        YYASSERT (tok == token::EQOP || tok == token::RELOP);
+        YYASSERT (tok == token::kEqOp || tok == token::kRelOp);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       symbol_type (int tok, blink::xpath::NumericOp::Opcode v)
         : super_type(token_type (tok), std::move (v))
       {
-        YYASSERT (tok == token::MULOP);
+        YYASSERT (tok == token::kMulOp);
       }
 #else
       symbol_type (int tok, const blink::xpath::NumericOp::Opcode& v)
         : super_type(token_type (tok), v)
       {
-        YYASSERT (tok == token::MULOP);
+        YYASSERT (tok == token::kMulOp);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       symbol_type (int tok, blink::xpath::Step::Axis v)
         : super_type(token_type (tok), std::move (v))
       {
-        YYASSERT (tok == token::AXISNAME);
+        YYASSERT (tok == token::kAxisName);
       }
 #else
       symbol_type (int tok, const blink::xpath::Step::Axis& v)
         : super_type(token_type (tok), v)
       {
-        YYASSERT (tok == token::AXISNAME);
+        YYASSERT (tok == token::kAxisName);
       }
 #endif
     };
 
     /// Build a parser object.
-     YyParser  (blink::xpath::Parser* parser_yyarg);
+     YyParser  (blink::xpath::Parser* parser__yyarg);
     virtual ~ YyParser  ();
 
     /// Parse.  An alias for parse ().
@@ -888,271 +888,271 @@ switch (yytype)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_MULOP (blink::xpath::NumericOp::Opcode v)
+      make_kMulOp (blink::xpath::NumericOp::Opcode v)
       {
-        return symbol_type (token::MULOP, std::move (v));
+        return symbol_type (token::kMulOp, std::move (v));
       }
 #else
       static
       symbol_type
-      make_MULOP (const blink::xpath::NumericOp::Opcode& v)
+      make_kMulOp (const blink::xpath::NumericOp::Opcode& v)
       {
-        return symbol_type (token::MULOP, v);
+        return symbol_type (token::kMulOp, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_EQOP (blink::xpath::EqTestOp::Opcode v)
+      make_kEqOp (blink::xpath::EqTestOp::Opcode v)
       {
-        return symbol_type (token::EQOP, std::move (v));
+        return symbol_type (token::kEqOp, std::move (v));
       }
 #else
       static
       symbol_type
-      make_EQOP (const blink::xpath::EqTestOp::Opcode& v)
+      make_kEqOp (const blink::xpath::EqTestOp::Opcode& v)
       {
-        return symbol_type (token::EQOP, v);
+        return symbol_type (token::kEqOp, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_RELOP (blink::xpath::EqTestOp::Opcode v)
+      make_kRelOp (blink::xpath::EqTestOp::Opcode v)
       {
-        return symbol_type (token::RELOP, std::move (v));
+        return symbol_type (token::kRelOp, std::move (v));
       }
 #else
       static
       symbol_type
-      make_RELOP (const blink::xpath::EqTestOp::Opcode& v)
+      make_kRelOp (const blink::xpath::EqTestOp::Opcode& v)
       {
-        return symbol_type (token::RELOP, v);
+        return symbol_type (token::kRelOp, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_PLUS ()
+      make_kPlus ()
       {
-        return symbol_type (token::PLUS);
+        return symbol_type (token::kPlus);
       }
 #else
       static
       symbol_type
-      make_PLUS ()
+      make_kPlus ()
       {
-        return symbol_type (token::PLUS);
+        return symbol_type (token::kPlus);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_MINUS ()
+      make_kMinus ()
       {
-        return symbol_type (token::MINUS);
+        return symbol_type (token::kMinus);
       }
 #else
       static
       symbol_type
-      make_MINUS ()
+      make_kMinus ()
       {
-        return symbol_type (token::MINUS);
+        return symbol_type (token::kMinus);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_OR ()
+      make_kOr ()
       {
-        return symbol_type (token::OR);
+        return symbol_type (token::kOr);
       }
 #else
       static
       symbol_type
-      make_OR ()
+      make_kOr ()
       {
-        return symbol_type (token::OR);
+        return symbol_type (token::kOr);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_AND ()
+      make_kAnd ()
       {
-        return symbol_type (token::AND);
+        return symbol_type (token::kAnd);
       }
 #else
       static
       symbol_type
-      make_AND ()
+      make_kAnd ()
       {
-        return symbol_type (token::AND);
+        return symbol_type (token::kAnd);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_AXISNAME (blink::xpath::Step::Axis v)
+      make_kAxisName (blink::xpath::Step::Axis v)
       {
-        return symbol_type (token::AXISNAME, std::move (v));
+        return symbol_type (token::kAxisName, std::move (v));
       }
 #else
       static
       symbol_type
-      make_AXISNAME (const blink::xpath::Step::Axis& v)
+      make_kAxisName (const blink::xpath::Step::Axis& v)
       {
-        return symbol_type (token::AXISNAME, v);
+        return symbol_type (token::kAxisName, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NODETYPE (String v)
+      make_kNodeType (String v)
       {
-        return symbol_type (token::NODETYPE, std::move (v));
+        return symbol_type (token::kNodeType, std::move (v));
       }
 #else
       static
       symbol_type
-      make_NODETYPE (const String& v)
+      make_kNodeType (const String& v)
       {
-        return symbol_type (token::NODETYPE, v);
+        return symbol_type (token::kNodeType, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_PI (String v)
+      make_kPI (String v)
       {
-        return symbol_type (token::PI, std::move (v));
+        return symbol_type (token::kPI, std::move (v));
       }
 #else
       static
       symbol_type
-      make_PI (const String& v)
+      make_kPI (const String& v)
       {
-        return symbol_type (token::PI, v);
+        return symbol_type (token::kPI, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_FUNCTIONNAME (String v)
+      make_kFunctionName (String v)
       {
-        return symbol_type (token::FUNCTIONNAME, std::move (v));
+        return symbol_type (token::kFunctionName, std::move (v));
       }
 #else
       static
       symbol_type
-      make_FUNCTIONNAME (const String& v)
+      make_kFunctionName (const String& v)
       {
-        return symbol_type (token::FUNCTIONNAME, v);
+        return symbol_type (token::kFunctionName, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_LITERAL (String v)
+      make_kLiteral (String v)
       {
-        return symbol_type (token::LITERAL, std::move (v));
+        return symbol_type (token::kLiteral, std::move (v));
       }
 #else
       static
       symbol_type
-      make_LITERAL (const String& v)
+      make_kLiteral (const String& v)
       {
-        return symbol_type (token::LITERAL, v);
+        return symbol_type (token::kLiteral, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_VARIABLEREFERENCE (String v)
+      make_kVariableReference (String v)
       {
-        return symbol_type (token::VARIABLEREFERENCE, std::move (v));
+        return symbol_type (token::kVariableReference, std::move (v));
       }
 #else
       static
       symbol_type
-      make_VARIABLEREFERENCE (const String& v)
+      make_kVariableReference (const String& v)
       {
-        return symbol_type (token::VARIABLEREFERENCE, v);
+        return symbol_type (token::kVariableReference, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NUMBER (String v)
+      make_kNumber (String v)
       {
-        return symbol_type (token::NUMBER, std::move (v));
+        return symbol_type (token::kNumber, std::move (v));
       }
 #else
       static
       symbol_type
-      make_NUMBER (const String& v)
+      make_kNumber (const String& v)
       {
-        return symbol_type (token::NUMBER, v);
+        return symbol_type (token::kNumber, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_DOTDOT ()
+      make_kDotDot ()
       {
-        return symbol_type (token::DOTDOT);
+        return symbol_type (token::kDotDot);
       }
 #else
       static
       symbol_type
-      make_DOTDOT ()
+      make_kDotDot ()
       {
-        return symbol_type (token::DOTDOT);
+        return symbol_type (token::kDotDot);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_SLASHSLASH ()
+      make_kSlashSlash ()
       {
-        return symbol_type (token::SLASHSLASH);
+        return symbol_type (token::kSlashSlash);
       }
 #else
       static
       symbol_type
-      make_SLASHSLASH ()
+      make_kSlashSlash ()
       {
-        return symbol_type (token::SLASHSLASH);
+        return symbol_type (token::kSlashSlash);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NAMETEST (String v)
+      make_kNameTest (String v)
       {
-        return symbol_type (token::NAMETEST, std::move (v));
+        return symbol_type (token::kNameTest, std::move (v));
       }
 #else
       static
       symbol_type
-      make_NAMETEST (const String& v)
+      make_kNameTest (const String& v)
       {
-        return symbol_type (token::NAMETEST, v);
+        return symbol_type (token::kNameTest, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_XPATH_ERROR ()
+      make_kXPathError ()
       {
-        return symbol_type (token::XPATH_ERROR);
+        return symbol_type (token::kXPathError);
       }
 #else
       static
       symbol_type
-      make_XPATH_ERROR ()
+      make_kXPathError ()
       {
-        return symbol_type (token::XPATH_ERROR);
+        return symbol_type (token::kXPathError);
       }
 #endif
 
@@ -1468,7 +1468,7 @@ switch (yytype)
 
 
     // User arguments.
-    blink::xpath::Parser* parser;
+    blink::xpath::Parser* parser_;
   };
 
 

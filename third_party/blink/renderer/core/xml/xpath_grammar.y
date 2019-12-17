@@ -67,20 +67,20 @@ using blink::xpath::Step;
 %}
 
 %define api.parser.class { YyParser }
-%parse-param { blink::xpath::Parser* parser }
+%parse-param { blink::xpath::Parser* parser_ }
 
 %define api.value.type variant
 
-%left <blink::xpath::NumericOp::Opcode> MULOP
-%left <blink::xpath::EqTestOp::Opcode> EQOP RELOP
-%left PLUS MINUS
-%left OR AND
-%token <blink::xpath::Step::Axis> AXISNAME
-%token <String> NODETYPE PI FUNCTIONNAME LITERAL
-%token <String> VARIABLEREFERENCE NUMBER
-%token DOTDOT SLASHSLASH
-%token <String> NAMETEST
-%token XPATH_ERROR
+%left <blink::xpath::NumericOp::Opcode> kMulOp
+%left <blink::xpath::EqTestOp::Opcode> kEqOp kRelOp
+%left kPlus kMinus
+%left kOr kAnd
+%token <blink::xpath::Step::Axis> kAxisName
+%token <String> kNodeType kPI kFunctionName kLiteral
+%token <String> kVariableReference kNumber
+%token kDotDot kSlashSlash
+%token <String> kNameTest
+%token kXPathError
 
 %type <blink::Persistent<blink::xpath::LocationPath>> LocationPath
 %type <blink::Persistent<blink::xpath::LocationPath>> AbsoluteLocationPath
@@ -126,7 +126,7 @@ void YyParser::error(const std::string&) { }
 Expr:
     OrExpr
     {
-      parser->top_expr_ = $1;
+      parser_->top_expr_ = $1;
       $$ = $1;
     }
     ;
@@ -193,12 +193,12 @@ Step:
         $$ = blink::MakeGarbageCollected<Step>(Step::kChildAxis, *$1);
     }
     |
-    NAMETEST OptionalPredicateList
+    kNameTest OptionalPredicateList
     {
       AtomicString local_name;
       AtomicString namespace_uri;
-      if (!parser->ExpandQName($1, local_name, namespace_uri)) {
-        parser->got_namespace_error_ = true;
+      if (!parser_->ExpandQName($1, local_name, namespace_uri)) {
+        parser_->got_namespace_error_ = true;
         YYABORT;
       }
 
@@ -216,12 +216,12 @@ Step:
         $$ = blink::MakeGarbageCollected<Step>($1, *$2);
     }
     |
-    AxisSpecifier NAMETEST OptionalPredicateList
+    AxisSpecifier kNameTest OptionalPredicateList
     {
       AtomicString local_name;
       AtomicString namespace_uri;
-      if (!parser->ExpandQName($2, local_name, namespace_uri)) {
-        parser->got_namespace_error_ = true;
+      if (!parser_->ExpandQName($2, local_name, namespace_uri)) {
+        parser_->got_namespace_error_ = true;
         YYABORT;
       }
 
@@ -235,7 +235,7 @@ Step:
     ;
 
 AxisSpecifier:
-    AXISNAME
+    kAxisName
     |
     '@'
     {
@@ -244,7 +244,7 @@ AxisSpecifier:
     ;
 
 NodeTest:
-    NODETYPE '(' ')'
+    kNodeType '(' ')'
     {
       if ($1 == "node")
         $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kAnyNodeTest);
@@ -254,12 +254,12 @@ NodeTest:
         $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kCommentNodeTest);
     }
     |
-    PI '(' ')'
+    kPI '(' ')'
     {
       $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kProcessingInstructionNodeTest);
     }
     |
-    PI '(' LITERAL ')'
+    kPI '(' kLiteral ')'
     {
       $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kProcessingInstructionNodeTest, $3.StripWhiteSpace());
     }
@@ -299,7 +299,7 @@ Predicate:
     ;
 
 DescendantOrSelf:
-    SLASHSLASH
+    kSlashSlash
     {
       $$ = blink::MakeGarbageCollected<Step>(Step::kDescendantOrSelfAxis, Step::NodeTest(Step::NodeTest::kAnyNodeTest));
     }
@@ -311,14 +311,14 @@ AbbreviatedStep:
       $$ = blink::MakeGarbageCollected<Step>(Step::kSelfAxis, Step::NodeTest(Step::NodeTest::kAnyNodeTest));
     }
     |
-    DOTDOT
+    kDotDot
     {
       $$ = blink::MakeGarbageCollected<Step>(Step::kParentAxis, Step::NodeTest(Step::NodeTest::kAnyNodeTest));
     }
     ;
 
 PrimaryExpr:
-    VARIABLEREFERENCE
+    kVariableReference
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::VariableReference>($1);
     }
@@ -328,12 +328,12 @@ PrimaryExpr:
       $$ = $2;
     }
     |
-    LITERAL
+    kLiteral
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::StringExpression>($1);
     }
     |
-    NUMBER
+    kNumber
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::Number>($1.ToDouble());
     }
@@ -342,14 +342,14 @@ PrimaryExpr:
     ;
 
 FunctionCall:
-    FUNCTIONNAME '(' ')'
+    kFunctionName '(' ')'
     {
       $$ = blink::xpath::CreateFunction($1);
       if (!$$)
         YYABORT;
     }
     |
-    FUNCTIONNAME '(' ArgumentList ')'
+    kFunctionName '(' ArgumentList ')'
     {
       $$ = blink::xpath::CreateFunction($1, *$3);
       if (!$$)
@@ -420,7 +420,7 @@ FilterExpr:
 OrExpr:
     AndExpr
     |
-    OrExpr OR AndExpr
+    OrExpr kOr AndExpr
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::LogicalOp>(blink::xpath::LogicalOp::kOP_Or, $1, $3);
     }
@@ -429,7 +429,7 @@ OrExpr:
 AndExpr:
     EqualityExpr
     |
-    AndExpr AND EqualityExpr
+    AndExpr kAnd EqualityExpr
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::LogicalOp>(blink::xpath::LogicalOp::kOP_And, $1, $3);
     }
@@ -438,7 +438,7 @@ AndExpr:
 EqualityExpr:
     RelationalExpr
     |
-    EqualityExpr EQOP RelationalExpr
+    EqualityExpr kEqOp RelationalExpr
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::EqTestOp>($2, $1, $3);
     }
@@ -447,7 +447,7 @@ EqualityExpr:
 RelationalExpr:
     AdditiveExpr
     |
-    RelationalExpr RELOP AdditiveExpr
+    RelationalExpr kRelOp AdditiveExpr
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::EqTestOp>($2, $1, $3);
     }
@@ -456,12 +456,12 @@ RelationalExpr:
 AdditiveExpr:
     MultiplicativeExpr
     |
-    AdditiveExpr PLUS MultiplicativeExpr
+    AdditiveExpr kPlus MultiplicativeExpr
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::NumericOp>(blink::xpath::NumericOp::kOP_Add, $1, $3);
     }
     |
-    AdditiveExpr MINUS MultiplicativeExpr
+    AdditiveExpr kMinus MultiplicativeExpr
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::NumericOp>(blink::xpath::NumericOp::kOP_Sub, $1, $3);
     }
@@ -470,7 +470,7 @@ AdditiveExpr:
 MultiplicativeExpr:
     UnaryExpr
     |
-    MultiplicativeExpr MULOP UnaryExpr
+    MultiplicativeExpr kMulOp UnaryExpr
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::NumericOp>($2, $1, $3);
     }
@@ -479,7 +479,7 @@ MultiplicativeExpr:
 UnaryExpr:
     UnionExpr
     |
-    MINUS UnaryExpr
+    kMinus UnaryExpr
     {
       $$ = blink::MakeGarbageCollected<blink::xpath::Negative>();
       $$->AddSubExpression($2);

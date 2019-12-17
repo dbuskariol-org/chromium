@@ -151,13 +151,13 @@ namespace xpathyy {
 
 
   /// Build a parser object.
-   YyParser :: YyParser  (blink::xpath::Parser* parser_yyarg)
+   YyParser :: YyParser  (blink::xpath::Parser* parser__yyarg)
     :
 #if YYDEBUG
       yydebug_ (false),
       yycdebug_ (&std::cerr),
 #endif
-      parser (parser_yyarg)
+      parser_ (parser__yyarg)
   {}
 
    YyParser ::~ YyParser  ()
@@ -179,13 +179,13 @@ namespace xpathyy {
   {
     switch (this->type_get ())
     {
-      case 11: // NODETYPE
-      case 12: // PI
-      case 13: // FUNCTIONNAME
-      case 14: // LITERAL
-      case 15: // VARIABLEREFERENCE
-      case 16: // NUMBER
-      case 19: // NAMETEST
+      case 11: // kNodeType
+      case 12: // kPI
+      case 13: // kFunctionName
+      case 14: // kLiteral
+      case 15: // kVariableReference
+      case 16: // kNumber
+      case 19: // kNameTest
         value.move< String > (std::move (that.value));
         break;
 
@@ -232,16 +232,16 @@ namespace xpathyy {
         value.move< blink::Persistent<blink::xpath::Step> > (std::move (that.value));
         break;
 
-      case 4: // EQOP
-      case 5: // RELOP
+      case 4: // kEqOp
+      case 5: // kRelOp
         value.move< blink::xpath::EqTestOp::Opcode > (std::move (that.value));
         break;
 
-      case 3: // MULOP
+      case 3: // kMulOp
         value.move< blink::xpath::NumericOp::Opcode > (std::move (that.value));
         break;
 
-      case 10: // AXISNAME
+      case 10: // kAxisName
       case 36: // AxisSpecifier
         value.move< blink::xpath::Step::Axis > (std::move (that.value));
         break;
@@ -260,13 +260,13 @@ namespace xpathyy {
   {
     switch (this->type_get ())
     {
-      case 11: // NODETYPE
-      case 12: // PI
-      case 13: // FUNCTIONNAME
-      case 14: // LITERAL
-      case 15: // VARIABLEREFERENCE
-      case 16: // NUMBER
-      case 19: // NAMETEST
+      case 11: // kNodeType
+      case 12: // kPI
+      case 13: // kFunctionName
+      case 14: // kLiteral
+      case 15: // kVariableReference
+      case 16: // kNumber
+      case 19: // kNameTest
         value.copy< String > (YY_MOVE (that.value));
         break;
 
@@ -313,16 +313,16 @@ namespace xpathyy {
         value.copy< blink::Persistent<blink::xpath::Step> > (YY_MOVE (that.value));
         break;
 
-      case 4: // EQOP
-      case 5: // RELOP
+      case 4: // kEqOp
+      case 5: // kRelOp
         value.copy< blink::xpath::EqTestOp::Opcode > (YY_MOVE (that.value));
         break;
 
-      case 3: // MULOP
+      case 3: // kMulOp
         value.copy< blink::xpath::NumericOp::Opcode > (YY_MOVE (that.value));
         break;
 
-      case 10: // AXISNAME
+      case 10: // kAxisName
       case 36: // AxisSpecifier
         value.copy< blink::xpath::Step::Axis > (YY_MOVE (that.value));
         break;
@@ -349,13 +349,13 @@ namespace xpathyy {
     super_type::move (s);
     switch (this->type_get ())
     {
-      case 11: // NODETYPE
-      case 12: // PI
-      case 13: // FUNCTIONNAME
-      case 14: // LITERAL
-      case 15: // VARIABLEREFERENCE
-      case 16: // NUMBER
-      case 19: // NAMETEST
+      case 11: // kNodeType
+      case 12: // kPI
+      case 13: // kFunctionName
+      case 14: // kLiteral
+      case 15: // kVariableReference
+      case 16: // kNumber
+      case 19: // kNameTest
         value.move< String > (YY_MOVE (s.value));
         break;
 
@@ -402,16 +402,16 @@ namespace xpathyy {
         value.move< blink::Persistent<blink::xpath::Step> > (YY_MOVE (s.value));
         break;
 
-      case 4: // EQOP
-      case 5: // RELOP
+      case 4: // kEqOp
+      case 5: // kRelOp
         value.move< blink::xpath::EqTestOp::Opcode > (YY_MOVE (s.value));
         break;
 
-      case 3: // MULOP
+      case 3: // kMulOp
         value.move< blink::xpath::NumericOp::Opcode > (YY_MOVE (s.value));
         break;
 
-      case 10: // AXISNAME
+      case 10: // kAxisName
       case 36: // AxisSpecifier
         value.move< blink::xpath::Step::Axis > (YY_MOVE (s.value));
         break;
@@ -506,13 +506,13 @@ namespace xpathyy {
   {
     switch (that.type_get ())
     {
-      case 11: // NODETYPE
-      case 12: // PI
-      case 13: // FUNCTIONNAME
-      case 14: // LITERAL
-      case 15: // VARIABLEREFERENCE
-      case 16: // NUMBER
-      case 19: // NAMETEST
+      case 11: // kNodeType
+      case 12: // kPI
+      case 13: // kFunctionName
+      case 14: // kLiteral
+      case 15: // kVariableReference
+      case 16: // kNumber
+      case 19: // kNameTest
         value.YY_MOVE_OR_COPY< String > (YY_MOVE (that.value));
         break;
 
@@ -559,16 +559,16 @@ namespace xpathyy {
         value.YY_MOVE_OR_COPY< blink::Persistent<blink::xpath::Step> > (YY_MOVE (that.value));
         break;
 
-      case 4: // EQOP
-      case 5: // RELOP
+      case 4: // kEqOp
+      case 5: // kRelOp
         value.YY_MOVE_OR_COPY< blink::xpath::EqTestOp::Opcode > (YY_MOVE (that.value));
         break;
 
-      case 3: // MULOP
+      case 3: // kMulOp
         value.YY_MOVE_OR_COPY< blink::xpath::NumericOp::Opcode > (YY_MOVE (that.value));
         break;
 
-      case 10: // AXISNAME
+      case 10: // kAxisName
       case 36: // AxisSpecifier
         value.YY_MOVE_OR_COPY< blink::xpath::Step::Axis > (YY_MOVE (that.value));
         break;
@@ -588,13 +588,13 @@ namespace xpathyy {
   {
     switch (that.type_get ())
     {
-      case 11: // NODETYPE
-      case 12: // PI
-      case 13: // FUNCTIONNAME
-      case 14: // LITERAL
-      case 15: // VARIABLEREFERENCE
-      case 16: // NUMBER
-      case 19: // NAMETEST
+      case 11: // kNodeType
+      case 12: // kPI
+      case 13: // kFunctionName
+      case 14: // kLiteral
+      case 15: // kVariableReference
+      case 16: // kNumber
+      case 19: // kNameTest
         value.move< String > (YY_MOVE (that.value));
         break;
 
@@ -641,16 +641,16 @@ namespace xpathyy {
         value.move< blink::Persistent<blink::xpath::Step> > (YY_MOVE (that.value));
         break;
 
-      case 4: // EQOP
-      case 5: // RELOP
+      case 4: // kEqOp
+      case 5: // kRelOp
         value.move< blink::xpath::EqTestOp::Opcode > (YY_MOVE (that.value));
         break;
 
-      case 3: // MULOP
+      case 3: // kMulOp
         value.move< blink::xpath::NumericOp::Opcode > (YY_MOVE (that.value));
         break;
 
-      case 10: // AXISNAME
+      case 10: // kAxisName
       case 36: // AxisSpecifier
         value.move< blink::xpath::Step::Axis > (YY_MOVE (that.value));
         break;
@@ -670,13 +670,13 @@ namespace xpathyy {
     state = that.state;
     switch (that.type_get ())
     {
-      case 11: // NODETYPE
-      case 12: // PI
-      case 13: // FUNCTIONNAME
-      case 14: // LITERAL
-      case 15: // VARIABLEREFERENCE
-      case 16: // NUMBER
-      case 19: // NAMETEST
+      case 11: // kNodeType
+      case 12: // kPI
+      case 13: // kFunctionName
+      case 14: // kLiteral
+      case 15: // kVariableReference
+      case 16: // kNumber
+      case 19: // kNameTest
         value.move< String > (that.value);
         break;
 
@@ -723,16 +723,16 @@ namespace xpathyy {
         value.move< blink::Persistent<blink::xpath::Step> > (that.value);
         break;
 
-      case 4: // EQOP
-      case 5: // RELOP
+      case 4: // kEqOp
+      case 5: // kRelOp
         value.move< blink::xpath::EqTestOp::Opcode > (that.value);
         break;
 
-      case 3: // MULOP
+      case 3: // kMulOp
         value.move< blink::xpath::NumericOp::Opcode > (that.value);
         break;
 
-      case 10: // AXISNAME
+      case 10: // kAxisName
       case 36: // AxisSpecifier
         value.move< blink::xpath::Step::Axis > (that.value);
         break;
@@ -980,13 +980,13 @@ namespace xpathyy {
          when using variants.  */
       switch (yyr1_[yyn])
     {
-      case 11: // NODETYPE
-      case 12: // PI
-      case 13: // FUNCTIONNAME
-      case 14: // LITERAL
-      case 15: // VARIABLEREFERENCE
-      case 16: // NUMBER
-      case 19: // NAMETEST
+      case 11: // kNodeType
+      case 12: // kPI
+      case 13: // kFunctionName
+      case 14: // kLiteral
+      case 15: // kVariableReference
+      case 16: // kNumber
+      case 19: // kNameTest
         yylhs.value.emplace< String > ();
         break;
 
@@ -1033,16 +1033,16 @@ namespace xpathyy {
         yylhs.value.emplace< blink::Persistent<blink::xpath::Step> > ();
         break;
 
-      case 4: // EQOP
-      case 5: // RELOP
+      case 4: // kEqOp
+      case 5: // kRelOp
         yylhs.value.emplace< blink::xpath::EqTestOp::Opcode > ();
         break;
 
-      case 3: // MULOP
+      case 3: // kMulOp
         yylhs.value.emplace< blink::xpath::NumericOp::Opcode > ();
         break;
 
-      case 10: // AXISNAME
+      case 10: // kAxisName
       case 36: // AxisSpecifier
         yylhs.value.emplace< blink::xpath::Step::Axis > ();
         break;
@@ -1064,7 +1064,7 @@ namespace xpathyy {
   case 2:
 #line 128 "third_party/blink/renderer/core/xml/xpath_grammar.y"
     {
-      parser->top_expr_ = yystack_[0].value.as < blink::Persistent<blink::xpath::Expression> > ();
+      parser_->top_expr_ = yystack_[0].value.as < blink::Persistent<blink::xpath::Expression> > ();
       yylhs.value.as < blink::Persistent<blink::xpath::Expression> > () = yystack_[0].value.as < blink::Persistent<blink::xpath::Expression> > ();
     }
 #line 1070 "third_party/blink/renderer/core/xml/xpath_grammar_generated.cc"
@@ -1157,8 +1157,8 @@ namespace xpathyy {
     {
       AtomicString local_name;
       AtomicString namespace_uri;
-      if (!parser->ExpandQName(yystack_[1].value.as < String > (), local_name, namespace_uri)) {
-        parser->got_namespace_error_ = true;
+      if (!parser_->ExpandQName(yystack_[1].value.as < String > (), local_name, namespace_uri)) {
+        parser_->got_namespace_error_ = true;
         YYABORT;
       }
 
@@ -1186,8 +1186,8 @@ namespace xpathyy {
     {
       AtomicString local_name;
       AtomicString namespace_uri;
-      if (!parser->ExpandQName(yystack_[1].value.as < String > (), local_name, namespace_uri)) {
-        parser->got_namespace_error_ = true;
+      if (!parser_->ExpandQName(yystack_[1].value.as < String > (), local_name, namespace_uri)) {
+        parser_->got_namespace_error_ = true;
         YYABORT;
       }
 
@@ -1876,11 +1876,11 @@ namespace xpathyy {
   const char*
   const  YyParser ::yytname_[] =
   {
-  "$end", "error", "$undefined", "MULOP", "EQOP", "RELOP", "PLUS",
-  "MINUS", "OR", "AND", "AXISNAME", "NODETYPE", "PI", "FUNCTIONNAME",
-  "LITERAL", "VARIABLEREFERENCE", "NUMBER", "DOTDOT", "SLASHSLASH",
-  "NAMETEST", "XPATH_ERROR", "'/'", "'@'", "'('", "')'", "'['", "']'",
-  "'.'", "','", "'|'", "$accept", "Expr", "LocationPath",
+  "$end", "error", "$undefined", "kMulOp", "kEqOp", "kRelOp", "kPlus",
+  "kMinus", "kOr", "kAnd", "kAxisName", "kNodeType", "kPI",
+  "kFunctionName", "kLiteral", "kVariableReference", "kNumber", "kDotDot",
+  "kSlashSlash", "kNameTest", "kXPathError", "'/'", "'@'", "'('", "')'",
+  "'['", "']'", "'.'", "','", "'|'", "$accept", "Expr", "LocationPath",
   "AbsoluteLocationPath", "RelativeLocationPath", "Step", "AxisSpecifier",
   "NodeTest", "OptionalPredicateList", "PredicateList", "Predicate",
   "DescendantOrSelf", "AbbreviatedStep", "PrimaryExpr", "FunctionCall",
