@@ -25718,6 +25718,8 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3118" label="LongTaskBufferFull"/>
   <int value="3119" label="HTMLMetaElementMonetization"/>
   <int value="3120" label="HTMLLinkElementMonetization"/>
+  <int value="3121" label="InputTypeCheckboxRenderedNonSquare"/>
+  <int value="3122" label="InputTypeRadioRenderedNonSquare"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
