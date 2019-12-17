@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Allalaadimine peatatud</translation>
 <translation id="1386674309198842382">Aktiivne <ph name="LAST_UPDATED" /> päeva tagasi</translation>
 <translation id="1397811292916898096">Otsi teenusega <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Manustatud saidile <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">„Ära jälgi”</translation>
 <translation id="1407135791313364759">Ava kõik</translation>
 <translation id="1409426117486808224">Avatud vahelehtede lihtsustatud vaade</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> üksust kustutati</translation>
 <translation id="2536728043171574184">Kuvatakse on lehe võrguühenduseta koopia</translation>
 <translation id="2537178555904266562">Viga paroolide sünkroonimisel</translation>
+<translation id="2537296579376733324">Kõik küpsisefailid, ainult sellel saidil</translation>
 <translation id="2546283357679194313">Küpsised ja saidiandmed</translation>
 <translation id="2567385386134582609">KUJUTIS</translation>
 <translation id="257088987046510401">Teemad</translation>

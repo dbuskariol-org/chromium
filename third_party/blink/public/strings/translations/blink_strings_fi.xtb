@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Pidennä tämä teksti yli <ph name="MIN_CHARACTERS" /> merkkiin (tällä hetkellä käytössä <ph name="CURRENT_LENGTH" /> merkkiä).</translation>
 <translation id="383465348367842624"><ph name="ATSIGN" />-osaa ennen tulevassa osassa ei pitäisi olla merkkiä <ph name="INVALIDCHARACTER" />.</translation>
 <translation id="3846214748874656680">Sulje koko näytön tila.</translation>
-<translation id="3889183436948184105">muutostiedot</translation>
 <translation id="3920932319529768807">johtopäätös</translation>
 <translation id="3924558731517983934">sovellus</translation>
 <translation id="3944740393230681990">prologi</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Kuukausi</translation>
 <translation id="901493112792887934">nykyinen toistoaika sekunteina</translation>
 <translation id="901834265349196618">sähköposti</translation>
-<translation id="9023835124071926463">kommenttiosio</translation>
 <translation id="9048119486235211610">navigointi</translation>
 <translation id="9062295712474918030">dokumentti</translation>
 <translation id="9093215626363556771">sulje kuva kuvassa ‑tila</translation>

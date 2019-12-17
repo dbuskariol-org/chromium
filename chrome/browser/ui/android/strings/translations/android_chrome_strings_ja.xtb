@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">ダウンロードを一時停止しました</translation>
 <translation id="1386674309198842382">最終同期: <ph name="LAST_UPDATED" /> 日前</translation>
 <translation id="1397811292916898096"><ph name="PRODUCT_NAME" /> で検索</translation>
-<translation id="1404122904123200417">埋め込み先: <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">「トラッキング拒否」</translation>
 <translation id="1407135791313364759">すべて開く</translation>
 <translation id="1409426117486808224">開いているタブの簡易表示</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" />件の項目を削除しました</translation>
 <translation id="2536728043171574184">このページのオフライン コピーを表示しています</translation>
 <translation id="2537178555904266562">パスワードの同期中にエラーが発生しました</translation>
+<translation id="2537296579376733324">すべての Cookie（このサイトのみ）</translation>
 <translation id="2546283357679194313">Cookie とサイトデータ</translation>
 <translation id="2567385386134582609">画像</translation>
 <translation id="257088987046510401">テーマ</translation>

@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">已暫停下載</translation>
 <translation id="1386674309198842382">曾於 <ph name="LAST_UPDATED" /> 天前在線</translation>
 <translation id="1397811292916898096">使用 <ph name="PRODUCT_NAME" /> 搜尋內容</translation>
-<translation id="1404122904123200417">內嵌位置：<ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">「不追蹤」</translation>
 <translation id="1407135791313364759">全部開啟</translation>
 <translation id="1409426117486808224">使用簡化檢視模式查看開啟的分頁</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">已刪除 <ph name="NUMBER_OF_ITEMS" /> 個項目</translation>
 <translation id="2536728043171574184">正在瀏覽此網頁的離線版本</translation>
 <translation id="2537178555904266562">同步處理密碼時發生錯誤</translation>
+<translation id="2537296579376733324">所有 Cookies，僅限此網站</translation>
 <translation id="2546283357679194313">Cookie 和網站數據</translation>
 <translation id="2567385386134582609">圖片</translation>
 <translation id="257088987046510401">主題背景</translation>

@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Transferência interrompida</translation>
 <translation id="1386674309198842382">Ativo há <ph name="LAST_UPDATED" /> dias</translation>
 <translation id="1397811292916898096">Pesquisar com o <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Incorporado em <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">"Não monitorizar"</translation>
 <translation id="1407135791313364759">Abrir tudo</translation>
 <translation id="1409426117486808224">Vista simplificada dos separadores abertos</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> itens eliminados</translation>
 <translation id="2536728043171574184">Visualização de uma cópia offline desta página</translation>
 <translation id="2537178555904266562">Erro ao sincronizar as palavras-passe.</translation>
+<translation id="2537296579376733324">Todos os cookies, apenas neste site</translation>
 <translation id="2546283357679194313">Cookies e dados de Web sites</translation>
 <translation id="2567385386134582609">IMAGEM</translation>
 <translation id="257088987046510401">Temas</translation>

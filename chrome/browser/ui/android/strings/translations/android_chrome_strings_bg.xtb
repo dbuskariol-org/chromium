@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Изтеглянето е на пауза</translation>
 <translation id="1386674309198842382">Активно преди <ph name="LAST_UPDATED" /> дни</translation>
 <translation id="1397811292916898096">Търсене чрез <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Вградено в(ъв) <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">Заявка „Do Not Track“</translation>
 <translation id="1407135791313364759">Отваряне на всички</translation>
 <translation id="1409426117486808224">Опростен изглед на отворените раздели</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">Изтрихте <ph name="NUMBER_OF_ITEMS" /> елемента</translation>
 <translation id="2536728043171574184">Преглеждате офлайн копие на страницата</translation>
 <translation id="2537178555904266562">Грешка при синхронизирането на паролите</translation>
+<translation id="2537296579376733324">Всички „бисквитки“, само на този сайт</translation>
 <translation id="2546283357679194313">„Бисквитки“ и данни за сайтове</translation>
 <translation id="2567385386134582609">ИЗОБРАЖЕНИЕ</translation>
 <translation id="257088987046510401">Теми</translation>

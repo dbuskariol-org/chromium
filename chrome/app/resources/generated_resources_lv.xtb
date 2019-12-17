@@ -1531,7 +1531,7 @@ Servera ziņojums: <ph name="SERVER_MSG" /></translation>
 <translation id="3143515551205905069">Atcelt sinhronizāciju</translation>
 <translation id="3143754809889689516">Atskaņot no sākuma</translation>
 <translation id="3144647712221361880">Atvērt saiti kā</translation>
-<translation id="3145187901750964977">Nevarēja instalēt virtuālo mašīnu Lūdzu, mēģiniet vēlreiz vai sazinieties ar savas organizācijas ierīču administratoru. Kļūdas kods: <ph name="ERROR_CODE" />.</translation>
+<translation id="3145187901750964977">Nevarēja instalēt virtuālo mašīnu. Lūdzu, mēģiniet vēlreiz vai sazinieties ar savas organizācijas ierīču administratoru. Kļūdas kods: <ph name="ERROR_CODE" />.</translation>
 <translation id="3149477159749171726">Versija:
     <ph name="LINUX_VERSION" />
 
@@ -4605,7 +4605,7 @@ Vai vēlaties palaist rīku <ph name="CONTROL_PANEL_APPLET_NAME" />?</translatio
 <translation id="7644543211198159466">Krāsa un motīvs</translation>
 <translation id="7645176681409127223"><ph name="USER_NAME" /> (īpašnieks)</translation>
 <translation id="7645681574855902035">Linux dublējuma atcelšana</translation>
-<translation id="7646772052135772216">Paroļu sinhronizācijas nedarbojas</translation>
+<translation id="7646772052135772216">Paroļu sinhronizācija nedarbojas</translation>
 <translation id="7647403192093989392">Nav nesen veiktu darbību</translation>
 <translation id="7648992873808071793">saglabāt failus šajā ierīcē</translation>
 <translation id="7649070708921625228">Palīdzība</translation>

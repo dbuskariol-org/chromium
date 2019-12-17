@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Pausatu da deskarga</translation>
 <translation id="1386674309198842382">Aktibo duela <ph name="LAST_UPDATED" /> egun</translation>
 <translation id="1397811292916898096">Egin bilaketak <ph name="PRODUCT_NAME" /> zerbitzuarekin</translation>
-<translation id="1404122904123200417"><ph name="WEBSITE_URL" /> URLan kapsulatuta</translation>
 <translation id="1406000523432664303">"Ez jarraitu"</translation>
 <translation id="1407135791313364759">Ireki guztiak</translation>
 <translation id="1409426117486808224">Irekitako fitxen ikuspegi sinplifikatua</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">Ezabatu dira <ph name="NUMBER_OF_ITEMS" /> elementu</translation>
 <translation id="2536728043171574184">Orriaren konexiorik gabeko kopia ikusten ari zara</translation>
 <translation id="2537178555904266562">Errore bat gertatu da pasahitzak sinkronizatzean</translation>
+<translation id="2537296579376733324">Cookie guztiak, baina webgune honetan soilik</translation>
 <translation id="2546283357679194313">Cookieak eta webgune-datuak</translation>
 <translation id="2567385386134582609">IRUDIA</translation>
 <translation id="257088987046510401">Gaiak</translation>

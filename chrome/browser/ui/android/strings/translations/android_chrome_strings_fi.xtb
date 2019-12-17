@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Lataus keskeytettiin.</translation>
 <translation id="1386674309198842382">Aktiivinen <ph name="LAST_UPDATED" /> päivää sitten</translation>
 <translation id="1397811292916898096">Hae nimellä <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Upotettu osoitteeseen <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">Do Not Track</translation>
 <translation id="1407135791313364759">Avaa kaikki</translation>
 <translation id="1409426117486808224">Yksinkertaisempi avoimien välilehtien näkymä</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> kohdetta poistettu</translation>
 <translation id="2536728043171574184">Näkyvissä on sivun offline-versio.</translation>
 <translation id="2537178555904266562">Salasanojen synkronointivirhe</translation>
+<translation id="2537296579376733324">Kaikki evästeet, vain tällä sivustolla</translation>
 <translation id="2546283357679194313">Evästeet ja sivustotiedot</translation>
 <translation id="2567385386134582609">KUVA</translation>
 <translation id="257088987046510401">Teemat</translation>

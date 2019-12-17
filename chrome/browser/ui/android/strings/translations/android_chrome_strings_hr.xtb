@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Preuzimanje je pauzirano</translation>
 <translation id="1386674309198842382">Aktivan prije <ph name="LAST_UPDATED" /> dana</translation>
 <translation id="1397811292916898096">Pretraživanje pomoću usluge <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Ugrađeno u <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">"Nemoj pratiti"</translation>
 <translation id="1407135791313364759">Otvori sve</translation>
 <translation id="1409426117486808224">Pojednostavljeni prikaz za otvorene kartice</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">Broj izbrisanih stavki: <ph name="NUMBER_OF_ITEMS" /></translation>
 <translation id="2536728043171574184">Prikaz izvanmrežne kopije stranice</translation>
 <translation id="2537178555904266562">Pogreška prilikom sinkronizacije zaporki</translation>
+<translation id="2537296579376733324">Svi kolačići, samo na ovoj web-lokaciji</translation>
 <translation id="2546283357679194313">Kolačići i podaci o web-lokacijama</translation>
 <translation id="2567385386134582609">SLIKA</translation>
 <translation id="257088987046510401">Teme</translation>

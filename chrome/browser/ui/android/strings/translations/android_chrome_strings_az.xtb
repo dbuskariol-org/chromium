@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Endirmə durduruldu</translation>
 <translation id="1386674309198842382"><ph name="LAST_UPDATED" /> gün əvvəl aktiv olub</translation>
 <translation id="1397811292916898096"><ph name="PRODUCT_NAME" /> ilə axtarın</translation>
-<translation id="1404122904123200417"><ph name="WEBSITE_URL" /> linkinə yerləşdirilib</translation>
 <translation id="1406000523432664303">İzləməyin</translation>
 <translation id="1407135791313364759">Hamısını açın</translation>
 <translation id="1409426117486808224">Açıq tablar üçün sadələşdirilmiş görünüş</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> element silindi</translation>
 <translation id="2536728043171574184">Bu səhifənin oflayn nüsxəsinə baxılır</translation>
 <translation id="2537178555904266562">Parolları sinxronlaşdıran zaman xəta baş verdi</translation>
+<translation id="2537296579376733324">Ancaq bu saytda, bütün kukilər</translation>
 <translation id="2546283357679194313">Kukilər və sayt datası</translation>
 <translation id="2567385386134582609">ŞƏKİL</translation>
 <translation id="257088987046510401">Temalar</translation>
@@ -1015,7 +1015,7 @@ Bu sayt kameraya daxil olmur. Kamera şəkillərini yalnız Siz görürsünüz.<
 <translation id="8487700953926739672">Oflayn olaraq əlçatan</translation>
 <translation id="8489271220582375723">Tarixçə səhifəsini açın</translation>
 <translation id="8493948351860045254">Yaddaşı boşaldın</translation>
-<translation id="8497726226069778601">Burada...hələ heç nə yoxdur</translation>
+<translation id="8497726226069778601">Burada baxmağa heçnə yoxdur... hələki</translation>
 <translation id="8503559462189395349">Chrome Parolları</translation>
 <translation id="8503813439785031346">İstifadəçi adı</translation>
 <translation id="8514477925623180633">Chrome'da saxlanılan parolları eksport edin</translation>

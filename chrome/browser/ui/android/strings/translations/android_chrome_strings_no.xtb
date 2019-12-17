@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Nedlastingen er satt på pause</translation>
 <translation id="1386674309198842382">Aktiv for <ph name="LAST_UPDATED" /> dager siden</translation>
 <translation id="1397811292916898096">Søk med <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Innbygd i <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">«Ingen sporing»</translation>
 <translation id="1407135791313364759">Åpne alle</translation>
 <translation id="1409426117486808224">Forenklet visning for åpne faner</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">Slettet <ph name="NUMBER_OF_ITEMS" /> elementer</translation>
 <translation id="2536728043171574184">Ser på en lokalt lagret versjon av denne siden</translation>
 <translation id="2537178555904266562">Feil under synkronisering av passord</translation>
+<translation id="2537296579376733324">Alle informasjonskapsler, kun på dette nettstedet</translation>
 <translation id="2546283357679194313">Informasjonskapsler og data fra nettsteder</translation>
 <translation id="2567385386134582609">BILDE</translation>
 <translation id="257088987046510401">Temaer</translation>

@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">הארך טקסט זה ל-<ph name="MIN_CHARACTERS" /> תווים או יותר (אתה משתמש כרגע ב-<ph name="CURRENT_LENGTH" /> תווים).</translation>
 <translation id="383465348367842624">חלק ולאחריו '<ph name="ATSIGN" />' לא אמור לכלול את הסמל '<ph name="INVALIDCHARACTER" />'.</translation>
 <translation id="3846214748874656680">צא ממסך מלא</translation>
-<translation id="3889183436948184105">תיקון</translation>
 <translation id="3920932319529768807">סיכום</translation>
 <translation id="3924558731517983934">יישום</translation>
 <translation id="3944740393230681990">פרולוג</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">חודש</translation>
 <translation id="901493112792887934">זמן נוכחי בשניות</translation>
 <translation id="901834265349196618">אימייל</translation>
-<translation id="9023835124071926463">קטע התגובות</translation>
 <translation id="9048119486235211610">ניווט</translation>
 <translation id="9062295712474918030">מסמך</translation>
 <translation id="9093215626363556771">יציאה ממצב 'תמונה בתוך תמונה'</translation>

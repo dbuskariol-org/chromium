@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Pikendage teksti vähemalt <ph name="MIN_CHARACTERS" /> tähemärgini (kasutate praegu <ph name="CURRENT_LENGTH" /> tähemärki).</translation>
 <translation id="383465348367842624">Märgile „<ph name="ATSIGN" />” eelnev osa ei tohi sisaldada sümbolit „<ph name="INVALIDCHARACTER" />”.</translation>
 <translation id="3846214748874656680">Täisekraanilt väljumine</translation>
-<translation id="3889183436948184105">redaktsioon</translation>
 <translation id="3920932319529768807">kokkuvõte</translation>
 <translation id="3924558731517983934">rakendus</translation>
 <translation id="3944740393230681990">proloog</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">kuu</translation>
 <translation id="901493112792887934">praegune aeg sekundites</translation>
 <translation id="901834265349196618">meil:</translation>
-<translation id="9023835124071926463">kommentaaride jaotis</translation>
 <translation id="9048119486235211610">navigeerimine</translation>
 <translation id="9062295712474918030">dokument</translation>
 <translation id="9093215626363556771">välju režiimist Pilt pildis</translation>

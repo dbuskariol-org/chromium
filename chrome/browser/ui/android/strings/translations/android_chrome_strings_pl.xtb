@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Pobieranie wstrzymane</translation>
 <translation id="1386674309198842382">Aktywność <ph name="LAST_UPDATED" /> dni temu</translation>
 <translation id="1397811292916898096">Szukaj w <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Umieszczone na <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">„Bez śledzenia”</translation>
 <translation id="1407135791313364759">Otwórz wszystkie</translation>
 <translation id="1409426117486808224">Uproszczony widok otwartych kart</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">Usunięte elementy: <ph name="NUMBER_OF_ITEMS" /></translation>
 <translation id="2536728043171574184">Oglądasz kopię offline tej strony</translation>
 <translation id="2537178555904266562">Błąd podczas synchronizowania haseł</translation>
+<translation id="2537296579376733324">Wszystkie pliki cookie, tylko w tej witrynie</translation>
 <translation id="2546283357679194313">Pliki cookie i dane stron</translation>
 <translation id="2567385386134582609">OBRAZ</translation>
 <translation id="257088987046510401">Motywy</translation>

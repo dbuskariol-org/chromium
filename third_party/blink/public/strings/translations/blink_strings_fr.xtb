@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Veuillez allonger ce texte pour qu'il comporte au moins <ph name="MIN_CHARACTERS" /> caractères. Il en compte actuellement <ph name="CURRENT_LENGTH" />.</translation>
 <translation id="383465348367842624">La partie suivie du symbole "<ph name="ATSIGN" />" ne doit pas contenir le caractère "<ph name="INVALIDCHARACTER" />".</translation>
 <translation id="3846214748874656680">Quitter le mode plein écran</translation>
-<translation id="3889183436948184105">révision</translation>
 <translation id="3920932319529768807">conclusion</translation>
 <translation id="3924558731517983934">application</translation>
 <translation id="3944740393230681990">prologue</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Mois</translation>
 <translation id="901493112792887934">durée actuelle en secondes</translation>
 <translation id="901834265349196618">e-mail</translation>
-<translation id="9023835124071926463">section de commentaires</translation>
 <translation id="9048119486235211610">navigation</translation>
 <translation id="9062295712474918030">document</translation>
 <translation id="9093215626363556771">quitter le mode PIP</translation>

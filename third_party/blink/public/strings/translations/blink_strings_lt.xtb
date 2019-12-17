@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Pailginkite šį tekstą iki <ph name="MIN_CHARACTERS" /> simb. ar daugiau (šiuo metu naudojate <ph name="CURRENT_LENGTH" /> simb.).</translation>
 <translation id="383465348367842624">Prieš „<ph name="ATSIGN" />“ esančioje dalyje neturėtų būti simbolio „<ph name="INVALIDCHARACTER" />“.</translation>
 <translation id="3846214748874656680">Išjungti viso ekrano režimą</translation>
-<translation id="3889183436948184105">taisymas</translation>
 <translation id="3920932319529768807">išvada</translation>
 <translation id="3924558731517983934">programa</translation>
 <translation id="3944740393230681990">prologas</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Mėnuo</translation>
 <translation id="901493112792887934">dabartinis laikas sekundėmis</translation>
 <translation id="901834265349196618">El. paštas</translation>
-<translation id="9023835124071926463">komentarų skiltis</translation>
 <translation id="9048119486235211610">naršymas</translation>
 <translation id="9062295712474918030">dokumentas</translation>
 <translation id="9093215626363556771">išeiti iš vaizdo vaizde</translation>

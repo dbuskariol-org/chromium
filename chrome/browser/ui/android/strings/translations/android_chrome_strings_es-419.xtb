@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Descarga detenida</translation>
 <translation id="1386674309198842382">Activo hace <ph name="LAST_UPDATED" /> días</translation>
 <translation id="1397811292916898096">Buscar con <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Incorporado en <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">No realizar seguimiento</translation>
 <translation id="1407135791313364759">Abrir todas</translation>
 <translation id="1409426117486808224">Vista simplificada para las pestañas abiertas</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> elementos borrados</translation>
 <translation id="2536728043171574184">Visualizando una copia sin conexión de la página</translation>
 <translation id="2537178555904266562">Se produjo un error al sincronizar las contraseñas</translation>
+<translation id="2537296579376733324">Todas las cookies, solo en este sitio</translation>
 <translation id="2546283357679194313">Datos de sitios y cookies</translation>
 <translation id="2567385386134582609">IMAGEN</translation>
 <translation id="257088987046510401">Temas</translation>

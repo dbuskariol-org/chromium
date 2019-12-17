@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">หยุดดาวน์โหลดไว้ชั่วคราว</translation>
 <translation id="1386674309198842382">ใช้งานเมื่อ <ph name="LAST_UPDATED" /> วันที่ผ่านมา</translation>
 <translation id="1397811292916898096">ค้นหาด้วย <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">ฝังอยู่ใน <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">“ไม่ติดตาม”</translation>
 <translation id="1407135791313364759">เปิดทั้งหมด</translation>
 <translation id="1409426117486808224">มุมมองอย่างง่ายสำหรับแท็บที่เปิดไว้</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">ลบแล้ว <ph name="NUMBER_OF_ITEMS" /> รายการ</translation>
 <translation id="2536728043171574184">ดูสำเนาแบบออฟไลน์ของหน้านี้</translation>
 <translation id="2537178555904266562">เกิดข้อผิดพลาดในการซิงค์รหัสผ่าน</translation>
+<translation id="2537296579376733324">คุกกี้ทั้งหมดในเว็บไซต์นี้เท่านั้น</translation>
 <translation id="2546283357679194313">คุกกี้และข้อมูลเว็บไซต์</translation>
 <translation id="2567385386134582609">รูปภาพ</translation>
 <translation id="257088987046510401">ธีม</translation>

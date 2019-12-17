@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Wydłuż ten tekst przynajmniej do <ph name="MIN_CHARACTERS" /> znaków (teraz używasz <ph name="CURRENT_LENGTH" /> znaków).</translation>
 <translation id="383465348367842624">Część przed znakiem „<ph name="ATSIGN" />” nie może zawierać symbolu „<ph name="INVALIDCHARACTER" />”.</translation>
 <translation id="3846214748874656680">Zamknij pełny ekran</translation>
-<translation id="3889183436948184105">wersja</translation>
 <translation id="3920932319529768807">podsumowanie</translation>
 <translation id="3924558731517983934">aplikacja</translation>
 <translation id="3944740393230681990">prolog</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Miesiąc</translation>
 <translation id="901493112792887934">bieżący czas w sekundach</translation>
 <translation id="901834265349196618">e-mail</translation>
-<translation id="9023835124071926463">sekcja komentarzy</translation>
 <translation id="9048119486235211610">nawigacja</translation>
 <translation id="9062295712474918030">dokument</translation>
 <translation id="9093215626363556771">wyłącz tryb obrazu w obrazie</translation>

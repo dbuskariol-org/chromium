@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Преземањето е паузирано</translation>
 <translation id="1386674309198842382">Активен пред <ph name="LAST_UPDATED" /> дена</translation>
 <translation id="1397811292916898096">Пребарувајте со <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Вградено во <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">„Не ме следи“</translation>
 <translation id="1407135791313364759">Отвори ги сите</translation>
 <translation id="1409426117486808224">Поедноставен приказ за отворени картички</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">Избришани се <ph name="NUMBER_OF_ITEMS" /> ставки</translation>
 <translation id="2536728043171574184">Се прикажува офлајн копија на страницата</translation>
 <translation id="2537178555904266562">Грешка при синхронизирање на лозинките</translation>
+<translation id="2537296579376733324">Сите колачиња, само на овој сајт</translation>
 <translation id="2546283357679194313">Колачиња и податоци од сајтот</translation>
 <translation id="2567385386134582609">СЛИКА</translation>
 <translation id="257088987046510401">Теми</translation>

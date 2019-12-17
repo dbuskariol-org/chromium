@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">डाउनलोड रोकिएको छ</translation>
 <translation id="1386674309198842382"><ph name="LAST_UPDATED" /> दिनअघि सक्रिय</translation>
 <translation id="1397811292916898096"><ph name="PRODUCT_NAME" /> मार्फत खोज्नुहोस्</translation>
-<translation id="1404122904123200417"><ph name="WEBSITE_URL" /> मा एम्बेड भएको</translation>
 <translation id="1406000523432664303">“ट्रयाक नगर्नुहोस्”</translation>
 <translation id="1407135791313364759">सबै खोल्नुहोस्</translation>
 <translation id="1409426117486808224">खुला ट्याबहरूका लागि सरलीकृत दृश्य</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> वस्तुहरू मेटाइए</translation>
 <translation id="2536728043171574184">यो पृष्ठको एक अफलाइन प्रतिलिपि हेर्दै</translation>
 <translation id="2537178555904266562">पासवर्डहरू सिंक गर्ने क्रममा त्रुटि भयो</translation>
+<translation id="2537296579376733324">सबै कुकीहरू, यो साइटमा मात्र</translation>
 <translation id="2546283357679194313">कुकीहरू र साइट डाटा</translation>
 <translation id="2567385386134582609">छवि</translation>
 <translation id="257088987046510401">थिमहरू</translation>

@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">გთხოვთ, გაზარდოთ ეს ტექსტი <ph name="MIN_CHARACTERS" /> ან მეტ სიმბოლომდე (ამჟამად იყენებთ <ph name="CURRENT_LENGTH" /> სიმბოლოს).</translation>
 <translation id="383465348367842624">ნაწილი, რომელსაც მოყვება „<ph name="ATSIGN" />“ არ უნდა შეიცავდეს „<ph name="INVALIDCHARACTER" />“ სიმბოლოს.</translation>
 <translation id="3846214748874656680">სრულეკრანიანი რეჟიმიდან გამოსვლა</translation>
-<translation id="3889183436948184105">რედაქცია</translation>
 <translation id="3920932319529768807">დასკვნა</translation>
 <translation id="3924558731517983934">აპლიკაცია</translation>
 <translation id="3944740393230681990">პროლოგი</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">თვე</translation>
 <translation id="901493112792887934">მიმდინარე დრო წამებში</translation>
 <translation id="901834265349196618">ელფოსტა</translation>
-<translation id="9023835124071926463">კომენტარების სექცია</translation>
 <translation id="9048119486235211610">ნავიგაცია</translation>
 <translation id="9062295712474918030">დოკუმენტი</translation>
 <translation id="9093215626363556771">რეჟიმიდან „გამოსახულება გამოსახულებაში“ გასვლა</translation>

@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Gert var hlé á niðurhali</translation>
 <translation id="1386674309198842382">Virkt fyrir <ph name="LAST_UPDATED" /> dögum</translation>
 <translation id="1397811292916898096">Leita með <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Fellt inn á <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">„Ekki rekja“</translation>
 <translation id="1407135791313364759">Opna alla</translation>
 <translation id="1409426117486808224">Einfaldað yfirlit fyrir opna flipa</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> atriðum eytt</translation>
 <translation id="2536728043171574184">Skoðar ótengt afrit af þessari síðu</translation>
 <translation id="2537178555904266562">Villa við að samstilla aðgangsorð</translation>
+<translation id="2537296579376733324">Öll fótspor, aðeins á þessu vefsvæði</translation>
 <translation id="2546283357679194313">Fótspor og gögn vefsvæða</translation>
 <translation id="2567385386134582609">MYND</translation>
 <translation id="257088987046510401">Þemu</translation>

@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Du må forlenge denne teksten til <ph name="MIN_CHARACTERS" /> tegn eller mer (for øyeblikket bruker du <ph name="CURRENT_LENGTH" /> tegn).</translation>
 <translation id="383465348367842624">En del etterfulgt av «<ph name="ATSIGN" />» kan ikke inneholde symbolet «<ph name="INVALIDCHARACTER" />».</translation>
 <translation id="3846214748874656680">Avslutt fullskjermmodus</translation>
-<translation id="3889183436948184105">versjon</translation>
 <translation id="3920932319529768807">konklusjon</translation>
 <translation id="3924558731517983934">program</translation>
 <translation id="3944740393230681990">prolog</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Måned</translation>
 <translation id="901493112792887934">gjeldende tid i sekunder</translation>
 <translation id="901834265349196618">e-post</translation>
-<translation id="9023835124071926463">kommentardel</translation>
 <translation id="9048119486235211610">navigasjon</translation>
 <translation id="9062295712474918030">dokument</translation>
 <translation id="9093215626363556771">avslutt bilde-i-bilde</translation>

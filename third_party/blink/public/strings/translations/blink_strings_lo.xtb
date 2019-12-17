@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">ກະລຸນາຂະຫຍາຍຂໍ້ຄວາມນີ້ໃຫ້ຍາວເປັນ <ph name="MIN_CHARACTERS" /> ອັກຂະລະຂຶ້ນໄປ (ປະຈຸບັນ ທ່ານກຳລັງໃຊ້ <ph name="CURRENT_LENGTH" /> ອັກຂະລະ).</translation>
 <translation id="383465348367842624">ສ່ວນ​ຫນຶ່ງ​ຕິດຕາມດ້ວຍ  '<ph name="ATSIGN" />' ບໍ່​ຄວນ​ໃຫ້​ມີ​ສັນ​ຍາ​ລັກ '<ph name="INVALIDCHARACTER" />'.</translation>
 <translation id="3846214748874656680">ອອກຈາກເຕັມໜ້າຈໍ</translation>
-<translation id="3889183436948184105">ການດັດແກ້</translation>
 <translation id="3920932319529768807">ຂໍ້ສະຫຼຸບ</translation>
 <translation id="3924558731517983934">ແອັບພລິເຄຊັນ</translation>
 <translation id="3944740393230681990">ບົດນຳ</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">ເດືອນ</translation>
 <translation id="901493112792887934">ເວ​ລາ​ປະຈຸ​ບັນ​ເປັນ​ວິ​ນາ​ທີ</translation>
 <translation id="901834265349196618">ອີເມວ</translation>
-<translation id="9023835124071926463">ພາກສ່ວນຄຳເຫັນ</translation>
 <translation id="9048119486235211610">ການນໍາ​ທາງ</translation>
 <translation id="9062295712474918030">ເອກະສານ</translation>
 <translation id="9093215626363556771">ອອກຈາກໂໝດສະແດງຜົນຊ້ອນກັນ</translation>

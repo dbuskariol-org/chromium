@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Павялічце колькасць сімвалаў у гэтым тэксце як мінімум да <ph name="MIN_CHARACTERS" /> (зараз у вас – <ph name="CURRENT_LENGTH" />).</translation>
 <translation id="383465348367842624">У частцы перад "<ph name="ATSIGN" />" не павінна быць сімвала "<ph name="INVALIDCHARACTER" />".</translation>
 <translation id="3846214748874656680">Выключыць поўнаэкранны рэжым</translation>
-<translation id="3889183436948184105">рэдакцыя</translation>
 <translation id="3920932319529768807">заключэнне</translation>
 <translation id="3924558731517983934">праграма</translation>
 <translation id="3944740393230681990">пралог</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Месяц</translation>
 <translation id="901493112792887934">колькі секунд прайшло</translation>
 <translation id="901834265349196618">электронная пошта</translation>
-<translation id="9023835124071926463">раздзел каментарыяў</translation>
 <translation id="9048119486235211610">навігацыя</translation>
 <translation id="9062295712474918030">дакумент</translation>
 <translation id="9093215626363556771">выйсці з рэжыму "відарыс у відарысе"</translation>

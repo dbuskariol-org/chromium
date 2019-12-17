@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">يُرجى إطالة هذا النص إلى <ph name="MIN_CHARACTERS" /> من الحروف أو أكثر (أنت تستخدم حاليًا <ph name="CURRENT_LENGTH" /> من الحروف).</translation>
 <translation id="383465348367842624">الجزء المتبوع بالعلامة "<ph name="ATSIGN" />" يجب ألا يشتمل على الرمز "<ph name="INVALIDCHARACTER" />".</translation>
 <translation id="3846214748874656680">خروج من عرض ملء الشاشة</translation>
-<translation id="3889183436948184105">المراجعة</translation>
 <translation id="3920932319529768807">خاتمة</translation>
 <translation id="3924558731517983934">التطبيق</translation>
 <translation id="3944740393230681990">فاتحة</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">شهر</translation>
 <translation id="901493112792887934">المدة الحالية بالثواني</translation>
 <translation id="901834265349196618">بريد إلكتروني</translation>
-<translation id="9023835124071926463">قسم التعليقات</translation>
 <translation id="9048119486235211610">تنقل</translation>
 <translation id="9062295712474918030">المستند</translation>
 <translation id="9093215626363556771">الخروج من وضع "نافذة ضمن نافذة"</translation>

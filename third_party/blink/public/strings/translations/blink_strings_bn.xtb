@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">দয়া করে এই পাঠ্যকে ন্যূনতম <ph name="MIN_CHARACTERS" /> অক্ষরের বা তার বেশি (আপনি বর্তমানে <ph name="CURRENT_LENGTH" />টি অক্ষর ব্যবহার করেছেন) দৈর্ঘের করুন।</translation>
 <translation id="383465348367842624">'<ph name="ATSIGN" />' অনুসরণ করে এমন একটি অংশে '<ph name="INVALIDCHARACTER" />' চিহ্ন থাকা উচিত নয়৷</translation>
 <translation id="3846214748874656680">পূর্ণস্ক্রীন থেকে প্রস্থান করুন</translation>
-<translation id="3889183436948184105">আবার দেখুন</translation>
 <translation id="3920932319529768807">সিদ্ধান্ত</translation>
 <translation id="3924558731517983934">অ্যাপ্লিকেশান</translation>
 <translation id="3944740393230681990">ভূমিকা</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">মাস</translation>
 <translation id="901493112792887934">সেকেন্ডে বর্তমান সময়</translation>
 <translation id="901834265349196618">ইমেল আইডি</translation>
-<translation id="9023835124071926463">মন্তব্যের বিভাগ</translation>
 <translation id="9048119486235211610">নেভিগেশন</translation>
 <translation id="9062295712474918030">দস্তাবেজ</translation>
 <translation id="9093215626363556771">ছবির-মধ্যে-ছবি মোড থেকে বেরিয়ে আসুন</translation>

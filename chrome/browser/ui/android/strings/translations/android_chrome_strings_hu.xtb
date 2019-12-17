@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">A letöltés szünetel</translation>
 <translation id="1386674309198842382"><ph name="LAST_UPDATED" /> napja volt aktív</translation>
 <translation id="1397811292916898096">Keresés a(z) <ph name="PRODUCT_NAME" /> keresőmotorral</translation>
-<translation id="1404122904123200417">Beágyazva itt: <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">„Nincs nyomon követés”</translation>
 <translation id="1407135791313364759">Összes megnyitása</translation>
 <translation id="1409426117486808224">A megnyitott lapok egyszerűsített nézete</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> elem törölve</translation>
 <translation id="2536728043171574184">Az oldal offline példányának megtekintése</translation>
 <translation id="2537178555904266562">Hiba történt a jelszavak szinkronizálásakor</translation>
+<translation id="2537296579376733324">Az összes cookie, csak ezen a webhelyen</translation>
 <translation id="2546283357679194313">Cookie-k és webhelyadatok</translation>
 <translation id="2567385386134582609">KÉP</translation>
 <translation id="257088987046510401">Témák</translation>

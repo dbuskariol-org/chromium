@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">このテキストは <ph name="MIN_CHARACTERS" /> 文字以上で指定してください（現在は <ph name="CURRENT_LENGTH" /> 文字です）。</translation>
 <translation id="383465348367842624">「<ph name="ATSIGN" />」の前の文字列に記号「<ph name="INVALIDCHARACTER" />」を使用しないでください。</translation>
 <translation id="3846214748874656680">全画面表示を終了</translation>
-<translation id="3889183436948184105">変更履歴</translation>
 <translation id="3920932319529768807">まとめ</translation>
 <translation id="3924558731517983934">アプリケーション</translation>
 <translation id="3944740393230681990">プロローグ</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">月</translation>
 <translation id="901493112792887934">現在の時間（秒単位）</translation>
 <translation id="901834265349196618">メール</translation>
-<translation id="9023835124071926463">コメント セクション</translation>
 <translation id="9048119486235211610">ナビゲーション</translation>
 <translation id="9062295712474918030">ドキュメント</translation>
 <translation id="9093215626363556771">ピクチャー イン ピクチャーを終了します</translation>

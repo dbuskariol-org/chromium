@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">請將這段文字加長到 <ph name="MIN_CHARACTERS" /> 個字元以上 (目前使用字元數：<ph name="CURRENT_LENGTH" />)。</translation>
 <translation id="383465348367842624">「<ph name="ATSIGN" />」後面的部分不應包含「<ph name="INVALIDCHARACTER" />」符號。</translation>
 <translation id="3846214748874656680">結束全螢幕</translation>
-<translation id="3889183436948184105">修訂版本</translation>
 <translation id="3920932319529768807">結論</translation>
 <translation id="3924558731517983934">應用程式</translation>
 <translation id="3944740393230681990">序言</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">月</translation>
 <translation id="901493112792887934">目前時間 (以秒為單位)</translation>
 <translation id="901834265349196618">電子郵件</translation>
-<translation id="9023835124071926463">評論部分</translation>
 <translation id="9048119486235211610">導覽</translation>
 <translation id="9062295712474918030">文件</translation>
 <translation id="9093215626363556771">離開子母畫面</translation>

@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">已暂停下载</translation>
 <translation id="1386674309198842382"><ph name="LAST_UPDATED" /> 天前曾有活动</translation>
 <translation id="1397811292916898096">使用 <ph name="PRODUCT_NAME" /> 进行搜索</translation>
-<translation id="1404122904123200417">嵌入位置：<ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">“不跟踪”</translation>
 <translation id="1407135791313364759">全部打开</translation>
 <translation id="1409426117486808224">使用简化版视图查看打开的标签页</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">删除了 <ph name="NUMBER_OF_ITEMS" /> 项</translation>
 <translation id="2536728043171574184">正在查看此网页的离线副本</translation>
 <translation id="2537178555904266562">同步密码时出错</translation>
+<translation id="2537296579376733324">所有 Cookie，仅限在此网站上</translation>
 <translation id="2546283357679194313">Cookie 和网站数据</translation>
 <translation id="2567385386134582609">图片</translation>
 <translation id="257088987046510401">主题背景</translation>

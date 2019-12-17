@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Η λήψη διακόπηκε προσωρινά.</translation>
 <translation id="1386674309198842382">Ενεργή <ph name="LAST_UPDATED" /> ημέρες πριν</translation>
 <translation id="1397811292916898096">Αναζήτηση με <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Ενσωματωμένο σε <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">"Να μην γίνεται εντοπισμός"</translation>
 <translation id="1407135791313364759">Άνοιγμα όλων</translation>
 <translation id="1409426117486808224">Απλοποιημένη προβολή για ανοικτές καρτέλες</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">Διαγράφηκαν <ph name="NUMBER_OF_ITEMS" /> στοιχεία</translation>
 <translation id="2536728043171574184">Προβολή ενός αντιγράφου αυτής της σελίδας εκτός σύνδεσης</translation>
 <translation id="2537178555904266562">Σφάλμα κατά τον συγχρονισμό των κωδικών πρόσβασης</translation>
+<translation id="2537296579376733324">Όλα τα cookie, μόνο σε αυτόν τον ιστότοπο</translation>
 <translation id="2546283357679194313">Cookie και δεδομένα ιστότοπου</translation>
 <translation id="2567385386134582609">ΕΙΚΟΝΑ</translation>
 <translation id="257088987046510401">Θέματα</translation>

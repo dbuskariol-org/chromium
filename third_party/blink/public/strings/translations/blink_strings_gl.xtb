@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Amplía este texto a <ph name="MIN_CHARACTERS" /> caracteres ou máis. Actualmente estás utilizando <ph name="CURRENT_LENGTH" /> caracteres.</translation>
 <translation id="383465348367842624">O texto seguido do signo "<ph name="ATSIGN" />" non debe conter o símbolo "<ph name="INVALIDCHARACTER" />".</translation>
 <translation id="3846214748874656680">Saír da pantalla completa</translation>
-<translation id="3889183436948184105">revisión</translation>
 <translation id="3920932319529768807">conclusión</translation>
 <translation id="3924558731517983934">aplicación</translation>
 <translation id="3944740393230681990">prólogo</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Mes</translation>
 <translation id="901493112792887934">tempo actual en segundos</translation>
 <translation id="901834265349196618">correo electrónico</translation>
-<translation id="9023835124071926463">sección de comentarios</translation>
 <translation id="9048119486235211610">navegación</translation>
 <translation id="9062295712474918030">documento</translation>
 <translation id="9093215626363556771">sae do modo de pantalla superposta</translation>

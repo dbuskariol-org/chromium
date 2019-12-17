@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Спампоўка прыпынена</translation>
 <translation id="1386674309198842382">Апошнія дзеянні: <ph name="LAST_UPDATED" /> сут таму</translation>
 <translation id="1397811292916898096">Шукаць з дапамогай <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Убудавана ў вэб-сайт <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">"Не адсочваць"</translation>
 <translation id="1407135791313364759">Адкрыць усе</translation>
 <translation id="1409426117486808224">Спрошчаны выгляд адкрытых укладак</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">Выдалена элементаў: <ph name="NUMBER_OF_ITEMS" /></translation>
 <translation id="2536728043171574184">Вы праглядаеце пазасеткавую копію гэтай старонкі</translation>
 <translation id="2537178555904266562">Памылка пры сінхранізацыі пароляў</translation>
+<translation id="2537296579376733324">Усе файлы cookie, толькі на гэтым сайце</translation>
 <translation id="2546283357679194313">Файлы сookie і даныя сайтаў</translation>
 <translation id="2567385386134582609">ВІДАРЫС</translation>
 <translation id="257088987046510401">Тэмы</translation>

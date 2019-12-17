@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Энэ текстийг <ph name="MIN_CHARACTERS" /> болон үүнээс дээш тэмдэгтээр уртасгана уу (та одоогоор <ph name="CURRENT_LENGTH" /> тэмдэгт ашиглаж байна).</translation>
 <translation id="383465348367842624">'<ph name="ATSIGN" />'-д хамаарах хэсэг нь '<ph name="INVALIDCHARACTER" />' тэмдэгтийг агуулах ёсгүй.</translation>
 <translation id="3846214748874656680">Бүтэн дэлгэцийг хумих</translation>
-<translation id="3889183436948184105">хийсэн өөрчлөлт</translation>
 <translation id="3920932319529768807">дүгнэлт</translation>
 <translation id="3924558731517983934">апп</translation>
 <translation id="3944740393230681990">эхлэл</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Сар</translation>
 <translation id="901493112792887934">Секунтаар илэрхийлэгдсэн цаг</translation>
 <translation id="901834265349196618">и-мэйл</translation>
-<translation id="9023835124071926463">сэтгэгдэл бичих хэсэг</translation>
 <translation id="9048119486235211610">удирдлага</translation>
 <translation id="9062295712474918030">документ</translation>
 <translation id="9093215626363556771">дэлгэцэн доторх дэлгэцийг хаах</translation>

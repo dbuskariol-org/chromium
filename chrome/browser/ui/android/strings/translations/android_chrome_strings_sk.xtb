@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Sťahovanie bolo pozastavené</translation>
 <translation id="1386674309198842382">Aktívne pred <ph name="LAST_UPDATED" /> dňami</translation>
 <translation id="1397811292916898096">Hľadať pomocou vyhľadávača <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Vložené na webe <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">Nesledovať</translation>
 <translation id="1407135791313364759">Otvoriť všetko</translation>
 <translation id="1409426117486808224">Jednoduché zobrazenie otvorených kariet</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">Odstránené položky: <ph name="NUMBER_OF_ITEMS" /></translation>
 <translation id="2536728043171574184">Zobrazuje sa offline kópia tejto stránky</translation>
 <translation id="2537178555904266562">Chyba pri synchronizovaní hesiel</translation>
+<translation id="2537296579376733324">Všetky súbory cookie, iba na tomto webe</translation>
 <translation id="2546283357679194313">Súbory cookie a dáta webov</translation>
 <translation id="2567385386134582609">OBRÁZOK</translation>
 <translation id="257088987046510401">Motívy</translation>

@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Pakihabaan ang text na ito hanggang <ph name="MIN_CHARACTERS" /> (na) character o higit pa (kasalukuyan kang gumagamit ng <ph name="CURRENT_LENGTH" /> (na) character).</translation>
 <translation id="383465348367842624">Hindi dapat naglalaman ng simbolong '<ph name="INVALIDCHARACTER" />' ang bahagi bago ang '<ph name="ATSIGN" />.'</translation>
 <translation id="3846214748874656680">Lumabas sa fullscreen</translation>
-<translation id="3889183436948184105">rebisyon</translation>
 <translation id="3920932319529768807">konklusyon</translation>
 <translation id="3924558731517983934">application</translation>
 <translation id="3944740393230681990">prologue</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Buwan</translation>
 <translation id="901493112792887934">kasalukuyang oras ayon sa segundo</translation>
 <translation id="901834265349196618">email</translation>
-<translation id="9023835124071926463">seksyon ng komento</translation>
 <translation id="9048119486235211610">navigation</translation>
 <translation id="9062295712474918030">dokumento</translation>
 <translation id="9093215626363556771">lumabas sa picture-in-picture</translation>

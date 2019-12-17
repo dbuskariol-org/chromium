@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">تم إيقاف التنزيل مؤقتًا</translation>
 <translation id="1386674309198842382">نشط قبل <ph name="LAST_UPDATED" /> من الأيام</translation>
 <translation id="1397811292916898096">البحث باستخدام <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">متضمّن في <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">"عدم التعقب"</translation>
 <translation id="1407135791313364759">فتح الكل</translation>
 <translation id="1409426117486808224">عرض مبسَّط لعلامات التبويب المفتوحة</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547">تم حذف <ph name="NUMBER_OF_ITEMS" /> من العناصر</translation>
 <translation id="2536728043171574184">عرض نسخة بلا اتصال من هذه الصفحة</translation>
 <translation id="2537178555904266562">حدث خطأ أثناء مزامنة كلمات المرور</translation>
+<translation id="2537296579376733324">جميع ملفات تعريف الارتباط، في هذا الموقع الإلكتروني فقط</translation>
 <translation id="2546283357679194313">ملفات تعريف الارتباط وبيانات المواقع</translation>
 <translation id="2567385386134582609">صورة</translation>
 <translation id="257088987046510401">المظاهر</translation>

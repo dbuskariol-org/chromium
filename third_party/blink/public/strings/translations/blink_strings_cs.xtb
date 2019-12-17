@@ -82,7 +82,6 @@
 <translation id="3822383571486410024">Prodlužte prosím tento text na <ph name="MIN_CHARACTERS" /> či více znaků. (Aktuálně má <ph name="CURRENT_LENGTH" /> znaků.)</translation>
 <translation id="383465348367842624">Část před znakem <ph name="ATSIGN" /> nesmí obsahovat znak <ph name="INVALIDCHARACTER" />.</translation>
 <translation id="3846214748874656680">Ukončit režim na celou obrazovku</translation>
-<translation id="3889183436948184105">verze</translation>
 <translation id="3920932319529768807">závěr</translation>
 <translation id="3924558731517983934">aplikace</translation>
 <translation id="3944740393230681990">prolog</translation>
@@ -259,7 +258,6 @@
 <translation id="8987927404178983737">Měsíc</translation>
 <translation id="901493112792887934">aktuální čas v sekundách</translation>
 <translation id="901834265349196618">e-mail</translation>
-<translation id="9023835124071926463">sekce komentářů</translation>
 <translation id="9048119486235211610">navigace</translation>
 <translation id="9062295712474918030">dokument</translation>
 <translation id="9093215626363556771">ukončit režim obrazu v obraze</translation>

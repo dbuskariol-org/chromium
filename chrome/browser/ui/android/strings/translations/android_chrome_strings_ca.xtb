@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">La baixada s'ha posat en pausa</translation>
 <translation id="1386674309198842382">Actiu fa <ph name="LAST_UPDATED" /> dies</translation>
 <translation id="1397811292916898096">Cerca amb <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Inserit a <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">No segueixis</translation>
 <translation id="1407135791313364759">Obre-les totes</translation>
 <translation id="1409426117486808224">Visualització simplificada de les pestanyes obertes</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> elements suprimits</translation>
 <translation id="2536728043171574184">S'està mostrant una còpia sense connexió d'aquesta pàgina</translation>
 <translation id="2537178555904266562">S'ha produït un error en sincronitzar les contrasenyes</translation>
+<translation id="2537296579376733324">Totes les galetes, només en aquest lloc web</translation>
 <translation id="2546283357679194313">Dades de llocs web i galetes</translation>
 <translation id="2567385386134582609">IMATGE</translation>
 <translation id="257088987046510401">Temes</translation>

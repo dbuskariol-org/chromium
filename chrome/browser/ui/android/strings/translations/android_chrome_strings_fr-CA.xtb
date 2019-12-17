@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Téléchargement interrompu</translation>
 <translation id="1386674309198842382">Actif il y a <ph name="LAST_UPDATED" /> jours</translation>
 <translation id="1397811292916898096">Rechercher avec <ph name="PRODUCT_NAME" /></translation>
-<translation id="1404122904123200417">Intégré sur <ph name="WEBSITE_URL" /></translation>
 <translation id="1406000523432664303">« Ne pas faire le suivi »</translation>
 <translation id="1407135791313364759">Tout ouvrir</translation>
 <translation id="1409426117486808224">Affichage simplifié pour les onglets ouverts</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> éléments supprimés</translation>
 <translation id="2536728043171574184">Affichage d’une copie hors ligne de cette page en cours</translation>
 <translation id="2537178555904266562">Erreur lors de la synchronisation des mots de passe</translation>
+<translation id="2537296579376733324">Tous les témoins, sur ce site seulement</translation>
 <translation id="2546283357679194313">Témoins et données de site</translation>
 <translation id="2567385386134582609">IMAGE</translation>
 <translation id="257088987046510401">Thèmes</translation>

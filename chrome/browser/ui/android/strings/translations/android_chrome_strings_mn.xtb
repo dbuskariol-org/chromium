@@ -61,7 +61,6 @@
 <translation id="1384959399684842514">Таталтыг түр зогсоосон</translation>
 <translation id="1386674309198842382"><ph name="LAST_UPDATED" /> өдрийн өмнөөс идэвхтэй</translation>
 <translation id="1397811292916898096"><ph name="PRODUCT_NAME" />-р хайх</translation>
-<translation id="1404122904123200417"><ph name="WEBSITE_URL" />-д оруулсан</translation>
 <translation id="1406000523432664303">“Бүү дага”</translation>
 <translation id="1407135791313364759">Бүгдийг нээ</translation>
 <translation id="1409426117486808224">Нээлттэй чихтэй хуудасны хялбаршуулсан харагдац</translation>
@@ -214,6 +213,7 @@
 <translation id="2534155362429831547"><ph name="NUMBER_OF_ITEMS" /> зүйлийг устгасан</translation>
 <translation id="2536728043171574184">Энэ хуудсын офлайн хуулбарыг харж байна</translation>
 <translation id="2537178555904266562">Нууц үгийг синк хийхэд алдаа гарлаа</translation>
+<translation id="2537296579376733324">Бүх күүки, зөвхөн энэ сайт дээр</translation>
 <translation id="2546283357679194313">Cookies болон сайтын дата</translation>
 <translation id="2567385386134582609">ЗУРАГ</translation>
 <translation id="257088987046510401">Themes</translation>
