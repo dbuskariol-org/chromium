@@ -13,7 +13,6 @@
 #include "components/viz/common/quads/solid_color_draw_quad.h"
 #include "components/viz/service/display/display_resource_provider.h"
 #include "components/viz/service/display/output_surface.h"
-#include "components/viz/service/display/overlay_candidate_list.h"
 #include "components/viz/service/display/overlay_strategy_single_on_top.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
 #include "ui/gfx/geometry/rect_conversions.h"
@@ -44,7 +43,8 @@ gfx::Rect OverlayProcessorUsingStrategy::GetAndResetOverlayDamage() {
 
 void OverlayProcessorUsingStrategy::NotifyOverlayPromotion(
     DisplayResourceProvider* resource_provider,
-    const CandidateList& candidates) const {}
+    const CandidateList& candidates,
+    const QuadList& quad_list) {}
 
 void OverlayProcessorUsingStrategy::ProcessForOverlays(
     DisplayResourceProvider* resource_provider,
@@ -70,7 +70,8 @@ void OverlayProcessorUsingStrategy::ProcessForOverlays(
     // being invoked.  Also reset |previous_frame_underlay_was_unoccluded_|.
     previous_frame_underlay_rect_ = gfx::Rect();
     previous_frame_underlay_was_unoccluded_ = false;
-    NotifyOverlayPromotion(resource_provider, *candidates);
+    NotifyOverlayPromotion(resource_provider, *candidates,
+                           render_pass->quad_list);
     return;
   }
 
@@ -93,7 +94,8 @@ void OverlayProcessorUsingStrategy::ProcessForOverlays(
     previous_frame_underlay_was_unoccluded_ = false;
   }
 
-  NotifyOverlayPromotion(resource_provider, *candidates);
+  NotifyOverlayPromotion(resource_provider, *candidates,
+                         render_pass->quad_list);
   TRACE_COUNTER1(TRACE_DISABLED_BY_DEFAULT("viz.debug.overlay_planes"),
                  "Scheduled overlay planes", candidates->size());
 }

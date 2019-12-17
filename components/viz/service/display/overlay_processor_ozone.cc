@@ -4,7 +4,6 @@
 
 #include "components/viz/service/display/overlay_processor_ozone.h"
 
-#include "components/viz/service/display/overlay_candidate_list.h"
 #include "components/viz/service/display/overlay_strategy_fullscreen.h"
 #include "components/viz/service/display/overlay_strategy_single_on_top.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"

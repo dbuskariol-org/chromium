@@ -23,8 +23,6 @@ class DisplayResourceProvider;
 }
 
 namespace viz {
-class OverlayCandidateList;
-
 // OverlayProcessor subclass that goes through a list of strategies to determine
 // overlay candidates. THis is used by Android and Ozone platforms.
 class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
@@ -147,7 +145,8 @@ class VIZ_SERVICE_EXPORT OverlayProcessorUsingStrategy
   // Used by Android pre-SurfaceControl to notify promotion hints.
   virtual void NotifyOverlayPromotion(
       DisplayResourceProvider* resource_provider,
-      const OverlayCandidateList& candidate_list) const;
+      const OverlayCandidateList& candidate_list,
+      const QuadList& quad_list);
 
   DISALLOW_COPY_AND_ASSIGN(OverlayProcessorUsingStrategy);
 };

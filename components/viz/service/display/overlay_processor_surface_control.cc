@@ -4,7 +4,6 @@
 
 #include "components/viz/service/display/overlay_processor_surface_control.h"
 
-#include "components/viz/service/display/overlay_candidate_list.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
 #include "ui/gfx/geometry/rect_conversions.h"
 #include "ui/gfx/overlay_transform_utils.h"

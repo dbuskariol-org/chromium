@@ -4,7 +4,6 @@
 
 #include "components/viz/service/display/overlay_processor_surface_control.h"
 
-#include "components/viz/service/display/overlay_candidate_list.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "ui/gfx/test/gfx_util.h"
 
