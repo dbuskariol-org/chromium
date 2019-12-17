@@ -62,7 +62,8 @@ and follow steps 2-3 in the second part of the
 ### Writing the test
 
 To write a new test, start with the example in the javadoc for
-[RenderTestRule](https://cs.chromium.org/chromium/src/chrome/test/android/javatests/src/org/chromium/chrome/test/util/RenderTestRule.java).
+[RenderTestRule](https://cs.chromium.org/chromium/src/ui/android/javatests/src/org/chromium/ui/test/util/RenderTestRule.java)
+or [ChromeRenderTestRule](https://cs.chromium.org/chromium/src/chrome/test/android/javatests/src/org/chromium/chrome/test/util/ChromeRenderTestRule.java).
 
 ### Running the tests locally
 
@@ -123,7 +124,7 @@ running Marshmallow as well.
 
 Certain features lead to flaky tests, for example any sort of animation we don't
 take into account while writing the tests. To help deal with this, you can use
-`RenderTestRule.sanitize` to modify the View hierarchy and remove some of the
+`ChromeRenderTestRule.sanitize` to modify the View hierarchy and remove some of the
 more troublesome attributes (for example, it disables the blinking cursor in
 `EditText`s).
 

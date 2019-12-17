@@ -1042,11 +1042,12 @@ if (enable_vr || enable_arcore) {
       ]
 
       deps = chrome_test_xr_java_deps + [
+               ":chrome_test_util_java",
                "//chrome/android:chrome_test_xr_java",
+               "//components/module_installer/android:module_installer_java",
                "//third_party/gvr-android-sdk:controller_test_api_java",
                "//third_party/gvr-android-sdk:gvr_common_java",
-               ":chrome_test_util_java",
-               "//components/module_installer/android:module_installer_java",
+               "//ui/android:ui_java_test_support",
              ]
 
       data = [

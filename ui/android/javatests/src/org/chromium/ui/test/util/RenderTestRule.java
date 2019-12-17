@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.test.util;
+package org.chromium.ui.test.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,8 +11,6 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 
 import org.junit.Assert;
 import org.junit.rules.TestWatcher;
@@ -23,7 +21,6 @@ import org.chromium.base.Log;
 import org.chromium.base.ThreadUtils;
 import org.chromium.base.test.util.Feature;
 import org.chromium.base.test.util.UrlUtils;
-import org.chromium.content_public.browser.test.util.TestThreadUtils;
 import org.chromium.ui.UiUtils;
 
 import java.io.File;
@@ -41,13 +38,12 @@ import java.util.concurrent.Callable;
  * <pre>
  * {@code
  *
- * @RunWith(ChromeJUnit4ClassRunner.class)
- * @CommandLineFlags.Add({ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE})
- * public class MyTest {
+ * @RunWith(BaseJUnit4ClassRunner.class)
+ * public class MyTest extends DummyUiActivityTestCase {
  *     // Provide RenderTestRule with the path from src/ to the golden directory.
  *     @Rule
  *     public RenderTestRule mRenderTestRule =
- *             new RenderTestRule("chrome/test/data/android/render_tests");
+ *             new RenderTestRule("components/myfeature/test/data/android/render_tests");
  *
  *     @Test
  *     // The test must have the feature "RenderTest" for the bots to display renders.
@@ -109,13 +105,6 @@ public class RenderTestRule extends TestWatcher {
         }
     }
 
-    /**
-     * Constructor using {@code "chrome/test/data/android/render_tests"} as default golden folder.
-     */
-    public RenderTestRule() {
-        this("chrome/test/data/android/render_tests");
-    }
-
     public RenderTestRule(String goldenFolder) {
         // |goldenFolder| is relative to the src directory in the repository. |mGoldenFolder| will
         // be the folder on the test device.
@@ -148,20 +137,19 @@ public class RenderTestRule extends TestWatcher {
     public void render(final View view, String id) throws IOException {
         Assert.assertTrue("Render Tests must have the RenderTest feature.", mHasRenderTestFeature);
 
-        Bitmap testBitmap =
-                ThreadUtils.runOnUiThreadBlockingNoException(new Callable<Bitmap>() {
-                    @Override
-                    public Bitmap call() {
-                        int height = view.getMeasuredHeight();
-                        int width = view.getMeasuredWidth();
-                        if (height <= 0 || width <= 0) {
-                            throw new IllegalStateException(
-                                    "Invalid view dimensions: " + width + "x" + height);
-                        }
+        Bitmap testBitmap = ThreadUtils.runOnUiThreadBlockingNoException(new Callable<Bitmap>() {
+            @Override
+            public Bitmap call() {
+                int height = view.getMeasuredHeight();
+                int width = view.getMeasuredWidth();
+                if (height <= 0 || width <= 0) {
+                    throw new IllegalStateException(
+                            "Invalid view dimensions: " + width + "x" + height);
+                }
 
-                        return UiUtils.generateScaledScreenshot(view, 0, Bitmap.Config.ARGB_8888);
-                    }
-                });
+                return UiUtils.generateScaledScreenshot(view, 0, Bitmap.Config.ARGB_8888);
+            }
+        });
 
         compareForResult(testBitmap, id);
     }
@@ -207,25 +195,6 @@ public class RenderTestRule extends TestWatcher {
                 saveBitmap(result.second, createOutputPath(DIFF_FOLDER_RELATIVE, filename));
                 break;
         }
-    }
-
-    /**
-     * Searches the View hierarchy and modifies the Views to provide better stability in tests. For
-     * example it will disable the blinking cursor in EditTexts.
-     */
-    public static void sanitize(View view) {
-        TestThreadUtils.runOnUiThreadBlocking(() -> {
-            // Add more sanitizations as we discover more flaky attributes.
-            if (view instanceof ViewGroup) {
-                ViewGroup viewGroup = (ViewGroup) view;
-                for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    sanitize(viewGroup.getChildAt(i));
-                }
-            } else if (view instanceof EditText) {
-                EditText editText = (EditText) view;
-                editText.setCursorVisible(false);
-            }
-        });
     }
 
     @Override
