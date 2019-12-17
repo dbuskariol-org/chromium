@@ -138,8 +138,6 @@ void WebviewController::SendNavigationEvent(
       navigation_handle->IsRendererInitiated());
   navigation_event->set_is_same_document(navigation_handle->IsSameDocument());
   navigation_event->set_has_user_gesture(navigation_handle->HasUserGesture());
-  navigation_event->set_previous_url(
-      navigation_handle->GetPreviousURL().GetContent());
   navigation_event->set_was_server_redirect(
       navigation_handle->WasServerRedirect());
   navigation_event->set_is_post(navigation_handle->IsPost());
