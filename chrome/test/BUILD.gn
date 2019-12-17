@@ -2834,6 +2834,7 @@ group("ct_telemetry_perf_tests_without_chrome") {
   ]
 
   data_deps = [
+    "//components/subresource_filter/tools:index_ruleset",
     "//testing:run_perf_test",
   ]
 }
