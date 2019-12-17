@@ -574,7 +574,8 @@
               "fast/borders/border-image-repeat-round.html",
               "fast/borders/border-image-repeat.html",
               "fast/borders/border-image-slices.html",
-              "fast/borders/border-image-source.html"],
+              "fast/borders/border-image-source.html",
+              "fast/backgrounds/mask-composite.html"],
     "args": ["--enable-blink-features=CSSCascade"]
   },
   {

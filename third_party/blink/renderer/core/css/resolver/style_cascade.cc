@@ -137,6 +137,10 @@ void StyleCascade::Apply(Animator& animator) {
   // border-image-* longhands that have already been applied.
   Apply(GetCSSPropertyWebkitBorderImage(), resolver);
 
+  // -webkit-mask-image needs to be applied before -webkit-mask-composite,
+  // otherwise -webkit-mask-composite has no effect.
+  Apply(GetCSSPropertyWebkitMaskImage(), resolver);
+
   // TODO(crbug.com/985031): Set bits ::Add-time to know if we need to do this.
   ApplyHighPriority(resolver);
 
