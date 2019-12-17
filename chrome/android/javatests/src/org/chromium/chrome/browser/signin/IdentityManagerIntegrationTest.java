@@ -78,7 +78,8 @@ public class IdentityManagerIntegrationTest {
             seedAccountTrackerService();
 
             // Get a reference to the service.
-            mIdentityMutator = IdentityServicesProvider.getSigninManager().getIdentityMutator();
+            mIdentityMutator =
+                    IdentityServicesProvider.get().getSigninManager().getIdentityMutator();
             mIdentityManager = IdentityServicesProvider.get().getIdentityManager();
         });
     }

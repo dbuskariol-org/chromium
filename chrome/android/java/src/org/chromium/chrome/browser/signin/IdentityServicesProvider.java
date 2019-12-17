@@ -53,8 +53,7 @@ public class IdentityServicesProvider {
     }
 
     /** Getter for {@link SigninManager} instance. */
-    @VisibleForTesting
-    SigninManager getSigninManagerInternal() {
+    public SigninManager getSigninManager() {
         ThreadUtils.assertOnUiThread();
         SigninManager result =
                 IdentityServicesProviderJni.get().getSigninManager(Profile.getLastUsedProfile());
@@ -65,11 +64,6 @@ public class IdentityServicesProvider {
     /** Getter for {@link AccountTrackerService} instance. */
     public static AccountTrackerService getAccountTrackerService() {
         return get().getAccountTrackerServiceInternal();
-    }
-
-    /** Getter for {@link SigninManager} instance. */
-    public static SigninManager getSigninManager() {
-        return get().getSigninManagerInternal();
     }
 
     @NativeMethods
