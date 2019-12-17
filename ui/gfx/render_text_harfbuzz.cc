@@ -1810,7 +1810,8 @@ void RenderTextHarfBuzz::DrawVisualText(internal::SkiaTextRenderer* renderer,
   BreakList<SkColor> colors = layout_colors();
   if (!selection.is_empty()) {
     colors.ApplyValue(selection_color(),
-                      Range(selection.GetMin(), selection.GetMax()));
+                      Range(TextIndexToDisplayIndex(selection.GetMin()),
+                            TextIndexToDisplayIndex(selection.GetMax())));
   }
 
   internal::TextRunList* run_list = GetRunList();

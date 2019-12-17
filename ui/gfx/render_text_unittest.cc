@@ -7303,4 +7303,21 @@ TEST_F(RenderTextTest, DrawVisualText_WithSelection) {
   EXPECT_EQ(text_log[2].color, SK_ColorBLACK);
 }
 
+TEST_F(RenderTextTest, DrawVisualText_WithSelectionOnObcuredEmoji) {
+  RenderText* render_text = GetRenderText();
+  render_text->SetText(WideToUTF16(L"\U0001F628\U0001F628\U0001F628"));
+  render_text->SetObscured(true);
+  render_text->set_selection_color(SK_ColorRED);
+  DrawVisualText({4, 6});
+
+  std::vector<TestSkiaTextRenderer::TextLog> text_log;
+  renderer()->GetTextLogAndReset(&text_log);
+
+  ASSERT_EQ(text_log.size(), 2u);
+  EXPECT_EQ(text_log[0].glyph_count, 2u);
+  EXPECT_EQ(text_log[0].color, SK_ColorBLACK);
+  EXPECT_EQ(text_log[1].glyph_count, 1u);
+  EXPECT_EQ(text_log[1].color, SK_ColorRED);
+}
+
 }  // namespace gfx
