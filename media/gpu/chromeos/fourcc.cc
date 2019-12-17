@@ -232,10 +232,10 @@ base::Optional<Fourcc> Fourcc::FromVAFourCC(uint32_t va_fourcc) {
   return base::nullopt;
 }
 
-uint32_t Fourcc::ToVAFourCC() const {
+base::Optional<uint32_t> Fourcc::ToVAFourCC() const {
   switch (value_) {
     case Fourcc::INVALID:
-      return 0;
+      return base::nullopt;
     case Fourcc::YU12:
       return VA_FOURCC_I420;
     case Fourcc::NV12:
@@ -263,10 +263,13 @@ uint32_t Fourcc::ToVAFourCC() const {
     case Fourcc::YM16:
     case Fourcc::MT21:
     case Fourcc::MM21:
-      break;
+      // VAAPI does not know about these formats, so signal this by returning
+      // nullopt.
+      DVLOGF(3) << "Fourcc not convertible to VaFourCC: " << ToString();
+      return base::nullopt;
   }
-  DLOG(WARNING) << "Unmapped fourcc: " << ToString();
-  return 0;
+  NOTREACHED() << "Unmapped Fourcc: " << ToString();
+  return base::nullopt;
 }
 
 #endif  // BUILDFLAG(USE_VAAPI)

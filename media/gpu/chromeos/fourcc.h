@@ -157,8 +157,8 @@ class MEDIA_GPU_EXPORT Fourcc {
 #endif  // BUILDFLAG(USE_V4L2_CODEC)
 #if BUILDFLAG(USE_VAAPI)
   // Returns the VAFourCC counterpart of the value.
-  // Returns 0 if no mapping is found.
-  uint32_t ToVAFourCC() const;
+  // Returns nullopt if no mapping is found.
+  base::Optional<uint32_t> ToVAFourCC() const;
 #endif  // BUILDFLAG(USE_VAAPI)
 
   // Returns whether |value_| is multi planar format.

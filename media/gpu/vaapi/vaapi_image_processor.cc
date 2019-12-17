@@ -107,8 +107,21 @@ std::unique_ptr<VaapiImageProcessor> VaapiImageProcessor::Create(
   return nullptr;
 #endif
 
-  if (!IsSupported(input_config.fourcc.ToVAFourCC(),
-                   output_config.fourcc.ToVAFourCC(), input_config.size,
+  auto input_vafourcc = input_config.fourcc.ToVAFourCC();
+  if (!input_vafourcc) {
+    VLOGF(2) << "Input fourcc " << input_config.fourcc.ToString()
+             << " not compatible with VAAPI.";
+    return nullptr;
+  }
+
+  auto output_vafourcc = output_config.fourcc.ToVAFourCC();
+  if (!output_vafourcc) {
+    VLOGF(2) << "Output fourcc " << output_config.fourcc.ToString()
+             << " not compatible with VAAPI.";
+    return nullptr;
+  }
+
+  if (!IsSupported(*input_vafourcc, *output_vafourcc, input_config.size,
                    output_config.size)) {
     return nullptr;
   }
