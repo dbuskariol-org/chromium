@@ -2688,6 +2688,27 @@
             ]
         }
     ],
+    "FriendlySettingsRedesignTest": [
+        {
+            "platforms": [
+                "windows",
+                "mac",
+                "chromeos",
+                "linux",
+                "android",
+                "android_webview",
+                "ios"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "FriendlySettingRedesign"
+                    ]
+                }
+            ]
+        }
+    ],
     "FuzzyAppSearch": [
         {
             "platforms": [
