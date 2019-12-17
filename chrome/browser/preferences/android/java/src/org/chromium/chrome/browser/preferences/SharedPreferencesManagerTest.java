@@ -189,38 +189,38 @@ public class SharedPreferencesManagerTest {
     @SmallTest
     public void testCheckerIsCalled() {
         mSubject.writeInt("int_key", 123);
-        verify(mChecker, times(1)).assertIsKeyInUse("int_key");
+        verify(mChecker, times(1)).checkIsKeyInUse("int_key");
         mSubject.readInt("int_key");
-        verify(mChecker, times(2)).assertIsKeyInUse("int_key");
+        verify(mChecker, times(2)).checkIsKeyInUse("int_key");
         mSubject.incrementInt("int_key");
-        verify(mChecker, times(3)).assertIsKeyInUse("int_key");
+        verify(mChecker, times(3)).checkIsKeyInUse("int_key");
 
         mSubject.writeBoolean("bool_key", true);
-        verify(mChecker, times(1)).assertIsKeyInUse("bool_key");
+        verify(mChecker, times(1)).checkIsKeyInUse("bool_key");
         mSubject.readBoolean("bool_key", false);
-        verify(mChecker, times(2)).assertIsKeyInUse("bool_key");
+        verify(mChecker, times(2)).checkIsKeyInUse("bool_key");
 
         mSubject.writeString("string_key", "foo");
-        verify(mChecker, times(1)).assertIsKeyInUse("string_key");
+        verify(mChecker, times(1)).checkIsKeyInUse("string_key");
         mSubject.readString("string_key", "");
-        verify(mChecker, times(2)).assertIsKeyInUse("string_key");
+        verify(mChecker, times(2)).checkIsKeyInUse("string_key");
 
         mSubject.writeLong("long_key", 999L);
-        verify(mChecker, times(1)).assertIsKeyInUse("long_key");
+        verify(mChecker, times(1)).checkIsKeyInUse("long_key");
         mSubject.readLong("long_key");
-        verify(mChecker, times(2)).assertIsKeyInUse("long_key");
+        verify(mChecker, times(2)).checkIsKeyInUse("long_key");
 
         mSubject.writeStringSet("string_set_key", new HashSet<>());
-        verify(mChecker, times(1)).assertIsKeyInUse("string_set_key");
+        verify(mChecker, times(1)).checkIsKeyInUse("string_set_key");
         mSubject.readStringSet("string_set_key");
-        verify(mChecker, times(2)).assertIsKeyInUse("string_set_key");
+        verify(mChecker, times(2)).checkIsKeyInUse("string_set_key");
         mSubject.addToStringSet("string_set_key", "bar");
-        verify(mChecker, times(3)).assertIsKeyInUse("string_set_key");
+        verify(mChecker, times(3)).checkIsKeyInUse("string_set_key");
         mSubject.removeFromStringSet("string_set_key", "bar");
-        verify(mChecker, times(4)).assertIsKeyInUse("string_set_key");
+        verify(mChecker, times(4)).checkIsKeyInUse("string_set_key");
 
         mSubject.removeKey("some_key");
-        verify(mChecker, times(1)).assertIsKeyInUse("some_key");
+        verify(mChecker, times(1)).checkIsKeyInUse("some_key");
     }
 
     private static class TestObserver implements SharedPreferencesManager.Observer {
