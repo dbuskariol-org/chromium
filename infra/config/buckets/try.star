@@ -1577,8 +1577,6 @@ win_builder(
 
 win_builder(
     name = 'win_chromium_compile_dbg_ng',
-    goma_backend = None,
-    goma_enable_ats = False,
     goma_jobs = goma.jobs.J150,
     tryjob = tryjob(),
 )
