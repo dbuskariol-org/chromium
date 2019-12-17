@@ -7,7 +7,6 @@ package org.chromium.chrome.browser.settings.website;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.Settings;
 
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.settings.NfcSystemLevelSetting;
@@ -29,7 +28,7 @@ public class NfcCategory extends SiteSettingsCategory {
 
     @Override
     protected Intent getIntentToEnableOsGlobalPermission(Context context) {
-        return new Intent(Settings.ACTION_NFC_SETTINGS);
+        return NfcSystemLevelSetting.getNfcSystemLevelSettingIntent();
     }
 
     @Override

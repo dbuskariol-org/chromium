@@ -6,9 +6,11 @@ package org.chromium.chrome.browser.settings;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.nfc.NfcAdapter;
 import android.os.Process;
+import android.provider.Settings;
 
 import androidx.annotation.VisibleForTesting;
 
@@ -72,6 +74,10 @@ public class NfcSystemLevelSetting {
                 ()
                         -> NfcSystemLevelSettingJni.get().onNfcSystemLevelPromptCompleted(
                                 nativeCallback));
+    }
+
+    public static Intent getNfcSystemLevelSettingIntent() {
+        return new Intent(Settings.ACTION_NFC_SETTINGS);
     }
 
     /** Disable/enable Android NFC setting for testing use only. */
