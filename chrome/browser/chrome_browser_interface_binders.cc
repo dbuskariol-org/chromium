@@ -78,6 +78,8 @@
 #include "chrome/browser/payments/payment_request_factory.h"
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
 #include "chrome/browser/ui/webui/downloads/downloads_ui.h"
+#include "chrome/browser/ui/webui/new_tab_page/new_tab_page.mojom.h"
+#include "chrome/browser/ui/webui/new_tab_page/new_tab_page_ui.h"
 #endif
 
 #if defined(OS_CHROMEOS)
@@ -401,6 +403,9 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<DownloadsUI,
                                          downloads::mojom::PageHandlerFactory>(
       map);
+
+  RegisterWebUIControllerInterfaceBinder<
+      NewTabPageUI, new_tab_page::mojom::PageHandlerFactory>(map);
 #endif
 
 #if defined(OS_CHROMEOS)

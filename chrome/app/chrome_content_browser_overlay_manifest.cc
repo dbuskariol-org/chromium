@@ -10,7 +10,6 @@
 #include "chrome/browser/media/media_engagement_score_details.mojom.h"
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
 #include "chrome/browser/ui/webui/feed_internals/feed_internals.mojom.h"
-#include "chrome/browser/ui/webui/new_tab_page/new_tab_page.mojom.h"
 #include "chrome/browser/ui/webui/omnibox/omnibox.mojom.h"
 #include "chrome/browser/ui/webui/reset_password/reset_password.mojom.h"
 #include "chrome/browser/ui/webui/snippets_internals/snippets_internals.mojom.h"
@@ -105,7 +104,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 // brokered through a dedicated interface, but they're here
                 // for for now.
                 feed_internals::mojom::PageHandler,
-                new_tab_page::mojom::PageHandlerFactory,
 #if !defined(OS_ANDROID)
                 app_management::mojom::PageHandlerFactory,
 #endif
