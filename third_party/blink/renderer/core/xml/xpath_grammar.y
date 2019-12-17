@@ -40,6 +40,15 @@
  * //third_party/bison. See https://crbug.com/1028421.
  */
 
+%require "3.4"
+%language "c++"
+
+%code requires {
+
+#include "third_party/blink/renderer/platform/heap/persistent.h"
+
+}
+
 %{
 
 #include "third_party/blink/renderer/core/xml/xpath_functions.h"
@@ -50,83 +59,67 @@
 #include "third_party/blink/renderer/core/xml/xpath_step.h"
 #include "third_party/blink/renderer/core/xml/xpath_variable_reference.h"
 
-// The union below must be located on the stack because it contains raw
-// pointers to Oilpan objects. crbug.com/961413
-#define YYSTACK_USE_ALLOCA 1
-// Bison's bug? YYSTACK_ALLOC is not defined if _MSC_VER.
-#if defined(_MSC_VER)
-#define YYSTACK_ALLOC _alloca
-#endif
-
 #define YYENABLE_NLS 0
-#define YYLTYPE_IS_TRIVIAL 1
+#define YY_EXCEPTIONS 0
 #define YYDEBUG 0
-#define YYMAXDEPTH 10000
 
 using blink::xpath::Step;
 %}
 
-%define api.pure full
+%define api.parser.class { YyParser }
 %parse-param { blink::xpath::Parser* parser }
 
-%union
-{
-  blink::xpath::Step::Axis axis;
-  blink::xpath::Step::NodeTest* node_test;
-  blink::xpath::NumericOp::Opcode num_op;
-  blink::xpath::EqTestOp::Opcode eq_op;
-  String* str;
-  blink::xpath::Expression* expr;
-  blink::HeapVector<blink::Member<blink::xpath::Predicate>>* pred_list;
-  blink::HeapVector<blink::Member<blink::xpath::Expression>>* arg_list;
-  blink::xpath::Step* step;
-  blink::xpath::LocationPath* location_path;
-}
+%define api.value.type variant
 
-%{
-
-static int xpathyylex(YYSTYPE* yylval) { return blink::xpath::Parser::Current()->Lex(yylval); }
-static void xpathyyerror(void*, const char*) { }
-
-%}
-
-%left <num_op> MULOP
-%left <eq_op> EQOP RELOP
+%left <blink::xpath::NumericOp::Opcode> MULOP
+%left <blink::xpath::EqTestOp::Opcode> EQOP RELOP
 %left PLUS MINUS
 %left OR AND
-%token <axis> AXISNAME
-%token <str> NODETYPE PI FUNCTIONNAME LITERAL
-%token <str> VARIABLEREFERENCE NUMBER
+%token <blink::xpath::Step::Axis> AXISNAME
+%token <String> NODETYPE PI FUNCTIONNAME LITERAL
+%token <String> VARIABLEREFERENCE NUMBER
 %token DOTDOT SLASHSLASH
-%token <str> NAMETEST
+%token <String> NAMETEST
 %token XPATH_ERROR
 
-%type <location_path> LocationPath
-%type <location_path> AbsoluteLocationPath
-%type <location_path> RelativeLocationPath
-%type <step> Step
-%type <axis> AxisSpecifier
-%type <step> DescendantOrSelf
-%type <node_test> NodeTest
-%type <expr> Predicate
-%type <pred_list> OptionalPredicateList
-%type <pred_list> PredicateList
-%type <step> AbbreviatedStep
-%type <expr> Expr
-%type <expr> PrimaryExpr
-%type <expr> FunctionCall
-%type <arg_list> ArgumentList
-%type <expr> Argument
-%type <expr> UnionExpr
-%type <expr> PathExpr
-%type <expr> FilterExpr
-%type <expr> OrExpr
-%type <expr> AndExpr
-%type <expr> EqualityExpr
-%type <expr> RelationalExpr
-%type <expr> AdditiveExpr
-%type <expr> MultiplicativeExpr
-%type <expr> UnaryExpr
+%type <blink::Persistent<blink::xpath::LocationPath>> LocationPath
+%type <blink::Persistent<blink::xpath::LocationPath>> AbsoluteLocationPath
+%type <blink::Persistent<blink::xpath::LocationPath>> RelativeLocationPath
+%type <blink::Persistent<blink::xpath::Step>> Step
+%type <blink::xpath::Step::Axis> AxisSpecifier
+%type <blink::Persistent<blink::xpath::Step>> DescendantOrSelf
+%type <blink::Persistent<blink::xpath::Step::NodeTest>> NodeTest
+%type <blink::Persistent<blink::xpath::Expression>> Predicate
+%type <blink::Persistent<blink::HeapVector<blink::Member<blink::xpath::Predicate>>>> OptionalPredicateList
+%type <blink::Persistent<blink::HeapVector<blink::Member<blink::xpath::Predicate>>>> PredicateList
+%type <blink::Persistent<blink::xpath::Step>> AbbreviatedStep
+%type <blink::Persistent<blink::xpath::Expression>> Expr
+%type <blink::Persistent<blink::xpath::Expression>> PrimaryExpr
+%type <blink::Persistent<blink::xpath::Expression>> FunctionCall
+%type <blink::Persistent<blink::HeapVector<blink::Member<blink::xpath::Expression>>>> ArgumentList
+%type <blink::Persistent<blink::xpath::Expression>> Argument
+%type <blink::Persistent<blink::xpath::Expression>> UnionExpr
+%type <blink::Persistent<blink::xpath::Expression>> PathExpr
+%type <blink::Persistent<blink::xpath::Expression>> FilterExpr
+%type <blink::Persistent<blink::xpath::Expression>> OrExpr
+%type <blink::Persistent<blink::xpath::Expression>> AndExpr
+%type <blink::Persistent<blink::xpath::Expression>> EqualityExpr
+%type <blink::Persistent<blink::xpath::Expression>> RelationalExpr
+%type <blink::Persistent<blink::xpath::Expression>> AdditiveExpr
+%type <blink::Persistent<blink::xpath::Expression>> MultiplicativeExpr
+%type <blink::Persistent<blink::xpath::Expression>> UnaryExpr
+
+%code {
+
+static int xpathyylex(xpathyy::YyParser::semantic_type* yylval) {
+  return blink::xpath::Parser::Current()->Lex(yylval);
+}
+
+namespace xpathyy {
+void YyParser::error(const std::string&) { }
+}
+
+}
 
 %%
 
@@ -134,17 +127,20 @@ Expr:
     OrExpr
     {
       parser->top_expr_ = $1;
+      $$ = $1;
     }
     ;
 
 LocationPath:
     RelativeLocationPath
     {
+      $$ = $1;
       $$->SetAbsolute(false);
     }
     |
     AbsoluteLocationPath
     {
+      $$ = $1;
       $$->SetAbsolute(true);
     }
     ;
@@ -176,11 +172,13 @@ RelativeLocationPath:
     |
     RelativeLocationPath '/' Step
     {
+      $$ = $1;
       $$->AppendStep($3);
     }
     |
     RelativeLocationPath DescendantOrSelf Step
     {
+      $$ = $1;
       $$->AppendStep($2);
       $$->AppendStep($3);
     }
@@ -199,7 +197,7 @@ Step:
     {
       AtomicString local_name;
       AtomicString namespace_uri;
-      if (!parser->ExpandQName(*$1, local_name, namespace_uri)) {
+      if (!parser->ExpandQName($1, local_name, namespace_uri)) {
         parser->got_namespace_error_ = true;
         YYABORT;
       }
@@ -208,7 +206,6 @@ Step:
         $$ = blink::MakeGarbageCollected<Step>(Step::kChildAxis, Step::NodeTest(Step::NodeTest::kNameTest, local_name, namespace_uri), *$2);
       else
         $$ = blink::MakeGarbageCollected<Step>(Step::kChildAxis, Step::NodeTest(Step::NodeTest::kNameTest, local_name, namespace_uri));
-       parser->DeleteString($1);
     }
     |
     AxisSpecifier NodeTest OptionalPredicateList
@@ -223,7 +220,7 @@ Step:
     {
       AtomicString local_name;
       AtomicString namespace_uri;
-      if (!parser->ExpandQName(*$2, local_name, namespace_uri)) {
+      if (!parser->ExpandQName($2, local_name, namespace_uri)) {
         parser->got_namespace_error_ = true;
         YYABORT;
       }
@@ -232,7 +229,6 @@ Step:
         $$ = blink::MakeGarbageCollected<Step>($1, Step::NodeTest(Step::NodeTest::kNameTest, local_name, namespace_uri), *$3);
       else
         $$ = blink::MakeGarbageCollected<Step>($1, Step::NodeTest(Step::NodeTest::kNameTest, local_name, namespace_uri));
-      parser->DeleteString($2);
     }
     |
     AbbreviatedStep
@@ -250,27 +246,22 @@ AxisSpecifier:
 NodeTest:
     NODETYPE '(' ')'
     {
-      if (*$1 == "node")
+      if ($1 == "node")
         $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kAnyNodeTest);
-      else if (*$1 == "text")
+      else if ($1 == "text")
         $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kTextNodeTest);
-      else if (*$1 == "comment")
+      else if ($1 == "comment")
         $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kCommentNodeTest);
-
-      parser->DeleteString($1);
     }
     |
     PI '(' ')'
     {
       $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kProcessingInstructionNodeTest);
-      parser->DeleteString($1);
     }
     |
     PI '(' LITERAL ')'
     {
-      $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kProcessingInstructionNodeTest, $3->StripWhiteSpace());
-      parser->DeleteString($1);
-      parser->DeleteString($3);
+      $$ = blink::MakeGarbageCollected<Step::NodeTest>(Step::NodeTest::kProcessingInstructionNodeTest, $3.StripWhiteSpace());
     }
     ;
 
@@ -281,6 +272,9 @@ OptionalPredicateList:
     }
     |
     PredicateList
+    {
+      $$ = $1;
+    }
     ;
 
 PredicateList:
@@ -292,6 +286,7 @@ PredicateList:
     |
     PredicateList Predicate
     {
+      $$ = $1;
       $$->push_back(blink::MakeGarbageCollected<blink::xpath::Predicate>($2));
     }
     ;
@@ -325,8 +320,7 @@ AbbreviatedStep:
 PrimaryExpr:
     VARIABLEREFERENCE
     {
-      $$ = blink::MakeGarbageCollected<blink::xpath::VariableReference>(*$1);
-      parser->DeleteString($1);
+      $$ = blink::MakeGarbageCollected<blink::xpath::VariableReference>($1);
     }
     |
     '(' Expr ')'
@@ -336,14 +330,12 @@ PrimaryExpr:
     |
     LITERAL
     {
-      $$ = blink::MakeGarbageCollected<blink::xpath::StringExpression>(*$1);
-      parser->DeleteString($1);
+      $$ = blink::MakeGarbageCollected<blink::xpath::StringExpression>($1);
     }
     |
     NUMBER
     {
-      $$ = blink::MakeGarbageCollected<blink::xpath::Number>($1->ToDouble());
-      parser->DeleteString($1);
+      $$ = blink::MakeGarbageCollected<blink::xpath::Number>($1.ToDouble());
     }
     |
     FunctionCall
@@ -352,18 +344,16 @@ PrimaryExpr:
 FunctionCall:
     FUNCTIONNAME '(' ')'
     {
-      $$ = blink::xpath::CreateFunction(*$1);
+      $$ = blink::xpath::CreateFunction($1);
       if (!$$)
         YYABORT;
-      parser->DeleteString($1);
     }
     |
     FUNCTIONNAME '(' ArgumentList ')'
     {
-      $$ = blink::xpath::CreateFunction(*$1, *$3);
+      $$ = blink::xpath::CreateFunction($1, *$3);
       if (!$$)
         YYABORT;
-      parser->DeleteString($1);
     }
     ;
 
@@ -376,6 +366,7 @@ ArgumentList:
     |
     ArgumentList ',' Argument
     {
+      $$ = $1;
       $$->push_back($3);
     }
     ;
