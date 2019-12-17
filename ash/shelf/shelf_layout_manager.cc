@@ -532,7 +532,7 @@ void ShelfLayoutManager::UpdateVisibilityState() {
     SetState(SHELF_HIDDEN);
   } else {
     // TODO(zelidrag): Verify shelf drag animation still shows on the device
-    // when we are in SHELF_AUTO_HIDE_ALWAYS_HIDDEN.
+    // when we are in ShelfAutoHideBehavior::kAlwaysHidden.
     switch (window_state) {
       case WorkspaceWindowState::kFullscreen:
         if (IsShelfAutoHideForFullscreenMaximized()) {
@@ -1398,11 +1398,11 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
 
 ShelfVisibilityState ShelfLayoutManager::CalculateShelfVisibility() {
   switch (shelf_->auto_hide_behavior()) {
-    case SHELF_AUTO_HIDE_BEHAVIOR_ALWAYS:
+    case ShelfAutoHideBehavior::kAlways:
       return SHELF_AUTO_HIDE;
-    case SHELF_AUTO_HIDE_BEHAVIOR_NEVER:
+    case ShelfAutoHideBehavior::kNever:
       return SHELF_VISIBLE;
-    case SHELF_AUTO_HIDE_ALWAYS_HIDDEN:
+    case ShelfAutoHideBehavior::kAlwaysHidden:
       return SHELF_HIDDEN;
   }
   return SHELF_VISIBLE;
