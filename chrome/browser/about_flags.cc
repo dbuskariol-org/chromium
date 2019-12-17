@@ -647,11 +647,6 @@ const FeatureEntry::FeatureVariation kInterestFeedFeatureVariations[] = {
          kInterestFeedLargeImagesAndSnippetsWithUndoableActionsFeatureVariationConstant),
      nullptr}};
 
-const FeatureEntry::FeatureVariation kRemoteSuggestionsFeatureVariations[] = {
-    {"via content suggestion server (backed by ChromeReader)", nullptr, 0,
-     "3313421"},
-    {"via content suggestion server (backed by Google Now)", nullptr, 0,
-     "3313422"}};
 #endif  // OS_ANDROID
 
 const FeatureEntry::Choice kEnableUseZoomForDSFChoices[] = {
@@ -2479,12 +2474,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kInterestFeedNotificationsName,
      flag_descriptions::kInterestFeedNotificationsDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(feed::kInterestFeedNotifications)},
-    {"enable-ntp-remote-suggestions",
-     flag_descriptions::kEnableNtpRemoteSuggestionsName,
-     flag_descriptions::kEnableNtpRemoteSuggestionsDescription, kOsAndroid,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(ntp_snippets::kArticleSuggestionsFeature,
-                                    kRemoteSuggestionsFeatureVariations,
-                                    "NTPArticleSuggestions")},
     {"offlining-recent-pages", flag_descriptions::kOffliningRecentPagesName,
      flag_descriptions::kOffliningRecentPagesDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(offline_pages::kOffliningRecentPagesFeature)},
