@@ -58,6 +58,7 @@ PACKAGE_FILTER = [
     "libsmime3.so",
     "libstdc++.so",
     "libuuid.so",
+    "libvulkan.so.1",
     "libxcb.so",
     "libxcb-dri3.so.0",
     "rtld(GNU_HASH)",

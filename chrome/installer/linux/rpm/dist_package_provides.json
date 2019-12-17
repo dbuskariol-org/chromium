@@ -270,6 +270,7 @@
         "libuuid.so.1(UUID_1.0)(64bit)",
         "libuuid.so.1(UUID_2.20)(64bit)",
         "libuuid.so.1(UUID_2.31)(64bit)",
+        "libvulkan.so.1()(64bit)",
         "libxcb-dri3.so.0()(64bit)",
         "libxcb.so.1()(64bit)",
         "rtld(GNU_HASH)"
@@ -537,6 +538,7 @@
         "libuuid.so.1(UUID_1.0)(64bit)",
         "libuuid.so.1(UUID_2.20)(64bit)",
         "libuuid.so.1(UUID_2.31)(64bit)",
+        "libvulkan.so.1()(64bit)",
         "libxcb-dri3.so.0()(64bit)",
         "libxcb.so.1()(64bit)",
         "rtld(GNU_HASH)"
@@ -1057,6 +1059,8 @@
         "libuuid.so.1(UUID_2.20)(64bit)",
         "libuuid.so.1(UUID_2.31)",
         "libuuid.so.1(UUID_2.31)(64bit)",
+        "libvulkan.so.1",
+        "libvulkan.so.1()(64bit)",
         "libxcb-dri3.so.0",
         "libxcb-dri3.so.0()(64bit)",
         "libxcb.so.1",
@@ -1585,6 +1589,8 @@
         "libuuid.so.1(UUID_2.20)(64bit)",
         "libuuid.so.1(UUID_2.31)",
         "libuuid.so.1(UUID_2.31)(64bit)",
+        "libvulkan.so.1",
+        "libvulkan.so.1()(64bit)",
         "libxcb-dri3.so.0",
         "libxcb-dri3.so.0()(64bit)",
         "libxcb.so.1",
