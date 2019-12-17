@@ -7,16 +7,11 @@
 
 #include <memory>
 
-#include "base/callback.h"
 #include "base/supports_user_data.h"
+#include "ios/chrome/browser/overlays/public/overlay_request_callbacks.h"
 
 class OverlayResponse;
-
-// Callback for OverlayRequests.  If an overlay requires a completion block to
-// be executed after its UI is dismissed, OverlayManager clients can provide a
-// callback that uses the OverlayResponse provided to the request.  |response|
-// may be null if no response has been provided.
-typedef base::OnceCallback<void(OverlayResponse* response)> OverlayCallback;
+class OverlayCallbackManager;
 
 // Model object used to track overlays requested for OverlayManager.
 class OverlayRequest {
@@ -47,17 +42,15 @@ class OverlayRequest {
     return ConfigType::FromUserData(data());
   }
 
-  // Setter for the response object for this request.
-  virtual void set_response(std::unique_ptr<OverlayResponse> response) = 0;
-  // The response for this request.  It is constructed with an
-  // OverlayResponseInfo containing user interaction information for the overlay
-  // UI resulting from this request.
-  virtual OverlayResponse* response() const = 0;
+  // Returns the request's callback controller, which can be used to communicate
+  // user interaction information back to the reqeuster.
+  virtual OverlayCallbackManager* GetCallbackManager() = 0;
 
-  // Setter for the callback.  Provided callbacks are guaranteed to be executed,
-  // either upon dismissal of the request's corresponding overlay UI or upon
-  // cancellation of the request.
-  virtual void set_callback(OverlayCallback callback) = 0;
+  // DEPRECATED: Responses and callbacks should be set using the callback
+  // manager.
+  virtual void set_response(std::unique_ptr<OverlayResponse> response) = 0;
+  virtual OverlayResponse* response() const = 0;
+  virtual void set_callback(OverlayCompletionCallback callback) = 0;
 
  protected:
   OverlayRequest() = default;

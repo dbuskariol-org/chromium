@@ -19,7 +19,7 @@ TEST_F(OverlayRequestImplTest, ExecuteCallback) {
   OverlayRequestImpl* request_impl =
       static_cast<OverlayRequestImpl*>(request.get());
   __block bool callback_executed = false;
-  OverlayCallback callback =
+  OverlayCompletionCallback callback =
       base::BindOnce(base::RetainBlock(^(OverlayResponse* response) {
         callback_executed =
             response &&
