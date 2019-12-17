@@ -55241,6 +55241,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="SafeBrowsingUserConsentVsUrlCheckRaceResult">
+  <obsolete>
+    The relevant code was deleted in December 2019.
+  </obsolete>
   <int value="0" label="URL check finished first, URL is safe"/>
   <int value="1" label="URL check finished first, URL is malicious"/>
   <int value="2" label="User opted in, URL is safe"/>
