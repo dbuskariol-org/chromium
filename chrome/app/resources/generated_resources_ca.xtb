@@ -2526,7 +2526,6 @@ en almenys <ph name="INSTALL_SIZE" /> d'espai lliure. Per alliberar espai, supri
 <translation id="4572779512957829735">Introdueix el PIN de la clau de seguretat</translation>
 <translation id="457386861538956877">Més...</translation>
 <translation id="4574741712540401491">•  <ph name="LIST_ITEM_TEXT" /></translation>
-<translation id="4576541033847873020">Vincula un dispositiu Bluetooth</translation>
 <translation id="4579581181964204535">No es pot emetre <ph name="HOST_NAME" />.</translation>
 <translation id="4581774856936278355">S'ha produït un error en restaurar Linux</translation>
 <translation id="4582563038311694664">Restableix tota la configuració</translation>
