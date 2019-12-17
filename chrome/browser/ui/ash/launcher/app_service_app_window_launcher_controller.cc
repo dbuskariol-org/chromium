@@ -13,6 +13,7 @@
 #include "chrome/browser/chromeos/crostini/crostini_features.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_util.h"
 #include "chrome/browser/profiles/profile.h"
+#include "chrome/browser/ui/app_list/arc/arc_app_utils.h"
 #include "chrome/browser/ui/ash/launcher/app_service_app_window_arc_tracker.h"
 #include "chrome/browser/ui/ash/launcher/app_service_app_window_crostini_tracker.h"
 #include "chrome/browser/ui/ash/launcher/app_service_app_window_launcher_item_controller.h"
@@ -224,6 +225,9 @@ void AppServiceAppWindowLauncherController::OnWindowActivated(
   AppWindowLauncherController::OnWindowActivated(reason, new_active,
                                                  old_active);
 
+  if (arc_tracker_)
+    arc_tracker_->OnTaskSetActive(arc_tracker_->active_task_id());
+
   SetWindowActivated(new_active, /*active*/ true);
   SetWindowActivated(old_active, /*active*/ false);
 }
@@ -328,10 +332,13 @@ void AppServiceAppWindowLauncherController::RegisterWindow(
   if (app_window_it != aura_window_to_app_window_.end())
     return;
 
-  if (arc_tracker_)
+  // For the ARC apps window, AttachControllerToWindow calls AddWindowToShelf,
+  // so we don't need to call AddWindowToShelf again.
+  if (arc_tracker_ && arc::GetWindowTaskId(window) != arc::kNoTaskId) {
     arc_tracker_->AttachControllerToWindow(window);
-
-  AddWindowToShelf(window, shelf_id);
+  } else {
+    AddWindowToShelf(window, shelf_id);
+  }
 }
 
 void AppServiceAppWindowLauncherController::UnregisterAppWindow(
@@ -364,6 +371,13 @@ void AppServiceAppWindowLauncherController::AddAppWindowToShelf(
                                                    std::move(controller));
       owner()->SetItemStatus(shelf_id, ash::STATUS_RUNNING);
     }
+  } else {
+    // The window for ARC Play Store is is a special window, which is created by
+    // both Extensions and ARC. If Extensions's window is generated after
+    // ARC window, calls OnItemDelegateDiscarded to remove the ARC apps
+    // window.
+    if (shelf_id.app_id == arc::kPlayStoreAppId)
+      OnItemDelegateDiscarded(item_controller);
   }
 
   item_controller->AddWindow(app_window);
