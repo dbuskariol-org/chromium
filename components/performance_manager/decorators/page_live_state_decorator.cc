@@ -25,7 +25,9 @@ class PageLiveStateDataImpl
   PageLiveStateDataImpl& operator=(const PageLiveStateDataImpl&) = delete;
 
   // PageLiveStateDecorator::Data:
-  bool IsAttachedToUSB() const override { return is_attached_to_usb_; }
+  bool IsConnectedToUSBDevice() const override {
+    return is_connected_to_usb_device_;
+  }
   bool IsConnectedToBluetoothDevice() const override {
     return is_connected_to_bluetooth_device_;
   }
@@ -35,8 +37,8 @@ class PageLiveStateDataImpl
   bool IsCapturingDesktop() const override { return is_capturing_desktop_; }
   bool IsAutoDiscardable() const override { return is_auto_discardable_; }
 
-  void set_is_attached_to_usb(bool is_attached_to_usb) {
-    is_attached_to_usb_ = is_attached_to_usb;
+  void set_is_connected_to_usb_device(bool is_connected_to_usb_device) {
+    is_connected_to_usb_device_ = is_connected_to_usb_device;
   }
   void set_is_connected_to_bluetooth_device(
       bool is_connected_to_bluetooth_device) {
@@ -66,7 +68,7 @@ class PageLiveStateDataImpl
 
   explicit PageLiveStateDataImpl(const PageNodeImpl* page_node) {}
 
-  bool is_attached_to_usb_ = false;
+  bool is_connected_to_usb_device_ = false;
   bool is_connected_to_bluetooth_device_ = false;
   bool is_capturing_video_ = false;
   bool is_capturing_audio_ = false;
@@ -103,12 +105,12 @@ void SetPropertyForWebContents(
 }  // namespace
 
 // static
-void PageLiveStateDecorator::OnWebContentsAttachedToUSBChanged(
+void PageLiveStateDecorator::OnIsConnectedToUSBDeviceChanged(
     content::WebContents* contents,
-    bool is_attached_to_usb) {
-  SetPropertyForWebContents(contents,
-                            &PageLiveStateDataImpl::set_is_attached_to_usb,
-                            is_attached_to_usb);
+    bool is_connected_to_usb_device) {
+  SetPropertyForWebContents(
+      contents, &PageLiveStateDataImpl::set_is_connected_to_usb_device,
+      is_connected_to_usb_device);
 }
 
 // static

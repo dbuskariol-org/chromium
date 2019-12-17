@@ -27,13 +27,9 @@ class PageLiveStateDecorator {
   PageLiveStateDecorator(const PageLiveStateDecorator& other) = delete;
   PageLiveStateDecorator& operator=(const PageLiveStateDecorator&) = delete;
 
-  // The following functions should only be called from the UI thread:
-
-  // Should be called whenever a WebContents gets connected or disconnected to
-  // a USB device.
-  // TODO(sebmarchand|olivierli): Call this from USBTabHelper.
-  static void OnWebContentsAttachedToUSBChanged(content::WebContents* contents,
-                                                bool is_attached_to_usb);
+  // Must be called when the connected to USB device state changes.
+  static void OnIsConnectedToUSBDeviceChanged(content::WebContents* contents,
+                                              bool is_connected_to_usb_device);
 
   // Must be called when the connected to Bluetooth device state changes.
   static void OnIsConnectedToBluetoothDeviceChanged(
@@ -63,7 +59,7 @@ class PageLiveStateDecorator::Data {
   Data(const Data& other) = delete;
   Data& operator=(const Data&) = delete;
 
-  virtual bool IsAttachedToUSB() const = 0;
+  virtual bool IsConnectedToUSBDevice() const = 0;
   virtual bool IsConnectedToBluetoothDevice() const = 0;
   virtual bool IsCapturingVideo() const = 0;
   virtual bool IsCapturingAudio() const = 0;
