@@ -5330,6 +5330,7 @@
       computed_style_custom_functions: ["getter", "setter"],
       style_builder_custom_functions: ["initial", "inherit", "value"],
       priority: "High",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-caret-color",
@@ -5360,6 +5361,7 @@
       computed_style_custom_functions: ["getter","setter"],
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-background-color",
@@ -5376,6 +5378,7 @@
       style_builder_template_args: {
         initial_color: "ComputedStyleInitialValues::InitialBackgroundColor",
       },
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-border-left-color",
@@ -5390,6 +5393,7 @@
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-border-right-color",
@@ -5404,6 +5408,7 @@
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-border-top-color",
@@ -5418,6 +5423,7 @@
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-border-bottom-color",
@@ -5432,6 +5438,7 @@
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-border-inline-start-color",
@@ -5479,6 +5486,7 @@
       setter: "SetInternalVisitedFillPaint",
       getter: "FillPaint",
       converter: "ConvertSVGPaint",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-outline-color",
@@ -5492,6 +5500,7 @@
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-stroke",
@@ -5503,6 +5512,7 @@
       setter: "SetInternalVisitedStrokePaint",
       getter: "StrokePaint",
       converter: "ConvertSVGPaint",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-text-decoration-color",
@@ -5516,6 +5526,7 @@
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-text-emphasis-color",
@@ -5533,6 +5544,7 @@
       style_builder_template_args: {
         initial_color: "StyleColor::CurrentColor",
       },
+      affected_by_forced_colors: true,
     },
     {
       name: "-internal-visited-text-fill-color",

@@ -579,6 +579,12 @@
     "args": ["--enable-blink-features=CSSCascade"]
   },
   {
+    "prefix": "forced-high-contrast-cascade",
+    "bases": ["external/wpt/forced-colors-mode"],
+    "args": ["--force-high-contrast",
+             "--enable-blink-features=CSSCascade,ForcedColors"]
+  },
+  {
     "prefix": "at-property",
     "bases": ["fast/css/css-properties-values-api",
               "external/wpt/css/css-properties-values-api"],
