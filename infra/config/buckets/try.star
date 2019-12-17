@@ -172,6 +172,14 @@ android_builder(
 )
 
 android_builder(
+    name = 'android-pie-arm64-coverage-rel',
+    cores = 16,
+    goma_jobs = goma.jobs.J300,
+    ssd = True,
+    use_clang_coverage = True,
+)
+
+android_builder(
     name = 'android-pie-arm64-rel',
     cores = 16,
     goma_jobs = goma.jobs.J300,
