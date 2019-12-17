@@ -2296,6 +2296,7 @@ NSString* const kBrowserViewControllerSnackbarCategory =
     }
     NSArray<GuideName*>* guideNames = @[
       kContentAreaGuide,
+      kPrimaryToolbarGuide,
       kBadgeOverflowMenuGuide,
       kOmniboxGuide,
       kOmniboxLeadingImageGuide,
@@ -2594,7 +2595,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   __weak __typeof(self) weakSelf = self;
   [self.toolbarAccessoryPresenter
       addToolbarAccessoryView:findBarView
-             usingToolbarView:_primaryToolbarCoordinator.viewController.view
                      animated:animate
                    completion:^() {
                      __strong __typeof(self) strongSelf = weakSelf;
@@ -2602,6 +2602,7 @@ NSString* const kBrowserViewControllerSnackbarCategory =
                        [strongSelf.findBarController selectAllText];
                      }
                    }];
+
   [self updateFindBar:YES shouldFocus:shouldFocus];
 }
 
