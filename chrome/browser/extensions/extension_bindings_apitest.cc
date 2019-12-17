@@ -87,7 +87,8 @@ IN_PROC_BROWSER_TEST_F(ExtensionBindingsApiTest,
 
 // Tests that an error raised during an async function still fires
 // the callback, but sets chrome.runtime.lastError.
-IN_PROC_BROWSER_TEST_F(ExtensionBindingsApiTest, LastError) {
+// Flaky on all platforms: https://crbug.com/1035011
+IN_PROC_BROWSER_TEST_F(ExtensionBindingsApiTest, DISABLED_LastError) {
   ASSERT_TRUE(LoadExtension(
       test_data_dir_.AppendASCII("bindings").AppendASCII("last_error")));
 
