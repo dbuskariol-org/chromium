@@ -42,7 +42,8 @@ AppServiceAppWindowLauncherController::AppServiceAppWindowLauncherController(
     arc_tracker_ = std::make_unique<AppServiceAppWindowArcTracker>(this);
 
   if (crostini::CrostiniFeatures::Get()->IsUIAllowed(owner->profile()))
-    crostini_tracker_ = std::make_unique<AppServiceAppWindowCrostiniTracker>();
+    crostini_tracker_ =
+        std::make_unique<AppServiceAppWindowCrostiniTracker>(this);
 }
 
 AppServiceAppWindowLauncherController::
@@ -211,7 +212,7 @@ void AppServiceAppWindowLauncherController::OnWindowDestroying(
   RemoveAppWindowFromShelf(app_window_it->second.get());
 
   if (!shelf_id.IsNull() && crostini_tracker_)
-    crostini_tracker_->OnWindowDestroying(shelf_id.app_id);
+    crostini_tracker_->OnWindowDestroying(shelf_id.app_id, window);
 
   aura_window_to_app_window_.erase(app_window_it);
 }
