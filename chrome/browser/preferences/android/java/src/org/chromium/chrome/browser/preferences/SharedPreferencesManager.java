@@ -304,4 +304,15 @@ public class SharedPreferencesManager {
         ed.remove(key);
         ed.apply();
     }
+
+    /**
+     * Checks if any value was written associated to a key in shared preferences.
+     *
+     * @param key The key of the preference to check.
+     * @return Whether any value was written for that key.
+     */
+    public boolean contains(String key) {
+        mKeyChecker.checkIsKeyInUse(key);
+        return ContextUtils.getAppSharedPreferences().contains(key);
+    }
 }
