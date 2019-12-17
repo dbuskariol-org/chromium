@@ -6051,14 +6051,6 @@ crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-event-list
 crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-multiple-retainers.js [ Pass Failure ]
 crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-no-detached-iframe.js [ Pass Failure ]
 
-# Temporarily disabled for landing datagrid Changes in devtools
-crbug.com/963183 http/tests/devtools/components/datagrid.js [ Pass Failure ]
-crbug.com/963183 http/tests/devtools/components/viewport-datagrid.js [ Pass Failure ]
-crbug.com/963183 http/tests/devtools/unit/datagrid-editable-longtext.js [ Pass Failure ]
-crbug.com/963183 http/tests/devtools/unit/datagrid-items-attached-to-dom.js [ Pass Failure ]
-crbug.com/963183 http/tests/devtools/unit/viewport-datagrid-items-attached-to-dom.js [ Pass Failure ]
-crbug.com/963183 http/tests/devtools/unit/viewport-datagrid-items-expandable-attached-to-dom.js [ Pass Failure ]
-
 # Temporarily disabled for landing changes to treeoutline in DevTools
 crbug.com/1033213 http/tests/devtools/security/interstitial-sidebar.js [ Pass Failure ]
 crbug.com/1033213 http/tests/devtools/security/mixed-content-sidebar.js [ Pass Failure ]
