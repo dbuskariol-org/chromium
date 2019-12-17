@@ -5594,6 +5594,7 @@
     "SafeBrowsingRealTimeUrlLookupEnabled": [
         {
             "platforms": [
+                "android",
                 "chromeos",
                 "linux",
                 "mac",
