@@ -2280,7 +2280,7 @@ void LayoutObject::StyleWillChange(StyleDifference diff,
   // Elements may inherit touch action from parent frame, so we need to report
   // touchstart handler if the root layout object has non-auto effective touch
   // action.
-  TouchAction old_touch_action = TouchAction::kTouchActionAuto;
+  TouchAction old_touch_action = TouchAction::kAuto;
   bool is_document_element = GetNode() && IsDocumentElement();
   if (style_) {
     old_touch_action = is_document_element ? style_->GetEffectiveTouchAction()
@@ -2290,11 +2290,11 @@ void LayoutObject::StyleWillChange(StyleDifference diff,
                                      ? new_style.GetEffectiveTouchAction()
                                      : new_style.GetTouchAction();
   if (GetNode() && !GetNode()->IsTextNode() &&
-      (old_touch_action == TouchAction::kTouchActionAuto) !=
-          (new_touch_action == TouchAction::kTouchActionAuto)) {
+      (old_touch_action == TouchAction::kAuto) !=
+          (new_touch_action == TouchAction::kAuto)) {
     EventHandlerRegistry& registry =
         GetDocument().GetFrame()->GetEventHandlerRegistry();
-    if (new_touch_action != TouchAction::kTouchActionAuto) {
+    if (new_touch_action != TouchAction::kAuto) {
       registry.DidAddEventHandler(*GetNode(),
                                   EventHandlerRegistry::kTouchAction);
     } else {
@@ -3047,7 +3047,7 @@ void LayoutObject::WillBeDestroyed() {
   // m_style is null in cases of partial construction. Any handler we added
   // previously may have already been removed by the Document independently.
   if (GetNode() && !GetNode()->IsTextNode() && style_ &&
-      style_->GetTouchAction() != TouchAction::kTouchActionAuto) {
+      style_->GetTouchAction() != TouchAction::kAuto) {
     EventHandlerRegistry& registry =
         GetDocument().GetFrame()->GetEventHandlerRegistry();
     if (registry.EventHandlerTargets(EventHandlerRegistry::kTouchAction)

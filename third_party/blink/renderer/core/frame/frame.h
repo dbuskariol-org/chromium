@@ -283,7 +283,7 @@ class CORE_EXPORT Frame : public GarbageCollected<Frame> {
   // the main frame.
   bool is_inert_ = false;
 
-  TouchAction inherited_effective_touch_action_ = TouchAction::kTouchActionAuto;
+  TouchAction inherited_effective_touch_action_ = TouchAction::kAuto;
 
   bool visible_to_hit_testing_ = true;
 

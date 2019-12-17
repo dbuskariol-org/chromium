@@ -2708,7 +2708,7 @@ void Document::PropagateStyleToViewport() {
   // Misc
   {
     PROPAGATE_FROM(document_element_style, GetEffectiveTouchAction,
-                   SetEffectiveTouchAction, TouchAction::kTouchActionAuto);
+                   SetEffectiveTouchAction, TouchAction::kAuto);
     PROPAGATE_FROM(document_element_style, GetScrollBehavior, SetScrollBehavior,
                    kScrollBehaviorAuto);
     PROPAGATE_FROM(document_element_style, DarkColorScheme, SetDarkColorScheme,
