@@ -405,11 +405,13 @@ blink_builder(
 blink_builder(
     name = 'win10-blink-rel',
     os = os.WINDOWS_ANY,
+    builderless = True,
 )
 
 blink_builder(
     name = 'win7-blink-rel',
     os = os.WINDOWS_ANY,
+    builderless = True,
 )
 
 
@@ -419,6 +421,8 @@ def blink_mac_builder(*, name, **kwargs):
       cores = None,
       goma_backend = goma.backend.RBE_PROD,
       os = os.MAC_ANY,
+      builderless = True,
+      ssd = True,
       **kwargs
   )
 
