@@ -5556,11 +5556,25 @@
     "SafeBrowsingRealTimeUrlLookupEnabled": [
         {
             "platforms": [
-                "android",
                 "chromeos",
                 "linux",
                 "mac",
                 "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "SafeBrowsingRealTimeUrlLookupEnabled"
+                    ]
+                }
+            ]
+        }
+    ],
+    "SafeBrowsingRealTimeUrlLookupEnabledAndroid": [
+        {
+            "platforms": [
+                "android"
             ],
             "experiments": [
                 {
