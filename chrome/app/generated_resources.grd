@@ -7711,7 +7711,7 @@ Please help our engineers fix this problem. Tell us what happened right before y
         Sign-in error
       </message>
       <message name="IDS_SYNC_ERROR_BUBBLE_VIEW_TITLE" desc="Title in the sync error bubble view/notification.">
-        Sync Error
+        Sync error
       </message>
       <message name="IDS_SYNC_ERROR_USER_MENU_TITLE" desc="Title of the sync/signin error header of desktop user menu.">
         Sync isn't working
