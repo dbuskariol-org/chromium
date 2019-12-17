@@ -30808,6 +30808,7 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="3" label="ProgressAfterMoreThreadTime"/>
   <int value="4" label="TimeoutWait"/>
   <int value="5" label="ProgressAfterWait"/>
+  <int value="6" label="ContinueOnNonHostServerTty"/>
 </enum>
 
 <enum name="GPUWebGraphicsContext3D_Init_CanLoseContext">
