@@ -106,6 +106,8 @@ void AppServiceAppWindowLauncherController::ActiveUserChanged(
     }
   }
   app_service_instance_helper_->ActiveUserChanged();
+  if (arc_tracker_)
+    arc_tracker_->ActiveUserChanged(user_email);
 }
 
 void AppServiceAppWindowLauncherController::AdditionalUserAddedToSession(
@@ -158,7 +160,7 @@ void AppServiceAppWindowLauncherController::OnWindowPropertyChanged(
   RegisterWindow(window, shelf_id);
 }
 
-void AppServiceAppWindowLauncherController::OnWindowVisibilityChanging(
+void AppServiceAppWindowLauncherController::OnWindowVisibilityChanged(
     aura::Window* window,
     bool visible) {
   // Skip OnWindowVisibilityChanged for ancestors/descendants.
@@ -166,7 +168,7 @@ void AppServiceAppWindowLauncherController::OnWindowVisibilityChanging(
     return;
 
   if (arc_tracker_)
-    arc_tracker_->OnWindowVisibilityChanging(window);
+    arc_tracker_->OnWindowVisibilityChanged(window);
 
   ash::ShelfID shelf_id = GetShelfId(window);
   if (shelf_id.IsNull())
