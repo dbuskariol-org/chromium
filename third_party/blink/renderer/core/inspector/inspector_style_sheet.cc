@@ -947,18 +947,6 @@ bool InspectorStyleSheetBase::LineNumberAndColumnToOffset(
   return true;
 }
 
-InspectorStyleSheet* InspectorStyleSheet::Create(
-    InspectorNetworkAgent* network_agent,
-    CSSStyleSheet* page_style_sheet,
-    const String& origin,
-    const String& document_url,
-    InspectorStyleSheetBase::Listener* listener,
-    InspectorResourceContainer* resource_container) {
-  return MakeGarbageCollected<InspectorStyleSheet>(
-      network_agent, page_style_sheet, origin, document_url, listener,
-      resource_container);
-}
-
 InspectorStyleSheet::InspectorStyleSheet(
     InspectorNetworkAgent* network_agent,
     CSSStyleSheet* page_style_sheet,
