@@ -6340,6 +6340,9 @@ bool WebContentsImpl::DidAddMessageToConsole(
     const base::string16& message,
     int32_t line_no,
     const base::string16& source_id) {
+  for (auto& observer : observers_)
+    observer.OnDidAddMessageToConsole(log_level, message, line_no, source_id);
+
   if (!delegate_)
     return false;
   return delegate_->DidAddMessageToConsole(this, log_level, message, line_no,
