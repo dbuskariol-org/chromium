@@ -1162,12 +1162,14 @@ def fyi_coverage_builder(
     *,
     name,
     cores=32,
+    ssd=True,
     execution_timeout=20 * time.hour,
     goma_backend=goma.backend.RBE_PROD,
     **kwargs):
   return fyi_builder(
       name = name,
       cores = cores,
+      ssd=ssd,
       execution_timeout = execution_timeout,
       goma_backend = goma_backend,
       **kwargs
@@ -1176,13 +1178,11 @@ def fyi_coverage_builder(
 fyi_coverage_builder(
     name = 'android-code-coverage',
     use_java_coverage = True,
-    ssd = True,
 )
 
 fyi_coverage_builder(
     name = 'android-code-coverage-native',
     use_clang_coverage = True,
-    ssd = True,
 )
 
 fyi_coverage_builder(
@@ -1199,13 +1199,11 @@ fyi_coverage_builder(
 
 fyi_coverage_builder(
     name = 'linux-chromeos-code-coverage',
-    ssd = True,
     use_clang_coverage = True,
 )
 
 fyi_coverage_builder(
     name = 'linux-code-coverage',
-    os = None,
     use_clang_coverage = True,
 )
 
@@ -1214,7 +1212,6 @@ fyi_coverage_builder(
     builderless = True,
     cores = 24,
     os = os.MAC_ANY,
-    ssd = True,
     use_clang_coverage = True,
 )
 
@@ -1223,7 +1220,6 @@ fyi_coverage_builder(
     builderless = True,
     goma_enable_ats = True,
     os = os.WINDOWS_DEFAULT,
-    ssd = True,
     use_clang_coverage = True,
 )
 
