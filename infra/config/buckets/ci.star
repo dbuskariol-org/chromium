@@ -1294,12 +1294,6 @@ fyi_mac_builder(
 )
 
 fyi_mac_builder(
-    name = 'Mac10.14 Tests',
-    cores = None,
-    os = os.MAC_10_14,
-)
-
-fyi_mac_builder(
     name = 'Mac deterministic',
     cores = None,
     executable = luci.recipe(name = 'swarming/deterministic_build'),
@@ -1922,11 +1916,6 @@ mac_builder(
     os = os.MAC_ANY,
 )
 
-mac_builder(
-    name = 'Mac10.13 Tests (dbg)',
-    os = os.MAC_ANY,
-)
-
 def mac_ios_builder(*, name, **kwargs):
   return mac_builder(
       name = name,
@@ -2167,6 +2156,31 @@ swangle_windows_builder(
     name = 'win-swangle-x86',
     goma_backend = None,
     goma_enable_ats = False,
+)
+
+
+# Thin testers are triggered builders which simply trigger swarmed
+# tests and collect their results. The OS they run on doesn't matter,
+# and they don't do anything computationally intensive, so use 2-core
+# Linux hosts.
+def thin_tester(*, name, mastername, **kwargs):
+  return builder(
+      name = name,
+      mastername = mastername,
+      builderless = True,
+      cores = 2,
+      os = os.LINUX_DEFAULT,
+      **kwargs
+  )
+
+thin_tester(
+    name = 'Mac10.13 Tests (dbg)',
+    mastername = 'chromium.mac',
+)
+
+thin_tester(
+    name = 'Mac10.14 Tests',
+    mastername = 'chromium.fyi',
 )
 
 
