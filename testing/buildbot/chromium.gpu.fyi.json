@@ -7585,29 +7585,6 @@
       },
       {
         "args": [
-          "--test-launcher-retry-limit=0"
-        ],
-        "merge": {
-          "args": [],
-          "script": "//testing/merge_scripts/standard_gtest_merge.py"
-        },
-        "should_retry_with_patch": false,
-        "swarming": {
-          "can_use_on_swarming_builders": true,
-          "containment_type": "AUTO",
-          "dimension_sets": [
-            {
-              "gpu": "nvidia-quadro-p400-ubuntu-stable",
-              "os": "linux-nvidia-stable",
-              "pool": "Chrome-GPU"
-            }
-          ]
-        },
-        "test": "angle_white_box_tests",
-        "test_target": "//third_party/angle/src/tests:angle_white_box_tests"
-      },
-      {
-        "args": [
           "--use-gpu-in-tests"
         ],
         "merge": {
@@ -20123,30 +20100,6 @@
         },
         "test": "angle_unittests",
         "test_target": "//third_party/angle/src/tests:angle_unittests"
-      },
-      {
-        "args": [
-          "--test-launcher-retry-limit=0"
-        ],
-        "merge": {
-          "args": [],
-          "script": "//testing/merge_scripts/standard_gtest_merge.py"
-        },
-        "should_retry_with_patch": false,
-        "swarming": {
-          "can_use_on_swarming_builders": true,
-          "containment_type": "AUTO",
-          "dimension_sets": [
-            {
-              "gpu": "1002:699f",
-              "os": "Windows-10",
-              "pool": "Chrome-GPU"
-            }
-          ],
-          "expiration": 21600
-        },
-        "test": "angle_white_box_tests",
-        "test_target": "//third_party/angle/src/tests:angle_white_box_tests"
       },
       {
         "args": [
