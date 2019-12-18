@@ -3,15 +3,36 @@
 // found in the LICENSE file.
 
 #include "chrome/browser/chromeos/input_method/native_input_method_engine.h"
+#include "base/feature_list.h"
+#include "base/i18n/i18n_constants.h"
+#include "base/i18n/icu_string_conversions.h"
+#include "base/metrics/histogram_macros.h"
 #include "base/strings/string_util.h"
+#include "base/strings/utf_string_conversions.h"
+#include "chromeos/constants/chromeos_features.h"
 #include "ui/base/ime/chromeos/input_method_manager.h"
+#include "ui/base/ime/ime_bridge.h"
 
 namespace chromeos {
 
 namespace {
 
+// Returns the current input context. This may change during the session, even
+// if the IME engine does not change.
+ui::IMEInputContextHandlerInterface* GetInputContext() {
+  return ui::IMEBridge::Get()->GetInputContextHandler();
+}
+
 bool ShouldEngineUseMojo(const std::string& engine_id) {
-  return base::StartsWith(engine_id, "vkd_", base::CompareCase::SENSITIVE);
+  return base::FeatureList::IsEnabled(
+             chromeos::features::kNativeRuleBasedTyping) &&
+         base::StartsWith(engine_id, "vkd_", base::CompareCase::SENSITIVE);
+}
+
+std::string NormalizeString(const std::string& str) {
+  std::string normalized_str;
+  base::ConvertToUtf8AndNormalize(str, base::kCodepageUTF8, &normalized_str);
+  return normalized_str;
 }
 
 }  // namespace
@@ -83,7 +104,16 @@ void NativeInputMethodEngine::ImeObserver::OnKeyEvent(
     const std::string& engine_id,
     const InputMethodEngineBase::KeyboardEvent& event,
     ui::IMEEngineHandlerInterface::KeyEventDoneCallback callback) {
-  base_observer_->OnKeyEvent(engine_id, event, std::move(callback));
+  if (ShouldEngineUseMojo(engine_id)) {
+    remote_to_engine_->ProcessKeypressForRulebased(
+        ime::mojom::KeypressInfoForRulebased::New(
+            event.type, event.code, event.shift_key, event.altgr_key,
+            event.caps_lock, event.ctrl_key, event.alt_key),
+        base::BindOnce(&ImeObserver::OnKeyEventResponse, base::Unretained(this),
+                       base::Time::Now(), std::move(callback)));
+  } else {
+    base_observer_->OnKeyEvent(engine_id, event, std::move(callback));
+  }
 }
 
 void NativeInputMethodEngine::ImeObserver::OnReset(
@@ -142,6 +172,30 @@ void NativeInputMethodEngine::ImeObserver::FlushForTesting() {
 
 void NativeInputMethodEngine::ImeObserver::OnConnected(bool bound) {
   connected_to_engine_ = bound;
+}
+
+void NativeInputMethodEngine::ImeObserver::OnKeyEventResponse(
+    base::Time start,
+    ui::IMEEngineHandlerInterface::KeyEventDoneCallback callback,
+    ime::mojom::KeypressResponseForRulebasedPtr response) {
+  UMA_HISTOGRAM_CUSTOM_COUNTS(
+      "InputMethod.Mojo.Extension.Rulebased.ProcessLatency",
+      (base::Time::Now() - start).InMilliseconds(), 0, 1000, 50);
+
+  for (const auto& op : response->operations) {
+    switch (op->method) {
+      case ime::mojom::OperationMethodForRulebased::COMMIT_TEXT:
+        GetInputContext()->CommitText(NormalizeString(op->arguments));
+        break;
+      case ime::mojom::OperationMethodForRulebased::SET_COMPOSITION:
+        ui::CompositionText composition;
+        composition.text = base::UTF8ToUTF16(NormalizeString(op->arguments));
+        GetInputContext()->UpdateCompositionText(
+            composition, composition.text.length(), /*visible=*/true);
+        break;
+    }
+  }
+  std::move(callback).Run(response->result);
 }
 
 }  // namespace chromeos

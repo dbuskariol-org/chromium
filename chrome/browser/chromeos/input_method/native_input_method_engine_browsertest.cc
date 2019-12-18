@@ -4,10 +4,22 @@
 
 #include "chrome/browser/chromeos/input_method/native_input_method_engine.h"
 
+#include "base/strings/utf_string_conversions.h"
+#include "base/test/scoped_feature_list.h"
 #include "base/test/task_environment.h"
 #include "chrome/test/base/in_process_browser_test.h"
+#include "chromeos/constants/chromeos_features.h"
 #include "content/public/test/test_utils.h"
 #include "mojo/core/embedder/embedder.h"
+#include "ui/base/ime/chromeos/input_method_chromeos.h"
+#include "ui/base/ime/dummy_text_input_client.h"
+#include "ui/base/ime/ime_bridge.h"
+#include "ui/base/ime/ime_engine_handler_interface.h"
+#include "ui/base/ime/input_method_delegate.h"
+#include "ui/base/ime/text_input_flags.h"
+#include "ui/events/event.h"
+#include "ui/events/keycodes/keyboard_codes.h"
+#include "ui/events/keycodes/keyboard_codes_posix.h"
 
 namespace {
 
@@ -49,27 +61,99 @@ class TestObserver : public InputMethodEngineBase::Observer {
   DISALLOW_COPY_AND_ASSIGN(TestObserver);
 };
 
-class NativeInputMethodEngineTest : public InProcessBrowserTest {
+class KeyProcessingWaiter {
+ public:
+  ui::IMEEngineHandlerInterface::KeyEventDoneCallback CreateCallback() {
+    return base::BindOnce(&KeyProcessingWaiter::OnKeyEventDone,
+                          base::Unretained(this));
+  }
+
+  void OnKeyEventDone(bool consumed) { run_loop_.Quit(); }
+
+  void Wait() { run_loop_.Run(); }
+
+ private:
+  base::RunLoop run_loop_;
+};
+
+class NativeInputMethodEngineTest : public InProcessBrowserTest,
+                                    public ui::internal::InputMethodDelegate {
+ public:
+  NativeInputMethodEngineTest() : input_method_(this) {
+    feature_list_.InitWithFeatureState(
+        chromeos::features::kNativeRuleBasedTyping, true);
+  }
+
  protected:
   void SetUp() override {
     mojo::core::Init();
     InProcessBrowserTest::SetUp();
+    ui::IMEBridge::Initialize();
   }
 
   void SetUpOnMainThread() override {
+    ui::IMEBridge::Get()->SetInputContextHandler(&input_method_);
+
     auto observer = std::make_unique<TestObserver>();
     engine_.Initialize(std::move(observer), "", nullptr);
     InProcessBrowserTest::SetUpOnMainThread();
   }
 
+  // Overridden from ui::internal::InputMethodDelegate:
+  ui::EventDispatchDetails DispatchKeyEventPostIME(
+      ui::KeyEvent* event) override {
+    return ui::EventDispatchDetails();
+  }
+
+  void DispatchKeyPress(ui::KeyboardCode code, int flags = ui::EF_NONE) {
+    KeyProcessingWaiter waiterPressed;
+    KeyProcessingWaiter waiterReleased;
+    engine_.ProcessKeyEvent({ui::ET_KEY_PRESSED, code, flags},
+                            waiterPressed.CreateCallback());
+    engine_.ProcessKeyEvent({ui::ET_KEY_RELEASED, code, flags},
+                            waiterReleased.CreateCallback());
+    engine_.FlushForTesting();
+    waiterPressed.Wait();
+    waiterReleased.Wait();
+  }
+
+  void SetFocus(ui::TextInputClient* client) {
+    input_method_.SetFocusedTextInputClient(client);
+  }
+
   chromeos::NativeInputMethodEngine engine_;
+
+ private:
+  ui::InputMethodChromeOS input_method_;
+  base::test::ScopedFeatureList feature_list_;
 };
 
 }  // namespace
 
-IN_PROC_BROWSER_TEST_F(NativeInputMethodEngineTest, CanConnectToInputEngine) {
-  // ID for Arabic is specified in google_xkb_manifest.json.
-  engine_.Enable("vkd_ar");
+IN_PROC_BROWSER_TEST_F(NativeInputMethodEngineTest,
+                       VietnameseTelex_SimpleTransform) {
+  // ID is specified in google_xkb_manifest.json.
+  engine_.Enable("vkd_vi_telex");
   engine_.FlushForTesting();
   EXPECT_TRUE(engine_.IsConnectedForTesting());
+
+  // Create a fake text field.
+  ui::DummyTextInputClient text_input_client(ui::TEXT_INPUT_TYPE_TEXT);
+  SetFocus(&text_input_client);
+
+  DispatchKeyPress(ui::VKEY_A, ui::EF_SHIFT_DOWN);
+  DispatchKeyPress(ui::VKEY_S);
+  DispatchKeyPress(ui::VKEY_SPACE);
+
+  // Expect to commit 'Á '.
+  ASSERT_EQ(text_input_client.composition_history().size(), 2U);
+  EXPECT_EQ(text_input_client.composition_history()[0].text,
+            base::ASCIIToUTF16("A"));
+  EXPECT_EQ(text_input_client.composition_history()[1].text,
+            base::UTF8ToUTF16(u8"\u00c1"));
+  ASSERT_EQ(text_input_client.insert_text_history().size(), 1U);
+  EXPECT_EQ(text_input_client.insert_text_history()[0],
+            base::UTF8ToUTF16(u8"\u00c1 "));
+
+  SetFocus(nullptr);
 }

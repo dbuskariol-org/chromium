@@ -101,6 +101,12 @@ class NativeInputMethodEngine : public InputMethodEngine {
     // the success of the connection.
     void OnConnected(bool bound);
 
+    // Called when a key press is processed by Mojo.
+    void OnKeyEventResponse(
+        base::Time start,
+        ui::IMEEngineHandlerInterface::KeyEventDoneCallback callback,
+        ime::mojom::KeypressResponseForRulebasedPtr response);
+
     std::unique_ptr<InputMethodEngineBase::Observer> base_observer_;
     mojo::Remote<ime::mojom::InputEngineManager> remote_manager_;
     mojo::Receiver<ime::mojom::InputChannel> receiver_from_engine_;
