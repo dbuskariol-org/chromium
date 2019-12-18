@@ -6079,3 +6079,4 @@ crbug.com/1034789 [ Mac10.13 ] http/tests/security/frameNavigation/xss-ALLOWED-p
 crbug.com/1034789 [ Mac10.13 ] virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Timeout ]
 crbug.com/1034789 [ Mac10.13 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
 crbug.com/1034839 css3/filters/effect-reference-image.html [ Pass Failure ]
+crbug.com/1035293 virtual/web-components-v0-disabled/fast/dom/StyleSheet/stylesheet-move-between-documents-crash.html [ Pass Crash ]
