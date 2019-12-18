@@ -25666,7 +25666,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3028" label="CreateObjectBlob"/>
   <int value="3029" label="QuotaRead"/>
   <int value="3030" label="DelegateFocus"/>
-  <int value="3031" label="DelegateFocusNotFirstInFlatTree"/>
+  <int value="3031" label="OBSOLETE_DelegateFocusNotFirstInFlatTree"/>
   <int value="3032" label="ThirdPartySharedWorker"/>
   <int value="3033" label="ThirdPartyBroadcastChannel"/>
   <int value="3034"
