@@ -6,6 +6,7 @@ background:media:imgur:2019,,mobile,"2019,health_check"
 background:news:nytimes,,mobile,"2016,javascript_heavy"
 background:search:google,,mobile,"2016,health_check"
 background:social:facebook,,mobile,2016
+background:social:facebook:2019,,mobile,2019
 background:tools:gmail,,mobile,"2016,health_check"
 browse:chrome:newtab,Story that loads new tab page and performs searches.,mobile,"2016,emerging_market"
 browse:chrome:omnibox,Story that peforms search by using omnibox search provider,mobile,"2016,emerging_market"

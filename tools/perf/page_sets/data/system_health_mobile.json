@@ -15,6 +15,9 @@
         "background:social:facebook": {
             "DEFAULT": "system_health_mobile_045.wprgo"
         },
+        "background:social:facebook:2019": {
+            "DEFAULT": "system_health_mobile_6a3429e9e4.wprgo"
+        },
         "background:tools:gmail": {
             "DEFAULT": "system_health_mobile_043.wprgo"
         },

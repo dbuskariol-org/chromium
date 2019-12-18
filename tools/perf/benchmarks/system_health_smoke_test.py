@@ -41,6 +41,7 @@ _DISABLED_TESTS = frozenset({
 
   # crbug.com/878390 - These stories are already covered by their 2018 or
   # 2019 versions and will later be removed.
+  'system_health.memory_mobile/background:social:facebook',
   'system_health.memory_mobile/background:media:imgur',
   'system_health.memory_mobile/browse:tech:discourse_infinite_scroll',
   'system_health.memory_mobile/browse:shopping:amazon',
