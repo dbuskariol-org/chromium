@@ -1351,18 +1351,10 @@ def mac_ios_builder(*, name, executable=luci.recipe(name = 'ios/try'), **kwargs)
 
 mac_ios_builder(
     name = 'ios-device',
-    tryjob = tryjob(
-        # https://crbug.com/739556; make this non-experimental ASAP.
-        experiment_percentage = 10,
-    ),
 )
 
 mac_ios_builder(
     name = 'ios-device-xcode-clang',
-    tryjob = tryjob(
-        # https://crbug.com/739556
-        experiment_percentage = 10,
-    ),
 )
 
 mac_ios_builder(
@@ -1406,10 +1398,6 @@ mac_ios_builder(
 
 mac_ios_builder(
     name = 'ios-simulator-xcode-clang',
-    tryjob = tryjob(
-        # https://crbug.com/739556
-        experiment_percentage = 10,
-    ),
 )
 
 mac_ios_builder(
