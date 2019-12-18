@@ -21,7 +21,7 @@
 #endif
 
 @interface JavaScriptConfirmationOverlayMediator ()
-@property(nonatomic, readonly) OverlayRequest* request;
+// The config from the request passed on initialization.
 @property(nonatomic, readonly)
     JavaScriptConfirmationOverlayRequestConfig* config;
 
@@ -32,11 +32,9 @@
 @implementation JavaScriptConfirmationOverlayMediator
 
 - (instancetype)initWithRequest:(OverlayRequest*)request {
-  if (self = [super init]) {
-    _request = request;
-    DCHECK(_request);
+  if (self = [super initWithRequest:request]) {
     // Verify that the request is configured for JavaScript confirmations.
-    DCHECK(_request->GetConfig<JavaScriptConfirmationOverlayRequestConfig>());
+    DCHECK(request->GetConfig<JavaScriptConfirmationOverlayRequestConfig>());
   }
   return self;
 }
@@ -58,7 +56,7 @@
 
 @end
 
-@implementation JavaScriptConfirmationOverlayMediator (Subclassing)
+@implementation JavaScriptConfirmationOverlayMediator (AlertConsumerSupport)
 
 - (NSString*)alertTitle {
   return GetJavaScriptDialogTitle(self.config->source(),
@@ -79,7 +77,7 @@
                            __typeof__(self) strongSelf = weakSelf;
                            [strongSelf setConfirmationResponse:YES];
                            [strongSelf.delegate
-                               stopDialogForMediator:strongSelf];
+                               stopOverlayForMediator:strongSelf];
                          }],
     [AlertAction actionWithTitle:l10n_util::GetNSString(IDS_CANCEL)
                            style:UIAlertActionStyleCancel
@@ -87,7 +85,7 @@
                            __typeof__(self) strongSelf = weakSelf;
                            [strongSelf setConfirmationResponse:NO];
                            [strongSelf.delegate
-                               stopDialogForMediator:strongSelf];
+                               stopOverlayForMediator:strongSelf];
                          }],
   ] mutableCopy];
   AlertAction* blockingAction =

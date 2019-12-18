@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_UI_OVERLAYS_COMMON_ALERTS_ALERT_OVERLAY_COORDINATOR_SUBCLASSING_H_
-#define IOS_CHROME_BROWSER_UI_OVERLAYS_COMMON_ALERTS_ALERT_OVERLAY_COORDINATOR_SUBCLASSING_H_
+#ifndef IOS_CHROME_BROWSER_UI_OVERLAYS_COMMON_ALERTS_ALERT_OVERLAY_COORDINATOR_ALERT_MEDIATOR_CREATION_H_
+#define IOS_CHROME_BROWSER_UI_OVERLAYS_COMMON_ALERTS_ALERT_OVERLAY_COORDINATOR_ALERT_MEDIATOR_CREATION_H_
 
 #import "ios/chrome/browser/ui/overlays/common/alerts/alert_overlay_coordinator.h"
 
@@ -12,7 +12,7 @@
 
 // Category that allows subclasses to update UI using the OverlayRequest
 // configuration.
-@interface AlertOverlayCoordinator (Subclassing)
+@interface AlertOverlayCoordinator (AlertMediatorCreation)
 
 // Subclasses must override this selector to create a mediator that will
 // configure the alert using the OverlayRequest's config.
@@ -20,4 +20,4 @@
 
 @end
 
-#endif  // IOS_CHROME_BROWSER_UI_OVERLAYS_COMMON_ALERTS_ALERT_OVERLAY_COORDINATOR_SUBCLASSING_H_
+#endif  // IOS_CHROME_BROWSER_UI_OVERLAYS_COMMON_ALERTS_ALERT_OVERLAY_COORDINATOR_ALERT_MEDIATOR_CREATION_H_
