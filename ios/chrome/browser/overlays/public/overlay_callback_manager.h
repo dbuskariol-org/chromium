@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "base/callback.h"
+#include "ios/chrome/browser/overlays/public/overlay_dispatch_callback_storage.h"
 #include "ios/chrome/browser/overlays/public/overlay_user_data.h"
 
 class OverlayResponse;
@@ -39,6 +40,24 @@ class OverlayCallbackManager {
   // executed once with the completion response when the overlay UI is finished
   // or the request is cancelled.
   virtual void AddCompletionCallback(OverlayCompletionCallback callback) = 0;
+
+  // Dispatches |response| to all callbacks that have been added for its
+  // info type.  Used to send user interaction information back to the overlay's
+  // requester for ongoing overlay UI.
+  virtual void DispatchResponse(std::unique_ptr<OverlayResponse> response) = 0;
+
+  // Adds |callback| to be executed for dispatched responses with InfoType.  The
+  // provided callbacks are not guaranteed to be called, as there is no
+  // guarantee that an InfoType response will be sent for the overlay.
+  template <class InfoType>
+  void AddDispatchCallback(OverlayDispatchCallback callback) {
+    DCHECK(!callback.is_null());
+    GetDispatchCallbackStorage()->AddDispatchCallback<InfoType>(callback);
+  }
+
+ protected:
+  // Returns the dispatch callback storage.
+  virtual OverlayDispatchCallbackStorage* GetDispatchCallbackStorage() = 0;
 };
 
 #endif  // IOS_CHROME_BROWSER_OVERLAYS_PUBLIC_OVERLAY_CALLBACK_MANAGER_H_

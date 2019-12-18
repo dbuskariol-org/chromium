@@ -35,3 +35,14 @@ void OverlayCallbackManagerImpl::AddCompletionCallback(
   DCHECK(!callback.is_null());
   completion_callbacks_.emplace_back(std::move(callback));
 }
+
+void OverlayCallbackManagerImpl::DispatchResponse(
+    std::unique_ptr<OverlayResponse> response) {
+  DCHECK(response);
+  dispatch_callback_storage_.DispatchResponse(response.get());
+}
+
+OverlayDispatchCallbackStorage*
+OverlayCallbackManagerImpl::GetDispatchCallbackStorage() {
+  return &dispatch_callback_storage_;
+}
