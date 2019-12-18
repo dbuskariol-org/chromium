@@ -27,6 +27,9 @@
         "browse:chrome:omnibox": {
             "DEFAULT": "system_health_mobile_056.wprgo"
         },
+        "browse:chrome:omnibox:2019": {
+            "DEFAULT": "system_health_mobile_8de13d6bda.wprgo"
+        },
         "browse:media:facebook_photos": {
             "DEFAULT": "system_health_mobile_040.wprgo"
         },
