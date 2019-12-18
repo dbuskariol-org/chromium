@@ -2,7 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/tabs/tab_group_id.h"
+#include "components/tab_groups/tab_group_id.h"
+
+namespace tab_groups {
 
 // static
 TabGroupId TabGroupId::GenerateNew() {
@@ -35,3 +37,5 @@ std::string TabGroupId::ToString() const {
 }
 
 TabGroupId::TabGroupId(base::Token token) : token_(token) {}
+
+}  // namespace tab_groups

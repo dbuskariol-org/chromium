@@ -1,17 +1,20 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2019 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_TABS_TAB_GROUP_VISUAL_DATA_H_
-#define CHROME_BROWSER_UI_TABS_TAB_GROUP_VISUAL_DATA_H_
+#ifndef COMPONENTS_TAB_GROUPS_TAB_GROUP_VISUAL_DATA_H_
+#define COMPONENTS_TAB_GROUPS_TAB_GROUP_VISUAL_DATA_H_
 
 #include <stddef.h>
 
+#include "base/component_export.h"
 #include "base/macros.h"
 #include "base/strings/string16.h"
 #include "third_party/skia/include/core/SkColor.h"
 
-class TabGroupVisualData {
+namespace tab_groups {
+
+class COMPONENT_EXPORT(TAB_GROUPS) TabGroupVisualData {
  public:
   // Construct a TabGroupVisualData with placeholder name and random color.
   TabGroupVisualData();
@@ -40,4 +43,6 @@ class TabGroupVisualData {
   SkColor color_;
 };
 
-#endif  // CHROME_BROWSER_UI_TABS_TAB_GROUP_VISUAL_DATA_H_
+}  // namespace tab_groups
+
+#endif  // COMPONENTS_TAB_GROUPS_TAB_GROUP_VISUAL_DATA_H_

@@ -2,12 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_TABS_TAB_GROUP_ID_H_
-#define CHROME_BROWSER_UI_TABS_TAB_GROUP_ID_H_
+#ifndef COMPONENTS_TAB_GROUPS_TAB_GROUP_ID_H_
+#define COMPONENTS_TAB_GROUPS_TAB_GROUP_ID_H_
 
+#include "base/component_export.h"
 #include "base/token.h"
 
-class TabGroupId {
+namespace tab_groups {
+
+class COMPONENT_EXPORT(TAB_GROUPS) TabGroupId {
  public:
   static TabGroupId GenerateNew();
 
@@ -33,4 +36,6 @@ class TabGroupId {
   base::Token token_;
 };
 
-#endif  // CHROME_BROWSER_UI_TABS_TAB_GROUP_ID_H_
+}  // namespace tab_groups
+
+#endif  // COMPONENTS_TAB_GROUPS_TAB_GROUP_ID_H_

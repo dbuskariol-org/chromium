@@ -906,7 +906,7 @@ IN_PROC_BROWSER_TEST_F(BrowserTestWithTabGroupsEnabled,
   TabStripModel* const model = browser()->tab_strip_model();
   ui_test_utils::NavigateToURL(browser(),
                                embedded_test_server()->GetURL("/empty.html"));
-  const TabGroupId group_id = model->AddToNewGroup({0});
+  const tab_groups::TabGroupId group_id = model->AddToNewGroup({0});
 
   // Open a new background tab.
   WebContents* const contents =
@@ -930,7 +930,7 @@ IN_PROC_BROWSER_TEST_F(BrowserTestWithTabGroupsEnabled,
   ui_test_utils::NavigateToURL(
       browser(), embedded_test_server()->GetURL(
                      "/frame_tree/anchor_to_same_site_location.html"));
-  const TabGroupId group_id = model->AddToNewGroup({0});
+  const tab_groups::TabGroupId group_id = model->AddToNewGroup({0});
 
   // Click a target=_blank link.
   WebContents* const contents =
