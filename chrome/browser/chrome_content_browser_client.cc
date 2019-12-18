@@ -482,6 +482,7 @@
 
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
 #include "chrome/browser/captive_portal/captive_portal_tab_helper.h"
+#include "chrome/browser/captive_portal/captive_portal_url_loader_throttle.h"
 #endif
 
 #if BUILDFLAG(ENABLE_NACL)
@@ -4247,6 +4248,11 @@ ChromeContentBrowserClient::CreateURLLoaderThrottles(
             base::Unretained(this)),
         wc_getter, frame_tree_node_id, profile->GetResourceContext()));
   }
+#endif
+
+#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
+  result.push_back(
+      std::make_unique<CaptivePortalURLLoaderThrottle>(wc_getter.Run()));
 #endif
 
   if (chrome_navigation_ui_data &&
