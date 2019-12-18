@@ -138,36 +138,55 @@ function maybeSetWebFont() {
   document.head.appendChild(e);
 }
 
-const supportedTextSizes = [14, 15, 16, 18, 20, 24, 28, 32, 40, 48];
-function updateSlider(position) {
-  document.documentElement.style.setProperty(
-      '--fontSizePercent', (position / 9 * 100) + '%');
-  for (let i = 0; i < supportedTextSizes.length; i++) {
-    const option =
-        document.querySelector('.tickmarks option[value="' + i + '"]');
-    if (!option) {
-      continue;
+// TODO(https://crbug.com/1027612): Consider making this a custom HTML element.
+class FontSizeSlider {
+  constructor(element, supportedFontSizes) {
+    this.element = element;
+    this.supportedFontSizes = supportedFontSizes;
+
+    this.element.addEventListener('change', (e) => {
+      document.body.style.fontSize =
+          this.supportedFontSizes[e.target.value] + 'px';
+      this.update(e.target.value);
+    });
+
+    this.element.addEventListener('input', (e) => {
+      this.update(e.target.value);
+    });
+
+    this.tickmarks = document.createElement('datalist');
+    this.tickmarks.setAttribute('class', 'tickmarks');
+    this.element.after(this.tickmarks);
+
+    for (let i = 0; i < this.supportedFontSizes.length; i++) {
+      const option = document.createElement('option');
+      option.setAttribute('value', i);
+      option.textContent = supportedFontSizes[i];
+      this.tickmarks.appendChild(option);
     }
 
-    const optionClasses = option.classList;
-    removeAll(optionClasses, ['before-thumb', 'after-thumb']);
-    if (i < position) {
-      optionClasses.add('before-thumb');
-    } else {
-      optionClasses.add('after-thumb');
+    this.update(this.element.value);
+  }
+
+  update(position) {
+    this.element.style.setProperty(
+        '--fontSizePercent',
+        (position / (this.supportedFontSizes.length - 1) * 100) + '%');
+    for (let option = this.tickmarks.firstChild; option != null;
+         option = option.nextSibling) {
+      const isBeforeThumb = option.value < position;
+      option.classList.toggle('before-thumb', isBeforeThumb);
+      option.classList.toggle('after-thumb', !isBeforeThumb);
     }
   }
 }
 
-function updateSliderFromElement(element) {
-  if (element) {
-    updateSlider(element.value);
-  }
-}
+const fontSizeSlider = new FontSizeSlider(
+    document.querySelector('#font-size-selection'),
+    [14, 15, 16, 18, 20, 24, 28, 32, 40, 48]);
 
 updateToolbarColor();
 maybeSetWebFont();
-updateSliderFromElement(document.querySelector('#font-size-selection'));
 
 // The zooming speed relative to pinching speed.
 const FONT_SCALE_MULTIPLIER = 0.5;
@@ -449,17 +468,6 @@ document.querySelector('#close-settings-button')
 document.querySelector('#theme-selection').addEventListener('change', (e) => {
   useTheme(e.target.value);
 });
-
-document.querySelector('#font-size-selection')
-    .addEventListener('change', (e) => {
-      document.body.style.fontSize = supportedTextSizes[e.target.value] + 'px';
-      updateSlider(e.target.value);
-    });
-
-document.querySelector('#font-size-selection')
-    .addEventListener('input', (e) => {
-      updateSlider(e.target.value);
-    });
 
 document.querySelector('#font-family-selection')
     .addEventListener('change', (e) => {
