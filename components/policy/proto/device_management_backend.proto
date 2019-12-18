@@ -1525,6 +1525,8 @@ message ChromeDesktopReportRequest {
 message ChromeOsUserReportRequest {
   // Browser related info.
   optional BrowserReport browser_report = 1;
+  // Android applications installed in primary profile.
+  repeated AndroidAppInfo android_app_infos = 2;
 }
 
 // A validation issue from validating a policy value that was contained in
