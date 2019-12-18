@@ -39,6 +39,7 @@
 #include "components/feed/buildflags.h"
 #include "components/performance_manager/performance_manager_tab_helper.h"
 #include "components/performance_manager/public/mojom/coordination_unit.mojom.h"
+#include "components/safe_browsing/buildflags.h"
 #include "components/translate/content/common/translate.mojom.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/render_frame_host.h"
@@ -64,6 +65,11 @@
 #include "chrome/browser/android/contextualsearch/unhandled_tap_web_contents_observer.h"
 #include "third_party/blink/public/mojom/unhandled_tap_notifier/unhandled_tap_notifier.mojom.h"
 #endif  // BUILDFLAG(ENABLE_UNHANDLED_TAP)
+
+#if BUILDFLAG(FULL_SAFE_BROWSING)
+#include "chrome/browser/ui/webui/reset_password/reset_password.mojom.h"
+#include "chrome/browser/ui/webui/reset_password/reset_password_ui.h"
+#endif  // BUILDFLAG(FULL_SAFE_BROWSING)
 
 #if defined(OS_ANDROID)
 #include "chrome/browser/android/contextualsearch/contextual_search_observer.h"
@@ -456,6 +462,11 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<FeedInternalsUI,
                                          feed_internals::mojom::PageHandler>(
       map);
+#endif
+
+#if BUILDFLAG(FULL_SAFE_BROWSING)
+  RegisterWebUIControllerInterfaceBinder<ResetPasswordUI,
+                                         ::mojom::ResetPasswordHandler>(map);
 #endif
 }
 

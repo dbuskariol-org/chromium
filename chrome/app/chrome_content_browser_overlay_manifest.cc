@@ -9,7 +9,6 @@
 #include "build/build_config.h"
 #include "chrome/browser/media/media_engagement_score_details.mojom.h"
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
-#include "chrome/browser/ui/webui/reset_password/reset_password.mojom.h"
 #include "chrome/common/available_offline_content.mojom.h"
 #include "chrome/common/cache_stats_recorder.mojom.h"
 #include "chrome/common/net_benchmarking.mojom.h"
@@ -85,6 +84,7 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
         .RequireCapability("util_win", "util_win")
         .RequireCapability("xr_device_service", "xr_device_provider")
         .RequireCapability("xr_device_service", "xr_device_test_hook")
+#if defined(OS_CHROMEOS) || !defined(OS_ANDROID)
         .ExposeInterfaceFilterCapability_Deprecated(
             "navigation:frame", "renderer",
             service_manager::Manifest::InterfaceList<
@@ -99,9 +99,10 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
                 // brokered through a dedicated interface, but they're here
                 // for for now.
 #if !defined(OS_ANDROID)
-                app_management::mojom::PageHandlerFactory,
+                app_management::mojom::PageHandlerFactory
 #endif
-                mojom::ResetPasswordHandler>())
+                >())
+#endif  // defined(OS_CHROMEOS) || !defined(OS_ANDROID)
         .Build()
   };
   return *manifest;
