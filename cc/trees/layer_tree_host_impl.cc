@@ -271,7 +271,6 @@ LayerTreeHostImpl::LayerTreeHostImpl(
       settings_(settings),
       is_synchronous_single_threaded_(!task_runner_provider->HasImplThread() &&
                                       !settings_.single_thread_proxy_scheduler),
-      resource_provider_(settings_.delegated_sync_points_required),
       cached_managed_memory_policy_(settings.memory_policy),
       // Must be initialized after is_synchronous_single_threaded_ and
       // task_runner_provider_.

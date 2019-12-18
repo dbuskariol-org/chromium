@@ -282,9 +282,7 @@ class RendererPerfTest : public testing::Test {
         gpu::kNullSurfaceHandle, gpu_memory_buffer_manager_.get(),
         image_factory, gpu_channel_manager_delegate, renderer_settings_);
     child_context_provider_->BindToCurrentThread();
-    constexpr bool sync_token_verification = false;
-    child_resource_provider_ =
-        std::make_unique<ClientResourceProvider>(sync_token_verification);
+    child_resource_provider_ = std::make_unique<ClientResourceProvider>();
 
     auto output_surface = CreateOutputSurface(gpu_service);
     // WaitForSwapDisplayClient depends on this.

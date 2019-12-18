@@ -483,7 +483,7 @@ class OverlayTest : public testing::Test {
 
     child_provider_ = TestContextProvider::Create();
     child_provider_->BindToCurrentThread();
-    child_resource_provider_ = std::make_unique<ClientResourceProvider>(true);
+    child_resource_provider_ = std::make_unique<ClientResourceProvider>();
 
     overlay_processor_ = std::make_unique<OverlayProcessorType>();
   }
@@ -2287,7 +2287,7 @@ class GLRendererWithOverlaysTest : public testing::Test {
 
     child_provider_ = TestContextProvider::Create();
     child_provider_->BindToCurrentThread();
-    child_resource_provider_ = std::make_unique<ClientResourceProvider>(true);
+    child_resource_provider_ = std::make_unique<ClientResourceProvider>();
   }
 
   ~GLRendererWithOverlaysTest() override {
