@@ -298,7 +298,7 @@ TEST_F(TextFragmentAnchorMetricsTest, InvalidFragmentDirective) {
       {"#foo:~:bar", kCounted},
       {"#:~:utext=foo", kCounted},
       {"#:~:text=foo", kUncounted},
-      {"#:~:text=foo&invalid", kCounted},
+      {"#:~:text=foo&invalid", kUncounted},
       {"#foo:~:text=foo", kUncounted}};
 
   for (auto test_case : test_cases) {

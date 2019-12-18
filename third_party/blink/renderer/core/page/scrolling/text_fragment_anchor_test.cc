@@ -1583,6 +1583,43 @@ TEST_F(TextFragmentAnchorTest, HighlightOnReload) {
   EXPECT_EQ(1u, GetDocument().Markers().Markers().size());
 }
 
+// Ensure that we can have text directives combined with non-text directives
+TEST_F(TextFragmentAnchorTest, NonTextDirectives) {
+  SimRequest request(
+      "https://example.com/test.html#:~:text=test&directive&text=more",
+      "text/html");
+  LoadURL("https://example.com/test.html#:~:text=test&directive&text=more");
+  request.Complete(R"HTML(
+    <!DOCTYPE html>
+    <style>
+      body {
+        height: 2200px;
+      }
+      #first {
+        position: absolute;
+        top: 1000px;
+      }
+      #second {
+        position: absolute;
+        top: 2000px;
+      }
+    </style>
+    <p id="first">This is a test page</p>
+    <p id="second">This is some more text</p>
+  )HTML");
+  Compositor().BeginFrame();
+
+  RunAsyncMatchingTasks();
+
+  Element& first = *GetDocument().getElementById("first");
+
+  EXPECT_TRUE(ViewportRect().Contains(BoundingRectInFrame(first)))
+      << "First <p> wasn't scrolled into view, viewport's scroll offset: "
+      << LayoutViewport()->GetScrollOffset().ToString();
+
+  EXPECT_EQ(2u, GetDocument().Markers().Markers().size());
+}
+
 }  // namespace
 
 }  // namespace blink
