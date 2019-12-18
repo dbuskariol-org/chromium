@@ -19,15 +19,14 @@ namespace device {
 
 class MockClient : public PowerMonitorBroadcastSource::Client {
  public:
-  MockClient(base::OnceClosure service_connected)
-      : service_connected_(std::move(service_connected)) {}
+  MockClient(base::Closure service_connected)
+      : service_connected_(service_connected) {}
   ~MockClient() override = default;
 
   // Implement device::mojom::PowerMonitorClient
   void PowerStateChange(bool on_battery_power) override {
     power_state_changes_++;
-    if (service_connected_)
-      std::move(service_connected_).Run();
+    service_connected_.Run();
   }
   void Suspend() override { suspends_++; }
   void Resume() override { resumes_++; }
@@ -41,7 +40,7 @@ class MockClient : public PowerMonitorBroadcastSource::Client {
   int power_state_changes_ = 0;  // Count of OnPowerStateChange notifications.
   int suspends_ = 0;             // Count of OnSuspend notifications.
   int resumes_ = 0;              // Count of OnResume notifications.
-  base::OnceClosure service_connected_;
+  base::Closure service_connected_;
 };
 
 class PowerMonitorMessageBroadcasterTest : public DeviceServiceTestBase {

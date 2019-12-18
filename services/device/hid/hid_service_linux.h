@@ -24,7 +24,8 @@ class HidServiceLinux : public HidService {
   ~HidServiceLinux() override;
 
   // HidService:
-  void Connect(const std::string& device_id, ConnectCallback callback) override;
+  void Connect(const std::string& device_id,
+               const ConnectCallback& callback) override;
   base::WeakPtr<HidService> GetWeakPtr() override;
 
  private:
@@ -39,7 +40,7 @@ class HidServiceLinux : public HidService {
   static void OnPathOpenComplete(std::unique_ptr<ConnectParams> params,
                                  base::ScopedFD fd);
   static void OnPathOpenError(const std::string& device_path,
-                              ConnectCallback callback,
+                              const ConnectCallback& callback,
                               const std::string& error_name,
                               const std::string& error_message);
 #else

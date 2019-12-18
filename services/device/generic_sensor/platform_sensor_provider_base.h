@@ -18,10 +18,11 @@ namespace device {
 class PlatformSensorProviderBase {
  public:
   using CreateSensorCallback =
-      base::OnceCallback<void(scoped_refptr<PlatformSensor>)>;
+      base::Callback<void(scoped_refptr<PlatformSensor>)>;
 
   // Creates new instance of PlatformSensor.
-  void CreateSensor(mojom::SensorType type, CreateSensorCallback callback);
+  void CreateSensor(mojom::SensorType type,
+                    const CreateSensorCallback& callback);
 
   // Gets previously created instance of PlatformSensor by sensor type |type|.
   scoped_refptr<PlatformSensor> GetSensor(mojom::SensorType type);
@@ -40,7 +41,7 @@ class PlatformSensorProviderBase {
   // Method that must be implemented by platform specific classes.
   virtual void CreateSensorInternal(mojom::SensorType type,
                                     SensorReadingSharedBuffer* reading_buffer,
-                                    CreateSensorCallback callback) = 0;
+                                    const CreateSensorCallback& callback) = 0;
 
   // Implementations might override this method to free resources when there
   // are no sensors left.

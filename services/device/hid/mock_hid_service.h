@@ -20,7 +20,8 @@ class MockHidService : public HidService {
   void FirstEnumerationComplete();
   const std::map<std::string, scoped_refptr<HidDeviceInfo>>& devices() const;
 
-  void Connect(const std::string& device_id, ConnectCallback callback) override;
+  void Connect(const std::string& device_id,
+               const ConnectCallback& callback) override;
 
  private:
   base::WeakPtr<HidService> GetWeakPtr() override;

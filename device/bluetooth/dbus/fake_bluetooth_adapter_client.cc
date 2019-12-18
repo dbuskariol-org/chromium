@@ -220,7 +220,7 @@ void FakeBluetoothAdapterClient::UnpauseDiscovery(
 void FakeBluetoothAdapterClient::RemoveDevice(
     const dbus::ObjectPath& object_path,
     const dbus::ObjectPath& device_path,
-    base::OnceClosure callback,
+    const base::Closure& callback,
     ErrorCallback error_callback) {
   if (object_path != dbus::ObjectPath(kAdapterPath)) {
     std::move(error_callback).Run(kNoResponseError, "");
@@ -229,7 +229,7 @@ void FakeBluetoothAdapterClient::RemoveDevice(
 
   VLOG(1) << "RemoveDevice: " << object_path.value() << " "
           << device_path.value();
-  std::move(callback).Run();
+  callback.Run();
 
   FakeBluetoothDeviceClient* device_client =
       static_cast<FakeBluetoothDeviceClient*>(
@@ -248,7 +248,7 @@ void FakeBluetoothAdapterClient::MakeStartDiscoveryFail() {
 void FakeBluetoothAdapterClient::SetDiscoveryFilter(
     const dbus::ObjectPath& object_path,
     const DiscoveryFilter& discovery_filter,
-    base::OnceClosure callback,
+    const base::Closure& callback,
     ErrorCallback error_callback) {
   if (object_path != dbus::ObjectPath(kAdapterPath)) {
     PostDelayedTask(
@@ -266,24 +266,24 @@ void FakeBluetoothAdapterClient::SetDiscoveryFilter(
 
   discovery_filter_.reset(new DiscoveryFilter());
   discovery_filter_->CopyFrom(discovery_filter);
-  PostDelayedTask(std::move(callback));
+  PostDelayedTask(callback);
 }
 
 void FakeBluetoothAdapterClient::CreateServiceRecord(
     const dbus::ObjectPath& object_path,
     const bluez::BluetoothServiceRecordBlueZ& record,
-    ServiceRecordCallback callback,
+    const ServiceRecordCallback& callback,
     ErrorCallback error_callback) {
   ++last_handle_;
   records_.insert(
       std::pair<uint32_t, BluetoothServiceRecordBlueZ>(last_handle_, record));
-  std::move(callback).Run(last_handle_);
+  callback.Run(last_handle_);
 }
 
 void FakeBluetoothAdapterClient::RemoveServiceRecord(
     const dbus::ObjectPath& object_path,
     uint32_t handle,
-    base::OnceClosure callback,
+    const base::Closure& callback,
     ErrorCallback error_callback) {
   auto it = records_.find(handle);
   if (it == records_.end()) {
@@ -293,7 +293,7 @@ void FakeBluetoothAdapterClient::RemoveServiceRecord(
     return;
   }
   records_.erase(it);
-  std::move(callback).Run();
+  callback.Run();
 }
 
 void FakeBluetoothAdapterClient::SetLongTermKeys(

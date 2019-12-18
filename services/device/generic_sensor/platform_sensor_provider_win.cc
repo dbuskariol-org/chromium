@@ -40,18 +40,17 @@ PlatformSensorProviderWin::GetComStaTaskRunnerForTesting() {
 void PlatformSensorProviderWin::CreateSensorInternal(
     mojom::SensorType type,
     SensorReadingSharedBuffer* reading_buffer,
-    CreateSensorCallback callback) {
+    const CreateSensorCallback& callback) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   if (sensor_manager_) {
-    OnInitSensorManager(type, reading_buffer, std::move(callback));
+    OnInitSensorManager(type, reading_buffer, callback);
   } else {
     com_sta_task_runner_->PostTaskAndReply(
         FROM_HERE,
-        base::BindOnce(&PlatformSensorProviderWin::InitSensorManager,
-                       base::Unretained(this)),
-        base::BindOnce(&PlatformSensorProviderWin::OnInitSensorManager,
-                       base::Unretained(this), type, reading_buffer,
-                       std::move(callback)));
+        base::Bind(&PlatformSensorProviderWin::InitSensorManager,
+                   base::Unretained(this)),
+        base::Bind(&PlatformSensorProviderWin::OnInitSensorManager,
+                   base::Unretained(this), type, reading_buffer, callback));
   }
 }
 
@@ -76,11 +75,11 @@ void PlatformSensorProviderWin::InitSensorManager() {
 void PlatformSensorProviderWin::OnInitSensorManager(
     mojom::SensorType type,
     SensorReadingSharedBuffer* reading_buffer,
-    CreateSensorCallback callback) {
+    const CreateSensorCallback& callback) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
   if (!sensor_manager_) {
-    std::move(callback).Run(nullptr);
+    callback.Run(nullptr);
     return;
   }
 
@@ -93,7 +92,7 @@ void PlatformSensorProviderWin::OnInitSensorManager(
       // |callback| will be run with a reference to this object.
       PlatformSensorFusion::Create(
           reading_buffer, this, std::move(linear_acceleration_fusion_algorithm),
-          std::move(callback));
+          callback);
       break;
     }
 
@@ -101,11 +100,10 @@ void PlatformSensorProviderWin::OnInitSensorManager(
     default: {
       base::PostTaskAndReplyWithResult(
           com_sta_task_runner_.get(), FROM_HERE,
-          base::BindOnce(&PlatformSensorProviderWin::CreateSensorReader,
-                         base::Unretained(this), type),
-          base::BindOnce(&PlatformSensorProviderWin::SensorReaderCreated,
-                         base::Unretained(this), type, reading_buffer,
-                         std::move(callback)));
+          base::Bind(&PlatformSensorProviderWin::CreateSensorReader,
+                     base::Unretained(this), type),
+          base::Bind(&PlatformSensorProviderWin::SensorReaderCreated,
+                     base::Unretained(this), type, reading_buffer, callback));
       break;
     }
   }
@@ -114,7 +112,7 @@ void PlatformSensorProviderWin::OnInitSensorManager(
 void PlatformSensorProviderWin::SensorReaderCreated(
     mojom::SensorType type,
     SensorReadingSharedBuffer* reading_buffer,
-    CreateSensorCallback callback,
+    const CreateSensorCallback& callback,
     std::unique_ptr<PlatformSensorReaderWinBase> sensor_reader) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   if (!sensor_reader) {
@@ -131,7 +129,7 @@ void PlatformSensorProviderWin::SensorReaderCreated(
         return;
       }
       default:
-        std::move(callback).Run(nullptr);
+        callback.Run(nullptr);
         return;
     }
   }
@@ -139,7 +137,7 @@ void PlatformSensorProviderWin::SensorReaderCreated(
   scoped_refptr<PlatformSensor> sensor =
       new PlatformSensorWin(type, reading_buffer, this, com_sta_task_runner_,
                             std::move(sensor_reader));
-  std::move(callback).Run(sensor);
+  callback.Run(sensor);
 }
 
 std::unique_ptr<PlatformSensorReaderWinBase>

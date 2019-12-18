@@ -17,7 +17,7 @@ class PlatformSensorProviderMac : public PlatformSensorProvider {
  protected:
   void CreateSensorInternal(mojom::SensorType type,
                             SensorReadingSharedBuffer* reading_buffer,
-                            CreateSensorCallback callback) override;
+                            const CreateSensorCallback& callback) override;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(PlatformSensorProviderMac);

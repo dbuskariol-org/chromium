@@ -26,14 +26,15 @@ class HidServiceMac : public HidService {
   HidServiceMac();
   ~HidServiceMac() override;
 
-  void Connect(const std::string& device_id, ConnectCallback connect) override;
+  void Connect(const std::string& device_id,
+               const ConnectCallback& connect) override;
   base::WeakPtr<HidService> GetWeakPtr() override;
 
  private:
   static base::ScopedCFTypeRef<IOHIDDeviceRef> OpenOnBlockingThread(
       scoped_refptr<HidDeviceInfo> device_info);
   void DeviceOpened(scoped_refptr<HidDeviceInfo> device_info,
-                    ConnectCallback callback,
+                    const ConnectCallback& callback,
                     base::ScopedCFTypeRef<IOHIDDeviceRef> hid_device);
 
   // IOService matching callbacks.

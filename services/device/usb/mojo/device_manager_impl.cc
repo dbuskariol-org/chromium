@@ -50,16 +50,17 @@ void DeviceManagerImpl::AddReceiver(
 void DeviceManagerImpl::EnumerateDevicesAndSetClient(
     mojo::PendingAssociatedRemote<mojom::UsbDeviceManagerClient> client,
     EnumerateDevicesAndSetClientCallback callback) {
-  usb_service_->GetDevices(base::BindOnce(
+  usb_service_->GetDevices(base::Bind(
       &DeviceManagerImpl::OnGetDevices, weak_factory_.GetWeakPtr(),
-      /*options=*/nullptr, std::move(client), std::move(callback)));
+      /*options=*/nullptr, base::Passed(&client), base::Passed(&callback)));
 }
 
 void DeviceManagerImpl::GetDevices(mojom::UsbEnumerationOptionsPtr options,
                                    GetDevicesCallback callback) {
-  usb_service_->GetDevices(base::BindOnce(
-      &DeviceManagerImpl::OnGetDevices, weak_factory_.GetWeakPtr(),
-      std::move(options), mojo::NullAssociatedRemote(), std::move(callback)));
+  usb_service_->GetDevices(
+      base::Bind(&DeviceManagerImpl::OnGetDevices, weak_factory_.GetWeakPtr(),
+                 base::Passed(&options), mojo::NullAssociatedRemote(),
+                 base::Passed(&callback)));
 }
 
 void DeviceManagerImpl::GetDevice(

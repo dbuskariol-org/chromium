@@ -32,10 +32,10 @@ void MockHidService::FirstEnumerationComplete() {
 }
 
 void MockHidService::Connect(const std::string& device_id,
-                             ConnectCallback callback) {
+                             const ConnectCallback& callback) {
   const auto& map_entry = devices().find(device_id);
   if (map_entry == devices().end()) {
-    std::move(callback).Run(nullptr);
+    callback.Run(nullptr);
     return;
   }
 
@@ -48,7 +48,7 @@ void MockHidService::Connect(const std::string& device_id,
       base::MakeRefCounted<base::RefCountedBytes>(data, sizeof(data) - 1);
   connection->MockInputReport(std::move(buffer));
 
-  std::move(callback).Run(connection);
+  callback.Run(connection);
 }
 
 const std::map<std::string, scoped_refptr<HidDeviceInfo>>&
