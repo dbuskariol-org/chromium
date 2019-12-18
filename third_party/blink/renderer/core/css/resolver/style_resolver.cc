@@ -981,9 +981,18 @@ bool StyleResolver::PseudoStyleForElementInternal(
     // but that would use a slow universal element selector. So instead we apply
     // the styles here as an optimization.
     if (pseudo_style_request.pseudo_id == kPseudoIdMarker) {
+      // Set 'unicode-bidi: isolate'
       state.Style()->SetUnicodeBidi(UnicodeBidi::kIsolate);
-      state.Style()->SetFontVariantNumericSpacing(
-          FontVariantNumeric::kTabularNums);
+
+      // Set 'font-variant-numeric: tabular-nums'
+      FontVariantNumeric variant_numeric;
+      variant_numeric.SetNumericSpacing(FontVariantNumeric::kTabularNums);
+      state.GetFontBuilder().SetVariantNumeric(variant_numeric);
+      UpdateFont(state);
+
+      // Don't bother matching rules if there is no style for ::marker
+      if (!state.ParentStyle()->HasPseudoElementStyle(kPseudoIdMarker))
+        return true;
     }
 
     MatchUARules(collector);
