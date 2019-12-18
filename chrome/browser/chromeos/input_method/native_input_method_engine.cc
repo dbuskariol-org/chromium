@@ -118,6 +118,9 @@ void NativeInputMethodEngine::ImeObserver::OnKeyEvent(
 
 void NativeInputMethodEngine::ImeObserver::OnReset(
     const std::string& engine_id) {
+  if (ShouldEngineUseMojo(engine_id)) {
+    remote_to_engine_->ResetForRulebased();
+  }
   base_observer_->OnReset(engine_id);
 }
 

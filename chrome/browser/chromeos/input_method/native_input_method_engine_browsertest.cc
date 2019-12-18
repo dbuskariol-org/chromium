@@ -128,12 +128,14 @@ class NativeInputMethodEngineTest : public InProcessBrowserTest,
   base::test::ScopedFeatureList feature_list_;
 };
 
+// ID is specified in google_xkb_manifest.json.
+constexpr char kEngineIdVietnameseTelex[] = "vkd_vi_telex";
+
 }  // namespace
 
 IN_PROC_BROWSER_TEST_F(NativeInputMethodEngineTest,
                        VietnameseTelex_SimpleTransform) {
-  // ID is specified in google_xkb_manifest.json.
-  engine_.Enable("vkd_vi_telex");
+  engine_.Enable(kEngineIdVietnameseTelex);
   engine_.FlushForTesting();
   EXPECT_TRUE(engine_.IsConnectedForTesting());
 
@@ -154,6 +156,30 @@ IN_PROC_BROWSER_TEST_F(NativeInputMethodEngineTest,
   ASSERT_EQ(text_input_client.insert_text_history().size(), 1U);
   EXPECT_EQ(text_input_client.insert_text_history()[0],
             base::UTF8ToUTF16(u8"\u00c1 "));
+
+  SetFocus(nullptr);
+}
+
+IN_PROC_BROWSER_TEST_F(NativeInputMethodEngineTest, VietnameseTelex_Reset) {
+  engine_.Enable(kEngineIdVietnameseTelex);
+  engine_.FlushForTesting();
+  EXPECT_TRUE(engine_.IsConnectedForTesting());
+
+  // Create a fake text field.
+  ui::DummyTextInputClient text_input_client(ui::TEXT_INPUT_TYPE_TEXT);
+  SetFocus(&text_input_client);
+
+  DispatchKeyPress(ui::VKEY_A);
+  engine_.Reset();
+  DispatchKeyPress(ui::VKEY_S);
+
+  // Expect to commit 's'.
+  ASSERT_EQ(text_input_client.composition_history().size(), 1U);
+  EXPECT_EQ(text_input_client.composition_history()[0].text,
+            base::ASCIIToUTF16("a"));
+  ASSERT_EQ(text_input_client.insert_text_history().size(), 1U);
+  EXPECT_EQ(text_input_client.insert_text_history()[0],
+            base::ASCIIToUTF16("s"));
 
   SetFocus(nullptr);
 }
