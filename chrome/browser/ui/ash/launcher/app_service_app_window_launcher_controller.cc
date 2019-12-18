@@ -4,6 +4,8 @@
 
 #include "chrome/browser/ui/ash/launcher/app_service_app_window_launcher_controller.h"
 
+#include <memory>
+
 #include "ash/public/cpp/app_list/internal_app_id_constants.h"
 #include "ash/public/cpp/shelf_model.h"
 #include "ash/public/cpp/window_properties.h"
@@ -19,6 +21,7 @@
 #include "chrome/browser/ui/ash/launcher/app_service_app_window_launcher_item_controller.h"
 #include "chrome/browser/ui/ash/launcher/app_window_base.h"
 #include "chrome/browser/ui/ash/launcher/app_window_launcher_item_controller.h"
+#include "chrome/browser/ui/ash/launcher/arc_app_window.h"
 #include "chrome/browser/ui/ash/launcher/chrome_launcher_controller.h"
 #include "chrome/services/app_service/public/cpp/instance.h"
 #include "chrome/services/app_service/public/mojom/types.mojom.h"
@@ -279,6 +282,12 @@ void AppServiceAppWindowLauncherController::OnInstanceRegistryWillBeDestroyed(
   Observe(nullptr);
 }
 
+int AppServiceAppWindowLauncherController::GetActiveTaskId() const {
+  if (arc_tracker_)
+    return arc_tracker_->active_task_id();
+  return arc::kNoTaskId;
+}
+
 void AppServiceAppWindowLauncherController::UnregisterWindow(
     aura::Window* window) {
   auto app_window_it = aura_window_to_app_window_.find(window);
@@ -293,12 +302,30 @@ void AppServiceAppWindowLauncherController::AddWindowToShelf(
   if (base::Contains(aura_window_to_app_window_, window))
     return;
 
-  auto app_window_ptr = std::make_unique<AppWindowBase>(
-      shelf_id, views::Widget::GetWidgetForNativeWindow(window));
-  AppWindowBase* app_window = app_window_ptr.get();
-  aura_window_to_app_window_[window] = std::move(app_window_ptr);
-
+  AppWindowBase* app_window;
+  if (arc::GetWindowTaskId(window) != arc::kNoTaskId) {
+    std::unique_ptr<ArcAppWindow> app_window_ptr =
+        std::make_unique<ArcAppWindow>(
+            arc::GetWindowTaskId(window),
+            arc::ArcAppShelfId::FromString(shelf_id.app_id),
+            views::Widget::GetWidgetForNativeWindow(window), this,
+            owner()->profile());
+    app_window = app_window_ptr.get();
+    aura_window_to_app_window_[window] = std::move(app_window_ptr);
+  } else {
+    auto app_window_ptr = std::make_unique<AppWindowBase>(
+        shelf_id, views::Widget::GetWidgetForNativeWindow(window));
+    app_window = app_window_ptr.get();
+    aura_window_to_app_window_[window] = std::move(app_window_ptr);
+  }
   AddAppWindowToShelf(app_window);
+}
+
+AppWindowBase* AppServiceAppWindowLauncherController::GetAppWindow(
+    aura::Window* window) {
+  if (!base::Contains(aura_window_to_app_window_, window))
+    return nullptr;
+  return aura_window_to_app_window_[window].get();
 }
 
 void AppServiceAppWindowLauncherController::SetWindowActivated(

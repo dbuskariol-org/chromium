@@ -382,6 +382,10 @@ void ArcAppWindowLauncherController::OnTaskSetActive(int32_t task_id) {
   }
 }
 
+int ArcAppWindowLauncherController::GetActiveTaskId() const {
+  return active_task_id_;
+}
+
 AppWindowLauncherItemController*
 ArcAppWindowLauncherController::ControllerForWindow(aura::Window* window) {
   if (!window)

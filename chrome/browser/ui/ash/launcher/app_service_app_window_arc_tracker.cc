@@ -18,6 +18,7 @@
 #include "chrome/browser/ui/app_list/arc/arc_app_utils.h"
 #include "chrome/browser/ui/ash/launcher/app_service_app_window_launcher_controller.h"
 #include "chrome/browser/ui/ash/launcher/app_service_app_window_launcher_item_controller.h"
+#include "chrome/browser/ui/ash/launcher/app_window_base.h"
 #include "chrome/browser/ui/ash/launcher/app_window_launcher_item_controller.h"
 #include "chrome/browser/ui/ash/launcher/chrome_launcher_controller.h"
 #include "chrome/browser/ui/ash/multi_user/multi_user_window_manager_helper.h"
@@ -191,8 +192,10 @@ void AppServiceAppWindowArcTracker::OnTaskDescriptionUpdated(
   ArcAppWindowInfo* const info = it->second.get();
   DCHECK(info);
   info->SetDescription(label, icon_png_data);
-
-  // TODO(crbug.com/1011235): Set title and image
+  AppWindowBase* app_window =
+      app_service_controller_->GetAppWindow(it->second->window());
+  if (app_window)
+    app_window->SetDescription(label, icon_png_data);
 }
 
 void AppServiceAppWindowArcTracker::OnTaskDestroyed(int task_id) {
@@ -299,6 +302,10 @@ void AppServiceAppWindowArcTracker::AttachControllerToWindow(
   const ash::ShelfID shelf_id = info->shelf_id();
   AttachControllerToTask(task_id);
   app_service_controller_->AddWindowToShelf(window, shelf_id);
+  AppWindowBase* app_window = app_service_controller_->GetAppWindow(window);
+  if (app_window)
+    app_window->SetDescription(info->title(), info->icon_data_png());
+
   window->SetProperty(ash::kShelfIDKey, shelf_id.Serialize());
   window->SetProperty(ash::kArcPackageNameKey,
                       new std::string(info->package_name()));
