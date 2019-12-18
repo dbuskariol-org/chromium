@@ -26,6 +26,8 @@
 #include "chrome/browser/ui/webui/interventions_internals/interventions_internals.mojom.h"
 #include "chrome/browser/ui/webui/interventions_internals/interventions_internals_ui.h"
 #include "chrome/browser/ui/webui/media/media_engagement_ui.h"
+#include "chrome/browser/ui/webui/omnibox/omnibox.mojom.h"
+#include "chrome/browser/ui/webui/omnibox/omnibox_ui.h"
 #include "chrome/browser/ui/webui/usb_internals/usb_internals.mojom.h"
 #include "chrome/browser/ui/webui/usb_internals/usb_internals_ui.h"
 #include "chrome/common/prerender.mojom.h"
@@ -401,6 +403,9 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<
       MediaEngagementUI, media::mojom::MediaEngagementScoreDetailsProvider>(
       map);
+
+  RegisterWebUIControllerInterfaceBinder<OmniboxUI,
+                                         ::mojom::OmniboxPageHandler>(map);
 
   RegisterWebUIControllerInterfaceBinder<
       SiteEngagementUI, ::mojom::SiteEngagementDetailsProvider>(map);

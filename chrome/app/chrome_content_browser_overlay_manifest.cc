@@ -9,7 +9,6 @@
 #include "build/build_config.h"
 #include "chrome/browser/media/media_engagement_score_details.mojom.h"
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
-#include "chrome/browser/ui/webui/omnibox/omnibox.mojom.h"
 #include "chrome/browser/ui/webui/reset_password/reset_password.mojom.h"
 #include "chrome/common/available_offline_content.mojom.h"
 #include "chrome/common/cache_stats_recorder.mojom.h"
@@ -102,7 +101,7 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
 #if !defined(OS_ANDROID)
                 app_management::mojom::PageHandlerFactory,
 #endif
-                mojom::OmniboxPageHandler, mojom::ResetPasswordHandler>())
+                mojom::ResetPasswordHandler>())
         .Build()
   };
   return *manifest;
