@@ -96,6 +96,13 @@ def fyi_builder(
       **kwargs
   )
 
+# This is launching & collecting entirely isolated tests.
+# OS shouldn't matter.
+fyi_builder(
+    name = 'mac-osxbeta-rel',
+    goma_backend = goma.backend.RBE_PROD,
+)
+
 
 def fyi_windows_builder(*, name, os=os.WINDOWS_DEFAULT, **kwargs):
   return fyi_builder(
@@ -206,6 +213,31 @@ mac_builder(
     name = 'Mac Builder',
 )
 
+# The build runs on 10.13, but triggers tests on 10.10 bots.
+mac_builder(
+    name = 'Mac10.10 Tests',
+)
+
+# The build runs on 10.13, but triggers tests on 10.11 bots.
+mac_builder(
+    name = 'Mac10.11 Tests',
+)
+
+mac_builder(
+    name = 'Mac10.12 Tests',
+    os = os.MAC_10_12,
+)
+
+mac_builder(
+    name = 'Mac10.13 Tests',
+    os = os.MAC_10_13,
+)
+
+mac_builder(
+    name = 'WebKit Mac10.13 (retina)',
+    os = os.MAC_10_13,
+)
+
 
 def mac_ios_builder(*, name, **kwargs):
   return mac_builder(
@@ -219,51 +251,6 @@ def mac_ios_builder(*, name, **kwargs):
 
 mac_ios_builder(
     name = 'ios-simulator',
-)
-
-
-# Thin testers are triggered builders which simply trigger swarmed
-# tests and collect their results. The OS they run on doesn't matter,
-# and they don't do anything computationally intensive, so use 2-core
-# Linux hosts.
-def thin_tester(*, name, mastername, **kwargs):
-  return builder(
-      name = name,
-      mastername = mastername,
-      builderless = True,
-      cores = 2,
-      os = os.LINUX_DEFAULT,
-      **kwargs
-  )
-
-thin_tester(
-    name = 'Mac10.10 Tests',
-    mastername = 'chromium.mac',
-)
-
-thin_tester(
-    name = 'Mac10.11 Tests',
-    mastername = 'chromium.mac',
-)
-
-thin_tester(
-    name = 'Mac10.12 Tests',
-    mastername = 'chromium.mac',
-)
-
-thin_tester(
-    name = 'Mac10.13 Tests',
-    mastername = 'chromium.mac',
-)
-
-thin_tester(
-    name = 'WebKit Mac10.13 (retina)',
-    mastername = 'chromium.mac',
-)
-
-thin_tester(
-    name = 'mac-osxbeta-rel',
-    mastername = 'chromium.fyi',
 )
 
 
