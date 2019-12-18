@@ -14,7 +14,6 @@ source_set("overlays") {
     "public/overlay_presenter_observer.h",
     "public/overlay_presenter_observer_bridge.h",
     "public/overlay_request.h",
-    "public/overlay_request_callbacks.h",
     "public/overlay_request_cancel_handler.h",
     "public/overlay_request_queue.h",
     "public/overlay_response.h",

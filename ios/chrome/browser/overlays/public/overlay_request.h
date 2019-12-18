@@ -8,9 +8,7 @@
 #include <memory>
 
 #include "base/supports_user_data.h"
-#include "ios/chrome/browser/overlays/public/overlay_request_callbacks.h"
 
-class OverlayResponse;
 class OverlayCallbackManager;
 
 // Model object used to track overlays requested for OverlayManager.
@@ -45,12 +43,6 @@ class OverlayRequest {
   // Returns the request's callback controller, which can be used to communicate
   // user interaction information back to the reqeuster.
   virtual OverlayCallbackManager* GetCallbackManager() = 0;
-
-  // DEPRECATED: Responses and callbacks should be set using the callback
-  // manager.
-  virtual void set_response(std::unique_ptr<OverlayResponse> response) = 0;
-  virtual OverlayResponse* response() const = 0;
-  virtual void set_callback(OverlayCompletionCallback callback) = 0;
 
  protected:
   OverlayRequest() = default;

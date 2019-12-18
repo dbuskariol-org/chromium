@@ -21,19 +21,6 @@ OverlayCallbackManager* OverlayRequestImpl::GetCallbackManager() {
   return &callback_manager_;
 }
 
-void OverlayRequestImpl::set_response(
-    std::unique_ptr<OverlayResponse> response) {
-  callback_manager_.SetCompletionResponse(std::move(response));
-}
-
-OverlayResponse* OverlayRequestImpl::response() const {
-  return callback_manager_.GetCompletionResponse();
-}
-
-void OverlayRequestImpl::set_callback(OverlayCompletionCallback callback) {
-  callback_manager_.AddCompletionCallback(std::move(callback));
-}
-
 base::SupportsUserData* OverlayRequestImpl::data() {
   return this;
 }

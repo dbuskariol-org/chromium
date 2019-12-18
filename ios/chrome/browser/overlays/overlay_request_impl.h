@@ -19,9 +19,6 @@ class OverlayRequestImpl : public OverlayRequest,
 
   // OverlayRequest:
   OverlayCallbackManager* GetCallbackManager() override;
-  void set_response(std::unique_ptr<OverlayResponse> response) override;
-  OverlayResponse* response() const override;
-  void set_callback(OverlayCompletionCallback callback) override;
   base::SupportsUserData* data() override;
 
  private:

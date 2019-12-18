@@ -7,8 +7,17 @@
 
 #include <memory>
 
-#include "ios/chrome/browser/overlays/public/overlay_request_callbacks.h"
+#include "base/callback.h"
 #include "ios/chrome/browser/overlays/public/overlay_user_data.h"
+
+class OverlayResponse;
+
+// Completion callback for OverlayRequests.  If an overlay requires a completion
+// block to be executed after its UI is dismissed, OverlayPresenter clients can
+// provide a callback that uses the OverlayResponse provided to the request.
+// |response| may be null if no response has been provided.
+typedef base::OnceCallback<void(OverlayResponse* response)>
+    OverlayCompletionCallback;
 
 // Helper object owned by an OverlayRequest that is used to communicate overlay
 // UI interaction information back to the overlay's requester.  Supports

@@ -6,6 +6,7 @@
 
 #include "base/strings/sys_string_conversions.h"
 #include "components/strings/grit/components_strings.h"
+#include "ios/chrome/browser/overlays/public/overlay_callback_manager.h"
 #import "ios/chrome/browser/overlays/public/overlay_request.h"
 #import "ios/chrome/browser/overlays/public/overlay_response.h"
 #import "ios/chrome/browser/overlays/public/web_content_area/java_script_prompt_overlay.h"
@@ -53,7 +54,7 @@
 #pragma mark - Response helpers
 
 - (void)setPromptResponse:(NSString*)textInput {
-  self.request->set_response(
+  self.request->GetCallbackManager()->SetCompletionResponse(
       OverlayResponse::CreateWithInfo<JavaScriptPromptOverlayResponseInfo>(
           base::SysNSStringToUTF8(textInput)));
 }

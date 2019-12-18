@@ -5,6 +5,7 @@
 #import "ios/chrome/browser/ui/overlays/web_content_area/java_script_dialogs/java_script_confirmation_overlay_mediator.h"
 
 #include "components/strings/grit/components_strings.h"
+#include "ios/chrome/browser/overlays/public/overlay_callback_manager.h"
 #import "ios/chrome/browser/overlays/public/overlay_request.h"
 #import "ios/chrome/browser/overlays/public/overlay_response.h"
 #import "ios/chrome/browser/overlays/public/web_content_area/java_script_confirmation_overlay.h"
@@ -50,7 +51,7 @@
 
 // Sets the OverlayResponse using the user's selection from the confirmation UI.
 - (void)setConfirmationResponse:(BOOL)dialogConfirmed {
-  self.request->set_response(
+  self.request->GetCallbackManager()->SetCompletionResponse(
       OverlayResponse::CreateWithInfo<
           JavaScriptConfirmationOverlayResponseInfo>(dialogConfirmed));
 }

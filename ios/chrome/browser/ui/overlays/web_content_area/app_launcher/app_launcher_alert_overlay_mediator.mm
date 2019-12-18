@@ -6,6 +6,7 @@
 
 #include "base/logging.h"
 #include "components/strings/grit/components_strings.h"
+#include "ios/chrome/browser/overlays/public/overlay_callback_manager.h"
 #include "ios/chrome/browser/overlays/public/overlay_request.h"
 #include "ios/chrome/browser/overlays/public/overlay_response.h"
 #include "ios/chrome/browser/overlays/public/web_content_area/app_launcher_alert_overlay.h"
@@ -48,7 +49,7 @@
 #pragma mark - Response helpers
 
 - (void)updateResponseAllowingAppLaunch:(BOOL)allowAppLaunch {
-  self.request->set_response(
+  self.request->GetCallbackManager()->SetCompletionResponse(
       OverlayResponse::CreateWithInfo<AppLauncherAlertOverlayResponseInfo>(
           allowAppLaunch));
 }

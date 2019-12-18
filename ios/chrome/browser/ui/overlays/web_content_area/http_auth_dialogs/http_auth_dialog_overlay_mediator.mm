@@ -7,6 +7,7 @@
 #include "base/logging.h"
 #import "base/strings/sys_string_conversions.h"
 #include "components/strings/grit/components_strings.h"
+#include "ios/chrome/browser/overlays/public/overlay_callback_manager.h"
 #include "ios/chrome/browser/overlays/public/overlay_request.h"
 #include "ios/chrome/browser/overlays/public/overlay_response.h"
 #include "ios/chrome/browser/overlays/public/web_content_area/http_auth_overlay.h"
@@ -62,7 +63,8 @@
     response = OverlayResponse::CreateWithInfo<HTTPAuthOverlayResponseInfo>(
         user, password);
   }
-  self.request->set_response(std::move(response));
+  self.request->GetCallbackManager()->SetCompletionResponse(
+      std::move(response));
 }
 
 @end
