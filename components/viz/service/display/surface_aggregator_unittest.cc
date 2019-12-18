@@ -5965,5 +5965,136 @@ TEST_F(SurfaceAggregatorValidSurfaceTest, RenderPassDoesNotFillSurface) {
   }
 }
 
+// Tests that damage rects are aggregated correctly when surfaces change.
+TEST_F(SurfaceAggregatorValidSurfaceTest,
+       AggregateDamageRectWithBackdropFilter) {
+  // Add a callback for when the surface is damaged.
+  MockAggregatedDamageCallback aggregated_damage_callback;
+  root_sink_->SetAggregatedDamageCallbackForTesting(
+      aggregated_damage_callback.GetCallback());
+
+  std::vector<Quad> solid_color_quad = {
+      Quad::SolidColorQuad(SK_ColorGREEN, gfx::Rect(30, 30))};
+
+  std::vector<Quad> render_pass_draw_quads = {
+      Quad::RenderPassQuad(1, gfx::Transform()),
+      Quad::RenderPassQuad(2, gfx::Transform()),
+      Quad::RenderPassQuad(3, gfx::Transform()),
+      Quad::RenderPassQuad(4, gfx::Transform())};
+
+  std::vector<Pass> root_passes = {
+      Pass(solid_color_quad, 1, gfx::Size(30, 30)),
+      Pass(solid_color_quad, 2, gfx::Size(30, 30)),
+      Pass(solid_color_quad, 3, gfx::Size(30, 30)),
+      Pass(solid_color_quad, 4, gfx::Size(30, 30)),
+      Pass(render_pass_draw_quads, 5, gfx::Size(100, 100))};
+
+  CompositorFrame root_frame = MakeEmptyCompositorFrame();
+  AddPasses(&root_frame.render_pass_list, root_passes,
+            &root_frame.metadata.referenced_surfaces);
+
+  root_frame.render_pass_list[4]
+      ->shared_quad_state_list.ElementAt(0)
+      ->quad_to_target_transform.Translate(70, 0);
+  root_frame.render_pass_list[4]
+      ->shared_quad_state_list.ElementAt(1)
+      ->quad_to_target_transform.Translate(30, 30);
+  root_frame.render_pass_list[4]
+      ->shared_quad_state_list.ElementAt(2)
+      ->quad_to_target_transform.Translate(10, 50);
+  root_frame.render_pass_list[4]
+      ->shared_quad_state_list.ElementAt(3)
+      ->quad_to_target_transform.Translate(70, 70);
+
+  // Add backdrop blur filter to all render passes.
+  root_frame.render_pass_list[0]->backdrop_filters.Append(
+      cc::FilterOperation::CreateBlurFilter(5));
+  root_frame.render_pass_list[1]->backdrop_filters.Append(
+      cc::FilterOperation::CreateBlurFilter(5));
+  root_frame.render_pass_list[2]->backdrop_filters.Append(
+      cc::FilterOperation::CreateBlurFilter(5));
+  root_frame.render_pass_list[3]->backdrop_filters.Append(
+      cc::FilterOperation::CreateBlurFilter(5));
+
+  root_frame.render_pass_list[4]->damage_rect = gfx::Rect(0, 85, 100, 15);
+
+  root_sink_->SubmitCompositorFrame(root_local_surface_id_,
+                                    std::move(root_frame));
+
+  // Damage rect for first aggregation should contain entire root surface.
+  SurfaceId root_surface_id(root_sink_->frame_sink_id(),
+                            root_local_surface_id_);
+  EXPECT_CALL(
+      aggregated_damage_callback,
+      OnAggregatedDamage(root_local_surface_id_, SurfaceSize(),
+                         gfx::Rect(0, 0, 100, 100), next_display_time()));
+  CompositorFrame aggregated_frame = AggregateFrame(root_surface_id);
+  testing::Mock::VerifyAndClearExpectations(&aggregated_damage_callback);
+  const auto& aggregated_pass_list = aggregated_frame.render_pass_list;
+  EXPECT_EQ(gfx::Rect(SurfaceSize()), aggregated_pass_list[4]->damage_rect);
+
+  //   _____________________
+  //  |               |     |
+  //  |               |     |
+  //  |       ____    |_____|
+  //  |      |    |         |
+  //  |   ___|    |         |
+  //  |  |   ||___|         |
+  //  |  |    |        _____|
+  //  |  |____|       |     |
+  //  |               |     |
+  //  |_______________|_____|
+  //
+  root_frame = MakeEmptyCompositorFrame();
+  AddPasses(&root_frame.render_pass_list, root_passes,
+            &root_frame.metadata.referenced_surfaces);
+
+  root_frame.render_pass_list[4]
+      ->shared_quad_state_list.ElementAt(0)
+      ->quad_to_target_transform.Translate(70, 0);
+  root_frame.render_pass_list[4]
+      ->shared_quad_state_list.ElementAt(1)
+      ->quad_to_target_transform.Translate(30, 30);
+  root_frame.render_pass_list[4]
+      ->shared_quad_state_list.ElementAt(2)
+      ->quad_to_target_transform.Translate(10, 50);
+  root_frame.render_pass_list[4]
+      ->shared_quad_state_list.ElementAt(3)
+      ->quad_to_target_transform.Translate(70, 70);
+
+  // Add backdrop blur filter to all render passes.
+  root_frame.render_pass_list[0]->backdrop_filters.Append(
+      cc::FilterOperation::CreateBlurFilter(5));
+  root_frame.render_pass_list[1]->backdrop_filters.Append(
+      cc::FilterOperation::CreateBlurFilter(5));
+  root_frame.render_pass_list[2]->backdrop_filters.Append(
+      cc::FilterOperation::CreateBlurFilter(5));
+  root_frame.render_pass_list[3]->backdrop_filters.Append(
+      cc::FilterOperation::CreateBlurFilter(5));
+
+  // Damage the bottom portion of the root render pass, such that it only
+  // intersects with one of child render pass.
+  root_frame.render_pass_list[4]->damage_rect = gfx::Rect(0, 85, 100, 15);
+
+  root_sink_->SubmitCompositorFrame(root_local_surface_id_,
+                                    std::move(root_frame));
+
+  // The expected damage rect should include all the other child render pass
+  // output surface that would need to be updated. In this case, that would be
+  // the bottom 3 render pass from the image.
+  const gfx::Rect expected_damage_rect(0, 30, 100, 70);
+
+  SurfaceId root_surface_id_2(root_sink_->frame_sink_id(),
+                              root_local_surface_id_);
+  EXPECT_CALL(
+      aggregated_damage_callback,
+      OnAggregatedDamage(root_local_surface_id_, SurfaceSize(),
+                         gfx::Rect(0, 85, 100, 15), next_display_time()));
+  aggregated_frame = AggregateFrame(root_surface_id_2);
+  testing::Mock::VerifyAndClearExpectations(&aggregated_damage_callback);
+  EXPECT_EQ(expected_damage_rect.ToString(),
+            aggregated_frame.render_pass_list[4]->damage_rect.ToString());
+}
+
 }  // namespace
 }  // namespace viz
