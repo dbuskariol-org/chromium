@@ -59,58 +59,37 @@ function setTextDirection(direction) {
   document.body.setAttribute('dir', direction);
 }
 
-function removeAll(source, elementsToRemove) {
-  elementsToRemove.forEach(function(element) {
-    source.remove(element);
-  });
-}
-
 // These classes must agree with the font classes in distilledpage.css.
 const fontFamilyClasses = ['sans-serif', 'serif', 'monospace'];
-function getFontFamilyClass(fontFamily) {
-  if (fontFamilyClasses.includes(fontFamily)) {
-    return fontFamily;
-  }
-  return fontFamilyClasses[0];
-}
-
 function useFontFamily(fontFamily) {
-  removeAll(document.body.classList, fontFamilyClasses);
-  document.body.classList.add(getFontFamilyClass(fontFamily));
+  fontFamilyClasses.forEach(
+      (element) =>
+          document.body.classList.toggle(element, element == fontFamily));
 }
 
 // These classes must agree with the theme classes in distilledpage.css.
 const themeClasses = ['light', 'dark', 'sepia'];
-function getThemeClass(theme) {
-  if (themeClasses.includes(theme)) {
-    return theme;
-  }
-  return themeClasses[0];
-}
-
 function useTheme(theme) {
-  removeAll(document.body.classList, themeClasses);
-  document.body.classList.add(getThemeClass(theme));
-  updateToolbarColor();
+  themeClasses.forEach(
+      (element) => document.body.classList.toggle(element, element == theme));
+  updateToolbarColor(theme);
 }
 
-function getThemeFromElement(element) {
-  let foundTheme = themeClasses[0];
-  themeClasses.forEach(function(theme) {
-    if (element.classList.contains(theme)) {
-      foundTheme = theme;
+function getClassFromElement(element, classList) {
+  let foundClass = classList[0];
+  classList.forEach((cls) => {
+    if (element.classList.contains(cls)) {
+      foundClass = cls;
     }
   });
-  return foundTheme;
+  return foundClass;
 }
 
-function updateToolbarColor() {
-  const themeClass = getThemeFromElement(document.body);
-
+function updateToolbarColor(theme) {
   let toolbarColor;
-  if (themeClass == 'sepia') {
+  if (theme == 'sepia') {
     toolbarColor = '#BF9A73';
-  } else if (themeClass == 'dark') {
+  } else if (theme == 'dark') {
     toolbarColor = '#1A1A1A';
   } else {
     toolbarColor = '#F5F5F5';
@@ -185,7 +164,7 @@ const fontSizeSlider = new FontSizeSlider(
     document.querySelector('#font-size-selection'),
     [14, 15, 16, 18, 20, 24, 28, 32, 40, 48]);
 
-updateToolbarColor();
+updateToolbarColor(getClassFromElement(document.body, themeClasses));
 maybeSetWebFont();
 
 // The zooming speed relative to pinching speed.
