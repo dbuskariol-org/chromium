@@ -192,6 +192,9 @@ class NightLightTest : public NoSessionAshTestBase {
 
     // Simulate user 1 login.
     SwitchActiveUser(kUser1Email);
+
+    // Start with ambient color disabled.
+    SetAmbientColorEnabled(false);
   }
 
   void CreateTestUserSessions() {
@@ -208,6 +211,10 @@ class NightLightTest : public NoSessionAshTestBase {
   void SetNightLightEnabled(bool enabled) {
     GetController()->SetEnabled(
         enabled, NightLightControllerImpl::AnimationDuration::kShort);
+  }
+
+  void SetAmbientColorEnabled(bool enabled) {
+    GetController()->SetAmbientColorEnabled(enabled);
   }
 
   // Simulate powerd sending multiple times an ambient temperature of
@@ -357,6 +364,8 @@ TEST_F(NightLightTest, TestNightLightWithDisplayConfigurationChanges) {
 TEST_F(NightLightTest, TestUserSwitchAndSettingsPersistence) {
   // Test start with user1 logged in.
   NightLightControllerImpl* controller = GetController();
+  controller->SetAmbientColorEnabled(false);
+  EXPECT_FALSE(controller->GetAmbientColorEnabled());
   SetNightLightEnabled(true);
   EXPECT_TRUE(controller->GetEnabled());
   const float user1_temperature = 0.8f;
@@ -366,6 +375,7 @@ TEST_F(NightLightTest, TestUserSwitchAndSettingsPersistence) {
 
   // Switch to user 2, and expect NightLight to be disabled.
   SwitchActiveUser(kUser2Email);
+  SetAmbientColorEnabled(false);
   EXPECT_FALSE(controller->GetEnabled());
   // Changing user_2's color temperature shouldn't affect user_1's settings.
   const float user2_temperature = 0.2f;
