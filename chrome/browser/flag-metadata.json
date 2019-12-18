@@ -625,11 +625,6 @@
     "expiry_milestone": 84
   },
   {
-    "name": "cryptauth-v1-devicesync-deprecate",
-    "owners": [ "khorimoto", "nohle" ],
-    "expiry_milestone": 87
-  },
-  {
     "name": "cryptauth-v2-device-activity-status",
     "owners": [ "khorimoto", "nohle", "themaxli" ],
     "expiry_milestone": 85
@@ -748,6 +743,11 @@
     // This flag is use to disable CancelAllTouches() function, which enable the
     // testing for implementation of canceling single touches.
     "expiry_milestone": 86
+  },
+  {
+    "name": "disable-cryptauth-v1-devicesync",
+    "owners": [ "khorimoto", "nohle" ],
+    "expiry_milestone": 87
   },
   {
     "name": "disable-explicit-dma-fences",
