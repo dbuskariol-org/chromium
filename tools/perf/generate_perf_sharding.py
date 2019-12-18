@@ -8,10 +8,13 @@ from __future__ import print_function
 import argparse
 import collections
 import csv
+import filecmp
 import json
 import multiprocessing
 import os
+import shutil
 import sys
+import tempfile
 import textwrap
 
 from core import path_util
@@ -37,6 +40,8 @@ should never be automatically reverted, since the reverted state of the JSON map
 files may not match with the true state of world.
 
 """
+
+_BENCHMARK_SCHEDULES = 'tools/perf/benchmark_schedules.csv'
 
 
 def GetParser():
@@ -68,6 +73,12 @@ def GetParser():
       help='Update the timing data that is used to create the shard maps, '
       'but don\'t update the shard maps themselves.')
   _AddBuilderPlatformSelectionArgs(parser_update_timing)
+  parser_update_timing.add_argument(
+      '--filter-only', action='store_true',
+      help='Do not grab new data from bigquery but instead simply filter '
+      'the existing data to reflect some change in the benchmark (for example '
+      'if the benchmark was switched to abridged mode on some platform or if '
+      'a story was removed from the benchmark.)')
   parser_update_timing.set_defaults(func=_UpdateTimingDataCommand)
 
   parser_deschedule = subparsers.add_parser(
@@ -107,10 +118,10 @@ def _DumpJson(data, output_path):
 
 def _LoadTimingData(args):
   builder_name, timing_file_path = args
-  data = retrieve_story_timing.FetchAverageStortyTimingData(
+  data = retrieve_story_timing.FetchAverageStoryTimingData(
       configurations=[builder_name], num_last_days=5)
   _DumpJson(data, timing_file_path)
-  print('Finish retrieve story timing data for %s' % repr(builder_name))
+  print('Finished retrieving story timing data for %s' % repr(builder_name))
 
 
 def _source_filepath(posix_path):
@@ -139,12 +150,12 @@ class _BenchmarkUsageRow(object):
         return benchmark_config
 
   def ToRow(self):
-    unabridged_platforms =[
+    unabridged_platforms = sorted([
         p.name for p in self.platforms
-        if not self._GetBenchmarkConfiguration(p).abridged]
-    abridged_platforms = [
+        if not self._GetBenchmarkConfiguration(p).abridged])
+    abridged_platforms = sorted([
         p.name for p in self.platforms
-        if self._GetBenchmarkConfiguration(p).abridged]
+        if self._GetBenchmarkConfiguration(p).abridged])
     unabridged_count = len(unabridged_platforms)
     abridged_count = len(abridged_platforms)
     platform_names = sorted([p.name for p in self.platforms])
@@ -154,7 +165,8 @@ class _BenchmarkUsageRow(object):
             ', '.join(abridged_platforms)]
 
 
-def _UpdateWaterfallUsageData():
+def _UpdateWaterfallUsageData(output_path=None):
+  output_path = output_path or _source_filepath(_BENCHMARK_SCHEDULES)
   builders = _GetBuilderPlatforms(builders=None, waterfall='perf')
   # https://stackoverflow.com/questions/31838823
   EmptyBenchmarkUsageRow = lambda: _BenchmarkUsageRow(None, None, None)
@@ -181,7 +193,7 @@ def _UpdateWaterfallUsageData():
        'platforms where abridged']]
   for benchmark in benchmarks:
     csv_data.append(benchmark.ToRow())
-  with open(_source_filepath('tools/perf/benchmark_schedules.csv'), 'w') as fh:
+  with open(output_path, 'w') as fh:
     writer = csv.writer(fh, lineterminator='\n')
     writer.writerows(csv_data)
 
@@ -220,7 +232,27 @@ def _PromptWarning():
 
 
 def _UpdateTimingDataCommand(args):
-  _UpdateTimingData(_GetBuilderPlatforms(args.builders, args.waterfall))
+  builders = _GetBuilderPlatforms(args.builders, args.waterfall)
+  if not args.filter_only:
+    _UpdateTimingData(builders)
+  for builder in builders:
+    _FilterTimingData(builder)
+  _UpdateWaterfallUsageData()
+
+
+def _FilterTimingData(builder, output_path=None):
+  output_path = output_path or builder.timing_file_path
+  with open(builder.timing_file_path) as f:
+    timing_dataset = json.load(f)
+  story_full_names = set()
+  for benchmark_config in builder.benchmark_configs:
+    for story in benchmark_config.stories:
+      story_full_names.add('/'.join([benchmark_config.name, story]))
+  # When benchmarks are abridged or stories are removed, we want that
+  # to be reflected in the timing data right away.
+  timing_dataset = [point for point in timing_dataset
+                    if str(point['name']) in story_full_names]
+  _DumpJson(timing_dataset, output_path)
 
 
 def _UpdateTimingData(builders):
@@ -231,7 +263,6 @@ def _UpdateTimingData(builders):
   p = multiprocessing.Pool(len(load_timing_args))
   # Use map_async to work around python bug. See crbug.com/1026004.
   p.map_async(_LoadTimingData, load_timing_args).get(12*60*60)
-  _UpdateWaterfallUsageData()
 
 
 def _GetBuilderPlatforms(builders, waterfall):
@@ -300,9 +331,33 @@ def _ParseBenchmarks(shard_map_path):
 
 
 def _ValidateShardMaps(args):
-  """Validate that the shard maps are consistent with the state of the repo."""
+  """Validate that the shard maps, csv files, etc. are consistent."""
   del args
   errors = []
+
+  tempdir = tempfile.mkdtemp()
+  try:
+    temp_filepath = os.path.join(tempdir, 'schedules.csv')
+    _UpdateWaterfallUsageData(temp_filepath)
+    real_path = _source_filepath(_BENCHMARK_SCHEDULES)
+    if not filecmp.cmp(temp_filepath, real_path):
+      errors.append(
+          '{benchmark_schedules} is not up to date. Please run '
+          '`./generate_perf_sharding.py update-timing --filter-only` '
+          'to regenerate it.'.format(benchmark_schedules=_BENCHMARK_SCHEDULES))
+
+    builders = _GetBuilderPlatforms(builders=None, waterfall='perf')
+    for builder in builders:
+      output_file = os.path.join(
+          tempdir, os.path.basename(builder.timing_file_path))
+      _FilterTimingData(builder, output_file)
+      if not filecmp.cmp(builder.timing_file_path, output_file):
+        errors.append(
+            '{timing_data} is not up to date. Please run '
+            '`./generate_perf_sharding.py update-timing --filter-only` '
+            'to regenerate it.'.format(timing_data=builder.timing_file_path))
+  finally:
+    shutil.rmtree(tempdir)
 
   # Check that bot_platforms.py matches the actual shard maps
   for platform in bot_platforms.ALL_PLATFORMS:
