@@ -57,7 +57,6 @@ class InspectorStyle final : public GarbageCollected<InspectorStyle> {
   InspectorStyle(CSSStyleDeclaration*,
                  CSSRuleSourceData*,
                  InspectorStyleSheetBase* parent_style_sheet);
-  ~InspectorStyle();
 
   CSSStyleDeclaration* CssStyle() { return style_.Get(); }
   std::unique_ptr<protocol::CSS::CSSStyle> BuildObjectForStyle();

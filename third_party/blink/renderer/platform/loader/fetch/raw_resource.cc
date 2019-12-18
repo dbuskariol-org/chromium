@@ -406,8 +406,6 @@ void RawResourceClient::DidDownloadToBlob(Resource*,
 RawResourceClientStateChecker::RawResourceClientStateChecker()
     : state_(kNotAddedAsClient) {}
 
-RawResourceClientStateChecker::~RawResourceClientStateChecker() = default;
-
 NOINLINE void RawResourceClientStateChecker::WillAddClient() {
   SECURITY_CHECK(state_ == kNotAddedAsClient);
   state_ = kStarted;
