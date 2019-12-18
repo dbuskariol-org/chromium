@@ -2492,6 +2492,9 @@ enum WebFeature {
   kHTMLLinkElementMonetization = 3120,
   kInputTypeCheckboxRenderedNonSquare = 3121,
   kInputTypeRadioRenderedNonSquare = 3122,
+  kWebkitBoxPackJustifyDoesSomething = 3123,
+  kWebkitBoxPackCenterDoesSomething = 3124,
+  kWebkitBoxPackEndDoesSomething = 3125,
 
   // Add new features immediately above this line. Don't change assigned
   // numbers of any item, and don't reuse removed slots.
