@@ -7789,6 +7789,21 @@
             ]
         }
     ],
+    "WebViewWakeMetricsService": [
+        {
+            "platforms": [
+                "android_webview"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "WebViewWakeMetricsService"
+                    ]
+                }
+            ]
+        }
+    ],
     "ZippedSystemLogsUpload": [
         {
             "platforms": [
