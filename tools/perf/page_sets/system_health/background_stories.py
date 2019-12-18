@@ -84,6 +84,13 @@ class BackgroundImgurMobileStory(_BackgroundStory):
   TAGS = [story_tags.HEALTH_CHECK, story_tags.YEAR_2016]
 
 
+class BackgroundImgurMobileStory2019(_BackgroundStory):
+  NAME = 'background:media:imgur:2019'
+  URL = 'http://imgur.com/gallery/hUita'
+  SUPPORTED_PLATFORMS = platforms.MOBILE_ONLY
+  TAGS = [story_tags.HEALTH_CHECK, story_tags.YEAR_2019]
+
+
 class BackgroundGmailMobileStory(LoadGmailMobileStory):
   NAME = 'background:tools:gmail'
   SUPPORTED_PLATFORMS = platforms.MOBILE_ONLY

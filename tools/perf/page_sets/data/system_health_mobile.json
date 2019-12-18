@@ -3,6 +3,9 @@
         "background:media:imgur": {
             "DEFAULT": "system_health_mobile_047.wprgo"
         },
+        "background:media:imgur:2019": {
+            "DEFAULT": "system_health_mobile_1e1539cbc7.wprgo"
+        },
         "background:news:nytimes": {
             "DEFAULT": "system_health_mobile_052.wprgo"
         },
