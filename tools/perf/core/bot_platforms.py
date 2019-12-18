@@ -44,7 +44,7 @@ class PerfPlatform(object):
           _IsPlatformSupported(b.benchmark, self._platform_os)])
     # pylint: enable=redefined-outer-name
     benchmark_names = [config.name for config in self._benchmark_configs]
-    assert len(list(set(benchmark_names))) == len(benchmark_names), (
+    assert len(set(benchmark_names)) == len(benchmark_names), (
         'Make sure that a benchmark does not appear twice.')
 
     base_file_name = name.replace(' ', '_').lower()
