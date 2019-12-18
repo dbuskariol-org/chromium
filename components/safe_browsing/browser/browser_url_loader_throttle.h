@@ -29,6 +29,8 @@ namespace safe_browsing {
 
 class UrlCheckerDelegate;
 
+class VerdictCacheManager;
+
 // BrowserURLLoaderThrottle is used in the browser process to query
 // SafeBrowsing to determine whether a URL and also its redirect URLs are safe
 // to load.
@@ -48,7 +50,8 @@ class BrowserURLLoaderThrottle : public blink::URLLoaderThrottle {
       GetDelegateCallback delegate_getter,
       const base::Callback<content::WebContents*()>& web_contents_getter,
       int frame_tree_node_id,
-      content::ResourceContext* resource_context);
+      content::ResourceContext* resource_context,
+      base::WeakPtr<VerdictCacheManager> cache_manager);
 
   ~BrowserURLLoaderThrottle() override;
 
@@ -82,7 +85,8 @@ class BrowserURLLoaderThrottle : public blink::URLLoaderThrottle {
       GetDelegateCallback delegate_getter,
       const base::Callback<content::WebContents*()>& web_contents_getter,
       int frame_tree_node_id,
-      content::ResourceContext* resource_context);
+      content::ResourceContext* resource_context,
+      base::WeakPtr<VerdictCacheManager> cache_manager);
 
   // |slow_check| indicates whether it reports the result of a slow check.
   // (Please see comments of CheckerOnIO::OnCheckUrlResult() for what slow check

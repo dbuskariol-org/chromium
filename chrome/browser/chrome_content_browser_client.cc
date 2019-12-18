@@ -235,6 +235,8 @@
 #include "components/safe_browsing/db/database_manager.h"
 #include "components/safe_browsing/features.h"
 #include "components/safe_browsing/password_protection/password_protection_navigation_throttle.h"
+#include "components/safe_browsing/realtime/policy_engine.h"
+#include "components/safe_browsing/verdict_cache_manager.h"
 #include "components/security_interstitials/content/origin_policy_ui.h"
 #include "components/security_interstitials/content/ssl_cert_reporter.h"
 #include "components/security_interstitials/content/ssl_error_navigation_throttle.h"
@@ -4242,11 +4244,21 @@ ChromeContentBrowserClient::CreateURLLoaderThrottles(
   bool matches_enterprise_whitelist = safe_browsing::IsURLWhitelistedByPolicy(
       request.url, *profile->GetPrefs());
   if (!matches_enterprise_whitelist) {
+    // |cache_manager| is used when real time url check is enabled.
+    base::WeakPtr<safe_browsing::VerdictCacheManager> cache_manager =
+        // |safe_browsing_service_| may be unavailable in tests.
+        safe_browsing_service_ &&
+                safe_browsing::RealTimePolicyEngine::CanPerformFullURLLookup(
+                    profile)
+            ? safe_browsing_service_->GetVerdictCacheManagerWeakPtr(profile)
+            : nullptr;
+
     result.push_back(safe_browsing::BrowserURLLoaderThrottle::Create(
         base::BindOnce(
             &ChromeContentBrowserClient::GetSafeBrowsingUrlCheckerDelegate,
             base::Unretained(this)),
-        wc_getter, frame_tree_node_id, profile->GetResourceContext()));
+        wc_getter, frame_tree_node_id, profile->GetResourceContext(),
+        cache_manager));
   }
 #endif
 

@@ -149,14 +149,14 @@ void MojoSafeBrowsingImpl::CreateCheckerAndCheck(
 
   // This is not called for frame resources, and real time URL checks currently
   // only support frame resources. If we extend real time URL checks to support
-  // non-main frames, we will need to provide the user preferences regarding
-  // real time lookup here.
+  // non-main frames, we will need to provide the user preferences and cache
+  // manager regarding real time lookup here.
   auto checker_impl = std::make_unique<SafeBrowsingUrlCheckerImpl>(
       headers, static_cast<int>(load_flags), resource_type, has_user_gesture,
       delegate_,
       base::Bind(&GetWebContentsFromID, render_process_id_,
                  static_cast<int>(render_frame_id)),
-      /*real_time_lookup_enabled=*/false);
+      /*real_time_lookup_enabled=*/false, /*cache_manager=*/nullptr);
 
   checker_impl->CheckUrl(
       url, method,

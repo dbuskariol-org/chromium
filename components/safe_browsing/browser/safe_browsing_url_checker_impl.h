@@ -27,6 +27,8 @@ namespace safe_browsing {
 
 class UrlCheckerDelegate;
 
+class VerdictCacheManager;
+
 // A SafeBrowsingUrlCheckerImpl instance is used to perform SafeBrowsing check
 // for a URL and its redirect URLs. It implements Mojo interface so that it can
 // be used to handle queries from renderers. But it is also used to handle
@@ -69,7 +71,8 @@ class SafeBrowsingUrlCheckerImpl : public mojom::SafeBrowsingUrlChecker,
       bool has_user_gesture,
       scoped_refptr<UrlCheckerDelegate> url_checker_delegate,
       const base::Callback<content::WebContents*()>& web_contents_getter,
-      bool real_time_lookup_enabled);
+      bool real_time_lookup_enabled,
+      base::WeakPtr<VerdictCacheManager> cache_manager_on_ui);
 
   ~SafeBrowsingUrlCheckerImpl() override;
 
@@ -114,8 +117,21 @@ class SafeBrowsingUrlCheckerImpl : public mojom::SafeBrowsingUrlChecker,
   void OnCheckBrowseUrlResult(const GURL& url,
                               SBThreatType threat_type,
                               const ThreatMetadata& metadata) override;
-
   void OnCheckUrlForHighConfidenceAllowlist(bool did_match_allowlist) override;
+
+  // This function has to be static because it is called in UI thread,
+  // |weak_checker_on_io| can only be accessed from IO thread.
+  // This function is called if the url doesn't match the allowlist.
+  static void StartGetCachedRealTimeUrlVerdictOnUI(
+      base::WeakPtr<SafeBrowsingUrlCheckerImpl> weak_checker_on_io,
+      base::WeakPtr<VerdictCacheManager> cache_manager_on_ui,
+      const GURL& url);
+
+  // This function will start real time url lookup if there is no cache match.
+  void OnGetCachedRealTimeUrlVerdictDoneOnIO(
+      RTLookupResponse::ThreatInfo::VerdictType verdict_type,
+      std::unique_ptr<RTLookupResponse::ThreatInfo> cached_threat_info,
+      const GURL& url);
 
   void OnTimeout();
 
@@ -201,6 +217,11 @@ class SafeBrowsingUrlCheckerImpl : public mojom::SafeBrowsingUrlChecker,
 
   // Whether real time lookup is enabled for this request.
   bool real_time_lookup_enabled_;
+
+  // Unowned object used for getting and storing real time url check cache.
+  // Must be NOT nullptr when real time url check is enabled and profile is not
+  // delete. Can only be accessed in UI thread.
+  base::WeakPtr<VerdictCacheManager> cache_manager_on_ui_;
 
   base::WeakPtrFactory<SafeBrowsingUrlCheckerImpl> weak_factory_{this};
 
