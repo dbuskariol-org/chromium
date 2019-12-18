@@ -29,13 +29,15 @@ def _IsPlatformSupported(benchmark, platform):
 
 class PerfPlatform(object):
   def __init__(self, name, description, benchmark_configs,
-               num_shards, platform_os, is_fyi=False):
+               num_shards, platform_os, is_fyi=False,
+               run_reference_build=True):
     self._name = name
     self._description = description
     self._platform_os = platform_os
     # For sorting ignore case and "segments" in the bot name.
     self._sort_key = name.lower().replace('-', ' ')
     self._is_fyi = is_fyi
+    self.run_reference_build = run_reference_build
     assert num_shards
     self._num_shards = num_shards
     # pylint: disable=redefined-outer-name
@@ -260,7 +262,8 @@ ANDROID_GO = PerfPlatform(
     19, 'android')
 ANDROID_GO_WEBVIEW = PerfPlatform(
     'android-go_webview-perf', 'Android OPM1.171019.021 (gobo)',
-    _ANDROID_GO_WEBVIEW_BENCHMARK_CONFIGS, 13, 'android')
+    _ANDROID_GO_WEBVIEW_BENCHMARK_CONFIGS, 13, 'android',
+    run_reference_build=False)
 ANDROID_NEXUS_5 = PerfPlatform(
     'Android Nexus5 Perf', 'Android KOT49H', _ANDROID_NEXUS_5_BENCHMARK_CONFIGS,
     16, 'android')
@@ -271,21 +274,24 @@ ANDROID_NEXUS_5X = PerfPlatform(
     'android')
 ANDROID_NEXUS_5X_WEBVIEW = PerfPlatform(
     'Android Nexus5X WebView Perf', 'Android AOSP MOB30K',
-    _ANDROID_NEXUS_5X_WEBVIEW_BENCHMARK_CONFIGS, 16, 'android')
+    _ANDROID_NEXUS_5X_WEBVIEW_BENCHMARK_CONFIGS, 16, 'android',
+    run_reference_build=False)
 ANDROID_NEXUS_6_WEBVIEW = PerfPlatform(
     'Android Nexus6 WebView Perf', 'Android AOSP MOB30K',
     _ANDROID_NEXUS_6_WEBVIEW_BENCHMARK_CONFIGS,
     12,  # Reduced from 16 per crbug.com/891848.
-    'android')
+    'android', run_reference_build=False)
 ANDROID_PIXEL2 = PerfPlatform(
     'android-pixel2-perf', 'Android OPM1.171019.021',
     _ANDROID_PIXEL2_BENCHMARK_CONFIGS, 35, 'android')
 ANDROID_PIXEL2_WEBVIEW = PerfPlatform(
     'android-pixel2_webview-perf', 'Android OPM1.171019.021',
-    _ANDROID_PIXEL2_WEBVIEW_BENCHMARK_CONFIGS, 21, 'android')
+    _ANDROID_PIXEL2_WEBVIEW_BENCHMARK_CONFIGS, 21, 'android',
+    run_reference_build=False)
 ANDROID_PIXEL2_WEBLAYER = PerfPlatform(
     'android-pixel2_weblayer-perf', 'Android OPM1.171019.021',
-    _ANDROID_PIXEL2_WEBLAYER_BENCHMARK_CONFIGS, 4, 'android')
+    _ANDROID_PIXEL2_WEBLAYER_BENCHMARK_CONFIGS, 4, 'android',
+    run_reference_build=False)
 # FYI bots
 WIN_10_LOW_END_HP_CANDIDATE = PerfPlatform(
     'win-10_laptop_low_end-perf_HP-Candidate', 'HP 15-BS121NR Laptop Candidate',
@@ -294,22 +300,30 @@ WIN_10_LOW_END_HP_CANDIDATE = PerfPlatform(
 ANDROID_NEXUS5X_PERF_FYI =  PerfPlatform(
     'android-nexus5x-perf-fyi', 'Android MMB29Q',
     _ANDROID_NEXUS5X_FYI_BENCHMARK_CONFIGS,
-    3, 'android', is_fyi=True)
+    3, 'android', is_fyi=True, run_reference_build=False)
 ANDROID_PIXEL2_PERF_AAB_FYI = PerfPlatform(
     'android-pixel2-perf-aab-fyi', 'Android OPM1.171019.021',
     _ANDROID_PIXEL2_AAB_FYI_BENCHMARK_CONFIGS,
-    1, 'android', is_fyi=True)
+    1, 'android', is_fyi=True,
+    # TODO(crbug.com/612455): Enable ref builds once can pass both
+    # --browser=exact (used by this bot to have it run Monochrome6432)
+    # and --browser=reference together.
+    run_reference_build=False)
 ANDROID_PIXEL2_PERF_FYI = PerfPlatform(
     'android-pixel2-perf-fyi', 'Android OPM1.171019.021',
     _ANDROID_PIXEL2_FYI_BENCHMARK_CONFIGS,
-    4, 'android', is_fyi=True)
+    4, 'android', is_fyi=True,
+    # TODO(crbug.com/612455): Enable ref builds once can pass both
+    # --browser=exact (used by this bot to have it run Monochrome6432)
+    # and --browser=reference together.
+    run_reference_build=False)
 CHROMEOS_KEVIN_PERF_FYI = PerfPlatform(
     'chromeos-kevin-perf-fyi', '',
     _CHROMEOS_KEVIN_FYI_BENCHMARK_CONFIGS,
-    4, 'chromeos', is_fyi=True)
+    4, 'chromeos', is_fyi=True, run_reference_build=False)
 LINUX_PERF_FYI = PerfPlatform(
     'linux-perf-fyi', '', _LINUX_PERF_FYI_BENCHMARK_CONFIGS,
-    1, 'linux', is_fyi=True)
+    1, 'linux', is_fyi=True, run_reference_build=False)
 
 ALL_PLATFORMS = {
     p for p in locals().values() if isinstance(p, PerfPlatform)
