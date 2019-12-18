@@ -4867,7 +4867,6 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="7974936243149753750">Overscan</translation>
 <translation id="7978412674231730200">Chiave privata</translation>
 <translation id="7978450511781612192">I tuoi Account Google verranno scollegati e verrà interrotta la sincronizzazione di preferiti, cronologia, password e altro.</translation>
-<translation id="7979036127916589816">Errore di sincronizzazione</translation>
 <translation id="7980084013673500153">ID asset: <ph name="ASSET_ID" /></translation>
 <translation id="7981313251711023384">Le pagine vengono precaricate per velocizzare la navigazione e la ricerca</translation>
 <translation id="798145602633458219">Aggiungi il suggerimento <ph name="SUGGESTION_NAME" /> alla casella di ricerca</translation>
@@ -5315,6 +5314,7 @@ Conserva il file di chiave in un luogo sicuro. Ti servirà per creare nuove vers
 <translation id="862542460444371744">&amp;Estensioni</translation>
 <translation id="862727964348362408">Sospeso</translation>
 <translation id="862750493060684461">Cache CSS</translation>
+<translation id="8627706565932943526">Errore di sincronizzazione</translation>
 <translation id="8627795981664801467">Solo connessioni protette</translation>
 <translation id="8630903300770275248">Importa utente controllato</translation>
 <translation id="8631032106121706562">Petalo</translation>

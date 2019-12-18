@@ -4866,7 +4866,6 @@
 <translation id="7974936243149753750">오버스캔</translation>
 <translation id="7978412674231730200">비공개 키</translation>
 <translation id="7978450511781612192">Google 계정에서 로그아웃됩니다. 북마크, 방문 기록, 비밀번호 등이 더 이상 동기화되지 않습니다.</translation>
-<translation id="7979036127916589816">동기화 오류</translation>
 <translation id="7980084013673500153">애셋 ID: <ph name="ASSET_ID" /></translation>
 <translation id="7981313251711023384">더 빠른 인터넷 사용과 검색을 위해 페이지 미리 로드</translation>
 <translation id="798145602633458219"><ph name="SUGGESTION_NAME" /> 추천 검색어를 검색창에 추가</translation>
@@ -5315,6 +5314,7 @@
 <translation id="862542460444371744">확장 프로그램(&amp;E)</translation>
 <translation id="862727964348362408">일시중지됨</translation>
 <translation id="862750493060684461">CSS 캐시</translation>
+<translation id="8627706565932943526">동기화 오류</translation>
 <translation id="8627795981664801467">보안 연결만</translation>
 <translation id="8630903300770275248">관리 대상 사용자 가져오기</translation>
 <translation id="8631032106121706562">꽃잎</translation>

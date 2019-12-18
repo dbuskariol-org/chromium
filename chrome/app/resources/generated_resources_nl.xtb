@@ -4867,7 +4867,6 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="7974936243149753750">Overscan</translation>
 <translation id="7978412674231730200">Privésleutel</translation>
 <translation id="7978450511781612192">Hiermee word je uitgelogd van je Google-accounts. Onder meer je bladwijzers, geschiedenis en wachtwoorden worden niet meer gesynchroniseerd.</translation>
-<translation id="7979036127916589816">Synchronisatiefout</translation>
 <translation id="7980084013673500153">Item-ID: <ph name="ASSET_ID" /></translation>
 <translation id="7981313251711023384">Pagina's vooraf laden voor sneller browsen en zoeken</translation>
 <translation id="798145602633458219">De suggestie <ph name="SUGGESTION_NAME" /> toevoegen aan het zoekvak</translation>
@@ -5316,6 +5315,7 @@ Bewaar je sleutelbestand op een veilige plaats. Je hebt het bestand nodig om nie
 <translation id="862542460444371744">&amp;Extensies</translation>
 <translation id="862727964348362408">Opgeschort</translation>
 <translation id="862750493060684461">CSS-cachegeheugen</translation>
+<translation id="8627706565932943526">Synchronisatiefout</translation>
 <translation id="8627795981664801467">Alleen beveiligde verbindingen</translation>
 <translation id="8630903300770275248">Gebruiker met beperkte rechten importeren</translation>
 <translation id="8631032106121706562">Madeliefje</translation>

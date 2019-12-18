@@ -4868,7 +4868,6 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="7974936243149753750">Rubno područje zaslona</translation>
 <translation id="7978412674231730200">Osobni ključ</translation>
 <translation id="7978450511781612192">Time ćete se odjaviti s Google računa. Vaše se oznake, povijest, zaporke i druge postavke više neće sinkronizirati.</translation>
-<translation id="7979036127916589816">Sinkronizacijska pogreška</translation>
 <translation id="7980084013673500153">ID uređaja: <ph name="ASSET_ID" /></translation>
 <translation id="7981313251711023384">Prethodno učitaj stranice za brže pregledavanje i pretraživanje</translation>
 <translation id="798145602633458219">Dodaj prijedlog <ph name="SUGGESTION_NAME" /> u okvir za pretraživanje</translation>
@@ -5317,6 +5316,7 @@ Mislim da ta web-lokacija ne bi trebala biti blokirana!</translation>
 <translation id="862542460444371744">&amp;Proširenja</translation>
 <translation id="862727964348362408">Obustavljeno</translation>
 <translation id="862750493060684461">CSS predmemorija</translation>
+<translation id="8627706565932943526">Pogreška sinkronizacije</translation>
 <translation id="8627795981664801467">Samo sigurne veze</translation>
 <translation id="8630903300770275248">Uvezi zaštićenog korisnika</translation>
 <translation id="8631032106121706562">Latica</translation>

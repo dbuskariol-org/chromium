@@ -4864,7 +4864,6 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="7974936243149753750">Overscan</translation>
 <translation id="7978412674231730200">Privater Schlüssel</translation>
 <translation id="7978450511781612192">Dadurch werden Sie aus Ihren Google-Konten abgemeldet. Ihre Lesezeichen, Ihr Verlauf, Ihre Passwörter usw. werden nicht mehr synchronisiert.</translation>
-<translation id="7979036127916589816">Synchronisierungsfehler</translation>
 <translation id="7980084013673500153">Geräte-ID: <ph name="ASSET_ID" /></translation>
 <translation id="7981313251711023384">Seiten vorab laden, um das Surfen und die Suche zu beschleunigen</translation>
 <translation id="798145602633458219">Vorschlag "<ph name="SUGGESTION_NAME" />" an Suchfeld anhängen</translation>
@@ -5312,6 +5311,7 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="862542460444371744">&amp;Erweiterungen</translation>
 <translation id="862727964348362408">Ausgesetzt</translation>
 <translation id="862750493060684461">CSS-Cache</translation>
+<translation id="8627706565932943526">Synchronisierungsfehler</translation>
 <translation id="8627795981664801467">Nur sichere Verbindungen</translation>
 <translation id="8630903300770275248">Betreuten Nutzer importieren</translation>
 <translation id="8631032106121706562">Margerite</translation>

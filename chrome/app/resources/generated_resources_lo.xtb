@@ -4865,7 +4865,6 @@
 <translation id="7974936243149753750">ສະແກນເກີນ</translation>
 <translation id="7978412674231730200">ປຸ່ມສ່ວນຕົວ</translation>
 <translation id="7978450511781612192">ນີ້ຈະນຳທ່ານອອກຈາກລະບົບບັນຊີ Google ຂອງທ່ານ. ບຸກມາກ, ປະຫວັດ ແລະ ອື່ນໆອີກຂອງທ່ານຈະບໍ່ຊິ້ງຂໍ້ມູນອີກຕໍ່ໄປ.</translation>
-<translation id="7979036127916589816">ຊິງຄ໌ຜິດພາດ</translation>
 <translation id="7980084013673500153">ລະ​ຫັດຊັບ​ສິນ​: <ph name="ASSET_ID" /></translation>
 <translation id="7981313251711023384">ໂຫຼດໜ້າກ່ອນສຳລັບການທ່ອງເວັບ ແລະ ການຊອກຫາທີ່ໄວກວ່າ</translation>
 <translation id="798145602633458219">ຄັດຕິດການແນະນຳ <ph name="SUGGESTION_NAME" /> ໃສ່ກ່ອງຊອກຫາ</translation>
@@ -5313,6 +5312,7 @@
 <translation id="862542460444371744">ສ່ວນຂະຫຍາຍ</translation>
 <translation id="862727964348362408">ໂຈະແລ້ວ</translation>
 <translation id="862750493060684461">ແຄຊ໌ CSS</translation>
+<translation id="8627706565932943526">ຊິງຄ໌ຜິດພາດ</translation>
 <translation id="8627795981664801467">ການເຊື່ອມຕໍ່ທີ່ປອດໄພເທົ່ານັ້ນ</translation>
 <translation id="8630903300770275248">ນໍາເຂົ້າຜູ້ໃຊ້ທີ່ມີການຄວບຄຸມດູແລ</translation>
 <translation id="8631032106121706562">ກີບ​ດອກ</translation>

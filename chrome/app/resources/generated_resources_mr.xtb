@@ -4833,7 +4833,6 @@ https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-featu
 <translation id="7974936243149753750">ओव्हरस्कॅन</translation>
 <translation id="7978412674231730200">खाजगी की</translation>
 <translation id="7978450511781612192">हे तुम्हाला तुमच्या Google खात्यामधून साइन आउट करेल. तुमचे बुकमार्क, इतिहास, पासवर्ड आणि बरेच काही आता सिंक होणार नाही.</translation>
-<translation id="7979036127916589816">सिंक एरर</translation>
 <translation id="7980084013673500153">मालमत्ता आयडी: <ph name="ASSET_ID" /></translation>
 <translation id="7981313251711023384">जलद ब्राउझिंग आणि शोधाकरता पेज आधीच लोड करा</translation>
 <translation id="798145602633458219">सूचना <ph name="SUGGESTION_NAME" /> सर्च बॉक्समध्ये जोडा</translation>
@@ -5279,6 +5278,7 @@ https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-featu
 <translation id="862542460444371744">&amp;विस्तार</translation>
 <translation id="862727964348362408">निलंबित</translation>
 <translation id="862750493060684461">CSS कॅशे</translation>
+<translation id="8627706565932943526">संकालन एरर</translation>
 <translation id="8627795981664801467">केवळ सुरक्षित कनेक्शन</translation>
 <translation id="8630903300770275248">पर्यवेक्षित वापरकर्ता इंपोर्ट करा</translation>
 <translation id="8631032106121706562">पाकळ्या</translation>

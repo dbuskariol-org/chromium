@@ -4863,7 +4863,6 @@
 <translation id="7974936243149753750">过扫描</translation>
 <translation id="7978412674231730200">私有密钥</translation>
 <translation id="7978450511781612192">执行此操作会使您退出 Google 帐号。您的书签、历史记录、密码及其他设置将不再保持同步。</translation>
-<translation id="7979036127916589816">同步错误</translation>
 <translation id="7980084013673500153">资源 ID：<ph name="ASSET_ID" /></translation>
 <translation id="7981313251711023384">预加载网页，以便实现更快速的浏览和搜索</translation>
 <translation id="798145602633458219">将“<ph name="SUGGESTION_NAME" />”这项推荐内容附加到搜索框中</translation>
@@ -5311,6 +5310,7 @@
 <translation id="862542460444371744">扩展程序(&amp;E)</translation>
 <translation id="862727964348362408">已暂停</translation>
 <translation id="862750493060684461">CSS 缓存</translation>
+<translation id="8627706565932943526">同步错误</translation>
 <translation id="8627795981664801467">仅限安全连接</translation>
 <translation id="8630903300770275248">导入受监管用户</translation>
 <translation id="8631032106121706562">花朵</translation>
