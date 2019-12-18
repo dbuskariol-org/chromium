@@ -2046,6 +2046,7 @@ jumbo_static_library("ui") {
         "webui/chromeos/emulator/device_emulator_ui.cc",
         "webui/chromeos/emulator/device_emulator_ui.h",
       ]
+      deps += [ "//chromeos/components/sample_system_web_app_ui" ]
     }
 
     if (use_cras) {

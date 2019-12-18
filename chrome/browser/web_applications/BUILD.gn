@@ -69,6 +69,10 @@ source_set("web_applications") {
       "//components/arc:arc_base",
       "//components/arc/mojom",
     ]
+
+    if (!is_official_build) {
+      deps += [ "//chromeos/components/sample_system_web_app_ui" ]
+    }
   }
 
   public_deps = [

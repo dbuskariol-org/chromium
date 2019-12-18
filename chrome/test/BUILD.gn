@@ -1507,6 +1507,12 @@ if (!is_android) {
           "//chromeos/components/help_app_ui:browser_tests_js",
           "//chromeos/components/media_app_ui:browser_tests_js",
         ]
+
+        if (!is_official_build) {
+          deps += [
+            "//chromeos/components/sample_system_web_app_ui:browser_tests_js",
+          ]
+        }
       }
     }
 
