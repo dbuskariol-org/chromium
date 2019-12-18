@@ -270,6 +270,9 @@
         "load:search:amazon": {
             "DEFAULT": "system_health_mobile_000.wprgo"
         },
+        "load:search:amazon:2019": {
+            "DEFAULT": "system_health_mobile_c1802fd8f4.wprgo"
+        },
         "load:search:baidu": {
             "DEFAULT": "system_health_mobile_000.wprgo"
         },

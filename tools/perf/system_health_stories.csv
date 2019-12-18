@@ -101,6 +101,7 @@ load:news:washingtonpost,,mobile,"2016,health_check"
 load:news:washingtonpost:2019,,mobile,"2019,health_check"
 load:news:wikipedia:2018,,"desktop,mobile","2018,emerging_market"
 load:search:amazon:2018,,desktop,2018
+load:search:amazon:2019,,mobile,2019
 load:search:baidu:2018,,"desktop,mobile","2018,health_check,international"
 load:search:ebay:2018,,"desktop,mobile","2018,health_check"
 load:search:flipkart:2018,,desktop,"2018,international"
