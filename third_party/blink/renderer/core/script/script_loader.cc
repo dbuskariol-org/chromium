@@ -718,7 +718,8 @@ bool ScriptLoader::PrepareScript(const TextPosition& script_start_position,
             MakeGarbageCollected<ModulePendingScriptTreeClient>();
         modulator->FetchDescendantsForInlineScript(
             module_script, fetch_client_settings_object_fetcher,
-            mojom::RequestContextType::SCRIPT, module_tree_client);
+            mojom::RequestContextType::SCRIPT,
+            network::mojom::RequestDestination::kScript, module_tree_client);
         prepared_pending_script_ = MakeGarbageCollected<ModulePendingScript>(
             element_, module_tree_client, is_external_script_);
         break;
@@ -935,7 +936,8 @@ void ScriptLoader::FetchModuleScriptTree(
   auto* module_tree_client =
       MakeGarbageCollected<ModulePendingScriptTreeClient>();
   modulator->FetchTree(url, fetch_client_settings_object_fetcher,
-                       mojom::RequestContextType::SCRIPT, options,
+                       mojom::RequestContextType::SCRIPT,
+                       network::mojom::RequestDestination::kScript, options,
                        ModuleScriptCustomFetchType::kNone, module_tree_client);
   prepared_pending_script_ = MakeGarbageCollected<ModulePendingScript>(
       element_, module_tree_client, is_external_script_);

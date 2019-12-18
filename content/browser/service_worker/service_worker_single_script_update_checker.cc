@@ -174,6 +174,8 @@ ServiceWorkerSingleScriptUpdateChecker::ServiceWorkerSingleScriptUpdateChecker(
     // https://w3c.github.io/ServiceWorker/#update-algorithm
     resource_request.fetch_request_context_type =
         static_cast<int>(blink::mojom::RequestContextType::SERVICE_WORKER);
+    resource_request.destination =
+        network::mojom::RequestDestination::kServiceWorker;
     resource_request.resource_type =
         static_cast<int>(ResourceType::kServiceWorker);
 
@@ -204,6 +206,7 @@ ServiceWorkerSingleScriptUpdateChecker::ServiceWorkerSingleScriptUpdateChecker(
     // https://w3c.github.io/ServiceWorker/#update-algorithm
     resource_request.fetch_request_context_type =
         static_cast<int>(blink::mojom::RequestContextType::SCRIPT);
+    resource_request.destination = network::mojom::RequestDestination::kScript;
     resource_request.resource_type = static_cast<int>(ResourceType::kScript);
   }
 

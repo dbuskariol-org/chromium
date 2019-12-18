@@ -857,6 +857,7 @@ mojom::blink::FetchAPIRequestPtr Request::CreateFetchAPIRequest() const {
   fetch_api_request->integrity = request_->Integrity();
   fetch_api_request->is_history_navigation = request_->IsHistoryNavigation();
   fetch_api_request->request_context_type = request_->Context();
+  fetch_api_request->destination = request_->Destination();
 
   // Strip off the fragment part of URL. So far, all callers expect the fragment
   // to be excluded.
@@ -907,6 +908,13 @@ mojom::RequestContextType Request::GetRequestContextType() const {
     return mojom::RequestContextType::UNSPECIFIED;
   }
   return request_->Context();
+}
+
+network::mojom::RequestDestination Request::GetRequestDestination() const {
+  if (!request_) {
+    return network::mojom::RequestDestination::kEmpty;
+  }
+  return request_->Destination();
 }
 
 void Request::Trace(blink::Visitor* visitor) {

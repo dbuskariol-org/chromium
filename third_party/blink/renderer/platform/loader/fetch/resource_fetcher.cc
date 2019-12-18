@@ -413,6 +413,40 @@ mojom::RequestContextType ResourceFetcher::DetermineRequestContext(
   return mojom::RequestContextType::SUBRESOURCE;
 }
 
+network::mojom::RequestDestination ResourceFetcher::DetermineRequestDestination(
+    ResourceType type) {
+  switch (type) {
+    case ResourceType::kXSLStyleSheet:
+      DCHECK(RuntimeEnabledFeatures::XSLTEnabled());
+      FALLTHROUGH;
+    case ResourceType::kCSSStyleSheet:
+      return network::mojom::RequestDestination::kStyle;
+    case ResourceType::kScript:
+      return network::mojom::RequestDestination::kScript;
+    case ResourceType::kFont:
+      return network::mojom::RequestDestination::kFont;
+    case ResourceType::kImage:
+      return network::mojom::RequestDestination::kImage;
+    case ResourceType::kTextTrack:
+      return network::mojom::RequestDestination::kTrack;
+    case ResourceType::kSVGDocument:
+      return network::mojom::RequestDestination::kImage;
+    case ResourceType::kAudio:
+      return network::mojom::RequestDestination::kAudio;
+    case ResourceType::kVideo:
+      return network::mojom::RequestDestination::kVideo;
+    case ResourceType::kManifest:
+      return network::mojom::RequestDestination::kManifest;
+    case ResourceType::kRaw:
+    case ResourceType::kImportResource:
+    case ResourceType::kLinkPrefetch:
+    case ResourceType::kMock:
+      return network::mojom::RequestDestination::kEmpty;
+  }
+  NOTREACHED();
+  return network::mojom::RequestDestination::kEmpty;
+}
+
 // static
 void ResourceFetcher::AddPriorityObserverForTesting(
     const KURL& resource_url,
@@ -855,6 +889,8 @@ base::Optional<ResourceRequestBlockedReason> ResourceFetcher::PrepareRequest(
       mojom::RequestContextType::UNSPECIFIED) {
     resource_request.SetRequestContext(
         DetermineRequestContext(resource_type, kImageNotImageSet));
+    resource_request.SetRequestDestination(
+        DetermineRequestDestination(resource_type));
   }
   if (resource_type == ResourceType::kLinkPrefetch)
     resource_request.SetPurposeHeader("prefetch");
@@ -2024,12 +2060,14 @@ void ResourceFetcher::EmulateLoadStartedForInspector(
     Resource* resource,
     const KURL& url,
     mojom::RequestContextType request_context,
+    network::mojom::RequestDestination request_destination,
     const AtomicString& initiator_name) {
   base::AutoReset<bool> r(&is_in_request_resource_, true);
   if (CachedResource(url))
     return;
   ResourceRequest resource_request(url);
   resource_request.SetRequestContext(request_context);
+  resource_request.SetRequestDestination(request_destination);
   if (!resource_request.PriorityHasBeenSet()) {
     resource_request.SetPriority(ComputeLoadPriority(
         resource->GetType(), resource_request, ResourcePriority::kNotVisible,
