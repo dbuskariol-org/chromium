@@ -317,10 +317,6 @@ bool Profile::IsNewProfile() {
          PrefService::INITIALIZATION_STATUS_CREATED_NEW_PREF_STORE;
 }
 
-bool Profile::IsSyncAllowed() {
-  return ProfileSyncServiceFactory::IsSyncAllowed(this);
-}
-
 void Profile::MaybeSendDestroyedNotification() {
   if (!sent_destroyed_notification_) {
     sent_destroyed_notification_ = true;
