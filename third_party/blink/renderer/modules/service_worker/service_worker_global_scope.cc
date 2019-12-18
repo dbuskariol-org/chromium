@@ -1830,6 +1830,7 @@ void ServiceWorkerGlobalScope::DispatchFetchEventForMainResource(
         response_callback,
     DispatchFetchEventForMainResourceCallback callback) {
   DCHECK(IsContextThread());
+
   // We can use kNone as a |requestor_coep| for the main resource because it
   // must be the same origin.
   event_queue_->EnqueueNormal(

@@ -272,8 +272,6 @@ void WorkerScriptFetchInitiator::AddAdditionalRequestHeaders(
   UpdateAdditionalHeadersForBrowserInitiatedRequest(
       &resource_request->headers, browser_context,
       /*should_update_existing_headers=*/false, renderer_preferences);
-
-  SetFetchMetadataHeadersForBrowserInitiatedRequest(resource_request);
 }
 
 void WorkerScriptFetchInitiator::CreateScriptLoader(

@@ -219,8 +219,6 @@ ServiceWorkerSingleScriptUpdateChecker::ServiceWorkerSingleScriptUpdateChecker(
   // for service worker served as modules, and "omit" as a credentials mode:
   // https://html.spec.whatwg.org/C/#fetch-a-single-module-script
 
-  SetFetchMetadataHeadersForBrowserInitiatedRequest(&resource_request);
-
   if (service_worker_loader_helpers::ShouldValidateBrowserCacheForScript(
           is_main_script_, force_bypass_cache_, update_via_cache_,
           time_since_last_check_)) {
