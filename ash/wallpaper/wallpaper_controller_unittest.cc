@@ -1991,8 +1991,8 @@ TEST_F(WallpaperControllerTest, LockDuringOverview) {
                              ->wallpaper_view();
 
   // Make sure that wallpaper still have blur.
-  ASSERT_EQ(30, wallpaper_view->blur_sigma());
-  ASSERT_EQ(1, wallpaper_view->opacity());
+  ASSERT_EQ(30, wallpaper_view->property().blur_sigma);
+  ASSERT_EQ(1, wallpaper_view->property().opacity);
 }
 
 TEST_F(WallpaperControllerTest, OnlyShowDevicePolicyWallpaperOnLoginScreen) {

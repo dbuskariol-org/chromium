@@ -26,8 +26,7 @@ class WallpaperView : public WallpaperBaseView,
   // Schedules a repaint of the wallpaper with blur and opacity changes.
   void SetWallpaperProperty(const WallpaperProperty& property);
 
-  int blur_sigma() const { return property_.blur_sigma; }
-  float opacity() const { return property_.opacity; }
+  const WallpaperProperty& property() const { return property_; }
 
  private:
   // views::View:

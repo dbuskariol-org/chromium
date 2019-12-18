@@ -89,7 +89,7 @@ void OverviewWallpaperController::StopBlurAnimationsForTesting() {
     layer_tree->root()->GetAnimator()->StopAnimating();
   for (aura::Window* root : Shell::Get()->GetAllRootWindows()) {
     auto* wallpaper_widget_controller = GetWallpaperWidgetController(root);
-    wallpaper_widget_controller->EndPendingAnimation();
+    wallpaper_widget_controller->StopAnimating();
     GetAnimator(wallpaper_widget_controller)->StopAnimating();
   }
 }
@@ -120,7 +120,7 @@ void OverviewWallpaperController::OnBlurChange(WallpaperAnimationState state,
       continue;
 
     auto* wallpaper_widget_controller = GetWallpaperWidgetController(root);
-    wallpaper_widget_controller->EndPendingAnimation();
+    wallpaper_widget_controller->StopAnimating();
     auto* wallpaper_window =
         wallpaper_widget_controller->GetWidget()->GetNativeWindow();
 

@@ -156,7 +156,7 @@ bool WallpaperWidgetController::IsAnimating() const {
   return animating_widget_.get();
 }
 
-void WallpaperWidgetController::EndPendingAnimation() {
+void WallpaperWidgetController::StopAnimating() {
   if (!IsAnimating())
     return;
   animating_widget_->StopAnimating();
@@ -210,6 +210,11 @@ bool WallpaperWidgetController::SetWallpaperProperty(
   if (wallpaper_view_ && !locked)
     wallpaper_view_->SetWallpaperProperty(property);
   return true;
+}
+
+const WallpaperProperty& WallpaperWidgetController::GetWallpaperProperty()
+    const {
+  return property_;
 }
 
 void WallpaperWidgetController::ResetWidgetsForTesting() {

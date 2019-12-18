@@ -1464,9 +1464,10 @@ void WallpaperControllerImpl::InstallDesktopController(
   auto* wallpaper_widget_controller =
       RootWindowController::ForWindow(root_window)
           ->wallpaper_widget_controller();
-  WallpaperProperty property = is_wallpaper_blurred_for_lock_state
-                                   ? wallpaper_constants::kLockState
-                                   : wallpaper_widget_controller->property();
+  WallpaperProperty property =
+      is_wallpaper_blurred_for_lock_state
+          ? wallpaper_constants::kLockState
+          : wallpaper_widget_controller->GetWallpaperProperty();
 
   WallpaperView* current_wallpaper_view = nullptr;
   auto* widget = CreateWallpaperWidget(root_window, container_id, property,

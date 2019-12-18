@@ -40,7 +40,7 @@ class ASH_EXPORT WallpaperWidgetController {
 
   // If an animating wallpaper change is in progress, it ends the animation and
   // changes the wallpaper immediately. No-op if IsAnimation() returns false.
-  void EndPendingAnimation();
+  void StopAnimating();
 
   // Adds a callback that will be run when the wallpaper animation ends. Used
   // when you're expecting a wallpaper change (e.g. when IsAnimation() returns
@@ -59,8 +59,9 @@ class ASH_EXPORT WallpaperWidgetController {
   // Returns true if there was something to reparent.
   bool Reparent(aura::Window* root_window, int container);
 
-  // Set the properties (blur and opacity) used to draw wallpaper.
+  // Sets/Gets the properties (blur and opacity) used to draw wallpaper.
   bool SetWallpaperProperty(const WallpaperProperty& property);
+  const WallpaperProperty& GetWallpaperProperty() const;
 
   // TODO: Get the wallpaper view from |animating_widget_| or |active_widget_|
   // instead of caching the pointer value.
@@ -69,8 +70,6 @@ class ASH_EXPORT WallpaperWidgetController {
   // Reset, and closes both |active_widget_| and |animating_widget_|. Can be
   // used in tests to reset the wallpaper widget controller state.
   void ResetWidgetsForTesting();
-
-  const WallpaperProperty& property() const { return property_; }
 
  private:
   // Wrapper around wallpaper widgets that manages the widget state.
