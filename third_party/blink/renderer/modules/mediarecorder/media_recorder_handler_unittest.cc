@@ -639,7 +639,7 @@ TEST_F(MediaRecorderHandlerPassthroughTest, ErrorsOutOnCodecSwitch) {
   platform_->RunUntilIdle();
 }
 
-INSTANTIATE_TEST_SUITE_P(,
+INSTANTIATE_TEST_SUITE_P(All,
                          MediaRecorderHandlerPassthroughTest,
                          ValuesIn(kMediaRecorderPassthroughTestParams));
 
