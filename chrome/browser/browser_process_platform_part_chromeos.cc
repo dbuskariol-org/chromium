@@ -242,7 +242,7 @@ void BrowserProcessPlatformPart::DestroySystemClock() {
 void BrowserProcessPlatformPart::CreateProfileHelper() {
   DCHECK(!created_profile_helper_ && !profile_helper_);
   created_profile_helper_ = true;
-  profile_helper_.reset(new chromeos::ProfileHelper());
+  profile_helper_ = chromeos::ProfileHelper::CreateInstance();
 }
 
 chromeos::AccountManagerFactory*
