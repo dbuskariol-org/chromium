@@ -2122,8 +2122,8 @@ crbug.com/472330 fast/writing-mode/box-shadow-vertical-rl.html [ Failure ]
 # These are the failing tests because Chrome hasn't implemented according to the spec.
 crbug.com/645988 external/wpt/uievents/order-of-events/focus-events/focus-manual.html [ Failure ]
 
-crbug.com/346473  fast/events/drag-on-mouse-move-cancelled.html [ Failure ]
-crbug.com/346473  virtual/mouseevent_fractional/fast/events/drag-on-mouse-move-cancelled.html [ Failure ]
+crbug.com/346473 fast/events/drag-on-mouse-move-cancelled.html [ Failure ]
+crbug.com/346473 virtual/mouseevent_fractional/fast/events/drag-on-mouse-move-cancelled.html [ Failure ]
 
 # These tests are skipped as there is no touch support on Mac.
 crbug.com/613672 [ Mac ] external/wpt/feature-policy/experimental-features/vertical-scroll-touch-block-manual.tentative.html [ Skip ]
@@ -2203,7 +2203,7 @@ crbug.com/957181 external/wpt/resource-timing/nested-context-navigations-iframe.
 crbug.com/957181 virtual/omt-worker-fetch/external/wpt/resource-timing/nested-context-navigations-iframe.html [ Pass Failure ]
 
 # Chrome touch-action computation ignores div transforms.
-crbug.com/715148 external/wpt/pointerevents/pointerevent_touch-action-rotated-divs_touch-manual.html  [ Skip ]
+crbug.com/715148 external/wpt/pointerevents/pointerevent_touch-action-rotated-divs_touch-manual.html [ Skip ]
 
 # These testcases are incorrect, mark them as failing until they're fixed in the testsuite.
 # https://lists.w3.org/Archives/Public/www-style/2016Jan/0275.html
@@ -3958,19 +3958,19 @@ crbug.com/697971 [ Mac10.12 ] virtual/text-antialias/selection/flexbox-selection
 crbug.com/697971 [ Mac10.12 ] virtual/text-antialias/selection/flexbox-selection.html [ Skip ]
 
 # [css-grid]
-crbug.com/921722  external/wpt/css/css-grid/abspos/descendant-static-position-001.html [ Failure ]
-crbug.com/921722  external/wpt/css/css-grid/abspos/descendant-static-position-002.html [ Failure ]
-crbug.com/921722  external/wpt/css/css-grid/abspos/descendant-static-position-003.html [ Failure ]
-crbug.com/941987  external/wpt/css/css-grid/alignment/grid-baseline-align-cycles-001.html [ Failure ]
+crbug.com/921722 external/wpt/css/css-grid/abspos/descendant-static-position-001.html [ Failure ]
+crbug.com/921722 external/wpt/css/css-grid/abspos/descendant-static-position-002.html [ Failure ]
+crbug.com/921722 external/wpt/css/css-grid/abspos/descendant-static-position-003.html [ Failure ]
+crbug.com/941987 external/wpt/css/css-grid/alignment/grid-baseline-align-cycles-001.html [ Failure ]
 crbug.com/1005519 external/wpt/css/css-grid/alignment/grid-self-alignment-baseline-with-grid-001.html [ Failure ]
 crbug.com/1005519 external/wpt/css/css-grid/alignment/grid-self-alignment-baseline-with-grid-002.html [ Failure ]
 crbug.com/1005519 external/wpt/css/css-grid/alignment/grid-self-alignment-baseline-with-grid-004.html [ Failure ]
 crbug.com/1005519 external/wpt/css/css-grid/alignment/grid-self-alignment-baseline-with-grid-003.html [ Failure ]
-crbug.com/759665  external/wpt/css/css-grid/animation/grid-template-columns-001.html [ Failure ]
-crbug.com/759665  external/wpt/css/css-grid/animation/grid-template-rows-001.html [ Failure ]
+crbug.com/759665 external/wpt/css/css-grid/animation/grid-template-columns-001.html [ Failure ]
+crbug.com/759665 external/wpt/css/css-grid/animation/grid-template-rows-001.html [ Failure ]
 crbug.com/1018439 external/wpt/css/css-grid/grid-child-percent-basis-resize-1.html [ Failure ]
-crbug.com/511177  external/wpt/css/css-grid/grid-layout-properties.html [ Failure ]
-crbug.com/868380  external/wpt/css/css-grid/grid-model/grid-container-ignores-first-letter-002.html [ Failure ]
+crbug.com/511177 external/wpt/css/css-grid/grid-layout-properties.html [ Failure ]
+crbug.com/868380 external/wpt/css/css-grid/grid-model/grid-container-ignores-first-letter-002.html [ Failure ]
 crbug.com/707359 [ Mac ] fast/css-grid-layout/grid-align-baseline-vertical.html [ Failure ]
 crbug.com/707359 [ Mac ] fast/css-grid-layout/grid-self-baseline-03.html [ Failure ]
 crbug.com/707359 [ Mac ] fast/css-grid-layout/grid-self-baseline-04.html [ Failure ]
@@ -4627,12 +4627,12 @@ crbug.com/757165 [ Win ] virtual/gpu/fast/canvas/image-object-in-canvas.html [ S
 crbug.com/903837 [ Mac ] virtual/gpu/fast/canvas/color-space/display_linear-rgb.html [ Skip ]
 
 # Antialiasing error
-crbug.com/845973 virtual/display-compositor-pixel-dump/fast/canvas/display-compositor-pixel-dump/OffscreenCanvas-opaque-background-compositing.html  [ Pass Failure ]
+crbug.com/845973 virtual/display-compositor-pixel-dump/fast/canvas/display-compositor-pixel-dump/OffscreenCanvas-opaque-background-compositing.html [ Pass Failure ]
 
 # Some Windows 7 vm images have a timezone-related registry not populated
 # leading this test to fail.
 # https://chromium-review.googlesource.com/c/chromium/src/+/1379250/6
-crbug.com/856119 [ Win7 ] fast/js/regress/resolved-timezone-defined.html  [ Pass Failure ]
+crbug.com/856119 [ Win7 ] fast/js/regress/resolved-timezone-defined.html [ Pass Failure ]
 
 # Tests occasionaly timing out (flaky) on WebKit Win7 dbg builder
 crbug.com/757955 [ Win7 Debug ] http/tests/devtools/sources/debugger-pause/pause-on-elements-panel.js [ Pass Timeout ]
@@ -4911,7 +4911,7 @@ crbug.com/785955 http/tests/credentialmanager/tools/virtual-authenticator-enviro
 crbug.com/826936 external/wpt/webauthn/createcredential-badargs-authnrselection.https.html [ Pass Timeout Failure ]
 crbug.com/826936 external/wpt/webauthn/createcredential-badargs-rp.https.html [ Pass Timeout Failure ]
 crbug.com/826936 external/wpt/webauthn/createcredential-badargs-user.https.html [ Pass Timeout Failure ]
-crbug.com/826936 external/wpt/webauthn/createcredential-excludecredentials.https.html  [ Pass Timeout Failure ]
+crbug.com/826936 external/wpt/webauthn/createcredential-excludecredentials.https.html [ Pass Timeout Failure ]
 crbug.com/826936 external/wpt/webauthn/createcredential-passing.https.html [ Pass Timeout Failure ]
 crbug.com/826936 external/wpt/webauthn/createcredential-badargs-challenge.https.html [ Pass Timeout Failure ]
 crbug.com/826936 external/wpt/webauthn/createcredential-pubkeycredparams.https.html [ Pass Timeout Failure ]
@@ -5419,7 +5419,7 @@ crbug.com/944025 http/tests/preload/meta-viewport-device-width-link-headers.html
 crbug.com/945665 http/tests/devtools/elements/styles-3/styles-add-new-rule-tab.js [ Pass Failure ]
 crbug.com/945665 http/tests/devtools/elements/styles-3/styles-add-new-rule.js [ Pass Failure Timeout ]
 crbug.com/945665 http/tests/devtools/elements/styles-3/styles-disable-inherited.js [ Pass Failure ]
-crbug.com/945665 [ Win7 ] http/tests/devtools/elements/styles-3/style-rule-from-imported-stylesheet.js  [ Failure Pass ]
+crbug.com/945665 [ Win7 ] http/tests/devtools/elements/styles-3/style-rule-from-imported-stylesheet.js [ Failure Pass ]
 crbug.com/945665 http/tests/devtools/elements/styles-3/styles-change-node-while-editing.js [ Pass Failure ]
 crbug.com/945629 http/tests/devtools/network/network-filters.js [ Pass Failure Timeout ]
 
