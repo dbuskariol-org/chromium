@@ -6,6 +6,7 @@
 
 #include "third_party/blink/renderer/bindings/core/v8/unrestricted_double_or_keyframe_animation_options.h"
 #include "third_party/blink/renderer/core/animation/animation.h"
+#include "third_party/blink/renderer/core/animation/document_animations.h"
 #include "third_party/blink/renderer/core/animation/document_timeline.h"
 #include "third_party/blink/renderer/core/animation/effect_input.h"
 #include "third_party/blink/renderer/core/animation/effect_model.h"
@@ -97,13 +98,13 @@ HeapVector<Member<Animation>> Animatable::getAnimations(
     return animations;
 
   for (const auto& animation :
-       element->GetDocument().Timeline().getAnimations()) {
+       element->GetDocument().GetDocumentAnimations().getAnimations()) {
     DCHECK(animation->effect());
     // TODO(gtsteel) make this use the idl properties
     Element* target = To<KeyframeEffect>(animation->effect())->EffectTarget();
     if (element == target || (use_subtree && element->contains(target))) {
-      // DocumentTimeline::getAnimations should only give us animations that are
-      // either current or in effect.
+      // DocumentAnimations::getAnimations should only give us animations that
+      // are either current or in effect.
       DCHECK(animation->effect()->IsCurrent() ||
              animation->effect()->IsInEffect());
       animations.push_back(animation);

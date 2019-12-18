@@ -110,6 +110,7 @@ class DocumentOutliveTimeReporter;
 class DocumentParser;
 class DocumentResourceCoordinator;
 class DocumentState;
+class DocumentAnimations;
 class DocumentTimeline;
 class DocumentType;
 class DOMFeaturePolicy;
@@ -1295,6 +1296,9 @@ class CORE_EXPORT Document : public ContainerNode,
 
   AnimationClock& GetAnimationClock();
   const AnimationClock& GetAnimationClock() const;
+  DocumentAnimations& GetDocumentAnimations() const {
+    return *document_animations_;
+  }
   DocumentTimeline& Timeline() const { return *timeline_; }
   PendingAnimations& GetPendingAnimations() { return *pending_animations_; }
   WorkletAnimationController& GetWorkletAnimationController() {
@@ -2019,6 +2023,7 @@ class CORE_EXPORT Document : public ContainerNode,
       HashMap<AtomicString, std::unique_ptr<Locale>>;
   LocaleIdentifierToLocaleMap locale_cache_;
 
+  Member<DocumentAnimations> document_animations_;
   Member<DocumentTimeline> timeline_;
   Member<PendingAnimations> pending_animations_;
   Member<WorkletAnimationController> worklet_animation_controller_;

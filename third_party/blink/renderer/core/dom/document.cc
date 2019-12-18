@@ -1170,6 +1170,7 @@ Document::Document(const DocumentInit& initializer,
           GetTaskRunner(TaskType::kInternalUserInteraction),
           this,
           &Document::ElementDataCacheClearTimerFired),
+      document_animations_(MakeGarbageCollected<DocumentAnimations>(this)),
       timeline_(MakeGarbageCollected<DocumentTimeline>(this)),
       pending_animations_(MakeGarbageCollected<PendingAnimations>(*this)),
       worklet_animation_controller_(
@@ -2439,7 +2440,7 @@ bool Document::NeedsFullLayoutTreeUpdate() const {
     return true;
   if (IsSlotAssignmentOrLegacyDistributionDirty())
     return true;
-  if (DocumentAnimations::NeedsAnimationTimingUpdate(*this))
+  if (document_animations_->NeedsAnimationTimingUpdate())
     return true;
   return false;
 }
@@ -2839,7 +2840,7 @@ void Document::UpdateStyleAndLayoutTree() {
 
   probe::RecalculateStyle recalculate_style_scope(this);
 
-  DocumentAnimations::UpdateAnimationTimingIfNeeded(*this);
+  document_animations_->UpdateAnimationTimingIfNeeded();
   EvaluateMediaQueryListIfNeeded();
   UpdateUseShadowTreesIfNeeded();
 
@@ -2855,7 +2856,7 @@ void Document::UpdateStyleAndLayoutTree() {
     ClearFocusedElementSoon();
   GetLayoutView()->ClearHitTestCache();
 
-  DCHECK(!DocumentAnimations::NeedsAnimationTimingUpdate(*this));
+  DCHECK(!document_animations_->NeedsAnimationTimingUpdate());
 
   unsigned element_count =
       GetStyleEngine().StyleForElementCount() - start_element_count;
@@ -8284,6 +8285,7 @@ void Document::Trace(Visitor* visitor) {
   visitor->Trace(template_document_host_);
   visitor->Trace(user_action_elements_);
   visitor->Trace(svg_extensions_);
+  visitor->Trace(document_animations_);
   visitor->Trace(timeline_);
   visitor->Trace(pending_animations_);
   visitor->Trace(worklet_animation_controller_);
