@@ -79,9 +79,8 @@
     [self.bannerViewController
         setSubtitleText:base::SysUTF16ToNSString(
                             self.saveCardInfoBarDelegate->card_label())];
-    gfx::Image icon = self.saveCardInfoBarDelegate->GetIcon();
-    if (!icon.IsEmpty())
-      [self.bannerViewController setIconImage:icon.ToUIImage()];
+    self.bannerViewController.iconImage =
+        [UIImage imageNamed:@"infobar_save_card_icon"];
   }
 }
 
