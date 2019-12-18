@@ -26,7 +26,7 @@ class UsbServiceLinux final : public UsbService {
   ~UsbServiceLinux() override;
 
   // device::UsbService implementation
-  void GetDevices(GetDevicesCallback callback) override;
+  void GetDevices(const GetDevicesCallback& callback) override;
 
  private:
   using DeviceMap =

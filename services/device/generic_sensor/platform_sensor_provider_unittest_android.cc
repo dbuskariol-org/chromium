@@ -35,8 +35,8 @@ TEST_F(PlatformSensorProviderTestAndroid, SensorManagerIsNull) {
   provider_->SetSensorManagerToNullForTesting();
   provider_->CreateSensor(
       device::mojom::SensorType::AMBIENT_LIGHT,
-      base::BindOnce(&PlatformSensorProviderTestAndroid::CreateSensorCallback,
-                     base::Unretained(this)));
+      base::Bind(&PlatformSensorProviderTestAndroid::CreateSensorCallback,
+                 base::Unretained(this)));
 }
 
 }  // namespace device

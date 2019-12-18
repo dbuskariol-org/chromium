@@ -19,7 +19,7 @@ union SensorReading;
 // identify what type of sensor that is and creates a SensorInfoLinux structure
 // that holds all the necessary information to create a PlatformSensorLinux.
 struct SensorPathsLinux {
-  using ReaderFunctor = base::RepeatingCallback<
+  using ReaderFunctor = base::Callback<
       void(double scaling, double offset, SensorReading& reading)>;
 
   SensorPathsLinux();

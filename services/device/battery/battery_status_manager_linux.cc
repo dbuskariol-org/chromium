@@ -304,9 +304,7 @@ mojom::BatteryStatus ComputeWebBatteryStatus(BatteryProperties* properties) {
     case UPOWER_DEVICE_STATE_FULL: {
       break;
     }
-    default: {
-      status.charging_time = std::numeric_limits<double>::infinity();
-    }
+    default: { status.charging_time = std::numeric_limits<double>::infinity(); }
   }
   return status;
 }
@@ -347,13 +345,13 @@ class BatteryStatusManagerLinux::BatteryStatusNotificationThread
         system_bus_.get(), UPowerObject::PropertyChangedCallback());
     upower_->proxy()->ConnectToSignal(
         kUPowerServiceName, kUPowerSignalDeviceAdded,
-        base::BindRepeating(&BatteryStatusNotificationThread::DeviceAdded,
-                            base::Unretained(this)),
+        base::Bind(&BatteryStatusNotificationThread::DeviceAdded,
+                   base::Unretained(this)),
         base::DoNothing());
     upower_->proxy()->ConnectToSignal(
         kUPowerServiceName, kUPowerSignalDeviceRemoved,
-        base::BindRepeating(&BatteryStatusNotificationThread::DeviceRemoved,
-                            base::Unretained(this)),
+        base::Bind(&BatteryStatusNotificationThread::DeviceRemoved,
+                   base::Unretained(this)),
         base::DoNothing());
 
     FindBatteryDevice();
@@ -462,8 +460,8 @@ class BatteryStatusManagerLinux::BatteryStatusNotificationThread
       // to the Changed signal.
       battery_->proxy()->ConnectToSignal(
           kUPowerDeviceInterfaceName, kUPowerDeviceSignalChanged,
-          base::BindRepeating(&BatteryStatusNotificationThread::BatteryChanged,
-                              base::Unretained(this)),
+          base::Bind(&BatteryStatusNotificationThread::BatteryChanged,
+                     base::Unretained(this)),
           base::DoNothing());
     }
   }
@@ -488,9 +486,8 @@ class BatteryStatusManagerLinux::BatteryStatusNotificationThread
       const dbus::ObjectPath& device_path) {
     return std::make_unique<BatteryObject>(
         system_bus_.get(), device_path,
-        base::BindRepeating(
-            &BatteryStatusNotificationThread::BatteryPropertyChanged,
-            base::Unretained(this)));
+        base::Bind(&BatteryStatusNotificationThread::BatteryPropertyChanged,
+                   base::Unretained(this)));
   }
 
   void DeviceAdded(dbus::Signal* /* signal */) {

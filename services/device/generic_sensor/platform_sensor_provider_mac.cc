@@ -19,19 +19,18 @@ PlatformSensorProviderMac::~PlatformSensorProviderMac() = default;
 void PlatformSensorProviderMac::CreateSensorInternal(
     mojom::SensorType type,
     SensorReadingSharedBuffer* reading_buffer,
-    CreateSensorCallback callback) {
+    const CreateSensorCallback& callback) {
   // Create Sensors here.
   switch (type) {
     case mojom::SensorType::AMBIENT_LIGHT: {
       scoped_refptr<PlatformSensor> sensor =
           new PlatformSensorAmbientLightMac(reading_buffer, this);
-      std::move(callback).Run(std::move(sensor));
+      callback.Run(std::move(sensor));
       break;
     }
     case mojom::SensorType::ACCELEROMETER: {
-      std::move(callback).Run(
-          base::MakeRefCounted<PlatformSensorAccelerometerMac>(reading_buffer,
-                                                               this));
+      callback.Run(base::MakeRefCounted<PlatformSensorAccelerometerMac>(
+          reading_buffer, this));
       break;
     }
     case mojom::SensorType::RELATIVE_ORIENTATION_EULER_ANGLES: {
@@ -40,8 +39,7 @@ void PlatformSensorProviderMac::CreateSensorInternal(
       // If this PlatformSensorFusion object is successfully initialized,
       // |callback| will be run with a reference to this object.
       PlatformSensorFusion::Create(reading_buffer, this,
-                                   std::move(fusion_algorithm),
-                                   std::move(callback));
+                                   std::move(fusion_algorithm), callback);
       break;
     }
     case mojom::SensorType::RELATIVE_ORIENTATION_QUATERNION: {
@@ -54,11 +52,11 @@ void PlatformSensorProviderMac::CreateSensorInternal(
       PlatformSensorFusion::Create(
           reading_buffer, this,
           std::move(orientation_quaternion_fusion_algorithm_using_euler_angles),
-          std::move(callback));
+          callback);
       break;
     }
     default:
-      std::move(callback).Run(nullptr);
+      callback.Run(nullptr);
   }
 }
 

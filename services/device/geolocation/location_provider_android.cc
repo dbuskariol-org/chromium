@@ -37,8 +37,8 @@ void LocationProviderAndroid::SetUpdateCallback(
 void LocationProviderAndroid::StartProvider(bool high_accuracy) {
   DCHECK(thread_checker_.CalledOnValidThread());
   LocationApiAdapterAndroid::GetInstance()->Start(
-      base::BindRepeating(&LocationProviderAndroid::NotifyNewGeoposition,
-                          weak_ptr_factory_.GetWeakPtr()),
+      base::Bind(&LocationProviderAndroid::NotifyNewGeoposition,
+                 weak_ptr_factory_.GetWeakPtr()),
       high_accuracy);
 }
 

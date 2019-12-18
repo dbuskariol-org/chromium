@@ -36,7 +36,7 @@ void PlatformSensorProviderWinrt::SetSensorReaderFactoryForTesting(
 void PlatformSensorProviderWinrt::CreateSensorInternal(
     mojom::SensorType type,
     SensorReadingSharedBuffer* reading_buffer,
-    CreateSensorCallback callback) {
+    const CreateSensorCallback& callback) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
   switch (type) {
@@ -48,7 +48,7 @@ void PlatformSensorProviderWinrt::CreateSensorInternal(
       // |callback| will be run with a reference to this object.
       PlatformSensorFusion::Create(
           reading_buffer, this, std::move(linear_acceleration_fusion_algorithm),
-          std::move(callback));
+          callback);
       break;
     }
 
@@ -56,11 +56,10 @@ void PlatformSensorProviderWinrt::CreateSensorInternal(
     default: {
       base::PostTaskAndReplyWithResult(
           com_sta_task_runner_.get(), FROM_HERE,
-          base::BindOnce(&PlatformSensorProviderWinrt::CreateSensorReader,
-                         base::Unretained(this), type),
-          base::BindOnce(&PlatformSensorProviderWinrt::SensorReaderCreated,
-                         base::Unretained(this), type, reading_buffer,
-                         std::move(callback)));
+          base::Bind(&PlatformSensorProviderWinrt::CreateSensorReader,
+                     base::Unretained(this), type),
+          base::Bind(&PlatformSensorProviderWinrt::SensorReaderCreated,
+                     base::Unretained(this), type, reading_buffer, callback));
       break;
     }
   }
@@ -69,7 +68,7 @@ void PlatformSensorProviderWinrt::CreateSensorInternal(
 void PlatformSensorProviderWinrt::SensorReaderCreated(
     mojom::SensorType type,
     SensorReadingSharedBuffer* reading_buffer,
-    CreateSensorCallback callback,
+    const CreateSensorCallback& callback,
     std::unique_ptr<PlatformSensorReaderWinBase> sensor_reader) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   if (!sensor_reader) {
@@ -86,7 +85,7 @@ void PlatformSensorProviderWinrt::SensorReaderCreated(
         return;
       }
       default:
-        std::move(callback).Run(nullptr);
+        callback.Run(nullptr);
         return;
     }
   }
@@ -94,7 +93,7 @@ void PlatformSensorProviderWinrt::SensorReaderCreated(
       base::MakeRefCounted<PlatformSensorWin>(type, reading_buffer, this,
                                               com_sta_task_runner_,
                                               std::move(sensor_reader));
-  std::move(callback).Run(std::move(sensor));
+  callback.Run(std::move(sensor));
 }
 
 std::unique_ptr<PlatformSensorReaderWinBase>

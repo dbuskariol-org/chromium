@@ -37,7 +37,7 @@ class PlatformSensorProviderWinrt final : public PlatformSensorProvider {
   // PlatformSensorProvider interface implementation.
   void CreateSensorInternal(mojom::SensorType type,
                             SensorReadingSharedBuffer* reading_buffer,
-                            CreateSensorCallback callback) override;
+                            const CreateSensorCallback& callback) override;
 
  private:
   std::unique_ptr<PlatformSensorReaderWinBase> CreateSensorReader(
@@ -46,7 +46,7 @@ class PlatformSensorProviderWinrt final : public PlatformSensorProvider {
   void SensorReaderCreated(
       mojom::SensorType type,
       SensorReadingSharedBuffer* reading_buffer,
-      CreateSensorCallback callback,
+      const CreateSensorCallback& callback,
       std::unique_ptr<PlatformSensorReaderWinBase> sensor_reader);
 
   // The Windows.Devices.Sensors WinRT API supports both STA and MTA

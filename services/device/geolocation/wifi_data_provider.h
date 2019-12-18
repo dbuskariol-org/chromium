@@ -35,7 +35,7 @@ class WifiDataProvider : public base::RefCountedThreadSafe<WifiDataProvider> {
   // obtain.
   virtual bool GetData(WifiData* data) = 0;
 
-  typedef base::RepeatingClosure WifiDataUpdateCallback;
+  typedef base::Closure WifiDataUpdateCallback;
 
   void AddCallback(WifiDataUpdateCallback* callback);
 

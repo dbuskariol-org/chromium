@@ -27,34 +27,33 @@ PlatformSensorProviderBase::~PlatformSensorProviderBase() {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 }
 
-void PlatformSensorProviderBase::CreateSensor(mojom::SensorType type,
-                                              CreateSensorCallback callback) {
+void PlatformSensorProviderBase::CreateSensor(
+    mojom::SensorType type,
+    const CreateSensorCallback& callback) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
   if (!CreateSharedBufferIfNeeded()) {
-    std::move(callback).Run(nullptr);
+    callback.Run(nullptr);
     return;
   }
 
   SensorReadingSharedBuffer* reading_buffer =
       GetSensorReadingSharedBufferForType(type);
   if (!reading_buffer) {
-    std::move(callback).Run(nullptr);
+    callback.Run(nullptr);
     return;
   }
 
   auto it = requests_map_.find(type);
   if (it != requests_map_.end()) {
-    it->second.push_back(std::move(callback));
+    it->second.push_back(callback);
   } else {  // This is the first CreateSensor call.
-    auto& requests = requests_map_[type];
-    requests.clear();
-    requests.push_back(std::move(callback));
+    requests_map_[type] = CallbackQueue({callback});
 
     CreateSensorInternal(
         type, reading_buffer,
-        base::BindOnce(&PlatformSensorProviderBase::NotifySensorCreated,
-                       base::Unretained(this), type));
+        base::Bind(&PlatformSensorProviderBase::NotifySensorCreated,
+                   base::Unretained(this), type));
   }
 }
 
@@ -144,15 +143,15 @@ void PlatformSensorProviderBase::NotifySensorCreated(
     sensor_map_[type] = sensor.get();
 
   auto it = requests_map_.find(type);
-  CallbackQueue callback_queue = std::move(it->second);
-  requests_map_.erase(it);
+  CallbackQueue callback_queue = it->second;
+  requests_map_.erase(type);
 
   FreeResourcesIfNeeded();
 
   // Inform subscribers about the sensor.
   // |sensor| can be nullptr here.
   for (auto& callback : callback_queue)
-    std::move(callback).Run(sensor);
+    callback.Run(sensor);
 }
 
 std::vector<mojom::SensorType>

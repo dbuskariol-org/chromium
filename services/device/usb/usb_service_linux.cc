@@ -219,12 +219,12 @@ UsbServiceLinux::~UsbServiceLinux() {
   NotifyWillDestroyUsbService();
 }
 
-void UsbServiceLinux::GetDevices(GetDevicesCallback callback) {
+void UsbServiceLinux::GetDevices(const GetDevicesCallback& callback) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (enumeration_ready())
-    UsbService::GetDevices(std::move(callback));
+    UsbService::GetDevices(callback);
   else
-    enumeration_callbacks_.push_back(std::move(callback));
+    enumeration_callbacks_.push_back(callback);
 }
 
 void UsbServiceLinux::OnDeviceAdded(
@@ -292,8 +292,8 @@ void UsbServiceLinux::DeviceReady(scoped_refptr<UsbDeviceLinux> device,
     result.reserve(devices().size());
     for (const auto& map_entry : devices())
       result.push_back(map_entry.second);
-    for (auto& callback : enumeration_callbacks_)
-      std::move(callback).Run(result);
+    for (const auto& callback : enumeration_callbacks_)
+      callback.Run(result);
     enumeration_callbacks_.clear();
   } else if (success && enumeration_ready()) {
     NotifyDeviceAdded(device);
@@ -328,8 +328,8 @@ void UsbServiceLinux::HelperStarted() {
     result.reserve(devices().size());
     for (const auto& map_entry : devices())
       result.push_back(map_entry.second);
-    for (auto& callback : enumeration_callbacks_)
-      std::move(callback).Run(result);
+    for (const auto& callback : enumeration_callbacks_)
+      callback.Run(result);
     enumeration_callbacks_.clear();
   }
 }

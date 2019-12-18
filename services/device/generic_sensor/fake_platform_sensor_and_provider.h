@@ -55,14 +55,14 @@ class FakePlatformSensorProvider : public PlatformSensorProvider {
   MOCK_METHOD3(DoCreateSensorInternal,
                void(mojom::SensorType,
                     scoped_refptr<PlatformSensor>,
-                    CreateSensorCallback));
+                    const CreateSensorCallback&));
 
   SensorReadingSharedBuffer* GetSensorReadingBuffer(mojom::SensorType type);
 
  private:
   void CreateSensorInternal(mojom::SensorType type,
                             SensorReadingSharedBuffer* reading_buffer,
-                            CreateSensorCallback callback) override;
+                            const CreateSensorCallback& callback) override;
 
   DISALLOW_COPY_AND_ASSIGN(FakePlatformSensorProvider);
 };

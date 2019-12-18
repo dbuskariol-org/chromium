@@ -75,22 +75,22 @@ class ConfigBuilder {
 };
 
 void ExpectOpenAndThen(mojom::UsbOpenDeviceError expected,
-                       base::OnceClosure continuation,
+                       const base::Closure& continuation,
                        mojom::UsbOpenDeviceError error) {
   EXPECT_EQ(expected, error);
-  std::move(continuation).Run();
+  continuation.Run();
 }
 
 void ExpectResultAndThen(bool expected_result,
-                         base::OnceClosure continuation,
+                         const base::Closure& continuation,
                          bool actual_result) {
   EXPECT_EQ(expected_result, actual_result);
-  std::move(continuation).Run();
+  continuation.Run();
 }
 
 void ExpectTransferInAndThen(mojom::UsbTransferStatus expected_status,
                              const std::vector<uint8_t>& expected_bytes,
-                             base::OnceClosure continuation,
+                             const base::Closure& continuation,
                              mojom::UsbTransferStatus actual_status,
                              const std::vector<uint8_t>& actual_bytes) {
   EXPECT_EQ(expected_status, actual_status);
@@ -99,12 +99,12 @@ void ExpectTransferInAndThen(mojom::UsbTransferStatus expected_status,
     EXPECT_EQ(expected_bytes[i], actual_bytes[i])
         << "Contents differ at index: " << i;
   }
-  std::move(continuation).Run();
+  continuation.Run();
 }
 
 void ExpectPacketsOutAndThen(
     const std::vector<uint32_t>& expected_packets,
-    base::OnceClosure continuation,
+    const base::Closure& continuation,
     std::vector<UsbIsochronousPacketPtr> actual_packets) {
   ASSERT_EQ(expected_packets.size(), actual_packets.size());
   for (size_t i = 0; i < expected_packets.size(); ++i) {
@@ -113,13 +113,13 @@ void ExpectPacketsOutAndThen(
     EXPECT_EQ(mojom::UsbTransferStatus::COMPLETED, actual_packets[i]->status)
         << "Packet at index " << i << " not completed.";
   }
-  std::move(continuation).Run();
+  continuation.Run();
 }
 
 void ExpectPacketsInAndThen(
     const std::vector<uint8_t>& expected_bytes,
     const std::vector<uint32_t>& expected_packets,
-    base::OnceClosure continuation,
+    const base::Closure& continuation,
     const std::vector<uint8_t>& actual_bytes,
     std::vector<UsbIsochronousPacketPtr> actual_packets) {
   ASSERT_EQ(expected_packets.size(), actual_packets.size());
@@ -134,14 +134,14 @@ void ExpectPacketsInAndThen(
     EXPECT_EQ(expected_bytes[i], actual_bytes[i])
         << "Contents differ at index: " << i;
   }
-  std::move(continuation).Run();
+  continuation.Run();
 }
 
 void ExpectTransferStatusAndThen(mojom::UsbTransferStatus expected_status,
-                                 base::OnceClosure continuation,
+                                 const base::Closure& continuation,
                                  mojom::UsbTransferStatus actual_status) {
   EXPECT_EQ(expected_status, actual_status);
-  std::move(continuation).Run();
+  continuation.Run();
 }
 
 class MockUsbDeviceClient : public mojom::UsbDeviceClient {

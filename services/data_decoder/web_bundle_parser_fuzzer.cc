@@ -61,8 +61,8 @@ class WebBundleParserFuzzer {
                                    std::move(data_source_remote));
 
     quit_loop_ = run_loop->QuitClosure();
-    parser_->ParseMetadata(base::BindOnce(
-        &WebBundleParserFuzzer::OnParseMetadata, base::Unretained(this)));
+    parser_->ParseMetadata(base::Bind(&WebBundleParserFuzzer::OnParseMetadata,
+                                      base::Unretained(this)));
   }
 
   void OnParseMetadata(data_decoder::mojom::BundleMetadataPtr metadata,
@@ -84,10 +84,9 @@ class WebBundleParserFuzzer {
       return;
     }
 
-    parser_->ParseResponse(
-        locations_[index]->offset, locations_[index]->length,
-        base::BindOnce(&WebBundleParserFuzzer::OnParseResponse,
-                       base::Unretained(this), index));
+    parser_->ParseResponse(locations_[index]->offset, locations_[index]->length,
+                           base::Bind(&WebBundleParserFuzzer::OnParseResponse,
+                                      base::Unretained(this), index));
   }
 
   void OnParseResponse(size_t index,
@@ -99,7 +98,7 @@ class WebBundleParserFuzzer {
  private:
   mojo::Remote<data_decoder::mojom::WebBundleParser> parser_;
   DataSource data_source_;
-  base::OnceClosure quit_loop_;
+  base::Closure quit_loop_;
   std::vector<data_decoder::mojom::BundleResponseLocationPtr> locations_;
 };
 

@@ -105,7 +105,7 @@ void OnDoneReadingConfigDescriptors(
 }
 
 void OnReadConfigDescriptor(UsbDeviceDescriptor* desc,
-                            base::OnceClosure closure,
+                            base::Closure closure,
                             UsbTransferStatus status,
                             scoped_refptr<base::RefCountedBytes> buffer,
                             size_t length) {
@@ -123,7 +123,7 @@ void OnReadConfigDescriptor(UsbDeviceDescriptor* desc,
 void OnReadConfigDescriptorHeader(scoped_refptr<UsbDeviceHandle> device_handle,
                                   UsbDeviceDescriptor* desc,
                                   uint8_t index,
-                                  base::OnceClosure closure,
+                                  base::Closure closure,
                                   UsbTransferStatus status,
                                   scoped_refptr<base::RefCountedBytes> header,
                                   size_t length) {
@@ -171,7 +171,7 @@ void OnReadDeviceDescriptor(
 
   uint8_t num_configurations = desc->num_configurations;
   UsbDeviceDescriptor* desc_ptr = desc.get();
-  base::RepeatingClosure closure = base::BarrierClosure(
+  base::Closure closure = base::BarrierClosure(
       num_configurations,
       base::BindOnce(OnDoneReadingConfigDescriptors, device_handle,
                      std::move(desc), std::move(callback)));
@@ -188,7 +188,7 @@ void OnReadDeviceDescriptor(
 }
 
 void StoreStringDescriptor(IndexMap::iterator it,
-                           base::OnceClosure callback,
+                           base::Closure callback,
                            const base::string16& string) {
   it->second = string;
   std::move(callback).Run();
@@ -236,7 +236,7 @@ void OnReadLanguageIds(scoped_refptr<UsbDeviceHandle> device_handle,
   for (auto it = index_map->begin(); it != index_map->end(); ++it)
     iterator_map[it->first] = it;
 
-  base::RepeatingClosure barrier = base::BarrierClosure(
+  base::Closure barrier = base::BarrierClosure(
       static_cast<int>(iterator_map.size()),
       base::BindOnce(std::move(callback), std::move(index_map)));
   for (const auto& map_entry : iterator_map) {
