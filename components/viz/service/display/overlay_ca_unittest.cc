@@ -48,6 +48,7 @@ namespace {
 const gfx::Rect kOverlayRect(0, 0, 256, 256);
 const gfx::PointF kUVTopLeft(0.1f, 0.2f);
 const gfx::PointF kUVBottomRight(1.0f, 1.0f);
+const gfx::Rect kRenderPassOutputRect(0, 0, 256, 256);
 
 class OverlayOutputSurface : public OutputSurface {
  public:
@@ -101,10 +102,10 @@ class CATestOverlayProcessor : public OverlayProcessorMac {
 
 std::unique_ptr<RenderPass> CreateRenderPass() {
   int render_pass_id = 1;
-  gfx::Rect output_rect(0, 0, 256, 256);
 
   std::unique_ptr<RenderPass> pass = RenderPass::Create();
-  pass->SetNew(render_pass_id, output_rect, output_rect, gfx::Transform());
+  pass->SetNew(render_pass_id, kRenderPassOutputRect, kRenderPassOutputRect,
+               gfx::Transform());
 
   SharedQuadState* shared_state = pass->CreateAndAppendSharedQuadState();
   shared_state->opacity = 1.f;
@@ -276,6 +277,8 @@ TEST_F(CALayerOverlayTest, AllowNonAxisAlignedTransform) {
       &ca_layer_list, &damage_rect_, &content_bounds_);
   EXPECT_EQ(gfx::Rect(), damage_rect);
   EXPECT_EQ(1U, ca_layer_list.size());
+  gfx::Rect overlay_damage = overlay_processor_->GetAndResetOverlayDamage();
+  EXPECT_EQ(kRenderPassOutputRect, overlay_damage);
   EXPECT_EQ(0U, output_surface_->bind_framebuffer_count());
 }
 
@@ -297,6 +300,8 @@ TEST_F(CALayerOverlayTest, ThreeDTransform) {
       render_pass_filters, render_pass_backdrop_filters, nullptr,
       &ca_layer_list, &damage_rect_, &content_bounds_);
   EXPECT_EQ(1U, ca_layer_list.size());
+  gfx::Rect overlay_damage = overlay_processor_->GetAndResetOverlayDamage();
+  EXPECT_EQ(kRenderPassOutputRect, overlay_damage);
   gfx::Transform expected_transform;
   expected_transform.RotateAboutXAxis(45.f);
   gfx::Transform actual_transform(ca_layer_list.back().shared_state->transform);
