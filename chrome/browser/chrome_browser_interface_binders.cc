@@ -106,6 +106,11 @@
 #include "chrome/browser/ui/webui/chromeos/machine_learning/machine_learning_internals_ui.h"
 #endif
 
+#if defined(OS_CHROMEOS)
+#include "chrome/browser/ui/webui/chromeos/cellular_setup/cellular_setup_dialog.h"
+#include "chromeos/services/cellular_setup/public/mojom/cellular_setup.mojom.h"
+#endif
+
 #if BUILDFLAG(ENABLE_EXTENSIONS)
 #include "extensions/browser/api/mime_handler_private/mime_handler_private.h"
 #include "extensions/browser/guest_view/mime_handler_view/mime_handler_view_guest.h"
@@ -423,6 +428,10 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<
       chromeos::AddSupervisionUI,
       add_supervision::mojom::AddSupervisionHandler>(map);
+
+  RegisterWebUIControllerInterfaceBinder<
+      chromeos::cellular_setup::CellularSetupDialogUI,
+      chromeos::cellular_setup::mojom::CellularSetup>(map);
 
   RegisterWebUIControllerInterfaceBinder<
       chromeos::machine_learning::MachineLearningInternalsUI,

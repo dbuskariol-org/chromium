@@ -24,7 +24,6 @@
 #if defined(OS_CHROMEOS)
 #include "chrome/browser/ui/webui/chromeos/crostini_installer/crostini_installer.mojom.h"
 #include "chrome/browser/ui/webui/chromeos/crostini_upgrader/crostini_upgrader.mojom.h"
-#include "chromeos/services/cellular_setup/public/mojom/cellular_setup.mojom.h"
 #include "chromeos/services/media_perception/public/mojom/media_perception.mojom.h"
 #include "chromeos/services/multidevice_setup/public/mojom/multidevice_setup.mojom.h"
 #include "chromeos/services/network_config/public/mojom/constants.mojom.h"  // nogncheck
@@ -91,7 +90,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
             "navigation:frame", "renderer",
             service_manager::Manifest::InterfaceList<
 #if defined(OS_CHROMEOS)
-                chromeos::cellular_setup::mojom::CellularSetup,
                 chromeos::crostini_installer::mojom::PageHandlerFactory,
                 chromeos::crostini_upgrader::mojom::PageHandlerFactory,
                 chromeos::multidevice_setup::mojom::MultiDeviceSetup,
