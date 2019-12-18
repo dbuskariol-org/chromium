@@ -539,6 +539,7 @@ public final class ChromePreferenceKeys {
         // clang-format off
         return Arrays.asList(
                 "allow_low_end_device_ui",
+                "bookmark_search_history",
                 "website_settings_filter",
                 "chrome_modern_design_enabled",
                 "home_page_button_force_enabled",
