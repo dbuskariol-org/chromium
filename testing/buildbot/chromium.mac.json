@@ -27,7 +27,8 @@
             }
           ]
         },
-        "test": "accessibility_unittests"
+        "test": "accessibility_unittests",
+        "test_target": "//ui/accessibility:accessibility_unittests"
       },
       {
         "merge": {
@@ -43,7 +44,8 @@
             }
           ]
         },
-        "test": "angle_unittests"
+        "test": "angle_unittests",
+        "test_target": "//third_party/angle/src/tests:angle_unittests"
       },
       {
         "merge": {
@@ -59,7 +61,8 @@
             }
           ]
         },
-        "test": "app_shell_unittests"
+        "test": "app_shell_unittests",
+        "test_target": "//extensions/shell:app_shell_unittests"
       },
       {
         "merge": {
@@ -75,7 +78,8 @@
             }
           ]
         },
-        "test": "base_unittests"
+        "test": "base_unittests",
+        "test_target": "//base:base_unittests"
       },
       {
         "merge": {
@@ -91,7 +95,8 @@
             }
           ]
         },
-        "test": "base_util_unittests"
+        "test": "base_util_unittests",
+        "test_target": "//base/util:base_util_unittests"
       },
       {
         "merge": {
@@ -107,7 +112,8 @@
             }
           ]
         },
-        "test": "blink_common_unittests"
+        "test": "blink_common_unittests",
+        "test_target": "//third_party/blink/common:blink_common_unittests"
       },
       {
         "merge": {
@@ -123,7 +129,8 @@
             }
           ]
         },
-        "test": "blink_fuzzer_unittests"
+        "test": "blink_fuzzer_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_fuzzer_unittests"
       },
       {
         "merge": {
@@ -139,7 +146,8 @@
             }
           ]
         },
-        "test": "blink_heap_unittests"
+        "test": "blink_heap_unittests",
+        "test_target": "//third_party/blink/renderer/platform/heap:blink_heap_unittests"
       },
       {
         "merge": {
@@ -155,7 +163,8 @@
             }
           ]
         },
-        "test": "blink_platform_unittests"
+        "test": "blink_platform_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_platform_unittests"
       },
       {
         "merge": {
@@ -172,7 +181,8 @@
             }
           ]
         },
-        "test": "blink_unittests"
+        "test": "blink_unittests",
+        "test_target": "//third_party/blink/renderer/controller:blink_unittests"
       },
       {
         "merge": {
@@ -188,7 +198,8 @@
             }
           ]
         },
-        "test": "boringssl_crypto_tests"
+        "test": "boringssl_crypto_tests",
+        "test_target": "//third_party/boringssl:boringssl_crypto_tests"
       },
       {
         "merge": {
@@ -204,7 +215,8 @@
             }
           ]
         },
-        "test": "boringssl_ssl_tests"
+        "test": "boringssl_ssl_tests",
+        "test_target": "//third_party/boringssl:boringssl_ssl_tests"
       },
       {
         "args": [
@@ -225,7 +237,8 @@
           ],
           "shards": 10
         },
-        "test": "browser_tests"
+        "test": "browser_tests",
+        "test_target": "//chrome/test:browser_tests"
       },
       {
         "merge": {
@@ -241,7 +254,8 @@
             }
           ]
         },
-        "test": "cacheinvalidation_unittests"
+        "test": "cacheinvalidation_unittests",
+        "test_target": "//third_party/cacheinvalidation:cacheinvalidation_unittests"
       },
       {
         "args": [
@@ -260,7 +274,8 @@
             }
           ]
         },
-        "test": "capture_unittests"
+        "test": "capture_unittests",
+        "test_target": "//media/capture:capture_unittests"
       },
       {
         "merge": {
@@ -276,7 +291,8 @@
             }
           ]
         },
-        "test": "cast_unittests"
+        "test": "cast_unittests",
+        "test_target": "//media/cast:cast_unittests"
       },
       {
         "merge": {
@@ -292,7 +308,8 @@
             }
           ]
         },
-        "test": "cc_unittests"
+        "test": "cc_unittests",
+        "test_target": "//cc:cc_unittests"
       },
       {
         "merge": {
@@ -308,7 +325,8 @@
             }
           ]
         },
-        "test": "chrome_app_unittests"
+        "test": "chrome_app_unittests",
+        "test_target": "//chrome/test:chrome_app_unittests"
       },
       {
         "merge": {
@@ -324,7 +342,8 @@
             }
           ]
         },
-        "test": "chromedriver_unittests"
+        "test": "chromedriver_unittests",
+        "test_target": "//chrome/test/chromedriver:chromedriver_unittests"
       },
       {
         "merge": {
@@ -340,7 +359,8 @@
             }
           ]
         },
-        "test": "components_browsertests"
+        "test": "components_browsertests",
+        "test_target": "//components:components_browsertests"
       },
       {
         "merge": {
@@ -356,7 +376,8 @@
             }
           ]
         },
-        "test": "components_unittests"
+        "test": "components_unittests",
+        "test_target": "//components:components_unittests"
       },
       {
         "merge": {
@@ -373,7 +394,8 @@
           ],
           "shards": 6
         },
-        "test": "content_browsertests"
+        "test": "content_browsertests",
+        "test_target": "//content/test:content_browsertests"
       },
       {
         "merge": {
@@ -389,7 +411,8 @@
             }
           ]
         },
-        "test": "content_nocompile_tests"
+        "test": "content_nocompile_tests",
+        "test_target": "//content/test:content_nocompile_tests"
       },
       {
         "merge": {
@@ -405,7 +428,8 @@
             }
           ]
         },
-        "test": "content_unittests"
+        "test": "content_unittests",
+        "test_target": "//content/test:content_unittests"
       },
       {
         "merge": {
@@ -421,7 +445,8 @@
             }
           ]
         },
-        "test": "crashpad_tests"
+        "test": "crashpad_tests",
+        "test_target": "//third_party/crashpad/crashpad:crashpad_tests"
       },
       {
         "merge": {
@@ -437,7 +462,8 @@
             }
           ]
         },
-        "test": "cronet_tests"
+        "test": "cronet_tests",
+        "test_target": "//components/cronet:cronet_tests"
       },
       {
         "merge": {
@@ -453,7 +479,8 @@
             }
           ]
         },
-        "test": "cronet_unittests"
+        "test": "cronet_unittests",
+        "test_target": "//components/cronet:cronet_unittests"
       },
       {
         "merge": {
@@ -469,7 +496,8 @@
             }
           ]
         },
-        "test": "crypto_unittests"
+        "test": "crypto_unittests",
+        "test_target": "//crypto:crypto_unittests"
       },
       {
         "merge": {
@@ -485,7 +513,8 @@
             }
           ]
         },
-        "test": "device_unittests"
+        "test": "device_unittests",
+        "test_target": "//device:device_unittests"
       },
       {
         "merge": {
@@ -501,7 +530,8 @@
             }
           ]
         },
-        "test": "display_unittests"
+        "test": "display_unittests",
+        "test_target": "//ui/display:display_unittests"
       },
       {
         "merge": {
@@ -517,7 +547,8 @@
             }
           ]
         },
-        "test": "events_unittests"
+        "test": "events_unittests",
+        "test_target": "//ui/events:events_unittests"
       },
       {
         "merge": {
@@ -533,7 +564,8 @@
             }
           ]
         },
-        "test": "extensions_browsertests"
+        "test": "extensions_browsertests",
+        "test_target": "//extensions:extensions_browsertests"
       },
       {
         "merge": {
@@ -549,7 +581,8 @@
             }
           ]
         },
-        "test": "extensions_unittests"
+        "test": "extensions_unittests",
+        "test_target": "//extensions:extensions_unittests"
       },
       {
         "merge": {
@@ -565,7 +598,8 @@
             }
           ]
         },
-        "test": "filesystem_service_unittests"
+        "test": "filesystem_service_unittests",
+        "test_target": "//components/services/filesystem:filesystem_service_unittests"
       },
       {
         "merge": {
@@ -581,7 +615,8 @@
             }
           ]
         },
-        "test": "gcm_unit_tests"
+        "test": "gcm_unit_tests",
+        "test_target": "//google_apis/gcm:gcm_unit_tests"
       },
       {
         "merge": {
@@ -597,7 +632,8 @@
             }
           ]
         },
-        "test": "gfx_unittests"
+        "test": "gfx_unittests",
+        "test_target": "//ui/gfx:gfx_unittests"
       },
       {
         "merge": {
@@ -613,7 +649,8 @@
             }
           ]
         },
-        "test": "gin_unittests"
+        "test": "gin_unittests",
+        "test_target": "//gin:gin_unittests"
       },
       {
         "merge": {
@@ -629,7 +666,8 @@
             }
           ]
         },
-        "test": "google_apis_unittests"
+        "test": "google_apis_unittests",
+        "test_target": "//google_apis:google_apis_unittests"
       },
       {
         "merge": {
@@ -645,7 +683,8 @@
             }
           ]
         },
-        "test": "gpu_unittests"
+        "test": "gpu_unittests",
+        "test_target": "//gpu:gpu_unittests"
       },
       {
         "merge": {
@@ -661,7 +700,8 @@
             }
           ]
         },
-        "test": "gwp_asan_unittests"
+        "test": "gwp_asan_unittests",
+        "test_target": "//components/gwp_asan:gwp_asan_unittests"
       },
       {
         "merge": {
@@ -677,7 +717,8 @@
             }
           ]
         },
-        "test": "headless_browsertests"
+        "test": "headless_browsertests",
+        "test_target": "//headless:headless_browsertests"
       },
       {
         "merge": {
@@ -693,7 +734,8 @@
             }
           ]
         },
-        "test": "headless_unittests"
+        "test": "headless_unittests",
+        "test_target": "//headless:headless_unittests"
       },
       {
         "merge": {
@@ -710,7 +752,8 @@
           ],
           "shards": 3
         },
-        "test": "interactive_ui_tests"
+        "test": "interactive_ui_tests",
+        "test_target": "//chrome/test:interactive_ui_tests"
       },
       {
         "merge": {
@@ -726,7 +769,8 @@
             }
           ]
         },
-        "test": "ipc_tests"
+        "test": "ipc_tests",
+        "test_target": "//ipc:ipc_tests"
       },
       {
         "merge": {
@@ -742,7 +786,8 @@
             }
           ]
         },
-        "test": "jingle_unittests"
+        "test": "jingle_unittests",
+        "test_target": "//jingle:jingle_unittests"
       },
       {
         "merge": {
@@ -758,7 +803,8 @@
             }
           ]
         },
-        "test": "latency_unittests"
+        "test": "latency_unittests",
+        "test_target": "//ui/latency:latency_unittests"
       },
       {
         "merge": {
@@ -774,7 +820,8 @@
             }
           ]
         },
-        "test": "libjingle_xmpp_unittests"
+        "test": "libjingle_xmpp_unittests",
+        "test_target": "//third_party/libjingle_xmpp:libjingle_xmpp_unittests"
       },
       {
         "merge": {
@@ -790,7 +837,8 @@
             }
           ]
         },
-        "test": "media_blink_unittests"
+        "test": "media_blink_unittests",
+        "test_target": "//media/blink:media_blink_unittests"
       },
       {
         "merge": {
@@ -806,7 +854,8 @@
             }
           ]
         },
-        "test": "media_service_unittests"
+        "test": "media_service_unittests",
+        "test_target": "//media/mojo/services:media_service_unittests"
       },
       {
         "merge": {
@@ -822,7 +871,8 @@
             }
           ]
         },
-        "test": "media_unittests"
+        "test": "media_unittests",
+        "test_target": "//media:media_unittests"
       },
       {
         "merge": {
@@ -838,7 +888,8 @@
             }
           ]
         },
-        "test": "message_center_unittests"
+        "test": "message_center_unittests",
+        "test_target": "//ui/message_center:message_center_unittests"
       },
       {
         "merge": {
@@ -854,7 +905,8 @@
             }
           ]
         },
-        "test": "midi_unittests"
+        "test": "midi_unittests",
+        "test_target": "//media/midi:midi_unittests"
       },
       {
         "merge": {
@@ -870,7 +922,8 @@
             }
           ]
         },
-        "test": "mojo_unittests"
+        "test": "mojo_unittests",
+        "test_target": "//mojo:mojo_unittests"
       },
       {
         "merge": {
@@ -886,7 +939,8 @@
             }
           ]
         },
-        "test": "nacl_loader_unittests"
+        "test": "nacl_loader_unittests",
+        "test_target": "//components/nacl/loader:nacl_loader_unittests"
       },
       {
         "merge": {
@@ -902,7 +956,8 @@
             }
           ]
         },
-        "test": "native_theme_unittests"
+        "test": "native_theme_unittests",
+        "test_target": "//ui/native_theme:native_theme_unittests"
       },
       {
         "merge": {
@@ -918,7 +973,8 @@
             }
           ]
         },
-        "test": "net_unittests"
+        "test": "net_unittests",
+        "test_target": "//net:net_unittests"
       },
       {
         "merge": {
@@ -934,7 +990,8 @@
             }
           ]
         },
-        "test": "pdf_unittests"
+        "test": "pdf_unittests",
+        "test_target": "//pdf:pdf_unittests"
       },
       {
         "merge": {
@@ -950,7 +1007,8 @@
             }
           ]
         },
-        "test": "perfetto_unittests"
+        "test": "perfetto_unittests",
+        "test_target": "//third_party/perfetto:perfetto_unittests"
       },
       {
         "merge": {
@@ -966,7 +1024,8 @@
             }
           ]
         },
-        "test": "ppapi_unittests"
+        "test": "ppapi_unittests",
+        "test_target": "//ppapi:ppapi_unittests"
       },
       {
         "merge": {
@@ -982,7 +1041,8 @@
             }
           ]
         },
-        "test": "printing_unittests"
+        "test": "printing_unittests",
+        "test_target": "//printing:printing_unittests"
       },
       {
         "merge": {
@@ -998,7 +1058,8 @@
             }
           ]
         },
-        "test": "remoting_unittests"
+        "test": "remoting_unittests",
+        "test_target": "//remoting:remoting_unittests"
       },
       {
         "merge": {
@@ -1014,7 +1075,8 @@
             }
           ]
         },
-        "test": "sandbox_mac_unittests"
+        "test": "sandbox_mac_unittests",
+        "test_target": "//sandbox/mac:sandbox_mac_unittests"
       },
       {
         "merge": {
@@ -1030,7 +1092,8 @@
             }
           ]
         },
-        "test": "service_manager_unittests"
+        "test": "service_manager_unittests",
+        "test_target": "//services/service_manager/tests:service_manager_unittests"
       },
       {
         "merge": {
@@ -1046,7 +1109,8 @@
             }
           ]
         },
-        "test": "services_unittests"
+        "test": "services_unittests",
+        "test_target": "//services:services_unittests"
       },
       {
         "merge": {
@@ -1062,7 +1126,8 @@
             }
           ]
         },
-        "test": "shell_dialogs_unittests"
+        "test": "shell_dialogs_unittests",
+        "test_target": "//ui/shell_dialogs:shell_dialogs_unittests"
       },
       {
         "merge": {
@@ -1078,7 +1143,8 @@
             }
           ]
         },
-        "test": "skia_unittests"
+        "test": "skia_unittests",
+        "test_target": "//skia:skia_unittests"
       },
       {
         "merge": {
@@ -1094,7 +1160,8 @@
             }
           ]
         },
-        "test": "snapshot_unittests"
+        "test": "snapshot_unittests",
+        "test_target": "//ui/snapshot:snapshot_unittests"
       },
       {
         "merge": {
@@ -1110,7 +1177,8 @@
             }
           ]
         },
-        "test": "sql_unittests"
+        "test": "sql_unittests",
+        "test_target": "//sql:sql_unittests"
       },
       {
         "merge": {
@@ -1126,7 +1194,8 @@
             }
           ]
         },
-        "test": "storage_unittests"
+        "test": "storage_unittests",
+        "test_target": "//storage:storage_unittests"
       },
       {
         "merge": {
@@ -1142,7 +1211,8 @@
             }
           ]
         },
-        "test": "sync_integration_tests"
+        "test": "sync_integration_tests",
+        "test_target": "//chrome/test:sync_integration_tests"
       },
       {
         "merge": {
@@ -1158,7 +1228,8 @@
             }
           ]
         },
-        "test": "ui_base_unittests"
+        "test": "ui_base_unittests",
+        "test_target": "//ui/base:ui_base_unittests"
       },
       {
         "merge": {
@@ -1174,7 +1245,8 @@
             }
           ]
         },
-        "test": "ui_touch_selection_unittests"
+        "test": "ui_touch_selection_unittests",
+        "test_target": "//ui/touch_selection:ui_touch_selection_unittests"
       },
       {
         "merge": {
@@ -1190,7 +1262,8 @@
             }
           ]
         },
-        "test": "unit_tests"
+        "test": "unit_tests",
+        "test_target": "//chrome/test:unit_tests"
       },
       {
         "merge": {
@@ -1206,7 +1279,8 @@
             }
           ]
         },
-        "test": "updater_tests"
+        "test": "updater_tests",
+        "test_target": "//chrome/updater:updater_tests"
       },
       {
         "merge": {
@@ -1222,7 +1296,8 @@
             }
           ]
         },
-        "test": "url_unittests"
+        "test": "url_unittests",
+        "test_target": "//url:url_unittests"
       },
       {
         "merge": {
@@ -1238,7 +1313,8 @@
             }
           ]
         },
-        "test": "views_unittests"
+        "test": "views_unittests",
+        "test_target": "//ui/views:views_unittests"
       },
       {
         "merge": {
@@ -1254,7 +1330,8 @@
             }
           ]
         },
-        "test": "viz_unittests"
+        "test": "viz_unittests",
+        "test_target": "//components/viz:viz_unittests"
       },
       {
         "merge": {
@@ -1270,7 +1347,8 @@
             }
           ]
         },
-        "test": "wtf_unittests"
+        "test": "wtf_unittests",
+        "test_target": "//third_party/blink/renderer/platform/wtf:wtf_unittests"
       },
       {
         "merge": {
@@ -1287,7 +1365,8 @@
             }
           ]
         },
-        "test": "xr_browser_tests"
+        "test": "xr_browser_tests",
+        "test_target": "//chrome/test:xr_browser_tests"
       }
     ],
     "isolated_scripts": [
@@ -1306,7 +1385,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//:blink_python_tests"
       },
       {
         "args": [
@@ -1326,7 +1406,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/test/chromedriver:chromedriver_py_tests"
       },
       {
         "isolate_name": "chromedriver_replay_unittests",
@@ -1343,7 +1424,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/test/chromedriver:chromedriver_replay_unittests"
       },
       {
         "args": [
@@ -1365,7 +1447,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//components:components_perftests"
       },
       {
         "isolate_name": "content_shell_crash_test",
@@ -1382,7 +1465,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//content/shell:content_shell_crash_test"
       },
       {
         "isolate_name": "flatbuffers_unittests",
@@ -1399,7 +1483,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//third_party/flatbuffers:flatbuffers_unittests"
       },
       {
         "isolate_name": "grit_python_unittests",
@@ -1416,7 +1501,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//tools/grit:grit_python_unittests"
       },
       {
         "isolate_name": "mac_signing_tests",
@@ -1433,7 +1519,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/installer/mac:mac_signing_tests"
       },
       {
         "isolate_name": "metrics_python_tests",
@@ -1450,7 +1537,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//tools/metrics:metrics_python_tests"
       },
       {
         "isolate_name": "telemetry_gpu_unittests",
@@ -1468,7 +1556,8 @@
             }
           ],
           "idempotent": false
-        }
+        },
+        "test_target": "//chrome/test:telemetry_gpu_unittests"
       },
       {
         "args": [
@@ -1490,7 +1579,8 @@
               "os": "Mac-10.10"
             }
           ]
-        }
+        },
+        "test_target": "//ui/views:views_perftests"
       },
       {
         "args": [
@@ -1514,7 +1604,8 @@
             }
           ],
           "shards": 25
-        }
+        },
+        "test_target": "//:blink_web_tests"
       }
     ]
   },
@@ -1534,7 +1625,8 @@
             }
           ]
         },
-        "test": "accessibility_unittests"
+        "test": "accessibility_unittests",
+        "test_target": "//ui/accessibility:accessibility_unittests"
       },
       {
         "merge": {
@@ -1550,7 +1642,8 @@
             }
           ]
         },
-        "test": "angle_unittests"
+        "test": "angle_unittests",
+        "test_target": "//third_party/angle/src/tests:angle_unittests"
       },
       {
         "merge": {
@@ -1566,7 +1659,8 @@
             }
           ]
         },
-        "test": "app_shell_unittests"
+        "test": "app_shell_unittests",
+        "test_target": "//extensions/shell:app_shell_unittests"
       },
       {
         "merge": {
@@ -1582,7 +1676,8 @@
             }
           ]
         },
-        "test": "base_unittests"
+        "test": "base_unittests",
+        "test_target": "//base:base_unittests"
       },
       {
         "merge": {
@@ -1598,7 +1693,8 @@
             }
           ]
         },
-        "test": "base_util_unittests"
+        "test": "base_util_unittests",
+        "test_target": "//base/util:base_util_unittests"
       },
       {
         "merge": {
@@ -1614,7 +1710,8 @@
             }
           ]
         },
-        "test": "blink_common_unittests"
+        "test": "blink_common_unittests",
+        "test_target": "//third_party/blink/common:blink_common_unittests"
       },
       {
         "merge": {
@@ -1630,7 +1727,8 @@
             }
           ]
         },
-        "test": "blink_fuzzer_unittests"
+        "test": "blink_fuzzer_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_fuzzer_unittests"
       },
       {
         "merge": {
@@ -1646,7 +1744,8 @@
             }
           ]
         },
-        "test": "blink_heap_unittests"
+        "test": "blink_heap_unittests",
+        "test_target": "//third_party/blink/renderer/platform/heap:blink_heap_unittests"
       },
       {
         "merge": {
@@ -1662,7 +1761,8 @@
             }
           ]
         },
-        "test": "blink_platform_unittests"
+        "test": "blink_platform_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_platform_unittests"
       },
       {
         "merge": {
@@ -1679,7 +1779,8 @@
             }
           ]
         },
-        "test": "blink_unittests"
+        "test": "blink_unittests",
+        "test_target": "//third_party/blink/renderer/controller:blink_unittests"
       },
       {
         "merge": {
@@ -1695,7 +1796,8 @@
             }
           ]
         },
-        "test": "boringssl_crypto_tests"
+        "test": "boringssl_crypto_tests",
+        "test_target": "//third_party/boringssl:boringssl_crypto_tests"
       },
       {
         "merge": {
@@ -1711,7 +1813,8 @@
             }
           ]
         },
-        "test": "boringssl_ssl_tests"
+        "test": "boringssl_ssl_tests",
+        "test_target": "//third_party/boringssl:boringssl_ssl_tests"
       },
       {
         "args": [
@@ -1732,7 +1835,8 @@
           ],
           "shards": 10
         },
-        "test": "browser_tests"
+        "test": "browser_tests",
+        "test_target": "//chrome/test:browser_tests"
       },
       {
         "merge": {
@@ -1748,7 +1852,8 @@
             }
           ]
         },
-        "test": "cacheinvalidation_unittests"
+        "test": "cacheinvalidation_unittests",
+        "test_target": "//third_party/cacheinvalidation:cacheinvalidation_unittests"
       },
       {
         "args": [
@@ -1767,7 +1872,8 @@
             }
           ]
         },
-        "test": "capture_unittests"
+        "test": "capture_unittests",
+        "test_target": "//media/capture:capture_unittests"
       },
       {
         "merge": {
@@ -1783,7 +1889,8 @@
             }
           ]
         },
-        "test": "cast_unittests"
+        "test": "cast_unittests",
+        "test_target": "//media/cast:cast_unittests"
       },
       {
         "merge": {
@@ -1799,7 +1906,8 @@
             }
           ]
         },
-        "test": "cc_unittests"
+        "test": "cc_unittests",
+        "test_target": "//cc:cc_unittests"
       },
       {
         "merge": {
@@ -1815,7 +1923,8 @@
             }
           ]
         },
-        "test": "chrome_app_unittests"
+        "test": "chrome_app_unittests",
+        "test_target": "//chrome/test:chrome_app_unittests"
       },
       {
         "merge": {
@@ -1831,7 +1940,8 @@
             }
           ]
         },
-        "test": "chromedriver_unittests"
+        "test": "chromedriver_unittests",
+        "test_target": "//chrome/test/chromedriver:chromedriver_unittests"
       },
       {
         "merge": {
@@ -1847,7 +1957,8 @@
             }
           ]
         },
-        "test": "components_browsertests"
+        "test": "components_browsertests",
+        "test_target": "//components:components_browsertests"
       },
       {
         "merge": {
@@ -1863,7 +1974,8 @@
             }
           ]
         },
-        "test": "components_unittests"
+        "test": "components_unittests",
+        "test_target": "//components:components_unittests"
       },
       {
         "merge": {
@@ -1880,7 +1992,8 @@
           ],
           "shards": 6
         },
-        "test": "content_browsertests"
+        "test": "content_browsertests",
+        "test_target": "//content/test:content_browsertests"
       },
       {
         "merge": {
@@ -1896,7 +2009,8 @@
             }
           ]
         },
-        "test": "content_nocompile_tests"
+        "test": "content_nocompile_tests",
+        "test_target": "//content/test:content_nocompile_tests"
       },
       {
         "merge": {
@@ -1912,7 +2026,8 @@
             }
           ]
         },
-        "test": "content_unittests"
+        "test": "content_unittests",
+        "test_target": "//content/test:content_unittests"
       },
       {
         "merge": {
@@ -1928,7 +2043,8 @@
             }
           ]
         },
-        "test": "crashpad_tests"
+        "test": "crashpad_tests",
+        "test_target": "//third_party/crashpad/crashpad:crashpad_tests"
       },
       {
         "merge": {
@@ -1944,7 +2060,8 @@
             }
           ]
         },
-        "test": "cronet_tests"
+        "test": "cronet_tests",
+        "test_target": "//components/cronet:cronet_tests"
       },
       {
         "merge": {
@@ -1960,7 +2077,8 @@
             }
           ]
         },
-        "test": "cronet_unittests"
+        "test": "cronet_unittests",
+        "test_target": "//components/cronet:cronet_unittests"
       },
       {
         "merge": {
@@ -1976,7 +2094,8 @@
             }
           ]
         },
-        "test": "crypto_unittests"
+        "test": "crypto_unittests",
+        "test_target": "//crypto:crypto_unittests"
       },
       {
         "merge": {
@@ -1992,7 +2111,8 @@
             }
           ]
         },
-        "test": "device_unittests"
+        "test": "device_unittests",
+        "test_target": "//device:device_unittests"
       },
       {
         "merge": {
@@ -2008,7 +2128,8 @@
             }
           ]
         },
-        "test": "display_unittests"
+        "test": "display_unittests",
+        "test_target": "//ui/display:display_unittests"
       },
       {
         "merge": {
@@ -2024,7 +2145,8 @@
             }
           ]
         },
-        "test": "events_unittests"
+        "test": "events_unittests",
+        "test_target": "//ui/events:events_unittests"
       },
       {
         "merge": {
@@ -2040,7 +2162,8 @@
             }
           ]
         },
-        "test": "extensions_browsertests"
+        "test": "extensions_browsertests",
+        "test_target": "//extensions:extensions_browsertests"
       },
       {
         "merge": {
@@ -2056,7 +2179,8 @@
             }
           ]
         },
-        "test": "extensions_unittests"
+        "test": "extensions_unittests",
+        "test_target": "//extensions:extensions_unittests"
       },
       {
         "merge": {
@@ -2072,7 +2196,8 @@
             }
           ]
         },
-        "test": "filesystem_service_unittests"
+        "test": "filesystem_service_unittests",
+        "test_target": "//components/services/filesystem:filesystem_service_unittests"
       },
       {
         "merge": {
@@ -2088,7 +2213,8 @@
             }
           ]
         },
-        "test": "gcm_unit_tests"
+        "test": "gcm_unit_tests",
+        "test_target": "//google_apis/gcm:gcm_unit_tests"
       },
       {
         "merge": {
@@ -2104,7 +2230,8 @@
             }
           ]
         },
-        "test": "gfx_unittests"
+        "test": "gfx_unittests",
+        "test_target": "//ui/gfx:gfx_unittests"
       },
       {
         "merge": {
@@ -2120,7 +2247,8 @@
             }
           ]
         },
-        "test": "gin_unittests"
+        "test": "gin_unittests",
+        "test_target": "//gin:gin_unittests"
       },
       {
         "merge": {
@@ -2136,7 +2264,8 @@
             }
           ]
         },
-        "test": "google_apis_unittests"
+        "test": "google_apis_unittests",
+        "test_target": "//google_apis:google_apis_unittests"
       },
       {
         "merge": {
@@ -2152,7 +2281,8 @@
             }
           ]
         },
-        "test": "gpu_unittests"
+        "test": "gpu_unittests",
+        "test_target": "//gpu:gpu_unittests"
       },
       {
         "merge": {
@@ -2168,7 +2298,8 @@
             }
           ]
         },
-        "test": "gwp_asan_unittests"
+        "test": "gwp_asan_unittests",
+        "test_target": "//components/gwp_asan:gwp_asan_unittests"
       },
       {
         "merge": {
@@ -2184,7 +2315,8 @@
             }
           ]
         },
-        "test": "headless_browsertests"
+        "test": "headless_browsertests",
+        "test_target": "//headless:headless_browsertests"
       },
       {
         "merge": {
@@ -2200,7 +2332,8 @@
             }
           ]
         },
-        "test": "headless_unittests"
+        "test": "headless_unittests",
+        "test_target": "//headless:headless_unittests"
       },
       {
         "merge": {
@@ -2217,7 +2350,8 @@
           ],
           "shards": 3
         },
-        "test": "interactive_ui_tests"
+        "test": "interactive_ui_tests",
+        "test_target": "//chrome/test:interactive_ui_tests"
       },
       {
         "merge": {
@@ -2233,7 +2367,8 @@
             }
           ]
         },
-        "test": "ipc_tests"
+        "test": "ipc_tests",
+        "test_target": "//ipc:ipc_tests"
       },
       {
         "merge": {
@@ -2249,7 +2384,8 @@
             }
           ]
         },
-        "test": "jingle_unittests"
+        "test": "jingle_unittests",
+        "test_target": "//jingle:jingle_unittests"
       },
       {
         "merge": {
@@ -2265,7 +2401,8 @@
             }
           ]
         },
-        "test": "latency_unittests"
+        "test": "latency_unittests",
+        "test_target": "//ui/latency:latency_unittests"
       },
       {
         "merge": {
@@ -2281,7 +2418,8 @@
             }
           ]
         },
-        "test": "libjingle_xmpp_unittests"
+        "test": "libjingle_xmpp_unittests",
+        "test_target": "//third_party/libjingle_xmpp:libjingle_xmpp_unittests"
       },
       {
         "merge": {
@@ -2297,7 +2435,8 @@
             }
           ]
         },
-        "test": "media_blink_unittests"
+        "test": "media_blink_unittests",
+        "test_target": "//media/blink:media_blink_unittests"
       },
       {
         "merge": {
@@ -2313,7 +2452,8 @@
             }
           ]
         },
-        "test": "media_service_unittests"
+        "test": "media_service_unittests",
+        "test_target": "//media/mojo/services:media_service_unittests"
       },
       {
         "merge": {
@@ -2329,7 +2469,8 @@
             }
           ]
         },
-        "test": "media_unittests"
+        "test": "media_unittests",
+        "test_target": "//media:media_unittests"
       },
       {
         "merge": {
@@ -2345,7 +2486,8 @@
             }
           ]
         },
-        "test": "message_center_unittests"
+        "test": "message_center_unittests",
+        "test_target": "//ui/message_center:message_center_unittests"
       },
       {
         "merge": {
@@ -2361,7 +2503,8 @@
             }
           ]
         },
-        "test": "midi_unittests"
+        "test": "midi_unittests",
+        "test_target": "//media/midi:midi_unittests"
       },
       {
         "merge": {
@@ -2377,7 +2520,8 @@
             }
           ]
         },
-        "test": "mojo_unittests"
+        "test": "mojo_unittests",
+        "test_target": "//mojo:mojo_unittests"
       },
       {
         "merge": {
@@ -2393,7 +2537,8 @@
             }
           ]
         },
-        "test": "nacl_loader_unittests"
+        "test": "nacl_loader_unittests",
+        "test_target": "//components/nacl/loader:nacl_loader_unittests"
       },
       {
         "merge": {
@@ -2409,7 +2554,8 @@
             }
           ]
         },
-        "test": "native_theme_unittests"
+        "test": "native_theme_unittests",
+        "test_target": "//ui/native_theme:native_theme_unittests"
       },
       {
         "merge": {
@@ -2425,7 +2571,8 @@
             }
           ]
         },
-        "test": "net_unittests"
+        "test": "net_unittests",
+        "test_target": "//net:net_unittests"
       },
       {
         "merge": {
@@ -2441,7 +2588,8 @@
             }
           ]
         },
-        "test": "pdf_unittests"
+        "test": "pdf_unittests",
+        "test_target": "//pdf:pdf_unittests"
       },
       {
         "merge": {
@@ -2457,7 +2605,8 @@
             }
           ]
         },
-        "test": "perfetto_unittests"
+        "test": "perfetto_unittests",
+        "test_target": "//third_party/perfetto:perfetto_unittests"
       },
       {
         "merge": {
@@ -2473,7 +2622,8 @@
             }
           ]
         },
-        "test": "ppapi_unittests"
+        "test": "ppapi_unittests",
+        "test_target": "//ppapi:ppapi_unittests"
       },
       {
         "merge": {
@@ -2489,7 +2639,8 @@
             }
           ]
         },
-        "test": "printing_unittests"
+        "test": "printing_unittests",
+        "test_target": "//printing:printing_unittests"
       },
       {
         "merge": {
@@ -2505,7 +2656,8 @@
             }
           ]
         },
-        "test": "remoting_unittests"
+        "test": "remoting_unittests",
+        "test_target": "//remoting:remoting_unittests"
       },
       {
         "merge": {
@@ -2521,7 +2673,8 @@
             }
           ]
         },
-        "test": "sandbox_mac_unittests"
+        "test": "sandbox_mac_unittests",
+        "test_target": "//sandbox/mac:sandbox_mac_unittests"
       },
       {
         "merge": {
@@ -2537,7 +2690,8 @@
             }
           ]
         },
-        "test": "service_manager_unittests"
+        "test": "service_manager_unittests",
+        "test_target": "//services/service_manager/tests:service_manager_unittests"
       },
       {
         "merge": {
@@ -2553,7 +2707,8 @@
             }
           ]
         },
-        "test": "services_unittests"
+        "test": "services_unittests",
+        "test_target": "//services:services_unittests"
       },
       {
         "merge": {
@@ -2569,7 +2724,8 @@
             }
           ]
         },
-        "test": "shell_dialogs_unittests"
+        "test": "shell_dialogs_unittests",
+        "test_target": "//ui/shell_dialogs:shell_dialogs_unittests"
       },
       {
         "merge": {
@@ -2585,7 +2741,8 @@
             }
           ]
         },
-        "test": "skia_unittests"
+        "test": "skia_unittests",
+        "test_target": "//skia:skia_unittests"
       },
       {
         "merge": {
@@ -2601,7 +2758,8 @@
             }
           ]
         },
-        "test": "snapshot_unittests"
+        "test": "snapshot_unittests",
+        "test_target": "//ui/snapshot:snapshot_unittests"
       },
       {
         "merge": {
@@ -2617,7 +2775,8 @@
             }
           ]
         },
-        "test": "sql_unittests"
+        "test": "sql_unittests",
+        "test_target": "//sql:sql_unittests"
       },
       {
         "merge": {
@@ -2633,7 +2792,8 @@
             }
           ]
         },
-        "test": "storage_unittests"
+        "test": "storage_unittests",
+        "test_target": "//storage:storage_unittests"
       },
       {
         "merge": {
@@ -2649,7 +2809,8 @@
             }
           ]
         },
-        "test": "sync_integration_tests"
+        "test": "sync_integration_tests",
+        "test_target": "//chrome/test:sync_integration_tests"
       },
       {
         "merge": {
@@ -2665,7 +2826,8 @@
             }
           ]
         },
-        "test": "ui_base_unittests"
+        "test": "ui_base_unittests",
+        "test_target": "//ui/base:ui_base_unittests"
       },
       {
         "merge": {
@@ -2681,7 +2843,8 @@
             }
           ]
         },
-        "test": "ui_touch_selection_unittests"
+        "test": "ui_touch_selection_unittests",
+        "test_target": "//ui/touch_selection:ui_touch_selection_unittests"
       },
       {
         "merge": {
@@ -2697,7 +2860,8 @@
             }
           ]
         },
-        "test": "unit_tests"
+        "test": "unit_tests",
+        "test_target": "//chrome/test:unit_tests"
       },
       {
         "merge": {
@@ -2713,7 +2877,8 @@
             }
           ]
         },
-        "test": "updater_tests"
+        "test": "updater_tests",
+        "test_target": "//chrome/updater:updater_tests"
       },
       {
         "merge": {
@@ -2729,7 +2894,8 @@
             }
           ]
         },
-        "test": "url_unittests"
+        "test": "url_unittests",
+        "test_target": "//url:url_unittests"
       },
       {
         "merge": {
@@ -2745,7 +2911,8 @@
             }
           ]
         },
-        "test": "views_unittests"
+        "test": "views_unittests",
+        "test_target": "//ui/views:views_unittests"
       },
       {
         "merge": {
@@ -2761,7 +2928,8 @@
             }
           ]
         },
-        "test": "viz_unittests"
+        "test": "viz_unittests",
+        "test_target": "//components/viz:viz_unittests"
       },
       {
         "merge": {
@@ -2777,7 +2945,8 @@
             }
           ]
         },
-        "test": "wtf_unittests"
+        "test": "wtf_unittests",
+        "test_target": "//third_party/blink/renderer/platform/wtf:wtf_unittests"
       },
       {
         "merge": {
@@ -2794,7 +2963,8 @@
             }
           ]
         },
-        "test": "xr_browser_tests"
+        "test": "xr_browser_tests",
+        "test_target": "//chrome/test:xr_browser_tests"
       }
     ],
     "isolated_scripts": [
@@ -2813,7 +2983,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//:blink_python_tests"
       },
       {
         "args": [
@@ -2833,7 +3004,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/test/chromedriver:chromedriver_py_tests"
       },
       {
         "isolate_name": "chromedriver_replay_unittests",
@@ -2850,7 +3022,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/test/chromedriver:chromedriver_replay_unittests"
       },
       {
         "args": [
@@ -2872,7 +3045,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//components:components_perftests"
       },
       {
         "isolate_name": "content_shell_crash_test",
@@ -2889,7 +3063,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//content/shell:content_shell_crash_test"
       },
       {
         "isolate_name": "flatbuffers_unittests",
@@ -2906,7 +3081,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//third_party/flatbuffers:flatbuffers_unittests"
       },
       {
         "isolate_name": "grit_python_unittests",
@@ -2923,7 +3099,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//tools/grit:grit_python_unittests"
       },
       {
         "isolate_name": "mac_signing_tests",
@@ -2940,7 +3117,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/installer/mac:mac_signing_tests"
       },
       {
         "isolate_name": "metrics_python_tests",
@@ -2957,7 +3135,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//tools/metrics:metrics_python_tests"
       },
       {
         "isolate_name": "telemetry_gpu_unittests",
@@ -2975,7 +3154,8 @@
             }
           ],
           "idempotent": false
-        }
+        },
+        "test_target": "//chrome/test:telemetry_gpu_unittests"
       },
       {
         "args": [
@@ -2997,7 +3177,8 @@
               "os": "Mac-10.11"
             }
           ]
-        }
+        },
+        "test_target": "//ui/views:views_perftests"
       },
       {
         "args": [
@@ -3021,7 +3202,8 @@
             }
           ],
           "shards": 25
-        }
+        },
+        "test_target": "//:blink_web_tests"
       }
     ]
   },
@@ -3041,7 +3223,8 @@
             }
           ]
         },
-        "test": "accessibility_unittests"
+        "test": "accessibility_unittests",
+        "test_target": "//ui/accessibility:accessibility_unittests"
       },
       {
         "merge": {
@@ -3057,7 +3240,8 @@
             }
           ]
         },
-        "test": "angle_unittests"
+        "test": "angle_unittests",
+        "test_target": "//third_party/angle/src/tests:angle_unittests"
       },
       {
         "merge": {
@@ -3073,7 +3257,8 @@
             }
           ]
         },
-        "test": "app_shell_unittests"
+        "test": "app_shell_unittests",
+        "test_target": "//extensions/shell:app_shell_unittests"
       },
       {
         "merge": {
@@ -3089,7 +3274,8 @@
             }
           ]
         },
-        "test": "base_unittests"
+        "test": "base_unittests",
+        "test_target": "//base:base_unittests"
       },
       {
         "merge": {
@@ -3105,7 +3291,8 @@
             }
           ]
         },
-        "test": "base_util_unittests"
+        "test": "base_util_unittests",
+        "test_target": "//base/util:base_util_unittests"
       },
       {
         "merge": {
@@ -3121,7 +3308,8 @@
             }
           ]
         },
-        "test": "blink_common_unittests"
+        "test": "blink_common_unittests",
+        "test_target": "//third_party/blink/common:blink_common_unittests"
       },
       {
         "merge": {
@@ -3137,7 +3325,8 @@
             }
           ]
         },
-        "test": "blink_fuzzer_unittests"
+        "test": "blink_fuzzer_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_fuzzer_unittests"
       },
       {
         "merge": {
@@ -3153,7 +3342,8 @@
             }
           ]
         },
-        "test": "blink_heap_unittests"
+        "test": "blink_heap_unittests",
+        "test_target": "//third_party/blink/renderer/platform/heap:blink_heap_unittests"
       },
       {
         "merge": {
@@ -3169,7 +3359,8 @@
             }
           ]
         },
-        "test": "blink_platform_unittests"
+        "test": "blink_platform_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_platform_unittests"
       },
       {
         "merge": {
@@ -3186,7 +3377,8 @@
             }
           ]
         },
-        "test": "blink_unittests"
+        "test": "blink_unittests",
+        "test_target": "//third_party/blink/renderer/controller:blink_unittests"
       },
       {
         "merge": {
@@ -3202,7 +3394,8 @@
             }
           ]
         },
-        "test": "boringssl_crypto_tests"
+        "test": "boringssl_crypto_tests",
+        "test_target": "//third_party/boringssl:boringssl_crypto_tests"
       },
       {
         "merge": {
@@ -3218,7 +3411,8 @@
             }
           ]
         },
-        "test": "boringssl_ssl_tests"
+        "test": "boringssl_ssl_tests",
+        "test_target": "//third_party/boringssl:boringssl_ssl_tests"
       },
       {
         "args": [
@@ -3239,7 +3433,8 @@
           ],
           "shards": 10
         },
-        "test": "browser_tests"
+        "test": "browser_tests",
+        "test_target": "//chrome/test:browser_tests"
       },
       {
         "merge": {
@@ -3255,7 +3450,8 @@
             }
           ]
         },
-        "test": "cacheinvalidation_unittests"
+        "test": "cacheinvalidation_unittests",
+        "test_target": "//third_party/cacheinvalidation:cacheinvalidation_unittests"
       },
       {
         "args": [
@@ -3274,7 +3470,8 @@
             }
           ]
         },
-        "test": "capture_unittests"
+        "test": "capture_unittests",
+        "test_target": "//media/capture:capture_unittests"
       },
       {
         "merge": {
@@ -3290,7 +3487,8 @@
             }
           ]
         },
-        "test": "cast_unittests"
+        "test": "cast_unittests",
+        "test_target": "//media/cast:cast_unittests"
       },
       {
         "merge": {
@@ -3306,7 +3504,8 @@
             }
           ]
         },
-        "test": "cc_unittests"
+        "test": "cc_unittests",
+        "test_target": "//cc:cc_unittests"
       },
       {
         "merge": {
@@ -3322,7 +3521,8 @@
             }
           ]
         },
-        "test": "chrome_app_unittests"
+        "test": "chrome_app_unittests",
+        "test_target": "//chrome/test:chrome_app_unittests"
       },
       {
         "merge": {
@@ -3338,7 +3538,8 @@
             }
           ]
         },
-        "test": "chromedriver_unittests"
+        "test": "chromedriver_unittests",
+        "test_target": "//chrome/test/chromedriver:chromedriver_unittests"
       },
       {
         "merge": {
@@ -3354,7 +3555,8 @@
             }
           ]
         },
-        "test": "components_browsertests"
+        "test": "components_browsertests",
+        "test_target": "//components:components_browsertests"
       },
       {
         "merge": {
@@ -3370,7 +3572,8 @@
             }
           ]
         },
-        "test": "components_unittests"
+        "test": "components_unittests",
+        "test_target": "//components:components_unittests"
       },
       {
         "merge": {
@@ -3387,7 +3590,8 @@
           ],
           "shards": 6
         },
-        "test": "content_browsertests"
+        "test": "content_browsertests",
+        "test_target": "//content/test:content_browsertests"
       },
       {
         "merge": {
@@ -3403,7 +3607,8 @@
             }
           ]
         },
-        "test": "content_nocompile_tests"
+        "test": "content_nocompile_tests",
+        "test_target": "//content/test:content_nocompile_tests"
       },
       {
         "merge": {
@@ -3419,7 +3624,8 @@
             }
           ]
         },
-        "test": "content_unittests"
+        "test": "content_unittests",
+        "test_target": "//content/test:content_unittests"
       },
       {
         "merge": {
@@ -3435,7 +3641,8 @@
             }
           ]
         },
-        "test": "crashpad_tests"
+        "test": "crashpad_tests",
+        "test_target": "//third_party/crashpad/crashpad:crashpad_tests"
       },
       {
         "merge": {
@@ -3451,7 +3658,8 @@
             }
           ]
         },
-        "test": "cronet_tests"
+        "test": "cronet_tests",
+        "test_target": "//components/cronet:cronet_tests"
       },
       {
         "merge": {
@@ -3467,7 +3675,8 @@
             }
           ]
         },
-        "test": "cronet_unittests"
+        "test": "cronet_unittests",
+        "test_target": "//components/cronet:cronet_unittests"
       },
       {
         "merge": {
@@ -3483,7 +3692,8 @@
             }
           ]
         },
-        "test": "crypto_unittests"
+        "test": "crypto_unittests",
+        "test_target": "//crypto:crypto_unittests"
       },
       {
         "merge": {
@@ -3499,7 +3709,8 @@
             }
           ]
         },
-        "test": "device_unittests"
+        "test": "device_unittests",
+        "test_target": "//device:device_unittests"
       },
       {
         "merge": {
@@ -3515,7 +3726,8 @@
             }
           ]
         },
-        "test": "display_unittests"
+        "test": "display_unittests",
+        "test_target": "//ui/display:display_unittests"
       },
       {
         "merge": {
@@ -3531,7 +3743,8 @@
             }
           ]
         },
-        "test": "events_unittests"
+        "test": "events_unittests",
+        "test_target": "//ui/events:events_unittests"
       },
       {
         "merge": {
@@ -3547,7 +3760,8 @@
             }
           ]
         },
-        "test": "extensions_browsertests"
+        "test": "extensions_browsertests",
+        "test_target": "//extensions:extensions_browsertests"
       },
       {
         "merge": {
@@ -3563,7 +3777,8 @@
             }
           ]
         },
-        "test": "extensions_unittests"
+        "test": "extensions_unittests",
+        "test_target": "//extensions:extensions_unittests"
       },
       {
         "merge": {
@@ -3579,7 +3794,8 @@
             }
           ]
         },
-        "test": "filesystem_service_unittests"
+        "test": "filesystem_service_unittests",
+        "test_target": "//components/services/filesystem:filesystem_service_unittests"
       },
       {
         "merge": {
@@ -3595,7 +3811,8 @@
             }
           ]
         },
-        "test": "gcm_unit_tests"
+        "test": "gcm_unit_tests",
+        "test_target": "//google_apis/gcm:gcm_unit_tests"
       },
       {
         "merge": {
@@ -3611,7 +3828,8 @@
             }
           ]
         },
-        "test": "gfx_unittests"
+        "test": "gfx_unittests",
+        "test_target": "//ui/gfx:gfx_unittests"
       },
       {
         "merge": {
@@ -3627,7 +3845,8 @@
             }
           ]
         },
-        "test": "gin_unittests"
+        "test": "gin_unittests",
+        "test_target": "//gin:gin_unittests"
       },
       {
         "merge": {
@@ -3643,7 +3862,8 @@
             }
           ]
         },
-        "test": "google_apis_unittests"
+        "test": "google_apis_unittests",
+        "test_target": "//google_apis:google_apis_unittests"
       },
       {
         "merge": {
@@ -3659,7 +3879,8 @@
             }
           ]
         },
-        "test": "gpu_unittests"
+        "test": "gpu_unittests",
+        "test_target": "//gpu:gpu_unittests"
       },
       {
         "merge": {
@@ -3675,7 +3896,8 @@
             }
           ]
         },
-        "test": "gwp_asan_unittests"
+        "test": "gwp_asan_unittests",
+        "test_target": "//components/gwp_asan:gwp_asan_unittests"
       },
       {
         "merge": {
@@ -3691,7 +3913,8 @@
             }
           ]
         },
-        "test": "headless_browsertests"
+        "test": "headless_browsertests",
+        "test_target": "//headless:headless_browsertests"
       },
       {
         "merge": {
@@ -3707,7 +3930,8 @@
             }
           ]
         },
-        "test": "headless_unittests"
+        "test": "headless_unittests",
+        "test_target": "//headless:headless_unittests"
       },
       {
         "merge": {
@@ -3724,7 +3948,8 @@
           ],
           "shards": 3
         },
-        "test": "interactive_ui_tests"
+        "test": "interactive_ui_tests",
+        "test_target": "//chrome/test:interactive_ui_tests"
       },
       {
         "merge": {
@@ -3740,7 +3965,8 @@
             }
           ]
         },
-        "test": "ipc_tests"
+        "test": "ipc_tests",
+        "test_target": "//ipc:ipc_tests"
       },
       {
         "merge": {
@@ -3756,7 +3982,8 @@
             }
           ]
         },
-        "test": "jingle_unittests"
+        "test": "jingle_unittests",
+        "test_target": "//jingle:jingle_unittests"
       },
       {
         "merge": {
@@ -3772,7 +3999,8 @@
             }
           ]
         },
-        "test": "latency_unittests"
+        "test": "latency_unittests",
+        "test_target": "//ui/latency:latency_unittests"
       },
       {
         "merge": {
@@ -3788,7 +4016,8 @@
             }
           ]
         },
-        "test": "libjingle_xmpp_unittests"
+        "test": "libjingle_xmpp_unittests",
+        "test_target": "//third_party/libjingle_xmpp:libjingle_xmpp_unittests"
       },
       {
         "merge": {
@@ -3804,7 +4033,8 @@
             }
           ]
         },
-        "test": "media_blink_unittests"
+        "test": "media_blink_unittests",
+        "test_target": "//media/blink:media_blink_unittests"
       },
       {
         "merge": {
@@ -3820,7 +4050,8 @@
             }
           ]
         },
-        "test": "media_service_unittests"
+        "test": "media_service_unittests",
+        "test_target": "//media/mojo/services:media_service_unittests"
       },
       {
         "merge": {
@@ -3836,7 +4067,8 @@
             }
           ]
         },
-        "test": "media_unittests"
+        "test": "media_unittests",
+        "test_target": "//media:media_unittests"
       },
       {
         "merge": {
@@ -3852,7 +4084,8 @@
             }
           ]
         },
-        "test": "message_center_unittests"
+        "test": "message_center_unittests",
+        "test_target": "//ui/message_center:message_center_unittests"
       },
       {
         "merge": {
@@ -3868,7 +4101,8 @@
             }
           ]
         },
-        "test": "midi_unittests"
+        "test": "midi_unittests",
+        "test_target": "//media/midi:midi_unittests"
       },
       {
         "merge": {
@@ -3884,7 +4118,8 @@
             }
           ]
         },
-        "test": "mojo_unittests"
+        "test": "mojo_unittests",
+        "test_target": "//mojo:mojo_unittests"
       },
       {
         "merge": {
@@ -3900,7 +4135,8 @@
             }
           ]
         },
-        "test": "nacl_loader_unittests"
+        "test": "nacl_loader_unittests",
+        "test_target": "//components/nacl/loader:nacl_loader_unittests"
       },
       {
         "merge": {
@@ -3916,7 +4152,8 @@
             }
           ]
         },
-        "test": "native_theme_unittests"
+        "test": "native_theme_unittests",
+        "test_target": "//ui/native_theme:native_theme_unittests"
       },
       {
         "merge": {
@@ -3932,7 +4169,8 @@
             }
           ]
         },
-        "test": "net_unittests"
+        "test": "net_unittests",
+        "test_target": "//net:net_unittests"
       },
       {
         "merge": {
@@ -3948,7 +4186,8 @@
             }
           ]
         },
-        "test": "pdf_unittests"
+        "test": "pdf_unittests",
+        "test_target": "//pdf:pdf_unittests"
       },
       {
         "merge": {
@@ -3964,7 +4203,8 @@
             }
           ]
         },
-        "test": "perfetto_unittests"
+        "test": "perfetto_unittests",
+        "test_target": "//third_party/perfetto:perfetto_unittests"
       },
       {
         "merge": {
@@ -3980,7 +4220,8 @@
             }
           ]
         },
-        "test": "ppapi_unittests"
+        "test": "ppapi_unittests",
+        "test_target": "//ppapi:ppapi_unittests"
       },
       {
         "merge": {
@@ -3996,7 +4237,8 @@
             }
           ]
         },
-        "test": "printing_unittests"
+        "test": "printing_unittests",
+        "test_target": "//printing:printing_unittests"
       },
       {
         "merge": {
@@ -4012,7 +4254,8 @@
             }
           ]
         },
-        "test": "remoting_unittests"
+        "test": "remoting_unittests",
+        "test_target": "//remoting:remoting_unittests"
       },
       {
         "merge": {
@@ -4028,7 +4271,8 @@
             }
           ]
         },
-        "test": "sandbox_mac_unittests"
+        "test": "sandbox_mac_unittests",
+        "test_target": "//sandbox/mac:sandbox_mac_unittests"
       },
       {
         "merge": {
@@ -4044,7 +4288,8 @@
             }
           ]
         },
-        "test": "service_manager_unittests"
+        "test": "service_manager_unittests",
+        "test_target": "//services/service_manager/tests:service_manager_unittests"
       },
       {
         "merge": {
@@ -4060,7 +4305,8 @@
             }
           ]
         },
-        "test": "services_unittests"
+        "test": "services_unittests",
+        "test_target": "//services:services_unittests"
       },
       {
         "merge": {
@@ -4076,7 +4322,8 @@
             }
           ]
         },
-        "test": "shell_dialogs_unittests"
+        "test": "shell_dialogs_unittests",
+        "test_target": "//ui/shell_dialogs:shell_dialogs_unittests"
       },
       {
         "merge": {
@@ -4092,7 +4339,8 @@
             }
           ]
         },
-        "test": "skia_unittests"
+        "test": "skia_unittests",
+        "test_target": "//skia:skia_unittests"
       },
       {
         "merge": {
@@ -4108,7 +4356,8 @@
             }
           ]
         },
-        "test": "snapshot_unittests"
+        "test": "snapshot_unittests",
+        "test_target": "//ui/snapshot:snapshot_unittests"
       },
       {
         "merge": {
@@ -4124,7 +4373,8 @@
             }
           ]
         },
-        "test": "sql_unittests"
+        "test": "sql_unittests",
+        "test_target": "//sql:sql_unittests"
       },
       {
         "merge": {
@@ -4140,7 +4390,8 @@
             }
           ]
         },
-        "test": "storage_unittests"
+        "test": "storage_unittests",
+        "test_target": "//storage:storage_unittests"
       },
       {
         "merge": {
@@ -4156,7 +4407,8 @@
             }
           ]
         },
-        "test": "sync_integration_tests"
+        "test": "sync_integration_tests",
+        "test_target": "//chrome/test:sync_integration_tests"
       },
       {
         "merge": {
@@ -4172,7 +4424,8 @@
             }
           ]
         },
-        "test": "ui_base_unittests"
+        "test": "ui_base_unittests",
+        "test_target": "//ui/base:ui_base_unittests"
       },
       {
         "merge": {
@@ -4188,7 +4441,8 @@
             }
           ]
         },
-        "test": "ui_touch_selection_unittests"
+        "test": "ui_touch_selection_unittests",
+        "test_target": "//ui/touch_selection:ui_touch_selection_unittests"
       },
       {
         "merge": {
@@ -4204,7 +4458,8 @@
             }
           ]
         },
-        "test": "unit_tests"
+        "test": "unit_tests",
+        "test_target": "//chrome/test:unit_tests"
       },
       {
         "merge": {
@@ -4220,7 +4475,8 @@
             }
           ]
         },
-        "test": "updater_tests"
+        "test": "updater_tests",
+        "test_target": "//chrome/updater:updater_tests"
       },
       {
         "merge": {
@@ -4236,7 +4492,8 @@
             }
           ]
         },
-        "test": "url_unittests"
+        "test": "url_unittests",
+        "test_target": "//url:url_unittests"
       },
       {
         "merge": {
@@ -4252,7 +4509,8 @@
             }
           ]
         },
-        "test": "views_unittests"
+        "test": "views_unittests",
+        "test_target": "//ui/views:views_unittests"
       },
       {
         "merge": {
@@ -4268,7 +4526,8 @@
             }
           ]
         },
-        "test": "viz_unittests"
+        "test": "viz_unittests",
+        "test_target": "//components/viz:viz_unittests"
       },
       {
         "merge": {
@@ -4284,7 +4543,8 @@
             }
           ]
         },
-        "test": "wtf_unittests"
+        "test": "wtf_unittests",
+        "test_target": "//third_party/blink/renderer/platform/wtf:wtf_unittests"
       },
       {
         "merge": {
@@ -4301,7 +4561,8 @@
             }
           ]
         },
-        "test": "xr_browser_tests"
+        "test": "xr_browser_tests",
+        "test_target": "//chrome/test:xr_browser_tests"
       }
     ],
     "isolated_scripts": [
@@ -4320,7 +4581,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//:blink_python_tests"
       },
       {
         "args": [
@@ -4340,7 +4602,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/test/chromedriver:chromedriver_py_tests"
       },
       {
         "isolate_name": "chromedriver_replay_unittests",
@@ -4357,7 +4620,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/test/chromedriver:chromedriver_replay_unittests"
       },
       {
         "args": [
@@ -4379,7 +4643,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//components:components_perftests"
       },
       {
         "isolate_name": "content_shell_crash_test",
@@ -4396,7 +4661,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//content/shell:content_shell_crash_test"
       },
       {
         "isolate_name": "flatbuffers_unittests",
@@ -4413,7 +4679,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//third_party/flatbuffers:flatbuffers_unittests"
       },
       {
         "isolate_name": "grit_python_unittests",
@@ -4430,7 +4697,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//tools/grit:grit_python_unittests"
       },
       {
         "isolate_name": "mac_signing_tests",
@@ -4447,7 +4715,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/installer/mac:mac_signing_tests"
       },
       {
         "isolate_name": "metrics_python_tests",
@@ -4464,7 +4733,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//tools/metrics:metrics_python_tests"
       },
       {
         "isolate_name": "telemetry_gpu_unittests",
@@ -4482,7 +4752,8 @@
             }
           ],
           "idempotent": false
-        }
+        },
+        "test_target": "//chrome/test:telemetry_gpu_unittests"
       },
       {
         "args": [
@@ -4504,7 +4775,8 @@
           ],
           "idempotent": false,
           "shards": 12
-        }
+        },
+        "test_target": "//chrome/test:telemetry_perf_unittests"
       },
       {
         "args": [
@@ -4527,7 +4799,8 @@
           ],
           "idempotent": false,
           "shards": 4
-        }
+        },
+        "test_target": "//chrome/test:telemetry_unittests"
       },
       {
         "args": [
@@ -4549,7 +4822,8 @@
               "os": "Mac-10.12.6"
             }
           ]
-        }
+        },
+        "test_target": "//ui/views:views_perftests"
       },
       {
         "args": [
@@ -4573,7 +4847,8 @@
             }
           ],
           "shards": 25
-        }
+        },
+        "test_target": "//:blink_web_tests"
       }
     ]
   },
@@ -4593,7 +4868,8 @@
             }
           ]
         },
-        "test": "accessibility_unittests"
+        "test": "accessibility_unittests",
+        "test_target": "//ui/accessibility:accessibility_unittests"
       },
       {
         "merge": {
@@ -4609,7 +4885,8 @@
             }
           ]
         },
-        "test": "angle_unittests"
+        "test": "angle_unittests",
+        "test_target": "//third_party/angle/src/tests:angle_unittests"
       },
       {
         "merge": {
@@ -4625,7 +4902,8 @@
             }
           ]
         },
-        "test": "app_shell_unittests"
+        "test": "app_shell_unittests",
+        "test_target": "//extensions/shell:app_shell_unittests"
       },
       {
         "merge": {
@@ -4641,7 +4919,8 @@
             }
           ]
         },
-        "test": "base_unittests"
+        "test": "base_unittests",
+        "test_target": "//base:base_unittests"
       },
       {
         "merge": {
@@ -4657,7 +4936,8 @@
             }
           ]
         },
-        "test": "base_util_unittests"
+        "test": "base_util_unittests",
+        "test_target": "//base/util:base_util_unittests"
       },
       {
         "merge": {
@@ -4673,7 +4953,8 @@
             }
           ]
         },
-        "test": "blink_common_unittests"
+        "test": "blink_common_unittests",
+        "test_target": "//third_party/blink/common:blink_common_unittests"
       },
       {
         "merge": {
@@ -4689,7 +4970,8 @@
             }
           ]
         },
-        "test": "blink_fuzzer_unittests"
+        "test": "blink_fuzzer_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_fuzzer_unittests"
       },
       {
         "merge": {
@@ -4705,7 +4987,8 @@
             }
           ]
         },
-        "test": "blink_heap_unittests"
+        "test": "blink_heap_unittests",
+        "test_target": "//third_party/blink/renderer/platform/heap:blink_heap_unittests"
       },
       {
         "merge": {
@@ -4721,7 +5004,8 @@
             }
           ]
         },
-        "test": "blink_platform_unittests"
+        "test": "blink_platform_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_platform_unittests"
       },
       {
         "merge": {
@@ -4738,7 +5022,8 @@
             }
           ]
         },
-        "test": "blink_unittests"
+        "test": "blink_unittests",
+        "test_target": "//third_party/blink/renderer/controller:blink_unittests"
       },
       {
         "merge": {
@@ -4754,7 +5039,8 @@
             }
           ]
         },
-        "test": "boringssl_crypto_tests"
+        "test": "boringssl_crypto_tests",
+        "test_target": "//third_party/boringssl:boringssl_crypto_tests"
       },
       {
         "merge": {
@@ -4770,7 +5056,8 @@
             }
           ]
         },
-        "test": "boringssl_ssl_tests"
+        "test": "boringssl_ssl_tests",
+        "test_target": "//third_party/boringssl:boringssl_ssl_tests"
       },
       {
         "args": [
@@ -4791,7 +5078,8 @@
           ],
           "shards": 10
         },
-        "test": "browser_tests"
+        "test": "browser_tests",
+        "test_target": "//chrome/test:browser_tests"
       },
       {
         "merge": {
@@ -4807,7 +5095,8 @@
             }
           ]
         },
-        "test": "cacheinvalidation_unittests"
+        "test": "cacheinvalidation_unittests",
+        "test_target": "//third_party/cacheinvalidation:cacheinvalidation_unittests"
       },
       {
         "args": [
@@ -4826,7 +5115,8 @@
             }
           ]
         },
-        "test": "capture_unittests"
+        "test": "capture_unittests",
+        "test_target": "//media/capture:capture_unittests"
       },
       {
         "merge": {
@@ -4842,7 +5132,8 @@
             }
           ]
         },
-        "test": "cast_unittests"
+        "test": "cast_unittests",
+        "test_target": "//media/cast:cast_unittests"
       },
       {
         "merge": {
@@ -4858,7 +5149,8 @@
             }
           ]
         },
-        "test": "cc_unittests"
+        "test": "cc_unittests",
+        "test_target": "//cc:cc_unittests"
       },
       {
         "merge": {
@@ -4874,7 +5166,8 @@
             }
           ]
         },
-        "test": "chrome_app_unittests"
+        "test": "chrome_app_unittests",
+        "test_target": "//chrome/test:chrome_app_unittests"
       },
       {
         "merge": {
@@ -4890,7 +5183,8 @@
             }
           ]
         },
-        "test": "chromedriver_unittests"
+        "test": "chromedriver_unittests",
+        "test_target": "//chrome/test/chromedriver:chromedriver_unittests"
       },
       {
         "merge": {
@@ -4906,7 +5200,8 @@
             }
           ]
         },
-        "test": "components_browsertests"
+        "test": "components_browsertests",
+        "test_target": "//components:components_browsertests"
       },
       {
         "merge": {
@@ -4922,7 +5217,8 @@
             }
           ]
         },
-        "test": "components_unittests"
+        "test": "components_unittests",
+        "test_target": "//components:components_unittests"
       },
       {
         "merge": {
@@ -4939,7 +5235,8 @@
           ],
           "shards": 6
         },
-        "test": "content_browsertests"
+        "test": "content_browsertests",
+        "test_target": "//content/test:content_browsertests"
       },
       {
         "merge": {
@@ -4955,7 +5252,8 @@
             }
           ]
         },
-        "test": "content_nocompile_tests"
+        "test": "content_nocompile_tests",
+        "test_target": "//content/test:content_nocompile_tests"
       },
       {
         "merge": {
@@ -4971,7 +5269,8 @@
             }
           ]
         },
-        "test": "content_unittests"
+        "test": "content_unittests",
+        "test_target": "//content/test:content_unittests"
       },
       {
         "merge": {
@@ -4987,7 +5286,8 @@
             }
           ]
         },
-        "test": "crashpad_tests"
+        "test": "crashpad_tests",
+        "test_target": "//third_party/crashpad/crashpad:crashpad_tests"
       },
       {
         "merge": {
@@ -5003,7 +5303,8 @@
             }
           ]
         },
-        "test": "cronet_tests"
+        "test": "cronet_tests",
+        "test_target": "//components/cronet:cronet_tests"
       },
       {
         "merge": {
@@ -5019,7 +5320,8 @@
             }
           ]
         },
-        "test": "cronet_unittests"
+        "test": "cronet_unittests",
+        "test_target": "//components/cronet:cronet_unittests"
       },
       {
         "merge": {
@@ -5035,7 +5337,8 @@
             }
           ]
         },
-        "test": "crypto_unittests"
+        "test": "crypto_unittests",
+        "test_target": "//crypto:crypto_unittests"
       },
       {
         "merge": {
@@ -5051,7 +5354,8 @@
             }
           ]
         },
-        "test": "device_unittests"
+        "test": "device_unittests",
+        "test_target": "//device:device_unittests"
       },
       {
         "merge": {
@@ -5067,7 +5371,8 @@
             }
           ]
         },
-        "test": "display_unittests"
+        "test": "display_unittests",
+        "test_target": "//ui/display:display_unittests"
       },
       {
         "merge": {
@@ -5083,7 +5388,8 @@
             }
           ]
         },
-        "test": "events_unittests"
+        "test": "events_unittests",
+        "test_target": "//ui/events:events_unittests"
       },
       {
         "merge": {
@@ -5099,7 +5405,8 @@
             }
           ]
         },
-        "test": "extensions_browsertests"
+        "test": "extensions_browsertests",
+        "test_target": "//extensions:extensions_browsertests"
       },
       {
         "merge": {
@@ -5115,7 +5422,8 @@
             }
           ]
         },
-        "test": "extensions_unittests"
+        "test": "extensions_unittests",
+        "test_target": "//extensions:extensions_unittests"
       },
       {
         "merge": {
@@ -5131,7 +5439,8 @@
             }
           ]
         },
-        "test": "filesystem_service_unittests"
+        "test": "filesystem_service_unittests",
+        "test_target": "//components/services/filesystem:filesystem_service_unittests"
       },
       {
         "merge": {
@@ -5147,7 +5456,8 @@
             }
           ]
         },
-        "test": "gcm_unit_tests"
+        "test": "gcm_unit_tests",
+        "test_target": "//google_apis/gcm:gcm_unit_tests"
       },
       {
         "merge": {
@@ -5163,7 +5473,8 @@
             }
           ]
         },
-        "test": "gfx_unittests"
+        "test": "gfx_unittests",
+        "test_target": "//ui/gfx:gfx_unittests"
       },
       {
         "merge": {
@@ -5179,7 +5490,8 @@
             }
           ]
         },
-        "test": "gin_unittests"
+        "test": "gin_unittests",
+        "test_target": "//gin:gin_unittests"
       },
       {
         "merge": {
@@ -5195,7 +5507,8 @@
             }
           ]
         },
-        "test": "google_apis_unittests"
+        "test": "google_apis_unittests",
+        "test_target": "//google_apis:google_apis_unittests"
       },
       {
         "merge": {
@@ -5211,7 +5524,8 @@
             }
           ]
         },
-        "test": "gpu_unittests"
+        "test": "gpu_unittests",
+        "test_target": "//gpu:gpu_unittests"
       },
       {
         "merge": {
@@ -5227,7 +5541,8 @@
             }
           ]
         },
-        "test": "gwp_asan_unittests"
+        "test": "gwp_asan_unittests",
+        "test_target": "//components/gwp_asan:gwp_asan_unittests"
       },
       {
         "merge": {
@@ -5243,7 +5558,8 @@
             }
           ]
         },
-        "test": "headless_browsertests"
+        "test": "headless_browsertests",
+        "test_target": "//headless:headless_browsertests"
       },
       {
         "merge": {
@@ -5259,7 +5575,8 @@
             }
           ]
         },
-        "test": "headless_unittests"
+        "test": "headless_unittests",
+        "test_target": "//headless:headless_unittests"
       },
       {
         "merge": {
@@ -5276,7 +5593,8 @@
           ],
           "shards": 3
         },
-        "test": "interactive_ui_tests"
+        "test": "interactive_ui_tests",
+        "test_target": "//chrome/test:interactive_ui_tests"
       },
       {
         "merge": {
@@ -5292,7 +5610,8 @@
             }
           ]
         },
-        "test": "ipc_tests"
+        "test": "ipc_tests",
+        "test_target": "//ipc:ipc_tests"
       },
       {
         "merge": {
@@ -5308,7 +5627,8 @@
             }
           ]
         },
-        "test": "jingle_unittests"
+        "test": "jingle_unittests",
+        "test_target": "//jingle:jingle_unittests"
       },
       {
         "merge": {
@@ -5324,7 +5644,8 @@
             }
           ]
         },
-        "test": "latency_unittests"
+        "test": "latency_unittests",
+        "test_target": "//ui/latency:latency_unittests"
       },
       {
         "merge": {
@@ -5340,7 +5661,8 @@
             }
           ]
         },
-        "test": "libjingle_xmpp_unittests"
+        "test": "libjingle_xmpp_unittests",
+        "test_target": "//third_party/libjingle_xmpp:libjingle_xmpp_unittests"
       },
       {
         "merge": {
@@ -5356,7 +5678,8 @@
             }
           ]
         },
-        "test": "media_blink_unittests"
+        "test": "media_blink_unittests",
+        "test_target": "//media/blink:media_blink_unittests"
       },
       {
         "merge": {
@@ -5372,7 +5695,8 @@
             }
           ]
         },
-        "test": "media_service_unittests"
+        "test": "media_service_unittests",
+        "test_target": "//media/mojo/services:media_service_unittests"
       },
       {
         "merge": {
@@ -5388,7 +5712,8 @@
             }
           ]
         },
-        "test": "media_unittests"
+        "test": "media_unittests",
+        "test_target": "//media:media_unittests"
       },
       {
         "merge": {
@@ -5404,7 +5729,8 @@
             }
           ]
         },
-        "test": "message_center_unittests"
+        "test": "message_center_unittests",
+        "test_target": "//ui/message_center:message_center_unittests"
       },
       {
         "merge": {
@@ -5420,7 +5746,8 @@
             }
           ]
         },
-        "test": "midi_unittests"
+        "test": "midi_unittests",
+        "test_target": "//media/midi:midi_unittests"
       },
       {
         "merge": {
@@ -5436,7 +5763,8 @@
             }
           ]
         },
-        "test": "mojo_unittests"
+        "test": "mojo_unittests",
+        "test_target": "//mojo:mojo_unittests"
       },
       {
         "merge": {
@@ -5452,7 +5780,8 @@
             }
           ]
         },
-        "test": "nacl_loader_unittests"
+        "test": "nacl_loader_unittests",
+        "test_target": "//components/nacl/loader:nacl_loader_unittests"
       },
       {
         "merge": {
@@ -5468,7 +5797,8 @@
             }
           ]
         },
-        "test": "native_theme_unittests"
+        "test": "native_theme_unittests",
+        "test_target": "//ui/native_theme:native_theme_unittests"
       },
       {
         "merge": {
@@ -5484,7 +5814,8 @@
             }
           ]
         },
-        "test": "net_unittests"
+        "test": "net_unittests",
+        "test_target": "//net:net_unittests"
       },
       {
         "merge": {
@@ -5500,7 +5831,8 @@
             }
           ]
         },
-        "test": "pdf_unittests"
+        "test": "pdf_unittests",
+        "test_target": "//pdf:pdf_unittests"
       },
       {
         "merge": {
@@ -5516,7 +5848,8 @@
             }
           ]
         },
-        "test": "perfetto_unittests"
+        "test": "perfetto_unittests",
+        "test_target": "//third_party/perfetto:perfetto_unittests"
       },
       {
         "merge": {
@@ -5532,7 +5865,8 @@
             }
           ]
         },
-        "test": "ppapi_unittests"
+        "test": "ppapi_unittests",
+        "test_target": "//ppapi:ppapi_unittests"
       },
       {
         "merge": {
@@ -5548,7 +5882,8 @@
             }
           ]
         },
-        "test": "printing_unittests"
+        "test": "printing_unittests",
+        "test_target": "//printing:printing_unittests"
       },
       {
         "merge": {
@@ -5564,7 +5899,8 @@
             }
           ]
         },
-        "test": "remoting_unittests"
+        "test": "remoting_unittests",
+        "test_target": "//remoting:remoting_unittests"
       },
       {
         "merge": {
@@ -5580,7 +5916,8 @@
             }
           ]
         },
-        "test": "sandbox_mac_unittests"
+        "test": "sandbox_mac_unittests",
+        "test_target": "//sandbox/mac:sandbox_mac_unittests"
       },
       {
         "merge": {
@@ -5596,7 +5933,8 @@
             }
           ]
         },
-        "test": "service_manager_unittests"
+        "test": "service_manager_unittests",
+        "test_target": "//services/service_manager/tests:service_manager_unittests"
       },
       {
         "merge": {
@@ -5612,7 +5950,8 @@
             }
           ]
         },
-        "test": "services_unittests"
+        "test": "services_unittests",
+        "test_target": "//services:services_unittests"
       },
       {
         "merge": {
@@ -5628,7 +5967,8 @@
             }
           ]
         },
-        "test": "shell_dialogs_unittests"
+        "test": "shell_dialogs_unittests",
+        "test_target": "//ui/shell_dialogs:shell_dialogs_unittests"
       },
       {
         "merge": {
@@ -5644,7 +5984,8 @@
             }
           ]
         },
-        "test": "skia_unittests"
+        "test": "skia_unittests",
+        "test_target": "//skia:skia_unittests"
       },
       {
         "merge": {
@@ -5660,7 +6001,8 @@
             }
           ]
         },
-        "test": "snapshot_unittests"
+        "test": "snapshot_unittests",
+        "test_target": "//ui/snapshot:snapshot_unittests"
       },
       {
         "merge": {
@@ -5676,7 +6018,8 @@
             }
           ]
         },
-        "test": "sql_unittests"
+        "test": "sql_unittests",
+        "test_target": "//sql:sql_unittests"
       },
       {
         "merge": {
@@ -5692,7 +6035,8 @@
             }
           ]
         },
-        "test": "storage_unittests"
+        "test": "storage_unittests",
+        "test_target": "//storage:storage_unittests"
       },
       {
         "merge": {
@@ -5708,7 +6052,8 @@
             }
           ]
         },
-        "test": "sync_integration_tests"
+        "test": "sync_integration_tests",
+        "test_target": "//chrome/test:sync_integration_tests"
       },
       {
         "merge": {
@@ -5724,7 +6069,8 @@
             }
           ]
         },
-        "test": "ui_base_unittests"
+        "test": "ui_base_unittests",
+        "test_target": "//ui/base:ui_base_unittests"
       },
       {
         "merge": {
@@ -5740,7 +6086,8 @@
             }
           ]
         },
-        "test": "ui_touch_selection_unittests"
+        "test": "ui_touch_selection_unittests",
+        "test_target": "//ui/touch_selection:ui_touch_selection_unittests"
       },
       {
         "merge": {
@@ -5756,7 +6103,8 @@
             }
           ]
         },
-        "test": "unit_tests"
+        "test": "unit_tests",
+        "test_target": "//chrome/test:unit_tests"
       },
       {
         "merge": {
@@ -5772,7 +6120,8 @@
             }
           ]
         },
-        "test": "updater_tests"
+        "test": "updater_tests",
+        "test_target": "//chrome/updater:updater_tests"
       },
       {
         "merge": {
@@ -5788,7 +6137,8 @@
             }
           ]
         },
-        "test": "url_unittests"
+        "test": "url_unittests",
+        "test_target": "//url:url_unittests"
       },
       {
         "merge": {
@@ -5804,7 +6154,8 @@
             }
           ]
         },
-        "test": "views_unittests"
+        "test": "views_unittests",
+        "test_target": "//ui/views:views_unittests"
       },
       {
         "merge": {
@@ -5820,7 +6171,8 @@
             }
           ]
         },
-        "test": "viz_unittests"
+        "test": "viz_unittests",
+        "test_target": "//components/viz:viz_unittests"
       },
       {
         "merge": {
@@ -5836,7 +6188,8 @@
             }
           ]
         },
-        "test": "wtf_unittests"
+        "test": "wtf_unittests",
+        "test_target": "//third_party/blink/renderer/platform/wtf:wtf_unittests"
       },
       {
         "merge": {
@@ -5853,7 +6206,8 @@
             }
           ]
         },
-        "test": "xr_browser_tests"
+        "test": "xr_browser_tests",
+        "test_target": "//chrome/test:xr_browser_tests"
       }
     ],
     "isolated_scripts": [
@@ -5872,7 +6226,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//:blink_python_tests"
       },
       {
         "args": [
@@ -5892,7 +6247,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/test/chromedriver:chromedriver_py_tests"
       },
       {
         "isolate_name": "chromedriver_replay_unittests",
@@ -5909,7 +6265,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/test/chromedriver:chromedriver_replay_unittests"
       },
       {
         "args": [
@@ -5931,7 +6288,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//components:components_perftests"
       },
       {
         "isolate_name": "content_shell_crash_test",
@@ -5948,7 +6306,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//content/shell:content_shell_crash_test"
       },
       {
         "isolate_name": "flatbuffers_unittests",
@@ -5965,7 +6324,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//third_party/flatbuffers:flatbuffers_unittests"
       },
       {
         "isolate_name": "grit_python_unittests",
@@ -5982,7 +6342,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//tools/grit:grit_python_unittests"
       },
       {
         "isolate_name": "mac_signing_tests",
@@ -5999,7 +6360,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//chrome/installer/mac:mac_signing_tests"
       },
       {
         "isolate_name": "metrics_python_tests",
@@ -6016,7 +6378,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//tools/metrics:metrics_python_tests"
       },
       {
         "isolate_name": "telemetry_gpu_unittests",
@@ -6034,7 +6397,8 @@
             }
           ],
           "idempotent": false
-        }
+        },
+        "test_target": "//chrome/test:telemetry_gpu_unittests"
       },
       {
         "args": [
@@ -6057,7 +6421,8 @@
           ],
           "idempotent": false,
           "shards": 4
-        }
+        },
+        "test_target": "//chrome/test:telemetry_unittests"
       },
       {
         "args": [
@@ -6079,7 +6444,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//ui/views:views_perftests"
       },
       {
         "args": [
@@ -6103,7 +6469,8 @@
             }
           ],
           "shards": 25
-        }
+        },
+        "test_target": "//:blink_web_tests"
       }
     ],
     "scripts": [
@@ -6135,7 +6502,8 @@
             }
           ]
         },
-        "test": "accessibility_unittests"
+        "test": "accessibility_unittests",
+        "test_target": "//ui/accessibility:accessibility_unittests"
       },
       {
         "merge": {
@@ -6151,7 +6519,8 @@
             }
           ]
         },
-        "test": "angle_unittests"
+        "test": "angle_unittests",
+        "test_target": "//third_party/angle/src/tests:angle_unittests"
       },
       {
         "merge": {
@@ -6167,7 +6536,8 @@
             }
           ]
         },
-        "test": "app_shell_unittests"
+        "test": "app_shell_unittests",
+        "test_target": "//extensions/shell:app_shell_unittests"
       },
       {
         "merge": {
@@ -6183,7 +6553,8 @@
             }
           ]
         },
-        "test": "base_unittests"
+        "test": "base_unittests",
+        "test_target": "//base:base_unittests"
       },
       {
         "merge": {
@@ -6199,7 +6570,8 @@
             }
           ]
         },
-        "test": "base_util_unittests"
+        "test": "base_util_unittests",
+        "test_target": "//base/util:base_util_unittests"
       },
       {
         "merge": {
@@ -6215,7 +6587,8 @@
             }
           ]
         },
-        "test": "blink_common_unittests"
+        "test": "blink_common_unittests",
+        "test_target": "//third_party/blink/common:blink_common_unittests"
       },
       {
         "merge": {
@@ -6231,7 +6604,8 @@
             }
           ]
         },
-        "test": "blink_fuzzer_unittests"
+        "test": "blink_fuzzer_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_fuzzer_unittests"
       },
       {
         "merge": {
@@ -6247,7 +6621,8 @@
             }
           ]
         },
-        "test": "blink_heap_unittests"
+        "test": "blink_heap_unittests",
+        "test_target": "//third_party/blink/renderer/platform/heap:blink_heap_unittests"
       },
       {
         "merge": {
@@ -6263,7 +6638,8 @@
             }
           ]
         },
-        "test": "blink_platform_unittests"
+        "test": "blink_platform_unittests",
+        "test_target": "//third_party/blink/renderer/platform:blink_platform_unittests"
       },
       {
         "merge": {
@@ -6280,7 +6656,8 @@
             }
           ]
         },
-        "test": "blink_unittests"
+        "test": "blink_unittests",
+        "test_target": "//third_party/blink/renderer/controller:blink_unittests"
       },
       {
         "merge": {
@@ -6296,7 +6673,8 @@
             }
           ]
         },
-        "test": "boringssl_crypto_tests"
+        "test": "boringssl_crypto_tests",
+        "test_target": "//third_party/boringssl:boringssl_crypto_tests"
       },
       {
         "merge": {
@@ -6312,7 +6690,8 @@
             }
           ]
         },
-        "test": "boringssl_ssl_tests"
+        "test": "boringssl_ssl_tests",
+        "test_target": "//third_party/boringssl:boringssl_ssl_tests"
       },
       {
         "args": [
@@ -6333,7 +6712,8 @@
           ],
           "shards": 10
         },
-        "test": "browser_tests"
+        "test": "browser_tests",
+        "test_target": "//chrome/test:browser_tests"
       },
       {
         "merge": {
@@ -6349,7 +6729,8 @@
             }
           ]
         },
-        "test": "cacheinvalidation_unittests"
+        "test": "cacheinvalidation_unittests",
+        "test_target": "//third_party/cacheinvalidation:cacheinvalidation_unittests"
       },
       {
         "args": [
@@ -6368,7 +6749,8 @@
             }
           ]
         },
-        "test": "capture_unittests"
+        "test": "capture_unittests",
+        "test_target": "//media/capture:capture_unittests"
       },
       {
         "merge": {
@@ -6384,7 +6766,8 @@
             }
           ]
         },
-        "test": "cast_unittests"
+        "test": "cast_unittests",
+        "test_target": "//media/cast:cast_unittests"
       },
       {
         "merge": {
@@ -6400,7 +6783,8 @@
             }
           ]
         },
-        "test": "cc_unittests"
+        "test": "cc_unittests",
+        "test_target": "//cc:cc_unittests"
       },
       {
         "merge": {
@@ -6416,7 +6800,8 @@
             }
           ]
         },
-        "test": "chrome_app_unittests"
+        "test": "chrome_app_unittests",
+        "test_target": "//chrome/test:chrome_app_unittests"
       },
       {
         "merge": {
@@ -6432,7 +6817,8 @@
             }
           ]
         },
-        "test": "chromedriver_unittests"
+        "test": "chromedriver_unittests",
+        "test_target": "//chrome/test/chromedriver:chromedriver_unittests"
       },
       {
         "merge": {
@@ -6448,7 +6834,8 @@
             }
           ]
         },
-        "test": "components_browsertests"
+        "test": "components_browsertests",
+        "test_target": "//components:components_browsertests"
       },
       {
         "merge": {
@@ -6464,7 +6851,8 @@
             }
           ]
         },
-        "test": "components_unittests"
+        "test": "components_unittests",
+        "test_target": "//components:components_unittests"
       },
       {
         "merge": {
@@ -6481,7 +6869,8 @@
           ],
           "shards": 6
         },
-        "test": "content_browsertests"
+        "test": "content_browsertests",
+        "test_target": "//content/test:content_browsertests"
       },
       {
         "merge": {
@@ -6497,7 +6886,8 @@
             }
           ]
         },
-        "test": "content_nocompile_tests"
+        "test": "content_nocompile_tests",
+        "test_target": "//content/test:content_nocompile_tests"
       },
       {
         "merge": {
@@ -6513,7 +6903,8 @@
             }
           ]
         },
-        "test": "content_unittests"
+        "test": "content_unittests",
+        "test_target": "//content/test:content_unittests"
       },
       {
         "merge": {
@@ -6529,7 +6920,8 @@
             }
           ]
         },
-        "test": "crashpad_tests"
+        "test": "crashpad_tests",
+        "test_target": "//third_party/crashpad/crashpad:crashpad_tests"
       },
       {
         "merge": {
@@ -6545,7 +6937,8 @@
             }
           ]
         },
-        "test": "cronet_tests"
+        "test": "cronet_tests",
+        "test_target": "//components/cronet:cronet_tests"
       },
       {
         "merge": {
@@ -6561,7 +6954,8 @@
             }
           ]
         },
-        "test": "cronet_unittests"
+        "test": "cronet_unittests",
+        "test_target": "//components/cronet:cronet_unittests"
       },
       {
         "merge": {
@@ -6577,7 +6971,8 @@
             }
           ]
         },
-        "test": "crypto_unittests"
+        "test": "crypto_unittests",
+        "test_target": "//crypto:crypto_unittests"
       },
       {
         "merge": {
@@ -6593,7 +6988,8 @@
             }
           ]
         },
-        "test": "device_unittests"
+        "test": "device_unittests",
+        "test_target": "//device:device_unittests"
       },
       {
         "merge": {
@@ -6609,7 +7005,8 @@
             }
           ]
         },
-        "test": "display_unittests"
+        "test": "display_unittests",
+        "test_target": "//ui/display:display_unittests"
       },
       {
         "merge": {
@@ -6625,7 +7022,8 @@
             }
           ]
         },
-        "test": "events_unittests"
+        "test": "events_unittests",
+        "test_target": "//ui/events:events_unittests"
       },
       {
         "merge": {
@@ -6641,7 +7039,8 @@
             }
           ]
         },
-        "test": "extensions_browsertests"
+        "test": "extensions_browsertests",
+        "test_target": "//extensions:extensions_browsertests"
       },
       {
         "merge": {
@@ -6657,7 +7056,8 @@
             }
           ]
         },
-        "test": "extensions_unittests"
+        "test": "extensions_unittests",
+        "test_target": "//extensions:extensions_unittests"
       },
       {
         "merge": {
@@ -6673,7 +7073,8 @@
             }
           ]
         },
-        "test": "filesystem_service_unittests"
+        "test": "filesystem_service_unittests",
+        "test_target": "//components/services/filesystem:filesystem_service_unittests"
       },
       {
         "merge": {
@@ -6689,7 +7090,8 @@
             }
           ]
         },
-        "test": "gcm_unit_tests"
+        "test": "gcm_unit_tests",
+        "test_target": "//google_apis/gcm:gcm_unit_tests"
       },
       {
         "merge": {
@@ -6705,7 +7107,8 @@
             }
           ]
         },
-        "test": "gfx_unittests"
+        "test": "gfx_unittests",
+        "test_target": "//ui/gfx:gfx_unittests"
       },
       {
         "merge": {
@@ -6721,7 +7124,8 @@
             }
           ]
         },
-        "test": "gin_unittests"
+        "test": "gin_unittests",
+        "test_target": "//gin:gin_unittests"
       },
       {
         "merge": {
@@ -6737,7 +7141,8 @@
             }
           ]
         },
-        "test": "google_apis_unittests"
+        "test": "google_apis_unittests",
+        "test_target": "//google_apis:google_apis_unittests"
       },
       {
         "merge": {
@@ -6753,7 +7158,8 @@
             }
           ]
         },
-        "test": "gpu_unittests"
+        "test": "gpu_unittests",
+        "test_target": "//gpu:gpu_unittests"
       },
       {
         "merge": {
@@ -6769,7 +7175,8 @@
             }
           ]
         },
-        "test": "gwp_asan_unittests"
+        "test": "gwp_asan_unittests",
+        "test_target": "//components/gwp_asan:gwp_asan_unittests"
       },
       {
         "merge": {
@@ -6785,7 +7192,8 @@
             }
           ]
         },
-        "test": "headless_browsertests"
+        "test": "headless_browsertests",
+        "test_target": "//headless:headless_browsertests"
       },
       {
         "merge": {
@@ -6801,7 +7209,8 @@
             }
           ]
         },
-        "test": "headless_unittests"
+        "test": "headless_unittests",
+        "test_target": "//headless:headless_unittests"
       },
       {
         "merge": {
@@ -6818,7 +7227,8 @@
           ],
           "shards": 3
         },
-        "test": "interactive_ui_tests"
+        "test": "interactive_ui_tests",
+        "test_target": "//chrome/test:interactive_ui_tests"
       },
       {
         "merge": {
@@ -6834,7 +7244,8 @@
             }
           ]
         },
-        "test": "ipc_tests"
+        "test": "ipc_tests",
+        "test_target": "//ipc:ipc_tests"
       },
       {
         "merge": {
@@ -6850,7 +7261,8 @@
             }
           ]
         },
-        "test": "jingle_unittests"
+        "test": "jingle_unittests",
+        "test_target": "//jingle:jingle_unittests"
       },
       {
         "merge": {
@@ -6866,7 +7278,8 @@
             }
           ]
         },
-        "test": "latency_unittests"
+        "test": "latency_unittests",
+        "test_target": "//ui/latency:latency_unittests"
       },
       {
         "merge": {
@@ -6882,7 +7295,8 @@
             }
           ]
         },
-        "test": "libjingle_xmpp_unittests"
+        "test": "libjingle_xmpp_unittests",
+        "test_target": "//third_party/libjingle_xmpp:libjingle_xmpp_unittests"
       },
       {
         "merge": {
@@ -6898,7 +7312,8 @@
             }
           ]
         },
-        "test": "media_blink_unittests"
+        "test": "media_blink_unittests",
+        "test_target": "//media/blink:media_blink_unittests"
       },
       {
         "merge": {
@@ -6914,7 +7329,8 @@
             }
           ]
         },
-        "test": "media_service_unittests"
+        "test": "media_service_unittests",
+        "test_target": "//media/mojo/services:media_service_unittests"
       },
       {
         "merge": {
@@ -6930,7 +7346,8 @@
             }
           ]
         },
-        "test": "media_unittests"
+        "test": "media_unittests",
+        "test_target": "//media:media_unittests"
       },
       {
         "merge": {
@@ -6946,7 +7363,8 @@
             }
           ]
         },
-        "test": "message_center_unittests"
+        "test": "message_center_unittests",
+        "test_target": "//ui/message_center:message_center_unittests"
       },
       {
         "merge": {
@@ -6962,7 +7380,8 @@
             }
           ]
         },
-        "test": "midi_unittests"
+        "test": "midi_unittests",
+        "test_target": "//media/midi:midi_unittests"
       },
       {
         "merge": {
@@ -6978,7 +7397,8 @@
             }
           ]
         },
-        "test": "mojo_unittests"
+        "test": "mojo_unittests",
+        "test_target": "//mojo:mojo_unittests"
       },
       {
         "merge": {
@@ -6994,7 +7414,8 @@
             }
           ]
         },
-        "test": "nacl_loader_unittests"
+        "test": "nacl_loader_unittests",
+        "test_target": "//components/nacl/loader:nacl_loader_unittests"
       },
       {
         "merge": {
@@ -7010,7 +7431,8 @@
             }
           ]
         },
-        "test": "native_theme_unittests"
+        "test": "native_theme_unittests",
+        "test_target": "//ui/native_theme:native_theme_unittests"
       },
       {
         "merge": {
@@ -7026,7 +7448,8 @@
             }
           ]
         },
-        "test": "net_unittests"
+        "test": "net_unittests",
+        "test_target": "//net:net_unittests"
       },
       {
         "merge": {
@@ -7042,7 +7465,8 @@
             }
           ]
         },
-        "test": "pdf_unittests"
+        "test": "pdf_unittests",
+        "test_target": "//pdf:pdf_unittests"
       },
       {
         "merge": {
@@ -7058,7 +7482,8 @@
             }
           ]
         },
-        "test": "perfetto_unittests"
+        "test": "perfetto_unittests",
+        "test_target": "//third_party/perfetto:perfetto_unittests"
       },
       {
         "merge": {
@@ -7074,7 +7499,8 @@
             }
           ]
         },
-        "test": "ppapi_unittests"
+        "test": "ppapi_unittests",
+        "test_target": "//ppapi:ppapi_unittests"
       },
       {
         "merge": {
@@ -7090,7 +7516,8 @@
             }
           ]
         },
-        "test": "printing_unittests"
+        "test": "printing_unittests",
+        "test_target": "//printing:printing_unittests"
       },
       {
         "merge": {
@@ -7106,7 +7533,8 @@
             }
           ]
         },
-        "test": "remoting_unittests"
+        "test": "remoting_unittests",
+        "test_target": "//remoting:remoting_unittests"
       },
       {
         "merge": {
@@ -7122,7 +7550,8 @@
             }
           ]
         },
-        "test": "sandbox_mac_unittests"
+        "test": "sandbox_mac_unittests",
+        "test_target": "//sandbox/mac:sandbox_mac_unittests"
       },
       {
         "merge": {
@@ -7138,7 +7567,8 @@
             }
           ]
         },
-        "test": "service_manager_unittests"
+        "test": "service_manager_unittests",
+        "test_target": "//services/service_manager/tests:service_manager_unittests"
       },
       {
         "merge": {
@@ -7154,7 +7584,8 @@
             }
           ]
         },
-        "test": "services_unittests"
+        "test": "services_unittests",
+        "test_target": "//services:services_unittests"
       },
       {
         "merge": {
@@ -7170,7 +7601,8 @@
             }
           ]
         },
-        "test": "shell_dialogs_unittests"
+        "test": "shell_dialogs_unittests",
+        "test_target": "//ui/shell_dialogs:shell_dialogs_unittests"
       },
       {
         "merge": {
@@ -7186,7 +7618,8 @@
             }
           ]
         },
-        "test": "skia_unittests"
+        "test": "skia_unittests",
+        "test_target": "//skia:skia_unittests"
       },
       {
         "merge": {
@@ -7202,7 +7635,8 @@
             }
           ]
         },
-        "test": "snapshot_unittests"
+        "test": "snapshot_unittests",
+        "test_target": "//ui/snapshot:snapshot_unittests"
       },
       {
         "merge": {
@@ -7218,7 +7652,8 @@
             }
           ]
         },
-        "test": "sql_unittests"
+        "test": "sql_unittests",
+        "test_target": "//sql:sql_unittests"
       },
       {
         "merge": {
@@ -7234,7 +7669,8 @@
             }
           ]
         },
-        "test": "storage_unittests"
+        "test": "storage_unittests",
+        "test_target": "//storage:storage_unittests"
       },
       {
         "merge": {
@@ -7250,7 +7686,8 @@
             }
           ]
         },
-        "test": "sync_integration_tests"
+        "test": "sync_integration_tests",
+        "test_target": "//chrome/test:sync_integration_tests"
       },
       {
         "merge": {
@@ -7266,7 +7703,8 @@
             }
           ]
         },
-        "test": "ui_base_unittests"
+        "test": "ui_base_unittests",
+        "test_target": "//ui/base:ui_base_unittests"
       },
       {
         "merge": {
@@ -7282,7 +7720,8 @@
             }
           ]
         },
-        "test": "ui_touch_selection_unittests"
+        "test": "ui_touch_selection_unittests",
+        "test_target": "//ui/touch_selection:ui_touch_selection_unittests"
       },
       {
         "merge": {
@@ -7298,7 +7737,8 @@
             }
           ]
         },
-        "test": "unit_tests"
+        "test": "unit_tests",
+        "test_target": "//chrome/test:unit_tests"
       },
       {
         "merge": {
@@ -7314,7 +7754,8 @@
             }
           ]
         },
-        "test": "updater_tests"
+        "test": "updater_tests",
+        "test_target": "//chrome/updater:updater_tests"
       },
       {
         "merge": {
@@ -7330,7 +7771,8 @@
             }
           ]
         },
-        "test": "url_unittests"
+        "test": "url_unittests",
+        "test_target": "//url:url_unittests"
       },
       {
         "merge": {
@@ -7346,7 +7788,8 @@
             }
           ]
         },
-        "test": "views_unittests"
+        "test": "views_unittests",
+        "test_target": "//ui/views:views_unittests"
       },
       {
         "merge": {
@@ -7362,7 +7805,8 @@
             }
           ]
         },
-        "test": "viz_unittests"
+        "test": "viz_unittests",
+        "test_target": "//components/viz:viz_unittests"
       },
       {
         "merge": {
@@ -7378,7 +7822,8 @@
             }
           ]
         },
-        "test": "wtf_unittests"
+        "test": "wtf_unittests",
+        "test_target": "//third_party/blink/renderer/platform/wtf:wtf_unittests"
       },
       {
         "merge": {
@@ -7395,7 +7840,8 @@
             }
           ]
         },
-        "test": "xr_browser_tests"
+        "test": "xr_browser_tests",
+        "test_target": "//chrome/test:xr_browser_tests"
       }
     ],
     "isolated_scripts": [
@@ -7414,7 +7860,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//:blink_python_tests"
       },
       {
         "isolate_name": "content_shell_crash_test",
@@ -7431,7 +7878,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//content/shell:content_shell_crash_test"
       },
       {
         "isolate_name": "flatbuffers_unittests",
@@ -7448,7 +7896,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//third_party/flatbuffers:flatbuffers_unittests"
       },
       {
         "isolate_name": "grit_python_unittests",
@@ -7465,7 +7914,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//tools/grit:grit_python_unittests"
       },
       {
         "isolate_name": "metrics_python_tests",
@@ -7482,7 +7932,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//tools/metrics:metrics_python_tests"
       },
       {
         "args": [
@@ -7508,7 +7959,8 @@
           ],
           "hard_timeout": 960,
           "shards": 2
-        }
+        },
+        "test_target": "//chrome/test:performance_test_suite"
       },
       {
         "isolate_name": "telemetry_gpu_unittests",
@@ -7526,7 +7978,8 @@
             }
           ],
           "idempotent": false
-        }
+        },
+        "test_target": "//chrome/test:telemetry_gpu_unittests"
       },
       {
         "args": [
@@ -7549,7 +8002,8 @@
           ],
           "idempotent": false,
           "shards": 4
-        }
+        },
+        "test_target": "//chrome/test:telemetry_unittests"
       },
       {
         "args": [
@@ -7571,7 +8025,8 @@
               "os": "Mac-10.13.6"
             }
           ]
-        }
+        },
+        "test_target": "//ui/views:views_perftests"
       },
       {
         "args": [
@@ -7596,7 +8051,8 @@
             }
           ],
           "shards": 12
-        }
+        },
+        "test_target": "//:blink_web_tests"
       }
     ]
   },
@@ -7626,7 +8082,8 @@
             }
           ],
           "shards": 12
-        }
+        },
+        "test_target": "//:blink_web_tests"
       }
     ]
   }
