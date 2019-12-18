@@ -330,9 +330,9 @@ bool CompositorFrameSinkSupport::IsRoot() const {
 
 void CompositorFrameSinkSupport::DidNotProduceFrame(const BeginFrameAck& ack) {
   TRACE_EVENT2("viz", "CompositorFrameSinkSupport::DidNotProduceFrame",
-               "ack.source_id", ack.source_id, "ack.sequence_number",
-               ack.sequence_number);
-  DCHECK_GE(ack.sequence_number, BeginFrameArgs::kStartingFrameNumber);
+               "ack.source_id", ack.frame_id.source_id, "ack.sequence_number",
+               ack.frame_id.sequence_number);
+  DCHECK(ack.frame_id.IsSequenceValid());
 
   begin_frame_tracker_.ReceivedAck(ack);
 
@@ -428,8 +428,7 @@ SubmitResult CompositorFrameSinkSupport::MaybeSubmitCompositorFrameInternal(
 
   // Override the has_damage flag (ignoring invalid data from clients).
   frame.metadata.begin_frame_ack.has_damage = true;
-  DCHECK_LE(BeginFrameArgs::kStartingFrameNumber,
-            frame.metadata.begin_frame_ack.sequence_number);
+  DCHECK(frame.metadata.begin_frame_ack.frame_id.IsSequenceValid());
 
   if (!ui::LatencyInfo::Verify(frame.metadata.latency_info,
                                "RenderWidgetHostImpl::OnSwapCompositorFrame")) {

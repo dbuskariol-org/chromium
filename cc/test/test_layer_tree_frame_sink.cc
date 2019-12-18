@@ -159,8 +159,7 @@ void TestLayerTreeFrameSink::SubmitCompositorFrame(viz::CompositorFrame frame,
                                                    bool hit_test_data_changed,
                                                    bool show_hit_test_borders) {
   DCHECK(frame.metadata.begin_frame_ack.has_damage);
-  DCHECK_LE(viz::BeginFrameArgs::kStartingFrameNumber,
-            frame.metadata.begin_frame_ack.sequence_number);
+  DCHECK(frame.metadata.begin_frame_ack.frame_id.IsSequenceValid());
   test_client_->DisplayReceivedCompositorFrame(frame);
 
   gfx::Size frame_size = frame.size_in_pixels();
@@ -196,7 +195,7 @@ void TestLayerTreeFrameSink::SubmitCompositorFrame(viz::CompositorFrame frame,
 
 void TestLayerTreeFrameSink::DidNotProduceFrame(const viz::BeginFrameAck& ack) {
   DCHECK(!ack.has_damage);
-  DCHECK_LE(viz::BeginFrameArgs::kStartingFrameNumber, ack.sequence_number);
+  DCHECK(ack.frame_id.IsSequenceValid());
   support_->DidNotProduceFrame(ack);
 }
 

@@ -87,8 +87,7 @@ class DisplayDamageTrackerTest : public testing::Test {
       pass_list.push_back(std::move(pass));
 
       BeginFrameAck ack;
-      ack.source_id = args.source_id;
-      ack.sequence_number = args.sequence_number;
+      ack.frame_id = BeginFrameId(args.frame_id);
       ack.has_damage = true;
 
       CompositorFrame frame = CompositorFrameBuilder()

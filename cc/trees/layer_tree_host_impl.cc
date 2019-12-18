@@ -2299,8 +2299,7 @@ bool LayerTreeHostImpl::DrawLayers(FrameData* frame) {
     // check in that case.
     const auto& bfargs = current_begin_frame_tracker_.Current();
     const auto& ack = compositor_frame.metadata.begin_frame_ack;
-    DCHECK_EQ(bfargs.source_id, ack.source_id);
-    DCHECK_EQ(bfargs.sequence_number, ack.sequence_number);
+    DCHECK_EQ(bfargs.frame_id, ack.frame_id);
   }
 #endif
 
@@ -2457,8 +2456,7 @@ viz::CompositorFrame LayerTreeHostImpl::GenerateCompositorFrame(
     }
   }
 
-  DCHECK_LE(viz::BeginFrameArgs::kStartingFrameNumber,
-            frame->begin_frame_ack.sequence_number);
+  DCHECK(frame->begin_frame_ack.frame_id.IsSequenceValid());
   metadata.begin_frame_ack = frame->begin_frame_ack;
 
   viz::CompositorFrame compositor_frame;
@@ -2743,8 +2741,7 @@ void LayerTreeHostImpl::DidNotProduceFrame(const viz::BeginFrameAck& ack,
     // Notify the trackers only when this is *not* the case (since the trackers
     // are not notified about the start of the future frame either).
     const auto& args = current_begin_frame_tracker_.Current();
-    if (args.source_id == ack.source_id &&
-        args.sequence_number == ack.sequence_number) {
+    if (args.frame_id == ack.frame_id) {
       frame_trackers_.NotifyImplFrameCausedNoDamage(ack);
       if (begin_main_frame_sent_during_impl_)
         frame_trackers_.NotifyMainFrameCausedNoDamage(args);

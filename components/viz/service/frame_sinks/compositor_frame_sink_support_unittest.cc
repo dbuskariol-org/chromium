@@ -67,8 +67,7 @@ gpu::SyncToken GenTestSyncToken(int id) {
 
 bool BeginFrameArgsAreEquivalent(const BeginFrameArgs& first,
                                  const BeginFrameArgs& second) {
-  return first.source_id == second.source_id &&
-         first.sequence_number == second.sequence_number;
+  return first.frame_id == second.frame_id;
 }
 
 }  // namespace
