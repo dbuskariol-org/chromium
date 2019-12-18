@@ -928,19 +928,6 @@ deps = {
       'condition': 'checkout_linux',
   },
 
-  # TODO(steveroe): Get this from GCS instead of CIPD once the arm64 sdk is
-  # released using the same version specified in build/fuchsia/linux.sdk.sha1.
-  'src/third_party/fuchsia-sdk-arm64': {
-      'packages': [
-          {
-              'package': 'fuchsia/sdk/core/linux-arm64',
-              'version': 'xbqDSJKkLORclZW8h9et17dVsOjaxurf7RElMu0fGvUC'
-          },
-      ],
-      'condition': 'host_os == "linux" and (checkout_fuchsia and checkout_fuchsia_for_arm64_host)',
-      'dep_type': 'cipd',
-  },
-
   'src/third_party/grpc/src': {
       'url': Var('chromium_git') + '/external/github.com/grpc/grpc.git' + '@' + '74b981a6a3d9ba17f3acae1d72b9109325ef656d',
   },
