@@ -165,7 +165,13 @@ void PrintViewManagerBase::PrintDocument(
     const gfx::Rect& content_area,
     const gfx::Point& offsets) {
 #if defined(OS_WIN)
-  if (!base::FeatureList::IsEnabled(features::kUseXpsForPrinting)) {
+  // Non-modifiable jobs are PDF, need to check a different flag for those when
+  // determining whether to print with XPS or GDI print API.
+  const bool print_using_xps =
+      print_job_->document()->settings().is_modifiable()
+          ? base::FeatureList::IsEnabled(features::kUseXpsForPrinting)
+          : base::FeatureList::IsEnabled(features::kUseXpsForPrintingFromPdf);
+  if (!print_using_xps) {
     // Print using GDI, which first requires conversion to EMF.
     print_job_->StartConversionToNativeFormat(print_data, page_size,
                                               content_area, offsets);
