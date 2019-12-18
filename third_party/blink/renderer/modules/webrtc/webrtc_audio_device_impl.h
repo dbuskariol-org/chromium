@@ -10,7 +10,6 @@
 #include <list>
 #include <memory>
 #include <string>
-#include <vector>
 
 #include "base/macros.h"
 #include "base/memory/scoped_refptr.h"
@@ -19,6 +18,7 @@
 #include "third_party/blink/renderer/modules/modules_export.h"
 #include "third_party/blink/renderer/modules/webrtc/webrtc_audio_device_not_impl.h"
 #include "third_party/blink/renderer/platform/webrtc/webrtc_source.h"
+#include "third_party/blink/renderer/platform/wtf/vector.h"
 
 // A WebRtcAudioDeviceImpl instance implements the abstract interface
 // webrtc::AudioDeviceModule which makes it possible for a user (e.g. webrtc::
@@ -187,9 +187,7 @@ class MODULES_EXPORT WebRtcAudioDeviceImpl
 
   // Buffer used for temporary storage during render callback.
   // It is only accessed by the audio render thread.
-  //
-  // TODO(crbug.com/923394): Replace std::vector by WTF::Vector.
-  std::vector<int16_t> render_buffer_;
+  Vector<int16_t> render_buffer_;
 
   // The output device used for echo cancellation
   //
