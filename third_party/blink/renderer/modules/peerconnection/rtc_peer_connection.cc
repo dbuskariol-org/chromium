@@ -2864,8 +2864,8 @@ void RTCPeerConnection::DidModifySctpTransport(
 }
 
 void RTCPeerConnection::DidModifyTransceivers(
-    WebVector<std::unique_ptr<RTCRtpTransceiverPlatform>> platform_transceivers,
-    WebVector<uintptr_t> removed_transceiver_ids,
+    Vector<std::unique_ptr<RTCRtpTransceiverPlatform>> platform_transceivers,
+    Vector<uintptr_t> removed_transceiver_ids,
     bool is_remote_description) {
   for (auto id : removed_transceiver_ids) {
     for (auto* it = transceivers_.begin(); it != transceivers_.end(); ++it) {
