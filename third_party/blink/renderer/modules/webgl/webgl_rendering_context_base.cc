@@ -5588,10 +5588,18 @@ void WebGLRenderingContextBase::TexImageHelperHTMLVideoElement(
       source_image_rect == SentinelEmptyRect() ||
       source_image_rect ==
           IntRect(0, 0, video->videoWidth(), video->videoHeight());
-  const bool use_copyTextureCHROMIUM = function_id == kTexImage2D &&
-                                       source_image_rect_is_default &&
-                                       depth == 1 && GL_TEXTURE_2D == target &&
-                                       CanUseTexImageViaGPU(format, type);
+
+  const auto& caps = GetDrawingBuffer()->ContextProvider()->GetCapabilities();
+  const bool may_need_image_external_essl3 =
+      caps.egl_image_external &&
+      Extensions3DUtil::CopyTextureCHROMIUMNeedsESSL3(internalformat);
+  const bool have_image_external_essl3 = caps.egl_image_external_essl3;
+  const bool use_copyTextureCHROMIUM =
+      function_id == kTexImage2D && source_image_rect_is_default &&
+      depth == 1 && GL_TEXTURE_2D == target &&
+      (have_image_external_essl3 || !may_need_image_external_essl3) &&
+      CanUseTexImageViaGPU(format, type);
+
   // Format of source video may be 16-bit format, e.g. Y16 format.
   // glCopyTextureCHROMIUM requires the source texture to be in 8-bit format.
   // Converting 16-bits formated source texture to 8-bits formated texture will
