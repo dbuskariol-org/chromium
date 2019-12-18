@@ -57,6 +57,9 @@ public final class WebLayerImpl extends IWebLayer.Stub {
     private static final String TAG = "WebLayer";
     private static final String PRIVATE_DIRECTORY_SUFFIX = "weblayer";
     // Command line flags are only read in debug builds.
+    // WARNING: this file is written to by testing code in chrome (see
+    // "//chrome/test/chromedriver/chrome/device_manager.cc"). If you change this variable, update
+    // "device_manager.cc" too.
     private static final String COMMAND_LINE_FILE = "/data/local/tmp/weblayer-command-line";
 
     private final ProfileManager mProfileManager = new ProfileManager();
