@@ -59,6 +59,7 @@ _DISABLED_TESTS = frozenset({
   'system_health.memory_mobile/load:news:qq',
   'system_health.memory_mobile/load:news:reddit',
   'system_health.memory_mobile/load:news:washingtonpost',
+  'system_health.memory_mobile/load:search:taobao',
   'system_health.memory_mobile/load:tools:stackoverflow',
   'system_health.memory_desktop/load_accessibility:shopping:amazon',
   'system_health.memory_desktop/browse_accessibility:tech:codesearch',

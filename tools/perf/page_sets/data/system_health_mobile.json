@@ -285,6 +285,9 @@
         "load:search:taobao": {
             "DEFAULT": "system_health_mobile_000.wprgo"
         },
+        "load:search:taobao:2019": {
+            "DEFAULT": "system_health_mobile_193439b464.wprgo"
+        },
         "load:search:yahoo": {
             "DEFAULT": "system_health_mobile_000.wprgo"
         },

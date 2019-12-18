@@ -105,6 +105,7 @@ load:search:flipkart:2018,,desktop,"2018,international"
 load:search:google:2018,,"desktop,mobile",2018
 load:search:taobao,,mobile,"2016,health_check,international"
 load:search:taobao:2018,,desktop,"2018,international"
+load:search:taobao:2019,,mobile,"2019,health_check,international"
 load:search:yahoo:2018,,"desktop,mobile",2018
 load:search:yandex:2018,,"desktop,mobile","2018,international"
 load:social:instagram:2018,,desktop,2018

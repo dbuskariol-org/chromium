@@ -77,6 +77,14 @@ class LoadTaobaoMobileStory(_LoadingStory):
           story_tags.YEAR_2016]
 
 
+class LoadTaobaoMobileStory2019(_LoadingStory):
+  NAME = 'load:search:taobao:2019'
+  URL = 'http://m.intl.taobao.com/'
+  SUPPORTED_PLATFORMS = platforms.MOBILE_ONLY
+  TAGS = [story_tags.INTERNATIONAL, story_tags.HEALTH_CHECK,
+          story_tags.YEAR_2019]
+
+
 class LoadYandexStory2018(_LoadingStory):
   NAME = 'load:search:yandex:2018'
   URL = 'https://yandex.ru/touchsearch?text=science'
