@@ -4958,12 +4958,14 @@ bool LayerTreeHostImpl::GetSnapFlingInfoAndSetAnimatingSnapTarget(
   gfx::ScrollOffset current_offset = GetVisualScrollOffset(*scroll_node);
   *out_initial_position = ScrollOffsetToVector2dF(current_offset);
 
+  // CC side always uses fractional scroll deltas.
+  bool use_fractional_offsets = true;
   gfx::ScrollOffset snap_offset;
   TargetSnapAreaElementIds snap_target_ids;
   std::unique_ptr<SnapSelectionStrategy> strategy =
       SnapSelectionStrategy::CreateForEndAndDirection(
-          current_offset, gfx::ScrollOffset(natural_displacement_in_content));
-
+          current_offset, gfx::ScrollOffset(natural_displacement_in_content),
+          use_fractional_offsets);
   if (!data.FindSnapPosition(*strategy, &snap_offset, &snap_target_ids))
     return false;
   scroll_animating_snap_target_ids_ = snap_target_ids;
