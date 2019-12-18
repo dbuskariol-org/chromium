@@ -2668,18 +2668,16 @@ crbug.com/1012627 [ Win7 ] external/wpt/css/css-text/line-breaking/line-breaking
 
 crbug.com/1029514 external/wpt/html/semantics/embedded-content/the-video-element/resize-during-playback.html [ Pass Failure ]
 
+# These need WPT fuzzy matching:
+crbug.com/1035194 [ Linux ] external/wpt/css/filter-effects/css-filters-animation-opacity.html [ Failure ]
+crbug.com/1035194 [ Linux ] external/wpt/css/filter-effects/backdrop-filter-basic-opacity-2.html [ Failure ]
+crbug.com/1035194 [ Linux ] virtual/scalefactor200/external/wpt/css/filter-effects/css-filters-animation-opacity.html [ Failure ]
+crbug.com/1035194 [ Linux ] virtual/scalefactor200/external/wpt/css/filter-effects/backdrop-filter-basic-opacity-2.html [ Failure ]
+
 # ====== New tests from wpt-importer added here ======
 crbug.com/626703 [ Linux ] external/wpt/css/motion/offset-anchor-transform-box-fill-box-003.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/motion/offset-anchor-transform-box-fill-box-003.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/motion/offset-anchor-transform-box-fill-box-003.html [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/filter-effects/backdrop-filter-containing-block.html [ Failure ]
-crbug.com/626703 [ Linux ] virtual/scalefactor200/external/wpt/css/filter-effects/backdrop-filter-basic-opacity-2.html [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/filter-effects/css-filters-animation-opacity.html [ Failure ]
-crbug.com/626703 [ Linux ] virtual/scalefactor200/external/wpt/css/filter-effects/backdrop-filter-zero-size.html [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/filter-effects/backdrop-filter-basic-opacity-2.html [ Failure ]
-crbug.com/626703 [ Linux ] virtual/scalefactor200/external/wpt/css/filter-effects/css-filters-animation-opacity.html [ Failure ]
-crbug.com/626703 [ Linux ] virtual/scalefactor200/external/wpt/css/filter-effects/backdrop-filter-containing-block.html [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/filter-effects/backdrop-filter-zero-size.html [ Failure ]
 crbug.com/626703 [ Linux ] external/wpt/offscreen-canvas/text/2d.text.measure.width.empty.worker.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/offscreen-canvas/text/2d.text.measure.width.empty.worker.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/offscreen-canvas/text/2d.text.measure.width.empty.worker.html [ Timeout ]
