@@ -14,7 +14,6 @@
 #include <android/log.h>
 #endif
 
-#include "crazy_linker_debug.h"
 #include "crazy_linker_util.h"
 
 // Note: unit-testing support files are in crazy_linker_files_mock.cpp
@@ -200,7 +199,12 @@ void* operator new(size_t size) {
   // runtime. Hence our fatal message does not contain the number of
   // bytes requested by the allocation.
   static const char kFatalMessage[] = "Out of memory!";
-  crazy::LogFatalAndExit(kFatalMessage);
+#ifdef __ANDROID__
+  __android_log_write(ANDROID_LOG_FATAL, "crazy_linker", kFatalMessage);
+#else
+  ::write(STDERR_FILENO, kFatalMessage, sizeof(kFatalMessage) - 1);
+#endif
+  _exit(1);
 #if defined(__GNUC__)
   __builtin_unreachable();
 #endif

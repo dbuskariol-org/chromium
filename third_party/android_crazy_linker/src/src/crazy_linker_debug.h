@@ -29,9 +29,6 @@ template <bool> struct CompileAssert { };
 
 namespace crazy {
 
-// Log fatal error and exit.
-void LogFatalAndExit(const char* message);
-
 #if CRAZY_DEBUG
 
 void Log(const char* location, const char* fmt, ...);
