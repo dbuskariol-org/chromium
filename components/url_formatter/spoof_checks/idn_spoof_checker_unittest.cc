@@ -1175,7 +1175,11 @@ const IDNTestCase kIdnCases[] = {
 
     {"xn--7dbh4a.com", L"חסד.com", false},
     {"xn--7dbh4a.il", L"חסד.il", true},
-};  // namespace
+
+    // Whole-script-confusable in Ethiopic.
+    {"xn--6xd66aa62c.com", L"ሠዐዐፐ.com", false},
+    {"xn--6xd66aa62c.et", L"ሠዐዐፐ.et", true},
+};
 
 namespace test {
 #include "components/url_formatter/spoof_checks/top_domains/test_domains-trie-inc.cc"
