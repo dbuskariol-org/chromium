@@ -33,6 +33,7 @@ import org.chromium.components.embedder_support.application.ClassLoaderContextWr
 import org.chromium.content_public.browser.BrowserStartupController;
 import org.chromium.content_public.browser.ChildProcessCreationParams;
 import org.chromium.content_public.browser.DeviceUtils;
+import org.chromium.net.NetworkChangeNotifier;
 import org.chromium.ui.base.ResourceBundle;
 import org.chromium.weblayer_private.interfaces.IBrowserFragment;
 import org.chromium.weblayer_private.interfaces.ICrashReporterController;
@@ -186,6 +187,12 @@ public final class WebLayerImpl extends IWebLayer.Stub {
             LibraryLoader.getInstance().ensureInitialized();
         }
         GmsBridge.getInstance().setSafeBrowsingHandler();
+
+        // Configure NetworkChangeNotifier to auto detect changes in network
+        // connectivity.
+        NetworkChangeNotifier.init();
+        NetworkChangeNotifier.setAutoDetectConnectivityState(
+                new WebLayerNetworkChangeNotifierRegistrationPolicy());
     }
 
     @Override
