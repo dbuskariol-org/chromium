@@ -18,6 +18,7 @@
 #include "ash/wm/overview/overview_utils.h"
 #include "ash/wm/overview/scoped_overview_animation_settings.h"
 #include "ash/wm/splitview/split_view_controller.h"
+#include "ash/wm/splitview/split_view_utils.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
 #include "ash/wm/window_preview_view.h"
 #include "ash/wm/window_state.h"
@@ -202,6 +203,8 @@ void ScopedOverviewTransformWindow::RestoreWindow(bool reset_transform) {
     for (auto& settings : animation_settings_list) {
       auto exit_observer = std::make_unique<ExitAnimationObserver>();
       settings->AddObserver(exit_observer.get());
+      if (window_->layer()->GetAnimator() == settings->GetAnimator())
+        settings->AddObserver(new WindowTransformAnimationObserver(window_));
       Shell::Get()->overview_controller()->AddExitAnimationObserver(
           std::move(exit_observer));
     }
