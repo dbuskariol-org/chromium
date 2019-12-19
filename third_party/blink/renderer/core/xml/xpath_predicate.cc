@@ -263,7 +263,11 @@ void Predicate::Trace(blink::Visitor* visitor) {
 bool Predicate::Evaluate(EvaluationContext& context) const {
   DCHECK(expr_);
 
-  Value result(expr_->Evaluate(context));
+  // Apply a cloned context because position() requires the current
+  // context node.
+  EvaluationContext cloned_context = context;
+  Value result(expr_->Evaluate(cloned_context));
+  context.had_type_conversion_error |= cloned_context.had_type_conversion_error;
 
   // foo[3] means foo[position()=3]
   if (result.IsNumber())
