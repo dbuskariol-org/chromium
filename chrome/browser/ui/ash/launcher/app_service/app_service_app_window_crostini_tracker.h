@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_WINDOW_CROSTINI_TRACKER_H_
-#define CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_WINDOW_CROSTINI_TRACKER_H_
+#ifndef CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_SERVICE_APP_WINDOW_CROSTINI_TRACKER_H_
+#define CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_SERVICE_APP_WINDOW_CROSTINI_TRACKER_H_
 
 #include "ash/public/cpp/shelf_types.h"
 #include "base/containers/flat_map.h"
@@ -65,4 +65,4 @@ class AppServiceAppWindowCrostiniTracker {
   int64_t display_id_to_restart_in_ = 0;
 };
 
-#endif  // CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_WINDOW_CROSTINI_TRACKER_H_
+#endif  // CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_SERVICE_APP_WINDOW_CROSTINI_TRACKER_H_

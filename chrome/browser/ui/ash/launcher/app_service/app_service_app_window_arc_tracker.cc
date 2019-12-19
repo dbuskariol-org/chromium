@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/ash/launcher/app_service_app_window_arc_tracker.h"
+#include "chrome/browser/ui/ash/launcher/app_service/app_service_app_window_arc_tracker.h"
 
 #include "ash/public/cpp/app_types.h"
 #include "ash/public/cpp/multi_user_window_manager.h"
@@ -16,8 +16,8 @@
 #include "chrome/browser/chromeos/arc/arc_util.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/app_list/arc/arc_app_utils.h"
-#include "chrome/browser/ui/ash/launcher/app_service_app_window_launcher_controller.h"
-#include "chrome/browser/ui/ash/launcher/app_service_app_window_launcher_item_controller.h"
+#include "chrome/browser/ui/ash/launcher/app_service/app_service_app_window_launcher_controller.h"
+#include "chrome/browser/ui/ash/launcher/app_service/app_service_app_window_launcher_item_controller.h"
 #include "chrome/browser/ui/ash/launcher/app_window_base.h"
 #include "chrome/browser/ui/ash/launcher/app_window_launcher_item_controller.h"
 #include "chrome/browser/ui/ash/launcher/arc_app_window.h"

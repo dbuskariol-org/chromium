@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_WINDOW_LAUNCHER_CONTROLLER_H_
-#define CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_WINDOW_LAUNCHER_CONTROLLER_H_
+#ifndef CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_SERVICE_APP_WINDOW_LAUNCHER_CONTROLLER_H_
+#define CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_SERVICE_APP_WINDOW_LAUNCHER_CONTROLLER_H_
 
 #include <map>
 #include <memory>
@@ -13,7 +13,7 @@
 #include "base/macros.h"
 #include "base/scoped_observer.h"
 #include "chrome/browser/apps/app_service/app_service_proxy.h"
-#include "chrome/browser/ui/ash/launcher/app_service_instance_registry_helper.h"
+#include "chrome/browser/ui/ash/launcher/app_service/app_service_instance_registry_helper.h"
 #include "chrome/browser/ui/ash/launcher/app_window_launcher_controller.h"
 #include "chrome/browser/ui/ash/launcher/arc_app_window_delegate.h"
 #include "chrome/services/app_service/public/cpp/instance_registry.h"
@@ -144,4 +144,4 @@ class AppServiceAppWindowLauncherController
   DISALLOW_COPY_AND_ASSIGN(AppServiceAppWindowLauncherController);
 };
 
-#endif  // CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_WINDOW_LAUNCHER_CONTROLLER_H_
+#endif  // CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_SERVICE_APP_WINDOW_LAUNCHER_CONTROLLER_H_
