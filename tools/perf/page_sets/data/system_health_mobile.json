@@ -39,6 +39,9 @@
         "browse:media:flickr_infinite_scroll": {
             "DEFAULT": "system_health_mobile_062.wprgo"
         },
+        "browse:media:flickr_infinite_scroll:2019": {
+            "DEFAULT": "system_health_mobile_02f1f2624a.wprgo"
+        },
         "browse:media:googleplaystore:2019": {
             "DEFAULT": "system_health_mobile_4413a28712.wprgo"
         },

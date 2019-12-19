@@ -1652,6 +1652,14 @@ class FlickrMobileStory(_InfiniteScrollStory):
   TAGS = [story_tags.INFINITE_SCROLL, story_tags.YEAR_2016]
 
 
+class FlickrMobileStory2019(_InfiniteScrollStory):
+  NAME = 'browse:media:flickr_infinite_scroll:2019'
+  URL = 'https://www.flickr.com/explore'
+  SUPPORTED_PLATFORMS = platforms.MOBILE_ONLY
+  SCROLL_DISTANCE = 10000
+  TAGS = [story_tags.INFINITE_SCROLL, story_tags.YEAR_2019]
+
+
 class PinterestMobileStory(_InfiniteScrollStory):
   NAME = 'browse:social:pinterest_infinite_scroll'
   URL = 'https://www.pinterest.com/all'
