@@ -192,6 +192,9 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeEarlGreyAppInterface)
 
 - (void)selectTabAtIndex:(NSUInteger)index {
   [ChromeEarlGreyAppInterface selectTabAtIndex:index];
+  // Tab changes are initiated through |WebStateList|. Need to wait its
+  // obeservers to complete UI changes at app.
+  [[GREYUIThreadExecutor sharedInstance] drainUntilIdle];
 }
 
 - (BOOL)isIncognitoMode {
@@ -200,6 +203,9 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeEarlGreyAppInterface)
 
 - (void)closeTabAtIndex:(NSUInteger)index {
   [ChromeEarlGreyAppInterface closeTabAtIndex:index];
+  // Tab changes are initiated through |WebStateList|. Need to wait its
+  // obeservers to complete UI changes at app.
+  [[GREYUIThreadExecutor sharedInstance] drainUntilIdle];
 }
 
 - (NSUInteger)mainTabCount {
@@ -277,6 +283,9 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeEarlGreyAppInterface)
 
 - (void)closeAllTabs {
   [ChromeEarlGreyAppInterface closeAllTabs];
+  // Tab changes are initiated through |WebStateList|. Need to wait its
+  // obeservers to complete UI changes at app.
+  [[GREYUIThreadExecutor sharedInstance] drainUntilIdle];
 }
 
 - (void)waitForPageToFinishLoading {
