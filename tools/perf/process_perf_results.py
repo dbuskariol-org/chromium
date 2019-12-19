@@ -514,7 +514,11 @@ def _handle_perf_results(
         build_properties, output_json_file))
 
   # Kick off the uploads in multiple processes
-  pool = multiprocessing.Pool(_GetCpuCount())
+  # crbug.com/1035930: We are hitting HTTP Response 429. Limit ourselves
+  # to 2 processes to avoid this error. Uncomment the following code once
+  # the problem is fixed on the dashboard side.
+  # pool = multiprocessing.Pool(_GetCpuCount())
+  pool = multiprocessing.Pool(2)
   try:
     async_result = pool.map_async(
         _upload_individual_benchmark, invocations)
