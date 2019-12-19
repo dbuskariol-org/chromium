@@ -166,6 +166,12 @@ class LoadPinterestStory(_LoadingStory):
   SUPPORTED_PLATFORMS = platforms.DESKTOP_ONLY
 
 
+class LoadPinterestStory2019(_LoadingStory):
+  NAME = 'load:social:pinterest:2019'
+  URL = 'https://uk.pinterest.com/categories/popular/'
+  TAGS = [story_tags.JAVASCRIPT_HEAVY, story_tags.YEAR_2019]
+
+
 ################################################################################
 # News, discussion and knowledge portals and blogs.
 ################################################################################

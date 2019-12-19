@@ -336,6 +336,9 @@
         "load:social:pinterest": {
             "DEFAULT": "system_health_mobile_001.wprgo"
         },
+        "load:social:pinterest:2019": {
+            "DEFAULT": "system_health_mobile_25e2cdbc77.wprgo"
+        },
         "load:social:tumblr": {
             "DEFAULT": "system_health_mobile_001.wprgo"
         },

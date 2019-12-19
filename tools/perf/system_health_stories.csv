@@ -119,6 +119,7 @@ load:search:yandex:2018,,"desktop,mobile","2018,international"
 load:social:instagram:2018,,desktop,2018
 load:social:instagram:2019,,mobile,2019
 load:social:pinterest,,desktop,"2016,javascript_heavy"
+load:social:pinterest:2019,,"desktop,mobile","2019,javascript_heavy"
 load:social:twitter,,mobile,2016
 load:social:twitter:2019,,mobile,2019
 load:social:vk,,desktop,"2016,international"
