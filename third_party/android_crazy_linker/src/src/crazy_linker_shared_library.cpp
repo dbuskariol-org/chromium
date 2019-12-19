@@ -59,6 +59,12 @@
 #define DT_PREINIT_ARRAYSZ 33
 #endif
 
+// Avoid undefined symbol:__cxa_pure_virtual error.
+extern "C" void __cxa_pure_virtual() {
+  static const char kFatalMessage[] = "Pure virtual function was called!";
+  crazy::LogFatalAndExit(kFatalMessage);
+}
+
 namespace crazy {
 
 namespace {

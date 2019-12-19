@@ -6,6 +6,7 @@
 
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 #ifdef __ANDROID__
 #include <android/log.h>
@@ -16,6 +17,16 @@
 #include <string.h>
 
 namespace crazy {
+
+// Log fatal error and exit.
+void LogFatalAndExit(const char* message) {
+#ifdef __ANDROID__
+  __android_log_write(ANDROID_LOG_FATAL, "crazy_linker", message);
+#else
+  ::write(STDERR_FILENO, message, sizeof(message) - 1);
+#endif
+  _exit(1);
+}
 
 #if CRAZY_DEBUG
 
