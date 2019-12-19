@@ -698,7 +698,7 @@
             {
               'gpu': '10de:1cb3',
               'os': 'Ubuntu',
-              'pool': 'Chrome-GPU',
+              'pool': 'chromium.tests.gpu',
             },
           ],
         },
@@ -714,7 +714,7 @@
             {
               'gpu': '10de:1cb3',
               'os': 'Ubuntu',
-              'pool': 'Chrome-GPU',
+              'pool': 'chromium.tests.gpu',
             },
           ],
         },
@@ -730,7 +730,7 @@
             {
               'gpu': '10de:1cb3',
               'os': 'Ubuntu',
-              'pool': 'Chrome-GPU',
+              'pool': 'chromium.tests.gpu',
             },
           ],
         },
@@ -746,7 +746,7 @@
             {
               'gpu': '10de:1cb3',
               'os': 'Ubuntu',
-              'pool': 'Chrome-GPU',
+              'pool': 'chromium.tests.gpu',
             },
           ],
         },
@@ -780,7 +780,7 @@
             {
               'gpu': '10de:1cb3',
               'os': 'Ubuntu',
-              'pool': 'Chrome-GPU',
+              'pool': 'chromium.tests.gpu',
             },
           ],
         },
@@ -797,7 +797,7 @@
             {
               'gpu': '10de:1cb3',
               'os': 'Ubuntu',
-              'pool': 'Chrome-GPU',
+              'pool': 'chromium.tests.gpu',
             },
           ],
         },

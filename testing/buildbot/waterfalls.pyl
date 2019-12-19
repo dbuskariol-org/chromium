@@ -2054,7 +2054,7 @@
               'gpu': '1002:6821',
               'hidpi': '1',
               'os': 'Mac-10.13.6',
-              'pool': 'Chrome-GPU',
+              'pool': 'chromium.tests.gpu',
             }
           ],
         },
@@ -2932,7 +2932,7 @@
               'gpu': '1002:6821',
               'hidpi': '1',
               'os': 'mac-amd-stable',
-              'pool': 'Chrome-GPU',
+              'pool': 'chromium.tests.gpu',
             },
           ],
         },
@@ -3387,7 +3387,7 @@
           {
             'gpu': '10de:1cb3-23.21.14.1195',
             'os': 'Windows-2008ServerR2-SP1',
-            'pool': 'Chrome-GPU',
+            'pool': 'chromium.tests.gpu',
           },
         ],
       },
@@ -3406,7 +3406,7 @@
           {
             'gpu': '10de:1cb3-23.21.14.1195',
             'os': 'Windows-2008ServerR2-SP1',
-            'pool': 'Chrome-GPU',
+            'pool': 'chromium.tests.gpu',
           },
         ],
       }
@@ -3722,7 +3722,7 @@
               'gpu': '1002:6821',
               'hidpi': '1',
               'os': 'Mac-10.13.6',
-              'pool': 'Chrome-GPU',
+              'pool': 'chromium.tests.gpu',
             }
           ],
         },
