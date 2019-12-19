@@ -388,7 +388,7 @@ const char kTriggeredResetProfileSettingsSubPage[] =
 const char kAccessibilitySubPage[] = "accessibility";
 const char kAccountManagerSubPage[] = "accountManager";
 const char kAccountSubPage[] = "accounts";
-const char kAndroidAppsDetailsSubPage[] = "apps/androidAppsDetails";
+const char kAndroidAppsDetailsSubPage[] = "androidAppsDetails";
 const char kAndroidAppsDetailsSubPageInBrowserSettings[] =
     "androidApps/details";
 const char kAppManagementDetailSubPage[] = "app-management/detail";
