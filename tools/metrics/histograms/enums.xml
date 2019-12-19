@@ -12696,6 +12696,29 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3" label="Failure"/>
 </enum>
 
+<enum name="CryptohomeOOPMountCleanupResult">
+  <summary>
+    The possible results of attempting an unmount/mount clean-up using the
+    out-of-process mount helper.
+  </summary>
+  <int value="0" label="Success"/>
+  <int value="1" label="Failed to poke helper"/>
+  <int value="2" label="Failed to wait for helper"/>
+  <int value="3" label="Failed to kill helper"/>
+</enum>
+
+<enum name="CryptohomeOOPMountOperationResult">
+  <summary>
+    The possible results of attempting a mount operation using the
+    out-of-process mount helper.
+  </summary>
+  <int value="0" label="Success"/>
+  <int value="1" label="Failed to start"/>
+  <int value="2" label="Failed to write request protobuf"/>
+  <int value="3" label="Helper process timed out"/>
+  <int value="4" label="Failed to read response protobuf"/>
+</enum>
+
 <enum name="CryptohomeTpmResults">
   <int value="1" label="TPM Success"/>
   <int value="2" label="TPM Error Authentication Fail"/>
