@@ -220,8 +220,7 @@ bool ComputedStyle::NeedsReattachLayoutTree(const ComputedStyle* old_style,
   // line-clamping is currently only handled by LayoutDeprecatedFlexibleBox,
   // so that if line-clamping changes then the LayoutObject needs to be
   // recreated.
-  if (RuntimeEnabledFeatures::WebkitBoxLayoutUsesFlexLayoutEnabled() &&
-      (new_style->IsDeprecatedWebkitBox()) &&
+  if (new_style->IsDeprecatedWebkitBox() &&
       (old_style->HasLineClamp() != new_style->HasLineClamp() &&
        new_style->BoxOrient() == EBoxOrient::kVertical)) {
     return true;
