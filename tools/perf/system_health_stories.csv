@@ -123,6 +123,7 @@ load:social:twitter:2019,,mobile,2019
 load:social:vk,,desktop,"2016,international"
 load:social:vk:2018,,desktop,"2018,international"
 load:tools:docs,Load a typical google doc page.,"desktop,mobile","2016,health_check"
+load:tools:docs:2019,Load a typical google doc page (2019).,"desktop,mobile","2019,health_check"
 load:tools:drive,,"desktop,mobile","2016,javascript_heavy"
 load:tools:drive:2019,,"desktop,mobile","2019,javascript_heavy"
 load:tools:dropbox,,"desktop,mobile",2016

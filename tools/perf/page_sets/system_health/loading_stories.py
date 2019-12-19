@@ -415,6 +415,14 @@ class LoadDocsStory(_LoadingStory):
   TAGS = [story_tags.HEALTH_CHECK, story_tags.YEAR_2016]
 
 
+class LoadDocsStory2019(_LoadingStory):
+  """Load a typical google doc page (2019)."""
+  NAME = 'load:tools:docs:2019'
+  URL = (
+      'https://docs.google.com/document/d/1GvzDP-tTLmJ0myRhUAfTYWs3ZUFilUICg8psNHyccwQ/edit?usp=sharing')
+  TAGS = [story_tags.HEALTH_CHECK, story_tags.YEAR_2019]
+
+
 class _LoadGmailBaseStory(_LoadingStory):
   NAME = 'load:tools:gmail'
   URL = 'https://mail.google.com/mail/'

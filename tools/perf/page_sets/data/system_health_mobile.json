@@ -345,6 +345,9 @@
         "load:tools:docs": {
             "DEFAULT": "system_health_mobile_004.wprgo"
         },
+        "load:tools:docs:2019": {
+            "DEFAULT": "system_health_mobile_3004d67e94.wprgo"
+        },
         "load:tools:drive": {
             "DEFAULT": "system_health_mobile_004.wprgo"
         },
