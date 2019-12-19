@@ -53,6 +53,12 @@ void TrustedVaultClientAndroid::FetchKeysCompleted(
   std::move(cb).Run(converted_keys);
 }
 
+std::unique_ptr<TrustedVaultClientAndroid::Subscription>
+TrustedVaultClientAndroid::AddKeysChangedObserver(
+    const base::RepeatingClosure& cb) {
+  return observer_list_.Add(cb);
+}
+
 void TrustedVaultClientAndroid::FetchKeys(
     const std::string& gaia_id,
     base::OnceCallback<void(const std::vector<std::string>&)> cb) {

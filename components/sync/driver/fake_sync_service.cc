@@ -163,6 +163,10 @@ void FakeSyncService::GetAllNodesForDebugging(
 
 void FakeSyncService::SetInvalidationsForSessionsEnabled(bool enabled) {}
 
+void FakeSyncService::AddTrustedVaultDecryptionKeysFromWeb(
+    const std::string& gaia_id,
+    const std::vector<std::string>& keys) {}
+
 UserDemographicsResult FakeSyncService::GetUserNoisedBirthYearAndGender(
     base::Time now) {
   return UserDemographicsResult::ForStatus(

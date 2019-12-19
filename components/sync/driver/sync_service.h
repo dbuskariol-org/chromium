@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "base/callback.h"
 #include "base/location.h"
@@ -367,6 +368,12 @@ class SyncService : public KeyedService {
   // only when user is interested in session sync data, e.g. the history sync
   // page is opened.
   virtual void SetInvalidationsForSessionsEnabled(bool enabled) = 0;
+
+  // Processes trusted vault encryption keys retrieved from the web. Unused and
+  // ignored on platforms where keys are retrieved by other means.
+  virtual void AddTrustedVaultDecryptionKeysFromWeb(
+      const std::string& gaia_id,
+      const std::vector<std::string>& keys) = 0;
 
   //////////////////////////////////////////////////////////////////////////////
   // USER DEMOGRAPHICS

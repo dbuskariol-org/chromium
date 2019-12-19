@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "base/values.h"
 #include "components/signin/public/identity_manager/account_info.h"
@@ -43,7 +44,6 @@ class MockSyncService : public SyncService {
   MOCK_CONST_METHOD0(RequiresClientUpgrade, bool());
   MOCK_CONST_METHOD0(GetExperimentalAuthenticationKey,
                      std::unique_ptr<crypto::ECPrivateKey>());
-
   MOCK_METHOD0(GetSetupInProgressHandle,
                std::unique_ptr<SyncSetupInProgressHandle>());
   MOCK_CONST_METHOD0(IsSetupInProgress, bool());
@@ -57,6 +57,9 @@ class MockSyncService : public SyncService {
   MOCK_METHOD1(TriggerRefresh, void(const ModelTypeSet& types));
   MOCK_METHOD1(DataTypePreconditionChanged, void(syncer::ModelType type));
   MOCK_METHOD1(SetInvalidationsForSessionsEnabled, void(bool enabled));
+  MOCK_METHOD2(AddTrustedVaultDecryptionKeysFromWeb,
+               void(const std::string& gaia_id,
+                    const std::vector<std::string>& keys));
   MOCK_METHOD1(GetUserNoisedBirthYearAndGender,
                UserDemographicsResult(base::Time now));
 

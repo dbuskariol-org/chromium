@@ -37,6 +37,8 @@ class TrustedVaultClientAndroid : public syncer::TrustedVaultClient {
       const base::android::JavaParamRef<jobjectArray>& keys);
 
   // TrustedVaultClient implementation.
+  std::unique_ptr<Subscription> AddKeysChangedObserver(
+      const base::RepeatingClosure& cb) override;
   void FetchKeys(
       const std::string& gaia_id,
       base::OnceCallback<void(const std::vector<std::string>&)> cb) override;
@@ -57,6 +59,8 @@ class TrustedVaultClientAndroid : public syncer::TrustedVaultClient {
 
   // Null if no in-flight FetchKeys().
   std::unique_ptr<OngoingFetchKeys> ongoing_fetch_keys_;
+
+  CallbackList observer_list_;
 };
 
 #endif  // CHROME_BROWSER_SYNC_TRUSTED_VAULT_CLIENT_ANDROID_H_

@@ -1779,6 +1779,12 @@ void ProfileSyncService::SetInvalidationsForSessionsEnabled(bool enabled) {
   }
 }
 
+void ProfileSyncService::AddTrustedVaultDecryptionKeysFromWeb(
+    const std::string& gaia_id,
+    const std::vector<std::string>& keys) {
+  sync_client_->GetTrustedVaultClient()->StoreKeys(gaia_id, keys);
+}
+
 UserDemographicsResult ProfileSyncService::GetUserNoisedBirthYearAndGender(
     base::Time now) {
   // Do not provide the synced user’s birth year and gender when sync is

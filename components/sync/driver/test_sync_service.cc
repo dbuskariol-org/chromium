@@ -304,6 +304,10 @@ void TestSyncService::GetAllNodesForDebugging(
 
 void TestSyncService::SetInvalidationsForSessionsEnabled(bool enabled) {}
 
+void TestSyncService::AddTrustedVaultDecryptionKeysFromWeb(
+    const std::string& gaia_id,
+    const std::vector<std::string>& keys) {}
+
 UserDemographicsResult TestSyncService::GetUserNoisedBirthYearAndGender(
     base::Time now) {
   return user_demographics_result_;
