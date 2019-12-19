@@ -1103,7 +1103,7 @@ var OSSettingsManageAccessibilityPageTest =
     class extends OSSettingsBrowserTest {
   /** @override */
   get browsePreload() {
-    return super.browsePreload + 'a11y_page/manage_a11y_page.html';
+    return super.browsePreload + 'chromeos/os_a11y_page/manage_a11y_page.html';
   }
 
   /** @override */
