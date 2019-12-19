@@ -256,6 +256,7 @@ android_library("chrome_java") {
     "//chrome/browser/image_fetcher:java",
     "//chrome/browser/notifications/chime/android:java",
     "//chrome/browser/preferences:java",
+    "//chrome/browser/settings:java",
     "//chrome/browser/share/android:java_resources",
     "//chrome/browser/ui/android/appmenu:factory_java",
     "//chrome/browser/ui/android/appmenu:java",
