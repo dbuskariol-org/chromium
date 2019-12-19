@@ -6066,10 +6066,6 @@ crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-event-list
 crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-multiple-retainers.js [ Pass Failure ]
 crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-no-detached-iframe.js [ Pass Failure ]
 
-# Temporarily disabled for landing changes to treeoutline in DevTools
-crbug.com/1033213 http/tests/devtools/security/interstitial-sidebar.js [ Pass Failure ]
-crbug.com/1033213 http/tests/devtools/security/mixed-content-sidebar.js [ Pass Failure ]
-
 # Sheriff 2019-12-13
 crbug.com/1032451 [ Win7 ] virtual/webrtc-wpt-plan-b/external/wpt/webrtc/idlharness.https.window.html [ Failure ]
 crbug.com/1033852 [ Win7 ] virtual/omt-worker-fetch/external/wpt/fetch/api/idlharness.any.sharedworker.html [ Failure ]
