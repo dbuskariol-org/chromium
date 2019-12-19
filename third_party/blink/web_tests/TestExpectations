@@ -1314,13 +1314,9 @@ crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flexbox-overflow-auto.h
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/minimum-size-image.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/multiline-reverse-wrap-baseline.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/negative-overflow.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/order-painting.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/overflow-auto-resizes-correctly.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/percentage-height-replaced-element.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/relpos-with-percentage-top.html [ Failure ]
-
-### virtual/layout_ng_flex_box/css3/flexbox/mozilla/
-crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/mozilla/flexbox-items-as-stacking-contexts-2.html [ Failure ]
 
 ### virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/align-items-004.htm [ Failure ]
