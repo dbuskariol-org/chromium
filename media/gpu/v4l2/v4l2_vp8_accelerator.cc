@@ -191,13 +191,13 @@ bool V4L2VP8Accelerator::SubmitDecode(
     v4l2_frame_hdr.dct_part_sizes[i] = frame_hdr->dct_partition_sizes[i];
 
   scoped_refptr<V4L2DecodeSurface> dec_surface =
-      VP8PictureToV4L2DecodeSurface(pic);
+      VP8PictureToV4L2DecodeSurface(pic.get());
   std::vector<scoped_refptr<V4L2DecodeSurface>> ref_surfaces;
 
   const auto last_frame = reference_frames.GetFrame(Vp8RefType::VP8_FRAME_LAST);
   if (last_frame) {
     scoped_refptr<V4L2DecodeSurface> last_frame_surface =
-        VP8PictureToV4L2DecodeSurface(last_frame);
+        VP8PictureToV4L2DecodeSurface(last_frame.get());
     v4l2_frame_hdr.last_frame_ts = last_frame_surface->GetReferenceID();
     ref_surfaces.push_back(last_frame_surface);
   }
@@ -206,7 +206,7 @@ bool V4L2VP8Accelerator::SubmitDecode(
       reference_frames.GetFrame(Vp8RefType::VP8_FRAME_GOLDEN);
   if (golden_frame) {
     scoped_refptr<V4L2DecodeSurface> golden_frame_surface =
-        VP8PictureToV4L2DecodeSurface(golden_frame);
+        VP8PictureToV4L2DecodeSurface(golden_frame.get());
     v4l2_frame_hdr.golden_frame_ts = golden_frame_surface->GetReferenceID();
     ref_surfaces.push_back(golden_frame_surface);
   }
@@ -215,7 +215,7 @@ bool V4L2VP8Accelerator::SubmitDecode(
       reference_frames.GetFrame(Vp8RefType::VP8_FRAME_ALTREF);
   if (alt_frame) {
     scoped_refptr<V4L2DecodeSurface> alt_frame_surface =
-        VP8PictureToV4L2DecodeSurface(alt_frame);
+        VP8PictureToV4L2DecodeSurface(alt_frame.get());
     v4l2_frame_hdr.alt_frame_ts = alt_frame_surface->GetReferenceID();
     ref_surfaces.push_back(alt_frame_surface);
   }
@@ -247,17 +247,16 @@ bool V4L2VP8Accelerator::SubmitDecode(
   return true;
 }
 
-bool V4L2VP8Accelerator::OutputPicture(const scoped_refptr<VP8Picture>& pic) {
+bool V4L2VP8Accelerator::OutputPicture(scoped_refptr<VP8Picture> pic) {
   // TODO(crbug.com/647725): Insert correct color space.
-  surface_handler_->SurfaceReady(VP8PictureToV4L2DecodeSurface(pic),
+  surface_handler_->SurfaceReady(VP8PictureToV4L2DecodeSurface(pic.get()),
                                  pic->bitstream_id(), pic->visible_rect(),
                                  VideoColorSpace());
   return true;
 }
 
 scoped_refptr<V4L2DecodeSurface>
-V4L2VP8Accelerator::VP8PictureToV4L2DecodeSurface(
-    const scoped_refptr<VP8Picture>& pic) {
+V4L2VP8Accelerator::VP8PictureToV4L2DecodeSurface(VP8Picture* pic) {
   V4L2VP8Picture* v4l2_pic = pic->AsV4L2VP8Picture();
   CHECK(v4l2_pic);
   return v4l2_pic->dec_surface();
