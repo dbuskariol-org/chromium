@@ -27,7 +27,7 @@ import java.util.List;
  * permissions that have been granted to websites, as well as enable or disable permissions
  * browser-wide.
  */
-public class SiteSettingsPreferences
+public class SiteSettings
         extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener {
     // The keys for each category shown on the Site Settings page
     // are defined in the SiteSettingsCategory.
@@ -167,9 +167,9 @@ public class SiteSettingsPreferences
     @Override
     public boolean onPreferenceClick(Preference preference) {
         preference.getExtras().putString(
-                SingleCategoryPreferences.EXTRA_CATEGORY, preference.getKey());
-        preference.getExtras().putString(SingleCategoryPreferences.EXTRA_TITLE,
-                preference.getTitle().toString());
+                SingleCategorySettings.EXTRA_CATEGORY, preference.getKey());
+        preference.getExtras().putString(
+                SingleCategorySettings.EXTRA_TITLE, preference.getTitle().toString());
         return false;
     }
 }

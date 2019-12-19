@@ -36,7 +36,7 @@ import java.util.Locale;
  * Shows a particular chosen object (e.g. a USB device) and the list of sites that have been
  * granted access to it by the user.
  */
-public class ChosenObjectPreferences extends PreferenceFragmentCompat {
+public class ChosenObjectSettings extends PreferenceFragmentCompat {
     public static final String EXTRA_OBJECT_INFOS = "org.chromium.chrome.preferences.object_infos";
     public static final String EXTRA_SITES = "org.chromium.chrome.preferences.site_set";
     public static final String EXTRA_CATEGORY =
@@ -70,7 +70,7 @@ public class ChosenObjectPreferences extends PreferenceFragmentCompat {
                 (ArrayList<ChosenObjectInfo>) getArguments().getSerializable(EXTRA_OBJECT_INFOS);
         checkObjectConsistency();
         mSites = (ArrayList<Website>) getArguments().getSerializable(EXTRA_SITES);
-        String title = getArguments().getString(SingleCategoryPreferences.EXTRA_TITLE);
+        String title = getArguments().getString(SingleCategorySettings.EXTRA_TITLE);
         if (title != null) getActivity().setTitle(title);
 
         setHasOptionsMenu(true);
@@ -202,7 +202,7 @@ public class ChosenObjectPreferences extends PreferenceFragmentCompat {
             // After revoking a site's permission to access an object the user may end up back at
             // this activity. It is awkward to display this empty list because there's no action
             // that can be taken from it. In this case we dismiss this activity as well, taking
-            // them back to SingleCategoryPreferences which will now no longer offer the option to
+            // them back to SingleCategorySettings which will now no longer offer the option to
             // examine the permissions for this object.
             if (mObjectInfos.isEmpty()) {
                 getActivity().finish();
@@ -270,15 +270,15 @@ public class ChosenObjectPreferences extends PreferenceFragmentCompat {
         createHeader();
 
         // Each item |i| in |mSites| and |mObjectInfos| correspond to each other.
-        // See SingleCategoryPreferences.addChosenObjects().
+        // See SingleCategorySettings.addChosenObjects().
         for (int i = 0; i < mSites.size() && i < mObjectInfos.size(); ++i) {
             Website site = mSites.get(i);
             ChosenObjectInfo info = mObjectInfos.get(i);
             WebsitePreference preference =
                     new WebsitePreference(getStyledContext(), site, mCategory);
 
-            preference.getExtras().putSerializable(SingleWebsitePreferences.EXTRA_SITE, site);
-            preference.setFragment(SingleWebsitePreferences.class.getCanonicalName());
+            preference.getExtras().putSerializable(SingleWebsiteSettings.EXTRA_SITE, site);
+            preference.setFragment(SingleWebsiteSettings.class.getCanonicalName());
             preference.setImageView(R.drawable.ic_delete_white_24dp,
                     R.string.website_settings_revoke_device_permission, (View view) -> {
                         info.revoke();

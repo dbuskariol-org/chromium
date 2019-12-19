@@ -45,9 +45,9 @@ import java.util.Set;
 /**
  * Shows the permissions and other settings for a particular website.
  */
-public class SingleWebsitePreferences extends PreferenceFragmentCompat
+public class SingleWebsiteSettings extends PreferenceFragmentCompat
         implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
-    // SingleWebsitePreferences expects either EXTRA_SITE (a Website) or
+    // SingleWebsiteSettings expects either EXTRA_SITE (a Website) or
     // EXTRA_SITE_ADDRESS (a WebsiteAddress) to be present (but not both). If
     // EXTRA_SITE is present, the fragment will display the permissions in that
     // Website object. If EXTRA_SITE_ADDRESS is present, the fragment will find all
@@ -241,12 +241,11 @@ public class SingleWebsitePreferences extends PreferenceFragmentCompat
                     type++) {
                 if (merged.getPermissionInfo(type) == null && other.getPermissionInfo(type) != null
                         && permissionInfoIsForTopLevelOrigin(
-                                   other.getPermissionInfo(type), origin)) {
+                                other.getPermissionInfo(type), origin)) {
                     merged.setPermissionInfo(other.getPermissionInfo(type));
                 }
             }
-            if (merged.getLocalStorageInfo() == null
-                    && other.getLocalStorageInfo() != null
+            if (merged.getLocalStorageInfo() == null && other.getLocalStorageInfo() != null
                     && origin.equals(other.getLocalStorageInfo().getOrigin())) {
                 merged.setLocalStorageInfo(other.getLocalStorageInfo());
             }
@@ -436,8 +435,8 @@ public class SingleWebsitePreferences extends PreferenceFragmentCompat
             if (managedBy != null) {
                 final Intent notificationSettingsIntent =
                         getNotificationSettingsIntent(manager.getDelegatePackageName(origin));
-                String summaryText = getString(R.string.website_notification_managed_by_app,
-                        managedBy);
+                String summaryText =
+                        getString(R.string.website_notification_managed_by_app, managedBy);
                 ChromeImageViewPreference newPreference =
                         replaceWithReadOnlyCopyOf(preference, summaryText);
                 setupNotificationManagedByPreference(newPreference, notificationSettingsIntent);
@@ -669,7 +668,7 @@ public class SingleWebsitePreferences extends PreferenceFragmentCompat
                 return mSite.getPermission(i) == null
                         ? false
                         : SiteSettingsCategory.createFromType(type).showPermissionBlockedMessage(
-                                  getActivity());
+                                getActivity());
             }
         }
         return false;
@@ -846,7 +845,7 @@ public class SingleWebsitePreferences extends PreferenceFragmentCompat
                 return i < ContentSettingException.Type.NUM_ENTRIES
                         ? ContentSettingException.getContentSettingsType(i)
                         : PermissionInfo.getContentSettingsType(
-                                  i - ContentSettingException.Type.NUM_ENTRIES);
+                                i - ContentSettingException.Type.NUM_ENTRIES);
             }
         }
         return 0;

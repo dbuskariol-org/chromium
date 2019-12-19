@@ -71,10 +71,10 @@ import java.util.Set;
 
 /**
  * Shows a list of sites in a particular Site Settings category. For example, this could show all
- * the websites with microphone permissions. When the user selects a site, SingleWebsitePreferences
+ * the websites with microphone permissions. When the user selects a site, SingleWebsiteSettings
  * is launched to allow the user to see or modify the settings for that particular website.
  */
-public class SingleCategoryPreferences extends PreferenceFragmentCompat
+public class SingleCategorySettings extends PreferenceFragmentCompat
         implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener,
                    AddExceptionPreference.SiteAddedCallback, View.OnClickListener,
                    PreferenceManager.OnPreferenceTreeClickListener {
@@ -218,9 +218,8 @@ public class SingleCategoryPreferences extends PreferenceFragmentCompat
 
         // When the toggle is set to Blocked, the Allowed list header should read 'Exceptions', not
         // 'Allowed' (because it shows exceptions from the rule).
-        int resourceId = toggleValue
-                ? R.string.website_settings_allowed_group_heading
-                : R.string.website_settings_exceptions_group_heading;
+        int resourceId = toggleValue ? R.string.website_settings_allowed_group_heading
+                                     : R.string.website_settings_exceptions_group_heading;
         allowedGroup.setTitle(getHeaderTitle(resourceId, numAllowed));
         allowedGroup.setExpanded(mAllowListExpanded);
     }
@@ -380,8 +379,8 @@ public class SingleCategoryPreferences extends PreferenceFragmentCompat
             if (queryHasChanged) getInfoForOrigins();
         });
 
-        MenuItem help = menu.add(
-                Menu.NONE, R.id.menu_id_targeted_help, Menu.NONE, R.string.menu_help);
+        MenuItem help =
+                menu.add(Menu.NONE, R.id.menu_id_targeted_help, Menu.NONE, R.string.menu_help);
         help.setIcon(VectorDrawableCompat.create(
                 getResources(), R.drawable.ic_help_and_feedback, getActivity().getTheme()));
     }
@@ -417,13 +416,13 @@ public class SingleCategoryPreferences extends PreferenceFragmentCompat
 
         if (preference instanceof WebsitePreference) {
             WebsitePreference website = (WebsitePreference) preference;
-            website.setFragment(SingleWebsitePreferences.class.getName());
+            website.setFragment(SingleWebsiteSettings.class.getName());
             // EXTRA_SITE re-uses already-fetched permissions, which we can only use if the Website
             // was populated with data for all permission types.
             if (mCategory.showSites(SiteSettingsCategory.Type.ALL_SITES)) {
-                website.putSiteIntoExtras(SingleWebsitePreferences.EXTRA_SITE);
+                website.putSiteIntoExtras(SingleWebsiteSettings.EXTRA_SITE);
             } else {
-                website.putSiteAddressIntoExtras(SingleWebsitePreferences.EXTRA_SITE_ADDRESS);
+                website.putSiteAddressIntoExtras(SingleWebsiteSettings.EXTRA_SITE_ADDRESS);
             }
             int navigationSource = getArguments().getInt(
                     SettingsNavigationSource.EXTRA_KEY, SettingsNavigationSource.OTHER);
@@ -791,15 +790,14 @@ public class SingleCategoryPreferences extends PreferenceFragmentCompat
         for (Pair<ArrayList<ChosenObjectInfo>, ArrayList<Website>> entry : objects.values()) {
             Preference preference = new Preference(getStyledContext());
             Bundle extras = preference.getExtras();
-            extras.putInt(
-                    ChosenObjectPreferences.EXTRA_CATEGORY, mCategory.getContentSettingsType());
+            extras.putInt(ChosenObjectSettings.EXTRA_CATEGORY, mCategory.getContentSettingsType());
             extras.putString(EXTRA_TITLE, getActivity().getTitle().toString());
-            extras.putSerializable(ChosenObjectPreferences.EXTRA_OBJECT_INFOS, entry.first);
-            extras.putSerializable(ChosenObjectPreferences.EXTRA_SITES, entry.second);
+            extras.putSerializable(ChosenObjectSettings.EXTRA_OBJECT_INFOS, entry.first);
+            extras.putSerializable(ChosenObjectSettings.EXTRA_SITES, entry.second);
             preference.setIcon(
                     ContentSettingsResources.getIcon(mCategory.getContentSettingsType()));
             preference.setTitle(entry.first.get(0).getName());
-            preference.setFragment(ChosenObjectPreferences.class.getCanonicalName());
+            preference.setFragment(ChosenObjectSettings.class.getCanonicalName());
             getPreferenceScreen().addPreference(preference);
         }
 
@@ -941,11 +939,11 @@ public class SingleCategoryPreferences extends PreferenceFragmentCompat
         mCategory.configurePermissionIsOffPreferences(
                 osWarning, osWarningExtra, getActivity(), true);
         if (osWarning.getTitle() != null) {
-            osWarning.setKey(SingleWebsitePreferences.PREF_OS_PERMISSIONS_WARNING);
+            osWarning.setKey(SingleWebsiteSettings.PREF_OS_PERMISSIONS_WARNING);
             screen.addPreference(osWarning);
         }
         if (osWarningExtra.getTitle() != null) {
-            osWarningExtra.setKey(SingleWebsitePreferences.PREF_OS_PERMISSIONS_WARNING_EXTRA);
+            osWarningExtra.setKey(SingleWebsiteSettings.PREF_OS_PERMISSIONS_WARNING_EXTRA);
             screen.addPreference(osWarningExtra);
         }
     }

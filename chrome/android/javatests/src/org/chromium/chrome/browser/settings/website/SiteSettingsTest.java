@@ -60,7 +60,7 @@ import java.util.concurrent.Callable;
         ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE,
         ContentSwitches.HOST_RESOLVER_RULES + "=MAP * 127.0.0.1",
 })
-public class SiteSettingsPreferencesTest {
+public class SiteSettingsTest {
     @Rule
     public ChromeActivityTestRule<ChromeActivity> mActivityTestRule =
             new ChromeActivityTestRule<>(ChromeActivity.class);
@@ -84,11 +84,11 @@ public class SiteSettingsPreferencesTest {
                 SiteSettingsCategory.Type.DEVICE_LOCATION);
 
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            SingleCategoryPreferences websitePreferences =
-                    (SingleCategoryPreferences) settingsActivity.getMainFragment();
+            SingleCategorySettings websitePreferences =
+                    (SingleCategorySettings) settingsActivity.getMainFragment();
             ChromeSwitchPreference location =
                     (ChromeSwitchPreference) websitePreferences.findPreference(
-                            SingleCategoryPreferences.BINARY_TOGGLE_KEY);
+                            SingleCategorySettings.BINARY_TOGGLE_KEY);
 
             websitePreferences.onPreferenceChange(location, enabled);
             Assert.assertEquals("Location should be " + (enabled ? "allowed" : "blocked"), enabled,
@@ -155,14 +155,14 @@ public class SiteSettingsPreferencesTest {
         TestThreadUtils.runOnUiThreadBlocking(new Runnable() {
             @Override
             public void run() {
-                final SingleCategoryPreferences websitePreferences =
-                        (SingleCategoryPreferences) settingsActivity.getMainFragment();
+                final SingleCategorySettings websitePreferences =
+                        (SingleCategorySettings) settingsActivity.getMainFragment();
                 final ChromeSwitchPreference cookies =
                         (ChromeSwitchPreference) websitePreferences.findPreference(
-                                SingleCategoryPreferences.BINARY_TOGGLE_KEY);
+                                SingleCategorySettings.BINARY_TOGGLE_KEY);
                 final ChromeBaseCheckBoxPreference thirdPartyCookies =
                         (ChromeBaseCheckBoxPreference) websitePreferences.findPreference(
-                                SingleCategoryPreferences.THIRD_PARTY_COOKIES_TOGGLE_KEY);
+                                SingleCategorySettings.THIRD_PARTY_COOKIES_TOGGLE_KEY);
 
                 if (thirdPartyCookies != null) {
                     Assert.assertEquals("Third-party cookie toggle should be "
@@ -185,8 +185,8 @@ public class SiteSettingsPreferencesTest {
         TestThreadUtils.runOnUiThreadBlocking(new Runnable() {
             @Override
             public void run() {
-                final SingleCategoryPreferences websitePreferences =
-                        (SingleCategoryPreferences) settingsActivity.getMainFragment();
+                final SingleCategorySettings websitePreferences =
+                        (SingleCategorySettings) settingsActivity.getMainFragment();
 
                 Assert.assertTrue(doesAcceptCookies());
                 if (thirdPartiesOnly) {
@@ -211,11 +211,11 @@ public class SiteSettingsPreferencesTest {
     private void setThirdPartyCookiesEnabled(
             final SettingsActivity settingsActivity, final boolean enabled) {
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            final SingleCategoryPreferences websitePreferences =
-                    (SingleCategoryPreferences) settingsActivity.getMainFragment();
+            final SingleCategorySettings websitePreferences =
+                    (SingleCategorySettings) settingsActivity.getMainFragment();
             final ChromeBaseCheckBoxPreference thirdPartyCookies =
                     (ChromeBaseCheckBoxPreference) websitePreferences.findPreference(
-                            SingleCategoryPreferences.THIRD_PARTY_COOKIES_TOGGLE_KEY);
+                            SingleCategorySettings.THIRD_PARTY_COOKIES_TOGGLE_KEY);
 
             websitePreferences.onPreferenceChange(thirdPartyCookies, enabled);
             Assert.assertEquals(
@@ -231,10 +231,10 @@ public class SiteSettingsPreferencesTest {
                 SiteSettingsTestUtils.startSiteSettingsCategory(type);
 
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            SingleCategoryPreferences preferences =
-                    (SingleCategoryPreferences) settingsActivity.getMainFragment();
+            SingleCategorySettings preferences =
+                    (SingleCategorySettings) settingsActivity.getMainFragment();
             ChromeSwitchPreference toggle = (ChromeSwitchPreference) preferences.findPreference(
-                    SingleCategoryPreferences.BINARY_TOGGLE_KEY);
+                    SingleCategorySettings.BINARY_TOGGLE_KEY);
             preferences.onPreferenceChange(toggle, enabled);
         });
         settingsActivity.finish();
@@ -246,11 +246,11 @@ public class SiteSettingsPreferencesTest {
                 SiteSettingsTestUtils.startSiteSettingsCategory(type);
 
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            SingleCategoryPreferences preferences =
-                    (SingleCategoryPreferences) settingsActivity.getMainFragment();
+            SingleCategorySettings preferences =
+                    (SingleCategorySettings) settingsActivity.getMainFragment();
             TriStateSiteSettingsPreference triStateToggle =
                     (TriStateSiteSettingsPreference) preferences.findPreference(
-                            SingleCategoryPreferences.TRI_STATE_TOGGLE_KEY);
+                            SingleCategorySettings.TRI_STATE_TOGGLE_KEY);
             preferences.onPreferenceChange(triStateToggle, newValue);
         });
         settingsActivity.finish();
@@ -463,8 +463,8 @@ public class SiteSettingsPreferencesTest {
         final SettingsActivity settingsActivity =
                 SiteSettingsTestUtils.startSingleWebsitePreferences(website);
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            SingleWebsitePreferences websitePreferences =
-                    (SingleWebsitePreferences) settingsActivity.getMainFragment();
+            SingleWebsiteSettings websitePreferences =
+                    (SingleWebsiteSettings) settingsActivity.getMainFragment();
             websitePreferences.resetSite();
         });
         settingsActivity.finish();
@@ -622,7 +622,7 @@ public class SiteSettingsPreferencesTest {
     }
 
     /**
-     * Tests that {@link SingleWebsitePreferences#resetSite} doesn't crash
+     * Tests that {@link SingleWebsiteSettings#resetSite} doesn't crash
      * (see e.g. the crash on host names in issue 600232).
      */
     @Test
