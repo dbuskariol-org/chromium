@@ -157,7 +157,7 @@ class ProfileSyncService : public SyncService,
   void RemoveTypeDebugInfoObserver(TypeDebugInfoObserver* observer) override;
   base::WeakPtr<JsController> GetJsController() override;
   void GetAllNodesForDebugging(
-      const base::Callback<void(std::unique_ptr<base::ListValue>)>& callback)
+      base::OnceCallback<void(std::unique_ptr<base::ListValue>)> callback)
       override;
 
   // SyncEngineHost implementation.
@@ -197,7 +197,7 @@ class ProfileSyncService : public SyncService,
   // Similar to above but with a callback that will be invoked on completion.
   void OnAccountsInCookieUpdatedWithCallback(
       const std::vector<gaia::ListedAccount>& signed_in_accounts,
-      const base::Closure& callback);
+      base::OnceClosure callback);
 
   // Returns true if currently signed in account is not present in the list of
   // accounts from cookie jar.

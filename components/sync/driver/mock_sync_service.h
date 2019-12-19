@@ -84,8 +84,8 @@ class MockSyncService : public SyncService {
                void(TypeDebugInfoObserver* observer));
   MOCK_METHOD0(GetJsController, base::WeakPtr<JsController>());
   MOCK_METHOD1(GetAllNodesForDebugging,
-               void(const base::Callback<
-                    void(std::unique_ptr<base::ListValue>)>& callback));
+               void(base::OnceCallback<void(std::unique_ptr<base::ListValue>)>
+                        callback));
 
   // KeyedService implementation.
   MOCK_METHOD0(Shutdown, void());

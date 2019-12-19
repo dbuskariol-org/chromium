@@ -46,12 +46,12 @@ class SyncSetupInProgressHandle {
  public:
   // UIs should not construct this directly, but instead call
   // SyncService::GetSetupInProgress().
-  explicit SyncSetupInProgressHandle(base::Closure on_destroy);
+  explicit SyncSetupInProgressHandle(base::OnceClosure on_destroy);
 
   ~SyncSetupInProgressHandle();
 
  private:
-  base::Closure on_destroy_;
+  base::OnceClosure on_destroy_;
 };
 
 // SyncService is the layer between browser subsystems like bookmarks and the
@@ -455,8 +455,7 @@ class SyncService : public KeyedService {
   // For safety, the callback should be bound to some sort of WeakPtr<> or
   // scoped_refptr<>.
   virtual void GetAllNodesForDebugging(
-      const base::Callback<void(std::unique_ptr<base::ListValue>)>&
-          callback) = 0;
+      base::OnceCallback<void(std::unique_ptr<base::ListValue>)> callback) = 0;
 
  protected:
   SyncService() {}

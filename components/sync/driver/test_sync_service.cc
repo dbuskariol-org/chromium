@@ -300,7 +300,7 @@ base::WeakPtr<JsController> TestSyncService::GetJsController() {
 }
 
 void TestSyncService::GetAllNodesForDebugging(
-    const base::Callback<void(std::unique_ptr<base::ListValue>)>& callback) {}
+    base::OnceCallback<void(std::unique_ptr<base::ListValue>)> callback) {}
 
 void TestSyncService::SetInvalidationsForSessionsEnabled(bool enabled) {}
 

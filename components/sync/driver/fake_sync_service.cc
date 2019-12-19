@@ -159,7 +159,7 @@ base::WeakPtr<JsController> FakeSyncService::GetJsController() {
 }
 
 void FakeSyncService::GetAllNodesForDebugging(
-    const base::Callback<void(std::unique_ptr<base::ListValue>)>& callback) {}
+    base::OnceCallback<void(std::unique_ptr<base::ListValue>)> callback) {}
 
 void FakeSyncService::SetInvalidationsForSessionsEnabled(bool enabled) {}
 

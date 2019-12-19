@@ -103,7 +103,7 @@ class TestSyncService : public SyncService {
   void RemoveTypeDebugInfoObserver(TypeDebugInfoObserver* observer) override;
   base::WeakPtr<JsController> GetJsController() override;
   void GetAllNodesForDebugging(
-      const base::Callback<void(std::unique_ptr<base::ListValue>)>& callback)
+      base::OnceCallback<void(std::unique_ptr<base::ListValue>)> callback)
       override;
   void SetInvalidationsForSessionsEnabled(bool enabled) override;
   UserDemographicsResult GetUserNoisedBirthYearAndGender(
