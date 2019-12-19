@@ -2426,9 +2426,6 @@ crbug.com/705125 fast/mediacapturefromelement/CanvasCaptureMediaStream-capture-o
 crbug.com/763830 http/tests/security/cors-rfc1918/external-to-internal-fetch.php [ Skip ]
 crbug.com/763830 http/tests/security/cors-rfc1918/external-to-internal-xhr.php [ Skip ]
 
-crbug.com/831729 external/wpt/event-timing/crossiframe.html [ Timeout ]
-crbug.com/831729 external/wpt/event-timing/observer-manual.html [ Skip ]
-
 # Working on getting the CSP tests going:
 crbug.com/694525 external/wpt/content-security-policy/connect-src/worker-from-guid.sub.html [ Skip ]
 crbug.com/694525 external/wpt/content-security-policy/connect-src/worker-connect-src-blocked.sub.html [ Skip ]
