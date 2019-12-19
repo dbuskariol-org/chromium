@@ -2491,8 +2491,8 @@ RTCRtpReceiver* RTCPeerConnection::CreateOrUpdateReceiver(
   // Create track.
   MediaStreamTrack* track;
   if (receiver_it == rtp_receivers_.end()) {
-    track = MediaStreamTrack::Create(GetExecutionContext(),
-                                     platform_receiver->Track());
+    track = MakeGarbageCollected<MediaStreamTrack>(GetExecutionContext(),
+                                                   platform_receiver->Track());
     RegisterTrack(track);
   } else {
     track = (*receiver_it)->track();
@@ -2759,7 +2759,7 @@ void RTCPeerConnection::DidAddReceiverPlanB(
       webrtc::PeerConnectionInterface::SignalingState::kClosed)
     return;
   // Create track.
-  MediaStreamTrack* track = MediaStreamTrack::Create(
+  auto* track = MakeGarbageCollected<MediaStreamTrack>(
       GetExecutionContext(), platform_receiver->Track());
   tracks_.insert(track->Component(), track);
   // Create or update streams.

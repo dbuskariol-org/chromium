@@ -86,8 +86,8 @@ MediaStream* CreateMediaStream(V8TestingScope& scope) {
   auto* component =
       MakeGarbageCollected<MediaStreamComponent>("audioTrack", source);
 
-  auto* track =
-      MediaStreamTrack::Create(scope.GetExecutionContext(), component);
+  auto* track = MakeGarbageCollected<MediaStreamTrack>(
+      scope.GetExecutionContext(), component);
 
   HeapVector<Member<MediaStreamTrack>> tracks;
   tracks.push_back(track);
