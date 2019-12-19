@@ -421,6 +421,19 @@ void AppServiceAppWindowLauncherController::RegisterWindow(
   if (arc_tracker_ && arc::GetWindowTaskId(window) != arc::kNoTaskId) {
     arc_tracker_->AttachControllerToWindow(window);
   } else {
+    // The window for ARC Play Store is a special window, which is created by
+    // both Extensions and ARC. If Extensions's window is generated after
+    // ARC window, calls OnItemDelegateDiscarded to remove the ARC apps
+    // window.
+    if (shelf_id.app_id == arc::kPlayStoreAppId) {
+      AppWindowLauncherItemController* item_controller =
+          owner()->shelf_model()->GetAppWindowLauncherItemController(shelf_id);
+      if (item_controller != nullptr &&
+          shelf_id.app_id == arc::kPlayStoreAppId && arc_tracker_) {
+        OnItemDelegateDiscarded(item_controller);
+      }
+    }
+
     AddWindowToShelf(window, shelf_id);
   }
 }
@@ -455,13 +468,6 @@ void AppServiceAppWindowLauncherController::AddAppWindowToShelf(
                                                    std::move(controller));
       owner()->SetItemStatus(shelf_id, ash::STATUS_RUNNING);
     }
-  } else {
-    // The window for ARC Play Store is is a special window, which is created by
-    // both Extensions and ARC. If Extensions's window is generated after
-    // ARC window, calls OnItemDelegateDiscarded to remove the ARC apps
-    // window.
-    if (shelf_id.app_id == arc::kPlayStoreAppId)
-      OnItemDelegateDiscarded(item_controller);
   }
 
   item_controller->AddWindow(app_window);
@@ -488,14 +494,17 @@ void AppServiceAppWindowLauncherController::OnItemDelegateDiscarded(
     ash::ShelfItemDelegate* delegate) {
   for (auto& it : aura_window_to_app_window_) {
     AppWindowBase* app_window = it.second.get();
+    if (!app_window)
+      continue;
+
+    if (arc_tracker_)
+      arc_tracker_->OnItemDelegateDiscarded(app_window->shelf_id());
+
     if (!app_window || app_window->controller() != delegate)
       continue;
 
     VLOG(1) << "Item controller was released externally for the app "
             << delegate->shelf_id().app_id << ".";
-
-    if (arc_tracker_)
-      arc_tracker_->OnItemDelegateDiscarded(app_window->shelf_id());
 
     UnregisterAppWindow(it.second.get());
   }
