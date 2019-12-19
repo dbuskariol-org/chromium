@@ -968,7 +968,9 @@ void Surface::UpdateBufferTransform(bool y_invert) {
   }
   if (y_invert)
     buffer_matrix.preScale(1, -1, 0.5f, 0.5f);
-  buffer_matrix.postIDiv(state_.buffer_scale, state_.buffer_scale);
+  if (state_.buffer_scale != 0)
+    buffer_matrix.postScale(1.0f / state_.buffer_scale,
+                            1.0f / state_.buffer_scale);
   buffer_transform_ = gfx::Transform(buffer_matrix);
 }
 
