@@ -171,34 +171,34 @@ public final class ChromePreferenceKeys {
      * Default value is -1. Use NightModeUtils#getThemeSetting() to retrieve current setting or
      * default theme.
      */
-    public static final String UI_THEME_SETTING_KEY = "ui_theme_setting";
+    public static final String UI_THEME_SETTING = "ui_theme_setting";
 
     /**
      * Whether or not darken websites is enabled.
      * Default value is false.
      */
-    public static final String DARKEN_WEBSITES_ENABLED_KEY = "darken_websites_enabled";
+    public static final String UI_THEME_DARKEN_WEBSITES_ENABLED = "darken_websites_enabled";
 
     /**
      * Marks that the content suggestions surface has been shown.
      * Default value is false.
      */
-    public static final String CONTENT_SUGGESTIONS_SHOWN_KEY = "content_suggestions_shown";
+    public static final String CONTENT_SUGGESTIONS_SHOWN = "content_suggestions_shown";
 
     /**
      * Whether the user dismissed the personalized sign in promo from the Settings.
      * Default value is false.
      */
-    public static final String SETTINGS_PERSONALIZED_SIGNIN_PROMO_DISMISSED =
+    public static final String SIGNIN_PROMO_SETTINGS_PERSONALIZED_DISMISSED =
             "settings_personalized_signin_promo_dismissed";
     /**
      * Whether the user dismissed the personalized sign in promo from the new tab page.
      * Default value is false.
      */
-    public static final String NTP_SIGNIN_PROMO_DISMISSED =
+    public static final String SIGNIN_PROMO_NTP_PROMO_DISMISSED =
             "ntp.personalized_signin_promo_dismissed";
 
-    public static final String NTP_SIGNIN_PROMO_SUPPRESSION_PERIOD_START =
+    public static final String SIGNIN_PROMO_NTP_PROMO_SUPPRESSION_PERIOD_START =
             "ntp.signin_promo_suppression_period_start";
 
     public static final String CRASH_UPLOAD_SUCCESS_BROWSER = "browser_crash_success_upload";
@@ -211,14 +211,14 @@ public final class ChromePreferenceKeys {
     public static final String CRASH_UPLOAD_FAILURE_OTHER = "other_crash_failure_upload";
 
     public static final String VERIFIED_DIGITAL_ASSET_LINKS = "verified_digital_asset_links";
-    public static final String TRUSTED_WEB_ACTIVITY_DISCLOSURE_ACCEPTED_PACKAGES =
+    public static final String TWA_DISCLOSURE_ACCEPTED_PACKAGES =
             "trusted_web_activity_disclosure_accepted_packages";
 
     /**
      * Whether VR assets component should be registered on startup.
      * Default value is false.
      */
-    public static final String SHOULD_REGISTER_VR_ASSETS_COMPONENT_ON_STARTUP =
+    public static final String VR_SHOULD_REGISTER_ASSETS_COMPONENT_ON_STARTUP =
             "should_register_vr_assets_component_on_startup";
 
     /*
@@ -252,26 +252,26 @@ public final class ChromePreferenceKeys {
      * Contains a trial group that was used to determine whether the reached code profiler should be
      * enabled.
      */
-    public static final String REACHED_CODE_PROFILER_GROUP_KEY = "reached_code_profiler_group";
+    public static final String REACHED_CODE_PROFILER_GROUP = "reached_code_profiler_group";
 
     /**
      * Key to cache whether offline indicator v2 (persistent offline indicator) is enabled.
      */
-    public static final String OFFLINE_INDICATOR_V2_ENABLED_KEY = "offline_indicator_v2_enabled";
+    public static final String OFFLINE_INDICATOR_V2_ENABLED = "offline_indicator_v2_enabled";
 
     /**
      * Personalized signin promo preference.
      */
-    public static final String PREF_PERSONALIZED_SIGNIN_PROMO_DECLINED =
+    public static final String SIGNIN_PROMO_PERSONALIZED_DECLINED =
             "signin_promo_bookmarks_declined";
     /**
      * Generic signin and sync promo preferences.
      */
-    public static final String PREF_SIGNIN_AND_SYNC_PROMO_SHOW_COUNT =
+    public static final String SIGNIN_AND_SYNC_PROMO_SHOW_COUNT =
             "enhanced_bookmark_signin_promo_show_count";
 
     /** First run flags. */
-    public static final String FIRST_RUN_CACHED_TOS_ACCEPTED_PREF = "first_run_tos_accepted";
+    public static final String FIRST_RUN_CACHED_TOS_ACCEPTED = "first_run_tos_accepted";
     public static final String FIRST_RUN_FLOW_COMPLETE = "first_run_flow";
     public static final String FIRST_RUN_LIGHTWEIGHT_FLOW_COMPLETE = "lightweight_first_run_flow";
     public static final String FIRST_RUN_SKIP_WELCOME_PAGE = "skip_welcome_page";
@@ -335,7 +335,7 @@ public final class ChromePreferenceKeys {
             "displayed_data_reduction_snackbar_promo_saved_bytes";
 
     // Visible for backup and restore
-    public static final String DATA_REDUCTION_ENABLED_PREF = "BANDWIDTH_REDUCTION_PROXY_ENABLED";
+    public static final String DATA_REDUCTION_ENABLED = "BANDWIDTH_REDUCTION_PROXY_ENABLED";
     public static final String DATA_REDUCTION_FIRST_ENABLED_TIME =
             "BANDWIDTH_REDUCTION_FIRST_ENABLED_TIME";
 
@@ -344,136 +344,131 @@ public final class ChromePreferenceKeys {
     public static final String HOMEPAGE_CUSTOM_URI = "homepage_custom_uri";
     public static final String HOMEPAGE_USE_DEFAULT_URI = "homepage_partner_enabled";
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Keys representing cached feature flags                                                     //
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Cached feature flags generated by FeatureUtilities use this prefix.
      */
-    public static final KeyPrefix CACHED_FEATURE_FLAG = new KeyPrefix("Chrome.Flags.CachedFlag.*");
+    public static final KeyPrefix FLAGS_CACHED = new KeyPrefix("Chrome.Flags.CachedFlag.*");
 
     /**
      * Key for whether DownloadResumptionBackgroundTask should load native in service manager only
      * mode.
      * Default value is false.
      */
-    public static final String SERVICE_MANAGER_FOR_DOWNLOAD_RESUMPTION_KEY =
+    public static final String FLAGS_CACHED_SERVICE_MANAGER_FOR_DOWNLOAD_RESUMPTION =
             "service_manager_for_download_resumption";
 
     /**
      * Key for whether PrefetchBackgroundTask should load native in service manager only mode.
      * Default value is false.
      */
-    public static final String SERVICE_MANAGER_FOR_BACKGROUND_PREFETCH_KEY =
+    public static final String FLAGS_CACHED_SERVICE_MANAGER_FOR_BACKGROUND_PREFETCH =
             "service_manager_for_background_prefetch";
 
-    public static final String INTEREST_FEED_CONTENT_SUGGESTIONS_KEY =
+    public static final String FLAGS_CACHED_INTEREST_FEED_CONTENT_SUGGESTIONS =
             "interest_feed_content_suggestions";
 
     /**
      * Whether or not the download auto-resumption is enabled in native.
      * Default value is true.
      */
-    public static final String DOWNLOAD_AUTO_RESUMPTION_IN_NATIVE_KEY =
+    public static final String FLAGS_CACHED_DOWNLOAD_AUTO_RESUMPTION_IN_NATIVE =
             "download_auto_resumption_in_native";
 
     /**
      * Whether or not the bottom toolbar is enabled.
      * Default value is false.
      */
-    public static final String BOTTOM_TOOLBAR_ENABLED_KEY = "bottom_toolbar_enabled";
+    public static final String FLAGS_CACHED_BOTTOM_TOOLBAR_ENABLED = "bottom_toolbar_enabled";
 
     /**
      * Whether or not the adaptive toolbar is enabled.
      * Default value is true.
      */
-    public static final String ADAPTIVE_TOOLBAR_ENABLED_KEY = "adaptive_toolbar_enabled";
+    public static final String FLAGS_CACHED_ADAPTIVE_TOOLBAR_ENABLED = "adaptive_toolbar_enabled";
 
     /**
      * Whether or not the labeled bottom toolbar is enabled.
      * Default value is false.
      */
-    public static final String LABELED_BOTTOM_TOOLBAR_ENABLED_KEY =
+    public static final String FLAGS_CACHED_LABELED_BOTTOM_TOOLBAR_ENABLED =
             "labeled_bottom_toolbar_enabled";
 
     /**
      * Whether or not night mode is available.
      * Default value is false.
      */
-    public static final String NIGHT_MODE_AVAILABLE_KEY = "night_mode_available";
+    public static final String FLAGS_CACHED_NIGHT_MODE_AVAILABLE = "night_mode_available";
 
     /**
      * Whether or not night mode should set "light" as the default option.
      * Default value is false.
      */
-    public static final String NIGHT_MODE_DEFAULT_TO_LIGHT = "night_mode_default_to_light";
+    public static final String FLAGS_CACHED_NIGHT_MODE_DEFAULT_TO_LIGHT =
+            "night_mode_default_to_light";
 
     /**
      * Whether or not night mode is available for custom tabs.
      * Default value is false.
      */
-    public static final String NIGHT_MODE_CCT_AVAILABLE_KEY = "night_mode_cct_available";
+    public static final String FLAGS_CACHED_NIGHT_MODE_CCT_AVAILABLE = "night_mode_cct_available";
 
     /**
      * Whether or not command line on non-rooted devices is enabled.
      * Default value is false.
      */
-    public static final String COMMAND_LINE_ON_NON_ROOTED_ENABLED_KEY =
+    public static final String FLAGS_CACHED_COMMAND_LINE_ON_NON_ROOTED_ENABLED =
             "command_line_on_non_rooted_enabled";
 
     /**
      * Whether or not the start surface is enabled.
      * Default value is false.
      */
-    public static final String START_SURFACE_ENABLED_KEY = "start_surface_enabled";
+    public static final String FLAGS_CACHED_START_SURFACE_ENABLED = "start_surface_enabled";
 
     /**
      * Whether or not the grid tab switcher is enabled.
      * Default value is false.
      */
-    public static final String GRID_TAB_SWITCHER_ENABLED_KEY = "grid_tab_switcher_enabled";
+    public static final String FLAGS_CACHED_GRID_TAB_SWITCHER_ENABLED = "grid_tab_switcher_enabled";
 
     /**
      * Whether or not the tab group is enabled.
      * Default value is false.
      */
-    public static final String TAB_GROUPS_ANDROID_ENABLED_KEY = "tab_group_android_enabled";
+    public static final String FLAGS_CACHED_TAB_GROUPS_ANDROID_ENABLED =
+            "tab_group_android_enabled";
 
     /**
      * Whether or not the Duet-TabStrip integration is enabled.
      * Default value is false.
      */
-    public static final String DUET_TABSTRIP_INTEGRATION_ANDROID_ENABLED_KEY =
+    public static final String FLAGS_CACHED_DUET_TABSTRIP_INTEGRATION_ANDROID_ENABLED =
             "Chrome.Flags.DuetTabstripIntegrationEnabled";
 
     /**
      * Whether or not bootstrap tasks should be prioritized (i.e. bootstrap task prioritization
      * experiment is enabled). Default value is true.
      */
-    public static final String PRIORITIZE_BOOTSTRAP_TASKS_KEY = "prioritize_bootstrap_tasks";
+    public static final String FLAGS_CACHED_PRIORITIZE_BOOTSTRAP_TASKS =
+            "prioritize_bootstrap_tasks";
 
     /**
      * Whether warming up network service is enabled.
      * Default value is false.
      */
-    public static final String NETWORK_SERVICE_WARM_UP_ENABLED_KEY =
+    public static final String FLAGS_CACHED_NETWORK_SERVICE_WARM_UP_ENABLED =
             "network_service_warm_up_enabled";
 
     /**
      * Key to cache whether immersive ui mode is enabled.
      */
-    public static final String IMMERSIVE_UI_MODE_ENABLED = "immersive_ui_mode_enabled";
+    public static final String FLAGS_CACHED_IMMERSIVE_UI_MODE_ENABLED = "immersive_ui_mode_enabled";
 
     /**
      * Key to cache whether SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT is enabled.
      */
-    public static final String SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT =
+    public static final String FLAGS_CACHED_SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT =
             "swap_pixel_format_to_fix_convert_from_translucent";
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // End of keys representing cached feature flags                                              //
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Keys that indicates if an item in the context menu has been clicked or not.
@@ -531,12 +526,12 @@ public final class ChromePreferenceKeys {
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_BOOKMARKS,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_SETTINGS,
                 CHROME_DEFAULT_BROWSER,
-                UI_THEME_SETTING_KEY,
-                DARKEN_WEBSITES_ENABLED_KEY,
-                CONTENT_SUGGESTIONS_SHOWN_KEY,
-                SETTINGS_PERSONALIZED_SIGNIN_PROMO_DISMISSED,
-                NTP_SIGNIN_PROMO_DISMISSED,
-                NTP_SIGNIN_PROMO_SUPPRESSION_PERIOD_START,
+                UI_THEME_SETTING,
+                UI_THEME_DARKEN_WEBSITES_ENABLED,
+                CONTENT_SUGGESTIONS_SHOWN,
+                SIGNIN_PROMO_SETTINGS_PERSONALIZED_DISMISSED,
+                SIGNIN_PROMO_NTP_PROMO_DISMISSED,
+                SIGNIN_PROMO_NTP_PROMO_SUPPRESSION_PERIOD_START,
                 CRASH_UPLOAD_SUCCESS_BROWSER,
                 CRASH_UPLOAD_SUCCESS_RENDERER,
                 CRASH_UPLOAD_SUCCESS_GPU,
@@ -546,21 +541,21 @@ public final class ChromePreferenceKeys {
                 CRASH_UPLOAD_FAILURE_GPU,
                 CRASH_UPLOAD_FAILURE_OTHER,
                 VERIFIED_DIGITAL_ASSET_LINKS,
-                TRUSTED_WEB_ACTIVITY_DISCLOSURE_ACCEPTED_PACKAGES,
-                SHOULD_REGISTER_VR_ASSETS_COMPONENT_ON_STARTUP,
+                TWA_DISCLOSURE_ACCEPTED_PACKAGES,
+                VR_SHOULD_REGISTER_ASSETS_COMPONENT_ON_STARTUP,
                 ACCESSIBILITY_TAB_SWITCHER,
                 LATEST_UNSUPPORTED_VERSION,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_UNINSTALL,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_CLEAR_DATA,
                 WEBAPK_UNINSTALLED_PACKAGES,
-                REACHED_CODE_PROFILER_GROUP_KEY,
-                OFFLINE_INDICATOR_V2_ENABLED_KEY,
-                PREF_PERSONALIZED_SIGNIN_PROMO_DECLINED,
-                PREF_SIGNIN_AND_SYNC_PROMO_SHOW_COUNT,
+                REACHED_CODE_PROFILER_GROUP,
+                OFFLINE_INDICATOR_V2_ENABLED,
+                SIGNIN_PROMO_PERSONALIZED_DECLINED,
+                SIGNIN_AND_SYNC_PROMO_SHOW_COUNT,
                 CONTEXT_MENU_OPEN_IN_EPHEMERAL_TAB_CLICKED,
                 CONTEXT_MENU_OPEN_IMAGE_IN_EPHEMERAL_TAB_CLICKED,
                 CONTEXT_MENU_SEARCH_WITH_GOOGLE_LENS_CLICKED,
-                FIRST_RUN_CACHED_TOS_ACCEPTED_PREF,
+                FIRST_RUN_CACHED_TOS_ACCEPTED,
                 FIRST_RUN_FLOW_COMPLETE,
                 FIRST_RUN_LIGHTWEIGHT_FLOW_COMPLETE,
                 FIRST_RUN_SKIP_WELCOME_PAGE,
@@ -575,33 +570,31 @@ public final class ChromePreferenceKeys {
                 DATA_REDUCTION_DISPLAYED_INFOBAR_PROMO,
                 DATA_REDUCTION_DISPLAYED_INFOBAR_PROMO_VERSION,
                 DATA_REDUCTION_DISPLAYED_MILESTONE_PROMO_SAVED_BYTES,
-                DATA_REDUCTION_ENABLED_PREF,
+                DATA_REDUCTION_ENABLED,
                 DATA_REDUCTION_FIRST_ENABLED_TIME,
                 HOMEPAGE_ENABLED,
                 HOMEPAGE_CUSTOM_URI,
                 HOMEPAGE_USE_DEFAULT_URI,
-
-                // Cached feature flags
-                CACHED_FEATURE_FLAG.pattern(),
-                SERVICE_MANAGER_FOR_DOWNLOAD_RESUMPTION_KEY,
-                SERVICE_MANAGER_FOR_BACKGROUND_PREFETCH_KEY,
-                INTEREST_FEED_CONTENT_SUGGESTIONS_KEY,
-                DOWNLOAD_AUTO_RESUMPTION_IN_NATIVE_KEY,
-                BOTTOM_TOOLBAR_ENABLED_KEY,
-                ADAPTIVE_TOOLBAR_ENABLED_KEY,
-                LABELED_BOTTOM_TOOLBAR_ENABLED_KEY,
-                NIGHT_MODE_AVAILABLE_KEY,
-                NIGHT_MODE_DEFAULT_TO_LIGHT,
-                NIGHT_MODE_CCT_AVAILABLE_KEY,
-                COMMAND_LINE_ON_NON_ROOTED_ENABLED_KEY,
-                START_SURFACE_ENABLED_KEY,
-                GRID_TAB_SWITCHER_ENABLED_KEY,
-                TAB_GROUPS_ANDROID_ENABLED_KEY,
-                DUET_TABSTRIP_INTEGRATION_ANDROID_ENABLED_KEY,
-                PRIORITIZE_BOOTSTRAP_TASKS_KEY,
-                NETWORK_SERVICE_WARM_UP_ENABLED_KEY,
-                IMMERSIVE_UI_MODE_ENABLED,
-                SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT
+                FLAGS_CACHED.pattern(),
+                FLAGS_CACHED_SERVICE_MANAGER_FOR_DOWNLOAD_RESUMPTION,
+                FLAGS_CACHED_SERVICE_MANAGER_FOR_BACKGROUND_PREFETCH,
+                FLAGS_CACHED_INTEREST_FEED_CONTENT_SUGGESTIONS,
+                FLAGS_CACHED_DOWNLOAD_AUTO_RESUMPTION_IN_NATIVE,
+                FLAGS_CACHED_BOTTOM_TOOLBAR_ENABLED,
+                FLAGS_CACHED_ADAPTIVE_TOOLBAR_ENABLED,
+                FLAGS_CACHED_LABELED_BOTTOM_TOOLBAR_ENABLED,
+                FLAGS_CACHED_NIGHT_MODE_AVAILABLE,
+                FLAGS_CACHED_NIGHT_MODE_DEFAULT_TO_LIGHT,
+                FLAGS_CACHED_NIGHT_MODE_CCT_AVAILABLE,
+                FLAGS_CACHED_COMMAND_LINE_ON_NON_ROOTED_ENABLED,
+                FLAGS_CACHED_START_SURFACE_ENABLED,
+                FLAGS_CACHED_GRID_TAB_SWITCHER_ENABLED,
+                FLAGS_CACHED_TAB_GROUPS_ANDROID_ENABLED,
+                FLAGS_CACHED_DUET_TABSTRIP_INTEGRATION_ANDROID_ENABLED,
+                FLAGS_CACHED_PRIORITIZE_BOOTSTRAP_TASKS,
+                FLAGS_CACHED_NETWORK_SERVICE_WARM_UP_ENABLED,
+                FLAGS_CACHED_IMMERSIVE_UI_MODE_ENABLED,
+                FLAGS_CACHED_SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT
         );
         // clang-format on
     }
@@ -685,12 +678,12 @@ public final class ChromePreferenceKeys {
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_BOOKMARKS,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_SETTINGS,
                 CHROME_DEFAULT_BROWSER,
-                UI_THEME_SETTING_KEY,
-                DARKEN_WEBSITES_ENABLED_KEY,
-                CONTENT_SUGGESTIONS_SHOWN_KEY,
-                SETTINGS_PERSONALIZED_SIGNIN_PROMO_DISMISSED,
-                NTP_SIGNIN_PROMO_DISMISSED,
-                NTP_SIGNIN_PROMO_SUPPRESSION_PERIOD_START,
+                UI_THEME_SETTING,
+                UI_THEME_DARKEN_WEBSITES_ENABLED,
+                CONTENT_SUGGESTIONS_SHOWN,
+                SIGNIN_PROMO_SETTINGS_PERSONALIZED_DISMISSED,
+                SIGNIN_PROMO_NTP_PROMO_DISMISSED,
+                SIGNIN_PROMO_NTP_PROMO_SUPPRESSION_PERIOD_START,
                 CRASH_UPLOAD_SUCCESS_BROWSER,
                 CRASH_UPLOAD_SUCCESS_RENDERER,
                 CRASH_UPLOAD_SUCCESS_GPU,
@@ -700,18 +693,18 @@ public final class ChromePreferenceKeys {
                 CRASH_UPLOAD_FAILURE_GPU,
                 CRASH_UPLOAD_FAILURE_OTHER,
                 VERIFIED_DIGITAL_ASSET_LINKS,
-                TRUSTED_WEB_ACTIVITY_DISCLOSURE_ACCEPTED_PACKAGES,
-                SHOULD_REGISTER_VR_ASSETS_COMPONENT_ON_STARTUP,
+                TWA_DISCLOSURE_ACCEPTED_PACKAGES,
+                VR_SHOULD_REGISTER_ASSETS_COMPONENT_ON_STARTUP,
                 ACCESSIBILITY_TAB_SWITCHER,
                 LATEST_UNSUPPORTED_VERSION,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_UNINSTALL,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_CLEAR_DATA,
                 WEBAPK_UNINSTALLED_PACKAGES,
-                REACHED_CODE_PROFILER_GROUP_KEY,
-                OFFLINE_INDICATOR_V2_ENABLED_KEY,
-                PREF_PERSONALIZED_SIGNIN_PROMO_DECLINED,
-                PREF_SIGNIN_AND_SYNC_PROMO_SHOW_COUNT,
-                FIRST_RUN_CACHED_TOS_ACCEPTED_PREF,
+                REACHED_CODE_PROFILER_GROUP,
+                OFFLINE_INDICATOR_V2_ENABLED,
+                SIGNIN_PROMO_PERSONALIZED_DECLINED,
+                SIGNIN_AND_SYNC_PROMO_SHOW_COUNT,
+                FIRST_RUN_CACHED_TOS_ACCEPTED,
                 FIRST_RUN_FLOW_COMPLETE,
                 FIRST_RUN_LIGHTWEIGHT_FLOW_COMPLETE,
                 FIRST_RUN_SKIP_WELCOME_PAGE,
@@ -726,31 +719,29 @@ public final class ChromePreferenceKeys {
                 DATA_REDUCTION_DISPLAYED_INFOBAR_PROMO,
                 DATA_REDUCTION_DISPLAYED_INFOBAR_PROMO_VERSION,
                 DATA_REDUCTION_DISPLAYED_MILESTONE_PROMO_SAVED_BYTES,
-                DATA_REDUCTION_ENABLED_PREF,
+                DATA_REDUCTION_ENABLED,
                 DATA_REDUCTION_FIRST_ENABLED_TIME,
                 HOMEPAGE_ENABLED,
                 HOMEPAGE_CUSTOM_URI,
                 HOMEPAGE_USE_DEFAULT_URI,
-
-                // Cached feature flags
-                SERVICE_MANAGER_FOR_DOWNLOAD_RESUMPTION_KEY,
-                SERVICE_MANAGER_FOR_BACKGROUND_PREFETCH_KEY,
-                INTEREST_FEED_CONTENT_SUGGESTIONS_KEY,
-                DOWNLOAD_AUTO_RESUMPTION_IN_NATIVE_KEY,
-                BOTTOM_TOOLBAR_ENABLED_KEY,
-                ADAPTIVE_TOOLBAR_ENABLED_KEY,
-                LABELED_BOTTOM_TOOLBAR_ENABLED_KEY,
-                NIGHT_MODE_AVAILABLE_KEY,
-                NIGHT_MODE_DEFAULT_TO_LIGHT,
-                NIGHT_MODE_CCT_AVAILABLE_KEY,
-                COMMAND_LINE_ON_NON_ROOTED_ENABLED_KEY,
-                START_SURFACE_ENABLED_KEY,
-                GRID_TAB_SWITCHER_ENABLED_KEY,
-                TAB_GROUPS_ANDROID_ENABLED_KEY,
-                PRIORITIZE_BOOTSTRAP_TASKS_KEY,
-                NETWORK_SERVICE_WARM_UP_ENABLED_KEY,
-                IMMERSIVE_UI_MODE_ENABLED,
-                SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT
+                FLAGS_CACHED_SERVICE_MANAGER_FOR_DOWNLOAD_RESUMPTION,
+                FLAGS_CACHED_SERVICE_MANAGER_FOR_BACKGROUND_PREFETCH,
+                FLAGS_CACHED_INTEREST_FEED_CONTENT_SUGGESTIONS,
+                FLAGS_CACHED_DOWNLOAD_AUTO_RESUMPTION_IN_NATIVE,
+                FLAGS_CACHED_BOTTOM_TOOLBAR_ENABLED,
+                FLAGS_CACHED_ADAPTIVE_TOOLBAR_ENABLED,
+                FLAGS_CACHED_LABELED_BOTTOM_TOOLBAR_ENABLED,
+                FLAGS_CACHED_NIGHT_MODE_AVAILABLE,
+                FLAGS_CACHED_NIGHT_MODE_DEFAULT_TO_LIGHT,
+                FLAGS_CACHED_NIGHT_MODE_CCT_AVAILABLE,
+                FLAGS_CACHED_COMMAND_LINE_ON_NON_ROOTED_ENABLED,
+                FLAGS_CACHED_START_SURFACE_ENABLED,
+                FLAGS_CACHED_GRID_TAB_SWITCHER_ENABLED,
+                FLAGS_CACHED_TAB_GROUPS_ANDROID_ENABLED,
+                FLAGS_CACHED_PRIORITIZE_BOOTSTRAP_TASKS,
+                FLAGS_CACHED_NETWORK_SERVICE_WARM_UP_ENABLED,
+                FLAGS_CACHED_IMMERSIVE_UI_MODE_ENABLED,
+                FLAGS_CACHED_SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT
         );
         // clang-format on
     }
