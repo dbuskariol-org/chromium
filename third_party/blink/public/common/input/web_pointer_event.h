@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_POINTER_EVENT_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_POINTER_EVENT_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_POINTER_EVENT_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_POINTER_EVENT_H_
 
-#include "third_party/blink/public/platform/web_input_event.h"
-#include "third_party/blink/public/platform/web_mouse_event.h"
-#include "third_party/blink/public/platform/web_pointer_properties.h"
-#include "third_party/blink/public/platform/web_touch_event.h"
+#include "third_party/blink/public/common/input/web_input_event.h"
+#include "third_party/blink/public/common/input/web_mouse_event.h"
+#include "third_party/blink/public/common/input/web_pointer_properties.h"
+#include "third_party/blink/public/common/input/web_touch_event.h"
 
 namespace blink {
 
@@ -18,7 +18,8 @@ namespace blink {
 // WebPointerProperties and not have pointertype specific attributes here.
 // --------------------------------------------------------------
 
-class WebPointerEvent : public WebInputEvent, public WebPointerProperties {
+class BLINK_COMMON_EXPORT WebPointerEvent : public WebInputEvent,
+                                            public WebPointerProperties {
  public:
   WebPointerEvent()
       : WebInputEvent(sizeof(WebPointerEvent)), WebPointerProperties(0) {}
@@ -32,12 +33,10 @@ class WebPointerEvent : public WebInputEvent, public WebPointerProperties {
         height(height_param) {
     SetType(type_param);
   }
-  BLINK_PLATFORM_EXPORT WebPointerEvent(const WebTouchEvent&,
-                                        const WebTouchPoint&);
-  BLINK_PLATFORM_EXPORT WebPointerEvent(WebInputEvent::Type,
-                                        const WebMouseEvent&);
+  WebPointerEvent(const WebTouchEvent&, const WebTouchPoint&);
+  WebPointerEvent(WebInputEvent::Type, const WebMouseEvent&);
 
-  BLINK_PLATFORM_EXPORT static WebPointerEvent CreatePointerCausesUaActionEvent(
+  static WebPointerEvent CreatePointerCausesUaActionEvent(
       WebPointerProperties::PointerType,
       base::TimeTicks time_stamp);
 
@@ -76,16 +75,13 @@ class WebPointerEvent : public WebInputEvent, public WebPointerProperties {
   float width;
   float height;
 
-#if INSIDE_BLINK
   bool IsCancelable() const { return dispatch_type == kBlocking; }
   bool HasWidth() const { return !std::isnan(width); }
   bool HasHeight() const { return !std::isnan(height); }
 
-  BLINK_PLATFORM_EXPORT WebPointerEvent WebPointerEventInRootFrame() const;
-
-#endif
+  WebPointerEvent WebPointerEventInRootFrame() const;
 };
 
 }  // namespace blink
 
-#endif  // WebMouseEvent_h
+#endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_POINTER_EVENT_H_

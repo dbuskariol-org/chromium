@@ -2,22 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_GESTURE_EVENT_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_GESTURE_EVENT_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_GESTURE_EVENT_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_GESTURE_EVENT_H_
 
 #include "cc/paint/element_id.h"
-#include "third_party/blink/public/platform/web_gesture_device.h"
-#include "third_party/blink/public/platform/web_input_event.h"
-#include "third_party/blink/public/platform/web_pointer_properties.h"
-#include "third_party/blink/public/platform/web_scroll_types.h"
+#include "third_party/blink/public/common/input/web_gesture_device.h"
+#include "third_party/blink/public/common/input/web_input_event.h"
+#include "third_party/blink/public/common/input/web_pointer_properties.h"
+#include "third_party/blink/public/common/input/web_scroll_types.h"
 #include "ui/events/types/scroll_types.h"
+#include "ui/gfx/geometry/point_f.h"
 #include "ui/gfx/geometry/size_f.h"
 
 namespace blink {
 
 // WebGestureEvent ---------------------------------------------------------
 
-class WebGestureEvent : public WebInputEvent {
+class BLINK_COMMON_EXPORT WebGestureEvent : public WebInputEvent {
  public:
   enum class InertialPhaseState : uint8_t {
     kUnknownMomentum = 0,  // No phase information.
@@ -208,26 +209,24 @@ class WebGestureEvent : public WebInputEvent {
   WebGestureDevice SourceDevice() const { return source_device_; }
   void SetSourceDevice(WebGestureDevice device) { source_device_ = device; }
 
-#if INSIDE_BLINK
-  BLINK_PLATFORM_EXPORT float DeltaXInRootFrame() const;
-  BLINK_PLATFORM_EXPORT float DeltaYInRootFrame() const;
-  BLINK_PLATFORM_EXPORT ui::input_types::ScrollGranularity DeltaUnits() const;
-  BLINK_PLATFORM_EXPORT gfx::PointF PositionInRootFrame() const;
-  BLINK_PLATFORM_EXPORT InertialPhaseState InertialPhase() const;
-  BLINK_PLATFORM_EXPORT bool Synthetic() const;
+  float DeltaXInRootFrame() const;
+  float DeltaYInRootFrame() const;
+  ui::input_types::ScrollGranularity DeltaUnits() const;
+  gfx::PointF PositionInRootFrame() const;
+  InertialPhaseState InertialPhase() const;
+  bool Synthetic() const;
 
-  BLINK_PLATFORM_EXPORT float VelocityX() const;
-  BLINK_PLATFORM_EXPORT float VelocityY() const;
+  float VelocityX() const;
+  float VelocityY() const;
 
-  BLINK_PLATFORM_EXPORT gfx::SizeF TapAreaInRootFrame() const;
-  BLINK_PLATFORM_EXPORT int TapCount() const;
+  gfx::SizeF TapAreaInRootFrame() const;
+  int TapCount() const;
 
-  BLINK_PLATFORM_EXPORT void ApplyTouchAdjustment(
-      const gfx::PointF& root_frame_coords);
+  void ApplyTouchAdjustment(const gfx::PointF& root_frame_coords);
 
   // Sets any scaled values to be their computed values and sets |frame_scale_|
   // back to 1 and |frame_translate_| X and Y coordinates back to 0.
-  BLINK_PLATFORM_EXPORT void FlattenTransform();
+  void FlattenTransform();
 
   bool IsScrollEvent() const {
     switch (type_) {
@@ -254,7 +253,6 @@ class WebGestureEvent : public WebInputEvent {
         return false;
     }
   }
-#endif
 
   bool IsTargetViewport() const {
     switch (type_) {
@@ -317,4 +315,4 @@ class WebGestureEvent : public WebInputEvent {
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_GESTURE_EVENT_H_
+#endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_GESTURE_EVENT_H_

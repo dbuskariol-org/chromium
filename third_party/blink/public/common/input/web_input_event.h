@@ -28,12 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_INPUT_EVENT_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_INPUT_EVENT_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_INPUT_EVENT_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_INPUT_EVENT_H_
 
 #include <string.h>
 
 #include "base/time/time.h"
+#include "third_party/blink/public/common/common_export.h"
 #include "ui/gfx/geometry/point_f.h"
 #include "ui/gfx/geometry/vector2d_f.h"
 
@@ -412,7 +413,7 @@ class WebInputEvent {
   void SetFrameScale(float scale) { frame_scale_ = scale; }
 
   gfx::Vector2dF FrameTranslate() const { return frame_translate_; }
-  void SetFrameTranslate(gfx::Vector2dF translate) {
+  void SetFrameTranslate(const gfx::Vector2dF& translate) {
     frame_translate_ = translate;
   }
 

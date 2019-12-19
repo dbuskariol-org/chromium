@@ -2,18 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_TOUCH_EVENT_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_TOUCH_EVENT_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_TOUCH_EVENT_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_TOUCH_EVENT_H_
 
-#include "third_party/blink/public/platform/web_input_event.h"
-#include "third_party/blink/public/platform/web_touch_point.h"
+#include "third_party/blink/public/common/input/web_input_event.h"
+#include "third_party/blink/public/common/input/web_touch_point.h"
 
 namespace blink {
 
 // WebTouchEvent --------------------------------------------------------------
 
 // TODO(e_hakkinen): Replace with WebPointerEvent. crbug.com/508283
-class WebTouchEvent : public WebInputEvent {
+class BLINK_COMMON_EXPORT WebTouchEvent : public WebInputEvent {
  public:
   // Maximum number of simultaneous touches supported on
   // Ash/Aura.
@@ -51,20 +51,16 @@ class WebTouchEvent : public WebInputEvent {
       : WebInputEvent(sizeof(WebTouchEvent), type, modifiers, time_stamp),
         dispatch_type(kBlocking) {}
 
-#if INSIDE_BLINK
-
   // Sets any scaled values to be their computed values and sets |frame_scale_|
   // back to 1 and |frame_translate_| X and Y coordinates back to 0.
-  BLINK_PLATFORM_EXPORT WebTouchEvent FlattenTransform() const;
+  WebTouchEvent FlattenTransform() const;
 
   // Return a scaled WebTouchPoint in root frame coordinates.
-  BLINK_PLATFORM_EXPORT WebTouchPoint
-  TouchPointInRootFrame(unsigned touch_point) const;
+  WebTouchPoint TouchPointInRootFrame(unsigned touch_point) const;
 
   bool IsCancelable() const { return dispatch_type == kBlocking; }
-#endif
 };
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_TOUCH_EVENT_H_
+#endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_TOUCH_EVENT_H_

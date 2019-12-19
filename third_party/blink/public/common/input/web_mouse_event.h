@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_MOUSE_EVENT_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_MOUSE_EVENT_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_MOUSE_EVENT_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_MOUSE_EVENT_H_
 
-#include "third_party/blink/public/platform/web_input_event.h"
-#include "third_party/blink/public/platform/web_menu_source_type.h"
-#include "third_party/blink/public/platform/web_pointer_properties.h"
+#include "third_party/blink/public/common/input/web_input_event.h"
+#include "third_party/blink/public/common/input/web_menu_source_type.h"
+#include "third_party/blink/public/common/input/web_pointer_properties.h"
 
 namespace blink {
 
@@ -15,7 +15,8 @@ class WebGestureEvent;
 
 // WebMouseEvent --------------------------------------------------------------
 
-class WebMouseEvent : public WebInputEvent, public WebPointerProperties {
+class BLINK_COMMON_EXPORT WebMouseEvent : public WebInputEvent,
+                                          public WebPointerProperties {
  public:
   static constexpr PointerId kMousePointerId = std::numeric_limits<int>::max();
 
@@ -64,21 +65,19 @@ class WebMouseEvent : public WebInputEvent, public WebPointerProperties {
     return (GetModifiers() & kIsCompatibilityEventForTouch) != 0;
   }
 
-#if INSIDE_BLINK
-  BLINK_PLATFORM_EXPORT WebMouseEvent(Type type_param,
-                                      const WebGestureEvent&,
-                                      Button button_param,
-                                      int click_count_param,
-                                      int modifiers_param,
-                                      base::TimeTicks time_stamp_param,
-                                      PointerId id_param = kMousePointerId);
+  WebMouseEvent(Type type_param,
+                const WebGestureEvent&,
+                Button button_param,
+                int click_count_param,
+                int modifiers_param,
+                base::TimeTicks time_stamp_param,
+                PointerId id_param = kMousePointerId);
 
-  BLINK_PLATFORM_EXPORT gfx::PointF PositionInRootFrame() const;
+  gfx::PointF PositionInRootFrame() const;
 
   // Sets any scaled values to be their computed values and sets |frame_scale_|
   // back to 1 and |frame_translate_| X and Y coordinates back to 0.
-  BLINK_PLATFORM_EXPORT WebMouseEvent FlattenTransform() const;
-#endif
+  WebMouseEvent FlattenTransform() const;
 
  protected:
   WebMouseEvent(unsigned size_param, PointerId id_param)
@@ -100,4 +99,4 @@ class WebMouseEvent : public WebInputEvent, public WebPointerProperties {
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_MOUSE_EVENT_H_
+#endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_MOUSE_EVENT_H_

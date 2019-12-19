@@ -2,17 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_MOUSE_WHEEL_EVENT_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_MOUSE_WHEEL_EVENT_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_MOUSE_WHEEL_EVENT_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_MOUSE_WHEEL_EVENT_H_
 
-#include "third_party/blink/public/platform/web_mouse_event.h"
+#include "third_party/blink/public/common/input/web_mouse_event.h"
 #include "ui/events/types/scroll_types.h"
 
 namespace blink {
 
 // WebMouseWheelEvent ---------------------------------------------------------
 
-class WebMouseWheelEvent : public WebMouseEvent {
+class BLINK_COMMON_EXPORT WebMouseWheelEvent : public WebMouseEvent {
  public:
   enum Phase {
     // No phase information is avaiable.
@@ -114,16 +114,14 @@ class WebMouseWheelEvent : public WebMouseEvent {
         dispatch_type(kBlocking),
         delta_units(ui::input_types::ScrollGranularity::kScrollByPixel) {}
 
-#if INSIDE_BLINK
-  BLINK_PLATFORM_EXPORT float DeltaXInRootFrame() const;
-  BLINK_PLATFORM_EXPORT float DeltaYInRootFrame() const;
+  float DeltaXInRootFrame() const;
+  float DeltaYInRootFrame() const;
 
   // Sets any scaled values to be their computed values and sets |frame_scale_|
   // back to 1 and |frame_translate_| X and Y coordinates back to 0.
-  BLINK_PLATFORM_EXPORT WebMouseWheelEvent FlattenTransform() const;
+  WebMouseWheelEvent FlattenTransform() const;
 
   bool IsCancelable() const { return dispatch_type == kBlocking; }
-#endif
 };
 
 inline bool operator==(const WebMouseWheelEvent& a,
@@ -138,4 +136,4 @@ inline bool operator!=(const WebMouseWheelEvent& a,
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_MOUSE_WHEEL_EVENT_H_
+#endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_MOUSE_WHEEL_EVENT_H_

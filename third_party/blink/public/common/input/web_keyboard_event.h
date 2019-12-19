@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_KEYBOARD_EVENT_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_KEYBOARD_EVENT_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_KEYBOARD_EVENT_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_KEYBOARD_EVENT_H_
 
-#include "third_party/blink/public/platform/web_common.h"
-#include "third_party/blink/public/platform/web_input_event.h"
+#include "base/strings/string16.h"
+#include "third_party/blink/public/common/input/web_input_event.h"
 
 namespace blink {
 
@@ -59,8 +59,8 @@ class WebKeyboardEvent : public WebInputEvent {
   // Windows guarantee one character per event.  The Mac does not, but in
   // reality that's all it ever gives.  We're generous, and cap it a bit
   // longer.
-  WebUChar text[kTextLengthCap];
-  WebUChar unmodified_text[kTextLengthCap];
+  base::char16 text[kTextLengthCap];
+  base::char16 unmodified_text[kTextLengthCap];
 
   WebKeyboardEvent(Type type, int modifiers, base::TimeTicks time_stamp)
       : WebInputEvent(sizeof(WebKeyboardEvent), type, modifiers, time_stamp) {}
@@ -84,4 +84,4 @@ class WebKeyboardEvent : public WebInputEvent {
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_KEYBOARD_EVENT_H_
+#endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_KEYBOARD_EVENT_H_

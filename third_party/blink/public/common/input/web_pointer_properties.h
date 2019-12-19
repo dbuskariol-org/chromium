@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_POINTER_PROPERTIES_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_WEB_POINTER_PROPERTIES_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_POINTER_PROPERTIES_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_POINTER_PROPERTIES_H_
 
-#include "third_party/blink/public/platform/pointer_id.h"
-#include "third_party/blink/public/platform/web_common.h"
+#include "third_party/blink/public/common/common_export.h"
+#include "third_party/blink/public/common/input/pointer_id.h"
 #include "ui/gfx/geometry/point_f.h"
 
 #include <limits>
