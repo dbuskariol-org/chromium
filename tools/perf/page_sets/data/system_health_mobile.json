@@ -123,6 +123,9 @@
         "browse:shopping:lazada": {
             "DEFAULT": "system_health_mobile_053.wprgo"
         },
+        "browse:shopping:lazada:2019": {
+            "DEFAULT": "system_health_mobile_8df98214f9.wprgo"
+        },
         "browse:social:facebook": {
             "DEFAULT": "system_health_mobile_028.wprgo"
         },

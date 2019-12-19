@@ -942,6 +942,16 @@ class BrowseLazadaMobileStory(_ArticleBrowsingStory):
   ITEMS_TO_VISIT = 1
 
 
+class BrowseLazadaMobileStory2019(_ArticleBrowsingStory):
+  NAME = 'browse:shopping:lazada:2019'
+  URL = 'https://www.lazada.co.id/catalog/?q=Wrist+watch'
+  SUPPORTED_PLATFORMS = platforms.MOBILE_ONLY
+  TAGS = [story_tags.EMERGING_MARKET, story_tags.YEAR_2019]
+
+  ITEM_SELECTOR = '.c12p0m'
+  ITEMS_TO_VISIT = 4
+
+
 class BrowseAvitoMobileStory(_ArticleBrowsingStory):
   NAME = 'browse:shopping:avito'
   URL = 'https://www.avito.ru/rossiya'
