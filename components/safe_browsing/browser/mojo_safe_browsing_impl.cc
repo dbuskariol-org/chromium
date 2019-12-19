@@ -86,7 +86,7 @@ MojoSafeBrowsingImpl::MojoSafeBrowsingImpl(
 
   // It is safe to bind |this| as Unretained because |receivers_| is owned by
   // |this| and will not call this callback after it is destroyed.
-  receivers_.set_disconnect_handler(base::Bind(
+  receivers_.set_disconnect_handler(base::BindRepeating(
       &MojoSafeBrowsingImpl::OnMojoDisconnect, base::Unretained(this)));
 }
 
@@ -98,7 +98,8 @@ MojoSafeBrowsingImpl::~MojoSafeBrowsingImpl() {
 void MojoSafeBrowsingImpl::MaybeCreate(
     int render_process_id,
     content::ResourceContext* resource_context,
-    const base::Callback<scoped_refptr<UrlCheckerDelegate>()>& delegate_getter,
+    const base::RepeatingCallback<scoped_refptr<UrlCheckerDelegate>()>&
+        delegate_getter,
     mojo::PendingReceiver<mojom::SafeBrowsing> receiver) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
 
@@ -154,8 +155,8 @@ void MojoSafeBrowsingImpl::CreateCheckerAndCheck(
   auto checker_impl = std::make_unique<SafeBrowsingUrlCheckerImpl>(
       headers, static_cast<int>(load_flags), resource_type, has_user_gesture,
       delegate_,
-      base::Bind(&GetWebContentsFromID, render_process_id_,
-                 static_cast<int>(render_frame_id)),
+      base::BindRepeating(&GetWebContentsFromID, render_process_id_,
+                          static_cast<int>(render_frame_id)),
       /*real_time_lookup_enabled=*/false, /*cache_manager=*/nullptr);
 
   checker_impl->CheckUrl(

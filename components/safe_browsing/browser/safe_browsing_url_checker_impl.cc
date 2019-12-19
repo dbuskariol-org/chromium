@@ -101,7 +101,7 @@ SafeBrowsingUrlCheckerImpl::SafeBrowsingUrlCheckerImpl(
     content::ResourceType resource_type,
     bool has_user_gesture,
     scoped_refptr<UrlCheckerDelegate> url_checker_delegate,
-    const base::Callback<content::WebContents*()>& web_contents_getter,
+    const base::RepeatingCallback<content::WebContents*()>& web_contents_getter,
     bool real_time_lookup_enabled,
     base::WeakPtr<VerdictCacheManager> cache_manager_on_ui)
     : headers_(headers),
@@ -203,8 +203,8 @@ void SafeBrowsingUrlCheckerImpl::OnUrlResult(const GURL& url,
   resource.threat_type = threat_type;
   resource.threat_metadata = metadata;
   resource.callback =
-      base::Bind(&SafeBrowsingUrlCheckerImpl::OnBlockingPageComplete,
-                 weak_factory_.GetWeakPtr());
+      base::BindRepeating(&SafeBrowsingUrlCheckerImpl::OnBlockingPageComplete,
+                          weak_factory_.GetWeakPtr());
   resource.callback_thread =
       base::CreateSingleThreadTaskRunner({content::BrowserThread::IO});
   resource.web_contents_getter = web_contents_getter_;
@@ -498,12 +498,12 @@ void SafeBrowsingUrlCheckerImpl::OnGetCachedRealTimeUrlVerdictDoneOnIO(
   }
 
   RTLookupRequestCallback request_callback =
-      base::Bind(&SafeBrowsingUrlCheckerImpl::OnRTLookupRequest,
-                 weak_factory_.GetWeakPtr());
+      base::BindOnce(&SafeBrowsingUrlCheckerImpl::OnRTLookupRequest,
+                     weak_factory_.GetWeakPtr());
 
   RTLookupResponseCallback response_callback =
-      base::Bind(&SafeBrowsingUrlCheckerImpl::OnRTLookupResponse,
-                 weak_factory_.GetWeakPtr());
+      base::BindOnce(&SafeBrowsingUrlCheckerImpl::OnRTLookupResponse,
+                     weak_factory_.GetWeakPtr());
 
   auto* rt_lookup_service = database_manager_->GetRealTimeUrlLookupService();
   rt_lookup_service->StartLookup(url, std::move(request_callback),

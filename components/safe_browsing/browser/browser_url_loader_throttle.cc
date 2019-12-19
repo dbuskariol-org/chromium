@@ -145,7 +145,7 @@ class BrowserURLLoaderThrottle::CheckerOnIO
 // static
 std::unique_ptr<BrowserURLLoaderThrottle> BrowserURLLoaderThrottle::Create(
     GetDelegateCallback delegate_getter,
-    const base::Callback<content::WebContents*()>& web_contents_getter,
+    const base::RepeatingCallback<content::WebContents*()>& web_contents_getter,
     int frame_tree_node_id,
     content::ResourceContext* resource_context,
     base::WeakPtr<VerdictCacheManager> cache_manager) {
@@ -157,7 +157,7 @@ std::unique_ptr<BrowserURLLoaderThrottle> BrowserURLLoaderThrottle::Create(
 
 BrowserURLLoaderThrottle::BrowserURLLoaderThrottle(
     GetDelegateCallback delegate_getter,
-    const base::Callback<content::WebContents*()>& web_contents_getter,
+    const base::RepeatingCallback<content::WebContents*()>& web_contents_getter,
     int frame_tree_node_id,
     content::ResourceContext* resource_context,
     base::WeakPtr<VerdictCacheManager> cache_manager) {

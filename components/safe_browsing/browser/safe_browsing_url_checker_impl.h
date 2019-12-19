@@ -70,7 +70,8 @@ class SafeBrowsingUrlCheckerImpl : public mojom::SafeBrowsingUrlChecker,
       content::ResourceType resource_type,
       bool has_user_gesture,
       scoped_refptr<UrlCheckerDelegate> url_checker_delegate,
-      const base::Callback<content::WebContents*()>& web_contents_getter,
+      const base::RepeatingCallback<content::WebContents*()>&
+          web_contents_getter,
       bool real_time_lookup_enabled,
       base::WeakPtr<VerdictCacheManager> cache_manager_on_ui);
 
@@ -195,7 +196,7 @@ class SafeBrowsingUrlCheckerImpl : public mojom::SafeBrowsingUrlChecker,
   const int load_flags_;
   const content::ResourceType resource_type_;
   const bool has_user_gesture_;
-  base::Callback<content::WebContents*()> web_contents_getter_;
+  base::RepeatingCallback<content::WebContents*()> web_contents_getter_;
   scoped_refptr<UrlCheckerDelegate> url_checker_delegate_;
   scoped_refptr<SafeBrowsingDatabaseManager> database_manager_;
 
