@@ -494,6 +494,12 @@ class LoadWeatherStory(_LoadingStory):
   TAGS = [story_tags.JAVASCRIPT_HEAVY, story_tags.YEAR_2016]
 
 
+class LoadWeatherStory2019(_LoadingStory):
+  NAME = 'load:tools:weather:2019'
+  URL = 'https://weather.com/en-GB/weather/today/l/USCA0286:1:US'
+  TAGS = [story_tags.JAVASCRIPT_HEAVY, story_tags.YEAR_2019]
+
+
 class LoadDriveStory(_LoadingStory):
   NAME = 'load:tools:drive'
   URL = 'https://drive.google.com/drive/my-drive'

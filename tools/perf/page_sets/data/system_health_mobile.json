@@ -381,6 +381,9 @@
         "load:tools:weather": {
             "DEFAULT": "system_health_mobile_004.wprgo"
         },
+        "load:tools:weather:2019": {
+            "DEFAULT": "system_health_mobile_6045a1ffb8.wprgo"
+        },
         "long_running:tools:gmail-background": {
             "DEFAULT": "system_health_mobile_042.wprgo"
         },

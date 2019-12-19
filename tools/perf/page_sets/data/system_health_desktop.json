@@ -343,6 +343,9 @@
         "load:tools:weather": {
             "DEFAULT": "system_health_desktop_004.wprgo"
         },
+        "load:tools:weather:2019": {
+            "DEFAULT": "system_health_desktop_70d821feeb.wprgo"
+        },
         "load_accessibility:media:wikipedia": {
             "DEFAULT": "system_health_desktop_059.wprgo"
         },
