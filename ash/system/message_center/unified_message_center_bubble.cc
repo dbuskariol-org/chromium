@@ -8,6 +8,7 @@
 
 #include "ash/accessibility/accessibility_controller_impl.h"
 #include "ash/shelf/shelf.h"
+#include "ash/strings/grit/ash_strings.h"
 #include "ash/shell.h"
 #include "ash/style/ash_color_provider.h"
 #include "ash/style/default_color_constants.h"
@@ -17,6 +18,7 @@
 #include "ash/system/unified/unified_system_tray.h"
 #include "ash/system/unified/unified_system_tray_bubble.h"
 #include "ash/system/unified/unified_system_tray_view.h"
+#include "ui/base/l10n/l10n_util.h"
 #include "ui/compositor/paint_recorder.h"
 #include "ui/views/focus/focus_search.h"
 #include "ui/views/widget/widget.h"
@@ -198,6 +200,10 @@ TrayBubbleView* UnifiedMessageCenterBubble::GetBubbleView() const {
 
 views::Widget* UnifiedMessageCenterBubble::GetBubbleWidget() const {
   return bubble_widget_;
+}
+
+base::string16 UnifiedMessageCenterBubble::GetAccessibleNameForBubble() {
+  return l10n_util::GetStringUTF16(IDS_ASH_MESSAGE_CENTER_ACCESSIBLE_NAME);
 }
 
 bool UnifiedMessageCenterBubble::ShouldEnableExtraKeyboardAccessibility() {
