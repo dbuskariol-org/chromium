@@ -1844,6 +1844,10 @@ std::unique_ptr<WebContents> WebContentsImpl::DetachFromOuterWebContents() {
   node_.SetFocusedWebContents(this);
   CreateRenderWidgetHostViewForRenderManager(GetRenderViewHost());
   RecursivelyRegisterFrameSinkIds();
+  // TODO(adithyas): |browser_plugin_embedder_ax_tree_id| should either not be
+  // used for portals, or it should get a different name.
+  GetMainFrame()->set_browser_plugin_embedder_ax_tree_id(ui::AXTreeIDUnknown());
+  GetMainFrame()->UpdateAXTreeData();
   return web_contents;
 }
 
