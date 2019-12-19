@@ -187,6 +187,7 @@ v4l2_memory InputStorageTypeToV4L2Memory(VideoFrame::StorageType storage_type) {
     case VideoFrame::STORAGE_MOJO_SHARED_BUFFER:
       return V4L2_MEMORY_USERPTR;
     case VideoFrame::STORAGE_DMABUFS:
+    case VideoFrame::STORAGE_GPU_MEMORY_BUFFER:
       return V4L2_MEMORY_DMABUF;
     default:
       return static_cast<v4l2_memory>(0);
@@ -236,8 +237,9 @@ std::unique_ptr<ImageProcessorBackend> V4L2ImageProcessor::CreateWithOutputMode(
   // frame for input.
   VideoFrame::StorageType input_storage_type = VideoFrame::STORAGE_UNKNOWN;
   for (auto input_type : input_config.preferred_storage_types) {
-    if (input_type == VideoFrame::STORAGE_DMABUFS ||
-        VideoFrame::IsStorageTypeMappable(input_type)) {
+    v4l2_memory v4l2_memory_type = InputStorageTypeToV4L2Memory(input_type);
+    if (v4l2_memory_type == V4L2_MEMORY_USERPTR ||
+        v4l2_memory_type == V4L2_MEMORY_DMABUF) {
       input_storage_type = input_type;
       break;
     }
@@ -250,7 +252,9 @@ std::unique_ptr<ImageProcessorBackend> V4L2ImageProcessor::CreateWithOutputMode(
   // V4L2ImageProcessor only supports DmaBuf-backed video frame for output.
   VideoFrame::StorageType output_storage_type = VideoFrame::STORAGE_UNKNOWN;
   for (auto output_type : output_config.preferred_storage_types) {
-    if (output_type == VideoFrame::STORAGE_DMABUFS) {
+    v4l2_memory v4l2_memory_type = InputStorageTypeToV4L2Memory(output_type);
+    if (v4l2_memory_type == V4L2_MEMORY_USERPTR ||
+        v4l2_memory_type == V4L2_MEMORY_DMABUF) {
       output_storage_type = output_type;
       break;
     }
