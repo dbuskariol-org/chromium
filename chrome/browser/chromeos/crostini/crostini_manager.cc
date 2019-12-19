@@ -3055,6 +3055,12 @@ void CrostiniManager::OnPendingAppListUpdates(
 
 void CrostiniManager::SuspendImminent(
     power_manager::SuspendImminent::Reason reason) {
+  auto info =
+      GetContainerInfo(kCrostiniDefaultVmName, kCrostiniDefaultContainerName);
+  if (!info || !info->sshfs_mounted) {
+    return;
+  }
+
   // Block suspend and try to unmount sshfs (https://crbug.com/968060).
   auto token = base::UnguessableToken::Create();
   chromeos::PowerManagerClient::Get()->BlockSuspend(token, "CrostiniManager");
