@@ -133,7 +133,7 @@ class MODULES_EXPORT WebRtcAudioDeviceImpl
   // Called on the main render thread.
   void RemoveAudioRenderer(blink::WebRtcAudioRenderer* renderer) override;
   void AudioRendererThreadStopped() override;
-  void SetOutputDeviceForAec(const std::string& output_device_id) override;
+  void SetOutputDeviceForAec(const String& output_device_id) override;
   base::UnguessableToken GetAudioProcessingId() const override;
 
   // blink::WebRtcPlayoutDataSource implementation.
@@ -190,9 +190,7 @@ class MODULES_EXPORT WebRtcAudioDeviceImpl
   Vector<int16_t> render_buffer_;
 
   // The output device used for echo cancellation
-  //
-  // TODO(crbug.com/923394): Replace std::string by WTF::String.
-  std::string output_device_id_for_aec_;
+  String output_device_id_for_aec_;
 
   DISALLOW_COPY_AND_ASSIGN(WebRtcAudioDeviceImpl);
 };
