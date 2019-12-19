@@ -2244,6 +2244,12 @@
       },
     },
   },
+  'weblayer_browsertests': {
+    'remove_from': [
+      # TODO(crbug.com/1034002): Remove this entry once the bug is fixed.
+      'linux-code-coverage',
+    ],
+  },
   'webview_instrumentation_test_apk': {
     'remove_from': [
       # This test frequently fails on Android, https://crbug.com/824959
