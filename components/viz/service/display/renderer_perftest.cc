@@ -246,12 +246,11 @@ class RendererPerfTest : public testing::Test {
  public:
   RendererPerfTest()
       : manager_(&shared_bitmap_manager_),
-        support_(std::make_unique<CompositorFrameSinkSupport>(
-            nullptr,
-            &manager_,
-            kArbitraryFrameSinkId,
-            true /* is_root */,
-            true /* needs_sync_points */)),
+        support_(
+            std::make_unique<CompositorFrameSinkSupport>(nullptr,
+                                                         &manager_,
+                                                         kArbitraryFrameSinkId,
+                                                         true /* is_root */)),
         timer_(/*warmup_laps=*/100,
                /*time_limit=*/TestTimeLimit(),
                /*check_interval=*/10) {}

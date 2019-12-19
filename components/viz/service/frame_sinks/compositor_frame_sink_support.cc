@@ -51,15 +51,13 @@ CompositorFrameSinkSupport::CompositorFrameSinkSupport(
     mojom::CompositorFrameSinkClient* client,
     FrameSinkManagerImpl* frame_sink_manager,
     const FrameSinkId& frame_sink_id,
-    bool is_root,
-    bool needs_sync_tokens)
+    bool is_root)
     : client_(client),
       frame_sink_manager_(frame_sink_manager),
       surface_manager_(frame_sink_manager->surface_manager()),
       frame_sink_id_(frame_sink_id),
       surface_resource_holder_(this),
       is_root_(is_root),
-      needs_sync_tokens_(needs_sync_tokens),
       allow_copy_output_requests_(is_root) {
   // This may result in SetBeginFrameSource() being called.
   frame_sink_manager_->RegisterCompositorFrameSinkSupport(frame_sink_id_, this);
@@ -224,10 +222,6 @@ void CompositorFrameSinkSupport::OnSurfacePresented(
     const gfx::PresentationFeedback& feedback) {
   DidPresentCompositorFrame(frame_token, draw_start_timestamp, swap_timings,
                             feedback);
-}
-
-bool CompositorFrameSinkSupport::NeedsSyncTokens() const {
-  return needs_sync_tokens_;
 }
 
 void CompositorFrameSinkSupport::RefResources(

@@ -247,10 +247,8 @@ RenderPassId SurfaceAggregator::RemapPassId(RenderPassId surface_local_pass_id,
 int SurfaceAggregator::ChildIdForSurface(Surface* surface) {
   auto it = surface_id_to_resource_child_id_.find(surface->surface_id());
   if (it == surface_id_to_resource_child_id_.end()) {
-    int child_id = provider_->CreateChild(
-        base::BindRepeating(&SurfaceAggregator::UnrefResources,
-                            surface->client()),
-        surface->needs_sync_tokens());
+    int child_id = provider_->CreateChild(base::BindRepeating(
+        &SurfaceAggregator::UnrefResources, surface->client()));
     surface_id_to_resource_child_id_[surface->surface_id()] = child_id;
     return child_id;
   } else {

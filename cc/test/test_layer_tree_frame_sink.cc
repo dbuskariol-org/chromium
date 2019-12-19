@@ -106,10 +106,8 @@ bool TestLayerTreeFrameSink::BindToClient(LayerTreeFrameSinkClient* client) {
       compositor_task_runner_);
 
   constexpr bool is_root = true;
-  constexpr bool needs_sync_points = true;
   support_ = std::make_unique<viz::CompositorFrameSinkSupport>(
-      this, frame_sink_manager_.get(), frame_sink_id_, is_root,
-      needs_sync_points);
+      this, frame_sink_manager_.get(), frame_sink_id_, is_root);
   support_->SetWantsAnimateOnlyBeginFrames();
   client_->SetBeginFrameSource(&external_begin_frame_source_);
   if (display_begin_frame_source_) {
