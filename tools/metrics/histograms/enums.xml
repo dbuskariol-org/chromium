@@ -37280,7 +37280,6 @@ from previous Chrome versions.
   <int value="-711991950" label="SiteExplorationUi:enabled"/>
   <int value="-711890895" label="enable-website-settings-manager"/>
   <int value="-709058455" label="ui-slow-animations"/>
-  <int value="-707655322" label="Newblue:disabled"/>
   <int value="-706733351" label="enable-floating-virtual-keyboard:enabled"/>
   <int value="-705746939" label="ChromeDuet:enabled"/>
   <int value="-704232562" label="UseMonitorColorSpace:enabled"/>
@@ -39257,7 +39256,6 @@ from previous Chrome versions.
   <int value="1842219851" label="enable-incognito-window-counter"/>
   <int value="1843088575" label="OutOfBlinkCors:enabled"/>
   <int value="1844110073" label="enable-app-view"/>
-  <int value="1845131710" label="Newblue:enabled"/>
   <int value="1847024354" label="enable-hotword-hardware"/>
   <int value="1849379463" label="OfflinePagesCTV2:enabled"/>
   <int value="1849580433" label="disable-oop-rasterization"/>

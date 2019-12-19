@@ -1343,10 +1343,6 @@ const char kNewUsbBackendName[] = "Enable new USB backend";
 const char kNewUsbBackendDescription[] =
     "Enables the new experimental USB backend for Windows.";
 
-const char kNewblueName[] = "Newblue";
-const char kNewblueDescription[] =
-    "Enables the use of Bluetooth dispatcher daemon.";
-
 const char kNewTabstripAnimationName[] = "New tabstrip animations";
 const char kNewTabstripAnimationDescription[] =
     "New implementation of tabstrip animations.";

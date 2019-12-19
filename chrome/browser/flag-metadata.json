@@ -2631,11 +2631,6 @@
     "expiry_milestone": 83
   },
   {
-    "name": "newblue",
-    "owners": [ "sonnysasaka" ],
-    "expiry_milestone": 81
-  },
-  {
     "name": "no-credit-card-abort",
     "owners": [ "//components/payments/OWNERS" ],
     "expiry_milestone": 79
