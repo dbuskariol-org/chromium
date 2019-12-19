@@ -193,5 +193,6 @@ the instrumented libraries. To do this, add the library dev package to
 Then add `:libdbus-1-3` to
 `//third_party/instrumented_libraries:locally_built`'s `deps`.
 
-TODO(thomasanderson): Add doc to explain how to build and upload instrumented
-libraries.
+See [Linux Instrumented
+Libraries](https://chromium.googlesource.com/chromium/src.git/+/master/docs/linux_instrumented_libraries.md)
+for instructions on building and uploading the instrumented libraries.
