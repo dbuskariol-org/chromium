@@ -52,7 +52,6 @@
 #include "content/public/common/content_constants.h"
 #include "content/public/common/content_features.h"
 #include "content/public/common/content_switches.h"
-#include "content/public/common/page_importance_signals.h"
 #include "content/public/common/page_state.h"
 #include "content/public/common/referrer_type_converters.h"
 #include "content/public/common/three_d_api_types.h"
@@ -136,7 +135,6 @@
 #include "third_party/blink/public/web/web_input_element.h"
 #include "third_party/blink/public/web/web_local_frame.h"
 #include "third_party/blink/public/web/web_navigation_policy.h"
-#include "third_party/blink/public/web/web_page_importance_signals.h"
 #include "third_party/blink/public/web/web_page_popup.h"
 #include "third_party/blink/public/web/web_plugin.h"
 #include "third_party/blink/public/web/web_range.h"
@@ -2027,19 +2025,6 @@ void RenderViewImpl::DidUpdateTextAutosizerPageInfo(
   DCHECK(webview()->MainFrame()->IsWebLocalFrame());
   Send(new ViewHostMsg_NotifyTextAutosizerPageInfoChangedInLocalMainFrame(
       GetRoutingID(), page_info));
-}
-
-void RenderViewImpl::PageImportanceSignalsChanged() {
-  if (!webview() || !main_render_frame_)
-    return;
-
-  auto* web_signals = webview()->PageImportanceSignals();
-
-  PageImportanceSignals signals;
-  signals.had_form_interaction = web_signals->HadFormInteraction();
-
-  main_render_frame_->Send(new FrameHostMsg_UpdatePageImportanceSignals(
-      main_render_frame_->GetRoutingID(), signals));
 }
 
 void RenderViewImpl::DidAutoResize(const blink::WebSize& newSize) {

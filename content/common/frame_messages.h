@@ -40,7 +40,6 @@
 #include "content/public/common/favicon_url.h"
 #include "content/public/common/frame_navigate_params.h"
 #include "content/public/common/javascript_dialog_type.h"
-#include "content/public/common/page_importance_signals.h"
 #include "content/public/common/page_state.h"
 #include "content/public/common/previews_state.h"
 #include "content/public/common/referrer.h"
@@ -292,10 +291,6 @@ IPC_STRUCT_TRAITS_BEGIN(blink::ViewportIntersectionState)
   IPC_STRUCT_TRAITS_MEMBER(viewport_intersection)
   IPC_STRUCT_TRAITS_MEMBER(compositor_visible_rect)
   IPC_STRUCT_TRAITS_MEMBER(occlusion_state)
-IPC_STRUCT_TRAITS_END()
-
-IPC_STRUCT_TRAITS_BEGIN(content::PageImportanceSignals)
-  IPC_STRUCT_TRAITS_MEMBER(had_form_interaction)
 IPC_STRUCT_TRAITS_END()
 
 IPC_STRUCT_TRAITS_BEGIN(content::ResourceLoadTiming)
@@ -1284,10 +1279,6 @@ IPC_MESSAGE_ROUTED0(FrameHostMsg_SavableResourceLinksError)
 IPC_MESSAGE_ROUTED2(FrameHostMsg_SerializedHtmlWithLocalLinksResponse,
                     std::string /* data buffer */,
                     bool /* end of data? */)
-
-// Sent when the renderer updates hint for importance of a tab.
-IPC_MESSAGE_ROUTED1(FrameHostMsg_UpdatePageImportanceSignals,
-                    content::PageImportanceSignals)
 
 // This message is sent from a RenderFrameProxy when sequential focus
 // navigation needs to advance into its actual frame.  |source_routing_id|

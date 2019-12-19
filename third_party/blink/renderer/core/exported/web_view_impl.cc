@@ -301,7 +301,6 @@ WebViewImpl::WebViewImpl(WebViewClient* client,
 
   AllInstances().insert(this);
 
-  page_importance_signals_.SetObserver(client);
   resize_viewport_anchor_ =
       MakeGarbageCollected<ResizeViewportAnchor>(*AsView().page);
 }
@@ -2979,10 +2978,8 @@ void WebViewImpl::DidCommitLoad(bool is_new_navigation,
     should_dispatch_first_layout_after_finished_parsing_ = true;
     should_dispatch_first_layout_after_finished_loading_ = true;
 
-    if (is_new_navigation) {
+    if (is_new_navigation)
       GetPageScaleConstraintsSet().SetNeedsReset(true);
-      page_importance_signals_.OnCommitLoad();
-    }
   }
 
   // Give the visual viewport's scroll layer its initial size.
@@ -3104,10 +3101,6 @@ void WebViewImpl::SetMainFrameOverlayColor(SkColor color) {
   DCHECK(AsView().page->MainFrame());
   if (auto* local_frame = DynamicTo<LocalFrame>(AsView().page->MainFrame()))
     local_frame->SetMainFrameColorOverlay(color);
-}
-
-WebPageImportanceSignals* WebViewImpl::PageImportanceSignals() {
-  return &page_importance_signals_;
 }
 
 Element* WebViewImpl::FocusedElement() const {

@@ -254,7 +254,6 @@ class CONTENT_EXPORT RenderViewImpl : public blink::WebViewClient,
   void PageScaleFactorChanged(float page_scale_factor) override;
   void DidUpdateTextAutosizerPageInfo(
       const blink::WebTextAutosizerPageInfo& page_info) override;
-  void PageImportanceSignalsChanged() override;
   void DidAutoResize(const blink::WebSize& newSize) override;
   void DidFocus(blink::WebLocalFrame* calling_frame) override;
   bool CanHandleGestureEvent() override;

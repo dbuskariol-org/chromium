@@ -3244,6 +3244,8 @@ test("unit_tests") {
     "../browser/performance_manager/persistence/site_data/unittest_utils.cc",
     "../browser/performance_manager/persistence/site_data/unittest_utils.h",
     "../browser/performance_manager/render_process_host_proxy_unittest.cc",
+    "../browser/performance_manager/test_support/page_aggregator.cc",
+    "../browser/performance_manager/test_support/page_aggregator.h",
     "../browser/performance_monitor/metric_evaluator_helper_win_unittest.cc",
     "../browser/performance_monitor/system_monitor_unittest.cc",
     "../browser/permissions/chooser_context_base_mock_permission_observer.cc",
@@ -3509,6 +3511,7 @@ test("unit_tests") {
   if (!is_android) {
     sources += [
       "../browser/profiles/profile_avatar_icon_util_unittest.cc",
+      "../browser/tab_contents/form_interaction_tab_helper_unittest.cc",
       "../browser/ui/autofill/payments/autofill_dialog_models_unittest.cc",
       "../browser/ui/bookmarks/bookmark_editor_unittest.cc",
       "../browser/ui/bookmarks/bookmark_ui_utils_desktop_unittest.cc",

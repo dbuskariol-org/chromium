@@ -108,8 +108,6 @@ class CORE_EXPORT EmptyChromeClient : public ChromeClient {
   void StopDeferringCommits(LocalFrame& main_frame,
                             cc::PaintHoldingCommitTrigger) override {}
 
-  bool HadFormInteraction() const override { return false; }
-
   void StartDragging(LocalFrame*,
                      const WebDragData&,
                      WebDragOperationsMask,
