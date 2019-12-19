@@ -86,8 +86,8 @@ void FillV4L2Vp8EntropyHeader(const Vp8EntropyHeader& vp8_entropy_hdr,
 
 class V4L2VP8Picture : public VP8Picture {
  public:
-  explicit V4L2VP8Picture(const scoped_refptr<V4L2DecodeSurface>& dec_surface)
-      : dec_surface_(dec_surface) {}
+  explicit V4L2VP8Picture(scoped_refptr<V4L2DecodeSurface> dec_surface)
+      : dec_surface_(std::move(dec_surface)) {}
 
   V4L2VP8Picture* AsV4L2VP8Picture() override { return this; }
   scoped_refptr<V4L2DecodeSurface> dec_surface() { return dec_surface_; }
