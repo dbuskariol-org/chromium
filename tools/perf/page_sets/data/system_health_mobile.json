@@ -9,6 +9,9 @@
         "background:news:nytimes": {
             "DEFAULT": "system_health_mobile_052.wprgo"
         },
+        "background:news:nytimes:2019": {
+            "DEFAULT": "system_health_mobile_648270feb3.wprgo"
+        },
         "background:search:google": {
             "DEFAULT": "system_health_mobile_044.wprgo"
         },

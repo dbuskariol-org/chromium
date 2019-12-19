@@ -4,6 +4,7 @@ Story,Description,Platforms,Tags
 background:media:imgur,,mobile,"2016,health_check"
 background:media:imgur:2019,,mobile,"2019,health_check"
 background:news:nytimes,,mobile,"2016,javascript_heavy"
+background:news:nytimes:2019,,mobile,"2019,javascript_heavy"
 background:search:google,,mobile,"2016,health_check"
 background:search:google:2019,,mobile,"2019,health_check"
 background:social:facebook,,mobile,2016
