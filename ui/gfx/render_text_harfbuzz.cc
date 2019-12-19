@@ -1337,10 +1337,13 @@ void ShapeRunWithFont(const ShapeRunWithFontInput& in,
     const SkScalar y_offset =
         HarfBuzzUnitsToSkiaScalar(hb_positions[i].y_offset);
     out->positions[i].set(out->width + x_offset, -y_offset);
-    out->width += (in.glyph_width_for_test > 0)
-                      ? in.glyph_width_for_test
-                      : HarfBuzzUnitsToFloat(hb_positions[i].x_advance) +
-                            in.glyph_spacing;
+
+    if (in.glyph_width_for_test == 0)
+      out->width +=
+          HarfBuzzUnitsToFloat(hb_positions[i].x_advance) + in.glyph_spacing;
+    else if (hb_positions[i].x_advance)  // Leave zero-width glyphs alone.
+      out->width += in.glyph_width_for_test;
+
     // Round run widths if subpixel positioning is off to match native behavior.
     if (!in.render_params.subpixel_positioning)
       out->width = std::round(out->width);
