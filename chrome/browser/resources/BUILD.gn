@@ -186,6 +186,7 @@ if (!is_android) {
     deps = [
       "//chrome/browser/resources/new_tab_page:polymer3_elements",
       "//chrome/browser/ui/webui/new_tab_page:mojo_bindings_js",
+      "//skia/public/mojom:mojom_js",
     ]
 
     # The .grd contains references to generated files.
