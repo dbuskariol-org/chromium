@@ -222,6 +222,9 @@
         "load:news:bbc": {
             "DEFAULT": "system_health_mobile_002.wprgo"
         },
+        "load:news:bbc:2019": {
+            "DEFAULT": "system_health_mobile_ca7928bddd.wprgo"
+        },
         "load:news:cnn": {
             "DEFAULT": "system_health_mobile_006.wprgo"
         },

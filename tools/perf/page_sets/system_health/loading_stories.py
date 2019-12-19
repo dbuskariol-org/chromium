@@ -178,6 +178,13 @@ class LoadBbcDesktopStory2018(_LoadingStory):
   SUPPORTED_PLATFORMS = platforms.DESKTOP_ONLY
 
 
+class LoadBbcMobileStory2019(_LoadingStory):
+  NAME = 'load:news:bbc:2019'
+  URL = 'https://www.bbc.co.uk/news'
+  TAGS = [story_tags.YEAR_2019]
+  SUPPORTED_PLATFORMS = platforms.MOBILE_ONLY
+
+
 class LoadCnnStory2018(_LoadingStory):
   NAME = 'load:news:cnn:2018'
   URL = 'https://edition.cnn.com'
