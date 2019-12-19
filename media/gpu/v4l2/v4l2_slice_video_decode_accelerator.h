@@ -145,7 +145,7 @@ class MEDIA_GPU_EXPORT V4L2SliceVideoDecodeAccelerator
   scoped_refptr<V4L2DecodeSurface> CreateSurface() override;
   // SurfaceReady() uses |decoder_display_queue_| to guarantee that decoding
   // of |dec_surface| happens in order.
-  void SurfaceReady(const scoped_refptr<V4L2DecodeSurface>& dec_surface,
+  void SurfaceReady(scoped_refptr<V4L2DecodeSurface> dec_surface,
                     int32_t bitstream_id,
                     const gfx::Rect& visible_rect,
                     const VideoColorSpace& /* color_space */) override;

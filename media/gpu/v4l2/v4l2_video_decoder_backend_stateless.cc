@@ -349,7 +349,7 @@ void V4L2StatelessVideoDecoderBackend::DecodeSurface(
 }
 
 void V4L2StatelessVideoDecoderBackend::SurfaceReady(
-    const scoped_refptr<V4L2DecodeSurface>& dec_surface,
+    scoped_refptr<V4L2DecodeSurface> dec_surface,
     int32_t bitstream_id,
     const gfx::Rect& visible_rect,
     const VideoColorSpace& /* color_space */) {

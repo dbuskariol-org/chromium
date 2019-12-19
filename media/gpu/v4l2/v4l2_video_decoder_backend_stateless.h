@@ -54,7 +54,7 @@ class V4L2StatelessVideoDecoderBackend : public V4L2VideoDecoderBackend,
                    size_t size) override;
   void DecodeSurface(
       const scoped_refptr<V4L2DecodeSurface>& dec_surface) override;
-  void SurfaceReady(const scoped_refptr<V4L2DecodeSurface>& dec_surface,
+  void SurfaceReady(scoped_refptr<V4L2DecodeSurface> dec_surface,
                     int32_t bitstream_id,
                     const gfx::Rect& visible_rect,
                     const VideoColorSpace& color_space) override;
