@@ -7290,27 +7290,39 @@ TEST_F(RenderTextTest, MissingFlagEmoji) {
   EXPECT_EQ(whole_width, selection_bounds.width());
 }
 
-// Ensures that glyph spacing is correctly applied to obscured texts.
-TEST_F(RenderTextTest, GlyphSpacing) {
+// Ensures that glyph spacing is correctly applied to obscured text.
+TEST_F(RenderTextTest, ObscuredGlyphSpacing) {
   const base::string16 seuss = UTF8ToUTF16("hop on pop");
   RenderTextHarfBuzz* render_text = GetRenderText();
   render_text->SetText(seuss);
   render_text->SetObscured(true);
-  test_api()->EnsureLayout();
-  const internal::TextRunList* run_list = GetHarfBuzzRunList();
-  ASSERT_EQ(1U, run_list->size());
-  internal::TextRunHarfBuzz* run = run_list->runs()[0].get();
-  // The default glyph spacing is zero.
-  EXPECT_EQ(0, render_text->glyph_spacing());
-  ShapeRunWithFont(render_text->text(), Font(), FontRenderParams(), run);
-  const float width_without_glyph_spacing = run->shape.width;
 
-  const float kGlyphSpacing = 5;
-  render_text->set_glyph_spacing(kGlyphSpacing);
-  ShapeRunWithFont(render_text->text(), Font(), FontRenderParams(), run);
-  // The new width is the sum of |width_without_glyph_spacing| and the spacing.
-  const float total_spacing = seuss.length() * kGlyphSpacing;
-  EXPECT_EQ(width_without_glyph_spacing + total_spacing, run->shape.width);
+  // The default glyph spacing is zero.
+  const int width_without_glyph_spacing = render_text->GetStringSize().width();
+  EXPECT_EQ(0, render_text->obscured_glyph_spacing());
+
+  constexpr int kObscuredGlyphSpacing = 5;
+  render_text->SetObscuredGlyphSpacing(kObscuredGlyphSpacing);
+  const int width_with_glyph_spacing = render_text->GetStringSize().width();
+  EXPECT_EQ(kObscuredGlyphSpacing, render_text->obscured_glyph_spacing());
+
+  EXPECT_EQ(width_without_glyph_spacing +
+                static_cast<int>(seuss.length()) * kObscuredGlyphSpacing,
+            width_with_glyph_spacing);
+}
+
+// Ensures that glyph spacing is ignored for non-obscured text.
+TEST_F(RenderTextTest, ObscuredGlyphSpacingOnNonObscuredText) {
+  const base::string16 seuss = UTF8ToUTF16("hop on pop");
+  RenderTextHarfBuzz* render_text = GetRenderText();
+  render_text->SetText(seuss);
+  render_text->SetObscured(false);
+  const int width_without_glyph_spacing = render_text->GetStringSize().width();
+
+  constexpr int kObscuredGlyphSpacing = 5;
+  render_text->SetObscuredGlyphSpacing(kObscuredGlyphSpacing);
+  const int width_with_glyph_spacing = render_text->GetStringSize().width();
+  EXPECT_EQ(width_without_glyph_spacing, width_with_glyph_spacing);
 }
 
 // Ensure font size overrides propagate through to text runs.
