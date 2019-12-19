@@ -38,7 +38,9 @@ class TestObserver : public InputMethodEngineBase::Observer {
   void OnKeyEvent(
       const std::string& engine_id,
       const InputMethodEngineBase::KeyboardEvent& event,
-      ui::IMEEngineHandlerInterface::KeyEventDoneCallback key_data) override {}
+      ui::IMEEngineHandlerInterface::KeyEventDoneCallback callback) override {
+    std::move(callback).Run(/*handled=*/false);
+  }
   void OnInputContextUpdate(
       const ui::IMEEngineHandlerInterface::InputContext& context) override {}
   void OnCandidateClicked(
@@ -130,6 +132,7 @@ class NativeInputMethodEngineTest : public InProcessBrowserTest,
 
 // ID is specified in google_xkb_manifest.json.
 constexpr char kEngineIdVietnameseTelex[] = "vkd_vi_telex";
+constexpr char kEngineIdArabic[] = "vkd_ar";
 
 }  // namespace
 
@@ -180,6 +183,48 @@ IN_PROC_BROWSER_TEST_F(NativeInputMethodEngineTest, VietnameseTelex_Reset) {
   ASSERT_EQ(text_input_client.insert_text_history().size(), 1U);
   EXPECT_EQ(text_input_client.insert_text_history()[0],
             base::ASCIIToUTF16("s"));
+
+  SetFocus(nullptr);
+}
+
+IN_PROC_BROWSER_TEST_F(NativeInputMethodEngineTest, SwitchActiveController) {
+  // Swap between two controllers.
+  engine_.Enable(kEngineIdVietnameseTelex);
+  engine_.FlushForTesting();
+  engine_.Disable();
+  engine_.Enable(kEngineIdArabic);
+  engine_.FlushForTesting();
+
+  // Create a fake text field.
+  ui::DummyTextInputClient text_input_client(ui::TEXT_INPUT_TYPE_TEXT);
+  SetFocus(&text_input_client);
+
+  DispatchKeyPress(ui::VKEY_A);
+
+  // Expect to commit 'ش'.
+  ASSERT_EQ(text_input_client.composition_history().size(), 0U);
+  ASSERT_EQ(text_input_client.insert_text_history().size(), 1U);
+  EXPECT_EQ(text_input_client.insert_text_history()[0],
+            base::UTF8ToUTF16(u8"ش"));
+
+  SetFocus(nullptr);
+}
+
+IN_PROC_BROWSER_TEST_F(NativeInputMethodEngineTest, NoActiveController) {
+  engine_.Enable(kEngineIdVietnameseTelex);
+  engine_.FlushForTesting();
+  engine_.Disable();
+
+  // Create a fake text field.
+  ui::DummyTextInputClient text_input_client(ui::TEXT_INPUT_TYPE_TEXT);
+  SetFocus(&text_input_client);
+
+  DispatchKeyPress(ui::VKEY_A);
+  engine_.Reset();
+
+  // Expect no changes.
+  ASSERT_EQ(text_input_client.composition_history().size(), 0U);
+  ASSERT_EQ(text_input_client.insert_text_history().size(), 0U);
 
   SetFocus(nullptr);
 }

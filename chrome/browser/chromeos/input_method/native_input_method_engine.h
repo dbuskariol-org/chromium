@@ -99,7 +99,10 @@ class NativeInputMethodEngine : public InputMethodEngine {
    private:
     // Called when this is connected to the input engine. |bound| indicates
     // the success of the connection.
-    void OnConnected(bool bound);
+    void OnConnected(base::Time start, bool bound);
+
+    // Called when there's a connection error.
+    void OnError(base::Time start);
 
     // Called when a key press is processed by Mojo.
     void OnKeyEventResponse(

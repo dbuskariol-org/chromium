@@ -6,6 +6,7 @@
 #include "base/feature_list.h"
 #include "base/i18n/i18n_constants.h"
 #include "base/i18n/icu_string_conversions.h"
+#include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
@@ -33,6 +34,24 @@ std::string NormalizeString(const std::string& str) {
   std::string normalized_str;
   base::ConvertToUtf8AndNormalize(str, base::kCodepageUTF8, &normalized_str);
   return normalized_str;
+}
+
+enum class ImeServiceEvent {
+  kUnknown = 0,
+  kInitSuccess = 1,
+  kInitFailed = 2,
+  kActivateImeSuccess = 3,
+  kActivateImeFailed = 4,
+  kServiceDisconnected = 5,
+  kMaxValue = kServiceDisconnected
+};
+
+void LogEvent(ImeServiceEvent event) {
+  UMA_HISTOGRAM_ENUMERATION("InputMethod.Mojo.Extension.Event", event);
+}
+
+void LogLatency(const char* name, const base::TimeDelta& latency) {
+  base::UmaHistogramCustomCounts(name, latency.InMilliseconds(), 0, 1000, 50);
 }
 
 }  // namespace
@@ -70,8 +89,18 @@ NativeInputMethodEngine::GetNativeObserver() const {
 NativeInputMethodEngine::ImeObserver::ImeObserver(
     std::unique_ptr<InputMethodEngineBase::Observer> base_observer)
     : base_observer_(std::move(base_observer)), receiver_from_engine_(this) {
-  input_method::InputMethodManager::Get()->ConnectInputEngineManager(
+  auto* ime_manager = input_method::InputMethodManager::Get();
+
+  const auto start = base::Time::Now();
+  ime_manager->ConnectInputEngineManager(
       remote_manager_.BindNewPipeAndPassReceiver());
+  LogLatency("InputMethod.Mojo.Extension.ServiceInitLatency",
+             base::Time::Now() - start);
+
+  remote_manager_.set_disconnect_handler(base::BindOnce(
+      &ImeObserver::OnError, base::Unretained(this), base::Time::Now()));
+
+  LogEvent(ImeServiceEvent::kInitSuccess);
 }
 
 NativeInputMethodEngine::ImeObserver::~ImeObserver() = default;
@@ -83,10 +112,16 @@ void NativeInputMethodEngine::ImeObserver::OnActivate(
     // manifest, but the InputEngineManager expects the prefix "m17n:".
     // TODO(https://crbug.com/1012490): Migrate to m17n prefix and remove this.
     const auto new_engine_id = "m17n:" + engine_id.substr(4);
+
+    // Deactivate any existing engine.
+    remote_to_engine_.reset();
+    receiver_from_engine_.reset();
+
     remote_manager_->ConnectToImeEngine(
         new_engine_id, remote_to_engine_.BindNewPipeAndPassReceiver(),
         receiver_from_engine_.BindNewPipeAndPassRemote(), {},
-        base::BindOnce(&ImeObserver::OnConnected, base::Unretained(this)));
+        base::BindOnce(&ImeObserver::OnConnected, base::Unretained(this),
+                       base::Time::Now()));
   }
   base_observer_->OnActivate(engine_id);
 }
@@ -104,7 +139,7 @@ void NativeInputMethodEngine::ImeObserver::OnKeyEvent(
     const std::string& engine_id,
     const InputMethodEngineBase::KeyboardEvent& event,
     ui::IMEEngineHandlerInterface::KeyEventDoneCallback callback) {
-  if (ShouldEngineUseMojo(engine_id)) {
+  if (ShouldEngineUseMojo(engine_id) && remote_to_engine_.is_bound()) {
     remote_to_engine_->ProcessKeypressForRulebased(
         ime::mojom::KeypressInfoForRulebased::New(
             event.type, event.code, event.shift_key, event.altgr_key,
@@ -118,7 +153,7 @@ void NativeInputMethodEngine::ImeObserver::OnKeyEvent(
 
 void NativeInputMethodEngine::ImeObserver::OnReset(
     const std::string& engine_id) {
-  if (ShouldEngineUseMojo(engine_id)) {
+  if (ShouldEngineUseMojo(engine_id) && remote_to_engine_.is_bound()) {
     remote_to_engine_->ResetForRulebased();
   }
   base_observer_->OnReset(engine_id);
@@ -126,6 +161,9 @@ void NativeInputMethodEngine::ImeObserver::OnReset(
 
 void NativeInputMethodEngine::ImeObserver::OnDeactivated(
     const std::string& engine_id) {
+  if (ShouldEngineUseMojo(engine_id)) {
+    remote_to_engine_.reset();
+  }
   base_observer_->OnDeactivated(engine_id);
 }
 
@@ -169,21 +207,41 @@ void NativeInputMethodEngine::ImeObserver::OnScreenProjectionChanged(
 
 void NativeInputMethodEngine::ImeObserver::FlushForTesting() {
   remote_manager_.FlushForTesting();
-  receiver_from_engine_.FlushForTesting();
-  remote_to_engine_.FlushForTesting();
+  if (remote_to_engine_.is_bound())
+    receiver_from_engine_.FlushForTesting();
+  if (remote_to_engine_.is_bound())
+    remote_to_engine_.FlushForTesting();
 }
 
-void NativeInputMethodEngine::ImeObserver::OnConnected(bool bound) {
+void NativeInputMethodEngine::ImeObserver::OnConnected(base::Time start,
+                                                       bool bound) {
+  LogLatency("InputMethod.Mojo.Extension.ActivateIMELatency",
+             base::Time::Now() - start);
+  LogEvent(bound ? ImeServiceEvent::kActivateImeSuccess
+                 : ImeServiceEvent::kActivateImeSuccess);
+
   connected_to_engine_ = bound;
+}
+
+void NativeInputMethodEngine::ImeObserver::OnError(base::Time start) {
+  LOG(ERROR) << "IME Service connection error";
+
+  // If the Mojo pipe disconnection happens in 1000 ms after the service
+  // is initialized, we consider it as a failure. Normally it's caused
+  // by the Mojo service itself or misconfigured on Chrome OS.
+  if (base::Time::Now() - start < base::TimeDelta::FromMilliseconds(1000)) {
+    LogEvent(ImeServiceEvent::kInitFailed);
+  } else {
+    LogEvent(ImeServiceEvent::kServiceDisconnected);
+  }
 }
 
 void NativeInputMethodEngine::ImeObserver::OnKeyEventResponse(
     base::Time start,
     ui::IMEEngineHandlerInterface::KeyEventDoneCallback callback,
     ime::mojom::KeypressResponseForRulebasedPtr response) {
-  UMA_HISTOGRAM_CUSTOM_COUNTS(
-      "InputMethod.Mojo.Extension.Rulebased.ProcessLatency",
-      (base::Time::Now() - start).InMilliseconds(), 0, 1000, 50);
+  LogLatency("InputMethod.Mojo.Extension.Rulebased.ProcessLatency",
+             base::Time::Now() - start);
 
   for (const auto& op : response->operations) {
     switch (op->method) {
