@@ -12,7 +12,6 @@
 #include <utility>
 #include <vector>
 
-#include "base/bind.h"
 #include "base/values.h"
 #include "third_party/blink/public/common/thread_safe_browser_interface_broker_proxy.h"
 #include "third_party/blink/public/platform/platform.h"
@@ -28,11 +27,35 @@
 #include "third_party/blink/renderer/platform/peerconnection/rtc_ice_candidate_platform.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_offer_options_platform.h"
 #include "third_party/blink/renderer/platform/peerconnection/rtc_peer_connection_handler_client.h"
+#include "third_party/blink/renderer/platform/scheduler/public/post_cross_thread_task.h"
 #include "third_party/blink/renderer/platform/scheduler/public/thread.h"
+#include "third_party/blink/renderer/platform/wtf/cross_thread_functional.h"
 #include "third_party/blink/renderer/platform/wtf/text/string_builder.h"
 
 using webrtc::StatsReport;
 using webrtc::StatsReports;
+
+namespace blink {
+class InternalStandardStatsObserver;
+}
+
+namespace WTF {
+
+template <>
+struct CrossThreadCopier<scoped_refptr<blink::InternalStandardStatsObserver>>
+    : public CrossThreadCopierPassThrough<
+          scoped_refptr<blink::InternalStandardStatsObserver>> {
+  STATIC_ONLY(CrossThreadCopier);
+};
+
+template <typename T>
+struct CrossThreadCopier<rtc::scoped_refptr<T>> {
+  STATIC_ONLY(CrossThreadCopier);
+  using Type = rtc::scoped_refptr<T>;
+  static Type Copy(Type pointer) { return pointer; }
+};
+
+}  // namespace WTF
 
 namespace blink {
 
@@ -490,14 +513,13 @@ class InternalLegacyStatsObserver : public webrtc::StatsObserver {
   InternalLegacyStatsObserver(
       int lid,
       scoped_refptr<base::SingleThreadTaskRunner> main_thread,
-      base::OnceCallback<void(int, base::Value)> completion_callback)
+      CrossThreadOnceFunction<void(int, base::Value)> completion_callback)
       : lid_(lid),
         main_thread_(std::move(main_thread)),
         completion_callback_(std::move(completion_callback)) {}
 
   void OnComplete(const StatsReports& reports) override {
-    std::unique_ptr<base::ListValue> list(new base::ListValue());
-
+    auto list = std::make_unique<base::ListValue>();
     for (const auto* r : reports) {
       std::unique_ptr<base::DictionaryValue> report = GetDictValue(*r);
       if (report)
@@ -505,11 +527,11 @@ class InternalLegacyStatsObserver : public webrtc::StatsObserver {
     }
 
     if (!list->empty()) {
-      main_thread_->PostTask(
-          FROM_HERE,
-          base::BindOnce(&InternalLegacyStatsObserver::OnCompleteImpl,
-                         std::move(list), lid_,
-                         std::move(completion_callback_)));
+      PostCrossThreadTask(
+          *main_thread_.get(), FROM_HERE,
+          CrossThreadBindOnce(&InternalLegacyStatsObserver::OnCompleteImpl,
+                              std::move(list), lid_,
+                              std::move(completion_callback_)));
     }
   }
 
@@ -527,14 +549,14 @@ class InternalLegacyStatsObserver : public webrtc::StatsObserver {
   static void OnCompleteImpl(
       std::unique_ptr<base::ListValue> list,
       int lid,
-      base::OnceCallback<void(int, base::Value)> completion_callback) {
+      CrossThreadOnceFunction<void(int, base::Value)> completion_callback) {
     DCHECK(!list->empty());
     std::move(completion_callback).Run(lid, std::move(*list.get()));
   }
 
   const int lid_;
   const scoped_refptr<base::SingleThreadTaskRunner> main_thread_;
-  base::OnceCallback<void(int, base::Value)> completion_callback_;
+  CrossThreadOnceFunction<void(int, base::Value)> completion_callback_;
 };
 
 // chrome://webrtc-internals displays stats and stats graphs. The call path
@@ -547,7 +569,7 @@ class InternalStandardStatsObserver : public webrtc::RTCStatsCollectorCallback {
   InternalStandardStatsObserver(
       int lid,
       scoped_refptr<base::SingleThreadTaskRunner> main_thread,
-      base::OnceCallback<void(int, base::Value)> completion_callback)
+      CrossThreadOnceFunction<void(int, base::Value)> completion_callback)
       : lid_(lid),
         main_thread_(std::move(main_thread)),
         completion_callback_(std::move(completion_callback)) {}
@@ -556,9 +578,9 @@ class InternalStandardStatsObserver : public webrtc::RTCStatsCollectorCallback {
       const rtc::scoped_refptr<const webrtc::RTCStatsReport>& report) override {
     // We're on the signaling thread.
     DCHECK(!main_thread_->BelongsToCurrentThread());
-    main_thread_->PostTask(
-        FROM_HERE,
-        base::BindOnce(
+    PostCrossThreadTask(
+        *main_thread_.get(), FROM_HERE,
+        CrossThreadBindOnce(
             &InternalStandardStatsObserver::OnStatsDeliveredOnMainThread,
             scoped_refptr<InternalStandardStatsObserver>(this), report));
   }
@@ -637,7 +659,7 @@ class InternalStandardStatsObserver : public webrtc::RTCStatsCollectorCallback {
 
   const int lid_;
   const scoped_refptr<base::SingleThreadTaskRunner> main_thread_;
-  base::OnceCallback<void(int, base::Value)> completion_callback_;
+  CrossThreadOnceFunction<void(int, base::Value)> completion_callback_;
 };
 
 // static
@@ -707,8 +729,8 @@ void PeerConnectionTracker::GetStandardStats() {
     scoped_refptr<InternalStandardStatsObserver> observer(
         new rtc::RefCountedObject<InternalStandardStatsObserver>(
             pair.second, main_thread_task_runner_,
-            base::BindOnce(&PeerConnectionTracker::AddStandardStats,
-                           AsWeakPtr())));
+            CrossThreadBindOnce(&PeerConnectionTracker::AddStandardStats,
+                                AsWeakPtr())));
     pair.first->GetStandardStatsForTracker(observer);
   }
 }
@@ -720,8 +742,8 @@ void PeerConnectionTracker::GetLegacyStats() {
     rtc::scoped_refptr<InternalLegacyStatsObserver> observer(
         new rtc::RefCountedObject<InternalLegacyStatsObserver>(
             pair.second, main_thread_task_runner_,
-            base::BindOnce(&PeerConnectionTracker::AddLegacyStats,
-                           AsWeakPtr())));
+            CrossThreadBindOnce(&PeerConnectionTracker::AddLegacyStats,
+                                AsWeakPtr())));
     pair.first->GetStats(
         observer, webrtc::PeerConnectionInterface::kStatsOutputLevelDebug,
         nullptr);
