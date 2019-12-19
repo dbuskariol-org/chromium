@@ -61,11 +61,13 @@ namespace blink {
 
 // TODO(hta): This module should be redesigned to reduce string copies.
 
-static String SerializeBoolean(bool value) {
+namespace {
+
+String SerializeBoolean(bool value) {
   return value ? "true" : "false";
 }
 
-static String SerializeServers(
+String SerializeServers(
     const std::vector<webrtc::PeerConnectionInterface::IceServer>& servers) {
   StringBuilder result;
   result.Append("[");
@@ -85,12 +87,12 @@ static String SerializeServers(
   return result.ToString();
 }
 
-static String SerializeMediaConstraints(
+String SerializeMediaConstraints(
     const blink::WebMediaConstraints& constraints) {
   return String(constraints.ToString());
 }
 
-static String SerializeOfferOptions(blink::RTCOfferOptionsPlatform* options) {
+String SerializeOfferOptions(blink::RTCOfferOptionsPlatform* options) {
   if (!options)
     return "null";
 
@@ -106,7 +108,7 @@ static String SerializeOfferOptions(blink::RTCOfferOptionsPlatform* options) {
   return result.ToString();
 }
 
-static String SerializeAnswerOptions(blink::RTCAnswerOptionsPlatform* options) {
+String SerializeAnswerOptions(blink::RTCAnswerOptionsPlatform* options) {
   if (!options)
     return "null";
 
@@ -116,8 +118,7 @@ static String SerializeAnswerOptions(blink::RTCAnswerOptionsPlatform* options) {
   return result.ToString();
 }
 
-static String SerializeMediaStreamIds(
-    const blink::WebVector<String>& stream_ids) {
+String SerializeMediaStreamIds(const blink::WebVector<String>& stream_ids) {
   if (!stream_ids.size())
     return "[]";
   StringBuilder result;
@@ -133,7 +134,7 @@ static String SerializeMediaStreamIds(
   return result.ToString();
 }
 
-static String SerializeDirection(webrtc::RtpTransceiverDirection direction) {
+String SerializeDirection(webrtc::RtpTransceiverDirection direction) {
   switch (direction) {
     case webrtc::RtpTransceiverDirection::kSendRecv:
       return "'sendrecv'";
@@ -146,13 +147,13 @@ static String SerializeDirection(webrtc::RtpTransceiverDirection direction) {
   }
 }
 
-static String SerializeOptionalDirection(
+String SerializeOptionalDirection(
     const base::Optional<webrtc::RtpTransceiverDirection>& direction) {
   return direction ? SerializeDirection(*direction) : "null";
 }
 
-static String SerializeSender(const String& indent,
-                              const blink::RTCRtpSenderPlatform& sender) {
+String SerializeSender(const String& indent,
+                       const blink::RTCRtpSenderPlatform& sender) {
   StringBuilder result;
   result.Append("{\n");
   // track:'id',
@@ -176,8 +177,8 @@ static String SerializeSender(const String& indent,
   return result.ToString();
 }
 
-static String SerializeReceiver(const String& indent,
-                                const RTCRtpReceiverPlatform& receiver) {
+String SerializeReceiver(const String& indent,
+                         const RTCRtpReceiverPlatform& receiver) {
   StringBuilder result;
   result.Append("{\n");
   // track:'id',
@@ -196,8 +197,7 @@ static String SerializeReceiver(const String& indent,
   return result.ToString();
 }
 
-static String SerializeTransceiver(
-    const RTCRtpTransceiverPlatform& transceiver) {
+String SerializeTransceiver(const RTCRtpTransceiverPlatform& transceiver) {
   if (transceiver.ImplementationType() ==
       RTCRtpTransceiverPlatformImplementationType::kFullTransceiver) {
     StringBuilder result;
@@ -242,7 +242,7 @@ static String SerializeTransceiver(
   return SerializeReceiver("", *transceiver.Receiver());
 }
 
-static String SerializeIceTransportType(
+String SerializeIceTransportType(
     webrtc::PeerConnectionInterface::IceTransportsType type) {
   String transport_type("");
   switch (type) {
@@ -264,7 +264,7 @@ static String SerializeIceTransportType(
   return transport_type;
 }
 
-static String SerializeBundlePolicy(
+String SerializeBundlePolicy(
     webrtc::PeerConnectionInterface::BundlePolicy policy) {
   String policy_str("");
   switch (policy) {
@@ -283,7 +283,7 @@ static String SerializeBundlePolicy(
   return policy_str;
 }
 
-static String SerializeRtcpMuxPolicy(
+String SerializeRtcpMuxPolicy(
     webrtc::PeerConnectionInterface::RtcpMuxPolicy policy) {
   String policy_str("");
   switch (policy) {
@@ -299,7 +299,7 @@ static String SerializeRtcpMuxPolicy(
   return policy_str;
 }
 
-static String SerializeSdpSemantics(webrtc::SdpSemantics sdp_semantics) {
+String SerializeSdpSemantics(webrtc::SdpSemantics sdp_semantics) {
   String sdp_semantics_str("");
   switch (sdp_semantics) {
     case webrtc::SdpSemantics::kPlanB:
@@ -314,7 +314,7 @@ static String SerializeSdpSemantics(webrtc::SdpSemantics sdp_semantics) {
   return sdp_semantics_str;
 }
 
-static String SerializeConfiguration(
+String SerializeConfiguration(
     const webrtc::PeerConnectionInterface::RTCConfiguration& config) {
   StringBuilder result;
   // TODO(hbos): Add serialization of certificate.
@@ -338,7 +338,7 @@ static String SerializeConfiguration(
 // peer_connection_update_table.js, in order to be displayed as friendly
 // strings on chrome://webrtc-internals.
 
-static const char* GetSignalingStateString(
+const char* GetSignalingStateString(
     webrtc::PeerConnectionInterface::SignalingState state) {
   const char* result = "";
   switch (state) {
@@ -361,7 +361,7 @@ static const char* GetSignalingStateString(
   return result;
 }
 
-static const char* GetIceConnectionStateString(
+const char* GetIceConnectionStateString(
     webrtc::PeerConnectionInterface::IceConnectionState state) {
   switch (state) {
     case webrtc::PeerConnectionInterface::kIceConnectionNew:
@@ -384,7 +384,7 @@ static const char* GetIceConnectionStateString(
   }
 }
 
-static const char* GetConnectionStateString(
+const char* GetConnectionStateString(
     webrtc::PeerConnectionInterface::PeerConnectionState state) {
   switch (state) {
     case webrtc::PeerConnectionInterface::PeerConnectionState::kNew:
@@ -405,7 +405,7 @@ static const char* GetConnectionStateString(
   }
 }
 
-static const char* GetIceGatheringStateString(
+const char* GetIceGatheringStateString(
     webrtc::PeerConnectionInterface::IceGatheringState state) {
   switch (state) {
     case webrtc::PeerConnectionInterface::kIceGatheringNew:
@@ -420,7 +420,7 @@ static const char* GetIceGatheringStateString(
   }
 }
 
-static const char* GetTransceiverUpdatedReasonString(
+const char* GetTransceiverUpdatedReasonString(
     PeerConnectionTracker::TransceiverUpdatedReason reason) {
   switch (reason) {
     case PeerConnectionTracker::TransceiverUpdatedReason::kAddTransceiver:
@@ -442,7 +442,7 @@ static const char* GetTransceiverUpdatedReasonString(
 // Note:
 // The format must be consistent with what webrtc_internals.js expects.
 // If you change it here, you must change webrtc_internals.js as well.
-static std::unique_ptr<base::DictionaryValue> GetDictValueStats(
+std::unique_ptr<base::DictionaryValue> GetDictValueStats(
     const StatsReport& report) {
   if (report.values().empty())
     return nullptr;
@@ -486,8 +486,7 @@ static std::unique_ptr<base::DictionaryValue> GetDictValueStats(
 
 // Builds a DictionaryValue from the StatsReport.
 // The caller takes the ownership of the returned value.
-static std::unique_ptr<base::DictionaryValue> GetDictValue(
-    const StatsReport& report) {
+std::unique_ptr<base::DictionaryValue> GetDictValue(const StatsReport& report) {
   std::unique_ptr<base::DictionaryValue> stats = GetDictValueStats(report);
   if (!stats)
     return nullptr;
@@ -502,6 +501,8 @@ static std::unique_ptr<base::DictionaryValue> GetDictValue(
 
   return result;
 }
+
+}  // namespace
 
 // chrome://webrtc-internals displays stats and stats graphs. The call path
 // involves thread and process hops (IPC). This is the webrtc::StatsObserver
