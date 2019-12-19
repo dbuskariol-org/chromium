@@ -2597,8 +2597,8 @@
   },
   {
     "name": "mouse-subframe-no-implicit-capture",
-    "owners": [ "eirage", "input-dev" ],
-    "expiry_milestone": 78
+    "owners": [ "eirage", "nzolghadr", "input-dev" ],
+    "expiry_milestone": 84
   },
   {
     "name": "native-file-system-api",
