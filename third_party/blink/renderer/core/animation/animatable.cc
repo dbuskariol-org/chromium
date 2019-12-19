@@ -5,6 +5,7 @@
 #include "third_party/blink/renderer/core/animation/animatable.h"
 
 #include "third_party/blink/renderer/bindings/core/v8/unrestricted_double_or_keyframe_animation_options.h"
+#include "third_party/blink/renderer/bindings/core/v8/unrestricted_double_or_keyframe_effect_options.h"
 #include "third_party/blink/renderer/core/animation/animation.h"
 #include "third_party/blink/renderer/core/animation/document_animations.h"
 #include "third_party/blink/renderer/core/animation/document_timeline.h"
@@ -41,6 +42,17 @@ void ReportFeaturePolicyViolationsIfNecessary(
   }
 }
 
+UnrestrictedDoubleOrKeyframeEffectOptions CoerceEffectOptions(
+    UnrestrictedDoubleOrKeyframeAnimationOptions options) {
+  if (options.IsKeyframeAnimationOptions()) {
+    return UnrestrictedDoubleOrKeyframeEffectOptions::FromKeyframeEffectOptions(
+        options.GetAsKeyframeAnimationOptions());
+  } else {
+    return UnrestrictedDoubleOrKeyframeEffectOptions::FromUnrestrictedDouble(
+        options.GetAsUnrestrictedDouble());
+  }
+}
+
 }  // namespace
 
 Animation* Animatable::animate(
@@ -48,25 +60,16 @@ Animation* Animatable::animate(
     const ScriptValue& keyframes,
     const UnrestrictedDoubleOrKeyframeAnimationOptions& options,
     ExceptionState& exception_state) {
-  EffectModel::CompositeOperation composite = EffectModel::kCompositeReplace;
-  if (options.IsKeyframeAnimationOptions()) {
-    composite = EffectModel::StringToCompositeOperation(
-                    options.GetAsKeyframeAnimationOptions()->composite())
-                    .value();
-  }
-
   Element* element = GetAnimationTarget();
-  KeyframeEffectModelBase* effect = EffectInput::Convert(
-      element, keyframes, composite, script_state, exception_state);
+  KeyframeEffect* effect =
+      KeyframeEffect::Create(script_state, element, keyframes,
+                             CoerceEffectOptions(options), exception_state);
   if (exception_state.HadException())
     return nullptr;
 
-  Timing timing =
-      TimingInput::Convert(options, &element->GetDocument(), exception_state);
-  if (exception_state.HadException())
-    return nullptr;
-
-  Animation* animation = animateInternal(*element, effect, timing);
+  ReportFeaturePolicyViolationsIfNecessary(element->GetDocument(),
+                                           *effect->Model());
+  Animation* animation = element->GetDocument().Timeline().Play(effect);
   if (options.IsKeyframeAnimationOptions())
     animation->setId(options.GetAsKeyframeAnimationOptions()->id());
   return animation;
@@ -76,12 +79,14 @@ Animation* Animatable::animate(ScriptState* script_state,
                                const ScriptValue& keyframes,
                                ExceptionState& exception_state) {
   Element* element = GetAnimationTarget();
-  KeyframeEffectModelBase* effect =
-      EffectInput::Convert(element, keyframes, EffectModel::kCompositeReplace,
-                           script_state, exception_state);
+  KeyframeEffect* effect =
+      KeyframeEffect::Create(script_state, element, keyframes, exception_state);
   if (exception_state.HadException())
     return nullptr;
-  return animateInternal(*element, effect, Timing());
+
+  ReportFeaturePolicyViolationsIfNecessary(element->GetDocument(),
+                                           *effect->Model());
+  return element->GetDocument().Timeline().Play(effect);
 }
 
 HeapVector<Member<Animation>> Animatable::getAnimations(
@@ -111,15 +116,6 @@ HeapVector<Member<Animation>> Animatable::getAnimations(
     }
   }
   return animations;
-}
-
-Animation* Animatable::animateInternal(Element& element,
-                                       KeyframeEffectModelBase* effect,
-                                       const Timing& timing) {
-  ReportFeaturePolicyViolationsIfNecessary(element.GetDocument(), *effect);
-  auto* keyframe_effect =
-      MakeGarbageCollected<KeyframeEffect>(&element, effect, timing);
-  return element.GetDocument().Timeline().Play(keyframe_effect);
 }
 
 }  // namespace blink
