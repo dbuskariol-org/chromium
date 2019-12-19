@@ -58,9 +58,8 @@ if (public_android_sdk) {
     }
 
     uncompress_dex = true
-    static_library_provider = "//chrome/android:trichrome_library_apk"
-    if (!is_java_debug) {
-      static_library_synchronized_proguard = trichrome_synchronized_proguard
+    if (trichrome_synchronized_proguard) {
+      static_library_provider = "//chrome/android:trichrome_library_apk"
     }
   }
 
@@ -79,7 +78,9 @@ if (public_android_sdk) {
       deps = upstream_only_webview_deps
       apk_name = "TrichromeWebView6432"
       uncompress_dex = true
-      static_library_provider = "//chrome/android:trichrome_library_64_32_apk"
+      if (trichrome_synchronized_proguard) {
+        static_library_provider = "//chrome/android:trichrome_library_apk"
+      }
     }
   }
 }
