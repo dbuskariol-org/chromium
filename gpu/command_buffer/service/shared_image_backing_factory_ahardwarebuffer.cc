@@ -455,6 +455,9 @@ SharedImageBackingAHB::SharedImageBackingAHB(
 }
 
 SharedImageBackingAHB::~SharedImageBackingAHB() {
+  // Locking here in destructor since we are accessing member variable
+  // |have_context_| via have_context().
+  AutoLock auto_lock(this);
   DCHECK(hardware_buffer_handle_.is_valid());
   if (legacy_texture_) {
     legacy_texture_->RemoveLightweightRef(have_context());
@@ -502,9 +505,13 @@ bool SharedImageBackingAHB::ProduceLegacyMailbox(
   legacy_texture_ = GenGLTexture();
   if (!legacy_texture_)
     return false;
-  // Make sure our |legacy_texture_| has the right initial cleared rect.
-  legacy_texture_->SetLevelClearedRect(legacy_texture_->target(), 0,
-                                       ClearedRectInternal());
+  {
+    // Lock here to access |cleared_rect_| via ClearedRectInternal().
+    AutoLock auto_lock(this);
+    // Make sure our |legacy_texture_| has the right initial cleared rect.
+    legacy_texture_->SetLevelClearedRect(legacy_texture_->target(), 0,
+                                         ClearedRectInternal());
+  }
   mailbox_manager->ProduceTexture(mailbox(), legacy_texture_);
   return true;
 }
