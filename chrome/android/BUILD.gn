@@ -183,7 +183,9 @@ android_resources("chrome_download_java_resources") {
 }
 
 android_library("app_hooks_java") {
-  java_files = [ app_hooks_impl ]
+  sources = [
+    app_hooks_impl,
+  ]
   deps = [
     ":chrome_java",
   ]
@@ -211,7 +213,9 @@ java_cpp_template("vr_build_config") {
 # This prevents a cyclic dependency for features depending on the compositor.
 # TODO(crbug.com/846440): Move this to features/compositor when ready.
 android_library("chrome_public_java") {
-  java_files = [ "//chrome/android/java/src/org/chromium/chrome/browser/compositor/CompositorViewResizer.java" ]
+  sources = [
+    "//chrome/android/java/src/org/chromium/chrome/browser/compositor/CompositorViewResizer.java",
+  ]
   deps = [
     "//third_party/android_deps:androidx_annotation_annotation_java",
   ]
@@ -427,19 +431,19 @@ android_library("chrome_java") {
   android_manifest_for_lint = chrome_public_android_manifest
 
   # From java_sources.gni.
-  java_files = chrome_java_sources + [
-                 app_hooks_impl,
-                 _chrome_version_java_file,
-               ]
+  sources = chrome_java_sources + [
+              app_hooks_impl,
+              _chrome_version_java_file,
+            ]
 
   # Include sources from feed_java_sources.gni.
-  java_files += feed_java_sources
+  sources += feed_java_sources
   srcjar_deps += feed_srcjar_deps
 
-  java_files += public_vr_java_sources
+  sources += public_vr_java_sources
 
   # Include sources from public_tab_management_java_sources.gni.
-  java_files += public_tab_management_java_sources
+  sources += public_tab_management_java_sources
 
   if (enable_vr) {
     deps += [ ":chrome_vr_java_resources" ]
@@ -466,7 +470,7 @@ android_library("chrome_java") {
 
   # TODO(gayane): Instead of adding source files, add it as a separate
   # dependency when circular deps is resolved.
-  java_files += share_java_sources
+  sources += share_java_sources
 }
 
 generate_product_config_srcjar("chrome_product_config") {
@@ -632,7 +636,7 @@ java_cpp_template("resource_id_javagen") {
 
 junit_binary("chrome_junit_tests") {
   # From java_sources.gni.
-  java_files = chrome_junit_test_java_sources
+  sources = chrome_junit_test_java_sources
 
   deps = [
     ":app_hooks_java",
@@ -714,7 +718,7 @@ process_version("chrome_version_constants") {
 android_library("chrome_test_util_java") {
   testonly = true
 
-  java_files = [
+  sources = [
     "javatests/src/org/chromium/chrome/browser/customtabs/CustomTabActivityTestRule.java",
     "javatests/src/org/chromium/chrome/browser/customtabs/CustomTabsTestUtils.java",
     "javatests/src/org/chromium/chrome/browser/directactions/FakeDirectActionReporter.java",
@@ -746,7 +750,7 @@ android_library("chrome_test_java") {
   testonly = true
 
   # From java_sources.gni.
-  java_files = chrome_test_java_sources
+  sources = chrome_test_java_sources
 
   deps = [
     ":browser_java_test_support",
@@ -965,17 +969,17 @@ if (enable_vr || enable_arcore) {
   android_library("chrome_test_xr_java") {
     testonly = true
 
-    java_files = [
+    sources = [
+      "javatests/src/org/chromium/chrome/browser/vr/WebXrTestFramework.java",
+      "javatests/src/org/chromium/chrome/browser/vr/XrTestFramework.java",
       "javatests/src/org/chromium/chrome/browser/vr/rules/ChromeTabbedActivityXrTestRule.java",
       "javatests/src/org/chromium/chrome/browser/vr/rules/CustomTabActivityXrTestRule.java",
+      "javatests/src/org/chromium/chrome/browser/vr/rules/WebappActivityXrTestRule.java",
       "javatests/src/org/chromium/chrome/browser/vr/rules/XrActivityRestriction.java",
       "javatests/src/org/chromium/chrome/browser/vr/rules/XrActivityRestrictionRule.java",
       "javatests/src/org/chromium/chrome/browser/vr/rules/XrTestRule.java",
-      "javatests/src/org/chromium/chrome/browser/vr/rules/WebappActivityXrTestRule.java",
       "javatests/src/org/chromium/chrome/browser/vr/util/PermissionUtils.java",
       "javatests/src/org/chromium/chrome/browser/vr/util/XrTestRuleUtils.java",
-      "javatests/src/org/chromium/chrome/browser/vr/WebXrTestFramework.java",
-      "javatests/src/org/chromium/chrome/browser/vr/XrTestFramework.java",
     ]
 
     deps = chrome_test_xr_java_deps + [ ":chrome_test_util_java" ]
@@ -992,9 +996,28 @@ if (enable_vr || enable_arcore) {
     android_library("chrome_test_vr_java") {
       testonly = true
 
-      java_files = [
-        "javatests/src/org/chromium/chrome/browser/vr/jsdialog/VrBrowserJavaScriptModalDialogTest.java",
+      sources = [
         "javatests/src/org/chromium/chrome/browser/vr/EmulatedVrController.java",
+        "javatests/src/org/chromium/chrome/browser/vr/TestVrShellDelegate.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserCompositorViewHolderTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserControllerInputTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserDialogTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserNativeUiTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserNavigationTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserTestFramework.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserTransitionTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserWebInputEditingTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrDaydreamReadyModuleInstallTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrFeedbackInfoBarTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/VrInstallUpdateInfoBarTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrConsentTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrConsentTestFramework.java",
+        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrDeviceTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrInputTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrTabTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrTestFramework.java",
+        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrTransitionTest.java",
+        "javatests/src/org/chromium/chrome/browser/vr/jsdialog/VrBrowserJavaScriptModalDialogTest.java",
         "javatests/src/org/chromium/chrome/browser/vr/mock/MockBrowserKeyboardInterface.java",
         "javatests/src/org/chromium/chrome/browser/vr/mock/MockVrCoreVersionChecker.java",
         "javatests/src/org/chromium/chrome/browser/vr/mock/MockVrDaydreamApi.java",
@@ -1002,6 +1025,7 @@ if (enable_vr || enable_arcore) {
         "javatests/src/org/chromium/chrome/browser/vr/rules/ChromeTabbedActivityVrTestRule.java",
         "javatests/src/org/chromium/chrome/browser/vr/rules/CustomTabActivityVrTestRule.java",
         "javatests/src/org/chromium/chrome/browser/vr/rules/VrActivityRestrictionRule.java",
+        "javatests/src/org/chromium/chrome/browser/vr/rules/VrModuleNotInstalled.java",
         "javatests/src/org/chromium/chrome/browser/vr/rules/VrSettingsFile.java",
         "javatests/src/org/chromium/chrome/browser/vr/rules/VrTestRule.java",
         "javatests/src/org/chromium/chrome/browser/vr/rules/WebappActivityVrTestRule.java",
@@ -1014,26 +1038,6 @@ if (enable_vr || enable_arcore) {
         "javatests/src/org/chromium/chrome/browser/vr/util/VrShellDelegateUtils.java",
         "javatests/src/org/chromium/chrome/browser/vr/util/VrTestRuleUtils.java",
         "javatests/src/org/chromium/chrome/browser/vr/util/VrTransitionUtils.java",
-        "javatests/src/org/chromium/chrome/browser/vr/TestVrShellDelegate.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrFeedbackInfoBarTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrInstallUpdateInfoBarTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserCompositorViewHolderTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserControllerInputTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserDialogTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserNativeUiTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserNavigationTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserTestFramework.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserTransitionTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrBrowserWebInputEditingTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrConsentTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrConsentTestFramework.java",
-        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrDeviceTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrInputTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrTabTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrTestFramework.java",
-        "javatests/src/org/chromium/chrome/browser/vr/WebXrVrTransitionTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/VrDaydreamReadyModuleInstallTest.java",
-        "javatests/src/org/chromium/chrome/browser/vr/rules/VrModuleNotInstalled.java",
       ]
 
       deps = chrome_test_xr_java_deps + [
@@ -1061,7 +1065,7 @@ if (enable_vr || enable_arcore) {
     android_library("chrome_test_ar_java") {
       testonly = true
 
-      java_files = [
+      sources = [
         "javatests/src/org/chromium/chrome/browser/vr/WebXrArSessionTest.java",
         "javatests/src/org/chromium/chrome/browser/vr/WebXrArTestFramework.java",
       ]
@@ -1545,13 +1549,13 @@ generate_jni("test_support_jni_headers") {
 # Test support code that needs access to the browser.
 android_library("browser_java_test_support") {
   testonly = true
-  java_files = [
-    "javatests/src/org/chromium/chrome/browser/offlinepages/prefetch/PrefetchTestBridge.java",
+  sources = [
+    "javatests/src/org/chromium/chrome/browser/ServicificationBackgroundService.java",
     "javatests/src/org/chromium/chrome/browser/offlinepages/OfflineTestUtil.java",
+    "javatests/src/org/chromium/chrome/browser/offlinepages/prefetch/PrefetchTestBridge.java",
     "javatests/src/org/chromium/chrome/browser/prerender/PrerenderTestHelper.java",
     "javatests/src/org/chromium/chrome/browser/sync/FakeServerHelper.java",
     "javatests/src/org/chromium/chrome/browser/test/MockCertVerifierRuleAndroid.java",
-    "javatests/src/org/chromium/chrome/browser/ServicificationBackgroundService.java",
   ]
   deps = [
     ":chrome_java",
@@ -1679,8 +1683,9 @@ android_library("monochrome_java") {
     "//chrome/android:chrome_java",
     "//content/public/android:content_java",
   ]
-  java_files =
-      [ "java/src/org/chromium/chrome/browser/MonochromeApplication.java" ]
+  sources = [
+    "java/src/org/chromium/chrome/browser/MonochromeApplication.java",
+  ]
   min_sdk_version = 24
 }
 
@@ -2167,8 +2172,9 @@ android_test_apk("chrome_smoke_test_apk") {
       "javatests/src/org/chromium/chrome/test/smoke/AndroidManifest.xml"
   target_sdk_version = android_sdk_version
   testonly = true
-  java_files =
-      [ "javatests/src/org/chromium/chrome/test/smoke/ChromeSmokeTest.java" ]
+  sources = [
+    "javatests/src/org/chromium/chrome/test/smoke/ChromeSmokeTest.java",
+  ]
   deps = [
     "//base:base_java_test_support",
     "//chrome/test/android:chrome_java_test_pagecontroller",
@@ -2208,7 +2214,7 @@ android_test_apk("chrome_bundle_smoke_test_apk") {
       "javatests/src/org/chromium/chrome/test/smoke/AndroidManifest_bundle.xml"
   target_sdk_version = android_sdk_version
   testonly = true
-  java_files = [
+  sources = [
     "javatests/src/org/chromium/chrome/test/smoke/ChromeBundleSmokeTest.java",
   ]
 
