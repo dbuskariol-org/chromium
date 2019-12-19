@@ -118,10 +118,6 @@ async function transferBetweenVolumes(transferInfo) {
             entry => entry.type !== EntryType.SHARED_DRIVE &&
                 entry.teamDriveName === ''));
   }
-  const myDriveContent =
-      TestEntryInfo.getExpectedRows(transferInfo.source.initialEntries.filter(
-          entry => entry.type !== EntryType.SHARED_DRIVE &&
-              entry.teamDriveName === ''));
 
   let dstContents;
   if (transferInfo.destination.isTeamDrive) {
@@ -142,6 +138,8 @@ async function transferBetweenVolumes(transferInfo) {
       SHARED_DRIVE_ENTRY_SET :
       BASIC_DRIVE_ENTRY_SET;
 
+  const myDriveContent = TestEntryInfo.getExpectedRows(
+      driveFiles.filter(e => e.teamDriveName === '' && e.computerName === ''));
   // Open files app.
   const appId =
       await setupAndWaitUntilReady(RootPath.DOWNLOADS, localFiles, driveFiles);
