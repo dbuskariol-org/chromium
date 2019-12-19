@@ -125,10 +125,13 @@ Polymer({
       return;
     }
 
-    const startHour = /** @type {number} */ (
-            this.getPref('ash.night_light.custom_start_time').value) / 60.0;
+    const startHour =
+        /** @type {number} */ (
+            this.getPref('ash.night_light.custom_start_time').value) /
+        60.0;
     const endHour = /** @type {number} */ (
-        this.getPref('ash.night_light.custom_end_time').value) / 60.0;
+                        this.getPref('ash.night_light.custom_end_time').value) /
+        60.0;
 
     const markersContainer = this.$.markersContainer;
     markersContainer.innerHTML = '';
@@ -207,8 +210,9 @@ Polymer({
     if (event.target == this.$.startKnob ||
         event.target == this.$.startKnob.firstElementChild) {
       this.dragObject_ = this.$.startKnob;
-    } else if (event.target == this.$.endKnob ||
-               event.target == this.$.endKnob.firstElementChild) {
+    } else if (
+        event.target == this.$.endKnob ||
+        event.target == this.$.endKnob.firstElementChild) {
       this.dragObject_ = this.$.endKnob;
     } else {
       return;

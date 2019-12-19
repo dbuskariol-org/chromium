@@ -25,7 +25,7 @@ js_type_check("closure_compile") {
 js_library("device_page") {
   deps = [
     ":device_page_browser_proxy",
-    "..:route",
+    "../..:route",
     "//ui/webui/resources/js:i18n_behavior",
     "//ui/webui/resources/js:web_ui_listener_behavior",
   ]
@@ -40,17 +40,17 @@ js_library("device_page_browser_proxy") {
 js_library("pointers") {
   deps = [
     ":device_page_browser_proxy",
-    "../chromeos/localized_link:localized_link",
-    "../controls:settings_toggle_button",
+    "../../controls:settings_toggle_button",
+    "../localized_link:localized_link",
   ]
 }
 
 js_library("keyboard") {
   deps = [
     ":device_page_browser_proxy",
-    "..:route",
-    "../controls:settings_dropdown_menu",
-    "../prefs:prefs_types",
+    "../..:route",
+    "../../controls:settings_dropdown_menu",
+    "../../prefs:prefs_types",
     "//ui/webui/resources/js:assert",
     "//ui/webui/resources/js:cr",
     "//ui/webui/resources/js:load_time_data",
@@ -61,7 +61,7 @@ js_library("keyboard") {
 js_library("stylus") {
   deps = [
     ":device_page_browser_proxy",
-    "../prefs:prefs_types",
+    "../../prefs:prefs_types",
     "//ui/webui/resources/cr_elements/policy:cr_policy_indicator",
     "//ui/webui/resources/js:cr",
     "//ui/webui/resources/js:load_time_data",
@@ -71,9 +71,9 @@ js_library("stylus") {
 js_library("display") {
   deps = [
     ":display_layout",
-    "../controls:settings_dropdown_menu",
-    "../controls:settings_slider",
-    "../prefs:prefs_behavior",
+    "../../controls:settings_dropdown_menu",
+    "../../controls:settings_slider",
+    "../../prefs:prefs_behavior",
     "//ui/webui/resources/js:assert",
     "//ui/webui/resources/js:cr",
     "//ui/webui/resources/js:i18n_behavior",
@@ -122,7 +122,7 @@ js_library("layout_behavior") {
 
 js_library("night_light_slider") {
   deps = [
-    "../prefs:prefs_behavior",
+    "../../prefs:prefs_behavior",
     "//third_party/polymer/v1_0/components-chromium/iron-resizable-behavior:iron-resizable-behavior-extracted",
     "//third_party/polymer/v1_0/components-chromium/paper-behaviors:paper-ripple-behavior-extracted",
   ]
@@ -131,8 +131,8 @@ js_library("night_light_slider") {
 js_library("power") {
   deps = [
     ":device_page_browser_proxy",
-    "..:route",
-    "../prefs:prefs_types",
+    "../..:route",
+    "../../prefs:prefs_types",
     "//ui/webui/resources/js:i18n_behavior",
     "//ui/webui/resources/js:web_ui_listener_behavior",
   ]
@@ -141,9 +141,9 @@ js_library("power") {
 
 js_library("storage") {
   deps = [
-    "..:route",
-    "..:route_origin_behavior",
-    "../chromeos/localized_link:localized_link",
+    "../..:route",
+    "../..:route_origin_behavior",
+    "../localized_link:localized_link",
     "//ui/webui/resources/js:assert",
     "//ui/webui/resources/js:load_time_data",
     "//ui/webui/resources/js:web_ui_listener_behavior",
