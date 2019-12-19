@@ -3010,7 +3010,7 @@
           "--benchmarks=rendering.desktop",
         ],
         'swarming': {},
-        'experiment_percentage': 25,
+        'experiment_percentage': 100,
       }
     },
 
@@ -3035,7 +3035,7 @@
           "--browser=android-chromium"
         ],
         'swarming': {},
-        'experiment_percentage': 25,
+        'experiment_percentage': 10,
       }
     },
 
