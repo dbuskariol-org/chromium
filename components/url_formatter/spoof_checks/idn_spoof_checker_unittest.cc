@@ -1172,7 +1172,10 @@ const IDNTestCase kIdnCases[] = {
     {"xn--googlecom-lg9q.com", L"google工com.com", false},   // (U+5DE5)
     {"xn--googlecom-g040a.com", L"google讠com.com", false},  // (U+8BA0)
     {"xn--googlecom-b85n.com", L"google丁com.com", false},   // (U+4E01)
-};                                                           // namespace
+
+    {"xn--7dbh4a.com", L"חסד.com", false},
+    {"xn--7dbh4a.il", L"חסד.il", true},
+};  // namespace
 
 namespace test {
 #include "components/url_formatter/spoof_checks/top_domains/test_domains-trie-inc.cc"

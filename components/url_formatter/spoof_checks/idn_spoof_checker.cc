@@ -197,6 +197,12 @@ IDNSpoofChecker::IDNSpoofChecker() {
        "[аысԁеԍһіюјӏорԗԛѕԝхуъЬҽпгѵѡ]",
        // TLDs containing most of the Cyrillic domains.
        {"bg", "by", "kz", "pyc", "ru", "su", "ua", "uz"}},
+
+      {// Hebrew
+       "[[:Hebr:]]",
+       "[דוחיןסװײ׳ﬦ]",
+       // TLDs containing most of the Hebrew domains.
+       {"il"}},
   };
   for (const WholeScriptConfusableData& data : kWholeScriptConfusables) {
     auto all_letters = std::make_unique<icu::UnicodeSet>(
