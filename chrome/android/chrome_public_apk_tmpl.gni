@@ -368,6 +368,7 @@ template("monochrome_public_common_apk_or_module_tmpl") {
       shared_library_for_unwind_asset = "monochrome"
 
       _deps += [
+        "//android_webview:monochrome_webview_assets",
         "//android_webview/glue",
         "//android_webview/nonembedded:nonembedded_java",
         "//chrome/android:monochrome_java",
