@@ -446,7 +446,7 @@ testcase.transferHostedFileFromTeamDriveToDownloads = () => {
   return transferBetweenVolumes(new TransferInfo({
     fileToTransfer: ENTRIES.teamDriveAHostedFile,
     source: TRANSFER_LOCATIONS.driveTeamDriveA,
-    destination: TRANSFER_LOCATIONS.driveWithTeamDriveEntries,
+    destination: TRANSFER_LOCATIONS.downloads,
     expectFailure: true,
   }));
 };
