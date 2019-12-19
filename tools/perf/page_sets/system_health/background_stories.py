@@ -39,6 +39,18 @@ class BackgroundGoogleStory(_BackgroundStory):
     action_runner.TapElement(selector='g-fab')
 
 
+class BackgroundGoogleStory2019(_BackgroundStory):
+  NAME = 'background:search:google:2019'
+  URL = 'https://www.google.co.uk/#q=tom+cruise+movies'
+  TAGS = [story_tags.HEALTH_CHECK, story_tags.YEAR_2019]
+
+  def _DidLoadDocument(self, action_runner):
+    # Activte the immersive movie browsing experience
+    action_runner.WaitForElement(selector='.knHJyb')
+    action_runner.ScrollPageToElement(selector='.knHJyb')
+    action_runner.ClickElement(selector='.knHJyb')
+
+
 class BackgroundFacebookMobileStory(_BackgroundStory):
   NAME = 'background:social:facebook'
   URL = 'https://www.facebook.com/rihanna'
