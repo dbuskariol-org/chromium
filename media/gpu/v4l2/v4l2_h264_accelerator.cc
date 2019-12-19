@@ -417,7 +417,7 @@ H264Decoder::H264Accelerator::Status V4L2H264Accelerator::SubmitSlice(
   memset(data_copy.get(), 0, data_copy_size);
   data_copy[2] = 0x01;
   memcpy(data_copy.get() + 3, data, size);
-  return surface_handler_->SubmitSlice(dec_surface, data_copy.get(),
+  return surface_handler_->SubmitSlice(dec_surface.get(), data_copy.get(),
                                        data_copy_size)
              ? Status::kOk
              : Status::kFail;

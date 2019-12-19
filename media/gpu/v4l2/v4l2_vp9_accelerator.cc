@@ -359,7 +359,7 @@ bool V4L2VP9Accelerator::SubmitDecode(scoped_refptr<VP9Picture> pic,
   dec_surface->SetReferenceSurfaces(ref_surfaces);
   dec_surface->SetDecodeDoneCallback(done_cb);
 
-  if (!surface_handler_->SubmitSlice(dec_surface, frame_hdr->data,
+  if (!surface_handler_->SubmitSlice(dec_surface.get(), frame_hdr->data,
                                      frame_hdr->frame_size))
     return false;
 

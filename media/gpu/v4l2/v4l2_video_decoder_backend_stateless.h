@@ -49,11 +49,10 @@ class V4L2StatelessVideoDecoderBackend : public V4L2VideoDecoderBackend,
 
   // V4L2DecodeSurfaceHandler implementation.
   scoped_refptr<V4L2DecodeSurface> CreateSurface() override;
-  bool SubmitSlice(const scoped_refptr<V4L2DecodeSurface>& dec_surface,
+  bool SubmitSlice(V4L2DecodeSurface* dec_surface,
                    const uint8_t* data,
                    size_t size) override;
-  void DecodeSurface(
-      const scoped_refptr<V4L2DecodeSurface>& dec_surface) override;
+  void DecodeSurface(scoped_refptr<V4L2DecodeSurface> dec_surface) override;
   void SurfaceReady(scoped_refptr<V4L2DecodeSurface> dec_surface,
                     int32_t bitstream_id,
                     const gfx::Rect& visible_rect,

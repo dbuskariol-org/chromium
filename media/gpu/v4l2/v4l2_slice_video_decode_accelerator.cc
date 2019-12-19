@@ -1937,7 +1937,7 @@ void V4L2SliceVideoDecodeAccelerator::SetErrorState(Error error) {
 }
 
 bool V4L2SliceVideoDecodeAccelerator::SubmitSlice(
-    const scoped_refptr<V4L2DecodeSurface>& dec_surface,
+    V4L2DecodeSurface* dec_surface,
     const uint8_t* data,
     size_t size) {
   DCHECK(decoder_thread_task_runner_->BelongsToCurrentThread());
@@ -1962,7 +1962,7 @@ bool V4L2SliceVideoDecodeAccelerator::SubmitSlice(
 }
 
 void V4L2SliceVideoDecodeAccelerator::DecodeSurface(
-    const scoped_refptr<V4L2DecodeSurface>& dec_surface) {
+    scoped_refptr<V4L2DecodeSurface> dec_surface) {
   DCHECK(decoder_thread_task_runner_->BelongsToCurrentThread());
 
   DVLOGF(3) << "Submitting decode for surface: " << dec_surface->ToString();

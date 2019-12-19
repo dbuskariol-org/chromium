@@ -238,7 +238,7 @@ bool V4L2VP8Accelerator::SubmitDecode(
 
   dec_surface->SetReferenceSurfaces(ref_surfaces);
 
-  if (!surface_handler_->SubmitSlice(dec_surface, frame_hdr->data,
+  if (!surface_handler_->SubmitSlice(dec_surface.get(), frame_hdr->data,
                                      frame_hdr->frame_size))
     return false;
 
