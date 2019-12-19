@@ -339,6 +339,11 @@ public final class ChromePreferenceKeys {
     public static final String DATA_REDUCTION_FIRST_ENABLED_TIME =
             "BANDWIDTH_REDUCTION_FIRST_ENABLED_TIME";
 
+    /** Keys used to save settings related to homepage. */
+    public static final String HOMEPAGE_ENABLED = "homepage";
+    public static final String HOMEPAGE_CUSTOM_URI = "homepage_custom_uri";
+    public static final String HOMEPAGE_USE_DEFAULT_URI = "homepage_partner_enabled";
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Keys representing cached feature flags                                                     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -572,6 +577,9 @@ public final class ChromePreferenceKeys {
                 DATA_REDUCTION_DISPLAYED_MILESTONE_PROMO_SAVED_BYTES,
                 DATA_REDUCTION_ENABLED_PREF,
                 DATA_REDUCTION_FIRST_ENABLED_TIME,
+                HOMEPAGE_ENABLED,
+                HOMEPAGE_CUSTOM_URI,
+                HOMEPAGE_USE_DEFAULT_URI,
 
                 // Cached feature flags
                 CACHED_FEATURE_FLAG.pattern(),
@@ -720,6 +728,9 @@ public final class ChromePreferenceKeys {
                 DATA_REDUCTION_DISPLAYED_MILESTONE_PROMO_SAVED_BYTES,
                 DATA_REDUCTION_ENABLED_PREF,
                 DATA_REDUCTION_FIRST_ENABLED_TIME,
+                HOMEPAGE_ENABLED,
+                HOMEPAGE_CUSTOM_URI,
+                HOMEPAGE_USE_DEFAULT_URI,
 
                 // Cached feature flags
                 SERVICE_MANAGER_FOR_DOWNLOAD_RESUMPTION_KEY,
