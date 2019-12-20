@@ -4425,19 +4425,19 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, BadCertFollowedByGoodCert) {
       browser(), https_server_expired_.GetURL("/ssl/google.html"));
 
   ProceedThroughInterstitial(tab);
-  EXPECT_TRUE(state->HasAllowException(https_server_host));
+  EXPECT_TRUE(state->HasAllowException(https_server_host, tab));
 
   ui_test_utils::NavigateToURL(browser(),
                                https_server_.GetURL("/ssl/google.html"));
   ASSERT_FALSE(tab->GetInterstitialPage());
-  EXPECT_FALSE(state->HasAllowException(https_server_host));
+  EXPECT_FALSE(state->HasAllowException(https_server_host, tab));
 
   // Now check that subresource requests revoke the decision.
   ui_test_utils::NavigateToURL(
       browser(), https_server_expired_.GetURL("/ssl/google.html"));
 
   ProceedThroughInterstitial(tab);
-  EXPECT_TRUE(state->HasAllowException(https_server_host));
+  EXPECT_TRUE(state->HasAllowException(https_server_host, tab));
 
   GURL image = https_server_.GetURL("/ssl/google_files/logo.gif");
   bool result = false;
@@ -4450,7 +4450,7 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, BadCertFollowedByGoodCert) {
           "document.body.appendChild(img);",
       &result));
   EXPECT_TRUE(result);
-  EXPECT_FALSE(state->HasAllowException(https_server_host));
+  EXPECT_FALSE(state->HasAllowException(https_server_host, tab));
 }
 
 // Tests that the SSLStatus of a navigation entry for an SSL
