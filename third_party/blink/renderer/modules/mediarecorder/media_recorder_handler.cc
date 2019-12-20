@@ -316,7 +316,7 @@ bool MediaRecorderHandler::Start(int timeslice) {
         media::BindToCurrentLoop(WTF::BindRepeating(
             &MediaRecorderHandler::OnEncodedAudio, WrapWeakPersistent(this)));
 
-    audio_recorders_.emplace_back(MakeGarbageCollected<AudioTrackRecorder>(
+    audio_recorders_.emplace_back(std::make_unique<AudioTrackRecorder>(
         audio_codec_id_, audio_tracks_[0], std::move(on_encoded_audio_cb),
         audio_bits_per_second_));
   }
@@ -657,7 +657,6 @@ void MediaRecorderHandler::Trace(blink::Visitor* visitor) {
   visitor->Trace(audio_tracks_);
   visitor->Trace(recorder_);
   visitor->Trace(video_recorders_);
-  visitor->Trace(audio_recorders_);
 }
 
 }  // namespace blink
