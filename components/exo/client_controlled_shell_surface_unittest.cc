@@ -20,8 +20,8 @@
 #include "ash/wm/splitview/split_view_controller.h"
 #include "ash/wm/tablet_mode/tablet_mode_browser_window_drag_delegate.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
-#include "ash/wm/tablet_mode/tablet_mode_window_drag_controller.h"
 #include "ash/wm/tablet_mode/tablet_mode_window_drag_delegate.h"
+#include "ash/wm/tablet_mode/tablet_mode_window_resizer.h"
 #include "ash/wm/window_positioning_utils.h"
 #include "ash/wm/window_resizer.h"
 #include "ash/wm/window_state.h"
@@ -1216,8 +1216,8 @@ class ClientControlledShellSurfaceDragTest : public test::ExoTestBase {
     ash::WindowState* window_state = ash::WindowState::Get(window);
     window_state->CreateDragDetails(gfx::Point(0, 0), HTCLIENT,
                                     ::wm::WINDOW_MOVE_SOURCE_TOUCH);
-    std::unique_ptr<ash::TabletModeWindowDragController> controller_ =
-        std::make_unique<ash::TabletModeWindowDragController>(
+    std::unique_ptr<ash::TabletModeWindowResizer> controller_ =
+        std::make_unique<ash::TabletModeWindowResizer>(
             window_state,
             std::make_unique<ash::TabletModeBrowserWindowDragDelegate>());
     controller_->drag_delegate_for_testing()

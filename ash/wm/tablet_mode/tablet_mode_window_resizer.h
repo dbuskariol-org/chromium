@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_WM_TABLET_MODE_TABLET_MODE_WINDOW_DRAG_CONTROLLER_H_
-#define ASH_WM_TABLET_MODE_TABLET_MODE_WINDOW_DRAG_CONTROLLER_H_
+#ifndef ASH_WM_TABLET_MODE_TABLET_MODE_WINDOW_RESIZER_H_
+#define ASH_WM_TABLET_MODE_TABLET_MODE_WINDOW_RESIZER_H_
 
 #include <memory>
 
@@ -23,12 +23,12 @@ class WindowState;
 // windows without caption areas. Depending on the event position, the dragged
 // window may be 1) maximized, or 2) snapped in splitscreen, or 3) merged to an
 // existing window (in the case of a browser window).
-class ASH_EXPORT TabletModeWindowDragController : public WindowResizer {
+class ASH_EXPORT TabletModeWindowResizer : public WindowResizer {
  public:
-  TabletModeWindowDragController(
+  TabletModeWindowResizer(
       WindowState* window_state,
       std::unique_ptr<TabletModeWindowDragDelegate> drag_delegate);
-  ~TabletModeWindowDragController() override;
+  ~TabletModeWindowResizer() override;
 
   // WindowResizer:
   void Drag(const gfx::Point& location_in_parent, int event_flags) override;
@@ -51,11 +51,11 @@ class ASH_EXPORT TabletModeWindowDragController : public WindowResizer {
 
   // Used to determine if this has been deleted during a drag such as when a tab
   // gets dragged into another browser window.
-  base::WeakPtrFactory<TabletModeWindowDragController> weak_ptr_factory_{this};
+  base::WeakPtrFactory<TabletModeWindowResizer> weak_ptr_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(TabletModeWindowDragController);
+  DISALLOW_COPY_AND_ASSIGN(TabletModeWindowResizer);
 };
 
 }  // namespace ash
 
-#endif  // ASH_WM_TABLET_MODE_TABLET_MODE_WINDOW_DRAG_CONTROLLER_H_
+#endif  // ASH_WM_TABLET_MODE_TABLET_MODE_WINDOW_RESIZER_H_

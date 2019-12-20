@@ -23,8 +23,8 @@
 #include "ash/wm/pip/pip_window_resizer.h"
 #include "ash/wm/tablet_mode/tablet_mode_browser_window_drag_delegate.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
-#include "ash/wm/tablet_mode/tablet_mode_window_drag_controller.h"
 #include "ash/wm/tablet_mode/tablet_mode_window_drag_delegate.h"
+#include "ash/wm/tablet_mode/tablet_mode_window_resizer.h"
 #include "ash/wm/window_positioning_utils.h"
 #include "ash/wm/window_state.h"
 #include "ash/wm/window_util.h"
@@ -76,7 +76,7 @@ std::unique_ptr<WindowResizer> CreateWindowResizerForTabletMode(
     window_state->CreateDragDetails(point_in_parent, HTCLIENT,
                                     ::wm::WINDOW_MOVE_SOURCE_TOUCH);
     std::unique_ptr<WindowResizer> window_resizer =
-        std::make_unique<TabletModeWindowDragController>(
+        std::make_unique<TabletModeWindowResizer>(
             window_state, std::make_unique<TabletModeWindowDragDelegate>());
     return std::make_unique<DragWindowResizer>(std::move(window_resizer),
                                                window_state);
@@ -102,7 +102,7 @@ std::unique_ptr<WindowResizer> CreateWindowResizerForTabletMode(
 
   window_state->CreateDragDetails(point_in_parent, window_component, source);
   std::unique_ptr<WindowResizer> window_resizer =
-      std::make_unique<TabletModeWindowDragController>(
+      std::make_unique<TabletModeWindowResizer>(
           window_state,
           std::make_unique<TabletModeBrowserWindowDragDelegate>());
   return std::make_unique<DragWindowResizer>(std::move(window_resizer),
