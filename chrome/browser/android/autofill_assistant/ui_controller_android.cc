@@ -1310,6 +1310,11 @@ void UiControllerAndroid::OnClientSettingsChanged(
   } else {
     Java_AssistantOverlayModel_clearOverlayImage(env, GetOverlayModel());
   }
+  if (settings.integration_test_settings.has_value()) {
+    Java_AssistantHeaderModel_setDisableAnimations(
+        env, GetHeaderModel(),
+        settings.integration_test_settings->disable_header_animations());
+  }
 }
 
 void UiControllerAndroid::OnCounterChanged(int input_index,
