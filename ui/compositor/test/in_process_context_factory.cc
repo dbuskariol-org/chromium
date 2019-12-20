@@ -36,7 +36,6 @@
 #include "gpu/command_buffer/common/context_creation_attribs.h"
 #include "ui/compositor/compositor_switches.h"
 #include "ui/compositor/layer.h"
-#include "ui/compositor/reflector.h"
 #include "ui/compositor/test/direct_layer_tree_frame_sink.h"
 #include "ui/compositor/test/in_process_context_provider.h"
 #include "ui/display/display_switches.h"
@@ -59,15 +58,6 @@ namespace {
 
 // This should not conflict with ids from RenderWidgetHostImpl or WindowService.
 constexpr uint32_t kDefaultClientId = std::numeric_limits<uint32_t>::max() / 2;
-
-class FakeReflector : public Reflector {
- public:
-  FakeReflector() {}
-  ~FakeReflector() override {}
-  void OnMirroringCompositorResized() override {}
-  void AddMirroringLayer(Layer* layer) override {}
-  void RemoveMirroringLayer(Layer* layer) override {}
-};
 
 // An OutputSurface implementation that directly draws and swaps to an actual
 // GL surface.
@@ -305,15 +295,6 @@ void InProcessContextFactory::CreateLayerTreeFrameSink(
   compositor->SetLayerTreeFrameSink(std::move(layer_tree_frame_sink));
 
   data->display->Resize(compositor->size());
-}
-
-std::unique_ptr<Reflector> InProcessContextFactory::CreateReflector(
-    Compositor* mirrored_compositor,
-    Layer* mirroring_layer) {
-  return base::WrapUnique(new FakeReflector);
-}
-
-void InProcessContextFactory::RemoveReflector(Reflector* reflector) {
 }
 
 scoped_refptr<viz::ContextProvider>
