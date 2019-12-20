@@ -145,6 +145,12 @@ class OobeUI : public ui::MojoWebUIController {
     return nullptr;
   }
 
+  // Instantiates implementor of the mojom::MultiDeviceSetup mojo interface
+  // passing the pending receiver that will be internally bound.
+  void BindInterface(
+      mojo::PendingReceiver<multidevice_setup::mojom::MultiDeviceSetup>
+          receiver);
+
  private:
   void AddWebUIHandler(std::unique_ptr<BaseWebUIHandler> handler);
   void AddScreenHandler(std::unique_ptr<BaseScreenHandler> handler);
@@ -153,10 +159,6 @@ class OobeUI : public ui::MojoWebUIController {
   // display type.
   void ConfigureOobeDisplay();
 
-  // Adds Mojo receivers for this WebUIController.
-  void BindMultiDeviceSetup(
-      mojo::PendingReceiver<multidevice_setup::mojom::MultiDeviceSetup>
-          receiver);
   void BindPrivilegedHostDeviceSetter(
       mojo::PendingReceiver<
           multidevice_setup::mojom::PrivilegedHostDeviceSetter> receiver);
@@ -205,6 +207,8 @@ class OobeUI : public ui::MojoWebUIController {
   // Store the deferred JS calls before the screen handler instance is
   // initialized.
   std::unique_ptr<JSCallsContainer> js_calls_container_;
+
+  WEB_UI_CONTROLLER_TYPE_DECL();
 
   DISALLOW_COPY_AND_ASSIGN(OobeUI);
 };

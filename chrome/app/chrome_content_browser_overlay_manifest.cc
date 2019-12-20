@@ -87,7 +87,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
             "navigation:frame", "renderer",
             service_manager::Manifest::InterfaceList<
 #if defined(OS_CHROMEOS)
-                chromeos::multidevice_setup::mojom::MultiDeviceSetup,
                 chromeos::multidevice_setup::mojom::PrivilegedHostDeviceSetter,
                 chromeos::network_config::mojom::CrosNetworkConfig,
 #endif

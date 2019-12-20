@@ -491,7 +491,7 @@ void OobeUI::ConfigureOobeDisplay() {
     oobe_display_chooser_ = std::make_unique<OobeDisplayChooser>();
 }
 
-void OobeUI::BindMultiDeviceSetup(
+void OobeUI::BindInterface(
     mojo::PendingReceiver<multidevice_setup::mojom::MultiDeviceSetup>
         receiver) {
   multidevice_setup::MultiDeviceSetupService* service =
@@ -554,8 +554,6 @@ OobeUI::OobeUI(content::WebUI* web_ui, const GURL& url)
         base::BindOnce(DisablePolymer2));
   }
 
-  AddHandlerToRegistry(base::BindRepeating(&OobeUI::BindMultiDeviceSetup,
-                                           base::Unretained(this)));
   AddHandlerToRegistry(base::BindRepeating(
       &OobeUI::BindPrivilegedHostDeviceSetter, base::Unretained(this)));
   AddHandlerToRegistry(base::BindRepeating(&OobeUI::BindCrosNetworkConfig,
@@ -704,5 +702,7 @@ void OobeUI::OnDisplayConfigurationChanged() {
 void OobeUI::SetLoginUserCount(int user_count) {
   core_handler_->SetLoginUserCount(user_count);
 }
+
+WEB_UI_CONTROLLER_TYPE_IMPL(OobeUI)
 
 }  // namespace chromeos
