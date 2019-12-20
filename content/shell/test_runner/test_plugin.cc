@@ -34,8 +34,8 @@
 #include "third_party/blink/public/platform/web_graphics_context_3d_provider.h"
 #include "third_party/blink/public/platform/web_url.h"
 #include "third_party/blink/public/web/blink.h"
+#include "third_party/blink/public/web/web_local_frame.h"
 #include "third_party/blink/public/web/web_plugin_params.h"
-#include "third_party/blink/public/web/web_user_gesture_indicator.h"
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "third_party/skia/include/core/SkColor.h"
@@ -583,11 +583,10 @@ blink::WebInputEventResult TestPlugin::HandleInputEvent(
     PrintEventDetails(delegate_, event);
 
   if (print_user_gesture_status_) {
-    bool has_user_gesture =
-        blink::WebUserGestureIndicator::IsProcessingUserGesture(
-            web_local_frame_);
+    bool has_transient_user_activation =
+        web_local_frame_->HasTransientUserActivation();
     delegate_->PrintMessage(std::string("* ") +
-                            (has_user_gesture ? "" : "not ") +
+                            (has_transient_user_activation ? "" : "not ") +
                             "handling user gesture\n");
   }
 

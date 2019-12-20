@@ -4229,7 +4229,7 @@ bool Document::DispatchBeforeUnloadEvent(ChromeClient* chrome_client,
   if (!GetFrame() || before_unload_event.returnValue().IsNull())
     return true;
 
-  if (!GetFrame()->HasBeenActivated()) {
+  if (!GetFrame()->HasStickyUserActivation()) {
     beforeunload_dialog_histogram.Count(kNoDialogNoUserGesture);
     String message =
         "Blocked attempt to show a 'beforeunload' confirmation panel for a "

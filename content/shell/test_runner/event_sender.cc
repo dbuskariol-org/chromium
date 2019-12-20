@@ -47,7 +47,6 @@
 #include "third_party/blink/public/web/web_frame_widget.h"
 #include "third_party/blink/public/web/web_local_frame.h"
 #include "third_party/blink/public/web/web_page_popup.h"
-#include "third_party/blink/public/web/web_user_gesture_indicator.h"
 #include "third_party/blink/public/web/web_view.h"
 #include "ui/events/blink/blink_event_util.h"
 #include "ui/events/keycodes/dom/keycode_converter.h"
@@ -2231,8 +2230,7 @@ void EventSender::ScheduleAsynchronousKeyDown(const std::string& code_str,
 }
 
 void EventSender::ConsumeUserActivation() {
-  blink::WebUserGestureIndicator::ConsumeUserGesture(
-      view()->MainFrame()->ToWebLocalFrame());
+  view()->MainFrame()->ToWebLocalFrame()->ConsumeTransientUserActivation();
 }
 
 base::TimeTicks EventSender::GetCurrentEventTime() const {
