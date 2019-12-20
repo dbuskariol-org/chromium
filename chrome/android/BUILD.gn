@@ -2302,27 +2302,28 @@ if (public_android_sdk) {
       ]
     }
   }
-}
 
-instrumentation_test_runner("trichrome_chrome_bundle_smoke_test") {
-  apk_under_test = "//chrome/android:trichrome_chrome_bundle_apks"
-  android_test_apk = ":chrome_bundle_smoke_test_apk"
-  android_test_apk_name = "ChromeBundleSmokeTest"
-  never_incremental = true
-  modules = [ "test_dummy" ]
-  additional_apks = [ "//chrome/android:trichrome_library_apk" ]
-  extra_args = _bundle_smoke_test_extra_args
-}
+  instrumentation_test_runner("trichrome_chrome_bundle_smoke_test") {
+    apk_under_test = "//chrome/android:trichrome_chrome_bundle_apks"
+    android_test_apk = ":chrome_bundle_smoke_test_apk"
+    android_test_apk_name = "ChromeBundleSmokeTest"
+    never_incremental = true
+    modules = [ "test_dummy" ]
+    additional_apks = [ "//chrome/android:trichrome_library_apk" ]
+    extra_args = _bundle_smoke_test_extra_args
+  }
 
-instrumentation_test_runner("trichrome_chrome_bundle_fake_modules_smoke_test") {
-  apk_under_test = "//chrome/android:trichrome_chrome_bundle_apks"
-  android_test_apk = ":chrome_bundle_smoke_test_apk"
-  android_test_apk_name = "ChromeBundleSmokeTest"
-  never_incremental = true
-  fake_modules = [ "test_dummy" ]
-  additional_apks = [ "//chrome/android:trichrome_library_apk" ]
-  extra_args =
-      _bundle_smoke_test_extra_args + _bundle_fake_modules_smoke_test_extra_args
+  instrumentation_test_runner(
+      "trichrome_chrome_bundle_fake_modules_smoke_test") {
+    apk_under_test = "//chrome/android:trichrome_chrome_bundle_apks"
+    android_test_apk = ":chrome_bundle_smoke_test_apk"
+    android_test_apk_name = "ChromeBundleSmokeTest"
+    never_incremental = true
+    fake_modules = [ "test_dummy" ]
+    additional_apks = [ "//chrome/android:trichrome_library_apk" ]
+    extra_args = _bundle_smoke_test_extra_args +
+                 _bundle_fake_modules_smoke_test_extra_args
+  }
 }
 
 group("chrome_public_wpt") {
