@@ -143,7 +143,7 @@ bool CreditCardFIDOAuthenticator::IsUserOptedIn() {
 }
 
 void CreditCardFIDOAuthenticator::SyncUserOptIn(
-    AutofillClient::UnmaskDetails& unmask_details) {
+    payments::PaymentsClient::UnmaskDetails& unmask_details) {
   user_is_opted_in_ = IsUserOptedIn();
 
   // If payments is offering to opt-in, then that means user is not opted in.

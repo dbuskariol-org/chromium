@@ -238,9 +238,11 @@ void SetActiveExperiments(const std::vector<const char*>& active_experiments,
 
 class GetUnmaskDetailsRequest : public PaymentsRequest {
  public:
-  GetUnmaskDetailsRequest(GetUnmaskDetailsCallback callback,
-                          const std::string& app_locale,
-                          const bool full_sync_enabled)
+  GetUnmaskDetailsRequest(
+      base::OnceCallback<void(AutofillClient::PaymentsRpcResult,
+                              PaymentsClient::UnmaskDetails&)> callback,
+      const std::string& app_locale,
+      const bool full_sync_enabled)
       : callback_(std::move(callback)),
         app_locale_(app_locale),
         full_sync_enabled_(full_sync_enabled) {}
@@ -312,13 +314,15 @@ class GetUnmaskDetailsRequest : public PaymentsRequest {
   }
 
  private:
-  GetUnmaskDetailsCallback callback_;
+  base::OnceCallback<void(AutofillClient::PaymentsRpcResult,
+                          PaymentsClient::UnmaskDetails&)>
+      callback_;
   std::string app_locale_;
   const bool full_sync_enabled_;
 
   // Suggested authentication method and other information to facilitate card
   // unmasking.
-  AutofillClient::UnmaskDetails unmask_details_;
+  payments::PaymentsClient::UnmaskDetails unmask_details_;
   DISALLOW_COPY_AND_ASSIGN(GetUnmaskDetailsRequest);
 };
 
@@ -994,7 +998,22 @@ class MigrateCardsRequest : public PaymentsRequest {
 const char PaymentsClient::kRecipientName[] = "recipient_name";
 const char PaymentsClient::kPhoneNumber[] = "phone_number";
 
-PaymentsClient::UnmaskRequestDetails::UnmaskRequestDetails() {}
+PaymentsClient::UnmaskDetails::UnmaskDetails() = default;
+PaymentsClient::UnmaskDetails::~UnmaskDetails() = default;
+PaymentsClient::UnmaskDetails& PaymentsClient::UnmaskDetails::operator=(
+    const PaymentsClient::UnmaskDetails& other) {
+  unmask_auth_method = other.unmask_auth_method;
+  offer_fido_opt_in = other.offer_fido_opt_in;
+  if (other.fido_request_options.has_value()) {
+    fido_request_options = other.fido_request_options->Clone();
+  } else {
+    fido_request_options.reset();
+  }
+  fido_eligible_card_ids = other.fido_eligible_card_ids;
+  return *this;
+}
+
+PaymentsClient::UnmaskRequestDetails::UnmaskRequestDetails() = default;
 PaymentsClient::UnmaskRequestDetails::UnmaskRequestDetails(
     const UnmaskRequestDetails& other) {
   billing_customer_number = other.billing_customer_number;
@@ -1004,14 +1023,14 @@ PaymentsClient::UnmaskRequestDetails::UnmaskRequestDetails(
   user_response = other.user_response;
   fido_assertion_info = other.fido_assertion_info.Clone();
 }
-PaymentsClient::UnmaskRequestDetails::~UnmaskRequestDetails() {}
+PaymentsClient::UnmaskRequestDetails::~UnmaskRequestDetails() = default;
 
-PaymentsClient::UnmaskResponseDetails::UnmaskResponseDetails() {}
+PaymentsClient::UnmaskResponseDetails::UnmaskResponseDetails() = default;
 PaymentsClient::UnmaskResponseDetails::UnmaskResponseDetails(
     const UnmaskResponseDetails& other) {
   *this = other;
 }
-PaymentsClient::UnmaskResponseDetails::~UnmaskResponseDetails() {}
+PaymentsClient::UnmaskResponseDetails::~UnmaskResponseDetails() = default;
 PaymentsClient::UnmaskResponseDetails& PaymentsClient::UnmaskResponseDetails::
 operator=(const PaymentsClient::UnmaskResponseDetails& other) {
   real_pan = other.real_pan;
@@ -1029,7 +1048,7 @@ operator=(const PaymentsClient::UnmaskResponseDetails& other) {
   return *this;
 }
 
-PaymentsClient::OptChangeRequestDetails::OptChangeRequestDetails() {}
+PaymentsClient::OptChangeRequestDetails::OptChangeRequestDetails() = default;
 PaymentsClient::OptChangeRequestDetails::OptChangeRequestDetails(
     const OptChangeRequestDetails& other) {
   app_locale = other.app_locale;
@@ -1037,9 +1056,9 @@ PaymentsClient::OptChangeRequestDetails::OptChangeRequestDetails(
   fido_authenticator_response = other.fido_authenticator_response.Clone();
   card_authorization_token = other.card_authorization_token;
 }
-PaymentsClient::OptChangeRequestDetails::~OptChangeRequestDetails() {}
+PaymentsClient::OptChangeRequestDetails::~OptChangeRequestDetails() = default;
 
-PaymentsClient::OptChangeResponseDetails::OptChangeResponseDetails() {}
+PaymentsClient::OptChangeResponseDetails::OptChangeResponseDetails() = default;
 PaymentsClient::OptChangeResponseDetails::OptChangeResponseDetails(
     const OptChangeResponseDetails& other) {
   user_is_opted_in = other.user_is_opted_in;
@@ -1055,17 +1074,17 @@ PaymentsClient::OptChangeResponseDetails::OptChangeResponseDetails(
     fido_request_options.reset();
   }
 }
-PaymentsClient::OptChangeResponseDetails::~OptChangeResponseDetails() {}
+PaymentsClient::OptChangeResponseDetails::~OptChangeResponseDetails() = default;
 
-PaymentsClient::UploadRequestDetails::UploadRequestDetails() {}
+PaymentsClient::UploadRequestDetails::UploadRequestDetails() = default;
 PaymentsClient::UploadRequestDetails::UploadRequestDetails(
     const UploadRequestDetails& other) = default;
-PaymentsClient::UploadRequestDetails::~UploadRequestDetails() {}
+PaymentsClient::UploadRequestDetails::~UploadRequestDetails() = default;
 
-PaymentsClient::MigrationRequestDetails::MigrationRequestDetails() {}
+PaymentsClient::MigrationRequestDetails::MigrationRequestDetails() = default;
 PaymentsClient::MigrationRequestDetails::MigrationRequestDetails(
     const MigrationRequestDetails& other) = default;
-PaymentsClient::MigrationRequestDetails::~MigrationRequestDetails() {}
+PaymentsClient::MigrationRequestDetails::~MigrationRequestDetails() = default;
 
 PaymentsClient::PaymentsClient(
     scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory,
@@ -1078,15 +1097,17 @@ PaymentsClient::PaymentsClient(
       is_off_the_record_(is_off_the_record),
       has_retried_authorization_(false) {}
 
-PaymentsClient::~PaymentsClient() {}
+PaymentsClient::~PaymentsClient() = default;
 
 void PaymentsClient::Prepare() {
   if (access_token_.empty())
     StartTokenFetch(false);
 }
 
-void PaymentsClient::GetUnmaskDetails(GetUnmaskDetailsCallback callback,
-                                      const std::string& app_locale) {
+void PaymentsClient::GetUnmaskDetails(
+    base::OnceCallback<void(AutofillClient::PaymentsRpcResult,
+                            PaymentsClient::UnmaskDetails&)> callback,
+    const std::string& app_locale) {
   IssueRequest(std::make_unique<GetUnmaskDetailsRequest>(
                    std::move(callback), app_locale,
                    account_info_getter_->IsSyncFeatureEnabled()),

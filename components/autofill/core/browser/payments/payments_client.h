@@ -48,11 +48,6 @@ typedef base::OnceCallback<void(
     const std::string& display_text)>
     MigrateCardsCallback;
 
-// Callback type for GetUnmaskDetails callback.
-typedef base::OnceCallback<void(AutofillClient::PaymentsRpcResult,
-                                AutofillClient::UnmaskDetails&)>
-    GetUnmaskDetailsCallback;
-
 // Billable service number is defined in Payments server to distinguish
 // different requests.
 const int kUnmaskCardBillableServiceNumber = 70154;
@@ -73,6 +68,25 @@ class PaymentsClient {
   // values are set or not at appropriate times.
   static const char kRecipientName[];
   static const char kPhoneNumber[];
+
+  // Details for card unmasking, such as the suggested method of authentication,
+  // along with any information required to facilitate the authentication.
+  struct UnmaskDetails {
+    UnmaskDetails();
+    ~UnmaskDetails();
+    UnmaskDetails& operator=(const UnmaskDetails& other);
+
+    // The type of authentication method suggested for card unmask.
+    AutofillClient::UnmaskAuthMethod unmask_auth_method =
+        AutofillClient::UnmaskAuthMethod::UNKNOWN;
+    // Set to true if the user should be offered opt-in for FIDO Authentication.
+    bool offer_fido_opt_in = false;
+    // Public Key Credential Request Options required for authentication.
+    // https://www.w3.org/TR/webauthn/#dictdef-publickeycredentialrequestoptions
+    base::Optional<base::Value> fido_request_options;
+    // Set of credit cards ids that are eligible for FIDO Authentication.
+    std::set<std::string> fido_eligible_card_ids;
+  };
 
   // A collection of the information required to make a credit card unmask
   // request.
@@ -242,8 +256,10 @@ class PaymentsClient {
   // The user has interacted with a credit card form and may attempt to unmask a
   // card. This request returns what method of authentication is suggested,
   // along with any information to facilitate the authentication.
-  virtual void GetUnmaskDetails(GetUnmaskDetailsCallback callback,
-                                const std::string& app_locale);
+  virtual void GetUnmaskDetails(
+      base::OnceCallback<void(AutofillClient::PaymentsRpcResult,
+                              PaymentsClient::UnmaskDetails&)> callback,
+      const std::string& app_locale);
 
   // The user has attempted to unmask a card with the given cvc.
   void UnmaskCard(const UnmaskRequestDetails& request_details,
