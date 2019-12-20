@@ -32,13 +32,15 @@ class OSSettingsUI : public ui::MojoWebUIController {
   // passing the pending receiver that will be internally bound.
   void BindInterface(
       mojo::PendingReceiver<network_config::mojom::CrosNetworkConfig> receiver);
+  // Instantiates implementor of the mojom::PageHandlerFactory mojo interface
+  // passing the pending receiver that will be internally bound.
+  void BindInterface(
+      mojo::PendingReceiver<app_management::mojom::PageHandlerFactory>
+          receiver);
 
  private:
   void AddSettingsPageUIHandler(
       std::unique_ptr<content::WebUIMessageHandler> handler);
-  void BindAppManagementPageHandlerFactory(
-      mojo::PendingReceiver<app_management::mojom::PageHandlerFactory>
-          receiver);
 
   WebuiLoadTimer webui_load_timer_;
 

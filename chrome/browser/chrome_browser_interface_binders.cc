@@ -105,6 +105,7 @@
 #endif
 
 #if defined(OS_CHROMEOS)
+#include "chrome/browser/ui/webui/app_management/app_management.mojom.h"
 #include "chrome/browser/ui/webui/chromeos/add_supervision/add_supervision.mojom.h"
 #include "chrome/browser/ui/webui/chromeos/add_supervision/add_supervision_ui.h"
 #include "chrome/browser/ui/webui/chromeos/cellular_setup/cellular_setup_dialog.h"
@@ -491,6 +492,10 @@ void PopulateChromeWebUIFrameBinders(
       chromeos::AddSupervisionUI>(map);
 
   RegisterWebUIControllerInterfaceBinder<
+      app_management::mojom::PageHandlerFactory,
+      chromeos::settings::OSSettingsUI>(map);
+
+  RegisterWebUIControllerInterfaceBinder<
       chromeos::cellular_setup::mojom::CellularSetup,
       chromeos::cellular_setup::CellularSetupDialogUI>(map);
 
@@ -520,7 +525,7 @@ void PopulateChromeWebUIFrameBinders(
       chromeos::InternetConfigDialogUI, chromeos::InternetDetailDialogUI,
       chromeos::NetworkUI, chromeos::OobeUI, chromeos::settings::OSSettingsUI,
       settings::SettingsUI>(map);
-#endif  // defined(OS_CHROMEOS)
+#endif
 
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
     defined(OS_CHROMEOS)

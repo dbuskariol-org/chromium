@@ -173,9 +173,6 @@ OSSettingsUI::OSSettingsUI(content::WebUI* web_ui)
 
   content::WebUIDataSource::Add(web_ui->GetWebContents()->GetBrowserContext(),
                                 html_source);
-  AddHandlerToRegistry(
-      base::BindRepeating(&OSSettingsUI::BindAppManagementPageHandlerFactory,
-                          base::Unretained(this)));
 }
 
 OSSettingsUI::~OSSettingsUI() = default;
@@ -191,7 +188,7 @@ void OSSettingsUI::BindInterface(
   ash::GetNetworkConfigService(std::move(receiver));
 }
 
-void OSSettingsUI::BindAppManagementPageHandlerFactory(
+void OSSettingsUI::BindInterface(
     mojo::PendingReceiver<app_management::mojom::PageHandlerFactory> receiver) {
   if (!app_management_page_handler_factory_) {
     app_management_page_handler_factory_ =

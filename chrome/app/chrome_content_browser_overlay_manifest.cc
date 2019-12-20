@@ -27,10 +27,6 @@
 #include "chrome/common/conflicts/module_event_sink_win.mojom.h"
 #endif
 
-#if !defined(OS_ANDROID)
-#include "chrome/browser/ui/webui/app_management/app_management.mojom.h"
-#endif
-
 const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
   static base::NoDestructor<service_manager::Manifest> manifest {
     service_manager::ManifestBuilder()
@@ -79,18 +75,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
         .RequireCapability("util_win", "util_win")
         .RequireCapability("xr_device_service", "xr_device_provider")
         .RequireCapability("xr_device_service", "xr_device_test_hook")
-#if defined(OS_CHROMEOS) || !defined(OS_ANDROID)
-        .ExposeInterfaceFilterCapability_Deprecated(
-            "navigation:frame", "renderer",
-            service_manager::Manifest::InterfaceList<
-                // WebUI-only interfaces go below this line. These should be
-                // brokered through a dedicated interface, but they're here
-                // for for now.
-#if !defined(OS_ANDROID)
-                app_management::mojom::PageHandlerFactory
-#endif
-                >())
-#endif  // defined(OS_CHROMEOS) || !defined(OS_ANDROID)
         .Build()
   };
   return *manifest;
