@@ -2134,6 +2134,7 @@ public class ContextualSearchManagerTest {
     @Test
     @LargeTest
     @Feature({"ContextualSearch"})
+    @DisableIf.Build(sdk_is_greater_than = Build.VERSION_CODES.O_MR1, message = "crbug.com/1036414")
     public void testTapALot() throws InterruptedException, TimeoutException {
         for (int i = 0; i < 50; i++) {
             clickToTriggerPrefetch();
