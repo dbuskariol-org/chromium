@@ -28,6 +28,10 @@ const char* AssistantTextElementView::GetClassName() const {
   return "AssistantTextElementView";
 }
 
+ui::Layer* AssistantTextElementView::GetLayerForAnimating() {
+  return layer();
+}
+
 std::string AssistantTextElementView::ToStringForTesting() const {
   return base::UTF16ToUTF8(label_->GetText());
 }

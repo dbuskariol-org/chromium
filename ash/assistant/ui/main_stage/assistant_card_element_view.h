@@ -30,6 +30,7 @@ class COMPONENT_EXPORT(ASSISTANT_UI) AssistantCardElementView
 
   // AssistantUiElementView:
   const char* GetClassName() const override;
+  ui::Layer* GetLayerForAnimating() override;
   std::string ToStringForTesting() const override;
   void AddedToWidget() override;
   void ChildPreferredSizeChanged(views::View* child) override;

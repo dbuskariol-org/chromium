@@ -74,6 +74,10 @@ const char* AssistantCardElementView::GetClassName() const {
   return "AssistantCardElementView";
 }
 
+ui::Layer* AssistantCardElementView::GetLayerForAnimating() {
+  return native_view()->layer();
+}
+
 std::string AssistantCardElementView::ToStringForTesting() const {
   return card_element_->html();
 }
