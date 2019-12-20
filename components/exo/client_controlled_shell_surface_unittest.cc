@@ -1375,6 +1375,12 @@ TEST_F(ClientControlledShellSurfaceDisplayTest, MoveToAnotherDisplayByDrag) {
 
   aura::Window* window = shell_surface->GetWidget()->GetNativeWindow();
   EXPECT_EQ(root_windows[0], window->GetRootWindow());
+  // Prevent snapping |window|. It only distracts from the purpose of the test.
+  // TODO: Remove this code after adding functionality where the mouse has to
+  // dwell in the snap region before the dragged window can get snapped.
+  window->SetProperty(aura::client::kResizeBehaviorKey,
+                      aura::client::kResizeBehaviorNone);
+  ASSERT_FALSE(ash::WindowState::Get(window)->CanSnap());
 
   std::unique_ptr<ash::WindowResizer> resizer(
       CreateDragWindowResizer(window, gfx::Point(), HTCAPTION));
