@@ -3140,18 +3140,4 @@ public class ContextualSearchManagerTest {
         assertPanelClosedOrUndefined();
         assertLoadedNoUrl();
     }
-
-    @Test
-    @SmallTest
-    @Feature({"ContextualSearch"})
-    @CommandLineFlags.Add({"enable-features=ContextualSearchLongpressResolve<FakeStudyName",
-            "force-fieldtrials=FakeStudyName/FakeGroup",
-            "force-fieldtrial-params=FakeStudyName.FakeGroup:longpress_resolve_variation/"
-                    + ContextualSearchFieldTrial.LONGPRESS_RESOLVE_PRESERVE_TAP})
-    public void
-    testTapNotIgnoredWithLongpressResolveEnabledAndVariationPreserveTap() throws TimeoutException {
-        clickWordNode("states");
-        Assert.assertEquals("States", getSelectedText());
-        waitForPanelToPeek();
-    }
 }

@@ -1112,12 +1112,6 @@ const FeatureEntry::FeatureVariation kExploreSitesVariations[] = {
      base::size(kExploreSitesDenseTitleBottom), nullptr},
     {"Dense Title Right", kExploreSitesDenseTitleRight,
      base::size(kExploreSitesDenseTitleRight), nullptr}};
-const FeatureEntry::FeatureParam kLongpressResolvePreserveTap = {
-    contextual_search::kLongpressResolveParamName,
-    contextual_search::kLongpressResolvePreserveTap};
-const FeatureEntry::FeatureVariation kLongpressResolveVariations[] = {
-    {"and preserve Tap behavior", &kLongpressResolvePreserveTap, 1, nullptr},
-};
 
 #endif  // defined(OS_ANDROID)
 
@@ -1574,10 +1568,7 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kContextualSearchLongpressResolveName,
      flag_descriptions::kContextualSearchLongpressResolveDescription,
      kOsAndroid,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(
-         chrome::android::kContextualSearchLongpressResolve,
-         kLongpressResolveVariations,
-         "ContextualSearchLongpressResolve")},
+     FEATURE_VALUE_TYPE(chrome::android::kContextualSearchLongpressResolve)},
 
     {"contextual-search-ml-tap-suppression",
      flag_descriptions::kContextualSearchMlTapSuppressionName,
