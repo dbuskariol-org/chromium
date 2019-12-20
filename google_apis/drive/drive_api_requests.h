@@ -1154,7 +1154,7 @@ class SingleBatchableDelegateRequest : public UrlFetchRequestBase {
   GURL GetURL() const override;
   std::string GetRequestType() const override;
   std::vector<std::string> GetExtraRequestHeaders() const override;
-  void Prepare(const PrepareCallback& callback) override;
+  void Prepare(PrepareCallback callback) override;
   bool GetContentData(std::string* upload_content_type,
                       std::string* upload_content) override;
   void RunCallbackOnPrematureFailure(DriveApiErrorCode code) override;
@@ -1214,7 +1214,7 @@ class BatchUploadRequest : public UrlFetchRequestBase {
   const DriveApiUrlGenerator& url_generator() const { return url_generator_; }
 
   // UrlFetchRequestBase overrides.
-  void Prepare(const PrepareCallback& callback) override;
+  void Prepare(PrepareCallback callback) override;
   void Cancel() override;
   GURL GetURL() const override;
   std::string GetRequestType() const override;
