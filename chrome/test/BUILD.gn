@@ -3067,6 +3067,7 @@ test("unit_tests") {
     "../browser/component_updater/games_component_installer_unittest.cc",
     "../browser/component_updater/optimization_hints_component_installer_unittest.cc",
     "../browser/component_updater/origin_trials_component_installer_unittest.cc",
+    "../browser/component_updater/soda_component_installer_unittest.cc",
     "../browser/component_updater/subresource_filter_component_installer_unittest.cc",
     "../browser/component_updater/sw_reporter_installer_win_unittest.cc",
     "../browser/content_index/content_index_provider_unittest.cc",

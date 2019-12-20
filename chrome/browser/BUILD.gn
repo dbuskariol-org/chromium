@@ -335,6 +335,8 @@ jumbo_static_library("browser") {
     "component_updater/recovery_improved_component_installer_win.cc",
     "component_updater/safety_tips_component_installer.cc",
     "component_updater/safety_tips_component_installer.h",
+    "component_updater/soda_component_installer.cc",
+    "component_updater/soda_component_installer.h",
     "component_updater/ssl_error_assistant_component_installer.cc",
     "component_updater/ssl_error_assistant_component_installer.h",
     "component_updater/sth_set_component_remover.cc",
