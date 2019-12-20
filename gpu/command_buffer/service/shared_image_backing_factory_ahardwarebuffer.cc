@@ -135,7 +135,10 @@ class SharedImageBackingAHB : public ClearTrackingSharedImageBacking {
   ~SharedImageBackingAHB() override;
 
   void Update(std::unique_ptr<gfx::GpuFence> in_fence) override;
-  bool ProduceLegacyMailbox(MailboxManager* mailbox_manager) override;
+  // We never generate LegacyMailboxes in threadsafe mode, so exclude this
+  // function from thread safety analysis.
+  bool ProduceLegacyMailbox(MailboxManager* mailbox_manager)
+      NO_THREAD_SAFETY_ANALYSIS override;
   gfx::Rect ClearedRect() const override;
   void SetClearedRect(const gfx::Rect& cleared_rect) override;
   base::android::ScopedHardwareBufferHandle GetAhbHandle() const;
@@ -159,19 +162,20 @@ class SharedImageBackingAHB : public ClearTrackingSharedImageBacking {
 
  private:
   gles2::Texture* GenGLTexture();
-  base::android::ScopedHardwareBufferHandle hardware_buffer_handle_;
+  const base::android::ScopedHardwareBufferHandle hardware_buffer_handle_;
 
+  // Not guarded by |lock_| as we do not use legacy_texture_ in threadsafe
+  // mode.
   gles2::Texture* legacy_texture_ = nullptr;
 
-  bool is_cleared_ = false;
-
   // All reads and writes must wait for exiting writes to complete.
-  base::ScopedFD write_sync_fd_;
-  bool is_writing_ = false;
+  base::ScopedFD write_sync_fd_ GUARDED_BY(lock_);
+  bool is_writing_ GUARDED_BY(lock_) = false;
 
   // All writes must wait for existing reads to complete.
-  base::ScopedFD read_sync_fd_;
-  base::flat_set<const SharedImageRepresentation*> active_readers_;
+  base::ScopedFD read_sync_fd_ GUARDED_BY(lock_);
+  base::flat_set<const SharedImageRepresentation*> active_readers_
+      GUARDED_BY(lock_);
 
   DISALLOW_COPY_AND_ASSIGN(SharedImageBackingAHB);
 };
@@ -463,7 +467,6 @@ SharedImageBackingAHB::~SharedImageBackingAHB() {
     legacy_texture_->RemoveLightweightRef(have_context());
     legacy_texture_ = nullptr;
   }
-  hardware_buffer_handle_.reset();
 }
 
 gfx::Rect SharedImageBackingAHB::ClearedRect() const {
@@ -482,7 +485,7 @@ void SharedImageBackingAHB::SetClearedRect(const gfx::Rect& cleared_rect) {
   AutoLock auto_lock(this);
   // If a |legacy_texture_| exists, defer to that. Once created,
   // |legacy_texture_| is never destroyed, so no need to synchronize with
-  // ClearedRectInternal.
+  // SetClearedRectInternal.
   if (legacy_texture_) {
     legacy_texture_->SetLevelClearedRect(legacy_texture_->target(), 0,
                                          cleared_rect);
@@ -497,6 +500,10 @@ void SharedImageBackingAHB::Update(std::unique_ptr<gfx::GpuFence> in_fence) {
 
 bool SharedImageBackingAHB::ProduceLegacyMailbox(
     MailboxManager* mailbox_manager) {
+  // Legacy mailboxes cannot be used safely in threadsafe mode.
+  if (is_thread_safe())
+    return false;
+
   // This doesn't need to take a lock because it is only called at creation
   // time.
   DCHECK(!is_writing_);
@@ -505,21 +512,15 @@ bool SharedImageBackingAHB::ProduceLegacyMailbox(
   legacy_texture_ = GenGLTexture();
   if (!legacy_texture_)
     return false;
-  {
-    // Lock here to access |cleared_rect_| via ClearedRectInternal().
-    AutoLock auto_lock(this);
-    // Make sure our |legacy_texture_| has the right initial cleared rect.
-    legacy_texture_->SetLevelClearedRect(legacy_texture_->target(), 0,
-                                         ClearedRectInternal());
-  }
+  // Make sure our |legacy_texture_| has the right initial cleared rect.
+  legacy_texture_->SetLevelClearedRect(legacy_texture_->target(), 0,
+                                       ClearedRectInternal());
   mailbox_manager->ProduceTexture(mailbox(), legacy_texture_);
   return true;
 }
 
 base::android::ScopedHardwareBufferHandle SharedImageBackingAHB::GetAhbHandle()
     const {
-  AutoLock auto_lock(this);
-
   return hardware_buffer_handle_.Clone();
 }
 
@@ -687,12 +688,8 @@ gles2::Texture* SharedImageBackingAHB::GenGLTexture() {
 
   // If the backing is already cleared, no need to clear it again.
   gfx::Rect cleared_rect;
-  {
-    AutoLock auto_lock(this);
-
-    if (is_cleared_)
-      cleared_rect = gfx::Rect(size());
-  }
+  if (IsCleared())
+    cleared_rect = gfx::Rect(size());
 
   texture->SetLevelInfo(target, 0, egl_image->GetInternalFormat(),
                         size().width(), size().height(), 1, 0,
