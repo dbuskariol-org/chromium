@@ -2,16 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.jsdialog;
+package org.chromium.components.app_modal;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 
 import androidx.annotation.StringRes;
 
 import org.chromium.base.Log;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
 import org.chromium.ui.modaldialog.ModalDialogManager;
 import org.chromium.ui.modaldialog.ModalDialogProperties;
@@ -47,17 +46,18 @@ public abstract class JavascriptModalDialog implements ModalDialogProperties.Con
 
     /**
      * Showing a modal dialog for a JavaScript popup with the specified dialog type.
-     * @param activity The {@link ChromeActivity} that this dialog is shown upon.
+     * @param context The {@link Context} that this dialog is shown upon.
      * @param dialogType The {@link ModalDialogManager.ModalDialogType} of the dialog.
      */
-    protected void show(
-            ChromeActivity activity, @ModalDialogManager.ModalDialogType int dialogType) {
-        mDialogCustomView = (JavascriptDialogCustomView) LayoutInflater.from(activity).inflate(
+    protected void show(Context context, ModalDialogManager manager,
+            @ModalDialogManager.ModalDialogType int dialogType) {
+        assert manager != null;
+        mDialogCustomView = (JavascriptDialogCustomView) LayoutInflater.from(context).inflate(
                 R.layout.js_modal_dialog, null);
         mDialogCustomView.setPromptText(mDefaultPromptText);
         mDialogCustomView.setSuppressCheckBoxVisibility(mShouldShowSuppressCheckBox);
 
-        Resources resources = activity.getResources();
+        Resources resources = context.getResources();
 
         mDialogModel = new PropertyModel.Builder(ModalDialogProperties.ALL_KEYS)
                                .with(ModalDialogProperties.CONTROLLER, this)
@@ -71,7 +71,7 @@ public abstract class JavascriptModalDialog implements ModalDialogProperties.Con
                                .with(ModalDialogProperties.TITLE_SCROLLABLE, true)
                                .build();
 
-        mModalDialogManager = activity.getModalDialogManager();
+        mModalDialogManager = manager;
         mModalDialogManager.showDialog(mDialogModel, dialogType);
     }
 

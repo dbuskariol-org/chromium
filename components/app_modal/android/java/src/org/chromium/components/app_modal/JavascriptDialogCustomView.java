@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.jsdialog;
+package org.chromium.components.app_modal;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -12,8 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
-
-import org.chromium.chrome.R;
 
 /**
  * The JavaScript dialog that is either app modal or tab modal.

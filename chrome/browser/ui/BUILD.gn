@@ -802,6 +802,7 @@ jumbo_static_library("ui") {
       "//chrome/android/features/dev_ui:buildflags",
       "//chrome/browser/android/thin_webview:thin_webview",
       "//chrome/browser/resources/webapks:webapks_ui_resources",
+      "//components/app_modal/android:jni_headers",
       "//components/embedder_support/android:web_contents_delegate",
       "//components/navigation_interception",
       "//components/subresource_filter/core/browser",

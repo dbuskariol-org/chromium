@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.jsdialog;
+package org.chromium.components.app_modal;
+
+import android.content.Context;
 
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
 import org.chromium.ui.modaldialog.ModalDialogManager;
@@ -62,9 +62,9 @@ public class JavascriptAppModalDialog extends JavascriptModalDialog {
     @CalledByNative
     void showJavascriptAppModalDialog(WindowAndroid window, long nativeDialogPointer) {
         assert window != null;
-        ChromeActivity activity = (ChromeActivity) window.getActivity().get();
-        // If the activity has gone away, then just clean up the native pointer.
-        if (activity == null) {
+        Context context = window.getContext().get();
+        // If the context has gone away, then just clean up the native pointer.
+        if (context == null) {
             JavascriptAppModalDialogJni.get().didCancelAppModalDialog(
                     nativeDialogPointer, JavascriptAppModalDialog.this, false);
             return;
@@ -72,7 +72,7 @@ public class JavascriptAppModalDialog extends JavascriptModalDialog {
 
         // Cache the native dialog pointer so that we can use it to return the response.
         mNativeDialogPointer = nativeDialogPointer;
-        show(activity, ModalDialogManager.ModalDialogType.APP);
+        show(context, window.getModalDialogManager(), ModalDialogManager.ModalDialogType.APP);
     }
 
     @CalledByNative
