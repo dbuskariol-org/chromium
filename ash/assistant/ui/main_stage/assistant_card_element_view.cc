@@ -74,10 +74,6 @@ const char* AssistantCardElementView::GetClassName() const {
   return "AssistantCardElementView";
 }
 
-ui::Layer* AssistantCardElementView::GetLayerForAnimating() {
-  return native_view()->layer();
-}
-
 void AssistantCardElementView::AddedToWidget() {
   aura::Window* const top_level_window = native_view()->GetToplevelWindow();
 

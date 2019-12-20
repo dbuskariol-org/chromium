@@ -28,10 +28,6 @@ const char* AssistantTextElementView::GetClassName() const {
   return "AssistantTextElementView";
 }
 
-ui::Layer* AssistantTextElementView::GetLayerForAnimating() {
-  return layer();
-}
-
 void AssistantTextElementView::ChildPreferredSizeChanged(views::View* child) {
   PreferredSizeChanged();
 }

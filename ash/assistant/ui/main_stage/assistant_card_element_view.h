@@ -28,7 +28,6 @@ class COMPONENT_EXPORT(ASSISTANT_UI) AssistantCardElementView
 
   // AssistantUiElementView:
   const char* GetClassName() const override;
-  ui::Layer* GetLayerForAnimating() override;
   void AddedToWidget() override;
   void ChildPreferredSizeChanged(views::View* child) override;
   void AboutToRequestFocusFromTabTraversal(bool reverse) override;
