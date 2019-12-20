@@ -5,11 +5,11 @@
 #ifndef ASH_ASSISTANT_UI_MAIN_STAGE_ASSISTANT_CARD_ELEMENT_VIEW_H_
 #define ASH_ASSISTANT_UI_MAIN_STAGE_ASSISTANT_CARD_ELEMENT_VIEW_H_
 
+#include "ash/assistant/ui/main_stage/assistant_ui_element_view.h"
 #include "base/component_export.h"
 #include "base/macros.h"
 #include "services/content/public/cpp/navigable_contents.h"
 #include "services/content/public/cpp/navigable_contents_view.h"
-#include "ui/views/view.h"
 
 namespace ash {
 
@@ -19,14 +19,14 @@ class AssistantViewDelegate;
 // AssistantCardElementView is the visual representation of an
 // AssistantCardElement. It is a child view of UiElementContainerView.
 class COMPONENT_EXPORT(ASSISTANT_UI) AssistantCardElementView
-    : public views::View,
+    : public AssistantUiElementView,
       public content::NavigableContentsObserver {
  public:
   AssistantCardElementView(AssistantViewDelegate* delegate,
                            const AssistantCardElement* card_element);
   ~AssistantCardElementView() override;
 
-  // views::View:
+  // AssistantUiElementView:
   const char* GetClassName() const override;
   void AddedToWidget() override;
   void ChildPreferredSizeChanged(views::View* child) override;
