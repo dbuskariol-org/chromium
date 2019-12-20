@@ -149,7 +149,7 @@ class MODULES_EXPORT MediaRecorderHandler final
 
   Member<MediaRecorder> recorder_;
 
-  HeapVector<Member<VideoTrackRecorder>> video_recorders_;
+  Vector<std::unique_ptr<VideoTrackRecorder>> video_recorders_;
   Vector<std::unique_ptr<AudioTrackRecorder>> audio_recorders_;
 
   // Worker class doing the actual Webm Muxing work.

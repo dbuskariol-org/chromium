@@ -290,16 +290,15 @@ bool MediaRecorderHandler::Start(int timeslice) {
               WTF::BindRepeating(&MediaRecorderHandler::OnPassthroughVideo,
                                  WrapWeakPersistent(this)));
       video_recorders_.emplace_back(
-          MakeGarbageCollected<VideoTrackRecorderPassthrough>(
+          std::make_unique<VideoTrackRecorderPassthrough>(
               video_tracks_[0], on_passthrough_video_cb, task_runner_));
     } else {
       const VideoTrackRecorder::OnEncodedVideoCB on_encoded_video_cb =
           media::BindToCurrentLoop(WTF::BindRepeating(
               &MediaRecorderHandler::OnEncodedVideo, WrapWeakPersistent(this)));
-      video_recorders_.emplace_back(
-          MakeGarbageCollected<VideoTrackRecorderImpl>(
-              video_codec_id_, video_tracks_[0], on_encoded_video_cb,
-              video_bits_per_second_, task_runner_));
+      video_recorders_.emplace_back(std::make_unique<VideoTrackRecorderImpl>(
+          video_codec_id_, video_tracks_[0], on_encoded_video_cb,
+          video_bits_per_second_, task_runner_));
     }
   }
 
@@ -656,7 +655,6 @@ void MediaRecorderHandler::Trace(blink::Visitor* visitor) {
   visitor->Trace(video_tracks_);
   visitor->Trace(audio_tracks_);
   visitor->Trace(recorder_);
-  visitor->Trace(video_recorders_);
 }
 
 }  // namespace blink
