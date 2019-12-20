@@ -4782,6 +4782,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kHomepageLocationName,
      flag_descriptions::kHomepageLocationDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kHomepageLocation)},
+    {"homepage-settings-ui-conversion",
+     flag_descriptions::kHomepageSettingsUIConversionName,
+     flag_descriptions::kHomepageSettingsUIConversionDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kHomepageSettingsUIConversion)},
 #endif  // defined(OS_ANDROID)
 
 #if defined(OS_CHROMEOS)

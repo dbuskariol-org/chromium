@@ -2395,6 +2395,11 @@
     "expiry_milestone": 82
   },
   {
+    "name": "homepage-settings-ui-conversion",
+    "owners": [ "wenyufu", "chrome-android-app@chromium.org" ],
+    "expiry_milestone": 84
+  },
+  {
     "name": "http-auth-committed-interstitials",
     "owners": [ "jdeblasio", "estark" ],
     "expiry_milestone": 77
