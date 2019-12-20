@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.base.test.util.UrlUtils;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
 import org.chromium.weblayer.Tab;
@@ -20,7 +21,7 @@ import org.chromium.weblayer.shell.InstrumentationActivity;
 /**
  * Tests that script execution works as expected.
  */
-@RunWith(WebLayerJUnit4ClassRunner.class)
+@RunWith(BaseJUnit4ClassRunner.class)
 public class ExecuteScriptTest {
     @Rule
     public InstrumentationActivityTestRule mActivityTestRule =

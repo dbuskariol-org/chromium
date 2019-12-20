@@ -17,6 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.weblayer.Profile;
 import org.chromium.weblayer.shell.InstrumentationActivity;
 
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Example test that just starts the weblayer shell.
  */
-@RunWith(WebLayerJUnit4ClassRunner.class)
+@RunWith(BaseJUnit4ClassRunner.class)
 public class DataClearingTest {
     @Rule
     public InstrumentationActivityTestRule mActivityTestRule =
