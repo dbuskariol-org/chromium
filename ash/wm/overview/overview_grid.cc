@@ -212,6 +212,27 @@ std::unique_ptr<views::Widget> CreateDropTargetWidget(
   return widget;
 }
 
+// Returns 1 if the name of |window_dragging_state| begins with "kFrom," else 0.
+float GetWantedDropTargetOpacity(
+    SplitViewDragIndicators::WindowDraggingState window_dragging_state) {
+  switch (window_dragging_state) {
+    case SplitViewDragIndicators::WindowDraggingState::kNoDrag:
+      return 0.f;
+    case SplitViewDragIndicators::WindowDraggingState::kOtherDisplay:
+      return 0.f;
+    case SplitViewDragIndicators::WindowDraggingState::kFromOverview:
+      return 1.f;
+    case SplitViewDragIndicators::WindowDraggingState::kFromTop:
+      return 1.f;
+    case SplitViewDragIndicators::WindowDraggingState::kFromShelf:
+      return 1.f;
+    case SplitViewDragIndicators::WindowDraggingState::kToSnapLeft:
+      return 0.f;
+    case SplitViewDragIndicators::WindowDraggingState::kToSnapRight:
+      return 0.f;
+  }
+}
+
 // Returns the bounds for the overview window grid according to the split view
 // state. If split view mode is active, the overview window should open on the
 // opposite side of the default snap window. If |divider_changed| is true, maybe
@@ -692,7 +713,6 @@ void OverviewGrid::SetBoundsAndUpdatePositions(
 }
 
 void OverviewGrid::RearrangeDuringDrag(
-    aura::Window* root_window_being_dragged_in,
     aura::Window* dragged_window,
     SplitViewDragIndicators::WindowDraggingState window_dragging_state) {
   OverviewItem* drop_target = GetDropTarget();
@@ -702,12 +722,7 @@ void OverviewGrid::RearrangeDuringDrag(
     ScopedOverviewAnimationSettings settings(
         OVERVIEW_ANIMATION_DROP_TARGET_FADE,
         drop_target_widget_->GetNativeWindow());
-    drop_target->SetOpacity(root_window_being_dragged_in == root_window_ &&
-                                    SplitViewDragIndicators::GetSnapPosition(
-                                        window_dragging_state) ==
-                                        SplitViewController::NONE
-                                ? 1.f
-                                : 0.f);
+    drop_target->SetOpacity(GetWantedDropTargetOpacity(window_dragging_state));
   }
 
   // Update the grid's bounds.
@@ -789,7 +804,7 @@ void OverviewGrid::OnWindowDragContinued(
   DCHECK_EQ(dragged_window_, dragged_window);
   DCHECK_EQ(dragged_window->GetRootWindow(), root_window_);
 
-  RearrangeDuringDrag(root_window_, dragged_window, window_dragging_state);
+  RearrangeDuringDrag(dragged_window, window_dragging_state);
   UpdateDropTargetBackgroundVisibility(nullptr, location_in_screen);
 
   aura::Window* target_window =

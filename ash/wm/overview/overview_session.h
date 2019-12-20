@@ -146,8 +146,7 @@ class ASH_EXPORT OverviewSession : public display::DisplayObserver,
       SplitViewController::SnapPosition snap_position);
 
   // See |OverviewGrid::RearrangeDuringDrag|.
-  void RearrangeDuringDrag(aura::Window* root_window_being_dragged_in,
-                           aura::Window* dragged_window);
+  void RearrangeDuringDrag(aura::Window* dragged_window);
 
   // Updates the appearance of each drop target to visually indicate when the
   // dragged window is being dragged over it.
