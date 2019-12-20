@@ -289,7 +289,7 @@ generate_jar_jni("cancellation_signal_android_jar_jni_headers") {
 }
 
 android_library("browser_java") {
-  java_files = [
+  sources = [
     "java/src/org/chromium/android_webview/AndroidProtocolHandler.java",
     "java/src/org/chromium/android_webview/AutofillActionModeCallback.java",
     "java/src/org/chromium/android_webview/AwActionModeCallback.java",
@@ -311,8 +311,8 @@ android_library("browser_java") {
     "java/src/org/chromium/android_webview/AwCookieManager.java",
     "java/src/org/chromium/android_webview/AwDebug.java",
     "java/src/org/chromium/android_webview/AwDevToolsServer.java",
-    "java/src/org/chromium/android_webview/AwFeatures.java",
     "java/src/org/chromium/android_webview/AwFeatureList.java",
+    "java/src/org/chromium/android_webview/AwFeatures.java",
     "java/src/org/chromium/android_webview/AwFirebaseConfig.java",
     "java/src/org/chromium/android_webview/AwFormDatabase.java",
     "java/src/org/chromium/android_webview/AwGeolocationPermissions.java",
@@ -372,12 +372,12 @@ android_library("browser_java") {
     "java/src/org/chromium/android_webview/gfx/JavaBrowserViewRendererHelper.java",
     "java/src/org/chromium/android_webview/metrics/AwMetricsLogUploader.java",
     "java/src/org/chromium/android_webview/metrics/AwMetricsServiceClient.java",
-    "java/src/org/chromium/android_webview/safe_browsing/AwSafeBrowsingConfigHelper.java",
-    "java/src/org/chromium/android_webview/safe_browsing/AwSafeBrowsingConversionHelper.java",
-    "java/src/org/chromium/android_webview/safe_browsing/AwSafeBrowsingResponse.java",
     "java/src/org/chromium/android_webview/permission/AwGeolocationCallback.java",
     "java/src/org/chromium/android_webview/permission/AwPermissionRequest.java",
     "java/src/org/chromium/android_webview/policy/AwPolicyProvider.java",
+    "java/src/org/chromium/android_webview/safe_browsing/AwSafeBrowsingConfigHelper.java",
+    "java/src/org/chromium/android_webview/safe_browsing/AwSafeBrowsingConversionHelper.java",
+    "java/src/org/chromium/android_webview/safe_browsing/AwSafeBrowsingResponse.java",
   ]
   deps = [
     ":common_aidl_java",
@@ -431,7 +431,9 @@ android_library("browser_java") {
 }
 
 android_library("common_variations_utils_java") {
-  java_files = [ "java/src/org/chromium/android_webview/common/variations/VariationsUtils.java" ]
+  sources = [
+    "java/src/org/chromium/android_webview/common/variations/VariationsUtils.java",
+  ]
   deps = [
     "//android_webview/proto:aw_variations_seed_proto_java",
     "//base:base_java",
@@ -444,7 +446,7 @@ android_library("common_variations_utils_java") {
 # android_webview_java. It compiles the abstract class; implementations are
 # compiled separately.
 android_library("common_platform_services_java") {
-  java_files = [
+  sources = [
     "java/src/org/chromium/android_webview/common/PlatformServiceBridge.java",
     "java/src/org/chromium/android_webview/common/PlatformServiceBridgeImpl.java",
   ]
@@ -462,14 +464,16 @@ android_library("common_platform_services_java") {
 
 # This target compiles the implementation of PlatformServiceBridge for AOSP targets.
 android_library("platform_service_bridge_upstream_implementation_java") {
-  java_files = [ "java/src/org/chromium/android_webview/common/PlatformServiceBridgeImpl.java" ]
+  sources = [
+    "java/src/org/chromium/android_webview/common/PlatformServiceBridgeImpl.java",
+  ]
   deps = [
     ":common_platform_services_java",
   ]
 }
 
 android_library("common_crash_java") {
-  java_files = [
+  sources = [
     "java/src/org/chromium/android_webview/common/crash/AwCrashReporterClient.java",
     "java/src/org/chromium/android_webview/common/crash/CrashInfo.java",
     "java/src/org/chromium/android_webview/common/crash/CrashUploadUtil.java",
@@ -488,7 +492,7 @@ android_library("common_crash_java") {
 }
 
 android_library("common_java") {
-  java_files = [
+  sources = [
     "java/src/org/chromium/android_webview/common/AwResource.java",
     "java/src/org/chromium/android_webview/common/Flag.java",
     "java/src/org/chromium/android_webview/common/FlagOverrideHelper.java",
@@ -502,8 +506,9 @@ android_library("common_java") {
 }
 
 android_library("common_commandline_java") {
-  java_files =
-      [ "java/src/org/chromium/android_webview/common/CommandLineUtil.java" ]
+  sources = [
+    "java/src/org/chromium/android_webview/common/CommandLineUtil.java",
+  ]
 
   deps = [
     "//base:base_java",
@@ -534,7 +539,9 @@ generate_product_config_srcjar("webview_product_config") {
 # level - with the list of pak locales populated by looking at the assets that
 # are listed in the final APK's .build_config.
 android_library("android_webview_product_config_java") {
-  java_files = [ "java/src/org/chromium/android_webview/AwLocaleConfig.java" ]
+  sources = [
+    "java/src/org/chromium/android_webview/AwLocaleConfig.java",
+  ]
   srcjar_deps = [ ":webview_product_config" ]
   jar_excluded_patterns = [ "*/ProductConfig.class" ]
 }
