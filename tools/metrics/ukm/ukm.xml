@@ -3585,48 +3585,112 @@ be describing additional metrics about the same event.
       The worse throughput of the main and the compositor thread during a
       compositor animation.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="SlowerThread.MainThreadAnimation">
     <summary>
       The worse throughput of the main and the compositor thread during a main
       thread animation.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="SlowerThread.PinchZoom">
     <summary>
       The worse throughput of the main and the compositor thread during
       pinch-zoom interactions.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="SlowerThread.RAF">
     <summary>
       The worse throughput of the main and the compositor thread during rAF
       callback driven animation.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="SlowerThread.TouchScroll">
     <summary>
       The worse throughput of the main and the compositor thread during
       touchscroll driven interactions.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="SlowerThread.Universal">
     <summary>
       The worse throughput of the main and the compositor thread for all frame
       production.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="SlowerThread.Video">
     <summary>
       The worse throughput of the main and the compositor thread during video
       play.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="SlowerThread.WheelScroll">
     <summary>
       The worse throughput of the main and the compositor thread during
       mousewheel scroll driven interactions.
     </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
 </event>
 
