@@ -843,6 +843,9 @@ void VaapiVideoEncodeAccelerator::Destroy() {
 
   child_weak_this_factory_.InvalidateWeakPtrs();
 
+  // We're destroying; cancel all callbacks.
+  client_ptr_factory_.reset();
+
   encoder_task_runner_->PostTask(
       FROM_HERE, base::BindOnce(&VaapiVideoEncodeAccelerator::DestroyTask,
                                 encoder_weak_this_));
