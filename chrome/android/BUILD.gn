@@ -942,6 +942,7 @@ if (enable_vr || enable_arcore) {
   # have each android_library have duplicate entries in their deps lists.
   # See https://crbug.com/860018.
   chrome_test_xr_java_deps = [
+    ":chrome_test_util_java",
     "//base:base_java",
     "//base:base_java_test_support",
     "//chrome/android:app_hooks_java",
@@ -982,7 +983,7 @@ if (enable_vr || enable_arcore) {
       "javatests/src/org/chromium/chrome/browser/vr/util/XrTestRuleUtils.java",
     ]
 
-    deps = chrome_test_xr_java_deps + [ ":chrome_test_util_java" ]
+    deps = chrome_test_xr_java_deps
 
     data = [
       "//chrome/test/data/android/feed/",
@@ -1066,14 +1067,22 @@ if (enable_vr || enable_arcore) {
       testonly = true
 
       sources = [
+        "javatests/src/org/chromium/chrome/browser/vr/WebXrArHitTestTest.java",
         "javatests/src/org/chromium/chrome/browser/vr/WebXrArSessionTest.java",
         "javatests/src/org/chromium/chrome/browser/vr/WebXrArTestFramework.java",
+        "javatests/src/org/chromium/chrome/browser/vr/rules/ArPlaybackFile.java",
+        "javatests/src/org/chromium/chrome/browser/vr/rules/ArTestRule.java",
+        "javatests/src/org/chromium/chrome/browser/vr/rules/ChromeTabbedActivityArTestRule.java",
+        "javatests/src/org/chromium/chrome/browser/vr/rules/CustomTabActivityArTestRule.java",
+        "javatests/src/org/chromium/chrome/browser/vr/rules/WebappActivityArTestRule.java",
+        "javatests/src/org/chromium/chrome/browser/vr/util/ArTestRuleUtils.java",
       ]
 
       deps =
           chrome_test_xr_java_deps + [ "//chrome/android:chrome_test_xr_java" ]
 
       data = [
+        "//chrome/test/data/xr/ar_playback_datasets/",
         "//third_party/arcore-android-sdk/test-apks/",
       ]
     }
