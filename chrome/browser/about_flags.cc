@@ -4426,9 +4426,6 @@ const FeatureEntry kFeatureEntries[] = {
 #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
 
 #if defined(OS_CHROMEOS)
-    {"crostini-webui-installer", flag_descriptions::kCrostiniWebUIInstallerName,
-     flag_descriptions::kCrostiniWebUIInstallerDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(chromeos::features::kCrostiniWebUIInstaller)},
     {"crostini-webui-upgrader", flag_descriptions::kCrostiniWebUIUpgraderName,
      flag_descriptions::kCrostiniWebUIUpgraderDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kCrostiniWebUIUpgrader)},

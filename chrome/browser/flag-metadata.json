@@ -615,11 +615,6 @@
     "expiry_milestone": 82
   },
   {
-    "name": "crostini-webui-installer",
-    "owners": [ "lxj", "timloh", "benwells" ],
-    "expiry_milestone": 82
-  },
-  {
     "name": "crostini-webui-upgrader",
     "owners": [ "nverne", "davidmunro", "benwells" ],
     "expiry_milestone": 84

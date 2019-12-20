@@ -3349,10 +3349,6 @@ const char kCrostiniUsbAllowUnsupportedName[] =
 const char kCrostiniUsbAllowUnsupportedDescription[] =
     "Allow mounting unsupported Usb devices in Crostini. At your own risk. ";
 
-const char kCrostiniWebUIInstallerName[] = "Crostini WebUI Installer";
-const char kCrostiniWebUIInstallerDescription[] =
-    "Enable the new WebUI Crostini Installer.";
-
 const char kCrostiniWebUIUpgraderName[] = "Crostini WebUI Upgrader";
 const char kCrostiniWebUIUpgraderDescription[] =
     "Enable the new WebUI Crostini Upgrader Dialog.";
