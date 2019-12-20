@@ -206,7 +206,7 @@ async function transferBetweenVolumes(transferInfo) {
 
   // If we expected the transfer to succeed, add the pasted file to the list
   // of expected rows.
-  if (!transferInfo.expectFailure && !transferInfo.isMove &&
+  if (!transferInfo.expectFailure &&
       transferInfo.source !== transferInfo.destination) {
     const pasteFile = transferInfo.fileToTransfer.getExpectedRow();
     // Check if we need to add (1) to the filename, in the case of a
