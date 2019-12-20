@@ -35,8 +35,6 @@
 #include <vector>
 
 #include "third_party/blink/public/platform/web_private_ptr.h"
-#include "third_party/blink/public/platform/web_string.h"
-#include "third_party/blink/public/platform/web_vector.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 #include "third_party/blink/renderer/platform/wtf/vector.h"
@@ -60,7 +58,7 @@ class PLATFORM_EXPORT BaseConstraint {
   virtual bool HasMax() const { return false; }
   virtual bool HasExact() const = 0;
   const char* GetName() const { return name_; }
-  virtual WebString ToString() const = 0;
+  virtual String ToString() const = 0;
 
  private:
   const char* name_;
@@ -97,7 +95,7 @@ class PLATFORM_EXPORT LongConstraint : public BaseConstraint {
   bool HasMin() const override { return has_min_; }
   bool HasMax() const override { return has_max_; }
   bool HasExact() const override { return has_exact_; }
-  WebString ToString() const override;
+  String ToString() const override;
   int32_t Min() const { return min_; }
   int32_t Max() const { return max_; }
   int32_t Exact() const { return exact_; }
@@ -149,7 +147,7 @@ class PLATFORM_EXPORT DoubleConstraint : public BaseConstraint {
   bool HasMin() const override { return has_min_; }
   bool HasMax() const override { return has_max_; }
   bool HasExact() const override { return has_exact_; }
-  WebString ToString() const override;
+  String ToString() const override;
   double Min() const { return min_; }
   double Max() const { return max_; }
   double Exact() const { return exact_; }
@@ -184,7 +182,7 @@ class PLATFORM_EXPORT StringConstraint : public BaseConstraint {
   bool Matches(String value) const;
   bool IsEmpty() const override;
   bool HasExact() const override { return !exact_.IsEmpty(); }
-  WebString ToString() const override;
+  String ToString() const override;
   bool HasIdeal() const { return !ideal_.IsEmpty(); }
   const Vector<String>& Exact() const;
   const Vector<String>& Ideal() const;
@@ -213,7 +211,7 @@ class PLATFORM_EXPORT BooleanConstraint : public BaseConstraint {
   bool Matches(bool value) const;
   bool IsEmpty() const override;
   bool HasExact() const override { return has_exact_; }
-  WebString ToString() const override;
+  String ToString() const override;
   bool HasIdeal() const { return has_ideal_; }
 
  private:
@@ -288,7 +286,7 @@ struct WebMediaTrackConstraintSet {
                                               std::string&) const;
   PLATFORM_EXPORT bool HasMin() const;
   PLATFORM_EXPORT bool HasExact() const;
-  PLATFORM_EXPORT WebString ToString() const;
+  PLATFORM_EXPORT String ToString() const;
 
  private:
   std::vector<const BaseConstraint*> AllConstraints() const;
@@ -314,12 +312,12 @@ class MediaConstraints {
   PLATFORM_EXPORT void Initialize();
   PLATFORM_EXPORT void Initialize(
       const WebMediaTrackConstraintSet& basic,
-      const WebVector<WebMediaTrackConstraintSet>& advanced);
+      const Vector<WebMediaTrackConstraintSet>& advanced);
 
   PLATFORM_EXPORT const WebMediaTrackConstraintSet& Basic() const;
-  PLATFORM_EXPORT const WebVector<WebMediaTrackConstraintSet>& Advanced() const;
+  PLATFORM_EXPORT const Vector<WebMediaTrackConstraintSet>& Advanced() const;
 
-  PLATFORM_EXPORT const WebString ToString() const;
+  PLATFORM_EXPORT const String ToString() const;
 
  private:
   WebPrivatePtr<MediaConstraintsPrivate> private_;

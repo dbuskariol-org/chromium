@@ -106,7 +106,7 @@ TEST(MediaTrackConstraintsTest, SetToString) {
 TEST(MediaTrackConstraintsTest, ConstraintsToString) {
   MediaConstraints the_constraints;
   WebMediaTrackConstraintSet basic;
-  WebVector<WebMediaTrackConstraintSet> advanced(static_cast<size_t>(1));
+  Vector<WebMediaTrackConstraintSet> advanced(static_cast<size_t>(1));
   basic.width.SetMax(240);
   advanced[0].echo_cancellation.SetExact(true);
   the_constraints.Initialize(basic, advanced);
@@ -129,7 +129,7 @@ TEST(MediaTrackConstraintsTest, ConvertWebSingleStringConstraint) {
   MediaConstraints input;
 
   WebMediaTrackConstraintSet basic;
-  WebVector<WebMediaTrackConstraintSet> advanced;
+  Vector<WebMediaTrackConstraintSet> advanced;
 
   basic.facing_mode.SetIdeal(Vector<String>({"foo"}));
   input.Initialize(basic, advanced);
@@ -148,7 +148,7 @@ TEST(MediaTrackConstraintsTest, ConvertWebDoubleStringConstraint) {
   buffer[1] = "bar";
 
   WebMediaTrackConstraintSet basic;
-  std::vector<WebMediaTrackConstraintSet> advanced;
+  Vector<WebMediaTrackConstraintSet> advanced;
   basic.facing_mode.SetIdeal(buffer);
   input.Initialize(basic, advanced);
 
@@ -234,7 +234,7 @@ TEST(MediaTrackConstraintsTest, IdealAndExactConvertToNaked) {
   advanced_element1.facing_mode.SetIdeal(buffer);
   buffer[0] = "exact";
   advanced_element2.facing_mode.SetExact(buffer);
-  std::vector<WebMediaTrackConstraintSet> advanced;
+  Vector<WebMediaTrackConstraintSet> advanced;
   advanced.push_back(advanced_element1);
   advanced.push_back(advanced_element2);
   input.Initialize(basic, advanced);
