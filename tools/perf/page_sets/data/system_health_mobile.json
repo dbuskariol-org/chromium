@@ -372,6 +372,9 @@
         "load:tools:dropbox": {
             "DEFAULT": "system_health_mobile_004.wprgo"
         },
+        "load:tools:dropbox:2019": {
+            "DEFAULT": "system_health_mobile_c19ba48444.wprgo"
+        },
         "load:tools:gmail": {
             "DEFAULT": "system_health_mobile_048.wprgo"
         },
