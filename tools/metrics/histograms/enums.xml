@@ -55325,6 +55325,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="BLACKLISTED"/>
 </enum>
 
+<enum name="SafeBrowsingRTLookupResponseVerdictType">
+  <int value="0" label="VERDICT_TYPE_UNSPECIFIED"/>
+  <int value="1" label="SAFE"/>
+  <int value="100" label="DANGEROUS"/>
+</enum>
+
 <enum name="SafeBrowsingStoreAvailabilityResult">
   <int value="0" label="Unknown"/>
   <int value="1" label="Not Enabled"/>
