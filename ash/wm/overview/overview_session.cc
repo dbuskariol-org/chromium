@@ -347,8 +347,9 @@ void OverviewSession::UpdateSplitViewDragIndicatorsWindowDraggingStates(
       SplitViewDragIndicators::ComputeWindowDraggingState(
           is_dragging, non_snap_state, snap_position);
   const State window_dragging_state_on_root_windows_not_being_dragged_in =
-      SplitViewDragIndicators::ComputeWindowDraggingState(
-          is_dragging, non_snap_state, SplitViewController::NONE);
+      window_dragging_state_on_root_window_being_dragged_in == State::kNoDrag
+          ? State::kNoDrag
+          : State::kOtherDisplay;
   for (std::unique_ptr<OverviewGrid>& grid : grid_list_) {
     grid->SetSplitViewDragIndicatorsWindowDraggingState(
         grid->root_window() == root_window_being_dragged_in

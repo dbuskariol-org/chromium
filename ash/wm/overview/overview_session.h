@@ -135,9 +135,10 @@ class ASH_EXPORT OverviewSession : public display::DisplayObserver,
   // This function sets the window dragging state on the split view drag
   // indicators on every root window. On |root_window_being_dragged_in|, the
   // state is determined by forwarding the other three arguments to
-  // |SplitViewDragIndicators::ComputeWindowDraggingState|. On other root
-  // windows, as snap previews are not appropriate, the state is determined
-  // similarly but with |SplitViewController::NONE| instead of |snap_position|.
+  // |SplitViewDragIndicators::ComputeWindowDraggingState|. If the state on
+  // |root_window_being_dragged_in| turns out to be kNoDrag, then the states on
+  // the other root windows are also set to kNoDrag. Otherwise, the states on
+  // the other root windows are set to kOtherDisplay.
   void UpdateSplitViewDragIndicatorsWindowDraggingStates(
       const aura::Window* root_window_being_dragged_in,
       bool is_dragging,
