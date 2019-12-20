@@ -38,6 +38,8 @@
 #include "third_party/blink/public/platform/web_string.h"
 #include "third_party/blink/public/platform/web_vector.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
+#include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
+#include "third_party/blink/renderer/platform/wtf/vector.h"
 
 namespace blink {
 
@@ -171,25 +173,25 @@ class PLATFORM_EXPORT StringConstraint : public BaseConstraint {
   // values for ideal and exact.
   explicit StringConstraint(const char* name);
 
-  void SetExact(const WebString& exact) { exact_.Assign(&exact, 1); }
+  void SetExact(const String& exact) { exact_ = {exact}; }
 
-  void SetExact(const WebVector<WebString>& exact) { exact_.Assign(exact); }
+  void SetExact(const Vector<String>& exact) { exact_ = exact; }
 
-  void SetIdeal(const WebString& ideal) { ideal_.Assign(&ideal, 1); }
+  void SetIdeal(const String& ideal) { ideal_ = {ideal}; }
 
-  void SetIdeal(const WebVector<WebString>& ideal) { ideal_.Assign(ideal); }
+  void SetIdeal(const Vector<String>& ideal) { ideal_ = ideal; }
 
-  bool Matches(WebString value) const;
+  bool Matches(String value) const;
   bool IsEmpty() const override;
-  bool HasExact() const override { return !exact_.empty(); }
+  bool HasExact() const override { return !exact_.IsEmpty(); }
   WebString ToString() const override;
-  bool HasIdeal() const { return !ideal_.empty(); }
-  const WebVector<WebString>& Exact() const;
-  const WebVector<WebString>& Ideal() const;
+  bool HasIdeal() const { return !ideal_.IsEmpty(); }
+  const Vector<String>& Exact() const;
+  const Vector<String>& Ideal() const;
 
  private:
-  WebVector<WebString> exact_;
-  WebVector<WebString> ideal_;
+  Vector<String> exact_;
+  Vector<String> ideal_;
 };
 
 class PLATFORM_EXPORT BooleanConstraint : public BaseConstraint {

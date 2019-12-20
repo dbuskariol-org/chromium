@@ -249,8 +249,8 @@ WebString DoubleConstraint::ToString() const {
 StringConstraint::StringConstraint(const char* name)
     : BaseConstraint(name), exact_(), ideal_() {}
 
-bool StringConstraint::Matches(WebString value) const {
-  if (exact_.empty()) {
+bool StringConstraint::Matches(String value) const {
+  if (exact_.IsEmpty()) {
     return true;
   }
   for (const auto& choice : exact_) {
@@ -262,21 +262,21 @@ bool StringConstraint::Matches(WebString value) const {
 }
 
 bool StringConstraint::IsEmpty() const {
-  return exact_.empty() && ideal_.empty();
+  return exact_.IsEmpty() && ideal_.IsEmpty();
 }
 
-const WebVector<WebString>& StringConstraint::Exact() const {
+const Vector<String>& StringConstraint::Exact() const {
   return exact_;
 }
 
-const WebVector<WebString>& StringConstraint::Ideal() const {
+const Vector<String>& StringConstraint::Ideal() const {
   return ideal_;
 }
 
 WebString StringConstraint::ToString() const {
   StringBuilder builder;
   builder.Append('{');
-  if (!ideal_.empty()) {
+  if (!ideal_.IsEmpty()) {
     builder.Append("ideal: [");
     bool first = true;
     for (const auto& iter : ideal_) {
@@ -289,7 +289,7 @@ WebString StringConstraint::ToString() const {
     }
     builder.Append(']');
   }
-  if (!exact_.empty()) {
+  if (!exact_.IsEmpty()) {
     if (builder.length() > 1)
       builder.Append(", ");
     builder.Append("exact: [");
