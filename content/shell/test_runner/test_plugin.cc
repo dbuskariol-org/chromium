@@ -596,12 +596,11 @@ blink::WebInputEventResult TestPlugin::HandleInputEvent(
   return blink::WebInputEventResult::kNotHandled;
 }
 
-bool TestPlugin::HandleDragStatusUpdate(
-    blink::WebDragStatus drag_status,
-    const blink::WebDragData& data,
-    blink::WebDragOperationsMask mask,
-    const blink::WebFloatPoint& position,
-    const blink::WebFloatPoint& screen_position) {
+bool TestPlugin::HandleDragStatusUpdate(blink::WebDragStatus drag_status,
+                                        const blink::WebDragData& data,
+                                        blink::WebDragOperationsMask mask,
+                                        const gfx::PointF& position,
+                                        const gfx::PointF& screen_position) {
   const char* drag_status_name = nullptr;
   switch (drag_status) {
     case blink::kWebDragStatusEnter:

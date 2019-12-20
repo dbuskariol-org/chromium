@@ -248,7 +248,6 @@
 #include <cpu-features.h>
 
 #include "content/renderer/java/gin_java_bridge_dispatcher.h"
-#include "third_party/blink/public/platform/web_float_point.h"
 #endif
 
 using base::Time;
@@ -304,7 +303,6 @@ using blink::mojom::SelectionMenuBehavior;
 using network::mojom::ReferrerPolicy;
 
 #if defined(OS_ANDROID)
-using blink::WebFloatPoint;
 using blink::WebFloatRect;
 #endif
 

@@ -265,8 +265,8 @@ void FrameLoader::SaveScrollAnchor() {
     if (serialized_anchor.IsValid()) {
       history_item->SetScrollAnchorData(
           {serialized_anchor.selector,
-           WebFloatPoint(serialized_anchor.relative_offset.X(),
-                         serialized_anchor.relative_offset.Y()),
+           gfx::PointF(serialized_anchor.relative_offset.X(),
+                       serialized_anchor.relative_offset.Y()),
            serialized_anchor.simhash});
     }
   }
@@ -1235,8 +1235,8 @@ void FrameLoader::RestoreScrollPositionAndViewState(
     // Anchor-based restore should allow for earlier restoration.
     bool did_restore = view->LayoutViewport()->RestoreScrollAnchor(
         {view_state.scroll_anchor_data_.selector_,
-         LayoutPoint(view_state.scroll_anchor_data_.offset_.x,
-                     view_state.scroll_anchor_data_.offset_.y),
+         LayoutPoint(view_state.scroll_anchor_data_.offset_.x(),
+                     view_state.scroll_anchor_data_.offset_.y()),
          view_state.scroll_anchor_data_.simhash_});
     if (!did_restore) {
       view->LayoutViewport()->SetScrollOffset(view_state.scroll_offset_,

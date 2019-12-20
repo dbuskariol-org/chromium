@@ -56,7 +56,6 @@
 #include "third_party/blink/public/platform/web_cursor_info.h"
 #include "third_party/blink/public/platform/web_drag_data.h"
 #include "third_party/blink/public/platform/web_drag_operation.h"
-#include "third_party/blink/public/platform/web_float_point.h"
 #include "third_party/blink/public/platform/web_size.h"
 #include "third_party/blink/public/platform/web_url_loader_mock_factory.h"
 #include "third_party/blink/public/public_buildflags.h"
@@ -736,7 +735,7 @@ TEST_F(WebViewTest, HitTestResultAtWithPageScaleAndPan) {
   positive_result.Reset();
 
   // Pan around the zoomed in page so the image is not visible in viewport.
-  web_view->SetVisualViewportOffset(WebFloatPoint(100, 100));
+  web_view->SetVisualViewportOffset(gfx::PointF(100, 100));
   WebHitTestResult negative_result2 = web_view->HitTestResultAt(hit_point);
   EXPECT_FALSE(
       negative_result2.GetNode().To<WebElement>().HasHTMLTagName("img"));
@@ -794,7 +793,7 @@ TEST_F(WebViewTest, HitTestResultForTapWithTapAreaPageScaleAndPan) {
 
   // Zoom in and pan around the page so the image is not visible in viewport.
   web_view->SetPageScaleFactor(2.0f);
-  web_view->SetVisualViewportOffset(WebFloatPoint(100, 100));
+  web_view->SetVisualViewportOffset(gfx::PointF(100, 100));
   WebHitTestResult negative_result2 =
       web_view->HitTestResultForTap(hit_point, tap_area);
   EXPECT_FALSE(
@@ -2516,8 +2515,8 @@ static void DragAndDropURL(WebViewImpl* web_view, const std::string& url) {
   item.string_data = WebString::FromUTF8(url);
   drag_data.AddItem(item);
 
-  const WebFloatPoint client_point(0, 0);
-  const WebFloatPoint screen_point(0, 0);
+  const gfx::PointF client_point;
+  const gfx::PointF screen_point;
   WebFrameWidget* widget = web_view->MainFrameImpl()->FrameWidget();
   widget->DragTargetDragEnter(drag_data, client_point, screen_point,
                               kWebDragOperationCopy, 0);
@@ -4501,13 +4500,13 @@ TEST_F(ShowUnhandledTapTest, ShowUnhandledTapUIIfNeeded) {
   constexpr float visual_y = 10.f;
 
   web_view_->SetPageScaleFactor(scale);
-  web_view_->SetVisualViewportOffset(WebFloatPoint(visual_x, visual_y));
+  web_view_->SetVisualViewportOffset(gfx::PointF(visual_x, visual_y));
 
   Tap("target");
 
   // Ensure position didn't change as a result of scroll into view.
-  ASSERT_EQ(visual_x, web_view_->VisualViewportOffset().x);
-  ASSERT_EQ(visual_y, web_view_->VisualViewportOffset().y);
+  ASSERT_EQ(visual_x, web_view_->VisualViewportOffset().x());
+  ASSERT_EQ(visual_y, web_view_->VisualViewportOffset().y());
 
   EXPECT_TRUE(mock_notifier_.WasUnhandledTap());
 
@@ -4855,7 +4854,7 @@ TEST_F(WebViewTest, ForceAndResetViewport) {
   // Override applies transform, sets visible rect, and disables
   // visual viewport clipping.
   TransformationMatrix matrix =
-      dev_tools_emulator->ForceViewportForTesting(WebFloatPoint(50, 55), 2.f);
+      dev_tools_emulator->ForceViewportForTesting(gfx::PointF(50, 55), 2.f);
   expected_matrix.MakeIdentity().Scale(2.f).Translate(-50, -55);
   EXPECT_EQ(expected_matrix, matrix);
   {
@@ -4865,8 +4864,8 @@ TEST_F(WebViewTest, ForceAndResetViewport) {
   }
 
   // Setting new override discards previous one.
-  matrix = dev_tools_emulator->ForceViewportForTesting(
-      WebFloatPoint(5.4f, 10.5f), 1.5f);
+  matrix = dev_tools_emulator->ForceViewportForTesting(gfx::PointF(5.4f, 10.5f),
+                                                       1.5f);
   expected_matrix.MakeIdentity().Scale(1.5f).Translate(-5.4f, -10.5f);
   EXPECT_EQ(expected_matrix, matrix);
   {
@@ -4904,7 +4903,7 @@ TEST_F(WebViewTest, ViewportOverrideIntegratesDeviceMetricsOffsetAndScale) {
   EXPECT_EQ(expected_matrix, web_view_impl->GetDeviceEmulationTransform());
 
   // Device metrics offset and scale are applied before viewport override.
-  emulation_params.viewport_offset = WebFloatPoint(5, 10);
+  emulation_params.viewport_offset = gfx::PointF(5, 10);
   emulation_params.viewport_scale = 1.5f;
   web_view_impl->EnableDeviceEmulation(emulation_params);
   expected_matrix.MakeIdentity()
@@ -4935,7 +4934,7 @@ TEST_F(WebViewTest, ViewportOverrideAdaptsToScaleAndScroll) {
       ScrollOffset(100, 150), kProgrammaticScroll, kScrollBehaviorInstant);
 
   WebDeviceEmulationParams emulation_params;
-  emulation_params.viewport_offset = WebFloatPoint(50, 55);
+  emulation_params.viewport_offset = gfx::PointF(50, 55);
   emulation_params.viewport_scale = 2.f;
   web_view_impl->EnableDeviceEmulation(emulation_params);
   expected_matrix.MakeIdentity()
