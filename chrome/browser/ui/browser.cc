@@ -1030,7 +1030,22 @@ void Browser::UpdateUIForNavigationInTab(WebContents* contents,
   // navigating away from the new tab page.
   ScheduleUIUpdate(contents, content::INVALIDATE_TYPE_URL);
 
-  if (contents_is_selected &&
+  // Figure out if the navigating contents can take focus (potentially taking it
+  // away from other, currently-focused UI element like the omnibox).
+  // Specifically, user-initiated navigations can give focus to the tab;
+  // renderer-initiated navigations usually don't, unless the NTP triggers them
+  // (in which case they're treated similarly to a user-initiated navigation).
+  //
+  // TODO(lukasza): https://crbug.com/1034999: Try to avoid special-casing
+  // kChromeUINewTabURL below and covering it via IsNTPOrRelatedURL instead.
+  const GURL& current_url = contents->GetLastCommittedURL();
+  bool contents_can_take_focus =
+      user_initiated || current_url == GURL(chrome::kChromeUINewTabURL) ||
+      search::IsNTPOrRelatedURL(
+          current_url,
+          Profile::FromBrowserContext(contents->GetBrowserContext()));
+
+  if (contents_can_take_focus && contents_is_selected &&
       (window()->IsActive() || action == NavigateParams::SHOW_WINDOW)) {
     contents->SetInitialFocus();
   }
