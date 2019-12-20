@@ -273,10 +273,10 @@ class MockIconCacher : public IconCacher {
  public:
   MOCK_METHOD3(StartFetchPopularSites,
                void(PopularSites::Site site,
-                    const base::Closure& icon_available,
-                    const base::Closure& preliminary_icon_available));
+                    base::OnceClosure icon_available,
+                    base::OnceClosure preliminary_icon_available));
   MOCK_METHOD2(StartFetchMostLikely,
-               void(const GURL& page_url, const base::Closure& icon_available));
+               void(const GURL& page_url, base::OnceClosure icon_available));
 };
 
 class MockCustomLinksManager : public CustomLinksManager {
@@ -486,7 +486,7 @@ class MostVisitedSitesTest
       bool save_success = false;
       tmp_popular_sites->MaybeStartFetch(
           /*force_download=*/true,
-          base::Bind(
+          base::BindOnce(
               [](bool* save_success, base::RunLoop* loop, bool success) {
                 *save_success = success;
                 loop->Quit();
