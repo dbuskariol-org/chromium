@@ -21617,6 +21617,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="1425" label="PRINTING_GETPRINTERS"/>
   <int value="1426" label="WEBCAMPRIVATE_SET_HOME"/>
   <int value="1427" label="INPUTMETHODPRIVATE_RESET"/>
+  <int value="1428" label="PRINTING_GETPRINTERINFO"/>
 </enum>
 
 <enum name="ExtensionIconState">

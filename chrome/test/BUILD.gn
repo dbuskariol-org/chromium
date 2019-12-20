@@ -2356,6 +2356,8 @@ if (!is_android) {
         "../browser/chromeos/printing/test_cups_print_job_manager.h",
         "../browser/chromeos/printing/test_cups_printers_manager.cc",
         "../browser/chromeos/printing/test_cups_printers_manager.h",
+        "../browser/chromeos/printing/test_printer_configurer.cc",
+        "../browser/chromeos/printing/test_printer_configurer.h",
         "../browser/chromeos/profiles/profile_helper_browsertest.cc",
         "../browser/chromeos/shutdown_policy_browsertest.cc",
         "../browser/chromeos/startup_settings_cache_browsertest.cc",
@@ -2450,6 +2452,7 @@ if (!is_android) {
       if (use_cups) {
         sources +=
             [ "../browser/chromeos/extensions/printing/printing_apitest.cc" ]
+        deps += [ "//printing:test_support" ]
       }
       if (enable_cros_libassistant) {
         sources += [
