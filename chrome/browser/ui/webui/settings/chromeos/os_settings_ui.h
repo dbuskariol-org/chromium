@@ -28,11 +28,14 @@ class OSSettingsUI : public ui::MojoWebUIController {
   explicit OSSettingsUI(content::WebUI* web_ui);
   ~OSSettingsUI() override;
 
+  // Instantiates implementor of the mojom::CrosNetworkConfig mojo interface
+  // passing the pending receiver that will be internally bound.
+  void BindInterface(
+      mojo::PendingReceiver<network_config::mojom::CrosNetworkConfig> receiver);
+
  private:
   void AddSettingsPageUIHandler(
       std::unique_ptr<content::WebUIMessageHandler> handler);
-  void BindCrosNetworkConfig(
-      mojo::PendingReceiver<network_config::mojom::CrosNetworkConfig> receiver);
   void BindAppManagementPageHandlerFactory(
       mojo::PendingReceiver<app_management::mojom::PageHandlerFactory>
           receiver);
@@ -41,6 +44,8 @@ class OSSettingsUI : public ui::MojoWebUIController {
 
   std::unique_ptr<AppManagementPageHandlerFactory>
       app_management_page_handler_factory_;
+
+  WEB_UI_CONTROLLER_TYPE_DECL();
 
   DISALLOW_COPY_AND_ASSIGN(OSSettingsUI);
 };

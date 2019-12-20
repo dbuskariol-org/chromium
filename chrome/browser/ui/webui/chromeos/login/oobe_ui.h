@@ -155,6 +155,11 @@ class OobeUI : public ui::MojoWebUIController {
   void BindInterface(
       mojo::PendingReceiver<
           multidevice_setup::mojom::PrivilegedHostDeviceSetter> receiver);
+  // Instantiates implementor of the mojom::CrosNetworkConfig mojo
+  // interface passing the pending receiver that will be internally bound.
+  void BindInterface(
+      mojo::PendingReceiver<chromeos::network_config::mojom::CrosNetworkConfig>
+          receiver);
 
  private:
   void AddWebUIHandler(std::unique_ptr<BaseWebUIHandler> handler);
@@ -163,10 +168,6 @@ class OobeUI : public ui::MojoWebUIController {
   // Configures all the relevant screen shandlers and resources for OOBE/Login
   // display type.
   void ConfigureOobeDisplay();
-
-  void BindCrosNetworkConfig(
-      mojo::PendingReceiver<chromeos::network_config::mojom::CrosNetworkConfig>
-          receiver);
 
   // Type of UI.
   std::string display_type_;

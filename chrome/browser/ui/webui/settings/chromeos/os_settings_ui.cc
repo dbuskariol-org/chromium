@@ -173,10 +173,6 @@ OSSettingsUI::OSSettingsUI(content::WebUI* web_ui)
 
   content::WebUIDataSource::Add(web_ui->GetWebContents()->GetBrowserContext(),
                                 html_source);
-
-  AddHandlerToRegistry(base::BindRepeating(&OSSettingsUI::BindCrosNetworkConfig,
-                                           base::Unretained(this)));
-
   AddHandlerToRegistry(
       base::BindRepeating(&OSSettingsUI::BindAppManagementPageHandlerFactory,
                           base::Unretained(this)));
@@ -190,7 +186,7 @@ void OSSettingsUI::AddSettingsPageUIHandler(
   web_ui()->AddMessageHandler(std::move(handler));
 }
 
-void OSSettingsUI::BindCrosNetworkConfig(
+void OSSettingsUI::BindInterface(
     mojo::PendingReceiver<network_config::mojom::CrosNetworkConfig> receiver) {
   ash::GetNetworkConfigService(std::move(receiver));
 }
@@ -204,6 +200,8 @@ void OSSettingsUI::BindAppManagementPageHandlerFactory(
   }
   app_management_page_handler_factory_->Bind(std::move(receiver));
 }
+
+WEB_UI_CONTROLLER_TYPE_IMPL(OSSettingsUI)
 
 }  // namespace settings
 }  // namespace chromeos

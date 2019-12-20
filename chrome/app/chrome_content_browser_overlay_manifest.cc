@@ -21,8 +21,6 @@
 
 #if defined(OS_CHROMEOS)
 #include "chromeos/services/media_perception/public/mojom/media_perception.mojom.h"
-#include "chromeos/services/network_config/public/mojom/constants.mojom.h"  // nogncheck
-#include "chromeos/services/network_config/public/mojom/cros_network_config.mojom.h"  // nogncheck
 #endif
 
 #if defined(OS_WIN)
@@ -85,9 +83,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
         .ExposeInterfaceFilterCapability_Deprecated(
             "navigation:frame", "renderer",
             service_manager::Manifest::InterfaceList<
-#if defined(OS_CHROMEOS)
-                chromeos::network_config::mojom::CrosNetworkConfig,
-#endif
                 // WebUI-only interfaces go below this line. These should be
                 // brokered through a dedicated interface, but they're here
                 // for for now.

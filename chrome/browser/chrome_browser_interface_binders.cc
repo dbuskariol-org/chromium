@@ -98,11 +98,6 @@
 #include "chrome/browser/ui/webui/new_tab_page/new_tab_page_ui.h"
 #endif
 
-#if defined(OS_CHROMEOS)
-#include "chrome/browser/ui/webui/chromeos/add_supervision/add_supervision.mojom.h"
-#include "chrome/browser/ui/webui/chromeos/add_supervision/add_supervision_ui.h"
-#endif
-
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
     defined(OS_CHROMEOS)
 #include "chrome/browser/ui/webui/discards/discards.mojom.h"
@@ -110,22 +105,27 @@
 #endif
 
 #if defined(OS_CHROMEOS)
-#include "chrome/browser/ui/webui/chromeos/machine_learning/machine_learning_internals_page_handler.mojom.h"
-#include "chrome/browser/ui/webui/chromeos/machine_learning/machine_learning_internals_ui.h"
-#endif
-
-#if defined(OS_CHROMEOS)
+#include "chrome/browser/ui/webui/chromeos/add_supervision/add_supervision.mojom.h"
+#include "chrome/browser/ui/webui/chromeos/add_supervision/add_supervision_ui.h"
 #include "chrome/browser/ui/webui/chromeos/cellular_setup/cellular_setup_dialog.h"
 #include "chrome/browser/ui/webui/chromeos/crostini_installer/crostini_installer.mojom.h"
 #include "chrome/browser/ui/webui/chromeos/crostini_installer/crostini_installer_ui.h"
 #include "chrome/browser/ui/webui/chromeos/crostini_upgrader/crostini_upgrader.mojom.h"
 #include "chrome/browser/ui/webui/chromeos/crostini_upgrader/crostini_upgrader_ui.h"
+#include "chrome/browser/ui/webui/chromeos/internet_config_dialog.h"
+#include "chrome/browser/ui/webui/chromeos/internet_detail_dialog.h"
 #include "chrome/browser/ui/webui/chromeos/login/oobe_ui.h"
+#include "chrome/browser/ui/webui/chromeos/machine_learning/machine_learning_internals_page_handler.mojom.h"
+#include "chrome/browser/ui/webui/chromeos/machine_learning/machine_learning_internals_ui.h"
 #include "chrome/browser/ui/webui/chromeos/multidevice_setup/multidevice_setup_dialog.h"
+#include "chrome/browser/ui/webui/chromeos/network_ui.h"
+#include "chrome/browser/ui/webui/settings/chromeos/os_settings_ui.h"
+#include "chrome/browser/ui/webui/settings/settings_ui.h"
 #include "chromeos/components/multidevice/debug_webui/proximity_auth_ui.h"
 #include "chromeos/services/cellular_setup/public/mojom/cellular_setup.mojom.h"
 #include "chromeos/services/multidevice_setup/multidevice_setup_service.h"
 #include "chromeos/services/multidevice_setup/public/mojom/multidevice_setup.mojom.h"
+#include "chromeos/services/network_config/public/mojom/cros_network_config.mojom.h"  // nogncheck
 #endif
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
@@ -514,6 +514,12 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<
       chromeos::multidevice_setup::mojom::PrivilegedHostDeviceSetter,
       chromeos::OobeUI>(map);
+
+  RegisterWebUIControllerInterfaceBinder<
+      chromeos::network_config::mojom::CrosNetworkConfig,
+      chromeos::InternetConfigDialogUI, chromeos::InternetDetailDialogUI,
+      chromeos::NetworkUI, chromeos::OobeUI, chromeos::settings::OSSettingsUI,
+      settings::SettingsUI>(map);
 #endif  // defined(OS_CHROMEOS)
 
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
