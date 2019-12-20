@@ -10498,15 +10498,16 @@ TEST_F(WebFrameTest, ImageDocumentLoadResponseEnd) {
   EXPECT_TRUE(document->IsImageDocument());
 
   ImageDocument* img_document = ToImageDocument(document);
-  ImageResource* resource = img_document->CachedImageResourceDeprecated();
+  ImageResourceContent* image_content = img_document->CachedImage();
 
-  EXPECT_TRUE(resource);
-  EXPECT_NE(base::TimeTicks(), resource->LoadResponseEnd());
+  EXPECT_TRUE(image_content);
+  EXPECT_NE(base::TimeTicks(), image_content->LoadResponseEnd());
 
   DocumentLoader* loader = document->Loader();
 
   EXPECT_TRUE(loader);
-  EXPECT_EQ(loader->GetTiming().ResponseEnd(), resource->LoadResponseEnd());
+  EXPECT_EQ(loader->GetTiming().ResponseEnd(),
+            image_content->LoadResponseEnd());
 }
 
 TEST_F(WebFrameTest, CopyImageDocument) {
