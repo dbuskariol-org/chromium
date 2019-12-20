@@ -97,7 +97,8 @@ class CanvasResourceProviderSharedBitmap : public CanvasResourceProviderBitmap {
     if (!IsBitmapFormatSupported(color_params.TransferableResourceFormat())) {
       // If the rendering format is not supported, downgrate to 8-bits.
       // TODO(junov): Should we try 12-12-12-12 and 10-10-10-2?
-      color_params.SetCanvasPixelFormat(CanvasPixelFormat::kRGBA8);
+      color_params.SetCanvasPixelFormat(
+          CanvasColorParams::GetNativeCanvasPixelFormat());
     }
 
     return CanvasResourceSharedBitmap::Create(Size(), color_params,
@@ -144,10 +145,11 @@ class CanvasResourceProviderSharedImage : public CanvasResourceProvider {
             // TODO(khushalsagar): The software path seems to be assuming N32
             // somewhere in the later pipeline but for offscreen canvas only.
             CanvasColorParams(color_params.ColorSpace(),
-                              color_params.PixelFormat(),
-                              color_params.GetOpacityMode(),
-                              is_accelerated ? CanvasForceRGBA::kForced
-                                             : CanvasForceRGBA::kNotForced),
+                              is_accelerated && color_params.PixelFormat() !=
+                                                    CanvasPixelFormat::kF16
+                                  ? CanvasPixelFormat::kRGBA8
+                                  : color_params.PixelFormat(),
+                              color_params.GetOpacityMode()),
             is_origin_top_left,
             std::move(context_provider_wrapper),
             std::move(resource_dispatcher)),
