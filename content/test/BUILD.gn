@@ -777,7 +777,7 @@ if (is_android) {
 
   android_library("content_browsertests_java") {
     testonly = true
-    java_files = [
+    sources = [
       "../shell/android/browsertests_apk/src/org/chromium/content_browsertests_apk/ContentBrowserTestsActivity.java",
       "../shell/android/browsertests_apk/src/org/chromium/content_browsertests_apk/ContentBrowserTestsApplication.java",
     ]
@@ -2329,7 +2329,7 @@ if (is_android) {
 
   android_library("content_unittests_java") {
     testonly = true
-    java_files = content_java_sources_needing_jni
+    sources = content_java_sources_needing_jni
     deps = [
       "$google_play_services_package:google_play_services_auth_api_phone_java",
       "$google_play_services_package:google_play_services_base_java",
