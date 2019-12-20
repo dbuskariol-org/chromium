@@ -4208,6 +4208,26 @@
             ]
         }
     ],
+    "OmniboxPreserveDefaultMatchAgainstAsyncUpdate": [
+        {
+            "platforms": [
+                "android",
+                "chromeos",
+                "ios",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Beta_Enabled",
+                    "enable_features": [
+                        "OmniboxPreserveDefaultMatchAgainstAsyncUpdate"
+                    ]
+                }
+            ]
+        }
+    ],
     "OmniboxSearchEngineLogo": [
         {
             "platforms": [
