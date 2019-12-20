@@ -413,6 +413,11 @@ Polymer({
       return true;
     }
 
+    // Valid if the key is CTRL+- or CTRL+= to zoom in and out of the screen.
+    if ((event.keyCode == 187 || event.keyCode == 189) && event.ctrlKey) {
+      return true;
+    }
+
     // The rest of the keys are invalid.
     return false;
   },
