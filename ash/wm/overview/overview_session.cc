@@ -339,22 +339,25 @@ void OverviewSession::SetSplitViewDragIndicatorsDraggedWindow(
 
 void OverviewSession::UpdateSplitViewDragIndicatorsWindowDraggingStates(
     const aura::Window* root_window_being_dragged_in,
-    bool is_dragging,
-    SplitViewDragIndicators::WindowDraggingState non_snap_state,
-    SplitViewController::SnapPosition snap_position) {
-  using State = SplitViewDragIndicators::WindowDraggingState;
-  const State window_dragging_state_on_root_window_being_dragged_in =
-      SplitViewDragIndicators::ComputeWindowDraggingState(
-          is_dragging, non_snap_state, snap_position);
-  const State window_dragging_state_on_root_windows_not_being_dragged_in =
-      window_dragging_state_on_root_window_being_dragged_in == State::kNoDrag
-          ? State::kNoDrag
-          : State::kOtherDisplay;
+    SplitViewDragIndicators::WindowDraggingState
+        state_on_root_window_being_dragged_in) {
+  if (state_on_root_window_being_dragged_in ==
+      SplitViewDragIndicators::WindowDraggingState::kNoDrag) {
+    ResetSplitViewDragIndicatorsWindowDraggingStates();
+    return;
+  }
   for (std::unique_ptr<OverviewGrid>& grid : grid_list_) {
     grid->SetSplitViewDragIndicatorsWindowDraggingState(
         grid->root_window() == root_window_being_dragged_in
-            ? window_dragging_state_on_root_window_being_dragged_in
-            : window_dragging_state_on_root_windows_not_being_dragged_in);
+            ? state_on_root_window_being_dragged_in
+            : SplitViewDragIndicators::WindowDraggingState::kOtherDisplay);
+  }
+}
+
+void OverviewSession::ResetSplitViewDragIndicatorsWindowDraggingStates() {
+  for (std::unique_ptr<OverviewGrid>& grid : grid_list_) {
+    grid->SetSplitViewDragIndicatorsWindowDraggingState(
+        SplitViewDragIndicators::WindowDraggingState::kNoDrag);
   }
 }
 
