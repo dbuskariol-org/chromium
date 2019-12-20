@@ -423,6 +423,17 @@ Polymer({
   },
 
   /**
+   * Called when the row container is pressed while the input element has focus.
+   * @param {Event} event The event object.
+   * @private
+   */
+  onRowContainerMousedown_: function(event) {
+    // Prevent the pin input from losing focus when extraneous areas of the
+    // row container are clicked.
+    event.preventDefault();
+  },
+
+  /**
    * Called when a key event is pressed while the input element has focus.
    * @param {Event} event The event object.
    * @private
