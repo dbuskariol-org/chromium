@@ -66,7 +66,6 @@ class CallStackProfileBuilder : public base::ProfileBuilder {
 
   // Both weight and count are used by the heap profiler only.
   void OnSampleCompleted(std::vector<base::Frame> frames,
-                         base::TimeTicks sample_timestamp,
                          size_t weight,
                          size_t count);
 
@@ -74,8 +73,7 @@ class CallStackProfileBuilder : public base::ProfileBuilder {
   base::ModuleCache* GetModuleCache() override;
   void RecordMetadata(
       base::ProfileBuilder::MetadataProvider* metadata_provider) override;
-  void OnSampleCompleted(std::vector<base::Frame> frames,
-                         base::TimeTicks sample_timestamp) override;
+  void OnSampleCompleted(std::vector<base::Frame> frames) override;
   void OnProfileCompleted(base::TimeDelta profile_duration,
                           base::TimeDelta sampling_period) override;
 

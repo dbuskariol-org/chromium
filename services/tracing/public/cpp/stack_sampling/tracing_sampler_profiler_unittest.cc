@@ -358,16 +358,14 @@ TEST(TracingProfileBuilderTest, ValidModule) {
   TracingSamplerProfiler::TracingProfileBuilder profile_builder(
       base::PlatformThreadId(),
       std::make_unique<MockTraceWriter>(base::DoNothing()), false);
-  profile_builder.OnSampleCompleted({base::Frame(0x1010, &module)},
-                                    base::TimeTicks());
+  profile_builder.OnSampleCompleted({base::Frame(0x1010, &module)});
 }
 
 TEST(TracingProfileBuilderTest, InvalidModule) {
   TracingSamplerProfiler::TracingProfileBuilder profile_builder(
       base::PlatformThreadId(),
       std::make_unique<MockTraceWriter>(base::DoNothing()), false);
-  profile_builder.OnSampleCompleted({base::Frame(0x1010, nullptr)},
-                                    base::TimeTicks());
+  profile_builder.OnSampleCompleted({base::Frame(0x1010, nullptr)});
 }
 
 #if defined(OS_ANDROID) || defined(OS_LINUX)
@@ -394,8 +392,7 @@ TEST(TracingProfileBuilderTest, MangleELFModuleID) {
   auto* raw_trace_writer = trace_writer.get();
   TracingSamplerProfiler::TracingProfileBuilder profile_builder(
       base::PlatformThreadId(), std::move(trace_writer), false);
-  profile_builder.OnSampleCompleted({base::Frame(0x1010, &module)},
-                                    base::TimeTicks());
+  profile_builder.OnSampleCompleted({base::Frame(0x1010, &module)});
   raw_trace_writer->FlushPacketIfPossible();
   EXPECT_TRUE(found_build_id);
 }
