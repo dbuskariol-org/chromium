@@ -389,7 +389,6 @@ source_set("eg_tests") {
     "settings_accessibility_egtest.mm",
     "settings_egtest.mm",
     "signin_settings_egtest.mm",
-    "translate_ui_egtest.mm",
   ]
 
   deps = [
@@ -502,7 +501,6 @@ source_set("eg2_tests") {
     "settings_accessibility_egtest.mm",
     "settings_egtest.mm",
     "signin_settings_egtest.mm",
-    "translate_ui_egtest.mm",
   ]
   deps = [
     ":eg_test_support+eg2",
