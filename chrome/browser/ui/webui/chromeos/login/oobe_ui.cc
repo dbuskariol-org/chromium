@@ -501,7 +501,7 @@ void OobeUI::BindInterface(
     service->BindMultiDeviceSetup(std::move(receiver));
 }
 
-void OobeUI::BindPrivilegedHostDeviceSetter(
+void OobeUI::BindInterface(
     mojo::PendingReceiver<multidevice_setup::mojom::PrivilegedHostDeviceSetter>
         receiver) {
   multidevice_setup::MultiDeviceSetupService* service =
@@ -554,8 +554,6 @@ OobeUI::OobeUI(content::WebUI* web_ui, const GURL& url)
         base::BindOnce(DisablePolymer2));
   }
 
-  AddHandlerToRegistry(base::BindRepeating(
-      &OobeUI::BindPrivilegedHostDeviceSetter, base::Unretained(this)));
   AddHandlerToRegistry(base::BindRepeating(&OobeUI::BindCrosNetworkConfig,
                                            base::Unretained(this)));
 }

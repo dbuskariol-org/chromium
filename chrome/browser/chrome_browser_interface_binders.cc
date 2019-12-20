@@ -125,6 +125,7 @@
 #include "chromeos/components/multidevice/debug_webui/proximity_auth_ui.h"
 #include "chromeos/services/cellular_setup/public/mojom/cellular_setup.mojom.h"
 #include "chromeos/services/multidevice_setup/multidevice_setup_service.h"
+#include "chromeos/services/multidevice_setup/public/mojom/multidevice_setup.mojom.h"
 #endif
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
@@ -509,6 +510,10 @@ void PopulateChromeWebUIFrameBinders(
       chromeos::multidevice_setup::mojom::MultiDeviceSetup, chromeos::OobeUI,
       chromeos::multidevice::ProximityAuthUI,
       chromeos::multidevice_setup::MultiDeviceSetupDialogUI>(map);
+
+  RegisterWebUIControllerInterfaceBinder<
+      chromeos::multidevice_setup::mojom::PrivilegedHostDeviceSetter,
+      chromeos::OobeUI>(map);
 #endif  // defined(OS_CHROMEOS)
 
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \

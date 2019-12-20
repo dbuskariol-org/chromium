@@ -21,7 +21,6 @@
 
 #if defined(OS_CHROMEOS)
 #include "chromeos/services/media_perception/public/mojom/media_perception.mojom.h"
-#include "chromeos/services/multidevice_setup/public/mojom/multidevice_setup.mojom.h"
 #include "chromeos/services/network_config/public/mojom/constants.mojom.h"  // nogncheck
 #include "chromeos/services/network_config/public/mojom/cros_network_config.mojom.h"  // nogncheck
 #endif
@@ -87,7 +86,6 @@ const service_manager::Manifest& GetChromeContentBrowserOverlayManifest() {
             "navigation:frame", "renderer",
             service_manager::Manifest::InterfaceList<
 #if defined(OS_CHROMEOS)
-                chromeos::multidevice_setup::mojom::PrivilegedHostDeviceSetter,
                 chromeos::network_config::mojom::CrosNetworkConfig,
 #endif
                 // WebUI-only interfaces go below this line. These should be
