@@ -165,6 +165,8 @@ void HotseatWidget::DelegateView::Init(
 void HotseatWidget::DelegateView::UpdateOpaqueBackground() {
   if (!ShouldShowHotseatBackground()) {
     opaque_background_.SetVisible(false);
+    if (features::IsBackgroundBlurEnabled())
+      opaque_background_.SetBackgroundBlur(0);
     return;
   }
 
