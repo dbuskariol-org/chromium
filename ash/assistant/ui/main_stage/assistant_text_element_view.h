@@ -23,6 +23,7 @@ class COMPONENT_EXPORT(ASSISTANT_UI) AssistantTextElementView
 
   // AssistantUiElementView:
   const char* GetClassName() const override;
+  ui::Layer* GetLayerForAnimating() override;
   void ChildPreferredSizeChanged(views::View* child) override;
 
  private:
