@@ -25,6 +25,7 @@ from .codegen_context import CodeGenContext
 from .codegen_expr import expr_from_exposure
 from .codegen_format import format_template as _format
 from .codegen_utils import collect_include_headers
+from .codegen_utils import enclose_with_header_guard
 from .codegen_utils import enclose_with_namespace
 from .codegen_utils import make_copyright_header
 from .codegen_utils import make_forward_declarations
@@ -703,17 +704,26 @@ def generate_dictionary_h_file(dictionary):
         "Visitor",
     ])
 
+    namespace_node = enclose_with_namespace(
+        ListNode([
+            make_forward_declarations(root_node.accumulator),
+            TextNode(""),
+            code_node,
+        ]), name_style.namespace("blink"))
+
+    header_guard = name_style.header_guard(
+        PathManager(dictionary).dict_path(ext="h"))
+    header_guard_node = enclose_with_header_guard(
+        ListNode([
+            make_header_include_directives(root_node.accumulator),
+            TextNode(""),
+            namespace_node,
+        ]), header_guard)
+
     root_node.extend([
         make_copyright_header(),
         TextNode(""),
-        make_header_include_directives(root_node.accumulator),
-        TextNode(""),
-        enclose_with_namespace(
-            ListNode([
-                make_forward_declarations(root_node.accumulator),
-                TextNode(""),
-                code_node,
-            ]), name_style.namespace("blink")),
+        header_guard_node,
     ])
 
     filename = "example_dictionary.h"
