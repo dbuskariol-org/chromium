@@ -64,7 +64,6 @@
 #include "third_party/skia/include/core/SkSurface.h"
 #include "third_party/skia/include/gpu/GrContext.h"
 #include "third_party/skia/include/gpu/gl/GrGLTypes.h"
-#include "ui/gl/gpu_preference.h"
 #include "v8/include/v8.h"
 
 namespace blink {

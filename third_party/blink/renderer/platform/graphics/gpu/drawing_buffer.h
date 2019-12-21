@@ -611,7 +611,7 @@ class PLATFORM_EXPORT DrawingBuffer : public cc::TextureLayerClient,
 
   bool opengl_flip_y_extension_;
 
-  gl::GpuPreference initial_gpu_;
+  const gl::GpuPreference initial_gpu_;
   gl::GpuPreference current_active_gpu_;
 
   DISALLOW_COPY_AND_ASSIGN(DrawingBuffer);
