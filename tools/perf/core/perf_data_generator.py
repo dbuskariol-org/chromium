@@ -524,6 +524,30 @@ BUILDERS = {
       'device_os_flavor': 'google',
     },
   },
+  'win-10_laptop_low_end-perf': {
+    'tests': [
+      {
+        'isolate': 'performance_test_suite',
+        'extra_args': [
+            '--assert-gpu-compositing',
+        ],
+      },
+    ],
+    'platform': 'win',
+    'target_bits': 64,
+    'dimension': {
+      'pool': 'chrome.tests.perf',
+      # Explicitly set GPU driver version and Windows OS version such
+      # that we can be informed if this
+      # version ever changes or becomes inconsistent. It is important
+      # that bots are homogeneous. See crbug.com/988045 for history.
+      'os': 'Windows-10-18363.476',
+      'gpu': '8086:1616-20.19.15.5070',
+      # TODO(crbug.com/998161): Add synthetic product name for these.
+      # They don't have this dimension yet as I am writing this CL since
+      # they are since in pool 'unassigned'.
+    },
+  },
   'win-10-perf': {
     'tests': [
       {
