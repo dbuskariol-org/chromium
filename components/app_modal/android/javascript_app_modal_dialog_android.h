@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_ANDROID_JAVASCRIPT_APP_MODAL_DIALOG_ANDROID_H_
-#define CHROME_BROWSER_UI_ANDROID_JAVASCRIPT_APP_MODAL_DIALOG_ANDROID_H_
+#ifndef COMPONENTS_APP_MODAL_ANDROID_JAVASCRIPT_APP_MODAL_DIALOG_ANDROID_H_
+#define COMPONENTS_APP_MODAL_ANDROID_JAVASCRIPT_APP_MODAL_DIALOG_ANDROID_H_
 
 #include <memory>
 
@@ -14,16 +14,14 @@
 #include "ui/gfx/native_widget_types.h"
 
 namespace app_modal {
-class JavaScriptAppModalDialog;
-}
 
-class JavascriptAppModalDialogAndroid
-    : public app_modal::NativeAppModalDialog {
+class JavaScriptAppModalDialog;
+
+class JavascriptAppModalDialogAndroid : public NativeAppModalDialog {
  public:
-  JavascriptAppModalDialogAndroid(
-      JNIEnv* env,
-      app_modal::JavaScriptAppModalDialog* dialog,
-      gfx::NativeWindow parent);
+  JavascriptAppModalDialogAndroid(JNIEnv* env,
+                                  JavaScriptAppModalDialog* dialog,
+                                  gfx::NativeWindow parent);
 
   // NativeAppModalDialog:
   void ShowAppModalDialog() override;
@@ -45,16 +43,21 @@ class JavascriptAppModalDialogAndroid
 
   const base::android::ScopedJavaGlobalRef<jobject>& GetDialogObject() const;
 
- private:
-  // The object deletes itself.
+ protected:
+  void DoShowAppModalDialog(bool is_web_contents_foremost);
+
+  JavaScriptAppModalDialog* dialog() { return dialog_.get(); }
+
   ~JavascriptAppModalDialogAndroid() override;
 
-  std::unique_ptr<app_modal::JavaScriptAppModalDialog> dialog_;
+ private:
+  std::unique_ptr<JavaScriptAppModalDialog> dialog_;
   base::android::ScopedJavaGlobalRef<jobject> dialog_jobject_;
   JavaObjectWeakGlobalRef parent_jobject_weak_ref_;
 
   DISALLOW_COPY_AND_ASSIGN(JavascriptAppModalDialogAndroid);
 };
 
+}  // namespace app_modal
 
-#endif  // CHROME_BROWSER_UI_ANDROID_JAVASCRIPT_APP_MODAL_DIALOG_ANDROID_H_
+#endif  // COMPONENTS_APP_MODAL_ANDROID_JAVASCRIPT_APP_MODAL_DIALOG_ANDROID_H_

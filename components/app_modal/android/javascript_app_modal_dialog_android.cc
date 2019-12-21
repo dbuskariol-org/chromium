@@ -2,15 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/android/javascript_app_modal_dialog_android.h"
+#include "components/app_modal/android/javascript_app_modal_dialog_android.h"
 
 #include "base/android/jni_android.h"
 #include "base/android/jni_string.h"
 #include "base/macros.h"
 #include "base/memory/ptr_util.h"
 #include "base/metrics/histogram_macros.h"
-#include "chrome/browser/android/tab_android.h"
-#include "chrome/browser/ui/javascript_dialogs/chrome_javascript_native_app_modal_dialog_factory.h"
 #include "components/app_modal/android/jni_headers/JavascriptAppModalDialog_jni.h"
 #include "components/app_modal/app_modal_dialog_queue.h"
 #include "components/app_modal/javascript_app_modal_dialog.h"
@@ -28,72 +26,17 @@ using base::android::JavaParamRef;
 using base::android::ScopedJavaGlobalRef;
 using base::android::ScopedJavaLocalRef;
 
+namespace app_modal {
+
 JavascriptAppModalDialogAndroid::JavascriptAppModalDialogAndroid(
     JNIEnv* env,
     app_modal::JavaScriptAppModalDialog* dialog,
     gfx::NativeWindow parent)
     : dialog_(dialog),
-      parent_jobject_weak_ref_(env, parent->GetJavaObject().obj()) {
-}
+      parent_jobject_weak_ref_(env, parent->GetJavaObject().obj()) {}
 
 void JavascriptAppModalDialogAndroid::ShowAppModalDialog() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-
-  JNIEnv* env = AttachCurrentThread();
-  // Keep a strong ref to the parent window while we make the call to java to
-  // display the dialog.
-  ScopedJavaLocalRef<jobject> parent_jobj = parent_jobject_weak_ref_.get(env);
-
-  TabAndroid* tab = TabAndroid::FromWebContents(dialog_->web_contents());
-  if (parent_jobj.is_null() || !tab) {
-    CancelAppModalDialog();
-    return;
-  }
-
-  ScopedJavaLocalRef<jobject> dialog_object;
-  ScopedJavaLocalRef<jstring> title =
-      ConvertUTF16ToJavaString(env, dialog_->title());
-  ScopedJavaLocalRef<jstring> message =
-      ConvertUTF16ToJavaString(env, dialog_->message_text());
-
-  bool foremost = tab->IsUserInteractable();
-  switch (dialog_->javascript_dialog_type()) {
-    case content::JAVASCRIPT_DIALOG_TYPE_ALERT: {
-      UMA_HISTOGRAM_BOOLEAN("JSDialogs.IsForemost.Alert", foremost);
-      dialog_object = Java_JavascriptAppModalDialog_createAlertDialog(
-          env, title, message, dialog_->display_suppress_checkbox());
-      break;
-    }
-    case content::JAVASCRIPT_DIALOG_TYPE_CONFIRM: {
-      if (dialog_->is_before_unload_dialog()) {
-        dialog_object = Java_JavascriptAppModalDialog_createBeforeUnloadDialog(
-            env, title, message, dialog_->is_reload(),
-            dialog_->display_suppress_checkbox());
-      } else {
-        UMA_HISTOGRAM_BOOLEAN("JSDialogs.IsForemost.Confirm", foremost);
-        dialog_object = Java_JavascriptAppModalDialog_createConfirmDialog(
-            env, title, message, dialog_->display_suppress_checkbox());
-      }
-      break;
-    }
-    case content::JAVASCRIPT_DIALOG_TYPE_PROMPT: {
-      UMA_HISTOGRAM_BOOLEAN("JSDialogs.IsForemost.Prompt", foremost);
-      ScopedJavaLocalRef<jstring> default_prompt_text =
-          ConvertUTF16ToJavaString(env, dialog_->default_prompt_text());
-      dialog_object = Java_JavascriptAppModalDialog_createPromptDialog(
-          env, title, message, dialog_->display_suppress_checkbox(),
-          default_prompt_text);
-      break;
-    }
-    default:
-      NOTREACHED();
-  }
-
-  // Keep a ref to the java side object until we get a confirm or cancel.
-  dialog_jobject_.Reset(dialog_object);
-
-  Java_JavascriptAppModalDialog_showJavascriptAppModalDialog(
-      env, dialog_object, parent_jobj, reinterpret_cast<intptr_t>(this));
+  DoShowAppModalDialog(true);
 }
 
 void JavascriptAppModalDialogAndroid::ActivateAppModalDialog() {
@@ -139,8 +82,77 @@ void JavascriptAppModalDialogAndroid::DidCancelAppModalDialog(
 }
 
 const ScopedJavaGlobalRef<jobject>&
-    JavascriptAppModalDialogAndroid::GetDialogObject() const {
+JavascriptAppModalDialogAndroid::GetDialogObject() const {
   return dialog_jobject_;
+}
+
+void JavascriptAppModalDialogAndroid::DoShowAppModalDialog(
+    bool is_web_contents_foremost) {
+  JNIEnv* env = AttachCurrentThread();
+  // Keep a strong ref to the parent window while we make the call to java to
+  // display the dialog.
+  ScopedJavaLocalRef<jobject> parent_jobj = parent_jobject_weak_ref_.get(env);
+  if (parent_jobj.is_null()) {
+    CancelAppModalDialog();
+    return;
+  }
+
+  ScopedJavaLocalRef<jobject> dialog_object;
+  ScopedJavaLocalRef<jstring> title =
+      ConvertUTF16ToJavaString(env, dialog_->title());
+  ScopedJavaLocalRef<jstring> message =
+      ConvertUTF16ToJavaString(env, dialog_->message_text());
+
+  switch (dialog_->javascript_dialog_type()) {
+    case content::JAVASCRIPT_DIALOG_TYPE_ALERT: {
+      UMA_HISTOGRAM_BOOLEAN("JSDialogs.IsForemost.Alert",
+                            is_web_contents_foremost);
+      dialog_object = Java_JavascriptAppModalDialog_createAlertDialog(
+          env, title, message, dialog_->display_suppress_checkbox());
+      break;
+    }
+    case content::JAVASCRIPT_DIALOG_TYPE_CONFIRM: {
+      if (dialog_->is_before_unload_dialog()) {
+        dialog_object = Java_JavascriptAppModalDialog_createBeforeUnloadDialog(
+            env, title, message, dialog_->is_reload(),
+            dialog_->display_suppress_checkbox());
+      } else {
+        UMA_HISTOGRAM_BOOLEAN("JSDialogs.IsForemost.Confirm",
+                              is_web_contents_foremost);
+        dialog_object = Java_JavascriptAppModalDialog_createConfirmDialog(
+            env, title, message, dialog_->display_suppress_checkbox());
+      }
+      break;
+    }
+    case content::JAVASCRIPT_DIALOG_TYPE_PROMPT: {
+      UMA_HISTOGRAM_BOOLEAN("JSDialogs.IsForemost.Prompt",
+                            is_web_contents_foremost);
+      ScopedJavaLocalRef<jstring> default_prompt_text =
+          ConvertUTF16ToJavaString(env, dialog_->default_prompt_text());
+      dialog_object = Java_JavascriptAppModalDialog_createPromptDialog(
+          env, title, message, dialog_->display_suppress_checkbox(),
+          default_prompt_text);
+      break;
+    }
+    default:
+      NOTREACHED();
+  }
+
+  // Keep a ref to the java side object until we get a confirm or cancel.
+  dialog_jobject_.Reset(dialog_object);
+
+  Java_JavascriptAppModalDialog_showJavascriptAppModalDialog(
+      env, dialog_object, parent_jobj, reinterpret_cast<intptr_t>(this));
+}
+
+JavascriptAppModalDialogAndroid::~JavascriptAppModalDialogAndroid() {
+  // In case the dialog is still displaying, tell it to close itself.
+  // This can happen if you trigger a dialog but close the Tab before it's
+  // shown, and then accept the dialog.
+  if (!dialog_jobject_.is_null()) {
+    JNIEnv* env = AttachCurrentThread();
+    Java_JavascriptAppModalDialog_dismiss(env, dialog_jobject_);
+  }
 }
 
 // static
@@ -156,40 +168,4 @@ ScopedJavaLocalRef<jobject> JNI_JavascriptAppModalDialog_GetCurrentModalDialog(
   return ScopedJavaLocalRef<jobject>(js_dialog->GetDialogObject());
 }
 
-JavascriptAppModalDialogAndroid::~JavascriptAppModalDialogAndroid() {
-  // In case the dialog is still displaying, tell it to close itself.
-  // This can happen if you trigger a dialog but close the Tab before it's
-  // shown, and then accept the dialog.
-  if (!dialog_jobject_.is_null()) {
-    JNIEnv* env = AttachCurrentThread();
-    Java_JavascriptAppModalDialog_dismiss(env, dialog_jobject_);
-  }
-}
-
-namespace {
-
-class ChromeJavaScriptNativeDialogAndroidFactory
-    : public app_modal::JavaScriptNativeDialogFactory {
- public:
-  ChromeJavaScriptNativeDialogAndroidFactory() {}
-  ~ChromeJavaScriptNativeDialogAndroidFactory() override {}
-
- private:
-  app_modal::NativeAppModalDialog* CreateNativeJavaScriptDialog(
-      app_modal::JavaScriptAppModalDialog* dialog) override {
-    dialog->web_contents()->GetDelegate()->ActivateContents(
-        dialog->web_contents());
-    return new JavascriptAppModalDialogAndroid(
-        base::android::AttachCurrentThread(),
-        dialog, dialog->web_contents()->GetTopLevelNativeWindow());
-  }
-
-  DISALLOW_COPY_AND_ASSIGN(ChromeJavaScriptNativeDialogAndroidFactory);
-};
-
-}  // namespace
-
-void InstallChromeJavaScriptNativeAppModalDialogFactory() {
-  app_modal::JavaScriptDialogManager::GetInstance()->SetNativeDialogFactory(
-      base::WrapUnique(new ChromeJavaScriptNativeDialogAndroidFactory));
-}
+}  // namespace app_modal
