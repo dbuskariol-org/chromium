@@ -629,6 +629,8 @@ _CONFIG = [
             'base::MRUCache',
             'gl::GpuPreference',
             'gpu::gles2::GLES2Interface',
+            'gpu::raster::RasterInterface',
+            'gpu::Mailbox',
             'gpu::MailboxHolder',
             'display::Display',
         ],
