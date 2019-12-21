@@ -860,9 +860,13 @@ const FeatureEntry::FeatureParam
     kOmniboxOnFocusSuggestionsParamNTPRealboxRemoteLocal[] = {
         {"ZeroSuggestVariant:15:*", "RemoteNoUrl,Local"}};
 const FeatureEntry::FeatureParam
+    kOmniboxOnFocusSuggestionsParamExtensionNTPOmniboxRemoteLocal[] = {
+        {"ZeroSuggestVariant:1:*", "RemoteNoUrl,Local"}};
+const FeatureEntry::FeatureParam
     kOmniboxOnFocusSuggestionsParamNTPOmniboxRealboxRemoteLocal[] = {
         *kOmniboxOnFocusSuggestionsParamNTPOmniboxRemoteLocal,
-        *kOmniboxOnFocusSuggestionsParamNTPRealboxRemoteLocal};
+        *kOmniboxOnFocusSuggestionsParamNTPRealboxRemoteLocal,
+        *kOmniboxOnFocusSuggestionsParamExtensionNTPOmniboxRemoteLocal};
 #endif  // defined(OS_ANDROID)
 
 const FeatureEntry::FeatureVariation kOmniboxOnFocusSuggestionsVariations[] = {
@@ -883,7 +887,11 @@ const FeatureEntry::FeatureVariation kOmniboxOnFocusSuggestionsVariations[] = {
      kOmniboxOnFocusSuggestionsParamNTPRealboxRemoteLocal,
      base::size(kOmniboxOnFocusSuggestionsParamNTPRealboxRemoteLocal),
      "t3316133" /* variation_id */},
-    {"NTP Omnibox,Realbox - Remote,Local",
+    {"Extension NTP Omnibox - Remote,Local",
+     kOmniboxOnFocusSuggestionsParamExtensionNTPOmniboxRemoteLocal,
+     base::size(kOmniboxOnFocusSuggestionsParamExtensionNTPOmniboxRemoteLocal),
+     "t3316133" /* variation_id */},
+    {"Everywhere - Remote,Local",
      kOmniboxOnFocusSuggestionsParamNTPOmniboxRealboxRemoteLocal,
      base::size(kOmniboxOnFocusSuggestionsParamNTPOmniboxRealboxRemoteLocal),
      "t3316133" /* variation_id */},
