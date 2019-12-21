@@ -1634,8 +1634,6 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/tabmodel/EmptyTabModelSelectorObserver.java",
   "java/src/org/chromium/chrome/browser/tabmodel/IncognitoTabModel.java",
   "java/src/org/chromium/chrome/browser/tabmodel/IncognitoTabModelImplCreator.java",
-  "java/src/org/chromium/chrome/browser/tabmodel/SingleTabModel.java",
-  "java/src/org/chromium/chrome/browser/tabmodel/SingleTabModelSelector.java",
   "java/src/org/chromium/chrome/browser/tabmodel/TabCreatorManager.java",
   "java/src/org/chromium/chrome/browser/tabmodel/TabList.java",
   "java/src/org/chromium/chrome/browser/tabmodel/TabModel.java",
