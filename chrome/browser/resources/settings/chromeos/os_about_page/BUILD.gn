@@ -30,6 +30,7 @@ js_library("os_about_page") {
 js_library("detailed_build_info") {
   deps = [
     "../../about_page:about_page_browser_proxy",
+    "../localized_link:localized_link",
     "//ui/webui/resources/cr_elements/policy:cr_policy_indicator_behavior",
     "//ui/webui/resources/js:assert",
     "//ui/webui/resources/js:i18n_behavior",
