@@ -387,14 +387,15 @@ class UnmaskCardRequest : public PaymentsRequest {
 
     // Either FIDO assertion info is set or CVC is set, never both.
     bool is_cvc_auth = !request_details_.user_response.cvc.empty();
-    bool is_fido_auth = request_details_.fido_assertion_info.is_dict();
+    bool is_fido_auth = request_details_.fido_assertion_info.has_value();
 
     DCHECK_NE(is_cvc_auth, is_fido_auth);
     if (is_cvc_auth) {
       request_dict.SetKey("encrypted_cvc", base::Value("__param:s7e_13_cvc"));
     } else {
-      request_dict.SetKey("fido_assertion_info",
-                          std::move(request_details_.fido_assertion_info));
+      request_dict.SetKey(
+          "fido_assertion_info",
+          std::move(request_details_.fido_assertion_info.value()));
     }
 
     std::string json_request;
@@ -516,12 +517,12 @@ class OptChangeRequest : public PaymentsRequest {
     }
     request_dict.SetKey("reason", base::Value(reason));
 
-    if (request_details_.fido_authenticator_response.is_dict()) {
+    if (request_details_.fido_authenticator_response.has_value()) {
       base::Value fido_authentication_info(base::Value::Type::DICTIONARY);
 
       fido_authentication_info.SetKey(
           "fido_authenticator_response",
-          std::move(request_details_.fido_authenticator_response));
+          std::move(request_details_.fido_authenticator_response.value()));
 
       if (!request_details_.card_authorization_token.empty()) {
         fido_authentication_info.SetKey(
@@ -1021,7 +1022,11 @@ PaymentsClient::UnmaskRequestDetails::UnmaskRequestDetails(
   card = other.card;
   risk_data = other.risk_data;
   user_response = other.user_response;
-  fido_assertion_info = other.fido_assertion_info.Clone();
+  if (other.fido_assertion_info.has_value()) {
+    fido_assertion_info = other.fido_assertion_info->Clone();
+  } else {
+    fido_assertion_info.reset();
+  }
 }
 PaymentsClient::UnmaskRequestDetails::~UnmaskRequestDetails() = default;
 
@@ -1053,7 +1058,11 @@ PaymentsClient::OptChangeRequestDetails::OptChangeRequestDetails(
     const OptChangeRequestDetails& other) {
   app_locale = other.app_locale;
   reason = other.reason;
-  fido_authenticator_response = other.fido_authenticator_response.Clone();
+  if (other.fido_authenticator_response.has_value()) {
+    fido_authenticator_response = other.fido_authenticator_response->Clone();
+  } else {
+    fido_authenticator_response.reset();
+  }
   card_authorization_token = other.card_authorization_token;
 }
 PaymentsClient::OptChangeRequestDetails::~OptChangeRequestDetails() = default;

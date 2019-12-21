@@ -322,7 +322,7 @@ void CreditCardFIDOAuthenticator::OptChange(
     request_details.fido_authenticator_response =
         std::move(authenticator_response);
     opt_change_metric =
-        request_details.fido_authenticator_response.FindKey(
+        request_details.fido_authenticator_response->FindKey(
             "fido_assertion_info")
             ? AutofillMetrics::WebauthnOptInParameters::kWithRequestChallenge
             : AutofillMetrics::WebauthnOptInParameters::kWithCreationChallenge;
