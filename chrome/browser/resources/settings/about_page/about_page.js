@@ -12,8 +12,6 @@ Polymer({
 
   behaviors: [
     WebUIListenerBehavior,
-    settings.MainPageBehavior,
-    settings.RouteObserverBehavior,
     I18nBehavior,
   ],
 
@@ -105,20 +103,6 @@ Polymer({
       this.aboutBrowserProxy_.requestUpdate();
     }
     // </if>
-  },
-
-  /**
-   * @param {!settings.Route} newRoute
-   * @param {settings.Route} oldRoute
-   */
-  currentRouteChanged: function(newRoute, oldRoute) {
-    settings.MainPageBehavior.currentRouteChanged.call(
-        this, newRoute, oldRoute);
-  },
-
-  // Override settings.MainPageBehavior method.
-  containsRoute: function(route) {
-    return !route || settings.routes.ABOUT.contains(route);
   },
 
   // <if expr="not chromeos">
