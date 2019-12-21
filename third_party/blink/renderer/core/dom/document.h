@@ -237,8 +237,6 @@ enum ShadowCascadeOrder {
   kShadowCascadeV1
 };
 
-enum class SecureContextState { kNonSecure, kSecure };
-
 using DocumentClassFlags = unsigned char;
 
 // A map of IDL attribute name to Element value, for one particular element.
@@ -1356,12 +1354,6 @@ class CORE_EXPORT Document : public ContainerNode,
 
   NthIndexCache* GetNthIndexCache() const { return nth_index_cache_; }
 
-  bool IsSecureContext(String& error_message) const override;
-  bool IsSecureContext() const override;
-  void SetSecureContextStateForTesting(SecureContextState state) {
-    secure_context_state_ = state;
-  }
-
   CanvasFontCache* GetCanvasFontCache();
 
   // Used by unit tests so that all parsing will be main thread for
@@ -1680,7 +1672,6 @@ class CORE_EXPORT Document : public ContainerNode,
   ScriptedIdleTaskController& EnsureScriptedIdleTaskController();
   void InitSecurityContext(const DocumentInit&,
                            const SecurityContextInit& security_initializer);
-  void InitSecureContextState();
 
   bool HasPendingVisualUpdate() const {
     return lifecycle_.GetState() == DocumentLifecycle::kVisualUpdatePending;
@@ -2054,8 +2045,6 @@ class CORE_EXPORT Document : public ContainerNode,
   bool logged_field_edit_;
 
   TaskHandle sensitive_input_edited_task_;
-
-  SecureContextState secure_context_state_;
 
   Member<NetworkStateObserver> network_state_observer_;
 

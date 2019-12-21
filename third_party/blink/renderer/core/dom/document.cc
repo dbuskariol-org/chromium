@@ -630,7 +630,7 @@ class Document::SecurityContextInit : public FeaturePolicyParserDelegate {
     InitializeOrigin(initializer);
 
     // The secure context state is based on the origin.
-    InitializeSecureContextState(initializer);
+    InitializeSecureContextMode(initializer);
 
     // Initialize origin trials, requires the post sandbox flags
     // security origin and secure context state.
@@ -665,8 +665,8 @@ class Document::SecurityContextInit : public FeaturePolicyParserDelegate {
 
   WindowAgentFactory* GetWindowAgentFactory() { return window_agent_factory_; }
   Agent* GetAgent() { return agent_; }
-  SecureContextState GetSecureContextState() {
-    return secure_context_state_.value();
+  SecureContextMode GetSecureContextMode() {
+    return secure_context_mode_.value();
   }
 
   void CountFeaturePolicyUsage(mojom::WebFeature feature) override {
@@ -933,30 +933,30 @@ class Document::SecurityContextInit : public FeaturePolicyParserDelegate {
     feature_policy_->SetHeaderPolicy(parsed_header_);
   }
 
-  void InitializeSecureContextState(const DocumentInit& initializer) {
+  void InitializeSecureContextMode(const DocumentInit& initializer) {
     auto* frame = initializer.GetFrame();
     if (!security_origin_->IsPotentiallyTrustworthy()) {
-      secure_context_state_ = SecureContextState::kNonSecure;
+      secure_context_mode_ = SecureContextMode::kInsecureContext;
     } else if (SchemeRegistry::SchemeShouldBypassSecureContextCheck(
                    security_origin_->Protocol())) {
-      secure_context_state_ = SecureContextState::kSecure;
+      secure_context_mode_ = SecureContextMode::kSecureContext;
     } else if (frame) {
       Frame* parent = frame->Tree().Parent();
       while (parent) {
         if (!parent->GetSecurityContext()
                  ->GetSecurityOrigin()
                  ->IsPotentiallyTrustworthy()) {
-          secure_context_state_ = SecureContextState::kNonSecure;
+          secure_context_mode_ = SecureContextMode::kInsecureContext;
           break;
         }
         parent = parent->Tree().Parent();
       }
-      if (!secure_context_state_.has_value())
-        secure_context_state_ = SecureContextState::kSecure;
+      if (!secure_context_mode_.has_value())
+        secure_context_mode_ = SecureContextMode::kSecureContext;
     } else {
-      secure_context_state_ = SecureContextState::kNonSecure;
+      secure_context_mode_ = SecureContextMode::kInsecureContext;
     }
-    bool is_secure = secure_context_state_ == SecureContextState::kSecure;
+    bool is_secure = secure_context_mode_ == SecureContextMode::kSecureContext;
     if (GetSandboxFlags() != WebSandboxFlags::kNone) {
       feature_count_.insert(
           is_secure ? WebFeature::kSecureContextCheckForSandboxedOriginPassed
@@ -967,7 +967,7 @@ class Document::SecurityContextInit : public FeaturePolicyParserDelegate {
   }
 
   void InitializeOriginTrials(const DocumentInit& initializer) {
-    DCHECK(secure_context_state_.has_value());
+    DCHECK(secure_context_mode_.has_value());
     origin_trials_ = MakeGarbageCollected<OriginTrialContext>();
 
     const String& header_value = initializer.OriginTrialsHeader();
@@ -980,8 +980,7 @@ class Document::SecurityContextInit : public FeaturePolicyParserDelegate {
       return;
     origin_trials_->AddTokens(
         security_origin_.get(),
-        secure_context_state_ == SecureContextState::kSecure /*is_secure*/,
-        *tokens);
+        secure_context_mode_ == SecureContextMode::kSecureContext, *tokens);
   }
 
   void InitializeAgent(const DocumentInit& initializer) {
@@ -1051,7 +1050,7 @@ class Document::SecurityContextInit : public FeaturePolicyParserDelegate {
   HashSet<mojom::FeaturePolicyFeature> parsed_feature_policies_;
   HashSet<mojom::WebFeature> feature_count_;
   bool bind_csp_immediately_ = false;
-  base::Optional<SecureContextState> secure_context_state_;
+  base::Optional<SecureContextMode> secure_context_mode_;
 };
 
 ExplicitlySetAttrElementsMap* Document::GetExplicitlySetAttrElementsMap(
@@ -1095,7 +1094,8 @@ Document::Document(const DocumentInit& initializer,
                        security_initializer.GetOriginTrialContext(),
                        security_initializer.GetSecurityOrigin(),
                        security_initializer.GetSandboxFlags(),
-                       security_initializer.TakeFeaturePolicy()),
+                       security_initializer.TakeFeaturePolicy(),
+                       security_initializer.GetSecureContextMode()),
       evaluate_media_queries_on_style_recalc_(false),
       pending_sheet_layout_(kNoLayoutWithPendingSheets),
       window_agent_factory_(security_initializer.GetWindowAgentFactory()),
@@ -1186,7 +1186,6 @@ Document::Document(const DocumentInit& initializer,
       parser_sync_policy_(kAllowAsynchronousParsing),
       node_count_(0),
       logged_field_edit_(false),
-      secure_context_state_(security_initializer.GetSecureContextState()),
       ukm_source_id_(ukm::UkmRecorder::GetNewSourceID()),
       needs_to_record_ukm_outlive_time_(false),
       viewport_data_(MakeGarbageCollected<ViewportData>(*this)),
@@ -8076,18 +8075,6 @@ void Document::PlatformColorsChanged() {
     return;
 
   GetStyleEngine().PlatformColorsChanged();
-}
-
-bool Document::IsSecureContext(String& error_message) const {
-  if (!IsSecureContext()) {
-    error_message = SecurityOrigin::IsPotentiallyTrustworthyErrorMessage();
-    return false;
-  }
-  return true;
-}
-
-bool Document::IsSecureContext() const {
-  return secure_context_state_ == SecureContextState::kSecure;
 }
 
 void Document::DidEnforceInsecureRequestPolicy() {
