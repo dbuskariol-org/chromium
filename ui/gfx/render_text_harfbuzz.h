@@ -19,12 +19,6 @@
 
 #include <hb.h>
 
-namespace base {
-namespace i18n {
-class BreakIterator;
-}
-}
-
 namespace gfx {
 
 class Range;
@@ -311,10 +305,6 @@ class GFX_EXPORT RenderTextHarfBuzz : public RenderText {
   bool update_layout_run_list_ : 1;
   bool update_display_run_list_ : 1;
   bool update_display_text_ : 1;
-
-  // ICU grapheme iterator for the layout text. Use GetGraphemeIterator()
-  // to access the iterator.
-  std::unique_ptr<base::i18n::BreakIterator> grapheme_iterator_;
 
   // The total size of the layouted text.
   SizeF total_size_;
