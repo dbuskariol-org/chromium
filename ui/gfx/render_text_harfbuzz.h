@@ -208,19 +208,14 @@ class GFX_EXPORT RenderTextHarfBuzz : public RenderText {
 
   // RenderText:
   const base::string16& GetDisplayText() override;
-  Size GetStringSize() override;
   SizeF GetStringSizeF() override;
   Size GetLineSize(const SelectionModel& caret) override;
-  float TotalLineWidth() override;
-  SelectionModel FindCursorPosition(const Point& point,
-                                    const Point& drag_origin) override;
   std::vector<Rect> GetSubstringBounds(const Range& range) override;
   RangeF GetCursorSpan(const Range& text_range) override;
   size_t GetLineContainingCaret(const SelectionModel& caret) override;
 
  protected:
   // RenderText:
-  int GetDisplayTextBaseline() override;
   SelectionModel AdjacentCharSelectionModel(
       const SelectionModel& selection,
       VisualCursorDirection direction) override;
