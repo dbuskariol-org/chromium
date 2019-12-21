@@ -612,14 +612,6 @@
                  type="chrome_html"
                  preprocess="true"
                  allowexternalscript="true" />
-      <if expr="chromeos">
-        <structure name="IDR_SETTINGS_LANGUAGES_MANAGE_INPUT_METHODS_PAGE_HTML"
-                   file="languages_page/manage_input_methods_page.html"
-                   type="chrome_html" />
-        <structure name="IDR_SETTINGS_LANGUAGES_MANAGE_INPUT_METHODS_PAGE_JS"
-                   file="languages_page/manage_input_methods_page.js"
-                   type="chrome_html" />
-      </if>
       <if expr="not is_macosx">
         <structure name="IDR_SETTINGS_LANGUAGES_EDIT_DICTIONARY_PAGE_HTML"
                    file="languages_page/edit_dictionary_page.html"

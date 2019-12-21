@@ -6,8 +6,6 @@
  * @fileoverview 'settings-manage-input-methods-page' is a sub-page for enabling
  * and disabling input methods. Input methods are grouped by base languages to
  * avoid showing duplicate or ambiguous input methods.
- *
- * TODO(hsuregan): Move to OS settings.
  */
 Polymer({
   is: 'settings-manage-input-methods-page',
