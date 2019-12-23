@@ -998,6 +998,16 @@ class BrowseTOIMobileStory(_ArticleBrowsingStory):
   ITEM_SELECTOR = '.dummy-img'
 
 
+class BrowseTOIMobileStory2019(_ArticleBrowsingStory):
+  NAME = 'browse:news:toi:2019'
+  URL = 'http://m.timesofindia.com'
+  SUPPORTED_PLATFORMS = platforms.MOBILE_ONLY
+  TAGS = [story_tags.EMERGING_MARKET, story_tags.YEAR_2019]
+
+  ITEMS_TO_VISIT = 2
+  ITEM_SELECTOR = '.dummy-img'
+
+
 class BrowseGloboMobileStory(_ArticleBrowsingStory):
   NAME = 'browse:news:globo'
   URL = 'http://www.globo.com'

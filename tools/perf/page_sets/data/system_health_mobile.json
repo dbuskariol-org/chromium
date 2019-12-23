@@ -105,6 +105,9 @@
         "browse:news:toi": {
             "DEFAULT": "system_health_mobile_064.wprgo"
         },
+        "browse:news:toi:2019": {
+            "DEFAULT": "system_health_mobile_1a97b96d14.wprgo"
+        },
         "browse:news:washingtonpost": {
             "DEFAULT": "system_health_mobile_021.wprgo"
         },
