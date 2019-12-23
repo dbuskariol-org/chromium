@@ -1903,6 +1903,13 @@
       status: "experimental",
     },
     {
+      name: "WritableFileStream",
+      status: "experimental",
+      // NativeFileSystem is in Origin Trial, which doesn't support having
+      // non-origin-trial-enabled features depend on it. https://crbug.com/1000486
+      // depends_on: ["NativeFileSystem"]
+    },
+    {
       name: "XSLT",
       status: "stable",
     },
