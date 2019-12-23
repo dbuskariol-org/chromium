@@ -49,7 +49,7 @@ constexpr int kDragStartTopEdgeInset = 8;
 
 // Distance from the divider's center point that reserved for splitview
 // resizing in landscape orientation.
-constexpr int kDistanceForSplitViewResize = 32;
+constexpr int kDistanceForSplitViewResize = 49;
 
 // Returns whether |window| can be moved via a two finger drag given
 // the hittest results of the two fingers.
