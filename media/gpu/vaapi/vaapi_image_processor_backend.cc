@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "media/gpu/vaapi/vaapi_image_processor.h"
+#include "media/gpu/vaapi/vaapi_image_processor_backend.h"
 
 #include <stdint.h>
 
@@ -26,7 +26,7 @@
 namespace media {
 
 namespace {
-// UMA errors that the VaapiImageProcessor class reports.
+// UMA errors that the VaapiImageProcessorBackend class reports.
 enum class VaIPFailure {
   kVaapiVppError = 0,
   kMaxValue = kVaapiVppError,
@@ -69,13 +69,13 @@ bool IsSupported(uint32_t input_va_fourcc,
 }  // namespace
 
 // static
-std::unique_ptr<ImageProcessorBackend> VaapiImageProcessor::Create(
+std::unique_ptr<ImageProcessorBackend> VaapiImageProcessorBackend::Create(
     const PortConfig& input_config,
     const PortConfig& output_config,
     const std::vector<OutputMode>& preferred_output_modes,
     ErrorCB error_cb,
     scoped_refptr<base::SequencedTaskRunner> backend_task_runner) {
-// VaapiImageProcessor supports ChromeOS only.
+// VaapiImageProcessorBackend supports ChromeOS only.
 #if !defined(OS_CHROMEOS)
   return nullptr;
 #endif
@@ -103,21 +103,21 @@ std::unique_ptr<ImageProcessorBackend> VaapiImageProcessor::Create(
                       VideoFrame::STORAGE_DMABUFS) &&
       !base::Contains(input_config.preferred_storage_types,
                       VideoFrame::STORAGE_GPU_MEMORY_BUFFER)) {
-    VLOGF(2) << "VaapiImageProcessor supports Dmabuf-backed or GpuMemoryBuffer"
-             << " based VideoFrame only for input";
+    VLOGF(2) << "VaapiImageProcessorBackend supports Dmabuf-backed or "
+                "GpuMemoryBuffer based VideoFrame only for input";
     return nullptr;
   }
   if (!base::Contains(output_config.preferred_storage_types,
                       VideoFrame::STORAGE_DMABUFS) &&
       !base::Contains(output_config.preferred_storage_types,
                       VideoFrame::STORAGE_GPU_MEMORY_BUFFER)) {
-    VLOGF(2) << "VaapiImageProcessor supports Dmabuf-backed or GpuMemoryBuffer"
-             << " based VideoFrame only for output";
+    VLOGF(2) << "VaapiImageProcessorBackend supports Dmabuf-backed or "
+                "GpuMemoryBuffer based VideoFrame only for output";
     return nullptr;
   }
 
   if (!base::Contains(preferred_output_modes, OutputMode::IMPORT)) {
-    VLOGF(2) << "VaapiImageProcessor only supports IMPORT mode.";
+    VLOGF(2) << "VaapiImageProcessorBackend only supports IMPORT mode.";
     return nullptr;
   }
 
@@ -143,12 +143,12 @@ std::unique_ptr<ImageProcessorBackend> VaapiImageProcessor::Create(
   // GetPlatformVideoFrameLayout() with a proper gfx::BufferUsage.
   // TODO(crbug.com/898423): Adjust layout once ImageProcessor provide the use
   // scenario.
-  return base::WrapUnique<ImageProcessorBackend>(new VaapiImageProcessor(
+  return base::WrapUnique<ImageProcessorBackend>(new VaapiImageProcessorBackend(
       std::move(vaapi_wrapper), input_config, output_config, OutputMode::IMPORT,
       std::move(error_cb), std::move(backend_task_runner)));
 }
 
-VaapiImageProcessor::VaapiImageProcessor(
+VaapiImageProcessorBackend::VaapiImageProcessorBackend(
     scoped_refptr<VaapiWrapper> vaapi_wrapper,
     const PortConfig& input_config,
     const PortConfig& output_config,
@@ -162,13 +162,13 @@ VaapiImageProcessor::VaapiImageProcessor(
                             std::move(backend_task_runner)),
       vaapi_wrapper_(std::move(vaapi_wrapper)) {}
 
-VaapiImageProcessor::~VaapiImageProcessor() {
+VaapiImageProcessorBackend::~VaapiImageProcessorBackend() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(backend_sequence_checker_);
 }
 
-void VaapiImageProcessor::Process(scoped_refptr<VideoFrame> input_frame,
-                                  scoped_refptr<VideoFrame> output_frame,
-                                  FrameReadyCB cb) {
+void VaapiImageProcessorBackend::Process(scoped_refptr<VideoFrame> input_frame,
+                                         scoped_refptr<VideoFrame> output_frame,
+                                         FrameReadyCB cb) {
   DVLOGF(4);
   DCHECK_CALLED_ON_VALID_SEQUENCE(backend_sequence_checker_);
 

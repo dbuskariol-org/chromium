@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_GPU_VAAPI_VAAPI_IMAGE_PROCESSOR_H_
-#define MEDIA_GPU_VAAPI_VAAPI_IMAGE_PROCESSOR_H_
+#ifndef MEDIA_GPU_VAAPI_VAAPI_IMAGE_PROCESSOR_BACKEND_H_
+#define MEDIA_GPU_VAAPI_VAAPI_IMAGE_PROCESSOR_BACKEND_H_
 
 #include <memory>
 
@@ -17,13 +17,13 @@ class VaapiWrapper;
 
 // ImageProcessor that is hardware accelerated with VA-API. This ImageProcessor
 // supports DmaBuf only for both input and output.
-class VaapiImageProcessor : public ImageProcessorBackend {
+class VaapiImageProcessorBackend : public ImageProcessorBackend {
  public:
-  // Factory method to create VaapiImageProcessor for a buffer conversion
+  // Factory method to create VaapiImageProcessorBackend for a buffer conversion
   // specified by |input_config| and |output_config|. Provided |error_cb| will
   // be posted to the same thread that executes Create(), if an error occurs
   // after initialization.
-  // Returns nullptr if it fails to create VaapiImageProcessor.
+  // Returns nullptr if it fails to create VaapiImageProcessorBackend.
   static std::unique_ptr<ImageProcessorBackend> Create(
       const PortConfig& input_config,
       const PortConfig& output_config,
@@ -37,20 +37,20 @@ class VaapiImageProcessor : public ImageProcessorBackend {
                FrameReadyCB cb) override;
 
  private:
-  VaapiImageProcessor(
+  VaapiImageProcessorBackend(
       scoped_refptr<VaapiWrapper> vaapi_wrapper,
       const PortConfig& input_config,
       const PortConfig& output_config,
       OutputMode output_mode,
       ErrorCB error_cb,
       scoped_refptr<base::SequencedTaskRunner> backend_task_runner);
-  ~VaapiImageProcessor() override;
+  ~VaapiImageProcessorBackend() override;
 
   const scoped_refptr<VaapiWrapper> vaapi_wrapper_;
 
-  DISALLOW_COPY_AND_ASSIGN(VaapiImageProcessor);
+  DISALLOW_COPY_AND_ASSIGN(VaapiImageProcessorBackend);
 };
 
 }  // namespace media
 
-#endif  // MEDIA_GPU_VAAPI_VAAPI_IMAGE_PROCESSOR_H_
+#endif  // MEDIA_GPU_VAAPI_VAAPI_IMAGE_PROCESSOR_BACKEND_H_

@@ -15,7 +15,7 @@
 #include "media/gpu/macros.h"
 
 #if BUILDFLAG(USE_VAAPI)
-#include "media/gpu/vaapi/vaapi_image_processor.h"
+#include "media/gpu/vaapi/vaapi_image_processor_backend.h"
 #endif  // BUILDFLAG(USE_VAAPI)
 
 #if BUILDFLAG(USE_V4L2_CODEC)
@@ -100,7 +100,8 @@ std::unique_ptr<ImageProcessor> ImageProcessorFactory::Create(
     ImageProcessor::ErrorCB error_cb) {
   std::vector<ImageProcessor::CreateBackendCB> create_funcs;
 #if BUILDFLAG(USE_VAAPI)
-  create_funcs.push_back(base::BindRepeating(&VaapiImageProcessor::Create));
+  create_funcs.push_back(
+      base::BindRepeating(&VaapiImageProcessorBackend::Create));
 #endif  // BUILDFLAG(USE_VAAPI)
 #if BUILDFLAG(USE_V4L2_CODEC)
   create_funcs.push_back(base::BindRepeating(
@@ -137,7 +138,7 @@ ImageProcessorFactory::CreateWithInputCandidates(
 #endif  // BUILDFLAG(USE_V4L2_CODEC)
 
   // TODO(crbug.com/1004727): Implement LibYUVImageProcessor and
-  // VaapiImageProcessor.
+  // VaapiImageProcessorBackend.
   return nullptr;
 }
 
