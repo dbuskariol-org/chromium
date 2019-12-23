@@ -19,8 +19,7 @@
     <template is="dom-if" if="[[isMigratingMinimal_(uiState)]]">
       <oobe-dialog id="minimal-migration-dialog" tabindex="0" has-buttons>
         <div slot="footer" class="layout vertical">
-          <throbber-notice
-              text="[[i18nDynamic(locale,'gaiaLoading')]]"></throbber-notice>
+          <throbber-notice text-key="gaiaLoading"></throbber-notice>
         </div>
       </oobe-dialog>
     </template>
