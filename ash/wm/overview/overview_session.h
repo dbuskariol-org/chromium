@@ -410,6 +410,10 @@ class ASH_EXPORT OverviewSession : public display::DisplayObserver,
   // The number of items in the overview.
   size_t num_items_ = 0;
 
+  // True if we are currently using keyboard (control + left/right) to scroll
+  // through the grid.
+  bool is_keyboard_scrolling_grid_ = false;
+
   // Stores the overview enter/exit type. See the enum declaration for
   // information on how these types affect overview mode.
   EnterExitOverviewType enter_exit_overview_type_ =
