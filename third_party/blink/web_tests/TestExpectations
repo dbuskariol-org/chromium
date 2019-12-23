@@ -6139,3 +6139,6 @@ crbug.com/1034839 css3/filters/effect-reference-image.html [ Pass Failure ]
 
 # Sheriff 2019-12-18
 crbug.com/859169 http/tests/devtools/layers/layer-compositing-reasons.js [ Pass Failure ]
+
+# Sheriff 2019-12-23
+crbug.com/1036626 virtual/threaded/http/tests/devtools/tracing/tracing-record-input-events.js [ Pass Failure ]
