@@ -912,8 +912,9 @@ IN_PROC_BROWSER_TEST_F(ExtensionWindowLastFocusedTest,
   DevToolsWindowTesting::CloseDevToolsWindowSync(devtools);
 }
 
+// Flaky. https://crbug.com/1035622
 IN_PROC_BROWSER_TEST_F(ExtensionWindowLastFocusedTest,
-                       NoDevtoolsAndAppWindows) {
+                       DISABLED_NoDevtoolsAndAppWindows) {
   DevToolsWindow* devtools = DevToolsWindowTesting::OpenDevToolsWindowSync(
       browser()->tab_strip_model()->GetWebContentsAt(0), false /* is_docked */);
   {
