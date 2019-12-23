@@ -159,7 +159,7 @@ class MEDIA_GPU_EXPORT V4L2WritableBufferRef {
   // filled.
   bool DoQueue() &&;
 
-  V4L2WritableBufferRef(const struct v4l2_buffer* v4l2_buffer,
+  V4L2WritableBufferRef(const struct v4l2_buffer& v4l2_buffer,
                         base::WeakPtr<V4L2Queue> queue);
   friend class V4L2BufferRefFactory;
 
@@ -221,7 +221,7 @@ class MEDIA_GPU_EXPORT V4L2ReadableBuffer
 
   ~V4L2ReadableBuffer();
 
-  V4L2ReadableBuffer(const struct v4l2_buffer* v4l2_buffer,
+  V4L2ReadableBuffer(const struct v4l2_buffer& v4l2_buffer,
                      base::WeakPtr<V4L2Queue> queue);
 
   std::unique_ptr<V4L2BufferRefBase> buffer_data_;

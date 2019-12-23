@@ -60,7 +60,7 @@ class V4L2Buffer {
 
   void* GetPlaneMapping(const size_t plane);
   size_t GetMemoryUsage() const;
-  const struct v4l2_buffer* v4l2_buffer() const { return &v4l2_buffer_; }
+  const struct v4l2_buffer& v4l2_buffer() const { return v4l2_buffer_; }
   scoped_refptr<VideoFrame> GetVideoFrame();
 
  private:
@@ -290,7 +290,7 @@ size_t V4L2BuffersList::size() const {
 // It also makes some private V4L2Queue methods available to this module only.
 class V4L2BufferRefBase {
  public:
-  V4L2BufferRefBase(const struct v4l2_buffer* v4l2_buffer,
+  V4L2BufferRefBase(const struct v4l2_buffer& v4l2_buffer,
                     base::WeakPtr<V4L2Queue> queue);
   ~V4L2BufferRefBase();
 
@@ -325,17 +325,17 @@ class V4L2BufferRefBase {
   DISALLOW_COPY_AND_ASSIGN(V4L2BufferRefBase);
 };
 
-V4L2BufferRefBase::V4L2BufferRefBase(const struct v4l2_buffer* v4l2_buffer,
+V4L2BufferRefBase::V4L2BufferRefBase(const struct v4l2_buffer& v4l2_buffer,
                                      base::WeakPtr<V4L2Queue> queue)
     : queue_(std::move(queue)), return_to_(queue_->free_buffers_) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-  DCHECK(V4L2_TYPE_IS_MULTIPLANAR(v4l2_buffer->type));
-  DCHECK_LE(v4l2_buffer->length, base::size(v4l2_planes_));
+  DCHECK(V4L2_TYPE_IS_MULTIPLANAR(v4l2_buffer.type));
+  DCHECK_LE(v4l2_buffer.length, base::size(v4l2_planes_));
   DCHECK(return_to_);
 
-  memcpy(&v4l2_buffer_, v4l2_buffer, sizeof(v4l2_buffer_));
-  memcpy(v4l2_planes_, v4l2_buffer->m.planes,
-         sizeof(struct v4l2_plane) * v4l2_buffer->length);
+  memcpy(&v4l2_buffer_, &v4l2_buffer, sizeof(v4l2_buffer_));
+  memcpy(v4l2_planes_, v4l2_buffer.m.planes,
+         sizeof(struct v4l2_plane) * v4l2_buffer.length);
   v4l2_buffer_.m.planes = v4l2_planes_;
 }
 
@@ -417,7 +417,7 @@ bool V4L2BufferRefBase::CheckNumFDsForFormat(const size_t num_fds) const {
 }
 
 V4L2WritableBufferRef::V4L2WritableBufferRef(
-    const struct v4l2_buffer* v4l2_buffer,
+    const struct v4l2_buffer& v4l2_buffer,
     base::WeakPtr<V4L2Queue> queue)
     : buffer_data_(
           std::make_unique<V4L2BufferRefBase>(v4l2_buffer, std::move(queue))) {
@@ -678,7 +678,7 @@ size_t V4L2WritableBufferRef::BufferId() const {
   return buffer_data_->v4l2_buffer_.index;
 }
 
-V4L2ReadableBuffer::V4L2ReadableBuffer(const struct v4l2_buffer* v4l2_buffer,
+V4L2ReadableBuffer::V4L2ReadableBuffer(const struct v4l2_buffer& v4l2_buffer,
                                        base::WeakPtr<V4L2Queue> queue)
     : buffer_data_(
           std::make_unique<V4L2BufferRefBase>(v4l2_buffer, std::move(queue))) {
@@ -769,13 +769,13 @@ size_t V4L2ReadableBuffer::BufferId() const {
 class V4L2BufferRefFactory {
  public:
   static V4L2WritableBufferRef CreateWritableRef(
-      const struct v4l2_buffer* v4l2_buffer,
+      const struct v4l2_buffer& v4l2_buffer,
       base::WeakPtr<V4L2Queue> queue) {
     return V4L2WritableBufferRef(v4l2_buffer, std::move(queue));
   }
 
   static V4L2ReadableBufferRef CreateReadableRef(
-      const struct v4l2_buffer* v4l2_buffer,
+      const struct v4l2_buffer& v4l2_buffer,
       base::WeakPtr<V4L2Queue> queue) {
     return new V4L2ReadableBuffer(v4l2_buffer, std::move(queue));
   }
@@ -1036,7 +1036,7 @@ std::pair<bool, V4L2ReadableBufferRef> V4L2Queue::DequeueBuffer() {
   DCHECK(free_buffers_);
   return std::make_pair(true,
                         V4L2BufferRefFactory::CreateReadableRef(
-                            &v4l2_buffer, weak_this_factory_.GetWeakPtr()));
+                            v4l2_buffer, weak_this_factory_.GetWeakPtr()));
 }
 
 bool V4L2Queue::IsStreaming() const {
