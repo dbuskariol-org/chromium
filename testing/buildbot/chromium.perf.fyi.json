@@ -52,11 +52,9 @@
       {
         "args": [
           "-v",
-          "--browser=exact",
+          "--browser=android-chrome-bundle",
           "--upload-results",
-          "--test-shard-map-filename=android-pixel2-perf-aab-fyi_map.json",
-          "--browser-executable=../../out/Release/bin/monochrome_bundle",
-          "--device=android"
+          "--test-shard-map-filename=android-pixel2-perf-aab-fyi_map.json"
         ],
         "isolate_name": "performance_test_suite",
         "merge": {
