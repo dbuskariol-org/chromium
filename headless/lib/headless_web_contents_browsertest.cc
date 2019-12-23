@@ -255,8 +255,14 @@ class HeadlessWebContentsScreenshotWindowPositionTest
   }
 };
 
+#if defined(OS_LINUX) || defined(OS_WIN)
+// Flaky on Win/Linux: crbug.com/1036627
+DISABLED_HEADLESS_ASYNC_DEVTOOLED_TEST_P(
+    HeadlessWebContentsScreenshotWindowPositionTest);
+#else
 HEADLESS_ASYNC_DEVTOOLED_TEST_P(
     HeadlessWebContentsScreenshotWindowPositionTest);
+#endif
 
 // Instantiate test case for both software and gpu compositing modes.
 INSTANTIATE_TEST_SUITE_P(HeadlessWebContentsScreenshotWindowPositionTests,
