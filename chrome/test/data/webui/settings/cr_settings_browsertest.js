@@ -1227,6 +1227,33 @@ TEST_F('CrSettingsSiteDetailsTest', 'MAYBE_All', function() {
 });
 
 /**
+ * Test fixture for
+ * chrome/browser/resources/settings/privacy_page/security_page.html.
+ * @constructor
+ * @extends {CrSettingsBrowserTest}
+ */
+function CrSettingsSecurityPageTest() {}
+
+CrSettingsSecurityPageTest.prototype = {
+  __proto__: CrSettingsBrowserTest.prototype,
+
+  /** @override */
+  browsePreload: 'chrome://settings/privacy_page/security_page.html',
+
+  /** @override */
+  extraLibraries: CrSettingsBrowserTest.prototype.extraLibraries.concat([
+    '../test_browser_proxy.js',
+    'test_sync_browser_proxy.js',
+    'test_privacy_page_browser_proxy.js',
+    'security_page_test.js',
+  ]),
+};
+
+TEST_F('CrSettingsSecurityPageTest', 'All', function() {
+  mocha.run();
+});
+
+/**
  * @constructor
  * @extends {CrSettingsBrowserTest}
  */

@@ -950,6 +950,14 @@
                  file="privacy_page/passwords_leak_detection_toggle.js"
                  type="chrome_html"
                  preprocess="true" />
+      <structure name="IDR_SETTINGS_SECURITY_PAGE_HTML"
+                 file="privacy_page/security_page.html"
+                 type="chrome_html"
+                 preprocess="true" />
+      <structure name="IDR_SETTINGS_SECURITY_PAGE_JS"
+                 file="privacy_page/security_page.js"
+                 type="chrome_html"
+                 preprocess="true" />
       <structure name="IDR_SETTINGS_PRIVACY_PAGE_HTML"
                  file="privacy_page/privacy_page.html"
                  type="chrome_html"
