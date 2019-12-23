@@ -11,7 +11,7 @@
 #include "base/memory/scoped_refptr.h"
 #include "media/base/video_types.h"
 #include "media/gpu/buildflags.h"
-#include "media/gpu/chromeos/libyuv_image_processor.h"
+#include "media/gpu/chromeos/libyuv_image_processor_backend.h"
 #include "media/gpu/macros.h"
 
 #if BUILDFLAG(USE_VAAPI)
@@ -107,7 +107,8 @@ std::unique_ptr<ImageProcessor> ImageProcessorFactory::Create(
   create_funcs.push_back(base::BindRepeating(
       &V4L2ImageProcessorBackend::Create, V4L2Device::Create(), num_buffers));
 #endif  // BUILDFLAG(USE_V4L2_CODEC)
-  create_funcs.push_back(base::BindRepeating(&LibYUVImageProcessor::Create));
+  create_funcs.push_back(
+      base::BindRepeating(&LibYUVImageProcessorBackend::Create));
 
   std::unique_ptr<ImageProcessor> image_processor;
   for (auto& create_func : create_funcs) {
@@ -137,7 +138,7 @@ ImageProcessorFactory::CreateWithInputCandidates(
     return processor;
 #endif  // BUILDFLAG(USE_V4L2_CODEC)
 
-  // TODO(crbug.com/1004727): Implement LibYUVImageProcessor and
+  // TODO(crbug.com/1004727): Implement LibYUVImageProcessorBackend and
   // VaapiImageProcessorBackend.
   return nullptr;
 }

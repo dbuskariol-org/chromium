@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "media/gpu/chromeos/libyuv_image_processor.h"
+#include "media/gpu/chromeos/libyuv_image_processor_backend.h"
 
 #include "base/memory/ptr_util.h"
 #include "media/gpu/chromeos/fourcc.h"
@@ -52,9 +52,8 @@ SupportResult IsFormatSupported(Fourcc input_fourcc, Fourcc output_fourcc) {
 
 }  // namespace
 
-
 // static
-std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessor::Create(
+std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
     const PortConfig& input_config,
     const PortConfig& output_config,
     const std::vector<OutputMode>& preferred_output_modes,
@@ -63,7 +62,8 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessor::Create(
   VLOGF(2);
 
   std::unique_ptr<VideoFrameMapper> video_frame_mapper;
-  // LibYUVImageProcessor supports only memory-based video frame for input.
+  // LibYUVImageProcessorBackend supports only memory-based video frame for
+  // input.
   VideoFrame::StorageType input_storage_type = VideoFrame::STORAGE_UNKNOWN;
   for (auto input_type : input_config.preferred_storage_types) {
     if (input_type == VideoFrame::STORAGE_DMABUFS) {
@@ -86,7 +86,8 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessor::Create(
     return nullptr;
   }
 
-  // LibYUVImageProcessor supports only memory-based video frame for output.
+  // LibYUVImageProcessorBackend supports only memory-based video frame for
+  // output.
   VideoFrame::StorageType output_storage_type = VideoFrame::STORAGE_UNKNOWN;
   for (auto output_type : output_config.preferred_storage_types) {
     if (VideoFrame::IsStorageTypeMappable(output_type)) {
@@ -126,7 +127,7 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessor::Create(
   }
 
   auto processor =
-      base::WrapUnique<ImageProcessorBackend>(new LibYUVImageProcessor(
+      base::WrapUnique<ImageProcessorBackend>(new LibYUVImageProcessorBackend(
           std::move(video_frame_mapper), std::move(intermediate_frame),
           PortConfig(input_config.fourcc, input_config.size,
                      input_config.planes, input_config.visible_size,
@@ -136,12 +137,12 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessor::Create(
                      {output_storage_type}),
           OutputMode::IMPORT, std::move(error_cb),
           std::move(backend_task_runner)));
-  VLOGF(2) << "LibYUVImageProcessor created for converting from "
+  VLOGF(2) << "LibYUVImageProcessorBackend created for converting from "
            << input_config.ToString() << " to " << output_config.ToString();
   return processor;
 }
 
-LibYUVImageProcessor::LibYUVImageProcessor(
+LibYUVImageProcessorBackend::LibYUVImageProcessorBackend(
     std::unique_ptr<VideoFrameMapper> video_frame_mapper,
     scoped_refptr<VideoFrame> intermediate_frame,
     const PortConfig& input_config,
@@ -157,13 +158,14 @@ LibYUVImageProcessor::LibYUVImageProcessor(
       video_frame_mapper_(std::move(video_frame_mapper)),
       intermediate_frame_(std::move(intermediate_frame)) {}
 
-LibYUVImageProcessor::~LibYUVImageProcessor() {
+LibYUVImageProcessorBackend::~LibYUVImageProcessorBackend() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(backend_sequence_checker_);
 }
 
-void LibYUVImageProcessor::Process(scoped_refptr<VideoFrame> input_frame,
-                                   scoped_refptr<VideoFrame> output_frame,
-                                   FrameReadyCB cb) {
+void LibYUVImageProcessorBackend::Process(
+    scoped_refptr<VideoFrame> input_frame,
+    scoped_refptr<VideoFrame> output_frame,
+    FrameReadyCB cb) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(backend_sequence_checker_);
   DVLOGF(4);
   if (input_frame->storage_type() == VideoFrame::STORAGE_DMABUFS) {
@@ -187,8 +189,8 @@ void LibYUVImageProcessor::Process(scoped_refptr<VideoFrame> input_frame,
   std::move(cb).Run(std::move(output_frame));
 }
 
-int LibYUVImageProcessor::DoConversion(const VideoFrame* const input,
-                                       VideoFrame* const output) {
+int LibYUVImageProcessorBackend::DoConversion(const VideoFrame* const input,
+                                              VideoFrame* const output) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(backend_sequence_checker_);
 
 #define Y_U_V_DATA(fr)                                                \

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_GPU_CHROMEOS_LIBYUV_IMAGE_PROCESSOR_H_
-#define MEDIA_GPU_CHROMEOS_LIBYUV_IMAGE_PROCESSOR_H_
+#ifndef MEDIA_GPU_CHROMEOS_LIBYUV_IMAGE_PROCESSOR_BACKEND_H_
+#define MEDIA_GPU_CHROMEOS_LIBYUV_IMAGE_PROCESSOR_BACKEND_H_
 
 #include <memory>
 #include <vector>
@@ -20,13 +20,14 @@ class VideoFrameMapper;
 // A software image processor which uses libyuv to perform format conversion.
 // It expects input VideoFrame is mapped into CPU space, and output VideoFrame
 // is allocated in user space.
-class MEDIA_GPU_EXPORT LibYUVImageProcessor : public ImageProcessorBackend {
+class MEDIA_GPU_EXPORT LibYUVImageProcessorBackend
+    : public ImageProcessorBackend {
  public:
-  // Factory method to create LibYUVImageProcessor to convert video format
-  // specified in input_config and output_config. Provided |error_cb| will be
-  // posted to the same thread Create() is called if an error occurs after
-  // initialization.
-  // Returns nullptr if it fails to create LibYUVImageProcessor.
+  // Factory method to create LibYUVImageProcessorBackend to convert video
+  // format specified in input_config and output_config. Provided |error_cb|
+  // will be posted to the same thread Create() is called if an error occurs
+  // after initialization. Returns nullptr if it fails to create
+  // LibYUVImageProcessorBackend.
   static std::unique_ptr<ImageProcessorBackend> Create(
       const PortConfig& input_config,
       const PortConfig& output_config,
@@ -40,7 +41,7 @@ class MEDIA_GPU_EXPORT LibYUVImageProcessor : public ImageProcessorBackend {
                FrameReadyCB cb) override;
 
  private:
-  LibYUVImageProcessor(
+  LibYUVImageProcessorBackend(
       std::unique_ptr<VideoFrameMapper> video_frame_mapper,
       scoped_refptr<VideoFrame> intermediate_frame,
       const PortConfig& input_config,
@@ -48,7 +49,7 @@ class MEDIA_GPU_EXPORT LibYUVImageProcessor : public ImageProcessorBackend {
       OutputMode output_mode,
       ErrorCB error_cb,
       scoped_refptr<base::SequencedTaskRunner> backend_task_runner);
-  ~LibYUVImageProcessor() override;
+  ~LibYUVImageProcessorBackend() override;
 
   void NotifyError();
 
@@ -64,9 +65,9 @@ class MEDIA_GPU_EXPORT LibYUVImageProcessor : public ImageProcessorBackend {
   // conversion method in libyuv, e.g., RGBA -> I420 (pivot) -> NV12.
   scoped_refptr<VideoFrame> intermediate_frame_;
 
-  DISALLOW_COPY_AND_ASSIGN(LibYUVImageProcessor);
+  DISALLOW_COPY_AND_ASSIGN(LibYUVImageProcessorBackend);
 };
 
 }  // namespace media
 
-#endif  // MEDIA_GPU_CHROMEOS_LIBYUV_IMAGE_PROCESSOR_H_
+#endif  // MEDIA_GPU_CHROMEOS_LIBYUV_IMAGE_PROCESSOR_BACKEND_H_
