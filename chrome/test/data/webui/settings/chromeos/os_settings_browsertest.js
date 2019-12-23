@@ -329,7 +329,8 @@ var OSSettingsBluetoothPageTest = class extends OSSettingsBrowserTest {
   }
 };
 
-TEST_F('OSSettingsBluetoothPageTest', 'AllJsTests', () => {
+// Flaky. https://crbug.com/1035378
+TEST_F('OSSettingsBluetoothPageTest', 'DISABLED_AllJsTests', () => {
   mocha.run();
 });
 
