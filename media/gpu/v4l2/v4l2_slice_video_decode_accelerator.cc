@@ -1387,10 +1387,8 @@ void V4L2SliceVideoDecodeAccelerator::AssignPictureBuffersTask(
   }
 
   // Reserve all buffers until ImportBufferForPictureTask() is called
-  while (output_queue_->FreeBuffersCount() > 0) {
-    auto buffer_opt = output_queue_->GetFreeBuffer();
-    DCHECK(buffer_opt);
-    V4L2WritableBufferRef buffer = std::move(*buffer_opt);
+  while (auto buffer_opt = output_queue_->GetFreeBuffer()) {
+    V4L2WritableBufferRef buffer(std::move(*buffer_opt));
     int i = buffer.BufferId();
 
     DCHECK_EQ(output_wait_map_.count(buffers[i].id()), 0u);
@@ -2086,21 +2084,15 @@ V4L2SliceVideoDecodeAccelerator::CreateSurface() {
   // Release some output buffers if their fence has been signaled.
   CheckGLFences();
 
-  if (input_queue_->FreeBuffersCount() == 0 ||
-      output_queue_->FreeBuffersCount() == 0)
-    return nullptr;
-
-  auto input_buffer_opt = input_queue_->GetFreeBuffer();
-  DCHECK(input_buffer_opt);
-  V4L2WritableBufferRef input_buffer = std::move(*input_buffer_opt);
+  auto input_buffer = input_queue_->GetFreeBuffer();
   // All buffers that are returned to the output free queue have their GL
   // fence signaled, so we can use them directly.
-  auto output_buffer_opt = output_queue_->GetFreeBuffer();
-  DCHECK(output_buffer_opt);
-  V4L2WritableBufferRef output_buffer = std::move(*output_buffer_opt);
+  auto output_buffer = output_queue_->GetFreeBuffer();
+  if (!input_buffer || !output_buffer)
+    return nullptr;
 
-  int input = input_buffer.BufferId();
-  int output = output_buffer.BufferId();
+  int input = input_buffer->BufferId();
+  int output = output_buffer->BufferId();
 
   scoped_refptr<V4L2DecodeSurface> dec_surface;
 
@@ -2111,13 +2103,12 @@ V4L2SliceVideoDecodeAccelerator::CreateSurface() {
       NOTIFY_ERROR(PLATFORM_FAILURE);
       return nullptr;
     }
-    dec_surface = new V4L2RequestDecodeSurface(std::move(input_buffer),
-                                              std::move(output_buffer),
-                                              nullptr,
-                                              std::move(request_ref));
+    dec_surface = new V4L2RequestDecodeSurface(std::move(*input_buffer),
+                                               std::move(*output_buffer),
+                                               nullptr, std::move(request_ref));
   } else {
     dec_surface = new V4L2ConfigStoreDecodeSurface(
-        std::move(input_buffer), std::move(output_buffer), nullptr);
+        std::move(*input_buffer), std::move(*output_buffer), nullptr);
   }
 
   DVLOGF(4) << "Created surface " << input << " -> " << output;

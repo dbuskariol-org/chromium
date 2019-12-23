@@ -411,10 +411,8 @@ void V4L2VideoDecodeAccelerator::AssignPictureBuffersTask(
   }
 
   // Reserve all buffers until ImportBufferForPictureTask() is called
-  while (output_queue_->FreeBuffersCount() > 0) {
-    auto buffer_opt(output_queue_->GetFreeBuffer());
-    DCHECK(buffer_opt);
-    V4L2WritableBufferRef buffer = std::move(*buffer_opt);
+  while (auto buffer_opt = output_queue_->GetFreeBuffer()) {
+    V4L2WritableBufferRef buffer(std::move(*buffer_opt));
     int i = buffer.BufferId();
 
     DCHECK_EQ(output_wait_map_.count(buffers[i].id()), 0u);
@@ -1410,7 +1408,9 @@ void V4L2VideoDecodeAccelerator::Enqueue() {
     } else {
       // Enqueue an input buffer, or an empty flush buffer if decoder cmd
       // is not supported and there may be buffers to be flushed.
-      if (!EnqueueInputRecord())
+      auto buffer = std::move(input_ready_queue_.front());
+      input_ready_queue_.pop();
+      if (!EnqueueInputRecord(std::move(buffer)))
         return;
     }
   }
@@ -1438,8 +1438,8 @@ void V4L2VideoDecodeAccelerator::Enqueue() {
   const int old_outputs_queued = output_queue_->QueuedBuffersCount();
   // Release output buffers which GL fences have been signaled.
   CheckGLFences();
-  while (output_queue_->FreeBuffersCount() > 0) {
-    if (!EnqueueOutputRecord())
+  while (auto buffer_opt = output_queue_->GetFreeBuffer()) {
+    if (!EnqueueOutputRecord(std::move(*buffer_opt)))
       return;
   }
   if (old_outputs_queued == 0 && output_queue_->QueuedBuffersCount() != 0) {
@@ -1570,13 +1570,11 @@ bool V4L2VideoDecodeAccelerator::DequeueOutputBuffer() {
   return true;
 }
 
-bool V4L2VideoDecodeAccelerator::EnqueueInputRecord() {
+bool V4L2VideoDecodeAccelerator::EnqueueInputRecord(
+    V4L2WritableBufferRef buffer) {
   DVLOGF(4);
-  DCHECK(!input_ready_queue_.empty());
 
   // Enqueue an input (VIDEO_OUTPUT) buffer.
-  auto buffer = std::move(input_ready_queue_.front());
-  input_ready_queue_.pop();
   int32_t input_id = buffer.GetTimeStamp().tv_sec;
   size_t bytes_used = buffer.GetPlaneBytesUsed(0);
   if (!std::move(buffer).QueueMMap()) {
@@ -1587,12 +1585,8 @@ bool V4L2VideoDecodeAccelerator::EnqueueInputRecord() {
   return true;
 }
 
-bool V4L2VideoDecodeAccelerator::EnqueueOutputRecord() {
-  DCHECK(output_queue_);
-  auto buffer_opt = output_queue_->GetFreeBuffer();
-  DCHECK(buffer_opt);
-  V4L2WritableBufferRef buffer = std::move(*buffer_opt);
-
+bool V4L2VideoDecodeAccelerator::EnqueueOutputRecord(
+    V4L2WritableBufferRef buffer) {
   OutputRecord& output_record = output_buffer_map_[buffer.BufferId()];
   DCHECK_NE(output_record.picture_id, -1);
 
