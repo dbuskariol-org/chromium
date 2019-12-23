@@ -602,7 +602,7 @@ var OSSettingsMultideviceFeatureItemTest = class extends OSSettingsBrowserTest {
   /** @override */
   get browsePreload() {
     return super.browsePreload +
-        'multidevice_page/multidevice_feature_item.html';
+        'chromeos/multidevice_page/multidevice_feature_item.html';
   }
 
   /** @override */
@@ -624,7 +624,7 @@ var OSSettingsMultideviceFeatureToggleTest =
   /** @override */
   get browsePreload() {
     return super.browsePreload +
-        'multidevice_page/multidevice_feature_toggle.html';
+        'chromeos/multidevice_page/multidevice_feature_toggle.html';
   }
 
   /** @override */
@@ -644,7 +644,8 @@ TEST_F('OSSettingsMultideviceFeatureToggleTest', 'AllJsTests', () => {
 var OSSettingsMultidevicePageTest = class extends OSSettingsBrowserTest {
   /** @override */
   get browsePreload() {
-    return super.browsePreload + 'multidevice_page/multidevice_page.html';
+    return super.browsePreload +
+        'chromeos/multidevice_page/multidevice_page.html';
   }
 
   /** @override */
@@ -668,7 +669,7 @@ var OSSettingsMultideviceSmartLockSubpageTest =
   /** @override */
   get browsePreload() {
     return super.browsePreload +
-        'multidevice_page/multidevice_smartlock_subpage.html';
+        'chromeos/multidevice_page/multidevice_smartlock_subpage.html';
   }
 
   /** @override */
@@ -691,7 +692,8 @@ TEST_F('OSSettingsMultideviceSmartLockSubpageTest', 'AllJsTests', () => {
 var OSSettingsMultideviceSubpageTest = class extends OSSettingsBrowserTest {
   /** @override */
   get browsePreload() {
-    return super.browsePreload + 'multidevice_page/multidevice_subpage.html';
+    return super.browsePreload +
+        'chromeos/multidevice_page/multidevice_subpage.html';
   }
 
   /** @override */
