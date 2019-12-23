@@ -570,6 +570,7 @@
     },
     {
       name: "DecodeJpeg420ImagesToYUV",
+      status: "test",
     },
     {
       name: "DecodeLossyWebPImagesToYUV",
