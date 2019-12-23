@@ -600,7 +600,7 @@ void OverviewSession::SetWindowListNotAnimatedWhenExiting(
 std::unique_ptr<ui::ScopedLayerAnimationSettings>
 OverviewSession::UpdateGridAtLocationYPositionAndOpacity(
     int64_t display_id,
-    int new_y,
+    float new_y,
     float opacity,
     UpdateAnimationSettingsCallback callback) {
   OverviewGrid* grid = GetGridWithRootWindow(

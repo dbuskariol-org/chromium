@@ -236,11 +236,10 @@ class ASH_EXPORT OverviewSession : public display::DisplayObserver,
   // Shifts and fades the grid in |grid_list_| associated with |location|.
   // Returns a ui::ScopedLayerAnimationSettings object for the caller to
   // observe.
-  // TODO(sammiequon): Change |new_y| to use float.
   std::unique_ptr<ui::ScopedLayerAnimationSettings>
   UpdateGridAtLocationYPositionAndOpacity(
       int64_t display_id,
-      int new_y,
+      float new_y,
       float opacity,
       UpdateAnimationSettingsCallback callback);
 
