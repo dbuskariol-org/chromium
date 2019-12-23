@@ -44,6 +44,7 @@ source_set("badge_public") {
     ":public",
     "//base",
     "//ios/chrome/browser/ui/badges:public",
+    "//ios/chrome/browser/ui/badges:util",
   ]
 }
 
