@@ -144,9 +144,8 @@
       </div>
       <div slot="bottom-buttons" class="flex layout horizontal end-justified">
         <oobe-text-button inverse on-tap="onHIDContinueTap_"
-            disabled="[[continueButtonDisabled]]">
-          <div>[[i18nDynamic(locale, 'hidDetectionContinue')]]</div>
-        </oobe-text-button>
+            text-key="hidDetectionContinue"
+            disabled="[[continueButtonDisabled]]"></oobe-text-button>
       </div>
     </oobe-dialog>
   </template>

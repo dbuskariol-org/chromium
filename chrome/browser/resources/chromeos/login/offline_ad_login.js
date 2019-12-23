@@ -32,7 +32,7 @@ var JoinConfigType;
 Polymer({
   is: 'offline-ad-login',
 
-  behaviors: [I18nBehavior, OobeDialogHostBehavior],
+  behaviors: [OobeI18nBehavior, OobeDialogHostBehavior],
 
   properties: {
     /**
@@ -452,7 +452,7 @@ Polymer({
 
   i18nUpdateLocale: function() {
     this.setupEncList();
-    I18nBehavior.i18nUpdateLocale.call(this);
+    OobeI18nBehaviorImpl.i18nUpdateLocale.call(this);
   },
 
   onKeydownUnlockPassword_: function(e) {

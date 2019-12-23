@@ -36,9 +36,8 @@
       </div>
       <div slot="bottom-buttons" class="layout horizontal end-justified">
         <oobe-next-button id="app-downloading-continue-setup-button"
-            on-tap="onContinue_" class="focus-on-show" inverse>
-          <div>[[i18nDynamic(locale, 'appDownloadingContinueSetup')]]</div>
-        </oobe-next-button>
+            text-key="appDownloadingContinueSetup" on-tap="onContinue_"
+            class="focus-on-show" inverse></oobe-next-button>
       </div>
     </oobe-dialog>
   </template>
