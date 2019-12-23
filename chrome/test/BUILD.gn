@@ -82,7 +82,9 @@ if (is_android) {
     deps = [
       "//chrome/android:chrome_all_java",
     ]
-    java_files = [ "android/test_support/src/org/chromium/chrome/test_support/PaymentRequestTestBridge.java" ]
+    sources = [
+      "android/test_support/src/org/chromium/chrome/test_support/PaymentRequestTestBridge.java",
+    ]
   }
 
   generate_jni("test_support_jni_headers") {
@@ -624,7 +626,7 @@ if (is_android) {
       "//testing/android/native_test:native_test_java",
       "//ui/android:ui_full_java",
     ]
-    java_files = [
+    sources = [
       "android/browsertests_apk/src/org/chromium/android_browsertests_apk/ChromeBrowserTestsActivity.java",
       "android/browsertests_apk/src/org/chromium/android_browsertests_apk/ChromeBrowserTestsApplication.java",
     ]
