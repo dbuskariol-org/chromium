@@ -148,6 +148,7 @@ FYI_BUILDERS = {
         'extra_args': [
             '--output-format=histograms',
             '--experimental-proto-trace-format',
+            '--experimental-tbmv3-metrics',
         ],
       }
     ],
