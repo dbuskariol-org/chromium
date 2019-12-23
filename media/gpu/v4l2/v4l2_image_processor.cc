@@ -885,8 +885,9 @@ bool V4L2ImageProcessor::EnqueueInputRecord(const JobRecord* job_record) {
   DCHECK(input_queue_);
   DCHECK_GT(input_queue_->FreeBuffersCount(), 0u);
 
-  V4L2WritableBufferRef buffer(input_queue_->GetFreeBuffer());
-  DCHECK(buffer.IsValid());
+  auto buffer_opt(input_queue_->GetFreeBuffer());
+  DCHECK(buffer_opt);
+  V4L2WritableBufferRef buffer = std::move(*buffer_opt);
 
   switch (input_memory_type_) {
     case V4L2_MEMORY_USERPTR: {
@@ -932,8 +933,9 @@ bool V4L2ImageProcessor::EnqueueOutputRecord(JobRecord* job_record) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(backend_sequence_checker_);
   DCHECK_GT(output_queue_->FreeBuffersCount(), 0u);
 
-  V4L2WritableBufferRef buffer(output_queue_->GetFreeBuffer());
-  DCHECK(buffer.IsValid());
+  auto buffer_opt(output_queue_->GetFreeBuffer());
+  DCHECK(buffer_opt);
+  V4L2WritableBufferRef buffer = std::move(*buffer_opt);
 
   job_record->output_buffer_id = buffer.BufferId();
 

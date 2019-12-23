@@ -1080,8 +1080,9 @@ bool V4L2VideoEncodeAccelerator::EnqueueInputRecord() {
 
   scoped_refptr<VideoFrame> frame = frame_info.frame;
 
-  V4L2WritableBufferRef input_buf = input_queue_->GetFreeBuffer();
-  DCHECK(input_buf.IsValid());
+  auto input_buf_opt = input_queue_->GetFreeBuffer();
+  DCHECK(input_buf_opt);
+  V4L2WritableBufferRef input_buf = std::move(*input_buf_opt);
   size_t buffer_id = input_buf.BufferId();
 
   struct timeval timestamp;
@@ -1188,8 +1189,9 @@ bool V4L2VideoEncodeAccelerator::EnqueueOutputRecord() {
   TRACE_EVENT0("media,gpu", "V4L2VEA::EnqueueOutputRecord");
 
   // Enqueue an output (VIDEO_CAPTURE) buffer.
-  V4L2WritableBufferRef output_buf = output_queue_->GetFreeBuffer();
-  DCHECK(output_buf.IsValid());
+  auto output_buf_opt = output_queue_->GetFreeBuffer();
+  DCHECK(output_buf_opt);
+  V4L2WritableBufferRef output_buf = std::move(*output_buf_opt);
   if (!std::move(output_buf).QueueMMap()) {
     VLOGF(1) << "Failed to QueueMMap.";
     return false;

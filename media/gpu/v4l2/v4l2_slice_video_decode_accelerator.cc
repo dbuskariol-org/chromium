@@ -920,7 +920,6 @@ bool V4L2SliceVideoDecodeAccelerator::EnqueueInputRecord(
 
   // Enqueue an input (VIDEO_OUTPUT) buffer for an input video frame.
   V4L2WritableBufferRef input_buffer = std::move(dec_surface->input_buffer());
-  DCHECK(input_buffer.IsValid());
   const int index = input_buffer.BufferId();
   input_buffer.PrepareQueueBuffer(*dec_surface);
   if (!std::move(input_buffer).QueueMMap()) {
@@ -940,7 +939,6 @@ bool V4L2SliceVideoDecodeAccelerator::EnqueueOutputRecord(
 
   // Enqueue an output (VIDEO_CAPTURE) buffer.
   V4L2WritableBufferRef output_buffer = std::move(dec_surface->output_buffer());
-  DCHECK(output_buffer.IsValid());
   size_t index = output_buffer.BufferId();
   OutputRecord& output_record = output_buffer_map_[index];
   DCHECK_NE(output_record.picture_id, -1);
@@ -1390,8 +1388,9 @@ void V4L2SliceVideoDecodeAccelerator::AssignPictureBuffersTask(
 
   // Reserve all buffers until ImportBufferForPictureTask() is called
   while (output_queue_->FreeBuffersCount() > 0) {
-    V4L2WritableBufferRef buffer = output_queue_->GetFreeBuffer();
-    DCHECK(buffer.IsValid());
+    auto buffer_opt = output_queue_->GetFreeBuffer();
+    DCHECK(buffer_opt);
+    V4L2WritableBufferRef buffer = std::move(*buffer_opt);
     int i = buffer.BufferId();
 
     DCHECK_EQ(output_wait_map_.count(buffers[i].id()), 0u);
@@ -1943,7 +1942,6 @@ bool V4L2SliceVideoDecodeAccelerator::SubmitSlice(
   DCHECK(decoder_thread_task_runner_->BelongsToCurrentThread());
 
   V4L2WritableBufferRef& input_buffer = dec_surface->input_buffer();
-  DCHECK(input_buffer.IsValid());
 
   const size_t plane_size = input_buffer.GetPlaneSize(0);
   const size_t bytes_used = input_buffer.GetPlaneBytesUsed(0);
@@ -2092,12 +2090,14 @@ V4L2SliceVideoDecodeAccelerator::CreateSurface() {
       output_queue_->FreeBuffersCount() == 0)
     return nullptr;
 
-  V4L2WritableBufferRef input_buffer = input_queue_->GetFreeBuffer();
-  DCHECK(input_buffer.IsValid());
+  auto input_buffer_opt = input_queue_->GetFreeBuffer();
+  DCHECK(input_buffer_opt);
+  V4L2WritableBufferRef input_buffer = std::move(*input_buffer_opt);
   // All buffers that are returned to the output free queue have their GL
   // fence signaled, so we can use them directly.
-  V4L2WritableBufferRef output_buffer = output_queue_->GetFreeBuffer();
-  DCHECK(output_buffer.IsValid());
+  auto output_buffer_opt = output_queue_->GetFreeBuffer();
+  DCHECK(output_buffer_opt);
+  V4L2WritableBufferRef output_buffer = std::move(*output_buffer_opt);
 
   int input = input_buffer.BufferId();
   int output = output_buffer.BufferId();

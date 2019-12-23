@@ -523,7 +523,7 @@ class MEDIA_GPU_EXPORT V4L2VideoDecodeAccelerator
   // them.
   //
 
-  V4L2WritableBufferRef current_input_buffer_;
+  base::Optional<V4L2WritableBufferRef> current_input_buffer_;
 
   scoped_refptr<V4L2Queue> input_queue_;
   scoped_refptr<V4L2Queue> output_queue_;

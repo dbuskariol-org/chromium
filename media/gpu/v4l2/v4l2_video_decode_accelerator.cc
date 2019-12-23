@@ -412,8 +412,9 @@ void V4L2VideoDecodeAccelerator::AssignPictureBuffersTask(
 
   // Reserve all buffers until ImportBufferForPictureTask() is called
   while (output_queue_->FreeBuffersCount() > 0) {
-    V4L2WritableBufferRef buffer(output_queue_->GetFreeBuffer());
-    DCHECK(buffer.IsValid());
+    auto buffer_opt(output_queue_->GetFreeBuffer());
+    DCHECK(buffer_opt);
+    V4L2WritableBufferRef buffer = std::move(*buffer_opt);
     int i = buffer.BufferId();
 
     DCHECK_EQ(output_wait_map_.count(buffers[i].id()), 0u);
@@ -909,8 +910,8 @@ void V4L2VideoDecodeAccelerator::DecodeBufferTask() {
     // Enqueue a buffer guaranteed to be empty.  To do that, we flush the
     // current input, enqueue no data to the next frame, then flush that down.
     schedule_task = true;
-    if (current_input_buffer_.IsValid() &&
-        current_input_buffer_.GetTimeStamp().tv_sec != kFlushBufferId)
+    if (current_input_buffer_ &&
+        current_input_buffer_->GetTimeStamp().tv_sec != kFlushBufferId)
       schedule_task = FlushInputFrame();
 
     if (schedule_task && AppendToInputFrame(NULL, 0) && FlushInputFrame()) {
@@ -1148,9 +1149,9 @@ bool V4L2VideoDecodeAccelerator::AppendToInputFrame(const void* data,
   // we queue an empty buffer for the purposes of flushing the pipe.
 
   // Flush if we're too big
-  if (current_input_buffer_.IsValid()) {
-    size_t plane_size = current_input_buffer_.GetPlaneSize(0);
-    size_t bytes_used = current_input_buffer_.GetPlaneBytesUsed(0);
+  if (current_input_buffer_) {
+    size_t plane_size = current_input_buffer_->GetPlaneSize(0);
+    size_t bytes_used = current_input_buffer_->GetPlaneBytesUsed(0);
     if (bytes_used + size > plane_size) {
       if (!FlushInputFrame())
         return false;
@@ -1158,7 +1159,7 @@ bool V4L2VideoDecodeAccelerator::AppendToInputFrame(const void* data,
   }
 
   // Try to get an available input buffer.
-  if (!current_input_buffer_.IsValid()) {
+  if (!current_input_buffer_) {
     DCHECK(decoder_current_bitstream_buffer_ != NULL);
     DCHECK(input_queue_);
 
@@ -1167,14 +1168,14 @@ bool V4L2VideoDecodeAccelerator::AppendToInputFrame(const void* data,
       Dequeue();
 
     current_input_buffer_ = input_queue_->GetFreeBuffer();
-    if (!current_input_buffer_.IsValid()) {
+    if (!current_input_buffer_) {
       // No buffer available yet.
       DVLOGF(4) << "stalled for input buffers";
       return false;
     }
     struct timeval timestamp = {
         .tv_sec = decoder_current_bitstream_buffer_->input_id};
-    current_input_buffer_.SetTimeStamp(timestamp);
+    current_input_buffer_->SetTimeStamp(timestamp);
   }
 
   DCHECK(data != NULL || size == 0);
@@ -1186,17 +1187,17 @@ bool V4L2VideoDecodeAccelerator::AppendToInputFrame(const void* data,
   }
 
   // Copy in to the buffer.
-  size_t plane_size = current_input_buffer_.GetPlaneSize(0);
-  size_t bytes_used = current_input_buffer_.GetPlaneBytesUsed(0);
+  size_t plane_size = current_input_buffer_->GetPlaneSize(0);
+  size_t bytes_used = current_input_buffer_->GetPlaneBytesUsed(0);
 
   if (size > plane_size - bytes_used) {
     VLOGF(1) << "over-size frame, erroring";
     NOTIFY_ERROR(UNREADABLE_INPUT);
     return false;
   }
-  void* mapping = current_input_buffer_.GetPlaneMapping(0);
+  void* mapping = current_input_buffer_->GetPlaneMapping(0);
   memcpy(reinterpret_cast<uint8_t*>(mapping) + bytes_used, data, size);
-  current_input_buffer_.SetPlaneBytesUsed(0, bytes_used + size);
+  current_input_buffer_->SetPlaneBytesUsed(0, bytes_used + size);
 
   return true;
 }
@@ -1208,26 +1209,28 @@ bool V4L2VideoDecodeAccelerator::FlushInputFrame() {
   DCHECK_NE(decoder_state_, kResetting);
   DCHECK_NE(decoder_state_, kError);
 
-  if (!current_input_buffer_.IsValid())
+  if (!current_input_buffer_)
     return true;
 
-  const int32_t input_buffer_id = current_input_buffer_.GetTimeStamp().tv_sec;
+  const int32_t input_buffer_id = current_input_buffer_->GetTimeStamp().tv_sec;
 
   DCHECK(input_buffer_id != kFlushBufferId ||
-         current_input_buffer_.GetPlaneBytesUsed(0) == 0);
+         current_input_buffer_->GetPlaneBytesUsed(0) == 0);
   // * if input_id >= 0, this input buffer was prompted by a bitstream buffer we
   //   got from the client.  We can skip it if it is empty.
   // * if input_id < 0 (should be kFlushBufferId in this case), this input
   //   buffer was prompted by a flush buffer, and should be queued even when
   //   empty.
-  if (input_buffer_id >= 0 && current_input_buffer_.GetPlaneBytesUsed(0) == 0) {
-    current_input_buffer_ = V4L2WritableBufferRef();
+  if (input_buffer_id >= 0 &&
+      current_input_buffer_->GetPlaneBytesUsed(0) == 0) {
+    current_input_buffer_.reset();
     return true;
   }
 
   // Queue it.
   DVLOGF(4) << "submitting input_id=" << input_buffer_id;
-  input_ready_queue_.push(std::move(current_input_buffer_));
+  input_ready_queue_.push(std::move(*current_input_buffer_));
+  current_input_buffer_.reset();
   // Enqueue once since there's new available input for it.
   Enqueue();
 
@@ -1586,8 +1589,9 @@ bool V4L2VideoDecodeAccelerator::EnqueueInputRecord() {
 
 bool V4L2VideoDecodeAccelerator::EnqueueOutputRecord() {
   DCHECK(output_queue_);
-  V4L2WritableBufferRef buffer = output_queue_->GetFreeBuffer();
-  DCHECK(buffer.IsValid());
+  auto buffer_opt = output_queue_->GetFreeBuffer();
+  DCHECK(buffer_opt);
+  V4L2WritableBufferRef buffer = std::move(*buffer_opt);
 
   OutputRecord& output_record = output_buffer_map_[buffer.BufferId()];
   DCHECK_NE(output_record.picture_id, -1);
@@ -1713,7 +1717,7 @@ void V4L2VideoDecodeAccelerator::NotifyFlushDoneIfNeeded() {
       return;
     }
   }
-  if (current_input_buffer_.IsValid()) {
+  if (current_input_buffer_) {
     DVLOGF(3) << "Current input buffer != -1";
     return;
   }
@@ -1806,7 +1810,7 @@ void V4L2VideoDecodeAccelerator::ResetTask() {
   while (!decoder_input_queue_.empty())
     decoder_input_queue_.pop_front();
 
-  current_input_buffer_ = V4L2WritableBufferRef();
+  current_input_buffer_.reset();
 
   // If we are in the middle of switching resolutions or awaiting picture
   // buffers, postpone reset until it's done. We don't have to worry about
@@ -1916,7 +1920,7 @@ void V4L2VideoDecodeAccelerator::DestroyTask() {
   StopInputStream();
 
   decoder_current_bitstream_buffer_.reset();
-  current_input_buffer_ = V4L2WritableBufferRef();
+  current_input_buffer_.reset();
   decoder_decode_buffer_tasks_scheduled_ = 0;
   while (!decoder_input_queue_.empty())
     decoder_input_queue_.pop_front();

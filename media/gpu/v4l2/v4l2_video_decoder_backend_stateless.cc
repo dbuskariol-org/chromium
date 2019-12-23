@@ -230,12 +230,14 @@ V4L2StatelessVideoDecoderBackend::CreateSurface() {
   DVLOGF(4);
 
   // Request V4L2 input and output buffers.
-  V4L2WritableBufferRef input_buf = input_queue_->GetFreeBuffer();
-  V4L2WritableBufferRef output_buf = output_queue_->GetFreeBuffer();
-  if (!input_buf.IsValid() || !output_buf.IsValid()) {
+  auto input_buf_opt = input_queue_->GetFreeBuffer();
+  auto output_buf_opt = output_queue_->GetFreeBuffer();
+  if (!input_buf_opt || !output_buf_opt) {
     DVLOGF(3) << "There is no free V4L2 buffer.";
     return nullptr;
   }
+  V4L2WritableBufferRef input_buf = std::move(*input_buf_opt);
+  V4L2WritableBufferRef output_buf = std::move(*output_buf_opt);
 
   DmabufVideoFramePool* pool = client_->GetVideoFramePool();
   scoped_refptr<VideoFrame> frame;
