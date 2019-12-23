@@ -963,7 +963,12 @@ class DontBlockWebContentsOpenTest : public WebContentsOpenTest {
   }
 };
 
+#if defined(OS_WIN) || defined(OS_LINUX)
+// Flaky on Win/Linux: crbug.com/1036627
+DISABLED_HEADLESS_ASYNC_DEVTOOLED_TEST_F(DontBlockWebContentsOpenTest);
+#else
 HEADLESS_ASYNC_DEVTOOLED_TEST_F(DontBlockWebContentsOpenTest);
+#endif
 
 class BlockWebContentsOpenTest : public WebContentsOpenTest {
  public:
