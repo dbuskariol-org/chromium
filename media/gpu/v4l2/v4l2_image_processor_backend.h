@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_GPU_V4L2_V4L2_IMAGE_PROCESSOR_H_
-#define MEDIA_GPU_V4L2_V4L2_IMAGE_PROCESSOR_H_
+#ifndef MEDIA_GPU_V4L2_V4L2_IMAGE_PROCESSOR_BACKEND_H_
+#define MEDIA_GPU_V4L2_V4L2_IMAGE_PROCESSOR_BACKEND_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -31,17 +31,18 @@ namespace media {
 // Handles image processing accelerators that expose a V4L2 memory-to-memory
 // interface. The threading model of this class is the same as for other V4L2
 // hardware accelerators (see V4L2VideoDecodeAccelerator) for more details.
-class MEDIA_GPU_EXPORT V4L2ImageProcessor : public ImageProcessorBackend {
+class MEDIA_GPU_EXPORT V4L2ImageProcessorBackend
+    : public ImageProcessorBackend {
  public:
-  // Factory method to create V4L2ImageProcessor to convert from
+  // Factory method to create V4L2ImageProcessorBackend to convert from
   // input_config to output_config. The number of input buffers and output
   // buffers will be |num_buffers|. Provided |error_cb| will be posted to the
   // same thread Create() is called if an error occurs after initialization.
-  // Returns nullptr if V4L2ImageProcessor fails to create.
+  // Returns nullptr if V4L2ImageProcessorBackend fails to create.
   // Note: output_mode will be removed once all its clients use import mode.
   // TODO(crbug.com/917798): remove |device| parameter once
   //     V4L2VideoDecodeAccelerator no longer creates and uses
-  //     |image_processor_device_| before V4L2ImageProcessor is created.
+  //     |image_processor_device_| before V4L2ImageProcessorBackend is created.
   static std::unique_ptr<ImageProcessorBackend> Create(
       scoped_refptr<V4L2Device> device,
       size_t num_buffers,
@@ -106,7 +107,7 @@ class MEDIA_GPU_EXPORT V4L2ImageProcessor : public ImageProcessorBackend {
       ErrorCB error_cb,
       scoped_refptr<base::SequencedTaskRunner> backend_task_runner);
 
-  V4L2ImageProcessor(
+  V4L2ImageProcessorBackend(
       scoped_refptr<base::SequencedTaskRunner> backend_task_runner,
       scoped_refptr<V4L2Device> device,
       const PortConfig& input_config,
@@ -116,7 +117,7 @@ class MEDIA_GPU_EXPORT V4L2ImageProcessor : public ImageProcessorBackend {
       OutputMode output_mode,
       size_t num_buffers,
       ErrorCB error_cb);
-  ~V4L2ImageProcessor() override;
+  ~V4L2ImageProcessorBackend() override;
   void Destroy() override;
   // Stop all processing on |poll_task_runner_|.
   void DestroyOnPollSequence();
@@ -138,7 +139,7 @@ class MEDIA_GPU_EXPORT V4L2ImageProcessor : public ImageProcessorBackend {
   // |device_task_runner_|.
   static void V4L2VFRecycleThunk(
       scoped_refptr<base::SequencedTaskRunner> task_runner,
-      base::Optional<base::WeakPtr<V4L2ImageProcessor>> image_processor,
+      base::Optional<base::WeakPtr<V4L2ImageProcessorBackend>> image_processor,
       V4L2ReadableBufferRef buf);
   void V4L2VFRecycleTask(V4L2ReadableBufferRef buf);
 
@@ -173,15 +174,16 @@ class MEDIA_GPU_EXPORT V4L2ImageProcessor : public ImageProcessorBackend {
   SEQUENCE_CHECKER(poll_sequence_checker_);
 
   // WeakPtr bound to |backend_task_runner_|.
-  base::WeakPtr<V4L2ImageProcessor> backend_weak_this_;
+  base::WeakPtr<V4L2ImageProcessorBackend> backend_weak_this_;
   // WeakPtr bound to |poll_task_runner_|.
-  base::WeakPtr<V4L2ImageProcessor> poll_weak_this_;
-  base::WeakPtrFactory<V4L2ImageProcessor> backend_weak_this_factory_{this};
-  base::WeakPtrFactory<V4L2ImageProcessor> poll_weak_this_factory_{this};
+  base::WeakPtr<V4L2ImageProcessorBackend> poll_weak_this_;
+  base::WeakPtrFactory<V4L2ImageProcessorBackend> backend_weak_this_factory_{
+      this};
+  base::WeakPtrFactory<V4L2ImageProcessorBackend> poll_weak_this_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(V4L2ImageProcessor);
+  DISALLOW_COPY_AND_ASSIGN(V4L2ImageProcessorBackend);
 };
 
 }  // namespace media
 
-#endif  // MEDIA_GPU_V4L2_V4L2_IMAGE_PROCESSOR_H_
+#endif  // MEDIA_GPU_V4L2_V4L2_IMAGE_PROCESSOR_BACKEND_H_

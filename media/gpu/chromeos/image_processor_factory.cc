@@ -20,7 +20,7 @@
 
 #if BUILDFLAG(USE_V4L2_CODEC)
 #include "media/gpu/v4l2/v4l2_device.h"
-#include "media/gpu/v4l2/v4l2_image_processor.h"
+#include "media/gpu/v4l2/v4l2_image_processor_backend.h"
 #include "media/gpu/v4l2/v4l2_vda_helpers.h"
 #endif  // BUILDFLAG(USE_V4L2_CODEC)
 
@@ -41,7 +41,7 @@ std::unique_ptr<ImageProcessor> CreateV4L2ImageProcessorWithInputCandidates(
   // formats, and try all combination of input/output format, if any platform
   // fails to create ImageProcessor via current approach.
   const std::vector<uint32_t> supported_output_formats =
-      V4L2ImageProcessor::GetSupportedOutputFormats();
+      V4L2ImageProcessorBackend::GetSupportedOutputFormats();
   std::vector<Fourcc> supported_fourccs;
   for (const auto& format : supported_output_formats) {
     const auto fourcc = Fourcc::FromV4L2PixFmt(format);
@@ -58,7 +58,7 @@ std::unique_ptr<ImageProcessor> CreateV4L2ImageProcessorWithInputCandidates(
     return nullptr;
 
   const auto supported_input_pixfmts =
-      V4L2ImageProcessor::GetSupportedInputFormats();
+      V4L2ImageProcessorBackend::GetSupportedInputFormats();
   for (const auto& input_candidate : input_candidates) {
     const Fourcc input_fourcc = input_candidate.first;
     const gfx::Size& input_size = input_candidate.second;
@@ -72,7 +72,7 @@ std::unique_ptr<ImageProcessor> CreateV4L2ImageProcessorWithInputCandidates(
     // Try to get an image size as close as possible to the final size.
     gfx::Size output_size(visible_size.width(), visible_size.height());
     size_t num_planes = 0;
-    if (!V4L2ImageProcessor::TryOutputFormat(
+    if (!V4L2ImageProcessorBackend::TryOutputFormat(
             input_fourcc.ToV4L2PixFmt(), output_fourcc->ToV4L2PixFmt(),
             input_size, &output_size, &num_planes)) {
       VLOGF(2) << "Failed to get output size and plane count of IP";
@@ -104,7 +104,7 @@ std::unique_ptr<ImageProcessor> ImageProcessorFactory::Create(
 #endif  // BUILDFLAG(USE_VAAPI)
 #if BUILDFLAG(USE_V4L2_CODEC)
   create_funcs.push_back(base::BindRepeating(
-      &V4L2ImageProcessor::Create, V4L2Device::Create(), num_buffers));
+      &V4L2ImageProcessorBackend::Create, V4L2Device::Create(), num_buffers));
 #endif  // BUILDFLAG(USE_V4L2_CODEC)
   create_funcs.push_back(base::BindRepeating(&LibYUVImageProcessor::Create));
 
