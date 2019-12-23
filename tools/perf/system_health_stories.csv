@@ -20,6 +20,7 @@ browse:media:flickr_infinite_scroll:2019,,mobile,"2019,infinite_scroll"
 browse:media:googleplaystore:2018,"Navigate to the movies page of Google Play Store, scroll to the bottom,",desktop,"2018,images"
 browse:media:googleplaystore:2019,"Navigate to the movies page of Google Play Store, scroll to the bottom,",mobile,"2019,emerging_market,images"
 browse:media:imgur,,"desktop,mobile","2016,emerging_market"
+browse:media:imgur:2019,,mobile,"2019,emerging_market"
 browse:media:pinterest:2018,,desktop,2018
 browse:media:tumblr:2018,,desktop,2018
 browse:media:youtube,Load a typical YouTube video then navigate to a next few videos. Stop and,mobile,"2016,emerging_market,health_check,javascript_heavy"

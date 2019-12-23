@@ -54,6 +54,9 @@
         "browse:media:imgur": {
             "DEFAULT": "system_health_mobile_035.wprgo"
         },
+        "browse:media:imgur:2019": {
+            "DEFAULT": "system_health_mobile_96a8c80910.wprgo"
+        },
         "browse:media:youtube": {
             "DEFAULT": "system_health_mobile_037.wprgo"
         },
