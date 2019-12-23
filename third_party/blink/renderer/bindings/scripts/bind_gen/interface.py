@@ -62,12 +62,17 @@ def callback_function_name(cg_context, overload_index=None):
         name = name.replace("_", "Dec95")
         return name
 
-    property_name = _cxx_name(cg_context.property_.identifier)
+    if cg_context.constant:
+        property_name = cg_context.property_.identifier
+    else:
+        property_name = _cxx_name(cg_context.property_.identifier)
 
     if cg_context.attribute_get:
         kind = "AttributeGet"
     if cg_context.attribute_set:
         kind = "AttributeSet"
+    if cg_context.constant:
+        kind = "Constant"
     if cg_context.constructor_group:
         property_name = ""
         kind = "Constructor"
@@ -87,6 +92,17 @@ def callback_function_name(cg_context, overload_index=None):
         world_suffix = ""
 
     return name_style.func(property_name, kind, callback_suffix, world_suffix)
+
+
+def constant_name(cg_context):
+    assert isinstance(cg_context, CodeGenContext)
+    assert cg_context.constant
+
+    property_name = cg_context.property_.identifier
+
+    kind = "Constant"
+
+    return name_style.constant(kind, property_name)
 
 
 def bind_blink_api_arguments(code_node, cg_context):
@@ -1148,14 +1164,15 @@ def make_v8_set_return_value(cg_context):
     return T("V8SetReturnValue(${info}, ${return_value});")
 
 
-def _make_empty_callback_def(cg_context, function_name):
+def _make_empty_callback_def(cg_context, function_name, arg_decls=None):
     assert isinstance(cg_context, CodeGenContext)
     assert isinstance(function_name, str)
 
+    if arg_decls is None:
+        arg_decls = ["const v8::FunctionCallbackInfo<v8::Value>& info"]
+
     func_def = CxxFuncDefNode(
-        name=function_name,
-        arg_decls=["const v8::FunctionCallbackInfo<v8::Value>& info"],
-        return_type="void")
+        name=function_name, arg_decls=arg_decls, return_type="void")
     func_def.add_template_vars(cg_context.template_bindings())
 
     body = func_def.body
@@ -1236,6 +1253,52 @@ def make_attribute_set_callback_def(cg_context, function_name):
     ])
 
     return func_def
+
+
+def make_constant_callback_def(cg_context, function_name):
+    assert isinstance(cg_context, CodeGenContext)
+    assert isinstance(function_name, str)
+
+    logging_nodes = SequenceNode([
+        make_report_deprecate_as(cg_context),
+        make_report_measure_as(cg_context),
+        make_log_activity(cg_context),
+    ])
+    if not logging_nodes:
+        return None
+
+    func_def = _make_empty_callback_def(
+        cg_context,
+        function_name,
+        arg_decls=[
+            "v8::Local<v8::Name> property",
+            "const v8::FunctionCallbackInfo<v8::Value>& info",
+        ])
+    body = func_def.body
+
+    v8_set_return_value = _format(
+        "V8SetReturnValue(${info}, ${class_name}::{});",
+        constant_name(cg_context))
+    body.extend([
+        make_runtime_call_timer_scope(cg_context),
+        logging_nodes,
+        TextNode(""),
+        TextNode(v8_set_return_value),
+    ])
+
+    return func_def
+
+
+def make_constant_constant_def(cg_context, constant_name):
+    # IDL constant's C++ constant definition
+    assert isinstance(cg_context, CodeGenContext)
+    assert isinstance(constant_name, str)
+
+    constant_type = blink_type_info(cg_context.constant.idl_type).value_t
+    return TextNode("static constexpr {type} {name} = {value};".format(
+        type=constant_type,
+        name=constant_name,
+        value=cg_context.constant.value.literal))
 
 
 def make_overload_dispatcher_function_def(cg_context, function_name):
@@ -1464,6 +1527,23 @@ def _make_property_entry_world(world):
     assert False
 
 
+def _make_property_entry_constant_type_and_value_format(member):
+    idl_type = member.idl_type.unwrap()
+    if (idl_type.keyword_typename == "long long"
+            or idl_type.keyword_typename == "unsigned long long"):
+        assert False, "64-bit constants are not yet supported."
+    if idl_type.keyword_typename == "unsigned long":
+        return ("V8DOMConfiguration::kConstantTypeUnsignedLong",
+                "static_cast<int>({value})")
+    if idl_type.is_integer:
+        return ("V8DOMConfiguration::kConstantTypeLong",
+                "static_cast<int>({value})")
+    if idl_type.is_floating_point_numeric:
+        return ("V8DOMConfiguration::kConstantTypeDouble",
+                "static_cast<double>({value})")
+    assert False, "Unsupported type: {}".format(idl_type.syntactic_form)
+
+
 def _make_attribute_registration_table(table_name, attribute_entries):
     assert isinstance(table_name, str)
     assert isinstance(attribute_entries, (list, tuple))
@@ -1501,6 +1581,68 @@ def _make_attribute_registration_table(table_name, attribute_entries):
 
     return ListNode([
         T("static constexpr V8DOMConfiguration::AccessorConfiguration " +
+          table_name + "[] = {"),
+        ListNode(entry_nodes),
+        T("};"),
+    ])
+
+
+def _make_constant_callback_registration_table(table_name, constant_entries):
+    assert isinstance(table_name, str)
+    assert isinstance(constant_entries, (list, tuple))
+    assert all(
+        isinstance(entry, _PropEntryConstant)
+        and isinstance(entry.const_callback_name, str)
+        for entry in constant_entries)
+
+    T = TextNode
+
+    entry_nodes = []
+    for entry in constant_entries:
+        pattern = ("{{" "\"{property_name}\", " "{constant_callback}" "}},")
+        text = _format(
+            pattern,
+            property_name=entry.member.identifier,
+            constant_callback=entry.const_callback_name)
+        entry_nodes.append(T(text))
+
+    return ListNode([
+        T("static constexpr V8DOMConfiguration::ConstantCallbackConfiguration "
+          + table_name + "[] = {"),
+        ListNode(entry_nodes),
+        T("};"),
+    ])
+
+
+def _make_constant_value_registration_table(table_name, constant_entries):
+    assert isinstance(table_name, str)
+    assert isinstance(constant_entries, (list, tuple))
+    assert all(
+        isinstance(entry, _PropEntryConstant)
+        and entry.const_callback_name is None for entry in constant_entries)
+
+    T = TextNode
+
+    entry_nodes = []
+    for entry in constant_entries:
+        pattern = ("{{"
+                   "\"{property_name}\", "
+                   "{constant_type}, "
+                   "{constant_value}"
+                   "}},")
+        constant_type, constant_value_fmt = (
+            _make_property_entry_constant_type_and_value_format(entry.member))
+        constant_value = _format(
+            constant_value_fmt, value=entry.const_constant_name)
+        text = _format(
+            pattern,
+            property_name=entry.member.identifier,
+            constant_type=constant_type,
+            constant_value=constant_value)
+        entry_nodes.append(T(text))
+
+    return ListNode([
+        T("static constexpr V8DOMConfiguration::ConstantConfiguration " +
           table_name + "[] = {"),
         ListNode(entry_nodes),
         T("};"),
@@ -1565,6 +1707,7 @@ class _PropEntryMember(object):
 class _PropEntryAttribute(_PropEntryMember):
     def __init__(self, is_context_dependent, exposure_conditional, world,
                  attribute, attr_get_callback_name, attr_set_callback_name):
+        assert isinstance(attribute, web_idl.Attribute)
         assert isinstance(attr_get_callback_name, str)
         assert (attr_set_callback_name is None
                 or isinstance(attr_set_callback_name, str))
@@ -1575,9 +1718,24 @@ class _PropEntryAttribute(_PropEntryMember):
         self.attr_set_callback_name = attr_set_callback_name
 
 
+class _PropEntryConstant(_PropEntryMember):
+    def __init__(self, is_context_dependent, exposure_conditional, world,
+                 constant, const_callback_name, const_constant_name):
+        assert isinstance(constant, web_idl.Constant)
+        assert (const_callback_name is None
+                or isinstance(const_callback_name, str))
+        assert isinstance(const_constant_name, str)
+
+        _PropEntryMember.__init__(self, is_context_dependent,
+                                  exposure_conditional, world, constant)
+        self.const_callback_name = const_callback_name
+        self.const_constant_name = const_constant_name
+
+
 class _PropEntryConstructorGroup(_PropEntryMember):
     def __init__(self, is_context_dependent, exposure_conditional, world,
                  constructor_group, ctor_callback_name, ctor_func_length):
+        assert isinstance(constructor_group, web_idl.ConstructorGroup)
         assert isinstance(ctor_callback_name, str)
         assert isinstance(ctor_func_length, (int, long))
 
@@ -1591,6 +1749,7 @@ class _PropEntryConstructorGroup(_PropEntryMember):
 class _PropEntryOperationGroup(_PropEntryMember):
     def __init__(self, is_context_dependent, exposure_conditional, world,
                  operation_group, op_callback_name, op_func_length):
+        assert isinstance(operation_group, web_idl.OperationGroup)
         assert isinstance(op_callback_name, str)
         assert isinstance(op_func_length, (int, long))
 
@@ -1601,7 +1760,8 @@ class _PropEntryOperationGroup(_PropEntryMember):
 
 
 def _make_property_entries_and_callback_defs(
-        cg_context, attribute_entries, constructor_entries, operation_entries):
+        cg_context, attribute_entries, constant_entries, constructor_entries,
+        operation_entries):
     """
     Creates intermediate objects to help property installation and also makes
     code nodes of callback functions.
@@ -1614,6 +1774,7 @@ def _make_property_entries_and_callback_defs(
     """
     assert isinstance(cg_context, CodeGenContext)
     assert isinstance(attribute_entries, list)
+    assert isinstance(constant_entries, list)
     assert isinstance(constructor_entries, list)
     assert isinstance(operation_entries, list)
 
@@ -1668,6 +1829,31 @@ def _make_property_entries_and_callback_defs(
                 attr_get_callback_name=attr_get_callback_name,
                 attr_set_callback_name=attr_set_callback_name))
 
+    def process_constant(constant, is_context_dependent, exposure_conditional,
+                         world):
+        cgc = cg_context.make_copy(constant=constant, for_world=world)
+        const_callback_name = callback_function_name(cgc)
+        const_callback_node = make_constant_callback_def(
+            cgc, const_callback_name)
+        if const_callback_node is None:
+            const_callback_name = None
+        # IDL constant's C++ constant name
+        const_constant_name = _format("${class_name}::{}", constant_name(cgc))
+
+        callback_def_nodes.extend([
+            const_callback_node,
+            TextNode(""),
+        ])
+
+        constant_entries.append(
+            _PropEntryConstant(
+                is_context_dependent=is_context_dependent,
+                exposure_conditional=exposure_conditional,
+                world=world,
+                constant=constant,
+                const_callback_name=const_callback_name,
+                const_constant_name=const_constant_name))
+
     def process_constructor_group(constructor_group, is_context_dependent,
                                   exposure_conditional, world):
         cgc = cg_context.make_copy(
@@ -1713,6 +1899,7 @@ def _make_property_entries_and_callback_defs(
                 op_func_length=operation_group.min_num_of_required_arguments))
 
     iterate(interface.attributes, process_attribute)
+    iterate(interface.constants, process_constant)
     iterate(interface.constructor_groups, process_constructor_group)
     iterate(interface.operation_groups, process_operation_group)
 
@@ -1805,18 +1992,21 @@ def make_install_interface_template_def(cg_context, function_name,
 
 def make_install_properties_def(cg_context, function_name,
                                 is_context_dependent, attribute_entries,
-                                operation_entries):
+                                constant_entries, operation_entries):
     assert isinstance(cg_context, CodeGenContext)
     assert isinstance(is_context_dependent, bool)
     assert isinstance(attribute_entries, (list, tuple))
     assert all(
         isinstance(entry, _PropEntryAttribute) for entry in attribute_entries)
+    assert isinstance(constant_entries, (list, tuple))
+    assert all(
+        isinstance(entry, _PropEntryConstant) for entry in constant_entries)
     assert isinstance(operation_entries, (list, tuple))
     assert all(
         isinstance(entry, _PropEntryOperationGroup)
         for entry in operation_entries)
 
-    if not (attribute_entries or operation_entries):
+    if not (attribute_entries or constant_entries or operation_entries):
         return None
 
     if is_context_dependent:
@@ -1871,71 +2061,90 @@ def make_install_properties_def(cg_context, function_name,
                                                   []).append(entry)
         return unconditional_entries, conditional_to_entries
 
+    def install_properties(table_name, target_entries, make_table_func,
+                           installer_call_text):
+        unconditional_entries, conditional_to_entries = group_by_condition(
+            target_entries)
+        if unconditional_entries:
+            body.append(
+                CxxBlockNode([
+                    make_table_func(table_name, unconditional_entries),
+                    TextNode(installer_call_text),
+                ]))
+            body.append(TextNode(""))
+        for conditional, entries in conditional_to_entries.iteritems():
+            body.append(
+                CxxUnlikelyIfNode(
+                    cond=conditional,
+                    body=[
+                        make_table_func(table_name, entries),
+                        TextNode(installer_call_text),
+                    ]))
+        body.append(TextNode(""))
+
     table_name = "kAttributeTable"
     if is_context_dependent:
-        installer_call = (
+        installer_call_text = (
             "V8DOMConfiguration::InstallAccessors(${isolate}, ${world}, "
             "${instance_object}, ${prototype_object}, ${interface_object}, "
             "${signature}, kAttributeTable, base::size(kAttributeTable));")
     else:
-        installer_call = (
+        installer_call_text = (
             "V8DOMConfiguration::InstallAccessors(${isolate}, ${world}, "
             "${instance_template}, ${prototype_template}, "
             "${interface_template}, ${signature}, "
             "kAttributeTable, base::size(kAttributeTable));")
+    install_properties(table_name, attribute_entries,
+                       _make_attribute_registration_table, installer_call_text)
 
-    unconditional_entries, conditional_to_entries = group_by_condition(
-        attribute_entries)
-    if unconditional_entries:
-        body.append(
-            CxxBlockNode([
-                _make_attribute_registration_table(table_name,
-                                                   unconditional_entries),
-                TextNode(installer_call),
-            ]))
-        body.append(TextNode(""))
-    for conditional, entries in conditional_to_entries.iteritems():
-        body.append(
-            CxxUnlikelyIfNode(
-                cond=conditional,
-                body=[
-                    _make_attribute_registration_table(table_name, entries),
-                    TextNode(installer_call),
-                ]))
+    table_name = "kConstantCallbackTable"
+    if is_context_dependent:
+        installer_call_text = (
+            "V8DOMConfiguration::InstallConstants(${isolate}, "
+            "${interface_object}, ${prototype_object}, "
+            "kConstantCallbackTable, base::size(kConstantCallbackTable));")
+    else:
+        installer_call_text = (
+            "V8DOMConfiguration::InstallConstants(${isolate}, "
+            "${interface_template}, ${prototype_template}, "
+            "kConstantCallbackTable, base::size(kConstantCallbackTable));")
+    constant_callback_entries = filter(lambda entry: entry.const_callback_name,
+                                       constant_entries)
+    install_properties(table_name, constant_callback_entries,
+                       _make_constant_callback_registration_table,
+                       installer_call_text)
 
-    body.append(TextNode(""))
+    table_name = "kConstantValueTable"
+    if is_context_dependent:
+        installer_call_text = (
+            "V8DOMConfiguration::InstallConstants(${isolate}, "
+            "${interface_object}, ${prototype_object}, "
+            "kConstantValueTable, base::size(kConstantValueTable));")
+    else:
+        installer_call_text = (
+            "V8DOMConfiguration::InstallConstants(${isolate}, "
+            "${interface_template}, ${prototype_template}, "
+            "kConstantValueTable, base::size(kConstantValueTable));")
+    constant_value_entries = filter(
+        lambda entry: not entry.const_callback_name, constant_entries)
+    install_properties(table_name, constant_value_entries,
+                       _make_constant_value_registration_table,
+                       installer_call_text)
 
     table_name = "kOperationTable"
     if is_context_dependent:
-        installer_call = (
+        installer_call_text = (
             "V8DOMConfiguration::InstallMethods(${isolate}, ${world}, "
             "${instance_object}, ${prototype_object}, ${interface_object}, "
             "${signature}, kOperationTable, base::size(kOperationTable));")
     else:
-        installer_call = (
+        installer_call_text = (
             "V8DOMConfiguration::InstallMethods(${isolate}, ${world}, "
             "${instance_template}, ${prototype_template}, "
             "${interface_template}, ${signature}, "
             "kOperationTable, base::size(kOperationTable));")
-
-    unconditional_entries, conditional_to_entries = group_by_condition(
-        operation_entries)
-    if unconditional_entries:
-        body.append(
-            CxxBlockNode([
-                _make_operation_registration_table(table_name,
-                                                   unconditional_entries),
-                TextNode(installer_call),
-            ]))
-        body.append(TextNode(""))
-    for conditional, entries in conditional_to_entries.iteritems():
-        body.append(
-            CxxUnlikelyIfNode(
-                cond=conditional,
-                body=[
-                    _make_operation_registration_table(table_name, entries),
-                    TextNode(installer_call),
-                ]))
+    install_properties(table_name, operation_entries,
+                       _make_operation_registration_table, installer_call_text)
 
     return func_def
 
@@ -1954,11 +2163,13 @@ def generate_interfaces(web_idl_database):
         collect_include_headers(interface))
 
     attribute_entries = []
+    constant_entries = []
     constructor_entries = []
     operation_entries = []
     callback_def_nodes = _make_property_entries_and_callback_defs(
         cg_context,
         attribute_entries=attribute_entries,
+        constant_entries=constant_entries,
         constructor_entries=constructor_entries,
         operation_entries=operation_entries)
 
@@ -1972,18 +2183,21 @@ def generate_interfaces(web_idl_database):
         TextNode("${class_name}::InstallUnconditionalProperties"),
         is_context_dependent=False,
         attribute_entries=filter(is_unconditional, attribute_entries),
+        constant_entries=filter(is_unconditional, constant_entries),
         operation_entries=filter(is_unconditional, operation_entries))
     install_context_independent_props_node = make_install_properties_def(
         cg_context,
         TextNode("${class_name}::InstallContextIndependentProperties"),
         is_context_dependent=False,
         attribute_entries=filter(is_context_independent, attribute_entries),
+        constant_entries=filter(is_context_independent, constant_entries),
         operation_entries=filter(is_context_independent, operation_entries))
     install_context_dependent_props_node = make_install_properties_def(
         cg_context,
         TextNode("${class_name}::InstallContextDependentProperties"),
         is_context_dependent=True,
         attribute_entries=filter(is_context_dependent, attribute_entries),
+        constant_entries=filter(is_context_dependent, constant_entries),
         operation_entries=filter(is_context_dependent, operation_entries))
     install_interface_template_node = make_install_interface_template_def(
         cg_context, TextNode("${class_name}::InstallInterfaceTemplate"),
@@ -2001,10 +2215,18 @@ def generate_interfaces(web_idl_database):
         install_interface_template_node,
     ])
 
+    constant_def_nodes = ListNode()
+    for constant in interface.constants:
+        cgc = cg_context.make_copy(constant=constant)
+        constant_def_nodes.append(
+            make_constant_constant_def(cgc, constant_name(cgc)))
+
     nodes = ListNode([
         callback_def_nodes,
         TextNode(""),
         installer_function_nodes,
+        TextNode(""),
+        constant_def_nodes,
     ])
 
     root_node.extend([
