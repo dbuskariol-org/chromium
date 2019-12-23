@@ -472,8 +472,15 @@ class HeadlessWebContentsPDFPageSizeRoundingTest
   }
 };
 
+#if defined(OS_WIN) || defined(OS_LINUX)
+// Flaky on Win/Linux: crbug.com/1036627
+DISABLED_HEADLESS_ASYNC_DEVTOOLED_TEST_F(
+    HeadlessWebContentsPDFPageSizeRoundingTest);
+#else
 HEADLESS_ASYNC_DEVTOOLED_TEST_F(HeadlessWebContentsPDFPageSizeRoundingTest);
 #endif
+
+#endif  // BUILDFLAG(ENABLE_PRINTING)
 
 class HeadlessWebContentsSecurityTest
     : public HeadlessAsyncDevTooledBrowserTest,
