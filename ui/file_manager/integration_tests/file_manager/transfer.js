@@ -147,10 +147,7 @@ async function transferBetweenVolumes(transferInfo) {
     const myDriveContent = TestEntryInfo.getExpectedRows(
         driveFiles.filter(e => e.teamDriveName === '' && e.computerName === ''));
     // Select + expand + wait for its content.
-    chrome.test.assertTrue(await remoteCall.callRemoteTestUtil(
-        'selectFolderInTree', appId, ['Google Drive']));
-    chrome.test.assertTrue(await remoteCall.callRemoteTestUtil(
-        'expandSelectedFolderInTree', appId, []));
+    await navigateWithDirectoryTree(appId, '/My Drive');
     await remoteCall.waitForFiles(appId, myDriveContent);
   }
 
