@@ -129,7 +129,7 @@
             icon1x="oobe-welcome-dialog-20:language"
             icon2x="oobe-welcome-dialog-40:language"
             on-tap="onLanguageClicked_"
-            label-for-aria$="[[formatMessage_('languageButtonLabel',
+            label-for-aria="[[i18nDynamic(locale, 'languageButtonLabel',
                 currentLanguage)]]">
           <div slot="text">[[currentLanguage]]</div>
         </oobe-welcome-secondary-button>

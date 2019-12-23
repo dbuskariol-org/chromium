@@ -23,11 +23,14 @@ Polymer({
 
     border: Boolean,
 
-    /* Note that we are not using "aria-label" property here, because
-     * we want to pass the label value but not actually declare it as an
-     * ARIA property anywhere but the actual target element.
-     */
-    labelForAria: String,
+    labelForAria: {
+      type: String,
+    },
+
+    labelForAriaText_: {
+      type: String,
+      computed: 'ariaLabel_(labelForAria, locale, textKey)',
+    },
   },
 
   focus: function() {
@@ -41,6 +44,13 @@ Polymer({
 
   onInverseChanged_: function() {
     this.$.textButton.classList.toggle('action-button', this.inverse);
+  },
+
+  ariaLabel_: function(labelForAria, locale, textKey) {
+    if ((typeof labelForAria !== 'undefined') && (labelForAria !== '')) {
+      return labelForAria;
+    }
+    return this.i18n(textKey);
   },
 });
 
@@ -63,11 +73,10 @@ Polymer({
       value: 'back',
     },
 
-    /* Note that we are not using "aria-label" property here, because
-     * we want to pass the label value but not actually declare it as an
-     * ARIA property anywhere but the actual target element.
-     */
-    labelForAria: String,
+    labelForAria_: {
+      type: String,
+      computed: 'i18nDynamic(locale, textKey)',
+    },
   },
 
   focus: function() {
@@ -99,6 +108,11 @@ Polymer({
       type: String,
       value: 'next',
     },
+
+    labelForAria_: {
+      type: String,
+      computed: 'i18nDynamic(locale, textKey)',
+    },
   },
 
   focus: function() {
@@ -125,14 +139,16 @@ Polymer({
      */
     textKey: {
       type: String,
-      value: 'back',
     },
 
-    /* Note that we are not using "aria-label" property here, because
-     * we want to pass the label value but not actually declare it as an
-     * ARIA property anywhere but the actual target element.
-     */
-    labelForAria: String
+    labelForAria: {
+      type: String,
+    },
+
+    labelForAriaText_: {
+      type: String,
+      computed: 'ariaLabel_(labelForAria, locale, textKey)',
+    },
   },
 
   focus: function() {
@@ -145,5 +161,12 @@ Polymer({
 
   click: function() {
     this.$.button.click();
+  },
+
+  ariaLabel_: function(labelForAria, locale, textKey) {
+    if ((typeof labelForAria !== 'undefined') && (labelForAria !== '')) {
+      return labelForAria;
+    }
+    return this.i18n(textKey);
   },
 });

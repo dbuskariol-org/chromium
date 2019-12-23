@@ -26,12 +26,14 @@
           <div class="flex">
           </div>
           <oobe-text-button id="secondary-action-button"
+              label-for-aria="[[secondaryActionButtonLabel_]]"
               on-tap="onSecondaryActionButtonClicked_"
               hidden="[[!secondaryActionButtonLabel_]]"
               disabled="[[!secondaryActionButtonEnabled_]]">
             <div slot="text">[[secondaryActionButtonLabel_]]</div>
           </oobe-text-button>
           <oobe-text-button id="primary-action-button"
+              label-for-aria="[[primaryActionButtonLabel_]]"
               on-tap="onPrimaryActionButtonClicked_"
               hidden="[[!primaryActionButtonLabel_]]"
               disabled="[[!primaryActionButtonEnabled_]]"
