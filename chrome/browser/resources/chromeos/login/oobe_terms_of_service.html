@@ -16,20 +16,12 @@
 
     <!-- ERROR DIALOG -->
     <oobe-dialog id="termsOfServiceErrorDialog" role="dialog"
-        aria-labelledby="title"
+        title-key="termsOfServiceError"
+        subtitle-key="termsOfServiceTryAgain"
+        aria-label$="[[i18nDynamic(locale, 'termsOfServiceError')]]"
         hidden="[[!isInErrorState_(uiState)]]" has-buttons>
       <iron-icon icon="cr:warning" slot="oobe-icon" class="warning">
       </iron-icon>
-      <h1 id="title" slot="title">
-        <div>
-          [[i18nDynamic(locale, 'termsOfServiceError')]]
-        </div>
-      </h1>
-      <div slot="subtitle">
-        <div>
-          [[i18nDynamic(locale, 'termsOfServiceTryAgain')]]
-        </div>
-      </div>
       <div slot="bottom-buttons" class="flex layout horizontal">
         <oobe-back-button id="errorBackButton"
             disabled="[[backButtonDisabled_]]"

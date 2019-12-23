@@ -16,17 +16,13 @@
     <link rel="stylesheet" href="oobe_flex_layout.css">
     <oobe-dialog id="setupFingerprint" role="dialog" has-buttons
         footer-shrinkable
+        title-key="setupFingerprintScreenTitle"
+        subtitle-key="setupFingerprintScreenDescription"
         aria-label$="[[i18nDynamic(locale, 'setupFingerprintScreenTitle')]]"
         hidden>
       <hd-iron-icon slot="oobe-icon"
           icon1x="oobe-32:fingerprint" icon2x="oobe-64:fingerprint">
       </hd-iron-icon>
-      <h1 slot="title">
-        [[i18nDynamic(locale, 'setupFingerprintScreenTitle')]]
-      </h1>
-      <div slot="subtitle">
-          [[i18nDynamic(locale, 'setupFingerprintScreenDescription')]]
-      </div>
       <div slot="footer" class="flex layout vertical center center-justified">
         <img class="oobe-illustration"
             srcset="images/1x/finger_unlock.svg 1x,
@@ -42,17 +38,13 @@
       </div>
     </oobe-dialog>
     <oobe-dialog id="placeFinger" role="dialog" has-buttons footer-shrinkable
+        title-key="placeFingerScreenTitle"
+        subtitle-key="setupFingerprintScreenDescription"
         aria-label$="[[i18nDynamic(locale, 'placeFingerScreenTitle')]]"
         hidden>
       <hd-iron-icon slot="oobe-icon"
           icon1x="oobe-32:fingerprint" icon2x="oobe-64:fingerprint">
       </hd-iron-icon>
-      <h1 slot="title">
-        [[i18nDynamic(locale, 'placeFingerScreenTitle')]]
-      </h1>
-      <div slot="subtitle">
-          [[i18nDynamic(locale, 'setupFingerprintScreenDescription')]]
-      </div>
       <div slot="footer" class="flex layout vertical center center-justified">
         <div id="sensorLocationContainer" class="oobe-illustration">
           <template is="dom-if" if="[[shouldUseLottieAnimation_]]">
