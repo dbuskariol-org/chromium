@@ -1044,7 +1044,7 @@
       "sequence": {
         "cvoxModifier": true,
         "keys": {
-          "keyCode": [78, 76]
+          "keyCode": [74, 76]
         }
       }
     },
@@ -1053,25 +1053,8 @@
       "sequence": {
         "cvoxModifier": true,
         "keys": {
-          "keyCode": [80, 76]
-        }
-      }
-    },
-    {
-      "command": "nextParagraph",
-      "sequence": {
-        "cvoxModifier": true,
-        "keys": {
-          "keyCode": [78, 80]
-        }
-      }
-    },
-    {
-      "command": "previousParagraph",
-      "sequence": {
-        "cvoxModifier": true,
-        "keys": {
-          "keyCode": [80, 80]
+          "keyCode": [74, 76],
+          "shiftKey": [true]
         }
       }
     },
