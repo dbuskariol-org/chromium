@@ -1145,6 +1145,20 @@ IN_PROC_BROWSER_TEST_F(PrerenderBrowserTest, PrerenderNoCommitNoSwap2) {
                                false);
 }
 
+// Checks that the prerendering of a page is canceled correctly when a
+// Javascript alert is called.
+IN_PROC_BROWSER_TEST_F(PrerenderBrowserTest, PrerenderAlertBeforeOnload) {
+  PrerenderTestURL("/prerender/prerender_alert_before_onload.html",
+                   FINAL_STATUS_JAVASCRIPT_ALERT, 0);
+}
+
+// Checks that the prerendering of a page is canceled correctly when a
+// Javascript alert is called.
+IN_PROC_BROWSER_TEST_F(PrerenderBrowserTest, PrerenderAlertAfterOnload) {
+  PrerenderTestURL("/prerender/prerender_alert_after_onload.html",
+                   FINAL_STATUS_JAVASCRIPT_ALERT, 1);
+}
+
 // Checks that plugins are not loaded while a page is being preloaded, but
 // are loaded when the page is displayed.
 IN_PROC_BROWSER_TEST_F(PrerenderBrowserTest, PrerenderDelayLoadPlugin) {
