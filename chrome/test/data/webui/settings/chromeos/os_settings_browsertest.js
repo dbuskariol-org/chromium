@@ -29,11 +29,6 @@ const OSSettingsBrowserTest = class extends PolymerTest {
   }
 
   /** @override */
-  get featureList() {
-    return {enabled: ['chromeos::features::kSplitSettings']};
-  }
-
-  /** @override */
   get extraLibraries() {
     return super.extraLibraries.concat(
         [BROWSER_SETTINGS_PATH + 'ensure_lazy_loaded.js']);
@@ -169,9 +164,7 @@ const OSSettingsAppManagementBrowserTest = class extends OSSettingsBrowserTest {
 
   /** @override */
   get featureList() {
-    return {
-      enabled: super.featureList.enabled.concat(['features::kAppManagement'])
-    };
+    return {enabled: ['features::kAppManagement']};
   }
 
   /** @override */

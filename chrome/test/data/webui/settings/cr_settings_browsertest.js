@@ -1960,11 +1960,6 @@ var CrSettingsSplitSettingsFlagTest = class extends CrSettingsBrowserTest {
   }
 
   /** @override */
-  get featureList() {
-    return {enabled: ['chromeos::features::kSplitSettings']};
-  }
-
-  /** @override */
   get extraLibraries() {
     return super.extraLibraries.concat([
       'split_settings_flag_test.js',
