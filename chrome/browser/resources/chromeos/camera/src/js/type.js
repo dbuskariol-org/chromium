@@ -93,6 +93,14 @@ var Mode = {
 
 /**
  * @typedef {{
+ *   hasError: (boolean|undefined),
+ *   resolution: (Resolution|undefined),
+ * }}
+ */
+var PerfInformation;
+
+/**
+ * @typedef {{
  *   width: number,
  *   height: number,
  *   maxFps: number,

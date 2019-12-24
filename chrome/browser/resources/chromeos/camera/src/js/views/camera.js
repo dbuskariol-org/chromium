@@ -77,7 +77,7 @@ cca.views.Camera = class extends cca.views.View {
      * @type {!cca.views.camera.Preview}
      * @private
      */
-    this.preview_ = new cca.views.camera.Preview(this.restart.bind(this));
+    this.preview_ = new cca.views.camera.Preview(this.start.bind(this));
 
     /**
      * Options for the camera.
@@ -85,7 +85,7 @@ cca.views.Camera = class extends cca.views.View {
      * @private
      */
     this.options_ =
-        new cca.views.camera.Options(infoUpdater, this.restart.bind(this));
+        new cca.views.camera.Options(infoUpdater, this.start.bind(this));
 
     /**
      * @type {!cca.models.ResultSaver}
@@ -115,7 +115,7 @@ cca.views.Camera = class extends cca.views.View {
      */
     this.modes_ = new cca.views.camera.Modes(
         this.defaultMode_, photoPreferrer, videoPreferrer,
-        this.restart.bind(this), this.doSavePhoto_.bind(this), createVideoSaver,
+        this.start.bind(this), this.doSavePhoto_.bind(this), createVideoSaver,
         this.doSaveVideo_.bind(this), playShutterEffect);
 
     /**
@@ -164,12 +164,12 @@ cca.views.Camera = class extends cca.views.View {
     chrome.idle.onStateChanged.addListener((newState) => {
       this.locked_ = (newState === 'locked');
       if (this.locked_) {
-        this.restart();
+        this.start();
       }
     });
-    chrome.app.window.current().onMinimized.addListener(() => this.restart());
+    chrome.app.window.current().onMinimized.addListener(() => this.start());
 
-    this.configuring_ = this.start_();
+    this.configuring_ = null;
   }
 
   /**
@@ -204,17 +204,19 @@ cca.views.Camera = class extends cca.views.View {
     cca.state.set('taking', true);
     this.focus();  // Refocus the visible shutter button for ChromeVox.
     this.take_ = (async () => {
+      let hasError = false;
       try {
         await cca.views.camera.timertick.start();
         await this.modes_.current.startCapture();
       } catch (e) {
+        hasError = true;
         if (e && e.message === 'cancel') {
           return;
         }
         console.error(e);
       } finally {
         this.take_ = null;
-        cca.state.set('taking', false);
+        cca.state.set('taking', false, {hasError});
         this.focus();  // Refocus the visible shutter button for ChromeVox.
       }
     })();
@@ -290,10 +292,10 @@ cca.views.Camera = class extends cca.views.View {
 
   /**
    * Stops camera and tries to start camera stream again if possible.
-   * @return {!Promise<boolean>} Promise resolved to whether restart camera
+   * @return {!Promise<boolean>} Promise resolved to whether start camera
    *     successfully.
    */
-  async restart() {
+  async start() {
     // To prevent multiple callers enter this function at the same time, wait
     // until previous caller resets configuring to null.
     while (this.configuring_ !== null) {
@@ -418,6 +420,7 @@ cca.views.Camera = class extends cca.views.View {
         throw new cca.views.CameraSuspendedError();
       });
       this.configuring_ = null;
+
       return true;
     } catch (error) {
       this.activeDeviceId_ = null;
@@ -433,6 +436,10 @@ cca.views.Camera = class extends cca.views.View {
       this.retryStartTimeout_ = setTimeout(() => {
         this.configuring_ = this.start_();
       }, 100);
+
+      assert(window['backgroundOps'] !== undefined);
+      const /** !cca.bg.BackgroundOps */ bgOps = window['backgroundOps'];
+      bgOps.getPerfLogger().interrupt();
       return false;
     }
   }

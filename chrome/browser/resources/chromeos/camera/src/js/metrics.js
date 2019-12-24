@@ -110,13 +110,13 @@ cca.metrics.IntentResultType = {
  * Returns event builder for the metrics type: capture.
  * @param {?string} facingMode Camera facing-mode of the capture.
  * @param {number} length Length of 1 minute buckets for captured video.
- * @param {!{width: number, height: number}} resolution Capture resolution.
+ * @param {!Resolution} resolution Capture resolution.
  * @param {!cca.metrics.IntentResultType} intentResult
  * @return {!analytics.EventBuilder}
  * @private
  */
 cca.metrics.captureType_ = function(
-    facingMode, length, {width, height}, intentResult) {
+    facingMode, length, resolution, intentResult) {
   var condState = (states, cond = undefined, strict = undefined) => {
     // Return the first existing state among the given states only if there is
     // no gate condition or the condition is met.
@@ -138,10 +138,28 @@ cca.metrics.captureType_ = function(
       .dimen(7, condState(['mic'], Mode.VIDEO, true))
       .dimen(8, condState(['max-wnd']))
       .dimen(9, condState(['tall']))
-      .dimen(10, `${width}x${height}`)
+      .dimen(10, resolution.toString())
       .dimen(11, condState(['_30fps', '_60fps'], Mode.VIDEO, true))
       .dimen(12, intentResult)
       .value(length || 0);
+};
+
+/**
+ * Returns event builder for the metrics type: perf.
+ * @param {string} event The target event type.
+ * @param {number} duration The duration of the event in ms.
+ * @param {Object=} extras Optional information for the event.
+ * @return {!analytics.EventBuilder}
+ * @private
+ */
+cca.metrics.perfType_ = function(event, duration, extras = {}) {
+  const {resolution = ''} = extras;
+  return cca.metrics.base_.category('perf')
+      .action(event)
+      // Round the duration here since GA expects that the value is an integer.
+      // Reference: https://support.google.com/analytics/answer/1033068
+      .value(Math.round(duration))
+      .dimen(3, `${resolution}`);
 };
 
 /**
@@ -151,6 +169,7 @@ cca.metrics.captureType_ = function(
 cca.metrics.Type = {
   LAUNCH: cca.metrics.launchType_,
   CAPTURE: cca.metrics.captureType_,
+  PERF: cca.metrics.perfType_,
 };
 
 /**

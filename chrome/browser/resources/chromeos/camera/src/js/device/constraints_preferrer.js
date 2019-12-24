@@ -233,8 +233,13 @@ cca.device.VideoConstraintsPreferrer =
           /** @type {string} */ (this.deviceId_), this.resolution_,
           this.toggleFps_.checked ? 60 : 30);
       cca.state.set('mode-switching', true);
-      this.doReconfigureStream_().finally(
-          () => cca.state.set('mode-switching', false));
+      let hasError = false;
+      this.doReconfigureStream_()
+          .catch((error) => {
+            hasError = true;
+            throw error;
+          })
+          .finally(() => cca.state.set('mode-switching', false, {hasError}));
     });
   }
 

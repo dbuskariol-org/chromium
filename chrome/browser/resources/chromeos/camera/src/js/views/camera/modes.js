@@ -20,6 +20,11 @@ cca.views = cca.views || {};
 cca.views.camera = cca.views.camera || {};
 
 /**
+ * import {Resolution} from '../type.js';
+ */
+var Resolution = Resolution || {};
+
+/**
  * import {Mode} from '../../type.js';
  */
 var Mode = Mode || {};
@@ -285,13 +290,13 @@ cca.views.camera.Modes = class {
           event.preventDefault();
         }
       });
-      element.addEventListener('change', (event) => {
+      element.addEventListener('change', async (event) => {
         if (element.checked) {
           var mode = element.dataset.mode;
           this.updateModeUI_(mode);
           cca.state.set('mode-switching', true);
-          this.doSwitchMode_().then(
-              () => cca.state.set('mode-switching', false));
+          const isSuccess = await this.doSwitchMode_();
+          cca.state.set('mode-switching', false, {hasError: !isSuccess});
         }
       });
     });
@@ -639,10 +644,18 @@ cca.views.camera.Video = class extends cca.views.camera.ModeBase {
     }
     cca.sound.play('#sound-rec-end');
 
-    const {width, height} = this.stream_.getVideoTracks()[0].getSettings();
-    await this.doSaveVideo_(
-        {resolution: {width, height}, duration, videoSaver},
-        (new cca.models.Filenamer()).newVideoName());
+    const settings = this.stream_.getVideoTracks()[0].getSettings();
+    const resolution = new Resolution(settings.width, settings.height);
+    cca.state.set('video-capture-post-processing', true);
+    try {
+      await this.doSaveVideo_(
+          {resolution, duration, videoSaver},
+          (new cca.models.Filenamer()).newVideoName());
+      cca.state.set('video-capture-post-processing', false, {resolution});
+    } catch (e) {
+      cca.state.set('video-capture-post-processing', false, {hasError: true});
+      throw e;
+    }
   }
 
   /**
@@ -760,26 +773,20 @@ cca.views.camera.Photo = class extends cca.views.camera.ModeBase {
           new cca.mojo.ImageCapture(this.stream_.getVideoTracks()[0]);
     }
 
+    await this.takePhoto_();
+  }
+
+  /**
+   * Takes and saves a photo.
+   * @return {!Promise}
+   * @private
+   */
+  async takePhoto_() {
     const imageName = (new cca.models.Filenamer()).newImageName();
     if (this.metadataObserverId_ !== null) {
       this.metadataNames_.push(cca.models.Filenamer.getMetadataName(imageName));
     }
 
-    try {
-      var result = await this.createPhotoResult_();
-    } catch (e) {
-      cca.toast.show('error_msg_take_photo_failed');
-      throw e;
-    }
-    await this.doSavePhoto_(result, imageName);
-  }
-
-  /**
-   * Takes a photo and returns capture result.
-   * @return {!Promise<!cca.views.camera.PhotoResult>} Image capture result.
-   * @private
-   */
-  async createPhotoResult_() {
     let photoSettings;
     if (this.captureResolution_) {
       photoSettings = /** @type {!PhotoSettings} */ ({
@@ -797,10 +804,15 @@ cca.views.camera.Photo = class extends cca.views.camera.ModeBase {
     try {
       const results = await this.crosImageCapture_.takePhoto(photoSettings);
       this.playShutterEffect_();
+
+      cca.state.set('photo-capture-post-processing', true);
       const blob = await results[0];
-      const {width, height} = await cca.util.blobToImage(blob);
-      return {resolution: {width, height}, blob};
+      const image = await cca.util.blobToImage(blob);
+      const resolution = new Resolution(image.width, image.height);
+      await this.doSavePhoto_({resolution, blob}, imageName);
+      cca.state.set('photo-capture-post-processing', false, {resolution});
     } catch (e) {
+      cca.state.set('photo-capture-post-processing', false, {hasError: true});
       cca.toast.show('error_msg_take_photo_failed');
       throw e;
     }
@@ -983,6 +995,8 @@ cca.views.camera.Portrait = class extends cca.views.camera.Photo {
       throw e;
     }
 
+    cca.state.set('portrait-mode-capture-post-processing', true);
+    let hasError = false;
     const [refSave, portraitSave] = [
       [reference, refImageName],
       [portrait, portraitImageName],
@@ -991,6 +1005,7 @@ cca.views.camera.Portrait = class extends cca.views.camera.Photo {
       try {
         var blob = await p;
       } catch (e) {
+        hasError = true;
         cca.toast.show(
             isPortrait ? 'error_msg_take_portrait_photo_failed' :
                          'error_msg_take_photo_failed');
@@ -1002,9 +1017,11 @@ cca.views.camera.Portrait = class extends cca.views.camera.Photo {
     try {
       await portraitSave;
     } catch (e) {
+      hasError = true;
       // Portrait image may failed due to absence of human faces.
       // TODO(inker): Log non-intended error.
     }
     await refSave;
+    cca.state.set('portrait-mode-capture-post-processing', false, {hasError});
   }
 };

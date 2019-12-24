@@ -26,6 +26,7 @@ js_type_check("compile_resources") {
     ":metrics",
     ":namespace",
     ":nav",
+    ":perf",
     ":sound",
     ":state",
     ":toast",
@@ -93,6 +94,9 @@ js_library("nav") {
   ]
 }
 
+js_library("perf") {
+}
+
 js_library("state") {
 }
 
@@ -107,6 +111,7 @@ js_library("background_ops") {
   deps = [
     ":chrome_util",
     ":intent",
+    ":perf",
   ]
 }
 
