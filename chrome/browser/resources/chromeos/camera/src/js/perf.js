@@ -96,6 +96,7 @@ cca.perf.PerfLogger = class {
       return;
     }
     this.startTimeMap_.set(event, performance.now());
+    cca.mojo.ChromeHelper.getInstance().startTracing(event);
   }
 
   /**
@@ -126,6 +127,7 @@ cca.perf.PerfLogger = class {
     }
 
     const duration = performance.now() - startTime;
+    cca.mojo.ChromeHelper.getInstance().stopTracing(event);
     this.listeners_.forEach((listener) => listener(event, duration, perfInfo));
   }
 
