@@ -377,6 +377,7 @@ source_set("eg_app_support+eg2") {
     "//ios/chrome/browser/ntp:features",
     "//ios/chrome/browser/passwords",
     "//ios/chrome/browser/passwords:eg_app_support+eg2",
+    "//ios/chrome/browser/translate:eg_app_support+eg2",
     "//ios/chrome/browser/ui:feature_flags",
     "//ios/chrome/browser/ui/authentication:eg_app_support+eg2",
     "//ios/chrome/browser/ui/authentication/cells",
