@@ -59,7 +59,10 @@ class CrostiniInstaller : public KeyedService,
     kErrorConfiguringContainer = 23,
     kUserCancelledConfiguringContainer = 24,
 
-    kMaxValue = kUserCancelledConfiguringContainer,
+    kErrorCreateContainer = 25,
+    kErrorUnknown = 26,
+
+    kMaxValue = kErrorUnknown,
   };
 
   static CrostiniInstaller* GetForProfile(Profile* profile);
