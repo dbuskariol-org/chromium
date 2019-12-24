@@ -15,11 +15,6 @@ var cca = cca || {};
 cca.intent = cca.intent || {};
 
 /**
- * import {assertNotReached} from './chrome_util.js';
- */
-var assertNotReached = assertNotReached || {};
-
-/**
  * Thrown when fails to parse intent url.
  */
 cca.intent.ParseError = class extends Error {

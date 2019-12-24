@@ -20,11 +20,6 @@ cca.views = cca.views || {};
 cca.views.camera = cca.views.camera || {};
 
 /**
- * import {assert} from '../chrome_util.js';
- */
-var assert = assert || {};
-
-/**
  * Creates a controller to handle layouts of Camera view.
  */
 cca.views.camera.Layout = class {
@@ -65,8 +60,8 @@ cca.views.camera.Layout = class {
   static cssStyle_(selector) {
     const rule = cca.views.camera.Layout.cssRules_.find(
         (rule) => rule.selectorText === selector);
-    assert(rule !== undefined);
-    assert(rule.style !== null);
+    cca.assert(rule !== undefined);
+    cca.assert(rule.style !== null);
     return rule.style;
   }
 

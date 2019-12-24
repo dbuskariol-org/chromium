@@ -15,11 +15,6 @@ var cca = cca || {};
 cca.bg = {};
 
 /**
- * import {assert} from './chrome_util.js';
- */
-var assert = assert || {};
-
-/**
  * Fixed minimum width of the window inner-bounds in pixels.
  * @type {number}
  * @const

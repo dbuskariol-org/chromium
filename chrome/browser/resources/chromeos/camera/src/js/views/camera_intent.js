@@ -15,11 +15,6 @@ var cca = cca || {};
 cca.views = cca.views || {};
 
 /**
- * import {assert, assertNotReached} from '../chrome_util.js';
- */
-var {assert, assertNotReached} = {assert, assertNotReached};
-
-/**
  * The maximum number of pixels in the downscaled intent photo result. Reference
  * from GCA: https://goto.google.com/gca-inline-bitmap-max-pixel-num
  * @type {number}
@@ -142,7 +137,7 @@ cca.views.CameraIntent = class extends cca.views.Camera {
         } else if (this.videoResultFile_ !== null) {
           return this.reviewResult_.openVideo(this.videoResultFile_);
         } else {
-          assertNotReached('End take without intent result.');
+          cca.assertNotReached('End take without intent result.');
         }
       })();
       const result = this.photoResult_ || this.videoResult_;

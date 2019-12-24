@@ -15,11 +15,6 @@ var cca = cca || {};
 cca.views = cca.views || {};
 
 /**
- * import {assert} from '../chrome_util.js';
- */
-var assert = assert || {};
-
-/**
  * Thrown when app window suspended during stream reconfiguration.
  */
 cca.views.CameraSuspendedError = class extends Error {
@@ -344,7 +339,7 @@ cca.views.Camera = class extends cca.views.View {
         }
         try {
           if (deviceOperator !== null) {
-            assert(deviceId !== null);
+            cca.assert(deviceId !== null);
             await deviceOperator.setFpsRange(deviceId, constraints);
             await deviceOperator.setCaptureIntent(
                 deviceId, this.modes_.getCaptureIntent(mode));
@@ -398,7 +393,7 @@ cca.views.Camera = class extends cca.views.View {
             if (await this.startWithDevice_(id)) {
               // Make the different active camera announced by screen reader.
               const currentId = this.options_.currentDeviceId;
-              assert(currentId !== null);
+              cca.assert(currentId !== null);
               if (currentId === this.activeDeviceId_) {
                 return;
               }
@@ -432,7 +427,7 @@ cca.views.Camera = class extends cca.views.View {
         this.configuring_ = this.start_();
       }, 100);
 
-      assert(window['backgroundOps'] !== undefined);
+      cca.assert(window['backgroundOps'] !== undefined);
       const /** !cca.bg.BackgroundOps */ bgOps = window['backgroundOps'];
       bgOps.getPerfLogger().interrupt();
       return false;

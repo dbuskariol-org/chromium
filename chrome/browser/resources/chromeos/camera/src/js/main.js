@@ -10,11 +10,6 @@
 var cca = cca || {};
 
 /**
- * import {assert, assertInstanceof} from './chrome_util.js';
- */
-var {assert, assertInstanceof} = {assert, assertInstanceof};
-
-/**
  * Creates the Camera App main object.
  * @implements {cca.bg.ForegroundOps}
  */
@@ -139,7 +134,7 @@ cca.App = class {
         cca.proxy.browserProxy.localStorageGet(
             payload(element),
             (values) => cca.util.toggleChecked(
-                assertInstanceof(element, HTMLInputElement),
+                cca.assertInstanceof(element, HTMLInputElement),
                 values[element.dataset.key]));
       }
     });
@@ -165,7 +160,7 @@ cca.App = class {
         })
         .then((external) => {
           cca.state.set('ext-fs', external);
-          assert(cca.models.FileSystem.externalDir !== null);
+          cca.assert(cca.models.FileSystem.externalDir !== null);
           this.galleryButton_.initialize(cca.models.FileSystem.externalDir);
           cca.nav.open('camera');
         })
@@ -237,7 +232,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (cca.App.instance_ !== null) {
     return;
   }
-  assert(window['backgroundOps'] !== undefined);
+  cca.assert(window['backgroundOps'] !== undefined);
   const /** !cca.bg.BackgroundOps */ bgOps = window['backgroundOps'];
   const perfLogger = bgOps.getPerfLogger();
 
