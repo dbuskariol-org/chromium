@@ -4,6 +4,12 @@
 
 #include "services/network/quic_transport.h"
 
+#include "net/base/io_buffer.h"
+#include "net/quic/platform/impl/quic_mem_slice_impl.h"
+#include "net/third_party/quiche/src/quic/core/quic_session.h"
+#include "net/third_party/quiche/src/quic/core/quic_types.h"
+#include "net/third_party/quiche/src/quic/platform/api/quic_mem_slice.h"
+#include "net/third_party/quiche/src/quic/platform/api/quic_mem_slice_span.h"
 #include "services/network/network_context.h"
 #include "services/network/public/mojom/quic_transport.mojom.h"
 
@@ -31,6 +37,17 @@ QuicTransport::QuicTransport(
 }
 
 QuicTransport::~QuicTransport() = default;
+
+void QuicTransport::SendDatagram(base::span<const uint8_t> data,
+                                 base::OnceCallback<void(bool)> callback) {
+  auto buffer = base::MakeRefCounted<net::IOBuffer>(data.size());
+  memcpy(buffer->data(), data.data(), data.size());
+  quic::QuicMemSlice slice(
+      quic::QuicMemSliceImpl(std::move(buffer), data.size()));
+  const quic::MessageResult result =
+      transport_->session()->SendMessage(quic::QuicMemSliceSpan(&slice));
+  std::move(callback).Run(result.status == quic::MESSAGE_STATUS_SUCCESS);
+}
 
 void QuicTransport::OnConnected() {
   DCHECK(handshake_client_);

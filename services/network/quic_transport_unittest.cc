@@ -4,6 +4,9 @@
 
 #include "services/network/quic_transport.h"
 
+#include <vector>
+
+#include "base/test/bind_test_util.h"
 #include "base/test/task_environment.h"
 #include "net/cert/mock_cert_verifier.h"
 #include "net/dns/mock_host_resolver.h"
@@ -181,6 +184,63 @@ TEST_F(QuicTransportTest, ConnectWithError) {
   EXPECT_TRUE(test_handshake_client.has_seen_connection_establishment());
   EXPECT_FALSE(test_handshake_client.has_seen_handshake_failure());
   EXPECT_FALSE(test_handshake_client.has_seen_mojo_connection_error());
+}
+
+TEST_F(QuicTransportTest, SendDatagram) {
+  base::RunLoop run_loop_for_handshake;
+  mojo::PendingRemote<mojom::QuicTransportHandshakeClient> handshake_client;
+  TestHandshakeClient test_handshake_client(
+      handshake_client.InitWithNewPipeAndPassReceiver(),
+      run_loop_for_handshake.QuitClosure());
+
+  auto transport = CreateQuicTransport(
+      GetURL("/discard"), url::Origin::Create(GURL("https://example.org/")),
+      std::move(handshake_client));
+
+  run_loop_for_handshake.Run();
+
+  base::RunLoop run_loop_for_datagram;
+  bool result;
+  uint8_t data[] = {1, 2, 3, 4, 5};
+  mojo::Remote<mojom::QuicTransport> transport_remote(
+      test_handshake_client.PassTransport());
+  transport_remote->SendDatagram(base::make_span(data),
+                                 base::BindLambdaForTesting([&](bool r) {
+                                   result = r;
+                                   run_loop_for_datagram.Quit();
+                                 }));
+  run_loop_for_datagram.Run();
+  EXPECT_TRUE(result);
+}
+
+TEST_F(QuicTransportTest, SendToolargeDatagram) {
+  base::RunLoop run_loop_for_handshake;
+  mojo::PendingRemote<mojom::QuicTransportHandshakeClient> handshake_client;
+  TestHandshakeClient test_handshake_client(
+      handshake_client.InitWithNewPipeAndPassReceiver(),
+      run_loop_for_handshake.QuitClosure());
+
+  auto transport = CreateQuicTransport(
+      GetURL("/discard"), url::Origin::Create(GURL("https://example.org/")),
+      std::move(handshake_client));
+
+  run_loop_for_handshake.Run();
+
+  base::RunLoop run_loop_for_datagram;
+  bool result;
+  // The actual upper limit for one datagram is platform specific, but
+  // 786kb should be large enough for any platform.
+  std::vector<uint8_t> data(786 * 1024, 99);
+  mojo::Remote<mojom::QuicTransport> transport_remote(
+      test_handshake_client.PassTransport());
+
+  transport_remote->SendDatagram(base::make_span(data),
+                                 base::BindLambdaForTesting([&](bool r) {
+                                   result = r;
+                                   run_loop_for_datagram.Quit();
+                                 }));
+  run_loop_for_datagram.Run();
+  EXPECT_FALSE(result);
 }
 
 }  // namespace

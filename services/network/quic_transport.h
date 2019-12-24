@@ -41,6 +41,10 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) QuicTransport final
                     handshake_client);
   ~QuicTransport() override;
 
+  // mojom::QuicTransport implementation:
+  void SendDatagram(base::span<const uint8_t> data,
+                    base::OnceCallback<void(bool)> callback) override;
+
   // net::QuicTransportClient::Visitor implementation:
   void OnConnected() override;
   void OnConnectionFailed() override;
