@@ -15,11 +15,6 @@ var cca = cca || {};
 cca.metrics = cca.metrics || {};
 
 /**
- * import {Mode} from './type.js';
- */
-var Mode = Mode || {};
-
-/**
  * Event builder for basic metrics.
  * @type {?analytics.EventBuilder}
  * @private
@@ -110,7 +105,7 @@ cca.metrics.IntentResultType = {
  * Returns event builder for the metrics type: capture.
  * @param {?string} facingMode Camera facing-mode of the capture.
  * @param {number} length Length of 1 minute buckets for captured video.
- * @param {!Resolution} resolution Capture resolution.
+ * @param {!cca.Resolution} resolution Capture resolution.
  * @param {!cca.metrics.IntentResultType} intentResult
  * @return {!analytics.EventBuilder}
  * @private
@@ -129,17 +124,17 @@ cca.metrics.captureType_ = function(
   };
 
   return cca.metrics.base_.category('capture')
-      .action(condState(Object.values(Mode)))
+      .action(condState(Object.values(cca.Mode)))
       .label(facingMode || '(not set)')
       .dimen(3, condState(['sound']))
       .dimen(4, condState(['mirror']))
       .dimen(5, condState(['_3x3', '_4x4', 'golden'], 'grid'))
       .dimen(6, condState(['_3sec', '_10sec'], 'timer'))
-      .dimen(7, condState(['mic'], Mode.VIDEO, true))
+      .dimen(7, condState(['mic'], cca.Mode.VIDEO, true))
       .dimen(8, condState(['max-wnd']))
       .dimen(9, condState(['tall']))
       .dimen(10, resolution.toString())
-      .dimen(11, condState(['_30fps', '_60fps'], Mode.VIDEO, true))
+      .dimen(11, condState(['_30fps', '_60fps'], cca.Mode.VIDEO, true))
       .dimen(12, intentResult)
       .value(length || 0);
 };

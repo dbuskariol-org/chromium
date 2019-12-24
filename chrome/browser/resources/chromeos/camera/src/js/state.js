@@ -17,7 +17,7 @@ cca.state = cca.state || {};
 /* eslint-disable no-unused-vars */
 
 /**
- * @typedef {function(boolean, PerfInformation=)}
+ * @typedef {function(boolean, cca.PerfInformation=)}
  */
 var StateObserver;
 
@@ -73,7 +73,7 @@ cca.state.get = function(state) {
  * performance measurement.
  * @param {string} state State to be set.
  * @param {boolean} val True to set the state on, false otherwise.
- * @param {PerfInformation=} perfInfo Optional information of this state for
+ * @param {cca.PerfInformation=} perfInfo Optional information of this state for
  *     performance measurement.
  */
 cca.state.set = function(state, val, perfInfo = {}) {

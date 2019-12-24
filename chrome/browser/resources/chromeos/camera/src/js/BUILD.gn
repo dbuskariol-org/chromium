@@ -67,6 +67,9 @@ js_library("sound") {
 }
 
 js_library("type") {
+  deps = [
+    ":namespace",
+  ]
 }
 
 js_library("main") {

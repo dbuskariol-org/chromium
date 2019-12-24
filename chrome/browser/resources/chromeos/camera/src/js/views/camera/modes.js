@@ -19,16 +19,6 @@ cca.views = cca.views || {};
  */
 cca.views.camera = cca.views.camera || {};
 
-/**
- * import {Resolution} from '../type.js';
- */
-var Resolution = Resolution || {};
-
-/**
- * import {Mode} from '../../type.js';
- */
-var Mode = Mode || {};
-
 /* eslint-disable no-unused-vars */
 
 /**
@@ -128,7 +118,7 @@ cca.views.camera.ModeConfig = class {
 
   /**
    * Mode to be fallbacked to when fail to configure this mode.
-   * @return {!Mode}
+   * @return {!cca.Mode}
    * @abstract
    */
   get nextMode() {}
@@ -148,7 +138,7 @@ cca.views.camera.ModeConfig = class {
  */
 cca.views.camera.Modes = class {
   /**
-   * @param {!Mode} defaultMode Default mode to be switched to.
+   * @param {!cca.Mode} defaultMode Default mode to be switched to.
    * @param {!cca.device.PhotoConstraintsPreferrer} photoPreferrer
    * @param {!cca.device.VideoConstraintsPreferrer} videoPreferrer
    * @param {!cca.views.camera.DoSwitchMode} doSwitchMode
@@ -187,7 +177,7 @@ cca.views.camera.Modes = class {
         /** @type {!HTMLElement} */ (document.querySelector('#modes-group'));
 
     /**
-     * @type {?Resolution}
+     * @type {?cca.Resolution}
      * @private
      */
     this.captureResolution_ = null;
@@ -229,41 +219,41 @@ cca.views.camera.Modes = class {
 
     /**
      * Mode classname and related functions and attributes.
-     * @type {!Object<!Mode, !cca.views.camera.ModeConfig>}
+     * @type {!Object<!cca.Mode, !cca.views.camera.ModeConfig>}
      * @private
      */
     this.allModes_ = {
-      [Mode.VIDEO]: {
+      [cca.Mode.VIDEO]: {
         captureFactory: () => new cca.views.camera.Video(
             /** @type {!MediaStream} */ (this.stream_), createVideoSaver,
             doSaveVideo),
         isSupported: async () => true,
         constraintsPreferrer: videoPreferrer,
         getV1Constraints: getV1Constraints.bind(this, true),
-        nextMode: Mode.PHOTO,
+        nextMode: cca.Mode.PHOTO,
         captureIntent: cros.mojom.CaptureIntent.VIDEO_RECORD,
       },
-      [Mode.PHOTO]: {
+      [cca.Mode.PHOTO]: {
         captureFactory: () => new cca.views.camera.Photo(
             /** @type {!MediaStream} */ (this.stream_), doSavePhoto,
             this.captureResolution_, playShutterEffect),
         isSupported: async () => true,
         constraintsPreferrer: photoPreferrer,
         getV1Constraints: getV1Constraints.bind(this, false),
-        nextMode: Mode.SQUARE,
+        nextMode: cca.Mode.SQUARE,
         captureIntent: cros.mojom.CaptureIntent.STILL_CAPTURE,
       },
-      [Mode.SQUARE]: {
+      [cca.Mode.SQUARE]: {
         captureFactory: () => new cca.views.camera.Square(
             /** @type {!MediaStream} */ (this.stream_), doSavePhoto,
             this.captureResolution_, playShutterEffect),
         isSupported: async () => true,
         constraintsPreferrer: photoPreferrer,
         getV1Constraints: getV1Constraints.bind(this, false),
-        nextMode: Mode.PHOTO,
+        nextMode: cca.Mode.PHOTO,
         captureIntent: cros.mojom.CaptureIntent.STILL_CAPTURE,
       },
-      [Mode.PORTRAIT]: {
+      [cca.Mode.PORTRAIT]: {
         captureFactory: () => new cca.views.camera.Portrait(
             /** @type {!MediaStream} */ (this.stream_), doSavePhoto,
             this.captureResolution_, playShutterEffect),
@@ -279,7 +269,7 @@ cca.views.camera.Modes = class {
         },
         constraintsPreferrer: photoPreferrer,
         getV1Constraints: getV1Constraints.bind(this, false),
-        nextMode: Mode.PHOTO,
+        nextMode: cca.Mode.PHOTO,
         captureIntent: cros.mojom.CaptureIntent.STILL_CAPTURE,
       },
     };
@@ -311,7 +301,7 @@ cca.views.camera.Modes = class {
 
   /**
    * Updates state of mode related UI to the target mode.
-   * @param {!Mode} mode Mode to be toggled.
+   * @param {!cca.Mode} mode Mode to be toggled.
    * @private
    */
   updateModeUI_(mode) {
@@ -324,7 +314,7 @@ cca.views.camera.Modes = class {
         wrapper.offsetHeight / 2;
     // Make photo mode scroll slightly upper so that the third mode item falls
     // in blur area: crbug.com/988869
-    if (mode === Mode.PHOTO) {
+    if (mode === cca.Mode.PHOTO) {
       scrollTop -= 16;
     }
     this.modesGroup_.scrollTo({
@@ -337,13 +327,14 @@ cca.views.camera.Modes = class {
   /**
    * Gets all mode candidates. Desired trying sequence of candidate modes is
    * reflected in the order of the returned array.
-   * @return {!Array<!Mode>} Mode candidates to be tried out.
+   * @return {!Array<!cca.Mode>} Mode candidates to be tried out.
    */
   getModeCandidates() {
     const tried = {};
     const results = [];
     let mode =
-        /** @type {!Mode} */ (Object.keys(this.allModes_).find(cca.state.get));
+        /** @type {!cca.Mode} */ (
+            Object.keys(this.allModes_).find(cca.state.get));
     while (!tried[mode]) {
       tried[mode] = true;
       results.push(mode);
@@ -355,9 +346,9 @@ cca.views.camera.Modes = class {
   /**
    * Gets all available capture resolution and its corresponding preview
    * constraints for the given mode.
-   * @param {!Mode} mode
+   * @param {!cca.Mode} mode
    * @param {string} deviceId
-   * @param {!ResolutionList} previewResolutions
+   * @param {!cca.ResolutionList} previewResolutions
    * @return {!Array<!CaptureCandidate>}
    */
   getResolutionCandidates(mode, deviceId, previewResolutions) {
@@ -368,7 +359,7 @@ cca.views.camera.Modes = class {
   /**
    * Gets capture resolution and its corresponding preview constraints for the
    * given mode on camera HALv1 device.
-   * @param {!Mode} mode
+   * @param {!cca.Mode} mode
    * @param {?string} deviceId
    * @return {!Promise<!Array<!CaptureCandidate>>}
    */
@@ -380,7 +371,7 @@ cca.views.camera.Modes = class {
 
   /**
    * Gets capture intent for the given mode.
-   * @param {!Mode} mode
+   * @param {!cca.Mode} mode
    * @return {cros.mojom.CaptureIntent} Capture intent for the given mode.
    */
   getCaptureIntent(mode) {
@@ -390,7 +381,7 @@ cca.views.camera.Modes = class {
   /**
    * Gets supported modes for video device of given device id.
    * @param {?string} deviceId Device id of the video device.
-   * @return {!Promise<!Array<!Mode>>} All supported mode for
+   * @return {!Promise<!Array<!cca.Mode>>} All supported mode for
    *     the video device.
    */
   async getSupportedModes(deviceId) {
@@ -421,10 +412,10 @@ cca.views.camera.Modes = class {
 
   /**
    * Creates and updates new current mode object.
-   * @param {!Mode} mode Classname of mode to be updated.
+   * @param {!cca.Mode} mode Classname of mode to be updated.
    * @param {!MediaStream} stream Stream of the new switching mode.
    * @param {?string} deviceId Device id of currently working video device.
-   * @param {?Resolution} captureResolution Capturing resolution width and
+   * @param {?cca.Resolution} captureResolution Capturing resolution width and
    *     height.
    * @return {!Promise}
    */
@@ -486,7 +477,7 @@ cca.views.camera.Modes = class {
 cca.views.camera.ModeBase = class {
   /**
    * @param {!MediaStream} stream
-   * @param {?Resolution} captureResolution Capturing resolution width and
+   * @param {?cca.Resolution} captureResolution Capturing resolution width and
    *     height.
    */
   constructor(stream, captureResolution) {
@@ -500,7 +491,7 @@ cca.views.camera.ModeBase = class {
     /**
      * Capture resolution. May be null on device not support of setting
      * resolution.
-     * @type {?Resolution}
+     * @type {?cca.Resolution}
      * @private
      */
     this.captureResolution_ = captureResolution;
@@ -645,7 +636,7 @@ cca.views.camera.Video = class extends cca.views.camera.ModeBase {
     cca.sound.play('#sound-rec-end');
 
     const settings = this.stream_.getVideoTracks()[0].getSettings();
-    const resolution = new Resolution(settings.width, settings.height);
+    const resolution = new cca.Resolution(settings.width, settings.height);
     cca.state.set('video-capture-post-processing', true);
     try {
       await this.doSaveVideo_(
@@ -722,7 +713,7 @@ cca.views.camera.Photo = class extends cca.views.camera.ModeBase {
   /**
    * @param {!MediaStream} stream
    * @param {!cca.views.camera.DoSavePhoto} doSavePhoto
-   * @param {?Resolution} captureResolution
+   * @param {?cca.Resolution} captureResolution
    * @param {!cca.views.camera.PlayShutterEffect} playShutterEffect
    */
   constructor(stream, doSavePhoto, captureResolution, playShutterEffect) {
@@ -808,7 +799,7 @@ cca.views.camera.Photo = class extends cca.views.camera.ModeBase {
       cca.state.set('photo-capture-post-processing', true);
       const blob = await results[0];
       const image = await cca.util.blobToImage(blob);
-      const resolution = new Resolution(image.width, image.height);
+      const resolution = new cca.Resolution(image.width, image.height);
       await this.doSavePhoto_({resolution, blob}, imageName);
       cca.state.set('photo-capture-post-processing', false, {resolution});
     } catch (e) {
@@ -897,7 +888,7 @@ cca.views.camera.Square = class extends cca.views.camera.Photo {
   /**
    * @param {!MediaStream} stream
    * @param {!cca.views.camera.DoSavePhoto} doSavePhoto
-   * @param {?Resolution} captureResolution
+   * @param {?cca.Resolution} captureResolution
    * @param {!cca.views.camera.PlayShutterEffect} playShutterEffect
    */
   constructor(stream, doSavePhoto, captureResolution, playShutterEffect) {
@@ -945,7 +936,7 @@ cca.views.camera.Portrait = class extends cca.views.camera.Photo {
   /**
    * @param {!MediaStream} stream
    * @param {!cca.views.camera.DoSavePhoto} doSavePhoto
-   * @param {?Resolution} captureResolution
+   * @param {?cca.Resolution} captureResolution
    * @param {!cca.views.camera.PlayShutterEffect} playShutterEffect
    */
   constructor(stream, doSavePhoto, captureResolution, playShutterEffect) {

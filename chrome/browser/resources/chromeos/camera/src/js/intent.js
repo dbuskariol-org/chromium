@@ -20,11 +20,6 @@ cca.intent = cca.intent || {};
 var assertNotReached = assertNotReached || {};
 
 /**
- * import {Mode} from './type.js';
- */
-var Mode = Mode || {};
-
-/**
  * Thrown when fails to parse intent url.
  */
 cca.intent.ParseError = class extends Error {
@@ -50,7 +45,7 @@ cca.intent.Intent = class {
   /**
    * @param {!URL} url
    * @param {number} intentId
-   * @param {Mode} mode
+   * @param {cca.Mode} mode
    * @param {boolean} shouldHandleResult
    * @param {boolean} shouldDownScale
    * @param {boolean} isSecure
@@ -70,7 +65,7 @@ cca.intent.Intent = class {
 
     /**
      * Capture mode of intent.
-     * @const {Mode}
+     * @const {cca.Mode}
      */
     this.mode = mode;
 
@@ -180,10 +175,10 @@ cca.intent.Intent = class {
     const intentId = parseInt(param, 10);
 
     param = params.get('mode');
-    if (param === null || !Object.values(Mode).includes(param)) {
+    if (param === null || !Object.values(cca.Mode).includes(param)) {
       throw new cca.intent.ParseError(url);
     }
-    const mode = /** @type {Mode} */ (param);
+    const mode = /** @type {cca.Mode} */ (param);
 
     return new cca.intent.Intent(
         url, intentId, mode, getBool('shouldHandleResult'),

@@ -15,11 +15,6 @@ var cca = cca || {};
 cca.views = cca.views || {};
 
 /**
- * import {Mode} from '../type.js';
- */
-var Mode = Mode || {};
-
-/**
  * import {assert} from '../chrome_util.js';
  */
 var assert = assert || {};
@@ -47,7 +42,7 @@ cca.views.Camera = class extends cca.views.View {
    * @param {!cca.device.DeviceInfoUpdater} infoUpdater
    * @param {!cca.device.PhotoConstraintsPreferrer} photoPreferrer
    * @param {!cca.device.VideoConstraintsPreferrer} videoPreferrer
-   * @param {Mode} defaultMode
+   * @param {cca.Mode} defaultMode
    */
   constructor(
       resultSaver, infoUpdater, photoPreferrer, videoPreferrer, defaultMode) {
@@ -60,7 +55,7 @@ cca.views.Camera = class extends cca.views.View {
     this.infoUpdater_ = infoUpdater;
 
     /**
-     * @type {!Mode}
+     * @type {!cca.Mode}
      * @protected
      */
     this.defaultMode_ = defaultMode;
@@ -320,7 +315,7 @@ cca.views.Camera = class extends cca.views.View {
   /**
    * Try start stream reconfiguration with specified mode and device id.
    * @param {?string} deviceId
-   * @param {!Mode} mode
+   * @param {!cca.Mode} mode
    * @return {!Promise<boolean>} If found suitable stream and reconfigure
    *     successfully.
    */

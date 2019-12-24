@@ -20,11 +20,6 @@ cca.views = cca.views || {};
 cca.views.camera = cca.views.camera || {};
 
 /**
- * import {Mode, Resolution} from '../../type.js';
- */
-var {Mode, Resolution} = {Mode, Resolution};
-
-/**
  * import {assert} from '../chrome_util.js';
  */
 var assert = assert || {};
@@ -77,7 +72,7 @@ cca.views.camera.Layout = class {
 
   /**
    * Updates the video element size for previewing in the window.
-   * @return {!Resolution} Letterbox size.
+   * @return {!cca.Resolution} Letterbox size.
    * @private
    */
   updatePreviewSize_() {
@@ -89,7 +84,7 @@ cca.views.camera.Layout = class {
     let contentWidth = 0;
     let contentHeight = 0;
     if (video.videoHeight) {
-      const scale = cca.state.get(Mode.SQUARE) ?
+      const scale = cca.state.get(cca.Mode.SQUARE) ?
           Math.min(window.innerHeight, window.innerWidth) /
               Math.min(video.videoHeight, video.videoWidth) :
           Math.min(
@@ -102,8 +97,8 @@ cca.views.camera.Layout = class {
     }
     let viewportW = contentWidth;
     let viewportH = contentHeight;
-    cca.state.set('square-preview', cca.state.get(Mode.SQUARE));
-    if (cca.state.get(Mode.SQUARE)) {
+    cca.state.set('square-preview', cca.state.get(cca.Mode.SQUARE));
+    if (cca.state.get(cca.Mode.SQUARE)) {
       viewportW = viewportH = Math.min(contentWidth, contentHeight);
       this.squareVideo_.setProperty(
           'left', `${(viewportW - contentWidth) / 2}px`);
@@ -112,7 +107,7 @@ cca.views.camera.Layout = class {
       this.squareViewport_.setProperty('width', `${viewportW}px`);
       this.squareViewport_.setProperty('height', `${viewportH}px`);
     }
-    return new Resolution(
+    return new cca.Resolution(
         window.innerWidth - viewportW, window.innerHeight - viewportH);
   }
 

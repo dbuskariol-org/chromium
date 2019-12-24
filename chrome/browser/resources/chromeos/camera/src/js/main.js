@@ -15,11 +15,6 @@ var cca = cca || {};
 var {assert, assertInstanceof} = {assert, assertInstanceof};
 
 /**
- * import {Mode} from './type.js';
- */
-var Mode = Mode || {};
-
-/**
  * Creates the Camera App main object.
  * @implements {cca.bg.ForegroundOps}
  */
@@ -75,7 +70,8 @@ cca.App = class {
       } else {
         return new cca.views.Camera(
             this.galleryButton_, this.infoUpdater_, this.photoPreferrer_,
-            this.videoPreferrer_, intent !== null ? intent.mode : Mode.PHOTO);
+            this.videoPreferrer_,
+            intent !== null ? intent.mode : cca.Mode.PHOTO);
       }
     })();
 

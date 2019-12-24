@@ -102,8 +102,8 @@ cca.perf.PerfLogger = class {
   /**
    * Stops the measurement for given event and returns the measurement result.
    * @param {cca.perf.PerfEvent} event Target event.
-   * @param {PerfInformation=} perfInfo Optional information of this event for
-   *     performance measurement.
+   * @param {cca.PerfInformation=} perfInfo Optional information of this event
+   *     for performance measurement.
    */
   stop(event, perfInfo = {}) {
     if (!this.startTimeMap_.has(event)) {
@@ -133,8 +133,8 @@ cca.perf.PerfLogger = class {
 
   /**
    * Stops the measurement of launch-related events.
-   * @param {PerfInformation=} perfInfo Optional information of this event for
-   *     performance measurement.
+   * @param {cca.PerfInformation=} perfInfo Optional information of this event
+   *     for performance measurement.
    */
   stopLaunch(perfInfo) {
     const launchEvents = [
