@@ -131,6 +131,10 @@ js_library("toast") {
 }
 
 js_library("tooltip") {
+  deps = [
+    ":chrome_util",
+    ":namespace",
+  ]
 }
 
 js_library("util") {
