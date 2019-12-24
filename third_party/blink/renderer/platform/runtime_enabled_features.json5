@@ -1885,11 +1885,6 @@
       status: "experimental",
     },
     {
-      name: "WebXrGamepadModule",
-      // depends_on: ["WebXR"],  // TODO(https://crbug.com/954679): uncomment once bug is fixed
-      status: "stable",
-    },
-    {
       name: "WebXRHitTest",
       // depends_on: ["WebXRARModule"],  // TODO(https://crbug.com/954679): uncomment once bug is fixed
       status: "experimental"
