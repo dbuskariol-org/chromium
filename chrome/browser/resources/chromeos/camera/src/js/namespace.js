@@ -15,4 +15,5 @@ var cca = {
   toast: {},
   tooltip: {},
   util: {},
+  views: {},
 };
