@@ -126,6 +126,7 @@ js_library("namespace") {
 
 js_library("toast") {
   deps = [
+    ":namespace",
     ":util",
   ]
 }
