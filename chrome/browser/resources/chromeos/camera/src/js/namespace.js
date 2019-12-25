@@ -11,6 +11,7 @@
 var cca = {
   mojo: {},
   proxy: {},
+  state: {},
   toast: {},
   tooltip: {},
   util: {},

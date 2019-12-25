@@ -104,6 +104,9 @@ js_library("perf") {
 }
 
 js_library("state") {
+  deps = [
+    ":namespace",
+  ]
 }
 
 js_library("background") {
