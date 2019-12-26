@@ -1241,13 +1241,17 @@ def generate_performance_test(tester_config, test, builder_name):
     # TODO(crbug.com/865538): once we have plenty of windows hardwares,
     # to shards perf benchmarks on Win builders, reduce this hard timeout limit
     # to ~2 hrs.
-    'hard_timeout': 12 * 60 * 60, # 12 hours timeout for full suite
+    # Note that the builder seems to time out after 7 hours (crbug.com/1036447),
+    # so we must timeout the shards within ~5.5 hours to allow for other
+    # overhead. If the overall builder times out then we
+    # don't get data even from the passing shards.
+    'hard_timeout': int(5.5 * 60 * 60), # 5.5 hours timeout for full suite
     'ignore_task_failure': False,
-    # 6 hour timeout. Note that this is effectively the timeout for a
+    # 5.5 hour timeout. Note that this is effectively the timeout for a
     # benchmarking subprocess to run since we intentionally do not stream
     # subprocess output to the task stdout.
     # TODO(crbug.com/865538): Reduce this once we can reduce hard_timeout.
-    'io_timeout': 6 * 60 * 60,
+    'io_timeout': int(5.5 * 60 * 60),
     'dimension_sets': [
       tester_config['dimension']
     ],
