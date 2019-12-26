@@ -1283,9 +1283,7 @@
           "-v",
           "--browser=android-weblayer",
           "--upload-results",
-          "--test-shard-map-filename=android-pixel2_weblayer-perf_map.json",
-          "--webview-embedder-apk=../../out/Release/apks/WebLayerShell.apk",
-          "--webview-embedder-apk=../../out/Release/apks/WebLayerSupport.apk"
+          "--test-shard-map-filename=android-pixel2_weblayer-perf_map.json"
         ],
         "isolate_name": "performance_weblayer_test_suite",
         "merge": {

@@ -1174,12 +1174,6 @@ def generate_telemetry_args(tester_config, platform):
                      tester_config['browser'])
     if tester_config['platform'].startswith('android'):
       test_args.append('--device=android')
-
-  if tester_config['platform'] == 'android-weblayer':
-    test_args.append(
-        '--webview-embedder-apk=../../out/Release/apks/WebLayerShell.apk')
-    test_args.append(
-        '--webview-embedder-apk=../../out/Release/apks/WebLayerSupport.apk')
   return test_args
 
 
