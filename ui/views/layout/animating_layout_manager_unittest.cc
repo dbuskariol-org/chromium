@@ -1417,6 +1417,86 @@ TEST_F(AnimatingLayoutManagerTest,
   EnsureLayout(expected_end);
 }
 
+// Regression test for crbug.com/1037625: crash in SetViewVisibility() (1/2)
+TEST_F(AnimatingLayoutManagerTest, FlexLayout_RemoveFadingViewDoesNotCrash) {
+  constexpr gfx::Insets kChildMargins(5);
+  layout()->SetShouldAnimateBounds(false);
+  layout()->SetOrientation(LayoutOrientation::kHorizontal);
+  auto* const flex_layout =
+      layout()->SetTargetLayoutManager(std::make_unique<FlexLayout>());
+  flex_layout->SetOrientation(LayoutOrientation::kHorizontal);
+  flex_layout->SetCollapseMargins(true);
+  flex_layout->SetCrossAxisAlignment(LayoutAlignment::kStart);
+  flex_layout->SetDefault(kMarginsKey, kChildMargins);
+  flex_layout->SetDefault(kFlexBehaviorKey, kDropOut);
+
+  const ProposedLayout expected_start{
+      {50, 20},
+      {{child(0), true, {{5, 5}, kChildViewSize}},
+       {child(1), true, {{20, 5}, kChildViewSize}},
+       {child(2), true, {{35, 5}, kChildViewSize}}}};
+
+  // Set up the initial state of the host view and children.
+  SizeAndLayout();
+  EXPECT_FALSE(layout()->is_animating());
+  EnsureLayout(expected_start);
+
+  layout()->FadeOut(child(1));
+
+  animation_api()->IncrementTime(base::TimeDelta::FromMilliseconds(500));
+  view()->Layout();
+  EXPECT_TRUE(layout()->is_animating());
+
+  View* const child1 = child(1);
+  view()->RemoveChildView(child1);
+  delete child1;
+
+  animation_api()->IncrementTime(base::TimeDelta::FromMilliseconds(250));
+  view()->Layout();
+  EXPECT_TRUE(layout()->is_animating());
+
+  animation_api()->IncrementTime(base::TimeDelta::FromMilliseconds(250));
+  view()->Layout();
+  EXPECT_FALSE(layout()->is_animating());
+}
+
+// Regression test for crbug.com/1037625: crash in SetViewVisibility() (2/2)
+TEST_F(AnimatingLayoutManagerTest, FlexLayout_RemoveShowingViewDoesNotCrash) {
+  constexpr gfx::Insets kChildMargins(5);
+  layout()->SetShouldAnimateBounds(false);
+  layout()->SetOrientation(LayoutOrientation::kHorizontal);
+  child(1)->SetVisible(false);
+  auto* const flex_layout =
+      layout()->SetTargetLayoutManager(std::make_unique<FlexLayout>());
+  flex_layout->SetOrientation(LayoutOrientation::kHorizontal);
+  flex_layout->SetCollapseMargins(true);
+  flex_layout->SetCrossAxisAlignment(LayoutAlignment::kStart);
+  flex_layout->SetDefault(kMarginsKey, kChildMargins);
+  flex_layout->SetDefault(kFlexBehaviorKey, kDropOut);
+
+  // Set up the initial state of the host view and children.
+  SizeAndLayout();
+  EXPECT_FALSE(layout()->is_animating());
+
+  layout()->FadeIn(child(1));
+
+  animation_api()->IncrementTime(base::TimeDelta::FromMilliseconds(500));
+  view()->Layout();
+  EXPECT_TRUE(layout()->is_animating());
+
+  View* const child1 = child(1);
+  view()->RemoveChildView(child1);
+  delete child1;
+
+  animation_api()->IncrementTime(base::TimeDelta::FromMilliseconds(250));
+  view()->Layout();
+  EXPECT_TRUE(layout()->is_animating());
+
+  animation_api()->IncrementTime(base::TimeDelta::FromMilliseconds(250));
+  view()->Layout();
+  EXPECT_FALSE(layout()->is_animating());
+}
+
 TEST_F(AnimatingLayoutManagerTest, FlexLayout_FadeInOnAdded) {
   constexpr gfx::Insets kChildMargins(5);
   layout()->SetShouldAnimateBounds(false);

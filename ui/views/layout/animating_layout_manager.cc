@@ -332,6 +332,17 @@ std::vector<View*> AnimatingLayoutManager::GetChildViewsInPaintOrder(
   return result;
 }
 
+bool AnimatingLayoutManager::OnViewRemoved(View* host, View* view) {
+  // Remove any fade infos corresponding to the removed view.
+  fade_infos_.erase(std::remove_if(fade_infos_.begin(), fade_infos_.end(),
+                                   [view](const LayoutFadeInfo& fade_info) {
+                                     return fade_info.child_view == view;
+                                   }),
+                    fade_infos_.end());
+
+  return LayoutManagerBase::OnViewRemoved(host, view);
+}
+
 void AnimatingLayoutManager::PostOrQueueAction(base::OnceClosure action) {
   if (!is_animating()) {
     base::ThreadTaskRunnerHandle::Get()->PostTask(FROM_HERE, std::move(action));
