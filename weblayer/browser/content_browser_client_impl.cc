@@ -314,7 +314,7 @@ void ContentBrowserClientImpl::GetQuotaSettings(
     base::OnceCallback<void(base::Optional<storage::QuotaSettings>)> callback) {
   storage::GetNominalDynamicSettings(
       partition->GetPath(), context->IsOffTheRecord(),
-      storage::GetDefaultDeviceInfoHelper(), std::move(callback));
+      storage::GetDefaultDiskInfoHelper(), std::move(callback));
 }
 
 #if defined(OS_ANDROID)
