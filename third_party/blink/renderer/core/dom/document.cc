@@ -4133,9 +4133,7 @@ bool Document::CheckCompletedInternal() {
       return false;
   }
 
-  // !ukm_binding_ is checked to avoid repeating work.
-  if (frame_ && frame_->Client()->GetRemoteNavigationAssociatedInterfaces() &&
-      !ukm_binding_) {
+  if (frame_ && frame_->Client()->GetRemoteNavigationAssociatedInterfaces()) {
     ukm_binding_ = std::make_unique<
         mojo::AssociatedRemote<mojom::blink::UkmSourceIdFrameHost>>();
     frame_->Client()->GetRemoteNavigationAssociatedInterfaces()->GetInterface(
