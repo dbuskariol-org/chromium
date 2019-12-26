@@ -219,7 +219,8 @@ cca.device.VideoConstraintsPreferrer =
     this.restoreFpsPreference_();
 
     this.toggleFps_.addEventListener('click', (event) => {
-      if (!cca.state.get('streaming') || cca.state.get('taking')) {
+      if (!cca.state.get(cca.state.State.STREAMING) ||
+          cca.state.get(cca.state.State.TAKING)) {
         event.preventDefault();
       }
     });
@@ -227,14 +228,16 @@ cca.device.VideoConstraintsPreferrer =
       this.setPreferredConstFps_(
           /** @type {string} */ (this.deviceId_), this.resolution_,
           this.toggleFps_.checked ? 60 : 30);
-      cca.state.set('mode-switching', true);
+      cca.state.set(cca.state.State.MODE_SWITCHING, true);
       let hasError = false;
       this.doReconfigureStream_()
           .catch((error) => {
             hasError = true;
             throw error;
           })
-          .finally(() => cca.state.set('mode-switching', false, {hasError}));
+          .finally(
+              () => cca.state.set(
+                  cca.state.State.MODE_SWITCHING, false, {hasError}));
     });
   }
 
@@ -283,7 +286,8 @@ cca.device.VideoConstraintsPreferrer =
     }
     this.toggleFps_.checked = prefFps === 60;
     cca.device.SUPPORTED_CONSTANT_FPS.forEach(
-        (fps) => cca.state.set(`_${fps}fps`, fps === prefFps));
+        (fps) => cca.state.set(
+            cca.state.assertState(`_${fps}fps`), fps === prefFps));
     this.prefFpses_[deviceId] = this.prefFpses_[deviceId] || {};
     this.prefFpses_[deviceId][resolution] = prefFps;
     this.saveFpsPreference_();
@@ -344,7 +348,7 @@ cca.device.VideoConstraintsPreferrer =
     const supportedConstFpses =
         this.constFpsInfo_[deviceId][this.resolution_].filter(
             (fps) => cca.device.SUPPORTED_CONSTANT_FPS.includes(fps));
-    cca.state.set('multi-fps', supportedConstFpses.length > 1);
+    cca.state.set(cca.state.State.MULTI_FPS, supportedConstFpses.length > 1);
   }
 
   /**

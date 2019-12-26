@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import {assertInstanceof} from './chrome_util.js';
 import {browserProxy} from './browser_proxy/browser_proxy.js';
+import {assertInstanceof} from './chrome_util.js';
 import {DeviceOperator} from './mojo/device_operator.js';
 import * as state from './state.js';
 import * as toast from './toast.js';
@@ -36,11 +36,11 @@ export function setup(views) {
               assertInstanceof(element, HTMLElement)));
   document.body.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
-      state.set('tab-navigation', true);
+      state.set(state.State.TAB_NAVIGATION, true);
     }
   });
   document.body.addEventListener(
-      'pointerdown', () => state.set('tab-navigation', false));
+      'pointerdown', () => state.set(state.State.TAB_NAVIGATION, false));
 }
 
 /**
@@ -78,7 +78,7 @@ function inactivate(index) {
  * @return {boolean} Whether the view is shown or not.
  */
 function isShown(index) {
-  return state.get(allViews[index].root.id);
+  return state.get(allViews[index].name);
 }
 
 /**
@@ -90,7 +90,7 @@ function isShown(index) {
 function show(index) {
   const view = allViews[index];
   if (!isShown(index)) {
-    state.set(view.root.id, true);
+    state.set(view.name, true);
     view.layout();
     if (index > topmostIndex) {
       if (topmostIndex >= 0) {
@@ -130,7 +130,7 @@ function hide(index) {
     }
     topmostIndex = next;
   }
-  state.set(allViews[index].root.id, false);
+  state.set(allViews[index].name, false);
 }
 
 /**
@@ -194,8 +194,8 @@ export function onKeyPressed(event) {
           toast.show('error_msg_expert_mode_not_supported');
           return;
         }
-        const newState = !state.get('expert');
-        state.set('expert', newState);
+        const newState = !state.get(state.State.EXPERT);
+        state.set(state.State.EXPERT, newState);
         browserProxy.localStorageSet({expert: newState});
       })();
       break;
