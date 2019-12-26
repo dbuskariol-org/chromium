@@ -358,7 +358,7 @@ cca.views.camera.Modes = class {
    * @param {!cca.Mode} mode
    * @param {string} deviceId
    * @param {!cca.ResolutionList} previewResolutions
-   * @return {!Array<!CaptureCandidate>}
+   * @return {!Array<!cca.CaptureCandidate>}
    */
   getResolutionCandidates(mode, deviceId, previewResolutions) {
     return this.allModes_[mode].constraintsPreferrer.getSortedCandidates(
@@ -370,7 +370,7 @@ cca.views.camera.Modes = class {
    * given mode on camera HALv1 device.
    * @param {!cca.Mode} mode
    * @param {?string} deviceId
-   * @return {!Promise<!Array<!CaptureCandidate>>}
+   * @return {!Promise<!Array<!cca.CaptureCandidate>>}
    */
   async getResolutionCandidatesV1(mode, deviceId) {
     const previewCandidates =
