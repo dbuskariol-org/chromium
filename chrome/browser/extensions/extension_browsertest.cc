@@ -111,8 +111,7 @@ void ExtensionProtocolTestResourcesHandler(const base::FilePath& test_dir_root,
 }  // namespace
 
 ExtensionBrowserTest::ExtensionBrowserTest()
-    : loaded_(false),
-      installed_(false),
+    :
 #if defined(OS_CHROMEOS)
       set_chromeos_user_(true),
 #endif
@@ -439,11 +438,6 @@ const Extension* ExtensionBrowserTest::LoadAndLaunchApp(
 
 Browser* ExtensionBrowserTest::LaunchAppBrowser(const Extension* extension) {
   return browsertest_util::LaunchAppBrowser(profile(), extension);
-}
-
-Browser* ExtensionBrowserTest::LaunchBrowserForAppInTab(
-    const Extension* extension) {
-  return browsertest_util::LaunchBrowserForAppInTab(profile(), extension);
 }
 
 base::FilePath ExtensionBrowserTest::PackExtension(
