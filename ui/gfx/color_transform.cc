@@ -237,7 +237,6 @@ class ColorTransformStep {
   // Return true if this is a null transform.
   virtual bool IsNull() { return false; }
   virtual void Transform(ColorTransform::TriStim* color, size_t num) const = 0;
-  virtual bool CanAppendShaderSource() = 0;
   // In the shader, |hdr| will appear before |src|, so any helper functions that
   // are created should be put in |hdr|. Any helper functions should have
   // |step_index| included in the function name, to ensure that there are no
@@ -266,7 +265,6 @@ class ColorTransformInternal : public ColorTransform {
       step->Transform(colors, num);
     }
   }
-  bool CanGetShaderSource() const override;
   std::string GetShaderSource() const override;
   std::string GetSkShaderSource() const override;
   bool IsIdentity() const override { return steps_.empty(); }
@@ -287,7 +285,6 @@ class ColorTransformNull : public ColorTransformStep {
   ColorTransformNull* GetNull() override { return this; }
   bool IsNull() override { return true; }
   void Transform(ColorTransform::TriStim* color, size_t num) const override {}
-  bool CanAppendShaderSource() override { return true; }
   void AppendShaderSource(std::stringstream* hdr,
                           std::stringstream* src,
                           size_t step_index) const override {}
@@ -318,7 +315,6 @@ class ColorTransformMatrix : public ColorTransformStep {
       matrix_.TransformPoint(colors + i);
   }
 
-  bool CanAppendShaderSource() override { return true; }
 
   void AppendShaderSource(std::stringstream* hdr,
                           std::stringstream* src,
@@ -468,7 +464,6 @@ class ColorTransformSkTransferFn : public ColorTransformPerChannelTransferFn {
     }
     return false;
   }
-  bool CanAppendShaderSource() override { return true; }
   bool IsNull() override { return SkTransferFnIsApproximatelyIdentity(fn_); }
 
   // ColorTransformPerChannelTransferFn implementation:
@@ -519,7 +514,6 @@ class ColorTransformFromLinear : public ColorTransformPerChannelTransferFn {
   explicit ColorTransformFromLinear(ColorSpace::TransferID transfer)
       : ColorTransformPerChannelTransferFn(false), transfer_(transfer) {}
   ColorTransformFromLinear* GetFromLinear() override { return this; }
-  bool CanAppendShaderSource() override { return true; }
   bool IsNull() override { return transfer_ == ColorSpace::TransferID::LINEAR; }
 
   // ColorTransformPerChannelTransferFn implementation:
@@ -610,7 +604,6 @@ class ColorTransformToLinear : public ColorTransformPerChannelTransferFn {
     }
     return false;
   }
-  bool CanAppendShaderSource() override { return true; }
   bool IsNull() override { return transfer_ == ColorSpace::TransferID::LINEAR; }
 
   // ColorTransformPerChannelTransferFn implementation:
@@ -730,7 +723,6 @@ class ColorTransformFromBT2020CL : public ColorTransformStep {
       YUV[i] = ColorTransform::TriStim(R_Y + Y, Y, B_Y + Y);
     }
   }
-  bool CanAppendShaderSource() override { return true; }
   void AppendShaderSource(std::stringstream* hdr,
                           std::stringstream* src,
                           size_t step_index) const override {
@@ -861,14 +853,6 @@ std::string ColorTransformInternal::GetSkShaderSource() const {
   for (const auto& step : steps_)
     step->AppendSkShaderSource(&src);
   return src.str();
-}
-
-bool ColorTransformInternal::CanGetShaderSource() const {
-  for (const auto& step : steps_) {
-    if (!step->CanAppendShaderSource())
-      return false;
-  }
-  return true;
 }
 
 ColorTransformInternal::~ColorTransformInternal() {}

@@ -515,9 +515,6 @@ TEST(SimpleColorSpace, CanParseSkShaderSource) {
     for (const auto& dst : common_color_spaces) {
       auto transform = ColorTransform::NewColorTransform(
           src, dst, ColorTransform::Intent::INTENT_PERCEPTUAL);
-      if (!transform->CanGetShaderSource())
-        continue;
-
       std::string source = "void main(inout half4 color) {" +
                            transform->GetSkShaderSource() + "}";
       SkRuntimeColorFilterFactory factory(
