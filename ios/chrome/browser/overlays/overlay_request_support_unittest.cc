@@ -43,7 +43,7 @@ TEST_F(SupportsOverlayRequestTest, SupportNone) {
 }
 
 // Tests that the SupportsOverlayRequest template returns true when
-// SupportsRequest() is called with a request with the config type used to
+// IsRequestSupported() is called with a request with the config type used to
 // create the template specialization.
 TEST_F(SupportsOverlayRequestTest, SupportsRequestTemplate) {
   std::unique_ptr<OverlayRequestSupport> support =
