@@ -10,8 +10,8 @@ import androidx.annotation.IntDef;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ContextUtils;
-import org.chromium.chrome.R;
 import org.chromium.chrome.browser.snackbar.SnackbarManager.SnackbarController;
+import org.chromium.chrome.ui.messages.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -120,8 +120,8 @@ public class Snackbar {
      * @param type Type of the snackbar. Either {@link #TYPE_ACTION} or {@link #TYPE_NOTIFICATION}.
      * @param identifier The feature code of the snackbar. Should be one of the UMA* constants above
      */
-    public static Snackbar make(CharSequence text, SnackbarController controller, int type,
-            int identifier) {
+    public static Snackbar make(
+            CharSequence text, SnackbarController controller, int type, int identifier) {
         Snackbar s = new Snackbar();
         s.mText = text;
         s.mController = controller;
@@ -296,5 +296,7 @@ public class Snackbar {
 
     /** So tests can trigger a press on a Snackbar. */
     @VisibleForTesting
-    public Object getActionDataForTesting() { return mActionData; }
+    public Object getActionDataForTesting() {
+        return mActionData;
+    }
 }

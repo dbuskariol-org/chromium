@@ -155,10 +155,10 @@ public class SnackbarView {
 
             lp.bottomMargin = getBottomMarginForLayout();
             if (mIsTablet) {
-                int margin = mParent.getResources()
-                        .getDimensionPixelSize(R.dimen.snackbar_margin_tablet);
-                int width = mParent.getResources()
-                        .getDimensionPixelSize(R.dimen.snackbar_width_tablet);
+                int margin = mParent.getResources().getDimensionPixelSize(
+                        R.dimen.snackbar_margin_tablet);
+                int width =
+                        mParent.getResources().getDimensionPixelSize(R.dimen.snackbar_width_tablet);
                 lp.width = Math.min(width, mParent.getWidth() - 2 * margin);
                 lp.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
             }
@@ -206,8 +206,7 @@ public class SnackbarView {
      */
     public void announceforAccessibility() {
         mMessageView.announceForAccessibility(mMessageView.getContentDescription() + " "
-                + mContainerView.getResources().getString(
-                        org.chromium.chrome.R.string.bottom_bar_screen_position));
+                + mContainerView.getResources().getString(R.string.bottom_bar_screen_position));
     }
 
     /**
@@ -234,8 +233,8 @@ public class SnackbarView {
     private static int getBackgroundColor(View view, Snackbar snackbar) {
         // Themes are used first.
         if (snackbar.getTheme() == Snackbar.Theme.GOOGLE) {
-            return ApiCompatibilityUtils.getColor(
-                    view.getResources(), org.chromium.chrome.R.color.light_active_color);
+            return ApiCompatibilityUtils.getColor(view.getResources(),
+                    org.chromium.components.browser_ui.styles.R.color.light_active_color);
         }
 
         assert snackbar.getTheme() == Snackbar.Theme.BASIC;

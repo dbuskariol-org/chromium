@@ -50,13 +50,13 @@ public class SnackbarManager implements OnClickListener, ActivityStateListener {
          * Called when the user clicks the action button on the snackbar.
          * @param actionData Data object passed when showing this specific snackbar.
          */
-        default void onAction(Object actionData) { }
+        default void onAction(Object actionData) {}
 
         /**
          * Called when the snackbar is dismissed by timeout or UI environment change.
          * @param actionData Data object associated with the dismissed snackbar entry.
          */
-        default void onDismissNoAction(Object actionData) { }
+        default void onDismissNoAction(Object actionData) {}
     }
 
     public static final int DEFAULT_SNACKBAR_DURATION_MS = 3000;
@@ -246,7 +246,6 @@ public class SnackbarManager implements OnClickListener, ActivityStateListener {
                 mView.announceforAccessibility();
             }
         }
-
     }
 
     private int getDuration(Snackbar snackbar) {
