@@ -216,7 +216,6 @@ Transform GetPrimaryTransform(const gfx::ColorSpace& color_space) {
 class ColorTransformMatrix;
 class ColorTransformSkTransferFn;
 class ColorTransformFromLinear;
-class ColorTransformToBT2020CL;
 class ColorTransformFromBT2020CL;
 class ColorTransformNull;
 
@@ -225,7 +224,6 @@ class ColorTransformStep {
   ColorTransformStep() {}
   virtual ~ColorTransformStep() {}
   virtual ColorTransformFromLinear* GetFromLinear() { return nullptr; }
-  virtual ColorTransformToBT2020CL* GetToBT2020CL() { return nullptr; }
   virtual ColorTransformFromBT2020CL* GetFromBT2020CL() { return nullptr; }
   virtual ColorTransformSkTransferFn* GetSkTransferFn() { return nullptr; }
   virtual ColorTransformMatrix* GetMatrix() { return nullptr; }
@@ -239,19 +237,15 @@ class ColorTransformStep {
   // Return true if this is a null transform.
   virtual bool IsNull() { return false; }
   virtual void Transform(ColorTransform::TriStim* color, size_t num) const = 0;
-  virtual bool CanAppendShaderSource() { return false; }
+  virtual bool CanAppendShaderSource() = 0;
   // In the shader, |hdr| will appear before |src|, so any helper functions that
   // are created should be put in |hdr|. Any helper functions should have
   // |step_index| included in the function name, to ensure that there are no
   // naming conflicts.
   virtual void AppendShaderSource(std::stringstream* hdr,
                                   std::stringstream* src,
-                                  size_t step_index) const {
-    NOTREACHED();
-  }
-  virtual void AppendSkShaderSource(std::stringstream* src) const {
-    NOTREACHED();
-  }
+                                  size_t step_index) const = 0;
+  virtual void AppendSkShaderSource(std::stringstream* src) const = 0;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(ColorTransformStep);
@@ -714,61 +708,9 @@ class ColorTransformToLinear : public ColorTransformPerChannelTransferFn {
 // Then we run the transfer function like normal, and finally
 // this class is inserted as an extra step which takes calculates
 // the U and V values.
-class ColorTransformToBT2020CL : public ColorTransformStep {
- public:
-  bool Join(ColorTransformStep* next_untyped) override {
-    ColorTransformFromBT2020CL* next = next_untyped->GetFromBT2020CL();
-    if (!next)
-      return false;
-    if (null_)
-      return false;
-    null_ = true;
-    return true;
-  }
-
-  bool IsNull() override { return null_; }
-
-  void Transform(ColorTransform::TriStim* RYB, size_t num) const override {
-    for (size_t i = 0; i < num; i++) {
-      float U, V;
-      float B_Y = RYB[i].z() - RYB[i].y();
-      if (B_Y <= 0) {
-        U = B_Y / (-2.0 * -0.9702);
-      } else {
-        U = B_Y / (2.0 * 0.7910);
-      }
-      float R_Y = RYB[i].x() - RYB[i].y();
-      if (R_Y <= 0) {
-        V = R_Y / (-2.0 * -0.8591);
-      } else {
-        V = R_Y / (2.0 * 0.4969);
-      }
-      RYB[i] = ColorTransform::TriStim(RYB[i].y(), U + 0.5, V + 0.5);
-    }
-  }
-
- private:
-  bool null_ = false;
-};
-
-// Inverse of ColorTransformToBT2020CL, see comment above for more info.
 class ColorTransformFromBT2020CL : public ColorTransformStep {
  public:
-  bool Join(ColorTransformStep* next_untyped) override {
-    ColorTransformToBT2020CL* next = next_untyped->GetToBT2020CL();
-    if (!next)
-      return false;
-    if (null_)
-      return false;
-    null_ = true;
-    return true;
-  }
-
-  bool IsNull() override { return null_; }
-
   void Transform(ColorTransform::TriStim* YUV, size_t num) const override {
-    if (null_)
-      return;
     for (size_t i = 0; i < num; i++) {
       float Y = YUV[i].x();
       float U = YUV[i].y() - 0.5;
@@ -816,8 +758,9 @@ class ColorTransformFromBT2020CL : public ColorTransformStep {
          << "(color.rgb);" << endl;
   }
 
- private:
-  bool null_ = false;
+  void AppendSkShaderSource(std::stringstream* src) const override {
+    NOTREACHED();
+  }
 };
 
 void ColorTransformInternal::AppendColorSpaceToColorSpaceTransform(
@@ -875,7 +818,7 @@ void ColorTransformInternal::AppendColorSpaceToColorSpaceTransform(
   }
 
   if (dst.GetMatrixID() == ColorSpace::MatrixID::BT2020_CL) {
-    steps_.push_back(std::make_unique<ColorTransformToBT2020CL>());
+    NOTREACHED();
   } else {
     steps_.push_back(
         std::make_unique<ColorTransformMatrix>(GetTransferMatrix(dst)));

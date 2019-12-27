@@ -60,15 +60,18 @@ ColorSpace::TransferID extended_transfers[] = {
 };
 
 ColorSpace::MatrixID all_matrices[] = {
-    ColorSpace::MatrixID::RGB, ColorSpace::MatrixID::BT709,
-    ColorSpace::MatrixID::FCC, ColorSpace::MatrixID::BT470BG,
-    ColorSpace::MatrixID::SMPTE170M, ColorSpace::MatrixID::SMPTE240M,
+    ColorSpace::MatrixID::RGB,
+    ColorSpace::MatrixID::BT709,
+    ColorSpace::MatrixID::FCC,
+    ColorSpace::MatrixID::BT470BG,
+    ColorSpace::MatrixID::SMPTE170M,
+    ColorSpace::MatrixID::SMPTE240M,
 
     // YCOCG produces lots of negative values which isn't compatible with many
     // transfer functions.
     // TODO(hubbe): Test this separately.
     // ColorSpace::MatrixID::YCOCG,
-    ColorSpace::MatrixID::BT2020_NCL, ColorSpace::MatrixID::BT2020_CL,
+    ColorSpace::MatrixID::BT2020_NCL,
     ColorSpace::MatrixID::YDZDX,
 };
 
