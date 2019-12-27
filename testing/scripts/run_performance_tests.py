@@ -618,8 +618,9 @@ def main(sys_args):
               additional_flags=configuration['arguments'])
           output_paths = OutputFilePaths(isolated_out_dir, name).SetUp()
           print('\n### {folder} ###'.format(folder=name))
-          overall_return_code = execute_gtest_perf_test(
+          return_code = execute_gtest_perf_test(
               command_generator, output_paths, options.xvfb)
+          overall_return_code = return_code or overall_return_code
           test_results_files.append(output_paths.test_results)
     else:
       raise Exception('Telemetry tests must provide either a shard map or a '
