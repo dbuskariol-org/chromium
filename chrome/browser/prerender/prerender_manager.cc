@@ -51,7 +51,6 @@
 #include "chrome/common/prerender_types.h"
 #include "components/content_settings/core/browser/cookie_settings.h"
 #include "content/public/browser/browser_thread.h"
-#include "content/public/browser/devtools_agent_host.h"
 #include "content/public/browser/navigation_controller.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
@@ -437,15 +436,6 @@ WebContents* PrerenderManager::SwapInternal(const GURL& url,
   }
 
   DCHECK(prerender_data->contents()->prerendering_has_started());
-
-  // Don't use prerendered pages if debugger is attached to the tab.
-  // See http://crbug.com/98541
-  if (content::DevToolsAgentHost::IsDebuggerAttached(web_contents)) {
-    histograms_->RecordFinalStatus(prerender_data->contents()->origin(),
-                                   FINAL_STATUS_DEVTOOLS_ATTACHED);
-    prerender_data->contents()->Destroy(FINAL_STATUS_DEVTOOLS_ATTACHED);
-    return nullptr;
-  }
 
   // At this point, we've determined that we will use the prerender.
   content::RenderProcessHost* process_host =
