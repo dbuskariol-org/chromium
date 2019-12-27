@@ -71,7 +71,10 @@ def main():
 
   with tempfile.NamedTemporaryFile() as f:
     _WriteReportsJson(f)
-    cmd = ['gsutil.py', 'cp', '-a', 'public-read', f.name, _REPORTS_JSON_GS_URL]
+    cmd = [
+        'gsutil.py', '--', '-h', 'Cache-Control:no-cache', 'cp', '-a',
+        'public-read', f.name, _REPORTS_JSON_GS_URL
+    ]
     logging.warning(' '.join(cmd))
     subprocess.check_call(cmd)
 
