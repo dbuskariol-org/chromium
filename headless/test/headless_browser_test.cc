@@ -295,6 +295,9 @@ void HeadlessAsyncDevTooledBrowserTest::RunTest() {
   browser()->GetDevToolsTarget()->DetachClient(browser_devtools_client_.get());
   browser_context_->Close();
   browser_context_ = nullptr;
+  // Let the tasks that might have beein scheduled during web contents
+  // being closed run (see https://crbug.com/1036627 for details).
+  base::RunLoop().RunUntilIdle();
 }
 
 bool HeadlessAsyncDevTooledBrowserTest::GetEnableBeginFrameControl() {
