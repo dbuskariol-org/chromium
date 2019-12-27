@@ -32,6 +32,7 @@ source_set("overlays") {
     "overlay_dispatch_callback_storage.cc",
     "overlay_presenter_impl.h",
     "overlay_presenter_impl.mm",
+    "overlay_presenter_observer.cc",
     "overlay_presenter_observer_bridge.mm",
     "overlay_request_cancel_handler.mm",
     "overlay_request_impl.cc",
