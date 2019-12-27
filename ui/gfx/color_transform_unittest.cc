@@ -52,7 +52,6 @@ ColorSpace::TransferID simple_transfers[] = {
 // This one is weird as the non-linear numbers are not between 0 and 1.
 ColorSpace::TransferID noninvertible_transfers[] = {
     ColorSpace::TransferID::SMPTEST428_1,
-    ColorSpace::TransferID::SMPTEST2084_NON_HDR,
 };
 
 ColorSpace::TransferID extended_transfers[] = {

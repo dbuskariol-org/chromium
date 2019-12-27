@@ -56,10 +56,6 @@ Transform Invert(const Transform& t) {
 
 float FromLinear(ColorSpace::TransferID id, float v) {
   switch (id) {
-    case ColorSpace::TransferID::SMPTEST2084_NON_HDR:
-      // Should already be handled.
-      break;
-
     case ColorSpace::TransferID::LOG:
       if (v < 0.01f)
         return 0.0f;
@@ -178,10 +174,6 @@ float ToLinear(ColorSpace::TransferID id, float v) {
       return v;
     }
 
-    case ColorSpace::TransferID::SMPTEST2084_NON_HDR:
-      v = max(0.0f, v);
-      return min(2.3f * pow(v, 2.8f), v / 5.0f + 0.8f);
-
     // Spec: http://www.arib.or.jp/english/html/overview/doc/2-STD-B67v1_0.pdf
     case ColorSpace::TransferID::ARIB_STD_B67: {
       v = max(0.0f, v);
@@ -287,9 +279,8 @@ class ColorTransformInternal : public ColorTransform {
   size_t NumberOfStepsForTesting() const override { return steps_.size(); }
 
  private:
-  void AppendColorSpaceToColorSpaceTransform(ColorSpace src,
-                                             const ColorSpace& dst,
-                                             ColorTransform::Intent intent);
+  void AppendColorSpaceToColorSpaceTransform(const ColorSpace& src,
+                                             const ColorSpace& dst);
   void Simplify();
 
   std::list<std::unique_ptr<ColorTransformStep>> steps_;
@@ -690,10 +681,6 @@ class ColorTransformToLinear : public ColorTransformPerChannelTransferFn {
                 "              (c2 - c3 * pow(v2, 1.0 / m2)), 1.0 / m1);\n"
                 "  v = v2 * 10000.0 / 80.0;\n";
         return;
-      case ColorSpace::TransferID::SMPTEST2084_NON_HDR:
-        *src << "  v = max(0.0, v);\n"
-                "  v = min(2.3 * pow(v, 2.8), v / 5.0 + 0.8);\n";
-        return;
       case ColorSpace::TransferID::ARIB_STD_B67:
         *src << "  v = max(0.0, v);\n"
              << "  " << scalar_type << " a = 0.17883277;\n"
@@ -712,43 +699,6 @@ class ColorTransformToLinear : public ColorTransformPerChannelTransferFn {
 
  private:
   ColorSpace::TransferID transfer_;
-};
-
-class ColorTransformSMPTEST2048NonHdrToLinear : public ColorTransformStep {
- public:
-  // Assumes BT2020 primaries.
-  static float Luma(const ColorTransform::TriStim& c) {
-    return c.x() * 0.2627f + c.y() * 0.6780f + c.z() * 0.0593f;
-  }
-  static ColorTransform::TriStim ClipToWhite(ColorTransform::TriStim* c) {
-    float maximum = max(max(c->x(), c->y()), c->z());
-    if (maximum > 1.0f) {
-      float l = Luma(*c);
-      c->Scale(1.0f / maximum);
-      ColorTransform::TriStim white(1.0f, 1.0f, 1.0f);
-      white.Scale((1.0f - 1.0f / maximum) * l / Luma(white));
-      ColorTransform::TriStim black(0.0f, 0.0f, 0.0f);
-      *c += white - black;
-    }
-    return *c;
-  }
-  void Transform(ColorTransform::TriStim* colors, size_t num) const override {
-    for (size_t i = 0; i < num; i++) {
-      ColorTransform::TriStim ret(
-          ToLinear(ColorSpace::TransferID::SMPTEST2084_NON_HDR, colors[i].x()),
-          ToLinear(ColorSpace::TransferID::SMPTEST2084_NON_HDR, colors[i].y()),
-          ToLinear(ColorSpace::TransferID::SMPTEST2084_NON_HDR, colors[i].z()));
-      if (Luma(ret) > 0.0) {
-        ColorTransform::TriStim smpte2084(
-            ToLinear(ColorSpace::TransferID::SMPTEST2084, colors[i].x()),
-            ToLinear(ColorSpace::TransferID::SMPTEST2084, colors[i].y()),
-            ToLinear(ColorSpace::TransferID::SMPTEST2084, colors[i].z()));
-        smpte2084.Scale(Luma(ret) / Luma(smpte2084));
-        ret = ClipToWhite(&smpte2084);
-      }
-      colors[i] = ret;
-    }
-  }
 };
 
 // BT2020 Constant Luminance is different than most other
@@ -871,9 +821,8 @@ class ColorTransformFromBT2020CL : public ColorTransformStep {
 };
 
 void ColorTransformInternal::AppendColorSpaceToColorSpaceTransform(
-    ColorSpace src,
-    const ColorSpace& dst,
-    ColorTransform::Intent intent) {
+    const ColorSpace& src,
+    const ColorSpace& dst) {
   steps_.push_back(
       std::make_unique<ColorTransformMatrix>(GetRangeAdjustMatrix(src)));
 
@@ -895,10 +844,6 @@ void ColorTransformInternal::AppendColorSpaceToColorSpaceTransform(
   if (src.GetTransferFunction(&src_to_linear_fn)) {
     steps_.push_back(std::make_unique<ColorTransformSkTransferFn>(
         src_to_linear_fn, src.HasExtendedSkTransferFn()));
-  } else if (src.GetTransferID() ==
-             ColorSpace::TransferID::SMPTEST2084_NON_HDR) {
-    steps_.push_back(
-        std::make_unique<ColorTransformSMPTEST2048NonHdrToLinear>());
   } else {
     steps_.push_back(
         std::make_unique<ColorTransformToLinear>(src.GetTransferID()));
@@ -948,13 +893,7 @@ ColorTransformInternal::ColorTransformInternal(const ColorSpace& src,
   // TODO(ccameron): We may want dst assume sRGB at some point in the future.
   if (!src_.IsValid())
     return;
-
-  // SMPTEST2084_NON_HDR is not a valid destination.
-  if (dst.GetTransferID() == ColorSpace::TransferID::SMPTEST2084_NON_HDR) {
-    DLOG(ERROR) << "Invalid dst transfer function, returning identity.";
-    return;
-  }
-  AppendColorSpaceToColorSpaceTransform(src_, dst_, intent);
+  AppendColorSpaceToColorSpaceTransform(src_, dst_);
   if (intent != Intent::TEST_NO_OPT)
     Simplify();
 }
