@@ -48,6 +48,10 @@ public final class ChromePreferenceKeys {
      */
     public static final String ACCESSIBILITY_TAB_SWITCHER = "accessibility_tab_switcher";
 
+    public static final String BOOKMARKS_LAST_USED_URL = "enhanced_bookmark_last_used_url";
+    public static final String BOOKMARKS_LAST_USED_PARENT =
+            "enhanced_bookmark_last_used_parent_folder";
+
     /**
      * Whether Chrome is set as the default browser.
      * Default value is false.
@@ -468,6 +472,8 @@ public final class ChromePreferenceKeys {
         // clang-format off
         return Arrays.asList(
                 ACCESSIBILITY_TAB_SWITCHER,
+                BOOKMARKS_LAST_USED_URL,
+                BOOKMARKS_LAST_USED_PARENT,
                 CHROME_DEFAULT_BROWSER,
                 CONTENT_SUGGESTIONS_SHOWN,
                 CONTEXTUAL_SEARCH_ALL_TIME_OPEN_COUNT,
@@ -622,6 +628,8 @@ public final class ChromePreferenceKeys {
         // clang-format off
         return Arrays.asList(
                 ACCESSIBILITY_TAB_SWITCHER,
+                BOOKMARKS_LAST_USED_URL,
+                BOOKMARKS_LAST_USED_PARENT,
                 CHROME_DEFAULT_BROWSER,
                 CONTENT_SUGGESTIONS_SHOWN,
                 CONTEXTUAL_SEARCH_ALL_TIME_OPEN_COUNT,
