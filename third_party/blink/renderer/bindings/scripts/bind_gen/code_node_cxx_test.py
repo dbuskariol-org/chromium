@@ -33,7 +33,7 @@ class CodeNodeCxxTest(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_symbol_definition_with_branches(self):
-        root = SymbolScopeNode(separator_last="\n")
+        root = SymbolScopeNode(tail="\n")
 
         root.register_code_symbols([
             SymbolNode("var1", "int ${var1} = 1;"),
@@ -79,7 +79,7 @@ var3;
 """)
 
     def test_symbol_definition_with_nested_branches(self):
-        root = SymbolScopeNode(separator_last="\n")
+        root = SymbolScopeNode(tail="\n")
 
         root.register_code_symbols([
             SymbolNode("var1", "int ${var1} = 1;"),
@@ -132,7 +132,7 @@ if (true) {
 """)
 
     def test_function_definition_minimum(self):
-        root = SymbolScopeNode(separator_last="\n")
+        root = SymbolScopeNode(tail="\n")
         root.append(
             CxxFuncDefNode(
                 name="blink::bindings::func", arg_decls=[],
@@ -145,7 +145,7 @@ void blink::bindings::func() {
 """)
 
     def test_function_definition_full(self):
-        root = SymbolScopeNode(separator_last="\n")
+        root = SymbolScopeNode(tail="\n")
 
         func_def = CxxFuncDefNode(
             name="blink::bindings::func",
