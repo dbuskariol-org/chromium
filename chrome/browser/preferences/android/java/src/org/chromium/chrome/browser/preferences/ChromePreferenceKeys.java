@@ -346,6 +346,14 @@ public final class ChromePreferenceKeys {
      * Default value is false.
      */
     public static final String FLAGS_CACHED_START_SURFACE_ENABLED = "start_surface_enabled";
+
+    /**
+     * Whether or not the start surface single pane is enabled.
+     * Default value is false.
+     */
+    public static final String START_SURFACE_SINGLE_PANE_ENABLED_KEY =
+            "start_surface_single_pane_enabled";
+
     /**
      * Key to cache whether SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT is enabled.
      */
@@ -571,6 +579,7 @@ public final class ChromePreferenceKeys {
                 SIGNIN_PROMO_NTP_PROMO_SUPPRESSION_PERIOD_START,
                 SIGNIN_PROMO_PERSONALIZED_DECLINED,
                 SIGNIN_PROMO_SETTINGS_PERSONALIZED_DISMISSED,
+                START_SURFACE_SINGLE_PANE_ENABLED_KEY,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_CLEAR_DATA,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_UNINSTALL,
                 TWA_DISCLOSURE_ACCEPTED_PACKAGES,
@@ -720,6 +729,7 @@ public final class ChromePreferenceKeys {
                 SIGNIN_PROMO_NTP_PROMO_SUPPRESSION_PERIOD_START,
                 SIGNIN_PROMO_PERSONALIZED_DECLINED,
                 SIGNIN_PROMO_SETTINGS_PERSONALIZED_DISMISSED,
+                START_SURFACE_SINGLE_PANE_ENABLED_KEY,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_CLEAR_DATA,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_UNINSTALL,
                 TWA_DISCLOSURE_ACCEPTED_PACKAGES,
