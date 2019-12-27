@@ -6149,3 +6149,4 @@ crbug.com/1033381 synthetic_gestures/smooth-scroll-tiny-delta.html [ Pass Crash 
 
 # Sheriff 2019-12-27
 crbug.com/1038037 [ Win ] virtual/gpu-rasterization/images/exif-orientation-css.html [ Pass Failure ]
+crbug.com/1038037 [ Win ] virtual/gpu-rasterization/images/exif-orientation-none-css.html [ Pass Failure ]
