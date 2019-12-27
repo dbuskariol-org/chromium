@@ -6152,3 +6152,4 @@ crbug.com/1038037 [ Win ] virtual/gpu-rasterization/images/exif-orientation-css.
 crbug.com/1038037 [ Win ] virtual/gpu-rasterization/images/exif-orientation-none-css.html [ Pass Failure ]
 crbug.com/1037798 [ Win ] virtual/gpu-rasterization/images/exif-orientation-image-document.html [ Pass Failure ]
 crbug.com/1038091 [ Win ] virtual/gpu-rasterization/images/jpeg-yuv-image-decoding.html [ Pass Failure ]
+crbug.com/1038139 [ Win ] virtual/gpu-rasterization/images/2-comp.html [ Pass Failure ]
