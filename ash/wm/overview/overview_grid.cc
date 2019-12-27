@@ -555,12 +555,9 @@ void OverviewGrid::AppendItem(aura::Window* window,
 void OverviewGrid::RemoveItem(OverviewItem* overview_item,
                               bool item_destroying,
                               bool reposition) {
-  auto* window = overview_item->GetWindow();
-  // Use reverse iterator to be efficiently when removing all.
+  // Use reverse iterator to be efficient when removing all.
   auto iter = std::find_if(window_list_.rbegin(), window_list_.rend(),
-                           [window](std::unique_ptr<OverviewItem>& item) {
-                             return item->GetWindow() == window;
-                           });
+                           base::MatchesUniquePtr(overview_item));
   DCHECK(iter != window_list_.rend());
 
   // This can also be called when shutting down |this|, at which the item will
