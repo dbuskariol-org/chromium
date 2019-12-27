@@ -129,19 +129,9 @@ class PrerenderManager::OnCloseWebContentsDeleter
     ScheduleWebContentsForDeletion(/*timeout=*/false);
   }
 
-  bool ShouldSuppressDialogs(WebContents* source) override {
-    // Use this as a proxy for getting statistics on how often we fail to honor
-    // the beforeunload event.
-    DCHECK_EQ(tab_.get(), source);
-    suppressed_dialog_ = true;
-    return true;
-  }
-
  private:
   void ScheduleWebContentsForDeletion(bool timeout) {
     UMA_HISTOGRAM_BOOLEAN("Prerender.TabContentsDeleterTimeout", timeout);
-    UMA_HISTOGRAM_BOOLEAN("Prerender.TabContentsDeleterSuppressedDialog",
-                          suppressed_dialog_);
     tab_->SetDelegate(nullptr);
     manager_->ScheduleDeleteOldWebContents(std::move(tab_), this);
     // |this| is deleted at this point.
@@ -149,7 +139,6 @@ class PrerenderManager::OnCloseWebContentsDeleter
 
   PrerenderManager* const manager_;
   std::unique_ptr<WebContents> tab_;
-  bool suppressed_dialog_ = false;
 
   DISALLOW_COPY_AND_ASSIGN(OnCloseWebContentsDeleter);
 };

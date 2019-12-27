@@ -50994,7 +50994,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="5" label="CREATE_NEW_WINDOW"/>
   <int value="6" label="PROFILE_DESTROYED"/>
   <int value="7" label="APP_TERMINATING"/>
-  <int value="8" label="JAVASCRIPT_ALERT"/>
+  <int value="8" label="JAVASCRIPT_ALERT (Obsolete)"/>
   <int value="9" label="AUTH_NEEDED"/>
   <int value="10" label="HTTPS"/>
   <int value="11" label="DOWNLOAD"/>
