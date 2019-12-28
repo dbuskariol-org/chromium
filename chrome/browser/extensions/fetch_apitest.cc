@@ -154,9 +154,10 @@ IN_PROC_BROWSER_TEST_F(ExtensionFetchTest,
                               "example.com", "/extensions/test_file.txt"))));
 }
 
+// TODO(crbug.com/1038156): Test is flaky.
 IN_PROC_BROWSER_TEST_F(
     ExtensionFetchTest,
-    ExtensionCannotFetchHostedResourceWithoutHostPermissions) {
+    DISABLED_ExtensionCannotFetchHostedResourceWithoutHostPermissions) {
   TestExtensionDir dir;
   constexpr char kManifest[] =
       R"({
