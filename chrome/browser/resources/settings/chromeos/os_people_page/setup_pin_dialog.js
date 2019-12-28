@@ -117,5 +117,4 @@ Polymer({
     return this.i18n(isConfirmStep ? 'confirm' : 'continue');
   },
 });
-
 })();

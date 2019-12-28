@@ -150,10 +150,9 @@ Polymer({
     if (errorCode_ == UserAddError.USER_EXISTS) {
       return this.i18n('userExistsError');
     }
-    //TODO errorString for UserAddError.INVALID_EMAIL crbug/1007481
+    // TODO errorString for UserAddError.INVALID_EMAIL crbug/1007481
 
     return '';
   },
 });
-
 })();
