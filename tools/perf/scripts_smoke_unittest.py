@@ -162,7 +162,8 @@ class ScriptsSmokeTest(unittest.TestCase):
 
   # Android: crbug.com/932301
   # ChromeOS: crbug.com/754913
-  @decorators.Disabled('chromeos', 'android')
+  # Windows: crbug.com/1024767
+  @decorators.Disabled('chromeos', 'android', 'win')
   def testRunPerformanceTestsTelemetrySharded_end2end(self):
     tempdir = tempfile.mkdtemp()
     env = os.environ.copy()
