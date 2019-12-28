@@ -172,6 +172,8 @@ void HeadlessBrowserTest::PostRunTestOnMainThread() {
        !i.IsAtEnd(); i.Advance()) {
     i.GetCurrentValue()->FastShutdownIfPossible();
   }
+  // Pump tasks produced during shutdown.
+  base::RunLoop().RunUntilIdle();
 }
 
 HeadlessBrowser* HeadlessBrowserTest::browser() const {
