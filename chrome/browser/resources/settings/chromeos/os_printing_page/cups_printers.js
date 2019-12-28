@@ -108,9 +108,8 @@ Polymer({
 
   /** @override */
   created: function() {
-    this.networkConfig_ =
-        network_config.MojoInterfaceProviderImpl.getInstance()
-            .getMojoServiceRemote();
+    this.networkConfig_ = network_config.MojoInterfaceProviderImpl.getInstance()
+                              .getMojoServiceRemote();
     this.entryManager_ =
         settings.printing.CupsPrintersEntryManager.getInstance();
   },
@@ -182,14 +181,12 @@ Polymer({
     const printerName = event.detail.printerName;
     switch (event.detail.resultCode) {
       case PrinterSetupResult.SUCCESS:
-        this.addPrinterResultText_ =
-            loadTimeData.getStringF('printerAddedSuccessfulMessage',
-                                    printerName);
+        this.addPrinterResultText_ = loadTimeData.getStringF(
+            'printerAddedSuccessfulMessage', printerName);
         break;
       case PrinterSetupResult.EDIT_SUCCESS:
-        this.addPrinterResultText_ =
-            loadTimeData.getStringF('printerEditedSuccessfulMessage',
-                                    printerName);
+        this.addPrinterResultText_ = loadTimeData.getStringF(
+            'printerEditedSuccessfulMessage', printerName);
         break;
       case PrinterSetupResult.PRINTER_UNREACHABLE:
         if (this.enableUpdatedUi_) {
@@ -210,8 +207,8 @@ Polymer({
    */
   openManufacturerModelDialogForSpecifiedPrinter_: function(e) {
     const item = e.detail.item;
-    this.$.addPrinterDialog
-        .openManufacturerModelDialogForSpecifiedPrinter(item);
+    this.$.addPrinterDialog.openManufacturerModelDialogForSpecifiedPrinter(
+        item);
   },
 
   /** @private */
@@ -228,9 +225,8 @@ Polymer({
   onPrintersChanged_: function(cupsPrintersList) {
     if (this.enableUpdatedUi_) {
       this.savedPrinters_ = cupsPrintersList.printerList.map(
-          printer => /** @type {!PrinterListEntry} */({
-              printerInfo: printer,
-              printerType: PrinterType.SAVED}));
+          printer => /** @type {!PrinterListEntry} */ (
+              {printerInfo: printer, printerType: PrinterType.SAVED}));
       this.entryManager_.setSavedPrintersList(this.savedPrinters_);
     } else {
       this.printers = cupsPrintersList.printerList;
@@ -297,20 +293,20 @@ Polymer({
 
   /** @private */
   getSavedPrintersAriaLabel_: function() {
-    const printerLabel =
-        this.savedPrinterCount_ == 0  ? 'savedPrintersCountNone' :
+    const printerLabel = this.savedPrinterCount_ == 0 ?
+        'savedPrintersCountNone' :
         this.savedPrinterCount_ == 1 ? 'savedPrintersCountOne' :
-        'savedPrintersCountMany';
+                                       'savedPrintersCountMany';
 
     return loadTimeData.getStringF(printerLabel, this.savedPrinterCount_);
   },
 
   /** @private */
   getNearbyPrintersAriaLabel_: function() {
-    const printerLabel =
-        this.nearbyPrinterCount_ == 0  ? 'nearbyPrintersCountNone' :
+    const printerLabel = this.nearbyPrinterCount_ == 0 ?
+        'nearbyPrintersCountNone' :
         this.nearbyPrinterCount_ == 1 ? 'nearbyPrintersCountOne' :
-        'nearbyPrintersCountMany';
+                                        'nearbyPrintersCountMany';
 
     return loadTimeData.getStringF(printerLabel, this.nearbyPrinterCount_);
   },

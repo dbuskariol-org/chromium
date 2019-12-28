@@ -102,10 +102,9 @@ Polymer({
     'open-action-menu': 'onOpenActionMenu_',
   },
 
-  observers: [
-      'onSearchOrPrintersChanged_(savedPrinters.*, searchTerm,' +
-          'hasShowMoreBeenTapped_, newPrinters_.*)'
-  ],
+  observers:
+      ['onSearchOrPrintersChanged_(savedPrinters.*, searchTerm,' +
+       'hasShowMoreBeenTapped_, newPrinters_.*)'],
 
   /** @private {settings.CupsPrintersBrowserProxy} */
   browserProxy_: null,
@@ -143,12 +142,12 @@ Polymer({
    * @private
    */
   onOpenActionMenu_: function(e) {
-    const item = /** @type {!PrinterListEntry} */(e.detail.item);
+    const item = /** @type {!PrinterListEntry} */ (e.detail.item);
     this.activePrinterListEntryIndex_ = this.savedPrinters.findIndex(
         printer => printer.printerInfo.printerId == item.printerInfo.printerId);
     this.activePrinter =
         this.get(['savedPrinters', this.activePrinterListEntryIndex_])
-        .printerInfo;
+            .printerInfo;
 
     const target = /** @type {!HTMLElement} */ (e.detail.target);
     this.$$('cr-action-menu').showAt(target);
@@ -240,8 +239,8 @@ Polymer({
         currArr.splice(newPrinterRemovedIdx, 1);
       }
 
-      this.visiblePrinterCounter_ = Math.max(
-          kMinVisiblePrinters, --this.visiblePrinterCounter_);
+      this.visiblePrinterCounter_ =
+          Math.max(kMinVisiblePrinters, --this.visiblePrinterCounter_);
     }
 
     this.set('newPrinters_', currArr);

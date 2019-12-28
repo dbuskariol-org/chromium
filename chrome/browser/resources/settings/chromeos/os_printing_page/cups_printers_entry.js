@@ -66,12 +66,12 @@ Polymer({
   },
 
   getSaveButtonAria_: function() {
-    return loadTimeData.getStringF('savePrinterAria',
-      this.printerEntry.printerInfo.printerName);
+    return loadTimeData.getStringF(
+        'savePrinterAria', this.printerEntry.printerInfo.printerName);
   },
 
   getSetupButtonAria_: function() {
-    return loadTimeData.getStringF('setupPrinterAria',
-      this.printerEntry.printerInfo.printerName);
+    return loadTimeData.getStringF(
+        'setupPrinterAria', this.printerEntry.printerInfo.printerName);
   },
 });

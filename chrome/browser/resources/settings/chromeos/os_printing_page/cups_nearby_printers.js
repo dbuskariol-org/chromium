@@ -11,9 +11,9 @@ Polymer({
 
   // ListPropertyUpdateBehavior is used in CupsPrintersEntryListBehavior.
   behaviors: [
-      CupsPrintersEntryListBehavior,
-      ListPropertyUpdateBehavior,
-      WebUIListenerBehavior,
+    CupsPrintersEntryListBehavior,
+    ListPropertyUpdateBehavior,
+    WebUIListenerBehavior,
   ],
 
   properties: {
@@ -63,9 +63,7 @@ Polymer({
     'query-discovered-printer': 'onQueryDiscoveredPrinter_',
   },
 
-  observers: [
-    'onSearchOrPrintersChanged_(nearbyPrinters.*, searchTerm)'
-  ],
+  observers: ['onSearchOrPrintersChanged_(nearbyPrinters.*, searchTerm)'],
 
   /**
    * Redoes the search whenever |searchTerm| or |nearbyPrinters| changes.
@@ -80,7 +78,7 @@ Polymer({
     const updatedPrinters = this.searchTerm ?
         this.nearbyPrinters.filter(
             item => settings.printing.matchesSearchTerm(
-                item.printerInfo,this.searchTerm)) :
+                item.printerInfo, this.searchTerm)) :
         this.nearbyPrinters.slice();
 
     updatedPrinters.sort(settings.printing.sortPrinters);
@@ -101,8 +99,8 @@ Polymer({
     settings.CupsPrintersBrowserProxyImpl.getInstance()
         .addDiscoveredPrinter(item.printerInfo.printerId)
         .then(
-            this.onAddNearbyPrintersSucceeded_.bind(this,
-                item.printerInfo.printerName),
+            this.onAddNearbyPrintersSucceeded_.bind(
+                this, item.printerInfo.printerName),
             this.onAddNearbyPrinterFailed_.bind(this));
   },
 
@@ -117,13 +115,13 @@ Polymer({
     // This is a workaround to ensure type safety on the params of the casted
     // function. We do this because the closure compiler does not work well with
     // rejected js promises.
-    const queryDiscoveredPrinterFailed = /** @type {!Function}) */(
+    const queryDiscoveredPrinterFailed = /** @type {!Function}) */ (
         this.onQueryDiscoveredPrinterFailed_.bind(this));
     settings.CupsPrintersBrowserProxyImpl.getInstance()
         .addDiscoveredPrinter(item.printerInfo.printerId)
         .then(
-            this.onQueryDiscoveredPrinterSucceeded_.bind(this,
-                item.printerInfo.printerName),
+            this.onQueryDiscoveredPrinterSucceeded_.bind(
+                this, item.printerInfo.printerName),
             queryDiscoveredPrinterFailed);
   },
 
@@ -139,7 +137,7 @@ Polymer({
 
     this.activePrinter =
         this.get(['nearbyPrinters', this.activePrinterListEntryIndex_])
-        .printerInfo;
+            .printerInfo;
   },
 
   /**
@@ -160,10 +158,10 @@ Polymer({
    * @private
    */
   onAddNearbyPrinterFailed_: function(printer) {
-    this.fire(
-        'show-cups-printer-toast',
-        {resultCode: PrinterSetupResult.PRINTER_UNREACHABLE,
-         printerName: printer.printerName});
+    this.fire('show-cups-printer-toast', {
+      resultCode: PrinterSetupResult.PRINTER_UNREACHABLE,
+      printerName: printer.printerName
+    });
   },
 
   /**
@@ -184,8 +182,9 @@ Polymer({
    * @private
    */
   onQueryDiscoveredPrinterFailed_: function(printer) {
-    this.fire('open-manufacturer-model-dialog-for-specified-printer',
-        {item: /** @type {CupsPrinterInfo} */(printer)});
+    this.fire(
+        'open-manufacturer-model-dialog-for-specified-printer',
+        {item: /** @type {CupsPrinterInfo} */ (printer)});
   },
 
   /**
