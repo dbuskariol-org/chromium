@@ -1817,14 +1817,6 @@ bool OverviewGrid::FitWindowRectsInBounds(
   return true;
 }
 
-std::vector<std::unique_ptr<OverviewItem>>::iterator
-OverviewGrid::GetOverviewItemIterContainingWindow(aura::Window* window) {
-  return std::find_if(window_list_.begin(), window_list_.end(),
-                      [window](std::unique_ptr<OverviewItem>& item) {
-                        return item->GetWindow() == window;
-                      });
-}
-
 size_t OverviewGrid::GetOverviewItemIndex(OverviewItem* item) const {
   auto iter = std::find_if(window_list_.begin(), window_list_.end(),
                            base::MatchesUniquePtr(item));
