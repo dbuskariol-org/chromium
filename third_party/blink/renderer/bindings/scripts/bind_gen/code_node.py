@@ -13,6 +13,7 @@ import copy
 from .codegen_accumulator import CodeGenAccumulator
 from .codegen_format import format_template
 from .mako_renderer import MakoRenderer
+from .mako_renderer import MakoTemplate
 
 
 class Likeliness(object):
@@ -135,7 +136,10 @@ class CodeNode(object):
         self._prev = None
 
         # Mako's template text, bindings dict
-        self._template_text = template_text
+        if template_text is None:
+            self._template = None
+        else:
+            self._template = MakoTemplate(template_text)
         self._template_vars = {}
 
         self._accumulator = None  # CodeGenAccumulator
@@ -189,10 +193,9 @@ class CodeNode(object):
 
         Only limited subclasses may override this method.
         """
-        assert self._template_text is not None
         return renderer.render(
             caller=self,
-            template_text=self._template_text,
+            template=self._template,
             template_vars=self.template_vars)
 
     @property
