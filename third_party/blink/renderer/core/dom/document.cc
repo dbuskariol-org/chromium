@@ -3035,12 +3035,14 @@ void Document::ApplyScrollRestorationLogic() {
   View()->InvokeFragmentAnchor();
 
   auto& frame_loader = GetFrame()->Loader();
-  auto& document_loader = *frame_loader.GetDocumentLoader();
+  auto* document_loader = frame_loader.GetDocumentLoader();
+  if (!document_loader)
+    return;
   if (frame_->IsLoading() &&
-      !FrameLoader::NeedsHistoryItemRestore(document_loader.LoadType()))
+      !FrameLoader::NeedsHistoryItemRestore(document_loader->LoadType()))
     return;
 
-  auto* history_item = frame_loader.GetDocumentLoader()->GetHistoryItem();
+  auto* history_item = document_loader->GetHistoryItem();
 
   if (!history_item || !history_item->GetViewState())
     return;
@@ -3062,7 +3064,7 @@ void Document::ApplyScrollRestorationLogic() {
       scroll_offset;
 
   bool can_restore_without_annoying_user =
-      !document_loader.GetInitialScrollState().was_scrolled_by_user &&
+      !document_loader->GetInitialScrollState().was_scrolled_by_user &&
       (can_restore_without_clamping || !frame_->IsLoading() ||
        !should_restore_scroll);
   if (!can_restore_without_annoying_user)
