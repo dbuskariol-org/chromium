@@ -6156,3 +6156,4 @@ crbug.com/1038139 [ Win ] virtual/gpu-rasterization/images/2-comp.html [ Pass Fa
 
 # Sheriff 2019-12-30
 crbug.com/1037798 [ Mac ] virtual/gpu-rasterization/images/exif-orientation-image-document.html [ Pass Failure ]
+crbug.com/1038354 fast/scroll-snap/snaps-after-scrollbar-scrolling.html [ Pass Failure ]
