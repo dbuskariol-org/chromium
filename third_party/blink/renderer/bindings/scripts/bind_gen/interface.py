@@ -1818,7 +1818,7 @@ def _make_property_entries_and_callback_defs(
     assert isinstance(operation_entries, list)
 
     interface = cg_context.interface
-    global_name = interface.extended_attributes.value_of("Global")
+    global_names = interface.extended_attributes.values_of("Global")
 
     callback_def_nodes = ListNode()
 
@@ -1826,7 +1826,7 @@ def _make_property_entries_and_callback_defs(
         for member in members:
             is_context_dependent = member.exposure.is_context_dependent
             exposure_conditional = expr_from_exposure(member.exposure,
-                                                      global_name)
+                                                      global_names)
 
             if "PerWorldBindings" in member.extended_attributes:
                 worlds = (CodeGenContext.MAIN_WORLD,
