@@ -4177,8 +4177,6 @@ bool LayerTreeHostImpl::ScrollAnimationCreateInternal(
     return false;
   }
 
-  scroll_tree.set_currently_scrolling_node(scroll_node->id);
-
   gfx::ScrollOffset current_offset =
       scroll_tree.current_scroll_offset(scroll_node->element_id);
   gfx::ScrollOffset target_offset = scroll_tree.ClampScrollOffsetToLimits(
@@ -5935,7 +5933,7 @@ bool LayerTreeHostImpl::ScrollAnimationUpdateTarget(
   gfx::Vector2dF scaled_delta =
       gfx::ScaleVector2d(scroll_delta, 1.f / scale_factor);
   bool animation_updated = mutator_host_->ImplOnlyScrollAnimationUpdateTarget(
-      scroll_node->element_id, scaled_delta,
+      scaled_delta,
       active_tree_->property_trees()->scroll_tree.MaxScrollOffset(
           scroll_node->id),
       CurrentBeginFrameArgs().frame_time, delayed_by);
