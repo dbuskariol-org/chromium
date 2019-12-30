@@ -5014,6 +5014,7 @@ crbug.com/851090 [ Linux ] virtual/mouseevent_fractional/fast/events/middleClick
 
 # Flaky timeout only on Mac 10.13.
 crbug.com/853360 [ Mac10.13 ] http/tests/misc/slow-loading-image-in-pattern.html [ Timeout Pass ]
+crbug.com/853360 [ Retina ] http/tests/misc/slow-loading-image-in-pattern.html [ Timeout Pass ]
 
 # Origin Policy: Skip tests that rely on --feature-enabled=OriginPolicy, so
 #   they can be run via virtual/origin-policy instead.
