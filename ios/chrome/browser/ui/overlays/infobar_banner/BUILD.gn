@@ -14,3 +14,52 @@ source_set("infobar_banner") {
 
   deps = []
 }
+
+source_set("common") {
+  sources = [
+    "infobar_banner_overlay_coordinator.h",
+    "infobar_banner_overlay_coordinator.mm",
+    "infobar_banner_overlay_mediator+consumer_support.h",
+    "infobar_banner_overlay_mediator.h",
+    "infobar_banner_overlay_mediator.mm",
+  ]
+
+  configs += [ "//build/config/compiler:enable_arc" ]
+
+  deps = [
+    "//base",
+    "//components/infobars/core",
+    "//ios/chrome/browser/overlays",
+    "//ios/chrome/browser/overlays/public/common/infobars",
+    "//ios/chrome/browser/overlays/public/infobar_banner",
+    "//ios/chrome/browser/ui/infobars/banners",
+    "//ios/chrome/browser/ui/infobars/banners:public",
+    "//ios/chrome/browser/ui/overlays:coordinators",
+  ]
+}
+
+source_set("unit_tests") {
+  testonly = true
+  sources = [
+    "infobar_banner_overlay_mediator_unittest.mm",
+  ]
+
+  configs += [ "//build/config/compiler:enable_arc" ]
+
+  deps = [
+    ":common",
+    "//components/infobars/core",
+    "//ios/chrome/browser/infobars/test",
+    "//ios/chrome/browser/overlays",
+    "//ios/chrome/browser/overlays/public/common/infobars",
+    "//ios/chrome/browser/overlays/public/infobar_banner",
+    "//ios/chrome/browser/ui/elements",
+    "//ios/chrome/browser/ui/infobars/banners",
+    "//ios/chrome/browser/ui/infobars/banners:public",
+    "//ios/chrome/browser/ui/infobars/banners/test",
+    "//ios/chrome/browser/ui/overlays/test",
+    "//testing/gtest",
+    "//third_party/ocmock",
+    "//ui/base",
+  ]
+}
