@@ -377,7 +377,12 @@ class TelemetryCommandGenerator(object):
 
   def _generate_reference_build_args(self):
     if self._is_reference:
-      return ['--browser=reference',
+      reference_browser_flag = '--browser=reference'
+      # TODO(crbug.com/1038137): Make the logic generic once more reference
+      # settings are added
+      if '--browser=android-chrome-bundle' in self._get_passthrough_args():
+        reference_browser_flag = '--browser=reference-android-chrome-bundle'
+      return [reference_browser_flag,
               '--max-failures=5']
     return []
 

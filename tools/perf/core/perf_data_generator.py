@@ -131,6 +131,9 @@ FYI_BUILDERS = {
     'tests': [
       {
         'isolate': 'performance_test_suite',
+        'extra_args': [
+           '--run-ref-build',
+        ],
       }
     ],
     'platform': 'android-chrome-bundle',
