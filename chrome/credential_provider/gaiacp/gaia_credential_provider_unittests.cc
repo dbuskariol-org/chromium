@@ -552,7 +552,13 @@ void GcpCredentialProviderWithADUsersTest::SetUp() {
   ASSERT_EQ(S_OK, SetGlobalFlagForTesting(L"enable_ad_association", 1));
 }
 
-TEST_P(GcpCredentialProviderWithADUsersTest, ReauthCredentialTest) {
+// TODO(crbug.com/1038351): Test fails on Windows.
+#if defined(OS_WIN)
+#define MAYBE_ReauthCredentialTest DISABLED_ReauthCredentialTest
+#else
+#define MAYBE_ReauthCredentialTest ReauthCredentialTest
+#endif
+TEST_P(GcpCredentialProviderWithADUsersTest, MAYBE_ReauthCredentialTest) {
   const bool has_user_id = std::get<0>(GetParam());
   const bool valid_token_handle = std::get<1>(GetParam());
   const bool is_ad_user = std::get<2>(GetParam());
