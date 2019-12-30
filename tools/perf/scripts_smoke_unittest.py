@@ -164,7 +164,9 @@ class ScriptsSmokeTest(unittest.TestCase):
   # ChromeOS: crbug.com/754913
   # Windows: crbug.com/1024767
   # Linux: crbug.com/1024767
-  @decorators.Disabled('chromeos', 'android', 'win', 'linux')
+  # all: Disabled everywhere because the smoke test shard map
+  # needed to be changed to fix crbug.com/1024767.
+  @decorators.Disabled('all')
   def testRunPerformanceTestsTelemetrySharded_end2end(self):
     tempdir = tempfile.mkdtemp()
     env = os.environ.copy()
