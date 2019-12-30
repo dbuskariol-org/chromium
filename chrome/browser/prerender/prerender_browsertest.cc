@@ -1977,13 +1977,6 @@ IN_PROC_BROWSER_TEST_F(PrerenderBrowserTest,
   NavigateToURLWithParams(params, false);
 }
 
-// Checks that the prerendering of a page is canceled correctly when the
-// prerendered page tries to make a second navigation entry.
-IN_PROC_BROWSER_TEST_F(PrerenderBrowserTest, PrerenderNewNavigationEntry) {
-  PrerenderTestURL("/prerender/prerender_new_entry.html",
-                   FINAL_STATUS_NEW_NAVIGATION_ENTRY, 1);
-}
-
 // Attempt a swap-in in a new tab. The session storage doesn't match, so it
 // should not swap.
 IN_PROC_BROWSER_TEST_F(PrerenderBrowserTest, PrerenderPageNewTab) {
