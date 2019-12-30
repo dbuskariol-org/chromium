@@ -107,15 +107,10 @@ void IconLabelBubbleView::SeparatorView::UpdateOpacity() {
     duration = kIconLabelBubbleFadeInDurationMs;
   }
 
-  if (disable_animation_for_test_) {
-    layer()->SetOpacity(opacity);
-  } else {
-    ui::ScopedLayerAnimationSettings animation(layer()->GetAnimator());
-    animation.SetTransitionDuration(
-        base::TimeDelta::FromMilliseconds(duration));
-    animation.SetTweenType(gfx::Tween::Type::EASE_IN);
-    layer()->SetOpacity(opacity);
-  }
+  ui::ScopedLayerAnimationSettings animation(layer()->GetAnimator());
+  animation.SetTransitionDuration(base::TimeDelta::FromMilliseconds(duration));
+  animation.SetTweenType(gfx::Tween::Type::EASE_IN);
+  layer()->SetOpacity(opacity);
 }
 
 //////////////////////////////////////////////////////////////////

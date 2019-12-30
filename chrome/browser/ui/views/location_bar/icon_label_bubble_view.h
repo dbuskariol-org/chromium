@@ -58,30 +58,6 @@ class IconLabelBubbleView : public views::InkDropObserver,
     virtual SkColor GetIconLabelBubbleInkDropColor() const;
   };
 
-  // A view that draws the separator.
-  class SeparatorView : public views::View {
-   public:
-    explicit SeparatorView(IconLabelBubbleView* owner);
-
-    // views::View:
-    void OnPaint(gfx::Canvas* canvas) override;
-
-    // Updates the opacity based on the ink drop's state.
-    void UpdateOpacity();
-
-    void set_disable_animation_for_test(bool disable_animation_for_test) {
-      disable_animation_for_test_ = disable_animation_for_test;
-    }
-
-   private:
-    // Weak.
-    IconLabelBubbleView* owner_;
-
-    bool disable_animation_for_test_ = false;
-
-    DISALLOW_COPY_AND_ASSIGN(SeparatorView);
-  };
-
   IconLabelBubbleView(const gfx::FontList& font_list, Delegate* delegate);
   ~IconLabelBubbleView() override;
 
@@ -103,7 +79,7 @@ class IconLabelBubbleView : public views::InkDropObserver,
   SkColor GetParentBackgroundColor() const;
 
   // Exposed for testing.
-  SeparatorView* separator_view() const { return separator_view_; }
+  views::View* separator_view() const { return separator_view_; }
 
   // Exposed for testing.
   bool is_animating_label() const { return slide_animation_.is_animating(); }
@@ -205,6 +181,24 @@ class IconLabelBubbleView : public views::InkDropObserver,
 
  private:
   class HighlightPathGenerator;
+
+  // A view that draws the separator.
+  class SeparatorView : public views::View {
+   public:
+    explicit SeparatorView(IconLabelBubbleView* owner);
+
+    // views::View:
+    void OnPaint(gfx::Canvas* canvas) override;
+
+    // Updates the opacity based on the ink drop's state.
+    void UpdateOpacity();
+
+   private:
+    // Weak.
+    IconLabelBubbleView* owner_;
+
+    DISALLOW_COPY_AND_ASSIGN(SeparatorView);
+  };
 
   // Spacing between the image and the label.
   int GetInternalSpacing() const;

@@ -11,6 +11,7 @@
 #include "chrome/test/views/chrome_views_test_base.h"
 #include "components/strings/grit/components_strings.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "ui/compositor/scoped_animation_duration_scale_mode.h"
 #include "ui/events/base_event_utils.h"
 #include "ui/events/gesture_detection/gesture_configuration.h"
 #include "ui/events/test/event_generator.h"
@@ -54,7 +55,6 @@ class TestIconLabelBubbleView : public IconLabelBubbleView {
         is_bubble_showing_(false) {
     GetImageView()->SetImageSize(gfx::Size(kImageSize, kImageSize));
     SetLabel(base::ASCIIToUTF16("Label"));
-    separator_view()->set_disable_animation_for_test(true);
   }
 
   void SetCurrentAnimationValue(int value) {
@@ -119,6 +119,9 @@ class TestIconLabelBubbleView : public IconLabelBubbleView {
   }
 
  private:
+  std::unique_ptr<ui::ScopedAnimationDurationScaleMode> zero_duration_mode_ =
+      std::make_unique<ui::ScopedAnimationDurationScaleMode>(
+          ui::ScopedAnimationDurationScaleMode::ZERO_DURATION);
   int value_;
   bool is_bubble_showing_;
   DISALLOW_COPY_AND_ASSIGN(TestIconLabelBubbleView);
