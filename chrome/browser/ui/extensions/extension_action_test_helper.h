@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_EXTENSIONS_BROWSER_ACTION_TEST_UTIL_H_
-#define CHROME_BROWSER_UI_EXTENSIONS_BROWSER_ACTION_TEST_UTIL_H_
+#ifndef CHROME_BROWSER_UI_EXTENSIONS_EXTENSION_ACTION_TEST_HELPER_H_
+#define CHROME_BROWSER_UI_EXTENSIONS_EXTENSION_ACTION_TEST_HELPER_H_
 
 #include <stddef.h>
 
@@ -22,16 +22,16 @@ class Image;
 class Size;
 }  // namespace gfx
 
-class BrowserActionTestUtil {
+class ExtensionActionTestHelper {
  public:
-  // Constructs a BrowserActionTestUtil which, if |is_real_window| is false,
+  // Constructs a ExtensionActionTestHelper which, if |is_real_window| is false,
   // will create its own browser actions container. This is useful in unit
   // tests, when the |browser|'s window doesn't create platform-specific views.
-  static std::unique_ptr<BrowserActionTestUtil> Create(
+  static std::unique_ptr<ExtensionActionTestHelper> Create(
       Browser* browser,
       bool is_real_window = true);
 
-  virtual ~BrowserActionTestUtil() {}
+  virtual ~ExtensionActionTestHelper() {}
 
   // Returns the number of browser action buttons in the window toolbar.
   virtual int NumberOfBrowserActions() = 0;
@@ -91,9 +91,9 @@ class BrowserActionTestUtil {
   // Returns the associated ExtensionsContainer.
   virtual ExtensionsContainer* GetExtensionsContainer() = 0;
 
-  // Creates and returns a BrowserActionTestUtil with an "overflow" container,
-  // with this object's container as the main bar.
-  virtual std::unique_ptr<BrowserActionTestUtil> CreateOverflowBar(
+  // Creates and returns a ExtensionActionTestHelper with an "overflow"
+  // container, with this object's container as the main bar.
+  virtual std::unique_ptr<ExtensionActionTestHelper> CreateOverflowBar(
       Browser* browser) = 0;
 
   // Returns the minimum allowed size of an extension popup.
@@ -109,10 +109,10 @@ class BrowserActionTestUtil {
   virtual bool CanBeResized() = 0;
 
  protected:
-  BrowserActionTestUtil() {}
+  ExtensionActionTestHelper() {}
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(BrowserActionTestUtil);
+  DISALLOW_COPY_AND_ASSIGN(ExtensionActionTestHelper);
 };
 
-#endif  // CHROME_BROWSER_UI_EXTENSIONS_BROWSER_ACTION_TEST_UTIL_H_
+#endif  // CHROME_BROWSER_UI_EXTENSIONS_EXTENSION_ACTION_TEST_HELPER_H_

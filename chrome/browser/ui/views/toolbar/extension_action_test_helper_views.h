@@ -2,23 +2,24 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_TOOLBAR_BROWSER_ACTION_TEST_UTIL_VIEWS_H_
-#define CHROME_BROWSER_UI_VIEWS_TOOLBAR_BROWSER_ACTION_TEST_UTIL_VIEWS_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_TOOLBAR_EXTENSION_ACTION_TEST_HELPER_VIEWS_H_
+#define CHROME_BROWSER_UI_VIEWS_TOOLBAR_EXTENSION_ACTION_TEST_HELPER_VIEWS_H_
 
 #include <memory>
 
-#include "chrome/browser/ui/extensions/browser_action_test_util.h"
+#include "chrome/browser/ui/extensions/extension_action_test_helper.h"
 
 class BrowserActionsContainer;
 
-class BrowserActionTestUtilViews : public BrowserActionTestUtil {
+class ExtensionActionTestHelperViews : public ExtensionActionTestHelper {
  public:
-  BrowserActionTestUtilViews(const BrowserActionTestUtilViews&) = delete;
-  BrowserActionTestUtilViews& operator=(const BrowserActionTestUtilViews&) =
+  ExtensionActionTestHelperViews(const ExtensionActionTestHelperViews&) =
       delete;
-  ~BrowserActionTestUtilViews() override;
+  ExtensionActionTestHelperViews& operator=(
+      const ExtensionActionTestHelperViews&) = delete;
+  ~ExtensionActionTestHelperViews() override;
 
-  // BrowserActionTestUtil:
+  // ExtensionActionTestHelper:
   int NumberOfBrowserActions() override;
   int VisibleBrowserActions() override;
   void InspectPopup(int index) override;
@@ -35,7 +36,7 @@ class BrowserActionTestUtilViews : public BrowserActionTestUtil {
   void SetWidth(int width) override;
   ToolbarActionsBar* GetToolbarActionsBar() override;
   ExtensionsContainer* GetExtensionsContainer() override;
-  std::unique_ptr<BrowserActionTestUtil> CreateOverflowBar(
+  std::unique_ptr<ExtensionActionTestHelper> CreateOverflowBar(
       Browser* browser) override;
   gfx::Size GetMinPopupSize() override;
   gfx::Size GetMaxPopupSize() override;
@@ -43,17 +44,17 @@ class BrowserActionTestUtilViews : public BrowserActionTestUtil {
   bool CanBeResized() override;
 
  private:
-  friend class BrowserActionTestUtil;
+  friend class ExtensionActionTestHelper;
 
   class TestToolbarActionsBarHelper;
 
-  // Constructs a version of BrowserActionTestUtilViews that does not own the
-  // BrowserActionsContainer it tests.
-  explicit BrowserActionTestUtilViews(
+  // Constructs a version of ExtensionActionTestHelperViews that does not own
+  // the BrowserActionsContainer it tests.
+  explicit ExtensionActionTestHelperViews(
       BrowserActionsContainer* browser_actions_container);
-  // Constructs a version of BrowserActionTestUtilViews given a |test_helper|
-  // responsible for owning the BrowserActionsContainer.
-  explicit BrowserActionTestUtilViews(
+  // Constructs a version of ExtensionActionTestHelperViews given a
+  // |test_helper| responsible for owning the BrowserActionsContainer.
+  explicit ExtensionActionTestHelperViews(
       std::unique_ptr<TestToolbarActionsBarHelper> test_helper);
 
   std::unique_ptr<TestToolbarActionsBarHelper> test_helper_;
@@ -62,4 +63,4 @@ class BrowserActionTestUtilViews : public BrowserActionTestUtil {
   BrowserActionsContainer* const browser_actions_container_;
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_TOOLBAR_BROWSER_ACTION_TEST_UTIL_VIEWS_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_TOOLBAR_EXTENSION_ACTION_TEST_HELPER_VIEWS_H_

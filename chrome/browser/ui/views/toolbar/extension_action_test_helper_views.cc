@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/extensions/browser_action_test_util.h"
+#include "chrome/browser/ui/extensions/extension_action_test_helper.h"
 
 #include <stddef.h>
 
@@ -16,8 +16,8 @@
 #include "chrome/browser/ui/views/extensions/extension_popup.h"
 #include "chrome/browser/ui/views/extensions/extensions_menu_test_util.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
-#include "chrome/browser/ui/views/toolbar/browser_action_test_util_views.h"
 #include "chrome/browser/ui/views/toolbar/browser_actions_container.h"
+#include "chrome/browser/ui/views/toolbar/extension_action_test_helper_views.h"
 #include "chrome/browser/ui/views/toolbar/toolbar_action_view.h"
 #include "chrome/browser/ui/views/toolbar/toolbar_view.h"
 #include "ui/gfx/geometry/rect.h"
@@ -29,7 +29,7 @@
 // A helper class that owns an instance of a BrowserActionsContainer; this is
 // used when testing without an associated browser window, or if this is for
 // the overflow version of the bar.
-class BrowserActionTestUtilViews::TestToolbarActionsBarHelper
+class ExtensionActionTestHelperViews::TestToolbarActionsBarHelper
     : public BrowserActionsContainer::Delegate {
  public:
   TestToolbarActionsBarHelper(Browser* browser,
@@ -71,117 +71,117 @@ class BrowserActionTestUtilViews::TestToolbarActionsBarHelper
   views::ResizeAwareParentView container_parent_;
 };
 
-BrowserActionTestUtilViews::~BrowserActionTestUtilViews() = default;
+ExtensionActionTestHelperViews::~ExtensionActionTestHelperViews() = default;
 
-int BrowserActionTestUtilViews::NumberOfBrowserActions() {
+int ExtensionActionTestHelperViews::NumberOfBrowserActions() {
   return browser_actions_container_->num_toolbar_actions();
 }
 
-int BrowserActionTestUtilViews::VisibleBrowserActions() {
+int ExtensionActionTestHelperViews::VisibleBrowserActions() {
   return browser_actions_container_->VisibleBrowserActions();
 }
 
-void BrowserActionTestUtilViews::InspectPopup(int index) {
+void ExtensionActionTestHelperViews::InspectPopup(int index) {
   ToolbarActionView* view =
       browser_actions_container_->GetToolbarActionViewAt(index);
-  static_cast<ExtensionActionViewController*>(view->view_controller())->
-      InspectPopup();
+  static_cast<ExtensionActionViewController*>(view->view_controller())
+      ->InspectPopup();
 }
 
-bool BrowserActionTestUtilViews::HasIcon(int index) {
+bool ExtensionActionTestHelperViews::HasIcon(int index) {
   return !browser_actions_container_->GetToolbarActionViewAt(index)
               ->GetImage(views::Button::STATE_NORMAL)
               .isNull();
 }
 
-gfx::Image BrowserActionTestUtilViews::GetIcon(int index) {
+gfx::Image ExtensionActionTestHelperViews::GetIcon(int index) {
   gfx::ImageSkia icon =
       browser_actions_container_->GetToolbarActionViewAt(index)
           ->GetIconForTest();
   return gfx::Image(icon);
 }
 
-void BrowserActionTestUtilViews::Press(int index) {
+void ExtensionActionTestHelperViews::Press(int index) {
   browser_actions_container_->GetToolbarActionViewAt(index)
       ->view_controller()
       ->ExecuteAction(true);
 }
 
-std::string BrowserActionTestUtilViews::GetExtensionId(int index) {
+std::string ExtensionActionTestHelperViews::GetExtensionId(int index) {
   return browser_actions_container_->GetToolbarActionViewAt(index)
       ->view_controller()
       ->GetId();
 }
 
-std::string BrowserActionTestUtilViews::GetTooltip(int index) {
+std::string ExtensionActionTestHelperViews::GetTooltip(int index) {
   base::string16 tooltip =
       browser_actions_container_->GetToolbarActionViewAt(index)->GetTooltipText(
           gfx::Point());
   return base::UTF16ToUTF8(tooltip);
 }
 
-gfx::NativeView BrowserActionTestUtilViews::GetPopupNativeView() {
+gfx::NativeView ExtensionActionTestHelperViews::GetPopupNativeView() {
   ToolbarActionViewController* popup_owner =
       GetToolbarActionsBar()->popup_owner();
   return popup_owner ? popup_owner->GetPopupNativeView() : nullptr;
 }
 
-bool BrowserActionTestUtilViews::HasPopup() {
+bool ExtensionActionTestHelperViews::HasPopup() {
   return GetPopupNativeView() != nullptr;
 }
 
-gfx::Size BrowserActionTestUtilViews::GetPopupSize() {
+gfx::Size ExtensionActionTestHelperViews::GetPopupSize() {
   gfx::NativeView popup = GetPopupNativeView();
   views::Widget* widget = views::Widget::GetWidgetForNativeView(popup);
   return widget->GetWindowBoundsInScreen().size();
 }
 
-bool BrowserActionTestUtilViews::HidePopup() {
+bool ExtensionActionTestHelperViews::HidePopup() {
   GetToolbarActionsBar()->HideActivePopup();
   return !HasPopup();
 }
 
-bool BrowserActionTestUtilViews::ActionButtonWantsToRun(size_t index) {
+bool ExtensionActionTestHelperViews::ActionButtonWantsToRun(size_t index) {
   return browser_actions_container_->GetToolbarActionViewAt(index)
       ->wants_to_run_for_testing();
 }
 
-void BrowserActionTestUtilViews::SetWidth(int width) {
+void ExtensionActionTestHelperViews::SetWidth(int width) {
   browser_actions_container_->SetSize(
       gfx::Size(width, browser_actions_container_->height()));
 }
 
-ToolbarActionsBar* BrowserActionTestUtilViews::GetToolbarActionsBar() {
+ToolbarActionsBar* ExtensionActionTestHelperViews::GetToolbarActionsBar() {
   return browser_actions_container_->toolbar_actions_bar();
 }
 
-ExtensionsContainer* BrowserActionTestUtilViews::GetExtensionsContainer() {
+ExtensionsContainer* ExtensionActionTestHelperViews::GetExtensionsContainer() {
   return GetToolbarActionsBar();
 }
 
-std::unique_ptr<BrowserActionTestUtil>
-BrowserActionTestUtilViews::CreateOverflowBar(Browser* browser) {
+std::unique_ptr<ExtensionActionTestHelper>
+ExtensionActionTestHelperViews::CreateOverflowBar(Browser* browser) {
   CHECK(!GetToolbarActionsBar()->in_overflow_mode())
       << "Only a main bar can create an overflow bar!";
 
-  return base::WrapUnique(new BrowserActionTestUtilViews(
+  return base::WrapUnique(new ExtensionActionTestHelperViews(
       std::make_unique<TestToolbarActionsBarHelper>(
           browser, browser_actions_container_)));
 }
 
-gfx::Size BrowserActionTestUtilViews::GetMinPopupSize() {
+gfx::Size ExtensionActionTestHelperViews::GetMinPopupSize() {
   return gfx::Size(ExtensionPopup::kMinWidth, ExtensionPopup::kMinHeight);
 }
 
-gfx::Size BrowserActionTestUtilViews::GetMaxPopupSize() {
+gfx::Size ExtensionActionTestHelperViews::GetMaxPopupSize() {
   return gfx::Size(ExtensionPopup::kMaxWidth, ExtensionPopup::kMaxHeight);
 }
 
-gfx::Size BrowserActionTestUtilViews::GetToolbarActionSize() {
+gfx::Size ExtensionActionTestHelperViews::GetToolbarActionSize() {
   return GetToolbarActionsBar()->GetViewSize();
 }
 
-bool BrowserActionTestUtilViews::CanBeResized() {
+bool ExtensionActionTestHelperViews::CanBeResized() {
   // The container can only be resized if we can start a drag for the view.
   DCHECK_LE(1u, browser_actions_container_->num_toolbar_actions());
   ToolbarActionView* action_view =
@@ -191,38 +191,40 @@ bool BrowserActionTestUtilViews::CanBeResized() {
                                                          point);
 }
 
-BrowserActionTestUtilViews::BrowserActionTestUtilViews(
+ExtensionActionTestHelperViews::ExtensionActionTestHelperViews(
     BrowserActionsContainer* browser_actions_container)
     : browser_actions_container_(browser_actions_container) {}
 
-BrowserActionTestUtilViews::BrowserActionTestUtilViews(
+ExtensionActionTestHelperViews::ExtensionActionTestHelperViews(
     std::unique_ptr<TestToolbarActionsBarHelper> test_helper)
     : test_helper_(std::move(test_helper)),
       browser_actions_container_(test_helper_->browser_actions_container()) {}
 
 // static
-std::unique_ptr<BrowserActionTestUtil> BrowserActionTestUtil::Create(
+std::unique_ptr<ExtensionActionTestHelper> ExtensionActionTestHelper::Create(
     Browser* browser,
     bool is_real_window) {
   // If the ExtensionsMenu is enabled, then use a separate implementation of
-  // the BrowserActionTestUtil.
+  // the ExtensionActionTestHelper.
   if (base::FeatureList::IsEnabled(features::kExtensionsToolbarMenu))
     return std::make_unique<ExtensionsMenuTestUtil>(browser, is_real_window);
 
-  std::unique_ptr<BrowserActionTestUtil> browser_action_test_util;
+  std::unique_ptr<ExtensionActionTestHelper> browser_action_test_util;
 
   if (is_real_window) {
-    browser_action_test_util = base::WrapUnique(new BrowserActionTestUtilViews(
-        BrowserView::GetBrowserViewForBrowser(browser)
-            ->toolbar()
-            ->browser_actions()));
+    browser_action_test_util =
+        base::WrapUnique(new ExtensionActionTestHelperViews(
+            BrowserView::GetBrowserViewForBrowser(browser)
+                ->toolbar()
+                ->browser_actions()));
   } else {
     // This is the main bar.
     BrowserActionsContainer* main_bar = nullptr;
-    browser_action_test_util = base::WrapUnique(new BrowserActionTestUtilViews(
-        std::make_unique<
-            BrowserActionTestUtilViews::TestToolbarActionsBarHelper>(
-            browser, main_bar)));
+    browser_action_test_util =
+        base::WrapUnique(new ExtensionActionTestHelperViews(
+            std::make_unique<
+                ExtensionActionTestHelperViews::TestToolbarActionsBarHelper>(
+                browser, main_bar)));
   }
 
   return browser_action_test_util;
