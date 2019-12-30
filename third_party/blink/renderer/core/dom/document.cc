@@ -3069,11 +3069,7 @@ void Document::ApplyScrollRestorationLogic() {
     return;
 
   frame_loader.RestoreScrollPositionAndViewState();
-  if (View()->GetScrollableArea()->ApplyPendingHistoryRestoreScrollOffset()) {
-    if (ScrollingCoordinator* scrolling_coordinator =
-            View()->GetFrame().GetPage()->GetScrollingCoordinator())
-      scrolling_coordinator->FrameViewRootLayerDidChange(View());
-  }
+  View()->GetScrollableArea()->ApplyPendingHistoryRestoreScrollOffset();
 }
 
 void Document::UpdateStyleAndLayout(ForcedLayoutStatus status) {
