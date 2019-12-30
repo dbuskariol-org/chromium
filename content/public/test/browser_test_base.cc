@@ -38,6 +38,7 @@
 #include "content/browser/scheduler/browser_task_executor.h"
 #include "content/browser/startup_data_impl.h"
 #include "content/browser/startup_helper.h"
+#include "content/browser/storage_partition_impl.h"
 #include "content/browser/tracing/memory_instrumentation_util.h"
 #include "content/browser/tracing/tracing_controller_impl.h"
 #include "content/public/app/content_main.h"
@@ -216,6 +217,16 @@ BrowserTestBase::~BrowserTestBase() {
 
 void BrowserTestBase::SetUp() {
   set_up_called_ = true;
+
+  if (!UseProductionQuotaSettings()) {
+    // By default use hardcoded quota settings to have a consistent testing
+    // environment.
+    const int kQuota = 5 * 1024 * 1024;
+    quota_settings_ =
+        std::make_unique<storage::QuotaSettings>(kQuota * 5, kQuota, 0, 0);
+    StoragePartitionImpl::SetDefaultQuotaSettingsForTesting(
+        quota_settings_.get());
+  }
 
   base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
 
@@ -515,10 +526,16 @@ void BrowserTestBase::TearDown() {
   ui::test::EventGeneratorDelegate::SetFactoryFunction(
       ui::test::EventGeneratorDelegate::FactoryFunction());
 #endif
+
+  StoragePartitionImpl::SetDefaultQuotaSettingsForTesting(nullptr);
 }
 
 bool BrowserTestBase::AllowFileAccessFromFiles() {
   return true;
+}
+
+bool BrowserTestBase::UseProductionQuotaSettings() {
+  return false;
 }
 
 void BrowserTestBase::SimulateNetworkServiceCrash() {
