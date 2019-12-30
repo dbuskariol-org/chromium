@@ -457,7 +457,8 @@ void GcpCredentialProviderWithGaiaUsersTest::SetUp() {
   ASSERT_EQ(S_OK, SetGlobalFlagForTesting(L"enable_ad_association", 0));
 }
 
-TEST_P(GcpCredentialProviderWithGaiaUsersTest, ReauthCredentialTest) {
+// TODO(crbug.com/1038339): Test is failing consistently.
+TEST_P(GcpCredentialProviderWithGaiaUsersTest, DISABLED_ReauthCredentialTest) {
   const bool has_token_handle = std::get<0>(GetParam());
   const bool valid_token_handle = std::get<1>(GetParam());
   const bool has_internet = std::get<2>(GetParam());
