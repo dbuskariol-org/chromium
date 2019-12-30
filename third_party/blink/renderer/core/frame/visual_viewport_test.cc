@@ -2688,11 +2688,6 @@ TEST_P(VisualViewportTest, PaintScrollbar) {
 // When a pinch-zoom occurs, the viewport scale and translation nodes can be
 // directly updated without a PaintArtifactCompositor update.
 TEST_P(VisualViewportTest, DirectPinchZoomPropertyUpdate) {
-  // TODO(crbug.com/953322): Implement this optimization for
-  // CompositeAfterPaint.
-  if (RuntimeEnabledFeatures::CompositeAfterPaintEnabled())
-    return;
-
   InitializeWithAndroidSettings();
 
   RegisterMockedHttpURLLoad("200-by-800-viewport.html");
