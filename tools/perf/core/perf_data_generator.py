@@ -570,6 +570,14 @@ BUILDERS = {
         'num_shards': 1,
         'type': TEST_TYPES.GTEST,
       },
+      {
+        'isolate': 'dawn_perf_tests',
+        'num_shards': 1,
+        'type': TEST_TYPES.GTEST,
+        'extra_args': [
+            '--shard-timeout=300'
+        ],
+      },
     ],
     'platform': 'win',
     'target_bits': 64,
@@ -881,6 +889,10 @@ GTEST_BENCHMARKS = {
     'views_perftests': BenchmarkMetadata(
         'tapted@chromium.org', 'Internals>Views'),
     'components_perftests': BenchmarkMetadata('csharrison@chromium.org'),
+    'dawn_perf_tests': BenchmarkMetadata(
+        'enga@chromium.org, chrome-gpu-perf-owners@chromium.org',
+        'Internals>GPU>Dawn',
+        'https://dawn.googlesource.com/dawn/+/HEAD/src/tests/perf_tests/README.md'),
 }
 
 
