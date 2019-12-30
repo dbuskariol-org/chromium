@@ -1660,6 +1660,7 @@ TEST_F(LayerTreeHostImplTest, ScrollSnapAfterAnimatedScroll) {
 
   EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD,
             host_impl_->ScrollAnimated(pointer_position, delta).thread);
+  host_impl_->ScrollEnd();
 
   EXPECT_EQ(overflow->scroll_tree_index(),
             host_impl_->CurrentlyScrollingNode()->id);
@@ -11032,6 +11033,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimated) {
     EXPECT_EQ(
         InputHandler::SCROLL_ON_IMPL_THREAD,
         host_impl_->ScrollAnimated(gfx::Point(), gfx::Vector2d(0, 50)).thread);
+    host_impl_->ScrollEnd();
 
     EXPECT_EQ(0, set_needs_commit_count);
     EXPECT_EQ(1, set_needs_redraw_count);
@@ -11233,6 +11235,8 @@ TEST_F(LayerTreeHostImplTest, SecondScrollAnimatedBeginNotIgnored) {
                 ->ScrollAnimatedBegin(
                     BeginState(gfx::Point(), gfx::Vector2dF(0, 10)).get())
                 .thread);
+
+  host_impl_->ScrollEnd();
 
   // The second ScrollAnimatedBegin should not get ignored.
   EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD,
@@ -11473,6 +11477,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimated) {
   EXPECT_EQ(
       InputHandler::SCROLL_ON_IMPL_THREAD,
       host_impl_->ScrollAnimated(gfx::Point(), gfx::Vector2d(0, 50)).thread);
+  host_impl_->ScrollEnd();
   host_impl_->DidFinishImplFrame();
 
   begin_frame_args.frame_time =
@@ -11734,8 +11739,13 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedNotUserScrollable) {
 
   EXPECT_VECTOR_EQ(gfx::ScrollOffset(0, 100),
                    scrolling_layer->CurrentScrollOffset());
-  EXPECT_EQ(nullptr, host_impl_->CurrentlyScrollingNode());
+  // The CurrentlyScrollingNode shouldn't be cleared until a GestureScrollEnd.
+  EXPECT_EQ(scrolling_layer->scroll_tree_index(),
+            host_impl_->CurrentlyScrollingNode()->id);
   host_impl_->DidFinishImplFrame();
+
+  host_impl_->ScrollEnd();
+  EXPECT_EQ(nullptr, host_impl_->CurrentlyScrollingNode());
 }
 
 // Test that smooth scrolls clamp correctly when bounds change mid-animation.
