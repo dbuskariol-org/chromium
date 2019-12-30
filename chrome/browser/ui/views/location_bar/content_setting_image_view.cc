@@ -177,11 +177,6 @@ void ContentSettingImageView::OnThemeChanged() {
   IconLabelBubbleView::OnThemeChanged();
 }
 
-SkColor ContentSettingImageView::GetTextColor() const {
-  return GetNativeTheme()->GetSystemColor(
-      ui::NativeTheme::kColorId_TextfieldDefaultColor);
-}
-
 bool ContentSettingImageView::ShouldShowSeparator() const {
   return false;
 }
@@ -239,7 +234,7 @@ void ContentSettingImageView::UpdateImage() {
   SetImage(content_setting_image_model_
                ->GetIcon(icon_color_ ? icon_color_.value()
                                      : color_utils::DeriveDefaultIconColor(
-                                           GetTextColor()))
+                                           GetForegroundColor()))
                .AsImageSkia());
 }
 

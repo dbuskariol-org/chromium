@@ -67,7 +67,7 @@ class LocationIconView : public IconLabelBubbleView {
   gfx::Size GetMinimumSize() const override;
   bool OnMousePressed(const ui::MouseEvent& event) override;
   bool OnMouseDragged(const ui::MouseEvent& event) override;
-  SkColor GetTextColor() const override;
+  SkColor GetForegroundColor() const override;
   bool ShouldShowSeparator() const override;
   bool ShowBubble(const ui::Event& event) override;
   void GetAccessibleNodeData(ui::AXNodeData* node_data) override;

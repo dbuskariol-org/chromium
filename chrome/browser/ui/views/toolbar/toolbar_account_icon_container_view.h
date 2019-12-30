@@ -31,6 +31,7 @@ class ToolbarAccountIconContainerView : public ToolbarIconContainerView,
   void UpdateAllIcons() override;
 
   // IconLabelBubbleView::Delegate:
+  SkColor GetIconLabelBubbleSurroundingForegroundColor() const override;
   SkColor GetIconLabelBubbleInkDropColor() const override;
 
   // PageActionIconView::Delegate:

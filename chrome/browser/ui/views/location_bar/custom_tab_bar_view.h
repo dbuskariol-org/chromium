@@ -62,7 +62,7 @@ class CustomTabBarView : public views::AccessiblePaneView,
   void ChildPreferredSizeChanged(views::View* child) override;
 
   // IconLabelBubbleView::Delegate:
-  SkColor GetIconLabelBubbleInkDropColor() const override;
+  SkColor GetIconLabelBubbleSurroundingForegroundColor() const override;
 
   // LocationIconView::Delegate:
   content::WebContents* GetWebContents() override;

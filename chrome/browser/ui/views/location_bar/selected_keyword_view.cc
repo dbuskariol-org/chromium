@@ -37,14 +37,14 @@ SelectedKeywordView::~SelectedKeywordView() {}
 void SelectedKeywordView::ResetImage() {
   SetImage(gfx::CreateVectorIcon(vector_icons::kSearchIcon,
                                  GetLayoutConstant(LOCATION_BAR_ICON_SIZE),
-                                 GetTextColor()));
+                                 GetForegroundColor()));
 }
 
 void SelectedKeywordView::OnBoundsChanged(const gfx::Rect& previous_bounds) {
   SetLabelForCurrentWidth();
 }
 
-SkColor SelectedKeywordView::GetTextColor() const {
+SkColor SelectedKeywordView::GetForegroundColor() const {
   return location_bar_->GetColor(OmniboxPart::LOCATION_BAR_SELECTED_KEYWORD);
 }
 

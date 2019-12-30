@@ -188,7 +188,7 @@ class LocationBarView : public LocationBar,
   content::WebContents* GetWebContents() override;
 
   // IconLabelBubbleView::Delegate:
-  SkColor GetIconLabelBubbleInkDropColor() const override;
+  SkColor GetIconLabelBubbleSurroundingForegroundColor() const override;
 
   // ContentSettingImageView::Delegate:
   content::WebContents* GetContentSettingWebContents() override;

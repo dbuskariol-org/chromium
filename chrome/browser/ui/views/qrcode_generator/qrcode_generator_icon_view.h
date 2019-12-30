@@ -25,7 +25,7 @@ class QRCodeGeneratorIconView : public PageActionIconView {
   // PageActionIconView:
   views::BubbleDialogDelegateView* GetBubble() const override;
   void UpdateImpl() override;
-  SkColor GetTextColor() const override;
+  SkColor GetForegroundColor() const override;
   base::string16 GetTextForTooltipAndAccessibleName() const override;
 
  protected:

@@ -692,7 +692,7 @@ WebContents* LocationBarView::GetWebContents() {
 ////////////////////////////////////////////////////////////////////////////////
 // LocationBarView, public IconLabelBubbleView::Delegate implementation:
 
-SkColor LocationBarView::GetIconLabelBubbleInkDropColor() const {
+SkColor LocationBarView::GetIconLabelBubbleSurroundingForegroundColor() const {
   return GetNativeTheme()->GetSystemColor(
       ui::NativeTheme::kColorId_TextfieldDefaultColor);
 }

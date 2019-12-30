@@ -53,6 +53,10 @@ constexpr int kIconLabelBubbleFadeOutDurationMs = 175;
 
 }  // namespace
 
+SkColor IconLabelBubbleView::Delegate::GetIconLabelBubbleInkDropColor() const {
+  return GetIconLabelBubbleSurroundingForegroundColor();
+}
+
 //////////////////////////////////////////////////////////////////
 // SeparatorView class
 
@@ -200,6 +204,10 @@ void IconLabelBubbleView::SetFontList(const gfx::FontList& font_list) {
   label()->SetFontList(font_list);
 }
 
+SkColor IconLabelBubbleView::GetForegroundColor() const {
+  return delegate_->GetIconLabelBubbleSurroundingForegroundColor();
+}
+
 SkColor IconLabelBubbleView::GetParentBackgroundColor() const {
   return GetNativeTheme()->GetSystemColor(
       ui::NativeTheme::kColorId_TextfieldDefaultBackground);
@@ -314,7 +322,7 @@ void IconLabelBubbleView::OnThemeChanged() {
   // under certain conditions. We don't want that, so unset the background.
   label()->SetBackground(nullptr);
 
-  SetEnabledTextColors(GetTextColor());
+  SetEnabledTextColors(GetForegroundColor());
   label()->SetBackgroundColor(GetParentBackgroundColor());
   SchedulePaint();
 }

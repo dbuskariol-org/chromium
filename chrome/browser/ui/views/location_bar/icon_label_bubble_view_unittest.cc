@@ -86,8 +86,6 @@ class TestIconLabelBubbleView : public IconLabelBubbleView {
 
  protected:
   // IconLabelBubbleView:
-  SkColor GetTextColor() const override { return kTestColor; }
-
   bool ShouldShowLabel() const override {
     return !IsShrinking() ||
            (width() >
@@ -132,7 +130,9 @@ class IconLabelBubbleViewTestBase : public ChromeViewsTestBase,
                                     public IconLabelBubbleView::Delegate {
  public:
   // IconLabelBubbleView::Delegate:
-  SkColor GetIconLabelBubbleInkDropColor() const override { return kTestColor; }
+  SkColor GetIconLabelBubbleSurroundingForegroundColor() const override {
+    return kTestColor;
+  }
 };
 
 class IconLabelBubbleViewTest : public IconLabelBubbleViewTestBase {

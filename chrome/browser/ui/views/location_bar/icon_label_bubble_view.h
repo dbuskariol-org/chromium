@@ -48,8 +48,14 @@ class IconLabelBubbleView : public views::InkDropObserver,
 
   class Delegate {
    public:
-    // Returns the base color for ink drops.
-    virtual SkColor GetIconLabelBubbleInkDropColor() const = 0;
+    // Returns the foreground color of items around the IconLabelBubbleView,
+    // e.g. nearby text items.  By default, the IconLabelBubbleView will use
+    // this as its foreground color and ink drop base color.
+    virtual SkColor GetIconLabelBubbleSurroundingForegroundColor() const = 0;
+
+    // Returns the base color for ink drops.  If not overridden, this returns
+    // GetIconLabelBubbleSurroundingForegroundColor().
+    virtual SkColor GetIconLabelBubbleInkDropColor() const;
   };
 
   // A view that draws the separator.
@@ -117,8 +123,8 @@ class IconLabelBubbleView : public views::InkDropObserver,
  protected:
   static constexpr int kOpenTimeMS = 150;
 
-  // Gets the color for displaying text.
-  virtual SkColor GetTextColor() const = 0;
+  // Gets the color for displaying text and/or icons.
+  virtual SkColor GetForegroundColor() const;
 
   // Returns true when the separator should be visible.
   virtual bool ShouldShowSeparator() const;

@@ -61,7 +61,7 @@ bool LocationIconView::OnMouseDragged(const ui::MouseEvent& event) {
   return IconLabelBubbleView::OnMouseDragged(event);
 }
 
-SkColor LocationIconView::GetTextColor() const {
+SkColor LocationIconView::GetForegroundColor() const {
   SecurityLevel security_level = SecurityLevel::NONE;
   if (!delegate_->IsEditingOrEmpty())
     security_level = delegate_->GetLocationBarModel()->GetSecurityLevel();

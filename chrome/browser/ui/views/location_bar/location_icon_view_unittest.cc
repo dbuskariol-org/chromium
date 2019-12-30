@@ -19,7 +19,7 @@ class TestLocationIconDelegate : public IconLabelBubbleView::Delegate,
   virtual ~TestLocationIconDelegate() = default;
 
   // IconLabelBubbleView::Delegate:
-  SkColor GetIconLabelBubbleInkDropColor() const override {
+  SkColor GetIconLabelBubbleSurroundingForegroundColor() const override {
     return SK_ColorBLACK;
   }
 

@@ -473,8 +473,9 @@ class WebAppFrameToolbarView::ToolbarButtonContainer
   }
 
   // IconLabelBubbleView::Delegate:
-  SkColor GetIconLabelBubbleInkDropColor() const override {
-    return icon_color_;
+  SkColor GetIconLabelBubbleSurroundingForegroundColor() const override {
+    return GetNativeTheme()->GetSystemColor(
+        ui::NativeTheme::kColorId_TextfieldDefaultColor);
   }
 
   // ContentSettingImageView::Delegate:

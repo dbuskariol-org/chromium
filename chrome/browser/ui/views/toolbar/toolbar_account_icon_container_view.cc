@@ -65,6 +65,13 @@ void ToolbarAccountIconContainerView::UpdateAllIcons() {
   avatar_->UpdateIcon();
 }
 
+SkColor
+ToolbarAccountIconContainerView::GetIconLabelBubbleSurroundingForegroundColor()
+    const {
+  return GetNativeTheme()->GetSystemColor(
+      ui::NativeTheme::kColorId_TextfieldDefaultColor);
+}
+
 SkColor ToolbarAccountIconContainerView::GetIconLabelBubbleInkDropColor()
     const {
   return GetToolbarInkDropBaseColor(this);

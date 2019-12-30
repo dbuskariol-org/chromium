@@ -349,7 +349,7 @@ void CustomTabBarView::ExecuteCommand(int command_id, int event_flags) {
   }
 }
 
-SkColor CustomTabBarView::GetIconLabelBubbleInkDropColor() const {
+SkColor CustomTabBarView::GetIconLabelBubbleSurroundingForegroundColor() const {
   return GetNativeTheme()->GetSystemColor(
       ui::NativeTheme::kColorId_TextfieldDefaultColor);
 }
