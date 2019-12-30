@@ -22,7 +22,7 @@
 SelectedKeywordView::SelectedKeywordView(LocationBarView* location_bar,
                                          const gfx::FontList& font_list,
                                          Profile* profile)
-    : IconLabelBubbleView(font_list),
+    : IconLabelBubbleView(font_list, location_bar),
       location_bar_(location_bar),
       profile_(profile) {
   full_label_.SetFontList(font_list);
@@ -46,10 +46,6 @@ void SelectedKeywordView::OnBoundsChanged(const gfx::Rect& previous_bounds) {
 
 SkColor SelectedKeywordView::GetTextColor() const {
   return location_bar_->GetColor(OmniboxPart::LOCATION_BAR_SELECTED_KEYWORD);
-}
-
-SkColor SelectedKeywordView::GetInkDropBaseColor() const {
-  return location_bar_->GetLocationIconInkDropColor();
 }
 
 gfx::Size SelectedKeywordView::CalculatePreferredSize() const {

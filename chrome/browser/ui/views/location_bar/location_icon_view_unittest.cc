@@ -11,11 +11,19 @@
 
 namespace {
 
-class TestLocationIconDelegate : public LocationIconView::Delegate {
+class TestLocationIconDelegate : public IconLabelBubbleView::Delegate,
+                                 public LocationIconView::Delegate {
  public:
   explicit TestLocationIconDelegate(LocationBarModel* location_bar_model)
       : location_bar_model_(location_bar_model) {}
+  virtual ~TestLocationIconDelegate() = default;
 
+  // IconLabelBubbleView::Delegate:
+  SkColor GetIconLabelBubbleInkDropColor() const override {
+    return SK_ColorBLACK;
+  }
+
+  // LocationIconView::Delegate:
   content::WebContents* GetWebContents() override { return nullptr; }
 
   bool IsEditingOrEmpty() const override { return is_editing_or_empty_; }
@@ -41,9 +49,6 @@ class TestLocationIconDelegate : public LocationIconView::Delegate {
     return gfx::ImageSkia();
   }
 
-  // Gets the color to use for icon ink highlights.
-  SkColor GetLocationIconInkDropColor() const override { return SK_ColorBLACK; }
-
  private:
   LocationBarModel* location_bar_model_;
   bool is_editing_or_empty_ = false;
@@ -64,7 +69,7 @@ class LocationIconViewTest : public ChromeViewsTestBase {
     delegate_ =
         std::make_unique<TestLocationIconDelegate>(location_bar_model());
 
-    view_ = new LocationIconView(font_list, delegate());
+    view_ = new LocationIconView(font_list, delegate(), delegate());
     view_->SetBoundsRect(gfx::Rect(0, 0, 24, 24));
     widget_->SetContentsView(view_);
 

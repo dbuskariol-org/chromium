@@ -70,9 +70,10 @@ const unsigned int promo_width = 240;
 
 ContentSettingImageView::ContentSettingImageView(
     std::unique_ptr<ContentSettingImageModel> image_model,
+    IconLabelBubbleView::Delegate* parent_delegate,
     Delegate* delegate,
     const gfx::FontList& font_list)
-    : IconLabelBubbleView(font_list),
+    : IconLabelBubbleView(font_list, parent_delegate),
       delegate_(delegate),
       content_setting_image_model_(std::move(image_model)),
       bubble_view_(nullptr) {
@@ -213,10 +214,6 @@ bool ContentSettingImageView::ShowBubbleImpl() {
 
 bool ContentSettingImageView::IsBubbleShowing() const {
   return bubble_view_ != nullptr;
-}
-
-SkColor ContentSettingImageView::GetInkDropBaseColor() const {
-  return delegate_->GetContentSettingInkDropColor();
 }
 
 ContentSettingImageModel::ImageType ContentSettingImageView::GetTypeForTesting()

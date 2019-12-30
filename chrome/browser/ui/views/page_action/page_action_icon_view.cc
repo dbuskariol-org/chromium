@@ -46,11 +46,13 @@ const OmniboxView* PageActionIconView::Delegate::GetOmniboxView() const {
   return nullptr;
 }
 
-PageActionIconView::PageActionIconView(CommandUpdater* command_updater,
-                                       int command_id,
-                                       PageActionIconView::Delegate* delegate,
-                                       const gfx::FontList& font_list)
-    : IconLabelBubbleView(font_list),
+PageActionIconView::PageActionIconView(
+    CommandUpdater* command_updater,
+    int command_id,
+    IconLabelBubbleView::Delegate* parent_delegate,
+    PageActionIconView::Delegate* delegate,
+    const gfx::FontList& font_list)
+    : IconLabelBubbleView(font_list, parent_delegate),
       command_updater_(command_updater),
       delegate_(delegate),
       command_id_(command_id) {
@@ -113,10 +115,6 @@ void PageActionIconView::ViewHierarchyChanged(
 void PageActionIconView::OnThemeChanged() {
   IconLabelBubbleView::OnThemeChanged();
   UpdateIconImage();
-}
-
-SkColor PageActionIconView::GetInkDropBaseColor() const {
-  return delegate_->GetPageActionInkDropColor();
 }
 
 bool PageActionIconView::ShouldShowSeparator() const {

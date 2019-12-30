@@ -46,6 +46,12 @@ class IconLabelBubbleView : public views::InkDropObserver,
  public:
   static constexpr int kTrailingPaddingPreMd = 2;
 
+  class Delegate {
+   public:
+    // Returns the base color for ink drops.
+    virtual SkColor GetIconLabelBubbleInkDropColor() const = 0;
+  };
+
   // A view that draws the separator.
   class SeparatorView : public views::View {
    public:
@@ -70,7 +76,7 @@ class IconLabelBubbleView : public views::InkDropObserver,
     DISALLOW_COPY_AND_ASSIGN(SeparatorView);
   };
 
-  explicit IconLabelBubbleView(const gfx::FontList& font_list);
+  IconLabelBubbleView(const gfx::FontList& font_list, Delegate* delegate);
   ~IconLabelBubbleView() override;
 
   // views::InkDropObserver:
@@ -138,7 +144,7 @@ class IconLabelBubbleView : public views::InkDropObserver,
   bool OnMousePressed(const ui::MouseEvent& event) override;
   void OnThemeChanged() override;
   std::unique_ptr<views::InkDrop> CreateInkDrop() override;
-  SkColor GetInkDropBaseColor() const override = 0;
+  SkColor GetInkDropBaseColor() const override;
   bool IsTriggerableEvent(const ui::Event& event) override;
   bool ShouldUpdateInkDropOnClickCanceled() const override;
   void NotifyClick(const ui::Event& event) override;
@@ -228,6 +234,8 @@ class IconLabelBubbleView : public views::InkDropObserver,
 
   // Sets the border padding around this view.
   void UpdateBorder();
+
+  Delegate* delegate_;
 
   // The contents of the bubble.
   SeparatorView* separator_view_;

@@ -40,9 +40,6 @@ class PageActionIconView : public IconLabelBubbleView {
  public:
   class Delegate {
    public:
-    // Gets the color to use for the ink highlight.
-    virtual SkColor GetPageActionInkDropColor() const = 0;
-
     // Gets the opacity to use for the ink highlight.
     virtual float GetPageActionInkDropVisibleOpacity() const;
 
@@ -96,6 +93,7 @@ class PageActionIconView : public IconLabelBubbleView {
 
   PageActionIconView(CommandUpdater* command_updater,
                      int command_id,
+                     IconLabelBubbleView::Delegate* parent_delegate,
                      Delegate* delegate,
                      const gfx::FontList& = gfx::FontList());
 
@@ -122,7 +120,6 @@ class PageActionIconView : public IconLabelBubbleView {
   void ViewHierarchyChanged(
       const views::ViewHierarchyChangedDetails& details) override;
   void OnThemeChanged() override;
-  SkColor GetInkDropBaseColor() const override;
   bool ShouldShowSeparator() const final;
   void NotifyClick(const ui::Event& event) override;
   bool IsTriggerableEvent(const ui::Event& event) override;

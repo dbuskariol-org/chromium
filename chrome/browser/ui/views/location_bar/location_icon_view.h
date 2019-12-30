@@ -56,15 +56,11 @@ class LocationIconView : public IconLabelBubbleView {
     // Gets an icon for the location bar icon chip.
     virtual gfx::ImageSkia GetLocationIcon(
         IconFetchedCallback on_icon_fetched) const = 0;
-
-    // Gets the color to use for icon ink highlights.
-    virtual SkColor GetLocationIconInkDropColor() const = 0;
-
-   protected:
-    virtual ~Delegate() {}
   };
 
-  LocationIconView(const gfx::FontList& font_list, Delegate* delagate);
+  LocationIconView(const gfx::FontList& font_list,
+                   IconLabelBubbleView::Delegate* parent_delegate,
+                   Delegate* delegate);
   ~LocationIconView() override;
 
   // IconLabelBubbleView:
@@ -76,7 +72,6 @@ class LocationIconView : public IconLabelBubbleView {
   bool ShowBubble(const ui::Event& event) override;
   void GetAccessibleNodeData(ui::AXNodeData* node_data) override;
   bool IsBubbleShowing() const override;
-  SkColor GetInkDropBaseColor() const override;
 
   // Returns what the minimum width for the label text.
   int GetMinimumLabelTextWidth() const;

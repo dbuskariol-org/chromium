@@ -134,9 +134,13 @@ class IconLabelBubbleView::HighlightPathGenerator
 //////////////////////////////////////////////////////////////////
 // IconLabelBubbleView class
 
-IconLabelBubbleView::IconLabelBubbleView(const gfx::FontList& font_list)
+IconLabelBubbleView::IconLabelBubbleView(const gfx::FontList& font_list,
+                                         Delegate* delegate)
     : LabelButton(nullptr, base::string16()),
+      delegate_(delegate),
       separator_view_(new SeparatorView(this)) {
+  DCHECK(delegate_);
+
   SetFontList(font_list);
   SetHorizontalAlignment(gfx::ALIGN_LEFT);
 
@@ -321,6 +325,10 @@ std::unique_ptr<views::InkDrop> IconLabelBubbleView::CreateInkDrop() {
   ink_drop->SetShowHighlightOnFocus(!focus_ring());
   ink_drop->AddObserver(this);
   return std::move(ink_drop);
+}
+
+SkColor IconLabelBubbleView::GetInkDropBaseColor() const {
+  return delegate_->GetIconLabelBubbleInkDropColor();
 }
 
 bool IconLabelBubbleView::IsTriggerableEvent(const ui::Event& event) {

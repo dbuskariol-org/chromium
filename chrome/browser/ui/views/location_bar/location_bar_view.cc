@@ -190,7 +190,8 @@ void LocationBarView::Init() {
   const gfx::FontList& font_list = views::style::GetFont(
       CONTEXT_OMNIBOX_PRIMARY, views::style::STYLE_PRIMARY);
 
-  auto location_icon_view = std::make_unique<LocationIconView>(font_list, this);
+  auto location_icon_view =
+      std::make_unique<LocationIconView>(font_list, this, this);
   location_icon_view->set_drag_controller(this);
   location_icon_view_ = AddChildView(std::move(location_icon_view));
 
@@ -233,7 +234,7 @@ void LocationBarView::Init() {
       ContentSettingImageModel::GenerateContentSettingImageModels();
   for (auto& model : models) {
     auto image_view = std::make_unique<ContentSettingImageView>(
-        std::move(model), this, font_list);
+        std::move(model), this, this, font_list);
     image_view->SetIconColor(icon_color);
     image_view->SetVisible(false);
     content_setting_views_.push_back(AddChildView(std::move(image_view)));
@@ -287,6 +288,7 @@ void LocationBarView::Init() {
   params.font_list = &font_list;
   params.browser = browser_;
   params.command_updater = command_updater();
+  params.icon_label_bubble_delegate = this;
   params.page_action_icon_delegate = this;
   page_action_icon_container_ =
       AddChildView(std::make_unique<PageActionIconContainerView>(params));
@@ -688,11 +690,15 @@ WebContents* LocationBarView::GetWebContents() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, public ContentSettingImageView::Delegate implementation:
+// LocationBarView, public IconLabelBubbleView::Delegate implementation:
 
-SkColor LocationBarView::GetContentSettingInkDropColor() const {
-  return GetLocationIconInkDropColor();
+SkColor LocationBarView::GetIconLabelBubbleInkDropColor() const {
+  return GetNativeTheme()->GetSystemColor(
+      ui::NativeTheme::kColorId_TextfieldDefaultColor);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// LocationBarView, public ContentSettingImageView::Delegate implementation:
 
 content::WebContents* LocationBarView::GetContentSettingWebContents() {
   return IsLocationBarUserInputInProgress() ? nullptr : GetWebContents();
@@ -705,10 +711,6 @@ LocationBarView::GetContentSettingBubbleModelDelegate() {
 
 ////////////////////////////////////////////////////////////////////////////////
 // LocationBarView, public PageActionIconView::Delegate implementation:
-
-SkColor LocationBarView::GetPageActionInkDropColor() const {
-  return GetLocationIconInkDropColor();
-}
 
 WebContents* LocationBarView::GetWebContentsForPageActionIconView() {
   return GetWebContents();
@@ -1231,7 +1233,3 @@ gfx::ImageSkia LocationBarView::GetLocationIcon(
              : gfx::ImageSkia();
 }
 
-SkColor LocationBarView::GetLocationIconInkDropColor() const {
-  return GetNativeTheme()->GetSystemColor(
-      ui::NativeTheme::kColorId_TextfieldDefaultColor);
-}

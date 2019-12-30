@@ -28,9 +28,13 @@
 using content::WebContents;
 using security_state::SecurityLevel;
 
-LocationIconView::LocationIconView(const gfx::FontList& font_list,
-                                   Delegate* delegate)
-    : IconLabelBubbleView(font_list), delegate_(delegate) {
+LocationIconView::LocationIconView(
+    const gfx::FontList& font_list,
+    IconLabelBubbleView::Delegate* parent_delegate,
+    Delegate* delegate)
+    : IconLabelBubbleView(font_list, parent_delegate), delegate_(delegate) {
+  DCHECK(delegate_);
+
   SetID(VIEW_ID_LOCATION_ICON);
   Update(true);
   SetUpForAnimation();
@@ -71,10 +75,6 @@ bool LocationIconView::ShouldShowSeparator() const {
 
 bool LocationIconView::ShowBubble(const ui::Event& event) {
   return delegate_->ShowPageInfoDialog();
-}
-
-SkColor LocationIconView::GetInkDropBaseColor() const {
-  return delegate_->GetLocationIconInkDropColor();
 }
 
 void LocationIconView::GetAccessibleNodeData(ui::AXNodeData* node_data) {
