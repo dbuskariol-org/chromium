@@ -1619,8 +1619,8 @@ void StoragePartitionImpl::OpenSessionStorage(
 
 void StoragePartitionImpl::OnAuthRequired(
     const base::Optional<base::UnguessableToken>& window_id,
-    uint32_t process_id,
-    uint32_t routing_id,
+    int32_t process_id,
+    int32_t routing_id,
     uint32_t request_id,
     const GURL& url,
     bool first_auth_attempt,
@@ -1654,8 +1654,8 @@ void StoragePartitionImpl::OnAuthRequired(
 
 void StoragePartitionImpl::OnCertificateRequested(
     const base::Optional<base::UnguessableToken>& window_id,
-    uint32_t process_id,
-    uint32_t routing_id,
+    int32_t process_id,
+    int32_t routing_id,
     uint32_t request_id,
     const scoped_refptr<net::SSLCertRequestInfo>& cert_info,
     mojo::PendingRemote<network::mojom::ClientCertificateResponder>
@@ -1682,8 +1682,8 @@ void StoragePartitionImpl::OnCertificateRequested(
 }
 
 void StoragePartitionImpl::OnSSLCertificateError(
-    uint32_t process_id,
-    uint32_t routing_id,
+    int32_t process_id,
+    int32_t routing_id,
     const GURL& url,
     int net_error,
     const net::SSLInfo& ssl_info,
@@ -1698,7 +1698,7 @@ void StoragePartitionImpl::OnSSLCertificateError(
 }
 
 void StoragePartitionImpl::OnFileUploadRequested(
-    uint32_t process_id,
+    int32_t process_id,
     bool async,
     const std::vector<base::FilePath>& file_paths,
     OnFileUploadRequestedCallback callback) {
@@ -1739,7 +1739,7 @@ void StoragePartitionImpl::OnCanSendDomainReliabilityUpload(
       blink::mojom::PermissionStatus::GRANTED);
 }
 
-void StoragePartitionImpl::OnClearSiteData(uint32_t process_id,
+void StoragePartitionImpl::OnClearSiteData(int32_t process_id,
                                            int32_t routing_id,
                                            const GURL& url,
                                            const std::string& header_value,
