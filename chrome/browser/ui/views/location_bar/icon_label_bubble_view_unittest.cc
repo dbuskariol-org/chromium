@@ -50,9 +50,7 @@ class TestIconLabelBubbleView : public IconLabelBubbleView {
 
   explicit TestIconLabelBubbleView(const gfx::FontList& font_list,
                                    Delegate* delegate)
-      : IconLabelBubbleView(font_list, delegate),
-        value_(0),
-        is_bubble_showing_(false) {
+      : IconLabelBubbleView(font_list, delegate) {
     GetImageView()->SetImageSize(gfx::Size(kImageSize, kImageSize));
     SetLabel(base::ASCIIToUTF16("Label"));
   }
@@ -122,8 +120,8 @@ class TestIconLabelBubbleView : public IconLabelBubbleView {
   std::unique_ptr<ui::ScopedAnimationDurationScaleMode> zero_duration_mode_ =
       std::make_unique<ui::ScopedAnimationDurationScaleMode>(
           ui::ScopedAnimationDurationScaleMode::ZERO_DURATION);
-  int value_;
-  bool is_bubble_showing_;
+  int value_ = 0;
+  bool is_bubble_showing_ = false;
   DISALLOW_COPY_AND_ASSIGN(TestIconLabelBubbleView);
 };
 

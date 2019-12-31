@@ -872,12 +872,8 @@ WebAppFrameToolbarView::GetContentSettingViewsForTesting() const {
       ->get_content_setting_views();
 }
 
-SkColor WebAppFrameToolbarView::GetCaptionColor() const {
-  return paint_as_active_ ? active_color_ : inactive_color_;
-}
-
 void WebAppFrameToolbarView::UpdateChildrenColor() {
-  SkColor icon_color = GetCaptionColor();
+  const SkColor icon_color = paint_as_active_ ? active_color_ : inactive_color_;
   if (left_container_)
     left_container_->SetIconColor(icon_color);
   right_container_->SetIconColor(icon_color);

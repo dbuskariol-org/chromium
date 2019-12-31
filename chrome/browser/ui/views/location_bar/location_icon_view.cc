@@ -49,13 +49,6 @@ gfx::Size LocationIconView::GetMinimumSize() const {
   return GetMinimumSizeForPreferredSize(GetPreferredSize());
 }
 
-bool LocationIconView::OnMousePressed(const ui::MouseEvent& event) {
-  delegate_->OnLocationIconPressed(event);
-
-  IconLabelBubbleView::OnMousePressed(event);
-  return true;
-}
-
 bool LocationIconView::OnMouseDragged(const ui::MouseEvent& event) {
   delegate_->OnLocationIconDragged(event);
   return IconLabelBubbleView::OnMouseDragged(event);
@@ -77,6 +70,18 @@ bool LocationIconView::ShowBubble(const ui::Event& event) {
   return delegate_->ShowPageInfoDialog();
 }
 
+bool LocationIconView::IsBubbleShowing() const {
+  return PageInfoBubbleView::GetShownBubbleType() !=
+         PageInfoBubbleView::BUBBLE_NONE;
+}
+
+bool LocationIconView::OnMousePressed(const ui::MouseEvent& event) {
+  delegate_->OnLocationIconPressed(event);
+
+  IconLabelBubbleView::OnMousePressed(event);
+  return true;
+}
+
 void LocationIconView::GetAccessibleNodeData(ui::AXNodeData* node_data) {
   if (delegate_->IsEditingOrEmpty()) {
     node_data->role = ax::mojom::Role::kImage;
@@ -94,11 +99,6 @@ void LocationIconView::GetAccessibleNodeData(ui::AXNodeData* node_data) {
 
   IconLabelBubbleView::GetAccessibleNodeData(node_data);
   node_data->role = ax::mojom::Role::kPopUpButton;
-}
-
-bool LocationIconView::IsBubbleShowing() const {
-  return PageInfoBubbleView::GetShownBubbleType() !=
-         PageInfoBubbleView::BUBBLE_NONE;
 }
 
 int LocationIconView::GetMinimumLabelTextWidth() const {

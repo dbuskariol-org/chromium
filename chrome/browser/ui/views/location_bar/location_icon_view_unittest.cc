@@ -25,28 +25,22 @@ class TestLocationIconDelegate : public IconLabelBubbleView::Delegate,
 
   // LocationIconView::Delegate:
   content::WebContents* GetWebContents() override { return nullptr; }
-
   bool IsEditingOrEmpty() const override { return is_editing_or_empty_; }
-  void set_is_editing_or_empty(bool is_editing_or_empty) {
-    is_editing_or_empty_ = is_editing_or_empty;
-  }
-
   SkColor GetSecurityChipColor(
       security_state::SecurityLevel security_level) const override {
     return SK_ColorWHITE;
   }
-
   bool ShowPageInfoDialog() override { return false; }
-
-  // Gets the LocationBarModel.
   const LocationBarModel* GetLocationBarModel() const override {
     return location_bar_model_;
   }
-
-  // Gets an icon for the location bar icon chip.
   gfx::ImageSkia GetLocationIcon(
       IconFetchedCallback on_icon_fetched) const override {
     return gfx::ImageSkia();
+  }
+
+  void set_is_editing_or_empty(bool is_editing_or_empty) {
+    is_editing_or_empty_ = is_editing_or_empty;
   }
 
  private:

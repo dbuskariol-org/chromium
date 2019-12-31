@@ -216,7 +216,7 @@ class LocationBarView : public LocationBar,
   Browser* browser() { return browser_; }
   Profile* profile() { return profile_; }
 
-  // LocationIconView::Delegate
+  // LocationIconView::Delegate:
   bool IsEditingOrEmpty() const override;
   void OnLocationIconPressed(const ui::MouseEvent& event) override;
   void OnLocationIconDragged(const ui::MouseEvent& event) override;

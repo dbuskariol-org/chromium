@@ -122,10 +122,6 @@
 #include "ui/views/controls/label.h"
 #include "ui/views/widget/widget.h"
 
-#if defined(USE_AURA) || defined(OS_MACOSX)
-#include "ui/native_theme/native_theme_dark_aura.h"
-#endif
-
 namespace {
 
 int IncrementalMinimumWidth(const views::View* view) {
@@ -173,9 +169,6 @@ LocationBarView::LocationBarView(Browser* browser,
 }
 
 LocationBarView::~LocationBarView() {}
-
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, public:
 
 void LocationBarView::Init() {
   // We need to be in a Widget, otherwise GetNativeTheme() may change and we're
@@ -363,9 +356,6 @@ void LocationBarView::SelectAll() {
   omnibox_view_->SelectAll(true);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, public LocationBar implementation:
-
 void LocationBarView::FocusLocation(bool is_user_initiated) {
   omnibox_view_->SetFocus(is_user_initiated);
 }
@@ -377,9 +367,6 @@ void LocationBarView::Revert() {
 OmniboxView* LocationBarView::GetOmniboxView() {
   return omnibox_view_;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, public views::View implementation:
 
 bool LocationBarView::HasFocus() const {
   return omnibox_view_ && omnibox_view_->model()->has_focus();
@@ -674,9 +661,6 @@ bool LocationBarView::ActivateFirstInactiveBubbleForAccessibility() {
       ->ActivateFirstInactiveBubbleForAccessibility();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, public OmniboxEditController implementation:
-
 void LocationBarView::UpdateWithoutTabRestore() {
   Update(nullptr);
 }
@@ -689,16 +673,10 @@ WebContents* LocationBarView::GetWebContents() {
   return delegate_->GetWebContents();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, public IconLabelBubbleView::Delegate implementation:
-
 SkColor LocationBarView::GetIconLabelBubbleSurroundingForegroundColor() const {
   return GetNativeTheme()->GetSystemColor(
       ui::NativeTheme::kColorId_TextfieldDefaultColor);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, public ContentSettingImageView::Delegate implementation:
 
 content::WebContents* LocationBarView::GetContentSettingWebContents() {
   return IsLocationBarUserInputInProgress() ? nullptr : GetWebContents();
@@ -709,19 +687,13 @@ LocationBarView::GetContentSettingBubbleModelDelegate() {
   return delegate_->GetContentSettingBubbleModelDelegate();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, public PageActionIconView::Delegate implementation:
-
 WebContents* LocationBarView::GetWebContentsForPageActionIconView() {
   return GetWebContents();
 }
 
 bool LocationBarView::IsLocationBarUserInputInProgress() const {
-  return omnibox_view() && omnibox_view()->model()->user_input_in_progress();
+  return omnibox_view_ && omnibox_view_->model()->user_input_in_progress();
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, public static methods:
 
 // static
 bool LocationBarView::IsVirtualKeyboardVisible(views::Widget* widget) {
@@ -746,9 +718,6 @@ int LocationBarView::GetAvailableDecorationTextHeight() {
   return std::max(
       0, LocationBarView::GetAvailableTextHeight() - (bubble_padding * 2));
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, private:
 
 int LocationBarView::GetMinimumLeadingWidth() const {
   // If the keyword bubble is showing, the view can collapse completely.
@@ -789,9 +758,7 @@ void LocationBarView::RefreshBackground() {
   if (omnibox_view_->model()->is_caret_visible()) {
     background_color = border_color = GetColor(OmniboxPart::RESULTS_BACKGROUND);
   } else {
-    const SkColor normal = GetOmniboxColor(GetThemeProvider(),
-                                           OmniboxPart::LOCATION_BAR_BACKGROUND,
-                                           OmniboxPartState::NORMAL);
+    const SkColor normal = GetColor(OmniboxPart::LOCATION_BAR_BACKGROUND);
     const SkColor hovered = GetOmniboxColor(
         GetThemeProvider(), OmniboxPart::LOCATION_BAR_BACKGROUND,
         OmniboxPartState::HOVERED);
@@ -897,9 +864,6 @@ void LocationBarView::OnPageInfoBubbleClosed(
   FocusLocation(false);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, private LocationBar implementation:
-
 GURL LocationBarView::GetDestinationURL() const {
   return destination_url();
 }
@@ -960,9 +924,6 @@ LocationBarTesting* LocationBarView::GetLocationBarForTesting() {
   return this;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, private LocationBarTesting implementation:
-
 bool LocationBarView::TestContentSettingImagePressed(size_t index) {
   if (index >= content_setting_views_.size())
     return false;
@@ -980,9 +941,6 @@ bool LocationBarView::IsContentSettingBubbleShowing(size_t index) {
   return index < content_setting_views_.size() &&
          content_setting_views_[index]->IsBubbleShowing();
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, private views::View implementation:
 
 const char* LocationBarView::GetClassName() const {
   return kViewClassName;
@@ -1021,9 +979,6 @@ void LocationBarView::OnPaintBorder(gfx::Canvas* canvas) {
                    border_color);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, private views::DragController implementation:
-
 void LocationBarView::WriteDragDataForView(views::View* sender,
                                            const gfx::Point& press_pt,
                                            OSExchangeData* data) {
@@ -1055,8 +1010,6 @@ bool LocationBarView::CanStartDragForView(View* sender,
   return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, private views::AnimationDelegateViews implementation:
 void LocationBarView::AnimationProgressed(const gfx::Animation* animation) {
   DCHECK_EQ(animation, &hover_animation_);
   RefreshBackground();
@@ -1071,9 +1024,6 @@ void LocationBarView::AnimationCanceled(const gfx::Animation* animation) {
   DCHECK_EQ(animation, &hover_animation_);
   AnimationProgressed(animation);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, private OmniboxEditController implementation:
 
 void LocationBarView::OnChanged() {
   location_icon_view_->Update(/*suppress_animations=*/false);
@@ -1138,15 +1088,9 @@ void LocationBarView::OnOmniboxHovered(bool is_hovering) {
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, private DropdownBarHostDelegate implementation:
-
 void LocationBarView::FocusAndSelectAll() {
   FocusLocation(true);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, private ui::MaterialDesignControllerObserver implementation:
 
 void LocationBarView::OnTouchUiChanged() {
   const gfx::FontList& font_list = views::style::GetFont(
@@ -1162,11 +1106,8 @@ void LocationBarView::OnTouchUiChanged() {
   PreferredSizeChanged();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// LocationBarView, LocationBarIconView::Delegate implementation:
-
 bool LocationBarView::IsEditingOrEmpty() const {
-  return omnibox_view() && omnibox_view()->IsEditingOrEmpty();
+  return omnibox_view_ && omnibox_view_->IsEditingOrEmpty();
 }
 
 void LocationBarView::OnLocationIconPressed(const ui::MouseEvent& event) {
@@ -1216,20 +1157,16 @@ bool LocationBarView::ShowPageInfoDialog() {
           *helper->GetVisibleSecurityState(),
           base::BindOnce(&LocationBarView::OnPageInfoBubbleClosed,
                          weak_factory_.GetWeakPtr()));
-  bubble->SetHighlightedButton(location_icon_view());
+  bubble->SetHighlightedButton(location_icon_view_);
   bubble->GetWidget()->Show();
   return true;
 }
 
 gfx::ImageSkia LocationBarView::GetLocationIcon(
     LocationIconView::Delegate::IconFetchedCallback on_icon_fetched) const {
-  security_state::SecurityLevel level = security_state::SecurityLevel::NONE;
-  if (!IsEditingOrEmpty())
-    level = GetLocationBarModel()->GetSecurityLevel();
-  return omnibox_view()
-             ? omnibox_view()->GetIcon(
-                   GetLayoutConstant(LOCATION_BAR_ICON_SIZE),
-                   GetSecurityChipColor(level), std::move(on_icon_fetched))
-             : gfx::ImageSkia();
+  if (!omnibox_view_)
+    return gfx::ImageSkia();
+  return omnibox_view_->GetIcon(GetLayoutConstant(LOCATION_BAR_ICON_SIZE),
+                                location_icon_view_->GetForegroundColor(),
+                                std::move(on_icon_fetched));
 }
-
