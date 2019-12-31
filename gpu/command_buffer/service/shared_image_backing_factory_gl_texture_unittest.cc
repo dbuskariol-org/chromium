@@ -64,7 +64,7 @@ void CreateSharedContext(const GpuDriverBugWorkarounds& workarounds,
   context_state = base::MakeRefCounted<SharedContextState>(
       std::move(share_group), surface, context,
       false /* use_virtualized_gl_contexts */, base::DoNothing());
-  context_state->InitializeGrContext(workarounds, nullptr);
+  context_state->InitializeGrContext(GpuPreferences(), workarounds, nullptr);
   context_state->InitializeGL(GpuPreferences(), feature_info);
 }
 
