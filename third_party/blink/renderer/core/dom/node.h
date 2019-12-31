@@ -102,8 +102,6 @@ enum class CustomElementState : uint32_t {
   kCustom = 1 << kNodeCustomElementShift,
   kUndefined = 2 << kNodeCustomElementShift,
   kFailed = 3 << kNodeCustomElementShift,
-
-  kNotDefinedFlag = 2 << kNodeCustomElementShift,
 };
 
 enum class SlotChangeType {
