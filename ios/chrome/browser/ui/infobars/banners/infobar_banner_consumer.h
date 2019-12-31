@@ -5,7 +5,7 @@
 #ifndef IOS_CHROME_BROWSER_UI_INFOBARS_BANNERS_INFOBAR_BANNER_CONSUMER_H_
 #define IOS_CHROME_BROWSER_UI_INFOBARS_BANNERS_INFOBAR_BANNER_CONSUMER_H_
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 @protocol InfobarBannerConsumer <NSObject>
 

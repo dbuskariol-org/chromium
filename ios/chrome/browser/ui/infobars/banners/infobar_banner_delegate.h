@@ -5,7 +5,7 @@
 #ifndef IOS_CHROME_BROWSER_UI_INFOBARS_BANNERS_INFOBAR_BANNER_DELEGATE_H_
 #define IOS_CHROME_BROWSER_UI_INFOBARS_BANNERS_INFOBAR_BANNER_DELEGATE_H_
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 // Delegate to handle InfobarBanner actions.
 @protocol InfobarBannerDelegate
