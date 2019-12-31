@@ -2732,9 +2732,10 @@ void LayerTreeHostImpl::DidNotProduceFrame(const viz::BeginFrameAck& ack,
   if (layer_tree_frame_sink_)
     layer_tree_frame_sink_->DidNotProduceFrame(ack);
 
-  // If a frame was not submitted because there was no damage, then notify the
+  // If a frame was not submitted because there was no damage, or the scheduler
+  // hit the frame-deadline while waiting for the main-thread, notify the
   // trackers.
-  if (reason == FrameSkippedReason::kNoDamage &&
+  if (reason != FrameSkippedReason::kRecoverLatency &&
       impl_thread_phase_ == ImplThreadPhase::INSIDE_IMPL_FRAME) {
     // It is possible that |ack| is for a 'future frame', i.e. for the next
     // frame from the one currently being handled by the compositor (represented
@@ -2746,8 +2747,10 @@ void LayerTreeHostImpl::DidNotProduceFrame(const viz::BeginFrameAck& ack,
     const auto& args = current_begin_frame_tracker_.Current();
     if (args.frame_id == ack.frame_id) {
       frame_trackers_.NotifyImplFrameCausedNoDamage(ack);
-      if (begin_main_frame_sent_during_impl_)
+      if (begin_main_frame_sent_during_impl_ &&
+          reason == FrameSkippedReason::kNoDamage) {
         frame_trackers_.NotifyMainFrameCausedNoDamage(args);
+      }
     }
   }
 }
