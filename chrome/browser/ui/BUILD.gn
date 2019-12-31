@@ -2887,6 +2887,8 @@ jumbo_static_library("ui") {
       "views/frame/toolbar_button_provider.h",
       "views/frame/top_container_background.cc",
       "views/frame/top_container_background.h",
+      "views/frame/top_container_loading_bar.cc",
+      "views/frame/top_container_loading_bar.h",
       "views/frame/top_container_view.cc",
       "views/frame/top_container_view.h",
       "views/frame/top_controls_slide_controller.h",
