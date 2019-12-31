@@ -477,6 +477,9 @@ class WebAppFrameToolbarView::ToolbarButtonContainer
     return GetNativeTheme()->GetSystemColor(
         ui::NativeTheme::kColorId_TextfieldDefaultColor);
   }
+  SkColor GetIconLabelBubbleInkDropColor() const override {
+    return icon_color_;
+  }
 
   // ContentSettingImageView::Delegate:
   content::WebContents* GetContentSettingWebContents() override {
