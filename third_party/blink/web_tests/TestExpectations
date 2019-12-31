@@ -2670,6 +2670,7 @@ crbug.com/1035708 external/wpt/css/css-pseudo/spelling-error-001.html [ Failure 
 crbug.com/1035708 external/wpt/css/css-pseudo/grammar-error-001.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
+crbug.com/626703 [ Mac10.13 ] virtual/reporting-api/external/wpt/content-security-policy/reporting-api/reporting-api-doesnt-send-reports-without-violation.https.sub.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/infrastructure/reftest/reftest_match_and_mismatch-6.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/infrastructure/reftest/reftest_match_and_mismatch-6.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/infrastructure/reftest/reftest_match_and_mismatch-6.html [ Failure ]
