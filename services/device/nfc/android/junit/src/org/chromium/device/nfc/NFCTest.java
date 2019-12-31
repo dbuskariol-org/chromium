@@ -780,6 +780,15 @@ public class NFCTest {
         verify(mockWatchCallback4).call(mErrorCaptor.capture());
         assertNull(mErrorCaptor.getValue());
 
+        // Should not match because the record type must match case-sensitive.
+        NdefScanOptions options5 = createNdefScanOptions();
+        options5.recordType = "Url";
+        int watchId5 = mNextWatchId++;
+        WatchResponse mockWatchCallback5 = mock(WatchResponse.class);
+        nfc.watch(options5, watchId5, mockWatchCallback5);
+        verify(mockWatchCallback5).call(mErrorCaptor.capture());
+        assertNull(mErrorCaptor.getValue());
+
         nfc.processPendingOperationsForTesting(mNfcTagHandler);
 
         // Check that client was notified and watch with correct id was triggered.
@@ -790,6 +799,63 @@ public class NFCTest {
         assertEquals(watchId1, mOnWatchCallbackCaptor.getValue()[0]);
         assertEquals(watchId2, mOnWatchCallbackCaptor.getValue()[1]);
         assertEquals(watchId3, mOnWatchCallbackCaptor.getValue()[2]);
+    }
+
+    /**
+     * Test that Nfc.watch() matching function compares 2 external types in case-insensitive manner.
+     */
+    @Test
+    @Feature({"NFCTest"})
+    public void testWatchMatchingExternalType() {
+        TestNfcImpl nfc = new TestNfcImpl(mContext, mDelegate);
+        mDelegate.invokeCallback();
+        nfc.setClient(mNfcClient);
+
+        // Prepare the external type record.
+        android.nfc.NdefMessage extNdefMessage = new android.nfc.NdefMessage(
+                NdefMessageUtils.createPlatformExternalRecord(DUMMY_EXTERNAL_TYPE, DUMMY_RECORD_ID,
+                        ApiCompatibilityUtils.getBytesUtf8(TEST_TEXT)));
+        try {
+            doReturn(extNdefMessage).when(mNfcTagHandler).read();
+        } catch (IOException | FormatException e) {
+        }
+
+        // Should match, the record type is exactly equal.
+        NdefScanOptions options1 = createNdefScanOptions();
+        options1.recordType = DUMMY_EXTERNAL_TYPE;
+        int watchId1 = mNextWatchId++;
+        WatchResponse mockWatchCallback1 = mock(WatchResponse.class);
+        nfc.watch(options1, watchId1, mockWatchCallback1);
+        verify(mockWatchCallback1).call(mErrorCaptor.capture());
+        assertNull(mErrorCaptor.getValue());
+
+        // Should match, the record type is equal in case-insensitive manner.
+        NdefScanOptions options2 = createNdefScanOptions();
+        options2.recordType = "aBc.com:xyZ";
+        int watchId2 = mNextWatchId++;
+        WatchResponse mockWatchCallback2 = mock(WatchResponse.class);
+        nfc.watch(options2, watchId2, mockWatchCallback2);
+        verify(mockWatchCallback2).call(mErrorCaptor.capture());
+        assertNull(mErrorCaptor.getValue());
+
+        // Should not match, the record type is NOT equal even in case-insensitive manner.
+        NdefScanOptions options3 = createNdefScanOptions();
+        options3.recordType = "abcd.com:xyz";
+        int watchId3 = mNextWatchId++;
+        WatchResponse mockWatchCallback3 = mock(WatchResponse.class);
+        nfc.watch(options3, watchId3, mockWatchCallback3);
+        verify(mockWatchCallback3).call(mErrorCaptor.capture());
+        assertNull(mErrorCaptor.getValue());
+
+        nfc.processPendingOperationsForTesting(mNfcTagHandler);
+
+        // Check that client was notified and watch with correct id was triggered.
+        verify(mNfcClient, times(1))
+                .onWatch(mOnWatchCallbackCaptor.capture(), nullable(String.class),
+                        any(NdefMessage.class));
+        assertEquals(2, mOnWatchCallbackCaptor.getValue().length);
+        assertEquals(watchId1, mOnWatchCallbackCaptor.getValue()[0]);
+        assertEquals(watchId2, mOnWatchCallbackCaptor.getValue()[1]);
     }
 
     /**
