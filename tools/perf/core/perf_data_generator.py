@@ -339,7 +339,7 @@ BUILDERS = {
         'isolate': 'performance_test_suite',
       }
     ],
-    'platform': 'android-chrome',
+    'platform': 'android-chrome-bundle',
     'dimension': {
       'device_os': 'OMB1.180119.001',
       'device_type': 'gobo',
@@ -504,7 +504,7 @@ BUILDERS = {
         'isolate': 'performance_test_suite',
       }
     ],
-    'platform': 'android-chrome',
+    'platform': 'android-chrome-bundle',
     'dimension': {
       'pool': 'chrome.tests.perf',
       'os': 'Android',
