@@ -776,11 +776,6 @@
       name: "ForceTallerSelectPopup",
       status: {"ChromeOS": "stable"},
     },
-    // This is to communicate features::FormControlsRefresh from ui (and can be
-    // removed when the feature launches).
-    {
-      name: "FormControlsRefresh",
-    },
     {
       name: "FractionalMouseEvent",
     },
@@ -1267,7 +1262,6 @@
     // This is to add an option to enable the Reveal button on password inputs while waiting ::reveal gets standardized.
     {
       name: "PasswordReveal",
-      depends_on: ["FormControlsRefresh"],
     },
     {
       name: "PaymentApp",

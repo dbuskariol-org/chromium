@@ -521,9 +521,6 @@ void SetCustomizedRuntimeFeaturesFromCombinedArgs(
   // They're moved here to distinguish them from actual base checks
   WebRuntimeFeatures::EnableOverlayScrollbars(ui::IsOverlayScrollbarEnabled());
 
-  WebRuntimeFeatures::EnableFormControlsRefresh(
-      features::IsFormControlsRefreshEnabled());
-
   if (base::FeatureList::GetInstance()->IsFeatureOverriddenFromCommandLine(
           blink::features::kNativeFileSystemAPI.name,
           base::FeatureList::OVERRIDE_ENABLE_FEATURE)) {
