@@ -345,18 +345,22 @@ void NGFlexLayoutAlgorithm::ConstructAndAppendFlexItems() {
         is_horizontal_flow_ ? physical_border_scrollbar_padding.HorizontalSum()
                             : physical_border_scrollbar_padding.VerticalSum();
 
+    // TODO(dgrogan): Don't layout every time, just when you need to.
+    // Use ChildHasIntrinsicMainAxisSize as a guide.
+    scoped_refptr<const NGLayoutResult> layout_result =
+        child.Layout(child_space, /* break_token */ nullptr);
+    NGFragment fragment_in_child_writing_mode(
+        child_style.GetWritingMode(), layout_result->PhysicalFragment());
+
     // We want the child's min/max size in its writing mode, not ours. We'll
     // only ever use it if the child's inline axis is our main axis.
+    //
+    // Always calculate the min/max sizes after a layout in order to corrrectly
+    // account for any scrollbars.
     MinMaxSizeInput input(
         /* percentage_resolution_block_size */ content_box_size_.block_size);
     MinMaxSize intrinsic_sizes_border_box = child.ComputeMinMaxSize(
         child_style.GetWritingMode(), input, &child_space);
-    // TODO(dgrogan): Don't layout every time, just when you need to.
-    // Use ChildHasIntrinsicMainAxisSize as a guide.
-    scoped_refptr<const NGLayoutResult> layout_result =
-        child.Layout(child_space, nullptr /*break token*/);
-    NGFragment fragment_in_child_writing_mode(
-        child_style.GetWritingMode(), layout_result->PhysicalFragment());
 
     LayoutUnit flex_base_border_box;
     const Length& specified_length_in_main_axis =

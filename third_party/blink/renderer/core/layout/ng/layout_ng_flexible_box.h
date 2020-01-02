@@ -15,6 +15,9 @@ class CORE_EXPORT LayoutNGFlexibleBox : public LayoutNGMixin<LayoutBlock> {
  public:
   explicit LayoutNGFlexibleBox(Element*);
 
+  bool HasTopOverflow() const override;
+  bool HasLeftOverflow() const override;
+
   void UpdateBlockLayout(bool relayout_children) override;
 
   bool IsFlexibleBoxIncludingDeprecatedAndNG() const final { return true; }

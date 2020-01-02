@@ -17,6 +17,21 @@ namespace blink {
 LayoutNGFlexibleBox::LayoutNGFlexibleBox(Element* element)
     : LayoutNGMixin<LayoutBlock>(element) {}
 
+bool LayoutNGFlexibleBox::HasTopOverflow() const {
+  if (IsHorizontalWritingMode())
+    return StyleRef().ResolvedIsColumnReverseFlexDirection();
+  return StyleRef().IsLeftToRightDirection() ==
+         StyleRef().ResolvedIsRowReverseFlexDirection();
+}
+
+bool LayoutNGFlexibleBox::HasLeftOverflow() const {
+  if (IsHorizontalWritingMode()) {
+    return StyleRef().IsLeftToRightDirection() ==
+           StyleRef().ResolvedIsRowReverseFlexDirection();
+  }
+  return StyleRef().ResolvedIsColumnReverseFlexDirection();
+}
+
 void LayoutNGFlexibleBox::UpdateBlockLayout(bool relayout_children) {
   LayoutAnalyzer::BlockScope analyzer(*this);
 
