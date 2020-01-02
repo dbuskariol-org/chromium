@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "ash/public/cpp/app_list/internal_app_id_constants.h"
+#include "ash/public/cpp/app_types.h"
 #include "ash/public/cpp/multi_user_window_manager.h"
 #include "ash/public/cpp/shelf_model.h"
 #include "ash/public/cpp/window_properties.h"
@@ -27,10 +28,12 @@
 #include "chrome/browser/ui/ash/multi_user/multi_user_util.h"
 #include "chrome/browser/ui/ash/multi_user/multi_user_window_manager_helper.h"
 #include "chrome/services/app_service/public/cpp/instance.h"
+#include "chrome/services/app_service/public/mojom/types.mojom-shared.h"
 #include "chrome/services/app_service/public/mojom/types.mojom.h"
 #include "components/account_id/account_id.h"
 #include "components/arc/arc_util.h"
 #include "extensions/common/constants.h"
+#include "ui/aura/client/aura_constants.h"
 #include "ui/aura/env.h"
 #include "ui/aura/window.h"
 #include "ui/views/widget/widget.h"
@@ -268,6 +271,13 @@ void AppServiceAppWindowLauncherController::OnInstanceUpdate(
       (update.State() & apps::InstanceState::kDestroyed) ==
           apps::InstanceState::kUnknown) {
     std::string app_id = update.AppId();
+    if (proxy_->AppRegistryCache().GetAppType(app_id) ==
+            apps::mojom::AppType::kCrostini ||
+        base::StartsWith(app_id, crostini::kCrostiniAppIdPrefix,
+                         base::CompareCase::SENSITIVE)) {
+      window->SetProperty(aura::client::kAppType,
+                          static_cast<int>(ash::AppType::CROSTINI_APP));
+    }
     window->SetProperty(ash::kAppIDKey, update.AppId());
     window->SetProperty(ash::kShelfIDKey, shelf_id.Serialize());
     window->SetProperty<int>(ash::kShelfItemTypeKey, ash::TYPE_APP);
