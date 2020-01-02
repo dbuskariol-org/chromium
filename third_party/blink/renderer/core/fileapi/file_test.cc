@@ -214,6 +214,7 @@ TEST(FileTest, FileSystemFileWithApocalypseTimestamp) {
 TEST(FileTest, fileSystemFileWithoutNativeSnapshot) {
   KURL url("filesystem:http://example.com/isolated/hash/non-native-file");
   FileMetadata metadata;
+  metadata.length = 0;
   File* const file =
       File::CreateForFileSystemFile(url, metadata, File::kIsUserVisible);
   EXPECT_FALSE(file->HasBackingFile());
@@ -239,6 +240,7 @@ TEST(FileTest, hsaSameSource) {
   KURL url_a("filesystem:http://example.com/isolated/hash/non-native-file-A");
   KURL url_b("filesystem:http://example.com/isolated/hash/non-native-file-B");
   FileMetadata metadata;
+  metadata.length = 0;
   File* const file_system_file_a1 =
       File::CreateForFileSystemFile(url_a, metadata, File::kIsUserVisible);
   File* const file_system_file_a2 =
