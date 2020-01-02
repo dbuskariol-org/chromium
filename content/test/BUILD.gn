@@ -1090,6 +1090,7 @@ test("content_browsertests") {
     "//components/services/storage/public/cpp",
     "//components/ukm:test_support",
     "//components/url_formatter:url_formatter",
+    "//components/viz/host",
     "//components/viz/test:test_support",
     "//content:resources",
     "//content/app:both_for_content_tests",
