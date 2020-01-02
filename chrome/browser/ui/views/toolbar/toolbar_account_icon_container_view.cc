@@ -57,9 +57,6 @@ ToolbarAccountIconContainerView::ToolbarAccountIconContainerView(
                        views::FlexSpecification::ForSizeRule(
                            views::MinimumFlexSizeRule::kScaleToMinimum,
                            views::MaximumFlexSizeRule::kPreferred));
-  // TODO(crbug.com/1038571): move this into the base class.
-  animating_layout_manager()->SetDefaultFadeMode(
-      views::AnimatingLayoutManager::FadeInOutMode::kSlideFromTrailingEdge);
 }
 
 ToolbarAccountIconContainerView::~ToolbarAccountIconContainerView() = default;
