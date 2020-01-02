@@ -90,11 +90,8 @@ void AppServiceAppWindowLauncherController::ActiveUserChanged(
   // Deactivates the running app windows in InstanceRegistry for the inactive
   // user, and activates the app windows for the active user.
   for (auto* window : window_list_) {
-    ash::ShelfID shelf_id;
-    if (proxy_->InstanceRegistry().ForOneInstance(
-            window, [&shelf_id](const apps::InstanceUpdate& update) {
-              shelf_id = ash::ShelfID(update.AppId(), update.LaunchId());
-            })) {
+    ash::ShelfID shelf_id = proxy_->InstanceRegistry().GetShelfId(window);
+    if (!shelf_id.IsNull()) {
       RegisterWindow(window, shelf_id);
     } else {
       auto app_window_it = aura_window_to_app_window_.find(window);
@@ -306,8 +303,7 @@ void AppServiceAppWindowLauncherController::OnInstanceUpdate(
     // MultiUserWindowManagerHelper manages those windows.
     auto app_window_it = aura_window_to_app_window_.find(window);
     if (app_window_it != aura_window_to_app_window_.end() &&
-        proxy_->InstanceRegistry().ForOneInstance(
-            window, [](const apps::InstanceUpdate& update) {})) {
+        proxy_->InstanceRegistry().Exists(window)) {
       RemoveAppWindowFromShelf(app_window_it->second.get());
       aura_window_to_app_window_.erase(app_window_it);
     }
@@ -521,10 +517,7 @@ ash::ShelfID AppServiceAppWindowLauncherController::GetShelfId(
   if (!search_profile_list) {
     // Search from the proxy of the active user's profile, and verify whether
     // the app exists in the proxy.
-    proxy_->InstanceRegistry().ForOneInstance(
-        window, [&shelf_id](const apps::InstanceUpdate& update) {
-          shelf_id = ash::ShelfID(update.AppId(), update.LaunchId());
-        });
+    shelf_id = proxy_->InstanceRegistry().GetShelfId(window);
     if (shelf_id.IsNull()) {
       shelf_id =
           ash::ShelfID::Deserialize(window->GetProperty(ash::kShelfIDKey));
@@ -540,12 +533,9 @@ ash::ShelfID AppServiceAppWindowLauncherController::GetShelfId(
   } else {
     for (auto* profile : profile_list_) {
       auto* proxy = apps::AppServiceProxyFactory::GetForProfile(profile);
-      if (proxy->InstanceRegistry().ForOneInstance(
-              window, [&shelf_id](const apps::InstanceUpdate& update) {
-                shelf_id = ash::ShelfID(update.AppId(), update.LaunchId());
-              })) {
+      shelf_id = proxy->InstanceRegistry().GetShelfId(window);
+      if (!shelf_id.IsNull())
         break;
-      }
     }
     if (shelf_id.IsNull()) {
       shelf_id =
@@ -580,8 +570,7 @@ void AppServiceAppWindowLauncherController::UserHasAppOnActiveDesktop(
     content::BrowserContext* browser_context) {
   // If the window was created for the active user, register it to show an item
   // on the shelf.
-  if (proxy_->InstanceRegistry().ForOneInstance(
-          window, [](const apps::InstanceUpdate& update) {})) {
+  if (proxy_->InstanceRegistry().Exists(window)) {
     RegisterWindow(window, shelf_id);
     return;
   }

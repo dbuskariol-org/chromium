@@ -196,11 +196,8 @@ void AppServiceAppWindowArcTracker::OnTaskCreated(
   // window information.
   // Update |state|. The app must be started, and running state. If visible,
   // set it as |kVisible|, otherwise, clear the visible bit.
-  apps::InstanceState state = apps::InstanceState::kUnknown;
   auto* proxy = apps::AppServiceProxyFactory::GetForProfile(observed_profile_);
-  proxy->InstanceRegistry().ForOneInstance(
-      window,
-      [&state](const apps::InstanceUpdate& update) { state = update.State(); });
+  apps::InstanceState state = proxy->InstanceRegistry().GetState(window);
   state = static_cast<apps::InstanceState>(
       state | apps::InstanceState::kStarted | apps::InstanceState::kRunning);
   app_service_controller_->app_service_instance_helper()->OnInstances(
