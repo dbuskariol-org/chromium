@@ -2514,12 +2514,12 @@ NSString* const kBrowserViewControllerSnackbarCategory =
 - (CGRect)ntpFrameForWebState:(web::WebState*)webState {
   NewTabPageTabHelper* NTPHelper = NewTabPageTabHelper::FromWebState(webState);
   DCHECK(NTPHelper && NTPHelper->IsActive());
-  if (!IsRegularXRegularSizeClass())
-    return self.contentArea.bounds;
-  // NTP expects to be laid out behind the bottom toolbar.  It uses
-  // |contentInset| to push content above the toolbar.
+  // NTP expects to be laid out behind the bottom toolbar.
   UIEdgeInsets viewportInsets = [self viewportInsetsForView:self.contentArea];
-  viewportInsets.bottom = 0.0;
+  if (IsRegularXRegularSizeClass())
+    viewportInsets.bottom = 0.0;
+  if (IsSplitToolbarMode(self))
+    viewportInsets.top = 0;
   return UIEdgeInsetsInsetRect(self.contentArea.bounds, viewportInsets);
 }
 
@@ -3750,14 +3750,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   // toolbar.
   [self.infobarContainerCoordinator updateInfobarContainer];
 
-  // Resize the NTP's contentInset.bottom to be above the secondary toolbar.
-  if (self.isNTPActiveForCurrentWebState) {
-    NewTabPageCoordinator* coordinator =
-        _ntpCoordinatorsForWebStates[self.currentWebState];
-    UIEdgeInsets contentInset = coordinator.contentInset;
-    contentInset.bottom = height;
-    coordinator.contentInset = contentInset;
-  }
 }
 
 // Updates the browser container view such that its viewport is the space
