@@ -280,6 +280,15 @@ void AppServiceAppWindowArcTracker::OnTaskSetActive(int32_t task_id) {
               ? ArcAppWindow::FullScreenMode::kActive
               : ArcAppWindow::FullScreenMode::kNonActive);
     }
+    if (previous_arc_app_window_info->window()) {
+      apps::InstanceState state =
+          app_service_controller_->app_service_instance_helper()
+              ->CalculateActivatedState(previous_arc_app_window_info->window(),
+                                        false /* active */);
+      app_service_controller_->app_service_instance_helper()->OnInstances(
+          previous_arc_app_window_info->app_shelf_id().app_id(),
+          previous_arc_app_window_info->window(), std::string(), state);
+    }
   }
 
   active_task_id_ = task_id;
@@ -299,6 +308,13 @@ void AppServiceAppWindowArcTracker::OnTaskSetActive(int32_t task_id) {
   }
   app_service_controller_->owner()->SetItemStatus(
       current_arc_app_window_info->shelf_id(), ash::STATUS_RUNNING);
+
+  apps::InstanceState state =
+      app_service_controller_->app_service_instance_helper()
+          ->CalculateActivatedState(window, true /* active */);
+  app_service_controller_->app_service_instance_helper()->OnInstances(
+      current_arc_app_window_info->app_shelf_id().app_id(), window,
+      std::string(), state);
 }
 
 void AppServiceAppWindowArcTracker::AttachControllerToWindow(

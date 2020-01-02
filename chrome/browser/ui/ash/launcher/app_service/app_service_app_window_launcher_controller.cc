@@ -376,7 +376,7 @@ AppWindowBase* AppServiceAppWindowLauncherController::GetAppWindow(
 void AppServiceAppWindowLauncherController::SetWindowActivated(
     aura::Window* window,
     bool active) {
-  if (!window)
+  if (!window || !observed_windows_.IsObserving(window))
     return;
 
   const ash::ShelfID shelf_id =
