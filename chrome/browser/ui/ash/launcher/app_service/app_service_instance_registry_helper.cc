@@ -13,6 +13,8 @@
 #include "chrome/browser/apps/app_service/app_service_proxy_factory.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_manager.h"
+#include "chrome/browser/ui/ash/launcher/app_service/app_service_app_window_launcher_controller.h"
+#include "chrome/browser/ui/ash/launcher/chrome_launcher_controller.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/browser_list.h"
@@ -24,10 +26,15 @@
 #include "extensions/common/constants.h"
 
 AppServiceInstanceRegistryHelper::AppServiceInstanceRegistryHelper(
-    Profile* profile)
-    : proxy_(apps::AppServiceProxyFactory::GetForProfile(profile)),
-      launcher_controller_helper_(
-          std::make_unique<LauncherControllerHelper>(profile)) {}
+    AppServiceAppWindowLauncherController* controller)
+    : controller_(controller),
+      proxy_(apps::AppServiceProxyFactory::GetForProfile(
+          controller->owner()->profile())),
+      launcher_controller_helper_(std::make_unique<LauncherControllerHelper>(
+          controller->owner()->profile())) {
+  DCHECK(controller_);
+  DCHECK(proxy_);
+}
 
 AppServiceInstanceRegistryHelper::~AppServiceInstanceRegistryHelper() = default;
 
@@ -162,7 +169,22 @@ void AppServiceInstanceRegistryHelper::OnInstances(const std::string& app_id,
 
   std::vector<std::unique_ptr<apps::Instance>> deltas;
   deltas.push_back(std::move(instance));
-  proxy_->InstanceRegistry().OnInstances(std::move(deltas));
+
+  // The window could be teleported from the inactive user's profile to the
+  // current active user, so search all proxies. If the instance is found from a
+  // proxy, still save to that proxy, otherwise, save to the current active user
+  // profile's proxy.
+  auto* proxy = proxy_;
+  for (auto* profile : controller_->GetProfileList()) {
+    auto* proxy_for_profile =
+        apps::AppServiceProxyFactory::GetForProfile(profile);
+    if (proxy_for_profile->InstanceRegistry().ForOneInstance(
+            window, [](const apps::InstanceUpdate& update) {})) {
+      proxy = proxy_for_profile;
+      break;
+    }
+  }
+  proxy->InstanceRegistry().OnInstances(std::move(deltas));
 }
 
 void AppServiceInstanceRegistryHelper::OnWindowVisibilityChanged(
