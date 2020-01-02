@@ -12,16 +12,16 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 
-import org.chromium.android_webview.common.FlagOverrideConstants;
+import org.chromium.android_webview.common.DeveloperModeUtils;
 
 import java.util.Map;
 
 /**
- * A {@link ContentProvider} to fetch the flag overrides, via the {@code query()} method. No special
+ * A {@link ContentProvider} to fetch debugging data via the {@code query()} method. No special
  * permissions are required to access this ContentProvider, and it can be accessed by any context
  * (including the embedded WebView implementation).
  */
-public final class FlagOverrideContentProvider extends ContentProvider {
+public final class DeveloperModeContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         return true;
@@ -45,10 +45,10 @@ public final class FlagOverrideContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
-        if (FlagOverrideConstants.URI_PATH.equals(uri.getPath())) {
+        if (DeveloperModeUtils.FLAG_OVERRIDE_URI_PATH.equals(uri.getPath())) {
             Map<String, Boolean> flagOverrides = DeveloperUiService.getFlagOverrides();
-            final String[] columns = {FlagOverrideConstants.FLAG_NAME_COLUMN,
-                    FlagOverrideConstants.FLAG_STATE_COLUMN};
+            final String[] columns = {DeveloperModeUtils.FLAG_OVERRIDE_NAME_COLUMN,
+                    DeveloperModeUtils.FLAG_OVERRIDE_STATE_COLUMN};
             MatrixCursor cursor = new MatrixCursor(columns, flagOverrides.size());
             for (Map.Entry<String, Boolean> entry : flagOverrides.entrySet()) {
                 String flagName = entry.getKey();
@@ -64,9 +64,9 @@ public final class FlagOverrideContentProvider extends ContentProvider {
     }
 
     private void disableDeveloperMode() {
-        ComponentName flagOverrideContentProvider =
-                new ComponentName(getContext(), FlagOverrideContentProvider.class.getName());
-        getContext().getPackageManager().setComponentEnabledSetting(flagOverrideContentProvider,
+        ComponentName developerModeContentProvider =
+                new ComponentName(getContext(), DeveloperModeContentProvider.class.getName());
+        getContext().getPackageManager().setComponentEnabledSetting(developerModeContentProvider,
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
 
         // Stop the service explicitly, in case it's running. NOOP if the service is not running.
