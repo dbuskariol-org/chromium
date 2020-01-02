@@ -520,7 +520,15 @@ ash::ShelfID AppServiceAppWindowLauncherController::GetShelfId(
       return ash::ShelfID(shelf_app_id);
   }
 
+  if (plugin_vm::IsPluginVmWindow(window))
+    return ash::ShelfID(plugin_vm::kPluginVmAppId);
+
   ash::ShelfID shelf_id;
+  if (arc_tracker_)
+    shelf_id = arc_tracker_->GetShelfId(arc::GetWindowTaskId(window));
+
+  if (!shelf_id.IsNull())
+    return shelf_id;
 
   // If the window exists in InstanceRegistry, get the shelf id from
   // InstanceRegistry.
@@ -563,13 +571,6 @@ ash::ShelfID AppServiceAppWindowLauncherController::GetShelfId(
       return ash::ShelfID();
     }
   }
-
-  // For null shelf id, it could be VM window or ARC apps window.
-  if (plugin_vm::IsPluginVmWindow(window))
-    return ash::ShelfID(plugin_vm::kPluginVmAppId);
-
-  if (arc_tracker_)
-    return arc_tracker_->GetShelfId(arc::GetWindowTaskId(window));
 
   return shelf_id;
 }
