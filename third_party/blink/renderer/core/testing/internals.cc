@@ -3196,13 +3196,14 @@ bool Internals::isUseCounted(Document* document, uint32_t feature) {
 
 bool Internals::isCSSPropertyUseCounted(Document* document,
                                         const String& property_name) {
-  return document->IsPropertyCounted(unresolvedCSSPropertyID(property_name));
+  return document->IsPropertyCounted(
+      unresolvedCSSPropertyID(document, property_name));
 }
 
 bool Internals::isAnimatedCSSPropertyUseCounted(Document* document,
                                                 const String& property_name) {
   return document->IsAnimatedPropertyCounted(
-      unresolvedCSSPropertyID(property_name));
+      unresolvedCSSPropertyID(document, property_name));
 }
 
 void Internals::clearUseCounter(Document* document, uint32_t feature) {
