@@ -1452,7 +1452,7 @@ void OverviewGrid::EndScroll() {
 int OverviewGrid::CalculateWidthAndMaybeSetUnclippedBounds(OverviewItem* item,
                                                            int height) {
   const gfx::Size item_size(0, height);
-  gfx::RectF target_bounds = item->GetTargetBoundsInScreen();
+  gfx::SizeF target_size = item->GetTargetBoundsInScreen().size();
   float scale = item->GetItemScale(item_size);
   ScopedOverviewTransformWindow::GridWindowFillMode grid_fill_mode =
       item->GetWindowDimensionsType();
@@ -1466,27 +1466,35 @@ int OverviewGrid::CalculateWidthAndMaybeSetUnclippedBounds(OverviewItem* item,
         overview_session_->window_drag_controller()
             ? overview_session_->window_drag_controller()->item()
             : nullptr;
-    if (grid_dragged_item) {
+    if (grid_dragged_item)
       dragged_window = grid_dragged_item->GetWindow();
-      grid_fill_mode = grid_dragged_item->GetWindowDimensionsType();
-    } else if (dragged_window_) {
+    else if (dragged_window_)
       dragged_window = dragged_window_;
-      grid_fill_mode = ScopedOverviewTransformWindow::GetWindowDimensionsType(
-          dragged_window);
-    }
-
     if (dragged_window && dragged_window->parent()) {
-      target_bounds = ::ash::GetTargetBoundsInScreen(dragged_window);
+      const gfx::Size work_area_size =
+          screen_util::GetDisplayWorkAreaBoundsInScreenForActiveDeskContainer(
+              root_window_)
+              .size();
+      gfx::Size dragged_window_size = dragged_window->bounds().size();
+      // If the drag started from a different root window, |dragged_window| may
+      // not fit into the work area of |root_window_|. Then if |dragged_window|
+      // is dropped into this grid, |dragged_window| will shrink to fit into
+      // this work area. The drop target shall reflect that.
+      dragged_window_size.SetToMin(work_area_size);
+      grid_fill_mode = ScopedOverviewTransformWindow::GetWindowDimensionsType(
+          dragged_window_size);
+      target_size = ::ash::GetTargetBoundsInScreen(dragged_window).size();
+      target_size.SetToMin(gfx::SizeF(work_area_size));
       const gfx::SizeF inset_size(0, height - 2 * kWindowMargin);
       scale = ScopedOverviewTransformWindow::GetItemScale(
-          target_bounds.size(), inset_size,
+          target_size, inset_size,
           dragged_window->GetProperty(aura::client::kTopViewInset),
           kHeaderHeightDp);
     }
   }
 
   int width = std::max(
-      1, gfx::ToFlooredInt(target_bounds.width() * scale) + 2 * kWindowMargin);
+      1, gfx::ToFlooredInt(target_size.width() * scale) + 2 * kWindowMargin);
   switch (grid_fill_mode) {
     case ScopedOverviewTransformWindow::GridWindowFillMode::kLetterBoxed:
       width = kExtremeWindowRatioThreshold * height;
@@ -1510,8 +1518,8 @@ int OverviewGrid::CalculateWidthAndMaybeSetUnclippedBounds(OverviewItem* item,
   // Perform horizontal clipping if the window's aspect ratio is wider than the
   // split view bounds aspect ratio, and vertical clipping otherwise.
   const float aspect_ratio =
-      target_bounds.width() /
-      (target_bounds.height() -
+      target_size.width() /
+      (target_size.height() -
        item->GetWindow()->GetProperty(aura::client::kTopViewInset));
   const float target_aspect_ratio =
       split_view_bounds->width() / split_view_bounds->height();
@@ -1537,7 +1545,7 @@ int OverviewGrid::CalculateWidthAndMaybeSetUnclippedBounds(OverviewItem* item,
     // aspect ratio of |target_bounds|. Clipping takes the overview header into
     // account, so add that back in.
     const int unclipped_height =
-        width * target_bounds.height() / target_bounds.width();
+        width * target_size.height() / target_size.width();
     unclipped_size.set_width(width);
     unclipped_size.set_height(unclipped_height + kHeaderHeightDp);
 
