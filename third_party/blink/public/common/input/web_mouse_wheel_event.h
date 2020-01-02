@@ -129,11 +129,6 @@ inline bool operator==(const WebMouseWheelEvent& a,
   return memcmp(&a, &b, a.size()) == 0;
 }
 
-inline bool operator!=(const WebMouseWheelEvent& a,
-                       const WebMouseWheelEvent& b) {
-  return !(a == b);
-}
-
 }  // namespace blink
 
 #endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_INPUT_WEB_MOUSE_WHEEL_EVENT_H_
