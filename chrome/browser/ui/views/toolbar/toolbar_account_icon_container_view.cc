@@ -46,16 +46,20 @@ ToolbarAccountIconContainerView::ToolbarAccountIconContainerView(
   params.page_action_icon_delegate = this;
   params.button_observer = this;
   params.view_observer = this;
-  avatar_->SetProperty(views::kFlexBehaviorKey,
-                       views::FlexSpecification::ForSizeRule(
-                           views::MinimumFlexSizeRule::kScaleToMinimum,
-                           views::MaximumFlexSizeRule::kPreferred));
   AddMainButton(avatar_);
 
   // Since the insertion point for icons before the avatar button, we don't
   // initialize until after the avatar button has been added.
   page_action_icon_controller_ = std::make_unique<PageActionIconController>();
   page_action_icon_controller_->Init(params, this);
+
+  avatar_->SetProperty(views::kFlexBehaviorKey,
+                       views::FlexSpecification::ForSizeRule(
+                           views::MinimumFlexSizeRule::kScaleToMinimum,
+                           views::MaximumFlexSizeRule::kPreferred));
+  // TODO(crbug.com/1038571): move this into the base class.
+  animating_layout_manager()->SetDefaultFadeMode(
+      views::AnimatingLayoutManager::FadeInOutMode::kSlideFromTrailingEdge);
 }
 
 ToolbarAccountIconContainerView::~ToolbarAccountIconContainerView() = default;
