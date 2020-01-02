@@ -771,11 +771,8 @@ BUILDERS = {
         'num_shards': 1,
         'type': TEST_TYPES.GTEST,
       },
-      {
-        'isolate': 'views_perftests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
-      },
+      # crbug.com/1036846: re-enable views_perftest. It is believed that this
+      # suite is causing bots to die in subsequent tasks.
       {
         'isolate': 'media_perftests',
         'num_shards': 1,
