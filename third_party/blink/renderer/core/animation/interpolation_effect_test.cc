@@ -14,7 +14,7 @@ namespace blink {
 namespace {
 
 double GetInterpolableNumber(Interpolation* value) {
-  TransitionInterpolation* interpolation = ToTransitionInterpolation(value);
+  auto* interpolation = To<TransitionInterpolation>(value);
   std::unique_ptr<TypedInterpolationValue> interpolated_value =
       interpolation->GetInterpolatedValue();
   return ToInterpolableNumber(interpolated_value->GetInterpolableValue())
