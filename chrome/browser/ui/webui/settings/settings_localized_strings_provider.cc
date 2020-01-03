@@ -185,6 +185,8 @@ void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
 #endif
     {"retry", IDS_SETTINGS_RETRY},
     {"save", IDS_SAVE},
+    {"searchResultBubbleText", IDS_SEARCH_RESULT_BUBBLE_TEXT},
+    {"searchResultsBubbleText", IDS_SEARCH_RESULTS_BUBBLE_TEXT},
     {"settings", IDS_SETTINGS_SETTINGS},
     {"settingsAltPageTitle", IDS_SETTINGS_ALT_PAGE_TITLE},
     {"subpageArrowRoleDescription", IDS_SETTINGS_SUBPAGE_BUTTON},

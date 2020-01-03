@@ -459,6 +459,12 @@ are declared in tools/grit/grit_rule.gni.
         <message name="IDS_SEARCH_RESULTS_PLURAL" desc="Message announced to screenreader users when searching completes and results are showing.">
           <ph name="RESULT_COUNT">$1<ex>15</ex></ph> results for '<ph name="SEARCH_TEXT">$2<ex>cookies</ex></ph>'
         </message>
+        <message name="IDS_SEARCH_RESULT_BUBBLE_TEXT" desc="Text that shows in search result bubbles that point at parts of the settings UI which, when clicked, reveal new places for a search results (singular).">
+          1 result
+        </message>
+        <message name="IDS_SEARCH_RESULTS_BUBBLE_TEXT" desc="Text that shows in search result bubbles that point at parts of the settings UI which, when clicked, reveal new places for search results (plural).">
+          <ph name="NUM_RESULTS">$1<ex>5</ex></ph> results
+        </message>
         <message name="IDS_SEARCH_NO_RESULTS" desc="Text description of a search that has no results.">
           No search results found
         </message>
