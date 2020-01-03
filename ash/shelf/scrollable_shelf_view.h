@@ -177,6 +177,7 @@ class ASH_EXPORT ScrollableShelfView : public views::AccessiblePaneView,
   void ViewHierarchyChanged(
       const views::ViewHierarchyChangedDetails& details) override;
   void ScrollRectToVisible(const gfx::Rect& rect) override;
+  std::unique_ptr<ui::Layer> RecreateLayer() override;
 
   // ShelfButtonDelegate:
   void OnShelfButtonAboutToRequestFocusFromTabTraversal(ShelfButton* button,

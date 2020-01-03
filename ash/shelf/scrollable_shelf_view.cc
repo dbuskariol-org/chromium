@@ -733,6 +733,13 @@ void ScrollableShelfView::Layout() {
   if (right_arrow_->GetVisible())
     right_arrow_->SetBoundsRect(right_arrow_bounds);
 
+  // Layer::Clone(), which may be triggered by screen rotation, does not copy
+  // the mask layer. So we may need to reset the mask layer.
+  if (!layer()->layer_mask_layer()) {
+    DCHECK(!gradient_layer_delegate_->layer()->layer_mask_back_link());
+    layer()->SetMaskLayer(gradient_layer_delegate_->layer());
+  }
+
   if (gradient_layer_delegate_->layer()->bounds() != layer()->bounds())
     gradient_layer_delegate_->layer()->SetBounds(layer()->bounds());
 
@@ -896,6 +903,11 @@ void ScrollableShelfView::ScrollRectToVisible(const gfx::Rect& rect) {
     return;
 
   ScrollToMainOffset(main_axis_offset_after_scroll, /*animating=*/true);
+}
+
+std::unique_ptr<ui::Layer> ScrollableShelfView::RecreateLayer() {
+  layer()->SetMaskLayer(nullptr);
+  return views::View::RecreateLayer();
 }
 
 const char* ScrollableShelfView::GetClassName() const {
