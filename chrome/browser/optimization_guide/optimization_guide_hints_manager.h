@@ -155,8 +155,10 @@ class OptimizationGuideHintsManager
                            HintsFetched_AtNonSRP_ECT_SLOW_2G);
   FRIEND_TEST_ALL_PREFIXES(OptimizationGuideHintsManagerFetchingTest,
                            HintsFetched_AtSRP_ECT_SLOW_2G_DuplicatesRemoved);
-  FRIEND_TEST_ALL_PREFIXES(OptimizationGuideHintsManagerFetchingTest,
-                           HintsFetched_AtSRP_ECT_SLOW_2G_InsecureHostsRemoved);
+  FRIEND_TEST_ALL_PREFIXES(
+      OptimizationGuideHintsManagerFetchingTest,
+      HintsFetched_AtSRP_ECT_SLOW_2G_NonHTTPOrHTTPSHostsRemoved);
+
   // Processes the hints component.
   //
   // Should always be called on the thread that belongs to

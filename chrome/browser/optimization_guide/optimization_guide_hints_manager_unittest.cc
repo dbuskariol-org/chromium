@@ -1982,7 +1982,7 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
 }
 
 TEST_F(OptimizationGuideHintsManagerFetchingTest,
-       HintsFetched_AtSRP_ECT_SLOW_2G_InsecureHostsRemoved) {
+       HintsFetched_AtSRP_ECT_SLOW_2G_NonHTTPOrHTTPSHostsRemoved) {
   hints_manager()->RegisterOptimizationTypes(
       {optimization_guide::proto::DEFER_ALL_SCRIPT});
   InitializeWithDefaultConfig("1.0.0.0");
@@ -1996,7 +1996,8 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
   base::HistogramTester histogram_tester;
   std::vector<GURL> sorted_predicted_urls;
   sorted_predicted_urls.push_back(GURL("https://foo.com/page1.html"));
-  sorted_predicted_urls.push_back(GURL("http://insecure-bar.com/"));
+  sorted_predicted_urls.push_back(GURL("file://non-web-bar.com/"));
+  sorted_predicted_urls.push_back(GURL("http://httppage.com/"));
 
   NavigationPredictorKeyedService::Prediction prediction(
       nullptr, GURL("https://www.google.com/"), sorted_predicted_urls);
@@ -2005,7 +2006,7 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
   // Ensure that we only include 1 secure host in the request. These would be
   // foo.com.
   histogram_tester.ExpectUniqueSample(
-      "OptimizationGuide.HintsFetcher.GetHintsRequest.HostCount", 1, 1);
+      "OptimizationGuide.HintsFetcher.GetHintsRequest.HostCount", 2, 1);
 }
 
 TEST_F(OptimizationGuideHintsManagerFetchingTest, HintsFetched_AtSRP_ECT_4G) {

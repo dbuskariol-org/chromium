@@ -887,7 +887,7 @@ bool OptimizationGuideHintsManager::IsAllowedToFetchNavigationHints(
   if (!IsUserPermittedToFetchFromRemoteOptimizationGuide(profile_))
     return false;
 
-  if (!url.is_valid() || !url.SchemeIs(url::kHttpsScheme))
+  if (!url.is_valid() || !url.SchemeIsHTTPOrHTTPS())
     return false;
 
   base::Optional<net::EffectiveConnectionType> ect_max_threshold =
