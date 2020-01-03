@@ -50,6 +50,7 @@
 #include "third_party/blink/renderer/core/html/html_table_cell_element.h"
 #include "third_party/blink/renderer/core/html/media/html_media_element.h"
 #include "third_party/blink/renderer/core/html_names.h"
+#include "third_party/blink/renderer/core/layout/layout_list_marker.h"
 #include "third_party/blink/renderer/core/layout/layout_object.h"
 #include "third_party/blink/renderer/core/layout/layout_replaced.h"
 #include "third_party/blink/renderer/core/layout/layout_theme.h"
@@ -208,10 +209,24 @@ static void AdjustStyleForMarker(ComputedStyle& style,
       (IsA<HTMLLIElement>(parent_element) &&
        !parent_style.IsInsideListElement());
 
-  // Outside list markers should generate a block container.
-  if (!is_inside) {
+  if (is_inside) {
+    auto margins = LayoutListMarker::InlineMarginsForInside(
+        style, parent_style.GeneratesMarkerImage());
+    style.SetMarginStart(Length::Fixed(margins.first));
+    style.SetMarginEnd(Length::Fixed(margins.second));
+  } else {
+    // Outside list markers should generate a block container.
     DCHECK_EQ(style.Display(), EDisplay::kInline);
     style.SetDisplay(EDisplay::kInlineBlock);
+
+    // Do not break inside the marker, and honor the trailing spaces.
+    style.SetWhiteSpace(EWhiteSpace::kPre);
+
+    // Compute margins for 'outside' during layout, because it requires the
+    // layout size of the marker.
+    // TODO(kojii): absolute position looks more reasonable, and maybe required
+    // in some cases, but this is currently blocked by crbug.com/734554
+    // style.SetPosition(EPosition::kAbsolute);
   }
 }
 
