@@ -8,6 +8,9 @@
   </message>
 
   <!-- People (OS settings) -->
+  <message name="IDS_OS_SETTINGS_PEOPLE" desc="Name of a section in the OS settings page." meaning="People and their accounts.">
+    People
+  </message>
   <message name="IDS_OS_SETTINGS_PROFILE_LABEL" desc="Label underneath the profile's real name, listing the email address and optionally the number of additional accounts">
     {COUNT, plural,
      =0 {<ph name="EMAIL">$1<ex>alice@example.com</ex></ph>}
