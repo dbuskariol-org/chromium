@@ -910,7 +910,6 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/media/ui/MediaNotificationListener.java",
   "java/src/org/chromium/chrome/browser/media/ui/MediaNotificationManager.java",
   "java/src/org/chromium/chrome/browser/media/ui/MediaSessionTabHelper.java",
-  "java/src/org/chromium/chrome/browser/metrics/ActivityStopMetrics.java",
   "java/src/org/chromium/chrome/browser/metrics/ActivityTabStartupMetricsTracker.java",
   "java/src/org/chromium/chrome/browser/metrics/BackgroundTaskMemoryMetricsEmitter.java",
   "java/src/org/chromium/chrome/browser/metrics/ImpressionTracker.java",
