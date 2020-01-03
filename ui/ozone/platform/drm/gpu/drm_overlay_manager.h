@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_OZONE_PLATFORM_DRM_COMMON_DRM_OVERLAY_MANAGER_H_
-#define UI_OZONE_PLATFORM_DRM_COMMON_DRM_OVERLAY_MANAGER_H_
+#ifndef UI_OZONE_PLATFORM_DRM_GPU_DRM_OVERLAY_MANAGER_H_
+#define UI_OZONE_PLATFORM_DRM_GPU_DRM_OVERLAY_MANAGER_H_
 
 #include <memory>
 #include <vector>
@@ -21,8 +21,6 @@ class OverlaySurfaceCandidate;
 // Ozone DRM extension of the OverlayManagerOzone interface. It queries the
 // DrmDevice to see if an overlay configuration will work and keeps an MRU cache
 // of recent configurations.
-// TODO(crbug.com/936425): Move DrmOverlayManager to ui/ozone/platform/drm/gpu/
-// as it's not longer used from ui/ozone/platform/drm/host/.
 class DrmOverlayManager : public OverlayManagerOzone {
  public:
   DrmOverlayManager();
@@ -88,4 +86,4 @@ class DrmOverlayManager : public OverlayManagerOzone {
 
 }  // namespace ui
 
-#endif  // UI_OZONE_PLATFORM_DRM_COMMON_DRM_OVERLAY_MANAGER_H_
+#endif  // UI_OZONE_PLATFORM_DRM_GPU_DRM_OVERLAY_MANAGER_H_
