@@ -213,7 +213,6 @@ crbug.com/963205 [ win nvidia opengl passthrough ] conformance/extensions/webgl-
 crbug.com/963205 [ win nvidia opengl passthrough ] conformance/extensions/webgl-compressed-texture-s3tc-srgb.html [ RetryOnFailure ]
 crbug.com/715001 [ opengl win nvidia                    ] conformance/limits/gl-max-texture-dimensions.html [ Failure ]
 crbug.com/703779 [ opengl win nvidia                    ] conformance/textures/misc/texture-size.html [ Failure ]
-crbug.com/781668 [ opengl win nvidia-0x1cb3             ] conformance2/textures/canvas_sub_rectangle/tex-2d-rgb565-rgb-unsigned_byte.html [ Failure ]
 crbug.com/921055 [ opengl win passthrough nvidia-0x1cb3 ] conformance2/textures/image_bitmap_from_image_data/tex-2d-rgb9_e5-rgb-float.html [ RetryOnFailure ]
 crbug.com/905003 [ opengl win passthrough nvidia        ] conformance2/textures/misc/integer-cubemap-specification-order-bug.html [ Failure ]
 crbug.com/887578 [ opengl win passthrough nvidia        ] deqp/data/gles3/shaders/conversions.html [ RetryOnFailure ]
