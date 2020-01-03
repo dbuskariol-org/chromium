@@ -3187,6 +3187,17 @@ deps = {
       'dep_type': 'cipd',
   },
 
+  'src/third_party/android_deps/libs/javax_annotation_javax_annotation_api': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/android_deps/libs/javax_annotation_javax_annotation_api',
+              'version': 'version:1.3.2-cr0',
+          },
+      ],
+      'condition': 'checkout_android',
+      'dep_type': 'cipd',
+  },
+
   'src/third_party/android_deps/libs/javax_annotation_jsr250_api': {
       'packages': [
           {
