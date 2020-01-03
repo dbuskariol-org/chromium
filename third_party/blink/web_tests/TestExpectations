@@ -1317,8 +1317,6 @@ crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/relpos-with-percentage-
 ### virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/align-items-004.htm [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/align-items-baseline-overflow-non-visible.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/anonymous-flex-item-001.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/anonymous-flex-item-003.html [ Failure ]
 crbug.com/807497 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/anonymous-flex-item-005.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-basis-010.html [ Failure ]
 crbug.com/249112 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-minimum-height-flex-items-005.xht [ Failure ]
