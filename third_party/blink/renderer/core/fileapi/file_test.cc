@@ -26,7 +26,7 @@ class MockBlob : public FakeBlob {
   static void Create(File* file, base::Time modified_time) {
     mojo::PendingRemote<mojom::blink::Blob> remote;
     PostCrossThreadTask(
-        *base::CreateSequencedTaskRunner({base::ThreadPool()}), FROM_HERE,
+        *base::CreateSingleThreadTaskRunner({base::ThreadPool()}), FROM_HERE,
         CrossThreadBindOnce(
             [](const String& uuid,
                mojo::PendingReceiver<mojom::blink::Blob> receiver,
