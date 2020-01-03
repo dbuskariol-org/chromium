@@ -126,8 +126,8 @@ public class BookmarkUtils {
         if (parent != null) {
             parentItem = bookmarkModel.getBookmarkById(parent);
         }
-        if (parent == null || parentItem == null || parentItem.isManaged() || !parentItem.isFolder()
-                || !parentItem.isEditable()) {
+        if (parent == null || parentItem == null || parentItem.isManaged()
+                || !parentItem.isFolder()) {
             parent = bookmarkModel.getDefaultFolder();
         }
         BookmarkId bookmarkId =
