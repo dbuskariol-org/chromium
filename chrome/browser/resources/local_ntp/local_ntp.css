@@ -116,7 +116,8 @@ body.hide-fakebox #fakebox {
   visibility: hidden;
 }
 
-#fakebox-container {
+#fakebox-container,
+#realbox-container {
   margin: 0 auto 0 auto;
   /* Increase min-width again to account for the search icon: 390px new
    * min-width + additional 20px */
