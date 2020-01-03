@@ -4261,6 +4261,7 @@
                 "android",
                 "android_webview",
                 "chromeos",
+                "ios",
                 "linux",
                 "mac",
                 "windows"
@@ -4268,6 +4269,10 @@
             "experiments": [
                 {
                     "name": "Enabled",
+                    "params": {
+                        "extra-safelisted-request-headers": "x-googapps-allowed-domains,youtube-restrict",
+                        "extra-safelisted-request-headers-for-enterprise": "x-googapps-allowed-domains,youtube-restrict"
+                    },
                     "enable_features": [
                         "OutOfBlinkCors"
                     ]
