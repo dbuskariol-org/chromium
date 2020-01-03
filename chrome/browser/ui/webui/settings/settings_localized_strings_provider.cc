@@ -190,8 +190,6 @@ void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
     {"settings", IDS_SETTINGS_SETTINGS},
     {"settingsAltPageTitle", IDS_SETTINGS_ALT_PAGE_TITLE},
     {"subpageArrowRoleDescription", IDS_SETTINGS_SUBPAGE_BUTTON},
-    {"toggleOn", IDS_SETTINGS_TOGGLE_ON},
-    {"toggleOff", IDS_SETTINGS_TOGGLE_OFF},
     {"notValid", IDS_SETTINGS_NOT_VALID},
     {"notValidWebAddress", IDS_SETTINGS_NOT_VALID_WEB_ADDRESS},
     {"notValidWebAddressForContentType",
@@ -1043,6 +1041,8 @@ void AddDeviceStrings(content::WebUIDataSource* html_source) {
       {"displayNightLightTempSliderMinLabel",
        IDS_SETTINGS_DISPLAY_NIGHT_LIGHT_TEMP_SLIDER_MIN_LABEL},
       {"displayUnifiedDesktop", IDS_SETTINGS_DISPLAY_UNIFIED_DESKTOP},
+      {"displayUnifiedDesktopOn", IDS_SETTINGS_DISPLAY_UNIFIED_DESKTOP_ON},
+      {"displayUnifiedDesktopOff", IDS_SETTINGS_DISPLAY_UNIFIED_DESKTOP_OFF},
       {"displayResolutionTitle", IDS_SETTINGS_DISPLAY_RESOLUTION_TITLE},
       {"displayResolutionText", IDS_SETTINGS_DISPLAY_RESOLUTION_TEXT},
       {"displayResolutionTextBest", IDS_SETTINGS_DISPLAY_RESOLUTION_TEXT_BEST},
@@ -2638,6 +2638,8 @@ void AddSearchStrings(content::WebUIDataSource* html_source, Profile* profile) {
      IDS_SETTINGS_SEARCH_GOOGLE_ASSISTANT_ENABLED},
     {"searchGoogleAssistantDisabled",
      IDS_SETTINGS_SEARCH_GOOGLE_ASSISTANT_DISABLED},
+    {"searchGoogleAssistantOn", IDS_SETTINGS_SEARCH_GOOGLE_ASSISTANT_ON},
+    {"searchGoogleAssistantOff", IDS_SETTINGS_SEARCH_GOOGLE_ASSISTANT_OFF},
 #endif
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
