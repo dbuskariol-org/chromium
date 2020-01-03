@@ -1303,7 +1303,6 @@ virtual/layout_ng_block_frag/fragmentation/scrolling-contents-scroll.html [ Cras
 crbug.com/591099 external/wpt/css/css-flexbox/flexbox_align-items-stretch-3.html [ Failure ]
 
 ### virtual/layout_ng_flex_box/css3/flexbox/
-crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/auto-height-column-with-border-and-padding.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flex-align-vertical-writing-mode.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flex-align.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/css3/flexbox/flexbox-baseline-margins.html [ Failure ]
@@ -1335,7 +1334,6 @@ crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox
 crbug.com/336604 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_visibility-collapse-line-wrapping.html [ Failure ]
 crbug.com/336604 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_visibility-collapse.html [ Failure ]
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/negative-margins-001.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/overflow-top-left.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/percentage-heights-007.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/percentage-heights-quirks-node.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/quirks-auto-block-size-with-percentage-item.html [ Pass Failure ]

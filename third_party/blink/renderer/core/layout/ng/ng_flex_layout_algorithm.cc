@@ -49,11 +49,12 @@ bool NGFlexLayoutAlgorithm::MainAxisIsInlineAxis(
 }
 
 LayoutUnit NGFlexLayoutAlgorithm::MainAxisContentExtent(
-    LayoutUnit sum_hypothetical_main_size) {
+    LayoutUnit sum_hypothetical_main_size) const {
   if (Style().ResolvedIsColumnFlexDirection()) {
     return ComputeBlockSizeForFragment(
                ConstraintSpace(), Style(), border_padding_,
-               sum_hypothetical_main_size + (border_padding_).BlockSum()) -
+               sum_hypothetical_main_size +
+                   border_scrollbar_padding_.BlockSum()) -
            border_scrollbar_padding_.BlockSum();
   }
   return content_box_size_.inline_size;
