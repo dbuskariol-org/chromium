@@ -78,7 +78,7 @@ TEST(MediaTrackConstraintsTest, ConstraintName) {
 
 TEST(MediaTrackConstraintsTest, MandatoryChecks) {
   WebMediaTrackConstraintSet the_set;
-  std::string found_name;
+  String found_name;
   EXPECT_FALSE(the_set.HasMandatory());
   EXPECT_FALSE(the_set.HasMandatoryOutsideSet({"width"}, found_name));
   EXPECT_FALSE(the_set.width.HasMandatory());

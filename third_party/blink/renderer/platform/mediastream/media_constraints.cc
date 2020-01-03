@@ -388,61 +388,59 @@ WebMediaTrackConstraintSet::WebMediaTrackConstraintSet()
       goog_payload_padding("googPayloadPadding"),
       goog_latency_ms("latencyMs") {}
 
-std::vector<const BaseConstraint*> WebMediaTrackConstraintSet::AllConstraints()
+Vector<const BaseConstraint*> WebMediaTrackConstraintSet::AllConstraints()
     const {
-  const BaseConstraint* temp[] = {&width,
-                                  &height,
-                                  &aspect_ratio,
-                                  &frame_rate,
-                                  &facing_mode,
-                                  &resize_mode,
-                                  &volume,
-                                  &sample_rate,
-                                  &sample_size,
-                                  &echo_cancellation,
-                                  &echo_cancellation_type,
-                                  &latency,
-                                  &channel_count,
-                                  &device_id,
-                                  &group_id,
-                                  &video_kind,
-                                  &media_stream_source,
-                                  &disable_local_echo,
-                                  &render_to_associated_sink,
-                                  &goog_echo_cancellation,
-                                  &goog_experimental_echo_cancellation,
-                                  &goog_auto_gain_control,
-                                  &goog_experimental_auto_gain_control,
-                                  &goog_noise_suppression,
-                                  &goog_highpass_filter,
-                                  &goog_experimental_noise_suppression,
-                                  &goog_audio_mirroring,
-                                  &goog_da_echo_cancellation,
-                                  &goog_noise_reduction,
-                                  &offer_to_receive_audio,
-                                  &offer_to_receive_video,
-                                  &voice_activity_detection,
-                                  &ice_restart,
-                                  &goog_use_rtp_mux,
-                                  &enable_dtls_srtp,
-                                  &enable_rtp_data_channels,
-                                  &enable_dscp,
-                                  &enable_i_pv6,
-                                  &goog_enable_video_suspend_below_min_bitrate,
-                                  &goog_num_unsignalled_recv_streams,
-                                  &goog_combined_audio_video_bwe,
-                                  &goog_screencast_min_bitrate,
-                                  &goog_cpu_overuse_detection,
-                                  &goog_cpu_underuse_threshold,
-                                  &goog_cpu_overuse_threshold,
-                                  &goog_cpu_underuse_encode_rsd_threshold,
-                                  &goog_cpu_overuse_encode_rsd_threshold,
-                                  &goog_cpu_overuse_encode_usage,
-                                  &goog_high_start_bitrate,
-                                  &goog_payload_padding,
-                                  &goog_latency_ms};
-  const int element_count = sizeof(temp) / sizeof(temp[0]);
-  return std::vector<const BaseConstraint*>(&temp[0], &temp[element_count]);
+  return {&width,
+          &height,
+          &aspect_ratio,
+          &frame_rate,
+          &facing_mode,
+          &resize_mode,
+          &volume,
+          &sample_rate,
+          &sample_size,
+          &echo_cancellation,
+          &echo_cancellation_type,
+          &latency,
+          &channel_count,
+          &device_id,
+          &group_id,
+          &video_kind,
+          &media_stream_source,
+          &disable_local_echo,
+          &render_to_associated_sink,
+          &goog_echo_cancellation,
+          &goog_experimental_echo_cancellation,
+          &goog_auto_gain_control,
+          &goog_experimental_auto_gain_control,
+          &goog_noise_suppression,
+          &goog_highpass_filter,
+          &goog_experimental_noise_suppression,
+          &goog_audio_mirroring,
+          &goog_da_echo_cancellation,
+          &goog_noise_reduction,
+          &offer_to_receive_audio,
+          &offer_to_receive_video,
+          &voice_activity_detection,
+          &ice_restart,
+          &goog_use_rtp_mux,
+          &enable_dtls_srtp,
+          &enable_rtp_data_channels,
+          &enable_dscp,
+          &enable_i_pv6,
+          &goog_enable_video_suspend_below_min_bitrate,
+          &goog_num_unsignalled_recv_streams,
+          &goog_combined_audio_video_bwe,
+          &goog_screencast_min_bitrate,
+          &goog_cpu_overuse_detection,
+          &goog_cpu_underuse_threshold,
+          &goog_cpu_overuse_threshold,
+          &goog_cpu_underuse_encode_rsd_threshold,
+          &goog_cpu_overuse_encode_rsd_threshold,
+          &goog_cpu_overuse_encode_usage,
+          &goog_high_start_bitrate,
+          &goog_payload_padding,
+          &goog_latency_ms};
 }
 
 bool WebMediaTrackConstraintSet::IsEmpty() const {
@@ -454,8 +452,8 @@ bool WebMediaTrackConstraintSet::IsEmpty() const {
 }
 
 bool WebMediaTrackConstraintSet::HasMandatoryOutsideSet(
-    const std::vector<std::string>& good_names,
-    std::string& found_name) const {
+    const Vector<String>& good_names,
+    String& found_name) const {
   for (auto* const constraint : AllConstraints()) {
     if (constraint->HasMandatory()) {
       if (std::find(good_names.begin(), good_names.end(),
@@ -469,8 +467,8 @@ bool WebMediaTrackConstraintSet::HasMandatoryOutsideSet(
 }
 
 bool WebMediaTrackConstraintSet::HasMandatory() const {
-  std::string dummy_string;
-  return HasMandatoryOutsideSet(std::vector<std::string>(), dummy_string);
+  String dummy_string;
+  return HasMandatoryOutsideSet(Vector<String>(), dummy_string);
 }
 
 bool WebMediaTrackConstraintSet::HasMin() const {

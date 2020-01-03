@@ -511,7 +511,7 @@ void ConvertConstraintsToWebrtcOfferOptions(
   if (constraints.IsEmpty()) {
     return;
   }
-  std::string failing_name;
+  String failing_name;
   if (constraints.Basic().HasMandatoryOutsideSet(
           {constraints.Basic().offer_to_receive_audio.GetName(),
            constraints.Basic().offer_to_receive_video.GetName(),

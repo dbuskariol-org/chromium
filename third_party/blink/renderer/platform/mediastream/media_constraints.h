@@ -31,9 +31,6 @@
 #ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_MEDIASTREAM_MEDIA_CONSTRAINTS_H_
 #define THIRD_PARTY_BLINK_RENDERER_PLATFORM_MEDIASTREAM_MEDIA_CONSTRAINTS_H_
 
-#include <string>
-#include <vector>
-
 #include "third_party/blink/public/platform/web_private_ptr.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
@@ -282,14 +279,14 @@ struct WebMediaTrackConstraintSet {
 
   PLATFORM_EXPORT bool IsEmpty() const;
   PLATFORM_EXPORT bool HasMandatory() const;
-  PLATFORM_EXPORT bool HasMandatoryOutsideSet(const std::vector<std::string>&,
-                                              std::string&) const;
+  PLATFORM_EXPORT bool HasMandatoryOutsideSet(const Vector<String>&,
+                                              String&) const;
   PLATFORM_EXPORT bool HasMin() const;
   PLATFORM_EXPORT bool HasExact() const;
   PLATFORM_EXPORT String ToString() const;
 
  private:
-  std::vector<const BaseConstraint*> AllConstraints() const;
+  Vector<const BaseConstraint*> AllConstraints() const;
 };
 
 class MediaConstraints {
