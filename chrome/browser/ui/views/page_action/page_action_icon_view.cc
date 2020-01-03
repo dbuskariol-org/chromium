@@ -192,6 +192,10 @@ void PageActionIconView::OnTouchUiChanged() {
     PreferredSizeChanged();
 }
 
+const char* PageActionIconView::GetClassName() const {
+  return "PageActionIconView";
+}
+
 void PageActionIconView::SetIconColor(SkColor icon_color) {
   icon_color_ = icon_color;
   UpdateIconImage();

@@ -86,6 +86,10 @@ const gfx::VectorIcon& SaveCardIconView::GetVectorIconBadge() const {
   return gfx::kNoneIcon;
 }
 
+const char* SaveCardIconView::GetClassName() const {
+  return "SaveCardIconView";
+}
+
 base::string16 SaveCardIconView::GetTextForTooltipAndAccessibleName() const {
   SaveCardBubbleController* controller = GetController();
   if (!controller) {
