@@ -1155,14 +1155,11 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
 }
 
 // This method should be called on receiving WKNavigationDelegate callbacks. It
-// will log a metric if the callback occurs after the reciever has already been
-// closed. It also stops the SafeBrowsing warning detection timer, since after
-// this point it's too late for a SafeBrowsing warning to be displayed for the
-// navigation for which the timer was started.
+// stops the SafeBrowsing warning detection timer, since after this point it's
+// too late for a SafeBrowsing warning to be displayed for the navigation for
+// which the timer was started.
 - (void)didReceiveWKNavigationDelegateCallback {
-  if (self.beingDestroyed) {
-    UMA_HISTOGRAM_BOOLEAN("Renderer.WKWebViewCallbackAfterDestroy", true);
-  }
+  DCHECK(!self.beingDestroyed);
   _safeBrowsingWarningDetectionTimer.Stop();
 }
 
