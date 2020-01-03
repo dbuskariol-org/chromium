@@ -97,7 +97,6 @@ GTEST_CONVERSION_WHITELIST = [
   'components_perftests',
   'dawn_perf_tests',
   'gpu_perftests',
-  'latency_perftests',
   'load_library_perf_tests',
   'media_perftests',
   'net_perftests',
