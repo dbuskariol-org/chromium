@@ -24,6 +24,7 @@
 #include "ash/wm/desks/desk_mini_view.h"
 #include "ash/wm/desks/desks_bar_view.h"
 #include "ash/wm/desks/desks_util.h"
+#include "ash/wm/mru_window_tracker.h"
 #include "ash/wm/overview/cleanup_animation_observer.h"
 #include "ash/wm/overview/drop_target_view.h"
 #include "ash/wm/overview/overview_constants.h"
@@ -555,6 +556,11 @@ void OverviewGrid::AppendItem(aura::Window* window,
                               bool use_spawn_animation) {
   AddItem(window, reposition, animate, /*ignored_items=*/{},
           window_list_.size(), use_spawn_animation);
+}
+
+void OverviewGrid::AddItemInMruOrder(aura::Window* window, bool animate) {
+  AddItem(window, /*reposition=*/true, animate, /*ignored_items=*/{},
+          FindInsertionIndex(window));
 }
 
 void OverviewGrid::RemoveItem(OverviewItem* overview_item,
@@ -1833,6 +1839,24 @@ size_t OverviewGrid::GetOverviewItemIndex(OverviewItem* item) const {
                            base::MatchesUniquePtr(item));
   DCHECK(iter != window_list_.end());
   return iter - window_list_.begin();
+}
+
+size_t OverviewGrid::FindInsertionIndex(const aura::Window* window) {
+  DCHECK(!GetDropTarget());
+  size_t index = 0u;
+  for (aura::Window* mru_window :
+       Shell::Get()->mru_window_tracker()->BuildMruWindowList(kActiveDesk)) {
+    if (index == window_list_.size() || mru_window == window)
+      return index;
+    // As we iterate over the whole MRU window list, the windows in this grid
+    // will be encountered in the same order, but possibly with other windows in
+    // between. Ignore those other windows, and only increment |index| when we
+    // reach the next window in this grid.
+    if (mru_window == window_list_[index]->GetWindow())
+      ++index;
+  }
+  NOTREACHED();
+  return 0u;
 }
 
 void OverviewGrid::AddDraggedWindowIntoOverviewOnDragEnd(
