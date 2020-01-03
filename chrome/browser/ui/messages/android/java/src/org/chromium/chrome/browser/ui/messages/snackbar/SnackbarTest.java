@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.snackbar;
+package org.chromium.chrome.browser.ui.messages.snackbar;
 
 import android.support.test.filters.MediumTest;
 import android.support.test.filters.SmallTest;
@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.chromium.base.Supplier;
 import org.chromium.base.task.PostTask;
 import org.chromium.base.test.util.RetryOnFailure;
-import org.chromium.chrome.browser.snackbar.SnackbarManager.SnackbarController;
+import org.chromium.chrome.browser.ui.messages.snackbar.SnackbarManager.SnackbarController;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.content_public.browser.test.util.Criteria;
@@ -31,12 +31,10 @@ public class SnackbarTest extends DummyUiActivityTestCase {
     private SnackbarManager mManager;
     private SnackbarController mDefaultController = new SnackbarController() {
         @Override
-        public void onDismissNoAction(Object actionData) {
-        }
+        public void onDismissNoAction(Object actionData) {}
 
         @Override
-        public void onAction(Object actionData) {
-        }
+        public void onAction(Object actionData) {}
     };
 
     private SnackbarController mDismissController = new SnackbarController() {
@@ -46,7 +44,7 @@ public class SnackbarTest extends DummyUiActivityTestCase {
         }
 
         @Override
-        public void onAction(Object actionData) { }
+        public void onAction(Object actionData) {}
     };
 
     private boolean mDismissed;
@@ -65,8 +63,8 @@ public class SnackbarTest extends DummyUiActivityTestCase {
     @MediumTest
     @RetryOnFailure
     public void testStackQueuePersistentOrder() {
-        final Snackbar stackbar = Snackbar.make("stack", mDefaultController,
-                Snackbar.TYPE_ACTION, Snackbar.UMA_TEST_SNACKBAR);
+        final Snackbar stackbar = Snackbar.make(
+                "stack", mDefaultController, Snackbar.TYPE_ACTION, Snackbar.UMA_TEST_SNACKBAR);
         final Snackbar queuebar = Snackbar.make("queue", mDefaultController,
                 Snackbar.TYPE_NOTIFICATION, Snackbar.UMA_TEST_SNACKBAR);
         final Snackbar persistent = Snackbar.make("persistent", mDefaultController,
@@ -102,8 +100,8 @@ public class SnackbarTest extends DummyUiActivityTestCase {
     @SmallTest
     @RetryOnFailure
     public void testPersistentQueueStackOrder() {
-        final Snackbar stackbar = Snackbar.make("stack", mDefaultController,
-                Snackbar.TYPE_ACTION, Snackbar.UMA_TEST_SNACKBAR);
+        final Snackbar stackbar = Snackbar.make(
+                "stack", mDefaultController, Snackbar.TYPE_ACTION, Snackbar.UMA_TEST_SNACKBAR);
         final Snackbar queuebar = Snackbar.make("queue", mDefaultController,
                 Snackbar.TYPE_NOTIFICATION, Snackbar.UMA_TEST_SNACKBAR);
         final Snackbar persistent = Snackbar.make("persistent", mDefaultController,
@@ -131,8 +129,8 @@ public class SnackbarTest extends DummyUiActivityTestCase {
     @Test
     @SmallTest
     public void testDismissSnackbar() {
-        final Snackbar snackbar = Snackbar.make("stack", mDismissController,
-                Snackbar.TYPE_ACTION, Snackbar.UMA_TEST_SNACKBAR);
+        final Snackbar snackbar = Snackbar.make(
+                "stack", mDismissController, Snackbar.TYPE_ACTION, Snackbar.UMA_TEST_SNACKBAR);
         mDismissed = false;
         PostTask.runOrPostTask(UiThreadTaskTraits.DEFAULT, () -> mManager.showSnackbar(snackbar));
         pollSnackbarCondition("Snackbar on queue was not cleared by snackbar stack.",

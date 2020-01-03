@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.snackbar;
+package org.chromium.chrome.browser.ui.messages.snackbar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import org.chromium.base.test.util.Feature;
-import org.chromium.chrome.browser.snackbar.SnackbarManager.SnackbarController;
+import org.chromium.chrome.browser.ui.messages.snackbar.SnackbarManager.SnackbarController;
 
 /**
  * Tests for {@link SnackbarCollection}.
@@ -29,7 +29,8 @@ public class SnackbarCollectionUnitTest {
     private static final String ACTION_TITLE = "stack";
     private static final String NOTIFICATION_TITLE = "queue";
 
-    @Mock private SnackbarController mMockController;
+    @Mock
+    private SnackbarController mMockController;
 
     @Before
     public void setUp() {
@@ -147,8 +148,8 @@ public class SnackbarCollectionUnitTest {
     }
 
     private Snackbar makeActionSnackbar(SnackbarController controller) {
-        return Snackbar.make(ACTION_TITLE, controller, Snackbar.TYPE_ACTION,
-                Snackbar.UMA_TEST_SNACKBAR);
+        return Snackbar.make(
+                ACTION_TITLE, controller, Snackbar.TYPE_ACTION, Snackbar.UMA_TEST_SNACKBAR);
     }
 
     private Snackbar makeNotificationSnackbar(SnackbarController controller) {
