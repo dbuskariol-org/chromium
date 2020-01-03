@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.tile;
+package org.chromium.chrome.browser.suggestions.tile;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -39,10 +39,8 @@ public class TileView extends FrameLayout {
     /**
      * Initializes the view. This should be called immediately after inflation.
      *
-     * @param title The title of the tile.
      * @param showOfflineBadge Whether to show the offline badge.
      * @param icon The icon to display on the tile.
-     * @param titleLines The number of text lines to use for the tile title.
      */
     public void initialize(boolean showOfflineBadge, Drawable icon) {
         setOfflineBadgeVisibility(showOfflineBadge);

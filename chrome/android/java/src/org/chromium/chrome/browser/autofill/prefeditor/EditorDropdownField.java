@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.prefeditor;
+package org.chromium.chrome.browser.autofill.prefeditor;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.chrome.R;
@@ -34,6 +35,9 @@ import java.util.List;
  * Helper class for creating a dropdown view with a label.
  */
 class EditorDropdownField implements EditorFieldView {
+    @Nullable
+    private static EditorObserverForTest sObserverForTest;
+
     private final Context mContext;
     private final EditorFieldModel mFieldModel;
     private final View mLayout;
@@ -43,8 +47,6 @@ class EditorDropdownField implements EditorFieldView {
     private final TextView mErrorLabel;
     private int mSelectedIndex;
     private ArrayAdapter<CharSequence> mAdapter;
-    @Nullable
-    private EditorObserverForTest mObserverForTest;
 
     /**
      * Builds a dropdown view.
@@ -56,11 +58,10 @@ class EditorDropdownField implements EditorFieldView {
      *                        processed.
      */
     public EditorDropdownField(Context context, ViewGroup root, final EditorFieldModel fieldModel,
-            final Runnable changedCallback, @Nullable EditorObserverForTest observer) {
+            final Runnable changedCallback) {
         assert fieldModel.getInputTypeHint() == EditorFieldModel.INPUT_TYPE_HINT_DROPDOWN;
         mContext = context;
         mFieldModel = fieldModel;
-        mObserverForTest = observer;
 
         mLayout = LayoutInflater.from(context).inflate(
                 R.layout.payment_request_editor_dropdown, root, false);
@@ -132,8 +133,8 @@ class EditorDropdownField implements EditorFieldView {
                     mFieldModel.setCustomErrorMessage(null);
                     updateDisplayedError(false);
                 }
-                if (mObserverForTest != null) {
-                    mObserverForTest.onEditorTextUpdate();
+                if (sObserverForTest != null) {
+                    sObserverForTest.onEditorTextUpdate();
                 }
             }
 
@@ -220,7 +221,7 @@ class EditorDropdownField implements EditorFieldView {
         mSelectedIndex = TextUtils.isEmpty(mFieldModel.getValue())
                 ? 0
                 : mAdapter.getPosition(
-                          mFieldModel.getDropdownValueByKey((mFieldModel.getValue().toString())));
+                        mFieldModel.getDropdownValueByKey((mFieldModel.getValue().toString())));
         assert mSelectedIndex >= 0;
         mDropdown.setSelection(mSelectedIndex);
     }
@@ -231,5 +232,10 @@ class EditorDropdownField implements EditorFieldView {
             dropdownValues.add(dropdownKeyValues.get(i).getValue());
         }
         return dropdownValues;
+    }
+
+    @VisibleForTesting
+    public static void setEditorObserverForTest(EditorObserverForTest observerForTest) {
+        sObserverForTest = observerForTest;
     }
 }

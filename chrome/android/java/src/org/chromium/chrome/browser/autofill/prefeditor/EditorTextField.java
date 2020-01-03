@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.prefeditor;
+package org.chromium.chrome.browser.autofill.prefeditor;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
@@ -34,6 +34,9 @@ import org.chromium.chrome.browser.widget.ChromeTextInputLayout;
 /** Handles validation and display of one field from the {@link EditorFieldModel}. */
 @VisibleForTesting
 public class EditorTextField extends FrameLayout implements EditorFieldView, View.OnClickListener {
+    @Nullable
+    private static EditorObserverForTest sObserverForTest;
+
     private EditorFieldModel mEditorFieldModel;
     private OnEditorActionListener mEditorActionListener;
     private ChromeTextInputLayout mInputLayout;
@@ -43,17 +46,14 @@ public class EditorTextField extends FrameLayout implements EditorFieldView, Vie
     private ImageView mValueIcon;
     private int mValueIconId;
     private boolean mHasFocusedAtLeastOnce;
-    @Nullable
-    private EditorObserverForTest mObserverForTest;
 
     public EditorTextField(Context context, final EditorFieldModel fieldModel,
             OnEditorActionListener actionListener, @Nullable InputFilter filter,
-            @Nullable TextWatcher formatter, @Nullable EditorObserverForTest observer) {
+            @Nullable TextWatcher formatter) {
         super(context);
         assert fieldModel.getInputTypeHint() != EditorFieldModel.INPUT_TYPE_HINT_DROPDOWN;
         mEditorFieldModel = fieldModel;
         mEditorActionListener = actionListener;
-        mObserverForTest = observer;
 
         LayoutInflater.from(context).inflate(R.layout.payments_request_editor_textview, this, true);
         mInputLayout = (ChromeTextInputLayout) findViewById(R.id.text_input_layout);
@@ -124,8 +124,8 @@ public class EditorTextField extends FrameLayout implements EditorFieldView, Vie
                 fieldModel.setValue(s.toString());
                 updateDisplayedError(false);
                 updateFieldValueIcon(false);
-                if (mObserverForTest != null) {
-                    mObserverForTest.onEditorTextUpdate();
+                if (sObserverForTest != null) {
+                    sObserverForTest.onEditorTextUpdate();
                 }
                 if (!mEditorFieldModel.isLengthMaximum()) return;
                 updateDisplayedError(true);
@@ -282,5 +282,10 @@ public class EditorTextField extends FrameLayout implements EditorFieldView, Vie
             mValueIcon.setImageDrawable(AppCompatResources.getDrawable(getContext(), mValueIconId));
             mValueIcon.setVisibility(VISIBLE);
         }
+    }
+
+    @VisibleForTesting
+    public static void setEditorObserverForTest(EditorObserverForTest observerForTest) {
+        sObserverForTest = observerForTest;
     }
 }

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.prefeditor;
+package org.chromium.chrome.browser.autofill.prefeditor;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -74,8 +74,9 @@ public class EditorDialog
     /** Duration of the animation to hide the UI. */
     private static final int DIALOG_EXIT_ANIMATION_MS = 195;
 
+    private static EditorObserverForTest sObserverForTest;
+
     private final Context mContext;
-    private final EditorObserverForTest mObserverForTest;
     private final Handler mHandler;
     private final TextView.OnEditorActionListener mEditorActionListener;
     private final int mHalfRowMargin;
@@ -107,20 +108,18 @@ public class EditorDialog
      * Builds the editor dialog.
      *
      * @param activity        The activity on top of which the UI should be displayed.
-     * @param observerForTest Optional event observer for testing.
      * @param deleteRunnable  The runnable that when called will delete the profile.
      */
-    public EditorDialog(
-            Activity activity, EditorObserverForTest observerForTest, Runnable deleteRunnable) {
+    public EditorDialog(Activity activity, Runnable deleteRunnable) {
         super(activity, R.style.Theme_Chromium_Fullscreen);
         // Sets transparent background for animating content view.
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mContext = activity;
-        mObserverForTest = observerForTest;
         mHandler = new Handler();
         mIsDismissed = false;
         mEditorActionListener = new TextView.OnEditorActionListener() {
             @Override
+            @SuppressWarnings("WrongConstant") // https://crbug.com/1038784
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     mDoneButton.performClick();
@@ -263,8 +262,8 @@ public class EditorDialog
             }
         }
 
-        if (!invalidViews.isEmpty() && mObserverForTest != null) {
-            mObserverForTest.onEditorValidationError();
+        if (!invalidViews.isEmpty() && sObserverForTest != null) {
+            sObserverForTest.onEditorValidationError();
         }
 
         return invalidViews.isEmpty();
@@ -451,11 +450,11 @@ public class EditorDialog
 
                     // The fields may have changed.
                     prepareEditor();
-                    if (mObserverForTest != null) mObserverForTest.onEditorReadyToEdit();
+                    if (sObserverForTest != null) sObserverForTest.onEditorReadyToEdit();
                 }
             };
-            EditorDropdownField dropdownView = new EditorDropdownField(
-                    mContext, parent, fieldModel, prepareEditorRunnable, mObserverForTest);
+            EditorDropdownField dropdownView =
+                    new EditorDropdownField(mContext, parent, fieldModel, prepareEditorRunnable);
             mFieldViews.add(dropdownView);
             mDropdownFields.add(dropdownView.getDropdown());
 
@@ -469,7 +468,7 @@ public class EditorDialog
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     fieldModel.setIsChecked(isChecked);
-                    if (mObserverForTest != null) mObserverForTest.onEditorReadyToEdit();
+                    if (sObserverForTest != null) sObserverForTest.onEditorReadyToEdit();
                 }
             });
 
@@ -486,8 +485,8 @@ public class EditorDialog
                 formatter = mPhoneFormatter;
             }
 
-            EditorTextField inputLayout = new EditorTextField(mContext, fieldModel,
-                    mEditorActionListener, filter, formatter, mObserverForTest);
+            EditorTextField inputLayout = new EditorTextField(
+                    mContext, fieldModel, mEditorActionListener, filter, formatter);
             mFieldViews.add(inputLayout);
 
             EditText input = inputLayout.getEditText();
@@ -589,12 +588,12 @@ public class EditorDialog
                 @Override
                 public void run() {
                     invalidViews.get(0).scrollToAndFocus();
-                    if (mObserverForTest != null) mObserverForTest.onEditorReadyToEdit();
+                    if (sObserverForTest != null) sObserverForTest.onEditorReadyToEdit();
                 }
             });
         } else {
             // The first field will be focused, we are ready to edit.
-            if (mObserverForTest != null) mObserverForTest.onEditorReadyToEdit();
+            if (sObserverForTest != null) sObserverForTest.onEditorReadyToEdit();
         }
     }
 
@@ -620,6 +619,13 @@ public class EditorDialog
     @VisibleForTesting
     public List<Spinner> getDropdownFieldsForTest() {
         return mDropdownFields;
+    }
+
+    @VisibleForTesting
+    public static void setEditorObserverForTest(EditorObserverForTest observerForTest) {
+        sObserverForTest = observerForTest;
+        EditorDropdownField.setEditorObserverForTest(sObserverForTest);
+        EditorTextField.setEditorObserverForTest(sObserverForTest);
     }
 
     private Drawable getTintedBackIcon() {

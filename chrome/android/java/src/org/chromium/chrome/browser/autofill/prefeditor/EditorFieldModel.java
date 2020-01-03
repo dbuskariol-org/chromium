@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.prefeditor;
+package org.chromium.chrome.browser.autofill.prefeditor;
 
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -406,8 +406,10 @@ public class EditorFieldModel {
         return mIconResourceIds;
     }
 
-    /** @return The list of string identifiers of the descriptions of the displayed icons. This is
-     * for the screen reader. */
+    /**
+     * @return The list of string identifiers of the descriptions of the displayed icons. This is
+     * for the screen reader.
+     */
     public List<Integer> getIconDescriptionsForAccessibility() {
         assert mInputTypeHint == INPUT_TYPE_HINT_ICONS;
         return mIconDescriptionsForAccessibility;
@@ -544,8 +546,10 @@ public class EditorFieldModel {
         mCustomErrorMessage = errorMessage;
     }
 
-    /** @return The value that the user has typed into the field or the key of the value that the
-     *          user has selected in the dropdown. Can be null. */
+    /**
+     * @return The value that the user has typed into the field or the key of the value that the
+     *          user has selected in the dropdown. Can be null.
+     */
     @Nullable
     public CharSequence getValue() {
         return mValue;
@@ -643,8 +647,10 @@ public class EditorFieldModel {
         mDropdownCallback = callback;
     }
 
-    /** @return True if the input field should take up the full line, instead of sharing with other
-     *          input fields. This is the default.*/
+    /**
+     * @return True if the input field should take up the full line, instead of sharing with other
+     *          input fields. This is the default.
+     */
     public boolean isFullLine() {
         return mIsFullLine;
     }
