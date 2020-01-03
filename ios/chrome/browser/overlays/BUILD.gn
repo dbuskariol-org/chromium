@@ -6,7 +6,7 @@ source_set("overlays") {
   public = [
     "public/overlay_callback_manager.h",
     "public/overlay_dismissal_callback.h",
-    "public/overlay_dispatch_callback_storage.h",
+    "public/overlay_dispatch_callback.h",
     "public/overlay_modality.h",
     "public/overlay_presentation_callback.h",
     "public/overlay_presentation_context.h",
@@ -29,7 +29,7 @@ source_set("overlays") {
     "default_overlay_request_cancel_handler.mm",
     "overlay_callback_manager_impl.cc",
     "overlay_callback_manager_impl.h",
-    "overlay_dispatch_callback_storage.cc",
+    "overlay_dispatch_callback.cc",
     "overlay_presenter_impl.h",
     "overlay_presenter_impl.mm",
     "overlay_presenter_observer.cc",
@@ -62,6 +62,7 @@ source_set("unit_tests") {
   sources = [
     "default_overlay_request_cancel_handler_unittest.mm",
     "overlay_callback_manager_impl_unittest.cc",
+    "overlay_dispatch_callback_unittest.cc",
     "overlay_presenter_impl_unittest.mm",
     "overlay_presenter_observer_bridge_unittest.mm",
     "overlay_request_impl_unittest.cc",
