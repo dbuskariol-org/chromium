@@ -81,37 +81,38 @@ class MediaConstraintsPrivate final
  public:
   static scoped_refptr<MediaConstraintsPrivate> Create();
   static scoped_refptr<MediaConstraintsPrivate> Create(
-      const WebMediaTrackConstraintSet& basic,
-      const Vector<WebMediaTrackConstraintSet>& advanced);
+      const MediaTrackConstraintSetPlatform& basic,
+      const Vector<MediaTrackConstraintSetPlatform>& advanced);
 
   bool IsEmpty() const;
-  const WebMediaTrackConstraintSet& Basic() const;
-  const Vector<WebMediaTrackConstraintSet>& Advanced() const;
+  const MediaTrackConstraintSetPlatform& Basic() const;
+  const Vector<MediaTrackConstraintSetPlatform>& Advanced() const;
   const String ToString() const;
 
  private:
-  MediaConstraintsPrivate(const WebMediaTrackConstraintSet& basic,
-                          const Vector<WebMediaTrackConstraintSet>& advanced);
+  MediaConstraintsPrivate(
+      const MediaTrackConstraintSetPlatform& basic,
+      const Vector<MediaTrackConstraintSetPlatform>& advanced);
 
-  WebMediaTrackConstraintSet basic_;
-  Vector<WebMediaTrackConstraintSet> advanced_;
+  MediaTrackConstraintSetPlatform basic_;
+  Vector<MediaTrackConstraintSetPlatform> advanced_;
 };
 
 scoped_refptr<MediaConstraintsPrivate> MediaConstraintsPrivate::Create() {
-  WebMediaTrackConstraintSet basic;
-  Vector<WebMediaTrackConstraintSet> advanced;
+  MediaTrackConstraintSetPlatform basic;
+  Vector<MediaTrackConstraintSetPlatform> advanced;
   return base::AdoptRef(new MediaConstraintsPrivate(basic, advanced));
 }
 
 scoped_refptr<MediaConstraintsPrivate> MediaConstraintsPrivate::Create(
-    const WebMediaTrackConstraintSet& basic,
-    const Vector<WebMediaTrackConstraintSet>& advanced) {
+    const MediaTrackConstraintSetPlatform& basic,
+    const Vector<MediaTrackConstraintSetPlatform>& advanced) {
   return base::AdoptRef(new MediaConstraintsPrivate(basic, advanced));
 }
 
 MediaConstraintsPrivate::MediaConstraintsPrivate(
-    const WebMediaTrackConstraintSet& basic,
-    const Vector<WebMediaTrackConstraintSet>& advanced)
+    const MediaTrackConstraintSetPlatform& basic,
+    const Vector<MediaTrackConstraintSetPlatform>& advanced)
     : basic_(basic), advanced_(advanced) {}
 
 bool MediaConstraintsPrivate::IsEmpty() const {
@@ -120,12 +121,12 @@ bool MediaConstraintsPrivate::IsEmpty() const {
   return basic_.IsEmpty() && advanced_.IsEmpty();
 }
 
-const WebMediaTrackConstraintSet& MediaConstraintsPrivate::Basic() const {
+const MediaTrackConstraintSetPlatform& MediaConstraintsPrivate::Basic() const {
   return basic_;
 }
 
-const Vector<WebMediaTrackConstraintSet>& MediaConstraintsPrivate::Advanced()
-    const {
+const Vector<MediaTrackConstraintSetPlatform>&
+MediaConstraintsPrivate::Advanced() const {
   return advanced_;
 }
 
@@ -333,7 +334,7 @@ String BooleanConstraint::ToString() const {
   return builder.ToString();
 }
 
-WebMediaTrackConstraintSet::WebMediaTrackConstraintSet()
+MediaTrackConstraintSetPlatform::MediaTrackConstraintSetPlatform()
     : width("width"),
       height("height"),
       aspect_ratio("aspectRatio"),
@@ -388,7 +389,7 @@ WebMediaTrackConstraintSet::WebMediaTrackConstraintSet()
       goog_payload_padding("googPayloadPadding"),
       goog_latency_ms("latencyMs") {}
 
-Vector<const BaseConstraint*> WebMediaTrackConstraintSet::AllConstraints()
+Vector<const BaseConstraint*> MediaTrackConstraintSetPlatform::AllConstraints()
     const {
   return {&width,
           &height,
@@ -443,7 +444,7 @@ Vector<const BaseConstraint*> WebMediaTrackConstraintSet::AllConstraints()
           &goog_latency_ms};
 }
 
-bool WebMediaTrackConstraintSet::IsEmpty() const {
+bool MediaTrackConstraintSetPlatform::IsEmpty() const {
   for (auto* const constraint : AllConstraints()) {
     if (!constraint->IsEmpty())
       return false;
@@ -451,7 +452,7 @@ bool WebMediaTrackConstraintSet::IsEmpty() const {
   return true;
 }
 
-bool WebMediaTrackConstraintSet::HasMandatoryOutsideSet(
+bool MediaTrackConstraintSetPlatform::HasMandatoryOutsideSet(
     const Vector<String>& good_names,
     String& found_name) const {
   for (auto* const constraint : AllConstraints()) {
@@ -466,12 +467,12 @@ bool WebMediaTrackConstraintSet::HasMandatoryOutsideSet(
   return false;
 }
 
-bool WebMediaTrackConstraintSet::HasMandatory() const {
+bool MediaTrackConstraintSetPlatform::HasMandatory() const {
   String dummy_string;
   return HasMandatoryOutsideSet(Vector<String>(), dummy_string);
 }
 
-bool WebMediaTrackConstraintSet::HasMin() const {
+bool MediaTrackConstraintSetPlatform::HasMin() const {
   for (auto* const constraint : AllConstraints()) {
     if (constraint->HasMin())
       return true;
@@ -479,7 +480,7 @@ bool WebMediaTrackConstraintSet::HasMin() const {
   return false;
 }
 
-bool WebMediaTrackConstraintSet::HasExact() const {
+bool MediaTrackConstraintSetPlatform::HasExact() const {
   for (auto* const constraint : AllConstraints()) {
     if (constraint->HasExact())
       return true;
@@ -487,7 +488,7 @@ bool WebMediaTrackConstraintSet::HasExact() const {
   return false;
 }
 
-String WebMediaTrackConstraintSet::ToString() const {
+String MediaTrackConstraintSetPlatform::ToString() const {
   StringBuilder builder;
   bool first = true;
   for (auto* const constraint : AllConstraints()) {
@@ -523,18 +524,19 @@ void MediaConstraints::Initialize() {
 }
 
 void MediaConstraints::Initialize(
-    const WebMediaTrackConstraintSet& basic,
-    const Vector<WebMediaTrackConstraintSet>& advanced) {
+    const MediaTrackConstraintSetPlatform& basic,
+    const Vector<MediaTrackConstraintSetPlatform>& advanced) {
   DCHECK(IsNull());
   private_ = MediaConstraintsPrivate::Create(basic, advanced);
 }
 
-const WebMediaTrackConstraintSet& MediaConstraints::Basic() const {
+const MediaTrackConstraintSetPlatform& MediaConstraints::Basic() const {
   DCHECK(!IsNull());
   return private_->Basic();
 }
 
-const Vector<WebMediaTrackConstraintSet>& MediaConstraints::Advanced() const {
+const Vector<MediaTrackConstraintSetPlatform>& MediaConstraints::Advanced()
+    const {
   DCHECK(!IsNull());
   return private_->Advanced();
 }

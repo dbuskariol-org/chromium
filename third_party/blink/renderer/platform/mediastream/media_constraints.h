@@ -218,9 +218,9 @@ class PLATFORM_EXPORT BooleanConstraint : public BaseConstraint {
   unsigned has_exact_ : 1;
 };
 
-struct WebMediaTrackConstraintSet {
+struct MediaTrackConstraintSetPlatform {
  public:
-  PLATFORM_EXPORT WebMediaTrackConstraintSet();
+  PLATFORM_EXPORT MediaTrackConstraintSetPlatform();
 
   LongConstraint width;
   LongConstraint height;
@@ -308,11 +308,12 @@ class MediaConstraints {
 
   PLATFORM_EXPORT void Initialize();
   PLATFORM_EXPORT void Initialize(
-      const WebMediaTrackConstraintSet& basic,
-      const Vector<WebMediaTrackConstraintSet>& advanced);
+      const MediaTrackConstraintSetPlatform& basic,
+      const Vector<MediaTrackConstraintSetPlatform>& advanced);
 
-  PLATFORM_EXPORT const WebMediaTrackConstraintSet& Basic() const;
-  PLATFORM_EXPORT const Vector<WebMediaTrackConstraintSet>& Advanced() const;
+  PLATFORM_EXPORT const MediaTrackConstraintSetPlatform& Basic() const;
+  PLATFORM_EXPORT const Vector<MediaTrackConstraintSetPlatform>& Advanced()
+      const;
 
   PLATFORM_EXPORT const String ToString() const;
 
