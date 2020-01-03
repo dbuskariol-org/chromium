@@ -44,7 +44,9 @@ class AdTaggingClusterTelemetry(perf_benchmark.PerfBenchmark):
         'PageLoad.Clients.Ads.Cpu.AdFrames.Aggregate.TotalUsage',
         'PageLoad.Clients.Ads.Cpu.FullPage.TotalUsage',
         'PageLoad.Clients.Ads.Resources.Bytes.Ads2',
+        'PageLoad.Cpu.TotalUsage',
         'PageLoad.Experimental.Bytes.NetworkIncludingHeaders',
+        'PageLoad.PaintTiming.NavigationToFirstContentfulPaint',
     ]
     for histogram in uma_histograms:
       tbm_options.config.chrome_trace_config.EnableUMAHistograms(histogram)
