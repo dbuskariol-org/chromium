@@ -9,7 +9,6 @@
 #include "third_party/blink/public/common/input/web_gesture_device.h"
 #include "third_party/blink/public/common/input/web_input_event.h"
 #include "third_party/blink/public/common/input/web_pointer_properties.h"
-#include "third_party/blink/public/common/input/web_scroll_types.h"
 #include "ui/events/types/scroll_types.h"
 #include "ui/gfx/geometry/point_f.h"
 #include "ui/gfx/geometry/size_f.h"

@@ -1698,8 +1698,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
                         OnUpdateUserActivationState)
     IPC_MESSAGE_HANDLER(FrameHostMsg_ScrollRectToVisibleInParentFrame,
                         OnScrollRectToVisibleInParentFrame)
-    IPC_MESSAGE_HANDLER(FrameHostMsg_BubbleLogicalScrollInParentFrame,
-                        OnBubbleLogicalScrollInParentFrame)
     IPC_MESSAGE_HANDLER(FrameHostMsg_FrameDidCallFocus, OnFrameDidCallFocus)
     IPC_MESSAGE_HANDLER(FrameHostMsg_RenderFallbackContentInParentProcess,
                         OnRenderFallbackContentInParentProcess)
@@ -4116,8 +4114,8 @@ void RenderFrameHostImpl::OnScrollRectToVisibleInParentFrame(
   proxy->ScrollRectToVisible(rect_to_scroll, params);
 }
 
-void RenderFrameHostImpl::OnBubbleLogicalScrollInParentFrame(
-    blink::WebScrollDirection direction,
+void RenderFrameHostImpl::BubbleLogicalScrollInParentFrame(
+    blink::mojom::ScrollDirection direction,
     ui::input_types::ScrollGranularity granularity) {
   if (!is_active())
     return;
@@ -4132,7 +4130,8 @@ void RenderFrameHostImpl::OnBubbleLogicalScrollInParentFrame(
     return;
   }
 
-  proxy->BubbleLogicalScroll(direction, granularity);
+  proxy->GetAssociatedRemoteFrame()->BubbleLogicalScroll(direction,
+                                                         granularity);
 }
 
 void RenderFrameHostImpl::OnFrameDidCallFocus() {
