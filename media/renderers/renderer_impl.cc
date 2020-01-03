@@ -194,7 +194,11 @@ void RendererImpl::SetLatencyHint(
   DVLOG(1) << __func__;
   DCHECK(!latency_hint || (*latency_hint >= base::TimeDelta()));
   DCHECK(task_runner_->BelongsToCurrentThread());
-  // TODO(chcunningham): Plumb to audio/video renderers in a follow up CL.
+
+  // TODO(chcunningham): Plumb to video renderer in a follow up CL.
+
+  if (audio_renderer_)
+    audio_renderer_->SetLatencyHint(latency_hint);
 }
 
 void RendererImpl::Flush(base::OnceClosure flush_cb) {

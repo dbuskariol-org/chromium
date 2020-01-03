@@ -322,6 +322,8 @@ class MockAudioRenderer : public AudioRenderer {
   MOCK_METHOD1(Flush, void(base::OnceClosure flush_cb));
   MOCK_METHOD0(StartPlaying, void());
   MOCK_METHOD1(SetVolume, void(float volume));
+  MOCK_METHOD1(SetLatencyHint,
+               void(base::Optional<base::TimeDelta> latency_hint));
 
  private:
   DISALLOW_COPY_AND_ASSIGN(MockAudioRenderer);
