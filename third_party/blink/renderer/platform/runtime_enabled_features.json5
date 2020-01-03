@@ -701,10 +701,6 @@
       name: "FallbackCursorMode",
     },
     {
-      name: "FastBorderRadius",
-      status: "experimental",
-    },
-    {
       name: "FeaturePolicyForClientHints",
       status: "experimental",
     },

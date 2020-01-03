@@ -334,8 +334,6 @@ void SetRuntimeFeaturesFromChromiumFeatures() {
   // function and using feature string name with EnableFeatureFromString.
   const RuntimeFeatureToChromiumFeatureMap<const char*>
       runtimeFeatureNameToChromiumFeatureMapping[] = {
-          {"FastBorderRadius", blink::features::kFastBorderRadius,
-           kUseFeatureState},
           {"FontSrcLocalMatching", features::kFontSrcLocalMatching,
            kUseFeatureState},
           {"LegacyWindowsDWriteFontFallback",
@@ -547,7 +545,6 @@ void SetCustomizedRuntimeFeaturesFromCombinedArgs(
     WebRuntimeFeatures::EnableNetInfoDownlinkMax(true);
     WebRuntimeFeatures::EnableFetchMetadata(true);
     WebRuntimeFeatures::EnableFetchMetadataDestination(true);
-    WebRuntimeFeatures::EnableFeatureFromString("FastBorderRadius", true);
     WebRuntimeFeatures::EnableDisplayLocking(true);
   }
 
