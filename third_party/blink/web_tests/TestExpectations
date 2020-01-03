@@ -4511,8 +4511,6 @@ crbug.com/737959 http/tests/misc/object-image-load-outlives-gc-without-crashing.
 
 crbug.com/737959 http/tests/misc/video-poster-image-load-outlives-gc-without-crashing.html [ Failure Pass Crash ]
 
-crbug.com/734762 inspector-protocol/timeline/page-frames.js [ Failure Pass ]
-
 # module script lacks XHTML support
 crbug.com/717643 external/wpt/html/semantics/scripting-1/the-script-element/module/module-in-xhtml.xhtml [ Failure ]
 crbug.com/717643 virtual/streaming-preload/external/wpt/html/semantics/scripting-1/the-script-element/module/module-in-xhtml.xhtml [ Failure ]
