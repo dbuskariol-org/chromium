@@ -68,6 +68,10 @@ class RendererImpl::RendererClientInternal final : public RendererClient {
     DCHECK(type_ == DemuxerStream::VIDEO);
     renderer_->OnVideoOpacityChange(opaque);
   }
+  void OnVideoFrameRateChange(base::Optional<int> fps) override {
+    DCHECK(type_ == DemuxerStream::VIDEO);
+    renderer_->OnVideoFrameRateChange(fps);
+  }
 
   bool IsVideoStreamAvailable() override {
     return media_resource_->GetFirstStream(::media::DemuxerStream::VIDEO);
@@ -947,6 +951,11 @@ void RendererImpl::OnVideoNaturalSizeChange(const gfx::Size& size) {
 void RendererImpl::OnVideoOpacityChange(bool opaque) {
   DCHECK(task_runner_->BelongsToCurrentThread());
   client_->OnVideoOpacityChange(opaque);
+}
+
+void RendererImpl::OnVideoFrameRateChange(base::Optional<int> fps) {
+  DCHECK(task_runner_->BelongsToCurrentThread());
+  client_->OnVideoFrameRateChange(fps);
 }
 
 void RendererImpl::CleanUpTrackChange(base::RepeatingClosure on_finished,
