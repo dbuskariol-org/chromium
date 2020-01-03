@@ -2863,6 +2863,9 @@
     Show language options
   </message>
   <if expr="chromeos">
+    <message name="IDS_SETTINGS_LANGUAGES_BROWSER_LANGUAGES_LIST_ORDERING_INSTRUCTIONS" desc="Explanatory message about ordering the list of languages.">
+      Add languages or reorder list.
+    </message>
     <message name="IDS_SETTINGS_LANGUAGES_LANGUAGES_LIST_ORDERING_INSTRUCTIONS" desc="Explanatory message about ordering the list of languages.">
       Add languages or reorder list. <ph name="BEGIN_LINK">&lt;a&gt;</ph>Learn more<ph name="END_LINK">&lt;/a&gt;<ex>&lt;/a&gt;</ex></ph>
     </message>
@@ -2878,7 +2881,7 @@
     </message>
   </if>
   <if expr="not chromeos">
-    <message name="IDS_SETTINGS_LANGUAGES_LANGUAGES_LIST_ORDERING_INSTRUCTIONS" desc="Explanatory message about ordering the list of languages.">
+    <message name="IDS_SETTINGS_LANGUAGES_BROWSER_LANGUAGES_LIST_ORDERING_INSTRUCTIONS" desc="Explanatory message about ordering the list of languages.">
       Order languages based on your preference
     </message>
   </if>
