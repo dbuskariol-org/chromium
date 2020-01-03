@@ -17,7 +17,7 @@ double GetInterpolableNumber(Interpolation* value) {
   auto* interpolation = To<TransitionInterpolation>(value);
   std::unique_ptr<TypedInterpolationValue> interpolated_value =
       interpolation->GetInterpolatedValue();
-  return ToInterpolableNumber(interpolated_value->GetInterpolableValue())
+  return To<InterpolableNumber>(interpolated_value->GetInterpolableValue())
       .Value();
 }
 
