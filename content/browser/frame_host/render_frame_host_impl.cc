@@ -6102,8 +6102,7 @@ void RenderFrameHostImpl::UpdatePermissionsForNavigation(
   // process.  In this case, we need to ensure that the new renderer retains
   // ability to access files that the old renderer could access.  Abuse is
   // prevented, because the files listed in ResourceRequestBody are validated
-  // earlier, when they are recieved from the renderer (in ShouldServiceRequest
-  // called from ResourceDispatcherHostImpl::BeginRequest).
+  // earlier, when they are received from the renderer.
   if (common_params.post_data)
     GrantFileAccessFromResourceRequestBody(*common_params.post_data);
 }
