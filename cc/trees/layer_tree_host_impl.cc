@@ -3895,28 +3895,17 @@ InputHandler::ScrollStatus LayerTreeHostImpl::RootScrollBegin(
     ScrollState* scroll_state,
     InputHandler::ScrollInputType type) {
   TRACE_EVENT0("cc", "LayerTreeHostImpl::RootScrollBegin");
-
-  ClearCurrentlyScrollingNode();
-
-  gfx::Point viewport_point(scroll_state->position_x(),
-                            scroll_state->position_y());
-
-  gfx::PointF device_viewport_point = gfx::ScalePoint(
-      gfx::PointF(viewport_point), active_tree_->device_scale_factor());
-  LayerImpl* first_scrolling_layer_or_scrollbar =
-      active_tree_->FindFirstScrollingLayerOrScrollbarThatIsHitByPoint(
-          device_viewport_point);
-
-  if (IsTouchDraggingScrollbar(first_scrolling_layer_or_scrollbar, type)) {
-    TRACE_EVENT_INSTANT0("cc", "Scrollbar Scrolling", TRACE_EVENT_SCOPE_THREAD);
+  if (!OuterViewportScrollNode()) {
     ScrollStatus scroll_status;
-    scroll_status.thread = SCROLL_ON_MAIN_THREAD;
+    scroll_status.thread = InputHandler::SCROLL_IGNORED;
     scroll_status.main_thread_scrolling_reasons =
-        MainThreadScrollingReason::kScrollbarScrolling;
+        MainThreadScrollingReason::kNoScrollingLayer;
     return scroll_status;
   }
 
-  return ScrollBeginImpl(scroll_state, OuterViewportScrollNode(), type);
+  scroll_state->data()->set_current_native_scrolling_element(
+      OuterViewportScrollNode()->element_id);
+  return ScrollBegin(scroll_state, type);
 }
 
 InputHandler::ScrollStatus LayerTreeHostImpl::ScrollBegin(
