@@ -248,6 +248,12 @@ gfx::Rect GetWidgetBoundsInRoot(views::Widget* widget) {
   return window->GetBoundsInRootWindow();
 }
 
+bool ShouldExcludeItemFromGridLayout(
+    OverviewItem* item,
+    const base::flat_set<OverviewItem*>& ignored_items) {
+  return item->animating_to_close() || ignored_items.contains(item);
+}
+
 }  // namespace
 
 // The class to observe the overview window that the dragged tabs will merge
@@ -452,8 +458,7 @@ void OverviewGrid::PositionWindows(
 
   for (size_t i = 0; i < window_list_.size(); ++i) {
     OverviewItem* window_item = window_list_[i].get();
-    if (window_item->animating_to_close() ||
-        ignored_items.contains(window_item)) {
+    if (ShouldExcludeItemFromGridLayout(window_item, ignored_items)) {
       rects[i].SetRect(0, 0, 0, 0);
       continue;
     }
@@ -1699,7 +1704,7 @@ std::vector<gfx::RectF> OverviewGrid::GetWindowRectsForTabletModeLayout(
   // that the items are always aligned left or right.
   float rightmost_window_right = 0;
   for (const auto& item : window_list_) {
-    if (item->animating_to_close() || ignored_items.contains(item.get()))
+    if (ShouldExcludeItemFromGridLayout(item.get(), ignored_items))
       continue;
     rightmost_window_right =
         std::max(rightmost_window_right, item->target_bounds().right());
@@ -1729,7 +1734,7 @@ std::vector<gfx::RectF> OverviewGrid::GetWindowRectsForTabletModeLayout(
   std::vector<gfx::RectF> rects;
   for (size_t i = 0; i < window_list_.size(); ++i) {
     OverviewItem* item = window_list_[i].get();
-    if (item->animating_to_close() || ignored_items.contains(item)) {
+    if (ShouldExcludeItemFromGridLayout(item, ignored_items)) {
       rects.push_back(gfx::RectF());
       continue;
     }
@@ -1782,10 +1787,8 @@ bool OverviewGrid::FitWindowRectsInBounds(
   // All elements are of same height and only the height is necessary to
   // determine each item's scale.
   for (size_t i = 0u; i < window_count; ++i) {
-    if (window_list_[i]->animating_to_close() ||
-        ignored_items.contains(window_list_[i].get())) {
+    if (ShouldExcludeItemFromGridLayout(window_list_[i].get(), ignored_items))
       continue;
-    }
 
     int width =
         CalculateWidthAndMaybeSetUnclippedBounds(window_list_[i].get(), height);
