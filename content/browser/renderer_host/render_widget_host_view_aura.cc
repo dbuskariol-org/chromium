@@ -363,6 +363,7 @@ RenderWidgetHostViewAura::RenderWidgetHostViewAura(
       popup_child_host_view_(nullptr),
       is_loading_(false),
       has_composition_text_(false),
+      needs_begin_frames_(false),
       added_frame_observer_(false),
       cursor_visibility_state_in_renderer_(UNKNOWN),
 #if defined(OS_WIN)
@@ -570,6 +571,21 @@ gfx::NativeViewAccessible RenderWidgetHostViewAura::GetNativeViewAccessible() {
 
 ui::TextInputClient* RenderWidgetHostViewAura::GetTextInputClient() {
   return this;
+}
+
+void RenderWidgetHostViewAura::SetNeedsBeginFrames(bool needs_begin_frames) {
+  needs_begin_frames_ = needs_begin_frames;
+  UpdateNeedsBeginFramesInternal();
+}
+
+void RenderWidgetHostViewAura::SetWantsAnimateOnlyBeginFrames() {
+  if (delegated_frame_host_)
+    delegated_frame_host_->SetWantsAnimateOnlyBeginFrames();
+}
+
+void RenderWidgetHostViewAura::OnBeginFrame(base::TimeTicks frame_time) {
+  host()->ProgressFlingIfNeeded(frame_time);
+  UpdateNeedsBeginFramesInternal();
 }
 
 RenderFrameHostImpl* RenderWidgetHostViewAura::GetFocusedFrame() const {
@@ -866,16 +882,30 @@ RenderWidgetHostViewAura::GetParentNativeViewAccessible() {
 }
 #endif
 
+void RenderWidgetHostViewAura::DidCreateNewRendererCompositorFrameSink(
+    viz::mojom::CompositorFrameSinkClient* renderer_compositor_frame_sink) {
+  renderer_compositor_frame_sink_ = renderer_compositor_frame_sink;
+  if (delegated_frame_host_) {
+    delegated_frame_host_->DidCreateNewRendererCompositorFrameSink(
+        renderer_compositor_frame_sink_);
+  }
+}
+
 void RenderWidgetHostViewAura::SubmitCompositorFrame(
     const viz::LocalSurfaceId& local_surface_id,
     viz::CompositorFrame frame,
     base::Optional<viz::HitTestRegionList> hit_test_region_list) {
-  NOTREACHED();
+  DCHECK(delegated_frame_host_);
+  TRACE_EVENT0("content", "RenderWidgetHostViewAura::OnSwapCompositorFrame");
+
+  delegated_frame_host_->SubmitCompositorFrame(
+      local_surface_id, std::move(frame), std::move(hit_test_region_list));
 }
 
 void RenderWidgetHostViewAura::OnDidNotProduceFrame(
     const viz::BeginFrameAck& ack) {
-  NOTREACHED();
+  if (delegated_frame_host_)
+    delegated_frame_host_->DidNotProduceFrame(ack);
 }
 
 void RenderWidgetHostViewAura::ResetFallbackToFirstNavigationSurface() {
@@ -2502,6 +2532,12 @@ void RenderWidgetHostViewAura::SetPopupChild(
   event_handler_->SetPopupChild(
       popup_child_host_view,
       popup_child_host_view ? popup_child_host_view->event_handler() : nullptr);
+}
+
+void RenderWidgetHostViewAura::UpdateNeedsBeginFramesInternal() {
+  if (!delegated_frame_host_)
+    return;
+  delegated_frame_host_->SetNeedsBeginFrames(needs_begin_frames_);
 }
 
 void RenderWidgetHostViewAura::ScrollFocusedEditableNodeIntoRect(
