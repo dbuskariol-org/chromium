@@ -86,7 +86,7 @@ public class SuggestionViewViewBinder extends BaseSuggestionViewBinder {
         line1.setTextColor(ApiCompatibilityUtils.getColor(view.getResources(), color1));
 
         @ColorRes
-        final int color2 = isSearch ? (useDarkMode ? R.color.default_text_color_dark_secondary
+        final int color2 = isSearch ? (useDarkMode ? R.color.default_text_color_secondary_dark
                                                    : R.color.default_text_color_light)
                                     : (useDarkMode ? R.color.suggestion_url_dark_modern
                                                    : R.color.suggestion_url_light_modern);
