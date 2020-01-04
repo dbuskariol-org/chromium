@@ -1946,22 +1946,11 @@ crbug.com/1035582 virtual/web-components-v0-disabled/fast/parser/document-write-
 crbug.com/1035582 virtual/cascade/fast/forms/color/color-suggestion-picker-appearance.html [ Failure Pass ]
 crbug.com/1035582 virtual/cascade/fast/forms/calendar-picker/calendar-picker-appearance-zoom125.html [ Failure Pass ]
 
-# These fail only on Linux:
-crbug.com/1035582 [ Linux ] external/wpt/css/selectors/focus-visible-003-manual.html [ Failure Pass Timeout ]
-crbug.com/1035582 [ Linux ] external/wpt/css/selectors/focus-visible-004-manual.html [ Failure Pass Timeout ]
-crbug.com/1035582 [ Linux ] fast/forms/datalist/input-appearance-range-with-transform.html [ Failure Pass ]
-crbug.com/1035582 [ Linux ] fast/forms/range/slider-mouse-events.html [ Failure Pass ]
-crbug.com/1035582 [ Linux ] fast/forms/range/slider-zoomed.html [ Failure Pass ]
-crbug.com/1035582 [ Linux ] fast/forms/select-popup/popup-menu-appearance-zoom.html [ Failure Pass ]
-crbug.com/1035582 [ Linux ] virtual/scalefactor150/fast/hidpi/static/calendar-picker-appearance.html [ Failure Pass ]
-crbug.com/1035582 [ Linux ] virtual/scalefactor150/fast/hidpi/static/data-suggestion-picker-appearance.html [ Failure Pass ]
-crbug.com/1035582 [ Linux ] virtual/scalefactor200/fast/hidpi/static/data-suggestion-picker-appearance.html [ Failure Pass ]
-crbug.com/1035582 [ Linux ] virtual/scalefactor200withzoom/fast/hidpi/static/calendar-picker-appearance.html [ Failure Pass ]
-crbug.com/1035582 [ Linux ] virtual/scalefactor200withzoom/fast/hidpi/static/data-suggestion-picker-appearance.html [ Failure Pass ]
+# These need test modification: the Color picker now pops up a dialog.
+crbug.com/1035582 external/wpt/css/selectors/focus-visible-003-manual.html [ Skip ]
+crbug.com/1035582 external/wpt/css/selectors/focus-visible-004-manual.html [ Skip ]
 
 # These fail only on Windows:
-crbug.com/1035582 [ Win ] external/wpt/css/selectors/focus-visible-003-manual.html [ Failure Pass Timeout ]
-crbug.com/1035582 [ Win ] external/wpt/css/selectors/focus-visible-004-manual.html [ Failure Pass Timeout ]
 crbug.com/1035582 [ Win ] fast/forms/range/slider-mouse-events.html [ Failure Pass ]
 crbug.com/1035582 [ Win ] fast/forms/range/slider-zoomed.html [ Failure Pass ]
 crbug.com/1035582 [ Win ] fast/forms/select-popup/popup-menu-appearance-coarse.html [ Failure Pass ]
