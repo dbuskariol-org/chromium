@@ -210,24 +210,18 @@ std::unique_ptr<views::Widget> CreateDropTargetWidget(
   return widget;
 }
 
-// Returns 1 if the name of |window_dragging_state| begins with "kFrom," else 0.
 float GetWantedDropTargetOpacity(
     SplitViewDragIndicators::WindowDraggingState window_dragging_state) {
   switch (window_dragging_state) {
     case SplitViewDragIndicators::WindowDraggingState::kNoDrag:
-      return 0.f;
     case SplitViewDragIndicators::WindowDraggingState::kOtherDisplay:
-      return 0.f;
-    case SplitViewDragIndicators::WindowDraggingState::kFromOverview:
-      return 1.f;
-    case SplitViewDragIndicators::WindowDraggingState::kFromTop:
-      return 1.f;
-    case SplitViewDragIndicators::WindowDraggingState::kFromShelf:
-      return 1.f;
     case SplitViewDragIndicators::WindowDraggingState::kToSnapLeft:
-      return 0.f;
     case SplitViewDragIndicators::WindowDraggingState::kToSnapRight:
       return 0.f;
+    case SplitViewDragIndicators::WindowDraggingState::kFromOverview:
+    case SplitViewDragIndicators::WindowDraggingState::kFromTop:
+    case SplitViewDragIndicators::WindowDraggingState::kFromShelf:
+      return 1.f;
   }
 }
 
@@ -611,7 +605,8 @@ void OverviewGrid::RemoveItem(OverviewItem* overview_item,
             ? base::make_optional(
                   split_view_drag_indicators_->current_window_dragging_state())
             : base::nullopt,
-        /*divider_changed=*/false);
+        /*divider_changed=*/false,
+        /*account_for_hotseat=*/true);
     SetBoundsAndUpdatePositions(grid_bounds, ignored_items, /*animate=*/true);
   }
 }
@@ -674,7 +669,7 @@ void OverviewGrid::RearrangeDuringDrag(
   // Update the grid's bounds.
   const gfx::Rect wanted_grid_bounds = GetGridBoundsInScreen(
       root_window_, base::make_optional(window_dragging_state),
-      /*divider_changed=*/false);
+      /*divider_changed=*/false, /*account_for_hotseat=*/true);
   if (bounds_ != wanted_grid_bounds) {
     SetBoundsAndUpdatePositions(wanted_grid_bounds,
                                 {GetOverviewItemContaining(dragged_window)},
@@ -924,7 +919,8 @@ void OverviewGrid::OnSplitViewDividerPositionChanged() {
   SetBoundsAndUpdatePositions(
       GetGridBoundsInScreen(root_window_,
                             /*window_dragging_state=*/base::nullopt,
-                            /*divider_changed=*/true),
+                            /*divider_changed=*/true,
+                            /*account_for_hotseat=*/true),
       /*ignored_items=*/{}, /*animate=*/false);
 }
 
@@ -1906,7 +1902,7 @@ gfx::Rect OverviewGrid::GetDesksWidgetBounds() const {
       !SplitViewController::IsLayoutHorizontal() &&
       !SplitViewController::Get(root_window_)->InSplitViewMode()) {
     desks_widget_root_bounds.Offset(
-        0, bounds_.height() * kHighlightScreenPrimaryAxisRatio +
+        0, split_view_drag_indicators_->GetLeftHighlightViewBounds().height() +
                2 * kHighlightScreenEdgePaddingDp);
   }
 
