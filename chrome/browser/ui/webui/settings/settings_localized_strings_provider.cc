@@ -2138,10 +2138,12 @@ void AddPeopleStrings(content::WebUIDataSource* html_source, Profile* profile) {
     {"photoCaptureAccessibleText", IDS_SETTINGS_PHOTO_CAPTURE_ACCESSIBLE_TEXT},
     {"photoDiscardAccessibleText", IDS_SETTINGS_PHOTO_DISCARD_ACCESSIBLE_TEXT},
     {"photoModeAccessibleText", IDS_SETTINGS_PHOTO_MODE_ACCESSIBLE_TEXT},
-    {"syncOsAppsCheckboxLabel", IDS_OS_SETTINGS_SYNC_OS_APPS_CHECKBOX_LABEL},
-    {"syncOsSettingsCheckboxLabel",
-     IDS_OS_SETTINGS_SYNC_OS_SETTINGS_CHECKBOX_LABEL},
-    {"syncPrintersCheckboxLabel", IDS_OS_SETTINGS_SYNC_PRINTERS_CHECKBOX_LABEL},
+    {"osSyncPageTitle", IDS_OS_SETTINGS_SYNC_PAGE_TITLE},
+    {"osSyncTurnOn", IDS_OS_SETTINGS_SYNC_TURN_ON},
+    {"osSyncTurnOff", IDS_OS_SETTINGS_SYNC_TURN_OFF},
+    {"osSyncAppsCheckboxLabel", IDS_OS_SETTINGS_SYNC_APPS_CHECKBOX_LABEL},
+    {"osSyncSettingsCheckboxLabel",
+     IDS_OS_SETTINGS_SYNC_SETTINGS_CHECKBOX_LABEL},
     {"videoModeAccessibleText", IDS_SETTINGS_VIDEO_MODE_ACCESSIBLE_TEXT},
     {"wifiConfigurationsCheckboxLabel",
      IDS_SETTINGS_WIFI_CONFIGURATIONS_CHECKBOX_LABEL},
@@ -2237,8 +2239,6 @@ void AddPeopleStrings(content::WebUIDataSource* html_source, Profile* profile) {
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 #if defined(OS_CHROMEOS)
-  // TODO(crbug.com/1013466): String for this row label.
-  html_source->AddString("peopleOsSyncRowLabel", "SYNC PLACEHOLDER LABEL");
   AddFingerprintStrings(html_source);
 #endif  // OS_CHROMEOS
   html_source->AddString("managementPage",
