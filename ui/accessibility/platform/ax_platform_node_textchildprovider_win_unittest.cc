@@ -272,12 +272,12 @@ TEST_F(AXPlatformNodeTextChildProviderTest,
   base::win::ScopedBstr text_content;
   EXPECT_HRESULT_SUCCEEDED(
       text_range_provider->GetText(-1, text_content.Receive()));
-  EXPECT_EQ(0, wcscmp(static_cast<BSTR>(text_content), L""));
+  EXPECT_EQ(
+      0, wcscmp(static_cast<BSTR>(text_content), L"\ntext child of nontext."));
 
   ComPtr<IRawElementProviderSimple> enclosing_element;
   text_range_provider->GetEnclosingElement(&enclosing_element);
-  EXPECT_EQ(nontext_child_of_nontext_text_provider_raw_.Get(),
-            enclosing_element.Get());
+  EXPECT_EQ(nontext_child_of_root_provider_raw_.Get(), enclosing_element.Get());
 }
 
 TEST_F(AXPlatformNodeTextChildProviderTest,
