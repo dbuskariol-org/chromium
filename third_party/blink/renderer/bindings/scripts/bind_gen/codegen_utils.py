@@ -156,5 +156,4 @@ def write_code_node_to_file(code_node, filepath):
 
     format_result = clang_format(rendered_text, filename=filepath)
 
-    with open(filepath, "w") as output_file:
-        output_file.write(format_result.contents)
+    web_idl.file_io.write_to_file_if_changed(filepath, format_result.contents)
