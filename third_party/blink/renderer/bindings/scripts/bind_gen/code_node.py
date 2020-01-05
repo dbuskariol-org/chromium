@@ -31,7 +31,7 @@ def render_code_node(code_node):
     while True:
         prev_accumulated_size = accumulated_size
         renderer.reset()
-        code_node.render()
+        code_node.render(renderer)
         accumulated_size = accumulator.total_size()
         if (renderer.is_rendering_complete()
                 and accumulated_size == prev_accumulated_size):
@@ -191,19 +191,19 @@ class CodeNode(object):
 
         This function is supposed to be used in a Mako template as ${code_node}.
         """
-        self.render()
+        renderer = self.renderer
+        assert renderer
+
+        self.render(renderer)
         return ""
 
-    def render(self):
+    def render(self, renderer):
         """
         Renders this CodeNode object as a text string and also propagates
         updates to related CodeNode objects.  As this method has side-effects
         not only to this object but also other related objects, the resulting
         text may change on each invocation.
         """
-        renderer = self.renderer
-        assert renderer
-
         last_render_state = self._render_state
         self._render_state = CodeNode._RenderState()
         self._is_rendering = True
@@ -519,7 +519,7 @@ class ListNode(CodeNode):
                     self._will_skip_separator = False
                 else:
                     renderer.render_text(self._separator)
-                node.render()
+                node.render(renderer)
             if self._element_nodes:
                 renderer.render_text(self._tail)
         finally:

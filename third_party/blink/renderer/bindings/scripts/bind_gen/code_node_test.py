@@ -139,7 +139,7 @@ int var1 = var2 + var3;
 
         with self.assertRaises(NameError):
             renderer.reset()
-            root.render()
+            root.render(renderer)
 
         callers_on_error = list(renderer.callers_on_error)
         self.assertEqual(len(callers_on_error), 3)
