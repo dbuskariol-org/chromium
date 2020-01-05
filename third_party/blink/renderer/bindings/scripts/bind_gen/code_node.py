@@ -8,8 +8,6 @@ provides a collection of the classes that represent code nodes independent from
 specific bindings, such as ECMAScript bindings.
 """
 
-import copy
-
 from .codegen_accumulator import CodeGenAccumulator
 from .codegen_format import format_template
 from .mako_renderer import MakoRenderer
@@ -169,10 +167,14 @@ class CodeNode(object):
             self._template = None
         else:
             self._template = MakoTemplate(template_text)
-        self._template_vars = {}
+
+        # Template variable bindings
+        self._own_template_vars = None
+        self._base_template_vars = None
+        self._cached_template_vars = None
 
         self._accumulator = None  # CodeGenAccumulator
-        self._accumulate_requests = []
+        self._accumulate_requests = None
 
         self._renderer = None  # MakoRenderer
 
@@ -219,7 +221,7 @@ class CodeNode(object):
             assert accumulator
             for request in self._accumulate_requests:
                 request(accumulator)
-            self._accumulate_requests = []
+            self._accumulate_requests = None
 
     def _render(self, renderer, last_render_state):
         """
@@ -277,39 +279,89 @@ class CodeNode(object):
             node = node.outer
         return node
 
+    def inclusive_outers(self):
+        """
+        Returns a list of outer nodes including this node in order from this
+        node to the outermost node.
+        """
+        outers = []
+        node = self
+        while node is not None:
+            outers.append(node)
+            node = node.outer
+        return outers
+
     @property
     def template_vars(self):
         """
         Returns the template variable bindings available at this point, i.e.
         bound at this node or outer nodes.
 
-        CAUTION: Do not modify the returned dict.  This method may return the
-        original dict in a CodeNode.
+        CAUTION: This accessor caches the result.  This accessor must not be
+        called during construction of a code node tree.
         """
-        if not self.outer:
-            return self._template_vars
+        if self._cached_template_vars is not None:
+            return self._cached_template_vars
 
-        if not self._template_vars:
-            return self.outer.template_vars
+        outers = self.inclusive_outers()
+        bindings = None
 
-        binds = copy.copy(self.outer.template_vars)
-        for name, value in self._template_vars.iteritems():
-            assert name not in binds, (
-                "Duplicated template variable binding: {}".format(name))
-            binds[name] = value
-        return binds
+        for node in outers:
+            if node.base_template_vars is not None:
+                bindings = dict(node.base_template_vars)
+                break
+        if bindings is None:
+            bindings = {}
+
+        for node in outers:
+            if node.own_template_vars is None:
+                continue
+            for name, value in node.own_template_vars.iteritems():
+                assert name not in bindings, (
+                    "Duplicated template variable binding: {}".format(name))
+                bindings[name] = value
+
+        self._cached_template_vars = bindings
+        return self._cached_template_vars
+
+    @property
+    def own_template_vars(self):
+        """Returns the template variables bound at this code node."""
+        return self._own_template_vars
 
     def add_template_var(self, name, value):
-        assert name not in self._template_vars, (
+        if self._own_template_vars is None:
+            self._own_template_vars = {}
+        assert isinstance(name, str)
+        assert name not in self._own_template_vars, (
             "Duplicated template variable binding: {}".format(name))
         if isinstance(value, CodeNode):
             value.set_outer(self)
-        self._template_vars[name] = value
+        self._own_template_vars[name] = value
 
     def add_template_vars(self, template_vars):
         assert isinstance(template_vars, dict)
         for name, value in template_vars.iteritems():
             self.add_template_var(name, value)
+
+    @property
+    def base_template_vars(self):
+        """
+        Returns the base template variables if it's set at this code node.
+
+        The base template variables are a set of template variables that of
+        the innermost code node takes effect.  It means that the base template
+        variables are layered and shadowable.
+        """
+        return self._base_template_vars
+
+    def set_base_template_vars(self, template_vars):
+        assert isinstance(template_vars, dict)
+        for name, value in template_vars.iteritems():
+            assert isinstance(name, str)
+            assert not isinstance(value, CodeNode)
+        assert self._base_template_vars is None
+        self._base_template_vars = template_vars
 
     @property
     def accumulator(self):
@@ -329,6 +381,8 @@ class CodeNode(object):
         argument of self.accumulator.
         """
         assert callable(request)
+        if self._accumulate_requests is None:
+            self._accumulate_requests = []
         self._accumulate_requests.append(request)
 
     @property
