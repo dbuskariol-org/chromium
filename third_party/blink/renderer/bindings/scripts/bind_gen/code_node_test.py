@@ -9,7 +9,8 @@ from .code_node import LiteralNode
 from .code_node import SymbolNode
 from .code_node import SymbolScopeNode
 from .code_node import TextNode
-from .codegen_utils import render_code_node
+from .code_node import render_code_node
+from .codegen_accumulator import CodeGenAccumulator
 from .mako_renderer import MakoRenderer
 
 
@@ -21,6 +22,8 @@ class CodeNodeTest(unittest.TestCase):
     def assertRenderResult(self, node, expected):
         if node.renderer is None:
             node.set_renderer(MakoRenderer())
+        if node.accumulator is None:
+            node.set_accumulator(CodeGenAccumulator())
 
         def simplify(text):
             return "\n".join(

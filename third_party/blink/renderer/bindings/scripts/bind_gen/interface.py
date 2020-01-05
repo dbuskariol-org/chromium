@@ -2765,5 +2765,5 @@ def generate_interface(interface):
 
 
 def generate_interfaces(web_idl_database):
-    interface = web_idl_database.find("Window")
+    interface = web_idl_database.find("Navigator")
     generate_interface(interface)

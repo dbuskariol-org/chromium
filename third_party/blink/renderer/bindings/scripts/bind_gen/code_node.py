@@ -16,6 +16,30 @@ from .mako_renderer import MakoRenderer
 from .mako_renderer import MakoTemplate
 
 
+def render_code_node(code_node):
+    """
+    Renders |code_node| and turns it into text letting |code_node| apply all
+    necessary changes (side effects).  Returns the resulting text.
+    """
+    assert isinstance(code_node, CodeNode)
+    assert code_node.outer is None
+
+    renderer = code_node.renderer
+    accumulator = code_node.accumulator
+
+    accumulated_size = accumulator.total_size()
+    while True:
+        prev_accumulated_size = accumulated_size
+        renderer.reset()
+        code_node.render()
+        accumulated_size = accumulator.total_size()
+        if (renderer.is_rendering_complete()
+                and accumulated_size == prev_accumulated_size):
+            break
+
+    return renderer.to_text()
+
+
 class Likeliness(object):
     """
     Represents how much likely a code node will be executed.
@@ -470,6 +494,8 @@ class ListNode(CodeNode):
         self._head = head
         self._tail = tail
 
+        self._will_skip_separator = False
+
         if code_nodes is not None:
             self.extend(code_nodes)
 
@@ -487,10 +513,10 @@ class ListNode(CodeNode):
         try:
             if self._element_nodes:
                 renderer.render_text(self._head)
-            is_first = True
+            self._will_skip_separator = True
             for node in self._element_nodes:
-                if is_first:
-                    is_first = False
+                if self._will_skip_separator:
+                    self._will_skip_separator = False
                 else:
                     renderer.render_text(self._separator)
                 node.render()
@@ -498,6 +524,9 @@ class ListNode(CodeNode):
                 renderer.render_text(self._tail)
         finally:
             renderer.pop_caller()
+
+    def skip_separator(self):
+        self._will_skip_separator = True
 
     def append(self, node):
         if node is None:
@@ -575,7 +604,7 @@ class SequenceNode(ListNode):
                 self.remove(node)
             self._to_be_removed = []
 
-        return super(SequenceNode, self)._render(
+        super(SequenceNode, self)._render(
             renderer=renderer, last_render_state=last_render_state)
 
     def schedule_to_remove(self, node):
@@ -609,8 +638,11 @@ class SymbolScopeNode(SequenceNode):
             if not self.is_code_symbol_defined(symbol_node):
                 self._insert_symbol_definition(symbol_node, last_render_state)
 
-        return super(SymbolScopeNode, self)._render(
+        super(SymbolScopeNode, self)._render(
             renderer=renderer, last_render_state=last_render_state)
+
+        if self.current_render_state.undefined_code_symbols:
+            renderer.invalidate_rendering_result()
 
     def _insert_symbol_definition(self, symbol_node, last_render_state):
         DIRECT_USES = "u"
@@ -849,11 +881,12 @@ class SymbolDefinitionNode(SequenceNode):
         if scope.is_code_symbol_defined(self._symbol_node):
             assert isinstance(self.outer, SequenceNode)
             self.outer.schedule_to_remove(self)
-            return ""
+            self.outer.skip_separator()
+            return
 
         scope.on_code_symbol_defined(self._symbol_node)
 
-        return super(SymbolDefinitionNode, self)._render(
+        super(SymbolDefinitionNode, self)._render(
             renderer=renderer, last_render_state=last_render_state)
 
     @property

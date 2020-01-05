@@ -10,6 +10,7 @@ from .code_node import CodeNode
 from .code_node import EmptyNode
 from .code_node import LiteralNode
 from .code_node import SequenceNode
+from .code_node import render_code_node
 from .codegen_accumulator import CodeGenAccumulator
 from .path_manager import PathManager
 
@@ -144,22 +145,6 @@ def collect_include_headers(idl_definition):
         header_paths.add(PathManager(type_def_obj).blink_path(ext="h"))
 
     return header_paths
-
-
-def render_code_node(code_node):
-    """
-    Renders |code_node| and turns it into text letting |code_node| apply all
-    necessary changes (side effects).  Returns the resulting text.
-    """
-    renderer = code_node.renderer
-    prev = None
-    current = ""
-    while current != prev:
-        renderer.reset()
-        prev = current
-        code_node.render()
-        current = renderer.to_text()
-    return current
 
 
 def write_code_node_to_file(code_node, filepath):
