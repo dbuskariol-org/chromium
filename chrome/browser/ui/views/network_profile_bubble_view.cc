@@ -24,17 +24,6 @@
 
 namespace {
 
-// Bubble layout constants.
-const int kNotificationBubbleWidth = 250;
-
-std::unique_ptr<views::View> CreateLearnMoreLink(
-    views::LinkListener* listener) {
-  auto learn_more =
-      std::make_unique<views::Link>(l10n_util::GetStringUTF16(IDS_LEARN_MORE));
-  learn_more->set_listener(listener);
-  return learn_more;
-}
-
 class NetworkProfileBubbleView : public views::BubbleDialogDelegateView,
                                  public views::LinkListener {
  public:
@@ -69,7 +58,9 @@ NetworkProfileBubbleView::NetworkProfileBubbleView(
       navigator_(navigator),
       profile_(profile) {
   DialogDelegate::set_buttons(ui::DIALOG_BUTTON_OK);
-  DialogDelegate::SetExtraView(CreateLearnMoreLink(this));
+  auto* learn_more = DialogDelegate::SetExtraView(
+      std::make_unique<views::Link>(l10n_util::GetStringUTF16(IDS_LEARN_MORE)));
+  learn_more->set_listener(this);
   chrome::RecordDialogCreation(
       chrome::DialogIdentifier::NETWORK_SHARE_PROFILE_WARNING);
 }
@@ -86,6 +77,7 @@ void NetworkProfileBubbleView::Init() {
       l10n_util::GetStringFUTF16(IDS_PROFILE_ON_NETWORK_WARNING,
           l10n_util::GetStringUTF16(IDS_PRODUCT_NAME)));
   label->SetMultiLine(true);
+  constexpr int kNotificationBubbleWidth = 250;
   label->SizeToFit(kNotificationBubbleWidth);
   label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   AddChildView(label);
