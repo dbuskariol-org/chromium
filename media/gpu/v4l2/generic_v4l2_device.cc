@@ -218,7 +218,7 @@ EGLImageKHR GenericV4L2Device::CreateEGLImage(
     const gfx::Size& size,
     unsigned int buffer_index,
     uint32_t v4l2_pixfmt,
-    const std::vector<base::ScopedFD>& dmabuf_fds) {
+    std::vector<base::ScopedFD>&& dmabuf_fds) {
   DVLOGF(3);
   if (!CanCreateEGLImageFrom(v4l2_pixfmt)) {
     VLOGF(1) << "Unsupported V4L2 pixel format";
@@ -291,7 +291,7 @@ EGLImageKHR GenericV4L2Device::CreateEGLImage(
 scoped_refptr<gl::GLImage> GenericV4L2Device::CreateGLImage(
     const gfx::Size& size,
     uint32_t fourcc,
-    const std::vector<base::ScopedFD>& dmabuf_fds) {
+    std::vector<base::ScopedFD>&& dmabuf_fds) {
   DVLOGF(3);
   DCHECK(CanCreateEGLImageFrom(fourcc));
   const auto vf_format_fourcc = Fourcc::FromV4L2PixFmt(fourcc);

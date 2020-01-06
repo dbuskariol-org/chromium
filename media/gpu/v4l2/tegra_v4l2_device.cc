@@ -227,7 +227,7 @@ EGLImageKHR TegraV4L2Device::CreateEGLImage(
     const gfx::Size& /* size */,
     unsigned int buffer_index,
     uint32_t v4l2_pixfmt,
-    const std::vector<base::ScopedFD>& /* dmabuf_fds */) {
+    std::vector<base::ScopedFD>&& /* dmabuf_fds */) {
   DVLOGF(3);
   if (!CanCreateEGLImageFrom(v4l2_pixfmt)) {
     LOG(ERROR) << "Unsupported V4L2 pixel format";
@@ -252,7 +252,7 @@ EGLImageKHR TegraV4L2Device::CreateEGLImage(
 scoped_refptr<gl::GLImage> TegraV4L2Device::CreateGLImage(
     const gfx::Size& size,
     uint32_t fourcc,
-    const std::vector<base::ScopedFD>& dmabuf_fds) {
+    std::vector<base::ScopedFD>&& dmabuf_fds) {
   NOTREACHED();
   return nullptr;
 }

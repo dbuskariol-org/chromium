@@ -598,9 +598,9 @@ class MEDIA_GPU_EXPORT V4L2Device
   // Create an EGLImage from provided |dmabuf_fds| and bind |texture_id| to it.
   // Some implementations may also require the V4L2 |buffer_index| of the buffer
   // for which |dmabuf_fds| have been exported.
-  // The caller may choose to close the file descriptors after this method
-  // returns, and may expect the buffers to remain valid for the lifetime of
-  // the created EGLImage.
+  // This method takes full ownership of |dmabuf_fds|. The caller shall not use
+  // them after this method returns, and must duplicate them before passing them
+  // if it needs to access the buffers through them afterwards.
   // Return EGL_NO_IMAGE_KHR on failure.
   virtual EGLImageKHR CreateEGLImage(
       EGLDisplay egl_display,
@@ -609,17 +609,17 @@ class MEDIA_GPU_EXPORT V4L2Device
       const gfx::Size& size,
       unsigned int buffer_index,
       uint32_t v4l2_pixfmt,
-      const std::vector<base::ScopedFD>& dmabuf_fds) = 0;
+      std::vector<base::ScopedFD>&& dmabuf_fds) = 0;
 
   // Create a GLImage from provided |dmabuf_fds|.
-  // The caller may choose to close the file descriptors after this method
-  // returns, and may expect the buffers to remain valid for the lifetime of
-  // the created GLImage.
+  // This method takes full ownership of |dmabuf_fds|. The caller shall not use
+  // them after this method returns, and must duplicate them before passing them
+  // if it needs to access the buffers through them afterwards.
   // Return the newly created GLImage.
   virtual scoped_refptr<gl::GLImage> CreateGLImage(
       const gfx::Size& size,
       uint32_t fourcc,
-      const std::vector<base::ScopedFD>& dmabuf_fds) = 0;
+      std::vector<base::ScopedFD>&& dmabuf_fds) = 0;
 
   // Destroys the EGLImageKHR.
   virtual EGLBoolean DestroyEGLImage(EGLDisplay egl_display,

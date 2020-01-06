@@ -1449,7 +1449,7 @@ void V4L2SliceVideoDecodeAccelerator::AssignPictureBuffersTask(
 void V4L2SliceVideoDecodeAccelerator::CreateGLImageFor(
     size_t buffer_index,
     int32_t picture_buffer_id,
-    std::vector<base::ScopedFD> passed_dmabuf_fds,
+    std::vector<base::ScopedFD>&& dmabuf_fds,
     GLuint client_texture_id,
     GLuint texture_id,
     const gfx::Size& size,
@@ -1472,7 +1472,7 @@ void V4L2SliceVideoDecodeAccelerator::CreateGLImageFor(
   }
 
   scoped_refptr<gl::GLImage> gl_image = gl_image_device_->CreateGLImage(
-      size, fourcc.ToV4L2PixFmt(), passed_dmabuf_fds);
+      size, fourcc.ToV4L2PixFmt(), std::move(dmabuf_fds));
   if (!gl_image) {
     VLOGF(1) << "Could not create GLImage,"
              << " index=" << buffer_index << " texture_id=" << texture_id;
@@ -1551,7 +1551,7 @@ void V4L2SliceVideoDecodeAccelerator::ImportBufferForPictureForImportTask(
 
 void V4L2SliceVideoDecodeAccelerator::ImportBufferForPictureTask(
     int32_t picture_buffer_id,
-    std::vector<base::ScopedFD> passed_dmabuf_fds,
+    std::vector<base::ScopedFD>&& passed_dmabuf_fds,
     int32_t stride) {
   DVLOGF(3) << "picture_buffer_id=" << picture_buffer_id;
   DCHECK(decoder_thread_task_runner_->BelongsToCurrentThread());

@@ -44,19 +44,18 @@ class GenericV4L2Device : public V4L2Device {
       enum v4l2_buf_type buf_type) override;
 
   bool CanCreateEGLImageFrom(uint32_t v4l2_pixfmt) override;
-  EGLImageKHR CreateEGLImage(
-      EGLDisplay egl_display,
-      EGLContext egl_context,
-      GLuint texture_id,
-      const gfx::Size& size,
-      unsigned int buffer_index,
-      uint32_t v4l2_pixfmt,
-      const std::vector<base::ScopedFD>& dmabuf_fds) override;
+  EGLImageKHR CreateEGLImage(EGLDisplay egl_display,
+                             EGLContext egl_context,
+                             GLuint texture_id,
+                             const gfx::Size& size,
+                             unsigned int buffer_index,
+                             uint32_t v4l2_pixfmt,
+                             std::vector<base::ScopedFD>&& dmabuf_fds) override;
 
   scoped_refptr<gl::GLImage> CreateGLImage(
       const gfx::Size& size,
       uint32_t fourcc,
-      const std::vector<base::ScopedFD>& dmabuf_fds) override;
+      std::vector<base::ScopedFD>&& dmabuf_fds) override;
 
   EGLBoolean DestroyEGLImage(EGLDisplay egl_display,
                              EGLImageKHR egl_image) override;
