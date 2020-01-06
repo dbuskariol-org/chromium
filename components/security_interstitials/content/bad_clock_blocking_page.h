@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_SSL_BAD_CLOCK_BLOCKING_PAGE_H_
-#define CHROME_BROWSER_SSL_BAD_CLOCK_BLOCKING_PAGE_H_
+#ifndef COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_BAD_CLOCK_BLOCKING_PAGE_H_
+#define COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_BAD_CLOCK_BLOCKING_PAGE_H_
 
 #include <memory>
 #include <string>
@@ -70,4 +70,4 @@ class BadClockBlockingPage : public SSLBlockingPageBase {
   DISALLOW_COPY_AND_ASSIGN(BadClockBlockingPage);
 };
 
-#endif  // CHROME_BROWSER_SSL_BAD_CLOCK_BLOCKING_PAGE_H_
+#endif  // COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_BAD_CLOCK_BLOCKING_PAGE_H_
