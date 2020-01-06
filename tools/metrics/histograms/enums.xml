@@ -6206,6 +6206,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Timed out"/>
 </enum>
 
+<enum name="BooleanCoalesced">
+  <int value="0" label="not coalesced"/>
+  <int value="1" label="coalesced"/>
+</enum>
+
 <enum name="BooleanColorSpaceSupported">
   <int value="0" label="Color space not supported"/>
   <int value="1" label="Color space supported"/>
