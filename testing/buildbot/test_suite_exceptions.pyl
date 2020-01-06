@@ -715,22 +715,6 @@
         },
         'use_xvfb': False,
       },
-      'Linux ASan LSan Tests (1)': {
-        'args': [
-          '--use-gpu-in-tests',
-          '--no-xvfb',
-        ],
-        'swarming': {
-          'dimension_sets': [
-            {
-              'gpu': '10de:1cb3',
-              'os': 'Ubuntu',
-              'pool': 'chromium.tests.gpu',
-            },
-          ],
-        },
-        'use_xvfb': False,
-      },
       'Linux CFI': {
         'args': [
           '--use-gpu-in-tests',
@@ -1133,7 +1117,6 @@
       'Mac10.13 Tests',
       'Mac10.13 Tests (dbg)',
       'Mac ASan 64 Tests (1)',
-      'Mac ASan 64 Tests (1)',
       'ToTMacASan',
     ],
     'modifications': {
@@ -1165,7 +1148,6 @@
       'Mac10.13 Tests',
       'Mac10.13 Tests (dbg)',
       'Mac ASan 64 Tests (1)',
-      'Mac ASan 64 Tests (1)',
       'ToTMacASan',
     ],
   },
@@ -1186,7 +1168,6 @@
       'Mac10.13 Tests',
       'Mac10.13 Tests (dbg)',
       'Mac ASan 64 Tests (1)',
-      'Mac ASan 64 Tests (1)',
       'ToTMacASan',
     ],
   },
@@ -1205,7 +1186,6 @@
       'Mac10.11 Tests',
       'Mac10.13 Tests',
       'Mac10.13 Tests (dbg)',
-      'Mac ASan 64 Tests (1)',
       'Mac ASan 64 Tests (1)',
       'ToTMacASan',
     ],
@@ -1231,7 +1211,6 @@
       'Mac10.11 Tests',
       'Mac10.13 Tests',
       'Mac10.13 Tests (dbg)',
-      'Mac ASan 64 Tests (1)',
       'Mac ASan 64 Tests (1)',
       'ToTMacASan',
     ],
