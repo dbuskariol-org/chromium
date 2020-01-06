@@ -1942,6 +1942,7 @@ jumbo_static_library("browser") {
     "//components/nacl/common:buildflags",
     "//components/payments/core",
     "//components/safe_browsing:buildflags",
+    "//components/services/storage/public/mojom",
     "//components/sync",
     "//components/sync_device_info",
     "//content/public/browser",

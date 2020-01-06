@@ -22,6 +22,7 @@
 #include "base/time/default_clock.h"
 #include "components/services/storage/indexed_db/leveldb/fake_leveldb_factory.h"
 #include "components/services/storage/indexed_db/transactional_leveldb/transactional_leveldb_database.h"
+#include "components/services/storage/public/mojom/indexed_db_control.mojom-test-utils.h"
 #include "content/browser/indexed_db/indexed_db_class_factory.h"
 #include "content/browser/indexed_db/indexed_db_connection.h"
 #include "content/browser/indexed_db/indexed_db_context_impl.h"
@@ -251,7 +252,10 @@ TEST_F(IndexedDBFactoryTest, BasicFactoryCreationAndTearDown) {
   EXPECT_TRUE(origin_state2_handle.IsHeld()) << s.ToString();
   EXPECT_TRUE(s.ok()) << s.ToString();
 
-  std::vector<StorageUsageInfo> origin_info = context()->GetAllOriginsInfo();
+  std::vector<storage::mojom::IndexedDBStorageUsageInfoPtr> origin_info;
+  storage::mojom::IndexedDBControlAsyncWaiter sync_control(context());
+  sync_control.GetUsage(&origin_info);
+
   EXPECT_EQ(2ul, origin_info.size());
   EXPECT_EQ(2ul, factory()->GetOpenOrigins().size());
 }
