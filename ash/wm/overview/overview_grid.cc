@@ -634,7 +634,9 @@ void OverviewGrid::AddDropTargetNotForDraggingFromThisGrid(
         OVERVIEW_ANIMATION_DROP_TARGET_FADE, drop_target_window);
     drop_target_widget_->SetOpacity(1.f);
   }
-  overview_session_->AddItem(drop_target_window, /*reposition=*/true, animate);
+  const size_t position = FindInsertionIndex(dragged_window);
+  overview_session_->AddItem(drop_target_window, /*reposition=*/true, animate,
+                             /*ignored_items=*/{}, position);
 }
 
 void OverviewGrid::RemoveDropTarget() {
