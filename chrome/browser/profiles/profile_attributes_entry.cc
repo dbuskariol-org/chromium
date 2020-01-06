@@ -32,6 +32,7 @@ const char kAuthCredentialsKey[] = "local_auth_credentials";
 const char kPasswordTokenKey[] = "gaia_password_token";
 const char kIsAuthErrorKey[] = "is_auth_error";
 const char kMetricsBucketIndex[] = "metrics_bucket_index";
+const char kSigninRequiredKey[] = "signin_required";
 
 // Local state pref to keep track of the next available profile bucket.
 const char kNextMetricsBucketIndex[] = "profile.metrics.next_bucket_index";
@@ -327,8 +328,7 @@ bool ProfileAttributesEntry::IsOmitted() const {
 }
 
 bool ProfileAttributesEntry::IsSigninRequired() const {
-  return profile_info_cache_->ProfileIsSigninRequiredAtIndex(profile_index()) ||
-         is_force_signin_profile_locked_;
+  return GetBool(kSigninRequiredKey) || is_force_signin_profile_locked_;
 }
 
 std::string ProfileAttributesEntry::GetSupervisedUserId() const {
@@ -445,7 +445,10 @@ void ProfileAttributesEntry::SetIsUsingGAIAPicture(bool value) {
 }
 
 void ProfileAttributesEntry::SetIsSigninRequired(bool value) {
-  profile_info_cache_->SetProfileSigninRequiredAtIndex(profile_index(), value);
+  if (value != GetBool(kSigninRequiredKey)) {
+    SetBool(kSigninRequiredKey, value);
+    profile_info_cache_->NotifyIsSigninRequiredChanged(GetPath());
+  }
   if (is_force_signin_enabled_)
     LockForceSigninProfile(value);
 }

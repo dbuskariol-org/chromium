@@ -81,7 +81,6 @@ class ProfileInfoCache : public ProfileInfoInterface,
   // loaded from disk.
   const gfx::Image* GetGAIAPictureOfProfileAtIndex(size_t index) const override;
   bool IsUsingGAIAPictureOfProfileAtIndex(size_t index) const override;
-  bool ProfileIsSigninRequiredAtIndex(size_t index) const override;
   bool ProfileIsUsingDefaultAvatarAtIndex(size_t index) const override;
 
   // Returns true if a GAIA picture has been loaded or has failed to load for
@@ -95,7 +94,6 @@ class ProfileInfoCache : public ProfileInfoInterface,
   void SetSupervisedUserIdOfProfileAtIndex(size_t index, const std::string& id);
   void SetGAIAPictureOfProfileAtIndex(size_t index, gfx::Image image);
   void SetIsUsingGAIAPictureOfProfileAtIndex(size_t index, bool value);
-  void SetProfileSigninRequiredAtIndex(size_t index, bool value);
   void SetProfileIsUsingDefaultAvatarAtIndex(size_t index, bool value);
 
   // Notify IsSignedInRequired to all observer

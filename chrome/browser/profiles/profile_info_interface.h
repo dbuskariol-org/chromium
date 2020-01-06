@@ -34,9 +34,6 @@ class ProfileInfoInterface {
   // Checks if the GAIA picture should be used as the profile's avatar icon.
   virtual bool IsUsingGAIAPictureOfProfileAtIndex(size_t index) const = 0;
 
-  // This profile is associated with an account but has been signed-out.
-  virtual bool ProfileIsSigninRequiredAtIndex(size_t index) const = 0;
-
   // Returns true if the user has never manually selected a profile avatar.
   virtual bool ProfileIsUsingDefaultAvatarAtIndex(size_t index) const = 0;
 

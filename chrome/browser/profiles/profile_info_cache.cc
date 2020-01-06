@@ -43,7 +43,6 @@ namespace {
 const char kIsUsingDefaultAvatarKey[] = "is_using_default_avatar";
 const char kUseGAIAPictureKey[] = "use_gaia_picture";
 const char kGAIAPictureFileNameKey[] = "gaia_picture_file_name";
-const char kSigninRequiredKey[] = "signin_required";
 const char kAccountIdKey[] = "account_id_key";
 #if !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
 const char kLegacyProfileNameMigrated[] = "legacy.profile.name.migrated";
@@ -284,12 +283,6 @@ bool ProfileInfoCache::IsUsingGAIAPictureOfProfileAtIndex(size_t index) const {
   return value;
 }
 
-bool ProfileInfoCache::ProfileIsSigninRequiredAtIndex(size_t index) const {
-  bool value = false;
-  GetInfoForProfileAtIndex(index)->GetBoolean(kSigninRequiredKey, &value);
-  return value;
-}
-
 bool ProfileInfoCache::ProfileIsUsingDefaultAvatarAtIndex(size_t index) const {
   bool value = false;
   GetInfoForProfileAtIndex(index)->GetBoolean(kIsUsingDefaultAvatarKey, &value);
@@ -396,18 +389,6 @@ void ProfileInfoCache::SetIsUsingGAIAPictureOfProfileAtIndex(size_t index,
   base::FilePath profile_path = GetPathOfProfileAtIndex(index);
   for (auto& observer : observer_list_)
     observer.OnProfileAvatarChanged(profile_path);
-}
-
-void ProfileInfoCache::SetProfileSigninRequiredAtIndex(size_t index,
-                                                       bool value) {
-  if (value == ProfileIsSigninRequiredAtIndex(index))
-    return;
-
-  std::unique_ptr<base::DictionaryValue> info(
-      GetInfoForProfileAtIndex(index)->DeepCopy());
-  info->SetBoolean(kSigninRequiredKey, value);
-  SetInfoForProfileAtIndex(index, std::move(info));
-  NotifyIsSigninRequiredChanged(GetPathOfProfileAtIndex(index));
 }
 
 void ProfileInfoCache::SetProfileIsUsingDefaultAvatarAtIndex(
