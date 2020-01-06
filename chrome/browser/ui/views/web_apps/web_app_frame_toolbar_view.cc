@@ -53,7 +53,6 @@
 #include "ui/compositor/layer_animation_sequence.h"
 #include "ui/compositor/scoped_layer_animation_settings.h"
 #include "ui/events/event.h"
-#include "ui/gfx/color_palette.h"
 #include "ui/gfx/color_utils.h"
 #include "ui/gfx/geometry/insets.h"
 #include "ui/gfx/geometry/rect.h"
@@ -650,12 +649,8 @@ void WebAppFrameToolbarView::ToolbarButtonContainer::OnWidgetVisibilityChanged(
 }
 
 WebAppFrameToolbarView::WebAppFrameToolbarView(views::Widget* widget,
-                                               BrowserView* browser_view,
-                                               SkColor active_color,
-                                               SkColor inactive_color)
-    : browser_view_(browser_view),
-      active_color_(active_color),
-      inactive_color_(inactive_color) {
+                                               BrowserView* browser_view)
+    : browser_view_(browser_view) {
   DCHECK(browser_view_);
   DCHECK(web_app::AppBrowserController::IsForWebAppBrowser(
       browser_view_->browser()));
@@ -699,7 +694,6 @@ WebAppFrameToolbarView::WebAppFrameToolbarView(views::Widget* widget,
                                     views::MaximumFlexSizeRule::kPreferred)
                                     .WithOrder(1));
 
-  UpdateChildrenColor();
   UpdateStatusIconsVisibility();
 
   DCHECK(!browser_view_->toolbar_button_provider() ||
@@ -720,10 +714,8 @@ void WebAppFrameToolbarView::UpdateStatusIconsVisibility() {
 void WebAppFrameToolbarView::UpdateCaptionColors() {
   const BrowserNonClientFrameView* frame_view =
       browser_view_->frame()->GetFrameView();
+  DCHECK(frame_view);
 
-  // frame_view is nullptr during BrowserNonClientFrameViewAsh::Init().
-  if (!frame_view)
-    return;
   active_color_ = frame_view->GetCaptionColor(BrowserFrameActiveState::kActive);
   inactive_color_ =
       frame_view->GetCaptionColor(BrowserFrameActiveState::kInactive);
@@ -866,6 +858,10 @@ const char* WebAppFrameToolbarView::GetClassName() const {
 
 void WebAppFrameToolbarView::ChildPreferredSizeChanged(views::View* child) {
   PreferredSizeChanged();
+}
+
+void WebAppFrameToolbarView::OnThemeChanged() {
+  UpdateCaptionColors();
 }
 
 views::View* WebAppFrameToolbarView::GetContentSettingContainerForTesting() {
