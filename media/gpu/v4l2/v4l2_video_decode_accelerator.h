@@ -513,10 +513,9 @@ class MEDIA_GPU_EXPORT V4L2VideoDecodeAccelerator
   //
   // Hardware state and associated queues.  Since decoder_thread_ services
   // the hardware, decoder_thread_ owns these too.
-  // output_buffer_map_ and output_planes_count_ are an
-  // exception during the buffer (re)allocation sequence, when the
-  // decoder_thread_ is blocked briefly while the Child thread manipulates
-  // them.
+  // output_buffer_map_ is an exception during the buffer (re)allocation
+  // sequence, when the decoder_thread_ is blocked briefly while the Child
+  // thread manipulates them.
   //
 
   base::Optional<V4L2WritableBufferRef> current_input_buffer_;
@@ -546,9 +545,6 @@ class MEDIA_GPU_EXPORT V4L2VideoDecodeAccelerator
   std::vector<OutputRecord> output_buffer_map_;
   // Required size of DPB for decoding.
   int output_dpb_size_;
-
-  // Number of planes (i.e. separate memory buffers) for output.
-  size_t output_planes_count_;
 
   // Pictures that are ready but not sent to PictureReady yet.
   base::queue<PictureRecord> pending_picture_ready_;
@@ -599,8 +595,6 @@ class MEDIA_GPU_EXPORT V4L2VideoDecodeAccelerator
   base::Optional<Fourcc> egl_image_format_fourcc_;
   // The logical dimensions of EGLImage buffer in pixels.
   gfx::Size egl_image_size_;
-  // Number of planes for EGLImage.
-  size_t egl_image_planes_count_;
 
   // Input format V4L2 fourccs this class supports.
   static const uint32_t supported_input_fourccs_[];

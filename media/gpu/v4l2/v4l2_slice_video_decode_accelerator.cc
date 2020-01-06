@@ -145,8 +145,7 @@ V4L2SliceVideoDecodeAccelerator::V4L2SliceVideoDecodeAccelerator(
     EGLDisplay egl_display,
     const BindGLImageCallback& bind_image_cb,
     const MakeGLContextCurrentCallback& make_context_current_cb)
-    : input_planes_count_(0),
-      output_planes_count_(0),
+    : output_planes_count_(0),
       child_task_runner_(base::ThreadTaskRunnerHandle::Get()),
       device_(std::move(device)),
       decoder_thread_("V4L2SliceVideoDecodeAcceleratorThread"),
@@ -242,8 +241,6 @@ bool V4L2SliceVideoDecodeAccelerator::Initialize(const Config& config,
   }
 
   video_profile_ = config.profile;
-
-  input_planes_count_ = 1;
 
   input_format_fourcc_ =
       V4L2Device::VideoCodecProfileToV4L2PixFmt(video_profile_, true);
@@ -486,7 +483,7 @@ bool V4L2SliceVideoDecodeAccelerator::SetupFormats() {
   format.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
   format.fmt.pix_mp.pixelformat = input_format_fourcc_;
   format.fmt.pix_mp.plane_fmt[0].sizeimage = input_size;
-  format.fmt.pix_mp.num_planes = input_planes_count_;
+  format.fmt.pix_mp.num_planes = 1;
   IOCTL_OR_ERROR_RETURN_FALSE(VIDIOC_S_FMT, &format);
   DCHECK_EQ(format.fmt.pix_mp.pixelformat, input_format_fourcc_);
 

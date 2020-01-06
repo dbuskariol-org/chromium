@@ -146,7 +146,6 @@ V4L2VideoDecodeAccelerator::V4L2VideoDecodeAccelerator(
       reset_pending_(false),
       decoder_partial_frame_pending_(false),
       output_dpb_size_(0),
-      output_planes_count_(0),
       picture_clearing_count_(0),
       device_poll_thread_("V4L2DevicePollThread"),
       egl_display_(egl_display),
@@ -154,7 +153,6 @@ V4L2VideoDecodeAccelerator::V4L2VideoDecodeAccelerator(
       make_context_current_cb_(make_context_current_cb),
       video_profile_(VIDEO_CODEC_PROFILE_UNKNOWN),
       input_format_fourcc_(0),
-      egl_image_planes_count_(0),
       weak_this_factory_(this) {
   weak_this_ = weak_this_factory_.GetWeakPtr();
 }
@@ -2197,28 +2195,29 @@ bool V4L2VideoDecodeAccelerator::CreateBuffersForFormat(
     const struct v4l2_format& format,
     const gfx::Size& visible_size) {
   DCHECK(decoder_thread_.task_runner()->BelongsToCurrentThread());
-  output_planes_count_ = format.fmt.pix_mp.num_planes;
+  size_t egl_image_planes_count;
+
   coded_size_.SetSize(format.fmt.pix_mp.width, format.fmt.pix_mp.height);
   visible_size_ = visible_size;
   if (image_processor_device_) {
     egl_image_size_ = visible_size_;
-    egl_image_planes_count_ = 0;
+    egl_image_planes_count = 0;
     if (!V4L2ImageProcessorBackend::TryOutputFormat(
             output_format_fourcc_->ToV4L2PixFmt(),
             egl_image_format_fourcc_->ToV4L2PixFmt(), coded_size_,
-            &egl_image_size_, &egl_image_planes_count_)) {
+            &egl_image_size_, &egl_image_planes_count)) {
       VLOGF(1) << "Fail to get output size and plane count of processor";
       return false;
     }
   } else {
     egl_image_size_ = coded_size_;
-    egl_image_planes_count_ = output_planes_count_;
+    egl_image_planes_count = format.fmt.pix_mp.num_planes;
   }
   VLOGF(2) << "new resolution: " << coded_size_.ToString()
            << ", visible size: " << visible_size_.ToString()
-           << ", decoder output planes count: " << output_planes_count_
+           << ", decoder output planes count: " << format.fmt.pix_mp.num_planes
            << ", EGLImage size: " << egl_image_size_.ToString()
-           << ", EGLImage plane count: " << egl_image_planes_count_;
+           << ", EGLImage plane count: " << egl_image_planes_count;
 
   return CreateOutputBuffers();
 }

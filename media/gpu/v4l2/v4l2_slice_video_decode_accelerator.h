@@ -364,7 +364,6 @@ class MEDIA_GPU_EXPORT V4L2SliceVideoDecodeAccelerator
   // VideoCodecProfiles supported by a v4l2 decoder driver.
   std::vector<VideoCodecProfile> supported_profiles_;
 
-  size_t input_planes_count_;
   size_t output_planes_count_;
 
   // GPU Child thread task runner.
