@@ -7,13 +7,9 @@
 #include <utility>
 
 #include "base/strings/string_number_conversions.h"
-#include "chrome/browser/interstitials/chrome_metrics_helper.h"
-#include "chrome/browser/interstitials/enterprise_util.h"
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/ssl/chrome_security_blocking_page_factory.h"
-#include "chrome/browser/ssl/ssl_error_controller_client.h"
 #include "components/safe_browsing/common/safe_browsing_prefs.h"
 #include "components/security_interstitials/content/cert_report_helper.h"
+#include "components/security_interstitials/content/security_interstitial_controller_client.h"
 #include "components/security_interstitials/content/ssl_cert_reporter.h"
 #include "components/security_interstitials/core/bad_clock_ui.h"
 #include "components/security_interstitials/core/metrics_helper.h"
@@ -31,25 +27,6 @@ using content::InterstitialPageDelegate;
 using content::NavigationController;
 using content::NavigationEntry;
 
-namespace {
-
-const char kBadClockMetricsName[] = "bad_clock";
-
-std::unique_ptr<ChromeMetricsHelper> CreateBadClockMetricsHelper(
-    content::WebContents* web_contents,
-    const GURL& request_url) {
-  // Set up the metrics helper for the BadClockUI.
-  security_interstitials::MetricsHelper::ReportDetails reporting_info;
-  reporting_info.metric_prefix = kBadClockMetricsName;
-  std::unique_ptr<ChromeMetricsHelper> metrics_helper =
-      std::make_unique<ChromeMetricsHelper>(web_contents, request_url,
-                                            reporting_info);
-  metrics_helper.get()->StartRecordingCaptivePortalMetrics(false);
-  return metrics_helper;
-}
-
-}  // namespace
-
 // static
 const InterstitialPageDelegate::TypeID BadClockBlockingPage::kTypeForTesting =
     &BadClockBlockingPage::kTypeForTesting;
@@ -65,30 +42,25 @@ BadClockBlockingPage::BadClockBlockingPage(
     const GURL& request_url,
     const base::Time& time_triggered,
     ssl_errors::ClockState clock_state,
-    std::unique_ptr<SSLCertReporter> ssl_cert_reporter)
-    : SSLBlockingPageBase(
-          web_contents,
-          CertificateErrorReport::INTERSTITIAL_CLOCK,
-          ssl_info,
-          request_url,
-          std::move(ssl_cert_reporter),
-          false /* overridable */,
-          time_triggered,
-          std::make_unique<SSLErrorControllerClient>(
-              web_contents,
-              ssl_info,
-              cert_error,
-              request_url,
-              CreateBadClockMetricsHelper(web_contents, request_url))),
+    std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
+    std::unique_ptr<
+        security_interstitials::SecurityInterstitialControllerClient>
+        controller_client)
+    : SSLBlockingPageBase(web_contents,
+                          CertificateErrorReport::INTERSTITIAL_CLOCK,
+                          ssl_info,
+                          request_url,
+                          std::move(ssl_cert_reporter),
+                          false /* overridable */,
+                          time_triggered,
+                          std::move(controller_client)),
       ssl_info_(ssl_info),
       bad_clock_ui_(new security_interstitials::BadClockUI(request_url,
                                                            cert_error,
                                                            ssl_info,
                                                            time_triggered,
                                                            clock_state,
-                                                           controller())) {
-  ChromeSecurityBlockingPageFactory::DoChromeSpecificSetup(this);
-}
+                                                           controller())) {}
 
 BadClockBlockingPage::~BadClockBlockingPage() = default;
 

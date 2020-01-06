@@ -543,9 +543,10 @@ void SSLErrorHandlerDelegateImpl::ShowBadClockInterstitial(
     const base::Time& now,
     ssl_errors::ClockState clock_state) {
   // Show bad clock page. The interstitial owns the blocking page.
-  OnBlockingPageReady(new BadClockBlockingPage(
-      web_contents_, cert_error_, ssl_info_, request_url_, now, clock_state,
-      std::move(ssl_cert_reporter_)));
+  OnBlockingPageReady(
+      ChromeSecurityBlockingPageFactory::CreateBadClockBlockingPage(
+          web_contents_, cert_error_, ssl_info_, request_url_, now, clock_state,
+          std::move(ssl_cert_reporter_)));
 }
 
 void SSLErrorHandlerDelegateImpl::ShowBlockedInterceptionInterstitial() {

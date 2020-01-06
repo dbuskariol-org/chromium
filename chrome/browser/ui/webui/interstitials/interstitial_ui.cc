@@ -233,9 +233,9 @@ BadClockBlockingPage* CreateBadClockBlockingPage(
   if (strict_enforcement)
     options_mask |=
         security_interstitials::SSLErrorOptionsMask::STRICT_ENFORCEMENT;
-  return new BadClockBlockingPage(web_contents, cert_error, ssl_info,
-                                  request_url, base::Time::Now(), clock_state,
-                                  nullptr);
+  return ChromeSecurityBlockingPageFactory::CreateBadClockBlockingPage(
+      web_contents, cert_error, ssl_info, request_url, base::Time::Now(),
+      clock_state, nullptr);
 }
 
 LookalikeUrlInterstitialPage* CreateLookalikeInterstitialPage(

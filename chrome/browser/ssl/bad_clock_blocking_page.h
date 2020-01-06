@@ -35,13 +35,17 @@ class BadClockBlockingPage : public SSLBlockingPageBase {
   // If the blocking page isn't shown, the caller is responsible for cleaning
   // up the blocking page. Otherwise, the interstitial takes ownership when
   // shown.
-  BadClockBlockingPage(content::WebContents* web_contents,
-                       int cert_error,
-                       const net::SSLInfo& ssl_info,
-                       const GURL& request_url,
-                       const base::Time& time_triggered,
-                       ssl_errors::ClockState clock_state,
-                       std::unique_ptr<SSLCertReporter> ssl_cert_reporter);
+  BadClockBlockingPage(
+      content::WebContents* web_contents,
+      int cert_error,
+      const net::SSLInfo& ssl_info,
+      const GURL& request_url,
+      const base::Time& time_triggered,
+      ssl_errors::ClockState clock_state,
+      std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
+      std::unique_ptr<
+          security_interstitials::SecurityInterstitialControllerClient>
+          controller_client);
 
   ~BadClockBlockingPage() override;
 
