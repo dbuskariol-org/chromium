@@ -239,28 +239,24 @@ class MEDIA_GPU_EXPORT V4L2VideoDecodeAccelerator
   // via AssignPictureBuffers() on decoder thread.
   void AssignPictureBuffersTask(const std::vector<PictureBuffer>& buffers);
 
-  // Use buffer backed by dmabuf file descriptors in |dmabuf_fds| for the
-  // OutputRecord associated with |picture_buffer_id|, taking ownership of the
-  // file descriptors. |stride| is the number of bytes from one row of pixels
-  // to the next row.
+  // Use buffer backed by |handle| for the OutputRecord associated with
+  // |picture_buffer_id|. |handle| does not need to be valid if we are in
+  // ALLOCATE mode and using an image processor.
   void ImportBufferForPictureTask(int32_t picture_buffer_id,
-                                  std::vector<base::ScopedFD>&& dmabuf_fds,
-                                  int32_t stride);
+                                  gfx::NativePixmapHandle handle);
 
-  // Check |planes| and |dmabuf_fds| are valid in import mode, besides
-  // ImportBufferForPicture.
+  // Check |handle| is valid in import mode, besides ImportBufferForPicture.
   void ImportBufferForPictureForImportTask(int32_t picture_buffer_id,
                                            VideoPixelFormat pixel_format,
                                            gfx::NativePixmapHandle handle);
 
   // Create an EGLImage for the buffer associated with V4L2 |buffer_index| and
-  // for |picture_buffer_id|, backed by dmabuf file descriptors in
-  // |passed_dmabuf_fds|, taking ownership of them.
+  // for |picture_buffer_id|, and backed by |handle|.
   // The buffer should be bound to |texture_id| and is of |size| and format
   // described by |fourcc|.
   void CreateEGLImageFor(size_t buffer_index,
                          int32_t picture_buffer_id,
-                         std::vector<base::ScopedFD>&& dmabuf_fds,
+                         gfx::NativePixmapHandle handle,
                          GLuint texture_id,
                          const gfx::Size& size,
                          const Fourcc fourcc);
