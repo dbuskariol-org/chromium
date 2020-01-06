@@ -13,6 +13,7 @@
 #include "base/threading/thread.h"
 #include "base/threading/thread_checker.h"
 #include "third_party/blink/renderer/modules/modules_export.h"
+#include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 #include "third_party/webrtc/api/peer_connection_interface.h"
 #include "third_party/webrtc/p2p/stunprober/stun_prober.h"
 
@@ -142,7 +143,7 @@ class MODULES_EXPORT PeerConnectionDependencyFactory
   // Functions related to Stun probing trial to determine how fast we could send
   // Stun request without being dropped by NAT.
   void TryScheduleStunProbeTrial();
-  void StartStunProbeTrialOnWorkerThread(const std::string& params);
+  void StartStunProbeTrialOnWorkerThread(const String& params);
 
   // Creates |pc_factory_|, which in turn is used for
   // creating PeerConnection objects.

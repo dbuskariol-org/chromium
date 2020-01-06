@@ -10,7 +10,6 @@
 #include <utility>
 #include <vector>
 
-#include "base/bind.h"
 #include "base/bind_helpers.h"
 #include "base/location.h"
 #include "base/logging.h"
@@ -49,6 +48,8 @@
 #include "third_party/blink/renderer/platform/peerconnection/rtc_peer_connection_handler_platform.h"
 #include "third_party/blink/renderer/platform/peerconnection/stun_field_trial.h"
 #include "third_party/blink/renderer/platform/peerconnection/video_codec_factory.h"
+#include "third_party/blink/renderer/platform/scheduler/public/post_cross_thread_task.h"
+#include "third_party/blink/renderer/platform/wtf/cross_thread_functional.h"
 #include "third_party/webrtc/api/call/call_factory_interface.h"
 #include "third_party/webrtc/api/peer_connection_interface.h"
 #include "third_party/webrtc/api/rtc_event_log/rtc_event_log_factory.h"
@@ -194,11 +195,12 @@ void PeerConnectionDependencyFactory::CreatePeerConnectionFactory() {
   base::WaitableEvent start_worker_event(
       base::WaitableEvent::ResetPolicy::MANUAL,
       base::WaitableEvent::InitialState::NOT_SIGNALED);
-  chrome_worker_thread_.task_runner()->PostTask(
-      FROM_HERE,
-      base::BindOnce(&PeerConnectionDependencyFactory::InitializeWorkerThread,
-                     base::Unretained(this), &worker_thread_,
-                     &start_worker_event));
+  PostCrossThreadTask(
+      *chrome_worker_thread_.task_runner().get(), FROM_HERE,
+      CrossThreadBindOnce(
+          &PeerConnectionDependencyFactory::InitializeWorkerThread,
+          CrossThreadUnretained(this), CrossThreadUnretained(&worker_thread_),
+          CrossThreadUnretained(&start_worker_event)));
 
   base::WaitableEvent create_network_manager_event(
       base::WaitableEvent::ResetPolicy::MANUAL,
@@ -212,12 +214,13 @@ void PeerConnectionDependencyFactory::CreatePeerConnectionFactory() {
     mdns_responder = std::make_unique<MdnsResponderAdapter>();
   }
 #endif  // BUILDFLAG(ENABLE_MDNS)
-  chrome_worker_thread_.task_runner()->PostTask(
-      FROM_HERE,
-      base::BindOnce(&PeerConnectionDependencyFactory::
-                         CreateIpcNetworkManagerOnWorkerThread,
-                     base::Unretained(this), &create_network_manager_event,
-                     std::move(mdns_responder)));
+  PostCrossThreadTask(
+      *chrome_worker_thread_.task_runner().get(), FROM_HERE,
+      CrossThreadBindOnce(&PeerConnectionDependencyFactory::
+                              CreateIpcNetworkManagerOnWorkerThread,
+                          CrossThreadUnretained(this),
+                          CrossThreadUnretained(&create_network_manager_event),
+                          std::move(mdns_responder)));
 
   start_worker_event.Wait();
   create_network_manager_event.Wait();
@@ -234,12 +237,13 @@ void PeerConnectionDependencyFactory::CreatePeerConnectionFactory() {
   base::WaitableEvent start_signaling_event(
       base::WaitableEvent::ResetPolicy::MANUAL,
       base::WaitableEvent::InitialState::NOT_SIGNALED);
-  chrome_signaling_thread_.task_runner()->PostTask(
-      FROM_HERE,
-      base::BindOnce(
+  PostCrossThreadTask(
+      *chrome_signaling_thread_.task_runner().get(), FROM_HERE,
+      CrossThreadBindOnce(
           &PeerConnectionDependencyFactory::InitializeSignalingThread,
-          base::Unretained(this), blink::Platform::Current()->GetGpuFactories(),
-          &start_signaling_event));
+          CrossThreadUnretained(this),
+          CrossThreadUnretained(Platform::Current()->GetGpuFactories()),
+          CrossThreadUnretained(&start_signaling_event)));
 
   start_signaling_event.Wait();
   CHECK(signaling_thread_);
@@ -544,20 +548,22 @@ void PeerConnectionDependencyFactory::TryScheduleStunProbeTrial() {
 
   GetPcFactory();
 
-  chrome_worker_thread_.task_runner()->PostDelayedTask(
-      FROM_HERE,
-      base::BindOnce(
+  PostDelayedCrossThreadTask(
+      *chrome_worker_thread_.task_runner().get(), FROM_HERE,
+      CrossThreadBindOnce(
           &PeerConnectionDependencyFactory::StartStunProbeTrialOnWorkerThread,
-          base::Unretained(this), *params),
+          CrossThreadUnretained(this), String::FromUTF8(*params)),
       base::TimeDelta::FromMilliseconds(blink::kExperimentStartDelayMs));
 }
 
 void PeerConnectionDependencyFactory::StartStunProbeTrialOnWorkerThread(
-    const std::string& params) {
+    const String& params) {
   DCHECK(network_manager_);
   DCHECK(chrome_worker_thread_.task_runner()->BelongsToCurrentThread());
-  stun_trial_.reset(new blink::StunProberTrial(network_manager_.get(), params,
-                                               socket_factory_.get()));
+  // TODO(crbug.com/787254): Remove the UTF8 conversion when StunProberTrial
+  // operates over WTF::String.
+  stun_trial_.reset(new StunProberTrial(network_manager_.get(), params.Utf8(),
+                                        socket_factory_.get()));
 }
 
 void PeerConnectionDependencyFactory::CreateIpcNetworkManagerOnWorkerThread(
@@ -581,11 +587,11 @@ void PeerConnectionDependencyFactory::CleanupPeerConnectionFactory() {
     // The network manager needs to free its resources on the thread they were
     // created, which is the worked thread.
     if (chrome_worker_thread_.IsRunning()) {
-      chrome_worker_thread_.task_runner()->PostTask(
-          FROM_HERE,
-          base::BindOnce(
+      PostCrossThreadTask(
+          *chrome_worker_thread_.task_runner().get(), FROM_HERE,
+          CrossThreadBindOnce(
               &PeerConnectionDependencyFactory::DeleteIpcNetworkManager,
-              base::Unretained(this)));
+              CrossThreadUnretained(this)));
       // Stopping the thread will wait until all tasks have been
       // processed before returning. We wait for the above task to finish before
       // letting the the function continue to avoid any potential race issues.
