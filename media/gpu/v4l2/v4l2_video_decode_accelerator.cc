@@ -484,7 +484,7 @@ void V4L2VideoDecodeAccelerator::CreateEGLImageFor(
 
   EGLImageKHR egl_image = egl_image_device_->CreateEGLImage(
       egl_display_, gl_context->GetHandle(), texture_id, size, buffer_index,
-      fourcc.ToV4L2PixFmt(), std::move(dmabuf_fds));
+      fourcc, std::move(dmabuf_fds));
   if (egl_image == EGL_NO_IMAGE_KHR) {
     VLOGF(1) << "could not create EGLImageKHR,"
              << " index=" << buffer_index << " texture_id=" << texture_id;
@@ -2325,8 +2325,9 @@ bool V4L2VideoDecodeAccelerator::SetupFormats() {
   memset(&fmtdesc, 0, sizeof(fmtdesc));
   fmtdesc.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
   while (device_->Ioctl(VIDIOC_ENUM_FMT, &fmtdesc) == 0) {
-    if (device_->CanCreateEGLImageFrom(fmtdesc.pixelformat)) {
-      output_format_fourcc_ = Fourcc::FromV4L2PixFmt(fmtdesc.pixelformat);
+    auto fourcc = Fourcc::FromV4L2PixFmt(fmtdesc.pixelformat);
+    if (fourcc && device_->CanCreateEGLImageFrom(*fourcc)) {
+      output_format_fourcc_ = *fourcc;
       break;
     }
     ++fmtdesc.index;

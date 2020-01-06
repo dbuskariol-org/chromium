@@ -26,6 +26,7 @@
 #include "media/base/video_decoder_config.h"
 #include "media/base/video_frame.h"
 #include "media/base/video_frame_layout.h"
+#include "media/gpu/chromeos/fourcc.h"
 #include "media/gpu/media_gpu_export.h"
 #include "media/gpu/v4l2/v4l2_device_poller.h"
 #include "media/video/video_decode_accelerator.h"
@@ -593,7 +594,7 @@ class MEDIA_GPU_EXPORT V4L2Device
 
   // Return true if the given V4L2 pixfmt can be used in CreateEGLImage()
   // for the current platform.
-  virtual bool CanCreateEGLImageFrom(uint32_t v4l2_pixfmt) = 0;
+  virtual bool CanCreateEGLImageFrom(const Fourcc fourcc) = 0;
 
   // Create an EGLImage from provided |dmabuf_fds| and bind |texture_id| to it.
   // Some implementations may also require the V4L2 |buffer_index| of the buffer
@@ -608,7 +609,7 @@ class MEDIA_GPU_EXPORT V4L2Device
       GLuint texture_id,
       const gfx::Size& size,
       unsigned int buffer_index,
-      uint32_t v4l2_pixfmt,
+      const Fourcc fourcc,
       std::vector<base::ScopedFD>&& dmabuf_fds) = 0;
 
   // Create a GLImage from provided |dmabuf_fds|.
@@ -618,7 +619,7 @@ class MEDIA_GPU_EXPORT V4L2Device
   // Return the newly created GLImage.
   virtual scoped_refptr<gl::GLImage> CreateGLImage(
       const gfx::Size& size,
-      uint32_t fourcc,
+      const Fourcc fourcc,
       std::vector<base::ScopedFD>&& dmabuf_fds) = 0;
 
   // Destroys the EGLImageKHR.
