@@ -261,11 +261,6 @@ bool SupervisedUserService::IsSupervisedUserIframeFilterEnabled() const {
       supervised_users::kSupervisedUserIframeFilter);
 }
 
-#if !defined(OS_ANDROID)
-void SupervisedUserService::InitSync(const std::string& refresh_token) {
-}
-#endif  // !defined(OS_ANDROID)
-
 void SupervisedUserService::AddObserver(
     SupervisedUserServiceObserver* observer) {
   observer_list_.AddObserver(observer);

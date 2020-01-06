@@ -139,12 +139,6 @@ class SupervisedUserService : public KeyedService,
 
   bool IsSupervisedUserIframeFilterEnabled() const;
 
-#if !defined(OS_ANDROID)
-  // Initializes this profile for syncing, using the provided |refresh_token| to
-  // mint access tokens for Sync.
-  void InitSync(const std::string& refresh_token);
-#endif
-
   void AddObserver(SupervisedUserServiceObserver* observer);
   void RemoveObserver(SupervisedUserServiceObserver* observer);
 
