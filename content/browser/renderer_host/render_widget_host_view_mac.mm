@@ -1051,18 +1051,6 @@ void RenderWidgetHostViewMac::FocusedNodeChanged(
   }
 }
 
-void RenderWidgetHostViewMac::SubmitCompositorFrame(
-    const viz::LocalSurfaceId& local_surface_id,
-    viz::CompositorFrame frame,
-    base::Optional<viz::HitTestRegionList> hit_test_region_list) {
-  NOTREACHED();
-}
-
-void RenderWidgetHostViewMac::OnDidNotProduceFrame(
-    const viz::BeginFrameAck& ack) {
-  NOTREACHED();
-}
-
 void RenderWidgetHostViewMac::ResetFallbackToFirstNavigationSurface() {
   browser_compositor_->GetDelegatedFrameHost()
       ->ResetFallbackToFirstNavigationSurface();
