@@ -11,9 +11,8 @@
 
 #include "base/memory/weak_ptr.h"
 
-@protocol PageInfoCommands;
+@protocol BrowserCommands;
 @protocol PageInfoPresentation;
-@protocol PageInfoReloading;
 class PageInfoModel;
 
 // TODO(crbug.com/227827) Merge 178763: PageInfoModel has been removed in
@@ -27,10 +26,10 @@ class PageInfoModel;
 - (id)initWithModel:(PageInfoModel*)model
              sourcePoint:(CGPoint)sourcePoint
     presentationProvider:(id<PageInfoPresentation>)provider
-              dispatcher:(id<PageInfoCommands, PageInfoReloading>)dispatcher;
+                 handler:(id<BrowserCommands>)handler;
 
 // Dispatcher for this view controller.
-@property(nonatomic, weak) id<PageInfoCommands, PageInfoReloading> dispatcher;
+@property(nonatomic, weak) id<BrowserCommands> handler;
 
 // Dismisses the view.
 - (void)dismiss;

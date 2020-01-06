@@ -12,12 +12,11 @@
 #include "base/strings/sys_string_conversions.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "components/strings/grit/components_strings.h"
-#import "ios/chrome/browser/ui/commands/page_info_commands.h"
+#import "ios/chrome/browser/ui/commands/browser_commands.h"
 #import "ios/chrome/browser/ui/fancy_ui/bidi_container_view.h"
 #import "ios/chrome/browser/ui/page_info/page_info_constants.h"
 #include "ios/chrome/browser/ui/page_info/page_info_model.h"
 #import "ios/chrome/browser/ui/page_info/requirements/page_info_presentation.h"
-#import "ios/chrome/browser/ui/page_info/requirements/page_info_reloading.h"
 #import "ios/chrome/browser/ui/util/animation_util.h"
 #include "ios/chrome/browser/ui/util/rtl_geometry.h"
 #include "ios/chrome/browser/ui/util/ui_util.h"
@@ -133,7 +132,7 @@ const CGFloat kButtonXOffset = kTextXPosition;
 - (id)initWithModel:(PageInfoModel*)model
              sourcePoint:(CGPoint)sourcePoint
     presentationProvider:(id<PageInfoPresentation>)provider
-              dispatcher:(id<PageInfoCommands, PageInfoReloading>)dispatcher {
+                 handler:(id<BrowserCommands>)handler {
   DCHECK(provider);
   self = [super init];
   if (self) {
@@ -157,7 +156,7 @@ const CGFloat kButtonXOffset = kTextXPosition;
 
     _model.reset(model);
     _arrowOriginPoint = sourcePoint;
-    _dispatcher = dispatcher;
+    _handler = handler;
 
     UIInterfaceOrientation orientation =
         [[UIApplication sharedApplication] statusBarOrientation];
@@ -181,7 +180,7 @@ const CGFloat kButtonXOffset = kTextXPosition;
     // Set up an invisible button that closes the popup.
     _closeButton = [[UIButton alloc] init];
     _closeButton.accessibilityLabel = l10n_util::GetNSString(IDS_DONE);
-    [_closeButton addTarget:dispatcher
+    [_closeButton addTarget:handler
                      action:@selector(hidePageInfo)
            forControlEvents:UIControlEventTouchDown];
     [_containerView addSubview:_closeButton];
@@ -342,7 +341,7 @@ const CGFloat kButtonXOffset = kTextXPosition;
 #pragma mark - internal
 
 - (BOOL)accessibilityPerformEscape {
-  [self.dispatcher hidePageInfo];
+  [self.handler hidePageInfo];
   return YES;
 }
 
@@ -514,17 +513,17 @@ const CGFloat kButtonXOffset = kTextXPosition;
     case PageInfoModel::BUTTON_SHOW_SECURITY_HELP:
       messageId = IDS_LEARN_MORE;
       accessibilityID = @"Learn more";
-      [button addTarget:self.dispatcher
+      [button addTarget:self.handler
                     action:@selector(showSecurityHelpPage)
           forControlEvents:UIControlEventTouchUpInside];
       break;
     case PageInfoModel::BUTTON_RELOAD:
       messageId = IDS_IOS_PAGE_INFO_RELOAD;
       accessibilityID = @"Reload button";
-      [button addTarget:self.dispatcher
+      [button addTarget:self.handler
                     action:@selector(hidePageInfo)
           forControlEvents:UIControlEventTouchUpInside];
-      [button addTarget:self.dispatcher
+      [button addTarget:self.handler
                     action:@selector(reload)
           forControlEvents:UIControlEventTouchUpInside];
       break;

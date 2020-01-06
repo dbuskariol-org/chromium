@@ -22,6 +22,10 @@
                                   (ios::ChromeBrowserState*)browserState
     NS_UNAVAILABLE;
 
+//|originPoint| is the midpoint of the UI element from which the page info
+// should start presenting.
+@property(nonatomic, assign) CGPoint originPoint;
+
 // |presentationProvider| provides information and runs tasks necessary to
 // present Page Info.
 @property(nonatomic, weak) id<PageInfoPresentation> presentationProvider;
