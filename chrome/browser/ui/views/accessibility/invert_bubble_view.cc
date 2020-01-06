@@ -161,14 +161,10 @@ void InvertBubbleView::ButtonPressed(views::Button* sender,
 }
 
 void InvertBubbleView::OpenLink(const std::string& url, int event_flags) {
-  WindowOpenDisposition disposition =
-      ui::DispositionFromEventFlags(event_flags);
-  content::OpenURLParams params(
-      GURL(url), content::Referrer(),
-      disposition == WindowOpenDisposition::CURRENT_TAB
-          ? WindowOpenDisposition::NEW_FOREGROUND_TAB
-          : disposition,
-      ui::PAGE_TRANSITION_LINK, false);
+  WindowOpenDisposition disposition = ui::DispositionFromEventFlags(
+      event_flags, WindowOpenDisposition::NEW_FOREGROUND_TAB);
+  content::OpenURLParams params(GURL(url), content::Referrer(), disposition,
+                                ui::PAGE_TRANSITION_LINK, false);
   browser_->OpenURL(params);
 }
 

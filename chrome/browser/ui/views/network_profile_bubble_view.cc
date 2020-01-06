@@ -101,15 +101,12 @@ void NetworkProfileBubbleView::LinkClicked(views::Link* source,
                                            int event_flags) {
   NetworkProfileBubble::RecordUmaEvent(
       NetworkProfileBubble::METRIC_LEARN_MORE_CLICKED);
-  WindowOpenDisposition disposition =
-      ui::DispositionFromEventFlags(event_flags);
+  WindowOpenDisposition disposition = ui::DispositionFromEventFlags(
+      event_flags, WindowOpenDisposition::NEW_FOREGROUND_TAB);
   content::OpenURLParams params(
       GURL("https://sites.google.com/a/chromium.org/dev/administrators/"
            "common-problems-and-solutions#network_profile"),
-      content::Referrer(), disposition == WindowOpenDisposition::CURRENT_TAB
-                               ? WindowOpenDisposition::NEW_FOREGROUND_TAB
-                               : disposition,
-      ui::PAGE_TRANSITION_LINK, false);
+      content::Referrer(), disposition, ui::PAGE_TRANSITION_LINK, false);
   navigator_->OpenURL(params);
 
   // If the user interacted with the bubble we don't reduce the number of
