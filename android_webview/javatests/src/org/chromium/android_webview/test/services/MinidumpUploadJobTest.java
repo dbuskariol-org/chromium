@@ -27,11 +27,11 @@ import org.chromium.base.ThreadUtils;
 import org.chromium.components.minidump_uploader.CrashFileManager;
 import org.chromium.components.minidump_uploader.CrashTestRule;
 import org.chromium.components.minidump_uploader.CrashTestRule.MockCrashReportingPermissionManager;
+import org.chromium.components.minidump_uploader.MinidumpUploadJob;
+import org.chromium.components.minidump_uploader.MinidumpUploadJobImpl;
 import org.chromium.components.minidump_uploader.MinidumpUploadTestUtility;
-import org.chromium.components.minidump_uploader.MinidumpUploader;
 import org.chromium.components.minidump_uploader.MinidumpUploaderDelegate;
-import org.chromium.components.minidump_uploader.MinidumpUploaderImpl;
-import org.chromium.components.minidump_uploader.TestMinidumpUploaderImpl;
+import org.chromium.components.minidump_uploader.TestMinidumpUploadJobImpl;
 import org.chromium.components.minidump_uploader.util.CrashReportingPermissionManager;
 import org.chromium.components.version_info.Channel;
 
@@ -46,7 +46,7 @@ import java.io.IOException;
  */
 @RunWith(AwJUnit4ClassRunner.class)
 @OnlyRunIn(SINGLE_PROCESS)
-public class MinidumpUploaderTest {
+public class MinidumpUploadJobTest {
     @Rule
     public CrashTestRule mTestRule = new CrashTestRule() {
         @Override
@@ -101,16 +101,16 @@ public class MinidumpUploaderTest {
             new TestSamplingDelegate(Channel.UNKNOWN, 0);
 
     /**
-     * Ensure MinidumpUploaderImpl doesn't crash even if the WebView Crash dir doesn't exist (could
+     * Ensure MinidumpUploadJobImpl doesn't crash even if the WebView Crash dir doesn't exist (could
      * happen e.g. if a Job persists across WebView-updates?
      *
-     * MinidumpUploaderImpl should automatically recreate the directory.
+     * MinidumpUploadJobImpl should automatically recreate the directory.
      */
     @Test
     @MediumTest
     public void testUploadingWithoutCrashDir() {
         File webviewCrashDir = mTestRule.getExistingCacheDir();
-        // Delete the WebView crash directory to ensure MinidumpUploader doesn't crash without it.
+        // Delete the WebView crash directory to ensure MinidumpUploadJob doesn't crash without it.
         FileUtils.recursivelyDeleteFile(webviewCrashDir);
         Assert.assertFalse(webviewCrashDir.exists());
 
@@ -119,10 +119,10 @@ public class MinidumpUploaderTest {
                 new MockCrashReportingPermissionManager() {
                     { mIsEnabledForTests = true; }
                 };
-        MinidumpUploader minidumpUploader =
+        MinidumpUploadJob minidumpUploadJob =
                 // Use AwMinidumpUploaderDelegate instead of TestMinidumpUploaderDelegate here
                 // since AwMinidumpUploaderDelegate defines the WebView crash directory.
-                new TestMinidumpUploaderImpl(new AwMinidumpUploaderDelegate(
+                new TestMinidumpUploadJobImpl(new AwMinidumpUploaderDelegate(
                         TEST_SAMPLING_DELEGATE) {
                     @Override
                     public CrashReportingPermissionManager createCrashReportingPermissionManager() {
@@ -132,7 +132,7 @@ public class MinidumpUploaderTest {
 
         // Ensure that we don't crash when trying to upload minidumps without a crash directory.
         MinidumpUploadTestUtility.uploadMinidumpsSync(
-                minidumpUploader, false /* expectReschedule */);
+                minidumpUploadJob, false /* expectReschedule */);
     }
 
     /**
@@ -278,7 +278,7 @@ public class MinidumpUploaderTest {
         PlatformServiceBridge.injectInstance(new TestPlatformServiceBridge(/* userConsent */ true));
         MinidumpUploaderDelegate delegate = new TestCrashSamplingMinidumpUploaderDelegate(
                 new TestSamplingDelegate(channel, samplePercentage), isSampled);
-        MinidumpUploader minidumpUploader = new TestMinidumpUploaderImpl(delegate);
+        MinidumpUploadJob minidumpUploadJob = new TestMinidumpUploadJobImpl(delegate);
 
         File firstFile = createMinidumpFileInCrashDir("1_abc.dmp0.try0");
         File secondFile = createMinidumpFileInCrashDir("12_abcd.dmp0.try0");
@@ -288,7 +288,7 @@ public class MinidumpUploaderTest {
                 secondFile.getName().replace(".dmp", isSampled ? ".up" : ".skipped"));
 
         MinidumpUploadTestUtility.uploadMinidumpsSync(
-                minidumpUploader, false /* expectReschedule */);
+                minidumpUploadJob, false /* expectReschedule */);
 
         Assert.assertFalse(firstFile.exists());
         Assert.assertTrue(expectedFirstFile.exists());
@@ -354,7 +354,7 @@ public class MinidumpUploaderTest {
         PlatformServiceBridge.injectInstance(new TestPlatformServiceBridge(userConsent));
         MinidumpUploaderDelegate delegate =
                 new WebViewUserConsentMinidumpUploaderDelegate(userConsent);
-        MinidumpUploader minidumpUploader = new TestMinidumpUploaderImpl(delegate);
+        MinidumpUploadJob minidumpUploadJob = new TestMinidumpUploadJobImpl(delegate);
 
         File firstFile = createMinidumpFileInCrashDir("1_abc.dmp0.try0");
         File secondFile = createMinidumpFileInCrashDir("12_abcd.dmp0.try0");
@@ -364,7 +364,7 @@ public class MinidumpUploaderTest {
                 secondFile.getName().replace(".dmp", userConsent ? ".up" : ".skipped"));
 
         MinidumpUploadTestUtility.uploadMinidumpsSync(
-                minidumpUploader, false /* expectReschedule */);
+                minidumpUploadJob, false /* expectReschedule */);
 
         Assert.assertFalse(firstFile.exists());
         Assert.assertTrue(expectedFirstFile.exists());
@@ -436,7 +436,7 @@ public class MinidumpUploaderTest {
         Assert.assertEquals(minidumps.length, uids.length);
         // Ensure the upload service minidump directory is empty before we start copying files.
         File[] initialMinidumps = fileManager.getMinidumpsReadyForUpload(
-                MinidumpUploaderImpl.MAX_UPLOAD_TRIES_ALLOWED);
+                MinidumpUploadJobImpl.MAX_UPLOAD_TRIES_ALLOWED);
         Assert.assertEquals(0, initialMinidumps.length);
 
         // Open file descriptors to the files and then delete the files.
@@ -459,11 +459,11 @@ public class MinidumpUploaderTest {
                 new MockCrashReportingPermissionManager() {
                     { mIsEnabledForTests = true; }
                 };
-        MinidumpUploader minidumpUploader =
+        MinidumpUploadJob minidumpUploadJob =
                 // Use AwMinidumpUploaderDelegate instead of TestMinidumpUploaderDelegate to ensure
                 // AwMinidumpUploaderDelegate works well together with the minidump-copying methods
                 // of CrashReceiverService.
-                new TestMinidumpUploaderImpl(new AwMinidumpUploaderDelegate(
+                new TestMinidumpUploadJobImpl(new AwMinidumpUploaderDelegate(
                         TEST_SAMPLING_DELEGATE) {
                     @Override
                     public CrashReportingPermissionManager createCrashReportingPermissionManager() {
@@ -472,10 +472,10 @@ public class MinidumpUploaderTest {
                 });
 
         MinidumpUploadTestUtility.uploadMinidumpsSync(
-                minidumpUploader, false /* expectReschedule */);
+                minidumpUploadJob, false /* expectReschedule */);
         // Ensure there are no minidumps left to upload.
         File[] nonUploadedMinidumps = fileManager.getMinidumpsReadyForUpload(
-                MinidumpUploaderImpl.MAX_UPLOAD_TRIES_ALLOWED);
+                MinidumpUploadJobImpl.MAX_UPLOAD_TRIES_ALLOWED);
         Assert.assertEquals(0, nonUploadedMinidumps.length);
 
         File[] uploadedFiles = fileManager.getAllUploadedFiles();

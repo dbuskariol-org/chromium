@@ -7,7 +7,7 @@ package org.chromium.components.minidump_uploader;
 /**
  * Interface for uploading minidumps.
  */
-public interface MinidumpUploader {
+public interface MinidumpUploadJob {
     /**
      * Try to upload all the minidumps in the crash directory.
      * This method will be called on the UI thread of our JobService.

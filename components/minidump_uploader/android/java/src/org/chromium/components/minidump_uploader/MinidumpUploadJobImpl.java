@@ -20,8 +20,8 @@ import java.io.File;
  * successfully uploaded any minidumps. At the end of a job it simply checks whether there are any
  * minidumps left to upload, and if so, the job is rescheduled.
  */
-public class MinidumpUploaderImpl implements MinidumpUploader {
-    private static final String TAG = "MinidumpUploaderImpl";
+public class MinidumpUploadJobImpl implements MinidumpUploadJob {
+    private static final String TAG = "MDUploadJobImpl";
 
     /**
      * The delegate that performs embedder-specific behavior.
@@ -44,7 +44,7 @@ public class MinidumpUploaderImpl implements MinidumpUploader {
     public static final int MAX_UPLOAD_TRIES_ALLOWED = 3;
 
     @VisibleForTesting
-    public MinidumpUploaderImpl(MinidumpUploaderDelegate delegate) {
+    public MinidumpUploadJobImpl(MinidumpUploaderDelegate delegate) {
         mDelegate = delegate;
     }
 
@@ -74,9 +74,9 @@ public class MinidumpUploaderImpl implements MinidumpUploader {
      * to the worker thread.
      */
     private class UploadRunnable implements Runnable {
-        private final MinidumpUploader.UploadsFinishedCallback mUploadsFinishedCallback;
+        private final MinidumpUploadJob.UploadsFinishedCallback mUploadsFinishedCallback;
 
-        public UploadRunnable(MinidumpUploader.UploadsFinishedCallback uploadsFinishedCallback) {
+        public UploadRunnable(MinidumpUploadJob.UploadsFinishedCallback uploadsFinishedCallback) {
             mUploadsFinishedCallback = uploadsFinishedCallback;
         }
 
@@ -159,14 +159,14 @@ public class MinidumpUploaderImpl implements MinidumpUploader {
 
     @Override
     public void uploadAllMinidumps(
-            final MinidumpUploader.UploadsFinishedCallback uploadsFinishedCallback) {
+            final MinidumpUploadJob.UploadsFinishedCallback uploadsFinishedCallback) {
         ThreadUtils.assertOnUiThread();
         if (mWorkerThread != null) {
             throw new RuntimeException(
-                    "A given minidump uploader instance should never be launched more than once.");
+                    "A given minidump upload job instance should never be launched more than once.");
         }
         mWorkerThread = new Thread(
-                new UploadRunnable(uploadsFinishedCallback), "MinidumpUploader-WorkerThread");
+                new UploadRunnable(uploadsFinishedCallback), "MinidumpUploadJob-WorkerThread");
         mCancelUpload = false;
 
         mDelegate.prepareToUploadMinidumps(new Runnable() {

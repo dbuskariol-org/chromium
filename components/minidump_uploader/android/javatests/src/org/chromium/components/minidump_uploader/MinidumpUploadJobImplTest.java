@@ -29,11 +29,11 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * Instrumentation tests for the common MinidumpUploader implementation within the minidump_uploader
- * component.
+ * Instrumentation tests for the common MinidumpUploadJob implementation within the
+ * minidump_uploader component.
  */
 @RunWith(BaseJUnit4ClassRunner.class)
-public class MinidumpUploaderImplTest {
+public class MinidumpUploadJobImplTest {
     @Rule
     public CrashTestRule mTestRule = new CrashTestRule();
 
@@ -55,13 +55,13 @@ public class MinidumpUploaderImplTest {
                         mIsEnabledForTests = false;
                     }
                 };
-        MinidumpUploader minidumpUploader =
-                new TestMinidumpUploaderImpl(mTestRule.getExistingCacheDir(), permManager);
+        MinidumpUploadJob minidumpUploadJob =
+                new TestMinidumpUploadJobImpl(mTestRule.getExistingCacheDir(), permManager);
 
         File firstFile = createMinidumpFileInCrashDir("1_abc.dmp0.try0");
         File secondFile = createMinidumpFileInCrashDir("12_abc.dmp0.try0");
-        String triesBelowMaxString = ".try" + (MinidumpUploaderImpl.MAX_UPLOAD_TRIES_ALLOWED - 1);
-        String maxTriesString = ".try" + MinidumpUploaderImpl.MAX_UPLOAD_TRIES_ALLOWED;
+        String triesBelowMaxString = ".try" + (MinidumpUploadJobImpl.MAX_UPLOAD_TRIES_ALLOWED - 1);
+        String maxTriesString = ".try" + MinidumpUploadJobImpl.MAX_UPLOAD_TRIES_ALLOWED;
         File justBelowMaxTriesFile =
                 createMinidumpFileInCrashDir("belowmaxtries.dmp0" + triesBelowMaxString);
         File maxTriesFile = createMinidumpFileInCrashDir("maxtries.dmp0" + maxTriesString);
@@ -72,7 +72,7 @@ public class MinidumpUploaderImplTest {
                 justBelowMaxTriesFile.getName().replace(triesBelowMaxString, maxTriesString));
 
         MinidumpUploadTestUtility.uploadMinidumpsSync(
-                minidumpUploader, true /* expectReschedule */);
+                minidumpUploadJob, true /* expectReschedule */);
         Assert.assertFalse(firstFile.exists());
         Assert.assertFalse(secondFile.exists());
         Assert.assertFalse(justBelowMaxTriesFile.exists());
@@ -105,14 +105,14 @@ public class MinidumpUploaderImplTest {
                         new MinidumpUploadCallableTest.TestHttpURLConnectionFactory(), permManager);
             }
         });
-        MinidumpUploader minidumpUploader = createCallableListMinidumpUploader(
+        MinidumpUploadJob minidumpUploadJob = createCallableListMinidumpUploadJob(
                 callables, permManager.isUsageAndCrashReportingPermittedByUser());
 
         File firstFile = createMinidumpFileInCrashDir("firstFile.dmp0.try0");
         File secondFile = createMinidumpFileInCrashDir("secondFile.dmp0.try0");
 
         MinidumpUploadTestUtility.uploadMinidumpsSync(
-                minidumpUploader, true /* expectReschedule */);
+                minidumpUploadJob, true /* expectReschedule */);
         Assert.assertFalse(firstFile.exists());
         Assert.assertFalse(secondFile.exists());
         File expectedSecondFile;
@@ -135,14 +135,14 @@ public class MinidumpUploaderImplTest {
     @Test
     @MediumTest
     public void testInvalidMinidumpNameGeneratesNoUploads() throws IOException {
-        MinidumpUploader minidumpUploader =
-                new ExpectNoUploadsMinidumpUploaderImpl(mTestRule.getExistingCacheDir());
+        MinidumpUploadJob minidumpUploadJob =
+                new ExpectNoUploadsMinidumpUploadJobImpl(mTestRule.getExistingCacheDir());
 
         // Note the omitted ".try0" suffix.
         File fileUsingLegacyNamingScheme = createMinidumpFileInCrashDir("1_abc.dmp0");
 
         MinidumpUploadTestUtility.uploadMinidumpsSync(
-                minidumpUploader, false /* expectReschedule */);
+                minidumpUploadJob, false /* expectReschedule */);
 
         // The file should not have been touched, nor should any successful upload files have
         // appeared.
@@ -152,7 +152,7 @@ public class MinidumpUploaderImplTest {
     }
 
     /**
-     * Test that ensures we can interrupt the MinidumpUploader when uploading minidumps.
+     * Test that ensures we can interrupt the MinidumpUploadJob when uploading minidumps.
      */
     @Test
     @MediumTest
@@ -175,14 +175,14 @@ public class MinidumpUploaderImplTest {
                     { mIsEnabledForTests = true; }
                 };
         final CountDownLatch stopStallingLatch = new CountDownLatch(1);
-        MinidumpUploaderImpl minidumpUploader = new StallingMinidumpUploaderImpl(
+        MinidumpUploadJobImpl minidumpUploadJob = new StallingMinidumpUploadJobImpl(
                 mTestRule.getExistingCacheDir(), permManager, stopStallingLatch, successfulUpload);
 
         File firstFile = createMinidumpFileInCrashDir("123_abc.dmp0.try0");
 
         // This is run on the UI thread to avoid failing any assertOnUiThread assertions.
-        MinidumpUploadTestUtility.uploadAllMinidumpsOnUiThread(minidumpUploader,
-                new MinidumpUploader.UploadsFinishedCallback() {
+        MinidumpUploadTestUtility.uploadAllMinidumpsOnUiThread(minidumpUploadJob,
+                new MinidumpUploadJob.UploadsFinishedCallback() {
                     @Override
                     public void uploadsFinished(boolean reschedule) {
                         if (successfulUpload) {
@@ -195,11 +195,11 @@ public class MinidumpUploaderImplTest {
                 // Block until job posted - otherwise the worker thread might not have been created
                 // before we try to join it.
                 true /* blockUntilJobPosted */);
-        minidumpUploader.cancelUploads();
+        minidumpUploadJob.cancelUploads();
         stopStallingLatch.countDown();
         // Wait until our job finished.
         try {
-            minidumpUploader.joinWorkerThreadForTesting();
+            minidumpUploadJob.joinWorkerThreadForTesting();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -230,14 +230,14 @@ public class MinidumpUploaderImplTest {
                     { mIsEnabledForTests = true; }
                 };
         final CountDownLatch stopStallingLatch = new CountDownLatch(1);
-        MinidumpUploaderImpl minidumpUploader =
-                new StallingMinidumpUploaderImpl(mTestRule.getExistingCacheDir(), permManager,
+        MinidumpUploadJobImpl minidumpUploadJob =
+                new StallingMinidumpUploadJobImpl(mTestRule.getExistingCacheDir(), permManager,
                         stopStallingLatch, false /* successfulUpload */);
 
         createMinidumpFileInCrashDir("123_abc.dmp0.try0");
 
-        MinidumpUploader.UploadsFinishedCallback crashingCallback =
-                new MinidumpUploader.UploadsFinishedCallback() {
+        MinidumpUploadJob.UploadsFinishedCallback crashingCallback =
+                new MinidumpUploadJob.UploadsFinishedCallback() {
                     @Override
                     public void uploadsFinished(boolean reschedule) {
                         // We don't guarantee whether uploadsFinished is called after a job has been
@@ -248,16 +248,16 @@ public class MinidumpUploaderImplTest {
                 };
 
         // This is run on the UI thread to avoid failing any assertOnUiThread assertions.
-        MinidumpUploadTestUtility.uploadAllMinidumpsOnUiThread(minidumpUploader, crashingCallback);
+        MinidumpUploadTestUtility.uploadAllMinidumpsOnUiThread(minidumpUploadJob, crashingCallback);
         // Ensure we tell JobScheduler to reschedule the job.
-        Assert.assertTrue(minidumpUploader.cancelUploads());
+        Assert.assertTrue(minidumpUploadJob.cancelUploads());
         stopStallingLatch.countDown();
-        // Wait for the MinidumpUploader worker thread to finish before ending the test. This is to
+        // Wait for the MinidumpUploadJob worker thread to finish before ending the test. This is to
         // ensure the worker thread doesn't continue running after the test finishes - trying to
         // access directories or minidumps set up and deleted by the test framework.
         ThreadUtils.runOnUiThreadBlocking(() -> {
             try {
-                minidumpUploader.joinWorkerThreadForTesting();
+                minidumpUploadJob.joinWorkerThreadForTesting();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -268,9 +268,9 @@ public class MinidumpUploaderImplTest {
         MinidumpUploadCallable createCallable(File minidumpFile, File logfile);
     }
 
-    private MinidumpUploaderImpl createCallableListMinidumpUploader(
+    private MinidumpUploadJobImpl createCallableListMinidumpUploadJob(
             final List<MinidumpUploadCallableCreator> callables, final boolean userPermitted) {
-        return new TestMinidumpUploaderImpl(mTestRule.getExistingCacheDir(), null) {
+        return new TestMinidumpUploadJobImpl(mTestRule.getExistingCacheDir(), null) {
             private int mIndex;
 
             @Override
@@ -284,8 +284,8 @@ public class MinidumpUploaderImplTest {
         };
     }
 
-    private static class ExpectNoUploadsMinidumpUploaderImpl extends MinidumpUploaderImpl {
-        public ExpectNoUploadsMinidumpUploaderImpl(File cacheDir) {
+    private static class ExpectNoUploadsMinidumpUploadJobImpl extends MinidumpUploadJobImpl {
+        public ExpectNoUploadsMinidumpUploadJobImpl(File cacheDir) {
             super(new TestMinidumpUploaderDelegate(
                     cacheDir, new MockCrashReportingPermissionManager() {
                         { mIsEnabledForTests = true; }
@@ -309,14 +309,14 @@ public class MinidumpUploaderImplTest {
     }
 
     /**
-     * Minidump uploader implementation that stalls minidump-uploading until a given CountDownLatch
-     * counts down.
+     * Minidump upload job implementation that stalls minidump-uploading until a given
+     * CountDownLatch counts down.
      */
-    private static class StallingMinidumpUploaderImpl extends TestMinidumpUploaderImpl {
+    private static class StallingMinidumpUploadJobImpl extends TestMinidumpUploadJobImpl {
         CountDownLatch mStopStallingLatch;
         boolean mSuccessfulUpload;
 
-        public StallingMinidumpUploaderImpl(File cacheDir,
+        public StallingMinidumpUploadJobImpl(File cacheDir,
                 CrashReportingPermissionManager permissionManager, CountDownLatch stopStallingLatch,
                 boolean successfulUpload) {
             super(cacheDir, permissionManager);

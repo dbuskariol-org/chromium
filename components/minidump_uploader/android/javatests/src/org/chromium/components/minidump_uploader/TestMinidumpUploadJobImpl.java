@@ -9,15 +9,15 @@ import org.chromium.components.minidump_uploader.util.CrashReportingPermissionMa
 import java.io.File;
 
 /**
- * Test-implementation of MinidumpUploaderImpl.
+ * Test-implementation of MinidumpUploadJobImpl.
  */
-public class TestMinidumpUploaderImpl extends MinidumpUploaderImpl {
-    public TestMinidumpUploaderImpl(
+public class TestMinidumpUploadJobImpl extends MinidumpUploadJobImpl {
+    public TestMinidumpUploadJobImpl(
             File cacheDir, CrashReportingPermissionManager permissionManager) {
         super(new TestMinidumpUploaderDelegate(cacheDir, permissionManager));
     }
 
-    public TestMinidumpUploaderImpl(MinidumpUploaderDelegate delegate) {
+    public TestMinidumpUploadJobImpl(MinidumpUploaderDelegate delegate) {
         super(delegate);
     }
 
