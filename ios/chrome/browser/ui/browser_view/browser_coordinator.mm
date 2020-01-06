@@ -35,6 +35,8 @@
 #import "ios/chrome/browser/ui/download/ar_quick_look_coordinator.h"
 #import "ios/chrome/browser/ui/download/pass_kit_coordinator.h"
 #import "ios/chrome/browser/ui/open_in/open_in_mediator.h"
+#import "ios/chrome/browser/ui/page_info/features.h"
+#import "ios/chrome/browser/ui/page_info/page_info_coordinator.h"
 #import "ios/chrome/browser/ui/page_info/page_info_legacy_coordinator.h"
 #import "ios/chrome/browser/ui/passwords/password_breach_coordinator.h"
 #import "ios/chrome/browser/ui/print/print_controller.h"
@@ -111,7 +113,7 @@
     ManualFillAllPasswordCoordinator* allPasswordCoordinator;
 
 // Coordinator for Page Info UI.
-@property(nonatomic, strong) PageInfoLegacyCoordinator* pageInfoCoordinator;
+@property(nonatomic, strong) ChromeCoordinator* pageInfoCoordinator;
 
 // Coordinator for the PassKit UI presentation.
 @property(nonatomic, strong) PassKitCoordinator* passKitCoordinator;
@@ -311,10 +313,21 @@
                          browser:self.browser];
   [self.translateInfobarCoordinator start];
 
-  self.pageInfoCoordinator = [[PageInfoLegacyCoordinator alloc]
-      initWithBaseViewController:self.viewController
-                         browser:self.browser];
-  self.pageInfoCoordinator.presentationProvider = self.viewController;
+  if (base::FeatureList::IsEnabled(kPageInfoRefactoring)) {
+    PageInfoCoordinator* pageInfoCoordinator = [[PageInfoCoordinator alloc]
+        initWithBaseViewController:self.viewController
+                           browser:self.browser];
+    pageInfoCoordinator.presentationProvider = self.viewController;
+    self.pageInfoCoordinator = pageInfoCoordinator;
+
+  } else {
+    PageInfoLegacyCoordinator* pageInfoCoordinator =
+        [[PageInfoLegacyCoordinator alloc]
+            initWithBaseViewController:self.viewController
+                               browser:self.browser];
+    pageInfoCoordinator.presentationProvider = self.viewController;
+    self.pageInfoCoordinator = pageInfoCoordinator;
+  }
   [self.pageInfoCoordinator start];
 
   self.passKitCoordinator = [[PassKitCoordinator alloc]

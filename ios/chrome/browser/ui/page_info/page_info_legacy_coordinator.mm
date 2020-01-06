@@ -17,9 +17,9 @@
 #import "ios/chrome/browser/ui/commands/open_new_tab_command.h"
 #import "ios/chrome/browser/ui/commands/page_info_commands.h"
 #import "ios/chrome/browser/ui/fullscreen/chrome_coordinator+fullscreen_disabling.h"
+#import "ios/chrome/browser/ui/page_info/legacy_page_info_view_controller.h"
 #import "ios/chrome/browser/ui/page_info/page_info_constants.h"
 #include "ios/chrome/browser/ui/page_info/page_info_model.h"
-#import "ios/chrome/browser/ui/page_info/page_info_view_controller.h"
 #import "ios/chrome/browser/ui/page_info/requirements/page_info_presentation.h"
 #import "ios/chrome/browser/ui/page_info/requirements/page_info_reloading.h"
 #import "ios/chrome/browser/url_loading/url_loading_params.h"
@@ -39,11 +39,14 @@
 @interface PageInfoLegacyCoordinator ()<PageInfoCommands, PageInfoReloading>
 
 // The view controller for the Page Info UI. Nil if not visible.
-@property(nonatomic, strong) PageInfoViewController* pageInfoViewController;
+@property(nonatomic, strong)
+    LegacyPageInfoViewController* pageInfoViewController;
 
 @end
 
 @implementation PageInfoLegacyCoordinator
+
+@synthesize presentationProvider = _presentationProvider;
 
 #pragma mark - ChromeCoordinator
 
@@ -63,7 +66,7 @@
 
 #pragma mark - PageInfoCommands
 
-- (void)showPageInfoForOriginPoint:(CGPoint)originPoint {
+- (void)legacyShowPageInfoForOriginPoint:(CGPoint)originPoint {
   web::WebState* webState =
       self.browser->GetWebStateList()->GetActiveWebState();
   web::NavigationItem* navItem =
@@ -103,11 +106,15 @@
 
   CGPoint originPresentationCoordinates = [self.presentationProvider
       convertToPresentationCoordinatesForOrigin:originPoint];
-  self.pageInfoViewController = [[PageInfoViewController alloc]
+  self.pageInfoViewController = [[LegacyPageInfoViewController alloc]
              initWithModel:pageInfoModel
                sourcePoint:originPresentationCoordinates
       presentationProvider:self.presentationProvider
                 dispatcher:self];
+}
+
+- (void)showPageInfo {
+  NOTREACHED();
 }
 
 - (void)hidePageInfo {
