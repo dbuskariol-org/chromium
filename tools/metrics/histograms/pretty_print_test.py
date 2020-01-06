@@ -25,6 +25,7 @@ ORIGINAL_XML = """
        Removed 1/2019.
    </obsolete>
  </histogram>
+
  <histogram name="Foo.Bar" units="xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyyzzzz">
   <summary>Foo</summary>
   <obsolete>Obsolete 1</obsolete>
@@ -33,11 +34,28 @@ ORIGINAL_XML = """
   <component>Component</component>
   <component>Other&gt;Component</component>
  </histogram>
+
+ <histogram_suffixes name="Test.HistogramSuffixes" separator=".">
+  <suffix name="TestSuffix" label="A misplaced histogram_suffixes"/>
+  <affected-histogram name="Test.Histogram"/>
+</histogram_suffixes>
+
 </histograms>
+
+<histogram_suffixes_list>
+
+<histogram name="Test.MisplacedHistogram" units="us">
+   <owner>person@chromium.org</owner>
+   <summary>A misplaced histogram
+   </summary>
+   Misplaced content.
+ </histogram>
+
+</histogram_suffixes_list>
+
 <enums>This shouldn't be here</enums>
 </histogram-configuration>
 """.strip()
-
 
 PRETTY_XML = """
 <!-- Top level Comment 1 -->
@@ -70,7 +88,22 @@ PRETTY_XML = """
   Mixed content.
 </histogram>
 
+<histogram name="Test.MisplacedHistogram" units="microseconds">
+  <owner>person@chromium.org</owner>
+  <summary>A misplaced histogram</summary>
+  Misplaced content.
+</histogram>
+
 </histograms>
+
+<histogram_suffixes_list>
+
+<histogram_suffixes name="Test.HistogramSuffixes" separator=".">
+  <suffix name="TestSuffix" label="A misplaced histogram_suffixes"/>
+  <affected-histogram name="Test.Histogram"/>
+</histogram_suffixes>
+
+</histogram_suffixes_list>
 
 </histogram-configuration>
 """.strip()
