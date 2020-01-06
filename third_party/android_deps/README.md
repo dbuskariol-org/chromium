@@ -38,7 +38,7 @@ Full steps to add a new third party library:
       problems. The cipd commands output by `fetch_all.py --update-all` already
       check for uniqueness of the tag before uploading a new version. You can
       also supply a new suffix in your package using FALLBACK_PROPERTIES in
-      tools/android/roll/android_deps/buildSrc/src/main/groovy/ChromiumDepGraph.goovy
+      third_party/android_deps/buildSrc/src/main/groovy/ChromiumDepGraph.goovy
 
 4. Run the commands printed at step 3 to create new and updated packages
    via cipd.
@@ -51,7 +51,7 @@ Full steps to add a new third party library:
 
 5. Thoroughly test your change on a clean checkout.
     - Run the following command:
-      `rm -rf third_party/android_deps/libs/[!O]* && tools/android/roll/android_deps/fetch_all.py --update-all`.
+      `rm -rf third_party/android_deps/libs/[!O]* && third_party/android_deps/fetch_all.py --update-all`.
     - This ensures that all your deps are fresh. You do not need to run the
       commands printed out in this step.
 
@@ -74,7 +74,7 @@ date is at the bottom.
 [owners_link]: http://go/android-deps-owners
 [docs_link]: ../../../../docs/adding_to_third_party.md
 [android_sdk_link]: https://developer.android.com/studio/terms
-[readme_chromium_link]: ../../../../third_party/android_deps/README.chromium
+[readme_chromium_link]: third_party/android_deps/README.chromium
 
 ### Implementation notes:
 The script invokes a Gradle plugin to leverage its dependency resolution
