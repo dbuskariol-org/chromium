@@ -67,20 +67,6 @@ void AssemblyProgram::PrecomputeLabels(RvaVisitor* abs32_visitor,
                                        RvaVisitor* rel32_visitor) {
   abs32_label_manager_.Read(abs32_visitor);
   rel32_label_manager_.Read(rel32_visitor);
-  // TrimLabels() should be called here if used. Previously this was used only
-  // for ARM binaries, but ARM support has been deprecated.
-}
-
-// Chosen empirically to give the best reduction in payload size for
-// an update from daisy_3701.98.0 to daisy_4206.0.0.
-const int AssemblyProgram::kLabelLowerLimit = 5;
-
-void AssemblyProgram::TrimLabels() {
-  int lower_limit = kLabelLowerLimit;
-
-  VLOG(1) << "TrimLabels: threshold " << lower_limit;
-
-  rel32_label_manager_.RemoveUnderusedLabels(lower_limit);
 }
 
 void AssemblyProgram::UnassignIndexes() {
