@@ -1123,9 +1123,9 @@ process_version("version_xml") {
 }
 
 android_resources("product_version_resources") {
-  resource_dirs = []
-  generated_resource_dirs = [ version_resource_dir ]
-  generated_resource_files = [ version_resource_file ]
+  sources = [
+    version_resource_file,
+  ]
   custom_package = "org.chromium.base"
   deps = [
     ":version_xml",
