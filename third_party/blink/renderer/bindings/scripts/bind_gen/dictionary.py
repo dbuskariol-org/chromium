@@ -96,11 +96,10 @@ def make_dict_member_get_def(cg_context):
 
     func_def = CxxFuncDefNode(
         name=blink_member_name.get_api,
-        class_name=cg_context.class_name,
         arg_decls=[],
         return_type=blink_type_info(member.idl_type).ref_t,
         const=True)
-    func_def.add_template_vars(cg_context.template_bindings())
+    func_def.set_base_template_vars(cg_context.template_bindings())
 
     body = func_def.body
 
@@ -121,11 +120,10 @@ def make_dict_member_has_def(cg_context):
 
     func_def = CxxFuncDefNode(
         name=_blink_member_name(member).has_api,
-        class_name=cg_context.class_name,
         arg_decls=[],
         return_type="bool",
         const=True)
-    func_def.add_template_vars(cg_context.template_bindings())
+    func_def.set_base_template_vars(cg_context.template_bindings())
 
     body = func_def.body
 
@@ -145,13 +143,12 @@ def make_dict_member_set_def(cg_context):
 
     func_def = CxxFuncDefNode(
         name=blink_member_name.set_api,
-        class_name=cg_context.class_name,
         arg_decls=[
             _format("{} value",
                     blink_type_info(member.idl_type).ref_t)
         ],
         return_type="void")
-    func_def.add_template_vars(cg_context.template_bindings())
+    func_def.set_base_template_vars(cg_context.template_bindings())
 
     body = func_def.body
 
@@ -262,7 +259,6 @@ const v8::Eternal<v8::Name>* member_names = GetV8MemberNames(isolate);
 v8::Local<v8::Context> ${current_context} = isolate->GetCurrentContext();"""
     body.append(T(text))
 
-    # TODO(peria): Support runtime enabled / origin trial members.
     for key_index, member in enumerate(own_members):
         _1 = _blink_member_name(member).has_api
         _2 = key_index
@@ -427,7 +423,6 @@ if (${exception_state}.HadException()) {
         T("v8::Local<v8::Value> v8_value;"),
     ])
 
-    # TODO(peria): Support origin-trials and runtime enabled features.
     for key_index, member in enumerate(own_members):
         body.append(make_fill_own_dict_member(key_index, member))
 
@@ -527,7 +522,7 @@ def make_dict_class_def(cg_context):
         cg_context.class_name,
         base_class_names=[cg_context.base_class_name],
         export=component_export(component))
-    class_def.add_template_vars(cg_context.template_bindings())
+    class_def.set_base_template_vars(cg_context.template_bindings())
 
     if dictionary.inherited:
         class_def.top_section.append(
@@ -536,7 +531,9 @@ def make_dict_class_def(cg_context):
     public_section = class_def.public_section
     public_section.append(
         T("""\
-static ${class_name}* Create();
+static ${class_name}* Create() {
+  return MakeGarbageCollected<${class_name}>();
+}
 static ${class_name}* Create(
     v8::Isolate* isolate,
     v8::Local<v8::Object> v8_dictionary,
@@ -547,27 +544,14 @@ ${class_name}() = default;
 void Trace(Visitor* visitor);
 """))
 
-    # TODO(peria): Consider inlining these accessors.
     for member in dictionary.own_members:
-        member_blink_type = blink_type_info(member.idl_type)
-        blink_member_name = _blink_member_name(member)
-        public_section.append(
-            CxxFuncDeclNode(
-                name=blink_member_name.get_api,
-                return_type=member_blink_type.ref_t,
-                arg_decls=[],
-                const=True))
-        public_section.append(
-            CxxFuncDeclNode(
-                name=blink_member_name.set_api,
-                arg_decls=[_format("{} value", member_blink_type.ref_t)],
-                return_type="void"))
-        public_section.append(
-            CxxFuncDeclNode(
-                name=blink_member_name.has_api,
-                arg_decls=[],
-                return_type="bool",
-                const=True))
+        member_cg_context = cg_context.make_copy(dict_member=member)
+        public_section.extend([
+            T(""),
+            make_dict_member_get_def(member_cg_context),
+            make_dict_member_has_def(member_cg_context),
+            make_dict_member_set_def(member_cg_context),
+        ])
 
     protected_section = class_def.protected_section
     protected_section.append(
@@ -723,16 +707,6 @@ def generate_dictionary(dictionary):
         TextNode(""),
         make_dict_trace_def(cg_context),
     ])
-    for member in dictionary.own_members:
-        member_cg_context = cg_context.make_copy(dict_member=member)
-        source_blink_ns.body.extend([
-            TextNode(""),
-            make_dict_member_get_def(member_cg_context),
-            TextNode(""),
-            make_dict_member_has_def(member_cg_context),
-            TextNode(""),
-            make_dict_member_set_def(member_cg_context),
-        ])
 
     # Write down to the files.
     write_code_node_to_file(header_node, path_manager.gen_path_to(header_path))
