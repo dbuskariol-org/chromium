@@ -779,18 +779,6 @@ bool SupervisedUserService::UserMayLoad(const Extension* extension,
   return may_load;
 }
 
-bool SupervisedUserService::UserMayModifySettings(const Extension* extension,
-                                                  base::string16* error) const {
-  DCHECK(ProfileIsSupervised());
-  ExtensionState result = GetExtensionState(*extension);
-  // Only allow the supervised user to modify the settings and enable or disable
-  // the extension if the supervised user has full control.
-  bool may_modify = result == ExtensionState::ALLOWED;
-  if (!may_modify && error)
-    *error = GetExtensionsLockedMessage();
-  return may_modify;
-}
-
 bool SupervisedUserService::MustRemainDisabled(
     const Extension* extension,
     extensions::disable_reason::DisableReason* reason,
