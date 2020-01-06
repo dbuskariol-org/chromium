@@ -31,20 +31,12 @@ class LabelReceptor : public InstructionReceptor {
   // InstructionReceptor:
   CheckBool EmitPeRelocs() override { return true; }
   CheckBool EmitElfRelocation() override { return true; }
-  CheckBool EmitElfARMRelocation() override { return true; }
   CheckBool EmitOrigin(RVA rva) override { return true; }
   CheckBool EmitSingleByte(uint8_t byte) override { return true; }
   CheckBool EmitMultipleBytes(const uint8_t* bytes, size_t len) override {
     return true;
   }
   CheckBool EmitRel32(Label* label) override {
-    rel32_vector_.push_back(label);
-    return true;
-  }
-  CheckBool EmitRel32ARM(uint16_t op,
-                         Label* label,
-                         const uint8_t* arm_op,
-                         uint16_t op_size) override {
     rel32_vector_.push_back(label);
     return true;
   }
@@ -75,7 +67,8 @@ void AssemblyProgram::PrecomputeLabels(RvaVisitor* abs32_visitor,
                                        RvaVisitor* rel32_visitor) {
   abs32_label_manager_.Read(abs32_visitor);
   rel32_label_manager_.Read(rel32_visitor);
-  TrimLabels();
+  // TrimLabels() should be called here if used. Previously this was used only
+  // for ARM binaries, but ARM support has been deprecated.
 }
 
 // Chosen empirically to give the best reduction in payload size for
@@ -83,10 +76,6 @@ void AssemblyProgram::PrecomputeLabels(RvaVisitor* abs32_visitor,
 const int AssemblyProgram::kLabelLowerLimit = 5;
 
 void AssemblyProgram::TrimLabels() {
-  // For now only trim for ARM binaries.
-  if (kind() != EXE_ELF_32_ARM)
-    return;
-
   int lower_limit = kLabelLowerLimit;
 
   VLOG(1) << "TrimLabels: threshold " << lower_limit;
