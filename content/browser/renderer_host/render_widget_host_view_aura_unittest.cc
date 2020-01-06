@@ -1519,13 +1519,13 @@ TEST_F(RenderWidgetHostViewAuraTest,
   base::RunLoop().RunUntilIdle();
   auto events = GetAndResetDispatchedMessages();
   ASSERT_FALSE(events.empty());
-  const NativeWebKeyboardEvent* native_key_event1 =
-      static_cast<const NativeWebKeyboardEvent*>(
+  const blink::WebKeyboardEvent* blink_key_event1 =
+      static_cast<const blink::WebKeyboardEvent*>(
           events[0]->ToEvent()->Event()->web_event.get());
-  ASSERT_TRUE(native_key_event1);
-  ASSERT_EQ(key_event1.key_code(), native_key_event1->windows_key_code);
+  ASSERT_TRUE(blink_key_event1);
+  ASSERT_EQ(key_event1.key_code(), blink_key_event1->windows_key_code);
   ASSERT_EQ(ui::KeycodeConverter::DomCodeToNativeKeycode(key_event1.code()),
-            native_key_event1->native_key_code);
+            blink_key_event1->native_key_code);
 
   // These keys will pass through the prehandler since they aren't locked.
   std::vector<ui::DomCode> dom_codes = {
@@ -1621,15 +1621,15 @@ TEST_F(RenderWidgetHostViewAuraTest,
     ASSERT_FALSE(events.empty())
         << "Failed for DomCode: "
         << ui::KeycodeConverter::DomCodeToCodeString(dom_code);
-    const NativeWebKeyboardEvent* native_key_event =
-        static_cast<const NativeWebKeyboardEvent*>(
+    const blink::WebKeyboardEvent* blink_key_event =
+        static_cast<const blink::WebKeyboardEvent*>(
             events[0]->ToEvent()->Event()->web_event.get());
-    ASSERT_TRUE(native_key_event)
+    ASSERT_TRUE(blink_key_event)
         << "Failed for DomCode: "
         << ui::KeycodeConverter::DomCodeToCodeString(dom_code);
-    ASSERT_EQ(key_event.key_code(), native_key_event->windows_key_code);
+    ASSERT_EQ(key_event.key_code(), blink_key_event->windows_key_code);
     ASSERT_EQ(ui::KeycodeConverter::DomCodeToNativeKeycode(key_event.code()),
-              native_key_event->native_key_code);
+              blink_key_event->native_key_code);
   }
 
   // Although this key was locked, it will still pass through the prehandler as
