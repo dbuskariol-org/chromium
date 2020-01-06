@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.android_webview;
+package org.chromium.components.autofill;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -24,8 +24,10 @@ import java.util.Iterator;
  * The class to call Android's AutofillManager.
  */
 @TargetApi(Build.VERSION_CODES.O)
-public class AwAutofillManager {
+public class AutofillManagerWrapper {
     // Don't change TAG, it is used for runtime log.
+    // NOTE: As a result of the above, the tag below still references the name of this class from
+    // when it was originally developed specifically for Android WebView.
     public static final String TAG = "AwAutofillManager";
 
     /**
@@ -34,15 +36,15 @@ public class AwAutofillManager {
     public static interface InputUIObserver { void onInputUIShown(); }
 
     private static class AutofillInputUIMonitor extends AutofillManager.AutofillCallback {
-        private WeakReference<AwAutofillManager> mManager;
+        private WeakReference<AutofillManagerWrapper> mManager;
 
-        public AutofillInputUIMonitor(AwAutofillManager manager) {
-            mManager = new WeakReference<AwAutofillManager>(manager);
+        public AutofillInputUIMonitor(AutofillManagerWrapper manager) {
+            mManager = new WeakReference<AutofillManagerWrapper>(manager);
         }
 
         @Override
         public void onAutofillEvent(View view, int virtualId, int event) {
-            AwAutofillManager manager = mManager.get();
+            AutofillManagerWrapper manager = mManager.get();
             if (manager == null) return;
             manager.mIsAutofillInputUIShowing = (event == EVENT_INPUT_SHOWN);
             if (event == EVENT_INPUT_SHOWN) manager.notifyInputUIChange();
@@ -57,7 +59,7 @@ public class AwAutofillManager {
     private boolean mDisabled;
     private ArrayList<WeakReference<InputUIObserver>> mInputUIObservers;
 
-    public AwAutofillManager(Context context) {
+    public AutofillManagerWrapper(Context context) {
         updateLogStat();
         if (isLoggable()) log("constructor");
         mAutofillManager = context.getSystemService(AutofillManager.class);
@@ -92,9 +94,7 @@ public class AwAutofillManager {
     public void notifyVirtualViewEntered(View parent, int childId, Rect absBounds) {
         // Log warning only when the autofill is triggered.
         if (mDisabled) {
-            Log.w(TAG,
-                    "WebView autofill is disabled because WebView isn't created with "
-                            + "activity context.");
+            Log.w(TAG, "Autofill is disabled: AutofillManager isn't available in given Context.");
             return;
         }
         if (checkAndWarnIfDestroyed()) return;
@@ -134,7 +134,7 @@ public class AwAutofillManager {
 
     private boolean checkAndWarnIfDestroyed() {
         if (mDestroyed) {
-            Log.w(TAG, "Application attempted to call on a destroyed AwAutofillManager",
+            Log.w(TAG, "Application attempted to call on a destroyed AutofillManagerWrapper",
                     new Throwable());
         }
         return mDestroyed;
@@ -190,6 +190,7 @@ public class AwAutofillManager {
 
     private static void updateLogStat() {
         // Use 'setprop log.tag.AwAutofillManager DEBUG' to enable the log at runtime.
+        // NOTE: See the comment on TAG above for why this is still AwAutofillManager.
         sIsLoggable = Log.isLoggable(TAG, Log.DEBUG);
     }
 }

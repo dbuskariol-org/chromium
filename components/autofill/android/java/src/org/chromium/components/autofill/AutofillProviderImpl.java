@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.android_webview;
+package org.chromium.components.autofill;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -21,9 +21,6 @@ import androidx.annotation.VisibleForTesting;
 import org.chromium.base.ThreadUtils;
 import org.chromium.base.annotations.DoNotInline;
 import org.chromium.base.metrics.ScopedSysTraceEvent;
-import org.chromium.components.autofill.AutofillProvider;
-import org.chromium.components.autofill.FormData;
-import org.chromium.components.autofill.FormFieldData;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.display.DisplayAndroid;
@@ -32,16 +29,17 @@ import org.chromium.ui.display.DisplayAndroid;
  * This class uses Android autofill service to fill web form. All methods are
  * supposed to be called in UI thread.
  *
- * This class doesn't have 1:1 mapping to native AutofillProviderAndroid and is
- * same as how AwContents.java mapping to native AwContents, AwAutofillProvider
- * is owned by AwContents.java and AutofillProviderAndroid is owned by native
- * AwContents.
+ * This class doesn't have 1:1 mapping to native AutofillProviderAndroid; the
+ * normal ownership model is that this object is owned by the embedder-specific
+ * Java WebContents wrapper (e.g., AwContents.java in //android_webview), and
+ * AutofillProviderAndroid is owned by the embedder-specific C++ WebContents
+ * wrapper (e.g., native AwContents in //android_webview).
  *
  * DoNotInline since it causes class verification errors, see crbug.com/991851.
  */
 @DoNotInline
 @TargetApi(Build.VERSION_CODES.O)
-public class AwAutofillProvider extends AutofillProvider {
+public class AutofillProviderImpl extends AutofillProvider {
     private static class FocusField {
         public final short fieldIndex;
         public final Rect absBound;
@@ -216,28 +214,30 @@ public class AwAutofillProvider extends AutofillProvider {
         }
     }
 
-    private AwAutofillManager mAutofillManager;
+    private AutofillManagerWrapper mAutofillManager;
     private ViewGroup mContainerView;
     private WebContents mWebContents;
 
     private AutofillRequest mRequest;
     private long mNativeAutofillProvider;
-    private AwAutofillUMA mAutofillUMA;
-    private AwAutofillManager.InputUIObserver mInputUIObserver;
+    private AutofillProviderUMA mAutofillUMA;
+    private AutofillManagerWrapper.InputUIObserver mInputUIObserver;
     private long mAutofillTriggeredTimeMillis;
 
-    public AwAutofillProvider(Context context, ViewGroup containerView) {
-        this(containerView, new AwAutofillManager(context), context);
+    public AutofillProviderImpl(Context context, ViewGroup containerView) {
+        this(containerView, new AutofillManagerWrapper(context), context);
     }
 
     @VisibleForTesting
-    public AwAutofillProvider(ViewGroup containerView, AwAutofillManager manager, Context context) {
-        try (ScopedSysTraceEvent e = ScopedSysTraceEvent.scoped("AwAutofillProvider.constructor")) {
+    public AutofillProviderImpl(
+            ViewGroup containerView, AutofillManagerWrapper manager, Context context) {
+        try (ScopedSysTraceEvent e =
+                        ScopedSysTraceEvent.scoped("AutofillProviderImpl.constructor")) {
             assert Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
             mAutofillManager = manager;
             mContainerView = containerView;
-            mAutofillUMA = new AwAutofillUMA(context);
-            mInputUIObserver = new AwAutofillManager.InputUIObserver() {
+            mAutofillUMA = new AutofillProviderUMA(context);
+            mInputUIObserver = new AutofillManagerWrapper.InputUIObserver() {
                 @Override
                 public void onInputUIShown() {
                     // Not need to report suggestion window displayed if there is no live autofill
@@ -259,12 +259,12 @@ public class AwAutofillProvider extends AutofillProvider {
     @Override
     public void onProvideAutoFillVirtualStructure(ViewStructure structure, int flags) {
         // This method could be called for the session started by the native
-        // control outside of WebView, e.g. the URL bar, in this case, we simply
+        // control outside of the scope of autofill, e.g. the URL bar, in this case, we simply
         // return.
         if (mRequest == null) return;
         mRequest.fillViewStructure(structure);
-        if (AwAutofillManager.isLoggable()) {
-            AwAutofillManager.log(
+        if (AutofillManagerWrapper.isLoggable()) {
+            AutofillManagerWrapper.log(
                     "onProvideAutoFillVirtualStructure fields:" + structure.getChildCount());
         }
         mAutofillUMA.onVirtualStructureProvided();
@@ -274,8 +274,8 @@ public class AwAutofillProvider extends AutofillProvider {
     public void autofill(final SparseArray<AutofillValue> values) {
         if (mNativeAutofillProvider != 0 && mRequest != null && mRequest.autofill((values))) {
             autofill(mNativeAutofillProvider, mRequest.mFormData);
-            if (AwAutofillManager.isLoggable()) {
-                AwAutofillManager.log("autofill values:" + values.size());
+            if (AutofillManagerWrapper.isLoggable()) {
+                AutofillManagerWrapper.log("autofill values:" + values.size());
             }
             mAutofillUMA.onAutofill();
         }
@@ -300,7 +300,7 @@ public class AwAutofillProvider extends AutofillProvider {
     public void startAutofillSession(
             FormData formData, int focus, float x, float y, float width, float height) {
         // Check focusField inside short value?
-        // Autofill Manager might have session that wasn't started by WebView,
+        // Autofill Manager might have session that wasn't started by AutofillProviderImpl,
         // we just always cancel existing session here.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             mAutofillManager.cancel();

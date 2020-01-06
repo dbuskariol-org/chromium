@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.android_webview;
+package org.chromium.components.autofill;
 
 import android.content.Context;
 
@@ -13,20 +13,22 @@ import org.chromium.base.metrics.RecordHistogram;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The class for WebView autofill UMA.
+ * The class for AutofillProvider-related UMA. Note that most of the concrete histogram
+ * names include "WebView"; when this class was originally developed it was WebView-specific,
+ * and when generalizing it we did not change these names to maintain continuity when
+ * analyzing the histograms.
  */
-public class AwAutofillUMA {
+public class AutofillProviderUMA {
     // Records whether the Autofill service is enabled or not.
-    public static final String UMA_AUTOFILL_WEBVIEW_ENABLED = "Autofill.WebView.Enabled";
+    public static final String UMA_AUTOFILL_ENABLED = "Autofill.WebView.Enabled";
 
     // Records whether the Autofill provider is created by activity context or not.
-    public static final String UMA_AUTOFILL_WEBVIEW_CREATED_BY_ACTIVITY_CONTEXT =
+    public static final String UMA_AUTOFILL_CREATED_BY_ACTIVITY_CONTEXT =
             "Autofill.WebView.CreatedByActivityContext";
 
     // Records what happened in an autofill session.
-    public static final String UMA_AUTOFILL_WEBVIEW_AUTOFILL_SESSION =
-            "Autofill.WebView.AutofillSession";
-    // The possible value of UMA_AUTOFILL_WEBVIEW_AUTOFILL_SESSION.
+    public static final String UMA_AUTOFILL_AUTOFILL_SESSION = "Autofill.WebView.AutofillSession";
+    // The possible value of UMA_AUTOFILL_AUTOFILL_SESSION.
     public static final int SESSION_UNKNOWN = 0;
     public static final int NO_CALLBACK_FORM_FRAMEWORK = 1;
     public static final int NO_SUGGESTION_USER_CHANGE_FORM_FORM_SUBMITTED = 2;
@@ -48,9 +50,8 @@ public class AwAutofillUMA {
     public static final String UMA_AUTOFILL_USER_CHANGED_AUTOFILLED_FIELD =
             "Autofill.WebView.UserChangedAutofilledField";
 
-    public static final String UMA_AUTOFILL_WEBVIEW_SUBMISSION_SOURCE =
-            "Autofill.WebView.SubmissionSource";
-    // The possible value of UMA_AUTOFILL_WEBVIEW_SUBMISSION_SOURCE.
+    public static final String UMA_AUTOFILL_SUBMISSION_SOURCE = "Autofill.WebView.SubmissionSource";
+    // The possible value of UMA_AUTOFILL_SUBMISSION_SOURCE.
     public static final int SAME_DOCUMENT_NAVIGATION = 0;
     public static final int XHR_SUCCEEDED = 1;
     public static final int FRAME_DETACHED = 2;
@@ -59,13 +60,11 @@ public class AwAutofillUMA {
     public static final int FORM_SUBMISSION = 5;
     public static final int SUBMISSION_SOURCE_HISTOGRAM_COUNT = 6;
 
-    // The million seconds from user touched the field to WebView started autofill session.
-    public static final String UMA_AUTOFILL_WEBVIEW_TRIGGERING_TIME =
-            "Autofill.WebView.TriggeringTime";
+    // The million seconds from user touched the field to the autofill session starting.
+    public static final String UMA_AUTOFILL_TRIGGERING_TIME = "Autofill.WebView.TriggeringTime";
 
-    // The million seconds from WebView started autofill session to suggestion was displayed.
-    public static final String UMA_AUTOFILL_WEBVIEW_SUGGESTION_TIME =
-            "Autofill.WebView.SuggestionTime";
+    // The million seconds from the autofill session starting to the suggestion being displayed.
+    public static final String UMA_AUTOFILL_SUGGESTION_TIME = "Autofill.WebView.SuggestionTime";
 
     // The expected time range of time is from 10ms to 2 seconds, and 50 buckets is sufficient.
     private static final long MIN_TIME_MILLIS = 10;
@@ -111,7 +110,7 @@ public class AwAutofillUMA {
         }
 
         public void recordHistogram() {
-            RecordHistogram.recordEnumeratedHistogram(UMA_AUTOFILL_WEBVIEW_AUTOFILL_SESSION,
+            RecordHistogram.recordEnumeratedHistogram(UMA_AUTOFILL_AUTOFILL_SESSION,
                     toUMAAutofillSessionValue(), AUTOFILL_SESSION_HISTOGRAM_COUNT);
             // Only record if user ever changed form.
             if (mUserChangedAutofilledField != null) {
@@ -119,7 +118,7 @@ public class AwAutofillUMA {
                         UMA_AUTOFILL_USER_CHANGED_AUTOFILLED_FIELD, mUserChangedAutofilledField);
             }
             if (mSuggestionTimeMillis != null) {
-                recordTimesHistogram(UMA_AUTOFILL_WEBVIEW_SUGGESTION_TIME, mSuggestionTimeMillis);
+                recordTimesHistogram(UMA_AUTOFILL_SUGGESTION_TIME, mSuggestionTimeMillis);
             }
         }
 
@@ -180,8 +179,8 @@ public class AwAutofillUMA {
     private SessionRecorder mRecorder;
     private Boolean mAutofillDisabled;
 
-    public AwAutofillUMA(Context context) {
-        RecordHistogram.recordBooleanHistogram(UMA_AUTOFILL_WEBVIEW_CREATED_BY_ACTIVITY_CONTEXT,
+    public AutofillProviderUMA(Context context) {
+        RecordHistogram.recordBooleanHistogram(UMA_AUTOFILL_CREATED_BY_ACTIVITY_CONTEXT,
                 ContextUtils.activityFromContext(context) != null);
     }
 
@@ -189,14 +188,14 @@ public class AwAutofillUMA {
         if (mRecorder != null) mRecorder.record(SessionRecorder.EVENT_FORM_SUBMITTED);
         recordSession();
         // We record this no matter autofill service is disabled or not.
-        RecordHistogram.recordEnumeratedHistogram(UMA_AUTOFILL_WEBVIEW_SUBMISSION_SOURCE,
+        RecordHistogram.recordEnumeratedHistogram(UMA_AUTOFILL_SUBMISSION_SOURCE,
                 toUMASubmissionSource(submissionSource), SUBMISSION_SOURCE_HISTOGRAM_COUNT);
     }
 
     public void onSessionStarted(boolean autofillDisabled) {
         // Record autofill status once per instance and only if user triggers the autofill.
         if (mAutofillDisabled == null || mAutofillDisabled.booleanValue() != autofillDisabled) {
-            RecordHistogram.recordBooleanHistogram(UMA_AUTOFILL_WEBVIEW_ENABLED, !autofillDisabled);
+            RecordHistogram.recordBooleanHistogram(UMA_AUTOFILL_ENABLED, !autofillDisabled);
             mAutofillDisabled = Boolean.valueOf(autofillDisabled);
         }
 
