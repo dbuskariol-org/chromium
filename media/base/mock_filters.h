@@ -77,12 +77,25 @@ class MockPipeline : public Pipeline {
   MockPipeline();
   ~MockPipeline() override;
 
-  MOCK_METHOD4(Start,
-               void(StartType, Demuxer*, Client*, const PipelineStatusCB&));
+  void Start(StartType start_type,
+             Demuxer* demuxer,
+             Client* client,
+             PipelineStatusCallback seek_cb) {
+    OnStart(start_type, demuxer, client, seek_cb);
+  }
+  MOCK_METHOD4(OnStart,
+               void(StartType, Demuxer*, Client*, PipelineStatusCallback&));
   MOCK_METHOD0(Stop, void());
-  MOCK_METHOD2(Seek, void(base::TimeDelta, const PipelineStatusCB&));
-  MOCK_METHOD1(Suspend, void(const PipelineStatusCB&));
-  MOCK_METHOD2(Resume, void(base::TimeDelta, const PipelineStatusCB&));
+  void Seek(base::TimeDelta time, PipelineStatusCallback seek_cb) {
+    OnSeek(time, seek_cb);
+  }
+  MOCK_METHOD2(OnSeek, void(base::TimeDelta, PipelineStatusCallback&));
+  void Suspend(PipelineStatusCallback cb) { OnSuspend(cb); }
+  MOCK_METHOD1(OnSuspend, void(PipelineStatusCallback&));
+  void Resume(base::TimeDelta time, PipelineStatusCallback seek_cb) {
+    OnResume(time, seek_cb);
+  }
+  MOCK_METHOD2(OnResume, void(base::TimeDelta, PipelineStatusCallback&));
   MOCK_METHOD2(OnEnabledAudioTracksChanged,
                void(const std::vector<MediaTrack::Id>&, base::OnceClosure));
   MOCK_METHOD2(OnSelectedVideoTrackChanged,
