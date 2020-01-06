@@ -5,14 +5,13 @@
 #import "ios/chrome/browser/ui/overlays/infobar_banner/infobar_banner_overlay_mediator.h"
 
 #import "base/bind.h"
-#include "base/strings/sys_string_conversions.h"
-#import "ios/chrome/browser/overlays/public/common/infobars/infobar_banner_overlay_request_config.h"
 #include "ios/chrome/browser/overlays/public/infobar_banner/infobar_banner_overlay_responses.h"
 #include "ios/chrome/browser/overlays/public/overlay_callback_manager.h"
 #include "ios/chrome/browser/overlays/public/overlay_dispatch_callback.h"
 #include "ios/chrome/browser/overlays/public/overlay_request.h"
+#include "ios/chrome/browser/overlays/public/overlay_request_support.h"
 #include "ios/chrome/browser/overlays/public/overlay_response.h"
-#import "ios/chrome/browser/ui/infobars/banners/test/fake_infobar_banner_consumer.h"
+#include "ios/chrome/browser/overlays/test/fake_overlay_user_data.h"
 #import "testing/gtest_mac.h"
 #include "testing/platform_test.h"
 #import "third_party/ocmock/OCMock/OCMock.h"
@@ -22,30 +21,24 @@
 #error "This file requires ARC support."
 #endif
 
-namespace {
-NSString* const kBannerAccessibilityLabel = @"a11y label";
-NSString* const kButtonText = @"button text";
-NSString* const kIconImageName = @"infobar_translate_icon";
-const bool kPresentsModal(false);
-NSString* const kTitleText = @"title text";
-NSString* const kSubtitleText = @"subtitle text";
+// InfobarBannerOverlayMediator subclass used for testing.
+@interface FakeInfobarBannerOverlayMediator : InfobarBannerOverlayMediator
+@end
+
+@implementation FakeInfobarBannerOverlayMediator
++ (const OverlayRequestSupport*)requestSupport {
+  return OverlayRequestSupport::All();
 }
+@end
 
 // Test fixture for InfobarBannerOverlayMediator.
 class InfobarBannerOverlayMediatorTest : public PlatformTest {
  public:
   InfobarBannerOverlayMediatorTest()
-      : request_(
-            OverlayRequest::CreateWithConfig<InfobarBannerOverlayRequestConfig>(
-                kBannerAccessibilityLabel,
-                kButtonText,
-                kIconImageName,
-                kPresentsModal,
-                kTitleText,
-                kSubtitleText)),
+      : request_(OverlayRequest::CreateWithConfig<FakeOverlayUserData>()),
         delegate_(
             OCMStrictProtocolMock(@protocol(OverlayRequestMediatorDelegate))),
-        mediator_([[InfobarBannerOverlayMediator alloc]
+        mediator_([[FakeInfobarBannerOverlayMediator alloc]
             initWithRequest:request_.get()]) {
     mediator_.delegate = delegate_;
   }
@@ -58,19 +51,6 @@ class InfobarBannerOverlayMediatorTest : public PlatformTest {
   id<OverlayRequestMediatorDelegate> delegate_ = nil;
   InfobarBannerOverlayMediator* mediator_ = nil;
 };
-
-// Tests that an InfobarBannerOverlayMediator correctly sets up its consumer.
-TEST_F(InfobarBannerOverlayMediatorTest, SetUpConsumer) {
-  FakeInfobarBannerConsumer* consumer =
-      [[FakeInfobarBannerConsumer alloc] init];
-  mediator_.consumer = consumer;
-  EXPECT_NSEQ(kBannerAccessibilityLabel, consumer.bannerAccessibilityLabel);
-  EXPECT_NSEQ(kButtonText, consumer.buttonText);
-  EXPECT_NSEQ([UIImage imageNamed:kIconImageName], consumer.iconImage);
-  EXPECT_EQ(kPresentsModal, consumer.presentsModal);
-  EXPECT_NSEQ(kTitleText, consumer.titleText);
-  EXPECT_NSEQ(kSubtitleText, consumer.subtitleText);
-}
 
 // Tests that an InfobarBannerOverlayMediator correctly dispatches a response
 // for confirm button taps before stopping itself.

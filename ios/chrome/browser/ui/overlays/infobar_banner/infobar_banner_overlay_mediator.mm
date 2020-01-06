@@ -8,11 +8,10 @@
 
 #include "base/logging.h"
 #import "base/strings/sys_string_conversions.h"
-#import "ios/chrome/browser/overlays/public/common/infobars/infobar_banner_overlay_request_config.h"
-#import "ios/chrome/browser/overlays/public/common/infobars/infobar_overlay_request_config.h"
 #include "ios/chrome/browser/overlays/public/infobar_banner/infobar_banner_overlay_responses.h"
 #include "ios/chrome/browser/overlays/public/overlay_callback_manager.h"
 #include "ios/chrome/browser/overlays/public/overlay_request.h"
+#include "ios/chrome/browser/overlays/public/overlay_request_support.h"
 #include "ios/chrome/browser/overlays/public/overlay_response.h"
 #import "ios/chrome/browser/ui/infobars/banners/infobar_banner_consumer.h"
 #import "ios/chrome/browser/ui/overlays/infobar_banner/infobar_banner_overlay_mediator+consumer_support.h"
@@ -21,16 +20,11 @@
 #error "This file requires ARC support."
 #endif
 
-@interface InfobarBannerOverlayMediator ()
-// The banner config from the request.
-@property(nonatomic, readonly) InfobarBannerOverlayRequestConfig* config;
-@end
-
 @implementation InfobarBannerOverlayMediator
 
 - (instancetype)initWithRequest:(OverlayRequest*)request {
   if (self = [super initWithRequest:request]) {
-    DCHECK(request->GetConfig<InfobarBannerOverlayRequestConfig>());
+    DCHECK([self class].requestSupport->IsRequestSupported(request));
   }
   return self;
 }
@@ -43,12 +37,6 @@
   _consumer = consumer;
   if (_consumer)
     [self configureConsumer];
-}
-
-- (InfobarBannerOverlayRequestConfig*)config {
-  return self.request
-             ? self.request->GetConfig<InfobarBannerOverlayRequestConfig>()
-             : nullptr;
 }
 
 #pragma mark - InfobarBannerDelegate
@@ -99,18 +87,7 @@
 @implementation InfobarBannerOverlayMediator (ConsumerSupport)
 
 - (void)configureConsumer {
-  // TODO(crbug.com/1030357): Add NOTREACHED() here to enforce that subclasses
-  // implement.
-  InfobarBannerOverlayRequestConfig* config = self.config;
-  if (!config)
-    return;
-  [self.consumer
-      setBannerAccessibilityLabel:config->banner_accessibility_label()];
-  [self.consumer setButtonText:config->button_text()];
-  [self.consumer setIconImage:[UIImage imageNamed:config->icon_image_name()]];
-  [self.consumer setPresentsModal:config->presents_modal()];
-  [self.consumer setTitleText:config->title_text()];
-  [self.consumer setSubtitleText:config->subtitle_text()];
+  NOTREACHED() << "Subclasses must implement.";
 }
 
 @end

@@ -14,6 +14,7 @@
 #import "ios/chrome/browser/ui/infobars/banners/infobar_banner_accessibility_util.h"
 #import "ios/chrome/browser/ui/infobars/banners/infobar_banner_view_controller.h"
 #import "ios/chrome/browser/ui/overlays/infobar_banner/infobar_banner_overlay_mediator.h"
+#import "ios/chrome/browser/ui/overlays/infobar_banner/passwords/save_password_infobar_banner_overlay_mediator.h"
 #import "ios/chrome/browser/ui/overlays/overlay_request_coordinator+subclassing.h"
 #import "ios/chrome/browser/ui/overlays/overlay_request_coordinator_delegate.h"
 
@@ -46,12 +47,11 @@ const std::vector<const OverlayRequestSupport*> GetSupportsForMediatorClasses(
 #pragma mark - Accessors
 
 + (NSArray<Class>*)supportedMediatorClasses {
-  // TODO(crbug.com/1030357): Add more mediator classes here.
-  return @[];
+  return @ [[SavePasswordInfobarBannerOverlayMediator class]];
 }
 
 + (const OverlayRequestSupport*)requestSupport {
-  static std::unique_ptr<const OverlayRequestSupport> _requestSupport = nil;
+  static std::unique_ptr<const OverlayRequestSupport> _requestSupport;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     _requestSupport = std::make_unique<OverlayRequestSupport>(
