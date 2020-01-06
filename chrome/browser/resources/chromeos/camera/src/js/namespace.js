@@ -24,6 +24,8 @@ var cca = {
   tooltip: {},
   util: {},
   views: {
-    camera: {},
+    camera: {
+      timertick: {},
+    },
   },
 };
