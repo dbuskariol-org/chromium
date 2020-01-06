@@ -10,9 +10,7 @@
 #include <memory>
 
 #include "base/memory/weak_ptr.h"
-#include "ios/chrome/browser/ui/page_info/page_info_model_observer.h"
 
-@class BidiContainerView;
 @protocol PageInfoCommands;
 @protocol PageInfoPresentation;
 @protocol PageInfoReloading;
@@ -27,7 +25,6 @@ class PageInfoModel;
 // |provider|'s view. Typically, |sourcePoint| would be the midpoint of a button
 // that resulted in this popup being displayed.
 - (id)initWithModel:(PageInfoModel*)model
-                  bridge:(PageInfoModelObserver*)bridge
              sourcePoint:(CGPoint)sourcePoint
     presentationProvider:(id<PageInfoPresentation>)provider
               dispatcher:(id<PageInfoCommands, PageInfoReloading>)dispatcher;
@@ -42,29 +39,5 @@ class PageInfoModel;
 - (void)performLayout;
 
 @end
-
-// Bridge that listens for change notifications from the model.
-class PageInfoModelBubbleBridge : public PageInfoModelObserver {
- public:
-  PageInfoModelBubbleBridge();
-  ~PageInfoModelBubbleBridge() override;
-
-  // PageInfoModelObserver implementation.
-  void OnPageInfoModelChanged() override;
-
-  // Sets the controller.
-  void set_controller(PageInfoViewController* controller) {
-    controller_ = controller;
-  }
-
- private:
-  void PerformLayout();
-
-  __weak PageInfoViewController* controller_ = nil;
-
-  base::WeakPtrFactory<PageInfoModelBubbleBridge> weak_ptr_factory_;
-
-  DISALLOW_COPY_AND_ASSIGN(PageInfoModelBubbleBridge);
-};
 
 #endif  // IOS_CHROME_BROWSER_UI_PAGE_INFO_PAGE_INFO_VIEW_CONTROLLER_H_

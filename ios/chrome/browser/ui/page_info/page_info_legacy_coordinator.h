@@ -9,11 +9,6 @@
 
 @protocol PageInfoPresentation;
 
-// Notification sent when the page info is shown.
-extern NSString* const kPageInfoWillShowNotification;
-// Notification sent when the page info is hidden.
-extern NSString* const kPageInfoWillHideNotification;
-
 // The coordinator that manages the display of the Page Info UI. When
 // |dispatcher| is set, this coordinator uses |dispatcher| to register itself
 // as the target for PageInfoCommmands. These commands can then trigger the

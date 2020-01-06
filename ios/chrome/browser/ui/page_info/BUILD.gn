@@ -7,7 +7,6 @@ source_set("page_info") {
   sources = [
     "page_info_model.cc",
     "page_info_model.h",
-    "page_info_model_observer.h",
     "page_info_view_controller.h",
     "page_info_view_controller.mm",
   ]

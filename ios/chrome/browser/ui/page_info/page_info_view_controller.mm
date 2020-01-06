@@ -92,42 +92,6 @@ const CGFloat kButtonXOffset = kTextXPosition;
 
 }  // namespace
 
-#pragma mark - PageInfoModelBubbleBridge
-
-PageInfoModelBubbleBridge::PageInfoModelBubbleBridge()
-    : controller_(nil), weak_ptr_factory_(this) {}
-
-PageInfoModelBubbleBridge::~PageInfoModelBubbleBridge() {}
-
-void PageInfoModelBubbleBridge::OnPageInfoModelChanged() {
-  // Check to see if a layout has already been scheduled.
-  if (weak_ptr_factory_.HasWeakPtrs())
-    return;
-
-  // Delay performing layout by a second so that all the animations from
-  // InfoBubbleWindow and origin updates from BaseBubbleController finish, so
-  // that we don't all race trying to change the frame's origin.
-  //
-  // Using MessageLoop is superior here to |-performSelector:| because it will
-  // not retain its target; if the child outlives its parent, zombies get left
-  // behind (http://crbug.com/59619). This will cancel the scheduled task if
-  // the controller (and thus this bridge) get destroyed before the message
-  // can be delivered.
-  base::ThreadTaskRunnerHandle::Get()->PostDelayedTask(
-      FROM_HERE,
-      base::BindOnce(&PageInfoModelBubbleBridge::PerformLayout,
-                     weak_ptr_factory_.GetWeakPtr()),
-      base::TimeDelta::FromMilliseconds(1000 /* milliseconds */));
-}
-
-void PageInfoModelBubbleBridge::PerformLayout() {
-  // If the window is animating closed when this is called, the
-  // animation could be holding the last reference to |controller_|
-  // (and thus |this|).  Pin it until the task is completed.
-  NS_VALID_UNTIL_END_OF_SCOPE PageInfoViewController* keep_alive = controller_;
-  [controller_ performLayout];
-}
-
 #pragma mark - PageInfoViewController
 
 @interface PageInfoViewController () {
@@ -143,9 +107,6 @@ void PageInfoModelBubbleBridge::PerformLayout() {
 
   // Model for the data to display.
   std::unique_ptr<PageInfoModel> _model;
-
-  // Thin bridge that pushes model-changed notifications from C++ to Cocoa.
-  std::unique_ptr<PageInfoModelObserver> _modelBridge;
 
   // Width of the view. Depends on the device (iPad/iPhone).
   CGFloat _viewWidth;
@@ -170,7 +131,6 @@ void PageInfoModelBubbleBridge::PerformLayout() {
 #pragma mark public
 
 - (id)initWithModel:(PageInfoModel*)model
-                  bridge:(PageInfoModelObserver*)bridge
              sourcePoint:(CGPoint)sourcePoint
     presentationProvider:(id<PageInfoPresentation>)provider
               dispatcher:(id<PageInfoCommands, PageInfoReloading>)dispatcher {
@@ -196,7 +156,6 @@ void PageInfoModelBubbleBridge::PerformLayout() {
                              UIViewAutoresizingFlexibleBottomMargin)];
 
     _model.reset(model);
-    _modelBridge.reset(bridge);
     _arrowOriginPoint = sourcePoint;
     _dispatcher = dispatcher;
 
