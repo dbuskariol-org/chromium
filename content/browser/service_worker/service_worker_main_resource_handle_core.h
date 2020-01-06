@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_NAVIGATION_HANDLE_CORE_H_
-#define CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_NAVIGATION_HANDLE_CORE_H_
+#ifndef CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_MAIN_RESOURCE_HANDLE_CORE_H_
+#define CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_MAIN_RESOURCE_HANDLE_CORE_H_
 
 #include <memory>
 #include <utility>
@@ -19,24 +19,24 @@
 namespace content {
 
 class ServiceWorkerContextWrapper;
-class ServiceWorkerNavigationHandle;
+class ServiceWorkerMainResourceHandle;
 
 // This class is created on the UI thread, but should only be accessed from the
 // service worker core thread afterwards. It is the core thread pendant of
-// ServiceWorkerNavigationHandle. See the ServiceWorkerNavigationHandle header
-// for more details about the lifetime of both classes.
+// ServiceWorkerMainResourceHandle. See the ServiceWorkerMainResourceHandle
+// header for more details about the lifetime of both classes.
 //
-// TODO(crbug.com/824858): Merge this class into ServiceWorkerNavigationHandle
+// TODO(crbug.com/824858): Merge this class into ServiceWorkerMainResourceHandle
 // when the core thread moves to the UI thread.
-class CONTENT_EXPORT ServiceWorkerNavigationHandleCore {
+class CONTENT_EXPORT ServiceWorkerMainResourceHandleCore {
  public:
-  ServiceWorkerNavigationHandleCore(
-      base::WeakPtr<ServiceWorkerNavigationHandle> ui_handle,
+  ServiceWorkerMainResourceHandleCore(
+      base::WeakPtr<ServiceWorkerMainResourceHandle> ui_handle,
       ServiceWorkerContextWrapper* context_wrapper);
-  ~ServiceWorkerNavigationHandleCore();
+  ~ServiceWorkerMainResourceHandleCore();
 
-  // Called by corresponding methods in ServiceWorkerNavigationHandle. See
-  // comments in the header of ServiceWorkerNavigationHandle for details.
+  // Called by corresponding methods in ServiceWorkerMainResourceHandle. See
+  // comments in the header of ServiceWorkerMainResourceHandle for details.
   void OnBeginNavigationCommit(
       int render_process_id,
       int render_frame_id,
@@ -66,20 +66,20 @@ class CONTENT_EXPORT ServiceWorkerNavigationHandleCore {
     return interceptor_.get();
   }
 
-  base::WeakPtr<ServiceWorkerNavigationHandleCore> AsWeakPtr() {
+  base::WeakPtr<ServiceWorkerMainResourceHandleCore> AsWeakPtr() {
     return weak_factory_.GetWeakPtr();
   }
 
  private:
   scoped_refptr<ServiceWorkerContextWrapper> context_wrapper_;
-  base::WeakPtr<ServiceWorkerNavigationHandle> ui_handle_;
+  base::WeakPtr<ServiceWorkerMainResourceHandle> ui_handle_;
   base::WeakPtr<ServiceWorkerContainerHost> container_host_;
   std::unique_ptr<ServiceWorkerControlleeRequestHandler> interceptor_;
-  base::WeakPtrFactory<ServiceWorkerNavigationHandleCore> weak_factory_{this};
+  base::WeakPtrFactory<ServiceWorkerMainResourceHandleCore> weak_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(ServiceWorkerNavigationHandleCore);
+  DISALLOW_COPY_AND_ASSIGN(ServiceWorkerMainResourceHandleCore);
 };
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_NAVIGATION_HANDLE_CORE_H_
+#endif  // CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_MAIN_RESOURCE_HANDLE_CORE_H_

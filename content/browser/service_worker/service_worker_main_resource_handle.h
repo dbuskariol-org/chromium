@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_NAVIGATION_HANDLE_H_
-#define CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_NAVIGATION_HANDLE_H_
+#ifndef CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_MAIN_RESOURCE_HANDLE_H_
+#define CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_MAIN_RESOURCE_HANDLE_H_
 
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
@@ -14,47 +14,45 @@
 namespace content {
 
 class ServiceWorkerContextWrapper;
-class ServiceWorkerNavigationHandleCore;
+class ServiceWorkerMainResourceHandleCore;
 
 // This class is used to manage the lifetime of ServiceWorkerProviderHosts
 // created for main resource requests (navigations and web workers). This is a
 // UI thread class, with a pendant class on the core thread, the
-// ServiceWorkerNavigationHandleCore.
+// ServiceWorkerMainResourceHandleCore.
 //
-// The lifetime of the ServiceWorkerNavigationHandle, the
-// ServiceWorkerNavigationHandleCore and the ServiceWorkerProviderHost are the
+// The lifetime of the ServiceWorkerMainResourceHandle, the
+// ServiceWorkerMainResourceHandleCore and the ServiceWorkerProviderHost are the
 // following:
-//   1) We create a ServiceWorkerNavigationHandle on the UI thread without
+//   1) We create a ServiceWorkerMainResourceHandle on the UI thread without
 //   populating the member service worker provider info. This also leads to the
-//   creation of a ServiceWorkerNavigationHandleCore.
+//   creation of a ServiceWorkerMainResourceHandleCore.
 //
 //   2) When the navigation request is sent to the core thread, we include a
-//   pointer to the ServiceWorkerNavigationHandleCore.
+//   pointer to the ServiceWorkerMainResourceHandleCore.
 //
 //   3) If we pre-create a ServiceWorkerProviderHost for this navigation, it
 //   is added to ServiceWorkerContextCore and its provider info is passed to
-//   ServiceWorkerNavigationHandle on the UI thread via
-//   ServiceWorkerNavigationHandleCore. See
-//   ServiceWorkerNavigationHandleCore::OnCreatedProviderHost() and
-//   ServiceWorkerNavigationHandle::OnCreatedProviderHost() for details.
+//   ServiceWorkerMainResourceHandle on the UI thread via
+//   ServiceWorkerMainResourceHandleCore. See
+//   ServiceWorkerMainResourceHandleCore::OnCreatedProviderHost() and
+//   ServiceWorkerMainResourceHandle::OnCreatedProviderHost() for details.
 //
 //   4) When the navigation is ready to commit, the NavigationRequest will
-//   call ServiceWorkerNavigationHandle::OnBeginNavigationCommit() to
+//   call ServiceWorkerMainResourceHandle::OnBeginNavigationCommit() to
 //     - complete the initialization for the ServiceWorkerProviderHost.
 //     - take out the provider info to be sent as part of navigation commit IPC.
 //
-//   5) When the navigation finishes, the ServiceWorkerNavigationHandle is
-//   destroyed. The destructor of the ServiceWorkerNavigationHandle destroys
+//   5) When the navigation finishes, the ServiceWorkerMainResourceHandle is
+//   destroyed. The destructor of the ServiceWorkerMainResourceHandle destroys
 //   the provider info which in turn leads to the destruction of an unclaimed
 //   ServiceWorkerProviderHost, and posts a task to destroy the
-//   ServiceWorkerNavigationHandleCore on the core thread.
-//
-// TODO(falken): Rename ServiceWorkerMainResourceHandle.
-class CONTENT_EXPORT ServiceWorkerNavigationHandle {
+//   ServiceWorkerMainResourceHandleCore on the core thread.
+class CONTENT_EXPORT ServiceWorkerMainResourceHandle {
  public:
-  explicit ServiceWorkerNavigationHandle(
+  explicit ServiceWorkerMainResourceHandle(
       ServiceWorkerContextWrapper* context_wrapper);
-  ~ServiceWorkerNavigationHandle();
+  ~ServiceWorkerMainResourceHandle();
 
   // Called after a ServiceWorkerProviderHost tied with |provider_info|
   // was pre-created for the navigation.
@@ -87,25 +85,25 @@ class CONTENT_EXPORT ServiceWorkerNavigationHandle {
 
   bool has_provider_info() const { return !!provider_info_; }
 
-  ServiceWorkerNavigationHandleCore* core() { return core_; }
+  ServiceWorkerMainResourceHandleCore* core() { return core_; }
 
   const ServiceWorkerContextWrapper* context_wrapper() const {
     return context_wrapper_.get();
   }
 
-  base::WeakPtr<ServiceWorkerNavigationHandle> AsWeakPtr() {
+  base::WeakPtr<ServiceWorkerMainResourceHandle> AsWeakPtr() {
     return weak_factory_.GetWeakPtr();
   }
 
  private:
   blink::mojom::ServiceWorkerProviderInfoForClientPtr provider_info_;
 
-  ServiceWorkerNavigationHandleCore* core_;
+  ServiceWorkerMainResourceHandleCore* core_;
   scoped_refptr<ServiceWorkerContextWrapper> context_wrapper_;
-  base::WeakPtrFactory<ServiceWorkerNavigationHandle> weak_factory_{this};
-  DISALLOW_COPY_AND_ASSIGN(ServiceWorkerNavigationHandle);
+  base::WeakPtrFactory<ServiceWorkerMainResourceHandle> weak_factory_{this};
+  DISALLOW_COPY_AND_ASSIGN(ServiceWorkerMainResourceHandle);
 };
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_NAVIGATION_HANDLE_H_
+#endif  // CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_MAIN_RESOURCE_HANDLE_H_

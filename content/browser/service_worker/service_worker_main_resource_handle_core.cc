@@ -2,28 +2,28 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/service_worker/service_worker_navigation_handle_core.h"
+#include "content/browser/service_worker/service_worker_main_resource_handle_core.h"
 
 #include "content/browser/service_worker/service_worker_context_wrapper.h"
-#include "content/browser/service_worker/service_worker_navigation_handle.h"
+#include "content/browser/service_worker/service_worker_main_resource_handle.h"
 #include "content/common/service_worker/service_worker_utils.h"
 
 namespace content {
 
-ServiceWorkerNavigationHandleCore::ServiceWorkerNavigationHandleCore(
-    base::WeakPtr<ServiceWorkerNavigationHandle> ui_handle,
+ServiceWorkerMainResourceHandleCore::ServiceWorkerMainResourceHandleCore(
+    base::WeakPtr<ServiceWorkerMainResourceHandle> ui_handle,
     ServiceWorkerContextWrapper* context_wrapper)
     : context_wrapper_(context_wrapper), ui_handle_(ui_handle) {
-  // The ServiceWorkerNavigationHandleCore is created on the UI thread but
+  // The ServiceWorkerMainResourceHandleCore is created on the UI thread but
   // should only be accessed from the core thread afterwards.
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 }
 
-ServiceWorkerNavigationHandleCore::~ServiceWorkerNavigationHandleCore() {
+ServiceWorkerMainResourceHandleCore::~ServiceWorkerMainResourceHandleCore() {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
 }
 
-void ServiceWorkerNavigationHandleCore::OnBeginNavigationCommit(
+void ServiceWorkerMainResourceHandleCore::OnBeginNavigationCommit(
     int render_process_id,
     int render_frame_id,
     network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy) {
@@ -34,7 +34,7 @@ void ServiceWorkerNavigationHandleCore::OnBeginNavigationCommit(
   }
 }
 
-void ServiceWorkerNavigationHandleCore::OnBeginWorkerCommit(
+void ServiceWorkerMainResourceHandleCore::OnBeginWorkerCommit(
     network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   if (container_host_) {
