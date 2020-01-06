@@ -6787,6 +6787,9 @@ crbug.com/1038139 [ Win ] virtual/gpu-rasterization/images/2-comp.html [ Pass Fa
 # Sheriff 2019-12-30
 crbug.com/1038354 fast/scroll-snap/snaps-after-scrollbar-scrolling.html [ Pass Failure ]
 
+# These tests will pass once the --enable-features=WebBundlesFromNetwork flag is enabled by default.
+crbug.com/1018640 external/wpt/web-bundle/* [ Skip ]
+
 # Sheriff 2020-01-02
 crbug.com/1038656 [ Mac ] http/tests/devtools/coverage/coverage-view-unused.js [ Pass Failure ]
 crbug.com/1038656 [ Win ] http/tests/devtools/coverage/coverage-view-unused.js [ Pass Failure ]
