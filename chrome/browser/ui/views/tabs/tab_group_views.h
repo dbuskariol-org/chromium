@@ -21,7 +21,7 @@ class TabStrip;
 // calculations and updates. Painting is done in TabStrip.
 class TabGroupViews {
  public:
-  TabGroupViews(TabStrip* tab_strip, tab_groups::TabGroupId group);
+  TabGroupViews(TabStrip* tab_strip, const tab_groups::TabGroupId& group);
   ~TabGroupViews();
 
   tab_groups::TabGroupId group() const { return group_; }
