@@ -1552,11 +1552,11 @@ void RTCPeerConnectionHandler::AddICECandidate(
   TRACE_EVENT0("webrtc", "RTCPeerConnectionHandler::addICECandidate");
   std::unique_ptr<webrtc::IceCandidateInterface> native_candidate(
       dependency_factory_->CreateIceCandidate(
-          candidate->SdpMid().Utf8(),
+          candidate->SdpMid(),
           candidate->SdpMLineIndex()
               ? static_cast<int>(*candidate->SdpMLineIndex())
               : -1,
-          candidate->Candidate().Utf8()));
+          candidate->Candidate()));
 
   auto callback_on_task_runner =
       [](base::WeakPtr<RTCPeerConnectionHandler> handler_weak_ptr,
@@ -2446,8 +2446,7 @@ RTCPeerConnectionHandler::CreateNativeSessionDescription(
     const String& type,
     webrtc::SdpParseError* error) {
   webrtc::SessionDescriptionInterface* native_desc =
-      dependency_factory_->CreateSessionDescription(type.Utf8(), sdp.Utf8(),
-                                                    error);
+      dependency_factory_->CreateSessionDescription(type, sdp, error);
 
   LOG_IF(ERROR, !native_desc) << "Failed to create native session description."
                               << " Type: " << type << " SDP: " << sdp;
