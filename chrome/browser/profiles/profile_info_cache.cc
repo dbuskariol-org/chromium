@@ -256,14 +256,6 @@ base::FilePath ProfileInfoCache::GetPathOfProfileAtIndex(size_t index) const {
   return user_data_dir_.AppendASCII(keys_[index]);
 }
 
-std::string ProfileInfoCache::GetGAIAIdOfProfileAtIndex(
-    size_t index) const {
-  std::string gaia_id;
-  GetInfoForProfileAtIndex(index)->GetString(ProfileAttributesEntry::kGAIAIdKey,
-                                             &gaia_id);
-  return gaia_id;
-}
-
 const gfx::Image* ProfileInfoCache::GetGAIAPictureOfProfileAtIndex(
     size_t index) const {
   base::FilePath path = GetPathOfProfileAtIndex(index);

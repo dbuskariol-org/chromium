@@ -289,7 +289,7 @@ base::string16 ProfileAttributesEntry::GetGAIAGivenName() const {
 }
 
 std::string ProfileAttributesEntry::GetGAIAId() const {
-  return profile_info_cache_->GetGAIAIdOfProfileAtIndex(profile_index());
+  return GetString(ProfileAttributesEntry::kGAIAIdKey);
 }
 
 const gfx::Image* ProfileAttributesEntry::GetGAIAPicture() const {

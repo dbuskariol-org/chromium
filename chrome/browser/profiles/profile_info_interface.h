@@ -28,9 +28,6 @@ class ProfileInfoInterface {
 
   virtual base::FilePath GetPathOfProfileAtIndex(size_t index) const = 0;
 
-
-  virtual std::string GetGAIAIdOfProfileAtIndex(size_t index) const = 0;
-
   virtual const gfx::Image* GetGAIAPictureOfProfileAtIndex(
       size_t index) const = 0;
 
