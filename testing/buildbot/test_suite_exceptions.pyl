@@ -106,12 +106,12 @@
       # chromium.fyi
       'linux-code-coverage': {
         'swarming': {
-          'shards': 21,
+          'shards': 50,
         },
       },
       'linux-chromeos-code-coverage': {
         'swarming': {
-          'shards': 21,
+          'shards': 50,
         },
       },
       'mac-code-coverage': {
@@ -556,6 +556,17 @@
           'shards': 3,
         },
       },
+      # chromium.fyi
+      'linux-code-coverage': {
+        'swarming': {
+          'shards': 12,
+        },
+      },
+      'linux-chromeos-code-coverage': {
+        'swarming': {
+          'shards': 12,
+        },
+      },
     },
   },
   'content_shell_crash_test': {
@@ -902,6 +913,17 @@
         'args': [
           '--gtest_filter=-SadTabViewInteractiveUITest.ReloadMultipleSadTabs',
         ],
+      },
+      # chromium.fyi
+      'linux-code-coverage': {
+        'swarming': {
+          'shards': 10,
+        },
+      },
+      'linux-chromeos-code-coverage': {
+        'swarming': {
+          'shards': 10,
+        },
       },
     },
   },
@@ -1570,6 +1592,17 @@
       },
       'Win10 Tests x64 (dbg)': {
         'experiment_percentage': 100, # https://crbug.com/840369
+      },
+      # chromium.fyi
+      'linux-code-coverage': {
+        'swarming': {
+          'shards': 4,
+        },
+      },
+      'linux-chromeos-code-coverage': {
+        'swarming': {
+          'shards': 4,
+        },
       },
     },
   },
