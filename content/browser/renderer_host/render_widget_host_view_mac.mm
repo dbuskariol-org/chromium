@@ -846,7 +846,8 @@ void RenderWidgetHostViewMac::EnsureSurfaceSynchronizedForWebTest() {
 void RenderWidgetHostViewMac::OnDidUpdateVisualPropertiesComplete(
     const cc::RenderFrameMetadata& metadata) {
   browser_compositor_->UpdateSurfaceFromChild(
-      metadata.device_scale_factor, metadata.viewport_size_in_pixels,
+      host()->auto_resize_enabled(), metadata.device_scale_factor,
+      metadata.viewport_size_in_pixels,
       metadata.local_surface_id_allocation.value_or(
           viz::LocalSurfaceIdAllocation()));
 }
