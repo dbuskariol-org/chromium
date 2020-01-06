@@ -541,8 +541,8 @@ void PeerConnectionDependencyFactory::InitializeWorkerThread(
 }
 
 void PeerConnectionDependencyFactory::TryScheduleStunProbeTrial() {
-  base::Optional<std::string> params =
-      blink::Platform::Current()->WebRtcStunProbeTrialParameter();
+  base::Optional<WebString> params =
+      Platform::Current()->WebRtcStunProbeTrialParameter();
   if (!params)
     return;
 
@@ -552,7 +552,7 @@ void PeerConnectionDependencyFactory::TryScheduleStunProbeTrial() {
       *chrome_worker_thread_.task_runner().get(), FROM_HERE,
       CrossThreadBindOnce(
           &PeerConnectionDependencyFactory::StartStunProbeTrialOnWorkerThread,
-          CrossThreadUnretained(this), String::FromUTF8(*params)),
+          CrossThreadUnretained(this), String(*params)),
       base::TimeDelta::FromMilliseconds(blink::kExperimentStartDelayMs));
 }
 
