@@ -1545,8 +1545,6 @@ RenderProcessHostImpl::RenderProcessHostImpl(
       /* render_frame_id= */ ChildProcessHost::kInvalidUniqueID,
       storage_partition_impl_->GetServiceWorkerContext()));
 
-  AddObserver(indexed_db_factory_.get());
-
   InitializeChannelProxy();
 
   const int id = GetID();
