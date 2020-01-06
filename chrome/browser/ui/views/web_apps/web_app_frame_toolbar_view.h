@@ -66,7 +66,7 @@ class WebAppFrameToolbarView : public views::AccessiblePaneView,
                                         int y,
                                         int available_height);
 
-  SkColor active_color_for_testing() const { return active_color_; }
+  SkColor active_color_for_testing() const { return active_foreground_color_; }
 
   // ToolbarButtonProvider:
   BrowserActionsContainer* GetBrowserActionsContainer() override;
@@ -117,8 +117,10 @@ class WebAppFrameToolbarView : public views::AccessiblePaneView,
 
   // Button and text colors.
   bool paint_as_active_ = true;
-  SkColor active_color_ = gfx::kPlaceholderColor;
-  SkColor inactive_color_ = gfx::kPlaceholderColor;
+  SkColor active_background_color_ = gfx::kPlaceholderColor;
+  SkColor active_foreground_color_ = gfx::kPlaceholderColor;
+  SkColor inactive_background_color_ = gfx::kPlaceholderColor;
+  SkColor inactive_foreground_color_ = gfx::kPlaceholderColor;
 
   class NavigationButtonContainer;
   class ToolbarButtonContainer;
