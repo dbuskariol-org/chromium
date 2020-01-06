@@ -13,6 +13,23 @@
 
 int GetFontSizeDeltaBoundedByAvailableHeight(int available_height,
                                              int desired_font_size) {
+  int size_delta =
+      GetFontSizeDeltaIgnoringUserOrLocaleSettings(desired_font_size);
+  ui::ResourceBundle& bundle = ui::ResourceBundle::GetSharedInstance();
+  gfx::FontList base_font = bundle.GetFontListWithDelta(size_delta);
+
+  // Shrink large fonts to ensure they fit. Default fonts should fit already.
+  // TODO(tapted): Move DeriveWithHeightUpperBound() to ui::ResourceBundle to
+  // take advantage of the font cache.
+  int user_or_locale_delta =
+      size_delta + gfx::PlatformFont::kDefaultBaseFontSize - desired_font_size;
+  base_font = base_font.DeriveWithHeightUpperBound(available_height);
+
+  return base_font.GetFontSize() - gfx::PlatformFont::kDefaultBaseFontSize +
+         user_or_locale_delta;
+}
+
+int GetFontSizeDeltaIgnoringUserOrLocaleSettings(int desired_font_size) {
   int size_delta = desired_font_size - gfx::PlatformFont::kDefaultBaseFontSize;
   ui::ResourceBundle& bundle = ui::ResourceBundle::GetSharedInstance();
   gfx::FontList base_font = bundle.GetFontListWithDelta(size_delta);
@@ -27,11 +44,6 @@ int GetFontSizeDeltaBoundedByAvailableHeight(int available_height,
     base_font = bundle.GetFontListWithDelta(size_delta + user_or_locale_delta);
   }
   DCHECK_EQ(desired_font_size, base_font.GetFontSize());
-
-  // Shrink large fonts to ensure they fit. Default fonts should fit already.
-  // TODO(tapted): Move DeriveWithHeightUpperBound() to ui::ResourceBundle to
-  // take advantage of the font cache.
-  base_font = base_font.DeriveWithHeightUpperBound(available_height);
 
   // To ensure a subsequent request from the ResourceBundle ignores the delta
   // due to user or locale settings, include it here.
@@ -48,10 +60,13 @@ void ApplyCommonFontStyles(int context,
       // TODO(pbos): Instead of fixing the toolbar button height this way
       // consider dynamically resizing all of the toolbar based on the actual
       // final item height.
-      const int height = ui::MaterialDesignController::touch_ui() ? 22 : 17;
-      static const int toolbar_button_delta =
-          GetFontSizeDeltaBoundedByAvailableHeight(height, height);
-      *size_delta = toolbar_button_delta;
+      int height = ui::MaterialDesignController::touch_ui() ? 22 : 17;
+      *size_delta = GetFontSizeDeltaBoundedByAvailableHeight(height, height);
+      break;
+    }
+    case CONTEXT_WEB_UI_TAB_COUNTER: {
+      *size_delta = GetFontSizeDeltaIgnoringUserOrLocaleSettings(14);
+      *weight = gfx::Font::Weight::BOLD;
       break;
     }
     case CONTEXT_OMNIBOX_PRIMARY:
