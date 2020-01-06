@@ -91,7 +91,3 @@ SkColor TabGroupViews::GetGroupBackgroundColor() const {
                                        TabStyle::kSelectedTabOpacity,
                                        SK_AlphaTRANSPARENT, SK_AlphaOPAQUE));
 }
-
-bool TabGroupViews::ShouldPaintGroupBackground() const {
-  return header_->dragging();
-}

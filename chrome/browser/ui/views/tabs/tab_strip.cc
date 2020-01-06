@@ -2686,14 +2686,16 @@ void TabStrip::OnGroupCloseAnimationCompleted(
 }
 
 void TabStrip::StoppedDraggingView(TabSlotView* view, bool* is_first_view) {
+  if (view &&
+      view->GetTabSlotViewType() == TabSlotView::ViewType::kTabGroupHeader) {
+    // Ensure all tab group UI is repainted, especially the dragging highlight.
+    view->set_dragging(false);
+    SchedulePaint();
+    return;
+  }
+
   int tab_data_index = GetModelIndexOf(view);
   if (tab_data_index == -1) {
-    // Ensure the drag status is updated even if the view is not a valid tab.
-    // This is primarily to make sure group headers are updated correctly.
-    // Otherwise, tab drag status is only updated in PrepareForAnimation().
-    if (view)
-      view->set_dragging(false);
-
     // The tab was removed before the drag completed. Don't do anything.
     return;
   }

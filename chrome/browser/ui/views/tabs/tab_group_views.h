@@ -49,10 +49,6 @@ class TabGroupViews {
   // tab color. Needed to layer painting for the group background highlight.
   SkColor GetGroupBackgroundColor() const;
 
-  // Returns whether the group highlight background should be shown. Currently
-  // it should only be shown if the entire group is dragging via its header.
-  bool ShouldPaintGroupBackground() const;
-
  private:
   TabStrip* const tab_strip_;
   const tab_groups::TabGroupId group_;
