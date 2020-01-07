@@ -757,11 +757,6 @@ BUILDERS = {
           '--assert-gpu-compositing',
         ],
       },
-      {
-        'isolate': 'dawn_perf_tests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
-      },
     ],
     'platform': 'mac',
     'dimension': {
