@@ -169,6 +169,13 @@ STDMETHODIMP AXPlatformNodeTextRangeProviderWin::ExpandToEnclosingUnit(
   WIN_ACCESSIBILITY_API_HISTOGRAM(UMA_API_TEXTRANGE_EXPANDTOENCLOSINGUNIT);
   UIA_VALIDATE_TEXTRANGEPROVIDER_CALL();
 
+  // Normalize the start position so that we do not incorrectly expand it
+  // backwards if it happens to be sitting at the end of a node.
+  AXPositionInstance normalized_start =
+      start_->AsLeafTextPositionBeforeCharacter();
+  if (!normalized_start->IsNullPosition())
+    start_ = std::move(normalized_start);
+
   // Determine if start is on a boundary of the specified TextUnit, if it is
   // not, move backwards until it is. Move the end forwards from start until it
   // is on the next TextUnit boundary, if one exists.
