@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_PLATFORM_MODULES_MEDIASTREAM_MEDIA_STREAM_AUDIO_TRACK_H_
-#define THIRD_PARTY_BLINK_PUBLIC_PLATFORM_MODULES_MEDIASTREAM_MEDIA_STREAM_AUDIO_TRACK_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_MEDIASTREAM_MEDIA_STREAM_AUDIO_TRACK_H_
+#define THIRD_PARTY_BLINK_RENDERER_PLATFORM_MEDIASTREAM_MEDIA_STREAM_AUDIO_TRACK_H_
 
 #include <memory>
 
@@ -15,7 +15,7 @@
 #include "base/threading/thread_checker.h"
 #include "third_party/blink/public/platform/modules/mediastream/media_stream_audio_deliverer.h"
 #include "third_party/blink/public/platform/modules/mediastream/web_platform_media_stream_track.h"
-#include "third_party/blink/public/platform/web_common.h"
+#include "third_party/blink/renderer/platform/platform_export.h"
 
 namespace blink {
 
@@ -26,7 +26,7 @@ class MediaStreamAudioSource;
 // MediaStreamAudioSource to one or more WebMediaStreamAudioSinks. An instance
 // of this class is owned by WebMediaStreamTrack, and clients should use
 // From() to gain access to a MediaStreamAudioTrack.
-class BLINK_PLATFORM_EXPORT MediaStreamAudioTrack
+class PLATFORM_EXPORT MediaStreamAudioTrack
     : public WebPlatformMediaStreamTrack {
  public:
   explicit MediaStreamAudioTrack(bool is_local_track);
@@ -123,4 +123,4 @@ class BLINK_PLATFORM_EXPORT MediaStreamAudioTrack
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_PUBLIC_PLATFORM_MODULES_MEDIASTREAM_MEDIA_STREAM_AUDIO_TRACK_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_PLATFORM_MEDIASTREAM_MEDIA_STREAM_AUDIO_TRACK_H_
