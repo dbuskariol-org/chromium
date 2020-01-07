@@ -1374,7 +1374,6 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/settings/ManagedPreferenceDelegate.java",
   "java/src/org/chromium/chrome/browser/settings/ManagedPreferencesUtils.java",
   "java/src/org/chromium/chrome/browser/settings/NfcSystemLevelSetting.java",
-  "java/src/org/chromium/chrome/browser/settings/SearchUtils.java",
   "java/src/org/chromium/chrome/browser/settings/SeekBarPreference.java",
   "java/src/org/chromium/chrome/browser/settings/SettingsActivity.java",
   "java/src/org/chromium/chrome/browser/settings/SettingsLauncher.java",

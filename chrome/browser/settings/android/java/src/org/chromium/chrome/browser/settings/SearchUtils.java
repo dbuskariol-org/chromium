@@ -61,12 +61,11 @@ public class SearchUtils {
         });
 
         // Make the close button a clear button.
-        searchView.findViewById(org.chromium.chrome.R.id.search_close_btn)
-                .setOnClickListener((View v) -> {
-                    searchView.setQuery("", false);
-                    updateActionBarButtons(searchItem, "", activity);
-                    changeListener.onQueryTextChange("");
-                });
+        findSearchClearButton(searchView).setOnClickListener((View v) -> {
+            searchView.setQuery("", false);
+            updateActionBarButtons(searchItem, "", activity);
+            changeListener.onQueryTextChange("");
+        });
 
         // Ensure the clear button doesn't reappear with layout changes (e.g. keyboard visibility).
         findSearchClearButton(searchView)
@@ -137,6 +136,6 @@ public class SearchUtils {
     }
 
     private static ImageView findSearchClearButton(SearchView searchView) {
-        return searchView.findViewById(org.chromium.chrome.R.id.search_close_btn);
+        return searchView.findViewById(R.id.search_close_btn);
     }
 }
