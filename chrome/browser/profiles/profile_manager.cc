@@ -42,6 +42,7 @@
 #include "chrome/browser/data_reduction_proxy/data_reduction_proxy_chrome_settings_factory.h"
 #include "chrome/browser/download/download_core_service.h"
 #include "chrome/browser/download/download_core_service_factory.h"
+#include "chrome/browser/navigation_predictor/navigation_predictor_keyed_service_factory.h"
 #include "chrome/browser/optimization_guide/optimization_guide_keyed_service.h"
 #include "chrome/browser/optimization_guide/optimization_guide_keyed_service_factory.h"
 #include "chrome/browser/password_manager/password_store_factory.h"
@@ -1280,6 +1281,9 @@ void ProfileManager::DoFinalInitForServices(Profile* profile,
   PreviewsServiceFactory::GetForProfile(profile)->Initialize(
       base::CreateSingleThreadTaskRunner({BrowserThread::UI}),
       profile->GetPath());
+
+  // Ensure NavigationPredictorKeyedService is started.
+  NavigationPredictorKeyedServiceFactory::GetForProfile(profile);
 
   IdentityManagerFactory::GetForProfile(profile)->OnNetworkInitialized();
   AccountReconcilorFactory::GetForProfile(profile);
