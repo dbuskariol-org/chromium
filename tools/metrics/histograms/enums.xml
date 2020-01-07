@@ -37308,6 +37308,7 @@ from previous Chrome versions.
   <int value="-714043324" label="OutOfBlinkCORS:enabled"/>
   <int value="-711991950" label="SiteExplorationUi:enabled"/>
   <int value="-711890895" label="enable-website-settings-manager"/>
+  <int value="-709793261" label="PaintPreviewTest:disabled"/>
   <int value="-709058455" label="ui-slow-animations"/>
   <int value="-706733351" label="enable-floating-virtual-keyboard:enabled"/>
   <int value="-705746939" label="ChromeDuet:enabled"/>
@@ -37605,6 +37606,7 @@ from previous Chrome versions.
   <int value="-310615515" label="EnableSuggestedFiles:disabled"/>
   <int value="-307260007" label="ExtensionsCheckup:disabled"/>
   <int value="-304951461" label="TextSuggestionsTouchBar:enabled"/>
+  <int value="-301310056" label="PaintPreviewTest:enabled"/>
   <int value="-300018686" label="disable-cloud-import"/>
   <int value="-299841473" label="top-document-isolation:enabled"/>
   <int value="-297716805"

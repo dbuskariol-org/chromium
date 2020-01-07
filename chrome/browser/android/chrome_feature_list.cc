@@ -31,6 +31,7 @@
 #include "components/ntp_tiles/features.h"
 #include "components/offline_pages/core/offline_page_feature.h"
 #include "components/omnibox/common/omnibox_features.h"
+#include "components/paint_preview/features/features.h"
 #include "components/password_manager/core/common/password_manager_features.h"
 #include "components/payments/core/features.h"
 #include "components/previews/core/previews_features.h"
@@ -204,6 +205,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kWebApkAdaptiveIcon,
     &net::features::kSameSiteByDefaultCookies,
     &net::features::kCookiesWithoutSameSiteMustBeSecure,
+    &paint_preview::kPaintPreviewTest,
     &payments::features::kAlwaysAllowJustInTimePaymentApp,
     &payments::features::kPaymentRequestSkipToGPay,
     &payments::features::kPaymentRequestSkipToGPayIfNoCard,

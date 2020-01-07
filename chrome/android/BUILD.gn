@@ -315,6 +315,7 @@ android_library("chrome_java") {
     "//components/navigation_interception/android:navigation_interception_java",
     "//components/offline_items_collection/core:core_java",
     "//components/omnibox/browser:browser_java",
+    "//components/paint_preview/browser/android:java",
     "//components/payments/content/android:java",
     "//components/payments/mojom:mojom_java",
     "//components/policy/android:policy_java",

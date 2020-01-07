@@ -323,6 +323,12 @@ public final class ChromePreferenceKeys {
     public static final String FLAGS_CACHED_NIGHT_MODE_DEFAULT_TO_LIGHT =
             "night_mode_default_to_light";
     /**
+     * Whether the Paint Preview Capture menu item is enabled.
+     * Default value is false.
+     */
+    public static final String FLAGS_CACHED_PAINT_PREVIEW_TEST_ENABLED_KEY =
+            "Chrome.Flags.PaintPreviewTestEnabled";
+    /**
      * Whether or not bootstrap tasks should be prioritized (i.e. bootstrap task prioritization
      * experiment is enabled). Default value is true.
      */
@@ -556,6 +562,7 @@ public final class ChromePreferenceKeys {
                 FLAGS_CACHED_NIGHT_MODE_AVAILABLE,
                 FLAGS_CACHED_NIGHT_MODE_CCT_AVAILABLE,
                 FLAGS_CACHED_NIGHT_MODE_DEFAULT_TO_LIGHT,
+                FLAGS_CACHED_PAINT_PREVIEW_TEST_ENABLED_KEY,
                 FLAGS_CACHED_PRIORITIZE_BOOTSTRAP_TASKS,
                 FLAGS_CACHED_SERVICE_MANAGER_FOR_BACKGROUND_PREFETCH,
                 FLAGS_CACHED_SERVICE_MANAGER_FOR_DOWNLOAD_RESUMPTION,
@@ -707,6 +714,7 @@ public final class ChromePreferenceKeys {
                 FLAGS_CACHED_NIGHT_MODE_AVAILABLE,
                 FLAGS_CACHED_NIGHT_MODE_CCT_AVAILABLE,
                 FLAGS_CACHED_NIGHT_MODE_DEFAULT_TO_LIGHT,
+                FLAGS_CACHED_PAINT_PREVIEW_TEST_ENABLED_KEY,
                 FLAGS_CACHED_PRIORITIZE_BOOTSTRAP_TASKS,
                 FLAGS_CACHED_SERVICE_MANAGER_FOR_BACKGROUND_PREFETCH,
                 FLAGS_CACHED_SERVICE_MANAGER_FOR_DOWNLOAD_RESUMPTION,
