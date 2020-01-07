@@ -1120,7 +1120,9 @@ interface NetworkContext {
         pending_remote<AuthenticationHandler>? auth_handler,
         pending_remote<TrustedHeaderClient>? header_client);
 
-  // Creates a QuicTransport connection to |url|.
+  // Creates a QuicTransport connection to |url|. |origin| is used for the
+  // client indication - see
+  // https://tools.ietf.org/html/draft-vvv-webtransport-quic-01#section-3.2 .
   //
   // It is recommended to detect mojo connection errors on |handshake_client|.
   CreateQuicTransport(

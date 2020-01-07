@@ -1162,7 +1162,8 @@ void NetworkContext::CreateQuicTransport(
     const net::NetworkIsolationKey& key,
     mojo::PendingRemote<mojom::QuicTransportHandshakeClient>
         pending_handshake_client) {
-  // TODO(yhirano): Implement this and have a security review on the impl too.
+  quic_transports_.insert(std::make_unique<QuicTransport>(
+      url, origin, key, this, std::move(pending_handshake_client)));
 }
 
 void NetworkContext::CreateNetLogExporter(
@@ -1613,6 +1614,13 @@ void NetworkContext::LookupServerBasicAuthCredentials(
 const net::HttpAuthPreferences* NetworkContext::GetHttpAuthPreferences() const
     noexcept {
   return &http_auth_merged_preferences_;
+}
+
+size_t NetworkContext::NumOpenQuicTransports() const {
+  return std::count_if(quic_transports_.begin(), quic_transports_.end(),
+                       [](const std::unique_ptr<QuicTransport>& transport) {
+                         return !transport->torn_down();
+                       });
 }
 
 void NetworkContext::OnHttpAuthDynamicParamsChanged(

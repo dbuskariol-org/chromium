@@ -467,7 +467,7 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) NetworkContext
 
   const net::HttpAuthPreferences* GetHttpAuthPreferences() const;
 
-  size_t num_open_quic_transports() const { return quic_transports_.size(); }
+  size_t NumOpenQuicTransports() const;
 
  private:
   URLRequestContextOwner MakeURLRequestContext(
