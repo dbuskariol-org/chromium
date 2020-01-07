@@ -1149,7 +1149,7 @@ TEST_F(DeepScanningDialogDelegateAuditOnlyTest, SupportedTypes) {
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sdc"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sdd"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sdw"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.seven_z"));
+  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.7z"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sxc"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sxi"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sxw"));
