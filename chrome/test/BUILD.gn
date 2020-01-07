@@ -196,7 +196,7 @@ static_library("test_support") {
     "//components/performance_manager/test_support",
     "//components/prefs:test_support",
     "//components/rappor:test_support",
-    "//components/safe_browsing/db:v4_test_util",
+    "//components/safe_browsing/core/db:v4_test_util",
     "//components/search_engines:test_support",
     "//components/sessions:test_support",
     "//components/signin/public/base:test_support",
@@ -709,7 +709,7 @@ if (!is_android) {
       "//components/policy:chrome_settings_proto_generated_compile",
       "//components/resources",
       "//components/safe_browsing:buildflags",
-      "//components/safe_browsing/db:test_database_manager",
+      "//components/safe_browsing/core/db:test_database_manager",
       "//components/services/patch/public/mojom",
       "//components/services/quarantine:test_support",
       "//components/signin/core/browser",
@@ -3659,10 +3659,10 @@ test("unit_tests") {
     "//components/page_load_metrics/common:test_support",
     "//components/resources",
     "//components/safe_browsing:buildflags",
-    "//components/safe_browsing:features",
-    "//components/safe_browsing/db",
-    "//components/safe_browsing/db:test_database_manager",
-    "//components/safe_browsing/password_protection:mock_password_protection",
+    "//components/safe_browsing/content/password_protection:mock_password_protection",
+    "//components/safe_browsing/core:features",
+    "//components/safe_browsing/core/db",
+    "//components/safe_browsing/core/db:test_database_manager",
     "//components/services/patch/content",
     "//components/services/unzip/content",
     "//components/spellcheck:buildflags",
@@ -4926,11 +4926,10 @@ test("unit_tests") {
       ":test_proto",
       "../common/safe_browsing:mock_binary_feature_extractor",
       "//chrome/services/file_util/public/cpp:unit_tests",
-      "//components/safe_browsing:ping_manager_unittest",
-      "//components/safe_browsing/browser:unittests",
-      "//components/safe_browsing/db:v4_test_util",
-      "//components/safe_browsing/renderer:websocket_sb_handshake_throttle_unittest",
-      "//components/safe_browsing/triggers:ad_redirect_trigger",
+      "//components/safe_browsing/content/renderer:websocket_sb_handshake_throttle_unittest",
+      "//components/safe_browsing/content/triggers:ad_redirect_trigger",
+      "//components/safe_browsing/core:ping_manager_unittest",
+      "//components/safe_browsing/core/db:v4_test_util",
     ]
   } else if (safe_browsing_mode == 2) {
     sources += [ "../browser/safe_browsing/telemetry/android/android_telemetry_service_unittest.cc" ]
@@ -6610,7 +6609,7 @@ if (is_win) {
     ]
     deps = [
       "//base",
-      "//components/safe_browsing:csd_proto",
+      "//components/safe_browsing/core:csd_proto",
       "//crypto",
     ]
     libs = [ "wintrust.lib" ]

@@ -6,7 +6,7 @@
 
 #include "base/bind.h"
 #include "base/task/post_task.h"
-#include "components/safe_browsing/db/database_manager.h"
+#include "components/safe_browsing/core/db/database_manager.h"
 #include "components/security_interstitials/content/unsafe_resource.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
