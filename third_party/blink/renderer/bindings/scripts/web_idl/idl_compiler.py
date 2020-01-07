@@ -6,6 +6,8 @@ import functools
 import itertools
 import posixpath
 
+from blinkbuild.name_style_converter import NameStyleConverter
+
 from .callback_function import CallbackFunction
 from .callback_interface import CallbackInterface
 from .composition_parts import Identifier
@@ -225,7 +227,12 @@ class IdlCompiler(object):
             self._ir_map.add(new_ir)
             basepath, _ = posixpath.splitext(
                 new_ir.debug_info.location.filepath)
-            header = posixpath.extsep.join([basepath, "h"])
+            dirpath, filename = posixpath.split(basepath)
+            impl_class = new_ir.extended_attributes.value_of("ImplementedAs")
+            if impl_class:
+                filename = NameStyleConverter(impl_class).to_snake_case()
+            header = posixpath.join(dirpath,
+                                    posixpath.extsep.join([filename, "h"]))
             new_ir.code_generator_info.set_blink_headers([header])
 
     def _merge_partial_interface_likes(self):
