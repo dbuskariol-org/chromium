@@ -8233,6 +8233,12 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="IOSLaunchedByOpenInChromeIntent">
+  <owner>justincohen@chromium.org</owner>
+  <owner>rohitrao@chromium.org</owner>
+  <description>User opened a URL in Chrome via Apple Shortcuts.</description>
+</action>
+
 <action name="IOSLaunchedBySearchInChromeIntent">
   <owner>justincohen@chromium.org</owner>
   <description>
