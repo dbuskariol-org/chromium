@@ -15,7 +15,6 @@
 
 namespace content {
 class RenderProcessHost;
-class ResourceContext;
 }
 
 namespace blink {
@@ -46,7 +45,6 @@ class SafeBrowsingService {
   // Executed on UI thread
   void Initialize();
   std::unique_ptr<blink::URLLoaderThrottle> CreateURLLoaderThrottle(
-      content::ResourceContext* resource_context,
       const base::RepeatingCallback<content::WebContents*()>& wc_getter,
       int frame_tree_node_id);
   void AddInterface(service_manager::BinderRegistry* registry,

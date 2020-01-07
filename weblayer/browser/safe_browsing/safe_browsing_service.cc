@@ -69,18 +69,17 @@ void SafeBrowsingService::Initialize() {
 
 std::unique_ptr<blink::URLLoaderThrottle>
 SafeBrowsingService::CreateURLLoaderThrottle(
-    content::ResourceContext* resource_context,
     const base::RepeatingCallback<content::WebContents*()>& wc_getter,
     int frame_tree_node_id) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 
   return safe_browsing::BrowserURLLoaderThrottle::Create(
       base::BindOnce(
-          [](SafeBrowsingService* sb_service, content::ResourceContext*) {
+          [](SafeBrowsingService* sb_service) {
             return sb_service->GetSafeBrowsingUrlCheckerDelegate();
           },
           base::Unretained(this)),
-      wc_getter, frame_tree_node_id, resource_context,
+      wc_getter, frame_tree_node_id,
       // cache_manager is used to perform real time url check, which is gated by
       // UKM opted in. Since WebLayer currently doesn't support UKM, this
       // feature is not enabled.

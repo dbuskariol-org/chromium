@@ -12,7 +12,6 @@
 #include "components/safe_browsing/db/v4_protocol_manager_util.h"
 
 namespace content {
-class ResourceContext;
 class WebContents;
 }
 
@@ -62,7 +61,6 @@ class UrlCheckerDelegate
   // |frame_tree_node_id| will be used. Please note that |frame_tree_node_id|
   // could also be -1, if a request is not associated with a frame.
   virtual bool ShouldSkipRequestCheck(
-      content::ResourceContext* resource_context,
       const GURL& original_url,
       int frame_tree_node_id,
       int render_process_id,

@@ -765,11 +765,11 @@ AwContentBrowserClient::CreateURLLoaderThrottles(
 
   result.push_back(safe_browsing::BrowserURLLoaderThrottle::Create(
       base::BindOnce(
-          [](AwContentBrowserClient* client, content::ResourceContext*) {
+          [](AwContentBrowserClient* client) {
             return client->GetSafeBrowsingUrlCheckerDelegate();
           },
           base::Unretained(this)),
-      wc_getter, frame_tree_node_id, browser_context->GetResourceContext(),
+      wc_getter, frame_tree_node_id,
       // TODO(crbug.com/1033760): cache manager is used to perform real time url
       // check, which is gated by UKM opted in. Since AW currently doesn't
       // support UKM, this feature is not enabled.

@@ -29,14 +29,12 @@ class BrowserURLLoaderThrottle::CheckerOnIO
  public:
   CheckerOnIO(
       GetDelegateCallback delegate_getter,
-      content::ResourceContext* resource_context,
       int frame_tree_node_id,
       base::RepeatingCallback<content::WebContents*()> web_contents_getter,
       base::WeakPtr<BrowserURLLoaderThrottle> throttle,
       bool real_time_lookup_enabled,
       base::WeakPtr<VerdictCacheManager> cache_manager)
       : delegate_getter_(std::move(delegate_getter)),
-        resource_context_(resource_context),
         frame_tree_node_id_(frame_tree_node_id),
         web_contents_getter_(web_contents_getter),
         throttle_(std::move(throttle)),
@@ -54,13 +52,13 @@ class BrowserURLLoaderThrottle::CheckerOnIO
              const std::string& method) {
     DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
     scoped_refptr<UrlCheckerDelegate> url_checker_delegate =
-        std::move(delegate_getter_).Run(resource_context_);
-    skip_checks_ = !url_checker_delegate ||
-                   !url_checker_delegate->GetDatabaseManager()->IsSupported() ||
-                   url_checker_delegate->ShouldSkipRequestCheck(
-                       resource_context_, url, frame_tree_node_id_,
-                       -1 /* render_process_id */, -1 /* render_frame_id */,
-                       originated_from_service_worker);
+        std::move(delegate_getter_).Run();
+    skip_checks_ =
+        !url_checker_delegate ||
+        !url_checker_delegate->GetDatabaseManager()->IsSupported() ||
+        url_checker_delegate->ShouldSkipRequestCheck(
+            url, frame_tree_node_id_, -1 /* render_process_id */,
+            -1 /* render_frame_id */, originated_from_service_worker);
     if (skip_checks_) {
       base::PostTask(
           FROM_HERE, {content::BrowserThread::UI},
@@ -132,7 +130,6 @@ class BrowserURLLoaderThrottle::CheckerOnIO
   // The following member stays valid until |url_checker_| is created.
   GetDelegateCallback delegate_getter_;
 
-  content::ResourceContext* resource_context_;
   std::unique_ptr<SafeBrowsingUrlCheckerImpl> url_checker_;
   int frame_tree_node_id_;
   base::RepeatingCallback<content::WebContents*()> web_contents_getter_;
@@ -147,19 +144,17 @@ std::unique_ptr<BrowserURLLoaderThrottle> BrowserURLLoaderThrottle::Create(
     GetDelegateCallback delegate_getter,
     const base::RepeatingCallback<content::WebContents*()>& web_contents_getter,
     int frame_tree_node_id,
-    content::ResourceContext* resource_context,
     base::WeakPtr<VerdictCacheManager> cache_manager) {
   return base::WrapUnique<BrowserURLLoaderThrottle>(
       new BrowserURLLoaderThrottle(std::move(delegate_getter),
                                    web_contents_getter, frame_tree_node_id,
-                                   resource_context, cache_manager));
+                                   cache_manager));
 }
 
 BrowserURLLoaderThrottle::BrowserURLLoaderThrottle(
     GetDelegateCallback delegate_getter,
     const base::RepeatingCallback<content::WebContents*()>& web_contents_getter,
     int frame_tree_node_id,
-    content::ResourceContext* resource_context,
     base::WeakPtr<VerdictCacheManager> cache_manager) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 
@@ -171,9 +166,8 @@ BrowserURLLoaderThrottle::BrowserURLLoaderThrottle(
                    : false;
 
   io_checker_ = std::make_unique<CheckerOnIO>(
-      std::move(delegate_getter), resource_context, frame_tree_node_id,
-      web_contents_getter, weak_factory_.GetWeakPtr(), real_time_lookup_enabled,
-      cache_manager);
+      std::move(delegate_getter), frame_tree_node_id, web_contents_getter,
+      weak_factory_.GetWeakPtr(), real_time_lookup_enabled, cache_manager);
 }
 
 BrowserURLLoaderThrottle::~BrowserURLLoaderThrottle() {

@@ -4240,9 +4240,9 @@ ChromeContentBrowserClient::CreateURLLoaderThrottles(
     result.push_back(safe_browsing::BrowserURLLoaderThrottle::Create(
         base::BindOnce(
             &ChromeContentBrowserClient::GetSafeBrowsingUrlCheckerDelegate,
-            base::Unretained(this)),
-        wc_getter, frame_tree_node_id, profile->GetResourceContext(),
-        cache_manager));
+            base::Unretained(this),
+            profile->GetPrefs()->GetBoolean(prefs::kSafeBrowsingEnabled)),
+        wc_getter, frame_tree_node_id, cache_manager));
   }
 #endif
 
@@ -4898,11 +4898,10 @@ ui::NativeTheme* ChromeContentBrowserClient::GetWebTheme() const {
 
 scoped_refptr<safe_browsing::UrlCheckerDelegate>
 ChromeContentBrowserClient::GetSafeBrowsingUrlCheckerDelegate(
-    content::ResourceContext* resource_context) {
+    bool safe_browsing_enabled_for_profile) {
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
 
-  ProfileIOData* io_data = ProfileIOData::FromResourceContext(resource_context);
-  if (!io_data->safe_browsing_enabled()->GetValue())
+  if (!safe_browsing_enabled_for_profile)
     return nullptr;
 
   // |safe_browsing_service_| may be unavailable in tests.

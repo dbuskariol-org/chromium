@@ -686,7 +686,7 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
 #endif
 
   scoped_refptr<safe_browsing::UrlCheckerDelegate>
-  GetSafeBrowsingUrlCheckerDelegate(content::ResourceContext* resource_context);
+  GetSafeBrowsingUrlCheckerDelegate(bool safe_browsing_enabled_for_profile);
 
 #if BUILDFLAG(ENABLE_PLUGINS)
   // Set of origins that can use TCP/UDP private APIs from NaCl.

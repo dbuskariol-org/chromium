@@ -70,7 +70,6 @@ bool AwUrlCheckerDelegateImpl::IsUrlWhitelisted(const GURL& url) {
 }
 
 bool AwUrlCheckerDelegateImpl::ShouldSkipRequestCheck(
-    content::ResourceContext* resource_context,
     const GURL& original_url,
     int frame_tree_node_id,
     int render_process_id,

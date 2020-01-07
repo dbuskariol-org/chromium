@@ -253,7 +253,7 @@ ContentBrowserClientImpl::CreateURLLoaderThrottles(
       IsSafebrowsingSupported()) {
 #if defined(OS_ANDROID)
     result.push_back(GetSafeBrowsingService()->CreateURLLoaderThrottle(
-        browser_context->GetResourceContext(), wc_getter, frame_tree_node_id));
+        wc_getter, frame_tree_node_id));
 #endif
   }
 

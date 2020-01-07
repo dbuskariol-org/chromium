@@ -133,8 +133,7 @@ void MojoSafeBrowsingImpl::CreateCheckerAndCheck(
     CreateCheckerAndCheckCallback callback) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
 
-  if (delegate_->ShouldSkipRequestCheck(resource_context_, url,
-                                        -1 /* frame_tree_node_id */,
+  if (delegate_->ShouldSkipRequestCheck(url, -1 /* frame_tree_node_id */,
                                         render_process_id_, render_frame_id,
                                         originated_from_service_worker)) {
     // Ensure that we don't destroy an uncalled CreateCheckerAndCheckCallback

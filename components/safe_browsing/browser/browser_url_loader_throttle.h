@@ -17,7 +17,6 @@
 #include "url/gurl.h"
 
 namespace content {
-class ResourceContext;
 class WebContents;
 }
 
@@ -43,15 +42,13 @@ class VerdictCacheManager;
 class BrowserURLLoaderThrottle : public blink::URLLoaderThrottle {
  public:
   using GetDelegateCallback =
-      base::OnceCallback<scoped_refptr<UrlCheckerDelegate>(
-          content::ResourceContext*)>;
+      base::OnceCallback<scoped_refptr<UrlCheckerDelegate>()>;
 
   static std::unique_ptr<BrowserURLLoaderThrottle> Create(
       GetDelegateCallback delegate_getter,
       const base::RepeatingCallback<content::WebContents*()>&
           web_contents_getter,
       int frame_tree_node_id,
-      content::ResourceContext* resource_context,
       base::WeakPtr<VerdictCacheManager> cache_manager);
 
   ~BrowserURLLoaderThrottle() override;
@@ -87,7 +84,6 @@ class BrowserURLLoaderThrottle : public blink::URLLoaderThrottle {
       const base::RepeatingCallback<content::WebContents*()>&
           web_contents_getter,
       int frame_tree_node_id,
-      content::ResourceContext* resource_context,
       base::WeakPtr<VerdictCacheManager> cache_manager);
 
   // |slow_check| indicates whether it reports the result of a slow check.

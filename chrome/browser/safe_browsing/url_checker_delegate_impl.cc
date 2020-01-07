@@ -121,7 +121,6 @@ bool UrlCheckerDelegateImpl::IsUrlWhitelisted(const GURL& url) {
 }
 
 bool UrlCheckerDelegateImpl::ShouldSkipRequestCheck(
-    content::ResourceContext* resource_context,
     const GURL& original_url,
     int frame_tree_node_id,
     int render_process_id,
