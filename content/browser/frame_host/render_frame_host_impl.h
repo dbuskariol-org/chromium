@@ -94,6 +94,7 @@
 #include "third_party/blink/public/mojom/frame/navigation_initiator.mojom.h"
 #include "third_party/blink/public/mojom/idle/idle_manager.mojom.h"
 #include "third_party/blink/public/mojom/image_downloader/image_downloader.mojom.h"
+#include "third_party/blink/public/mojom/installedapp/installed_app_provider.mojom.h"
 #include "third_party/blink/public/mojom/native_file_system/native_file_system_manager.mojom-forward.h"
 #include "third_party/blink/public/mojom/notifications/notification_service.mojom-forward.h"
 #include "third_party/blink/public/mojom/payments/payment_app.mojom.h"
@@ -1155,6 +1156,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   void CreateNotificationService(
       mojo::PendingReceiver<blink::mojom::NotificationService> receiver);
+
+  void CreateInstalledAppProvider(
+      mojo::PendingReceiver<blink::mojom::InstalledAppProvider> receiver);
 
 #if defined(OS_ANDROID)
   void BindNFCReceiver(mojo::PendingReceiver<device::mojom::NFC> receiver);

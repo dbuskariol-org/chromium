@@ -65,6 +65,7 @@
 #include "content/browser/frame_host/render_frame_proxy_host.h"
 #include "content/browser/generic_sensor/sensor_provider_proxy_impl.h"
 #include "content/browser/geolocation/geolocation_service_impl.h"
+#include "content/browser/installedapp/installed_app_provider_impl.h"
 #include "content/browser/interface_provider_filtering.h"
 #include "content/browser/loader/file_url_loader_factory.h"
 #include "content/browser/loader/navigation_url_loader_impl.h"
@@ -6463,6 +6464,11 @@ void RenderFrameHostImpl::CreateNotificationService(
     mojo::PendingReceiver<blink::mojom::NotificationService> receiver) {
   GetProcess()->CreateNotificationService(GetLastCommittedOrigin(),
                                           std::move(receiver));
+}
+
+void RenderFrameHostImpl::CreateInstalledAppProvider(
+    mojo::PendingReceiver<blink::mojom::InstalledAppProvider> receiver) {
+  InstalledAppProviderImpl::Create(this, std::move(receiver));
 }
 
 void RenderFrameHostImpl::CreateDedicatedWorkerHostFactory(
