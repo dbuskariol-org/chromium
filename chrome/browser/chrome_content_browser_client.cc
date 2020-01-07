@@ -4368,9 +4368,10 @@ class FileURLLoaderFactory : public network::mojom::URLLoaderFactory {
               network::URLLoaderCompletionStatus(net::ERR_ACCESS_DENIED));
       return;
     }
-    content::CreateFileURLLoader(request, std::move(loader), std::move(client),
-                                 /*observer=*/nullptr,
-                                 /* allow_directory_listing */ true);
+    content::CreateFileURLLoaderBypassingSecurityChecks(
+        request, std::move(loader), std::move(client),
+        /*observer=*/nullptr,
+        /* allow_directory_listing */ true);
   }
 
   void Clone(
