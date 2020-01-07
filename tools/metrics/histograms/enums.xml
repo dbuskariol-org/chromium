@@ -66044,6 +66044,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="WebFontPackageFormat">
+  <obsolete>
+    Removed Jan 2020.
+  </obsolete>
   <int value="0" label="Unknown / Decode error"/>
   <int value="1" label="SFNT"/>
   <int value="2" label="WOFF"/>
