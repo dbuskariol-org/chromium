@@ -98,7 +98,6 @@ FYI_BUILDERS = {
         'isolate': 'performance_test_suite',
         'extra_args': [
           '--output-format=histograms',
-          '--experimental-proto-trace-format',
         ],
       }
     ],
@@ -151,7 +150,6 @@ FYI_BUILDERS = {
         'isolate': 'performance_test_suite',
         'extra_args': [
             '--output-format=histograms',
-            '--experimental-proto-trace-format',
             '--experimental-tbmv3-metrics',
         ],
       }
