@@ -327,7 +327,6 @@ TEST_P(VideoTrackRecorderTest, EncodeFrameWithPaddedCodedSize) {
   }
 
   base::RunLoop run_loop;
-  base::RepeatingClosure quit_closure = run_loop.QuitClosure();
   EXPECT_CALL(*this, OnEncodedVideo(_, _, _, _, true))
       .Times(1)
       .WillOnce(RunClosure(run_loop.QuitClosure()));
@@ -395,7 +394,6 @@ TEST_F(VideoTrackRecorderTest, HandlesOnError) {
   EXPECT_FALSE(HasEncoderInstance());
 
   base::RunLoop run_loop;
-  base::RepeatingClosure quit_closure = run_loop.QuitClosure();
   EXPECT_CALL(*this, OnEncodedVideo(_, _, _, _, true))
       .Times(1)
       .WillOnce(RunClosure(run_loop.QuitClosure()));
@@ -569,9 +567,9 @@ TEST_F(VideoTrackRecorderPassthroughTest, DoesntForwardDeltaFrameFirst) {
 
   // Frame 3 (deltaframe) - forwarded
   base::RunLoop run_loop;
-  base::Closure quit_closure = run_loop.QuitClosure();
   frame = CreateFrame(/*is_key_frame=*/false, VideoTrackRecorder::CodecId::VP9);
-  EXPECT_CALL(*this, OnEncodedVideo).WillOnce(RunClosure(quit_closure));
+  EXPECT_CALL(*this, OnEncodedVideo)
+      .WillOnce(RunClosure(run_loop.QuitClosure()));
   video_track_recorder_->OnEncodedVideoFrameForTesting(frame,
                                                        base::TimeTicks::Now());
   run_loop.Run();
