@@ -93,6 +93,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kAdjustWebApkInstallationSpace,
     &kAllowNewIncognitoTabIntents,
     &kAllowRemoteContextForNotifications,
+    &kAndroidBlockIntentNonSafelistedHeaders,
     &kAndroidNightMode,
     &kAndroidNightModeCCT,
     &kAndroidNightModeForQ,
@@ -258,6 +259,10 @@ const base::Feature* FindFeatureExposedToJava(const std::string& feature_name) {
 // Alphabetical:
 const base::Feature kAdjustWebApkInstallationSpace = {
     "AdjustWebApkInstallationSpace", base::FEATURE_DISABLED_BY_DEFAULT};
+
+const base::Feature kAndroidBlockIntentNonSafelistedHeaders{
+    "AndroidBlockIntentNonSafelistedHeaders",
+    base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kAndroidNightMode{"AndroidNightMode",
                                       base::FEATURE_ENABLED_BY_DEFAULT};

@@ -164,6 +164,8 @@ public abstract class ChromeFeatureList {
             "AutofillCreditCardAuthentication";
     public static final String AUTOFILL_ENABLE_COMPANY_NAME = "AutofillEnableCompanyName";
     public static final String ADJUST_WEBAPK_INSTALLATION_SPACE = "AdjustWebApkInstallationSpace";
+    public static final String ANDROID_BLOCK_INTENT_NON_SAFELISTED_HEADERS =
+            "AndroidBlockIntentNonSafelistedHeaders";
     public static final String ANDROID_NIGHT_MODE = "AndroidNightMode";
     public static final String ANDROID_NIGHT_MODE_CCT = "AndroidNightModeCCT";
     public static final String ANDROID_NIGHT_MODE_FOR_Q = "AndroidNightModeForQ";
