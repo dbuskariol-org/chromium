@@ -466,9 +466,11 @@ void Widget::NotifyNativeViewHierarchyWillChange() {
   // to avoid these redundant steps and to avoid accessing deleted views
   // that may have been in focus.
   ClearFocusFromWidget();
+  native_widget_->OnNativeViewHierarchyChanged();
 }
 
 void Widget::NotifyNativeViewHierarchyChanged() {
+  native_widget_->OnNativeViewHierarchyWillChange();
   root_view_->NotifyNativeViewHierarchyChanged();
 }
 
