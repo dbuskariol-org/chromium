@@ -352,7 +352,7 @@ BUILDERS = {
         'isolate': 'performance_webview_test_suite',
       }
     ],
-    'platform': 'android-webview-google-bundle',
+    'platform': 'android-webview-google',
     'dimension': {
       'pool': 'chrome.tests.perf-webview',
       'os': 'Android',
@@ -464,7 +464,7 @@ BUILDERS = {
         'isolate': 'performance_webview_test_suite',
       }
     ],
-    'platform': 'android-webview-google-bundle',
+    'platform': 'android-webview-google',
     'dimension': {
       'pool': 'chrome.tests.perf-webview',
       'os': 'Android',
