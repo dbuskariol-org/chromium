@@ -401,13 +401,13 @@ Profile* ProfileManager::GetLastUsedProfileAllowedByPolicy() {
   Profile* profile = GetLastUsedProfile();
   if (!profile)
     return nullptr;
-  if (IncognitoModeForced(profile))
+  if (IsOffTheRecordModeForced(profile))
     return profile->GetOffTheRecordProfile();
   return profile;
 }
 
 // static
-bool ProfileManager::IncognitoModeForced(Profile* profile) {
+bool ProfileManager::IsOffTheRecordModeForced(Profile* profile) {
   return profile->IsGuestSession() ||
          profile->IsSystemProfile() ||
          IncognitoModePrefs::GetAvailability(profile->GetPrefs()) ==
