@@ -131,6 +131,8 @@ jumbo_static_library("weblayer_lib") {
     "browser/ssl_host_state_delegate_impl.h",
     "browser/tab_impl.cc",
     "browser/tab_impl.h",
+    "browser/weblayer_browser_interface_binders.cc",
+    "browser/weblayer_browser_interface_binders.h",
     "browser/weblayer_content_browser_overlay_manifest.cc",
     "browser/weblayer_content_browser_overlay_manifest.h",
     "browser/webui/web_ui_controller_factory.cc",
