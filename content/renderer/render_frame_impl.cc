@@ -1421,8 +1421,7 @@ RenderFrameImpl* RenderFrameImpl::CreateMainFrame(
   render_view->render_widget_ = RenderWidget::CreateForFrame(
       params->main_frame_widget_routing_id, compositor_deps,
       params->visual_properties.display_mode,
-      /*is_undead=*/params->main_frame_routing_id == MSG_ROUTING_NONE,
-      params->never_visible);
+      /*is_undead=*/false, params->never_visible);
 
   RenderWidget* render_widget = render_view->GetWidget();
   render_widget->set_delegate(render_view);
@@ -1583,17 +1582,48 @@ void RenderFrameImpl::CreateFrame(
     // This is equivalent to creating a new RenderWidget if it wasn't undead.
     RenderWidget* render_widget =
         render_view->ReviveUndeadMainFrameRenderWidget();
-    DCHECK(!render_widget->GetWebWidget());
+    if (render_widget) {
+      DCHECK(!render_widget->GetWebWidget());
 
-    // Non-owning pointer that is self-referencing and destroyed by calling
-    // Close(). The RenderViewImpl has a RenderWidget already, but not a
-    // WebFrameWidget, which is now attached here.
-    auto* web_frame_widget = blink::WebFrameWidget::CreateForMainFrame(
-        render_view->GetWidget(), web_frame);
-    // This is equivalent to calling InitForMainFrame() on a new RenderWidget
-    // if it wasn't undead.
-    render_widget->InitForRevivedMainFrame(
-        web_frame_widget, widget_params->visual_properties.screen_info);
+      // Non-owning pointer that is self-referencing and destroyed by calling
+      // Close(). The RenderViewImpl has a RenderWidget already, but not a
+      // WebFrameWidget, which is now attached here.
+      auto* web_frame_widget = blink::WebFrameWidget::CreateForMainFrame(
+          render_view->GetWidget(), web_frame);
+      // This is equivalent to calling InitForMainFrame() on a new RenderWidget
+      // if it wasn't undead.
+      render_widget->InitForRevivedMainFrame(
+          web_frame_widget, widget_params->visual_properties.screen_info);
+    } else {
+      // If RenderView was initialized with a remote main frame then it won't
+      // have an undead widget. We only have an undead widget after the first
+      // time a local main frame was created.
+      //
+      // This block of code mimics RenderFrameImpl::CreateMainFrame().
+      //
+      // Note that |never_visible| is not provided by the browser in this path
+      // which means that a |never_visible| local main frame navigation to the
+      // origin of an OOP child frame could result in losing the |never_visible|
+      // state. We need |never_visible| to be a property of the RenderView so
+      // that future frames can see it.
+      render_view->render_widget_ = RenderWidget::CreateForFrame(
+          widget_params->routing_id, compositor_deps,
+          widget_params->visual_properties.display_mode,
+          /*is_undead=*/false, /*never_visible=*/false);
+
+      render_widget = render_view->GetWidget();
+      render_widget->set_delegate(render_view);
+
+      // Non-owning pointer that is self-referencing and destroyed by calling
+      // Close(). The RenderViewImpl has a RenderWidget already, but not a
+      // WebFrameWidget, which is now attached here.
+      auto* web_frame_widget =
+          blink::WebFrameWidget::CreateForMainFrame(render_widget, web_frame);
+
+      render_widget->InitForMainFrame(
+          RenderWidget::ShowCallback(), web_frame_widget,
+          &widget_params->visual_properties.screen_info);
+    }
 
     // Note that we do *not* call WebViewImpl's DidAttachLocalMainFrame() here
     // yet because this frame is provisional and not attached to the Page yet.
@@ -1620,6 +1650,7 @@ void RenderFrameImpl::CreateFrame(
     // space/context.
     std::unique_ptr<RenderWidget> render_widget = RenderWidget::CreateForFrame(
         widget_params->routing_id, compositor_deps,
+        // TODO(danakj): Use widget_params->visual_properties.screen_info here?
         blink::mojom::DisplayMode::kUndefined,
         /*is_undead=*/false, /*never_visible=*/false);
 
