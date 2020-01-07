@@ -73,14 +73,6 @@ void OneClickSigninDialogView::WindowClosing() {
   dialog_view_ = nullptr;
 }
 
-void OneClickSigninDialogView::LinkClicked(views::Link* source,
-                                           int event_flags) {
-  if (source == learn_more_link_)
-    delegate_->OnLearnMoreLinkClicked(true);
-  else if ((source == advanced_link_) && Accept())
-    Hide();
-}
-
 bool OneClickSigninDialogView::Accept() {
   std::move(confirmed_callback_).Run(true);
   return true;
@@ -90,9 +82,7 @@ OneClickSigninDialogView::OneClickSigninDialogView(
     const base::string16& email,
     std::unique_ptr<OneClickSigninLinksDelegate> delegate,
     base::OnceCallback<void(bool)> confirmed_callback)
-    : delegate_(std::move(delegate)),
-      email_(email),
-      confirmed_callback_(std::move(confirmed_callback)) {
+    : email_(email), confirmed_callback_(std::move(confirmed_callback)) {
   DCHECK(!confirmed_callback_.is_null());
 
   views::GridLayout* layout =
@@ -118,17 +108,23 @@ OneClickSigninDialogView::OneClickSigninDialogView(
 
   auto learn_more_link =
       std::make_unique<views::Link>(l10n_util::GetStringUTF16(IDS_LEARN_MORE));
-  learn_more_link->set_listener(this);
+  learn_more_link->set_callback(
+      base::BindRepeating(&OneClickSigninLinksDelegate::OnLearnMoreLinkClicked,
+                          std::move(delegate), true));
   learn_more_link->SetHorizontalAlignment(gfx::ALIGN_LEFT);
-  learn_more_link_ =
-      layout->AddView(std::move(learn_more_link), 1, 1,
-                      views::GridLayout::TRAILING, views::GridLayout::CENTER);
+  layout->AddView(std::move(learn_more_link), 1, 1, views::GridLayout::TRAILING,
+                  views::GridLayout::CENTER);
 
   auto advanced_link = std::make_unique<views::Link>(
       l10n_util::GetStringUTF16(IDS_ONE_CLICK_SIGNIN_DIALOG_ADVANCED));
-  advanced_link->set_listener(this);
+  advanced_link->set_callback(base::BindRepeating(
+      [](OneClickSigninDialogView* view) {
+        if (view->Accept())
+          Hide();
+      },
+      base::Unretained(this)));
   advanced_link->SetHorizontalAlignment(gfx::ALIGN_LEFT);
-  advanced_link_ = DialogDelegate::SetExtraView(std::move(advanced_link));
+  DialogDelegate::SetExtraView(std::move(advanced_link));
 
   DialogDelegate::set_button_label(
       ui::DIALOG_BUTTON_OK,

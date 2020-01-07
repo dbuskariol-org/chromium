@@ -259,13 +259,6 @@ void InfoBarView::ButtonPressed(views::Button* sender,
   }
 }
 
-void InfoBarView::LinkClicked(views::Link* source, int event_flags) {
-  if (!owner())
-    return;  // We're closing; don't call anything, it might access the owner.
-  if (delegate()->LinkClicked(ui::DispositionFromEventFlags(event_flags)))
-    RemoveSelf();
-}
-
 void InfoBarView::OnWillChangeFocus(View* focused_before, View* focused_now) {
   views::ExternalFocusTracker::OnWillChangeFocus(focused_before, focused_now);
 
@@ -288,7 +281,8 @@ views::Label* InfoBarView::CreateLabel(const base::string16& text) const {
 views::Link* InfoBarView::CreateLink(const base::string16& text) {
   views::Link* link = new views::Link(text, CONTEXT_BODY_TEXT_LARGE);
   SetLabelDetails(link);
-  link->set_listener(this);
+  link->set_callback(
+      base::BindRepeating(&InfoBarView::LinkClicked, base::Unretained(this)));
   link->SetProperty(kLabelType, LabelType::kLink);
   return link;
 }
@@ -403,4 +397,11 @@ void InfoBarView::SetLabelDetails(views::Label* label) const {
                      gfx::Insets(ChromeLayoutProvider::Get()->GetDistanceMetric(
                                      DISTANCE_TOAST_LABEL_VERTICAL),
                                  0));
+}
+
+void InfoBarView::LinkClicked(views::Link* source, int event_flags) {
+  if (!owner())
+    return;  // We're closing; don't call anything, it might access the owner.
+  if (delegate()->LinkClicked(ui::DispositionFromEventFlags(event_flags)))
+    RemoveSelf();
 }
