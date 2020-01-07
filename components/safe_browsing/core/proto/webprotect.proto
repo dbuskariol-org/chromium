@@ -83,6 +83,19 @@ message DlpDeepScanningVerdict {
   }
   optional Status status = 1;
 
+  // Next ID: 4
+  message MatchedDetector {
+    // Unique identifier for this detector.
+    optional string detector_id = 1;
+
+    // Display name of this detector.
+    optional string display_name = 2;
+
+    // Type of this detector.
+    optional string detector_type = 3;
+  }
+
+  // Next ID: 7
   message TriggeredRule {
     enum Action {
       ACTION_UNKNOWN = 0;
@@ -95,6 +108,12 @@ message DlpDeepScanningVerdict {
     optional string rule_name = 2;
 
     optional int64 rule_id = 3;
+
+    optional string rule_resource_name = 4;
+
+    optional string rule_severity = 5;
+
+    repeated MatchedDetector matched_detectors = 6;
   }
   // Only relevant when status is SUCCESS above.
   repeated TriggeredRule triggered_rules = 2;
