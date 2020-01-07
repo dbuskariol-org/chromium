@@ -130,11 +130,6 @@ class ChromeBrowserProvider {
   // Returns an instance of the app distribution provider.
   virtual AppDistributionProvider* GetAppDistributionProvider() const;
 
-  // Creates and returns an object that can fetch and vend search engine logos.
-  // The caller assumes ownership of the returned object.
-  virtual id<LogoVendor> CreateLogoVendor(
-      ios::ChromeBrowserState* browser_state) const NS_RETURNS_RETAINED;
-
   virtual id<LogoVendor> CreateLogoVendor(
       ios::ChromeBrowserState* browser_state,
       web::WebState* web_state) const NS_RETURNS_RETAINED;

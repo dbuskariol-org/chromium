@@ -96,11 +96,6 @@ AppDistributionProvider* ChromeBrowserProvider::GetAppDistributionProvider()
 }
 
 id<LogoVendor> ChromeBrowserProvider::CreateLogoVendor(
-    ios::ChromeBrowserState* browser_state) const {
-  return nil;
-}
-
-id<LogoVendor> ChromeBrowserProvider::CreateLogoVendor(
     ios::ChromeBrowserState* browser_state,
     web::WebState* web_state) const {
   return nil;
