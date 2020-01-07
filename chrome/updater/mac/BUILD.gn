@@ -65,8 +65,7 @@ executable("updater_setup") {
     ":network_fetcher_sources",
     ":updater_bundle",
     "//base",
-    "//chrome/common",
-    "//chrome/common/importer",
+    "//chrome/common/mac:launchd",
     "//chrome/updater:common",
     "//mojo/public/cpp/platform",
   ]
