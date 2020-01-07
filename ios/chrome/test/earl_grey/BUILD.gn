@@ -86,7 +86,6 @@ chrome_ios_eg_test("ios_chrome_ui_egtests") {
     "//ios/chrome/browser/ui/ntp:eg_tests",
     "//ios/chrome/browser/ui/omnibox:eg_tests",
     "//ios/chrome/browser/ui/omnibox/popup:eg_tests",
-    "//ios/chrome/browser/ui/omnibox/popup/shortcuts:eg_tests",
     "//ios/chrome/browser/ui/page_info:eg_tests",
     "//ios/chrome/browser/ui/popup_menu:eg_tests",
     "//ios/chrome/browser/ui/qr_scanner:eg_tests",

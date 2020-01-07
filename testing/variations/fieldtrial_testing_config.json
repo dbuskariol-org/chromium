@@ -4108,9 +4108,7 @@
             "experiments": [
                 {
                     "name": "iOSExperiments",
-                    "enable_features": [
-                        "OmniboxPopupShortcutIconsInZeroState"
-                    ]
+                    "enable_features": []
                 }
             ]
         }
