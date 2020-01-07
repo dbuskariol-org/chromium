@@ -1389,12 +1389,14 @@ const Widget* Widget::AsWidget() const {
 
 bool Widget::SetInitialFocus(ui::WindowShowState show_state) {
   FocusManager* focus_manager = GetFocusManager();
+  if (!focus_manager)
+    return false;
   View* v = widget_delegate_->GetInitiallyFocusedView();
   if (!focus_on_creation_ || show_state == ui::SHOW_STATE_INACTIVE ||
       show_state == ui::SHOW_STATE_MINIMIZED) {
     // If not focusing the window now, tell the focus manager which view to
     // focus when the window is restored.
-    if (v && focus_manager)
+    if (v)
       focus_manager->SetStoredFocusView(v);
     return true;
   }
@@ -1403,10 +1405,8 @@ bool Widget::SetInitialFocus(ui::WindowShowState show_state) {
     // If the Widget is active (thus allowing its child Views to receive focus),
     // but the request for focus was unsuccessful, fall back to using the first
     // focusable View instead.
-    if (focus_manager && focus_manager->GetFocusedView() == nullptr &&
-        IsActive()) {
+    if (focus_manager->GetFocusedView() == nullptr && IsActive())
       focus_manager->AdvanceFocus(false);
-    }
   }
   return !!focus_manager->GetFocusedView();
 }
