@@ -656,7 +656,7 @@ void OverviewGrid::SetBoundsAndUpdatePositions(
 }
 
 void OverviewGrid::RearrangeDuringDrag(
-    aura::Window* dragged_window,
+    OverviewItem* dragged_item,
     SplitViewDragIndicators::WindowDraggingState window_dragging_state) {
   OverviewItem* drop_target = GetDropTarget();
 
@@ -673,8 +673,10 @@ void OverviewGrid::RearrangeDuringDrag(
       root_window_, base::make_optional(window_dragging_state),
       /*divider_changed=*/false, /*account_for_hotseat=*/true);
   if (bounds_ != wanted_grid_bounds) {
-    SetBoundsAndUpdatePositions(wanted_grid_bounds,
-                                {GetOverviewItemContaining(dragged_window)},
+    base::flat_set<OverviewItem*> ignored_items;
+    if (dragged_item)
+      ignored_items.insert(dragged_item);
+    SetBoundsAndUpdatePositions(wanted_grid_bounds, ignored_items,
                                 /*animate=*/true);
   }
 }
@@ -743,7 +745,7 @@ void OverviewGrid::OnWindowDragContinued(
   DCHECK_EQ(dragged_window_, dragged_window);
   DCHECK_EQ(dragged_window->GetRootWindow(), root_window_);
 
-  RearrangeDuringDrag(dragged_window, window_dragging_state);
+  RearrangeDuringDrag(nullptr, window_dragging_state);
   UpdateDropTargetBackgroundVisibility(nullptr, location_in_screen);
 
   aura::Window* target_window =

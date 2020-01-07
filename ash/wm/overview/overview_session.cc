@@ -361,11 +361,11 @@ void OverviewSession::ResetSplitViewDragIndicatorsWindowDraggingStates() {
   }
 }
 
-void OverviewSession::RearrangeDuringDrag(aura::Window* dragged_window) {
+void OverviewSession::RearrangeDuringDrag(OverviewItem* dragged_item) {
   for (std::unique_ptr<OverviewGrid>& grid : grid_list_) {
     DCHECK(grid->split_view_drag_indicators());
     grid->RearrangeDuringDrag(
-        dragged_window,
+        dragged_item,
         grid->split_view_drag_indicators()->current_window_dragging_state());
   }
 }

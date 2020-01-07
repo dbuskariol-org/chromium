@@ -145,7 +145,7 @@ class ASH_EXPORT OverviewSession : public display::DisplayObserver,
   void ResetSplitViewDragIndicatorsWindowDraggingStates();
 
   // See |OverviewGrid::RearrangeDuringDrag|.
-  void RearrangeDuringDrag(aura::Window* dragged_window);
+  void RearrangeDuringDrag(OverviewItem* dragged_item);
 
   // Updates the appearance of each drop target to visually indicate when the
   // dragged window is being dragged over it.
