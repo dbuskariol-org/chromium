@@ -241,6 +241,42 @@ bool OmniboxResultView::MaybeTriggerSecondaryButton(const ui::Event& event) {
   return true;
 }
 
+base::string16 OmniboxResultView::ToAccessibilityLabelWithSecondaryButton(
+    const base::string16& match_text,
+    size_t total_matches,
+    int* label_prefix_length) {
+  int additional_message_id = 0;
+  views::Button* secondary_button = GetSecondaryButton();
+  bool button_focused =
+      IsSelected() && popup_contents_view_->model()->selected_line_state() ==
+                          OmniboxPopupModel::BUTTON_FOCUSED;
+
+  // If there's a button focused, we don't want the "n of m" message announced.
+  if (button_focused)
+    total_matches = 0;
+
+  // Add additional messages
+  if (secondary_button == suggestion_tab_switch_button_) {
+    additional_message_id = button_focused
+                                ? IDS_ACC_TAB_SWITCH_BUTTON_FOCUSED_PREFIX
+                                : IDS_ACC_TAB_SWITCH_SUFFIX;
+  } else if (secondary_button == remove_suggestion_button_) {
+    // Don't add an additional message for removable suggestions without button
+    // focus, since they are relatively common.
+    additional_message_id =
+        button_focused ? IDS_ACC_REMOVE_SUGGESTION_FOCUSED_PREFIX : 0;
+  }
+
+  // TODO(tommycli): We re-fetch the original match from the popup model,
+  // because |match_| already has its contents and description swapped by this
+  // class, and we don't want that for the bubble. We should improve this.
+  AutocompleteMatch raw_match =
+      popup_contents_view_->model()->result().match_at(model_index_);
+  return AutocompleteMatchType::ToAccessibilityLabel(
+      raw_match, match_text, model_index_, total_matches, additional_message_id,
+      label_prefix_length);
+}
+
 OmniboxPartState OmniboxResultView::GetThemeState() const {
   if (IsSelected())
     return OmniboxPartState::SELECTED;
@@ -427,8 +463,8 @@ void OmniboxResultView::GetAccessibleNodeData(ui::AXNodeData* node_data) {
   // Pass false for |is_tab_switch_button_focused|, because the button will
   // receive its own label in the case that a screen reader is listening to
   // selection events on items rather than announcements or value change events.
-  node_data->SetName(AutocompleteMatchType::ToAccessibilityLabel(
-      match_, match_.contents, false));
+  node_data->SetName(
+      AutocompleteMatchType::ToAccessibilityLabel(match_, match_.contents));
 
   node_data->role = ax::mojom::Role::kListBoxOption;
   node_data->AddIntAttribute(ax::mojom::IntAttribute::kPosInSet,
@@ -473,8 +509,8 @@ void OmniboxResultView::EmitTextChangedAccessiblityEvent() {
   // The omnibox results list reuses the same items, but the text displayed for
   // these items is updated as the value of omnibox changes. The displayed text
   // for a given item is exposed to screen readers as the item's name/label.
-  base::string16 current_name = AutocompleteMatchType::ToAccessibilityLabel(
-      match_, match_.contents, false);
+  base::string16 current_name =
+      AutocompleteMatchType::ToAccessibilityLabel(match_, match_.contents);
   if (accessible_name_ != current_name) {
     NotifyAccessibilityEvent(ax::mojom::Event::kTextChanged, true);
     accessible_name_ = current_name;
