@@ -1252,6 +1252,7 @@ if (!is_android) {
       "../browser/ui/browser_navigator_browsertest.cc",
       "../browser/ui/browser_navigator_browsertest.h",
       "../browser/ui/browser_navigator_browsertest_chromeos.cc",
+      "../browser/ui/browser_tab_strip_model_delegate_browsertest.cc",
       "../browser/ui/browser_tabrestore_browsertest.cc",
       "../browser/ui/collected_cookies_browsertest.cc",
       "../browser/ui/content_settings/content_setting_bubble_model_browsertest.cc",
