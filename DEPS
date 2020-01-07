@@ -332,7 +332,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling libgifcodec
   # and whatever else without interference from each other.
-  'libgifcodec_revision': '3815a0321b8e99a9eb35309c80334a43c2c49ff2',
+  'libgifcodec_revision': '38d9c73f49b861bb4a9829371ac311544b120023',
 
   # TODO(crbug.com/941824): The values below need to be kept in sync
   # between //DEPS and //buildtools/DEPS, so if you're updating one,
