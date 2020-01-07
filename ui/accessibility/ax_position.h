@@ -759,6 +759,10 @@ class AXPosition {
     if (CreatePreviousLeafTreePosition()->IsNullPosition())
       return AXBoundaryType::kDocumentStart;
 
+    // Ignored positions cannot be format boundaries.
+    if (IsIgnored())
+      return AXBoundaryType::kNone;
+
     // Iterate over anchors until a format boundary is found. This will return a
     // null position upon crossing a boundary.
     AXPositionInstance previous_position = CreatePreviousLeafTreePosition(
@@ -783,6 +787,10 @@ class AXPosition {
     // Treat the last iterable node as a format boundary
     if (CreateNextLeafTreePosition()->IsNullPosition())
       return AXBoundaryType::kDocumentEnd;
+
+    // Ignored positions cannot be format boundaries.
+    if (IsIgnored())
+      return AXBoundaryType::kNone;
 
     // Iterate over anchors until a format boundary is found. This will return a
     // null position upon crossing a boundary.
