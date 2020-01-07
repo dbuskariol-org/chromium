@@ -48,12 +48,10 @@
 
 OmniboxResultView::OmniboxResultView(
     OmniboxPopupContentsView* popup_contents_view,
-    size_t model_index,
-    const ui::ThemeProvider* theme_provider)
+    size_t model_index)
     : AnimationDelegateViews(this),
       popup_contents_view_(popup_contents_view),
       model_index_(model_index),
-      theme_provider_(theme_provider),
       animation_(new gfx::SlideAnimation(this)) {
   CHECK_GE(model_index, 0u);
 
@@ -64,7 +62,7 @@ OmniboxResultView::OmniboxResultView(
           popup_contents_view_, this,
           l10n_util::GetStringUTF16(IDS_OMNIBOX_TAB_SUGGEST_HINT),
           l10n_util::GetStringUTF16(IDS_OMNIBOX_TAB_SUGGEST_SHORT_HINT),
-          omnibox::kSwitchIcon, theme_provider_));
+          omnibox::kSwitchIcon));
 
   // This is intentionally not in the tab order by default, but should be if the
   // user has full-acessibility mode on. This is because this is a tertiary
@@ -74,11 +72,6 @@ OmniboxResultView::OmniboxResultView(
   remove_suggestion_button_ =
       AddChildView(views::CreateVectorImageButton(this));
   views::InstallCircleHighlightPathGenerator(remove_suggestion_button_);
-  // TODO(tommycli): We may need to update the color for theme changes.
-  int icon_size = GetLayoutConstant(LOCATION_BAR_ICON_SIZE);
-  views::SetImageFromVectorIcon(remove_suggestion_button_,
-                                vector_icons::kCloseRoundedIcon, icon_size,
-                                GetColor(OmniboxPart::RESULTS_ICON));
   remove_suggestion_button_->SetTooltipText(
       l10n_util::GetStringUTF16(IDS_OMNIBOX_REMOVE_SUGGESTION));
   remove_suggestion_focus_ring_ =
@@ -90,9 +83,6 @@ OmniboxResultView::OmniboxResultView(
 
   keyword_view_ = AddChildView(std::make_unique<OmniboxMatchCellView>(this));
   keyword_view_->icon()->EnableCanvasFlippingForRTLUI(true);
-  keyword_view_->icon()->SetImage(
-      gfx::CreateVectorIcon(omnibox::kKeywordSearchIcon, icon_size,
-                            GetColor(OmniboxPart::RESULTS_ICON)));
   keyword_view_->icon()->SizeToPreferredSize();
 
   // Calling SetMatch() will result in the child OmniboxMatchCellViews
@@ -105,7 +95,7 @@ OmniboxResultView::OmniboxResultView(
 OmniboxResultView::~OmniboxResultView() {}
 
 SkColor OmniboxResultView::GetColor(OmniboxPart part) const {
-  return GetOmniboxColor(theme_provider_, part, GetThemeState());
+  return GetOmniboxColor(GetThemeProvider(), part, GetThemeState());
 }
 
 void OmniboxResultView::SetMatch(const AutocompleteMatch& match) {
@@ -139,8 +129,12 @@ void OmniboxResultView::SetMatch(const AutocompleteMatch& match) {
                                           keyword_match->description_class);
   }
 
-  Invalidate();
-  InvalidateLayout();
+  // There is no need to invalidate the views hierarchy in the absence of a
+  // widget.
+  if (GetWidget()) {
+    Invalidate();
+    InvalidateLayout();
+  }
 }
 
 void OmniboxResultView::ShowKeyword(bool show_keyword) {
@@ -486,6 +480,10 @@ gfx::Size OmniboxResultView::CalculatePreferredSize() const {
 }
 
 void OmniboxResultView::OnThemeChanged() {
+  views::SetImageFromVectorIcon(remove_suggestion_button_,
+                                vector_icons::kCloseRoundedIcon,
+                                GetLayoutConstant(LOCATION_BAR_ICON_SIZE),
+                                GetColor(OmniboxPart::RESULTS_ICON));
   Invalidate(true);
 }
 
