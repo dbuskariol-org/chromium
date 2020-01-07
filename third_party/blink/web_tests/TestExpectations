@@ -7178,6 +7178,5 @@ crbug.com/963183 http/tests/devtools/sources/debugger/js-with-inline-stylesheets
 crbug.com/963183 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-1.js [ Pass Failure ]
 crbug.com/963183 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-inline-with-sourceURL.js [ Pass Failure ]
 
-# Sheriff 2020-01-06
-crbug.com/1039578 external/wpt/webdriver/tests/take_screenshot/iframe.py>>test_frame_content [ Pass Failure ]
-crbug.com/1039578 external/wpt/webdriver/tests/take_element_screenshot/iframe.py>>test_frame_element [ Pass Failure ]
+# Temporarily disabled to land Linkifier changes in DevTools
+crbug.com/963183 http/tests/devtools/jump-to-previous-editing-location.js [ Pass Failure ]
