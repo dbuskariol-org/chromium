@@ -3615,25 +3615,6 @@
             ]
         }
     ],
-    "MixedAutoupgrade": [
-        {
-            "platforms": [
-                "chromeos",
-                "linux",
-                "mac",
-                "windows",
-                "android"
-            ],
-            "experiments": [
-                {
-                    "name": "EnabledAll",
-                    "enable_features": [
-                        "AutoupgradeMixedContent"
-                    ]
-                }
-            ]
-        }
-    ],
     "MyChromeEverywhere": [
         {
             "platforms": [
@@ -4462,6 +4443,47 @@
                     "name": "Enabled",
                     "enable_features": [
                         "PassiveEventListenersDueToFling"
+                    ]
+                }
+            ]
+        }
+    ],
+    "PassiveMixedContentAutoupgrade": [
+        {
+            "platforms": [
+                "android",
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "params": {
+                        "mode": "no-images"
+                    },
+                    "enable_features": [
+                        "AutoupgradeMixedContent"
+                    ]
+                }
+            ]
+        }
+    ],
+    "PassiveMixedContentWarning": [
+        {
+            "platforms": [
+                "android",
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "PassiveMixedContentWarning"
                     ]
                 }
             ]

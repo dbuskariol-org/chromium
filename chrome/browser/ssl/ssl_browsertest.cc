@@ -223,6 +223,14 @@ enum ProceedDecision {
   SSL_INTERSTITIAL_DO_NOT_PROCEED
 };
 
+security_state::SecurityLevel GetPassiveMixedContentSecurityLevel() {
+  if (base::FeatureList::IsEnabled(
+          security_state::features::kPassiveMixedContentWarning)) {
+    return security_state::WARNING;
+  }
+  return security_state::NONE;
+}
+
 // This observer waits for the SSLErrorHandler to start an interstitial timer
 // for the given web contents.
 class SSLInterstitialTimerObserver {
@@ -1169,7 +1177,8 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, GoBackToMixedContent) {
                                      "i.src = 'http://example.test';"
                                      "document.body.appendChild(i);"));
   observer.WaitForDidChangeVisibleSecurityState();
-  ssl_test_util::CheckSecurityState(tab, CertError::NONE, security_state::NONE,
+  ssl_test_util::CheckSecurityState(tab, CertError::NONE,
+                                    GetPassiveMixedContentSecurityLevel(),
                                     AuthState::DISPLAYED_INSECURE_CONTENT);
 
   // Now navigate somewhere else, and then back to the page that dynamically
@@ -1199,7 +1208,8 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, MixedContentWithSameDocumentNavigation) {
                                      "i.src = 'http://example.test';"
                                      "document.body.appendChild(i);"));
   security_state_observer.WaitForDidChangeVisibleSecurityState();
-  ssl_test_util::CheckSecurityState(tab, CertError::NONE, security_state::NONE,
+  ssl_test_util::CheckSecurityState(tab, CertError::NONE,
+                                    GetPassiveMixedContentSecurityLevel(),
                                     AuthState::DISPLAYED_INSECURE_CONTENT);
 
   // Initiate a same-document navigation and check that the page is still
@@ -1208,7 +1218,8 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, MixedContentWithSameDocumentNavigation) {
   ui_test_utils::NavigateToURL(browser(),
                                https_server_.GetURL("/ssl/google.html#foo"));
   navigation_observer.WaitForSameDocumentNavigation();
-  ssl_test_util::CheckSecurityState(tab, CertError::NONE, security_state::NONE,
+  ssl_test_util::CheckSecurityState(tab, CertError::NONE,
+                                    GetPassiveMixedContentSecurityLevel(),
                                     AuthState::DISPLAYED_INSECURE_CONTENT);
 }
 
@@ -2458,7 +2469,8 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, TestDisplaysInsecureContent) {
 
   ssl_test_util::CheckSecurityState(
       browser()->tab_strip_model()->GetActiveWebContents(), CertError::NONE,
-      security_state::NONE, AuthState::DISPLAYED_INSECURE_CONTENT);
+      GetPassiveMixedContentSecurityLevel(),
+      AuthState::DISPLAYED_INSECURE_CONTENT);
 }
 
 // Visits a page that displays an insecure form.
@@ -2786,7 +2798,8 @@ IN_PROC_BROWSER_TEST_F(SSLUITest,
   EXPECT_TRUE(js_result);
 
   // We should now have insecure content.
-  ssl_test_util::CheckSecurityState(tab, CertError::NONE, security_state::NONE,
+  ssl_test_util::CheckSecurityState(tab, CertError::NONE,
+                                    GetPassiveMixedContentSecurityLevel(),
                                     AuthState::DISPLAYED_INSECURE_CONTENT);
 }
 
@@ -2823,7 +2836,8 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, TestDisplaysInsecureContentTwoTabs) {
   observer.Wait();
 
   // The new tab has insecure content.
-  ssl_test_util::CheckSecurityState(tab2, CertError::NONE, security_state::NONE,
+  ssl_test_util::CheckSecurityState(tab2, CertError::NONE,
+                                    GetPassiveMixedContentSecurityLevel(),
                                     AuthState::DISPLAYED_INSECURE_CONTENT);
 
   // The original tab should not be contaminated.
@@ -2898,7 +2912,8 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, TestDisplaysCachedInsecureContent) {
   // content (even though the image comes from the WebCore memory cache).
   const GURL url_https = https_server_.GetURL(replacement_path);
   ui_test_utils::NavigateToURL(browser(), url_https);
-  ssl_test_util::CheckSecurityState(tab, CertError::NONE, security_state::NONE,
+  ssl_test_util::CheckSecurityState(tab, CertError::NONE,
+                                    GetPassiveMixedContentSecurityLevel(),
                                     AuthState::DISPLAYED_INSECURE_CONTENT);
 }
 
@@ -3222,7 +3237,8 @@ IN_PROC_BROWSER_TEST_F(SSLUITestWaitForDOMNotification,
           "document.body.appendChild(img);"));
 
   run_loop.Run();
-  ssl_test_util::CheckSecurityState(tab, CertError::NONE, security_state::NONE,
+  ssl_test_util::CheckSecurityState(tab, CertError::NONE,
+                                    GetPassiveMixedContentSecurityLevel(),
                                     AuthState::DISPLAYED_INSECURE_CONTENT);
 }
 
@@ -5686,7 +5702,8 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, ClientRedirectToMixedContentSSLState) {
   navigation_manager_final_url.WaitForNavigationFinished();
   content::WaitForLoadStop(tab);
 
-  ssl_test_util::CheckSecurityState(tab, CertError::NONE, security_state::NONE,
+  ssl_test_util::CheckSecurityState(tab, CertError::NONE,
+                                    GetPassiveMixedContentSecurityLevel(),
                                     AuthState::DISPLAYED_INSECURE_CONTENT);
 }
 
