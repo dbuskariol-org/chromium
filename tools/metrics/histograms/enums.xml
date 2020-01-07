@@ -12477,6 +12477,8 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="22" label="Insufficient Disk Space"/>
   <int value="23" label="Error Configuring Container"/>
   <int value="24" label="User Cancelled While Configuring Container"/>
+  <int value="25" label="Error Creating Container"/>
+  <int value="26" label="Bug - Failed without capturing error code"/>
 </enum>
 
 <enum name="CrostiniUISurface">
