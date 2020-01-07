@@ -6541,7 +6541,7 @@ void RenderFrameImpl::BeginNavigationInternal(
   // Set SiteForCookies.
   WebDocument frame_document = frame_->GetDocument();
   if (info->frame_type == network::mojom::RequestContextFrameType::kTopLevel)
-    request.SetSiteForCookies(request.Url());
+    request.SetSiteForCookies(net::SiteForCookies::FromUrl(request.Url()));
   else
     request.SetSiteForCookies(frame_document.SiteForCookies());
 

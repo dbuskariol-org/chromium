@@ -4581,7 +4581,7 @@ void ChromeContentBrowserClient::CreateWebSocket(
     content::RenderFrameHost* frame,
     WebSocketFactory factory,
     const GURL& url,
-    const GURL& site_for_cookies,
+    const net::SiteForCookies& site_for_cookies,
     const base::Optional<std::string>& user_agent,
     mojo::PendingRemote<network::mojom::WebSocketHandshakeClient>
         handshake_client) {
@@ -4595,8 +4595,8 @@ void ChromeContentBrowserClient::CreateWebSocket(
 
   DCHECK(web_request_api);
   web_request_api->ProxyWebSocket(frame, std::move(factory), url,
-                                  site_for_cookies, user_agent,
-                                  std::move(handshake_client));
+                                  site_for_cookies.RepresentativeUrl(),
+                                  user_agent, std::move(handshake_client));
 #endif
 }
 
@@ -4604,7 +4604,7 @@ bool ChromeContentBrowserClient::WillCreateRestrictedCookieManager(
     network::mojom::RestrictedCookieManagerRole role,
     content::BrowserContext* browser_context,
     const url::Origin& origin,
-    const GURL& site_for_cookies,
+    const net::SiteForCookies& site_for_cookies,
     const url::Origin& top_frame_origin,
     bool is_service_worker,
     int process_id,

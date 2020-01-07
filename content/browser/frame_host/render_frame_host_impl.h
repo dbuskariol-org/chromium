@@ -481,7 +481,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   // Computes site_for_cookies to be used when navigating this frame to
   // |destination|.
-  GURL ComputeSiteForCookiesForNavigation(const GURL& destination) const;
+  net::SiteForCookies ComputeSiteForCookiesForNavigation(
+      const GURL& destination) const;
 
   // Computes site_for_cookies for this frame. A non-empty result denotes which
   // domains are considered first-party to the top-level site when resources are
@@ -490,7 +491,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   //
   // The result can be used to check if cookies (including storage APIs and
   // shared/service workers) are accessible.
-  GURL ComputeSiteForCookies();
+  net::SiteForCookies ComputeSiteForCookies();
 
   // Allows overriding the last committed origin in tests.
   void SetLastCommittedOriginForTesting(const url::Origin& origin);
@@ -1504,7 +1505,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // Starts traversing the tree from |render_frame_host|.
   // |is_origin_secure| is whether the origin of the destination of the
   // navigation whose site_for_cookies is being calculated is secure.
-  GURL ComputeSiteForCookiesInternal(
+  net::SiteForCookies ComputeSiteForCookiesInternal(
       const RenderFrameHostImpl* render_frame_host,
       bool is_origin_secure) const;
 

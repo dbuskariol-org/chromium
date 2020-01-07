@@ -1505,8 +1505,7 @@ void URLLoader::SetRawRequestHeadersAndNotify(
     if (!reported_cookies.empty()) {
       network_context_client_->OnCookiesRead(
           /* is_service_worker = */ false, GetProcessId(), GetRenderFrameId(),
-          url_request_->url(),
-          url_request_->site_for_cookies().RepresentativeUrl(),
+          url_request_->url(), url_request_->site_for_cookies(),
           reported_cookies);
     }
   }
@@ -1711,8 +1710,7 @@ void URLLoader::ReportFlaggedResponseCookies() {
     if (!reported_cookies.empty()) {
       network_context_client_->OnCookiesChanged(
           /* is_service_worker = */ false, GetProcessId(), GetRenderFrameId(),
-          url_request_->url(),
-          url_request_->site_for_cookies().RepresentativeUrl(),
+          url_request_->url(), url_request_->site_for_cookies(),
           reported_cookies);
     }
   }

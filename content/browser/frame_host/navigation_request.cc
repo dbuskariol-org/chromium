@@ -2078,7 +2078,7 @@ void NavigationRequest::OnStartChecksComplete(
   // Mark the fetch_start (Navigation Timing API).
   commit_params_->navigation_timing->fetch_start = base::TimeTicks::Now();
 
-  GURL site_for_cookies =
+  net::SiteForCookies site_for_cookies =
       frame_tree_node_->current_frame_host()
           ->ComputeSiteForCookiesForNavigation(common_params_->url);
   bool parent_is_main_frame = !frame_tree_node_->parent()

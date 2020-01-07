@@ -541,7 +541,7 @@ void NetworkContext::GetRestrictedCookieManager(
     mojo::PendingReceiver<mojom::RestrictedCookieManager> receiver,
     mojom::RestrictedCookieManagerRole role,
     const url::Origin& origin,
-    const GURL& site_for_cookies,
+    const net::SiteForCookies& site_for_cookies,
     const url::Origin& top_frame_origin,
     bool is_service_worker,
     int32_t process_id,
@@ -1135,7 +1135,7 @@ void NetworkContext::ClearBadProxiesCache(
 void NetworkContext::CreateWebSocket(
     const GURL& url,
     const std::vector<std::string>& requested_protocols,
-    const GURL& site_for_cookies,
+    const net::SiteForCookies& site_for_cookies,
     const net::NetworkIsolationKey& network_isolation_key,
     std::vector<mojom::HttpHeaderPtr> additional_headers,
     int32_t process_id,

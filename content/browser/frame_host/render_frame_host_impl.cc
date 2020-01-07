@@ -2339,12 +2339,12 @@ const url::Origin& RenderFrameHostImpl::ComputeTopFrameOrigin(
   return host->GetLastCommittedOrigin();
 }
 
-GURL RenderFrameHostImpl::ComputeSiteForCookiesForNavigation(
+net::SiteForCookies RenderFrameHostImpl::ComputeSiteForCookiesForNavigation(
     const GURL& destination) const {
   // For top-level navigation, |site_for_cookies| will always be the destination
   // URL.
   if (frame_tree_node_->IsMainFrame())
-    return destination;
+    return net::SiteForCookies::FromUrl(destination);
 
   // Check if everything above the frame being navigated is consistent. It's OK
   // to skip checking the frame itself since it will be validated against
@@ -2353,12 +2353,12 @@ GURL RenderFrameHostImpl::ComputeSiteForCookiesForNavigation(
                                        destination.SchemeIsCryptographic());
 }
 
-GURL RenderFrameHostImpl::ComputeSiteForCookies() {
+net::SiteForCookies RenderFrameHostImpl::ComputeSiteForCookies() {
   return ComputeSiteForCookiesInternal(
       this, GetLastCommittedURL().SchemeIsCryptographic());
 }
 
-GURL RenderFrameHostImpl::ComputeSiteForCookiesInternal(
+net::SiteForCookies RenderFrameHostImpl::ComputeSiteForCookiesInternal(
     const RenderFrameHostImpl* render_frame_host,
     bool is_origin_secure) const {
 #if defined(OS_ANDROID)
@@ -2368,34 +2368,34 @@ GURL RenderFrameHostImpl::ComputeSiteForCookiesInternal(
       frame_tree_node_->navigator()->GetController()->GetLastCommittedEntry();
   if (last_committed_entry &&
       !last_committed_entry->GetBaseURLForDataURL().is_empty()) {
-    return last_committed_entry->GetBaseURLForDataURL();
+    return net::SiteForCookies::FromUrl(
+        last_committed_entry->GetBaseURLForDataURL());
   }
 #endif
 
   const url::Origin& top_document_origin =
       frame_tree_->root()->current_frame_host()->GetLastCommittedOrigin();
-  const GURL& top_document_url = top_document_origin.GetURL();
+  net::SiteForCookies candidate =
+      net::SiteForCookies::FromOrigin(top_document_origin);
 
   if (GetContentClient()
           ->browser()
           ->ShouldTreatURLSchemeAsFirstPartyWhenTopLevel(
-              top_document_url.scheme_piece(), is_origin_secure)) {
-    return top_document_url;
+              top_document_origin.scheme(), is_origin_secure)) {
+    return candidate;
   }
 
   // Make sure every ancestors are same-domain with the main document. Otherwise
   // this will be a 3rd party cookie.
   for (const RenderFrameHostImpl* rfh = render_frame_host; rfh;
        rfh = rfh->parent_) {
-    if ((top_document_origin != rfh->last_committed_origin_) &&
-        !net::registry_controlled_domains::SameDomainOrHost(
-            top_document_url, rfh->last_committed_origin_,
-            net::registry_controlled_domains::INCLUDE_PRIVATE_REGISTRIES)) {
-      return GURL::EmptyGURL();
+    if (!candidate.IsEquivalent(
+            net::SiteForCookies::FromOrigin(rfh->last_committed_origin_))) {
+      return net::SiteForCookies();
     }
   }
 
-  return top_document_url;
+  return candidate;
 }
 
 void RenderFrameHostImpl::SetOriginAndNetworkIsolationKeyOfNewFrame(
