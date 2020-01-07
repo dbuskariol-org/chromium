@@ -13,6 +13,8 @@ static_library("security_interstitial_page") {
     "cert_report_helper.h",
     "certificate_error_report.cc",
     "certificate_error_report.h",
+    "common_name_mismatch_handler.cc",
+    "common_name_mismatch_handler.h",
     "connection_help_ui.cc",
     "connection_help_ui.h",
     "known_interception_disclosure_ui.cc",

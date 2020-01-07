@@ -1719,8 +1719,6 @@ jumbo_static_library("browser") {
     "ssl/chrome_ssl_host_state_delegate.h",
     "ssl/chrome_ssl_host_state_delegate_factory.cc",
     "ssl/chrome_ssl_host_state_delegate_factory.h",
-    "ssl/common_name_mismatch_handler.cc",
-    "ssl/common_name_mismatch_handler.h",
     "ssl/connection_help_tab_helper.cc",
     "ssl/connection_help_tab_helper.h",
     "ssl/insecure_sensitive_input_driver.cc",
