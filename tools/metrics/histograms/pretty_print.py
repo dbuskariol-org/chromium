@@ -101,7 +101,7 @@ def FixMisplacedHistogramsAndHistogramSuffixes(tree):
       tree: The node of the xml tree.
       histograms: A list of histogram nodes inside histogram_suffixes_list
           node. This is a return element.
-      histogram_suffixes: A list of histogram_suffixes nodes inside hisotgrams
+      histogram_suffixes: A list of histogram_suffixes nodes inside histograms
           node. This is a return element.
     """
     for child in tree:
@@ -114,17 +114,17 @@ def FixMisplacedHistogramsAndHistogramSuffixes(tree):
 
   ExtractMisplacedHistograms(tree)
 
-  def AddBackMisplacedHisotgrams(tree):
-    """Adds back those misplaced histogram and hsitogram_suffixes nodes."""
+  def AddBackMisplacedHistograms(tree):
+    """Adds back those misplaced histogram and histogram_suffixes nodes."""
     for child in tree:
       if child.tag == 'histograms':
         child.extend(histograms)
       elif child.tag == 'histogram_suffixes_list':
         child.extend(histogram_suffixes)
       else:
-        FixMisplacedHisotgrams(child)
+        AddBackMisplacedHistograms(child)
 
-  AddBackMisplacedHisotgrams(tree)
+  AddBackMisplacedHistograms(tree)
 
 def PrettyPrintHistograms(raw_xml):
   """Pretty-print the given histograms XML.

@@ -12,6 +12,7 @@ ORIGINAL_XML = """
 <!-- Top level Comment 1 -->
 <!-- Top level Comment 2 -->
 <histogram-configuration>
+<!-- Second level Comment 1 -->
 <histograms>
  <histogram name="Test.Histogram" units="us">
    <owner>person@chromium.org</owner>
@@ -62,6 +63,8 @@ PRETTY_XML = """
 <!-- Top level Comment 2 -->
 
 <histogram-configuration>
+
+<!-- Second level Comment 1 -->
 
 <histograms>
 
