@@ -1211,7 +1211,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   network::mojom::CrossOriginOpenerPolicy cross_origin_opener_policy() const {
     return cross_origin_opener_policy_;
   }
-  void SetCrossOriginOriginOpenerPolicyForTesting(
+  void set_cross_origin_opener_policy(
       network::mojom::CrossOriginOpenerPolicy policy) {
     cross_origin_opener_policy_ = policy;
   }
