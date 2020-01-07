@@ -2795,8 +2795,6 @@ void RenderFrameHostImpl::SetNavigationRequest(
 void RenderFrameHostImpl::Unload(RenderFrameProxyHost* proxy, bool is_loading) {
   // The end of this event is in OnUnloadACK when the RenderFrame has completed
   // the operation and sends back an IPC message.
-  // The trace event may not end properly if the ACK times out.  We expect this
-  // to be fixed when RenderViewHostImpl::OnUnload moves to RenderFrameHost.
   TRACE_EVENT_ASYNC_BEGIN1("navigation", "RenderFrameHostImpl::Unload", this,
                            "frame_tree_node",
                            frame_tree_node_->frame_tree_node_id());
