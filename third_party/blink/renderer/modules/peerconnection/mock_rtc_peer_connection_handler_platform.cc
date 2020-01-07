@@ -403,7 +403,7 @@ MockRTCPeerConnectionHandlerPlatform::NativePeerConnection() {
 }
 
 void MockRTCPeerConnectionHandlerPlatform::
-    RunSynchronousOnceClosureOnSignalingThread(base::OnceClosure closure,
+    RunSynchronousOnceClosureOnSignalingThread(CrossThreadOnceClosure closure,
                                                const char* trace_event_name) {}
 
 void MockRTCPeerConnectionHandlerPlatform::

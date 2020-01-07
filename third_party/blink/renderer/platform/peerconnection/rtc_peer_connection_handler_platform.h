@@ -36,6 +36,7 @@
 
 #include "third_party/blink/renderer/platform/peerconnection/rtc_stats.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
+#include "third_party/blink/renderer/platform/wtf/cross_thread_functional.h"
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 #include "third_party/blink/renderer/platform/wtf/vector.h"
 #include "third_party/webrtc/api/peer_connection_interface.h"
@@ -150,7 +151,7 @@ class PLATFORM_EXPORT RTCPeerConnectionHandlerPlatform {
   virtual webrtc::PeerConnectionInterface* NativePeerConnection() = 0;
 
   virtual void RunSynchronousOnceClosureOnSignalingThread(
-      base::OnceClosure closure,
+      CrossThreadOnceClosure closure,
       const char* trace_event_name) = 0;
   virtual void RunSynchronousRepeatingClosureOnSignalingThread(
       const base::RepeatingClosure& closure,

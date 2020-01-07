@@ -164,7 +164,7 @@ class MODULES_EXPORT RTCPeerConnectionHandler
   void Stop() override;
   webrtc::PeerConnectionInterface* NativePeerConnection() override;
   void RunSynchronousOnceClosureOnSignalingThread(
-      base::OnceClosure closure,
+      CrossThreadOnceClosure closure,
       const char* trace_event_name) override;
   void RunSynchronousRepeatingClosureOnSignalingThread(
       const base::RepeatingClosure& closure,
@@ -265,7 +265,7 @@ class MODULES_EXPORT RTCPeerConnectionHandler
 
   RTCSessionDescriptionPlatform*
   GetRTCSessionDescriptionPlatformOnSignalingThread(
-      base::OnceCallback<const webrtc::SessionDescriptionInterface*()>
+      CrossThreadOnceFunction<const webrtc::SessionDescriptionInterface*()>
           description_cb,
       const char* log_text);
 
