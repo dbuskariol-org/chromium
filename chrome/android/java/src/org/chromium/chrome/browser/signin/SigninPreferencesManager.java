@@ -1,53 +1,49 @@
-// Copyright 2015 The Chromium Authors. All rights reserved.
+// Copyright 2019 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.preferences;
+package org.chromium.chrome.browser.signin;
+
+import android.support.annotation.Nullable;
+
+import androidx.annotation.VisibleForTesting;
+
+import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
+import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 
 import java.util.Set;
 
 /**
- * ChromePreferenceManager stores and retrieves values in Android shared preferences for specific
- * features.
- *
- * TODO(crbug.com/1022102): Finish moving feature-specific methods out of this class and delete it.
+ * SigninPreferencesManager stores the state of the SignInPromo.
  */
-public class ChromePreferenceManager {
-    // For new int values with a default of 0, just document the key and its usage, and call
-    // #readInt and #writeInt directly.
-    // For new boolean values, document the key and its usage, call #readBoolean and #writeBoolean
-    // directly. While calling #readBoolean, default value is required.
-
-    private static class LazyHolder {
-        static final ChromePreferenceManager INSTANCE = new ChromePreferenceManager();
-    }
+public class SigninPreferencesManager {
+    static final SigninPreferencesManager INSTANCE = new SigninPreferencesManager();
 
     private final SharedPreferencesManager mManager;
 
-    private ChromePreferenceManager() {
+    private SigninPreferencesManager() {
         mManager = SharedPreferencesManager.getInstance();
     }
 
     /**
-     * Get the static instance of ChromePreferenceManager if exists else create it.
-     * @return the ChromePreferenceManager singleton
+     * @return the SignInPromoStore singleton
      */
-    public static ChromePreferenceManager getInstance() {
-        return LazyHolder.INSTANCE;
+    public static SigninPreferencesManager getInstance() {
+        return INSTANCE;
     }
 
     /**
      * Returns Chrome major version number when signin promo was last shown, or 0 if version number
      * isn't known.
      */
-    public int getSigninPromoLastShownVersion() {
+    int getSigninPromoLastShownVersion() {
         return mManager.readInt(ChromePreferenceKeys.SIGNIN_PROMO_LAST_SHOWN_MAJOR_VERSION);
     }
 
     /**
      * Sets Chrome major version number when signin promo was last shown.
      */
-    public void setSigninPromoLastShownVersion(int majorVersion) {
+    void setSigninPromoLastShownVersion(int majorVersion) {
         mManager.writeInt(ChromePreferenceKeys.SIGNIN_PROMO_LAST_SHOWN_MAJOR_VERSION, majorVersion);
     }
 
@@ -55,7 +51,8 @@ public class ChromePreferenceManager {
      * Returns a set of account names on the device when signin promo was last shown,
      * or null if promo hasn't been shown yet.
      */
-    public Set<String> getSigninPromoLastAccountNames() {
+    @Nullable
+    Set<String> getSigninPromoLastAccountNames() {
         return mManager.readStringSet(
                 ChromePreferenceKeys.SIGNIN_PROMO_LAST_SHOWN_ACCOUNT_NAMES, null);
     }
@@ -63,7 +60,7 @@ public class ChromePreferenceManager {
     /**
      * Stores a set of account names on the device when signin promo is shown.
      */
-    public void setSigninPromoLastAccountNames(Set<String> accountNames) {
+    void setSigninPromoLastAccountNames(Set<String> accountNames) {
         mManager.writeStringSet(
                 ChromePreferenceKeys.SIGNIN_PROMO_LAST_SHOWN_ACCOUNT_NAMES, accountNames);
     }
@@ -73,6 +70,7 @@ public class ChromePreferenceManager {
      * temporarily suppressed; zero otherwise.
      * @return the epoch time in milliseconds (see {@link System#currentTimeMillis()}).
      */
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     public long getNewTabPageSigninPromoSuppressionPeriodStart() {
         return mManager.readLong(
                 ChromePreferenceKeys.SIGNIN_PROMO_NTP_PROMO_SUPPRESSION_PERIOD_START);
@@ -83,6 +81,7 @@ public class ChromePreferenceManager {
      * temporarily suppressed.
      * @param timeMillis the epoch time in milliseconds (see {@link System#currentTimeMillis()}).
      */
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     public void setNewTabPageSigninPromoSuppressionPeriodStart(long timeMillis) {
         mManager.writeLong(
                 ChromePreferenceKeys.SIGNIN_PROMO_NTP_PROMO_SUPPRESSION_PERIOD_START, timeMillis);
@@ -92,6 +91,7 @@ public class ChromePreferenceManager {
      * Removes the stored timestamp of the suppression period start when signin promos in the New
      * Tab Page are no longer suppressed.
      */
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     public void clearNewTabPageSigninPromoSuppressionPeriodStart() {
         mManager.removeKey(ChromePreferenceKeys.SIGNIN_PROMO_NTP_PROMO_SUPPRESSION_PERIOD_START);
     }
