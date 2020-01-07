@@ -142,7 +142,7 @@ const base::Feature kThirdPartyModulesBlocking{
 const base::Feature kTLS13HardeningForLocalAnchors{
     "TLS13HardeningForLocalAnchors", base::FEATURE_ENABLED_BY_DEFAULT};
 
-#if (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_MACOSX)
+#if BUILDFLAG(TRIAL_COMPARISON_CERT_VERIFIER_SUPPORTED)
 // Enables the dual certificate verification trial feature.
 // https://crbug.com/649026
 const base::Feature kCertDualVerificationTrialFeature{

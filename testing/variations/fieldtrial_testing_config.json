@@ -1535,7 +1535,6 @@
     "CertDualVerificationTrial": [
         {
             "platforms": [
-                "linux",
                 "mac"
             ],
             "experiments": [
@@ -1543,21 +1542,6 @@
                     "name": "Enabled",
                     "enable_features": [
                         "CertDualVerificationTrial"
-                    ]
-                }
-            ]
-        }
-    ],
-    "CertVerifierBuiltin": [
-        {
-            "platforms": [
-                "linux"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled_V2",
-                    "enable_features": [
-                        "CertVerifierBuiltin"
                     ]
                 }
             ]
