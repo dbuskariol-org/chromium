@@ -920,6 +920,10 @@ jumbo_static_library("extensions") {
     "//url",
   ]
 
+  if (enable_autofill_assistant_api) {
+    deps += [ "//components/autofill_assistant/browser" ]
+  }
+
   if (is_chromeos) {
     sources += [
       "api/certificate_provider/certificate_provider_api.cc",
