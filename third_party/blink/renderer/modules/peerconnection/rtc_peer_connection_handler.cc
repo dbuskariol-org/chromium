@@ -1763,7 +1763,7 @@ void RTCPeerConnectionHandler::AddTransceiverWithTrackOnSignalingThread(
 
 webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>>
 RTCPeerConnectionHandler::AddTransceiverWithKind(
-    std::string kind,
+    const String& kind,
     const webrtc::RtpTransceiverInit& init) {
   DCHECK_EQ(configuration_.sdp_semantics, webrtc::SdpSemantics::kUnifiedPlan);
   DCHECK(task_runner_->RunsTasksInCurrentSequence());

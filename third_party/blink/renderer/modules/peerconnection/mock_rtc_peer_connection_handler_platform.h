@@ -63,7 +63,7 @@ class MockRTCPeerConnectionHandlerPlatform
   AddTransceiverWithTrack(const WebMediaStreamTrack&,
                           const webrtc::RtpTransceiverInit&) override;
   webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>>
-  AddTransceiverWithKind(std::string kind,
+  AddTransceiverWithKind(const String& kind,
                          const webrtc::RtpTransceiverInit&) override;
   webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>> AddTrack(
       const WebMediaStreamTrack&,

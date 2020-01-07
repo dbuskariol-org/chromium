@@ -150,7 +150,7 @@ class MODULES_EXPORT RTCPeerConnectionHandler
   AddTransceiverWithTrack(const blink::WebMediaStreamTrack& web_track,
                           const webrtc::RtpTransceiverInit& init) override;
   webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>>
-  AddTransceiverWithKind(std::string kind,
+  AddTransceiverWithKind(const String& kind,
                          const webrtc::RtpTransceiverInit& init) override;
   webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>> AddTrack(
       const WebMediaStreamTrack& web_track,

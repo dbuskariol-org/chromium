@@ -32,7 +32,6 @@
 #define THIRD_PARTY_BLINK_RENDERER_PLATFORM_PEERCONNECTION_RTC_PEER_CONNECTION_HANDLER_PLATFORM_H_
 
 #include <memory>
-#include <string>
 
 #include "third_party/blink/renderer/platform/peerconnection/rtc_stats.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
@@ -133,7 +132,7 @@ class PLATFORM_EXPORT RTCPeerConnectionHandlerPlatform {
   virtual webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>>
   AddTransceiverWithKind(
       // webrtc::MediaStreamTrackInterface::kAudioKind or kVideoKind
-      std::string kind,
+      const String& kind,
       const webrtc::RtpTransceiverInit&) = 0;
   // Adds the track to the peer connection, returning the resulting transceiver
   // or error.
