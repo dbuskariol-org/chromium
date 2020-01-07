@@ -30,7 +30,7 @@ class Profile;
 // not to hold any references to the Profile beyond what's used by LazyParams
 // (which should be deleted after lazy initialization).
 
-class OffTheRecordProfileIOData : public ProfileIOData {
+class OffTheRecordProfileIOData {
  public:
   class Handle {
    public:
@@ -38,9 +38,6 @@ class OffTheRecordProfileIOData : public ProfileIOData {
     ~Handle();
 
     content::ResourceContext* GetResourceContext() const;
-    // GetResourceContextNoInit() does not call LazyInitialize() so it can be
-    // safely be used during initialization.
-    content::ResourceContext* GetResourceContextNoInit() const;
 
    private:
     // Lazily initialize ProfileParams. We do this on the calls to
@@ -50,7 +47,7 @@ class OffTheRecordProfileIOData : public ProfileIOData {
     // on the UI thread from being unnecessarily initialized.
     void LazyInitialize() const;
 
-    OffTheRecordProfileIOData* const io_data_;
+    ProfileIOData* const io_data_;
 
     Profile* const profile_;
 
@@ -60,10 +57,10 @@ class OffTheRecordProfileIOData : public ProfileIOData {
   };
 
  private:
-  OffTheRecordProfileIOData();
-  ~OffTheRecordProfileIOData() override;
-
-  DISALLOW_COPY_AND_ASSIGN(OffTheRecordProfileIOData);
+  // TODO(mmenke):  Delete this class, and merge ProfileImplIOData::Handle with
+  // OffTheRecordProfileIOData::Handle.
+  OffTheRecordProfileIOData() = delete;
+  ~OffTheRecordProfileIOData() = delete;
 };
 
 #endif  // CHROME_BROWSER_PROFILES_OFF_THE_RECORD_PROFILE_IO_DATA_H_

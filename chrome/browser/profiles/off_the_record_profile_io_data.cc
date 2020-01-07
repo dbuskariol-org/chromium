@@ -45,9 +45,7 @@
 using content::BrowserThread;
 
 OffTheRecordProfileIOData::Handle::Handle(Profile* profile)
-    : io_data_(new OffTheRecordProfileIOData),
-      profile_(profile),
-      initialized_(false) {
+    : io_data_(new ProfileIOData), profile_(profile), initialized_(false) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   DCHECK(profile);
 }
@@ -61,15 +59,6 @@ content::ResourceContext*
 OffTheRecordProfileIOData::Handle::GetResourceContext() const {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   LazyInitialize();
-  return GetResourceContextNoInit();
-}
-
-content::ResourceContext*
-OffTheRecordProfileIOData::Handle::GetResourceContextNoInit() const {
-  DCHECK_CURRENTLY_ON(BrowserThread::UI);
-  // Don't call LazyInitialize here, since the resource context is created at
-  // the beginning of initalization and is used by some members while they're
-  // being initialized (i.e. AppCacheService).
   return io_data_->GetResourceContext();
 }
 
@@ -81,10 +70,4 @@ void OffTheRecordProfileIOData::Handle::LazyInitialize() const {
   // below try to get the ResourceContext pointer.
   initialized_ = true;
   io_data_->InitializeOnUIThread(profile_);
-}
-
-OffTheRecordProfileIOData::OffTheRecordProfileIOData() = default;
-
-OffTheRecordProfileIOData::~OffTheRecordProfileIOData() {
-  DestroyResourceContext();
 }

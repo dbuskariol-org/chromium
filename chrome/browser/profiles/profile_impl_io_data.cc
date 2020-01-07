@@ -66,9 +66,7 @@
 using content::BrowserThread;
 
 ProfileImplIOData::Handle::Handle(Profile* profile)
-    : io_data_(new ProfileImplIOData),
-      profile_(profile),
-      initialized_(false) {
+    : io_data_(new ProfileIOData), profile_(profile), initialized_(false) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   DCHECK(profile);
 }
@@ -78,26 +76,10 @@ ProfileImplIOData::Handle::~Handle() {
   io_data_->ShutdownOnUIThread();
 }
 
-void ProfileImplIOData::Handle::Init(const base::FilePath& profile_path) {
-  DCHECK_CURRENTLY_ON(BrowserThread::UI);
-
-  // Keep track of profile path for data reduction proxy..
-  io_data_->profile_path_ = profile_path;
-}
-
 content::ResourceContext*
     ProfileImplIOData::Handle::GetResourceContext() const {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   LazyInitialize();
-  return GetResourceContextNoInit();
-}
-
-content::ResourceContext*
-ProfileImplIOData::Handle::GetResourceContextNoInit() const {
-  DCHECK_CURRENTLY_ON(BrowserThread::UI);
-  // Don't call LazyInitialize here, since the resource context is created at
-  // the beginning of initalization and is used by some members while they're
-  // being initialized (i.e. AppCacheService).
   return io_data_->GetResourceContext();
 }
 
@@ -110,10 +92,4 @@ void ProfileImplIOData::Handle::LazyInitialize() const {
   // below try to get the ResourceContext pointer.
   initialized_ = true;
   io_data_->InitializeOnUIThread(profile_);
-}
-
-ProfileImplIOData::ProfileImplIOData() = default;
-
-ProfileImplIOData::~ProfileImplIOData() {
-  DestroyResourceContext();
 }

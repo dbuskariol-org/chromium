@@ -12,20 +12,14 @@
 #include "chrome/browser/profiles/profile_io_data.h"
 #include "components/prefs/pref_store.h"
 
-class ProfileImplIOData : public ProfileIOData {
+class ProfileImplIOData {
  public:
   class Handle {
    public:
     explicit Handle(Profile* profile);
     ~Handle();
 
-    // Init() must be called before ~Handle().
-    void Init(const base::FilePath& profile_path);
-
     content::ResourceContext* GetResourceContext() const;
-    // GetResourceContextNoInit() does not call LazyInitialize() so it can be
-    // safely be used during initialization.
-    content::ResourceContext* GetResourceContextNoInit() const;
 
    private:
     // Lazily initialize ProfileParams. We do this on the calls to
@@ -37,7 +31,7 @@ class ProfileImplIOData : public ProfileIOData {
 
     // The getters will be invalidated on the IO thread before
     // ProfileIOData instance is deleted.
-    ProfileImplIOData* const io_data_;
+    ProfileIOData* const io_data_;
 
     Profile* const profile_;
 
@@ -47,11 +41,10 @@ class ProfileImplIOData : public ProfileIOData {
   };
 
  private:
-  ProfileImplIOData();
-  ~ProfileImplIOData() override;
-
-  // Parameters needed for isolated apps.
-  base::FilePath profile_path_;
+  // TODO(mmenke):  Delete this class, and merge ProfileImplIOData::Handle with
+  // OffTheRecordProfileIOData::Handle.
+  ProfileImplIOData() = delete;
+  ~ProfileImplIOData() = delete;
 
   DISALLOW_COPY_AND_ASSIGN(ProfileImplIOData);
 };
