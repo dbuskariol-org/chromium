@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/updater/mac/updater_setup/updater_setup.h"
+#include "chrome/updater/mac/setup/setup.h"
 
 int main(int argc, const char* argv[]) {
-  return updater_setup::UpdaterSetupMain(argc, argv);
+  return updater::setup::UpdaterSetupMain(argc, argv);
 }

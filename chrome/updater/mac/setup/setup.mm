@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/updater/mac/updater_setup/updater_setup.h"
+#include "chrome/updater/mac/setup/setup.h"
 
 #import <ServiceManagement/ServiceManagement.h>
 
@@ -26,7 +26,9 @@
 #include "chrome/updater/util.h"
 #include "components/crash/core/common/crash_key.h"
 
-namespace updater_setup {
+namespace updater {
+
+namespace setup {
 
 namespace {
 
@@ -95,6 +97,18 @@ bool CopyBundle() {
   return true;
 }
 
+bool DeleteInstallFolder() {
+  // Delete the install folder - "~/Library/Google/GoogleUpdate".
+  const base::FilePath dest_path =
+      base::mac::GetUserLibraryPath().Append(kUpdaterFolder);
+
+  if (!base::DeleteFileRecursively(dest_path)) {
+    LOG(ERROR) << "Deleting " << dest_path << " failed";
+    return false;
+  }
+  return true;
+}
+
 base::ScopedCFTypeRef<CFStringRef> CopyGoogleUpdateCheckLaunchDName() {
   return base::ScopedCFTypeRef<CFStringRef>(CFStringCreateCopy(
       kCFAllocatorDefault, CFSTR("com.google.GoogleUpdate.check")));
@@ -152,6 +166,15 @@ bool CreateLaunchdItems() {
                                                   name, plist);
 }
 
+bool RemoveFromLaunchd() {
+  // This may block while deleting the launchd plist file.
+  base::ScopedBlockingCall scoped_blocking_call(FROM_HERE,
+                                                base::BlockingType::MAY_BLOCK);
+  base::ScopedCFTypeRef<CFStringRef> name(CopyGoogleUpdateCheckLaunchDName());
+  return Launchd::GetInstance()->DeletePlist(Launchd::User, Launchd::Agent,
+                                             name);
+}
+
 int SetupUpdater() {
   if (!CopyBundle())
     return -1;
@@ -195,4 +218,16 @@ int UpdaterSetupMain(int argc, const char* const* argv) {
   return result;
 }
 
-}  // namespace updater_setup
+}  // namespace setup
+
+int Uninstall() {
+  if (!setup::RemoveFromLaunchd())
+    return -1;
+
+  if (!setup::DeleteInstallFolder())
+    return -2;
+
+  return 0;
+}
+
+}  // namespace updater
