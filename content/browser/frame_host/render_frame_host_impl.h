@@ -1220,8 +1220,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // the back-forward cache.
   void DidCommitBackForwardCacheNavigation(
       NavigationRequest* committing_navigation_request,
-      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params>
-          validated_params);
+      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params> params);
 
   bool has_committed_any_navigation() const {
     return has_committed_any_navigation_;
@@ -1535,8 +1534,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void IssueKeepAliveHandle(
       mojo::PendingReceiver<mojom::KeepAliveHandle> receiver) override;
   void DidCommitProvisionalLoad(
-      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params>
-          validated_params,
+      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params> params,
       mojom::DidCommitProvisionalLoadInterfaceParamsPtr interface_params)
       override;
 
@@ -1546,13 +1544,12 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // replace DidCommitProvisionalLoad in the long run.
   void DidCommitPerNavigationMojoInterfaceNavigation(
       NavigationRequest* committing_navigation_request,
-      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params>
-          validated_params,
+      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params> params,
       mojom::DidCommitProvisionalLoadInterfaceParamsPtr interface_params);
 
   void DidCommitSameDocumentNavigation(
-      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params>
-          validated_params) override;
+      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params> params)
+      override;
   void BeginNavigation(
       mojom::CommonNavigationParamsPtr common_params,
       mojom::BeginNavigationParamsPtr begin_params,
@@ -1829,7 +1826,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // A return value of true means that the commit should proceed.
   bool ValidateDidCommitParams(
       NavigationRequest* navigation_request,
-      FrameHostMsg_DidCommitProvisionalLoad_Params* validated_params,
+      FrameHostMsg_DidCommitProvisionalLoad_Params* params,
       bool is_same_document_navigation);
 
   // Updates the site url if the navigation was successful and the page is not
@@ -1840,8 +1837,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // DidCommitPerNavigationMojoInterfaceNavigation.
   void DidCommitNavigation(
       std::unique_ptr<NavigationRequest> committing_navigation_request,
-      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params>
-          validated_params,
+      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params> params,
       mojom::DidCommitProvisionalLoadInterfaceParamsPtr interface_params);
 
   // Called when we receive the confirmation that a navigation committed in the
@@ -1851,8 +1847,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // state should be restored to its pre-commit value.
   bool DidCommitNavigationInternal(
       std::unique_ptr<NavigationRequest> navigation_request,
-      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params>
-          validated_params,
+      std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params> params,
       bool is_same_document_navigation);
 
   // Called by the renderer process when it is done processing a same-document
@@ -1869,7 +1864,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // Creates a TracedValue object containing the details of a committed
   // navigation, so it can be logged with the tracing system.
   std::unique_ptr<base::trace_event::TracedValue> CommitAsTracedValue(
-      FrameHostMsg_DidCommitProvisionalLoad_Params* validated_params) const;
+      FrameHostMsg_DidCommitProvisionalLoad_Params* params) const;
 
   // Creates URLLoaderFactory objects for |isolated_world_origins|.
   blink::PendingURLLoaderFactoryBundle::OriginMap
@@ -1916,7 +1911,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // Returns true if we should proceed to the Commit callback, false otherwise.
   bool MaybeInterceptCommitCallback(
       NavigationRequest* navigation_request,
-      FrameHostMsg_DidCommitProvisionalLoad_Params* validated_params,
+      FrameHostMsg_DidCommitProvisionalLoad_Params* params,
       mojom::DidCommitProvisionalLoadInterfaceParamsPtr* interface_params);
 
   // If this RenderFrameHost is a local root (i.e., either the main frame or a
