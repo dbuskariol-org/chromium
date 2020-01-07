@@ -196,7 +196,6 @@ AdsPageLoadMetricsObserver::OnCommit(
     ukm::SourceId source_id) {
   DCHECK(ad_frames_data_.empty());
 
-  committed_ = true;
   page_load_is_reload_ =
       navigation_handle->GetReloadType() != content::ReloadType::NONE;
 
