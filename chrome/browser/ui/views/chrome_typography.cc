@@ -57,10 +57,11 @@ void ApplyCommonFontStyles(int context,
                            gfx::Font::Weight* weight) {
   switch (context) {
     case CONTEXT_TOOLBAR_BUTTON: {
-      // TODO(pbos): Instead of fixing the toolbar button height this way
-      // consider dynamically resizing all of the toolbar based on the actual
-      // final item height.
       int height = ui::MaterialDesignController::touch_ui() ? 22 : 17;
+      // We only want the font size to be constrained by available height, and
+      // don't actually have a target font size, so we just need to supply any
+      // sufficiently-large value for the second argument here. |height| will
+      // always be sufficiently large, since dips are smaller than pts.
       *size_delta = GetFontSizeDeltaBoundedByAvailableHeight(height, height);
       break;
     }
