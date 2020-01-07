@@ -43,11 +43,14 @@ AudioTrackRecorder::CodecId AudioTrackRecorder::GetPreferredCodecId() {
   return CodecId::OPUS;
 }
 
-AudioTrackRecorder::AudioTrackRecorder(CodecId codec,
-                                       MediaStreamComponent* track,
-                                       OnEncodedAudioCB on_encoded_audio_cb,
-                                       int32_t bits_per_second)
-    : track_(track),
+AudioTrackRecorder::AudioTrackRecorder(
+    CodecId codec,
+    MediaStreamComponent* track,
+    OnEncodedAudioCB on_encoded_audio_cb,
+    base::OnceClosure on_track_source_ended_cb,
+    int32_t bits_per_second)
+    : TrackRecorder(std::move(on_track_source_ended_cb)),
+      track_(track),
       encoder_(CreateAudioEncoder(codec,
                                   std::move(on_encoded_audio_cb),
                                   bits_per_second)),

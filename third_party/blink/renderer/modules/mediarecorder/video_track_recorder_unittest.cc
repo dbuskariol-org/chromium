@@ -117,9 +117,14 @@ class VideoTrackRecorderTest
         ConvertToBaseRepeatingCallback(
             CrossThreadBindRepeating(&VideoTrackRecorderTest::OnEncodedVideo,
                                      CrossThreadUnretained(this))),
+        ConvertToBaseOnceCallback(CrossThreadBindOnce(
+            &VideoTrackRecorderTest::OnSourceReadyStateEnded,
+            CrossThreadUnretained(this))),
         0 /* bits_per_second */,
         scheduler::GetSingleThreadTaskRunnerForTesting());
   }
+
+  MOCK_METHOD0(OnSourceReadyStateEnded, void());
 
   MOCK_METHOD5(OnEncodedVideo,
                void(const media::WebmMuxer::VideoParameters& params,
@@ -166,6 +171,12 @@ class VideoTrackRecorderTest
 // its inner object(s). This is a non trivial sequence.
 TEST_P(VideoTrackRecorderTest, ConstructAndDestruct) {
   InitializeRecorder(testing::get<0>(GetParam()));
+}
+
+TEST_F(VideoTrackRecorderTest, RelaysReadyStateEnded) {
+  InitializeRecorder(VideoTrackRecorder::CodecId::VP8);
+  EXPECT_CALL(*this, OnSourceReadyStateEnded);
+  mock_source_->StopSource();
 }
 
 // Creates the encoder and encodes 2 frames of the same size; the encoder
@@ -464,6 +475,7 @@ class VideoTrackRecorderPassthroughTest
         ConvertToBaseRepeatingCallback(CrossThreadBindRepeating(
             &VideoTrackRecorderPassthroughTest::OnEncodedVideo,
             CrossThreadUnretained(this))),
+        ConvertToBaseOnceCallback(CrossThreadBindOnce([] {})),
         scheduler::GetSingleThreadTaskRunnerForTesting());
   }
 
