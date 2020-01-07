@@ -990,6 +990,8 @@ source_set("chromeos") {
     "extensions/permissions_updater_delegate_chromeos.h",
     "extensions/public_session_permission_helper.cc",
     "extensions/public_session_permission_helper.h",
+    "extensions/signin_screen_extensions_external_loader.cc",
+    "extensions/signin_screen_extensions_external_loader.h",
     "extensions/signin_screen_policy_provider.cc",
     "extensions/signin_screen_policy_provider.h",
     "external_metrics.cc",
