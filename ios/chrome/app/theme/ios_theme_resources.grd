@@ -35,10 +35,6 @@
       <structure type="chrome_scaled_image" name="IDR_IOS_INFOBAR_TRANSLATE" file="infobar_translate.png" />
       <structure type="chrome_scaled_image" name="IDR_IOS_OMNIBOX_HTTPS_VALID" file="omnibox_https_valid.png" />
       <structure type="chrome_scaled_image" name="IDR_IOS_OMNIBOX_KEYBOARD_VIEW_APPEND" file="omnibox/append_ios.png" />
-      <structure type="chrome_scaled_image" name="IDR_IOS_OMNIBOX_OFFLINE" file="omnibox_offline.png" />
-      <structure type="chrome_scaled_image" name="IDR_IOS_PAGEINFO_BAD" file="omnibox/pageinfo_bad.png" />
-      <structure type="chrome_scaled_image" name="IDR_IOS_PAGEINFO_GOOD" file="omnibox/pageinfo_good.png" />
-      <structure type="chrome_scaled_image" name="IDR_IOS_PAGEINFO_INFO" file="omnibox/pageinfo_info.png" />
       <structure type="chrome_scaled_image" name="IDR_IOS_PAYMENTS_WARNING" file="payments_warning.png" />
       <structure type="chrome_scaled_image" name="IDR_IOS_PROMO_INFO" file="promo_info.png" />
       <structure type="chrome_scaled_image" name="IDR_IOS_SETTINGS_INFO_24" file="settings_info_24.png" />
