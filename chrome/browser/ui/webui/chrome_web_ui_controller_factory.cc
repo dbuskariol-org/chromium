@@ -450,7 +450,8 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
       (url.host_piece() == chrome::kChromeUIAppLauncherPageHost ||
        url.host_piece() == chrome::kChromeUIBookmarksHost ||
        url.host_piece() == chrome::kChromeUIHistoryHost ||
-       url.host_piece() == chrome::kChromeUIExtensionsHost)) {
+       url.host_piece() == chrome::kChromeUIExtensionsHost ||
+       url.host_piece() == chrome::kChromeUINewTabPageHost)) {
     return &NewWebUI<PageNotAvailableForGuestUI>;
   }
   // Bookmarks are part of NTP on Android.
