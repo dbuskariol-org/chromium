@@ -40,8 +40,7 @@ PepperBrokerInfoBarDelegate::PepperBrokerInfoBarDelegate(
     HostContentSettingsMap* content_settings,
     TabSpecificContentSettings* tab_content_settings,
     base::OnceCallback<void(bool)> callback)
-    : ConfirmInfoBarDelegate(),
-      url_(url),
+    : url_(url),
       plugin_name_(plugin_name),
       content_settings_(content_settings),
       tab_content_settings_(tab_content_settings),

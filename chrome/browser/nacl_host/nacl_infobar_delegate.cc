@@ -18,11 +18,9 @@ void NaClInfoBarDelegate::Create(InfoBarService* infobar_service) {
       std::unique_ptr<ConfirmInfoBarDelegate>(new NaClInfoBarDelegate())));
 }
 
-NaClInfoBarDelegate::NaClInfoBarDelegate() : ConfirmInfoBarDelegate() {
-}
+NaClInfoBarDelegate::NaClInfoBarDelegate() = default;
 
-NaClInfoBarDelegate::~NaClInfoBarDelegate() {
-}
+NaClInfoBarDelegate::~NaClInfoBarDelegate() = default;
 
 infobars::InfoBarDelegate::InfoBarIdentifier
 NaClInfoBarDelegate::GetIdentifier() const {

@@ -39,7 +39,7 @@ class GlobalConfirmInfoBar::DelegateProxy : public ConfirmInfoBarDelegate {
   bool Accept() override;
   bool Cancel() override;
 
-  infobars::InfoBar* info_bar_;
+  infobars::InfoBar* info_bar_ = nullptr;
   base::WeakPtr<GlobalConfirmInfoBar> global_info_bar_;
 
   DISALLOW_COPY_AND_ASSIGN(DelegateProxy);
@@ -47,12 +47,9 @@ class GlobalConfirmInfoBar::DelegateProxy : public ConfirmInfoBarDelegate {
 
 GlobalConfirmInfoBar::DelegateProxy::DelegateProxy(
     base::WeakPtr<GlobalConfirmInfoBar> global_info_bar)
-    : info_bar_(nullptr),
-      global_info_bar_(global_info_bar) {
-}
+    : global_info_bar_(global_info_bar) {}
 
-GlobalConfirmInfoBar::DelegateProxy::~DelegateProxy() {
-}
+GlobalConfirmInfoBar::DelegateProxy::~DelegateProxy() = default;
 
 infobars::InfoBarDelegate::InfoBarIdentifier
 GlobalConfirmInfoBar::DelegateProxy::GetIdentifier() const {
@@ -71,9 +68,8 @@ GURL GlobalConfirmInfoBar::DelegateProxy::GetLinkURL() const {
 
 bool GlobalConfirmInfoBar::DelegateProxy::LinkClicked(
     WindowOpenDisposition disposition) {
-  return global_info_bar_
-             ? global_info_bar_->delegate_->LinkClicked(disposition)
-             : false;
+  return global_info_bar_ &&
+         global_info_bar_->delegate_->LinkClicked(disposition);
 }
 
 void GlobalConfirmInfoBar::DelegateProxy::InfoBarDismissed() {
@@ -102,7 +98,7 @@ GlobalConfirmInfoBar::DelegateProxy::GetMessageElideBehavior() const {
 
 int GlobalConfirmInfoBar::DelegateProxy::GetButtons() const {
   return global_info_bar_ ? global_info_bar_->delegate_->GetButtons()
-                          : 0;
+                          : BUTTON_NONE;
 }
 
 base::string16 GlobalConfirmInfoBar::DelegateProxy::GetButtonLabel(
@@ -150,9 +146,9 @@ void GlobalConfirmInfoBar::DelegateProxy::Detach() {
 // static
 base::WeakPtr<GlobalConfirmInfoBar> GlobalConfirmInfoBar::Show(
     std::unique_ptr<ConfirmInfoBarDelegate> delegate) {
-  GlobalConfirmInfoBar* info_bar =
-      new GlobalConfirmInfoBar(std::move(delegate));
-  return info_bar->weak_factory_.GetWeakPtr();
+  // Owns itself, deleted by Close().
+  auto* infobar = new GlobalConfirmInfoBar(std::move(delegate));
+  return infobar->weak_factory_.GetWeakPtr();
 }
 
 void GlobalConfirmInfoBar::Close() {
@@ -161,9 +157,7 @@ void GlobalConfirmInfoBar::Close() {
 
 GlobalConfirmInfoBar::GlobalConfirmInfoBar(
     std::unique_ptr<ConfirmInfoBarDelegate> delegate)
-    : delegate_(std::move(delegate)),
-      browser_tab_strip_tracker_(this, nullptr, nullptr),
-      is_closing_(false) {
+    : delegate_(std::move(delegate)) {
   browser_tab_strip_tracker_.Init();
 }
 
@@ -196,7 +190,7 @@ void GlobalConfirmInfoBar::TabChangedAt(content::WebContents* web_contents,
 void GlobalConfirmInfoBar::OnInfoBarRemoved(infobars::InfoBar* info_bar,
                                             bool animate) {
   // Do not process alien infobars.
-  for (auto it : proxies_) {
+  for (const auto& it : proxies_) {
     if (it.second->info_bar_ == info_bar) {
       OnManagerShuttingDown(info_bar->owner());
       break;
@@ -218,8 +212,8 @@ void GlobalConfirmInfoBar::MaybeAddInfoBar(content::WebContents* web_contents) {
   if (base::Contains(proxies_, infobar_service))
     return;
 
-  std::unique_ptr<GlobalConfirmInfoBar::DelegateProxy> proxy(
-      new GlobalConfirmInfoBar::DelegateProxy(weak_factory_.GetWeakPtr()));
+  auto proxy = std::make_unique<GlobalConfirmInfoBar::DelegateProxy>(
+      weak_factory_.GetWeakPtr());
   GlobalConfirmInfoBar::DelegateProxy* proxy_ptr = proxy.get();
   infobars::InfoBar* added_bar = infobar_service->AddInfoBar(
       infobar_service->CreateConfirmInfoBar(std::move(proxy)));

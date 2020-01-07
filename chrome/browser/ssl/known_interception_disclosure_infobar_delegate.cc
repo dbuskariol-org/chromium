@@ -8,7 +8,6 @@
 #include <utility>
 
 #include "base/time/clock.h"
-#include "base/time/default_clock.h"
 #include "base/time/time.h"
 #include "chrome/browser/infobars/infobar_service.h"
 #include "chrome/browser/profiles/profile.h"
@@ -26,24 +25,12 @@
 #include "chrome/browser/ssl/known_interception_disclosure_infobar.h"
 #endif
 
-namespace {
-
-// How long to suppress the disclosure UI after showing it to the user. On
-// Android, this is measured across browser sessions (which tend to be short)
-// by storing the last dismissal time in a pref. On Desktop, the last dismissal
-// time is stored in memory, so this is is only measured within the same
-// browsing session (and thus will trigger on every browser startup).
-constexpr base::TimeDelta kMessageCooldown = base::TimeDelta::FromDays(7);
-
-}  // namespace
-
 KnownInterceptionDisclosureCooldown*
 KnownInterceptionDisclosureCooldown::GetInstance() {
   return base::Singleton<KnownInterceptionDisclosureCooldown>::get();
 }
 
-bool KnownInterceptionDisclosureCooldown::
-    IsKnownInterceptionDisclosureCooldownActive(Profile* profile) {
+bool KnownInterceptionDisclosureCooldown::IsActive(Profile* profile) {
   base::Time last_dismissal;
 
 #if defined(OS_ANDROID)
@@ -53,15 +40,11 @@ bool KnownInterceptionDisclosureCooldown::
   last_dismissal = last_dismissal_time_;
 #endif
 
-  // More than |kMessageCooldown| days have passed.
-  if (clock_->Now() - last_dismissal > kMessageCooldown)
-    return false;
-
-  return true;
+  // Suppress the disclosure UI for 7 days after showing it to the user.
+  return (clock_->Now() - last_dismissal) <= base::TimeDelta::FromDays(7);
 }
 
-void KnownInterceptionDisclosureCooldown::
-    ActivateKnownInterceptionDisclosureCooldown(Profile* profile) {
+void KnownInterceptionDisclosureCooldown::Activate(Profile* profile) {
 #if defined(OS_ANDROID)
   profile->GetPrefs()->SetTime(
       prefs::kKnownInterceptionDisclosureInfobarLastShown, clock_->Now());
@@ -75,16 +58,16 @@ void KnownInterceptionDisclosureCooldown::SetClockForTesting(
   clock_ = std::move(clock);
 }
 
-KnownInterceptionDisclosureCooldown::KnownInterceptionDisclosureCooldown()
-    : clock_(std::make_unique<base::DefaultClock>()) {}
+KnownInterceptionDisclosureCooldown::KnownInterceptionDisclosureCooldown() =
+    default;
+
 KnownInterceptionDisclosureCooldown::~KnownInterceptionDisclosureCooldown() =
     default;
 
 void MaybeShowKnownInterceptionDisclosureDialog(
     content::WebContents* web_contents,
     net::CertStatus cert_status) {
-  KnownInterceptionDisclosureCooldown* disclosure_tracker =
-      KnownInterceptionDisclosureCooldown::GetInstance();
+  auto* disclosure_tracker = KnownInterceptionDisclosureCooldown::GetInstance();
   if (!(cert_status & net::CERT_STATUS_KNOWN_INTERCEPTION_DETECTED) &&
       !disclosure_tracker->get_has_seen_known_interception()) {
     return;
@@ -100,8 +83,7 @@ void MaybeShowKnownInterceptionDisclosureDialog(
       std::make_unique<KnownInterceptionDisclosureInfoBarDelegate>(profile);
 
   infobars::InfoBar* infobar = nullptr;
-  if (!KnownInterceptionDisclosureCooldown::GetInstance()
-           ->IsKnownInterceptionDisclosureCooldownActive(profile)) {
+  if (!KnownInterceptionDisclosureCooldown::GetInstance()->IsActive(profile)) {
 #if defined(OS_ANDROID)
     infobar = infobar_service->AddInfoBar(
         KnownInterceptionDisclosureInfoBar::CreateInfoBar(std::move(delegate)));
@@ -135,8 +117,7 @@ bool KnownInterceptionDisclosureInfoBarDelegate::ShouldExpire(
 }
 
 void KnownInterceptionDisclosureInfoBarDelegate::InfoBarDismissed() {
-  KnownInterceptionDisclosureCooldown::GetInstance()
-      ->ActivateKnownInterceptionDisclosureCooldown(profile_);
+  KnownInterceptionDisclosureCooldown::GetInstance()->Activate(profile_);
   Cancel();
 }
 
@@ -154,8 +135,7 @@ int KnownInterceptionDisclosureInfoBarDelegate::GetButtons() const {
 }
 
 bool KnownInterceptionDisclosureInfoBarDelegate::Accept() {
-  KnownInterceptionDisclosureCooldown::GetInstance()
-      ->ActivateKnownInterceptionDisclosureCooldown(profile_);
+  KnownInterceptionDisclosureCooldown::GetInstance()->Activate(profile_);
   return true;
 }
 
@@ -167,17 +147,7 @@ int KnownInterceptionDisclosureInfoBarDelegate::GetIconId() const {
 
 base::string16 KnownInterceptionDisclosureInfoBarDelegate::GetButtonLabel(
     InfoBarButton button) const {
-  switch (button) {
-    case BUTTON_OK:
-      return l10n_util::GetStringUTF16(
-          IDS_KNOWN_INTERCEPTION_INFOBAR_BUTTON_TEXT);
-    case BUTTON_CANCEL:
-      FALLTHROUGH;
-    case BUTTON_NONE:
-      NOTREACHED();
-  }
-  NOTREACHED();
-  return base::string16();
+  return l10n_util::GetStringUTF16(IDS_KNOWN_INTERCEPTION_INFOBAR_BUTTON_TEXT);
 }
 
 base::string16 KnownInterceptionDisclosureInfoBarDelegate::GetDescriptionText()

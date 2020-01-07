@@ -12,11 +12,7 @@
 #include "content/public/browser/web_contents.h"
 #include "ui/base/l10n/l10n_util.h"
 
-PasswordManagerInfoBarDelegate::~PasswordManagerInfoBarDelegate() {}
-
-PasswordManagerInfoBarDelegate::PasswordManagerInfoBarDelegate()
-    : ConfirmInfoBarDelegate(),
-      details_message_(base::string16()) {}
+PasswordManagerInfoBarDelegate::~PasswordManagerInfoBarDelegate() = default;
 
 base::string16 PasswordManagerInfoBarDelegate::GetDetailsMessageText() const {
   return details_message_;
@@ -49,6 +45,8 @@ bool PasswordManagerInfoBarDelegate::LinkClicked(
 base::string16 PasswordManagerInfoBarDelegate::GetMessageText() const {
   return message_;
 }
+
+PasswordManagerInfoBarDelegate::PasswordManagerInfoBarDelegate() = default;
 
 void PasswordManagerInfoBarDelegate::SetMessage(const base::string16& message) {
   message_ = message;
