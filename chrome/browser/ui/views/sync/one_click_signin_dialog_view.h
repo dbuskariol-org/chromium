@@ -37,6 +37,15 @@ class OneClickSigninDialogView : public views::DialogDelegateView,
   // method is meant to be called only from tests.
   static OneClickSigninDialogView* view_for_testing() { return dialog_view_; }
 
+  // Overridden from views::DialogDelegateView:
+  base::string16 GetWindowTitle() const override;
+  ui::ModalType GetModalType() const override;
+  void WindowClosing() override;
+  bool Accept() override;
+
+  // Overridden from views::LinkListener:
+  void LinkClicked(views::Link* source, int event_flags) override;
+
  protected:
   // Creates a OneClickSigninDialogView.
   OneClickSigninDialogView(
@@ -51,17 +60,6 @@ class OneClickSigninDialogView : public views::DialogDelegateView,
 
   FRIEND_TEST_ALL_PREFIXES(OneClickSigninDialogViewTest, AdvancedLink);
   FRIEND_TEST_ALL_PREFIXES(OneClickSigninDialogViewTest, LearnMoreLink);
-
-  void Init();
-
-  // Overridden from views::DialogDelegateView:
-  base::string16 GetWindowTitle() const override;
-  ui::ModalType GetModalType() const override;
-  void WindowClosing() override;
-  bool Accept() override;
-
-  // Overridden from views::LinkListener:
-  void LinkClicked(views::Link* source, int event_flags) override;
 
   // Delegate to handle clicking on links in the bubble.
   std::unique_ptr<OneClickSigninLinksDelegate> delegate_;
