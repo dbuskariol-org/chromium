@@ -4035,6 +4035,7 @@ jumbo_static_library("ui") {
       "webui/print_preview/printer_handler.h",
     ]
     deps += [
+      "//components/printing/common:mojo_interfaces",
       "//services/device/public/cpp/usb",
       "//services/device/public/mojom:usb",
     ]

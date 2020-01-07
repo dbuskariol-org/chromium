@@ -4967,6 +4967,8 @@ test("unit_tests") {
         "../browser/printing/test_printer_query.cc",
         "../browser/printing/test_printer_query.h",
         "../browser/ui/webui/print_preview/extension_printer_handler_unittest.cc",
+        "../browser/ui/webui/print_preview/fake_print_render_frame.cc",
+        "../browser/ui/webui/print_preview/fake_print_render_frame.h",
         "../browser/ui/webui/print_preview/pdf_printer_handler_unittest.cc",
         "../browser/ui/webui/print_preview/pdf_printer_handler_win_unittest.cc",
         "../browser/ui/webui/print_preview/print_preview_handler_unittest.cc",

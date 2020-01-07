@@ -1175,9 +1175,6 @@ bool PrintRenderFrameHelper::OnMessageReceived(const IPC::Message& message) {
 
   bool handled = true;
   IPC_BEGIN_MESSAGE_MAP(PrintRenderFrameHelper, message)
-#if BUILDFLAG(ENABLE_PRINT_PREVIEW)
-    IPC_MESSAGE_HANDLER(PrintMsg_PrintPreview, OnPrintPreview)
-#endif  // BUILDFLAG(ENABLE_PRINT_PREVIEW)
     IPC_MESSAGE_HANDLER(PrintMsg_PrintFrameContent, OnPrintFrameContent)
     IPC_MESSAGE_UNHANDLED(handled = false)
   IPC_END_MESSAGE_MAP()
@@ -1264,6 +1261,60 @@ void PrintRenderFrameHelper::InitiatePrintPreview(
                           : PRINT_PREVIEW_USER_INITIATED_ENTIRE_FRAME);
 }
 
+void PrintRenderFrameHelper::PrintPreview(base::Value settings) {
+  ScopedIPC scoped_ipc(weak_ptr_factory_.GetWeakPtr());
+  if (ipc_nesting_level_ > 1)
+    return;
+
+  print_preview_context_.OnPrintPreview();
+
+  base::UmaHistogramEnumeration(print_preview_context_.IsForArc()
+                                    ? "Arc.PrintPreview.PreviewEvent"
+                                    : "PrintPreview.PreviewEvent",
+                                PREVIEW_EVENT_REQUESTED, PREVIEW_EVENT_MAX);
+
+  if (!print_preview_context_.source_frame()) {
+    DidFinishPrinting(FAIL_PREVIEW);
+    return;
+  }
+
+  if (!UpdatePrintSettings(print_preview_context_.source_frame(),
+                           print_preview_context_.source_node(),
+                           base::Value::AsDictionaryValue(settings))) {
+    if (print_preview_context_.last_error() != PREVIEW_ERROR_BAD_SETTING) {
+      DidFinishPrinting(INVALID_SETTINGS);
+    } else {
+      DidFinishPrinting(FAIL_PREVIEW);
+    }
+    return;
+  }
+
+  // Save the job settings if a PrintRenderer will be used to create the preview
+  // document.
+  if (print_renderer_)
+    print_renderer_job_settings_ = std::move(settings);
+
+  // Set the options from document if we are previewing a pdf and send a
+  // message to browser.
+  if (print_pages_params_->params.is_first_request &&
+      !print_preview_context_.IsModifiable()) {
+    PrintHostMsg_SetOptionsFromDocument_Params options;
+    if (SetOptionsFromPdfDocument(&options)) {
+      PrintHostMsg_PreviewIds ids(
+          print_pages_params_->params.preview_request_id,
+          print_pages_params_->params.preview_ui_id);
+      Send(new PrintHostMsg_SetOptionsFromDocument(routing_id(), options, ids));
+    }
+  }
+
+  is_print_ready_metafile_sent_ = false;
+
+  // PDF printer device supports alpha blending.
+  print_pages_params_->params.supports_alpha_blend = true;
+
+  PrepareFrameForPreviewDocument();
+}
+
 void PrintRenderFrameHelper::OnPrintPreviewDialogClosed() {
   ScopedIPC scoped_ipc(weak_ptr_factory_.GetWeakPtr());
   print_preview_context_.source_frame()->DispatchAfterPrintEvent();
@@ -1306,59 +1357,6 @@ void PrintRenderFrameHelper::UpdateFrameMarginsCssInfo(
 }
 
 #if BUILDFLAG(ENABLE_PRINT_PREVIEW)
-void PrintRenderFrameHelper::OnPrintPreview(
-    const base::DictionaryValue& settings) {
-  if (ipc_nesting_level_ > 1)
-    return;
-
-  print_preview_context_.OnPrintPreview();
-
-  base::UmaHistogramEnumeration(print_preview_context_.IsForArc()
-                                    ? "Arc.PrintPreview.PreviewEvent"
-                                    : "PrintPreview.PreviewEvent",
-                                PREVIEW_EVENT_REQUESTED, PREVIEW_EVENT_MAX);
-
-  if (!print_preview_context_.source_frame()) {
-    DidFinishPrinting(FAIL_PREVIEW);
-    return;
-  }
-
-  if (!UpdatePrintSettings(print_preview_context_.source_frame(),
-                           print_preview_context_.source_node(), settings)) {
-    if (print_preview_context_.last_error() != PREVIEW_ERROR_BAD_SETTING) {
-      DidFinishPrinting(INVALID_SETTINGS);
-    } else {
-      DidFinishPrinting(FAIL_PREVIEW);
-    }
-    return;
-  }
-
-  // Save the job settings if a PrintRenderer will be used to create the preview
-  // document.
-  if (print_renderer_)
-    print_renderer_job_settings_ = settings.Clone();
-
-  // Set the options from document if we are previewing a pdf and send a
-  // message to browser.
-  if (print_pages_params_->params.is_first_request &&
-      !print_preview_context_.IsModifiable()) {
-    PrintHostMsg_SetOptionsFromDocument_Params options;
-    if (SetOptionsFromPdfDocument(&options)) {
-      PrintHostMsg_PreviewIds ids(
-          print_pages_params_->params.preview_request_id,
-          print_pages_params_->params.preview_ui_id);
-      Send(new PrintHostMsg_SetOptionsFromDocument(routing_id(), options, ids));
-    }
-  }
-
-  is_print_ready_metafile_sent_ = false;
-
-  // PDF printer device supports alpha blending.
-  print_pages_params_->params.supports_alpha_blend = true;
-
-  PrepareFrameForPreviewDocument();
-}
-
 void PrintRenderFrameHelper::PrepareFrameForPreviewDocument() {
   reset_prep_frame_view_ = false;
 

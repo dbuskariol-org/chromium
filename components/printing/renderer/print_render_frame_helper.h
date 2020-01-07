@@ -226,15 +226,13 @@ class PrintRenderFrameHelper
   void InitiatePrintPreview(
       mojo::PendingAssociatedRemote<mojom::PrintRenderer> print_renderer,
       bool has_selection) override;
+  void PrintPreview(base::Value settings) override;
   void OnPrintPreviewDialogClosed() override;
 #endif  // BUILDFLAG(ENABLE_PRINT_PREVIEW)
   void PrintingDone(bool success) override;
   void SetPrintingEnabled(bool enabled) override;
 
   // Message handlers ---------------------------------------------------------
-#if BUILDFLAG(ENABLE_PRINT_PREVIEW)
-  void OnPrintPreview(const base::DictionaryValue& settings);
-#endif  // BUILDFLAG(ENABLE_PRINT_PREVIEW)
   void OnPrintFrameContent(const PrintMsg_PrintFrame_Params& params);
 
   // Get |page_size| and |content_area| information from

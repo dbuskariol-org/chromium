@@ -367,14 +367,6 @@ IPC_MESSAGE_ROUTED0(PrintMsg_PrintNodeUnderContextMenu)
 // Print content of an out-of-process subframe.
 IPC_MESSAGE_ROUTED1(PrintMsg_PrintFrameContent, PrintMsg_PrintFrame_Params)
 
-#if BUILDFLAG(ENABLE_PRINT_PREVIEW)
-// Tells the RenderFrame to switch the CSS to print media type, renders every
-// requested pages for print preview using the given |settings|. This gets
-// called multiple times as the user updates settings.
-IPC_MESSAGE_ROUTED1(PrintMsg_PrintPreview,
-                    base::DictionaryValue /* settings */)
-#endif
-
 // Messages sent from the renderer to the browser.
 
 // Tells the browser that the renderer is done calculating the number of

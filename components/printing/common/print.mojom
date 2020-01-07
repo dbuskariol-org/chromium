@@ -37,6 +37,12 @@ interface PrintRenderFrame {
   InitiatePrintPreview(pending_associated_remote<PrintRenderer>? print_renderer,
                        bool has_selection);
 
+  // Tells the RenderFrame to switch the CSS to print media type and render
+  // every requested page for print preview using the given |settings|. This
+  // gets called multiple times as the user updates settings.
+  [EnableIf=enable_print_preview]
+  PrintPreview(mojo_base.mojom.DictionaryValue settings);
+
   // Tells the RenderFrame that the print preview dialog was closed.
   [EnableIf=enable_print_preview]
   OnPrintPreviewDialogClosed();
