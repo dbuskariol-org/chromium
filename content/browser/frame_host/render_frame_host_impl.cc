@@ -1553,6 +1553,12 @@ void RenderFrameHostImpl::ExecuteJavaScriptWithUserGestureForTests(
     int32_t world_id) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
+  // TODO(mustaq): The render-to-browser state update caused by the below
+  // JavaScriptExecuteRequestsForTests call is redundant with this update. We
+  // should determine if the redundancy can be removed.
+  frame_tree_node()->UpdateUserActivationState(
+      blink::UserActivationUpdateType::kNotifyActivation);
+
   const bool has_user_gesture = true;
   GetNavigationControl()->JavaScriptExecuteRequestForTests(
       javascript, false, has_user_gesture, world_id, base::NullCallback());
