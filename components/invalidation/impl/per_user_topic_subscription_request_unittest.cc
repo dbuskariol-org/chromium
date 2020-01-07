@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/invalidation/impl/per_user_topic_registration_request.h"
+#include "components/invalidation/impl/per_user_topic_subscription_request.h"
 
 #include "base/bind.h"
 #include "base/json/json_reader.h"
@@ -60,11 +60,11 @@ network::mojom::URLResponseHeadPtr CreateHeadersForTest(int responce_code) {
 
 }  // namespace
 
-class PerUserTopicRegistrationRequestTest : public testing::Test {
+class PerUserTopicSubscriptionRequestTest : public testing::Test {
  public:
-  PerUserTopicRegistrationRequestTest() {}
+  PerUserTopicSubscriptionRequestTest() {}
 
-  GURL url(PerUserTopicRegistrationRequest* request) {
+  GURL url(PerUserTopicSubscriptionRequest* request) {
     return request->GetUrlForTesting();
   }
 
@@ -77,24 +77,24 @@ class PerUserTopicRegistrationRequestTest : public testing::Test {
   data_decoder::test::InProcessDataDecoder in_process_data_decoder_;
   network::TestURLLoaderFactory url_loader_factory_;
 
-  DISALLOW_COPY_AND_ASSIGN(PerUserTopicRegistrationRequestTest);
+  DISALLOW_COPY_AND_ASSIGN(PerUserTopicSubscriptionRequestTest);
 };
 
-TEST_F(PerUserTopicRegistrationRequestTest,
+TEST_F(PerUserTopicSubscriptionRequestTest,
        ShouldNotInvokeCallbackWhenCancelled) {
   std::string token = "1234567890";
   std::string url = "http://valid-url.test";
   std::string topic = "test";
   std::string project_id = "smarty-pants-12345";
-  PerUserTopicRegistrationRequest::RequestType type =
-      PerUserTopicRegistrationRequest::SUBSCRIBE;
+  PerUserTopicSubscriptionRequest::RequestType type =
+      PerUserTopicSubscriptionRequest::SUBSCRIBE;
 
-  base::MockCallback<PerUserTopicRegistrationRequest::CompletedCallback>
+  base::MockCallback<PerUserTopicSubscriptionRequest::CompletedCallback>
       callback;
   EXPECT_CALL(callback, Run(_, _)).Times(0);
 
-  PerUserTopicRegistrationRequest::Builder builder;
-  std::unique_ptr<PerUserTopicRegistrationRequest> request =
+  PerUserTopicSubscriptionRequest::Builder builder;
+  std::unique_ptr<PerUserTopicSubscriptionRequest> request =
       builder.SetInstanceIdToken(token)
           .SetScope(url)
           .SetPublicTopicName(topic)
@@ -108,23 +108,23 @@ TEST_F(PerUserTopicRegistrationRequestTest,
   request.reset();
 }
 
-TEST_F(PerUserTopicRegistrationRequestTest, ShouldSubscribeWithoutErrors) {
+TEST_F(PerUserTopicSubscriptionRequestTest, ShouldSubscribeWithoutErrors) {
   std::string token = "1234567890";
   std::string base_url = "http://valid-url.test";
   std::string topic = "test";
   std::string project_id = "smarty-pants-12345";
-  PerUserTopicRegistrationRequest::RequestType type =
-      PerUserTopicRegistrationRequest::SUBSCRIBE;
+  PerUserTopicSubscriptionRequest::RequestType type =
+      PerUserTopicSubscriptionRequest::SUBSCRIBE;
 
-  base::MockCallback<PerUserTopicRegistrationRequest::CompletedCallback>
+  base::MockCallback<PerUserTopicSubscriptionRequest::CompletedCallback>
       callback;
   Status status(StatusCode::FAILED, "initial");
   std::string private_topic;
   EXPECT_CALL(callback, Run(_, _))
       .WillOnce(DoAll(SaveArg<0>(&status), SaveArg<1>(&private_topic)));
 
-  PerUserTopicRegistrationRequest::Builder builder;
-  std::unique_ptr<PerUserTopicRegistrationRequest> request =
+  PerUserTopicSubscriptionRequest::Builder builder;
+  std::unique_ptr<PerUserTopicSubscriptionRequest> request =
       builder.SetInstanceIdToken(token)
           .SetScope(base_url)
           .SetPublicTopicName(topic)
@@ -150,24 +150,24 @@ TEST_F(PerUserTopicRegistrationRequestTest, ShouldSubscribeWithoutErrors) {
   EXPECT_EQ(private_topic, "test-pr");
 }
 
-TEST_F(PerUserTopicRegistrationRequestTest,
+TEST_F(PerUserTopicSubscriptionRequestTest,
        ShouleNotSubscribeWhenNetworkProblem) {
   std::string token = "1234567890";
   std::string base_url = "http://valid-url.test";
   std::string topic = "test";
   std::string project_id = "smarty-pants-12345";
-  PerUserTopicRegistrationRequest::RequestType type =
-      PerUserTopicRegistrationRequest::SUBSCRIBE;
+  PerUserTopicSubscriptionRequest::RequestType type =
+      PerUserTopicSubscriptionRequest::SUBSCRIBE;
 
-  base::MockCallback<PerUserTopicRegistrationRequest::CompletedCallback>
+  base::MockCallback<PerUserTopicSubscriptionRequest::CompletedCallback>
       callback;
   Status status(StatusCode::FAILED, "initial");
   std::string private_topic;
   EXPECT_CALL(callback, Run(_, _))
       .WillOnce(DoAll(SaveArg<0>(&status), SaveArg<1>(&private_topic)));
 
-  PerUserTopicRegistrationRequest::Builder builder;
-  std::unique_ptr<PerUserTopicRegistrationRequest> request =
+  PerUserTopicSubscriptionRequest::Builder builder;
+  std::unique_ptr<PerUserTopicSubscriptionRequest> request =
       builder.SetInstanceIdToken(token)
           .SetScope(base_url)
           .SetPublicTopicName(topic)
@@ -192,16 +192,16 @@ TEST_F(PerUserTopicRegistrationRequestTest,
   EXPECT_EQ(status.code, StatusCode::FAILED);
 }
 
-TEST_F(PerUserTopicRegistrationRequestTest,
+TEST_F(PerUserTopicSubscriptionRequestTest,
        ShouldNotSubscribeWhenWrongResponse) {
   std::string token = "1234567890";
   std::string base_url = "http://valid-url.test";
   std::string topic = "test";
   std::string project_id = "smarty-pants-12345";
-  PerUserTopicRegistrationRequest::RequestType type =
-      PerUserTopicRegistrationRequest::SUBSCRIBE;
+  PerUserTopicSubscriptionRequest::RequestType type =
+      PerUserTopicSubscriptionRequest::SUBSCRIBE;
 
-  base::MockCallback<PerUserTopicRegistrationRequest::CompletedCallback>
+  base::MockCallback<PerUserTopicSubscriptionRequest::CompletedCallback>
       callback;
   Status status(StatusCode::SUCCESS, "initial");
   std::string private_topic;
@@ -209,8 +209,8 @@ TEST_F(PerUserTopicRegistrationRequestTest,
   EXPECT_CALL(callback, Run(_, _))
       .WillOnce(DoAll(SaveArg<0>(&status), SaveArg<1>(&private_topic)));
 
-  PerUserTopicRegistrationRequest::Builder builder;
-  std::unique_ptr<PerUserTopicRegistrationRequest> request =
+  PerUserTopicSubscriptionRequest::Builder builder;
+  std::unique_ptr<PerUserTopicSubscriptionRequest> request =
       builder.SetInstanceIdToken(token)
           .SetScope(base_url)
           .SetPublicTopicName(topic)
@@ -234,15 +234,15 @@ TEST_F(PerUserTopicRegistrationRequestTest,
   EXPECT_EQ(status.message, "Missing topic name");
 }
 
-TEST_F(PerUserTopicRegistrationRequestTest, ShouldUnsubscribe) {
+TEST_F(PerUserTopicSubscriptionRequestTest, ShouldUnsubscribe) {
   std::string token = "1234567890";
   std::string base_url = "http://valid-url.test";
   std::string topic = "test";
   std::string project_id = "smarty-pants-12345";
-  PerUserTopicRegistrationRequest::RequestType type =
-      PerUserTopicRegistrationRequest::UNSUBSCRIBE;
+  PerUserTopicSubscriptionRequest::RequestType type =
+      PerUserTopicSubscriptionRequest::UNSUBSCRIBE;
 
-  base::MockCallback<PerUserTopicRegistrationRequest::CompletedCallback>
+  base::MockCallback<PerUserTopicSubscriptionRequest::CompletedCallback>
       callback;
   Status status(StatusCode::FAILED, "initial");
   std::string private_topic;
@@ -250,8 +250,8 @@ TEST_F(PerUserTopicRegistrationRequestTest, ShouldUnsubscribe) {
   EXPECT_CALL(callback, Run(_, _))
       .WillOnce(DoAll(SaveArg<0>(&status), SaveArg<1>(&private_topic)));
 
-  PerUserTopicRegistrationRequest::Builder builder;
-  std::unique_ptr<PerUserTopicRegistrationRequest> request =
+  PerUserTopicSubscriptionRequest::Builder builder;
+  std::unique_ptr<PerUserTopicSubscriptionRequest> request =
       builder.SetInstanceIdToken(token)
           .SetScope(base_url)
           .SetPublicTopicName(topic)
@@ -275,35 +275,35 @@ TEST_F(PerUserTopicRegistrationRequestTest, ShouldUnsubscribe) {
   EXPECT_EQ(status.message, std::string());
 }
 
-class PerUserTopicRegistrationRequestParamTest
-    : public PerUserTopicRegistrationRequestTest,
+class PerUserTopicSubscriptionRequestParamTest
+    : public PerUserTopicSubscriptionRequestTest,
       public testing::WithParamInterface<net::HttpStatusCode> {
  public:
-  PerUserTopicRegistrationRequestParamTest() = default;
-  ~PerUserTopicRegistrationRequestParamTest() override = default;
+  PerUserTopicSubscriptionRequestParamTest() = default;
+  ~PerUserTopicSubscriptionRequestParamTest() override = default;
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(PerUserTopicRegistrationRequestParamTest);
+  DISALLOW_COPY_AND_ASSIGN(PerUserTopicSubscriptionRequestParamTest);
 };
 
-TEST_P(PerUserTopicRegistrationRequestParamTest,
+TEST_P(PerUserTopicSubscriptionRequestParamTest,
        ShouldNotSubscribeWhenNonRepeatableError) {
   std::string token = "1234567890";
   std::string base_url = "http://valid-url.test";
   std::string topic = "test";
   std::string project_id = "smarty-pants-12345";
-  PerUserTopicRegistrationRequest::RequestType type =
-      PerUserTopicRegistrationRequest::SUBSCRIBE;
+  PerUserTopicSubscriptionRequest::RequestType type =
+      PerUserTopicSubscriptionRequest::SUBSCRIBE;
 
-  base::MockCallback<PerUserTopicRegistrationRequest::CompletedCallback>
+  base::MockCallback<PerUserTopicSubscriptionRequest::CompletedCallback>
       callback;
   Status status(StatusCode::FAILED, "initial");
   std::string private_topic;
   EXPECT_CALL(callback, Run(_, _))
       .WillOnce(DoAll(SaveArg<0>(&status), SaveArg<1>(&private_topic)));
 
-  PerUserTopicRegistrationRequest::Builder builder;
-  std::unique_ptr<PerUserTopicRegistrationRequest> request =
+  PerUserTopicSubscriptionRequest::Builder builder;
+  std::unique_ptr<PerUserTopicSubscriptionRequest> request =
       builder.SetInstanceIdToken(token)
           .SetScope(base_url)
           .SetPublicTopicName(topic)
@@ -322,7 +322,7 @@ TEST_P(PerUserTopicRegistrationRequestParamTest,
 }
 
 INSTANTIATE_TEST_SUITE_P(All,
-                         PerUserTopicRegistrationRequestParamTest,
+                         PerUserTopicSubscriptionRequestParamTest,
                          testing::Values(net::HTTP_BAD_REQUEST,
                                          net::HTTP_FORBIDDEN,
                                          net::HTTP_NOT_FOUND));

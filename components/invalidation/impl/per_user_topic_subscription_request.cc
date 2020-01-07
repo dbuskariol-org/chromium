@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/invalidation/impl/per_user_topic_registration_request.h"
+#include "components/invalidation/impl/per_user_topic_subscription_request.h"
 
 #include <memory>
 
@@ -53,23 +53,23 @@ enum class SubscriptionStatus {
 
 void RecordRequestStatus(
     SubscriptionStatus status,
-    syncer::PerUserTopicRegistrationRequest::RequestType type,
+    syncer::PerUserTopicSubscriptionRequest::RequestType type,
     const std::string& topic,
     int net_error = net::OK,
     int response_code = 200) {
   switch (type) {
-    case syncer::PerUserTopicRegistrationRequest::SUBSCRIBE: {
+    case syncer::PerUserTopicSubscriptionRequest::SUBSCRIBE: {
       base::UmaHistogramEnumeration(
           "FCMInvalidations.SubscriptionRequestStatus", status);
       break;
     }
-    case syncer::PerUserTopicRegistrationRequest::UNSUBSCRIBE: {
+    case syncer::PerUserTopicSubscriptionRequest::UNSUBSCRIBE: {
       base::UmaHistogramEnumeration(
           "FCMInvalidations.UnsubscriptionRequestStatus", status);
       break;
     }
   }
-  if (type != syncer::PerUserTopicRegistrationRequest::SUBSCRIBE) {
+  if (type != syncer::PerUserTopicSubscriptionRequest::SUBSCRIBE) {
     return;
   }
 
@@ -101,11 +101,11 @@ void RecordRequestStatus(
 
 namespace syncer {
 
-PerUserTopicRegistrationRequest::PerUserTopicRegistrationRequest() {}
+PerUserTopicSubscriptionRequest::PerUserTopicSubscriptionRequest() {}
 
-PerUserTopicRegistrationRequest::~PerUserTopicRegistrationRequest() = default;
+PerUserTopicSubscriptionRequest::~PerUserTopicSubscriptionRequest() = default;
 
-void PerUserTopicRegistrationRequest::Start(
+void PerUserTopicSubscriptionRequest::Start(
     CompletedCallback callback,
     network::mojom::URLLoaderFactory* loader_factory) {
   DCHECK(request_completed_callback_.is_null()) << "Request already running!";
@@ -113,11 +113,11 @@ void PerUserTopicRegistrationRequest::Start(
 
   simple_loader_->DownloadToStringOfUnboundedSizeUntilCrashAndDie(
       loader_factory,
-      base::BindOnce(&PerUserTopicRegistrationRequest::OnURLFetchComplete,
+      base::BindOnce(&PerUserTopicSubscriptionRequest::OnURLFetchComplete,
                      weak_ptr_factory_.GetWeakPtr()));
 }
 
-void PerUserTopicRegistrationRequest::OnURLFetchComplete(
+void PerUserTopicSubscriptionRequest::OnURLFetchComplete(
     std::unique_ptr<std::string> response_body) {
   int response_code = 0;
   if (simple_loader_->ResponseInfo() &&
@@ -128,7 +128,7 @@ void PerUserTopicRegistrationRequest::OnURLFetchComplete(
                              std::move(response_body));
 }
 
-void PerUserTopicRegistrationRequest::OnURLFetchCompleteInternal(
+void PerUserTopicSubscriptionRequest::OnURLFetchCompleteInternal(
     int net_error,
     int response_code,
     std::unique_ptr<std::string> response_body) {
@@ -177,11 +177,11 @@ void PerUserTopicRegistrationRequest::OnURLFetchCompleteInternal(
 
   data_decoder::DataDecoder::ParseJsonIsolated(
       *response_body,
-      base::BindOnce(&PerUserTopicRegistrationRequest::OnJsonParse,
+      base::BindOnce(&PerUserTopicSubscriptionRequest::OnJsonParse,
                      weak_ptr_factory_.GetWeakPtr()));
 }
 
-void PerUserTopicRegistrationRequest::OnJsonParse(
+void PerUserTopicSubscriptionRequest::OnJsonParse(
     data_decoder::DataDecoder::ValueOrError result) {
   if (!result.value) {
     RecordRequestStatus(SubscriptionStatus::kParsingFailure, type_, topic_);
@@ -205,15 +205,15 @@ void PerUserTopicRegistrationRequest::OnJsonParse(
   }
 }
 
-PerUserTopicRegistrationRequest::Builder::Builder() = default;
-PerUserTopicRegistrationRequest::Builder::Builder(
-    PerUserTopicRegistrationRequest::Builder&&) = default;
-PerUserTopicRegistrationRequest::Builder::~Builder() = default;
+PerUserTopicSubscriptionRequest::Builder::Builder() = default;
+PerUserTopicSubscriptionRequest::Builder::Builder(
+    PerUserTopicSubscriptionRequest::Builder&&) = default;
+PerUserTopicSubscriptionRequest::Builder::~Builder() = default;
 
-std::unique_ptr<PerUserTopicRegistrationRequest>
-PerUserTopicRegistrationRequest::Builder::Build() const {
+std::unique_ptr<PerUserTopicSubscriptionRequest>
+PerUserTopicSubscriptionRequest::Builder::Build() const {
   DCHECK(!scope_.empty());
-  auto request = base::WrapUnique(new PerUserTopicRegistrationRequest());
+  auto request = base::WrapUnique(new PerUserTopicSubscriptionRequest());
 
   std::string url;
   switch (type_) {
@@ -254,54 +254,54 @@ PerUserTopicRegistrationRequest::Builder::Build() const {
   return request;
 }
 
-PerUserTopicRegistrationRequest::Builder&
-PerUserTopicRegistrationRequest::Builder::SetInstanceIdToken(
+PerUserTopicSubscriptionRequest::Builder&
+PerUserTopicSubscriptionRequest::Builder::SetInstanceIdToken(
     const std::string& token) {
   instance_id_token_ = token;
   return *this;
 }
 
-PerUserTopicRegistrationRequest::Builder&
-PerUserTopicRegistrationRequest::Builder::SetScope(const std::string& scope) {
+PerUserTopicSubscriptionRequest::Builder&
+PerUserTopicSubscriptionRequest::Builder::SetScope(const std::string& scope) {
   scope_ = scope;
   return *this;
 }
 
-PerUserTopicRegistrationRequest::Builder&
-PerUserTopicRegistrationRequest::Builder::SetAuthenticationHeader(
+PerUserTopicSubscriptionRequest::Builder&
+PerUserTopicSubscriptionRequest::Builder::SetAuthenticationHeader(
     const std::string& auth_header) {
   auth_header_ = auth_header;
   return *this;
 }
 
-PerUserTopicRegistrationRequest::Builder&
-PerUserTopicRegistrationRequest::Builder::SetPublicTopicName(
+PerUserTopicSubscriptionRequest::Builder&
+PerUserTopicSubscriptionRequest::Builder::SetPublicTopicName(
     const Topic& topic) {
   topic_ = topic;
   return *this;
 }
 
-PerUserTopicRegistrationRequest::Builder&
-PerUserTopicRegistrationRequest::Builder::SetProjectId(
+PerUserTopicSubscriptionRequest::Builder&
+PerUserTopicSubscriptionRequest::Builder::SetProjectId(
     const std::string& project_id) {
   project_id_ = project_id;
   return *this;
 }
 
-PerUserTopicRegistrationRequest::Builder&
-PerUserTopicRegistrationRequest::Builder::SetType(RequestType type) {
+PerUserTopicSubscriptionRequest::Builder&
+PerUserTopicSubscriptionRequest::Builder::SetType(RequestType type) {
   type_ = type;
   return *this;
 }
 
-PerUserTopicRegistrationRequest::Builder&
-PerUserTopicRegistrationRequest::Builder::SetTopicIsPublic(
+PerUserTopicSubscriptionRequest::Builder&
+PerUserTopicSubscriptionRequest::Builder::SetTopicIsPublic(
     bool topic_is_public) {
   topic_is_public_ = topic_is_public;
   return *this;
 }
 
-HttpRequestHeaders PerUserTopicRegistrationRequest::Builder::BuildHeaders()
+HttpRequestHeaders PerUserTopicSubscriptionRequest::Builder::BuildHeaders()
     const {
   HttpRequestHeaders headers;
   if (!auth_header_.empty()) {
@@ -310,7 +310,7 @@ HttpRequestHeaders PerUserTopicRegistrationRequest::Builder::BuildHeaders()
   return headers;
 }
 
-std::string PerUserTopicRegistrationRequest::Builder::BuildBody() const {
+std::string PerUserTopicSubscriptionRequest::Builder::BuildBody() const {
   base::DictionaryValue request;
 
   request.SetString("public_topic_name", topic_);
@@ -325,7 +325,7 @@ std::string PerUserTopicRegistrationRequest::Builder::BuildBody() const {
 }
 
 std::unique_ptr<network::SimpleURLLoader>
-PerUserTopicRegistrationRequest::Builder::BuildURLFetcher(
+PerUserTopicSubscriptionRequest::Builder::BuildURLFetcher(
     const HttpRequestHeaders& headers,
     const std::string& body,
     const GURL& url) const {
@@ -333,10 +333,11 @@ PerUserTopicRegistrationRequest::Builder::BuildURLFetcher(
       net::DefineNetworkTrafficAnnotation("per_user_topic_registration_request",
                                           R"(
         semantics {
-          sender: "Register the Sync client for listening of the specific topic"
+          sender:
+            "Subscribe the Sync client for listening to the specific topic"
           description:
             "Chromium can receive Sync invalidations via FCM messages."
-            "This request registers the client for receiving messages for the"
+            "This request subscribes the client for receiving messages for the"
             "concrete topic. In case of Chrome Sync topic is a ModelType,"
             "e.g. BOOKMARK"
           trigger:

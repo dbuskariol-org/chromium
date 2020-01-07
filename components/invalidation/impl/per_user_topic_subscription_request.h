@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_INVALIDATION_IMPL_PER_USER_TOPIC_REGISTRATION_REQUEST_H_
-#define COMPONENTS_INVALIDATION_IMPL_PER_USER_TOPIC_REGISTRATION_REQUEST_H_
+#ifndef COMPONENTS_INVALIDATION_IMPL_PER_USER_TOPIC_SUBSCRIPTION_REQUEST_H_
+#define COMPONENTS_INVALIDATION_IMPL_PER_USER_TOPIC_SUBSCRIPTION_REQUEST_H_
 
 #include <memory>
 #include <string>
@@ -22,8 +22,8 @@
 
 namespace syncer {
 
-// A single request to register against per user topic service.
-class PerUserTopicRegistrationRequest {
+// A single request to subscribe to a topic on the per-user-topic service.
+class PerUserTopicSubscriptionRequest {
  public:
   // The request result consists of the request status and name of the private
   // topic. The |topic_name| will be empty in the case of error.
@@ -32,15 +32,15 @@ class PerUserTopicRegistrationRequest {
                               const std::string& topic_name)>;
   enum RequestType { SUBSCRIBE, UNSUBSCRIBE };
 
-  // Builds authenticated PerUserTopicRegistrationRequests.
+  // Builds authenticated PerUserTopicSubscriptionRequests.
   class Builder {
    public:
     Builder();
     Builder(Builder&&);
     ~Builder();
 
-    // Builds a Request object in order to perform the registration.
-    std::unique_ptr<PerUserTopicRegistrationRequest> Build() const;
+    // Builds a Request object in order to perform the subscription.
+    std::unique_ptr<PerUserTopicSubscriptionRequest> Build() const;
 
     Builder& SetInstanceIdToken(const std::string& token);
     Builder& SetScope(const std::string& scope);
@@ -74,7 +74,7 @@ class PerUserTopicRegistrationRequest {
     DISALLOW_COPY_AND_ASSIGN(Builder);
   };
 
-  ~PerUserTopicRegistrationRequest();
+  ~PerUserTopicSubscriptionRequest();
 
   // Starts an async request. The callback is invoked when the request succeeds
   // or fails. The callback is not called if the request is destroyed.
@@ -84,7 +84,8 @@ class PerUserTopicRegistrationRequest {
   GURL GetUrlForTesting() const { return url_; }
 
  private:
-  PerUserTopicRegistrationRequest();
+  PerUserTopicSubscriptionRequest();
+
   void OnURLFetchComplete(std::unique_ptr<std::string> response_body);
   void OnURLFetchCompleteInternal(int net_error,
                                   int response_code,
@@ -104,11 +105,11 @@ class PerUserTopicRegistrationRequest {
   RequestType type_;
   std::string topic_;
 
-  base::WeakPtrFactory<PerUserTopicRegistrationRequest> weak_ptr_factory_{this};
+  base::WeakPtrFactory<PerUserTopicSubscriptionRequest> weak_ptr_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(PerUserTopicRegistrationRequest);
+  DISALLOW_COPY_AND_ASSIGN(PerUserTopicSubscriptionRequest);
 };
 
 }  // namespace syncer
 
-#endif  // COMPONENTS_INVALIDATION_IMPL_PER_USER_TOPIC_REGISTRATION_REQUEST_H_
+#endif  // COMPONENTS_INVALIDATION_IMPL_PER_USER_TOPIC_SUBSCRIPTION_REQUEST_H_

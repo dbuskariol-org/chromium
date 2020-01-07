@@ -193,7 +193,7 @@ Refer to README.md for content description and update process.
  <item id="pdf_plugin_placeholder" hash_code="56866367" type="0" content_hash_code="16907221" os_list="linux,windows" file_path="chrome/browser/plugins/pdf_plugin_placeholder_observer.cc"/>
  <item id="pepper_tcp_socket" hash_code="120623198" type="0" content_hash_code="105652563" os_list="linux,windows" file_path="content/browser/renderer_host/pepper/pepper_socket_utils.cc"/>
  <item id="pepper_udp_socket" hash_code="53512439" type="0" content_hash_code="85431089" os_list="linux,windows" file_path="content/browser/renderer_host/pepper/pepper_socket_utils.cc"/>
- <item id="per_user_topic_registration_request" hash_code="10498172" type="0" content_hash_code="32495619" os_list="linux,windows" file_path="components/invalidation/impl/per_user_topic_registration_request.cc"/>
+ <item id="per_user_topic_registration_request" hash_code="10498172" type="0" content_hash_code="57098847" os_list="linux,windows" file_path="components/invalidation/impl/per_user_topic_subscription_request.cc"/>
  <item id="permission_reporting" hash_code="131741641" type="0" deprecated="2018-03-06" content_hash_code="7213535" file_path=""/>
  <item id="permission_request_creator" hash_code="43206794" type="0" deprecated="2019-07-30" content_hash_code="73571699" file_path=""/>
  <item id="persist_blob_to_indexed_db" hash_code="32030464" type="0" deprecated="2018-08-13" content_hash_code="35410079" file_path=""/>
