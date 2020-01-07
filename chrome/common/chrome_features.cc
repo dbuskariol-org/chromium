@@ -507,7 +507,7 @@ const base::Feature kAcknowledgeNtpOverrideOnDeactivate{
 // not shown on the omnibox, since its functionality is replaced by the
 // setting.
 const base::Feature kMixedContentSiteSetting{"MixedContentSiteSetting",
-                                             base::FEATURE_DISABLED_BY_DEFAULT};
+                                             base::FEATURE_ENABLED_BY_DEFAULT};
 
 #if !defined(OS_ANDROID)
 const base::Feature kOnConnectNative{"OnConnectNative",

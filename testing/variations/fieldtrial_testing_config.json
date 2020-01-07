@@ -3650,24 +3650,6 @@
             ]
         }
     ],
-    "MixedContentShieldRemoval": [
-        {
-            "platforms": [
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "MixedContentSiteSetting"
-                    ]
-                }
-            ]
-        }
-    ],
     "MyChromeEverywhere": [
         {
             "platforms": [
