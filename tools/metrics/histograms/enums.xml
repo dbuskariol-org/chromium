@@ -7987,6 +7987,16 @@ histogram as enum -->
   <int value="10" label="Image was not required for activation."/>
 </enum>
 
+<enum name="ChimeEvent">
+  <int value="0" label="Register"/>
+  <int value="1" label="UnRegister"/>
+  <int value="2" label="Notification Create"/>
+  <int value="3" label="Notification Click"/>
+  <int value="4" label="Notification Remove"/>
+  <int value="5" label="Notification Expire"/>
+  <int value="6" label="Notification Action Click"/>
+</enum>
+
 <enum name="ChromeActivityType">
   <int value="0" label="Tabbed Chrome"/>
   <int value="1" label="Custom Tab"/>
