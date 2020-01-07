@@ -130,7 +130,7 @@ void BrowserAccessibilityManagerWin::FireBlinkEvent(
       FireUiaTextContainerEvent(UIA_Text_TextChangedEventId, node);
       break;
     case ax::mojom::Event::kTextSelectionChanged:
-      FireUiaTextContainerEvent(UIA_Text_TextSelectionChangedEventId, node);
+      text_selection_changed_events_.insert(node);
       break;
     default:
       break;
@@ -211,8 +211,10 @@ void BrowserAccessibilityManagerWin::FireGeneratedEvent(
       // Fire the event on the object where the focus of the selection is.
       int32_t focus_id = ax_tree()->GetUnignoredSelection().focus_object_id;
       BrowserAccessibility* focus_object = GetFromID(focus_id);
-      if (focus_object && focus_object->HasVisibleCaretOrSelection())
+      if (focus_object && focus_object->HasVisibleCaretOrSelection()) {
         FireWinAccessibilityEvent(IA2_EVENT_TEXT_CARET_MOVED, focus_object);
+        text_selection_changed_events_.insert(node);
+      }
       break;
     }
     // aria-dropeffect is deprecated in WAI-ARIA 1.1.
@@ -770,6 +772,12 @@ void BrowserAccessibilityManagerWin::FinalizeAccessibilityEvents() {
     FireUiaPropertyChangedEvent(UIA_AriaPropertiesPropertyId, event_node);
   }
   aria_properties_events_.clear();
+
+  for (auto&& sel_event_node : text_selection_changed_events_) {
+    FireUiaTextContainerEvent(UIA_Text_TextSelectionChangedEventId,
+                              sel_event_node);
+  }
+  text_selection_changed_events_.clear();
 
   for (auto&& selected : selection_events_) {
     auto* container = selected.first;
