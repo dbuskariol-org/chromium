@@ -5797,13 +5797,15 @@ void Document::EnqueueMediaQueryChangeListeners(
 }
 
 void Document::EnqueueVisualViewportScrollEvent() {
-  VisualViewportScrollEvent* event = VisualViewportScrollEvent::Create();
+  VisualViewportScrollEvent* event =
+      MakeGarbageCollected<VisualViewportScrollEvent>();
   event->SetTarget(domWindow()->visualViewport());
   scripted_animation_controller_->EnqueuePerFrameEvent(event);
 }
 
 void Document::EnqueueVisualViewportResizeEvent() {
-  VisualViewportResizeEvent* event = VisualViewportResizeEvent::Create();
+  VisualViewportResizeEvent* event =
+      MakeGarbageCollected<VisualViewportResizeEvent>();
   event->SetTarget(domWindow()->visualViewport());
   scripted_animation_controller_->EnqueuePerFrameEvent(event);
 }
