@@ -124,6 +124,10 @@ class ChromeBrowserProvider {
   // Attaches any embedder-specific browser agents to the given |browser|.
   virtual void AttachBrowserAgents(Browser* browser) const;
 
+  // Schedule any embedder-specific startup tasks.
+  virtual void ScheduleDeferredStartupTasks(
+      ios::ChromeBrowserState* browser_state) const;
+
   // Returns an instance of the voice search provider, if one exists.
   virtual VoiceSearchProvider* GetVoiceSearchProvider() const;
 
