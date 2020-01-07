@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget;
+package org.chromium.components.browser_ui.widget.text;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -38,8 +38,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.IntDef;
 
 import org.chromium.base.ApiCompatibilityUtils;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ui.widget.animation.Interpolators;
+import org.chromium.components.browser_ui.widget.R;
+import org.chromium.components.browser_ui.widget.animation.Interpolators;
 import org.chromium.ui.base.LocalizationUtils;
 
 import java.lang.annotation.Retention;

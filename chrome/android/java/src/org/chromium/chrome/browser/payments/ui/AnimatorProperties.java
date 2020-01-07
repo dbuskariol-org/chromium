@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ui.widget.animation;
+package org.chromium.chrome.browser.payments.ui;
 
 import android.graphics.drawable.Drawable;
 import android.util.Property;
@@ -10,8 +10,8 @@ import android.util.Property;
 /**
  * Holds different {@link Property} types that can be used with ObjectAnimators.
  */
-public class AnimatorProperties {
-    public static final Property<Drawable, Integer> DRAWABLE_ALPHA_PROPERTY =
+class AnimatorProperties {
+    static final Property<Drawable, Integer> DRAWABLE_ALPHA_PROPERTY =
             new Property<Drawable, Integer>(Integer.class, "alpha") {
                 @Override
                 public Integer get(Drawable d) {

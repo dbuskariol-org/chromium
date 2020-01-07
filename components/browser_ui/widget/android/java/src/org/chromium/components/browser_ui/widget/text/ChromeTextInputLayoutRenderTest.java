@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget;
+package org.chromium.components.browser_ui.widget.text;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -17,17 +17,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.chromium.base.test.params.BaseJUnit4RunnerDelegate;
 import org.chromium.base.test.params.ParameterAnnotations;
 import org.chromium.base.test.params.ParameterSet;
 import org.chromium.base.test.params.ParameterizedRunner;
 import org.chromium.base.test.util.Feature;
-import org.chromium.chrome.R;
-import org.chromium.chrome.test.ChromeJUnit4RunnerDelegate;
-import org.chromium.chrome.test.util.ChromeRenderTestRule;
+import org.chromium.components.browser_ui.widget.test.R;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
 import org.chromium.ui.base.LocalizationUtils;
 import org.chromium.ui.test.util.DummyUiActivityTestCase;
 import org.chromium.ui.test.util.NightModeTestUtils;
+import org.chromium.ui.test.util.RenderTestRule;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,14 +36,15 @@ import java.util.List;
  * Render tests for the ChromeTextInputLayout
  */
 @RunWith(ParameterizedRunner.class)
-@ParameterAnnotations.UseRunnerDelegate(ChromeJUnit4RunnerDelegate.class)
+@ParameterAnnotations.UseRunnerDelegate(BaseJUnit4RunnerDelegate.class)
 public class ChromeTextInputLayoutRenderTest extends DummyUiActivityTestCase {
     @ParameterAnnotations.ClassParameter
     private static List<ParameterSet> sClassParams =
             new NightModeTestUtils.NightModeParams().getParameters();
 
     @Rule
-    public ChromeRenderTestRule mRenderTestRule = new ChromeRenderTestRule();
+    public RenderTestRule mRenderTestRule =
+            new RenderTestRule("chrome/test/data/android/render_tests");
 
     private static final String LABEL = "Label";
     private static final String TEXT = "Chrome's own TextInputLayout";
@@ -78,7 +79,7 @@ public class ChromeTextInputLayoutRenderTest extends DummyUiActivityTestCase {
                     new ContextThemeWrapper(activity, R.style.Theme_Chromium_Settings));
             mInputLayout.addView(mEditText);
             mInputLayout.setHint(LABEL);
-            ChromeRenderTestRule.sanitize(mEditText);
+            RenderTestRule.sanitize(mEditText);
         });
     }
 
