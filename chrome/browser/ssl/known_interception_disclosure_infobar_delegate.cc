@@ -116,6 +116,30 @@ KnownInterceptionDisclosureInfoBarDelegate::
     KnownInterceptionDisclosureInfoBarDelegate(Profile* profile)
     : profile_(profile) {}
 
+infobars::InfoBarDelegate::InfoBarIdentifier
+KnownInterceptionDisclosureInfoBarDelegate::GetIdentifier() const {
+  return KNOWN_INTERCEPTION_DISCLOSURE_INFOBAR_DELEGATE;
+}
+
+base::string16 KnownInterceptionDisclosureInfoBarDelegate::GetLinkText() const {
+  return l10n_util::GetStringUTF16(IDS_LEARN_MORE);
+}
+
+GURL KnownInterceptionDisclosureInfoBarDelegate::GetLinkURL() const {
+  return GURL("chrome://connection-monitoring-detected/");
+}
+
+bool KnownInterceptionDisclosureInfoBarDelegate::ShouldExpire(
+    const NavigationDetails& details) const {
+  return false;
+}
+
+void KnownInterceptionDisclosureInfoBarDelegate::InfoBarDismissed() {
+  KnownInterceptionDisclosureCooldown::GetInstance()
+      ->ActivateKnownInterceptionDisclosureCooldown(profile_);
+  Cancel();
+}
+
 base::string16 KnownInterceptionDisclosureInfoBarDelegate::GetMessageText()
     const {
   return l10n_util::GetStringUTF16(IDS_KNOWN_INTERCEPTION_HEADER);
@@ -129,9 +153,20 @@ int KnownInterceptionDisclosureInfoBarDelegate::GetButtons() const {
 #endif
 }
 
+bool KnownInterceptionDisclosureInfoBarDelegate::Accept() {
+  KnownInterceptionDisclosureCooldown::GetInstance()
+      ->ActivateKnownInterceptionDisclosureCooldown(profile_);
+  return true;
+}
+
+// Platform specific implementations.
+#if defined(OS_ANDROID)
+int KnownInterceptionDisclosureInfoBarDelegate::GetIconId() const {
+  return IDR_ANDROID_INFOBAR_WARNING;
+}
+
 base::string16 KnownInterceptionDisclosureInfoBarDelegate::GetButtonLabel(
     InfoBarButton button) const {
-#if defined(OS_ANDROID)
   switch (button) {
     case BUTTON_OK:
       return l10n_util::GetStringUTF16(
@@ -141,44 +176,8 @@ base::string16 KnownInterceptionDisclosureInfoBarDelegate::GetButtonLabel(
     case BUTTON_NONE:
       NOTREACHED();
   }
-#endif
   NOTREACHED();
   return base::string16();
-}
-
-bool KnownInterceptionDisclosureInfoBarDelegate::Accept() {
-  KnownInterceptionDisclosureCooldown::GetInstance()
-      ->ActivateKnownInterceptionDisclosureCooldown(profile_);
-  return true;
-}
-
-base::string16 KnownInterceptionDisclosureInfoBarDelegate::GetLinkText() const {
-  return l10n_util::GetStringUTF16(IDS_LEARN_MORE);
-}
-GURL KnownInterceptionDisclosureInfoBarDelegate::GetLinkURL() const {
-  return GURL("chrome://connection-monitoring-detected/");
-}
-
-infobars::InfoBarDelegate::InfoBarIdentifier
-KnownInterceptionDisclosureInfoBarDelegate::GetIdentifier() const {
-  return KNOWN_INTERCEPTION_DISCLOSURE_INFOBAR_DELEGATE;
-}
-
-void KnownInterceptionDisclosureInfoBarDelegate::InfoBarDismissed() {
-  KnownInterceptionDisclosureCooldown::GetInstance()
-      ->ActivateKnownInterceptionDisclosureCooldown(profile_);
-  Cancel();
-}
-
-bool KnownInterceptionDisclosureInfoBarDelegate::ShouldExpire(
-    const NavigationDetails& details) const {
-  return false;
-}
-
-// Platform specific implementations.
-#if defined(OS_ANDROID)
-int KnownInterceptionDisclosureInfoBarDelegate::GetIconId() const {
-  return IDR_ANDROID_INFOBAR_WARNING;
 }
 
 base::string16 KnownInterceptionDisclosureInfoBarDelegate::GetDescriptionText()

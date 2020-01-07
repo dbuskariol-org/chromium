@@ -11,6 +11,7 @@
 #include "components/infobars/core/infobar_container.h"
 #include "third_party/skia/include/core/SkPath.h"
 #include "ui/views/controls/button/button.h"
+#include "ui/views/controls/link_listener.h"
 #include "ui/views/controls/menu/menu_types.h"
 #include "ui/views/focus/external_focus_tracker.h"
 
@@ -19,13 +20,13 @@ class ImageButton;
 class ImageView;
 class Label;
 class Link;
-class LinkListener;
 class MenuRunner;
 }  // namespace views
 
 class InfoBarView : public infobars::InfoBar,
                     public views::View,
                     public views::ButtonListener,
+                    public views::LinkListener,
                     public views::ExternalFocusTracker {
  public:
   explicit InfoBarView(std::unique_ptr<infobars::InfoBarDelegate> delegate);
@@ -48,6 +49,9 @@ class InfoBarView : public infobars::InfoBar,
   // calls to ButtonPressed() in this case.)
   void ButtonPressed(views::Button* sender, const ui::Event& event) override;
 
+  // views::LinkListener:
+  void LinkClicked(views::Link* source, int event_flags) override;
+
   // views::ExternalFocusTracker:
   void OnWillChangeFocus(View* focused_before, View* focused_now) override;
 
@@ -59,8 +63,7 @@ class InfoBarView : public infobars::InfoBar,
 
   // Creates a link with the appropriate font and color for an infobar.
   // NOTE: Subclasses must ignore link clicks if we're unowned.
-  views::Link* CreateLink(const base::string16& text,
-                          views::LinkListener* listener) const;
+  views::Link* CreateLink(const base::string16& text);
 
   // Given |views| and the total |available_width| to display them in, sets
   // each view's size so that the longest view shrinks until it reaches the

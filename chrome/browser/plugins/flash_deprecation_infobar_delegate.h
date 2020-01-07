@@ -27,14 +27,14 @@ class FlashDeprecationInfoBarDelegate : public ConfirmInfoBarDelegate {
   // ConfirmInfobarDelegate:
   infobars::InfoBarDelegate::InfoBarIdentifier GetIdentifier() const override;
   const gfx::VectorIcon& GetVectorIcon() const override;
+  base::string16 GetLinkText() const override;
+  GURL GetLinkURL() const override;
+  bool ShouldExpire(const NavigationDetails& details) const override;
+  void InfoBarDismissed() override;
   base::string16 GetMessageText() const override;
   int GetButtons() const override;
   base::string16 GetButtonLabel(InfoBarButton button) const override;
   bool Accept() override;
-  base::string16 GetLinkText() const override;
-  GURL GetLinkURL() const override;
-  void InfoBarDismissed() override;
-  bool ShouldExpire(const NavigationDetails& details) const override;
 
  private:
   // The profile associated with this infobar.

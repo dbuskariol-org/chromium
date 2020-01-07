@@ -72,26 +72,25 @@ class KnownInterceptionDisclosureInfoBarDelegate
   ~KnownInterceptionDisclosureInfoBarDelegate() override = default;
 
   // ConfirmInfoBarDelegate:
-  base::string16 GetMessageText() const override;
-  int GetButtons() const override;
-  base::string16 GetButtonLabel(InfoBarButton button) const override;
-  bool Accept() override;
+  infobars::InfoBarDelegate::InfoBarIdentifier GetIdentifier() const override;
   base::string16 GetLinkText() const override;
   GURL GetLinkURL() const override;
-
-  // infobars::InfoBarDelegate:
-  infobars::InfoBarDelegate::InfoBarIdentifier GetIdentifier() const override;
-  void InfoBarDismissed() override;
   bool ShouldExpire(const NavigationDetails& details) const override;
+  void InfoBarDismissed() override;
+  base::string16 GetMessageText() const override;
+  int GetButtons() const override;
+  bool Accept() override;
 
 #if defined(OS_ANDROID)
   int GetIconId() const override;
+  base::string16 GetButtonLabel(InfoBarButton button) const override;
+
   // This function is the equivalent of GetMessageText(), but for the portion of
   // the infobar below the 'message' title for the Android infobar.
   base::string16 GetDescriptionText() const;
-#endif
 
   static void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry);
+#endif
 
  private:
   Profile* profile_;

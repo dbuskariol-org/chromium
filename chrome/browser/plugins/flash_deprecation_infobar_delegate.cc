@@ -105,6 +105,27 @@ const gfx::VectorIcon& FlashDeprecationInfoBarDelegate::GetVectorIcon() const {
   return kExtensionIcon;
 }
 
+base::string16 FlashDeprecationInfoBarDelegate::GetLinkText() const {
+  return l10n_util::GetStringUTF16(IDS_LEARN_MORE);
+}
+
+GURL FlashDeprecationInfoBarDelegate::GetLinkURL() const {
+  return GURL(
+      "https://www.blog.google/products/chrome/saying-goodbye-flash-chrome/");
+}
+
+bool FlashDeprecationInfoBarDelegate::ShouldExpire(
+    const NavigationDetails& details) const {
+  bool minimum_duration_elapsed = base::Time::Now() - display_start_ >
+                                  kMinimumDurationBeforeExpiryOnNavigation;
+  return minimum_duration_elapsed &&
+         ConfirmInfoBarDelegate::ShouldExpire(details);
+}
+
+void FlashDeprecationInfoBarDelegate::InfoBarDismissed() {
+  ActivateFlashDeprecationWarningCooldown(profile_);
+}
+
 base::string16 FlashDeprecationInfoBarDelegate::GetMessageText() const {
   return l10n_util::GetStringUTF16(IDS_PLUGIN_FLASH_DEPRECATION_PROMPT);
 }
@@ -129,25 +150,4 @@ bool FlashDeprecationInfoBarDelegate::Accept() {
   host_content_settings_map->SetDefaultContentSetting(
       ContentSettingsType::PLUGINS, CONTENT_SETTING_DEFAULT);
   return true;
-}
-
-base::string16 FlashDeprecationInfoBarDelegate::GetLinkText() const {
-  return l10n_util::GetStringUTF16(IDS_LEARN_MORE);
-}
-
-GURL FlashDeprecationInfoBarDelegate::GetLinkURL() const {
-  return GURL(
-      "https://www.blog.google/products/chrome/saying-goodbye-flash-chrome/");
-}
-
-void FlashDeprecationInfoBarDelegate::InfoBarDismissed() {
-  ActivateFlashDeprecationWarningCooldown(profile_);
-}
-
-bool FlashDeprecationInfoBarDelegate::ShouldExpire(
-    const NavigationDetails& details) const {
-  bool minimum_duration_elapsed = base::Time::Now() - display_start_ >
-                                  kMinimumDurationBeforeExpiryOnNavigation;
-  return minimum_duration_elapsed &&
-         ConfirmInfoBarDelegate::ShouldExpire(details);
 }

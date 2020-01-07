@@ -61,6 +61,14 @@ const gfx::VectorIcon& PepperBrokerInfoBarDelegate::GetVectorIcon() const {
   return kExtensionIcon;
 }
 
+base::string16 PepperBrokerInfoBarDelegate::GetLinkText() const {
+  return l10n_util::GetStringUTF16(IDS_LEARN_MORE);
+}
+
+GURL PepperBrokerInfoBarDelegate::GetLinkURL() const {
+  return GURL("https://support.google.com/chrome/?p=ib_pepper_broker");
+}
+
 base::string16 PepperBrokerInfoBarDelegate::GetMessageText() const {
   return l10n_util::GetStringFUTF16(
       IDS_PEPPER_BROKER_MESSAGE, plugin_name_,
@@ -81,14 +89,6 @@ bool PepperBrokerInfoBarDelegate::Accept() {
 bool PepperBrokerInfoBarDelegate::Cancel() {
   DispatchCallback(false);
   return true;
-}
-
-base::string16 PepperBrokerInfoBarDelegate::GetLinkText() const {
-  return l10n_util::GetStringUTF16(IDS_LEARN_MORE);
-}
-
-GURL PepperBrokerInfoBarDelegate::GetLinkURL() const {
-  return GURL("https://support.google.com/chrome/?p=ib_pepper_broker");
 }
 
 void PepperBrokerInfoBarDelegate::DispatchCallback(bool result) {

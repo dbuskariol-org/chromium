@@ -28,16 +28,16 @@ class GlobalConfirmInfoBar::DelegateProxy : public ConfirmInfoBarDelegate {
 
   // ConfirmInfoBarDelegate overrides
   infobars::InfoBarDelegate::InfoBarIdentifier GetIdentifier() const override;
+  base::string16 GetLinkText() const override;
+  GURL GetLinkURL() const override;
+  bool LinkClicked(WindowOpenDisposition disposition) override;
+  void InfoBarDismissed() override;
   base::string16 GetMessageText() const override;
   gfx::ElideBehavior GetMessageElideBehavior() const override;
   int GetButtons() const override;
   base::string16 GetButtonLabel(InfoBarButton button) const override;
   bool Accept() override;
   bool Cancel() override;
-  base::string16 GetLinkText() const override;
-  GURL GetLinkURL() const override;
-  bool LinkClicked(WindowOpenDisposition disposition) override;
-  void InfoBarDismissed() override;
 
   infobars::InfoBar* info_bar_;
   base::WeakPtr<GlobalConfirmInfoBar> global_info_bar_;
@@ -58,6 +58,34 @@ infobars::InfoBarDelegate::InfoBarIdentifier
 GlobalConfirmInfoBar::DelegateProxy::GetIdentifier() const {
   return global_info_bar_ ? global_info_bar_->delegate_->GetIdentifier()
                           : INVALID;
+}
+
+base::string16 GlobalConfirmInfoBar::DelegateProxy::GetLinkText() const {
+  return global_info_bar_ ? global_info_bar_->delegate_->GetLinkText()
+                          : base::string16();
+}
+
+GURL GlobalConfirmInfoBar::DelegateProxy::GetLinkURL() const {
+  return global_info_bar_ ? global_info_bar_->delegate_->GetLinkURL() : GURL();
+}
+
+bool GlobalConfirmInfoBar::DelegateProxy::LinkClicked(
+    WindowOpenDisposition disposition) {
+  return global_info_bar_
+             ? global_info_bar_->delegate_->LinkClicked(disposition)
+             : false;
+}
+
+void GlobalConfirmInfoBar::DelegateProxy::InfoBarDismissed() {
+  base::WeakPtr<GlobalConfirmInfoBar> info_bar = global_info_bar_;
+  // See comments in GlobalConfirmInfoBar::DelegateProxy::Accept().
+  if (info_bar) {
+    info_bar->OnInfoBarRemoved(info_bar_, false);
+    info_bar->delegate_->InfoBarDismissed();
+  }
+  // Could be destroyed after this point.
+  if (info_bar)
+    info_bar->Close();
 }
 
 base::string16 GlobalConfirmInfoBar::DelegateProxy::GetMessageText() const {
@@ -111,34 +139,6 @@ bool GlobalConfirmInfoBar::DelegateProxy::Cancel() {
   if (info_bar)
       info_bar->Close();
   return true;
-}
-
-base::string16 GlobalConfirmInfoBar::DelegateProxy::GetLinkText() const {
-  return global_info_bar_ ? global_info_bar_->delegate_->GetLinkText()
-                          : base::string16();
-}
-
-GURL GlobalConfirmInfoBar::DelegateProxy::GetLinkURL() const {
-  return global_info_bar_ ? global_info_bar_->delegate_->GetLinkURL()
-                          : GURL();
-}
-
-bool GlobalConfirmInfoBar::DelegateProxy::LinkClicked(
-    WindowOpenDisposition disposition) {
-  return global_info_bar_ ?
-      global_info_bar_->delegate_->LinkClicked(disposition) : false;
-}
-
-void GlobalConfirmInfoBar::DelegateProxy::InfoBarDismissed() {
-  base::WeakPtr<GlobalConfirmInfoBar> info_bar = global_info_bar_;
-  // See comments in GlobalConfirmInfoBar::DelegateProxy::Accept().
-  if (info_bar) {
-    info_bar->OnInfoBarRemoved(info_bar_, false);
-    info_bar->delegate_->InfoBarDismissed();
-  }
-  // Could be destroyed after this point.
-  if (info_bar)
-      info_bar->Close();
 }
 
 void GlobalConfirmInfoBar::DelegateProxy::Detach() {

@@ -31,23 +31,23 @@ int PasswordManagerInfoBarDelegate::GetIconId() const {
   return IDR_ANDROID_INFOBAR_SAVE_PASSWORD;
 }
 
+GURL PasswordManagerInfoBarDelegate::GetLinkURL() const {
+  return GURL(password_manager::kPasswordManagerHelpCenterSmartLock);
+}
+
 bool PasswordManagerInfoBarDelegate::ShouldExpire(
     const NavigationDetails& details) const {
   return !details.is_redirect && ConfirmInfoBarDelegate::ShouldExpire(details);
-}
-
-base::string16 PasswordManagerInfoBarDelegate::GetMessageText() const {
-  return message_;
-}
-
-GURL PasswordManagerInfoBarDelegate::GetLinkURL() const {
-  return GURL(password_manager::kPasswordManagerHelpCenterSmartLock);
 }
 
 bool PasswordManagerInfoBarDelegate::LinkClicked(
     WindowOpenDisposition disposition) {
   ConfirmInfoBarDelegate::LinkClicked(disposition);
   return true;
+}
+
+base::string16 PasswordManagerInfoBarDelegate::GetMessageText() const {
+  return message_;
 }
 
 void PasswordManagerInfoBarDelegate::SetMessage(const base::string16& message) {

@@ -29,18 +29,18 @@ NaClInfoBarDelegate::GetIdentifier() const {
   return NACL_INFOBAR_DELEGATE;
 }
 
-base::string16 NaClInfoBarDelegate::GetMessageText() const {
-  return l10n_util::GetStringUTF16(IDS_NACL_APP_MISSING_ARCH_MESSAGE);
-}
-
-int NaClInfoBarDelegate::GetButtons() const {
-  return BUTTON_NONE;
-}
-
 base::string16 NaClInfoBarDelegate::GetLinkText() const {
   return l10n_util::GetStringUTF16(IDS_LEARN_MORE);
 }
 
 GURL NaClInfoBarDelegate::GetLinkURL() const {
   return GURL("https://support.google.com/chrome/?p=ib_nacl");
+}
+
+base::string16 NaClInfoBarDelegate::GetMessageText() const {
+  return l10n_util::GetStringUTF16(IDS_NACL_APP_MISSING_ARCH_MESSAGE);
+}
+
+int NaClInfoBarDelegate::GetButtons() const {
+  return BUTTON_NONE;
 }

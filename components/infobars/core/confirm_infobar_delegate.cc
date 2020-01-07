@@ -45,19 +45,6 @@ bool ConfirmInfoBarDelegate::Cancel() {
   return true;
 }
 
-base::string16 ConfirmInfoBarDelegate::GetLinkText() const {
-  return base::string16();
-}
-
-GURL ConfirmInfoBarDelegate::GetLinkURL() const {
-  return GURL();
-}
-
-bool ConfirmInfoBarDelegate::LinkClicked(WindowOpenDisposition disposition) {
-  infobar()->owner()->OpenURL(GetLinkURL(), disposition);
-  return false;
-}
-
 ConfirmInfoBarDelegate::ConfirmInfoBarDelegate() {}
 
 bool ConfirmInfoBarDelegate::EqualsDelegate(InfoBarDelegate* delegate) const {

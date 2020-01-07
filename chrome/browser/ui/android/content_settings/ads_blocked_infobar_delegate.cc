@@ -47,29 +47,6 @@ int AdsBlockedInfobarDelegate::GetIconId() const {
   return IDR_ANDROID_INFOBAR_BLOCKED_POPUPS;
 }
 
-base::string16 AdsBlockedInfobarDelegate::GetMessageText() const {
-  return l10n_util::GetStringUTF16(IDS_BLOCKED_ADS_INFOBAR_MESSAGE);
-}
-
-int AdsBlockedInfobarDelegate::GetButtons() const {
-  return BUTTON_OK | BUTTON_CANCEL;
-}
-
-base::string16 AdsBlockedInfobarDelegate::GetButtonLabel(
-    InfoBarButton button) const {
-  if (button == BUTTON_OK)
-    return l10n_util::GetStringUTF16(IDS_OK);
-  return l10n_util::GetStringUTF16(IDS_APP_MENU_RELOAD);
-}
-
-bool AdsBlockedInfobarDelegate::Cancel() {
-  content::WebContents* web_contents =
-      InfoBarService::WebContentsFromInfoBar(infobar());
-  ChromeSubresourceFilterClient::FromWebContents(web_contents)
-      ->OnReloadRequested();
-  return true;
-}
-
 GURL AdsBlockedInfobarDelegate::GetLinkURL() const {
   DCHECK(infobar_expanded_);
   return GURL(subresource_filter::kLearnMoreLink);
@@ -92,4 +69,27 @@ bool AdsBlockedInfobarDelegate::LinkClicked(WindowOpenDisposition disposition) {
   // the infobar going away on the tab (and therefore invoking our smart-hiding
   // logic).
   return false;
+}
+
+base::string16 AdsBlockedInfobarDelegate::GetMessageText() const {
+  return l10n_util::GetStringUTF16(IDS_BLOCKED_ADS_INFOBAR_MESSAGE);
+}
+
+int AdsBlockedInfobarDelegate::GetButtons() const {
+  return BUTTON_OK | BUTTON_CANCEL;
+}
+
+base::string16 AdsBlockedInfobarDelegate::GetButtonLabel(
+    InfoBarButton button) const {
+  if (button == BUTTON_OK)
+    return l10n_util::GetStringUTF16(IDS_OK);
+  return l10n_util::GetStringUTF16(IDS_APP_MENU_RELOAD);
+}
+
+bool AdsBlockedInfobarDelegate::Cancel() {
+  content::WebContents* web_contents =
+      InfoBarService::WebContentsFromInfoBar(infobar());
+  ChromeSubresourceFilterClient::FromWebContents(web_contents)
+      ->OnReloadRequested();
+  return true;
 }
