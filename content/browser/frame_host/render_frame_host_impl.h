@@ -569,14 +569,13 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void SetNavigationRequest(
       std::unique_ptr<NavigationRequest> navigation_request);
 
-  // Tells the renderer that this RenderFrame is being swapped out for one in a
+  // Tells the renderer that this RenderFrame is being replaced with one in a
   // different renderer process.  It should run its unload handler and move to
   // a blank document.  If |proxy| is not null, it should also create a
   // RenderFrameProxy to replace the RenderFrame and set it to |is_loading|
-  // state. The renderer should preserve the RenderFrameProxy object until it
-  // exits, in case we come back.  The renderer can exit if it has no other
-  // active RenderFrames, but not until WasSwappedOut is called.
-  void SwapOut(RenderFrameProxyHost* proxy, bool is_loading);
+  // state. The renderer process keeps the RenderFrameProxy object around as a
+  // placeholder while the frame is rendered in a different process.
+  void Unload(RenderFrameProxyHost* proxy, bool is_loading);
 
   // Remove this frame and its children. This happens asynchronously, an IPC
   // round trip with the renderer process is needed to ensure children's unload
@@ -593,12 +592,12 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // Whether the RFH is waiting for an unload ACK from the renderer.
   bool IsWaitingForUnloadACK() const;
 
-  // Called when either the SwapOut request has been acknowledged or has timed
+  // Called when either the Unload() request has been acknowledged or has timed
   // out.
-  void OnSwappedOut();
+  void OnUnloaded();
 
   // This method returns true from the time this RenderFrameHost is created
-  // until it is pending deletion. Pending deletion starts when SwapOut is
+  // until it is pending deletion. Pending deletion starts when Unload() is
   // called on the frame or one of its ancestors.
   // BackForwardCache: Returns false when the frame is in the BackForwardCache.
   bool is_active() const {
@@ -883,7 +882,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void BindBrowserInterfaceBrokerReceiver(
       mojo::PendingReceiver<blink::mojom::BrowserInterfaceBroker>);
 
-  // Exposed so that tests can swap out the implementation and intercept calls.
+  // Exposed so that tests can swap the implementation and intercept calls.
   mojo::AssociatedReceiver<mojom::FrameHost>&
   frame_host_receiver_for_testing() {
     return frame_host_associated_receiver_;
@@ -1376,7 +1375,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   FRIEND_TEST_ALL_PREFIXES(RenderFrameHostManagerTest,
                            UnloadPushStateOnCrossProcessNavigation);
   FRIEND_TEST_ALL_PREFIXES(RenderFrameHostManagerTest,
-                           WebUIJavascriptDisallowedAfterSwapOut);
+                           WebUIJavascriptDisallowedAfterUnload);
   FRIEND_TEST_ALL_PREFIXES(RenderFrameHostManagerTest, LastCommittedOrigin);
   FRIEND_TEST_ALL_PREFIXES(
       RenderFrameHostManagerUnloadBrowserTest,
@@ -1384,25 +1383,25 @@ class CONTENT_EXPORT RenderFrameHostImpl
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest, CrashSubframe);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest, FindImmediateLocalRoots);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest,
-                           RenderViewHostIsNotReusedAfterDelayedSwapOutACK);
+                           RenderViewHostIsNotReusedAfterDelayedUnloadACK);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest,
-                           RenderViewHostStaysActiveWithLateSwapoutACK);
+                           RenderViewHostStaysActiveWithLateUnloadACK);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest,
                            LoadEventForwardingWhilePendingDeletion);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest,
                            ContextMenuAfterCrossProcessNavigation);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest,
-                           ActiveSandboxFlagsRetainedAfterSwapOut);
+                           ActiveSandboxFlagsRetainedAfterUnload);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest,
-                           LastCommittedURLRetainedAfterSwapOut);
+                           LastCommittedURLRetainedAfterUnload);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest,
                            RenderFrameProxyNotRecreatedDuringProcessShutdown);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest,
-                           SwapOutACKArrivesPriorToProcessShutdownRequest);
+                           UnloadACKArrivesPriorToProcessShutdownRequest);
   FRIEND_TEST_ALL_PREFIXES(SecurityExploitBrowserTest,
                            AttemptDuplicateRenderViewHost);
   FRIEND_TEST_ALL_PREFIXES(WebContentsImplBrowserTest,
-                           FullscreenAfterFrameSwap);
+                           FullscreenAfterFrameUnload);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest, UnloadHandlerSubframes);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest, Unload_ABAB);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessBrowserTest,
@@ -1442,7 +1441,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
       bool proceed,
       const base::TimeTicks& renderer_before_unload_start_time,
       const base::TimeTicks& renderer_before_unload_end_time);
-  void OnSwapOutACK();
+  void OnUnloadACK();
   void OnContextMenu(const ContextMenuParams& params);
   void OnVisualStateResponse(uint64_t id);
   void OnRunJavaScriptDialog(const base::string16& message,
@@ -1696,9 +1695,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void GetInterface(const std::string& interface_name,
                     mojo::ScopedMessagePipeHandle interface_pipe) override;
 
-  // Allows tests to disable the swapout event timer to simulate bugs that
+  // Allows tests to disable the unload event timer to simulate bugs that
   // happen before it fires (to avoid flakiness).
-  void DisableSwapOutTimerForTesting();
+  void DisableUnloadTimerForTesting();
 
   void SendJavaScriptDialogReply(IPC::Message* reply_msg,
                                  bool success,
@@ -1885,7 +1884,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // subframes have completed running unload handlers. If so, this function
   // destroys this frame. This will happen as soon as...
   // 1) The children in other processes have been deleted.
-  // 2) The ack (FrameHostMsg_Swapout_ACK or FrameHostMsg_Detach) has been
+  // 2) The ack (FrameHostMsg_Unload_ACK or FrameHostMsg_Detach) has been
   //    received. It means this frame in the renderer process is gone.
   void PendingDeletionCheckCompleted();
 
@@ -2054,8 +2053,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
   const int routing_id_;
 
   // Boolean indicating whether this RenderFrameHost is being actively used or
-  // is waiting for FrameHostMsg_SwapOut_ACK and thus pending deletion.
-  bool is_waiting_for_swapout_ack_;
+  // is waiting for FrameHostMsg_Unload_ACK and thus pending deletion.
+  bool is_waiting_for_unload_ack_;
 
   // Tracks whether the RenderFrame for this RenderFrameHost has been created in
   // the renderer process.
@@ -2127,10 +2126,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // relevant NavigationEntry.
   int nav_entry_id_;
 
-  // Used to swap out or shut down this RFH when the unload event is taking too
-  // long to execute, depending on the number of active frames in the
-  // SiteInstance.  May be null in tests.
-  std::unique_ptr<TimeoutMonitor> swapout_event_monitor_timeout_;
+  // Used to clean up this RFH when the unload event is taking too long to
+  // execute. May be null in tests.
+  std::unique_ptr<TimeoutMonitor> unload_event_monitor_timeout_;
 
   // GeolocationService which provides Geolocation.
   std::unique_ptr<GeolocationServiceImpl> geolocation_service_;
@@ -2435,7 +2433,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
     // An event such as a navigation happened causing the frame to start its
     // deletion. IPC are sent to execute the unload handlers and delete the
     // RenderFrame. The RenderFrameHost is waiting for an ACK. Either
-    // FrameHostMsg_Swapout_ACK for the navigating frame, or FrameHostMsg_Detach
+    // FrameHostMsg_Unload_ACK for the navigating frame, or FrameHostMsg_Detach
     // for its subframe.
     InProgress,
 

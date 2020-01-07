@@ -869,7 +869,7 @@ RenderFrameHostImpl::RenderFrameHostImpl(
       frame_tree_node_(frame_tree_node),
       parent_(nullptr),
       routing_id_(routing_id),
-      is_waiting_for_swapout_ack_(false),
+      is_waiting_for_unload_ack_(false),
       render_frame_created_(false),
       is_waiting_for_beforeunload_ack_(false),
       beforeunload_dialog_request_cancels_unload_(false),
@@ -925,8 +925,9 @@ RenderFrameHostImpl::RenderFrameHostImpl(
 
   SetUpMojoIfNeeded();
 
-  swapout_event_monitor_timeout_.reset(new TimeoutMonitor(base::BindRepeating(
-      &RenderFrameHostImpl::OnSwappedOut, weak_ptr_factory_.GetWeakPtr())));
+  unload_event_monitor_timeout_ =
+      std::make_unique<TimeoutMonitor>(base::BindRepeating(
+          &RenderFrameHostImpl::OnUnloaded, weak_ptr_factory_.GetWeakPtr()));
   beforeunload_timeout_.reset(new TimeoutMonitor(
       base::BindRepeating(&RenderFrameHostImpl::BeforeUnloadTimeout,
                           weak_ptr_factory_.GetWeakPtr())));
@@ -993,7 +994,7 @@ RenderFrameHostImpl::RenderFrameHostImpl(
 
 RenderFrameHostImpl::~RenderFrameHostImpl() {
   // When a RenderFrameHostImpl is deleted, it may still contain children. This
-  // can happen with the swap out timer. It causes a RenderFrameHost to delete
+  // can happen with the unload timer. It causes a RenderFrameHost to delete
   // itself even if it is still waiting for its children to complete their
   // unload handlers.
   //
@@ -1041,13 +1042,13 @@ RenderFrameHostImpl::~RenderFrameHostImpl() {
   // 1. The RenderFrame can be the main frame. In this case, closing the
   //    associated RenderView will clean up the resources associated with the
   //    main RenderFrame.
-  // 2. The RenderFrame can be swapped out. In this case, the browser sends a
-  //    UnfreezableFrameMsg_SwapOut for the RenderFrame to replace itself with a
+  // 2. The RenderFrame can be unloaded. In this case, the browser sends a
+  //    UnfreezableFrameMsg_Unload for the RenderFrame to replace itself with a
   //    RenderFrameProxy and release its associated resources. |unload_state_|
   //    is advanced to UnloadState::InProgress to track that this IPC is in
   //    flight.
   // 3. The RenderFrame can be detached, as part of removing a subtree (due to
-  //    navigation, swap out, or DOM mutation). In this case, the browser sends
+  //    navigation, unload, or DOM mutation). In this case, the browser sends
   //    a UnfreezableFrameMsg_Delete for the RenderFrame to detach itself and
   //    release its associated resources. If the subframe contains an unload
   //    handler, |unload_state_| is advanced to UnloadState::InProgress to track
@@ -1055,7 +1056,7 @@ RenderFrameHostImpl::~RenderFrameHostImpl() {
   //    UnloadState::Completed.
   //
   // The browser side gives the renderer a small timeout to finish processing
-  // swap out / detach messages. When the timeout expires, the RFH will be
+  // unload / detach messages. When the timeout expires, the RFH will be
   // removed regardless of whether or not the renderer acknowledged that it
   // completed the work, to avoid indefinitely leaking browser-side state. To
   // avoid leaks, ~RenderFrameHostImpl still validates that the appropriate
@@ -1094,9 +1095,9 @@ RenderFrameHostImpl::~RenderFrameHostImpl() {
   g_routing_id_frame_map.Get().erase(
       GlobalFrameRoutingId(GetProcess()->GetID(), routing_id_));
 
-  // Null out the swapout timer; in crash dumps this member will be null only if
+  // Null out the unload timer; in crash dumps this member will be null only if
   // the dtor has run.  (It may also be null in tests.)
-  swapout_event_monitor_timeout_.reset();
+  unload_event_monitor_timeout_.reset();
 
   for (auto& iter : visual_state_callbacks_)
     std::move(iter.second).Run(false);
@@ -1657,7 +1658,7 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameHostMsg_UpdateState, OnUpdateState)
     IPC_MESSAGE_HANDLER(FrameHostMsg_OpenURL, OnOpenURL)
     IPC_MESSAGE_HANDLER(FrameHostMsg_BeforeUnload_ACK, OnBeforeUnloadACK)
-    IPC_MESSAGE_HANDLER(FrameHostMsg_SwapOut_ACK, OnSwapOutACK)
+    IPC_MESSAGE_HANDLER(FrameHostMsg_Unload_ACK, OnUnloadACK)
     IPC_MESSAGE_HANDLER(FrameHostMsg_ContextMenu, OnContextMenu)
     IPC_MESSAGE_HANDLER(FrameHostMsg_VisualStateResponse, OnVisualStateResponse)
     IPC_MESSAGE_HANDLER_DELAY_REPLY(FrameHostMsg_RunJavaScriptDialog,
@@ -2510,7 +2511,7 @@ void RenderFrameHostImpl::OnDetach() {
   // A frame is removed while replacing this document with the new one. When it
   // happens, delete the frame and both the new and old documents. Unload
   // handlers aren't guaranteed to run here.
-  if (is_waiting_for_swapout_ack_) {
+  if (is_waiting_for_unload_ack_) {
     parent_->RemoveChild(frame_tree_node_);
     return;
   }
@@ -2790,45 +2791,44 @@ void RenderFrameHostImpl::SetNavigationRequest(
       std::move(navigation_request);
 }
 
-void RenderFrameHostImpl::SwapOut(RenderFrameProxyHost* proxy,
-                                  bool is_loading) {
-  // The end of this event is in OnSwapOutACK when the RenderFrame has completed
+void RenderFrameHostImpl::Unload(RenderFrameProxyHost* proxy, bool is_loading) {
+  // The end of this event is in OnUnloadACK when the RenderFrame has completed
   // the operation and sends back an IPC message.
   // The trace event may not end properly if the ACK times out.  We expect this
-  // to be fixed when RenderViewHostImpl::OnSwapOut moves to RenderFrameHost.
-  TRACE_EVENT_ASYNC_BEGIN1("navigation", "RenderFrameHostImpl::SwapOut", this,
+  // to be fixed when RenderViewHostImpl::OnUnload moves to RenderFrameHost.
+  TRACE_EVENT_ASYNC_BEGIN1("navigation", "RenderFrameHostImpl::Unload", this,
                            "frame_tree_node",
                            frame_tree_node_->frame_tree_node_id());
 
   // If this RenderFrameHost is already pending deletion, it must have already
   // gone through this, therefore just return.
   if (unload_state_ != UnloadState::NotRun) {
-    NOTREACHED() << "RFH should be in default state when calling SwapOut.";
+    NOTREACHED() << "RFH should be in default state when calling Unload.";
     return;
   }
 
-  if (swapout_event_monitor_timeout_) {
-    swapout_event_monitor_timeout_->Start(base::TimeDelta::FromMilliseconds(
+  if (unload_event_monitor_timeout_) {
+    unload_event_monitor_timeout_->Start(base::TimeDelta::FromMilliseconds(
         RenderViewHostImpl::kUnloadTimeoutMS));
   }
 
   // There should always be a proxy to replace the old RenderFrameHost.  If
   // there are no remaining active views in the process, the proxy will be
-  // short-lived and will be deleted when the SwapOut ACK is received.
+  // short-lived and will be deleted when the unload ACK is received.
   CHECK(proxy);
 
   // TODO(nasko): If the frame is not live, the RFH should just be deleted by
-  // simulating the receipt of swap out ack.
-  is_waiting_for_swapout_ack_ = true;
+  // simulating the receipt of unload ack.
+  is_waiting_for_unload_ack_ = true;
   unload_state_ = UnloadState::InProgress;
 
   if (IsRenderFrameLive()) {
     FrameReplicationState replication_state =
         proxy->frame_tree_node()->current_replication_state();
-    Send(new UnfreezableFrameMsg_SwapOut(routing_id_, proxy->GetRoutingID(),
-                                         is_loading, replication_state));
+    Send(new UnfreezableFrameMsg_Unload(routing_id_, proxy->GetRoutingID(),
+                                        is_loading, replication_state));
     // Remember that a RenderFrameProxy was created as part of processing the
-    // SwapOut message above.
+    // Unload message above.
     proxy->SetRenderFrameProxyCreated(true);
 
     StartPendingDeletionOnSubtree();
@@ -2839,7 +2839,7 @@ void RenderFrameHostImpl::SwapOut(RenderFrameProxyHost* proxy,
   PendingDeletionCheckCompletedOnSubtree();
 
   if (web_ui())
-    web_ui()->RenderFrameHostSwappingOut();
+    web_ui()->RenderFrameHostUnloading();
 
   web_bluetooth_services_.clear();
 #if !defined(OS_ANDROID)
@@ -3006,19 +3006,19 @@ void RenderFrameHostImpl::ProcessBeforeUnloadACKFromFrame(
 
 bool RenderFrameHostImpl::IsWaitingForUnloadACK() const {
   return render_view_host_->is_waiting_for_close_ack_ ||
-         is_waiting_for_swapout_ack_;
+         is_waiting_for_unload_ack_;
 }
 
-void RenderFrameHostImpl::OnSwapOutACK() {
+void RenderFrameHostImpl::OnUnloadACK() {
   if (frame_tree_node_->render_manager()->is_attaching_inner_delegate()) {
-    // This RFH was swapped out while attaching an inner delegate. The RFH
+    // This RFH was unloaded while attaching an inner delegate. The RFH
     // will stay around but it will no longer be associated with a RenderFrame.
     SetRenderFrameCreated(false);
     return;
   }
 
-  // Ignore spurious swap out ack.
-  if (!is_waiting_for_swapout_ack_)
+  // Ignore spurious unload ack.
+  if (!is_waiting_for_unload_ack_)
     return;
 
   DCHECK_EQ(UnloadState::InProgress, unload_state_);
@@ -3026,12 +3026,12 @@ void RenderFrameHostImpl::OnSwapOutACK() {
   PendingDeletionCheckCompleted();  // Can delete |this|.
 }
 
-void RenderFrameHostImpl::OnSwappedOut() {
-  DCHECK(is_waiting_for_swapout_ack_);
+void RenderFrameHostImpl::OnUnloaded() {
+  DCHECK(is_waiting_for_unload_ack_);
 
-  TRACE_EVENT_ASYNC_END0("navigation", "RenderFrameHostImpl::SwapOut", this);
-  if (swapout_event_monitor_timeout_)
-    swapout_event_monitor_timeout_->Stop();
+  TRACE_EVENT_ASYNC_END0("navigation", "RenderFrameHostImpl::Unload", this);
+  if (unload_event_monitor_timeout_)
+    unload_event_monitor_timeout_->Stop();
 
   ClearWebUI();
 
@@ -3047,8 +3047,8 @@ void RenderFrameHostImpl::OnSwappedOut() {
   CHECK(deleted);
 }
 
-void RenderFrameHostImpl::DisableSwapOutTimerForTesting() {
-  swapout_event_monitor_timeout_.reset();
+void RenderFrameHostImpl::DisableUnloadTimerForTesting() {
+  unload_event_monitor_timeout_.reset();
 }
 
 void RenderFrameHostImpl::SetSubframeUnloadTimeoutForTesting(
@@ -5060,8 +5060,8 @@ void RenderFrameHostImpl::StartPendingDeletionOnSubtree() {
 
 void RenderFrameHostImpl::PendingDeletionCheckCompleted() {
   if (unload_state_ == UnloadState::Completed && children_.empty()) {
-    if (is_waiting_for_swapout_ack_)
-      OnSwappedOut();
+    if (is_waiting_for_unload_ack_)
+      OnUnloaded();
     else
       parent_->RemoveChild(frame_tree_node_);
   }
@@ -5568,7 +5568,7 @@ void RenderFrameHostImpl::CommitNavigation(
     // same-process navigations yet as we are reusing the RenderFrameHost and
     // as the local frame navigates it overrides the values that we are
     // interested in. The cross-process navigation case is handled in
-    // RenderFrameHostManager::SwapOutOldFrame.
+    // RenderFrameHostManager::UnloadOldFrame.
     //
     // Here we are recording the metrics for same-process navigations at the
     // point just before the navigation commits.

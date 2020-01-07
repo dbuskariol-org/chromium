@@ -708,11 +708,11 @@ IN_PROC_BROWSER_TEST_F(RenderFrameHostImplBeforeUnloadBrowserTest,
   EXPECT_TRUE(main_frame->is_waiting_for_beforeunload_ack());
 
   // Now answer the dialog and allow the navigation to proceed.  Disable
-  // SwapOut ACK on the old frame so that it sticks around in pending delete
+  // unload ACK on the old frame so that it sticks around in pending delete
   // state, since the test later verifies that it has received the beforeunload
   // ACK.
   TestFrameNavigationObserver commit_observer(root);
-  main_frame->DisableSwapOutTimerForTesting();
+  main_frame->DisableUnloadTimerForTesting();
   CloseDialogAndProceed();
   commit_observer.WaitForCommit();
   EXPECT_EQ(cross_site_url, web_contents()->GetLastCommittedURL());
@@ -721,7 +721,7 @@ IN_PROC_BROWSER_TEST_F(RenderFrameHostImplBeforeUnloadBrowserTest,
 
   // The navigation that succeeded was a browser-initiated, main frame
   // navigation, so it swapped RenderFrameHosts. |main_frame| should now be
-  // pending deletion and waiting for swapout ACK, but it should not be waiting
+  // pending deletion and waiting for unload ACK, but it should not be waiting
   // for the beforeunload ACK.
   EXPECT_FALSE(main_frame->is_active());
   EXPECT_FALSE(main_frame->is_waiting_for_beforeunload_ack());

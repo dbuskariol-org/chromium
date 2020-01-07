@@ -2185,7 +2185,7 @@ bool RenderFrameImpl::OnMessageReceived(const IPC::Message& msg) {
   bool handled = true;
   IPC_BEGIN_MESSAGE_MAP(RenderFrameImpl, msg)
     IPC_MESSAGE_HANDLER(FrameMsg_BeforeUnload, OnBeforeUnload)
-    IPC_MESSAGE_HANDLER(UnfreezableFrameMsg_SwapOut, OnSwapOut)
+    IPC_MESSAGE_HANDLER(UnfreezableFrameMsg_Unload, OnUnload)
     IPC_MESSAGE_HANDLER(FrameMsg_SwapIn, OnSwapIn)
     IPC_MESSAGE_HANDLER(FrameMsg_Stop, OnStop)
     IPC_MESSAGE_HANDLER(FrameMsg_ContextMenuClosed, OnContextMenuClosed)
@@ -2314,16 +2314,16 @@ void RenderFrameImpl::OnBeforeUnload(bool is_reload) {
       routing_id, proceed, before_unload_start_time, before_unload_end_time));
 }
 
-// Swap this RenderFrame out so the frame can navigate to a document rendered by
+// Unload this RenderFrame so the frame can navigate to a document rendered by
 // a different process. We also allow this process to exit if there are no other
 // active RenderFrames in it.
 // This executes the unload handlers on this frame and its local descendants.
-void RenderFrameImpl::OnSwapOut(
+void RenderFrameImpl::OnUnload(
     int proxy_routing_id,
     bool is_loading,
     const FrameReplicationState& replicated_frame_state) {
-  TRACE_EVENT1("navigation,rail", "RenderFrameImpl::OnSwapOut",
-               "id", routing_id_);
+  TRACE_EVENT1("navigation,rail", "RenderFrameImpl::OnUnload", "id",
+               routing_id_);
   DCHECK(!base::RunLoop::IsNestedOnCurrentThread());
 
   // Send an UpdateState message before we get deleted.
@@ -2340,8 +2340,9 @@ void RenderFrameImpl::OnSwapOut(
   int routing_id = GetRoutingID();
 
   // Before |this| is destroyed, grab the TaskRunner to be used for sending the
-  // SwapOut ACK.  This will be used to schedule SwapOut ACK to be sent after
-  // any postMessage IPCs scheduled from the unload event above.
+  // FrameHostMsg_Unload_ACK.  This will be used to schedule
+  // FrameHostMsg_Unload_ACK to be sent after any postMessage IPCs scheduled
+  // from the unload event above.
   scoped_refptr<base::SingleThreadTaskRunner> task_runner =
       GetTaskRunner(blink::TaskType::kPostedMessage);
 
@@ -2385,16 +2386,16 @@ void RenderFrameImpl::OnSwapOut(
   // process that is now rendering the frame.
   proxy->SetReplicatedState(replicated_frame_state);
 
-  // Notify the browser that this frame was swapped. Use the RenderThread
+  // Notify the browser that this frame was unloaded. Use the RenderThread
   // directly because |this| is deleted.  Post a task to send the ACK, so that
   // any postMessage IPCs scheduled from the unload handler are sent before
   // the ACK (see https://crbug.com/857274).
-  auto send_swapout_ack = base::BindOnce(
+  auto send_unload_ack = base::BindOnce(
       [](int routing_id, bool is_main_frame) {
-        RenderThread::Get()->Send(new FrameHostMsg_SwapOut_ACK(routing_id));
+        RenderThread::Get()->Send(new FrameHostMsg_Unload_ACK(routing_id));
       },
       routing_id, is_main_frame);
-  task_runner->PostTask(FROM_HERE, std::move(send_swapout_ack));
+  task_runner->PostTask(FROM_HERE, std::move(send_unload_ack));
 }
 
 void RenderFrameImpl::OnSwapIn() {
