@@ -1011,7 +1011,12 @@ public class WebContentsAccessibilityImpl extends AccessibilityNodeProvider
 
     @CalledByNative
     private void handleCheckStateChanged(int id) {
-        sendAccessibilityEvent(id, AccessibilityEvent.TYPE_VIEW_CLICKED);
+        // If the node has accessibility focus, fire TYPE_VIEW_CLICKED event. This check ensures
+        // only necessary announcements are made (e.g. changing a radio group selection
+        // would erroneously announce "checked not checked" without this check)
+        if (mAccessibilityFocusId == id) {
+            sendAccessibilityEvent(id, AccessibilityEvent.TYPE_VIEW_CLICKED);
+        }
     }
 
     @CalledByNative
