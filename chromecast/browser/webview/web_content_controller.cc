@@ -155,8 +155,8 @@ void WebContentController::AttachTo(aura::Window* window, int window_id) {
   surface_->AddSurfaceObserver(this);
 
   // Unretained is safe because we unset this in the destructor.
-  surface_->SetEmbeddedSurfaceId(
-      base::Bind(&WebContentController::GetSurfaceId, base::Unretained(this)));
+  surface_->SetEmbeddedSurfaceId(base::BindRepeating(
+      &WebContentController::GetSurfaceId, base::Unretained(this)));
 
   current_rfh_ = GetWebContents()->GetMainFrame();
   if (current_rfh_) {
