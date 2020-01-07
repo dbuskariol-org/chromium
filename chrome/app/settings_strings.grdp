@@ -3363,6 +3363,18 @@
   <message name="IDS_SETTINGS_SITE_SETTINGS_NOTIFICATIONS" desc="Label for notifications sites site settings.">
     Notifications
   </message>
+  <message name="IDS_SETTINGS_SITE_SETTINGS_HID_DEVICES" desc="Label for HID devices in site settings.">
+    HID devices
+  </message>
+  <message name="IDS_SETTINGS_SITE_SETTINGS_HID_DEVICES_ASK" desc="The ask label for HID devices in site settings.">
+    Ask when a site wants to access HID devices
+  </message>
+  <message name="IDS_SETTINGS_SITE_SETTINGS_HID_DEVICES_ASK_RECOMMENDED" desc="The ask label for HID devices in site settings (with the 'recommended' suffix).">
+    Ask when a site wants to access HID devices (recommended)
+  </message>
+  <message name="IDS_SETTINGS_SITE_SETTINGS_HID_DEVICES_BLOCK" desc="The block label for HID devices in site settings.">
+    Do not allow any sites to access HID devices
+  </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_IMAGES" desc="Label for the images site settings.">
     Images
   </message>
@@ -3864,6 +3876,9 @@
   </message>
   <message name="IDS_SETTINGS_NO_SERIAL_PORTS_FOUND" desc="Explanation for not showing serial ports in site settings.">
     No serial ports found
+  </message>
+  <message name="IDS_SETTINGS_NO_HID_DEVICES_FOUND" desc="Explanation for not showing HID devices in site settings.">
+    No HID devices found
   </message>
   <message name="IDS_SETTINGS_ADD_SITE_EXCEPTION_PLACEHOLDER" desc="Placeholder text shown before the user starts typing a new content settings exception for a site." >
     [*.]example.com
