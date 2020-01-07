@@ -69,6 +69,7 @@ void StatusAreaWidgetTestHelper::WaitForAnimationEnd(
     StatusAreaWidget* status_area_widget) {
   AnimationEndObserver observer(status_area_widget->GetLayer()->GetAnimator());
   observer.WaitForAnimationEnd();
+  status_area_widget->GetLayer()->GetAnimator()->StopAnimating();
 }
 
 }  // namespace ash
