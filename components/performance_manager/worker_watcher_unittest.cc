@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/performance_manager/shared_worker_watcher.h"
+#include "components/performance_manager/worker_watcher.h"
 
 #include <memory>
 #include <utility>
@@ -376,10 +376,10 @@ void TestFrameNodeSource::InvokeAndRemoveCallback(FrameNodeImpl* frame_node) {
 
 }  // namespace
 
-class SharedWorkerWatcherTest : public testing::Test {
+class WorkerWatcherTest : public testing::Test {
  public:
-  SharedWorkerWatcherTest();
-  ~SharedWorkerWatcherTest() override;
+  WorkerWatcherTest();
+  ~WorkerWatcherTest() override;
 
   // testing::Test:
   void SetUp() override;
@@ -390,7 +390,8 @@ class SharedWorkerWatcherTest : public testing::Test {
       PerformanceManagerImpl::GraphImplCallback graph_callback);
 
   // Retrieves the worker node associated with |instance|.
-  WorkerNodeImpl* GetWorkerNode(const content::SharedWorkerInstance& instance);
+  WorkerNodeImpl* GetSharedWorkerNode(
+      const content::SharedWorkerInstance& instance);
 
   PerformanceManagerImpl* performance_manager() {
     return performance_manager_.get();
@@ -415,31 +416,31 @@ class SharedWorkerWatcherTest : public testing::Test {
   std::unique_ptr<TestProcessNodeSource> process_node_source_;
   std::unique_ptr<TestFrameNodeSource> frame_node_source_;
 
-  // The SharedWorkerWatcher that's being tested.
-  std::unique_ptr<SharedWorkerWatcher> shared_worker_watcher_;
+  // The WorkerWatcher that's being tested.
+  std::unique_ptr<WorkerWatcher> worker_watcher_;
 
-  DISALLOW_COPY_AND_ASSIGN(SharedWorkerWatcherTest);
+  DISALLOW_COPY_AND_ASSIGN(WorkerWatcherTest);
 };
 
-SharedWorkerWatcherTest::SharedWorkerWatcherTest() = default;
+WorkerWatcherTest::WorkerWatcherTest() = default;
 
-SharedWorkerWatcherTest::~SharedWorkerWatcherTest() = default;
+WorkerWatcherTest::~WorkerWatcherTest() = default;
 
-void SharedWorkerWatcherTest::SetUp() {
+void WorkerWatcherTest::SetUp() {
   performance_manager_ = PerformanceManagerImpl::Create(base::DoNothing());
 
   process_node_source_ = std::make_unique<TestProcessNodeSource>();
   frame_node_source_ = std::make_unique<TestFrameNodeSource>();
 
-  shared_worker_watcher_ = std::make_unique<SharedWorkerWatcher>(
+  worker_watcher_ = std::make_unique<WorkerWatcher>(
       "browser_context_id", &shared_worker_service_, process_node_source_.get(),
       frame_node_source_.get());
 }
 
-void SharedWorkerWatcherTest::TearDown() {
+void WorkerWatcherTest::TearDown() {
   // Clean up the performance manager correctly.
-  shared_worker_watcher_->TearDown();
-  shared_worker_watcher_ = nullptr;
+  worker_watcher_->TearDown();
+  worker_watcher_ = nullptr;
 
   // Delete the TestFrameNodeSource and the TestProcessNodeSource in
   // that order since they own graph nodes.
@@ -448,7 +449,7 @@ void SharedWorkerWatcherTest::TearDown() {
   PerformanceManagerImpl::Destroy(std::move(performance_manager_));
 }
 
-void SharedWorkerWatcherTest::CallOnGraphAndWait(
+void WorkerWatcherTest::CallOnGraphAndWait(
     PerformanceManagerImpl::GraphImplCallback graph_callback) {
   base::RunLoop run_loop;
   performance_manager_->CallOnGraphImpl(
@@ -461,13 +462,13 @@ void SharedWorkerWatcherTest::CallOnGraphAndWait(
           }));
 }
 
-WorkerNodeImpl* SharedWorkerWatcherTest::GetWorkerNode(
+WorkerNodeImpl* WorkerWatcherTest::GetSharedWorkerNode(
     const content::SharedWorkerInstance& instance) {
-  return shared_worker_watcher_->GetWorkerNode(instance);
+  return worker_watcher_->GetSharedWorkerNode(instance);
 }
 
 // This test creates one worker with one client frame.
-TEST_F(SharedWorkerWatcherTest, SimpleWorker) {
+TEST_F(WorkerWatcherTest, SimpleWorker) {
   int render_process_id = process_node_source()->CreateProcessNode();
 
   // Create the frame node.
@@ -486,7 +487,7 @@ TEST_F(SharedWorkerWatcherTest, SimpleWorker) {
   // Check expectations on the graph.
   CallOnGraphAndWait(base::BindLambdaForTesting(
       [process_node = process_node_source()->GetProcessNode(render_process_id),
-       worker_node = GetWorkerNode(shared_worker_instance),
+       worker_node = GetSharedWorkerNode(shared_worker_instance),
        client_frame_node = frame_node_source()->GetFrameNode(
            render_process_id, frame_id)](GraphImpl* graph) {
         EXPECT_TRUE(graph->NodeInGraph(worker_node));
@@ -501,7 +502,7 @@ TEST_F(SharedWorkerWatcherTest, SimpleWorker) {
   shared_worker_service()->StopSharedWorker(shared_worker_instance);
 }
 
-TEST_F(SharedWorkerWatcherTest, CrossProcess) {
+TEST_F(WorkerWatcherTest, CrossProcess) {
   // Create the frame node.
   int frame_process_id = process_node_source()->CreateProcessNode();
   int frame_id = frame_node_source()->CreateFrameNode(
@@ -521,7 +522,7 @@ TEST_F(SharedWorkerWatcherTest, CrossProcess) {
   CallOnGraphAndWait(base::BindLambdaForTesting(
       [worker_process_node =
            process_node_source()->GetProcessNode(worker_process_id),
-       worker_node = GetWorkerNode(shared_worker_instance),
+       worker_node = GetSharedWorkerNode(shared_worker_instance),
        client_process_node =
            process_node_source()->GetProcessNode(frame_process_id),
        client_frame_node = frame_node_source()->GetFrameNode(
@@ -538,7 +539,7 @@ TEST_F(SharedWorkerWatcherTest, CrossProcess) {
   shared_worker_service()->StopSharedWorker(shared_worker_instance);
 }
 
-TEST_F(SharedWorkerWatcherTest, OneWorkerTwoClients) {
+TEST_F(WorkerWatcherTest, OneWorkerTwoClients) {
   int render_process_id = process_node_source()->CreateProcessNode();
 
   // Create the worker.
@@ -560,7 +561,7 @@ TEST_F(SharedWorkerWatcherTest, OneWorkerTwoClients) {
 
   // Check expectations on the graph.
   CallOnGraphAndWait(base::BindLambdaForTesting(
-      [worker_node = GetWorkerNode(shared_worker_instance),
+      [worker_node = GetSharedWorkerNode(shared_worker_instance),
        client_frame_node_1 =
            frame_node_source()->GetFrameNode(render_process_id, frame_id_1),
        client_frame_node_2 = frame_node_source()->GetFrameNode(
@@ -583,7 +584,7 @@ TEST_F(SharedWorkerWatcherTest, OneWorkerTwoClients) {
   shared_worker_service()->StopSharedWorker(shared_worker_instance);
 }
 
-TEST_F(SharedWorkerWatcherTest, OneClientTwoWorkers) {
+TEST_F(WorkerWatcherTest, OneClientTwoWorkers) {
   int render_process_id = process_node_source()->CreateProcessNode();
 
   // Create the frame node.
@@ -604,8 +605,8 @@ TEST_F(SharedWorkerWatcherTest, OneClientTwoWorkers) {
 
   // Check expectations on the graph.
   CallOnGraphAndWait(base::BindLambdaForTesting(
-      [worker_node_1 = GetWorkerNode(shared_worker_instance_1),
-       worker_node_2 = GetWorkerNode(shared_worker_instance_2),
+      [worker_node_1 = GetSharedWorkerNode(shared_worker_instance_1),
+       worker_node_2 = GetSharedWorkerNode(shared_worker_instance_2),
        client_frame_node = frame_node_source()->GetFrameNode(
            render_process_id, frame_id)](GraphImpl* graph) {
         // Check worker 1.
@@ -631,7 +632,7 @@ TEST_F(SharedWorkerWatcherTest, OneClientTwoWorkers) {
   shared_worker_service()->StopSharedWorker(shared_worker_instance_2);
 }
 
-TEST_F(SharedWorkerWatcherTest, FrameDestroyed) {
+TEST_F(WorkerWatcherTest, FrameDestroyed) {
   int render_process_id = process_node_source()->CreateProcessNode();
 
   // Create the frame node.
@@ -639,7 +640,7 @@ TEST_F(SharedWorkerWatcherTest, FrameDestroyed) {
       render_process_id,
       process_node_source()->GetProcessNode(render_process_id));
 
-  // Create the worker.
+  // Create a shared worker.
   content::SharedWorkerInstance shared_worker_instance =
       shared_worker_service()->StartSharedWorker(render_process_id);
 
@@ -649,20 +650,21 @@ TEST_F(SharedWorkerWatcherTest, FrameDestroyed) {
 
   // Check that everything is wired up correctly.
   CallOnGraphAndWait(base::BindLambdaForTesting(
-      [worker_node = GetWorkerNode(shared_worker_instance),
+      [shared_worker_node = GetSharedWorkerNode(shared_worker_instance),
        client_frame_node = frame_node_source()->GetFrameNode(
            render_process_id, frame_id)](GraphImpl* graph) {
-        EXPECT_TRUE(graph->NodeInGraph(worker_node));
-        EXPECT_TRUE(IsWorkerClient(worker_node, client_frame_node));
+        EXPECT_TRUE(graph->NodeInGraph(shared_worker_node));
+        EXPECT_TRUE(IsWorkerClient(shared_worker_node, client_frame_node));
       }));
 
   frame_node_source()->DeleteFrameNode(render_process_id, frame_id);
 
   // Check that the worker is no longer connected to the deleted frame.
   CallOnGraphAndWait(base::BindLambdaForTesting(
-      [worker_node = GetWorkerNode(shared_worker_instance)](GraphImpl* graph) {
-        EXPECT_TRUE(graph->NodeInGraph(worker_node));
-        EXPECT_TRUE(worker_node->client_frames().empty());
+      [shared_worker_node =
+           GetSharedWorkerNode(shared_worker_instance)](GraphImpl* graph) {
+        EXPECT_TRUE(graph->NodeInGraph(shared_worker_node));
+        EXPECT_TRUE(shared_worker_node->client_frames().empty());
       }));
 
   // The watcher is still expecting a worker removed notification.

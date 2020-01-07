@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PERFORMANCE_MANAGER_SHARED_WORKER_WATCHER_H_
-#define COMPONENTS_PERFORMANCE_MANAGER_SHARED_WORKER_WATCHER_H_
+#ifndef COMPONENTS_PERFORMANCE_MANAGER_WORKER_WATCHER_H_
+#define COMPONENTS_PERFORMANCE_MANAGER_WORKER_WATCHER_H_
 
 #include <memory>
 #include <string>
@@ -26,15 +26,18 @@ class FrameNodeSource;
 class ProcessNodeSource;
 class WorkerNodeImpl;
 
-// This class keeps track of running shared workers for a single browser context
-// and handles the ownership of the worker nodes.
-class SharedWorkerWatcher : public content::SharedWorkerService::Observer {
+// This class keeps track of running workers of all types for a single browser
+// context and handles the ownership of the worker nodes.
+//
+// TODO(https://crbug.com/993029): Add support for dedicated workers and service
+//                                 workers.
+class WorkerWatcher : public content::SharedWorkerService::Observer {
  public:
-  SharedWorkerWatcher(const std::string& browser_context_id,
-                      content::SharedWorkerService* shared_worker_service,
-                      ProcessNodeSource* process_node_source,
-                      FrameNodeSource* frame_node_source);
-  ~SharedWorkerWatcher() override;
+  WorkerWatcher(const std::string& browser_context_id,
+                content::SharedWorkerService* shared_worker_service,
+                ProcessNodeSource* process_node_source,
+                FrameNodeSource* frame_node_source);
+  ~WorkerWatcher() override;
 
   // Cleans up this instance and ensures shared worker nodes are correctly
   // destroyed on the PM graph.
@@ -54,7 +57,7 @@ class SharedWorkerWatcher : public content::SharedWorkerService::Observer {
                        int frame_id) override;
 
  private:
-  friend class SharedWorkerWatcherTest;
+  friend class WorkerWatcherTest;
 
   void OnBeforeFrameNodeRemoved(int render_process_id,
                                 int frame_id,
@@ -67,8 +70,9 @@ class SharedWorkerWatcher : public content::SharedWorkerService::Observer {
                          int frame_id,
                          WorkerNodeImpl* child_worker_node);
 
-  // Helper function to retrieve an existing worker node.
-  WorkerNodeImpl* GetWorkerNode(const content::SharedWorkerInstance& instance);
+  // Helper function to retrieve an existing shared worker node.
+  WorkerNodeImpl* GetSharedWorkerNode(
+      const content::SharedWorkerInstance& instance);
 
   // The ID of the BrowserContext who owns the shared worker service.
   const std::string browser_context_id_;
@@ -87,7 +91,7 @@ class SharedWorkerWatcher : public content::SharedWorkerService::Observer {
 
   // Maps each SharedWorkerInstance to its worker node.
   base::flat_map<content::SharedWorkerInstance, std::unique_ptr<WorkerNodeImpl>>
-      worker_nodes_;
+      shared_worker_nodes_;
 
   // Maps each frame to the shared workers that this frame is a client of. This
   // is used when a frame is torn down before the OnBeforeWorkerTerminated() is
@@ -111,9 +115,9 @@ class SharedWorkerWatcher : public content::SharedWorkerService::Observer {
   base::flat_map<WorkerNodeImpl*, int> clients_to_remove_;
 #endif  // DCHECK_IS_ON()
 
-  DISALLOW_COPY_AND_ASSIGN(SharedWorkerWatcher);
+  DISALLOW_COPY_AND_ASSIGN(WorkerWatcher);
 };
 
 }  // namespace performance_manager
 
-#endif  // COMPONENTS_PERFORMANCE_MANAGER_SHARED_WORKER_WATCHER_H_
+#endif  // COMPONENTS_PERFORMANCE_MANAGER_WORKER_WATCHER_H_
