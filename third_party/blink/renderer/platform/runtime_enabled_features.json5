@@ -1027,7 +1027,7 @@
     },
     {
       name: "MediaSessionPosition",
-      status: "experimental",
+      status: "stable",
     },
     {
       name: "MediaSessionSeeking",
