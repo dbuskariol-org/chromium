@@ -423,12 +423,6 @@
       name: "CSSColorSchemeUARendering",
     },
     {
-      // CSS min(), max() and clamp()
-      // https://drafts.csswg.org/css-values-4/#comp-func
-      name: "CSSComparisonFunctions",
-      status: "stable",
-    },
-    {
       name: "CSSFocusVisible",
       status: "experimental",
     },
