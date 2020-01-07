@@ -5441,6 +5441,29 @@ TEST_P(SplitViewOverviewSessionTest, GridBoundsAfterWindowDestroyed) {
   EXPECT_EQ(grid_bounds, GetGridBounds());
 }
 
+// Tests that overview stays active if we have a snapped window.
+TEST_P(SplitViewOverviewSessionTest, OnScreenLock) {
+  std::unique_ptr<aura::Window> window1 = CreateTestWindow();
+  std::unique_ptr<aura::Window> window2 = CreateTestWindow();
+
+  // Overview should exit if no snapped window after locking/unlocking.
+  ToggleOverview();
+  GetSessionControllerClient()->LockScreen();
+  GetSessionControllerClient()->UnlockScreen();
+  ASSERT_FALSE(InOverviewSession());
+
+  ToggleOverview();
+  split_view_controller()->SnapWindow(window2.get(), SplitViewController::LEFT);
+
+  // Lock and unlock the machine. Test that we are still in overview and
+  // splitview.
+  GetSessionControllerClient()->LockScreen();
+  GetSessionControllerClient()->UnlockScreen();
+  EXPECT_TRUE(InOverviewSession());
+  EXPECT_EQ(SplitViewController::State::kLeftSnapped,
+            split_view_controller()->state());
+}
+
 // Test the split view and overview functionalities in clamshell mode. Split
 // view is only active when overview is active in clamshell mode.
 class SplitViewOverviewSessionInClamshellTest
