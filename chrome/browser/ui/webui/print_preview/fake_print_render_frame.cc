@@ -32,6 +32,9 @@ void FakePrintRenderFrame::PrintPreview(base::Value settings) {}
 
 void FakePrintRenderFrame::OnPrintPreviewDialogClosed() {}
 
+void FakePrintRenderFrame::PrintFrameContent(
+    mojom::PrintFrameContentParamsPtr params) {}
+
 void FakePrintRenderFrame::PrintingDone(bool success) {}
 
 void FakePrintRenderFrame::SetPrintingEnabled(bool enabled) {}
