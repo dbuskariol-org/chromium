@@ -5692,6 +5692,13 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="DownloadNotification.Button_DeepScan">
+  <owner>drubery@chromium.org</owner>
+  <description>
+    User pushes &quot;Scan&quot; on the prompt for download deep scanning
+  </description>
+</action>
+
 <action name="DownloadNotification.Button_Discard">
   <owner>yoshiki@chromium.org</owner>
   <description>
