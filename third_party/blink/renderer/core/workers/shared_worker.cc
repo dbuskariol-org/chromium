@@ -110,7 +110,15 @@ SharedWorker* SharedWorker::Create(ExecutionContext* context,
   if (options.IsString()) {
     worker_name = options.GetAsString();
   } else if (options.IsWorkerOptions()) {
-    worker_name = options.GetAsWorkerOptions()->name();
+    WorkerOptions* worker_options = options.GetAsWorkerOptions();
+    if (worker_options->type() == "module" &&
+        !RuntimeEnabledFeatures::ModuleSharedWorkerEnabled()) {
+      exception_state.ThrowTypeError(
+          "Module scripts are not supported on SharedWorker yet. "
+          "(see https://crbug.com/824646)");
+      return nullptr;
+    }
+    worker_name = worker_options->name();
   } else {
     NOTREACHED();
   }
