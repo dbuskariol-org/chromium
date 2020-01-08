@@ -912,6 +912,45 @@
     },
   },
   'monochrome_apk_checker': {
+    'modifications': {
+      'ToTAndroid': {
+        'swarming': {
+          'dimension_sets': [
+            {
+              'device_os': None,
+              'device_playstore_version': None,
+              'device_type': None,
+              'os': 'Ubuntu-16.04',
+            },
+          ],
+        },
+      },
+      'android-arm64-proguard-rel': {
+        'swarming': {
+          'dimension_sets': [
+            {
+              'device_os': None,
+              'device_playstore_version': None,
+              'device_type': None,
+              'os': 'Ubuntu-16.04',
+            },
+          ],
+        },
+      },
+      'android-pie-arm64-rel': {
+        'swarming': {
+          'dimension_sets': [
+            {
+              'device_os': None,
+              'device_os_flavor': None,
+              'device_playstore_version': None,
+              'device_type': None,
+              'os': 'Ubuntu-16.04',
+            },
+          ],
+        },
+      },
+    },
     'remove_from': [
       # Don't run on trybots, which don't use proguard.
       # https://crbug.com/1029936.
