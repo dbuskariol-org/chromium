@@ -250,38 +250,17 @@ std::unique_ptr<network::ResourceRequest> CreateResourceRequest(
   new_request->report_raw_headers = request_info->report_raw_headers;
   new_request->has_user_gesture = request_info->common_params->has_user_gesture;
   new_request->enable_load_timing = true;
+  new_request->mode = network::mojom::RequestMode::kNavigate;
 
   FrameTreeNode* frame_tree_node =
       FrameTreeNode::GloballyFindByID(frame_tree_node_id);
   if (request_info->is_main_frame) {
-    // `<portal>` acts like a top-level navigation, but we want to represent it
-    // as a nested navigation for the purposes of security checks like
-    // `Sec-Fetch-Mode`.
-    new_request->mode =
-        frame_tree_node &&
-                WebContentsImpl::FromFrameTreeNode(frame_tree_node)->IsPortal()
-            ? network::mojom::RequestMode::kNavigateNestedFrame
-            : network::mojom::RequestMode::kNavigate;
-
-    // TODO(mkwst): "Portal"'s destination isn't actually defined at the
-    // moment. Let's assume it'll be similar to a frame until we decide
-    // otherwise.
-    // https://github.com/w3c/webappsec-fetch-metadata/issues/46
-    // https://crbug.com/1035402
     new_request->destination =
         frame_tree_node &&
                 WebContentsImpl::FromFrameTreeNode(frame_tree_node)->IsPortal()
             ? network::mojom::RequestDestination::kIframe
             : network::mojom::RequestDestination::kDocument;
   } else {
-    new_request->mode = network::mojom::RequestMode::kNavigateNestedFrame;
-    if (frame_tree_node && (frame_tree_node->frame_owner_element_type() ==
-                                blink::FrameOwnerElementType::kObject ||
-                            frame_tree_node->frame_owner_element_type() ==
-                                blink::FrameOwnerElementType::kEmbed)) {
-      new_request->mode = network::mojom::RequestMode::kNavigateNestedObject;
-    }
-
     if (frame_tree_node) {
       switch (frame_tree_node->frame_owner_element_type()) {
         case blink::FrameOwnerElementType::kObject:

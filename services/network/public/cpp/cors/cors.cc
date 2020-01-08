@@ -260,7 +260,7 @@ base::Optional<CorsErrorStatus> CheckAccess(
 bool ShouldCheckCors(const GURL& request_url,
                      const base::Optional<url::Origin>& request_initiator,
                      mojom::RequestMode request_mode) {
-  if (IsNavigationRequestMode(request_mode) ||
+  if (request_mode == network::mojom::RequestMode::kNavigate ||
       request_mode == network::mojom::RequestMode::kNoCors) {
     return false;
   }
