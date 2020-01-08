@@ -2485,6 +2485,13 @@ should be able to be added at any place in this file.
   <description>Please enter the description of this user action.</description>
 </action>
 
+<action name="AppList_SearchQueryStarted">
+  <owner>jennyz@chromium.org</owner>
+  <description>
+    User starts a new search query in launcher search box.
+  </description>
+</action>
+
 <action name="AppList_ShowPlayStoreQueryResults">
   <owner>jennyz@chromium.org</owner>
   <owner>newcomer@chromium.org</owner>
