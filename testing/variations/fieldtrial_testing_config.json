@@ -5103,7 +5103,8 @@
                 {
                     "name": "Enabled",
                     "params": {
-                        "connection_options": "NSTP"
+                        "connection_options": "NSTP",
+                        "enable_quic": "true"
                     },
                     "enable_features": [
                         "QuicDoesNotUseFeatures"
