@@ -397,7 +397,7 @@ cast_source_set("browser") {
     ]
   }
 
-  if (enable_cast_wayland_server) {
+  if (is_linux && use_ozone) {
     sources += [
       "exo/cast_wm_helper.cc",
       "exo/cast_wm_helper.h",
