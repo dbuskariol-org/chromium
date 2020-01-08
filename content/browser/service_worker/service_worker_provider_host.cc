@@ -53,38 +53,21 @@ void CreateQuicTransportConnectorImpl(
 
 }  // anonymous namespace
 
-// static
-std::unique_ptr<ServiceWorkerProviderHost>
-ServiceWorkerProviderHost::CreateForServiceWorker(
-    base::WeakPtr<ServiceWorkerContextCore> context,
-    scoped_refptr<ServiceWorkerVersion> version,
-    blink::mojom::ServiceWorkerProviderInfoForStartWorkerPtr*
-        out_provider_info) {
-  return base::WrapUnique(new ServiceWorkerProviderHost(
-      /*is_parent_frame_secure=*/true, FrameTreeNode::kFrameTreeNodeInvalidId,
-      (*out_provider_info)->host_remote.InitWithNewEndpointAndPassReceiver(),
-      /*container_remote=*/mojo::NullAssociatedRemote(), std::move(version),
-      context));
-}
-
 ServiceWorkerProviderHost::ServiceWorkerProviderHost(
-    bool is_parent_frame_secure,
-    int frame_tree_node_id,
     mojo::PendingAssociatedReceiver<blink::mojom::ServiceWorkerContainerHost>
         host_receiver,
-    mojo::PendingAssociatedRemote<blink::mojom::ServiceWorkerContainer>
-        container_remote,
     scoped_refptr<ServiceWorkerVersion> running_hosted_version,
     base::WeakPtr<ServiceWorkerContextCore> context)
     : provider_id_(NextProviderId()),
       running_hosted_version_(std::move(running_hosted_version)),
       container_host_(std::make_unique<content::ServiceWorkerContainerHost>(
           blink::mojom::ServiceWorkerProviderType::kForServiceWorker,
-          is_parent_frame_secure,
-          frame_tree_node_id,
+          /*is_parent_frame_secure=*/true,
+          FrameTreeNode::kFrameTreeNodeInvalidId,
           std::move(host_receiver),
-          std::move(container_remote),
+          mojo::NullAssociatedRemote(),
           context)) {
+  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   DCHECK(running_hosted_version_);
   container_host_->set_service_worker_host(this);
   container_host_->UpdateUrls(
@@ -108,31 +91,25 @@ ServiceWorkerProviderHost::~ServiceWorkerProviderHost() {
 
 ServiceWorkerVersion* ServiceWorkerProviderHost::running_hosted_version()
     const {
-  DCHECK(!running_hosted_version_ ||
-         container_host_->IsContainerForServiceWorker());
+  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
+  DCHECK(running_hosted_version_);
   return running_hosted_version_.get();
-}
-
-bool ServiceWorkerProviderHost::IsProviderForServiceWorker() const {
-  return container_host_->IsContainerForServiceWorker();
 }
 
 void ServiceWorkerProviderHost::CompleteStartWorkerPreparation(
     int process_id,
     mojo::PendingReceiver<blink::mojom::BrowserInterfaceBroker>
         broker_receiver) {
+  DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   DCHECK_EQ(ChildProcessHost::kInvalidUniqueID, worker_process_id_);
   DCHECK_NE(ChildProcessHost::kInvalidUniqueID, process_id);
-  DCHECK(IsProviderForServiceWorker());
-  SetWorkerProcessId(process_id);
-
+  worker_process_id_ = process_id;
   broker_receiver_.Bind(std::move(broker_receiver));
 }
 
 void ServiceWorkerProviderHost::CreateQuicTransportConnector(
     mojo::PendingReceiver<blink::mojom::QuicTransportConnector> receiver) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-  DCHECK(IsProviderForServiceWorker());
   RunOrPostTaskOnThread(
       FROM_HERE, BrowserThread::UI,
       base::BindOnce(&CreateQuicTransportConnectorImpl, worker_process_id_,
@@ -144,11 +121,6 @@ base::WeakPtr<ServiceWorkerProviderHost>
 ServiceWorkerProviderHost::GetWeakPtr() {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   return weak_factory_.GetWeakPtr();
-}
-
-void ServiceWorkerProviderHost::SetWorkerProcessId(int worker_process_id) {
-  DCHECK(IsProviderForServiceWorker());
-  worker_process_id_ = worker_process_id;
 }
 
 }  // namespace content

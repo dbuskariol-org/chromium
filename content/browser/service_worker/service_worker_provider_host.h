@@ -48,18 +48,11 @@ class ServiceWorkerVersion;
 // TODO(https://crbug.com/931087): Rename this to ServiceWorkerHost.
 class CONTENT_EXPORT ServiceWorkerProviderHost {
  public:
-  // Used for starting a service worker. Returns a provider host for the service
-  // worker and partially fills |out_provider_info|.  The host stays alive as
-  // long as this info stays alive (namely, as long as
-  // |out_provider_info->host_remote| stays alive).
-  // CompleteStartWorkerPreparation() must be called later to get a full info to
-  // send to the renderer.
-  static std::unique_ptr<ServiceWorkerProviderHost> CreateForServiceWorker(
-      base::WeakPtr<ServiceWorkerContextCore> context,
-      scoped_refptr<ServiceWorkerVersion> version,
-      blink::mojom::ServiceWorkerProviderInfoForStartWorkerPtr*
-          out_provider_info);
-
+  ServiceWorkerProviderHost(
+      mojo::PendingAssociatedReceiver<blink::mojom::ServiceWorkerContainerHost>
+          host_receiver,
+      scoped_refptr<ServiceWorkerVersion> running_hosted_version,
+      base::WeakPtr<ServiceWorkerContextCore> context);
   ~ServiceWorkerProviderHost();
 
   int provider_id() const { return provider_id_; }
@@ -68,10 +61,6 @@ class CONTENT_EXPORT ServiceWorkerProviderHost {
   // This is nullptr when the worker is still starting up (until
   // CompleteStartWorkerPreparation() is called).
   ServiceWorkerVersion* running_hosted_version() const;
-
-  // TODO(https://crbug.com/931087): Remove this function in favor of the
-  // ServiceWorkerContainerHost::IsContainerForServiceWorker().
-  bool IsProviderForServiceWorker() const;
 
   // Completes initialization of this provider host. It is called once a
   // renderer process has been found to host the worker.
@@ -90,25 +79,13 @@ class CONTENT_EXPORT ServiceWorkerProviderHost {
   base::WeakPtr<ServiceWorkerProviderHost> GetWeakPtr();
 
  private:
-  ServiceWorkerProviderHost(
-      bool is_parent_frame_secure,
-      int frame_tree_node_id,
-      mojo::PendingAssociatedReceiver<blink::mojom::ServiceWorkerContainerHost>
-          host_receiver,
-      mojo::PendingAssociatedRemote<blink::mojom::ServiceWorkerContainer>
-          container_remote,
-      scoped_refptr<ServiceWorkerVersion> running_hosted_version,
-      base::WeakPtr<ServiceWorkerContextCore> context);
-
-  // Sets the process ID of the service worker execution context.
-  void SetWorkerProcessId(int process_id);
-
   // Unique among all provider hosts.
   const int provider_id_;
 
   int worker_process_id_ = ChildProcessHost::kInvalidUniqueID;
 
   // The instance of service worker this provider hosts.
+  // TODO(https://crbug.com/931087): Change this to a rawptr.
   const scoped_refptr<ServiceWorkerVersion> running_hosted_version_;
 
   BrowserInterfaceBrokerImpl<ServiceWorkerProviderHost,
