@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <meta charset="UTF-8">
+<title>transform-perspective composition</title>
+<link rel="help" href="https://drafts.csswg.org/css-transforms-2/#three-d-transform-functions">
+<meta name="assert" content="transform-perspective supports animation as a transform list">
+
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/css/support/interpolation-testcommon.js"></script>
+
 <body>
-<script src="../interpolation/resources/interpolation-test.js"></script>
 <script>
 // Addition and accumulation of perspective values are very similar, but not
 // identical. We can test the difference by constructing a scenario where a
@@ -25,36 +32,36 @@
 
 // ------------ Addition tests --------------
 
-assertComposition({
+test_composition({
   property: 'transform',
   underlying: 'perspective(10px)',
   addFrom: 'perspective(10px)',
   addTo: 'perspective(50px)',
 }, [
-  {at: -0.5, is: 'perspective(4.12px)'},
-  {at: 0, is: 'perspective(5px)'},
-  {at: 0.25, is: 'perspective(5.45px)'},
-  {at: 0.5, is: 'perspective(6.15px)'},
-  {at: 0.75, is: 'perspective(7.06px)'},
-  {at: 1, is: 'perspective(8.33px)'},
-  {at: 1.5, is: 'perspective(10px)'},
+  {at: -0.5, expect: 'perspective(4.12px)'},
+  {at: 0, expect: 'perspective(5px)'},
+  {at: 0.25, expect: 'perspective(5.45px)'},
+  {at: 0.5, expect: 'perspective(6.15px)'},
+  {at: 0.75, expect: 'perspective(7.06px)'},
+  {at: 1, expect: 'perspective(8.33px)'},
+  {at: 1.5, expect: 'perspective(10px)'},
 ]);
 
 // ------------ Accumulation tests --------------
 
-assertComposition({
+test_composition({
   property: 'transform',
   underlying: 'perspective(10px)',
   accumulateFrom: 'perspective(10px)',
   accumulateTo: 'perspective(50px)',
 }, [
-  {at: -0.5, is: 'perspective(4.12px)'},
-  {at: 0, is: 'perspective(5px)'},
-  {at: 0.25, is: 'perspective(5.45px)'},
-  {at: 0.5, is: 'perspective(6.15px)'},
-  {at: 0.75, is: 'perspective(7.06px)'},
-  {at: 1, is: 'perspective(8.33px)'},
-  {at: 1.5, is: 'perspective(12.5px)'},
+  {at: -0.5, expect: 'perspective(4.12px)'},
+  {at: 0, expect: 'perspective(5px)'},
+  {at: 0.25, expect: 'perspective(5.45px)'},
+  {at: 0.5, expect: 'perspective(6.15px)'},
+  {at: 0.75, expect: 'perspective(7.06px)'},
+  {at: 1, expect: 'perspective(8.33px)'},
+  {at: 1.5, expect: 'perspective(12.5px)'},
 ]);
 </script>
 </body>

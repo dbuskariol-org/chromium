@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <meta charset="UTF-8">
+<title>transform-matrix composition</title>
+<link rel="help" href="https://drafts.csswg.org/css-transforms-2/#ctm">
+<meta name="assert" content="transform-matrix supports animation as a transform list">
+
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/css/support/interpolation-testcommon.js"></script>
+
 <body>
-<script src="../interpolation/resources/interpolation-test.js"></script>
 <script>
 // For matrix and matrix3d, addition is defined as concatenation whilst
 // accumulation works by decomposing the matrix and then accumulating the
@@ -45,7 +52,7 @@ function create3dMatrix(x, y, z, radians, translateX) {
 
 // ------------ Addition tests --------------
 
-assertComposition({
+test_composition({
   property: 'transform',
   // translateX(100px) rotate(90deg)
   underlying: 'matrix(0, 1, -1, 0, 100, 0)',
@@ -54,16 +61,16 @@ assertComposition({
   // translateX(200px)
   addTo: 'matrix(1, 0, 0, 1, 200, 0)',
 }, [
-  {at: -0.5, is: 'matrix(0, 1, -1, 0, 100, 50)'},
-  {at: 0, is: 'matrix(0, 1, -1, 0, 100, 100)'},
-  {at: 0.25, is: 'matrix(0, 1, -1, 0, 100, 125)'},
-  {at: 0.5, is: 'matrix(0, 1, -1, 0, 100, 150)'},
-  {at: 0.75, is: 'matrix(0, 1, -1, 0, 100, 175)'},
-  {at: 1, is: 'matrix(0, 1, -1, 0, 100, 200)'},
-  {at: 1.5, is: 'matrix(0, 1, -1, 0, 100, 250)'},
+  {at: -0.5, expect: 'matrix(0, 1, -1, 0, 100, 50)'},
+  {at: 0, expect: 'matrix(0, 1, -1, 0, 100, 100)'},
+  {at: 0.25, expect: 'matrix(0, 1, -1, 0, 100, 125)'},
+  {at: 0.5, expect: 'matrix(0, 1, -1, 0, 100, 150)'},
+  {at: 0.75, expect: 'matrix(0, 1, -1, 0, 100, 175)'},
+  {at: 1, expect: 'matrix(0, 1, -1, 0, 100, 200)'},
+  {at: 1.5, expect: 'matrix(0, 1, -1, 0, 100, 250)'},
 ]);
 
-assertComposition({
+test_composition({
   property: 'transform',
   // translateX(100px) rotate3d(1, 1, 0, 45deg)
   underlying: create3dMatrix(1, 1, 0, Math.PI / 4, 100),
@@ -73,19 +80,19 @@ assertComposition({
   addTo: 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 200, 0, 0, 1)',
 }, [
   // matrix3ds are hard to read; these are the decomposed forms for clarity
-  {at: -0.5, is: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(50px)'},
-  {at: 0, is: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(100px)'},
-  {at: 0.25, is: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(125px)'},
-  {at: 0.5, is: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(150px)'},
-  {at: 0.75, is: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(175px)'},
-  {at: 1, is: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(200px)'},
-  {at: 1.5, is: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(250px)'},
+  {at: -0.5, expect: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(50px)'},
+  {at: 0, expect: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(100px)'},
+  {at: 0.25, expect: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(125px)'},
+  {at: 0.5, expect: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(150px)'},
+  {at: 0.75, expect: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(175px)'},
+  {at: 1, expect: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(200px)'},
+  {at: 1.5, expect: 'translateX(100px) rotate3d(1, 1, 0, 45deg) translateX(250px)'},
 ]);
 
 // Addition of non-invertible matrices is still defined as concatenation so
 // includes the underlying value.
 
-assertComposition({
+test_composition({
   property: 'transform',
   // Non-invertible.
   underlying: 'matrix(1, 1, 0, 0, 0, 100)',
@@ -94,16 +101,16 @@ assertComposition({
   // translateX(200px)
   addTo: 'matrix(1, 0, 0, 1, 200, 0)',
 }, [
-  {at: -0.5, is: 'matrix(1, 1, 0, 0, 100, 200)'},
-  {at: 0, is: 'matrix(1, 1, 0, 0, 100, 200)'},
-  {at: 0.25, is: 'matrix(1, 1, 0, 0, 100, 200)'},
-  {at: 0.5, is: 'matrix(1, 1, 0, 0, 200, 300)'},
-  {at: 0.75, is: 'matrix(1, 1, 0, 0, 200, 300)'},
-  {at: 1, is: 'matrix(1, 1, 0, 0, 200, 300)'},
-  {at: 1.5, is: 'matrix(1, 1, 0, 0, 200, 300)'},
+  {at: -0.5, expect: 'matrix(1, 1, 0, 0, 100, 200)'},
+  {at: 0, expect: 'matrix(1, 1, 0, 0, 100, 200)'},
+  {at: 0.25, expect: 'matrix(1, 1, 0, 0, 100, 200)'},
+  {at: 0.5, expect: 'matrix(1, 1, 0, 0, 200, 300)'},
+  {at: 0.75, expect: 'matrix(1, 1, 0, 0, 200, 300)'},
+  {at: 1, expect: 'matrix(1, 1, 0, 0, 200, 300)'},
+  {at: 1.5, expect: 'matrix(1, 1, 0, 0, 200, 300)'},
 ]);
 
-assertComposition({
+test_composition({
   property: 'transform',
   // translateX(100px)
   underlying: 'matrix(1, 0, 0, 1, 100, 0)',
@@ -112,18 +119,18 @@ assertComposition({
   // translateX(200px)
   addTo: 'matrix(1, 0, 0, 1, 200, 0)',
 }, [
-  {at: -0.5, is: 'matrix(1, 1, 0, 0, 100, 100)'},
-  {at: 0, is: 'matrix(1, 1, 0, 0, 100, 100)'},
-  {at: 0.25, is: 'matrix(1, 1, 0, 0, 100, 100)'},
-  {at: 0.5, is: 'matrix(1, 0, 0, 1, 300, 0)'},
-  {at: 0.75, is: 'matrix(1, 0, 0, 1, 300, 0)'},
-  {at: 1, is: 'matrix(1, 0, 0, 1, 300, 0)'},
-  {at: 1.5, is: 'matrix(1, 0, 0, 1, 300, 0)'},
+  {at: -0.5, expect: 'matrix(1, 1, 0, 0, 100, 100)'},
+  {at: 0, expect: 'matrix(1, 1, 0, 0, 100, 100)'},
+  {at: 0.25, expect: 'matrix(1, 1, 0, 0, 100, 100)'},
+  {at: 0.5, expect: 'matrix(1, 0, 0, 1, 300, 0)'},
+  {at: 0.75, expect: 'matrix(1, 0, 0, 1, 300, 0)'},
+  {at: 1, expect: 'matrix(1, 0, 0, 1, 300, 0)'},
+  {at: 1.5, expect: 'matrix(1, 0, 0, 1, 300, 0)'},
 ]);
 
 // ------------ Accumulation tests --------------
 
-assertComposition({
+test_composition({
   property: 'transform',
   // translateX(100px) rotate(90deg)
   underlying: 'matrix(0, 1, -1, 0, 100, 0)',
@@ -132,16 +139,16 @@ assertComposition({
   // translateX(200px)
   accumulateTo: 'matrix(1, 0, 0, 1, 200, 0)',
 }, [
-  {at: -0.5, is: 'matrix(0, 1, -1, 0, 150, 0)'},
-  {at: 0, is: 'matrix(0, 1, -1, 0, 200, 0)'},
-  {at: 0.25, is: 'matrix(0, 1, -1, 0, 225, 0)'},
-  {at: 0.5, is: 'matrix(0, 1, -1, 0, 250, 0)'},
-  {at: 0.75, is: 'matrix(0, 1, -1, 0, 275, 0)'},
-  {at: 1, is: 'matrix(0, 1, -1, 0, 300, 0)'},
-  {at: 1.5, is: 'matrix(0, 1, -1, 0, 350, 0)'},
+  {at: -0.5, expect: 'matrix(0, 1, -1, 0, 150, 0)'},
+  {at: 0, expect: 'matrix(0, 1, -1, 0, 200, 0)'},
+  {at: 0.25, expect: 'matrix(0, 1, -1, 0, 225, 0)'},
+  {at: 0.5, expect: 'matrix(0, 1, -1, 0, 250, 0)'},
+  {at: 0.75, expect: 'matrix(0, 1, -1, 0, 275, 0)'},
+  {at: 1, expect: 'matrix(0, 1, -1, 0, 300, 0)'},
+  {at: 1.5, expect: 'matrix(0, 1, -1, 0, 350, 0)'},
 ]);
 
-assertComposition({
+test_composition({
   property: 'transform',
   // translateX(100px) rotate3d(1, 1, 0, 45deg)
   underlying: create3dMatrix(1, 1, 0, Math.PI / 4, 100),
@@ -151,18 +158,18 @@ assertComposition({
   accumulateTo: 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 200, 0, 0, 1)',
 }, [
   // matrix3ds are hard to read; these are the decomposed forms for clarity
-  {at: -0.5, is: 'translateX(150px) rotate3d(1, 1, 0, 45deg)'},
-  {at: 0, is: 'translateX(200px) rotate3d(1, 1, 0, 45deg)'},
-  {at: 0.25, is: 'translateX(225px) rotate3d(1, 1, 0, 45deg)'},
-  {at: 0.5, is: 'translateX(250px) rotate3d(1, 1, 0, 45deg)'},
-  {at: 0.75, is: 'translateX(275px) rotate3d(1, 1, 0, 45deg)'},
-  {at: 1, is: 'translateX(300px) rotate3d(1, 1, 0, 45deg)'},
-  {at: 1.5, is: 'translateX(350px) rotate3d(1, 1, 0, 45deg)'},
+  {at: -0.5, expect: 'translateX(150px) rotate3d(1, 1, 0, 45deg)'},
+  {at: 0, expect: 'translateX(200px) rotate3d(1, 1, 0, 45deg)'},
+  {at: 0.25, expect: 'translateX(225px) rotate3d(1, 1, 0, 45deg)'},
+  {at: 0.5, expect: 'translateX(250px) rotate3d(1, 1, 0, 45deg)'},
+  {at: 0.75, expect: 'translateX(275px) rotate3d(1, 1, 0, 45deg)'},
+  {at: 1, expect: 'translateX(300px) rotate3d(1, 1, 0, 45deg)'},
+  {at: 1.5, expect: 'translateX(350px) rotate3d(1, 1, 0, 45deg)'},
 ]);
 
 // Accumulation of non-invertible matrices falls back to replace behavior.
 
-assertComposition({
+test_composition({
   property: 'transform',
   // Non-invertible.
   underlying: 'matrix(1, 1, 0, 0, 0, 100)',
@@ -171,16 +178,16 @@ assertComposition({
   // translateX(200px)
   accumulateTo: 'matrix(1, 0, 0, 1, 200, 0)',
 }, [
-  {at: -0.5, is: 'matrix(1, 0, 0, 1, 50, 0)'},
-  {at: 0, is: 'matrix(1, 0, 0, 1, 100, 0)'},
-  {at: 0.25, is: 'matrix(1, 0, 0, 1, 125, 0)'},
-  {at: 0.5, is: 'matrix(1, 0, 0, 1, 150, 0)'},
-  {at: 0.75, is: 'matrix(1, 0, 0, 1, 175, 0)'},
-  {at: 1, is: 'matrix(1, 0, 0, 1, 200, 0)'},
-  {at: 1.5, is: 'matrix(1, 0, 0, 1, 250, 0)'},
+  {at: -0.5, expect: 'matrix(1, 0, 0, 1, 50, 0)'},
+  {at: 0, expect: 'matrix(1, 0, 0, 1, 100, 0)'},
+  {at: 0.25, expect: 'matrix(1, 0, 0, 1, 125, 0)'},
+  {at: 0.5, expect: 'matrix(1, 0, 0, 1, 150, 0)'},
+  {at: 0.75, expect: 'matrix(1, 0, 0, 1, 175, 0)'},
+  {at: 1, expect: 'matrix(1, 0, 0, 1, 200, 0)'},
+  {at: 1.5, expect: 'matrix(1, 0, 0, 1, 250, 0)'},
 ]);
 
-assertComposition({
+test_composition({
   property: 'transform',
   // translateX(100px)
   underlying: 'matrix(1, 0, 0, 1, 100, 0)',
@@ -189,13 +196,13 @@ assertComposition({
   // translateX(200px)
   accumulateTo: 'matrix(1, 0, 0, 1, 200, 0)',
 }, [
-  {at: -0.5, is: 'matrix(1, 1, 0, 0, 0, 100)'},
-  {at: 0, is: 'matrix(1, 1, 0, 0, 0, 100)'},
-  {at: 0.25, is: 'matrix(1, 1, 0, 0, 0, 100)'},
-  {at: 0.5, is: 'matrix(1, 0, 0, 1, 300, 0)'},
-  {at: 0.75, is: 'matrix(1, 0, 0, 1, 300, 0)'},
-  {at: 1, is: 'matrix(1, 0, 0, 1, 300, 0)'},
-  {at: 1.5, is: 'matrix(1, 0, 0, 1, 300, 0)'},
+  {at: -0.5, expect: 'matrix(1, 1, 0, 0, 0, 100)'},
+  {at: 0, expect: 'matrix(1, 1, 0, 0, 0, 100)'},
+  {at: 0.25, expect: 'matrix(1, 1, 0, 0, 0, 100)'},
+  {at: 0.5, expect: 'matrix(1, 0, 0, 1, 300, 0)'},
+  {at: 0.75, expect: 'matrix(1, 0, 0, 1, 300, 0)'},
+  {at: 1, expect: 'matrix(1, 0, 0, 1, 300, 0)'},
+  {at: 1.5, expect: 'matrix(1, 0, 0, 1, 300, 0)'},
 ]);
 </script>
 </body>
