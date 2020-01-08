@@ -595,6 +595,11 @@ class NavigationURLLoaderImpl::URLLoaderRequestController
           base::ThreadTaskRunnerHandle::Get()));
 
       default_loader_used_ = false;
+      // If |url_loader_| already exists, this means we are following a redirect
+      // using an interceptor. In this case we should make sure to reset the
+      // loader, similar to what is done in Restart().
+      if (url_loader_)
+        url_loader_->ResetForFollowRedirect();
       url_loader_ = blink::ThrottlingURLLoader::CreateLoaderAndStart(
           std::move(single_request_factory), std::move(throttles),
           frame_tree_node_id_, global_request_id_.request_id,
