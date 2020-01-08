@@ -2020,6 +2020,24 @@
             ]
         }
     ],
+    "DesktopTabGroups": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "TabGroups"
+                    ]
+                }
+            ]
+        }
+    ],
     "DialMediaRouteProvider": [
         {
             "platforms": [
