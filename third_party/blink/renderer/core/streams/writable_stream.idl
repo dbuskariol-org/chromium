@@ -11,5 +11,6 @@
     [NotEnumerable] readonly attribute boolean locked;
     [RaisesException, CallWith=ScriptState, NotEnumerable] Promise<void> abort(
         optional any reason);
+    [RaisesException, CallWith=ScriptState, NotEnumerable] Promise<void> close();
     [RaisesException, CallWith=ScriptState, NotEnumerable] WritableStreamDefaultWriter getWriter();
 };
