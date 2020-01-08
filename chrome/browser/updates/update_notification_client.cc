@@ -37,7 +37,25 @@ void UpdateNotificationClient::OnSchedulerInitialized(
 }
 
 void UpdateNotificationClient::OnUserAction(const UserActionData& action_data) {
-  NOTIMPLEMENTED();
+  DCHECK(action_data.client_type ==
+         notifications::SchedulerClientType::kChromeUpdate);
+  auto* update_notification_service = get_service_callback_.Run();
+  DCHECK(update_notification_service);
+
+  switch (action_data.action_type) {
+    case notifications::UserActionType::kClick:
+      NOTIMPLEMENTED();
+      break;
+    case notifications::UserActionType::kButtonClick:
+      NOTIMPLEMENTED();
+      break;
+    case notifications::UserActionType::kDismiss:
+      update_notification_service->OnUserDismiss();
+      break;
+    default:
+      NOTREACHED();
+      break;
+  }
 }
 
 }  // namespace updates
