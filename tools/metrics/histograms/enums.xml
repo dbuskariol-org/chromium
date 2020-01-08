@@ -13877,6 +13877,16 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="137457845" label="WEB_HISTORY_SERVICE"/>
 </enum>
 
+<enum name="DayOfWeek">
+  <int value="0" label="Sunday"/>
+  <int value="1" label="Monday"/>
+  <int value="2" label="Tuesday"/>
+  <int value="3" label="Wednesday"/>
+  <int value="4" label="Thursday"/>
+  <int value="5" label="Friday"/>
+  <int value="6" label="Saturday"/>
+</enum>
+
 <enum name="DCLayerResult">
   <int value="0" label="Success"/>
   <int value="1" label="Failed unsupported quad (not recorded)"/>
@@ -42691,6 +42701,21 @@ Called by update_use_counter_css.py.-->
   </int>
 </enum>
 
+<enum name="Month">
+  <int value="1" label="January"/>
+  <int value="2" label="Febuary"/>
+  <int value="3" label="March"/>
+  <int value="4" label="April"/>
+  <int value="5" label="May"/>
+  <int value="6" label="June"/>
+  <int value="7" label="July"/>
+  <int value="8" label="August"/>
+  <int value="9" label="September"/>
+  <int value="10" label="October"/>
+  <int value="11" label="November"/>
+  <int value="12" label="December"/>
+</enum>
+
 <enum name="MostVisitedTileIndex">
   <summary>
     Index of a tile on the new tab page. This is only an enum so that the
@@ -58996,6 +59021,14 @@ Called by update_net_trust_anchors.py.-->
   <int value="1" label="No Scale"/>
   <int value="2" label="Downscale"/>
   <int value="3" label="Large Downscale"/>
+</enum>
+
+<enum name="SmartChargingReason">
+  <int value="1" label="Charger plugged in"/>
+  <int value="2" label="Charger unplugged"/>
+  <int value="3" label="Periodic log"/>
+  <int value="4" label="Shutdown"/>
+  <int value="5" label="Suspend"/>
 </enum>
 
 <enum name="SmartLockAuthEventPasswordState">
