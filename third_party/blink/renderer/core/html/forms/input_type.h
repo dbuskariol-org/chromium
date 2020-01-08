@@ -140,6 +140,8 @@ class CORE_EXPORT InputType : public GarbageCollected<InputType> {
   virtual String BadInputText() const;
   virtual String RangeOverflowText(const Decimal& maximum) const;
   virtual String RangeUnderflowText(const Decimal& minimum) const;
+  virtual String RangeInvalidText(const Decimal& minimum,
+                                  const Decimal& maximum) const;
   virtual String TypeMismatchText() const;
   virtual String ValueMissingText() const;
   virtual bool CanSetStringValue() const;
