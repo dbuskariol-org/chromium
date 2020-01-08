@@ -201,8 +201,8 @@ String GetStringFromScriptHelper(
     return script;
   }
 
-  TrustedScript* result =
-      default_policy->CreateScript(doc->GetIsolate(), script, exception_state);
+  TrustedScript* result = default_policy->CreateScript(
+      doc->GetIsolate(), script, HeapVector<ScriptValue>(), exception_state);
   if (exception_state.HadException()) {
     exception_state.ClearException();
     return String();
@@ -361,8 +361,9 @@ String GetStringFromTrustedHTML(const String& string,
       return string;
     }
   }
-  TrustedHTML* result = default_policy->CreateHTML(
-      execution_context->GetIsolate(), string, exception_state);
+  TrustedHTML* result =
+      default_policy->CreateHTML(execution_context->GetIsolate(), string,
+                                 HeapVector<ScriptValue>(), exception_state);
   if (exception_state.HadException()) {
     return g_empty_string;
   }
@@ -427,7 +428,8 @@ String GetStringFromTrustedScript(const String& potential_script,
     }
   }
   TrustedScript* result = default_policy->CreateScript(
-      execution_context->GetIsolate(), potential_script, exception_state);
+      execution_context->GetIsolate(), potential_script,
+      HeapVector<ScriptValue>(), exception_state);
   DCHECK_EQ(!result, exception_state.HadException());
   if (exception_state.HadException()) {
     return g_empty_string;
@@ -482,7 +484,8 @@ String GetStringFromTrustedScriptURL(
     }
   }
   TrustedScriptURL* result = default_policy->CreateScriptURL(
-      execution_context->GetIsolate(), string, exception_state);
+      execution_context->GetIsolate(), string, HeapVector<ScriptValue>(),
+      exception_state);
 
   if (exception_state.HadException()) {
     return g_empty_string;
