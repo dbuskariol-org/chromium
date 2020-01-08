@@ -31,8 +31,9 @@ cca.views.CameraIntent = class extends cca.views.Camera {
    * @param {!cca.device.DeviceInfoUpdater} infoUpdater
    * @param {!cca.device.PhotoConstraintsPreferrer} photoPreferrer
    * @param {!cca.device.VideoConstraintsPreferrer} videoPreferrer
+   * @param {!cca.perf.PerfLogger} perfLogger
    */
-  constructor(intent, infoUpdater, photoPreferrer, videoPreferrer) {
+  constructor(intent, infoUpdater, photoPreferrer, videoPreferrer, perfLogger) {
     const resultSaver = /** @type {!cca.models.ResultSaver} */ ({
       savePhoto: async (blob) => {
         if (intent.shouldDownScale) {
@@ -55,7 +56,8 @@ cca.views.CameraIntent = class extends cca.views.Camera {
       },
     });
     super(
-        resultSaver, infoUpdater, photoPreferrer, videoPreferrer, intent.mode);
+        resultSaver, infoUpdater, photoPreferrer, videoPreferrer, intent.mode,
+        perfLogger);
 
     /**
      * @type {!cca.intent.Intent}
