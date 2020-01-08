@@ -745,7 +745,7 @@
       {
         "args": [
           "-v",
-          "--browser=android-chrome-bundle",
+          "--browser=android-chrome",
           "--upload-results",
           "--test-shard-map-filename=android-go-perf_map.json",
           "--run-ref-build"
@@ -1078,7 +1078,7 @@
       {
         "args": [
           "-v",
-          "--browser=android-chrome-bundle",
+          "--browser=android-chrome",
           "--upload-results",
           "--test-shard-map-filename=android-pixel2-perf_map.json",
           "--run-ref-build"
