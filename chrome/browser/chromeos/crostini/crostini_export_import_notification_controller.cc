@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/crostini/crostini_export_import_notification.h"
+#include "chrome/browser/chromeos/crostini/crostini_export_import_notification_controller.h"
 
 #include "ash/public/cpp/notification_utils.h"
 #include "base/strings/utf_string_conversions.h"
@@ -32,12 +32,13 @@ constexpr char kNotifierCrostiniExportImportOperation[] =
 
 }  // namespace
 
-CrostiniExportImportNotification::CrostiniExportImportNotification(
-    Profile* profile,
-    ExportImportType type,
-    const std::string& notification_id,
-    base::FilePath path,
-    ContainerId container_id)
+CrostiniExportImportNotificationController::
+    CrostiniExportImportNotificationController(
+        Profile* profile,
+        ExportImportType type,
+        const std::string& notification_id,
+        base::FilePath path,
+        ContainerId container_id)
     : CrostiniExportImportStatusTracker(type, std::move(path)),
       profile_(profile),
       container_id_(std::move(container_id)) {
@@ -60,9 +61,10 @@ CrostiniExportImportNotification::CrostiniExportImportNotification(
   SetStatusRunning(0);
 }
 
-CrostiniExportImportNotification::~CrostiniExportImportNotification() = default;
+CrostiniExportImportNotificationController::
+    ~CrostiniExportImportNotificationController() = default;
 
-void CrostiniExportImportNotification::ForceRedisplay() {
+void CrostiniExportImportNotificationController::ForceRedisplay() {
   hidden_ = false;
 
   NotificationDisplayService::GetForProfile(profile_)->Display(
@@ -70,7 +72,7 @@ void CrostiniExportImportNotification::ForceRedisplay() {
       /*metadata=*/nullptr);
 }
 
-void CrostiniExportImportNotification::SetStatusRunningUI(
+void CrostiniExportImportNotificationController::SetStatusRunningUI(
     int progress_percent) {
   if (hidden_) {
     return;
@@ -93,7 +95,7 @@ void CrostiniExportImportNotification::SetStatusRunningUI(
   ForceRedisplay();
 }
 
-void CrostiniExportImportNotification::SetStatusCancellingUI() {
+void CrostiniExportImportNotificationController::SetStatusCancellingUI() {
   if (hidden_) {
     return;
   }
@@ -113,7 +115,7 @@ void CrostiniExportImportNotification::SetStatusCancellingUI() {
   ForceRedisplay();
 }
 
-void CrostiniExportImportNotification::SetStatusDoneUI() {
+void CrostiniExportImportNotificationController::SetStatusDoneUI() {
   notification_->set_type(message_center::NOTIFICATION_TYPE_SIMPLE);
   notification_->set_accent_color(ash::kSystemNotificationColorNormal);
   notification_->set_title(l10n_util::GetStringUTF16(
@@ -131,12 +133,12 @@ void CrostiniExportImportNotification::SetStatusDoneUI() {
   ForceRedisplay();
 }
 
-void CrostiniExportImportNotification::SetStatusCancelledUI() {
+void CrostiniExportImportNotificationController::SetStatusCancelledUI() {
   NotificationDisplayService::GetForProfile(profile_)->Close(
       NotificationHandler::Type::TRANSIENT, notification_->id());
 }
 
-void CrostiniExportImportNotification::SetStatusFailedWithMessageUI(
+void CrostiniExportImportNotificationController::SetStatusFailedWithMessageUI(
     Status status,
     const base::string16& message) {
   notification_->set_type(message_center::NOTIFICATION_TYPE_SIMPLE);
@@ -153,7 +155,7 @@ void CrostiniExportImportNotification::SetStatusFailedWithMessageUI(
   ForceRedisplay();
 }
 
-void CrostiniExportImportNotification::Close(bool by_user) {
+void CrostiniExportImportNotificationController::Close(bool by_user) {
   switch (status()) {
     case Status::RUNNING:
     case Status::CANCELLING:
@@ -172,7 +174,7 @@ void CrostiniExportImportNotification::Close(bool by_user) {
   }
 }
 
-void CrostiniExportImportNotification::Click(
+void CrostiniExportImportNotificationController::Click(
     const base::Optional<int>& button_index,
     const base::Optional<base::string16>&) {
   switch (status()) {
