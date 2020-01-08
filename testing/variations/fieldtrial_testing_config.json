@@ -3705,6 +3705,32 @@
             ]
         }
     ],
+    "NTPZeroPrefixSuggestions": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "params": {
+                        "ZeroSuggestVariant:15:*": "RemoteNoUrl,Local",
+                        "ZeroSuggestVariant:1:*": "RemoteNoUrl,Local",
+                        "ZeroSuggestVariant:7:*": "RemoteNoUrl,Local"
+                    },
+                    "enable_features": [
+                        "NtpRealbox",
+                        "NtpRealboxMatchOmniboxTheme",
+                        "OmniboxOnFocusSuggestions",
+                        "OmniboxSuggestionTransparencyOptions"
+                    ]
+                }
+            ]
+        }
+    ],
     "NativeGellerizationRollout": [
         {
             "platforms": [
