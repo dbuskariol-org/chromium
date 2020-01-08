@@ -3262,7 +3262,7 @@ Unknown properties are collapsed to zero. -->
 </enum>
 
 <enum name="AsyncHitTestReasons">
-  <int value="0" label="Not async hit test"/>
+  <int value="0" label="Synchronous hit test"/>
   <int value="1" label="Iframe has overlapped region"/>
   <int value="2" label="Iframe is irregularly clipped"/>
   <int value="3" label="Iframe is not active"/>
