@@ -151,6 +151,7 @@ source_set("gl_tests_filters") {
   testonly = true
 
   data = [
+    "//testing/buildbot/filters/android.emulator.gl_tests.filter",
     "//testing/buildbot/filters/android.pie_arm64_rel.gl_tests.filter",
   ]
 }
