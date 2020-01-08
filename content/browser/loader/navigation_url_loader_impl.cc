@@ -262,6 +262,17 @@ std::unique_ptr<network::ResourceRequest> CreateResourceRequest(
                 WebContentsImpl::FromFrameTreeNode(frame_tree_node)->IsPortal()
             ? network::mojom::RequestMode::kNavigateNestedFrame
             : network::mojom::RequestMode::kNavigate;
+
+    // TODO(mkwst): "Portal"'s destination isn't actually defined at the
+    // moment. Let's assume it'll be similar to a frame until we decide
+    // otherwise.
+    // https://github.com/w3c/webappsec-fetch-metadata/issues/46
+    // https://crbug.com/1035402
+    new_request->destination =
+        frame_tree_node &&
+                WebContentsImpl::FromFrameTreeNode(frame_tree_node)->IsPortal()
+            ? network::mojom::RequestDestination::kIframe
+            : network::mojom::RequestDestination::kDocument;
   } else {
     new_request->mode = network::mojom::RequestMode::kNavigateNestedFrame;
     if (frame_tree_node && (frame_tree_node->frame_owner_element_type() ==
@@ -270,36 +281,31 @@ std::unique_ptr<network::ResourceRequest> CreateResourceRequest(
                                 blink::FrameOwnerElementType::kEmbed)) {
       new_request->mode = network::mojom::RequestMode::kNavigateNestedObject;
     }
-  }
 
-  if (frame_tree_node) {
-    switch (frame_tree_node->frame_owner_element_type()) {
-      case blink::FrameOwnerElementType::kNone:
-        new_request->destination =
-            network::mojom::RequestDestination::kDocument;
-        break;
-      case blink::FrameOwnerElementType::kObject:
-        new_request->destination = network::mojom::RequestDestination::kObject;
-        break;
-      case blink::FrameOwnerElementType::kEmbed:
-        new_request->destination = network::mojom::RequestDestination::kEmbed;
-        break;
-      case blink::FrameOwnerElementType::kIframe:
-        new_request->destination = network::mojom::RequestDestination::kIframe;
-        break;
-      case blink::FrameOwnerElementType::kFrame:
-        new_request->destination = network::mojom::RequestDestination::kFrame;
-        break;
-      case blink::FrameOwnerElementType::kPortal:
-        // TODO(mkwst): "Portal"'s destination isn't actually defined at the
-        // moment. Let's assume it'll be similar to a frame until we decide
-        // otherwise.
-        // https://github.com/w3c/webappsec-fetch-metadata/issues/46
-        new_request->destination = network::mojom::RequestDestination::kIframe;
-        break;
+    if (frame_tree_node) {
+      switch (frame_tree_node->frame_owner_element_type()) {
+        case blink::FrameOwnerElementType::kObject:
+          new_request->destination =
+              network::mojom::RequestDestination::kObject;
+          break;
+        case blink::FrameOwnerElementType::kEmbed:
+          new_request->destination = network::mojom::RequestDestination::kEmbed;
+          break;
+        case blink::FrameOwnerElementType::kIframe:
+          new_request->destination =
+              network::mojom::RequestDestination::kIframe;
+          break;
+        case blink::FrameOwnerElementType::kFrame:
+          new_request->destination = network::mojom::RequestDestination::kFrame;
+          break;
+        case blink::FrameOwnerElementType::kPortal:
+        case blink::FrameOwnerElementType::kNone:
+          NOTREACHED();
+          break;
+      }
+    } else {
+      new_request->destination = network::mojom::RequestDestination::kDocument;
     }
-  } else {
-    new_request->destination = network::mojom::RequestDestination::kDocument;
   }
 
   if (ui::PageTransitionIsWebTriggerable(
