@@ -1109,6 +1109,8 @@ jumbo_static_library("browser") {
     "payments/payment_handler_permission_context.cc",
     "payments/payment_handler_permission_context.h",
     "payments/ssl_validity_checker.cc",
+    "performance_hints/performance_hints_observer.cc",
+    "performance_hints/performance_hints_observer.h",
     "performance_manager/browser_child_process_watcher.cc",
     "performance_manager/browser_child_process_watcher.h",
     "performance_manager/chrome_browser_main_extra_parts_performance_manager.cc",
