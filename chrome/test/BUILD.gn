@@ -558,6 +558,7 @@ if (is_android) {
       "$root_gen_dir/chrome/android/chrome_apk_paks/locales/en-US.pak",
       "$root_gen_dir/chrome/android/chrome_apk_paks/resources.pak",
       "$root_gen_dir/components/components_resources.pak",
+      "$root_gen_dir/components/dev_ui_components_resources.pak",
       "$root_out_dir/browser_tests.pak",
       "//components/test/data/payments/",
       "//chrome/test/data/ssl/",
@@ -591,7 +592,10 @@ if (is_android) {
 
     # These are grit() rules so they are in $root_gen_dir.
     deps += [ "//components/resources" ]
-    sources += [ "$root_gen_dir/components/components_resources.pak" ]
+    sources += [
+      "$root_gen_dir/components/components_resources.pak",
+      "$root_gen_dir/components/dev_ui_components_resources.pak",
+    ]
 
     # These are repack() rules so they are in $root_out_dir.
     deps += [ "//chrome:browser_tests_pak" ]
