@@ -969,7 +969,9 @@ public class NFCTest {
         nfc.processPendingOperationsForTesting(null);
 
         // An error is notified.
-        verify(mNfcClient, times(1)).onError(NdefErrorType.NOT_SUPPORTED);
+        verify(mNfcClient, times(1)).onError(mErrorCaptor.capture());
+        assertNotNull(mErrorCaptor.getValue());
+        assertEquals(NdefErrorType.NOT_SUPPORTED, mErrorCaptor.getValue().errorType);
         // No watch.
         verify(mNfcClient, times(0))
                 .onWatch(mOnWatchCallbackCaptor.capture(), nullable(String.class),
@@ -996,7 +998,7 @@ public class NFCTest {
         nfc.processPendingOperationsForTesting(null);
 
         // An error is NOT notified.
-        verify(mNfcClient, times(0)).onError(NdefErrorType.NOT_SUPPORTED);
+        verify(mNfcClient, times(0)).onError(mErrorCaptor.capture());
         // No watch.
         verify(mNfcClient, times(0))
                 .onWatch(mOnWatchCallbackCaptor.capture(), nullable(String.class),
@@ -1025,7 +1027,9 @@ public class NFCTest {
         verify(mNfcClient, times(0))
                 .onWatch(mOnWatchCallbackCaptor.capture(), nullable(String.class),
                         any(NdefMessage.class));
-        verify(mNfcClient, times(1)).onError(NdefErrorType.IO_ERROR);
+        verify(mNfcClient, times(1)).onError(mErrorCaptor.capture());
+        assertNotNull(mErrorCaptor.getValue());
+        assertEquals(NdefErrorType.IO_ERROR, mErrorCaptor.getValue().errorType);
     }
 
     /**
