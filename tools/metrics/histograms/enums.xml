@@ -4411,6 +4411,8 @@ Unknown properties are collapsed to zero. -->
   <int value="0" label="Not migrated"/>
   <int value="1" label="Migrated from canonical email"/>
   <int value="2" label="Migrated from non canonical email"/>
+  <int value="3"
+      label="Not migrated (Unexpected primary account id with email format)."/>
 </enum>
 
 <enum name="AutofillPredictionSource">
