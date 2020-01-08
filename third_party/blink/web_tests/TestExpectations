@@ -7180,6 +7180,9 @@ crbug.com/963183 http/tests/devtools/sources/debugger/js-with-inline-stylesheets
 crbug.com/963183 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-1.js [ Pass Failure ]
 crbug.com/963183 http/tests/devtools/startup/sources/debugger/script-formatter-breakpoints-inline-with-sourceURL.js [ Pass Failure ]
 
+crbug.com/1030086 external/wpt/html/infrastructure/safe-passing-of-structured-data/structured-cloning-error-extra.html [ Pass Failure ]
+crbug.com/1030086 external/wpt/html/infrastructure/safe-passing-of-structured-data/structuredclone_0.html [ Pass Failure ]
+
 # Temporarily disabled to land Linkifier changes in DevTools
 crbug.com/963183 http/tests/devtools/jump-to-previous-editing-location.js [ Pass Failure ]
 
