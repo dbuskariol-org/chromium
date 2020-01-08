@@ -6501,11 +6501,7 @@ void GLES2DecoderImpl::DoBindFramebuffer(GLenum target, GLuint client_id) {
     service_id = GetBackbufferServiceId();
   }
 
-  if (workarounds().do_extra_flush_around_bindframebuffer)
-    api()->glFlushFn();
   api()->glBindFramebufferEXTFn(target, service_id);
-  if (workarounds().do_extra_flush_around_bindframebuffer)
-    api()->glFlushFn();
   OnFboChanged();
 }
 
