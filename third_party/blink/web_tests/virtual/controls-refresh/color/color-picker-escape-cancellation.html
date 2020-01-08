@@ -6,30 +6,124 @@
 <script src='../../../fast/forms/resources/picker-common.js'></script>
 </head>
 <body>
-<input type='color' id='color' value='#80d9ff'>
+<input type='color' id='color1' value='#80d9ff'>
+<input type='color' id='color2' value='#3d5a66'>
+<input type='color' id='color3' value='#000000'>
 <script>
 'use strict';
 
-let t = async_test('Color picker: Pressing escape to discard color selection.');
-t.step(() => {
-  let colorControl = document.getElementById('color');
-  openPicker(colorControl, t.step_func(() => {
-    popupWindow.focus();
-    const popupDocument = popupWindow.document;
+promise_test(() => {
+  let colorControl = document.getElementById('color1');
+  return openPickerWithPromise(colorControl)
+  .then(() => {
+    internals.pagePopupWindow.focus();
+    eventSender.keyDown('Escape');
+    assert_equals(internals.pagePopupWindow, null, 'Popup should close after pressing escape with no changes.');
+  });
+}, "Color picker: Pressing escape with no changes should close the popup");
+
+promise_test(() => {
+  let colorControl = document.getElementById('color1');
+  return openPickerWithPromise(colorControl)
+  .then(() => {
+    internals.pagePopupWindow.focus();
+    const popupDocument = internals.pagePopupWindow.document;
     const colorWell = popupDocument.querySelector('color-well');
     const colorWellRect = colorWell.getBoundingClientRect();
     eventSender.mouseMoveTo(colorWellRect.left, colorWellRect.top);
     eventSender.mouseDown();
     eventSender.mouseMoveTo(colorWellRect.left + (colorWellRect.width * 4 / 10), colorWellRect.top + (colorWellRect.height * 6 / 10));
     eventSender.mouseUp();
+    assert_equals(colorControl.value, '#3d5a66', 'Expected color value to change from mouse input.');
     eventSender.keyDown('Escape');
-    waitUntilClosing(t.step_func_done(() => {
-      assert_equals(colorControl.value, '#80d9ff', 'Color control value should remain the same after pressing escape.');
-    }), popupWindow.eval('ColorPicker').COMMIT_DELAY_MS);
-  }), t.step_func_done(() => {
-    assert_true(true, 'Popup did not open.');
-  }));
-});
+    assert_equals(colorControl.value, '#80d9ff', 'Color control value should have reverted back after pressing escape.');
+    assert_not_equals(internals.pagePopupWindow, null, 'Popup should still be open after escape that reverted color value.');
+    eventSender.keyDown('Escape');
+    assert_equals(internals.pagePopupWindow, null, 'Popup should close after second escape.');
+  });
+}, "Color picker: Pressing escape once discards color selection but keeps popup open, pressing again closes popup");
+
+promise_test(() => {
+  let colorControl = document.getElementById('color1');
+  return openPickerWithPromise(colorControl)
+  .then(() => {
+    internals.pagePopupWindow.focus();
+    const popupDocument = internals.pagePopupWindow.document;
+    const colorWell = popupDocument.querySelector('color-well');
+    const rValueContainer = popupDocument.getElementById('rValueContainer');
+    const rValueContainerRect = rValueContainer.getBoundingClientRect();
+    eventSender.mouseMoveTo(rValueContainerRect.left + 1, rValueContainerRect.top);
+    eventSender.mouseDown();
+    eventSender.mouseUp();
+    assert_equals(rValueContainer.value, '128');
+    eventSender.keyDown('Delete');
+    assert_equals(rValueContainer.value, '28');
+    assert_equals(colorControl.value, '#1cd9ff', 'Expected color value to change from manualinput.');
+    eventSender.keyDown('Escape');
+    assert_equals(colorControl.value, '#80d9ff', 'Color control value should have reverted back after pressing escape.');
+    assert_equals(rValueContainer.value, '128');
+    assert_not_equals(internals.pagePopupWindow, null, 'Popup should still be open after escape that reverted color value.');
+    eventSender.keyDown('Escape');
+    assert_equals(internals.pagePopupWindow, null, 'Popup should close after second escape.');
+  });
+}, "Color picker: Pressing escape once discards manual color selection but keeps popup open, pressing again closes popup");
+
+promise_test(() => {
+  let colorControl = document.getElementById('color2');
+  return openPickerWithPromise(colorControl)
+  .then(() => {
+    internals.pagePopupWindow.focus();
+    const popupDocument = internals.pagePopupWindow.document;
+    const colorWell = popupDocument.querySelector('color-well');
+    const colorWellRect = colorWell.getBoundingClientRect();
+    eventSender.mouseMoveTo(colorWellRect.left + (colorWellRect.width * 2 / 10), colorWellRect.top + (colorWellRect.height * 3 / 10));
+    eventSender.mouseDown();
+    eventSender.mouseUp();
+    assert_equals(colorControl.value, '#8fa8b3', 'Mouse input should have changed color value.');
+
+    eventSender.mouseMoveTo(colorWellRect.left + (colorWellRect.width * 4 / 10), colorWellRect.top + (colorWellRect.height * 6 / 10));
+    eventSender.mouseDown();
+    eventSender.mouseUp();
+    assert_equals(colorControl.value, '#3d5a66', 'Mouse input should have changed color back to original value.');
+    eventSender.keyDown('Escape');
+    assert_equals(internals.pagePopupWindow, null, 'Single escape should change popup since its value was switched back the value when opened');
+  });
+}, "Color picker: Pressing escape closes popup after value is changed and then set back to original value.");
+
+promise_test(() => {
+  let colorControl = document.getElementById('color3');
+  return openPickerWithPromise(colorControl)
+  .then(() => {
+    internals.pagePopupWindow.focus();
+    const popupDocument = internals.pagePopupWindow.document;
+    const hueSlider = popupDocument.querySelector('hue-slider');
+    const hueSliderRect = hueSlider.getBoundingClientRect();
+    eventSender.mouseMoveTo(hueSliderRect.left, hueSliderRect.top);
+    eventSender.mouseDown();
+    eventSender.mouseMoveTo(hueSliderRect.left + (hueSliderRect.width / 2), hueSliderRect.top);
+    eventSender.mouseUp();
+    assert_equals(colorControl.value, '#000000', 'Hue slider should not have changed value when starting from #000000.');
+
+    eventSender.keyDown('Escape');
+    assert_equals(internals.pagePopupWindow, null, 'Single escape should close popup if hue slider but not color value changed');
+  });
+}, "Color picker: Hue slider change with no color value change doesn't affect escape behavior");
+
+promise_test(() => {
+  let colorControl = document.getElementById('color3');
+  return openPickerWithPromise(colorControl)
+  .then(() => {
+    internals.pagePopupWindow.focus();
+    const popupDocument = internals.pagePopupWindow.document;
+    const formatToggler = popupDocument.querySelector('format-toggler');
+    formatToggler.click();  // first click changes format to HSL
+    formatToggler.click();  // second click changes format to Hex
+
+    eventSender.keyDown('Escape');
+    assert_equals(internals.pagePopupWindow, null, 'Single escape should close popup if manual color entry format but not color value changed');
+  });
+}, "Color picker: Format changes with no color value change don't affect escape behavior");
+
 </script>
 </body>
 </html>
