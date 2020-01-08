@@ -15,8 +15,6 @@ import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
 
-import org.chromium.chrome.R;
-
 /**
  * A preference that supports some Chrome-specific customizations:
  *
