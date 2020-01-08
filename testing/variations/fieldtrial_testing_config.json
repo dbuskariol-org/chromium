@@ -4094,22 +4094,6 @@
             ]
         }
     ],
-    "OmniboxGroupSuggestionsBySearchVsUrlAndroid": [
-        {
-            "platforms": [
-                "android"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "OmniboxGroupSuggestionsBySearchVsUrl",
-                        "OmniboxPreserveDefaultMatchScore"
-                    ]
-                }
-            ]
-        }
-    ],
     "OmniboxOnDeviceHeadSuggest": [
         {
             "platforms": [
