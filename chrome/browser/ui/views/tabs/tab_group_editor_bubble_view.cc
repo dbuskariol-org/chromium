@@ -38,14 +38,6 @@
 #include "ui/views/layout/layout_types.h"
 #include "ui/views/view_class_properties.h"
 
-namespace {
-
-constexpr int TAB_GROUP_HEADER_CXMENU_NEW_TAB_IN_GROUP = 13;
-constexpr int TAB_GROUP_HEADER_CXMENU_UNGROUP = 14;
-constexpr int TAB_GROUP_HEADER_CXMENU_CLOSE_GROUP = 15;
-constexpr int TAB_GROUP_HEADER_CXMENU_FEEDBACK = 16;
-}  // namespace
-
 // static
 views::Widget* TabGroupEditorBubbleView::Show(
     TabGroupHeader* anchor_view,
