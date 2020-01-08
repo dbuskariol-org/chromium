@@ -474,6 +474,8 @@ source_set("chromeos") {
     "arc/accessibility/arc_accessibility_util.h",
     "arc/accessibility/ax_tree_source_arc.cc",
     "arc/accessibility/ax_tree_source_arc.h",
+    "arc/accessibility/geometry_util.cc",
+    "arc/accessibility/geometry_util.h",
     "arc/app_shortcuts/arc_app_shortcut_item.cc",
     "arc/app_shortcuts/arc_app_shortcut_item.h",
     "arc/app_shortcuts/arc_app_shortcuts_menu_builder.cc",
