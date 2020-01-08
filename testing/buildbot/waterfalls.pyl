@@ -3485,6 +3485,7 @@
           'all',
         ],
         'mixins': [
+          'fuchsia_aemu',
           'linux-xenial',
         ],
         'swarming': {
