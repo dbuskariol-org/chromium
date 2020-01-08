@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include <mfapi.h>
 
+#include "base/win/windows_version.h"
 #include "media/base/test_helpers.h"
 #include "media/base/win/mf_helpers.h"
 #include "media/base/win/mf_initializer.h"
@@ -15,11 +16,15 @@ using Microsoft::WRL::ComPtr;
 
 class DXGIDeviceScopedHandleTest : public testing::Test {
  public:
-  DXGIDeviceScopedHandleTest() = default;
+  DXGIDeviceScopedHandleTest()
+      : test_supported_(base::win::GetVersion() >= base::win::Version::WIN10) {}
   ~DXGIDeviceScopedHandleTest() override = default;
 
  protected:
   void SetUp() override {
+    if (!test_supported_)
+      return;
+
     ASSERT_TRUE(InitializeMediaFoundation());
 
     // Get a shared DXGI Device Manager from Media Foundation.
@@ -50,16 +55,23 @@ class DXGIDeviceScopedHandleTest : public testing::Test {
   }
 
   void TearDown() override {
-    ASSERT_HRESULT_SUCCEEDED(MFUnlockDXGIDeviceManager());
+    if (test_supported_) {
+      ASSERT_HRESULT_SUCCEEDED(MFUnlockDXGIDeviceManager());
+    }
   }
 
   Microsoft::WRL::ComPtr<IMFDXGIDeviceManager> dxgi_device_man_ = nullptr;
   UINT device_reset_token_ = 0;
+  const bool test_supported_;
 };
 
 TEST_F(DXGIDeviceScopedHandleTest, UseDXGIDeviceScopedHandle) {
+  if (!test_supported_)
+    return;
+
   {
-    // Create DXGIDeviceScopedHandle in an inner scope without LockDevice call.
+    // Create DXGIDeviceScopedHandle in an inner scope without LockDevice
+    // call.
     mf::DXGIDeviceScopedHandle device_handle_1(dxgi_device_man_.Get());
   }
   {
