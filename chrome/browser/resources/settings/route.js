@@ -823,9 +823,7 @@ cr.define('settings', function() {
     }
 
     // <if expr="chromeos">
-    const showOSSettings = loadTimeData.valueExists('showOSSettings') &&
-        loadTimeData.getBoolean('showOSSettings');
-    if (isOSSettings || showOSSettings) {
+    if (isOSSettings) {
       addOSSettingsRoutes(availableRoutes);
     }
     // </if>
