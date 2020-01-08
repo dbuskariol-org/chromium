@@ -4495,6 +4495,7 @@ bool ChromeContentBrowserClient::WillCreateURLLoaderFactory(
     mojo::PendingRemote<network::mojom::TrustedURLLoaderHeaderClient>*
         header_client,
     bool* bypass_redirect_checks,
+    bool* disable_secure_dns,
     network::mojom::URLLoaderFactoryOverridePtr* factory_override) {
   bool use_proxy = false;
 
@@ -4519,6 +4520,16 @@ bool ChromeContentBrowserClient::WillCreateURLLoaderFactory(
   use_proxy |= signin::ProxyingURLLoaderFactory::MaybeProxyRequest(
       frame, type == URLLoaderFactoryType::kNavigation, request_initiator,
       factory_receiver);
+
+#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
+  if (disable_secure_dns) {
+    WebContents* web_contents = WebContents::FromRenderFrameHost(frame);
+    *disable_secure_dns =
+        web_contents && CaptivePortalTabHelper::FromWebContents(web_contents) &&
+        CaptivePortalTabHelper::FromWebContents(web_contents)
+            ->is_captive_portal_window();
+  }
+#endif
 
   return use_proxy;
 }
