@@ -323,7 +323,11 @@ bool CorsURLLoaderFactory::IsSane(const NetworkContext* context,
 
     case InitiatorLockCompatibility::kIncorrectLock:
       // Requests from the renderer need to always specify a correct initiator.
-      NOTREACHED();
+      //
+      // TODO(lukasza): https://crbug.com/1027173: Reintroduce NOTREACHED below
+      // after relaxing request initiator checks to account for requests issued
+      // by the PDF plugin.
+      //
       // TODO(lukasza): https://crbug.com/920634: Report bad message and return
       // false below.
       break;
