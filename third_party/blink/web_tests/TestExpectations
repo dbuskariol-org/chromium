@@ -3678,6 +3678,12 @@ crbug.com/1035708 external/wpt/css/css-pseudo/spelling-error-001.html [ Failure 
 crbug.com/1035708 external/wpt/css/css-pseudo/grammar-error-001.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
+crbug.com/626703 [ Mac ] external/wpt/css/css-text-decor/text-decoration-subelements-002.html [ Failure ]
+crbug.com/626703 [ Win ] external/wpt/css/css-text-decor/text-decoration-subelements-002.html [ Failure ]
+crbug.com/626703 [ Win7 ] external/wpt/content-security-policy/object-src/object-src-no-url-allowed.html [ Timeout ]
+crbug.com/626703 [ Win7 ] external/wpt/content-security-policy/plugin-types/plugintypes-nourl-allowed.html [ Timeout ]
+crbug.com/626703 [ Mac ] external/wpt/css/css-text-decor/text-decoration-subelements-003.html [ Failure ]
+crbug.com/626703 [ Win ] external/wpt/css/css-text-decor/text-decoration-subelements-003.html [ Failure ]
 crbug.com/626703 [ Mac10.11 ] virtual/cascade/external/wpt/css/css-paint-api/parse-input-arguments-018.https.html [ Failure ]
 crbug.com/626703 [ Linux ] external/wpt/infrastructure/reftest/reftest_match_and_mismatch-6.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/infrastructure/reftest/reftest_match_and_mismatch-6.html [ Failure ]
