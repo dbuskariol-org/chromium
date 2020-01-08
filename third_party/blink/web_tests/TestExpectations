@@ -3678,10 +3678,7 @@ crbug.com/1035708 external/wpt/css/css-pseudo/spelling-error-001.html [ Failure 
 crbug.com/1035708 external/wpt/css/css-pseudo/grammar-error-001.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
-crbug.com/626703 [ Mac10.10 ] virtual/reporting-api/external/wpt/content-security-policy/reporting-api/reporting-api-doesnt-send-reports-without-violation.https.sub.html [ Timeout ]
-crbug.com/626703 [ Retina ] virtual/reporting-api/external/wpt/content-security-policy/reporting-api/reporting-api-doesnt-send-reports-without-violation.https.sub.html [ Timeout ]
 crbug.com/626703 [ Mac10.11 ] virtual/cascade/external/wpt/css/css-paint-api/parse-input-arguments-018.https.html [ Failure ]
-crbug.com/626703 [ Mac10.13 ] virtual/reporting-api/external/wpt/content-security-policy/reporting-api/reporting-api-doesnt-send-reports-without-violation.https.sub.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/infrastructure/reftest/reftest_match_and_mismatch-6.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/infrastructure/reftest/reftest_match_and_mismatch-6.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/infrastructure/reftest/reftest_match_and_mismatch-6.html [ Failure ]
@@ -7185,3 +7182,6 @@ crbug.com/963183 http/tests/devtools/startup/sources/debugger/script-formatter-b
 
 # Temporarily disabled to land Linkifier changes in DevTools
 crbug.com/963183 http/tests/devtools/jump-to-previous-editing-location.js [ Pass Failure ]
+
+# Sheriff 2020-01-08
+crbug.com/850170 virtual/reporting-api/external/wpt/content-security-policy/reporting-api/reporting-api-doesnt-send-reports-without-violation.https.sub.html [ Pass Timeout ]
