@@ -3677,6 +3677,7 @@ crbug.com/1035708 external/wpt/css/css-pseudo/spelling-error-001.html [ Failure 
 crbug.com/1035708 external/wpt/css/css-pseudo/grammar-error-001.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
+crbug.com/626703 [ Win7 ] external/wpt/pointerevents/pointerevent_touch-action-inherit_child-auto-child-none_touch.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/css/css-text-decor/text-decoration-subelements-002.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/css-text-decor/text-decoration-subelements-002.html [ Failure ]
 crbug.com/626703 [ Win7 ] external/wpt/content-security-policy/object-src/object-src-no-url-allowed.html [ Timeout ]
@@ -3871,7 +3872,6 @@ crbug.com/626703 [ Win ] external/wpt/webvtt/rendering/cues-with-video/processin
 crbug.com/626703 [ Linux ] external/wpt/shadow-dom/directionality-002.tentative.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/shadow-dom/directionality-002.tentative.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/shadow-dom/directionality-002.tentative.html [ Failure ]
-crbug.com/626703 [ Mac10.10 ] external/wpt/html/cross-origin-opener-policy/popup-same-site-unsafe-allow-outgoing.https.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.13 ] wpt_internal/display-lock/rendersubtree/activation/selection.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/css/css-lists/li-value-reversed-005.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/css-lists/li-value-reversed-005.html [ Failure ]
@@ -7050,7 +7050,6 @@ crbug.com/1015187 [ Mac ] virtual/stable/external/wpt/html/cross-origin-embedder
 # Sheriff 2019-11-29
 crbug.com/1019079 virtual/gpu/fast/canvas/OffscreenCanvas-placeholder-createImageBitmap.html [ Pass Failure ]
 crbug.com/1019079 fast/canvas/OffscreenCanvas-placeholder-createImageBitmap.html [ Pass Failure ]
-crbug.com/1027435 [ Mac ] external/wpt/html/cross-origin-opener-policy/popup-none.https.html [ Pass Timeout ]
 crbug.com/1027434 external/wpt/html/browsers/origin/cross-origin-objects/cross-origin-objects.html [ Pass Timeout ]
 crbug.com/1027434 virtual/not-site-per-process/external/wpt/html/browsers/origin/cross-origin-objects/cross-origin-objects.html [ Pass Timeout ]
 
