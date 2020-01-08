@@ -1031,6 +1031,9 @@ void ShelfLayoutManager::OnFirstWallpaperShown() {
 void ShelfLayoutManager::OnDisplayMetricsChanged(
     const display::Display& display,
     uint32_t changed_metrics) {
+  if (updating_bounds_)
+    return;
+
   // Update |user_work_area_bounds_| for the new display arrangement.
   CalculateTargetBoundsAndUpdateWorkArea(hotseat_state());
 }
