@@ -11,8 +11,8 @@ function popupOpenCallbackWrapper() {
     setTimeout(popupOpenCallback, 20);
 }
 
-function waitUntilClosing(callback) {
-    setTimeout(callback, 1);
+function waitUntilClosing(callback, customDelay) {
+    setTimeout(callback, (customDelay !== undefined) ? customDelay : 1);
 }
 
 function rootWindow() {
@@ -34,34 +34,6 @@ function rootWindow() {
 // - INPUT color with DATALIST
 // - INPUT date/datetime-local/month/week
 function openPicker(element, callback, errorCallback) {
-    popupWindow = openPickerHelper(element);
-    if (typeof callback === "function" && popupWindow)
-        setPopupOpenCallback(callback);
-    else if (typeof errorCallback === "function" && !popupWindow)
-        errorCallback();
-}
-
-// openPickerWithPromise opens a picker UI for the following types:
-// - menulist SELECT
-// - INPUT color
-// - INPUT date/datetime-local/month/week
-//
-// Returns a Promise that resolves when the popup has been opened.
-function openPickerWithPromise(element) {
-    return new Promise(function(resolve, reject) {
-        popupWindow = openPickerHelper(element);
-        if (popupWindow) {
-            popupWindow.addEventListener("didOpenPicker", resolve, false);
-        } else {
-            reject();
-        }
-    });
-}
-
-// Helper function for openPicker and openPickerWithPromise.
-// Performs the keystrokes that will cause the picker to open,
-// and returns the popup window, or null.
-function openPickerHelper(element) {
     element.offsetTop; // Force to lay out
     element.focus();
     if (element.tagName === "SELECT") {
@@ -73,7 +45,11 @@ function openPickerHelper(element) {
             eventSender.keyDown("ArrowDown", ["altKey"]);
         }
     }
-    return internals.pagePopupWindow;
+    popupWindow = internals.pagePopupWindow;
+    if (typeof callback === "function" && popupWindow)
+        setPopupOpenCallback(callback);
+    else if (typeof errorCallback === "function" && !popupWindow)
+        errorCallback();
 }
 
 function clickToOpenPicker(x, y, callback, errorCallback) {
