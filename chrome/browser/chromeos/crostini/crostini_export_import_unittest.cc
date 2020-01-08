@@ -42,6 +42,11 @@ struct ImportProgressOptionalArguments {
 
 class CrostiniExportImportTest : public testing::Test {
  public:
+  CrostiniExportImportNotificationController* GetController() {
+    return crostini_export_import_->GetNotificationControllerForTesting(
+        container_id_);
+  }
+
   void SendExportProgress(
       vm_tools::cicerone::ExportLxdContainerProgressSignal_Status status,
       const ExportProgressOptionalArguments& arguments = {}) {
@@ -158,9 +163,7 @@ TEST_F(CrostiniExportImportTest, TestDeprecatedExportSuccess) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::EXPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
   ASSERT_NE(controller, nullptr);
   EXPECT_EQ(controller->status(),
             CrostiniExportImportStatusTracker::Status::RUNNING);
@@ -213,9 +216,7 @@ TEST_F(CrostiniExportImportTest, TestExportSuccess) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::EXPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
   ASSERT_NE(controller, nullptr);
   EXPECT_EQ(controller->status(),
             CrostiniExportImportStatusTracker::Status::RUNNING);
@@ -278,9 +279,7 @@ TEST_F(CrostiniExportImportTest, TestExportFail) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::EXPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
 
   // Failed.
   SendExportProgress(
@@ -298,9 +297,7 @@ TEST_F(CrostiniExportImportTest, TestExportCancelled) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::EXPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
   ASSERT_NE(controller, nullptr);
   EXPECT_EQ(controller->status(),
             CrostiniExportImportStatusTracker::Status::RUNNING);
@@ -333,8 +330,7 @@ TEST_F(CrostiniExportImportTest, TestExportCancelled) {
   // CANCELLED:
   SendExportProgress(
       vm_tools::cicerone::ExportLxdContainerProgressSignal_Status_CANCELLED);
-  EXPECT_FALSE(crostini_export_import_->GetNotificationControllerForTesting(
-      container_id_));
+  EXPECT_FALSE(GetController());
   task_environment_.RunUntilIdle();
   EXPECT_FALSE(base::PathExists(tarball_));
 }
@@ -344,9 +340,7 @@ TEST_F(CrostiniExportImportTest, TestExportDoneBeforeCancelled) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::EXPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
   ASSERT_NE(controller, nullptr);
   EXPECT_EQ(controller->status(),
             CrostiniExportImportStatusTracker::Status::RUNNING);
@@ -365,8 +359,7 @@ TEST_F(CrostiniExportImportTest, TestExportDoneBeforeCancelled) {
   // DONE: Completed before cancel processed, file should be deleted.
   SendExportProgress(
       vm_tools::cicerone::ExportLxdContainerProgressSignal_Status_DONE);
-  EXPECT_FALSE(crostini_export_import_->GetNotificationControllerForTesting(
-      container_id_));
+  EXPECT_FALSE(GetController());
   task_environment_.RunUntilIdle();
   EXPECT_FALSE(base::PathExists(tarball_));
 }
@@ -376,9 +369,7 @@ TEST_F(CrostiniExportImportTest, TestImportSuccess) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::IMPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
   ASSERT_NE(controller, nullptr);
   EXPECT_EQ(controller->status(),
             CrostiniExportImportStatusTracker::Status::RUNNING);
@@ -429,9 +420,7 @@ TEST_F(CrostiniExportImportTest, TestImportFail) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::IMPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
 
   // Failed.
   SendImportProgress(
@@ -448,9 +437,7 @@ TEST_F(CrostiniExportImportTest, TestImportCancelled) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::IMPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
   ASSERT_NE(controller, nullptr);
   EXPECT_EQ(controller->status(),
             CrostiniExportImportStatusTracker::Status::RUNNING);
@@ -478,8 +465,7 @@ TEST_F(CrostiniExportImportTest, TestImportCancelled) {
   // CANCELLED:
   SendImportProgress(
       vm_tools::cicerone::ImportLxdContainerProgressSignal_Status_CANCELLED);
-  EXPECT_FALSE(crostini_export_import_->GetNotificationControllerForTesting(
-      container_id_));
+  EXPECT_FALSE(GetController());
 }
 
 TEST_F(CrostiniExportImportTest, TestImportDoneBeforeCancelled) {
@@ -487,9 +473,7 @@ TEST_F(CrostiniExportImportTest, TestImportDoneBeforeCancelled) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::IMPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
   ASSERT_NE(controller, nullptr);
   EXPECT_EQ(controller->status(),
             CrostiniExportImportStatusTracker::Status::RUNNING);
@@ -517,9 +501,7 @@ TEST_F(CrostiniExportImportTest, TestImportFailArchitecture) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::IMPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
 
   // Failed Architecture.
   SendImportProgress(
@@ -542,9 +524,7 @@ TEST_F(CrostiniExportImportTest, TestImportFailSpace) {
       tarball_, 0,
       crostini_export_import_->NewOperationData(ExportImportType::IMPORT));
   task_environment_.RunUntilIdle();
-  CrostiniExportImportNotificationController* controller =
-      crostini_export_import_->GetNotificationControllerForTesting(
-          container_id_);
+  CrostiniExportImportNotificationController* controller = GetController();
 
   // Failed Space.
   SendImportProgress(
