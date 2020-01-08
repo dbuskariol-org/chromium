@@ -356,9 +356,6 @@ crbug.com/1018273 [ Mac ] paint/invalidation/compositing/should-not-repaint-scro
 crbug.com/1018273 [ Mac ] paint/invalidation/compositing/stop-painting-onto-scrolling-contents.html [ Failure ]
 crbug.com/1018273 [ Mac ] paint/overflow/composited-scroll-vertical-rl.html [ Failure ]
 
-crbug.com/1025019 compositing/overflow/scroller-with-border-radius.html [ Crash ]
-crbug.com/1025019 virtual/prefer_compositing_to_lcd_text/compositing/overflow/scroller-with-border-radius.html [ Crash ]
-
 # Fail due to lack of fuzzy matching on Win and Mac platforms for WPT. The pixels in the pre-rotated reference
 # images do not exactly match the exif rotated images, probably due to jpeg decoding/encoding issues. Maybe
 # adjusting the image size to a multiple of 8 would fix this (so all jpeg blocks are solid color).
