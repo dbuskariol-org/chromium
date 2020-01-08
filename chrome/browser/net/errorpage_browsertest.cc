@@ -1421,10 +1421,27 @@ class ErrorPageForIDNTest : public InProcessBrowserTest,
 
   // InProcessBrowserTest:
   void SetUpOnMainThread() override {
+    // ERR_UNSAFE_PORT will not trigger navigation corrections.
+    url_loader_interceptor_ =
+        std::make_unique<content::URLLoaderInterceptor>(base::BindRepeating(
+            [](content::URLLoaderInterceptor::RequestParams* params) {
+              if (params->url_request.url.host() == kHostname) {
+                params->client->OnComplete(
+                    network::URLLoaderCompletionStatus(net::ERR_UNSAFE_PORT));
+                return true;
+              }
+              return false;
+            }));
+
     // Clear AcceptLanguages to force punycode decoding.
     browser()->profile()->GetPrefs()->SetString(
         language::prefs::kAcceptLanguages, std::string());
   }
+
+  void TearDownOnMainThread() override { url_loader_interceptor_.reset(); }
+
+ private:
+  std::unique_ptr<content::URLLoaderInterceptor> url_loader_interceptor_;
 };
 
 const char ErrorPageForIDNTest::kHostname[] =
@@ -1435,11 +1452,8 @@ const char ErrorPageForIDNTest::kHostnameJSUnicode[] =
 
 // Make sure error page shows correct unicode for IDN.
 IN_PROC_BROWSER_TEST_F(ErrorPageForIDNTest, IDN) {
-  // ERR_UNSAFE_PORT will not trigger navigation corrections.
-  ui_test_utils::NavigateToURL(
-      browser(),
-      URLRequestFailedJob::GetMockHttpUrlForHostname(net::ERR_UNSAFE_PORT,
-                                                     kHostname));
+  ui_test_utils::NavigateToURL(browser(),
+                               GURL("http://" + std::string(kHostname) + "/"));
   EXPECT_TRUE(IsDisplayingText(browser(), kHostnameJSUnicode));
 }
 
