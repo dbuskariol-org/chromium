@@ -266,7 +266,7 @@ void BookmarkModelObserverImpl::BookmarkNodeChildrenReordered(
                    : syncer::UniquePosition::After(position, suffix);
 
     const sync_pb::EntitySpecifics specifics = CreateSpecificsFromBookmarkNode(
-        node, model, /*force_favicon_load=*/true);
+        child.get(), model, /*force_favicon_load=*/true);
 
     bookmark_tracker_->Update(sync_id, entity->metadata()->server_version(),
                               modification_time, position.ToProto(), specifics);
