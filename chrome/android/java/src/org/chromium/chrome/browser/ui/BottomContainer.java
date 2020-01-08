@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.snackbar;
+package org.chromium.chrome.browser.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -81,5 +81,5 @@ public class BottomContainer
     public void onContentOffsetChanged(int offset) {}
 
     @Override
-    public void onToggleOverlayVideoMode(boolean enabled) { }
+    public void onToggleOverlayVideoMode(boolean enabled) {}
 }
