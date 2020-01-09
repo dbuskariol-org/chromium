@@ -49,6 +49,7 @@ public class EphemeralTabCoordinator implements View.OnLayoutChangeListener {
     private final ChromeActivity mActivity;
     private final BottomSheetController mBottomSheetController;
     private final FaviconLoader mFaviconLoader;
+    private final EphemeralTabMetrics mMetrics = new EphemeralTabMetrics();
     private OverlayPanelContent mPanelContent;
     private WebContentsObserver mWebContentsObserver;
     private EphemeralTabSheetContent mSheetContent;
@@ -67,6 +68,8 @@ public class EphemeralTabCoordinator implements View.OnLayoutChangeListener {
         mBottomSheetController = bottomSheetController;
         mFaviconLoader = new FaviconLoader(mActivity);
         mBottomSheetController.addObserver(new EmptyBottomSheetObserver() {
+            private int mCloseReason;
+
             @Override
             public void onSheetContentChanged(BottomSheetContent newContent) {
                 if (newContent != mSheetContent) destroyContent();
@@ -76,6 +79,28 @@ public class EphemeralTabCoordinator implements View.OnLayoutChangeListener {
             public void onSheetStateChanged(int newState) {
                 if (mSheetContent == null) return;
                 mSheetContent.showOpenInNewTabButton(newState == SheetState.FULL);
+                switch (newState) {
+                    case SheetState.PEEK:
+                        mMetrics.recordMetricsForPeeked();
+                        break;
+                    case SheetState.FULL:
+                        mMetrics.recordMetricsForOpened();
+                        break;
+                }
+            }
+
+            @Override
+            public void onSheetClosed(int reason) {
+                // "Closed" actually means "Peek" for bottom sheet. Save the reason to log
+                // when the sheet goes to hidden state.
+                mCloseReason = reason;
+            }
+
+            @Override
+            public void onSheetOffsetChanged(float heightFraction, float offsetPx) {
+                if (heightFraction == 0.0f) {
+                    mMetrics.recordMetricsForClosed(mCloseReason);
+                }
             }
         });
     }
