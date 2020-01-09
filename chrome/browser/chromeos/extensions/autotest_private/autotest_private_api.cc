@@ -2503,6 +2503,27 @@ void AutotestPrivateWaitForAssistantQueryStatusFunction::Timeout() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// AutotestPrivateIsArcPackageListInitialRefreshedFunction
+///////////////////////////////////////////////////////////////////////////////
+
+AutotestPrivateIsArcPackageListInitialRefreshedFunction::
+    AutotestPrivateIsArcPackageListInitialRefreshedFunction() = default;
+
+AutotestPrivateIsArcPackageListInitialRefreshedFunction::
+    ~AutotestPrivateIsArcPackageListInitialRefreshedFunction() = default;
+
+ExtensionFunction::ResponseAction
+AutotestPrivateIsArcPackageListInitialRefreshedFunction::Run() {
+  DVLOG(1) << "AutotestPrivateIsArcPackageListInitialRefreshedFunction";
+
+  ArcAppListPrefs* const prefs =
+      ArcAppListPrefs::Get(Profile::FromBrowserContext(browser_context()));
+
+  return RespondNow(OneArgument(
+      std::make_unique<base::Value>(prefs->package_list_initial_refreshed())));
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // AutotestPrivateSetWhitelistedPrefFunction
 ///////////////////////////////////////////////////////////////////////////////
 
