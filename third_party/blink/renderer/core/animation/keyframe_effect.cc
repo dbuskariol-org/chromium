@@ -330,7 +330,7 @@ KeyframeEffect::CheckCanStartAnimationOnCompositor(
 void KeyframeEffect::StartAnimationOnCompositor(
     int group,
     base::Optional<double> start_time,
-    double current_time,
+    base::TimeDelta time_offset,
     double animation_playback_rate,
     CompositorAnimation* compositor_animation) {
   DCHECK(!HasActiveAnimationsOnCompositor());
@@ -345,7 +345,7 @@ void KeyframeEffect::StartAnimationOnCompositor(
   DCHECK(Model());
 
   CompositorAnimations::StartAnimationOnCompositor(
-      *effect_target_, group, start_time, current_time, SpecifiedTiming(),
+      *effect_target_, group, start_time, time_offset, SpecifiedTiming(),
       GetAnimation(), *compositor_animation, *Model(),
       compositor_keyframe_model_ids_, animation_playback_rate);
   DCHECK(!compositor_keyframe_model_ids_.IsEmpty());

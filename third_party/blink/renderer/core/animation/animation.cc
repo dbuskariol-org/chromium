@@ -1474,7 +1474,8 @@ void Animation::StartAnimationOnCompositor(
   DCHECK(To<KeyframeEffect>(content_.Get()));
   DCHECK(std::isfinite(time_offset));
   To<KeyframeEffect>(content_.Get())
-      ->StartAnimationOnCompositor(compositor_group_, start_time, time_offset,
+      ->StartAnimationOnCompositor(compositor_group_, start_time,
+                                   base::TimeDelta::FromSecondsD(time_offset),
                                    EffectivePlaybackRate());
 }
 

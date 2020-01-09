@@ -113,7 +113,7 @@ class CORE_EXPORT KeyframeEffect final : public AnimationEffect {
   // Must only be called once.
   void StartAnimationOnCompositor(int group,
                                   base::Optional<double> start_time,
-                                  double time_offset,
+                                  base::TimeDelta time_offset,
                                   double animation_playback_rate,
                                   CompositorAnimation* = nullptr);
   bool HasActiveAnimationsOnCompositor() const;
