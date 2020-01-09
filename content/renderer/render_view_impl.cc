@@ -1844,7 +1844,7 @@ void RenderViewImpl::CloseMainFrameRenderWidget() {
   // There is a WebFrameWidget previously attached by AttachWebFrameWidget().
   DCHECK(render_widget_->GetWebWidget());
 
-  if (destroying_) {
+  if (true || destroying_) {
     // We are inside RenderViewImpl::Destroy() and the main frame is being
     // detached as part of shutdown. So we can destroy the RenderWidget.
 

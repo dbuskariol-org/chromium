@@ -454,6 +454,7 @@ RenderWidget::RenderWidget(int32_t widget_routing_id,
       widget_receiver_(this, std::move(widget_receiver)) {
   DCHECK_NE(routing_id_, MSG_ROUTING_NONE);
   DCHECK(RenderThread::IsMainThread());
+  DCHECK(compositor_deps_);
 
   // In tests there may not be a RenderThreadImpl.
   if (RenderThreadImpl::current()) {
