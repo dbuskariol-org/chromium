@@ -2,21 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'chrome://new-tab-page/customize_dialog.js';
+import 'chrome://new-tab-page/customize_themes.js';
 
 import {BrowserProxy} from 'chrome://new-tab-page/browser_proxy.js';
 import {assertFocus, keydown, TestProxy} from 'chrome://test/new_tab_page/test_support.js';
 import {eventToPromise, flushTasks} from 'chrome://test/test_util.m.js';
 
-suite('NewTabPageCustomizeDialogFocusTest', () => {
-  /** @type {!CustomizeDialogElement} */
-  let customizeDialog;
+suite('NewTabPageCustomizeThemesFocusTest', () => {
+  /** @type {!customizeThemesElement} */
+  let customizeThemes;
 
   /** @type {TestProxy} */
   let testProxy;
 
   function queryThemeIcons() {
-    return customizeDialog.shadowRoot.querySelectorAll(
+    return customizeThemes.shadowRoot.querySelectorAll(
         '#themesContainer ntp-theme-icon');
   }
 
@@ -34,8 +34,8 @@ suite('NewTabPageCustomizeDialogFocusTest', () => {
     testProxy.handler.setResultFor('getChromeThemes', Promise.resolve({
       chromeThemes: themes,
     }));
-    customizeDialog = document.createElement('ntp-customize-dialog');
-    document.body.appendChild(customizeDialog);
+    customizeThemes = document.createElement('ntp-customize-themes');
+    document.body.appendChild(customizeThemes);
     await flushTasks();
   });
 
@@ -77,7 +77,7 @@ suite('NewTabPageCustomizeDialogFocusTest', () => {
 
   test('right focuses left theme icon in RTL', async () => {
     // Arrange.
-    customizeDialog.dir = 'rtl';
+    customizeThemes.dir = 'rtl';
 
     // Act.
     const themeIcons = queryThemeIcons();
@@ -89,7 +89,7 @@ suite('NewTabPageCustomizeDialogFocusTest', () => {
 
   test('right wrap around focuses last theme icon in RTL', async () => {
     // Arrange.
-    customizeDialog.dir = 'rtl';
+    customizeThemes.dir = 'rtl';
 
     // Act.
     const themeIcons = queryThemeIcons();
@@ -101,7 +101,7 @@ suite('NewTabPageCustomizeDialogFocusTest', () => {
 
   test('left focuses right theme icon in RTL', async () => {
     // Arrange.
-    customizeDialog.dir = 'rtl';
+    customizeThemes.dir = 'rtl';
 
     // Act.
     const themeIcons = queryThemeIcons();
@@ -113,7 +113,7 @@ suite('NewTabPageCustomizeDialogFocusTest', () => {
 
   test('left wrap around focuses first theme icon in RTL', async () => {
     // Arrange.
-    customizeDialog.dir = 'rtl';
+    customizeThemes.dir = 'rtl';
 
     // Act.
     const themeIcons = queryThemeIcons();
