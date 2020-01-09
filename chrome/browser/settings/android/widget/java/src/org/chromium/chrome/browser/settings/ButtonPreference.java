@@ -10,8 +10,6 @@ import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.widget.Button;
 
-import org.chromium.chrome.R;
-
 /**
  * A {@link Preference} that provides button functionality.
  *
