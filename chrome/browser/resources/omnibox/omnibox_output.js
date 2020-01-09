@@ -877,7 +877,8 @@ class OutputAdditionalInfoProperty extends OutputProperty {
       obj[key] = value;
       return obj;
     }, {});
-    const obj64 = btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+    const text = JSON.stringify(obj, null, 2);
+    const obj64 = btoa(unescape(encodeURIComponent(text)));
     return `data:application/json;base64,${obj64}`;
   }
 }
