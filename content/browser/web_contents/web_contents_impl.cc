@@ -818,16 +818,21 @@ WebContentsImpl* WebContentsImpl::FromFrameTreeNode(
 }
 
 // static
+WebContents* WebContentsImpl::FromRenderFrameHostID(
+    GlobalFrameRoutingId render_frame_host_id) {
+  DCHECK(BrowserThread::CurrentlyOn(BrowserThread::UI) ||
+         !BrowserThread::IsThreadInitialized(BrowserThread::UI));
+  return WebContents::FromRenderFrameHost(
+      RenderFrameHost::FromID(render_frame_host_id));
+}
+
+// static
 WebContents* WebContentsImpl::FromRenderFrameHostID(int render_process_host_id,
                                                     int render_frame_host_id) {
   DCHECK(BrowserThread::CurrentlyOn(BrowserThread::UI) ||
          !BrowserThread::IsThreadInitialized(BrowserThread::UI));
-  RenderFrameHost* render_frame_host =
-      RenderFrameHost::FromID(render_process_host_id, render_frame_host_id);
-  if (!render_frame_host)
-    return nullptr;
-
-  return WebContents::FromRenderFrameHost(render_frame_host);
+  return WebContents::FromRenderFrameHost(
+      RenderFrameHost::FromID(render_process_host_id, render_frame_host_id));
 }
 
 // static
