@@ -72,6 +72,7 @@ class LocationIconView : public IconLabelBubbleView {
   bool IsBubbleShowing() const override;
   bool OnMousePressed(const ui::MouseEvent& event) override;
   void GetAccessibleNodeData(ui::AXNodeData* node_data) override;
+  void AddedToWidget() override;
 
   // Returns what the minimum width for the label text.
   int GetMinimumLabelTextWidth() const;
