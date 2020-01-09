@@ -275,32 +275,6 @@
       },
     },
   },
-  'cast_shell_browsertests': {
-    'modifications': {
-      'Cast Audio Linux': {
-        'args': [
-          '--enable-local-file-accesses',
-          '--ozone-platform=headless',
-          '--no-sandbox',
-          '--test-launcher-jobs=1',
-        ],
-        'swarming': {
-          'can_use_on_swarming_builders': False,  # https://crbug.com/861753
-        },
-      },
-      'Cast Linux': {
-        'args': [
-          '--enable-local-file-accesses',
-          '--ozone-platform=headless',
-          '--no-sandbox',
-          '--test-launcher-jobs=1',
-        ],
-        'swarming': {
-          'can_use_on_swarming_builders': False,  # https://crbug.com/861753
-        },
-      },
-    },
-  },
   'cc_unittests': {
     'modifications': {
       'Linux TSan Tests': {
