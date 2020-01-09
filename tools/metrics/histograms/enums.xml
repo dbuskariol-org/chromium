@@ -66854,6 +66854,7 @@ Full version information for the fingerprint enum values:
   <int value="-1382906531" label="chrome://managed-user-passphrase/"/>
   <int value="-1379571130" label="chrome://newtab/"/>
   <int value="-1378421581" label="chrome://media-router/"/>
+  <int value="-1331415629" label="chrome://os-settings/"/>
   <int value="-1313432739" label="chrome://plugins/"/>
   <int value="-1239015343" label="chrome://kill/"/>
   <int value="-1224398205" label="chrome://prefs-internals/"/>
@@ -66954,6 +66955,7 @@ Full version information for the fingerprint enum values:
   <int value="1281801197" label="chrome://terms/"/>
   <int value="1286620182" label="chrome://reset-password/"/>
   <int value="1306215264" label="chrome://activationmessage/"/>
+  <int value="1326111536" label="chrome://new-tab-page/"/>
   <int value="1340926535" label="chrome://network/"/>
   <int value="1354146226" label="chrome://tab-modal-confirm-dialog/"/>
   <int value="1371905827" label="chrome://flags/"/>
@@ -66967,6 +66969,7 @@ Full version information for the fingerprint enum values:
   <int value="1466599095" label="chrome://oobe/"/>
   <int value="1467342679" label="chrome://memory-internals/"/>
   <int value="1476643520" label="chrome://internet-detail-dialog/"/>
+  <int value="1506419762" label="devtools://devtools/"/>
   <int value="1540230808" label="chrome://power/"/>
   <int value="1554928128" label="chrome://sync-confirmation/?consent-bump"/>
   <int value="1568301017" label="chrome://media-internals/"/>
