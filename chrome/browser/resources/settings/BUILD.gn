@@ -107,7 +107,6 @@ group("closure_compile") {
   if (is_chromeos) {
     deps += [
       "chromeos:closure_compile",
-      "multidevice_page:closure_compile",
       "parental_controls_page:closure_compile",
     ]
   }
