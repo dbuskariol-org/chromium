@@ -3087,6 +3087,8 @@ cc::LayerTreeSettings RenderWidget::GenerateLayerTreeSettings(
   settings.commit_fractional_scroll_deltas =
       blink::WebRuntimeFeatures::IsFractionalScrollOffsetsEnabled();
 
+  settings.enable_smooth_scroll = compositor_deps->IsScrollAnimatorEnabled();
+
   // The means the renderer compositor has 2 possible modes:
   // - Threaded compositing with a scheduler.
   // - Single threaded compositing without a scheduler (for web tests only).
