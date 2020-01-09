@@ -7,6 +7,7 @@ package org.chromium.chrome.browser.preferences;
 import org.chromium.base.annotations.CheckDiscard;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -693,6 +694,16 @@ public final class ChromePreferenceKeys {
                 WEBAPK_UNINSTALLED_PACKAGES
         );
         // clang-format on
+    }
+
+    @CheckDiscard("Validation is performed in tests and in debug builds.")
+    static List<KeyPrefix> createGrandfatheredPrefixesInUse() {
+        return Collections.EMPTY_LIST;
+    }
+
+    @CheckDiscard("Validation is performed in tests and in debug builds.")
+    static List<KeyPrefix> createDeprecatedPrefixesForTesting() {
+        return Collections.EMPTY_LIST;
     }
 
     private ChromePreferenceKeys() {}
