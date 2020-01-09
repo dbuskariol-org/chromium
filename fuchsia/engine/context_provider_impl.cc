@@ -150,6 +150,7 @@ bool MaybeAddCommandLineArgsFromConfig(const base::Value& config,
     return true;
 
   static const base::StringPiece kAllowedArgs[] = {
+      switches::kDisableGpuWatchdog,
       switches::kEnableFeatures,
       switches::kEnableFuchsiaAudioConsumer,
       switches::kEnableLowEndDeviceMode,
