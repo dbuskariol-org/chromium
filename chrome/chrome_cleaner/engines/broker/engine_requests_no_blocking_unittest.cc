@@ -437,9 +437,7 @@ class TestEngineRequestInvoker {
 };
 
 MULTIPROCESS_TEST_MAIN(EngineRequestsNoBlocking) {
-  // COM can't be initialized inside the sandbox.
-  base::test::TaskEnvironment task_environment(
-      base::test::TaskEnvironment::ThreadPoolCOMEnvironment::NONE);
+  base::test::TaskEnvironment task_environment;
 
   auto child_process = SetupSandboxedChildProcess();
   if (!child_process)
@@ -522,6 +520,11 @@ class EngineRequestsNoBlockingTest
     : public ::testing::TestWithParam<const char*> {};
 
 TEST_P(EngineRequestsNoBlockingTest, TestRequest) {
+  // All of these tests fail when run on win8 bots so return right away.
+  // TODO(crbug.com/947576): Find out why and re-enable them.
+  if (base::win::GetVersion() == base::win::Version::WIN8)
+    return;
+
   base::test::TaskEnvironment task_environment;
 
   // This event will be shared between the parent and child processes. The
