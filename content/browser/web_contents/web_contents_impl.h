@@ -562,7 +562,7 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
                    const base::string16& title,
                    base::i18n::TextDirection title_direction) override;
   WebContents* GetAsWebContents() override;
-  bool IsNeverVisible() override;
+  bool IsNeverComposited() override;
   ui::AXMode GetAccessibilityMode() override;
   // Broadcasts the mode change to all frames.
   void SetAccessibilityMode(ui::AXMode mode) override;

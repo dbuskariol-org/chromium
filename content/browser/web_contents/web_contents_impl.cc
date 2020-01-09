@@ -1076,8 +1076,8 @@ void WebContentsImpl::SetAccessibilityMode(ui::AXMode mode) {
     return;
 
   // Don't allow accessibility to be enabled for WebContents that are never
-  // visible, like background pages.
-  if (IsNeverVisible())
+  // user-visible, like background pages.
+  if (IsNeverComposited())
     return;
 
   accessibility_mode_ = mode;
@@ -5689,10 +5689,10 @@ void WebContentsImpl::ClearFocusedElement() {
     frame->ClearFocusedElement();
 }
 
-bool WebContentsImpl::IsNeverVisible() {
+bool WebContentsImpl::IsNeverComposited() {
   if (!delegate_)
     return false;
-  return delegate_->IsNeverVisible(this);
+  return delegate_->IsNeverComposited(this);
 }
 
 RenderViewHostDelegateView* WebContentsImpl::GetDelegateView() {
