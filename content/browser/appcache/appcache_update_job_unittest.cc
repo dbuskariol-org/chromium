@@ -542,36 +542,40 @@ int RetryRequestTestJob::expected_requests_ = 0;
 // Helper class to check for certain HTTP headers.
 class HttpHeadersRequestTestJob {
  public:
-  // Call this at the start of each HTTP header-related test.
-  static void Initialize(const std::string& expect_if_modified_since,
-                         const std::string& expect_if_none_match,
-                         bool headers_allowed = true) {
-    expect_if_modified_since_ = expect_if_modified_since;
-    expect_if_none_match_ = expect_if_none_match;
-    headers_allowed_ = headers_allowed;
-  }
-
-  // Verifies results at end of test and resets class.
-  static void Verify() {
-    if (!expect_if_modified_since_.empty())
-      EXPECT_TRUE(saw_if_modified_since_);
-    if (!expect_if_none_match_.empty())
-      EXPECT_TRUE(saw_if_none_match_);
-    if (!headers_allowed_)
-      EXPECT_FALSE(saw_headers_);
-
-    // Reset.
-    expect_if_modified_since_.clear();
+  HttpHeadersRequestTestJob() {
     saw_if_modified_since_ = false;
-    expect_if_none_match_.clear();
     saw_if_none_match_ = false;
     headers_allowed_ = true;
     saw_headers_ = false;
     already_checked_ = false;
   }
 
-  static void ValidateExtraHeaders(
-      const net::HttpRequestHeaders& extra_headers) {
+  HttpHeadersRequestTestJob(const std::string& expect_if_modified_since,
+                            const std::string& expect_if_none_match,
+                            bool headers_allowed = true)
+      : expect_if_modified_since_(expect_if_modified_since),
+        saw_if_modified_since_(false),
+        expect_if_none_match_(expect_if_none_match),
+        saw_if_none_match_(false),
+        headers_allowed_(headers_allowed),
+        saw_headers_(false),
+        already_checked_(false),
+        verify_called_(false) {}
+
+  ~HttpHeadersRequestTestJob() { DCHECK(verify_called_); }
+
+  // Verifies results at end of test.
+  void Verify(const GURL& url) {
+    verify_called_ = true;
+    if (!expect_if_modified_since_.empty())
+      EXPECT_TRUE(saw_if_modified_since_) << "URL " << url.spec() << " failed";
+    if (!expect_if_none_match_.empty())
+      EXPECT_TRUE(saw_if_none_match_) << "URL " << url.spec() << " failed";
+    if (!headers_allowed_)
+      EXPECT_FALSE(saw_headers_) << "URL " << url.spec() << " failed";
+  }
+
+  void ValidateExtraHeaders(const net::HttpRequestHeaders& extra_headers) {
     if (already_checked_)
       return;
 
@@ -593,74 +597,19 @@ class HttpHeadersRequestTestJob {
   }
 
  private:
-  static std::string expect_if_modified_since_;
-  static bool saw_if_modified_since_;
-  static std::string expect_if_none_match_;
-  static bool saw_if_none_match_;
-  static bool headers_allowed_;
-  static bool saw_headers_;
-  static bool already_checked_;
+  std::string expect_if_modified_since_;
+  bool saw_if_modified_since_;
+  std::string expect_if_none_match_;
+  bool saw_if_none_match_;
+  bool headers_allowed_;
+  bool saw_headers_;
+  bool already_checked_;
+  bool verify_called_;
 };
-
-// static
-std::string HttpHeadersRequestTestJob::expect_if_modified_since_;
-bool HttpHeadersRequestTestJob::saw_if_modified_since_ = false;
-std::string HttpHeadersRequestTestJob::expect_if_none_match_;
-bool HttpHeadersRequestTestJob::saw_if_none_match_ = false;
-bool HttpHeadersRequestTestJob::headers_allowed_ = true;
-bool HttpHeadersRequestTestJob::saw_headers_ = false;
-bool HttpHeadersRequestTestJob::already_checked_ = false;
-
-// TODO(ananta/michaeln). Remove dependencies on URLRequest based
-// classes by refactoring the response headers/data into a common class.
-bool InterceptRequest(URLLoaderInterceptor::RequestParams* params) {
-  const auto& url_request = params->url_request;
-  if (url_request.url.host() == "failme" ||
-      url_request.url.host() == "testme") {
-    params->client->OnComplete(network::URLLoaderCompletionStatus(-100));
-    return true;
-  }
-
-  HttpHeadersRequestTestJob::ValidateExtraHeaders(url_request.headers);
-
-  std::string headers;
-  std::string body;
-  if (url_request.url == RetryRequestTestJob::kRetryUrl) {
-    RetryRequestTestJob::GetResponseForURL(url_request.url, &headers, &body);
-  } else {
-    MockHttpServer::GetMockResponse(url_request.url.path(), &headers, &body);
-  }
-
-  net::HttpResponseInfo info;
-  info.headers = base::MakeRefCounted<net::HttpResponseHeaders>(
-      net::HttpUtil::AssembleRawHeaders(headers));
-
-  auto response = network::mojom::URLResponseHead::New();
-  response->headers = info.headers;
-  response->headers->GetMimeType(&response->mime_type);
-
-  params->client->OnReceiveResponse(std::move(response));
-
-  mojo::ScopedDataPipeProducerHandle producer_handle;
-  mojo::ScopedDataPipeConsumerHandle consumer_handle;
-  mojo::CreateDataPipe(nullptr, &producer_handle, &consumer_handle);
-
-  uint32_t bytes_written = body.size();
-  producer_handle->WriteData(body.data(), &bytes_written,
-                             MOJO_WRITE_DATA_FLAG_ALL_OR_NONE);
-  params->client->OnStartLoadingResponseBody(std::move(consumer_handle));
-  return true;
-}
 
 class AppCacheUpdateJobTest : public testing::Test,
                               public AppCacheGroup::UpdateObserver {
  public:
-  enum class ScopeType {
-    kScopeRoot,
-    kScopeBar,
-    kScopeOther,
-  };
-
   AppCacheUpdateJobTest()
       : do_checks_after_update_finished_(false),
         expect_group_obsolete_(false),
@@ -673,10 +622,55 @@ class AppCacheUpdateJobTest : public testing::Test,
         expect_non_null_update_time_(false),
         tested_manifest_(NONE),
         tested_manifest_path_override_(nullptr),
-        interceptor_(base::BindRepeating(&InterceptRequest)),
+        interceptor_(
+            base::BindRepeating(&AppCacheUpdateJobTest::InterceptRequest,
+                                base::Unretained(this))),
         process_id_(123),
         weak_partition_factory_(static_cast<StoragePartitionImpl*>(
             BrowserContext::GetDefaultStoragePartition(&browser_context_))) {}
+
+  // TODO(ananta/michaeln): Remove dependencies on URLRequest based
+  // classes by refactoring the response headers/data into a common class.
+  bool InterceptRequest(URLLoaderInterceptor::RequestParams* params) {
+    const auto& url_request = params->url_request;
+    if (url_request.url.host() == "failme" ||
+        url_request.url.host() == "testme") {
+      params->client->OnComplete(network::URLLoaderCompletionStatus(-100));
+      return true;
+    }
+
+    auto it = http_headers_request_test_jobs_.find(url_request.url);
+    if (it != http_headers_request_test_jobs_.end())
+      it->second->ValidateExtraHeaders(url_request.headers);
+
+    std::string headers;
+    std::string body;
+    if (url_request.url == RetryRequestTestJob::kRetryUrl) {
+      RetryRequestTestJob::GetResponseForURL(url_request.url, &headers, &body);
+    } else {
+      MockHttpServer::GetMockResponse(url_request.url.path(), &headers, &body);
+    }
+
+    net::HttpResponseInfo info;
+    info.headers = base::MakeRefCounted<net::HttpResponseHeaders>(
+        net::HttpUtil::AssembleRawHeaders(headers));
+
+    auto response = network::mojom::URLResponseHead::New();
+    response->headers = info.headers;
+    response->headers->GetMimeType(&response->mime_type);
+
+    params->client->OnReceiveResponse(std::move(response));
+
+    mojo::ScopedDataPipeProducerHandle producer_handle;
+    mojo::ScopedDataPipeConsumerHandle consumer_handle;
+    mojo::CreateDataPipe(nullptr, &producer_handle, &consumer_handle);
+
+    uint32_t bytes_written = body.size();
+    producer_handle->WriteData(body.data(), &bytes_written,
+                               MOJO_WRITE_DATA_FLAG_ALL_OR_NONE);
+    params->client->OnStartLoadingResponseBody(std::move(consumer_handle));
+    return true;
+  }
 
   void SetUp() override {
     ChildProcessSecurityPolicyImpl::GetInstance()->Add(process_id_,
@@ -3245,8 +3239,11 @@ class AppCacheUpdateJobTest : public testing::Test,
     group_->AddUpdateObserver(this);
   }
 
-  static void VerifyHeadersAndDeleteUpdate(AppCacheUpdateJob* update) {
-    HttpHeadersRequestTestJob::Verify();
+  void VerifyHeadersAndDeleteUpdate(AppCacheUpdateJob* update) {
+    for (auto it = http_headers_request_test_jobs_.begin();
+         it != http_headers_request_test_jobs_.end(); ++it) {
+      it->second->Verify(it->first);
+    }
     delete update;
   }
 
@@ -3260,7 +3257,9 @@ class AppCacheUpdateJobTest : public testing::Test,
 
     // First test against a cache attempt. Will start manifest fetch
     // synchronously.
-    HttpHeadersRequestTestJob::Initialize(std::string(), std::string());
+    http_headers_request_test_jobs_.emplace(
+        group_->manifest_url(), std::make_unique<HttpHeadersRequestTestJob>(
+                                    std::string(), std::string()));
     MockFrontend mock_frontend;
     AppCacheHost host(/*host_id=*/base::UnguessableToken::Create(),
                       /*process_id=*/1, /*render_frame_id=*/1,
@@ -3273,7 +3272,7 @@ class AppCacheUpdateJobTest : public testing::Test,
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
-                       update));
+                       base::Unretained(this), update));
 
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
@@ -3294,7 +3293,9 @@ class AppCacheUpdateJobTest : public testing::Test,
     group_ = base::MakeRefCounted<AppCacheGroup>(
         service_->storage(), GURL("http://headertest"), 111);
 
-    HttpHeadersRequestTestJob::Initialize(std::string(), std::string());
+    http_headers_request_test_jobs_.emplace(
+        group_->manifest_url(), std::make_unique<HttpHeadersRequestTestJob>(
+                                    std::string(), std::string()));
 
     AppCacheUpdateJob* update =
         new AppCacheUpdateJob(service_.get(), group_.get());
@@ -3309,7 +3310,7 @@ class AppCacheUpdateJobTest : public testing::Test,
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
-                       update));
+                       base::Unretained(this), update));
 
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
@@ -3331,8 +3332,10 @@ class AppCacheUpdateJobTest : public testing::Test,
     group_ = base::MakeRefCounted<AppCacheGroup>(
         service_->storage(), GURL("http://headertest"), 111);
 
-    HttpHeadersRequestTestJob::Initialize("Sat, 29 Oct 1994 19:43:31 GMT",
-                                          std::string());
+    http_headers_request_test_jobs_.emplace(
+        group_->manifest_url(),
+        std::make_unique<HttpHeadersRequestTestJob>(
+            "Sat, 29 Oct 1994 19:43:31 GMT", std::string()));
     AppCacheUpdateJob* update =
         new AppCacheUpdateJob(service_.get(), group_.get());
     group_->update_job_ = update;
@@ -3346,7 +3349,7 @@ class AppCacheUpdateJobTest : public testing::Test,
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
-                       update));
+                       base::Unretained(this), update));
 
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
@@ -3361,13 +3364,15 @@ class AppCacheUpdateJobTest : public testing::Test,
   void IfModifiedSinceUpgradeParserVersion0Test() {
     base::test::ScopedFeatureList f;
     f.InitAndEnableFeature(kAppCacheManifestScopeChecksFeature);
-    HttpHeadersRequestTestJob::Initialize(std::string(), std::string(),
-                                          /*headers_allowed=*/false);
 
     MakeService();
     group_ = base::MakeRefCounted<AppCacheGroup>(
         service_->storage(), MockHttpServer::GetMockUrl("files/manifest1"),
         111);
+    http_headers_request_test_jobs_.emplace(
+        group_->manifest_url(), std::make_unique<HttpHeadersRequestTestJob>(
+                                    std::string(), std::string(),
+                                    /*headers_allowed=*/false));
     AppCacheUpdateJob* update =
         new AppCacheUpdateJob(service_.get(), group_.get());
     group_->update_job_ = update;
@@ -3429,13 +3434,15 @@ class AppCacheUpdateJobTest : public testing::Test,
   void IfModifiedSinceUpgradeParserVersion1Test() {
     base::test::ScopedFeatureList f;
     f.InitAndEnableFeature(kAppCacheManifestScopeChecksFeature);
-    HttpHeadersRequestTestJob::Initialize("Sat, 29 Oct 1994 19:43:31 GMT",
-                                          std::string());
 
     MakeService();
     group_ = base::MakeRefCounted<AppCacheGroup>(
         service_->storage(), MockHttpServer::GetMockUrl("files/manifest1"),
         111);
+    http_headers_request_test_jobs_.emplace(
+        group_->manifest_url(),
+        std::make_unique<HttpHeadersRequestTestJob>(
+            "Sat, 29 Oct 1994 19:43:31 GMT", std::string()));
     AppCacheUpdateJob* update =
         new AppCacheUpdateJob(service_.get(), group_.get());
     group_->update_job_ = update;
@@ -3501,13 +3508,15 @@ class AppCacheUpdateJobTest : public testing::Test,
   void IfNoneMatchUpgradeParserVersion0Test() {
     base::test::ScopedFeatureList f;
     f.InitAndEnableFeature(kAppCacheManifestScopeChecksFeature);
-    HttpHeadersRequestTestJob::Initialize(std::string(), std::string(),
-                                          /*headers_allowed=*/false);
 
     MakeService();
     group_ = base::MakeRefCounted<AppCacheGroup>(
         service_->storage(), MockHttpServer::GetMockUrl("files/manifest1"),
         111);
+    http_headers_request_test_jobs_.emplace(
+        group_->manifest_url(), std::make_unique<HttpHeadersRequestTestJob>(
+                                    std::string(), std::string(),
+                                    /*headers_allowed=*/false));
     AppCacheUpdateJob* update =
         new AppCacheUpdateJob(service_.get(), group_.get());
     group_->update_job_ = update;
@@ -3569,12 +3578,14 @@ class AppCacheUpdateJobTest : public testing::Test,
   void IfNoneMatchUpgradeParserVersion1Test() {
     base::test::ScopedFeatureList f;
     f.InitAndEnableFeature(kAppCacheManifestScopeChecksFeature);
-    HttpHeadersRequestTestJob::Initialize(std::string(), "\"LadeDade\"");
 
     MakeService();
     group_ = base::MakeRefCounted<AppCacheGroup>(
         service_->storage(), MockHttpServer::GetMockUrl("files/manifest1"),
         111);
+    http_headers_request_test_jobs_.emplace(
+        group_->manifest_url(), std::make_unique<HttpHeadersRequestTestJob>(
+                                    std::string(), "\"LadeDade\""));
     AppCacheUpdateJob* update =
         new AppCacheUpdateJob(service_.get(), group_.get());
     group_->update_job_ = update;
@@ -3633,11 +3644,12 @@ class AppCacheUpdateJobTest : public testing::Test,
   }
 
   void IfNoneMatchRefetchTest() {
-    HttpHeadersRequestTestJob::Initialize(std::string(), "\"LadeDade\"");
-
     MakeService();
     group_ = base::MakeRefCounted<AppCacheGroup>(
         service_->storage(), GURL("http://headertest"), 111);
+    http_headers_request_test_jobs_.emplace(
+        group_->manifest_url(), std::make_unique<HttpHeadersRequestTestJob>(
+                                    std::string(), "\"LadeDade\""));
     AppCacheUpdateJob* update =
         new AppCacheUpdateJob(service_.get(), group_.get());
     group_->update_job_ = update;
@@ -3661,7 +3673,7 @@ class AppCacheUpdateJobTest : public testing::Test,
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
-                       update));
+                       base::Unretained(this), update));
 
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
@@ -3670,12 +3682,13 @@ class AppCacheUpdateJobTest : public testing::Test,
 
   void MultipleHeadersRefetchTest() {
     // Verify that code is correct when building multiple extra headers.
-    HttpHeadersRequestTestJob::Initialize("Sat, 29 Oct 1994 19:43:31 GMT",
-                                          "\"LadeDade\"");
-
     MakeService();
     group_ = base::MakeRefCounted<AppCacheGroup>(
         service_->storage(), GURL("http://headertest"), 111);
+    http_headers_request_test_jobs_.emplace(
+        group_->manifest_url(),
+        std::make_unique<HttpHeadersRequestTestJob>(
+            "Sat, 29 Oct 1994 19:43:31 GMT", "\"LadeDade\""));
     AppCacheUpdateJob* update =
         new AppCacheUpdateJob(service_.get(), group_.get());
     group_->update_job_ = update;
@@ -3700,7 +3713,7 @@ class AppCacheUpdateJobTest : public testing::Test,
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
-                       update));
+                       base::Unretained(this), update));
 
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
@@ -3863,7 +3876,10 @@ class AppCacheUpdateJobTest : public testing::Test,
   // has finished. Cannot verify update job internals as update is deleted.
   void VerifyExpectations() {
     RetryRequestTestJob::Verify();
-    HttpHeadersRequestTestJob::Verify();
+    for (auto it = http_headers_request_test_jobs_.begin();
+         it != http_headers_request_test_jobs_.end(); ++it) {
+      it->second->Verify(it->first);
+    }
 
     EXPECT_EQ(expect_group_obsolete_, group_->is_obsolete());
     EXPECT_EQ(expect_group_is_being_deleted_ || expect_eviction_,
@@ -4579,6 +4595,8 @@ class AppCacheUpdateJobTest : public testing::Test,
   content::TestBrowserContext browser_context_;
   URLLoaderInterceptor interceptor_;
   const int process_id_;
+  std::map<GURL, std::unique_ptr<HttpHeadersRequestTestJob>>
+      http_headers_request_test_jobs_;
   base::WeakPtrFactory<StoragePartitionImpl> weak_partition_factory_;
 };
 
