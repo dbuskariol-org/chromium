@@ -15,7 +15,6 @@ per-file gcm_driver_resources.grdp=dimich@chromium.org
 per-file gcm_driver_resources.grdp=fgorski@chromium.org
 per-file gcm_driver_resources.grdp=jianli@chromium.org
 per-file gcm_driver_resources.grdp=peter@chromium.org
-per-file gcm_driver_resources.grdp=zea@chromium.org
 per-file neterror*=mmenke@chromium.org
 per-file neterror*=file://net/OWNERS
 per-file ntp_tiles_dev_ui_resources.grdp=file://components/ntp_tiles/OWNERS
