@@ -385,11 +385,6 @@ class ASH_EXPORT SplitViewController : public aura::WindowObserver,
                                  const gfx::Transform& start_transform,
                                  const gfx::Transform& target_transform);
 
-  // Removes the window item that contains |window| from the overview window
-  // grid if |window| is currently showing in overview window grid. It should be
-  // called before trying to snap the window.
-  void RemoveWindowFromOverviewIfApplicable(aura::Window* window);
-
   // Updates the |snapping_window_transformed_bounds_map_| on |window|. It
   // should be called before trying to snap the window.
   void UpdateSnappingWindowTransformedBounds(aura::Window* window);
