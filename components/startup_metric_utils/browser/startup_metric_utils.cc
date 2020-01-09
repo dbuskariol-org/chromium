@@ -526,8 +526,7 @@ void RecordFirstWebContentsNonEmptyPaint(
       now - render_process_host_init_time);
 }
 
-void RecordFirstWebContentsMainNavigationStart(base::TimeTicks ticks,
-                                               WebContentsWorkload workload) {
+void RecordFirstWebContentsMainNavigationStart(base::TimeTicks ticks) {
   static bool is_first_call = true;
   if (!is_first_call || ticks.is_null())
     return;
@@ -539,21 +538,6 @@ void RecordFirstWebContentsMainNavigationStart(base::TimeTicks ticks,
       UMA_HISTOGRAM_LONG_TIMES_100,
       "Startup.FirstWebContents.MainNavigationStart", g_process_creation_ticks,
       ticks);
-
-  // Log extra information about this startup's workload. Only added to this
-  // histogram as this extra suffix can help making it less noisy but isn't
-  // worth tripling the number of startup histograms either.
-  if (workload == WebContentsWorkload::SINGLE_TAB) {
-    UMA_HISTOGRAM_WITH_TEMPERATURE(
-        UMA_HISTOGRAM_LONG_TIMES_100,
-        "Startup.FirstWebContents.MainNavigationStart.SingleTab",
-        ticks - g_process_creation_ticks);
-  } else {
-    UMA_HISTOGRAM_WITH_TEMPERATURE(
-        UMA_HISTOGRAM_LONG_TIMES_100,
-        "Startup.FirstWebContents.MainNavigationStart.MultiTabs",
-        ticks - g_process_creation_ticks);
-  }
 }
 
 void RecordFirstWebContentsMainNavigationFinished(base::TimeTicks ticks) {
