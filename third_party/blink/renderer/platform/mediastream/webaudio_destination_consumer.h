@@ -25,7 +25,7 @@
 #ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_MEDIASTREAM_WEBAUDIO_DESTINATION_CONSUMER_H_
 #define THIRD_PARTY_BLINK_RENDERER_PLATFORM_MEDIASTREAM_WEBAUDIO_DESTINATION_CONSUMER_H_
 
-#include "third_party/blink/public/platform/web_vector.h"
+#include "third_party/blink/renderer/platform/wtf/vector.h"
 
 namespace blink {
 
@@ -38,7 +38,7 @@ class WebAudioDestinationConsumer {
   // The size of the vector is the number of audio channels, and
   // |number_of_frames| is the number of audio frames in the (possibly
   // multi-channel) buffer in a planar format.
-  virtual void ConsumeAudio(const WebVector<const float*>&,
+  virtual void ConsumeAudio(const Vector<const float*>&,
                             size_t number_of_frames) = 0;
 };
 

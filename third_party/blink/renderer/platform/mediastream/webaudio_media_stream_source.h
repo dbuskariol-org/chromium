@@ -39,7 +39,7 @@ class PLATFORM_EXPORT WebAudioMediaStreamSource final
   // concurrently across threads, but these methods could be called on any
   // thread.
   void SetFormat(size_t number_of_channels, float sample_rate) override;
-  void ConsumeAudio(const WebVector<const float*>& audio_data,
+  void ConsumeAudio(const Vector<const float*>& audio_data,
                     size_t number_of_frames) override;
 
   // Called by AudioPushFifo zero or more times during the call to

@@ -182,7 +182,7 @@ void ConsumerWrapper::ConsumeAudio(AudioBus* bus, size_t number_of_frames) {
 
   // Wrap AudioBus.
   size_t number_of_channels = bus->NumberOfChannels();
-  WebVector<const float*> bus_vector(number_of_channels);
+  Vector<const float*> bus_vector(number_of_channels);
   for (size_t i = 0; i < number_of_channels; ++i)
     bus_vector[i] = bus->Channel(i)->Data();
 
