@@ -1912,26 +1912,6 @@
             ]
         }
     ],
-    "DecodeWebPToYUV": [
-        {
-            "platforms": [
-                "android",
-                "android_webview",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Experiment",
-                    "enable_features": [
-                        "DecodeLossyWebPImagesToYUV"
-                    ]
-                }
-            ]
-        }
-    ],
     "DecoupleTranslateLanguage": [
         {
             "platforms": [
