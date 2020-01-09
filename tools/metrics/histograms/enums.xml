@@ -47619,11 +47619,17 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="OSXFastUserSwitchEvent">
+  <obsolete>
+    Removed 2020 January.
+  </obsolete>
   <int value="0" label="User Became Active"/>
   <int value="1" label="User Became Inactive"/>
 </enum>
 
 <enum name="OSXFilesystem">
+  <obsolete>
+    Removed 2020 January.
+  </obsolete>
   <int value="0" label="Unknown"/>
   <int value="1" label="Other"/>
   <int value="2" label="Apple Xsan"/>
@@ -47746,6 +47752,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="OSXOtherInstancesCheckResult">
+  <obsolete>
+    Removed 2020 January.
+  </obsolete>
   <int value="0" label="Old-style update"/>
   <int value="1" label="No other instances at start"/>
   <int value="2" label="User did not authorize"/>
@@ -47787,6 +47796,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="OSXStagingDirectoryStep">
+  <obsolete>
+    Removed 2020 January.
+  </obsolete>
   <int value="0" label="failure"/>
   <int value="1" label="NSItemReplacementDirectory"/>
   <int value="2" label="Sibling directory"/>
@@ -47797,6 +47809,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="OSXStartupUpdateState">
+  <obsolete>
+    Removed 2020 January.
+  </obsolete>
   <int value="0" label="Update key not set"/>
   <int value="1" label="Update key set, staged copy present"/>
   <int value="2" label="Update key set, staged copy not present"/>

@@ -3473,7 +3473,6 @@ test("unit_tests") {
     "../common/ini_parser_unittest.cc",
     "../common/mac/mock_launchd.h",
     "../common/mac/mock_launchd.mm",
-    "../common/mac/staging_watcher_unittest.mm",
     "../common/media_router/issue_unittest.cc",
     "../common/media_router/media_route_unittest.cc",
     "../common/media_router/media_sink_unittest.cc",

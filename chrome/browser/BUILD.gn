@@ -4172,8 +4172,7 @@ jumbo_static_library("browser") {
     sources += [
       "first_run/upgrade_util.cc",
       "first_run/upgrade_util.h",
-      "first_run/upgrade_util_mac.h",
-      "first_run/upgrade_util_mac.mm",
+      "first_run/upgrade_util_mac.cc",
       "first_run/upgrade_util_win.cc",
       "first_run/upgrade_util_win.h",
       "lifetime/switch_utils.cc",
