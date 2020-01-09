@@ -23,6 +23,7 @@
 #include "base/test/scoped_feature_list.h"
 #include "base/test/task_environment.h"
 #include "base/threading/thread_task_runner_handle.h"
+#include "content/browser/appcache/appcache_cache_test_helper.h"
 #include "content/browser/appcache/appcache_group.h"
 #include "content/browser/appcache/appcache_host.h"
 #include "content/browser/appcache/appcache_response.h"
@@ -3439,20 +3440,13 @@ class AppCacheUpdateJobTest : public testing::Test,
     group_ = base::MakeRefCounted<AppCacheGroup>(
         service_->storage(), MockHttpServer::GetMockUrl("files/manifest1"),
         111);
-    http_headers_request_test_jobs_.emplace(
-        group_->manifest_url(),
-        std::make_unique<HttpHeadersRequestTestJob>(
-            "Sat, 29 Oct 1994 19:43:31 GMT", std::string()));
     AppCacheUpdateJob* update =
         new AppCacheUpdateJob(service_.get(), group_.get());
     group_->update_job_ = update;
 
-    // Give the newest cache a manifest entry that is in storage.
-    response_writer_ =
-        service_->storage()->CreateResponseWriter(group_->manifest_url());
-
-    AppCache* cache = MakeCacheForGroup(service_->storage()->NewCacheId(),
-                                        response_writer_->response_id());
+    // Create a cache without a manifest entry.  The manifest entry will be
+    // added later.
+    AppCache* cache = MakeCacheForGroup(service_->storage()->NewCacheId(), -1);
     MockFrontend* frontend = MakeMockFrontend();
     AppCacheHost* host = MakeHost(frontend);
     host->AssociateCompleteCache(cache);
@@ -3476,26 +3470,41 @@ class AppCacheUpdateJobTest : public testing::Test,
     frontend->AddExpectedEvent(
         blink::mojom::AppCacheEventID::APPCACHE_UPDATE_READY_EVENT);
 
+    AppCacheCacheTestHelper::CacheEntries cache_entries;
+
+    // Add cache entry for manifest.
     // Seed storage with expected manifest response info that will cause
     // an If-Modified-Since header to be put in the manifest fetch request.
     const char data[] =
         "HTTP/1.1 200 OK\0"
-        "Last-Modified: Sat, 29 Oct 1994 19:43:31 GMT\0"
-        "\0";
+        "Last-Modified: Sat, 29 Oct 1994 19:43:31 GMT\0";
     scoped_refptr<net::HttpResponseHeaders> headers =
         base::MakeRefCounted<net::HttpResponseHeaders>(
             std::string(data, base::size(data)));
     std::unique_ptr<net::HttpResponseInfo> response_info =
         std::make_unique<net::HttpResponseInfo>();
     response_info->headers = std::move(headers);
-    scoped_refptr<HttpResponseInfoIOBuffer> io_buffer =
-        base::MakeRefCounted<HttpResponseInfoIOBuffer>(
-            std::move(response_info));
-    response_writer_->WriteInfo(
-        io_buffer.get(),
+    AppCacheCacheTestHelper::AddCacheEntry(
+        &cache_entries, group_->manifest_url(), AppCacheEntry::EXPLICIT,
+        /*expect_if_modified_since=*/"Sat, 29 Oct 1994 19:43:31 GMT",
+        /*expect_if_none_match=*/std::string(), /*headers_allowed=*/true,
+        std::move(response_info), kManifest1Contents);
+
+    // Add all header checks from |cache_entries|.
+    for (auto it = cache_entries.begin(); it != cache_entries.end(); ++it) {
+      http_headers_request_test_jobs_.emplace(
+          it->first,
+          std::make_unique<HttpHeadersRequestTestJob>(
+              it->second->expect_if_modified_since,
+              it->second->expect_if_none_match, it->second->headers_allowed));
+    }
+
+    cache_helper_ = std::make_unique<AppCacheCacheTestHelper>(
+        service_.get(), group_->manifest_url(), cache, std::move(cache_entries),
         base::BindOnce(
             &AppCacheUpdateJobTest::StartUpdateAfterSeedingStorageData,
             base::Unretained(this)));
+    cache_helper_->Write();
 
     // Start update after data write completes asynchronously.
   }
@@ -3800,6 +3809,7 @@ class AppCacheUpdateJobTest : public testing::Test,
       VerifyExpectations();
 
     // Clean up everything that was created on the IO thread.
+    cache_helper_.reset();
     protect_newest_cache_ = nullptr;
     group_ = nullptr;
     hosts_.clear();
@@ -3832,8 +3842,10 @@ class AppCacheUpdateJobTest : public testing::Test,
     group_->set_last_full_update_check_time(cache->update_time());
 
     // Add manifest entry to cache.
-    cache->AddEntry(manifest_entry_url, AppCacheEntry(AppCacheEntry::MANIFEST,
-                                                      manifest_response_id));
+    if (manifest_response_id >= 0) {
+      cache->AddEntry(manifest_entry_url, AppCacheEntry(AppCacheEntry::MANIFEST,
+                                                        manifest_response_id));
+    }
 
     // Specific tests that expect a newer time should set
     // expect_full_update_time_newer_than_ which causes this
@@ -4564,6 +4576,7 @@ class AppCacheUpdateJobTest : public testing::Test,
   base::OnceClosure test_completed_cb_;
 
   std::unique_ptr<AppCacheResponseWriter> response_writer_;
+  std::unique_ptr<AppCacheCacheTestHelper> cache_helper_;
 
   // Hosts used by an async test that need to live until update job finishes.
   // Otherwise, test can put host on the stack instead of here.
