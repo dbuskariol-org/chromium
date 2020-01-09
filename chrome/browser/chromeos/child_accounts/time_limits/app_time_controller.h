@@ -8,6 +8,7 @@
 #include <memory>
 
 class Profile;
+class PrefRegistrySimple;
 
 namespace chromeos {
 namespace app_time {
@@ -20,6 +21,10 @@ class WebTimeLimitEnforcer;
 class AppTimeController {
  public:
   static bool ArePerAppTimeLimitsEnabled();
+
+  // Registers preferences
+  static void RegisterProfilePrefs(PrefRegistrySimple* registry);
+
   explicit AppTimeController(Profile* profile);
   AppTimeController(const AppTimeController&) = delete;
   AppTimeController& operator=(const AppTimeController&) = delete;

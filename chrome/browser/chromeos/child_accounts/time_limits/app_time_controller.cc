@@ -10,6 +10,8 @@
 #include "chrome/browser/chromeos/child_accounts/time_limits/web_time_limit_enforcer.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/common/chrome_features.h"
+#include "chrome/common/pref_names.h"
+#include "components/prefs/pref_registry_simple.h"
 
 namespace chromeos {
 namespace app_time {
@@ -17,6 +19,12 @@ namespace app_time {
 // static
 bool AppTimeController::ArePerAppTimeLimitsEnabled() {
   return base::FeatureList::IsEnabled(features::kPerAppTimeLimits);
+}
+
+// static
+void AppTimeController::RegisterProfilePrefs(PrefRegistrySimple* registry) {
+  registry->RegisterDictionaryPref(prefs::kPerAppTimeLimitsPolicy);
+  registry->RegisterDictionaryPref(prefs::kPerAppTimeLimitsWhitelistPolicy);
 }
 
 AppTimeController::AppTimeController(Profile* profile)
