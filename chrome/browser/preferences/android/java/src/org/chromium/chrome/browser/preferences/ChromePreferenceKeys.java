@@ -237,6 +237,13 @@ public final class ChromePreferenceKeys {
     public static final String DATA_REDUCTION_SITE_BREAKDOWN_ALLOWED_DATE =
             "data_reduction_site_breakdown_allowed_date";
 
+    public static final String DOWNLOAD_IS_DOWNLOAD_HOME_ENABLED =
+            "org.chromium.chrome.browser.download.IS_DOWNLOAD_HOME_ENABLED";
+    public static final String DOWNLOAD_PENDING_DOWNLOAD_NOTIFICATIONS =
+            "PendingDownloadNotifications";
+    public static final String DOWNLOAD_PENDING_OMA_DOWNLOADS = "PendingOMADownloads";
+    public static final String DOWNLOAD_UMA_ENTRY = "DownloadUmaEntry";
+
     /**
      * Indicates whether or not there are prefetched content in chrome that can be viewed offline.
      */
@@ -624,6 +631,10 @@ public final class ChromePreferenceKeys {
                 DATA_REDUCTION_FIRST_ENABLED_TIME,
                 DATA_REDUCTION_FRE_PROMO_OPT_OUT,
                 DATA_REDUCTION_SITE_BREAKDOWN_ALLOWED_DATE,
+                DOWNLOAD_IS_DOWNLOAD_HOME_ENABLED,
+                DOWNLOAD_PENDING_DOWNLOAD_NOTIFICATIONS,
+                DOWNLOAD_PENDING_OMA_DOWNLOADS,
+                DOWNLOAD_UMA_ENTRY,
                 FIRST_RUN_CACHED_TOS_ACCEPTED,
                 FIRST_RUN_FLOW_COMPLETE,
                 FIRST_RUN_FLOW_SIGNIN_ACCOUNT_NAME,
