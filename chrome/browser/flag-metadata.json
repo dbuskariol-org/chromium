@@ -1336,8 +1336,8 @@
   },
   {
     "name": "enable-experimental-kernel-vm-support",
-    "owners": [ "jflat", "zwisler" ],
-    "expiry_milestone": 82
+    "owners": [ "zwisler" ],
+    "expiry_milestone": 87
   },
   {
     "name": "enable-experimental-productivity-features",
