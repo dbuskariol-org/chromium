@@ -54,6 +54,7 @@ public class EphemeralTabCoordinator implements View.OnLayoutChangeListener {
     private EphemeralTabSheetContent mSheetContent;
     private boolean mIsIncognito;
     private String mUrl;
+    private int mCurrentMaxSheetHeight;
 
     /**
      * Constructor.
@@ -171,8 +172,14 @@ public class EphemeralTabCoordinator implements View.OnLayoutChangeListener {
     public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft,
             int oldTop, int oldRight, int oldBottom) {
         if (mSheetContent == null) return;
-        if ((oldBottom - oldTop) == (bottom - top)) return;
-        mSheetContent.updateContentHeight(getMaxSheetHeight());
+
+        // It may not be possible to update the content height when the actual height changes
+        // due to the current tab not being ready yet. Try it later again when the tab
+        // (hence MaxSheetHeight) becomes valid.
+        int maxSheetHeight = getMaxSheetHeight();
+        if (maxSheetHeight == 0 || mCurrentMaxSheetHeight == maxSheetHeight) return;
+        mSheetContent.updateContentHeight(maxSheetHeight);
+        mCurrentMaxSheetHeight = maxSheetHeight;
     }
 
     private int getMaxSheetHeight() {
