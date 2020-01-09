@@ -604,7 +604,11 @@ const flags_ui::FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(web::kReloadSadTab)},
     {"page-info-refactoring", flag_descriptions::kPageInfoRefactoringName,
      flag_descriptions::kPageInfoRefactoringDescription, flags_ui::kOsIos,
-     FEATURE_VALUE_TYPE(kPageInfoRefactoring)}};
+     FEATURE_VALUE_TYPE(kPageInfoRefactoring)},
+    {"contained-browser-bvc", flag_descriptions::kContainedBVCName,
+     flag_descriptions::kContainedBVCDescription, flags_ui::kOsIos,
+     FEATURE_VALUE_TYPE(kContainedBVC)},
+};
 
 // Add all switches from experimental flags to |command_line|.
 void AppendSwitchesFromExperimentalSettings(base::CommandLine* command_line) {
