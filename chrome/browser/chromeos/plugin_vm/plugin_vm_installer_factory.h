@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_IMAGE_MANAGER_FACTORY_H_
-#define CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_IMAGE_MANAGER_FACTORY_H_
+#ifndef CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_INSTALLER_FACTORY_H_
+#define CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_INSTALLER_FACTORY_H_
 
 #include "base/macros.h"
 #include "base/memory/singleton.h"
@@ -17,18 +17,18 @@ class Profile;
 
 namespace plugin_vm {
 
-class PluginVmImageManager;
+class PluginVmInstaller;
 
-class PluginVmImageManagerFactory : public BrowserContextKeyedServiceFactory {
+class PluginVmInstallerFactory : public BrowserContextKeyedServiceFactory {
  public:
-  static PluginVmImageManager* GetForProfile(Profile* profile);
-  static PluginVmImageManagerFactory* GetInstance();
+  static PluginVmInstaller* GetForProfile(Profile* profile);
+  static PluginVmInstallerFactory* GetInstance();
 
  private:
-  friend struct base::DefaultSingletonTraits<PluginVmImageManagerFactory>;
+  friend struct base::DefaultSingletonTraits<PluginVmInstallerFactory>;
 
-  PluginVmImageManagerFactory();
-  ~PluginVmImageManagerFactory() override;
+  PluginVmInstallerFactory();
+  ~PluginVmInstallerFactory() override;
 
   // BrowserContextKeyedServiceFactory implementation.
   KeyedService* BuildServiceInstanceFor(
@@ -36,9 +36,9 @@ class PluginVmImageManagerFactory : public BrowserContextKeyedServiceFactory {
   content::BrowserContext* GetBrowserContextToUse(
       content::BrowserContext* context) const override;
 
-  DISALLOW_COPY_AND_ASSIGN(PluginVmImageManagerFactory);
+  DISALLOW_COPY_AND_ASSIGN(PluginVmInstallerFactory);
 };
 
 }  // namespace plugin_vm
 
-#endif  // CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_IMAGE_MANAGER_FACTORY_H_
+#endif  // CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_INSTALLER_FACTORY_H_

@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_PLUGIN_VM_PLUGIN_VM_LAUNCHER_VIEW_H_
-#define CHROME_BROWSER_UI_VIEWS_PLUGIN_VM_PLUGIN_VM_LAUNCHER_VIEW_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_PLUGIN_VM_PLUGIN_VM_INSTALLER_VIEW_H_
+#define CHROME_BROWSER_UI_VIEWS_PLUGIN_VM_PLUGIN_VM_INSTALLER_VIEW_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
-#include "chrome/browser/chromeos/plugin_vm/plugin_vm_image_manager.h"
+#include "chrome/browser/chromeos/plugin_vm/plugin_vm_installer.h"
 #include "ui/views/bubble/bubble_dialog_delegate_view.h"
 
 namespace views {
@@ -18,16 +18,13 @@ class ProgressBar;
 
 class Profile;
 
-// The PluginVm launcher that is shown to user if PluginVm icon is clicked, but
-// PluginVm is not yet ready to be launched. This class is responsible for
-// triggering the steps of the PluginVm setup process and displaying progress
-// according to the state of this setup.
-class PluginVmLauncherView : public views::BubbleDialogDelegateView,
-                             public plugin_vm::PluginVmImageManager::Observer {
+// The front end for Plugin VM, shown the first time the user launches it.
+class PluginVmInstallerView : public views::BubbleDialogDelegateView,
+                              public plugin_vm::PluginVmInstaller::Observer {
  public:
-  explicit PluginVmLauncherView(Profile* profile);
+  explicit PluginVmInstallerView(Profile* profile);
 
-  static PluginVmLauncherView* GetActiveViewForTesting();
+  static PluginVmInstallerView* GetActiveViewForTesting();
 
   // views::BubbleDialogDelegateView implementation.
   bool ShouldShowWindowTitle() const override;
@@ -48,13 +45,13 @@ class PluginVmLauncherView : public views::BubbleDialogDelegateView,
   void OnDownloadCompleted() override;
   void OnDownloadCancelled() override;
   void OnDownloadFailed(
-      plugin_vm::PluginVmImageManager::FailureReason reason) override;
+      plugin_vm::PluginVmInstaller::FailureReason reason) override;
   void OnImportProgressUpdated(int percent_completed,
                                base::TimeDelta elapsed_time) override;
   void OnImported() override;
   void OnImportCancelled() override;
   void OnImportFailed(
-      plugin_vm::PluginVmImageManager::FailureReason reason) override;
+      plugin_vm::PluginVmInstaller::FailureReason reason) override;
 
   // Public for testing purposes.
   base::string16 GetBigMessage() const;
@@ -74,7 +71,7 @@ class PluginVmLauncherView : public views::BubbleDialogDelegateView,
     ERROR,              // Something unexpected happened.
   };
 
-  ~PluginVmLauncherView() override;
+  ~PluginVmInstallerView() override;
 
   int GetCurrentDialogButtons() const;
   base::string16 GetCurrentDialogButtonLabel(ui::DialogButton button) const;
@@ -96,7 +93,7 @@ class PluginVmLauncherView : public views::BubbleDialogDelegateView,
   void StartPluginVmImageDownload();
 
   Profile* profile_ = nullptr;
-  plugin_vm::PluginVmImageManager* plugin_vm_image_manager_ = nullptr;
+  plugin_vm::PluginVmInstaller* plugin_vm_installer_ = nullptr;
   views::Label* big_message_label_ = nullptr;
   views::Label* message_label_ = nullptr;
   views::ProgressBar* progress_bar_ = nullptr;
@@ -106,11 +103,11 @@ class PluginVmLauncherView : public views::BubbleDialogDelegateView,
   base::TimeTicks setup_start_tick_;
 
   State state_ = State::START_DOWNLOADING;
-  base::Optional<plugin_vm::PluginVmImageManager::FailureReason> reason_;
+  base::Optional<plugin_vm::PluginVmInstaller::FailureReason> reason_;
 
   base::OnceCallback<void(bool success)> finished_callback_for_testing_;
 
-  DISALLOW_COPY_AND_ASSIGN(PluginVmLauncherView);
+  DISALLOW_COPY_AND_ASSIGN(PluginVmInstallerView);
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_PLUGIN_VM_PLUGIN_VM_LAUNCHER_VIEW_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_PLUGIN_VM_PLUGIN_VM_INSTALLER_VIEW_H_

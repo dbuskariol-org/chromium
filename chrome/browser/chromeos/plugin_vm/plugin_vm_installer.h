@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_IMAGE_MANAGER_H_
-#define CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_IMAGE_MANAGER_H_
+#ifndef CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_INSTALLER_H_
+#define CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_INSTALLER_H_
 
 #include <memory>
 #include <string>
@@ -28,7 +28,7 @@ namespace plugin_vm {
 
 class PluginVmDriveImageDownloadService;
 
-// PluginVmImageManager is responsible for management of PluginVm image
+// PluginVmInstaller is responsible for installing the PluginVm image,
 // including downloading this image from url specified by the user policy,
 // and importing the downloaded image archive using concierge D-Bus services.
 //
@@ -37,16 +37,15 @@ class PluginVmDriveImageDownloadService;
 // called in this order. Image processing might be interrupted by
 // calling the corresponding cancel methods. If one of the methods mentioned is
 // called not in the correct order or before the previous state is finished then
-// associated fail method will be called by the manager and image processing
+// associated fail method will be called by the installer and image processing
 // will be interrupted.
 //
 // This class uses one of two different objects for handling file downloads. If
 // the image is hosted on Drive, a PluginVmDriveImageDownloadService object is
 // used due to the need for using the Drive API. In all other cases, the
 // DownloadService class is used to make the request directly.
-class PluginVmImageManager
-    : public KeyedService,
-      public chromeos::ConciergeClient::DiskImageObserver {
+class PluginVmInstaller : public KeyedService,
+                          public chromeos::ConciergeClient::DiskImageObserver {
  public:
   // FailureReasons values can be shown to the user. Do not reorder or renumber
   // these values without careful consideration.
@@ -94,9 +93,9 @@ class PluginVmImageManager
     virtual void OnImportFailed(FailureReason reason) = 0;
   };
 
-  explicit PluginVmImageManager(Profile* profile);
+  explicit PluginVmInstaller(Profile* profile);
 
-  // Returns true if manager is processing PluginVm image at the moment.
+  // Returns true if installer is processing a PluginVm image at the moment.
   bool IsProcessing();
 
   // Initiates the PluginVM DLC download, should always be called before
@@ -189,7 +188,7 @@ class PluginVmImageManager
   std::unique_ptr<PluginVmDriveImageDownloadService> drive_download_service_;
   bool using_drive_download_service_ = false;
 
-  ~PluginVmImageManager() override;
+  ~PluginVmInstaller() override;
 
   // Get string representation of state for logging purposes.
   std::string GetStateName(State state);
@@ -225,7 +224,7 @@ class PluginVmImageManager
 
   // Callback for the final call to concierge's DiskImageStatus to
   // get the final result of the disk import operation. This moves
-  // the manager to a finishing state, depending on the result of the
+  // the installer to a finishing state, depending on the result of the
   // query. Called when the signal for the command indicates that we
   // are done with importing.
   void OnFinalDiskImageStatus(
@@ -242,11 +241,11 @@ class PluginVmImageManager
   void RemoveTemporaryPluginVmImageArchiveIfExists();
   void OnTemporaryPluginVmImageArchiveRemoved(bool success);
 
-  base::WeakPtrFactory<PluginVmImageManager> weak_ptr_factory_{this};
+  base::WeakPtrFactory<PluginVmInstaller> weak_ptr_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(PluginVmImageManager);
+  DISALLOW_COPY_AND_ASSIGN(PluginVmInstaller);
 };
 
 }  // namespace plugin_vm
 
-#endif  // CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_IMAGE_MANAGER_H_
+#endif  // CHROME_BROWSER_CHROMEOS_PLUGIN_VM_PLUGIN_VM_INSTALLER_H_

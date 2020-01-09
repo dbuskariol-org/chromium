@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/plugin_vm/plugin_vm_image_manager.h"
+#include "chrome/browser/chromeos/plugin_vm/plugin_vm_installer.h"
 
 #include <memory>
 #include <string>
@@ -45,13 +45,13 @@ chromeos::ConciergeClient* GetConciergeClient() {
 
 namespace plugin_vm {
 
-PluginVmImageManager::~PluginVmImageManager() = default;
+PluginVmInstaller::~PluginVmInstaller() = default;
 
-bool PluginVmImageManager::IsProcessing() {
+bool PluginVmInstaller::IsProcessing() {
   return State::NOT_STARTED < state_ && state_ < State::CONFIGURED;
 }
 
-void PluginVmImageManager::StartDlcDownload() {
+void PluginVmInstaller::StartDlcDownload() {
   if (IsProcessing()) {
     LOG(ERROR) << "Download of a PluginVm image couldn't be started as"
                << " another PluginVm image is currently being processed "
@@ -76,9 +76,9 @@ void PluginVmImageManager::StartDlcDownload() {
   if (prev_state != State::DOWNLOAD_DLC_CANCELLED) {
     chromeos::DlcserviceClient::Get()->Install(
         dlc_module_list_,
-        base::BindOnce(&PluginVmImageManager::OnDlcDownloadCompleted,
+        base::BindOnce(&PluginVmInstaller::OnDlcDownloadCompleted,
                        weak_ptr_factory_.GetWeakPtr()),
-        base::BindRepeating(&PluginVmImageManager::OnDlcDownloadProgressUpdated,
+        base::BindRepeating(&PluginVmInstaller::OnDlcDownloadProgressUpdated,
                             weak_ptr_factory_.GetWeakPtr()));
   }
 
@@ -86,14 +86,14 @@ void PluginVmImageManager::StartDlcDownload() {
     observer_->OnDlcDownloadStarted();
 }
 
-void PluginVmImageManager::CancelDlcDownload() {
+void PluginVmInstaller::CancelDlcDownload() {
   state_ = State::DOWNLOAD_DLC_CANCELLED;
 
   if (observer_)
     observer_->OnDlcDownloadCancelled();
 }
 
-void PluginVmImageManager::StartDownload() {
+void PluginVmInstaller::StartDownload() {
   if (state_ != State::DOWNLOADED_DLC) {
     LOG(ERROR) << "Download of a PluginVm image couldn't be started as "
                << "StartDlcDownload() was not called prior.";
@@ -124,7 +124,7 @@ void PluginVmImageManager::StartDownload() {
   }
 }
 
-void PluginVmImageManager::CancelDownload() {
+void PluginVmInstaller::CancelDownload() {
   state_ = State::DOWNLOAD_CANCELLED;
 
   if (using_drive_download_service_) {
@@ -135,7 +135,7 @@ void PluginVmImageManager::CancelDownload() {
   }
 }
 
-void PluginVmImageManager::OnDlcDownloadProgressUpdated(double progress) {
+void PluginVmInstaller::OnDlcDownloadProgressUpdated(double progress) {
   if (state_ != State::DOWNLOADING_DLC)
     return;
 
@@ -144,7 +144,7 @@ void PluginVmImageManager::OnDlcDownloadProgressUpdated(double progress) {
         progress, base::TimeTicks::Now() - dlc_download_start_tick_);
 }
 
-void PluginVmImageManager::OnDlcDownloadCompleted(
+void PluginVmInstaller::OnDlcDownloadCompleted(
     const std::string& err,
     const dlcservice::DlcModuleList& dlc_module_list) {
   if (state_ != State::DOWNLOADING_DLC)
@@ -164,14 +164,14 @@ void PluginVmImageManager::OnDlcDownloadCompleted(
     observer_->OnDlcDownloadCompleted();
 }
 
-void PluginVmImageManager::OnDownloadStarted() {
+void PluginVmInstaller::OnDownloadStarted() {
   download_start_tick_ = base::TimeTicks::Now();
   if (observer_)
     observer_->OnDownloadStarted();
 }
 
-void PluginVmImageManager::OnDownloadProgressUpdated(uint64_t bytes_downloaded,
-                                                     int64_t content_length) {
+void PluginVmInstaller::OnDownloadProgressUpdated(uint64_t bytes_downloaded,
+                                                  int64_t content_length) {
   if (observer_) {
     observer_->OnDownloadProgressUpdated(
         bytes_downloaded, content_length,
@@ -179,7 +179,7 @@ void PluginVmImageManager::OnDownloadProgressUpdated(uint64_t bytes_downloaded,
   }
 }
 
-void PluginVmImageManager::OnDownloadCompleted(
+void PluginVmInstaller::OnDownloadCompleted(
     const download::CompletionInfo& info) {
   downloaded_plugin_vm_image_archive_ = info.path;
   downloaded_plugin_vm_image_size_ = info.bytes_downloaded;
@@ -198,7 +198,7 @@ void PluginVmImageManager::OnDownloadCompleted(
   RecordPluginVmImageDownloadedSizeHistogram(info.bytes_downloaded);
 }
 
-void PluginVmImageManager::OnDownloadCancelled() {
+void PluginVmInstaller::OnDownloadCancelled() {
   DCHECK_EQ(state_, State::DOWNLOAD_CANCELLED);
 
   RemoveTemporaryPluginVmImageArchiveIfExists();
@@ -213,7 +213,7 @@ void PluginVmImageManager::OnDownloadCancelled() {
   state_ = State::NOT_STARTED;
 }
 
-void PluginVmImageManager::OnDownloadFailed(FailureReason reason) {
+void PluginVmInstaller::OnDownloadFailed(FailureReason reason) {
   state_ = State::DOWNLOAD_FAILED;
   RemoveTemporaryPluginVmImageArchiveIfExists();
   current_download_guid_.clear();
@@ -227,7 +227,7 @@ void PluginVmImageManager::OnDownloadFailed(FailureReason reason) {
     observer_->OnDownloadFailed(reason);
 }
 
-void PluginVmImageManager::StartImport() {
+void PluginVmInstaller::StartImport() {
   if (state_ != State::DOWNLOADED) {
     LOG(ERROR) << "Importing of PluginVm image couldn't proceed as current "
                << "state is " << GetStateName(state_) << " not "
@@ -243,22 +243,22 @@ void PluginVmImageManager::StartImport() {
       ->GetDebugDaemonClient()
       ->StartPluginVmDispatcher(
           chromeos::ProfileHelper::GetUserIdHashFromProfile(profile_),
-          base::BindOnce(&PluginVmImageManager::OnPluginVmDispatcherStarted,
+          base::BindOnce(&PluginVmInstaller::OnPluginVmDispatcherStarted,
                          weak_ptr_factory_.GetWeakPtr()));
 }
 
-void PluginVmImageManager::OnPluginVmDispatcherStarted(bool success) {
+void PluginVmInstaller::OnPluginVmDispatcherStarted(bool success) {
   if (!success) {
     LOG(ERROR) << "Failed to start PluginVm dispatcher service";
     OnImported(FailureReason::DISPATCHER_NOT_AVAILABLE);
     return;
   }
   GetConciergeClient()->WaitForServiceToBeAvailable(
-      base::BindOnce(&PluginVmImageManager::OnConciergeAvailable,
+      base::BindOnce(&PluginVmInstaller::OnConciergeAvailable,
                      weak_ptr_factory_.GetWeakPtr()));
 }
 
-void PluginVmImageManager::OnConciergeAvailable(bool success) {
+void PluginVmInstaller::OnConciergeAvailable(bool success) {
   if (!success) {
     LOG(ERROR) << "Concierge did not become available";
     OnImported(FailureReason::CONCIERGE_NOT_AVAILABLE);
@@ -276,12 +276,12 @@ void PluginVmImageManager::OnConciergeAvailable(bool success) {
   base::PostTaskAndReplyWithResult(
       FROM_HERE,
       {base::ThreadPool(), base::TaskPriority::USER_VISIBLE, base::MayBlock()},
-      base::BindOnce(&PluginVmImageManager::PrepareFD, base::Unretained(this)),
-      base::BindOnce(&PluginVmImageManager::OnFDPrepared,
+      base::BindOnce(&PluginVmInstaller::PrepareFD, base::Unretained(this)),
+      base::BindOnce(&PluginVmInstaller::OnFDPrepared,
                      weak_ptr_factory_.GetWeakPtr()));
 }
 
-base::Optional<base::ScopedFD> PluginVmImageManager::PrepareFD() {
+base::Optional<base::ScopedFD> PluginVmInstaller::PrepareFD() {
   // In case import has been cancelled meantime.
   if (state_ == State::IMPORT_CANCELLED || state_ == State::NOT_STARTED)
     return base::nullopt;
@@ -297,8 +297,7 @@ base::Optional<base::ScopedFD> PluginVmImageManager::PrepareFD() {
   return fd;
 }
 
-void PluginVmImageManager::OnFDPrepared(
-    base::Optional<base::ScopedFD> maybeFd) {
+void PluginVmInstaller::OnFDPrepared(base::Optional<base::ScopedFD> maybeFd) {
   // In case import has been cancelled meantime.
   if (state_ == State::IMPORT_CANCELLED || state_ == State::NOT_STARTED)
     return;
@@ -321,11 +320,11 @@ void PluginVmImageManager::OnFDPrepared(
 
   GetConciergeClient()->ImportDiskImage(
       std::move(maybeFd.value()), request,
-      base::BindOnce(&PluginVmImageManager::OnImportDiskImage,
+      base::BindOnce(&PluginVmInstaller::OnImportDiskImage,
                      weak_ptr_factory_.GetWeakPtr()));
 }
 
-void PluginVmImageManager::OnImportDiskImage(
+void PluginVmInstaller::OnImportDiskImage(
     base::Optional<vm_tools::concierge::ImportDiskImageResponse> reply) {
   if (!reply.has_value()) {
     LOG(ERROR) << "Could not retrieve response from ImportDiskImage call to "
@@ -359,7 +358,7 @@ void PluginVmImageManager::OnImportDiskImage(
   //   at this stage though.
 }
 
-void PluginVmImageManager::OnDiskImageProgress(
+void PluginVmInstaller::OnDiskImageProgress(
     const vm_tools::concierge::DiskImageStatusResponse& signal) {
   if (signal.command_uuid() != current_import_command_uuid_)
     return;
@@ -387,16 +386,15 @@ void PluginVmImageManager::OnDiskImageProgress(
   }
 }
 
-void PluginVmImageManager::RequestFinalStatus() {
+void PluginVmInstaller::RequestFinalStatus() {
   vm_tools::concierge::DiskImageStatusRequest status_request;
   status_request.set_command_uuid(current_import_command_uuid_);
   GetConciergeClient()->DiskImageStatus(
-      status_request,
-      base::BindOnce(&PluginVmImageManager::OnFinalDiskImageStatus,
-                     weak_ptr_factory_.GetWeakPtr()));
+      status_request, base::BindOnce(&PluginVmInstaller::OnFinalDiskImageStatus,
+                                     weak_ptr_factory_.GetWeakPtr()));
 }
 
-void PluginVmImageManager::OnFinalDiskImageStatus(
+void PluginVmInstaller::OnFinalDiskImageStatus(
     base::Optional<vm_tools::concierge::DiskImageStatusResponse> reply) {
   if (!reply.has_value()) {
     LOG(ERROR) << "Could not retrieve response from DiskImageStatus call to "
@@ -418,7 +416,7 @@ void PluginVmImageManager::OnFinalDiskImageStatus(
   OnImported(base::nullopt);
 }
 
-void PluginVmImageManager::OnImported(
+void PluginVmInstaller::OnImported(
     base::Optional<FailureReason> failure_reason) {
   GetConciergeClient()->RemoveDiskImageObserver(this);
   RemoveTemporaryPluginVmImageArchiveIfExists();
@@ -442,7 +440,7 @@ void PluginVmImageManager::OnImported(
   state_ = State::CONFIGURED;
 }
 
-void PluginVmImageManager::CancelImport() {
+void PluginVmInstaller::CancelImport() {
   state_ = State::IMPORT_CANCELLED;
   VLOG(1) << "Cancelling disk image import with command_uuid: "
           << current_import_command_uuid_;
@@ -450,11 +448,11 @@ void PluginVmImageManager::CancelImport() {
   vm_tools::concierge::CancelDiskImageRequest request;
   request.set_command_uuid(current_import_command_uuid_);
   GetConciergeClient()->CancelDiskImageOperation(
-      request, base::BindOnce(&PluginVmImageManager::OnImportDiskImageCancelled,
+      request, base::BindOnce(&PluginVmInstaller::OnImportDiskImageCancelled,
                               weak_ptr_factory_.GetWeakPtr()));
 }
 
-void PluginVmImageManager::OnImportDiskImageCancelled(
+void PluginVmInstaller::OnImportDiskImageCancelled(
     base::Optional<vm_tools::concierge::CancelDiskImageResponse> reply) {
   DCHECK_EQ(state_, State::IMPORT_CANCELLED);
 
@@ -481,34 +479,34 @@ void PluginVmImageManager::OnImportDiskImageCancelled(
   VLOG(1) << "Import disk image request has been cancelled successfully";
 }
 
-void PluginVmImageManager::SetObserver(Observer* observer) {
+void PluginVmInstaller::SetObserver(Observer* observer) {
   observer_ = observer;
 }
 
-void PluginVmImageManager::RemoveObserver() {
+void PluginVmInstaller::RemoveObserver() {
   observer_ = nullptr;
 }
 
-void PluginVmImageManager::SetDownloadServiceForTesting(
+void PluginVmInstaller::SetDownloadServiceForTesting(
     download::DownloadService* download_service) {
   download_service_ = download_service;
 }
 
-void PluginVmImageManager::SetDownloadedPluginVmImageArchiveForTesting(
+void PluginVmInstaller::SetDownloadedPluginVmImageArchiveForTesting(
     const base::FilePath& downloaded_plugin_vm_image_archive) {
   downloaded_plugin_vm_image_archive_ = downloaded_plugin_vm_image_archive;
 }
 
-std::string PluginVmImageManager::GetCurrentDownloadGuidForTesting() {
+std::string PluginVmInstaller::GetCurrentDownloadGuidForTesting() {
   return current_download_guid_;
 }
 
-void PluginVmImageManager::SetDriveDownloadServiceForTesting(
+void PluginVmInstaller::SetDriveDownloadServiceForTesting(
     std::unique_ptr<PluginVmDriveImageDownloadService> drive_download_service) {
   drive_download_service_ = std::move(drive_download_service);
 }
 
-PluginVmImageManager::PluginVmImageManager(Profile* profile)
+PluginVmInstaller::PluginVmInstaller(Profile* profile)
     : profile_(profile),
       download_service_(
           DownloadServiceFactory::GetForKey(profile->GetProfileKey())) {
@@ -516,7 +514,7 @@ PluginVmImageManager::PluginVmImageManager(Profile* profile)
   dlc_module_info->set_dlc_id(kPitaDlc);
 }
 
-GURL PluginVmImageManager::GetPluginVmImageDownloadUrl() {
+GURL PluginVmInstaller::GetPluginVmImageDownloadUrl() {
   const base::Value* url_ptr =
       profile_->GetPrefs()
           ->GetDictionary(plugin_vm::prefs::kPluginVmImage)
@@ -528,7 +526,7 @@ GURL PluginVmImageManager::GetPluginVmImageDownloadUrl() {
   return GURL(url_ptr->GetString());
 }
 
-std::string PluginVmImageManager::GetStateName(State state) {
+std::string PluginVmInstaller::GetStateName(State state) {
   switch (state) {
     case State::NOT_STARTED:
       return "NOT_STARTED";
@@ -559,14 +557,13 @@ std::string PluginVmImageManager::GetStateName(State state) {
   }
 }
 
-download::DownloadParams PluginVmImageManager::GetDownloadParams(
-    const GURL& url) {
+download::DownloadParams PluginVmInstaller::GetDownloadParams(const GURL& url) {
   download::DownloadParams params;
 
   // DownloadParams
   params.client = download::DownloadClient::PLUGIN_VM_IMAGE;
   params.guid = base::GenerateGUID();
-  params.callback = base::BindRepeating(&PluginVmImageManager::OnStartDownload,
+  params.callback = base::BindRepeating(&PluginVmInstaller::OnStartDownload,
                                         weak_ptr_factory_.GetWeakPtr());
 
   params.traffic_annotation = net::MutableNetworkTrafficAnnotationTag(
@@ -588,7 +585,7 @@ download::DownloadParams PluginVmImageManager::GetDownloadParams(
   return params;
 }
 
-void PluginVmImageManager::OnStartDownload(
+void PluginVmInstaller::OnStartDownload(
     const std::string& download_guid,
     download::DownloadParams::StartResult start_result) {
   if (start_result == download::DownloadParams::ACCEPTED)
@@ -597,7 +594,7 @@ void PluginVmImageManager::OnStartDownload(
     OnDownloadFailed(FailureReason::DOWNLOAD_FAILED_UNKNOWN);
 }
 
-bool PluginVmImageManager::VerifyDownload(
+bool PluginVmInstaller::VerifyDownload(
     const std::string& downloaded_archive_hash) {
   if (downloaded_archive_hash.empty()) {
     LOG(ERROR) << "No hash found for downloaded PluginVm image archive";
@@ -617,10 +614,10 @@ bool PluginVmImageManager::VerifyDownload(
                                           downloaded_archive_hash);
 }
 
-void PluginVmImageManager::RemoveTemporaryPluginVmImageArchiveIfExists() {
+void PluginVmInstaller::RemoveTemporaryPluginVmImageArchiveIfExists() {
   if (using_drive_download_service_) {
     drive_download_service_->RemoveTemporaryArchive(base::BindOnce(
-        &PluginVmImageManager::OnTemporaryPluginVmImageArchiveRemoved,
+        &PluginVmInstaller::OnTemporaryPluginVmImageArchiveRemoved,
         weak_ptr_factory_.GetWeakPtr()));
   } else {
     if (!downloaded_plugin_vm_image_archive_.empty()) {
@@ -631,14 +628,13 @@ void PluginVmImageManager::RemoveTemporaryPluginVmImageArchiveIfExists() {
           base::BindOnce(&base::DeleteFile, downloaded_plugin_vm_image_archive_,
                          false /* recursive */),
           base::BindOnce(
-              &PluginVmImageManager::OnTemporaryPluginVmImageArchiveRemoved,
+              &PluginVmInstaller::OnTemporaryPluginVmImageArchiveRemoved,
               weak_ptr_factory_.GetWeakPtr()));
     }
   }
 }
 
-void PluginVmImageManager::OnTemporaryPluginVmImageArchiveRemoved(
-    bool success) {
+void PluginVmInstaller::OnTemporaryPluginVmImageArchiveRemoved(bool success) {
   if (!success) {
     LOG(ERROR) << "Downloaded PluginVm image archive located in "
                << downloaded_plugin_vm_image_archive_.value()

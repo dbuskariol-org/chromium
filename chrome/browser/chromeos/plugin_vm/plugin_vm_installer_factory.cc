@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/plugin_vm/plugin_vm_image_manager_factory.h"
+#include "chrome/browser/chromeos/plugin_vm/plugin_vm_installer_factory.h"
 
-#include "chrome/browser/chromeos/plugin_vm/plugin_vm_image_manager.h"
+#include "chrome/browser/chromeos/plugin_vm/plugin_vm_installer.h"
 #include "chrome/browser/download/download_service_factory.h"
 #include "chrome/browser/profiles/incognito_helpers.h"
 #include "chrome/browser/profiles/profile.h"
@@ -13,32 +13,31 @@
 namespace plugin_vm {
 
 // static
-PluginVmImageManager* PluginVmImageManagerFactory::GetForProfile(
-    Profile* profile) {
-  return static_cast<PluginVmImageManager*>(
+PluginVmInstaller* PluginVmInstallerFactory::GetForProfile(Profile* profile) {
+  return static_cast<PluginVmInstaller*>(
       GetInstance()->GetServiceForBrowserContext(profile, true));
 }
 
 // static
-PluginVmImageManagerFactory* PluginVmImageManagerFactory::GetInstance() {
-  return base::Singleton<PluginVmImageManagerFactory>::get();
+PluginVmInstallerFactory* PluginVmInstallerFactory::GetInstance() {
+  return base::Singleton<PluginVmInstallerFactory>::get();
 }
 
-PluginVmImageManagerFactory::PluginVmImageManagerFactory()
+PluginVmInstallerFactory::PluginVmInstallerFactory()
     : BrowserContextKeyedServiceFactory(
-          "PluginVmImageManager",
+          "PluginVmInstaller",
           BrowserContextDependencyManager::GetInstance()) {
   DependsOn(DownloadServiceFactory::GetInstance());
 }
 
-PluginVmImageManagerFactory::~PluginVmImageManagerFactory() = default;
+PluginVmInstallerFactory::~PluginVmInstallerFactory() = default;
 
-KeyedService* PluginVmImageManagerFactory::BuildServiceInstanceFor(
+KeyedService* PluginVmInstallerFactory::BuildServiceInstanceFor(
     content::BrowserContext* context) const {
-  return new PluginVmImageManager(Profile::FromBrowserContext(context));
+  return new PluginVmInstaller(Profile::FromBrowserContext(context));
 }
 
-content::BrowserContext* PluginVmImageManagerFactory::GetBrowserContextToUse(
+content::BrowserContext* PluginVmInstallerFactory::GetBrowserContextToUse(
     content::BrowserContext* context) const {
   return chrome::GetBrowserContextRedirectedInIncognito(context);
 }

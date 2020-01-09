@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/plugin_vm/plugin_vm_image_manager.h"
+#include "chrome/browser/chromeos/plugin_vm/plugin_vm_installer.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -18,7 +18,7 @@
 #include "chrome/browser/chromeos/login/users/mock_user_manager.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_drive_image_download_service.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_image_download_client.h"
-#include "chrome/browser/chromeos/plugin_vm/plugin_vm_image_manager_factory.h"
+#include "chrome/browser/chromeos/plugin_vm/plugin_vm_installer_factory.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_metrics_util.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_pref_names.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_test_helper.h"
@@ -67,7 +67,7 @@ const int kDownloadedPluginVmImageSizeInMb = 123456789u / (1024 * 1024);
 
 }  // namespace
 
-class MockObserver : public PluginVmImageManager::Observer {
+class MockObserver : public PluginVmInstaller::Observer {
  public:
   MOCK_METHOD0(OnDlcDownloadStarted, void());
   MOCK_METHOD2(OnDlcDownloadProgressUpdated,
@@ -75,7 +75,7 @@ class MockObserver : public PluginVmImageManager::Observer {
   MOCK_METHOD0(OnDlcDownloadCompleted, void());
   MOCK_METHOD0(OnDlcDownloadCancelled, void());
   MOCK_METHOD1(OnDlcDownloadFailed,
-               void(plugin_vm::PluginVmImageManager::FailureReason));
+               void(plugin_vm::PluginVmInstaller::FailureReason));
   MOCK_METHOD0(OnDownloadStarted, void());
   MOCK_METHOD3(OnDownloadProgressUpdated,
                void(uint64_t bytes_downloaded,
@@ -84,13 +84,13 @@ class MockObserver : public PluginVmImageManager::Observer {
   MOCK_METHOD0(OnDownloadCompleted, void());
   MOCK_METHOD0(OnDownloadCancelled, void());
   MOCK_METHOD1(OnDownloadFailed,
-               void(plugin_vm::PluginVmImageManager::FailureReason));
+               void(plugin_vm::PluginVmInstaller::FailureReason));
   MOCK_METHOD2(OnImportProgressUpdated,
                void(int percent_completed, base::TimeDelta elapsed_time));
   MOCK_METHOD0(OnImported, void());
   MOCK_METHOD0(OnImportCancelled, void());
   MOCK_METHOD1(OnImportFailed,
-               void(plugin_vm::PluginVmImageManager::FailureReason));
+               void(plugin_vm::PluginVmInstaller::FailureReason));
 };
 
 // We are inheriting from DummyDriveService instead of DriveServiceInterface
@@ -145,10 +145,10 @@ class SimpleFakeDriveService : public drive::DummyDriveService {
   ProgressCallback progress_callback_;
 };
 
-class PluginVmImageManagerTestBase : public testing::Test {
+class PluginVmInstallerTestBase : public testing::Test {
  public:
-  PluginVmImageManagerTestBase() = default;
-  ~PluginVmImageManagerTestBase() override = default;
+  PluginVmInstallerTestBase() = default;
+  ~PluginVmInstallerTestBase() override = default;
 
  protected:
   void SetUp() override {
@@ -162,9 +162,9 @@ class PluginVmImageManagerTestBase : public testing::Test {
     // Sets new PluginVmImage pref for this test.
     SetPluginVmImagePref(kUrl, kHash);
 
-    manager_ = PluginVmImageManagerFactory::GetForProfile(profile_.get());
+    installer_ = PluginVmInstallerFactory::GetForProfile(profile_.get());
     observer_ = std::make_unique<MockObserver>();
-    manager_->SetObserver(observer_.get());
+    installer_->SetObserver(observer_.get());
 
     fake_concierge_client_ = static_cast<chromeos::FakeConciergeClient*>(
         chromeos::DBusThreadManager::Get()->GetConciergeClient());
@@ -193,9 +193,9 @@ class PluginVmImageManagerTestBase : public testing::Test {
   }
 
   void ProcessImageUntilImporting() {
-    manager_->StartDlcDownload();
+    installer_->StartDlcDownload();
     task_environment_.RunUntilIdle();
-    manager_->StartDownload();
+    installer_->StartDownload();
     task_environment_.RunUntilIdle();
   }
 
@@ -203,16 +203,16 @@ class PluginVmImageManagerTestBase : public testing::Test {
     ProcessImageUntilImporting();
 
     // Faking downloaded file for testing.
-    manager_->SetDownloadedPluginVmImageArchiveForTesting(
+    installer_->SetDownloadedPluginVmImageArchiveForTesting(
         fake_downloaded_plugin_vm_image_archive_);
-    manager_->StartImport();
+    installer_->StartImport();
     task_environment_.RunUntilIdle();
   }
 
   content::BrowserTaskEnvironment task_environment_;
   std::unique_ptr<TestingProfile> profile_;
   std::unique_ptr<PluginVmTestHelper> plugin_vm_test_helper_;
-  PluginVmImageManager* manager_;
+  PluginVmInstaller* installer_;
   std::unique_ptr<MockObserver> observer_;
   base::FilePath fake_downloaded_plugin_vm_image_archive_;
   // Owned by chromeos::DBusThreadManager
@@ -233,31 +233,30 @@ class PluginVmImageManagerTestBase : public testing::Test {
 
   base::ScopedTempDir profiles_dir_;
 
-  DISALLOW_COPY_AND_ASSIGN(PluginVmImageManagerTestBase);
+  DISALLOW_COPY_AND_ASSIGN(PluginVmInstallerTestBase);
 };
 
-class PluginVmImageManagerDownloadServiceTest
-    : public PluginVmImageManagerTestBase {
+class PluginVmInstallerDownloadServiceTest : public PluginVmInstallerTestBase {
  public:
-  PluginVmImageManagerDownloadServiceTest() = default;
-  ~PluginVmImageManagerDownloadServiceTest() override = default;
+  PluginVmInstallerDownloadServiceTest() = default;
+  ~PluginVmInstallerDownloadServiceTest() override = default;
 
  protected:
   void SetUp() override {
-    PluginVmImageManagerTestBase::SetUp();
+    PluginVmInstallerTestBase::SetUp();
 
     download_service_ = std::make_unique<download::test::TestDownloadService>();
     download_service_->SetIsReady(true);
     download_service_->SetHash256(kHash);
     client_ = std::make_unique<PluginVmImageDownloadClient>(profile_.get());
     download_service_->set_client(client_.get());
-    manager_->SetDownloadServiceForTesting(download_service_.get());
+    installer_->SetDownloadServiceForTesting(download_service_.get());
     histogram_tester_ = std::make_unique<base::HistogramTester>();
     fake_downloaded_plugin_vm_image_archive_ = CreateZipFile();
   }
 
   void TearDown() override {
-    PluginVmImageManagerTestBase::TearDown();
+    PluginVmInstallerTestBase::TearDown();
 
     histogram_tester_.reset();
     download_service_.reset();
@@ -276,17 +275,17 @@ class PluginVmImageManagerDownloadServiceTest
 
  private:
   std::unique_ptr<PluginVmImageDownloadClient> client_;
-  DISALLOW_COPY_AND_ASSIGN(PluginVmImageManagerDownloadServiceTest);
+  DISALLOW_COPY_AND_ASSIGN(PluginVmInstallerDownloadServiceTest);
 };
 
-class PluginVmImageManagerDriveTest : public PluginVmImageManagerTestBase {
+class PluginVmInstallerDriveTest : public PluginVmInstallerTestBase {
  public:
-  PluginVmImageManagerDriveTest() = default;
-  ~PluginVmImageManagerDriveTest() override = default;
+  PluginVmInstallerDriveTest() = default;
+  ~PluginVmInstallerDriveTest() override = default;
 
  protected:
   void SetUp() override {
-    PluginVmImageManagerTestBase::SetUp();
+    PluginVmInstallerTestBase::SetUp();
 
     google_apis::DriveApiErrorCode error = google_apis::DRIVE_OTHER_ERROR;
     std::unique_ptr<google_apis::FileResource> entry;
@@ -304,7 +303,7 @@ class PluginVmImageManagerDriveTest : public PluginVmImageManagerTestBase {
     ASSERT_TRUE(entry);
 
     auto drive_download_service =
-        std::make_unique<PluginVmDriveImageDownloadService>(manager_,
+        std::make_unique<PluginVmDriveImageDownloadService>(installer_,
                                                             profile_.get());
     // We will need to access this object for some tests in the future.
     drive_download_service_ = drive_download_service.get();
@@ -315,7 +314,7 @@ class PluginVmImageManagerDriveTest : public PluginVmImageManagerTestBase {
     drive_download_service->SetDriveServiceForTesting(
         std::move(fake_drive_service));
 
-    manager_->SetDriveDownloadServiceForTesting(
+    installer_->SetDriveDownloadServiceForTesting(
         std::move(drive_download_service));
   }
 
@@ -333,11 +332,10 @@ class PluginVmImageManagerDriveTest : public PluginVmImageManagerTestBase {
   drive::FakeDriveService* fake_drive_service_;
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(PluginVmImageManagerDriveTest);
+  DISALLOW_COPY_AND_ASSIGN(PluginVmInstallerDriveTest);
 };
 
-TEST_F(PluginVmImageManagerDownloadServiceTest,
-       DownloadPluginVmImageParamsTest) {
+TEST_F(PluginVmInstallerDownloadServiceTest, DownloadPluginVmImageParamsTest) {
   SetupConciergeForSuccessfulDiskImageImport(fake_concierge_client_);
 
   EXPECT_CALL(*observer_, OnDlcDownloadStarted());
@@ -346,11 +344,11 @@ TEST_F(PluginVmImageManagerDownloadServiceTest,
   EXPECT_CALL(*observer_, OnImportProgressUpdated(50.0, _));
   EXPECT_CALL(*observer_, OnImported());
 
-  manager_->StartDlcDownload();
+  installer_->StartDlcDownload();
   task_environment_.RunUntilIdle();
-  manager_->StartDownload();
+  installer_->StartDownload();
 
-  std::string guid = manager_->GetCurrentDownloadGuidForTesting();
+  std::string guid = installer_->GetCurrentDownloadGuidForTesting();
   base::Optional<download::DownloadParams> params =
       download_service_->GetDownload(guid);
   ASSERT_TRUE(params.has_value());
@@ -361,13 +359,13 @@ TEST_F(PluginVmImageManagerDownloadServiceTest,
   // Finishing image processing.
   task_environment_.RunUntilIdle();
   // Faking downloaded file for testing.
-  manager_->SetDownloadedPluginVmImageArchiveForTesting(
+  installer_->SetDownloadedPluginVmImageArchiveForTesting(
       fake_downloaded_plugin_vm_image_archive_);
-  manager_->StartImport();
+  installer_->StartImport();
   task_environment_.RunUntilIdle();
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest, OnlyOneImageIsProcessedTest) {
+TEST_F(PluginVmInstallerDownloadServiceTest, OnlyOneImageIsProcessedTest) {
   SetupConciergeForSuccessfulDiskImageImport(fake_concierge_client_);
 
   EXPECT_CALL(*observer_, OnDlcDownloadStarted());
@@ -376,32 +374,32 @@ TEST_F(PluginVmImageManagerDownloadServiceTest, OnlyOneImageIsProcessedTest) {
   EXPECT_CALL(*observer_, OnImportProgressUpdated(50.0, _));
   EXPECT_CALL(*observer_, OnImported());
 
-  manager_->StartDlcDownload();
+  installer_->StartDlcDownload();
   task_environment_.RunUntilIdle();
-  manager_->StartDownload();
+  installer_->StartDownload();
 
-  EXPECT_TRUE(manager_->IsProcessing());
+  EXPECT_TRUE(installer_->IsProcessing());
 
   task_environment_.RunUntilIdle();
   // Faking downloaded file for testing.
-  manager_->SetDownloadedPluginVmImageArchiveForTesting(
+  installer_->SetDownloadedPluginVmImageArchiveForTesting(
       fake_downloaded_plugin_vm_image_archive_);
 
-  EXPECT_TRUE(manager_->IsProcessing());
+  EXPECT_TRUE(installer_->IsProcessing());
 
-  manager_->StartImport();
+  installer_->StartImport();
 
-  EXPECT_TRUE(manager_->IsProcessing());
+  EXPECT_TRUE(installer_->IsProcessing());
 
   task_environment_.RunUntilIdle();
 
-  EXPECT_FALSE(manager_->IsProcessing());
+  EXPECT_FALSE(installer_->IsProcessing());
 
   histogram_tester_->ExpectUniqueSample(kPluginVmImageDownloadedSizeHistogram,
                                         kDownloadedPluginVmImageSizeInMb, 1);
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest,
+TEST_F(PluginVmInstallerDownloadServiceTest,
        CanProceedWithANewImageWhenSucceededTest) {
   SetupConciergeForSuccessfulDiskImageImport(fake_concierge_client_);
 
@@ -411,7 +409,7 @@ TEST_F(PluginVmImageManagerDownloadServiceTest,
 
   ProcessImageUntilConfigured();
 
-  EXPECT_FALSE(manager_->IsProcessing());
+  EXPECT_FALSE(installer_->IsProcessing());
 
   // As it is deleted after successful importing.
   fake_downloaded_plugin_vm_image_archive_ = CreateZipFile();
@@ -421,28 +419,27 @@ TEST_F(PluginVmImageManagerDownloadServiceTest,
                                         kDownloadedPluginVmImageSizeInMb, 2);
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest,
+TEST_F(PluginVmInstallerDownloadServiceTest,
        CanProceedWithANewImageWhenFailedTest) {
   SetupConciergeForSuccessfulDiskImageImport(fake_concierge_client_);
 
-  EXPECT_CALL(
-      *observer_,
-      OnDownloadFailed(
-          PluginVmImageManager::FailureReason::DOWNLOAD_FAILED_ABORTED));
+  EXPECT_CALL(*observer_,
+              OnDownloadFailed(
+                  PluginVmInstaller::FailureReason::DOWNLOAD_FAILED_ABORTED));
   EXPECT_CALL(*observer_, OnDlcDownloadStarted()).Times(2);
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted()).Times(2);
   EXPECT_CALL(*observer_, OnDownloadCompleted());
   EXPECT_CALL(*observer_, OnImportProgressUpdated(50.0, _));
   EXPECT_CALL(*observer_, OnImported());
 
-  manager_->StartDlcDownload();
+  installer_->StartDlcDownload();
   task_environment_.RunUntilIdle();
-  manager_->StartDownload();
-  std::string guid = manager_->GetCurrentDownloadGuidForTesting();
+  installer_->StartDownload();
+  std::string guid = installer_->GetCurrentDownloadGuidForTesting();
   download_service_->SetFailedDownload(guid, false);
   task_environment_.RunUntilIdle();
 
-  EXPECT_FALSE(manager_->IsProcessing());
+  EXPECT_FALSE(installer_->IsProcessing());
 
   ProcessImageUntilConfigured();
 
@@ -450,37 +447,37 @@ TEST_F(PluginVmImageManagerDownloadServiceTest,
                                         kDownloadedPluginVmImageSizeInMb, 1);
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest, CancelledDownloadTest) {
+TEST_F(PluginVmInstallerDownloadServiceTest, CancelledDownloadTest) {
   EXPECT_CALL(*observer_, OnDownloadCompleted()).Times(0);
   EXPECT_CALL(*observer_, OnDownloadCancelled());
 
-  manager_->StartDownload();
-  manager_->CancelDownload();
+  installer_->StartDownload();
+  installer_->CancelDownload();
   task_environment_.RunUntilIdle();
   // Finishing image processing as it should really happen.
-  manager_->OnDownloadCancelled();
+  installer_->OnDownloadCancelled();
 
   histogram_tester_->ExpectTotalCount(kPluginVmImageDownloadedSizeHistogram, 0);
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest, ImportNonExistingImageTest) {
+TEST_F(PluginVmInstallerDownloadServiceTest, ImportNonExistingImageTest) {
   SetupConciergeForSuccessfulDiskImageImport(fake_concierge_client_);
 
   EXPECT_CALL(*observer_, OnDownloadCompleted());
-  EXPECT_CALL(*observer_,
-              OnImportFailed(
-                  PluginVmImageManager::FailureReason::COULD_NOT_OPEN_IMAGE));
+  EXPECT_CALL(
+      *observer_,
+      OnImportFailed(PluginVmInstaller::FailureReason::COULD_NOT_OPEN_IMAGE));
 
   ProcessImageUntilImporting();
   // Should fail as fake downloaded file isn't set.
-  manager_->StartImport();
+  installer_->StartImport();
   task_environment_.RunUntilIdle();
 
   histogram_tester_->ExpectUniqueSample(kPluginVmImageDownloadedSizeHistogram,
                                         kDownloadedPluginVmImageSizeInMb, 1);
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest, CancelledImportTest) {
+TEST_F(PluginVmInstallerDownloadServiceTest, CancelledImportTest) {
   SetupConciergeForSuccessfulDiskImageImport(fake_concierge_client_);
   SetupConciergeForCancelDiskImageOperation(fake_concierge_client_,
                                             true /* success */);
@@ -491,18 +488,18 @@ TEST_F(PluginVmImageManagerDownloadServiceTest, CancelledImportTest) {
   ProcessImageUntilImporting();
 
   // Faking downloaded file for testing.
-  manager_->SetDownloadedPluginVmImageArchiveForTesting(
+  installer_->SetDownloadedPluginVmImageArchiveForTesting(
       fake_downloaded_plugin_vm_image_archive_);
-  manager_->StartImport();
-  manager_->CancelImport();
+  installer_->StartImport();
+  installer_->CancelImport();
   task_environment_.RunUntilIdle();
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest, EmptyPluginVmImageUrlTest) {
+TEST_F(PluginVmInstallerDownloadServiceTest, EmptyPluginVmImageUrlTest) {
   SetPluginVmImagePref("", kHash);
   EXPECT_CALL(
       *observer_,
-      OnDownloadFailed(PluginVmImageManager::FailureReason::INVALID_IMAGE_URL));
+      OnDownloadFailed(PluginVmInstaller::FailureReason::INVALID_IMAGE_URL));
   EXPECT_CALL(*observer_, OnDlcDownloadStarted());
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   ProcessImageUntilImporting();
@@ -510,85 +507,80 @@ TEST_F(PluginVmImageManagerDownloadServiceTest, EmptyPluginVmImageUrlTest) {
   histogram_tester_->ExpectTotalCount(kPluginVmImageDownloadedSizeHistogram, 0);
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest, VerifyDownloadTest) {
-  EXPECT_FALSE(manager_->VerifyDownload(kHash2));
-  EXPECT_TRUE(manager_->VerifyDownload(kHashUppercase));
-  EXPECT_TRUE(manager_->VerifyDownload(kHash));
-  EXPECT_FALSE(manager_->VerifyDownload(std::string()));
+TEST_F(PluginVmInstallerDownloadServiceTest, VerifyDownloadTest) {
+  EXPECT_FALSE(installer_->VerifyDownload(kHash2));
+  EXPECT_TRUE(installer_->VerifyDownload(kHashUppercase));
+  EXPECT_TRUE(installer_->VerifyDownload(kHash));
+  EXPECT_FALSE(installer_->VerifyDownload(std::string()));
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest,
+TEST_F(PluginVmInstallerDownloadServiceTest,
        CannotStartDownloadIfDlcDownloadNotRun) {
-  EXPECT_CALL(
-      *observer_,
-      OnDownloadFailed(
-          PluginVmImageManager::FailureReason::DLC_DOWNLOAD_NOT_STARTED));
+  EXPECT_CALL(*observer_,
+              OnDownloadFailed(
+                  PluginVmInstaller::FailureReason::DLC_DOWNLOAD_NOT_STARTED));
   EXPECT_CALL(*observer_, OnDownloadCompleted()).Times(0);
-  manager_->StartDownload();
+  installer_->StartDownload();
   task_environment_.RunUntilIdle();
 }
 
-TEST_F(PluginVmImageManagerDownloadServiceTest,
+TEST_F(PluginVmInstallerDownloadServiceTest,
        CannotStartDlcDownloadIfPluginVmGetsDisabled) {
   profile_->ScopedCrosSettingsTestHelper()->SetBoolean(
       chromeos::kPluginVmAllowed, false);
-  EXPECT_CALL(
-      *observer_,
-      OnDownloadFailed(PluginVmImageManager::FailureReason::NOT_ALLOWED));
+  EXPECT_CALL(*observer_,
+              OnDownloadFailed(PluginVmInstaller::FailureReason::NOT_ALLOWED));
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted()).Times(0);
-  manager_->StartDlcDownload();
+  installer_->StartDlcDownload();
   task_environment_.RunUntilIdle();
 }
 
-TEST_F(PluginVmImageManagerDriveTest, InvalidDriveUrlTest) {
+TEST_F(PluginVmInstallerDriveTest, InvalidDriveUrlTest) {
   SetPluginVmImagePref(kDriveUrl2, kHash);
 
   EXPECT_CALL(*observer_, OnDownloadStarted());
   EXPECT_CALL(
       *observer_,
-      OnDownloadFailed(PluginVmImageManager::FailureReason::INVALID_IMAGE_URL));
+      OnDownloadFailed(PluginVmInstaller::FailureReason::INVALID_IMAGE_URL));
   ProcessImageUntilImporting();
 }
 
-TEST_F(PluginVmImageManagerDriveTest, NoConnectionDriveTest) {
+TEST_F(PluginVmInstallerDriveTest, NoConnectionDriveTest) {
   SetPluginVmImagePref(kDriveUrl, kHash);
   fake_drive_service_->set_offline(true);
 
   EXPECT_CALL(*observer_, OnDownloadStarted());
-  EXPECT_CALL(
-      *observer_,
-      OnDownloadFailed(
-          PluginVmImageManager::FailureReason::DOWNLOAD_FAILED_NETWORK));
+  EXPECT_CALL(*observer_,
+              OnDownloadFailed(
+                  PluginVmInstaller::FailureReason::DOWNLOAD_FAILED_NETWORK));
   ProcessImageUntilImporting();
 }
 
-TEST_F(PluginVmImageManagerDriveTest, WrongHashDriveTest) {
+TEST_F(PluginVmInstallerDriveTest, WrongHashDriveTest) {
   SetPluginVmImagePref(kDriveUrl, kHash2);
 
   EXPECT_CALL(*observer_, OnDownloadStarted());
-  EXPECT_CALL(
-      *observer_,
-      OnDownloadFailed(PluginVmImageManager::FailureReason::HASH_MISMATCH));
+  EXPECT_CALL(*observer_, OnDownloadFailed(
+                              PluginVmInstaller::FailureReason::HASH_MISMATCH));
 
   ProcessImageUntilImporting();
 }
 
-TEST_F(PluginVmImageManagerDriveTest, DriveDownloadFailedAfterStartingTest) {
+TEST_F(PluginVmInstallerDriveTest, DriveDownloadFailedAfterStartingTest) {
   SetPluginVmImagePref(kDriveUrl, kHash);
   SimpleFakeDriveService* fake_drive_service = SetUpSimpleFakeDriveService();
 
   EXPECT_CALL(*observer_, OnDownloadStarted());
   EXPECT_CALL(*observer_, OnDownloadProgressUpdated(5, 100, _));
   EXPECT_CALL(*observer_, OnDownloadProgressUpdated(10, 100, _));
-  EXPECT_CALL(
-      *observer_,
-      OnDownloadFailed(
-          PluginVmImageManager::FailureReason::DOWNLOAD_FAILED_NETWORK));
+  EXPECT_CALL(*observer_,
+              OnDownloadFailed(
+                  PluginVmInstaller::FailureReason::DOWNLOAD_FAILED_NETWORK));
   EXPECT_CALL(*observer_, OnDownloadCompleted()).Times(0);
 
-  manager_->StartDlcDownload();
+  installer_->StartDlcDownload();
   task_environment_.RunUntilIdle();
-  manager_->StartDownload();
+  installer_->StartDownload();
   task_environment_.RunUntilIdle();
 
   fake_drive_service->RunGetContentCallback(
@@ -601,7 +593,7 @@ TEST_F(PluginVmImageManagerDriveTest, DriveDownloadFailedAfterStartingTest) {
                                             std::unique_ptr<std::string>());
 }
 
-TEST_F(PluginVmImageManagerDriveTest, CancelledDriveDownloadTest) {
+TEST_F(PluginVmInstallerDriveTest, CancelledDriveDownloadTest) {
   SetPluginVmImagePref(kDriveUrl, kHash);
   SimpleFakeDriveService* fake_drive_service = SetUpSimpleFakeDriveService();
 
@@ -609,20 +601,20 @@ TEST_F(PluginVmImageManagerDriveTest, CancelledDriveDownloadTest) {
   EXPECT_CALL(*observer_, OnDownloadProgressUpdated(5, 100, _));
   EXPECT_CALL(*observer_, OnDownloadCompleted()).Times(0);
 
-  manager_->StartDlcDownload();
+  installer_->StartDlcDownload();
   task_environment_.RunUntilIdle();
-  manager_->StartDownload();
+  installer_->StartDownload();
   task_environment_.RunUntilIdle();
 
   fake_drive_service->RunGetContentCallback(
       google_apis::HTTP_SUCCESS, std::make_unique<std::string>("Part1"));
   fake_drive_service->RunProgressCallback(5, 100);
-  manager_->CancelDownload();
+  installer_->CancelDownload();
   task_environment_.RunUntilIdle();
   EXPECT_TRUE(fake_drive_service->cancel_callback_called());
 }
 
-TEST_F(PluginVmImageManagerDriveTest, SuccessfulDriveDownloadTest) {
+TEST_F(PluginVmInstallerDriveTest, SuccessfulDriveDownloadTest) {
   SetPluginVmImagePref(kDriveUrl, kHash);
 
   EXPECT_CALL(*observer_, OnDownloadStarted());
