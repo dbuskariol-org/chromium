@@ -21711,6 +21711,8 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="1427" label="INPUTMETHODPRIVATE_RESET"/>
   <int value="1428" label="PRINTING_GETPRINTERINFO"/>
   <int value="1429" label="AUTOTESTPRIVATE_ISARCPACKAGELISTINITIALREFRESHED"/>
+  <int value="1430" label="AUTOTESTPRIVATE_STARTTRACING"/>
+  <int value="1431" label="AUTOTESTPRIVATE_STOPTRACING"/>
 </enum>
 
 <enum name="ExtensionIconState">
