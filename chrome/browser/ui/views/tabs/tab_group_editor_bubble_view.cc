@@ -29,6 +29,7 @@
 #include "third_party/skia/include/core/SkColor.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/gfx/geometry/insets.h"
+#include "ui/native_theme/native_theme.h"
 #include "ui/views/controls/button/button.h"
 #include "ui/views/controls/button/label_button.h"
 #include "ui/views/controls/label.h"
@@ -170,12 +171,15 @@ TabGroupEditorBubbleView::~TabGroupEditorBubbleView() = default;
 void TabGroupEditorBubbleView::InitColorSet() {
   base::flat_map<tab_groups::TabGroupColorId, tab_groups::TabGroupColor>
       all_colors = tab_groups::GetTabGroupColorSet();
+  ui::NativeTheme* native_theme = ui::NativeTheme::GetInstanceForNativeUi();
 
   color_ids_.reserve(all_colors.size());
   colors_.reserve(all_colors.size());
   for (auto const color_pair : all_colors) {
     color_ids_.push_back(color_pair.first);
-    SkColor color = tab_controller_->GetPaintedGroupColor(color_pair.first);
+    SkColor color = native_theme->ShouldUseDarkColors()
+                        ? color_pair.second.dark_theme_color
+                        : color_pair.second.light_theme_color;
     colors_.push_back({color, color_pair.second.label});
   }
 }
