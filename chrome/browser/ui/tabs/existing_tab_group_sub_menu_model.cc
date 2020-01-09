@@ -7,8 +7,67 @@
 #include "chrome/browser/ui/tabs/tab_group.h"
 #include "chrome/browser/ui/tabs/tab_group_model.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
+#include "components/tab_groups/tab_group_color.h"
 #include "components/tab_groups/tab_group_id.h"
 #include "components/tab_groups/tab_group_visual_data.h"
+#include "ui/gfx/canvas.h"
+#include "ui/gfx/image/canvas_image_source.h"
+#include "ui/gfx/image/image_skia.h"
+#include "ui/native_theme/native_theme.h"
+
+namespace {
+
+// The tab group icon is a circle that reflects the color of the group in the
+// tab strip. Because it's a simple, colored shape, we use a CanvasImageSource
+// to draw the icon directly into the menu, rather than passing in a vector.
+class TabGroupIconImageSource : public gfx::CanvasImageSource {
+ public:
+  // Note: This currently matches the size of the empty tab group header, but
+  // it doesn't share the same variable because this icon should remain
+  // constrained to a menu icon size.
+  static constexpr int kIconSize = 14;
+
+  explicit TabGroupIconImageSource(
+      const tab_groups::TabGroupVisualData* visual_data);
+  ~TabGroupIconImageSource() override;
+
+ private:
+  SkColor GetColor();
+
+  // gfx::CanvasImageSource overrides:
+  void Draw(gfx::Canvas* canvas) override;
+
+  ui::NativeTheme* native_theme_;
+  const tab_groups::TabGroupVisualData* visual_data_;
+
+  DISALLOW_COPY_AND_ASSIGN(TabGroupIconImageSource);
+};
+
+TabGroupIconImageSource::TabGroupIconImageSource(
+    const tab_groups::TabGroupVisualData* visual_data)
+    : CanvasImageSource(gfx::Size(kIconSize, kIconSize)),
+      native_theme_(ui::NativeTheme::GetInstanceForNativeUi()),
+      visual_data_(visual_data) {}
+
+TabGroupIconImageSource::~TabGroupIconImageSource() = default;
+
+SkColor TabGroupIconImageSource::GetColor() {
+  const tab_groups::TabGroupColor color_data =
+      tab_groups::GetTabGroupColorSet().at(visual_data_->color());
+  return native_theme_->ShouldUseDarkColors() ? color_data.dark_theme_color
+                                              : color_data.light_theme_color;
+}
+
+void TabGroupIconImageSource::Draw(gfx::Canvas* canvas) {
+  cc::PaintFlags flags;
+  flags.setStyle(cc::PaintFlags::kFill_Style);
+  flags.setAntiAlias(true);
+  flags.setColor(GetColor());
+  canvas->DrawCircle(gfx::PointF(kIconSize / 2, kIconSize / 2), kIconSize / 2,
+                     flags);
+}
+
+}  // namespace
 
 constexpr int kFirstCommandIndex =
     TabStripModel::ContextMenuCommand::CommandLast + 1;
@@ -25,9 +84,15 @@ void ExistingTabGroupSubMenuModel::Build() {
   // Start command ids after the parent menu's ids to avoid collisions.
   int group_index = kFirstCommandIndex;
   for (tab_groups::TabGroupId group : GetOrderedTabGroups()) {
-    if (ShouldShowGroup(model_, context_index_, group))
-      AddItem(group_index,
-              model_->group_model()->GetTabGroup(group)->GetDisplayedTitle());
+    if (ShouldShowGroup(model_, context_index_, group)) {
+      const TabGroup* tab_group = model_->group_model()->GetTabGroup(group);
+      AddItemWithIcon(
+          group_index, tab_group->GetDisplayedTitle(),
+          gfx::ImageSkia(std::make_unique<TabGroupIconImageSource>(
+                             tab_group->visual_data()),
+                         gfx::Size(TabGroupIconImageSource::kIconSize,
+                                   TabGroupIconImageSource::kIconSize)));
+    }
     group_index++;
   }
 }
