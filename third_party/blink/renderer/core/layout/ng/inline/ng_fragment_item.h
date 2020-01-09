@@ -18,6 +18,7 @@ namespace blink {
 
 class NGFragmentItems;
 class NGInlineBreakToken;
+class NGInlineItem;
 struct NGTextFragmentPaintInfo;
 
 // This class represents a text run or a box in an inline formatting context.
@@ -64,8 +65,8 @@ class CORE_EXPORT NGFragmentItem : public DisplayItemClient {
   // TODO(kojii): Should be able to create without once creating fragments.
   NGFragmentItem(const NGPhysicalTextFragment& text);
   NGFragmentItem(const NGPhysicalBoxFragment& box,
-                 wtf_size_t item_count,
                  TextDirection resolved_direction);
+  NGFragmentItem(const NGInlineItem& inline_item, const PhysicalSize& size);
   NGFragmentItem(const NGPhysicalLineBoxFragment& line, wtf_size_t item_count);
 
   ~NGFragmentItem() final;
@@ -74,6 +75,7 @@ class CORE_EXPORT NGFragmentItem : public DisplayItemClient {
 
   bool IsText() const { return Type() == kText || Type() == kGeneratedText; }
   bool IsContainer() const { return Type() == kBox || Type() == kLine; }
+  bool IsInlineBox() const;
   bool IsAtomicInline() const;
   bool IsEmptyLineBox() const;
   bool IsHiddenForPaint() const { return is_hidden_for_paint_; }
@@ -128,6 +130,10 @@ class CORE_EXPORT NGFragmentItem : public DisplayItemClient {
     return 0;
   }
   bool HasChildren() const { return DescendantsCount() > 1; }
+  void SetDescendantsCount(wtf_size_t count) {
+    CHECK_EQ(Type(), kBox);
+    box_.descendants_count = count;
+  }
 
   // Returns |NGPhysicalBoxFragment| if one is associated with this item.
   const NGPhysicalBoxFragment* BoxFragment() const {

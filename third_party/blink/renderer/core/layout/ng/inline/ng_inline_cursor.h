@@ -105,7 +105,10 @@ class CORE_EXPORT NGInlineCursor {
   // other than line.
   bool HasSoftWrapToNextLine() const;
 
-  // True if the current position is a atomic inline. It is error to call at
+  // True if the current position is an inline box. It is error to call at end.
+  bool IsInlineBox() const;
+
+  // True if the current position is an atomic inline. It is error to call at
   // end.
   bool IsAtomicInline() const;
 

@@ -163,6 +163,15 @@ bool NGInlineCursor::HasSoftWrapToNextLine() const {
   return !break_token.IsFinished() && !break_token.IsForcedBreak();
 }
 
+bool NGInlineCursor::IsInlineBox() const {
+  if (current_paint_fragment_)
+    return current_paint_fragment_->PhysicalFragment().IsInlineBox();
+  if (current_item_)
+    return current_item_->IsInlineBox();
+  NOTREACHED();
+  return false;
+}
+
 bool NGInlineCursor::IsAtomicInline() const {
   if (current_paint_fragment_)
     return current_paint_fragment_->PhysicalFragment().IsAtomicInline();

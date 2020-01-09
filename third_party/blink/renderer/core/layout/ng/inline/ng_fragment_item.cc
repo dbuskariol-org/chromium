@@ -9,6 +9,7 @@
 #include "third_party/blink/renderer/core/layout/ng/inline/ng_caret_position.h"
 #include "third_party/blink/renderer/core/layout/ng/inline/ng_fragment_items_builder.h"
 #include "third_party/blink/renderer/core/layout/ng/inline/ng_inline_cursor.h"
+#include "third_party/blink/renderer/core/layout/ng/inline/ng_inline_item.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_physical_box_fragment.h"
 
 namespace blink {
@@ -52,16 +53,30 @@ NGFragmentItem::NGFragmentItem(const NGPhysicalLineBoxFragment& line,
       ink_overflow_computed_(false) {}
 
 NGFragmentItem::NGFragmentItem(const NGPhysicalBoxFragment& box,
-                               wtf_size_t item_count,
                                TextDirection resolved_direction)
     : layout_object_(box.GetLayoutObject()),
-      box_({&box, item_count}),
+      box_({&box, 1}),
       rect_({PhysicalOffset(), box.Size()}),
       type_(kBox),
       style_variant_(static_cast<unsigned>(box.StyleVariant())),
       is_hidden_for_paint_(box.IsHiddenForPaint()),
       text_direction_(static_cast<unsigned>(resolved_direction)),
       ink_overflow_computed_(false) {}
+
+NGFragmentItem::NGFragmentItem(const NGInlineItem& inline_item,
+                               const PhysicalSize& size)
+    : layout_object_(inline_item.GetLayoutObject()),
+      box_({nullptr, 1}),
+      rect_({PhysicalOffset(), size}),
+      type_(kBox),
+      style_variant_(static_cast<unsigned>(inline_item.StyleVariant())),
+      is_hidden_for_paint_(false),
+      text_direction_(static_cast<unsigned>(TextDirection::kLtr)),
+      ink_overflow_computed_(false) {
+  DCHECK_EQ(inline_item.Type(), NGInlineItem::kOpenTag);
+  DCHECK(layout_object_);
+  DCHECK(layout_object_->IsLayoutInline());
+}
 
 NGFragmentItem::~NGFragmentItem() {
   switch (Type()) {
@@ -86,6 +101,16 @@ bool NGFragmentItem::HasSameParent(const NGFragmentItem& other) const {
   if (!other.GetLayoutObject())
     return false;
   return GetLayoutObject()->Parent() == other.GetLayoutObject()->Parent();
+}
+
+bool NGFragmentItem::IsInlineBox() const {
+  if (Type() == kBox) {
+    if (const NGPhysicalBoxFragment* box = BoxFragment())
+      return box->IsInlineBox();
+    DCHECK(GetLayoutObject()->IsLayoutInline());
+    return true;
+  }
+  return false;
 }
 
 bool NGFragmentItem::IsAtomicInline() const {
@@ -327,9 +352,13 @@ void NGFragmentItem::RecalcInkOverflow(
   if (Type() == kLine) {
     // Line boxes don't have self overflow. Compute content overflow only.
     *self_and_contents_rect_out = contents_rect;
-  } else if (const NGPhysicalBoxFragment* box_fragment = BoxFragment()) {
-    DCHECK(box_fragment->IsInlineBox());
-    self_rect = box_fragment->ComputeSelfInkOverflow();
+  } else if (Type() == kBox) {
+    if (const NGPhysicalBoxFragment* box_fragment = BoxFragment()) {
+      DCHECK(box_fragment->IsInlineBox());
+      self_rect = box_fragment->ComputeSelfInkOverflow();
+    } else {
+      self_rect = LocalRect();
+    }
     *self_and_contents_rect_out = UnionRect(self_rect, contents_rect);
   } else {
     NOTREACHED();
