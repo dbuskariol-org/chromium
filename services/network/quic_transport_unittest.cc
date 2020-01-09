@@ -20,6 +20,26 @@
 namespace network {
 namespace {
 
+// We don't use mojo::BlockingCopyToString because it leads to deadlocks.
+std::string Read(mojo::ScopedDataPipeConsumerHandle readable) {
+  std::string output;
+  while (true) {
+    char buffer[1024];
+    uint32_t size = sizeof(buffer);
+    MojoResult result =
+        readable->ReadData(buffer, &size, MOJO_READ_DATA_FLAG_NONE);
+    if (result == MOJO_RESULT_SHOULD_WAIT) {
+      base::RunLoop().RunUntilIdle();
+      continue;
+    }
+    if (result == MOJO_RESULT_FAILED_PRECONDITION) {
+      return output;
+    }
+    DCHECK_EQ(result, MOJO_RESULT_OK);
+    output.append(buffer, size);
+  }
+}
+
 class TestHandshakeClient final : public mojom::QuicTransportHandshakeClient {
  public:
   TestHandshakeClient(mojo::PendingReceiver<mojom::QuicTransportHandshakeClient>
@@ -242,6 +262,121 @@ TEST_F(QuicTransportTest, SendToolargeDatagram) {
                                  }));
   run_loop_for_datagram.Run();
   EXPECT_FALSE(result);
+}
+
+TEST_F(QuicTransportTest, EchoOnUnidirectionalStreams) {
+  base::RunLoop run_loop_for_handshake;
+  mojo::PendingRemote<mojom::QuicTransportHandshakeClient> handshake_client;
+  TestHandshakeClient test_handshake_client(
+      handshake_client.InitWithNewPipeAndPassReceiver(),
+      run_loop_for_handshake.QuitClosure());
+
+  CreateQuicTransport(GetURL("/echo"),
+                      url::Origin::Create(GURL("https://example.org/")),
+                      std::move(handshake_client));
+
+  run_loop_for_handshake.Run();
+
+  ASSERT_TRUE(test_handshake_client.has_seen_connection_establishment());
+
+  mojo::Remote<mojom::QuicTransport> transport_remote(
+      test_handshake_client.PassTransport());
+
+  mojo::ScopedDataPipeConsumerHandle readable_for_outgoing;
+  mojo::ScopedDataPipeProducerHandle writable_for_outgoing;
+  const MojoCreateDataPipeOptions options = {
+      sizeof(options), MOJO_CREATE_DATA_PIPE_FLAG_NONE, 1, 4 * 1024};
+  ASSERT_EQ(MOJO_RESULT_OK,
+            mojo::CreateDataPipe(&options, &writable_for_outgoing,
+                                 &readable_for_outgoing));
+  uint32_t size = 5;
+  ASSERT_EQ(MOJO_RESULT_OK, writable_for_outgoing->WriteData(
+                                "hello", &size, MOJO_WRITE_DATA_FLAG_NONE));
+  // Signal the end-of-data.
+  writable_for_outgoing.reset();
+
+  base::RunLoop run_loop_for_stream_creation;
+  uint32_t stream_id;
+  bool stream_created;
+  transport_remote->CreateStream(
+      std::move(readable_for_outgoing),
+      /*writable=*/{}, base::BindLambdaForTesting([&](bool b, uint32_t id) {
+        stream_created = b;
+        stream_id = id;
+        run_loop_for_stream_creation.Quit();
+      }));
+  run_loop_for_stream_creation.Run();
+  ASSERT_TRUE(stream_created);
+
+  mojo::ScopedDataPipeConsumerHandle readable_for_incoming;
+  uint32_t incoming_stream_id = stream_id;
+  base::RunLoop run_loop_for_incoming_stream;
+  transport_remote->AcceptUnidirectionalStream(base::BindLambdaForTesting(
+      [&](uint32_t id, mojo::ScopedDataPipeConsumerHandle readable) {
+        incoming_stream_id = id;
+        readable_for_incoming = std::move(readable);
+        run_loop_for_incoming_stream.Quit();
+      }));
+
+  run_loop_for_incoming_stream.Run();
+  ASSERT_TRUE(readable_for_incoming);
+  EXPECT_NE(stream_id, incoming_stream_id);
+
+  std::string echo_back = Read(std::move(readable_for_incoming));
+  EXPECT_EQ("hello", echo_back);
+}
+
+TEST_F(QuicTransportTest, EchoOnBidirectionalStream) {
+  base::RunLoop run_loop_for_handshake;
+  mojo::PendingRemote<mojom::QuicTransportHandshakeClient> handshake_client;
+  TestHandshakeClient test_handshake_client(
+      handshake_client.InitWithNewPipeAndPassReceiver(),
+      run_loop_for_handshake.QuitClosure());
+
+  CreateQuicTransport(GetURL("/echo"),
+                      url::Origin::Create(GURL("https://example.org/")),
+                      std::move(handshake_client));
+
+  run_loop_for_handshake.Run();
+
+  ASSERT_TRUE(test_handshake_client.has_seen_connection_establishment());
+
+  mojo::Remote<mojom::QuicTransport> transport_remote(
+      test_handshake_client.PassTransport());
+
+  mojo::ScopedDataPipeConsumerHandle readable_for_outgoing;
+  mojo::ScopedDataPipeProducerHandle writable_for_outgoing;
+  mojo::ScopedDataPipeConsumerHandle readable_for_incoming;
+  mojo::ScopedDataPipeProducerHandle writable_for_incoming;
+  const MojoCreateDataPipeOptions options = {
+      sizeof(options), MOJO_CREATE_DATA_PIPE_FLAG_NONE, 1, 4 * 1024};
+  ASSERT_EQ(MOJO_RESULT_OK,
+            mojo::CreateDataPipe(&options, &writable_for_outgoing,
+                                 &readable_for_outgoing));
+  ASSERT_EQ(MOJO_RESULT_OK,
+            mojo::CreateDataPipe(&options, &writable_for_incoming,
+                                 &readable_for_incoming));
+  uint32_t size = 5;
+  ASSERT_EQ(MOJO_RESULT_OK, writable_for_outgoing->WriteData(
+                                "hello", &size, MOJO_WRITE_DATA_FLAG_NONE));
+  // Signal the end-of-data.
+  writable_for_outgoing.reset();
+
+  base::RunLoop run_loop_for_stream_creation;
+  uint32_t stream_id;
+  bool stream_created;
+  transport_remote->CreateStream(
+      std::move(readable_for_outgoing), std::move(writable_for_incoming),
+      base::BindLambdaForTesting([&](bool b, uint32_t id) {
+        stream_created = b;
+        stream_id = id;
+        run_loop_for_stream_creation.Quit();
+      }));
+  run_loop_for_stream_creation.Run();
+  ASSERT_TRUE(stream_created);
+
+  std::string echo_back = Read(std::move(readable_for_incoming));
+  EXPECT_EQ("hello", echo_back);
 }
 
 }  // namespace
