@@ -724,6 +724,17 @@ void NGInlineCursor::MoveTo(const LayoutObject& layout_object) {
     MoveToNext();
 }
 
+void NGInlineCursor::MoveTo(const NGFragmentItem& fragment_item) {
+  DCHECK(!root_paint_fragment_ && !current_paint_fragment_);
+  MoveTo(*fragment_item.GetLayoutObject());
+  while (IsNotNull()) {
+    if (CurrentItem() == &fragment_item)
+      return;
+    MoveToNext();
+  }
+  NOTREACHED();
+}
+
 void NGInlineCursor::MoveTo(const NGInlineCursor& cursor) {
   if (const NGPaintFragment* paint_fragment = cursor.CurrentPaintFragment()) {
     MoveTo(*paint_fragment);

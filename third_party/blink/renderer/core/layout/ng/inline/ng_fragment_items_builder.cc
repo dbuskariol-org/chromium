@@ -221,9 +221,7 @@ void NGFragmentItemsBuilder::AssociateNextForSameLayoutObject() {
     DCHECK(layout_object->IsInLayoutNGInlineFormattingContext()) << item;
     auto insert_result = last_fragment_map.insert(layout_object, index);
     if (insert_result.is_new_entry) {
-      // TDOO(yosin): Once we update all |LayoutObject::FirstInlineFragment()|,
-      // we should enable below.
-      // layout_object->SetFirstInlineFragmentItemIndex(index);
+      layout_object->SetFirstInlineFragmentItemIndex(index);
       continue;
     }
     const wtf_size_t last_index = insert_result.stored_value->value;
