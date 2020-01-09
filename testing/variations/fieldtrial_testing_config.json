@@ -6128,45 +6128,23 @@
             ]
         }
     ],
-    "SimpleCachePrefetchExperiment2": [
+    "SimpleCacheTrailerPrefetchHint": [
         {
             "platforms": [
-                "android",
-                "chromeos",
-                "linux"
-            ],
-            "experiments": [
-                {
-                    "name": "PrefetchTrailerHint0",
-                    "params": {
-                        "FullPrefetchBytes": "0",
-                        "TrailerPrefetchHint": "true"
-                    },
-                    "enable_features": [
-                        "SimpleCachePrefetchExperiment2"
-                    ]
-                }
-            ]
-        }
-    ],
-    "SimpleCacheTrial": [
-        {
-            "platforms": [
+                "windows",
                 "mac",
-                "windows"
+                "chromeos",
+                "linux",
+                "android"
             ],
             "experiments": [
                 {
-                    "name": "ExperimentNoTrailerPrefetchHint4",
+                    "name": "Enabled0",
                     "params": {
-                        "FullPrefetchBytes": "0",
                         "TrailerPrefetchHint": "true"
                     },
                     "enable_features": [
                         "SimpleCachePrefetchExperiment2"
-                    ],
-                    "disable_features": [
-                        "HttpCacheForceBackend"
                     ]
                 }
             ]
