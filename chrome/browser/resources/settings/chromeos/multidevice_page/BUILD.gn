@@ -41,8 +41,8 @@ js_library("multidevice_feature_item") {
   deps = [
     ":multidevice_feature_behavior",
     ":multidevice_page:multidevice_constants",
+    "..:route_origin_behavior",
     "../..:route",
-    "../..:route_origin_behavior",
     "../localized_link:localized_link",
     "//ui/webui/resources/js:cr",
   ]

@@ -762,11 +762,11 @@
                  file="route.js"
                  type="chrome_html"
                  preprocess="true" />
-      <structure name="IDR_SETTINGS_ROUTE_ORIGIN_BEHAVIOR_HTML"
-                 file="route_origin_behavior.html"
+      <structure name="IDR_OS_SETTINGS_ROUTE_ORIGIN_BEHAVIOR_HTML"
+                 file="chromeos/route_origin_behavior.html"
                  type="chrome_html" />
-      <structure name="IDR_SETTINGS_ROUTE_ORIGIN_BEHAVIOR_JS"
-                 file="route_origin_behavior.js"
+      <structure name="IDR_OS_SETTINGS_ROUTE_ORIGIN_BEHAVIOR_JS"
+                 file="chromeos/route_origin_behavior.js"
                  type="chrome_html" />
       <structure name="IDR_OS_SETTINGS_SEARCH_ENGINES_BROWSER_PROXY_JS"
                  file="search_engines_page/search_engines_browser_proxy.js"
