@@ -120,7 +120,7 @@ class CORE_EXPORT KeyframeEffect final : public AnimationEffect {
   bool HasActiveAnimationsOnCompositor(const PropertyHandle&) const;
   bool CancelAnimationOnCompositor(CompositorAnimation*);
   void CancelIncompatibleAnimationsOnCompositor();
-  void PauseAnimationForTestingOnCompositor(double pause_time);
+  void PauseAnimationForTestingOnCompositor(base::TimeDelta pause_time);
 
   void AttachCompositedLayers();
 

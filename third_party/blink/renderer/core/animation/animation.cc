@@ -1782,7 +1782,8 @@ void Animation::PauseForTesting(double pause_time) {
     base::Optional<double> current_time = CurrentTimeInternal();
     DCHECK(current_time);
     To<KeyframeEffect>(content_.Get())
-        ->PauseAnimationForTestingOnCompositor(current_time.value());
+        ->PauseAnimationForTestingOnCompositor(
+            base::TimeDelta::FromSecondsD(current_time.value()));
   }
 
   // Do not wait for animation ready to lock in the hold time. Otherwise,

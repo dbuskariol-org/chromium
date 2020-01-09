@@ -382,7 +382,8 @@ void KeyframeEffect::CancelIncompatibleAnimationsOnCompositor() {
   }
 }
 
-void KeyframeEffect::PauseAnimationForTestingOnCompositor(double pause_time) {
+void KeyframeEffect::PauseAnimationForTestingOnCompositor(
+    base::TimeDelta pause_time) {
   DCHECK(HasActiveAnimationsOnCompositor());
   if (!effect_target_ || !effect_target_->GetLayoutObject())
     return;

@@ -126,7 +126,7 @@ class CORE_EXPORT CompositorAnimations {
   static void PauseAnimationForTestingOnCompositor(const Element&,
                                                    const Animation&,
                                                    int id,
-                                                   double pause_time);
+                                                   base::TimeDelta pause_time);
 
   static void AttachCompositedLayers(Element&, CompositorAnimation*);
 
