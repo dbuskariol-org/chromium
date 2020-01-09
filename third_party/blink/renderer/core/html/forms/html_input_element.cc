@@ -584,10 +584,9 @@ FormControlState HTMLInputElement::SaveFormControlState() const {
 }
 
 void HTMLInputElement::RestoreFormControlState(const FormControlState& state) {
-  if (input_type_view_->RestoreFormControlState(state)) {
-    state_restored_ = true;
-    QueueInputAndChangeEvents();
-  }
+  input_type_view_->RestoreFormControlState(state);
+  state_restored_ = true;
+  QueueInputAndChangeEvents();
 }
 
 bool HTMLInputElement::CanStartSelection() const {
