@@ -15,8 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.chromium.chrome.R;
-
 /**
  * A preference that takes value from a specified list of objects, presented as a dropdown.
  */
@@ -93,8 +91,7 @@ public class SpinnerPreference extends Preference {
         mSpinner = (Spinner) holder.findViewById(R.id.spinner);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(
-                    AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mSelectedIndex = position;
                 if (getOnPreferenceChangeListener() != null) {
                     getOnPreferenceChangeListener().onPreferenceChange(
