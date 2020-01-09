@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.snackbar.smartlockautosignin;
+package org.chromium.chrome.browser.password_manager;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -23,9 +23,7 @@ import org.chromium.chrome.browser.ui.messages.snackbar.SnackbarManager;
  * A controller that triggers an auto sign-in snackbar. Auto sign-in snackbar is
  * triggered on a request credentials call of a Credential Manager API.
  */
-public class AutoSigninSnackbarController
-        implements SnackbarManager.SnackbarController {
-
+public class AutoSigninSnackbarController implements SnackbarManager.SnackbarController {
     private final SnackbarManager mSnackbarManager;
     private final TabObserver mTabObserver;
     private final Tab mTab;
@@ -40,8 +38,8 @@ public class AutoSigninSnackbarController
         SnackbarManager snackbarManager = ((TabImpl) tab).getActivity().getSnackbarManager();
         AutoSigninSnackbarController snackbarController =
                 new AutoSigninSnackbarController(snackbarManager, tab);
-        Snackbar snackbar = Snackbar.make(text, snackbarController, Snackbar.TYPE_NOTIFICATION,
-                Snackbar.UMA_AUTO_LOGIN);
+        Snackbar snackbar = Snackbar.make(
+                text, snackbarController, Snackbar.TYPE_NOTIFICATION, Snackbar.UMA_AUTO_LOGIN);
         Context context = tab.getWindowAndroid().getActivity().get();
         int backgroundColor =
                 ApiCompatibilityUtils.getColor(context.getResources(), R.color.light_active_color);

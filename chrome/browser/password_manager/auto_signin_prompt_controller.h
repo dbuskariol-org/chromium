@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_ANDROID_SNACKBARS_AUTO_SIGNIN_PROMPT_CONTROLLER_H_
-#define CHROME_BROWSER_UI_ANDROID_SNACKBARS_AUTO_SIGNIN_PROMPT_CONTROLLER_H_
+#ifndef CHROME_BROWSER_PASSWORD_MANAGER_AUTO_SIGNIN_PROMPT_CONTROLLER_H_
+#define CHROME_BROWSER_PASSWORD_MANAGER_AUTO_SIGNIN_PROMPT_CONTROLLER_H_
 
 #include <jni.h>
 
@@ -20,4 +20,4 @@ class WebContents;
 void ShowAutoSigninPrompt(content::WebContents* web_contents,
                           const base::string16& username);
 
-#endif  // CHROME_BROWSER_UI_ANDROID_SNACKBARS_AUTO_SIGNIN_PROMPT_CONTROLLER_H_
+#endif  // CHROME_BROWSER_PASSWORD_MANAGER_AUTO_SIGNIN_PROMPT_CONTROLLER_H_
