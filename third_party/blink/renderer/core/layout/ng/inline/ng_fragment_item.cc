@@ -16,7 +16,7 @@ namespace blink {
 
 NGFragmentItem::NGFragmentItem(const NGPhysicalTextFragment& text)
     : layout_object_(text.GetLayoutObject()),
-      text_({text.TextShapeResult(), text.StartOffset(), text.EndOffset()}),
+      text_({text.TextShapeResult(), text.TextOffset()}),
       rect_({PhysicalOffset(), text.Size()}),
       type_(kText),
       sub_type_(static_cast<unsigned>(text.TextType())),
@@ -25,11 +25,10 @@ NGFragmentItem::NGFragmentItem(const NGPhysicalTextFragment& text)
       is_hidden_for_paint_(text.IsHiddenForPaint()),
       text_direction_(static_cast<unsigned>(text.ResolvedDirection())),
       ink_overflow_computed_(false) {
-  DCHECK_LE(text_.start_offset, text_.end_offset);
 #if DCHECK_IS_ON()
   if (text_.shape_result) {
-    DCHECK_EQ(text_.shape_result->StartIndex(), text_.start_offset);
-    DCHECK_EQ(text_.shape_result->EndIndex(), text_.end_offset);
+    DCHECK_EQ(text_.shape_result->StartIndex(), StartOffset());
+    DCHECK_EQ(text_.shape_result->EndIndex(), EndOffset());
   }
 #endif
   if (text.TextType() == NGPhysicalTextFragment::kGeneratedText) {
@@ -201,29 +200,19 @@ const ShapeResultView* NGFragmentItem::TextShapeResult() const {
   return nullptr;
 }
 
-unsigned NGFragmentItem::StartOffset() const {
+NGTextOffset NGFragmentItem::TextOffset() const {
   if (Type() == kText)
-    return text_.start_offset;
+    return text_.text_offset;
   if (Type() == kGeneratedText)
-    return 0;
+    return {0, generated_text_.text.length()};
   NOTREACHED();
-  return 0;
-}
-
-unsigned NGFragmentItem::EndOffset() const {
-  if (Type() == kText)
-    return text_.end_offset;
-  if (Type() == kGeneratedText)
-    return generated_text_.text.length();
-  NOTREACHED();
-  return 0;
+  return {};
 }
 
 StringView NGFragmentItem::Text(const NGFragmentItems& items) const {
   if (Type() == kText) {
-    DCHECK_LE(text_.start_offset, text_.end_offset);
-    return StringView(items.Text(UsesFirstLineStyle()), text_.start_offset,
-                      text_.end_offset - text_.start_offset);
+    return StringView(items.Text(UsesFirstLineStyle()), text_.text_offset.start,
+                      text_.text_offset.Length());
   }
   if (Type() == kGeneratedText)
     return GeneratedText();
@@ -234,8 +223,8 @@ StringView NGFragmentItem::Text(const NGFragmentItems& items) const {
 NGTextFragmentPaintInfo NGFragmentItem::TextPaintInfo(
     const NGFragmentItems& items) const {
   if (Type() == kText) {
-    return {items.Text(UsesFirstLineStyle()), text_.start_offset,
-            text_.end_offset, text_.shape_result.get()};
+    return {items.Text(UsesFirstLineStyle()), text_.text_offset.start,
+            text_.text_offset.end, text_.shape_result.get()};
   }
   if (Type() == kGeneratedText) {
     return {generated_text_.text, 0, generated_text_.text.length(),

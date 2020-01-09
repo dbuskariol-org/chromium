@@ -535,10 +535,10 @@ NGTextOffset NGInlineCursor::CurrentTextOffset() const {
   if (current_paint_fragment_) {
     const auto& text_fragment =
         To<NGPhysicalTextFragment>(current_paint_fragment_->PhysicalFragment());
-    return {text_fragment.StartOffset(), text_fragment.EndOffset()};
+    return text_fragment.TextOffset();
   }
   if (current_item_)
-    return {current_item_->StartOffset(), current_item_->EndOffset()};
+    return current_item_->TextOffset();
   NOTREACHED();
   return {};
 }
