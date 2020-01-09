@@ -511,15 +511,12 @@ void AppListControllerImpl::OnSessionStateChanged(
   // Show the app list after signing in in tablet mode. For metrics, the app
   // list is not considered shown since the browser window is shown over app
   // list upon login.
-  if (!presenter_.GetView()) {
-    Show(GetDisplayIdToShowAppListOn(),
-         base::nullopt /* no AppListShowSource */, base::TimeTicks());
-  }
+  if (!presenter_.GetTargetVisibility())
+    Shell::Get()->home_screen_controller()->Show();
 
   // Hide app list UI initially to prevent app list from flashing in background
   // while the initial app window is being shown.
-  if (HasVisibleWindows() ||
-      Shell::Get()->overview_controller()->InOverviewSession()) {
+  if (!last_target_visible_) {
     presenter_.GetView()->SetVisible(false);
     presenter_.GetView()->search_box_view()->SetVisible(false);
   } else {
