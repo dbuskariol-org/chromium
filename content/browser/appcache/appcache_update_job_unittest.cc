@@ -60,6 +60,7 @@ const base::TimeDelta kFullUpdateInterval = base::TimeDelta::FromHours(24);
 const base::TimeDelta kMaxEvictableErrorDuration =
     base::TimeDelta::FromDays(14);
 const base::TimeDelta kOneHour = base::TimeDelta::FromHours(1);
+const base::TimeDelta kOneYear = base::TimeDelta::FromDays(365);
 
 const char kManifest1Contents[] =
     "CACHE MANIFEST\n"
@@ -68,6 +69,8 @@ const char kManifest1Contents[] =
     "fallback1 fallback1a\n"
     "NETWORK:\n"
     "*\n";
+
+const char kExplicit1Contents[] = "explicit1";
 
 // By default, kManifest2Contents is served from a path in /files/, so any
 // resource listing in it that references outside of that path will require a
@@ -175,7 +178,7 @@ class MockHttpServer {
       (*body) = "CACHE MANIFEST\n";
     } else if (path == "/files/explicit1") {
       (*headers) = std::string(ok_headers, base::size(ok_headers));
-      (*body) = "explicit1";
+      (*body) = kExplicit1Contents;
     } else if (path == "/files/explicit2") {
       (*headers) = std::string(ok_headers, base::size(ok_headers));
       (*body) = "explicit2";
@@ -659,6 +662,12 @@ class AppCacheUpdateJobTest : public testing::Test,
     auto response = network::mojom::URLResponseHead::New();
     response->headers = info.headers;
     response->headers->GetMimeType(&response->mime_type);
+
+    // Provide valid request and response times to
+    // UpdateUrlLoaderRequest.  It's still up to that class's
+    // |OnReceiveResponse| to capture these values in the net::HttpResponseInfo.
+    response->request_time = base::Time::Now();
+    response->response_time = base::Time::Now();
 
     params->client->OnReceiveResponse(std::move(response));
 
@@ -3275,9 +3284,7 @@ class AppCacheUpdateJobTest : public testing::Test,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
                        base::Unretained(this), update));
 
-    base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
-                                  base::Unretained(this)));
+    TriggerTestComplete();
   }
 
   void IfModifiedTestRefetch() {
@@ -3313,9 +3320,7 @@ class AppCacheUpdateJobTest : public testing::Test,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
                        base::Unretained(this), update));
 
-    base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
-                                  base::Unretained(this)));
+    TriggerTestComplete();
   }
 
   void IfModifiedTestLastModified() {
@@ -3352,9 +3357,7 @@ class AppCacheUpdateJobTest : public testing::Test,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
                        base::Unretained(this), update));
 
-    base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
-                                  base::Unretained(this)));
+    TriggerTestComplete();
   }
 
   // AppCaches built with manifest parser version 0 should update without
@@ -3652,6 +3655,89 @@ class AppCacheUpdateJobTest : public testing::Test,
     // Start update after data write completes asynchronously.
   }
 
+  void RequestResponseTimesAreSetTest() {
+    MakeService();
+    group_ = base::MakeRefCounted<AppCacheGroup>(
+        service_->storage(), MockHttpServer::GetMockUrl("files/manifest1"),
+        111);
+    AppCacheUpdateJob* update =
+        new AppCacheUpdateJob(service_.get(), group_.get());
+    group_->update_job_ = update;
+
+    // Create a cache without a manifest entry.  The manifest entry will be
+    // added later.
+    AppCache* cache = MakeCacheForGroup(service_->storage()->NewCacheId(), -1);
+    MockFrontend* frontend = MakeMockFrontend();
+    AppCacheHost* host = MakeHost(frontend);
+    host->AssociateCompleteCache(cache);
+
+    // Set up checks for when update job finishes.
+    do_checks_after_update_finished_ = false;
+
+    AppCacheCacheTestHelper::CacheEntries cache_entries;
+
+    // Add cache entry for manifest.
+    // Seed storage with expected manifest response info that will cause
+    // an If-Modified-Since header to be put in the manifest fetch request.
+    {
+      const char data[] =
+          "HTTP/1.1 200 OK\0"
+          "Last-Modified: Sat, 29 Oct 2019 19:43:31 GMT\0";
+      scoped_refptr<net::HttpResponseHeaders> headers =
+          base::MakeRefCounted<net::HttpResponseHeaders>(
+              std::string(data, base::size(data)));
+      std::unique_ptr<net::HttpResponseInfo> response_info =
+          std::make_unique<net::HttpResponseInfo>();
+      response_info->headers = std::move(headers);
+      response_info->request_time = base::Time::Now() - kOneYear;
+      response_info->response_time = base::Time::Now() - kOneYear;
+      AppCacheCacheTestHelper::AddCacheEntry(
+          &cache_entries, group_->manifest_url(), AppCacheEntry::EXPLICIT,
+          /*expect_if_modified_since=*/std::string(),
+          /*expect_if_none_match=*/std::string(), /*headers_allowed=*/true,
+          std::move(response_info), kManifest1Contents);
+    }
+
+    cache_helper_ = std::make_unique<AppCacheCacheTestHelper>(
+        service_.get(), group_->manifest_url(), cache, std::move(cache_entries),
+        base::BindOnce(
+            &AppCacheUpdateJobTest::StartUpdateAfterSeedingStorageData,
+            base::Unretained(this)));
+    cache_helper_->Write();
+
+    post_update_finished_cb_ = base::BindOnce(
+        &AppCacheUpdateJobTest::RequestResponseTimesAreSetUpdateFinished,
+        base::Unretained(this));
+
+    // Start update after data write completes asynchronously.
+    // After update is finished, continues async in
+    // |RequestResponseTimesAreSetUpdateFinished|.
+  }
+
+  void RequestResponseTimesAreSetUpdateFinished() {
+    ASSERT_NE(group_->newest_complete_cache(), cache_helper_->write_cache());
+    ASSERT_NE(group_->newest_complete_cache(), nullptr);
+    cache_helper_->PrepareForRead(
+        group_->newest_complete_cache(),
+        base::BindOnce(
+            &AppCacheUpdateJobTest::RequestResponseTimesAreSetReadFinished,
+            base::Unretained(this)));
+    cache_helper_->Read();
+    // Continues async in |RequestResponseTimesAreSetReadFinished|.
+  }
+
+  void RequestResponseTimesAreSetReadFinished() {
+    auto it = cache_helper_->read_cache_entries().find(
+        MockHttpServer::GetMockUrl("files/explicit1"));
+    ASSERT_NE(it, cache_helper_->read_cache_entries().end());
+    CHECK_GT(it->second->response_info->request_time,
+             base::Time::Now() - kOneHour);
+    CHECK_GT(it->second->response_info->response_time,
+             base::Time::Now() - kOneHour);
+    TriggerTestComplete();
+    // Continues async in |TestComplete|.
+  }
+
   void IfNoneMatchRefetchTest() {
     MakeService();
     group_ = base::MakeRefCounted<AppCacheGroup>(
@@ -3684,9 +3770,7 @@ class AppCacheUpdateJobTest : public testing::Test,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
                        base::Unretained(this), update));
 
-    base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
-                                  base::Unretained(this)));
+    TriggerTestComplete();
   }
 
   void MultipleHeadersRefetchTest() {
@@ -3724,9 +3808,7 @@ class AppCacheUpdateJobTest : public testing::Test,
         base::BindOnce(&AppCacheUpdateJobTest::VerifyHeadersAndDeleteUpdate,
                        base::Unretained(this), update));
 
-    base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
-                                  base::Unretained(this)));
+    TriggerTestComplete();
   }
 
   void CrossOriginHttpsSuccessTest() {
@@ -3795,14 +3877,23 @@ class AppCacheUpdateJobTest : public testing::Test,
   }
 
   void UpdateFinished() {
+    if (post_update_finished_cb_) {
+      std::move(post_update_finished_cb_).Run();
+      return;
+    }
+
+    TriggerTestComplete();
+  }
+
+  void TriggerTestComplete() {
     // We unwind the stack prior to finishing up to let stack-based objects
     // get deleted.
     base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::UpdateFinishedUnwound,
+        FROM_HERE, base::BindOnce(&AppCacheUpdateJobTest::TestComplete,
                                   base::Unretained(this)));
   }
 
-  void UpdateFinishedUnwound() {
+  void TestComplete() {
     EXPECT_EQ(AppCacheGroup::IDLE, group_->update_status());
     EXPECT_TRUE(group_->update_job() == nullptr);
     if (do_checks_after_update_finished_)
@@ -4574,6 +4665,7 @@ class AppCacheUpdateJobTest : public testing::Test,
   scoped_refptr<AppCacheGroup> group_;
   scoped_refptr<AppCache> protect_newest_cache_;
   base::OnceClosure test_completed_cb_;
+  base::OnceClosure post_update_finished_cb_;
 
   std::unique_ptr<AppCacheResponseWriter> response_writer_;
   std::unique_ptr<AppCacheCacheTestHelper> cache_helper_;
@@ -4988,6 +5080,10 @@ TEST_F(AppCacheUpdateJobTest, IfNoneMatchUpgradeParserVersion0) {
 TEST_F(AppCacheUpdateJobTest, IfNoneMatchUpgradeParserVersion1) {
   RunTestOnUIThread(
       &AppCacheUpdateJobTest::IfNoneMatchUpgradeParserVersion1Test);
+}
+
+TEST_F(AppCacheUpdateJobTest, RequestResponseTimesAreSet) {
+  RunTestOnUIThread(&AppCacheUpdateJobTest::RequestResponseTimesAreSetTest);
 }
 
 TEST_F(AppCacheUpdateJobTest, IfNoneMatchRefetch) {
