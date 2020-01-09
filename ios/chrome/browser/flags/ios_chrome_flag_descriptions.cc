@@ -266,10 +266,6 @@ const char kMobileGoogleSRPDescription[] =
     "Request the Mobile version of Google SRP by default when the desktop mode "
     "is requested by default.";
 
-const char kNewClearBrowsingDataUIName[] = "Clear Browsing Data UI";
-const char kNewClearBrowsingDataUIDescription[] =
-    "Enable new Clear Browsing Data UI.";
-
 const char kNewOmniboxPopupLayoutName[] = "New omnibox popup";
 const char kNewOmniboxPopupLayoutDescription[] =
     "Switches the omnibox suggestions and omnibox itself to display the new "

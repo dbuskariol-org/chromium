@@ -232,10 +232,6 @@ extern const char kMarkHttpAsDescription[];
 extern const char kMobileGoogleSRPName[];
 extern const char kMobileGoogleSRPDescription[];
 
-// Title and description for the flag to enable new Clear Browsing Data UI.
-extern const char kNewClearBrowsingDataUIName[];
-extern const char kNewClearBrowsingDataUIDescription[];
-
 // Title and description for the flag to display new omnibox popup.
 extern const char kNewOmniboxPopupLayoutName[];
 extern const char kNewOmniboxPopupLayoutDescription[];
