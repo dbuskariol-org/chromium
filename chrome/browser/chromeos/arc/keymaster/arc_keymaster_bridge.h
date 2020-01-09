@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_ARC_KEYMASTER_ARC_KEYMASTER_BRIDGE_H_
-#define COMPONENTS_ARC_KEYMASTER_ARC_KEYMASTER_BRIDGE_H_
+#ifndef CHROME_BROWSER_CHROMEOS_ARC_KEYMASTER_ARC_KEYMASTER_BRIDGE_H_
+#define CHROME_BROWSER_CHROMEOS_ARC_KEYMASTER_ARC_KEYMASTER_BRIDGE_H_
 
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
+#include "chrome/browser/chromeos/arc/keymaster/cert_store_bridge.h"
 #include "components/arc/mojom/keymaster.mojom.h"
 #include "components/keyed_service/core/keyed_service.h"
 
@@ -47,6 +48,9 @@ class ArcKeymasterBridge : public KeyedService, public mojom::KeymasterHost {
   // Points to a proxy bound to the implementation in arc-keymasterd.
   mojom::KeymasterServerPtr keymaster_server_proxy_;
 
+  // Points to a proxy bound to the implementation in arc-keymasterd.
+  std::unique_ptr<keymaster::CertStoreBridge> cert_store_bridge_;
+
   // WeakPtrFactory to use for callbacks.
   base::WeakPtrFactory<ArcKeymasterBridge> weak_factory_;
 
@@ -55,4 +59,4 @@ class ArcKeymasterBridge : public KeyedService, public mojom::KeymasterHost {
 
 }  // namespace arc
 
-#endif  // COMPONENTS_ARC_KEYMASTER_ARC_KEYMASTER_BRIDGE_H_
+#endif  // CHROME_BROWSER_CHROMEOS_ARC_KEYMASTER_ARC_KEYMASTER_BRIDGE_H_

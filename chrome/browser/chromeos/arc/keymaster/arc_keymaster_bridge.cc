@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/arc/keymaster/arc_keymaster_bridge.h"
+#include "chrome/browser/chromeos/arc/keymaster/arc_keymaster_bridge.h"
 
 #include <utility>
 
@@ -49,7 +49,9 @@ ArcKeymasterBridge* ArcKeymasterBridge::GetForBrowserContext(
 
 ArcKeymasterBridge::ArcKeymasterBridge(content::BrowserContext* context,
                                        ArcBridgeService* bridge_service)
-    : arc_bridge_service_(bridge_service), weak_factory_(this) {
+    : arc_bridge_service_(bridge_service),
+      cert_store_bridge_(std::make_unique<keymaster::CertStoreBridge>(context)),
+      weak_factory_(this) {
   arc_bridge_service_->keymaster()->SetHost(this);
 }
 
@@ -67,6 +69,7 @@ void ArcKeymasterBridge::GetServer(GetServerCallback callback) {
 
 void ArcKeymasterBridge::OnBootstrapMojoConnection(GetServerCallback callback,
                                                    bool result) {
+  cert_store_bridge_->OnBootstrapMojoConnection(result);
   if (!result) {
     LOG(ERROR) << "Error bootstrapping Mojo in arc-keymasterd.";
     keymaster_server_proxy_.reset();
@@ -79,10 +82,15 @@ void ArcKeymasterBridge::OnBootstrapMojoConnection(GetServerCallback callback,
 
 void ArcKeymasterBridge::BootstrapMojoConnection(GetServerCallback callback) {
   DVLOG(1) << "Bootstrapping arc-keymasterd Mojo connection via D-Bus.";
+
   mojo::OutgoingInvitation invitation;
   mojo::PlatformChannel channel;
   mojo::ScopedMessagePipeHandle server_pipe =
       invitation.AttachMessagePipe("arc-keymaster-pipe");
+
+  // Bootstrap cert_store channel attached to the same invitation.
+  cert_store_bridge_->BindToInvitation(&invitation);
+
   mojo::OutgoingInvitation::Send(std::move(invitation),
                                  base::kNullProcessHandle,
                                  channel.TakeLocalEndpoint());
