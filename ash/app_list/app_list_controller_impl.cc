@@ -550,19 +550,6 @@ void AppListControllerImpl::OnAppListStateChanged(AppListState new_state,
 
   UpdateLauncherContainer();
 
-  // Band-aid for https://b/144056527 to update visibility after AppListState
-  // change. Otherwise, previously calculated visibility in OnVisibilityChanged
-  // and OnVisibilityWillChange is not correct and makes focus change handler
-  // code in AppListPresenterImpl::OnWindowFocused close the app list window
-  // when focus moves into Assistant web contents.
-  aura::Window* app_list_window = GetWindow();
-  if (app_list_window) {
-    const bool app_list_visible = app_list_window->TargetVisibility();
-    if (app_list_visible != IsVisible()) {
-      OnVisibilityChanged(app_list_visible, last_visible_display_id_);
-    }
-  }
-
   if (new_state == AppListState::kStateEmbeddedAssistant) {
     // ShowUi will be no-op if the AssistantUiModel is already visible.
     Shell::Get()->assistant_controller()->ui_controller()->ShowUi(
@@ -1439,7 +1426,7 @@ void AppListControllerImpl::OnVisibilityChanged(bool visible,
   // HomeLauncher is only visible when no other app windows are visible,
   // unless we are in the process of animating to (or dragging) the home
   // launcher.
-  if (IsTabletMode() && ShouldLauncherShowBehindApps())
+  if (IsTabletMode())
     real_visibility &= !HasVisibleWindows();
 
   aura::Window* app_list_window = GetWindow();
@@ -1481,9 +1468,8 @@ void AppListControllerImpl::OnVisibilityWillChange(bool visible,
   // HomeLauncher is only visible when no other app windows are visible,
   // unless we are in the process of animating to (or dragging) the home
   // launcher.
-  if (IsTabletMode() && ShouldLauncherShowBehindApps() &&
-      home_launcher_transition_state_ ==
-          HomeLauncherTransitionState::kFinished) {
+  if (IsTabletMode() && home_launcher_transition_state_ ==
+                            HomeLauncherTransitionState::kFinished) {
     real_target_visibility &= !HasVisibleWindows();
   }
 
