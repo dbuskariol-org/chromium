@@ -101,6 +101,23 @@ class TestHandshakeClient final : public mojom::QuicTransportHandshakeClient {
   bool has_seen_mojo_connection_error_ = false;
 };
 
+class TestClient final : public mojom::QuicTransportClient {
+ public:
+  explicit TestClient(
+      mojo::PendingReceiver<mojom::QuicTransportClient> pending_receiver)
+      : receiver_(this, std::move(pending_receiver)) {}
+
+  void WaitUntilMojoConnectionError() {
+    base::RunLoop run_loop;
+
+    receiver_.set_disconnect_handler(run_loop.QuitClosure());
+    run_loop.Run();
+  }
+
+ private:
+  mojo::Receiver<mojom::QuicTransportClient> receiver_;
+};
+
 class QuicTransportTest : public testing::Test {
  public:
   QuicTransportTest()
@@ -187,24 +204,28 @@ TEST_F(QuicTransportTest, ConnectSuccessfully) {
   EXPECT_EQ(1u, network_context().NumOpenQuicTransports());
 }
 
-TEST_F(QuicTransportTest, ConnectWithError) {
+TEST_F(QuicTransportTest, ConnectWithWrongOrigin) {
   base::RunLoop run_loop_for_handshake;
   mojo::PendingRemote<mojom::QuicTransportHandshakeClient> handshake_client;
   TestHandshakeClient test_handshake_client(
       handshake_client.InitWithNewPipeAndPassReceiver(),
       run_loop_for_handshake.QuitClosure());
 
-  // This should fail due to the wrong origin
   CreateQuicTransport(GetURL("/discard"),
                       url::Origin::Create(GURL("https://evil.com")),
                       std::move(handshake_client));
 
   run_loop_for_handshake.Run();
 
-  // TODO(vasilvv): This should fail, but now succeeds due to a bug in net/.
   EXPECT_TRUE(test_handshake_client.has_seen_connection_establishment());
   EXPECT_FALSE(test_handshake_client.has_seen_handshake_failure());
   EXPECT_FALSE(test_handshake_client.has_seen_mojo_connection_error());
+
+  // Server resets the connection due to origin mismatch.
+  TestClient client(test_handshake_client.PassClientReceiver());
+  client.WaitUntilMojoConnectionError();
+
+  EXPECT_EQ(0u, network_context().NumOpenQuicTransports());
 }
 
 TEST_F(QuicTransportTest, SendDatagram) {
