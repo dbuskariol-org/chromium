@@ -792,6 +792,22 @@
             ]
         }
     ],
+    "AutofillCreditCardAuthentication": [
+        {
+            "platforms": [
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "AutofillCreditCardAuthentication"
+                    ]
+                }
+            ]
+        }
+    ],
     "AutofillDynamicForms": [
         {
             "platforms": [
