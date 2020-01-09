@@ -5055,6 +5055,26 @@
             ]
         }
     ],
+    "ProfileSyncServiceUsesThreadPool": [
+        {
+            "platforms": [
+                "android",
+                "chromeos",
+                "ios",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled_20191112",
+                    "enable_features": [
+                        "ProfileSyncServiceUsesThreadPool"
+                    ]
+                }
+            ]
+        }
+    ],
     "ProgressBarAnimationAndroid": [
         {
             "platforms": [
