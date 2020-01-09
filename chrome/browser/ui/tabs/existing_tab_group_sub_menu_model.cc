@@ -24,12 +24,26 @@ ExistingTabGroupSubMenuModel::ExistingTabGroupSubMenuModel(TabStripModel* model,
 void ExistingTabGroupSubMenuModel::Build() {
   // Start command ids after the parent menu's ids to avoid collisions.
   int group_index = kFirstCommandIndex;
-  for (tab_groups::TabGroupId group : model_->group_model()->ListTabGroups()) {
+  for (tab_groups::TabGroupId group : GetOrderedTabGroups()) {
     if (ShouldShowGroup(model_, context_index_, group))
       AddItem(group_index,
               model_->group_model()->GetTabGroup(group)->GetDisplayedTitle());
     group_index++;
   }
+}
+
+std::vector<tab_groups::TabGroupId>
+ExistingTabGroupSubMenuModel::GetOrderedTabGroups() {
+  std::vector<tab_groups::TabGroupId> ordered_groups;
+  base::Optional<tab_groups::TabGroupId> current_group = base::nullopt;
+  for (int i = 0; i < model_->count(); ++i) {
+    base::Optional<tab_groups::TabGroupId> new_group =
+        model_->GetTabGroupForTab(i);
+    if (new_group.has_value() && new_group != current_group)
+      ordered_groups.push_back(new_group.value());
+    current_group = new_group;
+  }
+  return ordered_groups;
 }
 
 bool ExistingTabGroupSubMenuModel::IsCommandIdChecked(int command_id) const {
@@ -43,11 +57,9 @@ bool ExistingTabGroupSubMenuModel::IsCommandIdEnabled(int command_id) const {
 void ExistingTabGroupSubMenuModel::ExecuteCommand(int command_id,
                                                   int event_flags) {
   const int group_index = command_id - kFirstCommandIndex;
-  // TODO(https://crbug.com/922736): If a group has been deleted, |group_index|
-  // may refer to a different group than it did when the menu was created.
   DCHECK_LT(size_t{group_index}, model_->group_model()->ListTabGroups().size());
-  model_->ExecuteAddToExistingGroupCommand(
-      context_index_, model_->group_model()->ListTabGroups()[group_index]);
+  model_->ExecuteAddToExistingGroupCommand(context_index_,
+                                           GetOrderedTabGroups()[group_index]);
 }
 
 // static
