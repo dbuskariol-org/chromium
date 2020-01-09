@@ -14,14 +14,6 @@
         <attr name="helpContext" format="string" />
     </declare-styleable>
 
-    <declare-styleable name="ChromeSwitchPreference">
-        <!-- Prevents the summary text from being styled like title text in the
-             case that the title is empty. -->
-        <attr name="dontUseSummaryAsTitle" format="boolean" />
-        <!-- Draws a horizontal divider line at the bottom of the preference. -->
-        <attr name="drawDivider" format="boolean" />
-    </declare-styleable>
-
     <declare-styleable name="BookmarkTextInputLayout">
         <attr name="emptyErrorMessage" format="string" />
     </declare-styleable>
