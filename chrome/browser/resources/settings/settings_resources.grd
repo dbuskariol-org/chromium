@@ -21,7 +21,7 @@
                  type="chrome_html"
                  preprocess="true" />
 
-      <if expr="not is_macosx and not is_chromeos">
+      <if expr="not is_macosx and not chromeos">
         <structure name="IDR_SETTINGS_CAPTIONS_SUBPAGE_HTML"
                    file="a11y_page/captions_subpage.html"
                    type="chrome_html" />
