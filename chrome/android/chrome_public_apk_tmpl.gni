@@ -86,7 +86,8 @@ template("chrome_public_common_apk_or_module_tmpl") {
     _add_unwind_tables = invoker.add_unwind_tables_in_apk
   } else {
     _needs_32bit_lib =
-        target_cpu == "arm" || (_is_monochrome && target_cpu == "arm64")
+        target_cpu == "arm" ||
+        (_is_monochrome && target_cpu == "arm64" && !_is_64_bit_browser)
     _add_unwind_tables =
         _needs_32bit_lib && _add_unwind_tables_in_chrome_32bit_apk &&
         ((android_64bit_target_cpu &&
