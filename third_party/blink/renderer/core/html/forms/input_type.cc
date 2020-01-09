@@ -253,6 +253,8 @@ void InputType::SetValueAsDecimal(const Decimal& new_value,
 
 void InputType::ReadingChecked() const {}
 
+void InputType::WillUpdateCheckedness(bool) {}
+
 bool InputType::SupportsValidation() const {
   return true;
 }

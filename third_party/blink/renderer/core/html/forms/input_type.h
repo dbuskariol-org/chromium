@@ -104,7 +104,12 @@ class CORE_EXPORT InputType : public GarbageCollected<InputType> {
   virtual void SetValueAsDecimal(const Decimal&,
                                  TextFieldEventBehavior,
                                  ExceptionState&) const;
+
+  // Functions related to 'checked'
+
   virtual void ReadingChecked() const;
+  // The function is called just before updating checkedness.
+  virtual void WillUpdateCheckedness(bool new_checked);
 
   // Validation functions
 
