@@ -39,6 +39,8 @@ std::string GetStringNameForOptimizationType(
       return "PerformanceHints";
     case proto::OptimizationType::LITE_PAGE:
       return "LitePage";
+    case proto::OptimizationType::COMPRESS_PUBLIC_IMAGES:
+      return "CompressPublicImages";
   }
   NOTREACHED();
   return std::string();

@@ -10,6 +10,7 @@ package optimization_guide.proto;
 import "common_types.proto";
 import "performance_hints_metadata.proto";
 import "previews_metadata.proto";
+import "public_image_metadata.proto";
 
 // Information about the hint that the client already has for a host.
 message MatchedHintInfo {
@@ -127,6 +128,8 @@ enum OptimizationType {
   // This optimization allows page loads going through the data reduction
   // proxy to be transformed by the proxy.
   LITE_PAGE = 7;
+  // This optimization compresses public images.
+  COMPRESS_PUBLIC_IMAGES = 8;
 }
 
 // Presents semantics for how page load URLs should be matched.
@@ -189,6 +192,7 @@ message Optimization {
   oneof metadata {
     PreviewsMetadata previews_metadata = 10;
     PerformanceHintsMetadata performance_hints_metadata = 11;
+    PublicImageMetadata public_image_metadata = 12;
   }
 }
 
