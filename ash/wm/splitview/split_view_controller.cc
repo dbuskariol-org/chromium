@@ -678,7 +678,8 @@ void SplitViewController::StartResize(const gfx::Point& location_in_screen) {
     gfx::Point location_in_parent(location_in_screen);
     ::wm::ConvertPointFromScreen(window->parent(), &location_in_parent);
     int window_component = GetWindowComponentForResize(window);
-    window_state->CreateDragDetails(location_in_parent, window_component,
+    window_state->CreateDragDetails(gfx::PointF(location_in_parent),
+                                    window_component,
                                     ::wm::WINDOW_MOVE_SOURCE_TOUCH);
     window_state->OnDragStarted(window_component);
   }
@@ -1764,8 +1765,8 @@ void SplitViewController::InsertWindowToOverview(aura::Window* window,
 void SplitViewController::FinishWindowResizing(aura::Window* window) {
   if (window != nullptr) {
     WindowState* window_state = WindowState::Get(window);
-    window_state->OnCompleteDrag(
-        GetEndDragLocationInScreen(window, previous_event_location_));
+    window_state->OnCompleteDrag(gfx::PointF(
+        GetEndDragLocationInScreen(window, previous_event_location_)));
     window_state->DeleteDragDetails();
   }
 }

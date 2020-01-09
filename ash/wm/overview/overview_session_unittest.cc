@@ -1005,10 +1005,10 @@ TEST_P(OverviewSessionTest, ActivateDraggedWindowNotCancelOverview) {
 
   // Start drag on |window1|.
   std::unique_ptr<WindowResizer> resizer(CreateWindowResizer(
-      window1.get(), gfx::Point(), HTCAPTION, ::wm::WINDOW_MOVE_SOURCE_TOUCH));
+      window1.get(), gfx::PointF(), HTCAPTION, ::wm::WINDOW_MOVE_SOURCE_TOUCH));
   EXPECT_TRUE(InOverviewSession());
 
-  resizer->Drag(gfx::Point(400, 0), 0);
+  resizer->Drag(gfx::PointF(400, 0), 0);
   EXPECT_TRUE(InOverviewSession());
 
   wm::ActivateWindow(window1.get());
@@ -1032,7 +1032,7 @@ TEST_P(OverviewSessionTest, ActivateAnotherWindowDuringDragNotCancelOverview) {
   // Start drag on |window1|.
   wm::ActivateWindow(window1.get());
   std::unique_ptr<WindowResizer> resizer(CreateWindowResizer(
-      window1.get(), gfx::Point(), HTCAPTION, ::wm::WINDOW_MOVE_SOURCE_TOUCH));
+      window1.get(), gfx::PointF(), HTCAPTION, ::wm::WINDOW_MOVE_SOURCE_TOUCH));
   EXPECT_TRUE(InOverviewSession());
 
   // Activate |window2| should not cancel overview mode.
@@ -1315,7 +1315,7 @@ TEST_P(OverviewSessionTest,
   ASSERT_FALSE(InOverviewSession());
   {
     std::unique_ptr<WindowResizer> resizer =
-        CreateWindowResizer(primary_screen_window.get(), gfx::Point(400, 0),
+        CreateWindowResizer(primary_screen_window.get(), gfx::PointF(400, 0),
                             HTCAPTION, ::wm::WINDOW_MOVE_SOURCE_TOUCH);
     ASSERT_TRUE(InOverviewSession());
     EXPECT_FALSE(GetDropTarget(1));
@@ -1326,7 +1326,7 @@ TEST_P(OverviewSessionTest,
   ASSERT_FALSE(InOverviewSession());
   {
     std::unique_ptr<WindowResizer> resizer =
-        CreateWindowResizer(secondary_screen_window.get(), gfx::Point(400, 0),
+        CreateWindowResizer(secondary_screen_window.get(), gfx::PointF(400, 0),
                             HTCAPTION, ::wm::WINDOW_MOVE_SOURCE_TOUCH);
     ASSERT_TRUE(InOverviewSession());
     EXPECT_FALSE(GetDropTarget(0));
@@ -1402,7 +1402,7 @@ TEST_P(OverviewSessionTest,
   window->SetProperty(aura::client::kAppType,
                       static_cast<int>(AppType::BROWSER));
   std::unique_ptr<WindowResizer> resizer =
-      CreateWindowResizer(window.get(), gfx::Point(400, 0), HTCAPTION,
+      CreateWindowResizer(window.get(), gfx::PointF(400, 0), HTCAPTION,
                           ::wm::WINDOW_MOVE_SOURCE_TOUCH);
   ASSERT_TRUE(InOverviewSession());
   EXPECT_TRUE(GetDropTarget(0));
@@ -1631,9 +1631,9 @@ TEST_P(OverviewSessionTest, CancelOverviewOnTap) {
 TEST_P(OverviewSessionTest, OverviewWhileDragging) {
   std::unique_ptr<aura::Window> window(CreateTestWindow());
   std::unique_ptr<WindowResizer> resizer(CreateWindowResizer(
-      window.get(), gfx::Point(), HTCAPTION, ::wm::WINDOW_MOVE_SOURCE_MOUSE));
+      window.get(), gfx::PointF(), HTCAPTION, ::wm::WINDOW_MOVE_SOURCE_MOUSE));
   ASSERT_TRUE(resizer.get());
-  gfx::Point location = resizer->GetInitialLocation();
+  gfx::PointF location = resizer->GetInitialLocation();
   location.Offset(20, 20);
   resizer->Drag(location, 0);
   ToggleOverview();
@@ -2390,12 +2390,12 @@ TEST_P(OverviewSessionTest, DropTargetStackedAtBottomForWindowDraggedFromTop) {
   wm::ActivateWindow(window2.get());
   wm::ActivateWindow(window1.get());
   std::unique_ptr<WindowResizer> resizer =
-      CreateWindowResizer(window1.get(), gfx::Point(400, 0), HTCAPTION,
+      CreateWindowResizer(window1.get(), gfx::PointF(400, 0), HTCAPTION,
                           ::wm::WINDOW_MOVE_SOURCE_TOUCH);
   ASSERT_TRUE(GetDropTarget(0));
   EXPECT_LT(IndexOf(GetDropTarget(0)->GetWindow(), parent),
             IndexOf(window2.get(), parent));
-  resizer->Drag(gfx::Point(400, 500), ui::EF_NONE);
+  resizer->Drag(gfx::PointF(400, 500), ui::EF_NONE);
   resizer->CompleteDrag();
   EXPECT_FALSE(GetDropTarget(0));
 }
@@ -2804,13 +2804,13 @@ TEST_P(OverviewSessionTest, DraggingFromTopAnimation) {
   ui::GestureEvent event(0, 0, 0, base::TimeTicks(),
                          ui::GestureEventDetails(ui::ET_GESTURE_SCROLL_BEGIN));
   WindowState* window_state = WindowState::Get(widget->GetNativeWindow());
-  window_state->CreateDragDetails(event.location(), HTCAPTION,
+  window_state->CreateDragDetails(event.location_f(), HTCAPTION,
                                   ::wm::WINDOW_MOVE_SOURCE_TOUCH);
   auto drag_controller = std::make_unique<TabletModeWindowResizer>(
       window_state, std::make_unique<TabletModeBrowserWindowDragDelegate>());
   ui::Event::DispatcherApi dispatch_helper(&event);
   dispatch_helper.set_target(widget->GetNativeWindow());
-  drag_controller->Drag(event.location(), event.flags());
+  drag_controller->Drag(event.location_f(), event.flags());
 
   ASSERT_TRUE(InOverviewSession());
   EXPECT_EQ(OverviewSession::EnterExitOverviewType::kImmediateEnter,
