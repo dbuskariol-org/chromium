@@ -5988,9 +5988,8 @@
             ],
             "experiments": [
                 {
-                    "name": "Enabled_All",
+                    "name": "Enabled_Ui_Ps3",
                     "enable_features": [
-                        "OffMainThreadServiceWorkerStartup",
                         "ServiceWorkerOnUI",
                         "ServiceWorkerPrefersUnusedProcess"
                     ]
