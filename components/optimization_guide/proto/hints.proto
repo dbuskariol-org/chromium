@@ -211,14 +211,13 @@ message PageHint {
 }
 
 message Hint {
+  reserved 3;
+
   // Describes the granularity of the key field.
   optional KeyRepresentation key_representation = 1;
   // The key that applies to this hint. The key_representation field describes
   // the form in which this key takes. Guaranteed to be non-empty.
   optional string key = 2;
-  // Top-level optimizations are currently unused on the client as of M-72. This
-  // may change in the future as new optimization types are added.
-  repeated Optimization whitelisted_optimizations = 3;
   // An ordered set of per-page hints. Only the first PageHint record
   // that matches a committed page URL should be used for that page load.
   repeated PageHint page_hints = 4;
