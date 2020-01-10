@@ -54,6 +54,7 @@ class CORE_EXPORT CSSProperty : public CSSUnresolvedProperty {
     return flags_ & kIsAffectedByForcedColors;
   }
   bool IsValidForFirstLetter() const { return flags_ & kValidForFirstLetter; }
+  bool IsValidForCue() const { return flags_ & kValidForCue; }
 
   bool IsRepeated() const { return repetition_separator_ != '\0'; }
   char RepetitionSeparator() const { return repetition_separator_; }
@@ -121,6 +122,8 @@ class CORE_EXPORT CSSProperty : public CSSUnresolvedProperty {
     kAnimation = 1 << 11,
     // https://drafts.csswg.org/css-pseudo-4/#first-letter-styling
     kValidForFirstLetter = 1 << 12,
+    // https://w3c.github.io/webvtt/#the-cue-pseudo-element
+    kValidForCue = 1 << 13,
   };
 
   constexpr CSSProperty(CSSPropertyID property_id,

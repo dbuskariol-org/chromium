@@ -450,6 +450,14 @@
       default: false,
       valid_type: "bool",
     },
+
+    // - valid_for_cue: true
+    //
+    // https://w3c.github.io/webvtt/#the-cue-pseudo-element
+    valid_for_cue: {
+      default: false,
+      valid_type: "bool",
+    },
   },
 
   // Members in the data objects should appear in the same order as in the
@@ -645,6 +653,7 @@
       typedom_types: ["Keyword"],
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "direction",
@@ -671,6 +680,7 @@
       converter: "ConvertFontFamily",
       priority: "High",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "font-kerning",
@@ -709,6 +719,7 @@
       keywords: ["xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large", "larger", "smaller", "-webkit-xxx-large"],
       typedom_types: ["Keyword", "Length", "Percentage"],
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "font-size-adjust",
@@ -739,6 +750,7 @@
       ],
       typedom_types: ["Keyword", "Percentage"],
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "font-style",
@@ -752,6 +764,7 @@
       keywords: ["normal", "italic", "oblique"],
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "font-variant-ligatures",
@@ -830,6 +843,7 @@
       keywords: ["normal", "bold", "bolder", "lighter"],
       typedom_types: ["Keyword", "Number"],
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "font-feature-settings",
@@ -856,6 +870,7 @@
       keywords: ["normal"],
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-webkit-font-smoothing",
@@ -1024,6 +1039,7 @@
         fill_type: "Attachment",
       },
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "background-blend-mode",
@@ -1053,6 +1069,7 @@
         fill_type: "Clip",
       },
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "background-color",
@@ -1073,6 +1090,7 @@
       },
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "background-image",
@@ -1087,6 +1105,7 @@
         fill_type_getter: "GetImage",
       },
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "background-origin",
@@ -1099,6 +1118,7 @@
         fill_type: "Origin",
       },
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "background-position-x",
@@ -1109,6 +1129,7 @@
         fill_type: "PositionX",
       },
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "background-position-y",
@@ -1119,6 +1140,7 @@
         fill_type: "PositionY",
       },
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "background-repeat-x",
@@ -1127,6 +1149,7 @@
         fill_type: "RepeatX",
       },
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "background-repeat-y",
@@ -1135,6 +1158,7 @@
         fill_type: "RepeatY",
       },
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "background-size",
@@ -1148,6 +1172,7 @@
         fill_type: "Size",
       },
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "baseline-shift",
@@ -2229,6 +2254,7 @@
       keywords: ["normal"],
       typedom_types: ["Keyword", "Length", "Number", "Percentage"],
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "line-height-step",
@@ -2567,6 +2593,7 @@
       computed_style_custom_functions: ["setter"],
       typedom_types: ["Number"],
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "order",
@@ -2606,6 +2633,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "color",
       affected_by_forced_colors: true,
+      valid_for_cue: true,
     },
     {
       name: "outline-offset",
@@ -2618,6 +2646,7 @@
       computed_style_custom_functions: ["getter"],
       converter: "ConvertComputedLength<int>",
       typedom_types: ["Length"],
+      valid_for_cue: true,
     },
     {
       name: "outline-style",
@@ -2632,6 +2661,7 @@
       default_value: "none",
       type_name: "EBorderStyle",
       style_builder_custom_functions: ["initial", "inherit", "value"],
+      valid_for_cue: true,
     },
     {
       name: "outline-width",
@@ -2646,6 +2676,7 @@
       converter: "ConvertLineWidth<unsigned short>",
       keywords: ["thin", "medium", "thick"],
       typedom_types: ["Keyword", "Length"],
+      valid_for_cue: true,
     },
     {
       name: "overflow-anchor",
@@ -3411,6 +3442,7 @@
       style_builder_template: "color",
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "text-decoration-line",
@@ -3424,6 +3456,7 @@
       type_name: "TextDecoration",
       converter: "ConvertFlags<TextDecoration>",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "text-decoration-skip-ink",
@@ -3435,6 +3468,7 @@
       typedom_types: ["Keyword"],
       default_value: "auto",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "text-decoration-style",
@@ -3445,6 +3479,7 @@
       typedom_types: ["Keyword"],
       default_value: "solid",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "text-indent",
@@ -3497,6 +3532,7 @@
       typedom_types: ["Keyword"],
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "text-size-adjust",
@@ -3695,6 +3731,7 @@
       typedom_types: ["Keyword"],
       default_value: "visible",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "x",
@@ -4302,6 +4339,7 @@
       ],
       typedom_types: ["Keyword"],
       default_value: "normal",
+      valid_for_cue: true,
     },
     {
       name: "widows",
@@ -5430,6 +5468,7 @@
       priority: "High",
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-visited-caret-color",
@@ -5479,6 +5518,7 @@
       },
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-visited-border-left-color",
@@ -5609,6 +5649,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
       affected_by_forced_colors: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-visited-stroke",
@@ -5636,6 +5677,7 @@
       style_builder_template: "visited_color",
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-visited-text-emphasis-color",
@@ -5712,6 +5754,7 @@
       },
       ua_property_for: "background-attachment",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-ua-background-blend-mode",
@@ -5731,6 +5774,7 @@
       },
       ua_property_for: "background-clip",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-ua-background-color",
@@ -5743,6 +5787,7 @@
       ua_property_for: "background-color",
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-ua-background-image",
@@ -5753,6 +5798,7 @@
       },
       ua_property_for: "background-image",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-ua-background-origin",
@@ -5762,6 +5808,7 @@
       },
       ua_property_for: "background-origin",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-ua-background-position-x",
@@ -5771,6 +5818,7 @@
       },
       ua_property_for: "background-position-x",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-ua-background-position-y",
@@ -5780,6 +5828,7 @@
       },
       ua_property_for: "background-position-y",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-ua-background-size",
@@ -5789,6 +5838,7 @@
       },
       ua_property_for: "background-size",
       valid_for_first_letter: true,
+      valid_for_cue: true,
     },
     {
       name: "-internal-ua-border-bottom-color",

@@ -1355,57 +1355,6 @@ void StyleResolver::ApplyAnimatedStandardProperties(
   }
 }
 
-static inline bool IsValidCueStyleProperty(CSSPropertyID id) {
-  switch (id) {
-    case CSSPropertyID::kBackground:
-    case CSSPropertyID::kBackgroundAttachment:
-    case CSSPropertyID::kBackgroundClip:
-    case CSSPropertyID::kBackgroundColor:
-    case CSSPropertyID::kBackgroundImage:
-    case CSSPropertyID::kBackgroundOrigin:
-    case CSSPropertyID::kBackgroundPosition:
-    case CSSPropertyID::kBackgroundPositionX:
-    case CSSPropertyID::kBackgroundPositionY:
-    case CSSPropertyID::kBackgroundRepeat:
-    case CSSPropertyID::kBackgroundRepeatX:
-    case CSSPropertyID::kBackgroundRepeatY:
-    case CSSPropertyID::kBackgroundSize:
-    case CSSPropertyID::kColor:
-    case CSSPropertyID::kFont:
-    case CSSPropertyID::kFontFamily:
-    case CSSPropertyID::kFontSize:
-    case CSSPropertyID::kFontStretch:
-    case CSSPropertyID::kFontStyle:
-    case CSSPropertyID::kFontVariant:
-    case CSSPropertyID::kFontWeight:
-    case CSSPropertyID::kLineHeight:
-    case CSSPropertyID::kOpacity:
-    case CSSPropertyID::kOutline:
-    case CSSPropertyID::kOutlineColor:
-    case CSSPropertyID::kOutlineOffset:
-    case CSSPropertyID::kOutlineStyle:
-    case CSSPropertyID::kOutlineWidth:
-    case CSSPropertyID::kVisibility:
-    case CSSPropertyID::kWhiteSpace:
-    // FIXME: 'text-decoration' shorthand to be handled when available.
-    // See https://chromiumcodereview.appspot.com/19516002 for details.
-    case CSSPropertyID::kTextDecoration:
-    case CSSPropertyID::kTextShadow:
-    case CSSPropertyID::kBorderStyle:
-      return true;
-    case CSSPropertyID::kTextDecorationLine:
-    case CSSPropertyID::kTextDecorationStyle:
-    case CSSPropertyID::kTextDecorationColor:
-    case CSSPropertyID::kTextDecorationSkipInk:
-      return true;
-    case CSSPropertyID::kFontVariationSettings:
-      return true;
-    default:
-      break;
-  }
-  return false;
-}
-
 static inline bool IsValidMarkerStyleProperty(CSSPropertyID id) {
   switch (id) {
     // Valid ::marker properties listed in spec:
@@ -1453,7 +1402,7 @@ static bool PassesPropertyFilter(ValidPropertyFilter valid_property_filter,
     case ValidPropertyFilter::kFirstLetter:
       return CSSProperty::Get(property).IsValidForFirstLetter();
     case ValidPropertyFilter::kCue:
-      return IsValidCueStyleProperty(property);
+      return CSSProperty::Get(property).IsValidForCue();
     case ValidPropertyFilter::kMarker:
       return IsValidMarkerStyleProperty(property);
   }

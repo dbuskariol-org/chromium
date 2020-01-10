@@ -43,6 +43,7 @@ namespace {{namespace}} {
   (property.ua and 'kUA' or ''),
   (property.is_animation_property and 'kAnimation' or ''),
   (property.valid_for_first_letter and 'kValidForFirstLetter' or ''),
+  (property.valid_for_cue and 'kValidForCue' or ''),
 ] | reject('==', '') | join(' | ') %}
 {% set ctor_args = (not is_alias and [property_id, flags, separator] or []) %}
 // {{property.name}}
