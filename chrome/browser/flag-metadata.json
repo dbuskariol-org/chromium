@@ -2090,6 +2090,11 @@
     "expiry_milestone": 83
   },
   {
+    "name": "enable-webassembly-tiering",
+    "owners": [ "clemensb", "wasm-team@google.com" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "enable-webgl-draft-extensions",
     "owners": [ "webgl-team@google.com" ],
     // This flag is the only way for end users to test upcoming WebGL

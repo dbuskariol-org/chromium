@@ -594,6 +594,9 @@ extern const char kEnableWasmSimdDescription[];
 extern const char kEnableWasmThreadsName[];
 extern const char kEnableWasmThreadsDescription[];
 
+extern const char kEnableWasmTieringName[];
+extern const char kEnableWasmTieringDescription[];
+
 extern const char kEvDetailsInPageInfoName[];
 extern const char kEvDetailsInPageInfoDescription[];
 
