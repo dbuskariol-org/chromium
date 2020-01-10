@@ -476,6 +476,9 @@ public final class ChromePreferenceKeys {
 
     public static final String SYNC_SESSIONS_UUID = "chromium.sync.sessions.id";
 
+    public static final String TAB_ID_MANAGER_NEXT_ID =
+            "org.chromium.chrome.browser.tab.TabIdManager.NEXT_ID";
+
     /**
      * Keys for deferred recording of the outcomes of showing the clear data dialog after
      * Trusted Web Activity client apps are uninstalled or have their data cleared.
@@ -710,6 +713,7 @@ public final class ChromePreferenceKeys {
                 SNAPSHOT_DATABASE_REMOVED,
                 START_SURFACE_SINGLE_PANE_ENABLED_KEY,
                 SYNC_SESSIONS_UUID,
+                TAB_ID_MANAGER_NEXT_ID,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_CLEAR_DATA,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_UNINSTALL,
                 TWA_DISCLOSURE_ACCEPTED_PACKAGES,
