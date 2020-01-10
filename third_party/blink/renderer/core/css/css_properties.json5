@@ -443,6 +443,13 @@
       valid_type: "str",
     },
 
+    // - valid_for_first_letter: true
+    //
+    // https://drafts.csswg.org/css-pseudo-4/#first-letter-styling
+    valid_for_first_letter: {
+      default: false,
+      valid_type: "bool",
+    },
   },
 
   // Members in the data objects should appear in the same order as in the
@@ -637,6 +644,7 @@
       keywords: ["currentcolor"],
       typedom_types: ["Keyword"],
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "direction",
@@ -662,6 +670,7 @@
       type_name: "FontDescription::FamilyDescription",
       converter: "ConvertFontFamily",
       priority: "High",
+      valid_for_first_letter: true,
     },
     {
       name: "font-kerning",
@@ -673,6 +682,7 @@
       priority: "High",
       keywords: ["auto", "normal", "none"],
       typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-optical-sizing",
@@ -683,7 +693,8 @@
       type_name: "OpticalSizing",
       priority: "High",
       keywords: ["auto", "none"],
-      typedom_types: ["Keyword"]
+      typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-size",
@@ -696,7 +707,8 @@
       converter: "ConvertFontSize",
       priority: "High",
       keywords: ["xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large", "larger", "smaller", "-webkit-xxx-large"],
-      typedom_types: ["Keyword", "Length", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-size-adjust",
@@ -709,7 +721,8 @@
       converter: "ConvertFontSizeAdjust",
       priority: "High",
       keywords: ["none"],
-      typedom_types: ["Keyword", "Number"]
+      typedom_types: ["Keyword", "Number"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-stretch",
@@ -724,7 +737,8 @@
         "normal", "ultra-condensed", "extra-condensed", "condensed",
         "semi-condensed", "semi-expanded", "expanded", "extra-expanded", "ultra-expanded"
       ],
-      typedom_types: ["Keyword", "Percentage"]
+      typedom_types: ["Keyword", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-style",
@@ -737,6 +751,7 @@
       priority: "High",
       keywords: ["normal", "italic", "oblique"],
       typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-variant-ligatures",
@@ -754,6 +769,7 @@
          "no-contextual"
       ],
       typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-variant-caps",
@@ -768,6 +784,7 @@
         "all-petite-caps", "unicase", "titling-caps"
       ],
       typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-variant-east-asian",
@@ -782,6 +799,7 @@
          "traditional", "full-width", "proportional-width", "ruby"
       ],
       typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-variant-numeric",
@@ -797,6 +815,7 @@
         "slashed-zero"
       ],
       typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-weight",
@@ -809,7 +828,8 @@
       converter: "ConvertFontWeight",
       priority: "High",
       keywords: ["normal", "bold", "bolder", "lighter"],
-      typedom_types: ["Keyword", "Number"]
+      typedom_types: ["Keyword", "Number"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-feature-settings",
@@ -822,6 +842,7 @@
       priority: "High",
       keywords: ["normal"],
       typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "font-variation-settings",
@@ -833,7 +854,8 @@
       converter: "ConvertFontVariationSettings",
       priority: "High",
       keywords: ["normal"],
-      typedom_types: ["Keyword"]
+      typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "-webkit-font-smoothing",
@@ -842,6 +864,7 @@
       font: true,
       type_name: "FontSmoothingMode",
       priority: "High",
+      valid_for_first_letter: true,
     },
     {
       name: "forced-color-adjust",
@@ -1000,6 +1023,7 @@
       style_builder_template_args: {
         fill_type: "Attachment",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "background-blend-mode",
@@ -1016,6 +1040,7 @@
         fill_type: "BlendMode",
         fill_type_getter: "GetBlendMode",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "background-clip",
@@ -1027,6 +1052,7 @@
       style_builder_template_args: {
         fill_type: "Clip",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "background-color",
@@ -1046,6 +1072,7 @@
         initial_color: "ComputedStyleInitialValues::InitialBackgroundColor",
       },
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "background-image",
@@ -1059,6 +1086,7 @@
         fill_type: "Image",
         fill_type_getter: "GetImage",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "background-origin",
@@ -1070,6 +1098,7 @@
       style_builder_template_args: {
         fill_type: "Origin",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "background-position-x",
@@ -1079,6 +1108,7 @@
       style_builder_template_args: {
         fill_type: "PositionX",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "background-position-y",
@@ -1088,6 +1118,7 @@
       style_builder_template_args: {
         fill_type: "PositionY",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "background-repeat-x",
@@ -1095,6 +1126,7 @@
       style_builder_template_args: {
         fill_type: "RepeatX",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "background-repeat-y",
@@ -1102,6 +1134,7 @@
       style_builder_template_args: {
         fill_type: "RepeatY",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "background-size",
@@ -1114,6 +1147,7 @@
       style_builder_template_args: {
         fill_type: "Size",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "baseline-shift",
@@ -1140,6 +1174,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "border-bottom-left-radius",
@@ -1152,6 +1187,7 @@
       type_name: "LengthSize",
       converter: "ConvertRadius",
       typedom_types: ["Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "border-bottom-right-radius",
@@ -1164,6 +1200,7 @@
       type_name: "LengthSize",
       converter: "ConvertRadius",
       typedom_types: ["Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "border-bottom-style",
@@ -1178,6 +1215,7 @@
       typedom_types: ["Keyword"],
       default_value: "none",
       type_name: "EBorderStyle",
+      valid_for_first_letter: true,
     },
     {
       name: "border-bottom-width",
@@ -1193,6 +1231,7 @@
       type_name: "LayoutUnit",
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertBorderWidth",
+      valid_for_first_letter: true,
     },
     {
       name: "border-collapse",
@@ -1214,6 +1253,7 @@
       style_builder_template_args: {
         modifier_type: "Outset",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-image-repeat",
@@ -1225,6 +1265,7 @@
       style_builder_template_args: {
         modifier_type: "Repeat",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-image-slice",
@@ -1236,6 +1277,7 @@
       style_builder_template_args: {
         modifier_type: "Slice",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-image-source",
@@ -1245,6 +1287,7 @@
       keywords: ["none"],
       typedom_types: ["Keyword", "Image"],
       style_builder_custom_functions: ["value"],
+      valid_for_first_letter: true,
     },
     {
       name: "border-image-width",
@@ -1257,6 +1300,7 @@
       style_builder_template_args: {
         modifier_type: "Width",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-left-color",
@@ -1274,6 +1318,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "border-left-style",
@@ -1288,6 +1333,7 @@
       typedom_types: ["Keyword"],
       default_value: "none",
       type_name: "EBorderStyle",
+      valid_for_first_letter: true,
     },
     {
       name: "border-left-width",
@@ -1303,6 +1349,7 @@
       type_name: "LayoutUnit",
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertBorderWidth",
+      valid_for_first_letter: true,
     },
     {
       name: "border-right-color",
@@ -1320,6 +1367,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "border-right-style",
@@ -1334,6 +1382,7 @@
       typedom_types: ["Keyword"],
       default_value: "none",
       type_name: "EBorderStyle",
+      valid_for_first_letter: true,
     },
     {
       name: "border-right-width",
@@ -1349,6 +1398,7 @@
       type_name: "LayoutUnit",
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertBorderWidth",
+      valid_for_first_letter: true,
     },
     {
       name: "border-top-color",
@@ -1366,6 +1416,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "border-top-left-radius",
@@ -1378,6 +1429,7 @@
       type_name: "LengthSize",
       converter: "ConvertRadius",
       typedom_types: ["Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "border-top-right-radius",
@@ -1390,6 +1442,7 @@
       type_name: "LengthSize",
       converter: "ConvertRadius",
       typedom_types: ["Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "border-top-style",
@@ -1404,6 +1457,7 @@
       typedom_types: ["Keyword"],
       default_value: "none",
       type_name: "EBorderStyle",
+      valid_for_first_letter: true,
     },
     {
       name: "border-top-width",
@@ -1419,6 +1473,7 @@
       type_name: "LayoutUnit",
       computed_style_custom_functions: ["getter", "setter"],
       converter: "ConvertBorderWidth",
+      valid_for_first_letter: true,
     },
     {
       name: "bottom",
@@ -1447,6 +1502,7 @@
       keywords: ["none"],
       typedom_types: ["Keyword"],
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "box-sizing",
@@ -1843,6 +1899,7 @@
       default_value: "none",
       name_for_methods: "Floating",
       type_name: "EFloat",
+      valid_for_first_letter: true,
     },
     {
       name: "flood-color",
@@ -2146,7 +2203,8 @@
       inherited: true,
       converter: "ConvertSpacing",
       keywords: ["normal"],
-      typedom_types: ["Keyword", "Length"]
+      typedom_types: ["Keyword", "Length"],
+      valid_for_first_letter: true,
     },
     {
       name: "lighting-color",
@@ -2169,7 +2227,8 @@
       computed_style_custom_functions: ["getter"],
       converter: "ConvertLineHeight",
       keywords: ["normal"],
-      typedom_types: ["Keyword", "Length", "Number", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Number", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "line-height-step",
@@ -2242,7 +2301,8 @@
       converter: "ConvertQuirkyLength",
       computed_style_custom_functions: ["setter"],
       keywords: ["auto"],
-      typedom_types: ["Keyword", "Length", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "margin-left",
@@ -2256,7 +2316,8 @@
       converter: "ConvertQuirkyLength",
       computed_style_custom_functions: ["setter"],
       keywords: ["auto"],
-      typedom_types: ["Keyword", "Length", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "margin-right",
@@ -2270,7 +2331,8 @@
       converter: "ConvertQuirkyLength",
       computed_style_custom_functions: ["setter"],
       keywords: ["auto"],
-      typedom_types: ["Keyword", "Length", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "margin-top",
@@ -2284,7 +2346,8 @@
       converter: "ConvertQuirkyLength",
       computed_style_custom_functions: ["setter"],
       keywords: ["auto"],
-      typedom_types: ["Keyword", "Length", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "marker-end",
@@ -2502,7 +2565,8 @@
       default_value: "1.0",
       type_name: "float",
       computed_style_custom_functions: ["setter"],
-      typedom_types: ["Number"]
+      typedom_types: ["Number"],
+      valid_for_first_letter: true,
     },
     {
       name: "order",
@@ -2689,7 +2753,8 @@
       default_value: "Length::Fixed()",
       converter: "ConvertLength",
       computed_style_custom_functions: ["setter"],
-      typedom_types: ["Keyword", "Length", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "padding-left",
@@ -2702,7 +2767,8 @@
       default_value: "Length::Fixed()",
       converter: "ConvertLength",
       computed_style_custom_functions: ["setter"],
-      typedom_types: ["Keyword", "Length", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "padding-right",
@@ -2715,7 +2781,8 @@
       default_value: "Length::Fixed()",
       converter: "ConvertLength",
       computed_style_custom_functions: ["setter"],
-      typedom_types: ["Keyword", "Length", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "padding-top",
@@ -2728,7 +2795,8 @@
       default_value: "Length::Fixed()",
       converter: "ConvertLength",
       computed_style_custom_functions: ["setter"],
-      typedom_types: ["Keyword", "Length", "Percentage"]
+      typedom_types: ["Keyword", "Length", "Percentage"],
+      valid_for_first_letter: true,
     },
     {
       name: "paint-order",
@@ -3342,6 +3410,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "text-decoration-line",
@@ -3354,6 +3423,7 @@
       name_for_methods: "TextDecoration",
       type_name: "TextDecoration",
       converter: "ConvertFlags<TextDecoration>",
+      valid_for_first_letter: true,
     },
     {
       name: "text-decoration-skip-ink",
@@ -3364,6 +3434,7 @@
       keywords: ["none", "auto"],
       typedom_types: ["Keyword"],
       default_value: "auto",
+      valid_for_first_letter: true,
     },
     {
       name: "text-decoration-style",
@@ -3373,6 +3444,7 @@
       keywords: ["solid", "double", "dotted", "dashed", "wavy"],
       typedom_types: ["Keyword"],
       default_value: "solid",
+      valid_for_first_letter: true,
     },
     {
       name: "text-indent",
@@ -3397,7 +3469,8 @@
       default_value: "auto",
       getter: "GetTextJustify",
       type_name: "TextJustify",
-      typedom_types: ["Keyword"]
+      typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "text-overflow",
@@ -3423,6 +3496,7 @@
       keywords: ["none"],
       typedom_types: ["Keyword"],
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "text-size-adjust",
@@ -3448,6 +3522,7 @@
       keywords: ["capitalize", "uppercase", "lowercase", "none"],
       typedom_types: ["Keyword"],
       default_value: "none",
+      valid_for_first_letter: true,
     },
     {
       name: "text-underline-position",
@@ -3462,6 +3537,7 @@
       converter: "ConvertTextUnderlinePosition",
       keywords: ["auto", "under", "left", "right"],
       typedom_types: ["Keyword"],
+      valid_for_first_letter: true,
     },
     {
       name: "top",
@@ -3606,6 +3682,7 @@
       style_builder_custom_functions: ["inherit", "value"],
       typedom_types: ["Keyword", "Length", "Percentage"],
       keywords: ["baseline", "sub", "super", "text-top", "text-bottom", "middle"],
+      valid_for_first_letter: true,
     },
     {
       name: "visibility",
@@ -3617,6 +3694,7 @@
       keywords: ["visible", "hidden", "collapse"],
       typedom_types: ["Keyword"],
       default_value: "visible",
+      valid_for_first_letter: true,
     },
     {
       name: "x",
@@ -3665,13 +3743,15 @@
       name_for_methods: "HorizontalBorderSpacing",
       type_name: "short",
       converter: "ConvertComputedLength<short>",
+      valid_for_first_letter: true,
     },
     {
       name: "-webkit-border-image",
       property_methods: ["ParseSingleValue", "CSSValueFromComputedStyleInternal"],
       style_builder_custom_functions: ["value"],
       slots: ["border-image-outset", "border-image-repeat", "border-image-slice",
-              "border-image-source", "border-image-width"]
+              "border-image-source", "border-image-width"],
+      valid_for_first_letter: true,
     },
     {
       name: "-webkit-border-vertical-spacing",
@@ -3684,6 +3764,7 @@
       name_for_methods: "VerticalBorderSpacing",
       type_name: "short",
       converter: "ConvertComputedLength<short>",
+      valid_for_first_letter: true,
     },
     // For valid values of box-align see
     // http://www.w3.org/TR/2009/WD-css3-flexbox-20090723/#alignment
@@ -4274,7 +4355,8 @@
       converter: "ConvertSpacing",
       keywords: ["normal"],
       typedom_types: ["normal"],
-      typedom_types: ["Keyword", "Length"]
+      typedom_types: ["Keyword", "Length"],
+      valid_for_first_letter: true,
     },
     {
       name: "z-index",
@@ -4360,7 +4442,8 @@
         physical_group: "margin",
       },
       typedom_types: ["Length", "Percentage"],
-      keywords: ["auto"]
+      keywords: ["auto"],
+      valid_for_first_letter: true,
     },
     {
       name: "margin-inline-end",
@@ -4371,7 +4454,8 @@
         physical_group: "margin",
       },
       typedom_types: ["Length", "Percentage"],
-      keywords: ["auto"]
+      keywords: ["auto"],
+      valid_for_first_letter: true,
     },
     {
       name: "margin-block-start",
@@ -4382,7 +4466,8 @@
         physical_group: "margin",
       },
       typedom_types: ["Length", "Percentage"],
-      keywords: ["auto"]
+      keywords: ["auto"],
+      valid_for_first_letter: true,
     },
     {
       name: "margin-block-end",
@@ -4393,7 +4478,8 @@
         physical_group: "margin",
       },
       typedom_types: ["Length", "Percentage"],
-      keywords: ["auto"]
+      keywords: ["auto"],
+      valid_for_first_letter: true,
     },
     {
       name: "padding-inline-start",
@@ -4442,6 +4528,7 @@
         resolver: "inline-start",
         physical_group: "border-width",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-inline-start-style",
@@ -4449,6 +4536,7 @@
         resolver: "inline-start",
         physical_group: "border-style",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-inline-start-color",
@@ -4457,6 +4545,7 @@
         resolver: "inline-start",
         physical_group: "border-color",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-inline-end-width",
@@ -4465,6 +4554,7 @@
         resolver: "inline-end",
         physical_group: "border-width",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-inline-end-style",
@@ -4472,6 +4562,7 @@
         resolver: "inline-end",
         physical_group: "border-style",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-inline-end-color",
@@ -4480,6 +4571,7 @@
         resolver: "inline-end",
         physical_group: "border-color",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-block-start-width",
@@ -4488,6 +4580,7 @@
         resolver: "block-start",
         physical_group: "border-width",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-block-start-style",
@@ -4495,6 +4588,7 @@
         resolver: "block-start",
         physical_group: "border-style",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-block-start-color",
@@ -4503,6 +4597,7 @@
         resolver: "block-start",
         physical_group: "border-color",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-block-end-width",
@@ -4511,6 +4606,7 @@
         resolver: "block-end",
         physical_group: "border-width",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-block-end-style",
@@ -4518,6 +4614,7 @@
         resolver: "block-end",
         physical_group: "border-style",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "border-block-end-color",
@@ -4526,6 +4623,7 @@
         resolver: "block-end",
         physical_group: "border-color",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "inset-inline-start",
@@ -5331,6 +5429,7 @@
       style_builder_custom_functions: ["initial", "inherit", "value"],
       priority: "High",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-caret-color",
@@ -5379,6 +5478,7 @@
         initial_color: "ComputedStyleInitialValues::InitialBackgroundColor",
       },
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-border-left-color",
@@ -5394,6 +5494,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-border-right-color",
@@ -5409,6 +5510,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-border-top-color",
@@ -5424,6 +5526,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-border-bottom-color",
@@ -5439,6 +5542,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-border-inline-start-color",
@@ -5448,6 +5552,7 @@
         resolver: "inline-start",
         physical_group: "visited-border-color",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-border-inline-end-color",
@@ -5457,6 +5562,7 @@
         resolver: "inline-end",
         physical_group: "visited-border-color",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-border-block-start-color",
@@ -5466,6 +5572,7 @@
         resolver: "block-start",
         physical_group: "visited-border-color",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-border-block-end-color",
@@ -5475,6 +5582,7 @@
         resolver: "block-end",
         physical_group: "visited-border-color",
       },
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-fill",
@@ -5527,6 +5635,7 @@
       converter: "ConvertStyleColor",
       style_builder_template: "visited_color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-visited-text-emphasis-color",
@@ -5602,6 +5711,7 @@
         fill_type: "Attachment",
       },
       ua_property_for: "background-attachment",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-background-blend-mode",
@@ -5611,6 +5721,7 @@
         fill_type_getter: "GetBlendMode",
       },
       ua_property_for: "background-blend-mode",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-background-clip",
@@ -5619,6 +5730,7 @@
         fill_type: "Clip",
       },
       ua_property_for: "background-clip",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-background-color",
@@ -5630,6 +5742,7 @@
       },
       ua_property_for: "background-color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-background-image",
@@ -5639,6 +5752,7 @@
         fill_type_getter: "GetImage",
       },
       ua_property_for: "background-image",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-background-origin",
@@ -5647,6 +5761,7 @@
         fill_type: "Origin",
       },
       ua_property_for: "background-origin",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-background-position-x",
@@ -5655,6 +5770,7 @@
         fill_type: "PositionX",
       },
       ua_property_for: "background-position-x",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-background-position-y",
@@ -5663,6 +5779,7 @@
         fill_type: "PositionY",
       },
       ua_property_for: "background-position-y",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-background-size",
@@ -5671,6 +5788,7 @@
         fill_type: "Size",
       },
       ua_property_for: "background-size",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-bottom-color",
@@ -5679,6 +5797,7 @@
       style_builder_template: "color",
       ua_property_for: "border-bottom-color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-left-color",
@@ -5687,6 +5806,7 @@
       style_builder_template: "color",
       ua_property_for: "border-left-color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-right-color",
@@ -5695,6 +5815,7 @@
       style_builder_template: "color",
       ua_property_for: "border-right-color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-top-color",
@@ -5703,78 +5824,91 @@
       style_builder_template: "color",
       ua_property_for: "border-top-color",
       affected_by_forced_colors: true,
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-bottom-style",
       name_for_methods: "BorderBottomStyle",
       type_name: "EBorderStyle",
       ua_property_for: "border-bottom-style",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-left-style",
       name_for_methods: "BorderLeftStyle",
       type_name: "EBorderStyle",
       ua_property_for: "border-left-style",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-right-style",
       name_for_methods: "BorderRightStyle",
       type_name: "EBorderStyle",
       ua_property_for: "border-right-style",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-top-style",
       name_for_methods: "BorderTopStyle",
       type_name: "EBorderStyle",
       ua_property_for: "border-top-style",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-bottom-width",
       name_for_methods: "BorderBottomWidth",
       converter: "ConvertBorderWidth",
       ua_property_for: "border-bottom-width",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-left-width",
       name_for_methods: "BorderLeftWidth",
       converter: "ConvertBorderWidth",
       ua_property_for: "border-left-width",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-right-width",
       name_for_methods: "BorderRightWidth",
       converter: "ConvertBorderWidth",
       ua_property_for: "border-right-width",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-top-width",
       name_for_methods: "BorderTopWidth",
       converter: "ConvertBorderWidth",
       ua_property_for: "border-top-width",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-top-left-radius",
       name_for_methods: "BorderTopLeftRadius",
       converter: "ConvertRadius",
       ua_property_for: "border-top-left-radius",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-top-right-radius",
       name_for_methods: "BorderTopRightRadius",
       converter: "ConvertRadius",
       ua_property_for: "border-top-right-radius",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-bottom-left-radius",
       name_for_methods: "BorderBottomLeftRadius",
       converter: "ConvertRadius",
       ua_property_for: "border-bottom-left-radius",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-bottom-right-radius",
       name_for_methods: "BorderBottomRightRadius",
       converter: "ConvertRadius",
       ua_property_for: "border-bottom-right-radius",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-image-outset",
@@ -5783,6 +5917,7 @@
         modifier_type: "Outset",
       },
       ua_property_for: "border-image-outset",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-image-repeat",
@@ -5791,6 +5926,7 @@
         modifier_type: "Repeat",
       },
       ua_property_for: "border-image-repeat",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-image-slice",
@@ -5799,6 +5935,7 @@
         modifier_type: "Slice",
       },
       ua_property_for: "border-image-slice",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-image-source",
@@ -5807,6 +5944,7 @@
         modifier_type: "Source",
       },
       ua_property_for: "border-image-source",
+      valid_for_first_letter: true,
     },
     {
       name: "-internal-ua-border-image-width",
@@ -5815,6 +5953,7 @@
         modifier_type: "Width",
       },
       ua_property_for: "border-image-width",
+      valid_for_first_letter: true,
     },
 
     // Aliases; these map to the same CSSPropertyID
