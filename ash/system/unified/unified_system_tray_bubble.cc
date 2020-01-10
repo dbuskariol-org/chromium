@@ -175,6 +175,16 @@ void UnifiedSystemTrayBubble::EnsureExpanded() {
   controller_->EnsureExpanded();
 }
 
+void UnifiedSystemTrayBubble::CollapseWithoutAnimating() {
+  if (!bubble_widget_)
+    return;
+
+  DCHECK(unified_view_);
+  DCHECK(controller_);
+
+  controller_->CollapseWithoutAnimating();
+}
+
 void UnifiedSystemTrayBubble::CollapseMessageCenter() {
   tray_->CollapseMessageCenter();
 }
