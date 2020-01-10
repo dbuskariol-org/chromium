@@ -797,6 +797,24 @@ V4L2Queue::V4L2Queue(scoped_refptr<V4L2Device> dev,
       destroy_cb_(std::move(destroy_cb)),
       weak_this_factory_(this) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
+  // Check if this queue support requests.
+  struct v4l2_requestbuffers reqbufs;
+  memset(&reqbufs, 0, sizeof(reqbufs));
+  reqbufs.count = 0;
+  reqbufs.type = type;
+  reqbufs.memory = V4L2_MEMORY_MMAP;
+  if (device_->Ioctl(VIDIOC_REQBUFS, &reqbufs) != 0) {
+    VPLOGF(1) << "Request support checks's VIDIOC_REQBUFS ioctl failed.";
+    return;
+  }
+
+  if (reqbufs.capabilities & V4L2_BUF_CAP_SUPPORTS_REQUESTS) {
+    supports_requests_ = true;
+    VLOGF(1) << "Using request API.";
+  } else {
+    VLOGF(1) << "Using config store API.";
+  }
 }
 
 V4L2Queue::~V4L2Queue() {
@@ -1110,6 +1128,12 @@ size_t V4L2Queue::QueuedBuffersCount() const {
 #undef VDQLOGF
 #undef VPQLOGF
 #undef VQLOGF
+
+bool V4L2Queue::SupportsRequests() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
+  return supports_requests_;
+}
 
 // This class is used to expose V4L2Queue's constructor to this module. This is
 // to ensure that nobody else can create instances of it.

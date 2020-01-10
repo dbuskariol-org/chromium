@@ -123,11 +123,6 @@ V4L2StatelessVideoDecoderBackend::~V4L2StatelessVideoDecoderBackend() {
 bool V4L2StatelessVideoDecoderBackend::Initialize() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
-  if (!CheckRequestAPISupport()) {
-    VPLOGF(1) << "Failed to check request api support.";
-    return false;
-  }
-
   if (!IsSupportedProfile(profile_)) {
     VLOGF(1) << "Unsupported profile " << GetProfileName(profile_);
     return false;
@@ -136,7 +131,7 @@ bool V4L2StatelessVideoDecoderBackend::Initialize() {
   if (!CreateAvd())
     return false;
 
-  if (supports_requests_) {
+  if (input_queue_->SupportsRequests()) {
     requests_queue_ = device_->GetRequestsQueue();
     if (requests_queue_ == nullptr)
       return false;
@@ -267,7 +262,7 @@ V4L2StatelessVideoDecoderBackend::CreateSurface() {
   }
 
   scoped_refptr<V4L2DecodeSurface> dec_surface;
-  if (supports_requests_) {
+  if (input_queue_->SupportsRequests()) {
     V4L2RequestRef request_ref = requests_queue_->GetFreeRequest();
     if (!request_ref.IsValid()) {
       DVLOGF(3) << "Could not get free request.";
@@ -610,29 +605,6 @@ void V4L2StatelessVideoDecoderBackend::ClearPendingRequests(
   }
 }
 
-bool V4L2StatelessVideoDecoderBackend::CheckRequestAPISupport() {
-  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-  DVLOGF(3);
-
-  struct v4l2_requestbuffers reqbufs;
-  memset(&reqbufs, 0, sizeof(reqbufs));
-  reqbufs.count = 0;
-  reqbufs.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-  reqbufs.memory = V4L2_MEMORY_MMAP;
-  if (device_->Ioctl(VIDIOC_REQBUFS, &reqbufs) != 0) {
-    VPLOGF(1) << "VIDIOC_REQBUFS ioctl failed.";
-    return false;
-  }
-  if (reqbufs.capabilities & V4L2_BUF_CAP_SUPPORTS_REQUESTS) {
-    supports_requests_ = true;
-    VLOGF(1) << "Using request API.";
-  } else {
-    VLOGF(1) << "Using config store.";
-  }
-
-  return true;
-}
-
 bool V4L2StatelessVideoDecoderBackend::IsSupportedProfile(
     VideoCodecProfile profile) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
@@ -661,7 +633,7 @@ bool V4L2StatelessVideoDecoderBackend::CreateAvd() {
   pic_size_ = gfx::Size();
 
   if (profile_ >= H264PROFILE_MIN && profile_ <= H264PROFILE_MAX) {
-    if (supports_requests_) {
+    if (input_queue_->SupportsRequests()) {
       avd_.reset(new H264Decoder(
           std::make_unique<V4L2H264Accelerator>(this, device_.get()),
           profile_));
@@ -671,7 +643,7 @@ bool V4L2StatelessVideoDecoderBackend::CreateAvd() {
           profile_));
     }
   } else if (profile_ >= VP8PROFILE_MIN && profile_ <= VP8PROFILE_MAX) {
-    if (supports_requests_) {
+    if (input_queue_->SupportsRequests()) {
       avd_.reset(new VP8Decoder(
           std::make_unique<V4L2VP8Accelerator>(this, device_.get())));
     } else {
