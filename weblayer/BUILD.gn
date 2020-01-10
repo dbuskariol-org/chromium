@@ -220,6 +220,7 @@ jumbo_static_library("weblayer_lib") {
     "//components/security_interstitials/content/renderer:security_interstitial_page_controller",
     "//components/security_interstitials/core",
     "//components/spellcheck:buildflags",
+    "//components/ssl_errors",
     "//components/startup_metric_utils/browser:lib",
     "//components/user_prefs",
     "//components/version_info",
