@@ -5,7 +5,6 @@
 #ifndef CONTENT_BROWSER_WORKER_HOST_DEDICATED_WORKER_HOST_H_
 #define CONTENT_BROWSER_WORKER_HOST_DEDICATED_WORKER_HOST_H_
 
-#include "base/optional.h"
 #include "base/scoped_observer.h"
 #include "build/build_config.h"
 #include "content/browser/browser_interface_broker_impl.h"
@@ -45,8 +44,7 @@ class StoragePartitionImpl;
 // Creates a host factory for a dedicated worker. This must be called on the UI
 // thread.
 void CreateDedicatedWorkerHostFactory(
-    int worker_process_id,
-    base::Optional<GlobalFrameRoutingId> creator_render_frame_host_id,
+    GlobalFrameRoutingId creator_render_frame_host_id,
     GlobalFrameRoutingId ancestor_render_frame_host_id,
     const url::Origin& origin,
     mojo::PendingReceiver<blink::mojom::DedicatedWorkerHostFactory> receiver);
@@ -59,7 +57,7 @@ class DedicatedWorkerHost final : public blink::mojom::DedicatedWorkerHost,
  public:
   DedicatedWorkerHost(
       RenderProcessHost* worker_process_host,
-      base::Optional<GlobalFrameRoutingId> creator_render_frame_host_id,
+      GlobalFrameRoutingId creator_render_frame_host_id,
       GlobalFrameRoutingId ancestor_render_frame_host_id,
       const url::Origin& origin,
       mojo::PendingReceiver<blink::mojom::DedicatedWorkerHost> host);
@@ -157,9 +155,10 @@ class DedicatedWorkerHost final : public blink::mojom::DedicatedWorkerHost,
   ScopedObserver<RenderProcessHost, RenderProcessHostObserver>
       scoped_process_host_observer_;
 
-  // The ID of the frame that directly starts this worker. This is base::nullopt
-  // when this worker is nested.
-  const base::Optional<GlobalFrameRoutingId> creator_render_frame_host_id_;
+  // The ID of the frame that directly starts this worker. This is
+  // {creator_render_process_host_id, MSG_ROUTING_NONE} when this worker is
+  // nested.
+  const GlobalFrameRoutingId creator_render_frame_host_id_;
 
   // The ID of the frame that owns this worker, either directly, or (in the case
   // of nested workers) indirectly via a tree of dedicated workers.

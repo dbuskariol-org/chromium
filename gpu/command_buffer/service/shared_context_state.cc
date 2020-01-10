@@ -435,8 +435,8 @@ uint64_t SharedContextState::GetMemoryUsage() {
 
 void SharedContextState::UpdateSkiaOwnedMemorySize() {
   if (!gr_context_) {
-    memory_tracker_.OnMemoryAllocatedChange(
-        CommandBufferId::FromUnsafeValue(0u), skia_gr_cache_size_, 0u);
+    memory_tracker_.OnMemoryAllocatedChange(CommandBufferId(),
+                                            skia_gr_cache_size_, 0u);
     skia_gr_cache_size_ = 0u;
     return;
   }
@@ -445,9 +445,8 @@ void SharedContextState::UpdateSkiaOwnedMemorySize() {
   // Skia does not have a CommandBufferId. PeakMemoryMonitor currently does not
   // use CommandBufferId to identify source, so use zero here to separate
   // prevent confusion.
-  memory_tracker_.OnMemoryAllocatedChange(CommandBufferId::FromUnsafeValue(0u),
-                                          skia_gr_cache_size_,
-                                          static_cast<uint64_t>(new_size));
+  memory_tracker_.OnMemoryAllocatedChange(
+      CommandBufferId(), skia_gr_cache_size_, static_cast<uint64_t>(new_size));
   skia_gr_cache_size_ = static_cast<uint64_t>(new_size);
 }
 
