@@ -86,6 +86,7 @@
       _sceneController =
           [[SceneController alloc] initWithSceneState:_sceneState];
 
+      // TODO(crbug.com/1040501): remove this.
       // This is temporary plumbing that's not supposed to be here.
       _sceneController.mainController = (id<MainControllerGuts>)_mainController;
       _mainController.sceneController = _sceneController;
