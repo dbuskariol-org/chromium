@@ -46,6 +46,8 @@ namespace banners {
 // whether the site is already installed (and on Android, divert the flow to a
 // native app banner if requested). The second call completes the checking for a
 // web app banner (checking manifest validity, service worker, and icon).
+//
+// TODO(https://crbug.com/930612): Refactor this into several simpler classes.
 class AppBannerManager : public content::WebContentsObserver,
                          public blink::mojom::AppBannerService,
                          public SiteEngagementObserver {
