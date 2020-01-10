@@ -63,6 +63,7 @@ class V4L2Queue;
 class V4L2BufferRefBase;
 class V4L2BuffersList;
 class V4L2DecodeSurface;
+class V4L2RequestRef;
 
 // A unique reference to a buffer for clients to prepare and submit.
 //
@@ -80,36 +81,47 @@ class MEDIA_GPU_EXPORT V4L2WritableBufferRef {
   enum v4l2_memory Memory() const;
 
   // Queue a MMAP buffer.
+  // When requests are supported, a |request_ref| can be passed along this
+  // the buffer to be submitted.
   // If successful, true is returned and the reference to the buffer is dropped
   // so this reference becomes invalid.
   // In case of error, false is returned and the buffer is returned to the free
   // list.
-  bool QueueMMap() &&;
+  bool QueueMMap(V4L2RequestRef* request_ref = nullptr) &&;
   // Queue a USERPTR buffer, assigning |ptrs| as pointer for each plane.
   // The size of |ptrs| must be equal to the number of planes of this buffer.
+  // When requests are supported, a |request_ref| can be passed along this
+  // the buffer to be submitted.
   // If successful, true is returned and the reference to the buffer is dropped
   // so this reference becomes invalid.
   // In case of error, false is returned and the buffer is returned to the free
   // list.
-  bool QueueUserPtr(const std::vector<void*>& ptrs) &&;
+  bool QueueUserPtr(const std::vector<void*>& ptrs,
+                    V4L2RequestRef* request_ref = nullptr) &&;
   // Queue a DMABUF buffer, assigning |fds| as file descriptors for each plane.
   // It is allowed the number of |fds| might be greater than the number of
   // planes of this buffer. It happens when the v4l2 pixel format is single
   // planar. The fd of the first plane is only used in that case.
+  // When requests are supported, a |request_ref| can be passed along this
+  // the buffer to be submitted.
   // If successful, true is returned and the reference to the buffer is dropped
   // so this reference becomes invalid.
   // In case of error, false is returned and the buffer is returned to the free
   // list.
-  bool QueueDMABuf(const std::vector<base::ScopedFD>& fds) &&;
+  bool QueueDMABuf(const std::vector<base::ScopedFD>& fds,
+                   V4L2RequestRef* request_ref = nullptr) &&;
   // Queue a DMABUF buffer, assigning file descriptors of |planes| for planes.
   // It is allowed the number of |planes| might be greater than the number of
   // planes of this buffer. It happens when the v4l2 pixel format is single
   // planar. The fd of the first plane of |planes| is only used in that case.
+  // When requests are supported, a |request_ref| can be passed along this
+  // the buffer to be submitted.
   // If successful, true is returned and the reference to the buffer is dropped
   // so this reference becomes invalid.
   // In case of error, false is returned and the buffer is returned to the free
   // list.
-  bool QueueDMABuf(const std::vector<gfx::NativePixmapPlane>& planes) &&;
+  bool QueueDMABuf(const std::vector<gfx::NativePixmapPlane>& planes,
+                   V4L2RequestRef* request_ref = nullptr) &&;
 
   // Returns the number of planes in this buffer.
   size_t PlanesCount() const;
@@ -144,22 +156,24 @@ class MEDIA_GPU_EXPORT V4L2WritableBufferRef {
   // return nullptr for any other buffer type.
   scoped_refptr<VideoFrame> GetVideoFrame() WARN_UNUSED_RESULT;
 
-  // Add the request or config store information to |surface|.
-  // TODO(acourbot): This method is a temporary hack. Implement proper config
-  // store/request API support.
-  void PrepareQueueBuffer(const V4L2DecodeSurface& surface);
-
   // Return the V4L2 buffer ID of the underlying buffer.
   // TODO(acourbot) This is used for legacy clients but should be ultimately
   // removed. See crbug/879971
   size_t BufferId() const;
+
+  // Set the passed config store to this buffer.
+  // This method is only used for backward compatibility until the config
+  // store is deprecated and should not be called by new code.
+  void SetConfigStore(uint32_t config_store);
 
   ~V4L2WritableBufferRef();
 
  private:
   // Do the actual queue operation once the v4l2_buffer structure is properly
   // filled.
-  bool DoQueue() &&;
+  // When requests are supported, a |request_ref| can be passed along this
+  // the buffer to be submitted.
+  bool DoQueue(V4L2RequestRef* request_ref) &&;
 
   V4L2WritableBufferRef(const struct v4l2_buffer& v4l2_buffer,
                         base::WeakPtr<V4L2Queue> queue);

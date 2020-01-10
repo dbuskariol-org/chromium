@@ -308,31 +308,6 @@ void V4L2StatelessVideoDecoderBackend::DecodeSurface(
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DVLOGF(3);
 
-  // Enqueue input_buf and output_buf
-  dec_surface->input_buffer().PrepareQueueBuffer(*dec_surface);
-
-  if (!std::move(dec_surface->input_buffer()).QueueMMap()) {
-    client_->OnBackendError();
-    return;
-  }
-
-  bool result = false;
-  switch (output_queue_->GetMemoryType()) {
-    case V4L2_MEMORY_MMAP:
-      result = std::move(dec_surface->output_buffer()).QueueMMap();
-      break;
-    case V4L2_MEMORY_DMABUF:
-      result = std::move(dec_surface->output_buffer())
-                   .QueueDMABuf(dec_surface->video_frame()->DmabufFds());
-      break;
-    default:
-      NOTREACHED() << "We should only use MMAP or DMABUF.";
-  }
-  if (!result) {
-    client_->OnBackendError();
-    return;
-  }
-
   if (!dec_surface->Submit()) {
     VLOGF(1) << "Error while submitting frame for decoding!";
     client_->OnBackendError();

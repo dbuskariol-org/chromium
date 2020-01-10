@@ -29,7 +29,6 @@
 #include "media/gpu/chromeos/fourcc.h"
 #include "media/gpu/macros.h"
 #include "media/gpu/v4l2/generic_v4l2_device.h"
-#include "media/gpu/v4l2/v4l2_decode_surface.h"
 #include "ui/gfx/native_pixmap_handle.h"
 
 #if defined(ARCH_CPU_ARMEL)
@@ -312,6 +311,7 @@ class V4L2BufferRefBase {
  private:
   size_t BufferId() const { return v4l2_buffer_.index; }
 
+  friend class V4L2WritableBufferRef;
   // A weak pointer to the queue this buffer belongs to. Will remain valid as
   // long as the underlying V4L2 buffer is valid too.
   // This can only be accessed from the sequence protected by sequence_checker_.
@@ -464,9 +464,12 @@ enum v4l2_memory V4L2WritableBufferRef::Memory() const {
   return static_cast<enum v4l2_memory>(buffer_data_->v4l2_buffer_.memory);
 }
 
-bool V4L2WritableBufferRef::DoQueue() && {
+bool V4L2WritableBufferRef::DoQueue(V4L2RequestRef* request_ref) && {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(buffer_data_);
+
+  if (request_ref && buffer_data_->queue_->SupportsRequests())
+      request_ref->SetQueueBuffer(&(buffer_data_->v4l2_buffer_));
 
   bool queued = buffer_data_->QueueBuffer();
 
@@ -476,7 +479,8 @@ bool V4L2WritableBufferRef::DoQueue() && {
   return queued;
 }
 
-bool V4L2WritableBufferRef::QueueMMap() && {
+bool V4L2WritableBufferRef::QueueMMap(
+    V4L2RequestRef* request_ref) && {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(buffer_data_);
 
@@ -488,10 +492,12 @@ bool V4L2WritableBufferRef::QueueMMap() && {
     return false;
   }
 
-  return std::move(self).DoQueue();
+  return std::move(self).DoQueue(request_ref);
 }
 
-bool V4L2WritableBufferRef::QueueUserPtr(const std::vector<void*>& ptrs) && {
+bool V4L2WritableBufferRef::QueueUserPtr(
+    const std::vector<void*>& ptrs,
+    V4L2RequestRef* request_ref) && {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(buffer_data_);
 
@@ -513,11 +519,12 @@ bool V4L2WritableBufferRef::QueueUserPtr(const std::vector<void*>& ptrs) && {
     self.buffer_data_->v4l2_buffer_.m.planes[i].m.userptr =
         reinterpret_cast<unsigned long>(ptrs[i]);
 
-  return std::move(self).DoQueue();
+  return std::move(self).DoQueue(request_ref);
 }
 
 bool V4L2WritableBufferRef::QueueDMABuf(
-    const std::vector<base::ScopedFD>& fds) && {
+    const std::vector<base::ScopedFD>& fds,
+    V4L2RequestRef* request_ref) && {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(buffer_data_);
 
@@ -536,11 +543,12 @@ bool V4L2WritableBufferRef::QueueDMABuf(
   for (size_t i = 0; i < num_planes; i++)
     self.buffer_data_->v4l2_buffer_.m.planes[i].m.fd = fds[i].get();
 
-  return std::move(self).DoQueue();
+  return std::move(self).DoQueue(request_ref);
 }
 
 bool V4L2WritableBufferRef::QueueDMABuf(
-    const std::vector<gfx::NativePixmapPlane>& planes) && {
+    const std::vector<gfx::NativePixmapPlane>& planes,
+    V4L2RequestRef* request_ref) && {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(buffer_data_);
 
@@ -559,7 +567,7 @@ bool V4L2WritableBufferRef::QueueDMABuf(
   for (size_t i = 0; i < num_planes; i++)
     self.buffer_data_->v4l2_buffer_.m.planes[i].m.fd = planes[i].fd.get();
 
-  return std::move(self).DoQueue();
+  return std::move(self).DoQueue(request_ref);
 }
 
 size_t V4L2WritableBufferRef::PlanesCount() const {
@@ -666,16 +674,18 @@ void V4L2WritableBufferRef::SetPlaneDataOffset(const size_t plane,
   buffer_data_->v4l2_buffer_.m.planes[plane].data_offset = data_offset;
 }
 
-void V4L2WritableBufferRef::PrepareQueueBuffer(
-    const V4L2DecodeSurface& surface) {
-  surface.PrepareQueueBuffer(&(buffer_data_->v4l2_buffer_));
-}
-
 size_t V4L2WritableBufferRef::BufferId() const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(buffer_data_);
 
   return buffer_data_->v4l2_buffer_.index;
+}
+
+void V4L2WritableBufferRef::SetConfigStore(uint32_t config_store) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  DCHECK(buffer_data_);
+
+  buffer_data_->v4l2_buffer_.config_store = config_store;
 }
 
 V4L2ReadableBuffer::V4L2ReadableBuffer(const struct v4l2_buffer& v4l2_buffer,
