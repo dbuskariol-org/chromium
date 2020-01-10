@@ -96,7 +96,10 @@ const CGFloat kAnimationDuration = 0.15;
       completion:^(BOOL finished) {
         [weakSelf.presentedViewController
             didMoveToParentViewController:weakSelf.baseViewController];
-        [weakSelf.delegate containedPresenterDidPresent:weakSelf];
+        if ([weakSelf.delegate
+                respondsToSelector:@selector(containedPresenterDidPresent:)]) {
+          [weakSelf.delegate containedPresenterDidPresent:weakSelf];
+        }
       }];
 }
 
@@ -108,7 +111,10 @@ const CGFloat kAnimationDuration = 0.15;
     [weakSelf.presentedViewController.view removeFromSuperview];
     [weakSelf.presentedViewController removeFromParentViewController];
     [weakSelf.backgroundView removeFromSuperview];
-    [weakSelf.delegate containedPresenterDidDismiss:weakSelf];
+    if ([weakSelf.delegate
+            respondsToSelector:@selector(containedPresenterDidDismiss:)]) {
+      [weakSelf.delegate containedPresenterDidDismiss:weakSelf];
+    }
     weakSelf.backgroundView = nil;
   };
   if (animated) {
