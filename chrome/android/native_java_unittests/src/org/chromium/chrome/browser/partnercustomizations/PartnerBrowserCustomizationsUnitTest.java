@@ -5,21 +5,20 @@
 package org.chromium.chrome.browser.partnercustomizations;
 
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.annotation.Config;
 
-import org.chromium.base.test.BaseRobolectricTestRunner;
+import org.chromium.base.annotations.CalledByNative;
+import org.chromium.base.annotations.CalledByNativeJavaTest;
 import org.chromium.base.test.util.Feature;
 
 /**
  * Unit tests for {@link PartnerBrowserCustomizations}.
  */
-@RunWith(BaseRobolectricTestRunner.class)
-@Config(manifest = Config.NONE)
 public class PartnerBrowserCustomizationsUnitTest {
-    @Test
+    @CalledByNative
+    private PartnerBrowserCustomizationsUnitTest() {}
+
     @Feature({"Homepage"})
+    @CalledByNativeJavaTest
     public void testIsValidHomepage() {
         Assert.assertTrue(PartnerBrowserCustomizations.isValidHomepage(
                 "chrome-native://newtab/path#fragment"));
