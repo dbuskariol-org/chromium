@@ -352,7 +352,6 @@ external/wpt/pointerevents/pointerlock/pointerevent_pointermove_on_chorded_mouse
 external/wpt/pointerlock/mouse_buttons_back_forward.html [ Timeout ]
 external/wpt/pointerlock/pointerlock_remove_target.html [ Timeout ]
 external/wpt/pointerlock/pointerlock_shadow.html [ Timeout ]
-external/wpt/portals/csp/frame-src.sub.html [ Timeout ]
 external/wpt/portals/htmlportalelement-event-handler-content-attributes.html [ Failure ]
 external/wpt/portals/portal-activate-data.html [ Timeout ]
 external/wpt/portals/portal-activate-event-constructor.html [ Failure ]
@@ -1055,3 +1054,8 @@ external/wpt/referrer-policy/generic/subresource-test/script-messaging.html [ Fa
 external/wpt/referrer-policy/generic/subresource-test/worker-messaging.html [ Failure Timeout ]
 external/wpt/referrer-policy/generic/subresource-test/xhr-messaging.html [ Failure Timeout ]
 external/wpt/referrer-policy/generic/unsupported-csp-referrer-directive.html [ Failure Timeout ]
+
+# portals/csp/frame-src.sub.html crashes because of a race between cancelling a
+# speculative navigation in the browser, and committing the navigation in the
+# renderer.
+crbug.com/838348 external/wpt/portals/csp/frame-src.sub.html [ Pass Crash Timeout ]
