@@ -695,6 +695,7 @@
           'walleye',
         ],
         'test_suites': {
+          'gtest_tests': 'webview_bot_instrumentation_test_apk_gtest',
           'isolated_scripts': 'android_wpt_scripts',
         },
         'use_swarming': True,
