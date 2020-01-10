@@ -1124,6 +1124,21 @@ void SplitViewController::OnOverviewModeEnding(
   ShowAppCannotSnapToast();
 }
 
+void SplitViewController::OnDisplayRemoved(
+    const display::Display& old_display) {
+  // Display removal always triggers a window activation which ends overview,
+  // and therefore ends clamshell split view, before |OnDisplayRemoved| is
+  // called. In clamshell mode, |OverviewController::CanEndOverview| always
+  // returns true, meaning that overview is guaranteed to end successfully.
+  DCHECK(!InClamshellSplitViewMode());
+  // If we are in tablet split view with only one snapped window, make sure we
+  // are in overview (see https://crbug.com/1027179).
+  if (state_ == State::kLeftSnapped || state_ == State::kRightSnapped) {
+    Shell::Get()->overview_controller()->StartOverview(
+        OverviewSession::EnterExitOverviewType::kImmediateEnter);
+  }
+}
+
 void SplitViewController::OnDisplayMetricsChanged(
     const display::Display& display,
     uint32_t metrics) {
