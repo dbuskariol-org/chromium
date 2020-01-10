@@ -513,12 +513,6 @@ void RenderWidgetHostImpl::UpdatePriority() {
     process_->UpdateClientPriority(this);
 }
 
-void RenderWidgetHostImpl::DidDestroyRenderWidget() {
-  if (owner_delegate_)
-    DCHECK(!owner_delegate_->IsMainFrameActive());
-  frame_token_message_queue_->Reset();
-}
-
 void RenderWidgetHostImpl::Init() {
   DCHECK(process_->IsInitializedAndNotDead());
 
@@ -1841,9 +1835,6 @@ void RenderWidgetHostImpl::RendererExited() {
 
   waiting_for_screen_rects_ack_ = false;
 
-  // Must reset these to ensure that keyboard events work with a new renderer.
-  suppress_events_until_keydown_ = false;
-
   // After the renderer crashes, the view is destroyed and so the
   // RenderWidgetHost cannot track its visibility anymore. We assume such
   // RenderWidgetHost to be invisible for the sake of internal accounting - be
@@ -1859,21 +1850,33 @@ void RenderWidgetHostImpl::RendererExited() {
       process_->UpdateClientPriority(this);
   }
 
-  // Reset this to ensure the hung renderer mechanism is working properly.
-  in_flight_event_count_ = 0;
-  StopInputEventAckTimeout();
-
   if (view_) {
     view_->RenderProcessGone();
-    view_.reset();  // The View should be deleted by RenderProcessGone.
+    SetView(nullptr);  // The View should be deleted by RenderProcessGone.
   }
 
+  ResetRenderWidgetState();
+}
+
+void RenderWidgetHostImpl::DidDestroyRenderWidget() {
+  if (owner_delegate_)
+    DCHECK(!owner_delegate_->IsMainFrameActive());
+  ResetRenderWidgetState();
+}
+
+void RenderWidgetHostImpl::ResetRenderWidgetState() {
+  // Must reset these to ensure that keyboard events work with a new
+  // RenderWidget.
+  suppress_events_until_keydown_ = false;
+
   // Reconstruct the input router to ensure that it has fresh state for a new
-  // renderer. Otherwise it may be stuck waiting for the old renderer to ack an
-  // event. (In particular, the above call to view_->RenderProcessGone will
+  // RenderWidget. Otherwise it may be stuck waiting for the old renderer to ack
+  // an event. (In particular, the above call to view_->RenderProcessGone() will
   // destroy the aura window, which may dispatch a synthetic mouse move.)
+  //
+  // This also stops the event ack timeout to ensure the hung renderer mechanism
+  // is working properly.
   SetupInputRouter();
-  synthetic_gesture_controller_.reset();
 
   frame_token_message_queue_->Reset();
 }

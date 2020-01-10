@@ -864,6 +864,10 @@ class CONTENT_EXPORT RenderWidgetHostImpl
                                          const gfx::Rect& rect_to_zoom);
   void OnZoomToFindInPageRectInMainFrame(const gfx::Rect& rect_to_zoom);
 
+  // When the RenderWidget is destroyed, this resets states in the browser
+  // to be ready for a replacement RenderWidget with a clean start.
+  void ResetRenderWidgetState();
+
   // Generates a filled in VisualProperties struct representing the current
   // properties of this widget.
   VisualProperties GetVisualProperties();

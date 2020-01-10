@@ -1610,9 +1610,28 @@ TEST_F(RenderWidgetHostTest, InputEventRWHLatencyComponent) {
 }
 
 TEST_F(RenderWidgetHostTest, RendererExitedResetsInputRouter) {
+  blink::WebMouseWheelEvent event;
+  event.phase = blink::WebMouseWheelEvent::kPhaseBegan;
+  host_->input_router()->SendWheelEvent(MouseWheelEventWithLatencyInfo(event));
+  ASSERT_TRUE(host_->input_router()->HasPendingEvents());
+
   // RendererExited will delete the view.
   host_->SetView(new TestView(host_.get()));
   host_->RendererExited();
+
+  // Make sure the input router is in a fresh state.
+  ASSERT_FALSE(host_->input_router()->HasPendingEvents());
+}
+
+TEST_F(RenderWidgetHostTest, DestroyingRenderWidgetResetsInputRouter) {
+  blink::WebMouseWheelEvent event;
+  event.phase = blink::WebMouseWheelEvent::kPhaseBegan;
+  host_->input_router()->SendWheelEvent(MouseWheelEventWithLatencyInfo(event));
+  ASSERT_TRUE(host_->input_router()->HasPendingEvents());
+
+  EXPECT_CALL(mock_owner_delegate_, IsMainFrameActive())
+      .WillRepeatedly(Return(false));
+  host_->DidDestroyRenderWidget();
 
   // Make sure the input router is in a fresh state.
   ASSERT_FALSE(host_->input_router()->HasPendingEvents());
