@@ -2011,15 +2011,15 @@ V4L2SliceVideoDecodeAccelerator::CreateSurface() {
 
   if (supports_requests_) {
     // Get a free request from the queue for a new surface.
-    V4L2RequestRef request_ref = requests_queue_->GetFreeRequest();
-    if (!request_ref.IsValid()) {
+    base::Optional<V4L2RequestRef> request_ref =
+        requests_queue_->GetFreeRequest();
+    if (!request_ref) {
       NOTIFY_ERROR(PLATFORM_FAILURE);
       return nullptr;
     }
-    dec_surface = new V4L2RequestDecodeSurface(std::move(*input_buffer),
-                                               std::move(*output_buffer),
-                                               output_record.output_frame,
-                                               std::move(request_ref));
+    dec_surface = new V4L2RequestDecodeSurface(
+        std::move(*input_buffer), std::move(*output_buffer),
+        output_record.output_frame, std::move(*request_ref));
   } else {
     dec_surface = new V4L2ConfigStoreDecodeSurface(std::move(*input_buffer),
                                                    std::move(*output_buffer),

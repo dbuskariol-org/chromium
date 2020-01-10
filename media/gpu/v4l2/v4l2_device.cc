@@ -2100,30 +2100,32 @@ V4L2RequestRefBase::V4L2RequestRefBase(V4L2Request* request) {
 V4L2RequestRefBase::~V4L2RequestRefBase() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
-  if (IsValid())
+  if (request_)
     request_->DecRefCounter();
 }
 
 bool V4L2RequestRef::SetCtrls(struct v4l2_ext_controls* ctrls) const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  DCHECK_NE(request_, nullptr);
 
   return request_->SetCtrls(ctrls);
 }
 
 bool V4L2RequestRef::SetQueueBuffer(struct v4l2_buffer* buffer) const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  DCHECK_NE(request_, nullptr);
 
   return request_->SetQueueBuffer(buffer);
 }
 
-V4L2SubmittedRequestRef V4L2RequestRef::Submit() && {
+base::Optional<V4L2SubmittedRequestRef> V4L2RequestRef::Submit() && {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK_NE(request_, nullptr);
 
   V4L2RequestRef self(std::move(*this));
 
   if (!self.request_->Submit())
-    return V4L2SubmittedRequestRef(nullptr);
+    return base::nullopt;
 
   return V4L2SubmittedRequestRef(self.request_);
 }
@@ -2162,7 +2164,7 @@ base::Optional<base::ScopedFD> V4L2RequestsQueue::CreateRequestFD() {
   return base::ScopedFD(request_fd);
 }
 
-V4L2RequestRef V4L2RequestsQueue::GetFreeRequest() {
+base::Optional<V4L2RequestRef> V4L2RequestsQueue::GetFreeRequest() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   V4L2Request* request_ptr =
@@ -2175,7 +2177,7 @@ V4L2RequestRef V4L2RequestsQueue::GetFreeRequest() {
     auto request_fd = CreateRequestFD();
     if (!request_fd.has_value()) {
       VLOGF(1) << "Error while creating a new request FD!";
-      return V4L2RequestRef(nullptr);
+      return base::nullopt;
     }
     // Not using std::make_unique because constructor is private.
     std::unique_ptr<V4L2Request> request(
@@ -2190,7 +2192,7 @@ V4L2RequestRef V4L2RequestsQueue::GetFreeRequest() {
              << "request is blocking.";
     if (!request_ptr->WaitForCompletion()) {
       VLOG(1) << "Timeout while waiting for request to complete.";
-      return V4L2RequestRef(nullptr);
+      return base::nullopt;
     }
     free_requests_.pop();
   }
@@ -2198,7 +2200,7 @@ V4L2RequestRef V4L2RequestsQueue::GetFreeRequest() {
   DCHECK(request_ptr);
   if (!request_ptr->Reset()) {
     VPLOGF(1) << "Failed to reset request";
-    return V4L2RequestRef(nullptr);
+    return base::nullopt;
   }
 
   return V4L2RequestRef(request_ptr);

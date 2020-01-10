@@ -403,9 +403,6 @@ class V4L2Request;
 // This class is used to manage requests and not intended to be used
 // directly.
 class MEDIA_GPU_EXPORT V4L2RequestRefBase {
- public:
-  bool IsValid() const { return request_ != nullptr; }
-
  protected:
   V4L2RequestRefBase(V4L2RequestRefBase&& req_base);
   V4L2RequestRefBase(V4L2Request* request);
@@ -436,7 +433,7 @@ class MEDIA_GPU_EXPORT V4L2RequestRef : public V4L2RequestRefBase {
   // Apply buffer to the request.
   bool SetQueueBuffer(struct v4l2_buffer* buffer) const;
   // Submits the request to the driver.
-  V4L2SubmittedRequestRef Submit() &&;
+  base::Optional<V4L2SubmittedRequestRef> Submit() &&;
 
  private:
   friend class V4L2RequestsQueue;
@@ -481,7 +478,7 @@ class MEDIA_GPU_EXPORT V4L2RequestsQueue {
  public:
   // Gets a free request. If no request is available, a non-valid request
   // reference will be returned.
-  V4L2RequestRef GetFreeRequest();
+  base::Optional<V4L2RequestRef> GetFreeRequest();
 
  private:
   // File descriptor of the media device (/dev/mediaX) from which requests

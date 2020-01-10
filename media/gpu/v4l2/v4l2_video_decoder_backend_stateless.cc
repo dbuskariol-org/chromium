@@ -261,15 +261,16 @@ V4L2StatelessVideoDecoderBackend::CreateSurface() {
 
   scoped_refptr<V4L2DecodeSurface> dec_surface;
   if (input_queue_->SupportsRequests()) {
-    V4L2RequestRef request_ref = requests_queue_->GetFreeRequest();
-    if (!request_ref.IsValid()) {
+    base::Optional<V4L2RequestRef> request_ref =
+        requests_queue_->GetFreeRequest();
+    if (!request_ref) {
       DVLOGF(3) << "Could not get free request.";
       return nullptr;
     }
 
     dec_surface = new V4L2RequestDecodeSurface(
         std::move(*input_buf), std::move(*output_buf), std::move(frame),
-        std::move(request_ref));
+        std::move(*request_ref));
   } else {
     dec_surface = new V4L2ConfigStoreDecodeSurface(
         std::move(*input_buf), std::move(*output_buf), std::move(frame));

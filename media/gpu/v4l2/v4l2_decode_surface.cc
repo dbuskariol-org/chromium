@@ -139,7 +139,6 @@ void V4L2RequestDecodeSurface::PrepareSetCtrls(
     struct v4l2_ext_controls* ctrls) const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK_NE(ctrls, nullptr);
-  DCHECK(request_ref_.IsValid());
 
   ctrls->which = V4L2_CTRL_WHICH_REQUEST_VAL;
   request_ref_.SetCtrls(ctrls);
@@ -155,7 +154,6 @@ uint64_t V4L2RequestDecodeSurface::GetReferenceID() const {
 
 bool V4L2RequestDecodeSurface::Submit() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-  DCHECK(request_ref_.IsValid());
   // Use the output buffer index as the timestamp.
   // Since the client is supposed to keep the output buffer out of the V4L2
   // queue for as long as it is used as a reference frame, this ensures that
@@ -186,7 +184,7 @@ bool V4L2RequestDecodeSurface::Submit() {
   if (!result)
     return result;
 
-  return std::move(request_ref_).Submit().IsValid();
+  return std::move(request_ref_).Submit().has_value();
 }
 
 }  // namespace media
