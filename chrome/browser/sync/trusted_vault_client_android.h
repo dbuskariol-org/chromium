@@ -41,6 +41,9 @@ class TrustedVaultClientAndroid : public syncer::TrustedVaultClient {
   // ongoing MarkKeysAsStale() request.
   void MarkKeysAsStaleCompleted(JNIEnv* env, jboolean result);
 
+  // Called from Java to notify that the keys in the vault may have changed.
+  void NotifyKeysChanged(JNIEnv* env);
+
   // TrustedVaultClient implementation.
   std::unique_ptr<Subscription> AddKeysChangedObserver(
       const base::RepeatingClosure& cb) override;

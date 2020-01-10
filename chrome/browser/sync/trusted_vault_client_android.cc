@@ -62,6 +62,10 @@ void TrustedVaultClientAndroid::MarkKeysAsStaleCompleted(JNIEnv* env,
   std::move(cb).Run(!!result);
 }
 
+void TrustedVaultClientAndroid::NotifyKeysChanged(JNIEnv* env) {
+  observer_list_.Notify();
+}
+
 std::unique_ptr<TrustedVaultClientAndroid::Subscription>
 TrustedVaultClientAndroid::AddKeysChangedObserver(
     const base::RepeatingClosure& cb) {
