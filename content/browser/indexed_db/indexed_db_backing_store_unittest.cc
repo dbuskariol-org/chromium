@@ -117,12 +117,12 @@ class TestableIndexedDBBackingStore : public IndexedDBBackingStore {
     return true;
   }
 
-  bool RemoveBlobFile(int64_t database_id, int64_t key) const override {
+  bool RemoveBlobFile(int64_t database_id, int64_t blob_number) const override {
     if (database_id_ != database_id ||
         !KeyPrefix::IsValidDatabaseId(database_id)) {
       return false;
     }
-    removals_.push_back(key);
+    removals_.push_back(blob_number);
     return true;
   }
 
@@ -395,11 +395,11 @@ class IndexedDBBackingStoreTestWithBlobs : public IndexedDBBackingStoreTest {
       return false;
     std::set<int64_t> ids;
     for (const auto& write : backing_store_->writes())
-      ids.insert(write.key());
+      ids.insert(write.blob_number());
     if (ids.size() != backing_store_->writes().size())
       return false;
     for (const auto& read : reads) {
-      if (ids.count(read.key()) != 1)
+      if (ids.count(read.blob_number()) != 1)
         return false;
     }
     return true;
@@ -471,8 +471,10 @@ class IndexedDBBackingStoreTestWithBlobs : public IndexedDBBackingStoreTest {
     if (backing_store_->removals().size() != backing_store_->writes().size())
       return false;
     for (size_t i = 0; i < backing_store_->writes().size(); ++i) {
-      if (backing_store_->writes()[i].key() != backing_store_->removals()[i])
+      if (backing_store_->writes()[i].blob_number() !=
+          backing_store_->removals()[i]) {
         return false;
+      }
     }
     return true;
   }
@@ -758,9 +760,9 @@ TEST_F(IndexedDBBackingStoreTestWithBlobs, DeleteRange) {
 
           // Verify blob removals.
           ASSERT_EQ(2UL, backing_store()->removals().size());
-          EXPECT_EQ(backing_store()->writes()[1].key(),
+          EXPECT_EQ(backing_store()->writes()[1].blob_number(),
                     backing_store()->removals()[0]);
-          EXPECT_EQ(backing_store()->writes()[2].key(),
+          EXPECT_EQ(backing_store()->writes()[2].blob_number(),
                     backing_store()->removals()[1]);
 
           // Clean up on the IDB sequence.
