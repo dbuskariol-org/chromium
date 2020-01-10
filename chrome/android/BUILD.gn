@@ -1988,6 +1988,7 @@ template("chrome_test_apk_tmpl") {
     testonly = true
     target_type = "instrumentation_test_apk"
     shared_library_for_unwind_asset = "chromefortest"
+    bundles_supported = true
 
     deps = _chrome_public_shared_deps + invoker.deps + [
              ":chrome_apk_pak_assets",
