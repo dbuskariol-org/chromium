@@ -4467,7 +4467,10 @@ jumbo_static_library("browser") {
   }
 
   if (enable_kaleidoscope) {
-    deps += [ "//chrome/browser/media/kaleidoscope/internal" ]
+    deps += [
+      "//chrome/browser/media/kaleidoscope/internal",
+      "//chrome/browser/media/kaleidoscope/internal/mojom",
+    ]
   }
 
   if (enable_legacy_desktop_in_product_help) {

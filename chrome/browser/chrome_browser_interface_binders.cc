@@ -11,6 +11,7 @@
 #include "chrome/browser/accessibility/accessibility_labels_service.h"
 #include "chrome/browser/accessibility/accessibility_labels_service_factory.h"
 #include "chrome/browser/bad_message.h"
+#include "chrome/browser/buildflags.h"
 #include "chrome/browser/dom_distiller/dom_distiller_service_factory.h"
 #include "chrome/browser/engagement/site_engagement_details.mojom.h"
 #include "chrome/browser/language/translate_frame_binder.h"
@@ -133,6 +134,11 @@
 #include "extensions/browser/guest_view/mime_handler_view/mime_handler_view_guest.h"
 #include "extensions/common/api/mime_handler.mojom.h"  // nogncheck
 #endif
+
+#if BUILDFLAG(ENABLE_KALEIDOSCOPE)
+#include "chrome/browser/media/kaleidoscope/internal/kaleidoscope_ui.h"
+#include "chrome/browser/media/kaleidoscope/internal/mojom/kaleidoscope.mojom.h"
+#endif  // BUILDFLAG(ENABLE_KALEIDOSCOPE)
 
 namespace chrome {
 namespace internal {
@@ -562,6 +568,11 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<::mojom::ResetPasswordHandler,
                                          ResetPasswordUI>(map);
 #endif
+
+#if BUILDFLAG(ENABLE_KALEIDOSCOPE)
+  RegisterWebUIControllerInterfaceBinder<media::mojom::KaleidoscopeDataProvider,
+                                         KaleidoscopeUI>(map);
+#endif  // BUILDFLAG(ENABLE_KALEIDOSCOPE)
 }
 
 }  // namespace internal
