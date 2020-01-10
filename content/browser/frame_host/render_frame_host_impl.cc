@@ -130,7 +130,6 @@
 #include "content/common/navigation_params_utils.h"
 #include "content/common/render_message_filter.mojom.h"
 #include "content/common/renderer.mojom.h"
-#include "content/common/swapped_out_messages.h"
 #include "content/common/unfreezable_frame_messages.h"
 #include "content/common/widget.mojom.h"
 #include "content/public/browser/ax_event_notification_details.h"
@@ -3043,13 +3042,6 @@ void RenderFrameHostImpl::OnUnloaded() {
     unload_event_monitor_timeout_->Stop();
 
   ClearWebUI();
-
-  // If this is a main frame RFH that's about to be deleted, update its RVH's
-  // swapped-out state here. https://crbug.com/505887.  This should only be
-  // done if the RVH hasn't been already reused and marked as active by another
-  // navigation. See https://crbug.com/823567.
-  if (frame_tree_node_->IsMainFrame() && !render_view_host_->is_active())
-    render_view_host_->set_is_swapped_out(true);
 
   bool deleted =
       frame_tree_node_->render_manager()->DeleteFromPendingList(this);
