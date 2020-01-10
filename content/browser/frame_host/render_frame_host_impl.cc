@@ -6473,10 +6473,16 @@ void RenderFrameHostImpl::CreateInstalledAppProvider(
 
 void RenderFrameHostImpl::CreateDedicatedWorkerHostFactory(
     mojo::PendingReceiver<blink::mojom::DedicatedWorkerHostFactory> receiver) {
+  // Allocate the worker in the same process as the creator.
+  int worker_process_id = process_->GetID();
+
+  // When a dedicated worker is created from the frame script, the frame is both
+  // the creator and the ancestor.
   content::CreateDedicatedWorkerHostFactory(
-      process_->GetID(), /*ancestor_render_frame_id=*/routing_id_,
-      /*creator_render_frame_id=*/routing_id_, last_committed_origin_,
-      std::move(receiver));
+      worker_process_id,
+      /*creator_render_frame_host_id=*/GetGlobalFrameRoutingId(),
+      /*ancestor_render_frame_host_id=*/GetGlobalFrameRoutingId(),
+      last_committed_origin_, std::move(receiver));
 }
 
 void RenderFrameHostImpl::OnMediaInterfaceFactoryConnectionError() {
