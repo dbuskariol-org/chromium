@@ -69,13 +69,6 @@ Polymer({
       type: String,
       value: '',
     },
-
-    /**
-     * TODO(jimmyxgong): Remove this feature flag conditional once feature
-     * is launched.
-     * @private
-     */
-    enableUpdatedUi: Boolean,
   },
 
   observers: [
@@ -488,13 +481,6 @@ Polymer({
       type: Boolean,
       value: false,
     },
-
-    /**
-     * TODO(jimmyxgong): Remove this feature flag conditional once feature
-     * is launched.
-     * @private
-     */
-    enableUpdatedUi: Boolean,
   },
 
   listeners: {
@@ -507,8 +493,6 @@ Polymer({
   /** Opens the Add manual printer dialog. */
   open: function() {
     this.resetData_();
-    // The updated UI will remove the discovery dialog. Open the manual
-    // dialog by default.
     this.switchDialog_(
         '', AddPrinterDialogs.MANUALLY, 'showManuallyAddDialog_');
   },
