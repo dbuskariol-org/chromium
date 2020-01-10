@@ -393,6 +393,11 @@ public final class ChromePreferenceKeys {
     public static final String HOMEPAGE_LOCATION_POLICY = "Chrome.Policy.HomepageLocation";
 
     /**
+     * Key for UUID-based generator used for Chrome Invalidations (sync, etc.).
+     */
+    public static final String INVALIDATIONS_UUID_PREF_KEY = "chromium.invalidations.uuid";
+
+    /**
      * When the user is shown a badge that the current Android OS version is unsupported, and they
      * tap it to display the menu (which has additional information), we store the current version
      * of Chrome to this preference to ensure we only show the badge once. The value is cleared
@@ -457,6 +462,10 @@ public final class ChromePreferenceKeys {
      */
     public static final String SIGNIN_PROMO_SETTINGS_PERSONALIZED_DISMISSED =
             "settings_personalized_signin_promo_dismissed";
+
+    public static final String SNAPSHOT_DATABASE_REMOVED = "snapshot_database_removed";
+
+    public static final String SYNC_SESSIONS_UUID = "chromium.sync.sessions.id";
 
     /**
      * Keys for deferred recording of the outcomes of showing the clear data dialog after
@@ -667,6 +676,7 @@ public final class ChromePreferenceKeys {
                 HOMEPAGE_CUSTOM_URI,
                 HOMEPAGE_ENABLED,
                 HOMEPAGE_USE_DEFAULT_URI,
+                INVALIDATIONS_UUID_PREF_KEY,
                 LATEST_UNSUPPORTED_VERSION,
                 OFFLINE_INDICATOR_V2_ENABLED,
                 PRIVACY_ALLOW_PRERENDER_OLD,
@@ -686,7 +696,9 @@ public final class ChromePreferenceKeys {
                 SIGNIN_PROMO_NTP_PROMO_SUPPRESSION_PERIOD_START,
                 SIGNIN_PROMO_PERSONALIZED_DECLINED,
                 SIGNIN_PROMO_SETTINGS_PERSONALIZED_DISMISSED,
+                SNAPSHOT_DATABASE_REMOVED,
                 START_SURFACE_SINGLE_PANE_ENABLED_KEY,
+                SYNC_SESSIONS_UUID,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_CLEAR_DATA,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_UNINSTALL,
                 TWA_DISCLOSURE_ACCEPTED_PACKAGES,
