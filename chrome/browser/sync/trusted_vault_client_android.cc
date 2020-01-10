@@ -93,7 +93,8 @@ void TrustedVaultClientAndroid::FetchKeys(
 
 void TrustedVaultClientAndroid::StoreKeys(
     const std::string& gaia_id,
-    const std::vector<std::vector<uint8_t>>& keys) {
+    const std::vector<std::vector<uint8_t>>& keys,
+    int last_key_version) {
   // Not supported on Android, where keys are fetched outside the browser.
   NOTREACHED();
 }
