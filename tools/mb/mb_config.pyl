@@ -1844,6 +1844,10 @@
 
     'official_goma_mac_perf': [
       'official', 'goma', 'no_keystone_registration_framework',
+      # The mac perf bots can't use the 10.15 SDK yet.
+      # Remove this once they've been upgraded to versions of MacOS + xcode
+      # that support the 10.15 SDK. See https://crbug.com/1023913 for more.
+      'mac_sdk_10_14',
     ],
 
     'official_goma_perf': [
@@ -2350,6 +2354,10 @@
 
     'mac_deterministic_build': {
       'gn_args': 'mac_deterministic_build=true',
+    },
+
+    'mac_sdk_10_14': {
+      'gn_args': 'mac_sdk_official_version="10.14"',
     },
 
     'mac_strip': {
