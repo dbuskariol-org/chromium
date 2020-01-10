@@ -75,7 +75,6 @@ UnifiedMessageCenterBubble::UnifiedMessageCenterBubble(UnifiedSystemTray* tray)
   init_params.anchor_mode = TrayBubbleView::AnchorMode::kRect;
   init_params.min_width = kTrayMenuWidth;
   init_params.max_width = kTrayMenuWidth;
-  init_params.corner_radius = kUnifiedTrayCornerRadius;
   init_params.has_shadow = false;
   init_params.close_on_deactivate = false;
 
