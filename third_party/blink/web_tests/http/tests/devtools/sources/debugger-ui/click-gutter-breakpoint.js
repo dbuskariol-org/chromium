@@ -47,6 +47,7 @@
   async function runScript() {
     TestRunner.evaluateInPageWithTimeout('f2()');
     await SourcesTestRunner.waitUntilPausedPromise();
+    runtime.sharedInstance(Sources.JavaScriptBreakpointsSidebarPane).doUpdate();
     await SourcesTestRunner.waitBreakpointSidebarPane();
     SourcesTestRunner.dumpBreakpointSidebarPane('while paused');
     SourcesTestRunner.completeDebuggerTest();
