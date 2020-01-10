@@ -639,6 +639,10 @@ class Document::SecurityContextInit : public FeaturePolicyParserDelegate {
     // Initialize feature policy, depends on origin trials.
     InitializeFeaturePolicy(initializer, document_classes);
 
+    // Initialize document policy.
+    document_policy_ =
+        DocumentPolicy::CreateWithHeaderPolicy(initializer.GetDocumentPolicy());
+
     // Initialize the agent. Depends on security origin.
     InitializeAgent(initializer);
   }
@@ -654,6 +658,11 @@ class Document::SecurityContextInit : public FeaturePolicyParserDelegate {
   std::unique_ptr<FeaturePolicy> TakeFeaturePolicy() {
     DCHECK(feature_policy_);
     return std::move(feature_policy_);
+  }
+
+  std::unique_ptr<DocumentPolicy> TakeDocumentPolicy() {
+    DCHECK(document_policy_);
+    return std::move(document_policy_);
   }
 
   const Vector<String>& FeaturePolicyParseMessages() const {
@@ -1041,6 +1050,7 @@ class Document::SecurityContextInit : public FeaturePolicyParserDelegate {
   scoped_refptr<SecurityOrigin> security_origin_;
   WebSandboxFlags sandbox_flags_ = WebSandboxFlags::kNone;
   std::unique_ptr<FeaturePolicy> feature_policy_;
+  std::unique_ptr<DocumentPolicy> document_policy_;
   Vector<String> feature_policy_parse_messages_;
   ParsedFeaturePolicy parsed_header_;
   Member<ContentSecurityPolicy> csp_;
@@ -1095,6 +1105,7 @@ Document::Document(const DocumentInit& initializer,
                        security_initializer.GetSecurityOrigin(),
                        security_initializer.GetSandboxFlags(),
                        security_initializer.TakeFeaturePolicy(),
+                       security_initializer.TakeDocumentPolicy(),
                        security_initializer.GetSecureContextMode()),
       evaluate_media_queries_on_style_recalc_(false),
       pending_sheet_layout_(kNoLayoutWithPendingSheets),
