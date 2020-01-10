@@ -540,6 +540,7 @@ public final class ChromePreferenceKeys {
                 "PhysicalWeb.TotalUrls.OnRefresh",
                 "PhysicalWeb.UrlSelected",
                 "PrefMigrationVersion",
+                "ServiceManagerFeatures",
                 "allow_low_end_device_ui",
                 "allow_starting_service_manager_only",
                 "bookmark_search_history",
