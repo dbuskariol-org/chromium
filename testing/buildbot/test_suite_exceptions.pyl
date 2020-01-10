@@ -1635,6 +1635,20 @@
       'Win10 FYI x64 Exp Release (Intel HD 630)',
     ],
   },
+  'viz_unittests': {
+    'modifications': {
+      'android-marshmallow-x86-fyi-rel': {
+        'flags': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.viz_unittests.filter',
+        ],
+      },
+      'android-pie-x86-fyi-rel': {
+        'flags': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.viz_unittests.filter',
+        ],
+      },
+    },
+  },
   'vr_android_unittests': {
     'remove_from': [
       'android-marshmallow-x86-fyi-rel',
