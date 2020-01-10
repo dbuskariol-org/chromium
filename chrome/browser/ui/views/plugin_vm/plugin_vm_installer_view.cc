@@ -187,30 +187,34 @@ bool PluginVmInstallerView::Accept() {
   DCHECK_EQ(state_, State::ERROR);
   // Retry button has been clicked to retry setting of PluginVm environment
   // after error occurred.
-  StartPluginVmImageDownload();
+  StartInstallation();
   return false;
 }
 
 bool PluginVmInstallerView::Cancel() {
-  if (state_ == State::DOWNLOADING_DLC ||
-      state_ == State::START_DLC_DOWNLOADING) {
-    plugin_vm_installer_->CancelDlcDownload();
-
-    plugin_vm::RecordPluginVmSetupResultHistogram(
-        plugin_vm::PluginVmSetupResult::kUserCancelledDownloadingPluginVmDlc);
+  switch (state_) {
+    case State::DOWNLOADING_DLC:
+    case State::START_DLC_DOWNLOADING:
+      plugin_vm::RecordPluginVmSetupResultHistogram(
+          plugin_vm::PluginVmSetupResult::kUserCancelledDownloadingPluginVmDlc);
+      break;
+    case State::DOWNLOADING:
+    case State::START_DOWNLOADING:
+      plugin_vm::RecordPluginVmSetupResultHistogram(
+          plugin_vm::PluginVmSetupResult::
+              kUserCancelledDownloadingPluginVmImage);
+      break;
+    case State::IMPORTING:
+      plugin_vm::RecordPluginVmSetupResultHistogram(
+          plugin_vm::PluginVmSetupResult::kUserCancelledImportingPluginVmImage);
+      break;
+    case State::ERROR:
+      return true;
+    default:
+      NOTREACHED();
   }
-  if (state_ == State::DOWNLOADING || state_ == State::START_DOWNLOADING) {
-    plugin_vm_installer_->CancelDownload();
 
-    plugin_vm::RecordPluginVmSetupResultHistogram(
-        plugin_vm::PluginVmSetupResult::kUserCancelledDownloadingPluginVmImage);
-  }
-  if (state_ == State::IMPORTING) {
-    plugin_vm_installer_->CancelImport();
-
-    plugin_vm::RecordPluginVmSetupResultHistogram(
-        plugin_vm::PluginVmSetupResult::kUserCancelledImportingPluginVmImage);
-  }
+  plugin_vm_installer_->Cancel();
 
   return true;
 }
@@ -241,8 +245,6 @@ void PluginVmInstallerView::OnDlcDownloadCompleted() {
 
   state_ = State::START_DOWNLOADING;
   OnStateUpdated();
-
-  plugin_vm_installer_->StartDownload();
 }
 
 void PluginVmInstallerView::OnDlcDownloadCancelled() {
@@ -275,7 +277,6 @@ void PluginVmInstallerView::OnDownloadCompleted() {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   DCHECK_EQ(state_, State::DOWNLOADING);
 
-  plugin_vm_installer_->StartImport();
   state_ = State::IMPORTING;
   OnStateUpdated();
 }
@@ -378,7 +379,6 @@ base::string16 PluginVmInstallerView::GetMessage() const {
       DCHECK(reason_);
       switch (*reason_) {
         default:
-        case Reason::LOGIC_ERROR:
         case Reason::SIGNAL_NOT_CONNECTED:
         case Reason::OPERATION_IN_PROGRESS:
         case Reason::UNEXPECTED_DISK_IMAGE_STATUS:
@@ -490,13 +490,12 @@ void PluginVmInstallerView::AddedToWidget() {
   }
 
   if (state_ == State::START_DOWNLOADING)
-    StartPluginVmImageDownload();
+    StartInstallation();
   else
     OnStateUpdated();
 }
 
 void PluginVmInstallerView::OnStateUpdated() {
-  // TODO(https://crbug.com/1017511): display failure reasons.
   SetBigMessageLabel();
   SetMessageLabel();
   SetBigImage();
@@ -620,7 +619,7 @@ void PluginVmInstallerView::SetBigImage() {
           IDR_PLUGIN_VM_INSTALLER));
 }
 
-void PluginVmInstallerView::StartPluginVmImageDownload() {
+void PluginVmInstallerView::StartInstallation() {
   // In each case setup starts from this function (when dialog is opened or
   // retry button is clicked).
   setup_start_tick_ = base::TimeTicks::Now();
@@ -629,5 +628,5 @@ void PluginVmInstallerView::StartPluginVmImageDownload() {
   OnStateUpdated();
 
   plugin_vm_installer_->SetObserver(this);
-  plugin_vm_installer_->StartDlcDownload();
+  plugin_vm_installer_->Start();
 }

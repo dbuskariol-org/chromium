@@ -62,6 +62,8 @@ class PluginVmInstallerView : public views::BubbleDialogDelegateView,
 
  private:
   enum class State {
+    // TODO(timloh): We should be able to simplify this by removing the
+    // START_DLC_DOWNLOADING and START_DOWNLOADING states.
     START_DLC_DOWNLOADING,  // PluginVm DLC downloading should be started.
     DOWNLOADING_DLC,    // PluginVm DLC downloading and installing in progress.
     START_DOWNLOADING,  // PluginVm image downloading should be started.
@@ -90,7 +92,7 @@ class PluginVmInstallerView : public views::BubbleDialogDelegateView,
   void SetMessageLabel();
   void SetBigImage();
 
-  void StartPluginVmImageDownload();
+  void StartInstallation();
 
   Profile* profile_ = nullptr;
   plugin_vm::PluginVmInstaller* plugin_vm_installer_ = nullptr;
