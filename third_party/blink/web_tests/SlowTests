@@ -672,3 +672,5 @@ crbug.com/1027439 http/tests/devtools/storage-panel-dom-storage-update.js [ Slow
 
 # Mark all axe audit tests slow.
 crbug.com/1020379 http/tests/devtools/a11y-axe-core/* [ Slow ]
+
+crbug.com/1040054 http/tests/devtools/cache-storage/cache-data.js [ Slow ]
