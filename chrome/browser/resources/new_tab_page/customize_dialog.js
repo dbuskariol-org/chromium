@@ -5,6 +5,8 @@
 import 'chrome://resources/cr_elements/cr_button/cr_button.m.js';
 import 'chrome://resources/cr_elements/cr_dialog/cr_dialog.m.js';
 import './customize_themes.js';
+import 'chrome://resources/polymer/v3_0/iron-pages/iron-pages.js';
+import 'chrome://resources/polymer/v3_0/iron-selector/iron-selector.js';
 
 import {html, PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 
@@ -27,6 +29,12 @@ class CustomizeDialogElement extends PolymerElement {
     return {
       /** @type {!newTabPage.mojom.Theme} */
       theme: Object,
+
+      /** @private */
+      selectedPage_: {
+        type: String,
+        value: 'backgrounds',
+      },
     };
   }
 
@@ -46,6 +54,19 @@ class CustomizeDialogElement extends PolymerElement {
   onDoneClick_() {
     this.pageHandler_.confirmThemeChanges();
     this.$.dialog.close();
+  }
+
+  /**
+   * @param {!Event} e
+   * @private
+   */
+  onMenuItemKeyDown_(e) {
+    if (!['Enter', ' '].includes(e.key)) {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    this.selectedPage_ = e.target.getAttribute('page-name');
   }
 }
 
