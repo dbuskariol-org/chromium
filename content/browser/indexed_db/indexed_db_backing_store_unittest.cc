@@ -26,6 +26,7 @@
 #include "components/services/storage/indexed_db/scopes/disjoint_range_lock_manager.h"
 #include "components/services/storage/indexed_db/transactional_leveldb/leveldb_write_batch.h"
 #include "components/services/storage/indexed_db/transactional_leveldb/transactional_leveldb_database.h"
+#include "components/services/storage/public/mojom/indexed_db_control.mojom-test-utils.h"
 #include "content/browser/indexed_db/indexed_db_class_factory.h"
 #include "content/browser/indexed_db/indexed_db_context_impl.h"
 #include "content/browser/indexed_db/indexed_db_factory_impl.h"
@@ -261,7 +262,10 @@ class IndexedDBBackingStoreTest : public testing::Test {
       }
       // All leveldb databases are closed, and they can be deleted.
       for (auto origin : idb_context_->GetAllOrigins()) {
-        idb_context_->DeleteForOrigin(origin);
+        bool success = false;
+        storage::mojom::IndexedDBControlAsyncWaiter waiter(idb_context_.get());
+        waiter.DeleteForOrigin(origin, &success);
+        EXPECT_TRUE(success);
       }
     }
     if (temp_dir_.IsValid())
