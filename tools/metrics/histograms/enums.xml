@@ -13160,6 +13160,8 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="0" label="D3D_FEATURE_LEVEL_UNKNOWN"/>
   <int value="1" label="D3D_FEATURE_LEVEL_12_0"/>
   <int value="2" label="D3D_FEATURE_LEVEL_12_1"/>
+  <int value="3" label="D3D_FEATURE_LEVEL_11_0"/>
+  <int value="4" label="D3D_FEATURE_LEVEL_11_1"/>
 </enum>
 
 <enum name="D3D9InitializeResult">
