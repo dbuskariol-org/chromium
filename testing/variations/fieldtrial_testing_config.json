@@ -7902,6 +7902,21 @@
             ]
         }
     ],
+    "WindowsSensorAPIs": [
+        {
+            "platforms": [
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "WinrtSensorsImplementation"
+                    ]
+                }
+            ]
+        }
+    ],
     "ZippedSystemLogsUpload": [
         {
             "platforms": [
