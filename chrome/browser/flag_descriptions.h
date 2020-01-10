@@ -1786,6 +1786,9 @@ extern const char kWebUIA11yEnhancementsDescription[];
 extern const char kGoogleBrandedContextMenuName[];
 extern const char kGoogleBrandedContextMenuDescription[];
 
+extern const char kSyncSetupFriendlySettingsName[];
+extern const char kSyncSetupFriendlySettingsDescription[];
+
 #endif  // defined(OS_ANDROID)
 
 // Windows --------------------------------------------------------------------

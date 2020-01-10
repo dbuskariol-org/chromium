@@ -38670,6 +38670,7 @@ from previous Chrome versions.
   <int value="983311394" label="tab-management-experiment-type"/>
   <int value="986796748" label="AccountConsistency:enabled"/>
   <int value="987843084" label="TerminalSystemApp:enabled"/>
+  <int value="988781221" label="SyncSetupFriendlySettings:disabled"/>
   <int value="988981463" label="ImageCaptureAPI:enabled"/>
   <int value="989062160" label="ModuleScriptsImportMetaUrl:enabled"/>
   <int value="994317727"
@@ -39472,6 +39473,7 @@ from previous Chrome versions.
   <int value="1961425320" label="force-qtkit"/>
   <int value="1962485086" label="DesktopPWAsLocalUpdating:enabled"/>
   <int value="1964816410" label="AndroidPayIntegrationV2:enabled"/>
+  <int value="1965055310" label="SyncSetupFriendlySettings:enabled"/>
   <int value="1965976546" label="NewOverviewAnimations:disabled"/>
   <int value="1966730288" label="disable-threaded-compositing"/>
   <int value="1969604362" label="enable-pinch-virtual-viewport"/>

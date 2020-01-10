@@ -4834,6 +4834,13 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(chrome::android::kProfileCard)},
 #endif  // defined(OS_ANDROID)
 
+#if !defined(OS_ANDROID)
+    {"sync-setup-friendly-settings",
+     flag_descriptions::kSyncSetupFriendlySettingsName,
+     flag_descriptions::kSyncSetupFriendlySettingsDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(features::kSyncSetupFriendlySettings)},
+#endif  // !defined(OS_ANDROID)
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

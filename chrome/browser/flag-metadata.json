@@ -3393,6 +3393,11 @@
     "expiry_milestone": 77
   },
   {
+    "name": "sync-setup-friendly-settings",
+    "owners": ["msalama"],
+    "expiry_milestone": 84
+  },
+  {
     "name": "sync-wifi-configurations",
     "owners": ["jonmann", "cros-system-services@google.com"],
     "expiry_milestone": 85

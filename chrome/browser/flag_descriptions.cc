@@ -3053,6 +3053,10 @@ const char kGoogleBrandedContextMenuDescription[] =
     "Shows a Google icon next to context menu items powered by Google "
     "services.";
 
+const char kSyncSetupFriendlySettingsName[] = "Sync setup friendly settings";
+const char kSyncSetupFriendlySettingsDescription[] =
+    "Enable the new sync setup friendly settings";
+
 #endif  // !defined(OS_ANDROID)
 
 // Windows ---------------------------------------------------------------------
