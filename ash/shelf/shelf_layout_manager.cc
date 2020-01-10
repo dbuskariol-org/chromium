@@ -1622,11 +1622,15 @@ void ShelfLayoutManager::CalculateTargetBounds(
     status_origin.set_x(shelf_width - status_size.width());
   target_bounds_.status_bounds_in_shelf = gfx::Rect(status_origin, status_size);
 
-  gfx::Point nav_origin =
-      gfx::Point(home_button_edge_spacing, home_button_edge_spacing);
-  const gfx::Size nav_size = shelf_widget_->navigation_widget()->GetIdealSize();
+  gfx::Point nav_origin = gfx::Point();
+  gfx::Size nav_size = shelf_widget_->navigation_widget()->GetIdealSize();
+
+  // Enlarge the widget to take up available space, this ensures events which
+  // are outside of the HomeButton bounds can be received.
+  nav_size.Enlarge(home_button_edge_spacing, home_button_edge_spacing);
+
   if (shelf_->IsHorizontalAlignment() && base::i18n::IsRTL())
-    nav_origin.set_x(shelf_width - nav_size.width() - nav_origin.x());
+    nav_origin.set_x(shelf_width - nav_size.width());
   target_bounds_.nav_bounds_in_shelf = gfx::Rect(nav_origin, nav_size);
 
   gfx::Point hotseat_origin;
