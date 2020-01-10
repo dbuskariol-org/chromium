@@ -33,13 +33,16 @@ OmniboxTabSwitchButton::OmniboxTabSwitchButton(
     OmniboxResultView* result_view,
     const base::string16& hint,
     const base::string16& hint_short,
-    const gfx::VectorIcon& icon)
+    const gfx::VectorIcon& icon,
+    const ui::ThemeProvider* theme_provider)
     : MdTextButton(result_view, views::style::CONTEXT_BUTTON_MD),
       popup_contents_view_(popup_contents_view),
       result_view_(result_view),
       hint_(hint),
-      hint_short_(hint_short) {
+      hint_short_(hint_short),
+      theme_provider_(theme_provider) {
   views::InstallPillHighlightPathGenerator(this);
+  SetBgColorOverride(GetBackgroundColor());
   SetImage(STATE_NORMAL, gfx::CreateVectorIcon(
                              icon, GetLayoutConstant(LOCATION_BAR_ICON_SIZE),
                              gfx::kChromeIconGrey));
@@ -96,10 +99,6 @@ void OmniboxTabSwitchButton::UpdateBackground() {
   SetBgColorOverride(GetBackgroundColor());
 }
 
-void OmniboxTabSwitchButton::OnThemeChanged() {
-  SetBgColorOverride(GetBackgroundColor());
-}
-
 void OmniboxTabSwitchButton::ProvideWidthHint(int parent_width) {
   base::string16 text;
   int preferred_width = CalculateGoalWidth(parent_width, &text);
@@ -126,14 +125,14 @@ bool OmniboxTabSwitchButton::IsSelected() const {
 }
 
 SkColor OmniboxTabSwitchButton::GetBackgroundColor() const {
-  return GetOmniboxColor(GetThemeProvider(), OmniboxPart::RESULTS_BACKGROUND,
+  return GetOmniboxColor(theme_provider_, OmniboxPart::RESULTS_BACKGROUND,
                          state() == STATE_HOVERED ? OmniboxPartState::HOVERED
                                                   : OmniboxPartState::NORMAL);
 }
 
 void OmniboxTabSwitchButton::SetPressed() {
   SetBgColorOverride(color_utils::AlphaBlend(
-      GetOmniboxColor(GetThemeProvider(), OmniboxPart::RESULTS_BACKGROUND,
+      GetOmniboxColor(theme_provider_, OmniboxPart::RESULTS_BACKGROUND,
                       OmniboxPartState::SELECTED),
       SK_ColorBLACK, 0.8f));
 }
