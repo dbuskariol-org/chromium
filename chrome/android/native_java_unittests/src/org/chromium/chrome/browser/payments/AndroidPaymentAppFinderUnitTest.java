@@ -14,14 +14,12 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
+import org.chromium.base.annotations.CalledByNative;
+import org.chromium.base.annotations.CalledByNativeJavaTest;
 import org.chromium.chrome.browser.payments.PaymentAppFactory.PaymentAppCreatedCallback;
 import org.chromium.components.payments.PaymentManifestDownloader;
 import org.chromium.components.payments.PaymentManifestParser;
@@ -36,13 +34,21 @@ import java.util.List;
 import java.util.Set;
 
 /** Tests for the native Android payment app finder. */
-@RunWith(RobolectricTestRunner.class)
-@Config(sdk = 21, manifest = Config.NONE)
 public class AndroidPaymentAppFinderUnitTest {
     private static final IntentArgumentMatcher sPayIntentArgumentMatcher =
             new IntentArgumentMatcher(new Intent("org.chromium.intent.action.PAY"));
 
-    public AndroidPaymentAppFinderUnitTest() {}
+    // SHA256("01020304050607080900"):
+    public static final byte[][] BOB_PAY_SIGNATURE_FINGERPRINTS = {{(byte) 0x9A, (byte) 0x89,
+            (byte) 0xC6, (byte) 0x8C, (byte) 0x4C, (byte) 0x5E, (byte) 0x28, (byte) 0xB8,
+            (byte) 0xC4, (byte) 0xA5, (byte) 0x56, (byte) 0x76, (byte) 0x73, (byte) 0xD4,
+            (byte) 0x62, (byte) 0xFF, (byte) 0xF5, (byte) 0x15, (byte) 0xDB, (byte) 0x46,
+            (byte) 0x11, (byte) 0x6F, (byte) 0x99, (byte) 0x00, (byte) 0x62, (byte) 0x4D,
+            (byte) 0x09, (byte) 0xC4, (byte) 0x74, (byte) 0xF5, (byte) 0x93, (byte) 0xFB}};
+    public static final Signature BOB_PAY_SIGNATURE = new Signature("01020304050607080900");
+
+    @CalledByNative
+    private AndroidPaymentAppFinderUnitTest() {}
 
     /**
      * Argument matcher that matches Intents using |filterEquals| method.
@@ -65,7 +71,7 @@ public class AndroidPaymentAppFinderUnitTest {
         }
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testNoValidPaymentMethodNames() {
         Set<String> methodNames = new HashSet<>();
         methodNames.add("unknown-payment-method-name");
@@ -84,7 +90,7 @@ public class AndroidPaymentAppFinderUnitTest {
         Mockito.verify(callback).onAllPaymentAppsCreated();
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testQueryWithoutApps() {
         PackageManagerDelegate packageManagerDelegate = Mockito.mock(PackageManagerDelegate.class);
         Mockito.when(packageManagerDelegate.getActivitiesThatCanRespondToIntentWithMetaData(
@@ -107,7 +113,7 @@ public class AndroidPaymentAppFinderUnitTest {
         Mockito.verify(callback).onAllPaymentAppsCreated();
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testQueryWithoutMetaData() {
         List<ResolveInfo> activities = new ArrayList<>();
         ResolveInfo alicePay = new ResolveInfo();
@@ -138,7 +144,7 @@ public class AndroidPaymentAppFinderUnitTest {
         Mockito.verify(callback).onAllPaymentAppsCreated();
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testQueryWithUnsupportedPaymentMethod() {
         List<ResolveInfo> activities = new ArrayList<>();
         ResolveInfo alicePay = new ResolveInfo();
@@ -174,7 +180,7 @@ public class AndroidPaymentAppFinderUnitTest {
         Mockito.verify(callback).onAllPaymentAppsCreated();
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testQueryBasicCardsWithTwoApps() {
         List<ResolveInfo> activities = new ArrayList<>();
         ResolveInfo alicePay = new ResolveInfo();
@@ -239,7 +245,7 @@ public class AndroidPaymentAppFinderUnitTest {
         Mockito.verify(callback).onAllPaymentAppsCreated();
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testQueryBobPayWithOneAppThatHasIsReadyToPayService() {
         List<ResolveInfo> activities = new ArrayList<>();
         ResolveInfo bobPay = new ResolveInfo();
@@ -274,14 +280,15 @@ public class AndroidPaymentAppFinderUnitTest {
         isBobPayReadyToPay.serviceInfo.name = "com.bobpay.app.IsReadyToWebPay";
         services.add(isBobPayReadyToPay);
         Intent isReadyToPayIntent = new Intent(AndroidPaymentAppFinder.ACTION_IS_READY_TO_PAY);
-        Mockito.when(packageManagerDelegate.getServicesThatCanRespondToIntent(
+        Mockito
+                .when(packageManagerDelegate.getServicesThatCanRespondToIntent(
                         ArgumentMatchers.argThat(new IntentArgumentMatcher(isReadyToPayIntent))))
                 .thenReturn(services);
 
         PackageInfo bobPayPackageInfo = new PackageInfo();
         bobPayPackageInfo.versionCode = 10;
         bobPayPackageInfo.signatures = new Signature[1];
-        bobPayPackageInfo.signatures[0] = PaymentManifestVerifierTest.BOB_PAY_SIGNATURE;
+        bobPayPackageInfo.signatures[0] = BOB_PAY_SIGNATURE;
         Mockito.when(packageManagerDelegate.getPackageInfoWithSignatures("com.bobpay.app"))
                 .thenReturn(bobPayPackageInfo);
 
@@ -318,8 +325,8 @@ public class AndroidPaymentAppFinderUnitTest {
             public void parseWebAppManifest(String content, ManifestParseCallback callback) {
                 WebAppManifestSection[] manifest = new WebAppManifestSection[1];
                 int minVersion = 10;
-                manifest[0] = new WebAppManifestSection("com.bobpay.app", minVersion,
-                        PaymentManifestVerifierTest.BOB_PAY_SIGNATURE_FINGERPRINTS);
+                manifest[0] = new WebAppManifestSection(
+                        "com.bobpay.app", minVersion, BOB_PAY_SIGNATURE_FINGERPRINTS);
                 callback.onWebAppManifestParseSuccess(manifest);
             }
 

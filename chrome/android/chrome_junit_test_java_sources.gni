@@ -165,7 +165,6 @@ chrome_junit_test_java_sources = [
   "junit/src/org/chromium/chrome/browser/omnibox/suggestions/entity/EntitySuggestionProcessorUnitTest.java",
   "junit/src/org/chromium/chrome/browser/page_info/PermissionParamsListBuilderUnitTest.java",
   "junit/src/org/chromium/chrome/browser/partnerbookmarks/PartnerBookmarksFaviconThrottleTest.java",
-  "junit/src/org/chromium/chrome/browser/payments/AndroidPaymentAppFinderUnitTest.java",
   "junit/src/org/chromium/chrome/browser/payments/AutofillContactTest.java",
   "junit/src/org/chromium/chrome/browser/payments/AutofillContactUnitTest.java",
   "junit/src/org/chromium/chrome/browser/payments/PaymentManifestVerifierTest.java",
