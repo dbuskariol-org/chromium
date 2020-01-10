@@ -2650,6 +2650,10 @@ crbug.com/1035582 [ Linux ] fast/forms/select/listbox-overlay-scrollbar.html [ S
 crbug.com/1035582 external/wpt/css/css-pseudo/spelling-error-003-manual.html [ Skip ]
 crbug.com/1035582 external/wpt/css/css-transforms/transform-input-015.html [ Skip ]
 
+# Focus ring related
+crbug.com/1035582 fast/forms/text/input-appearance-autocomplete-very-long-value.html [ Skip ]
+crbug.com/1035582 virtual/text-antialias/selection/mixed-directionality-selection.html [ Skip ]
+
 # ======
 # ====== End of rebaselines for crbug.com/1035582 ======
 # ======
