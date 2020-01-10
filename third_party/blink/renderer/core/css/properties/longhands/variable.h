@@ -34,10 +34,10 @@ class CORE_EXPORT Variable : public Longhand {
 
  protected:
   constexpr Variable(bool inherited)
-      : Longhand(
-            CSSPropertyID::kVariable,
-            kProperty | (inherited ? kInherited : 0) | kValidForFirstLetter,
-            '\0') {}
+      : Longhand(CSSPropertyID::kVariable,
+                 kProperty | (inherited ? kInherited : 0) |
+                     kValidForFirstLetter | kValidForMarker,
+                 '\0') {}
 };
 
 }  // namespace blink

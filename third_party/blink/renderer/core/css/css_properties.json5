@@ -458,6 +458,14 @@
       default: false,
       valid_type: "bool",
     },
+
+    // - valid_for_marker: true
+    //
+    // https://drafts.csswg.org/css-pseudo-4/#marker-pseudo
+    valid_for_marker: {
+      default: false,
+      valid_type: "bool",
+    },
   },
 
   // Members in the data objects should appear in the same order as in the
@@ -654,6 +662,7 @@
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
       valid_for_cue: true,
+      valid_for_marker: true,
     },
     {
       name: "direction",
@@ -668,6 +677,7 @@
       type_name: "TextDirection",
       style_builder_custom_functions: ["value"],
       priority: "High",
+      valid_for_marker: true,
     },
     {
       name: "font-family",
@@ -681,6 +691,7 @@
       priority: "High",
       valid_for_first_letter: true,
       valid_for_cue: true,
+      valid_for_marker: true,
     },
     {
       name: "font-kerning",
@@ -693,6 +704,7 @@
       keywords: ["auto", "normal", "none"],
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
+      valid_for_marker: true,
     },
     {
       name: "font-optical-sizing",
@@ -705,6 +717,7 @@
       keywords: ["auto", "none"],
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
+      valid_for_marker: true,
     },
     {
       name: "font-size",
@@ -720,6 +733,7 @@
       typedom_types: ["Keyword", "Length", "Percentage"],
       valid_for_first_letter: true,
       valid_for_cue: true,
+      valid_for_marker: true,
     },
     {
       name: "font-size-adjust",
@@ -734,6 +748,7 @@
       keywords: ["none"],
       typedom_types: ["Keyword", "Number"],
       valid_for_first_letter: true,
+      valid_for_marker: true,
     },
     {
       name: "font-stretch",
@@ -751,6 +766,7 @@
       typedom_types: ["Keyword", "Percentage"],
       valid_for_first_letter: true,
       valid_for_cue: true,
+      valid_for_marker: true,
     },
     {
       name: "font-style",
@@ -765,6 +781,7 @@
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
       valid_for_cue: true,
+      valid_for_marker: true,
     },
     {
       name: "font-variant-ligatures",
@@ -783,6 +800,7 @@
       ],
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
+      valid_for_marker: true,
     },
     {
       name: "font-variant-caps",
@@ -798,6 +816,7 @@
       ],
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
+      valid_for_marker: true,
     },
     {
       name: "font-variant-east-asian",
@@ -813,6 +832,7 @@
       ],
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
+      valid_for_marker: true,
     },
     {
       name: "font-variant-numeric",
@@ -829,6 +849,7 @@
       ],
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
+      valid_for_marker: true,
     },
     {
       name: "font-weight",
@@ -844,6 +865,7 @@
       typedom_types: ["Keyword", "Number"],
       valid_for_first_letter: true,
       valid_for_cue: true,
+      valid_for_marker: true,
     },
     {
       name: "font-feature-settings",
@@ -857,6 +879,7 @@
       keywords: ["normal"],
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
+      valid_for_marker: true,
     },
     {
       name: "font-variation-settings",
@@ -871,6 +894,7 @@
       typedom_types: ["Keyword"],
       valid_for_first_letter: true,
       valid_for_cue: true,
+      valid_for_marker: true,
     },
     {
       name: "-webkit-font-smoothing",
@@ -1724,6 +1748,7 @@
       type_name: "ContentData",
       computed_style_custom_functions: ["getter", "setter"],
       style_builder_custom_functions: ["initial", "inherit", "value"],
+      valid_for_marker: true,
     },
     {
       name: "counter-increment",
@@ -3426,6 +3451,7 @@
       typedom_types: ["Keyword"],
       default_value: "none",
       name_for_methods: "TextCombine",
+      valid_for_marker: true,
     },
     {
       name: "text-decoration-color",
@@ -3703,6 +3729,7 @@
       typedom_types: ["Keyword"],
       default_value: "normal",
       type_name: "UnicodeBidi",
+      valid_for_marker: true,
     },
     {
       name: "vector-effect",
@@ -4340,6 +4367,7 @@
       typedom_types: ["Keyword"],
       default_value: "normal",
       valid_for_cue: true,
+      valid_for_marker: true,
     },
     {
       name: "widows",
@@ -5469,6 +5497,7 @@
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
       valid_for_cue: true,
+      valid_for_marker: true,
     },
     {
       name: "-internal-visited-caret-color",

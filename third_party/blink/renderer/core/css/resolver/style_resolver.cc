@@ -1355,44 +1355,6 @@ void StyleResolver::ApplyAnimatedStandardProperties(
   }
 }
 
-static inline bool IsValidMarkerStyleProperty(CSSPropertyID id) {
-  switch (id) {
-    // Valid ::marker properties listed in spec:
-    // https://drafts.csswg.org/css-pseudo-4/#marker-pseudo
-    case CSSPropertyID::kColor:
-    case CSSPropertyID::kContent:
-    case CSSPropertyID::kDirection:
-    case CSSPropertyID::kFont:
-    case CSSPropertyID::kFontFamily:
-    case CSSPropertyID::kFontFeatureSettings:
-    case CSSPropertyID::kFontKerning:
-    case CSSPropertyID::kFontOpticalSizing:
-    case CSSPropertyID::kFontSize:
-    case CSSPropertyID::kFontSizeAdjust:
-    case CSSPropertyID::kFontStretch:
-    case CSSPropertyID::kFontStyle:
-    case CSSPropertyID::kFontVariant:
-    case CSSPropertyID::kFontVariantCaps:
-    case CSSPropertyID::kFontVariantEastAsian:
-    case CSSPropertyID::kFontVariantLigatures:
-    case CSSPropertyID::kFontVariantNumeric:
-    case CSSPropertyID::kFontVariationSettings:
-    case CSSPropertyID::kFontWeight:
-    case CSSPropertyID::kTextCombineUpright:
-    case CSSPropertyID::kUnicodeBidi:
-    case CSSPropertyID::kWhiteSpace:
-      return true;
-
-    // Not directly specified in spec, but variables should be supported nearly
-    // anywhere.
-    case CSSPropertyID::kVariable:
-      return true;
-
-    default:
-      return false;
-  }
-}
-
 static bool PassesPropertyFilter(ValidPropertyFilter valid_property_filter,
                                  CSSPropertyID property,
                                  const Document& document) {
@@ -1404,7 +1366,7 @@ static bool PassesPropertyFilter(ValidPropertyFilter valid_property_filter,
     case ValidPropertyFilter::kCue:
       return CSSProperty::Get(property).IsValidForCue();
     case ValidPropertyFilter::kMarker:
-      return IsValidMarkerStyleProperty(property);
+      return CSSProperty::Get(property).IsValidForMarker();
   }
   NOTREACHED();
   return true;

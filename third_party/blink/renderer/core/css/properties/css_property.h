@@ -55,6 +55,7 @@ class CORE_EXPORT CSSProperty : public CSSUnresolvedProperty {
   }
   bool IsValidForFirstLetter() const { return flags_ & kValidForFirstLetter; }
   bool IsValidForCue() const { return flags_ & kValidForCue; }
+  bool IsValidForMarker() const { return flags_ & kValidForMarker; }
 
   bool IsRepeated() const { return repetition_separator_ != '\0'; }
   char RepetitionSeparator() const { return repetition_separator_; }
@@ -124,6 +125,8 @@ class CORE_EXPORT CSSProperty : public CSSUnresolvedProperty {
     kValidForFirstLetter = 1 << 12,
     // https://w3c.github.io/webvtt/#the-cue-pseudo-element
     kValidForCue = 1 << 13,
+    // https://drafts.csswg.org/css-pseudo-4/#marker-pseudo
+    kValidForMarker = 1 << 14,
   };
 
   constexpr CSSProperty(CSSPropertyID property_id,
