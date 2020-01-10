@@ -49,6 +49,15 @@ public final class ChromePreferenceKeys {
 
     /** Whether Autofill Assistant is enabled */
     public static final String AUTOFILL_ASSISTANT_ENABLED = "autofill_assistant_switch";
+    /** Whether the Autofill Assistant onboarding has been accepted. */
+    public static final String AUTOFILL_ASSISTANT_ONBOARDING_ACCEPTED =
+            "AUTOFILL_ASSISTANT_ONBOARDING_ACCEPTED";
+    /**
+     * LEGACY preference indicating whether "do not show again" was checked in the autofill
+     * assistant onboarding
+     */
+    public static final String AUTOFILL_ASSISTANT_SKIP_INIT_SCREEN =
+            "AUTOFILL_ASSISTANT_SKIP_INIT_SCREEN";
 
     public static final String BOOKMARKS_LAST_MODIFIED_FOLDER_ID = "last_bookmark_folder_id";
     public static final String BOOKMARKS_LAST_USED_URL = "enhanced_bookmark_last_used_url";
@@ -592,6 +601,8 @@ public final class ChromePreferenceKeys {
         return Arrays.asList(
                 ACCESSIBILITY_TAB_SWITCHER,
                 AUTOFILL_ASSISTANT_ENABLED,
+                AUTOFILL_ASSISTANT_ONBOARDING_ACCEPTED,
+                AUTOFILL_ASSISTANT_SKIP_INIT_SCREEN,
                 BOOKMARKS_LAST_MODIFIED_FOLDER_ID,
                 BOOKMARKS_LAST_USED_URL,
                 BOOKMARKS_LAST_USED_PARENT,
