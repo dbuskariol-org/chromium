@@ -262,7 +262,7 @@ namespace declarativeNetRequest {
     long? tabId;
 
     // If specified, only matches rules after the given timestamp.
-    long? minTimeStamp;
+    double? minTimeStamp;
   };
 
   [nodoc]
