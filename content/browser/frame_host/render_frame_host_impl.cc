@@ -1675,8 +1675,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
                                     OnRunJavaScriptDialog)
     IPC_MESSAGE_HANDLER_DELAY_REPLY(FrameHostMsg_RunBeforeUnloadConfirm,
                                     OnRunBeforeUnloadConfirm)
-    IPC_MESSAGE_HANDLER(FrameHostMsg_DidAccessInitialDocument,
-                        OnDidAccessInitialDocument)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeOpener, OnDidChangeOpener)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeFramePolicy,
                         OnDidChangeFramePolicy)
@@ -3354,7 +3352,7 @@ bool RenderFrameHostImpl::HasTransientUserActivation() {
   return frame_tree_node_->HasTransientUserActivation();
 }
 
-void RenderFrameHostImpl::OnDidAccessInitialDocument() {
+void RenderFrameHostImpl::DidAccessInitialDocument() {
   delegate_->DidAccessInitialDocument();
 }
 
