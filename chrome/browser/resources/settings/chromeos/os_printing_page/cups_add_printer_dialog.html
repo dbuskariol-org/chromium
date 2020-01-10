@@ -91,6 +91,10 @@
         padding-inline-end: 20px;
         padding-inline-start: 20px;
       }
+
+      #make-model-body {
+        height: 290px;
+      }
     </style>
     <add-printer-dialog>
       <div slot="dialog-title">
@@ -98,7 +102,7 @@
         <printer-dialog-error error-text="[[errorText_]]">
         </printer-dialog-error>
       </div>
-      <div slot="dialog-body">
+      <div id="make-model-body" slot="dialog-body">
         <div class="subtext" id="makeModelTextInfo">
           <settings-localized-link
               localized-string=
