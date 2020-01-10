@@ -305,8 +305,8 @@ bool LocationBarView::IsInitialized() const {
 }
 
 SkColor LocationBarView::GetColor(OmniboxPart part) const {
-  DCHECK(GetWidget());
-  return GetOmniboxColor(GetThemeProvider(), part);
+  return GetOmniboxColor(&ThemeService::GetThemeProviderForProfile(profile_),
+                         part);
 }
 
 SkColor LocationBarView::GetOpaqueBorderColor() const {

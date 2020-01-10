@@ -54,8 +54,12 @@
 namespace {
 
 std::unique_ptr<views::ImageButton> CreateCloseButton(
-    views::ButtonListener* listener) {
+    views::ButtonListener* listener,
+    SkColor color) {
   auto close_button = CreateVectorImageButton(listener);
+  SetImageFromVectorIconWithColor(
+      close_button.get(), vector_icons::kCloseRoundedIcon,
+      GetLayoutConstant(LOCATION_BAR_ICON_SIZE), color);
   close_button->SetTooltipText(l10n_util::GetStringUTF16(IDS_APP_CLOSE));
   close_button->SetBorder(views::CreateEmptyBorder(
       gfx::Insets(GetLayoutConstant(LOCATION_BAR_CHILD_INTERIOR_PADDING))));
@@ -81,7 +85,7 @@ bool ShouldDisplayUrl(content::WebContents* contents) {
 // page.
 class CustomTabBarTitleOriginView : public views::View {
  public:
-  CustomTabBarTitleOriginView() {
+  explicit CustomTabBarTitleOriginView(SkColor background_color) {
     auto title_label = std::make_unique<views::Label>(
         base::string16(), CONTEXT_BODY_TEXT_LARGE,
         views::style::TextStyle::STYLE_PRIMARY);
@@ -90,6 +94,7 @@ class CustomTabBarTitleOriginView : public views::View {
         views::style::STYLE_SECONDARY,
         gfx::DirectionalityMode::DIRECTIONALITY_AS_URL);
 
+    title_label->SetBackgroundColor(background_color);
     title_label->SetElideBehavior(gfx::ElideBehavior::ELIDE_TAIL);
     title_label->SetHorizontalAlignment(gfx::HorizontalAlignment::ALIGN_LEFT);
     title_label->SetProperty(views::kFlexBehaviorKey,
@@ -97,6 +102,7 @@ class CustomTabBarTitleOriginView : public views::View {
                                  views::MinimumFlexSizeRule::kScaleToMinimum,
                                  views::MaximumFlexSizeRule::kPreferred));
 
+    location_label->SetBackgroundColor(background_color);
     location_label->SetElideBehavior(gfx::ElideBehavior::ELIDE_HEAD);
     location_label->SetHorizontalAlignment(
         gfx::HorizontalAlignment::ALIGN_LEFT);
@@ -118,11 +124,6 @@ class CustomTabBarTitleOriginView : public views::View {
     title_label_->SetText(title);
     location_label_->SetText(location);
     location_label_->SetVisible(!location.empty());
-  }
-
-  void SetColors(SkColor background_color) {
-    title_label_->SetBackgroundColor(background_color);
-    location_label_->SetBackgroundColor(background_color);
   }
 
   int GetMinimumWidth() const {
@@ -173,16 +174,38 @@ CustomTabBarView::CustomTabBarView(BrowserView* browser_view,
       delegate_(delegate),
       browser_(browser_view->browser()) {
   set_context_menu_controller(this);
+  base::Optional<SkColor> optional_theme_color =
+      browser_->app_controller()->GetThemeColor();
+
+  const bool dark_mode = GetNativeTheme()->ShouldUseDarkColors();
+  const SkColor default_frame_color =
+#if defined(OS_CHROMEOS)
+      // Ash system frames differ from ChromeOS browser frames.
+      ash::kDefaultFrameColor;
+#else
+      ThemeProperties::GetDefaultColor(ThemeProperties::COLOR_FRAME, false,
+                                       dark_mode);
+#endif
+
+  title_bar_color_ = optional_theme_color.value_or(default_frame_color);
+
+  background_color_ = dark_mode ? default_frame_color : SK_ColorWHITE;
+
+  SetBackground(views::CreateSolidBackground(background_color_));
+
+  const SkColor foreground_color =
+      color_utils::GetColorWithMaxContrast(background_color_);
 
   const gfx::FontList& font_list = views::style::GetFont(
       CONTEXT_OMNIBOX_PRIMARY, views::style::STYLE_PRIMARY);
 
-  close_button_ = AddChildView(CreateCloseButton(this));
+  close_button_ = AddChildView(CreateCloseButton(this, foreground_color));
 
   location_icon_view_ =
       AddChildView(std::make_unique<LocationIconView>(font_list, this, this));
 
-  auto title_origin_view = std::make_unique<CustomTabBarTitleOriginView>();
+  auto title_origin_view =
+      std::make_unique<CustomTabBarTitleOriginView>(background_color_);
   title_origin_view->SetProperty(
       views::kFlexBehaviorKey, views::FlexSpecification::ForSizeRule(
                                    views::MinimumFlexSizeRule::kScaleToMinimum,
@@ -207,85 +230,6 @@ gfx::Rect CustomTabBarView::GetAnchorBoundsInScreen() const {
 
 const char* CustomTabBarView::GetClassName() const {
   return kViewClassName;
-}
-
-gfx::Size CustomTabBarView::CalculatePreferredSize() const {
-  // ToolbarView::GetMinimumSize() uses the preferred size of its children, so
-  // tell it the minimum size this control will fit into (its layout will
-  // automatically have this control fill available space).
-  return gfx::Size(layout_manager_->interior_margin().width() +
-                       title_origin_view_->GetMinimumSize().width() +
-                       close_button_->GetPreferredSize().width() +
-                       location_icon_view_->GetPreferredSize().width(),
-                   GetLayoutManager()->GetPreferredSize(this).height());
-}
-
-void CustomTabBarView::OnPaintBackground(gfx::Canvas* canvas) {
-  views::View::OnPaintBackground(canvas);
-
-  SkColor separator_color =
-      color_utils::IsDark(background_color_) ? SK_ColorWHITE : SK_ColorBLACK;
-  constexpr float kSeparatorOpacity = 0.15f;
-
-  gfx::Rect bounds = GetLocalBounds();
-  const gfx::Size separator_size = gfx::Size(bounds.width(), 1);
-
-  // Inset the bounds by 1 on the bottom, so we draw the bottom border inside
-  // the custom tab bar.
-  bounds.Inset(0, 0, 0, 1);
-
-  // Custom tab/content separator (bottom border).
-  canvas->FillRect(gfx::Rect(bounds.bottom_left(), separator_size),
-                   color_utils::AlphaBlend(separator_color, background_color_,
-                                           kSeparatorOpacity));
-
-  // Don't render the separator if there is already sufficient contrast between
-  // the custom tab bar and the title bar.
-  constexpr float kMaxContrastForSeparator = 1.1f;
-  if (color_utils::GetContrastRatio(background_color_, title_bar_color_) >
-      kMaxContrastForSeparator) {
-    return;
-  }
-
-  // Frame/Custom tab separator (top border).
-  canvas->FillRect(gfx::Rect(bounds.origin(), separator_size),
-                   color_utils::AlphaBlend(separator_color, title_bar_color_,
-                                           kSeparatorOpacity));
-}
-
-void CustomTabBarView::ChildPreferredSizeChanged(views::View* child) {
-  Layout();
-  SchedulePaint();
-}
-
-void CustomTabBarView::OnThemeChanged() {
-  base::Optional<SkColor> optional_theme_color =
-      browser_->app_controller()->GetThemeColor();
-
-  const bool dark_mode = GetNativeTheme()->ShouldUseDarkColors();
-  const SkColor default_frame_color =
-#if defined(OS_CHROMEOS)
-      // Ash system frames differ from ChromeOS browser frames.
-      ash::kDefaultFrameColor;
-#else
-      ThemeProperties::GetDefaultColor(ThemeProperties::COLOR_FRAME, false,
-                                       dark_mode);
-#endif
-
-  title_bar_color_ = optional_theme_color.value_or(default_frame_color);
-
-  background_color_ = dark_mode ? default_frame_color : SK_ColorWHITE;
-
-  SetBackground(views::CreateSolidBackground(background_color_));
-
-  const SkColor foreground_color =
-      color_utils::GetColorWithMaxContrast(background_color_);
-
-  SetImageFromVectorIconWithColor(
-      close_button_, vector_icons::kCloseRoundedIcon,
-      GetLayoutConstant(LOCATION_BAR_ICON_SIZE), foreground_color);
-
-  title_origin_view_->SetColors(background_color_);
 }
 
 void CustomTabBarView::TabChangedAt(content::WebContents* contents,
@@ -337,6 +281,78 @@ void CustomTabBarView::TabChangedAt(content::WebContents* contents,
   Layout();
 }
 
+gfx::Size CustomTabBarView::CalculatePreferredSize() const {
+  // ToolbarView::GetMinimumSize() uses the preferred size of its children, so
+  // tell it the minimum size this control will fit into (its layout will
+  // automatically have this control fill available space).
+  return gfx::Size(layout_manager_->interior_margin().width() +
+                       title_origin_view_->GetMinimumSize().width() +
+                       close_button_->GetPreferredSize().width() +
+                       location_icon_view_->GetPreferredSize().width(),
+                   GetLayoutManager()->GetPreferredSize(this).height());
+}
+
+void CustomTabBarView::OnPaintBackground(gfx::Canvas* canvas) {
+  views::View::OnPaintBackground(canvas);
+
+  SkColor separator_color =
+      color_utils::IsDark(background_color_) ? SK_ColorWHITE : SK_ColorBLACK;
+  constexpr float kSeparatorOpacity = 0.15f;
+
+  gfx::Rect bounds = GetLocalBounds();
+  const gfx::Size separator_size = gfx::Size(bounds.width(), 1);
+
+  // Inset the bounds by 1 on the bottom, so we draw the bottom border inside
+  // the custom tab bar.
+  bounds.Inset(0, 0, 0, 1);
+
+  // Custom tab/content separator (bottom border).
+  canvas->FillRect(gfx::Rect(bounds.bottom_left(), separator_size),
+                   color_utils::AlphaBlend(separator_color, background_color_,
+                                           kSeparatorOpacity));
+
+  // Don't render the separator if there is already sufficient contrast between
+  // the custom tab bar and the title bar.
+  constexpr float kMaxContrastForSeparator = 1.1f;
+  if (color_utils::GetContrastRatio(background_color_, title_bar_color_) >
+      kMaxContrastForSeparator) {
+    return;
+  }
+
+  // Frame/Custom tab separator (top border).
+  canvas->FillRect(gfx::Rect(bounds.origin(), separator_size),
+                   color_utils::AlphaBlend(separator_color, title_bar_color_,
+                                           kSeparatorOpacity));
+}
+
+void CustomTabBarView::ChildPreferredSizeChanged(views::View* child) {
+  Layout();
+  SchedulePaint();
+}
+
+void CustomTabBarView::ShowContextMenuForViewImpl(
+    views::View* source,
+    const gfx::Point& point,
+    ui::MenuSourceType source_type) {
+  if (!context_menu_model_) {
+    context_menu_model_ = std::make_unique<ui::SimpleMenuModel>(this);
+    context_menu_model_->AddItemWithStringId(IDC_COPY_URL, IDS_COPY_URL);
+  }
+  context_menu_runner_ = std::make_unique<views::MenuRunner>(
+      context_menu_model_.get(),
+      views::MenuRunner::HAS_MNEMONICS | views::MenuRunner::CONTEXT_MENU);
+  context_menu_runner_->RunMenuAt(
+      views::View::GetWidget(), nullptr, gfx::Rect(point, gfx::Size()),
+      views::MenuAnchorPosition::kTopLeft, source_type);
+}
+
+void CustomTabBarView::ExecuteCommand(int command_id, int event_flags) {
+  if (command_id == IDC_COPY_URL) {
+    base::RecordAction(base::UserMetricsAction("CopyCustomTabBarUrl"));
+    chrome::ExecuteCommand(browser_, command_id);
+  }
+}
+
 SkColor CustomTabBarView::GetIconLabelBubbleSurroundingForegroundColor() const {
   return title_origin_view_->GetLocationColor();
 }
@@ -357,11 +373,6 @@ void CustomTabBarView::OnLocationIconPressed(const ui::MouseEvent& event) {}
 
 void CustomTabBarView::OnLocationIconDragged(const ui::MouseEvent& event) {}
 
-SkColor CustomTabBarView::GetSecurityChipColor(
-    security_state::SecurityLevel security_level) const {
-  return GetOmniboxSecurityChipColor(GetThemeProvider(), security_level);
-}
-
 bool CustomTabBarView::ShowPageInfoDialog() {
   return ::ShowPageInfoDialog(
       GetWebContents(),
@@ -370,8 +381,11 @@ bool CustomTabBarView::ShowPageInfoDialog() {
       bubble_anchor_util::Anchor::kCustomTabBar);
 }
 
-const LocationBarModel* CustomTabBarView::GetLocationBarModel() const {
-  return delegate_->GetLocationBarModel();
+SkColor CustomTabBarView::GetSecurityChipColor(
+    security_state::SecurityLevel security_level) const {
+  return GetOmniboxSecurityChipColor(
+      &ThemeService::GetThemeProviderForProfile(browser_->profile()),
+      security_level);
 }
 
 gfx::ImageSkia CustomTabBarView::GetLocationIcon(
@@ -382,6 +396,10 @@ gfx::ImageSkia CustomTabBarView::GetLocationIcon(
       GetSecurityChipColor(GetLocationBarModel()->GetSecurityLevel()));
 }
 
+const LocationBarModel* CustomTabBarView::GetLocationBarModel() const {
+  return delegate_->GetLocationBarModel();
+}
+
 void CustomTabBarView::ButtonPressed(views::Button* sender,
                                      const ui::Event& event) {
   GoBackToApp();
@@ -389,11 +407,6 @@ void CustomTabBarView::ButtonPressed(views::Button* sender,
 
 void CustomTabBarView::GoBackToAppForTesting() {
   GoBackToApp();
-}
-
-bool CustomTabBarView::IsShowingOriginForTesting() const {
-  return title_origin_view_ != nullptr &&
-         title_origin_view_->IsShowingOriginForTesting();
 }
 
 void CustomTabBarView::GoBackToApp() {
@@ -443,25 +456,7 @@ void CustomTabBarView::AppInfoClosedCallback(
   GetFocusManager()->SetFocusedView(location_icon_view_);
 }
 
-void CustomTabBarView::ExecuteCommand(int command_id, int event_flags) {
-  if (command_id == IDC_COPY_URL) {
-    base::RecordAction(base::UserMetricsAction("CopyCustomTabBarUrl"));
-    chrome::ExecuteCommand(browser_, command_id);
-  }
-}
-
-void CustomTabBarView::ShowContextMenuForViewImpl(
-    views::View* source,
-    const gfx::Point& point,
-    ui::MenuSourceType source_type) {
-  if (!context_menu_model_) {
-    context_menu_model_ = std::make_unique<ui::SimpleMenuModel>(this);
-    context_menu_model_->AddItemWithStringId(IDC_COPY_URL, IDS_COPY_URL);
-  }
-  context_menu_runner_ = std::make_unique<views::MenuRunner>(
-      context_menu_model_.get(),
-      views::MenuRunner::HAS_MNEMONICS | views::MenuRunner::CONTEXT_MENU);
-  context_menu_runner_->RunMenuAt(
-      views::View::GetWidget(), nullptr, gfx::Rect(point, gfx::Size()),
-      views::MenuAnchorPosition::kTopLeft, source_type);
+bool CustomTabBarView::IsShowingOriginForTesting() const {
+  return title_origin_view_ != nullptr &&
+         title_origin_view_->IsShowingOriginForTesting();
 }
