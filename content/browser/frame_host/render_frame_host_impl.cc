@@ -2094,7 +2094,7 @@ bool RenderFrameHostImpl::CreateRenderFrame(int previous_routing_id,
     params->widget_params->routing_id =
         GetLocalRenderWidgetHost()->GetRoutingID();
     params->widget_params->visual_properties =
-        GetLocalRenderWidgetHost()->GetVisualProperties();
+        GetLocalRenderWidgetHost()->GetInitialVisualProperties();
   }
 
   GetProcess()->GetRendererInterface()->CreateFrame(std::move(params));

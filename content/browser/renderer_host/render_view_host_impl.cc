@@ -374,8 +374,7 @@ bool RenderViewHostImpl::CreateRenderView(
 
   // TODO(danakj): Make the visual_properties optional in the message.
   if (proxy_route_id == MSG_ROUTING_NONE) {
-    params->visual_properties = GetWidget()->GetVisualProperties();
-    GetWidget()->SetInitialVisualProperties(params->visual_properties);
+    params->visual_properties = GetWidget()->GetInitialVisualProperties();
   }
 
   // The RenderView is owned by this process. This call must be accompanied by a
