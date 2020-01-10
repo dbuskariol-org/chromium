@@ -4405,7 +4405,10 @@ gfx::Vector2dF LayerTreeHostImpl::ScrollSingleNode(
 }
 
 void LayerTreeHostImpl::ScrollLatchedScroller(ScrollState* scroll_state) {
-  DCHECK(CurrentlyScrollingNode() && scroll_state);
+  DCHECK(CurrentlyScrollingNode());
+  DCHECK(scroll_state);
+  DCHECK(latched_scroll_type_.has_value());
+
   ScrollNode* scroll_node = CurrentlyScrollingNode();
   gfx::Point viewport_point(scroll_state->position_x(),
                             scroll_state->position_y());
@@ -4428,7 +4431,8 @@ void LayerTreeHostImpl::ScrollLatchedScroller(ScrollState* scroll_state) {
     // still use Viewport::ScrollBy to also move browser controls if needed.
     Viewport::ScrollResult result = viewport().ScrollBy(
         delta, viewport_point, scroll_state->is_direct_manipulation(),
-        !wheel_scrolling_, scroll_node->scrolls_outer_viewport);
+        latched_scroll_type_ != InputHandler::WHEEL,
+        scroll_node->scrolls_outer_viewport);
 
     applied_delta = result.consumed_delta;
     delta_applied_to_content = result.content_scrolled_delta;
@@ -4530,9 +4534,9 @@ void LayerTreeHostImpl::DidLatchToScroller(const ScrollState& scroll_state,
   scroll_affects_scroll_handler_ = active_tree_->have_scroll_event_handlers();
   scroll_animating_snap_target_ids_ = TargetSnapAreaElementIds();
   last_latched_scroller_ = CurrentlyScrollingNode()->element_id;
-  wheel_scrolling_ = type == InputHandler::WHEEL;
+  latched_scroll_type_ = type;
 
-  frame_trackers_.StartSequence(wheel_scrolling_
+  frame_trackers_.StartSequence(latched_scroll_type_ == InputHandler::WHEEL
                                     ? FrameSequenceTrackerType::kWheelScroll
                                     : FrameSequenceTrackerType::kTouchScroll);
   client_->RenewTreePriority();
@@ -4587,8 +4591,7 @@ void LayerTreeHostImpl::SetRenderFrameObserver(
 }
 
 bool LayerTreeHostImpl::ShouldAnimateScroll(
-    const ScrollState& scroll_state,
-    InputHandler::ScrollInputType type) const {
+    const ScrollState& scroll_state) const {
   if (!settings_.enable_smooth_scroll)
     return false;
 
@@ -4603,7 +4606,7 @@ bool LayerTreeHostImpl::ShouldAnimateScroll(
 
   // Mac does not smooth scroll wheel events (crbug.com/574283). We allow tests
   // to force it on.
-  return type == InputHandler::SCROLLBAR
+  return latched_scroll_type_ == InputHandler::SCROLLBAR
              ? true
              : force_smooth_wheel_scrolling_for_testing_;
 #else
@@ -4613,11 +4616,10 @@ bool LayerTreeHostImpl::ShouldAnimateScroll(
 
 InputHandlerScrollResult LayerTreeHostImpl::ScrollUpdate(
     ScrollState* scroll_state,
-    InputHandler::ScrollInputType type,
     base::TimeDelta delayed_by) {
   DCHECK(scroll_state);
 
-  if (ShouldAnimateScroll(*scroll_state, type)) {
+  if (ShouldAnimateScroll(*scroll_state)) {
     DCHECK(!scroll_state->is_in_inertial_phase());
     gfx::Vector2dF scroll_delta(scroll_state->delta_x(),
                                 scroll_state->delta_y());
@@ -4901,6 +4903,7 @@ void LayerTreeHostImpl::ClearCurrentlyScrollingNode() {
   did_scroll_x_for_scroll_gesture_ = false;
   did_scroll_y_for_scroll_gesture_ = false;
   scroll_animating_snap_target_ids_ = TargetSnapAreaElementIds();
+  latched_scroll_type_.reset();
 }
 
 void LayerTreeHostImpl::ScrollEnd(bool should_snap) {
@@ -4911,12 +4914,14 @@ void LayerTreeHostImpl::ScrollEnd(bool should_snap) {
     return;
   }
 
+  DCHECK(latched_scroll_type_.has_value());
+
   browser_controls_offset_manager_->ScrollEnd();
-  ClearCurrentlyScrollingNode();
-  frame_trackers_.StopSequence(wheel_scrolling_
+  frame_trackers_.StopSequence(latched_scroll_type_ == InputHandler::WHEEL
                                    ? FrameSequenceTrackerType::kWheelScroll
                                    : FrameSequenceTrackerType::kTouchScroll);
 
+  ClearCurrentlyScrollingNode();
   deferred_scroll_end_ = false;
   scroll_gesture_did_end_ = true;
   client_->SetNeedsCommitOnImplThread();
