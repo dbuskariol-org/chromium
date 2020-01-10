@@ -143,9 +143,6 @@ class ASH_EXPORT UnifiedSystemTrayBubble
   // animation.
   void SetFrameVisible(bool visible);
 
-  // Returns the insets for the bubble.
-  gfx::Insets GetInsets();
-
   // Controller of UnifiedSystemTrayView. As the view is owned by views
   // hierarchy, we have to own the controller here.
   std::unique_ptr<UnifiedSystemTrayController> controller_;

@@ -8,13 +8,14 @@
 
 #include "ash/accessibility/accessibility_controller_impl.h"
 #include "ash/shelf/shelf.h"
-#include "ash/strings/grit/ash_strings.h"
 #include "ash/shell.h"
+#include "ash/strings/grit/ash_strings.h"
 #include "ash/style/ash_color_provider.h"
 #include "ash/style/default_color_constants.h"
 #include "ash/system/message_center/unified_message_center_view.h"
 #include "ash/system/tray/tray_constants.h"
 #include "ash/system/tray/tray_event_filter.h"
+#include "ash/system/tray/tray_utils.h"
 #include "ash/system/unified/unified_system_tray.h"
 #include "ash/system/unified/unified_system_tray_bubble.h"
 #include "ash/system/unified/unified_system_tray_view.h"
@@ -158,13 +159,15 @@ void UnifiedMessageCenterBubble::UpdatePosition() {
   // position of the layer.
   gfx::Rect anchor_rect = tray_->shelf()->GetSystemTrayAnchorRect();
 
-  int left_offset =
-      tray_->shelf()->alignment() == ShelfAlignment::kLeft
-          ? kUnifiedMenuPadding
-          : -(kUnifiedMenuPadding - (base::i18n::IsRTL() ? 0 : 1));
+  gfx::Insets tray_bubble_insets = GetTrayBubbleInsets();
+  int left_offset = tray_->shelf()->alignment() == ShelfAlignment::kLeft
+                        ? tray_bubble_insets.left()
+                        : -tray_bubble_insets.right();
+
   anchor_rect.set_x(anchor_rect.x() + left_offset);
   anchor_rect.set_y(anchor_rect.y() - tray_->bubble()->GetCurrentTrayHeight() -
-                    kUnifiedMenuPadding - kUnifiedMessageCenterBubbleSpacing);
+                    tray_bubble_insets.bottom() -
+                    kUnifiedMessageCenterBubbleSpacing);
   bubble_view_->ChangeAnchorRect(anchor_rect);
 
   bubble_widget_->GetLayer()->StackAtTop(border_->layer());
