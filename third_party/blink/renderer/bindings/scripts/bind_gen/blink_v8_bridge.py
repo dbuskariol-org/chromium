@@ -150,13 +150,12 @@ def blink_type_info(idl_type):
             "ScriptPromise", ref_fmt="{}&", const_ref_fmt="const {}&")
 
     if real_type.is_union:
-        def_obj = real_type.union_definition_object
-        blink_impl_type = blink_class_name(def_obj)
+        blink_impl_type = blink_class_name(real_type.union_definition_object)
         return TypeInfo(
             blink_impl_type,
             ref_fmt="{}&",
             const_ref_fmt="const {}&",
-            is_nullable=def_obj.does_include_nullable_type)
+            is_nullable=True)
 
     if real_type.is_nullable:
         inner_type = blink_type_info(real_type.inner_type)
@@ -176,9 +175,12 @@ def native_value_tag(idl_type):
 
     real_type = idl_type.unwrap(typedef=True)
 
-    if (real_type.is_boolean or real_type.is_numeric or real_type.is_string
-            or real_type.is_any or real_type.is_object):
+    if (real_type.is_boolean or real_type.is_numeric or real_type.is_any
+            or real_type.is_object):
         return "IDL{}".format(real_type.type_name)
+
+    if real_type.unwrap(nullable=True).is_string:
+        return "IDL{}V2".format(real_type.type_name)
 
     if real_type.is_symbol:
         assert False, "Blink does not support/accept IDL symbol type."
@@ -206,6 +208,8 @@ def native_value_tag(idl_type):
 
     if real_type.is_nullable:
         return "IDLNullable<{}>".format(native_value_tag(real_type.inner_type))
+
+    assert False
 
 
 def make_default_value_expr(idl_type, default_value):
@@ -239,6 +243,9 @@ def make_default_value_expr(idl_type, default_value):
         elif type_info.value_t == "ScriptValue":
             initializer = None  # ScriptValue::IsEmpty() by default
             assignment_value = "ScriptValue()"
+        elif idl_type.unwrap().is_union:
+            initializer = None  # <union_type>::IsNull() by default
+            assignment_value = "{}()".format(type_info.value_t)
         else:
             assert not type_info.is_nullable
             initializer = None  # !base::Optional::has_value() by default
