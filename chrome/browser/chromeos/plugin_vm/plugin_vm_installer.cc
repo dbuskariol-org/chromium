@@ -100,9 +100,6 @@ void PluginVmInstaller::StartDlcDownload() {
                      weak_ptr_factory_.GetWeakPtr()),
       base::BindRepeating(&PluginVmInstaller::OnDlcDownloadProgressUpdated,
                           weak_ptr_factory_.GetWeakPtr()));
-
-  if (observer_)
-    observer_->OnDlcDownloadStarted();
 }
 
 void PluginVmInstaller::CancelDlcDownload() {
@@ -184,8 +181,6 @@ void PluginVmInstaller::OnDlcDownloadCompleted(
 
 void PluginVmInstaller::OnDownloadStarted() {
   download_start_tick_ = base::TimeTicks::Now();
-  if (observer_)
-    observer_->OnDownloadStarted();
 }
 
 void PluginVmInstaller::OnDownloadProgressUpdated(uint64_t bytes_downloaded,

@@ -70,14 +70,12 @@ const int kDownloadedPluginVmImageSizeInMb = 123456789u / (1024 * 1024);
 
 class MockObserver : public PluginVmInstaller::Observer {
  public:
-  MOCK_METHOD0(OnDlcDownloadStarted, void());
   MOCK_METHOD2(OnDlcDownloadProgressUpdated,
                void(double progress, base::TimeDelta elapsed_time));
   MOCK_METHOD0(OnDlcDownloadCompleted, void());
   MOCK_METHOD0(OnDlcDownloadCancelled, void());
   MOCK_METHOD1(OnDlcDownloadFailed,
                void(plugin_vm::PluginVmInstaller::FailureReason));
-  MOCK_METHOD0(OnDownloadStarted, void());
   MOCK_METHOD3(OnDownloadProgressUpdated,
                void(uint64_t bytes_downloaded,
                     int64_t content_length,
@@ -377,7 +375,6 @@ class PluginVmInstallerDriveTest : public PluginVmInstallerTestBase {
 TEST_F(PluginVmInstallerDownloadServiceTest, DownloadPluginVmImageParamsTest) {
   SetupConciergeForSuccessfulDiskImageImport(fake_concierge_client_);
 
-  EXPECT_CALL(*observer_, OnDlcDownloadStarted());
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(*observer_, OnDownloadCompleted());
   EXPECT_CALL(*observer_, OnImportProgressUpdated(50.0, _));
@@ -400,7 +397,6 @@ TEST_F(PluginVmInstallerDownloadServiceTest, DownloadPluginVmImageParamsTest) {
 TEST_F(PluginVmInstallerDownloadServiceTest, OnlyOneImageIsProcessedTest) {
   SetupConciergeForSuccessfulDiskImageImport(fake_concierge_client_);
 
-  EXPECT_CALL(*observer_, OnDlcDownloadStarted());
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(*observer_, OnDownloadCompleted());
   EXPECT_CALL(*observer_, OnImportProgressUpdated(50.0, _));
@@ -449,7 +445,6 @@ TEST_F(PluginVmInstallerDownloadServiceTest,
   EXPECT_CALL(*observer_,
               OnDownloadFailed(
                   PluginVmInstaller::FailureReason::DOWNLOAD_FAILED_ABORTED));
-  EXPECT_CALL(*observer_, OnDlcDownloadStarted()).Times(2);
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted()).Times(2);
   EXPECT_CALL(*observer_, OnDownloadCompleted());
   EXPECT_CALL(*observer_, OnImportProgressUpdated(50.0, _));
@@ -517,7 +512,6 @@ TEST_F(PluginVmInstallerDownloadServiceTest, EmptyPluginVmImageUrlTest) {
   EXPECT_CALL(
       *observer_,
       OnDownloadFailed(PluginVmInstaller::FailureReason::INVALID_IMAGE_URL));
-  EXPECT_CALL(*observer_, OnDlcDownloadStarted());
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   StartAndRunToCompletion();
 
@@ -544,7 +538,7 @@ TEST_F(PluginVmInstallerDownloadServiceTest, CannotStartIfPluginVmIsDisabled) {
 TEST_F(PluginVmInstallerDriveTest, InvalidDriveUrlTest) {
   SetPluginVmImagePref(kDriveUrl2, kHash);
 
-  EXPECT_CALL(*observer_, OnDownloadStarted());
+  EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(
       *observer_,
       OnDownloadFailed(PluginVmInstaller::FailureReason::INVALID_IMAGE_URL));
@@ -555,7 +549,7 @@ TEST_F(PluginVmInstallerDriveTest, NoConnectionDriveTest) {
   SetPluginVmImagePref(kDriveUrl, kHash);
   fake_drive_service_->set_offline(true);
 
-  EXPECT_CALL(*observer_, OnDownloadStarted());
+  EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(*observer_,
               OnDownloadFailed(
                   PluginVmInstaller::FailureReason::DOWNLOAD_FAILED_NETWORK));
@@ -565,7 +559,7 @@ TEST_F(PluginVmInstallerDriveTest, NoConnectionDriveTest) {
 TEST_F(PluginVmInstallerDriveTest, WrongHashDriveTest) {
   SetPluginVmImagePref(kDriveUrl, kHash2);
 
-  EXPECT_CALL(*observer_, OnDownloadStarted());
+  EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(*observer_, OnDownloadFailed(
                               PluginVmInstaller::FailureReason::HASH_MISMATCH));
 
@@ -576,7 +570,7 @@ TEST_F(PluginVmInstallerDriveTest, DriveDownloadFailedAfterStartingTest) {
   SetPluginVmImagePref(kDriveUrl, kHash);
   SimpleFakeDriveService* fake_drive_service = SetUpSimpleFakeDriveService();
 
-  EXPECT_CALL(*observer_, OnDownloadStarted());
+  EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(*observer_, OnDownloadProgressUpdated(5, 100, _));
   EXPECT_CALL(*observer_, OnDownloadProgressUpdated(10, 100, _));
   EXPECT_CALL(*observer_,
@@ -600,7 +594,7 @@ TEST_F(PluginVmInstallerDriveTest, CancelledDriveDownloadTest) {
   SetPluginVmImagePref(kDriveUrl, kHash);
   SimpleFakeDriveService* fake_drive_service = SetUpSimpleFakeDriveService();
 
-  EXPECT_CALL(*observer_, OnDownloadStarted());
+  EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(*observer_, OnDownloadProgressUpdated(5, 100, _));
   EXPECT_CALL(*observer_, OnDownloadCompleted()).Times(0);
 
@@ -617,7 +611,7 @@ TEST_F(PluginVmInstallerDriveTest, CancelledDriveDownloadTest) {
 TEST_F(PluginVmInstallerDriveTest, SuccessfulDriveDownloadTest) {
   SetPluginVmImagePref(kDriveUrl, kHash);
 
-  EXPECT_CALL(*observer_, OnDownloadStarted());
+  EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(*observer_, OnDownloadCompleted());
   EXPECT_CALL(*observer_,
               OnDownloadProgressUpdated(_, std::strlen(kContent), _))

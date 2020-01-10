@@ -66,12 +66,10 @@ class PluginVmInstaller : public KeyedService,
   class Observer {
    public:
     virtual ~Observer() = default;
-    virtual void OnDlcDownloadStarted() = 0;
     virtual void OnDlcDownloadProgressUpdated(double progress,
                                               base::TimeDelta elapsed_time) = 0;
     virtual void OnDlcDownloadCompleted() = 0;
     virtual void OnDlcDownloadCancelled() = 0;
-    virtual void OnDownloadStarted() = 0;
     virtual void OnDownloadProgressUpdated(uint64_t bytes_downloaded,
                                            int64_t content_length,
                                            base::TimeDelta elapsed_time) = 0;
