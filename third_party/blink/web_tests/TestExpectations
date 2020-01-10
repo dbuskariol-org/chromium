@@ -7111,7 +7111,7 @@ crbug.com/1034492 http/tests/devtools/unit/filtered-list-widget-providers.js [ P
 crbug.com/1034492 http/tests/devtools/unit/soft-drop-down.js [ Pass Failure ]
 
 # Sheriff 2019-12-17
-crbug.com/1034789 [ Mac10.13 ] http/tests/security/frameNavigation/xss-ALLOWED-parent-navigation-change-async.html [ Pass Timeout ]
+crbug.com/1034789 [ Mac ] http/tests/security/frameNavigation/xss-ALLOWED-parent-navigation-change-async.html [ Pass Timeout ]
 crbug.com/1034789 [ Mac10.13 ] virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Timeout ]
 crbug.com/1034789 [ Mac10.13 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
 crbug.com/1034839 css3/filters/effect-reference-image.html [ Pass Failure ]
