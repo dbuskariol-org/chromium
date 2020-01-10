@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_MEDIA_ROUTER_PROVIDERS_CAST_MOCK_ACTIVITY_RECORD_H_
-#define CHROME_BROWSER_MEDIA_ROUTER_PROVIDERS_CAST_MOCK_ACTIVITY_RECORD_H_
+#ifndef CHROME_BROWSER_MEDIA_ROUTER_PROVIDERS_CAST_MOCK_CAST_ACTIVITY_RECORD_H_
+#define CHROME_BROWSER_MEDIA_ROUTER_PROVIDERS_CAST_MOCK_CAST_ACTIVITY_RECORD_H_
 
 #include <string>
 
@@ -16,19 +16,15 @@
 
 namespace media_router {
 
-class MockActivityRecord : public ActivityRecord {
+class MockCastActivityRecord : public CastActivityRecord {
  public:
-  MockActivityRecord(const MediaRoute& route, const std::string& app_id);
-  ~MockActivityRecord() override;
+  MockCastActivityRecord(const MediaRoute& route, const std::string& app_id);
+  ~MockCastActivityRecord() override;
 
   void set_session_id(const std::string& new_id) {
     if (!session_id_)
       session_id_ = new_id;
     ASSERT_EQ(session_id_, new_id);
-  }
-
-  void AddFakeClient(const std::string& client_id) {
-    connected_clients_[client_id] = nullptr;
   }
 
   MOCK_METHOD1(SendAppMessageToReceiver,
@@ -38,11 +34,8 @@ class MockActivityRecord : public ActivityRecord {
   MOCK_METHOD2(SendSetVolumeRequestToReceiver,
                void(const CastInternalMessage& cast_message,
                     cast_channel::ResultCallback callback));
-  MOCK_METHOD3(
-      SendStopSessionMessageToReceiver,
-      void(const base::Optional<std::string>& client_id,
-           const std::string& hash_token,
-           mojom::MediaRouteProvider::TerminateRouteCallback callback));
+  MOCK_METHOD1(SendStopSessionMessageToClients,
+               void(const std::string& hash_token));
   MOCK_METHOD1(HandleLeaveSession, void(const std::string& client_id));
   MOCK_METHOD3(
       AddClient,
@@ -75,4 +68,4 @@ class MockActivityRecord : public ActivityRecord {
 
 }  // namespace media_router
 
-#endif  // CHROME_BROWSER_MEDIA_ROUTER_PROVIDERS_CAST_MOCK_ACTIVITY_RECORD_H_
+#endif  // CHROME_BROWSER_MEDIA_ROUTER_PROVIDERS_CAST_MOCK_CAST_ACTIVITY_RECORD_H_
