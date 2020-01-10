@@ -2143,6 +2143,17 @@ void RenderWidgetHostViewAndroid::OnBeginFrame(
   if (sync_compositor_ && args.type == viz::BeginFrameArgs::MISSED)
     return;
 
+  bool needs_begin_frame =
+      (outstanding_begin_frame_requests_ & BEGIN_FRAME) ||
+      (outstanding_begin_frame_requests_ & PERSISTENT_BEGIN_FRAME);
+
+  // Update |last_begin_frame_args_| before handling
+  // |outstanding_begin_frame_requests_| to prevent the BeginFrameSource from
+  // sending the same MISSED args in infinite recursion.
+  last_begin_frame_args_ = args;
+
+  ClearBeginFrameRequest(BEGIN_FRAME);
+
   bool webview_fling = sync_compositor_ && is_currently_scrolling_viewport_;
   if (!webview_fling) {
     host_->ProgressFlingIfNeeded(args.frame_time);
@@ -2153,14 +2164,7 @@ void RenderWidgetHostViewAndroid::OnBeginFrame(
     host_->ProgressFlingIfNeeded(args.frame_time);
   }
 
-  // Update |last_begin_frame_args_| before handling
-  // |outstanding_begin_frame_requests_| to prevent the BeginFrameSource from
-  // sending the same MISSED args in infinite recursion.
-  last_begin_frame_args_ = args;
-
-  if ((outstanding_begin_frame_requests_ & BEGIN_FRAME) ||
-      (outstanding_begin_frame_requests_ & PERSISTENT_BEGIN_FRAME)) {
-    ClearBeginFrameRequest(BEGIN_FRAME);
+  if (needs_begin_frame) {
     SendBeginFrame(args);
   }
 }
@@ -2476,6 +2480,10 @@ void RenderWidgetHostViewAndroid::SetWebContentsAccessibility(
         ->render_frame_metadata_provider()
         ->ReportAllRootScrollsForAccessibility(!!web_contents_accessibility_);
   }
+}
+
+void RenderWidgetHostViewAndroid::SetNeedsBeginFrameForFlingProgress() {
+  AddBeginFrameRequest(BEGIN_FRAME);
 }
 
 }  // namespace content

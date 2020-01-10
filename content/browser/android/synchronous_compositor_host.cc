@@ -527,7 +527,7 @@ void SynchronousCompositorHost::SetBeginFramePaused(bool paused) {
 }
 
 void SynchronousCompositorHost::SetNeedsBeginFrames(bool needs_begin_frames) {
-  rwhva_->host()->SetNeedsBeginFrame(needs_begin_frames);
+  rwhva_->SetNeedsBeginFrames(needs_begin_frames);
 }
 
 void SynchronousCompositorHost::LayerTreeFrameSinkCreated() {

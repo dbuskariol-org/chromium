@@ -99,6 +99,8 @@ class CONTENT_EXPORT RenderWidgetHostViewAndroid
     return touch_selection_controller_.get();
   }
 
+  void SetNeedsBeginFrames(bool needs_begin_frames);
+
   // RenderWidgetHostView implementation.
   void InitAsChild(gfx::NativeView parent_view) override;
   void InitAsPopup(RenderWidgetHostView* parent_host_view,
@@ -163,7 +165,6 @@ class CONTENT_EXPORT RenderWidgetHostViewAndroid
   std::unique_ptr<SyntheticGestureTarget> CreateSyntheticGestureTarget()
       override;
   void OnDidNavigateMainFrameToNewPage() override;
-  void SetNeedsBeginFrames(bool needs_begin_frames) override;
   const viz::FrameSinkId& GetFrameSinkId() const override;
   viz::FrameSinkId GetRootFrameSinkId() override;
   viz::SurfaceId GetCurrentSurfaceId() const override;
@@ -377,6 +378,8 @@ class CONTENT_EXPORT RenderWidgetHostViewAndroid
   ui::DelegatedFrameHostAndroid* delegated_frame_host_for_testing() {
     return delegated_frame_host_.get();
   }
+
+  void SetNeedsBeginFrameForFlingProgress();
 
  protected:
   // RenderWidgetHostViewBase:
