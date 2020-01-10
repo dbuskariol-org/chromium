@@ -105,10 +105,7 @@ group("closure_compile") {
   }
 
   if (is_chromeos) {
-    deps += [
-      "chromeos:closure_compile",
-      "parental_controls_page:closure_compile",
-    ]
+    deps += [ "chromeos:closure_compile" ]
   }
 }
 

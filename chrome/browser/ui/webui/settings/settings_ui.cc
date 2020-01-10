@@ -92,7 +92,6 @@
 #include "chrome/browser/ui/webui/settings/chromeos/account_manager_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/android_apps_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/multidevice_handler.h"
-#include "chrome/browser/ui/webui/settings/chromeos/parental_controls_handler.h"
 #include "chrome/common/chrome_switches.h"
 #include "chrome/grit/browser_resources.h"
 #include "chromeos/components/account_manager/account_manager.h"
@@ -240,9 +239,6 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
       base::FeatureList::IsEnabled(features::kSyncSetupFriendlySettings));
 
 #if defined(OS_CHROMEOS)
-  html_source->AddBoolean(
-      "showParentalControls",
-      chromeos::settings::ShouldShowParentalControls(profile));
   html_source->AddBoolean("splitSettingsSyncEnabled",
                           chromeos::features::IsSplitSettingsSyncEnabled());
 #endif
@@ -326,11 +322,6 @@ void SettingsUI::InitBrowserSettingsWebUIHandlers(
                 : nullptr,
             android_sms_service ? android_sms_service->android_sms_app_manager()
                                 : nullptr));
-    if (chromeos::settings::ShouldShowParentalControls(profile)) {
-      web_ui->AddMessageHandler(
-          std::make_unique<chromeos::settings::ParentalControlsHandler>(
-              profile));
-    }
   }
 
   web_ui->AddMessageHandler(

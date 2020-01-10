@@ -117,17 +117,6 @@ Polymer({
     /** @private */
     showSignoutDialog_: Boolean,
 
-    // <if expr="chromeos">
-    /** @private */
-    showParentalControls_: {
-      type: Boolean,
-      value: function() {
-        return loadTimeData.valueExists('showParentalControls') &&
-            loadTimeData.getBoolean('showParentalControls');
-      },
-    },
-    // </if>
-
     /** @private {!Map<string, string>} */
     focusConfig_: {
       type: Object,
