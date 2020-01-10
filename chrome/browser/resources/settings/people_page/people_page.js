@@ -134,13 +134,6 @@ Polymer({
                   '#picture-subpage-trigger .subpage-arrow');
         }
         // </if>
-        // <if expr="chromeos">
-        if (settings.routes.CHANGE_PICTURE) {
-          map.set(
-              settings.routes.CHANGE_PICTURE.path,
-              '#picture-subpage-trigger .subpage-arrow');
-        }
-        // </if>
         return map;
       },
     },
