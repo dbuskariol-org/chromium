@@ -8536,12 +8536,24 @@ IntersectionObserver& Document::EnsureDisplayLockActivationObserver() {
 void Document::ProcessDisplayLockActivationObservation(
     const HeapVector<Member<IntersectionObserverEntry>>& entries) {
   for (auto& entry : entries) {
+    auto* context = entry->target()->GetDisplayLockContext();
+    DCHECK(context);
     if (entry->isIntersecting()) {
-      auto* context = entry->target()->GetDisplayLockContext();
-      DCHECK(context);
+      if (!context->IsLocked())
+        continue;
       DCHECK(context->ShouldCommitForActivation(
           DisplayLockActivationReason::kViewportIntersection));
       context->CommitForActivationWithSignal(entry->target());
+    } else if (!DisplayLockContext::IsAttributeVersion(context)) {
+      // In a CSS version, if we're not visible, but are observing viewport
+      // intersections, it means that we're either locked (in which case we
+      // should remain locked), or we've been activated (in which case we should
+      // relock).
+      DCHECK(context->IsLocked() || context->IsActivated());
+      if (context->IsLocked())
+        continue;
+      context->ClearActivated();
+      context->StartAcquire();
     }
   }
 }
