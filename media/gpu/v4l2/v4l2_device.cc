@@ -42,6 +42,13 @@
 
 namespace media {
 
+namespace {
+
+// Maximum number of requests that can be created.
+constexpr size_t kMaxNumRequests = 32;
+
+}  // namespace
+
 // Class used to store the state of a buffer that should persist between
 // reference creations. This includes:
 // * Result of initial VIDIOC_QUERYBUF ioctl,
@@ -2148,60 +2155,50 @@ base::Optional<base::ScopedFD> V4L2RequestsQueue::CreateRequestFD() {
   int ret = HANDLE_EINTR(
         ioctl(media_fd_.get(), MEDIA_IOC_REQUEST_ALLOC, &request_fd));
   if (ret < 0) {
-    VPLOGF(1) << "Failed to create request.";
+    VPLOGF(1) << "Failed to create request";
     return base::nullopt;
   }
 
   return base::ScopedFD(request_fd);
 }
 
-bool V4L2RequestsQueue::AllocateRequests(size_t nb_requests) {
-  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-
-  // Only positive number of requests are valid.
-  if (nb_requests < 1) {
-    VLOGF(1) << "Failed to create requests. Request number must be 1 or more";
-    return false;
-  }
-
-  // Returns if requests have been already allocated.
-  if (!free_requests_.empty()) {
-    VLOGF(1) << "Requests already allocated";
-    return false;
-  }
-
-  // Creates the number of requested requests.
-  for (size_t i = 0; i < nb_requests; i++) {
-    auto request_fd = CreateRequestFD();
-    if (request_fd.has_value()) {
-      // Not using std::make_unique because constructor is private.
-      std::unique_ptr<V4L2Request> request(
-          new V4L2Request(std::move(request_fd.value()), this));
-      free_requests_.push(request.get());
-      requests_.push_back(std::move(request));
-    } else {
-      requests_.clear();
-      VPLOGF(1) << "Failed to created number of requested requests.";
-      return false;
-    }
-  }
-
-  return true;
-}
-
 V4L2RequestRef V4L2RequestsQueue::GetFreeRequest() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
-  // Gets a request in the front of the queue and checked is free to be used.
-  // If no request is available, still returns a request reference but the
-  // request will null which will make it marked invalid.
-  V4L2Request* request_ptr = nullptr;
-  if (!free_requests_.empty()) {
-    request_ptr = free_requests_.front();
-    if (request_ptr->WaitForCompletion() && request_ptr->Reset())
-      free_requests_.pop();
-    else
-      request_ptr = nullptr;
+  V4L2Request* request_ptr =
+      free_requests_.empty() ? nullptr : free_requests_.front();
+  if (request_ptr && request_ptr->IsCompleted()) {
+    // Previous request is already completed, just recycle it.
+    free_requests_.pop();
+  } else if (requests_.size() < kMaxNumRequests) {
+    // No request yet, or not completed, but we can allocate a new one.
+    auto request_fd = CreateRequestFD();
+    if (!request_fd.has_value()) {
+      VLOGF(1) << "Error while creating a new request FD!";
+      return V4L2RequestRef(nullptr);
+    }
+    // Not using std::make_unique because constructor is private.
+    std::unique_ptr<V4L2Request> request(
+        new V4L2Request(std::move(*request_fd), this));
+    request_ptr = request.get();
+    requests_.push_back(std::move(request));
+    VLOGF(4) << "Allocated new request, total number: " << requests_.size();
+  } else {
+    // Request is not completed and we have reached the maximum number.
+    // Wait for it to complete.
+    VLOGF(1) << "Waiting for request completion. This probably means a "
+             << "request is blocking.";
+    if (!request_ptr->WaitForCompletion()) {
+      VLOG(1) << "Timeout while waiting for request to complete.";
+      return V4L2RequestRef(nullptr);
+    }
+    free_requests_.pop();
+  }
+
+  DCHECK(request_ptr);
+  if (!request_ptr->Reset()) {
+    VPLOGF(1) << "Failed to reset request";
+    return V4L2RequestRef(nullptr);
   }
 
   return V4L2RequestRef(request_ptr);

@@ -33,7 +33,6 @@ namespace {
 constexpr size_t kTimestampCacheSize = 128;
 // Number of requests to allocate for submitting input buffers, if requests
 // are used.
-constexpr size_t kNumRequests = 16;
 
 }  // namespace
 
@@ -135,7 +134,6 @@ bool V4L2StatelessVideoDecoderBackend::Initialize() {
     requests_queue_ = device_->GetRequestsQueue();
     if (requests_queue_ == nullptr)
       return false;
-    return requests_queue_->AllocateRequests(kNumRequests);
   }
 
   return true;

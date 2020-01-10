@@ -617,10 +617,6 @@ bool V4L2SliceVideoDecodeAccelerator::CreateInputBuffers() {
     requests_queue_ = device_->GetRequestsQueue();
     if (requests_queue_ == nullptr)
       return false;
-
-    if (!requests_queue_->AllocateRequests(
-            input_queue_->AllocatedBuffersCount()))
-      return false;
   }
 
   return true;

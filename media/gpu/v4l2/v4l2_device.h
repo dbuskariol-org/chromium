@@ -479,9 +479,6 @@ class MEDIA_GPU_EXPORT V4L2SubmittedRequestRef : public V4L2RequestRefBase {
 //    back to the free request pool described in 1).
 class MEDIA_GPU_EXPORT V4L2RequestsQueue {
  public:
-  // Allocates |nb_requests|. Returns true if all requests
-  // could be created.
-  bool AllocateRequests(size_t nb_requests);
   // Gets a free request. If no request is available, a non-valid request
   // reference will be returned.
   V4L2RequestRef GetFreeRequest();
