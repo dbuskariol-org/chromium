@@ -1304,4 +1304,20 @@
           'requestAnimationFrame', appId, []));
     }
   };
+
+  /**
+   * Tests opening a broken JPEG doesn't display a broken image icon.
+   */
+  testcase.openQuickViewBrokenImage = async () => {
+    // Open Files app on Downloads containing ENTRIES.brokenJpeg.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, [ENTRIES.brokenJpeg], []);
+
+    // Open the file in Quick View.
+    await openQuickView(appId, ENTRIES.brokenJpeg.nameText);
+
+    // Check: the quick view should have the attribute 'load-error'.
+    const element =
+        await remoteCall.waitForElement(appId, '#quick-view[load-error]');
+  };
 })();
