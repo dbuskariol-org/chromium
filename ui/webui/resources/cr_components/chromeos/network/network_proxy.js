@@ -43,7 +43,7 @@ Polymer({
      */
     proxy_: {
       type: Object,
-      value: function() {
+      value() {
         return this.createDefaultProxySettings_();
       },
     },
@@ -102,7 +102,7 @@ Polymer({
   proxyIsUserModified_: false,
 
   /** @override */
-  attached: function() {
+  attached() {
     this.reset();
   },
 
@@ -110,7 +110,7 @@ Polymer({
    * Called any time the page is refreshed or navigated to so that the proxy
    * is updated correctly.
    */
-  reset: function() {
+  reset() {
     this.proxyIsUserModified_ = false;
     this.updateProxy_();
   },
@@ -120,7 +120,7 @@ Polymer({
    * @param {!chromeos.networkConfig.mojom.ManagedProperties|undefined} oldValue
    * @private
    */
-  managedPropertiesChanged_: function(newValue, oldValue) {
+  managedPropertiesChanged_(newValue, oldValue) {
     if ((newValue && newValue.guid) != (oldValue && oldValue.guid)) {
       // Clear saved manual properties and exclude domains if we're updating
       // to show a different network.
@@ -140,7 +140,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  proxyMatches_: function(a, b) {
+  proxyMatches_(a, b) {
     return !!a && !!b && a.host.activeValue === b.host.activeValue &&
         a.port.activeValue === b.port.activeValue;
   },
@@ -150,7 +150,7 @@ Polymer({
    * @return {!chromeos.networkConfig.mojom.ManagedProxyLocation}
    * @private
    */
-  createDefaultProxyLocation_: function(port) {
+  createDefaultProxyLocation_(port) {
     return {
       host: OncMojo.createManagedString(''),
       port: OncMojo.createManagedInt(port),
@@ -163,7 +163,7 @@ Polymer({
    * @return {!chromeos.networkConfig.mojom.ManagedProxySettings}
    * @private
    */
-  validateProxy_: function(inputProxy) {
+  validateProxy_(inputProxy) {
     const proxy =
         /** @type {!chromeos.networkConfig.mojom.ManagedProxySettings} */ (
             Object.assign({}, inputProxy));
@@ -193,7 +193,7 @@ Polymer({
   },
 
   /** @private */
-  updateProxy_: function() {
+  updateProxy_() {
     if (!this.managedProperties) {
       return;
     }
@@ -227,7 +227,7 @@ Polymer({
    * @param {!chromeos.networkConfig.mojom.ManagedProxySettings} proxy
    * @private
    */
-  setProxy_: function(proxy) {
+  setProxy_(proxy) {
     this.proxy_ = proxy;
     if (proxy.manual) {
       const manual = proxy.manual;
@@ -248,7 +248,7 @@ Polymer({
   },
 
   /** @private */
-  useSameProxyChanged_: function() {
+  useSameProxyChanged_() {
     this.proxyIsUserModified_ = true;
   },
 
@@ -256,7 +256,7 @@ Polymer({
    * @return {!chromeos.networkConfig.mojom.ManagedProxySettings}
    * @private
    */
-  createDefaultProxySettings_: function() {
+  createDefaultProxySettings_() {
     return {
       type: OncMojo.createManagedString('Direct'),
     };
@@ -268,7 +268,7 @@ Polymer({
    * @return {!chromeos.networkConfig.mojom.ProxyLocation|undefined}
    * @private
    */
-  getProxyLocation_: function(location) {
+  getProxyLocation_(location) {
     if (!location) {
       return undefined;
     }
@@ -282,7 +282,7 @@ Polymer({
    * Called when the proxy changes in the UI.
    * @private
    */
-  sendProxyChange_: function() {
+  sendProxyChange_() {
     const mojom = chromeos.networkConfig.mojom;
     const proxyType = OncMojo.getActiveString(this.proxy_.type);
     if (!proxyType || (proxyType == 'PAC' && !this.proxy_.pac)) {
@@ -343,7 +343,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onTypeChange_: function(event) {
+  onTypeChange_(event) {
     if (!this.proxy_ || !this.proxy_.type) {
       return;
     }
@@ -390,17 +390,17 @@ Polymer({
   },
 
   /** @private */
-  onPACChange_: function() {
+  onPACChange_() {
     this.sendProxyChange_();
   },
 
   /** @private */
-  onProxyInputChange_: function() {
+  onProxyInputChange_() {
     this.proxyIsUserModified_ = true;
   },
 
   /** @private */
-  onAddProxyExclusionTap_: function() {
+  onAddProxyExclusionTap_() {
     const value = this.$.proxyExclusion.value;
     if (!value) {
       return;
@@ -415,7 +415,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onAddProxyExclusionKeypress_: function(event) {
+  onAddProxyExclusionKeypress_(event) {
     if (event.key != 'Enter') {
       return;
     }
@@ -428,12 +428,12 @@ Polymer({
    * @param {!Event} event The remove proxy exclusions change event.
    * @private
    */
-  onProxyExclusionsChange_: function(event) {
+  onProxyExclusionsChange_(event) {
     this.proxyIsUserModified_ = true;
   },
 
   /** @private */
-  onSaveProxyTap_: function() {
+  onSaveProxyTap_() {
     this.sendProxyChange_();
   },
 
@@ -442,7 +442,7 @@ Polymer({
    * @return {string} The description for |proxyType|.
    * @private
    */
-  getProxyTypeDesc_: function(proxyType) {
+  getProxyTypeDesc_(proxyType) {
     if (proxyType == 'Manual') {
       return this.i18n('networkProxyTypeManual');
     }
@@ -460,7 +460,7 @@ Polymer({
    * @return {boolean} Whether the named property setting is editable.
    * @private
    */
-  isEditable_: function(propertyName) {
+  isEditable_(propertyName) {
     if (!this.editable || (this.isShared_() && !this.useSharedProxies)) {
       return false;
     }
@@ -477,7 +477,7 @@ Polymer({
    * @return {boolean} Whether |property| is editable.
    * @private
    */
-  isPropertyEditable_: function(property) {
+  isPropertyEditable_(property) {
     return !!property && !this.isNetworkPolicyEnforced(property) &&
         !this.isExtensionControlled(property);
   },
@@ -486,7 +486,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  isShared_: function() {
+  isShared_() {
     if (!this.managedProperties) {
       return false;
     }
@@ -499,7 +499,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  isSaveManualProxyEnabled_: function() {
+  isSaveManualProxyEnabled_() {
     if (!this.proxyIsUserModified_) {
       return false;
     }
@@ -519,7 +519,7 @@ Polymer({
    * @return {boolean} True if property == value
    * @private
    */
-  matches_: function(property, value) {
+  matches_(property, value) {
     return property == value;
   },
 });
