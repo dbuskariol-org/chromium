@@ -38,15 +38,6 @@ public class AndroidPaymentAppFinderUnitTest {
     private static final IntentArgumentMatcher sPayIntentArgumentMatcher =
             new IntentArgumentMatcher(new Intent("org.chromium.intent.action.PAY"));
 
-    // SHA256("01020304050607080900"):
-    public static final byte[][] BOB_PAY_SIGNATURE_FINGERPRINTS = {{(byte) 0x9A, (byte) 0x89,
-            (byte) 0xC6, (byte) 0x8C, (byte) 0x4C, (byte) 0x5E, (byte) 0x28, (byte) 0xB8,
-            (byte) 0xC4, (byte) 0xA5, (byte) 0x56, (byte) 0x76, (byte) 0x73, (byte) 0xD4,
-            (byte) 0x62, (byte) 0xFF, (byte) 0xF5, (byte) 0x15, (byte) 0xDB, (byte) 0x46,
-            (byte) 0x11, (byte) 0x6F, (byte) 0x99, (byte) 0x00, (byte) 0x62, (byte) 0x4D,
-            (byte) 0x09, (byte) 0xC4, (byte) 0x74, (byte) 0xF5, (byte) 0x93, (byte) 0xFB}};
-    public static final Signature BOB_PAY_SIGNATURE = new Signature("01020304050607080900");
-
     @CalledByNative
     private AndroidPaymentAppFinderUnitTest() {}
 
@@ -288,7 +279,7 @@ public class AndroidPaymentAppFinderUnitTest {
         PackageInfo bobPayPackageInfo = new PackageInfo();
         bobPayPackageInfo.versionCode = 10;
         bobPayPackageInfo.signatures = new Signature[1];
-        bobPayPackageInfo.signatures[0] = BOB_PAY_SIGNATURE;
+        bobPayPackageInfo.signatures[0] = PaymentManifestVerifierTest.BOB_PAY_SIGNATURE;
         Mockito.when(packageManagerDelegate.getPackageInfoWithSignatures("com.bobpay.app"))
                 .thenReturn(bobPayPackageInfo);
 
@@ -325,8 +316,8 @@ public class AndroidPaymentAppFinderUnitTest {
             public void parseWebAppManifest(String content, ManifestParseCallback callback) {
                 WebAppManifestSection[] manifest = new WebAppManifestSection[1];
                 int minVersion = 10;
-                manifest[0] = new WebAppManifestSection(
-                        "com.bobpay.app", minVersion, BOB_PAY_SIGNATURE_FINGERPRINTS);
+                manifest[0] = new WebAppManifestSection("com.bobpay.app", minVersion,
+                        PaymentManifestVerifierTest.BOB_PAY_SIGNATURE_FINGERPRINTS);
                 callback.onWebAppManifestParseSuccess(manifest);
             }
 

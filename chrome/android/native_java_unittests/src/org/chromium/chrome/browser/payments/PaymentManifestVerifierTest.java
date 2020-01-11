@@ -10,12 +10,10 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
 
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
+import org.chromium.base.annotations.CalledByNative;
+import org.chromium.base.annotations.CalledByNativeJavaTest;
 import org.chromium.chrome.browser.payments.PaymentManifestVerifier.ManifestVerifyCallback;
 import org.chromium.chrome.browser.payments.PaymentManifestWebDataService.PaymentManifestWebDataServiceCallback;
 import org.chromium.components.payments.PaymentManifestDownloader;
@@ -29,8 +27,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 /** A test for the verifier of a payment app manifest. */
-@RunWith(RobolectricTestRunner.class)
-@Config(sdk = 21, manifest = Config.NONE)
 public class PaymentManifestVerifierTest {
     private static final String ERROR_MESSAGE = "This is an error message.";
 
@@ -45,15 +41,16 @@ public class PaymentManifestVerifierTest {
     private final ManifestVerifyCallback mCallback;
 
     // SHA256("01020304050607080900"):
-    public final static byte[][] BOB_PAY_SIGNATURE_FINGERPRINTS = {{(byte) 0x9A, (byte) 0x89,
+    public static final byte[][] BOB_PAY_SIGNATURE_FINGERPRINTS = {{(byte) 0x9A, (byte) 0x89,
             (byte) 0xC6, (byte) 0x8C, (byte) 0x4C, (byte) 0x5E, (byte) 0x28, (byte) 0xB8,
             (byte) 0xC4, (byte) 0xA5, (byte) 0x56, (byte) 0x76, (byte) 0x73, (byte) 0xD4,
             (byte) 0x62, (byte) 0xFF, (byte) 0xF5, (byte) 0x15, (byte) 0xDB, (byte) 0x46,
             (byte) 0x11, (byte) 0x6F, (byte) 0x99, (byte) 0x00, (byte) 0x62, (byte) 0x4D,
             (byte) 0x09, (byte) 0xC4, (byte) 0x74, (byte) 0xF5, (byte) 0x93, (byte) 0xFB}};
-    public final static Signature BOB_PAY_SIGNATURE = new Signature("01020304050607080900");
+    public static final Signature BOB_PAY_SIGNATURE = new Signature("01020304050607080900");
 
-    public PaymentManifestVerifierTest() throws URISyntaxException {
+    @CalledByNative
+    private PaymentManifestVerifierTest() throws URISyntaxException {
         mMethodName = new URI("https://example.com");
 
         mAlicePay = new ResolveInfo();
@@ -131,7 +128,7 @@ public class PaymentManifestVerifierTest {
         mCallback = Mockito.mock(ManifestVerifyCallback.class);
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testUnableToDownloadPaymentMethodManifest() {
         PaymentManifestVerifier verifier = new PaymentManifestVerifier(mMethodName, mMatchingApps,
                 null /* supportedOrigins */, mWebDataService, new PaymentManifestDownloader() {
@@ -154,7 +151,7 @@ public class PaymentManifestVerifierTest {
                 .onValidDefaultPaymentApp(Mockito.any(URI.class), Mockito.any(ResolveInfo.class));
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testUnableToDownloadWebAppManifest() {
         PaymentManifestVerifier verifier = new PaymentManifestVerifier(mMethodName, mMatchingApps,
                 null /* supportedOrigins */, mWebDataService, new PaymentManifestDownloader() {
@@ -184,17 +181,17 @@ public class PaymentManifestVerifierTest {
         Mockito.verify(mCallback).onFinishedUsingResources();
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testUnableToParsePaymentMethodManifest() {
-        PaymentManifestVerifier verifier = new PaymentManifestVerifier(mMethodName, mMatchingApps,
-                null /* supportedOrigins */, mWebDataService,
-                mDownloader, new PaymentManifestParser() {
-                    @Override
-                    public void parsePaymentMethodManifest(
-                            String content, ManifestParseCallback callback) {
-                        callback.onManifestParseFailure();
-                    }
-                }, mPackageManagerDelegate, mCallback);
+        PaymentManifestVerifier verifier =
+                new PaymentManifestVerifier(mMethodName, mMatchingApps, null /* supportedOrigins */,
+                        mWebDataService, mDownloader, new PaymentManifestParser() {
+                            @Override
+                            public void parsePaymentMethodManifest(
+                                    String content, ManifestParseCallback callback) {
+                                callback.onManifestParseFailure();
+                            }
+                        }, mPackageManagerDelegate, mCallback);
 
         verifier.verify();
 
@@ -204,29 +201,29 @@ public class PaymentManifestVerifierTest {
         Mockito.verify(mCallback).onFinishedUsingResources();
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testUnableToParseWebAppManifest() {
-        PaymentManifestVerifier verifier = new PaymentManifestVerifier(mMethodName, mMatchingApps,
-                null /* supportedOrigins */, mWebDataService,
-                mDownloader, new PaymentManifestParser() {
-                    @Override
-                    public void parsePaymentMethodManifest(
-                            String content, ManifestParseCallback callback) {
-                        try {
-                            callback.onPaymentMethodManifestParseSuccess(
-                                    new URI[] {new URI("https://alicepay.com/app.json")},
-                                    new URI[0], false);
-                        } catch (URISyntaxException e) {
-                            Assert.assertTrue(false);
-                        }
-                    }
+        PaymentManifestVerifier verifier =
+                new PaymentManifestVerifier(mMethodName, mMatchingApps, null /* supportedOrigins */,
+                        mWebDataService, mDownloader, new PaymentManifestParser() {
+                            @Override
+                            public void parsePaymentMethodManifest(
+                                    String content, ManifestParseCallback callback) {
+                                try {
+                                    callback.onPaymentMethodManifestParseSuccess(
+                                            new URI[] {new URI("https://alicepay.com/app.json")},
+                                            new URI[0], false);
+                                } catch (URISyntaxException e) {
+                                    Assert.assertTrue(false);
+                                }
+                            }
 
-                    @Override
-                    public void parseWebAppManifest(
-                            String content, ManifestParseCallback callback) {
-                        callback.onManifestParseFailure();
-                    }
-                }, mPackageManagerDelegate, mCallback);
+                            @Override
+                            public void parseWebAppManifest(
+                                    String content, ManifestParseCallback callback) {
+                                callback.onManifestParseFailure();
+                            }
+                        }, mPackageManagerDelegate, mCallback);
 
         verifier.verify();
 
@@ -236,7 +233,7 @@ public class PaymentManifestVerifierTest {
         Mockito.verify(mCallback).onFinishedUsingResources();
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void testBobPayAllowed() {
         PaymentManifestVerifier verifier =
                 new PaymentManifestVerifier(mMethodName, mMatchingApps, null /* supportedOrigins */,
@@ -259,7 +256,7 @@ public class PaymentManifestVerifierTest {
     }
 
     /** If a single web app manifest fails to download, all downloads should be aborted. */
-    @Test
+    @CalledByNativeJavaTest
     public void testFirstOfTwoManifestsFailsToDownload() {
         CountingParser parser = new CountingParser() {
             @Override
@@ -312,7 +309,7 @@ public class PaymentManifestVerifierTest {
     }
 
     /** If a single web app manifest fails to parse, all downloads should be aborted. */
-    @Test
+    @CalledByNativeJavaTest
     public void testFirstOfTwoManifestsFailsToParse() {
         CountingParser parser = new CountingParser() {
             @Override
