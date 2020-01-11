@@ -64,7 +64,7 @@ OmniboxResultView::OmniboxResultView(
           popup_contents_view_, this,
           l10n_util::GetStringUTF16(IDS_OMNIBOX_TAB_SUGGEST_HINT),
           l10n_util::GetStringUTF16(IDS_OMNIBOX_TAB_SUGGEST_SHORT_HINT),
-          omnibox::kSwitchIcon, theme_provider_));
+          omnibox::kSwitchIcon));
 
   // This is intentionally not in the tab order by default, but should be if the
   // user has full-acessibility mode on. This is because this is a tertiary
