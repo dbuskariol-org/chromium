@@ -1102,7 +1102,11 @@ class CC_EXPORT LayerTreeHostImpl : public InputHandler,
   // Tracks, for debugging purposes, the amount of scroll received (not
   // necessarily applied) in this compositor frame. This will be reset each
   // time a CompositorFrame is generated.
-  gfx::ScrollOffset scroll_accumulated_this_frame_;
+  gfx::Vector2dF scroll_accumulated_this_frame_;
+
+  // Tracks the last scroll state received. At the moment, this is used to infer
+  // the most recent scroll type and direction for scroll snapping purposes.
+  base::Optional<ScrollState> last_scroll_state_;
 
   std::vector<std::unique_ptr<SwapPromise>>
       swap_promises_for_main_thread_scroll_update_;
