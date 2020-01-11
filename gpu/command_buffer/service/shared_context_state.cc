@@ -12,6 +12,7 @@
 #include "gpu/command_buffer/service/service_transfer_cache.h"
 #include "gpu/command_buffer/service/service_utils.h"
 #include "gpu/config/gpu_driver_bug_workarounds.h"
+#include "gpu/config/skia_limits.h"
 #include "gpu/vulkan/buildflags.h"
 #include "skia/buildflags.h"
 #include "ui/gl/gl_bindings.h"
@@ -87,8 +88,8 @@ SharedContextState::SharedContextState(
       context_(context),
       real_context_(std::move(context)),
       surface_(std::move(surface)) {
-  raster::DetermineGrCacheLimitsFromAvailableMemory(
-      &max_resource_cache_bytes_, &glyph_cache_max_texture_bytes_);
+  DetermineGrCacheLimitsFromAvailableMemory(&max_resource_cache_bytes_,
+                                            &glyph_cache_max_texture_bytes_);
   if (GrContextIsVulkan()) {
 #if BUILDFLAG(ENABLE_VULKAN)
     gr_context_ = vk_context_provider_->GetGrContext();
