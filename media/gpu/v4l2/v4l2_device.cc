@@ -828,9 +828,7 @@ V4L2Queue::V4L2Queue(scoped_refptr<V4L2Device> dev,
 
   if (reqbufs.capabilities & V4L2_BUF_CAP_SUPPORTS_REQUESTS) {
     supports_requests_ = true;
-    VLOGF(1) << "Using request API.";
-  } else {
-    VLOGF(1) << "Using config store API.";
+    DVLOGF(4) << "Queue supports request API.";
   }
 }
 
