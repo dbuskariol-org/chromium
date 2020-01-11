@@ -927,8 +927,7 @@ void AddDeviceStrings(content::WebUIDataSource* html_source) {
   static constexpr webui::LocalizedString kDeviceStrings[] = {
       {"devicePageTitle", IDS_SETTINGS_DEVICE_TITLE},
       {"scrollLabel", IDS_SETTINGS_SCROLL_LABEL},
-      {"traditionalScrollLabel", IDS_SETTINGS_TRADITIONAL_SCROLL_LABEL},
-      {"naturalScrollLabel", IDS_SETTINGS_NATURAL_SCROLL_LABEL},
+      {"touchPadScrollLabel", IDS_OS_SETTINGS_TOUCHPAD_REVERSE_SCROLL_LABEL},
   };
   AddLocalizedStringsBulk(html_source, kDeviceStrings);
 
