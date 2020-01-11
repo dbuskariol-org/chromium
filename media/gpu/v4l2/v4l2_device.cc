@@ -2047,7 +2047,6 @@ bool V4L2Request::IsCompleted() {
 
 bool V4L2Request::WaitForCompletion(int poll_timeout_ms) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-
   if (!request_fd_.is_valid()) {
     VPLOGF(1) << "Invalid request";
     return false;
@@ -2056,12 +2055,20 @@ bool V4L2Request::WaitForCompletion(int poll_timeout_ms) {
   struct pollfd poll_fd = {request_fd_.get(), POLLPRI, 0};
 
   // Poll the request to ensure its previous task is done
-  if (poll(&poll_fd, 1, poll_timeout_ms) != 1) {
-    VPLOGF(1) << "Failed to poll request.";
-    return false;
+  switch (poll(&poll_fd, 1, poll_timeout_ms)) {
+    case 1:
+      return true;
+    case 0:
+      // Not an error - we just timed out.
+      DVLOGF(4) << "Request poll(" << poll_timeout_ms << ") timed out";
+      return false;
+    case -1:
+      VPLOGF(1) << "Failed to poll request";
+      return false;
+    default:
+      NOTREACHED();
+      return false;
   }
-
-  return true;
 }
 
 bool V4L2Request::Reset() {
