@@ -128,10 +128,50 @@ Polymer({
       this.savedExcludeDomains_ = undefined;
     }
 
-    if (this.proxyIsUserModified_) {
-      return;  // Ignore update
+    if (this.proxyIsUserModified_ || this.isInputEditInProgress_()) {
+      // Ignore updates if any fields have been modified by user or if any
+      // input elements are currently being edited.
+      return;
     }
     this.updateProxy_();
+  },
+
+  /**
+   * @return {boolean} True if any input elements are currently being edited.
+   * @private
+   */
+  isInputEditInProgress_: function() {
+    if (!this.editable) {
+      return false;
+    }
+    const activeElement = this.shadowRoot.activeElement;
+    if (!activeElement) {
+      return false;
+    }
+
+    // Find property name for current active element.
+    let property = null;
+    switch (activeElement.id) {
+      case 'sameProxyInput':
+      case 'httpProxyInput':
+        property = 'manual.httpProxy.host';
+        break;
+      case 'secureHttpProxyInput':
+        property = 'manual.secureHttpProxy.host';
+        break;
+      case 'socksProxyInput':
+        property = 'manual.socks.host';
+        break;
+      case 'pacInput':
+        property = 'pac';
+        break;
+    }
+    if (!property) {
+      return false;
+    }
+
+    // Input should be considered active only when the property editable.
+    return this.isEditable_(property);
   },
 
   /**
