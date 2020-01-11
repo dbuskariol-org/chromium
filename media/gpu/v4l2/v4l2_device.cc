@@ -476,7 +476,7 @@ bool V4L2WritableBufferRef::DoQueue(V4L2RequestRef* request_ref) && {
   DCHECK(buffer_data_);
 
   if (request_ref && buffer_data_->queue_->SupportsRequests())
-      request_ref->SetQueueBuffer(&(buffer_data_->v4l2_buffer_));
+    request_ref->ApplyQueueBuffer(&(buffer_data_->v4l2_buffer_));
 
   bool queued = buffer_data_->QueueBuffer();
 
@@ -1947,10 +1947,10 @@ V4L2RequestsQueue* V4L2Device::GetRequestsQueue() {
 
 class V4L2Request {
  public:
-  // Sets the passed controls to the request.
-  bool SetCtrls(struct v4l2_ext_controls* ctrls);
-  // Sets the passed buffer to the request.
-  bool SetQueueBuffer(struct v4l2_buffer* buffer);
+  // Apply the passed controls to the request.
+  bool ApplyCtrls(struct v4l2_ext_controls* ctrls);
+  // Apply the passed buffer to the request..
+  bool ApplyQueueBuffer(struct v4l2_buffer* buffer);
   // Submits the request to the driver.
   bool Submit();
   // Indicates if the request has completed.
@@ -1998,7 +1998,7 @@ int V4L2Request::DecRefCounter() {
   return ref_counter_;
 }
 
-bool V4L2Request::SetCtrls(struct v4l2_ext_controls* ctrls) {
+bool V4L2Request::ApplyCtrls(struct v4l2_ext_controls* ctrls) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK_NE(ctrls, nullptr);
 
@@ -2013,7 +2013,7 @@ bool V4L2Request::SetCtrls(struct v4l2_ext_controls* ctrls) {
   return true;
 }
 
-bool V4L2Request::SetQueueBuffer(struct v4l2_buffer* buffer) {
+bool V4L2Request::ApplyQueueBuffer(struct v4l2_buffer* buffer) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK_NE(buffer, nullptr);
 
@@ -2104,18 +2104,18 @@ V4L2RequestRefBase::~V4L2RequestRefBase() {
     request_->DecRefCounter();
 }
 
-bool V4L2RequestRef::SetCtrls(struct v4l2_ext_controls* ctrls) const {
+bool V4L2RequestRef::ApplyCtrls(struct v4l2_ext_controls* ctrls) const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK_NE(request_, nullptr);
 
-  return request_->SetCtrls(ctrls);
+  return request_->ApplyCtrls(ctrls);
 }
 
-bool V4L2RequestRef::SetQueueBuffer(struct v4l2_buffer* buffer) const {
+bool V4L2RequestRef::ApplyQueueBuffer(struct v4l2_buffer* buffer) const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK_NE(request_, nullptr);
 
-  return request_->SetQueueBuffer(buffer);
+  return request_->ApplyQueueBuffer(buffer);
 }
 
 base::Optional<V4L2SubmittedRequestRef> V4L2RequestRef::Submit() && {
