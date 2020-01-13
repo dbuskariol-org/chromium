@@ -401,7 +401,10 @@ void SMILTimeContainer::UpdateAnimationsAndScheduleFrameIfNeeded(
     SMILTime elapsed) {
   DCHECK(GetDocument().IsActive());
   DCHECK(!wakeup_timer_.IsActive());
-
+  // If the priority queue is empty, there are no timed elements to process and
+  // no animations to apply, so we are done.
+  if (priority_queue_.IsEmpty())
+    return;
   UpdateAnimationTimings(elapsed);
   ApplyTimedEffects(elapsed);
   DCHECK(!wakeup_timer_.IsActive());
@@ -465,13 +468,6 @@ void SMILTimeContainer::UpdateAnimationTimings(SMILTime presentation_time) {
   DCHECK(GetDocument().IsActive());
 
   AnimationTargetsMutationsForbidden scope(this);
-
-  if (document_order_indexes_dirty_)
-    UpdateDocumentOrderIndexes();
-
-  if (priority_queue_.IsEmpty())
-    return;
-
   // Flush any "late" interval updates.
   UpdateIntervals(latest_update_time_);
 
@@ -490,6 +486,9 @@ void SMILTimeContainer::ApplyTimedEffects(SMILTime elapsed) {
   bool did_apply_effects = false;
   {
     AnimationTargetsMutationsForbidden scope(this);
+    if (document_order_indexes_dirty_)
+      UpdateDocumentOrderIndexes();
+
     for (auto& entry : animated_targets_) {
       ElementSMILAnimations* animations = entry.key->GetSMILAnimations();
       if (animations && animations->Apply(elapsed))
