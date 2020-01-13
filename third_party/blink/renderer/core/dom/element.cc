@@ -4700,7 +4700,7 @@ void Element::setOuterHTML(const StringOrTrustedHTML& string_or_html,
 Node* Element::InsertAdjacent(const String& where,
                               Node* new_child,
                               ExceptionState& exception_state) {
-  if (DeprecatedEqualIgnoringCase(where, "beforeBegin")) {
+  if (EqualIgnoringASCIICase(where, "beforeBegin")) {
     if (ContainerNode* parent = parentNode()) {
       parent->InsertBefore(new_child, this, exception_state);
       if (!exception_state.HadException())
@@ -4709,17 +4709,17 @@ Node* Element::InsertAdjacent(const String& where,
     return nullptr;
   }
 
-  if (DeprecatedEqualIgnoringCase(where, "afterBegin")) {
+  if (EqualIgnoringASCIICase(where, "afterBegin")) {
     InsertBefore(new_child, firstChild(), exception_state);
     return exception_state.HadException() ? nullptr : new_child;
   }
 
-  if (DeprecatedEqualIgnoringCase(where, "beforeEnd")) {
+  if (EqualIgnoringASCIICase(where, "beforeEnd")) {
     AppendChild(new_child, exception_state);
     return exception_state.HadException() ? nullptr : new_child;
   }
 
-  if (DeprecatedEqualIgnoringCase(where, "afterEnd")) {
+  if (EqualIgnoringASCIICase(where, "afterEnd")) {
     if (ContainerNode* parent = parentNode()) {
       parent->InsertBefore(new_child, nextSibling(), exception_state);
       if (!exception_state.HadException())
