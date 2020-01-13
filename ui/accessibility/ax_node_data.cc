@@ -917,10 +917,18 @@ bool AXNodeData::IsReadOnlyOrDisabled() const {
     case ax::mojom::Restriction::kReadOnly:
     case ax::mojom::Restriction::kDisabled:
       return true;
-    case ax::mojom::Restriction::kNone:
-      return false;
+    case ax::mojom::Restriction::kNone: {
+      if (HasState(ax::mojom::State::kEditable) ||
+          HasState(ax::mojom::State::kRichlyEditable)) {
+        return false;
+      }
+
+      // By default, when readonly is not supported, we assume the node is never
+      // editable - then always readonly.
+      return ShouldHaveReadonlyStateByDefault(role) ||
+             !IsReadOnlySupported(role);
+    }
   }
-  return false;
 }
 
 bool AXNodeData::IsRangeValueSupported() const {

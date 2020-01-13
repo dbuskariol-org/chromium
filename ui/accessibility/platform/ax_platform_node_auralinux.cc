@@ -2771,7 +2771,8 @@ void AXPlatformNodeAuraLinux::GetAtkState(AtkStateSet* atk_state_set) {
     atk_state_set_add_state(atk_state_set, ATK_STATE_EXPANDABLE);
   if (data.HasState(ax::mojom::State::kDefault))
     atk_state_set_add_state(atk_state_set, ATK_STATE_DEFAULT);
-  if (data.HasState(ax::mojom::State::kEditable) &&
+  if ((data.HasState(ax::mojom::State::kEditable) ||
+       data.HasState(ax::mojom::State::kRichlyEditable)) &&
       data.GetRestriction() != ax::mojom::Restriction::kReadOnly) {
     atk_state_set_add_state(atk_state_set, ATK_STATE_EDITABLE);
   }
@@ -2837,18 +2838,15 @@ void AXPlatformNodeAuraLinux::GetAtkState(AtkStateSet* atk_state_set) {
     atk_state_set_add_state(atk_state_set, GetAtkStateTypeForCheckableNode());
   }
 
-  switch (GetData().GetRestriction()) {
-    case ax::mojom::Restriction::kNone:
-      atk_state_set_add_state(atk_state_set, ATK_STATE_ENABLED);
-      atk_state_set_add_state(atk_state_set, ATK_STATE_SENSITIVE);
-      break;
-    case ax::mojom::Restriction::kReadOnly:
+  if (data.GetRestriction() != ax::mojom::Restriction::kDisabled) {
+    if (IsReadOnlySupported(data.role) && data.IsReadOnlyOrDisabled()) {
 #if defined(ATK_216)
       atk_state_set_add_state(atk_state_set, ATK_STATE_READ_ONLY);
 #endif
-      break;
-    default:
-      break;
+    } else {
+      atk_state_set_add_state(atk_state_set, ATK_STATE_ENABLED);
+      atk_state_set_add_state(atk_state_set, ATK_STATE_SENSITIVE);
+    }
   }
 
   if (delegate_->GetFocus() == GetOrCreateAtkObject())
