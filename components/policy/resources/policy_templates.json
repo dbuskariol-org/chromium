@@ -759,7 +759,7 @@
       'caption': '''Chrome Reporting Extension''',
       'desc': '''Configure Chrome Reporting Extension related policies.
 
-      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME">MachineLevelUserCloudPolicyEnrollmentToken</ph>.''',
+      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="CLOUD_MANAGEMENT_ENROLLMENT_TOKEN_POLICY_NAME">CloudManagementEnrollmentToken</ph>.''',
       'policies': [
         'ReportVersionData',
         'ReportPolicyData',
@@ -15326,7 +15326,7 @@
       'owners': ['zmin@chromium.org', 'pastarmovj@chromium.org', 'rogerta@chromium.org'],
       'type': 'string',
       'schema': { 'type': 'string' },
-      'supported_on': ['chrome.*:66-'],
+      'supported_on': ['chrome.*:66-80'],
       'features': {
         'dynamic_refresh': False,
         'per_profile': False,
@@ -16374,7 +16374,7 @@
       When this policy is left unset or set to True, version information is gathered.
       When this policy is set to False, version information is not gathered.
 
-      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME">MachineLevelUserCloudPolicyEnrollmentToken</ph>.'''
+      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="CLOUD_MANAGEMENT_ENROLLMENT_TOKEN_POLICY_NAME">CloudManagementEnrollmentToken</ph>.'''
     },
     {
       'id': 471,
@@ -16396,7 +16396,7 @@
       When this policy is left unset or set to True, policy data and time of policy fetch are gathered.
       When this policy is set to False, policy data and time of policy fetch are not gathered.
 
-      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME">MachineLevelUserCloudPolicyEnrollmentToken</ph>.'''
+      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="CLOUD_MANAGEMENT_ENROLLMENT_TOKEN_POLICY_NAME">CloudManagementEnrollmentToken</ph>.'''
     },
     {
       'id': 472,
@@ -16418,7 +16418,7 @@
       When this policy is left unset or set to True, information that can be used to identify machines is gathered.
       When this policy is set to False, information that can be used to identify machines is not gathered.
 
-      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME">MachineLevelUserCloudPolicyEnrollmentToken</ph>.'''
+      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="CLOUD_MANAGEMENT_ENROLLMENT_TOKEN_POLICY_NAME">CloudManagementEnrollmentToken</ph>.'''
     },
     {
       'id': 473,
@@ -16440,7 +16440,7 @@
       When this policy is left unset or set to True, information that can be used to identify users is gathered.
       When this policy is set to False, information that can be used to identify users is not gathered.
 
-      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME">MachineLevelUserCloudPolicyEnrollmentToken</ph>.'''
+      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="CLOUD_MANAGEMENT_ENROLLMENT_TOKEN_POLICY_NAME">CloudManagementEnrollmentToken</ph>.'''
     },
     {
       'id': 499,
@@ -16462,7 +16462,7 @@
       When this policy is left unset or set to True, extension and plugins data are gathered.
       When this policy is set to False, extensions and plugins data are not gathered.
 
-      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME">MachineLevelUserCloudPolicyEnrollmentToken</ph>.'''
+      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="CLOUD_MANAGEMENT_ENROLLMENT_TOKEN_POLICY_NAME">CloudManagementEnrollmentToken</ph>.'''
     },
     {
       'id': 500,
@@ -16484,7 +16484,7 @@
       When this policy is left unset or set to True, Safe Browsing data are gathered.
       When this policy is set to False, Safe Browsing data are not gathered.
 
-      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME">MachineLevelUserCloudPolicyEnrollmentToken</ph>.'''
+      This policy is only effective when the <ph name="CHROME_REPORTING_EXTENSION_NAME">Chrome Reporting Extension</ph> is enabled, and the machine is enrolled with <ph name="CLOUD_MANAGEMENT_ENROLLMENT_TOKEN_POLICY_NAME">CloudManagementEnrollmentToken</ph>.'''
     },
     {
       'id': 608,

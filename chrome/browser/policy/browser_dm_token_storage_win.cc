@@ -151,8 +151,7 @@ std::string BrowserDMTokenStorageWin::InitClientId() {
 }
 
 std::string BrowserDMTokenStorageWin::InitEnrollmentToken() {
-  return base::WideToUTF8(
-      InstallUtil::GetMachineLevelUserCloudPolicyEnrollmentToken());
+  return base::WideToUTF8(InstallUtil::GetCloudManagementEnrollmentToken());
 }
 
 std::string BrowserDMTokenStorageWin::InitDMToken() {

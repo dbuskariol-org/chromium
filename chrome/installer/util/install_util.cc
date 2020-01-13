@@ -107,8 +107,8 @@ HWND CreateUACForegroundWindow() {
 
 // Returns Registry key path of Chrome policies. This is used by the policies
 // that are shared between Chrome and installer.
-base::string16 GetChromePoliciesRegistryPath() {
-  base::string16 key_path = L"SOFTWARE\\Policies\\";
+std::wstring GetChromePoliciesRegistryPath() {
+  std::wstring key_path = L"SOFTWARE\\Policies\\";
   install_static::AppendChromeInstallSubDirectory(
       install_static::InstallDetails::Get().mode(), false /* !include_suffix */,
       &key_path);
@@ -579,16 +579,12 @@ void InstallUtil::AddUpdateDowngradeVersionItem(
 }
 
 // static
-void InstallUtil::GetMachineLevelUserCloudPolicyEnrollmentTokenRegistryPath(
-    base::string16* key_path,
-    base::string16* value_name,
-    base::string16* old_value_name) {
+std::pair<std::wstring, std::wstring>
+InstallUtil::GetCloudManagementEnrollmentTokenRegistryPath() {
   // This token applies to all installs on the machine, even though only a
   // system install can set it.  This is to prevent users from doing a user
   // install of chrome to get around policies.
-  *key_path = GetChromePoliciesRegistryPath();
-  *value_name = L"CloudManagementEnrollmentToken";
-  *old_value_name = L"MachineLevelUserCloudPolicyEnrollmentToken";
+  return {GetChromePoliciesRegistryPath(), L"CloudManagementEnrollmentToken"};
 }
 
 // static
@@ -607,7 +603,7 @@ void InstallUtil::GetMachineLevelUserCloudPolicyDMTokenRegistryPath(
 }
 
 // static
-base::string16 InstallUtil::GetMachineLevelUserCloudPolicyEnrollmentToken() {
+base::string16 InstallUtil::GetCloudManagementEnrollmentToken() {
   // Because chrome needs to know if machine level user cloud policies must be
   // initialized even before the entire policy service is brought up, this
   // helper function exists to directly read the token from the system policies.
@@ -617,17 +613,10 @@ base::string16 InstallUtil::GetMachineLevelUserCloudPolicyEnrollmentToken() {
   // this token via SCCM.
   // TODO(rogerta): This may not be the best place for the helpers dealing with
   // the enrollment and/or DM tokens.  See crbug.com/823852 for details.
-  base::string16 key_path;
-  base::string16 value_name;
-  base::string16 old_value_name;
-  GetMachineLevelUserCloudPolicyEnrollmentTokenRegistryPath(
-      &key_path, &value_name, &old_value_name);
-
+  auto key_and_value = GetCloudManagementEnrollmentTokenRegistryPath();
   base::string16 value;
-  RegKey key(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_QUERY_VALUE);
-  if (key.ReadValue(value_name.c_str(), &value) == ERROR_FILE_NOT_FOUND)
-    key.ReadValue(old_value_name.c_str(), &value);
-
+  RegKey key(HKEY_LOCAL_MACHINE, key_and_value.first.c_str(), KEY_QUERY_VALUE);
+  key.ReadValue(key_and_value.second.c_str(), &value);
   return value;
 }
 

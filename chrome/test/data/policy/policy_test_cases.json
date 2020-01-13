@@ -2996,13 +2996,7 @@
   },
 
   "MachineLevelUserCloudPolicyEnrollmentToken": {
-    "os": ["win", "linux", "mac"],
-    "policy_pref_mapping_test": [
-      {
-        "policies": { "MachineLevelUserCloudPolicyEnrollmentToken": "" },
-        "prefs": { "policy.machine_level_user_cloud_policy_enrollment_token": { "local_state": true } }
-      }
-    ]
+    "note": "This policy was replaced with CloudManagementEnrollmentToken in Chrome 72 and has been removed altogether in Chrome 81"
   },
 
   "CloudManagementEnrollmentToken": {},

@@ -10,7 +10,8 @@
 #define CHROME_INSTALLER_UTIL_INSTALL_UTIL_H_
 
 #include <windows.h>
-#include <tchar.h>
+#include <string>
+#include <utility>
 
 #include "base/command_line.h"
 #include "base/files/file.h"
@@ -177,13 +178,8 @@ class InstallUtil {
 
   // Returns the registry key path and value name where the enrollment token is
   // stored for machine level user cloud policies.
-  // Note that the value name was recently changed, we still need to return the
-  // old for some time until it's no longer in use.
-  // TODO(crbug.com/907589) : Remove |old_value_name| once no longer in use.
-  static void GetMachineLevelUserCloudPolicyEnrollmentTokenRegistryPath(
-      base::string16* key_path,
-      base::string16* value_name,
-      base::string16* old_value_name);
+  static std::pair<std::wstring, std::wstring>
+  GetCloudManagementEnrollmentTokenRegistryPath();
 
   // Returns the registry key path and value name where the DM token is stored
   // for machine level user cloud policies.
@@ -194,7 +190,7 @@ class InstallUtil {
   // Returns the token used to enroll this chrome instance for machine level
   // user cloud policies.  Returns an empty string if this machine should not
   // be enrolled.
-  static base::string16 GetMachineLevelUserCloudPolicyEnrollmentToken();
+  static base::string16 GetCloudManagementEnrollmentToken();
 
   // Returns true if cloud management enrollment is mandatory.
   static bool ShouldCloudManagementBlockOnFailure();
