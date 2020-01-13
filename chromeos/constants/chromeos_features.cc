@@ -55,6 +55,10 @@ const base::Feature kCrostiniBackup{"CrostiniBackup",
 const base::Feature kCrostiniPortForwarding{"CrostiniPortForwarding",
                                             base::FEATURE_DISABLED_BY_DEFAULT};
 
+// Enables or disables Crostini Disk Resizing.
+const base::Feature kCrostiniDiskResizing{"CrostiniDiskResizing",
+                                          base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Enables or disables Crostini using Buster container images.
 const base::Feature kCrostiniUseBusterImage{"CrostiniUseBusterImage",
                                             base::FEATURE_ENABLED_BY_DEFAULT};
