@@ -60,6 +60,14 @@ class CORE_EXPORT NGFlexLayoutAlgorithm
   LayoutUnit MainAxisContentExtent(LayoutUnit sum_hypothetical_main_size) const;
 
   void HandleOutOfFlowPositioned(NGBlockNode child);
+
+  // Propagates the baseline from the given flex-item if needed.
+  void PropagateBaselineFromChild(
+      const FlexItem&,
+      const NGPhysicalBoxFragment&,
+      LayoutUnit block_offset,
+      base::Optional<LayoutUnit>* fallback_baseline);
+
   // TODO(dgrogan): This is redundant with FlexLayoutAlgorithm.IsMultiline() but
   // it's needed before the algorithm is instantiated. Figure out how to
   // not reimplement.

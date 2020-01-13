@@ -9,12 +9,14 @@
 #include "third_party/blink/renderer/core/layout/layout_box.h"
 #include "third_party/blink/renderer/core/layout/layout_flexible_box.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_block_break_token.h"
+#include "third_party/blink/renderer/core/layout/ng/ng_box_fragment.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_constraint_space.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_constraint_space_builder.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_flex_child_iterator.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_fragment.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_length_utils.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_out_of_flow_layout_part.h"
+#include "third_party/blink/renderer/core/layout/ng/ng_physical_box_fragment.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_space_utils.h"
 #include "third_party/blink/renderer/platform/wtf/vector.h"
 
@@ -305,6 +307,11 @@ NGFlexLayoutAlgorithm::BuildConstraintSpaceForDeterminingFlexBasis(
       DCHECK_NE(content_box_size_.block_size, kIndefiniteSize);
     }
   }
+
+  space_builder.SetNeedsBaseline(
+      ConstraintSpace().NeedsBaseline() ||
+      FlexLayoutAlgorithm::AlignmentForChild(Style(), child_style) ==
+          ItemPosition::kBaseline);
 
   space_builder.SetAvailableSize(content_box_size_);
   space_builder.SetPercentageResolutionSize(child_percentage_size_);
@@ -608,15 +615,13 @@ scoped_refptr<const NGLayoutResult> NGFlexLayoutAlgorithm::Layout() {
     for (wtf_size_t i = 0; i < line->line_items.size(); ++i) {
       FlexItem& flex_item = line->line_items[i];
 
-      WritingMode child_writing_mode =
-          flex_item.ng_input_node.Style().GetWritingMode();
+      const ComputedStyle& child_style = flex_item.ng_input_node.Style();
       NGConstraintSpaceBuilder space_builder(ConstraintSpace(),
-                                             child_writing_mode,
+                                             child_style.GetWritingMode(),
                                              /* is_new_fc */ true);
       SetOrthogonalFallbackInlineSizeIfNeeded(Style(), flex_item.ng_input_node,
                                               &space_builder);
-      space_builder.SetTextDirection(
-          flex_item.ng_input_node.Style().Direction());
+      space_builder.SetTextDirection(child_style.Direction());
       space_builder.SetIsPaintedAtomically(true);
 
       LogicalSize available_size;
@@ -645,6 +650,11 @@ scoped_refptr<const NGLayoutResult> NGFlexLayoutAlgorithm::Layout() {
         else
           space_builder.SetIsFixedBlockSize(true);
       }
+
+      space_builder.SetNeedsBaseline(
+          ConstraintSpace().NeedsBaseline() ||
+          FlexLayoutAlgorithm::AlignmentForChild(Style(), child_style) ==
+              ItemPosition::kBaseline);
 
       space_builder.SetAvailableSize(available_size);
       space_builder.SetPercentageResolutionSize(child_percentage_size_);
@@ -694,9 +704,9 @@ scoped_refptr<const NGLayoutResult> NGFlexLayoutAlgorithm::Layout() {
 }
 
 void NGFlexLayoutAlgorithm::ApplyStretchAlignmentToChild(FlexItem& flex_item) {
-  WritingMode child_writing_mode =
-      flex_item.ng_input_node.Style().GetWritingMode();
-  NGConstraintSpaceBuilder space_builder(ConstraintSpace(), child_writing_mode,
+  const ComputedStyle& child_style = flex_item.ng_input_node.Style();
+  NGConstraintSpaceBuilder space_builder(ConstraintSpace(),
+                                         child_style.GetWritingMode(),
                                          /* is_new_fc */ true);
   SetOrthogonalFallbackInlineSizeIfNeeded(Style(), flex_item.ng_input_node,
                                           &space_builder);
@@ -712,7 +722,13 @@ void NGFlexLayoutAlgorithm::ApplyStretchAlignmentToChild(FlexItem& flex_item) {
       space_builder.SetIsFixedBlockSizeIndefinite(true);
     }
   }
-  space_builder.SetTextDirection(flex_item.ng_input_node.Style().Direction());
+
+  space_builder.SetNeedsBaseline(
+      ConstraintSpace().NeedsBaseline() ||
+      FlexLayoutAlgorithm::AlignmentForChild(Style(), child_style) ==
+          ItemPosition::kBaseline);
+
+  space_builder.SetTextDirection(child_style.Direction());
   space_builder.SetAvailableSize(available_size);
   space_builder.SetPercentageResolutionSize(child_percentage_size_);
   space_builder.SetIsFixedInlineSize(true);
@@ -755,6 +771,8 @@ void NGFlexLayoutAlgorithm::GiveLinesAndItemsFinalPositionAndSize() {
                                     border_scrollbar_padding_.block_start);
   }
 
+  base::Optional<LayoutUnit> fallback_baseline;
+
   for (FlexLine& line_context : line_contexts) {
     for (wtf_size_t child_number = 0;
          child_number < line_context.line_items.size(); ++child_number) {
@@ -763,6 +781,9 @@ void NGFlexLayoutAlgorithm::GiveLinesAndItemsFinalPositionAndSize() {
       if (DoesItemStretch(flex_item.ng_input_node))
         ApplyStretchAlignmentToChild(flex_item);
 
+      const auto& physical_fragment = To<NGPhysicalBoxFragment>(
+          flex_item.layout_result->PhysicalFragment());
+
       // flex_item.desired_location stores the main axis offset in X and the
       // cross axis offset in Y. But AddChild wants offset from parent
       // rectangle, so we have to transpose for columns. AddChild takes care of
@@ -770,11 +791,57 @@ void NGFlexLayoutAlgorithm::GiveLinesAndItemsFinalPositionAndSize() {
       LayoutPoint location = is_column_
                                  ? flex_item.desired_location.TransposedPoint()
                                  : flex_item.desired_location;
-      container_builder_.AddChild(flex_item.layout_result->PhysicalFragment(),
+
+      // Only propagate baselines from children on the first flex-line.
+      if (&line_context == line_contexts.begin()) {
+        PropagateBaselineFromChild(flex_item, physical_fragment, location.Y(),
+                                   &fallback_baseline);
+      }
+
+      container_builder_.AddChild(physical_fragment,
                                   {location.X(), location.Y()});
       flex_item.ng_input_node.StoreMargins(flex_item.physical_margins);
     }
   }
+
+  // Set the baseline to the fallback, if we didn't find any children with
+  // baseline alignment.
+  if (!container_builder_.Baseline() && fallback_baseline)
+    container_builder_.SetBaseline(*fallback_baseline);
+}
+
+void NGFlexLayoutAlgorithm::PropagateBaselineFromChild(
+    const FlexItem& flex_item,
+    const NGPhysicalBoxFragment& physical_fragment,
+    LayoutUnit block_offset,
+    base::Optional<LayoutUnit>* fallback_baseline) {
+  // Check if we've already found an appropriate baseline.
+  if (container_builder_.Baseline())
+    return;
+
+  NGBoxFragment fragment(ConstraintSpace().GetWritingMode(),
+                         ConstraintSpace().Direction(), physical_fragment);
+
+  if (base::Optional<LayoutUnit> baseline = fragment.Baseline()) {
+    LayoutUnit baseline_offset = block_offset + *baseline;
+
+    // We prefer a baseline from a child with baseline alignment, and no
+    // auto-margins in the cross axis.
+    if (FlexLayoutAlgorithm::AlignmentForChild(Style(), flex_item.style) ==
+            ItemPosition::kBaseline &&
+        !flex_item.HasAutoMarginsInCrossAxis()) {
+      container_builder_.SetBaseline(baseline_offset);
+      return;
+    }
+
+    // Set the fallback baseline to this (if not set yet).
+    *fallback_baseline = fallback_baseline->value_or(baseline_offset);
+    return;
+  }
+
+  // Use the block-end border-box edge as the last resort baseline.
+  *fallback_baseline =
+      fallback_baseline->value_or(block_offset + fragment.BlockSize());
 }
 
 base::Optional<MinMaxSize> NGFlexLayoutAlgorithm::ComputeMinMaxSize(
