@@ -14,6 +14,7 @@
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/net/dns_probe_service_factory.h"
 #include "chrome/browser/net/dns_probe_test_util.h"
+#include "chrome/browser/net/dns_util.h"
 #include "chrome/browser/net/net_error_tab_helper.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
@@ -97,6 +98,10 @@ class DelayingDnsProbeService : public DnsProbeService {
 
   void ProbeDns(ProbeCallback callback) override {
     delayed_probes_.push_back(std::move(callback));
+  }
+
+  net::DnsConfigOverrides GetCurrentConfigOverridesForTesting() override {
+    return dns_probe_service_impl_->GetCurrentConfigOverridesForTesting();
   }
 
   void StartDelayedProbes() {
@@ -343,15 +348,15 @@ class DnsProbeBrowserTest : public InProcessBrowserTest {
   // DnsProbeStatus messages of its currently active tab monitored.
   void SetActiveBrowser(Browser* browser);
 
-  // Sets the results the FakeHostResolver will return for the system and
-  // public DnsProbeRunners.  Since this mocks out the
-  // NetworkContext & HostResolver used by the DnsProbeService it doesn't really
-  // give an end-to-end test, but content::TestHostResolver mocks don't affect
-  // the probes since they use HostResolverSource::DNS, so this is the best
-  // that can be done currently.
+  // Sets the results the FakeHostResolver will return for the current config
+  // and Google config DnsProbeRunners. Since this mocks out the NetworkContext
+  // and HostResolver used by the DnsProbeService it doesn't really give an
+  // end-to-end test, but content::TestHostResolver mocks don't affect the
+  // probes since they use HostResolverSource::DNS, so this is the best that
+  // can be done currently.
   void SetFakeHostResolverResults(
-      std::vector<FakeHostResolver::SingleResult> system_results,
-      std::vector<FakeHostResolver::SingleResult> public_results);
+      std::vector<FakeHostResolver::SingleResult> current_config_results,
+      std::vector<FakeHostResolver::SingleResult> google_config_results);
 
   void SetCorrectionServiceBroken(bool broken);
   void SetCorrectionServiceDelayRequests(bool delay_requests);
@@ -496,12 +501,12 @@ void DnsProbeBrowserTest::SetActiveBrowser(Browser* browser) {
 }
 
 void DnsProbeBrowserTest::SetFakeHostResolverResults(
-    std::vector<FakeHostResolver::SingleResult> system_results,
-    std::vector<FakeHostResolver::SingleResult> public_results) {
+    std::vector<FakeHostResolver::SingleResult> current_config_results,
+    std::vector<FakeHostResolver::SingleResult> google_config_results) {
   ASSERT_FALSE(network_context_);
 
   network_context_ = std::make_unique<FakeHostResolverNetworkContext>(
-      std::move(system_results), std::move(public_results));
+      std::move(current_config_results), std::move(google_config_results));
 }
 
 void DnsProbeBrowserTest::SetCorrectionServiceBroken(bool broken) {
@@ -656,6 +661,39 @@ class DnsProbeFailingProbesTest : public DnsProbeBrowserTest {
   }
 };
 
+class DnsProbeCurrentConfigFailingProbesTest : public DnsProbeBrowserTest {
+ protected:
+  void SetUpOnMainThread() override {
+    SetFakeHostResolverResults(
+        {{net::ERR_NAME_NOT_RESOLVED,
+          net::ResolveErrorInfo(net::ERR_NAME_NOT_RESOLVED),
+          FakeHostResolver::kNoResponse}},
+        {{net::OK, net::ResolveErrorInfo(net::OK),
+          FakeHostResolver::kOneAddressResponse}});
+    DnsProbeBrowserTest::SetUpOnMainThread();
+  }
+};
+
+class DnsProbeCurrentSecureConfigFailingProbesTest
+    : public DnsProbeBrowserTest {
+ protected:
+  void SetUpOnMainThread() override {
+    PrefService* local_state = g_browser_process->local_state();
+    local_state->SetString(prefs::kDnsOverHttpsMode,
+                           chrome_browser_net::kDnsOverHttpsModeSecure);
+    local_state->SetString(prefs::kDnsOverHttpsTemplates,
+                           "https://bar.test/dns-query{?dns}");
+
+    SetFakeHostResolverResults(
+        {{net::ERR_NAME_NOT_RESOLVED,
+          net::ResolveErrorInfo(net::ERR_NAME_NOT_RESOLVED),
+          FakeHostResolver::kNoResponse}},
+        {{net::OK, net::ResolveErrorInfo(net::OK),
+          FakeHostResolver::kOneAddressResponse}});
+    DnsProbeBrowserTest::SetUpOnMainThread();
+  }
+};
+
 // Test Fixture for tests where the DNS probes should fail to connect to a DNS
 // server (timeout or unreachable host).
 class DnsProbeUnreachableProbesTest : public DnsProbeBrowserTest {
@@ -745,6 +783,52 @@ IN_PROC_BROWSER_TEST_F(DnsProbeSuccessfulProbesTest,
   // again.
   EXPECT_EQ(error_page::DNS_PROBE_FINISHED_NXDOMAIN, WaitForSentStatus());
   ExpectDisplayingCorrections("ERR_NAME_NOT_RESOLVED");
+}
+
+IN_PROC_BROWSER_TEST_F(DnsProbeCurrentConfigFailingProbesTest, BadConfig) {
+  SetCorrectionServiceBroken(true);
+
+  NavigateToDnsError(2);
+
+  EXPECT_EQ(error_page::DNS_PROBE_STARTED, WaitForSentStatus());
+  EXPECT_EQ(error_page::DNS_PROBE_STARTED, WaitForSentStatus());
+
+  // Checking the page runs the RunLoop, so make sure nothing hairy happens.
+  EXPECT_EQ(0, pending_status_count());
+  ExpectDisplayingLocalErrorPage("DNS_PROBE_STARTED");
+  EXPECT_EQ(0, pending_status_count());
+
+  StartDelayedProbes(1);
+
+  EXPECT_EQ(error_page::DNS_PROBE_FINISHED_BAD_CONFIG, WaitForSentStatus());
+
+  // Checking the page runs the RunLoop, so make sure nothing hairy happens.
+  EXPECT_EQ(0, pending_status_count());
+  ExpectDisplayingLocalErrorPage("DNS_PROBE_FINISHED_BAD_CONFIG");
+}
+
+IN_PROC_BROWSER_TEST_F(DnsProbeCurrentSecureConfigFailingProbesTest,
+                       BadSecureConfig) {
+  SetCorrectionServiceBroken(true);
+
+  NavigateToDnsError(2);
+
+  EXPECT_EQ(error_page::DNS_PROBE_STARTED, WaitForSentStatus());
+  EXPECT_EQ(error_page::DNS_PROBE_STARTED, WaitForSentStatus());
+
+  // Checking the page runs the RunLoop, so make sure nothing hairy happens.
+  EXPECT_EQ(0, pending_status_count());
+  ExpectDisplayingLocalErrorPage("DNS_PROBE_STARTED");
+  EXPECT_EQ(0, pending_status_count());
+
+  StartDelayedProbes(1);
+
+  EXPECT_EQ(error_page::DNS_PROBE_FINISHED_BAD_SECURE_CONFIG,
+            WaitForSentStatus());
+
+  // Checking the page runs the RunLoop, so make sure nothing hairy happens.
+  EXPECT_EQ(0, pending_status_count());
+  ExpectDisplayingLocalErrorPage("DNS_PROBE_FINISHED_BAD_SECURE_CONFIG");
 }
 
 // Make sure probes update DNS error page properly when they're supposed to.

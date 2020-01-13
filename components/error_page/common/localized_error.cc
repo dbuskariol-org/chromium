@@ -389,46 +389,61 @@ const LocalizedErrorMap generic_4xx_5xx_error = {
 };
 
 const LocalizedErrorMap dns_probe_error_options[] = {
-  {error_page::DNS_PROBE_POSSIBLE,
-   IDS_ERRORPAGES_HEADING_NOT_AVAILABLE,
-   IDS_ERRORPAGES_SUMMARY_DNS_PROBE_RUNNING,
-   SUGGEST_DIAGNOSE_TOOL,
-   SHOW_BUTTON_RELOAD,
-  },
+    {
+        error_page::DNS_PROBE_POSSIBLE,
+        IDS_ERRORPAGES_HEADING_NOT_AVAILABLE,
+        IDS_ERRORPAGES_SUMMARY_DNS_PROBE_RUNNING,
+        SUGGEST_DIAGNOSE_TOOL,
+        SHOW_BUTTON_RELOAD,
+    },
 
-  // DNS_PROBE_NOT_RUN is not here; NetErrorHelper will restore the original
-  // error, which might be one of several DNS-related errors.
+    // DNS_PROBE_NOT_RUN is not here; NetErrorHelper will restore the original
+    // error, which might be one of several DNS-related errors.
 
-  {error_page::DNS_PROBE_STARTED,
-   IDS_ERRORPAGES_HEADING_NOT_AVAILABLE,
-   IDS_ERRORPAGES_SUMMARY_DNS_PROBE_RUNNING,
-   // Include SUGGEST_RELOAD so the More button doesn't jump when we update.
-   SUGGEST_DIAGNOSE_TOOL,
-   SHOW_BUTTON_RELOAD,
-  },
+    {
+        error_page::DNS_PROBE_STARTED,
+        IDS_ERRORPAGES_HEADING_NOT_AVAILABLE,
+        IDS_ERRORPAGES_SUMMARY_DNS_PROBE_RUNNING,
+        // Include SUGGEST_RELOAD so the More button doesn't jump when we
+        // update.
+        SUGGEST_DIAGNOSE_TOOL,
+        SHOW_BUTTON_RELOAD,
+    },
 
-  // DNS_PROBE_FINISHED_UNKNOWN is not here; NetErrorHelper will restore the
-  // original error, which might be one of several DNS-related errors.
+    // DNS_PROBE_FINISHED_UNKNOWN is not here; NetErrorHelper will restore the
+    // original error, which might be one of several DNS-related errors.
 
-  {error_page::DNS_PROBE_FINISHED_NO_INTERNET,
-   IDS_ERRORPAGES_HEADING_INTERNET_DISCONNECTED,
-   IDS_ERRORPAGES_HEADING_INTERNET_DISCONNECTED,
-   SUGGEST_OFFLINE_CHECKS | SUGGEST_DIAGNOSE_TOOL,
-   SHOW_NO_BUTTONS,
-  },
-  {error_page::DNS_PROBE_FINISHED_BAD_CONFIG,
-   IDS_ERRORPAGES_HEADING_NOT_AVAILABLE,
-   IDS_ERRORPAGES_SUMMARY_NAME_NOT_RESOLVED,
-   SUGGEST_DNS_CONFIG | SUGGEST_FIREWALL_CONFIG | SUGGEST_PROXY_CONFIG |
-       SUGGEST_DIAGNOSE_TOOL,
-   SHOW_BUTTON_RELOAD,
-  },
-  {error_page::DNS_PROBE_FINISHED_NXDOMAIN,
-   IDS_ERRORPAGES_HEADING_NOT_AVAILABLE,
-   IDS_ERRORPAGES_SUMMARY_NAME_NOT_RESOLVED,
-   SUGGEST_DIAGNOSE_TOOL,
-   SHOW_BUTTON_RELOAD,
-  },
+    {
+        error_page::DNS_PROBE_FINISHED_NO_INTERNET,
+        IDS_ERRORPAGES_HEADING_INTERNET_DISCONNECTED,
+        IDS_ERRORPAGES_HEADING_INTERNET_DISCONNECTED,
+        SUGGEST_OFFLINE_CHECKS | SUGGEST_DIAGNOSE_TOOL,
+        SHOW_NO_BUTTONS,
+    },
+    {
+        error_page::DNS_PROBE_FINISHED_BAD_CONFIG,
+        IDS_ERRORPAGES_HEADING_NOT_AVAILABLE,
+        IDS_ERRORPAGES_SUMMARY_NAME_NOT_RESOLVED,
+        SUGGEST_DNS_CONFIG | SUGGEST_FIREWALL_CONFIG | SUGGEST_PROXY_CONFIG |
+            SUGGEST_DIAGNOSE_TOOL,
+        SHOW_BUTTON_RELOAD,
+    },
+    {
+        error_page::DNS_PROBE_FINISHED_BAD_SECURE_CONFIG,
+        IDS_ERRORPAGES_HEADING_NOT_AVAILABLE,
+        IDS_ERRORPAGES_SUMMARY_NAME_NOT_RESOLVED,
+        // TODO(crbug.com/1037899): Make the suggestions specific to secure DNS
+        SUGGEST_DNS_CONFIG | SUGGEST_FIREWALL_CONFIG | SUGGEST_PROXY_CONFIG |
+            SUGGEST_DIAGNOSE_TOOL,
+        SHOW_BUTTON_RELOAD,
+    },
+    {
+        error_page::DNS_PROBE_FINISHED_NXDOMAIN,
+        IDS_ERRORPAGES_HEADING_NOT_AVAILABLE,
+        IDS_ERRORPAGES_SUMMARY_NAME_NOT_RESOLVED,
+        SUGGEST_DIAGNOSE_TOOL,
+        SHOW_BUTTON_RELOAD,
+    },
 };
 
 const LocalizedErrorMap* FindErrorMapInArray(const LocalizedErrorMap* maps,
