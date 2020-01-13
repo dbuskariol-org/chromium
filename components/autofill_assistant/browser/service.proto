@@ -974,6 +974,7 @@ message UseCreditCardProto {
       CREDIT_CARD_CARD_HOLDER_NAME = 5;
       CREDIT_CARD_NUMBER = 6;
       CREDIT_CARD_EXP_MM_YY = 7;
+      CREDIT_CARD_NETWORK = 8;
     }
 
     optional CardField card_field = 1;
