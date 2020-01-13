@@ -24,9 +24,7 @@ js_library("multidevice_browser_proxy") {
 }
 
 js_library("multidevice_constants") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
 }
 
 js_library("multidevice_feature_behavior") {
