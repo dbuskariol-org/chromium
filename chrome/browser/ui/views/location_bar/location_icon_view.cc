@@ -36,7 +36,6 @@ LocationIconView::LocationIconView(
   DCHECK(delegate_);
 
   SetID(VIEW_ID_LOCATION_ICON);
-  Update(true);
   SetUpForAnimation();
 
   // Readability is guaranteed by the omnibox theme.
@@ -99,6 +98,15 @@ void LocationIconView::GetAccessibleNodeData(ui::AXNodeData* node_data) {
 
   IconLabelBubbleView::GetAccessibleNodeData(node_data);
   node_data->role = ax::mojom::Role::kPopUpButton;
+}
+
+void LocationIconView::AddedToWidget() {
+  Update(true);
+}
+
+void LocationIconView::OnThemeChanged() {
+  IconLabelBubbleView::OnThemeChanged();
+  UpdateIcon();
 }
 
 int LocationIconView::GetMinimumLabelTextWidth() const {
@@ -187,9 +195,6 @@ void LocationIconView::UpdateTextVisibility(bool suppress_animations) {
     AnimateIn(base::nullopt);
   else
     AnimateOut();
-
-  // The label text color may have changed.
-  OnThemeChanged();
 }
 
 void LocationIconView::UpdateIcon() {
