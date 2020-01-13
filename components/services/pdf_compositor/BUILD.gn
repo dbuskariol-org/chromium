@@ -27,17 +27,13 @@ static_library("pdf_compositor") {
     deps += [ "//content/public/child" ]
   }
 
-  public_deps = [
-    "//components/services/pdf_compositor/public/mojom",
-  ]
+  public_deps = [ "//components/services/pdf_compositor/public/mojom" ]
 }
 
 if (enable_basic_printing) {
   source_set("unit_tests") {
     testonly = true
-    sources = [
-      "pdf_compositor_impl_unittest.cc",
-    ]
+    sources = [ "pdf_compositor_impl_unittest.cc" ]
 
     include_dirs = [
       "//skia/config",
