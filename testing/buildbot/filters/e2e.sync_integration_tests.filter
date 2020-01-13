@@ -1,13 +1,5 @@
 # TODO(crbug.com/1010568): Enable all sync e2e tests.
 -TwoClientDictionarySyncTest.RemoveOnAAddOnB_E2ETest
--TwoClientExtensionAppsSyncTest*
--TwoClientExtensionsSyncTest.UpdateEnableDisableExtension_E2ETest
--TwoClientExtensionsSyncTest.UpdateIncognitoEnableDisable_E2ETest
--TwoClientExtensionsSyncTest.InstallDifferentExtensions_E2ETest
--TwoClientExtensionsSyncTest.StartWithDifferentExtensions_E2ETest
--TwoClientExtensionsSyncTest.StartWithSameExtensions_E2ETest
--TwoClientExtensionsSyncTest.UninstallPreinstalledExtensions_E2ETest
--TwoClientExtensionsSyncTest.Uninstall_E2ETest
 -USS/TwoClientPasswordsSyncTest*
 -TwoClientSearchEnginesSyncTest.DeleteSyncedDefault_E2ETest
 -TwoClientSearchEnginesSyncTest.Delete_E2ETest
