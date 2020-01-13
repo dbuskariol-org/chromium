@@ -152,8 +152,9 @@ GPUPipelineLayout* GPUDevice::createPipelineLayout(
 }
 
 GPUShaderModule* GPUDevice::createShaderModule(
-    const GPUShaderModuleDescriptor* descriptor) {
-  return GPUShaderModule::Create(this, descriptor);
+    const GPUShaderModuleDescriptor* descriptor,
+    ExceptionState& exception_state) {
+  return GPUShaderModule::Create(this, descriptor, exception_state);
 }
 
 GPURenderPipeline* GPUDevice::createRenderPipeline(

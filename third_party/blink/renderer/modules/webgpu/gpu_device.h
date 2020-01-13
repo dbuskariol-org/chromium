@@ -83,7 +83,8 @@ class GPUDevice final : public EventTargetWithInlineData,
       const GPUPipelineLayoutDescriptor* descriptor);
 
   GPUShaderModule* createShaderModule(
-      const GPUShaderModuleDescriptor* descriptor);
+      const GPUShaderModuleDescriptor* descriptor,
+      ExceptionState& exception_state);
   GPURenderPipeline* createRenderPipeline(
       ScriptState* script_state,
       const GPURenderPipelineDescriptor* descriptor);
