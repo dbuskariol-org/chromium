@@ -22,6 +22,7 @@ namespace policy {
 namespace {
 // Key names used when building the dictionary to pass to the Chrome Reporting
 // API.
+constexpr char kAndroidId[] = "androidId";
 constexpr char kAppPackage[] = "appPackage";
 constexpr char kEventType[] = "eventType";
 constexpr char kStatefulTotal[] = "statefulTotal";
@@ -118,13 +119,17 @@ base::Value ConvertEventToValue(
   }
 
   if (app_install_report_log_event.has_stateful_total()) {
-    event.SetIntKey(kStatefulTotal,
-                    app_install_report_log_event.stateful_total());
+    // 64-bit ints aren't supported by JSON - must be stored as strings
+    std::ostringstream str;
+    str << app_install_report_log_event.stateful_total();
+    event.SetStringKey(kStatefulTotal, str.str());
   }
 
   if (app_install_report_log_event.has_stateful_free()) {
-    event.SetIntKey(kStatefulFree,
-                    app_install_report_log_event.stateful_free());
+    // 64-bit ints aren't supported by JSON - must be stored as strings
+    std::ostringstream str;
+    str << app_install_report_log_event.stateful_free();
+    event.SetStringKey(kStatefulFree, str.str());
   }
 
   if (app_install_report_log_event.has_clouddps_response()) {
@@ -138,6 +143,13 @@ base::Value ConvertEventToValue(
   if (app_install_report_log_event.has_session_state_change_type()) {
     event.SetIntKey(kSessionStateChangeType,
                     app_install_report_log_event.session_state_change_type());
+  }
+
+  if (app_install_report_log_event.has_android_id()) {
+    // 64-bit ints aren't supporetd by JSON - must be stored as strings
+    std::ostringstream str;
+    str << app_install_report_log_event.android_id();
+    event.SetStringKey(kAndroidId, str.str());
   }
 
   event.SetStringKey(kSerialNumber, GetSerialNumber());

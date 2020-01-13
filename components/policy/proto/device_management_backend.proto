@@ -2448,6 +2448,9 @@ message AppInstallReportLogEvent {
 
   // Type of session state change. Set for event type SESSION_STATE_CHANGE.
   optional SessionStateChangeType session_state_change_type = 8;
+
+  // ARC++ Android id.
+  optional int64 android_id = 9;
 }
 
 // Log bucket for an app.
