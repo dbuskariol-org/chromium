@@ -21,6 +21,7 @@
 #include "ash/wm/splitview/split_view_controller.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller_test_api.h"
 #include "ash/wm/window_state.h"
+#include "ash/wm/window_util.h"
 #include "ui/compositor/scoped_animation_duration_scale_mode.h"
 #include "ui/gfx/geometry/point_f.h"
 #include "ui/wm/core/window_util.h"
@@ -767,6 +768,23 @@ TEST_F(DragWindowFromShelfControllerTest, RestoreBackdropAfterDragEnds) {
   EndDrag(gfx::Point(0, 200), base::nullopt);
   EXPECT_TRUE(split_view_controller()->IsWindowInSplitView(window.get()));
   EXPECT_EQ(window->GetProperty(kBackdropWindowMode), original_backdrop_mode);
+}
+
+TEST_F(DragWindowFromShelfControllerTest,
+       DoNotChangeActiveWindowDuringDragging) {
+  UpdateDisplay("400x400");
+  const gfx::Rect shelf_bounds =
+      Shelf::ForWindow(Shell::GetPrimaryRootWindow())->GetIdealBounds();
+  auto window = CreateTestWindow();
+  wm::ActivateWindow(window.get());
+  EXPECT_EQ(window.get(), window_util::GetActiveWindow());
+
+  StartDrag(window.get(), shelf_bounds.CenterPoint(), HotseatState::kExtended);
+  Drag(gfx::Point(200, 200), 0.f, 1.f);
+  OverviewController* overview_controller = Shell::Get()->overview_controller();
+  EXPECT_TRUE(overview_controller->InOverviewSession());
+  EXPECT_EQ(window.get(), window_util::GetActiveWindow());
+  EndDrag(gfx::Point(0, 200), base::nullopt);
 }
 
 }  // namespace ash

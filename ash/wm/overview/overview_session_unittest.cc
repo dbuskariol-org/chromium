@@ -1398,6 +1398,7 @@ TEST_P(OverviewSessionTest,
        DropTargetRemovedIfWindowDraggedFromTopIsDestroyed) {
   EnterTabletMode();
   std::unique_ptr<aura::Window> window = CreateTestWindow();
+  std::unique_ptr<aura::Window> window2 = CreateTestWindow();
   window->SetProperty(aura::client::kAppType,
                       static_cast<int>(AppType::BROWSER));
   std::unique_ptr<WindowResizer> resizer =
