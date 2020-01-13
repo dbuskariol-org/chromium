@@ -858,7 +858,7 @@ class AdvanceFocusWidgetDelegate : public WidgetDelegate {
     should_advance_focus_to_parent_ = value;
   }
 
-  // WidgetDelegate overrides:
+  // WidgetDelegate:
   bool ShouldAdvanceFocusToTopLevelWidget() const override {
     return should_advance_focus_to_parent_;
   }

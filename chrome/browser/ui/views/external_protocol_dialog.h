@@ -31,7 +31,6 @@ class ExternalProtocolDialog : public views::DialogDelegateView,
                          const GURL& url,
                          const base::string16& program_name,
                          const base::Optional<url::Origin>& initiating_origin);
-
   ~ExternalProtocolDialog() override;
 
   // views::DialogDelegateView:

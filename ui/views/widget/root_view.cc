@@ -717,8 +717,6 @@ View::DragInfo* RootView::GetDragInfo() {
 ////////////////////////////////////////////////////////////////////////////////
 // RootView, private:
 
-// Input -----------------------------------------------------------------------
-
 void RootView::UpdateCursor(const ui::MouseEvent& event) {
   if (!(event.flags() & ui::EF_IS_NON_CLIENT)) {
     View* v = GetEventHandlerForPoint(event.location());

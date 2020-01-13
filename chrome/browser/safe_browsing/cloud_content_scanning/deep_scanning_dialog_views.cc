@@ -124,6 +124,8 @@ void DeepScanningDialogViews::ShowResult(bool success) {
   }
 }
 
+DeepScanningDialogViews::~DeepScanningDialogViews() = default;
+
 void DeepScanningDialogViews::UpdateDialog() {
   DCHECK(shown_);
   DCHECK(scan_success_.has_value());
@@ -196,6 +198,41 @@ void DeepScanningDialogViews::Resize(int lines_delta) {
   widget_->SetSize(new_size);
 }
 
+void DeepScanningDialogViews::SetupButtons() {
+  if (!scan_success_.has_value() || !scan_success_.value()) {
+    DialogDelegate::set_button_label(ui::DIALOG_BUTTON_CANCEL,
+                                     GetCancelButtonText());
+    DialogDelegate::set_default_button(ui::DIALOG_BUTTON_CANCEL);
+  }
+
+  // TODO(domfc): Add "Learn more" button setup for scan failures.
+}
+
+base::string16 DeepScanningDialogViews::GetDialogMessage() const {
+  if (!scan_success_.has_value()) {
+    return l10n_util::GetStringUTF16(
+        IDS_DEEP_SCANNING_DIALOG_UPLOAD_PENDING_MESSAGE);
+  }
+  return l10n_util::GetStringUTF16(
+      scan_success_.value() ? IDS_DEEP_SCANNING_DIALOG_SUCCESS_MESSAGE
+                            : IDS_DEEP_SCANNING_DIALOG_UPLOAD_FAILURE_MESSAGE);
+}
+
+SkColor DeepScanningDialogViews::GetImageColor() const {
+  if (!scan_success_.has_value())
+    return kScanPendingColor;
+  return scan_success_.value() ? kScanSuccessColor : kScanFailureColor;
+}
+
+base::string16 DeepScanningDialogViews::GetCancelButtonText() const {
+  if (!scan_success_.has_value()) {
+    return l10n_util::GetStringUTF16(
+        IDS_DEEP_SCANNING_DIALOG_CANCEL_UPLOAD_BUTTON);
+  }
+  DCHECK(!scan_success_.value());
+  return l10n_util::GetStringUTF16(IDS_CLOSE);
+}
+
 void DeepScanningDialogViews::Show() {
   DCHECK(!shown_);
   shown_ = true;
@@ -235,49 +272,5 @@ void DeepScanningDialogViews::Show() {
 
   widget_ = constrained_window::ShowWebModalDialogViews(this, web_contents_);
 }
-
-void DeepScanningDialogViews::SetupButtons() {
-  if (!scan_success_.has_value() || !scan_success_.value()) {
-    DialogDelegate::set_button_label(ui::DIALOG_BUTTON_CANCEL,
-                                     GetCancelButtonText());
-    DialogDelegate::set_default_button(ui::DIALOG_BUTTON_CANCEL);
-  }
-
-  // TODO(domfc): Add "Learn more" button setup for scan failures.
-}
-
-base::string16 DeepScanningDialogViews::GetDialogMessage() const {
-  if (!scan_success_.has_value()) {
-    return l10n_util::GetStringUTF16(
-        IDS_DEEP_SCANNING_DIALOG_UPLOAD_PENDING_MESSAGE);
-  } else if (scan_success_.value()) {
-    return l10n_util::GetStringUTF16(IDS_DEEP_SCANNING_DIALOG_SUCCESS_MESSAGE);
-  } else {
-    return l10n_util::GetStringUTF16(
-        IDS_DEEP_SCANNING_DIALOG_UPLOAD_FAILURE_MESSAGE);
-  }
-}
-
-SkColor DeepScanningDialogViews::GetImageColor() const {
-  if (!scan_success_.has_value())
-    return kScanPendingColor;
-  else if (scan_success_.value())
-    return kScanSuccessColor;
-  else
-    return kScanFailureColor;
-}
-
-base::string16 DeepScanningDialogViews::GetCancelButtonText() const {
-  if (!scan_success_.has_value())
-    return l10n_util::GetStringUTF16(
-        IDS_DEEP_SCANNING_DIALOG_CANCEL_UPLOAD_BUTTON);
-  else if (!scan_success_.value())
-    return l10n_util::GetStringUTF16(IDS_CLOSE);
-
-  NOTREACHED();
-  return base::string16();
-}
-
-DeepScanningDialogViews::~DeepScanningDialogViews() = default;
 
 }  // namespace safe_browsing

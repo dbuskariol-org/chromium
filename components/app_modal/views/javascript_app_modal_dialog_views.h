@@ -25,7 +25,7 @@ class JavaScriptAppModalDialogViews : public NativeAppModalDialog,
   explicit JavaScriptAppModalDialogViews(JavaScriptAppModalDialog* parent);
   ~JavaScriptAppModalDialogViews() override;
 
-  // Overridden from NativeAppModalDialog:
+  // NativeAppModalDialog:
   void ShowAppModalDialog() override;
   void ActivateAppModalDialog() override;
   void CloseAppModalDialog() override;
@@ -33,13 +33,11 @@ class JavaScriptAppModalDialogViews : public NativeAppModalDialog,
   void CancelAppModalDialog() override;
   bool IsShowing() const override;
 
-  // Overridden from views::DialogDelegate:
+  // views::DialogDelegate:
   base::string16 GetWindowTitle() const override;
   void DeleteDelegate() override;
   bool Cancel() override;
   bool Accept() override;
-
-  // Overridden from views::WidgetDelegate:
   ui::ModalType GetModalType() const override;
   views::View* GetContentsView() override;
   views::View* GetInitiallyFocusedView() override;

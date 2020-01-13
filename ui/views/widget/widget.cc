@@ -96,7 +96,7 @@ class DefaultWidgetDelegate : public WidgetDelegate {
   }
   ~DefaultWidgetDelegate() override = default;
 
-  // Overridden from WidgetDelegate:
+  // WidgetDelegate:
   void DeleteDelegate() override { delete this; }
   Widget* GetWidget() override { return widget_; }
   const Widget* GetWidget() const override { return widget_; }

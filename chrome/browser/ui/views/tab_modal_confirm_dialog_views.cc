@@ -60,26 +60,6 @@ TabModalConfirmDialogViews::TabModalConfirmDialogViews(
   chrome::RecordDialogCreation(chrome::DialogIdentifier::TAB_MODAL_CONFIRM);
 }
 
-TabModalConfirmDialogViews::~TabModalConfirmDialogViews() {
-}
-
-void TabModalConfirmDialogViews::AcceptTabModalDialog() {
-  AcceptDialog();
-}
-
-void TabModalConfirmDialogViews::CancelTabModalDialog() {
-  CancelDialog();
-}
-
-void TabModalConfirmDialogViews::CloseDialog() {
-  GetWidget()->Close();
-}
-
-void TabModalConfirmDialogViews::LinkClicked(views::Link* source,
-                                             int event_flags) {
-  delegate_->LinkClicked(ui::DispositionFromEventFlags(event_flags));
-}
-
 base::string16 TabModalConfirmDialogViews::GetWindowTitle() const {
   return delegate_->GetTitle();
 }
@@ -105,19 +85,6 @@ bool TabModalConfirmDialogViews::ShouldShowCloseButton() const {
   return false;
 }
 
-views::View* TabModalConfirmDialogViews::GetInitiallyFocusedView() {
-  base::Optional<int> focused_button = delegate_->GetInitiallyFocusedButton();
-  if (!focused_button) {
-    return DialogDelegate::GetInitiallyFocusedView();
-  }
-
-  if (*focused_button == ui::DIALOG_BUTTON_OK)
-    return GetOkButton();
-  if (*focused_button == ui::DIALOG_BUTTON_CANCEL)
-    return GetCancelButton();
-  return nullptr;
-}
-
 views::View* TabModalConfirmDialogViews::GetContentsView() {
   return message_box_view_;
 }
@@ -136,4 +103,36 @@ void TabModalConfirmDialogViews::DeleteDelegate() {
 
 ui::ModalType TabModalConfirmDialogViews::GetModalType() const {
   return ui::MODAL_TYPE_CHILD;
+}
+
+TabModalConfirmDialogViews::~TabModalConfirmDialogViews() = default;
+
+void TabModalConfirmDialogViews::AcceptTabModalDialog() {
+  AcceptDialog();
+}
+
+void TabModalConfirmDialogViews::CancelTabModalDialog() {
+  CancelDialog();
+}
+
+void TabModalConfirmDialogViews::CloseDialog() {
+  GetWidget()->Close();
+}
+
+void TabModalConfirmDialogViews::LinkClicked(views::Link* source,
+                                             int event_flags) {
+  delegate_->LinkClicked(ui::DispositionFromEventFlags(event_flags));
+}
+
+views::View* TabModalConfirmDialogViews::GetInitiallyFocusedView() {
+  base::Optional<int> focused_button = delegate_->GetInitiallyFocusedButton();
+  if (!focused_button) {
+    return DialogDelegate::GetInitiallyFocusedView();
+  }
+
+  if (*focused_button == ui::DIALOG_BUTTON_OK)
+    return GetOkButton();
+  if (*focused_button == ui::DIALOG_BUTTON_CANCEL)
+    return GetCancelButton();
+  return nullptr;
 }

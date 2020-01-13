@@ -33,7 +33,7 @@ class LoginTestWidgetDelegate : public views::WidgetDelegate {
   explicit LoginTestWidgetDelegate(views::Widget* widget) : widget_(widget) {}
   ~LoginTestWidgetDelegate() override = default;
 
-  // Overridden from WidgetDelegate:
+  // views::WidgetDelegate:
   void DeleteDelegate() override { delete this; }
   views::Widget* GetWidget() override { return widget_; }
   const views::Widget* GetWidget() const override { return widget_; }

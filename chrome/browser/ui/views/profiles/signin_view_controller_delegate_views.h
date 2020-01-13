@@ -31,7 +31,6 @@ class SigninViewControllerDelegateViews
       public content::WebContentsDelegate,
       public ChromeWebModalDialogManagerDelegate {
  public:
-
   static std::unique_ptr<views::WebView> CreateSyncConfirmationWebView(
       Browser* browser);
 

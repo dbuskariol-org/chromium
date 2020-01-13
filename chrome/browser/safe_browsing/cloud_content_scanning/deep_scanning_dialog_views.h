@@ -37,8 +37,6 @@ class DeepScanningDialogViews : public views::DialogDelegate {
   base::string16 GetWindowTitle() const override;
   bool Cancel() override;
   bool ShouldShowCloseButton() const override;
-
-  // views::WidgetDelegate:
   views::View* GetContentsView() override;
   views::Widget* GetWidget() override;
   const views::Widget* GetWidget() const override;

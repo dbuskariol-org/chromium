@@ -33,7 +33,7 @@ namespace {
 
 NativeWidgetAura* Init(aura::Window* parent, Widget* widget) {
   Widget::InitParams params(Widget::InitParams::TYPE_POPUP);
-  params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
   params.parent = parent;
   widget->Init(std::move(params));
   return static_cast<NativeWidgetAura*>(widget->native_widget());
@@ -255,7 +255,7 @@ class MaximizeLayoutManager : public TestLayoutManagerBase {
 
 // This simulates BrowserView, which creates a custom RootView so that
 // OnNativeWidgetSizeChanged that is invoked during Init matters.
-class TestWidget : public views::Widget {
+class TestWidget : public Widget {
  public:
   TestWidget() = default;
 
@@ -289,7 +289,7 @@ TEST_F(NativeWidgetAuraTest, ShowMaximizedDoesntBounceAround) {
   root_window()->SetLayoutManager(new MaximizeLayoutManager);
   std::unique_ptr<TestWidget> widget(new TestWidget());
   Widget::InitParams params(Widget::InitParams::TYPE_WINDOW);
-  params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
   params.parent = nullptr;
   params.context = root_window();
   params.show_state = ui::SHOW_STATE_MAXIMIZED;
@@ -321,13 +321,13 @@ class PropertyTestLayoutManager : public TestLayoutManagerBase {
   DISALLOW_COPY_AND_ASSIGN(PropertyTestLayoutManager);
 };
 
-class PropertyTestWidgetDelegate : public views::WidgetDelegate {
+class PropertyTestWidgetDelegate : public WidgetDelegate {
  public:
   explicit PropertyTestWidgetDelegate(Widget* widget) : widget_(widget) {}
   ~PropertyTestWidgetDelegate() override = default;
 
  private:
-  // views::WidgetDelegate:
+  // WidgetDelegate:
   bool CanMaximize() const override { return true; }
   bool CanMinimize() const override { return true; }
   bool CanResize() const override { return true; }
@@ -346,7 +346,7 @@ TEST_F(NativeWidgetAuraTest, TestPropertiesWhenAddedToLayout) {
   root_window()->SetLayoutManager(layout_manager);
   std::unique_ptr<TestWidget> widget(new TestWidget());
   Widget::InitParams params(Widget::InitParams::TYPE_WINDOW);
-  params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
   params.delegate = new PropertyTestWidgetDelegate(widget.get());
   params.parent = nullptr;
   params.context = root_window();
@@ -358,7 +358,7 @@ TEST_F(NativeWidgetAuraTest, TestPropertiesWhenAddedToLayout) {
 TEST_F(NativeWidgetAuraTest, GetClientAreaScreenBounds) {
   // Create a widget.
   Widget::InitParams params(Widget::InitParams::TYPE_WINDOW);
-  params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
   params.context = root_window();
   params.bounds.SetRect(10, 20, 300, 400);
   std::unique_ptr<Widget> widget(new Widget());
@@ -373,7 +373,7 @@ TEST_F(NativeWidgetAuraTest, GetClientAreaScreenBounds) {
 }
 
 // View subclass that tracks whether it has gotten a gesture event.
-class GestureTrackingView : public views::View {
+class GestureTrackingView : public View {
  public:
   GestureTrackingView() = default;
 
@@ -417,7 +417,7 @@ TEST_F(NativeWidgetAuraTest, DontCaptureOnGesture) {
   view->AddChildView(child);
   std::unique_ptr<TestWidget> widget(new TestWidget());
   Widget::InitParams params(Widget::InitParams::TYPE_WINDOW_FRAMELESS);
-  params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
   params.context = root_window();
   params.bounds = gfx::Rect(0, 0, 100, 200);
   widget->Init(std::move(params));
@@ -456,11 +456,10 @@ TEST_F(NativeWidgetAuraTest, DontCaptureOnGesture) {
 // Verifies views with layers are targeted for events properly.
 TEST_F(NativeWidgetAuraTest, PreferViewLayersToChildWindows) {
   // Create two widgets: |parent| and |child|. |child| is a child of |parent|.
-  views::View* parent_root = new views::View;
+  View* parent_root = new View;
   std::unique_ptr<Widget> parent(new Widget());
   Widget::InitParams parent_params(Widget::InitParams::TYPE_WINDOW_FRAMELESS);
-  parent_params.ownership =
-      views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  parent_params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
   parent_params.context = root_window();
   parent->Init(std::move(parent_params));
   parent->SetContentsView(parent_root);
@@ -469,7 +468,7 @@ TEST_F(NativeWidgetAuraTest, PreferViewLayersToChildWindows) {
 
   std::unique_ptr<Widget> child(new Widget());
   Widget::InitParams child_params(Widget::InitParams::TYPE_CONTROL);
-  child_params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  child_params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
   child_params.parent = parent->GetNativeWindow();
   child->Init(std::move(child_params));
   child->SetBounds(gfx::Rect(0, 0, 200, 200));
@@ -481,7 +480,7 @@ TEST_F(NativeWidgetAuraTest, PreferViewLayersToChildWindows) {
                 gfx::Point(50, 50)));
 
   // Create a view with a layer and stack it at the bottom (below |child|).
-  views::View* view_with_layer = new views::View;
+  View* view_with_layer = new View;
   parent_root->AddChildView(view_with_layer);
   view_with_layer->SetBounds(0, 0, 50, 50);
   view_with_layer->SetPaintToLayer();
@@ -570,7 +569,7 @@ TEST_F(NativeWidgetAuraTest, FlashFrame) {
   std::unique_ptr<Widget> widget(new Widget());
   Widget::InitParams params(Widget::InitParams::TYPE_WINDOW);
   params.context = root_window();
-  params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
   widget->Init(std::move(params));
   aura::Window* window = widget->GetNativeWindow();
   EXPECT_FALSE(window->GetProperty(aura::client::kDrawAttentionKey));
@@ -639,12 +638,12 @@ TEST_F(NativeWidgetAuraTest, OnWidgetMovedInvokedAfterAcquireLayer) {
 // can not be activated.
 TEST_F(NativeWidgetAuraTest, PreventFocusOnNonActivableWindow) {
   test_focus_rules()->set_can_activate(false);
-  views::test::TestInitialFocusWidgetDelegate delegate(root_window());
+  test::TestInitialFocusWidgetDelegate delegate(root_window());
   delegate.GetWidget()->Show();
   EXPECT_FALSE(delegate.view()->HasFocus());
 
   test_focus_rules()->set_can_activate(true);
-  views::test::TestInitialFocusWidgetDelegate delegate2(root_window());
+  test::TestInitialFocusWidgetDelegate delegate2(root_window());
   delegate2.GetWidget()->Show();
   EXPECT_TRUE(delegate2.view()->HasFocus());
 }

@@ -210,6 +210,20 @@ void FullscreenShellSurface::OnWindowDestroying(aura::Window* window) {
   window->RemoveObserver(this);
 }
 
+void FullscreenShellSurface::GetAccessibleNodeData(ui::AXNodeData* node_data) {
+  node_data->role = ax::mojom::Role::kClient;
+
+  if (child_ax_tree_id_ == ui::AXTreeIDUnknown())
+    return;
+
+  node_data->AddStringAttribute(ax::mojom::StringAttribute::kChildTreeId,
+                                child_ax_tree_id_.ToString());
+}
+
+void FullscreenShellSurface::SetChildAxTreeId(ui::AXTreeID child_ax_tree_id) {
+  child_ax_tree_id_ = child_ax_tree_id;
+}
+
 void FullscreenShellSurface::UpdateHostWindowBounds() {
   // This method applies multiple changes to the window tree. Use ScopedPause
   // to ensure that occlusion isn't recomputed before all changes have been
@@ -268,20 +282,6 @@ bool FullscreenShellSurface::OnPreWidgetCommit() {
     return false;
 
   return true;
-}
-
-void FullscreenShellSurface::GetAccessibleNodeData(ui::AXNodeData* node_data) {
-  node_data->role = ax::mojom::Role::kClient;
-
-  if (child_ax_tree_id_ == ui::AXTreeIDUnknown())
-    return;
-
-  node_data->AddStringAttribute(ax::mojom::StringAttribute::kChildTreeId,
-                                child_ax_tree_id_.ToString());
-}
-
-void FullscreenShellSurface::SetChildAxTreeId(ui::AXTreeID child_ax_tree_id) {
-  child_ax_tree_id_ = child_ax_tree_id;
 }
 
 }  // namespace exo

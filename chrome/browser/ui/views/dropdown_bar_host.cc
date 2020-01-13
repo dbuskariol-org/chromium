@@ -31,6 +31,11 @@ DropdownBarHost::DropdownBarHost(BrowserView* browser_view)
       esc_accel_target_registered_(false),
       is_visible_(false) {}
 
+DropdownBarHost::~DropdownBarHost() {
+  focus_manager_->RemoveFocusChangeListener(this);
+  ResetFocusTracker();
+}
+
 void DropdownBarHost::Init(views::View* host_view,
                            views::View* view,
                            DropdownBarHostDelegate* delegate) {
@@ -80,9 +85,20 @@ void DropdownBarHost::Init(views::View* host_view,
   AnimationProgressed(animation_.get());
 }
 
-DropdownBarHost::~DropdownBarHost() {
-  focus_manager_->RemoveFocusChangeListener(this);
-  focus_tracker_.reset(NULL);
+bool DropdownBarHost::IsAnimating() const {
+  return animation_->is_animating();
+}
+
+bool DropdownBarHost::IsVisible() const {
+  return is_visible_;
+}
+
+void DropdownBarHost::SetFocusAndSelection() {
+  delegate_->FocusAndSelectAll();
+}
+
+void DropdownBarHost::StopAnimation() {
+  animation_->End();
 }
 
 void DropdownBarHost::Show(bool animate) {
@@ -116,14 +132,6 @@ void DropdownBarHost::Show(bool animate) {
     OnVisibilityChanged();
 }
 
-void DropdownBarHost::SetFocusAndSelection() {
-  delegate_->FocusAndSelectAll();
-}
-
-bool DropdownBarHost::IsAnimating() const {
-  return animation_->is_animating();
-}
-
 void DropdownBarHost::Hide(bool animate) {
   if (!IsVisible())
     return;
@@ -147,14 +155,6 @@ void DropdownBarHost::Hide(bool animate) {
   }
 }
 
-void DropdownBarHost::StopAnimation() {
-  animation_->End();
-}
-
-bool DropdownBarHost::IsVisible() const {
-  return is_visible_;
-}
-
 void DropdownBarHost::SetDialogPosition(const gfx::Rect& new_pos) {
   view_->SetSize(new_pos.size());
 
@@ -164,8 +164,6 @@ void DropdownBarHost::SetDialogPosition(const gfx::Rect& new_pos) {
   host()->SetBounds(new_pos);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// DropdownBarHost, views::FocusChangeListener implementation:
 void DropdownBarHost::OnWillChangeFocus(views::View* focused_before,
                                         views::View* focused_now) {
   // First we need to determine if one or both of the views passed in are child
@@ -193,9 +191,6 @@ void DropdownBarHost::OnDidChangeFocus(views::View* focused_before,
                                        views::View* focused_now) {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// DropdownBarHost, views::AnimationDelegateViews implementation:
-
 void DropdownBarHost::AnimationProgressed(const gfx::Animation* animation) {
   // First, we calculate how many pixels to slide the widget.
   gfx::Size pref_size = view_->GetPreferredSize();
@@ -218,29 +213,6 @@ void DropdownBarHost::AnimationEnded(const gfx::Animation* animation) {
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// DropdownBarHost protected:
-
-void DropdownBarHost::ResetFocusTracker() {
-  focus_tracker_.reset(NULL);
-}
-
-void DropdownBarHost::OnVisibilityChanged() {
-}
-
-void DropdownBarHost::GetWidgetBounds(gfx::Rect* bounds) {
-  DCHECK(bounds);
-  *bounds = browser_view_->bounds();
-}
-
-views::Widget* DropdownBarHost::GetWidget() {
-  return host_.get();
-}
-
-const views::Widget* DropdownBarHost::GetWidget() const {
-  return host_.get();
-}
-
 void DropdownBarHost::RegisterAccelerators() {
   DCHECK(!esc_accel_target_registered_);
   ui::Accelerator escape(ui::VKEY_ESCAPE, ui::EF_NONE);
@@ -254,4 +226,23 @@ void DropdownBarHost::UnregisterAccelerators() {
   ui::Accelerator escape(ui::VKEY_ESCAPE, ui::EF_NONE);
   focus_manager_->UnregisterAccelerator(escape, this);
   esc_accel_target_registered_ = false;
+}
+
+void DropdownBarHost::OnVisibilityChanged() {}
+
+void DropdownBarHost::ResetFocusTracker() {
+  focus_tracker_.reset();
+}
+
+void DropdownBarHost::GetWidgetBounds(gfx::Rect* bounds) {
+  DCHECK(bounds);
+  *bounds = browser_view_->bounds();
+}
+
+views::Widget* DropdownBarHost::GetWidget() {
+  return host_.get();
+}
+
+const views::Widget* DropdownBarHost::GetWidget() const {
+  return host_.get();
 }

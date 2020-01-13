@@ -107,9 +107,6 @@ bool JavaScriptAppModalDialogViews::Accept() {
   return true;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// JavaScriptAppModalDialogViews, views::WidgetDelegate implementation:
-
 ui::ModalType JavaScriptAppModalDialogViews::GetModalType() const {
   return ui::MODAL_TYPE_SYSTEM;
 }

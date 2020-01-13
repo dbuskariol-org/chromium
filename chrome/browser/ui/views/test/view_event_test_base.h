@@ -91,7 +91,7 @@ class ViewEventTestBase : public views::WidgetDelegate, public testing::Test {
   // appropriately.
   virtual gfx::Size GetPreferredSizeForContents() const;
 
-  // Overridden from views::WidgetDelegate:
+  // views::WidgetDelegate:
   bool CanResize() const override;
   views::View* GetContentsView() override;
   const views::Widget* GetWidget() const override;

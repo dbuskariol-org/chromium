@@ -36,13 +36,11 @@ class MessageBox::Core : public views::DialogDelegateView {
   void Show();
   void Hide();
 
-  // views::DialogDelegateView interface.
+  // views::DialogDelegateView:
   bool Accept() override;
   bool Cancel() override;
   ui::ModalType GetModalType() const override;
   base::string16 GetWindowTitle() const override;
-
-  // views::WidgetDelegate interface.
   views::View* GetContentsView() override;
   views::Widget* GetWidget() override;
   const views::Widget* GetWidget() const override;

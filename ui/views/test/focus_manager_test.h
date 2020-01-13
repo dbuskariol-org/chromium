@@ -25,11 +25,11 @@ class FocusManagerTest : public ViewsTestBase, public WidgetDelegate {
   // Convenience to obtain the focus manager for the test's hosting widget.
   FocusManager* GetFocusManager();
 
-  // Overridden from ViewsTestBase:
+  // ViewsTestBase:
   void SetUp() override;
   void TearDown() override;
 
-  // Overridden from WidgetDelegate:
+  // WidgetDelegate:
   View* GetContentsView() override;
   Widget* GetWidget() override;
   const Widget* GetWidget() const override;

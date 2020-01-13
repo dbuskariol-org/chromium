@@ -68,7 +68,7 @@ class ExtensionDialog : public views::DialogDelegate,
 
   extensions::ExtensionViewHost* host() const { return host_.get(); }
 
-  // views::DialogDelegate override.
+  // views::DialogDelegate:
   bool CanResize() const override;
   ui::ModalType GetModalType() const override;
   bool ShouldShowWindowTitle() const override;
@@ -79,7 +79,7 @@ class ExtensionDialog : public views::DialogDelegate,
   const views::Widget* GetWidget() const override;
   views::View* GetContentsView() override;
 
-  // content::NotificationObserver overrides.
+  // content::NotificationObserver:
   void Observe(int type,
                const content::NotificationSource& source,
                const content::NotificationDetails& details) override;

@@ -294,13 +294,13 @@ class VIEWS_EXPORT DialogDelegateView : public DialogDelegate,
   DialogDelegateView();
   ~DialogDelegateView() override;
 
-  // Overridden from DialogDelegate:
+  // DialogDelegate:
   void DeleteDelegate() override;
   Widget* GetWidget() override;
   const Widget* GetWidget() const override;
   View* GetContentsView() override;
 
-  // Overridden from View:
+  // View:
   void ViewHierarchyChanged(
       const ViewHierarchyChangedDetails& details) override;
 

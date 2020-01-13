@@ -164,7 +164,7 @@ class TestDesktopWidgetDelegate : public WidgetDelegate {
   }
   bool can_close() const { return can_close_; }
 
-  // WidgetDelegate overrides:
+  // WidgetDelegate:
   void WindowClosing() override;
   Widget* GetWidget() override;
   const Widget* GetWidget() const override;

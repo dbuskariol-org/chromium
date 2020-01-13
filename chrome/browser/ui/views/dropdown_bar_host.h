@@ -77,17 +77,13 @@ class DropdownBarHost : public ui::AcceleratorTarget,
   // of the |view_|.
   virtual void SetDialogPosition(const gfx::Rect& new_pos);
 
-  // Overridden from views::FocusChangeListener:
+  // views::FocusChangeListener:
   void OnWillChangeFocus(views::View* focused_before,
                          views::View* focused_now) override;
   void OnDidChangeFocus(views::View* focused_before,
                         views::View* focused_now) override;
 
-  // Overridden from ui::AcceleratorTarget:
-  bool AcceleratorPressed(const ui::Accelerator& accelerator) override = 0;
-  bool CanHandleAccelerators() const override = 0;
-
-  // views::AnimationDelegateViews implementation:
+  // views::AnimationDelegateViews:
   void AnimationProgressed(const gfx::Animation* animation) override;
   void AnimationEnded(const gfx::Animation* animation) override;
 
@@ -152,6 +148,8 @@ class DropdownBarHost : public ui::AcceleratorTarget,
   // Set the view whose position in the |browser_view_| view hierarchy
   // determines the z-order of |host_| relative to views with layers and
   // views with associated NativeViews.
+  //
+  // Implemented in platform-specific files.
   void SetHostViewNative(views::View* host_view);
 
   // The BrowserView that created us.

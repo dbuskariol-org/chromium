@@ -59,7 +59,7 @@ ChooserDialogView::ChooserDialogView(
   chrome::RecordDialogCreation(chrome::DialogIdentifier::CHOOSER);
 }
 
-ChooserDialogView::~ChooserDialogView() {}
+ChooserDialogView::~ChooserDialogView() = default;
 
 base::string16 ChooserDialogView::GetWindowTitle() const {
   return device_chooser_content_view_->GetWindowTitle();
@@ -110,11 +110,6 @@ const views::Widget* ChooserDialogView::GetWidget() const {
 
 void ChooserDialogView::OnSelectionChanged() {
   DialogModelChanged();
-}
-
-DeviceChooserContentView*
-ChooserDialogView::device_chooser_content_view_for_test() const {
-  return device_chooser_content_view_;
 }
 
 void ChromeExtensionChooserDialog::ShowDialogImpl(
