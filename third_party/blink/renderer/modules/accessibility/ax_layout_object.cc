@@ -1639,10 +1639,6 @@ ax::mojom::Dropeffect AXLayoutObject::ParseDropeffect(
   return ax::mojom::Dropeffect::kNone;
 }
 
-bool AXLayoutObject::SupportsARIAFlowTo() const {
-  return !GetAttribute(html_names::kAriaFlowtoAttr).IsEmpty();
-}
-
 bool AXLayoutObject::SupportsARIAOwns() const {
   if (!layout_object_)
     return false;

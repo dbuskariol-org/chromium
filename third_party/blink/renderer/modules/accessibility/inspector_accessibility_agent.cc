@@ -432,10 +432,6 @@ class SparseAttributeAXPropertyAdapter
             CreateProperty(AXPropertyNameEnum::Activedescendant,
                            CreateRelatedNodeListValue(object)));
         break;
-      case AXObjectAttribute::kAriaDetails:
-        properties_.emplace_back(CreateProperty(
-            AXPropertyNameEnum::Details, CreateRelatedNodeListValue(object)));
-        break;
       case AXObjectAttribute::kAriaErrorMessage:
         properties_.emplace_back(
             CreateProperty(AXPropertyNameEnum::Errormessage,
@@ -452,6 +448,11 @@ class SparseAttributeAXPropertyAdapter
         properties_.emplace_back(CreateRelatedNodeListProperty(
             AXPropertyNameEnum::Controls, objects,
             html_names::kAriaControlsAttr, *ax_object_));
+        break;
+      case AXObjectVectorAttribute::kAriaDetails:
+        properties_.emplace_back(CreateRelatedNodeListProperty(
+            AXPropertyNameEnum::Details, objects, html_names::kAriaDetailsAttr,
+            *ax_object_));
         break;
       case AXObjectVectorAttribute::kAriaFlowTo:
         properties_.emplace_back(CreateRelatedNodeListProperty(

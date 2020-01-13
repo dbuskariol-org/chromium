@@ -41,7 +41,7 @@ namespace http://www.w3.org/1999/xhtml
     property ariaControlsElements
     property ariaCurrent
     property ariaDescribedByElements
-    property ariaDetailsElement
+    property ariaDetailsElements
     property ariaDisabled
     property ariaErrorMessageElement
     property ariaExpanded
@@ -1241,7 +1241,7 @@ namespace http://www.w3.org/2000/svg
     property ariaControlsElements
     property ariaCurrent
     property ariaDescribedByElements
-    property ariaDetailsElement
+    property ariaDetailsElements
     property ariaDisabled
     property ariaErrorMessageElement
     property ariaExpanded

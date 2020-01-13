@@ -2873,8 +2873,6 @@ static AtkIntRelation kIntRelations[] = {
     {ax::mojom::IntAttribute::kPopupForId, ATK_RELATION_POPUP_FOR,
      base::nullopt},
 #if defined(ATK_226)
-    {ax::mojom::IntAttribute::kDetailsId, ATK_RELATION_DETAILS,
-     ATK_RELATION_DETAILS_FOR},
     {ax::mojom::IntAttribute::kErrormessageId, ATK_RELATION_ERROR_MESSAGE,
      ATK_RELATION_ERROR_FOR},
 #endif
@@ -2889,6 +2887,8 @@ struct AtkIntListRelation {
 static AtkIntListRelation kIntListRelations[] = {
     {ax::mojom::IntListAttribute::kControlsIds, ATK_RELATION_CONTROLLER_FOR,
      ATK_RELATION_CONTROLLED_BY},
+    {ax::mojom::IntListAttribute::kDetailsIds, ATK_RELATION_DETAILS,
+     ATK_RELATION_DETAILS_FOR},
     {ax::mojom::IntListAttribute::kDescribedbyIds, ATK_RELATION_DESCRIBED_BY,
      ATK_RELATION_DESCRIPTION_FOR},
     {ax::mojom::IntListAttribute::kFlowtoIds, ATK_RELATION_FLOWS_TO,

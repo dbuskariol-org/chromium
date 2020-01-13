@@ -97,7 +97,6 @@ typename std::vector<std::pair<FirstType, SecondType>>::const_iterator
 bool IsNodeIdIntAttribute(ax::mojom::IntAttribute attr) {
   switch (attr) {
     case ax::mojom::IntAttribute::kActivedescendantId:
-    case ax::mojom::IntAttribute::kDetailsId:
     case ax::mojom::IntAttribute::kErrormessageId:
     case ax::mojom::IntAttribute::kInPageLinkTargetId:
     case ax::mojom::IntAttribute::kMemberOfId:
@@ -175,6 +174,7 @@ bool IsNodeIdIntAttribute(ax::mojom::IntAttribute attr) {
 bool IsNodeIdIntListAttribute(ax::mojom::IntListAttribute attr) {
   switch (attr) {
     case ax::mojom::IntListAttribute::kControlsIds:
+    case ax::mojom::IntListAttribute::kDetailsIds:
     case ax::mojom::IntListAttribute::kDescribedbyIds:
     case ax::mojom::IntListAttribute::kFlowtoIds:
     case ax::mojom::IntListAttribute::kIndirectChildIds:
@@ -1104,9 +1104,6 @@ std::string AXNodeData::ToString() const {
       case ax::mojom::IntAttribute::kActivedescendantId:
         result += " activedescendant=" + value;
         break;
-      case ax::mojom::IntAttribute::kDetailsId:
-        result += " details=" + value;
-        break;
       case ax::mojom::IntAttribute::kErrormessageId:
         result += " errormessage=" + value;
         break;
@@ -1533,6 +1530,9 @@ std::string AXNodeData::ToString() const {
         break;
       case ax::mojom::IntListAttribute::kDescribedbyIds:
         result += " describedby_ids=" + IntVectorToString(values);
+        break;
+      case ax::mojom::IntListAttribute::kDetailsIds:
+        result += " details_ids=" + IntVectorToString(values);
         break;
       case ax::mojom::IntListAttribute::kFlowtoIds:
         result += " flowto_ids=" + IntVectorToString(values);

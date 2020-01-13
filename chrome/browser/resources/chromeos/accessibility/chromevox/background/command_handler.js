@@ -586,8 +586,9 @@ CommandHandler.onCommand = function(command) {
       while (node && !node.details) {
         node = node.parent;
       }
-      if (node) {
-        current = cursors.Range.fromNode(node.details);
+      if (node && node.details.length) {
+        // TODO currently can only jump to first detail.
+        current = cursors.Range.fromNode(node.details[0]);
       }
       break;
     case 'readFromHere':

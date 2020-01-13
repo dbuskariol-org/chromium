@@ -1998,7 +1998,7 @@ interface Element : Node
     getter ariaControlsElements
     getter ariaCurrent
     getter ariaDescribedByElements
-    getter ariaDetailsElement
+    getter ariaDetailsElements
     getter ariaDisabled
     getter ariaErrorMessageElement
     getter ariaExpanded
@@ -2141,7 +2141,7 @@ interface Element : Node
     setter ariaControlsElements
     setter ariaCurrent
     setter ariaDescribedByElements
-    setter ariaDetailsElement
+    setter ariaDetailsElements
     setter ariaDisabled
     setter ariaErrorMessageElement
     setter ariaExpanded
@@ -2208,7 +2208,7 @@ interface ElementInternals
     getter ariaControlsElements
     getter ariaCurrent
     getter ariaDescribedByElements
-    getter ariaDetailsElement
+    getter ariaDetailsElements
     getter ariaDisabled
     getter ariaErrorMessageElement
     getter ariaExpanded
@@ -2264,7 +2264,7 @@ interface ElementInternals
     setter ariaControlsElements
     setter ariaCurrent
     setter ariaDescribedByElements
-    setter ariaDetailsElement
+    setter ariaDetailsElements
     setter ariaDisabled
     setter ariaErrorMessageElement
     setter ariaExpanded
