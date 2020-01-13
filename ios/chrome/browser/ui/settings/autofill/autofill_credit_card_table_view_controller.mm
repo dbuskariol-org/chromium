@@ -17,6 +17,7 @@
 #include "ios/chrome/browser/application_context.h"
 #include "ios/chrome/browser/autofill/personal_data_manager_factory.h"
 #include "ios/chrome/browser/browser_state/chrome_browser_state.h"
+#include "ios/chrome/browser/main/browser.h"
 #import "ios/chrome/browser/ui/settings/autofill/autofill_add_credit_card_coordinator.h"
 #import "ios/chrome/browser/ui/settings/autofill/autofill_constants.h"
 #import "ios/chrome/browser/ui/settings/autofill/autofill_credit_card_edit_table_view_controller.h"
@@ -59,7 +60,7 @@ typedef NS_ENUM(NSInteger, ItemType) {
     PersonalDataManagerObserver> {
   autofill::PersonalDataManager* _personalDataManager;
 
-  ios::ChromeBrowserState* _browserState;
+  Browser* _browser;
   std::unique_ptr<autofill::PersonalDataManagerObserverBridge> _observer;
 }
 
@@ -86,8 +87,8 @@ typedef NS_ENUM(NSInteger, ItemType) {
 
 #pragma mark - ViewController Life Cycle.
 
-- (instancetype)initWithBrowserState:(ios::ChromeBrowserState*)browserState {
-  DCHECK(browserState);
+- (instancetype)initWithBrowser:(Browser*)browser {
+  DCHECK(browser);
   UITableViewStyle style = base::FeatureList::IsEnabled(kSettingsRefresh)
                                ? UITableViewStylePlain
                                : UITableViewStyleGrouped;
@@ -96,9 +97,10 @@ typedef NS_ENUM(NSInteger, ItemType) {
   if (self) {
     self.title = l10n_util::GetNSString(IDS_AUTOFILL_PAYMENT_METHODS);
     self.shouldHideDoneButton = YES;
-    _browserState = browserState;
+    _browser = browser;
     _personalDataManager =
-        autofill::PersonalDataManagerFactory::GetForBrowserState(_browserState);
+        autofill::PersonalDataManagerFactory::GetForBrowserState(
+            _browser->GetBrowserState());
     _observer.reset(new autofill::PersonalDataManagerObserverBridge(self));
     _personalDataManager->AddObserver(_observer.get());
   }
@@ -434,7 +436,7 @@ typedef NS_ENUM(NSInteger, ItemType) {
 
   self.addCreditCardCoordinator = [[AutofillAddCreditCardCoordinator alloc]
       initWithBaseViewController:self
-                    browserState:_browserState];
+                         browser:_browser];
 
   [self.addCreditCardCoordinator start];
 }
@@ -458,12 +460,12 @@ typedef NS_ENUM(NSInteger, ItemType) {
 
 - (BOOL)isAutofillCreditCardEnabled {
   return autofill::prefs::IsAutofillCreditCardEnabled(
-      _browserState->GetPrefs());
+      _browser->GetBrowserState()->GetPrefs());
 }
 
 - (void)setAutofillCreditCardEnabled:(BOOL)isEnabled {
   return autofill::prefs::SetAutofillCreditCardEnabled(
-      _browserState->GetPrefs(), isEnabled);
+      _browser->GetBrowserState()->GetPrefs(), isEnabled);
 }
 
 - (UIBarButtonItem*)addPaymentMethodButton {
