@@ -12,6 +12,7 @@
 #include <windows.h>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "base/command_line.h"
 #include "base/files/file.h"
@@ -176,10 +177,11 @@ class InstallUtil {
       const base::Version& new_version,
       WorkItemList* list);
 
-  // Returns the registry key path and value name where the enrollment token is
-  // stored for machine level user cloud policies.
-  static std::pair<std::wstring, std::wstring>
-  GetCloudManagementEnrollmentTokenRegistryPath();
+  // Returns pairs of registry key paths and value names where the enrollment
+  // token is stored for machine level user cloud policies. The locations are
+  // returned in order of preference.
+  static std::vector<std::pair<std::wstring, std::wstring>>
+  GetCloudManagementEnrollmentTokenRegistryPaths();
 
   // Returns the registry key path and value name where the DM token is stored
   // for machine level user cloud policies.

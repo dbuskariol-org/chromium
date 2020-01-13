@@ -110,8 +110,15 @@ HWND CreateUACForegroundWindow() {
 std::wstring GetChromePoliciesRegistryPath() {
   std::wstring key_path = L"SOFTWARE\\Policies\\";
   install_static::AppendChromeInstallSubDirectory(
-      install_static::InstallDetails::Get().mode(), false /* !include_suffix */,
+      install_static::InstallDetails::Get().mode(), /*include_suffix=*/false,
       &key_path);
+  return key_path;
+}
+
+std::wstring GetCloudManagementPoliciesRegistryPath() {
+  std::wstring key_path = L"SOFTWARE\\Policies\\";
+  key_path.append(install_static::kCompanyPathName);
+  key_path.append(L"\\CloudManagement");
   return key_path;
 }
 
@@ -579,12 +586,16 @@ void InstallUtil::AddUpdateDowngradeVersionItem(
 }
 
 // static
-std::pair<std::wstring, std::wstring>
-InstallUtil::GetCloudManagementEnrollmentTokenRegistryPath() {
-  // This token applies to all installs on the machine, even though only a
-  // system install can set it.  This is to prevent users from doing a user
-  // install of chrome to get around policies.
-  return {GetChromePoliciesRegistryPath(), L"CloudManagementEnrollmentToken"};
+std::vector<std::pair<std::wstring, std::wstring>>
+InstallUtil::GetCloudManagementEnrollmentTokenRegistryPaths() {
+  std::vector<std::pair<std::wstring, std::wstring>> paths;
+  // Prefer the product-agnostic location used by Google Update.
+  paths.emplace_back(GetCloudManagementPoliciesRegistryPath(),
+                     L"EnrollmentToken");
+  // Follow that with the Google Chrome policy.
+  paths.emplace_back(GetChromePoliciesRegistryPath(),
+                     L"CloudManagementEnrollmentToken");
+  return paths;
 }
 
 // static
@@ -613,11 +624,18 @@ base::string16 InstallUtil::GetCloudManagementEnrollmentToken() {
   // this token via SCCM.
   // TODO(rogerta): This may not be the best place for the helpers dealing with
   // the enrollment and/or DM tokens.  See crbug.com/823852 for details.
-  auto key_and_value = GetCloudManagementEnrollmentTokenRegistryPath();
+  RegKey key;
   base::string16 value;
-  RegKey key(HKEY_LOCAL_MACHINE, key_and_value.first.c_str(), KEY_QUERY_VALUE);
-  key.ReadValue(key_and_value.second.c_str(), &value);
-  return value;
+  for (const auto& key_and_value :
+           GetCloudManagementEnrollmentTokenRegistryPaths()) {
+    if (key.Open(HKEY_LOCAL_MACHINE, key_and_value.first.c_str(),
+                 KEY_QUERY_VALUE) == ERROR_SUCCESS &&
+        key.ReadValue(key_and_value.second.c_str(), &value) == ERROR_SUCCESS) {
+      return value;
+    }
+  }
+
+  return base::string16();
 }
 
 // static

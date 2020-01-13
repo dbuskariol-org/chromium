@@ -21,6 +21,7 @@ namespace {
 
 constexpr wchar_t kClientId1[] = L"fake-client-id-1";
 constexpr wchar_t kEnrollmentToken1[] = L"fake-enrollment-token-1";
+constexpr wchar_t kEnrollmentToken2[] = L"fake-enrollment-token-2";
 constexpr char kDMToken1[] = "fake-dm-token-1";
 
 }  // namespace
@@ -42,9 +43,22 @@ class BrowserDMTokenStorageWinTest : public testing::Test {
            (key.WriteValue(L"MachineGuid", machine_guid) == ERROR_SUCCESS);
   }
 
-  bool SetEnrollmentToken(const wchar_t* enrollment_token) {
-    auto key_and_value =
-        InstallUtil::GetCloudManagementEnrollmentTokenRegistryPath();
+  // Sets the preferred policy (in ...\CloudManagement).
+  bool SetPreferredEnrollmentTokenPolicy(const wchar_t* enrollment_token) {
+    auto paths = InstallUtil::GetCloudManagementEnrollmentTokenRegistryPaths();
+    const auto& key_and_value = paths.front();
+    base::win::RegKey key;
+    return key.Create(HKEY_LOCAL_MACHINE, key_and_value.first.c_str(),
+                      KEY_SET_VALUE) == ERROR_SUCCESS &&
+           key.WriteValue(key_and_value.second.c_str(), enrollment_token) ==
+               ERROR_SUCCESS;
+  }
+
+  // Sets the Chrome policy (in ...\Chrome).
+  bool SetSecondaryEnrollmentTokenPolicy(const wchar_t* enrollment_token) {
+    auto paths = InstallUtil::GetCloudManagementEnrollmentTokenRegistryPaths();
+    EXPECT_GE(paths.size(), size_t{2});
+    const auto& key_and_value = paths[1];
     base::win::RegKey key;
     return key.Create(HKEY_LOCAL_MACHINE, key_and_value.first.c_str(),
                       KEY_SET_VALUE) == ERROR_SUCCESS &&
@@ -74,12 +88,21 @@ TEST_F(BrowserDMTokenStorageWinTest, InitClientId) {
   EXPECT_EQ(base::WideToUTF8(kClientId1), storage.InitClientId());
 }
 
-TEST_F(BrowserDMTokenStorageWinTest, InitEnrollmentToken) {
+TEST_F(BrowserDMTokenStorageWinTest, InitEnrollmentTokenFromPreferred) {
   ASSERT_TRUE(SetMachineGuid(kClientId1));
-  ASSERT_TRUE(SetEnrollmentToken(kEnrollmentToken1));
+  ASSERT_TRUE(SetPreferredEnrollmentTokenPolicy(kEnrollmentToken1));
+  ASSERT_TRUE(SetSecondaryEnrollmentTokenPolicy(kEnrollmentToken2));
 
   BrowserDMTokenStorageWin storage;
   EXPECT_EQ(base::WideToUTF8(kEnrollmentToken1), storage.InitEnrollmentToken());
+}
+
+TEST_F(BrowserDMTokenStorageWinTest, InitEnrollmentTokenFromSecondary) {
+  ASSERT_TRUE(SetMachineGuid(kClientId1));
+  ASSERT_TRUE(SetSecondaryEnrollmentTokenPolicy(kEnrollmentToken2));
+
+  BrowserDMTokenStorageWin storage;
+  EXPECT_EQ(base::WideToUTF8(kEnrollmentToken2), storage.InitEnrollmentToken());
 }
 
 TEST_F(BrowserDMTokenStorageWinTest, InitDMToken) {

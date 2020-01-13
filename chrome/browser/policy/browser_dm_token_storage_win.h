@@ -39,7 +39,10 @@ class BrowserDMTokenStorageWin : public BrowserDMTokenStorage {
   scoped_refptr<base::SingleThreadTaskRunner> com_sta_task_runner_;
 
   FRIEND_TEST_ALL_PREFIXES(BrowserDMTokenStorageWinTest, InitClientId);
-  FRIEND_TEST_ALL_PREFIXES(BrowserDMTokenStorageWinTest, InitEnrollmentToken);
+  FRIEND_TEST_ALL_PREFIXES(BrowserDMTokenStorageWinTest,
+                           InitEnrollmentTokenFromPreferred);
+  FRIEND_TEST_ALL_PREFIXES(BrowserDMTokenStorageWinTest,
+                           InitEnrollmentTokenFromSecondary);
   FRIEND_TEST_ALL_PREFIXES(BrowserDMTokenStorageWinTest, InitDMToken);
 
   DISALLOW_COPY_AND_ASSIGN(BrowserDMTokenStorageWin);
