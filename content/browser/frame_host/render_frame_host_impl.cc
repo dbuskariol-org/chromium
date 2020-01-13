@@ -4547,7 +4547,15 @@ void RenderFrameHostImpl::CreatePortal(
   auto it = portals_.insert(std::move(portal)).first;
 
   RenderFrameProxyHost* proxy_host = (*it)->CreateProxyAndAttachPortal();
-  std::move(callback).Run(proxy_host->GetRoutingID(), (*it)->portal_token(),
+
+  // Since the portal is newly created and has yet to commit a navigation, this
+  // state is trivial.
+  const FrameReplicationState& initial_replicated_state =
+      proxy_host->frame_tree_node()->current_replication_state();
+  DCHECK(initial_replicated_state.origin.opaque());
+
+  std::move(callback).Run(proxy_host->GetRoutingID(), initial_replicated_state,
+                          (*it)->portal_token(),
                           (*it)->GetDevToolsFrameToken());
 }
 
