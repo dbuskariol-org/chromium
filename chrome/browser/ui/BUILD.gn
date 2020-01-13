@@ -656,7 +656,6 @@ jumbo_static_library("ui") {
       "android/chrome_http_auth_handler.cc",
       "android/chrome_http_auth_handler.h",
       "android/chrome_javascript_app_modal_dialog_android.cc",
-      "android/chrome_javascript_app_modal_dialog_android.h",
       "android/color_chooser_dialog_android.cc",
       "android/content_settings/ads_blocked_infobar_delegate.cc",
       "android/content_settings/ads_blocked_infobar_delegate.h",
