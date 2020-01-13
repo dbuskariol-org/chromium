@@ -227,6 +227,13 @@ class CC_PAINT_EXPORT PaintOp {
   // for the op.
   static bool GetBounds(const PaintOp* op, SkRect* rect);
 
+  // Returns the minimum conservative bounding rect that |op| draws to on a
+  // canvas. |clip_rect| and |ctm| are the current clip rect and transform on
+  // this canvas.
+  static gfx::Rect ComputePaintRect(const PaintOp* op,
+                                    const SkRect& clip_rect,
+                                    const SkMatrix& ctm);
+
   // Returns true if the op lies outside the current clip and should be skipped.
   // Should only be used with draw ops.
   static bool QuickRejectDraw(const PaintOp* op, const SkCanvas* canvas);
