@@ -78,19 +78,13 @@ group("policy_testserver_pyproto") {
 if (is_android) {
   android_library("test_support_java") {
     testonly = true
-    deps = [
-      "//chrome/android:chrome_all_java",
-    ]
-    sources = [
-      "android/test_support/src/org/chromium/chrome/test_support/PaymentRequestTestBridge.java",
-    ]
+    deps = [ "//chrome/android:chrome_all_java" ]
+    sources = [ "android/test_support/src/org/chromium/chrome/test_support/PaymentRequestTestBridge.java" ]
   }
 
   generate_jni("test_support_jni_headers") {
     testonly = true
-    sources = [
-      "android/test_support/src/org/chromium/chrome/test_support/PaymentRequestTestBridge.java",
-    ]
+    sources = [ "android/test_support/src/org/chromium/chrome/test_support/PaymentRequestTestBridge.java" ]
   }
 }
 
@@ -412,9 +406,7 @@ static_library("test_support") {
 
 group("telemetry_gpu_integration_test") {
   testonly = true
-  deps = [
-    "//tools/perf/chrome_telemetry_build:telemetry_chrome_test",
-  ]
+  deps = [ "//tools/perf/chrome_telemetry_build:telemetry_chrome_test" ]
 
   data = [
     # For isolate contract.
@@ -476,9 +468,7 @@ group("telemetry_gpu_integration_test_scripts_only") {
     "//tools/perf/chrome_telemetry_build:telemetry_chrome_test_without_chrome",
   ]
 
-  data = [
-    "//content/test/gpu/",
-  ]
+  data = [ "//content/test/gpu/" ]
 }
 
 if (is_win) {
@@ -488,9 +478,7 @@ if (is_win) {
       "../browser/ui/startup/credential_provider_signin_dialog_win_test_data.cc",
       "../browser/ui/startup/credential_provider_signin_dialog_win_test_data.h",
     ]
-    deps = [
-      "//base",
-    ]
+    deps = [ "//base" ]
   }
 }
 
@@ -528,9 +516,7 @@ if (is_android) {
       "//testing/android/native_test:native_test_support",
     ]
 
-    data_deps = [
-      "//testing/buildbot/filters:android_browsertests_filters",
-    ]
+    data_deps = [ "//testing/buildbot/filters:android_browsertests_filters" ]
 
     sources = [
       "../browser/engagement/important_sites_util_browsertest.cc",
@@ -574,9 +560,7 @@ if (is_android) {
       "base/android/android_browser_test.cc",
       "base/android/android_browser_test.h",
     ]
-    public_deps = [
-      "//content/test:test_support",
-    ]
+    public_deps = [ "//content/test:test_support" ]
     deps = [
       "//chrome/browser",
       "//content/public/browser",
@@ -647,9 +631,7 @@ static_library("browser_tests_runner") {
   testonly = true
   sources = []
 
-  deps = [
-    ":test_support",
-  ]
+  deps = [ ":test_support" ]
 
   if (is_chromeos) {
     sources += [ "base/browser_tests_main_chromeos.cc" ]
@@ -2804,9 +2786,7 @@ if (is_linux || is_mac || is_win) {
 
   group("browser_tests_apprtc") {
     testonly = true
-    data_deps = [
-      ":browser_tests",
-    ]
+    data_deps = [ ":browser_tests" ]
     data = [
       "//third_party/webrtc/rtc_tools/testing/browsertest/apprtc/out/app_engine/",
       "//third_party/webrtc/rtc_tools/testing/browsertest/apprtc/temp/google-cloud-sdk/",
@@ -2820,9 +2800,7 @@ if (is_linux || is_mac || is_win) {
   }
 
   sizes_test("chrome_sizes") {
-    data_deps = [
-      "//chrome",
-    ]
+    data_deps = [ "//chrome" ]
     if (is_win) {
       data_deps += [ "//chrome/installer/mini_installer" ]
     }
@@ -2831,9 +2809,7 @@ if (is_linux || is_mac || is_win) {
 
 group("telemetry_perf_unittests") {
   testonly = true
-  deps = [
-    "//tools/perf:perf",
-  ]
+  deps = [ "//tools/perf:perf" ]
 
   data = [
     # For isolate contract.
@@ -2852,9 +2828,7 @@ group("telemetry_perf_unittests") {
 
 group("telemetry_perf_tests") {
   testonly = true
-  deps = [
-    "//tools/perf/:perf",
-  ]
+  deps = [ "//tools/perf/:perf" ]
 
   data = [
     # Needed for isolate script to execute.
@@ -2865,13 +2839,9 @@ group("telemetry_perf_tests") {
 
 group("ct_telemetry_perf_tests_without_chrome") {
   testonly = true
-  deps = [
-    "//tools/perf/:perf_without_chrome",
-  ]
+  deps = [ "//tools/perf/:perf_without_chrome" ]
 
-  data = [
-    "//tools/perf/contrib/cluster_telemetry/",
-  ]
+  data = [ "//tools/perf/contrib/cluster_telemetry/" ]
 
   data_deps = [
     "//components/subresource_filter/tools:index_ruleset",
@@ -2883,9 +2853,7 @@ group("ct_telemetry_perf_tests_without_chrome") {
 # is done.
 group("performance_test_suite") {
   testonly = true
-  deps = [
-    "//chrome/test:telemetry_perf_tests",
-  ]
+  deps = [ "//chrome/test:telemetry_perf_tests" ]
 
   data_deps = [
     "//base:base_perftests",
@@ -2920,16 +2888,12 @@ group("performance_test_suite") {
 # //testing/buildbot/gn_isolate_map.pyl
 group("performance_webview_test_suite") {
   testonly = true
-  deps = [
-    "//chrome/test:performance_test_suite",
-  ]
+  deps = [ "//chrome/test:performance_test_suite" ]
 }
 
 group("performance_weblayer_test_suite") {
   testonly = true
-  deps = [
-    "//chrome/test:performance_test_suite",
-  ]
+  deps = [ "//chrome/test:performance_test_suite" ]
 }
 
 # Difference between this and telemetry_perf_tests is that this runs a devil
@@ -2937,16 +2901,12 @@ group("performance_weblayer_test_suite") {
 # //testing/buildbot/gn_isolate_map.pyl
 group("telemetry_perf_webview_tests") {
   testonly = true
-  deps = [
-    "//chrome/test:telemetry_perf_tests",
-  ]
+  deps = [ "//chrome/test:telemetry_perf_tests" ]
 }
 
 group("angle_perftests") {
   testonly = true
-  data_deps = [
-    "//testing:run_perf_test",
-  ]
+  data_deps = [ "//testing:run_perf_test" ]
   if (is_win || is_linux || is_android) {
     data_deps += [ "//third_party/angle/src/tests:angle_perftests" ]
   }
@@ -2954,9 +2914,7 @@ group("angle_perftests") {
 
 group("dawn_perf_tests") {
   testonly = true
-  data_deps = [
-    "//testing:run_perf_test",
-  ]
+  data_deps = [ "//testing:run_perf_test" ]
   if (use_dawn) {
     data_deps += [ "//third_party/dawn:dawn_perf_tests_temp_group" ]
   }
@@ -2964,9 +2922,8 @@ group("dawn_perf_tests") {
 
 if (is_mac) {
   mojom("firefox_importer_interface") {
-    sources = [
-      "../utility/importer/firefox_importer_unittest_utils_mac.mojom",
-    ]
+    sources =
+        [ "../utility/importer/firefox_importer_unittest_utils_mac.mojom" ]
     public_deps = [
       "//components/autofill/core/common/mojom:mojo_types",
       "//mojo/public/mojom/base",
@@ -5381,9 +5338,7 @@ test("unit_tests") {
 
 static_library("test_support_unit") {
   testonly = true
-  sources = [
-    "base/run_all_unittests.cc",
-  ]
+  sources = [ "base/run_all_unittests.cc" ]
 
   public_deps = [
     ":test_support",
@@ -5397,9 +5352,7 @@ static_library("test_support_unit") {
   deps = []
 
   if (is_win) {
-    deps = [
-      "//chrome/install_static/test:test_support",
-    ]
+    deps = [ "//chrome/install_static/test:test_support" ]
   }
 
   if (is_chromeos) {
@@ -5494,9 +5447,7 @@ if (!is_android) {
   import("//third_party/protobuf/proto_library.gni")
 
   proto_library("test_proto") {
-    sources = [
-      "../common/safe_browsing/ipc_protobuf_message_test.proto",
-    ]
+    sources = [ "../common/safe_browsing/ipc_protobuf_message_test.proto" ]
   }
 
   if (is_chromeos) {
@@ -6132,9 +6083,7 @@ if (!is_android && !is_fuchsia) {
       "../browser/sync/test/integration/wallet_helper.cc",
       "../browser/sync/test/integration/wallet_helper.h",
     ]
-    public_deps = [
-      "//chrome/browser",
-    ]
+    public_deps = [ "//chrome/browser" ]
     deps = [
       ":test_support",
       "//base",
@@ -6375,9 +6324,7 @@ if (!is_android && !is_fuchsia) {
 
   # Executable to measure time to load libraries.
   test("load_library_perf_tests") {
-    sources = [
-      "../browser/load_library_perf_test.cc",
-    ]
+    sources = [ "../browser/load_library_perf_test.cc" ]
 
     # This test deliberately does not depend in chrome's test support targets.
     # This is a small test and Chrome's test support targets bring in the
@@ -6392,9 +6339,7 @@ if (!is_android && !is_fuchsia) {
       "//third_party/widevine/cdm:buildflags",
     ]
 
-    data_deps = [
-      "//testing:run_perf_test",
-    ]
+    data_deps = [ "//testing:run_perf_test" ]
 
     if (enable_library_cdms) {
       deps += [ "//media/cdm:cdm_paths" ]
@@ -6409,9 +6354,7 @@ if (!is_android && !is_fuchsia) {
   }
 
   test("ntp_render_browsertests") {
-    sources = [
-      "../browser/ui/search/local_ntp_render_browsertest.cc",
-    ]
+    sources = [ "../browser/ui/search/local_ntp_render_browsertest.cc" ]
 
     configs += [ "//build/config:precompiled_headers" ]
 
@@ -6474,9 +6417,7 @@ if (!is_android && !is_fuchsia) {
     ]
 
     if (is_linux || is_win) {
-      data_deps = [
-        "//chrome:packed_resources",
-      ]
+      data_deps = [ "//chrome:packed_resources" ]
     }
 
     defines = [ "HAS_OUT_OF_PROC_TEST_RUNNER" ]
@@ -6540,9 +6481,7 @@ if (!is_android && !is_fuchsia) {
 
   group("telemetry_unittests") {
     testonly = true
-    deps = [
-      "//tools/perf/chrome_telemetry_build:telemetry_chrome_test",
-    ]
+    deps = [ "//tools/perf/chrome_telemetry_build:telemetry_chrome_test" ]
 
     data = [
       "//third_party/catapult/telemetry/telemetry/internal/bin/",
@@ -6557,9 +6496,7 @@ if (!is_android && !is_fuchsia) {
 
   group("telemetry_gpu_unittests_run") {
     testonly = true
-    deps = [
-      ":telemetry_gpu_unittests",
-    ]
+    deps = [ ":telemetry_gpu_unittests" ]
   }
 
   group("telemetry_gpu_unittests") {
@@ -6616,9 +6553,7 @@ if (is_win) {
 
 if (is_chromeos) {
   fuzzer_test("tokenized_string_fuzzer") {
-    sources = [
-      "../common/string_matching/tokenized_string_fuzzer.cc",
-    ]
+    sources = [ "../common/string_matching/tokenized_string_fuzzer.cc" ]
     deps = [
       "//base",
       "//chrome/common/string_matching",
@@ -6628,9 +6563,7 @@ if (is_chromeos) {
 
 if (is_win) {
   test("pixel_browser_tests") {
-    sources = [
-      "pixel/demo/skia_gold_demo_pixeltest.cc",
-    ]
+    sources = [ "pixel/demo/skia_gold_demo_pixeltest.cc" ]
     configs += [ "//build/config:precompiled_headers" ]
     defines = [ "HAS_OUT_OF_PROC_TEST_RUNNER" ]
     deps = [
@@ -6638,18 +6571,12 @@ if (is_win) {
       ":test_support",
     ]
     if (is_win) {
-      data = [
-        "//tools/skia_goldctl/goldctl.exe",
-      ]
+      data = [ "//tools/skia_goldctl/goldctl.exe" ]
     } else {
-      data = [
-        "//tools/skia_goldctl/goldctl",
-      ]
+      data = [ "//tools/skia_goldctl/goldctl" ]
     }
     if (!is_mac) {
-      data_deps = [
-        "//chrome:packed_resources",
-      ]
+      data_deps = [ "//chrome:packed_resources" ]
     }
   }
 }
@@ -6695,9 +6622,7 @@ if (is_chromeos) {
 
   proto_library("consistency_golden_proto") {
     visibility = [ ":usage_time_limit_unittests" ]
-    sources = [
-      "../browser/chromeos/child_accounts/time_limit_consistency_test/goldens/consistency_golden.proto",
-    ]
+    sources = [ "../browser/chromeos/child_accounts/time_limit_consistency_test/goldens/consistency_golden.proto" ]
     generate_python = false
   }
 }
@@ -6705,9 +6630,7 @@ if (is_chromeos) {
 if (is_mac || is_win || is_android) {
   group("rendering_representative_perf_tests") {
     testonly = true
-    deps = [
-      "//tools/perf/chrome_telemetry_build:telemetry_chrome_test",
-    ]
+    deps = [ "//tools/perf/chrome_telemetry_build:telemetry_chrome_test" ]
     data = [
       "//build/android/pylib",
       "//chrome/test/data/perf",
@@ -6724,9 +6647,7 @@ if (is_mac || is_win || is_android) {
 if (is_win) {
   test("delayloads_unittests") {
     output_name = "delayloads_unittests"
-    sources = [
-      "delayload/delayloads_unittest.cc",
-    ]
+    sources = [ "delayload/delayloads_unittest.cc" ]
 
     defines = []
     if (is_multi_dll_chrome) {
@@ -6747,9 +6668,7 @@ if (is_win) {
     # the //chrome target to bundle up both initial/chrome.exe and chrome.exe.
     # As a workaround, explicitly include a data dep on just chrome.exe, and
     # add //chrome to deps above to make sure it's been built.
-    data = [
-      "$root_out_dir/chrome.exe",
-    ]
+    data = [ "$root_out_dir/chrome.exe" ]
 
     # Don't want the test-specific dependencies to affect load tests.
     # In particular, a few system DLLs cause user32 to be loaded, which is bad.
@@ -6794,9 +6713,7 @@ if (!is_android) {
 
   test("xr_browser_tests_binary") {
     testonly = true
-    deps = [
-      ":xr_browser_tests_common",
-    ]
+    deps = [ ":xr_browser_tests_common" ]
 
     # Most tests require VR to be enabled.
     if (enable_vr) {
@@ -6847,9 +6764,7 @@ if (!is_android) {
     ]
 
     if (!is_mac) {
-      data_deps = [
-        "//chrome:packed_resources",
-      ]
+      data_deps = [ "//chrome:packed_resources" ]
     }
   }
 
@@ -6857,11 +6772,7 @@ if (!is_android) {
   # once the functionality is available on all platforms.
   copy("xr_browser_tests_runner") {
     testonly = true
-    sources = [
-      "//chrome/browser/vr/test/run_xr_browser_tests.py",
-    ]
-    outputs = [
-      "$root_out_dir/run_xr_browser_tests.py",
-    ]
+    sources = [ "//chrome/browser/vr/test/run_xr_browser_tests.py" ]
+    outputs = [ "$root_out_dir/run_xr_browser_tests.py" ]
   }
 }
