@@ -407,8 +407,6 @@ class CC_EXPORT FrameSequenceTracker {
   // when DCHECK is on.
   std::stringstream frame_sequence_trace_;
 
-  uint64_t last_started_main_sequence_ = 0;
-
   // If ReportBeginImplFrame is never called on a arg, then ReportBeginMainFrame
   // should ignore that arg.
   base::flat_set<viz::BeginFrameId> impl_frames_;

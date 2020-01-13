@@ -489,9 +489,6 @@ void FrameSequenceTracker::ReportBeginMainFrame(
   if (args.type == viz::BeginFrameArgs::NORMAL) {
     DCHECK(impl_frames_.contains(args.frame_id));
   }
-  last_started_main_sequence_ = args.frame_id.sequence_number;
-  DCHECK_EQ(last_started_impl_sequence_, last_started_main_sequence_)
-      << TRACKER_DCHECK_MSG;
 #endif
 
   UpdateTrackedFrameData(&begin_main_frame_data_, args.frame_id.source_id,
@@ -725,8 +722,10 @@ void FrameSequenceTracker::ReportMainFrameCausedNoDamage(
   TRACKER_TRACE_STREAM << "N(" << begin_main_frame_data_.previous_sequence
                        << "," << args.frame_id.sequence_number << ")";
 
-  if (ShouldIgnoreSequence(args.frame_id.sequence_number))
+  if (!first_received_main_sequence_ ||
+      first_received_main_sequence_ > args.frame_id.sequence_number) {
     return;
+  }
 
   if (last_no_main_damage_sequence_ == args.frame_id.sequence_number)
     return;
@@ -742,12 +741,6 @@ void FrameSequenceTracker::ReportMainFrameCausedNoDamage(
 
   if (begin_main_frame_data_.previous_sequence == args.frame_id.sequence_number)
     begin_main_frame_data_.previous_sequence = 0;
-
-#if DCHECK_IS_ON()
-  DCHECK_EQ(last_started_main_sequence_, args.frame_id.sequence_number)
-      << TRACKER_DCHECK_MSG;
-  last_started_main_sequence_ = 0;
-#endif
 }
 
 void FrameSequenceTracker::PauseFrameProduction() {

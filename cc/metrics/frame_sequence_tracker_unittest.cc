@@ -663,6 +663,25 @@ TEST_F(FrameSequenceTrackerTest, MultipleNoDamageNotificationsFromMain) {
   EXPECT_EQ(MainThroughput().frames_produced, 0u);
 }
 
+TEST_F(FrameSequenceTrackerTest, DelayedMainFrameNoDamage) {
+  const char sequence[] = "b(1)B(0,1)n(1)e(1)b(2)n(2)e(2)b(3)N(0,1)n(3)e(3)";
+  GenerateSequence(sequence);
+  EXPECT_EQ(ImplThroughput().frames_expected, 0u);
+  EXPECT_EQ(MainThroughput().frames_expected, 0u);
+  EXPECT_EQ(ImplThroughput().frames_produced, 0u);
+  EXPECT_EQ(MainThroughput().frames_produced, 0u);
+}
+
+TEST_F(FrameSequenceTrackerTest, DelayedMainFrameNoDamageFromOlderFrame) {
+  // Start a sequence, and receive a 'no damage' from an earlier frame.
+  const char second_sequence[] = "b(2)B(0,2)N(2,1)n(2)N(2,2)e(2)";
+  GenerateSequence(second_sequence);
+  EXPECT_EQ(ImplThroughput().frames_expected, 0u);
+  EXPECT_EQ(MainThroughput().frames_expected, 0u);
+  EXPECT_EQ(ImplThroughput().frames_produced, 0u);
+  EXPECT_EQ(MainThroughput().frames_produced, 0u);
+}
+
 TEST_F(FrameSequenceTrackerTest, StateResetDuringSequence) {
   const char sequence[] = "b(1)B(0,1)n(1)N(1,1)Re(1)b(2)n(2)e(2)";
   GenerateSequence(sequence);
