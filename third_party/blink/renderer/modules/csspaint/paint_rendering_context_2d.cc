@@ -164,6 +164,18 @@ void PaintRenderingContext2D::setTransform(DOMMatrix2DInit* transform,
   setTransform(m->m11(), m->m12(), m->m21(), m->m22(), m->m41(), m->m42());
 }
 
+DOMMatrix* PaintRenderingContext2D::getTransform() {
+  const AffineTransform& t = GetState().Transform();
+  DOMMatrix* m = DOMMatrix::Create();
+  m->setA(t.A() / effective_zoom_);
+  m->setB(t.B() / effective_zoom_);
+  m->setC(t.C() / effective_zoom_);
+  m->setD(t.D() / effective_zoom_);
+  m->setE(t.E() / effective_zoom_);
+  m->setF(t.F() / effective_zoom_);
+  return m;
+}
+
 sk_sp<PaintRecord> PaintRenderingContext2D::GetRecord() {
   if (!did_record_draw_commands_in_paint_recorder_ && !!previous_frame_) {
     return previous_frame_;  // Reuse the previous frame

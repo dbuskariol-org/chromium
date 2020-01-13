@@ -95,7 +95,7 @@ class MODULES_EXPORT BaseRenderingContext2D : public GarbageCollectedMixin,
                             double dx,
                             double dy);
   virtual void setTransform(DOMMatrix2DInit*, ExceptionState&);
-  DOMMatrix* getTransform();
+  virtual DOMMatrix* getTransform();
   void resetTransform();
 
   void beginPath();

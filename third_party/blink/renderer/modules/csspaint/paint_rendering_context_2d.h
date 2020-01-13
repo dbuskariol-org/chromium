@@ -91,6 +91,7 @@ class MODULES_EXPORT PaintRenderingContext2D : public ScriptWrappable,
                     double dx,
                     double dy) final;
   void setTransform(DOMMatrix2DInit*, ExceptionState&) final;
+  DOMMatrix* getTransform() final;
 
   sk_sp<PaintRecord> GetRecord();
 
