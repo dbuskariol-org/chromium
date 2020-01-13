@@ -94,6 +94,7 @@ jumbo_source_set("test_support") {
   ]
 
   deps = [
+    ":blink_heap_buildflags",
     "//testing/gtest",
     "//third_party/blink/public/mojom:mojom_platform_blink_headers",
     "//third_party/blink/renderer/platform:bindings_buildflags",
@@ -101,9 +102,7 @@ jumbo_source_set("test_support") {
 }
 
 test("blink_heap_unittests") {
-  deps = [
-    ":blink_heap_unittests_sources",
-  ]
+  deps = [ ":blink_heap_unittests_sources" ]
   if (is_android) {
     deps += [
       "//base:base_java",
