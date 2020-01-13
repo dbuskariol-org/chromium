@@ -1503,9 +1503,7 @@ component("ash") {
     "//url",
   ]
 
-  data_deps = [
-    ":dbus_service_files",
-  ]
+  data_deps = [ ":dbus_service_files" ]
 
   assert_no_deps = [
     # Ash should not depend upon cryptohome_client or components that depend
@@ -1640,9 +1638,7 @@ static_library("ash_shell_lib_with_content") {
     "//ui/views/examples:views_examples_with_content_lib",
     "//ui/wm",
   ]
-  public_deps = [
-    ":ash_shell_lib",
-  ]
+  public_deps = [ ":ash_shell_lib" ]
   data_deps = [
     "//ash/resources:ash_test_resources_200_percent",
     "//ash/resources:ash_test_resources_with_content_100_percent",
@@ -1658,9 +1654,7 @@ action("dbus_service_files") {
     "dbus/org.chromium.UrlHandlerService.conf",
   ]
   output_conf_file = "$root_out_dir/dbus/ash_dbus_services.conf"
-  outputs = [
-    output_conf_file,
-  ]
+  outputs = [ output_conf_file ]
 
   script = "//chromeos/tools/concat_dbus_conf_files.py"
   args = [ rebase_path(output_conf_file, root_build_dir) ]
@@ -2132,9 +2126,7 @@ test("ash_unittests") {
     "//url",
   ]
 
-  data_deps = [
-    "//ash/resources:ash_test_resources_100_percent",
-  ]
+  data_deps = [ "//ash/resources:ash_test_resources_100_percent" ]
 
   data = [
     # See DisplayColorManagerTest.
@@ -2204,9 +2196,7 @@ test("ash_ui_perftests") {
 
 executable("ash_shell_with_content") {
   testonly = true
-  sources = [
-    "shell/content/shell_with_content_main.cc",
-  ]
+  sources = [ "shell/content/shell_with_content_main.cc" ]
 
   deps = [
     ":ash_shell_lib_with_content",
