@@ -38,9 +38,7 @@ source_set("settings_root_constants") {
     "settings_root_table_constants.h",
     "settings_root_table_constants.mm",
   ]
-  deps = [
-    "//base",
-  ]
+  deps = [ "//base" ]
 }
 
 source_set("settings") {
@@ -449,9 +447,7 @@ source_set("eg_app_support+eg2") {
     "//ios/chrome/test/app:test_support",
     "//third_party/breakpad:client",
   ]
-  public_deps = [
-    "//components/content_settings/core/common",
-  ]
+  public_deps = [ "//components/content_settings/core/common" ]
 }
 
 source_set("eg_test_support+eg2") {
@@ -463,12 +459,8 @@ source_set("eg_test_support+eg2") {
     "settings_app_interface.h",
     "signin_settings_app_interface.h",
   ]
-  public_deps = [
-    "//components/content_settings/core/common",
-  ]
-  deps = [
-    "//base",
-  ]
+  public_deps = [ "//components/content_settings/core/common" ]
+  deps = [ "//base" ]
 }
 
 source_set("eg2_tests") {
