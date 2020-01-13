@@ -163,6 +163,7 @@ chrome_junit_test_java_sources = [
   "junit/src/org/chromium/chrome/browser/omnibox/suggestions/basic/BasicSuggestionProcessorTest.java",
   "junit/src/org/chromium/chrome/browser/omnibox/suggestions/editurl/EditUrlSuggestionTest.java",
   "junit/src/org/chromium/chrome/browser/omnibox/suggestions/entity/EntitySuggestionProcessorUnitTest.java",
+  "junit/src/org/chromium/chrome/browser/omnibox/suggestions/tail/AlignmentManagerUnitTest.java",
   "junit/src/org/chromium/chrome/browser/page_info/PermissionParamsListBuilderUnitTest.java",
   "junit/src/org/chromium/chrome/browser/partnerbookmarks/PartnerBookmarksFaviconThrottleTest.java",
   "junit/src/org/chromium/chrome/browser/payments/AutofillContactTest.java",

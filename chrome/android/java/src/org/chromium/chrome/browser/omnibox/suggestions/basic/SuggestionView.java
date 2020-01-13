@@ -66,18 +66,9 @@ public class SuggestionView extends FrameLayout {
         final int line1Bottom = line1Top + line1Height;
         final int line2Top = top + line2VerticalOffset;
         final int line2Bottom = line2Top + line2Height;
-        final int line1AdditionalStartPadding =
-                mSuggestionDelegate.getAdditionalTextLine1StartPadding(mTextLine1, right - left);
 
-        if (getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
-            int rightStartPos = right - left;
-            mTextLine1.layout(
-                    0, line1Top, rightStartPos - line1AdditionalStartPadding, line1Bottom);
-            mTextLine2.layout(0, line2Top, rightStartPos, line2Bottom);
-        } else {
-            mTextLine1.layout(line1AdditionalStartPadding, line1Top, right - left, line1Bottom);
-            mTextLine2.layout(0, line2Top, right - left, line2Bottom);
-        }
+        mTextLine1.layout(0, line1Top, right - left, line1Bottom);
+        mTextLine2.layout(0, line2Top, right - left, line2Bottom);
     }
 
     @Override

@@ -213,7 +213,6 @@ public class BasicSuggestionProcessor extends BaseSuggestionViewProcessor {
                 !suggestion.isUrlSuggestion()
                         || suggestionType == OmniboxSuggestionType.CLIPBOARD_IMAGE
                         || suggestionType == OmniboxSuggestionType.CLIPBOARD_TEXT);
-        model.set(SuggestionViewProperties.SUGGESTION_TYPE, suggestion.getType());
         model.set(SuggestionViewProperties.TEXT_LINE_1_TEXT, textLine1);
         model.set(SuggestionViewProperties.TEXT_LINE_2_TEXT, textLine2);
         fetchSuggestionFavicon(model, suggestion.getUrl(), suggestion.getType());

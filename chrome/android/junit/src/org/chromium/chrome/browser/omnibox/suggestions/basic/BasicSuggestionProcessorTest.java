@@ -164,12 +164,6 @@ public class BasicSuggestionProcessorTest {
 
     private void assertSuggestionTypeAndIcon(
             @OmniboxSuggestionType int expectedType, @SuggestionIcon int expectedIcon) {
-        int actualType = mModel.get(SuggestionViewProperties.SUGGESTION_TYPE);
-        Assert.assertEquals(String.format("Expected suggestion Type %s, Got %s",
-                                    SUGGESTION_TYPE_NAMES.get(expectedType),
-                                    SUGGESTION_TYPE_NAMES.get(actualType)),
-                expectedType, actualType);
-
         int actualIcon = mModel.get(SuggestionViewProperties.SUGGESTION_ICON_TYPE);
         Assert.assertEquals(
                 String.format("%s: Want Icon %s, Got %s", SUGGESTION_TYPE_NAMES.get(expectedType),
