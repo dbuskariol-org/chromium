@@ -596,6 +596,11 @@ const base::Feature kPredictivePrefetchingAllowedOnAllConnectionTypes{
 const base::Feature kPrerenderFallbackToPreconnect{
     "PrerenderFallbackToPreconnect", base::FEATURE_DISABLED_BY_DEFAULT};
 
+// Forces all eligible prerenders to be done in an isolated manner such that no
+// user-identifying information is used during the prefetch.
+const base::Feature kIsolatePrerenders{"IsolatePrerenders",
+                                       base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Whether to display redesign of the chrome privacy settings page
 // to the user.
 const base::Feature kPrivacySettingsRedesign{"PrivacySettingsRedesign",
@@ -663,7 +668,7 @@ const base::Feature kSitePerProcess {
 // SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled() rather than
 // checking the feature directly, since that decision is influenced by other
 // factors as well.
-const base::Feature kSiteIsolationForPasswordSites{
+const base::Feature kSiteIsolationForPasswordSites {
   "site-isolation-for-password-sites",
 // Enabled by default on Android; see https://crbug.com/849815.  Note that this
 // should not affect Android Webview, which does not include this code.

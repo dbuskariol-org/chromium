@@ -90,6 +90,7 @@
 #include "chrome/browser/platform_util.h"
 #include "chrome/browser/plugins/pdf_iframe_navigation_throttle.h"
 #include "chrome/browser/plugins/plugin_utils.h"
+#include "chrome/browser/prerender/isolated/isolated_prerender_url_loader_interceptor.h"
 #include "chrome/browser/prerender/prerender_final_status.h"
 #include "chrome/browser/prerender/prerender_manager.h"
 #include "chrome/browser/prerender/prerender_manager_factory.h"
@@ -4561,6 +4562,12 @@ ChromeContentBrowserClient::WillCreateURLLoaderRequestInterceptors(
             previews::PreviewsLitePageRedirectURLLoaderInterceptor>(
             network_loader_factory,
             chrome_navigation_ui_data->data_reduction_proxy_page_id(),
+            frame_tree_node_id));
+  }
+
+  if (base::FeatureList::IsEnabled(features::kIsolatePrerenders)) {
+    interceptors.push_back(
+        std::make_unique<IsolatedPrerenderURLLoaderInterceptor>(
             frame_tree_node_id));
   }
 
