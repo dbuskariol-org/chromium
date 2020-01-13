@@ -759,7 +759,7 @@ NSString* const kSuggestionSuffix = @" ••••••••";
   // TODO(crbug.com/886583): pass correct |max_length|.
   base::string16 generatedPassword =
       _passwordGenerationHelper->GeneratePassword([self lastCommittedURL], 0, 0,
-                                                  0, nullptr);
+                                                  0);
 
   self.generatedPotentialPassword = SysUTF16ToNSString(generatedPassword);
 
