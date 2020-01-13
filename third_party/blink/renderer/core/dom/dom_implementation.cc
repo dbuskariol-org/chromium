@@ -32,6 +32,7 @@
 #include "third_party/blink/renderer/core/dom/document_init.h"
 #include "third_party/blink/renderer/core/dom/document_type.h"
 #include "third_party/blink/renderer/core/dom/element.h"
+#include "third_party/blink/renderer/core/dom/sink_document.h"
 #include "third_party/blink/renderer/core/dom/text.h"
 #include "third_party/blink/renderer/core/dom/xml_document.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
@@ -218,6 +219,13 @@ Document* DOMImplementation::createDocument(const String& type,
     return MakeGarbageCollected<HTMLDocument>(init);
   if (type == "application/xhtml+xml")
     return XMLDocument::CreateXHTML(init);
+  // multipart/x-mixed-replace is only supported for images.
+  if (MIMETypeRegistry::IsSupportedImageResourceMIMEType(type) ||
+      type == "multipart/x-mixed-replace") {
+    return MakeGarbageCollected<ImageDocument>(init);
+  }
+  if (HTMLMediaElement::GetSupportsType(ContentType(type)))
+    return MakeGarbageCollected<MediaDocument>(init);
 
   PluginData* plugin_data = nullptr;
   if (init.GetFrame() && init.GetFrame()->GetPage() &&
@@ -239,42 +247,31 @@ Document* DOMImplementation::createDocument(const String& type,
     }
   }
 
-  if (plugin_data && plugin_data->IsExternalPluginMimeType(type)) {
-    // Plugins handled by MimeHandlerView do not create a PluginDocument. They
-    // are rendered inside cross-process frames and the notion of a PluginView
-    // (which is associated with PluginDocument) is irrelevant here.
-    auto* html_document = MakeGarbageCollected<HTMLDocument>(init);
-    html_document->SetIsForExternalHandler();
-    return html_document;
-  }
-
-  // PDF is one image type for which a plugin can override built-in support.
-  // We do not want QuickTime to take over all image types, obviously.
-  if ((type == "application/pdf" || type == "text/pdf") && plugin_data &&
-      plugin_data->SupportsMimeType(type)) {
-    return MakeGarbageCollected<PluginDocument>(
-        init, plugin_data->PluginBackgroundColorForMimeType(type));
-  }
-  // multipart/x-mixed-replace is only supported for images.
-  if (MIMETypeRegistry::IsSupportedImageResourceMIMEType(type) ||
-      type == "multipart/x-mixed-replace") {
-    return MakeGarbageCollected<ImageDocument>(init);
-  }
-
-  // Check to see if the type can be played by our media player, if so create a
-  // MediaDocument
-  if (HTMLMediaElement::GetSupportsType(ContentType(type)))
-    return MakeGarbageCollected<MediaDocument>(init);
-
-  // Everything else except text/plain can be overridden by plugins. In
-  // particular, Adobe SVG Viewer should be used for SVG, if installed.
+  // Everything else except text/plain can be overridden by plugins.
   // Disallowing plugins to use text/plain prevents plugins from hijacking a
   // fundamental type that the browser is expected to handle, and also serves as
   // an optimization to prevent loading the plugin database in the common case.
   if (type != "text/plain" && plugin_data &&
       plugin_data->SupportsMimeType(type)) {
-    return MakeGarbageCollected<PluginDocument>(
+    // Plugins handled by MimeHandlerView do not create a PluginDocument. They
+    // are rendered inside cross-process frames and the notion of a PluginView
+    // (which is associated with PluginDocument) is irrelevant here.
+    if (plugin_data->IsExternalPluginMimeType(type)) {
+      auto* html_document = MakeGarbageCollected<HTMLDocument>(init);
+      html_document->SetIsForExternalHandler();
+      return html_document;
+    }
+
+    Document* document = MakeGarbageCollected<PluginDocument>(
         init, plugin_data->PluginBackgroundColorForMimeType(type));
+    // TODO(crbug.com/1029822): Final sandbox flags are calculated during
+    // document construction, so we have to construct a PluginDocument then
+    // replace it with a SinkDocument when plugins are sanboxed. If we move
+    // final sandbox flag calcuation earlier, we could construct the
+    // SinkDocument directly.
+    if (document->IsSandboxed(WebSandboxFlags::kPlugins))
+      document = MakeGarbageCollected<SinkDocument>(init);
+    return document;
   }
   if (IsTextMIMEType(type))
     return MakeGarbageCollected<TextDocument>(init);
