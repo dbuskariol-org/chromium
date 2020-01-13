@@ -165,18 +165,23 @@ struct IconValue {
   bool is_placeholder_icon;
 };
 
+// Enumeration of possible app launch sources.
+// Note the enumeration is used in UMA histogram so entries
+// should not be re-ordered or removed.
 enum LaunchSource {
-  kUnknown,
-  kFromAppListGrid,              // Grid of apps, not the search box.
-  kFromAppListGridContextMenu,   // Grid of apps; context menu.
-  kFromAppListQuery,             // Query-dependent results (larger icons).
-  kFromAppListQueryContextMenu,  // Query-dependent results; context menu.
-  kFromAppListRecommendation,    // Query-less recommendations (smaller icons).
-  kFromParentalControls,         // Parental Controls Settings Section.
-  kFromShelf,                    // Shelf.
-  kFromFileManager,              // FileManager.
-  kFromLink,                     // Left-licking on links in the browser.
-  kFromOmnibox,                  // Enter URL in the Omnibox in the browser.
+  kUnknown = 0,
+  kFromAppListGrid = 1,             // Grid of apps, not the search box.
+  kFromAppListGridContextMenu = 2,  // Grid of apps; context menu.
+  kFromAppListQuery = 3,            // Query-dependent results (larger icons).
+  kFromAppListQueryContextMenu = 4, // Query-dependent results; context menu.
+  kFromAppListRecommendation = 5,   // Query-less recommendations (smaller
+                                    // icons).
+  kFromParentalControls = 6,        // Parental Controls Settings Section.
+  kFromShelf = 7,                   // Shelf.
+  kFromFileManager = 8,             // FileManager.
+  kFromLink = 9,                    // Left-licking on links in the browser.
+  kFromOmnibox = 10,                // Enter URL in the Omnibox in the browser.
+  kFromChromeInternal = 11,         // Chrome internal call.
 };
 
 enum TriState {
