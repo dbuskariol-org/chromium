@@ -1127,18 +1127,13 @@ TEST_F(DeepScanningDialogDelegateAuditOnlyTest, SupportedTypes) {
   DeepScanningDialogDelegate::Data data;
   ASSERT_TRUE(DeepScanningDialogDelegate::IsEnabled(profile(), url, &data));
 
+  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.7z"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.bzip"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.cab"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.doc"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.docx"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.eps"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.gzip"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.hwp"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.img_for_ocr"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.kml"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.kmz"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.odp"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.ods"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.odt"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.pdf"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.ppt"));
@@ -1146,21 +1141,11 @@ TEST_F(DeepScanningDialogDelegateAuditOnlyTest, SupportedTypes) {
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.ps"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.rar"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.rtf"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sdc"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sdd"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sdw"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.7z"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sxc"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sxi"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.sxw"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.tar"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.ttf"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.txt"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.wml"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.wpd"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.xls"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.xlsx"));
-  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.xml"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.xps"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.zip"));
 
@@ -1175,8 +1160,8 @@ TEST_F(DeepScanningDialogDelegateAuditOnlyTest, SupportedTypes) {
       base::BindOnce(
           [](bool* called, const DeepScanningDialogDelegate::Data& data,
              const DeepScanningDialogDelegate::Result& result) {
-            EXPECT_EQ(36u, data.paths.size());
-            ASSERT_EQ(36u, result.paths_results.size());
+            EXPECT_EQ(21u, data.paths.size());
+            EXPECT_EQ(21u, result.paths_results.size());
 
             // The supported types should be marked as false.
             for (const auto& result : result.paths_results)
