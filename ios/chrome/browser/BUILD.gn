@@ -169,9 +169,7 @@ source_set("chrome_url_constants") {
     "chrome_url_constants.h",
   ]
 
-  deps = [
-    "//base",
-  ]
+  deps = [ "//base" ]
   libs = [ "UIKit.framework" ]
 }
 
@@ -256,9 +254,7 @@ bundle_data("settings_resources") {
     "resources/Settings.bundle/Experimental.plist",
     "resources/Settings.bundle/Root.plist",
   ]
-  outputs = [
-    "{{bundle_resources_dir}}/Settings.bundle/{{source_file_part}}",
-  ]
+  outputs = [ "{{bundle_resources_dir}}/Settings.bundle/{{source_file_part}}" ]
 }
 
 source_set("unit_tests") {

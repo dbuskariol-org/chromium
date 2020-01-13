@@ -8,9 +8,7 @@ source_set("public") {
     "browser_observer.h",
     "browser_user_data.h",
   ]
-  deps = [
-    "//base",
-  ]
+  deps = [ "//base" ]
   configs += [ "//build/config/compiler:enable_arc" ]
 }
 
@@ -24,9 +22,7 @@ source_set("main") {
     "browser_web_state_list_delegate.mm",
   ]
 
-  public_deps = [
-    ":public",
-  ]
+  public_deps = [ ":public" ]
 
   deps = [
     "//base",
@@ -68,9 +64,7 @@ source_set("test_support") {
 
 source_set("unit_tests") {
   testonly = true
-  sources = [
-    "browser_impl_unittest.mm",
-  ]
+  sources = [ "browser_impl_unittest.mm" ]
   deps = [
     ":main",
     ":test_support",
