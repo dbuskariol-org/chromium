@@ -1882,7 +1882,9 @@ class AXPosition {
       text_position = text_position->CreateAncestorPosition(
           common_anchor, AXTextBoundaryDirection::kForwards);
     } else if (boundary_behavior == AXBoundaryBehavior::StopAtAnchorBoundary) {
-      NOTREACHED() << "Original text position was not at end of anchor.";
+      // If the next character position crosses the current anchor boundary
+      // with StopAtAnchorBoundary, snap to the end of the current anchor.
+      return CreatePositionAtEndOfAnchor();
     }
 
     // Even if the resulting position is right on a soft line break, affinity is
@@ -1943,7 +1945,9 @@ class AXPosition {
       text_position = text_position->CreateAncestorPosition(
           common_anchor, AXTextBoundaryDirection::kBackwards);
     } else if (boundary_behavior == AXBoundaryBehavior::StopAtAnchorBoundary) {
-      NOTREACHED() << "Original text position was not at start of anchor.";
+      // If the previous character position crosses the current anchor boundary
+      // with StopAtAnchorBoundary, snap to the start of the current anchor.
+      return CreatePositionAtStartOfAnchor();
     }
 
     // Even if the resulting position is right on a soft line break, affinity is
