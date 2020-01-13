@@ -2706,6 +2706,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "ntp-webui",
+    "owners": ["aee", "mahmadi", "tiborg"],
+    "expiry_milestone": 85
+  },
+  {
     "name": "offline-indicator-always-http-probe",
     "owners": [ "jianli", "offline-dev" ],
     "expiry_milestone": 76

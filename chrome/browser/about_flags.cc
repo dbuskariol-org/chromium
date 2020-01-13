@@ -3161,6 +3161,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kNtpRealboxMatchOmniboxThemeDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(ntp_features::kRealboxMatchOmniboxTheme)},
 
+    {"ntp-webui", flag_descriptions::kNtpWebUIName,
+     flag_descriptions::kNtpWebUIDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(ntp_features::kWebUI)},
+
     {"webui-a11y-enhancements", flag_descriptions::kWebUIA11yEnhancementsName,
      flag_descriptions::kWebUIA11yEnhancementsDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kWebUIA11yEnhancements)},

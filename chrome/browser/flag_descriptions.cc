@@ -2938,6 +2938,11 @@ const char kNtpRealboxMatchOmniboxThemeDescription[] =
     "Themes the real search box in the middle of the NTP to match the omnibox. "
     "Only has an an effect if #ntp-realbox is enabled.";
 
+const char kNtpWebUIName[] =
+    "Use the WebUI new tab page when opening a new tab";
+const char kNtpWebUIDescription[] =
+    "The WebUI new tab page is a replacement for the local NTP.";
+
 const char kImprovedCookieControlsName[] =
     "Enable improved cookie controls UI in incognito mode";
 const char kImprovedCookieControlsDescription[] =

@@ -19,6 +19,7 @@ extern const base::Feature kCustomizationMenuV2;
 extern const base::Feature kDismissPromos;
 extern const base::Feature kRealboxMatchOmniboxTheme;
 extern const base::Feature kRealboxUseGoogleGIcon;
+extern const base::Feature kWebUI;
 
 // Note: only exposed for about:flags. Use IsNtpRealboxEnabled() instead.
 extern const base::Feature kRealbox;
