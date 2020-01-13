@@ -17,7 +17,9 @@
 
 @class AppState;
 @class MetricsMediator;
+@protocol AppURLLoadingServiceDelegate;
 @protocol BrowsingDataCommands;
+@protocol SceneControllerGuts;
 @protocol TabSwitcherDelegate;
 
 // The main controller of the application, owned by the MainWindow nib. Also
@@ -45,7 +47,10 @@
 @property(nonatomic, weak) MetricsMediator* metricsMediator;
 
 // For temporary plumbing only.
-@property(nonatomic, weak) id<ApplicationCommands, TabSwitcherDelegate>
+@property(nonatomic, weak) id<ApplicationCommands,
+                              TabSwitcherDelegate,
+                              AppURLLoadingServiceDelegate,
+                              SceneControllerGuts>
     sceneController;
 
 @end
