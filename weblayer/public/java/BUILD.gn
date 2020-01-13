@@ -99,7 +99,5 @@ process_version("client_version") {
   template_file =
       "org/chromium/weblayer/WebLayerClientVersionConstants.java.version"
   output = _version_constants_java_file
-  sources = [
-    "//chrome/VERSION",
-  ]
+  sources = [ "//chrome/VERSION" ]
 }
