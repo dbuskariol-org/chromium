@@ -209,7 +209,7 @@ void CompositorFrameReporter::OnFinishImplFrame(base::TimeTicks timestamp) {
 }
 
 void CompositorFrameReporter::OnAbortBeginMainFrame() {
-  did_abort_main_frame_ = false;
+  did_abort_main_frame_ = true;
 }
 
 void CompositorFrameReporter::SetBlinkBreakdown(

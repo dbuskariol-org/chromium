@@ -239,6 +239,29 @@ TEST_F(CompositorFrameReportingControllerTest, ImplFrameCausedNoDamage) {
       "CompositorLatency.MissedFrame.BeginImplFrameToSendBeginMainFrame", 0);
 }
 
+TEST_F(CompositorFrameReportingControllerTest, MainFrameAborted) {
+  base::HistogramTester histogram_tester;
+
+  reporting_controller_.WillBeginImplFrame();
+  reporting_controller_.WillBeginMainFrame();
+  reporting_controller_.BeginMainFrameAborted();
+  reporting_controller_.OnFinishImplFrame();
+  reporting_controller_.DidSubmitCompositorFrame(1);
+
+  viz::FrameTimingDetails details = {};
+  reporting_controller_.DidPresentCompositorFrame(1, details);
+
+  histogram_tester.ExpectTotalCount(
+      "CompositorLatency.BeginImplFrameToSendBeginMainFrame", 1);
+  histogram_tester.ExpectTotalCount("CompositorLatency.Commit", 0);
+  histogram_tester.ExpectTotalCount("CompositorLatency.Activation", 0);
+  histogram_tester.ExpectTotalCount(
+      "CompositorLatency.EndActivateToSubmitCompositorFrame", 1);
+  histogram_tester.ExpectTotalCount(
+      "CompositorLatency.SubmitCompositorFrameToPresentationCompositorFrame",
+      1);
+}
+
 TEST_F(CompositorFrameReportingControllerTest, BlinkBreakdown) {
   base::HistogramTester histogram_tester;
 
