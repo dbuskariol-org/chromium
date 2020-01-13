@@ -201,24 +201,6 @@ void RecordCompositorSlowScrollMetric(InputHandler::ScrollInputType type,
   }
 }
 
-class ScopedPostAnimationEventsToMainThread {
- public:
-  ScopedPostAnimationEventsToMainThread(MutatorHost* animation_host,
-                                        LayerTreeHostImplClient* client)
-      : events_(animation_host->CreateEvents()), client_(client) {}
-
-  ~ScopedPostAnimationEventsToMainThread() {
-    if (!events_->IsEmpty())
-      client_->PostAnimationEventsToMainThreadOnImplThread(std::move(events_));
-  }
-
-  MutatorEvents* events() { return events_.get(); }
-
- private:
-  std::unique_ptr<MutatorEvents> events_;
-  LayerTreeHostImplClient* client_;
-};
-
 }  // namespace
 
 DEFINE_SCOPED_UMA_HISTOGRAM_TIMER(PendingTreeDurationHistogramTimer,
@@ -303,6 +285,7 @@ LayerTreeHostImpl::LayerTreeHostImpl(
       scroll_gesture_did_end_(false) {
   DCHECK(mutator_host_);
   mutator_host_->SetMutatorHostClient(this);
+  mutator_events_ = mutator_host_->CreateEvents();
 
   DCHECK(task_runner_provider_->IsImplThread());
   DidVisibilityChange(this, visible_);
@@ -3388,6 +3371,12 @@ LayerTreeHostImpl::TakeCompletedImageDecodeRequests() {
   return result;
 }
 
+std::unique_ptr<MutatorEvents> LayerTreeHostImpl::TakeMutatorEvents() {
+  std::unique_ptr<MutatorEvents> events = mutator_host_->CreateEvents();
+  std::swap(events, mutator_events_);
+  return events;
+}
+
 void LayerTreeHostImpl::ClearCaches() {
   // It is safe to clear the decode policy tracking on navigations since it
   // comes with an invalidation and the image ids are never re-used.
@@ -5292,21 +5281,19 @@ bool LayerTreeHostImpl::AnimateLayers(base::TimeTicks monotonic_time,
 }
 
 void LayerTreeHostImpl::UpdateAnimationState(bool start_ready_animations) {
-  ScopedPostAnimationEventsToMainThread event_poster(mutator_host_.get(),
-                                                     client_);
-
   const bool has_active_animations = mutator_host_->UpdateAnimationState(
-      start_ready_animations, event_poster.events());
+      start_ready_animations, mutator_events_.get());
 
-  if (has_active_animations)
+  if (has_active_animations) {
     SetNeedsOneBeginImplFrame();
+    if (!mutator_events_->IsEmpty())
+      SetNeedsCommit();
+  }
 }
 
 void LayerTreeHostImpl::ActivateAnimations() {
-  ScopedPostAnimationEventsToMainThread event_poster(mutator_host_.get(),
-                                                     client_);
   const bool activated =
-      mutator_host_->ActivateAnimations(event_poster.events());
+      mutator_host_->ActivateAnimations(mutator_events_.get());
   if (activated) {
     // Activating an animation changes layer draw properties, such as
     // screen_space_transform_is_animating. So when we see a new animation get
@@ -5314,6 +5301,8 @@ void LayerTreeHostImpl::ActivateAnimations() {
     active_tree()->set_needs_update_draw_properties();
     // Request another frame to run the next tick of the animation.
     SetNeedsOneBeginImplFrame();
+    if (!mutator_events_->IsEmpty())
+      SetNeedsCommit();
   }
 }
 

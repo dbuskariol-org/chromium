@@ -22,7 +22,6 @@ struct FrameTimingDetails;
 
 namespace cc {
 
-class MutatorEvents;
 class LayerTreeHost;
 class LayerTreeHostSingleThreadClient;
 class RenderFrameMetadataObserver;
@@ -114,8 +113,6 @@ class CC_EXPORT SingleThreadProxy : public Proxy,
   void SetNeedsPrepareTilesOnImplThread() override;
   void SetNeedsCommitOnImplThread() override;
   void SetVideoNeedsBeginFrames(bool needs_begin_frames) override;
-  void PostAnimationEventsToMainThreadOnImplThread(
-      std::unique_ptr<MutatorEvents> events) override;
   bool IsInsideDraw() override;
   bool IsBeginMainFrameExpected() override;
   void RenewTreePriority() override {}

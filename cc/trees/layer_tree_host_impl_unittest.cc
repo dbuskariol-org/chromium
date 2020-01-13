@@ -214,8 +214,6 @@ class LayerTreeHostImplTest : public testing::Test,
   }
   void SetNeedsCommitOnImplThread() override { did_request_commit_ = true; }
   void SetVideoNeedsBeginFrames(bool needs_begin_frames) override {}
-  void PostAnimationEventsToMainThreadOnImplThread(
-      std::unique_ptr<MutatorEvents> events) override {}
   bool IsInsideDraw() override { return false; }
   bool IsBeginMainFrameExpected() override { return true; }
   void RenewTreePriority() override {}

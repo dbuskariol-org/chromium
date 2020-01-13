@@ -411,15 +411,6 @@ void SingleThreadProxy::SetVideoNeedsBeginFrames(bool needs_begin_frames) {
     scheduler_on_impl_thread_->SetVideoNeedsBeginFrames(needs_begin_frames);
 }
 
-void SingleThreadProxy::PostAnimationEventsToMainThreadOnImplThread(
-    std::unique_ptr<MutatorEvents> events) {
-  TRACE_EVENT0(
-      "cc", "SingleThreadProxy::PostAnimationEventsToMainThreadOnImplThread");
-  DCHECK(task_runner_provider_->IsImplThread());
-  DebugScopedSetMainThread main(task_runner_provider_);
-  layer_tree_host_->SetAnimationEvents(std::move(events));
-}
-
 size_t SingleThreadProxy::CompositedAnimationsCount() const {
   return 0;
 }
@@ -860,7 +851,7 @@ void SingleThreadProxy::DoBeginMainFrame(
         host_impl_->ProcessScrollDeltas();
     layer_tree_host_->ApplyScrollAndScale(scroll_info.get());
   }
-
+  layer_tree_host_->ApplyMutatorEvents(host_impl_->TakeMutatorEvents());
   layer_tree_host_->WillBeginMainFrame();
   layer_tree_host_->BeginMainFrame(begin_frame_args);
   layer_tree_host_->AnimateLayers(begin_frame_args.frame_time);

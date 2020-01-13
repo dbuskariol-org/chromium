@@ -2022,12 +2022,28 @@ class LayerTreeHostAnimationTestImplSideInvalidationWithoutCommit
       host_impl->RequestImplSideInvalidationForCheckerImagedTiles();
     }
   }
+  void DidInvalidateContentOnImplSide(LayerTreeHostImpl* host_impl) override {
+    completion_.Signal();
+    EndTest();
+  }
+
+  void WillCommit() override {
+    if (layer_tree_host()->SourceFrameNumber() == 1) {
+      // Block until the invalidation is done after animation finishes on the
+      // compositor thread. We need to make sure the pending tree has valid
+      // information based on invalidation only.
+      completion_.Wait();
+    }
+  }
 
  protected:
   scoped_refptr<Layer> layer_;
   FakeContentLayerClient client_;
   bool did_request_impl_side_invalidation_ = false;
   int num_draws_;
+
+ private:
+  CompletionEvent completion_;
 };
 
 class ImplSideInvalidationWithoutCommitTestOpacity
@@ -2053,7 +2069,8 @@ class ImplSideInvalidationWithoutCommitTestOpacity
     const float expected_opacity = 0.8f;
     LayerImpl* layer_impl = host_impl->sync_tree()->LayerById(layer_->id());
     EXPECT_FLOAT_EQ(expected_opacity, layer_impl->Opacity());
-    EndTest();
+    LayerTreeHostAnimationTestImplSideInvalidationWithoutCommit::
+        DidInvalidateContentOnImplSide(host_impl);
   }
 };
 
@@ -2084,7 +2101,8 @@ class ImplSideInvalidationWithoutCommitTestTransform
     LayerImpl* layer_impl = host_impl->sync_tree()->LayerById(layer_->id());
     EXPECT_TRANSFORMATION_MATRIX_EQ(expected_transform,
                                     layer_impl->DrawTransform());
-    EndTest();
+    LayerTreeHostAnimationTestImplSideInvalidationWithoutCommit::
+        DidInvalidateContentOnImplSide(host_impl);
   }
 };
 
@@ -2120,7 +2138,8 @@ class ImplSideInvalidationWithoutCommitTestFilter
             ->property_trees()
             ->effect_tree.FindNodeFromElementId(layer_->element_id())
             ->filters.ToString());
-    EndTest();
+    LayerTreeHostAnimationTestImplSideInvalidationWithoutCommit::
+        DidInvalidateContentOnImplSide(host_impl);
   }
 };
 
@@ -2150,15 +2169,6 @@ class ImplSideInvalidationWithoutCommitTestScroll
     PostSetNeedsCommitToMainThread();
   }
 
-  void WillCommit() override {
-    if (layer_tree_host()->SourceFrameNumber() == 1) {
-      // Block until the invalidation is done after animation finishes on the
-      // compositor thread. We need to make sure the pending tree has valid
-      // information based on invalidation only.
-      completion_.Wait();
-    }
-  }
-
   void DrawLayersOnThread(LayerTreeHostImpl* host_impl) override {
     if (num_draws_++ > 0)
       return;
@@ -2174,12 +2184,9 @@ class ImplSideInvalidationWithoutCommitTestScroll
     LayerImpl* layer_impl = host_impl->pending_tree()->LayerById(layer_->id());
     EXPECT_VECTOR2DF_EQ(gfx::ScrollOffset(500.f, 550.f),
                         layer_impl->CurrentScrollOffset());
-    completion_.Signal();
-    EndTest();
+    LayerTreeHostAnimationTestImplSideInvalidationWithoutCommit::
+        DidInvalidateContentOnImplSide(host_impl);
   }
-
- private:
-  CompletionEvent completion_;
 };
 
 MULTI_THREAD_TEST_F(ImplSideInvalidationWithoutCommitTestScroll);

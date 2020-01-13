@@ -88,12 +88,6 @@ void ProxyMain::DidCommitAndDrawFrame() {
   layer_tree_host_->DidCommitAndDrawFrame();
 }
 
-void ProxyMain::SetAnimationEvents(std::unique_ptr<MutatorEvents> events) {
-  TRACE_EVENT0("cc", "ProxyMain::SetAnimationEvents");
-  DCHECK(IsMainThread());
-  layer_tree_host_->SetAnimationEvents(std::move(events));
-}
-
 void ProxyMain::DidLoseLayerTreeFrameSink() {
   TRACE_EVENT0("cc", "ProxyMain::DidLoseLayerTreeFrameSink");
   DCHECK(IsMainThread());
@@ -219,6 +213,9 @@ void ProxyMain::BeginMainFrame(
     layer_tree_host_->ApplyScrollAndScale(
         begin_main_frame_state->scroll_info.get());
   }
+
+  layer_tree_host_->ApplyMutatorEvents(
+      std::move(begin_main_frame_state->mutator_events));
 
   layer_tree_host_->WillBeginMainFrame();
 

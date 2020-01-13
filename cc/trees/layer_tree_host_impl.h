@@ -130,8 +130,6 @@ class LayerTreeHostImplClient {
   virtual void SetNeedsCommitOnImplThread() = 0;
   virtual void SetNeedsPrepareTilesOnImplThread() = 0;
   virtual void SetVideoNeedsBeginFrames(bool needs_begin_frames) = 0;
-  virtual void PostAnimationEventsToMainThreadOnImplThread(
-      std::unique_ptr<MutatorEvents> events) = 0;
   virtual bool IsInsideDraw() = 0;
   virtual void RenewTreePriority() = 0;
   virtual void PostDelayedAnimationTaskOnImplThread(base::OnceClosure task,
@@ -775,6 +773,8 @@ class CC_EXPORT LayerTreeHostImpl : public InputHandler,
 
   void QueueImageDecode(int request_id, const PaintImage& image);
   std::vector<std::pair<int, bool>> TakeCompletedImageDecodeRequests();
+  // Returns mutator events to be handled by BeginMainFrame.
+  std::unique_ptr<MutatorEvents> TakeMutatorEvents();
 
   void ClearCaches();
 
@@ -1174,6 +1174,7 @@ class CC_EXPORT LayerTreeHostImpl : public InputHandler,
   gfx::Rect viewport_damage_rect_;
 
   std::unique_ptr<MutatorHost> mutator_host_;
+  std::unique_ptr<MutatorEvents> mutator_events_;
   std::set<VideoFrameController*> video_frame_controllers_;
 
   // Map from scroll element ID to scrollbar animation controller.
