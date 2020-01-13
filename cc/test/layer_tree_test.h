@@ -25,13 +25,13 @@ class TestContextProvider;
 
 namespace cc {
 
+class Animation;
 class AnimationHost;
 class LayerImpl;
 class LayerTreeHost;
 class LayerTreeHostForTesting;
 class LayerTreeTestLayerTreeFrameSinkClient;
 class Proxy;
-class SingleKeyframeEffectAnimation;
 class TestLayerTreeFrameSink;
 class TestTaskGraphRunner;
 
@@ -78,13 +78,13 @@ class LayerTreeTest : public testing::Test, public TestHooks {
   void EndTestAfterDelayMs(int delay_milliseconds);
 
   void PostAddNoDamageAnimationToMainThread(
-      SingleKeyframeEffectAnimation* animation_to_receive_animation);
+      Animation* animation_to_receive_animation);
   void PostAddOpacityAnimationToMainThread(
-      SingleKeyframeEffectAnimation* animation_to_receive_animation);
+      Animation* animation_to_receive_animation);
   void PostAddOpacityAnimationToMainThreadInstantly(
-      SingleKeyframeEffectAnimation* animation_to_receive_animation);
+      Animation* animation_to_receive_animation);
   void PostAddOpacityAnimationToMainThreadDelayed(
-      SingleKeyframeEffectAnimation* animation_to_receive_animation);
+      Animation* animation_to_receive_animation);
   void PostSetLocalSurfaceIdAllocationToMainThread(
       const viz::LocalSurfaceIdAllocation& local_surface_id_allocation);
   void PostRequestNewLocalSurfaceIdToMainThread();
@@ -207,10 +207,10 @@ class LayerTreeTest : public testing::Test, public TestHooks {
 
  private:
   virtual void DispatchAddNoDamageAnimation(
-      SingleKeyframeEffectAnimation* animation_to_receive_animation,
+      Animation* animation_to_receive_animation,
       double animation_duration);
   virtual void DispatchAddOpacityAnimation(
-      SingleKeyframeEffectAnimation* animation_to_receive_animation,
+      Animation* animation_to_receive_animation,
       double animation_duration);
   void DispatchSetLocalSurfaceIdAllocation(
       const viz::LocalSurfaceIdAllocation& local_surface_id_allocation);

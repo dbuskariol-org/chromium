@@ -32,15 +32,7 @@ property of the same target across multiple Animations.
 Each Animation has a copy on the impl thread, and will take care of
 synchronizing to/from the impl thread when requested.
 
-[SingleKeyframeEffectAnimation](https://cs.chromium.org/chromium/src/cc/animation/single_keyframe_effect_animation.h)
-It is a sub-class of Animation that serves as a bridge between the cc animation
-clients and cc because currently only a single keyframe effect per animation is
-supported.
-
-There is a 1:1 relationship between SingleKeyframeEffectAnimation and
-the KeyframeEffect.
-
-> NOTE: SingleKeyframeEffectAnimation is being deprecated.
+There is a 1:1 relationship between Animation and KeyframeEffect.
 
 [Keyframe model](https://codesearch.chromium.org/chromium/src/cc/animation/keyframe_model.h)
 KeyframeModels contain the state necessary to 'play' (interpolate values from) an
