@@ -401,6 +401,8 @@ public final class ChromePreferenceKeys {
      */
     public static final String HOMEPAGE_LOCATION_POLICY = "Chrome.Policy.HomepageLocation";
 
+    public static final String INCOGNITO_SHORTCUT_ADDED = "incognito-shortcut-added";
+
     /**
      * Key for UUID-based generator used for Chrome Invalidations (sync, etc.).
      */
@@ -693,6 +695,7 @@ public final class ChromePreferenceKeys {
                 HOMEPAGE_CUSTOM_URI,
                 HOMEPAGE_ENABLED,
                 HOMEPAGE_USE_DEFAULT_URI,
+                INCOGNITO_SHORTCUT_ADDED,
                 INVALIDATIONS_UUID_PREF_KEY,
                 LATEST_UNSUPPORTED_VERSION,
                 OFFLINE_INDICATOR_V2_ENABLED,
