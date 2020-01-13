@@ -69,6 +69,11 @@ class LargeIconServiceImpl : public LargeIconService {
       const net::NetworkTrafficAnnotationTag& traffic_annotation,
       favicon_base::GoogleFaviconServerCallback callback) override;
   void TouchIconFromGoogleServer(const GURL& icon_url) override;
+
+  // Overrides the URL of the Google favicon server to send requests to for
+  // testing.
+  void SetServerUrlForTesting(const GURL& server_url_for_testing);
+
   // Extracts the organization-identifying domain from |url| which excludes
   // registrar portion (e.g. final ".com"). Used for logging UMA metrics.
   // Exposed publicly for testing.
@@ -104,6 +109,9 @@ class LargeIconServiceImpl : public LargeIconService {
   // icons. This is an optimization over populating an icon type vector on each
   // request.
   std::vector<favicon_base::IconTypeSet> large_icon_types_;
+
+  // URL of the Google favicon server (overridable by tests).
+  GURL server_url_;
 
   base::WeakPtrFactory<LargeIconServiceImpl> weak_ptr_factory_{this};
 
