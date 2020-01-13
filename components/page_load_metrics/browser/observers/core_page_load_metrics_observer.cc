@@ -50,11 +50,6 @@ void RecordFirstMeaningfulPaintStatus(
                             internal::FIRST_MEANINGFUL_PAINT_LAST_ENTRY);
 }
 
-void RecordTimeToInteractiveStatus(internal::TimeToInteractiveStatus status) {
-  UMA_HISTOGRAM_ENUMERATION(internal::kHistogramTimeToInteractiveStatus, status,
-                            internal::TIME_TO_INTERACTIVE_LAST_ENTRY);
-}
-
 }  // namespace
 
 namespace internal {
@@ -101,10 +96,6 @@ const char kHistogramLargestContentfulPaintMainFrame[] =
 const char kHistogramLargestContentfulPaintMainFrameContentType[] =
     "PageLoad.Internal.PaintTiming.LargestContentfulPaint.MainFrame."
     "ContentType";
-const char kHistogramTimeToInteractive[] =
-    "PageLoad.Experimental.NavigationToInteractive";
-const char kHistogramInteractiveToInteractiveDetection[] =
-    "PageLoad.Internal.InteractiveToInteractiveDetection";
 const char kHistogramFirstInputDelay[] =
     "PageLoad.InteractiveTiming.FirstInputDelay3";
 const char kHistogramFirstInputTimestamp[] =
@@ -211,9 +202,6 @@ const char kHistogramFirstContentfulPaintUserInitiated[] =
 
 const char kHistogramFirstMeaningfulPaintStatus[] =
     "PageLoad.Experimental.PaintTiming.FirstMeaningfulPaintStatus";
-
-const char kHistogramTimeToInteractiveStatus[] =
-    "PageLoad.Experimental.TimeToInteractiveStatus";
 
 const char kHistogramFirstNonScrollInputAfterFirstPaint[] =
     "PageLoad.InputTiming.NavigationToFirstNonScroll.AfterPaint";
@@ -531,40 +519,6 @@ void CorePageLoadMetricsObserver::OnFirstMeaningfulPaintInMainFrameDocument(
   }
 }
 
-void CorePageLoadMetricsObserver::OnPageInteractive(
-    const page_load_metrics::mojom::PageLoadTiming& timing) {
-  // Both interactive and interactive detection time must be present.
-  DCHECK(timing.interactive_timing->interactive);
-  DCHECK(timing.interactive_timing->interactive_detection);
-  DCHECK_GE(timing.interactive_timing->interactive_detection.value(),
-            timing.interactive_timing->interactive.value());
-
-  if (!page_load_metrics::WasStartedInForegroundOptionalEventInForeground(
-          timing.interactive_timing->interactive_detection, GetDelegate())) {
-    RecordTimeToInteractiveStatus(internal::TIME_TO_INTERACTIVE_BACKGROUNDED);
-    return;
-  }
-
-  if (timing.interactive_timing->first_invalidating_input &&
-      timing.interactive_timing->first_invalidating_input.value() <
-          timing.interactive_timing->interactive) {
-    RecordTimeToInteractiveStatus(
-        internal::TIME_TO_INTERACTIVE_USER_INTERACTION_BEFORE_INTERACTIVE);
-    return;
-  }
-
-  base::TimeDelta time_to_interactive =
-      timing.interactive_timing->interactive.value();
-  base::TimeDelta interactive_to_detection =
-      timing.interactive_timing->interactive_detection.value() -
-      time_to_interactive;
-  PAGE_LOAD_HISTOGRAM(internal::kHistogramTimeToInteractive,
-                      time_to_interactive);
-  PAGE_LOAD_HISTOGRAM(internal::kHistogramInteractiveToInteractiveDetection,
-                      interactive_to_detection);
-  RecordTimeToInteractiveStatus(internal::TIME_TO_INTERACTIVE_RECORDED);
-}
-
 void CorePageLoadMetricsObserver::OnFirstInputInPage(
     const page_load_metrics::mojom::PageLoadTiming& timing) {
   if (!page_load_metrics::WasStartedInForegroundOptionalEventInForeground(
@@ -846,15 +800,6 @@ void CorePageLoadMetricsObserver::RecordTimingHistograms(
             ? internal::FIRST_MEANINGFUL_PAINT_DID_NOT_REACH_NETWORK_STABLE
             : internal::
                   FIRST_MEANINGFUL_PAINT_DID_NOT_REACH_FIRST_CONTENTFUL_PAINT);
-  }
-
-  if (main_frame_timing.paint_timing->first_paint &&
-      !main_frame_timing.interactive_timing->interactive) {
-    RecordTimeToInteractiveStatus(
-        main_frame_timing.paint_timing->first_meaningful_paint
-            ? internal::TIME_TO_INTERACTIVE_DID_NOT_REACH_QUIESCENCE
-            : internal::
-                  TIME_TO_INTERACTIVE_DID_NOT_REACH_FIRST_MEANINGFUL_PAINT);
   }
 
   if (main_frame_timing.interactive_timing->longest_input_timestamp) {
