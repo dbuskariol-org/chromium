@@ -45,6 +45,7 @@ RenderSurfaceImpl::RenderSurfaceImpl(LayerTreeImpl* layer_tree_impl,
       ancestor_property_changed_(false),
       contributes_to_drawn_surface_(false),
       is_render_surface_list_member_(false),
+      can_use_cached_backdrop_filtered_result_(false),
       nearest_occlusion_immune_ancestor_(nullptr) {
   damage_tracker_ = DamageTracker::Create();
 }
