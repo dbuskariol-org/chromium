@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_WM_BACK_GESTURE_METRICS_H_
-#define ASH_WM_BACK_GESTURE_METRICS_H_
+#ifndef ASH_WM_GESTURES_BACK_GESTURE_BACK_GESTURE_METRICS_H_
+#define ASH_WM_GESTURES_BACK_GESTURE_BACK_GESTURE_METRICS_H_
 
 #include "ui/gfx/geometry/point.h"
 
@@ -82,4 +82,4 @@ void RecordUnderneathWindowType(BackGestureUnderneathWindowType type);
 
 }  // namespace ash
 
-#endif  // ASH_WM_BACK_GESTURE_METRICS_H_
+#endif  // ASH_WM_GESTURES_BACK_GESTURE_BACK_GESTURE_METRICS_H_

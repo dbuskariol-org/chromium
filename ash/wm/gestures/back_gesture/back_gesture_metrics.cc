@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/wm/back_gesture_metrics.h"
+#include "ash/wm/gestures/back_gesture/back_gesture_metrics.h"
 
 #include "ash/display/screen_orientation_controller.h"
 #include "ash/public/cpp/app_types.h"

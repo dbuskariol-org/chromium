@@ -12,7 +12,7 @@
 #include "ash/public/cpp/ash_features.h"
 #include "ash/session/session_controller_impl.h"
 #include "ash/shell.h"
-#include "ash/wm/back_gesture_affordance.h"
+#include "ash/wm/gestures/back_gesture/back_gesture_affordance.h"
 #include "ash/wm/overview/overview_controller.h"
 #include "ash/wm/resize_shadow_controller.h"
 #include "ash/wm/splitview/split_view_divider.h"

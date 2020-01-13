@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_WM_BACK_GESTURE_AFFORDANCE_H_
-#define ASH_WM_BACK_GESTURE_AFFORDANCE_H_
+#ifndef ASH_WM_GESTURES_BACK_GESTURE_BACK_GESTURE_AFFORDANCE_H_
+#define ASH_WM_GESTURES_BACK_GESTURE_BACK_GESTURE_AFFORDANCE_H_
 
 #include <memory>
 
@@ -99,4 +99,4 @@ class ASH_EXPORT BackGestureAffordance : public gfx::AnimationDelegate {
 
 }  // namespace ash
 
-#endif  // ASH_WM_BACK_GESTURE_AFFORDANCE_H_
+#endif  // ASH_WM_GESTURES_BACK_GESTURE_BACK_GESTURE_AFFORDANCE_H_

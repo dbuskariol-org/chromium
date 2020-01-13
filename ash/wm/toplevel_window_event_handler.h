@@ -9,7 +9,7 @@
 
 #include "ash/ash_export.h"
 #include "ash/display/window_tree_host_manager.h"
-#include "ash/wm/back_gesture_metrics.h"
+#include "ash/wm/gestures/back_gesture/back_gesture_metrics.h"
 #include "base/callback.h"
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
