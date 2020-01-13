@@ -592,18 +592,12 @@ if (is_android) {
   }
 
   java_cpp_enum("java_enums") {
-    sources = [
-      "cast_content_window.h",
-    ]
+    sources = [ "cast_content_window.h" ]
   }
 }
 
 cast_source_set("web_contents_provider") {
-  sources = [
-    "webview/web_contents_provider.h",
-  ]
+  sources = [ "webview/web_contents_provider.h" ]
 
-  deps = [
-    "//content/public/browser",
-  ]
+  deps = [ "//content/public/browser" ]
 }
