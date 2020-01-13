@@ -73,9 +73,7 @@ static_library("browser") {
 
 source_set("unit_tests") {
   testonly = true
-  sources = [
-    "printer_capabilities_unittest.cc",
-  ]
+  sources = [ "printer_capabilities_unittest.cc" ]
 
   deps = [
     "//base",
