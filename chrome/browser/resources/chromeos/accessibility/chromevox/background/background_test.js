@@ -2010,7 +2010,8 @@ TEST_F('ChromeVoxBackgroundTest', 'DISABLED_EventFromUser', function() {
       });
 });
 
-TEST_F('ChromeVoxBackgroundTest', 'PopUpButtonSetSize', function() {
+// See https://crbug.com/997688
+TEST_F('ChromeVoxBackgroundTest', 'DISABLED_PopUpButtonSetSize', function() {
   var mockFeedback = this.createMockFeedback();
   this.runWithLoadedTree(
       `
