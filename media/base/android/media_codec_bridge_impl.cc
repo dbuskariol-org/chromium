@@ -111,38 +111,7 @@ bool GetCodecSpecificDataForAudio(AudioCodec codec,
       break;
     }
     case kCodecAAC: {
-      media::BitReader reader(extra_data, extra_data_size);
-
-      // The following code is copied from aac.cc
-      // TODO(qinmin): refactor the code in aac.cc to make it more reusable.
-      uint8_t profile = 0;
-      uint8_t frequency_index = 0;
-      uint8_t channel_config = 0;
-      RETURN_ON_ERROR(reader.ReadBits(5, &profile));
-      RETURN_ON_ERROR(reader.ReadBits(4, &frequency_index));
-
-      if (0xf == frequency_index)
-        RETURN_ON_ERROR(reader.SkipBits(24));
-      RETURN_ON_ERROR(reader.ReadBits(4, &channel_config));
-
-      if (profile == 5 || profile == 29) {
-        // Read extension config.
-        uint8_t ext_frequency_index = 0;
-        RETURN_ON_ERROR(reader.ReadBits(4, &ext_frequency_index));
-        if (ext_frequency_index == 0xf)
-          RETURN_ON_ERROR(reader.SkipBits(24));
-        RETURN_ON_ERROR(reader.ReadBits(5, &profile));
-      }
-
-      if (profile < 1 || profile > 4 || frequency_index == 0xf ||
-          channel_config > 7) {
-        LOG(ERROR) << "Invalid AAC header";
-        return false;
-      }
-
-      output_csd0->push_back(profile << 3 | frequency_index >> 1);
-      output_csd0->push_back((frequency_index & 0x01) << 7 | channel_config
-                                                                 << 3);
+      output_csd0->assign(extra_data, extra_data + extra_data_size);
       *output_frame_has_adts_header = true;
       break;
     }
