@@ -985,9 +985,7 @@ if (!is_ios) {
   # third_party/blink/tools/run_web_tests.py
   group("run_web_tests") {
     testonly = true
-    deps = [
-      ":blink_web_tests",
-    ]
+    deps = [ ":blink_web_tests" ]
   }
 
   if (!is_chromeos && !is_ios && !is_fuchsia && !is_android) {
@@ -1018,23 +1016,15 @@ if (!is_ios) {
         "//chrome:chrome",
         "//chrome/test/chromedriver",
       ]
-      deps = [
-        "//third_party/blink/tools:wpt_tests_isolate",
-      ]
+      deps = [ "//third_party/blink/tools:wpt_tests_isolate" ]
     }
   }
 
   group("devtools_web_tests") {
     testonly = true
-    deps = [
-      ":blink_web_tests",
-    ]
-    data_deps = [
-      ":blink_web_tests",
-    ]
-    data = [
-      "//third_party/devtools-frontend/src/test/webtests/",
-    ]
+    deps = [ ":blink_web_tests" ]
+    data_deps = [ ":blink_web_tests" ]
+    data = [ "//third_party/devtools-frontend/src/test/webtests/" ]
   }
 
   # https://www.chromium.org/developers/testing/webkit-layout-tests
@@ -1149,33 +1139,24 @@ if (!is_ios) {
   copy("layout_test_data_mojo_bindings") {
     testonly = true
 
-    sources = [
-      "$root_gen_dir/mojo/public/js/mojo_bindings.js",
-    ]
+    sources = [ "$root_gen_dir/mojo/public/js/mojo_bindings.js" ]
 
-    outputs = [
-      "$root_gen_dir/layout_test_data/mojo/public/js/mojo_bindings.js",
-    ]
+    outputs =
+        [ "$root_gen_dir/layout_test_data/mojo/public/js/mojo_bindings.js" ]
 
-    deps = [
-      "//mojo/public/js:bindings",
-    ]
+    deps = [ "//mojo/public/js:bindings" ]
   }
 
   copy("layout_test_data_mojo_bindings_lite") {
     testonly = true
 
-    sources = [
-      "$root_gen_dir/mojo/public/js/mojo_bindings_lite.js",
-    ]
+    sources = [ "$root_gen_dir/mojo/public/js/mojo_bindings_lite.js" ]
 
     outputs = [
       "$root_gen_dir/layout_test_data/mojo/public/js/mojo_bindings_lite.js",
     ]
 
-    deps = [
-      "//mojo/public/js:bindings_lite",
-    ]
+    deps = [ "//mojo/public/js:bindings_lite" ]
   }
 
   group("blink_python_tests") {
