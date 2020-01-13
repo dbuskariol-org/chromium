@@ -24,7 +24,6 @@
 #include "components/performance_manager/embedder/performance_manager_registry.h"
 #include "components/performance_manager/performance_manager_lock_observer.h"
 #include "components/performance_manager/public/graph/graph.h"
-#include "components/performance_manager/worker_watcher.h"
 #include "content/public/browser/storage_partition.h"
 #include "content/public/common/content_features.h"
 
@@ -130,11 +129,6 @@ void ChromeBrowserMainExtraPartsPerformanceManager::PostMainMessageLoopRun() {
   g_browser_process->profile_manager()->RemoveObserver(this);
   observed_profiles_.RemoveAll();
 
-  // Clear up the worker nodes.
-  for (auto& worker_watcher : worker_watchers_)
-    worker_watcher.second->TearDown();
-  worker_watchers_.clear();
-
   page_live_state_data_helper_.reset();
 
   // There may still be WebContents and RenderProcessHosts with attached user
@@ -152,15 +146,7 @@ void ChromeBrowserMainExtraPartsPerformanceManager::PostMainMessageLoopRun() {
 void ChromeBrowserMainExtraPartsPerformanceManager::OnProfileAdded(
     Profile* profile) {
   observed_profiles_.Add(profile);
-  auto worker_watcher = std::make_unique<performance_manager::WorkerWatcher>(
-      profile->UniqueId(),
-      content::BrowserContext::GetDefaultStoragePartition(profile)
-          ->GetSharedWorkerService(),
-      &process_node_source_, &frame_node_source_);
-
-  bool inserted =
-      worker_watchers_.insert({profile, std::move(worker_watcher)}).second;
-  DCHECK(inserted);
+  registry_->NotifyBrowserContextAdded(profile);
 }
 
 void ChromeBrowserMainExtraPartsPerformanceManager::
@@ -171,8 +157,5 @@ void ChromeBrowserMainExtraPartsPerformanceManager::
 void ChromeBrowserMainExtraPartsPerformanceManager::OnProfileWillBeDestroyed(
     Profile* profile) {
   observed_profiles_.Remove(profile);
-  auto it = worker_watchers_.find(profile);
-  DCHECK(it != worker_watchers_.end());
-  it->second->TearDown();
-  worker_watchers_.erase(it);
+  registry_->NotifyBrowserContextRemoved(profile);
 }
