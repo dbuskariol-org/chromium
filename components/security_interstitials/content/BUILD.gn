@@ -42,9 +42,7 @@ static_library("security_interstitial_page") {
     "urls.h",
   ]
 
-  public_deps = [
-    "//components/safe_browsing/core/db:hit_report",
-  ]
+  public_deps = [ "//components/safe_browsing/core/db:hit_report" ]
 
   deps = [
     ":proto",
