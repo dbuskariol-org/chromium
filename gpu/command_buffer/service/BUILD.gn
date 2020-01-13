@@ -11,25 +11,17 @@ import("//ui/gl/features.gni")
 
 group("service") {
   if (is_component_build) {
-    public_deps = [
-      "//gpu",
-    ]
+    public_deps = [ "//gpu" ]
   } else {
-    public_deps = [
-      ":service_sources",
-    ]
+    public_deps = [ ":service_sources" ]
   }
 }
 
 group("gles2") {
   if (is_component_build) {
-    public_deps = [
-      "//gpu:gles2",
-    ]
+    public_deps = [ "//gpu:gles2" ]
   } else {
-    public_deps = [
-      ":gles2_sources",
-    ]
+    public_deps = [ ":gles2_sources" ]
   }
 }
 
@@ -449,9 +441,7 @@ target(link_target_type, "gles2_sources") {
 }
 
 proto_library("disk_cache_proto") {
-  sources = [
-    "disk_cache_proto.proto",
-  ]
+  sources = [ "disk_cache_proto.proto" ]
 }
 
 if (is_android) {
