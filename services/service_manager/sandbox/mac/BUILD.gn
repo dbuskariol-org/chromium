@@ -30,7 +30,5 @@ action_foreach("package_sb_files") {
 source_set("packaged_sb_files") {
   sources = get_target_outputs(":package_sb_files")
   defines = [ "SERVICE_MANAGER_SANDBOX_IMPL" ]
-  deps = [
-    ":package_sb_files",
-  ]
+  deps = [ ":package_sb_files" ]
 }
