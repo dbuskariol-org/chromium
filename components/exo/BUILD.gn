@@ -217,9 +217,7 @@ source_set("unit_tests") {
     "//ui/wm",
   ]
 
-  sources = [
-    "mime_utils_unittest.cc",
-  ]
+  sources = [ "mime_utils_unittest.cc" ]
 
   if (use_ozone) {
     deps += [ "//ui/ozone" ]
@@ -265,9 +263,7 @@ source_set("unit_tests") {
 }
 
 test("exo_unittests") {
-  sources = [
-    "test/run_all_unittests.cc",
-  ]
+  sources = [ "test/run_all_unittests.cc" ]
 
   deps = [
     ":test_support",
