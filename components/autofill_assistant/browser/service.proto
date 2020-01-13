@@ -1322,6 +1322,8 @@ message DateTimeRangeProto {
   optional string start_label = 5;
   // The label of the end date/time value (e.g., 'Return').
   optional string end_label = 6;
+  // The error to show if the date range is invalid.
+  optional string invalid_error_message = 7;
 }
 
 // A section showing a simple text message.
