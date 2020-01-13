@@ -353,4 +353,8 @@ void GLImageNativePixmap::OnMemoryDump(
   // TODO(ericrk): Implement GLImage OnMemoryDump. crbug.com/514914
 }
 
+scoped_refptr<gfx::NativePixmap> GLImageNativePixmap::GetNativePixmap() {
+  return pixmap_;
+}
+
 }  // namespace gl

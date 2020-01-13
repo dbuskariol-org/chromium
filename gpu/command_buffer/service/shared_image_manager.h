@@ -19,7 +19,15 @@ class SharedImageRepresentationFactoryRef;
 
 class GPU_GLES2_EXPORT SharedImageManager {
  public:
-  explicit SharedImageManager(bool thread_safe = false);
+  // If |thread_safe| is set, the manager itself can be safely accessed from
+  // other threads but the backings themselves may not be thread-safe so
+  // representations should not be created on other threads. When
+  // |display_context_on_another_thread| is set, we make sure that all
+  // SharedImages that will be used in the display context have thread-safe
+  // backings and therefore it is safe to create representations on the thread
+  // that holds the display context.
+  explicit SharedImageManager(bool thread_safe = false,
+                              bool display_context_on_another_thread = false);
   ~SharedImageManager();
 
   // Registers a SharedImageBacking with the manager and returns a
@@ -66,12 +74,25 @@ class GPU_GLES2_EXPORT SharedImageManager {
 
   bool is_thread_safe() const { return !!lock_; }
 
+  bool display_context_on_another_thread() const {
+    return display_context_on_another_thread_;
+  }
+
+  // Returns the NativePixmap backing |mailbox|. Returns null if the SharedImage
+  // doesn't exist or is not backed by a NativePixmap. The caller is not
+  // expected to read from or write into the provided NativePixmap because it
+  // can be modified by the client at any time. The primary purpose of this
+  // method is to facilitate pageflip testing on the viz thread.
+  scoped_refptr<gfx::NativePixmap> GetNativePixmap(const gpu::Mailbox& mailbox);
+
  private:
   class AutoLock;
   // The lock for protecting |images_|.
   base::Optional<base::Lock> lock_;
 
   base::flat_set<std::unique_ptr<SharedImageBacking>> images_ GUARDED_BY(lock_);
+
+  const bool display_context_on_another_thread_;
 
   THREAD_CHECKER(thread_checker_);
 

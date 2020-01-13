@@ -19,6 +19,7 @@
 #include "cc/base/math_util.h"
 #include "cc/paint/filter_operations.h"
 #include "components/viz/common/display/renderer_settings.h"
+#include "components/viz/common/features.h"
 #include "components/viz/common/frame_sinks/copy_output_request.h"
 #include "components/viz/common/frame_sinks/copy_output_util.h"
 #include "components/viz/common/quads/draw_quad.h"
@@ -125,15 +126,22 @@ DirectRenderer::DirectRenderer(const RendererSettings* settings,
 DirectRenderer::~DirectRenderer() = default;
 
 void DirectRenderer::Initialize() {
+  auto* context_provider = output_surface_->context_provider();
+  gpu::SharedImageInterface* sii = nullptr;
+
+  if (features::ShouldUseRealBuffersForPageFlipTest()) {
+    CHECK(context_provider);
+    sii = context_provider->SharedImageInterface();
+    CHECK(sii);
+  }
+
   // Create an overlay validator based on the platform and set it on the newly
   // created processor. This would initialize the strategies on the validator as
   // well.
   overlay_processor_ = OverlayProcessorInterface::CreateOverlayProcessor(
       output_surface_->AsSkiaOutputSurface(),
       output_surface_->GetSurfaceHandle(), output_surface_->capabilities(),
-      *settings_);
-
-  auto* context_provider = output_surface_->context_provider();
+      *settings_, sii);
 
   use_partial_swap_ = settings_->partial_swap_enabled && CanPartialSwap();
   allow_empty_swap_ = use_partial_swap_;

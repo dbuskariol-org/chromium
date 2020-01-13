@@ -93,7 +93,8 @@ class VIZ_SERVICE_EXPORT OverlayProcessorInterface {
       SkiaOutputSurface* skia_output_surface,
       gpu::SurfaceHandle surface_handle,
       const OutputSurface::Capabilities& capabilities,
-      const RendererSettings& renderer_settings);
+      const RendererSettings& renderer_settings,
+      gpu::SharedImageInterface* shared_image_interface);
 
   virtual ~OverlayProcessorInterface() {}
 

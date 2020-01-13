@@ -70,4 +70,8 @@ unsigned GLImage::GetDataFormat() {
   }
 }
 
+scoped_refptr<gfx::NativePixmap> GLImage::GetNativePixmap() {
+  return nullptr;
+}
+
 }  // namespace gl

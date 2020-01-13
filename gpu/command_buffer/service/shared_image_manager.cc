@@ -72,7 +72,10 @@ class SCOPED_LOCKABLE SharedImageManager::AutoLock {
   DISALLOW_COPY_AND_ASSIGN(AutoLock);
 };
 
-SharedImageManager::SharedImageManager(bool thread_safe) {
+SharedImageManager::SharedImageManager(bool thread_safe,
+                                       bool display_context_on_another_thread)
+    : display_context_on_another_thread_(display_context_on_another_thread) {
+  DCHECK(!display_context_on_another_thread || thread_safe);
   if (thread_safe)
     lock_.emplace();
   CALLED_ON_VALID_THREAD();
@@ -323,6 +326,15 @@ void SharedImageManager::OnMemoryDump(const Mailbox& mailbox,
   // Allow the SharedImageBacking to attach additional data to the dump
   // or dump additional sub-paths.
   backing->OnMemoryDump(dump_name, dump, pmd, client_tracing_id);
+}
+
+scoped_refptr<gfx::NativePixmap> SharedImageManager::GetNativePixmap(
+    const gpu::Mailbox& mailbox) {
+  AutoLock autolock(this);
+  auto found = images_.find(mailbox);
+  if (found == images_.end())
+    return nullptr;
+  return (*found)->GetNativePixmap();
 }
 
 }  // namespace gpu

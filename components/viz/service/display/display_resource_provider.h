@@ -339,6 +339,9 @@ class VIZ_SERVICE_EXPORT DisplayResourceProvider
   void DeclareUsedResourcesFromChild(int child,
                                      const ResourceIdSet& resources_from_child);
 
+  // Returns the mailbox corresponding to a resource id.
+  gpu::Mailbox GetMailbox(int resource_id);
+
  private:
   enum DeleteStyle {
     NORMAL,

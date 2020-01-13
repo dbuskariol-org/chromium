@@ -42,6 +42,11 @@ const base::Feature kDisableDeJelly{"DisableDeJelly",
 const base::Feature kVizForWebView{"VizForWebView",
                                    base::FEATURE_DISABLED_BY_DEFAULT};
 
+// Whether we should use the real buffers corresponding to overlay candidates in
+// order to do a pageflip test rather than allocating test buffers.
+const base::Feature kUseRealBuffersForPageFlipTest{
+    "UseRealBuffersForPageFlipTest", base::FEATURE_DISABLED_BY_DEFAULT};
+
 bool IsVizDisplayCompositorEnabled() {
   // TODO(crbug.com/936425): Delete function when it's no longer checked.
   return true;
@@ -83,6 +88,10 @@ bool IsUsingVizForWebView() {
 
 bool IsUsingPreferredIntervalForVideo() {
   return base::FeatureList::IsEnabled(kUsePreferredIntervalForVideo);
+}
+
+bool ShouldUseRealBuffersForPageFlipTest() {
+  return base::FeatureList::IsEnabled(kUseRealBuffersForPageFlipTest);
 }
 
 }  // namespace features

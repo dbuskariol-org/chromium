@@ -77,7 +77,8 @@ OverlayProcessorInterface::CreateOverlayProcessor(
     SkiaOutputSurface* skia_output_surface,
     gpu::SurfaceHandle surface_handle,
     const OutputSurface::Capabilities& capabilities,
-    const RendererSettings& renderer_settings) {
+    const RendererSettings& renderer_settings,
+    gpu::SharedImageInterface* shared_image_interface) {
 #if defined(OS_MACOSX)
   bool could_overlay = surface_handle != gpu::kNullSurfaceHandle;
   could_overlay &= capabilities.supports_surfaceless;
@@ -104,7 +105,7 @@ OverlayProcessorInterface::CreateOverlayProcessor(
   }
   return std::make_unique<OverlayProcessorOzone>(
       overlay_enabled, std::move(overlay_candidates),
-      std::move(renderer_settings.overlay_strategies));
+      std::move(renderer_settings.overlay_strategies), shared_image_interface);
 #elif defined(OS_ANDROID)
   if (capabilities.supports_surfaceless) {
     // This is for Android SurfaceControl case.

@@ -19,6 +19,7 @@
 #include "ui/gfx/geometry/rect_f.h"
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/gpu_fence.h"
+#include "ui/gfx/native_pixmap.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/overlay_transform.h"
 #include "ui/gl/gl_export.h"
@@ -152,6 +153,10 @@ class GL_EXPORT GLImage : public base::RefCounted<GLImage> {
   // Workaround for StreamTexture which must be re-copied on each access.
   // TODO(ericrk): Remove this once SharedImage transition is complete.
   virtual bool HasMutableState() const;
+
+  // Returns the NativePixmap backing the GLImage. If not backed by a
+  // NativePixmap, returns null.
+  virtual scoped_refptr<gfx::NativePixmap> GetNativePixmap();
 
  protected:
   virtual ~GLImage() {}

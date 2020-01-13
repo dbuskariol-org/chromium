@@ -36,6 +36,7 @@
 #include "ui/gl/gl_bindings.h"
 #include "ui/gl/gl_fence.h"
 #include "ui/gl/gl_gl_api_implementation.h"
+#include "ui/gl/gl_image_native_pixmap.h"
 #include "ui/gl/gl_image_shared_memory.h"
 #include "ui/gl/gl_version_info.h"
 #include "ui/gl/trace_util.h"
@@ -378,6 +379,10 @@ class SharedImageBackingGLTexture : public SharedImageBackingWithReadAccess {
         texture_(texture),
         attribs_(attribs) {
     DCHECK(texture_);
+    gl::GLImage* image =
+        texture_->GetLevelImage(texture_->target(), 0, nullptr);
+    if (image)
+      native_pixmap_ = image->GetNativePixmap();
   }
 
   ~SharedImageBackingGLTexture() override {
@@ -479,6 +484,10 @@ class SharedImageBackingGLTexture : public SharedImageBackingWithReadAccess {
     }
   }
 
+  scoped_refptr<gfx::NativePixmap> GetNativePixmap() override {
+    return native_pixmap_;
+  }
+
  protected:
   std::unique_ptr<SharedImageRepresentationGLTexture> ProduceGLTexture(
       SharedImageManager* manager,
@@ -557,6 +566,7 @@ class SharedImageBackingGLTexture : public SharedImageBackingWithReadAccess {
   gles2::Texture* rgb_emulation_texture_ = nullptr;
   sk_sp<SkPromiseImageTexture> cached_promise_texture_;
   const UnpackStateAttribs attribs_;
+  scoped_refptr<gfx::NativePixmap> native_pixmap_;
 };
 
 // Implementation of SharedImageBacking that creates a GL Texture and stores it

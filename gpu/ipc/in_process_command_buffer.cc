@@ -298,6 +298,12 @@ class InProcessCommandBuffer::SharedImageInterface
     // No need to flush in this implementation.
   }
 
+  scoped_refptr<gfx::NativePixmap> GetNativePixmap(
+      const gpu::Mailbox& mailbox) override {
+    DCHECK(parent_->GetSharedImageManager()->is_thread_safe());
+    return parent_->GetSharedImageManager()->GetNativePixmap(mailbox);
+  }
+
   CommandBufferId command_buffer_id() const { return command_buffer_id_; }
 
  private:

@@ -619,6 +619,12 @@ class DirectContextProviderDelegateImpl : public DirectContextProviderDelegate,
     // No need to flush in this implementation.
   }
 
+  scoped_refptr<gfx::NativePixmap> GetNativePixmap(
+      const gpu::Mailbox& mailbox) override {
+    DCHECK(shared_image_manager_->is_thread_safe());
+    return shared_image_manager_->GetNativePixmap(mailbox);
+  }
+
   // DirectContextProviderDelegate implementation.
   gpu::SharedImageManager* GetSharedImageManager() override {
     return shared_image_manager_;
