@@ -476,6 +476,9 @@ public final class ChromePreferenceKeys {
 
     public static final String SYNC_SESSIONS_UUID = "chromium.sync.sessions.id";
 
+    public static final String TABBED_ACTIVITY_LAST_BACKGROUNDED_TIME_MS_PREF =
+            "ChromeTabbedActivity.BackgroundTimeMs";
+
     public static final String TAB_ID_MANAGER_NEXT_ID =
             "org.chromium.chrome.browser.tab.TabIdManager.NEXT_ID";
 
@@ -713,6 +716,7 @@ public final class ChromePreferenceKeys {
                 SNAPSHOT_DATABASE_REMOVED,
                 START_SURFACE_SINGLE_PANE_ENABLED_KEY,
                 SYNC_SESSIONS_UUID,
+                TABBED_ACTIVITY_LAST_BACKGROUNDED_TIME_MS_PREF,
                 TAB_ID_MANAGER_NEXT_ID,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_CLEAR_DATA,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_UNINSTALL,

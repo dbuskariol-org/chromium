@@ -8,12 +8,12 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.VisibleForTesting;
 
-import org.chromium.base.ContextUtils;
 import org.chromium.base.Log;
 import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher;
 import org.chromium.chrome.browser.lifecycle.Destroyable;
 import org.chromium.chrome.browser.lifecycle.PauseResumeWithNativeObserver;
 import org.chromium.chrome.browser.lifecycle.StartStopWithNativeObserver;
+import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 
 /**
@@ -103,7 +103,7 @@ public class ChromeInactivityTracker
      */
     @VisibleForTesting
     public void setLastBackgroundedTimeInPrefs(long timeInMillis) {
-        ContextUtils.getAppSharedPreferences().edit().putLong(mPrefName, timeInMillis).apply();
+        SharedPreferencesManager.getInstance().writeLong(mPrefName, timeInMillis);
     }
 
     /**
@@ -115,7 +115,7 @@ public class ChromeInactivityTracker
     }
 
     long getLastBackgroundedTimeMs() {
-        return ContextUtils.getAppSharedPreferences().getLong(
+        return SharedPreferencesManager.getInstance().readLong(
                 mPrefName, UNKNOWN_LAST_BACKGROUNDED_TIME);
     }
 
