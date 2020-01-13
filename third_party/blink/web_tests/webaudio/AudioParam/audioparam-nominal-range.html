@@ -366,21 +366,24 @@
                           .beEqualTo(limits[paramName].maxValue) &&
               isCorrect;
 
-          // Verify that the min and max attributes are read-only
-          parameter.minValue = Math.PI;
+          // Verify that the min and max attributes are read-only.  |testValue|
+          // MUST be a number that can be represented exactly the same way as
+          // both a double and single float.  A small integer works nicely.
+          const testValue = 42;
+          parameter.minValue = testValue;
           let isReadOnly;
           isReadOnly =
-              should(parameter.minValue, prefix + '.minValue = Math.PI')
-                  .notBeEqualTo(Math.PI);
+              should(parameter.minValue, `${prefix}.minValue = ${testValue}`)
+                  .notBeEqualTo(testValue);
 
           should(isReadOnly, prefix + '.minValue is read-only').beEqualTo(true);
 
           isCorrect = isReadOnly && isCorrect;
 
-          parameter.maxValue = Math.PI;
+          parameter.maxValue = testValue;
           isReadOnly =
-              should(parameter.maxValue, prefix + '.maxValue = Math.PI')
-                  .notBeEqualTo(Math.PI);
+              should(parameter.maxValue, `${prefix}.maxValue = ${testValue}`)
+                  .notBeEqualTo(testValue);
           should(isReadOnly, prefix + '.maxValue is read-only').beEqualTo(true);
 
           isCorrect = isReadOnly && isCorrect;
