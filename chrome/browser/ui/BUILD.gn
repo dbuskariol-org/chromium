@@ -4169,9 +4169,7 @@ static_library("test_support") {
     "toolbar/test_toolbar_action_view_controller.cc",
     "toolbar/test_toolbar_action_view_controller.h",
   ]
-  public_deps = [
-    ":ui",
-  ]
+  public_deps = [ ":ui" ]
   deps = [
     "//chrome/app/theme:theme_resources",
     "//chrome/browser",
@@ -4284,16 +4282,12 @@ if (is_chromeos) {
       "ash/keyboard/chrome_keyboard_controller_client_test_helper.cc",
       "ash/keyboard/chrome_keyboard_controller_client_test_helper.h",
     ]
-    deps = [
-      "//ash",
-    ]
+    deps = [ "//ash" ]
   }
 }
 
 if (is_android) {
   java_cpp_enum("tab_model_enums_java") {
-    sources = [
-      "android/tab_model/tab_model.h",
-    ]
+    sources = [ "android/tab_model/tab_model.h" ]
   }
 }
