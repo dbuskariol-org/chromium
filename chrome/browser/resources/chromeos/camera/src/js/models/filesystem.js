@@ -426,7 +426,7 @@ export async function saveVideo(tempfile, filename) {
   assert(dir !== null);
 
   // Non-null version for the Closure Compiler.
-  let nonNullDir = dir;
+  const nonNullDir = dir;
 
   // Assuming content of tempfile contains all recorded chunks appended together
   // and is a well-formed video. The work needed here is just to move the file
