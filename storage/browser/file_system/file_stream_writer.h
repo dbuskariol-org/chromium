@@ -48,8 +48,7 @@ class FileStreamWriter {
   static std::unique_ptr<FileStreamWriter> CreateForMemoryFile(
       base::WeakPtr<ObfuscatedFileUtilMemoryDelegate> memory_file_util,
       const base::FilePath& file_path,
-      int64_t initial_offset,
-      OpenOrCreate open_or_create);
+      int64_t initial_offset);
 
   // Closes the file. If there's an in-flight operation, it is canceled (i.e.,
   // the callback function associated with the operation is not called).
