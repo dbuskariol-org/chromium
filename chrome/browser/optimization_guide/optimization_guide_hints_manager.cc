@@ -876,6 +876,10 @@ OptimizationGuideHintsManager::CanApplyOptimization(
           optimization_metadata->performance_hints_metadata =
               optimization.performance_hints_metadata();
           break;
+        case optimization_guide::proto::Optimization::kPublicImageMetadata:
+          optimization_metadata->public_image_metadata =
+              optimization.public_image_metadata();
+          break;
         default:
           NOTREACHED();
           break;
