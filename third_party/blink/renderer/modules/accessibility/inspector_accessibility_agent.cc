@@ -534,7 +534,7 @@ Response InspectorAccessibilityAgent::getPartialAXTree(
   if (!local_frame)
     return Response::Error("Frame is detached.");
   AXContext ax_context(document);
-  AXObjectCacheImpl& cache = ToAXObjectCacheImpl(ax_context.GetAXObjectCache());
+  auto& cache = To<AXObjectCacheImpl>(ax_context.GetAXObjectCache());
 
   AXObject* inspected_ax_object = cache.GetOrCreate(dom_node);
   *nodes = std::make_unique<protocol::Array<protocol::Accessibility::AXNode>>();
@@ -723,7 +723,7 @@ Response InspectorAccessibilityAgent::getFullAXTree(
     document->UpdateStyleAndLayout();
   *nodes = std::make_unique<protocol::Array<protocol::Accessibility::AXNode>>();
   AXContext ax_context(*document);
-  AXObjectCacheImpl& cache = ToAXObjectCacheImpl(ax_context.GetAXObjectCache());
+  auto& cache = To<AXObjectCacheImpl>(ax_context.GetAXObjectCache());
   Deque<AXID> ids;
   ids.emplace_back(cache.Root()->AXObjectID());
   while (!ids.empty()) {

@@ -290,11 +290,12 @@ class CORE_EXPORT ChromeClientImpl final : public ChromeClient {
   FRIEND_TEST_ALL_PREFIXES(FileChooserQueueTest, DerefQueuedChooser);
 };
 
-DEFINE_TYPE_CASTS(ChromeClientImpl,
-                  ChromeClient,
-                  client,
-                  client->IsChromeClientImpl(),
-                  client.IsChromeClientImpl());
+template <>
+struct DowncastTraits<ChromeClientImpl> {
+  static bool AllowFrom(const ChromeClient& client) {
+    return client.IsChromeClientImpl();
+  }
+};
 
 }  // namespace blink
 
