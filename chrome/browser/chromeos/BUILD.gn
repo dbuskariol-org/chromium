@@ -319,9 +319,7 @@ source_set("chromeos") {
     "//ui/wm/public",
     "//url",
   ]
-  data_deps = [
-    ":dbus_service_files",
-  ]
+  data_deps = [ ":dbus_service_files" ]
 
   allow_circular_includes_from = [
     "//chrome/browser/extensions",
@@ -2461,9 +2459,7 @@ action("dbus_service_files") {
     "dbus/org.chromium.VmApplicationsService.conf",
   ]
   output_conf_file = "$root_out_dir/dbus/chrome_dbus_services.conf"
-  outputs = [
-    output_conf_file,
-  ]
+  outputs = [ output_conf_file ]
 
   script = "//chromeos/tools/concat_dbus_conf_files.py"
   args = [ rebase_path(output_conf_file, root_build_dir) ]
@@ -3076,9 +3072,7 @@ source_set("unit_tests") {
     ]
   }
 
-  public_deps = [
-    ":chromeos",
-  ]
+  public_deps = [ ":chromeos" ]
   deps = [
     ":arc_test_support",
     ":attestation_proto",
@@ -3191,53 +3185,37 @@ source_set("unit_tests") {
     "//ui/events/devices:test_support",
     "//ui/shell_dialogs",
   ]
-  data = [
-    "//chromeos/test/data/",
-  ]
+  data = [ "//chromeos/test/data/" ]
 }
 
 proto_library("attestation_proto") {
-  sources = [
-    "attestation/attestation_key_payload.proto",
-  ]
+  sources = [ "attestation/attestation_key_payload.proto" ]
 }
 
 proto_library("screen_brightness_event_proto") {
-  sources = [
-    "power/ml/screen_brightness_event.proto",
-  ]
+  sources = [ "power/ml/screen_brightness_event.proto" ]
 }
 
 proto_library("user_charging_event_proto") {
-  sources = [
-    "power/smart_charging/user_charging_event.proto",
-  ]
+  sources = [ "power/smart_charging/user_charging_event.proto" ]
 }
 
 proto_library("user_activity_event_proto") {
-  sources = [
-    "power/ml/user_activity_event.proto",
-  ]
+  sources = [ "power/ml/user_activity_event.proto" ]
 }
 
 proto_library("backdrop_wallpaper_proto") {
-  sources = [
-    "backdrop_wallpaper_handlers/backdrop_wallpaper.proto",
-  ]
+  sources = [ "backdrop_wallpaper_handlers/backdrop_wallpaper.proto" ]
   generate_python = false
 }
 
 proto_library("device_configuration_proto") {
-  sources = [
-    "login/screens/recommend_apps/device_configuration.proto",
-  ]
+  sources = [ "login/screens/recommend_apps/device_configuration.proto" ]
   generate_python = false
 }
 
 proto_library("print_job_info_proto") {
-  sources = [
-    "printing/history/print_job_info.proto",
-  ]
+  sources = [ "printing/history/print_job_info.proto" ]
 }
 
 device_policy_remover_path = "$target_gen_dir/device_policy_remover.cc"
@@ -3263,9 +3241,7 @@ action("device_policy_remover_generate") {
     chrome_device_policy_pb2_path,
   ]
 
-  outputs = [
-    device_policy_remover_path,
-  ]
+  outputs = [ device_policy_remover_path ]
 
   args = [
     # generated file name
@@ -3284,13 +3260,9 @@ action("device_policy_remover_generate") {
 }
 
 static_library("device_policy_remover_generated") {
-  sources = [
-    device_policy_remover_path,
-  ]
+  sources = [ device_policy_remover_path ]
 
-  public_deps = [
-    ":device_policy_remover_generate",
-  ]
+  public_deps = [ ":device_policy_remover_generate" ]
 }
 
 fuzzer_test("smb_url_fuzzer") {
@@ -3314,9 +3286,7 @@ fuzzer_test("smb_url_fuzzer") {
 }
 
 fuzzer_test("zeroconf_printer_detector_fuzzer") {
-  sources = [
-    "printing/zeroconf_printer_detector_fuzzer.cc",
-  ]
+  sources = [ "printing/zeroconf_printer_detector_fuzzer.cc" ]
   deps = [
     "//base/test:test_support",
     "//chrome/browser",
@@ -3326,9 +3296,7 @@ fuzzer_test("zeroconf_printer_detector_fuzzer") {
 
 if (use_libfuzzer) {
   fuzzer_test("policy_fuzzer") {
-    sources = [
-      "policy/fuzzer/policy_fuzzer.cc",
-    ]
+    sources = [ "policy/fuzzer/policy_fuzzer.cc" ]
 
     deps = [
       ":policy_fuzzer_proto",
@@ -3340,9 +3308,7 @@ if (use_libfuzzer) {
   }
 
   fuzzable_proto_library("policy_fuzzer_proto") {
-    sources = [
-      "policy/fuzzer/policy_fuzzer.proto",
-    ]
+    sources = [ "policy/fuzzer/policy_fuzzer.proto" ]
 
     import_dirs = [ "//components/policy/proto" ]
 
