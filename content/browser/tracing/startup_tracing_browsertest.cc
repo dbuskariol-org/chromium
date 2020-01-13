@@ -97,6 +97,8 @@ IN_PROC_BROWSER_TEST_F(CommandlineStartupTracingTest,
       std::string::npos);
 }
 
+#undef MAYBE_TestStartupTracing
+
 class StartupTracingInProcessTest : public ContentBrowserTest {
  public:
   StartupTracingInProcessTest() {
