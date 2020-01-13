@@ -5,9 +5,7 @@
 source_set("browser_agent") {
   configs += [ "//build/config/compiler:enable_arc" ]
   friend = [ ":unit_tests" ]
-  public = [
-    "infobar_overlay_browser_agent.h",
-  ]
+  public = [ "infobar_overlay_browser_agent.h" ]
   sources = [
     "infobar_banner_overlay_request_callback_installer.h",
     "infobar_banner_overlay_request_callback_installer.mm",
@@ -37,6 +35,7 @@ source_set("browser_agent_util") {
   deps = [
     ":browser_agent",
     "//base",
+    "//ios/chrome/browser/infobars/overlays/browser_agent/interaction_handlers/passwords",
     "//ios/chrome/browser/main:public",
     "//ios/chrome/browser/ui/infobars:feature_flags",
   ]
