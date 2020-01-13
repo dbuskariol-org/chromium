@@ -94,7 +94,8 @@ TEST_F(InfobarOverlayBrowserAgentTest, BannerPresentation) {
   // Add an infobar request to the banner modality, expecting
   // InfobarBannerInteractionHandler::BannerVisibilityChanged() to be called.
   std::unique_ptr<OverlayRequest> added_request =
-      OverlayRequest::CreateWithConfig<InfobarOverlayRequestConfig>(&infobar_);
+      OverlayRequest::CreateWithConfig<InfobarOverlayRequestConfig>(
+          &infobar_, InfobarOverlayType::kBanner);
   OverlayRequest* request = added_request.get();
   MockInfobarBannerInteractionHandler& mock_banner_handler =
       *mock_interaction_handler_->mock_banner_handler();

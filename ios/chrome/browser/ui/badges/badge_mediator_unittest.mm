@@ -303,7 +303,8 @@ TEST_P(BadgeMediatorTest, InfobarBannerOverlayObserving) {
   OverlayRequestQueue* queue = OverlayRequestQueue::FromWebState(
       web_state(), OverlayModality::kInfobarBanner);
   queue->AddRequest(
-      OverlayRequest::CreateWithConfig<InfobarOverlayRequestConfig>(infobar));
+      OverlayRequest::CreateWithConfig<InfobarOverlayRequestConfig>(
+          infobar, InfobarOverlayType::kBanner));
   EXPECT_TRUE(item.badgeState & BadgeStatePresented);
 
   // Simulate dismissal of the banner and verify that the badge state is no

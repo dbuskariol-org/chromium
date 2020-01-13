@@ -14,8 +14,8 @@ source_set("overlays") {
     "infobar_overlay_request_inserter.mm",
     "infobar_overlay_tab_helper.h",
     "infobar_overlay_tab_helper.mm",
-    "infobar_overlay_type.h",
   ]
+  public_deps = [ ":overlay_type" ]
   deps = [
     "//base",
     "//components/infobars/core",
@@ -28,6 +28,11 @@ source_set("overlays") {
     "//ios/chrome/browser/ui/infobars:infobars_ui",
     "//ios/web/public",
   ]
+}
+
+source_set("overlay_type") {
+  configs += [ "//build/config/compiler:enable_arc" ]
+  sources = [ "infobar_overlay_type.h" ]
 }
 
 source_set("util") {
