@@ -440,6 +440,8 @@ public final class ChromePreferenceKeys {
      */
     public static final String REACHED_CODE_PROFILER_GROUP = "reached_code_profiler_group";
 
+    public static final String RLZ_NOTIFIED = "rlz_first_search_notified";
+
     /**
      * Generic signin and sync promo preferences.
      */
@@ -707,6 +709,7 @@ public final class ChromePreferenceKeys {
                 PRIVACY_NETWORK_PREDICTIONS,
                 PROMOS_SKIPPED_ON_FIRST_START,
                 REACHED_CODE_PROFILER_GROUP,
+                RLZ_NOTIFIED,
                 SIGNIN_AND_SYNC_PROMO_SHOW_COUNT,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_BOOKMARKS,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_SETTINGS,
