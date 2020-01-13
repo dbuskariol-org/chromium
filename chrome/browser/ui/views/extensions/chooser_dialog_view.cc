@@ -100,16 +100,12 @@ views::View* ChooserDialogView::GetContentsView() {
   return device_chooser_content_view_;
 }
 
-views::Widget* ChooserDialogView::GetWidget() {
-  return device_chooser_content_view_->GetWidget();
-}
-
-const views::Widget* ChooserDialogView::GetWidget() const {
-  return device_chooser_content_view_->GetWidget();
-}
-
 void ChooserDialogView::OnSelectionChanged() {
   DialogModelChanged();
+}
+
+const views::Widget* ChooserDialogView::GetWidgetImpl() const {
+  return device_chooser_content_view_->GetWidget();
 }
 
 void ChromeExtensionChooserDialog::ShowDialogImpl(

@@ -74,8 +74,6 @@ class VIEWS_EXPORT NativeWidgetAura : public internal::NativeWidgetPrivate,
   bool ShouldUseNativeFrame() const override;
   bool ShouldWindowContentsBeTransparent() const override;
   void FrameTypeChanged() override;
-  Widget* GetWidget() override;
-  const Widget* GetWidget() const override;
   gfx::NativeView GetNativeView() const override;
   gfx::NativeWindow GetNativeWindow() const override;
   Widget* GetTopLevelWidget() override;
@@ -221,6 +219,9 @@ class VIEWS_EXPORT NativeWidgetAura : public internal::NativeWidgetPrivate,
 
  private:
   void SetInitialFocus(ui::WindowShowState show_state);
+
+  // internal::NativeWidgetPrivate:
+  const Widget* GetWidgetImpl() const override;
 
   internal::NativeWidgetDelegate* delegate_;
 

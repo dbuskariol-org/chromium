@@ -208,14 +208,6 @@ views::View* SimpleMessageBoxViews::GetContentsView() {
   return message_box_view_;
 }
 
-views::Widget* SimpleMessageBoxViews::GetWidget() {
-  return message_box_view_->GetWidget();
-}
-
-const views::Widget* SimpleMessageBoxViews::GetWidget() const {
-  return message_box_view_->GetWidget();
-}
-
 bool SimpleMessageBoxViews::ShouldShowCloseButton() const {
   return can_close_;
 }
@@ -284,6 +276,10 @@ void SimpleMessageBoxViews::Run(MessageBoxResultCallback result_callback) {
 void SimpleMessageBoxViews::Done() {
   CHECK(!result_callback_.is_null());
   std::move(result_callback_).Run(result_);
+}
+
+const views::Widget* SimpleMessageBoxViews::GetWidgetImpl() const {
+  return message_box_view_->GetWidget();
 }
 
 namespace chrome {

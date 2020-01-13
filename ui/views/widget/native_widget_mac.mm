@@ -250,14 +250,6 @@ void NativeWidgetMac::FrameTypeChanged() {
   GetWidget()->GetRootView()->SchedulePaint();
 }
 
-Widget* NativeWidgetMac::GetWidget() {
-  return delegate_->AsWidget();
-}
-
-const Widget* NativeWidgetMac::GetWidget() const {
-  return delegate_->AsWidget();
-}
-
 gfx::NativeView NativeWidgetMac::GetNativeView() const {
   // Returns a BridgedContentView, unless there is no views::RootView set.
   return [GetNativeWindow().GetNativeNSWindow() contentView];
@@ -874,6 +866,10 @@ ui::EventDispatchDetails NativeWidgetMac::DispatchKeyEventPostIME(
   else
     GetWidget()->OnKeyEvent(key);
   return ui::EventDispatchDetails();
+}
+
+const Widget* NativeWidgetMac::GetWidgetImpl() const {
+  return delegate_->AsWidget();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

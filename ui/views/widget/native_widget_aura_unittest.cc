@@ -332,8 +332,7 @@ class PropertyTestWidgetDelegate : public WidgetDelegate {
   bool CanMinimize() const override { return true; }
   bool CanResize() const override { return true; }
   void DeleteDelegate() override { delete this; }
-  Widget* GetWidget() override { return widget_; }
-  const Widget* GetWidget() const override { return widget_; }
+  const Widget* GetWidgetImpl() const override { return widget_; }
 
   Widget* widget_;
   DISALLOW_COPY_AND_ASSIGN(PropertyTestWidgetDelegate);

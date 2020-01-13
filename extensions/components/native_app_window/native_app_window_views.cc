@@ -212,14 +212,6 @@ void NativeAppWindowViews::DeleteDelegate() {
   app_window_->OnNativeClose();
 }
 
-views::Widget* NativeAppWindowViews::GetWidget() {
-  return widget_;
-}
-
-const views::Widget* NativeAppWindowViews::GetWidget() const {
-  return widget_;
-}
-
 bool NativeAppWindowViews::ShouldDescendIntoChildForEventHandling(
     gfx::NativeView child,
     const gfx::Point& location) {
@@ -436,6 +428,10 @@ void NativeAppWindowViews::RemoveObserver(
 void NativeAppWindowViews::OnViewWasResized() {
   for (auto& observer : observer_list_)
     observer.OnPositionRequiresUpdate();
+}
+
+const views::Widget* NativeAppWindowViews::GetWidgetImpl() const {
+  return widget_;
 }
 
 }  // namespace native_app_window

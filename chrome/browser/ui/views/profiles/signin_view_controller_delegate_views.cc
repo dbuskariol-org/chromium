@@ -59,14 +59,6 @@ views::View* SigninViewControllerDelegateViews::GetContentsView() {
   return content_view_;
 }
 
-views::Widget* SigninViewControllerDelegateViews::GetWidget() {
-  return content_view_->GetWidget();
-}
-
-const views::Widget* SigninViewControllerDelegateViews::GetWidget() const {
-  return content_view_->GetWidget();
-}
-
 void SigninViewControllerDelegateViews::DeleteDelegate() {
   ResetSigninViewControllerDelegate();
   delete this;
@@ -222,6 +214,10 @@ void SigninViewControllerDelegateViews::DisplayModal() {
       NOTREACHED() << "Unsupported dialog modal type " << dialog_modal_type_;
   }
   content_view_->RequestFocus();
+}
+
+const views::Widget* SigninViewControllerDelegateViews::GetWidgetImpl() const {
+  return content_view_->GetWidget();
 }
 
 // --------------------------------------------------------------------

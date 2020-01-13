@@ -2400,14 +2400,6 @@ void BrowserView::OnWidgetMove() {
     location_bar_view->GetOmniboxView()->CloseOmniboxPopup();
 }
 
-views::Widget* BrowserView::GetWidget() {
-  return View::GetWidget();
-}
-
-const views::Widget* BrowserView::GetWidget() const {
-  return View::GetWidget();
-}
-
 void BrowserView::RevealTabStripIfNeeded() {
   if (!immersive_mode_controller_->IsEnabled())
     return;

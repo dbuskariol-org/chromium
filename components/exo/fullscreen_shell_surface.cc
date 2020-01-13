@@ -171,14 +171,6 @@ void FullscreenShellSurface::WindowClosing() {
   widget_ = nullptr;
 }
 
-views::Widget* FullscreenShellSurface::GetWidget() {
-  return widget_;
-}
-
-const views::Widget* FullscreenShellSurface::GetWidget() const {
-  return widget_;
-}
-
 views::View* FullscreenShellSurface::GetContentsView() {
   return this;
 }
@@ -222,6 +214,10 @@ void FullscreenShellSurface::GetAccessibleNodeData(ui::AXNodeData* node_data) {
 
 void FullscreenShellSurface::SetChildAxTreeId(ui::AXTreeID child_ax_tree_id) {
   child_ax_tree_id_ = child_ax_tree_id;
+}
+
+const views::Widget* FullscreenShellSurface::GetWidgetImpl() const {
+  return widget_;
 }
 
 void FullscreenShellSurface::UpdateHostWindowBounds() {

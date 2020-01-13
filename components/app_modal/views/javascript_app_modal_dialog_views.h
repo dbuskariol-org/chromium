@@ -43,10 +43,11 @@ class JavaScriptAppModalDialogViews : public NativeAppModalDialog,
   views::View* GetInitiallyFocusedView() override;
   bool ShouldShowCloseButton() const override;
   void WindowClosing() override;
-  views::Widget* GetWidget() override;
-  const views::Widget* GetWidget() const override;
 
  private:
+  // views::DialogDelegate:
+  const views::Widget* GetWidgetImpl() const override;
+
   // A pointer to the AppModalDialog that owns us.
   std::unique_ptr<JavaScriptAppModalDialog> parent_;
 

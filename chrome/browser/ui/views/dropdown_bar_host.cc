@@ -239,10 +239,6 @@ void DropdownBarHost::GetWidgetBounds(gfx::Rect* bounds) {
   *bounds = browser_view_->bounds();
 }
 
-views::Widget* DropdownBarHost::GetWidget() {
-  return host_.get();
-}
-
-const views::Widget* DropdownBarHost::GetWidget() const {
+const views::Widget* DropdownBarHost::GetWidgetImpl() const {
   return host_.get();
 }

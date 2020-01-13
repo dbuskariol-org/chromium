@@ -129,11 +129,7 @@ void JavaScriptAppModalDialogViews::WindowClosing() {
   parent_->OnClose();
 }
 
-views::Widget* JavaScriptAppModalDialogViews::GetWidget() {
-  return message_box_view_->GetWidget();
-}
-
-const views::Widget* JavaScriptAppModalDialogViews::GetWidget() const {
+const views::Widget* JavaScriptAppModalDialogViews::GetWidgetImpl() const {
   return message_box_view_->GetWidget();
 }
 

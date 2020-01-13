@@ -98,8 +98,6 @@ class DefaultWidgetDelegate : public WidgetDelegate {
 
   // WidgetDelegate:
   void DeleteDelegate() override { delete this; }
-  Widget* GetWidget() override { return widget_; }
-  const Widget* GetWidget() const override { return widget_; }
   bool ShouldAdvanceFocusToTopLevelWidget() const override {
     // In most situations where a Widget is used without a delegate the Widget
     // is used as a container, so that we want focus to advance to the top-level
@@ -108,6 +106,9 @@ class DefaultWidgetDelegate : public WidgetDelegate {
   }
 
  private:
+  // WidgetDelegate:
+  const Widget* GetWidgetImpl() const override { return widget_; }
+
   Widget* widget_;
 
   DISALLOW_COPY_AND_ASSIGN(DefaultWidgetDelegate);

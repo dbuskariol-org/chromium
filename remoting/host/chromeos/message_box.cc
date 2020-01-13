@@ -42,14 +42,15 @@ class MessageBox::Core : public views::DialogDelegateView {
   ui::ModalType GetModalType() const override;
   base::string16 GetWindowTitle() const override;
   views::View* GetContentsView() override;
-  views::Widget* GetWidget() override;
-  const views::Widget* GetWidget() const override;
   void DeleteDelegate() override;
 
   // Called by MessageBox::Core when it is destroyed.
   void OnMessageBoxDestroyed();
 
  private:
+  // views::DialogDelegateView:
+  const views::Widget* GetWidgetImpl() const override;
+
   const base::string16 title_label_;
   ResultCallback result_callback_;
   MessageBox* message_box_;
@@ -120,14 +121,6 @@ views::View* MessageBox::Core::GetContentsView() {
   return message_box_view_;
 }
 
-views::Widget* MessageBox::Core::GetWidget() {
-  return message_box_view_->GetWidget();
-}
-
-const views::Widget* MessageBox::Core::GetWidget() const {
-  return message_box_view_->GetWidget();
-}
-
 void MessageBox::Core::DeleteDelegate() {
   if (message_box_) {
     message_box_->core_ = nullptr;
@@ -140,6 +133,10 @@ void MessageBox::Core::OnMessageBoxDestroyed() {
   message_box_ = nullptr;
   // The callback should not be invoked after MessageBox is destroyed.
   result_callback_.Reset();
+}
+
+const views::Widget* MessageBox::Core::GetWidgetImpl() const {
+  return message_box_view_->GetWidget();
 }
 
 MessageBox::MessageBox(const base::string16& title_label,
