@@ -571,9 +571,7 @@ viz_source_set("perf_tests") {
 }
 
 fuzzer_test("hit_test_manager_fuzzer") {
-  sources = [
-    "hit_test/hit_test_manager_fuzzer.cc",
-  ]
+  sources = [ "hit_test/hit_test_manager_fuzzer.cc" ]
 
   libfuzzer_options = [ "max_len=81920" ]
 
