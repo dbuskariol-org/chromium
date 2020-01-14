@@ -769,6 +769,7 @@ public class CompositorViewHolder extends FrameLayout
     public void onBottomControlsHeightChanged(
             int bottomControlsHeight, int bottomControlsMinHeight) {
         if (mTabVisible == null) return;
+        getWebContents().notifyBrowserControlsHeightChanged();
         Point viewportSize = getViewportSize();
         setSize(mTabVisible.getWebContents(), mTabVisible.getContentView(), viewportSize.x,
                 viewportSize.y);
@@ -776,9 +777,9 @@ public class CompositorViewHolder extends FrameLayout
     }
 
     @Override
-    public void onTopControlsHeightChanged(
-            int topControlsHeight, int topControlsMinHeight, boolean controlsResizeView) {
+    public void onTopControlsHeightChanged(int topControlsHeight, int topControlsMinHeight) {
         if (mTabVisible == null) return;
+        getWebContents().notifyBrowserControlsHeightChanged();
         Point viewportSize = getViewportSize();
         setSize(mTabVisible.getWebContents(), mTabVisible.getContentView(), viewportSize.x,
                 viewportSize.y);

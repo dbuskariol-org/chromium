@@ -994,6 +994,13 @@ public class WebContentsImpl implements WebContents, RenderFrameHostDelegate, Wi
                 mNativeWebContentsAndroid, WebContentsImpl.this);
     }
 
+    @Override
+    public void notifyBrowserControlsHeightChanged() {
+        if (mNativeWebContentsAndroid == 0) return;
+        WebContentsImplJni.get().notifyBrowserControlsHeightChanged(
+                mNativeWebContentsAndroid, WebContentsImpl.this);
+    }
+
     private void checkNotDestroyed() {
         if (mNativeWebContentsAndroid != 0) return;
         throw new IllegalStateException(
@@ -1088,6 +1095,8 @@ public class WebContentsImpl implements WebContents, RenderFrameHostDelegate, Wi
         void setDisplayCutoutSafeArea(long nativeWebContentsAndroid, WebContentsImpl caller,
                 int top, int left, int bottom, int right);
         void notifyRendererPreferenceUpdate(long nativeWebContentsAndroid, WebContentsImpl caller);
+        void notifyBrowserControlsHeightChanged(
+                long nativeWebContentsAndroid, WebContentsImpl caller);
         boolean isBeingDestroyed(long nativeWebContentsAndroid, WebContentsImpl caller);
     }
 }

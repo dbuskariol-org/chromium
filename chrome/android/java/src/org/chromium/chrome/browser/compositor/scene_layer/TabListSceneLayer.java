@@ -138,7 +138,7 @@ public class TabListSceneLayer extends SceneLayer {
                     t.getBrightness(), t.showToolbar(), defaultThemeColor,
                     t.getToolbarBackgroundColor(), closeButtonColor, t.anonymizeToolbar(),
                     t.isTitleNeeded(), urlBarBackgroundId, t.getTextBoxBackgroundColor(),
-                    textBoxAlpha, t.getToolbarAlpha(), t.getToolbarYOffset() * dpToPx,
+                    textBoxAlpha, t.getToolbarAlpha(), fullscreenManager.getContentOffset(),
                     t.getSideBorderScale(), t.insetBorderVertical());
         }
         TabListSceneLayerJni.get().finishBuildingFrame(mNativePtr, TabListSceneLayer.this);
@@ -212,7 +212,7 @@ public class TabListSceneLayer extends SceneLayer {
                 boolean showToolbar, int defaultThemeColor, int toolbarBackgroundColor,
                 int closeButtonColor, boolean anonymizeToolbar, boolean showTabTitle,
                 int toolbarTextBoxResource, int toolbarTextBoxBackgroundColor,
-                float toolbarTextBoxAlpha, float toolbarAlpha, float toolbarYOffset,
+                float toolbarTextBoxAlpha, float toolbarAlpha, float contentOffset,
                 float sideBorderScale, boolean insetVerticalBorder);
 
         void putBackgroundLayer(long nativeTabListSceneLayer, TabListSceneLayer caller,

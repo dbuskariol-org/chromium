@@ -483,4 +483,11 @@ public interface WebContents extends Parcelable {
      * Notify that web preferences needs update for various properties.
      */
     void notifyRendererPreferenceUpdate();
+
+    /**
+     * Notify that the browser controls heights have changed. Any change to the top controls height,
+     * bottom controls height, top controls min-height, and bottom controls min-height will call
+     * this. Min-height is the minimum visible height the controls can have.
+     */
+    void notifyBrowserControlsHeightChanged();
 }

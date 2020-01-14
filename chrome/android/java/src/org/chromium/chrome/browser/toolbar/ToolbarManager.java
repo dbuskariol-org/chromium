@@ -634,6 +634,20 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
                 }
             }
 
+            @Override
+            public void onBrowserControlsOffsetChanged(Tab tab, int topControlsOffsetY,
+                    int bottomControlsOffsetY, int contentOffsetY) {
+                // For now, this is only useful for the offline indicator v2 feature.
+                if (ChromeFeatureList.isInitialized()
+                        && !ChromeFeatureList.isEnabled(ChromeFeatureList.OFFLINE_INDICATOR_V2)) {
+                    return;
+                }
+
+                // Controls need to be offset to match the composited layer, which is
+                // anchored at the bottom of the controls container.
+                setControlContainerTopMargin(getToolbarExtraYOffset());
+            }
+
             private void handleIPHForSuccessfulPageLoad(final Tab tab) {
                 if (mTextBubble != null) {
                     mTextBubble.dismiss();
@@ -1687,22 +1701,23 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
     }
 
     /**
-     * Sets the top margin for the control container.
-     * @param margin The margin in pixels.
-     */
-    public void setControlContainerTopMargin(int margin) {
-        final ViewGroup.MarginLayoutParams layoutParams =
-                ((ViewGroup.MarginLayoutParams) mControlContainer.getLayoutParams());
-        layoutParams.topMargin = margin;
-        mControlContainer.setLayoutParams(layoutParams);
-    }
-
-    /**
      * Gets the Toolbar view.
      */
     @Nullable
     public View getToolbarView() {
         return mControlContainer.findViewById(R.id.toolbar);
+    }
+
+    /**
+     * We use getTopControlOffset to position the top controls. However, the toolbar's height may
+     * be less than the total top controls height. If that's the case, this method will return the
+     * extra offset needed to align the toolbar at the bottom of the top controls.
+     * @return The extra Y offset for the toolbar in pixels.
+     */
+    private int getToolbarExtraYOffset() {
+        final int stripAndToolbarHeight = mActivity.getResources().getDimensionPixelSize(
+                R.dimen.tab_strip_and_toolbar_height);
+        return mActivity.getFullscreenManager().getTopControlsHeight() - stripAndToolbarHeight;
     }
 
     /**
@@ -2043,6 +2058,21 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         return mActivity.isTablet()
                 && mActivity.getResources().getConfiguration().keyboard
                 == Configuration.KEYBOARD_QWERTY;
+    }
+
+    /**
+     * Sets the top margin for the control container.
+     * @param margin The margin in pixels.
+     */
+    private void setControlContainerTopMargin(int margin) {
+        final ViewGroup.MarginLayoutParams layoutParams =
+                ((ViewGroup.MarginLayoutParams) mControlContainer.getLayoutParams());
+        if (layoutParams.topMargin == margin) {
+            return;
+        }
+
+        layoutParams.topMargin = margin;
+        mControlContainer.setLayoutParams(layoutParams);
     }
 
     private static class LoadProgressSimulator {

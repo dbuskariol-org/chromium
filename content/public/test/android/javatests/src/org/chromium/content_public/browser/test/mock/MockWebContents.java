@@ -271,4 +271,7 @@ public class MockWebContents implements WebContents {
 
     @Override
     public void notifyRendererPreferenceUpdate() {}
+
+    @Override
+    public void notifyBrowserControlsHeightChanged() {}
 }
