@@ -542,6 +542,7 @@ HRESULT GlsRunnerTestBase::FinishLogonProcess(
 
   Microsoft::WRL::ComPtr<ICredentialProviderCredential> local_testing_cred =
       testing_cred_;
+
   // Release ownership on the testing_cred_ which should be finishing.
   testing_cred_.Reset();
 
@@ -549,7 +550,10 @@ HRESULT GlsRunnerTestBase::FinishLogonProcess(
       expected_success, expected_credentials_change_fired,
       expected_error_message, local_testing_cred);
 
-  EXPECT_EQ(hr, S_OK);
+  if (!fake_os_user_manager()->DoesPasswordChangeFail()) {
+    EXPECT_EQ(hr, S_OK);
+  }
+
   if (FAILED(hr))
     return hr;
 
@@ -629,11 +633,21 @@ HRESULT GlsRunnerTestBase::FinishLogonProcessWithCred(
   if (FAILED(hr))
     return hr;
 
-  EXPECT_EQ(nullptr, status_text);
-  EXPECT_EQ(CPSI_SUCCESS, status_icon);
-  EXPECT_EQ(CPGSR_RETURN_CREDENTIAL_FINISHED, cpgsr);
-  EXPECT_LT(0u, cpcs.cbSerialization);
-  EXPECT_NE(nullptr, cpcs.rgbSerialization);
+  // Credentials not valid, login doesn't go through.
+  if (test_cred->AreCredentialsValid()) {
+    EXPECT_EQ(nullptr, status_text);
+    EXPECT_EQ(CPSI_SUCCESS, status_icon);
+    EXPECT_EQ(CPGSR_RETURN_CREDENTIAL_FINISHED, cpgsr);
+    EXPECT_LT(0u, cpcs.cbSerialization);
+    EXPECT_NE(nullptr, cpcs.rgbSerialization);
+  } else {
+    EXPECT_EQ(CPSI_ERROR, status_icon);
+    EXPECT_EQ(CPGSR_RETURN_NO_CREDENTIAL_FINISHED, cpgsr);
+    // The credential provider has not serialized a credential,
+    // but has completed its work. This will force the logon UI to
+    // return, which will call UnAdvise for all the credential providers.
+    return E_FAIL;
+  }
 
   // Check that values were propagated to the provider.
   if (expected_credentials_change_fired) {

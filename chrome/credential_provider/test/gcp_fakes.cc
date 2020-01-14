@@ -204,6 +204,10 @@ HRESULT FakeOSUserManager::ChangeUserPassword(const wchar_t* domain,
   DCHECK(old_password);
   DCHECK(new_password);
 
+  if (fail_change_password_) {
+    return failed_change_password_hr_;
+  }
+
   if (username_to_info_.count(username) > 0) {
     if (username_to_info_[username].password != old_password)
       return HRESULT_FROM_WIN32(ERROR_INVALID_PASSWORD);
