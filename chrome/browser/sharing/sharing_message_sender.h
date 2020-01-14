@@ -10,7 +10,6 @@
 #include <string>
 
 #include "base/callback.h"
-#include "base/macros.h"
 #include "base/memory/weak_ptr.h"
 #include "base/optional.h"
 #include "base/time/time.h"
@@ -26,7 +25,6 @@ class DeviceInfo;
 class LocalDeviceInfoProvider;
 }  // namespace syncer
 
-class SharingFCMSender;
 class SharingSyncPreference;
 enum class SharingDevicePlatform;
 enum class SharingSendMessageResult;
@@ -37,22 +35,49 @@ class SharingMessageSender {
       SharingSendMessageResult,
       std::unique_ptr<chrome_browser_sharing::ResponseMessage>)>;
 
+  // Delegate class used to swap the actual message sending implementation.
+  class SendMessageDelegate {
+   public:
+    using SendMessageCallback =
+        base::OnceCallback<void(SharingSendMessageResult,
+                                base::Optional<std::string>)>;
+    virtual ~SendMessageDelegate() = default;
+
+    virtual void DoSendMessageToDevice(
+        const syncer::DeviceInfo& device,
+        base::TimeDelta time_to_live,
+        chrome_browser_sharing::SharingMessage message,
+        SendMessageCallback callback) = 0;
+  };
+
+  // Delegate type used to send a message.
+  enum class DelegateType {
+    kFCM,
+  };
+
   SharingMessageSender(
-      std::unique_ptr<SharingFCMSender> sharing_fcm_sender,
       SharingSyncPreference* sync_prefs,
       syncer::LocalDeviceInfoProvider* local_device_info_provider);
+  SharingMessageSender(const SharingMessageSender&) = delete;
+  SharingMessageSender& operator=(const SharingMessageSender&) = delete;
   virtual ~SharingMessageSender();
 
   virtual void SendMessageToDevice(
       const syncer::DeviceInfo& device,
       base::TimeDelta response_timeout,
       chrome_browser_sharing::SharingMessage message,
+      DelegateType delegate_type,
       ResponseCallback callback);
 
   virtual void OnAckReceived(
       chrome_browser_sharing::MessageType message_type,
       const std::string& message_id,
       std::unique_ptr<chrome_browser_sharing::ResponseMessage> response);
+
+  // Registers the given |delegate| to send messages when SendMessageToDevice is
+  // called with |type|.
+  void RegisterSendDelegate(DelegateType type,
+                            std::unique_ptr<SendMessageDelegate> delegate);
 
  private:
   void OnMessageSent(base::TimeTicks start_time,
@@ -69,7 +94,6 @@ class SharingMessageSender {
       SharingSendMessageResult result,
       std::unique_ptr<chrome_browser_sharing::ResponseMessage> response);
 
-  std::unique_ptr<SharingFCMSender> fcm_sender_;
   SharingSyncPreference* sync_prefs_;
   syncer::LocalDeviceInfoProvider* local_device_info_provider_;
 
@@ -82,9 +106,10 @@ class SharingMessageSender {
   // Map of FCM message_id to platform of receiver device for metrics.
   std::map<std::string, SharingDevicePlatform> receiver_device_platform_;
 
-  base::WeakPtrFactory<SharingMessageSender> weak_ptr_factory_{this};
+  // Registered delegates to send messages.
+  std::map<DelegateType, std::unique_ptr<SendMessageDelegate>> send_delegates_;
 
-  DISALLOW_COPY_AND_ASSIGN(SharingMessageSender);
+  base::WeakPtrFactory<SharingMessageSender> weak_ptr_factory_{this};
 };
 
 #endif  // CHROME_BROWSER_SHARING_SHARING_MESSAGE_SENDER_H_

@@ -34,25 +34,57 @@ const char kSenderAuthSecret[] = "sender_auth_secret";
 const char kSenderMessageID[] = "sender_message_id";
 constexpr base::TimeDelta kTimeToLive = base::TimeDelta::FromSeconds(10);
 
+namespace {
+
 class MockSharingFCMSender : public SharingFCMSender {
  public:
-  MockSharingFCMSender() : SharingFCMSender(nullptr, nullptr, nullptr) {}
+  MockSharingFCMSender(
+      SharingSyncPreference* sync_preference,
+      syncer::LocalDeviceInfoProvider* local_device_info_provider)
+      : SharingFCMSender(
+            /*gcm_driver=*/nullptr,
+            sync_preference,
+            /*vapid_key_manager=*/nullptr,
+            local_device_info_provider) {}
+  MockSharingFCMSender(const MockSharingFCMSender&) = delete;
+  MockSharingFCMSender& operator=(const MockSharingFCMSender&) = delete;
   ~MockSharingFCMSender() override = default;
 
-  MOCK_METHOD4(SendMessageToDevice,
+  MOCK_METHOD4(SendMessageToTargetInfo,
                void(syncer::DeviceInfo::SharingTargetInfo target,
                     base::TimeDelta time_to_live,
                     SharingMessage message,
                     SendMessageCallback callback));
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(MockSharingFCMSender);
 };
+
+class MockSendMessageDelegate
+    : public SharingMessageSender::SendMessageDelegate {
+ public:
+  MockSendMessageDelegate() = default;
+  MockSendMessageDelegate(const MockSendMessageDelegate&) = delete;
+  MockSendMessageDelegate& operator=(const MockSendMessageDelegate&) = delete;
+  ~MockSendMessageDelegate() override = default;
+
+  MOCK_METHOD4(DoSendMessageToDevice,
+               void(const syncer::DeviceInfo& device,
+                    base::TimeDelta time_to_live,
+                    chrome_browser_sharing::SharingMessage message,
+                    SendMessageCallback callback));
+};
+
+}  // namespace
 
 class SharingMessageSenderTest : public testing::Test {
  public:
   SharingMessageSenderTest() {
     SharingSyncPreference::RegisterProfilePrefs(prefs_.registry());
+    auto mock_sharing_fcm_sender = std::make_unique<MockSharingFCMSender>(
+        &sharing_sync_preference_,
+        fake_device_info_sync_service_.GetLocalDeviceInfoProvider());
+    mock_sharing_fcm_sender_ = mock_sharing_fcm_sender.get();
+    sharing_message_sender_.RegisterSendDelegate(
+        SharingMessageSender::DelegateType::kFCM,
+        std::move(mock_sharing_fcm_sender));
   }
   ~SharingMessageSenderTest() override = default;
 
@@ -61,15 +93,13 @@ class SharingMessageSenderTest : public testing::Test {
       base::test::TaskEnvironment::TimeSource::MOCK_TIME};
   sync_preferences::TestingPrefServiceSyncable prefs_;
   syncer::FakeDeviceInfoSyncService fake_device_info_sync_service_;
-
-  testing::NiceMock<MockSharingFCMSender>* mock_sharing_fcm_sender_ =
-      new testing::NiceMock<MockSharingFCMSender>();
   SharingSyncPreference sharing_sync_preference_{
       &prefs_, &fake_device_info_sync_service_};
 
   SharingMessageSender sharing_message_sender_{
-      base::WrapUnique(mock_sharing_fcm_sender_), &sharing_sync_preference_,
+      &sharing_sync_preference_,
       fake_device_info_sync_service_.GetLocalDeviceInfoProvider()};
+  MockSharingFCMSender* mock_sharing_fcm_sender_;
 
   DISALLOW_COPY_AND_ASSIGN(SharingMessageSenderTest);
 };
@@ -133,13 +163,14 @@ TEST_F(SharingMessageSenderTest, MessageSent_AckTimedout) {
         kSenderMessageID, /*response=*/nullptr);
   };
 
-  ON_CALL(*mock_sharing_fcm_sender_,
-          SendMessageToDevice(testing::_, testing::_, testing::_, testing::_))
-      .WillByDefault(testing::Invoke(simulate_timeout));
+  EXPECT_CALL(
+      *mock_sharing_fcm_sender_,
+      SendMessageToTargetInfo(testing::_, testing::_, testing::_, testing::_))
+      .WillOnce(testing::Invoke(simulate_timeout));
 
   sharing_message_sender_.SendMessageToDevice(
       *device_info.get(), kTimeToLive, chrome_browser_sharing::SharingMessage(),
-      mock_callback.Get());
+      SharingMessageSender::DelegateType::kFCM, mock_callback.Get());
 }
 
 TEST_F(SharingMessageSenderTest, SendMessageToDevice_InternalError) {
@@ -174,13 +205,14 @@ TEST_F(SharingMessageSenderTest, SendMessageToDevice_InternalError) {
             kSenderMessageID, /*response=*/nullptr);
       };
 
-  ON_CALL(*mock_sharing_fcm_sender_,
-          SendMessageToDevice(testing::_, testing::_, testing::_, testing::_))
-      .WillByDefault(testing::Invoke(simulate_internal_error));
+  EXPECT_CALL(
+      *mock_sharing_fcm_sender_,
+      SendMessageToTargetInfo(testing::_, testing::_, testing::_, testing::_))
+      .WillOnce(testing::Invoke(simulate_internal_error));
 
   sharing_message_sender_.SendMessageToDevice(
       *device_info.get(), kTimeToLive, chrome_browser_sharing::SharingMessage(),
-      mock_callback.Get());
+      SharingMessageSender::DelegateType::kFCM, mock_callback.Get());
 }
 
 TEST_F(SharingMessageSenderTest, MessageSent_AckReceived) {
@@ -236,11 +268,30 @@ TEST_F(SharingMessageSenderTest, MessageSent_AckReceived) {
             kSenderMessageID, std::move(response_message));
       };
 
-  ON_CALL(*mock_sharing_fcm_sender_,
-          SendMessageToDevice(testing::_, testing::_, testing::_, testing::_))
-      .WillByDefault(testing::Invoke(simulate_expected_ack_message_received));
+  EXPECT_CALL(
+      *mock_sharing_fcm_sender_,
+      SendMessageToTargetInfo(testing::_, testing::_, testing::_, testing::_))
+      .WillOnce(testing::Invoke(simulate_expected_ack_message_received));
 
-  sharing_message_sender_.SendMessageToDevice(*device_info.get(), kTimeToLive,
-                                              std::move(sent_message),
-                                              mock_callback.Get());
+  sharing_message_sender_.SendMessageToDevice(
+      *device_info.get(), kTimeToLive, std::move(sent_message),
+      SharingMessageSender::DelegateType::kFCM, mock_callback.Get());
+}
+
+TEST_F(SharingMessageSenderTest, NonExistingDelegate) {
+  SharingMessageSender sharing_message_sender{
+      &sharing_sync_preference_,
+      fake_device_info_sync_service_.GetLocalDeviceInfoProvider()};
+
+  std::unique_ptr<syncer::DeviceInfo> device_info = CreateFakeDeviceInfo(
+      kReceiverGUID, kReceiverDeviceName, CreateSharingInfo());
+
+  base::MockCallback<SharingMessageSender::ResponseCallback> mock_callback;
+  EXPECT_CALL(mock_callback,
+              Run(testing::Eq(SharingSendMessageResult::kInternalError),
+                  testing::Eq(nullptr)));
+
+  sharing_message_sender.SendMessageToDevice(
+      *device_info.get(), kTimeToLive, chrome_browser_sharing::SharingMessage(),
+      SharingMessageSender::DelegateType::kFCM, mock_callback.Get());
 }

@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 #include "chrome/browser/sharing/sharing_message_sender.h"
+
 #include "base/guid.h"
 #include "base/task/post_task.h"
 #include "chrome/browser/sharing/sharing_constants.h"
-#include "chrome/browser/sharing/sharing_fcm_sender.h"
 #include "chrome/browser/sharing/sharing_metrics.h"
 #include "chrome/browser/sharing/sharing_sync_preference.h"
 #include "chrome/browser/sharing/sharing_utils.h"
@@ -15,11 +15,9 @@
 #include "content/public/browser/browser_task_traits.h"
 
 SharingMessageSender::SharingMessageSender(
-    std::unique_ptr<SharingFCMSender> sharing_fcm_sender,
     SharingSyncPreference* sync_prefs,
     syncer::LocalDeviceInfoProvider* local_device_info_provider)
-    : fcm_sender_(std::move(sharing_fcm_sender)),
-      sync_prefs_(sync_prefs),
+    : sync_prefs_(sync_prefs),
       local_device_info_provider_(local_device_info_provider) {}
 
 SharingMessageSender::~SharingMessageSender() = default;
@@ -28,7 +26,9 @@ void SharingMessageSender::SendMessageToDevice(
     const syncer::DeviceInfo& device,
     base::TimeDelta response_timeout,
     chrome_browser_sharing::SharingMessage message,
+    DelegateType delegate_type,
     ResponseCallback callback) {
+  DCHECK_GE(response_timeout, kAckTimeToLive);
   DCHECK(message.payload_case() !=
          chrome_browser_sharing::SharingMessage::kAckMessage);
 
@@ -39,28 +39,20 @@ void SharingMessageSender::SendMessageToDevice(
   SharingDevicePlatform receiver_device_platform =
       sync_prefs_->GetDevicePlatform(device.guid());
 
-  base::PostDelayedTask(
-      FROM_HERE, {base::TaskPriority::USER_VISIBLE, content::BrowserThread::UI},
-      base::BindOnce(&SharingMessageSender::InvokeSendMessageCallback,
-                     weak_ptr_factory_.GetWeakPtr(), message_guid, message_type,
-                     receiver_device_platform,
-                     SharingSendMessageResult::kAckTimeout,
-                     /*response=*/nullptr),
-      response_timeout);
-
-  // TODO(crbug/1015411): Here we assume the caller gets the device guid from
-  // GetDeviceCandidates, so both DeviceInfoTracker and LocalDeviceInfoProvider
-  // are already ready. It's better to queue up the message and wait until
-  // DeviceInfoTracker and LocalDeviceInfoProvider are ready.
-  auto target_info = sync_prefs_->GetTargetInfo(device.guid());
-  if (!target_info) {
+  auto delegate_iter = send_delegates_.find(delegate_type);
+  if (delegate_iter == send_delegates_.end()) {
     InvokeSendMessageCallback(message_guid, message_type,
                               receiver_device_platform,
-                              SharingSendMessageResult::kDeviceNotFound,
+                              SharingSendMessageResult::kInternalError,
                               /*response=*/nullptr);
     return;
   }
+  SendMessageDelegate* delegate = delegate_iter->second.get();
+  DCHECK(delegate);
 
+  // TODO(crbug/1015411): Here we assume the caller gets the |device| from
+  // GetDeviceCandidates, so LocalDeviceInfoProvider is ready. It's better to
+  // queue up the message and wait until LocalDeviceInfoProvider is ready.
   const syncer::DeviceInfo* local_device_info =
       local_device_info_provider_->GetLocalDeviceInfo();
   if (!local_device_info) {
@@ -71,15 +63,14 @@ void SharingMessageSender::SendMessageToDevice(
     return;
   }
 
-  base::Optional<syncer::DeviceInfo::SharingInfo> sharing_info =
-      sync_prefs_->GetLocalSharingInfo(local_device_info);
-  if (!sharing_info) {
-    InvokeSendMessageCallback(message_guid, message_type,
-                              receiver_device_platform,
-                              SharingSendMessageResult::kInternalError,
-                              /*response=*/nullptr);
-    return;
-  }
+  base::PostDelayedTask(
+      FROM_HERE, {base::TaskPriority::USER_VISIBLE, content::BrowserThread::UI},
+      base::BindOnce(&SharingMessageSender::InvokeSendMessageCallback,
+                     weak_ptr_factory_.GetWeakPtr(), message_guid, message_type,
+                     receiver_device_platform,
+                     SharingSendMessageResult::kAckTimeout,
+                     /*response=*/nullptr),
+      response_timeout);
 
   LogSharingDeviceLastUpdatedAge(
       message_type, base::Time::Now() - device.last_updated_timestamp());
@@ -89,15 +80,8 @@ void SharingMessageSender::SendMessageToDevice(
   message.set_sender_device_name(
       send_tab_to_self::GetSharingDeviceNames(local_device_info).full_name);
 
-  auto* sender_info = message.mutable_sender_info();
-  sender_info->set_fcm_token(sharing_info->vapid_target_info.fcm_token);
-  sender_info->set_p256dh(sharing_info->vapid_target_info.p256dh);
-  sender_info->set_auth_secret(sharing_info->vapid_target_info.auth_secret);
-
-  DCHECK_GE(response_timeout, kAckTimeToLive);
-  fcm_sender_->SendMessageToDevice(
-      std::move(*target_info), response_timeout - kAckTimeToLive,
-      std::move(message),
+  delegate->DoSendMessageToDevice(
+      device, response_timeout - kAckTimeToLive, std::move(message),
       base::BindOnce(&SharingMessageSender::OnMessageSent,
                      weak_ptr_factory_.GetWeakPtr(), base::TimeTicks::Now(),
                      message_guid, message_type, receiver_device_platform));
@@ -149,6 +133,13 @@ void SharingMessageSender::OnAckReceived(
   InvokeSendMessageCallback(
       message_guid, message_type, receiver_device_platform,
       SharingSendMessageResult::kSuccessful, std::move(response));
+}
+
+void SharingMessageSender::RegisterSendDelegate(
+    DelegateType type,
+    std::unique_ptr<SendMessageDelegate> delegate) {
+  auto result = send_delegates_.emplace(type, std::move(delegate));
+  DCHECK(result.second) << "Delegate type already registered";
 }
 
 void SharingMessageSender::InvokeSendMessageCallback(

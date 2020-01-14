@@ -174,7 +174,7 @@ void SharingFCMHandler::SendAckMessage(
   if (response)
     ack_message->set_allocated_response_message(response.release());
 
-  sharing_fcm_sender_->SendMessageToDevice(
+  sharing_fcm_sender_->SendMessageToTargetInfo(
       std::move(*target_info), kAckTimeToLive, std::move(sharing_message),
       base::BindOnce(&SharingFCMHandler::OnAckMessageSent,
                      weak_ptr_factory_.GetWeakPtr(),

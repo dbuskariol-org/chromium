@@ -19,7 +19,9 @@ constexpr char kTestMessageId[] = "test_message_id";
 class MockSharingMessageSender : public SharingMessageSender {
  public:
   MockSharingMessageSender()
-      : SharingMessageSender(nullptr, nullptr, nullptr) {}
+      : SharingMessageSender(
+            /*sync_prefs=*/nullptr,
+            /*local_device_info_provider=*/nullptr) {}
   ~MockSharingMessageSender() override = default;
 
   MOCK_METHOD3(
