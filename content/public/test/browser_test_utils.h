@@ -1655,6 +1655,11 @@ class PwnMessageHelper {
                         bool privileged,
                         bool request_unadjusted_movement);
 
+  // Sends FrameHostMsg_OpenURL
+  static void OpenURL(RenderProcessHost* process,
+                      int routing_id,
+                      const GURL& url);
+
  private:
   PwnMessageHelper();  // Not instantiable.
 

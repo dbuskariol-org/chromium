@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/webui/web_ui_browsertest_util.h"
+#include "content/public/test/web_ui_browsertest_util.h"
 
 #include <memory>
 #include <string>
@@ -81,6 +81,30 @@ class TestWebUIController : public WebUIController {
 };
 
 }  // namespace
+
+void AddUntrustedDataSource(BrowserContext* browser_context,
+                            const std::string& host,
+                            base::Optional<std::string> child_src,
+                            bool no_xfo) {
+  auto* untrusted_data_source =
+      WebUIDataSource::Create(GetChromeUntrustedUIURL(host).spec());
+  untrusted_data_source->SetRequestFilter(
+      base::BindRepeating([](const std::string& path) { return true; }),
+      base::BindRepeating(&GetResource));
+  if (child_src.has_value())
+    untrusted_data_source->OverrideContentSecurityPolicyChildSrc(
+        child_src.value());
+  if (no_xfo)
+    untrusted_data_source->DisableDenyXFrameOptions();
+
+  WebUIDataSource::Add(browser_context, untrusted_data_source);
+}
+
+// static
+GURL GetChromeUntrustedUIURL(const std::string& host_and_path) {
+  return GURL(std::string(content::kChromeUIUntrustedScheme) +
+              url::kStandardSchemeSeparator + host_and_path);
+}
 
 TestWebUIControllerFactory::TestWebUIControllerFactory() = default;
 

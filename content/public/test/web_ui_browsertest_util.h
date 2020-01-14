@@ -2,14 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_WEBUI_WEB_UI_BROWSERTEST_UTIL_H_
-#define CONTENT_BROWSER_WEBUI_WEB_UI_BROWSERTEST_UTIL_H_
+#ifndef CONTENT_PUBLIC_TEST_WEB_UI_BROWSERTEST_UTIL_H_
+#define CONTENT_PUBLIC_TEST_WEB_UI_BROWSERTEST_UTIL_H_
 
 #include <memory>
+#include <string>
+#include <utility>
 
-#include "content/browser/webui/content_web_ui_controller_factory.h"
+#include "base/optional.h"
+#include "content/public/browser/web_ui_controller_factory.h"
 
 namespace content {
+
+// Adds a DataSource for chrome-untrusted://|host| URLs.
+void AddUntrustedDataSource(
+    BrowserContext* browser_context,
+    const std::string& host,
+    base::Optional<std::string> child_src = base::nullopt,
+    bool no_xfo = false);
+
+// Returns chrome-untrusted://|host_and_path| as a GURL.
+GURL GetChromeUntrustedUIURL(const std::string& host_and_path);
 
 // Returns WebUIControllers whose CSPs and headers can be controlled through
 // query parameters.
@@ -46,4 +59,4 @@ class TestWebUIControllerFactory : public WebUIControllerFactory {
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_WEBUI_WEB_UI_BROWSERTEST_UTIL_H_
+#endif  // CONTENT_PUBLIC_TEST_WEB_UI_BROWSERTEST_UTIL_H_
