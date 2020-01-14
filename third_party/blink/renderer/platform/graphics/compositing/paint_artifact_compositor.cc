@@ -447,29 +447,19 @@ PaintArtifactCompositor::PendingLayer::PendingLayer(
   paint_chunk_indices.push_back(chunk_index);
 }
 
-void PaintArtifactCompositor::PendingLayer::Merge(
-    const PendingLayer& guest,
-    const PropertyTreeState& merged_state) {
-  DCHECK(compositing_type != kRequiresOwnLayer &&
-         guest.compositing_type != kRequiresOwnLayer);
-  DCHECK_EQ(&property_tree_state.Effect(), &merged_state.Effect());
+bool PaintArtifactCompositor::PendingLayer::Merge(const PendingLayer& guest) {
+  if (!CanMerge(guest, guest.property_tree_state, &property_tree_state,
+                &bounds))
+    return false;
 
   paint_chunk_indices.AppendVector(guest.paint_chunk_indices);
-  if (merged_state != property_tree_state) {
-    FloatClipRect new_home_bounds(bounds);
-    GeometryMapper::LocalToAncestorVisualRect(property_tree_state, merged_state,
-                                              new_home_bounds);
-    bounds = new_home_bounds.Rect();
-    property_tree_state = merged_state;
-  }
-  FloatClipRect guest_bounds_in_home(guest.bounds);
-  GeometryMapper::LocalToAncestorVisualRect(
-      guest.property_tree_state, property_tree_state, guest_bounds_in_home);
-  bounds.Unite(guest_bounds_in_home.Rect());
+
   // TODO(crbug.com/701991): Upgrade GeometryMapper.
   // If we knew the new bounds is enclosed by the mapped opaque region of
   // the guest layer, we can deduce the merged layer being opaque too, and
   // update rect_known_to_be_opaque accordingly.
+
+  return true;
 }
 
 void PaintArtifactCompositor::PendingLayer::Upcast(
@@ -570,19 +560,55 @@ base::Optional<PropertyTreeState> CanUpcastWith(const PropertyTreeState& guest,
   return PropertyTreeState(*upcast_transform, clip_lca, home.Effect());
 }
 
-base::Optional<PropertyTreeState>
-PaintArtifactCompositor::PendingLayer::CanMerge(
+// We will only allow merging if the merged-area:home-area+guest-area doesn't
+// exceed the ratio |kMergingSparsityTolerance|:1.
+static constexpr float kMergeSparsityTolerance = 6;
+
+bool PaintArtifactCompositor::PendingLayer::CanMerge(
     const PendingLayer& guest,
-    const PropertyTreeState& guest_state) const {
+    const PropertyTreeState& guest_state,
+    PropertyTreeState* out_merged_state,
+    FloatRect* out_merged_bounds) const {
   if (compositing_type == kRequiresOwnLayer ||
       guest.compositing_type == kRequiresOwnLayer) {
-    return base::nullopt;
+    return false;
   }
   if (&property_tree_state.Effect().Unalias() !=
       &guest_state.Effect().Unalias()) {
-    return base::nullopt;
+    return false;
   }
-  return CanUpcastWith(guest_state, property_tree_state);
+
+  const base::Optional<PropertyTreeState>& merged_state =
+      CanUpcastWith(guest_state, property_tree_state);
+  if (!merged_state)
+    return false;
+
+  FloatClipRect new_home_bounds(bounds);
+  GeometryMapper::LocalToAncestorVisualRect(property_tree_state, *merged_state,
+                                            new_home_bounds);
+  FloatClipRect new_guest_bounds(guest.bounds);
+  GeometryMapper::LocalToAncestorVisualRect(guest_state, *merged_state,
+                                            new_guest_bounds);
+
+  FloatRect merged_bounds =
+      UnionRect(new_home_bounds.Rect(), new_guest_bounds.Rect());
+  // Don't check for sparcity if we may further decomposite the effect, so that
+  // the merged layer may be merged to other layers with the decomposited
+  // effect, which is often better than not merging even if the merged layer is
+  // sparse because we may create less composited effects and render surfaces.
+  if (guest_state.Effect().IsRoot() ||
+      guest_state.Effect().HasDirectCompositingReasons()) {
+    float sum_area = new_home_bounds.Rect().Size().Area() +
+                     new_guest_bounds.Rect().Size().Area();
+    if (merged_bounds.Size().Area() > kMergeSparsityTolerance * sum_area)
+      return false;
+  }
+
+  if (out_merged_state)
+    *out_merged_state = *merged_state;
+  if (out_merged_bounds)
+    *out_merged_bounds = merged_bounds;
+  return true;
 }
 
 // Returns nullptr if 'ancestor' is not a strict ancestor of 'node'.
@@ -742,10 +768,10 @@ void PaintArtifactCompositor::LayerizeGroup(
   // Every paint chunk will be visited by the main loop below for exactly
   // once, except for chunks that enter or exit groups (case B & C below). For
   // normal chunk visit (case A), the only cost is determining squash, which
-  // costs O(qd), where d came from "canUpcastTo" and geometry mapping.
+  // costs O(qd), where d came from |CanUpcastWith| and geometry mapping.
   // Subtotal: O(pqd)
   // For group entering and exiting, it could cost O(d) for each group, for
-  // searching the shallowest subgroup (strictChildOfAlongPath), thus O(d^2)
+  // searching the shallowest subgroup (StrictChildOfAlongPath), thus O(d^2)
   // in total.
   // Also when exiting group, the group may be decomposited and squashed to a
   // previous layer. Again finding the host costs O(qd). Merging would cost
@@ -806,10 +832,7 @@ void PaintArtifactCompositor::LayerizeGroup(
     for (wtf_size_t candidate_index = pending_layers_.size() - 1;
          candidate_index-- > first_layer_in_current_group;) {
       PendingLayer& candidate_layer = pending_layers_[candidate_index];
-      if (const base::Optional<PropertyTreeState>& merged_state =
-              candidate_layer.CanMerge(new_layer,
-                                       new_layer.property_tree_state)) {
-        candidate_layer.Merge(new_layer, *merged_state);
+      if (candidate_layer.Merge(new_layer)) {
         pending_layers_.pop_back();
         break;
       }
