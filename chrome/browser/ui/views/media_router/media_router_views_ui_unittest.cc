@@ -15,7 +15,6 @@
 #include "chrome/browser/media/router/providers/wired_display/wired_display_media_route_provider.h"
 #include "chrome/browser/media/router/test/mock_media_router.h"
 #include "chrome/browser/media/router/test/test_helper.h"
-#include "chrome/browser/sessions/session_tab_helper.h"
 #include "chrome/browser/sessions/session_tab_helper_factory.h"
 #include "chrome/browser/ui/media_router/cast_dialog_controller.h"
 #include "chrome/browser/ui/media_router/media_cast_mode.h"
@@ -24,6 +23,7 @@
 #include "chrome/common/webui_url_constants.h"
 #include "chrome/grit/generated_resources.h"
 #include "chrome/test/base/chrome_render_view_host_test_harness.h"
+#include "components/sessions/content/session_tab_helper.h"
 #include "content/public/browser/browser_context.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -181,8 +181,8 @@ class MediaRouterViewsUITest : public ChromeRenderViewHostTestHarness {
   }
 
   void StartTabCasting(bool is_incognito) {
-    MediaSource media_source =
-        MediaSource::ForTab(SessionTabHelper::IdForTab(web_contents()).id());
+    MediaSource media_source = MediaSource::ForTab(
+        sessions::SessionTabHelper::IdForTab(web_contents()).id());
     EXPECT_CALL(
         *mock_router_,
         CreateRouteInternal(media_source.id(), kSinkId, _, web_contents(), _,

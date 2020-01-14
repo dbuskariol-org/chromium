@@ -34,7 +34,6 @@
 #include "chrome/browser/search/search_suggest/search_suggest_service.h"
 #include "chrome/browser/search/search_suggest/search_suggest_service_factory.h"
 #include "chrome/browser/search_engines/template_url_service_factory.h"
-#include "chrome/browser/sessions/session_tab_helper.h"
 #include "chrome/browser/signin/identity_manager_factory.h"
 #include "chrome/browser/sync/profile_sync_service_factory.h"
 #include "chrome/browser/ui/bookmarks/bookmark_stats.h"
@@ -68,6 +67,7 @@
 #include "components/omnibox/common/omnibox_features.h"
 #include "components/search/search.h"
 #include "components/search_engines/template_url_service.h"
+#include "components/sessions/content/session_tab_helper.h"
 #include "components/signin/public/identity_manager/identity_manager.h"
 #include "components/strings/grit/components_strings.h"
 #include "components/sync/base/user_selectable_type.h"
@@ -907,7 +907,7 @@ void SearchTabHelper::OpenAutocompleteMatch(
       /*selected_index=*/line,
       /*disposition=*/disposition,
       /*is_paste_and_go=*/false,
-      /*tab_id=*/SessionTabHelper::IdForTab(web_contents_),
+      /*tab_id=*/sessions::SessionTabHelper::IdForTab(web_contents_),
       /*current_page_classification=*/metrics::OmniboxEventProto::NTP_REALBOX,
       /*elapsed_time_since_user_first_modified_omnibox=*/
       elapsed_time_since_first_autocomplete_query,

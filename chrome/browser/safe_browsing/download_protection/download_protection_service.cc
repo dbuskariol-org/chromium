@@ -23,11 +23,11 @@
 #include "chrome/browser/safe_browsing/download_protection/download_url_sb_client.h"
 #include "chrome/browser/safe_browsing/download_protection/ppapi_download_request.h"
 #include "chrome/browser/safe_browsing/services_delegate.h"
-#include "chrome/browser/sessions/session_tab_helper.h"
 #include "chrome/common/safe_browsing/binary_feature_extractor.h"
 #include "chrome/common/url_constants.h"
 #include "components/google/core/common/google_util.h"
 #include "components/safe_browsing/core/common/safebrowsing_switches.h"
+#include "components/sessions/content/session_tab_helper.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
@@ -403,7 +403,8 @@ DownloadProtectionService::IdentifyReferrerChain(
   content::WebContents* web_contents =
       content::DownloadItemUtils::GetWebContents(
           const_cast<download::DownloadItem*>(&item));
-  SessionID download_tab_id = SessionTabHelper::IdForTab(web_contents);
+  SessionID download_tab_id =
+      sessions::SessionTabHelper::IdForTab(web_contents);
   UMA_HISTOGRAM_BOOLEAN(
       "SafeBrowsing.ReferrerHasInvalidTabID.DownloadAttribution",
       !download_tab_id.is_valid());
@@ -459,7 +460,7 @@ DownloadProtectionService::IdentifyReferrerChain(
   std::unique_ptr<ReferrerChain> referrer_chain =
       std::make_unique<ReferrerChain>();
 
-  SessionID tab_id = SessionTabHelper::IdForTab(item.web_contents);
+  SessionID tab_id = sessions::SessionTabHelper::IdForTab(item.web_contents);
   UMA_HISTOGRAM_BOOLEAN(
       "SafeBrowsing.ReferrerHasInvalidTabID.NativeFileSystemWriteAttribution",
       !tab_id.is_valid());

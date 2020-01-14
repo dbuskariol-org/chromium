@@ -32,7 +32,6 @@
 #include "chrome/browser/sessions/session_data_deleter.h"
 #include "chrome/browser/sessions/session_restore.h"
 #include "chrome/browser/sessions/session_service_utils.h"
-#include "chrome/browser/sessions/session_tab_helper.h"
 #include "chrome/browser/sessions/tab_restore_service_factory.h"
 #include "chrome/browser/ui/browser_list.h"
 #include "chrome/browser/ui/browser_tabstrip.h"
@@ -42,6 +41,7 @@
 #include "chrome/browser/ui/tabs/tab_group_model.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "components/sessions/content/content_serialized_navigation_builder.h"
+#include "components/sessions/content/session_tab_helper.h"
 #include "components/sessions/core/session_command.h"
 #include "components/sessions/core/session_constants.h"
 #include "components/sessions/core/session_types.h"
@@ -345,8 +345,8 @@ void SessionService::WindowClosed(const SessionID& window_id) {
 }
 
 void SessionService::TabInserted(WebContents* contents) {
-  SessionTabHelper* session_tab_helper =
-      SessionTabHelper::FromWebContents(contents);
+  sessions::SessionTabHelper* session_tab_helper =
+      sessions::SessionTabHelper::FromWebContents(contents);
   if (!ShouldTrackChangesToWindow(session_tab_helper->window_id()))
     return;
   SetTabWindow(session_tab_helper->window_id(),
@@ -378,8 +378,8 @@ void SessionService::TabClosing(WebContents* contents) {
   content::SessionStorageNamespace* session_storage_namespace =
       contents->GetController().GetDefaultSessionStorageNamespace();
   session_storage_namespace->SetShouldPersist(false);
-  SessionTabHelper* session_tab_helper =
-      SessionTabHelper::FromWebContents(contents);
+  sessions::SessionTabHelper* session_tab_helper =
+      sessions::SessionTabHelper::FromWebContents(contents);
   TabClosed(session_tab_helper->window_id(),
             session_tab_helper->session_id(),
             contents->GetClosedByUserGesture());
@@ -414,7 +414,8 @@ void SessionService::SetWindowAppName(
 }
 
 void SessionService::TabRestored(WebContents* tab, bool pinned) {
-  SessionTabHelper* session_tab_helper = SessionTabHelper::FromWebContents(tab);
+  sessions::SessionTabHelper* session_tab_helper =
+      sessions::SessionTabHelper::FromWebContents(tab);
   if (!ShouldTrackChangesToWindow(session_tab_helper->window_id()))
     return;
 
@@ -663,7 +664,8 @@ void SessionService::BuildCommandsForTab(
   DCHECK(tab);
   DCHECK(window_id.is_valid());
 
-  SessionTabHelper* session_tab_helper = SessionTabHelper::FromWebContents(tab);
+  sessions::SessionTabHelper* session_tab_helper =
+      sessions::SessionTabHelper::FromWebContents(tab);
   const SessionID& session_id(session_tab_helper->session_id());
   base_session_service_->AppendRebuildCommand(
       sessions::CreateSetTabWindowCommand(window_id, session_id));

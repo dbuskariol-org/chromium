@@ -2,28 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_SESSIONS_SESSION_TAB_HELPER_H_
-#define CHROME_BROWSER_SESSIONS_SESSION_TAB_HELPER_H_
+#ifndef COMPONENTS_SESSIONS_CONTENT_SESSION_TAB_HELPER_H_
+#define COMPONENTS_SESSIONS_CONTENT_SESSION_TAB_HELPER_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
-#include "chrome/common/buildflags.h"
 #include "components/sessions/core/session_id.h"
+#include "components/sessions/core/sessions_export.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
 
 namespace sessions {
 class SessionTabHelperDelegate;
-}  // namespace sessions
 
 // This class keeps the extension API's windowID up to date with the current
 // window of the tab and observes navigation events.
-class SessionTabHelper : public content::WebContentsObserver,
-                         public content::WebContentsUserData<SessionTabHelper> {
+class SESSIONS_EXPORT SessionTabHelper
+    : public content::WebContentsObserver,
+      public content::WebContentsUserData<SessionTabHelper> {
  public:
   using DelegateLookup =
-      base::RepeatingCallback<sessions::SessionTabHelperDelegate*(
-          content::WebContents*)>;
+      base::RepeatingCallback<SessionTabHelperDelegate*(content::WebContents*)>;
 
   ~SessionTabHelper() override;
 
@@ -41,7 +40,7 @@ class SessionTabHelper : public content::WebContentsObserver,
   // was used as the contents of a tab), returns a tab id. This value is
   // immutable for a given tab. It will be unique across Chrome within the
   // current session, but may be re-used across sessions. Returns
-  // SessionID::InvalidValue() for a NULL WebContents or if the WebContents has
+  // SessionID::InvalidValue() for a null WebContents or if the WebContents has
   // no SessionTabHelper.
   static SessionID IdForTab(const content::WebContents* tab);
 
@@ -51,12 +50,11 @@ class SessionTabHelper : public content::WebContentsObserver,
   // being dragged between Browser windows, returns the old window's id value.
   // If the WebContents has a SessionTabHelper but has never been attached to a
   // Browser window, returns an id value that is different from that of any
-  // Browser. Returns SessionID::InvalidValue() for a NULL WebContents or if the
+  // Browser. Returns SessionID::InvalidValue() for a null WebContents or if the
   // WebContents has no SessionTabHelper.
   static SessionID IdForWindowContainingTab(const content::WebContents* tab);
 
   // content::WebContentsObserver:
-#if BUILDFLAG(ENABLE_SESSION_SERVICE)
   void UserAgentOverrideSet(const std::string& user_agent) override;
   void NavigationEntryCommitted(
       const content::LoadCommittedDetails& load_details) override;
@@ -65,7 +63,6 @@ class SessionTabHelper : public content::WebContentsObserver,
   void NavigationEntriesDeleted() override;
   void NavigationEntryChanged(
       const content::EntryChangedDetails& change_details) override;
-#endif
 
  private:
   friend class content::WebContentsUserData<SessionTabHelper>;
@@ -88,4 +85,6 @@ class SessionTabHelper : public content::WebContentsObserver,
   DISALLOW_COPY_AND_ASSIGN(SessionTabHelper);
 };
 
-#endif  // CHROME_BROWSER_SESSIONS_SESSION_TAB_HELPER_H_
+}  // namespace sessions
+
+#endif  // COMPONENTS_SESSIONS_CONTENT_SESSION_TAB_HELPER_H_

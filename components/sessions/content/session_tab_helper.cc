@@ -2,9 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/sessions/session_tab_helper.h"
+#include "components/sessions/content/session_tab_helper.h"
 
-#include "chrome/browser/profiles/profile.h"
 #include "components/sessions/content/content_serialized_navigation_builder.h"
 #include "components/sessions/content/session_tab_helper_delegate.h"
 #include "components/sessions/core/serialized_navigation_entry.h"
@@ -15,6 +14,8 @@
 #if BUILDFLAG(ENABLE_EXTENSIONS)
 #include "extensions/common/extension_messages.h"
 #endif
+
+namespace sessions {
 
 SessionTabHelper::SessionTabHelper(content::WebContents* contents,
                                    DelegateLookup lookup)
@@ -48,7 +49,7 @@ void SessionTabHelper::SetWindowID(const SessionID& id) {
 // static
 SessionID SessionTabHelper::IdForTab(const content::WebContents* tab) {
   const SessionTabHelper* session_tab_helper =
-      tab ? SessionTabHelper::FromWebContents(tab) : NULL;
+      tab ? SessionTabHelper::FromWebContents(tab) : nullptr;
   return session_tab_helper ? session_tab_helper->session_id()
                             : SessionID::InvalidValue();
 }
@@ -57,14 +58,13 @@ SessionID SessionTabHelper::IdForTab(const content::WebContents* tab) {
 SessionID SessionTabHelper::IdForWindowContainingTab(
     const content::WebContents* tab) {
   const SessionTabHelper* session_tab_helper =
-      tab ? SessionTabHelper::FromWebContents(tab) : NULL;
+      tab ? SessionTabHelper::FromWebContents(tab) : nullptr;
   return session_tab_helper ? session_tab_helper->window_id()
                             : SessionID::InvalidValue();
 }
 
-#if BUILDFLAG(ENABLE_SESSION_SERVICE)
 void SessionTabHelper::UserAgentOverrideSet(const std::string& user_agent) {
-  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  SessionTabHelperDelegate* delegate = GetDelegate();
   if (delegate) {
     delegate->SetTabUserAgentOverride(window_id(), session_id(), user_agent);
   }
@@ -72,7 +72,7 @@ void SessionTabHelper::UserAgentOverrideSet(const std::string& user_agent) {
 
 void SessionTabHelper::NavigationEntryCommitted(
     const content::LoadCommittedDetails& load_details) {
-  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  SessionTabHelperDelegate* delegate = GetDelegate();
   if (!delegate)
     return;
 
@@ -80,8 +80,8 @@ void SessionTabHelper::NavigationEntryCommitted(
       web_contents()->GetController().GetCurrentEntryIndex();
   delegate->SetSelectedNavigationIndex(window_id(), session_id(),
                                        current_entry_index);
-  const sessions::SerializedNavigationEntry navigation =
-      sessions::ContentSerializedNavigationBuilder::FromNavigationEntry(
+  const SerializedNavigationEntry navigation =
+      ContentSerializedNavigationBuilder::FromNavigationEntry(
           current_entry_index,
           web_contents()->GetController().GetEntryAtIndex(current_entry_index));
   delegate->UpdateTabNavigation(window_id(), session_id(), navigation);
@@ -89,7 +89,7 @@ void SessionTabHelper::NavigationEntryCommitted(
 
 void SessionTabHelper::NavigationListPruned(
     const content::PrunedDetails& pruned_details) {
-  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  SessionTabHelperDelegate* delegate = GetDelegate();
   if (!delegate)
     return;
 
@@ -98,7 +98,7 @@ void SessionTabHelper::NavigationListPruned(
 }
 
 void SessionTabHelper::NavigationEntriesDeleted() {
-  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  SessionTabHelperDelegate* delegate = GetDelegate();
   if (!delegate)
     return;
 
@@ -107,19 +107,20 @@ void SessionTabHelper::NavigationEntriesDeleted() {
 
 void SessionTabHelper::NavigationEntryChanged(
     const content::EntryChangedDetails& change_details) {
-  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  SessionTabHelperDelegate* delegate = GetDelegate();
   if (!delegate)
     return;
 
-  const sessions::SerializedNavigationEntry navigation =
-      sessions::ContentSerializedNavigationBuilder::FromNavigationEntry(
+  const SerializedNavigationEntry navigation =
+      ContentSerializedNavigationBuilder::FromNavigationEntry(
           change_details.index, change_details.changed_entry);
   delegate->UpdateTabNavigation(window_id(), session_id(), navigation);
 }
-#endif
 
-sessions::SessionTabHelperDelegate* SessionTabHelper::GetDelegate() {
+SessionTabHelperDelegate* SessionTabHelper::GetDelegate() {
   return delegate_lookup_ ? delegate_lookup_.Run(web_contents()) : nullptr;
 }
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(SessionTabHelper)
+
+}  // namespace sessions

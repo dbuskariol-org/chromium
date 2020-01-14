@@ -7,9 +7,6 @@
 #include <memory>
 
 #include "content/public/browser/navigation_entry.h"
-// TODO(sky): remove this, only necessary until another file includes
-// session_service.h.
-#include "components/sessions/content/session_tab_helper_delegate.h"
 
 namespace sessions {
 const char kTaskIdKey[] = "task_id_data";

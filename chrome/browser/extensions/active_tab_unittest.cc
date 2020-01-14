@@ -19,10 +19,10 @@
 #include "chrome/browser/extensions/tab_helper.h"
 #include "chrome/browser/extensions/test_extension_system.h"
 #include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/sessions/session_tab_helper.h"
 #include "chrome/common/webui_url_constants.h"
 #include "chrome/test/base/chrome_render_view_host_test_harness.h"
 #include "chrome/test/base/testing_profile.h"
+#include "components/sessions/content/session_tab_helper.h"
 #include "components/version_info/version_info.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/navigation_details.h"
@@ -157,7 +157,9 @@ class ActiveTabTest : public ChromeRenderViewHostTestHarness {
     ChromeRenderViewHostTestHarness::TearDown();
   }
 
-  int tab_id() { return SessionTabHelper::IdForTab(web_contents()).id(); }
+  int tab_id() {
+    return sessions::SessionTabHelper::IdForTab(web_contents()).id();
+  }
 
   ActiveTabPermissionGranter* active_tab_permission_granter() {
     return extensions::TabHelper::FromWebContents(web_contents())->
@@ -223,7 +225,8 @@ class ActiveTabTest : public ChromeRenderViewHostTestHarness {
   bool IsGrantedForTab(const Extension* extension,
                        const content::WebContents* web_contents) {
     return extension->permissions_data()->HasAPIPermissionForTab(
-        SessionTabHelper::IdForTab(web_contents).id(), APIPermission::kTab);
+        sessions::SessionTabHelper::IdForTab(web_contents).id(),
+        APIPermission::kTab);
   }
 
   // TODO(justinlin): Remove when tabCapture is moved to stable.
@@ -710,7 +713,8 @@ TEST_F(ActiveTabWithServiceTest, FileURLs) {
       TabHelper::FromWebContents(web_contents.get())
           ->active_tab_permission_granter();
   ASSERT_TRUE(permission_granter);
-  const int tab_id = SessionTabHelper::IdForTab(web_contents.get()).id();
+  const int tab_id =
+      sessions::SessionTabHelper::IdForTab(web_contents.get()).id();
   EXPECT_NE(extension_misc::kUnknownTabId, tab_id);
 
   EXPECT_FALSE(extension->permissions_data()->CanCaptureVisiblePage(

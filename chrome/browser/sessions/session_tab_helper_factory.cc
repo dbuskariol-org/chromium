@@ -2,7 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/sessions/session_tab_helper.h"
+#include "components/sessions/content/session_tab_helper.h"
+
+#include "chrome/common/buildflags.h"
 
 #if BUILDFLAG(ENABLE_SESSION_SERVICE)
 #include "chrome/browser/profiles/profile.h"
@@ -24,14 +26,14 @@ sessions::SessionTabHelperDelegate* GetSessionTabHelperDelegate(
 }  // namespace
 
 void CreateSessionServiceTabHelper(content::WebContents* contents) {
-  if (SessionTabHelper::FromWebContents(contents))
+  if (sessions::SessionTabHelper::FromWebContents(contents))
     return;
 
 #if BUILDFLAG(ENABLE_SESSION_SERVICE)
-  SessionTabHelper::DelegateLookup lookup =
+  sessions::SessionTabHelper::DelegateLookup lookup =
       base::BindRepeating(&GetSessionTabHelperDelegate);
 #else
-  SessionTabHelper::DelegateLookup lookup;
+  sessions::SessionTabHelper::DelegateLookup lookup;
 #endif
-  SessionTabHelper::CreateForWebContents(contents, std::move(lookup));
+  sessions::SessionTabHelper::CreateForWebContents(contents, std::move(lookup));
 }
