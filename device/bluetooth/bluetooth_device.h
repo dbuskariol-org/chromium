@@ -708,7 +708,7 @@ class DEVICE_BLUETOOTH_EXPORT BluetoothDevice {
 
   // Raw pointer to adapter owning this device object. Subclasses use platform
   // specific pointers via adapter_.
-  BluetoothAdapter* adapter_;
+  BluetoothAdapter* const adapter_;
 
   // Callbacks for pending success and error result of CreateGattConnection.
   std::vector<GattConnectionCallback> create_gatt_connection_success_callbacks_;

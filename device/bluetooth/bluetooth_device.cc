@@ -346,11 +346,22 @@ base::Optional<int8_t> BluetoothDevice::GetInquiryTxPower() const {
 void BluetoothDevice::CreateGattConnection(
     GattConnectionCallback callback,
     ConnectErrorCallback error_callback) {
+  const bool connection_already_pending =
+      !create_gatt_connection_success_callbacks_.empty();
+
   create_gatt_connection_success_callbacks_.push_back(std::move(callback));
   create_gatt_connection_error_callbacks_.push_back(std::move(error_callback));
 
-  if (IsGattConnected())
+  if (IsGattConnected()) {
+    DCHECK(!connection_already_pending);
     return DidConnectGatt();
+  }
+
+  if (connection_already_pending) {
+    // The correct callback will be run when the existing connection attempt
+    // completes.
+    return;
+  }
 
   CreateGattConnectionImpl();
 }
