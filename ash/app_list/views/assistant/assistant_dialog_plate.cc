@@ -288,12 +288,11 @@ void AssistantDialogPlate::InitLayout() {
       views::BoxLayout::CrossAxisAlignment::kCenter);
 
   // Molecule icon.
-  molecule_icon_ = LogoView::Create();
+  molecule_icon_ = AddChildView(LogoView::Create());
   molecule_icon_->SetID(AssistantViewID::kModuleIcon);
   molecule_icon_->SetPreferredSize(gfx::Size(kIconSizeDip, kIconSizeDip));
   molecule_icon_->SetState(LogoView::State::kMoleculeWavy,
                            /*animate=*/false);
-  AddChildView(molecule_icon_);
 
   // Input modality layout container.
   input_modality_layout_container_ = new views::View();
