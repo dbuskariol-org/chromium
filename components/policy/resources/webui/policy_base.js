@@ -2,62 +2,60 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-cr.exportPath('policy');
-
-/**
- * @typedef {{
- *    [id: string]: {
- *      name: string,
- *      policyNames: !Array<string>,
- * }}
- */
-policy.PolicyNamesResponse;
-
-/**
- * @typedef {!Array<{
- *  name: string,
- *  id: ?String,
- *  policies: {[name: string]: policy.Policy}
- * }>}
- */
-policy.PolicyValuesResponse;
-
-/**
- * @typedef {{
- *    level: string,
- *    scope: string,
- *    source: string,
- *    value: any,
- * }}
- */
-policy.Conflict;
-
-/**
- * @typedef {{
- *    ignored?: boolean,
- *    name: string,
- *    level: string,
- *    link: ?string,
- *    scope: string,
- *    source: string,
- *    error: string,
- *    value: any,
- *    allSourcesMerged: ?boolean,
- *    conflicts: ?Array<!Conflict>,
- * }}
- */
-policy.Policy;
-
-/**
- * @typedef {{
- *     id: ?string,
- *     name: string,
- *     policies: !Array<!Policy>
- * }}
- */
-policy.PolicyTableModel;
-
 cr.define('policy', function() {
+  /**
+   * @typedef {{
+   *    [id: string]: {
+   *      name: string,
+   *      policyNames: !Array<string>,
+   * }}
+   */
+  let PolicyNamesResponse;
+
+  /**
+   * @typedef {!Array<{
+   *  name: string,
+   *  id: ?String,
+   *  policies: {[name: string]: policy.Policy}
+   * }>}
+   */
+  let PolicyValuesResponse;
+
+  /**
+   * @typedef {{
+   *    level: string,
+   *    scope: string,
+   *    source: string,
+   *    value: any,
+   * }}
+   */
+  let Conflict;
+
+  /**
+   * @typedef {{
+   *    ignored?: boolean,
+   *    name: string,
+   *    level: string,
+   *    link: ?string,
+   *    scope: string,
+   *    source: string,
+   *    error: string,
+   *    value: any,
+   *    allSourcesMerged: ?boolean,
+   *    conflicts: ?Array<!Conflict>,
+   * }}
+   */
+  let Policy;
+
+  /**
+   * @typedef {{
+   *     id: ?string,
+   *     name: string,
+   *     policies: !Array<!Policy>
+   * }}
+   */
+  let PolicyTableModel;
+
   /**
    * A box that shows the status of cloud policy for a device, machine or user.
    * @constructor
@@ -204,17 +202,17 @@ cr.define('policy', function() {
   };
 
   /**
-   * A single policy's entry in the policy table.
+   * A single policy's row entry in the policy table.
    * @constructor
    * @extends {HTMLDivElement}
    */
-  const Policy = cr.ui.define(function() {
+  const PolicyRow = cr.ui.define(function() {
     const node = $('policy-template').cloneNode(true);
     node.removeAttribute('id');
     return node;
   });
 
-  Policy.prototype = {
+  PolicyRow.prototype = {
     // Set up the prototype chain.
     __proto__: HTMLDivElement.prototype,
 
@@ -400,7 +398,7 @@ cr.define('policy', function() {
             return a.value !== undefined ? -1 : 1;
           })
           .forEach(policy => {
-            const policyRow = new Policy;
+            const policyRow = new PolicyRow;
             policyRow.initialize(policy);
             mainContent.appendChild(policyRow);
           });
@@ -574,5 +572,14 @@ cr.define('policy', function() {
     },
   };
 
-  return {Page: Page, PolicyTable: PolicyTable, Policy: Policy};
+  return {
+    Page,
+    PolicyTable,
+    Policy,
+    PolicyNamesResponse,
+    PolicyValuesResponse,
+    Conflict,
+    PolicyRow,
+    PolicyTableModel
+  };
 });
