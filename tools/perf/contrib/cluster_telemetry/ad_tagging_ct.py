@@ -23,10 +23,16 @@ class AdTaggingClusterTelemetry(perf_benchmark.PerfBenchmark):
   @classmethod
   def AddBenchmarkCommandLineArgs(cls, parser):
     ct_benchmarks_util.AddBenchmarkCommandLineArgs(parser)
+    parser.add_option(
+        '--verbose-cpu-metrics-for-adtagging',
+        action='store_true',
+        help='Enables non-UMA CPU metrics for the ad_tagging.cluster_telemetry '
+        'benchmark.')
 
   @classmethod
   def ProcessCommandLineArgs(cls, parser, args):
     ct_benchmarks_util.ValidateCommandLineArgs(parser, args)
+    cls.enable_limited_cpu_time_metric = args.verbose_cpu_metrics_for_adtagging
 
   def GetExtraOutDirectories(self):
     # The indexed filter list does not end up in a build directory on cluster
@@ -52,7 +58,11 @@ class AdTaggingClusterTelemetry(perf_benchmark.PerfBenchmark):
     for histogram in uma_histograms:
       tbm_options.config.chrome_trace_config.EnableUMAHistograms(histogram)
 
-    tbm_options.SetTimelineBasedMetrics(['umaMetric', 'cpuTimeMetric'])
+    timeline_based_metrics = ['umaMetric']
+    if self.enable_limited_cpu_time_metric:
+      timeline_based_metrics.append('limitedCpuTimeMetric')
+
+    tbm_options.SetTimelineBasedMetrics(timeline_based_metrics)
     return tbm_options
 
   def CreateStorySet(self, options):
