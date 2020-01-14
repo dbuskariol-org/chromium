@@ -45,6 +45,7 @@ source_set("util") {
     "//base",
     "//ios/chrome/browser/infobars",
     "//ios/chrome/browser/infobars:public",
+    "//ios/chrome/browser/infobars/overlays:overlay_type",
     "//ios/chrome/browser/overlays",
     "//ios/chrome/browser/overlays/public/common/infobars",
   ]

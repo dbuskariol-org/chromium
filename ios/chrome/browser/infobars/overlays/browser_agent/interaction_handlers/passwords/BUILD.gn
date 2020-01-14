@@ -13,7 +13,9 @@ source_set("passwords") {
   deps = [
     "//base",
     "//ios/chrome/browser/infobars",
+    "//ios/chrome/browser/infobars:public",
     "//ios/chrome/browser/infobars/overlays/browser_agent/interaction_handlers",
+    "//ios/chrome/browser/infobars/overlays/browser_agent/interaction_handlers/common",
     "//ios/chrome/browser/overlays/public/infobar_banner",
     "//ios/chrome/browser/passwords:infobar_delegates",
   ]

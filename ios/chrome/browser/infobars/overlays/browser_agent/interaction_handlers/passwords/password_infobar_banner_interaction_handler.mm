@@ -6,6 +6,7 @@
 
 #include "base/logging.h"
 #include "ios/chrome/browser/infobars/infobar_ios.h"
+#import "ios/chrome/browser/overlays/public/infobar_banner/save_password_infobar_banner_overlay.h"
 #import "ios/chrome/browser/passwords/ios_chrome_save_password_infobar_delegate.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
@@ -13,6 +14,14 @@
 #endif
 
 #pragma mark - InfobarBannerInteractionHandler
+
+PasswordInfobarBannerInteractionHandler::
+    PasswordInfobarBannerInteractionHandler()
+    : InfobarBannerInteractionHandler(
+          SavePasswordInfobarBannerOverlayRequestConfig::RequestSupport()) {}
+
+PasswordInfobarBannerInteractionHandler::
+    ~PasswordInfobarBannerInteractionHandler() = default;
 
 void PasswordInfobarBannerInteractionHandler::BannerVisibilityChanged(
     InfoBarIOS* infobar,

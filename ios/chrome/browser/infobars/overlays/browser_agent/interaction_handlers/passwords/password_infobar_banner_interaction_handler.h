@@ -5,7 +5,7 @@
 #ifndef IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_BROWSER_AGENT_INTERACTION_HANDLERS_PASSWORDS_PASSWORD_INFOBAR_BANNER_INTERACTION_HANDLER_H_
 #define IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_BROWSER_AGENT_INTERACTION_HANDLERS_PASSWORDS_PASSWORD_INFOBAR_BANNER_INTERACTION_HANDLER_H_
 
-#import "ios/chrome/browser/infobars/overlays/browser_agent/interaction_handlers/infobar_interaction_handler.h"
+#import "ios/chrome/browser/infobars/overlays/browser_agent/interaction_handlers/common/infobar_banner_interaction_handler.h"
 
 class IOSChromeSavePasswordInfoBarDelegate;
 
@@ -14,6 +14,9 @@ class IOSChromeSavePasswordInfoBarDelegate;
 class PasswordInfobarBannerInteractionHandler
     : public InfobarBannerInteractionHandler {
  public:
+  PasswordInfobarBannerInteractionHandler();
+  ~PasswordInfobarBannerInteractionHandler() override;
+
   // InfobarBannerInteractionHandler:
   void BannerVisibilityChanged(InfoBarIOS* infobar, bool visible) override;
   void MainButtonTapped(InfoBarIOS* infobar) override;

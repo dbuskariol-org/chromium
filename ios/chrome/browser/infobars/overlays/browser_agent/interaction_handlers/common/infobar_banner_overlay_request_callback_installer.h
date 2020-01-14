@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_BROWSER_AGENT_INFOBAR_BANNER_OVERLAY_REQUEST_CALLBACK_INSTALLER_H_
-#define IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_BROWSER_AGENT_INFOBAR_BANNER_OVERLAY_REQUEST_CALLBACK_INSTALLER_H_
+#ifndef IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_BROWSER_AGENT_INTERACTION_HANDLERS_COMMON_INFOBAR_BANNER_OVERLAY_REQUEST_CALLBACK_INSTALLER_H_
+#define IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_BROWSER_AGENT_INTERACTION_HANDLERS_COMMON_INFOBAR_BANNER_OVERLAY_REQUEST_CALLBACK_INSTALLER_H_
 
 #include "ios/chrome/browser/overlays/public/overlay_request_callback_installer.h"
 
@@ -18,7 +18,7 @@ class InfobarBannerOverlayRequestCallbackInstaller
   // Constructor for an instance that installs callbacks for OverlayRequests
   // supported by |request_support| that forward interaction events to
   // |interaction_handler|.
-  explicit InfobarBannerOverlayRequestCallbackInstaller(
+  InfobarBannerOverlayRequestCallbackInstaller(
       const OverlayRequestSupport* request_support,
       InfobarBannerInteractionHandler* interaction_handler);
   ~InfobarBannerOverlayRequestCallbackInstaller() override;
@@ -56,4 +56,4 @@ class InfobarBannerOverlayRequestCallbackInstaller
       weak_factory_{this};
 };
 
-#endif  // IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_BROWSER_AGENT_INFOBAR_BANNER_OVERLAY_REQUEST_CALLBACK_INSTALLER_H_
+#endif  // IOS_CHROME_BROWSER_INFOBARS_OVERLAYS_BROWSER_AGENT_INTERACTION_HANDLERS_COMMON_INFOBAR_BANNER_OVERLAY_REQUEST_CALLBACK_INSTALLER_H_
