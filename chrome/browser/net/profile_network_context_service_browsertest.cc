@@ -191,8 +191,9 @@ class ProfileNetworkContextServiceCacheSameBrowsertest
   base::HistogramTester histograms_;
 };
 
+// TODO(https://crbug.com/1041810): flaky
 IN_PROC_BROWSER_TEST_F(ProfileNetworkContextServiceCacheSameBrowsertest,
-                       TestCacheResetParameter) {
+                       DISABLED_TestCacheResetParameter) {
   // At this point, we have already called the initialization once on startup.
   // Verify that we have the correct values in the local_state.
   PrefService* local_state = g_browser_process->local_state();
@@ -227,8 +228,9 @@ class ProfileNetworkContextServiceCacheChangeBrowsertest
   base::HistogramTester histograms_;
 };
 
+// TODO(https://crbug.com/1041810): flaky
 IN_PROC_BROWSER_TEST_F(ProfileNetworkContextServiceCacheChangeBrowsertest,
-                       TestCacheResetParameter) {
+                       DISABLED_TestCacheResetParameter) {
   // At this point, we have already called the initialization once on startup.
   // Verify that we have the correct values in the local_state.
   PrefService* local_state = g_browser_process->local_state();
