@@ -401,6 +401,9 @@ extern const char kEnableDesktopPWAsDescription[];
 extern const char kDesktopPWAsLocalUpdatingName[];
 extern const char kDesktopPWAsLocalUpdatingDescription[];
 
+extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceName[];
+extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceDescription[];
+
 extern const char kDesktopPWAsTabStripName[];
 extern const char kDesktopPWAsTabStripDescription[];
 

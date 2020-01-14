@@ -154,6 +154,9 @@ COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kDesktopPWAsLocalUpdating;
 
 COMPONENT_EXPORT(CHROME_FEATURES)
+extern const base::Feature kDesktopPWAsLocalUpdatingThrottlePersistence;
+
+COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kDesktopPWAsTabStrip;
 
 COMPONENT_EXPORT(CHROME_FEATURES)

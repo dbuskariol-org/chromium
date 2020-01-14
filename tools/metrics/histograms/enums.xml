@@ -38222,6 +38222,8 @@ from previous Chrome versions.
   <int value="345664265" label="BlinkHeapIncrementalMarking:disabled"/>
   <int value="346711293" label="enable-save-password-bubble"/>
   <int value="347981012" label="TabToGTSAnimation:disabled"/>
+  <int value="348449023"
+      label="DesktopPWAsLocalUpdatingThrottlePersistence:enabled"/>
   <int value="348854923" label="v8-cache-strategies-for-cache-storage"/>
   <int value="350399958" label="ModuleScriptsImportMetaUrl:disabled"/>
   <int value="350616049" label="IntentPicker:disabled"/>
@@ -38615,6 +38617,8 @@ from previous Chrome versions.
   <int value="842432903" label="CaptureThumbnailOnNavigatingAway:enabled"/>
   <int value="842789526" label="CloudPrinterHandler:disabled"/>
   <int value="843896452" label="UserActivationV2:enabled"/>
+  <int value="844587371"
+      label="DesktopPWAsLocalUpdatingThrottlePersistence:disabled"/>
   <int value="846951416" label="CopylessPaste:enabled"/>
   <int value="848324390" label="enable-lock-screen-apps"/>
   <int value="849980462" label="RemoveNtpFakebox:disabled"/>

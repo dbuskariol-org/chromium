@@ -2251,6 +2251,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kDesktopPWAsLocalUpdatingName,
      flag_descriptions::kDesktopPWAsLocalUpdatingDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kDesktopPWAsLocalUpdating)},
+    {"enable-desktop-pwas-local-updating-throttle-persistence",
+     flag_descriptions::kDesktopPWAsLocalUpdatingThrottlePersistenceName,
+     flag_descriptions::kDesktopPWAsLocalUpdatingThrottlePersistenceDescription,
+     kOsDesktop,
+     FEATURE_VALUE_TYPE(
+         features::kDesktopPWAsLocalUpdatingThrottlePersistence)},
     {"enable-desktop-pwas-tab-strip",
      flag_descriptions::kDesktopPWAsTabStripName,
      flag_descriptions::kDesktopPWAsTabStripDescription, kOsDesktop,

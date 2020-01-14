@@ -649,6 +649,12 @@ extern const char kDesktopPWAsLocalUpdatingDescription[] =
     "Enable installed PWAs to update their app manifest data when the site "
     "manifest data has changed.";
 
+extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceName[] =
+    "Desktop PWAs local updating throttle persistence";
+extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceDescription[] =
+    "Persist the throttling of local PWA manifest update checks across browser "
+    "restarts.";
+
 extern const char kDesktopPWAsTabStripName[] = "Desktop PWA tab strips";
 extern const char kDesktopPWAsTabStripDescription[] =
     "Experimental UI for exploring what PWA windows would look like with a tab "
