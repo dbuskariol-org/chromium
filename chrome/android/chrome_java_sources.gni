@@ -1184,7 +1184,6 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/omnibox/suggestions/base/SuggestionSpannable.java",
   "java/src/org/chromium/chrome/browser/omnibox/suggestions/basic/BasicSuggestionProcessor.java",
   "java/src/org/chromium/chrome/browser/omnibox/suggestions/basic/SuggestionHost.java",
-  "java/src/org/chromium/chrome/browser/omnibox/suggestions/basic/SuggestionView.java",
   "java/src/org/chromium/chrome/browser/omnibox/suggestions/basic/SuggestionViewDelegate.java",
   "java/src/org/chromium/chrome/browser/omnibox/suggestions/basic/SuggestionViewProperties.java",
   "java/src/org/chromium/chrome/browser/omnibox/suggestions/basic/SuggestionViewViewBinder.java",
