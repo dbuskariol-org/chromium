@@ -4,11 +4,13 @@
 
 #include "chrome/browser/chromeos/policy/status_collector/device_status_collector.h"
 
+#include <sys/types.h>
+#include <unistd.h>
+
 #include <stddef.h>
 #include <stdint.h>
 
 #include <algorithm>
-#include <cmath>
 #include <cstdio>
 #include <limits>
 #include <set>
@@ -90,10 +92,16 @@
 #include "components/user_manager/user_type.h"
 #include "components/version_info/version_info.h"
 #include "content/public/browser/browser_thread.h"
+#include "content/public/browser/gpu_data_manager.h"
 #include "extensions/browser/extension_registry.h"
 #include "extensions/common/extension.h"
+#include "gpu/config/gpu_info.h"
+#include "gpu/ipc/common/memory_stats.h"
 #include "storage/browser/file_system/external_mount_points.h"
 #include "third_party/cros_system_api/dbus/service_constants.h"
+#include "ui/display/display.h"
+#include "ui/display/screen.h"
+#include "ui/gfx/geometry/rect.h"
 
 using base::Time;
 using base::TimeDelta;
@@ -343,6 +351,49 @@ em::StatefulPartitionInfo ReadStatefulPartitionInfo() {
   spi.set_available_space(available_space);
   spi.set_total_space(total_space);
   return spi;
+}
+
+// Collects all the display related information.
+void GetDisplayStatus(em::GraphicsStatus* graphics_status) {
+  const std::vector<display::Display> displays =
+      display::Screen::GetScreen()->GetAllDisplays();
+  for (const auto& display : displays) {
+    em::DisplayInfo* display_info = graphics_status->add_displays();
+    display_info->set_resolution_width(display.GetSizeInPixel().width());
+    display_info->set_resolution_height(display.GetSizeInPixel().height());
+    display_info->set_refresh_rate(display.display_frequency());
+    display_info->set_is_internal(display.IsInternal());
+  }
+}
+
+// Makes the requested |gpu_memory_stats| available. Collects the other required
+// graphics properties next. Finally, calls |callback|.
+void OnVideoMemoryUsageStatsUpdate(
+    policy::DeviceStatusCollector::GraphicsStatusReceiver callback,
+    std::unique_ptr<em::GraphicsStatus> graphics_status,
+    const gpu::VideoMemoryUsageStats& gpu_memory_stats) {
+  auto* gpu_data_manager = content::GpuDataManager::GetInstance();
+  gpu::GPUInfo gpu_info = gpu_data_manager->GetGPUInfo();
+  // Adapter information
+  em::GraphicsAdapterInfo* graphics_info = graphics_status->mutable_adapter();
+  graphics_info->set_name(gpu_info.gpu.device_string);
+  graphics_info->set_driver_version(gpu_info.gpu.driver_version);
+  graphics_info->set_device_id(gpu_info.gpu.device_id);
+  graphics_info->set_system_ram_usage(gpu_memory_stats.bytes_allocated);
+
+  std::move(callback).Run(*graphics_status);
+}
+
+// Fetches display-related and graphics-adapter information.
+void FetchGraphicsStatus(
+    policy::DeviceStatusCollector::GraphicsStatusReceiver callback) {
+  std::unique_ptr<em::GraphicsStatus> graphics_status =
+      std::make_unique<em::GraphicsStatus>();
+  GetDisplayStatus(graphics_status.get());
+  auto* gpu_data_manager = content::GpuDataManager::GetInstance();
+  gpu_data_manager->RequestVideoMemoryUsageStatsUpdate(
+      base::BindOnce(&OnVideoMemoryUsageStatsUpdate, std::move(callback),
+                     std::move(graphics_status)));
 }
 
 bool ReadAndroidStatus(
@@ -615,6 +666,13 @@ class DeviceStatusCollectorState : public StatusCollectorState {
             this));
   }
 
+  void FetchGraphicsStatus(
+      const policy::DeviceStatusCollector::GraphicsStatusFetcher&
+          graphics_status_fetcher) {
+    graphics_status_fetcher.Run(base::BindOnce(
+        &DeviceStatusCollectorState::OnGraphicsStatusReceived, this));
+  }
+
  private:
   ~DeviceStatusCollectorState() override = default;
 
@@ -782,6 +840,10 @@ class DeviceStatusCollectorState : public StatusCollectorState {
     DCHECK(hdsi.total_space() >= hdsi.available_space());
     stateful_partition_info->CopyFrom(hdsi);
   }
+
+  void OnGraphicsStatusReceived(const em::GraphicsStatus& gs) {
+    *response_params_.device_status->mutable_graphics_status() = gs;
+  }
 };
 
 TpmStatusInfo::TpmStatusInfo() = default;
@@ -823,7 +885,8 @@ DeviceStatusCollector::DeviceStatusCollector(
     const TpmStatusFetcher& tpm_status_fetcher,
     const EMMCLifetimeFetcher& emmc_lifetime_fetcher,
     const StatefulPartitionInfoFetcher& stateful_partition_info_fetcher,
-    const CrosHealthdDataFetcher& cros_healthd_data_fetcher)
+    const CrosHealthdDataFetcher& cros_healthd_data_fetcher,
+    const GraphicsStatusFetcher& graphics_status_fetcher)
     : StatusCollector(provider, chromeos::CrosSettings::Get()),
       pref_service_(pref_service),
       firmware_fetch_error_(kFirmwareNotInitialized),
@@ -835,6 +898,7 @@ DeviceStatusCollector::DeviceStatusCollector(
       emmc_lifetime_fetcher_(emmc_lifetime_fetcher),
       stateful_partition_info_fetcher_(stateful_partition_info_fetcher),
       cros_healthd_data_fetcher_(cros_healthd_data_fetcher),
+      graphics_status_fetcher_(graphics_status_fetcher),
       power_manager_(chromeos::PowerManagerClient::Get()) {
   // protected fields of `StatusCollector`.
   max_stored_past_activity_interval_ = kMaxStoredPastActivityInterval;
@@ -871,6 +935,9 @@ DeviceStatusCollector::DeviceStatusCollector(
         base::BindRepeating(&DeviceStatusCollector::FetchCrosHealthdData,
                             weak_factory_.GetWeakPtr());
   }
+
+  if (graphics_status_fetcher_.is_null())
+    graphics_status_fetcher_ = base::BindRepeating(&FetchGraphicsStatus);
 
   idle_poll_timer_.Start(FROM_HERE,
                          TimeDelta::FromSeconds(kIdlePollIntervalSeconds), this,
@@ -958,7 +1025,8 @@ DeviceStatusCollector::DeviceStatusCollector(
           DeviceStatusCollector::TpmStatusFetcher(),
           DeviceStatusCollector::EMMCLifetimeFetcher(),
           DeviceStatusCollector::StatefulPartitionInfoFetcher(),
-          DeviceStatusCollector::CrosHealthdDataFetcher()) {}
+          DeviceStatusCollector::CrosHealthdDataFetcher(),
+          DeviceStatusCollector::GraphicsStatusFetcher()) {}
 
 DeviceStatusCollector::~DeviceStatusCollector() {
   power_manager_->RemoveObserver(this);
@@ -1659,6 +1727,9 @@ bool DeviceStatusCollector::GetHardwareStatus(
 
   // Fetch Stateful Partition Information on a background thread.
   state->FetchStatefulPartitionInfo(stateful_partition_info_fetcher_);
+
+  // Fetch Graphics status on a background thread.
+  state->FetchGraphicsStatus(graphics_status_fetcher_);
 
   return true;
 }

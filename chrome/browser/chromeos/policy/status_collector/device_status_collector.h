@@ -154,6 +154,15 @@ class DeviceStatusCollector : public StatusCollector,
   using CrosHealthdDataFetcher =
       base::RepeatingCallback<void(CrosHealthdDataReceiver)>;
 
+  // Asynchronously receives the graphics status.
+  using GraphicsStatusReceiver =
+      base::OnceCallback<void(const enterprise_management::GraphicsStatus&)>;
+
+  // Gets the display and graphics adapter information reported to the browser
+  // by the GPU process.
+  using GraphicsStatusFetcher =
+      base::RepeatingCallback<void(GraphicsStatusReceiver)>;
+
   // Reads EMMC usage lifetime from /var/log/storage_info.txt
   using EMMCLifetimeFetcher =
       base::RepeatingCallback<enterprise_management::DiskLifetimeEstimation(
@@ -176,7 +185,8 @@ class DeviceStatusCollector : public StatusCollector,
       const TpmStatusFetcher& tpm_status_fetcher,
       const EMMCLifetimeFetcher& emmc_lifetime_fetcher,
       const StatefulPartitionInfoFetcher& stateful_partition_info_fetcher,
-      const CrosHealthdDataFetcher& cros_healthd_data_fetcher);
+      const CrosHealthdDataFetcher& cros_healthd_data_fetcher,
+      const GraphicsStatusFetcher& graphics_status_fetcher);
 
   // Constructor with default callbacks. These callbacks are always executed on
   // Blocking Pool. Caller is responsible for passing already initialized
@@ -388,6 +398,8 @@ class DeviceStatusCollector : public StatusCollector,
   StatefulPartitionInfoFetcher stateful_partition_info_fetcher_;
 
   CrosHealthdDataFetcher cros_healthd_data_fetcher_;
+
+  GraphicsStatusFetcher graphics_status_fetcher_;
 
   PowerStatusCallback power_status_callback_;
 
