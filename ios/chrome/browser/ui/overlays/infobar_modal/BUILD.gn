@@ -3,12 +3,8 @@
 # found in the LICENSE file.
 
 source_set("infobar_modal") {
-  public = [
-    "infobar_modal_supported_overlay_coordinator_classes.h",
-  ]
-  sources = [
-    "infobar_modal_supported_overlay_coordinator_classes.mm",
-  ]
+  public = [ "infobar_modal_supported_overlay_coordinator_classes.h" ]
+  sources = [ "infobar_modal_supported_overlay_coordinator_classes.mm" ]
 
   configs += [ "//build/config/compiler:enable_arc" ]
 
