@@ -113,13 +113,9 @@ template("chrome_public_common_apk_or_module_tmpl") {
       }
 
       if (android_64bit_target_cpu) {
-        deps = [
-          "//chrome/android:lib${library_target}($android_secondary_abi_toolchain)",
-        ]
+        deps = [ "//chrome/android:lib${library_target}($android_secondary_abi_toolchain)" ]
       } else {
-        deps = [
-          "//chrome/android:lib${library_target}",
-        ]
+        deps = [ "//chrome/android:lib${library_target}" ]
       }
     }
   } else if (defined(invoker.shared_library_for_unwind_asset)) {
