@@ -447,6 +447,16 @@ public final class ChromePreferenceKeys {
 
     public static final String RLZ_NOTIFIED = "rlz_first_search_notified";
 
+    /** Key used to store the default Search Engine Type before choice is presented. */
+    public static final String SEARCH_ENGINE_CHOICE_DEFAULT_TYPE_BEFORE =
+            "search_engine_choice_default_type_before";
+    /** Key used to store the version of Chrome in which the choice was presented. */
+    public static final String SEARCH_ENGINE_CHOICE_PRESENTED_VERSION =
+            "search_engine_choice_presented_version";
+    /** Key used to store the date of when search engine choice was requested. */
+    public static final String SEARCH_ENGINE_CHOICE_REQUESTED_TIMESTAMP =
+            "search_engine_choice_requested_timestamp";
+
     /**
      * Generic signin and sync promo preferences.
      */
@@ -715,6 +725,9 @@ public final class ChromePreferenceKeys {
                 PROMOS_SKIPPED_ON_FIRST_START,
                 REACHED_CODE_PROFILER_GROUP,
                 RLZ_NOTIFIED,
+                SEARCH_ENGINE_CHOICE_DEFAULT_TYPE_BEFORE,
+                SEARCH_ENGINE_CHOICE_PRESENTED_VERSION,
+                SEARCH_ENGINE_CHOICE_REQUESTED_TIMESTAMP,
                 SIGNIN_AND_SYNC_PROMO_SHOW_COUNT,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_BOOKMARKS,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_SETTINGS,
