@@ -510,17 +510,27 @@ void ArcBluetoothBridge::DeviceChanged(BluetoothAdapter* adapter,
   if (!arc_bridge_service_->bluetooth()->IsConnected())
     return;
 
-  auto* bluetooth_instance = ARC_GET_INSTANCE_FOR_METHOD(
-      arc_bridge_service_->bluetooth(), OnDeviceFound);
-  if (bluetooth_instance) {
-    bluetooth_instance->OnDeviceFound(
-        GetDeviceProperties(mojom::BluetoothPropertyType::ALL, device));
+  std::string addr = device->GetAddress();
+  if (discovered_devices_.insert(addr).second) {
+    auto* bluetooth_instance = ARC_GET_INSTANCE_FOR_METHOD(
+        arc_bridge_service_->bluetooth(), OnDeviceFound);
+    if (bluetooth_instance) {
+      bluetooth_instance->OnDeviceFound(
+          GetDeviceProperties(mojom::BluetoothPropertyType::ALL, device));
+    }
+  } else {
+    auto* bluetooth_instance = ARC_GET_INSTANCE_FOR_METHOD(
+        arc_bridge_service_->bluetooth(), OnDevicePropertiesChanged);
+    if (bluetooth_instance) {
+      bluetooth_instance->OnDevicePropertiesChanged(
+          mojom::BluetoothAddress::From(addr),
+          GetDeviceProperties(mojom::BluetoothPropertyType::ALL, device));
+    }
   }
 
   if (!(device->GetType() & device::BLUETOOTH_TRANSPORT_LE))
     return;
 
-  std::string addr = device->GetAddress();
   auto it = gatt_connections_.find(addr);
   bool was_connected =
       (it != gatt_connections_.end() &&
@@ -1116,6 +1126,7 @@ void ArcBluetoothBridge::StartDiscoveryImpl(bool le_scan) {
     discovery_off_timer_.Start(FROM_HERE, kDiscoveryTimeout,
                                base::Bind(&ArcBluetoothBridge::CancelDiscovery,
                                           weak_factory_.GetWeakPtr()));
+    discovered_devices_.clear();
     discovery_queue_.Pop();
     return;
   }
@@ -1187,6 +1198,7 @@ void ArcBluetoothBridge::OnDiscoveryStarted(
                              base::Bind(&ArcBluetoothBridge::CancelDiscovery,
                                         weak_factory_.GetWeakPtr()));
   discovery_session_ = std::move(session);
+  discovered_devices_.clear();
 
   auto* bluetooth_instance = ARC_GET_INSTANCE_FOR_METHOD(
       arc_bridge_service_->bluetooth(), OnDiscoveryStateChanged);
