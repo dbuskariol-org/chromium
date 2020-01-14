@@ -1288,7 +1288,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
     public SnackbarManager getSnackbarManager() {
         if (mRootUiCoordinator != null && getBottomSheetController() != null
                 && getBottomSheetController().isSheetOpen()
-                && getBottomSheetController().isSheetHiding()) {
+                && !getBottomSheetController().isSheetHiding()) {
             return mRootUiCoordinator.getBottomSheetSnackbarManager();
         }
         return mSnackbarManager;
