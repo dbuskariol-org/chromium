@@ -51,9 +51,6 @@ int NextAvailableMetricsBucketIndex() {
 
 }  // namespace
 
-const base::Feature kPersistUPAInProfileInfoCache{
-    "PersistUPAInProfileInfoCache", base::FEATURE_ENABLED_BY_DEFAULT};
-
 const char ProfileAttributesEntry::kSupervisedUserId[] = "managed_user_id";
 const char ProfileAttributesEntry::kIsOmittedFromProfileListKey[] =
     "is_omitted_from_profile_list";

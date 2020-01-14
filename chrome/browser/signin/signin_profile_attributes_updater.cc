@@ -54,10 +54,7 @@ void SigninProfileAttributesUpdater::UpdateProfileAttributes() {
   CoreAccountInfo account_info =
       identity_manager_->GetUnconsentedPrimaryAccountInfo();
 
-  bool clear_profile =
-      account_info.IsEmpty() ||
-      (!base::FeatureList::IsEnabled(kPersistUPAInProfileInfoCache) &&
-       !identity_manager_->HasPrimaryAccount());
+  bool clear_profile = account_info.IsEmpty();
 
   if (account_info.gaia != entry->GetGAIAId() ||
       !gaia::AreEmailsSame(account_info.email,
@@ -116,10 +113,8 @@ void SigninProfileAttributesUpdater::OnPrimaryAccountCleared(
 
 void SigninProfileAttributesUpdater::OnUnconsentedPrimaryAccountChanged(
     const CoreAccountInfo& unconsented_primary_account_info) {
-  if (identity_manager_->HasPrimaryAccount() ||
-      !base::FeatureList::IsEnabled(kPersistUPAInProfileInfoCache)) {
+  if (identity_manager_->HasPrimaryAccount())
     return;
-  }
 
   UpdateProfileAttributes();
 }

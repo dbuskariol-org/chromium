@@ -57,12 +57,11 @@ const gfx::Image& GetAvatarImage(Profile* profile,
                                  const gfx::Image& user_identity_image) {
   ProfileAttributesEntry* entry = GetProfileAttributesEntry(profile);
   DCHECK(entry);
-  // TODO(crbug.com/1012179): If kPersistUPAInProfileInfoCache feature is on, it
-  // should suffice to call entry->GetAvatarIcon(). For this to work well, this
-  // class needs to observe ProfileAttributesStorage instead of (or on top of)
-  // IdentityManager. Only then we can rely on |entry| being up to date (as the
-  // storage also observes IdentityManager so there's no guarantee on the order
-  // of notifications).
+  // TODO(crbug.com/1012179): it should suffice to call entry->GetAvatarIcon().
+  // For this to work well, this class needs to observe ProfileAttributesStorage
+  // instead of (or on top of) IdentityManager. Only then we can rely on |entry|
+  // being up to date (as the storage also observes IdentityManager so there's
+  // no guarantee on the order of notifications).
   if (entry->IsUsingGAIAPicture() && entry->GetGAIAPicture())
     return *entry->GetGAIAPicture();
 
