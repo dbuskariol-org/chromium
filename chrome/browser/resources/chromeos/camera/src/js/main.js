@@ -184,7 +184,7 @@ export class App {
                 ackMigrate = true;
               });
         })
-        .then((external) => {
+        .then(() => {
           const externalDir = filesystem.getExternalDirectory();
           assert(externalDir !== null);
           this.galleryButton_.initialize(externalDir);
