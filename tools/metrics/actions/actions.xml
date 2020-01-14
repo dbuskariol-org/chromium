@@ -17882,6 +17882,7 @@ should be able to be added at any place in this file.
 </action>
 
 <action name="ProfileChooser_SignInAgainDisplayed">
+  <obsolete>No longer recorded after the revamp of the profile menu</obsolete>
   <owner>vasilii@chromium.org</owner>
   <owner>ewald@chromium.org</owner>
   <description>

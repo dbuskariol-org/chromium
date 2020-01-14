@@ -1703,9 +1703,6 @@ extern const char kAndroidNightModeDescription[];
 
 #else  // !defined(OS_ANDROID)
 
-extern const char kShowSyncPausedReasonCookiesClearedOnExitName[];
-extern const char kShowSyncPausedReasonCookiesClearedOnExitDescription[];
-
 extern const char kAppManagementName[];
 extern const char kAppManagementDescription[];
 
@@ -2391,9 +2388,6 @@ extern const char kDirectManipulationStylusDescription[];
 
 extern const char kAnimatedAvatarButtonName[];
 extern const char kAnimatedAvatarButtonDescription[];
-
-extern const char kProfileMenuRevampName[];
-extern const char kProfileMenuRevampDescription[];
 
 #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
 

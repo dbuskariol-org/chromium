@@ -2897,13 +2897,6 @@ const char kAndroidNightModeDescription[] =
 
 #else  // !defined(OS_ANDROID)
 
-const char kShowSyncPausedReasonCookiesClearedOnExitName[] =
-    "Show sync paused reason is the setup of cookie settings.";
-const char kShowSyncPausedReasonCookiesClearedOnExitDescription[] =
-    "If enabled and the user is in sync paused state because of cookie settings"
-    " set to clear cookies on exit, we show the user a message with the reason"
-    " in the user menu.";
-
 const char kAppManagementName[] = "Enable App Management page";
 const char kAppManagementDescription[] =
     "Shows the new app management page at chrome://apps.";
@@ -3988,10 +3981,6 @@ const char kAnimatedAvatarButtonName[] = "Animated avatar button";
 const char kAnimatedAvatarButtonDescription[] =
     "If enabled, Chrome will animate a pill with identity information around "
     "the avatar button on start-up and on sign-in.";
-
-const char kProfileMenuRevampName[] = "Profile menu revamp";
-const char kProfileMenuRevampDescription[] =
-    "Enables the new version of the profile menu (aka user menu).";
 
 #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
 

@@ -29,13 +29,9 @@ extern const base::Feature kMixBrowserTypeTabs;
 
 extern const base::Feature kNewTabstripAnimation;
 
-extern const base::Feature kProfileMenuRevamp;
-
 extern const base::Feature kProminentDarkModeActiveTabTitle;
 
 extern const base::Feature kScrollableTabStrip;
-
-extern const base::Feature kShowSyncPausedReasonCookiesClearedOnExit;
 
 extern const base::Feature kTabGroups;
 

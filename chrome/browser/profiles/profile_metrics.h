@@ -124,15 +124,15 @@ class ProfileMetrics {
   // clicking "Manage Accounts" within account selection on a Google property.
   enum ProfileDesktopMenu {
     // User opened the user menu, and clicked lock.
-    PROFILE_DESKTOP_MENU_LOCK = 0,
+    DEPRECATED_PROFILE_DESKTOP_MENU_LOCK = 0,
     // User opened the user menu, and removed an account.
     PROFILE_DESKTOP_MENU_REMOVE_ACCT,
     // User opened the user menu, and started adding an account.
     PROFILE_DESKTOP_MENU_ADD_ACCT,
     // User opened the user menu, and changed the profile name.
-    PROFILE_DESKTOP_MENU_EDIT_NAME,
+    DEPRECATED_PROFILE_DESKTOP_MENU_EDIT_NAME,
     // User opened the user menu, and started selecting a new profile image.
-    PROFILE_DESKTOP_MENU_EDIT_IMAGE,
+    DEPRECATED_PROFILE_DESKTOP_MENU_EDIT_IMAGE,
     // User opened the user menu, and opened the user manager.
     PROFILE_DESKTOP_MENU_OPEN_USER_MANAGER,
     // User opened the user menu, and selected Go Incognito.

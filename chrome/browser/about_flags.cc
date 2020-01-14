@@ -2019,13 +2019,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kWebglDraftExtensionsName,
      flag_descriptions::kWebglDraftExtensionsDescription, kOsAll,
      SINGLE_VALUE_TYPE(switches::kEnableWebGLDraftExtensions)},
-#if BUILDFLAG(ENABLE_DICE_SUPPORT)
-    {"show-sync-paused-reason-cookies-cleared-on-exit",
-     flag_descriptions::kShowSyncPausedReasonCookiesClearedOnExitName,
-     flag_descriptions::kShowSyncPausedReasonCookiesClearedOnExitDescription,
-     kOsAll,
-     FEATURE_VALUE_TYPE(features::kShowSyncPausedReasonCookiesClearedOnExit)},
-#endif
 #if defined(OS_ANDROID)
     {"enable-android-autofill-accessibility",
      flag_descriptions::kAndroidAutofillAccessibilityName,
@@ -4593,13 +4586,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(
          chrome::android::kDarkenWebsitesCheckboxInThemesSetting)},
 #endif  // defined(OS_ANDROID)
-
-#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
-    {"profile-menu-revamp", flag_descriptions::kProfileMenuRevampName,
-     flag_descriptions::kProfileMenuRevampDescription,
-     kOsWin | kOsMac | kOsLinux,
-     FEATURE_VALUE_TYPE(features::kProfileMenuRevamp)},
-#endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
 
     {"password-leak-detection", flag_descriptions::kPasswordLeakDetectionName,
      flag_descriptions::kPasswordLeakDetectionDescription, kOsAll,

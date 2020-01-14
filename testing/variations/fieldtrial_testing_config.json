@@ -3709,8 +3709,7 @@
                     "enable_features": [
                         "AnimatedAvatarButton",
                         "AutofillCreditCardUploadFeedback",
-                        "AutofillEnableToolbarStatusChip",
-                        "ProfileMenuRevamp"
+                        "AutofillEnableToolbarStatusChip"
                     ]
                 }
             ]
