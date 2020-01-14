@@ -21,8 +21,10 @@
 class PasswordInfobarBannerInteractionHandlerTest : public PlatformTest {
  public:
   PasswordInfobarBannerInteractionHandlerTest()
-      : infobar_([[FakeInfobarUIDelegate alloc] init],
-                 MockIOSChromeSavePasswordInfoBarDelegate::Create()) {
+      : infobar_(
+            [[FakeInfobarUIDelegate alloc] init],
+            MockIOSChromeSavePasswordInfoBarDelegate::Create(@"username",
+                                                             @"password")) {
     scoped_feature_list_.InitWithFeatures({kInfobarUIReboot}, {});
   }
 
