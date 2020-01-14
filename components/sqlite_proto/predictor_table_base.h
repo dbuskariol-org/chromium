@@ -1,17 +1,19 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+// Copyright 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PREDICTORS_PREDICTOR_TABLE_BASE_H_
-#define CHROME_BROWSER_PREDICTORS_PREDICTOR_TABLE_BASE_H_
+#ifndef COMPONENTS_SQLITE_PROTO_PREDICTOR_TABLE_BASE_H_
+#define COMPONENTS_SQLITE_PROTO_PREDICTOR_TABLE_BASE_H_
 
+#include "base/callback.h"
 #include "base/macros.h"
 #include "base/memory/ref_counted.h"
 #include "base/synchronization/atomic_flag.h"
 
 namespace base {
+class Location;
 class SequencedTaskRunner;
-}
+}  // namespace base
 
 namespace sql {
 class Database;
@@ -29,6 +31,12 @@ class PredictorTableBase
  public:
   // Returns a SequencedTaskRunner that is used to run tasks on the DB sequence.
   base::SequencedTaskRunner* GetTaskRunner();
+
+  typedef base::OnceCallback<void(sql::Database*)> DBTask;
+
+  virtual void ScheduleDBTask(const base::Location& from_here, DBTask task);
+
+  virtual void ExecuteDBTaskOnDBSequence(DBTask task);
 
  protected:
   explicit PredictorTableBase(
@@ -59,4 +67,4 @@ class PredictorTableBase
 
 }  // namespace predictors
 
-#endif  // CHROME_BROWSER_PREDICTORS_PREDICTOR_TABLE_BASE_H_
+#endif  // COMPONENTS_SQLITE_PROTO_PREDICTOR_TABLE_BASE_H_

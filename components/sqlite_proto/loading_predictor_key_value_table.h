@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PREDICTORS_LOADING_PREDICTOR_KEY_VALUE_TABLE_H_
-#define CHROME_BROWSER_PREDICTORS_LOADING_PREDICTOR_KEY_VALUE_TABLE_H_
+#ifndef COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_TABLE_H_
+#define COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_TABLE_H_
 
 #include <map>
 #include <string>
@@ -38,9 +38,9 @@ std::string GetDeleteAllSql(const std::string& table_name);
 // class doesn't manage the creation and the deletion of the table.
 //
 // All the functions except of the constructor must be called on a DB sequence
-// of the ResourcePrefetchPredictorTables.
+// of the PredictorTableBase.
 // The preferred way to call the methods of this class is passing the method to
-// ResourcePrefetchPredictorTables::ScheduleDBTask().
+// PredictorTableBase::ScheduleDBTask().
 //
 // Example:
 // tables_->ScheduleDBTask(
@@ -120,4 +120,4 @@ void LoadingPredictorKeyValueTable<T>::DeleteAllData(sql::Database* db) {
 
 }  // namespace predictors
 
-#endif  // CHROME_BROWSER_PREDICTORS_LOADING_PREDICTOR_KEY_VALUE_TABLE_H_
+#endif  // COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_TABLE_H_

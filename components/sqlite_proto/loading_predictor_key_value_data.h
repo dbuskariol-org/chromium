@@ -2,23 +2,24 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PREDICTORS_LOADING_PREDICTOR_KEY_VALUE_DATA_H_
-#define CHROME_BROWSER_PREDICTORS_LOADING_PREDICTOR_KEY_VALUE_DATA_H_
+#ifndef COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_DATA_H_
+#define COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_DATA_H_
 
 #include <algorithm>
 #include <map>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
 #include "base/bind.h"
 #include "base/location.h"
 #include "base/memory/ref_counted.h"
+#include "base/sequence_checker.h"
 #include "base/timer/timer.h"
-#include "chrome/browser/predictors/loading_predictor_key_value_table.h"
-#include "chrome/browser/predictors/resource_prefetch_predictor_tables.h"
-#include "content/public/browser/browser_thread.h"
+#include "components/sqlite_proto/loading_predictor_key_value_table.h"
+#include "components/sqlite_proto/predictor_table_base.h"
 
 class PredictorsHandler;
 
@@ -30,16 +31,14 @@ namespace predictors {
 // Compare function to decide which entry should be evicted.
 //
 // InitializeOnDBSequence() must be called on the DB sequence of the
-// ResourcePrefetchPredictorTables. All other methods must be called on UI
-// thread.
+// PredictorTableBase. All other methods must be called on UI thread.
 template <typename T, typename Compare>
 class LoadingPredictorKeyValueData {
  public:
-  LoadingPredictorKeyValueData(
-      scoped_refptr<ResourcePrefetchPredictorTables> tables,
-      LoadingPredictorKeyValueTable<T>* backend,
-      size_t max_size,
-      base::TimeDelta flush_delay);
+  LoadingPredictorKeyValueData(scoped_refptr<PredictorTableBase> tables,
+                               LoadingPredictorKeyValueTable<T>* backend,
+                               size_t max_size,
+                               base::TimeDelta flush_delay);
 
   // Must be called on the DB sequence of the ResourcePrefetchPredictorTables
   // before calling all other methods.
@@ -59,8 +58,9 @@ class LoadingPredictorKeyValueData {
   // Deletes all entries from the database.
   void DeleteAllData();
 
+  std::map<std::string, T>* DataCacheForTesting() { return data_cache_.get(); }
+
  private:
-  friend class ResourcePrefetchPredictorTest;
   friend class ::PredictorsHandler;
 
   struct EntryCompare : private Compare {
@@ -74,7 +74,7 @@ class LoadingPredictorKeyValueData {
 
   void FlushDataToDisk();
 
-  scoped_refptr<ResourcePrefetchPredictorTables> tables_;
+  scoped_refptr<PredictorTableBase> tables_;
   LoadingPredictorKeyValueTable<T>* backend_table_;
   std::unique_ptr<std::map<std::string, T>> data_cache_;
   std::unordered_map<std::string, DeferredOperation> deferred_updates_;
@@ -83,21 +83,21 @@ class LoadingPredictorKeyValueData {
   const size_t max_size_;
   EntryCompare entry_compare_;
 
+  SEQUENCE_CHECKER(sequence_checker_);
+
   DISALLOW_COPY_AND_ASSIGN(LoadingPredictorKeyValueData);
 };
 
 template <typename T, typename Compare>
 LoadingPredictorKeyValueData<T, Compare>::LoadingPredictorKeyValueData(
-    scoped_refptr<ResourcePrefetchPredictorTables> tables,
+    scoped_refptr<PredictorTableBase> tables,
     LoadingPredictorKeyValueTable<T>* backend,
     size_t max_size,
     base::TimeDelta flush_delay)
     : tables_(tables),
       backend_table_(backend),
       flush_delay_(flush_delay),
-      max_size_(max_size) {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-}
+      max_size_(max_size) {}
 
 template <typename T, typename Compare>
 void LoadingPredictorKeyValueData<T, Compare>::InitializeOnDBSequence() {
@@ -115,7 +115,7 @@ void LoadingPredictorKeyValueData<T, Compare>::InitializeOnDBSequence() {
     keys_to_delete.emplace_back(entry_to_delete->first);
     data_map->erase(entry_to_delete);
   }
-  if (keys_to_delete.size() > 0) {
+  if (!keys_to_delete.empty()) {
     tables_->ExecuteDBTaskOnDBSequence(
         base::BindOnce(&LoadingPredictorKeyValueTable<T>::DeleteData,
                        base::Unretained(backend_table_),
@@ -129,7 +129,7 @@ template <typename T, typename Compare>
 bool LoadingPredictorKeyValueData<T, Compare>::TryGetData(
     const std::string& key,
     T* data) const {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(data_cache_);
   auto it = data_cache_->find(key);
   if (it == data_cache_->end())
@@ -144,7 +144,7 @@ template <typename T, typename Compare>
 void LoadingPredictorKeyValueData<T, Compare>::UpdateData(
     const std::string& key,
     const T& data) {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(data_cache_);
   auto it = data_cache_->find(key);
   if (it == data_cache_->end()) {
@@ -172,7 +172,7 @@ void LoadingPredictorKeyValueData<T, Compare>::UpdateData(
 template <typename T, typename Compare>
 void LoadingPredictorKeyValueData<T, Compare>::DeleteData(
     const std::vector<std::string>& keys) {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(data_cache_);
   for (const std::string& key : keys) {
     if (data_cache_->erase(key))
@@ -186,7 +186,7 @@ void LoadingPredictorKeyValueData<T, Compare>::DeleteData(
 
 template <typename T, typename Compare>
 void LoadingPredictorKeyValueData<T, Compare>::DeleteAllData() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(data_cache_);
   data_cache_->clear();
   deferred_updates_.clear();
@@ -200,7 +200,7 @@ void LoadingPredictorKeyValueData<T, Compare>::DeleteAllData() {
 
 template <typename T, typename Compare>
 void LoadingPredictorKeyValueData<T, Compare>::FlushDataToDisk() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (deferred_updates_.empty())
     return;
 
@@ -236,4 +236,4 @@ void LoadingPredictorKeyValueData<T, Compare>::FlushDataToDisk() {
 
 }  // namespace predictors
 
-#endif  // CHROME_BROWSER_PREDICTORS_LOADING_PREDICTOR_KEY_VALUE_DATA_H_
+#endif  // COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_DATA_H_
