@@ -307,7 +307,8 @@ id<GREYMatcher> SearchCopiedTextButton() {
 
 // Copies and pastes a URL, then performs an undo of the paste, and attempts to
 // perform a second undo.
-- (void)testCopyPasteUndo {
+// TODO(crbug.com/1041478): This test is flaky.
+- (void)FLAKY_testCopyPasteUndo {
   [self openPage1];
 
   [ChromeEarlGreyUI focusOmnibox];
