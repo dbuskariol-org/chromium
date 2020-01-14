@@ -15,33 +15,6 @@ namespace blink {
 
 class ExceptionState;
 
-// NativeValueTraitsBase is supposed to be inherited by NativeValueTraits
-// classes. They serve as a way to hold the ImplType typedef without requiring
-// all NativeValueTraits specializations to declare it.
-//
-// The primary template below is used by NativeValueTraits specializations with
-// types that do not inherit from IDLBase, in which case it is assumed the type
-// of the specialization is also |ImplType|. The NativeValueTraitsBase
-// specialization is used for IDLBase-based types, which are supposed to have
-// their own |ImplType| typedefs.
-//
-// If present, |NullValue()| will be used when converting from the nullable type
-// T?, and should be used if the impl type has an existing "null" state. If not
-// present, WTF::Optional will be used to wrap the type.
-template <typename T, typename SFINAEHelper = void>
-struct NativeValueTraitsBase {
-  using ImplType = T;
-  STATIC_ONLY(NativeValueTraitsBase);
-};
-
-template <typename T>
-struct NativeValueTraitsBase<
-    T,
-    std::enable_if_t<std::is_base_of<IDLBase, T>::value>> {
-  using ImplType = typename T::ImplType;
-  STATIC_ONLY(NativeValueTraitsBase);
-};
-
 // Primary template for NativeValueTraits. It is not supposed to be used
 // directly: there needs to be a specialization for each type which represents
 // a JavaScript type that will be converted to a C++ representation.
@@ -69,6 +42,49 @@ struct NativeValueTraits;
 //   static inline typename NativeValueTraitsBase<T>::ImplType
 //   NativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 // };
+
+// NativeValueTraitsBase is supposed to be inherited by NativeValueTraits
+// classes. They serve as a way to hold the ImplType typedef without requiring
+// all NativeValueTraits specializations to declare it.
+//
+// The primary template below is used by NativeValueTraits specializations with
+// types that do not inherit from IDLBase, in which case it is assumed the type
+// of the specialization is also |ImplType|. The NativeValueTraitsBase
+// specialization is used for IDLBase-based types, which are supposed to have
+// their own |ImplType| typedefs.
+//
+// If present, |NullValue()| will be used when converting from the nullable type
+// T?, and should be used if the impl type has an existing "null" state. If not
+// present, WTF::Optional will be used to wrap the type.
+template <typename T, typename SFINAEHelper = void>
+struct NativeValueTraitsBase {
+  STATIC_ONLY(NativeValueTraitsBase);
+
+  using ImplType = T;
+
+  static decltype(auto) ArgumentValue(v8::Isolate* isolate,
+                                      int argument_index,
+                                      v8::Local<v8::Value> value,
+                                      ExceptionState& exception_state) {
+    return NativeValueTraits<T>::NativeValue(isolate, value, exception_state);
+  }
+};
+
+template <typename T>
+struct NativeValueTraitsBase<
+    T,
+    std::enable_if_t<std::is_base_of<IDLBase, T>::value>> {
+  STATIC_ONLY(NativeValueTraitsBase);
+
+  using ImplType = typename T::ImplType;
+
+  static decltype(auto) ArgumentValue(v8::Isolate* isolate,
+                                      int argument_index,
+                                      v8::Local<v8::Value> value,
+                                      ExceptionState& exception_state) {
+    return NativeValueTraits<T>::NativeValue(isolate, value, exception_state);
+  }
+};
 
 }  // namespace blink
 
