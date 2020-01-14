@@ -92,8 +92,6 @@ viz_component("service") {
     "display/texture_deleter.h",
     "display_embedder/buffer_queue.cc",
     "display_embedder/buffer_queue.h",
-    "display_embedder/compositing_mode_reporter_impl.cc",
-    "display_embedder/compositing_mode_reporter_impl.h",
     "display_embedder/direct_context_provider.cc",
     "display_embedder/direct_context_provider.h",
     "display_embedder/gl_output_surface.cc",

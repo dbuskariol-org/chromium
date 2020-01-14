@@ -11,6 +11,8 @@ viz_component("host") {
   sources = [
     "client_frame_sink_video_capturer.cc",
     "client_frame_sink_video_capturer.h",
+    "compositing_mode_reporter_impl.cc",
+    "compositing_mode_reporter_impl.h",
     "gpu_client.cc",
     "gpu_client.h",
     "gpu_client_delegate.h",

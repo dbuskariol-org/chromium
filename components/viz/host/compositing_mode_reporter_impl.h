@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_VIZ_SERVICE_DISPLAY_EMBEDDER_COMPOSITING_MODE_REPORTER_IMPL_H_
-#define COMPONENTS_VIZ_SERVICE_DISPLAY_EMBEDDER_COMPOSITING_MODE_REPORTER_IMPL_H_
+#ifndef COMPONENTS_VIZ_HOST_COMPOSITING_MODE_REPORTER_IMPL_H_
+#define COMPONENTS_VIZ_HOST_COMPOSITING_MODE_REPORTER_IMPL_H_
 
 #include "base/macros.h"
-#include "components/viz/service/viz_service_export.h"
+#include "components/viz/host/viz_host_export.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "mojo/public/cpp/bindings/receiver_set.h"
 #include "mojo/public/cpp/bindings/remote_set.h"
@@ -14,7 +14,7 @@
 
 namespace viz {
 
-class VIZ_SERVICE_EXPORT CompositingModeReporterImpl
+class VIZ_HOST_EXPORT CompositingModeReporterImpl
     : public mojom::CompositingModeReporter {
  public:
   // Creates the CompositingModeReporterImpl and binds it to the deferred mojo
@@ -44,4 +44,4 @@ class VIZ_SERVICE_EXPORT CompositingModeReporterImpl
 
 }  // namespace viz
 
-#endif  // COMPONENTS_VIZ_SERVICE_DISPLAY_EMBEDDER_COMPOSITING_MODE_REPORTER_IMPL_H_
+#endif  // COMPONENTS_VIZ_HOST_COMPOSITING_MODE_REPORTER_IMPL_H_

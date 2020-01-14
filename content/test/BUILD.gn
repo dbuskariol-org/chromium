@@ -361,8 +361,8 @@ jumbo_static_library("test_support") {
     ":content_test_mojo_bindings",
     "//base/third_party/dynamic_annotations",
     "//cc:test_support",
+    "//components/viz/client",
     "//components/viz/host",
-    "//components/viz/service",
     "//content/app:both_for_content_tests",
     "//content/browser:for_content_tests",
     "//content/browser/speech/proto",
@@ -514,7 +514,6 @@ jumbo_static_library("test_support") {
     deps += [
       "//components/viz/common",
       "//components/viz/host",
-      "//components/viz/service",
       "//third_party/libvpx",
       "//ui/compositor",
     ]
@@ -611,7 +610,6 @@ jumbo_static_library("browsertest_support") {
     "//base/test:test_config",
     "//base/test:test_support",
     "//components/network_session_configurator/common:common",
-    "//components/viz/service",
     "//content/app:both_for_content_tests",
     "//content/browser:for_content_tests",
     "//content/shell:content_shell_lib",
