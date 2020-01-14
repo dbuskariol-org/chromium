@@ -605,7 +605,7 @@ TEST_F(ServiceWorkerStorageTest, DisabledStorage) {
                                   &found_registration));
   EXPECT_EQ(blink::ServiceWorkerStatusCode::kErrorAbort,
             FindRegistrationForIdOnly(kRegistrationId, &found_registration));
-  EXPECT_FALSE(storage()->GetUninstallingRegistration(kScope.GetOrigin()));
+  EXPECT_FALSE(registry()->GetUninstallingRegistration(kScope.GetOrigin()));
 
   std::vector<scoped_refptr<ServiceWorkerRegistration>> found_registrations;
   EXPECT_EQ(
@@ -912,7 +912,7 @@ TEST_F(ServiceWorkerStorageTest, InstallingRegistrationsAreFindable) {
   EXPECT_TRUE(registrations_for_origin.empty());
 
   // Notify storage of it being installed.
-  storage()->NotifyInstallingRegistration(live_registration.get());
+  registry()->NotifyInstallingRegistration(live_registration.get());
 
   // Now should be findable.
   EXPECT_EQ(blink::ServiceWorkerStatusCode::kOk,
@@ -954,7 +954,7 @@ TEST_F(ServiceWorkerStorageTest, InstallingRegistrationsAreFindable) {
   EXPECT_TRUE(registrations_for_origin.empty());
 
   // Notify storage of installation no longer happening.
-  storage()->NotifyDoneInstallingRegistration(
+  registry()->NotifyDoneInstallingRegistration(
       live_registration.get(), nullptr, blink::ServiceWorkerStatusCode::kOk);
 
   // Once again, should not be findable.
@@ -1212,7 +1212,7 @@ TEST_F(ServiceWorkerStorageTest, GetAllRegistrationsInfosFields) {
   registration->EnableNavigationPreload(true);
   registration->SetNavigationPreloadHeader("header");
 
-  storage()->NotifyInstallingRegistration(registration.get());
+  registry()->NotifyInstallingRegistration(registration.get());
   EXPECT_EQ(blink::ServiceWorkerStatusCode::kOk,
             StoreRegistration(registration, registration->waiting_version()));
   std::vector<ServiceWorkerRegistrationInfo> all_registrations;
@@ -1695,9 +1695,9 @@ TEST_F(ServiceWorkerStorageTest, FindRegistration_LongestScopeMatch) {
       CreateServiceWorkerRegistrationAndVersion(context(), kScope3, kScript3);
 
   // Notify storage of them being installed.
-  storage()->NotifyInstallingRegistration(live_registration1.get());
-  storage()->NotifyInstallingRegistration(live_registration2.get());
-  storage()->NotifyInstallingRegistration(live_registration3.get());
+  registry()->NotifyInstallingRegistration(live_registration1.get());
+  registry()->NotifyInstallingRegistration(live_registration2.get());
+  registry()->NotifyInstallingRegistration(live_registration3.get());
 
   // Find a registration among installing ones.
   EXPECT_EQ(blink::ServiceWorkerStatusCode::kOk,
@@ -1717,11 +1717,11 @@ TEST_F(ServiceWorkerStorageTest, FindRegistration_LongestScopeMatch) {
                               live_registration3->waiting_version()));
 
   // Notify storage of installations no longer happening.
-  storage()->NotifyDoneInstallingRegistration(
+  registry()->NotifyDoneInstallingRegistration(
       live_registration1.get(), nullptr, blink::ServiceWorkerStatusCode::kOk);
-  storage()->NotifyDoneInstallingRegistration(
+  registry()->NotifyDoneInstallingRegistration(
       live_registration2.get(), nullptr, blink::ServiceWorkerStatusCode::kOk);
-  storage()->NotifyDoneInstallingRegistration(
+  registry()->NotifyDoneInstallingRegistration(
       live_registration3.get(), nullptr, blink::ServiceWorkerStatusCode::kOk);
 
   // Find a registration among installed ones.

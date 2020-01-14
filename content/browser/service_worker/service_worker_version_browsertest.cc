@@ -444,7 +444,7 @@ class ServiceWorkerVersionBrowserTest : public ContentBrowserTest {
         script_type, wrapper()->context()->storage()->NewVersionId(),
         wrapper()->context()->AsWeakPtr());
     // Make the registration findable via storage functions.
-    wrapper()->context()->storage()->NotifyInstallingRegistration(
+    wrapper()->context()->registry()->NotifyInstallingRegistration(
         registration_.get());
   }
 
@@ -571,7 +571,7 @@ class ServiceWorkerVersionBrowserTest : public ContentBrowserTest {
       blink::ServiceWorkerStatusCode status) {
     ASSERT_TRUE(
         BrowserThread::CurrentlyOn(ServiceWorkerContext::GetCoreThreadId()));
-    wrapper()->context()->storage()->NotifyDoneInstallingRegistration(
+    wrapper()->context()->registry()->NotifyDoneInstallingRegistration(
         registration_.get(), version_.get(), status);
   }
 

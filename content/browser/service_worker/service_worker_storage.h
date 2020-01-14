@@ -41,6 +41,7 @@ namespace content {
 
 class ServiceWorkerContextCore;
 class ServiceWorkerDiskCache;
+class ServiceWorkerRegistry;
 class ServiceWorkerResponseMetadataWriter;
 class ServiceWorkerResponseReader;
 class ServiceWorkerResponseWriter;
@@ -93,17 +94,21 @@ class CONTENT_EXPORT ServiceWorkerStorage {
 
   ~ServiceWorkerStorage();
 
+  // TODO(crbug.com/1039200): Stop passing ServiceWorkerRegistry once
+  // ServiceWorkerRegistration dependencies are moved to ServiceWorkerRegistry.
   static std::unique_ptr<ServiceWorkerStorage> Create(
       const base::FilePath& user_data_directory,
       ServiceWorkerContextCore* context,
       scoped_refptr<base::SequencedTaskRunner> database_task_runner,
       storage::QuotaManagerProxy* quota_manager_proxy,
-      storage::SpecialStoragePolicy* special_storage_policy);
+      storage::SpecialStoragePolicy* special_storage_policy,
+      ServiceWorkerRegistry* registry);
 
   // Used for DeleteAndStartOver. Creates new storage based on |old_storage|.
   static std::unique_ptr<ServiceWorkerStorage> Create(
       ServiceWorkerContextCore* context,
-      ServiceWorkerStorage* old_storage);
+      ServiceWorkerStorage* old_storage,
+      ServiceWorkerRegistry* registry);
 
   // Finds registration for |client_url| or |scope| or |registration_id|.
   // The Find methods will find stored and initially installing registrations.
@@ -136,8 +141,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // TODO(crbug.com/1039200): Move this method to ServiceWorkerRegistry.
   void FindRegistrationForIdOnly(int64_t registration_id,
                                  FindRegistrationCallback callback);
-
-  ServiceWorkerRegistration* GetUninstallingRegistration(const GURL& scope);
 
   // Returns all stored registrations for a given origin.
   void GetRegistrationsForOrigin(const GURL& origin,
@@ -278,17 +281,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // is disabled.
   int64_t NewResourceId();
 
-  // Intended for use only by ServiceWorkerRegisterJob and
-  // ServiceWorkerRegistration.
-  void NotifyInstallingRegistration(
-      ServiceWorkerRegistration* registration);
-  void NotifyDoneInstallingRegistration(ServiceWorkerRegistration* registration,
-                                        ServiceWorkerVersion* version,
-                                        blink::ServiceWorkerStatusCode status);
-  void NotifyDoneUninstallingRegistration(
-      ServiceWorkerRegistration* registration,
-      ServiceWorkerRegistration::Status new_status);
-
   void Disable();
 
   // Schedules deleting |resources| from the disk cache and removing their keys
@@ -349,8 +341,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   };
 
   using RegistrationList = std::vector<ServiceWorkerDatabase::RegistrationData>;
-  using RegistrationRefsById =
-      std::map<int64_t, scoped_refptr<ServiceWorkerRegistration>>;
   using InitializeCallback =
       base::OnceCallback<void(std::unique_ptr<InitialData> data,
                               ServiceWorkerDatabase::Status status)>;
@@ -386,7 +376,8 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       ServiceWorkerContextCore* context,
       scoped_refptr<base::SequencedTaskRunner> database_task_runner,
       storage::QuotaManagerProxy* quota_manager_proxy,
-      storage::SpecialStoragePolicy* special_storage_policy);
+      storage::SpecialStoragePolicy* special_storage_policy,
+      ServiceWorkerRegistry* registry);
 
   base::FilePath GetDatabasePath();
   base::FilePath GetDiskCachePath();
@@ -461,12 +452,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   scoped_refptr<ServiceWorkerRegistration> GetOrCreateRegistration(
       const ServiceWorkerDatabase::RegistrationData& data,
       const ResourceList& resources);
-  ServiceWorkerRegistration* FindInstallingRegistrationForClientUrl(
-      const GURL& client_url);
-  ServiceWorkerRegistration* FindInstallingRegistrationForScope(
-      const GURL& scope);
-  ServiceWorkerRegistration* FindInstallingRegistrationForId(
-      int64_t registration_id);
 
   // Lazy disk_cache getter.
   ServiceWorkerDiskCache* disk_cache();
@@ -575,10 +560,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // Posted when we finish deleting the cache directory.
   void DidDeleteDiskCache(StatusCallback callback, bool result);
 
-  // For finding registrations being installed or uninstalled.
-  RegistrationRefsById installing_registrations_;
-  RegistrationRefsById uninstalling_registrations_;
-
   // Origins having registations.
   std::set<GURL> registered_origins_;
 
@@ -628,6 +609,11 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   bool is_purge_pending_;
   bool has_checked_for_stale_resources_;
   base::OnceClosure purging_complete_callback_for_test_;
+
+  // |registry_| owns this class and must outlive this.
+  // TODO(crbug.com/1039200): Remove this reference once
+  // ServiceWorkerRegistration dependencies are moved to ServiceWorkerRegistry.
+  ServiceWorkerRegistry* registry_;
 
   base::WeakPtrFactory<ServiceWorkerStorage> weak_factory_{this};
 

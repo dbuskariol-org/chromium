@@ -136,7 +136,7 @@ void ServiceWorkerRegisterJob::StartImpl() {
   }
 
   scoped_refptr<ServiceWorkerRegistration> registration =
-      context_->storage()->GetUninstallingRegistration(scope_);
+      context_->registry()->GetUninstallingRegistration(scope_);
   if (registration.get())
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,
@@ -478,7 +478,7 @@ void ServiceWorkerRegisterJob::ContinueWithRegistrationForSameScriptUrl(
 }
 
 void ServiceWorkerRegisterJob::StartWorkerForUpdate() {
-  context_->storage()->NotifyInstallingRegistration(registration());
+  context_->registry()->NotifyInstallingRegistration(registration());
 
   int64_t version_id = context_->storage()->NewVersionId();
   if (version_id == blink::mojom::kInvalidServiceWorkerVersionId) {
@@ -747,7 +747,7 @@ void ServiceWorkerRegisterJob::CompleteInternal(
           context_->storage()->DeleteRegistration(
               registration(), registration()->scope().GetOrigin(),
               base::DoNothing());
-          context_->storage()->NotifyDoneUninstallingRegistration(
+          context_->registry()->NotifyDoneUninstallingRegistration(
               registration(), ServiceWorkerRegistration::Status::kUninstalled);
         }
       }
@@ -757,7 +757,7 @@ void ServiceWorkerRegisterJob::CompleteInternal(
   }
   DCHECK(callbacks_.empty());
   if (registration()) {
-    context_->storage()->NotifyDoneInstallingRegistration(
+    context_->registry()->NotifyDoneInstallingRegistration(
         registration(), new_version(), status);
 #if DCHECK_IS_ON()
     switch (registration()->status()) {

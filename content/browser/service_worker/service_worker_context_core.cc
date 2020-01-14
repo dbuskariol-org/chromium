@@ -284,11 +284,12 @@ ServiceWorkerContextCore::ServiceWorkerContextCore(
     ServiceWorkerContextWrapper* wrapper)
     : wrapper_(wrapper),
       container_host_by_uuid_(std::make_unique<ContainerHostByClientUUIDMap>()),
-      registry_(ServiceWorkerRegistry::Create(user_data_directory,
-                                              this,
-                                              std::move(database_task_runner),
-                                              quota_manager_proxy,
-                                              special_storage_policy)),
+      registry_(std::make_unique<ServiceWorkerRegistry>(
+          user_data_directory,
+          this,
+          std::move(database_task_runner),
+          quota_manager_proxy,
+          special_storage_policy)),
       job_coordinator_(std::make_unique<ServiceWorkerJobCoordinator>(this)),
       loader_factory_getter_(url_loader_factory_getter),
       force_update_on_page_load_(false),
@@ -307,9 +308,9 @@ ServiceWorkerContextCore::ServiceWorkerContextCore(
     ServiceWorkerContextWrapper* wrapper)
     : wrapper_(wrapper),
       container_host_by_uuid_(old_context->container_host_by_uuid_.release()),
-      registry_(ServiceWorkerRegistry::CreateForDeleteAndStartOver(
-          this,
-          old_context->registry())),
+      registry_(
+          std::make_unique<ServiceWorkerRegistry>(this,
+                                                  old_context->registry())),
       job_coordinator_(std::make_unique<ServiceWorkerJobCoordinator>(this)),
       loader_factory_getter_(old_context->loader_factory_getter()),
       loader_factory_bundle_for_update_check_(

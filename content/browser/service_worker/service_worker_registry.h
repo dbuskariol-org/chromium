@@ -24,6 +24,8 @@ class SpecialStoragePolicy;
 namespace content {
 
 class ServiceWorkerContextCore;
+class ServiceWorkerRegistration;
+class ServiceWorkerVersion;
 
 // This class manages in-memory representation of service worker registrations
 // (i.e., ServiceWorkerRegistration) including installing and uninstalling
@@ -36,23 +38,23 @@ class ServiceWorkerContextCore;
 // depend on ServiceWorkerRegistration into this class.
 class CONTENT_EXPORT ServiceWorkerRegistry {
  public:
+  using ResourceList = ServiceWorkerStorage::ResourceList;
   using FindRegistrationCallback =
       ServiceWorkerStorage::FindRegistrationCallback;
 
-  ~ServiceWorkerRegistry();
-
-  static std::unique_ptr<ServiceWorkerRegistry> Create(
+  ServiceWorkerRegistry(
       const base::FilePath& user_data_directory,
       ServiceWorkerContextCore* context,
       scoped_refptr<base::SequencedTaskRunner> database_task_runner,
       storage::QuotaManagerProxy* quota_manager_proxy,
       storage::SpecialStoragePolicy* special_storage_policy);
 
-  // Re-create the registry from the old one. This is called when something went
-  // wrong during storage access.
-  static std::unique_ptr<ServiceWorkerRegistry> CreateForDeleteAndStartOver(
-      ServiceWorkerContextCore* context,
-      ServiceWorkerRegistry* old_registry);
+  // For re-creating the registry from the old one. This is called when
+  // something went wrong during storage access.
+  ServiceWorkerRegistry(ServiceWorkerContextCore* context,
+                        ServiceWorkerRegistry* old_registry);
+
+  ~ServiceWorkerRegistry();
 
   ServiceWorkerStorage* storage() const { return storage_.get(); }
 
@@ -68,10 +70,46 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   void FindRegistrationForIdOnly(int64_t registration_id,
                                  FindRegistrationCallback callback);
 
- private:
-  explicit ServiceWorkerRegistry(std::unique_ptr<ServiceWorkerStorage> storage);
+  ServiceWorkerRegistration* GetUninstallingRegistration(const GURL& scope);
 
+  // Intended for use only by ServiceWorkerRegisterJob and
+  // ServiceWorkerRegistration.
+  void NotifyInstallingRegistration(ServiceWorkerRegistration* registration);
+  void NotifyDoneInstallingRegistration(ServiceWorkerRegistration* registration,
+                                        ServiceWorkerVersion* version,
+                                        blink::ServiceWorkerStatusCode status);
+  void NotifyDoneUninstallingRegistration(
+      ServiceWorkerRegistration* registration,
+      ServiceWorkerRegistration::Status new_status);
+
+  // TODO(crbug.com/1039200): Make these methods private once methods/fields
+  // related to ServiceWorkerRegistration in ServiceWorkerStorage are moved
+  // into this class.
+  ServiceWorkerRegistration* FindInstallingRegistrationForClientUrl(
+      const GURL& client_url);
+  ServiceWorkerRegistration* FindInstallingRegistrationForScope(
+      const GURL& scope);
+  ServiceWorkerRegistration* FindInstallingRegistrationForId(
+      int64_t registration_id);
+
+  using RegistrationRefsById =
+      std::map<int64_t, scoped_refptr<ServiceWorkerRegistration>>;
+  // TODO(crbug.com/1039200): Remove these accessors. These are tentatively
+  // exposed for ServiceWorkerStorage. Code that relies on these should be
+  // moved into this class.
+  RegistrationRefsById& installing_registrations() {
+    return installing_registrations_;
+  }
+  RegistrationRefsById& uninstalling_registrations() {
+    return uninstalling_registrations_;
+  }
+
+ private:
   std::unique_ptr<ServiceWorkerStorage> storage_;
+
+  // For finding registrations being installed or uninstalled.
+  RegistrationRefsById installing_registrations_;
+  RegistrationRefsById uninstalling_registrations_;
 };
 
 }  // namespace content
