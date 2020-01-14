@@ -1509,9 +1509,6 @@ class HotseatShelfViewTest : public ShelfViewTest,
 INSTANTIATE_TEST_SUITE_P(All, HotseatShelfViewTest, testing::Bool());
 
 TEST_P(HotseatShelfViewTest, ShouldHideTooltipTest) {
-  // TODO(https://crbug.com/1016823): Fix this test for the hotseat.
-  if (chromeos::switches::ShouldShowShelfHotseat())
-    return;
 
   ShelfID app_button_id = AddAppShortcut();
   ShelfID platform_button_id = AddApp();
