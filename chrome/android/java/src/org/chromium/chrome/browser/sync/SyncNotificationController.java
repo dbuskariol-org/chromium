@@ -24,8 +24,10 @@ import org.chromium.chrome.browser.notifications.PendingIntentProvider;
 import org.chromium.chrome.browser.notifications.channels.ChannelDefinitions;
 import org.chromium.chrome.browser.settings.SettingsLauncher;
 import org.chromium.chrome.browser.settings.sync.SyncAndServicesPreferences;
+import org.chromium.chrome.browser.signin.IdentityServicesProvider;
 import org.chromium.chrome.browser.sync.GoogleServiceAuthError.State;
 import org.chromium.chrome.browser.sync.ui.PassphraseActivity;
+import org.chromium.components.signin.base.CoreAccountInfo;
 import org.chromium.components.sync.AndroidSyncSettings;
 import org.chromium.components.sync.PassphraseType;
 
@@ -84,12 +86,17 @@ public class SyncNotificationController implements ProfileSyncService.SyncStateC
             }
         } else if (mProfileSyncService.isEngineInitialized()
                 && mProfileSyncService.isTrustedVaultKeyRequiredForPreferredDataTypes()) {
-            Intent intent = TrustedVaultClient.get().createKeyRetrievalIntent();
-            if (intent != null) {
-                showSyncNotification(mProfileSyncService.isEncryptEverythingEnabled()
-                                ? R.string.sync_error_card_title
-                                : R.string.sync_passwords_error_card_title,
-                        intent);
+            CoreAccountInfo primaryAccountInfo =
+                    IdentityServicesProvider.get().getIdentityManager().getPrimaryAccountInfo();
+            if (primaryAccountInfo != null) {
+                Intent intent =
+                        TrustedVaultClient.get().createKeyRetrievalIntent(primaryAccountInfo);
+                if (intent != null) {
+                    showSyncNotification(mProfileSyncService.isEncryptEverythingEnabled()
+                                    ? R.string.sync_error_card_title
+                                    : R.string.sync_passwords_error_card_title,
+                            intent);
+                }
             }
         } else {
             mNotificationManager.cancel(NotificationConstants.NOTIFICATION_ID_SYNC);

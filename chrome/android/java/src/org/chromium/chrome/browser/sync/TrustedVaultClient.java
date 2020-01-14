@@ -15,6 +15,7 @@ import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.chrome.browser.AppHooks;
 import org.chromium.chrome.browser.util.IntentUtils;
+import org.chromium.components.signin.base.CoreAccountInfo;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,29 +33,30 @@ public class TrustedVaultClient {
         /**
          * Reads and returns available encryption keys without involving any user action.
          *
-         * @param gaiaId String representation of the Gaia ID.
+         * @param accountInfo Account representing the user.
          * @return a promise with known keys, if any, where the last one is the most recent.
          */
-        Promise<List<byte[]>> fetchKeys(String gaiaId);
+        Promise<List<byte[]>> fetchKeys(CoreAccountInfo accountInfo);
 
         /**
          * Gets an Intent that can be used to display a UI that allows the user to reauthenticate
          * and retrieve the sync encryption keys.
          *
+         * @param accountInfo Account representing the user.
          * @return the Intent object or null is something went wrong.
          */
         @Nullable
-        Intent createKeyRetrievalIntent();
+        Intent createKeyRetrievalIntent(CoreAccountInfo accountInfo);
 
         /**
          * Invoked when the result of fetchKeys() represents keys that cannot decrypt Nigori, which
          * should only be possible if the provided keys are not up-to-date.
          *
-         * @param gaiaId String representation of the Gaia ID.
+         * @param accountInfo Account representing the user.
          * @return a promise which indicates completion and also represents whether the operation
          * took any effect (false positives acceptable).
          */
-        Promise<Boolean> markKeysAsStale(String gaiaId);
+        Promise<Boolean> markKeysAsStale(CoreAccountInfo accountInfo);
     }
 
     /**
@@ -62,17 +64,17 @@ public class TrustedVaultClient {
      */
     public static class EmptyBackend implements Backend {
         @Override
-        public Promise<List<byte[]>> fetchKeys(String gaiaId) {
+        public Promise<List<byte[]>> fetchKeys(CoreAccountInfo accountInfo) {
             return Promise.fulfilled(Collections.emptyList());
         }
 
         @Override
-        public Intent createKeyRetrievalIntent() {
+        public Intent createKeyRetrievalIntent(CoreAccountInfo accountInfo) {
             return null;
         }
 
         @Override
-        public Promise<Boolean> markKeysAsStale(String gaiaId) {
+        public Promise<Boolean> markKeysAsStale(CoreAccountInfo accountInfo) {
             return Promise.fulfilled(false);
         }
     };
@@ -103,9 +105,12 @@ public class TrustedVaultClient {
 
     /**
      * Displays a UI that allows the user to reauthenticate and retrieve the sync encryption keys.
+     *
+     * @param context Context to use when starting the dialog activity.
+     * @param accountInfo Account representing the user.
      */
-    public void displayKeyRetrievalDialog(Context context) {
-        Intent intent = createKeyRetrievalIntent();
+    public void displayKeyRetrievalDialog(Context context, CoreAccountInfo accountInfo) {
+        Intent intent = createKeyRetrievalIntent(accountInfo);
         if (intent == null) return;
 
         IntentUtils.safeStartActivity(context, intent);
@@ -117,12 +122,13 @@ public class TrustedVaultClient {
     /**
      * Creates an intent that launches an activity that triggers the key retrieval UI.
      *
+     * @param accountInfo Account representing the user.
      * @return the intent for opening the key retrieval activity or null if none is actually
      * required
      */
     @Nullable
-    public Intent createKeyRetrievalIntent() {
-        return mBackend.createKeyRetrievalIntent();
+    public Intent createKeyRetrievalIntent(CoreAccountInfo accountInfo) {
+        return mBackend.createKeyRetrievalIntent(accountInfo);
     }
 
     /**
@@ -165,23 +171,27 @@ public class TrustedVaultClient {
      * fetchKeysCompleted().
      */
     @CalledByNative
-    private static void fetchKeys(long nativeTrustedVaultClientAndroid, String gaiaId) {
+    private static void fetchKeys(
+            long nativeTrustedVaultClientAndroid, CoreAccountInfo accountInfo) {
         assert isNativeRegistered(nativeTrustedVaultClientAndroid);
-        get().mBackend.fetchKeys(gaiaId).then(
-                (keys)
-                        -> {
-                    if (isNativeRegistered(nativeTrustedVaultClientAndroid)) {
-                        TrustedVaultClientJni.get().fetchKeysCompleted(
-                                nativeTrustedVaultClientAndroid, gaiaId,
-                                keys.toArray(new byte[0][]));
-                    }
-                },
-                (exception) -> {
-                    if (isNativeRegistered(nativeTrustedVaultClientAndroid)) {
-                        TrustedVaultClientJni.get().fetchKeysCompleted(
-                                nativeTrustedVaultClientAndroid, gaiaId, new byte[0][]);
-                    }
-                });
+
+        get().mBackend.fetchKeys(accountInfo)
+                .then(
+                        (keys)
+                                -> {
+                            if (isNativeRegistered(nativeTrustedVaultClientAndroid)) {
+                                TrustedVaultClientJni.get().fetchKeysCompleted(
+                                        nativeTrustedVaultClientAndroid, accountInfo.getGaiaId(),
+                                        keys.toArray(new byte[0][]));
+                            }
+                        },
+                        (exception) -> {
+                            if (isNativeRegistered(nativeTrustedVaultClientAndroid)) {
+                                TrustedVaultClientJni.get().fetchKeysCompleted(
+                                        nativeTrustedVaultClientAndroid, accountInfo.getGaiaId(),
+                                        new byte[0][]);
+                            }
+                        });
     }
 
     /**
@@ -189,25 +199,28 @@ public class TrustedVaultClient {
      * markKeysAsStaleCompleted().
      */
     @CalledByNative
-    private static void markKeysAsStale(long nativeTrustedVaultClientAndroid, String gaiaId) {
+    private static void markKeysAsStale(
+            long nativeTrustedVaultClientAndroid, CoreAccountInfo accountInfo) {
         assert isNativeRegistered(nativeTrustedVaultClientAndroid);
-        get().mBackend.markKeysAsStale(gaiaId).then(
-                (result)
-                        -> {
-                    if (isNativeRegistered(nativeTrustedVaultClientAndroid)) {
-                        TrustedVaultClientJni.get().markKeysAsStaleCompleted(
-                                nativeTrustedVaultClientAndroid, result);
-                    }
-                },
-                (exception) -> {
-                    if (isNativeRegistered(nativeTrustedVaultClientAndroid)) {
-                        // There's no certainty about whether the operation made any difference so
-                        // let's return true indicating that it might have, since false positives
-                        // are allowed.
-                        TrustedVaultClientJni.get().markKeysAsStaleCompleted(
-                                nativeTrustedVaultClientAndroid, true);
-                    }
-                });
+
+        get().mBackend.markKeysAsStale(accountInfo)
+                .then(
+                        (result)
+                                -> {
+                            if (isNativeRegistered(nativeTrustedVaultClientAndroid)) {
+                                TrustedVaultClientJni.get().markKeysAsStaleCompleted(
+                                        nativeTrustedVaultClientAndroid, result);
+                            }
+                        },
+                        (exception) -> {
+                            if (isNativeRegistered(nativeTrustedVaultClientAndroid)) {
+                                // There's no certainty about whether the operation made any
+                                // difference so let's return true indicating that it might have,
+                                // since false positives are allowed.
+                                TrustedVaultClientJni.get().markKeysAsStaleCompleted(
+                                        nativeTrustedVaultClientAndroid, true);
+                            }
+                        });
     }
 
     @NativeMethods

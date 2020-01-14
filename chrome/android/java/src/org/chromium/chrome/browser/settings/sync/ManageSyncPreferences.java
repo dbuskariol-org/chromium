@@ -32,12 +32,14 @@ import org.chromium.chrome.browser.help.HelpAndFeedback;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.settings.ChromeSwitchPreference;
 import org.chromium.chrome.browser.settings.SettingsUtils;
+import org.chromium.chrome.browser.signin.IdentityServicesProvider;
 import org.chromium.chrome.browser.sync.ProfileSyncService;
 import org.chromium.chrome.browser.sync.TrustedVaultClient;
 import org.chromium.chrome.browser.sync.ui.PassphraseCreationDialogFragment;
 import org.chromium.chrome.browser.sync.ui.PassphraseDialogFragment;
 import org.chromium.chrome.browser.sync.ui.PassphraseTypeDialogFragment;
 import org.chromium.components.signin.ChromeSigninController;
+import org.chromium.components.signin.base.CoreAccountInfo;
 import org.chromium.components.sync.ModelType;
 import org.chromium.components.sync.PassphraseType;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
@@ -214,6 +216,8 @@ public class ManageSyncPreferences extends PreferenceFragmentCompat
      * from this state.
      */
     private void updateSyncPreferences() {
+        // TODO(crbug.com/1041815): Migrate away from ChromeSigninController and use IdentityManager
+        // instead.
         String signedInAccountName = ChromeSigninController.get().getSignedInAccountName();
         if (signedInAccountName == null) {
             // May happen if account is removed from the device while this screen is shown.
@@ -403,7 +407,12 @@ public class ManageSyncPreferences extends PreferenceFragmentCompat
         if (mProfileSyncService.isPassphraseRequiredForPreferredDataTypes()) {
             displayPassphraseDialog();
         } else if (mProfileSyncService.isTrustedVaultKeyRequiredForPreferredDataTypes()) {
-            TrustedVaultClient.get().displayKeyRetrievalDialog(getContext());
+            CoreAccountInfo primaryAccountInfo =
+                    IdentityServicesProvider.get().getIdentityManager().getPrimaryAccountInfo();
+            if (primaryAccountInfo != null) {
+                TrustedVaultClient.get().displayKeyRetrievalDialog(
+                        getActivity(), primaryAccountInfo);
+            }
         } else {
             displayPassphraseTypeDialog();
         }
