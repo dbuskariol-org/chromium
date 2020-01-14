@@ -41,28 +41,29 @@ function extractElementInfo(element, contentWindow, opt_styleNames) {
     return result;
   }
 
-  const styles = {};
+  // Force a style resolve and record the requested style values.
+  result.styles = {};
   const size = element.getBoundingClientRect();
-  const computedStyles = contentWindow.getComputedStyle(element);
+  const computedStyle = contentWindow.getComputedStyle(element);
   for (let i = 0; i < styleNames.length; i++) {
-    styles[styleNames[i]] = computedStyles[styleNames[i]];
+    result.styles[styleNames[i]] = computedStyle[styleNames[i]];
   }
-
-  result.styles = styles;
 
   // These attributes are set when element is <img> or <canvas>.
   result.imageWidth = Number(element.width);
   result.imageHeight = Number(element.height);
 
-  // These attributes are set in any element.
+  // Get the element client rectangle properties.
   result.renderedWidth = size.width;
   result.renderedHeight = size.height;
   result.renderedTop = size.top;
   result.renderedLeft = size.left;
 
-  // Get the scroll position of the element.
+  // Get the element scroll properties.
   result.scrollLeft = element.scrollLeft;
   result.scrollTop = element.scrollTop;
+  result.scrollWidth = element.scrollWidth;
+  result.scrollHeight = element.scrollHeight;
 
   return result;
 }
