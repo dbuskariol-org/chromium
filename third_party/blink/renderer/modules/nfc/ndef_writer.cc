@@ -131,6 +131,8 @@ void NDEFWriter::OnRequestPermission(
   }
 
   UseCounter::Count(GetExecutionContext(), WebFeature::kWebNfcNdefWriterPush);
+  // TODO(https://crbug.com/994936) remove when origin trial is complete.
+  UseCounter::Count(GetExecutionContext(), WebFeature::kWebNfcAPI);
 
   auto callback = WTF::Bind(&NDEFWriter::OnRequestCompleted,
                             WrapPersistent(this), WrapPersistent(resolver));
