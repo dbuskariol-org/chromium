@@ -37,7 +37,6 @@ chrome_ios_eg_test("ios_chrome_integration_egtests") {
     "//ios/chrome/browser/ui/autofill:eg_tests",
     "//ios/chrome/browser/ui/autofill/manual_fill:eg_tests",
     "//ios/chrome/browser/ui/content_suggestions:eg_tests",
-    "//ios/chrome/browser/ui/payments:eg_tests",
   ]
 }
 
@@ -223,7 +222,6 @@ source_set("test_support") {
     "//components/autofill/core/browser",
     "//components/browsing_data/core",
     "//components/content_settings/core/browser",
-    "//components/payments/core:core",
     "//components/strings",
     "//components/sync/base",
     "//components/translate/core/browser",
@@ -254,7 +252,6 @@ source_set("test_support") {
     "//ios/chrome/browser/ui/history:history_ui",
     "//ios/chrome/browser/ui/location_bar:location_bar",
     "//ios/chrome/browser/ui/omnibox:omnibox_internal",
-    "//ios/chrome/browser/ui/payments:payments_ui",
     "//ios/chrome/browser/ui/popup_menu:constants",
     "//ios/chrome/browser/ui/qr_scanner:test_support",
     "//ios/chrome/browser/ui/recent_tabs:recent_tabs_ui_constants",
@@ -360,7 +357,6 @@ source_set("eg_app_support+eg2") {
     "//components/autofill/core/browser",
     "//components/browsing_data/core",
     "//components/content_settings/core/browser",
-    "//components/payments/core:core",
     "//components/strings",
     "//components/sync/base",
     "//components/translate/core/browser",
@@ -405,7 +401,6 @@ source_set("eg_app_support+eg2") {
     "//ios/chrome/browser/ui/material_components",
     "//ios/chrome/browser/ui/omnibox:app_support+eg2",
     "//ios/chrome/browser/ui/omnibox:omnibox_internal",
-    "//ios/chrome/browser/ui/payments:payments_ui",
     "//ios/chrome/browser/ui/popup_menu:constants",
     "//ios/chrome/browser/ui/qr_scanner:eg_app_support+eg2",
     "//ios/chrome/browser/ui/reading_list:eg_app_support+eg2",

@@ -354,9 +354,6 @@
 // Returns YES if UKM feature is enabled.
 + (BOOL)isUKMEnabled WARN_UNUSED_RESULT;
 
-// Returns YES if WebPaymentsModifiers feature is enabled.
-+ (BOOL)isWebPaymentsModifiersEnabled WARN_UNUSED_RESULT;
-
 // Returns YES if CreditCardScanner feature is enabled.
 + (BOOL)isCreditCardScannerEnabled WARN_UNUSED_RESULT;
 

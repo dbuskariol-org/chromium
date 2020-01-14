@@ -115,7 +115,6 @@
 #import "ios/chrome/browser/ui/ntp/ntp_util.h"
 #import "ios/chrome/browser/ui/omnibox/popup/omnibox_popup_presenter.h"
 #import "ios/chrome/browser/ui/overscroll_actions/overscroll_actions_controller.h"
-#import "ios/chrome/browser/ui/payments/payment_request_manager.h"
 #import "ios/chrome/browser/ui/popup_menu/popup_menu_coordinator.h"
 #import "ios/chrome/browser/ui/presenters/vertical_animation_container.h"
 #import "ios/chrome/browser/ui/sad_tab/sad_tab_coordinator.h"
@@ -397,10 +396,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   // Keyboard commands provider.  It offloads most of the keyboard commands
   // management off of the BVC.
   KeyCommandsProvider* _keyCommandsProvider;
-
-  // Used to inject Javascript implementing the PaymentRequest API and to
-  // display the UI.
-  PaymentRequestManager* _paymentRequestManager;
 
   // Used to display the Voice Search UI.  Nil if not visible.
   scoped_refptr<VoiceSearchController> _voiceSearchController;
@@ -1250,7 +1245,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   } else {
     [_dialogPresenter cancelAllDialogs];
   }
-  [_paymentRequestManager enablePaymentRequest:active];
 
   [self setNeedsStatusBarAppearanceUpdate];
 }
@@ -1283,7 +1277,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
     [self.textZoomCoordinator stop];
   }
 
-  [_paymentRequestManager cancelRequest];
   [self.dispatcher dismissPopupMenuAnimated:NO];
   [_contextMenuCoordinator stop];
 
@@ -1352,8 +1345,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   _isShutdown = YES;
 
   [self setActive:NO];
-  [_paymentRequestManager close];
-  _paymentRequestManager = nil;
 
   if (self.browserState) {
     TextToSpeechPlaybackController* controller =
@@ -1412,7 +1403,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   _allWebStateObservationForwarder = nullptr;
   if (_voiceSearchController)
     _voiceSearchController->SetDispatcher(nil);
-  [_paymentRequestManager setActiveWebState:nullptr];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -2226,13 +2216,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
         SadTabTabHelper::FromWebState(webStateList->GetWebStateAt(i));
     sadTabHelper->SetDelegate(_sadTabCoordinator);
   }
-
-  _paymentRequestManager = [[PaymentRequestManager alloc]
-      initWithBaseViewController:self
-                    browserState:self.browserState
-                      dispatcher:self.dispatcher];
-  [_paymentRequestManager setLocationBarModel:_locationBarModel.get()];
-  [_paymentRequestManager setActiveWebState:self.currentWebState];
 }
 
 // Set the frame for the various views. View must be loaded.
@@ -4268,8 +4251,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
 
   self.currentWebState->GetWebViewProxy().scrollViewProxy.clipsToBounds = NO;
 
-  [_paymentRequestManager setActiveWebState:newWebState];
-
   [self webStateSelected:newWebState notifyToolbar:YES];
 }
 
@@ -4302,13 +4283,8 @@ NSString* const kBrowserViewControllerSnackbarCategory =
     self.browserContainerViewController.contentView = nil;
   }
 
-  [_paymentRequestManager stopTrackingWebState:webState];
-
   [[UpgradeCenter sharedInstance]
       tabWillClose:TabIdTabHelper::FromWebState(webState)->tab_id()];
-  if (webStateList->count() == 1) {  // About to remove the last tab.
-    [_paymentRequestManager setActiveWebState:nullptr];
-  }
 }
 
 // Observer method, WebState replaced in |webStateList|.
@@ -4322,9 +4298,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   // Add |newTab|'s view to the hierarchy if it's the current Tab.
   if (self.active && self.currentWebState == newWebState)
     [self displayWebState:newWebState];
-
-  if (newWebState)
-    [_paymentRequestManager setActiveWebState:newWebState];
 }
 
 // Observer method, |webState| inserted in |webStateList|.
@@ -4334,10 +4307,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
            activating:(BOOL)activating {
   DCHECK(webState);
   [self installDelegatesForWebState:webState];
-
-  if (activating) {
-    [_paymentRequestManager setActiveWebState:webState];
-  }
 
   DCHECK_EQ(self.tabModel.webStateList, webStateList);
 

@@ -10,7 +10,6 @@
 #include "components/autofill/core/common/autofill_features.h"
 #include "components/browsing_data/core/pref_names.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
-#import "components/payments/core/features.h"
 #include "components/prefs/pref_service.h"
 #import "components/ukm/ios/features.h"
 #import "ios/chrome/app/main_controller.h"
@@ -619,11 +618,6 @@ using chrome_test_util::BrowserCommandDispatcherForMainBVC;
 
 + (BOOL)isUKMEnabled {
   return base::FeatureList::IsEnabled(ukm::kUkmFeature);
-}
-
-+ (BOOL)isWebPaymentsModifiersEnabled {
-  return base::FeatureList::IsEnabled(
-      payments::features::kWebPaymentsModifiers);
 }
 
 + (BOOL)isCreditCardScannerEnabled {

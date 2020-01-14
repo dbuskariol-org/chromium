@@ -30,7 +30,6 @@ source_set("app") {
   deps = [
     "//base",
     "//ios/chrome/browser",
-    "//ios/chrome/browser/payments:constants",
     "//net",
     "//url",
   ]
@@ -42,7 +41,6 @@ source_set("unit_tests") {
   configs += [ "//build/config/compiler:enable_arc" ]
   testonly = true
   sources = [
-    "app_startup_parameters_unittest.mm",
     "chrome_overlay_window_testing.h",
     "deferred_initialization_runner_unittest.mm",
     "firebase_utils_unittest.mm",
@@ -163,7 +161,6 @@ source_set("app_internal") {
     "//components/metrics",
     "//components/ntp_snippets",
     "//components/password_manager/core/common",
-    "//components/payments/core",
     "//components/prefs",
     "//components/prefs/ios",
     "//components/proxy_config",
@@ -206,8 +203,6 @@ source_set("app_internal") {
     "//ios/chrome/browser/ntp_snippets",
     "//ios/chrome/browser/omaha",
     "//ios/chrome/browser/passwords",
-    "//ios/chrome/browser/payments",
-    "//ios/chrome/browser/payments:constants",
     "//ios/chrome/browser/reading_list",
     "//ios/chrome/browser/search_engines",
     "//ios/chrome/browser/search_engines:extension_search_engine_data_updater",

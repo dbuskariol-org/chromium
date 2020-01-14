@@ -37,7 +37,9 @@ source_set("settings_root_constants") {
     "settings_root_table_constants.h",
     "settings_root_table_constants.mm",
   ]
-  deps = [ "//base" ]
+  deps = [
+    "//base",
+  ]
 }
 
 source_set("settings") {
@@ -110,7 +112,6 @@ source_set("settings") {
     "//components/keyed_service/core",
     "//components/password_manager/core/browser",
     "//components/password_manager/core/common",
-    "//components/payments/core",
     "//components/prefs/ios",
     "//components/resources",
     "//components/search_engines",
@@ -152,7 +153,6 @@ source_set("settings") {
     "//ios/chrome/browser/ui/icons",
     "//ios/chrome/browser/ui/keyboard",
     "//ios/chrome/browser/ui/list_model",
-    "//ios/chrome/browser/ui/payments/cells",
     "//ios/chrome/browser/ui/settings/autofill",
     "//ios/chrome/browser/ui/settings/cells",
     "//ios/chrome/browser/ui/settings/cells:public",
@@ -276,7 +276,6 @@ source_set("unit_tests") {
     "//components/language/core/browser",
     "//components/password_manager/core/browser:test_support",
     "//components/password_manager/core/common",
-    "//components/payments/core",
     "//components/pref_registry",
     "//components/prefs:test_support",
     "//components/search_engines",
@@ -445,7 +444,9 @@ source_set("eg_app_support+eg2") {
     "//ios/chrome/test/app:test_support",
     "//third_party/breakpad:client",
   ]
-  public_deps = [ "//components/content_settings/core/common" ]
+  public_deps = [
+    "//components/content_settings/core/common",
+  ]
 }
 
 source_set("eg_test_support+eg2") {
@@ -457,8 +458,12 @@ source_set("eg_test_support+eg2") {
     "settings_app_interface.h",
     "signin_settings_app_interface.h",
   ]
-  public_deps = [ "//components/content_settings/core/common" ]
-  deps = [ "//base" ]
+  public_deps = [
+    "//components/content_settings/core/common",
+  ]
+  deps = [
+    "//base",
+  ]
 }
 
 source_set("eg2_tests") {
