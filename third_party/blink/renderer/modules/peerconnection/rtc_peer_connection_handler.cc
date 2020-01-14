@@ -892,11 +892,9 @@ class RTCPeerConnectionHandler::Observer
   // When an RTC event log is sent back from PeerConnection, it arrives here.
   void OnWebRtcEventLogWrite(const WTF::Vector<uint8_t>& output) override {
     if (!main_thread_->BelongsToCurrentThread()) {
-      // TODO(crbug.com/787254): Convert this call to PostCrossThreadTask,
-      // after crrev.com/c/1976250 lands.
-      main_thread_->PostTask(
-          FROM_HERE,
-          base::BindOnce(
+      PostCrossThreadTask(
+          *main_thread_.get(), FROM_HERE,
+          CrossThreadBindOnce(
               &RTCPeerConnectionHandler::Observer::OnWebRtcEventLogWrite,
               WrapCrossThreadPersistent(this), output));
     } else if (handler_) {
