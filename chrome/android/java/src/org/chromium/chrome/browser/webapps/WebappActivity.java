@@ -272,7 +272,7 @@ public class WebappActivity extends BaseCustomTabActivity<WebappActivityComponen
                 tab.reloadIgnoringCache();
             }
         }
-        tab.addObserver(createTabObserver());
+        mTabObserverRegistrar.registerActivityTabObserver(createTabObserver());
     }
 
     @Override
@@ -532,7 +532,8 @@ public class WebappActivity extends BaseCustomTabActivity<WebappActivityComponen
                         mToolbarCoordinator.showToolbarTemporarily();
                     }
                     if (mWebappInfo.isForWebApk()) {
-                        WebApkUma.recordNavigation(isNavigationInScope);
+                        boolean isChildTab = (tab.getParentId() != Tab.INVALID_TAB_ID);
+                        WebApkUma.recordNavigation(isChildTab, isNavigationInScope);
                     }
                 }
             }

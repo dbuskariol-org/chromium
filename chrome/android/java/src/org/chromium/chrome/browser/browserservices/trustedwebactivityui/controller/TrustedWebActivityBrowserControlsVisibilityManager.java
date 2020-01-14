@@ -5,6 +5,7 @@
 package org.chromium.chrome.browser.browserservices.trustedwebactivityui.controller;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.chromium.chrome.browser.browserservices.BrowserServicesIntentDataProvider;
 import org.chromium.chrome.browser.customtabs.CloseButtonVisibilityManager;
@@ -38,7 +39,9 @@ public class TrustedWebActivityBrowserControlsVisibilityManager {
     private final CloseButtonVisibilityManager mCloseButtonVisibilityManager;
 
     private boolean mInTwaMode;
-    private boolean mHideBrowserControlsInTwaMode;
+    private boolean mShowBrowserControlsInTwaMode;
+    private boolean mShowBrowserControlsForChildTab;
+
     private @BrowserControlsState int mBrowserControlsState = DEFAULT_BROWSER_CONTROLS_STATE;
 
     private final TabObserver mTabObserver = new EmptyTabObserver() {
@@ -70,9 +73,9 @@ public class TrustedWebActivityBrowserControlsVisibilityManager {
         mCloseButtonVisibilityManager = closeButtonVisibilityManager;
 
         WebappExtras webappExtras = intentDataProvider.getWebappExtras();
-        mHideBrowserControlsInTwaMode =
-                (webappExtras == null || webappExtras.displayMode == WebDisplayMode.FULLSCREEN
-                        || webappExtras.displayMode == WebDisplayMode.STANDALONE);
+        mShowBrowserControlsForChildTab = (webappExtras != null);
+        mShowBrowserControlsInTwaMode =
+                (webappExtras != null && webappExtras.displayMode == WebDisplayMode.MINIMAL_UI);
     }
 
     /**
@@ -114,12 +117,17 @@ public class TrustedWebActivityBrowserControlsVisibilityManager {
         // Show close button if toolbar is not visible, so that during the in and off-scope
         // transitions we avoid button flickering when toolbar is appearing/disappearing.
         boolean closeButtonVisibility =
-                !mInTwaMode || (mBrowserControlsState == BrowserControlsState.HIDDEN);
+                shouldShowBrowserControlsAndCloseButton(mTabProvider.getTab())
+                || (mBrowserControlsState == BrowserControlsState.HIDDEN);
 
         mCloseButtonVisibilityManager.setVisibility(closeButtonVisibility);
     }
 
-    private @BrowserControlsState int computeBrowserControlsState(Tab tab) {
+    private boolean shouldShowBrowserControlsAndCloseButton(@Nullable Tab tab) {
+        return !mInTwaMode || (isChildTab(tab) && mShowBrowserControlsForChildTab);
+    }
+
+    private @BrowserControlsState int computeBrowserControlsState(@Nullable Tab tab) {
         // Force browser controls to show when the security level is dangerous for consistency with
         // TabStateBrowserControlsVisibilityDelegate.
         if (tab != null
@@ -127,7 +135,15 @@ public class TrustedWebActivityBrowserControlsVisibilityManager {
             return BrowserControlsState.SHOWN;
         }
 
-        return mInTwaMode && mHideBrowserControlsInTwaMode ? BrowserControlsState.HIDDEN
-                                                           : BrowserControlsState.BOTH;
+        if (mInTwaMode && mShowBrowserControlsInTwaMode) {
+            return BrowserControlsState.BOTH;
+        }
+
+        return shouldShowBrowserControlsAndCloseButton(tab) ? BrowserControlsState.BOTH
+                                                            : BrowserControlsState.HIDDEN;
+    }
+
+    private boolean isChildTab(@Nullable Tab tab) {
+        return tab != null && tab.getParentId() != Tab.INVALID_TAB_ID;
     }
 }

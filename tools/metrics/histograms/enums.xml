@@ -6247,6 +6247,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Cloned"/>
 </enum>
 
+<enum name="BooleanCloseJustCurrentTab">
+  <int value="0" label="Different behavior"/>
+  <int value="1" label="Closed just current tab"/>
+</enum>
+
 <enum name="BooleanCloseTimeout">
   <int value="0" label="Closed normally"/>
   <int value="1" label="Timed out"/>
@@ -6703,6 +6708,11 @@ Unknown properties are collapsed to zero. -->
 <enum name="BooleanInForeground">
   <int value="0" label="Background"/>
   <int value="1" label="Foreground"/>
+</enum>
+
+<enum name="BooleanInScope">
+  <int value="0" label="Not in scope"/>
+  <int value="1" label="In scope"/>
 </enum>
 
 <enum name="BooleanInstalled">
