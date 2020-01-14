@@ -89,12 +89,8 @@ android_library("java") {
 
 android_library("test_java") {
   testonly = true
-  sources = [
-    "org/chromium/weblayer_private/test/TestWebLayerImpl.java",
-  ]
-  deps = [
-    "//net/android:net_java",
-  ]
+  sources = [ "org/chromium/weblayer_private/test/TestWebLayerImpl.java" ]
+  deps = [ "//net/android:net_java" ]
   srcjar_deps = [ ":test_aidl" ]
 }
 
@@ -130,9 +126,7 @@ android_library("interfaces_java") {
     "org/chromium/weblayer_private/interfaces/StrictModeWorkaround.java",
   ]
 
-  deps = [
-    "//third_party/android_deps:androidx_annotation_annotation_java",
-  ]
+  deps = [ "//third_party/android_deps:androidx_annotation_annotation_java" ]
 
   srcjar_deps = [ ":aidl" ]
 }
@@ -146,9 +140,7 @@ android_library("gms_bridge_java") {
     "org/chromium/weblayer_private/GmsBridgeImpl.java",
   ]
 
-  deps = [
-    "//base:base_java",
-  ]
+  deps = [ "//base:base_java" ]
 
   # The appropriate .class file will be loaded via a dependency to a library
   # like :gms_bridge_upstream_impl_java below.
@@ -157,12 +149,8 @@ android_library("gms_bridge_java") {
 
 # This target compiles the implementation of GmsBridge for public targets.
 android_library("gms_bridge_upstream_impl_java") {
-  sources = [
-    "org/chromium/weblayer_private/GmsBridgeImpl.java",
-  ]
-  deps = [
-    ":gms_bridge_java",
-  ]
+  sources = [ "org/chromium/weblayer_private/GmsBridgeImpl.java" ]
+  deps = [ ":gms_bridge_java" ]
 }
 
 android_aidl("aidl") {
@@ -195,7 +183,6 @@ android_aidl("aidl") {
 android_aidl("test_aidl") {
   import_include = [ "." ]
   testonly = true
-  sources = [
-    "org/chromium/weblayer_private/test_interfaces/ITestWebLayer.aidl",
-  ]
+  sources =
+      [ "org/chromium/weblayer_private/test_interfaces/ITestWebLayer.aidl" ]
 }

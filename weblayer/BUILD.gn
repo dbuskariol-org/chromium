@@ -27,12 +27,8 @@ if (is_android) {
 }
 
 source_set("android_descriptors") {
-  sources = [
-    "browser/android_descriptors.h",
-  ]
-  public_deps = [
-    "//content/public/common:content_descriptors",
-  ]
+  sources = [ "browser/android_descriptors.h" ]
+  public_deps = [ "//content/public/common:content_descriptors" ]
 }
 
 if (is_android) {
@@ -43,9 +39,7 @@ if (is_android) {
     # will never display most of them, so we try to limit the included
     # strings.
     whitelist = rebase_path("grit_strings_whitelist.txt", root_build_dir)
-    inputs = [
-      "//weblayer/grit_strings_whitelist.txt",
-    ]
+    inputs = [ "//weblayer/grit_strings_whitelist.txt" ]
     grit_flags = [
       "-w",
       whitelist,
@@ -66,9 +60,7 @@ if (is_android) {
     input_locales = locales
     output_locales = locales
     source_patterns = [ "${root_gen_dir}/weblayer/components_strings_" ]
-    deps = [
-      ":generate_components_strings",
-    ]
+    deps = [ ":generate_components_strings" ]
     output_dir = "$root_out_dir/weblayer/locales"
   }
 
@@ -77,9 +69,7 @@ if (is_android) {
     renaming_sources = [ "$root_out_dir/weblayer/locales/en-US.pak" ]
     renaming_destinations = [ "stored-locales/weblayer/en-US.pak" ]
     treat_as_locale_paks = true
-    deps = [
-      ":weblayer_locales",
-    ]
+    deps = [ ":weblayer_locales" ]
   }
 
   android_assets("bundle_locale_pak_assets") {
@@ -91,9 +81,7 @@ if (is_android) {
       renaming_destinations += [ "locales/$_locale.pak" ]
     }
     treat_as_locale_paks = true
-    deps = [
-      ":weblayer_locales",
-    ]
+    deps = [ ":weblayer_locales" ]
   }
 }
 
@@ -193,9 +181,7 @@ jumbo_static_library("weblayer_lib") {
     "//build/config/compiler:no_size_t_to_int_warning",
   ]
 
-  public_deps = [
-    ":android_descriptors",
-  ]
+  public_deps = [ ":android_descriptors" ]
   deps = [
     "//base",
     "//base:base_static",
@@ -361,9 +347,7 @@ grit("resources") {
     "-E",
     "root_gen_dir=" + rebase_path(root_gen_dir, root_build_dir),
   ]
-  deps = [
-    "//weblayer/browser/webui:mojo_bindings_js",
-  ]
+  deps = [ "//weblayer/browser/webui:mojo_bindings_js" ]
 }
 
 # TODO(jam): move weblayer_shell_resources_grit and copy_shell_resources here in
@@ -371,9 +355,7 @@ grit("resources") {
 
 if (is_android) {
   shared_library("libweblayer") {
-    sources = [
-      "app/entry_point.cc",
-    ]
+    sources = [ "app/entry_point.cc" ]
     deps = [
       ":weblayer_lib",
       "//base",
