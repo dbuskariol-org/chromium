@@ -6422,4 +6422,6 @@ crbug.com/963183 http/tests/devtools/sources/debugger-breakpoints/disable-breakp
 
 crbug.com/836300 fast/css3-text/css3-text-decoration/text-decoration-skip-ink-links.html [ Pass Failure ]
 
-
+# Sheriff 2020-01-14
+crbug.com/1041973 external/wpt/html/semantics/forms/constraints/form-validation-reportValidity.html [ Pass Failure ]
+crbug.com/1041973 virtual/web-components-v0-disabled/external/wpt/html/semantics/forms/constraints/form-validation-reportValidity.html [ Pass Failure ]
