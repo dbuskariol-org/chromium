@@ -624,6 +624,8 @@ jumbo_static_library("extensions") {
     "install_gate.h",
     "install_observer.cc",
     "install_observer.h",
+    "install_prompt_permissions.cc",
+    "install_prompt_permissions.h",
     "install_signer.cc",
     "install_signer.h",
     "install_tracker.cc",
