@@ -191,9 +191,7 @@ js_library("toggle_row") {
 }
 
 js_library("types") {
-  deps = [
-    "//chrome/browser/ui/webui/app_management:mojo_bindings_js_library_for_compile",
-  ]
+  deps = [ "//chrome/browser/ui/webui/app_management:mojo_bindings_js_library_for_compile" ]
 }
 
 js_library("uninstall_button") {
