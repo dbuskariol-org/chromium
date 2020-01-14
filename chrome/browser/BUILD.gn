@@ -1709,8 +1709,6 @@ jumbo_static_library("browser") {
     "ssl/insecure_sensitive_input_driver_factory.h",
     "ssl/known_interception_disclosure_infobar_delegate.cc",
     "ssl/known_interception_disclosure_infobar_delegate.h",
-    "ssl/mitm_software_blocking_page.cc",
-    "ssl/mitm_software_blocking_page.h",
     "ssl/secure_origin_policy_handler.cc",
     "ssl/secure_origin_policy_handler.h",
     "ssl/secure_origin_prefs_observer.cc",

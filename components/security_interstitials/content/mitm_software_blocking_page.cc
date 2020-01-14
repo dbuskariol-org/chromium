@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ssl/mitm_software_blocking_page.h"
+#include "components/security_interstitials/content/mitm_software_blocking_page.h"
 
 #include <utility>
 
@@ -25,9 +25,7 @@ using content::InterstitialPageDelegate;
 using content::NavigationController;
 using content::NavigationEntry;
 
-namespace {
-
-}  // namespace
+namespace {}  // namespace
 
 // static
 const InterstitialPageDelegate::TypeID
