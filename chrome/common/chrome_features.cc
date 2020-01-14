@@ -33,6 +33,13 @@ const base::Feature kApkWebAppInstalls{"ApkWebAppInstalls",
                                        base::FEATURE_ENABLED_BY_DEFAULT};
 #endif  // defined(OS_CHROMEOS)
 
+#if defined(OS_CHROMEOS)
+// Enables app activity reporting for child user.
+// Requires |kPerAppTimeLimits| to be enabled.
+const base::Feature kAppActivityReporting{"AppActivityReporting",
+                                          base::FEATURE_DISABLED_BY_DEFAULT};
+#endif
+
 #if defined(OS_MACOSX)
 // Enable the new multi-profile-aware app shim mode.
 // TODO(https://crbug.com/982024): Delete this flag when feature is complete.
