@@ -1257,7 +1257,6 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
        overview_mode_will_start_) &&
       !overview_controller->IsCompletingShutdownAnimations();
   const bool app_list_visible =
-      app_list_controller->IsVisible() ||
       app_list_controller->GetTargetVisibility() ||
       (!in_overview && app_list_controller->ShouldHomeLauncherBeVisible());
 
@@ -1281,13 +1280,8 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
         case AppListControllerImpl::HomeLauncherTransitionState::kMostlyHidden:
           return in_overview ? HotseatState::kExtended : HotseatState::kHidden;
         case AppListControllerImpl::HomeLauncherTransitionState::kFinished:
-          // Consider the AppList visible if it is beginning to show. Also
-          // detect the case where the last window is being minimized.
-          if (app_list_controller->GetTargetVisibility() ||
-              (!in_overview &&
-               app_list_controller->ShouldHomeLauncherBeVisible())) {
+          if (app_list_visible)
             return HotseatState::kShown;
-          }
 
           // Show the hotseat if the shelf view's context menu is showing.
           if (shelf_widget_->hotseat_widget()->IsShowingShelfMenu())

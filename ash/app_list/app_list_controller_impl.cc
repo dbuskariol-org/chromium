@@ -621,7 +621,9 @@ AppListViewState AppListControllerImpl::GetAppListViewState() {
 }
 
 bool AppListControllerImpl::ShouldHomeLauncherBeVisible() const {
-  return IsTabletMode() && !HasVisibleWindows();
+  return IsTabletMode() && (!HasVisibleWindows() ||
+                            home_launcher_transition_state_ ==
+                                HomeLauncherTransitionState::kMostlyShown);
 }
 
 void AppListControllerImpl::OnShelfAlignmentChanged(
@@ -1631,17 +1633,7 @@ void AppListControllerImpl::UpdateLauncherContainer(
   aura::Window* parent_window = GetContainerForDisplayId(display_id);
   if (parent_window && !parent_window->Contains(window)) {
     parent_window->AddChild(window);
-    bool is_showing_app_window = false;
-    for (auto* app_window :
-         Shell::Get()->mru_window_tracker()->BuildWindowForCycleList(
-             kActiveDesk)) {
-      if (!parent_window->Contains(app_window) &&
-          !WindowState::Get(app_window)->IsMinimized()) {
-        is_showing_app_window = true;
-        break;
-      }
-    }
-    if (ShouldLauncherShowBehindApps() && is_showing_app_window) {
+    if (!ShouldHomeLauncherBeVisible()) {
       // When move launcher back to behind apps, and there is app window
       // showing, we release focus.
       Shell::Get()->activation_client()->DeactivateWindow(window);
@@ -1656,11 +1648,14 @@ int AppListControllerImpl::GetContainerId() const {
 
 aura::Window* AppListControllerImpl::GetContainerForDisplayId(
     base::Optional<int64_t> display_id) {
-  aura::Window* root_window =
-      display_id.has_value()
-          ? Shell::GetRootWindowForDisplayId(display_id.value())
-          : presenter_.GetWindow()->GetRootWindow();
-  return root_window->GetChildById(GetContainerId());
+  aura::Window* root_window = nullptr;
+  if (display_id.has_value()) {
+    root_window = Shell::GetRootWindowForDisplayId(display_id.value());
+  } else if (presenter_.GetWindow()) {
+    root_window = presenter_.GetWindow()->GetRootWindow();
+  }
+
+  return root_window ? root_window->GetChildById(GetContainerId()) : nullptr;
 }
 
 bool AppListControllerImpl::ShouldLauncherShowBehindApps() const {
