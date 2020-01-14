@@ -239,5 +239,3 @@ crbug.com/1028975 [ win ] Pixel_PrecisionRoundedCorner [ RetryOnFailure ]
 
 # VP9 appears to not recover correctly after GPU process crashes on Windows.
 crbug.com/1033982 [ win nvidia ] Pixel_Video_Context_Loss_VP9 [ RetryOnFailure ]
-
-crbug.com/1037654 [ use-vulkan android android-chromium skia-renderer ] Pixel_WebGLCopyImage [ Failure ]
