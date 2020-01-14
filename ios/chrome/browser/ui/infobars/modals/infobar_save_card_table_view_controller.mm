@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, ItemType) {
   UIBarButtonItem* cancelButton = [[UIBarButtonItem alloc]
       initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                            target:self
-                           action:@selector(dismissInfobarModal:)];
+                           action:@selector(dismissInfobarModal)];
   cancelButton.accessibilityIdentifier = kInfobarModalCancelButton;
   self.navigationItem.leftBarButtonItem = cancelButton;
   self.navigationController.navigationBar.prefersLargeTitles = NO;
@@ -327,13 +327,11 @@ typedef NS_ENUM(NSInteger, ItemType) {
   // SaveCard specific editing metrics.
 }
 
-- (void)dismissInfobarModal:(UIButton*)sender {
+- (void)dismissInfobarModal {
   base::RecordAction(
       base::UserMetricsAction("MobileMessagesModalCancelledTapped"));
   [self.metricsRecorder recordModalEvent:MobileMessagesModalEvent::Canceled];
-  [self.saveCardModalDelegate dismissInfobarModal:sender
-                                         animated:YES
-                                       completion:nil];
+  [self.saveCardModalDelegate dismissInfobarModal:self];
 }
 
 #pragma mark - Helpers

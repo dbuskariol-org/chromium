@@ -18,6 +18,7 @@
 #import "ios/chrome/browser/ui/commands/snackbar_commands.h"
 #import "ios/chrome/browser/ui/infobars/banners/infobar_banner_presentation_state.h"
 #import "ios/chrome/browser/ui/infobars/banners/infobar_banner_view_controller.h"
+#import "ios/chrome/browser/ui/infobars/coordinators/infobar_coordinator+subclassing.h"
 #import "ios/chrome/browser/ui/infobars/coordinators/infobar_coordinator_implementation.h"
 #import "ios/chrome/browser/ui/infobars/coordinators/infobar_translate_mediator.h"
 #import "ios/chrome/browser/ui/infobars/infobar_badge_ui_delegate.h"
@@ -291,14 +292,14 @@ NSString* const kTranslateNotificationSnackbarCategory =
   [self performInfobarAction];
   [TranslateInfobarMetricsRecorder
       recordModalEvent:MobileMessagesTranslateModalEvent::ShowOriginal];
-  [self dismissInfobarModal:self animated:YES completion:nil];
+  [self dismissInfobarModalAnimated:YES completion:nil];
 }
 
 - (void)translateWithNewLanguages {
   [self.mediator updateLanguagesIfNecessary];
   [self performInfobarActionForStep:translate::TranslateStep::
                                         TRANSLATE_STEP_BEFORE_TRANSLATE];
-  [self dismissInfobarModal:self animated:YES completion:nil];
+  [self dismissInfobarModalAnimated:YES completion:nil];
 }
 
 - (void)showChangeSourceLanguageOptions {
@@ -359,14 +360,14 @@ NSString* const kTranslateNotificationSnackbarCategory =
       translate::TranslateStep::TRANSLATE_STEP_BEFORE_TRANSLATE)
     [self performInfobarAction];
 
-  [self dismissInfobarModal:self animated:YES completion:nil];
+  [self dismissInfobarModalAnimated:YES completion:nil];
 }
 
 - (void)undoAlwaysTranslateSourceLanguage {
   DCHECK(self.translateInfobarDelegate->ShouldAlwaysTranslate());
   [self recordInfobarEvent:InfobarEvent::INFOBAR_ALWAYS_TRANSLATE_UNDO];
   self.translateInfobarDelegate->ToggleAlwaysTranslate();
-  [self dismissInfobarModal:self animated:YES completion:nil];
+  [self dismissInfobarModalAnimated:YES completion:nil];
 }
 
 - (void)neverTranslateSourceLanguage {
@@ -380,19 +381,18 @@ NSString* const kTranslateNotificationSnackbarCategory =
                        languageCode:self.translateInfobarDelegate
                                         ->original_language_code()];
   self.translateInfobarDelegate->ToggleTranslatableLanguageByPrefs();
-  [self dismissInfobarModal:self
-                   animated:YES
-                 completion:^{
-                   // Completely remove the Infobar along with its badge after
-                   // blacklisting the Website.
-                   [self detachView];
-                 }];
+  [self dismissInfobarModalAnimated:YES
+                         completion:^{
+                           // Completely remove the Infobar along with its badge
+                           // after blacklisting the Website.
+                           [self detachView];
+                         }];
 }
 
 - (void)undoNeverTranslateSourceLanguage {
   DCHECK(!self.translateInfobarDelegate->IsTranslatableLanguageByPrefs());
   self.translateInfobarDelegate->ToggleTranslatableLanguageByPrefs();
-  [self dismissInfobarModal:self animated:YES completion:nil];
+  [self dismissInfobarModalAnimated:YES completion:nil];
   // TODO(crbug.com/1014959): implement else logic. Should anything be done?
 }
 
@@ -404,19 +404,18 @@ NSString* const kTranslateNotificationSnackbarCategory =
   [TranslateInfobarMetricsRecorder
       recordModalEvent:MobileMessagesTranslateModalEvent::
                            TappedNeverForThisSite];
-  [self dismissInfobarModal:self
-                   animated:YES
-                 completion:^{
-                   // Completely remove the Infobar along with its badge after
-                   // blacklisting the Website.
-                   [self detachView];
-                 }];
+  [self dismissInfobarModalAnimated:YES
+                         completion:^{
+                           // Completely remove the Infobar along with its badge
+                           // after blacklisting the Website.
+                           [self detachView];
+                         }];
 }
 
 - (void)undoNeverTranslateSite {
   DCHECK(self.translateInfobarDelegate->IsSiteBlacklisted());
   self.translateInfobarDelegate->ToggleSiteBlacklist();
-  [self dismissInfobarModal:self animated:YES completion:nil];
+  [self dismissInfobarModalAnimated:YES completion:nil];
   // TODO(crbug.com/1014959): implement else logic. Should aything be done?
 }
 

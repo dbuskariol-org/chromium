@@ -11,6 +11,7 @@
 #import "ios/chrome/browser/infobars/infobar_type.h"
 #import "ios/chrome/browser/ui/autofill/save_card_message_with_links.h"
 #import "ios/chrome/browser/ui/infobars/banners/infobar_banner_view_controller.h"
+#import "ios/chrome/browser/ui/infobars/coordinators/infobar_coordinator+subclassing.h"
 #import "ios/chrome/browser/ui/infobars/coordinators/infobar_coordinator_implementation.h"
 #import "ios/chrome/browser/ui/infobars/infobar_container.h"
 #import "ios/chrome/browser/ui/infobars/modals/infobar_save_card_modal_delegate.h"
@@ -218,11 +219,11 @@
   // Before passing the URL to the block, make sure the block has a copy of
   // the URL and not just a reference.
   const GURL URL(linkURL);
-  [self dismissInfobarModal:self
-                   animated:YES
-                 completion:^{
-                   self.saveCardInfoBarDelegate->OnLegalMessageLinkClicked(URL);
-                 }];
+  [self dismissInfobarModalAnimated:YES
+                         completion:^{
+                           self.saveCardInfoBarDelegate
+                               ->OnLegalMessageLinkClicked(URL);
+                         }];
 }
 
 #pragma mark - Private

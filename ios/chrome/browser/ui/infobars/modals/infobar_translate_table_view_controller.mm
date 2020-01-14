@@ -91,8 +91,8 @@ typedef NS_ENUM(NSInteger, ItemType) {
   // Configure the NavigationBar.
   UIBarButtonItem* cancelButton = [[UIBarButtonItem alloc]
       initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                           target:self
-                           action:@selector(dismissInfobarModal:)];
+                           target:self.infobarModalDelegate
+                           action:@selector(dismissInfobarModal)];
   cancelButton.accessibilityIdentifier = kInfobarModalCancelButton;
   self.navigationItem.leftBarButtonItem = cancelButton;
   self.navigationController.navigationBar.prefersLargeTitles = NO;
@@ -352,11 +352,9 @@ typedef NS_ENUM(NSInteger, ItemType) {
   return item;
 }
 
-- (void)dismissInfobarModal:(UIButton*)sender {
+- (void)dismissInfobarModal {
   // TODO(crbug.com/1014959): add metrics
-  [self.infobarModalDelegate dismissInfobarModal:sender
-                                        animated:YES
-                                      completion:nil];
+  [self.infobarModalDelegate dismissInfobarModal:self];
 }
 
 // Call the appropriate method to trigger Translate depending on if the
@@ -365,7 +363,7 @@ typedef NS_ENUM(NSInteger, ItemType) {
   if (self.updateLanguageBeforeTranslate) {
     [self.infobarModalDelegate translateWithNewLanguages];
   } else {
-    [self.infobarModalDelegate modalInfobarButtonWasAccepted:sender];
+    [self.infobarModalDelegate modalInfobarButtonWasAccepted:self];
   }
 }
 
