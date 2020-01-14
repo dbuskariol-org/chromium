@@ -72,9 +72,7 @@ buildflag_header("buildflags") {
 
 # This proto library is used for non-android NTPs below.
 proto_library("ntp_background_proto") {
-  sources = [
-    "search/background/ntp_background.proto",
-  ]
+  sources = [ "search/background/ntp_background.proto" ]
   generate_python = false
 }
 
@@ -5336,27 +5334,19 @@ config("notouch_config") {
 
 if (is_android) {
   proto_library("client_discourse_context_proto") {
-    sources = [
-      "android/proto/client_discourse_context.proto",
-    ]
+    sources = [ "android/proto/client_discourse_context.proto" ]
   }
 
   proto_library("delta_file_proto") {
-    sources = [
-      "android/proto/delta_file.proto",
-    ]
+    sources = [ "android/proto/delta_file.proto" ]
   }
 
   proto_library("explore_sites_proto") {
-    sources = [
-      "android/explore_sites/catalog.proto",
-    ]
+    sources = [ "android/explore_sites/catalog.proto" ]
   }
 
   proto_library("usage_stats_proto") {
-    sources = [
-      "android/usage_stats/website_event.proto",
-    ]
+    sources = [ "android/usage_stats/website_event.proto" ]
   }
 }
 
@@ -5392,27 +5382,19 @@ source_set("active_use_util") {
 }
 
 source_set("theme_properties") {
-  sources = [
-    "themes/theme_properties.h",
-  ]
+  sources = [ "themes/theme_properties.h" ]
 }
 
 proto_library("availability_protos") {
-  sources = [
-    "availability/proto/availability_prober_cache_entry.proto",
-  ]
+  sources = [ "availability/proto/availability_prober_cache_entry.proto" ]
 }
 
 proto_library("resource_prefetch_predictor_proto") {
-  sources = [
-    "predictors/resource_prefetch_predictor.proto",
-  ]
+  sources = [ "predictors/resource_prefetch_predictor.proto" ]
 }
 
 proto_library("permissions_proto") {
-  sources = [
-    "permissions/crowd_deny.proto",
-  ]
+  sources = [ "permissions/crowd_deny.proto" ]
 }
 
 grit("resources") {
@@ -5457,24 +5439,16 @@ grit("resources") {
   if (enable_plugins) {
     # .json is not in the default sources_assignment_filter.
     if (is_chromeos) {
-      inputs = [
-        "resources/plugin_metadata/plugins_chromeos.json",
-      ]
+      inputs = [ "resources/plugin_metadata/plugins_chromeos.json" ]
     }
     if (is_linux && !is_chromeos) {
-      inputs = [
-        "resources/plugin_metadata/plugins_linux.json",
-      ]
+      inputs = [ "resources/plugin_metadata/plugins_linux.json" ]
     }
     if (is_mac) {
-      inputs = [
-        "resources/plugin_metadata/plugins_mac.json",
-      ]
+      inputs = [ "resources/plugin_metadata/plugins_mac.json" ]
     }
     if (is_win) {
-      inputs = [
-        "resources/plugin_metadata/plugins_win.json",
-      ]
+      inputs = [ "resources/plugin_metadata/plugins_win.json" ]
     }
   }
 
@@ -5530,12 +5504,8 @@ grit("resources") {
 if (is_chrome_branded) {
   action("chrome_internal_resources_gen") {
     script = "internal/transform_additional_modules_list.py"
-    sources = [
-      "internal/resources/additional_modules_list.input",
-    ]
-    outputs = [
-      additional_modules_list_file,
-    ]
+    sources = [ "internal/resources/additional_modules_list.input" ]
+    outputs = [ additional_modules_list_file ]
     args = rebase_path(sources, root_build_dir) +
            rebase_path(outputs, root_build_dir)
   }
@@ -5579,26 +5549,16 @@ grit("dev_ui_browser_resources") {
 
 action("expired_flags_list_gen") {
   script = "//tools/flags/generate_expired_list.py"
-  sources = [
-    "flag-metadata.json",
-  ]
-  inputs = [
-    "//chrome/VERSION",
-  ]
-  outputs = [
-    "$root_gen_dir/chrome/browser/expired_flags_list.cc",
-  ]
+  sources = [ "flag-metadata.json" ]
+  inputs = [ "//chrome/VERSION" ]
+  outputs = [ "$root_gen_dir/chrome/browser/expired_flags_list.cc" ]
   args = rebase_path(sources, root_build_dir) +
          rebase_path(outputs, root_build_dir)
 }
 
 source_set("expired_flags_list") {
-  deps = [
-    ":expired_flags_list_gen",
-  ]
-  sources = [
-    "$root_gen_dir/chrome/browser/expired_flags_list.cc",
-  ]
+  deps = [ ":expired_flags_list_gen" ]
+  sources = [ "$root_gen_dir/chrome/browser/expired_flags_list.cc" ]
 }
 
 # Use a static library here because many test binaries depend on this but don't
@@ -5961,21 +5921,15 @@ if (!is_android) {
       "//components/translate/content/common",
     ]
 
-    public_deps = [
-      "//net:test_support",
-    ]
+    public_deps = [ "//net:test_support" ]
   }
 }
 
 if (is_android) {
   java_cpp_enum("sharing_send_message_result_generated_enum") {
-    sources = [
-      "sharing/sharing_send_message_result.h",
-    ]
+    sources = [ "sharing/sharing_send_message_result.h" ]
   }
   java_cpp_enum("sharing_dialog_type_generated_enum") {
-    sources = [
-      "sharing/sharing_metrics.h",
-    ]
+    sources = [ "sharing/sharing_metrics.h" ]
   }
 }
