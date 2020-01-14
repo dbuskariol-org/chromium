@@ -30,9 +30,7 @@ if (!is_ios) {
       "//url/ipc:url_ipc",
     ]
 
-    public_deps = [
-      ":interfaces",
-    ]
+    public_deps = [ ":interfaces" ]
   }
 
   static_library("safe_browsing_prefs") {
@@ -53,25 +51,21 @@ if (!is_ios) {
 
   source_set("unit_tests") {
     testonly = true
-    sources = [
-      "safe_browsing_prefs_unittest.cc",
-    ]
+    sources = [ "safe_browsing_prefs_unittest.cc" ]
     deps = [
       ":safe_browsing_prefs",
+      ":test_support",
       "//base:base",
       "//base/test:test_support",
       "//components/prefs:test_support",
       "//components/safe_browsing/core:features",
-      "//content/test:test_support",
       "//testing/gtest",
       "//url:url",
     ]
   }
 
   mojom("interfaces") {
-    sources = [
-      "safe_browsing.mojom",
-    ]
+    sources = [ "safe_browsing.mojom" ]
 
     public_deps = [
       "//content/public/common:resource_type_bindings",
@@ -87,13 +81,9 @@ if (!is_ios) {
 }
 
 source_set("thread_utils") {
-  sources = [
-    "thread_utils.h",
-  ]
+  sources = [ "thread_utils.h" ]
 
-  deps = [
-    "//base",
-  ]
+  deps = [ "//base" ]
 
   if (is_ios) {
     sources += [ "//components/safe_browsing/ios/thread_utils_ios.cc" ]
@@ -103,5 +93,23 @@ source_set("thread_utils") {
     sources += [ "//components/safe_browsing/content/common/thread_utils.cc" ]
 
     deps += [ "//content/public/browser" ]
+  }
+}
+
+source_set("test_support") {
+  testonly = true
+  sources = [ "test_task_environment.h" ]
+
+  deps = [ "//base/test:test_support" ]
+
+  if (is_ios) {
+    sources += [ "//components/safe_browsing/ios/test_task_environment_ios.cc" ]
+
+    deps += [ "//ios/web/public/test" ]
+  } else {
+    sources +=
+        [ "//components/safe_browsing/content/common/test_task_environment.cc" ]
+
+    deps += [ "//content/test:test_support" ]
   }
 }

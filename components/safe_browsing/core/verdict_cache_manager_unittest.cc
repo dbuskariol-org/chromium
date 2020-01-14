@@ -8,10 +8,10 @@
 #include "base/memory/scoped_refptr.h"
 #include "base/values.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
+#include "components/safe_browsing/core/common/test_task_environment.h"
 #include "components/safe_browsing/core/proto/csd.pb.h"
 #include "components/safe_browsing/core/proto/realtimeapi.pb.h"
 #include "components/sync_preferences/testing_pref_service_syncable.h"
-#include "content/public/test/browser_task_environment.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace safe_browsing {
@@ -22,6 +22,7 @@ class VerdictCacheManagerTest : public ::testing::Test {
 
   void SetUp() override {
     HostContentSettingsMap::RegisterProfilePrefs(test_pref_service_.registry());
+    task_environment_ = CreateTestTaskEnvironment();
     content_setting_map_ = new HostContentSettingsMap(
         &test_pref_service_, false /* is_off_the_record */,
         false /* store_last_modified */,
@@ -69,7 +70,7 @@ class VerdictCacheManagerTest : public ::testing::Test {
   scoped_refptr<HostContentSettingsMap> content_setting_map_;
 
  private:
-  content::BrowserTaskEnvironment task_environment_;
+  std::unique_ptr<base::test::TaskEnvironment> task_environment_;
   sync_preferences::TestingPrefServiceSyncable test_pref_service_;
 };
 

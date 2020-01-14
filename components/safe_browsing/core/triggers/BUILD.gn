@@ -55,6 +55,7 @@ source_set("unit_tests") {
     "//components/safe_browsing/content/browser",
     "//components/safe_browsing/core:features",
     "//components/safe_browsing/core/browser:browser",
+    "//components/safe_browsing/core/common:test_support",
     "//content/public/browser:browser",
     "//content/test:test_support",
     "//testing/gmock",
