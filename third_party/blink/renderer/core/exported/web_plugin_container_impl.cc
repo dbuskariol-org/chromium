@@ -160,11 +160,12 @@ void WebPluginContainerImpl::Paint(GraphicsContext& context,
     layer_->SetBounds(gfx::Size(Size()));
     layer_->SetIsDrawable(true);
     layer_->SetHitTestable(true);
+    auto offset = GetLayoutEmbeddedContent()->ReplacedContentRect().offset;
     // When compositing is after paint, composited plugins should have their
     // layers inserted rather than invoking WebPlugin::paint.
     RecordForeignLayer(context, *element_->GetLayoutObject(),
                        DisplayItem::kForeignLayerPlugin, layer_,
-                       FloatPoint(DocumentLocation()));
+                       FloatPoint(offset));
     return;
   }
 

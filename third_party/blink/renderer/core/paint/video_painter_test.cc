@@ -92,8 +92,8 @@ TEST_F(VideoPainterTestForCAP, VideoLayerAppearsInLayerTree) {
   const cc::Layer* layer = player->GetCcLayer();
   ASSERT_TRUE(layer);
   EXPECT_TRUE(HasLayerAttached(*layer));
-  // The layer bounds reflects the aspectn ratio and object-fit of the video.
-  EXPECT_EQ(gfx::Vector2dF(8, 83), layer->offset_to_transform_parent());
+  // The layer bounds reflects the aspect ratio and object-fit of the video.
+  EXPECT_EQ(gfx::Vector2dF(0, 75), layer->offset_to_transform_parent());
   EXPECT_EQ(gfx::Size(300, 150), layer->bounds());
 }
 

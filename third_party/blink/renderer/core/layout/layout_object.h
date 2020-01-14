@@ -1484,6 +1484,9 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
   virtual void AddAnnotatedRegions(Vector<AnnotatedRegionValue>&);
 
   CompositingState GetCompositingState() const;
+
+  // True for object types which override |AdditionalCompositingReasons|.
+  virtual bool CanHaveAdditionalCompositingReasons() const;
   virtual CompositingReasons AdditionalCompositingReasons() const;
 
   // |accumulated_offset| is accumulated physical offset of this object from

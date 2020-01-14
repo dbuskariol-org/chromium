@@ -3537,9 +3537,16 @@ void Element::SetNeedsCompositingUpdate() {
   if (!layout_object->HasLayer())
     return;
   layout_object->Layer()->SetNeedsCompositingInputsUpdate();
-  // Changes in the return value of requiresAcceleratedCompositing change if
-  // the PaintLayer is self-painting.
-  layout_object->Layer()->UpdateSelfPaintingLayer();
+
+  // Changes to RequiresAcceleratedCompositing change if the PaintLayer is
+  // self-painting (see: LayoutEmbeddedContent::LayerTypeRequired).
+  if (layout_object->IsLayoutEmbeddedContent())
+    layout_object->Layer()->UpdateSelfPaintingLayer();
+
+  // Changes to AdditionalCompositingReasons can change direct compositing
+  // reasons which affect paint properties.
+  if (layout_object->CanHaveAdditionalCompositingReasons())
+    layout_object->SetNeedsPaintPropertyUpdate();
 }
 
 void Element::V0SetCustomElementDefinition(

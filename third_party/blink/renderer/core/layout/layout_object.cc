@@ -3303,6 +3303,10 @@ CompositingState LayoutObject::GetCompositingState() const {
              : kNotComposited;
 }
 
+bool LayoutObject::CanHaveAdditionalCompositingReasons() const {
+  return false;
+}
+
 CompositingReasons LayoutObject::AdditionalCompositingReasons() const {
   return CompositingReason::kNone;
 }

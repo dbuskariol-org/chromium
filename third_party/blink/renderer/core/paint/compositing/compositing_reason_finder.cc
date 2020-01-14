@@ -151,6 +151,9 @@ CompositingReasons CompositingReasonFinder::DirectReasonsForPaintProperties(
     }
   }
 
+  if (object.CanHaveAdditionalCompositingReasons())
+    reasons |= object.AdditionalCompositingReasons();
+
   return reasons;
 }
 
@@ -230,7 +233,8 @@ CompositingReasons CompositingReasonFinder::NonStyleDeterminedDirectReasons(
     }
   }
 
-  direct_reasons |= layout_object.AdditionalCompositingReasons();
+  if (layout_object.CanHaveAdditionalCompositingReasons())
+    direct_reasons |= layout_object.AdditionalCompositingReasons();
 
   DCHECK(
       !(direct_reasons & CompositingReason::kComboAllStyleDeterminedReasons));
