@@ -1085,7 +1085,10 @@ bool TSFTextStore::TerminateComposition() {
 }
 
 void TSFTextStore::CalculateTextandSelectionDiffAndNotifyIfNeeded() {
-  if (!text_input_client_)
+  // If this is a re-entrant call, then bail out early so we don't end up
+  // in an infinite loop of sending notifications as TSF calls back into us
+  // when we send a text/selection change notification.
+  if (!text_input_client_ || is_notification_in_progress_)
     return;
 
   gfx::Range latest_buffer_range_from_client;
@@ -1182,6 +1185,7 @@ void TSFTextStore::CalculateTextandSelectionDiffAndNotifyIfNeeded() {
     // We should notify input service about text/selection change only after
     // the cache has already been updated because input service may call back
     // into us during notification.
+    is_notification_in_progress_ = true;
     if (notify_text_change && text_changed) {
       text_store_acp_sink_->OnTextChange(0, &text_change);
     }
@@ -1189,6 +1193,7 @@ void TSFTextStore::CalculateTextandSelectionDiffAndNotifyIfNeeded() {
     if (notify_selection_change && selection_changed) {
       text_store_acp_sink_->OnSelectionChange();
     }
+    is_notification_in_progress_ = false;
   }
 }
 
@@ -1264,6 +1269,10 @@ void TSFTextStore::SetInputPanelPolicy(bool input_panel_policy_manual) {
 }
 
 void TSFTextStore::SendOnLayoutChange() {
+  // A re-entrant call leads to infinite loop in TSF.
+  // We bail out if are in the process of notifying TSF about changes.
+  if (is_notification_in_progress_)
+    return;
   CalculateTextandSelectionDiffAndNotifyIfNeeded();
   if (text_store_acp_sink_ && (text_store_acp_sink_mask_ & TS_AS_LAYOUT_CHANGE))
     text_store_acp_sink_->OnLayoutChange(TS_LC_CHANGE, 0);

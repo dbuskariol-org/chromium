@@ -697,20 +697,13 @@ TEST_F(TSFTextStoreTest, RequestLockOnTextChangeTest) {
       .WillOnce(
           Invoke(&callback, &RequestLockTextChangeTestCallback::InsertText));
   EXPECT_CALL(text_input_client_, GetEditableSelectionRange(_))
-      .WillOnce(
-          Invoke(&callback,
-                 &RequestLockTextChangeTestCallback::GetEditableSelectionRange))
       .WillOnce(Invoke(
           &callback,
           &RequestLockTextChangeTestCallback::GetEditableSelectionRange));
   EXPECT_CALL(text_input_client_, GetTextFromRange(_, _))
       .WillOnce(Invoke(&callback,
-                       &RequestLockTextChangeTestCallback::GetTextFromRange))
-      .WillOnce(Invoke(&callback,
                        &RequestLockTextChangeTestCallback::GetTextFromRange));
   EXPECT_CALL(text_input_client_, GetTextRange(_))
-      .WillOnce(
-          Invoke(&callback, &RequestLockTextChangeTestCallback::GetTextRange))
       .WillOnce(
           Invoke(&callback, &RequestLockTextChangeTestCallback::GetTextRange));
 

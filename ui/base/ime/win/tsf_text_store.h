@@ -411,6 +411,9 @@ class COMPONENT_EXPORT(UI_BASE_IME_WIN) TSFTextStore
   // ITextStoreACPSink::OnLockGranted().
   bool edit_flag_ = false;
 
+  // Checks for re-entrancy while notifying changes to TSF.
+  bool is_notification_in_progress_ = false;
+
   // The type of current lock.
   //   0: No lock.
   //   TS_LF_READ: read-only lock.
