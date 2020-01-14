@@ -1207,6 +1207,9 @@ public class DownloadManagerService implements DownloadController.DownloadNotifi
                 mNativeDownloadManagerService, DownloadManagerService.this);
     }
 
+    @Override
+    public void onProfileDestroyed(Profile profile) {}
+
     @CalledByNative
     void onResumptionFailed(String downloadGuid) {
         mDownloadNotifier.notifyDownloadFailed(new DownloadInfo.Builder()

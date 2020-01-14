@@ -114,6 +114,7 @@
 #include "net/http/http_transaction_factory.h"
 
 #if defined(OS_ANDROID)
+#include "chrome/android/chrome_jni_headers/PackageHash_jni.h"
 #include "chrome/browser/android/customtabs/origin_verifier.h"
 #include "chrome/browser/android/explore_sites/explore_sites_service_factory.h"
 #include "chrome/browser/android/feed/feed_lifecycle_bridge.h"
@@ -701,7 +702,13 @@ void ChromeBrowsingDataRemoverDelegate::RemoveEmbedderData(
       }
     }
 
-    MediaDeviceIDSalt::Reset(profile_->GetPrefs());
+    if (filter_builder->GetMode() == BrowsingDataFilterBuilder::BLACKLIST) {
+      MediaDeviceIDSalt::Reset(profile_->GetPrefs());
+
+#if defined(OS_ANDROID)
+      Java_PackageHash_onCookiesDeleted(base::android::AttachCurrentThread());
+#endif
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////

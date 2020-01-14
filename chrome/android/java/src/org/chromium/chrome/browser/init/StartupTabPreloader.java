@@ -133,6 +133,9 @@ public class StartupTabPreloader implements ProfileManager.Observer, Destroyable
         }
     }
 
+    @Override
+    public void onProfileDestroyed(Profile profile) {}
+
     /**
      * @returns True if based on the intent we should load the tab, returns false otherwise.
      */

@@ -106,6 +106,8 @@ public class Profile {
         if (mIsOffTheRecord) {
             CookiesFetcher.deleteCookiesIfNecessary();
         }
+
+        ProfileManager.onProfileDestroyed(this);
     }
 
     @CalledByNative
