@@ -688,10 +688,11 @@ public class ExternalNavigationHandler {
      * and "picking Chrome" is handled inside the support library.
      */
     private boolean shouldKeepIntentRedirectInChrome(ExternalNavigationParams params,
-            boolean incomingIntentRedirect, Intent targetIntent, boolean isExternalProtocol) {
+            boolean incomingIntentRedirect, List<ResolveInfo> resolvingInfos,
+            boolean isExternalProtocol) {
         if (params.getRedirectHandler() != null && incomingIntentRedirect && !isExternalProtocol
                 && !params.getRedirectHandler().isFromCustomTabIntent()
-                && !params.getRedirectHandler().hasNewResolver(targetIntent)) {
+                && !params.getRedirectHandler().hasNewResolver(resolvingInfos)) {
             if (DEBUG) Log.i(TAG, "Custom tab redirect no handled");
             return true;
         }
@@ -871,7 +872,7 @@ public class ExternalNavigationHandler {
         }
 
         if (shouldKeepIntentRedirectInChrome(
-                    params, incomingIntentRedirect, targetIntent, isExternalProtocol)) {
+                    params, incomingIntentRedirect, resolvingInfos, isExternalProtocol)) {
             return OverrideUrlLoadingResult.NO_OVERRIDE;
         }
 
