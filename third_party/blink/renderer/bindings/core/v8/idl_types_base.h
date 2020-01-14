@@ -8,7 +8,7 @@
 namespace blink {
 
 // This is the base type for all WebIDL types, such as the ones defined in
-// IDLTypes.h. It is defined in a separate location to avoid circular header
+// idl_types.h. It is defined in a separate location to avoid circular header
 // inclusions when one only needs to check if a type inherits from IDLBase.
 struct IDLBase {
   using ImplType = void;

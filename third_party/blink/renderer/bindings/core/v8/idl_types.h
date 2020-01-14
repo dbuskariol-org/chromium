@@ -6,6 +6,7 @@
 #define THIRD_PARTY_BLINK_RENDERER_BINDINGS_CORE_V8_IDL_TYPES_H_
 
 #include <type_traits>
+
 #include "base/optional.h"
 #include "base/time/time.h"
 #include "third_party/blink/renderer/bindings/core/v8/idl_types_base.h"

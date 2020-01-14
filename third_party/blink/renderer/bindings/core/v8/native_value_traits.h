@@ -6,6 +6,7 @@
 #define THIRD_PARTY_BLINK_RENDERER_BINDINGS_CORE_V8_NATIVE_VALUE_TRAITS_H_
 
 #include <type_traits>
+
 #include "third_party/blink/renderer/bindings/core/v8/idl_types_base.h"
 #include "third_party/blink/renderer/platform/wtf/allocator/allocator.h"
 #include "v8/include/v8.h"
@@ -50,7 +51,7 @@ struct NativeValueTraitsBase<
 // Example:
 // template <>
 // struct NativeValueTraits<IDLLong> : public NativeValueTraitsBase<IDLLong> {
-//   static inline int32_t nativeValue(v8::Isolate* isolate,
+//   static inline int32_t NativeValue(v8::Isolate* isolate,
 //                                     v8::Local<v8::Value> value,
 //                                     ExceptionState& exceptionState) {
 //     return toInt32(isolate, value, exceptionState, NormalConversion);
@@ -64,7 +65,7 @@ struct NativeValueTraits;
 // NativeValue() method that takes the 3 arguments below.
 //
 // template <>
-// struct NativeValueTraits<T>: public NativeValueTraitsBase<T> {
+// struct NativeValueTraits<T> : public NativeValueTraitsBase<T> {
 //   static inline typename NativeValueTraitsBase<T>::ImplType
 //   NativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 // };

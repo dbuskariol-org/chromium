@@ -11,14 +11,26 @@
 #include "third_party/blink/renderer/bindings/core/v8/script_promise.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_binding_for_core.h"
 #include "third_party/blink/renderer/core/core_export.h"
+#include "third_party/blink/renderer/core/typed_arrays/dom_data_view.h"
+#include "third_party/blink/renderer/core/typed_arrays/dom_typed_array.h"
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 
 namespace blink {
 
 class CallbackFunctionBase;
+class ScriptWrappable;
+struct WrapperTypeInfo;
 
 namespace bindings {
+
 class DictionaryBase;
+
+CORE_EXPORT ScriptWrappable* NativeValueTraitsInterfaceNativeValue(
+    v8::Isolate* isolate,
+    const WrapperTypeInfo* wrapper_type_info,
+    v8::Local<v8::Value> value,
+    ExceptionState& exception_state);
+
 }  // namespace bindings
 
 // Boolean
@@ -516,6 +528,30 @@ struct CORE_EXPORT NativeValueTraits<IDLUnrestrictedFloat>
   }
 };
 
+// Buffer source types
+#define DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(T)                      \
+  template <>                                                                 \
+  struct CORE_EXPORT NativeValueTraits<T> : public NativeValueTraitsBase<T> { \
+    static T* NativeValue(v8::Isolate* isolate,                               \
+                          v8::Local<v8::Value> value,                         \
+                          ExceptionState& exception_state);                   \
+  }
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMArrayBuffer);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMArrayBufferView);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMInt8Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMInt16Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMInt32Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMUint8Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMUint8ClampedArray);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMUint16Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMUint32Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMBigInt64Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMBigUint64Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMFloat32Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMFloat64Array);
+DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMDataView);
+#undef DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE
+
 // Promises
 template <>
 struct CORE_EXPORT NativeValueTraits<IDLPromise>
@@ -532,7 +568,7 @@ struct CORE_EXPORT NativeValueTraits<IDLPromise>
   }
 };
 
-// Type-specific overloads
+// Nullable Date
 template <>
 struct CORE_EXPORT NativeValueTraits<IDLDateOrNull>
     : public NativeValueTraitsBase<IDLDateOrNull> {
@@ -796,20 +832,6 @@ struct NativeValueTraits<IDLRecord<K, V>>
   }
 };
 
-// Dictionary
-template <typename T>
-struct NativeValueTraits<
-    T,
-    typename std::enable_if<
-        std::is_base_of<bindings::DictionaryBase, T>::value>::type>
-    : public NativeValueTraitsBase<T> {
-  static T* NativeValue(v8::Isolate* isolate,
-                        v8::Local<v8::Value> value,
-                        ExceptionState& exception_state) {
-    return T::Create(isolate, value, exception_state);
-  }
-};
-
 // Callback functions
 template <typename T>
 struct NativeValueTraits<
@@ -828,6 +850,37 @@ struct NativeValueTraits<
         << "is not yet implemented.";
     return nullptr;
   }
+};
+
+// Dictionary
+template <typename T>
+struct NativeValueTraits<
+    T,
+    typename std::enable_if_t<
+        std::is_base_of<bindings::DictionaryBase, T>::value>>
+    : public NativeValueTraitsBase<T> {
+  static T* NativeValue(v8::Isolate* isolate,
+                        v8::Local<v8::Value> value,
+                        ExceptionState& exception_state) {
+    return T::Create(isolate, value, exception_state);
+  }
+};
+
+// Interface
+template <typename T>
+struct NativeValueTraits<
+    T,
+    typename std::enable_if_t<std::is_base_of<ScriptWrappable, T>::value>>
+    : public NativeValueTraitsBase<T> {
+  static T* NativeValue(v8::Isolate* isolate,
+                        v8::Local<v8::Value> value,
+                        ExceptionState& exception_state) {
+    return bindings::NativeValueTraitsInterfaceNativeValue(
+               isolate, T::GetStaticWrapperTypeInfo(), value, exception_state)
+        ->template ToImpl<T>();
+  }
+
+  static constexpr T* NullValue() { return nullptr; }
 };
 
 // Nullable
