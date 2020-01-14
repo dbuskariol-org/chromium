@@ -31,11 +31,7 @@ arch = args.arch
 dep_filename = os.path.abspath(args.dep_filename)
 distro_check = args.distro_check
 
-script_dir = os.path.dirname(os.path.realpath(__file__))
-dpkg_shlibdeps = os.path.join(script_dir, '..', '..', '..', '..', 'third_party',
-                              'dpkg-shlibdeps', 'dpkg-shlibdeps.pl')
-
-cmd = [dpkg_shlibdeps, '--ignore-weak-undefined']
+cmd = ['dpkg-shlibdeps']
 if arch == 'x64':
   cmd.extend(['-l%s/usr/lib/x86_64-linux-gnu' % sysroot,
               '-l%s/lib/x86_64-linux-gnu' % sysroot])
