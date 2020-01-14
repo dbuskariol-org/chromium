@@ -29,15 +29,11 @@ js_type_check("closure_compile") {
 }
 
 js_library("account_manager_browser_proxy") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
 }
 
 js_library("import_data_browser_proxy") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
 }
 
 js_library("manage_profile") {
@@ -79,9 +75,7 @@ js_library("people_page") {
 }
 
 js_library("profile_info_browser_proxy") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
 }
 
 js_library("signout_dialog") {

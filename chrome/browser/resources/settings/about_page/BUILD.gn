@@ -24,8 +24,6 @@ js_library("about_page") {
 }
 
 js_library("about_page_browser_proxy") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
   externs_list = [ "$externs_path/chrome_send.js" ]
 }

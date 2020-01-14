@@ -77,9 +77,7 @@ js_library("address_edit_dialog") {
 }
 
 js_library("credit_card_edit_dialog") {
-  deps = [
-    "//ui/webui/resources/js:i18n_behavior",
-  ]
+  deps = [ "//ui/webui/resources/js:i18n_behavior" ]
   externs_list = [ "$externs_path/autofill_private.js" ]
 }
 
@@ -91,9 +89,7 @@ js_library("credit_card_list") {
 }
 
 js_library("credit_card_list_entry") {
-  deps = [
-    "//ui/webui/resources/js:i18n_behavior",
-  ]
+  deps = [ "//ui/webui/resources/js:i18n_behavior" ]
 }
 
 js_library("password_list_item") {
@@ -105,9 +101,7 @@ js_library("password_list_item") {
 }
 
 js_library("password_manager_proxy") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
   externs_list = [ "$externs_path/passwords_private.js" ]
 }
 
@@ -140,8 +134,6 @@ js_library("password_edit_dialog") {
 }
 
 js_library("show_password_behavior") {
-  deps = [
-    ":blocking_request_manager",
-  ]
+  deps = [ ":blocking_request_manager" ]
   externs_list = [ "$externs_path/passwords_private.js" ]
 }

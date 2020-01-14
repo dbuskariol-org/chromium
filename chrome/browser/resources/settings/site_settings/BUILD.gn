@@ -55,9 +55,7 @@ js_library("all_sites") {
 }
 
 js_library("android_info_browser_proxy") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
   externs_list = [ "$externs_path/chrome_send.js" ]
 }
 
@@ -106,9 +104,7 @@ js_library("chooser_exception_list_entry") {
 }
 
 js_library("constants") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
 }
 
 js_library("local_data_browser_proxy") {
@@ -131,9 +127,7 @@ js_library("media_picker") {
 }
 
 js_library("cookie_info") {
-  deps = [
-    "//ui/webui/resources/js:load_time_data",
-  ]
+  deps = [ "//ui/webui/resources/js:load_time_data" ]
 }
 
 js_library("protocol_handlers") {
@@ -281,9 +275,7 @@ js_library("site_settings_prefs_browser_proxy") {
 }
 
 js_library("website_usage_private_api") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
   externs_list = [ "$externs_path/chrome_send.js" ]
 }
 

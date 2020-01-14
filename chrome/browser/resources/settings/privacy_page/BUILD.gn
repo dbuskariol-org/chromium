@@ -71,9 +71,7 @@ js_library("privacy_page") {
 }
 
 js_library("security_keys_browser_proxy") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
   externs_list = [ "$externs_path/chrome_send.js" ]
 }
 
@@ -97,9 +95,7 @@ js_library("security_keys_set_pin_dialog") {
 }
 
 js_library("security_keys_pin_field") {
-  deps = [
-    "//ui/webui/resources/js:i18n_behavior",
-  ]
+  deps = [ "//ui/webui/resources/js:i18n_behavior" ]
 }
 
 js_library("security_keys_credential_management_dialog") {

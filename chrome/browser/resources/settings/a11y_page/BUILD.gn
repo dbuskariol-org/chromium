@@ -32,7 +32,5 @@ js_library("a11y_page") {
 }
 
 js_library("captions_browser_proxy") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
 }

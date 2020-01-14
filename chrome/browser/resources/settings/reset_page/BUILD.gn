@@ -25,9 +25,7 @@ js_library("reset_page") {
 }
 
 js_library("reset_browser_proxy") {
-  deps = [
-    "//ui/webui/resources/js:cr",
-  ]
+  deps = [ "//ui/webui/resources/js:cr" ]
   externs_list = [ "$externs_path/chrome_send.js" ]
 }
 
