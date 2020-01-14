@@ -48,8 +48,10 @@ enum class RemoteBookmarkUpdateError {
   kMissingParentNodeInConflict = 7,
   // Failed to create a bookmark.
   kCreationFailure = 8,
+  // The bookmark's GUID did not match the originator client item ID.
+  kUnexpectedGuid = 9,
 
-  kMaxValue = kCreationFailure,
+  kMaxValue = kUnexpectedGuid,
 };
 
 void LogProblematicBookmark(RemoteBookmarkUpdateError problem) {
@@ -206,7 +208,18 @@ void BookmarkRemoteUpdatesHandler::Process(
             RemoteBookmarkUpdateError::kInvalidUniquePosition);
         continue;
       }
+      if (!HasExpectedBookmarkGuid(update_entity.specifics.bookmark(),
+                                   update_entity.originator_cache_guid,
+                                   update_entity.originator_client_item_id)) {
+        // Ignore updates with an unexpected GUID.
+        DLOG(ERROR)
+            << "Couldn't process an update bookmark with unexpected GUID: "
+            << update_entity.specifics.bookmark().guid();
+        LogProblematicBookmark(RemoteBookmarkUpdateError::kUnexpectedGuid);
+        continue;
+      }
     }
+
     const SyncedBookmarkTracker::Entity* tracked_entity =
         bookmark_tracker_->GetEntityForSyncId(update_entity.id);
     if (tracked_entity && tracked_entity->metadata()->server_version() >=
@@ -430,17 +443,6 @@ bool BookmarkRemoteUpdatesHandler::ProcessCreate(
 
   DCHECK(IsValidBookmarkSpecifics(update_entity.specifics.bookmark(),
                                   update_entity.is_folder));
-
-  // If specifics do not have a valid GUID, create a new one. Legacy clients do
-  // not populate GUID field and if the originator_client_item_id is not of
-  // valid GUID format to replace it, the field is left blank.
-  if (!base::IsValidGUID(update_entity.specifics.bookmark().guid())) {
-    // TODO(crbug.com/978430): Seems that's not the correct place for making any
-    // changes to |update|, need a proper place for generating GUID.
-    const_cast<syncer::UpdateResponseData&>(update)
-        .entity.specifics.mutable_bookmark()
-        ->set_guid(base::GenerateGUID());
-  }
 
   const bookmarks::BookmarkNode* parent_node = GetParentNode(update_entity);
   if (!parent_node) {

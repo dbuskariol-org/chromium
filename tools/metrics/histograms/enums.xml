@@ -5967,6 +5967,7 @@ Unknown properties are collapsed to zero. -->
   <int value="0" label="Specifics have a GUID"/>
   <int value="1" label="originator_client_item_id is a valid GUID"/>
   <int value="2" label="GUID field left empty"/>
+  <int value="3" label="GUID was inferred"/>
 </enum>
 
 <enum name="BookmarkLaunchLocation">
@@ -54406,6 +54407,9 @@ Called by update_net_trust_anchors.py.-->
   <int value="7"
       label="Parent node not found locally when processing a conflict"/>
   <int value="8" label="Failed to create a bookmark"/>
+  <int value="9"
+      label="The bookmark's GUID did not match the originator client item ID
+             or client tag"/>
 </enum>
 
 <enum name="RemoteHungProcessTerminateReason">

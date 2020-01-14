@@ -65,6 +65,15 @@ const bookmarks::BookmarkNode* ReplaceBookmarkNodeGUID(
 bool IsValidBookmarkSpecifics(const sync_pb::BookmarkSpecifics& specifics,
                               bool is_folder);
 
+// Checks if bookmark specifics contain a GUID that matches the value that would
+// be inferred from other redundant fields. |specifics| must be valid as per
+// IsValidBookmarkSpecifics().
+// TODO(crbug.com/1032052): Replace this with an analogous function that
+// verifies that the bookmark's client tag hash matches the GUID.
+bool HasExpectedBookmarkGuid(const sync_pb::BookmarkSpecifics& specifics,
+                             const std::string& originator_cache_guid,
+                             const std::string& originator_client_item_id);
+
 }  // namespace sync_bookmarks
 
 #endif  // COMPONENTS_SYNC_BOOKMARKS_BOOKMARK_SPECIFICS_CONVERSIONS_H_

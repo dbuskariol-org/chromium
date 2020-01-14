@@ -78,7 +78,8 @@ TEST(BookmarkSpecificsConversionsTest, ShouldCreateSpecificsFromBookmarkNode) {
   sync_pb::EntitySpecifics specifics = CreateSpecificsFromBookmarkNode(
       node, model.get(), /*force_favicon_load=*/false);
   const sync_pb::BookmarkSpecifics& bm_specifics = specifics.bookmark();
-  EXPECT_THAT(bm_specifics.guid(), Eq(node->guid()));
+  // TODO(crbug.com/978430): Update expectation once the GUID is populated.
+  EXPECT_FALSE(bm_specifics.has_guid());
   EXPECT_THAT(bm_specifics.title(), Eq(kTitle));
   EXPECT_THAT(GURL(bm_specifics.url()), Eq(kUrl));
   EXPECT_THAT(
@@ -401,9 +402,13 @@ TEST(BookmarkSpecificsConversionsTest,
   sync_pb::EntitySpecifics specifics;
   sync_pb::BookmarkSpecifics* bm_specifics = specifics.mutable_bookmark();
 
+  // No GUID.
+  bm_specifics->clear_guid();
+  EXPECT_FALSE(IsValidBookmarkSpecifics(*bm_specifics, /*is_folder=*/true));
+
   // Add empty GUID.
   bm_specifics->set_guid("");
-  EXPECT_TRUE(IsValidBookmarkSpecifics(*bm_specifics, /*is_folder=*/true));
+  EXPECT_FALSE(IsValidBookmarkSpecifics(*bm_specifics, /*is_folder=*/true));
 
   // Add invalid GUID.
   bm_specifics->set_guid("INVALID GUID");

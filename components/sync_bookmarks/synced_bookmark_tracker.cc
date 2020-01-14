@@ -43,7 +43,11 @@ enum class CorruptionReason {
 void HashSpecifics(const sync_pb::EntitySpecifics& specifics,
                    std::string* hash) {
   DCHECK_GT(specifics.ByteSize(), 0);
-  base::Base64Encode(base::SHA1HashString(specifics.SerializeAsString()), hash);
+  // TODO(crbug.com/978430): Include GUID in hash when committing is supported.
+  sync_pb::EntitySpecifics specifics_without_guid = specifics;
+  specifics_without_guid.mutable_bookmark()->clear_guid();
+  base::Base64Encode(
+      base::SHA1HashString(specifics_without_guid.SerializeAsString()), hash);
 }
 
 }  // namespace
