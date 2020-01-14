@@ -1719,6 +1719,54 @@ TEST_F(AnimatingLayoutManagerTest,
   EXPECT_FALSE(child(2)->GetVisible());
 }
 
+// Regression test for issues crbug.com/1040618 and crbug.com/1040676:
+// Views hidden due to layout constraints were not shown after a flex rule
+// change and FadeIn() was called.
+TEST_F(AnimatingLayoutManagerTest,
+       FlexLayout_PostDelayedActionAfterFadeIn_FadeInHiddenView) {
+  layout()->SetShouldAnimateBounds(false);
+  layout()->SetOrientation(LayoutOrientation::kHorizontal);
+  auto* const flex_layout =
+      layout()->SetTargetLayoutManager(std::make_unique<FlexLayout>());
+  flex_layout->SetOrientation(LayoutOrientation::kHorizontal);
+  flex_layout->SetCollapseMargins(true);
+  flex_layout->SetCrossAxisAlignment(LayoutAlignment::kStart);
+  flex_layout->SetDefault(kFlexBehaviorKey, kDropOut);
+
+  view()->SetSize({20, 10});
+  layout()->ResetLayout();
+  view()->Layout();
+
+  EXPECT_TRUE(child(0)->GetVisible());
+  EXPECT_TRUE(child(1)->GetVisible());
+  EXPECT_FALSE(child(2)->GetVisible());
+
+  bool action_run = false;
+
+  // This prevents the view from dropping out.
+  child(2)->SetProperty(kFlexBehaviorKey, FlexSpecification());
+  // The view is already potentially visible; this line should still trigger a
+  // recalculation and a new animation.
+  layout()->FadeIn(child(2));
+  layout()->PostOrQueueAction(
+      base::BindOnce([](bool* var) { *var = true; }, &action_run));
+  // No tasks should be posted, we're still animating.
+  EXPECT_TRUE(layout()->is_animating());
+  RunCurrentTasks();
+  EXPECT_FALSE(action_run);
+
+  // Advance the animation to the end.
+  animation_api()->IncrementTime(base::TimeDelta::FromMilliseconds(1000));
+  view()->Layout();
+  // We should be done and tasks will post.
+  EXPECT_FALSE(layout()->is_animating());
+  RunCurrentTasks();
+  EXPECT_TRUE(action_run);
+  EXPECT_TRUE(child(0)->GetVisible());
+  EXPECT_FALSE(child(1)->GetVisible());
+  EXPECT_TRUE(child(2)->GetVisible());
+}
+
 TEST_F(AnimatingLayoutManagerTest, FlexLayout_FadeInOnAdded) {
   constexpr gfx::Insets kChildMargins(5);
   layout()->SetShouldAnimateBounds(false);
