@@ -118,6 +118,21 @@ def constant_name(cg_context):
     return name_style.constant(kind, property_name)
 
 
+def custom_function_name(cg_context, overload_index=None):
+    assert isinstance(cg_context, CodeGenContext)
+
+    if cg_context.attribute_get:
+        suffix = "AttributeGetterCustom"
+    elif cg_context.attribute_set:
+        suffix = "AttributeSetterCustom"
+    elif cg_context.operation_group:
+        suffix = "MethodCustom"
+    else:
+        assert False
+
+    return name_style.func(cg_context.property_.identifier, suffix)
+
+
 # ----------------------------------------------------------------------------
 # Callback functions
 # ----------------------------------------------------------------------------
@@ -1282,6 +1297,16 @@ def make_attribute_get_callback_def(cg_context, function_name):
         make_report_measure_as(cg_context),
         make_log_activity(cg_context),
         EmptyNode(),
+    ])
+
+    if "Getter" in cg_context.property_.extended_attributes.values_of(
+            "Custom"):
+        text = _format("${class_name}::{}(${info});",
+                       custom_function_name(cg_context))
+        body.append(TextNode(text))
+        return func_def
+
+    body.extend([
         make_check_receiver(cg_context),
         make_return_value_cache_return_early(cg_context),
         EmptyNode(),
@@ -1316,6 +1341,16 @@ def make_attribute_set_callback_def(cg_context, function_name):
         make_report_measure_as(cg_context),
         make_log_activity(cg_context),
         EmptyNode(),
+    ])
+
+    if "Setter" in cg_context.property_.extended_attributes.values_of(
+            "Custom"):
+        text = _format("${class_name}::{}(${info}[0], ${info});",
+                       custom_function_name(cg_context))
+        body.append(TextNode(text))
+        return func_def
+
+    body.extend([
         make_check_receiver(cg_context),
         make_check_argument_length(cg_context),
         EmptyNode(),
@@ -1505,6 +1540,15 @@ def make_operation_function_def(cg_context, function_name):
         make_report_measure_as(cg_context),
         make_log_activity(cg_context),
         EmptyNode(),
+    ])
+
+    if "Custom" in cg_context.property_.extended_attributes:
+        text = _format("${class_name}::{}(${info});",
+                       custom_function_name(cg_context))
+        body.append(TextNode(text))
+        return func_def
+
+    body.extend([
         make_check_receiver(cg_context),
         EmptyNode(),
         make_steps_of_ce_reactions(cg_context),
@@ -1521,6 +1565,9 @@ def make_operation_callback_def(cg_context, function_name):
     assert isinstance(function_name, str)
 
     operation_group = cg_context.operation_group
+
+    assert (not ("Custom" in operation_group.extended_attributes)
+            or len(operation_group) == 1)
 
     if len(operation_group) == 1:
         return make_operation_function_def(
@@ -2734,6 +2781,42 @@ def generate_interface(interface):
         constant_defs.append(
             make_constant_constant_def(cgc, constant_name(cgc)))
 
+    # Custom callback implementations
+    custom_callback_impl_decls = ListNode()
+    for attribute in interface.attributes:
+        custom_values = attribute.extended_attributes.values_of("Custom")
+        if "Getter" in custom_values:
+            func_name = custom_function_name(
+                cg_context.make_copy(attribute=attribute, attribute_get=True))
+            custom_callback_impl_decls.append(
+                CxxFuncDeclNode(
+                    name=func_name,
+                    arg_decls=["const v8::FunctionCallbackInfo<v8::Value>&"],
+                    return_type="void",
+                    static=True))
+        if "Setter" in custom_values:
+            func_name = custom_function_name(
+                cg_context.make_copy(attribute=attribute, attribute_set=True))
+            custom_callback_impl_decls.append(
+                CxxFuncDeclNode(
+                    name=func_name,
+                    arg_decls=[
+                        "v8::Local<v8::Value>",
+                        "const v8::FunctionCallbackInfo<v8::Value>&"
+                    ],
+                    return_type="void",
+                    static=True))
+    for operation_group in interface.operation_groups:
+        if "Custom" in operation_group.extended_attributes:
+            func_name = custom_function_name(
+                cg_context.make_copy(operation_group=operation_group))
+            custom_callback_impl_decls.append(
+                CxxFuncDeclNode(
+                    name=func_name,
+                    arg_decls=["const v8::FunctionCallbackInfo<v8::Value>&"],
+                    return_type="void",
+                    static=True))
+
     # Cross-component trampolines
     if is_cross_components:
         # tp_ = trampoline name
@@ -2962,8 +3045,18 @@ def generate_interface(interface):
         api_class_def.public_section.append(installer_function_decls)
 
     if constant_defs:
-        api_class_def.public_section.append(EmptyNode())
-        api_class_def.public_section.append(constant_defs)
+        api_class_def.public_section.extend([
+            EmptyNode(),
+            TextNode("// Constants"),
+            constant_defs,
+        ])
+
+    if custom_callback_impl_decls:
+        api_class_def.public_section.extend([
+            EmptyNode(),
+            TextNode("// Custom callback implementations"),
+            custom_callback_impl_decls,
+        ])
 
     impl_source_blink_ns.body.extend([
         CxxNamespaceNode(name="", body=callback_defs),
@@ -2984,5 +3077,5 @@ def generate_interface(interface):
 
 
 def generate_interfaces(web_idl_database):
-    interface = web_idl_database.find("Node")
+    interface = web_idl_database.find("Element")
     generate_interface(interface)

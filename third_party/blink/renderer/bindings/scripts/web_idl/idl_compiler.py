@@ -378,7 +378,7 @@ class IdlCompiler(object):
             ]
 
     def _propagate_extattrs_to_overload_group(self):
-        ANY_OF = ("CrossOrigin", "LenientThis", "NotEnumerable",
+        ANY_OF = ("CrossOrigin", "Custom", "LenientThis", "NotEnumerable",
                   "PerWorldBindings", "SecureContext", "Unforgeable",
                   "Unscopable")
 
