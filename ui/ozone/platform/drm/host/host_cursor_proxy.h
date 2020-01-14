@@ -35,12 +35,15 @@ class HostCursorProxy : public DrmCursorProxy {
   void Move(gfx::AcceleratedWidget window, const gfx::Point& point) override;
   void InitializeOnEvdevIfNecessary() override;
 
-  // Mojo implementation of the DrmCursorProxy.
+  // Accessed from UI thread only.
   mojo::AssociatedRemote<ui::ozone::mojom::DeviceCursor> main_cursor_;
+
+  // Accessed from evdev thread only.
   mojo::AssociatedRemote<ui::ozone::mojom::DeviceCursor> evdev_cursor_;
+  mojo::PendingAssociatedRemote<ui::ozone::mojom::DeviceCursor>
+      evdev_cursor_pending_remote_;
 
   base::PlatformThreadRef ui_thread_ref_;
-  bool evdev_bound_ = false;
 
   DISALLOW_COPY_AND_ASSIGN(HostCursorProxy);
 };
