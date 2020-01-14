@@ -6751,8 +6751,7 @@ class SitePerProcessHitTestDataGenerationBrowserTest
  protected:
   // Load the page |host_name| and retrieve the hit test data from HitTestQuery.
   std::vector<viz::AggregatedHitTestRegion> SetupAndGetHitTestData(
-      const std::string& host_name,
-      unsigned skipped_child = -1) {
+      const std::string& host_name) {
     GURL main_url(embedded_test_server()->GetURL(host_name));
     EXPECT_TRUE(NavigateToURL(shell(), main_url));
 
@@ -6765,11 +6764,7 @@ class SitePerProcessHitTestDataGenerationBrowserTest
             root->current_frame_host()->GetRenderWidgetHost()->GetView());
 
     for (unsigned i = 0; i < root->child_count(); i++) {
-      // Child with pointer-events: none property will never submit a hit test
-      // region in /2 hit testing.
-      if (i != skipped_child) {
         WaitForHitTestData(root->child_at(i)->current_frame_host());
-      }
     }
 
     HitTestRegionObserver observer(rwhv_root->GetRootFrameSinkId());
@@ -7071,7 +7066,7 @@ IN_PROC_BROWSER_TEST_F(SitePerProcessHitTestDataGenerationBrowserTest,
 IN_PROC_BROWSER_TEST_F(SitePerProcessHitTestDataGenerationBrowserTest,
                        PointerEventsNoneOOPIF) {
   auto hit_test_data = SetupAndGetHitTestData(
-      "/frame_tree/page_with_positioned_frame_pointer-events_none.html", 0);
+      "/frame_tree/page_with_positioned_frame_pointer-events_none.html");
   float device_scale_factor = current_device_scale_factor();
   gfx::Transform expected_transform;
   gfx::Rect expected_region = gfx::ScaleToEnclosingRect(
