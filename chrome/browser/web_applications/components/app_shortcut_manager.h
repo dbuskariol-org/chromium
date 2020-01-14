@@ -41,8 +41,8 @@ class AppShortcutManager {
   // to the disk.
   void SuppressShortcutsForTesting();
 
+  // virtual for testing.
   virtual bool CanCreateShortcuts() const;
-
   // virtual for testing.
   virtual void CreateShortcuts(const AppId& app_id,
                                bool add_to_desktop,

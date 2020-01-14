@@ -191,7 +191,8 @@ void WebAppProvider::CreateWebAppsSubsystems(Profile* profile) {
   install_finalizer_ = std::make_unique<WebAppInstallFinalizer>(
       profile, sync_bridge.get(), icon_manager.get());
   file_handler_manager_ = std::make_unique<WebAppFileHandlerManager>(profile);
-  shortcut_manager_ = std::make_unique<WebAppShortcutManager>(profile);
+  shortcut_manager_ = std::make_unique<WebAppShortcutManager>(
+      profile, icon_manager.get(), file_handler_manager_.get());
 
   // Upcast to unified subsystem types:
   registrar_ = std::move(registrar);
