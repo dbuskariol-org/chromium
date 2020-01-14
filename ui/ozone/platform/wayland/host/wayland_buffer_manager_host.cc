@@ -150,6 +150,15 @@ class WaylandBufferManagerHost::Surface {
     if (pending_buffer_ == buffer)
       pending_buffer_ = nullptr;
 
+    // Remove the buffer from pending presentation feedbacks.
+    for (auto it = presentation_feedbacks_.begin();
+         it != presentation_feedbacks_.end(); ++it) {
+      if (it->first == buffer_id) {
+        presentation_feedbacks_.erase(it);
+        break;
+      }
+    }
+
     auto result = buffers_.erase(buffer_id);
     return result;
   }
@@ -212,7 +221,7 @@ class WaylandBufferManagerHost::Surface {
   bool HasWindow() const { return !!window_; }
 
  private:
-  using PresentationFeedbackQueue = base::queue<
+  using PresentationFeedbackQueue = std::vector<
       std::pair<uint32_t, wl::Object<struct wp_presentation_feedback>>>;
 
   bool CommitBufferInternal(WaylandBuffer* buffer) {
@@ -310,7 +319,7 @@ class WaylandBufferManagerHost::Surface {
         &Surface::FeedbackSyncOutput, &Surface::FeedbackPresented,
         &Surface::FeedbackDiscarded};
 
-    presentation_feedbacks_.push(std::make_pair(
+    presentation_feedbacks_.push_back(std::make_pair(
         buffer_id,
         wl::Object<struct wp_presentation_feedback>(wp_presentation_feedback(
             connection_->presentation(), window_->surface()))));
@@ -463,7 +472,7 @@ class WaylandBufferManagerHost::Surface {
     DCHECK(self);
     auto presentation = std::move(self->presentation_feedbacks_.front());
     DCHECK(presentation.second.get() == wp_presentation_feedback);
-    self->presentation_feedbacks_.pop();
+    self->presentation_feedbacks_.erase(self->presentation_feedbacks_.begin());
     self->OnPresentation(
         presentation.first,
         gfx::PresentationFeedback(
@@ -479,7 +488,7 @@ class WaylandBufferManagerHost::Surface {
     DCHECK(self);
     auto presentation = std::move(self->presentation_feedbacks_.front());
     DCHECK(presentation.second.get() == wp_presentation_feedback);
-    self->presentation_feedbacks_.pop();
+    self->presentation_feedbacks_.erase(self->presentation_feedbacks_.begin());
     self->OnPresentation(presentation.first,
                          gfx::PresentationFeedback::Failure());
   }
