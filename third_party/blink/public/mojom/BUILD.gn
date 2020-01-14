@@ -237,11 +237,14 @@ mojom("android_mojo_bindings") {
     "mediasession/media_session.mojom",
     "payments/payment_handler_host.mojom",
     "payments/payment_request.mojom",
-    "remote_objects/remote_objects.mojom",
     "webauthn/authenticator.mojom",
     "webauthn/internal_authenticator.mojom",
     "webshare/webshare.mojom",
   ]
+
+  if (is_android) {
+    sources += [ "remote_objects/remote_objects.mojom" ]
+  }
   public_deps = [
     "//components/payments/mojom",
     "//mojo/public/mojom/base",

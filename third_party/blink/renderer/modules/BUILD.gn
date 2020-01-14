@@ -129,7 +129,6 @@ jumbo_component("modules") {
     "//third_party/blink/renderer/modules/push_messaging",
     "//third_party/blink/renderer/modules/quota",
     "//third_party/blink/renderer/modules/remoteplayback",
-    "//third_party/blink/renderer/modules/remote_objects",
     "//third_party/blink/renderer/modules/scheduler",
     "//third_party/blink/renderer/modules/screen_enumeration",
     "//third_party/blink/renderer/modules/screen_orientation",
@@ -156,6 +155,10 @@ jumbo_component("modules") {
     "//third_party/blink/renderer/modules/worklet",
     "//third_party/blink/renderer/modules/xr",
   ]
+
+  if (is_android) {
+    sub_modules += [ "//third_party/blink/renderer/modules/remote_objects" ]
+  }
 
   deps = [
     ":make_modules_generated",
