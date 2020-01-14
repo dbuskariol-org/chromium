@@ -424,6 +424,12 @@ void ThreadState::VisitPersistents(Visitor* visitor) {
   }
 }
 
+void ThreadState::VisitRememberedSets(MarkingVisitor* visitor) {
+  ThreadHeapStatsCollector::EnabledScope stats_scope(
+      Heap().stats_collector(), ThreadHeapStatsCollector::kVisitRememberedSets);
+  Heap().MarkRememberedSets(visitor);
+}
+
 void ThreadState::VisitWeakPersistents(Visitor* visitor) {
   ProcessHeap::GetCrossThreadWeakPersistentRegion().TraceNodes(visitor);
   weak_persistent_region_->TraceNodes(visitor);
@@ -1648,6 +1654,11 @@ void ThreadState::MarkPhaseVisitRoots() {
     ThreadHeapStatsCollector::Scope stack_stats_scope(
         Heap().stats_collector(), ThreadHeapStatsCollector::kVisitStackRoots);
     PushRegistersAndVisitStack();
+  }
+
+  // Visit remembered sets (card tables) for minor collections.
+  if (current_gc_data_.collection_type == BlinkGC::CollectionType::kMinor) {
+    VisitRememberedSets(static_cast<MarkingVisitor*>(visitor));
   }
 }
 

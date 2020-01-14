@@ -138,6 +138,23 @@ Address ThreadHeap::CheckAndMarkPointer(MarkingVisitor* visitor,
   return nullptr;
 }
 
+void ThreadHeap::MarkRememberedSets(MarkingVisitor* visitor) {
+  static_assert(BlinkGC::kLargeObjectArenaIndex + 1 == BlinkGC::kNumberOfArenas,
+                "LargeObject arena must be the last one.");
+  const auto visit_header = [visitor](HeapObjectHeader* header) {
+    // Process only old objects.
+    if (header->IsMarked<HeapObjectHeader::AccessMode::kNonAtomic>()) {
+      visitor->VisitMarkedHeader(header);
+    }
+  };
+  for (size_t i = 0; i < BlinkGC::kLargeObjectArenaIndex; ++i) {
+    static_cast<NormalPageArena*>(arenas_[i])
+        ->IterateAndClearCardTables(visit_header);
+  }
+  static_cast<LargeObjectArena*>(arenas_[BlinkGC::kLargeObjectArenaIndex])
+      ->IterateAndClearRememberedPages(visit_header);
+}
+
 void ThreadHeap::SetupWorklists() {
   marking_worklist_.reset(new MarkingWorklist());
   write_barrier_worklist_.reset(new WriteBarrierWorklist());

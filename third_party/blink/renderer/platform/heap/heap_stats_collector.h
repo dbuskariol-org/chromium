@@ -64,7 +64,8 @@ class PLATFORM_EXPORT ThreadHeapStatsObserver {
   V(VisitPersistentRoots)             \
   V(VisitPersistents)                 \
   V(VisitRoots)                       \
-  V(VisitStackRoots)
+  V(VisitStackRoots)                  \
+  V(VisitRememberedSets)
 
 #define FOR_ALL_CONCURRENT_SCOPES(V) \
   V(ConcurrentMarkingStep)           \

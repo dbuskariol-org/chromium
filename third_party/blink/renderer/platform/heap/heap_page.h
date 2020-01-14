@@ -721,11 +721,15 @@ class PLATFORM_EXPORT NormalPage final : public BasePage {
 
   void VerifyMarking() override;
 
+  // Marks a card corresponding to address.
   void MarkCard(Address address);
 
   // Iterates over all objects in marked cards.
   template <typename Function>
   void IterateCardTable(Function function) const;
+
+  // Clears all bits in the card table.
+  void ClearCardTable() { card_table_.Clear(); }
 
  private:
   // Data structure that divides a page in a number of cards each of 512 bytes
@@ -898,12 +902,20 @@ class PLATFORM_EXPORT LargeObjectPage final : public BasePage {
   bool IsVectorBackingPage() const { return is_vector_backing_page_; }
 #endif
 
+  // Remembers the page as containing inter-generational pointers.
+  void SetRemembered(bool remembered) {
+    DCHECK_NE(remembered, is_remembered_);
+    is_remembered_ = remembered;
+  }
+  bool IsRemembered() const { return is_remembered_; }
+
  private:
   // The size of the underlying object including HeapObjectHeader.
   size_t object_size_;
 #ifdef ANNOTATE_CONTIGUOUS_CONTAINER
   bool is_vector_backing_page_;
 #endif
+  bool is_remembered_ = false;
 };
 
 // Each thread has a number of thread arenas (e.g., Generic arenas, typed arenas
@@ -1049,6 +1061,9 @@ class PLATFORM_EXPORT NormalPageArena final : public BaseArena {
 
   void MakeConsistentForGC() override;
 
+  template <typename Function>
+  void IterateAndClearCardTables(Function function);
+
  private:
   void AllocatePage();
 
@@ -1091,6 +1106,9 @@ class LargeObjectArena final : public BaseArena {
 #if DCHECK_IS_ON()
   bool IsConsistentForGC() override { return true; }
 #endif
+
+  template <typename Function>
+  void IterateAndClearRememberedPages(Function function);
 
  private:
   Address DoAllocateLargeObjectPage(size_t, size_t gc_info_index);
@@ -1275,6 +1293,29 @@ inline Address NormalPageArena::AllocateObject(size_t allocation_size,
 
 inline NormalPageArena* NormalPage::ArenaForNormalPage() const {
   return static_cast<NormalPageArena*>(Arena());
+}
+
+// Iterates over all card tables and clears them.
+template <typename Function>
+inline void NormalPageArena::IterateAndClearCardTables(Function function) {
+  for (BasePage* page : swept_pages_) {
+    auto* normal_page = static_cast<NormalPage*>(page);
+    normal_page->IterateCardTable(function);
+    normal_page->ClearCardTable();
+  }
+}
+
+// Iterates over all pages that may contain inter-generational pointers.
+template <typename Function>
+inline void LargeObjectArena::IterateAndClearRememberedPages(
+    Function function) {
+  for (BasePage* page : swept_pages_) {
+    auto* large_page = static_cast<LargeObjectPage*>(page);
+    if (large_page->IsRemembered()) {
+      function(large_page->ObjectHeader());
+      large_page->SetRemembered(false);
+    }
+  }
 }
 
 inline void ObjectStartBitmap::SetBit(Address header_address) {

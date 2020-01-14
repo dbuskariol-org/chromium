@@ -309,6 +309,9 @@ class PLATFORM_EXPORT ThreadHeap {
   // thread heaps.  If so marks the object pointed to as live.
   Address CheckAndMarkPointer(MarkingVisitor*, Address);
 
+  // Visits remembered sets.
+  void MarkRememberedSets(MarkingVisitor*);
+
   size_t ObjectPayloadSizeForTesting();
   void ResetAllocationPointForTesting();
 
