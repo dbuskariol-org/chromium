@@ -1759,9 +1759,6 @@ crbug.com/987224 [ IOS ] virtual/cascade/external/wpt/css/css-paint-api/idlharne
 # in-progress rebaselines, tracked at crbug.com/1035582.
 # ======
 
-# -
-# -
-# -
 # Group 1 Leftovers:
 crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/datetimelocal-multiple-fields-mouse-events.html [ Failure Pass ]
 crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-datetimelocal.html [ Failure Pass ]
@@ -1782,35 +1779,7 @@ crbug.com/1035582 fast/forms/date-multiple-fields/date-multiple-fields-wheel-eve
 crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/datetimelocal-multiple-fields-clearbutton-change-and-input-events.html [ Failure Pass ]
 crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/datetimelocal-multiple-fields-spinbutton-change-and-input-events.html [ Failure Pass ]
 crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/datetimelocal-multiple-fields-wheel-event.html [ Failure Pass ]
-# Focus ring:
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance-ar.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance-coarse.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance-minimum-date.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance-required-ar.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance-required.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance-ru.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance-step.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance-zoom125.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance-zoom200.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-appearance.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/month-picker-appearance-step.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/month-picker-appearance.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/week-picker-appearance-step.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/week-picker-appearance.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/color/color-suggestion-picker-appearance-zoom125.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/color/color-suggestion-picker-appearance.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/color/color-suggestion-picker-one-row-appearance.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/color/color-suggestion-picker-two-row-appearance.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/color/color-suggestion-picker-with-scrollbar-appearance.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/date/date-appearance-basic.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/datetimelocal/datetimelocal-appearance-basic.html [ Failure Pass ]
 
-
-# -
-# -
-# -
-# -
-# -
 # Group 2 Leftovers:
 crbug.com/1035582 fast/forms/date-multiple-fields/* [ Skip ]
 crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/* [ Skip ]
@@ -1822,71 +1791,13 @@ crbug.com/1035582 fast/forms/select/listbox-tap.html [ Failure Pass ]
 # Uncomment the one on 5715:
 crbug.com/1035582 fast/forms/suggested-value.html [ Failure Pass ]
 crbug.com/1035582 virtual/form-controls-refresh-disabled/fast/forms/select/menulist-update-text-popup.html [ Failure Pass ]
-# Focus ring:
-crbug.com/1035582 fast/forms/month/month-appearance-basic.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/number/number-appearance-datalist.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/number/number-appearance-spinbutton-disabled-readonly.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/range/input-appearance-range.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/select/listbox-appearance-basic.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/text/text-appearance-datalist.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/time/time-appearance-basic.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/week/week-appearance-basic.html [ Failure Pass ]
 
-
-# -
-# -
-# -
-# -
-# -
-# Group 5 Leftovers (all focus rings)
-crbug.com/1035582  compositing/overflow/do-not-paint-outline-into-composited-scrolling-contents.html [ Failure Pass ]
-crbug.com/1035582  compositing/overflow/update-widget-positions-on-nested-frames-and-scrollers.html [ Failure Pass ]
-crbug.com/1035582  editing/caret/caret-color-001.html [ Failure Pass ]
-crbug.com/1035582 editing/caret/caret-color-002.html [ Failure Pass ]
-crbug.com/1035582 editing/caret/caret-color-003.html [ Failure Pass ]
-crbug.com/1035582 editing/caret/caret-color-004.html [ Failure Pass ]
-crbug.com/1035582 editing/caret/caret-color-005.html [ Failure Pass ]
-crbug.com/1035582 editing/caret/caret-color-007.html [ Failure Pass ]
-crbug.com/1035582 editing/caret/caret-color-010.html [ Failure Pass ]
-crbug.com/1035582 editing/caret/caret-color-012.html [ Failure Pass ]
-crbug.com/1035582 editing/caret/caret-position.html [ Failure Pass ]
-crbug.com/1035582 editing/input/caret-at-the-edge-of-input.html [ Failure Pass ]
-crbug.com/1035582 editing/input/reveal-caret-of-multiline-input.html [ Failure Pass ]
-crbug.com/1035582 editing/inserting/4960120-1.html [ Failure Pass ]
-crbug.com/1035582 editing/pasteboard/4806874.html [ Failure Pass ]
-# -
-# -
-# -
 # Group 7 leftovers:
 crbug.com/1035582 virtual/gpu-rasterization/images/12-55.html [ Skip ]
 crbug.com/1035582 virtual/gpu-rasterization/images/182.html [ Skip ]
-# Focus rings:
-crbug.com/1035582 fast/multicol/multicol-with-child-renderLayer-for-input.html [ Failure Pass ]
-crbug.com/1035582 fast/overflow/scroll-nested-positioned-layer-in-overflow.html [ Failure Pass ]
-crbug.com/1035582 fast/overflow/scrollRevealButton.html [ Failure Pass ]
-crbug.com/1035582 fast/spatial-navigation/snav-multiple-select-focusring.html [ Failure Pass ]
-crbug.com/1035582 http/tests/webfont/popup-menu-load-webfont-after-open.html [ Failure Pass ]
-crbug.com/1035582 paint/invalidation/renderer-destruction-by-invalidateSelection-crash.html [ Failure Pass ]
-crbug.com/1035582 paint/invalidation/forms/button-reset-focus-by-mouse-then-keydown.html [ Failure Pass ]
-crbug.com/1035582 paint/invalidation/forms/checkbox-focus-by-mouse-then-keydown.html [ Failure Pass ]
-crbug.com/1035582 paint/invalidation/forms/radio-focus-by-mouse-then-keydown.html [ Failure Pass ]
-crbug.com/1035582 paint/invalidation/forms/textarea-caret.html [ Failure Pass ]
-crbug.com/1035582 paint/invalidation/scroll/caret-invalidation-in-overflow-scroll.html [ Failure Pass ]
-crbug.com/1035582 paint/invalidation/scroll/caret-with-composited-scroll.html [ Failure Pass ]
-crbug.com/1035582 paint/invalidation/selection/selection-in-composited-scrolling-container.html [ Failure Pass ]
-crbug.com/1035582 paint/invalidation/selection/selection-in-non-composited-scrolling-container.html [ Failure Pass ]
-crbug.com/1035582 paint/selection/text-selection-with-composition.html [ Failure Pass ]
-crbug.com/1035582 transforms/transformed-focused-text-input.html [ Failure Pass ]
-crbug.com/1035582 virtual/layout_ng_block_frag/fast/multicol/multicol-with-child-renderLayer-for-input.html [ Failure Pass ]
 # Dark mode, flagged by schenney, looks wrong:
 crbug.com/1035582 virtual/dark-mode-native-theme-on/text-input-elements.html [ Failure Pass ]
 
-# -
-# -
-# -
-# -
-# -
-# -
 # Problems rebaselining:
 crbug.com/1035582 virtual/cascade/fast/forms/date/date-appearance-basic.html [ Skip ]
 crbug.com/1035582 virtual/cascade/fast/forms/month/month-appearance-basic.html [ Skip ]
@@ -1921,6 +1832,18 @@ crbug.com/1035582 external/wpt/css/css-transforms/transform-input-015.html [ Ski
 # Focus ring related
 crbug.com/1035582 fast/forms/text/input-appearance-autocomplete-very-long-value.html [ Skip ]
 crbug.com/1035582 virtual/text-antialias/selection/mixed-directionality-selection.html [ Skip ]
+
+# Failed during rebaseline 3-1
+crbug.com/1035582 [ Fuchsia ] paint/invalidation/selection/selection-in-composited-scrolling-container.html [ Skip ]
+crbug.com/1035582 [ Linux ] paint/invalidation/scroll/caret-with-composited-scroll.html [ Skip ]
+crbug.com/1035582 [ Win ] paint/invalidation/forms/button-reset-focus-by-mouse-then-keydown.html [ Skip ]
+crbug.com/1035582 [ Win ] paint/invalidation/forms/radio-focus-by-mouse-then-keydown.html [ Skip ]
+crbug.com/1035582 [ Win ] paint/invalidation/scroll/caret-with-composited-scroll.html [ Skip ]
+crbug.com/1035582 [ Win7 ] virtual/gpu-rasterization/images/feature-policy-oversized-images-responsive-image.html [ Skip ]
+crbug.com/1035582 [ Win10 ] editing/caret/caret-position.html [ Skip ]
+crbug.com/1035582 [ Win10 ] editing/pasteboard/4806874.html [ Skip ]
+crbug.com/1035582 [ Win10 ] fast/forms/color/color-suggestion-picker-appearance-zoom125.html [ Skip ]
+crbug.com/1035582 [ Win10 ] fast/multicol/multicol-with-child-renderLayer-for-input.html [ Skip ]
 
 # ======
 # ====== End of rebaselines for crbug.com/1035582 ======
