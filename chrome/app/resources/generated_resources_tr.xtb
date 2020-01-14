@@ -78,7 +78,7 @@
 <translation id="1108600514891325577">D&amp;urdur</translation>
 <translation id="1110155001042129815">Bekle</translation>
 <translation id="1112420131909513020">Arka plan sekmesi Bluetooth bağlantısını kullanıyor</translation>
-<translation id="1113042067630273625">Bu işlem, <ph name="TOTAL_USAGE" />'lık depolanmış site verilerini temizleyecektir.</translation>
+<translation id="1113042067630273625">Bu işlem, toplam <ph name="TOTAL_USAGE" /> depolanmış site verisini temizleyecektir.</translation>
 <translation id="1114102982691049955"><ph name="PRINTER_MANUFACTURER" /> <ph name="PRINTER_MODEL" /> (USB)</translation>
 <translation id="1114202307280046356">Karo</translation>
 <translation id="1114335938027186412">Bilgisayarınızda, Chrome OS'deki pek çok kritik güvenlik özelliğini uygulamak için kullanılan bir Güvenilir Platform Modülü (TPM) güvenlik cihazı bulunmaktadır. Daha fazla bilgi edinmek için Chromebook Yardım Merkezi'ni ziyaret edin: https://support.google.com/chromebook/?p=tpm</translation>
@@ -518,7 +518,6 @@
 <translation id="1712552549805331520"><ph name="URL" />, verileri yerel bilgisayarınızda kalıcı olarak saklamak istiyor</translation>
 <translation id="1714644264617423774">Cihazınızı daha kolay kullanılır duruma getirmek için erişilebilirlik özelliklerini etkinleştirin. <ph name="LINK_BEGIN" />Daha fazla bilgi<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">Hareket sensörleri</translation>
-<translation id="171824261579749339">Avustralya <ph name="LINK_BEGIN" />Daha fazla bilgi<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">Son saat</translation>
 <translation id="1719312230114180055">Not: Parmak iziniz güçlü bir şifre veya PIN kadar güvenli olmayabilir.</translation>
 <translation id="1720318856472900922">TLS WWW Sunucu Kimlik Doğrulaması</translation>
@@ -729,7 +728,6 @@
 <translation id="2006638907958895361">Bağlantıyı <ph name="APP" /> uygulamasında aç</translation>
 <translation id="2007404777272201486">Sorun Bildirin...</translation>
 <translation id="2010501376126504057">Uyumlu cihazlar</translation>
-<translation id="2016430552235416146">Geleneksel</translation>
 <translation id="2017334798163366053">Performans verisi toplamayı devre dışı bırak</translation>
 <translation id="2017836877785168846">Geçmişi ve adres çubuğundaki otomatik tamamlama bilgilerini temizler.</translation>
 <translation id="2018352199541442911">Maalesef, harici depolama cihazınız şu anda desteklenmiyor.</translation>
@@ -770,7 +768,6 @@ Cihazınızda Family Link uygulamasını yükleyerek bu hesabın ayarlarını y�
 <translation id="2076672359661571384">Orta (Önerilir)</translation>
 <translation id="2077129598763517140">Kullanılabilir olduğunda donanım hızlandırmayı kullan</translation>
 <translation id="2078019350989722914">Çıkmadan Önce Uyar (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">Kapalı</translation>
 <translation id="2079053412993822885">Sertifikalarınızdan birini silerseniz, kendinizi tanıtmak için artık bu sertifikayı kullanamazsınız.</translation>
 <translation id="2079545284768500474">Geri al</translation>
 <translation id="2080070583977670716">Daha fazla ayar</translation>
@@ -2406,7 +2403,6 @@ Sunucunun mesajı: <ph name="SERVER_MSG" /></translation>
 <translation id="4364327530094270451">Kavun</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" />, bir pencereyi paylaşıyor.</translation>
 <translation id="4364830672918311045">Bildirimleri görüntüleme</translation>
-<translation id="436499142539576997">Uygulama verileri alınamadı, hâlâ uygulamanın çalışması için uğraşılıyor...</translation>
 <translation id="4370975561335139969">Girdiğiniz e-posta ve şifre eşleşmiyor</translation>
 <translation id="437184764829821926">Gelişmiş yazı tipi ayarları</translation>
 <translation id="4374831787438678295">Linux yükleyici</translation>
@@ -3926,7 +3922,7 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="6582080224869403177">Güvenliğinizi yeni sürüme geçirmek için <ph name="DEVICE_TYPE" /> cihazınızı sıfırlayın.</translation>
 <translation id="6584878029876017575">Microsoft Ömür Boyu İmzalama</translation>
 <translation id="6586451623538375658">Birincil fare düğmesini değiştir</translation>
-<translation id="6586604979641883411">Linux'un yeni sürüme geçirilmesi için en az <ph name="REQUIRED_SPACE" /> büyüklüğünde boş alan gerekiyor. Lütfen cihazınızda biraz yer açıp tekrar deneyin.</translation>
+<translation id="6586604979641883411">Linux'un yeni sürüme geçirilmesi için en az <ph name="REQUIRED_SPACE" /> boş alan gerekiyor. Lütfen cihazınızda biraz yer açıp tekrar deneyin.</translation>
 <translation id="6590458744723262880">Klasörü yeniden adlandırın</translation>
 <translation id="6592267180249644460">WebRTC günlüğü yakalandı: <ph name="WEBRTC_LOG_CAPTURE_TIME" /></translation>
 <translation id="6592808042417736307">Parmak iziniz alındı</translation>
@@ -4861,7 +4857,6 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="7908378463497120834">Maalesef, harici depolama cihazınızdaki en az bir bölüm eklenemedi.</translation>
 <translation id="7909969815743704077">Gizli modda indirildi</translation>
 <translation id="7910768399700579500">&amp;Yeni klasör</translation>
-<translation id="7910831464510799808">Açık</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">Şifreniz sunucuda değiştirildi. Lütfen oturumu kapatıp tekrar açın.</translation>
 <translation id="7915457674565721553">Ebeveyn denetimlerini kurmak için internete bağlanın</translation>

@@ -1013,7 +1013,6 @@
 <translation id="5855253129151731373">This site's hostname looks similar to <ph name="LOOKALIKE_DOMAIN" />. Attackers sometimes mimic sites by making small, hard-to-see changes to the domain name.
 
     If you believe that this is shown in error please visit https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
-<translation id="5860033963881614850">Off</translation>
 <translation id="5863847714970149516">The page ahead may try to charge you money</translation>
 <translation id="5866257070973731571">Add Phone Number</translation>
 <translation id="5866898949289125849">You're viewing a developer tools page</translation>
@@ -1025,7 +1024,6 @@
 <translation id="5901630391730855834">Yellow</translation>
 <translation id="5905445707201418379">Blocked according to <ph name="ORIGIN" />'s origin policy.</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (synced)</translation>
-<translation id="5916664084637901428">On</translation>
 <translation id="59174027418879706">Enabled</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">Save card to Google Account?</translation>

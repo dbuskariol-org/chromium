@@ -48,7 +48,7 @@
 <translation id="129382876167171263">Fajlovi koje sačuvaju web lokacije će se pojaviti ovdje</translation>
 <translation id="129553762522093515">Nedavno zatvoreno</translation>
 <translation id="1303507811548703290"><ph name="DOMAIN" /> – Poslano koristeći <ph name="DEVICE_NAME" /></translation>
-<translation id="1310482092992808703">Grupiraj kartice</translation>
+<translation id="1310482092992808703">Grupiši kartice</translation>
 <translation id="1327257854815634930">Historija navigacije je otvorena</translation>
 <translation id="1331212799747679585">Nije moguće ažurirati Chrome. Više opcija</translation>
 <translation id="1332501820983677155">Prečice Google Chrome funkcija</translation>
@@ -366,7 +366,6 @@
 <translation id="381841723434055211">Brojevi telefona</translation>
 <translation id="3819178904835489326">Broj izbrisanih preuzimanja: <ph name="NUMBER_OF_DOWNLOADS" /></translation>
 <translation id="3822502789641063741">Obrisati pohranu?</translation>
-<translation id="3853625385350850937">Da nastavite, uključite NFC na uređaju</translation>
 <translation id="3859306556332390985">Pomakni naprijed</translation>
 <translation id="388596076286380598">Preuzmite članke, videozapise i drugi sadržaj s web lokacija koje vam se sviđaju, čak i kada ste van mreže ili kada vam je veza slaba.</translation>
 <translation id="3894427358181296146">Dodaj folder</translation>

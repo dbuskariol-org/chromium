@@ -517,7 +517,6 @@
 <translation id="1712552549805331520">O URL <ph name="URL" /> quere almacenar datos de forma permanente no teu ordenador local</translation>
 <translation id="1714644264617423774">Activa as funcións de accesibilidade para que o dispositivo resulte máis fácil de utilizar. <ph name="LINK_BEGIN" />Máis información<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">Sensores de movemento</translation>
-<translation id="171824261579749339">Australiano <ph name="LINK_BEGIN" />Máis información<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">Última hora</translation>
 <translation id="1719312230114180055">Nota: É posible que a túa impresión dixital sexa menos segura que un contrasinal ou PIN fiables.</translation>
 <translation id="1720318856472900922">Autenticación do servidor TLS WWW</translation>
@@ -728,7 +727,6 @@
 <translation id="2006638907958895361">Abrir ligazón na aplicación <ph name="APP" /></translation>
 <translation id="2007404777272201486">Informar dun problema...</translation>
 <translation id="2010501376126504057">Dispositivos compatibles</translation>
-<translation id="2016430552235416146">Tradicional</translation>
 <translation id="2017334798163366053">Desactivar a recompilación da datos de rendemento</translation>
 <translation id="2017836877785168846">Borra o historial e os completados automáticos na barra de enderezos.</translation>
 <translation id="2018352199541442911">O dispositivo de almacenamento externo non é compatible neste momento.</translation>
@@ -769,7 +767,6 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="2076672359661571384">Tamaño medio (recomendado)</translation>
 <translation id="2077129598763517140">Utilizar a aceleración de hardware cando estea dispoñible</translation>
 <translation id="2078019350989722914">Avisar antes de pechar (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">Opción desactivada</translation>
 <translation id="2079053412993822885">Se eliminas un dos teus propios certificados, non poderás volver utilizalo para identificarte.</translation>
 <translation id="2079545284768500474">Desfacer</translation>
 <translation id="2080070583977670716">Máis configuracións</translation>
@@ -2405,7 +2402,6 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="4364327530094270451">Melón</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> está compartindo unha ventá.</translation>
 <translation id="4364830672918311045">Mostrar notificacións</translation>
-<translation id="436499142539576997">Produciuse un erro ao obter os datos da aplicación, pero estase tentando executar de todas formas…</translation>
 <translation id="4370975561335139969">O correo electrónico e o contrasinal inseridos non coinciden</translation>
 <translation id="437184764829821926">Configuración de tipo de letra avanzada</translation>
 <translation id="4374831787438678295">Instalador de Linux</translation>
@@ -4860,7 +4856,6 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="7908378463497120834">Polo menos unha partición do dispositivo de almacenamento externo non se puido activar.</translation>
 <translation id="7909969815743704077">Descargouse no modo de incógnito</translation>
 <translation id="7910768399700579500">&amp;Novo cartafol</translation>
-<translation id="7910831464510799808">Opción activada</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">O teu contrasinal cambiouse no servidor. Pecha sesión e volve iniciala.</translation>
 <translation id="7915457674565721553">Conéctate a Internet para configurar a función Controis parentais</translation>

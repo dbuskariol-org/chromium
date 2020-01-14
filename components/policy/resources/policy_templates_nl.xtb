@@ -368,12 +368,6 @@
       Dit beleid wordt verwijderd in Chrome 88.
 
       Zie https://www.chromestatus.com/feature/5989473649164288.</translation>
-<translation id="1559980755219453326">Met dit beleid wordt bepaald of informatie over extensies en plug-ins wordt gerapporteerd.
-
-      Als dit beleid niet is ingesteld of is ingesteld op True, worden er gegevens verzameld over de extensies en plug-ins.
-      Als dit beleid is ingesteld op False, worden er geen gegevens verzameld over extensies en plug-ins.
-
-      Dit beleid is alleen van toepassing wanneer <ph name="CHROME_REPORTING_EXTENSION_NAME" /> is ingeschakeld en het apparaat is ingeschreven met <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME" />.</translation>
 <translation id="1560205870554624777">Beheert of de Kerberos-functionaliteit wordt ingeschakeld. Kerberos is een verificatieprotocol dat kan worden gebruikt om web-apps en gedeelde bestanden te verifiëren.
 
           Als dit beleid wordt ingeschakeld, wordt de Kerberos-functionaliteit ingeschakeld. Kerberos-accounts kunnen worden toegevoegd via zowel het beleid 'Kerberos-accounts configureren' als via de instellingen van het Kerberos-account op de instellingenpagina 'Mensen'.
@@ -727,12 +721,6 @@
 
       Als er geen instelling voor dit beleid is opgegeven, staat dit gelijk aan het inschakelen van het beleid (zie de beschrijving hierboven).</translation>
 <translation id="2113068765175018713">Uptime van apparaat beperken door automatisch opnieuw op te starten</translation>
-<translation id="2116790137063002724">Met dit beleid wordt bepaald of informatie moet worden gerapporteerd die gebruikt kan worden om gebruikers te identificeren, zoals de OS-inloggegevens, de inloggegevens voor het <ph name="PRODUCT_NAME" />-profiel, de profielnaam voor <ph name="PRODUCT_NAME" />, het profielpad voor <ph name="PRODUCT_NAME" /> en het uitvoerbare pad voor <ph name="PRODUCT_NAME" />.
-
-      Als dit beleid niet is ingesteld of op 'True' is ingesteld, worden er gegevens verzameld die kunnen worden gebruikt om gebruikers te identificeren.
-      Als dit beleid is ingesteld op 'False', worden er geen gegevens verzameld die kunnen worden gebruikt om gebruikers te identificeren.
-
-      Dit beleid is alleen van toepassing wanneer de <ph name="CHROME_REPORTING_EXTENSION_NAME" /> is ingeschakeld en de machine is ingeschreven met <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME" />.</translation>
 <translation id="2127599828444728326">Meldingen op deze sites toestaan</translation>
 <translation id="2131902621292742709">Vertraging van dimmen van scherm wanneer op de batterij wordt gewerkt</translation>
 <translation id="2134437727173969994">Schermvergrendeling toestaan</translation>
@@ -3056,9 +3044,6 @@
         Als het beleid is ingesteld op 'false', kunnen gebruikers geen feedback sturen naar Google.
 
         Als het beleid niet is ingesteld of is ingesteld op 'true', kunnen gebruikers feedback naar Google sturen via Menu -&gt; Hulp -&gt; Een probleem melden, of hier een toetsencombinatie voor gebruiken.</translation>
-<translation id="5581292529942108810">Aan Chrome Reporting Extension gerelateerde beleidsregels.
-
-      Dit beleid is alleen effectief wanneer de <ph name="CHROME_REPORTING_EXTENSION_NAME" /> is ingeschakeld en de machine is ingeschreven met <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME" />.</translation>
 <translation id="5583806683960333345">Als deze instelling is ingeschakeld, kunnen gebruikers instant-tethering gebruiken, waarmee hun Google-telefoon mobiele data kan delen met hun apparaat.
 
       Als deze instelling is uitgeschakeld, kunnen gebruikers instant-tethering niet gebruiken.
@@ -3696,12 +3681,6 @@ Als dit beleid niet wordt ingesteld, kan de gebruiker ervoor kiezen de pagina 'N
 
       Hiermee worden de markeringen gespecificeerd die bij het starten moeten worden toegepast op <ph name="PRODUCT_NAME" />. De opgegeven markeringen worden alleen toegepast op het inlogscherm. Markeringen die worden ingesteld via dit beleid, worden niet doorgevoerd in gebruikerssessies.</translation>
 <translation id="685769593149966548">Strenge 'Beperkte modus' voor YouTube afdwingen</translation>
-<translation id="6857824281777105940">Met dit beleid wordt bepaald of informatie over Safe Browsing moet worden gerapporteerd, waaronder het aantal Safe Browsing-waarschuwingen en het aantal doorklikken van Safe Browsing-waarschuwingen.
-
-      Wanneer dit beleid niet is ingesteld of is ingesteld op True, worden gegevens over Safe Browsing verzameld.
-      Wanneer dit beleid is ingesteld op False, worden er geen gegevens over Safe Browsing verzameld.
-
-      Dit beleid is alleen effectief wanneer <ph name="CHROME_REPORTING_EXTENSION_NAME" /> is ingeschakeld en de machine is ingeschreven met <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME" />.</translation>
 <translation id="686079137349561371">Microsoft Windows 7 of later</translation>
 <translation id="6864244339257535116">Uploads en downloads van bestanden met wachtwoordbeveiliging toestaan</translation>
 <translation id="687046793986382807">Dit beleid wordt niet meer gebruikt sinds <ph name="PRODUCT_NAME" /> versie 35.
@@ -4053,12 +4032,6 @@ Geheugengegevens worden in alle gevallen aan de pagina gerapporteerd, afgezien v
 <translation id="7311458740754205918">Als dit beleid is ingesteld op 'True' of niet is ingesteld, kunnen op de nieuwe tabbladpagina contentsuggesties worden weergegeven op basis van de browsegeschiedenis, interesses en locatie van de gebruiker.
 
       Als dit is ingesteld op 'False', worden er geen automatisch gegenereerde contentsuggesties weergegeven op de nieuwe tabbladpagina.</translation>
-<translation id="7313793931637495417">Met dit beleid wordt bepaald of er versiegegevens moeten worden gerapporteerd, zoals OS-versie, OS-platform, OS-architectuur, <ph name="PRODUCT_NAME" />-versie en <ph name="PRODUCT_NAME" />-kanaal.
-
-      Als dit beleid niet is ingesteld of op 'True' is ingesteld, worden er versiegegevens verzameld.
-      Als dit beleid is ingesteld op 'False', worden er geen versiegegevens verzameld.
-
-      Dit beleid is alleen van toepassing wanneer de <ph name="CHROME_REPORTING_EXTENSION_NAME" /> is ingeschakeld en de machine is ingeschreven met <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME" />.</translation>
 <translation id="7323896582714668701">Extra opdrachtregelparameters voor <ph name="PRODUCT_NAME" /></translation>
 <translation id="7326394567531622570">Vergelijkbaar met Wipe (waarde 2), maar probeert inlogtokens te behouden, zodat de gebruiker niet opnieuw hoeft in te loggen.</translation>
 <translation id="7329968046053403405">Hiermee wordt het accounttype gespecificeerd van de accounts die worden geleverd door de verificatie-app voor Android die <ph name="HTTP_NEGOTIATE" />-verificatie ondersteunt (zoals Kerberos-verificatie). Deze informatie is beschikbaar via de leverancier van de verificatie-app. Ga voor meer informatie naar https://goo.gl/hajyfN.
@@ -4081,12 +4054,6 @@ Geheugengegevens worden in alle gevallen aan de pagina gerapporteerd, afgezien v
 <translation id="7339315111520512972">Afdwingen dat netwerkcode wordt uitgevoerd in het browserproces</translation>
 <translation id="7340034977315324840">Tijdsduur van apparaatgebruik melden</translation>
 <translation id="7343497214039883642">Configuratiebestand voor zakelijke printers voor apparaten</translation>
-<translation id="735902178936442460">Met dit beleid wordt bepaald of er informatie moet worden gerapporteerd die gebruikt kan worden om machines te identificeren, zoals de machinenaam en netwerkadressen.
-
-      Als dit beleid niet is ingesteld of op 'True' is ingesteld, worden er gegevens verzameld die kunnen worden gebruikt om machines te identificeren.
-      Als dit beleid is ingesteld op 'False', worden er geen gegevens verzameld die kunnen worden gebruik om machines te identificeren.
-
-      Dit beleid is alleen van toepassing wanneer de <ph name="CHROME_REPORTING_EXTENSION_NAME" /> is ingeschakeld en de machine is ingeschreven met <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME" />.</translation>
 <translation id="7359307926583593395">
       Dit beleid is van toepassing op het inlogscherm. Raadpleeg ook het beleid <ph name="SITE_PER_PROCESS_POLICY_NAME" /> dat van toepassing is op de gebruikerssessie. Het wordt aangeraden beide beleidsregels op dezelfde waarde in te stellen. Als de waarden niet overeenkomen, kan er bij het starten van een gebruikerssessie terwijl de door het gebruikersbeleid gespecificeerde waarde wordt toegepast, een vertraging optreden.
       </translation>
@@ -4498,12 +4465,6 @@ Geheugengegevens worden in alle gevallen aan de pagina gerapporteerd, afgezien v
       Als de instelling is ingeschakeld of niet is ingesteld, mogen websites controleren of de gebruiker betaalmethoden heeft opgeslagen.</translation>
 <translation id="8118665053362250806">Grootte voor mediaschijfcache instellen</translation>
 <translation id="8124468781472887384">Toegangsbeleid voor configuratie van apparaatprinters.</translation>
-<translation id="8138009212169037227">Met dit beleid wordt bepaald of beleidsgegevens en het tijdstip van de beleidsfetch worden gerapporteerd.
-
-      Als dit beleid niet is ingesteld of op 'True' is ingesteld, worden beleidsgegevens en het tijdstip van de beleidsfetch verzameld.
-      Als dit beleid is ingesteld op 'False', worden beleidsgegevens en het tijdstip van de beleidsfetch niet verzameld.
-
-      Dit beleid is alleen van toepassing wanneer de <ph name="CHROME_REPORTING_EXTENSION_NAME" /> is ingeschakeld en de machine is ingeschreven met <ph name="MACHINE_LEVEL_USER_CLOUD_POLICY_ENROLLMENT_TOKEN_POLICY_NAME" />.</translation>
 <translation id="8140204717286305802">De lijst met netwerkinterfaces met hun typen en hardwareadressen rapporteren aan de server.
 
       Als het beleid is ingesteld op 'false', wordt de interfacelijst niet gerapporteerd.</translation>

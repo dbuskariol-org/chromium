@@ -1028,7 +1028,6 @@
 <translation id="5855253129151731373">এই সাইটের হোস্টনেম <ph name="LOOKALIKE_DOMAIN" />-এর মতো মনে হচ্ছে। আক্রমণকারীরা কখনও কখনও ডোমেনের নামে সামান্য বা সহজে দেখা যায় না এমন পরিবর্তন করে কোনও সাইটের নকল করেন।
 
     এটি ভুল করে দেখানো হচ্ছে বলে মনে হলে, https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals লিঙ্কটি দেখুন।</translation>
-<translation id="5860033963881614850">বন্ধ করুন</translation>
 <translation id="5863847714970149516">পরের পৃষ্ঠাতে আপনাকে চার্জ করা হতে পারে</translation>
 <translation id="5866257070973731571">ফোন নম্বর যোগ করুন</translation>
 <translation id="5866898949289125849">আপনি ডেভেলপারের টুল পৃষ্ঠা দেখছেন</translation>
@@ -1040,7 +1039,6 @@
 <translation id="5901630391730855834">হলুদ</translation>
 <translation id="5905445707201418379"><ph name="ORIGIN" /> সার্ভারের 'অরিজিন নীতি' অনুযায়ী ব্লক করা হয়েছে।</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (সিঙ্ক হয়েছে)</translation>
-<translation id="5916664084637901428">চালু</translation>
 <translation id="59174027418879706">সক্ষমিত</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">Google অ্যাকাউন্টে কার্ড সেভ করবেন?</translation>

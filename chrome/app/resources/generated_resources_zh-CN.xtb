@@ -515,7 +515,6 @@
 <translation id="1712552549805331520"><ph name="URL" /> 想在您的本地计算机上永久存储数据</translation>
 <translation id="1714644264617423774">启用无障碍功能，让设备更易于使用。<ph name="LINK_BEGIN" />了解详情<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">动态传感器</translation>
-<translation id="171824261579749339">自然滚动<ph name="LINK_BEGIN" />了解详情<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">过去一小时</translation>
 <translation id="1719312230114180055">请注意：指纹识别的安全性可能不及安全系数高的密码或 PIN 码。</translation>
 <translation id="1720318856472900922">TLS WWW 服务器身份验证</translation>
@@ -726,7 +725,6 @@
 <translation id="2006638907958895361">在<ph name="APP" />中打开链接</translation>
 <translation id="2007404777272201486">报告问题...</translation>
 <translation id="2010501376126504057">兼容的设备</translation>
-<translation id="2016430552235416146">传统</translation>
 <translation id="2017334798163366053">停用性能数据收集</translation>
 <translation id="2017836877785168846">清除历史记录和地址栏中的自动填充项。</translation>
 <translation id="2018352199541442911">抱歉，系统目前不支持您的外部存储设备。</translation>
@@ -767,7 +765,6 @@
 <translation id="2076672359661571384">中（推荐）</translation>
 <translation id="2077129598763517140">使用硬件加速模式（如果可用）</translation>
 <translation id="2078019350989722914">退出前提示 (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">已关闭</translation>
 <translation id="2079053412993822885">如果您删除了自己的某个证书，则不能再用该证书标识自己的身份。</translation>
 <translation id="2079545284768500474">撤消</translation>
 <translation id="2080070583977670716">更多设置</translation>
@@ -2401,7 +2398,6 @@
 <translation id="4364327530094270451">甜瓜</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> 正在共享窗口。</translation>
 <translation id="4364830672918311045">显示通知</translation>
-<translation id="436499142539576997">未能获取应用数据，仍在尝试运行此应用…</translation>
 <translation id="4370975561335139969">您输入的电子邮件地址和密码不匹配。</translation>
 <translation id="437184764829821926">高级字体设置</translation>
 <translation id="4374831787438678295">Linux 安装程序</translation>
@@ -4856,7 +4852,6 @@
 <translation id="7908378463497120834">抱歉，您的外部存储设备上至少有一个分区无法加载。</translation>
 <translation id="7909969815743704077">已在隐身模式下进行下载</translation>
 <translation id="7910768399700579500">新建文件夹(&amp;N)</translation>
-<translation id="7910831464510799808">已开启</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">您已在服务器上更改密码。请先退出，然后重新登录。</translation>
 <translation id="7915457674565721553">请连接到互联网以设置家长控制</translation>

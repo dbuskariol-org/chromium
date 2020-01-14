@@ -1010,7 +1010,6 @@
 <translation id="5855253129151731373">यो साइटको होस्टनाम <ph name="LOOKALIKE_DOMAIN" /> जस्तै देखिन्छ। आक्रमणकारीहरूले कहिलेकाहीँ डोमेनको नाममा ससाना, स्पष्ट नदेखिने परिवर्तनहरू गरी नक्कली साइट सिर्जना गर्न सक्छन्।
 
     तपाईंलाई यो त्रुटिवश देखाइएको हो जस्तो लाग्छ भने कृपया https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals मा जानुहोस्।</translation>
-<translation id="5860033963881614850">बन्द</translation>
 <translation id="5863847714970149516">अगाडि आउने पृष्ठले तपाईंलाई पैसा तिराउने प्रयास गर्न सक्छ</translation>
 <translation id="5866257070973731571">फोन नम्बर थप्नुहोस्</translation>
 <translation id="5866898949289125849">तपाईं विकासकर्ताका उपकरणसम्बन्धी पृष्ठ हेर्दै हुनुहुन्छ</translation>
@@ -1022,7 +1021,6 @@
 <translation id="5901630391730855834">पहेँलो</translation>
 <translation id="5905445707201418379"><ph name="ORIGIN" /> को मूल नीतिका आधारमा रोक लगाइयो।</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (सिंक गरिएको)</translation>
-<translation id="5916664084637901428">खुल्ला</translation>
 <translation id="59174027418879706">सक्षम गरिएको</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">कार्डलाई Google खातामा सुरक्षित गर्ने हो?</translation>

@@ -1010,7 +1010,6 @@
 <translation id="5855253129151731373">ชื่อโฮสต์ของเว็บไซต์นี้ดูคล้ายกับ <ph name="LOOKALIKE_DOMAIN" /> บางครั้งผู้โจมตีจะเลียนแบบเว็บไซต์ต่างๆ โดยทำการเปลี่ยนแปลงเล็กๆ น้อยๆ ที่สังเกตเห็นได้ยากกับชื่อโดเมน
 
     หากคุณเชื่อว่าคำเตือนนี้เป็นข้อผิดพลาด โปรดไปที่ https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals</translation>
-<translation id="5860033963881614850">ปิด</translation>
 <translation id="5863847714970149516">ระบบอาจพยายามเรียกเก็บเงินจากคุณในหน้าถัดไป</translation>
 <translation id="5866257070973731571">เพิ่มหมายเลขโทรศัพท์</translation>
 <translation id="5866898949289125849">คุณกำลังดูหน้าเครื่องมือสำหรับนักพัฒนาซอฟต์แวร์</translation>
@@ -1022,7 +1021,6 @@
 <translation id="5901630391730855834">สีเหลือง</translation>
 <translation id="5905445707201418379">ถูกบล็อกตามนโยบายดั้งเดิมของ <ph name="ORIGIN" /></translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (ซิงค์แล้ว)</translation>
-<translation id="5916664084637901428">เปิด</translation>
 <translation id="59174027418879706">เปิดใช้งาน</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">บันทึกบัตรลงในบัญชี Google ไหม</translation>

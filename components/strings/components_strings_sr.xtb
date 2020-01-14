@@ -1027,7 +1027,6 @@
 <translation id="5855253129151731373">Име хоста овог сајта делује слично као <ph name="LOOKALIKE_DOMAIN" />. Нападачи понекад имитирају сајтове тако што незнатно и скоро неприметно измене име домена.
 
     Ако мислите да се ово приказује грешком, посетите https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
-<translation id="5860033963881614850">Искључено</translation>
 <translation id="5863847714970149516">Следећа страница може да покуша да вам нешто наплати</translation>
 <translation id="5866257070973731571">Додајте број телефона</translation>
 <translation id="5866898949289125849">Прегледате страницу са алаткама за прогамере</translation>
@@ -1039,7 +1038,6 @@
 <translation id="5901630391730855834">Жута</translation>
 <translation id="5905445707201418379">Блокирано је у складу са смерницама за порекло (<ph name="ORIGIN" />).</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (синхронизовано)</translation>
-<translation id="5916664084637901428">Укључено</translation>
 <translation id="59174027418879706">Омогућено</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">Желите ли да сачувате картицу на Google налогу?</translation>

@@ -1007,7 +1007,6 @@
 <translation id="5855253129151731373">Zdá sa, že názov hostiteľa tohto webu sa podobá doméne <ph name="LOOKALIKE_DOMAIN" />. Útočníci niekedy weby napodobňujú tak, že v názve domény vykonajú drobné, ťažko odhaliteľné zmeny.
 
     Ak sa domnievate, že toto upozornenie sa zobrazuje omylom, prejdite na https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
-<translation id="5860033963881614850">Vypnuté</translation>
 <translation id="5863847714970149516">Stránka, na ktorú sa chystáte prejsť, vám môže účtovať poplatky</translation>
 <translation id="5866257070973731571">Pridanie telefónneho čísla</translation>
 <translation id="5866898949289125849">Prezeráte si stránku s nástrojmi pre vývojárov</translation>
@@ -1019,7 +1018,6 @@
 <translation id="5901630391730855834">Žltá</translation>
 <translation id="5905445707201418379">Blokované pravidlom pre zdroj <ph name="ORIGIN" />.</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (synchronizované)</translation>
-<translation id="5916664084637901428">Zapnuté</translation>
 <translation id="59174027418879706">Povolené</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">Chcete uložiť kartu do účtu Google?</translation>

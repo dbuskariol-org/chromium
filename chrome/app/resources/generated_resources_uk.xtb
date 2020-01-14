@@ -518,7 +518,6 @@
 <translation id="1712552549805331520">Сайт <ph name="URL" /> хоче постійно зберігати дані на вашому локальному комп’ютері</translation>
 <translation id="1714644264617423774">Увімкніть функції доступності, щоб полегшити користування своїм пристроєм. <ph name="LINK_BEGIN" />Докладніше<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">Датчики руху</translation>
-<translation id="171824261579749339">Австралійське <ph name="LINK_BEGIN" />Докладніше<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">Остання година</translation>
 <translation id="1719312230114180055">Примітка. Відбиток пальця може бути менш надійним, ніж пароль чи PIN-код.</translation>
 <translation id="1720318856472900922">Автентифікація сервера TLS WWW</translation>
@@ -729,7 +728,6 @@
 <translation id="2006638907958895361">Відкрити посилання в додатку <ph name="APP" /></translation>
 <translation id="2007404777272201486">Повідомити про проблему...</translation>
 <translation id="2010501376126504057">Сумісні пристрої</translation>
-<translation id="2016430552235416146">Традиційне</translation>
 <translation id="2017334798163366053">Вимкнути збір даних про ефективність</translation>
 <translation id="2017836877785168846">Очищує історію й автозавершення в адресному рядку.</translation>
 <translation id="2018352199541442911">На жаль, зараз пристрій зовнішньої пам’яті не підтримується.</translation>
@@ -770,7 +768,6 @@
 <translation id="2076672359661571384">Середній (рекомендовано)</translation>
 <translation id="2077129598763517140">Використовувати апаратне прискорення, якщо доступно</translation>
 <translation id="2078019350989722914">Попереджати перед виходом (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">Вимкнено</translation>
 <translation id="2079053412993822885">Якщо видалити один зі своїх власних сертифікатів, ви більше не зможете використовувати його для власної ідентифікації.</translation>
 <translation id="2079545284768500474">Відмінити</translation>
 <translation id="2080070583977670716">Більше налаштувань</translation>
@@ -2406,7 +2403,6 @@
 <translation id="4364327530094270451">Диня</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> транслює вікно.</translation>
 <translation id="4364830672918311045">Показувати сповіщення</translation>
-<translation id="436499142539576997">Не вдалось отримати дані додатка. Додаток усе ще запускається…</translation>
 <translation id="4370975561335139969">Введені електронна адреса та пароль не збігаються</translation>
 <translation id="437184764829821926">Розширені налаштування шрифтів</translation>
 <translation id="4374831787438678295">Файл встановлення Linux</translation>
@@ -4861,7 +4857,6 @@
 <translation id="7908378463497120834">На жаль, підключити принаймні один розділ пристрою зовнішньої пам’яті неможливо.</translation>
 <translation id="7909969815743704077">Завантажено в режимі анонімного перегляду</translation>
 <translation id="7910768399700579500">&amp;Нова папка</translation>
-<translation id="7910831464510799808">Увімкнено</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">Ваш пароль змінено на сервері. Вийдіть і знову ввійдіть в обліковий запис.</translation>
 <translation id="7915457674565721553">Щоб налаштувати батьківський контроль, під'єднайте пристрій до Інтернету</translation>

@@ -704,7 +704,7 @@
 <translation id="4261046003697461417">يتعذّر إضافة تعليق توضيحي إلى المستندات المحمية</translation>
 <translation id="4265872034478892965">تم السماح من قبل المشرف</translation>
 <translation id="4275830172053184480">إعادة تشغيل جهازك</translation>
-<translation id="4277028893293644418">إعادة تعيين كلمة المرور</translation>
+<translation id="4277028893293644418">إعادة ضبط كلمة المرور</translation>
 <translation id="4279811152705618813">يدير <ph name="ENROLLMENT_DOMAIN" /> الجهاز <ph name="DEVICE_TYPE" />.</translation>
 <translation id="428639260510061158">{NUM_CARDS,plural, =1{‏تم حفظ هذه البطاقة في حسابك على Google}zero{‏تم حفظ هذه البطاقات في حسابك على Google}two{‏تم حفظ هاتين البطاقتين في حسابك على Google}few{‏تم حفظ هذه البطاقات في حسابك على Google}many{‏تم حفظ هذه البطاقات في حسابك على Google}other{‏تم حفظ هذه البطاقات في حسابك على Google}}</translation>
 <translation id="428847186335018806">‏فحص الملفات التي يتم تنزيلها أو تحميلها في Chrome</translation>
@@ -1027,7 +1027,6 @@
 <translation id="5855253129151731373">‏الاسم المضيف لهذا الموقع الإلكتروني يشبه النطاق <ph name="LOOKALIKE_DOMAIN" />. يحاكي المخترِقون أحيانًا المواقع الإلكترونية من خلال إجراء تغييرات بسيطة يصعب رؤيتها على اسم النطاق.
 
     إذا كنت تعتقد أنّه تم عرض هذه الرسالة عن طريق الخطأ، يُرجى الانتقال إلى https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
-<translation id="5860033963881614850">غير مفعّل</translation>
 <translation id="5863847714970149516">قد تحاول الصفحة التالية تحصيل رسوم منك</translation>
 <translation id="5866257070973731571">إضافة رقم الهاتف</translation>
 <translation id="5866898949289125849">أنت تطّلع على صفحة أدوات المطوّرين.</translation>
@@ -1039,7 +1038,6 @@
 <translation id="5901630391730855834">أصفر</translation>
 <translation id="5905445707201418379">تم الحظر وفقًا لسياسة المصدر <ph name="ORIGIN" />.</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (تمت المزامنة)</translation>
-<translation id="5916664084637901428">مفعّل</translation>
 <translation id="59174027418879706">تم التمكين</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">‏هل تريد حفظ البطاقة في حساب Google؟</translation>
@@ -1165,7 +1163,7 @@
 <translation id="647261751007945333">سياسات الأجهزة</translation>
 <translation id="6476284679642588870">إدارة طرق الدفع</translation>
 <translation id="6489534406876378309">بدء تحميل الأعطال</translation>
-<translation id="6499038740797743453">هل تريد إعادة تعيين كلمة المرور؟</translation>
+<translation id="6499038740797743453">هل تريد إعادة ضبط كلمة المرور؟</translation>
 <translation id="6507833130742554667">يتم قبول بطاقات الائتمان وبطاقات السحب الآلي.</translation>
 <translation id="6508722015517270189">‏إعادة تشغيل Chrome</translation>
 <translation id="6517596291481585650">تحذير: لم يتم دمج هذه السياسة كقائمة كما هو موضح بموجب السياسة؛ لأنها ليست قائمة.</translation>

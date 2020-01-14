@@ -515,7 +515,6 @@
 <translation id="1712552549805331520"><ph name="URL" /> ber om å lagre data permanent på datamaskinen din</translation>
 <translation id="1714644264617423774">Aktivér tilgjengelighetsfunksjoner for å gjøre enheten din enklere å bruke. <ph name="LINK_BEGIN" />Finn ut mer<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">Bevegelsessensorer</translation>
-<translation id="171824261579749339">Australsk <ph name="LINK_BEGIN" />Finn ut mer<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">Siste time</translation>
 <translation id="1719312230114180055">Merk: Det kan være mindre sikkert å bruke fingeravtrykk enn et sterkt passord eller en sterk PIN-kode.</translation>
 <translation id="1720318856472900922">Autentisering av tjeneren TLS WWW</translation>
@@ -726,7 +725,6 @@
 <translation id="2006638907958895361">Åpne linken i <ph name="APP" /></translation>
 <translation id="2007404777272201486">Rapportér et problem</translation>
 <translation id="2010501376126504057">Kompatible enheter</translation>
-<translation id="2016430552235416146">Tradisjonell</translation>
 <translation id="2017334798163366053">Deaktiver innsamling av ytelsesdata</translation>
 <translation id="2017836877785168846">Tømmer loggen og fjerner automatiske fullføringer fra adressefeltet.</translation>
 <translation id="2018352199541442911">Beklager, men den eksterne lagringsenheten din støttes foreløpig ikke.</translation>
@@ -767,7 +765,6 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="2076672359661571384">Middels (anbefalt)</translation>
 <translation id="2077129598763517140">Bruk maskinvareakselerasjon når det er tilgjengelig</translation>
 <translation id="2078019350989722914">Advar før avslutning (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">Av</translation>
 <translation id="2079053412993822885">Hvis du sletter et av dine egne sertifikater, kan du ikke lenger bruke det til å identifisere deg.</translation>
 <translation id="2079545284768500474">Angre</translation>
 <translation id="2080070583977670716">Flere innstillinger</translation>
@@ -2401,7 +2398,6 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="4364327530094270451">Melon</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> deler et vindu.</translation>
 <translation id="4364830672918311045">Vis varsler</translation>
-<translation id="436499142539576997">Kunne ikke hente appdata – prøver fremdeles å kjøre appen …</translation>
 <translation id="4370975561335139969">E-posten og passordet du skrev inn, stemmer ikke overens.</translation>
 <translation id="437184764829821926">Avanserte innstillinger for skrifttype</translation>
 <translation id="4374831787438678295">Linux-installasjonsprogram</translation>
@@ -4856,7 +4852,6 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="7908378463497120834">Beklager, men minst én partisjon på den eksterne lagringsenheten din kunne ikke tilkobles.</translation>
 <translation id="7909969815743704077">Lastet ned i inkognitomodus</translation>
 <translation id="7910768399700579500">&amp;Ny mappe</translation>
-<translation id="7910831464510799808">På</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">Passordet ditt er endret på tjeneren. Logg av og på igjen.</translation>
 <translation id="7915457674565721553">Koble til internett for å sette opp foreldrekontroll</translation>

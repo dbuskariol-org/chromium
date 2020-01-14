@@ -518,7 +518,6 @@
 <translation id="1712552549805331520"><ph name="URL" /> կայքն ուզում է ձեր համակարգչում տվյալներ մշտապես պահել</translation>
 <translation id="1714644264617423774">Միացնել հատուկ գործառույթները՝ սարքն ավելի հեշտ օգտագործելու համար։ <ph name="LINK_BEGIN" />Իմանալ ավելին<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">Շարժման տվիչներ</translation>
-<translation id="171824261579749339">Ավստրալական <ph name="LINK_BEGIN" />Իմանալ ավելին<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">Վերջին 1 ժամվա</translation>
 <translation id="1719312230114180055">Նկատի ունեցեք, որ ապակողպման հուսալի գաղտնաբառը կամ PIN կոդը կարող է մատնահետքից ավելի ապահով լինել:</translation>
 <translation id="1720318856472900922">TLS WWW սերվերի նույնականացում</translation>
@@ -730,7 +729,6 @@
 <translation id="2006638907958895361">Բացել հղումը <ph name="APP" /> հավելվածում</translation>
 <translation id="2007404777272201486">Report an Issue...</translation>
 <translation id="2010501376126504057">Համատեղելի սարքեր</translation>
-<translation id="2016430552235416146">Սովորական</translation>
 <translation id="2017334798163366053">Անջատել կատարողականության տվյալների հավաքումը</translation>
 <translation id="2017836877785168846">Մաքրում է պատմությունն ու հասցեագոտու ինքնալրացումները:</translation>
 <translation id="2018352199541442911">Ձեր արտաքին պահեստի սարքը չի աջակցվում:</translation>
@@ -771,7 +769,6 @@
 <translation id="2076672359661571384">Միջին (առաջարկվող)</translation>
 <translation id="2077129598763517140">Օգտագործել ապարատային արագացում (առկայության դեպքում)</translation>
 <translation id="2078019350989722914">Զգուշացնել նախքան դուրս գալը (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">Անջատված է</translation>
 <translation id="2079053412993822885">Եթե ջնջեք ձեր սեփական վկայագրերից մեկը, այլևս չեք կարողանա օգտագործել այն ձեզ նույնացնելու նպատակով:</translation>
 <translation id="2079545284768500474">Հետարկել</translation>
 <translation id="2080070583977670716">Այլ կարգավորումներ</translation>
@@ -2407,7 +2404,6 @@
 <translation id="4364327530094270451">Սեխ</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> հավելվածը կիսվում է պատուհանով:</translation>
 <translation id="4364830672918311045">Ցուցադրել ծանուցումները</translation>
-<translation id="436499142539576997">Չհաջողվեց ստանալ հավելվածի տվյալները։ Դեռ փորձում ենք գործարկել հավելվածը...</translation>
 <translation id="4370975561335139969">Մուտքագրված էլփոստը և գաղտնաբառը չեն համընկնում</translation>
 <translation id="437184764829821926">Տառատեսակի լրացուցիչ կարգավորումներ</translation>
 <translation id="4374831787438678295">Լինուքսի տեղադրիչ</translation>
@@ -4864,7 +4860,6 @@
 <translation id="7908378463497120834">Չհաջողվեց միացնել ձեր արտաքին հիշողության սարքի առնվազն մեկ հատվածը:</translation>
 <translation id="7909969815743704077">Ներբեռնվել է ինկոգնիտո ռեժիմում</translation>
 <translation id="7910768399700579500">&amp;Նոր պանակ</translation>
-<translation id="7910831464510799808">Միացված է</translation>
 <translation id="7911118814695487383">Լինուքս</translation>
 <translation id="7912080627461681647">Ձեր գաղտնաբառը փոխվել է սերվերում։ Դուրս եկեք հաշվից ու նորից մուտք գործեք։</translation>
 <translation id="7915457674565721553">Ծնողական վերահսկողությունը կարգավորելու համար միացեք համացանցին</translation>

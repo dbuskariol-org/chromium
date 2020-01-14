@@ -514,7 +514,6 @@
 <translation id="1712552549805331520"><ph name="URL" /> तपाईंको स्थानीय कम्प्युटरमा स्थायी रूपमा डेटा भण्डारण गर्न चाहन्छ</translation>
 <translation id="1714644264617423774">तपाईंको यन्त्र प्रयोग गर्न अझ सहज बनाउन पहुँचका विशेषताहरू सक्षम पार्नुहोस्। <ph name="LINK_BEGIN" />थप जान्नुहोस्<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">चालसम्बन्धी सेन्सरहरू</translation>
-<translation id="171824261579749339">अस्ट्रेलियाली <ph name="LINK_BEGIN" />थप जान्नुहोस्<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">पछिल्लो घन्टा</translation>
 <translation id="1719312230114180055">टिपोट: तपाईंको फिंगरप्रिन्ट भरपर्दो पासवर्ड वा PIN भन्दा कम सुरक्षित हुन सक्छ।</translation>
 <translation id="1720318856472900922">TLS WWW सर्भर प्रमाणीकरण</translation>
@@ -725,7 +724,6 @@
 <translation id="2006638907958895361">लिंकलाई <ph name="APP" /> मा खोल्नुहोस्</translation>
 <translation id="2007404777272201486">एउटा मामिला प्रतिवेदन गर्नुहोस्...</translation>
 <translation id="2010501376126504057">मिल्दा यन्त्रहरू</translation>
-<translation id="2016430552235416146">परम्परागत</translation>
 <translation id="2017334798163366053">कार्यसम्पादन डाटा सङ्कलन अक्षम बनाउनुहोस्</translation>
 <translation id="2017836877785168846">ठेगाना पट्टीबाट इतिहास र स्वतः पूर्णतासम्बन्धी सुविधाहरूलाई खाली गर्दछ।</translation>
 <translation id="2018352199541442911">माफ गर्नुहोस्, तपाइँको बाह्य भण्डारण यन्त्र यस समयमा समर्थन गरिएको छैन।</translation>
@@ -766,7 +764,6 @@
 <translation id="2076672359661571384">मध्यम (सिफारिस गरिएको)</translation>
 <translation id="2077129598763517140">उपलब्ध हुँदा हार्डवेयर त्वरण प्रयोग गर्नुहोस्</translation>
 <translation id="2078019350989722914">अन्त गर्नुअघि चेतावनी दिनुहोस् (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">निष्क्रिय छ</translation>
 <translation id="2079053412993822885">यदि तपाइँले तपाइँको आफ्नै प्रमाणपत्रहरू मध्ये एक हटाउनुभयो भने, तपाइँले उप्रान्त आफैलाई परिचय दिन सक्नुहुन्न।</translation>
 <translation id="2079545284768500474">अन्डू गर्नुहोस्</translation>
 <translation id="2080070583977670716">थप सेटिङहरू</translation>
@@ -2402,7 +2399,6 @@
 <translation id="4364327530094270451">खरबुजो</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> एउटा विन्डोलाई साझेदारी गर्दैछ</translation>
 <translation id="4364830672918311045">सूचनाहरू देखाउनुहोस्</translation>
-<translation id="436499142539576997">अनुप्रयोगको डेटा प्राप्त गर्न सकिएन, अझै अनुप्रयोग चलाउने प्रयास गर्दै...</translation>
 <translation id="4370975561335139969">तपाईँले प्रविष्टि गर्नुभएको इमेल र पासवर्ड मेल खाँदैनन्</translation>
 <translation id="437184764829821926">बृहत् फन्ट सेटिङहरू</translation>
 <translation id="4374831787438678295">Linux को स्थापनाकर्ता</translation>
@@ -4856,7 +4852,6 @@
 <translation id="7908378463497120834">माफ गर्नुहोला, तपाईंको भण्डारण साधनको कम्तीमा एक भाग माउन्ट हुन सकेन ।</translation>
 <translation id="7909969815743704077">इन्कग्निटोमा डाउनलोड गरियो</translation>
 <translation id="7910768399700579500">&amp;नयाँ फोल्डर</translation>
-<translation id="7910831464510799808">सक्रिय छ</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">सर्भरमा तपाईंको पासवर्ड परिवर्तन गरिएको छ। कृपया साइन आउट गर्नुहोस्, त्यसपछि फेरि साइन इन गर्नुहोस्।</translation>
 <translation id="7915457674565721553">अभिभावकीय नियन्त्रणहरू सेट अप गर्न इन्टरनेटमा जोडिनुहोस्</translation>

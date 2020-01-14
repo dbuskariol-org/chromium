@@ -1011,7 +1011,6 @@
 <translation id="5855253129151731373">このサイトのホスト名は <ph name="LOOKALIKE_DOMAIN" /> と似ているようです。不正なユーザーがドメイン名のごく一部を一目ではわからないように改変してサイトを偽装する場合があります。
 
     このメッセージが誤って表示されたと思われる場合は、https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals から問題を報告してください。</translation>
-<translation id="5860033963881614850">オフ</translation>
 <translation id="5863847714970149516">表示しようとしているページでは課金される恐れがあります</translation>
 <translation id="5866257070973731571">電話番号の追加</translation>
 <translation id="5866898949289125849">デベロッパー ツール ページを表示しています</translation>
@@ -1023,7 +1022,6 @@
 <translation id="5901630391730855834">黄</translation>
 <translation id="5905445707201418379"><ph name="ORIGIN" /> のオリジン ポリシーに沿ってブロックしました。</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" />（同期済み）</translation>
-<translation id="5916664084637901428">オン</translation>
 <translation id="59174027418879706">有効</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">カードを Google アカウントに保存しますか？</translation>

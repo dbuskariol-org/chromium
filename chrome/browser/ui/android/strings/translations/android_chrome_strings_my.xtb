@@ -366,7 +366,6 @@
 <translation id="381841723434055211">ဖုန်းနံပါတ်များ</translation>
 <translation id="3819178904835489326">ဒေါင်းလုဒ် <ph name="NUMBER_OF_DOWNLOADS" /> ခုကို ဖျက်လိုက်သည်</translation>
 <translation id="3822502789641063741">ဆိုက်နေရာကိုရှင်းမလား။</translation>
-<translation id="3853625385350850937">ရှေ့ဆက်ရန် သင့်စက်ပေါ်ရှိ NFC ကို ဖွင့်ပါ</translation>
 <translation id="3859306556332390985">အရှေ့သို့ ရစ်ရန်</translation>
 <translation id="388596076286380598">အော့ဖ်လိုင်းဖြစ်နေစဉ် သို့မဟုတ် လိုင်းမကောင်းသည့်အချိန်တွင်ပင် သင်ကြိုက်နှစ်သက်သည့် ဝဘ်ဆိုက်များမှ ဆောင်းပါး၊ ဗီဒီယိုနှင့် အခြားအကြောင်းအရာများကို ရယူလိုက်ပါ။</translation>
 <translation id="3894427358181296146">ဖိုလ်ဒါ ထည့်ရန်</translation>
@@ -572,7 +571,7 @@
 <translation id="5368958499335451666">{OPEN_TABS,plural, =1{ဖွင့်ထားသောတဘ် <ph name="OPEN_TABS_ONE" /> ခု၊ တဘ်များပြောင်းရန် တို့ပါ}other{ဖွင့်ထားသောတဘ် <ph name="OPEN_TABS_MANY" /> ခု၊ တဘ်များပြောင်းရန် တို့ပါ}}</translation>
 <translation id="5391532827096253100">ဤဝဘ်ဆိုက်သို့ သင်၏ချိတ်ဆက်မှုသည် လုံခြုံမှုမရှိပါ။ ဝဘ်ဆိုက် အချက်အလက်</translation>
 <translation id="5394307150471348411">{DETAIL_COUNT,plural, =1{(+ နောက်ထပ် ၁ ခု)}other{(+ နောက်ထပ် # ခု)}}</translation>
-<translation id="5400569084694353794">ဤအပလီကေးရှင်းကို သုံးခြင်းအားဖြင့်၊<ph name="BEGIN_LINK1" />ဝန်ဆောင်မှုဆိုင်ရာ စည်းမျဉ်းများ<ph name="END_LINK1" /> နှင့် <ph name="BEGIN_LINK2" />ကိုယ်ရေးကိုယ်တာ သတိပေးချက်ကို သဘောတူပါသည်။<ph name="END_LINK2" /></translation>
+<translation id="5400569084694353794">ဤအပလီကေးရှင်းကို သုံးခြင်းအားဖြင့်၊<ph name="BEGIN_LINK1" />ဝန်ဆောင်မှု စည်းမျဉ်းများ<ph name="END_LINK1" /> နှင့် <ph name="BEGIN_LINK2" />ကိုယ်ရေးကိုယ်တာ သတိပေးချက်ကို သဘောတူပါသည်။<ph name="END_LINK2" /></translation>
 <translation id="5403592356182871684">အမည်များ</translation>
 <translation id="5403644198645076998">ဆိုက်အချို့ကိုသာ ခွင့်ပြုပါ</translation>
 <translation id="5414836363063783498">စိစစ်နေ…</translation>

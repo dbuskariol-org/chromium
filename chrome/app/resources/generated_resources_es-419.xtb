@@ -515,7 +515,6 @@
 <translation id="1712552549805331520"><ph name="URL" /> desea almacenar de forma permanente los datos en tu computadora local</translation>
 <translation id="1714644264617423774">Permite habilitar las funciones de accesibilidad para que tu dispositivo sea más fácil de usar. <ph name="LINK_BEGIN" />Más información<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">Sensores de movimiento</translation>
-<translation id="171824261579749339">Australiano <ph name="LINK_BEGIN" />Más información<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">Última hora</translation>
 <translation id="1719312230114180055">Nota: La huella digital puede ser menos segura que un PIN o una contraseña eficaz.</translation>
 <translation id="1720318856472900922">Autenticación de servidor TLS WWW</translation>
@@ -726,7 +725,6 @@
 <translation id="2006638907958895361">Abrir vínculo en <ph name="APP" /></translation>
 <translation id="2007404777272201486">Informar de un problema...</translation>
 <translation id="2010501376126504057">Dispositivos compatibles</translation>
-<translation id="2016430552235416146">Tradicional</translation>
 <translation id="2017334798163366053">Inhabilitar recopilación de datos de rendimiento</translation>
 <translation id="2017836877785168846">Borra el historial y las opciones de autocompletado en la barra de direcciones.</translation>
 <translation id="2018352199541442911">Lo sentimos, tu dispositivo de almacenamiento externo no es compatible en este momento.</translation>
@@ -767,7 +765,6 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="2076672359661571384">Mediano (recomendado)</translation>
 <translation id="2077129598763517140">Usar aceleración de hardware cuando esté disponible</translation>
 <translation id="2078019350989722914">Advertir antes de salir (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">No</translation>
 <translation id="2079053412993822885">Si eliminas uno de tus propios certificados, ya no podrás utilizarlo para identificarte.</translation>
 <translation id="2079545284768500474">Deshacer</translation>
 <translation id="2080070583977670716">Más opciones de configuración</translation>
@@ -2403,7 +2400,6 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="4364327530094270451">Melón</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> comparte una ventana.</translation>
 <translation id="4364830672918311045">Mostrar notificaciones</translation>
-<translation id="436499142539576997">No se pudieron obtener los datos de la app. De todos modos, se sigue intentando ejecutar la app…</translation>
 <translation id="4370975561335139969">El correo electrónico y la contraseña que ingresaste no coinciden.</translation>
 <translation id="437184764829821926">Configuración avanzada de fuentes</translation>
 <translation id="4374831787438678295">Instalador de Linux</translation>
@@ -4858,7 +4854,6 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="7908378463497120834">Lo sentimos, al menos una partición en tu dispositivo de almacenamiento externo no se pudo montar.</translation>
 <translation id="7909969815743704077">Descargado en el modo de navegación de incógnito</translation>
 <translation id="7910768399700579500">&amp;Nueva carpeta</translation>
-<translation id="7910831464510799808">Sí</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">Se cambió la contraseña en el servidor. Sal de la cuenta y vuelve a acceder.</translation>
 <translation id="7915457674565721553">Conéctate a Internet para configurar los controles parentales</translation>

@@ -515,7 +515,6 @@
 <translation id="1712552549805331520"><ph name="URL" /> kërkon të ruajë të dhëna në mënyrë të përhershme në kompjuterin tënd lokal</translation>
 <translation id="1714644264617423774">Aktivizo veçoritë e qasshmërisë për ta bërë më të lehtë përdorimin e pajisjes. <ph name="LINK_BEGIN" />Mëso më shumë<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">Sensorët e lëvizjes</translation>
-<translation id="171824261579749339">Australian <ph name="LINK_BEGIN" />Mëso më shumë<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">Ora e fundit</translation>
 <translation id="1719312230114180055">Shënim. Gjurma jote e gishtit mund të jetë më pak e sigurt se një fjalëkalim ose një kod PIN i fortë.</translation>
 <translation id="1720318856472900922">Vërtetimi i serverit TLS WWW</translation>
@@ -726,7 +725,6 @@
 <translation id="2006638907958895361">Hape lidhjen në <ph name="APP" /></translation>
 <translation id="2007404777272201486">Raporto një problem...</translation>
 <translation id="2010501376126504057">Pajisjet e pajtueshme</translation>
-<translation id="2016430552235416146">Tradicionale</translation>
 <translation id="2017334798163366053">Çaktivizo mbledhjen e të dhënave të aktivitetit</translation>
 <translation id="2017836877785168846">Pastron historikun dhe plotësimet automatike në shiritin e adresës.</translation>
 <translation id="2018352199541442911">Na vjen keq, por hapësira e jashtme ruajtëse në pajisjen tënde nuk mbështetet në këtë moment.</translation>
@@ -767,7 +765,6 @@ Cilësimet e kësaj llogarie mund t'i menaxhosh duke instaluar aplikacionin Fami
 <translation id="2076672359661571384">Mesatare (rekomandohet)</translation>
 <translation id="2077129598763517140">Përdor përshpejtimin e harduerit kur të jetë i mundshëm</translation>
 <translation id="2078019350989722914">Paralajmëro para mbylljes (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">Joaktiv</translation>
 <translation id="2079053412993822885">Nëse fshin njërën nga certifikatat, nuk mund ta përdorësh më për të identifikuar veten.</translation>
 <translation id="2079545284768500474">Zhbëj</translation>
 <translation id="2080070583977670716">Cilësime të tjera</translation>
@@ -2403,7 +2400,6 @@ Cilësimet e kësaj llogarie mund t'i menaxhosh duke instaluar aplikacionin Fami
 <translation id="4364327530094270451">Pjepër</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> po ndan një dritare.</translation>
 <translation id="4364830672918311045">Shfaq njoftimet</translation>
-<translation id="436499142539576997">Marrja e të dhënave të aplikacionit dështoi, por po përpiqemi përsëri ta ekzekutojmë aplikacionin...</translation>
 <translation id="4370975561335139969">Mail-i dhe fjalëkalimi që ke futur nuk përputhen</translation>
 <translation id="437184764829821926">Cilësimet e përparuara të shkrimeve</translation>
 <translation id="4374831787438678295">Instaluesi për Linux</translation>
@@ -4857,7 +4853,6 @@ Cilësimet e kësaj llogarie mund t'i menaxhosh duke instaluar aplikacionin Fami
 <translation id="7908378463497120834">Na vjen keq, të paktën një pjesë në pajisjen e hapësirës ruajtëse të jashtme  nuk mund të montohej.</translation>
 <translation id="7909969815743704077">Shkarko në modalitetin "i fshehtë"</translation>
 <translation id="7910768399700579500">&amp;Dosje e re</translation>
-<translation id="7910831464510799808">Aktive</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">Fjalëkalimi yt është ndryshuar në server. Dil dhe më pas identifikohu përsëri.</translation>
 <translation id="7915457674565721553">Lidhu në internet për të konfiguruar kontrollet prindërore</translation>

@@ -518,7 +518,6 @@
 <translation id="1712552549805331520"><ph name="URL" />에서 로컬 컴퓨터에 데이터를 영구 저장하려고 합니다</translation>
 <translation id="1714644264617423774">기기를 더 편하게 이용하기 위한 접근성 기능을 사용 설정합니다. <ph name="LINK_BEGIN" />자세히 알아보기<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">움직임 감지 센서</translation>
-<translation id="171824261579749339">역방향 <ph name="LINK_BEGIN" />자세히 알아보기<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">지난 1시간</translation>
 <translation id="1719312230114180055">참고: 지문은 안전한 비밀번호 또는 PIN보다 보안 수준이 낮을 수도 있습니다.</translation>
 <translation id="1720318856472900922">TLS WWW 서버 인증</translation>
@@ -729,7 +728,6 @@
 <translation id="2006638907958895361"><ph name="APP" />에서 링크 열기</translation>
 <translation id="2007404777272201486">문제 신고...</translation>
 <translation id="2010501376126504057">호환 기기</translation>
-<translation id="2016430552235416146">기본</translation>
 <translation id="2017334798163366053">성능 데이터 수집 사용 중지</translation>
 <translation id="2017836877785168846">검색주소창의 검색 기록 및 자동 완성 항목을 삭제합니다.</translation>
 <translation id="2018352199541442911">죄송합니다. 연결하신 외부 저장장치는 현재 지원되지 않습니다.</translation>
@@ -770,7 +768,6 @@
 <translation id="2076672359661571384">중간(권장)</translation>
 <translation id="2077129598763517140">가능한 경우 하드웨어 가속 사용</translation>
 <translation id="2078019350989722914">종료하기 전 경고(<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">사용 안함</translation>
 <translation id="2079053412993822885">인증서 중 하나를 삭제하면 더 이상 삭제한 인증서를 사용하여 신원을 확인할 수 없습니다.</translation>
 <translation id="2079545284768500474">실행취소</translation>
 <translation id="2080070583977670716">설정 더보기</translation>
@@ -2404,7 +2401,6 @@
 <translation id="4364327530094270451">멜론</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" />이(가) 창을 공유합니다.</translation>
 <translation id="4364830672918311045">알림 표시</translation>
-<translation id="436499142539576997">앱 데이터를 가져올 수 없습니다. 아직 앱 실행을 시도하는 중입니다...</translation>
 <translation id="4370975561335139969">입력한 이메일과 비밀번호가 일치하지 않습니다.</translation>
 <translation id="437184764829821926">고급 글꼴 설정</translation>
 <translation id="4374831787438678295">Linux 설치 프로그램</translation>
@@ -4859,7 +4855,6 @@
 <translation id="7908378463497120834">죄송합니다. 외부 저장장치에 있는 하나 이상의 파티션을 마운트하지 못했습니다.</translation>
 <translation id="7909969815743704077">시크릿 모드에서 다운로드됨</translation>
 <translation id="7910768399700579500">새 폴더(&amp;N)</translation>
-<translation id="7910831464510799808">사용</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">서버에서 비밀번호가 변경되었습니다. 로그아웃한 다음 다시 로그인해 주세요.</translation>
 <translation id="7915457674565721553">자녀 보호 기능을 설정하려면 인터넷에 연결하세요.</translation>

@@ -1024,7 +1024,6 @@
 <translation id="5855253129151731373">इस साइट का होस्टनाम <ph name="LOOKALIKE_DOMAIN" /> से मिलता-जुलता है. हमलावर कभी-कभी डोमेन नाम में छोटे और नज़र न आने वाले बदलाव करके, साइटों की नकल कर लेते हैं.
 
     अगर आपको लगता है कि ऐसा गलती से दिखाया गया है, तो कृपया https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals पर जाएं.</translation>
-<translation id="5860033963881614850">बंद</translation>
 <translation id="5863847714970149516">आगे आने वाला पेज आपसे शुल्क लेने की कोशिश कर सकता है</translation>
 <translation id="5866257070973731571">फ़ोन नंबर जोड़ें</translation>
 <translation id="5866898949289125849">आप डेवलपर के टूल वाला पेज देख रहे हैं</translation>
@@ -1036,7 +1035,6 @@
 <translation id="5901630391730855834">पीला</translation>
 <translation id="5905445707201418379"><ph name="ORIGIN" /> की मूल नीति के मुताबिक रोक लगाई गई.</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (सिंक किया गया)</translation>
-<translation id="5916664084637901428">चालू</translation>
 <translation id="59174027418879706">चालू किया गया</translation>
 <translation id="5919090499915321845">बी10</translation>
 <translation id="5921639886840618607">कार्ड को Google खाते में सेव करें?</translation>

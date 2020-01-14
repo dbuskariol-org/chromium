@@ -1026,7 +1026,6 @@
 <translation id="5855253129151731373">Бул сайттагы түйүндүн аталышы <ph name="LOOKALIKE_DOMAIN" /> сайтына окшош көрүнүшү мүмкүн. Чабуулчулар кээ бир учурларда домендин аталышына кичинекей, көзгө көрүнбөгөн өзгөртүүлөрдү киргизип, сайттарды туурашат.
 
     Эгер бул жаңылыш көрсөтүлүп жатат деп ойлосоңуз, https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals баракчасына баш багыңыз.</translation>
-<translation id="5860033963881614850">Өчүк</translation>
 <translation id="5863847714970149516">Кийинки баракка өтсөңүз, акы алынышы мүмкүн</translation>
 <translation id="5866257070973731571">Телефон номерин кошуу</translation>
 <translation id="5866898949289125849">Иштеп чыгуучунун куралдар барагын көрүп жатасыз</translation>
@@ -1038,7 +1037,6 @@
 <translation id="5901630391730855834">Сары</translation>
 <translation id="5905445707201418379"><ph name="ORIGIN" /> баштапкы саясатына ылайык бөгөттөлдү.</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (шайкештирилген)</translation>
-<translation id="5916664084637901428">Күйүк</translation>
 <translation id="59174027418879706">Иштетилген</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">Карта Google аккаунтуңузда сакталсынбы?</translation>
@@ -1084,7 +1082,7 @@
 <translation id="6080696365213338172">Мазмунду администратор берген тастыктама аркылуу колдондуңуз. <ph name="DOMAIN" /> тапшырылган дайындарыңызды ортодон администраторуңуз кармап калышы мүмкүн.</translation>
 <translation id="6094273045989040137">Аннотация режимин иштетүү</translation>
 <translation id="6104072995492677441">JIS B6 (128mm x 182mm)</translation>
-<translation id="610911394827799129">Google каттоо эсебиңиздин серептөө таржымалынын башка түрлөрү <ph name="BEGIN_LINK" />myactivity.google.com<ph name="END_LINK" /> дарегинде болушу мүмкүн.</translation>
+<translation id="610911394827799129">Google аккаунтуңуздун серептөө таржымалынын башка түрлөрү <ph name="BEGIN_LINK" />myactivity.google.com<ph name="END_LINK" /> дарегинде болушу мүмкүн.</translation>
 <translation id="6120179357481664955">UPI идентификаторуңуз сакталсынбы?</translation>
 <translation id="6132597952260690497">Орнотулган кеңейтүүлөр жана плагиндер тууралуу маалымат</translation>
 <translation id="6146055958333702838">Колдонулуп жаткан кабелдерди текшерип, роутер, модем жана башка
@@ -1566,7 +1564,7 @@
 <translation id="8466379296835108687">{COUNT,plural, =1{1 насыя карта}other{# насыя карта}}</translation>
 <translation id="8473863474539038330">Даректер жана башкалар</translation>
 <translation id="8479754468255770962">Төмөнкү сол жагын илмек менен бекитүү</translation>
-<translation id="8483780878231876732">Google каттоо эсебиңиздеги насыя карточкаларын колдонуу үчүн Chrome'го кириңиз</translation>
+<translation id="8483780878231876732">Google аккаунтуңуздагы насыя карточкаларын колдонуу үчүн Chrome'го кириңиз</translation>
 <translation id="8488350697529856933">Төмөнкүгө колдонулат</translation>
 <translation id="8498891568109133222"><ph name="HOST_NAME" /> өтө узактан кийин жооп берди.</translation>
 <translation id="8503559462189395349">Chrome сырсөздөрү</translation>

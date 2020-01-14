@@ -518,7 +518,6 @@
 <translation id="1712552549805331520"><ph name="URL" /> сака трајно да складира податоци на вашиот локален компјутер</translation>
 <translation id="1714644264617423774">За полесно користење на уредот, овозможете ги функциите за пристапност. <ph name="LINK_BEGIN" />Дознајте повеќе<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">Сензори за движење</translation>
-<translation id="171824261579749339">Австралиски <ph name="LINK_BEGIN" />Дознајте повеќе<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">Изминатиот час</translation>
 <translation id="1719312230114180055">Забелешка: вашиот отпечаток може да биде помалку безбеден од силна лозинка или PIN.</translation>
 <translation id="1720318856472900922">Автентикација на сервер за TLS WWW</translation>
@@ -729,7 +728,6 @@
 <translation id="2006638907958895361">Отвори го линкот во <ph name="APP" /></translation>
 <translation id="2007404777272201486">Пријави проблем…</translation>
 <translation id="2010501376126504057">Компатибилни уреди</translation>
-<translation id="2016430552235416146">Традиционално</translation>
 <translation id="2017334798163366053">Оневозможи собирање податоци за изведба</translation>
 <translation id="2017836877785168846">Ги брише историјата и автоматските довршувања во лентата за адреси.</translation>
 <translation id="2018352199541442911">За жал, во моментов не го поддржуваме надворешниот уред за складирање.</translation>
@@ -770,7 +768,6 @@
 <translation id="2076672359661571384">Среден (препорачано)</translation>
 <translation id="2077129598763517140">Употребете забрзување на хардвер кога е достапно</translation>
 <translation id="2078019350989722914">Предупреди пред напуштање (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">Исклучено</translation>
 <translation id="2079053412993822885">Доколку избришете еден од сопствените сертификати, веќе нема да може да го користите за да се идентификувате.</translation>
 <translation id="2079545284768500474">Врати</translation>
 <translation id="2080070583977670716">Повеќе поставки</translation>
@@ -2406,7 +2403,6 @@
 <translation id="4364327530094270451">Диња</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> споделува прозорец.</translation>
 <translation id="4364830672918311045">Прикажи ги известувањата</translation>
-<translation id="436499142539576997">Не успеавме да добиеме податоци од апликацијата. Уште се обидуваме да ја стартуваме апликацијата…</translation>
 <translation id="4370975561335139969">Е-поштата и лозинката што ги внесовте не се совпаѓаат</translation>
 <translation id="437184764829821926">Напредни поставки за фонт</translation>
 <translation id="4374831787438678295">Инсталатор на Linux</translation>
@@ -4861,7 +4857,6 @@
 <translation id="7908378463497120834">Извинете, најмалку една партиција на надворешниот уред не можеше да се постави.</translation>
 <translation id="7909969815743704077">Преземено во Инкогнито</translation>
 <translation id="7910768399700579500">&amp;Нова папка</translation>
-<translation id="7910831464510799808">Вклучено</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">Вашата лозинка е променета на серверот. Одјавете се и повторно најавете се.</translation>
 <translation id="7915457674565721553">Поврзете се на интернет за да поставите „Родителски контроли“</translation>

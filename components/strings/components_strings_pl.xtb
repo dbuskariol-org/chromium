@@ -1027,7 +1027,6 @@
 <translation id="5855253129151731373">Nazwa hosta tej witryny jest podobna do <ph name="LOOKALIKE_DOMAIN" />. Złośliwe strony czasami podszywają się pod inne, wprowadzając niewielkie i trudne do zauważenia zmiany w nazwie domeny.
 
     Jeśli uważasz, że ten komunikat pojawił się w wyniku pomyłki, wejdź na https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals</translation>
-<translation id="5860033963881614850">Wyłączone</translation>
 <translation id="5863847714970149516">Otwierana strona może próbować obciążyć Cię płatnością</translation>
 <translation id="5866257070973731571">Dodaj numer telefonu</translation>
 <translation id="5866898949289125849">To jest strona z narzędziami dla programistów</translation>
@@ -1039,7 +1038,6 @@
 <translation id="5901630391730855834">Żółty</translation>
 <translation id="5905445707201418379">Zablokowano zgodnie z zasadami dotyczącymi źródła obowiązującymi w przypadku strony <ph name="ORIGIN" />.</translation>
 <translation id="5908541034548427511"><ph name="TYPE_1" /> (zsynchronizowane)</translation>
-<translation id="5916664084637901428">Włączone</translation>
 <translation id="59174027418879706">Włączony</translation>
 <translation id="5919090499915321845">B10</translation>
 <translation id="5921639886840618607">Zapisać kartę na koncie Google?</translation>

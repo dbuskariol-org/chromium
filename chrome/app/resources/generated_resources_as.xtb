@@ -512,7 +512,6 @@
 <translation id="1712552549805331520"><ph name="URL" />এ আপোনাৰ ল’কেল কম্পিউটাৰত স্থায়ীভাৱে ডেটা ষ্ট’ৰ কৰিব বিচাৰে</translation>
 <translation id="1714644264617423774">আপোনাৰ ডিভাইচটো ব্যৱহাৰৰ বাবে অধিক সুবিধাজনক কৰিবলৈ সাধ্য সুবিধাসমূহ সক্ষম কৰক। <ph name="LINK_BEGIN" />অধিক জানক<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">ম'শ্বন ছেন্সৰসমূহ</translation>
-<translation id="171824261579749339">অষ্ট্ৰেলিয়ান <ph name="LINK_BEGIN" />অধিক জানক<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">যোৱা ১ ঘণ্টাৰ</translation>
 <translation id="1719312230114180055">টোকা: এটা জটিল আৰ্হি বা পিনতকৈ আপোনাৰ ফিংগাৰপ্ৰিণ্টটো কম সুৰক্ষিত হ’ব পাৰে।</translation>
 <translation id="1720318856472900922">TLS WWW ছাৰ্ভাৰৰ বিশ্বাসযোগ্যতাৰ প্ৰমাণীকৰণ</translation>
@@ -722,7 +721,6 @@
 <translation id="2006638907958895361"><ph name="APP" />ত লিংকটো খোলক</translation>
 <translation id="2007404777272201486">কোনো সমস্যাৰ অভিযোগ দিয়ক...</translation>
 <translation id="2010501376126504057">সমিল ডিভাইচসমূহ</translation>
-<translation id="2016430552235416146">পৰম্পৰাগত</translation>
 <translation id="2017334798163366053">কার্যদক্ষতাৰ ডেটা সংগ্ৰহ অক্ষম কৰক</translation>
 <translation id="2017836877785168846">ঠিকনাৰ বাৰত ইতিহাস আৰু স্বয়ংক্ৰিয়ভাৱে পুৰ হোৱা তথ্য মচে।</translation>
 <translation id="2018352199541442911">দুঃখিত, আপোনাৰ বাহ্যিক সঞ্চয়াগাৰ ডিভাইচটো এই মুহূৰ্তত চলাব পৰা নাযাব।</translation>
@@ -763,7 +761,6 @@
 <translation id="2076672359661571384">মধ্যম (আমি চুপাৰিছ কৰোঁ)</translation>
 <translation id="2077129598763517140">উপলব্ধ হোৱাৰ সময়ত হার্ডৱেৰ এক্সিলেৰেশ্বন ব্যৱহাৰ কৰক</translation>
 <translation id="2078019350989722914">বাদ দিয়াৰ আগতে সকীয়নি দিব (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">অফ আছে</translation>
 <translation id="2079053412993822885">যদি আপুনি নিজৰ প্ৰমাণপত্ৰসমূহ মচি পেলালে সেইবোৰ নিজৰ চিনাক্ত কৰিবলৈ আৰু ব্যৱহাৰ কৰিব নোৱাৰে।</translation>
 <translation id="2079545284768500474">আনডু কৰক</translation>
 <translation id="2080070583977670716">অধিক ছেটিং</translation>
@@ -2387,7 +2384,6 @@
 <translation id="4364327530094270451">মেল’ন</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" />এ এখন ৱিণ্ড' শ্বেয়াৰ কৰি আছে।</translation>
 <translation id="4364830672918311045">জাননী দেখুওৱা</translation>
-<translation id="436499142539576997">এপ্‌ ডেটা আহৰণ কৰিব পৰা নগ’ল, এপ্‌টো চলাবলৈ এতিয়াও চেষ্টা কৰি থকা হৈছে...</translation>
 <translation id="4370975561335139969">আপুনি দিয়া ইমেইল আৰু পাছৱৰ্ড মিলা নাই</translation>
 <translation id="437184764829821926">উচ্চখাপৰ ফ’ণ্টৰ ছেটিংসমূহ</translation>
 <translation id="4374831787438678295">Linux ইনষ্টলাৰ</translation>
@@ -4824,7 +4820,6 @@
 <translation id="7908378463497120834">ক্ষমা কৰিব, আপোনাৰ বাহ্যিক ষ্ট'ৰেজ ডিভাইচৰ অতি কমেও এটা পাৰ্টিশ্বন মাউণ্ট কৰিব পৰা নগ'ল।</translation>
 <translation id="7909969815743704077">ইনক’গনিট’ ম’ডত ডাউনল’ড কৰা হৈছে</translation>
 <translation id="7910768399700579500">&amp;নতুন ফ’ল্ডাৰ</translation>
-<translation id="7910831464510799808">অন আছে</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">আপোনাৰ পাছৱৰ্ডটো ছাৰ্ভাৰত সলনি কৰা হৈছে। অনুগ্ৰহ কৰি ছাইন আউট কৰি পুনৰ ছাইন ইন কৰক।</translation>
 <translation id="7915457674565721553">অভিভাৱকীয় নিয়ন্ত্ৰণসমূহ ছেট আপ কৰিবলৈ ইণ্টাৰনেটৰ সৈতে সংযোগ কৰক</translation>

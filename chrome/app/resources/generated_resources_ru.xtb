@@ -517,7 +517,6 @@
 <translation id="1712552549805331520">Сайт <ph name="URL" /> запрашивает разрешение на постоянное хранение данных на вашем компьютере.</translation>
 <translation id="1714644264617423774">Чтобы пользоваться устройством было проще, включите специальные возможности. <ph name="LINK_BEGIN" />Подробнее…<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">Датчики движения</translation>
-<translation id="171824261579749339">Обратная. <ph name="LINK_BEGIN" />Подробнее…<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">Последний час</translation>
 <translation id="1719312230114180055">Помните, что распознавание отпечатков защищает не так надежно, как сложный пароль или PIN-код.</translation>
 <translation id="1720318856472900922">Аутентификация сервера TLS WWW</translation>
@@ -728,7 +727,6 @@
 <translation id="2006638907958895361">Открыть ссылку в приложении "<ph name="APP" />"</translation>
 <translation id="2007404777272201486">Сообщить о проблеме...</translation>
 <translation id="2010501376126504057">Совместимые устройства</translation>
-<translation id="2016430552235416146">Обычная</translation>
 <translation id="2017334798163366053">Запретить сбор данных о производительности</translation>
 <translation id="2017836877785168846">Удаление истории и вариантов автозаполнения в адресной строке</translation>
 <translation id="2018352199541442911">Внешнее запоминающее устройство не поддерживается.</translation>
@@ -769,7 +767,6 @@
 <translation id="2076672359661571384">Средний (рекомендуется)</translation>
 <translation id="2077129598763517140">Использовать аппаратное ускорение (при наличии)</translation>
 <translation id="2078019350989722914">Предупреждать перед выходом (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">Отключено</translation>
 <translation id="2079053412993822885">Если удалить один из собственных сертификатов, вы больше не сможете идентифицировать себя.</translation>
 <translation id="2079545284768500474">Отмена</translation>
 <translation id="2080070583977670716">Дополнительные настройки</translation>
@@ -2404,7 +2401,6 @@
 <translation id="4364327530094270451">Дыня</translation>
 <translation id="4364567974334641491">Приложение "<ph name="APP_NAME" />" предоставило доступ к окну.</translation>
 <translation id="4364830672918311045">Показывать уведомления</translation>
-<translation id="436499142539576997">Получить данные приложения не удалось. Мы пытаемся запустить его…</translation>
 <translation id="4370975561335139969">Указан неправильный адрес или пароль</translation>
 <translation id="437184764829821926">Расширенные настройки шрифтов</translation>
 <translation id="4374831787438678295">Установщик Linux</translation>
@@ -4859,7 +4855,6 @@
 <translation id="7908378463497120834">Не удалось добавить один или несколько разделов внешнего запоминающего устройства.</translation>
 <translation id="7909969815743704077">Скачано в режиме инкогнито</translation>
 <translation id="7910768399700579500">&amp;Новая папка</translation>
-<translation id="7910831464510799808">Включено</translation>
 <translation id="7911118814695487383">Linux</translation>
 <translation id="7912080627461681647">Пароль был изменен на сервере. Выйдите из аккаунта и войдите снова.</translation>
 <translation id="7915457674565721553">Чтобы настроить родительский контроль, подключитесь к Интернету.</translation>

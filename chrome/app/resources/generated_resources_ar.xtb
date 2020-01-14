@@ -509,7 +509,7 @@
 <translation id="1701062906490865540">إزالة هذا الشخص</translation>
 <translation id="1703331064825191675">لا داعي للقلق مطلقًا بشأن كلمات المرور</translation>
 <translation id="1706586824377653884">تمت الإضافة من قبل المشرف</translation>
-<translation id="1706625117072057435">مستويات التكبير/التصغير</translation>
+<translation id="1706625117072057435">مستويات التكبير أو التصغير</translation>
 <translation id="1708338024780164500">(غير نشطة)</translation>
 <translation id="1708713382908678956"><ph name="NAME_PH" /> (رقم التعريف: <ph name="ID_PH" />)</translation>
 <translation id="1709106626015023981">‏<ph name="WIDTH" /> x <ph name="HEIGHT" /> (الأصلي)</translation>
@@ -518,7 +518,6 @@
 <translation id="1712552549805331520">يريد <ph name="URL" /> تخزين بيانات على جهاز الكمبيوتر المحلي بشكل دائم.</translation>
 <translation id="1714644264617423774">تفعيل ميزات إمكانية الدخول لتسهيل طريقة استخدام الجهاز <ph name="LINK_BEGIN" />مزيد من المعلومات<ph name="LINK_END" /></translation>
 <translation id="1717218214683051432">مستشعرات الحركة</translation>
-<translation id="171824261579749339">أسترالي<ph name="LINK_BEGIN" />مزيد من المعلومات<ph name="LINK_END" /></translation>
 <translation id="1718835860248848330">آخر ساعة</translation>
 <translation id="1719312230114180055">ملاحظة: قد يكون استخدام ميزة بصمة الإصبع أقل أمانًا من استخدام كلمة مرور أو رقم تعريف شخصي قوي.</translation>
 <translation id="1720318856472900922">‏مصادقة TLS (بروتوكول أمان طبقة النقل) للخادم WWW</translation>
@@ -729,7 +728,6 @@
 <translation id="2006638907958895361">فتح الرابط في <ph name="APP" /></translation>
 <translation id="2007404777272201486">الإبلاغ عن مشكلة...</translation>
 <translation id="2010501376126504057">الأجهزة المتوافقة</translation>
-<translation id="2016430552235416146">التقليدي</translation>
 <translation id="2017334798163366053">إيقاف جمع بيانات مستوى الأداء</translation>
 <translation id="2017836877785168846">محو السجلّ وعمليات الإكمال التلقائي في شريط العناوين.</translation>
 <translation id="2018352199541442911">عذرًا، لا يتوفر جهاز مساحة التخزين الخارجية للاستخدام في الوقت الحالي.</translation>
@@ -762,7 +760,7 @@
 <translation id="205560151218727633">‏شعار مساعد Google</translation>
 <translation id="2058456167109518507">تم رصد جهاز للاتصال</translation>
 <translation id="2059913712424898428">المنطقة الزمنية</translation>
-<translation id="2065405795449409761">‏يتم التحكم في Chrome من خلال برامج اختبار تلقائية.</translation>
+<translation id="2065405795449409761">‏يتم التحكم في Chrome من خلال برامج اختبار مبرمجة.</translation>
 <translation id="2071393345806050157">ليس هناك ملف سجل محلي.</translation>
 <translation id="2075474481720804517">البطارية <ph name="BATTERY_PERCENTAGE" />%</translation>
 <translation id="2075959085554270910">تتيح لك تفعيل ميزة الضغط للنقر وميزة السحب بالنقر أو إيقافهما.</translation>
@@ -770,7 +768,6 @@
 <translation id="2076672359661571384">متوسط (موصى به)</translation>
 <translation id="2077129598763517140">استخدام تسريع الأجهزة عند توفره</translation>
 <translation id="2078019350989722914">التحذير قبل الإنهاء (<ph name="KEY_EQUIVALENT" />)</translation>
-<translation id="2078494137444990774">غير مفعَّل</translation>
 <translation id="2079053412993822885">إذا حذفت إحدى شهاداتك، فلن تستطيع استخدامها لتعريف هويتك.</translation>
 <translation id="2079545284768500474">تراجع</translation>
 <translation id="2080070583977670716">مزيد من الإعدادات</translation>
@@ -2403,7 +2400,6 @@
 <translation id="4364327530094270451">شمام</translation>
 <translation id="4364567974334641491">يشارك <ph name="APP_NAME" /> نافذة.</translation>
 <translation id="4364830672918311045">عرض الإشعارات</translation>
-<translation id="436499142539576997">تعذّر الحصول على بيانات التطبيق لكن ما زلنا نحاول تشغيله...</translation>
 <translation id="4370975561335139969">البريد الإلكتروني وكلمة المرور اللذان أدخلتهما غير متطابقين</translation>
 <translation id="437184764829821926">الإعدادات المتقدمة للخط</translation>
 <translation id="4374831787438678295">‏أداة تثبيت Linux</translation>
@@ -3665,7 +3661,7 @@
 <translation id="6198252989419008588">تغيير رقم التعريف الشخصي</translation>
 <translation id="6202304368170870640">يمكنك استخدام رقم تعريفك الشخصي لتسجيل الدخول أو فتح قفل جهازك.</translation>
 <translation id="6206311232642889873">نس&amp;خ صورة</translation>
-<translation id="6207200176136643843">إعادة الضبط على مستوى التكبير/التصغير التلقائي</translation>
+<translation id="6207200176136643843">إعادة الضبط على مستوى التكبير أو التصغير التلقائي</translation>
 <translation id="6207282396926186323">‏تثبيت <ph name="APP_NAME" /> (تطبيق Linux)</translation>
 <translation id="6207937957461833379">البلد/المنطقة</translation>
 <translation id="6208521041562685716">جارٍ تفعيل بيانات الجوّال</translation>
@@ -4859,7 +4855,6 @@
 <translation id="7908378463497120834">عذرًا، تعذر تركيب جزء واحد على الأقل من جهاز مساحة التخزين الخارجية.</translation>
 <translation id="7909969815743704077">تم التحميل في وضع التصفح المتخفي</translation>
 <translation id="7910768399700579500">م&amp;جلّد جديد</translation>
-<translation id="7910831464510799808">مفعّل</translation>
 <translation id="7911118814695487383">‏نظام التشغيل Linux</translation>
 <translation id="7912080627461681647">تم تغيير كلمة المرور على الخادم. يُرجى الخروج ثم تسجيل الدخول مجددًا.</translation>
 <translation id="7915457674565721553">الاتصال بالإنترنت لإعداد أدوات الرقابة الأبوية</translation>
@@ -5629,7 +5624,7 @@
 <translation id="8968766641738584599">حفظ البطاقة</translation>
 <translation id="89720367119469899">خروج</translation>
 <translation id="8972513834460200407">‏يُرجى التحقق مع مشرف الشبكة للتأكد من عدم حظر الجدار الناري للتنزيلات من خوادم Google.</translation>
-<translation id="8973557916016709913">إزالة مستوى التكبير/التصغير</translation>
+<translation id="8973557916016709913">إزالة مستوى التكبير أو التصغير</translation>
 <translation id="8973596347849323817">يمكنك تخصيص هذا الجهاز للتوافق مع احتياجاتك. ويمكن تغيير ميزات إمكانية الوصول هذه لاحقًا من خلال الإعدادات.</translation>
 <translation id="897414447285476047">ملف الوجهة غير مكتمل بسبب حدوث مشكلة في الاتصال.</translation>
 <translation id="897525204902889653">خدمة وحدة العزل</translation>
