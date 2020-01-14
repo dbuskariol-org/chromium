@@ -8421,19 +8421,21 @@ TEST_F(WebFrameTest, WebXrImmersiveOverlay) {
       web_widget_client.layer_tree_host();
 
   LocalFrame* frame = web_view_impl->MainFrameImpl()->GetFrame();
-
   Document* document = frame->GetDocument();
-  EXPECT_FALSE(document->IsImmersiveArOverlay());
-  document->SetIsImmersiveArOverlay(true);
-  EXPECT_TRUE(document->IsImmersiveArOverlay());
 
   Element* overlay = document->getElementById("overlay");
   EXPECT_FALSE(Fullscreen::IsFullscreenElement(*overlay));
   EXPECT_EQ(SkColorGetA(layer_tree_host->background_color()), SK_AlphaOPAQUE);
 
-  // Fullscreen should work without separate user activation while in ArOverlay
-  // mode.
+  // It's not legal to switch the fullscreen element while in immersive-ar mode,
+  // so set the fullscreen element first before activating that. This requires
+  // user activation.
+  LocalFrame::NotifyUserActivation(frame);
   Fullscreen::RequestFullscreen(*overlay);
+  EXPECT_FALSE(document->IsImmersiveArOverlay());
+  document->SetIsImmersiveArOverlay(true);
+  EXPECT_TRUE(document->IsImmersiveArOverlay());
+
   web_view_impl->MainFrameWidget()->DidEnterFullscreen();
   UpdateAllLifecyclePhases(web_view_impl);
   EXPECT_TRUE(Fullscreen::IsFullscreenElement(*overlay));

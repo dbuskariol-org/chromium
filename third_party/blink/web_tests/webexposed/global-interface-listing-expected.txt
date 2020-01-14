@@ -11112,6 +11112,10 @@ interface XRBoundedReferenceSpace : XRReferenceSpace
     attribute @@toStringTag
     getter boundsGeometry
     method constructor
+interface XRDOMOverlayState
+    attribute @@toStringTag
+    getter type
+    method constructor
 interface XRFrame
     attribute @@toStringTag
     getter session
@@ -11223,6 +11227,7 @@ interface XRRigidTransform
     method constructor
 interface XRSession : EventTarget
     attribute @@toStringTag
+    getter domOverlayState
     getter environmentBlendMode
     getter inputSources
     getter onend

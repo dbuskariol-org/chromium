@@ -20,6 +20,8 @@ blink_modules_sources("xr") {
     "xr_bounded_reference_space.h",
     "xr_canvas_input_provider.cc",
     "xr_canvas_input_provider.h",
+    "xr_dom_overlay_state.cc",
+    "xr_dom_overlay_state.h",
     "xr_frame.cc",
     "xr_frame.h",
     "xr_frame_provider.cc",

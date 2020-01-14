@@ -39,6 +39,7 @@ class XR;
 class XRAnchor;
 class XRAnchorSet;
 class XRCanvasInputProvider;
+class XRDOMOverlayState;
 class XRHitTestOptionsInit;
 class XRHitTestSource;
 class XRPlane;
@@ -101,6 +102,7 @@ class XRSession final
 
   XR* xr() const { return xr_; }
   const String& environmentBlendMode() const { return blend_mode_string_; }
+  XRDOMOverlayState* domOverlayState() const { return dom_overlay_state_; }
   const String visibilityState() const;
   XRRenderState* renderState() const { return render_state_; }
   XRWorldTrackingState* worldTrackingState() { return world_tracking_state_; }
@@ -181,6 +183,8 @@ class XRSession final
   // reports (0, 0);
   DoubleSize OutputCanvasSize() const;
   void DetachOutputCanvas(HTMLCanvasElement* output_canvas);
+
+  void SetDOMOverlayElement(Element* element);
 
   void LogGetPose() const;
 
@@ -406,6 +410,8 @@ class XRSession final
   Member<XRWebGLLayer> prev_base_layer_;
   Member<ResizeObserver> resize_observer_;
   Member<XRCanvasInputProvider> canvas_input_provider_;
+  Member<Element> overlay_element_;
+  Member<XRDOMOverlayState> dom_overlay_state_;
   bool environment_error_handler_subscribed_ = false;
   HeapHashSet<Member<ScriptPromiseResolver>> hit_test_promises_;
   // Set of promises returned from CreateAnchor that are still in-flight.

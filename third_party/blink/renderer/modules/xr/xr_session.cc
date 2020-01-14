@@ -28,6 +28,7 @@
 #include "third_party/blink/renderer/modules/xr/xr_anchor_set.h"
 #include "third_party/blink/renderer/modules/xr/xr_bounded_reference_space.h"
 #include "third_party/blink/renderer/modules/xr/xr_canvas_input_provider.h"
+#include "third_party/blink/renderer/modules/xr/xr_dom_overlay_state.h"
 #include "third_party/blink/renderer/modules/xr/xr_frame.h"
 #include "third_party/blink/renderer/modules/xr/xr_frame_provider.h"
 #include "third_party/blink/renderer/modules/xr/xr_hit_result.h"
@@ -343,6 +344,24 @@ XRSession::XRSession(
       NOTREACHED() << "Unknown environment blend mode: "
                    << environment_blend_mode;
   }
+}
+
+void XRSession::SetDOMOverlayElement(Element* element) {
+  DVLOG(2) << __func__ << ": element=" << element;
+  DCHECK(enabled_features_.Contains(
+      device::mojom::XRSessionFeature::DOM_OVERLAY_FOR_HANDHELD_AR));
+  DCHECK(element);
+
+  overlay_element_ = element;
+
+  // Set up the domOverlayState attribute. This could be done lazily on first
+  // access, but it's a tiny object and it's unclear if the memory that might
+  // save during XR sessions is worth the code size increase to do so. This
+  // should be revisited if the state gets more complex in the future.
+  //
+  // At this time, "screen" is the only supported DOM Overlay type.
+  dom_overlay_state_ = MakeGarbageCollected<XRDOMOverlayState>(
+      XRDOMOverlayState::DOMOverlayType::kScreen);
 }
 
 const String XRSession::visibilityState() const {
@@ -1854,6 +1873,8 @@ void XRSession::Trace(blink::Visitor* visitor) {
   visitor->Trace(input_sources_);
   visitor->Trace(resize_observer_);
   visitor->Trace(canvas_input_provider_);
+  visitor->Trace(overlay_element_);
+  visitor->Trace(dom_overlay_state_);
   visitor->Trace(callback_collection_);
   visitor->Trace(hit_test_promises_);
   visitor->Trace(create_anchor_promises_);
