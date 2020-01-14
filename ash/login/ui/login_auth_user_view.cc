@@ -85,7 +85,7 @@ constexpr SkColor kChallengeResponseErrorColor =
 // Date time format containing only the day of the week, for example: "Tuesday".
 constexpr char kDayOfWeekOnlyTimeFormat[] = "EEEE";
 
-constexpr int kFingerprintIconSizeDp = 32;
+constexpr int kFingerprintIconSizeDp = 28;
 constexpr int kResetToDefaultIconDelayMs = 1300;
 constexpr int kFingerprintIconTopSpacingDp = 20;
 constexpr int kSpacingBetweenFingerprintIconAndLabelDp = 15;
@@ -466,7 +466,7 @@ class LoginAuthUserView::FingerprintView : public views::View {
     if (success) {
       icon_->SetImage(gfx::CreateVectorIcon(kLockScreenFingerprintSuccessIcon,
                                             kFingerprintIconSizeDp,
-                                            gfx::kGoogleGreenDark500));
+                                            gfx::kGoogleGreen300));
     } else {
       SetIcon(FingerprintState::DISABLED_FROM_ATTEMPTS);
       // base::Unretained is safe because reset_state_ is owned by |this|.
