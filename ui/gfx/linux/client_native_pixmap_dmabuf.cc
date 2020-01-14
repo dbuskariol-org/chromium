@@ -83,7 +83,7 @@ ClientNativePixmapDmaBuf::PlaneInfo::PlaneInfo(PlaneInfo&& info)
 
 ClientNativePixmapDmaBuf::PlaneInfo::~PlaneInfo() {
   if (data) {
-    int ret = munmap(data, size);
+    int ret = munmap(data, offset + size);
     DCHECK(!ret);
   }
 }
@@ -183,7 +183,6 @@ ClientNativePixmapDmaBuf::ImportFromDmabuf(gfx::NativePixmapHandle handle,
     return nullptr;
   }
 
-  const size_t page_size = base::GetPageSize();
   for (size_t i = 0; i < handle.planes.size(); ++i) {
     // Verify that the plane buffer has appropriate size.
     size_t min_stride = 0;
@@ -201,22 +200,19 @@ ClientNativePixmapDmaBuf::ImportFromDmabuf(gfx::NativePixmapHandle handle,
     if (!min_size.IsValid() || handle.planes[i].size < min_size.ValueOrDie())
       return nullptr;
 
-    // mmap() fails if the offset argument is not page-aligned.
-    // Since handle.planes[i].offset is possibly not page-aligned, we
-    // have to map with an additional offset to be aligned to the page.
-    const size_t extra_offset = handle.planes[i].offset % page_size;
-    size_t map_size =
-        base::checked_cast<size_t>(handle.planes[i].size + extra_offset);
-    plane_info[i].offset = extra_offset;
+    const size_t map_size = base::checked_cast<size_t>(handle.planes[i].size);
+    plane_info[i].offset = handle.planes[i].offset;
     plane_info[i].size = map_size;
 
-    void* data =
-        mmap(nullptr, map_size, (PROT_READ | PROT_WRITE), MAP_SHARED,
-             handle.planes[i].fd.get(), handle.planes[i].offset - extra_offset);
+    void* data = mmap(nullptr, map_size + handle.planes[i].offset,
+                      (PROT_READ | PROT_WRITE), MAP_SHARED,
+                      handle.planes[i].fd.get(), 0);
+
     if (data == MAP_FAILED) {
       logging::SystemErrorCode mmap_error = logging::GetLastSystemErrorCode();
       if (mmap_error == ENOMEM)
-        base::TerminateBecauseOutOfMemory(map_size);
+        base::TerminateBecauseOutOfMemory(map_size +
+                                          handle.planes[i].offset);
       LOG(ERROR) << "Failed to mmap dmabuf: "
                  << logging::SystemErrorCodeToString(mmap_error);
       return nullptr;
