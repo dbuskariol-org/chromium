@@ -58,7 +58,7 @@ class InstallFinalizer {
 
   // Removes the external app for |app_url| from disk and registrar. Fails if
   // there is no installed external app for |app_url|.
-  virtual void UninstallExternalWebApp(
+  virtual void UninstallExternalWebAppByUrl(
       const GURL& app_url,
       ExternalInstallSource external_install_source,
       UninstallWebAppCallback) = 0;

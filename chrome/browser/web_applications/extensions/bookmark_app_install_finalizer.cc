@@ -157,7 +157,7 @@ void BookmarkAppInstallFinalizer::FinalizeUpdate(
   crx_installer->InstallWebApp(web_app_info);
 }
 
-void BookmarkAppInstallFinalizer::UninstallExternalWebApp(
+void BookmarkAppInstallFinalizer::UninstallExternalWebAppByUrl(
     const GURL& app_url,
     web_app::ExternalInstallSource external_install_source,
     UninstallWebAppCallback callback) {

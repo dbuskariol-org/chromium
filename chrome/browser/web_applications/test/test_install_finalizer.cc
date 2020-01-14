@@ -53,7 +53,7 @@ void TestInstallFinalizer::FinalizeUninstallAfterSync(
   NOTREACHED();
 }
 
-void TestInstallFinalizer::UninstallExternalWebApp(
+void TestInstallFinalizer::UninstallExternalWebAppByUrl(
     const GURL& app_url,
     ExternalInstallSource external_install_source,
     UninstallWebAppCallback callback) {

@@ -231,7 +231,7 @@ void WebAppInstallFinalizer::FinalizeUninstallAfterSync(
                              std::move(callback)));
 }
 
-void WebAppInstallFinalizer::UninstallExternalWebApp(
+void WebAppInstallFinalizer::UninstallExternalWebAppByUrl(
     const GURL& app_url,
     ExternalInstallSource external_install_source,
     UninstallWebAppCallback callback) {
