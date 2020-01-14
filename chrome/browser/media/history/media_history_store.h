@@ -7,12 +7,14 @@
 
 #include <memory>
 
+#include "base/callback_forward.h"
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
 #include "base/updateable_sequenced_task_runner.h"
 #include "chrome/browser/media/history/media_history_engagement_table.h"
 #include "chrome/browser/media/history/media_history_origin_table.h"
 #include "chrome/browser/media/history/media_history_playback_table.h"
+#include "chrome/browser/media/history/media_history_store.mojom.h"
 #include "chrome/browser/profiles/profile.h"
 #include "sql/database.h"
 #include "sql/init_status.h"
@@ -34,6 +36,9 @@ class MediaHistoryStore {
   ~MediaHistoryStore();
 
   void SavePlayback(const content::MediaPlayerWatchTime& watch_time);
+
+  void GetMediaHistoryStats(
+      base::OnceCallback<void(mojom::MediaHistoryStatsPtr)> callback);
 
  private:
   scoped_refptr<MediaHistoryStoreInternal> db_;

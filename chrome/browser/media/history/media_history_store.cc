@@ -4,7 +4,11 @@
 
 #include "chrome/browser/media/history/media_history_store.h"
 
+#include "base/callback.h"
+#include "base/strings/stringprintf.h"
+#include "base/task_runner_util.h"
 #include "content/public/browser/media_player_watch_time.h"
+#include "sql/statement.h"
 
 namespace {
 
@@ -49,6 +53,9 @@ class MediaHistoryStoreInternal
   bool CreateOriginId(const std::string& origin);
 
   void SavePlayback(const content::MediaPlayerWatchTime& watch_time);
+
+  mojom::MediaHistoryStatsPtr GetMediaHistoryStats();
+  int GetTableRowCount(const std::string& table_name);
 
   scoped_refptr<base::UpdateableSequencedTaskRunner> db_task_runner_;
   base::FilePath db_path_;
@@ -165,6 +172,43 @@ bool MediaHistoryStoreInternal::CreateOriginId(const std::string& origin) {
   return origin_table_->CreateOriginId(origin);
 }
 
+mojom::MediaHistoryStatsPtr MediaHistoryStoreInternal::GetMediaHistoryStats() {
+  mojom::MediaHistoryStatsPtr stats(mojom::MediaHistoryStats::New());
+
+  DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
+  if (!initialization_successful_)
+    return stats;
+
+  sql::Statement statement(DB()->GetUniqueStatement(
+      "SELECT name FROM sqlite_master WHERE type='table' "
+      "AND name NOT LIKE 'sqlite_%';"));
+
+  std::vector<std::string> table_names;
+  while (statement.Step()) {
+    auto table_name = statement.ColumnString(0);
+    stats->table_row_counts.emplace(table_name, GetTableRowCount(table_name));
+  }
+
+  DCHECK(statement.Succeeded());
+  return stats;
+}
+
+int MediaHistoryStoreInternal::GetTableRowCount(const std::string& table_name) {
+  DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
+  if (!initialization_successful_)
+    return -1;
+
+  sql::Statement statement(DB()->GetUniqueStatement(
+      base::StringPrintf("SELECT count(*) from %s", table_name.c_str())
+          .c_str()));
+
+  while (statement.Step()) {
+    return statement.ColumnInt(0);
+  }
+
+  return -1;
+}
+
 MediaHistoryStore::MediaHistoryStore(
     Profile* profile,
     scoped_refptr<base::UpdateableSequencedTaskRunner> db_task_runner)
@@ -183,6 +227,17 @@ void MediaHistoryStore::SavePlayback(
   db_->db_task_runner_->PostTask(
       FROM_HERE, base::BindOnce(&MediaHistoryStoreInternal::SavePlayback, db_,
                                 watch_time));
+}
+
+void MediaHistoryStore::GetMediaHistoryStats(
+    base::OnceCallback<void(mojom::MediaHistoryStatsPtr)> callback) {
+  if (!db_->initialization_successful_)
+    return std::move(callback).Run(mojom::MediaHistoryStats::New());
+
+  base::PostTaskAndReplyWithResult(
+      db_->db_task_runner_.get(), FROM_HERE,
+      base::BindOnce(&MediaHistoryStoreInternal::GetMediaHistoryStats, db_),
+      std::move(callback));
 }
 
 }  // namespace media_history

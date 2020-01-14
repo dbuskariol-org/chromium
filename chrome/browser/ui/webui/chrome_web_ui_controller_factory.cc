@@ -18,6 +18,7 @@
 #include "chrome/browser/buildflags.h"
 #include "chrome/browser/devtools/devtools_ui_bindings.h"
 #include "chrome/browser/engagement/site_engagement_service.h"
+#include "chrome/browser/media/history/media_history_keyed_service.h"
 #include "chrome/browser/media/media_engagement_service.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_manager.h"
@@ -47,6 +48,7 @@
 #include "chrome/browser/ui/webui/local_state/local_state_ui.h"
 #include "chrome/browser/ui/webui/log_web_ui_url.h"
 #include "chrome/browser/ui/webui/media/media_engagement_ui.h"
+#include "chrome/browser/ui/webui/media/media_history_ui.h"
 #include "chrome/browser/ui/webui/media/webrtc_logs_ui.h"
 #include "chrome/browser/ui/webui/memory_internals_ui.h"
 #include "chrome/browser/ui/webui/net_export_ui.h"
@@ -745,6 +747,11 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
   if (MediaEngagementService::IsEnabled() &&
       url.host_piece() == chrome::kChromeUIMediaEngagementHost) {
     return &NewWebUI<MediaEngagementUI>;
+  }
+
+  if (media_history::MediaHistoryKeyedService::IsEnabled() &&
+      url.host_piece() == chrome::kChromeUIMediaHistoryHost) {
+    return &NewWebUI<MediaHistoryUI>;
   }
 
 #if BUILDFLAG(FULL_SAFE_BROWSING)
