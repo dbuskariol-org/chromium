@@ -1307,22 +1307,6 @@
    * shown in Quick View.
    */
   testcase.openQuickViewTabIndexImage = async () => {
-    const caller = getCaller();
-
-    /**
-     * The <webview> resides in the <files-safe-media type="image"> shadow DOM,
-     * which is a child of the #quick-view shadow DOM.
-     */
-    const webView =
-        ['#quick-view', 'files-safe-media[type="image"]', 'webview'];
-
-    // Open Files app on Downloads containing ENTRIES.smallJpeg.
-    const appId = await setupAndWaitUntilReady(
-        RootPath.DOWNLOADS, [ENTRIES.smallJpeg], []);
-
-    // Open the file in Quick View.
-    await openQuickView(appId, ENTRIES.smallJpeg.nameText);
-
     // Prepare a list of tab-index focus queries.
     const tabQueries = [
       {'query': ['#quick-view', '[aria-label="Back"]:focus']},
@@ -1331,6 +1315,13 @@
       {'query': ['#quick-view', '[aria-label="Back"]:focus']},
     ];
 
+    // Open Files app on Downloads containing ENTRIES.smallJpeg.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, [ENTRIES.smallJpeg], []);
+
+    // Open the file in Quick View.
+    await openQuickView(appId, ENTRIES.smallJpeg.nameText);
+
     for (const query of tabQueries) {
       // Make the browser dispatch a tab key event to FilesApp.
       const result = await sendTestMessage(
@@ -1338,12 +1329,12 @@
       chrome.test.assertEq(
           result, 'tabKeyDispatched', 'Tab key dispatch failure');
 
-      // Wait until we get the focus on the element.
-      await remoteCall.waitForElement(appId, query.query);
+      // Note: Allow 500ms between key events to filter out the focus
+      // traversal problems noted in crbug.com/907380#c10.
+      await wait(500);
 
-      // Ensure all events have been processed before continuing.
-      chrome.test.assertTrue(await remoteCall.callRemoteTestUtil(
-          'requestAnimationFrame', appId, []));
+      // Check: the queried element should gain the focus.
+      await remoteCall.waitForElement(appId, query.query);
     }
   };
 })();
