@@ -1316,6 +1316,20 @@
     }
   },
   {
+    'name': 'chromium.devtools-frontend',
+    'machines': {
+      'DevTools Linux (chromium)': {
+        'mixins': [
+          'linux-xenial',
+        ],
+        'test_suites': {
+          'gtest_tests': 'layout_ng_gtests',
+          'isolated_scripts': 'devtools_webkit_isolated_scripts',
+        },
+      },
+    },
+  },
+  {
     'name': 'chromium.fuzz',
     'machines': {
       'ASAN Debug': {
