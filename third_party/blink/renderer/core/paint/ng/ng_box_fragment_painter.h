@@ -102,7 +102,7 @@ class NGBoxFragmentPainter : public BoxPainterBase {
   void PaintInlineItems(const PaintInfo&,
                         const PhysicalOffset& paint_offset,
                         NGInlineCursor* cursor);
-  void PaintLineBoxChildren(NGPaintFragment::ChildList,
+  void PaintLineBoxChildren(NGInlineCursor* children,
                             const PaintInfo&,
                             const PhysicalOffset& paint_offset);
   void PaintLineBox(const NGPhysicalFragment& line_box_fragment,
@@ -111,7 +111,7 @@ class NGBoxFragmentPainter : public BoxPainterBase {
                     const NGFragmentItem* line_box_item,
                     const PaintInfo&,
                     const PhysicalOffset& paint_offset);
-  void PaintBackplate(NGPaintFragment::ChildList,
+  void PaintBackplate(NGInlineCursor* descendants,
                       const PaintInfo&,
                       const PhysicalOffset& paint_offset);
   void PaintInlineChildren(NGPaintFragment::ChildList,

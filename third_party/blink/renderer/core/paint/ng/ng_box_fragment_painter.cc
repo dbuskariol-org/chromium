@@ -159,14 +159,17 @@ bool FragmentRequiresLegacyFallback(const NGPhysicalFragment& fragment) {
   return fragment.IsBlockFormattingContextRoot();
 }
 
-// Recursively build up backplates behind inline text boxes, each split at the
-// paragraph level. Store the results in paragraph_backplates.
-void BuildBackplate(const NGPaintFragment* line,
-                    const PhysicalOffset& paint_offset,
-                    PhysicalRect* current_backplate,
-                    int* consecutive_line_breaks,
-                    Vector<PhysicalRect>* paragraph_backplates) {
-  DCHECK(current_backplate && consecutive_line_breaks && paragraph_backplates);
+// Returns a vector of backplates that surround the paragraphs of text within
+// line_boxes.
+//
+// This function traverses descendants of an inline formatting context in
+// pre-order DFS and build up backplates behind inline text boxes, each split at
+// the paragraph level. Store the results in paragraph_backplates.
+Vector<PhysicalRect> BuildBackplate(NGInlineCursor* descendants,
+                                    const PhysicalOffset& paint_offset) {
+  Vector<PhysicalRect> paragraph_backplates;
+  PhysicalRect current_backplate;
+  int consecutive_line_breaks = 0;
 
   // The number of consecutive forced breaks that split the backplate by
   // paragraph.
@@ -176,48 +179,32 @@ void BuildBackplate(const NGPaintFragment* line,
   // able to simply use the linebox rect to compute the backplate because the
   // backplate should only be painted for inline text and not for atomic
   // inlines.
-  for (const NGPaintFragment* child : line->Children()) {
+  for (; *descendants; descendants->MoveToNext()) {
+    const NGPaintFragment* child = descendants->CurrentPaintFragment();
+    DCHECK(child);  // TODO(kojii): Support NGFragmentItem
     const NGPhysicalFragment& child_fragment = child->PhysicalFragment();
     if (child_fragment.IsHiddenForPaint() || child_fragment.IsFloating())
       continue;
     if (auto* text_fragment =
             DynamicTo<NGPhysicalTextFragment>(child_fragment)) {
       if (text_fragment->IsLineBreak()) {
-        (*consecutive_line_breaks)++;
+        consecutive_line_breaks++;
         continue;
       }
 
-      if (*consecutive_line_breaks >= kMaxConsecutiveLineBreaks) {
+      if (consecutive_line_breaks >= kMaxConsecutiveLineBreaks) {
         // This is a paragraph point.
-        paragraph_backplates->push_back(*current_backplate);
-        *current_backplate = PhysicalRect();
+        paragraph_backplates.push_back(current_backplate);
+        current_backplate = PhysicalRect();
       }
-      *consecutive_line_breaks = 0;
+      consecutive_line_breaks = 0;
+
       PhysicalRect box_rect(child->InlineOffsetToContainerBox() + paint_offset,
                             child->Size());
-      current_backplate->Unite(box_rect);
-    }
-    if (child_fragment.Type() == NGPhysicalFragment::kFragmentBox) {
-      // If a fragment box was reached, continue to recursively build
-      // up the backplate.
-      BuildBackplate(child, paint_offset, current_backplate,
-                     consecutive_line_breaks, paragraph_backplates);
+      current_backplate.Unite(box_rect);
     }
   }
-}
 
-// Returns a vector of backplates that surround the paragraphs of text within
-// line_boxes.
-Vector<PhysicalRect> BuildBackplate(const NGPaintFragment::ChildList line_boxes,
-                                    const PhysicalOffset& paint_offset) {
-  Vector<PhysicalRect> paragraph_backplates;
-  PhysicalRect current_backplate;
-  int consecutive_line_breaks = 0;
-  for (const NGPaintFragment* line : line_boxes) {
-    // Recursively build up and paint backplates for line boxes containing text.
-    BuildBackplate(line, paint_offset, &current_backplate,
-                   &consecutive_line_breaks, &paragraph_backplates);
-  }
   if (!current_backplate.IsEmpty())
     paragraph_backplates.push_back(current_backplate);
   return paragraph_backplates;
@@ -488,8 +475,8 @@ void NGBoxFragmentPainter::PaintBlockFlowContents(
   DCHECK(layout_object->IsLayoutBlockFlow());
   const auto& layout_block = To<LayoutBlock>(*layout_object);
   DCHECK(layout_block.ChildrenInline());
-  PaintLineBoxChildren(paint_fragment_->Children(), paint_info.ForDescendants(),
-                       paint_offset);
+  NGInlineCursor children(*paint_fragment_);
+  PaintLineBoxChildren(&children, paint_info.ForDescendants(), paint_offset);
 }
 
 void NGBoxFragmentPainter::PaintBlockChildren(const PaintInfo& paint_info) {
@@ -1071,7 +1058,7 @@ inline void NGBoxFragmentPainter::PaintLineBox(
 }
 
 void NGBoxFragmentPainter::PaintLineBoxChildren(
-    NGPaintFragment::ChildList line_boxes,
+    NGInlineCursor* children,
     const PaintInfo& paint_info,
     const PhysicalOffset& paint_offset) {
   // Only paint during the foreground/selection phases.
@@ -1094,7 +1081,7 @@ void NGBoxFragmentPainter::PaintLineBoxChildren(
   //                                             paint_offset);
 
   // If we have no lines then we have no work to do.
-  if (line_boxes.IsEmpty())
+  if (!*children)
     return;
 
   ScopedPaintTimingDetectorBlockPaintHook
@@ -1108,13 +1095,14 @@ void NGBoxFragmentPainter::PaintLineBoxChildren(
 
   if (paint_info.phase == PaintPhase::kForcedColorsModeBackplate &&
       layout_block.GetDocument().InForcedColorsMode()) {
-    PaintBackplate(line_boxes, paint_info, paint_offset);
+    PaintBackplate(children, paint_info, paint_offset);
     return;
   }
 
   const bool is_horizontal = box_fragment_.Style().IsHorizontalWritingMode();
-
-  for (const NGPaintFragment* line : line_boxes) {
+  for (; *children; children->MoveToNextSkippingChildren()) {
+    const NGPaintFragment* line = children->CurrentPaintFragment();
+    DCHECK(line);
     const NGPhysicalFragment& child_fragment = line->PhysicalFragment();
     DCHECK(!child_fragment.IsOutOfFlowPositioned());
     if (child_fragment.IsFloating())
@@ -1148,14 +1136,14 @@ void NGBoxFragmentPainter::PaintLineBoxChildren(
   }
 }
 
-void NGBoxFragmentPainter::PaintBackplate(NGPaintFragment::ChildList line_boxes,
+void NGBoxFragmentPainter::PaintBackplate(NGInlineCursor* line_boxes,
                                           const PaintInfo& paint_info,
                                           const PhysicalOffset& paint_offset) {
   if (paint_info.phase != PaintPhase::kForcedColorsModeBackplate)
     return;
 
   // Only paint backplates behind text when forced-color-adjust is auto.
-  const ComputedStyle& style = line_boxes.front().Style();
+  const ComputedStyle& style = PhysicalFragment().Style();
   if (style.ForcedColorAdjust() == EForcedColorAdjust::kNone)
     return;
 
