@@ -455,18 +455,12 @@ component("vr_base") {
 }
 
 source_set("vr_gl_bindings") {
-  sources = [
-    "gl_bindings.h",
-  ]
+  sources = [ "gl_bindings.h" ]
   public_configs = [ ":vr_gl_mode" ]
   if (use_command_buffer) {
-    public_deps = [
-      "//gpu/command_buffer/client:gles2_c_lib",
-    ]
+    public_deps = [ "//gpu/command_buffer/client:gles2_c_lib" ]
   } else {
-    public_deps = [
-      "//ui/gl",
-    ]
+    public_deps = [ "//ui/gl" ]
   }
 }
 
@@ -568,9 +562,7 @@ test("vr_common_perftests") {
   }
 
   # Needed for isolate script to execute
-  data_deps = [
-    "//testing:run_perf_test",
-  ]
+  data_deps = [ "//testing:run_perf_test" ]
 }
 
 source_set("vr_test_support") {
@@ -619,9 +611,7 @@ source_set("vr_test_support") {
     # doesn't propagate to individual test executable targets.
   ]
 
-  data_deps = [
-    ":vr_test_pak",
-  ]
+  data_deps = [ ":vr_test_pak" ]
 }
 
 source_set("vr_gl_test_support") {
@@ -746,9 +736,7 @@ if (!is_android) {
 }
 
 fuzzer_test("vr_omnibox_formatting_fuzzer") {
-  sources = [
-    "elements/omnibox_formatting_fuzzer.cc",
-  ]
+  sources = [ "elements/omnibox_formatting_fuzzer.cc" ]
   deps = [
     ":vr_common",
     ":vr_ui",
