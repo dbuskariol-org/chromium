@@ -957,6 +957,8 @@ var OSSettingsPluginVmPageTest = class extends OSSettingsBrowserTest {
   get extraLibraries() {
     return super.extraLibraries.concat([
       '//ui/webui/resources/js/promise_resolver.js',
+      '//ui/webui/resources/js/util.js',
+      BROWSER_SETTINGS_PATH + '../test_util.js',
       BROWSER_SETTINGS_PATH + '../test_browser_proxy.js',
       'plugin_vm_page_test.js',
     ]);

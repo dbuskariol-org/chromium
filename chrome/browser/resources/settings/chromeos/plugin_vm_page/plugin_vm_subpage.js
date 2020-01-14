@@ -16,6 +16,12 @@ Polymer({
       type: Object,
       notify: true,
     },
+
+    /** @private */
+    showRemoveConfirmationDialog_: {
+      type: Boolean,
+      value: false,
+    },
   },
 
   // TODO(juwa@google.com): Navigate back if plugin vm uninstalled.
@@ -26,11 +32,19 @@ Polymer({
   },
 
   /**
-   * Removes PluginVm.
-   * TODO(juwa@google.com): Show a confirmation dialog before removing.
+   * Shows a confirmation dialog, which if accepted will remove PluginVm.
    * @private
    */
   onRemoveClick_() {
-    settings.PluginVmBrowserProxyImpl.getInstance().removePluginVm();
+    this.showRemoveConfirmationDialog_ = true;
+  },
+
+  /**
+   * Hides the remove confirmation dialog.
+   * @private
+   */
+  onRemoveConfirmationDialogClose_: function() {
+    this.showRemoveConfirmationDialog_ = false;
+    this.$.pluginVmRemoveButton.focus();
   },
 });
