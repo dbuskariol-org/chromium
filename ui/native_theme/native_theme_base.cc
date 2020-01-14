@@ -1493,7 +1493,7 @@ SkColor NativeThemeBase::ControlsAccentColorForState(
   if (state == kHovered) {
     color_id = kHoveredAccent;
   } else if (state == kPressed) {
-    color_id = kHoveredAccent;
+    color_id = kPressedAccent;
   } else if (state == kDisabled) {
     color_id = kDisabledAccent;
   } else {
@@ -1509,7 +1509,7 @@ SkColor NativeThemeBase::ControlsSliderColorForState(
   if (state == kHovered) {
     color_id = kHoveredSlider;
   } else if (state == kPressed) {
-    color_id = kHoveredSlider;
+    color_id = kPressedSlider;
   } else if (state == kDisabled) {
     color_id = kDisabledSlider;
   } else {
@@ -1524,6 +1524,8 @@ SkColor NativeThemeBase::ControlsBorderColorForState(
   ControlColorId color_id;
   if (state == kHovered) {
     color_id = kHoveredBorder;
+  } else if (state == kPressed) {
+    color_id = kPressedBorder;
   } else if (state == kDisabled) {
     color_id = kDisabledBorder;
   } else {
@@ -1539,7 +1541,7 @@ SkColor NativeThemeBase::ControlsFillColorForState(
   if (state == kHovered) {
     color_id = kHoveredFill;
   } else if (state == kPressed) {
-    color_id = kHoveredFill;
+    color_id = kPressedFill;
   } else if (state == kDisabled) {
     color_id = kDisabledFill;
   } else {
@@ -1570,12 +1572,16 @@ SkColor NativeThemeBase::GetControlColor(ControlColorId color_id,
       return SkColorSetRGB(0x76, 0x76, 0x76);
     case kHoveredBorder:
       return SkColorSetRGB(0x4F, 0x4F, 0x4F);
+    case kPressedBorder:
+      return SkColorSetRGB(0x8D, 0x8D, 0x8D);
     case kDisabledBorder:
       return SkColorSetARGB(0x4D, 0x76, 0x76, 0x76);
     case kAccent:
       return SkColorSetRGB(0x00, 0x75, 0xFF);
     case kHoveredAccent:
       return SkColorSetRGB(0x00, 0x5C, 0xC8);
+    case kPressedAccent:
+      return SkColorSetRGB(0x37, 0x93, 0xFF);
     case kDisabledAccent:
       return SkColorSetARGB(0x4D, 0x76, 0x76, 0x76);
     case kBackground:
@@ -1586,6 +1592,8 @@ SkColor NativeThemeBase::GetControlColor(ControlColorId color_id,
       return SkColorSetRGB(0xEF, 0xEF, 0xEF);
     case kHoveredFill:
       return SkColorSetRGB(0xE5, 0xE5, 0xE5);
+    case kPressedFill:
+      return SkColorSetRGB(0xF5, 0xF5, 0xF5);
     case kDisabledFill:
       return SkColorSetARGB(0x4D, 0xEF, 0xEF, 0xEF);
     case kLightenLayer:
@@ -1596,6 +1604,8 @@ SkColor NativeThemeBase::GetControlColor(ControlColorId color_id,
       return SkColorSetRGB(0x00, 0x75, 0xFF);
     case kHoveredSlider:
       return SkColorSetRGB(0x00, 0x5C, 0xC8);
+    case kPressedSlider:
+      return SkColorSetRGB(0x37, 0x93, 0xFF);
     case kDisabledSlider:
       return SkColorSetRGB(0xCB, 0xCB, 0xCB);
   }
@@ -1614,17 +1624,21 @@ SkColor NativeThemeBase::GetHighContrastControlColor(
         return system_colors_[SystemThemeColor::kGrayText];
       case kBorder:
       case kHoveredBorder:
+      case kPressedBorder:
         return system_colors_[SystemThemeColor::kButtonText];
       case kAccent:
       case kHoveredAccent:
+      case kPressedAccent:
       case kProgressValue:
       case kSlider:
       case kHoveredSlider:
+      case kPressedSlider:
         return system_colors_[SystemThemeColor::kHighlight];
       case kBackground:
       case kDisabledBackground:
       case kFill:
       case kHoveredFill:
+      case kPressedFill:
       case kDisabledFill:
       case kLightenLayer:
         return system_colors_[SystemThemeColor::kWindow];
@@ -1638,17 +1652,21 @@ SkColor NativeThemeBase::GetHighContrastControlColor(
         return SK_ColorGREEN;
       case kBorder:
       case kHoveredBorder:
+      case kPressedBorder:
         return SK_ColorWHITE;
       case kAccent:
       case kHoveredAccent:
+      case kPressedAccent:
       case kProgressValue:
       case kSlider:
       case kHoveredSlider:
+      case kPressedSlider:
         return SK_ColorCYAN;
       case kBackground:
       case kDisabledBackground:
       case kFill:
       case kHoveredFill:
+      case kPressedFill:
       case kDisabledFill:
       case kLightenLayer:
         return SK_ColorBLACK;

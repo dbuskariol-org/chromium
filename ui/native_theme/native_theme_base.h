@@ -48,19 +48,23 @@ class NATIVE_THEME_EXPORT NativeThemeBase : public NativeTheme {
     kBorder,
     kDisabledBorder,
     kHoveredBorder,
+    kPressedBorder,
     kAccent,
     kDisabledAccent,
     kHoveredAccent,
+    kPressedAccent,
     kBackground,
     kDisabledBackground,
     kFill,
     kDisabledFill,
     kHoveredFill,
+    kPressedFill,
     kLightenLayer,
     kProgressValue,
     kSlider,
     kDisabledSlider,
-    kHoveredSlider
+    kHoveredSlider,
+    kPressedSlider
   };
 
   NativeThemeBase();
