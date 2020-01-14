@@ -21,7 +21,9 @@
 #include "base/optional.h"
 #include "base/strings/string16.h"
 #include "base/strings/string_piece.h"
+#include "base/util/type_safety/strong_alias.h"
 #include "base/version.h"
+#include "base/win/registry.h"
 #include "base/win/scoped_handle.h"
 #include "chrome/installer/util/util_constants.h"
 
@@ -183,11 +185,18 @@ class InstallUtil {
   static std::vector<std::pair<std::wstring, std::wstring>>
   GetCloudManagementEnrollmentTokenRegistryPaths();
 
-  // Returns the registry key path and value name where the DM token is stored
-  // for machine level user cloud policies.
-  static void GetMachineLevelUserCloudPolicyDMTokenRegistryPath(
-      base::string16* key_path,
-      base::string16* value_name);
+  using ReadOnly = util::StrongAlias<class ReadOnlyTag, bool>;
+  using BrowserLocation = util::StrongAlias<class BrowserLocationTag, bool>;
+
+  // Returns the registry key and value name from/to which a cloud management DM
+  // token may be read/written. |read_only| indicates whether they key is opened
+  // for reading the value or writing it. |browser_location| indicates whether
+  // the legacy browser-specific location is returned rather than the
+  // app-neutral location. The returned key will be invalid if it could not be
+  // opened/created.
+  static std::pair<base::win::RegKey, std::wstring>
+  GetCloudManagementDmTokenLocation(ReadOnly read_only,
+                                    BrowserLocation browser_location);
 
   // Returns the token used to enroll this chrome instance for machine level
   // user cloud policies.  Returns an empty string if this machine should not

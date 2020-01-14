@@ -4,6 +4,8 @@
 
 #include "chrome/browser/policy/browser_dm_token_storage_win.h"
 
+#include <tuple>
+
 #include "base/macros.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/test/test_reg_util_win.h"
@@ -23,6 +25,7 @@ constexpr wchar_t kClientId1[] = L"fake-client-id-1";
 constexpr wchar_t kEnrollmentToken1[] = L"fake-enrollment-token-1";
 constexpr wchar_t kEnrollmentToken2[] = L"fake-enrollment-token-2";
 constexpr char kDMToken1[] = "fake-dm-token-1";
+constexpr char kDMToken2[] = "fake-dm-token-2";
 
 }  // namespace
 
@@ -66,16 +69,18 @@ class BrowserDMTokenStorageWinTest : public testing::Test {
                ERROR_SUCCESS;
   }
 
-  bool SetDMToken(const std::string& dm_token) {
+  // Sets a DM token in either the app-neutral or browser-specific location in
+  // the registry.
+  bool SetDMToken(const std::string& dm_token,
+                  InstallUtil::BrowserLocation browser_location) {
     base::win::RegKey key;
-    base::string16 dm_token_key_path;
     base::string16 dm_token_value_name;
-    InstallUtil::GetMachineLevelUserCloudPolicyDMTokenRegistryPath(
-        &dm_token_key_path, &dm_token_value_name);
-    return (key.Create(HKEY_LOCAL_MACHINE, dm_token_key_path.c_str(),
-                       KEY_SET_VALUE | KEY_WOW64_64KEY) == ERROR_SUCCESS) &&
-           (key.WriteValue(dm_token_value_name.c_str(), dm_token.c_str(),
-                           dm_token.size(), REG_BINARY) == ERROR_SUCCESS);
+    std::tie(key, dm_token_value_name) =
+        InstallUtil::GetCloudManagementDmTokenLocation(
+            InstallUtil::ReadOnly(false), browser_location);
+    return key.Valid() &&
+           key.WriteValue(dm_token_value_name.c_str(), dm_token.c_str(),
+                          dm_token.size(), REG_BINARY) == ERROR_SUCCESS;
   }
 
   content::BrowserTaskEnvironment task_environment_;
@@ -108,9 +113,20 @@ TEST_F(BrowserDMTokenStorageWinTest, InitEnrollmentTokenFromSecondary) {
 TEST_F(BrowserDMTokenStorageWinTest, InitDMToken) {
   ASSERT_TRUE(SetMachineGuid(kClientId1));
 
-  ASSERT_TRUE(SetDMToken(kDMToken1));
+  // The app-neutral location should be preferred.
+  ASSERT_TRUE(SetDMToken(kDMToken1, InstallUtil::BrowserLocation(false)));
+  ASSERT_TRUE(SetDMToken(kDMToken2, InstallUtil::BrowserLocation(true)));
   BrowserDMTokenStorageWin storage;
   EXPECT_EQ(std::string(kDMToken1), storage.InitDMToken());
+}
+
+TEST_F(BrowserDMTokenStorageWinTest, InitDMTokenFromBrowserLocation) {
+  ASSERT_TRUE(SetMachineGuid(kClientId1));
+
+  // If there's no app-neutral token, the browser-specific one should be used.
+  ASSERT_TRUE(SetDMToken(kDMToken2, InstallUtil::BrowserLocation(true)));
+  BrowserDMTokenStorageWin storage;
+  EXPECT_EQ(std::string(kDMToken2), storage.InitDMToken());
 }
 
 }  // namespace policy

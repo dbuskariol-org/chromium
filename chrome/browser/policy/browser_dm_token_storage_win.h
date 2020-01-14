@@ -44,6 +44,8 @@ class BrowserDMTokenStorageWin : public BrowserDMTokenStorage {
   FRIEND_TEST_ALL_PREFIXES(BrowserDMTokenStorageWinTest,
                            InitEnrollmentTokenFromSecondary);
   FRIEND_TEST_ALL_PREFIXES(BrowserDMTokenStorageWinTest, InitDMToken);
+  FRIEND_TEST_ALL_PREFIXES(BrowserDMTokenStorageWinTest,
+                           InitDMTokenFromBrowserLocation);
 
   DISALLOW_COPY_AND_ASSIGN(BrowserDMTokenStorageWin);
 };

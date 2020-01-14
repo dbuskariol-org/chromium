@@ -24,7 +24,6 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/system/sys_info.h"
 #include "base/values.h"
-#include "base/win/registry.h"
 #include "base/win/shlwapi.h"
 #include "base/win/shortcut.h"
 #include "base/win/win_util.h"
@@ -599,18 +598,39 @@ InstallUtil::GetCloudManagementEnrollmentTokenRegistryPaths() {
 }
 
 // static
-void InstallUtil::GetMachineLevelUserCloudPolicyDMTokenRegistryPath(
-    base::string16* key_path,
-    base::string16* value_name) {
-  // This token applies to all installs on the machine, even though only a
-  // system install can set it.  This is to prevent users from doing a user
-  // install of chrome to get around policies.
-  *key_path = L"SOFTWARE\\";
-  install_static::AppendChromeInstallSubDirectory(
-      install_static::InstallDetails::Get().mode(), false /* !include_suffix */,
-      key_path);
-  key_path->append(L"\\Enrollment");
-  *value_name = L"dmtoken";
+std::pair<base::win::RegKey, std::wstring>
+InstallUtil::GetCloudManagementDmTokenLocation(
+    ReadOnly read_only,
+    BrowserLocation browser_location) {
+  // The location dictates the path and WoW bit.
+  REGSAM wow_access = 0;
+  std::wstring key_path(L"SOFTWARE\\");
+  if (browser_location) {
+    wow_access |= KEY_WOW64_64KEY;
+    install_static::AppendChromeInstallSubDirectory(
+        install_static::InstallDetails::Get().mode(), /*include_suffix=*/false,
+        &key_path);
+  } else {
+    wow_access |= KEY_WOW64_32KEY;
+    key_path.append(install_static::kCompanyPathName);
+  }
+  key_path.append(L"\\Enrollment");
+
+  base::win::RegKey key;
+  if (read_only) {
+    key.Open(HKEY_LOCAL_MACHINE, key_path.c_str(),
+             KEY_QUERY_VALUE | wow_access);
+  } else {
+    auto result = key.Create(HKEY_LOCAL_MACHINE, key_path.c_str(),
+                             KEY_SET_VALUE | wow_access);
+    if (result != ERROR_SUCCESS) {
+      ::SetLastError(result);
+      PLOG(ERROR) << "Failed to create/open registry key HKLM\\" << key_path
+                  << " for writing";
+    }
+  }
+
+  return {std::move(key), L"dmtoken"};
 }
 
 // static
