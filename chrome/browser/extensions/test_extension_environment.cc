@@ -12,6 +12,7 @@
 #include "chrome/browser/extensions/extension_service.h"
 #include "chrome/browser/extensions/test_extension_system.h"
 #include "chrome/browser/sessions/session_tab_helper.h"
+#include "chrome/browser/sessions/session_tab_helper_factory.h"
 #include "chrome/test/base/testing_profile.h"
 #include "content/public/test/browser_task_environment.h"
 #include "content/public/test/test_utils.h"
@@ -167,7 +168,7 @@ std::unique_ptr<content::WebContents> TestExtensionEnvironment::MakeTab()
   std::unique_ptr<content::WebContents> contents(
       content::WebContentsTester::CreateTestWebContents(profile(), nullptr));
   // Create a tab id.
-  SessionTabHelper::CreateForWebContents(contents.get());
+  CreateSessionServiceTabHelper(contents.get());
   return contents;
 }
 

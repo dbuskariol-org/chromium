@@ -22,6 +22,7 @@
 #include "chrome/browser/installable/installable_metrics.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/sessions/session_tab_helper.h"
+#include "chrome/browser/sessions/session_tab_helper_factory.h"
 #include "chrome/browser/shell_integration.h"
 #include "chrome/browser/ui/browser_commands.h"
 #include "chrome/browser/ui/browser_dialogs.h"
@@ -81,7 +82,7 @@ TabHelper::TabHelper(content::WebContents* web_contents)
       extension_action_runner_(new ExtensionActionRunner(web_contents)) {
   // The ActiveTabPermissionManager requires a session ID; ensure this
   // WebContents has one.
-  SessionTabHelper::CreateForWebContents(web_contents);
+  CreateSessionServiceTabHelper(web_contents);
   // The Unretained() is safe because ForEachFrame() is synchronous.
   web_contents->ForEachFrame(
       base::BindRepeating(&TabHelper::SetTabId, base::Unretained(this)));

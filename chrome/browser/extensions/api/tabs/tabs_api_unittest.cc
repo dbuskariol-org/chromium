@@ -14,6 +14,7 @@
 #include "chrome/browser/extensions/extension_service_test_base.h"
 #include "chrome/browser/extensions/extension_tab_util.h"
 #include "chrome/browser/sessions/session_tab_helper.h"
+#include "chrome/browser/sessions/session_tab_helper_factory.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "chrome/test/base/test_browser_window.h"
@@ -298,7 +299,7 @@ TEST_F(TabsApiUnitTest, PDFExtensionNavigation) {
   EXPECT_EQ(kGoogle, raw_web_contents->GetLastCommittedURL());
   EXPECT_EQ(kGoogle, raw_web_contents->GetVisibleURL());
 
-  SessionTabHelper::CreateForWebContents(raw_web_contents);
+  CreateSessionServiceTabHelper(raw_web_contents);
   int tab_id = SessionTabHelper::IdForTab(raw_web_contents).id();
   browser()->tab_strip_model()->AppendWebContents(std::move(web_contents),
                                                   true);
@@ -367,7 +368,7 @@ TEST_F(TabsApiUnitTest, TabsUpdateJavaScriptUrlNotAllowed) {
   content::WebContentsTester* web_contents_tester =
       content::WebContentsTester::For(raw_contents);
   web_contents_tester->NavigateAndCommit(GURL("http://www.example.com"));
-  SessionTabHelper::CreateForWebContents(raw_contents);
+  CreateSessionServiceTabHelper(raw_contents);
   int tab_id = SessionTabHelper::IdForTab(raw_contents).id();
 
   static constexpr char kFormatArgs[] = R"([%d, {"url": "%s"}])";
@@ -404,7 +405,7 @@ TEST_F(TabsApiUnitTest, TabsGoForwardAndBack) {
   content::WebContents* raw_web_contents = web_contents.get();
   ASSERT_TRUE(raw_web_contents);
 
-  SessionTabHelper::CreateForWebContents(raw_web_contents);
+  CreateSessionServiceTabHelper(raw_web_contents);
   const int tab_id = SessionTabHelper::IdForTab(raw_web_contents).id();
   browser()->tab_strip_model()->AppendWebContents(std::move(web_contents),
                                                   true);

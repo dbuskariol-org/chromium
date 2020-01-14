@@ -18,6 +18,7 @@
 #include "chrome/browser/net/system_network_context_manager.h"
 #include "chrome/browser/safe_browsing/test_safe_browsing_service.h"
 #include "chrome/browser/sessions/session_tab_helper.h"
+#include "chrome/browser/sessions/session_tab_helper_factory.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "chrome/test/base/test_browser_window.h"
@@ -134,7 +135,7 @@ TEST_F(SafeBrowsingPrivateApiUnitTest, GetReferrerChain) {
   content::WebContents* raw_web_contents = web_contents.get();
   ASSERT_TRUE(raw_web_contents);
 
-  SessionTabHelper::CreateForWebContents(raw_web_contents);
+  CreateSessionServiceTabHelper(raw_web_contents);
   int tab_id = SessionTabHelper::IdForTab(raw_web_contents).id();
   browser()->tab_strip_model()->AppendWebContents(std::move(web_contents),
                                                   true);
@@ -156,7 +157,7 @@ TEST_F(SafeBrowsingPrivateApiUnitTest, GetReferrerChainForNonSafeBrowsingUser) {
   content::WebContents* raw_web_contents = web_contents.get();
   ASSERT_TRUE(raw_web_contents);
 
-  SessionTabHelper::CreateForWebContents(raw_web_contents);
+  CreateSessionServiceTabHelper(raw_web_contents);
   int tab_id = SessionTabHelper::IdForTab(raw_web_contents).id();
   browser()->tab_strip_model()->AppendWebContents(std::move(web_contents),
                                                   true);

@@ -19,12 +19,23 @@
 #include "chrome/browser/sessions/session_service_factory.h"
 #endif
 
-SessionTabHelper::SessionTabHelper(content::WebContents* contents)
+SessionTabHelper::SessionTabHelper(content::WebContents* contents,
+                                   SessionServiceLookup lookup)
     : content::WebContentsObserver(contents),
+      service_lookup_(std::move(lookup)),
       session_id_(SessionID::NewUnique()),
       window_id_(SessionID::InvalidValue()) {}
 
 SessionTabHelper::~SessionTabHelper() = default;
+
+void SessionTabHelper::CreateForWebContents(content::WebContents* contents,
+                                            SessionServiceLookup lookup) {
+  DCHECK(contents);
+  if (!FromWebContents(contents)) {
+    contents->SetUserData(UserDataKey(), base::WrapUnique(new SessionTabHelper(
+                                             contents, std::move(lookup))));
+  }
+}
 
 void SessionTabHelper::SetWindowID(const SessionID& id) {
   window_id_ = id;
@@ -56,17 +67,16 @@ SessionID SessionTabHelper::IdForWindowContainingTab(
 
 #if BUILDFLAG(ENABLE_SESSION_SERVICE)
 void SessionTabHelper::UserAgentOverrideSet(const std::string& user_agent) {
-  Profile* profile =
-      Profile::FromBrowserContext(web_contents()->GetBrowserContext());
-  SessionService* session = SessionServiceFactory::GetForProfile(profile);
-  if (session)
-    session->SetTabUserAgentOverride(window_id(), session_id(), user_agent);
+  SessionService* session_service = GetSessionService();
+  if (session_service) {
+    session_service->SetTabUserAgentOverride(window_id(), session_id(),
+                                             user_agent);
+  }
 }
 
 void SessionTabHelper::NavigationEntryCommitted(
     const content::LoadCommittedDetails& load_details) {
-  SessionService* session_service = SessionServiceFactory::GetForProfile(
-      Profile::FromBrowserContext(web_contents()->GetBrowserContext()));
+  SessionService* session_service = GetSessionService();
   if (!session_service)
     return;
 
@@ -83,8 +93,7 @@ void SessionTabHelper::NavigationEntryCommitted(
 
 void SessionTabHelper::NavigationListPruned(
     const content::PrunedDetails& pruned_details) {
-  SessionService* session_service = SessionServiceFactory::GetForProfile(
-      Profile::FromBrowserContext(web_contents()->GetBrowserContext()));
+  SessionService* session_service = GetSessionService();
   if (!session_service)
     return;
 
@@ -93,8 +102,7 @@ void SessionTabHelper::NavigationListPruned(
 }
 
 void SessionTabHelper::NavigationEntriesDeleted() {
-  SessionService* session_service = SessionServiceFactory::GetForProfile(
-      Profile::FromBrowserContext(web_contents()->GetBrowserContext()));
+  SessionService* session_service = GetSessionService();
   if (!session_service)
     return;
 
@@ -103,8 +111,7 @@ void SessionTabHelper::NavigationEntriesDeleted() {
 
 void SessionTabHelper::NavigationEntryChanged(
     const content::EntryChangedDetails& change_details) {
-  SessionService* session_service = SessionServiceFactory::GetForProfile(
-      Profile::FromBrowserContext(web_contents()->GetBrowserContext()));
+  SessionService* session_service = GetSessionService();
   if (!session_service)
     return;
 
@@ -114,5 +121,9 @@ void SessionTabHelper::NavigationEntryChanged(
   session_service->UpdateTabNavigation(window_id(), session_id(), navigation);
 }
 #endif
+
+SessionService* SessionTabHelper::GetSessionService() {
+  return service_lookup_ ? service_lookup_.Run(web_contents()) : nullptr;
+}
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(SessionTabHelper)

@@ -16,6 +16,7 @@
 #include "chrome/browser/media/router/test/mock_media_router.h"
 #include "chrome/browser/media/router/test/test_helper.h"
 #include "chrome/browser/sessions/session_tab_helper.h"
+#include "chrome/browser/sessions/session_tab_helper_factory.h"
 #include "chrome/browser/ui/media_router/cast_dialog_controller.h"
 #include "chrome/browser/ui/media_router/media_cast_mode.h"
 #include "chrome/common/media_router/media_source.h"
@@ -142,7 +143,7 @@ class MediaRouterViewsUITest : public ChromeRenderViewHostTestHarness {
           return true;
         });
 
-    SessionTabHelper::CreateForWebContents(web_contents());
+    CreateSessionServiceTabHelper(web_contents());
     ui_ = std::make_unique<MediaRouterViewsUI>(web_contents());
     ui_->InitWithDefaultMediaSource();
   }
@@ -162,7 +163,7 @@ class MediaRouterViewsUITest : public ChromeRenderViewHostTestHarness {
                                             ui::PAGE_TRANSITION_LINK, "");
     content::RenderFrameHostTester::CommitPendingLoad(
         &web_contents()->GetController());
-    SessionTabHelper::CreateForWebContents(web_contents());
+    CreateSessionServiceTabHelper(web_contents());
     ui_ = std::make_unique<MediaRouterViewsUI>(web_contents());
     ui_->InitWithDefaultMediaSource();
   }

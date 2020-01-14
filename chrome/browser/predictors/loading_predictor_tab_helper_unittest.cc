@@ -7,6 +7,7 @@
 #include "chrome/browser/predictors/loading_predictor.h"
 #include "chrome/browser/predictors/loading_test_util.h"
 #include "chrome/browser/sessions/session_tab_helper.h"
+#include "chrome/browser/sessions/session_tab_helper_factory.h"
 #include "chrome/test/base/chrome_render_view_host_test_harness.h"
 #include "chrome/test/base/testing_profile.h"
 #include "content/public/test/navigation_simulator.h"
@@ -58,7 +59,7 @@ class LoadingPredictorTabHelperTest : public ChromeRenderViewHostTestHarness {
 
 void LoadingPredictorTabHelperTest::SetUp() {
   ChromeRenderViewHostTestHarness::SetUp();
-  SessionTabHelper::CreateForWebContents(web_contents());
+  CreateSessionServiceTabHelper(web_contents());
   LoadingPredictorTabHelper::CreateForWebContents(web_contents());
   tab_helper_ = LoadingPredictorTabHelper::FromWebContents(web_contents());
 
@@ -296,7 +297,7 @@ class LoadingPredictorTabHelperTestCollectorTest
 
 void LoadingPredictorTabHelperTestCollectorTest::SetUp() {
   ChromeRenderViewHostTestHarness::SetUp();
-  SessionTabHelper::CreateForWebContents(web_contents());
+  CreateSessionServiceTabHelper(web_contents());
   LoadingPredictorTabHelper::CreateForWebContents(web_contents());
   tab_helper_ = LoadingPredictorTabHelper::FromWebContents(web_contents());
 

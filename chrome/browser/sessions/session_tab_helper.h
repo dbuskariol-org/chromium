@@ -5,18 +5,27 @@
 #ifndef CHROME_BROWSER_SESSIONS_SESSION_TAB_HELPER_H_
 #define CHROME_BROWSER_SESSIONS_SESSION_TAB_HELPER_H_
 
+#include "base/callback.h"
 #include "base/macros.h"
 #include "chrome/common/buildflags.h"
 #include "components/sessions/core/session_id.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
 
+class SessionService;
+
 // This class keeps the extension API's windowID up to date with the current
 // window of the tab and observes navigation events.
 class SessionTabHelper : public content::WebContentsObserver,
                          public content::WebContentsUserData<SessionTabHelper> {
  public:
+  using SessionServiceLookup =
+      base::RepeatingCallback<SessionService*(content::WebContents*)>;
+
   ~SessionTabHelper() override;
+
+  static void CreateForWebContents(content::WebContents* contents,
+                                   SessionServiceLookup lookup);
 
   // Returns the identifier used by session restore for this tab.
   const SessionID& session_id() const { return session_id_; }
@@ -56,8 +65,12 @@ class SessionTabHelper : public content::WebContentsObserver,
 #endif
 
  private:
-  explicit SessionTabHelper(content::WebContents* contents);
   friend class content::WebContentsUserData<SessionTabHelper>;
+  SessionTabHelper(content::WebContents* contents, SessionServiceLookup lookup);
+
+  SessionService* GetSessionService();
+
+  SessionServiceLookup service_lookup_;
 
   // Unique identifier of the tab for session restore. This id is only unique
   // within the current session, and is not guaranteed to be unique across

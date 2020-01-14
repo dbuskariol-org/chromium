@@ -1555,6 +1555,8 @@ jumbo_static_library("browser") {
     "sessions/session_restore_android.cc",
     "sessions/session_tab_helper.cc",
     "sessions/session_tab_helper.h",
+    "sessions/session_tab_helper_factory.cc",
+    "sessions/session_tab_helper_factory.h",
     "sessions/tab_restore_service_factory.cc",
     "sessions/tab_restore_service_factory.h",
     "sharing/ack_message_handler.cc",
