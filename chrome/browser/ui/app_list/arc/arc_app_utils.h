@@ -148,9 +148,6 @@ void SetTaskActive(int task_id);
 // Closes the task.
 void CloseTask(int task_id);
 
-// Opens TalkBack settings window.
-void ShowTalkBackSettings();
-
 // Gets user selected package names.
 std::vector<std::string> GetSelectedPackagesFromPrefs(
     content::BrowserContext* context);

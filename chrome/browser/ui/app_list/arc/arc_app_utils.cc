@@ -78,8 +78,6 @@ constexpr char kIntentHelperClassName[] =
     "org.chromium.arc.intent_helper.SettingsReceiver";
 constexpr char kSetInTouchModeIntent[] =
     "org.chromium.arc.intent_helper.SET_IN_TOUCH_MODE";
-constexpr char kShowTalkbackSettingsIntent[] =
-    "org.chromium.arc.intent_helper.SHOW_TALKBACK_SETTINGS";
 
 constexpr char kAction[] = "action";
 constexpr char kActionMain[] = "android.intent.action.MAIN";
@@ -438,18 +436,6 @@ void CloseTask(int task_id) {
   if (!app_instance)
     return;
   app_instance->CloseTask(task_id);
-}
-
-void ShowTalkBackSettings() {
-  arc::mojom::IntentHelperInstance* intent_helper_instance =
-      GET_INTENT_HELPER_INSTANCE(SendBroadcast);
-  if (!intent_helper_instance)
-    return;
-
-  intent_helper_instance->SendBroadcast(
-      kShowTalkbackSettingsIntent,
-      ArcIntentHelperBridge::kArcIntentHelperPackageName,
-      kIntentHelperClassName, "{}");
 }
 
 std::vector<std::string> GetSelectedPackagesFromPrefs(
