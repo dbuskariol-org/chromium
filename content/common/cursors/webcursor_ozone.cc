@@ -34,9 +34,7 @@ void WebCursor::SetDisplayInfo(const display::Display& display) {
   // the kDefaultMaxSize constants to a single place. crbug.com/603512
   if (maximum_cursor_size_.width() == 0 || maximum_cursor_size_.height() == 0)
     maximum_cursor_size_ = gfx::Size(kDefaultMaxSize, kDefaultMaxSize);
-  if (platform_cursor_)
-    ui::CursorFactoryOzone::GetInstance()->UnrefImageCursor(platform_cursor_);
-  platform_cursor_ = NULL;
+  CleanupPlatformData();
   // It is not necessary to recreate platform_cursor_ yet, since it will be
   // recreated on demand when GetPlatformCursor is called.
 }
@@ -59,6 +57,7 @@ void WebCursor::CleanupPlatformData() {
     ui::CursorFactoryOzone::GetInstance()->UnrefImageCursor(platform_cursor_);
     platform_cursor_ = NULL;
   }
+  custom_cursor_.reset();
 }
 
 void WebCursor::CopyPlatformData(const WebCursor& other) {
