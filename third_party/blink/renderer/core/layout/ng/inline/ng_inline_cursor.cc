@@ -771,9 +771,8 @@ void NGInlineCursor::MoveToContainingLine() {
     return;
   }
   if (current_item_) {
-    do {
+    while (current_item_ && !IsLineBox())
       MoveToPreviousItem();
-    } while (current_item_ && !IsLineBox());
     return;
   }
   NOTREACHED();
