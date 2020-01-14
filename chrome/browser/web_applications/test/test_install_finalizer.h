@@ -36,6 +36,9 @@ class TestInstallFinalizer final : public InstallFinalizer {
                                   UninstallWebAppCallback callback) override;
   void FinalizeUpdate(const WebApplicationInfo& web_app_info,
                       InstallFinalizedCallback callback) override;
+  void UninstallExternalWebApp(const AppId& app_id,
+                               ExternalInstallSource external_install_source,
+                               UninstallWebAppCallback callback) override;
   void UninstallExternalWebAppByUrl(
       const GURL& app_url,
       ExternalInstallSource external_install_source,

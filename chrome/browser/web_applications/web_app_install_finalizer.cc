@@ -231,23 +231,13 @@ void WebAppInstallFinalizer::FinalizeUninstallAfterSync(
                              std::move(callback)));
 }
 
-void WebAppInstallFinalizer::UninstallExternalWebAppByUrl(
-    const GURL& app_url,
+void WebAppInstallFinalizer::UninstallExternalWebApp(
+    const AppId& app_id,
     ExternalInstallSource external_install_source,
     UninstallWebAppCallback callback) {
-  base::Optional<web_app::AppId> app_id =
-      registrar().LookupExternalAppId(app_url);
-  if (!app_id.has_value()) {
-    LOG(WARNING) << "Couldn't uninstall app with url " << app_url
-                 << "; No corresponding web app for url.";
-    base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(std::move(callback), /*uninstalled=*/false));
-    return;
-  }
-
   Source::Type source =
       InferSourceFromExternalInstallSource(external_install_source);
-  UninstallWebAppOrRemoveSource(*app_id, source, std::move(callback));
+  UninstallWebAppOrRemoveSource(app_id, source, std::move(callback));
 }
 
 bool WebAppInstallFinalizer::CanUserUninstallFromSync(

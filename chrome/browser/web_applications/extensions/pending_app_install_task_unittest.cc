@@ -178,6 +178,15 @@ class TestPendingAppInstallFinalizer : public InstallFinalizer {
     NOTREACHED();
   }
 
+  void UninstallExternalWebApp(const AppId& app_id,
+                               ExternalInstallSource external_install_source,
+                               UninstallWebAppCallback callback) override {
+    registrar_->RemoveExternalApp(app_id);
+
+    base::ThreadTaskRunnerHandle::Get()->PostTask(
+        FROM_HERE, base::BindOnce(std::move(callback), /*uninstalled=*/true));
+  }
+
   void UninstallExternalWebAppByUrl(
       const GURL& app_url,
       ExternalInstallSource external_install_source,
