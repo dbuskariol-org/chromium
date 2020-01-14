@@ -31,7 +31,11 @@ namespace storage {
 // A generic interface for writing to a file-like object.
 class FileStreamWriter {
  public:
-  enum OpenOrCreate { OPEN_EXISTING_FILE, CREATE_NEW_FILE };
+  enum OpenOrCreate {
+    OPEN_EXISTING_FILE,
+    CREATE_NEW_FILE,
+    CREATE_NEW_FILE_ALWAYS
+  };
 
   // Creates a writer for the existing file in the path |file_path| starting
   // from |initial_offset|. Uses |task_runner| for async file operations.
@@ -44,6 +48,8 @@ class FileStreamWriter {
 
   // Creates a writer for the existing memory file in the path |file_path|
   // starting from |initial_offset|.
+  // TODO(mek): Remove or use |open_or_create| field here, as it is not
+  // currently used. https://crbug.com/1041048
   COMPONENT_EXPORT(STORAGE_BROWSER)
   static std::unique_ptr<FileStreamWriter> CreateForMemoryFile(
       base::WeakPtr<ObfuscatedFileUtilMemoryDelegate> memory_file_util,
