@@ -13,7 +13,6 @@ import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.view.View;
 
-import org.chromium.chrome.R;
 import org.chromium.ui.drawable.StateListDrawableBuilder;
 import org.chromium.ui.widget.CheckableImageView;
 
@@ -66,9 +65,10 @@ public class ExpandablePreferenceGroup extends PreferenceGroup {
 
         // For accessibility, read out the whole title and whether the group is collapsed/expanded.
         View view = holder.itemView;
-        String description = getTitle() + getContext().getResources().getString(mExpanded
-                ? R.string.accessibility_expanded_group
-                : R.string.accessibility_collapsed_group);
+        String description = getTitle()
+                + getContext().getResources().getString(mExpanded
+                                ? R.string.accessibility_expanded_group
+                                : R.string.accessibility_collapsed_group);
         view.setContentDescription(description);
     }
 

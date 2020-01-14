@@ -1369,7 +1369,6 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/services/gcm/GCMBackgroundTask.java",
   "java/src/org/chromium/chrome/browser/services/gcm/GcmUma.java",
   "java/src/org/chromium/chrome/browser/services/gcm/InvalidationGcmUpstreamSender.java",
-  "java/src/org/chromium/chrome/browser/settings/ExpandablePreferenceGroup.java",
   "java/src/org/chromium/chrome/browser/settings/HyperlinkPreference.java",
   "java/src/org/chromium/chrome/browser/settings/LearnMorePreference.java",
   "java/src/org/chromium/chrome/browser/settings/LocationSettings.java",
