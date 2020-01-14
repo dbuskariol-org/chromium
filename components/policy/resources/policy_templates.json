@@ -643,6 +643,7 @@
         'CursorHighlightEnabled',
         'CaretHighlightEnabled',
         'MonoAudioEnabled',
+        'AccessibilityShortcutsEnabled',
         'AutoclickEnabled',
         'DeviceLoginScreenDefaultLargeCursorEnabled',
         'DeviceLoginScreenDefaultSpokenFeedbackEnabled',
@@ -10300,6 +10301,31 @@
           If you set this policy, users cannot change or override it.
 
           If this policy is left unset, high contrast mode is disabled initially but can be enabled by the user anytime.'''
+    },
+    {
+      'name': 'AccessibilityShortcutsEnabled',
+      'owners': ['amraboelkher@chromium.org', 'emaxx@chromium.org'],
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'supported_on': ['chrome_os:81-'],
+      'features': {
+        'can_be_recommended': True,
+        'dynamic_refresh': True,
+        'per_profile': True,
+      },
+      'example_value': True,
+      'id': 659,
+      'caption': '''Enable accessibility features shortcuts''',
+      'tags': [],
+      'desc': '''Enable accessibility features shortcuts.
+
+          If this policy is set to true, accessibility features shortcuts will always be enabled.
+
+          If this policy is set to false, accessibility features shortcuts will always be disabled.
+
+          If you set this policy, users cannot change or override it.
+
+          If this policy is left unset, accessibility features shortcuts will be enabled by default.'''
     },
     {
       'name': 'VirtualKeyboardEnabled',
@@ -20243,6 +20269,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 658,
+  'highest_id_currently_used': 659,
   'highest_atomic_group_id_currently_used': 38
 }

@@ -3997,6 +3997,16 @@
     ]
   },
 
+  "AccessibilityShortcutsEnabled": {
+    "os": ["chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "AccessibilityShortcutsEnabled": true },
+        "prefs": { "settings.a11y.shortcuts_enabled": {} }
+      }
+    ]
+  },
+
   "SelectToSpeakEnabled": {
     "os": ["chromeos"],
     "policy_pref_mapping_test": [
