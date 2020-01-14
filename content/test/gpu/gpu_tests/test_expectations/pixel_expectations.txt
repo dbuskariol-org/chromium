@@ -191,6 +191,7 @@ crbug.com/1033121 [ android skia-renderer use-gl no-use-vulkan ] Pixel_Video_MP4
 crbug.com/1033121 [ android skia-renderer use-gl no-use-vulkan ] Pixel_Video_MP4_FourColors_Rot_180 [ Skip ]
 crbug.com/1033121 [ android skia-renderer use-gl no-use-vulkan ] Pixel_Video_MP4_FourColors_Rot_270 [ Skip ]
 crbug.com/1033121 [ android skia-renderer use-gl no-use-vulkan ] Pixel_Video_MP4_FourColors_Rot_90 [ Skip ]
+crbug.com/1041856 [ android skia-renderer use-gl no-use-vulkan ] Pixel_Video_MP4 [ Skip ]
 
 # Produces blank images on Intel HD 630 w/ Mesa 19.0.2
 crbug.com/976861 [ linux intel-0x5912 ] Pixel_OffscreenCanvasTransferToImageBitmap [ Skip ]
