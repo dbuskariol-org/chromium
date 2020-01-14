@@ -4,8 +4,6 @@
 
 source_set("infobars") {
   sources = [
-    "infobar_banner_overlay_request_config.h",
-    "infobar_banner_overlay_request_config.mm",
     "infobar_overlay_request_config.h",
     "infobar_overlay_request_config.mm",
   ]
