@@ -297,7 +297,7 @@ void XRSession::MetricsReporter::ReportFeatureUsed(
     case XRSessionFeature::REF_SPACE_UNBOUNDED:
       recorder_->ReportFeatureUsed(XRSessionFeature::REF_SPACE_UNBOUNDED);
       break;
-    case XRSessionFeature::DOM_OVERLAY_FOR_HANDHELD_AR:
+    case XRSessionFeature::DOM_OVERLAY:
       // Not recording metrics for this feature currently
       break;
   }
@@ -348,8 +348,8 @@ XRSession::XRSession(
 
 void XRSession::SetDOMOverlayElement(Element* element) {
   DVLOG(2) << __func__ << ": element=" << element;
-  DCHECK(enabled_features_.Contains(
-      device::mojom::XRSessionFeature::DOM_OVERLAY_FOR_HANDHELD_AR));
+  DCHECK(
+      enabled_features_.Contains(device::mojom::XRSessionFeature::DOM_OVERLAY));
   DCHECK(element);
 
   overlay_element_ = element;

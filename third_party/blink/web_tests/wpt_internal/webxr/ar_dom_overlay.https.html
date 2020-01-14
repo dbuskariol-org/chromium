@@ -27,7 +27,7 @@ let fakeDeviceInitParams = { supportedModes: ["immersive-ar"],
                              views: VALID_VIEWS,
                              viewerOrigin: IDENTITY_TRANSFORM,
                              supportedFeatures: ALL_FEATURES.concat([
-                                 'dom-overlay-for-handheld-ar'])};
+                                 'dom-overlay'])};
 
 let watcherDone = new Event("watcherdone");
 
@@ -93,14 +93,14 @@ xr_session_promise_test(
   "Ensures DOM Overlay feature works for immersive-ar",
   testFunction.bind(this, document.body),
   fakeDeviceInitParams, 'immersive-ar',
-    {requiredFeatures: ['dom-overlay-for-handheld-ar'],
+    {requiredFeatures: ['dom-overlay'],
      domOverlay: { root: document.body } });
 
 xr_session_promise_test(
   "Ensures DOM Overlay element selection works",
   testFunction.bind(this, document.getElementById('div_overlay')),
   fakeDeviceInitParams, 'immersive-ar', {
-    requiredFeatures: ['dom-overlay-for-handheld-ar'],
+    requiredFeatures: ['dom-overlay'],
     domOverlay: { root: document.getElementById('div_overlay') }
   });
 

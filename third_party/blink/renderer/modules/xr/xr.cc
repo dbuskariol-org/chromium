@@ -119,8 +119,8 @@ base::Optional<device::mojom::XRSessionFeature> StringToXRSessionFeature(
   } else if (feature_string == "unbounded") {
     return device::mojom::XRSessionFeature::REF_SPACE_UNBOUNDED;
   } else if (RuntimeEnabledFeatures::WebXRIncubationsEnabled(doc) &&
-             feature_string == "dom-overlay-for-handheld-ar") {
-    return device::mojom::XRSessionFeature::DOM_OVERLAY_FOR_HANDHELD_AR;
+             feature_string == "dom-overlay") {
+    return device::mojom::XRSessionFeature::DOM_OVERLAY;
   }
 
   return base::nullopt;
@@ -140,7 +140,7 @@ bool IsFeatureValidForMode(device::mojom::XRSessionFeature feature,
     case device::mojom::XRSessionFeature::REF_SPACE_UNBOUNDED:
       return mode == device::mojom::blink::XRSessionMode::kImmersiveVr ||
              mode == device::mojom::blink::XRSessionMode::kImmersiveAr;
-    case device::mojom::XRSessionFeature::DOM_OVERLAY_FOR_HANDHELD_AR:
+    case device::mojom::XRSessionFeature::DOM_OVERLAY:
       if (mode != device::mojom::blink::XRSessionMode::kImmersiveAr)
         return false;
       if (!session_init->hasDomOverlay()) {
@@ -165,7 +165,7 @@ bool HasRequiredFeaturePolicy(const Document* doc,
     case device::mojom::XRSessionFeature::REF_SPACE_LOCAL_FLOOR:
     case device::mojom::XRSessionFeature::REF_SPACE_BOUNDED_FLOOR:
     case device::mojom::XRSessionFeature::REF_SPACE_UNBOUNDED:
-    case device::mojom::XRSessionFeature::DOM_OVERLAY_FOR_HANDHELD_AR:
+    case device::mojom::XRSessionFeature::DOM_OVERLAY:
       return doc->IsFeatureEnabled(mojom::FeaturePolicyFeature::kWebXr,
                                    ReportOptions::kReportOnFailure);
   }

@@ -28,8 +28,8 @@ MockRuntime.prototype.getMissingFrameCount = function() {
 };
 
 // Patch in experimental features.
-MockRuntime.featureToMojoMap["dom-overlay-for-handheld-ar"] =
-    device.mojom.XRSessionFeature.DOM_OVERLAY_FOR_HANDHELD_AR;
+MockRuntime.featureToMojoMap["dom-overlay"] =
+    device.mojom.XRSessionFeature.DOM_OVERLAY;
 
 ChromeXRTest.prototype.getService = function() {
   return this.mockVRService_;
@@ -47,4 +47,3 @@ MockVRService.prototype.getFramesThrottled = function() {
 
   return this.frames_throttled_;
 };
-
