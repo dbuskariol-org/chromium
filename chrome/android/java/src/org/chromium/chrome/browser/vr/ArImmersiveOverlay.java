@@ -292,7 +292,7 @@ public class ArImmersiveOverlay
         // The JS app may have put an element into fullscreen mode during the immersive session,
         // even if this wasn't visible to the user. Ensure that we fully exit out of any active
         // fullscreen state on session end to avoid being left in a confusing state.
-        if (mActivity.getActivityTab() != null) {
+        if (mActivity.getActivityTab() != null && !mActivity.isActivityFinishingOrDestroyed()) {
             mActivity.getFullscreenManager().onExitFullscreen(mActivity.getActivityTab());
         }
 
