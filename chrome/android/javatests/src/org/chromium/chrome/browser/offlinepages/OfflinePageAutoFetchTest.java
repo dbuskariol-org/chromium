@@ -185,6 +185,7 @@ public class OfflinePageAutoFetchTest {
     @Test
     @MediumTest
     @Feature({"OfflineAutoFetch"})
+    @DisabledTest(message = "https://crbug.com/1041822")
     public void testAutoFetchTriggersOnDNSErrorWhenOffline() {
         attemptLoadPage("http://does.not.resolve.com");
         waitForRequestCount(1);
