@@ -416,7 +416,8 @@ class MostVisitedElement extends PolymerElement {
    */
   getFaviconUrl_(url) {
     const faviconUrl = new URL('chrome://favicon2/');
-    faviconUrl.searchParams.set('size', '24');
+    faviconUrl.searchParams.set('size', '32');
+    faviconUrl.searchParams.set('scale_factor', '2x');
     faviconUrl.searchParams.set('show_fallback_monogram', '');
     faviconUrl.searchParams.set('page_url', url.url);
     return faviconUrl.href;
