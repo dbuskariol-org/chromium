@@ -562,7 +562,7 @@ void Surface::SetEmbeddedSurfaceId(
 }
 
 void Surface::SetEmbeddedSurfaceSize(const gfx::Size& size) {
-  embedded_surface_size_ = gfx::SizeF(size);
+  embedded_surface_size_ = size;
 }
 
 void Surface::SetAcquireFence(std::unique_ptr<gfx::GpuFence> gpu_fence) {
@@ -1007,12 +1007,8 @@ void Surface::AppendContentsToFrame(const gfx::Point& origin,
   // Surface quads require the quad rect to be appropriately sized and need to
   // use the shared quad clip rect.
   if (get_current_surface_id_) {
-    quad_rect = gfx::Rect(content_size_);
-    // Scale the |embedded_surface_size_| to |content_size_|.
-    if (embedded_surface_size_.width() || embedded_surface_size_.height()) {
-      scale.Scale(1.0f / embedded_surface_size_.width(),
-                  1.0f / embedded_surface_size_.height());
-    }
+    quad_rect = gfx::Rect(embedded_surface_size_);
+    scale = gfx::PointF(1.0f, 1.0f);
 
     if (!state_.crop.IsEmpty()) {
       // In order to crop an AxB rect to CxD we need to scale by A/C, B/D.
@@ -1021,7 +1017,9 @@ void Surface::AppendContentsToFrame(const gfx::Point& origin,
       scale.Scale(content_size_.width() / state_.crop.width(),
                   content_size_.height() / state_.crop.height());
 
-      translate = -state_.crop.origin().OffsetFromOrigin();
+      auto offset = state_.crop.origin().OffsetFromOrigin();
+      translate =
+          gfx::Vector2dF(-offset.x() * scale.x(), -offset.y() * scale.y());
     }
   } else {
     scale.Scale(state_.buffer_scale);
