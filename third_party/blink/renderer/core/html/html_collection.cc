@@ -285,7 +285,7 @@ inline bool HTMLCollection::ElementMatches(const Element& element) const {
     case kTagCollectionNSType:
       return To<TagCollectionNS>(*this).ElementMatches(element);
     case kWindowNamedItems:
-      return ToWindowNameCollection(*this).ElementMatches(element);
+      return To<WindowNameCollection>(*this).ElementMatches(element);
     case kDocumentAllNamedItems:
       return ToDocumentAllNameCollection(*this).ElementMatches(element);
     default:
