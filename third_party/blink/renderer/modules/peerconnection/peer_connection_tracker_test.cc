@@ -131,6 +131,8 @@ class MockPeerConnectionHandler : public RTCPeerConnectionHandler {
   MockRTCPeerConnectionHandlerClient client_;
 };
 
+}  // namespace
+
 class PeerConnectionTrackerTest : public ::testing::Test {
  public:
   void CreateTrackerWithMocks() {
@@ -155,8 +157,6 @@ class PeerConnectionTrackerTest : public ::testing::Test {
   std::unique_ptr<PeerConnectionTracker> tracker_;
   std::unique_ptr<MockPeerConnectionHandler> mock_handler_;
 };
-
-}  // namespace
 
 TEST_F(PeerConnectionTrackerTest, CreatingObject) {
   PeerConnectionTracker tracker(
