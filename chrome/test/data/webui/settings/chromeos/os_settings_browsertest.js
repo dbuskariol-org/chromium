@@ -1010,6 +1010,7 @@ var OSSettingsPrinterLandingPageTest = class extends OSSettingsBrowserTest {
       BROWSER_SETTINGS_PATH + '../test_browser_proxy.js',
       BROWSER_SETTINGS_PATH + '../fake_chrome_event.js',
       BROWSER_SETTINGS_PATH + '../chromeos/fake_network_config_mojom.js',
+      'cups_printer_test_utils.js',
       'test_cups_printers_browser_proxy.js',
       'cups_printer_landing_page_tests.js',
     ]);
@@ -1035,6 +1036,7 @@ var OSSettingsPrintingPageTest = class extends OSSettingsBrowserTest {
       BROWSER_SETTINGS_PATH + '../test_util.js',
       BROWSER_SETTINGS_PATH + '../test_browser_proxy.js',
       'test_cups_printers_browser_proxy.js',
+      'cups_printer_test_utils.js',
       'cups_printer_page_tests.js',
     ]);
   }
