@@ -1279,9 +1279,7 @@ RenderFrameHostManager::GetSiteInstanceForNavigation(
     render_frame_host_->set_browsing_instance_not_swapped_reason(
         force_swap_result);
   }
-  SiteInstanceDescriptor new_instance_descriptor =
-      SiteInstanceDescriptor(current_instance);
-  new_instance_descriptor = DetermineSiteInstanceForURL(
+  SiteInstanceDescriptor new_instance_descriptor = DetermineSiteInstanceForURL(
       dest_url, source_instance, current_instance, dest_instance, transition,
       is_failure, dest_is_restore, dest_is_view_source_mode, force_swap,
       was_server_redirect);
