@@ -15,11 +15,14 @@
 #include "chrome/browser/themes/theme_service.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_commands.h"
+#include "chrome/browser/ui/tabs/tab_group.h"
+#include "chrome/browser/ui/tabs/tab_group_model.h"
 #include "chrome/browser/ui/tabs/tab_renderer_data.h"
 #include "chrome/browser/ui/tabs/tab_utils.h"
 #include "chrome/browser/ui/webui/tab_strip/tab_strip_ui_embedder.h"
 #include "chrome/browser/ui/webui/tab_strip/tab_strip_ui_metrics.h"
 #include "chrome/grit/generated_resources.h"
+#include "components/tab_groups/tab_group_id.h"
 #include "third_party/skia/include/core/SkStream.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/models/simple_menu_model.h"
@@ -212,6 +215,45 @@ void TabStripUIHandler::OnJavascriptAllowed() {
 }
 
 // TabStripModelObserver:
+void TabStripUIHandler::OnTabGroupChanged(const TabGroupChange& change) {
+  switch (change.type) {
+    case TabGroupChange::kCreated:
+    case TabGroupChange::kContentsChanged: {
+      // TabGroupChange::kCreated events are unnecessary as the front-end will
+      // assume a group was created if there is a tab-group-state-changed event
+      // with a new group ID. TabGroupChange::kContentsChanged events are
+      // handled by TabGroupStateChanged.
+      break;
+    }
+
+    case TabGroupChange::kVisualsChanged: {
+      // TODO(johntlee): Send visuals to front-end.
+      break;
+    }
+
+    case TabGroupChange::kClosed: {
+      FireWebUIListener("tab-group-closed",
+                        base::Value(change.group.ToString()));
+      break;
+    }
+  }
+}
+
+void TabStripUIHandler::TabGroupedStateChanged(
+    base::Optional<tab_groups::TabGroupId> group,
+    int index) {
+  int tab_id = extensions::ExtensionTabUtil::GetTabId(
+      browser_->tab_strip_model()->GetWebContentsAt(index));
+  if (group.has_value()) {
+    FireWebUIListener("tab-group-state-changed", base::Value(tab_id),
+                      base::Value(index),
+                      base::Value(group.value().ToString()));
+  } else {
+    FireWebUIListener("tab-group-state-changed", base::Value(tab_id),
+                      base::Value(index));
+  }
+}
+
 void TabStripUIHandler::OnTabStripModelChanged(
     TabStripModel* tab_strip_model,
     const TabStripModelChange& change,
@@ -341,6 +383,12 @@ base::DictionaryValue TabStripUIHandler::GetTabData(
                       browser_->tab_strip_model()->active_index() == index);
   tab_data.SetInteger("id", extensions::ExtensionTabUtil::GetTabId(contents));
   tab_data.SetInteger("index", index);
+
+  const base::Optional<tab_groups::TabGroupId> group_id =
+      browser_->tab_strip_model()->GetTabGroupForTab(index);
+  if (group_id.has_value()) {
+    tab_data.SetString("groupId", group_id.value().ToString());
+  }
 
   TabRendererData tab_renderer_data =
       TabRendererData::FromTabInModel(browser_->tab_strip_model(), index);
