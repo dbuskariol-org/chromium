@@ -254,7 +254,9 @@ void NGBoxFragmentPainter::Paint(const PaintInfo& paint_info) {
 }
 
 void NGBoxFragmentPainter::PaintInternal(const PaintInfo& paint_info) {
-  ScopedPaintState paint_state(box_fragment_, paint_info);
+  // Avoid initialization of Optional ScopedPaintState::chunk_properties_
+  // and ScopedPaintState::adjusted_paint_info_.
+  STACK_UNINITIALIZED ScopedPaintState paint_state(box_fragment_, paint_info);
   if (!ShouldPaint(paint_state))
     return;
 
