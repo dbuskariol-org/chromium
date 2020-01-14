@@ -780,6 +780,14 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeEarlGreyAppInterface)
   return [ChromeEarlGreyAppInterface isNewOmniboxPopupLayoutEnabled];
 }
 
+- (BOOL)isVariationEnabled:(int)variationID {
+  return [ChromeEarlGreyAppInterface isVariationEnabled:variationID];
+}
+
+- (BOOL)isTriggerVariationEnabled:(int)variationID {
+  return [ChromeEarlGreyAppInterface isTriggerVariationEnabled:variationID];
+}
+
 - (BOOL)isUMACellularEnabled {
   return [ChromeEarlGreyAppInterface isUMACellularEnabled];
 }

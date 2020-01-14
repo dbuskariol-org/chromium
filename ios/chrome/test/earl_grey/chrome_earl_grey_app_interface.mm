@@ -12,6 +12,8 @@
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "components/prefs/pref_service.h"
 #import "components/ukm/ios/features.h"
+#include "components/variations/variations_associated_data.h"
+#include "components/variations/variations_http_header_provider.h"
 #import "ios/chrome/app/main_controller.h"
 #include "ios/chrome/browser/autofill/personal_data_manager_factory.h"
 #include "ios/chrome/browser/browser_state/chrome_browser_state.h"
@@ -610,6 +612,22 @@ using chrome_test_util::BrowserCommandDispatcherForMainBVC;
 
 + (BOOL)isNewOmniboxPopupLayoutEnabled {
   return base::FeatureList::IsEnabled(kNewOmniboxPopupLayout);
+}
+
++ (BOOL)isVariationEnabled:(int)variationID {
+  variations::VariationsHttpHeaderProvider* provider =
+      variations::VariationsHttpHeaderProvider::GetInstance();
+  std::vector<variations::VariationID> ids =
+      provider->GetVariationsVector(variations::GOOGLE_WEB_PROPERTIES);
+  return std::find(ids.begin(), ids.end(), variationID) != ids.end();
+}
+
++ (BOOL)isTriggerVariationEnabled:(int)variationID {
+  variations::VariationsHttpHeaderProvider* provider =
+      variations::VariationsHttpHeaderProvider::GetInstance();
+  std::vector<variations::VariationID> ids =
+      provider->GetVariationsVector(variations::GOOGLE_WEB_PROPERTIES_TRIGGER);
+  return std::find(ids.begin(), ids.end(), variationID) != ids.end();
 }
 
 + (BOOL)isUMACellularEnabled {

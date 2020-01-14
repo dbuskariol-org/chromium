@@ -348,6 +348,12 @@
 // Returns YES if NewOmniboxPopupLayout feature is enabled.
 + (BOOL)isNewOmniboxPopupLayoutEnabled WARN_UNUSED_RESULT;
 
+// Returns YES if |variationID| is enabled.
++ (BOOL)isVariationEnabled:(int)variationID;
+
+// Returns YES if a variation triggering server-side behavior is enabled.
++ (BOOL)isTriggerVariationEnabled:(int)variationID;
+
 // Returns YES if UmaCellular feature is enabled.
 + (BOOL)isUMACellularEnabled WARN_UNUSED_RESULT;
 
