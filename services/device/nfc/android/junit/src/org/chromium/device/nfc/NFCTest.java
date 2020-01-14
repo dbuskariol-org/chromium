@@ -578,21 +578,56 @@ public class NFCTest {
     @Test(expected = InvalidNdefMessageException.class)
     @Feature({"NFCTest"})
     public void testInvalidExternalRecordType() throws InvalidNdefMessageException {
+        NdefRecord extMojoNdefRecord = new NdefRecord();
+        extMojoNdefRecord.category = NdefRecordTypeCategory.EXTERNAL;
+        extMojoNdefRecord.data = ApiCompatibilityUtils.getBytesUtf8(TEST_TEXT);
         {
-            NdefRecord extMojoNdefRecord = new NdefRecord();
-            extMojoNdefRecord.category = NdefRecordTypeCategory.EXTERNAL;
             // Must have a ':'.
             extMojoNdefRecord.recordType = "abc.com";
-            extMojoNdefRecord.data = ApiCompatibilityUtils.getBytesUtf8(TEST_TEXT);
             NdefMessage extMojoNdefMessage = createMojoNdefMessage(extMojoNdefRecord);
             android.nfc.NdefMessage extNdefMessage =
                     NdefMessageUtils.toNdefMessage(extMojoNdefMessage);
             assertNull(extNdefMessage);
         }
         {
-            NdefRecord extMojoNdefRecord = new NdefRecord();
-            extMojoNdefRecord.category = NdefRecordTypeCategory.EXTERNAL;
-            extMojoNdefRecord.data = ApiCompatibilityUtils.getBytesUtf8(TEST_TEXT);
+            // '-' is allowed in the domain part.
+            extMojoNdefRecord.recordType = "abc-123.com:xyz";
+            NdefMessage extMojoNdefMessage = createMojoNdefMessage(extMojoNdefRecord);
+            android.nfc.NdefMessage extNdefMessage =
+                    NdefMessageUtils.toNdefMessage(extMojoNdefMessage);
+            assertNotNull(extNdefMessage);
+            assertEquals(1, extNdefMessage.getRecords().length);
+            assertEquals(android.nfc.NdefRecord.TNF_EXTERNAL_TYPE,
+                    extNdefMessage.getRecords()[0].getTnf());
+            assertEquals("abc-1.com:xyz", new String(extNdefMessage.getRecords()[0].getType()));
+            assertEquals(DUMMY_RECORD_ID, new String(extNdefMessage.getRecords()[0].getId()));
+            assertEquals(TEST_TEXT, new String(extNdefMessage.getRecords()[0].getPayload()));
+        }
+        {
+            // '-' is not allowed in the type part.
+            extMojoNdefRecord.recordType = "abc.com:xyz-123";
+            NdefMessage extMojoNdefMessage = createMojoNdefMessage(extMojoNdefRecord);
+            android.nfc.NdefMessage extNdefMessage =
+                    NdefMessageUtils.toNdefMessage(extMojoNdefMessage);
+            assertNull(extNdefMessage);
+        }
+        {
+            // As the 2 cases above have proved that '-' is allowed in the domain part but not
+            // allowed in the type part, from this case we can say that the first occurrence of
+            // ':' is used to separate the domain part and the type part, i.e. "xyz-123:uvw" is
+            // separated as the type part and is treated as invalid due to the existence of '-'.
+            extMojoNdefRecord.recordType = "abc.com:xyz-123:uvw";
+            NdefMessage extMojoNdefMessage = createMojoNdefMessage(extMojoNdefRecord);
+            android.nfc.NdefMessage extNdefMessage =
+                    NdefMessageUtils.toNdefMessage(extMojoNdefMessage);
+            assertNull(extNdefMessage);
+        }
+        {
+            // |recordType| is a string mixed with ASCII/non-ASCII, FAIL.
+            extMojoNdefRecord.recordType = "example.com:hellö";
+            android.nfc.NdefMessage extNdefMessage_nonASCII =
+                    NdefMessageUtils.toNdefMessage(createMojoNdefMessage(extMojoNdefRecord));
+            assertNull(extNdefMessage_nonASCII);
 
             char[] chars = new char[251];
             Arrays.fill(chars, 'a');
@@ -611,11 +646,8 @@ public class NFCTest {
             assertNull(extNdefMessage_256);
         }
         {
-            NdefRecord extMojoNdefRecord = new NdefRecord();
-            extMojoNdefRecord.category = NdefRecordTypeCategory.EXTERNAL;
-            // '/' is not allowed.
+            // '/' is not allowed in the type part.
             extMojoNdefRecord.recordType = "abc.com:xyz/";
-            extMojoNdefRecord.data = ApiCompatibilityUtils.getBytesUtf8(TEST_TEXT);
             NdefMessage extMojoNdefMessage = createMojoNdefMessage(extMojoNdefRecord);
             android.nfc.NdefMessage extNdefMessage =
                     NdefMessageUtils.toNdefMessage(extMojoNdefMessage);

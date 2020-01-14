@@ -72,13 +72,20 @@ bool GetBytesOfBufferSource(const NDEFRecordDataSource& buffer_source,
 // https://w3c.github.io/web-nfc/#dfn-validate-external-type
 // Validates |input| as an external type.
 bool IsValidExternalType(const String& input) {
-  static const String kOtherCharsForCustomType("()+,-=@;$_*'.");
+  static const String kOtherCharsForCustomType(":!()+,-=@;$_*'.");
 
+  // Ensure |input| is an ASCII string.
+  if (!input.ContainsOnlyASCIIOrEmpty())
+    return false;
+
+  // As all characters in |input| is ASCII, limiting its length within 255 just
+  // limits the length of its utf-8 encoded bytes we finally write into the
+  // record payload.
   if (input.IsEmpty() || input.length() > 255)
     return false;
 
-  // Finds the last occurrence of ':'.
-  wtf_size_t colon_index = input.ReverseFind(':');
+  // Finds the first occurrence of ':'.
+  wtf_size_t colon_index = input.find(':');
   if (colon_index == kNotFound)
     return false;
 
@@ -86,9 +93,7 @@ bool IsValidExternalType(const String& input) {
   String domain = input.Left(colon_index);
   if (domain.IsEmpty())
     return false;
-  // TODO(https://crbug.com/520391): Make sure |domain| can be converted
-  // successfully to ASCII using IDN rules and does not contain any forbidden
-  // host code point.
+  // TODO(https://crbug.com/520391): Validate |domain|.
 
   // Validates the type (the part after ':').
   String type = input.Substring(colon_index + 1);
