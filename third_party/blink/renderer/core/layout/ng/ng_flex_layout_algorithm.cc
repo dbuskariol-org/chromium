@@ -370,6 +370,9 @@ void NGFlexLayoutAlgorithm::ConstructAndAppendFlexItems() {
     LayoutUnit main_axis_border_padding =
         is_horizontal_flow_ ? physical_border_padding.HorizontalSum()
                             : physical_border_padding.VerticalSum();
+    LayoutUnit cross_axis_border_padding =
+        is_horizontal_flow_ ? physical_border_padding.VerticalSum()
+                            : physical_border_padding.HorizontalSum();
     LayoutUnit main_axis_border_scrollbar_padding =
         is_horizontal_flow_ ? physical_border_scrollbar_padding.HorizontalSum()
                             : physical_border_scrollbar_padding.VerticalSum();
@@ -548,11 +551,11 @@ void NGFlexLayoutAlgorithm::ConstructAndAppendFlexItems() {
     NGPhysicalBoxStrut physical_child_margins =
         ComputePhysicalMargins(flex_basis_space, child_style);
     algorithm_
-        ->emplace_back(child.GetLayoutBox(), child.Style(),
-                       flex_base_content_size,
+        ->emplace_back(nullptr, child.Style(), flex_base_content_size,
                        min_max_sizes_in_main_axis_direction,
                        min_max_sizes_in_cross_axis_direction,
-                       main_axis_border_padding, physical_child_margins)
+                       main_axis_border_padding, cross_axis_border_padding,
+                       physical_child_margins)
         .ng_input_node = child;
   }
 }
