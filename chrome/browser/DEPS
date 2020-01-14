@@ -214,7 +214,7 @@ include_rules = [
   "+components/services/heap_profiling",
   "+components/services/patch/content",
   "+components/services/patch/public",
-  "+components/services/pdf_compositor/public",
+  "+components/services/print_compositor/public",
   "+components/services/quarantine",
   '+components/services/storage/public',
   "+components/services/unzip",

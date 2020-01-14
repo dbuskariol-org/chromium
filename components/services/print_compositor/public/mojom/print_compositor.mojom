@@ -8,7 +8,7 @@ import "components/discardable_memory/public/mojom/discardable_shared_memory_man
 import "mojo/public/mojom/base/shared_memory.mojom";
 import "url/mojom/url.mojom";
 
-interface PdfCompositor {
+interface PrintCompositor {
   // The status of composition and conversion execution.
   // These values are persisted to logs. Entries should not be renumbered and
   // numeric values should never be reused.

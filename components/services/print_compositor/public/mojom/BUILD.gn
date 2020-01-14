@@ -5,7 +5,7 @@
 import("//mojo/public/tools/bindings/mojom.gni")
 
 mojom("mojom") {
-  sources = [ "pdf_compositor.mojom" ]
+  sources = [ "print_compositor.mojom" ]
   public_deps = [
     "//components/discardable_memory/public/mojom",
     "//mojo/public/mojom/base",

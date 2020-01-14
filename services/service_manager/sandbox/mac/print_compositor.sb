@@ -2,7 +2,7 @@
 ;; Use of this source code is governed by a BSD-style license that can be
 ;; found in the LICENSE file.
 ;;
-; This is the sandbox configuration file used for safeguarding the pdf
+; This is the sandbox configuration file used for safeguarding the print
 ; compositor service which is used for compositing web contents printed from
 ; different renderer processes.
 ;

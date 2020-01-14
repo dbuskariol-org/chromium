@@ -4379,8 +4379,8 @@ jumbo_static_library("browser") {
     ]
     deps += [
       "//components/printing/browser",
-      "//components/services/pdf_compositor/public/cpp",
-      "//components/services/pdf_compositor/public/mojom",
+      "//components/services/print_compositor/public/cpp",
+      "//components/services/print_compositor/public/mojom",
       "//printing",
     ]
 

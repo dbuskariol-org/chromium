@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/service_manager/sandbox/linux/bpf_pdf_compositor_policy_linux.h"
+#include "services/service_manager/sandbox/linux/bpf_print_compositor_policy_linux.h"
 
 #include <errno.h>
 
@@ -20,10 +20,10 @@ using sandbox::bpf_dsl::ResultExpr;
 
 namespace service_manager {
 
-PdfCompositorProcessPolicy::PdfCompositorProcessPolicy() {}
-PdfCompositorProcessPolicy::~PdfCompositorProcessPolicy() {}
+PrintCompositorProcessPolicy::PrintCompositorProcessPolicy() {}
+PrintCompositorProcessPolicy::~PrintCompositorProcessPolicy() {}
 
-ResultExpr PdfCompositorProcessPolicy::EvaluateSyscall(int sysno) const {
+ResultExpr PrintCompositorProcessPolicy::EvaluateSyscall(int sysno) const {
   // TODO(weili): the current set of policy is exactly same as utility process
   // policy. Check whether we can trim further.
   switch (sysno) {

@@ -8,8 +8,8 @@
     </if>
   </if>
 
-  <message name="IDS_PDF_COMPOSITOR_SERVICE_DISPLAY_NAME" desc="The display name (in the system task manager, etc) of the service process used for PDF compositing.">
-    PDF Compositor Service
+  <message name="IDS_PRINT_COMPOSITOR_SERVICE_DISPLAY_NAME" desc="The display name (in the system task manager, etc) of the service process used for PDF compositing.">
+    Print Compositor Service
   </message>
 
   <if expr="chromeos">

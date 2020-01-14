@@ -4,10 +4,10 @@
 
 import("//printing/buildflags/buildflags.gni")
 
-static_library("pdf_compositor") {
+static_library("print_compositor") {
   sources = [
-    "pdf_compositor_impl.cc",
-    "pdf_compositor_impl.h",
+    "print_compositor_impl.cc",
+    "print_compositor_impl.h",
   ]
 
   deps = [
@@ -15,7 +15,7 @@ static_library("pdf_compositor") {
     "//components/crash/core/common:crash_key",
     "//components/discardable_memory/client",
     "//components/discardable_memory/public/mojom",
-    "//components/services/pdf_compositor/public/cpp",
+    "//components/services/print_compositor/public/cpp",
     "//content/public/utility",
     "//printing/common",
     "//skia",
@@ -27,13 +27,13 @@ static_library("pdf_compositor") {
     deps += [ "//content/public/child" ]
   }
 
-  public_deps = [ "//components/services/pdf_compositor/public/mojom" ]
+  public_deps = [ "//components/services/print_compositor/public/mojom", ]
 }
 
 if (enable_basic_printing) {
   source_set("unit_tests") {
     testonly = true
-    sources = [ "pdf_compositor_impl_unittest.cc" ]
+    sources = [ "print_compositor_impl_unittest.cc" ]
 
     include_dirs = [
       "//skia/config",
@@ -42,13 +42,13 @@ if (enable_basic_printing) {
     ]
 
     deps = [
-      ":pdf_compositor",
+      ":print_compositor",
       "//base",
       "//base/test:test_support",
       "//cc/paint:paint",
       "//components/crash/core/common:crash_key",
-      "//components/services/pdf_compositor/public/cpp",
-      "//components/services/pdf_compositor/public/mojom",
+      "//components/services/print_compositor/public/cpp",
+      "//components/services/print_compositor/public/mojom",
       "//skia",
       "//testing/gmock",
       "//testing/gtest",

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SERVICES_PDF_COMPOSITOR_PDF_COMPOSITOR_IMPL_H_
-#define COMPONENTS_SERVICES_PDF_COMPOSITOR_PDF_COMPOSITOR_IMPL_H_
+#ifndef COMPONENTS_SERVICES_PRINT_COMPOSITOR_PRINT_COMPOSITOR_IMPL_H_
+#define COMPONENTS_SERVICES_PRINT_COMPOSITOR_PRINT_COMPOSITOR_IMPL_H_
 
 #include <map>
 #include <memory>
@@ -17,8 +17,8 @@
 #include "base/memory/ref_counted_memory.h"
 #include "base/memory/scoped_refptr.h"
 #include "base/optional.h"
-#include "components/services/pdf_compositor/public/cpp/pdf_service_mojo_types.h"
-#include "components/services/pdf_compositor/public/mojom/pdf_compositor.mojom.h"
+#include "components/services/print_compositor/public/cpp/print_service_mojo_types.h"
+#include "components/services/print_compositor/public/mojom/print_compositor.mojom.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/receiver.h"
 #include "third_party/skia/include/core/SkPicture.h"
@@ -37,7 +37,7 @@ class ClientDiscardableSharedMemoryManager;
 
 namespace printing {
 
-class PdfCompositorImpl : public mojom::PdfCompositor {
+class PrintCompositorImpl : public mojom::PrintCompositor {
  public:
   // Creates an instance with an optional Mojo receiver (may be null) and
   // optional initialization of the runtime environment necessary for
@@ -45,12 +45,13 @@ class PdfCompositorImpl : public mojom::PdfCompositor {
   // management, if and only if |SetDiscardableSharedMemoryManager()| is
   // eventually called, which may not be the case in unit tests. In practice,
   // |initialize_environment| is only false in unit tests.
-  PdfCompositorImpl(mojo::PendingReceiver<mojom::PdfCompositor> receiver,
-                    bool initialize_environment,
-                    scoped_refptr<base::SingleThreadTaskRunner> io_task_runner);
-  ~PdfCompositorImpl() override;
+  PrintCompositorImpl(
+      mojo::PendingReceiver<mojom::PrintCompositor> receiver,
+      bool initialize_environment,
+      scoped_refptr<base::SingleThreadTaskRunner> io_task_runner);
+  ~PrintCompositorImpl() override;
 
-  // mojom::PdfCompositor
+  // mojom::PrintCompositor
   void SetDiscardableSharedMemoryManager(
       mojo::PendingRemote<
           discardable_memory::mojom::DiscardableSharedMemoryManager> manager)
@@ -64,37 +65,38 @@ class PdfCompositorImpl : public mojom::PdfCompositor {
       uint64_t frame_guid,
       base::ReadOnlySharedMemoryRegion serialized_content,
       const ContentToFrameMap& subframe_content_map,
-      mojom::PdfCompositor::CompositePageToPdfCallback callback) override;
+      mojom::PrintCompositor::CompositePageToPdfCallback callback) override;
   void CompositeDocumentToPdf(
       uint64_t frame_guid,
       base::ReadOnlySharedMemoryRegion serialized_content,
       const ContentToFrameMap& subframe_content_map,
-      mojom::PdfCompositor::CompositeDocumentToPdfCallback callback) override;
+      mojom::PrintCompositor::CompositeDocumentToPdfCallback callback) override;
   void PrepareForDocumentToPdf(
-      mojom::PdfCompositor::PrepareForDocumentToPdfCallback callback) override;
+      mojom::PrintCompositor::PrepareForDocumentToPdfCallback callback)
+      override;
   void CompleteDocumentToPdf(
       uint32_t page_count,
-      mojom::PdfCompositor::CompleteDocumentToPdfCallback callback) override;
+      mojom::PrintCompositor::CompleteDocumentToPdfCallback callback) override;
   void SetWebContentsURL(const GURL& url) override;
   void SetUserAgent(const std::string& user_agent) override;
 
  protected:
   // This is the uniform underlying type for both
-  // mojom::PdfCompositor::CompositePageToPdfCallback and
-  // mojom::PdfCompositor::CompositeDocumentToPdfCallback.
+  // mojom::PrintCompositor::CompositePageToPdfCallback and
+  // mojom::PrintCompositor::CompositeDocumentToPdfCallback.
   using CompositeToPdfCallback =
-      base::OnceCallback<void(PdfCompositor::Status,
+      base::OnceCallback<void(PrintCompositor::Status,
                               base::ReadOnlySharedMemoryRegion)>;
 
   using PrepareForDocumentToPdfCallback =
-      base::OnceCallback<void(PdfCompositor::Status)>;
+      base::OnceCallback<void(PrintCompositor::Status)>;
   using CompleteDocumentToPdfCallback =
-      base::OnceCallback<void(PdfCompositor::Status,
+      base::OnceCallback<void(PrintCompositor::Status,
                               base::ReadOnlySharedMemoryRegion)>;
 
   // The core function for content composition and conversion to a pdf file.
   // Make this function virtual so tests can override it.
-  virtual mojom::PdfCompositor::Status CompositeToPdf(
+  virtual mojom::PrintCompositor::Status CompositeToPdf(
       base::ReadOnlySharedMemoryMapping shared_mem,
       const ContentToFrameMap& subframe_content_map,
       base::ReadOnlySharedMemoryRegion* region);
@@ -107,10 +109,10 @@ class PdfCompositorImpl : public mojom::PdfCompositor {
   virtual void CompleteDocumentRequest(CompleteDocumentToPdfCallback callback);
 
  private:
-  FRIEND_TEST_ALL_PREFIXES(PdfCompositorImplTest, IsReadyToComposite);
-  FRIEND_TEST_ALL_PREFIXES(PdfCompositorImplTest, MultiLayerDependency);
-  FRIEND_TEST_ALL_PREFIXES(PdfCompositorImplTest, DependencyLoop);
-  friend class MockCompletionPdfCompositorImpl;
+  FRIEND_TEST_ALL_PREFIXES(PrintCompositorImplTest, IsReadyToComposite);
+  FRIEND_TEST_ALL_PREFIXES(PrintCompositorImplTest, MultiLayerDependency);
+  FRIEND_TEST_ALL_PREFIXES(PrintCompositorImplTest, DependencyLoop);
+  friend class MockCompletionPrintCompositorImpl;
 
   // The map needed during content deserialization. It stores the mapping
   // between content id and its actual content.
@@ -211,9 +213,9 @@ class PdfCompositorImpl : public mojom::PdfCompositor {
   // Document content composition support functions when document is compiled
   // using individual pages' content.  These are not used when document is
   // composited with a separate metafile object.
-  mojom::PdfCompositor::Status PrepareForDocumentToPdf();
-  mojom::PdfCompositor::Status UpdateDocumentMetadata(uint32_t page_count);
-  mojom::PdfCompositor::Status CompleteDocumentToPdf(
+  mojom::PrintCompositor::Status PrepareForDocumentToPdf();
+  mojom::PrintCompositor::Status UpdateDocumentMetadata(uint32_t page_count);
+  mojom::PrintCompositor::Status CompleteDocumentToPdf(
       base::ReadOnlySharedMemoryRegion* region);
 
   // Composite the content of a subframe.
@@ -222,7 +224,7 @@ class PdfCompositorImpl : public mojom::PdfCompositor {
   DeserializationContext GetDeserializationContext(
       const ContentToFrameMap& subframe_content_map);
 
-  mojo::Receiver<mojom::PdfCompositor> receiver_{this};
+  mojo::Receiver<mojom::PrintCompositor> receiver_{this};
 
   const scoped_refptr<base::SingleThreadTaskRunner> io_task_runner_;
   std::unique_ptr<discardable_memory::ClientDiscardableSharedMemoryManager>
@@ -239,9 +241,9 @@ class PdfCompositorImpl : public mojom::PdfCompositor {
   std::vector<std::unique_ptr<RequestInfo>> requests_;
   std::unique_ptr<DocumentInfo> docinfo_;
 
-  DISALLOW_COPY_AND_ASSIGN(PdfCompositorImpl);
+  DISALLOW_COPY_AND_ASSIGN(PrintCompositorImpl);
 };
 
 }  // namespace printing
 
-#endif  // COMPONENTS_SERVICES_PDF_COMPOSITOR_PDF_COMPOSITOR_IMPL_H_
+#endif  // COMPONENTS_SERVICES_PRINT_COMPOSITOR_PRINT_COMPOSITOR_IMPL_H_
