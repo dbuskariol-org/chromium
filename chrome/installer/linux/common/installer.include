@@ -391,7 +391,7 @@ stage_install_common() {
         exit 1
       fi
       local expected_perms=777
-    elif [ "${base_name}" = "${PROGNAME}-sandbox" ]; then
+    elif [ "${base_name}" = "chrome-sandbox" ]; then
       local expected_perms=4755
     elif [[ "${base_name}" = "nacl_irt_"*".nexe" ]]; then
       local expected_perms=644
