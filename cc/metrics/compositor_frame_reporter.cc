@@ -145,9 +145,11 @@ std::string HistogramName(const int report_type_index,
 
 CompositorFrameReporter::CompositorFrameReporter(
     const base::flat_set<FrameSequenceTrackerType>* active_trackers,
+    const viz::BeginFrameId& id,
     LatencyUkmReporter* latency_ukm_reporter,
     bool is_single_threaded)
-    : is_single_threaded_(is_single_threaded),
+    : frame_id_(id),
+      is_single_threaded_(is_single_threaded),
       active_trackers_(active_trackers),
       latency_ukm_reporter_(latency_ukm_reporter) {
   TRACE_EVENT_ASYNC_BEGIN1("cc,benchmark", "PipelineReporter", this,

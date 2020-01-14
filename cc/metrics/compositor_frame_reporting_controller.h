@@ -49,16 +49,19 @@ class CC_EXPORT CompositorFrameReportingController {
       const CompositorFrameReportingController&) = delete;
 
   // Events to signal Beginning/Ending of phases.
-  virtual void WillBeginImplFrame();
-  virtual void WillBeginMainFrame();
-  virtual void BeginMainFrameAborted();
+  virtual void WillBeginImplFrame(const viz::BeginFrameId& id);
+  virtual void WillBeginMainFrame(const viz::BeginFrameId& id);
+  virtual void BeginMainFrameAborted(const viz::BeginFrameId& id);
   virtual void WillInvalidateOnImplSide();
   virtual void WillCommit();
   virtual void DidCommit();
   virtual void WillActivate();
   virtual void DidActivate();
-  virtual void DidSubmitCompositorFrame(uint32_t frame_token);
-  virtual void OnFinishImplFrame();
+  virtual void DidSubmitCompositorFrame(
+      uint32_t frame_token,
+      const viz::BeginFrameId& current_frame_id,
+      const viz::BeginFrameId& last_activated_frame_id);
+  virtual void OnFinishImplFrame(const viz::BeginFrameId& id);
   virtual void DidPresentCompositorFrame(
       uint32_t frame_token,
       const viz::FrameTimingDetails& details);
@@ -88,6 +91,8 @@ class CC_EXPORT CompositorFrameReportingController {
 
  private:
   void AdvanceReporterStage(PipelineStage start, PipelineStage target);
+
+  viz::BeginFrameId last_submitted_frame_id_;
 
   // Used by the managed reporters to differentiate the histogram names when
   // reporting to UMA.
