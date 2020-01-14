@@ -163,6 +163,12 @@ const base::Feature kDisableKeepaliveFetch{"DisableKeepaliveFetch",
 const base::Feature kOutOfBlinkFrameAncestors{"OutOfBlinkFrameAncestors",
                                               base::FEATURE_ENABLED_BY_DEFAULT};
 
+// Attach the origin of the destination URL to the "origin" header
+const base::Feature
+    kDeriveOriginFromUrlForNeitherGetNorHeadRequestWhenHavingSpecialAccess{
+        "DeriveOriginFromUrlForNeitherGetNorHeadRequestWhenHavingSpecialAccess",
+        base::FEATURE_DISABLED_BY_DEFAULT};
+
 bool ShouldEnableOutOfBlinkCorsForTesting() {
   return base::FeatureList::IsEnabled(features::kOutOfBlinkCors);
 }
