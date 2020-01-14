@@ -457,6 +457,9 @@ void NGBoxFragmentPainter::PaintBlockFlowContents(
     return;
   }
 
+  // Trying to rule out a null GraphicsContext, see: https://crbug.com/1040298
+  CHECK(&paint_info.context);
+
   // Check if there were contents to be painted and return early if none.
   // The union of |ContentsInkOverflow()| and |LocalRect()| covers the rect to
   // check, in both cases of:
