@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// The history system runs on a background thread so that potentially slow
+// The history system runs on a background sequence so that potentially slow
 // database operations don't delay the browser. This backend processing is
 // represented by HistoryBackend. The HistoryService's job is to dispatch to
 // that thread.
 //
-// Main thread                       History thread
+// Main thread                       backend_task_runner_
 // -----------                       --------------
 // HistoryService <----------------> HistoryBackend
 //                                   -> HistoryDatabase
