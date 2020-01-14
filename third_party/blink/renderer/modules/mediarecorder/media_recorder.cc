@@ -404,6 +404,12 @@ void MediaRecorder::StopRecording() {
     // never started.
     return;
   }
+  if (!recorder_handler_) {
+    // This may happen when ContextDestroyed has executed, but the
+    // MediaRecorderHandler still exists and all tracks
+    // have ended leading to a call to OnAllTracksEnded.
+    return;
+  }
   state_ = State::kInactive;
 
   recorder_handler_->Stop();
