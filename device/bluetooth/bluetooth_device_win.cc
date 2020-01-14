@@ -98,7 +98,9 @@ bool BluetoothDeviceWin::IsConnected() const {
 }
 
 bool BluetoothDeviceWin::IsGattConnected() const {
-  return gatt_connected_;
+  // If a BLE device is not GATT connected, Windows will automatically
+  // reconnect.
+  return is_low_energy_;
 }
 
 bool BluetoothDeviceWin::IsConnectable() const {
@@ -222,7 +224,7 @@ bool BluetoothDeviceWin::IsEqual(
       bluetooth_class_ != device_state.bluetooth_class ||
       visible_ != device_state.visible ||
       connected_ != device_state.connected ||
-      gatt_connected_ == device_state.is_bluetooth_classic() ||
+      is_low_energy_ == device_state.is_bluetooth_classic() ||
       paired_ != device_state.authenticated) {
     return false;
   }
@@ -263,9 +265,7 @@ void BluetoothDeviceWin::Update(
   bluetooth_class_ = device_state.bluetooth_class;
   visible_ = device_state.visible;
   connected_ = device_state.connected;
-  // If a BLE device is not GATT connected, Windows will automatically
-  // reconnect.
-  gatt_connected_ = !device_state.is_bluetooth_classic();
+  is_low_energy_ = !device_state.is_bluetooth_classic();
   paired_ = device_state.authenticated;
   UpdateServices(device_state);
 }

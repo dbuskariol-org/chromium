@@ -150,7 +150,7 @@ class DEVICE_BLUETOOTH_EXPORT BluetoothDeviceWin
   // the device.
   bool paired_;
   bool connected_;
-  bool gatt_connected_;
+  bool is_low_energy_;
 
   // Used to send change notifications when a device disappears during
   // discovery.
