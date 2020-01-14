@@ -249,6 +249,9 @@
   <message name="IDS_SETTINGS_CAPTIONS_DEFAULT_SETTING" desc="Name of the default setting for the caption text.">
     Default
   </message>
+  <message name="IDS_SETTINGS_CAPTIONS_ENABLE_LIVE_CAPTION" desc="Name of the setting to enable Live Caption.">
+    Enable Live Caption
+  </message>
   <message name="IDS_SETTINGS_ACCESSIBILITY" desc="Name of the settings page which displays accessibility preferences.">
     Accessibility
   </message>

@@ -250,6 +250,7 @@ void AddA11yStrings(content::WebUIDataSource* html_source) {
     {"captionsColorCyan", IDS_SETTINGS_CAPTIONS_COLOR_CYAN},
     {"captionsColorMagenta", IDS_SETTINGS_CAPTIONS_COLOR_MAGENTA},
     {"captionsDefaultSetting", IDS_SETTINGS_CAPTIONS_DEFAULT_SETTING},
+    {"captionsEnableLiveCaption", IDS_SETTINGS_CAPTIONS_ENABLE_LIVE_CAPTION},
     {"settingsSliderRoleDescription",
      IDS_SETTINGS_SLIDER_MIN_MAX_ARIA_ROLE_DESCRIPTION},
 #if defined(OS_CHROMEOS)
@@ -410,6 +411,9 @@ void AddA11yStrings(content::WebUIDataSource* html_source) {
   html_source->AddBoolean(
       "enableCaptionSettings",
       base::FeatureList::IsEnabled(features::kCaptionSettings));
+
+  html_source->AddBoolean("enableLiveCaption",
+                          base::FeatureList::IsEnabled(media::kLiveCaption));
 
 #if defined(OS_WIN)
   html_source->AddBoolean("isWindows10OrNewer",
