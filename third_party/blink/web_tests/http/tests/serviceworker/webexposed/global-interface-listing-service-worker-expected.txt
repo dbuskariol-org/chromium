@@ -1236,6 +1236,7 @@ interface QuicTransport
     attribute @@toStringTag
     method close
     method constructor
+    method sendDatagrams
 interface ReadableStream
     attribute @@toStringTag
     getter locked

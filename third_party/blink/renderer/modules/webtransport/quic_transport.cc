@@ -4,20 +4,119 @@
 
 #include "third_party/blink/renderer/modules/webtransport/quic_transport.h"
 
+#include <stdint.h>
+
 #include <utility>
 
+#include "base/numerics/safe_conversions.h"
 #include "mojo/public/cpp/bindings/remote.h"
 #include "third_party/blink/public/common/browser_interface_broker_proxy.h"
 #include "third_party/blink/public/mojom/webtransport/quic_transport_connector.mojom-blink.h"
 #include "third_party/blink/public/platform/task_type.h"
+#include "third_party/blink/renderer/bindings/core/v8/script_promise.h"
+#include "third_party/blink/renderer/bindings/core/v8/script_promise_resolver.h"
+#include "third_party/blink/renderer/bindings/core/v8/v8_array_buffer.h"
+#include "third_party/blink/renderer/bindings/core/v8/v8_array_buffer_view.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/core/frame/csp/content_security_policy.h"
+#include "third_party/blink/renderer/core/streams/underlying_sink_base.h"
+#include "third_party/blink/renderer/core/streams/writable_stream.h"
+#include "third_party/blink/renderer/core/typed_arrays/dom_typed_array.h"
 #include "third_party/blink/renderer/platform/bindings/exception_code.h"
 #include "third_party/blink/renderer/platform/bindings/exception_state.h"
 #include "third_party/blink/renderer/platform/bindings/script_state.h"
+#include "third_party/blink/renderer/platform/heap/persistent.h"
+#include "third_party/blink/renderer/platform/heap/visitor.h"
+#include "third_party/blink/renderer/platform/wtf/functional.h"
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 
 namespace blink {
+
+// Sends a datagram on write().
+class QuicTransport::DatagramUnderlyingSink final : public UnderlyingSinkBase {
+ public:
+  explicit DatagramUnderlyingSink(QuicTransport* quic_transport)
+      : quic_transport_(quic_transport) {}
+
+  ScriptPromise start(ScriptState* script_state,
+                      WritableStreamDefaultController*,
+                      ExceptionState&) override {
+    return ScriptPromise::CastUndefined(script_state);
+  }
+
+  ScriptPromise write(ScriptState* script_state,
+                      ScriptValue chunk,
+                      WritableStreamDefaultController*,
+                      ExceptionState& exception_state) override {
+    auto v8chunk = chunk.V8Value();
+    if (v8chunk->IsArrayBuffer()) {
+      DOMArrayBuffer* data =
+          V8ArrayBuffer::ToImpl(v8chunk.As<v8::ArrayBuffer>());
+      return SendDatagram({static_cast<const uint8_t*>(data->Data()),
+                           data->ByteLengthAsSizeT()});
+    }
+
+    auto* isolate = script_state->GetIsolate();
+    if (v8chunk->IsArrayBufferView()) {
+      NotShared<DOMArrayBufferView> data =
+          ToNotShared<NotShared<DOMArrayBufferView>>(isolate, v8chunk,
+                                                     exception_state);
+      if (exception_state.HadException()) {
+        return ScriptPromise();
+      }
+
+      return SendDatagram(
+          {static_cast<const uint8_t*>(data.View()->buffer()->Data()) +
+               data.View()->byteOffsetAsSizeT(),
+           data.View()->byteLengthAsSizeT()});
+    }
+
+    exception_state.ThrowTypeError(
+        "Datagram is not an ArrayBuffer or ArrayBufferView type.");
+    return ScriptPromise();
+  }
+
+  ScriptPromise close(ScriptState* script_state, ExceptionState&) override {
+    quic_transport_ = nullptr;
+    return ScriptPromise::CastUndefined(script_state);
+  }
+
+  ScriptPromise abort(ScriptState* script_state,
+                      ScriptValue reason,
+                      ExceptionState&) override {
+    quic_transport_ = nullptr;
+    return ScriptPromise::CastUndefined(script_state);
+  }
+
+  void Trace(Visitor* visitor) override {
+    visitor->Trace(quic_transport_);
+    UnderlyingSinkBase::Trace(visitor);
+  }
+
+ private:
+  ScriptPromise SendDatagram(base::span<const uint8_t> data) {
+    if (!quic_transport_->quic_transport_) {
+      // Silently drop the datagram if we are not connected.
+      // TODO(ricea): Change the behaviour if the standard changes. See
+      // https://github.com/WICG/web-transport/issues/93.
+      return ScriptPromise::CastUndefined(quic_transport_->script_state_);
+    }
+
+    auto* resolver = MakeGarbageCollected<ScriptPromiseResolver>(
+        quic_transport_->script_state_);
+    quic_transport_->quic_transport_->SendDatagram(
+        data, WTF::Bind(&DatagramSent, WrapPersistent(resolver)));
+    return resolver->Promise();
+  }
+
+  // |sent| indicates whether the datagram was sent or dropped. Currently we
+  // |don't do anything with this information.
+  static void DatagramSent(ScriptPromiseResolver* resolver, bool sent) {
+    resolver->Resolve();
+  }
+
+  Member<QuicTransport> quic_transport_;
+};
 
 QuicTransport* QuicTransport::Create(ScriptState* script_state,
                                      const String& url,
@@ -33,11 +132,21 @@ QuicTransport::QuicTransport(PassKey,
                              ScriptState* script_state,
                              const String& url)
     : ContextLifecycleObserver(ExecutionContext::From(script_state)),
+      script_state_(script_state),
       url_(NullURL(), url) {}
 
 void QuicTransport::close(const WebTransportCloseInfo* close_info) {
   DVLOG(1) << "QuicTransport::close() this=" << this;
   // TODO(ricea): Send |close_info| to the network service.
+
+  cleanly_closed_ = true;
+  // If we don't manage to close the writable stream here, then it will
+  // error when a write() is attempted.
+  if (!WritableStream::IsLocked(outgoing_datagrams_) &&
+      !WritableStream::CloseQueuedOrInFlight(outgoing_datagrams_)) {
+    auto promise = WritableStream::Close(script_state_, outgoing_datagrams_);
+    promise->MarkAsHandled();
+  }
   Dispose();
 }
 
@@ -65,7 +174,7 @@ QuicTransport::~QuicTransport() = default;
 
 void QuicTransport::OnHandshakeFailed() {
   DVLOG(1) << "QuicTransport::OnHandshakeFailed() this=" << this;
-  handshake_client_receiver_.reset();
+  Dispose();
 }
 
 void QuicTransport::ContextDestroyed(ExecutionContext* execution_context) {
@@ -79,6 +188,8 @@ bool QuicTransport::HasPendingActivity() const {
 }
 
 void QuicTransport::Trace(Visitor* visitor) {
+  visitor->Trace(outgoing_datagrams_);
+  visitor->Trace(script_state_);
   ContextLifecycleObserver::Trace(visitor);
   ScriptWrappable::Trace(visitor);
 }
@@ -140,6 +251,9 @@ void QuicTransport::Init(const String& url, ExceptionState& exception_state) {
       WTF::Bind(&QuicTransport::OnConnectionError, WrapWeakPersistent(this)));
 
   // TODO(ricea): Report something to devtools.
+
+  outgoing_datagrams_ = WritableStream::CreateWithCountQueueingStrategy(
+      script_state_, MakeGarbageCollected<DatagramUnderlyingSink>(this), 1);
 }
 
 void QuicTransport::Dispose() {
@@ -151,6 +265,14 @@ void QuicTransport::Dispose() {
 
 void QuicTransport::OnConnectionError() {
   DVLOG(1) << "QuicTransport::OnConnectionError() this=" << this;
+
+  if (!cleanly_closed_) {
+    v8::Local<v8::Value> reason = V8ThrowException::CreateTypeError(
+        script_state_->GetIsolate(), "Connection lost.");
+    WritableStreamDefaultController::Error(
+        script_state_, outgoing_datagrams_->Controller(), reason);
+  }
+
   Dispose();
 }
 

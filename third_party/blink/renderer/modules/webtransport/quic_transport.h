@@ -25,7 +25,9 @@ class ExceptionState;
 class ExecutionContext;
 class ScriptState;
 class WebTransportCloseInfo;
+class WritableStream;
 
+// https://wicg.github.io/web-transport/#quic-transport
 class MODULES_EXPORT QuicTransport final
     : public ScriptWrappable,
       public ActiveScriptWrappable<QuicTransport>,
@@ -46,6 +48,8 @@ class MODULES_EXPORT QuicTransport final
   ~QuicTransport() override;
 
   // QuicTransport IDL implementation.
+  WritableStream* sendDatagrams() { return outgoing_datagrams_; }
+
   void close(const WebTransportCloseInfo*);
 
   // QuicTransportHandshakeClient implementation
@@ -54,6 +58,9 @@ class MODULES_EXPORT QuicTransport final
       mojo::PendingReceiver<network::mojom::blink::QuicTransportClient>)
       override;
   void OnHandshakeFailed() override;
+
+  // QuicTransportClient implementation
+  // TODO(ricea): Add methods.
 
   // Implementation of ContextLifecycleObserver
   void ContextDestroyed(ExecutionContext*) final;
@@ -65,9 +72,18 @@ class MODULES_EXPORT QuicTransport final
   void Trace(Visitor* visitor) override;
 
  private:
+  class DatagramUnderlyingSink;
+
   void Init(const String& url, ExceptionState&);
   void Dispose();
   void OnConnectionError();
+
+  bool cleanly_closed_ = false;
+
+  // This corresponds to the [[SentDatagrams]] internal slot in the standard.
+  Member<WritableStream> outgoing_datagrams_;
+
+  Member<ScriptState> script_state_;
 
   const KURL url_;
   mojo::Remote<network::mojom::blink::QuicTransport> quic_transport_;
