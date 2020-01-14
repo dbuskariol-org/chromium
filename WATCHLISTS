@@ -1142,6 +1142,9 @@
     'ios_web': {
       'filepath': 'ios/web(_view)?/',
     },
+    'isolated_prefetch': {
+      'filepath': 'chrome/browser/prerender/isolated',
+    },
     'language': {
       'filepath': 'chrome/browser/language|'\
                   'components/language|'\
@@ -2469,6 +2472,8 @@
                      'marq+watch@chromium.org'],
     'ios_web': ['ios-reviews+web@chromium.org',
                 'eugenebut@chromium.org'],
+    'isolated_prefetch': ['robertogden+watch@chromium.org',
+                          'marcinjb+p4watch@google.com'],
     'language': ['language-reviews@chromium.org'],
     'libaom': ['fgalligan@chromium.org',
                'johannkoenig@chromium.org',
