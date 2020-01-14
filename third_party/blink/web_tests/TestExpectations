@@ -6399,9 +6399,6 @@ crbug.com/1018640 external/wpt/web-bundle/* [ Skip ]
 crbug.com/1038656 [ Mac ] http/tests/devtools/coverage/coverage-view-unused.js [ Pass Failure ]
 crbug.com/1038656 [ Win ] http/tests/devtools/coverage/coverage-view-unused.js [ Pass Failure ]
 
-crbug.com/1030086 external/wpt/html/infrastructure/safe-passing-of-structured-data/structured-cloning-error-extra.html [ Pass Failure ]
-crbug.com/1030086 external/wpt/html/infrastructure/safe-passing-of-structured-data/structuredclone_0.html [ Pass Failure ]
-
 # Temporarily disabled to land Linkifier changes in DevTools
 crbug.com/963183 http/tests/devtools/jump-to-previous-editing-location.js [ Pass Failure ]
 
