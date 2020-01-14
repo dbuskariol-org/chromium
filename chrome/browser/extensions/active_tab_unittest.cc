@@ -31,7 +31,6 @@
 #include "content/public/browser/notification_types.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/common/frame_navigate_params.h"
-#include "content/public/test/browser_side_navigation_test_utils.h"
 #include "content/public/test/navigation_simulator.h"
 #include "content/public/test/web_contents_tester.h"
 #include "extensions/browser/disable_reason.h"
@@ -656,7 +655,6 @@ class ActiveTabWithServiceTest : public ExtensionServiceTestBase {
   ActiveTabWithServiceTest() {}
 
   void SetUp() override;
-  void TearDown() override;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(ActiveTabWithServiceTest);
@@ -664,12 +662,6 @@ class ActiveTabWithServiceTest : public ExtensionServiceTestBase {
 
 void ActiveTabWithServiceTest::SetUp() {
   ExtensionServiceTestBase::SetUp();
-  content::BrowserSideNavigationSetUp();
-}
-
-void ActiveTabWithServiceTest::TearDown() {
-  content::BrowserSideNavigationTearDown();
-  ExtensionServiceTestBase::TearDown();
 }
 
 // Tests that an extension can only capture file:// URLs with the active tab

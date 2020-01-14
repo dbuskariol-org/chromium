@@ -25,7 +25,6 @@
 #include "components/sessions/content/session_tab_helper.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/navigation_entry.h"
-#include "content/public/test/browser_side_navigation_test_utils.h"
 #include "content/public/test/browser_task_environment.h"
 #include "content/public/test/web_contents_tester.h"
 #include "net/url_request/url_request_context_getter.h"
@@ -88,7 +87,6 @@ class SafeBrowsingPrivateApiUnitTest : public ExtensionServiceTestBase {
 void SafeBrowsingPrivateApiUnitTest::SetUp() {
   ExtensionServiceTestBase::SetUp();
   InitializeEmptyExtensionService();
-  content::BrowserSideNavigationSetUp();
 
   browser_window_ = std::make_unique<TestBrowserWindow>();
   Browser::CreateParams params(profile(), true);
@@ -109,7 +107,6 @@ void SafeBrowsingPrivateApiUnitTest::TearDown() {
   while (!browser()->tab_strip_model()->empty())
     browser()->tab_strip_model()->DetachWebContentsAt(0);
   browser_window_.reset();
-  content::BrowserSideNavigationTearDown();
 
   // Make sure the NetworkContext owned by SafeBrowsingService is destructed
   // before the NetworkService object..

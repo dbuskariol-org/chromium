@@ -19,7 +19,6 @@
 #include "chrome/test/base/test_browser_window.h"
 #include "components/sessions/content/session_tab_helper.h"
 #include "content/public/browser/navigation_entry.h"
-#include "content/public/test/browser_side_navigation_test_utils.h"
 #include "content/public/test/navigation_simulator.h"
 #include "content/public/test/web_contents_tester.h"
 #include "extensions/browser/api_test_utils.h"
@@ -109,7 +108,6 @@ void TabsApiUnitTest::SetUp() {
 
   ExtensionServiceTestBase::SetUp();
   InitializeEmptyExtensionService();
-  content::BrowserSideNavigationSetUp();
 
   browser_window_.reset(new TestBrowserWindow());
   Browser::CreateParams params(profile(), true);
@@ -123,7 +121,6 @@ void TabsApiUnitTest::SetUp() {
 void TabsApiUnitTest::TearDown() {
   browser_.reset();
   browser_window_.reset();
-  content::BrowserSideNavigationTearDown();
   ExtensionServiceTestBase::TearDown();
 }
 
