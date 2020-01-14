@@ -32,13 +32,17 @@ class MITMSoftwareBlockingPage : public SSLBlockingPageBase {
   // If the blocking page isn't shown, the caller is responsible for cleaning
   // up the blocking page. Otherwise, the interstitial takes ownership when
   // shown.
-  MITMSoftwareBlockingPage(content::WebContents* web_contents,
-                           int cert_error,
-                           const GURL& request_url,
-                           std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
-                           const net::SSLInfo& ssl_info,
-                           const std::string& mitm_software_name,
-                           bool is_enterprise_managed);
+  MITMSoftwareBlockingPage(
+      content::WebContents* web_contents,
+      int cert_error,
+      const GURL& request_url,
+      std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
+      const net::SSLInfo& ssl_info,
+      const std::string& mitm_software_name,
+      bool is_enterprise_managed,
+      std::unique_ptr<
+          security_interstitials::SecurityInterstitialControllerClient>
+          controller_client);
 
   ~MITMSoftwareBlockingPage() override;
 

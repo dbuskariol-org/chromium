@@ -6,12 +6,9 @@
 
 #include <utility>
 
-#include "chrome/browser/interstitials/chrome_metrics_helper.h"
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/ssl/chrome_security_blocking_page_factory.h"
-#include "chrome/browser/ssl/ssl_error_controller_client.h"
 #include "components/safe_browsing/core/common/safe_browsing_prefs.h"
 #include "components/security_interstitials/content/cert_report_helper.h"
+#include "components/security_interstitials/content/security_interstitial_controller_client.h"
 #include "components/security_interstitials/content/ssl_cert_reporter.h"
 #include "components/security_interstitials/core/metrics_helper.h"
 #include "content/public/browser/interstitial_page.h"
@@ -29,21 +26,6 @@ using content::NavigationController;
 using content::NavigationEntry;
 
 namespace {
-
-const char kMitmSoftwareMetricsName[] = "mitm_software";
-
-std::unique_ptr<ChromeMetricsHelper> CreateMitmSoftwareMetricsHelper(
-    content::WebContents* web_contents,
-    const GURL& request_url) {
-  // Set up the metrics helper for the MITMSoftwareUI.
-  security_interstitials::MetricsHelper::ReportDetails reporting_info;
-  reporting_info.metric_prefix = kMitmSoftwareMetricsName;
-  std::unique_ptr<ChromeMetricsHelper> metrics_helper =
-      std::make_unique<ChromeMetricsHelper>(web_contents, request_url,
-                                            reporting_info);
-  metrics_helper.get()->StartRecordingCaptivePortalMetrics(false);
-  return metrics_helper;
-}
 
 }  // namespace
 
@@ -63,21 +45,19 @@ MITMSoftwareBlockingPage::MITMSoftwareBlockingPage(
     std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
     const net::SSLInfo& ssl_info,
     const std::string& mitm_software_name,
-    bool is_enterprise_managed)
-    : SSLBlockingPageBase(
-          web_contents,
-          CertificateErrorReport::INTERSTITIAL_MITM_SOFTWARE,
-          ssl_info,
-          request_url,
-          std::move(ssl_cert_reporter),
-          false /* overridable */,
-          base::Time::Now(),
-          std::make_unique<SSLErrorControllerClient>(
-              web_contents,
-              ssl_info,
-              cert_error,
-              request_url,
-              CreateMitmSoftwareMetricsHelper(web_contents, request_url))),
+    bool is_enterprise_managed,
+    std::unique_ptr<
+        security_interstitials::SecurityInterstitialControllerClient>
+        controller_client)
+    : SSLBlockingPageBase(web_contents,
+                          CertificateErrorReport::INTERSTITIAL_MITM_SOFTWARE,
+                          ssl_info,
+                          request_url,
+                          std::move(ssl_cert_reporter),
+                          false /* overridable */,
+                          base::Time::Now(),
+                          std::move(controller_client)),
+
       ssl_info_(ssl_info),
       mitm_software_ui_(
           new security_interstitials::MITMSoftwareUI(request_url,
@@ -85,9 +65,7 @@ MITMSoftwareBlockingPage::MITMSoftwareBlockingPage(
                                                      ssl_info,
                                                      mitm_software_name,
                                                      is_enterprise_managed,
-                                                     controller())) {
-  ChromeSecurityBlockingPageFactory::DoChromeSpecificSetup(this);
-}
+                                                     controller())) {}
 
 MITMSoftwareBlockingPage::~MITMSoftwareBlockingPage() = default;
 

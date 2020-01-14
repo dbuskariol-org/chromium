@@ -173,9 +173,9 @@ MITMSoftwareBlockingPage* CreateMITMSoftwareBlockingPage(
 
   net::SSLInfo ssl_info;
   ssl_info.cert = ssl_info.unverified_cert = CreateFakeCert();
-  return new MITMSoftwareBlockingPage(web_contents, cert_error, request_url,
-                                      nullptr, ssl_info, mitm_software_name,
-                                      is_enterprise_managed);
+  return ChromeSecurityBlockingPageFactory::CreateMITMSoftwareBlockingPage(
+      web_contents, cert_error, request_url, nullptr, ssl_info,
+      mitm_software_name, is_enterprise_managed);
 }
 
 BlockedInterceptionBlockingPage* CreateBlockedInterceptionBlockingPage(

@@ -526,9 +526,11 @@ void SSLErrorHandlerDelegateImpl::ShowMITMSoftwareInterstitial(
     const std::string& mitm_software_name,
     bool is_enterprise_managed) {
   // Show MITM software blocking page. The interstitial owns the blocking page.
-  OnBlockingPageReady(new MITMSoftwareBlockingPage(
-      web_contents_, cert_error_, request_url_, std::move(ssl_cert_reporter_),
-      ssl_info_, mitm_software_name, is_enterprise_managed));
+  OnBlockingPageReady(
+      ChromeSecurityBlockingPageFactory::CreateMITMSoftwareBlockingPage(
+          web_contents_, cert_error_, request_url_,
+          std::move(ssl_cert_reporter_), ssl_info_, mitm_software_name,
+          is_enterprise_managed));
 }
 
 void SSLErrorHandlerDelegateImpl::ShowSSLInterstitial(const GURL& support_url) {
