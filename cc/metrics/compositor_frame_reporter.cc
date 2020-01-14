@@ -128,19 +128,19 @@ constexpr int kHistogramMax = 350000;
 constexpr int kHistogramBucketCount = 50;
 
 std::string HistogramName(const int report_type_index,
-                          const int frame_sequence_tracker_type_index,
+                          FrameSequenceTrackerType frame_sequence_tracker_type,
                           const int stage_type_index) {
-  DCHECK_LE(frame_sequence_tracker_type_index,
-            FrameSequenceTrackerType::kMaxType);
+  DCHECK_LE(frame_sequence_tracker_type, FrameSequenceTrackerType::kMaxType);
   const char* tracker_type_name =
       FrameSequenceTracker::GetFrameSequenceTrackerTypeName(
-          frame_sequence_tracker_type_index);
+          frame_sequence_tracker_type);
   DCHECK(tracker_type_name);
   return base::StrCat({"CompositorLatency.",
                        kReportTypeNames[report_type_index], tracker_type_name,
                        *tracker_type_name ? "." : "",
                        GetStageName(stage_type_index)});
 }
+
 }  // namespace
 
 CompositorFrameReporter::CompositorFrameReporter(
@@ -410,12 +410,12 @@ void CompositorFrameReporter::ReportHistogram(
   CHECK_GE(histogram_index, 0);
 
   STATIC_HISTOGRAM_POINTER_GROUP(
-      HistogramName(report_type_index, frame_sequence_tracker_type_index,
+      HistogramName(report_type_index, frame_sequence_tracker_type,
                     stage_type_index),
       histogram_index, kMaxHistogramIndex,
       AddTimeMicrosecondsGranularity(time_delta),
       base::Histogram::FactoryGet(
-          HistogramName(report_type_index, frame_sequence_tracker_type_index,
+          HistogramName(report_type_index, frame_sequence_tracker_type,
                         stage_type_index),
           kHistogramMin, kHistogramMax, kHistogramBucketCount,
           base::HistogramBase::kUmaTargetedHistogramFlag));
