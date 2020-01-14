@@ -97,7 +97,7 @@ cr.define('settings', function() {
     })(),
 
     /** @override */
-    attached: function() {
+    attached() {
       this.scroller = this.domHost ? this.domHost.parentNode : document.body;
     },
 
@@ -106,7 +106,7 @@ cr.define('settings', function() {
      * @param {!settings.Route} route
      * @return {boolean} Whether the given route is part of |this| page.
      */
-    containsRoute: function(route) {
+    containsRoute(route) {
       return false;
     },
 
@@ -115,7 +115,7 @@ cr.define('settings', function() {
      * @param {boolean} previous
      * @private
      */
-    inSearchModeChanged_: function(current, previous) {
+    inSearchModeChanged_(current, previous) {
       // Ignore 1st occurrence which happens while the element is being
       // initialized.
       if (previous === undefined) {
@@ -139,7 +139,7 @@ cr.define('settings', function() {
      * @return {boolean}
      * @private
      */
-    shouldExpandAdvanced_: function(route) {
+    shouldExpandAdvanced_(route) {
       return (
                  this.tagName == 'SETTINGS-BASIC-PAGE'
                  // <if expr="chromeos">
@@ -159,7 +159,7 @@ cr.define('settings', function() {
      * @return {!Promise<!SettingsSectionElement>}
      * @private
      */
-    ensureSectionForRoute_: function(route) {
+    ensureSectionForRoute_(route) {
       const section = this.getSection(route.section);
       if (section != null) {
         return Promise.resolve(section);
@@ -188,7 +188,7 @@ cr.define('settings', function() {
      * @param {!settings.Route} route
      * @private
      */
-    enterSubpage_: function(route) {
+    enterSubpage_(route) {
       this.lastScrollTop_ = this.scroller.scrollTop;
       this.scroller.scrollTop = 0;
       this.classList.add('showing-subpage');
@@ -217,7 +217,7 @@ cr.define('settings', function() {
      * @return {!Promise<void>}
      * @private
      */
-    enterMainPage_: function(oldRoute) {
+    enterMainPage_(oldRoute) {
       const oldSection = this.getSection(oldRoute.section);
       oldSection.classList.remove('expanded');
       this.classList.remove('showing-subpage');
@@ -236,7 +236,7 @@ cr.define('settings', function() {
      * @param {!settings.Route} route
      * @private
      */
-    scrollToSection_: function(route) {
+    scrollToSection_(route) {
       this.ensureSectionForRoute_(route).then(section => {
         if (!this.inSearchMode) {
           this.fire('showing-section', section);
@@ -385,7 +385,7 @@ cr.define('settings', function() {
      * @param {string} section Section name of the element to get.
      * @return {?SettingsSectionElement}
      */
-    getSection: function(section) {
+    getSection(section) {
       if (!section) {
         return null;
       }

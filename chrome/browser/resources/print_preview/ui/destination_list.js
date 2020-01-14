@@ -70,12 +70,12 @@ Polymer({
    * work.
    * @private
    */
-  forceIronResize_: function() {
+  forceIronResize_() {
     this.$.list.fire('iron-resize');
   },
 
   /** @private */
-  updateMatchingDestinations_: function() {
+  updateMatchingDestinations_() {
     if (this.destinations === undefined) {
       return;
     }
@@ -110,7 +110,7 @@ Polymer({
    * @param {!KeyboardEvent} e Event containing the destination and key.
    * @private
    */
-  onKeydown_: function(e) {
+  onKeydown_(e) {
     if (e.key === 'Enter') {
       this.onDestinationSelected_(e);
       e.stopPropagation();
@@ -121,7 +121,7 @@ Polymer({
    * @param {!Event} e Event containing the destination that was selected.
    * @private
    */
-  onDestinationSelected_: function(e) {
+  onDestinationSelected_(e) {
     if (e.composedPath()[0].tagName === 'A') {
       return;
     }

@@ -31,7 +31,7 @@ Polymer({
     },
   },
 
-  attached: function() {
+  attached() {
     this.addWebUIListener(
         'crostini-export-import-operation-status-changed', inProgress => {
           this.enableButtons_ = !inProgress;
@@ -41,17 +41,17 @@ Polymer({
   },
 
   /** @private */
-  onExportClick_: function() {
+  onExportClick_() {
     settings.CrostiniBrowserProxyImpl.getInstance().exportCrostiniContainer();
   },
 
   /** @private */
-  onImportClick_: function() {
+  onImportClick_() {
     this.showImportConfirmationDialog_ = true;
   },
 
   /** @private */
-  onImportConfirmationDialogClose_: function() {
+  onImportConfirmationDialogClose_() {
     this.showImportConfirmationDialog_ = false;
   },
 });

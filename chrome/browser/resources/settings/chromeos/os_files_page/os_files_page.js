@@ -22,7 +22,7 @@ Polymer({
     /** @private {!Map<string, string>} */
     focusConfig_: {
       type: Object,
-      value: function() {
+      value() {
         const map = new Map();
         if (settings.routes.SMB_SHARES) {
           map.set(settings.routes.SMB_SHARES.path, '#smbShares');
@@ -34,7 +34,7 @@ Polymer({
   },
 
   /** @private */
-  onTapSmbShares_: function() {
+  onTapSmbShares_() {
     settings.navigateTo(settings.routes.SMB_SHARES);
   },
 });

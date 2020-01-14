@@ -39,7 +39,7 @@ Polymer({
     /** @private {chrome.settingsPrivate.PrefObject} */
     passwordsLeakDetectionPref_: {
       type: Object,
-      value: function() {
+      value() {
         return /** @type {chrome.settingsPrivate.PrefObject} */ ({});
       },
     },
@@ -51,7 +51,7 @@ Polymer({
   ],
 
   /** @override */
-  ready: function() {
+  ready() {
     // <if expr="not chromeos">
     const storedAccountsChanged = storedAccounts => this.storedAccounts_ =
         storedAccounts;
@@ -65,7 +65,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  computeUserSignedIn_: function() {
+  computeUserSignedIn_() {
     return (!!this.syncStatus && !!this.syncStatus.signedIn) ?
         !this.syncStatus.hasError :
         (!!this.storedAccounts_ && this.storedAccounts_.length > 0);
@@ -75,7 +75,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  computePasswordsLeakDetectionAvailable_: function() {
+  computePasswordsLeakDetectionAvailable_() {
     if (this.prefs === undefined) {
       return false;
     }
@@ -87,7 +87,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getPasswordsLeakDetectionSubLabel_: function() {
+  getPasswordsLeakDetectionSubLabel_() {
     if (!this.userSignedIn_ && this.passwordsLeakDetectionAvailable_) {
       return this.i18n('passwordsLeakDetectionSignedOutEnabledDescription');
     }
@@ -98,7 +98,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  getDisabledLeakDetection_: function() {
+  getDisabledLeakDetection_() {
     if (this.prefs === undefined) {
       return false;
     }
@@ -106,14 +106,14 @@ Polymer({
   },
 
   /** @private */
-  onPasswordsLeakDetectionChange_: function() {
+  onPasswordsLeakDetectionChange_() {
     this.setPrefValue(
         'profile.password_manager_leak_detection',
         this.$.passwordsLeakDetectionCheckbox.checked);
   },
 
   /** @private */
-  setPasswordsLeakDetectionPref_: function() {
+  setPasswordsLeakDetectionPref_() {
     if (this.prefs === undefined) {
       return;
     }

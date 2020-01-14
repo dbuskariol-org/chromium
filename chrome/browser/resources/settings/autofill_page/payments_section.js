@@ -143,7 +143,7 @@ Polymer({
      */
     userIsFidoVerifiable_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean(
             'fidoAuthenticationAvailableForAutofill');
       },
@@ -167,7 +167,7 @@ Polymer({
      */
     migrationEnabled_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('migrationEnabled');
       },
       readOnly: true,
@@ -201,7 +201,7 @@ Polymer({
   setPersonalDataListener_: null,
 
   /** @override */
-  attached: function() {
+  attached() {
     // Create listener function.
     /** @type {function(!Array<!PaymentsManager.CreditCardEntry>)} */
     const setCreditCardsListener = cardList => {
@@ -243,7 +243,7 @@ Polymer({
   },
 
   /** @override */
-  detached: function() {
+  detached() {
     this.paymentsManager_.removePersonalDataManagerListener(
         /**
            @type {function(!Array<!AutofillManager.AddressEntry>,
@@ -258,7 +258,7 @@ Polymer({
    *     anchorElement: !HTMLElement}>} e
    * @private
    */
-  onCreditCardDotsMenuTap_: function(e) {
+  onCreditCardDotsMenuTap_(e) {
     // Copy item so dialog won't update model on cancel.
     this.activeCreditCard = e.detail.creditCard;
 
@@ -272,7 +272,7 @@ Polymer({
    * @param {!Event} e
    * @private
    */
-  onAddCreditCardTap_: function(e) {
+  onAddCreditCardTap_(e) {
     e.preventDefault();
     const date = new Date();  // Default to current month/year.
     const expirationMonth = date.getMonth() + 1;  // Months are 0 based.
@@ -285,7 +285,7 @@ Polymer({
   },
 
   /** @private */
-  onCreditCardDialogClose_: function() {
+  onCreditCardDialogClose_() {
     this.showCreditCardDialog_ = false;
     cr.ui.focusWithoutInk(assert(this.activeDialogAnchor_));
     this.activeDialogAnchor_ = null;
@@ -297,7 +297,7 @@ Polymer({
    * @param {!Event} e The polymer event.
    * @private
    */
-  onMenuEditCreditCardTap_: function(e) {
+  onMenuEditCreditCardTap_(e) {
     e.preventDefault();
 
     if (this.activeCreditCard.metadata.isLocal) {
@@ -310,7 +310,7 @@ Polymer({
   },
 
   /** @private */
-  onRemoteEditCreditCardTap_: function() {
+  onRemoteEditCreditCardTap_() {
     this.paymentsManager_.logServerCardLinkClicked();
     window.open(loadTimeData.getString('manageCreditCardsUrl'));
   },
@@ -319,7 +319,7 @@ Polymer({
    * Handles tapping on the "Remove" credit card button.
    * @private
    */
-  onMenuRemoveCreditCardTap_: function() {
+  onMenuRemoveCreditCardTap_() {
     this.paymentsManager_.removeCreditCard(
         /** @type {string} */ (this.activeCreditCard.guid));
     this.$.creditCardSharedMenu.close();
@@ -330,7 +330,7 @@ Polymer({
    * Handles tapping on the "Clear copy" button for cached credit cards.
    * @private
    */
-  onMenuClearCreditCardTap_: function() {
+  onMenuClearCreditCardTap_() {
     this.paymentsManager_.clearCachedCreditCard(
         /** @type {string} */ (this.activeCreditCard.guid));
     this.$.creditCardSharedMenu.close();
@@ -342,7 +342,7 @@ Polymer({
    * cards.
    * @private
    */
-  onMigrateCreditCardsClick_: function() {
+  onMigrateCreditCardsClick_() {
     this.paymentsManager_.migrateCreditCards();
   },
 
@@ -351,7 +351,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  saveCreditCard_: function(event) {
+  saveCreditCard_(event) {
     this.paymentsManager_.saveCreditCard(event.detail);
   },
 
@@ -361,7 +361,7 @@ Polymer({
    *     authentication.
    * @private
    */
-  shouldShowFidoToggle_: function(creditCardEnabled, userIsFidoVerifiable) {
+  shouldShowFidoToggle_(creditCardEnabled, userIsFidoVerifiable) {
     return creditCardEnabled && userIsFidoVerifiable;
   },
 
@@ -369,7 +369,7 @@ Polymer({
    * Listens for the enable-authentication event, and calls the private API.
    * @private
    */
-  setFIDOAuthenticationEnabledState_: function() {
+  setFIDOAuthenticationEnabledState_() {
     this.paymentsManager_.setCreditCardFIDOAuthEnabledState(
         this.$$('#autofillCreditCardFIDOAuthToggle').checked);
   },
@@ -380,7 +380,7 @@ Polymer({
    * @return {boolean} Whether to show the migration button.
    * @private
    */
-  checkIfMigratable_: function(creditCards, creditCardEnabled) {
+  checkIfMigratable_(creditCards, creditCardEnabled) {
     // If migration prerequisites are not met, return false.
     if (!this.migrationEnabled_) {
       return false;

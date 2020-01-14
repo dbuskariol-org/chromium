@@ -205,7 +205,7 @@ const SwitchAccessPredicate = {
    * @param {!SARootNode} scope
    * @return {function(!chrome.automation.AutomationNode): boolean}
    */
-  leaf: function(scope) {
+  leaf(scope) {
     return (node) => node.state[StateType.INVISIBLE] ||
         (!scope.isEquivalentTo(node) &&
          SwitchAccessPredicate.isInteresting(node, scope)) ||
@@ -219,7 +219,7 @@ const SwitchAccessPredicate = {
    * @param {!SARootNode} scope
    * @return {function(!chrome.automation.AutomationNode): boolean}
    */
-  root: function(scope) {
+  root(scope) {
     return (node) => scope.isEquivalentTo(node);
   },
 
@@ -230,7 +230,7 @@ const SwitchAccessPredicate = {
    * @param {!SARootNode} scope
    * @return {function(!chrome.automation.AutomationNode): boolean}
    */
-  visit: function(scope) {
+  visit(scope) {
     return (node) => node.role !== RoleType.DESKTOP &&
         SwitchAccessPredicate.isInteresting(node, scope);
   },

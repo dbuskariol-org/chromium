@@ -17,7 +17,7 @@ Polymer({
     enableSecurityKeysSubpage_: {
       type: Boolean,
       readOnly: true,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('enableSecurityKeysSubpage');
       }
     },
@@ -25,7 +25,7 @@ Polymer({
     /** @private */
     passwordsLeakDetectionEnabled_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('passwordsLeakDetectionEnabled');
       },
     },
@@ -33,7 +33,7 @@ Polymer({
     /** @private {chrome.settingsPrivate.PrefObject} */
     safeBrowsingReportingPref_: {
       type: Object,
-      value: function() {
+      value() {
         return /** @type {chrome.settingsPrivate.PrefObject} */ ({
           key: '',
           type: chrome.settingsPrivate.PrefType.BOOLEAN,
@@ -51,7 +51,7 @@ Polymer({
   browserProxy_: null,
 
   /** @override */
-  ready: function() {
+  ready() {
     this.browserProxy_ = settings.PrivacyPageBrowserProxyImpl.getInstance();
   },
 
@@ -59,19 +59,19 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  getDisabledExtendedSafeBrowsing_: function() {
+  getDisabledExtendedSafeBrowsing_() {
     return !this.getPref('safebrowsing.enabled').value;
   },
 
   /** @private */
-  onSafeBrowsingReportingToggleChange_: function() {
+  onSafeBrowsingReportingToggleChange_() {
     this.setPrefValue(
         'safebrowsing.scout_reporting_enabled',
         this.$$('#safeBrowsingReportingToggle').checked);
   },
 
   /** @private */
-  onSafeBrowsingReportingPrefChange_: function() {
+  onSafeBrowsingReportingPrefChange_() {
     if (this.prefs === undefined) {
       return;
     }
@@ -89,7 +89,7 @@ Polymer({
   },
 
   /** @private */
-  onManageCertificatesClick_: function() {
+  onManageCertificatesClick_() {
     // <if expr="use_nss_certs">
     settings.navigateTo(settings.routes.CERTIFICATES);
     // </if>
@@ -101,12 +101,12 @@ Polymer({
   },
 
   /** @private */
-  onAdvancedProtectionProgramLinkClick_: function() {
+  onAdvancedProtectionProgramLinkClick_() {
     window.open('https://landing.google.com/advancedprotection/');
   },
 
   /** @private */
-  onSecurityKeysClick_: function() {
+  onSecurityKeysClick_() {
     settings.navigateTo(settings.routes.SECURITY_KEYS);
     this.browserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_SECURITY_KEYS);

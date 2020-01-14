@@ -19,7 +19,7 @@ Polymer({
     /** @private {!Map<string, string>} */
     focusConfig_: {
       type: Object,
-      value: function() {
+      value() {
         const map = new Map();
         if (settings.routes.PASSWORDS) {
           map.set(settings.routes.PASSWORDS.path, '#passwordManagerButton');
@@ -41,7 +41,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onAddressesClick_: function(event) {
+  onAddressesClick_(event) {
     settings.navigateTo(settings.routes.ADDRESSES);
   },
 
@@ -49,7 +49,7 @@ Polymer({
    * Shows the manage payment methods sub page.
    * @private
    */
-  onPaymentsClick_: function() {
+  onPaymentsClick_() {
     settings.navigateTo(settings.routes.PAYMENTS);
   },
 
@@ -58,7 +58,7 @@ Polymer({
    * the Google Password Manager page.
    * @private
    */
-  onPasswordsClick_: function() {
+  onPasswordsClick_() {
     PasswordManagerImpl.getInstance().recordPasswordsPageAccessInSettings();
     loadTimeData.getBoolean('navigateToGooglePasswordManager') ?
         settings.OpenWindowProxyImpl.getInstance().openURL(

@@ -87,7 +87,7 @@ Polymer({
   },
 
   /** @override */
-  ready: function() {
+  ready() {
     cr.addWebUIListener('show-keys-changed', this.onShowKeysChange_.bind(this));
     settings.DevicePageBrowserProxyImpl.getInstance().initializeKeyboard();
     this.setUpKeyMapTargets_();
@@ -97,7 +97,7 @@ Polymer({
    * Initializes the dropdown menu options for remapping keys.
    * @private
    */
-  setUpKeyMapTargets_: function() {
+  setUpKeyMapTargets_() {
     // Ordering is according to UX, but values match settings.ModifierKey.
     this.keyMapTargets_ = [
       {
@@ -140,7 +140,7 @@ Polymer({
    * @param {Object} keyboardParams
    * @private
    */
-  onShowKeysChange_: function(keyboardParams) {
+  onShowKeysChange_(keyboardParams) {
     this.hasInternalKeyboard_ = keyboardParams['hasInternalKeyboard'];
     this.hasAssistantKey_ = keyboardParams['hasAssistantKey'];
     this.showCapsLock_ = keyboardParams['showCapsLock'];
@@ -148,23 +148,23 @@ Polymer({
     this.showAppleCommandKey_ = keyboardParams['showAppleCommandKey'];
   },
 
-  onShowKeyboardShortcutViewerTap_: function() {
+  onShowKeyboardShortcutViewerTap_() {
     settings.DevicePageBrowserProxyImpl.getInstance()
         .showKeyboardShortcutViewer();
   },
 
-  onShowLanguageInputTap_: function() {
+  onShowLanguageInputTap_() {
     settings.navigateTo(
         settings.routes.LANGUAGES_DETAILS,
         /* dynamicParams */ null, /* removeSearch */ true);
   },
 
-  getExternalMetaKeyLabel_: function(hasInternalKeyboard) {
+  getExternalMetaKeyLabel_(hasInternalKeyboard) {
     return loadTimeData.getString(
         hasInternalKeyboard ? 'keyboardKeyExternalMeta' : 'keyboardKeyMeta');
   },
 
-  getExternalCommandKeyLabel_: function(hasInternalKeyboard) {
+  getExternalCommandKeyLabel_(hasInternalKeyboard) {
     return loadTimeData.getString(
         hasInternalKeyboard ? 'keyboardKeyExternalCommand' :
                               'keyboardKeyCommand');

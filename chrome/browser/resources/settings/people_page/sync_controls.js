@@ -67,12 +67,12 @@ Polymer({
   cachedSyncPrefs_: null,
 
   /** @override */
-  created: function() {
+  created() {
     this.browserProxy_ = settings.SyncBrowserProxyImpl.getInstance();
   },
 
   /** @override */
-  attached: function() {
+  attached() {
     this.addWebUIListener(
         'sync-prefs-changed', this.handleSyncPrefsChanged_.bind(this));
 
@@ -85,7 +85,7 @@ Polymer({
    * Handler for when the sync preferences are updated.
    * @private
    */
-  handleSyncPrefsChanged_: function(syncPrefs) {
+  handleSyncPrefsChanged_(syncPrefs) {
     this.syncPrefs = syncPrefs;
 
     // If autofill is not registered or synced, force Payments integration off.
@@ -99,7 +99,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onSyncAllDataTypesChanged_: function(event) {
+  onSyncAllDataTypesChanged_(event) {
     if (event.target.checked) {
       this.set('syncPrefs.syncAllDataTypes', true);
 
@@ -125,7 +125,7 @@ Polymer({
    * Handler for when any sync data type checkbox is changed (except autofill).
    * @private
    */
-  onSingleSyncDataTypeChanged_: function() {
+  onSingleSyncDataTypeChanged_() {
     assert(this.syncPrefs);
     this.browserProxy_.setSyncDatatypes(this.syncPrefs);
   },
@@ -134,7 +134,7 @@ Polymer({
    * Handler for when the autofill data type checkbox is changed.
    * @private
    */
-  onAutofillDataTypeChanged_: function() {
+  onAutofillDataTypeChanged_() {
     this.set(
         'syncPrefs.paymentsIntegrationEnabled', this.syncPrefs.autofillSynced);
 
@@ -145,7 +145,7 @@ Polymer({
    * Handler for when the autofill data type checkbox is changed.
    * @private
    */
-  onTypedUrlsDataTypeChanged_: function() {
+  onTypedUrlsDataTypeChanged_() {
     this.onSingleSyncDataTypeChanged_();
   },
 
@@ -154,13 +154,12 @@ Polymer({
    * @param {boolean} autofillSynced
    * @return {boolean} Whether the sync checkbox should be disabled.
    */
-  shouldPaymentsCheckboxBeDisabled_: function(
-      syncAllDataTypes, autofillSynced) {
+  shouldPaymentsCheckboxBeDisabled_(syncAllDataTypes, autofillSynced) {
     return syncAllDataTypes || !autofillSynced;
   },
 
   /** @private */
-  syncStatusChanged_: function() {
+  syncStatusChanged_() {
     if (settings.getCurrentRoute() == settings.routes.SYNC_ADVANCED &&
         this.syncControlsHidden_()) {
       settings.navigateTo(settings.routes.SYNC);
@@ -171,7 +170,7 @@ Polymer({
    * @return {boolean} Whether the sync controls are hidden.
    * @private
    */
-  syncControlsHidden_: function() {
+  syncControlsHidden_() {
     if (!this.syncStatus) {
       // Show sync controls by default.
       return false;

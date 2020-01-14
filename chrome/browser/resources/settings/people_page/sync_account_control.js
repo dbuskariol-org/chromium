@@ -115,12 +115,12 @@ Polymer({
   /** @private {?settings.SyncBrowserProxy} */
   syncBrowserProxy_: null,
 
-  created: function() {
+  created() {
     this.syncBrowserProxy_ = settings.SyncBrowserProxyImpl.getInstance();
   },
 
   /** @override */
-  attached: function() {
+  attached() {
     this.syncBrowserProxy_.getStoredAccounts().then(
         this.handleStoredAccounts_.bind(this));
     this.addWebUIListener(
@@ -134,7 +134,7 @@ Polymer({
    * - Signin_ImpressionWithNoAccount_FromSettings
    * @private
    */
-  recordImpressionUserActions_: function() {
+  recordImpressionUserActions_() {
     assert(!this.syncStatus.signedIn);
     assert(this.shownAccount_ !== undefined);
 
@@ -152,12 +152,12 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  computeSignedIn_: function() {
+  computeSignedIn_() {
     return !!this.syncStatus && !!this.syncStatus.signedIn;
   },
 
   /** @private */
-  onSignedInChanged_: function() {
+  onSignedInChanged_() {
     if (this.embeddedInSubpage) {
       this.showingPromo = true;
       return;
@@ -183,7 +183,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getLabel_: function(labelWithAccount, labelWithNoAccount) {
+  getLabel_(labelWithAccount, labelWithNoAccount) {
     return this.shownAccount_ ? labelWithAccount : labelWithNoAccount;
   },
 
@@ -191,7 +191,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  computeSubLabel_: function() {
+  computeSubLabel_() {
     return this.getLabel_(this.promoSecondaryLabelWithAccount,
                           this.promoSecondaryLabelWithNoAccount);
   },
@@ -200,7 +200,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getPromoHeaderClass_: function() {
+  getPromoHeaderClass_() {
     return this.subLabel_ ? 'two-line' : '';
   },
 
@@ -210,7 +210,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getSubstituteLabel_: function(label, name) {
+  getSubstituteLabel_(label, name) {
     return loadTimeData.substituteString(label, name);
   },
 
@@ -220,7 +220,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getAccountLabel_: function(label, account) {
+  getAccountLabel_(label, account) {
     if (this.syncStatus.firstSetupInProgress) {
       return this.syncStatus.statusText || account;
     }
@@ -235,7 +235,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getAccountImageSrc_: function(image) {
+  getAccountImageSrc_(image) {
     // image can be undefined if the account has not set an avatar photo.
     return image || 'chrome://theme/IDR_PROFILE_AVATAR_PLACEHOLDER_LARGE';
   },
@@ -245,7 +245,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getSyncIconStyle_: function() {
+  getSyncIconStyle_() {
     if (this.syncStatus.disabled) {
       return 'sync-disabled';
     }
@@ -267,7 +267,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getSyncIcon_: function() {
+  getSyncIcon_() {
     switch (this.getSyncIconStyle_()) {
       case 'sync-problem':
         return 'settings:sync-problem';
@@ -287,7 +287,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getAvatarRowTitle_: function(
+  getAvatarRowTitle_(
       accountName, syncErrorLabel, syncPasswordsOnlyErrorLabel, authErrorLabel,
       disabledLabel) {
     if (this.syncStatus.disabled) {
@@ -315,7 +315,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldDisableSyncButton_: function() {
+  shouldDisableSyncButton_() {
     if (this.hideButtons || this.prefs === undefined) {
       return this.computeShowSetupButtons_();
     }
@@ -327,7 +327,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldShowTurnOffButton_: function() {
+  shouldShowTurnOffButton_() {
     return !this.hideButtons && !this.showSetupButtons_ &&
         !!this.syncStatus.signedIn;
   },
@@ -336,7 +336,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldShowErrorActionButton_: function() {
+  shouldShowErrorActionButton_() {
     if (this.embeddedInSubpage &&
         this.syncStatus.statusAction ==
             settings.StatusAction.ENTER_PASSPHRASE) {
@@ -352,7 +352,7 @@ Polymer({
    * @param {!Array<!settings.StoredAccount>} accounts
    * @private
    */
-  handleStoredAccounts_: function(accounts) {
+  handleStoredAccounts_(accounts) {
     this.storedAccounts_ = accounts;
   },
 
@@ -360,7 +360,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  computeShouldShowAvatarRow_: function() {
+  computeShouldShowAvatarRow_() {
     if (this.storedAccounts_ === undefined || this.syncStatus === undefined) {
       return false;
     }
@@ -369,7 +369,7 @@ Polymer({
   },
 
   /** @private */
-  onErrorButtonTap_: function() {
+  onErrorButtonTap_() {
     switch (this.syncStatus.statusAction) {
       case settings.StatusAction.REAUTHENTICATE:
         this.syncBrowserProxy_.startSignIn();
@@ -398,7 +398,7 @@ Polymer({
   },
 
   /** @private */
-  onSigninTap_: function() {
+  onSigninTap_() {
     this.syncBrowserProxy_.startSignIn();
     // Need to close here since one menu item also triggers this function.
     if (this.$$('#menu')) {
@@ -407,13 +407,13 @@ Polymer({
   },
 
   /** @private */
-  onSignoutTap_: function() {
+  onSignoutTap_() {
     this.syncBrowserProxy_.signOut(false /* deleteProfile */);
     /** @type {!CrActionMenuElement} */ (this.$$('#menu')).close();
   },
 
   /** @private */
-  onSyncButtonTap_: function() {
+  onSyncButtonTap_() {
     assert(this.shownAccount_);
     assert(this.storedAccounts_.length > 0);
     const isDefaultPromoAccount =
@@ -424,20 +424,20 @@ Polymer({
   },
 
   /** @private */
-  onTurnOffButtonTap_: function() {
+  onTurnOffButtonTap_() {
     /* This will route to people_page's disconnect dialog. */
     settings.navigateTo(settings.routes.SIGN_OUT);
   },
 
   /** @private */
-  onMenuButtonTap_: function() {
+  onMenuButtonTap_() {
     const actionMenu =
         /** @type {!CrActionMenuElement} */ (this.$$('#menu'));
     actionMenu.showAt(assert(this.$$('#dropdown-arrow')));
   },
 
   /** @private */
-  onShouldShowAvatarRowChange_: function() {
+  onShouldShowAvatarRowChange_() {
     // Close dropdown when avatar-row hides, so if it appears again, the menu
     // won't be open by default.
     const actionMenu = this.$$('#menu');
@@ -452,13 +452,13 @@ Polymer({
    *        }} e
    * @private
    */
-  onAccountTap_: function(e) {
+  onAccountTap_(e) {
     this.shownAccount_ = e.model.item;
     /** @type {!CrActionMenuElement} */ (this.$$('#menu')).close();
   },
 
   /** @private */
-  onShownAccountShouldChange_: function() {
+  onShownAccountShouldChange_() {
     if (this.storedAccounts_ === undefined || this.syncStatus === undefined) {
       return;
     }
@@ -496,17 +496,17 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  computeShowSetupButtons_: function() {
+  computeShowSetupButtons_() {
     return !this.hideButtons && !!this.syncStatus.firstSetupInProgress;
   },
 
   /** @private */
-  onSetupCancel_: function() {
+  onSetupCancel_() {
     this.fire('sync-setup-done', false);
   },
 
   /** @private */
-  onSetupConfirm_: function() {
+  onSetupConfirm_() {
     this.fire('sync-setup-done', true);
   },
 });

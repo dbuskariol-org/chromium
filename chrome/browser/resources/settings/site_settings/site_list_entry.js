@@ -68,7 +68,7 @@ Polymer({
   },
 
   /** @private */
-  onShowTooltip_: function() {
+  onShowTooltip_() {
     const indicator = assert(this.$$('cr-policy-pref-indicator'));
     // The tooltip text is used by an paper-tooltip contained inside the
     // cr-policy-pref-indicator. The text is currently held in a private
@@ -82,7 +82,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldHideResetButton_: function() {
+  shouldHideResetButton_() {
     if (this.model === undefined) {
       return false;
     }
@@ -96,7 +96,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldHideActionMenu_: function() {
+  shouldHideActionMenu_() {
     if (this.model === undefined) {
       return false;
     }
@@ -110,7 +110,7 @@ Polymer({
    * A handler for selecting a site (by clicking on the origin).
    * @private
    */
-  onOriginTap_: function() {
+  onOriginTap_() {
     if (!this.allowNavigateToSiteDetail_) {
       return;
     }
@@ -125,7 +125,7 @@ Polymer({
    * or the website whose third parties are also affected.
    * @return {string}
    */
-  computeDisplayName_: function() {
+  computeDisplayName_() {
     if (this.model.embeddingOrigin &&
         this.model.category === settings.ContentSettingsTypes.COOKIES &&
         this.model.origin.trim() == settings.SITE_EXCEPTION_WILDCARD) {
@@ -140,7 +140,7 @@ Polymer({
    * mix of the last two).
    * @return {string}
    */
-  computeSiteDescription_: function() {
+  computeSiteDescription_() {
     let description = '';
 
     if (this.model.embeddingOrigin) {
@@ -179,14 +179,14 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  computeShowPolicyPrefIndicator_: function() {
+  computeShowPolicyPrefIndicator_() {
     return this.model.enforcement ==
         chrome.settingsPrivate.Enforcement.ENFORCED &&
         !!this.model.controlledBy;
   },
 
   /** @private */
-  onResetButtonTap_: function() {
+  onResetButtonTap_() {
     // Use the appropriate method to reset a chooser exception.
     if (this.chooserType !== settings.ChooserType.NONE &&
         this.chooserObject != null) {
@@ -202,7 +202,7 @@ Polymer({
   },
 
   /** @private */
-  onShowActionMenuTap_: function() {
+  onShowActionMenuTap_() {
     // Chooser exceptions do not support the action menu, so do nothing.
     if (this.chooserType !== settings.ChooserType.NONE) {
       return;
@@ -214,7 +214,7 @@ Polymer({
   },
 
   /** @private */
-  onModelChanged_: function() {
+  onModelChanged_() {
     if (!this.model) {
       this.allowNavigateToSiteDetail_ = false;
       return;

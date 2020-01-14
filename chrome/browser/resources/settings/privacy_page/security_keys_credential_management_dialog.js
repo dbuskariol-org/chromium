@@ -83,7 +83,7 @@ Polymer({
   checkedCredentialIds_: null,
 
   /** @override */
-  attached: function() {
+  attached() {
     this.$.dialog.showModal();
     this.addWebUIListener(
         'security-keys-credential-management-finished',
@@ -100,13 +100,13 @@ Polymer({
    * @private
    * @param {string} error
    */
-  onError_: function(error) {
+  onError_(error) {
     this.errorMsg_ = error;
     this.dialogPage_ = CredentialManagementDialogPage.ERROR;
   },
 
   /** @private */
-  submitPIN_: function() {
+  submitPIN_() {
     // Disable the confirm button to prevent concurrent submissions.
     this.confirmButtonDisabled_ = true;
 
@@ -127,7 +127,7 @@ Polymer({
    * @private
    * @param {!Array<!settings.Credential>} credentials
    */
-  onCredentials_: function(credentials) {
+  onCredentials_(credentials) {
     if (!credentials.length) {
       this.onError_(this.i18n('securityKeysCredentialManagementNoCredentials'));
       return;
@@ -138,7 +138,7 @@ Polymer({
   },
 
   /** @private */
-  dialogPageChanged_: function() {
+  dialogPageChanged_() {
     switch (this.dialogPage_) {
       case CredentialManagementDialogPage.INITIAL:
         this.cancelButtonVisible_ = true;
@@ -172,7 +172,7 @@ Polymer({
   },
 
   /** @private */
-  confirmButtonClick_: function() {
+  confirmButtonClick_() {
     switch (this.dialogPage_) {
       case CredentialManagementDialogPage.PIN_PROMPT:
         this.submitPIN_();
@@ -186,7 +186,7 @@ Polymer({
   },
 
   /** @private */
-  close_: function() {
+  close_() {
     this.$.dialog.close();
   },
 
@@ -196,7 +196,7 @@ Polymer({
    * @param {!settings.Credential} credential
    * @return {string}
    */
-  formatUser_: function(credential) {
+  formatUser_(credential) {
     if (this.isEmpty_(credential.userDisplayName)) {
       return credential.userName;
     }
@@ -204,7 +204,7 @@ Polymer({
   },
 
   /** @private */
-  onDialogClosed_: function() {
+  onDialogClosed_() {
     this.browserProxy_.close();
   },
 
@@ -213,7 +213,7 @@ Polymer({
    * @param {?string} str
    * @return {boolean} Whether this credential has been selected for removal.
    */
-  isEmpty_: function(str) {
+  isEmpty_(str) {
     return !str || str.length == 0;
   },
 
@@ -221,7 +221,7 @@ Polymer({
    * @param {!Event} e
    * @private
    */
-  onIronSelect_: function(e) {
+  onIronSelect_(e) {
     // Prevent this event from bubbling since it is unnecessarily triggering the
     // listener within settings-animated-pages.
     e.stopPropagation();
@@ -232,7 +232,7 @@ Polymer({
    * @param {!Event} e
    * @private
    */
-  checkedCredentialsChanged_: function(e) {
+  checkedCredentialsChanged_(e) {
     const credentialId = e.target.dataset.id;
     if (e.target.checked) {
       this.checkedCredentialIds_.add(credentialId);
@@ -247,12 +247,12 @@ Polymer({
    * @param {string} credentialId
    * @return {boolean} true if the checkbox for |credentialId| is checked
    */
-  credentialIsChecked_: function(credentialId) {
+  credentialIsChecked_(credentialId) {
     return this.checkedCredentialIds_.has(credentialId);
   },
 
   /** @private */
-  deleteSelectedCredentials_: function() {
+  deleteSelectedCredentials_() {
     assert(this.dialogPage_ == CredentialManagementDialogPage.CREDENTIALS);
     assert(this.credentials_ && this.credentials_.length > 0);
     assert(this.checkedCredentialIds_.size > 0);

@@ -46,14 +46,14 @@ Polymer({
   },
 
   /** @override */
-  attached: function() {
+  attached() {
     Polymer.RenderStatus.afterNextRender(this, function() {
       Polymer.IronA11yAnnouncer.requestAvailability();
     });
   },
 
   /** Focuses the PIN input field. */
-  focus: function() {
+  focus() {
     this.$.pin.focus();
   },
 
@@ -62,7 +62,7 @@ Polymer({
    * @return {boolean} True iff the PIN is valid.
    * @private
    */
-  validate_: function() {
+  validate_() {
     const error = this.isValidPIN_(this.value_);
     if (error != '') {
       this.error_ = error;
@@ -77,7 +77,7 @@ Polymer({
    * @param {!settings.PINFieldSubmitFunc} submitFunc
    * @return {!Promise} resolves if the PIN was correct, else rejects
    */
-  trySubmit: function(submitFunc) {
+  trySubmit(submitFunc) {
     if (!this.validate_()) {
       this.focus();
       return Promise.reject();
@@ -96,7 +96,7 @@ Polymer({
    * @param {number} retries The number of retries remaining.
    * @private
    */
-  showIncorrectPINError_: function(retries) {
+  showIncorrectPINError_(retries) {
     // Warn the user if the number of retries is getting low.
     let error;
     if (1 < retries && retries <= 3) {
@@ -111,7 +111,7 @@ Polymer({
   },
 
   /** @private */
-  onPINInput_: function() {
+  onPINInput_() {
     // Typing in the PIN box after an error makes the error message
     // disappear.
     this.error_ = '';
@@ -123,7 +123,7 @@ Polymer({
    * @return {boolean} True iff |s| is non-empty.
    * @private
    */
-  isNonEmpty_: function(s) {
+  isNonEmpty_(s) {
     return s != '';
   },
 
@@ -131,7 +131,7 @@ Polymer({
    * @return {string} The PIN-input element type.
    * @private
    */
-  inputType_: function() {
+  inputType_() {
     return this.inputVisible_ ? 'text' : 'password';
   },
 
@@ -139,7 +139,7 @@ Polymer({
    * @return {string} The class (and thus icon) to be displayed.
    * @private
    */
-  showButtonClass_: function() {
+  showButtonClass_() {
     return 'icon-visibility' + (this.inputVisible_ ? '-off' : '');
   },
 
@@ -147,7 +147,7 @@ Polymer({
    * @return {string} The tooltip for the icon.
    * @private
    */
-  showButtonTitle_: function() {
+  showButtonTitle_() {
     return this.i18n(
         this.inputVisible_ ? 'securityKeysHidePINs' : 'securityKeysShowPINs');
   },
@@ -156,7 +156,7 @@ Polymer({
    * onClick handler for the show/hide icon.
    * @private
    */
-  showButtonClick_: function() {
+  showButtonClick_() {
     this.inputVisible_ = !this.inputVisible_;
   },
 
@@ -165,7 +165,7 @@ Polymer({
    * @return {string} An error string or else '' to indicate validity.
    * @private
    */
-  isValidPIN_: function(pin) {
+  isValidPIN_(pin) {
     // The UTF-8 encoding of the PIN must be between 4
     // and 63 bytes, and the final byte cannot be zero.
     const utf8Encoded = new TextEncoder().encode(pin);
@@ -199,7 +199,7 @@ Polymer({
   },
 
   /** @private */
-  errorChanged_: function() {
+  errorChanged_() {
     // Make screen readers announce changes to the PIN validation error
     // label.
     this.fire('iron-announce', {text: this.error_});

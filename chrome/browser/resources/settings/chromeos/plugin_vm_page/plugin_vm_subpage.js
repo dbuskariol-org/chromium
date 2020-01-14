@@ -21,7 +21,7 @@ Polymer({
   // TODO(juwa@google.com): Navigate back if plugin vm uninstalled.
 
   /** @private */
-  onSharedPathsClick_: function() {
+  onSharedPathsClick_() {
     settings.navigateTo(settings.routes.PLUGIN_VM_SHARED_PATHS);
   },
 
@@ -30,7 +30,7 @@ Polymer({
    * TODO(juwa@google.com): Show a confirmation dialog before removing.
    * @private
    */
-  onRemoveClick_: function() {
+  onRemoveClick_() {
     settings.PluginVmBrowserProxyImpl.getInstance().removePluginVm();
   },
 });

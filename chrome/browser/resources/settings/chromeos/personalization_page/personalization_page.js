@@ -22,7 +22,7 @@ Polymer({
     /** @private {!Map<string, string>} */
     focusConfig_: {
       type: Object,
-      value: function() {
+      value() {
         const map = new Map();
         if (settings.routes.CHANGE_PICTURE) {
           map.set(settings.routes.CHANGE_PICTURE.path, '#changePictureRow');
@@ -36,12 +36,12 @@ Polymer({
   browserProxy_: null,
 
   /** @override */
-  created: function() {
+  created() {
     this.browserProxy_ = settings.WallpaperBrowserProxyImpl.getInstance();
   },
 
   /** @override */
-  ready: function() {
+  ready() {
     this.browserProxy_.isWallpaperSettingVisible().then(
         isWallpaperSettingVisible => {
           this.showWallpaperRow_ = isWallpaperSettingVisible;
@@ -55,12 +55,12 @@ Polymer({
   /**
    * @private
    */
-  openWallpaperManager_: function() {
+  openWallpaperManager_() {
     this.browserProxy_.openWallpaperManager();
   },
 
   /** @private */
-  navigateToChangePicture_: function() {
+  navigateToChangePicture_() {
     settings.navigateTo(settings.routes.CHANGE_PICTURE);
   },
 });

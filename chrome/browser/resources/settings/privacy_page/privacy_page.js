@@ -66,7 +66,7 @@ Polymer({
     /** @private */
     passwordsLeakDetectionEnabled_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('passwordsLeakDetectionEnabled');
       },
     },
@@ -74,7 +74,7 @@ Polymer({
     /** @private {chrome.settingsPrivate.PrefObject} */
     safeBrowsingReportingPref_: {
       type: Object,
-      value: function() {
+      value() {
         return /** @type {chrome.settingsPrivate.PrefObject} */ ({
           key: '',
           type: chrome.settingsPrivate.PrefType.BOOLEAN,
@@ -86,7 +86,7 @@ Polymer({
     /** @private */
     isGuest_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('isGuest');
       }
     },
@@ -114,7 +114,7 @@ Polymer({
     /** @private */
     enableSafeBrowsingSubresourceFilter_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('enableSafeBrowsingSubresourceFilter');
       }
     },
@@ -122,7 +122,7 @@ Polymer({
     /** @private */
     privacySettingsRedesignEnabled_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('privacySettingsRedesignEnabled');
       },
     },
@@ -139,7 +139,7 @@ Polymer({
     /** @private */
     enableBlockAutoplayContentSetting_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('enableBlockAutoplayContentSetting');
       }
     },
@@ -147,7 +147,7 @@ Polymer({
     /** @private {settings.BlockAutoplayStatus} */
     blockAutoplayStatus_: {
       type: Object,
-      value: function() {
+      value() {
         return /** @type {settings.BlockAutoplayStatus} */ ({});
       }
     },
@@ -155,7 +155,7 @@ Polymer({
     /** @private */
     enablePaymentHandlerContentSetting_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('enablePaymentHandlerContentSetting');
       }
     },
@@ -163,7 +163,7 @@ Polymer({
     /** @private */
     enableExperimentalWebPlatformFeatures_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('enableExperimentalWebPlatformFeatures');
       },
     },
@@ -172,7 +172,7 @@ Polymer({
     enableSecurityKeysSubpage_: {
       type: Boolean,
       readOnly: true,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('enableSecurityKeysSubpage');
       }
     },
@@ -180,7 +180,7 @@ Polymer({
     /** @private */
     enableInsecureContentContentSetting_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('enableInsecureContentContentSetting');
       }
     },
@@ -188,7 +188,7 @@ Polymer({
     /** @private */
     enableNativeFileSystemWriteContentSetting_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean(
             'enableNativeFileSystemWriteContentSetting');
       }
@@ -204,7 +204,7 @@ Polymer({
     /** @private {!Map<string, string>} */
     focusConfig_: {
       type: Object,
-      value: function() {
+      value() {
         const map = new Map();
         // <if expr="use_nss_certs">
         if (settings.routes.CERTIFICATES) {
@@ -244,7 +244,7 @@ Polymer({
   ],
 
   /** @override */
-  ready: function() {
+  ready() {
     this.ContentSettingsTypes = settings.ContentSettingsTypes;
     this.ChooserType = settings.ChooserType;
 
@@ -269,19 +269,19 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  getDisabledExtendedSafeBrowsing_: function() {
+  getDisabledExtendedSafeBrowsing_() {
     return !this.getPref('safebrowsing.enabled').value;
   },
 
   /** @private */
-  onSafeBrowsingReportingToggleChange_: function() {
+  onSafeBrowsingReportingToggleChange_() {
     this.setPrefValue(
         'safebrowsing.scout_reporting_enabled',
         this.$$('#safeBrowsingReportingToggle').checked);
   },
 
   /** @private */
-  onSafeBrowsingReportingPrefChange_: function() {
+  onSafeBrowsingReportingPrefChange_() {
     if (this.prefs == undefined) {
       return;
     }
@@ -303,12 +303,12 @@ Polymer({
    * @param {?settings.SyncStatus} syncStatus
    * @private
    */
-  handleSyncStatus_: function(syncStatus) {
+  handleSyncStatus_(syncStatus) {
     this.syncStatus = syncStatus;
   },
 
   /** @protected */
-  currentRouteChanged: function() {
+  currentRouteChanged() {
     this.showClearBrowsingDataDialog_ =
         settings.getCurrentRoute() == settings.routes.CLEAR_BROWSER_DATA;
   },
@@ -317,7 +317,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onDoNotTrackDomChange_: function(event) {
+  onDoNotTrackDomChange_(event) {
     if (this.showDoNotTrackDialog_) {
       this.maybeShowDoNotTrackDialog_();
     }
@@ -328,7 +328,7 @@ Polymer({
    * @param {settings.BlockAutoplayStatus} autoplayStatus
    * @private
    */
-  onBlockAutoplayStatusChanged_: function(autoplayStatus) {
+  onBlockAutoplayStatusChanged_(autoplayStatus) {
     this.blockAutoplayStatus_ = autoplayStatus;
   },
 
@@ -337,7 +337,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onBlockAutoplayToggleChange_: function(event) {
+  onBlockAutoplayToggleChange_(event) {
     const target = /** @type {!SettingsToggleButtonElement} */ (event.target);
     this.browserProxy_.setBlockAutoplayEnabled(target.checked);
   },
@@ -348,7 +348,7 @@ Polymer({
    * is taken care of by the webUI pref.
    * @private
    */
-  onCanMakePaymentChange_: function() {
+  onCanMakePaymentChange_() {
     this.browserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_PAYMENT_METHOD);
   },
@@ -359,7 +359,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onDoNotTrackChange_: function(event) {
+  onDoNotTrackChange_(event) {
     this.browserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_DO_NOT_TRACK);
     const target = /** @type {!SettingsToggleButtonElement} */ (event.target);
@@ -375,7 +375,7 @@ Polymer({
   },
 
   /** @private */
-  maybeShowDoNotTrackDialog_: function() {
+  maybeShowDoNotTrackDialog_() {
     const dialog = this.$$('#confirmDoNotTrackDialog');
     if (dialog && !dialog.open) {
       dialog.showModal();
@@ -383,13 +383,13 @@ Polymer({
   },
 
   /** @private */
-  closeDoNotTrackDialog_: function() {
+  closeDoNotTrackDialog_() {
     this.$$('#confirmDoNotTrackDialog').close();
     this.showDoNotTrackDialog_ = false;
   },
 
   /** @private */
-  onDoNotTrackDialogClosed_: function() {
+  onDoNotTrackDialogClosed_() {
     cr.ui.focusWithoutInk(this.$.doNotTrack);
   },
 
@@ -397,7 +397,7 @@ Polymer({
    * Handles the shared proxy confirmation dialog 'Confirm' button.
    * @private
    */
-  onDoNotTrackDialogConfirm_: function() {
+  onDoNotTrackDialogConfirm_() {
     /** @type {!SettingsToggleButtonElement} */ (this.$.doNotTrack)
         .sendPrefChange();
     this.closeDoNotTrackDialog_();
@@ -408,14 +408,14 @@ Polymer({
    * event.
    * @private
    */
-  onDoNotTrackDialogCancel_: function() {
+  onDoNotTrackDialogCancel_() {
     /** @type {!SettingsToggleButtonElement} */ (this.$.doNotTrack)
         .resetToPrefValue();
     this.closeDoNotTrackDialog_();
   },
 
   /** @private */
-  onManageCertificatesTap_: function() {
+  onManageCertificatesTap_() {
     // <if expr="use_nss_certs">
     settings.navigateTo(settings.routes.CERTIFICATES);
     // </if>
@@ -431,7 +431,7 @@ Polymer({
    * logic of actually changing the setting is taken care of by the webUI pref.
    * @private
    */
-  onNetworkPredictionChange_: function() {
+  onNetworkPredictionChange_() {
     this.browserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_NETWORK_PREDICTION);
   },
@@ -440,7 +440,7 @@ Polymer({
    * This is a workaround to connect the remove all button to the subpage.
    * @private
    */
-  onRemoveAllCookiesFromSite_: function() {
+  onRemoveAllCookiesFromSite_() {
     const node = /** @type {?SiteDataDetailsSubpageElement} */ (
         this.$$('site-data-details-subpage'));
     if (node) {
@@ -449,45 +449,45 @@ Polymer({
   },
 
   /** @private */
-  onSiteDataTap_: function() {
+  onSiteDataTap_() {
     settings.navigateTo(settings.routes.SITE_SETTINGS_SITE_DATA);
   },
 
   /** @private */
-  onSiteSettingsTap_: function() {
+  onSiteSettingsTap_() {
     settings.navigateTo(settings.routes.SITE_SETTINGS);
     this.browserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_SITE_SETTINGS);
   },
 
   /** @private */
-  onClearBrowsingDataTap_: function() {
+  onClearBrowsingDataTap_() {
     settings.navigateTo(settings.routes.CLEAR_BROWSER_DATA);
     this.browserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_CLEAR_BROWSING_DATA);
   },
 
   /** @private */
-  onDialogClosed_: function() {
+  onDialogClosed_() {
     settings.navigateTo(settings.routes.CLEAR_BROWSER_DATA.parent);
     cr.ui.focusWithoutInk(assert(this.$.clearBrowsingData));
   },
 
   /** @private */
-  onSecurityKeysTap_: function() {
+  onSecurityKeysTap_() {
     settings.navigateTo(settings.routes.SECURITY_KEYS);
     this.browserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_SECURITY_KEYS);
   },
 
   /** @private */
-  getProtectedContentLabel_: function(value) {
+  getProtectedContentLabel_(value) {
     return value ? this.i18n('siteSettingsProtectedContentEnable') :
                    this.i18n('siteSettingsBlocked');
   },
 
   /** @private */
-  getProtectedContentIdentifiersLabel_: function(value) {
+  getProtectedContentIdentifiersLabel_(value) {
     return value ? this.i18n('siteSettingsProtectedContentEnableIdentifiers') :
                    this.i18n('siteSettingsBlocked');
   },

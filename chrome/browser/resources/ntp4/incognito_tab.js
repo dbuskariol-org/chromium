@@ -30,7 +30,7 @@ window.addEventListener('load', function() {
 // from the C++ side.
 const ntp = {
   /** @param {string} attached */
-  setBookmarkBarAttached: function(attached) {
+  setBookmarkBarAttached(attached) {
     document.documentElement.setAttribute('bookmarkbarattached', attached);
   },
 };

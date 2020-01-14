@@ -93,7 +93,7 @@ Polymer({
      */
     fingerprintScannerAnimationClass_: {
       type: String,
-      value: function() {
+      value() {
         if (!loadTimeData.getBoolean('fingerprintUnlockEnabled')) {
           return '';
         }
@@ -119,7 +119,7 @@ Polymer({
      */
     shouldUseLottieAnimation_: {
       type: Boolean,
-      value: function() {
+      value() {
         if (!loadTimeData.getBoolean('fingerprintUnlockEnabled')) {
           return false;
         }
@@ -147,7 +147,7 @@ Polymer({
   browserProxy_: null,
 
   /** @override */
-  attached: function() {
+  attached() {
     this.addWebUIListener(
         'on-fingerprint-scan-received', this.onScanReceived_.bind(this));
     this.browserProxy_ = settings.FingerprintBrowserProxyImpl.getInstance();
@@ -160,7 +160,7 @@ Polymer({
   /**
    * Closes the dialog.
    */
-  close: function() {
+  close() {
     if (this.$.dialog.open) {
       this.$.dialog.close();
     }
@@ -175,7 +175,7 @@ Polymer({
   },
 
   /** private */
-  clearSensorMessageTimeout_: function() {
+  clearSensorMessageTimeout_() {
     if (this.tapSensorMessageTimeoutId_ != 0) {
       clearTimeout(this.tapSensorMessageTimeoutId_);
       this.tapSensorMessageTimeoutId_ = 0;
@@ -187,7 +187,7 @@ Polymer({
    * closed.
    * @private
    */
-  reset_: function() {
+  reset_() {
     this.step_ = settings.FingerprintSetupStep.LOCATE_SCANNER;
     this.percentComplete_ = 0;
     this.clearSensorMessageTimeout_();
@@ -197,7 +197,7 @@ Polymer({
    * Closes the dialog.
    * @private
    */
-  onClose_: function() {
+  onClose_() {
     if (this.$.dialog.open) {
       this.$.dialog.close();
     }
@@ -209,7 +209,7 @@ Polymer({
    * @param {!settings.FingerprintScan} scan
    * @private
    */
-  onScanReceived_: function(scan) {
+  onScanReceived_(scan) {
     switch (this.step_) {
       case settings.FingerprintSetupStep.LOCATE_SCANNER:
         this.$.arc.reset();
@@ -244,7 +244,7 @@ Polymer({
    * @param {string} problemMessage Message for the scan result.
    * @private
    */
-  getInstructionMessage_: function(step, problemMessage) {
+  getInstructionMessage_(step, problemMessage) {
     switch (step) {
       case settings.FingerprintSetupStep.LOCATE_SCANNER:
         return this.i18n('configureFingerprintInstructionLocateScannerStep');
@@ -262,7 +262,7 @@ Polymer({
    *     fingerprint scanner gives.
    * @private
    */
-  setProblem_: function(scanResult) {
+  setProblem_(scanResult) {
     this.clearSensorMessageTimeout_();
     switch (scanResult) {
       case settings.FingerprintResultType.SUCCESS:
@@ -294,7 +294,7 @@ Polymer({
    *     fingerprint setup is on.
    * @private
    */
-  getCloseButtonText_: function(step) {
+  getCloseButtonText_(step) {
     if (step == settings.FingerprintSetupStep.READY) {
       return this.i18n('done');
     }
@@ -306,7 +306,7 @@ Polymer({
    * @param {!settings.FingerprintSetupStep} step
    * @private
    */
-  getCloseButtonClass_: function(step) {
+  getCloseButtonClass_(step) {
     if (step == settings.FingerprintSetupStep.READY) {
       return 'action-button';
     }
@@ -319,7 +319,7 @@ Polymer({
    * @param {boolean} allowAddAnotherFinger
    * @private
    */
-  hideAddAnother_: function(step, allowAddAnotherFinger) {
+  hideAddAnother_(step, allowAddAnotherFinger) {
     return step != settings.FingerprintSetupStep.READY ||
         !allowAddAnotherFinger;
   },
@@ -329,7 +329,7 @@ Polymer({
    * prepare to enroll another fingerprint.
    * @private
    */
-  onAddAnotherFingerprint_: function() {
+  onAddAnotherFingerprint_() {
     this.reset_();
     this.$.arc.reset();
     this.step_ = settings.FingerprintSetupStep.MOVE_FINGER;
@@ -340,7 +340,7 @@ Polymer({
    * Whether scanner location should be shown at the current step.
    * @private
    */
-  showScannerLocation_: function() {
+  showScannerLocation_() {
     return this.step_ == settings.FingerprintSetupStep.LOCATE_SCANNER;
   },
 
@@ -348,7 +348,7 @@ Polymer({
    * Whether fingerprint progress circle should be shown at the current step.
    * @private
    */
-  showArc_: function() {
+  showArc_() {
     return this.step_ == settings.FingerprintSetupStep.MOVE_FINGER ||
         this.step_ == settings.FingerprintSetupStep.READY;
   },
@@ -357,7 +357,7 @@ Polymer({
    * Observer for percentComplete_.
    * @private
    */
-  onProgressChanged_: function(newValue, oldValue) {
+  onProgressChanged_(newValue, oldValue) {
     // Start a new enrollment, so reset all enrollment related states.
     if (newValue === 0) {
       this.$.arc.reset();

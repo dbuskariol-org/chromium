@@ -40,7 +40,7 @@ Polymer({
   /** settings.RouteOriginBehavior override */
   route_: settings.routes.MULTIDEVICE_FEATURES,
 
-  ready: function() {
+  ready() {
     this.addFocusConfig_(this.subpageRoute, '#subpageButton');
   },
 
@@ -48,12 +48,12 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  hasSubpageClickHandler_: function() {
+  hasSubpageClickHandler_() {
     return !!this.subpageRoute && this.isFeatureAllowedByPolicy(this.feature);
   },
 
   /** @private */
-  handleItemClick_: function(event) {
+  handleItemClick_(event) {
     if (!this.hasSubpageClickHandler_()) {
       return;
     }

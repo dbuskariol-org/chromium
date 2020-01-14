@@ -66,7 +66,7 @@ Polymer({
      */
     networkStateList_: {
       type: Array,
-      value: function() {
+      value() {
         return [];
       },
     },
@@ -77,7 +77,7 @@ Polymer({
      */
     thirdPartyVpns_: {
       type: Object,
-      value: function() {
+      value() {
         return {};
       },
     },
@@ -89,7 +89,7 @@ Polymer({
      */
     notificationsDisabledDeviceNames_: {
       type: Array,
-      value: function() {
+      value() {
         return [];
       },
     },
@@ -100,7 +100,7 @@ Polymer({
      */
     showTechnologyBadge_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.valueExists('showTechnologyBadge') &&
             loadTimeData.getBoolean('showTechnologyBadge');
       }
@@ -128,14 +128,14 @@ Polymer({
   networkConfig_: null,
 
   /** @override */
-  created: function() {
+  created() {
     this.browserProxy_ = settings.InternetPageBrowserProxyImpl.getInstance();
     this.networkConfig_ = network_config.MojoInterfaceProviderImpl.getInstance()
                               .getMojoServiceRemote();
   },
 
   /** @override */
-  ready: function() {
+  ready() {
     this.browserProxy_.setGmsCoreNotificationsDisabledDeviceNamesCallback(
         this.onNotificationsDisabledDeviceNamesReceived_.bind(this));
     this.browserProxy_.requestGmsCoreNotificationsDisabledDeviceNames();
@@ -145,7 +145,7 @@ Polymer({
   },
 
   /** override */
-  detached: function() {
+  detached() {
     this.stopScanning_();
   },
 
@@ -155,7 +155,7 @@ Polymer({
    * @param {!settings.Route} oldRoute
    * @protected
    */
-  currentRouteChanged: function(newRoute, oldRoute) {
+  currentRouteChanged(newRoute, oldRoute) {
     if (newRoute != settings.routes.INTERNET_NETWORKS) {
       this.stopScanning_();
       return;
@@ -165,7 +165,7 @@ Polymer({
         this, newRoute, oldRoute);
   },
 
-  init: function() {
+  init() {
     // Clear any stale data.
     this.networkStateList_ = [];
     this.thirdPartyVpns_ = {};
@@ -181,17 +181,17 @@ Polymer({
    * NetworkListenerBehavior override
    * @param {!Array<OncMojo.NetworkStateProperties>} networks
    */
-  onActiveNetworksChanged: function(networks) {
+  onActiveNetworksChanged(networks) {
     this.getNetworkStateList_();
   },
 
   /** NetworkListenerBehavior override */
-  onNetworkStateListChanged: function() {
+  onNetworkStateListChanged() {
     this.getNetworkStateList_();
   },
 
   /** NetworkListenerBehavior override */
-  onVpnProvidersChanged: function() {
+  onVpnProvidersChanged() {
     if (this.deviceState.type != mojom.NetworkType.kVPN) {
       return;
     }
@@ -199,7 +199,7 @@ Polymer({
   },
 
   /** @private */
-  deviceStateChanged_: function() {
+  deviceStateChanged_() {
     if (this.deviceState !== undefined) {
       // A scan has completed if the spinner was active (i.e., scanning was
       // active) and the device is no longer scanning.
@@ -220,7 +220,7 @@ Polymer({
   },
 
   /** @private */
-  updateScanning_: function() {
+  updateScanning_() {
     if (!this.deviceState) {
       return;
     }
@@ -235,7 +235,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldStartScan_: function() {
+  shouldStartScan_() {
     // Scans should be kicked off from the Wi-Fi networks subpage.
     if (this.deviceState.type == mojom.NetworkType.kWiFi) {
       return true;
@@ -253,7 +253,7 @@ Polymer({
   },
 
   /** @private */
-  startScanning_: function() {
+  startScanning_() {
     if (this.scanIntervalId_ != null) {
       return;
     }
@@ -269,7 +269,7 @@ Polymer({
   },
 
   /** @private */
-  stopScanning_: function() {
+  stopScanning_() {
     if (this.scanIntervalId_ == null) {
       return;
     }
@@ -278,7 +278,7 @@ Polymer({
   },
 
   /** @private */
-  getNetworkStateList_: function() {
+  getNetworkStateList_() {
     if (!this.deviceState) {
       return;
     }
@@ -296,7 +296,7 @@ Polymer({
    * @param {!Array<!OncMojo.NetworkStateProperties>} networkStates
    * @private
    */
-  onGetNetworks_: function(networkStates) {
+  onGetNetworks_(networkStates) {
     if (!this.deviceState) {
       // Edge case when device states change before this callback.
       return;
@@ -391,7 +391,7 @@ Polymer({
    * @param {!Array<string>} notificationsDisabledDeviceNames
    * @private
    */
-  onNotificationsDisabledDeviceNamesReceived_: function(
+  onNotificationsDisabledDeviceNamesReceived_(
       notificationsDisabledDeviceNames) {
     this.notificationsDisabledDeviceNames_ = notificationsDisabledDeviceNames;
   },
@@ -401,7 +401,7 @@ Polymer({
    * @return {boolean} Whether or not the device state is enabled.
    * @private
    */
-  deviceIsEnabled_: function(deviceState) {
+  deviceIsEnabled_(deviceState) {
     return !!deviceState &&
         deviceState.deviceState ==
         chromeos.networkConfig.mojom.DeviceStateType.kEnabled;
@@ -414,7 +414,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getOffOnString_: function(deviceState, onstr, offstr) {
+  getOffOnString_(deviceState, onstr, offstr) {
     return this.deviceIsEnabled_(deviceState) ? onstr : offstr;
   },
 
@@ -423,7 +423,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  enableToggleIsVisible_: function(deviceState) {
+  enableToggleIsVisible_(deviceState) {
     return !!deviceState && deviceState.type != mojom.NetworkType.kEthernet &&
         deviceState.type != mojom.NetworkType.kVPN;
   },
@@ -433,7 +433,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  enableToggleIsEnabled_: function(deviceState) {
+  enableToggleIsEnabled_(deviceState) {
     return !!deviceState &&
         deviceState.deviceState !=
         chromeos.networkConfig.mojom.DeviceStateType.kProhibited;
@@ -444,7 +444,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getToggleA11yString_: function(deviceState) {
+  getToggleA11yString_(deviceState) {
     if (!this.enableToggleIsVisible_(deviceState)) {
       return '';
     }
@@ -464,7 +464,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getAddThirdPartyVpnA11yString_: function(provider) {
+  getAddThirdPartyVpnA11yString_(provider) {
     return this.i18n('internetAddThirdPartyVPN', provider.providerName || '');
   },
 
@@ -473,7 +473,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  allowAddConnection_: function(globalPolicy) {
+  allowAddConnection_(globalPolicy) {
     return globalPolicy && !globalPolicy.allowOnlyPolicyNetworksToConnect;
   },
 
@@ -483,7 +483,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  showAddButton_: function(deviceState, globalPolicy) {
+  showAddButton_(deviceState, globalPolicy) {
     if (!deviceState || deviceState.type != mojom.NetworkType.kWiFi) {
       return false;
     }
@@ -494,7 +494,7 @@ Polymer({
   },
 
   /** @private */
-  onAddButtonTap_: function() {
+  onAddButtonTap_() {
     assert(this.deviceState);
     const type = this.deviceState.type;
     assert(type != mojom.NetworkType.kCellular);
@@ -505,7 +505,7 @@ Polymer({
    * @param {!{model: !{item: !mojom.VpnProvider}}} event
    * @private
    */
-  onAddThirdPartyVpnTap_: function(event) {
+  onAddThirdPartyVpnTap_(event) {
     const provider = event.model.item;
     this.browserProxy_.addThirdPartyVpn(provider.appId);
   },
@@ -515,7 +515,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  knownNetworksIsVisible_: function(deviceState) {
+  knownNetworksIsVisible_(deviceState) {
     return !!deviceState && deviceState.type == mojom.NetworkType.kWiFi;
   },
 
@@ -523,7 +523,7 @@ Polymer({
    * Event triggered when the known networks button is clicked.
    * @private
    */
-  onKnownNetworksTap_: function() {
+  onKnownNetworksTap_() {
     assert(this.deviceState.type == mojom.NetworkType.kWiFi);
     this.fire('show-known-networks', this.deviceState.type);
   },
@@ -533,7 +533,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onDeviceEnabledChange_: function(event) {
+  onDeviceEnabledChange_(event) {
     assert(this.deviceState);
     this.fire('device-enabled-toggled', {
       enabled: !this.deviceIsEnabled_(this.deviceState),
@@ -547,7 +547,7 @@ Polymer({
    * @return {!Array<!OncMojo.NetworkStateProperties>}
    * @private
    */
-  getThirdPartyVpnNetworks_: function(thirdPartyVpns, provider) {
+  getThirdPartyVpnNetworks_(thirdPartyVpns, provider) {
     return thirdPartyVpns[provider.providerId] || [];
   },
 
@@ -557,7 +557,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  haveThirdPartyVpnNetwork_: function(thirdPartyVpns, provider) {
+  haveThirdPartyVpnNetwork_(thirdPartyVpns, provider) {
     const list = this.getThirdPartyVpnNetworks_(thirdPartyVpns, provider);
     return !!list.length;
   },
@@ -567,7 +567,7 @@ Polymer({
    * @param {!{target: HTMLElement, detail: !OncMojo.NetworkStateProperties}} e
    * @private
    */
-  onNetworkSelected_: function(e) {
+  onNetworkSelected_(e) {
     assert(this.globalPolicy);
     assert(this.defaultNetwork !== undefined);
     const networkState = e.detail;
@@ -584,7 +584,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  isBlockedByPolicy_: function(state) {
+  isBlockedByPolicy_(state) {
     if (state.type != mojom.NetworkType.kWiFi ||
         this.isPolicySource(state.source) || !this.globalPolicy) {
       return false;
@@ -604,7 +604,7 @@ Polymer({
    * @param {!OncMojo.NetworkStateProperties} state The network state.
    * @private
    */
-  canAttemptConnection_: function(state) {
+  canAttemptConnection_(state) {
     if (state.connectionState != mojom.ConnectionStateType.kNotConnected) {
       return false;
     }
@@ -631,7 +631,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  tetherToggleIsVisible_: function(deviceState, tetherDeviceState) {
+  tetherToggleIsVisible_(deviceState, tetherDeviceState) {
     return !!deviceState && deviceState.type == mojom.NetworkType.kCellular &&
         !!tetherDeviceState;
   },
@@ -642,7 +642,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  tetherToggleIsEnabled_: function(deviceState, tetherDeviceState) {
+  tetherToggleIsEnabled_(deviceState, tetherDeviceState) {
     return this.tetherToggleIsVisible_(deviceState, tetherDeviceState) &&
         this.enableToggleIsEnabled_(tetherDeviceState) &&
         tetherDeviceState.deviceState !=
@@ -653,7 +653,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onTetherEnabledChange_: function(event) {
+  onTetherEnabledChange_(event) {
     this.fire('device-enabled-toggled', {
       enabled: !this.deviceIsEnabled_(this.tetherDeviceState),
       type: mojom.NetworkType.kTether,
@@ -667,7 +667,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  matchesType_: function(typeString, device) {
+  matchesType_(typeString, device) {
     return device &&
         device.type == OncMojo.getNetworkTypeFromString(typeString);
   },
@@ -677,7 +677,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldShowNetworkList_: function(networkStateList) {
+  shouldShowNetworkList_(networkStateList) {
     return networkStateList.length > 0;
   },
 
@@ -687,7 +687,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getNoNetworksInnerHtml_: function(deviceState, tetherDeviceState) {
+  getNoNetworksInnerHtml_(deviceState, tetherDeviceState) {
     const type = deviceState.type;
     if (type == mojom.NetworkType.kTether ||
         (type == mojom.NetworkType.kCellular && this.tetherDeviceState)) {
@@ -715,7 +715,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  showGmsCoreNotificationsSection_: function(notificationsDisabledDeviceNames) {
+  showGmsCoreNotificationsSection_(notificationsDisabledDeviceNames) {
     return notificationsDisabledDeviceNames.length > 0;
   },
 
@@ -724,8 +724,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getGmsCoreNotificationsDevicesString_: function(
-      notificationsDisabledDeviceNames) {
+  getGmsCoreNotificationsDevicesString_(notificationsDisabledDeviceNames) {
     if (notificationsDisabledDeviceNames.length == 1) {
       return this.i18n(
           'gmscoreNotificationsOneDeviceSubtitle',

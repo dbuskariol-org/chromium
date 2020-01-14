@@ -30,7 +30,7 @@ Polymer({
   observers: ['onMarginsSettingChange_(settings.margins.value)'],
 
   /** @override */
-  ready: function() {
+  ready() {
     this.MarginsTypeEnum = MarginsType;
   },
 
@@ -38,13 +38,13 @@ Polymer({
    * @param {*} newValue The new value of the margins setting.
    * @private
    */
-  onMarginsSettingChange_: function(newValue) {
+  onMarginsSettingChange_(newValue) {
     this.selectedValue =
         /** @type {!MarginsType} */ (newValue).toString();
   },
 
   /** @param {string} value The new select value. */
-  onProcessSelectChange: function(value) {
+  onProcessSelectChange(value) {
     this.setSetting('margins', parseInt(value, 10));
   },
 
@@ -54,7 +54,7 @@ Polymer({
    * @return {boolean} Whether the margins settings button should be disabled.
    * @private
    */
-  getMarginsSettingsDisabled_: function(globallyDisabled, pagesPerSheet) {
+  getMarginsSettingsDisabled_(globallyDisabled, pagesPerSheet) {
     return globallyDisabled || pagesPerSheet > 1;
   },
 });

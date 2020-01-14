@@ -89,7 +89,7 @@ Polymer({
   recentEnrollmentId_: '',
 
   /** @override */
-  attached: function() {
+  attached() {
     Polymer.RenderStatus.afterNextRender(this, function() {
       Polymer.IronA11yAnnouncer.requestAvailability();
     });
@@ -109,13 +109,13 @@ Polymer({
    * @private
    * @param {string} error
    */
-  onError_: function(error) {
+  onError_(error) {
     this.errorMsg_ = error;
     this.dialogPage_ = BioEnrollDialogPage.ERROR;
   },
 
   /** @private */
-  submitPIN_: function() {
+  submitPIN_() {
     // Disable the confirm button to prevent concurrent submissions.
     this.confirmButtonDisabled_ = true;
 
@@ -137,14 +137,14 @@ Polymer({
    * @private
    * @param {!Array<!settings.Enrollment>} enrollments
    */
-  onEnrollments_: function(enrollments) {
+  onEnrollments_(enrollments) {
     this.enrollments_ = enrollments;
     this.$.enrollmentList.fire('iron-resize');
     this.dialogPage_ = BioEnrollDialogPage.ENROLLMENTS;
   },
 
   /** @private */
-  dialogPageChanged_: function() {
+  dialogPageChanged_() {
     switch (this.dialogPage_) {
       case BioEnrollDialogPage.INITIAL:
         this.cancelButtonVisible_ = true;
@@ -190,7 +190,7 @@ Polymer({
   },
 
   /** @private */
-  addButtonClick_: function() {
+  addButtonClick_() {
     assert(this.dialogPage_ == BioEnrollDialogPage.ENROLLMENTS);
 
     this.maxSamples_ = -1;  // Reset maxSamples_ before enrolling starts.
@@ -212,7 +212,7 @@ Polymer({
    * @private
    * @param {!settings.EnrollmentStatus} response
    */
-  onEnrolling_: function(response) {
+  onEnrolling_(response) {
     if (response.code == settings.Ctap2Status.ERR_KEEPALIVE_CANCEL) {
       this.showEnrollmentsPage_();
       return;
@@ -252,7 +252,7 @@ Polymer({
   },
 
   /** @private */
-  confirmButtonClick_: function() {
+  confirmButtonClick_() {
     switch (this.dialogPage_) {
       case BioEnrollDialogPage.PIN_PROMPT:
         this.submitPIN_();
@@ -270,7 +270,7 @@ Polymer({
   },
 
   /** @private */
-  renameNewEnrollment_: function() {
+  renameNewEnrollment_() {
     assert(this.dialogPage_ == BioEnrollDialogPage.CHOOSE_NAME);
     // Disable the confirm button to prevent concurrent submissions. It will be
     // re-enabled by dialogPageChanged_() where appropriate.
@@ -283,14 +283,14 @@ Polymer({
   },
 
   /** @private */
-  showEnrollmentsPage_: function() {
+  showEnrollmentsPage_() {
     this.browserProxy_.enumerateEnrollments().then(enrollments => {
       this.onEnrollments_(enrollments);
     });
   },
 
   /** @private */
-  cancel_: function() {
+  cancel_() {
     if (this.dialogPage_ == BioEnrollDialogPage.ENROLL) {
       // Cancel an ongoing enrollment.  Will cause the pending
       // enumerateEnrollments() promise to be resolved and proceed to the
@@ -304,12 +304,12 @@ Polymer({
   },
 
   /** @private */
-  done_: function() {
+  done_() {
     this.$.dialog.close();
   },
 
   /** @private */
-  onDialogClosed_: function() {
+  onDialogClosed_() {
     this.browserProxy_.close();
   },
 
@@ -317,7 +317,7 @@ Polymer({
    * @private
    * @param {!Event} e
    */
-  onIronSelect_: function(e) {
+  onIronSelect_(e) {
     // Prevent this event from bubbling since it is unnecessarily triggering the
     // listener within settings-animated-pages.
     e.stopPropagation();
@@ -327,7 +327,7 @@ Polymer({
    * @private
    * @param {!DomRepeatEvent} event
    */
-  deleteEnrollment_: function(event) {
+  deleteEnrollment_(event) {
     if (this.deleteInProgress_) {
       return;
     }
@@ -340,7 +340,7 @@ Polymer({
   },
 
   /** @private */
-  onEnrollmentNameInput_: function() {
+  onEnrollmentNameInput_() {
     this.confirmButtonDisabled_ = !this.recentEnrollmentName_.length;
   },
 
@@ -349,7 +349,7 @@ Polymer({
    * @param {!settings.BioEnrollDialogPage} dialogPage
    * @return {string} The title string for the current dialog page.
    */
-  dialogTitle_: function(dialogPage) {
+  dialogTitle_(dialogPage) {
     if (dialogPage == BioEnrollDialogPage.ENROLL ||
         dialogPage == BioEnrollDialogPage.CHOOSE_NAME) {
       return this.i18n('securityKeysBioEnrollmentAddTitle');
@@ -362,7 +362,7 @@ Polymer({
    * @param {?Array} enrollments
    * @return {string} The header label for the enrollments page.
    */
-  enrollmentsHeader_: function(enrollments) {
+  enrollmentsHeader_(enrollments) {
     return this.i18n(
         enrollments && enrollments.length ?
             'securityKeysBioEnrollmentEnrollmentsLabel' :

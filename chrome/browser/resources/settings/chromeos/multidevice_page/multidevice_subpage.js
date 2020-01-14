@@ -29,17 +29,17 @@ Polymer({
   browserProxy_: null,
 
   /** @override */
-  created: function() {
+  created() {
     this.browserProxy_ = settings.MultiDeviceBrowserProxyImpl.getInstance();
   },
 
   /** @private */
-  handleVerifyButtonClick_: function(event) {
+  handleVerifyButtonClick_(event) {
     this.browserProxy_.retryPendingHostSetup();
   },
 
   /** @private */
-  handleAndroidMessagesButtonClick_: function() {
+  handleAndroidMessagesButtonClick_() {
     this.browserProxy_.setUpAndroidSms();
   },
 
@@ -47,7 +47,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldShowIndividualFeatures_: function() {
+  shouldShowIndividualFeatures_() {
     return this.pageContentData.mode ===
         settings.MultiDeviceSettingsMode.HOST_SET_VERIFIED;
   },
@@ -56,7 +56,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldShowVerifyButton_: function() {
+  shouldShowVerifyButton_() {
     return [
       settings.MultiDeviceSettingsMode.HOST_SET_WAITING_FOR_SERVER,
       settings.MultiDeviceSettingsMode.HOST_SET_WAITING_FOR_VERIFICATION,
@@ -67,23 +67,23 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  shouldShowSuiteToggle_: function() {
+  shouldShowSuiteToggle_() {
     return this.pageContentData.mode ===
         settings.MultiDeviceSettingsMode.HOST_SET_VERIFIED;
   },
 
   /** @private */
-  handleForgetDeviceClick_: function() {
+  handleForgetDeviceClick_() {
     this.$.forgetDeviceDialog.showModal();
   },
 
   /** @private */
-  onForgetDeviceDialogCancelClick_: function() {
+  onForgetDeviceDialogCancelClick_() {
     this.$.forgetDeviceDialog.close();
   },
 
   /** @private */
-  onForgetDeviceDialogConfirmClick_: function() {
+  onForgetDeviceDialogConfirmClick_() {
     this.fire('forget-device-requested');
     this.$.forgetDeviceDialog.close();
   },
@@ -92,7 +92,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getStatusInnerHtml_: function() {
+  getStatusInnerHtml_() {
     if ([
           settings.MultiDeviceSettingsMode.HOST_SET_WAITING_FOR_SERVER,
           settings.MultiDeviceSettingsMode.HOST_SET_WAITING_FOR_VERIFICATION,
@@ -107,7 +107,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  doesAndroidMessagesRequireSetUp_: function() {
+  doesAndroidMessagesRequireSetUp_() {
     return this.getFeatureState(settings.MultiDeviceFeature.MESSAGES) ===
         settings.MultiDeviceFeatureState.FURTHER_SETUP_REQUIRED;
   },
@@ -116,7 +116,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  isAndroidMessagesSetupButtonDisabled_: function() {
+  isAndroidMessagesSetupButtonDisabled_() {
     const messagesFeatureState =
         this.getFeatureState(settings.MultiDeviceFeature.MESSAGES);
     return !this.isSuiteOn() ||

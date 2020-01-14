@@ -368,7 +368,7 @@ cr.define('settings', function() {
   /** @polymerBehavior */
   const RouteObserverBehavior = {
     /** @override */
-    attached: function() {
+    attached() {
       routerInstance.addObserver(this);
 
       // Emulating Polymer data bindings, the observer is called when the
@@ -377,7 +377,7 @@ cr.define('settings', function() {
     },
 
     /** @override */
-    detached: function() {
+    detached() {
       routerInstance.removeObserver(this);
     },
 
@@ -385,7 +385,7 @@ cr.define('settings', function() {
      * @param {!settings.Route|undefined} opt_newRoute
      * @param {!settings.Route|undefined} opt_oldRoute
      */
-    currentRouteChanged: function(opt_newRoute, opt_oldRoute) {
+    currentRouteChanged(opt_newRoute, opt_oldRoute) {
       assertNotReached();
     },
   };

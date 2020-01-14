@@ -49,7 +49,7 @@ Polymer({
   },
 
   /** @override */
-  attached: function() {
+  attached() {
     this.countryInfo = settings.address.CountryDetailManagerImpl.getInstance();
     this.countryInfo.getCountryList().then(countryList => {
       this.countries_ = countryList;
@@ -81,7 +81,7 @@ Polymer({
    * @param {settings.address.AddressComponentUI} setting
    * @return {string}
    */
-  long_: function(setting) {
+  long_(setting) {
     return setting.component.isLongField ? 'long' : '';
   },
 
@@ -89,7 +89,7 @@ Polymer({
    * Updates the wrapper that represents this address in the country's format.
    * @private
    */
-  updateAddressWrapper_: function() {
+  updateAddressWrapper_() {
     // Default to the last country used if no country code is provided.
     const countryCode = this.countryCode_ || this.countries_[0].countryCode;
     this.countryInfo.getAddressFormat(countryCode).then(format => {
@@ -111,7 +111,7 @@ Polymer({
     });
   },
 
-  updateCanSave_: function() {
+  updateCanSave_() {
     const inputs = this.$.dialog.querySelectorAll('.address-column, select');
 
     for (let i = 0; i < inputs.length; ++i) {
@@ -131,7 +131,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getCode_: function(country) {
+  getCode_(country) {
     return country.countryCode || 'SPACER';
   },
 
@@ -140,7 +140,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getName_: function(country) {
+  getName_(country) {
     return country.name || '------';
   },
 
@@ -149,12 +149,12 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  isDivision_: function(country) {
+  isDivision_(country) {
     return !country.countryCode;
   },
 
   /** @private */
-  onCancelTap_: function() {
+  onCancelTap_() {
     this.$.dialog.cancel();
   },
 
@@ -162,7 +162,7 @@ Polymer({
    * Handler for tapping the save button.
    * @private
    */
-  onSaveButtonTap_: function() {
+  onSaveButtonTap_() {
     // The Enter key can call this function even if the button is disabled.
     if (!this.canSave_) {
       return;
@@ -186,13 +186,13 @@ Polymer({
    * @param {string|undefined} countryCode
    * @private
    */
-  onUpdateCountryCode_: function(countryCode) {
+  onUpdateCountryCode_(countryCode) {
     this.address.countryCode = countryCode;
     this.updateAddressWrapper_();
   },
 
   /** @private */
-  onCountryChange_: function() {
+  onCountryChange_() {
     const countrySelect = /** @type {!HTMLSelectElement} */ (this.$$('select'));
     this.countryCode_ = countrySelect.value;
   },
@@ -210,10 +210,10 @@ cr.define('settings.address', function() {
      */
     constructor(address, component) {
       Object.defineProperty(this, 'value', {
-        get: function() {
+        get() {
           return this.getValue_();
         },
-        set: function(newValue) {
+        set(newValue) {
           this.setValue_(newValue);
         },
       });

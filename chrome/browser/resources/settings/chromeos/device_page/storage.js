@@ -55,7 +55,7 @@ Polymer({
     /** @private */
     isGuest_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('isGuest');
       }
     },
@@ -76,7 +76,7 @@ Polymer({
   updateTimerId_: -1,
 
   /** @override */
-  attached: function() {
+  attached() {
     this.addWebUIListener(
         'storage-size-stat-changed', this.handleSizeStatChanged_.bind(this));
     this.addWebUIListener(
@@ -101,7 +101,7 @@ Polymer({
         this.handleAndroidRunningChanged_.bind(this));
   },
 
-  ready: function() {
+  ready() {
     const r = settings.routes;
     this.addFocusConfig_(r.CROSTINI_DETAILS, '#crostiniSize');
     this.addFocusConfig_(r.ACCOUNTS, '#otherUsersSize');
@@ -115,7 +115,7 @@ Polymer({
    * @param {!settings.Route} oldRoute
    * @protected
    */
-  currentRouteChanged: function(newRoute, oldRoute) {
+  currentRouteChanged(newRoute, oldRoute) {
     settings.RouteOriginBehaviorImpl.currentRouteChanged.call(
         this, newRoute, oldRoute);
 
@@ -126,7 +126,7 @@ Polymer({
   },
 
   /** @private */
-  onPageShown_: function() {
+  onPageShown_() {
     // Updating storage information can be expensive (e.g. computing directory
     // sizes recursively), so we delay this operation until the page is shown.
     chrome.send('updateStorageInfo');
@@ -138,7 +138,7 @@ Polymer({
    * Handler for tapping the "My files" item.
    * @private
    */
-  onMyFilesTap_: function() {
+  onMyFilesTap_() {
     chrome.send('openMyFiles');
   },
 
@@ -146,7 +146,7 @@ Polymer({
    * Handler for tapping the "Browsing data" item.
    * @private
    */
-  onBrowsingDataTap_: function() {
+  onBrowsingDataTap_() {
     window.open('chrome://settings/clearBrowserData');
   },
 
@@ -154,7 +154,7 @@ Polymer({
    * Handler for tapping the "Android storage" item.
    * @private
    */
-  onAndroidTap_: function() {
+  onAndroidTap_() {
     chrome.send('openArcStorage');
   },
 
@@ -162,7 +162,7 @@ Polymer({
    * Handler for tapping the "Linux storage" item.
    * @private
    */
-  onCrostiniTap_: function() {
+  onCrostiniTap_() {
     settings.navigateTo(
         settings.routes.CROSTINI_DETAILS, /* dynamicParams */ null,
         /* removeSearch */ true);
@@ -172,7 +172,7 @@ Polymer({
    * Handler for tapping the "Other users" item.
    * @private
    */
-  onOtherUsersTap_: function() {
+  onOtherUsersTap_() {
     settings.navigateTo(
         settings.routes.ACCOUNTS,
         /* dynamicParams */ null, /* removeSearch */ true);
@@ -182,7 +182,7 @@ Polymer({
    * Handler for tapping the "External storage preferences" item.
    * @private
    */
-  onExternalStoragePreferencesTap_: function() {
+  onExternalStoragePreferencesTap_() {
     settings.navigateTo(settings.routes.EXTERNAL_STORAGE_PREFERENCES);
   },
 
@@ -190,7 +190,7 @@ Polymer({
    * @param {!settings.StorageSizeStat} sizeStat
    * @private
    */
-  handleSizeStatChanged_: function(sizeStat) {
+  handleSizeStatChanged_(sizeStat) {
     this.sizeStat_ = sizeStat;
     this.$.inUseLabelArea.style.width = (sizeStat.usedRatio * 100) + '%';
     this.$.availableLabelArea.style.width =
@@ -201,7 +201,7 @@ Polymer({
    * @param {string} size Formatted string representing the size of My files.
    * @private
    */
-  handleMyFilesSizeChanged_: function(size) {
+  handleMyFilesSizeChanged_(size) {
     this.$.myFilesSize.subLabel = size;
   },
 
@@ -210,7 +210,7 @@ Polymer({
    *     data.
    * @private
    */
-  handleBrowsingDataSizeChanged_: function(size) {
+  handleBrowsingDataSizeChanged_(size) {
     this.$.browsingDataSize.subLabel = size;
   },
 
@@ -219,7 +219,7 @@ Polymer({
    *     storage.
    * @private
    */
-  handleAndroidSizeChanged_: function(size) {
+  handleAndroidSizeChanged_(size) {
     if (this.androidRunning_) {
       this.$$('#androidSize').subLabel = size;
     }
@@ -230,7 +230,7 @@ Polymer({
    *     storage.
    * @private
    */
-  handleCrostiniSizeChanged_: function(size) {
+  handleCrostiniSizeChanged_(size) {
     if (this.showCrostiniStorage_) {
       this.$$('#crostiniSize').subLabel = size;
     }
@@ -240,7 +240,7 @@ Polymer({
    * @param {string} size Formatted string representing the size of Other users.
    * @private
    */
-  handleOtherUsersSizeChanged_: function(size) {
+  handleOtherUsersSizeChanged_(size) {
     if (!this.isGuest_) {
       this.$$('#otherUsersSize').subLabel = size;
     }
@@ -250,7 +250,7 @@ Polymer({
    * @param {boolean} running True if Android (ARC) is running.
    * @private
    */
-  handleAndroidRunningChanged_: function(running) {
+  handleAndroidRunningChanged_(running) {
     this.androidRunning_ = running;
   },
 
@@ -258,7 +258,7 @@ Polymer({
    * @param {boolean} enabled True if Crostini is enabled.
    * @private
    */
-  handleCrostiniEnabledChanged_: function(enabled) {
+  handleCrostiniEnabledChanged_(enabled) {
     this.showCrostiniStorage_ = enabled && this.showCrostini;
   },
 
@@ -266,7 +266,7 @@ Polymer({
    * Starts periodic update for storage usage.
    * @private
    */
-  startPeriodicUpdate_: function() {
+  startPeriodicUpdate_() {
     // We update the storage usage every 5 seconds.
     if (this.updateTimerId_ == -1) {
       this.updateTimerId_ = window.setInterval(() => {
@@ -283,7 +283,7 @@ Polymer({
    * Stops periodic update for storage usage.
    * @private
    */
-  stopPeriodicUpdate_: function() {
+  stopPeriodicUpdate_() {
     if (this.updateTimerId_ != -1) {
       window.clearInterval(this.updateTimerId_);
       this.updateTimerId_ = -1;
@@ -296,7 +296,7 @@ Polymer({
    *     space.
    * @private
    */
-  isSpaceLow_: function(spaceState) {
+  isSpaceLow_(spaceState) {
     return spaceState == settings.StorageSpaceState.LOW;
   },
 
@@ -306,7 +306,7 @@ Polymer({
    *     space.
    * @private
    */
-  isSpaceCriticallyLow_: function(spaceState) {
+  isSpaceCriticallyLow_(spaceState) {
     return spaceState == settings.StorageSpaceState.CRITICALLY_LOW;
   },
 
@@ -316,7 +316,7 @@ Polymer({
    *     space.
    * @private
    */
-  getBarClass_: function(spaceState) {
+  getBarClass_(spaceState) {
     switch (spaceState) {
       case settings.StorageSpaceState.LOW:
         return 'space-low';

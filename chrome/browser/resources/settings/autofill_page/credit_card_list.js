@@ -24,7 +24,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  hasSome_: function(list) {
+  hasSome_(list) {
     return !!(list && list.length);
   },
 });

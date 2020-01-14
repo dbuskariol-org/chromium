@@ -277,7 +277,7 @@ Polymer({
    * @param {!CustomEvent<string>} e
    * @private
    */
-  onSearchChanged_: function(e) {
+  onSearchChanged_(e) {
     const query = e.detail;
     window.location.href =
         `chrome://settings?search=${encodeURIComponent(query)}`;

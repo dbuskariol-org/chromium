@@ -77,7 +77,7 @@ Polymer({
   },
 
   /** @override */
-  created: function() {
+  created() {
     settings.initializeRouteFromUrl();
   },
 
@@ -86,7 +86,7 @@ Polymer({
    * @suppress {es5Strict} Object literals cannot contain duplicate keys in ES5
    *     strict mode.
    */
-  ready: function() {
+  ready() {
     // Lazy-create the drawer the first time it is opened or swiped into view.
     listenOnce(this.$.drawer, 'cr-drawer-opening', () => {
       this.$.drawerTemplate.if = true;
@@ -131,7 +131,7 @@ Polymer({
   },
 
   /** @override */
-  attached: function() {
+  attached() {
     document.documentElement.classList.remove('loading');
 
     setTimeout(function() {
@@ -174,12 +174,12 @@ Polymer({
   },
 
   /** @override */
-  detached: function() {
+  detached() {
     settings.resetRouteForTesting();
   },
 
   /** @param {!settings.Route} route */
-  currentRouteChanged: function(route) {
+  currentRouteChanged(route) {
     const urlSearchQuery = settings.getQueryParameters().get('search') || '';
     if (urlSearchQuery == this.lastSearchQuery_) {
       return;
@@ -203,7 +203,7 @@ Polymer({
   },
 
   // Override FindShortcutBehavior methods.
-  handleFindShortcut: function(modalContextOpen) {
+  handleFindShortcut(modalContextOpen) {
     if (modalContextOpen) {
       return false;
     }
@@ -212,7 +212,7 @@ Polymer({
   },
 
   // Override FindShortcutBehavior methods.
-  searchInputHasFocus: function() {
+  searchInputHasFocus() {
     return this.$$('cr-toolbar').getSearchField().isSearchFocused();
   },
 
@@ -220,7 +220,7 @@ Polymer({
    * @param {!CustomEvent<string>} e
    * @private
    */
-  onRefreshPref_: function(e) {
+  onRefreshPref_(e) {
     return /** @type {SettingsPrefsElement} */ (this.$.prefs).refresh(e.detail);
   },
 
@@ -229,7 +229,7 @@ Polymer({
    * @param {!Event} e
    * @private
    */
-  onSearchChanged_: function(e) {
+  onSearchChanged_(e) {
     const query = e.detail;
     settings.navigateTo(
         settings.routes.BASIC,
@@ -243,12 +243,12 @@ Polymer({
    * Called when a section is selected.
    * @private
    */
-  onIronActivate_: function() {
+  onIronActivate_() {
     this.$.drawer.close();
   },
 
   /** @private */
-  onMenuButtonTap_: function() {
+  onMenuButtonTap_() {
     this.$.drawer.toggle();
   },
 
@@ -260,7 +260,7 @@ Polymer({
    * the container, and pressing tab focuses a component in settings.
    * @private
    */
-  onMenuClose_: function() {
+  onMenuClose_() {
     if (!this.$.drawer.wasCanceled()) {
       // If a navigation happened, MainPageBehavior#currentRouteChanged handles
       // focusing the corresponding section.
@@ -277,21 +277,21 @@ Polymer({
   },
 
   /** @private */
-  onAdvancedOpenedInMainChanged_: function() {
+  onAdvancedOpenedInMainChanged_() {
     if (this.advancedOpenedInMain_) {
       this.advancedOpenedInMenu_ = true;
     }
   },
 
   /** @private */
-  onAdvancedOpenedInMenuChanged_: function() {
+  onAdvancedOpenedInMenuChanged_() {
     if (this.advancedOpenedInMenu_) {
       this.advancedOpenedInMain_ = true;
     }
   },
 
   /** @private */
-  onNarrowChanged_: function() {
+  onNarrowChanged_() {
     if (this.$.drawer.open && !this.narrow_) {
       this.$.drawer.close();
     }

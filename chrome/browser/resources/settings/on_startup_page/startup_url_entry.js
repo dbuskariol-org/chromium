@@ -33,7 +33,7 @@ Polymer({
   },
 
   /** @private */
-  onRemoveTap_: function() {
+  onRemoveTap_() {
     this.$$('cr-action-menu').close();
     settings.StartupUrlsPageBrowserProxyImpl.getInstance().removeStartupPage(
         this.model.modelIndex);
@@ -43,7 +43,7 @@ Polymer({
    * @param {!Event} e
    * @private
    */
-  onEditTap_: function(e) {
+  onEditTap_(e) {
     e.preventDefault();
     this.$$('cr-action-menu').close();
     this.fire(settings.EDIT_STARTUP_URL_EVENT, {
@@ -53,7 +53,7 @@ Polymer({
   },
 
   /** @private */
-  onDotsTap_: function() {
+  onDotsTap_() {
     const actionMenu =
         /** @type {!CrActionMenuElement} */ (this.$$('#menu').get());
     actionMenu.showAt(assert(this.$$('#dots')));

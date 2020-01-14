@@ -88,26 +88,26 @@ Background = function() {
   });
 
   Object.defineProperty(ChromeVox, 'modKeyStr', {
-    get: function() {
+    get() {
       return 'Search';
-    }.bind(this)
+    }
   });
 
   Object.defineProperty(ChromeVox, 'typingEcho', {
-    get: function() {
+    get() {
       return parseInt(localStorage['typingEcho'], 10);
-    }.bind(this),
-    set: function(v) {
+    },
+    set(v) {
       localStorage['typingEcho'] = v;
-    }.bind(this)
+    }
   });
 
   Object.defineProperty(ChromeVox, 'typingEcho', {
-    get: function() {
+    get() {
       var typingEcho = parseInt(localStorage['typingEcho'], 10) || 0;
       return typingEcho;
     },
-    set: function(value) {
+    set(value) {
       localStorage['typingEcho'] = value;
     }
   });
@@ -170,7 +170,7 @@ Background.prototype = {
   /**
    * @override
    */
-  getCurrentRange: function() {
+  getCurrentRange() {
     if (this.currentRange_ && this.currentRange_.isValid()) {
       return this.currentRange_;
     }
@@ -180,14 +180,14 @@ Background.prototype = {
   /**
    * @override
    */
-  getCurrentRangeWithoutRecovery: function() {
+  getCurrentRangeWithoutRecovery() {
     return this.currentRange_;
   },
 
   /**
    * @override
    */
-  setCurrentRange: function(newRange) {
+  setCurrentRange(newRange) {
     // Clear anything that was frozen on the braille display whenever
     // the user navigates.
     ChromeVox.braille.thaw();
@@ -227,8 +227,7 @@ Background.prototype = {
   /**
    * @override
    */
-  navigateToRange: function(
-      range, opt_focus, opt_speechProps, opt_skipSettingSelection) {
+  navigateToRange(range, opt_focus, opt_speechProps, opt_skipSettingSelection) {
     opt_focus = opt_focus === undefined ? true : opt_focus;
     opt_speechProps = opt_speechProps || {};
     opt_skipSettingSelection = opt_skipSettingSelection || false;
@@ -325,7 +324,7 @@ Background.prototype = {
   /**
    * Open the options page in a new tab.
    */
-  showOptionsPage: function() {
+  showOptionsPage() {
     var optionsPage = {url: 'background/options/options.html'};
     chrome.tabs.create(optionsPage);
   },
@@ -333,7 +332,7 @@ Background.prototype = {
   /**
    * @override
    */
-  onBrailleKeyEvent: function(evt, content) {
+  onBrailleKeyEvent(evt, content) {
     return BrailleCommandHandler.onBrailleKeyEvent(evt, content);
   },
 
@@ -342,7 +341,7 @@ Background.prototype = {
    * @param {Port} port
    * @private
    */
-  onMessage_: function(msg, port) {
+  onMessage_(msg, port) {
     var target = msg['target'];
     var action = msg['action'];
 
@@ -365,7 +364,7 @@ Background.prototype = {
   /**
    * @override
    */
-  markCurrentRange: function() {
+  markCurrentRange() {
     if (!this.currentRange) {
       return;
     }
@@ -386,7 +385,7 @@ Background.prototype = {
    * @param {!Event} evt
    * @private
    */
-  onClipboardEvent_: function(evt) {
+  onClipboardEvent_(evt) {
     var text = '';
     if (evt.type == 'paste') {
       if (this.preventPasteOutput_) {
@@ -410,7 +409,7 @@ Background.prototype = {
   },
 
   /** @private */
-  setCurrentRangeToFocus_: function() {
+  setCurrentRangeToFocus_() {
     chrome.automation.getFocus(function(focus) {
       if (focus) {
         this.setCurrentRange(cursors.Range.fromNode(focus));
@@ -425,7 +424,7 @@ Background.prototype = {
    * @param {cursors.Range} prevRange
    * @private
    */
-  setFocusToRange_: function(range, prevRange) {
+  setFocusToRange_(range, prevRange) {
     var start = range.start.node;
     var end = range.end.node;
 

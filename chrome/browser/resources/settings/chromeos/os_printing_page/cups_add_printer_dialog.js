@@ -76,7 +76,7 @@ Polymer({
   ],
 
   /** @private */
-  onCancelTap_: function() {
+  onCancelTap_() {
     this.$$('add-printer-dialog').close();
   },
 
@@ -85,7 +85,7 @@ Polymer({
    * @param {!PrinterSetupResult} result
    * @private
    * */
-  onAddPrinterSucceeded_: function(result) {
+  onAddPrinterSucceeded_(result) {
     this.fire(
         'show-cups-printer-toast',
         {resultCode: result, printerName: this.newPrinter.printerName});
@@ -97,7 +97,7 @@ Polymer({
    * @param {*} result
    * @private
    * */
-  onAddPrinterFailed_: function(result) {
+  onAddPrinterFailed_(result) {
     this.errorText_ = settings.printing.getErrorText(
         /** @type {PrinterSetupResult} */ (result));
   },
@@ -107,7 +107,7 @@ Polymer({
    * @param {!PrinterMakeModel} info
    * @private
    * */
-  onPrinterFound_: function(info) {
+  onPrinterFound_(info) {
     const newPrinter =
         /** @type {CupsPrinterInfo}  */ (Object.assign({}, this.newPrinter));
 
@@ -143,7 +143,7 @@ Polymer({
    * getPrinterInfo failed.
    * @private
    */
-  infoFailed_: function(result) {
+  infoFailed_(result) {
     this.addPrinterInProgress_ = false;
     if (result == PrinterSetupResult.PRINTER_UNREACHABLE) {
       this.$.printerAddressInput.invalid = true;
@@ -154,7 +154,7 @@ Polymer({
   },
 
   /** @private */
-  addPressed_: function() {
+  addPressed_() {
     this.addPrinterInProgress_ = true;
 
     if (this.newPrinter.printerProtocol == 'ipp' ||
@@ -172,7 +172,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onProtocolChange_: function(event) {
+  onProtocolChange_(event) {
     this.set('newPrinter.printerProtocol', event.target.value);
   },
 
@@ -180,13 +180,13 @@ Polymer({
    * @return {boolean} Whether the add printer button is enabled.
    * @private
    */
-  canAddPrinter_: function() {
+  canAddPrinter_() {
     return !this.addPrinterInProgress_ &&
         settings.printing.isNameAndAddressValid(this.newPrinter);
   },
 
   /** @private */
-  printerInfoChanged_: function() {
+  printerInfoChanged_() {
     this.$.printerAddressInput.invalid = false;
     this.errorText_ = '';
   },
@@ -197,7 +197,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onKeypress_: function(event) {
+  onKeypress_(event) {
     if (event.key != 'Enter') {
       return;
     }
@@ -272,13 +272,13 @@ Polymer({
   ],
 
   /** @override */
-  attached: function() {
+  attached() {
     settings.CupsPrintersBrowserProxyImpl.getInstance()
         .getCupsPrinterManufacturersList()
         .then(this.manufacturerListChanged_.bind(this));
   },
 
-  close: function() {
+  close() {
     this.$$('add-printer-dialog').close();
   },
 
@@ -287,7 +287,7 @@ Polymer({
    * @param {!PrinterSetupResult} result
    * @private
    * */
-  onPrinterAddedSucceeded_: function(result) {
+  onPrinterAddedSucceeded_(result) {
     this.fire(
         'show-cups-printer-toast',
         {resultCode: result, printerName: this.activePrinter.printerName});
@@ -299,7 +299,7 @@ Polymer({
    * @param {*} result
    * @private
    * */
-  onPrinterAddedFailed_: function(result) {
+  onPrinterAddedFailed_(result) {
     this.addPrinterInProgress_ = false;
     this.errorText_ = settings.printing.getErrorText(
         /** @type {PrinterSetupResult} */ (result));
@@ -312,7 +312,7 @@ Polymer({
    * model dialog.
    * @private
    */
-  getManufacturerAndModelSubtext_: function() {
+  getManufacturerAndModelSubtext_() {
     if (this.activePrinter.printerMakeAndModel) {
       return loadTimeData.getStringF(
           'manufacturerAndModelAdditionalInformation',
@@ -328,7 +328,7 @@ Polymer({
    *     models.
    * @private
    */
-  selectedManufacturerChanged_: function(manufacturer) {
+  selectedManufacturerChanged_(manufacturer) {
     // Reset model if manufacturer is changed.
     this.set('activePrinter.ppdModel', '');
     this.modelList = [];
@@ -343,7 +343,7 @@ Polymer({
    * Attempts to get the EULA Url if the selected printer has one.
    * @private
    */
-  selectedModelChanged_: function() {
+  selectedModelChanged_() {
     this.errorText_ = '';
     if (!this.activePrinter.ppdManufacturer || !this.activePrinter.ppdModel) {
       // Do not check for an EULA unless both |ppdManufacturer| and |ppdModel|
@@ -362,7 +362,7 @@ Polymer({
    * @param {string} eulaUrl The URL for the printer's EULA.
    * @private
    */
-  onGetEulaUrlCompleted_: function(eulaUrl) {
+  onGetEulaUrlCompleted_(eulaUrl) {
     this.eulaUrl_ = eulaUrl;
   },
 
@@ -370,7 +370,7 @@ Polymer({
    * @param {!ManufacturersInfo} manufacturersInfo
    * @private
    */
-  manufacturerListChanged_: function(manufacturersInfo) {
+  manufacturerListChanged_(manufacturersInfo) {
     if (!manufacturersInfo.success) {
       return;
     }
@@ -386,14 +386,14 @@ Polymer({
    * @param {!ModelsInfo} modelsInfo
    * @private
    */
-  modelListChanged_: function(modelsInfo) {
+  modelListChanged_(modelsInfo) {
     if (modelsInfo.success) {
       this.modelList = modelsInfo.models;
     }
   },
 
   /** @private */
-  onBrowseFile_: function() {
+  onBrowseFile_() {
     settings.CupsPrintersBrowserProxyImpl.getInstance()
         .getCupsPrinterPPDPath()
         .then(this.printerPPDPathChanged_.bind(this));
@@ -403,21 +403,21 @@ Polymer({
    * @param {string} path The full path to the selected PPD file
    * @private
    */
-  printerPPDPathChanged_: function(path) {
+  printerPPDPathChanged_(path) {
     this.set('activePrinter.printerPPDPath', path);
     this.invalidPPD_ = !path;
     this.newUserPPD_ = settings.printing.getBaseName(path);
   },
 
   /** @private */
-  onCancelTap_: function() {
+  onCancelTap_() {
     this.close();
     settings.CupsPrintersBrowserProxyImpl.getInstance().cancelPrinterSetUp(
         this.activePrinter);
   },
 
   /** @private */
-  addPrinter_: function() {
+  addPrinter_() {
     this.addPrinterInProgress_ = true;
     settings.CupsPrintersBrowserProxyImpl.getInstance()
         .addCupsPrinter(this.activePrinter)
@@ -433,7 +433,7 @@ Polymer({
    * @return {boolean} Whether we have enough information to set up the printer
    * @private
    */
-  canAddPrinter_: function(ppdManufacturer, ppdModel, printerPPDPath) {
+  canAddPrinter_(ppdManufacturer, ppdModel, printerPPDPath) {
     return !this.addPrinterInProgress_ &&
         settings.printing.isPPDInfoValid(
             ppdManufacturer, ppdModel, printerPPDPath);
@@ -476,7 +476,7 @@ Polymer({
   },
 
   /** Opens the Add manual printer dialog. */
-  open: function() {
+  open() {
     this.resetData_();
     this.switchDialog_(
         '', AddPrinterDialogs.MANUALLY, 'showManuallyAddDialog_');
@@ -486,28 +486,28 @@ Polymer({
    * Reset all the printer data in the Add printer flow.
    * @private
    */
-  resetData_: function() {
+  resetData_() {
     if (this.newPrinter) {
       this.newPrinter = getEmptyPrinter_();
     }
   },
 
   /** @private */
-  openManuallyAddPrinterDialog_: function() {
+  openManuallyAddPrinterDialog_() {
     this.switchDialog_(
         this.currentDialog_, AddPrinterDialogs.MANUALLY,
         'showManuallyAddDialog_');
   },
 
   /** @private */
-  openManufacturerModelDialogForCurrentPrinter_: function() {
+  openManufacturerModelDialogForCurrentPrinter_() {
     this.switchDialog_(
         this.currentDialog_, AddPrinterDialogs.MANUFACTURER,
         'showManufacturerDialog_');
   },
 
   /** @param {!CupsPrinterInfo} printer */
-  openManufacturerModelDialogForSpecifiedPrinter: function(printer) {
+  openManufacturerModelDialogForSpecifiedPrinter(printer) {
     this.newPrinter = printer;
     this.switchDialog_(
         '', AddPrinterDialogs.MANUFACTURER, 'showManufacturerDialog_');
@@ -521,7 +521,7 @@ Polymer({
    *     corresponding to the |toDialog|.
    * @private
    */
-  switchDialog_: function(fromDialog, toDialog, domIfBooleanName) {
+  switchDialog_(fromDialog, toDialog, domIfBooleanName) {
     this.previousDialog_ = fromDialog;
     this.currentDialog_ = toDialog;
 

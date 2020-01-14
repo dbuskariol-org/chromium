@@ -126,7 +126,7 @@ Polymer({
   setPersonalDataListener_: null,
 
   /** @override */
-  attached: function() {
+  attached() {
     // Create listener functions.
     /** @type {function(!Array<!AutofillManager.AddressEntry>)} */
     const setAddressesListener = addressList => {
@@ -159,7 +159,7 @@ Polymer({
   },
 
   /** @override */
-  detached: function() {
+  detached() {
     this.autofillManager_.removePersonalDataManagerListener(
         /**
            @type {function(!Array<!AutofillManager.AddressEntry>,
@@ -173,7 +173,7 @@ Polymer({
    * @param {!Event} e The polymer event.
    * @private
    */
-  onAddressMenuTap_: function(e) {
+  onAddressMenuTap_(e) {
     const menuEvent = /** @type {!{model: !{item: !Object}}} */ (e);
     const item = menuEvent.model.item;
 
@@ -192,7 +192,7 @@ Polymer({
    * @param {!Event} e The polymer event.
    * @private
    */
-  onAddAddressTap_: function(e) {
+  onAddAddressTap_(e) {
     e.preventDefault();
     this.activeAddress = {};
     this.showAddressDialog_ = true;
@@ -200,7 +200,7 @@ Polymer({
   },
 
   /** @private */
-  onAddressDialogClose_: function() {
+  onAddressDialogClose_() {
     this.showAddressDialog_ = false;
     cr.ui.focusWithoutInk(assert(this.activeDialogAnchor_));
     this.activeDialogAnchor_ = null;
@@ -211,14 +211,14 @@ Polymer({
    * @param {!Event} e The polymer event.
    * @private
    */
-  onMenuEditAddressTap_: function(e) {
+  onMenuEditAddressTap_(e) {
     e.preventDefault();
     this.showAddressDialog_ = true;
     this.$.addressSharedMenu.close();
   },
 
   /** @private */
-  onRemoteEditAddressTap_: function() {
+  onRemoteEditAddressTap_() {
     window.open(loadTimeData.getString('manageAddressesUrl'));
   },
 
@@ -226,7 +226,7 @@ Polymer({
    * Handles tapping on the "Remove" address button.
    * @private
    */
-  onMenuRemoveAddressTap_: function() {
+  onMenuRemoveAddressTap_() {
     this.autofillManager_.removeAddress(
         /** @type {string} */ (this.activeAddress.guid));
     this.$.addressSharedMenu.close();
@@ -238,7 +238,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  hasSome_: function(list) {
+  hasSome_(list) {
     return !!(list && list.length);
   },
 
@@ -247,7 +247,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  saveAddress_: function(event) {
+  saveAddress_(event) {
     this.autofillManager_.saveAddress(event.detail);
   },
 });

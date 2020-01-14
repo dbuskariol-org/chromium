@@ -69,7 +69,7 @@ Polymer({
   browserProxy_: null,
 
   /** @override */
-  attached: function() {
+  attached() {
     this.title_ = this.i18n('securityKeysResetTitle');
     this.browserProxy_ =
         settings.SecurityKeysResetBrowserProxyImpl.getInstance();
@@ -105,13 +105,13 @@ Polymer({
   },
 
   /** @private */
-  closeDialog_: function() {
+  closeDialog_() {
     this.$.dialog.close();
     this.finish_();
   },
 
   /** @private */
-  finish_: function() {
+  finish_() {
     if (this.complete_) {
       return;
     }
@@ -123,7 +123,7 @@ Polymer({
    * @param {!Event} e
    * @private
    */
-  onIronSelect_: function(e) {
+  onIronSelect_(e) {
     // Prevent this event from bubbling since it is unnecessarily triggering the
     // listener within settings-animated-pages.
     e.stopPropagation();
@@ -135,7 +135,7 @@ Polymer({
           to the user. Used automatically by Polymer.
      @private
    */
-  resetFailed_: function(code) {
+  resetFailed_(code) {
     if (code === null) {
       return '';
     }
@@ -148,7 +148,7 @@ Polymer({
    *     Polymer.
    * @private
    */
-  closeText_: function(complete) {
+  closeText_(complete) {
     return this.i18n(complete ? 'ok' : 'cancel');
   },
 
@@ -158,7 +158,7 @@ Polymer({
    *     Polymer.
    * @private
    */
-  maybeActionButton_: function(complete) {
+  maybeActionButton_(complete) {
     return complete ? 'action-button' : 'cancel-button';
   },
 });

@@ -27,24 +27,24 @@ Polymer({
   },
 
   /** @override */
-  attached: function() {
+  attached() {
     settings.WebsiteUsagePrivateApi.websiteUsagePolymerInstance = this;
   },
 
   /** @param {string} host */
-  fetchUsageTotal: function(host) {
+  fetchUsageTotal(host) {
     settings.WebsiteUsagePrivateApi.fetchUsageTotal(host);
   },
 
   /**
    * @param {string} origin
    */
-  clearUsage: function(origin) {
+  clearUsage(origin) {
     settings.WebsiteUsagePrivateApi.clearUsage(origin);
   },
 
   /** @param {string} origin */
-  notifyUsageDeleted: function(origin) {
+  notifyUsageDeleted(origin) {
     this.fire('usage-deleted', {origin: origin});
   },
 });

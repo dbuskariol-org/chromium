@@ -109,7 +109,7 @@ ChromeVoxOutputE2ETest.prototype = {
   __proto__: ChromeVoxNextE2ETest.prototype,
 
   /** @override */
-  setUp: function() {
+  setUp() {
     window.Dir = AutomationUtil.Dir;
     window.RoleType = chrome.automation.RoleType;
     this.forceContextualLastOutput();

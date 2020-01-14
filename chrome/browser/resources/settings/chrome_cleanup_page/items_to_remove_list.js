@@ -92,7 +92,7 @@ Polymer({
   },
 
   /** @private */
-  expandList_: function() {
+  expandList_() {
     this.expanded_ = true;
     this.moreItemsLinkText_ = '';
   },
@@ -110,7 +110,7 @@ Polymer({
    *
    * @param {!Array<settings.ChromeCleanupRemovalListItem>} itemsToShow
    */
-  updateVisibleState_: function(itemsToShow) {
+  updateVisibleState_(itemsToShow) {
     // Start expanded if there are less than
     // |settings.CHROME_CLEANUP_DEFAULT_ITEMS_TO_SHOW| items to show.
     this.expanded_ =
@@ -140,7 +140,7 @@ Polymer({
    * in the default view.
    * @param {boolean} expanded
    */
-  remainingItemsClass_: function(expanded) {
+  remainingItemsClass_(expanded) {
     return expanded ? 'visible-item' : 'hidden-item';
   },
 
@@ -149,7 +149,7 @@ Polymer({
    * @return {boolean} Whether a highlight suffix exists.
    * @private
    */
-  hasHighlightSuffix_: function(item) {
+  hasHighlightSuffix_(item) {
     return item.highlightSuffix !== null;
   },
 });

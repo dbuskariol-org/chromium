@@ -25,7 +25,7 @@ ChromeVoxBackgroundTest.prototype = {
   __proto__: ChromeVoxNextE2ETest.prototype,
 
   /** @override */
-  setUp: function() {
+  setUp() {
     window.EventType = chrome.automation.EventType;
     window.RoleType = chrome.automation.RoleType;
     window.doCmd = this.doCmd;
@@ -38,7 +38,7 @@ ChromeVoxBackgroundTest.prototype = {
   /**
    * @return {!MockFeedback}
    */
-  createMockFeedback: function() {
+  createMockFeedback() {
     var mockFeedback =
         new MockFeedback(this.newCallback(), this.newCallback.bind(this));
     mockFeedback.install();
@@ -50,13 +50,13 @@ ChromeVoxBackgroundTest.prototype = {
    * @param {string} cmd
    * @return {function() : void}
    */
-  doCmd: function(cmd) {
+  doCmd(cmd) {
     return function() {
       CommandHandler.onCommand(cmd);
     };
   },
 
-  press: function(keyCode, modifiers) {
+  press(keyCode, modifiers) {
     return function() {
       BackgroundKeyboardHandler.sendKeyPress(keyCode, modifiers);
     };

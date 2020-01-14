@@ -74,7 +74,7 @@ Polymer({
   },
 
   /** @override */
-  attached: function() {
+  attached() {
     const callbackRouter = BrowserProxy.getInstance().callbackRouter;
 
     this.listenerIds_ = [
@@ -140,13 +140,13 @@ Polymer({
   },
 
   /** @override */
-  detached: function() {
+  detached() {
     const callbackRouter = BrowserProxy.getInstance().callbackRouter;
     this.listenerIds_.forEach(id => callbackRouter.removeListener(id));
   },
 
   /** @private */
-  onActionButtonClick_: function() {
+  onActionButtonClick_() {
     switch (this.state_) {
       case State.SUCCEEDED:
         BrowserProxy.getInstance().handler.launch();
@@ -169,7 +169,7 @@ Polymer({
   },
 
   /** @private */
-  onCancelButtonClick_: function() {
+  onCancelButtonClick_() {
     switch (this.state_) {
       case State.PROMPT:
         BrowserProxy.getInstance().handler.cancelBeforeStart();
@@ -194,26 +194,26 @@ Polymer({
 
 
   /** @private */
-  startBackup_: function() {
+  startBackup_() {
     this.state_ = State.BACKUP;
     BrowserProxy.getInstance().handler.backup();
   },
 
   /** @private */
-  startPrechecks_: function(success, failure) {
+  startPrechecks_(success, failure) {
     this.precheckSuccessCallback_ = success;
     this.precheckFailureCallback_ = failure;
     BrowserProxy.getInstance().handler.startPrechecks();
   },
 
   /** @private */
-  startUpgrade_: function() {
+  startUpgrade_() {
     this.state_ = State.UPGRADING;
     BrowserProxy.getInstance().handler.upgrade();
   },
 
   /** @private */
-  closeDialog_: function() {
+  closeDialog_() {
     BrowserProxy.getInstance().handler.close();
   },
 
@@ -223,7 +223,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  isState_: function(state1, state2) {
+  isState_(state1, state2) {
     return state1 === state2;
   },
 
@@ -232,7 +232,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  canDoAction_: function(state) {
+  canDoAction_(state) {
     switch (state) {
       case State.PROMPT:
       case State.PRECHECKS_FAILED:
@@ -247,7 +247,7 @@ Polymer({
    * @return {boolean}
    * @private
    */
-  canCancel_: function(state) {
+  canCancel_(state) {
     switch (state) {
       case State.BACKUP:
       case State.BACKUP_SUCCEEDED:
@@ -261,7 +261,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getTitle_: function() {
+  getTitle_() {
     let titleId;
     switch (this.state_) {
       case State.PROMPT:
@@ -299,7 +299,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getActionButtonLabel_: function(state) {
+  getActionButtonLabel_(state) {
     switch (state) {
       case State.PROMPT:
         return loadTimeData.getString('upgrade');
@@ -318,7 +318,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getCancelButtonLabel_: function(state) {
+  getCancelButtonLabel_(state) {
     switch (state) {
       case State.SUCCEEDED:
         return loadTimeData.getString('close');
@@ -332,7 +332,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getProgressMessage_: function(state) {
+  getProgressMessage_(state) {
     let messageId = null;
     switch (state) {
       case State.PROMPT:
@@ -374,7 +374,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getErrorMessage_: function(state) {
+  getErrorMessage_(state) {
     // TODO(nverne): Surface error messages once we have better details.
     let messageId = null;
     return messageId ? loadTimeData.getString(messageId) : '';
@@ -385,7 +385,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getIllustrationStyle_: function(state) {
+  getIllustrationStyle_(state) {
     switch (state) {
       case State.BACKUP_SUCCEEDED:
       case State.PRECHECKS_FAILED:
@@ -400,7 +400,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getIllustrationURI_: function(state) {
+  getIllustrationURI_(state) {
     switch (state) {
       case State.BACKUP_SUCCEEDED:
         return 'images/success_illustration.png';

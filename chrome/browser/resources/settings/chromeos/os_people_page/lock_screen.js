@@ -57,7 +57,7 @@ Polymer({
      */
     writeUma_: {
       type: Object,
-      value: function() {
+      value() {
         return settings.recordLockScreenProgress;
       },
     },
@@ -68,7 +68,7 @@ Polymer({
      */
     quickUnlockEnabled_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('quickUnlockEnabled');
       },
       readOnly: true,
@@ -80,7 +80,7 @@ Polymer({
      */
     quickUnlockDisabledByPolicy_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('quickUnlockDisabledByPolicy');
       },
       readOnly: true,
@@ -92,7 +92,7 @@ Polymer({
      */
     fingerprintUnlockEnabled_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('fingerprintUnlockEnabled');
       },
       readOnly: true,
@@ -110,7 +110,7 @@ Polymer({
      */
     lockScreenNotificationsEnabled_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean('lockScreenNotificationsEnabled');
       },
       readOnly: true,
@@ -123,7 +123,7 @@ Polymer({
      */
     lockScreenHideSensitiveNotificationSupported_: {
       type: Boolean,
-      value: function() {
+      value() {
         return loadTimeData.getBoolean(
             'lockScreenHideSensitiveNotificationsSupported');
       },
@@ -144,7 +144,7 @@ Polymer({
   observers: ['selectedUnlockTypeChanged_(selectedUnlockType)'],
 
   /** @override */
-  attached: function() {
+  attached() {
     if (this.shouldAskForPassword_(settings.getCurrentRoute())) {
       this.openPasswordPromptDialog_();
     }
@@ -160,7 +160,7 @@ Polymer({
    * @param {!settings.Route} oldRoute
    * @protected
    */
-  currentRouteChanged: function(newRoute, oldRoute) {
+  currentRouteChanged(newRoute, oldRoute) {
     if (newRoute == settings.routes.LOCK_SCREEN) {
       this.updateUnlockType();
       this.updateNumFingerprints_();
@@ -182,7 +182,7 @@ Polymer({
    * @param {!Event} event
    * @private
    */
-  onScreenLockChange_: function(event) {
+  onScreenLockChange_(event) {
     const target = /** @type {!SettingsToggleButtonElement} */ (event.target);
     if (!this.authToken) {
       console.error('Screen lock changed with expired token.');
@@ -197,7 +197,7 @@ Polymer({
    * @param {!string} selected The current unlock type.
    * @private
    */
-  selectedUnlockTypeChanged_: function(selected) {
+  selectedUnlockTypeChanged_(selected) {
     if (selected == LockScreenUnlockType.VALUE_PENDING) {
       return;
     }
@@ -213,7 +213,7 @@ Polymer({
   },
 
   /** @private */
-  onSetModesChanged_: function() {
+  onSetModesChanged_() {
     if (this.shouldAskForPassword_(settings.getCurrentRoute())) {
       this.showSetupPinDialog_ = false;
       this.openPasswordPromptDialog_();
@@ -221,12 +221,12 @@ Polymer({
   },
 
   /** @private */
-  openPasswordPromptDialog_: function() {
+  openPasswordPromptDialog_() {
     this.showPasswordPromptDialog_ = true;
   },
 
   /** @private */
-  onPasswordPromptDialogClose_: function() {
+  onPasswordPromptDialogClose_() {
     this.showPasswordPromptDialog_ = false;
     if (!this.setModes_) {
       settings.navigateToPreviousRoute();
@@ -241,14 +241,14 @@ Polymer({
    * @param {!Event} e
    * @private
    */
-  onConfigurePin_: function(e) {
+  onConfigurePin_(e) {
     e.preventDefault();
     this.writeUma_(LockScreenProgress.CHOOSE_PIN_OR_PASSWORD);
     this.showSetupPinDialog_ = true;
   },
 
   /** @private */
-  onSetupPinDialogClose_: function() {
+  onSetupPinDialogClose_() {
     this.showSetupPinDialog_ = false;
     cr.ui.focusWithoutInk(assert(this.$$('#setupPinButton')));
   },
@@ -259,7 +259,7 @@ Polymer({
    *     Polymer know about the dependency.
    * @private
    */
-  showConfigurePinButton_: function(selectedUnlockType) {
+  showConfigurePinButton_(selectedUnlockType) {
     return selectedUnlockType === LockScreenUnlockType.PIN_PASSWORD;
   },
 
@@ -267,7 +267,7 @@ Polymer({
    * @param {boolean} hasPin
    * @private
    */
-  getSetupPinText_: function(hasPin) {
+  getSetupPinText_(hasPin) {
     if (hasPin) {
       return this.i18n('lockScreenChangePinButton');
     }
@@ -275,7 +275,7 @@ Polymer({
   },
 
   /** @private */
-  getDescriptionText_: function() {
+  getDescriptionText_() {
     if (this.numFingerprints_ > 0) {
       return this.i18n(
           'lockScreenNumberFingerprints', this.numFingerprints_.toString());
@@ -285,7 +285,7 @@ Polymer({
   },
 
   /** @private */
-  onEditFingerprints_: function() {
+  onEditFingerprints_() {
     settings.navigateTo(settings.routes.FINGERPRINT);
   },
 
@@ -294,12 +294,12 @@ Polymer({
    * @return {boolean} Whether the password dialog should be shown.
    * @private
    */
-  shouldAskForPassword_: function(route) {
+  shouldAskForPassword_(route) {
     return route == settings.routes.LOCK_SCREEN && !this.setModes_;
   },
 
   /** @private */
-  updateNumFingerprints_: function() {
+  updateNumFingerprints_() {
     if (this.fingerprintUnlockEnabled_ && this.fingerprintBrowserProxy_) {
       this.fingerprintBrowserProxy_.getNumFingerprints().then(
           numFingerprints => {

@@ -164,7 +164,7 @@ Polymer({
   browserProxy_: null,
 
   /** @override */
-  attached: function() {
+  attached() {
     this.title_ = this.i18n('securityKeysSetPINInitialTitle');
     this.browserProxy_ = settings.SecurityKeysPINBrowserProxyImpl.getInstance();
     this.$.dialog.showModal();
@@ -227,13 +227,13 @@ Polymer({
   },
 
   /** @private */
-  closeDialog_: function() {
+  closeDialog_() {
     this.$.dialog.close();
     this.finish_();
   },
 
   /** @private */
-  finish_: function() {
+  finish_() {
     if (this.complete_) {
       return;
     }
@@ -250,28 +250,28 @@ Polymer({
    * @param {!Event} e
    * @private
    */
-  onIronSelect_: function(e) {
+  onIronSelect_(e) {
     // Prevent this event from bubbling since it is unnecessarily triggering the
     // listener within settings-animated-pages.
     e.stopPropagation();
   },
 
   /** @private */
-  onCurrentPINInput_: function() {
+  onCurrentPINInput_() {
     // Typing in the current PIN box after an error makes the error message
     // disappear.
     this.currentPINError_ = '';
   },
 
   /** @private */
-  onNewPINInput_: function() {
+  onNewPINInput_() {
     // Typing in the new PIN box after an error makes the error message
     // disappear.
     this.newPINError_ = '';
   },
 
   /** @private */
-  onConfirmPINInput_: function() {
+  onConfirmPINInput_() {
     // Typing in the confirm PIN box after an error makes the error message
     // disappear.
     this.confirmPINError_ = '';
@@ -282,7 +282,7 @@ Polymer({
     @return {string} An error string or else '' to indicate validity.
     @private
   */
-  isValidPIN_: function(pin) {
+  isValidPIN_(pin) {
     // The UTF-8 encoding of the PIN must be between 4 and 63 bytes, and the
     // final byte cannot be zero.
     const utf8Encoded = new TextEncoder().encode(pin);
@@ -320,7 +320,7 @@ Polymer({
    * @return {string} The message to show under the text box.
    * @private
    */
-  mismatchError_: function(retries) {
+  mismatchError_(retries) {
     // Warn the user if the number of retries is getting low.
     if (1 < retries && retries <= 3) {
       return this.i18n('securityKeysPINIncorrectRetriesPl', retries.toString());
@@ -335,7 +335,7 @@ Polymer({
    * Called to set focus from inside a callback.
    * @private
    */
-  focusOn_: function(focusTarget) {
+  focusOn_(focusTarget) {
     // Focus cannot be set directly from within a backend callback. Also,
     // directly focusing |currentPIN| doesn't always seem to work(!). Thus
     // focus something else first, which is a hack that seems to solve the
@@ -354,7 +354,7 @@ Polymer({
    * Called by Polymer when the Set PIN button is activated.
    * @private
    */
-  pinSubmitNew_: function() {
+  pinSubmitNew_() {
     if (this.showCurrentEntry_) {
       this.currentPINError_ = this.isValidPIN_(this.currentPIN_);
       if (this.currentPINError_ != '') {
@@ -416,7 +416,7 @@ Polymer({
    * onClick handler for the show/hide icon.
    * @private
    */
-  showPINsClick_: function() {
+  showPINsClick_() {
     this.pinsVisible_ = !this.pinsVisible_;
   },
 
@@ -426,7 +426,7 @@ Polymer({
    * @return {boolean} True iff |s| is non-empty.
    * @private
    */
-  isNonEmpty_: function(s) {
+  isNonEmpty_(s) {
     return s != '';
   },
 
@@ -434,7 +434,7 @@ Polymer({
    * Called by Polymer when |errorCode_| changes to set the error string.
    * @private
    */
-  pinFailed_: function() {
+  pinFailed_() {
     if (this.errorCode_ === null) {
       return '';
     }
@@ -445,7 +445,7 @@ Polymer({
    * @return {string} The class of the Ok / Cancel button.
    * @private
    */
-  maybeActionButton_: function() {
+  maybeActionButton_() {
     return this.complete_ ? 'action-button' : 'cancel-button';
   },
 
@@ -453,7 +453,7 @@ Polymer({
    * @return {string} The label of the Ok / Cancel button.
    * @private
    */
-  closeText_: function() {
+  closeText_() {
     return this.i18n(this.complete_ ? 'ok' : 'cancel');
   },
 
@@ -461,7 +461,7 @@ Polymer({
    * @return {string} The class (and thus icon) to be displayed.
    * @private
    */
-  showPINsClass_: function() {
+  showPINsClass_() {
     return 'icon-visibility' + (this.pinsVisible_ ? '-off' : '');
   },
 
@@ -469,7 +469,7 @@ Polymer({
    * @return {string} The tooltip for the icon.
    * @private
    */
-  showPINsTitle_: function() {
+  showPINsTitle_() {
     return this.i18n(
         this.pinsVisible_ ? 'securityKeysHidePINs' : 'securityKeysShowPINs');
   },
@@ -478,7 +478,7 @@ Polymer({
    * @return {string} The PIN-input element type.
    * @private
    */
-  inputType_: function() {
+  inputType_() {
     return this.pinsVisible_ ? 'text' : 'password';
   },
 });
