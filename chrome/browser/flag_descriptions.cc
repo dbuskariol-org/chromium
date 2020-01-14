@@ -1420,6 +1420,17 @@ const char kOmniboxExperimentalSuggestScoringDescription[] =
     "Enables an experimental scoring mode for suggestions when Google is the "
     "default search engine.";
 
+const char kOmniboxHistoryQuickProviderAllowButDoNotScoreMidwordTermsName[] =
+    "Omnibox History Quick Provider Allow but Do Not Score Midword Terms";
+const char
+    kOmniboxHistoryQuickProviderAllowButDoNotScoreMidwordTermsDescription[] =
+        "Midword terms are allowed but not scored.";
+const char kOmniboxHistoryQuickProviderAllowMidwordContinuationsName[] =
+    "Omnibox History Quick Provider Allow Midword Continuations";
+const char kOmniboxHistoryQuickProviderAllowMidwordContinuationsDescription[] =
+    "Midword matches are allowed and scored when the match begins immediately "
+    "after the previous match ends.";
+
 const char kOmniboxLocalEntitySuggestionsName[] =
     "Omnibox Local Entity Suggestions";
 const char kOmniboxLocalEntitySuggestionsDescription[] =

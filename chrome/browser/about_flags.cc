@@ -2843,6 +2843,23 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kOmniboxExperimentalSuggestScoringDescription, kOsAll,
      FEATURE_VALUE_TYPE(omnibox::kOmniboxExperimentalSuggestScoring)},
 
+    {"omnibox-history-quick-provider-allow-but-do-not-score-midword-terms",
+     flag_descriptions::
+         kOmniboxHistoryQuickProviderAllowButDoNotScoreMidwordTermsName,
+     flag_descriptions::
+         kOmniboxHistoryQuickProviderAllowButDoNotScoreMidwordTermsDescription,
+     kOsAll,
+     FEATURE_VALUE_TYPE(
+         omnibox::kHistoryQuickProviderAllowButDoNotScoreMidwordTerms)},
+    {"omnibox-history-quick-provider-allow-midword-continuations",
+     flag_descriptions::
+         kOmniboxHistoryQuickProviderAllowMidwordContinuationsName,
+     flag_descriptions::
+         kOmniboxHistoryQuickProviderAllowMidwordContinuationsDescription,
+     kOsAll,
+     FEATURE_VALUE_TYPE(
+         omnibox::kHistoryQuickProviderAllowMidwordContinuations)},
+
 #if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_WIN)
     {"omnibox-experimental-keyword-mode",
      flag_descriptions::kOmniboxExperimentalKeywordModeName,

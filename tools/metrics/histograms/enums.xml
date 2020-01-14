@@ -37550,6 +37550,8 @@ from previous Chrome versions.
   <int value="-491131428" label="OmniboxNewAnswerLayout:disabled"/>
   <int value="-488779992" label="blink-settings"/>
   <int value="-483290305" label="WebUITabStripDemoOptions:enabled"/>
+  <int value="-482494879"
+      label="OmniboxHistoryQuickProviderAllowMidwordContinuations:disabled"/>
   <int value="-482259889" label="MacMDDownloadShelf:disabled"/>
   <int value="-482188490" label="ImpulseScrollAnimations:disabled"/>
   <int value="-478462945" label="enable-ephemeral-apps"/>
@@ -38376,6 +38378,8 @@ from previous Chrome versions.
   <int value="581355159" label="ContentSuggestionsCategoryRanker:disabled"/>
   <int value="582187448" label="DontPrefetchLibraries:enabled"/>
   <int value="584541349" label="ContextualSearchSingleActions:disabled"/>
+  <int value="584661108"
+      label="OmniboxHistoryQuickProviderAllowButDoNotScoreMidwordTerms:disabled"/>
   <int value="586021329" label="VibrateRequiresUserGesture:enabled"/>
   <int value="588333474" label="OfflineIndicator:disabled"/>
   <int value="589924262" label="CryptAuthV2DeviceActivityStatus:enabled"/>
@@ -38895,6 +38899,8 @@ from previous Chrome versions.
   <int value="1235800887" label="V8Ignition:enabled"/>
   <int value="1235940786" label="ChromeHomePersistentIph:enabled"/>
   <int value="1237297772" label="no-pings"/>
+  <int value="1237659269"
+      label="OmniboxHistoryQuickProviderAllowButDoNotScoreMidwordTerms:enabled"/>
   <int value="1239720601" label="OmniboxZeroSuggestionsOnNTPRealbox:enabled"/>
   <int value="1240073971" label="ash-disable-smooth-screen-rotation"/>
   <int value="1242100010" label="AutofillProfileClientValidation:disabled"/>
@@ -38968,6 +38974,8 @@ from previous Chrome versions.
   <int value="1320450434" label="ArcUsbStorageUI:disabled"/>
   <int value="1324623677"
       label="SessionRestorePrioritizesBackgroundUseCases:enabled"/>
+  <int value="1327883321"
+      label="OmniboxHistoryQuickProviderAllowMidwordContinuations:enabled"/>
   <int value="1330264457" label="OmniboxUIExperimentVerticalLayout:disabled"/>
   <int value="1331098784" label="ReducedReferrerGranularity:enabled"/>
   <int value="1332120969" label="ChromeDuet:disabled"/>

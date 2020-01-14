@@ -859,6 +859,14 @@ extern const char kOmniboxDisplayTitleForCurrentUrlDescription[];
 extern const char kOmniboxExperimentalSuggestScoringName[];
 extern const char kOmniboxExperimentalSuggestScoringDescription[];
 
+extern const char
+    kOmniboxHistoryQuickProviderAllowButDoNotScoreMidwordTermsName[];
+extern const char
+    kOmniboxHistoryQuickProviderAllowButDoNotScoreMidwordTermsDescription[];
+extern const char kOmniboxHistoryQuickProviderAllowMidwordContinuationsName[];
+extern const char
+    kOmniboxHistoryQuickProviderAllowMidwordContinuationsDescription[];
+
 extern const char kOmniboxLocalEntitySuggestionsName[];
 extern const char kOmniboxLocalEntitySuggestionsDescription[];
 
