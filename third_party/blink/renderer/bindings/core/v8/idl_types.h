@@ -86,7 +86,7 @@ using IDLStringTreatNullAsEmptyString =
 
 namespace bindings {
 
-enum class NativeValueTraitsStringConv {
+enum class IDLStringConvMode {
   kDefault,
   kNullable,
   kTreatNullAsEmptyString,
@@ -95,30 +95,29 @@ enum class NativeValueTraitsStringConv {
 }  // namespace bindings
 
 // ByteString
-template <bindings::NativeValueTraitsStringConv mode>
+template <bindings::IDLStringConvMode mode>
 struct IDLByteStringBaseV2 final : public IDLBaseHelper<String> {};
 using IDLByteStringV2 =
-    IDLByteStringBaseV2<bindings::NativeValueTraitsStringConv::kDefault>;
+    IDLByteStringBaseV2<bindings::IDLStringConvMode::kDefault>;
 using IDLByteStringOrNullV2 =
-    IDLByteStringBaseV2<bindings::NativeValueTraitsStringConv::kNullable>;
+    IDLByteStringBaseV2<bindings::IDLStringConvMode::kNullable>;
 
 // DOMString
-template <bindings::NativeValueTraitsStringConv mode>
+template <bindings::IDLStringConvMode mode>
 struct IDLStringBaseV2 final : public IDLBaseHelper<String> {};
-using IDLStringV2 =
-    IDLStringBaseV2<bindings::NativeValueTraitsStringConv::kDefault>;
+using IDLStringV2 = IDLStringBaseV2<bindings::IDLStringConvMode::kDefault>;
 using IDLStringOrNullV2 =
-    IDLStringBaseV2<bindings::NativeValueTraitsStringConv::kNullable>;
-using IDLStringTreatNullAsEmptyStringV2 = IDLStringBaseV2<
-    bindings::NativeValueTraitsStringConv::kTreatNullAsEmptyString>;
+    IDLStringBaseV2<bindings::IDLStringConvMode::kNullable>;
+using IDLStringTreatNullAsEmptyStringV2 =
+    IDLStringBaseV2<bindings::IDLStringConvMode::kTreatNullAsEmptyString>;
 
 // USVString
-template <bindings::NativeValueTraitsStringConv mode>
+template <bindings::IDLStringConvMode mode>
 struct IDLUSVStringBaseV2 final : public IDLBaseHelper<String> {};
 using IDLUSVStringV2 =
-    IDLUSVStringBaseV2<bindings::NativeValueTraitsStringConv::kDefault>;
+    IDLUSVStringBaseV2<bindings::IDLStringConvMode::kDefault>;
 using IDLUSVStringOrNullV2 =
-    IDLUSVStringBaseV2<bindings::NativeValueTraitsStringConv::kNullable>;
+    IDLUSVStringBaseV2<bindings::IDLStringConvMode::kNullable>;
 
 // Double
 struct IDLDouble final : public IDLBaseHelper<double> {};

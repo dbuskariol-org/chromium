@@ -584,7 +584,7 @@ class NativeValueTraitsStringAdapter {
 
 }  // namespace bindings
 
-template <bindings::NativeValueTraitsStringConv mode>
+template <bindings::IDLStringConvMode mode>
 struct NativeValueTraits<IDLByteStringBaseV2<mode>>
     : public NativeValueTraitsBase<IDLByteStringBaseV2<mode>> {
   // http://heycam.github.io/webidl/#es-ByteString
@@ -599,7 +599,7 @@ struct NativeValueTraits<IDLByteStringBaseV2<mode>>
           value.As<v8::Int32>()->Value());
     }
 
-    if (mode == bindings::NativeValueTraitsStringConv::kNullable) {
+    if (mode == bindings::IDLStringConvMode::kNullable) {
       if (value->IsNullOrUndefined())
         return bindings::NativeValueTraitsStringAdapter();
     }
@@ -631,7 +631,7 @@ struct NativeValueTraits<IDLByteStringBaseV2<mode>>
   }
 };
 
-template <bindings::NativeValueTraitsStringConv mode>
+template <bindings::IDLStringConvMode mode>
 struct NativeValueTraits<IDLStringBaseV2<mode>>
     : public NativeValueTraitsBase<IDLStringBaseV2<mode>> {
   // https://heycam.github.io/webidl/#es-DOMString
@@ -646,12 +646,11 @@ struct NativeValueTraits<IDLStringBaseV2<mode>>
           value.As<v8::Int32>()->Value());
     }
 
-    if (mode == bindings::NativeValueTraitsStringConv::kNullable) {
+    if (mode == bindings::IDLStringConvMode::kNullable) {
       if (value->IsNullOrUndefined())
         return bindings::NativeValueTraitsStringAdapter();
     }
-    if (mode ==
-        bindings::NativeValueTraitsStringConv::kTreatNullAsEmptyString) {
+    if (mode == bindings::IDLStringConvMode::kTreatNullAsEmptyString) {
       if (value->IsNull())
         return bindings::NativeValueTraitsStringAdapter(g_empty_string);
     }
@@ -678,7 +677,7 @@ struct NativeValueTraits<IDLStringBaseV2<mode>>
   }
 };
 
-template <bindings::NativeValueTraitsStringConv mode>
+template <bindings::IDLStringConvMode mode>
 struct NativeValueTraits<IDLUSVStringBaseV2<mode>>
     : public NativeValueTraitsBase<IDLUSVStringBaseV2<mode>> {
   // http://heycam.github.io/webidl/#es-USVString
