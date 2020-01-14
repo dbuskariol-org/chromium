@@ -1256,9 +1256,7 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
       ((overview_controller && overview_controller->InOverviewSession()) ||
        overview_mode_will_start_) &&
       !overview_controller->IsCompletingShutdownAnimations();
-  const bool app_list_visible =
-      app_list_controller->GetTargetVisibility() ||
-      (!in_overview && app_list_controller->ShouldHomeLauncherBeVisible());
+  const bool app_list_visible = app_list_controller->GetTargetVisibility();
 
   // Only force to show if there is not a pending drag operation.
   if (shelf_widget_->is_hotseat_forced_to_show() && drag_status_ == kDragNone)

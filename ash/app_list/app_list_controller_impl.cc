@@ -127,16 +127,17 @@ void SetAssistantPrivacyInfoDismissed() {
   prefs->SetBoolean(prefs::kAssistantPrivacyInfoDismissedInLauncher, true);
 }
 
-// Whether a window will be shown over the applist when shown in tablet mode.
-bool HasVisibleWindows() {
+// Gets the MRU window shown over the applist when in tablet mode.
+// Returns nullptr if no windows are shown over the applist.
+aura::Window* GetTopVisibleWindow() {
   std::vector<aura::Window*> window_list =
       Shell::Get()->mru_window_tracker()->BuildWindowListIgnoreModal(
           DesksMruType::kActiveDesk);
   for (auto* window : window_list) {
     if (window->TargetVisibility() && !WindowState::Get(window)->IsMinimized())
-      return true;
+      return window;
   }
-  return false;
+  return nullptr;
 }
 
 void LogAppListShowSource(AppListShowSource show_source) {
@@ -185,6 +186,11 @@ AppListControllerImpl::AppListControllerImpl()
 }
 
 AppListControllerImpl::~AppListControllerImpl() {
+  if (tracked_app_window_) {
+    tracked_app_window_->RemoveObserver(this);
+    tracked_app_window_ = nullptr;
+  }
+
   // If this is being destroyed before the Shell starts shutting down, first
   // remove this from objects it's observing.
   if (!is_shutdown_)
@@ -453,6 +459,11 @@ void AppListControllerImpl::ResolveOemFolderPosition(
 }
 
 void AppListControllerImpl::DismissAppList() {
+  if (tracked_app_window_) {
+    tracked_app_window_->RemoveObserver(this);
+    tracked_app_window_ = nullptr;
+  }
+
   presenter_.Dismiss(base::TimeTicks());
 }
 
@@ -621,9 +632,15 @@ AppListViewState AppListControllerImpl::GetAppListViewState() {
 }
 
 bool AppListControllerImpl::ShouldHomeLauncherBeVisible() const {
-  return IsTabletMode() && (!HasVisibleWindows() ||
-                            home_launcher_transition_state_ ==
-                                HomeLauncherTransitionState::kMostlyShown);
+  if (!IsTabletMode())
+    return false;
+
+  if (home_launcher_transition_state_ ==
+      HomeLauncherTransitionState::kMostlyShown)
+    return true;
+
+  return !Shell::Get()->overview_controller()->InOverviewSession() &&
+         !GetTopVisibleWindow();
 }
 
 void AppListControllerImpl::OnShelfAlignmentChanged(
@@ -656,7 +673,7 @@ void AppListControllerImpl::OnOverviewModeStartingAnimationComplete(
   // If overview start was canceled, overview end animations are about to start.
   // Preemptively update the target app list visibility.
   if (canceled) {
-    OnVisibilityWillChange(!HasVisibleWindows(), last_visible_display_id_);
+    OnVisibilityWillChange(!GetTopVisibleWindow(), last_visible_display_id_);
     return;
   }
 
@@ -672,7 +689,7 @@ void AppListControllerImpl::OnOverviewModeEnding(OverviewSession* session) {
   if (home_launcher_transition_state_ != HomeLauncherTransitionState::kFinished)
     return;
 
-  OnVisibilityWillChange(!HasVisibleWindows() /*shown*/,
+  OnVisibilityWillChange(!GetTopVisibleWindow() /*shown*/,
                          last_visible_display_id_);
 }
 
@@ -683,7 +700,7 @@ void AppListControllerImpl::OnOverviewModeEnded() {
   // case, respect the final state set by in-progress home launcher transition.
   if (home_launcher_transition_state_ != HomeLauncherTransitionState::kFinished)
     return;
-  OnVisibilityChanged(!HasVisibleWindows(), last_visible_display_id_);
+  OnVisibilityChanged(!GetTopVisibleWindow(), last_visible_display_id_);
 }
 
 void AppListControllerImpl::OnTabletModeStarted() {
@@ -889,7 +906,7 @@ void AppListControllerImpl::ShowHomeScreenView() {
   // App list is only considered shown for metrics if there are currently no
   // other visible windows shown over the app list after the tablet transition.
   base::Optional<AppListShowSource> show_source;
-  if (!HasVisibleWindows())
+  if (!GetTopVisibleWindow())
     show_source = kTabletMode;
 
   Show(GetDisplayIdToShowAppListOn(), show_source, base::TimeTicks());
@@ -1431,8 +1448,12 @@ void AppListControllerImpl::OnVisibilityChanged(bool visible,
   // HomeLauncher is only visible when no other app windows are visible,
   // unless we are in the process of animating to (or dragging) the home
   // launcher.
-  if (IsTabletMode())
-    real_visibility &= !HasVisibleWindows();
+  if (IsTabletMode()) {
+    UpdateTrackedAppWindow();
+
+    if (tracked_app_window_)
+      real_visibility = false;
+  }
 
   aura::Window* app_list_window = GetWindow();
   real_visibility &= app_list_window && app_list_window->TargetVisibility();
@@ -1467,6 +1488,24 @@ void AppListControllerImpl::OnVisibilityChanged(bool visible,
   }
 }
 
+void AppListControllerImpl::OnWindowVisibilityChanging(aura::Window* window,
+                                                       bool visible) {
+  if (visible || window != tracked_app_window_)
+    return;
+
+  UpdateTrackedAppWindow();
+
+  if (!tracked_app_window_ && ShouldHomeLauncherBeVisible())
+    OnVisibilityChanged(true, last_visible_display_id_);
+}
+
+void AppListControllerImpl::OnWindowDestroyed(aura::Window* window) {
+  if (window != tracked_app_window_)
+    return;
+
+  tracked_app_window_ = nullptr;
+}
+
 void AppListControllerImpl::OnVisibilityWillChange(bool visible,
                                                    int64_t display_id) {
   bool real_target_visibility = visible;
@@ -1475,7 +1514,7 @@ void AppListControllerImpl::OnVisibilityWillChange(bool visible,
   // launcher.
   if (IsTabletMode() && home_launcher_transition_state_ ==
                             HomeLauncherTransitionState::kFinished) {
-    real_target_visibility &= !HasVisibleWindows();
+    real_target_visibility &= !GetTopVisibleWindow();
   }
 
   // Skip adjacent same changes.
@@ -1699,6 +1738,18 @@ gfx::Rect AppListControllerImpl::GetInitialAppListItemScreenBoundsForWindow(
   std::string* app_id = window->GetProperty(kAppIDKey);
   return presenter_.GetView()->GetItemScreenBoundsInFirstGridPage(
       app_id ? *app_id : std::string());
+}
+
+void AppListControllerImpl::UpdateTrackedAppWindow() {
+  aura::Window* top_window = GetTopVisibleWindow();
+  if (tracked_app_window_ == top_window)
+    return;
+
+  if (tracked_app_window_)
+    tracked_app_window_->RemoveObserver(this);
+  tracked_app_window_ = top_window;
+  if (tracked_app_window_)
+    tracked_app_window_->AddObserver(this);
 }
 
 }  // namespace ash
