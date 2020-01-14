@@ -49,7 +49,6 @@ static_library("database_manager") {
     ":v4_protocol_manager_util",
     "//base",
     "//content/public/browser",
-    "//content/public/common",
     "//net",
     "//url",
   ]
