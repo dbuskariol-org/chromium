@@ -124,7 +124,6 @@ struct TestCase {
   const char* test_case_name = nullptr;
   GuestMode guest_mode = NOT_IN_GUEST_MODE;
   bool tablet_mode = false;
-  base::Optional<bool> enable_myfiles_volume;
   base::Optional<bool> enable_documents_provider;
   bool enable_arc = false;
   bool with_browser = false;
