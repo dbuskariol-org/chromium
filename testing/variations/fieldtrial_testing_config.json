@@ -7681,24 +7681,6 @@
             ]
         }
     ],
-    "WebRTC-Bwe-LossBasedControl": [
-        {
-            "platforms": [
-                "windows",
-                "mac",
-                "chromeos",
-                "linux",
-                "ios",
-                "android",
-                "android_webview"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled,balance_incr:5kbps,balance_decr:24kbps,exponent:0.7,resets:true,decr:0.9"
-                }
-            ]
-        }
-    ],
     "WebRTC-Bwe-MaxRttLimit": [
         {
             "platforms": [
