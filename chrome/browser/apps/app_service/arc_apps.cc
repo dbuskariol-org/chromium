@@ -850,7 +850,7 @@ apps::mojom::AppPtr ArcApps::Convert(ArcAppListPrefs* prefs,
     IconEffects icon_effects = IconEffects::kNone;
     if (app_info.suspended) {
       icon_effects =
-          static_cast<IconEffects>(icon_effects | IconEffects::kGray);
+          static_cast<IconEffects>(icon_effects | IconEffects::kBlocked);
     }
     app->icon_key = icon_key_factory_.MakeIconKey(icon_effects);
   }
@@ -927,7 +927,8 @@ void ArcApps::SetIconEffect(const std::string& app_id) {
 
   IconEffects icon_effects = IconEffects::kNone;
   if (app_info->suspended) {
-    icon_effects = static_cast<IconEffects>(icon_effects | IconEffects::kGray);
+    icon_effects =
+        static_cast<IconEffects>(icon_effects | IconEffects::kBlocked);
   }
   if (paused_apps_.find(app_id) != paused_apps_.end()) {
     icon_effects =
