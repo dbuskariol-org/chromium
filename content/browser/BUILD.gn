@@ -2644,13 +2644,9 @@ group("for_content_tests") {
     "//content/public/test/*",
   ]
   if (!is_component_build) {
-    public_deps = [
-      ":browser",
-    ]
+    public_deps = [ ":browser" ]
   } else {
-    public_deps = [
-      "//third_party/leveldatabase",
-    ]
+    public_deps = [ "//third_party/leveldatabase" ]
   }
 }
 
@@ -2658,8 +2654,6 @@ group("for_content_tests") {
 group("for_internal_webauthn") {
   visibility = [ "//components/autofill/content/browser/webauthn" ]
   if (!is_component_build) {
-    public_deps = [
-      ":browser",
-    ]
+    public_deps = [ ":browser" ]
   }
 }
