@@ -46,9 +46,7 @@ source_set("container_ui") {
 
   configs += [ "//build/config/compiler:enable_arc" ]
 
-  deps = [
-    "//base",
-  ]
+  deps = [ "//base" ]
 }
 
 source_set("coordinators") {
@@ -71,10 +69,26 @@ source_set("coordinators") {
   ]
 }
 
+source_set("util") {
+  sources = [
+    "overlay_request_mediator_util.h",
+    "overlay_request_mediator_util.mm",
+  ]
+
+  configs += [ "//build/config/compiler:enable_arc" ]
+
+  deps = [
+    ":coordinators",
+    "//base",
+    "//ios/chrome/browser/overlays",
+  ]
+}
+
 source_set("unit_tests") {
   testonly = true
   sources = [
     "overlay_request_mediator_unittest.mm",
+    "overlay_request_mediator_util_unittest.mm",
     "overlay_request_ui_state_unittest.mm",
   ]
 
@@ -83,6 +97,7 @@ source_set("unit_tests") {
   deps = [
     ":coordinators",
     ":overlays",
+    ":util",
     "//base/test:test_support",
     "//ios/chrome/browser/overlays",
     "//ios/chrome/browser/overlays/test",
