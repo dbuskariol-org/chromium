@@ -847,6 +847,7 @@
         'ReportDeviceNetworkInterfaces',
         'ReportDeviceHardwareStatus',
         'ReportDeviceSessionStatus',
+        'ReportDeviceGraphicsStatus',
         'ReportDeviceOsUpdateStatus',
         'ReportDeviceBoardStatus',
         'ReportDeviceCpuInfo',
@@ -7655,6 +7656,29 @@
       If the policy is set to false, the kiosk session information will not be
       reported. If set to true or left unset, kiosk session information will be
       reported.''',
+      'arc_support': 'This policy has no effect on the logging done by Android.',
+    },
+    {
+      'name': 'ReportDeviceGraphicsStatus',
+      'owners': ['file://components/policy/resources/OWNERS'],
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'supported_on': ['chrome_os:81-'],
+      'supported_chrome_os_management': ['google_cloud'],
+      'device_only': True,
+      'features': {
+        'dynamic_refresh': True,
+      },
+      'example_value': False,
+      'id': 660,
+      'caption': '''Report display and graphics statuses''',
+      'tags': ['admin-sharing'],
+      'desc': '''Report information related to display, such as refresh rate, and
+      information related to graphics, such as driver version.
+
+      If the policy is set to false or left unset, the display and graphics
+      statuses will not be reported. If set to true, display and graphics
+      statuses will be reported.''',
       'arc_support': 'This policy has no effect on the logging done by Android.',
     },
     {
@@ -19768,6 +19792,7 @@ The recommended way to configure policy on Windows is via GPO, although provisio
     'ReportDeviceUsers': 'device_reporting.report_users',
     'ReportDeviceHardwareStatus': 'device_reporting.report_hardware_status',
     'ReportDeviceSessionStatus': 'device_reporting.report_session_status',
+    'ReportDeviceGraphicsStatus': 'device_reporting.report_graphics_status',
     'ReportDeviceOsUpdateStatus': 'device_reporting.report_os_update_status',
     'ReportDeviceVersionInfo': 'device_reporting.report_version_info',
     'ReportUploadFrequency': 'device_reporting.device_status_frequency',
@@ -20193,6 +20218,7 @@ The recommended way to configure policy on Windows is via GPO, although provisio
         'ReportDeviceNetworkInterfaces',
         'ReportDeviceHardwareStatus',
         'ReportDeviceSessionStatus',
+        'ReportDeviceGraphicsStatus',
         'ReportDeviceOsUpdateStatus',
         'ReportDeviceBoardStatus',
         'ReportDeviceCpuInfo',
@@ -20269,6 +20295,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 659,
+  'highest_id_currently_used': 660,
   'highest_atomic_group_id_currently_used': 38
 }

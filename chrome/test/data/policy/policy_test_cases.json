@@ -4796,6 +4796,8 @@
 
   "ReportDeviceSessionStatus": {},
 
+  "ReportDeviceGraphicsStatus": {},
+
   "ReportDevicePowerStatus": {},
 
   "ReportDeviceStorageStatus": {},

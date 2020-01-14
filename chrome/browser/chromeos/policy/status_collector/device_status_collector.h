@@ -272,6 +272,8 @@ class DeviceStatusCollector : public StatusCollector,
       enterprise_management::DeviceStatusReportRequest* status);
   bool GetRunningKioskApp(
       enterprise_management::DeviceStatusReportRequest* status);
+  bool GetGraphicsStatus(scoped_refptr<DeviceStatusCollectorState>
+                             state);  // Queues async queries!
 
   // Helpers for the various portions of SESSION STATUS. Return true if they
   // actually report any status. Functions that queue async queries take
@@ -422,6 +424,7 @@ class DeviceStatusCollector : public StatusCollector,
   bool report_storage_status_ = false;
   bool report_board_status_ = false;
   bool report_cpu_info_ = false;
+  bool report_graphics_status_ = false;
 
   std::unique_ptr<chromeos::CrosSettings::ObserverSubscription>
       activity_times_subscription_;
@@ -445,6 +448,8 @@ class DeviceStatusCollector : public StatusCollector,
       board_status_subscription_;
   std::unique_ptr<chromeos::CrosSettings::ObserverSubscription>
       cpu_info_subscription_;
+  std::unique_ptr<chromeos::CrosSettings::ObserverSubscription>
+      graphics_status_subscription_;
 
   std::unique_ptr<PrefChangeRegistrar> pref_change_registrar_;
 

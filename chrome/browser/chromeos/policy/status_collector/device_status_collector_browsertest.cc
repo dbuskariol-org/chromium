@@ -2386,6 +2386,9 @@ TEST_F(DeviceStatusCollectorTest, TestGraphicsStatus) {
       base::BindRepeating(&GetFakeGraphicsStatus, fakeGraphicsStatus);
   RestartStatusCollector(std::move(options));
 
+  scoped_testing_cros_settings_.device_settings()->SetBoolean(
+      chromeos::kReportDeviceGraphicsStatus, true);
+
   GetStatus();
 
   EXPECT_TRUE(device_status_.has_graphics_status());
@@ -2409,6 +2412,14 @@ TEST_F(DeviceStatusCollectorTest, TestGraphicsStatus) {
             device_status_.graphics_status().adapter().device_id());
   EXPECT_EQ(fakeGraphicsStatus.adapter().system_ram_usage(),
             device_status_.graphics_status().adapter().system_ram_usage());
+
+  // Change the policy to not report display and graphics statuses
+  scoped_testing_cros_settings_.device_settings()->SetBoolean(
+      chromeos::kReportDeviceGraphicsStatus, false);
+
+  GetStatus();
+
+  EXPECT_FALSE(device_status_.has_graphics_status());
 }
 
 TEST_F(DeviceStatusCollectorTest, TestCrosHealthdInfo) {

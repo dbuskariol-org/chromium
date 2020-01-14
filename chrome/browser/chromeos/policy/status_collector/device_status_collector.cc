@@ -976,6 +976,8 @@ DeviceStatusCollector::DeviceStatusCollector(
       chromeos::kReportDeviceBoardStatus, callback);
   cpu_info_subscription_ = cros_settings_->AddSettingsObserver(
       chromeos::kReportDeviceCpuInfo, callback);
+  graphics_status_subscription_ = cros_settings_->AddSettingsObserver(
+      chromeos::kReportDeviceGraphicsStatus, callback);
 
   power_manager_->AddObserver(this);
 
@@ -1096,6 +1098,10 @@ void DeviceStatusCollector::UpdateReportingSettings() {
   if (!cros_settings_->GetBoolean(chromeos::kReportDeviceCpuInfo,
                                   &report_cpu_info_)) {
     report_cpu_info_ = false;
+  }
+  if (!cros_settings_->GetBoolean(chromeos::kReportDeviceGraphicsStatus,
+                                  &report_graphics_status_)) {
+    report_graphics_status_ = false;
   }
 
   if (!report_hardware_status_) {
@@ -1728,9 +1734,6 @@ bool DeviceStatusCollector::GetHardwareStatus(
   // Fetch Stateful Partition Information on a background thread.
   state->FetchStatefulPartitionInfo(stateful_partition_info_fetcher_);
 
-  // Fetch Graphics status on a background thread.
-  state->FetchGraphicsStatus(graphics_status_fetcher_);
-
   return true;
 }
 
@@ -1847,6 +1850,14 @@ bool DeviceStatusCollector::GetRunningKioskApp(
   return true;
 }
 
+bool DeviceStatusCollector::GetGraphicsStatus(
+    scoped_refptr<DeviceStatusCollectorState> state) {
+  // Fetch Graphics status on a background thread.
+  state->FetchGraphicsStatus(graphics_status_fetcher_);
+
+  return true;
+}
+
 void DeviceStatusCollector::GetStatusAsync(
     const StatusCollectorCallback& response) {
   // Must be on creation thread since some stats are written to in that thread
@@ -1905,6 +1916,9 @@ void DeviceStatusCollector::GetDeviceStatus(
 
   if (report_running_kiosk_app_)
     anything_reported |= GetRunningKioskApp(status);
+
+  if (report_graphics_status_)
+    anything_reported |= GetGraphicsStatus(state);
 
   // Wipe pointer if we didn't actually add any data.
   if (!anything_reported)
