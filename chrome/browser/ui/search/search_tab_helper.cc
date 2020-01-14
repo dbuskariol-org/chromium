@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "base/base64.h"
+#include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/metrics/user_metrics.h"
 #include "base/metrics/user_metrics_action.h"
@@ -18,6 +19,7 @@
 #include "chrome/browser/bitmap_fetcher/bitmap_fetcher_service.h"
 #include "chrome/browser/bitmap_fetcher/bitmap_fetcher_service_factory.h"
 #include "chrome/browser/bookmarks/bookmark_model_factory.h"
+#include "chrome/browser/extensions/extension_checkup.h"
 #include "chrome/browser/predictors/autocomplete_action_predictor.h"
 #include "chrome/browser/predictors/autocomplete_action_predictor_factory.h"
 #include "chrome/browser/profiles/profile.h"
@@ -78,6 +80,7 @@
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
 #include "content/public/browser/web_contents.h"
+#include "extensions/common/extension_features.h"
 #include "google_apis/gaia/gaia_auth_util.h"
 #include "third_party/metrics_proto/omnibox_event.pb.h"
 #include "ui/base/l10n/l10n_util.h"
@@ -794,6 +797,14 @@ void SearchTabHelper::OpenExtensionsPage(double button,
                                          bool shift_key) {
   if (!search::DefaultSearchProviderIsGoogle(profile()))
     return;
+  UMA_HISTOGRAM_ENUMERATION(
+      "Extensions.Checkup.NtpPromoClicked",
+      static_cast<extensions::CheckupMessage>(
+          base::GetFieldTrialParamByFeatureAsInt(
+              extensions_features::kExtensionsCheckup,
+              extensions_features::kExtensionsCheckupBannerMessageParameter,
+              static_cast<int>(extensions::CheckupMessage::NEUTRAL))));
+
   WindowOpenDisposition disposition =
       (button > 1) ? WindowOpenDisposition::NEW_FOREGROUND_TAB
                    : ui::DispositionFromClick((button == 1.0), alt_key,
