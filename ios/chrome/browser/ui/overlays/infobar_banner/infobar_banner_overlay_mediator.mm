@@ -15,6 +15,7 @@
 #include "ios/chrome/browser/overlays/public/overlay_response.h"
 #import "ios/chrome/browser/ui/infobars/banners/infobar_banner_consumer.h"
 #import "ios/chrome/browser/ui/overlays/infobar_banner/infobar_banner_overlay_mediator+consumer_support.h"
+#import "ios/chrome/browser/ui/overlays/overlay_request_mediator+subclassing.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
@@ -70,16 +71,6 @@
 - (void)infobarBannerWasDismissed {
   // Only needed in legacy implementation.  Dismissal completion cleanup occurs
   // in InfobarBannerOverlayCoordinator.
-}
-
-#pragma mark - Private
-
-// Dispatches |response| through the OverlayRequest, then stops the overlay UI.
-- (void)dispatchResponseAndStopOverlay:
-    (std::unique_ptr<OverlayResponse>)response {
-  if (self.request)
-    self.request->GetCallbackManager()->DispatchResponse(std::move(response));
-  [self.delegate stopOverlayForMediator:self];
 }
 
 @end
