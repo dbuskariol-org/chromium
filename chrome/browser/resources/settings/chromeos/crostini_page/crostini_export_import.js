@@ -27,17 +27,37 @@ Polymer({
      */
     enableButtons_: {
       type: Boolean,
+      computed: 'setEnableButtons_(installerShowing_, exportImportInProgress_)',
+    },
+
+    /** @private */
+    installerShowing_: {
+      type: Boolean,
       value: false,
     },
+
+    /** @private */
+    exportImportInProgress_: {
+      type: Boolean,
+      value: false,
+    },
+
   },
 
   attached() {
     this.addWebUIListener(
         'crostini-export-import-operation-status-changed', inProgress => {
-          this.enableButtons_ = !inProgress;
+          this.exportImportInProgress_ = inProgress;
         });
+    this.addWebUIListener(
+        'crostini-installer-status-changed', installerShowing => {
+          this.installerShowing_ = installerShowing;
+        });
+
     settings.CrostiniBrowserProxyImpl.getInstance()
         .requestCrostiniExportImportOperationStatus();
+    settings.CrostiniBrowserProxyImpl.getInstance()
+        .requestCrostiniInstallerStatus();
   },
 
   /** @private */
@@ -53,5 +73,10 @@ Polymer({
   /** @private */
   onImportConfirmationDialogClose_() {
     this.showImportConfirmationDialog_ = false;
+  },
+
+  /** @private */
+  setEnableButtons_: function(installerShowing, exportImportInProgress) {
+    return !(installerShowing || exportImportInProgress);
   },
 });
