@@ -11,6 +11,7 @@
 #include "third_party/blink/renderer/core/core_export.h"
 #include "third_party/blink/renderer/core/frame/remote_frame.h"
 #include "third_party/blink/renderer/platform/heap/self_keep_alive.h"
+#include "third_party/blink/renderer/platform/wtf/casting.h"
 
 namespace cc {
 class Layer;
@@ -142,11 +143,12 @@ class CORE_EXPORT WebRemoteFrameImpl final
   SelfKeepAlive<WebRemoteFrameImpl> self_keep_alive_;
 };
 
-DEFINE_TYPE_CASTS(WebRemoteFrameImpl,
-                  WebFrame,
-                  frame,
-                  frame->IsWebRemoteFrame(),
-                  frame.IsWebRemoteFrame());
+template <>
+struct DowncastTraits<WebRemoteFrameImpl> {
+  static bool AllowFrom(const WebFrame& frame) {
+    return frame.IsWebRemoteFrame();
+  }
+};
 
 }  // namespace blink
 

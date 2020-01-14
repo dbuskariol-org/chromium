@@ -364,7 +364,7 @@ void WebRemoteFrameImpl::UpdateUserActivationState(
 void WebRemoteFrameImpl::TransferUserActivationFrom(
     blink::WebRemoteFrame* source_frame) {
   GetFrame()->TransferUserActivationFrom(
-      ToWebRemoteFrameImpl(source_frame)->GetFrame());
+      To<WebRemoteFrameImpl>(source_frame)->GetFrame());
 }
 
 void WebRemoteFrameImpl::ScrollRectToVisible(

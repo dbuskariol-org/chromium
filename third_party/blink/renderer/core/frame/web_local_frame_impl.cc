@@ -1917,12 +1917,12 @@ std::pair<RemoteFrame*, base::UnguessableToken> WebLocalFrameImpl::CreatePortal(
   base::UnguessableToken portal_token;
   std::tie(portal_frame, portal_token) = client_->CreatePortal(
       portal_receiver.PassHandle(), portal_client.PassHandle(), portal);
-  return {ToWebRemoteFrameImpl(portal_frame)->GetFrame(), portal_token};
+  return {To<WebRemoteFrameImpl>(portal_frame)->GetFrame(), portal_token};
 }
 
 RemoteFrame* WebLocalFrameImpl::AdoptPortal(HTMLPortalElement* portal) {
-  WebRemoteFrameImpl* portal_frame =
-      ToWebRemoteFrameImpl(client_->AdoptPortal(portal->GetToken(), portal));
+  auto* portal_frame =
+      To<WebRemoteFrameImpl>(client_->AdoptPortal(portal->GetToken(), portal));
   return portal_frame->GetFrame();
 }
 
