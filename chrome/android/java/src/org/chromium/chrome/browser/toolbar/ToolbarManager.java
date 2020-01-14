@@ -95,6 +95,7 @@ import org.chromium.chrome.browser.tasks.tab_management.TabGroupPopupUi;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementModuleProvider;
 import org.chromium.chrome.browser.toolbar.bottom.BottomControlsCoordinator;
 import org.chromium.chrome.browser.toolbar.bottom.BottomTabSwitcherActionMenuCoordinator;
+import org.chromium.chrome.browser.toolbar.bottom.BottomToolbarVariationManager;
 import org.chromium.chrome.browser.toolbar.top.ActionModeController;
 import org.chromium.chrome.browser.toolbar.top.ActionModeController.ActionBarDelegate;
 import org.chromium.chrome.browser.toolbar.top.TabSwitcherActionMenuCoordinator;
@@ -718,6 +719,17 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             public void onOverviewModeStartedShowing(boolean showToolbar) {
                 mToolbar.setTabSwitcherMode(true, showToolbar, false);
                 updateButtonStatus();
+                if (FeatureUtilities.isBottomToolbarEnabled()
+                        && !BottomToolbarVariationManager
+                                    .shouldBottomToolbarBeVisibleInOverviewMode()) {
+                    // TODO(crbug.com/1036474): don't tell mToolbar the visibility of bottom toolbar
+                    // has been changed when entering overview, so it won't draw extra animations
+                    // or buttons during the transition. Before, bottom toolbar was always visible
+                    // in portrait mode, so the visibility was equivalent to the orientation change.
+                    // We may have to tell mToolbar extra information, like orientation, in future.
+                    // mToolbar.onBottomToolbarVisibilityChanged(false);
+                    mBottomControlsCoordinator.setBottomControlsVisible(false);
+                }
             }
 
             @Override
@@ -730,6 +742,16 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             public void onOverviewModeStartedHiding(boolean showToolbar, boolean delayAnimation) {
                 mToolbar.setTabSwitcherMode(false, showToolbar, delayAnimation);
                 updateButtonStatus();
+                if (FeatureUtilities.isBottomToolbarEnabled()
+                        && !BottomToolbarVariationManager
+                                    .shouldBottomToolbarBeVisibleInOverviewMode()) {
+                    // User may enter overview mode in landscape mode but exit in portrait mode.
+                    mIsBottomToolbarVisible = !FeatureUtilities.isAdaptiveToolbarEnabled()
+                            || mActivity.getResources().getConfiguration().orientation
+                                    != Configuration.ORIENTATION_LANDSCAPE;
+                    mToolbar.onBottomToolbarVisibilityChanged(mIsBottomToolbarVisible);
+                    mBottomControlsCoordinator.setBottomControlsVisible(mIsBottomToolbarVisible);
+                }
             }
 
             @Override
@@ -858,8 +880,11 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
     // TODO(crbug.com/1026020): Move this logic to BottomToolbar class.
     private void onShareDelegateAvailable(ShareDelegate shareDelegate) {
         final OnClickListener shareButtonListener = v -> {
-            recordBottomToolbarUseForIPH();
-            RecordUserAction.record("MobileBottomToolbarShareButton");
+            if (BottomToolbarVariationManager.isShareButtonOnBottom()) {
+                recordBottomToolbarUseForIPH();
+                RecordUserAction.record("MobileBottomToolbarShareButton");
+            }
+
             Tab tab = null;
             Activity activity = null;
             boolean isIncognito = false;
@@ -1041,7 +1066,8 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         });
 
         if (mTabGroupPopupUi != null) {
-            mTabGroupPopUiParentSupplier.set(mIsBottomToolbarVisible
+            mTabGroupPopUiParentSupplier.set(
+                    mIsBottomToolbarVisible && BottomToolbarVariationManager.isTabSwitcherOnBottom()
                             ? mActivity.findViewById(R.id.bottom_controls)
                             : mActivity.findViewById(R.id.toolbar));
             mTabGroupPopupUi.initializeWithNative(mActivity);
@@ -1120,9 +1146,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
      */
     public void showAppMenuUpdateBadge() {
         mToolbar.showAppMenuUpdateBadge();
-        if (mBottomControlsCoordinator != null) {
-            mBottomControlsCoordinator.showAppMenuUpdateBadge();
-        }
     }
 
     /**
@@ -1131,9 +1154,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
      */
     public void removeAppMenuUpdateBadge(boolean animate) {
         mToolbar.removeAppMenuUpdateBadge(animate);
-        if (mBottomControlsCoordinator != null) {
-            mBottomControlsCoordinator.removeAppMenuUpdateBadge();
-        }
     }
 
     /**
@@ -1141,10 +1161,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
      * TODO(amaralp): Only the top or bottom menu should be visible.
      */
     public boolean isShowingAppMenuUpdateBadge() {
-        if (mBottomControlsCoordinator != null
-                && mBottomControlsCoordinator.isShowingAppMenuUpdateBadge()) {
-            return true;
-        }
         return mToolbar.isShowingAppMenuUpdateBadge();
     }
 
@@ -1221,15 +1237,12 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
 
     @Override
     public @Nullable View getMenuButtonView() {
-        if (mBottomControlsCoordinator != null && isBottomToolbarVisible()) {
-            return mBottomControlsCoordinator.getMenuButtonWrapper().getImageButton();
-        }
         return mToolbar.getMenuButton();
     }
 
     @Override
     public boolean isMenuFromBottom() {
-        return isBottomToolbarVisible();
+        return mIsBottomToolbarVisible && BottomToolbarVariationManager.isMenuButtonOnBottom();
     }
 
     /**
@@ -1356,15 +1369,20 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         if (mBottomControlsCoordinator != null && FeatureUtilities.isBottomToolbarEnabled()
                 && FeatureUtilities.isAdaptiveToolbarEnabled()) {
             mIsBottomToolbarVisible = newOrientation != Configuration.ORIENTATION_LANDSCAPE;
+            if (!BottomToolbarVariationManager.shouldBottomToolbarBeVisibleInOverviewMode()
+                    && mIsBottomToolbarVisible) {
+                mIsBottomToolbarVisible = !mActivity.isInOverviewMode();
+            }
             mToolbar.onBottomToolbarVisibilityChanged(mIsBottomToolbarVisible);
             mBottomControlsCoordinator.setBottomControlsVisible(mIsBottomToolbarVisible);
             if (mAppMenuButtonHelper != null) {
-                mAppMenuButtonHelper.setMenuShowsFromBottom(mIsBottomToolbarVisible);
+                mAppMenuButtonHelper.setMenuShowsFromBottom(isMenuFromBottom());
             }
             mIdentityDiscController.updateButtonState();
 
             if (mTabGroupPopupUi != null) {
                 mTabGroupPopUiParentSupplier.set(mIsBottomToolbarVisible
+                                        && BottomToolbarVariationManager.isTabSwitcherOnBottom()
                                 ? mActivity.findViewById(R.id.bottom_controls)
                                 : mActivity.findViewById(R.id.toolbar));
             }
@@ -1502,10 +1520,10 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             }
         });
         mAppMenuButtonHelper = mAppMenuHandler.createAppMenuButtonHelper();
-        mAppMenuButtonHelper.setMenuShowsFromBottom(isBottomToolbarVisible());
+        mAppMenuButtonHelper.setMenuShowsFromBottom(isMenuFromBottom());
         mAppMenuButtonHelper.setOnAppMenuShownListener(() -> {
             RecordUserAction.record("MobileToolbarShowMenu");
-            if (isBottomToolbarVisible()) {
+            if (isMenuFromBottom()) {
                 RecordUserAction.record("MobileBottomToolbarShowMenu");
             } else {
                 RecordUserAction.record("MobileTopToolbarShowMenu");
@@ -1524,10 +1542,6 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
 
     @Nullable
     private MenuButton getMenuButtonWrapper() {
-        if (mBottomControlsCoordinator != null) {
-            return mBottomControlsCoordinator.getMenuButtonWrapper();
-        }
-
         return mToolbar.getMenuButtonWrapper();
     }
 

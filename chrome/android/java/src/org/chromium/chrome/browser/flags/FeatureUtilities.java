@@ -28,6 +28,7 @@ import org.chromium.chrome.browser.device.DeviceClassManager;
 import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.tasks.tab_management.TabManagementModuleProvider;
+import org.chromium.chrome.browser.toolbar.bottom.BottomToolbarVariationManager;
 import org.chromium.ui.base.DeviceFormFactor;
 
 import java.util.HashMap;
@@ -219,6 +220,16 @@ public class FeatureUtilities {
     public static void cacheBottomToolbarEnabled() {
         cacheFlag(ChromePreferenceKeys.FLAGS_CACHED_BOTTOM_TOOLBAR_ENABLED,
                 ChromeFeatureList.CHROME_DUET);
+        cacheBottomToolbarVariation();
+    }
+
+    /**
+     * Cache the enabled bottom toolbar variation.
+     */
+    public static void cacheBottomToolbarVariation() {
+        cacheVariation(ChromePreferenceKeys.VARIATION_CACHED_BOTTOM_TOOLBAR,
+                ChromeFeatureList.CHROME_DUET,
+                BottomToolbarVariationManager.getVariationParamName());
     }
 
     /**
@@ -262,6 +273,15 @@ public class FeatureUtilities {
                 && !DeviceFormFactor.isNonMultiDisplayContextOnTablet(
                         ContextUtils.getApplicationContext())
                 && (isDuetTabStripIntegrationAndroidEnabled() || !isTabGroupsAndroidEnabled());
+    }
+
+    /**
+     * @return The currently enabled bottom toolbar variation.
+     */
+    public static String getBottomToolbarVariation() {
+        return SharedPreferencesManager.getInstance().readString(
+                ChromePreferenceKeys.VARIATION_CACHED_BOTTOM_TOOLBAR,
+                BottomToolbarVariationManager.Variations.NONE);
     }
 
     /**
@@ -729,6 +749,12 @@ public class FeatureUtilities {
     private static void cacheFlag(String preferenceName, String featureName) {
         SharedPreferencesManager.getInstance().writeBoolean(
                 preferenceName, ChromeFeatureList.isEnabled(featureName));
+    }
+
+    private static void cacheVariation(
+            String preferenceName, String featureName, String variationName) {
+        SharedPreferencesManager.getInstance().writeString(preferenceName,
+                ChromeFeatureList.getFieldTrialParamByFeature(featureName, variationName));
     }
 
     private static boolean isFlagEnabled(String preferenceName, boolean defaultValue) {

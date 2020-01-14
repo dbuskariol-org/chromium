@@ -429,6 +429,11 @@ public final class ChromePreferenceKeys {
     public static final String PRIVACY_ALLOW_PRERENDER_OLD = "allow_prefetch";
 
     /**
+     * Key to cache the enabled bottom toolbar parameter.
+     */
+    public static final String VARIATION_CACHED_BOTTOM_TOOLBAR = "bottom_toolbar_variation";
+
+    /**
      * Whether the promotion for data reduction has been skipped on first invocation.
      * Default value is false.
      */
@@ -729,6 +734,7 @@ public final class ChromePreferenceKeys {
                 TWA_DISCLOSURE_ACCEPTED_PACKAGES,
                 UI_THEME_DARKEN_WEBSITES_ENABLED,
                 UI_THEME_SETTING,
+                VARIATION_CACHED_BOTTOM_TOOLBAR,
                 VERIFIED_DIGITAL_ASSET_LINKS,
                 VR_SHOULD_REGISTER_ASSETS_COMPONENT_ON_STARTUP,
                 WEBAPK_UNINSTALLED_PACKAGES
