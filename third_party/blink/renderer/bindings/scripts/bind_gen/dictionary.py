@@ -504,8 +504,7 @@ def make_dict_trace_def(cg_context):
 
     body.extend(map(trace_member_node, own_members))
 
-    if dictionary.inherited:
-        body.append(T("BaseClass::Trace(visitor);"))
+    body.append(T("BaseClass::Trace(visitor);"))
 
     return func_def
 
@@ -524,9 +523,8 @@ def make_dict_class_def(cg_context):
         export=component_export(component))
     class_def.set_base_template_vars(cg_context.template_bindings())
 
-    if dictionary.inherited:
-        class_def.top_section.append(
-            TextNode("using BaseClass = ${base_class_name};"))
+    class_def.top_section.append(
+        TextNode("using BaseClass = ${base_class_name};"))
 
     public_section = class_def.public_section
     public_section.append(
