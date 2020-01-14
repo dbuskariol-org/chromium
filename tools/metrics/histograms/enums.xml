@@ -8017,6 +8017,9 @@ histogram as enum -->
 </enum>
 
 <enum name="CheckerImagingDecision">
+  <obsolete>
+    Removed from code Jan 2020.
+  </obsolete>
   <int value="0" label="Can decode asynchronously."/>
   <int value="1" label="Image is animated."/>
   <int value="2" label="Image is a video frame."/>
