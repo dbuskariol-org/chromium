@@ -77,21 +77,15 @@ source_set("unit_tests") {
 
 source_set("tests_hook") {
   # This target is intentionally not test-only, as the main app depends on it.
-  sources = [
-    "tests_hook.h",
-  ]
+  sources = [ "tests_hook.h" ]
 }
 
 source_set("tests_fake_hook") {
   configs += [ "//build/config/compiler:enable_arc" ]
 
   # This target is intentionally not test-only, as the main app depends on it.
-  sources = [
-    "tests_fake_hook.mm",
-  ]
-  deps = [
-    ":tests_hook",
-  ]
+  sources = [ "tests_fake_hook.mm" ]
+  deps = [ ":tests_hook" ]
 }
 
 tweak_info_plist("info_plist") {
@@ -289,20 +283,14 @@ source_set("app_internal") {
 
 source_set("mode") {
   configs += [ "//build/config/compiler:enable_arc" ]
-  sources = [
-    "application_mode.h",
-  ]
+  sources = [ "application_mode.h" ]
 
-  deps = [
-    "//base",
-  ]
+  deps = [ "//base" ]
 }
 
 source_set("main") {
   configs += [ "//build/config/compiler:enable_arc" ]
-  sources = [
-    "chrome_exe_main.mm",
-  ]
+  sources = [ "chrome_exe_main.mm" ]
 
   deps = [
     ":app_internal",
@@ -408,43 +396,25 @@ ios_app_bundle("chrome") {
 if (current_toolchain == default_toolchain) {
   if (ios_enable_content_widget_extension) {
     bundle_data("content_widget_extension_bundle") {
-      public_deps = [
-        "//ios/chrome/content_widget_extension",
-      ]
-      sources = [
-        "$root_out_dir/content_widget_extension.appex",
-      ]
-      outputs = [
-        "{{bundle_contents_dir}}/PlugIns/{{source_file_part}}",
-      ]
+      public_deps = [ "//ios/chrome/content_widget_extension" ]
+      sources = [ "$root_out_dir/content_widget_extension.appex" ]
+      outputs = [ "{{bundle_contents_dir}}/PlugIns/{{source_file_part}}" ]
     }
   }
 
   if (ios_enable_search_widget_extension) {
     bundle_data("search_widget_extension_bundle") {
-      public_deps = [
-        "//ios/chrome/search_widget_extension",
-      ]
-      sources = [
-        "$root_out_dir/search_widget_extension.appex",
-      ]
-      outputs = [
-        "{{bundle_contents_dir}}/PlugIns/{{source_file_part}}",
-      ]
+      public_deps = [ "//ios/chrome/search_widget_extension" ]
+      sources = [ "$root_out_dir/search_widget_extension.appex" ]
+      outputs = [ "{{bundle_contents_dir}}/PlugIns/{{source_file_part}}" ]
     }
   }
 
   if (ios_enable_share_extension) {
     bundle_data("share_extension_bundle") {
-      public_deps = [
-        "//ios/chrome/share_extension",
-      ]
-      sources = [
-        "$root_out_dir/share_extension.appex",
-      ]
-      outputs = [
-        "{{bundle_contents_dir}}/PlugIns/{{source_file_part}}",
-      ]
+      public_deps = [ "//ios/chrome/share_extension" ]
+      sources = [ "$root_out_dir/share_extension.appex" ]
+      outputs = [ "{{bundle_contents_dir}}/PlugIns/{{source_file_part}}" ]
     }
   }
 }
