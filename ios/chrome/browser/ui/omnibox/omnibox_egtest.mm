@@ -150,8 +150,7 @@ id<GREYMatcher> SearchCopiedTextButton() {
 
 // Tests that the XClientData header is sent when navigating to
 // https://google.com through the omnibox.
-// TODO(crbug.com/1036225): Test very flaky on all config.
-- (void)DISABLED_testXClientData {
+- (void)testXClientData {
   // Rewrite the google URL to localhost URL.
   [OmniboxAppInterface rewriteGoogleURLToLocalhost];
 
