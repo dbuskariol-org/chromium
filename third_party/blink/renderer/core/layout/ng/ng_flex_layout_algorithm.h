@@ -47,7 +47,8 @@ class CORE_EXPORT NGFlexLayoutAlgorithm
   bool IsColumnContainerMainSizeDefinite() const;
   bool IsContainerCrossSizeDefinite() const;
 
-  NGConstraintSpace BuildConstraintSpaceForDeterminingFlexBasis(
+  NGConstraintSpace BuildSpaceForFlexBasis(const NGBlockNode& flex_item) const;
+  NGConstraintSpace BuildSpaceForIntrinsicBlockSize(
       const NGBlockNode& flex_item) const;
   void ConstructAndAppendFlexItems();
   void ApplyStretchAlignmentToChild(FlexItem& flex_item);
