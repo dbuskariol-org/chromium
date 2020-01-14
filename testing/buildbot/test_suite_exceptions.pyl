@@ -1646,12 +1646,12 @@
   'viz_unittests': {
     'modifications': {
       'android-marshmallow-x86-fyi-rel': {
-        'flags': [
+        'args': [
           '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.viz_unittests.filter',
         ],
       },
       'android-pie-x86-fyi-rel': {
-        'flags': [
+        'args': [
           '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.viz_unittests.filter',
         ],
       },
