@@ -220,8 +220,6 @@ bool MixedContentNavigationThrottle::ShouldBlockNavigation(bool for_redirect) {
         const GURL& origin_url = mixed_content_node->current_origin().GetURL();
         frame_host_delegate->DidRunInsecureContent(origin_url,
                                                    request->GetURL());
-        GetContentClient()->browser()->RecordURLMetric(
-            "ContentSettings.MixedScript.RanMixedScript", origin_url);
         mixed_content_features_.insert(
             blink::mojom::WebFeature::kMixedContentBlockableAllowed);
       }
