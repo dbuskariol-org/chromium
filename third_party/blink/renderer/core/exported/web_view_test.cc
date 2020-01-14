@@ -4396,8 +4396,8 @@ class MockUnhandledTapNotifierImpl : public mojom::blink::UnhandledTapNotifier {
     font_size_ = unhandled_tap_info->font_size_in_pixels;
   }
   bool WasUnhandledTap() const { return was_unhandled_tap_; }
-  int GetTappedXPos() const { return tapped_position_.X(); }
-  int GetTappedYPos() const { return tapped_position_.Y(); }
+  int GetTappedXPos() const { return tapped_position_.x(); }
+  int GetTappedYPos() const { return tapped_position_.y(); }
   int GetFontSize() const { return font_size_; }
   int GetElementTextRunLength() const { return element_text_run_length_; }
   void Reset() {
@@ -4410,7 +4410,7 @@ class MockUnhandledTapNotifierImpl : public mojom::blink::UnhandledTapNotifier {
 
  private:
   bool was_unhandled_tap_ = false;
-  IntPoint tapped_position_;
+  gfx::Point tapped_position_;
   int element_text_run_length_ = 0;
   int font_size_ = 0;
 
