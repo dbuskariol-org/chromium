@@ -70,8 +70,7 @@ typedef NS_ENUM(NSInteger, ItemType) {
 
 - (instancetype)initWithModalDelegate:
     (id<InfobarSaveCardModalDelegate>)modalDelegate {
-  self = [super initWithTableViewStyle:UITableViewStylePlain
-                           appBarStyle:ChromeTableViewControllerStyleNoAppBar];
+  self = [super initWithStyle:UITableViewStylePlain];
   if (self) {
     _saveCardModalDelegate = modalDelegate;
     _metricsRecorder = [[InfobarMetricsRecorder alloc]

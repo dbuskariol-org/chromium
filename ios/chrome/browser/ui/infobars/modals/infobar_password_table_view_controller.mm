@@ -74,8 +74,7 @@ typedef NS_ENUM(NSInteger, ItemType) {
 
 - (instancetype)initWithDelegate:(id<InfobarPasswordModalDelegate>)modalDelegate
                             type:(InfobarType)infobarType {
-  self = [super initWithTableViewStyle:UITableViewStylePlain
-                           appBarStyle:ChromeTableViewControllerStyleNoAppBar];
+  self = [super initWithStyle:UITableViewStylePlain];
   if (self) {
     _infobarModalDelegate = modalDelegate;
     _metricsRecorder =
