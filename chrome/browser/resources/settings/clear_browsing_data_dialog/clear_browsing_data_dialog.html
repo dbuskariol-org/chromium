@@ -256,28 +256,30 @@
             $i18n{clearData}
         </cr-button>
       </div>
-      <div slot="footer"
-          hidden="[[!shouldShowFooter_(syncStatus.signedIn)]]">
-        <settings-sync-account-control sync-status="[[syncStatus]]"
-            prefs="{{prefs}}" hide-buttons>
-        </settings-sync-account-control>
-        <div class="divider"></div>
-        <div id="footer-description" on-click="onSyncDescriptionLinkClicked_">
-          <span id="sync-info" hidden="[[syncStatus.hasError]]">
-            $i18nRaw{clearBrowsingDataWithSync}
-          </span>
-          <span id="sync-paused-info" hidden="[[!isSyncPaused_]]">
-            $i18nRaw{clearBrowsingDataWithSyncPaused}
-          </span>
-          <span id="sync-passphrase-error-info"
-              hidden="[[!hasPassphraseError_]]">
-            $i18nRaw{clearBrowsingDataWithSyncPassphraseError}
-          </span>
-          <span id="sync-other-error-info" hidden="[[!hasOtherSyncError_]]">
-            $i18nRaw{clearBrowsingDataWithSyncError}
-          </span>
+      <template is="dom-if" if="[[shouldShowFooter_(syncStatus.signedIn)]]"
+          restamp>
+        <div slot="footer">
+          <settings-sync-account-control sync-status="[[syncStatus]]"
+              prefs="{{prefs}}" hide-buttons>
+          </settings-sync-account-control>
+          <div class="divider"></div>
+          <div id="footer-description" on-click="onSyncDescriptionLinkClicked_">
+            <span id="sync-info" hidden="[[syncStatus.hasError]]">
+              $i18nRaw{clearBrowsingDataWithSync}
+            </span>
+            <span id="sync-paused-info" hidden="[[!isSyncPaused_]]">
+              $i18nRaw{clearBrowsingDataWithSyncPaused}
+            </span>
+            <span id="sync-passphrase-error-info"
+                hidden="[[!hasPassphraseError_]]">
+              $i18nRaw{clearBrowsingDataWithSyncPassphraseError}
+            </span>
+            <span id="sync-other-error-info" hidden="[[!hasOtherSyncError_]]">
+              $i18nRaw{clearBrowsingDataWithSyncError}
+            </span>
+          </div>
         </div>
-      </div>
+      </template>
     </cr-dialog>
 
     <cr-dialog id="installedAppsDialog" close-text="$i18n{close}"

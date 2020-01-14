@@ -314,8 +314,7 @@ cr.define('settings_privacy_page', function() {
           hasError: false,
         });
         Polymer.dom.flush();
-        const footer = element.$$('#clearBrowsingDataDialog [slot=footer]');
-        assertTrue(footer.hidden);
+        assertFalse(!!element.$$('#clearBrowsingDataDialog [slot=footer]'));
 
         // Syncing: the footer is shown, with the normal sync info.
         cr.webUIListenerCallback('sync-status-changed', {
@@ -323,7 +322,7 @@ cr.define('settings_privacy_page', function() {
           hasError: false,
         });
         Polymer.dom.flush();
-        assertFalse(footer.hidden);
+        assertTrue(!!element.$$('#clearBrowsingDataDialog [slot=footer]'));
         assertVisible(element.$$('#sync-info'), true);
         assertVisible(element.$$('#sync-paused-info'), false);
         assertVisible(element.$$('#sync-passphrase-error-info'), false);
@@ -372,8 +371,7 @@ cr.define('settings_privacy_page', function() {
           hasError: false,
         });
         Polymer.dom.flush();
-        assertFalse(
-            element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+        assertTrue(!!element.$$('#clearBrowsingDataDialog [slot=footer]'));
         const syncInfo = element.$$('#sync-info');
         assertVisible(syncInfo, true);
         const signoutLink = syncInfo.querySelector('a[href]');
@@ -390,8 +388,7 @@ cr.define('settings_privacy_page', function() {
           statusAction: settings.StatusAction.REAUTHENTICATE,
         });
         Polymer.dom.flush();
-        assertFalse(
-            element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+        assertTrue(!!element.$$('#clearBrowsingDataDialog [slot=footer]'));
         const syncInfo = element.$$('#sync-paused-info');
         assertVisible(syncInfo, true);
         const signinLink = syncInfo.querySelector('a[href]');
@@ -408,8 +405,7 @@ cr.define('settings_privacy_page', function() {
           statusAction: settings.StatusAction.ENTER_PASSPHRASE,
         });
         Polymer.dom.flush();
-        assertFalse(
-            element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+        assertTrue(!!element.$$('#clearBrowsingDataDialog [slot=footer]'));
         const syncInfo = element.$$('#sync-passphrase-error-info');
         assertVisible(syncInfo, true);
         const passphraseLink = syncInfo.querySelector('a[href]');
@@ -617,8 +613,7 @@ cr.define('settings_privacy_page', function() {
             hasError: false,
           });
           Polymer.dom.flush();
-          assertTrue(
-              element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+          assertFalse(!!element.$$('#clearBrowsingDataDialog [slot=footer]'));
 
           // Syncing.
           cr.webUIListenerCallback('sync-status-changed', {
@@ -626,8 +621,7 @@ cr.define('settings_privacy_page', function() {
             hasError: false,
           });
           Polymer.dom.flush();
-          assertTrue(
-              element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+          assertFalse(!!element.$$('#clearBrowsingDataDialog [slot=footer]'));
 
           // Sync passphrase error.
           cr.webUIListenerCallback('sync-status-changed', {
@@ -636,8 +630,7 @@ cr.define('settings_privacy_page', function() {
             statusAction: settings.StatusAction.ENTER_PASSPHRASE,
           });
           Polymer.dom.flush();
-          assertTrue(
-              element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+          assertFalse(!!element.$$('#clearBrowsingDataDialog [slot=footer]'));
 
           // Other sync error.
           cr.webUIListenerCallback('sync-status-changed', {
@@ -646,8 +639,7 @@ cr.define('settings_privacy_page', function() {
             statusAction: settings.StatusAction.NO_ACTION,
           });
           Polymer.dom.flush();
-          assertTrue(
-              element.$$('#clearBrowsingDataDialog [slot=footer]').hidden);
+          assertFalse(!!element.$$('#clearBrowsingDataDialog [slot=footer]'));
         });
       }
     });

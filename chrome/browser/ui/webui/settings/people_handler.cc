@@ -541,6 +541,9 @@ base::Value PeopleHandler::GetStoredAccountsList() {
     return accounts;
   }
 #endif
+  // Guest mode does not have a primary account (or an IdentityManager).
+  if (profile_->IsGuestSession())
+    return base::ListValue();
   // If dice is disabled or unsupported, show only the primary account.
   auto* identity_manager = IdentityManagerFactory::GetForProfile(profile_);
   base::Optional<AccountInfo> primary_account_info =

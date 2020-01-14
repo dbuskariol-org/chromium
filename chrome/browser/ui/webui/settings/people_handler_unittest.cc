@@ -1224,7 +1224,20 @@ TEST(PeopleHandlerDiceUnifiedConsentTest, StoredAccountsList) {
   EXPECT_EQ("a@gmail.com", accounts_list[0].FindKey("email")->GetString());
   EXPECT_EQ("b@gmail.com", accounts_list[1].FindKey("email")->GetString());
 }
-
 #endif  // BUILDFLAG(ENABLE_DICE_SUPPORT)
+
+#if defined(OS_CHROMEOS)
+// Regression test for crash in guest mode. https://crbug.com/1040476
+TEST(PeopleHandlerGuestModeTest, GetStoredAccountsList) {
+  content::BrowserTaskEnvironment task_environment;
+  TestingProfile::Builder builder;
+  builder.SetGuestSession();
+  std::unique_ptr<Profile> profile = builder.Build();
+
+  PeopleHandler handler(profile.get());
+  base::Value accounts = handler.GetStoredAccountsList();
+  EXPECT_TRUE(accounts.GetList().empty());
+}
+#endif  // defined(OS_CHROMEOS)
 
 }  // namespace settings
