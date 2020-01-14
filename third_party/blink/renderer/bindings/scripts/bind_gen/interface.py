@@ -357,6 +357,9 @@ def _make_reflect_process_keyword_state(cg_context):
         return "keywords::{}".format(name_style.constant(keyword))
 
     branches = CxxMultiBranchesNode()
+    branches.accumulate(
+        CodeGenAccumulator.require_include_headers(
+            ["third_party/blink/renderer/core/keywords.h"]))
     nodes = [
         T("// [ReflectOnly]"),
         T("const AtomicString reflect_value(${return_value}.LowerASCII());"),
@@ -576,7 +579,7 @@ def make_check_constructor_call(cg_context):
         CxxLikelyIfNode(
             cond=("ConstructorMode::Current(${isolate}) == "
                   "ConstructorMode::kWrapExistingObject"),
-            body=T("V8SetReturnValue(${info}, ${v8_receiver});\n"
+            body=T("bindings::V8SetReturnValue(${info}, ${v8_receiver});\n"
                    "return;")),
     ])
 
@@ -632,7 +635,7 @@ def make_check_security_of_return_value(cg_context):
              "BindingSecurity::ErrorReportOption::kDoNotReport)")
     body = [
         T(use_counter),
-        T("V8SetReturnValueNull(${info});\n"
+        T("bindings::V8SetReturnValue(${info}, nullptr);\n"
           "return;"),
     ]
     return SequenceNode([
@@ -1042,7 +1045,7 @@ if (!${blink_receiver}->""" + pred + """()) {
   v8::Local<v8::Value> v8_value;
   if (v8_private_cached_attribute.GetOrUndefined(${v8_receiver})
           .ToLocal(&v8_value) && !v8_value->IsUndefined()) {
-    V8SetReturnValue(${info}, v8_value);
+    bindings::V8SetReturnValue(${info}, v8_value);
     return;
   }
 }""")
@@ -1057,7 +1060,7 @@ auto v8_private_save_same_object =
   v8::Local<v8::Value> v8_value;
   if (v8_private_save_same_object.GetOrUndefined(${v8_receiver})
           .ToLocal(&v8_value) && !v8_value->IsUndefined()) {
-    V8SetReturnValue(${info}, v8_value);
+    bindings::V8SetReturnValue(${info}, v8_value);
     return;
   }
 }""")
@@ -1151,7 +1154,7 @@ def make_steps_of_put_forwards(cg_context):
         T("// [PutForwards]"),
         T("v8::Local<v8::Value> target;"),
         T("if (!${v8_receiver}->Get(${current_context}, "
-          "V8AtomicString(${isolate}, property_name))"
+          "V8AtomicString(${isolate}, ${property_name}))"
           ".ToLocal(&target)) {\n"
           "  return;\n"
           "}"),
@@ -1164,7 +1167,7 @@ def make_steps_of_put_forwards(cg_context):
             ]),
         T("bool did_set;"),
         T("if (!target.As<v8::Object>()->Set(${current_context}, "
-          "V8AtomicString("
+          "V8AtomicString(${isolate}, "
           "\"${attribute.extended_attributes.value_of(\"PutForwards\")}\""
           "), ${info}[0]).To(&did_set)) {{\n"
           "  return;\n"
@@ -1181,7 +1184,7 @@ def make_steps_of_replaceable(cg_context):
         T("// [Replaceable]"),
         T("bool did_create;"),
         T("if (!${v8_receiver}->CreateDataProperty(${current_context}, "
-          "V8AtomicString(${isolate}, property_name), "
+          "V8AtomicString(${isolate}, ${property_name}), "
           "${info}[0]).To(&did_create)) {\n"
           "  return;\n"
           "}"),
@@ -1201,30 +1204,39 @@ def make_v8_set_return_value(cg_context):
     return_type = cg_context.return_type.unwrap(typedef=True)
     return_type_body = return_type.unwrap()
 
-    if (cg_context.for_world == cg_context.MAIN_WORLD
-            and return_type_body.is_interface):
-        return T("V8SetReturnValueForMainWorld(${info}, ${return_value});")
-
-    if return_type_body.is_interface:
-        return T("V8SetReturnValue(${info}, ${return_value}, "
-                 "${creation_context_object});")
+    V8_RETURN_VALUE_FAST_TYPES = ("boolean", "byte", "octet", "short",
+                                  "unsigned short", "long", "unsigned long")
+    if return_type.keyword_typename in V8_RETURN_VALUE_FAST_TYPES:
+        return T("bindings::V8SetReturnValue(${info}, ${return_value});")
 
     if return_type_body.is_string:
+        args = ["${info}", "${return_value}", "${isolate}"]
         if return_type.is_nullable:
-            return T("V8SetReturnValueStringOrNull"
-                     "(${info}, ${return_value}, ${isolate});")
+            args.append("bindings::V8ReturnValue::kNullable")
         else:
-            return T("V8SetReturnValueString"
-                     "(${info}, ${return_value}, ${isolate});")
+            args.append("bindings::V8ReturnValue::kNonNullable")
+        return T("bindings::V8SetReturnValue({});".format(", ".join(args)))
+
+    if return_type_body.is_interface:
+        args = ["${info}", "${return_value}"]
+        if cg_context.for_world == cg_context.MAIN_WORLD:
+            args.append("bindings::V8ReturnValue::kMainWorld")
+        elif cg_context.constructor or cg_context.member_like.is_static:
+            args.append("${creation_context}")
+        else:
+            args.append("${blink_receiver}")
+        return T("bindings::V8SetReturnValue({});".format(", ".join(args)))
 
     if return_type.is_frozen_array:
-        return T("V8SetReturnValue(${info}, FreezeV8Object(ToV8("
-                 "${return_value}, ${v8_receiver}, ${isolate}), ${isolate}));")
+        return T("bindings::V8SetReturnValue(${info}, FreezeV8Object(ToV8("
+                 "${return_value}, ${creation_context_object}, ${isolate})));")
 
     if return_type.is_promise:
-        return T("V8SetReturnValue(${info}, ${return_value}.V8Value());")
+        return T("bindings::V8SetReturnValue"
+                 "(${info}, ${return_value}.V8Value());")
 
-    return T("V8SetReturnValue(${info}, ${return_value});")
+    return T("bindings::V8SetReturnValue(${info}, "
+             "ToV8(${return_value}, ${creation_context_object}, ${isolate}));")
 
 
 def _make_empty_callback_def(cg_context, function_name, arg_decls=None):
@@ -1340,7 +1352,7 @@ def make_constant_callback_def(cg_context, function_name):
     body = func_def.body
 
     v8_set_return_value = _format(
-        "V8SetReturnValue(${info}, ${class_name}::{});",
+        "bindings::V8SetReturnValue(${info}, ${class_name}::{});",
         constant_name(cg_context))
     body.extend([
         make_runtime_call_timer_scope(cg_context),
@@ -1414,7 +1426,7 @@ def make_constructor_function_def(cg_context, function_name):
             T("v8::Local<v8::Object> v8_wrapper = "
               "${return_value}->AssociateWithWrapper(${isolate}, "
               "${class_name}::GetWrapperTypeInfo(), ${v8_receiver});"))
-        body.append(T("V8SetReturnValue(${info}, v8_wrapper);"))
+        body.append(T("bindings::V8SetReturnValue(${info}, v8_wrapper);"))
 
     return func_def
 
@@ -1457,7 +1469,8 @@ def make_exposed_construct_callback_def(cg_context, function_name):
     body = func_def.body
 
     v8_set_return_value = _format(
-        "V8SetReturnValueInterfaceObject(${info}, {}::GetWrapperTypeInfo());",
+        "bindings::V8SetReturnValue"
+        "(${info}, {}::GetWrapperTypeInfo(), InterfaceObject);",
         v8_bridge_class_name(cg_context.exposed_construct))
     body.extend([
         make_runtime_call_timer_scope(cg_context),
@@ -2908,6 +2921,7 @@ def generate_interface(interface):
         "third_party/blink/renderer/platform/bindings/exception_messages.h",
         "third_party/blink/renderer/platform/bindings/runtime_call_stats.h",
         "third_party/blink/renderer/platform/bindings/v8_binding.h",
+        "third_party/blink/renderer/platform/bindings/v8_set_return_value.h",
     ])
     impl_source_node.accumulator.add_include_headers(
         collect_include_headers(interface))
