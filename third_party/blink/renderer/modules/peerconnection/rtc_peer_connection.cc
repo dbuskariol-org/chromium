@@ -802,32 +802,6 @@ void RTCPeerConnection::Dispose() {
   // Promptly clears a raw reference from content/ to an on-heap object
   // so that content/ doesn't access it in a lazy sweeping phase.
   peer_handler_.reset();
-
-  // UMA for CallSetupStates. This metric is reported regardless of whether or
-  // not getUserMedia() has been called in this document.
-  UMA_HISTOGRAM_ENUMERATION("WebRTC.PeerConnection.CallSetupState.OffererState",
-                            call_setup_state_tracker_.offerer_state());
-  UMA_HISTOGRAM_ENUMERATION(
-      "WebRTC.PeerConnection.CallSetupState.AnswererState",
-      call_setup_state_tracker_.answerer_state());
-  UMA_HISTOGRAM_ENUMERATION(
-      "WebRTC.PeerConnection.CallSetupState.CallSetupState",
-      call_setup_state_tracker_.GetCallSetupState());
-  // UMA for CallSetupStates only for documents that have performed
-  // getUserMedia(). This heuristic hints that the peer connection is likely
-  // used in a media/conferencing context, which is a use case that may be
-  // particularly sensitive to the Plan B vs Unified Plan switch.
-  if (call_setup_state_tracker_.document_uses_media()) {
-    UMA_HISTOGRAM_ENUMERATION(
-        "WebRTC.PeerConnection.CallSetupStateWithGum.OffererState",
-        call_setup_state_tracker_.offerer_state());
-    UMA_HISTOGRAM_ENUMERATION(
-        "WebRTC.PeerConnection.CallSetupStateWithGum.AnswererState",
-        call_setup_state_tracker_.answerer_state());
-    UMA_HISTOGRAM_ENUMERATION(
-        "WebRTC.PeerConnection.CallSetupStateWithGum.CallSetupState",
-        call_setup_state_tracker_.GetCallSetupState());
-  }
 }
 
 ScriptPromise RTCPeerConnection::createOffer(ScriptState* script_state,
