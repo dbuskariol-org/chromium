@@ -24,7 +24,6 @@ import org.chromium.base.task.AsyncTask;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.explore_sites.ExploreSitesBridge;
 import org.chromium.chrome.browser.explore_sites.ExploreSitesIPH;
-import org.chromium.chrome.browser.explore_sites.MostLikelyVariation;
 import org.chromium.chrome.browser.favicon.IconType;
 import org.chromium.chrome.browser.favicon.LargeIconBridge;
 import org.chromium.chrome.browser.favicon.RoundedIconGenerator;
@@ -146,28 +145,17 @@ public class TileRenderer {
             tileView = (TopSitesTileView) LayoutInflater.from(parentView.getContext())
                                .inflate(mTopSitesLayout, parentView, false);
 
-            int iconVariation = ExploreSitesBridge.getIconVariation();
-            if (iconVariation == MostLikelyVariation.ICON_ARROW) {
-                tile.setIcon(VectorDrawableCompat.create(
-                        mResources, R.drawable.ic_arrow_forward_blue_24dp, mTheme));
-                tile.setType(TileVisualType.ICON_REAL);
-            } else if (iconVariation == MostLikelyVariation.ICON_DOTS) {
-                tile.setIcon(VectorDrawableCompat.create(
-                        mResources, R.drawable.ic_apps_blue_24dp, mTheme));
-                tile.setType(TileVisualType.ICON_REAL);
-            } else if (iconVariation == MostLikelyVariation.ICON_GROUPED) {
-                tile.setIcon(VectorDrawableCompat.create(
-                        mResources, R.drawable.ic_apps_blue_24dp, mTheme));
-                tile.setType(TileVisualType.ICON_DEFAULT);
+            tile.setIcon(
+                    VectorDrawableCompat.create(mResources, R.drawable.ic_apps_blue_24dp, mTheme));
+            tile.setType(TileVisualType.ICON_DEFAULT);
 
-                // One task to load actual icon.
-                LargeIconBridge.LargeIconCallback bridgeCallback =
-                        setupDelegate.createIconLoadCallback(tile);
-                ExploreSitesBridge.getSummaryImage(Profile.getLastUsedProfile(), mDesiredIconSize,
-                        (Bitmap img)
-                                -> bridgeCallback.onLargeIconAvailable(
-                                        img, Color.BLACK, false, IconType.FAVICON));
-            }
+            // One task to load actual icon.
+            LargeIconBridge.LargeIconCallback bridgeCallback =
+                    setupDelegate.createIconLoadCallback(tile);
+            ExploreSitesBridge.getSummaryImage(Profile.getLastUsedProfile(), mDesiredIconSize,
+                    (Bitmap img)
+                            -> bridgeCallback.onLargeIconAvailable(
+                                    img, Color.BLACK, false, IconType.FAVICON));
         } else {
             tileView = (SuggestionsTileView) LayoutInflater.from(parentView.getContext())
                                .inflate(mLayout, parentView, false);

@@ -1088,65 +1088,22 @@ const FeatureEntry::FeatureVariation kTabFreezeVariations[] = {
 const FeatureEntry::FeatureParam kExploreSitesExperimental = {
     chrome::android::explore_sites::kExploreSitesVariationParameterName,
     chrome::android::explore_sites::kExploreSitesVariationExperimental};
-const FeatureEntry::FeatureParam kExploreSitesPersonalized = {
-    chrome::android::explore_sites::kExploreSitesVariationParameterName,
-    chrome::android::explore_sites::kExploreSitesVariationPersonalized};
 const FeatureEntry::FeatureParam kExploreSitesDenseTitleBottom[] = {
-    {chrome::android::explore_sites::kExploreSitesVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesVariationMostLikelyTile},
     {chrome::android::explore_sites::kExploreSitesDenseVariationParameterName,
      chrome::android::explore_sites::
          kExploreSitesDenseVariationDenseTitleBottom},
-    {chrome::android::explore_sites::
-         kExploreSitesMostLikelyVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesMostLikelyVariationIconDots}};
+};
 const FeatureEntry::FeatureParam kExploreSitesDenseTitleRight[] = {
-    {chrome::android::explore_sites::kExploreSitesVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesVariationMostLikelyTile},
     {chrome::android::explore_sites::kExploreSitesDenseVariationParameterName,
      chrome::android::explore_sites::
          kExploreSitesDenseVariationDenseTitleRight},
-    {chrome::android::explore_sites::
-         kExploreSitesMostLikelyVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesMostLikelyVariationIconDots}};
-const FeatureEntry::FeatureParam kExploreSitesIconArrow[] = {
-    {chrome::android::explore_sites::kExploreSitesVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesVariationMostLikelyTile},
-    {chrome::android::explore_sites::
-         kExploreSitesMostLikelyVariationParameterName,
-     chrome::android::explore_sites::
-         kExploreSitesMostLikelyVariationIconArrow}};
-const FeatureEntry::FeatureParam kExploreSitesIconDots[] = {
-    {chrome::android::explore_sites::kExploreSitesVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesVariationMostLikelyTile},
-    {chrome::android::explore_sites::
-         kExploreSitesMostLikelyVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesMostLikelyVariationIconDots}};
-const FeatureEntry::FeatureParam kExploreSitesIconGrouped[] = {
-    {chrome::android::explore_sites::kExploreSitesVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesVariationMostLikelyTile},
-    {chrome::android::explore_sites::
-         kExploreSitesMostLikelyVariationParameterName,
-     chrome::android::explore_sites::
-         kExploreSitesMostLikelyVariationIconGrouped}};
+};
 const FeatureEntry::FeatureParam kExploreSitesWithGamesTop[] = {
-    {chrome::android::explore_sites::kExploreSitesVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesVariationMostLikelyTile},
-    {chrome::android::explore_sites::
-         kExploreSitesMostLikelyVariationParameterName,
-     chrome::android::explore_sites::kExploreSitesMostLikelyVariationIconDots},
     {chrome::android::explore_sites::
          kExploreSitesHeadersExperimentParameterName,
      chrome::android::explore_sites::kExploreSitesGamesTopExperiment}};
 const FeatureEntry::FeatureVariation kExploreSitesVariations[] = {
     {"Experimental", &kExploreSitesExperimental, 1, nullptr},
-    {"Personalized", &kExploreSitesPersonalized, 1, nullptr},
-    {"Arrow Icon", kExploreSitesIconArrow, base::size(kExploreSitesIconArrow),
-     nullptr},
-    {"Dots Icon", kExploreSitesIconDots, base::size(kExploreSitesIconDots),
-     nullptr},
-    {"Grouped Icon", kExploreSitesIconGrouped,
-     base::size(kExploreSitesIconGrouped), nullptr},
     {"Games Top", kExploreSitesWithGamesTop,
      base::size(kExploreSitesWithGamesTop), nullptr},
     {"Dense Title Bottom", kExploreSitesDenseTitleBottom,

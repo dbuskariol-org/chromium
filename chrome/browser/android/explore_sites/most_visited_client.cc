@@ -11,13 +11,8 @@
 #include "ui/base/l10n/l10n_util.h"
 
 namespace explore_sites {
-using chrome::android::explore_sites::GetMostLikelyVariation;
-using chrome::android::explore_sites::MostLikelyVariation;
 
 std::unique_ptr<MostVisitedClient> MostVisitedClient::Create() {
-  if (GetMostLikelyVariation() == MostLikelyVariation::NONE)
-    return nullptr;
-
   // note: wrap_unique is used because the constructor is private.
   return base::WrapUnique(new MostVisitedClient());
 }

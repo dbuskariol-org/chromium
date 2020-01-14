@@ -52,8 +52,7 @@ import java.util.List;
 public class ExploreSitesPage extends BasicNativePage {
     private static final long BACK_NAVIGATION_TIMEOUT_FOR_UMA = DateUtils.SECOND_IN_MILLIS * 30;
     private static final String CONTEXT_MENU_USER_ACTION_PREFIX = "ExploreSites";
-    private static final int INITIAL_SCROLL_POSITION = 3;
-    private static final int INITIAL_SCROLL_POSITION_PERSONALIZED = 0;
+    private static final int INITIAL_SCROLL_POSITION = 0;
     private static final String NAVIGATION_ENTRY_PAGE_STATE_KEY = "ExploreSitesPageState";
     // Constants that dictate sizes of rows and columns
     private static final int MAX_COLUMNS_DENSE_TITLE_BOTTOM = 5;
@@ -270,13 +269,7 @@ public class ExploreSitesPage extends BasicNativePage {
             }
         });
 
-        // We don't want to scroll to the 4th category if personalized
-        // or integrated with Most Likely.
-        int variation = ExploreSitesBridge.getVariation();
-        mInitialScrollPosition = variation == ExploreSitesVariation.PERSONALIZED
-                        || ExploreSitesBridge.isIntegratedWithMostLikely(variation)
-                ? INITIAL_SCROLL_POSITION_PERSONALIZED
-                : INITIAL_SCROLL_POSITION;
+        mInitialScrollPosition = INITIAL_SCROLL_POSITION;
 
         ExploreSitesBridge.getCatalog(mProfile,
                 ExploreSitesCatalogUpdateRequestSource.EXPLORE_SITES_PAGE, this::translateToModel);
