@@ -218,7 +218,7 @@ public class CustomTabActivity extends BaseCustomTabActivity<CustomTabActivityCo
         // We start the Autofill Assistant after the call to super.finishNativeInitialization() as
         // this will initialize the BottomSheet that is used to embed the Autofill Assistant bottom
         // bar.
-        if (isAutofillAssistantEnabled()) {
+        if (AutofillAssistantFacade.isAutofillAssistantEnabled(getInitialIntent())) {
             AutofillAssistantFacade.start(this);
         }
     }
@@ -460,10 +460,5 @@ public class CustomTabActivity extends BaseCustomTabActivity<CustomTabActivityCo
         }
 
         return component;
-    }
-
-    private boolean isAutofillAssistantEnabled() {
-        return ChromeFeatureList.isEnabled(ChromeFeatureList.AUTOFILL_ASSISTANT)
-                && AutofillAssistantFacade.isConfigured(getInitialIntent().getExtras());
     }
 }

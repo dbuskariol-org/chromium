@@ -360,6 +360,7 @@ class AutofillAssistantUiTestUtil {
         testRule.startCustomTabActivityWithIntent(CustomTabsTestUtils.createMinimalCustomTabIntent(
                 InstrumentationRegistry.getTargetContext(), "about:blank"));
     }
+
     /**
      * Starts Autofill Assistant on the given {@code activity} and injects the given {@code
      * testService}.

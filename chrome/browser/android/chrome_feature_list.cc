@@ -66,6 +66,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &autofill::features::kAutofillRefreshStyleAndroid,
     &autofill::features::kAutofillEnableCompanyName,
     &autofill_assistant::features::kAutofillAssistant,
+    &autofill_assistant::features::kAutofillAssistantChromeEntry,
     &autofill_assistant::features::kAutofillAssistantDirectActions,
     &autofill::features::kAutofillTouchToFill,
     &content_settings::kImprovedCookieControlsForThirdPartyCookieBlocking,
