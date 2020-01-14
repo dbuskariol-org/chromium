@@ -6,6 +6,8 @@
 
 #include "chrome/browser/profiles/profile.h"
 #include "components/sessions/content/content_serialized_navigation_builder.h"
+#include "components/sessions/content/session_tab_helper_delegate.h"
+#include "components/sessions/core/serialized_navigation_entry.h"
 #include "content/public/browser/navigation_details.h"
 #include "content/public/browser/web_contents.h"
 #include "extensions/buildflags/buildflags.h"
@@ -14,22 +16,17 @@
 #include "extensions/common/extension_messages.h"
 #endif
 
-#if BUILDFLAG(ENABLE_SESSION_SERVICE)
-#include "chrome/browser/sessions/session_service.h"
-#include "chrome/browser/sessions/session_service_factory.h"
-#endif
-
 SessionTabHelper::SessionTabHelper(content::WebContents* contents,
-                                   SessionServiceLookup lookup)
+                                   DelegateLookup lookup)
     : content::WebContentsObserver(contents),
-      service_lookup_(std::move(lookup)),
+      delegate_lookup_(std::move(lookup)),
       session_id_(SessionID::NewUnique()),
       window_id_(SessionID::InvalidValue()) {}
 
 SessionTabHelper::~SessionTabHelper() = default;
 
 void SessionTabHelper::CreateForWebContents(content::WebContents* contents,
-                                            SessionServiceLookup lookup) {
+                                            DelegateLookup lookup) {
   DCHECK(contents);
   if (!FromWebContents(contents)) {
     contents->SetUserData(UserDataKey(), base::WrapUnique(new SessionTabHelper(
@@ -67,63 +64,62 @@ SessionID SessionTabHelper::IdForWindowContainingTab(
 
 #if BUILDFLAG(ENABLE_SESSION_SERVICE)
 void SessionTabHelper::UserAgentOverrideSet(const std::string& user_agent) {
-  SessionService* session_service = GetSessionService();
-  if (session_service) {
-    session_service->SetTabUserAgentOverride(window_id(), session_id(),
-                                             user_agent);
+  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  if (delegate) {
+    delegate->SetTabUserAgentOverride(window_id(), session_id(), user_agent);
   }
 }
 
 void SessionTabHelper::NavigationEntryCommitted(
     const content::LoadCommittedDetails& load_details) {
-  SessionService* session_service = GetSessionService();
-  if (!session_service)
+  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  if (!delegate)
     return;
 
   int current_entry_index =
       web_contents()->GetController().GetCurrentEntryIndex();
-  session_service->SetSelectedNavigationIndex(window_id(), session_id(),
-                                              current_entry_index);
+  delegate->SetSelectedNavigationIndex(window_id(), session_id(),
+                                       current_entry_index);
   const sessions::SerializedNavigationEntry navigation =
       sessions::ContentSerializedNavigationBuilder::FromNavigationEntry(
           current_entry_index,
           web_contents()->GetController().GetEntryAtIndex(current_entry_index));
-  session_service->UpdateTabNavigation(window_id(), session_id(), navigation);
+  delegate->UpdateTabNavigation(window_id(), session_id(), navigation);
 }
 
 void SessionTabHelper::NavigationListPruned(
     const content::PrunedDetails& pruned_details) {
-  SessionService* session_service = GetSessionService();
-  if (!session_service)
+  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  if (!delegate)
     return;
 
-  session_service->TabNavigationPathPruned(
-      window_id(), session_id(), pruned_details.index, pruned_details.count);
+  delegate->TabNavigationPathPruned(window_id(), session_id(),
+                                    pruned_details.index, pruned_details.count);
 }
 
 void SessionTabHelper::NavigationEntriesDeleted() {
-  SessionService* session_service = GetSessionService();
-  if (!session_service)
+  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  if (!delegate)
     return;
 
-  session_service->TabNavigationPathEntriesDeleted(window_id(), session_id());
+  delegate->TabNavigationPathEntriesDeleted(window_id(), session_id());
 }
 
 void SessionTabHelper::NavigationEntryChanged(
     const content::EntryChangedDetails& change_details) {
-  SessionService* session_service = GetSessionService();
-  if (!session_service)
+  sessions::SessionTabHelperDelegate* delegate = GetDelegate();
+  if (!delegate)
     return;
 
   const sessions::SerializedNavigationEntry navigation =
       sessions::ContentSerializedNavigationBuilder::FromNavigationEntry(
           change_details.index, change_details.changed_entry);
-  session_service->UpdateTabNavigation(window_id(), session_id(), navigation);
+  delegate->UpdateTabNavigation(window_id(), session_id(), navigation);
 }
 #endif
 
-SessionService* SessionTabHelper::GetSessionService() {
-  return service_lookup_ ? service_lookup_.Run(web_contents()) : nullptr;
+sessions::SessionTabHelperDelegate* SessionTabHelper::GetDelegate() {
+  return delegate_lookup_ ? delegate_lookup_.Run(web_contents()) : nullptr;
 }
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(SessionTabHelper)

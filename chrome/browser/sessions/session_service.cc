@@ -413,71 +413,6 @@ void SessionService::SetWindowAppName(
   ScheduleCommand(sessions::CreateSetWindowAppNameCommand(window_id, app_name));
 }
 
-void SessionService::TabNavigationPathPruned(const SessionID& window_id,
-                                             const SessionID& tab_id,
-                                             int index,
-                                             int count) {
-  if (!ShouldTrackChangesToWindow(window_id))
-    return;
-
-  DCHECK_GE(index, 0);
-  DCHECK_GT(count, 0);
-
-  // Update the range of available indices.
-  if (tab_to_available_range_.find(tab_id) != tab_to_available_range_.end()) {
-    std::pair<int, int>& range = tab_to_available_range_[tab_id];
-
-    // if both range.first and range.second are also deleted.
-    if (range.second >= index && range.second < index + count &&
-        range.first >= index && range.first < index + count) {
-      range.first = range.second = 0;
-    } else {
-      // Update range.first
-      if (range.first >= index + count)
-        range.first = range.first - count;
-      else if (range.first >= index && range.first < index + count)
-        range.first = index;
-
-      // Update range.second
-      if (range.second >= index + count)
-        range.second = std::max(range.first, range.second - count);
-      else if (range.second >= index && range.second < index + count)
-        range.second = std::max(range.first, index - 1);
-    }
-  }
-
-  return ScheduleCommand(
-      sessions::CreateTabNavigationPathPrunedCommand(tab_id, index, count));
-}
-
-void SessionService::TabNavigationPathEntriesDeleted(const SessionID& window_id,
-                                                     const SessionID& tab_id) {
-  if (!ShouldTrackChangesToWindow(window_id))
-    return;
-
-  // Multiple tabs might be affected by this deletion, so the rebuild is
-  // delayed until next save.
-  rebuild_on_next_save_ = true;
-  base_session_service_->StartSaveTimer();
-}
-
-void SessionService::UpdateTabNavigation(
-    const SessionID& window_id,
-    const SessionID& tab_id,
-    const SerializedNavigationEntry& navigation) {
-  if (!ShouldTrackURLForRestore(navigation.virtual_url()) ||
-      !ShouldTrackChangesToWindow(window_id)) {
-    return;
-  }
-
-  if (tab_to_available_range_.find(tab_id) != tab_to_available_range_.end()) {
-    std::pair<int, int>& range = tab_to_available_range_[tab_id];
-    range.first = std::min(navigation.index(), range.first);
-    range.second = std::max(navigation.index(), range.second);
-  }
-  ScheduleCommand(CreateUpdateTabNavigationCommand(tab_id, navigation));
-}
-
 void SessionService::TabRestored(WebContents* tab, bool pinned) {
   SessionTabHelper* session_tab_helper = SessionTabHelper::FromWebContents(tab);
   if (!ShouldTrackChangesToWindow(session_tab_helper->window_id()))
@@ -486,25 +421,6 @@ void SessionService::TabRestored(WebContents* tab, bool pinned) {
   BuildCommandsForTab(session_tab_helper->window_id(), tab, -1, base::nullopt,
                       pinned, nullptr);
   base_session_service_->StartSaveTimer();
-}
-
-void SessionService::SetSelectedNavigationIndex(const SessionID& window_id,
-                                                const SessionID& tab_id,
-                                                int index) {
-  if (!ShouldTrackChangesToWindow(window_id))
-    return;
-
-  if (tab_to_available_range_.find(tab_id) != tab_to_available_range_.end()) {
-    if (index < tab_to_available_range_[tab_id].first ||
-        index > tab_to_available_range_[tab_id].second) {
-      // The new index is outside the range of what we've archived, schedule
-      // a reset.
-      ResetFromCurrentBrowsers();
-      return;
-    }
-  }
-  ScheduleCommand(
-      sessions::CreateSetSelectedNavigationIndexCommand(tab_id, index));
 }
 
 void SessionService::SetSelectedTabInWindow(const SessionID& window_id,
@@ -519,17 +435,6 @@ void SessionService::SetSelectedTabInWindow(const SessionID& window_id,
 
   ScheduleCommand(
       sessions::CreateSetSelectedTabInWindowCommand(window_id, index));
-}
-
-void SessionService::SetTabUserAgentOverride(
-    const SessionID& window_id,
-    const SessionID& tab_id,
-    const std::string& user_agent_override) {
-  if (!ShouldTrackChangesToWindow(window_id))
-    return;
-
-  ScheduleCommand(sessions::CreateSetTabUserAgentOverrideCommand(
-      tab_id, user_agent_override));
 }
 
 void SessionService::SetTabExtensionAppID(
@@ -576,6 +481,101 @@ void SessionService::RebuildCommandsIfRequired() {
   if (rebuild_on_next_save_ && pending_window_close_ids_.empty()) {
     ScheduleResetCommands();
   }
+}
+
+void SessionService::SetTabUserAgentOverride(
+    const SessionID& window_id,
+    const SessionID& tab_id,
+    const std::string& user_agent_override) {
+  if (!ShouldTrackChangesToWindow(window_id))
+    return;
+
+  ScheduleCommand(sessions::CreateSetTabUserAgentOverrideCommand(
+      tab_id, user_agent_override));
+}
+
+void SessionService::SetSelectedNavigationIndex(const SessionID& window_id,
+                                                const SessionID& tab_id,
+                                                int index) {
+  if (!ShouldTrackChangesToWindow(window_id))
+    return;
+
+  if (tab_to_available_range_.find(tab_id) != tab_to_available_range_.end()) {
+    if (index < tab_to_available_range_[tab_id].first ||
+        index > tab_to_available_range_[tab_id].second) {
+      // The new index is outside the range of what we've archived, schedule
+      // a reset.
+      ResetFromCurrentBrowsers();
+      return;
+    }
+  }
+  ScheduleCommand(
+      sessions::CreateSetSelectedNavigationIndexCommand(tab_id, index));
+}
+
+void SessionService::UpdateTabNavigation(
+    const SessionID& window_id,
+    const SessionID& tab_id,
+    const SerializedNavigationEntry& navigation) {
+  if (!ShouldTrackURLForRestore(navigation.virtual_url()) ||
+      !ShouldTrackChangesToWindow(window_id)) {
+    return;
+  }
+
+  if (tab_to_available_range_.find(tab_id) != tab_to_available_range_.end()) {
+    std::pair<int, int>& range = tab_to_available_range_[tab_id];
+    range.first = std::min(navigation.index(), range.first);
+    range.second = std::max(navigation.index(), range.second);
+  }
+  ScheduleCommand(CreateUpdateTabNavigationCommand(tab_id, navigation));
+}
+
+void SessionService::TabNavigationPathPruned(const SessionID& window_id,
+                                             const SessionID& tab_id,
+                                             int index,
+                                             int count) {
+  if (!ShouldTrackChangesToWindow(window_id))
+    return;
+
+  DCHECK_GE(index, 0);
+  DCHECK_GT(count, 0);
+
+  // Update the range of available indices.
+  if (tab_to_available_range_.find(tab_id) != tab_to_available_range_.end()) {
+    std::pair<int, int>& range = tab_to_available_range_[tab_id];
+
+    // if both range.first and range.second are also deleted.
+    if (range.second >= index && range.second < index + count &&
+        range.first >= index && range.first < index + count) {
+      range.first = range.second = 0;
+    } else {
+      // Update range.first
+      if (range.first >= index + count)
+        range.first = range.first - count;
+      else if (range.first >= index && range.first < index + count)
+        range.first = index;
+
+      // Update range.second
+      if (range.second >= index + count)
+        range.second = std::max(range.first, range.second - count);
+      else if (range.second >= index && range.second < index + count)
+        range.second = std::max(range.first, index - 1);
+    }
+  }
+
+  return ScheduleCommand(
+      sessions::CreateTabNavigationPathPrunedCommand(tab_id, index, count));
+}
+
+void SessionService::TabNavigationPathEntriesDeleted(const SessionID& window_id,
+                                                     const SessionID& tab_id) {
+  if (!ShouldTrackChangesToWindow(window_id))
+    return;
+
+  // Multiple tabs might be affected by this deletion, so the rebuild is
+  // delayed until next save.
+  rebuild_on_next_save_ = true;
+  base_session_service_->StartSaveTimer();
 }
 
 void SessionService::Init() {

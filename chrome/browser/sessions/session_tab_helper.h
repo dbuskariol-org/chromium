@@ -12,20 +12,23 @@
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
 
-class SessionService;
+namespace sessions {
+class SessionTabHelperDelegate;
+}  // namespace sessions
 
 // This class keeps the extension API's windowID up to date with the current
 // window of the tab and observes navigation events.
 class SessionTabHelper : public content::WebContentsObserver,
                          public content::WebContentsUserData<SessionTabHelper> {
  public:
-  using SessionServiceLookup =
-      base::RepeatingCallback<SessionService*(content::WebContents*)>;
+  using DelegateLookup =
+      base::RepeatingCallback<sessions::SessionTabHelperDelegate*(
+          content::WebContents*)>;
 
   ~SessionTabHelper() override;
 
   static void CreateForWebContents(content::WebContents* contents,
-                                   SessionServiceLookup lookup);
+                                   DelegateLookup lookup);
 
   // Returns the identifier used by session restore for this tab.
   const SessionID& session_id() const { return session_id_; }
@@ -66,11 +69,11 @@ class SessionTabHelper : public content::WebContentsObserver,
 
  private:
   friend class content::WebContentsUserData<SessionTabHelper>;
-  SessionTabHelper(content::WebContents* contents, SessionServiceLookup lookup);
+  SessionTabHelper(content::WebContents* contents, DelegateLookup lookup);
 
-  SessionService* GetSessionService();
+  sessions::SessionTabHelperDelegate* GetDelegate();
 
-  SessionServiceLookup service_lookup_;
+  DelegateLookup delegate_lookup_;
 
   // Unique identifier of the tab for session restore. This id is only unique
   // within the current session, and is not guaranteed to be unique across

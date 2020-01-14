@@ -14,7 +14,8 @@
 namespace {
 
 #if BUILDFLAG(ENABLE_SESSION_SERVICE)
-SessionService* GetSessionService(content::WebContents* web_contents) {
+sessions::SessionTabHelperDelegate* GetSessionTabHelperDelegate(
+    content::WebContents* web_contents) {
   return SessionServiceFactory::GetForProfile(
       Profile::FromBrowserContext(web_contents->GetBrowserContext()));
 }
@@ -27,10 +28,10 @@ void CreateSessionServiceTabHelper(content::WebContents* contents) {
     return;
 
 #if BUILDFLAG(ENABLE_SESSION_SERVICE)
-  SessionTabHelper::SessionServiceLookup lookup =
-      base::BindRepeating(&GetSessionService);
+  SessionTabHelper::DelegateLookup lookup =
+      base::BindRepeating(&GetSessionTabHelperDelegate);
 #else
-  SessionTabHelper::SessionServiceLookup lookup;
+  SessionTabHelper::DelegateLookup lookup;
 #endif
   SessionTabHelper::CreateForWebContents(contents, std::move(lookup));
 }
