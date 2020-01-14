@@ -1490,71 +1490,80 @@ Browser* CreateBrowserWithTabs(int num_tabs) {
 
 }  // namespace
 
-// Flaky on Linux.  Times out on Windows and Mac debug builds.
-// http://crbug.com/772839.
-#if defined(OS_LINUX) || \
-    ((defined(OS_WIN) || defined(OS_MACOSX)) && !defined(NDEBUG))
-#define MAYBE_DiscardTabsWithMinimizedAndOccludedWindows \
-  DISABLED_DiscardTabsWithMinimizedAndOccludedWindows
+// Do not run in debug builds to avoid timeouts due to multiple navigations.
+#if !defined(NDEBUG)
+#define MAYBE_DiscardTabsWithMinimizedWindow \
+  DISABLED_DiscardTabsWithMinimizedWindow
 #else
-#define MAYBE_DiscardTabsWithMinimizedAndOccludedWindows \
-  DiscardTabsWithMinimizedAndOccludedWindows
+#define MAYBE_DiscardTabsWithMinimizedWindow DiscardTabsWithMinimizedWindow
 #endif
-IN_PROC_BROWSER_TEST_F(TabManagerTest,
-                       MAYBE_DiscardTabsWithMinimizedAndOccludedWindows) {
-  // Covered by |browser2|.
-  Browser* browser1 = browser();
-  EnsureTabsInBrowser(browser1, 2);
-  browser1->window()->SetBounds(gfx::Rect(10, 10, 10, 10));
-  // Covers |browser1|.
-  Browser* browser2 = CreateBrowserWithTabs(2);
-  EXPECT_NE(browser1, browser2);
-  browser2->window()->SetBounds(gfx::Rect(0, 0, 100, 100));
-  // Active browser.
-  Browser* browser3 = CreateBrowserWithTabs(2);
-  EXPECT_NE(browser1, browser3);
-  EXPECT_NE(browser2, browser3);
-  browser3->window()->SetBounds(gfx::Rect(110, 0, 100, 100));
+IN_PROC_BROWSER_TEST_F(TabManagerTest, DiscardTabsWithMinimizedWindow) {
   // Minimized browser.
-  Browser* browser4 = CreateBrowserWithTabs(2);
-  browser4->window()->Minimize();
-  EXPECT_NE(browser1, browser4);
-  EXPECT_NE(browser2, browser4);
-  EXPECT_NE(browser3, browser4);
+  EnsureTabsInBrowser(browser(), 2);
+  browser()->window()->Minimize();
+  // Other browser that will be last active. This browser exists because the
+  // last active tab cannot be discarded on
 
   // Advance time so everything is urgent discardable.
   test_clock_.Advance(kBackgroundUrgentProtectionTime);
 
-  for (int i = 0; i < 8; ++i)
-    tab_manager()->DiscardTab(LifecycleUnitDiscardReason::PROACTIVE);
+  for (int i = 0; i < 2; ++i)
+    tab_manager()->DiscardTab(LifecycleUnitDiscardReason::URGENT);
 
   base::RunLoop().RunUntilIdle();
 
 // On ChromeOS, active tabs are discarded if their window is non-visible. On
 // other platforms, they are never discarded.
 #if defined(OS_CHROMEOS)
-  EXPECT_TRUE(IsTabDiscarded(browser1->tab_strip_model()->GetWebContentsAt(0)));
-  EXPECT_FALSE(
-      IsTabDiscarded(browser2->tab_strip_model()->GetWebContentsAt(0)));
-  EXPECT_FALSE(
-      IsTabDiscarded(browser3->tab_strip_model()->GetWebContentsAt(0)));
-  EXPECT_TRUE(IsTabDiscarded(browser4->tab_strip_model()->GetWebContentsAt(0)));
+  EXPECT_TRUE(
+      IsTabDiscarded(browser()->tab_strip_model()->GetWebContentsAt(0)));
 #else
   EXPECT_FALSE(
-      IsTabDiscarded(browser1->tab_strip_model()->GetWebContentsAt(0)));
-  EXPECT_FALSE(
-      IsTabDiscarded(browser2->tab_strip_model()->GetWebContentsAt(0)));
-  EXPECT_FALSE(
-      IsTabDiscarded(browser3->tab_strip_model()->GetWebContentsAt(0)));
-  EXPECT_FALSE(
-      IsTabDiscarded(browser4->tab_strip_model()->GetWebContentsAt(0)));
+      IsTabDiscarded(browser()->tab_strip_model()->GetWebContentsAt(0)));
 #endif
 
   // Non-active tabs can be discarded on all platforms.
-  EXPECT_TRUE(IsTabDiscarded(browser1->tab_strip_model()->GetWebContentsAt(1)));
-  EXPECT_TRUE(IsTabDiscarded(browser2->tab_strip_model()->GetWebContentsAt(1)));
-  EXPECT_TRUE(IsTabDiscarded(browser3->tab_strip_model()->GetWebContentsAt(1)));
-  EXPECT_TRUE(IsTabDiscarded(browser4->tab_strip_model()->GetWebContentsAt(1)));
+  EXPECT_TRUE(
+      IsTabDiscarded(browser()->tab_strip_model()->GetWebContentsAt(1)));
+}
+
+// Do not run in debug builds to avoid timeouts due to multiple navigations.
+#if !defined(NDEBUG)
+#define MAYBE_DiscardTabsWithOccludedWindow \
+  DISABLED_DiscardTabsWithOccludedWindow
+#else
+#define MAYBE_DiscardTabsWithOccludedWindow DiscardTabsWithOccludedWindow
+#endif
+IN_PROC_BROWSER_TEST_F(TabManagerTest, DiscardTabsWithOccludedWindow) {
+  // Occluded browser.
+  EnsureTabsInBrowser(browser(), 2);
+  browser()->window()->SetBounds(gfx::Rect(10, 10, 10, 10));
+  // Other browser that covers the occluded browser.
+  Browser* other_browser = CreateBrowserWithTabs(1);
+  EXPECT_NE(other_browser, browser());
+  other_browser->window()->SetBounds(gfx::Rect(0, 0, 100, 100));
+
+  // Advance time so everything is urgent discardable.
+  test_clock_.Advance(kBackgroundUrgentProtectionTime);
+
+  for (int i = 0; i < 3; ++i)
+    tab_manager()->DiscardTab(LifecycleUnitDiscardReason::URGENT);
+
+  base::RunLoop().RunUntilIdle();
+
+// On ChromeOS, active tabs are discarded if their window is non-visible. On
+// other platforms, they are never discarded.
+#if defined(OS_CHROMEOS)
+  EXPECT_TRUE(
+      IsTabDiscarded(browser()->tab_strip_model()->GetWebContentsAt(0)));
+#else
+  EXPECT_FALSE(
+      IsTabDiscarded(browser()->tab_strip_model()->GetWebContentsAt(0)));
+#endif
+
+  // Non-active tabs can be discarded on all platforms.
+  EXPECT_TRUE(
+      IsTabDiscarded(browser()->tab_strip_model()->GetWebContentsAt(1)));
 }
 
 IN_PROC_BROWSER_TEST_F(TabManagerTest, UnfreezeTabOnNavigationEvent) {
