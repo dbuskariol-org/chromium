@@ -2086,6 +2086,47 @@ TEST_P(PaintArtifactCompositorTest, NonCompositedSimpleLuminanceMask) {
   const cc::EffectNode* masked_group =
       GetPropertyTrees().effect_tree.Node(layer->effect_tree_index());
   EXPECT_FALSE(masked_group->HasRenderSurface());
+  EXPECT_EQ(SkBlendMode::kSrcOver, masked_group->blend_mode);
+  EXPECT_TRUE(masked_group->filters.IsEmpty());
+  // It's the last effect node. |masking| has been decomposited.
+  EXPECT_EQ(masked_group, GetPropertyTrees().effect_tree.back());
+}
+
+TEST_P(PaintArtifactCompositorTest, CompositedLuminanceMaskOneChild) {
+  auto masked = CreateOpacityEffect(
+      e0(), 1.0, CompositingReason::kIsolateCompositedDescendants);
+  EffectPaintPropertyNode::State masking_state;
+  masking_state.local_transform_space = &t0();
+  masking_state.output_clip = &c0();
+  masking_state.color_filter = kColorFilterLuminanceToAlpha;
+  masking_state.blend_mode = SkBlendMode::kDstIn;
+  masking_state.direct_compositing_reasons = CompositingReason::kLayerForMask;
+  auto masking =
+      EffectPaintPropertyNode::Create(*masked, std::move(masking_state));
+
+  TestPaintArtifact artifact;
+  artifact.Chunk(t0(), c0(), *masked)
+      .RectDrawing(IntRect(100, 100, 200, 200), Color::kGray);
+  artifact.Chunk(t0(), c0(), *masking)
+      .RectDrawing(IntRect(150, 150, 100, 100), Color::kWhite);
+  Update(artifact.Build());
+  ASSERT_EQ(2u, LayerCount());
+
+  const cc::Layer* masking_layer = LayerAt(1);
+  const cc::EffectNode* masking_group =
+      GetPropertyTrees().effect_tree.Node(masking_layer->effect_tree_index());
+
+  // Render surface is not needed for one child.
+  EXPECT_FALSE(masking_group->HasRenderSurface());
+  ASSERT_EQ(1u, masking_group->filters.size());
+  EXPECT_EQ(cc::FilterOperation::REFERENCE,
+            masking_group->filters.at(0).type());
+  EXPECT_EQ(SkBlendMode::kDstIn, masking_group->blend_mode);
+
+  // The parent also has a render surface to define the scope of the backdrop
+  // of the kDstIn blend mode.
+  EXPECT_TRUE(
+      GetPropertyTrees().effect_tree.parent(masking_group)->HasRenderSurface());
 }
 
 TEST_P(PaintArtifactCompositorTest, CompositedLuminanceMaskTwoChildren) {
@@ -2121,6 +2162,82 @@ TEST_P(PaintArtifactCompositorTest, CompositedLuminanceMaskTwoChildren) {
   ASSERT_EQ(1u, masking_group->filters.size());
   EXPECT_EQ(cc::FilterOperation::REFERENCE,
             masking_group->filters.at(0).type());
+  EXPECT_EQ(SkBlendMode::kDstIn, masking_group->blend_mode);
+
+  // The parent also has a render surface to define the scope of the backdrop
+  // of the kDstIn blend mode.
+  EXPECT_TRUE(
+      GetPropertyTrees().effect_tree.parent(masking_group)->HasRenderSurface());
+}
+
+TEST_P(PaintArtifactCompositorTest, CompositedMaskOneChild) {
+  auto masked = CreateOpacityEffect(
+      e0(), 1.0, CompositingReason::kIsolateCompositedDescendants);
+  EffectPaintPropertyNode::State masking_state;
+  masking_state.local_transform_space = &t0();
+  masking_state.output_clip = &c0();
+  masking_state.blend_mode = SkBlendMode::kDstIn;
+  masking_state.direct_compositing_reasons = CompositingReason::kLayerForMask;
+  auto masking =
+      EffectPaintPropertyNode::Create(*masked, std::move(masking_state));
+
+  TestPaintArtifact artifact;
+  artifact.Chunk(t0(), c0(), *masked)
+      .RectDrawing(IntRect(100, 100, 200, 200), Color::kGray);
+  artifact.Chunk(t0(), c0(), *masking)
+      .RectDrawing(IntRect(150, 150, 100, 100), Color::kWhite);
+  Update(artifact.Build());
+  ASSERT_EQ(2u, LayerCount());
+
+  const cc::Layer* masking_layer = LayerAt(1);
+  const cc::EffectNode* masking_group =
+      GetPropertyTrees().effect_tree.Node(masking_layer->effect_tree_index());
+
+  // Render surface is not needed for one child.
+  EXPECT_FALSE(masking_group->HasRenderSurface());
+  EXPECT_EQ(SkBlendMode::kDstIn, masking_group->blend_mode);
+
+  // The parent also has a render surface to define the scope of the backdrop
+  // of the kDstIn blend mode.
+  EXPECT_TRUE(
+      GetPropertyTrees().effect_tree.parent(masking_group)->HasRenderSurface());
+}
+
+TEST_P(PaintArtifactCompositorTest, CompositedMaskTwoChildren) {
+  auto masked = CreateOpacityEffect(
+      e0(), 1.0, CompositingReason::kIsolateCompositedDescendants);
+  EffectPaintPropertyNode::State masking_state;
+  masking_state.local_transform_space = &t0();
+  masking_state.output_clip = &c0();
+  masking_state.blend_mode = SkBlendMode::kDstIn;
+  auto masking =
+      EffectPaintPropertyNode::Create(*masked, std::move(masking_state));
+
+  auto child_of_masked = CreateOpacityEffect(
+      *masking, 1.0, CompositingReason::kIsolateCompositedDescendants);
+
+  TestPaintArtifact artifact;
+  artifact.Chunk(t0(), c0(), *masked)
+      .RectDrawing(IntRect(100, 100, 200, 200), Color::kGray);
+  artifact.Chunk(t0(), c0(), *child_of_masked)
+      .RectDrawing(IntRect(100, 100, 200, 200), Color::kGray);
+  artifact.Chunk(t0(), c0(), *masking)
+      .RectDrawing(IntRect(150, 150, 100, 100), Color::kWhite);
+  Update(artifact.Build());
+  ASSERT_EQ(3u, LayerCount());
+
+  const cc::Layer* masking_layer = LayerAt(2);
+  const cc::EffectNode* masking_group =
+      GetPropertyTrees().effect_tree.Node(masking_layer->effect_tree_index());
+
+  // There is a render surface because there are two children.
+  EXPECT_TRUE(masking_group->HasRenderSurface());
+  EXPECT_EQ(SkBlendMode::kDstIn, masking_group->blend_mode);
+
+  // The parent also has a render surface to define the scope of the backdrop
+  // of the kDstIn blend mode.
+  EXPECT_TRUE(
+      GetPropertyTrees().effect_tree.parent(masking_group)->HasRenderSurface());
 }
 
 TEST_P(PaintArtifactCompositorTest, NonCompositedSimpleExoticBlendMode) {
@@ -2145,6 +2262,9 @@ TEST_P(PaintArtifactCompositorTest, NonCompositedSimpleExoticBlendMode) {
   const cc::EffectNode* group =
       GetPropertyTrees().effect_tree.Node(layer->effect_tree_index());
   EXPECT_FALSE(group->HasRenderSurface());
+  EXPECT_EQ(SkBlendMode::kSrcOver, group->blend_mode);
+  // It's the last effect node. |masking| has been decomposited.
+  EXPECT_EQ(group, GetPropertyTrees().effect_tree.back());
 }
 
 TEST_P(PaintArtifactCompositorTest, ForcedCompositedExoticBlendMode) {
@@ -2172,8 +2292,12 @@ TEST_P(PaintArtifactCompositorTest, ForcedCompositedExoticBlendMode) {
       GetPropertyTrees().effect_tree.Node(masking_layer->effect_tree_index());
   EXPECT_EQ(SkBlendMode::kXor, masking_group->blend_mode);
 
-  /// This requires a render surface.
+  // This requires a render surface.
   EXPECT_TRUE(masking_group->HasRenderSurface());
+  // The parent also requires a render surface to define the backdrop scope of
+  // the blend mode.
+  EXPECT_TRUE(
+      GetPropertyTrees().effect_tree.parent(masking_group)->HasRenderSurface());
 }
 
 TEST_P(PaintArtifactCompositorTest,
@@ -2206,8 +2330,12 @@ TEST_P(PaintArtifactCompositorTest,
       GetPropertyTrees().effect_tree.Node(masking_layer->effect_tree_index());
   EXPECT_EQ(SkBlendMode::kXor, masking_group->blend_mode);
 
-  /// This requires a render surface.
+  // This requires a render surface.
   EXPECT_TRUE(masking_group->HasRenderSurface());
+  // The parent also requires a render surface to define the backdrop scope of
+  // the blend mode.
+  EXPECT_TRUE(
+      GetPropertyTrees().effect_tree.parent(masking_group)->HasRenderSurface());
 }
 
 TEST_P(PaintArtifactCompositorTest,
@@ -2242,8 +2370,12 @@ TEST_P(PaintArtifactCompositorTest,
       GetPropertyTrees().effect_tree.Node(masking_layer->effect_tree_index());
   EXPECT_EQ(SkBlendMode::kXor, masking_group->blend_mode);
 
-  /// This requires a render surface.
+  // This requires a render surface.
   EXPECT_TRUE(masking_group->HasRenderSurface());
+  // The parent also requires a render surface to define the backdrop scope of
+  // the blend mode.
+  EXPECT_TRUE(
+      GetPropertyTrees().effect_tree.parent(masking_group)->HasRenderSurface());
 }
 
 TEST_P(PaintArtifactCompositorTest, UpdateProducesNewSequenceNumber) {
@@ -2746,6 +2878,8 @@ TEST_P(PaintArtifactCompositorTest, SynthesizedClipRotatedNotSupported) {
       *GetPropertyTrees().effect_tree.Node(mask_effect_0_id);
   ASSERT_EQ(mask_isolation_0_id, mask_effect_0.parent_id);
   EXPECT_EQ(SkBlendMode::kDstIn, mask_effect_0.blend_mode);
+  // Render surface is not needed for DstIn controlling only one layer.
+  EXPECT_FALSE(mask_effect_0.HasRenderSurface());
 }
 
 TEST_P(PaintArtifactCompositorTest, SynthesizedClip90DegRotationSupported) {

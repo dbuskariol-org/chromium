@@ -850,18 +850,21 @@ void SynthesizedClip::UpdateLayer(bool needs_layer,
   SkRRect new_rrect = clip.ClipRect();
   IntRect layer_bounds = EnclosingIntRect(clip.ClipRect().Rect());
   bool needs_display = false;
-  if (!path && &transform == &clip.LocalTransformSpace()) {
-    new_rrect.offset(-layer_bounds.X(), -layer_bounds.Y());
+
+  auto new_translation_2d_or_matrix =
+      GeometryMapper::SourceToDestinationProjection(clip.LocalTransformSpace(),
+                                                    transform);
+  new_translation_2d_or_matrix.MapRect(layer_bounds);
+  new_translation_2d_or_matrix.PostTranslate(-layer_bounds.X(),
+                                             -layer_bounds.Y());
+
+  if (!path && new_translation_2d_or_matrix.IsIdentityOr2DTranslation()) {
+    const auto& translation = new_translation_2d_or_matrix.Translation2D();
+    new_rrect.offset(translation.Width(), translation.Height());
     needs_display = !rrect_is_local_ || new_rrect != rrect_;
     translation_2d_or_matrix_ = GeometryMapper::Translation2DOrMatrix();
     rrect_is_local_ = true;
   } else {
-    auto new_translation_2d_or_matrix =
-        GeometryMapper::SourceToDestinationProjection(
-            clip.LocalTransformSpace(), transform);
-    new_translation_2d_or_matrix.MapRect(layer_bounds);
-    new_translation_2d_or_matrix.PostTranslate(-layer_bounds.X(),
-                                               -layer_bounds.Y());
     needs_display = rrect_is_local_ || new_rrect != rrect_ ||
                     new_translation_2d_or_matrix != translation_2d_or_matrix_ ||
                     (path_ != path && (!path_ || !path || *path_ != *path));
