@@ -2,38 +2,43 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-cr.exportPath('settings');
+cr.define('settings', function() {
+  /**
+   * The steps in the fingerprint setup flow.
+   * @enum {number}
+   */
+  const FingerprintSetupStep = {
+    LOCATE_SCANNER: 1,  // The user needs to locate the scanner.
+    MOVE_FINGER: 2,     // The user needs to move finger around the scanner.
+    READY: 3            // The scanner has read the fingerprint successfully.
+  };
 
-/**
- * The steps in the fingerprint setup flow.
- * @enum {number}
- */
-settings.FingerprintSetupStep = {
-  LOCATE_SCANNER: 1,  // The user needs to locate the scanner.
-  MOVE_FINGER: 2,     // The user needs to move finger around the scanner.
-  READY: 3            // The scanner has read the fingerprint successfully.
-};
+  /**
+   * Fingerprint sensor locations corresponding to the FingerprintLocation
+   * enumerators in
+   * /chrome/browser/chromeos/login/quick_unlock/quick_unlock_utils.h
+   * @enum {number}
+   */
+  const FingerprintLocation = {
+    TABLET_POWER_BUTTON: 0,
+    KEYBOARD_BOTTOM_LEFT: 1,
+    KEYBOARD_BOTTOM_RIGHT: 2,
+    KEYBOARD_TOP_RIGHT: 3,
+  };
 
-/**
- * Fingerprint sensor locations corresponding to the FingerprintLocation
- * enumerators in
- * /chrome/browser/chromeos/login/quick_unlock/quick_unlock_utils.h
- * @enum {number}
- */
-settings.FingerprintLocation = {
-  TABLET_POWER_BUTTON: 0,
-  KEYBOARD_TOP_RIGHT: 1,
-  KEYBOARD_BOTTOM_RIGHT: 2,
-};
+  /**
+   * The amount of milliseconds after a successful but not completed scan before
+   * a message shows up telling the user to scan their finger again.
+   * @type {number}
+   */
+  const SHOW_TAP_SENSOR_MESSAGE_DELAY_MS = 2000;
 
-(function() {
-
-/**
- * The amount of milliseconds after a successful but not completed scan before a
- * message shows up telling the user to scan their finger again.
- * @type {number}
- */
-const SHOW_TAP_SENSOR_MESSAGE_DELAY_MS = 2000;
+  return {
+    FingerprintSetupStep,
+    FingerprintLocation,
+    SHOW_TAP_SENSOR_MESSAGE_DELAY_MS
+  };
+});
 
 Polymer({
   is: 'settings-setup-fingerprint-dialog',
@@ -102,10 +107,12 @@ Polymer({
         switch (fingerprintLocation) {
           case settings.FingerprintLocation.TABLET_POWER_BUTTON:
             return '';
-          case settings.FingerprintLocation.KEYBOARD_TOP_RIGHT:
-            return 'fingerprint-scanner-laptop-top-right';
+          case settings.FingerprintLocation.KEYBOARD_BOTTOM_LEFT:
+            return 'fingerprint-scanner-laptop-bottom-left';
           case settings.FingerprintLocation.KEYBOARD_BOTTOM_RIGHT:
             return 'fingerprint-scanner-laptop-bottom-right';
+          case settings.FingerprintLocation.KEYBOARD_TOP_RIGHT:
+            return 'fingerprint-scanner-laptop-top-right';
         }
         assertNotReached();
       },
@@ -269,7 +276,7 @@ Polymer({
         this.problemMessage_ = '';
         this.tapSensorMessageTimeoutId_ = setTimeout(() => {
           this.problemMessage_ = this.i18n('configureFingerprintLiftFinger');
-        }, SHOW_TAP_SENSOR_MESSAGE_DELAY_MS);
+        }, settings.SHOW_TAP_SENSOR_MESSAGE_DELAY_MS);
         break;
       case settings.FingerprintResultType.PARTIAL:
       case settings.FingerprintResultType.INSUFFICIENT:
@@ -367,4 +374,3 @@ Polymer({
     this.$.arc.setProgress(oldValue, newValue, newValue === 100);
   },
 });
-})();
