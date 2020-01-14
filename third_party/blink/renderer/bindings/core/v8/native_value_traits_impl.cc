@@ -37,6 +37,20 @@ ScriptWrappable* NativeValueTraitsInterfaceNativeValue(
   return ToScriptWrappable(value.As<v8::Object>());
 }
 
+ScriptWrappable* NativeValueTraitsInterfaceArgumentValue(
+    v8::Isolate* isolate,
+    const WrapperTypeInfo* wrapper_type_info,
+    int argument_index,
+    v8::Local<v8::Value> value,
+    ExceptionState& exception_state) {
+  if (!V8PerIsolateData::From(isolate)->HasInstance(wrapper_type_info, value)) {
+    exception_state.ThrowTypeError(ExceptionMessages::ArgumentNotOfType(
+        argument_index, wrapper_type_info->interface_name));
+    return nullptr;
+  }
+  return ToScriptWrappable(value.As<v8::Object>());
+}
+
 }  // namespace bindings
 
 #define DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(T, V8T)             \

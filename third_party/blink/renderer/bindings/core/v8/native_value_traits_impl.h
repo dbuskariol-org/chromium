@@ -31,6 +31,13 @@ CORE_EXPORT ScriptWrappable* NativeValueTraitsInterfaceNativeValue(
     v8::Local<v8::Value> value,
     ExceptionState& exception_state);
 
+CORE_EXPORT ScriptWrappable* NativeValueTraitsInterfaceArgumentValue(
+    v8::Isolate* isolate,
+    const WrapperTypeInfo* wrapper_type_info,
+    int argument_index,
+    v8::Local<v8::Value> value,
+    ExceptionState& exception_state);
+
 }  // namespace bindings
 
 // Boolean
@@ -41,6 +48,13 @@ struct CORE_EXPORT NativeValueTraits<IDLBoolean>
                           v8::Local<v8::Value> value,
                           ExceptionState& exception_state) {
     return ToBoolean(isolate, value, exception_state);
+  }
+
+  static bool ArgumentValue(v8::Isolate* isolate,
+                            int argument_index,
+                            v8::Local<v8::Value> value,
+                            ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -53,6 +67,13 @@ struct CORE_EXPORT NativeValueTraits<IDLByte>
                             ExceptionState& exception_state) {
     return ToInt8(isolate, value, kNormalConversion, exception_state);
   }
+
+  static int8_t ArgumentValue(v8::Isolate* isolate,
+                              int argument_index,
+                              v8::Local<v8::Value> value,
+                              ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -62,6 +83,13 @@ struct CORE_EXPORT NativeValueTraits<IDLOctet>
                              v8::Local<v8::Value> value,
                              ExceptionState& exception_state) {
     return ToUInt8(isolate, value, kNormalConversion, exception_state);
+  }
+
+  static uint8_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -73,6 +101,13 @@ struct CORE_EXPORT NativeValueTraits<IDLShort>
                              ExceptionState& exception_state) {
     return ToInt16(isolate, value, kNormalConversion, exception_state);
   }
+
+  static int16_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -82,6 +117,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnsignedShort>
                               v8::Local<v8::Value> value,
                               ExceptionState& exception_state) {
     return ToUInt16(isolate, value, kNormalConversion, exception_state);
+  }
+
+  static uint16_t ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -93,6 +135,13 @@ struct CORE_EXPORT NativeValueTraits<IDLLong>
                              ExceptionState& exception_state) {
     return ToInt32(isolate, value, kNormalConversion, exception_state);
   }
+
+  static int32_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -102,6 +151,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnsignedLong>
                               v8::Local<v8::Value> value,
                               ExceptionState& exception_state) {
     return ToUInt32(isolate, value, kNormalConversion, exception_state);
+  }
+
+  static uint32_t ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -113,6 +169,13 @@ struct CORE_EXPORT NativeValueTraits<IDLLongLong>
                              ExceptionState& exception_state) {
     return ToInt64(isolate, value, kNormalConversion, exception_state);
   }
+
+  static int64_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -122,6 +185,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnsignedLongLong>
                               v8::Local<v8::Value> value,
                               ExceptionState& exception_state) {
     return ToUInt64(isolate, value, kNormalConversion, exception_state);
+  }
+
+  static uint64_t ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -134,6 +204,13 @@ struct CORE_EXPORT NativeValueTraits<IDLByteClamp>
                             ExceptionState& exception_state) {
     return ToInt8(isolate, value, kClamp, exception_state);
   }
+
+  static int8_t ArgumentValue(v8::Isolate* isolate,
+                              int argument_index,
+                              v8::Local<v8::Value> value,
+                              ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -143,6 +220,13 @@ struct CORE_EXPORT NativeValueTraits<IDLOctetClamp>
                              v8::Local<v8::Value> value,
                              ExceptionState& exception_state) {
     return ToUInt8(isolate, value, kClamp, exception_state);
+  }
+
+  static uint8_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -154,6 +238,13 @@ struct CORE_EXPORT NativeValueTraits<IDLShortClamp>
                              ExceptionState& exception_state) {
     return ToInt16(isolate, value, kClamp, exception_state);
   }
+
+  static int16_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -163,6 +254,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnsignedShortClamp>
                               v8::Local<v8::Value> value,
                               ExceptionState& exception_state) {
     return ToUInt16(isolate, value, kClamp, exception_state);
+  }
+
+  static uint16_t ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -174,6 +272,13 @@ struct CORE_EXPORT NativeValueTraits<IDLLongClamp>
                              ExceptionState& exception_state) {
     return ToInt32(isolate, value, kClamp, exception_state);
   }
+
+  static int32_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -183,6 +288,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnsignedLongClamp>
                               v8::Local<v8::Value> value,
                               ExceptionState& exception_state) {
     return ToUInt32(isolate, value, kClamp, exception_state);
+  }
+
+  static uint32_t ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -194,6 +306,13 @@ struct CORE_EXPORT NativeValueTraits<IDLLongLongClamp>
                              ExceptionState& exception_state) {
     return ToInt64(isolate, value, kClamp, exception_state);
   }
+
+  static int64_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -203,6 +322,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnsignedLongLongClamp>
                               v8::Local<v8::Value> value,
                               ExceptionState& exception_state) {
     return ToUInt64(isolate, value, kClamp, exception_state);
+  }
+
+  static uint64_t ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -215,6 +341,13 @@ struct CORE_EXPORT NativeValueTraits<IDLByteEnforceRange>
                             ExceptionState& exception_state) {
     return ToInt8(isolate, value, kEnforceRange, exception_state);
   }
+
+  static int8_t ArgumentValue(v8::Isolate* isolate,
+                              int argument_index,
+                              v8::Local<v8::Value> value,
+                              ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -224,6 +357,13 @@ struct CORE_EXPORT NativeValueTraits<IDLOctetEnforceRange>
                              v8::Local<v8::Value> value,
                              ExceptionState& exception_state) {
     return ToUInt8(isolate, value, kEnforceRange, exception_state);
+  }
+
+  static uint8_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -235,6 +375,13 @@ struct CORE_EXPORT NativeValueTraits<IDLShortEnforceRange>
                              ExceptionState& exception_state) {
     return ToInt16(isolate, value, kEnforceRange, exception_state);
   }
+
+  static int16_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -244,6 +391,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnsignedShortEnforceRange>
                               v8::Local<v8::Value> value,
                               ExceptionState& exception_state) {
     return ToUInt16(isolate, value, kEnforceRange, exception_state);
+  }
+
+  static uint16_t ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -255,6 +409,13 @@ struct CORE_EXPORT NativeValueTraits<IDLLongEnforceRange>
                              ExceptionState& exception_state) {
     return ToInt32(isolate, value, kEnforceRange, exception_state);
   }
+
+  static int32_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -264,6 +425,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnsignedLongEnforceRange>
                               v8::Local<v8::Value> value,
                               ExceptionState& exception_state) {
     return ToUInt32(isolate, value, kEnforceRange, exception_state);
+  }
+
+  static uint32_t ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -275,6 +443,13 @@ struct CORE_EXPORT NativeValueTraits<IDLLongLongEnforceRange>
                              ExceptionState& exception_state) {
     return ToInt64(isolate, value, kEnforceRange, exception_state);
   }
+
+  static int64_t ArgumentValue(v8::Isolate* isolate,
+                               int argument_index,
+                               v8::Local<v8::Value> value,
+                               ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -284,6 +459,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnsignedLongLongEnforceRange>
                               v8::Local<v8::Value> value,
                               ExceptionState& exception_state) {
     return ToUInt64(isolate, value, kEnforceRange, exception_state);
+  }
+
+  static uint64_t ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -434,6 +616,18 @@ struct NativeValueTraits<IDLByteStringBaseV2<mode>>
     }
     return bindings::NativeValueTraitsStringAdapter(v8_string);
   }
+
+  static bindings::NativeValueTraitsStringAdapter ArgumentValue(
+      v8::Isolate* isolate,
+      int argument_index,
+      v8::Local<v8::Value> value,
+      ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
+
+  static bindings::NativeValueTraitsStringAdapter NullValue() {
+    return bindings::NativeValueTraitsStringAdapter();
+  }
 };
 
 template <bindings::NativeValueTraitsStringConv mode>
@@ -469,6 +663,18 @@ struct NativeValueTraits<IDLStringBaseV2<mode>>
     }
     return bindings::NativeValueTraitsStringAdapter(v8_string);
   }
+
+  static bindings::NativeValueTraitsStringAdapter ArgumentValue(
+      v8::Isolate* isolate,
+      int argument_index,
+      v8::Local<v8::Value> value,
+      ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
+
+  static bindings::NativeValueTraitsStringAdapter NullValue() {
+    return bindings::NativeValueTraitsStringAdapter();
+  }
 };
 
 template <bindings::NativeValueTraitsStringConv mode>
@@ -485,6 +691,15 @@ struct NativeValueTraits<IDLUSVStringBaseV2<mode>>
 
     return ReplaceUnmatchedSurrogates(string);
   }
+
+  static String ArgumentValue(v8::Isolate* isolate,
+                              int argument_index,
+                              v8::Local<v8::Value> value,
+                              ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
+
+  static String NullValue() { return String(); }
 };
 
 // Floats and doubles
@@ -496,6 +711,13 @@ struct CORE_EXPORT NativeValueTraits<IDLDouble>
                             ExceptionState& exception_state) {
     return ToRestrictedDouble(isolate, value, exception_state);
   }
+
+  static double ArgumentValue(v8::Isolate* isolate,
+                              int argument_index,
+                              v8::Local<v8::Value> value,
+                              ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -505,6 +727,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnrestrictedDouble>
                             v8::Local<v8::Value> value,
                             ExceptionState& exception_state) {
     return ToDouble(isolate, value, exception_state);
+  }
+
+  static double ArgumentValue(v8::Isolate* isolate,
+                              int argument_index,
+                              v8::Local<v8::Value> value,
+                              ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -516,6 +745,13 @@ struct CORE_EXPORT NativeValueTraits<IDLFloat>
                            ExceptionState& exception_state) {
     return ToRestrictedFloat(isolate, value, exception_state);
   }
+
+  static float ArgumentValue(v8::Isolate* isolate,
+                             int argument_index,
+                             v8::Local<v8::Value> value,
+                             ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 template <>
@@ -525,6 +761,13 @@ struct CORE_EXPORT NativeValueTraits<IDLUnrestrictedFloat>
                            v8::Local<v8::Value> value,
                            ExceptionState& exception_state) {
     return ToFloat(isolate, value, exception_state);
+  }
+
+  static float ArgumentValue(v8::Isolate* isolate,
+                             int argument_index,
+                             v8::Local<v8::Value> value,
+                             ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -641,6 +884,13 @@ struct NativeValueTraits<IDLSequence<T>>
     ConvertSequenceSlow(isolate, std::move(script_iterator), exception_state,
                         result);
     return result;
+  }
+
+  static ImplType ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 
  private:
@@ -830,13 +1080,20 @@ struct NativeValueTraits<IDLRecord<K, V>>
     // "5. Return result."
     return result;
   }
+
+  static ImplType ArgumentValue(v8::Isolate* isolate,
+                                int argument_index,
+                                v8::Local<v8::Value> value,
+                                ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 // Callback functions
 template <typename T>
 struct NativeValueTraits<
     T,
-    std::enable_if_t<std::is_base_of<CallbackFunctionBase, T>::value>>
+    typename std::enable_if_t<std::is_base_of<CallbackFunctionBase, T>::value>>
     : public NativeValueTraitsBase<T> {
   static T* NativeValue(v8::Isolate* isolate,
                         v8::Local<v8::Value> value,
@@ -849,6 +1106,13 @@ struct NativeValueTraits<
         << "NativeValueTraits<CallbackFunctionBase>::NativeValue "
         << "is not yet implemented.";
     return nullptr;
+  }
+
+  static T* ArgumentValue(v8::Isolate* isolate,
+                          int argument_index,
+                          v8::Local<v8::Value> value,
+                          ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 
@@ -864,6 +1128,13 @@ struct NativeValueTraits<
                         ExceptionState& exception_state) {
     return T::Create(isolate, value, exception_state);
   }
+
+  static T* ArgumentValue(v8::Isolate* isolate,
+                          int argument_index,
+                          v8::Local<v8::Value> value,
+                          ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
+  }
 };
 
 // Interface
@@ -877,6 +1148,16 @@ struct NativeValueTraits<
                         ExceptionState& exception_state) {
     return bindings::NativeValueTraitsInterfaceNativeValue(
                isolate, T::GetStaticWrapperTypeInfo(), value, exception_state)
+        ->template ToImpl<T>();
+  }
+
+  static T* ArgumentValue(v8::Isolate* isolate,
+                          int argument_index,
+                          v8::Local<v8::Value> value,
+                          ExceptionState& exception_state) {
+    return bindings::NativeValueTraitsInterfaceArgumentValue(
+               isolate, T::GetStaticWrapperTypeInfo(), argument_index, value,
+               exception_state)
         ->template ToImpl<T>();
   }
 
@@ -896,6 +1177,14 @@ struct NativeValueTraits<IDLNullable<InnerType>>
       return IDLNullable<InnerType>::NullValue();
     return NativeValueTraits<InnerType>::NativeValue(isolate, v8_value,
                                                      exception_state);
+  }
+
+  static typename IDLNullable<InnerType>::ResultType ArgumentValue(
+      v8::Isolate* isolate,
+      int argument_index,
+      v8::Local<v8::Value> value,
+      ExceptionState& exception_state) {
+    return NativeValue(isolate, value, exception_state);
   }
 };
 

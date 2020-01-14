@@ -147,8 +147,12 @@ def bind_blink_api_arguments(code_node, cg_context):
         else:
             v8_value = "${{info}}[{}]".format(argument.index)
             code_node.register_code_symbol(
-                make_v8_to_blink_value(name, v8_value, argument.idl_type,
-                                       argument.default_value))
+                make_v8_to_blink_value(
+                    name,
+                    v8_value,
+                    argument.idl_type,
+                    argument_index=index,
+                    default_value=argument.default_value))
 
 
 def bind_callback_local_vars(code_node, cg_context):
@@ -2957,5 +2961,5 @@ def generate_interface(interface):
 
 
 def generate_interfaces(web_idl_database):
-    interface = web_idl_database.find("Navigator")
+    interface = web_idl_database.find("Node")
     generate_interface(interface)

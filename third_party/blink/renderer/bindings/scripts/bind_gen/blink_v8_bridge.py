@@ -174,12 +174,13 @@ def native_value_tag(idl_type):
     assert isinstance(idl_type, web_idl.IdlType)
 
     real_type = idl_type.unwrap(typedef=True)
+    non_null_real_type = real_type.unwrap(nullable=True)
 
-    if (real_type.is_boolean or real_type.is_numeric or real_type.is_any
-            or real_type.is_object):
+    if (real_type.is_boolean or real_type.is_numeric
+            or non_null_real_type.is_any or non_null_real_type.is_object):
         return "IDL{}".format(real_type.type_name)
 
-    if real_type.unwrap(nullable=True).is_string:
+    if non_null_real_type.is_string:
         return "IDL{}V2".format(real_type.type_name)
 
     if real_type.is_symbol:
@@ -188,10 +189,10 @@ def native_value_tag(idl_type):
     if real_type.is_void:
         assert False, "Blink does not support/accept IDL void type."
 
-    if real_type.type_definition_object is not None:
-        return blink_type_info(real_type).value_t
+    if non_null_real_type.type_definition_object:
+        return blink_class_name(non_null_real_type.type_definition_object)
 
-    if real_type.is_sequence:
+    if real_type.is_sequence or real_type.is_frozen_array:
         return "IDLSequence<{}>".format(
             native_value_tag(real_type.element_type))
 
@@ -209,7 +210,7 @@ def native_value_tag(idl_type):
     if real_type.is_nullable:
         return "IDLNullable<{}>".format(native_value_tag(real_type.inner_type))
 
-    assert False
+    assert False, "Unknown type: {}".format(idl_type.syntactic_form)
 
 
 def make_default_value_expr(idl_type, default_value):
@@ -307,6 +308,7 @@ def make_default_value_expr(idl_type, default_value):
 def make_v8_to_blink_value(blink_var_name,
                            v8_value_expr,
                            idl_type,
+                           argument_index=None,
                            default_value=None):
     """
     Returns a SymbolNode whose definition converts a v8::Value to a Blink value.
@@ -314,6 +316,7 @@ def make_v8_to_blink_value(blink_var_name,
     assert isinstance(blink_var_name, str)
     assert isinstance(v8_value_expr, str)
     assert isinstance(idl_type, web_idl.IdlType)
+    assert (argument_index is None or isinstance(argument_index, (int, long)))
     assert (default_value is None
             or isinstance(default_value, web_idl.LiteralConstant))
 
@@ -321,10 +324,22 @@ def make_v8_to_blink_value(blink_var_name,
     F = lambda *args, **kwargs: T(_format(*args, **kwargs))
 
     def create_definition(symbol_node):
-        blink_value_expr = _format(
-            "NativeValueTraits<{_1}>::NativeValue({_2})",
-            _1=native_value_tag(idl_type),
-            _2=", ".join(["${isolate}", v8_value_expr, "${exception_state}"]))
+        if argument_index is None:
+            blink_value_expr = _format(
+                "NativeValueTraits<{_1}>::NativeValue({_2})",
+                _1=native_value_tag(idl_type),
+                _2=", ".join(
+                    ["${isolate}", v8_value_expr, "${exception_state}"]))
+        else:
+            blink_value_expr = _format(
+                "NativeValueTraits<{_1}>::ArgumentValue({_2})",
+                _1=native_value_tag(idl_type),
+                _2=", ".join([
+                    "${isolate}",
+                    str(argument_index),
+                    v8_value_expr,
+                    "${exception_state}",
+                ]))
 
         if default_value is None:
             return SymbolDefinitionNode(symbol_node, [
