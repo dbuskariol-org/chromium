@@ -110,7 +110,8 @@ class ExtensionsMenuViewBrowserTest : public DialogBrowserTest {
           GetExtensionsToolbarContainer();
       // Clicking the extension should close the extensions menu, pop out the
       // extension, and display the "reload this page" bubble.
-      EXPECT_TRUE(container->action_bubble_public_for_testing());
+      EXPECT_TRUE(container->GetAnchoredWidgetForExtensionForTesting(
+          extensions_[0]->id()));
       EXPECT_FALSE(container->GetPoppedOutAction());
       EXPECT_FALSE(ExtensionsMenuView::IsShowing());
     } else if (ui_test_name_ == "UninstallDialog_Accept" ||
@@ -280,12 +281,13 @@ IN_PROC_BROWSER_TEST_F(ExtensionsMenuViewBrowserTest,
   test_dir.WriteFile(FILE_PATH_LITERAL("script.js"),
                      "console.log('injected!');");
 
-  scoped_refptr<const extensions::Extension> extension =
+  extensions_.push_back(
       extensions::ChromeTestExtensionLoader(profile()).LoadExtension(
-          test_dir.UnpackedPath());
-  ASSERT_TRUE(extension);
+          test_dir.UnpackedPath()));
+  ASSERT_EQ(1u, extensions_.size());
+  ASSERT_TRUE(extensions_.front());
 
-  extensions::ScriptingPermissionsModifier(profile(), extension)
+  extensions::ScriptingPermissionsModifier(profile(), extensions_.front())
       .SetWithholdHostPermissions(true);
 
   // Navigate to a page the extension wants to run on.
@@ -432,10 +434,13 @@ IN_PROC_BROWSER_TEST_P(ActivateWithReloadExtensionsMenuBrowserTest,
 
   TriggerSingleExtensionButton();
 
-  auto* const action_bubble = BrowserView::GetBrowserViewForBrowser(browser())
-                                  ->toolbar()
-                                  ->extensions_container()
-                                  ->action_bubble_public_for_testing();
+  auto* const action_bubble =
+      BrowserView::GetBrowserViewForBrowser(browser())
+          ->toolbar()
+          ->extensions_container()
+          ->GetAnchoredWidgetForExtensionForTesting(extensions_[0]->id())
+          ->widget_delegate()
+          ->AsDialogDelegate();
   ASSERT_TRUE(action_bubble);
 
   const bool accept_reload_dialog = GetParam();
