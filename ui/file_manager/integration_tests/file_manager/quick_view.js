@@ -1277,7 +1277,8 @@
     await remoteCall.fakeKeyDown(appId, ...ctrlA);
 
     // Use selection menu button to open Quick View.
-    await simulateUiClick(appId, '#selection-menu-button:not([hidden])');
+    await remoteCall.simulateUiClick(
+        appId, '#selection-menu-button:not([hidden])');
 
     // Wait because WebUI Menu ignores the following click if it happens in
     // <200ms from the previous click.
@@ -1286,7 +1287,7 @@
     // Click the Menu item to show the Quick View.
     const getInfoMenuItem = '#file-context-menu:not([hidden]) ' +
         ' [command="#get-info"]:not([hidden])';
-    await simulateUiClick(appId, getInfoMenuItem);
+    await remoteCall.simulateUiClick(appId, getInfoMenuItem);
 
     // Check: the Quick View dialog should be shown.
     const caller = getCaller();
