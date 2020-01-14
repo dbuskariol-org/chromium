@@ -195,9 +195,7 @@ android_resources("ui_java_resources") {
     resource_dirs += [ "//ui/android/java/res_night" ]
   }
 
-  deps = [
-    ":ui_strings_grd",
-  ]
+  deps = [ ":ui_strings_grd" ]
 }
 
 java_group("ui_java") {
