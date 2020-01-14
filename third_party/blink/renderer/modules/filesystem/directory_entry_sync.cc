@@ -83,7 +83,7 @@ DirectoryEntrySync* DirectoryEntrySync::getDirectory(
       std::move(error_callback_wrapper), DOMFileSystemBase::kSynchronous);
 
   Entry* entry = sync_helper->GetResultOrThrow(exception_state);
-  return entry ? ToDirectoryEntrySync(EntrySync::Create(entry)) : nullptr;
+  return entry ? To<DirectoryEntrySync>(EntrySync::Create(entry)) : nullptr;
 }
 
 void DirectoryEntrySync::removeRecursively(ExceptionState& exception_state) {
