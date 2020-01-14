@@ -10,8 +10,6 @@
 #include "android_webview/common/aw_switches.h"
 #include "android_webview/common/render_view_messages.h"
 #include "android_webview/common/url_constants.h"
-#include "android_webview/grit/aw_resources.h"
-#include "android_webview/grit/aw_strings.h"
 #include "android_webview/renderer/aw_content_settings_client.h"
 #include "android_webview/renderer/aw_key_systems.h"
 #include "android_webview/renderer/aw_print_render_frame_helper_delegate.h"
@@ -28,8 +26,10 @@
 #include "base/metrics/histogram_macros.h"
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
+#include "components/grit/components_resources.h"
 #include "components/page_load_metrics/renderer/metrics_render_frame_observer.h"
 #include "components/printing/renderer/print_render_frame_helper.h"
+#include "components/strings/grit/components_strings.h"
 #include "components/visitedlink/renderer/visitedlink_reader.h"
 #include "content/public/child/child_thread.h"
 #include "content/public/common/url_constants.h"
@@ -229,22 +229,22 @@ void AwContentRendererClient::PrepareErrorPage(
   // Create the error page based on the error reason.
   GURL gurl(error.url());
   std::string url_string = gurl.possibly_invalid_spec();
-  int reason_id = IDS_AW_WEBPAGE_CAN_NOT_BE_LOADED;
+  int reason_id = IDS_ANDROID_ERROR_PAGE_WEBPAGE_CAN_NOT_BE_LOADED;
 
   if (err.empty())
-    reason_id = IDS_AW_WEBPAGE_TEMPORARILY_DOWN;
+    reason_id = IDS_ANDROID_ERROR_PAGE_WEBPAGE_TEMPORARILY_DOWN;
 
   std::string escaped_url = net::EscapeForHTML(url_string);
   std::vector<std::string> replacements;
   replacements.push_back(
-      l10n_util::GetStringUTF8(IDS_AW_WEBPAGE_NOT_AVAILABLE));
+      l10n_util::GetStringUTF8(IDS_ANDROID_ERROR_PAGE_WEBPAGE_NOT_AVAILABLE));
   replacements.push_back(
       l10n_util::GetStringFUTF8(reason_id, base::UTF8ToUTF16(escaped_url)));
 
   // Having chosen the base reason, chose what extra information to add.
-  if (reason_id == IDS_AW_WEBPAGE_TEMPORARILY_DOWN) {
-    replacements.push_back(
-        l10n_util::GetStringUTF8(IDS_AW_WEBPAGE_TEMPORARILY_DOWN_SUGGESTIONS));
+  if (reason_id == IDS_ANDROID_ERROR_PAGE_WEBPAGE_TEMPORARILY_DOWN) {
+    replacements.push_back(l10n_util::GetStringUTF8(
+        IDS_ANDROID_ERROR_PAGE_WEBPAGE_TEMPORARILY_DOWN_SUGGESTIONS));
   } else {
     replacements.push_back(err);
   }
@@ -254,7 +254,7 @@ void AwContentRendererClient::PrepareErrorPage(
     replacements.push_back("");
   *error_html = base::ReplaceStringPlaceholders(
       ui::ResourceBundle::GetSharedInstance().LoadDataResourceString(
-          IDR_AW_LOAD_ERROR_HTML),
+          IDR_ANDROID_ERROR_PAGE_LOAD_ERROR_HTML),
       replacements, nullptr);
 }
 

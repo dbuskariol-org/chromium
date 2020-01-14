@@ -20,10 +20,10 @@
 #include "weblayer/renderer/weblayer_render_frame_observer.h"
 
 #if defined(OS_ANDROID)
-#include "android_webview/grit/aw_resources.h"
-#include "android_webview/grit/aw_strings.h"
+#include "components/grit/components_resources.h"
 #include "components/spellcheck/renderer/spellcheck.h"           // nogncheck
 #include "components/spellcheck/renderer/spellcheck_provider.h"  // nogncheck
+#include "components/strings/grit/components_strings.h"
 #include "content/public/renderer/render_thread.h"
 #include "services/service_manager/public/cpp/local_interface_provider.h"
 #include "weblayer/renderer/url_loader_throttle_provider.h"
@@ -57,22 +57,22 @@ void PopulateErrorPageHTML(const blink::WebURLError& error,
   // Create the error page based on the error reason.
   GURL gurl(error.url());
   std::string url_string = gurl.possibly_invalid_spec();
-  int reason_id = IDS_AW_WEBPAGE_CAN_NOT_BE_LOADED;
+  int reason_id = IDS_ANDROID_ERROR_PAGE_WEBPAGE_CAN_NOT_BE_LOADED;
 
   if (err.empty())
-    reason_id = IDS_AW_WEBPAGE_TEMPORARILY_DOWN;
+    reason_id = IDS_ANDROID_ERROR_PAGE_WEBPAGE_TEMPORARILY_DOWN;
 
   std::string escaped_url = net::EscapeForHTML(url_string);
   std::vector<std::string> replacements;
   replacements.push_back(
-      l10n_util::GetStringUTF8(IDS_AW_WEBPAGE_NOT_AVAILABLE));
+      l10n_util::GetStringUTF8(IDS_ANDROID_ERROR_PAGE_WEBPAGE_NOT_AVAILABLE));
   replacements.push_back(
       l10n_util::GetStringFUTF8(reason_id, base::UTF8ToUTF16(escaped_url)));
 
   // Having chosen the base reason, chose what extra information to add.
-  if (reason_id == IDS_AW_WEBPAGE_TEMPORARILY_DOWN) {
-    replacements.push_back(
-        l10n_util::GetStringUTF8(IDS_AW_WEBPAGE_TEMPORARILY_DOWN_SUGGESTIONS));
+  if (reason_id == IDS_ANDROID_ERROR_PAGE_WEBPAGE_TEMPORARILY_DOWN) {
+    replacements.push_back(l10n_util::GetStringUTF8(
+        IDS_ANDROID_ERROR_PAGE_WEBPAGE_TEMPORARILY_DOWN_SUGGESTIONS));
   } else {
     replacements.push_back(err);
   }
@@ -82,7 +82,7 @@ void PopulateErrorPageHTML(const blink::WebURLError& error,
     replacements.push_back("");
   *error_html = base::ReplaceStringPlaceholders(
       ui::ResourceBundle::GetSharedInstance().LoadDataResourceString(
-          IDR_AW_LOAD_ERROR_HTML),
+          IDR_ANDROID_ERROR_PAGE_LOAD_ERROR_HTML),
       replacements, nullptr);
 }
 #endif  // OS_ANDROID
