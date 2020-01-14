@@ -71,7 +71,7 @@ const char* kHistoryThreadName = "Chrome_HistoryThread";
 
 // static
 const base::Feature HistoryService::kHistoryServiceUsesTaskScheduler{
-    "HistoryServiceUsesTaskScheduler", base::FEATURE_DISABLED_BY_DEFAULT};
+    "HistoryServiceUsesTaskScheduler", base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Sends messages from the backend to us on the main thread. This must be a
 // separate class from the history service so that it can hold a reference to
