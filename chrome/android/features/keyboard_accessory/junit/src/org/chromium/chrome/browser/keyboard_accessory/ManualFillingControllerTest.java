@@ -40,7 +40,6 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
@@ -78,6 +77,7 @@ import org.chromium.chrome.browser.tab.TabHidingType;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.test.util.browser.Features;
 import org.chromium.chrome.test.util.browser.Features.EnableFeatures;
+import org.chromium.components.embedder_support.view.ContentView;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.ui.KeyboardVisibilityDelegate;
 import org.chromium.ui.display.DisplayAndroid;
@@ -102,7 +102,7 @@ public class ManualFillingControllerTest {
     private ChromeActivity mMockActivity;
     private WebContents mLastMockWebContents;
     @Mock
-    private ViewGroup mMockContentView;
+    private ContentView mMockContentView;
     @Mock
     private TabModelSelector mMockTabModelSelector;
     @Mock
