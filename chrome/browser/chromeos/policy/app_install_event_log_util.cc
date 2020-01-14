@@ -4,6 +4,8 @@
 
 #include "chrome/browser/chromeos/policy/app_install_event_log_util.h"
 
+#include <set>
+
 #include "base/hash/md5.h"
 #include "base/json/json_string_value_serializer.h"
 #include "base/strings/string_number_conversions.h"
@@ -85,10 +87,12 @@ std::string GetSerialNumber() {
 
 base::Value ConvertProtoToValue(
     const em::AppInstallReportRequest* app_install_report_request,
+    const base::Value& context,
     Profile* profile) {
   DCHECK(app_install_report_request);
 
   base::Value event_list(base::Value::Type::LIST);
+  std::set<std::string> seen_ids;
 
   for (const em::AppInstallReport& app_install_report :
        app_install_report_request->app_install_reports()) {
@@ -97,7 +101,16 @@ base::Value ConvertProtoToValue(
       base::Value wrapper;
       wrapper = ConvertEventToValue(
           app_install_report.has_package() ? app_install_report.package() : "",
-          app_install_report_log_event, profile);
+          app_install_report_log_event, context, profile);
+      auto* id = wrapper.FindStringKey(kEventId);
+      if (id) {
+        if (seen_ids.find(*id) != seen_ids.end()) {
+          LOG(WARNING) << "Skipping duplicate event (" << *id
+                       << "): " << wrapper;
+          continue;
+        }
+        seen_ids.insert(*id);
+      }
       event_list.Append(std::move(wrapper));
     }
   }
@@ -108,6 +121,7 @@ base::Value ConvertProtoToValue(
 base::Value ConvertEventToValue(
     const std::string& package,
     const em::AppInstallReportLogEvent& app_install_report_log_event,
+    const base::Value& context,
     Profile* profile) {
   base::Value event(base::Value::Type::DICTIONARY);
 
@@ -175,18 +189,12 @@ base::Value ConvertEventToValue(
     wrapper.SetStringKey(kTime, time_str);
   }
 
-  return wrapper;
-}
-
-void AppendEventId(base::Value* event_list, const base::Value& context) {
-  DCHECK(event_list);
-
-  DCHECK(event_list->is_list());
-  for (auto& event : event_list->GetList()) {
-    std::string event_id;
-    if (GetHash(event, context, &event_id))
-      event.SetStringKey(kEventId, event_id);
+  std::string event_id;
+  if (GetHash(wrapper, context, &event_id)) {
+    wrapper.SetStringKey(kEventId, event_id);
   }
+
+  return wrapper;
 }
 
 }  // namespace policy
