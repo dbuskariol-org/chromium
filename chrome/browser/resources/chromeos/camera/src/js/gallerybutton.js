@@ -228,8 +228,3 @@ export class GalleryButton {
     await this.updateCover_(file);
   }
 }
-
-/**
- * @typedef {GalleryButton}
- */
-cca.GalleryButton = GalleryButton;

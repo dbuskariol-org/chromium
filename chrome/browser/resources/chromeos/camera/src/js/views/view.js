@@ -189,8 +189,3 @@ export class View {
     return false;
   }
 }
-
-/** @const */
-cca.views.ViewName = ViewName;
-/** @const */
-cca.views.View = View;

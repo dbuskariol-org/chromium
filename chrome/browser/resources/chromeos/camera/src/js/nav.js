@@ -221,14 +221,3 @@ export function onWindowResized() {
     }
   }
 }
-
-/** @const */
-cca.nav.setup = setup;
-/** @const */
-cca.nav.open = open;
-/** @const */
-cca.nav.close = close;
-/** @const */
-cca.nav.onKeyPressed = onKeyPressed;
-/** @const */
-cca.nav.onWindowResized = onWindowResized;

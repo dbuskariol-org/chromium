@@ -633,10 +633,3 @@ export class ResolutionSettings extends BaseSettings {
     });
   }
 }
-
-/** @const */
-cca.views.BaseSettings = BaseSettings;
-/** @const */
-cca.views.MasterSettings = MasterSettings;
-/** @const */
-cca.views.ResolutionSettings = ResolutionSettings;

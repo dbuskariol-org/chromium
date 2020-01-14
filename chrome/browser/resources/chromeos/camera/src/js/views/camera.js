@@ -482,6 +482,3 @@ export class Camera extends View {
     }
   }
 }
-
-/** @const */
-cca.views.Camera = Camera;

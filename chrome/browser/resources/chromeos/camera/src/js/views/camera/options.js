@@ -265,6 +265,3 @@ export class Options {
     return sorted;
   }
 }
-
-/** @const */
-cca.views.camera.Options = Options;
