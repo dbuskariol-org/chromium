@@ -470,9 +470,9 @@ class ConnectedCryptoClientStream final : public quic::QuicCryptoClientStream {
         quic::QuicTime::Delta::FromSeconds(2 * quic::kMaximumIdleTimeoutSecs),
         quic::QuicTime::Delta::FromSeconds(quic::kMaximumIdleTimeoutSecs));
     config.SetBytesForConnectionIdToSend(quic::PACKET_8BYTE_CONNECTION_ID);
-    config.SetMaxIncomingBidirectionalStreamsToSend(
+    config.SetMaxBidirectionalStreamsToSend(
         quic::kDefaultMaxStreamsPerConnection / 2);
-    config.SetMaxIncomingUnidirectionalStreamsToSend(
+    config.SetMaxUnidirectionalStreamsToSend(
         quic::kDefaultMaxStreamsPerConnection / 2);
     quic::CryptoHandshakeMessage message;
     config.ToHandshakeMessage(&message,
@@ -524,13 +524,13 @@ class ConnectedCryptoClientStreamFactory final
   }
 
   // Creates a real quic::QuiCryptoServerStream.
-  std::unique_ptr<quic::QuicCryptoServerStream> CreateServerCryptoStream(
+  std::unique_ptr<quic::QuicCryptoServerStreamBase> CreateServerCryptoStream(
       const quic::QuicCryptoServerConfig* crypto_config,
       quic::QuicCompressedCertsCache* compressed_certs_cache,
       quic::QuicSession* session,
       quic::QuicCryptoServerStream::Helper* helper) override {
-    return std::make_unique<quic::QuicCryptoServerStream>(
-        crypto_config, compressed_certs_cache, session, helper);
+    return quic::CreateCryptoServerStream(crypto_config, compressed_certs_cache,
+                                          session, helper);
   }
 };
 
