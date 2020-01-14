@@ -162,6 +162,10 @@
       'Dawn Win10 x64 DEPS Builder': 'dawn_tests_release_trybot',
     },
 
+    'chromium.devtools-frontend': {
+      'DevTools Linux (chromium)': 'release_trybot',
+    },
+
     'chromium.fuzz': {
       'ASAN Debug': 'asan_lsan_debug_bot',
       'ASAN Release Media': 'asan_lsan_fuzzer_v8_heap_chromeos_codecs_release_bot',
