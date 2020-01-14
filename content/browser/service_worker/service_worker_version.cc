@@ -443,7 +443,7 @@ void ServiceWorkerVersion::StartWorker(ServiceWorkerMetrics::EventType purpose,
   // Ensure the live registration during starting worker so that the worker can
   // get associated with it in
   // ServiceWorkerProviderHost::CompleteStartWorkerPreparation.
-  context_->storage()->FindRegistrationForId(
+  context_->registry()->FindRegistrationForId(
       registration_id_, scope_.GetOrigin(),
       base::BindOnce(
           &ServiceWorkerVersion::DidEnsureLiveRegistrationForStartWorker,
@@ -538,7 +538,7 @@ void ServiceWorkerVersion::ScheduleUpdate() {
 void ServiceWorkerVersion::StartUpdate() {
   if (!context_)
     return;
-  context_->storage()->FindRegistrationForId(
+  context_->registry()->FindRegistrationForId(
       registration_id_, scope_.GetOrigin(),
       base::BindOnce(&ServiceWorkerVersion::FoundRegistrationForUpdate,
                      weak_factory_.GetWeakPtr()));

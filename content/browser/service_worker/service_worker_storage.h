@@ -115,6 +115,9 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // for |client_url| or |registration_id| may complete immediately
   // (the callback may be called prior to the method returning) or
   // asynchronously.
+  // NOTE: Do not call these methods directly. These methods will be moved
+  // to ServiceWorkerRegistry.
+  // TODO(crbug.com/1039200): Move these methods to ServiceWorkerRegistry.
   void FindRegistrationForClientUrl(const GURL& client_url,
                                     FindRegistrationCallback callback);
   void FindRegistrationForScope(const GURL& scope,
@@ -128,6 +131,9 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // is all that is available this method can be used instead.
   // Like |FindRegistrationForId| this method may complete immediately (the
   // callback may be called prior to the method returning) or asynchronously.
+  // NOTE: Do not call this method directly. This method will be moved
+  // to ServiceWorkerRegistry.
+  // TODO(crbug.com/1039200): Move this method to ServiceWorkerRegistry.
   void FindRegistrationForIdOnly(int64_t registration_id,
                                  FindRegistrationCallback callback);
 

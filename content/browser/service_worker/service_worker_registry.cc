@@ -5,7 +5,6 @@
 #include "content/browser/service_worker/service_worker_registry.h"
 
 #include "base/memory/ptr_util.h"
-#include "content/browser/service_worker/service_worker_storage.h"
 
 namespace content {
 
@@ -42,5 +41,31 @@ ServiceWorkerRegistry::ServiceWorkerRegistry(
 }
 
 ServiceWorkerRegistry::~ServiceWorkerRegistry() = default;
+
+void ServiceWorkerRegistry::FindRegistrationForClientUrl(
+    const GURL& client_url,
+    FindRegistrationCallback callback) {
+  storage()->FindRegistrationForClientUrl(client_url, std::move(callback));
+}
+
+void ServiceWorkerRegistry::FindRegistrationForScope(
+    const GURL& scope,
+    FindRegistrationCallback callback) {
+  storage()->FindRegistrationForScope(scope, std::move(callback));
+}
+
+void ServiceWorkerRegistry::FindRegistrationForId(
+    int64_t registration_id,
+    const GURL& origin,
+    FindRegistrationCallback callback) {
+  storage()->FindRegistrationForId(registration_id, origin,
+                                   std::move(callback));
+}
+
+void ServiceWorkerRegistry::FindRegistrationForIdOnly(
+    int64_t registration_id,
+    FindRegistrationCallback callback) {
+  storage()->FindRegistrationForIdOnly(registration_id, std::move(callback));
+}
 
 }  // namespace content

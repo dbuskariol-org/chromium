@@ -291,7 +291,7 @@ void ServiceWorkerContainerHost::GetRegistration(
   TRACE_EVENT_ASYNC_BEGIN1("ServiceWorker",
                            "ServiceWorkerContainerHost::GetRegistration",
                            trace_id, "Client URL", client_url.spec());
-  context_->storage()->FindRegistrationForClientUrl(
+  context_->registry()->FindRegistrationForClientUrl(
       client_url,
       base::AdaptCallbackForRepeating(base::BindOnce(
           &ServiceWorkerContainerHost::GetRegistrationComplete,

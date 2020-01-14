@@ -561,7 +561,7 @@ class ServiceWorkerVersionBrowserTest : public ContentBrowserTest {
                                          const GURL& origin) {
     ASSERT_TRUE(
         BrowserThread::CurrentlyOn(ServiceWorkerContext::GetCoreThreadId()));
-    wrapper()->context()->storage()->FindRegistrationForId(
+    wrapper()->context()->registry()->FindRegistrationForId(
         id, origin,
         CreateFindRegistrationReceiver(BrowserThread::UI, std::move(done),
                                        result));

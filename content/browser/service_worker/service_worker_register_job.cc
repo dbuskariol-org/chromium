@@ -143,7 +143,8 @@ void ServiceWorkerRegisterJob::StartImpl() {
         base::BindOnce(std::move(next_step),
                        blink::ServiceWorkerStatusCode::kOk, registration));
   else
-    context_->storage()->FindRegistrationForScope(scope_, std::move(next_step));
+    context_->registry()->FindRegistrationForScope(scope_,
+                                                   std::move(next_step));
 }
 
 void ServiceWorkerRegisterJob::Abort() {

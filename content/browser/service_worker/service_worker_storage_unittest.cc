@@ -274,6 +274,7 @@ class ServiceWorkerStorageTest : public testing::Test {
   }
 
   ServiceWorkerContextCore* context() { return helper_->context(); }
+  ServiceWorkerRegistry* registry() { return context()->registry(); }
   ServiceWorkerStorage* storage() { return context()->storage(); }
   ServiceWorkerDatabase* database() { return storage()->database_.get(); }
 
@@ -477,7 +478,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       scoped_refptr<ServiceWorkerRegistration>* registration) {
     base::Optional<blink::ServiceWorkerStatusCode> result;
     base::RunLoop loop;
-    storage()->FindRegistrationForClientUrl(
+    registry()->FindRegistrationForClientUrl(
         document_url, base::BindOnce(&FindCallback, loop.QuitClosure(), &result,
                                      registration));
     loop.Run();
@@ -489,7 +490,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       scoped_refptr<ServiceWorkerRegistration>* registration) {
     base::Optional<blink::ServiceWorkerStatusCode> result;
     base::RunLoop loop;
-    storage()->FindRegistrationForScope(
+    registry()->FindRegistrationForScope(
         scope, base::BindOnce(&FindCallback, loop.QuitClosure(), &result,
                               registration));
     EXPECT_FALSE(result);  // always async
@@ -503,7 +504,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       scoped_refptr<ServiceWorkerRegistration>* registration) {
     base::Optional<blink::ServiceWorkerStatusCode> result;
     base::RunLoop loop;
-    storage()->FindRegistrationForId(
+    registry()->FindRegistrationForId(
         registration_id, origin,
         base::BindOnce(&FindCallback, loop.QuitClosure(), &result,
                        registration));
@@ -516,7 +517,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       scoped_refptr<ServiceWorkerRegistration>* registration) {
     base::Optional<blink::ServiceWorkerStatusCode> result;
     base::RunLoop loop;
-    storage()->FindRegistrationForIdOnly(
+    registry()->FindRegistrationForIdOnly(
         registration_id, base::BindOnce(&FindCallback, loop.QuitClosure(),
                                         &result, registration));
     loop.Run();

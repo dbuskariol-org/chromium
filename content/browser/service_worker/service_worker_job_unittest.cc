@@ -167,6 +167,7 @@ class ServiceWorkerJobTest : public testing::Test {
   ServiceWorkerJobCoordinator* job_coordinator() const {
     return context()->job_coordinator();
   }
+  ServiceWorkerRegistry* registry() const { return context()->registry(); }
   ServiceWorkerStorage* storage() const { return context()->storage(); }
 
  protected:
@@ -235,7 +236,7 @@ ServiceWorkerJobTest::FindRegistrationForScope(
     blink::ServiceWorkerStatusCode expected_status) {
   scoped_refptr<ServiceWorkerRegistration> registration;
   base::RunLoop run_loop;
-  storage()->FindRegistrationForScope(
+  registry()->FindRegistrationForScope(
       scope, SaveFoundRegistration(expected_status, &registration,
                                    run_loop.QuitClosure()));
   run_loop.Run();
@@ -261,12 +262,12 @@ TEST_F(ServiceWorkerJobTest, SameDocumentSameRegistration) {
   base::RunLoop run_loop;
   base::RepeatingClosure barrier_closure =
       base::BarrierClosure(2, run_loop.QuitClosure());
-  storage()->FindRegistrationForClientUrl(
+  registry()->FindRegistrationForClientUrl(
       GURL("https://www.example.com/"),
       SaveFoundRegistration(blink::ServiceWorkerStatusCode::kOk, &registration1,
                             barrier_closure));
   scoped_refptr<ServiceWorkerRegistration> registration2;
-  storage()->FindRegistrationForClientUrl(
+  registry()->FindRegistrationForClientUrl(
       GURL("https://www.example.com/"),
       SaveFoundRegistration(blink::ServiceWorkerStatusCode::kOk, &registration2,
                             barrier_closure));
@@ -289,13 +290,13 @@ TEST_F(ServiceWorkerJobTest, SameMatchSameRegistration) {
   base::RunLoop run_loop;
   base::RepeatingClosure barrier_closure =
       base::BarrierClosure(2, run_loop.QuitClosure());
-  storage()->FindRegistrationForClientUrl(
+  registry()->FindRegistrationForClientUrl(
       GURL("https://www.example.com/one"),
       SaveFoundRegistration(blink::ServiceWorkerStatusCode::kOk, &registration1,
                             barrier_closure));
 
   scoped_refptr<ServiceWorkerRegistration> registration2;
-  storage()->FindRegistrationForClientUrl(
+  registry()->FindRegistrationForClientUrl(
       GURL("https://www.example.com/two"),
       SaveFoundRegistration(blink::ServiceWorkerStatusCode::kOk, &registration2,
                             barrier_closure));
@@ -320,11 +321,11 @@ TEST_F(ServiceWorkerJobTest, DifferentMatchDifferentRegistration) {
   base::RunLoop run_loop;
   base::RepeatingClosure barrier_closure =
       base::BarrierClosure(2, run_loop.QuitClosure());
-  storage()->FindRegistrationForClientUrl(
+  registry()->FindRegistrationForClientUrl(
       scope1, SaveFoundRegistration(blink::ServiceWorkerStatusCode::kOk,
                                     &registration1, barrier_closure));
   scoped_refptr<ServiceWorkerRegistration> registration2;
-  storage()->FindRegistrationForClientUrl(
+  registry()->FindRegistrationForClientUrl(
       scope2, SaveFoundRegistration(blink::ServiceWorkerStatusCode::kOk,
                                     &registration2, barrier_closure));
 

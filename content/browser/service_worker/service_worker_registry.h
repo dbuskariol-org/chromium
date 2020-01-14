@@ -9,6 +9,7 @@
 
 #include "base/files/file_path.h"
 #include "base/memory/scoped_refptr.h"
+#include "content/browser/service_worker/service_worker_storage.h"
 #include "content/common/content_export.h"
 
 namespace base {
@@ -23,7 +24,6 @@ class SpecialStoragePolicy;
 namespace content {
 
 class ServiceWorkerContextCore;
-class ServiceWorkerStorage;
 
 // This class manages in-memory representation of service worker registrations
 // (i.e., ServiceWorkerRegistration) including installing and uninstalling
@@ -31,10 +31,14 @@ class ServiceWorkerStorage;
 // ServiceWorkerContextCore and has the same lifetime of the owner.
 // The instance owns ServiceworkerStorage and uses it to store/retrieve
 // registrations to/from persistent storage.
+// The instance lives on the core thread.
 // TODO(crbug.com/1039200): Move ServiceWorkerStorage's method and fields which
 // depend on ServiceWorkerRegistration into this class.
 class CONTENT_EXPORT ServiceWorkerRegistry {
  public:
+  using FindRegistrationCallback =
+      ServiceWorkerStorage::FindRegistrationCallback;
+
   ~ServiceWorkerRegistry();
 
   static std::unique_ptr<ServiceWorkerRegistry> Create(
@@ -51,6 +55,18 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       ServiceWorkerRegistry* old_registry);
 
   ServiceWorkerStorage* storage() const { return storage_.get(); }
+
+  // TODO(crbug.com/1039200): Move corresponding comments from
+  // ServiceWorkerStorage.
+  void FindRegistrationForClientUrl(const GURL& client_url,
+                                    FindRegistrationCallback callback);
+  void FindRegistrationForScope(const GURL& scope,
+                                FindRegistrationCallback callback);
+  void FindRegistrationForId(int64_t registration_id,
+                             const GURL& origin,
+                             FindRegistrationCallback callback);
+  void FindRegistrationForIdOnly(int64_t registration_id,
+                                 FindRegistrationCallback callback);
 
  private:
   explicit ServiceWorkerRegistry(std::unique_ptr<ServiceWorkerStorage> storage);

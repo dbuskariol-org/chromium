@@ -727,7 +727,7 @@ void ServiceWorkerContextCore::ClearAllServiceWorkersForTest(
 void ServiceWorkerContextCore::CheckHasServiceWorker(
     const GURL& url,
     ServiceWorkerContext::CheckHasServiceWorkerCallback callback) {
-  storage()->FindRegistrationForClientUrl(
+  registry()->FindRegistrationForClientUrl(
       url, base::BindOnce(&ServiceWorkerContextCore::
                               DidFindRegistrationForCheckHasServiceWorker,
                           AsWeakPtr(), std::move(callback)));
@@ -739,7 +739,7 @@ void ServiceWorkerContextCore::CheckOfflineCapability(
   auto checker = std::make_unique<ServiceWorkerOfflineCapabilityChecker>(url);
   ServiceWorkerOfflineCapabilityChecker* checker_rawptr = checker.get();
   checker_rawptr->Start(
-      storage(),
+      registry(),
       // Bind unique_ptr to the |callback| so that
       // ServiceWorkerOfflineCapabilityChecker outlives |callback| and is surely
       // freed when |callback| is called.

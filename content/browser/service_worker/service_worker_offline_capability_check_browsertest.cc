@@ -223,7 +223,7 @@ class ServiceWorkerOfflineCapabilityCheckBrowserTest
   void SetupFetchEventDispatchTargetVersionOnCoreThread(
       base::OnceClosure done) {
     DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-    wrapper()->context()->storage()->FindRegistrationForScope(
+    wrapper()->context()->registry()->FindRegistrationForScope(
         embedded_test_server()->GetURL("/service_worker/"),
         base::BindOnce(&ServiceWorkerOfflineCapabilityCheckBrowserTest::
                            DidFindRegistration,
