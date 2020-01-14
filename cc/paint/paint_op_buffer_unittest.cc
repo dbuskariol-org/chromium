@@ -2833,13 +2833,6 @@ MATCHER(NonLazyImage, "") {
   return !arg->isLazyGenerated();
 }
 
-MATCHER_P(MatchesInvScale, expected, "") {
-  SkSize scale;
-  arg.decomposeScale(&scale, nullptr);
-  SkSize inv = SkSize::Make(1.0f / scale.width(), 1.0f / scale.height());
-  return inv == expected;
-}
-
 MATCHER_P2(MatchesRect, rect, scale, "") {
   EXPECT_EQ(arg->x(), rect.x() * scale.width());
   EXPECT_EQ(arg->y(), rect.y() * scale.height());
@@ -2899,7 +2892,7 @@ TEST(PaintOpBufferTest, RasterPaintWorkletImageRectBasicCase) {
   EXPECT_CALL(canvas, willSave()).InSequence(s);
   EXPECT_CALL(canvas, OnSaveLayer()).InSequence(s);
   EXPECT_CALL(canvas, willSave()).InSequence(s);
-  EXPECT_CALL(canvas, didConcat(SkMatrix::MakeTrans(8.0f, 8.0f)));
+  EXPECT_CALL(canvas, didTranslate(8.0f, 8.0f));
   EXPECT_CALL(canvas, OnSaveLayer()).InSequence(s);
   EXPECT_CALL(canvas, OnDrawRectWithColor(0u));
   EXPECT_CALL(canvas, willRestore()).InSequence(s);
@@ -2943,7 +2936,8 @@ TEST(PaintOpBufferTest, RasterPaintWorkletImageRectTranslated) {
   EXPECT_CALL(canvas, OnSaveLayer()).InSequence(s);
   EXPECT_CALL(canvas, didConcat(SkMatrix::MakeTrans(5.0f, 7.0f)));
   EXPECT_CALL(canvas, willSave()).InSequence(s);
-  EXPECT_CALL(canvas, didConcat(MatchesInvScale(scale_adjustment[0])));
+  EXPECT_CALL(canvas, didScale(1.0f / scale_adjustment[0].width(),
+                               1.0f / scale_adjustment[0].height()));
   EXPECT_CALL(canvas, onDrawImage(NonLazyImage(), 0.0f, 0.0f,
                                   MatchesQuality(quality[0])));
   EXPECT_CALL(canvas, willRestore()).InSequence(s);
@@ -2987,7 +2981,8 @@ TEST(PaintOpBufferTest, RasterPaintWorkletImageRectScaled) {
   EXPECT_CALL(canvas, OnSaveLayer()).InSequence(s);
   EXPECT_CALL(canvas, didConcat(SkMatrix::MakeScale(2.f, 1.5f)));
   EXPECT_CALL(canvas, willSave()).InSequence(s);
-  EXPECT_CALL(canvas, didConcat(MatchesInvScale(scale_adjustment[0])));
+  EXPECT_CALL(canvas, didScale(1.0f / scale_adjustment[0].width(),
+                               1.0f / scale_adjustment[0].height()));
   EXPECT_CALL(canvas, onDrawImage(NonLazyImage(), 0.0f, 0.0f,
                                   MatchesQuality(quality[0])));
   EXPECT_CALL(canvas, willRestore()).InSequence(s);
@@ -3033,7 +3028,8 @@ TEST(PaintOpBufferTest, RasterPaintWorkletImageRectClipped) {
   EXPECT_CALL(canvas, OnSaveLayer()).InSequence(s);
   EXPECT_CALL(canvas, OnSaveLayer()).InSequence(s);
   EXPECT_CALL(canvas, willSave()).InSequence(s);
-  EXPECT_CALL(canvas, didConcat(MatchesInvScale(scale_adjustment[0])));
+  EXPECT_CALL(canvas, didScale(1.0f / scale_adjustment[0].width(),
+                               1.0f / scale_adjustment[0].height()));
   EXPECT_CALL(canvas, onDrawImage(NonLazyImage(), 0.0f, 0.0f,
                                   MatchesQuality(quality[0])));
   EXPECT_CALL(canvas, willRestore()).InSequence(s);
@@ -3073,7 +3069,8 @@ TEST(PaintOpBufferTest, ReplacesImagesFromProvider) {
 
   // Save/scale/image/restore from DrawImageop.
   EXPECT_CALL(canvas, willSave()).InSequence(s);
-  EXPECT_CALL(canvas, didConcat(MatchesInvScale(scale_adjustment[0])));
+  EXPECT_CALL(canvas, didScale(1.0f / scale_adjustment[0].width(),
+                               1.0f / scale_adjustment[0].height()));
   EXPECT_CALL(canvas, onDrawImage(NonLazyImage(), 0.0f, 0.0f,
                                   MatchesQuality(quality[0])));
   EXPECT_CALL(canvas, willRestore()).InSequence(s);
@@ -3140,7 +3137,8 @@ TEST(PaintOpBufferTest, ReplacesImagesFromProviderOOP) {
     if (op->GetType() == PaintOpType::DrawImage) {
       // Save/scale/image/restore from DrawImageop.
       EXPECT_CALL(canvas, willSave()).InSequence(s);
-      EXPECT_CALL(canvas, didConcat(MatchesInvScale(expected_scale)));
+      EXPECT_CALL(canvas, didScale(1.0f / expected_scale.width(),
+                                   1.0f / expected_scale.height()));
       EXPECT_CALL(canvas, onDrawImage(NonLazyImage(), 0.0f, 0.0f, _));
       EXPECT_CALL(canvas, willRestore()).InSequence(s);
       op->Raster(&canvas, params);
