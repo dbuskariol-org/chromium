@@ -4,6 +4,7 @@ include_rules = [
   "+android_webview/renderer",
   "+android_webview/grit",
 
+  "+components/android_system_error_page",
   "+components/autofill/content/renderer",
   "+components/cdm/renderer",
   "+components/page_load_metrics/renderer",
