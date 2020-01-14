@@ -38,9 +38,7 @@ source_set("test_support") {
     "testing_application_context.mm",
   ]
 
-  public_deps = [
-    ":block_cleanup_test",
-  ]
+  public_deps = [ ":block_cleanup_test" ]
 
   deps = [
     "//base",
@@ -119,9 +117,7 @@ source_set("block_cleanup_test") {
 
 source_set("run_all_unittests") {
   testonly = true
-  sources = [
-    "run_all_unittests.cc",
-  ]
+  sources = [ "run_all_unittests.cc" ]
   deps = [
     ":test_support",
     "//base",
