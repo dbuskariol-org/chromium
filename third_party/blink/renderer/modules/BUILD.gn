@@ -482,21 +482,15 @@ jumbo_source_set("unit_tests") {
 }
 
 group("accessibility_unittests_data") {
-  data = [
-    "accessibility/testing/data/",
-  ]
+  data = [ "accessibility/testing/data/" ]
 }
 
 group("mediastream_unittests_data") {
-  data = [
-    "//media/test/data/",
-  ]
+  data = [ "//media/test/data/" ]
 }
 
 fuzzer_test("web_app_manifest_fuzzer") {
-  sources = [
-    "manifest/manifest_fuzzer.cc",
-  ]
+  sources = [ "manifest/manifest_fuzzer.cc" ]
 
   dict = "manifest/manifest_fuzzer.dict"
   seed_corpus = "manifest/fuzzer_seed_corpus"
@@ -509,9 +503,7 @@ fuzzer_test("web_app_manifest_fuzzer") {
 
 if (use_libfuzzer) {
   fuzzer_test("media_capabilities_fuzzer") {
-    sources = [
-      "media_capabilities/media_capabilities_fuzzer.cc",
-    ]
+    sources = [ "media_capabilities/media_capabilities_fuzzer.cc" ]
 
     seed_corpus = "media_capabilities/fuzzer_seed_corpus"
 
