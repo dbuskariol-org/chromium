@@ -529,7 +529,8 @@ void ThreadState::PerformConcurrentSweep() {
   // Concurrent sweeper doesn't call finalizers - this guarantees that sweeping
   // is not called recursively.
   ThreadHeapStatsCollector::EnabledConcurrentScope stats_scope(
-      Heap().stats_collector(), ThreadHeapStatsCollector::kConcurrentSweep);
+      Heap().stats_collector(),
+      ThreadHeapStatsCollector::kConcurrentSweepingStep);
   const bool finished = Heap().AdvanceSweep(
       ThreadHeap::SweepingType::kConcurrent,
       base::TimeTicks::Now() + kConcurrentSweepStepDuration);
@@ -1743,7 +1744,8 @@ void ThreadState::PerformConcurrentMark() {
   VLOG(2) << "[state:" << this << "] [threadid:" << CurrentThread() << "] "
           << "ConcurrentMark";
   ThreadHeapStatsCollector::EnabledConcurrentScope stats_scope(
-      Heap().stats_collector(), ThreadHeapStatsCollector::kConcurrentMark);
+      Heap().stats_collector(),
+      ThreadHeapStatsCollector::kConcurrentMarkingStep);
 
   uint8_t task_id;
   {

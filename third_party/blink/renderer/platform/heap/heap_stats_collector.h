@@ -67,8 +67,8 @@ class PLATFORM_EXPORT ThreadHeapStatsObserver {
   V(VisitStackRoots)
 
 #define FOR_ALL_CONCURRENT_SCOPES(V) \
-  V(ConcurrentMark)                  \
-  V(ConcurrentSweep)
+  V(ConcurrentMarkingStep)           \
+  V(ConcurrentSweepingStep)
 
 // Manages counters and statistics across garbage collection cycles.
 //
