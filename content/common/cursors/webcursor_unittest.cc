@@ -60,7 +60,7 @@ TEST(WebCursorTest, CursorInfoConstructorCustom) {
 #if defined(USE_OZONE)
   // Test if the rotating custom cursor works correctly.
   display::Display display;
-  display.set_rotation(display::Display::ROTATE_90);
+  display.set_panel_rotation(display::Display::ROTATE_90);
   cursor.SetDisplayInfo(display);
   EXPECT_FALSE(cursor.has_custom_cursor_for_test());
   native_cursor = cursor.GetNativeCursor();

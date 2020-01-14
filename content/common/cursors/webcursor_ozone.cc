@@ -23,12 +23,15 @@ ui::PlatformCursor WebCursor::GetPlatformCursor(const ui::Cursor& cursor) {
 }
 
 void WebCursor::SetDisplayInfo(const display::Display& display) {
-  if (rotation_ == display.rotation() &&
+  if (rotation_ == display.panel_rotation() &&
       device_scale_factor_ == display.device_scale_factor() &&
       maximum_cursor_size_ == display.maximum_cursor_size())
     return;
   device_scale_factor_ = display.device_scale_factor();
-  rotation_ = display.rotation();
+  // The cursor should use the panel's physical rotation instead of
+  // rotation. They can be different on ChromeOS but the same on
+  // other platforms.
+  rotation_ = display.panel_rotation();
   maximum_cursor_size_ = display.maximum_cursor_size();
   // TODO(oshima): Identify if it's possible to remove this check here and move
   // the kDefaultMaxSize constants to a single place. crbug.com/603512
