@@ -1958,7 +1958,9 @@ void LayoutObject::SetPseudoElementStyle(
   SetStyle(std::move(pseudo_style));
 }
 
-void LayoutObject::MarkContainerChainForOverflowRecalcIfNeeded() {
+void LayoutObject::MarkContainerChainForOverflowRecalcIfNeeded(
+    bool mark_container_chain_layout_overflow_recalc,
+    bool mark_container_chain_visual_overflow_recalc) {
   LayoutObject* object = this;
   do {
     // Cell and row need to propagate the flag to their containing section and
@@ -1968,25 +1970,42 @@ void LayoutObject::MarkContainerChainForOverflowRecalcIfNeeded() {
                  ? object->Parent()
                  : object->Container();
     if (object) {
-      object->SetChildNeedsLayoutOverflowRecalc();
-      object->MarkSelfPaintingLayerForVisualOverflowRecalc();
+      if (mark_container_chain_layout_overflow_recalc)
+        object->SetChildNeedsLayoutOverflowRecalc();
+      if (mark_container_chain_visual_overflow_recalc)
+        object->MarkSelfPaintingLayerForVisualOverflowRecalc();
     }
 
   } while (object);
 }
 
-void LayoutObject::SetNeedsVisualOverflowAndPaintInvalidation() {
+void LayoutObject::SetNeedsOverflowRecalc(
+    OverflowRecalcType overflow_recalc_type) {
+  bool mark_container_chain_layout_overflow_recalc = false;
+  bool mark_container_chain_visual_overflow_recalc = false;
+
+  if (overflow_recalc_type ==
+      OverflowRecalcType::kLayoutAndVisualOverflowRecalc) {
+    mark_container_chain_layout_overflow_recalc =
+        !SelfNeedsLayoutOverflowRecalc();
+    SetSelfNeedsLayoutOverflowRecalc();
+  }
+
+  DCHECK(overflow_recalc_type ==
+             OverflowRecalcType::kOnlyVisualOverflowRecalc ||
+         overflow_recalc_type ==
+             OverflowRecalcType::kLayoutAndVisualOverflowRecalc);
   SetShouldCheckForPaintInvalidation();
+  mark_container_chain_visual_overflow_recalc =
+      !SelfPaintingLayerNeedsVisualOverflowRecalc();
   MarkSelfPaintingLayerForVisualOverflowRecalc();
-}
 
-void LayoutObject::SetNeedsOverflowRecalc() {
-  bool needed_recalc = SelfNeedsLayoutOverflowRecalc();
-  SetSelfNeedsLayoutOverflowRecalc();
-  SetNeedsVisualOverflowAndPaintInvalidation();
-
-  if (!needed_recalc)
-    MarkContainerChainForOverflowRecalcIfNeeded();
+  if (mark_container_chain_layout_overflow_recalc ||
+      mark_container_chain_visual_overflow_recalc) {
+    MarkContainerChainForOverflowRecalcIfNeeded(
+        mark_container_chain_layout_overflow_recalc,
+        mark_container_chain_visual_overflow_recalc);
+  }
 }
 
 DISABLE_CFI_PERF
@@ -4069,6 +4088,15 @@ LayoutUnit LayoutObject::FlipForWritingModeInternal(
     return position;
   return (box_for_flipping ? box_for_flipping : ContainingBlock())
       ->FlipForWritingMode(position, width);
+}
+
+bool LayoutObject::SelfPaintingLayerNeedsVisualOverflowRecalc() const {
+  if (HasLayer()) {
+    auto* box_model_object = ToLayoutBoxModelObject(this);
+    if (box_model_object->HasSelfPaintingLayer())
+      return box_model_object->Layer()->NeedsVisualOverflowRecalc();
+  }
+  return false;
 }
 
 void LayoutObject::MarkSelfPaintingLayerForVisualOverflowRecalc() {
