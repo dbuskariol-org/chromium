@@ -4,6 +4,7 @@
 
 #include "third_party/blink/renderer/bindings/core/v8/native_value_traits_impl.h"
 
+#include "third_party/blink/renderer/bindings/core/v8/js_event_handler.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_array_buffer.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_array_buffer_view.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_big_int_64_array.h"
@@ -53,6 +54,7 @@ ScriptWrappable* NativeValueTraitsInterfaceArgumentValue(
 
 }  // namespace bindings
 
+// Buffer source types
 #define DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(T, V8T)             \
   T* NativeValueTraits<T>::NativeValue(v8::Isolate* isolate,              \
                                        v8::Local<v8::Value> value,        \
@@ -83,5 +85,30 @@ DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMFloat32Array, V8Float32Array)
 DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMFloat64Array, V8Float64Array)
 DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMDataView, V8DataView)
 #undef DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE
+
+// EventHandler
+EventListener* NativeValueTraits<IDLEventHandler>::NativeValue(
+    v8::Isolate* isolate,
+    v8::Local<v8::Value> value,
+    ExceptionState& exception_state) {
+  return JSEventHandler::CreateOrNull(
+      value, JSEventHandler::HandlerType::kEventHandler);
+}
+
+EventListener* NativeValueTraits<IDLOnBeforeUnloadEventHandler>::NativeValue(
+    v8::Isolate* isolate,
+    v8::Local<v8::Value> value,
+    ExceptionState& exception_state) {
+  return JSEventHandler::CreateOrNull(
+      value, JSEventHandler::HandlerType::kOnBeforeUnloadEventHandler);
+}
+
+EventListener* NativeValueTraits<IDLOnErrorEventHandler>::NativeValue(
+    v8::Isolate* isolate,
+    v8::Local<v8::Value> value,
+    ExceptionState& exception_state) {
+  return JSEventHandler::CreateOrNull(
+      value, JSEventHandler::HandlerType::kOnErrorEventHandler);
+}
 
 }  // namespace blink

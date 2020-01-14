@@ -173,6 +173,12 @@ def native_value_tag(idl_type):
     """Returns the tag type of NativeValueTraits."""
     assert isinstance(idl_type, web_idl.IdlType)
 
+    if idl_type.is_typedef:
+        if idl_type.identifier in ("EventHandler",
+                                   "OnBeforeUnloadEventHandler",
+                                   "OnErrorEventHandler"):
+            return "IDL{}".format(idl_type.identifier)
+
     real_type = idl_type.unwrap(typedef=True)
     non_null_real_type = real_type.unwrap(nullable=True)
 

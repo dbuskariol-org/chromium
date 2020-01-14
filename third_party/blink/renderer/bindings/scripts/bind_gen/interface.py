@@ -1201,7 +1201,15 @@ def make_v8_set_return_value(cg_context):
         # any text.
         return T("<% return_value.request_symbol_definition() %>")
 
-    return_type = cg_context.return_type.unwrap(typedef=True)
+    return_type = cg_context.return_type
+    if return_type.is_typedef:
+        if return_type.identifier in ("EventHandler",
+                                      "OnBeforeUnloadEventHandler",
+                                      "OnErrorEventHandler"):
+            return T("bindings::V8SetReturnValue(${info}, ${return_value}, "
+                     "${isolate}, ${blink_receiver});")
+
+    return_type = return_type.unwrap(typedef=True)
     return_type_body = return_type.unwrap()
 
     V8_RETURN_VALUE_FAST_TYPES = ("boolean", "byte", "octet", "short",
@@ -2918,10 +2926,11 @@ def generate_interface(interface):
         "third_party/blink/renderer/bindings/core/v8/"
         "native_value_traits_impl.h",
         "third_party/blink/renderer/bindings/core/v8/v8_dom_configuration.h",
+        "third_party/blink/renderer/bindings/core/v8/"
+        "v8_set_return_value_for_core.h",
         "third_party/blink/renderer/platform/bindings/exception_messages.h",
         "third_party/blink/renderer/platform/bindings/runtime_call_stats.h",
         "third_party/blink/renderer/platform/bindings/v8_binding.h",
-        "third_party/blink/renderer/platform/bindings/v8_set_return_value.h",
     ])
     impl_source_node.accumulator.add_include_headers(
         collect_include_headers(interface))

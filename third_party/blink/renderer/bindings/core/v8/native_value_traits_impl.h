@@ -18,6 +18,7 @@
 namespace blink {
 
 class CallbackFunctionBase;
+class EventListener;
 class ScriptWrappable;
 struct WrapperTypeInfo;
 
@@ -1186,6 +1187,31 @@ struct NativeValueTraits<IDLNullable<InnerType>>
       ExceptionState& exception_state) {
     return NativeValue(isolate, value, exception_state);
   }
+};
+
+// EventHandler
+template <>
+struct NativeValueTraits<IDLEventHandler>
+    : public NativeValueTraitsBase<IDLEventHandler> {
+  static EventListener* NativeValue(v8::Isolate* isolate,
+                                    v8::Local<v8::Value> value,
+                                    ExceptionState& exception_state);
+};
+
+template <>
+struct NativeValueTraits<IDLOnBeforeUnloadEventHandler>
+    : public NativeValueTraitsBase<IDLOnBeforeUnloadEventHandler> {
+  static EventListener* NativeValue(v8::Isolate* isolate,
+                                    v8::Local<v8::Value> value,
+                                    ExceptionState& exception_state);
+};
+
+template <>
+struct NativeValueTraits<IDLOnErrorEventHandler>
+    : public NativeValueTraitsBase<IDLOnErrorEventHandler> {
+  static EventListener* NativeValue(v8::Isolate* isolate,
+                                    v8::Local<v8::Value> value,
+                                    ExceptionState& exception_state);
 };
 
 }  // namespace blink

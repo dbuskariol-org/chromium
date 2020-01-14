@@ -18,6 +18,7 @@
 
 namespace blink {
 
+class EventListener;
 class ScriptPromise;
 
 // Boolean
@@ -186,6 +187,11 @@ struct IDLNullable<InnerType,
   using ImplType = typename InnerTraits::ImplType;
   static inline ResultType NullValue() { return InnerTraits::NullValue(); }
 };
+
+// EventHandler types
+struct IDLEventHandler : public IDLBaseHelper<EventListener*> {};
+struct IDLOnBeforeUnloadEventHandler : public IDLBaseHelper<EventListener*> {};
+struct IDLOnErrorEventHandler : public IDLBaseHelper<EventListener*> {};
 
 }  // namespace blink
 
