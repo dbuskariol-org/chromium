@@ -314,7 +314,7 @@ cr.googleTranslate = (function() {
      * @return {boolean} False if the translate library was not ready, in which
      *                   case the translation is not started.  True otherwise.
      */
-    translate: function(originalLang, targetLang) {
+    translate(originalLang, targetLang) {
       finished = false;
       errorCode = ERROR['NONE'];
       if (!libReady) {
@@ -336,7 +336,7 @@ cr.googleTranslate = (function() {
      * Reverts the page contents to its original value, effectively reverting
      * any performed translation.  Does nothing if the page was not translated.
      */
-    revert: function() {
+    revert() {
       lib.restore();
     },
 
@@ -344,7 +344,7 @@ cr.googleTranslate = (function() {
      * Called when an error is caught while executing script fetched in
      * translate_script.cc.
      */
-    onTranslateElementError: function(error) {
+    onTranslateElementError(error) {
       errorCode = ERROR['UNEXPECTED_SCRIPT_ERROR'];
       invokeReadyCallback();
     },
@@ -353,7 +353,7 @@ cr.googleTranslate = (function() {
      * Entry point called by the Translate Element once it has been injected in
      * the page.
      */
-    onTranslateElementLoad: function() {
+    onTranslateElementLoad() {
       loadedTime = performance.now();
       try {
         lib = google.translate.TranslateService({
@@ -384,7 +384,7 @@ cr.googleTranslate = (function() {
      * external CSS resource into the page.
      * @param {string} url URL of an external CSS resource to load.
      */
-    onLoadCSS: function(url) {
+    onLoadCSS(url) {
       const element = document.createElement('link');
       element.type = 'text/css';
       element.rel = 'stylesheet';
@@ -398,7 +398,7 @@ cr.googleTranslate = (function() {
      * an external JavaScript on the page.
      * @param {string} url URL of an external JavaScript to load.
      */
-    onLoadJavascript: function(url) {
+    onLoadJavascript(url) {
       // securityOrigin is predefined by translate_script.cc.
       if (!url.startsWith(securityOrigin)) {
         console.error('Translate: ' + url + ' is not allowed to load.');

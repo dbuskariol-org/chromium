@@ -76,7 +76,7 @@ cr.define('policy', function() {
     /**
      * Initialization function for the cr.ui framework.
      */
-    decorate: function() {},
+    decorate() {},
 
     /**
      * Sets the text of a particular named label element in the status box
@@ -87,7 +87,7 @@ cr.define('policy', function() {
      * @param {boolean=} needsToBeShown True if we want to show the label
      *     False otherwise.
      */
-    setLabelAndShow_: function(labelName, labelValue, needsToBeShown = true) {
+    setLabelAndShow_(labelName, labelValue, needsToBeShown = true) {
       const labelElement = this.querySelector(labelName);
       labelElement.textContent = labelValue || '';
       if (needsToBeShown) {
@@ -100,7 +100,7 @@ cr.define('policy', function() {
      *     "user".
      * @param {Object} status Dictionary with information about the status.
      */
-    initialize: function(scope, status) {
+    initialize(scope, status) {
       const notSpecifiedString = loadTimeData.getString('notSpecified');
       if (scope == 'device') {
         // For device policy, set the appropriate title and populate the topmost
@@ -188,7 +188,7 @@ cr.define('policy', function() {
     // Set up the prototype chain.
     __proto__: HTMLDivElement.prototype,
 
-    decorate: function() {},
+    decorate() {},
 
     /** @param {Conflict} conflict */
     initialize(conflict) {
@@ -221,7 +221,7 @@ cr.define('policy', function() {
     /**
      * Initialization function for the cr.ui framework.
      */
-    decorate: function() {
+    decorate() {
       const toggle = this.querySelector('.policy.row .toggle');
       toggle.addEventListener('click', this.toggleExpanded_.bind(this));
     },
@@ -325,7 +325,7 @@ cr.define('policy', function() {
      * Toggle the visibility of an additional row containing the complete text.
      * @private
      */
-    toggleExpanded_: function() {
+    toggleExpanded_() {
       const warningRowDisplay = this.querySelector('.warnings.row');
       const errorRowDisplay = this.querySelector('.errors.row');
       const valueRowDisplay = this.querySelector('.value.row');
@@ -368,7 +368,7 @@ cr.define('policy', function() {
     /**
      * Initialization function for the cr.ui framework.
      */
-    decorate: function() {
+    decorate() {
       this.policies_ = {};
       this.filterPattern_ = '';
     },
@@ -413,7 +413,7 @@ cr.define('policy', function() {
      * disabled by setting |pattern| to an empty string.
      * @param {string} pattern The filter pattern.
      */
-    setFilterPattern: function(pattern) {
+    setFilterPattern(pattern) {
       this.filterPattern_ = pattern.toLowerCase();
       this.filter();
     },
@@ -423,7 +423,7 @@ cr.define('policy', function() {
      * shown in the table. Furthermore, policies whose value is not currently
      * set are only shown if the corresponding checkbox is checked.
      */
-    filter: function() {
+    filter() {
       const showUnset = $('show-unset').checked;
       const policies = this.querySelectorAll('.policy-data');
       for (let i = 0; i < policies.length; i++) {
@@ -451,7 +451,7 @@ cr.define('policy', function() {
     /**
      * Main initialization function. Called by the browser on page load.
      */
-    initialize: function() {
+    initialize() {
       cr.ui.FocusOutlineManager.forDocument(document);
 
       this.mainSection = $('main-section');
@@ -545,7 +545,7 @@ cr.define('policy', function() {
      * status.
      * @param {Object} status Dictionary containing the current policy status.
      */
-    setStatus: function(status) {
+    setStatus(status) {
       // Remove any existing status boxes.
       const container = $('status-box-container');
       while (container.firstChild) {
@@ -569,7 +569,7 @@ cr.define('policy', function() {
      * Re-enable the reload policies button when the previous request to reload
      * policies values has completed.
      */
-    reloadPoliciesDone: function() {
+    reloadPoliciesDone() {
       $('reload-policies').disabled = false;
     },
   };

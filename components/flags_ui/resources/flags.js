@@ -428,7 +428,7 @@ FlagSearch.prototype = {
    * Initialises the in page search. Adding searchbox listeners and
    * collates the text elements used for string matching.
    */
-  init: function() {
+  init() {
     this.experiments_.link = /** @type {!NodeList<!HTMLElement>} */ (
         document.querySelectorAll('#tab-content-available .permalink'));
     this.experiments_.title = /** @type {!NodeList<!HTMLElement>} */ (
@@ -473,7 +473,7 @@ FlagSearch.prototype = {
   /**
    * Clears a search showing all experiments.
    */
-  clearSearch: function() {
+  clearSearch() {
     this.searchBox_.value = '';
     this.doSearch();
   },
@@ -483,7 +483,7 @@ FlagSearch.prototype = {
    * @param {HTMLElement} el The element to remove all highlighted mark up on.
    * @param {string} text Text to reset the element's textContent to.
    */
-  resetHighlights: function(el, text) {
+  resetHighlights(el, text) {
     if (el.children) {
       el.textContent = text;
     }
@@ -495,7 +495,7 @@ FlagSearch.prototype = {
    * @param {HTMLElement} el The node containing the text to match against.
    * @return {boolean} Whether there was a match.
    */
-  highlightMatchInElement: function(searchTerm, el) {
+  highlightMatchInElement(searchTerm, el) {
     // Experiment container.
     const parentEl = el.parentNode.parentNode.parentNode;
     const text = el.textContent;
@@ -543,7 +543,7 @@ FlagSearch.prototype = {
    * @param {string} searchTerm
    * @return {number} The number of matches found.
    */
-  highlightAllMatches: function(searchContent, searchTerm) {
+  highlightAllMatches(searchContent, searchTerm) {
     let matches = 0;
     for (let i = 0, j = searchContent.link.length; i < j; i++) {
       if (this.highlightMatchInElement(searchTerm, searchContent.title[i])) {
@@ -580,7 +580,7 @@ FlagSearch.prototype = {
   /**
    * Performs a search against the experiment title, description, permalink.
    */
-  doSearch: function() {
+  doSearch() {
     const searchTerm = this.searchBox_.value.trim().toLowerCase();
 
     if (searchTerm || searchTerm == '') {
@@ -600,7 +600,7 @@ FlagSearch.prototype = {
     this.searchIntervalId_ = null;
   },
 
-  announceSearchResults: function() {
+  announceSearchResults() {
     const searchTerm = this.searchBox_.value.trim().toLowerCase();
     if (!searchTerm) {
       return;
@@ -628,7 +628,7 @@ FlagSearch.prototype = {
    * Debounces the search to improve performance and prevent too many searches
    * from being initiated.
    */
-  debounceSearch: function() {
+  debounceSearch() {
     if (this.searchIntervalId_) {
       clearTimeout(this.searchIntervalId_);
     }

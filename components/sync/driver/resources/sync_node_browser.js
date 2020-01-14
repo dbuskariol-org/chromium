@@ -101,7 +101,7 @@
     /**
      * Finds the children of this node and appends them to the tree.
      */
-    handleExpand_: function(event) {
+    handleExpand_(event) {
       const treeItem = this;
 
       if (treeItem.expanded_) {
@@ -133,13 +133,13 @@
   SyncNodeTree.prototype = {
     __proto__: cr.ui.Tree.prototype,
 
-    decorate: function() {
+    decorate() {
       cr.ui.Tree.prototype.decorate.call(this);
       this.addEventListener('change', this.handleChange_.bind(this));
       this.allNodes = [];
     },
 
-    populate: function(nodes) {
+    populate(nodes) {
       const tree = this;
 
       // We store the full set of nodes in the SyncNodeTree object.
@@ -153,7 +153,7 @@
       });
     },
 
-    handleChange_: function(event) {
+    handleChange_(event) {
       if (this.selectedItem) {
         updateNodeDetailView(this.selectedItem);
       }
@@ -214,7 +214,7 @@
     customSplitter.prototype = {
       __proto__: Splitter.prototype,
 
-      handleSplitterDragEnd: function(e) {
+      handleSplitterDragEnd(e) {
         Splitter.prototype.handleSplitterDragEnd.apply(this, arguments);
         const treeElement = $('sync-node-tree-container');
         const newWidth = parseFloat(treeElement.style.width);

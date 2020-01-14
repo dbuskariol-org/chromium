@@ -280,7 +280,7 @@ function setInputElementValue_(value, input) {
 
   if (overrideProperty) {
     const newProperty = {
-      get: function() {
+      get() {
         if (setterCalled && oldPropertyDescriptor.get) {
           return oldPropertyDescriptor.get.call(input);
         }
