@@ -23,13 +23,7 @@ bool DropdownBarHost::disable_animations_during_testing_ = false;
 // DropdownBarHost, public:
 
 DropdownBarHost::DropdownBarHost(BrowserView* browser_view)
-    : AnimationDelegateViews(browser_view),
-      browser_view_(browser_view),
-      view_(nullptr),
-      delegate_(nullptr),
-      focus_manager_(nullptr),
-      esc_accel_target_registered_(false),
-      is_visible_(false) {}
+    : AnimationDelegateViews(browser_view), browser_view_(browser_view) {}
 
 DropdownBarHost::~DropdownBarHost() {
   focus_manager_->RemoveFocusChangeListener(this);
@@ -37,21 +31,20 @@ DropdownBarHost::~DropdownBarHost() {
 }
 
 void DropdownBarHost::Init(views::View* host_view,
-                           views::View* view,
+                           std::unique_ptr<views::View> view,
                            DropdownBarHostDelegate* delegate) {
   DCHECK(view);
   DCHECK(delegate);
 
-  view_ = view;
   delegate_ = delegate;
 
   // The |clip_view| exists to paint to a layer so that it can clip descendent
   // Views which also paint to a Layer. See http://crbug.com/589497
-  std::unique_ptr<views::View> clip_view(new views::View());
+  auto clip_view = std::make_unique<views::View>();
   clip_view->SetPaintToLayer();
   clip_view->layer()->SetFillsBoundsOpaquely(false);
   clip_view->layer()->SetMasksToBounds(true);
-  clip_view->AddChildView(view_);
+  view_ = clip_view->AddChildView(std::move(view));
 
   // Initialize the host.
   host_ = std::make_unique<ThemeCopyingWidget>(browser_view_->GetWidget());

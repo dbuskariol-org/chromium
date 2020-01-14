@@ -52,7 +52,7 @@ class DropdownBarHost : public ui::AcceleratorTarget,
   // hierarchy determines the z-order of the widget relative to views with
   // layers and views with associated NativeViews.
   void Init(views::View* host_view,
-            views::View* view,
+            std::unique_ptr<views::View> view,
             DropdownBarHostDelegate* delegate);
 
   // Whether we are animating the position of the dropdown widget.
@@ -155,17 +155,17 @@ class DropdownBarHost : public ui::AcceleratorTarget,
   BrowserView* browser_view_;
 
   // Our view, which is responsible for drawing the UI.
-  views::View* view_;
-  DropdownBarHostDelegate* delegate_;
+  views::View* view_ = nullptr;
+  DropdownBarHostDelegate* delegate_ = nullptr;
 
   // The animation class to use when opening the Dropdown widget.
   std::unique_ptr<gfx::SlideAnimation> animation_;
 
   // The focus manager we register with to keep track of focus changes.
-  views::FocusManager* focus_manager_;
+  views::FocusManager* focus_manager_ = nullptr;
 
   // True if the accelerator target for Esc key is registered.
-  bool esc_accel_target_registered_;
+  bool esc_accel_target_registered_ = false;
 
   // Tracks and stores the last focused view which is not the DropdownBarView
   // or any of its children. Used to restore focus once the DropdownBarView is
@@ -178,7 +178,7 @@ class DropdownBarHost : public ui::AcceleratorTarget,
 
   // A flag to manually manage visibility. GTK/X11 is asynchronous and
   // the state of the widget can be out of sync.
-  bool is_visible_;
+  bool is_visible_ = false;
 
   DISALLOW_COPY_AND_ASSIGN(DropdownBarHost);
 };
