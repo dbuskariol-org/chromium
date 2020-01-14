@@ -159,7 +159,9 @@ void ShelfNavigationWidget::Delegate::UpdateOpaqueBackground() {
 
   // The opaque background does not show up when there are two buttons.
   gfx::Rect opaque_background_bounds = GetFirstButtonBounds();
-  if (base::i18n::IsRTL()) {
+  if (base::i18n::IsRTL() && GetWidget() &&
+      Shelf::ForWindow(GetWidget()->GetNativeWindow())
+          ->IsHorizontalAlignment()) {
     opaque_background_bounds.set_x(
         2 * ShelfConfig::Get()->home_button_edge_spacing());
   }
