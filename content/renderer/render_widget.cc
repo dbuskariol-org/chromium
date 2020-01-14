@@ -2278,7 +2278,7 @@ void RenderWidget::OnImeSetComposition(
     return;
   }
 #endif
-  ImeEventGuard guard(this);
+  ImeEventGuard guard(weak_ptr_factory_.GetWeakPtr());
   blink::WebInputMethodController* controller = GetInputMethodController();
   if (!controller ||
       !controller->SetComposition(
@@ -2313,7 +2313,7 @@ void RenderWidget::OnImeCommitText(
     return;
   }
 #endif
-  ImeEventGuard guard(this);
+  ImeEventGuard guard(weak_ptr_factory_.GetWeakPtr());
   input_handler_->set_handling_input_event(true);
   if (auto* controller = GetInputMethodController()) {
     controller->CommitText(
@@ -2338,7 +2338,7 @@ void RenderWidget::OnImeFinishComposingText(bool keep_selection) {
   }
 #endif
 
-  ImeEventGuard guard(this);
+  ImeEventGuard guard(weak_ptr_factory_.GetWeakPtr());
   input_handler_->set_handling_input_event(true);
   if (auto* controller = GetInputMethodController()) {
     controller->FinishComposingText(
