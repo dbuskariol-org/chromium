@@ -135,6 +135,11 @@ ASH_PUBLIC_EXPORT extern const base::Feature kSwipingFromLeftEdgeToGoBack;
 // launched.
 ASH_PUBLIC_EXPORT extern const base::Feature kDragFromShelfToHomeOrOverview;
 
+// When enabled, shelf navigation controls and the overview tray item will be
+// removed from the shelf in tablet mode (unless otherwise specified by user
+// preferences, or policy).
+ASH_PUBLIC_EXPORT extern const base::Feature kHideShelfControlsInTabletMode;
+
 ASH_PUBLIC_EXPORT bool IsAllowAmbientEQEnabled();
 
 ASH_PUBLIC_EXPORT bool IsAutoNightLightEnabled();
@@ -178,6 +183,8 @@ ASH_PUBLIC_EXPORT bool IsSwipingFromLeftEdgeToGoBackEnabled();
 ASH_PUBLIC_EXPORT bool IsDragFromShelfToHomeOrOverviewEnabled();
 
 ASH_PUBLIC_EXPORT bool IsReduceDisplayNotificationsEnabled();
+
+ASH_PUBLIC_EXPORT bool IsHideShelfControlsInTabletModeEnabled();
 
 }  // namespace features
 }  // namespace ash
