@@ -332,6 +332,7 @@ std::vector<std::unique_ptr<autofill::PasswordForm>> CopyOf(
     }
     [self setSearchBarEnabled:YES];
   }
+  [self updateUIForEditState];
 }
 
 #pragma mark - SettingsRootTableViewController
