@@ -464,6 +464,7 @@ android_library("chrome_java") {
   if (enable_vr) {
     deps += [ ":chrome_vr_java_resources" ]
   }
+
   srcjar_deps += [ ":chrome_vr_android_java_enums_srcjar" ]
   if (enable_feed_in_chrome) {
     deps += [ ":chrome_feed_java_resources" ]
@@ -2157,10 +2158,9 @@ if (enable_arcore) {
     ]
 
     # Include ArCore files directly instead of using bundles.
-    deps += [
-      "//chrome/browser/android/vr:ar_java",
-      "//third_party/arcore-android-sdk-client:com_google_ar_core_java",
-    ]
+    deps +=
+        [ "//chrome/browser/android/vr:ar_java",
+          "//third_party/arcore-android-sdk-client:com_google_ar_core_java" ]
 
     _libarcore_dir = get_label_info(
                          "//third_party/arcore-android-sdk-client:com_google_ar_core_java($default_toolchain)",
