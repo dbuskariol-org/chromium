@@ -102,6 +102,8 @@ jumbo_static_library("weblayer_lib") {
     "browser/content_browser_client_impl.h",
     "browser/download_manager_delegate_impl.cc",
     "browser/download_manager_delegate_impl.h",
+    "browser/fake_permission_controller_delegate.cc",
+    "browser/fake_permission_controller_delegate.h",
     "browser/file_select_helper.cc",
     "browser/file_select_helper.h",
     "browser/i18n_util.cc",

@@ -11,6 +11,8 @@
 #include "components/safe_browsing/core/common/safe_browsing_prefs.h"
 #include "components/user_prefs/user_prefs.h"
 #include "content/public/browser/resource_context.h"
+#include "weblayer/browser/fake_permission_controller_delegate.h"
+#include "weblayer/public/common/switches.h"
 
 namespace weblayer {
 
@@ -84,6 +86,14 @@ content::SSLHostStateDelegate* BrowserContextImpl::GetSSLHostStateDelegate() {
 
 content::PermissionControllerDelegate*
 BrowserContextImpl::GetPermissionControllerDelegate() {
+  if (base::CommandLine::ForCurrentProcess()->HasSwitch(
+          switches::kWebLayerFakePermissions)) {
+    if (!permission_controller_delegate_) {
+      permission_controller_delegate_ =
+          std::make_unique<FakePermissionControllerDelegate>();
+    }
+    return permission_controller_delegate_.get();
+  }
   return nullptr;
 }
 

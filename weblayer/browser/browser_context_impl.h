@@ -76,6 +76,8 @@ class BrowserContextImpl : public content::BrowserContext {
   DownloadManagerDelegateImpl download_delegate_;
   SSLHostStateDelegateImpl ssl_host_state_delegate_;
   std::unique_ptr<PrefService> user_pref_service_;
+  std::unique_ptr<content::PermissionControllerDelegate>
+      permission_controller_delegate_;
 
   DISALLOW_COPY_AND_ASSIGN(BrowserContextImpl);
 };
