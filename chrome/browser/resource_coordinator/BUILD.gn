@@ -14,6 +14,12 @@ mojom("mojo_bindings") {
   sources = [ "lifecycle_unit_state.mojom" ]
 }
 
+proto_library("intervention_policy_database_proto") {
+  sources = [
+    "intervention_policy_database.proto",
+  ]
+}
+
 source_set("tab_manager_features") {
   public = [ "tab_manager_features.h" ]
 

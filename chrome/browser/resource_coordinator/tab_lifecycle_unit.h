@@ -185,6 +185,11 @@ class TabLifecycleUnitSource::TabLifecycleUnit
   // for the tab.
   void CheckFreezingOriginTrial(DecisionDetails* decision_details) const;
 
+  // Updates |decision_details| based on the global intervention policy database
+  // freezing data for the tab.
+  void CheckFreezingInterventionPolicyDatabase(
+      DecisionDetails* decision_details) const;
+
   // List of observers to notify when the discarded state or the auto-
   // discardable state of this tab changes.
   base::ObserverList<TabLifecycleObserver>::Unchecked* observers_;

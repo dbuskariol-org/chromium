@@ -19,6 +19,7 @@
 #include "base/timer/timer.h"
 #include "build/build_config.h"
 #include "chrome/browser/metrics/desktop_session_duration/desktop_session_duration_tracker.h"
+#include "chrome/browser/resource_coordinator/intervention_policy_database.h"
 #include "chrome/browser/resource_coordinator/lifecycle_unit.h"
 #include "chrome/browser/resource_coordinator/lifecycle_unit_observer.h"
 #include "chrome/browser/resource_coordinator/lifecycle_unit_source_observer.h"
@@ -151,6 +152,10 @@ class TabManager : public LifecycleUnitObserver,
   // Returns the number of restored tabs during session restore. This is
   // non-zero only during session restore.
   int restored_tab_count() const { return restored_tab_count_; }
+
+  InterventionPolicyDatabase* intervention_policy_database() {
+    return intervention_policy_database_.get();
+  }
 
   UsageClock* usage_clock() { return &usage_clock_; }
 
@@ -469,6 +474,10 @@ class TabManager : public LifecycleUnitObserver,
   // Records UMAs for tab and system-related events and properties during
   // session restore.
   std::unique_ptr<TabManagerStatsCollector> stats_collector_;
+
+  // The intervention policy database, should be initialized by
+  // InterventionPolicyDatabaseComponentInstallerPolicy.
+  std::unique_ptr<InterventionPolicyDatabase> intervention_policy_database_;
 
   // Last time at which a LifecycleUnit was temporarily unfrozen.
   base::TimeTicks last_unfreeze_time_;

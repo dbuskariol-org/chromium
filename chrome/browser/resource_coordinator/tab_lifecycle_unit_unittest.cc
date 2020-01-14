@@ -20,6 +20,7 @@
 #include "chrome/browser/metrics/desktop_session_duration/desktop_session_duration_tracker.h"
 #include "chrome/browser/notifications/notification_permission_context.h"
 #include "chrome/browser/permissions/permission_request_manager.h"
+#include "chrome/browser/resource_coordinator/intervention_policy_database.h"
 #include "chrome/browser/resource_coordinator/lifecycle_unit_observer.h"
 #include "chrome/browser/resource_coordinator/local_site_characteristics_data_unittest_utils.h"
 #include "chrome/browser/resource_coordinator/local_site_characteristics_webcontents_observer.h"
@@ -607,6 +608,47 @@ TEST_F(TabLifecycleUnitTest,
        CannotProactivelyDiscardTabIfInsufficientObservation) {
   TestCannotDiscardBasedOnHeuristicUsage(
       DecisionFailureReason::HEURISTIC_INSUFFICIENT_OBSERVATION, nullptr);
+}
+
+TEST_F(TabLifecycleUnitTest, CannotFreezeTabIfOriginOptedOut) {
+  auto* policy_db = GetTabLifecycleUnitSource()->intervention_policy_database();
+  policy_db->AddOriginPoliciesForTesting(
+      url::Origin::Create(web_contents_->GetLastCommittedURL()),
+      InterventionPolicyDatabase::OriginInterventionPolicies(
+          OriginInterventions::DEFAULT, OriginInterventions::OPT_OUT));
+
+  TabLifecycleUnit tab_lifecycle_unit(GetTabLifecycleUnitSource(), &observers_,
+                                      usage_clock_.get(), web_contents_,
+                                      tab_strip_model_.get());
+  TabLoadTracker::Get()->TransitionStateForTesting(web_contents_,
+                                                   LoadingState::LOADED);
+  DecisionDetails decision_details;
+  EXPECT_FALSE(tab_lifecycle_unit.CanFreeze(&decision_details));
+  EXPECT_FALSE(decision_details.IsPositive());
+  EXPECT_EQ(DecisionFailureReason::GLOBAL_BLACKLIST,
+            decision_details.FailureReason());
+}
+
+TEST_F(TabLifecycleUnitTest, CanFreezeOptedInTabs) {
+  auto* policy_db = GetTabLifecycleUnitSource()->intervention_policy_database();
+  policy_db->AddOriginPoliciesForTesting(
+      url::Origin::Create(web_contents_->GetLastCommittedURL()),
+      {OriginInterventions::DEFAULT, OriginInterventions::OPT_IN});
+
+  TabLifecycleUnit tab_lifecycle_unit(GetTabLifecycleUnitSource(), &observers_,
+                                      usage_clock_.get(), web_contents_,
+                                      tab_strip_model_.get());
+  TabLoadTracker::Get()->TransitionStateForTesting(web_contents_,
+                                                   LoadingState::LOADED);
+
+  // Mark the tab as recently audible, this should protect it from being frozen.
+  tab_lifecycle_unit.SetRecentlyAudible(true);
+
+  DecisionDetails decision_details;
+  EXPECT_TRUE(tab_lifecycle_unit.CanFreeze(&decision_details));
+  EXPECT_TRUE(decision_details.IsPositive());
+  EXPECT_EQ(DecisionSuccessReason::GLOBAL_WHITELIST,
+            decision_details.SuccessReason());
 }
 
 TEST_F(TabLifecycleUnitTest, CannotFreezeAFrozenTab) {
