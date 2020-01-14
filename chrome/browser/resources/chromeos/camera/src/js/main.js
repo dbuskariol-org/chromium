@@ -175,7 +175,8 @@ export class App {
         .initialize(() => {
           // Prompt to migrate pictures if needed.
           const message = chrome.i18n.getMessage('migrate_pictures_msg');
-          return nav.open('message-dialog', {message, cancellable: false})
+          return nav
+              .open(ViewName.MESSAGE_DIALOG, {message, cancellable: false})
               .then((acked) => {
                 if (!acked) {
                   throw new Error('no-migrate');
@@ -195,7 +196,7 @@ export class App {
             chrome.app.window.current().close();
             return;
           }
-          nav.open('warning', 'filesystem-failure');
+          nav.open(ViewName.WARNING, 'filesystem-failure');
         })
         .finally(() => {
           metrics.log(metrics.Type.LAUNCH, ackMigrate);

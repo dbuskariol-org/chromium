@@ -13,6 +13,7 @@ import * as nav from '../../nav.js';
 import {PerfEvent} from '../../perf.js';
 import * as state from '../../state.js';
 import * as util from '../../util.js';
+import {ViewName} from '../view.js';
 
 /**
  * Creates a controller for the options of Camera view.
@@ -91,7 +92,7 @@ export class Options {
 
     [['#switch-device', () => this.switchDevice_()],
      ['#toggle-grid', () => this.animatePreviewGrid_()],
-     ['#open-settings', () => nav.open('settings')],
+     ['#open-settings', () => nav.open(ViewName.SETTINGS)],
     ]
         .forEach(
             ([selector, fn]) =>
