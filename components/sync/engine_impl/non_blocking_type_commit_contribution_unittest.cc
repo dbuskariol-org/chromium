@@ -9,6 +9,7 @@
 #include <utility>
 
 #include "base/base64.h"
+#include "base/bind_helpers.h"
 #include "base/hash/sha1.h"
 #include "components/sync/base/client_tag_hash.h"
 #include "components/sync/base/model_type.h"
@@ -172,8 +173,8 @@ TEST(NonBlockingTypeCommitContributionTest,
   requests_data.push_back(std::move(request_data));
   NonBlockingTypeCommitContribution contribution(
       PASSWORDS, sync_pb::DataTypeContext(), std::move(requests_data),
-      /*worker=*/nullptr, &cryptographer, PassphraseType::kImplicitPassphrase,
-      &debug_info_emitter,
+      /*on_commit_response_callback=*/base::NullCallback(), &cryptographer,
+      PassphraseType::kImplicitPassphrase, &debug_info_emitter,
       /*only_commit_specifics=*/false);
 
   sync_pb::ClientToServerMessage msg;
@@ -233,8 +234,8 @@ TEST(NonBlockingTypeCommitContributionTest,
   requests_data.push_back(std::move(request_data));
   NonBlockingTypeCommitContribution contribution(
       PASSWORDS, sync_pb::DataTypeContext(), std::move(requests_data),
-      /*worker=*/nullptr, &cryptographer, PassphraseType::kCustomPassphrase,
-      &debug_info_emitter,
+      /*on_commit_response_callback=*/base::NullCallback(), &cryptographer,
+      PassphraseType::kCustomPassphrase, &debug_info_emitter,
       /*only_commit_specifics=*/false);
 
   sync_pb::ClientToServerMessage msg;

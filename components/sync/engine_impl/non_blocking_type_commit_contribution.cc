@@ -21,13 +21,14 @@ NonBlockingTypeCommitContribution::NonBlockingTypeCommitContribution(
     ModelType type,
     const sync_pb::DataTypeContext& context,
     CommitRequestDataList commit_requests,
-    ModelTypeWorker* worker,
+    base::OnceCallback<void(const CommitResponseDataList&)>
+        on_commit_response_callback,
     Cryptographer* cryptographer,
     PassphraseType passphrase_type,
     DataTypeDebugInfoEmitter* debug_info_emitter,
     bool only_commit_specifics)
     : type_(type),
-      worker_(worker),
+      on_commit_response_callback_(std::move(on_commit_response_callback)),
       cryptographer_(cryptographer),
       passphrase_type_(passphrase_type),
       context_(context),
@@ -151,7 +152,7 @@ SyncerError NonBlockingTypeCommitContribution::ProcessCommitResponse(
 
   // Send whatever successful responses we did get back to our parent.
   // It's the schedulers job to handle the failures.
-  worker_->OnCommitResponse(&response_list);
+  std::move(on_commit_response_callback_).Run(response_list);
 
   // Let the scheduler know about the failures.
   if (unknown_error) {
