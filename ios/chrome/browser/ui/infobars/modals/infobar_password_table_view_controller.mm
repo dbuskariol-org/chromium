@@ -38,6 +38,15 @@ typedef NS_ENUM(NSInteger, ItemType) {
 };
 
 @interface InfobarPasswordTableViewController () <UITextFieldDelegate>
+// Properties backing InfobarPasswordModalConsumer interface.
+@property(nonatomic, copy) NSString* username;
+@property(nonatomic, copy) NSString* maskedPassword;
+@property(nonatomic, copy) NSString* unmaskedPassword;
+@property(nonatomic, copy) NSString* detailsTextMessage;
+@property(nonatomic, copy) NSString* URL;
+@property(nonatomic, copy) NSString* saveButtonText;
+@property(nonatomic, copy) NSString* cancelButtonText;
+@property(nonatomic, assign) BOOL currentCredentialsSaved;
 // Item that holds the Username TextField information.
 @property(nonatomic, strong) TableViewTextEditItem* usernameItem;
 // Item that holds the Password TextField information.
