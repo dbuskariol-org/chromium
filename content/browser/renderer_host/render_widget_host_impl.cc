@@ -1825,10 +1825,6 @@ void RenderWidgetHostImpl::RendererExited() {
   if (!renderer_initialized_)
     return;
 
-  // Clear this flag so that we can ask the next renderer for composition
-  // updates.
-  monitoring_composition_info_ = false;
-
   // Clearing this flag causes us to re-create the renderer when recovering
   // from a crashed renderer.
   renderer_initialized_ = false;
@@ -2934,6 +2930,7 @@ device::mojom::WakeLock* RenderWidgetHostImpl::GetWakeLock() {
 void RenderWidgetHostImpl::SetupInputRouter() {
   in_flight_event_count_ = 0;
   suppress_events_until_keydown_ = false;
+  monitoring_composition_info_ = false;
   StopInputEventAckTimeout();
   associated_widget_input_handler_.reset();
   widget_input_handler_.reset();
