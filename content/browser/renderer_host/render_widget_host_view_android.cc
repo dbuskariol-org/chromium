@@ -1438,9 +1438,6 @@ void RenderWidgetHostViewAndroid::StartObservingRootWindow() {
 
   observing_root_window_ = true;
   view_.GetWindowAndroid()->AddObserver(this);
-  // When using browser compositor, DelegatedFrameHostAndroid provides the BFS.
-  if (!using_browser_compositor_ && sync_compositor_ && !using_viz_for_webview_)
-    sync_compositor_->StartObservingRootWindow(view_.GetWindowAndroid());
 
   ui::WindowAndroidCompositor* compositor =
       view_.GetWindowAndroid()->GetCompositor();
@@ -1466,8 +1463,6 @@ void RenderWidgetHostViewAndroid::StopObservingRootWindow() {
   observing_root_window_ = false;
   OnUpdateScopedSelectionHandles();
   view_.GetWindowAndroid()->RemoveObserver(this);
-  if (!using_browser_compositor_ && sync_compositor_ && !using_viz_for_webview_)
-    sync_compositor_->StopObservingRootWindow();
   // If the DFH has already been destroyed, it will have cleaned itself up.
   // This happens in some WebView cases.
   if (delegated_frame_host_)

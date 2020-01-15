@@ -27,7 +27,6 @@
 #include "ui/gfx/geometry/size_f.h"
 
 namespace ui {
-class WindowAndroid;
 struct DidOverscrollParams;
 }
 
@@ -67,6 +66,7 @@ class SynchronousCompositorHost : public SynchronousCompositor,
   void SynchronouslyZoomBy(float zoom_delta, const gfx::Point& anchor) override;
   void OnComputeScroll(base::TimeTicks animation_time) override;
   void ProgressFling(base::TimeTicks frame_time) override;
+  void SetBeginFrameSource(viz::BeginFrameSource* begin_frame_source) override;
 
   ui::ViewAndroid::CopyViewCallback GetCopyViewCallback();
   void DidOverscroll(const ui::DidOverscrollParams& over_scroll_params);
@@ -82,9 +82,9 @@ class SynchronousCompositorHost : public SynchronousCompositor,
 
   RenderProcessHost* GetRenderProcessHost();
 
-  void StartObservingRootWindow(ui::WindowAndroid* window);
-  void StopObservingRootWindow();
   void RequestOneBeginFrame();
+
+  void AddBeginFrameCompletionCallback(base::OnceClosure callback);
 
   // mojom::SynchronousCompositorHost overrides.
   void LayerTreeFrameSinkCreated() override;
@@ -127,7 +127,6 @@ class SynchronousCompositorHost : public SynchronousCompositor,
 
   void SendBeginFramePaused();
   void SendBeginFrame(viz::BeginFrameArgs args);
-  void SetBeginFrameSource(viz::BeginFrameSource* begin_frame_source);
   void AddBeginFrameRequest(BeginFrameRequestType request);
   void ClearBeginFrameRequest(BeginFrameRequestType request);
 
@@ -188,7 +187,6 @@ class SynchronousCompositorHost : public SynchronousCompositor,
   // The begin frame source being observed.  Null if none.
   viz::BeginFrameSource* begin_frame_source_ = nullptr;
   viz::BeginFrameArgs last_begin_frame_args_;
-  ui::WindowAndroid* observed_root_window_ = nullptr;
   viz::FrameTimingDetailsMap timing_details_;
 
   DISALLOW_COPY_AND_ASSIGN(SynchronousCompositorHost);
