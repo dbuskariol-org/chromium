@@ -46,15 +46,6 @@ public class RevenueStats {
     }
 
     /**
-     * Stores whether the RLZ provider has been notified that the first search has occurred as
-     * shared preference.
-     */
-    protected static void setRlzNotified(boolean notified) {
-        SharedPreferencesManager.getInstance().writeBoolean(
-                ChromePreferenceKeys.RLZ_NOTIFIED, notified);
-    }
-
-    /**
      * Stores that the RLZ provider has been notified that the first search has occurred.
      */
     protected static void markRlzNotified() {
