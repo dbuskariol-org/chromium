@@ -34,6 +34,7 @@
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "third_party/blink/public/common/blob/blob_utils.h"
 #include "third_party/blink/public/mojom/fetch/fetch_api_request.mojom-blink.h"
+#include "third_party/blink/public/mojom/worker/shared_worker_info.mojom-blink.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/core/fileapi/public_url_manager.h"
 #include "third_party/blink/renderer/core/messaging/message_channel.h"
@@ -68,7 +69,7 @@ SharedWorker::SharedWorker(ExecutionContext* context)
 
 SharedWorker* SharedWorker::Create(ExecutionContext* context,
                                    const String& url,
-                                   const StringOrWorkerOptions& options,
+                                   const StringOrWorkerOptions& name_or_options,
                                    ExceptionState& exception_state) {
   DCHECK(IsMainThread());
 
@@ -106,11 +107,11 @@ SharedWorker* SharedWorker::Create(ExecutionContext* context,
         script_url, blob_url_token.InitWithNewPipeAndPassReceiver());
   }
 
-  String worker_name;
-  if (options.IsString()) {
-    worker_name = options.GetAsString();
-  } else if (options.IsWorkerOptions()) {
-    WorkerOptions* worker_options = options.GetAsWorkerOptions();
+  auto options = mojom::blink::WorkerOptions::New();
+  if (name_or_options.IsString()) {
+    options->name = name_or_options.GetAsString();
+  } else if (name_or_options.IsWorkerOptions()) {
+    WorkerOptions* worker_options = name_or_options.GetAsWorkerOptions();
     if (worker_options->type() == "module" &&
         !RuntimeEnabledFeatures::ModuleSharedWorkerEnabled()) {
       exception_state.ThrowTypeError(
@@ -118,15 +119,15 @@ SharedWorker* SharedWorker::Create(ExecutionContext* context,
           "(see https://crbug.com/824646)");
       return nullptr;
     }
-    worker_name = worker_options->name();
+    options->name = worker_options->name();
   } else {
     NOTREACHED();
   }
-  DCHECK(!worker_name.IsNull());
+  DCHECK(!options->name.IsNull());
 
   SharedWorkerClientHolder::From(*document)->Connect(
       worker, std::move(remote_port), script_url, std::move(blob_url_token),
-      worker_name);
+      std::move(options));
 
   return worker;
 }

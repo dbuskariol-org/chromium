@@ -154,6 +154,7 @@ mojom("mojom_platform") {
     "worker/subresource_loader_updater.mojom",
     "worker/worker_content_settings_proxy.mojom",
     "worker/worker_main_script_load_params.mojom",
+    "worker/worker_options.mojom",
   ]
 
   if (!is_android) {

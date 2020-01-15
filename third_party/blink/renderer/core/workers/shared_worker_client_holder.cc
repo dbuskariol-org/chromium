@@ -81,9 +81,9 @@ void SharedWorkerClientHolder::Connect(
     MessagePortChannel port,
     const KURL& url,
     mojo::PendingRemote<mojom::blink::BlobURLToken> blob_url_token,
-    const String& name) {
+    mojom::blink::WorkerOptionsPtr options) {
   DCHECK(IsMainThread());
-  DCHECK(!name.IsNull());
+  DCHECK(options);
 
   // TODO(estark): this is broken, as it only uses the first header
   // when multiple might have been sent. Fix by making the
@@ -100,7 +100,7 @@ void SharedWorkerClientHolder::Connect(
   }
 
   mojom::blink::SharedWorkerInfoPtr info(mojom::blink::SharedWorkerInfo::New(
-      url, name, header, header_type,
+      url, std::move(options), header, header_type,
       worker->GetExecutionContext()->GetSecurityContext().AddressSpace()));
 
   mojo::PendingRemote<mojom::blink::SharedWorkerClient> client;

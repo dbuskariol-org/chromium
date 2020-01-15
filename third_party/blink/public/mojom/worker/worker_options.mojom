@@ -1,0 +1,13 @@
+// Copyright 2020 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+module blink.mojom;
+
+// Used for constructing shared workers
+// TODO(https://crbug.com/824646): ScriptType and
+// network.mojom.CredentialsMode should be added to WorkerOptions
+// https://html.spec.whatwg.org/multipage/workers.html#workeroptions
+struct WorkerOptions {
+  string name = "";
+};

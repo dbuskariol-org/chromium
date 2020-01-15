@@ -143,8 +143,12 @@ void SharedWorkerHost::Start(
 
   started_ = true;
 
+  // TODO(https://crbug.com/824646): options->type and options->credentials are
+  // temporarily using default values, but should be set by instance_.
+  auto options = blink::mojom::WorkerOptions::New();
+  options->name = instance_.name();
   blink::mojom::SharedWorkerInfoPtr info(blink::mojom::SharedWorkerInfo::New(
-      instance_.url(), instance_.name(), instance_.content_security_policy(),
+      instance_.url(), std::move(options), instance_.content_security_policy(),
       instance_.content_security_policy_type(),
       instance_.creation_address_space()));
 
