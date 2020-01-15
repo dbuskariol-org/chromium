@@ -59,9 +59,6 @@ crbug.com/891861 [ android no-passthrough ] WebglExtension_WEBGL_multi_draw_inst
 
 crbug.com/953120 conformance/programs/program-handling.html [ Failure ]
 
-crbug.com/1025652 [ intel passthrough d3d11 ] conformance/uniforms/uniform-samplers-test.html [ Failure ]
-crbug.com/1025652 [ intel passthrough opengl ] conformance/uniforms/uniform-samplers-test.html [ Failure ]
-
 crbug.com/949249 [ win passthrough opengl nvidia ] conformance2/extensions/ovr_multiview2.html [ Failure ]
 crbug.com/949249 [ win passthrough no-use-gl ] conformance2/extensions/ovr_multiview2.html [ Failure ]
 crbug.com/949249 [ linux passthrough opengl ] conformance2/extensions/ovr_multiview2.html [ Failure ]
@@ -110,17 +107,8 @@ crbug.com/792210 [ nvidia ] conformance/glsl/bugs/in-parameter-passed-as-inout-a
 ####################
 
 # Intel flaky issues
-crbug.com/945942 [ win passthrough intel ] conformance/uniforms/no-over-optimization-on-uniform-array-00.html [ RetryOnFailure ]
-crbug.com/620379 [ d3d11 win intel ] deqp/functional/gles3/lifetime.html [ RetryOnFailure ]
 crbug.com/912579 [ opengl win passthrough intel ] conformance2/rendering/out-of-bounds-index-buffers-after-copying.html [ RetryOnFailure ]
 crbug.com/1033662 [ opengl win passthrough intel ] deqp/functional/gles3/sync.html [ RetryOnFailure ]
-
-# It's unfortunate that these suppressions need to be so broad, but it
-# looks like the D3D11 device can be lost spontaneously on this
-# configuration while running basically any test.
-crbug.com/628395 [ d3d11 win intel ] conformance/* [ RetryOnFailure ]
-crbug.com/628395 [ d3d11 win intel ] conformance2/* [ RetryOnFailure ]
-crbug.com/628395 [ d3d11 win intel ] deqp/* [ RetryOnFailure ]
 
 # Intel failed issues
 crbug.com/795030 [ opengl win passthrough intel ] deqp/functional/gles3/shadercommonfunction.html [ Failure ]
@@ -603,7 +591,6 @@ crbug.com/982294 [ mac passthrough ] deqp/functional/gles3/transformfeedback/ran
 
 # Intel failed issues
 crbug.com/950552 [ linux intel no-passthrough ] conformance2/textures/misc/tex-3d-size-limit.html [ Failure ]
-crbug.com/1014429 [ linux intel opengl passthrough ] deqp/functional/gles3/shadercommonfunction.html [ Failure ]
 
 # Intel driver issues
 crbug.com/950552 [ linux intel mesa_lt_19.1.2 ] conformance2/textures/misc/tex-base-level-bug.html [ Failure ]
