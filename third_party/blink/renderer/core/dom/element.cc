@@ -4360,7 +4360,7 @@ bool Element::IsAutofocusable() const {
 bool Element::ActivateDisplayLockIfNeeded(DisplayLockActivationReason reason) {
   if (!RuntimeEnabledFeatures::DisplayLockingEnabled(GetExecutionContext()) ||
       GetDocument().LockedDisplayLockCount() ==
-          GetDocument().ActivationBlockingDisplayLockCount())
+          GetDocument().DisplayLockBlockingAllActivationCount())
     return false;
   const_cast<Element*>(this)->UpdateDistributionForFlatTreeTraversal();
 
@@ -4398,7 +4398,7 @@ bool Element::DisplayLockPreventsActivation(
   if (!RuntimeEnabledFeatures::DisplayLockingEnabled(GetExecutionContext()))
     return false;
 
-  if (GetDocument().ActivationBlockingDisplayLockCount() == 0)
+  if (GetDocument().LockedDisplayLockCount() == 0)
     return false;
 
   const_cast<Element*>(this)->UpdateDistributionForFlatTreeTraversal();

@@ -8042,17 +8042,17 @@ void Document::IncrementNumberOfCanvases() {
   num_canvases_++;
 }
 
-void Document::AddActivationBlockingDisplayLock() {
-  ++activation_blocking_display_lock_count_;
+void Document::IncrementDisplayLockBlockingAllActivation() {
+  ++display_lock_blocking_all_activation_count_;
 }
 
-void Document::RemoveActivationBlockingDisplayLock() {
-  DCHECK_GT(activation_blocking_display_lock_count_, 0);
-  --activation_blocking_display_lock_count_;
+void Document::DecrementDisplayLockBlockingAllActivation() {
+  DCHECK_GT(display_lock_blocking_all_activation_count_, 0);
+  --display_lock_blocking_all_activation_count_;
 }
 
-int Document::ActivationBlockingDisplayLockCount() const {
-  return activation_blocking_display_lock_count_;
+int Document::DisplayLockBlockingAllActivationCount() const {
+  return display_lock_blocking_all_activation_count_;
 }
 
 void Document::AddLockedDisplayLock() {

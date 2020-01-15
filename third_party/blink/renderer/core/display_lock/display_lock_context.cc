@@ -777,8 +777,8 @@ void DisplayLockContext::DidMoveToNewDocument(Document& old_document) {
     old_document.RemoveLockedDisplayLock();
     document_->AddLockedDisplayLock();
     if (!IsActivatable(DisplayLockActivationReason::kAny)) {
-      old_document.RemoveActivationBlockingDisplayLock();
-      document_->AddActivationBlockingDisplayLock();
+      old_document.DecrementDisplayLockBlockingAllActivation();
+      document_->IncrementDisplayLockBlockingAllActivation();
     }
   }
 }
@@ -1023,9 +1023,9 @@ void DisplayLockContext::StateChangeHelper::UpdateActivationBlockingCount(
   // Adjust activation blocking lock counts.
   if (old_activatable != new_activatable) {
     if (old_activatable)
-      document.AddActivationBlockingDisplayLock();
+      document.IncrementDisplayLockBlockingAllActivation();
     else
-      document.RemoveActivationBlockingDisplayLock();
+      document.DecrementDisplayLockBlockingAllActivation();
   }
 }
 
