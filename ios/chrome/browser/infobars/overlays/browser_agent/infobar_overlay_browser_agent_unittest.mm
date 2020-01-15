@@ -118,10 +118,10 @@ class InfobarOverlayBrowserAgentTest
       InfobarOverlayType overlay_type) {
     std::unique_ptr<FakeOverlayRequestCallbackInstaller> installer =
         std::make_unique<FakeOverlayRequestCallbackInstaller>(
-            &mock_callback_receivers_[overlay_type]);
-    installer->StartInstallingDispatchCallbacksWithSupport(
-        DispatchInfo::ResponseSupport());
-    installer->SetRequestSupport(&request_supports_.at(overlay_type));
+            &mock_callback_receivers_[overlay_type],
+            std::set<const OverlayResponseSupport*>(
+                {DispatchInfo::ResponseSupport()}));
+    installer->set_request_support(&request_supports_.at(overlay_type));
     return installer;
   }
 
@@ -183,19 +183,17 @@ TEST_P(InfobarOverlayBrowserAgentTest, OverlayPresentation) {
   queue()->AddRequest(std::move(added_request));
   // Verify that dispatched responses sent through |request|'s callback manager
   // are received by the expected receiver.
-  std::unique_ptr<OverlayResponse> response =
-      OverlayResponse::CreateWithInfo<DispatchInfo>();
   EXPECT_CALL(*mock_callback_receiver(),
-              DispatchCallback(request, DispatchInfo::ResponseSupport(),
-                               response.get()));
-  request->GetCallbackManager()->DispatchResponse(std::move(response));
+              DispatchCallback(request, DispatchInfo::ResponseSupport()));
+  request->GetCallbackManager()->DispatchResponse(
+      OverlayResponse::CreateWithInfo<DispatchInfo>());
   // Simulate dismissal of the request's UI, expecting
   // MockInfobarBannerInteractionHandler::Handler::InfobarVisibilityChanged()
   // and MockOverlayRequestCallbackReceiver::CompletionCallback() to
   // be called.
   EXPECT_CALL(*mock_handler(),
               InfobarVisibilityChanged(&infobar_, /*visible=*/false));
-  EXPECT_CALL(*mock_callback_receiver(), CompletionCallback(request, nullptr));
+  EXPECT_CALL(*mock_callback_receiver(), CompletionCallback(request));
   presentation_context_.SimulateDismissalForRequest(
       request, OverlayDismissalReason::kUserInteraction);
 }
