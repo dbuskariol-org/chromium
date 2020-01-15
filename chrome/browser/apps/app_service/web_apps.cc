@@ -348,6 +348,12 @@ void WebApps::UnpauseApps(const std::string& app_id) {
   SetIconEffect(app_id);
 }
 
+void WebApps::GetMenuModel(const std::string& app_id,
+                           apps::mojom::MenuType menu_type,
+                           GetMenuModelCallback callback) {
+  std::move(callback).Run(apps::mojom::MenuItems::New());
+}
+
 void WebApps::OpenNativeSettings(const std::string& app_id) {
   if (!profile_) {
     return;

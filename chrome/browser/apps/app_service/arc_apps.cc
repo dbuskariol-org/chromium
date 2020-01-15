@@ -487,6 +487,12 @@ void ArcApps::UnpauseApps(const std::string& app_id) {
   SetIconEffect(app_id);
 }
 
+void ArcApps::GetMenuModel(const std::string& app_id,
+                           apps::mojom::MenuType menu_type,
+                           GetMenuModelCallback callback) {
+  std::move(callback).Run(apps::mojom::MenuItems::New());
+}
+
 void ArcApps::OpenNativeSettings(const std::string& app_id) {
   ArcAppListPrefs* prefs = ArcAppListPrefs::Get(profile_);
   if (!prefs) {
