@@ -12,6 +12,7 @@
 #include "chrome/browser/prerender/prerender_handle.h"
 #include "chrome/browser/prerender/prerender_manager.h"
 #include "chrome/browser/prerender/prerender_manager_factory.h"
+#include "chrome/common/chrome_features.h"
 #include "chrome/test/base/chrome_render_view_host_test_harness.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/common/resource_type.h"
@@ -23,8 +24,6 @@ namespace {
 const gfx::Size kSize(640, 480);
 const GURL kTestUrl("https://test.com/path");
 
-const base::Feature kIsolatePrerenders{"IsolatePrerenders",
-                                       base::FEATURE_DISABLED_BY_DEFAULT};
 }  // namespace
 
 // These tests leak mojo objects (like the IsolatedPrerenderURLLoader) because
@@ -88,7 +87,7 @@ class IsolatedPrerenderURLLoaderInterceptorTest
 
 TEST_F(IsolatedPrerenderURLLoaderInterceptorTest, DISABLE_ASAN(WantIntercept)) {
   base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeature(kIsolatePrerenders);
+  scoped_feature_list.InitAndEnableFeature(features::kIsolatePrerenders);
 
   std::unique_ptr<prerender::PrerenderHandle> handle = StartPrerender(kTestUrl);
 
@@ -117,7 +116,7 @@ TEST_F(IsolatedPrerenderURLLoaderInterceptorTest, DISABLE_ASAN(WantIntercept)) {
 
 TEST_F(IsolatedPrerenderURLLoaderInterceptorTest, DISABLE_ASAN(FeatureOff)) {
   base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndDisableFeature(kIsolatePrerenders);
+  scoped_feature_list.InitAndDisableFeature(features::kIsolatePrerenders);
 
   std::unique_ptr<prerender::PrerenderHandle> handle = StartPrerender(kTestUrl);
 
@@ -146,7 +145,7 @@ TEST_F(IsolatedPrerenderURLLoaderInterceptorTest, DISABLE_ASAN(FeatureOff)) {
 
 TEST_F(IsolatedPrerenderURLLoaderInterceptorTest, DISABLE_ASAN(NotAPrerender)) {
   base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeature(kIsolatePrerenders);
+  scoped_feature_list.InitAndEnableFeature(features::kIsolatePrerenders);
 
   std::unique_ptr<IsolatedPrerenderURLLoaderInterceptor> interceptor =
       std::make_unique<IsolatedPrerenderURLLoaderInterceptor>(
@@ -170,7 +169,7 @@ TEST_F(IsolatedPrerenderURLLoaderInterceptorTest, DISABLE_ASAN(NotAPrerender)) {
 
 TEST_F(IsolatedPrerenderURLLoaderInterceptorTest, DISABLE_ASAN(NotAFrame)) {
   base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeature(kIsolatePrerenders);
+  scoped_feature_list.InitAndEnableFeature(features::kIsolatePrerenders);
 
   std::unique_ptr<IsolatedPrerenderURLLoaderInterceptor> interceptor =
       std::make_unique<IsolatedPrerenderURLLoaderInterceptor>(1337);
