@@ -1762,34 +1762,8 @@ crbug.com/987224 [ IOS ] virtual/cascade/external/wpt/css/css-paint-api/idlharne
 # ======
 
 # Group 1 Leftovers:
-crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/datetimelocal-multiple-fields-mouse-events.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-datetimelocal.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-datetimelocal-with-step.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-should-not-change-datetimelocal-time.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-with-step.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/datetimelocal-picker-choose-default-value-after-set-value.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/month-picker-choose-default-value-after-set-value.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/month-picker-key-operations.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/month-picker-mouse-operations.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/month-picker-touch-operations.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/calendar-picker/week-picker-key-operations.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/date-multiple-fields/date-clearbutton-preventdefault-mousecapture-status.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/date-multiple-fields/date-multiple-fields-clearbutton-change-and-input-events.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/date-multiple-fields/date-multiple-fields-mouse-events.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/date-multiple-fields/date-multiple-fields-spinbutton-change-and-input-events.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/date-multiple-fields/date-multiple-fields-wheel-event.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/datetimelocal-multiple-fields-clearbutton-change-and-input-events.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/datetimelocal-multiple-fields-spinbutton-change-and-input-events.html [ Failure Pass ]
-crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/datetimelocal-multiple-fields-wheel-event.html [ Failure Pass ]
 
 # Group 2 Leftovers:
-crbug.com/1035582 fast/forms/date-multiple-fields/* [ Skip ]
-crbug.com/1035582 fast/forms/datetimelocal-multiple-fields/* [ Skip ]
-crbug.com/1035582 fast/forms/month-multiple-fields/* [ Skip ]
-crbug.com/1035582 fast/forms/week-multiple-fields/* [ Skip ]
-crbug.com/1035582 fast/forms/time-multiple-fields/* [ Skip ]
-crbug.com/1035582 fast/forms/suggestion-picker/* [ Skip ]
-crbug.com/1035582 fast/forms/select/listbox-tap.html [ Failure Pass ]
 # Uncomment the one on 5715:
 crbug.com/1035582 fast/forms/suggested-value.html [ Failure Pass ]
 crbug.com/1035582 virtual/form-controls-refresh-disabled/fast/forms/select/menulist-update-text-popup.html [ Failure Pass ]
@@ -1846,6 +1820,11 @@ crbug.com/1035582 [ Win10 ] editing/caret/caret-position.html [ Skip ]
 crbug.com/1035582 [ Win10 ] editing/pasteboard/4806874.html [ Skip ]
 crbug.com/1035582 [ Win10 ] fast/forms/color/color-suggestion-picker-appearance-zoom125.html [ Skip ]
 crbug.com/1035582 [ Win10 ] fast/multicol/multicol-with-child-renderLayer-for-input.html [ Skip ]
+
+# This seems broken:
+crbug.com/1035582 fast/forms/select/listbox-tap.html [ Skip ]
+crbug.com/1035582 [ Win7 ] fast/forms/suggestion-picker/month-suggestion-picker-appearance-with-scroll-bar.html [ Skip ]
+
 
 # ======
 # ====== End of rebaselines for crbug.com/1035582 ======
