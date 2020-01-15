@@ -5027,6 +5027,8 @@ Unknown properties are collapsed to zero. -->
   <int value="14" label="Swiped back on bottom snapped window and minimized"/>
   <int value="15" label="Swiped back in overview and aborted"/>
   <int value="16" label="Swiped back in overview and went back"/>
+  <int value="17"
+      label="Swiped back to exit the underneath window's fullscreen mode"/>
 </enum>
 
 <enum name="BackGestureStartScenarioType">

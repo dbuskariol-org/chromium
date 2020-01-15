@@ -1458,6 +1458,35 @@ TEST_F(ToplevelWindowEventHandlerBackGestureTest, BackInSplitViewMode) {
   EXPECT_EQ(8, target_back_release.accelerator_count());
 }
 
+// Tests the back gesture behavior on a fullscreen'ed window.
+TEST_F(ToplevelWindowEventHandlerBackGestureTest, FullscreenedWindow) {
+  ui::TestAcceleratorTarget target_back_press, target_back_release;
+  RegisterBackPressAndRelease(&target_back_press, &target_back_release);
+
+  WindowState* window_state = WindowState::Get(top_window());
+  const WMEvent fullscreen_event(WM_EVENT_TOGGLE_FULLSCREEN);
+  window_state->OnWMEvent(&fullscreen_event);
+  EXPECT_TRUE(window_state->IsFullscreen());
+
+  ui::test::EventGenerator* generator = GetEventGenerator();
+  const gfx::Point start(0, 100);
+  generator->GestureScrollSequence(
+      start, gfx::Point(kSwipingDistanceForGoingBack + 10, 100),
+      base::TimeDelta::FromMilliseconds(100), 3);
+  // First back gesture should let the window exit fullscreen mode instead of
+  // triggering go back.
+  EXPECT_FALSE(window_state->IsFullscreen());
+  EXPECT_EQ(0, target_back_press.accelerator_count());
+  EXPECT_EQ(0, target_back_release.accelerator_count());
+
+  generator->GestureScrollSequence(
+      start, gfx::Point(kSwipingDistanceForGoingBack + 10, 100),
+      base::TimeDelta::FromMilliseconds(100), 3);
+  // Second back gesture should trigger go back.
+  EXPECT_EQ(1, target_back_press.accelerator_count());
+  EXPECT_EQ(1, target_back_release.accelerator_count());
+}
+
 namespace {
 
 void SendMouseReleaseAndReleaseCapture(ui::test::EventGenerator* generator,

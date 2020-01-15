@@ -1016,8 +1016,18 @@ bool ToplevelWindowEventHandler::MaybeHandleBackGesture(ui::GestureEvent* event,
            event->details().velocity_x() >= kFlingVelocityForGoingBack)) {
         ActivateUnderneathWindowInSplitViewMode(
             back_start_location_, dragged_from_splitview_divider_);
+        auto* top_window_state =
+            WindowState::Get(TabletModeWindowManager::GetTopWindow());
+        if (top_window_state && top_window_state->IsFullscreen() &&
+            !Shell::Get()->overview_controller()->InOverviewSession()) {
+          const WMEvent event(WM_EVENT_TOGGLE_FULLSCREEN);
+          top_window_state->OnWMEvent(&event);
+          RecordEndScenarioType(BackGestureEndScenarioType::kExitFullscreen);
+          return true;
+        }
+
         if (TabletModeWindowManager::ShouldMinimizeTopWindowOnBack()) {
-          WindowState::Get(TabletModeWindowManager::GetTopWindow())->Minimize();
+          top_window_state->Minimize();
           end_type = BackGestureEndType::kMinimize;
         } else {
           aura::Window* root_window =
