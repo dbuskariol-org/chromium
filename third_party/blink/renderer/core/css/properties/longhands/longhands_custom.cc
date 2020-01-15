@@ -4404,6 +4404,15 @@ const CSSValue* Order::CSSValueFromComputedStyleInternal(
                                         CSSPrimitiveValue::UnitType::kNumber);
 }
 
+const CSSValue* OriginTrialTestProperty::CSSValueFromComputedStyleInternal(
+    const ComputedStyle& style,
+    const SVGComputedStyle&,
+    const LayoutObject*,
+    bool allow_visited_style) const {
+  return CSSIdentifierValue::Create(style.OriginTrialTestProperty());
+  ;
+}
+
 const CSSValue* Orphans::ParseSingleValue(CSSParserTokenRange& range,
                                           const CSSParserContext& context,
                                           const CSSParserLocalContext&) const {
