@@ -25,8 +25,8 @@ const char* GetEnumStringValue(SharingFeatureName feature) {
   }
 }
 
-// These value are mapped to histogram suffixes. Please keep in sync with
-// "SharingDevicePlatform" in src/tools/metrics/histograms/enums.xml.
+// Maps SharingDevicePlatform enum values to strings used as histogram
+// suffixes. Keep in sync with "SharingDevicePlatform" in histograms.xml.
 std::string DevicePlatformToString(SharingDevicePlatform device_platform) {
   switch (device_platform) {
     case SharingDevicePlatform::kAndroid:
@@ -43,6 +43,25 @@ std::string DevicePlatformToString(SharingDevicePlatform device_platform) {
       return "Windows";
     case SharingDevicePlatform::kUnknown:
       return "Unknown";
+  }
+}
+
+// Maps SharingSendMessageResult enum values to strings used as histogram
+// suffixes. Keep in sync with "SharingSendMessageResult" in histograms.xml.
+std::string SharingSendMessageResultToSuffix(SharingSendMessageResult result) {
+  switch (result) {
+    case SharingSendMessageResult::kSuccessful:
+      return "Successful";
+    case SharingSendMessageResult::kDeviceNotFound:
+      return "DeviceNotFound";
+    case SharingSendMessageResult::kNetworkError:
+      return "NetworkError";
+    case SharingSendMessageResult::kPayloadTooLarge:
+      return "PayloadTooLarge";
+    case SharingSendMessageResult::kAckTimeout:
+      return "AckTimeout";
+    case SharingSendMessageResult::kInternalError:
+      return "InternalError";
   }
 }
 
@@ -238,6 +257,14 @@ void LogSharingDeviceLastUpdatedAge(
   base::UmaHistogramCounts1000(
       base::StrCat({kBase, ".", MessageTypeToMessageSuffix(message_type)}),
       hours);
+}
+
+void LogSharingDeviceLastUpdatedAgeWithResult(SharingSendMessageResult result,
+                                              base::TimeDelta age) {
+  base::UmaHistogramCounts1000(
+      base::StrCat({"Sharing.DeviceLastUpdatedAgeWithResult.",
+                    SharingSendMessageResultToSuffix(result)}),
+      age.InHours());
 }
 
 void LogSharingVersionComparison(

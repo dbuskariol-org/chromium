@@ -112,6 +112,11 @@ void LogSharingDeviceLastUpdatedAge(
     chrome_browser_sharing::MessageType message_type,
     base::TimeDelta age);
 
+// Logs to UMA the number of hours since the target device timestamp was last
+// updated. Logged when a message is sent to the device and the result is known.
+void LogSharingDeviceLastUpdatedAgeWithResult(SharingSendMessageResult result,
+                                              base::TimeDelta age);
+
 // Logs to UMA the comparison of the major version of Chrome on this
 // (the sender) device and the receiver device. Logged when a message is sent.
 // The |receiver_version| should be a dotted version number with optional

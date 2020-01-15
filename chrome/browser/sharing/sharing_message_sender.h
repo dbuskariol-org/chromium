@@ -84,6 +84,7 @@ class SharingMessageSender {
                      const std::string& message_guid,
                      chrome_browser_sharing::MessageType message_type,
                      SharingDevicePlatform receiver_device_platform,
+                     base::TimeDelta last_updated_age,
                      SharingSendMessageResult result,
                      base::Optional<std::string> message_id);
 
@@ -91,6 +92,7 @@ class SharingMessageSender {
       const std::string& message_guid,
       chrome_browser_sharing::MessageType message_type,
       SharingDevicePlatform receiver_device_platform,
+      base::TimeDelta last_updated_age,
       SharingSendMessageResult result,
       std::unique_ptr<chrome_browser_sharing::ResponseMessage> response);
 
@@ -105,6 +107,8 @@ class SharingMessageSender {
   std::map<std::string, std::string> message_guids_;
   // Map of FCM message_id to platform of receiver device for metrics.
   std::map<std::string, SharingDevicePlatform> receiver_device_platform_;
+  // Map of FCM message_id to age of last updated timestamp of receiver device.
+  std::map<std::string, base::TimeDelta> receiver_last_updated_age_;
 
   // Registered delegates to send messages.
   std::map<DelegateType, std::unique_ptr<SendMessageDelegate>> send_delegates_;

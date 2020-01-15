@@ -38,11 +38,13 @@ void SharingMessageSender::SendMessageToDevice(
       SharingPayloadCaseToMessageType(message.payload_case());
   SharingDevicePlatform receiver_device_platform =
       sync_prefs_->GetDevicePlatform(device.guid());
+  base::TimeDelta last_updated_age =
+      base::Time::Now() - device.last_updated_timestamp();
 
   auto delegate_iter = send_delegates_.find(delegate_type);
   if (delegate_iter == send_delegates_.end()) {
     InvokeSendMessageCallback(message_guid, message_type,
-                              receiver_device_platform,
+                              receiver_device_platform, last_updated_age,
                               SharingSendMessageResult::kInternalError,
                               /*response=*/nullptr);
     return;
@@ -57,7 +59,7 @@ void SharingMessageSender::SendMessageToDevice(
       local_device_info_provider_->GetLocalDeviceInfo();
   if (!local_device_info) {
     InvokeSendMessageCallback(message_guid, message_type,
-                              receiver_device_platform,
+                              receiver_device_platform, last_updated_age,
                               SharingSendMessageResult::kInternalError,
                               /*response=*/nullptr);
     return;
@@ -67,13 +69,12 @@ void SharingMessageSender::SendMessageToDevice(
       FROM_HERE, {base::TaskPriority::USER_VISIBLE, content::BrowserThread::UI},
       base::BindOnce(&SharingMessageSender::InvokeSendMessageCallback,
                      weak_ptr_factory_.GetWeakPtr(), message_guid, message_type,
-                     receiver_device_platform,
+                     receiver_device_platform, last_updated_age,
                      SharingSendMessageResult::kAckTimeout,
                      /*response=*/nullptr),
       response_timeout);
 
-  LogSharingDeviceLastUpdatedAge(
-      message_type, base::Time::Now() - device.last_updated_timestamp());
+  LogSharingDeviceLastUpdatedAge(message_type, last_updated_age);
   LogSharingVersionComparison(message_type, device.chrome_version());
 
   message.set_sender_guid(local_device_info->guid());
@@ -84,7 +85,8 @@ void SharingMessageSender::SendMessageToDevice(
       device, response_timeout - kAckTimeToLive, std::move(message),
       base::BindOnce(&SharingMessageSender::OnMessageSent,
                      weak_ptr_factory_.GetWeakPtr(), base::TimeTicks::Now(),
-                     message_guid, message_type, receiver_device_platform));
+                     message_guid, message_type, receiver_device_platform,
+                     last_updated_age));
 }
 
 void SharingMessageSender::OnMessageSent(
@@ -92,11 +94,13 @@ void SharingMessageSender::OnMessageSent(
     const std::string& message_guid,
     chrome_browser_sharing::MessageType message_type,
     SharingDevicePlatform receiver_device_platform,
+    base::TimeDelta last_updated_age,
     SharingSendMessageResult result,
     base::Optional<std::string> message_id) {
   if (result != SharingSendMessageResult::kSuccessful) {
     InvokeSendMessageCallback(message_guid, message_type,
-                              receiver_device_platform, result,
+                              receiver_device_platform, last_updated_age,
+                              result,
                               /*response=*/nullptr);
     return;
   }
@@ -104,6 +108,7 @@ void SharingMessageSender::OnMessageSent(
   send_message_times_.emplace(*message_id, start_time);
   message_guids_.emplace(*message_id, message_guid);
   receiver_device_platform_.emplace(*message_id, receiver_device_platform);
+  receiver_last_updated_age_.emplace(*message_id, last_updated_age);
 }
 
 void SharingMessageSender::OnAckReceived(
@@ -130,8 +135,14 @@ void SharingMessageSender::OnAckReceived(
                            base::TimeTicks::Now() - times_iter->second);
   send_message_times_.erase(times_iter);
 
+  auto last_updated_age_iter = receiver_last_updated_age_.find(message_id);
+  DCHECK(last_updated_age_iter != receiver_last_updated_age_.end());
+
+  base::TimeDelta last_updated_age = last_updated_age_iter->second;
+  receiver_last_updated_age_.erase(last_updated_age_iter);
+
   InvokeSendMessageCallback(
-      message_guid, message_type, receiver_device_platform,
+      message_guid, message_type, receiver_device_platform, last_updated_age,
       SharingSendMessageResult::kSuccessful, std::move(response));
 }
 
@@ -146,6 +157,7 @@ void SharingMessageSender::InvokeSendMessageCallback(
     const std::string& message_guid,
     chrome_browser_sharing::MessageType message_type,
     SharingDevicePlatform receiver_device_platform,
+    base::TimeDelta last_updated_age,
     SharingSendMessageResult result,
     std::unique_ptr<chrome_browser_sharing::ResponseMessage> response) {
   auto iter = send_message_callbacks_.find(message_guid);
@@ -157,4 +169,5 @@ void SharingMessageSender::InvokeSendMessageCallback(
   std::move(callback).Run(result, std::move(response));
 
   LogSendSharingMessageResult(message_type, receiver_device_platform, result);
+  LogSharingDeviceLastUpdatedAgeWithResult(result, last_updated_age);
 }
