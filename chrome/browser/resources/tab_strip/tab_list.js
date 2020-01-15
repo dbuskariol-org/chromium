@@ -15,6 +15,7 @@ import {isRTL} from 'chrome://resources/js/util.m.js';
 
 import {CustomElement} from './custom_element.js';
 import {TabElement} from './tab.js';
+import {TabGroupElement} from './tab_group.js';
 import {TabStripEmbedderProxy} from './tab_strip_embedder_proxy.js';
 import {tabStripOptions} from './tab_strip_options.js';
 import {TabData, TabsApiProxy} from './tabs_api_proxy.js';
@@ -51,6 +52,14 @@ const LayoutVariable = {
  */
 function isTabElement(element) {
   return element.tagName === 'TABSTRIP-TAB';
+}
+
+/**
+ * @param {!Element} element
+ * @return {boolean}
+ */
+function isTabGroupElement(element) {
+  return element.tagName === 'TABSTRIP-TAB-GROUP';
 }
 
 class TabListElement extends CustomElement {
@@ -265,6 +274,12 @@ class TabListElement extends CustomElement {
       addWebUIListener('tab-updated', tab => this.onTabUpdated_(tab));
       addWebUIListener(
           'tab-active-changed', tabId => this.onTabActivated_(tabId));
+      addWebUIListener(
+          'tab-group-state-changed',
+          (tabId, index, groupId) =>
+              this.onTabGroupStateChanged_(tabId, index, groupId));
+      addWebUIListener(
+          'tab-group-closed', groupId => this.onTabGroupClosed_(groupId));
     });
   }
 
@@ -299,6 +314,16 @@ class TabListElement extends CustomElement {
         this.shadowRoot.querySelector(`tabstrip-tab[data-tab-id="${tabId}"]`));
   }
 
+  /**
+   * @param {string} groupId
+   * @return {?TabGroupElement}
+   * @private
+   */
+  findTabGroupElement_(groupId) {
+    return /** @type {?TabGroupElement} */ (this.shadowRoot.querySelector(
+        `tabstrip-tab-group[data-group-id="${groupId}"]`));
+  }
+
   /** @private */
   fetchAndUpdateColors_() {
     this.tabStripEmbedderProxy_.getColors().then(
@@ -324,24 +349,54 @@ class TabListElement extends CustomElement {
 
   /**
    * @param {!TabElement} tabElement
-   * @param {number} index
+   * @param {number} modelIndex
    * @private
    */
-  insertTabOrMoveTo_(tabElement, index) {
+  insertTabOrMoveTo_(tabElement, modelIndex) {
     const isInserting = !tabElement.isConnected;
 
     // Remove the tabElement if it already exists in the DOM
     tabElement.remove();
 
-    if (tabElement.tab && tabElement.tab.pinned) {
+    if (tabElement.tab.pinned) {
       this.pinnedTabsElement_.insertBefore(
-          tabElement, this.pinnedTabsElement_.childNodes[index]);
+          tabElement, this.pinnedTabsElement_.childNodes[modelIndex]);
     } else {
-      // Pinned tabs are in their own , so the index of non-pinned
-      // tabs need to be offset by the number of pinned tabs
-      const offsetIndex = index - this.pinnedTabsElement_.childElementCount;
-      this.unpinnedTabsElement_.insertBefore(
-          tabElement, this.unpinnedTabsElement_.childNodes[offsetIndex]);
+      let elementToInsert = tabElement;
+      let elementAtIndex =
+          this.shadowRoot.querySelectorAll('tabstrip-tab').item(modelIndex);
+      let parentElement = this.unpinnedTabsElement_;
+
+      if (tabElement.tab.groupId) {
+        let tabGroupElement = this.findTabGroupElement_(tabElement.tab.groupId);
+        if (tabGroupElement) {
+          // If a TabGroupElement already exists, add the TabElement to it.
+          parentElement = tabGroupElement;
+        } else {
+          // If a TabGroupElement does not exist, create one and add the
+          // TabGroupElement into the DOM.
+          tabGroupElement = document.createElement('tabstrip-tab-group');
+          tabGroupElement.setAttribute('data-group-id', tabElement.tab.groupId);
+          tabGroupElement.appendChild(tabElement);
+          elementToInsert = tabGroupElement;
+        }
+      } else if (
+          elementAtIndex && elementAtIndex.parentElement &&
+          isTabGroupElement(elementAtIndex.parentElement) &&
+          elementAtIndex.previousElementSibling === null) {
+        // If the element at the model index is in a group and is the first
+        // element in its group, insert the new element before its
+        // TabGroupElement. If a TabElement is being sandwiched between two
+        // TabElements in a group, it can be assumed that the tab will
+        // eventually be inserted into the group as well.
+        elementAtIndex = elementAtIndex.parentElement;
+      }
+
+      if (elementAtIndex && elementAtIndex.parentElement === parentElement) {
+        parentElement.insertBefore(elementToInsert, elementAtIndex);
+      } else {
+        parentElement.appendChild(elementToInsert);
+      }
     }
 
     if (isInserting) {
@@ -365,9 +420,16 @@ class TabListElement extends CustomElement {
       this.scrollToActiveTab_();
     }
 
-    this.unpinnedTabsElement_.childNodes.forEach(
-        tabElement => this.updateThumbnailTrackStatus_(
-            /** @type {!TabElement} */ (tabElement)));
+    this.unpinnedTabsElement_.childNodes.forEach(element => {
+      if (isTabGroupElement(/** @type {!Element} */ (element))) {
+        element.childNodes.forEach(
+            tabElement => this.updateThumbnailTrackStatus_(
+                /** @type {!TabElement} */ (tabElement)));
+      } else {
+        this.updateThumbnailTrackStatus_(
+            /** @type {!TabElement} */ (element));
+      }
+    });
   }
 
   /**
@@ -400,12 +462,9 @@ class TabListElement extends CustomElement {
 
     event.dataTransfer.dropEffect = 'move';
 
-    let dragOverIndex =
-        Array.from(dragOverItem.parentNode.children).indexOf(dragOverItem);
-    if (!this.draggedItem_.tab.pinned) {
-      dragOverIndex += this.pinnedTabsElement_.childElementCount;
-    }
-
+    const dragOverIndex =
+        Array.from(this.shadowRoot.querySelectorAll('tabstrip-tab'))
+            .indexOf(dragOverItem);
     this.tabsApi_.moveTab(this.draggedItem_.tab.id, dragOverIndex);
   }
 
@@ -496,6 +555,31 @@ class TabListElement extends CustomElement {
     if (tab.active) {
       this.scrollToTab_(tabElement);
     }
+  }
+
+  /**
+   * @param {string} groupId
+   * @private
+   */
+  onTabGroupClosed_(groupId) {
+    const tabGroupElement = this.findTabGroupElement_(groupId);
+    if (!tabGroupElement) {
+      return;
+    }
+    tabGroupElement.remove();
+  }
+
+  /**
+   * @param {number} tabId
+   * @param {number} index
+   * @param {string} groupId
+   * @private
+   */
+  onTabGroupStateChanged_(tabId, index, groupId) {
+    const tabElement = this.findTabElement_(tabId);
+    tabElement.tab = /** @type {!TabData} */ (
+        Object.assign({}, tabElement.tab, {groupId: groupId}));
+    this.insertTabOrMoveTo_(tabElement, index);
   }
 
   /**
