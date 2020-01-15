@@ -11,6 +11,7 @@
 #include "base/task/thread_pool/pooled_sequenced_task_runner.h"
 #include "base/test/bind_test_util.h"
 #include "base/test/test_timeouts.h"
+#include "chrome/browser/media/history/media_history_session_table.h"
 #include "chrome/test/base/testing_profile.h"
 #include "content/public/browser/media_player_watch_time.h"
 #include "content/public/test/browser_task_environment.h"
@@ -154,6 +155,7 @@ TEST_F(MediaHistoryStoreUnitTest, GetStats) {
               stats->table_row_counts[MediaHistoryPlaybackTable::kTableName]);
     EXPECT_EQ(0,
               stats->table_row_counts[MediaHistoryEngagementTable::kTableName]);
+    EXPECT_EQ(0, stats->table_row_counts[MediaHistorySessionTable::kTableName]);
   }
 
   {
@@ -173,6 +175,7 @@ TEST_F(MediaHistoryStoreUnitTest, GetStats) {
               stats->table_row_counts[MediaHistoryPlaybackTable::kTableName]);
     EXPECT_EQ(0,
               stats->table_row_counts[MediaHistoryEngagementTable::kTableName]);
+    EXPECT_EQ(0, stats->table_row_counts[MediaHistorySessionTable::kTableName]);
   }
 }
 

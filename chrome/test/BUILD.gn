@@ -943,6 +943,7 @@ if (!is_android) {
       "../browser/media/defer_background_media_browsertest.cc",
       "../browser/media/encrypted_media_browsertest.cc",
       "../browser/media/encrypted_media_supported_types_browsertest.cc",
+      "../browser/media/history/media_history_browsertest.cc",
       "../browser/media/media_browsertest.cc",
       "../browser/media/media_browsertest.h",
       "../browser/media/media_engagement_autoplay_browsertest.cc",
