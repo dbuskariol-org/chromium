@@ -23,7 +23,7 @@ public abstract class ChromeFeatureList {
     private static Map<String, Boolean> sTestFeatures;
 
     // Prevent instantiation.
-    private ChromeFeatureList() {}
+    protected ChromeFeatureList() {}
 
     /**
      * Sets the feature flags to use in JUnit tests, since native calls are not available there.
