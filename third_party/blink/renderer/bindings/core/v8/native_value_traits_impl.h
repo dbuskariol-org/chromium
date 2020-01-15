@@ -9,10 +9,12 @@
 #include "third_party/blink/renderer/bindings/core/v8/native_value_traits.h"
 #include "third_party/blink/renderer/bindings/core/v8/script_iterator.h"
 #include "third_party/blink/renderer/bindings/core/v8/script_promise.h"
+#include "third_party/blink/renderer/bindings/core/v8/script_value.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_binding_for_core.h"
 #include "third_party/blink/renderer/core/core_export.h"
 #include "third_party/blink/renderer/core/typed_arrays/dom_data_view.h"
 #include "third_party/blink/renderer/core/typed_arrays/dom_typed_array.h"
+#include "third_party/blink/renderer/platform/bindings/exception_messages.h"
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 
 namespace blink {
@@ -569,18 +571,6 @@ DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMFloat64Array);
 DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE(DOMDataView);
 #undef DEFINE_NATIVE_VALUE_TRAITS_BUFFER_SOURCE_TYPE
 
-// Promises
-template <>
-struct CORE_EXPORT NativeValueTraits<IDLPromise>
-    : public NativeValueTraitsBase<IDLPromise> {
-  static ScriptPromise NativeValue(v8::Isolate* isolate,
-                                   v8::Local<v8::Value> value,
-                                   ExceptionState& exception_state) {
-    return ScriptPromise::Cast(ScriptState::From(isolate->GetCurrentContext()),
-                               value);
-  }
-};
-
 // Nullable Date
 template <>
 struct CORE_EXPORT NativeValueTraits<IDLDateOrNull>
@@ -590,6 +580,46 @@ struct CORE_EXPORT NativeValueTraits<IDLDateOrNull>
       v8::Local<v8::Value> value,
       ExceptionState& exception_state) {
     return ToCoreNullableDate(isolate, value, exception_state);
+  }
+};
+
+// object
+template <>
+struct CORE_EXPORT NativeValueTraits<IDLObject>
+    : public NativeValueTraitsBase<IDLObject> {
+  static ScriptValue NativeValue(v8::Isolate* isolate,
+                                 v8::Local<v8::Value> value,
+                                 ExceptionState& exception_state) {
+    if (value->IsObject())
+      return ScriptValue(isolate, value);
+    exception_state.ThrowTypeError(
+        ExceptionMessages::FailedToConvertJSValue("object"));
+    return ScriptValue();
+  }
+
+  static ScriptValue ArgumentValue(v8::Isolate* isolate,
+                                   int argument_index,
+                                   v8::Local<v8::Value> value,
+                                   ExceptionState& exception_state) {
+    if (value->IsObject())
+      return ScriptValue(isolate, value);
+    exception_state.ThrowTypeError(
+        ExceptionMessages::ArgumentNotOfType(argument_index, "object"));
+    return ScriptValue();
+  }
+
+  static ScriptValue NullValue() { return ScriptValue(); }
+};
+
+// Promises
+template <>
+struct CORE_EXPORT NativeValueTraits<IDLPromise>
+    : public NativeValueTraitsBase<IDLPromise> {
+  static ScriptPromise NativeValue(v8::Isolate* isolate,
+                                   v8::Local<v8::Value> value,
+                                   ExceptionState& exception_state) {
+    return ScriptPromise::Cast(ScriptState::From(isolate->GetCurrentContext()),
+                               value);
   }
 };
 

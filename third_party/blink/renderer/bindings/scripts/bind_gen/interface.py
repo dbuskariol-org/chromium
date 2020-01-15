@@ -609,7 +609,7 @@ def make_check_receiver(cg_context):
         return SequenceNode([
             T("// [LenientThis]"),
             CxxUnlikelyIfNode(
-                cond="!${class_name}::HasInstance(${v8_receiver}, ${isolate})",
+                cond="!${class_name}::HasInstance(${isolate}, ${v8_receiver})",
                 body=T("return;")),
         ])
 
@@ -618,7 +618,7 @@ def make_check_receiver(cg_context):
             T("// Promise returning function: "
               "Convert a TypeError to a reject promise."),
             CxxUnlikelyIfNode(
-                cond="!${class_name}::HasInstance(${v8_receiver}, ${isolate})",
+                cond="!${class_name}::HasInstance(${isolate}, ${v8_receiver})",
                 body=[
                     T("${exception_state}.ThrowTypeError("
                       "\"Illegal invocation\");"),

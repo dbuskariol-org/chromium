@@ -183,8 +183,8 @@ def native_value_tag(idl_type):
     real_type = idl_type.unwrap(typedef=True)
     non_null_real_type = real_type.unwrap(nullable=True)
 
-    if (real_type.is_boolean or real_type.is_numeric
-            or non_null_real_type.is_any or non_null_real_type.is_object):
+    if (real_type.is_boolean or real_type.is_numeric or real_type.is_any
+            or real_type.is_object):
         return "IDL{}".format(real_type.type_name)
 
     if non_null_real_type.is_string:

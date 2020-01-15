@@ -20,6 +20,7 @@ namespace blink {
 
 class EventListener;
 class ScriptPromise;
+class ScriptValue;
 
 // Boolean
 struct IDLBoolean final : public IDLBaseHelper<bool> {};
@@ -130,6 +131,9 @@ struct IDLUnrestrictedFloat final : public IDLBaseHelper<float> {};
 // Nullable Date
 struct IDLDateOrNull final : public IDLBaseHelper<base::Optional<base::Time>> {
 };
+
+// object
+struct IDLObject final : public IDLBaseHelper<ScriptValue> {};
 
 // Promise
 struct IDLPromise final : public IDLBaseHelper<ScriptPromise> {};

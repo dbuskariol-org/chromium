@@ -155,7 +155,6 @@ def collect_include_headers(idl_definition):
             continue
         if isinstance(type_def_obj, web_idl.Dictionary):
             header_paths.add(PathManager(type_def_obj).dict_path(ext="h"))
-            continue
         header_paths.add(PathManager(type_def_obj).api_path(ext="h"))
 
     return header_paths
