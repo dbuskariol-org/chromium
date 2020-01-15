@@ -68,6 +68,14 @@ Polymer({
     },
 
     /** @private */
+    enableWebXrContentSetting_: {
+      type: Boolean,
+      value: function() {
+        return loadTimeData.getBoolean('enableWebXrContentSetting');
+      }
+    },
+
+    /** @private */
     enableNativeFileSystemWriteContentSetting_: {
       type: Boolean,
       value() {
@@ -141,6 +149,11 @@ Polymer({
 
     if (this.enableInsecureContentContentSetting_) {
       pairs.push([R.SITE_SETTINGS_MIXEDSCRIPT, 'mixed-script']);
+    }
+
+    if (this.enableWebXrContentSetting_) {
+      pairs.push([R.SITE_SETTINGS_AR, 'ar']);
+      pairs.push([R.SITE_SETTINGS_VR, 'vr']);
     }
 
     pairs.forEach(([route, id]) => {

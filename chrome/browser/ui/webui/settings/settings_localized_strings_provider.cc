@@ -3166,6 +3166,16 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
      IDS_SETTINGS_SITE_SETTINGS_BLUETOOTH_SCANNING_ASK_RECOMMENDED},
     {"siteSettingsBluetoothScanningBlock",
      IDS_SETTINGS_SITE_SETTINGS_BLUETOOTH_SCANNING_BLOCK},
+    {"siteSettingsAr", IDS_SETTINGS_SITE_SETTINGS_AR},
+    {"siteSettingsArAsk", IDS_SETTINGS_SITE_SETTINGS_AR_ASK},
+    {"siteSettingsArAskRecommended",
+     IDS_SETTINGS_SITE_SETTINGS_AR_ASK_RECOMMENDED},
+    {"siteSettingsArBlock", IDS_SETTINGS_SITE_SETTINGS_AR_BLOCK},
+    {"siteSettingsVr", IDS_SETTINGS_SITE_SETTINGS_VR},
+    {"siteSettingsVrAsk", IDS_SETTINGS_SITE_SETTINGS_VR_ASK},
+    {"siteSettingsVrAskRecommended",
+     IDS_SETTINGS_SITE_SETTINGS_VR_ASK_RECOMMENDED},
+    {"siteSettingsVrBlock", IDS_SETTINGS_SITE_SETTINGS_VR_BLOCK},
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 
@@ -3234,6 +3244,10 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
   html_source->AddBoolean(
       "enableQuietNotificationPromptsSetting",
       base::FeatureList::IsEnabled(features::kQuietNotificationPrompts));
+
+  html_source->AddBoolean(
+      "enableWebXrContentSetting",
+      base::FeatureList::IsEnabled(features::kWebXrPermissionsApi));
 }
 
 #if defined(OS_CHROMEOS)

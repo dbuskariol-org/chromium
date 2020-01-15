@@ -308,6 +308,29 @@
           role-description="$i18n{subpageArrowRoleDescription}">
       </cr-link-row>
     </template>
+
+    <template is="dom-if" if="[[enableWebXrContentSetting_]]">
+      <cr-link-row class="hr two-line"
+          data-route="SITE_SETTINGS_AR"
+          id="ar" label="$i18n{siteSettingsAr}"
+          on-click="onTapNavigate_" start-icon="settings:vr-headset"
+          sub-label="[[defaultSettingLabel_(
+              default_.ar,
+              '$i18nPolymer{siteSettingsArAsk}',
+              '$i18nPolymer{siteSettingsArBlock}')]]"
+          role-description="$i18n{subpageArrowRoleDescription}">
+      </cr-link-row>
+      <cr-link-row class="hr two-line"
+          data-route="SITE_SETTINGS_VR"
+          id="vr" label="$i18n{siteSettingsVr}"
+          on-click="onTapNavigate_" start-icon="settings:vr-headset"
+          sub-label="[[defaultSettingLabel_(
+              default_.vr,
+              '$i18nPolymer{siteSettingsVrAsk}',
+              '$i18nPolymer{siteSettingsVrBlock}')]]"
+          role-description="$i18n{subpageArrowRoleDescription}">
+      </cr-link-row>
+    </template>
   </template>
   <script src="site_settings_page.js"></script>
 </dom-module>

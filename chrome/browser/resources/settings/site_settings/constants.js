@@ -40,6 +40,8 @@ settings.ContentSettingsTypes = {
   BLUETOOTH_SCANNING: 'bluetooth-scanning',
   NATIVE_FILE_SYSTEM_WRITE: 'native-file-system-write',
   HID_DEVICES: 'hid-devices',
+  AR: 'ar',
+  VR: 'vr',
 };
 
 /**

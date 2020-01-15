@@ -210,6 +210,10 @@ const SiteSettingsBehaviorImpl = {
     addOrRemoveSettingWithFlag(
         settings.ContentSettingsTypes.HID_DEVICES,
         'enableExperimentalWebPlatformFeatures');
+    addOrRemoveSettingWithFlag(
+        settings.ContentSettingsTypes.AR, 'enableWebXrContentSetting');
+    addOrRemoveSettingWithFlag(
+        settings.ContentSettingsTypes.VR, 'enableWebXrContentSetting');
     return this.contentTypes_.slice(0);
   },
 

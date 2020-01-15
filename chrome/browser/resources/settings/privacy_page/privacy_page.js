@@ -199,6 +199,12 @@ cr.define('settings', function() {
             loadTimeData.getBoolean('enableQuietNotificationPromptsSetting'),
       },
 
+      /** @private */
+      enableWebXrContentSetting_: {
+        type: Boolean,
+        value: () => loadTimeData.getBoolean('enableWebXrContentSetting'),
+      },
+
       /** @private {!Map<string, string>} */
       focusConfig_: {
         type: Object,

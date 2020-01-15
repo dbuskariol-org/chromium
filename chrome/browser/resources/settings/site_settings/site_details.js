@@ -86,6 +86,12 @@ Polymer({
     },
   },
 
+  /** @private */
+  enableWebXrContentSetting_: {
+    type: Boolean,
+    value: () => loadTimeData.getBoolean('enableWebXrContentSetting'),
+  },
+
   listeners: {
     'usage-deleted': 'onUsageDeleted_',
   },
