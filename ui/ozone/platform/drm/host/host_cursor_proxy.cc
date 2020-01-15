@@ -6,10 +6,20 @@
 
 #include <utility>
 
+#include "base/threading/thread_task_runner_handle.h"
 #include "services/service_manager/public/cpp/connector.h"
 #include "ui/ozone/public/gpu_platform_support_host.h"
 
 namespace ui {
+
+namespace {
+
+void DestroyRemoteOnEvdevThread(
+    mojo::AssociatedRemote<ui::ozone::mojom::DeviceCursor> remote) {
+  // Don't do anything. |remote| will automatically get destroyed.
+}
+
+}  // namespace
 
 // We assume that this is invoked only on the Mus/UI thread.
 HostCursorProxy::HostCursorProxy(
@@ -19,7 +29,13 @@ HostCursorProxy::HostCursorProxy(
       evdev_cursor_pending_remote_(std::move(evdev_cursor)),
       ui_thread_ref_(base::PlatformThread::CurrentRef()) {}
 
-HostCursorProxy::~HostCursorProxy() {}
+HostCursorProxy::~HostCursorProxy() {
+  if (evdev_task_runner_) {
+    evdev_task_runner_->PostTask(
+        FROM_HERE,
+        base::BindOnce(DestroyRemoteOnEvdevThread, std::move(evdev_cursor_)));
+  }
+}
 
 void HostCursorProxy::CursorSet(gfx::AcceleratedWidget widget,
                                 const std::vector<SkBitmap>& bitmaps,
@@ -47,6 +63,7 @@ void HostCursorProxy::InitializeOnEvdevIfNecessary() {
   if (evdev_cursor_.is_bound())
     return;
   evdev_cursor_.Bind(std::move(evdev_cursor_pending_remote_));
+  evdev_task_runner_ = base::ThreadTaskRunnerHandle::Get();
 }
 
 }  // namespace ui

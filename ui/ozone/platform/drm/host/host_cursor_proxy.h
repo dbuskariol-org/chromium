@@ -5,6 +5,7 @@
 #ifndef UI_OZONE_PLATFORM_DRM_HOST_HOST_CURSOR_PROXY_H_
 #define UI_OZONE_PLATFORM_DRM_HOST_HOST_CURSOR_PROXY_H_
 
+#include "base/single_thread_task_runner.h"
 #include "mojo/public/cpp/bindings/associated_remote.h"
 #include "mojo/public/cpp/bindings/pending_associated_remote.h"
 #include "ui/gfx/native_widget_types.h"
@@ -44,6 +45,7 @@ class HostCursorProxy : public DrmCursorProxy {
       evdev_cursor_pending_remote_;
 
   base::PlatformThreadRef ui_thread_ref_;
+  scoped_refptr<base::SingleThreadTaskRunner> evdev_task_runner_;
 
   DISALLOW_COPY_AND_ASSIGN(HostCursorProxy);
 };
