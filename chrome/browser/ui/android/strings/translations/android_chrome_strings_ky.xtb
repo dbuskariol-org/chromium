@@ -39,7 +39,6 @@
 <translation id="124678866338384709">Учурдагы өтмөктү жабуу</translation>
 <translation id="1258753120186372309">Google чиймелек: <ph name="DOODLE_DESCRIPTION" /></translation>
 <translation id="1260236875608242557">Издөө жана изилдөө</translation>
-<translation id="1264974993859112054">Спорт</translation>
 <translation id="1266864766717917324"><ph name="CONTENT_TYPE" /> менен бөлүшүлгөн жок</translation>
 <translation id="1272079795634619415">Токтотуу</translation>
 <translation id="1283039547216852943">Жайып көрсөтүү үчүн таптап коюңуз</translation>
@@ -242,7 +241,6 @@
 <translation id="2818669890320396765">Кыстармаларыңызды бардык түзмөктөрүңүздө колдонуу үчүн, аккаунтуңузга кирип, шайкештирүүнү күйгүзүңүз</translation>
 <translation id="2822354292072154809"><ph name="CHOSEN_OBJECT_NAME" /> үчүн сайттагы бардык уруксаттар баштапкы абалга келтирилсинби?</translation>
 <translation id="2842985007712546952">Түпкү куржун</translation>
-<translation id="2858138569776157458">Мыкты сайттар</translation>
 <translation id="2860954141821109167">Телефон колдонмосу бул түзмөктө иштетилгенин текшериңиз</translation>
 <translation id="2870560284913253234">Сайт</translation>
 <translation id="2874939134665556319">Мурунку трек</translation>
@@ -303,6 +301,7 @@
 <translation id="3282568296779691940">Chrome'го кириңиз</translation>
 <translation id="3288003805934695103">Баракты кайра жүктөп көрүңүз</translation>
 <translation id="32895400574683172">Эскертмелерге уруксат берилди</translation>
+<translation id="3290926146403723641">Google Жардамчы аркылуу вебдеги тапшырмаларды аткаруу үчүн Chrome сайттын URL'ин, сайттын мазмунун жана тийиштүү жеке маалыматты Google'га жөнөтөт</translation>
 <translation id="3295530008794733555">Ылдамыраак серептеңиз. Интернетти үнөмдөңүз.</translation>
 <translation id="3298243779924642547">Жөнөкөй</translation>
 <translation id="3303414029551471755">Мазмун жүктөлүп алына берсинби?</translation>
@@ -373,7 +372,7 @@
 <translation id="3912508018559818924">Интернеттен мыкты мазмунду гана табуу…</translation>
 <translation id="3927692899758076493">Sans Serif</translation>
 <translation id="3928666092801078803">Дайындарымды бириктирүү</translation>
-<translation id="393697183122708255">Иштетилген үн менен издөө мүмкүнчлгү жок</translation>
+<translation id="393697183122708255">Иштетилген айтып издөө мүмкүнчлгү жок</translation>
 <translation id="395206256282351086">Издөө сурамдарын жана сайттарды сунуштоо өчүрүлдү</translation>
 <translation id="3955193568934677022">Сайттарга корголгон мазмунду ойнотууга уруксат берүү (сунушталат)</translation>
 <translation id="396192773038029076">{NUM_IN_PROGRESS,plural, =1{Барагыңыз тармакка туташуу аткарылганда жүктөлөт}other{Барактарыңыз тармакка туташуу аткарылганда жүктөлөт}}</translation>
@@ -763,7 +762,6 @@ Google аккаунтуңуздун башка Google кызматтарынан
 <translation id="6697947395630195233">Бул сайт менен бөлүшүү үчүн Chrome жайгашкан жериңиз тууралуу маалыматты алышы керек.</translation>
 <translation id="6698801883190606802">Шайкештирилген дайындарды башкаруу</translation>
 <translation id="6699370405921460408">Google серверлери сиз кирген барактарды оптималдаштырат.</translation>
-<translation id="6709133671862442373">Жаңылыктар</translation>
 <translation id="6710213216561001401">Мурунку</translation>
 <translation id="671481426037969117"><ph name="FQDN" /> таймериңиздин убакыты бүттү. Ал эртең кайра башталат.</translation>
 <translation id="6738867403308150051">Жүктөлүп алынууда…</translation>
@@ -1068,7 +1066,7 @@ Google аккаунтуңуздун башка Google кызматтарынан
 <translation id="9050666287014529139">Купуя сөз айкашы</translation>
 <translation id="9063523880881406963">Иш тактасынын сайтындагы суроо-талапты өчүрүү</translation>
 <translation id="9065203028668620118">Түзөтүү</translation>
-<translation id="9070377983101773829">Үн менен издеп баштаңыз</translation>
+<translation id="9070377983101773829">Айтып издеп баштаңыз</translation>
 <translation id="9074336505530349563">Google тарабынан сунушталган мазмунду алуу үчүн аккаунтуңузга кирип, шайкештирүүнү күйгүзүңүз.</translation>
 <translation id="9086455579313502267">Тармакка кирүү мүмкүн эмес</translation>
 <translation id="9100505651305367705">Колдоого алынганда, макалаларды жөнөкөйлөштүрүп көрсөтүү сунушталсын</translation>
@@ -1078,7 +1076,6 @@ Google аккаунтуңуздун башка Google кызматтарынан
 <translation id="9133397713400217035">Оффлайн режиминде изилдөө</translation>
 <translation id="9133703968756164531"><ph name="ITEM_NAME" /> (<ph name="ITEM_ID" />)</translation>
 <translation id="9137013805542155359">Түпверсиясын көрсөтүү</translation>
-<translation id="9139318394846604261">Соода кылуу</translation>
 <translation id="9155898266292537608">Ошондой эле сөзду таптап коюп, издесеңиз болот</translation>
 <translation id="9169507124922466868">Чабыттоо таржымалынын жарымы жабык</translation>
 <translation id="9204836675896933765">1 файл калды</translation>

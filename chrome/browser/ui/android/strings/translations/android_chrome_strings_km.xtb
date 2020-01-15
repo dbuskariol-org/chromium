@@ -39,7 +39,6 @@
 <translation id="124678866338384709">បិទផ្ទាំងបច្ចុប្បន្ន</translation>
 <translation id="1258753120186372309">Google doodle៖ <ph name="DOODLE_DESCRIPTION" /></translation>
 <translation id="1260236875608242557">ស្វែងរក និងរុករក</translation>
-<translation id="1264974993859112054">កីឡា</translation>
 <translation id="1266864766717917324">មិនអាចចែករំលែក <ph name="CONTENT_TYPE" /> បានទេ</translation>
 <translation id="1272079795634619415">ឈប់</translation>
 <translation id="1283039547216852943">ចុច​ដើម្បី​ពង្រីក</translation>
@@ -242,7 +241,6 @@
 <translation id="2818669890320396765">ដើម្បី​ទទួលបាន​ចំណាំរបស់អ្នក​នៅលើ​ឧបករណ៍​ទាំងអស់​របស់អ្នក សូមចូលគណនី និងបើក​សមកាលកម្ម</translation>
 <translation id="2822354292072154809">តើ​អ្នកប្រាកដថា​ចង់​កំណត់​ការអនុញ្ញាត​គេហទំព័រ​ទាំងអស់​ឡើងវិញ​សម្រាប់ <ph name="CHOSEN_OBJECT_NAME" /> ដែរទេ?</translation>
 <translation id="2842985007712546952">ថតឯកសារមេ</translation>
-<translation id="2858138569776157458">គេហទំព័រ​ពេញនិយម</translation>
 <translation id="2860954141821109167">សូមប្រាកដថា កម្មវិធី​ទូរសព្ទត្រូវបានបើក​នៅលើឧបករណ៍នេះ</translation>
 <translation id="2870560284913253234">គេហទំព័រ</translation>
 <translation id="2874939134665556319">បទ​មុន</translation>
@@ -303,6 +301,7 @@
 <translation id="3282568296779691940">ចូលទៅ Chrome</translation>
 <translation id="3288003805934695103">ដំណើរការទំព័រឡើងវិញ</translation>
 <translation id="32895400574683172">ការជូន​ដំណឹង​ត្រូវ​បាន​អនុញ្ញាត</translation>
+<translation id="3290926146403723641">ដើម្បីបញ្ចប់កិច្ចការនានា​នៅលើបណ្ដាញ​តាមរយៈ Google ជំនួយការ, Chrome ផ្ញើ URL របស់​គេហទំព័រ ខ្លឹមសារ​គេហទំព័រ និងព័ត៌មានផ្ទាល់ខ្លួន​ដែលពាក់ព័ន្ធទៅ Google</translation>
 <translation id="3295530008794733555">រុករករហ័ស​ជាងមុន។ ប្រើទិន្នន័យតិច​ជាងមុន។</translation>
 <translation id="3298243779924642547">មុខងារ​ស្រាល</translation>
 <translation id="3303414029551471755">បន្តដើម្បីទាញយកមាតិកានេះ?</translation>
@@ -763,7 +762,6 @@
 <translation id="6697947395630195233">Chrome ត្រូវការការចូលប្រើប្រាស់ទីកន្លែងរបស់អ្នក ដើម្បីចែករំលែកទីកន្លែងរបស់អ្នកជាមួយទំព័រនេះ។</translation>
 <translation id="6698801883190606802">គ្រប់គ្រងទិន្នន័យដែលបានធ្វើសមកាលកម្ម</translation>
 <translation id="6699370405921460408">ម៉ាស៊ីនមេ Google នឹងបង្កើនប្រសិទ្ធភាពទំព័រដែលអ្នកចូលមើល។</translation>
-<translation id="6709133671862442373">ព័ត៌មាន</translation>
 <translation id="6710213216561001401">មុន</translation>
 <translation id="671481426037969117">កម្មវិធី​កំណត់​ម៉ោង <ph name="FQDN" /> របស់អ្នកបានបញ្ចប់​​ហើយ។ វានឹង​ចាប់ផ្ដើម​ឡើងវិញនៅថ្ងៃស្អែក។</translation>
 <translation id="6738867403308150051">កំពុងទាញយក…</translation>
@@ -1078,7 +1076,6 @@
 <translation id="9133397713400217035">រុករក​ដោយគ្មានអ៊ីនធឺណិត</translation>
 <translation id="9133703968756164531"><ph name="ITEM_NAME" /> (<ph name="ITEM_ID" />)</translation>
 <translation id="9137013805542155359">បង្ហាញប្រភពដើម</translation>
-<translation id="9139318394846604261">ទិញទំនិញ</translation>
 <translation id="9155898266292537608">​អ្នក​ក៏​អាច​ស្វែងរក​ដោយ​គ្រាន់​តែ​ចុចបន្តិច​នៅលើ​ពាក្យ​ណាមួយ​បានផងដែរ</translation>
 <translation id="9169507124922466868">ប្រវត្តិ​រុករក​ត្រូវបានបើក​ពាក់កណ្ដាល</translation>
 <translation id="9204836675896933765">នៅសល់ឯកសារចំនួន 1</translation>

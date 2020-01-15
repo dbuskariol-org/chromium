@@ -203,7 +203,6 @@
 <translation id="1272978324304772054">Þessi notandareikningur heyrir ekki undir lénið sem tækið er skráð á. Ef þú vilt skrá þig á annað lén þarftu fyrst að fara í gegnum endurheimtarferli tækis.</translation>
 <translation id="1274977772557788323">Geymslustillingar Adobe Flash Player</translation>
 <translation id="1274997165432133392">Fótspor og önnur gögn vefsvæðis</translation>
-<translation id="127668050356036882">Loka öllum gluggum</translation>
 <translation id="1280820357415527819">Leitar að farsímakerfum</translation>
 <translation id="1282420830958964167">Þú hefur náð hámarkinu sem foreldri þitt valdi fyrir „<ph name="APP_NAME" />“. Þú getur notað það í <ph name="TIME_LIMIT" /> á morgun.</translation>
 <translation id="1285320974508926690">Aldrei þýða þetta vefsvæði</translation>
@@ -1206,7 +1205,6 @@ Annars skaltu skrá þig út núna svo breytingarnar á þessum reikningi taki g
 <translation id="2665647207431876759">Útrunnið</translation>
 <translation id="2665717534925640469">Þessi síða er nú birt á öllum skjánum og hefur gert músarbendilinn óvirkan.</translation>
 <translation id="2665919335226618153">Obbosí! Villa kom upp við að sníða.</translation>
-<translation id="2666990579225592931">Opna gestaglugga</translation>
 <translation id="2667463864537187133">Stjórna ritvilluleit</translation>
 <translation id="2670102641511624474"><ph name="APP_NAME" /> deilir flipa í Chrome.</translation>
 <translation id="2670429602441959756">Þessi síða inniheldur eiginleika sem ekki eru enn studdir í VR. Hættir...</translation>
@@ -3429,7 +3427,6 @@ Annars skaltu skrá þig út núna svo breytingarnar á þessum reikningi taki g
 <translation id="5867841422488265304">Leitaðu eða sláðu inn veffang</translation>
 <translation id="5869029295770560994">Ég skil</translation>
 <translation id="5869522115854928033">Vistuð aðgangsorð</translation>
-<translation id="5869948122057593679">Loka öllum gluggum</translation>
 <translation id="5870086504539785141">Loka aðgengisvalmynd</translation>
 <translation id="5870155679953074650">Sótt úr sýndarminni</translation>
 <translation id="5876851302954717356">Nýr flipi hægra megin</translation>
@@ -4478,7 +4475,6 @@ Annars skaltu skrá þig út núna svo breytingarnar á þessum reikningi taki g
 <translation id="7385854874724088939">Eitthvað fór úrskeiðis við að reyna að prenta. Kannaðu prentarann og reyndu aftur.</translation>
 <translation id="7385896526023870365">Þessi viðbót hefur engan viðbótaraðgang að vefsvæðum.</translation>
 <translation id="7388044238629873883">Þetta er alveg að klárast!</translation>
-<translation id="7388222713940428051">Opna gestaglugga</translation>
 <translation id="7392118418926456391">Vírusleit mistókst</translation>
 <translation id="7392915005464253525">Opna lokaðan glugga aftur</translation>
 <translation id="7396845648024431313"><ph name="APP_NAME" /> verður opnað þegar kerfið er ræst og heldur áfram að keyra í bakgrunni, jafnvel þegar þú hefur lokað öllum öðrum <ph name="PRODUCT_NAME" /> gluggum.</translation>
@@ -4743,7 +4739,6 @@ Annars skaltu skrá þig út núna svo breytingarnar á þessum reikningi taki g
 <translation id="7784067724422331729">Öryggisstillingar tölvunnar þinnar útilokuðu þessa skrá.</translation>
 <translation id="7784796923038949829">Ekki er hægt að lesa eða breyta gögnum vefsvæðis</translation>
 <translation id="778480864305029524">Til að nota skynditjóðrun þarftu að kveikja á tilkynningum fyrir þjónustu Google Play.</translation>
-<translation id="7786207843293321886">Loka gestastillingu</translation>
 <translation id="7786889348652477777">Endu&amp;rhlaða forrit</translation>
 <translation id="7787308148023287649">Sýna á öðrum skjá</translation>
 <translation id="7788298548579301890">Annað forrit í tölvunni þinni bætti við forriti sem gæti breytt því hvernig Chrome virkar.

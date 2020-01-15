@@ -203,7 +203,6 @@
 <translation id="1272978324304772054">This user account does not belong to the domain that the device is enrolled to.  If you want to enrol to a different domain you need to go through device recovery first.</translation>
 <translation id="1274977772557788323">Adobe Flash Player Storage settings</translation>
 <translation id="1274997165432133392">Cookies and other site data</translation>
-<translation id="127668050356036882">Close all your windows</translation>
 <translation id="1280820357415527819">Searching for mobile networks</translation>
 <translation id="1282420830958964167">The limit on '<ph name="APP_NAME" />' that your parent set ran out. You can use it for <ph name="TIME_LIMIT" /> tomorrow.</translation>
 <translation id="1285320974508926690">Never translate this site</translation>
@@ -1206,7 +1205,6 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="2665647207431876759">Expired</translation>
 <translation id="2665717534925640469">This page is now full screen and has disabled your mouse cursor.</translation>
 <translation id="2665919335226618153">Oh no! There was an error during formatting.</translation>
-<translation id="2666990579225592931">Open Guest window</translation>
 <translation id="2667463864537187133">Manage spell check</translation>
 <translation id="2670102641511624474"><ph name="APP_NAME" /> is sharing a Chrome tab.</translation>
 <translation id="2670429602441959756">This page contains features not yet supported in VR. Exiting...</translation>
@@ -3429,7 +3427,6 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="5867841422488265304">Search or type web address</translation>
 <translation id="5869029295770560994">OK, got it</translation>
 <translation id="5869522115854928033">Saved passwords</translation>
-<translation id="5869948122057593679">Close all your windows</translation>
 <translation id="5870086504539785141">Close accessibility menu</translation>
 <translation id="5870155679953074650">Hard faults</translation>
 <translation id="5876851302954717356">New Tab to the Right</translation>
@@ -4478,7 +4475,6 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="7385854874724088939">Something went wrong when trying to print.  Please check your printer and try again.</translation>
 <translation id="7385896526023870365">This extension has no additional site access.</translation>
 <translation id="7388044238629873883">You've almost finished!</translation>
-<translation id="7388222713940428051">Open Guest window</translation>
 <translation id="7392118418926456391">Virus scan failed</translation>
 <translation id="7392915005464253525">R&amp;eopen closed window</translation>
 <translation id="7396845648024431313"><ph name="APP_NAME" /> will launch at system startup and continue to run in the background, even once you've closed all other <ph name="PRODUCT_NAME" /> windows.</translation>
@@ -4743,7 +4739,6 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="7784067724422331729">Security settings on your computer blocked this file.</translation>
 <translation id="7784796923038949829">Can't read or change site's data</translation>
 <translation id="778480864305029524">To use Instant Tethering, turn on notifications for Google Play Services.</translation>
-<translation id="7786207843293321886">Exit Guest</translation>
 <translation id="7786889348652477777">&amp;Reload App</translation>
 <translation id="7787308148023287649">Display on another screen</translation>
 <translation id="7788298548579301890">Another program on your computer added an app that may change the way Chrome works.

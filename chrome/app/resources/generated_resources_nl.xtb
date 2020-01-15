@@ -203,7 +203,6 @@
 <translation id="1272978324304772054">Dit gebruikersaccount hoort niet bij het domein waarbij het apparaat is geregistreerd. Als je het apparaat wilt registreren bij een ander domein, moet je eerst apparaatherstel uitvoeren.</translation>
 <translation id="1274977772557788323">Opslaginstellingen voor Adobe Flash Player</translation>
 <translation id="1274997165432133392">Cookies en andere sitegegevens</translation>
-<translation id="127668050356036882">Al je vensters sluiten</translation>
 <translation id="1280820357415527819">Mobiele netwerken zoeken</translation>
 <translation id="1282420830958964167">De door je ouder ingestelde limiet voor '<ph name="APP_NAME" />' is bereikt. Je kunt de app morgen <ph name="TIME_LIMIT" /> gebruiken.</translation>
 <translation id="1285320974508926690">Deze site nooit vertalen</translation>
@@ -1206,7 +1205,6 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="2665647207431876759">Verlopen</translation>
 <translation id="2665717534925640469">Deze pagina wordt nu op volledig scherm weergegeven en heeft je muisaanwijzer uitgeschakeld.</translation>
 <translation id="2665919335226618153">Er is een fout opgetreden tijdens het formatteren.</translation>
-<translation id="2666990579225592931">Gastvenster openen</translation>
 <translation id="2667463864537187133">Spellingcontrole beheren</translation>
 <translation id="2670102641511624474"><ph name="APP_NAME" /> deelt een Chrome-tabblad.</translation>
 <translation id="2670429602441959756">Deze pagina bevat functies die nog niet worden ondersteund in de VR-modus. Afsluiten...</translation>
@@ -3429,7 +3427,6 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="5867841422488265304">Zoek of typ een webadres</translation>
 <translation id="5869029295770560994">OK, begrepen</translation>
 <translation id="5869522115854928033">Opgeslagen wachtwoorden</translation>
-<translation id="5869948122057593679">Al je vensters sluiten</translation>
 <translation id="5870086504539785141">Toegankelijkheidsmenu sluiten</translation>
 <translation id="5870155679953074650">Harde fouten</translation>
 <translation id="5876851302954717356">Nieuw tabblad aan de rechterkant</translation>
@@ -4478,7 +4475,6 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="7385854874724088939">Er is iets misgegaan bij het afdrukken. Controleer je printer en probeer het opnieuw.</translation>
 <translation id="7385896526023870365">Deze extensie heeft geen extra sitetoegang.</translation>
 <translation id="7388044238629873883">Je bent bijna klaar.</translation>
-<translation id="7388222713940428051">Gastvenster openen</translation>
 <translation id="7392118418926456391">Virusscan is mislukt</translation>
 <translation id="7392915005464253525">G&amp;esloten venster opnieuw openen</translation>
 <translation id="7396845648024431313"><ph name="APP_NAME" /> wordt gestart zodra je het systeem opstart en blijft zelfs op de achtergrond actief als je alle andere vensters van <ph name="PRODUCT_NAME" /> sluit.</translation>
@@ -4743,7 +4739,6 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="7784067724422331729">Beveiligingsinstellingen op je computer hebben dit bestand geblokkeerd.</translation>
 <translation id="7784796923038949829">Kan sitegegevens niet lezen of wijzigen</translation>
 <translation id="778480864305029524">Schakel meldingen voor Google Play-services in om instant-tethering te gebruiken.</translation>
-<translation id="7786207843293321886">Gastsessie sluiten</translation>
 <translation id="7786889348652477777">App opnieuw &amp;laden</translation>
 <translation id="7787308148023287649">Weergeven op een ander scherm</translation>
 <translation id="7788298548579301890">Een ander programma op je computer heeft een app toegevoegd die de manier kan wijzigen waarop Chrome werkt.

@@ -39,7 +39,6 @@
 <translation id="124678866338384709">Cari paneli bağlayın</translation>
 <translation id="1258753120186372309">Google doodle: <ph name="DOODLE_DESCRIPTION" /></translation>
 <translation id="1260236875608242557">Axtarın və kəşf edin</translation>
-<translation id="1264974993859112054">İdman</translation>
 <translation id="1266864766717917324"><ph name="CONTENT_TYPE" /> paylaşmaq mümkün olmnadı</translation>
 <translation id="1272079795634619415">Dayandırın</translation>
 <translation id="1283039547216852943">Genişləndirmək üçün klikləyin</translation>
@@ -242,7 +241,6 @@
 <translation id="2818669890320396765">Bütün cihazlarda əlfəcinləri əldə etmək üçün daxil olun və sinxronizasiyanı aktiv edin</translation>
 <translation id="2822354292072154809"><ph name="CHOSEN_OBJECT_NAME" /> üçün bütün sayt icazələrini sıfırlamaq istədiyinizə əminsiniz?</translation>
 <translation id="2842985007712546952">Ana qovluq</translation>
-<translation id="2858138569776157458">Populyar saytlar</translation>
 <translation id="2860954141821109167">Telefon tətbiqinin bu cihazda aktiv edildiyinə əmin olun</translation>
 <translation id="2870560284913253234">Sayt</translation>
 <translation id="2874939134665556319">Öncəki trek</translation>
@@ -303,6 +301,7 @@
 <translation id="3282568296779691940">Chrome'a daxil olun</translation>
 <translation id="3288003805934695103">Səhifə təkrar yüklənir</translation>
 <translation id="32895400574683172">Bildirişlər aktivdir</translation>
+<translation id="3290926146403723641">Google Assistent vasitəsilə vebdə tapşırıqları tamamlamaq üçün Chrome saytın keçid və məzmununu, eləcə də müvafiq şəxsi məlumatları Google'a göndərir</translation>
 <translation id="3295530008794733555">Daha sürətli axtarış edin. Daha az data istifadə edin.</translation>
 <translation id="3298243779924642547">Xəbərdarlıq</translation>
 <translation id="3303414029551471755">Kontentin endirilməsinə davam etmək istəyirsiniz?</translation>
@@ -761,7 +760,6 @@ Ayarı dəyişmək üçün <ph name="BEGIN_LINK" />sinxronizasiyanı sıfırlay�
 <translation id="6697947395630195233">Chrome məkanı bu saytla paylaşmaq üçün məkana giriş tələb edir.</translation>
 <translation id="6698801883190606802">Sinxronlaşmış datanı idarə edin</translation>
 <translation id="6699370405921460408">Google serverləri daxil olduğunuz səhifələri optimallaşdıracaq.</translation>
-<translation id="6709133671862442373">Xəbərlər</translation>
 <translation id="6710213216561001401">Əvvəlki</translation>
 <translation id="671481426037969117"><ph name="FQDN" /> taymerinin vaxtı bitir. Sabah yenidən başlayacaq.</translation>
 <translation id="6738867403308150051">Endirilir...</translation>
@@ -1076,7 +1074,6 @@ Bu sayt kameraya daxil olmur. Kamera şəkillərini yalnız Siz görürsünüz.<
 <translation id="9133397713400217035">Oflayn araşdırın</translation>
 <translation id="9133703968756164531"><ph name="ITEM_NAME" /> (<ph name="ITEM_ID" />)</translation>
 <translation id="9137013805542155359">Originalı göstərin</translation>
-<translation id="9139318394846604261">Alış-veriş</translation>
 <translation id="9155898266292537608">Sözün üzərində klikləməklə axtarış edə bilərsiniz</translation>
 <translation id="9169507124922466868">Naviqasiya tarixçəsi yarı açıqdır</translation>
 <translation id="9204836675896933765">1 fayl qaldı</translation>
