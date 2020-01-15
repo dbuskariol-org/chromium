@@ -23,8 +23,9 @@ namespace ash {
 
 class AssistantController;
 class AssistantInteractionController;
-class TestAssistantService;
 class AssistantTestApi;
+class TestAssistantService;
+class TestAssistantWebViewFactory;
 
 // Helper class to make testing the Assistant Ash UI easier.
 class AssistantAshTestBase : public AshTestBase {
@@ -145,6 +146,7 @@ class AssistantAshTestBase : public AshTestBase {
   TestAssistantService* assistant_service();
 
   std::unique_ptr<AssistantTestApi> test_api_;
+  std::unique_ptr<TestAssistantWebViewFactory> test_web_view_factory_;
   base::test::ScopedFeatureList scoped_feature_list_;
   AssistantController* controller_ = nullptr;
 

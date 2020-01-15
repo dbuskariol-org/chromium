@@ -11,6 +11,7 @@
 #include "ash/app_list/views/assistant/assistant_main_view.h"
 #include "ash/app_list/views/assistant/assistant_page_view.h"
 #include "ash/assistant/assistant_controller.h"
+#include "ash/assistant/test/test_assistant_web_view_factory.h"
 #include "ash/keyboard/ui/keyboard_ui_controller.h"
 #include "ash/keyboard/ui/test/keyboard_test_util.h"
 #include "ash/public/cpp/app_list/app_list_features.h"
@@ -62,7 +63,8 @@ void PressHomeButton() {
 }  // namespace
 
 AssistantAshTestBase::AssistantAshTestBase()
-    : test_api_(AssistantTestApi::Create()) {}
+    : test_api_(AssistantTestApi::Create()),
+      test_web_view_factory_(std::make_unique<TestAssistantWebViewFactory>()) {}
 
 AssistantAshTestBase::~AssistantAshTestBase() = default;
 
