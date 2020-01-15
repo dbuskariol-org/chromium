@@ -445,6 +445,10 @@ void HTMLTextAreaElement::SetValueCommon(
       DispatchFormControlChangeEvent();
       break;
 
+    case TextFieldEventBehavior::kDispatchInputEvent:
+      DispatchInputEvent();
+      break;
+
     case TextFieldEventBehavior::kDispatchInputAndChangeEvent:
       DispatchInputEvent();
       DispatchFormControlChangeEvent();

@@ -106,36 +106,6 @@ function clickTimeCellAt(column, row) {
   eventSender.mouseUp();
 }
 
-function hoverOverSubmitTimeButton() {
-  skipAnimation();
-  var submitButton = popupWindow.global.picker.submissionControls.submitButton;
-  var offset = cumulativeOffset(submitButton);
-  var x = offset[0] + submitButton.offsetWidth / 2;
-  var y = offset[1] + submitButton.offsetHeight / 2;
-  eventSender.mouseMoveTo(x, y);
-}
-
-function clickSubmitTimeButton() {
-  hoverOverSubmitTimeButton();
-  eventSender.mouseDown();
-  eventSender.mouseUp();
-}
-
-function hoverOverCancelTimeButton() {
-  skipAnimation();
-  var cancelButton = popupWindow.global.picker.submissionControls.cancelButton;
-  var offset = cumulativeOffset(cancelButton);
-  var x = offset[0] + cancelButton.offsetWidth / 2;
-  var y = offset[1] + cancelButton.offsetHeight / 2;
-  eventSender.mouseMoveTo(x, y);
-}
-
-function clickCancelTimeButton() {
-  hoverOverCancelTimeButton();
-  eventSender.mouseDown();
-  eventSender.mouseUp();
-}
-
 function highlightedMonthButton() {
     skipAnimation();
     var year = popupWindow.global.picker.monthPopupView.yearListView.selectedRow + 1;

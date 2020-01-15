@@ -177,11 +177,14 @@ void TextFieldInputType::SetValue(const String& sanitized_value,
         GetElement().DispatchFormControlChangeEvent();
       break;
 
-    case TextFieldEventBehavior::kDispatchInputAndChangeEvent: {
+    case TextFieldEventBehavior::kDispatchInputEvent:
+      GetElement().DispatchInputEvent();
+      break;
+
+    case TextFieldEventBehavior::kDispatchInputAndChangeEvent:
       GetElement().DispatchInputEvent();
       GetElement().DispatchFormControlChangeEvent();
       break;
-    }
 
     case TextFieldEventBehavior::kDispatchNoEvent:
       break;

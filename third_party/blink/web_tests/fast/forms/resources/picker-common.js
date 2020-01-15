@@ -51,7 +51,8 @@ function openPickerWithPromise(element) {
     return new Promise(function(resolve, reject) {
         popupWindow = openPickerHelper(element);
         if (popupWindow) {
-            popupWindow.addEventListener("didOpenPicker", resolve, false);
+            popupOpenCallback = resolve;
+            popupWindow.addEventListener("didOpenPicker", popupOpenCallbackWrapper, false);
         } else {
             reject();
         }
