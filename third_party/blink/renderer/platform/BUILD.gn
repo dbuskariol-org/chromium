@@ -1121,6 +1121,7 @@ jumbo_component("platform") {
     "graphics/subtree_paint_property_update_reason.h",
     "graphics/surface_layer_bridge.cc",
     "graphics/surface_layer_bridge.h",
+    "graphics/texture_holder.cc",
     "graphics/texture_holder.h",
     "graphics/touch_action.h",
     "graphics/unaccelerated_static_bitmap_image.cc",
