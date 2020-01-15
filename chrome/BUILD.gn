@@ -1535,6 +1535,12 @@ if (is_android) {
     ]
   }
 
+  java_cpp_enum("cookie_controls_mode_javagen") {
+    sources = [
+      "../components/content_settings/core/browser/cookie_settings.h",
+    ]
+  }
+
   java_cpp_enum("credit_card_javagen") {
     sources = [ "../components/autofill/core/browser/data_model/credit_card.h" ]
   }

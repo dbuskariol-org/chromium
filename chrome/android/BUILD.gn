@@ -391,6 +391,7 @@ android_library("chrome_java") {
     "//chrome:assist_ranker_prediction_enum_javagen",
     "//chrome:content_setting_javagen",
     "//chrome:content_settings_type_javagen",
+    "//chrome:cookie_controls_mode_javagen",
     "//chrome:credit_card_javagen",
     "//chrome:download_enum_javagen",
     "//chrome:instant_apps_reasons_enum_javagen",
