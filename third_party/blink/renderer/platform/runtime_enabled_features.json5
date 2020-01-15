@@ -623,7 +623,7 @@
     },
     {
       name: "EncryptedMediaEncryptionSchemeQuery",
-      status: "test",
+      status: "stable",
     },
     {
       name: "EncryptedMediaHdcpPolicyCheck",
