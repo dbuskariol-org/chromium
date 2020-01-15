@@ -2421,37 +2421,10 @@ extern const char kDcheckIsFatalName[];
 extern const char kDcheckIsFatalDescription[];
 #endif  // defined(DCHECK_IS_CONFIGURABLE)
 
-#if BUILDFLAG(ENABLE_VR)
-
-extern const char kWebXrOrientationSensorDeviceName[];
-extern const char kWebXrOrientationSensorDeviceDescription[];
-
-#if BUILDFLAG(ENABLE_OCULUS_VR)
-extern const char kOculusVRName[];
-extern const char kOculusVRDescription[];
-#endif  // ENABLE_OCULUS_VR
-
-#if BUILDFLAG(ENABLE_OPENVR)
-extern const char kOpenVRName[];
-extern const char kOpenVRDescription[];
-#endif  // ENABLE_OPENVR
-
-#if BUILDFLAG(ENABLE_WINDOWS_MR)
-extern const char kWindowsMixedRealityName[];
-extern const char kWindowsMixedRealityDescription[];
-#endif  // ENABLE_WINDOWS_MR
-
-#if BUILDFLAG(ENABLE_OPENXR)
-extern const char kOpenXRName[];
-extern const char kOpenXRDescription[];
-#endif  // ENABLE_OPENXR
-
-#if !defined(OS_ANDROID)
+#if BUILDFLAG(ENABLE_VR) && !defined(OS_ANDROID)
 extern const char kXRSandboxName[];
 extern const char kXRSandboxDescription[];
-#endif  // !defined(OS_ANDROID)
-
-#endif  // ENABLE_VR
+#endif  // ENABLE_VR && !defined(OS_ANDROID)
 
 #if BUILDFLAG(ENABLE_NACL)
 extern const char kNaclName[];
