@@ -360,11 +360,13 @@ Polymer({
           default:
             assertNotReached();
         }
+        break;
       case State.UPGRADING:
         messageId = 'upgradingMessage';
         break;
       case State.SUCCEEDED:
         messageId = 'succeededMessage';
+        break;
     }
     return messageId ? loadTimeData.getString(messageId) : '';
   },
