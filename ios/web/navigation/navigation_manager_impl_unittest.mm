@@ -162,22 +162,6 @@ TEST_F(NavigationManagerTest, EmptyManager) {
   EXPECT_FALSE(navigation_manager()->GetPendingItem());
   EXPECT_EQ(-1, navigation_manager()->GetPendingItemIndex());
   EXPECT_EQ(-1, navigation_manager()->GetIndexForOffset(0));
-  EXPECT_EQ(-1, navigation_manager()->GetPreviousItemIndex());
-}
-
-// Tests that the simpler setter SetPreviousItemIndex() updates the previous
-// item index without sanity check.
-TEST_F(NavigationManagerTest, SetPreviousItemIndex) {
-  EXPECT_EQ(-1, navigation_manager()->GetPreviousItemIndex());
-
-  navigation_manager()->SetPreviousItemIndex(0);
-  EXPECT_EQ(0, navigation_manager()->GetPreviousItemIndex());
-
-  navigation_manager()->SetPreviousItemIndex(1);
-  EXPECT_EQ(1, navigation_manager()->GetPreviousItemIndex());
-
-  navigation_manager()->SetPreviousItemIndex(-1);
-  EXPECT_EQ(-1, navigation_manager()->GetPreviousItemIndex());
 }
 
 // Tests that GetPendingItemIndex() returns -1 if there is no pending entry.
@@ -2295,7 +2279,6 @@ TEST_F(NavigationManagerTest, CommitNonNilPendingItem) {
   navigation_manager()->CommitPendingItem(std::move(item));
 
   // Verify navigation manager and navigation item states.
-    EXPECT_EQ(1, navigation_manager()->GetPreviousItemIndex());
   EXPECT_EQ(1, navigation_manager()->GetLastCommittedItemIndex());
   EXPECT_EQ(0, navigation_manager()->GetPendingItemIndex());
   ASSERT_TRUE(navigation_manager()->GetLastCommittedItem());
