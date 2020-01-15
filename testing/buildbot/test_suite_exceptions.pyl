@@ -236,6 +236,18 @@
           'shards': 3,
         },
       },
+      'android-marshmallow-x86-fyi-rel': {
+        # https://crbug.com/1039860
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.cc_unittests.filter',
+        ],
+      },
+      'android-pie-x86-fyi-rel': {
+        # https://crbug.com/1039860
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.cc_unittests.filter',
+        ],
+      },
     },
   },
   'checkbins': {

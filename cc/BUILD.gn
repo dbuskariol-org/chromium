@@ -782,7 +782,10 @@ cc_test("cc_unittests") {
     "//ui/gl",
     "//ui/gl:test_support",
   ]
-  data_deps = [ "//third_party/mesa_headers" ]
+  data_deps = [
+    "//testing/buildbot/filters:cc_unittests_filters",
+    "//third_party/mesa_headers",
+  ]
 
   if (enable_vulkan) {
     deps += [
