@@ -416,6 +416,13 @@ public final class ChromePreferenceKeys {
      */
     public static final String LATEST_UNSUPPORTED_VERSION = "android_os_unsupported_chrome_version";
 
+    public static final String LOCALE_MANAGER_AUTO_SWITCH = "LocaleManager_PREF_AUTO_SWITCH";
+    public static final String LOCALE_MANAGER_PROMO_SHOWN = "LocaleManager_PREF_PROMO_SHOWN";
+    public static final String LOCALE_MANAGER_SEARCH_ENGINE_PROMO_SHOW_STATE =
+            "com.android.chrome.SEARCH_ENGINE_PROMO_SHOWN";
+    public static final String LOCALE_MANAGER_WAS_IN_SPECIAL_LOCALE =
+            "LocaleManager_WAS_IN_SPECIAL_LOCALE";
+
     /**
      * Key to cache whether offline indicator v2 (persistent offline indicator) is enabled.
      */
@@ -718,6 +725,10 @@ public final class ChromePreferenceKeys {
                 INCOGNITO_SHORTCUT_ADDED,
                 INVALIDATIONS_UUID_PREF_KEY,
                 LATEST_UNSUPPORTED_VERSION,
+                LOCALE_MANAGER_AUTO_SWITCH,
+                LOCALE_MANAGER_PROMO_SHOWN,
+                LOCALE_MANAGER_SEARCH_ENGINE_PROMO_SHOW_STATE,
+                LOCALE_MANAGER_WAS_IN_SPECIAL_LOCALE,
                 OFFLINE_INDICATOR_V2_ENABLED,
                 PRIVACY_ALLOW_PRERENDER_OLD,
                 PRIVACY_BANDWIDTH_NO_CELLULAR_OLD,
