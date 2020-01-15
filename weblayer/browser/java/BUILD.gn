@@ -17,6 +17,7 @@ generate_product_config_srcjar("weblayer_product_config") {
 
 java_cpp_enum("generated_enums") {
   sources = [
+    "//weblayer/public/download.h",
     "//weblayer/public/navigation.h",
     "//weblayer/public/new_tab_delegate.h",
     "//weblayer/public/profile.h",
@@ -34,6 +35,7 @@ android_library("java") {
     "org/chromium/weblayer_private/ContentViewRenderView.java",
     "org/chromium/weblayer_private/CrashReporterControllerImpl.java",
     "org/chromium/weblayer_private/DownloadCallbackProxy.java",
+    "org/chromium/weblayer_private/DownloadImpl.java",
     "org/chromium/weblayer_private/ErrorPageCallbackProxy.java",
     "org/chromium/weblayer_private/ExternalNavigationHandler.java",
     "org/chromium/weblayer_private/FragmentAndroidPermissionDelegate.java",
@@ -66,6 +68,7 @@ android_library("java") {
     "//components/autofill/android:provider_java",
     "//components/crash/android:handler_java",
     "//components/crash/android:java",
+    "//components/download/internal/common:internal_java",
     "//components/embedder_support/android:application_java",
     "//components/embedder_support/android:web_contents_delegate_java",
     "//components/minidump_uploader:minidump_uploader_java",
@@ -99,6 +102,7 @@ generate_jni("jni") {
   sources = [
     "org/chromium/weblayer_private/ContentViewRenderView.java",
     "org/chromium/weblayer_private/DownloadCallbackProxy.java",
+    "org/chromium/weblayer_private/DownloadImpl.java",
     "org/chromium/weblayer_private/ErrorPageCallbackProxy.java",
     "org/chromium/weblayer_private/ExternalNavigationHandler.java",
     "org/chromium/weblayer_private/FullscreenCallbackProxy.java",
@@ -120,6 +124,8 @@ android_library("interfaces_java") {
     "org/chromium/weblayer_private/interfaces/APICallException.java",
     "org/chromium/weblayer_private/interfaces/BrowserFragmentArgs.java",
     "org/chromium/weblayer_private/interfaces/BrowsingDataType.java",
+    "org/chromium/weblayer_private/interfaces/DownloadError.java",
+    "org/chromium/weblayer_private/interfaces/DownloadState.java",
     "org/chromium/weblayer_private/interfaces/LoadError.java",
     "org/chromium/weblayer_private/interfaces/NavigationState.java",
     "org/chromium/weblayer_private/interfaces/NewTabType.java",
@@ -161,9 +167,11 @@ android_aidl("aidl") {
     "org/chromium/weblayer_private/interfaces/IBrowserClient.aidl",
     "org/chromium/weblayer_private/interfaces/IBrowserFragment.aidl",
     "org/chromium/weblayer_private/interfaces/IChildProcessService.aidl",
+    "org/chromium/weblayer_private/interfaces/IClientDownload.aidl",
     "org/chromium/weblayer_private/interfaces/IClientNavigation.aidl",
     "org/chromium/weblayer_private/interfaces/ICrashReporterController.aidl",
     "org/chromium/weblayer_private/interfaces/ICrashReporterControllerClient.aidl",
+    "org/chromium/weblayer_private/interfaces/IDownload.aidl",
     "org/chromium/weblayer_private/interfaces/IDownloadCallbackClient.aidl",
     "org/chromium/weblayer_private/interfaces/IErrorPageCallbackClient.aidl",
     "org/chromium/weblayer_private/interfaces/IFullscreenCallbackClient.aidl",

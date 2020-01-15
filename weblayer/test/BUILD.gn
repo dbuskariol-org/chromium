@@ -92,6 +92,7 @@ test("weblayer_browsertests") {
 
   sources = [
     "../browser/autofill_browsertest.cc",
+    "../browser/download_browsertest.cc",
     "../browser/errorpage_browsertest.cc",
     "../browser/navigation_browsertest.cc",
     "../browser/ssl_browsertest.cc",

@@ -6,7 +6,6 @@
 #define WEBLAYER_BROWSER_BROWSER_CONTEXT_IMPL_H_
 
 #include "base/files/file_path.h"
-#include "base/macros.h"
 #include "build/build_config.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/browser_thread.h"
@@ -25,6 +24,10 @@ class BrowserContextImpl : public content::BrowserContext {
  public:
   BrowserContextImpl(ProfileImpl* profile_impl, const base::FilePath& path);
   ~BrowserContextImpl() override;
+  BrowserContextImpl(const BrowserContextImpl&) = delete;
+  BrowserContextImpl& operator=(const BrowserContextImpl&) = delete;
+
+  static base::FilePath GetDefaultDownloadDirectory();
 
   // BrowserContext implementation:
 #if !defined(OS_ANDROID)
@@ -48,6 +51,8 @@ class BrowserContextImpl : public content::BrowserContext {
   content::BackgroundFetchDelegate* GetBackgroundFetchDelegate() override;
   content::BackgroundSyncController* GetBackgroundSyncController() override;
   content::BrowsingDataRemoverDelegate* GetBrowsingDataRemoverDelegate()
+      override;
+  download::InProgressDownloadManager* RetriveInProgressDownloadManager()
       override;
   content::ContentIndexProvider* GetContentIndexProvider() override;
 
@@ -78,8 +83,6 @@ class BrowserContextImpl : public content::BrowserContext {
   std::unique_ptr<PrefService> user_pref_service_;
   std::unique_ptr<content::PermissionControllerDelegate>
       permission_controller_delegate_;
-
-  DISALLOW_COPY_AND_ASSIGN(BrowserContextImpl);
 };
 }  // namespace weblayer
 
