@@ -130,17 +130,6 @@ class DeviceStatusCollector : public StatusCollector,
   using CPUTempFetcher =
       base::Callback<std::vector<enterprise_management::CPUTempInfo>()>;
 
-  // Passed into asynchronous mojo interface for communicating with Android.
-  using AndroidStatusReceiver =
-      base::Callback<void(const std::string&, const std::string&)>;
-  // Calls the enterprise reporting mojo interface, passing over the
-  // AndroidStatusReceiver. Returns false if the mojo interface isn't available,
-  // in which case no asynchronous query is emitted and the android status query
-  // fails synchronously. The |AndroidStatusReceiver| is not called in this
-  // case.
-  using AndroidStatusFetcher =
-      base::Callback<bool(const AndroidStatusReceiver&)>;
-
   // Format of the function that asynchronously receives TpmStatusInfo.
   using TpmStatusReceiver = base::OnceCallback<void(const TpmStatusInfo&)>;
   // Gets the TpmStatusInfo and passes it to TpmStatusReceiver.

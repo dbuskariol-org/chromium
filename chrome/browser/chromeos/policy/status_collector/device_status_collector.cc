@@ -397,7 +397,7 @@ void FetchGraphicsStatus(
 }
 
 bool ReadAndroidStatus(
-    const policy::DeviceStatusCollector::AndroidStatusReceiver& receiver) {
+    const policy::StatusCollector::AndroidStatusReceiver& receiver) {
   auto* const arc_service_manager = arc::ArcServiceManager::Get();
   if (!arc_service_manager)
     return false;
@@ -622,8 +622,8 @@ class DeviceStatusCollectorState : public StatusCollectorState {
         base::Bind(&DeviceStatusCollectorState::OnCPUTempInfoReceived, this));
   }
 
-  bool FetchAndroidStatus(const DeviceStatusCollector::AndroidStatusFetcher&
-                              android_status_fetcher) {
+  bool FetchAndroidStatus(
+      const StatusCollector::AndroidStatusFetcher& android_status_fetcher) {
     return android_status_fetcher.Run(
         base::Bind(&DeviceStatusCollectorState::OnAndroidInfoReceived, this));
   }
@@ -1023,7 +1023,7 @@ DeviceStatusCollector::DeviceStatusCollector(
           DeviceStatusCollector::VolumeInfoFetcher(),
           DeviceStatusCollector::CPUStatisticsFetcher(),
           DeviceStatusCollector::CPUTempFetcher(),
-          DeviceStatusCollector::AndroidStatusFetcher(),
+          StatusCollector::AndroidStatusFetcher(),
           DeviceStatusCollector::TpmStatusFetcher(),
           DeviceStatusCollector::EMMCLifetimeFetcher(),
           DeviceStatusCollector::StatefulPartitionInfoFetcher(),

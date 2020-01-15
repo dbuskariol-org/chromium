@@ -154,7 +154,7 @@ class TestingDeviceStatusCollectorOptions {
   policy::DeviceStatusCollector::VolumeInfoFetcher volume_info_fetcher;
   policy::DeviceStatusCollector::CPUStatisticsFetcher cpu_fetcher;
   policy::DeviceStatusCollector::CPUTempFetcher cpu_temp_fetcher;
-  policy::DeviceStatusCollector::AndroidStatusFetcher android_status_fetcher;
+  policy::StatusCollector::AndroidStatusFetcher android_status_fetcher;
   policy::DeviceStatusCollector::TpmStatusFetcher tpm_status_fetcher;
   policy::DeviceStatusCollector::EMMCLifetimeFetcher emmc_lifetime_fetcher;
   policy::DeviceStatusCollector::StatefulPartitionInfoFetcher
@@ -313,14 +313,14 @@ std::vector<em::CPUTempInfo> GetFakeCPUTempInfo(
 }
 
 void CallAndroidStatusReceiver(
-    const policy::DeviceStatusCollector::AndroidStatusReceiver& receiver,
+    const policy::StatusCollector::AndroidStatusReceiver& receiver,
     const std::string& status,
     const std::string& droid_guard_info) {
   receiver.Run(status, droid_guard_info);
 }
 
 bool GetEmptyAndroidStatus(
-    const policy::DeviceStatusCollector::AndroidStatusReceiver& receiver) {
+    const policy::StatusCollector::AndroidStatusReceiver& receiver) {
   // Post it to the thread because this call is expected to be asynchronous.
   base::ThreadTaskRunnerHandle::Get()->PostTask(
       FROM_HERE, base::BindOnce(&CallAndroidStatusReceiver, receiver, "", ""));
@@ -330,7 +330,7 @@ bool GetEmptyAndroidStatus(
 bool GetFakeAndroidStatus(
     const std::string& status,
     const std::string& droid_guard_info,
-    const policy::DeviceStatusCollector::AndroidStatusReceiver& receiver) {
+    const policy::StatusCollector::AndroidStatusReceiver& receiver) {
   // Post it to the thread because this call is expected to be asynchronous.
   base::ThreadTaskRunnerHandle::Get()->PostTask(
       FROM_HERE, base::BindOnce(&CallAndroidStatusReceiver, receiver, status,
