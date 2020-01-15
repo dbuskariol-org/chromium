@@ -65,6 +65,7 @@ def blink_type_info(idl_type):
                      is_nullable=False):
             self.member_t = member_fmt.format(typename)
             self.ref_t = ref_fmt.format(typename)
+            self.const_ref_t = const_ref_fmt.format(typename)
             self.value_t = value_fmt.format(typename)
             # Whether Blink impl type can represent IDL null or not.
             self.is_nullable = is_nullable
