@@ -10,6 +10,7 @@
 #include "third_party/blink/public/platform/interface_registry.h"
 #include "third_party/blink/renderer/bindings/core/v8/window_proxy.h"
 #include "third_party/blink/renderer/bindings/core/v8/window_proxy_manager.h"
+#include "third_party/blink/renderer/core/frame/csp/content_security_policy.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
 #include "third_party/blink/renderer/core/frame/local_frame_client.h"
 #include "third_party/blink/renderer/core/frame/remote_dom_window.h"
@@ -296,6 +297,17 @@ void RemoteFrame::WillEnterFullscreen() {
   Fullscreen::RequestFullscreen(
       *owner_element, FullscreenOptions::Create(),
       Fullscreen::RequestType::kPrefixedForCrossProcessDescendant);
+}
+
+void RemoteFrame::AddReplicatedContentSecurityPolicies(
+    WTF::Vector<network::mojom::blink::ContentSecurityPolicyHeaderPtr>
+        headers) {
+  for (auto& header : headers) {
+    GetSecurityContext()->GetContentSecurityPolicy()->AddPolicyFromHeaderValue(
+        header->header_value,
+        static_cast<ContentSecurityPolicyHeaderType>(header->type),
+        static_cast<ContentSecurityPolicyHeaderSource>(header->source));
+  }
 }
 
 void RemoteFrame::ResetReplicatedContentSecurityPolicy() {

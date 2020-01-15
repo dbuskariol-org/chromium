@@ -6,6 +6,7 @@ module blink.mojom;
 
 import "cc/mojom/touch_action.mojom";
 import "mojo/public/mojom/base/string16.mojom";
+import "services/network/public/mojom/content_security_policy.mojom";
 import "skia/public/mojom/skcolor.mojom";
 import "third_party/blink/public/mojom/devtools/console_message.mojom";
 import "third_party/blink/public/mojom/frame/blocked_navigation_types.mojom";
@@ -13,9 +14,9 @@ import "third_party/blink/public/mojom/frame/fullscreen.mojom";
 import "third_party/blink/public/mojom/frame/lifecycle.mojom";
 import "third_party/blink/public/mojom/frame/sudden_termination_disabler_type.mojom";
 import "third_party/blink/public/mojom/input/scroll_direction.mojom";
+import "ui/events/mojom/scroll_granularity.mojom";
 import "url/mojom/origin.mojom";
 import "url/mojom/url.mojom";
-import "ui/events/mojom/scroll_granularity.mojom";
 
 // Implemented in Browser, this interface defines frame-specific methods that
 // will be invoked from the render process (e.g. content::RenderFrameHostImpl).
@@ -229,6 +230,11 @@ interface RemoteFrame {
   // as part of ViewMsg_Resize, once the browser process has resized the tab for
   // fullscreen.
   WillEnterFullscreen();
+
+  // Updates replicated ContentSecurityPolicy on the remote frame's
+  // SecurityContent.
+  AddReplicatedContentSecurityPolicies(
+      array<network.mojom.ContentSecurityPolicyHeader> headers);
 
   // Resets the replicated ContentSecurityPolicy on the remote frame's
   // SecurityContext. Used to reset CSP from the previous document on

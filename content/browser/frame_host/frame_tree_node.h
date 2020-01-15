@@ -20,6 +20,7 @@
 #include "content/common/content_export.h"
 #include "content/common/frame_owner_properties.h"
 #include "content/common/frame_replication_state.h"
+#include "services/network/public/mojom/content_security_policy.mojom-forward.h"
 #include "third_party/blink/public/common/frame/frame_owner_element_type.h"
 #include "third_party/blink/public/common/frame/frame_policy.h"
 #include "third_party/blink/public/common/frame/user_activation_state.h"
@@ -35,7 +36,6 @@ class NavigationRequest;
 class Navigator;
 class RenderFrameHostImpl;
 class NavigationEntryImpl;
-struct ContentSecurityPolicyHeader;
 
 // When a page contains iframes, its renderer process maintains a tree structure
 // of those frames. We are mirroring this tree in the browser process. This
@@ -184,7 +184,7 @@ class CONTENT_EXPORT FrameTreeNode {
 
   // Add CSP headers to replication state, notify proxies about the update.
   void AddContentSecurityPolicies(
-      const std::vector<ContentSecurityPolicyHeader>& headers);
+      std::vector<network::mojom::ContentSecurityPolicyHeaderPtr> headers);
 
   // Sets the current insecure request policy, and notifies proxies about the
   // update.

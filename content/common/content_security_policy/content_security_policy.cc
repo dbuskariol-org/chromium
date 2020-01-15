@@ -164,7 +164,7 @@ bool ShouldBypassContentSecurityPolicy(CSPContext* context, const GURL& url) {
 ContentSecurityPolicy::ContentSecurityPolicy() = default;
 
 ContentSecurityPolicy::ContentSecurityPolicy(
-    const ContentSecurityPolicyHeader& header,
+    const network::mojom::ContentSecurityPolicyHeader& header,
     const std::vector<CSPDirective>& directives,
     const std::vector<std::string>& report_endpoints,
     bool use_reporting_api)
@@ -177,7 +177,7 @@ ContentSecurityPolicy::ContentSecurityPolicy(
 // struct.
 ContentSecurityPolicy::ContentSecurityPolicy(
     network::mojom::ContentSecurityPolicyPtr csp)
-    : header("", csp->type, csp->source),
+    : header(*(csp->header)),
       report_endpoints(std::move(csp->report_endpoints)),
       use_reporting_api(csp->use_reporting_api) {
   for (auto& directive : csp->directives)

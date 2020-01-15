@@ -334,11 +334,10 @@ void FrameTreeNode::SetFrameName(const std::string& name,
 }
 
 void FrameTreeNode::AddContentSecurityPolicies(
-    const std::vector<ContentSecurityPolicyHeader>& headers) {
-  replication_state_.accumulated_csp_headers.insert(
-      replication_state_.accumulated_csp_headers.end(), headers.begin(),
-      headers.end());
-  render_manager_.OnDidAddContentSecurityPolicies(headers);
+    std::vector<network::mojom::ContentSecurityPolicyHeaderPtr> headers) {
+  for (auto& header : headers)
+    replication_state_.accumulated_csp_headers.push_back(*header);
+  render_manager_.OnDidAddContentSecurityPolicies(std::move(headers));
 }
 
 void FrameTreeNode::SetInsecureRequestPolicy(

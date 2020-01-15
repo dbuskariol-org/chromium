@@ -23,6 +23,7 @@
 #include "content/common/content_export.h"
 #include "content/public/browser/global_request_id.h"
 #include "content/public/common/referrer.h"
+#include "services/network/public/mojom/content_security_policy.mojom-forward.h"
 #include "third_party/blink/public/common/frame/user_activation_update_type.h"
 #include "ui/base/page_transition_types.h"
 #include "url/origin.h"
@@ -41,7 +42,6 @@ class RenderViewHost;
 class RenderViewHostImpl;
 class RenderWidgetHostView;
 class TestWebContents;
-struct ContentSecurityPolicyHeader;
 struct FrameOwnerProperties;
 struct FrameReplicationState;
 
@@ -342,7 +342,7 @@ class CONTENT_EXPORT RenderFrameHostManager
 
   // Sends the newly added Content Security Policy headers to all the proxies.
   void OnDidAddContentSecurityPolicies(
-      const std::vector<ContentSecurityPolicyHeader>& headers);
+      std::vector<network::mojom::ContentSecurityPolicyHeaderPtr> headers);
 
   // Resets Content Security Policy in all the proxies.
   void OnDidResetContentSecurityPolicy();

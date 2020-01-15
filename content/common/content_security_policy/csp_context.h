@@ -10,7 +10,6 @@
 #include "base/optional.h"
 #include "content/common/content_export.h"
 #include "content/common/content_security_policy/content_security_policy.h"
-#include "content/common/content_security_policy_header.h"
 #include "content/common/navigation_params.h"
 #include "services/network/public/mojom/content_security_policy.mojom-forward.h"
 #include "url/gurl.h"

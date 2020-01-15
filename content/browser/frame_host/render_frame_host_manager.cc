@@ -910,10 +910,10 @@ void RenderFrameHostManager::OnDidUpdateName(const std::string& name,
 }
 
 void RenderFrameHostManager::OnDidAddContentSecurityPolicies(
-    const std::vector<ContentSecurityPolicyHeader>& headers) {
+    std::vector<network::mojom::ContentSecurityPolicyHeaderPtr> headers) {
   for (const auto& pair : proxy_hosts_) {
-    pair.second->Send(new FrameMsg_AddContentSecurityPolicies(
-        pair.second->GetRoutingID(), headers));
+    pair.second->GetAssociatedRemoteFrame()
+        ->AddReplicatedContentSecurityPolicies(mojo::Clone(headers));
   }
 }
 

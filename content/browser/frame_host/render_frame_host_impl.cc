@@ -2567,12 +2567,13 @@ void RenderFrameHostImpl::DidAddContentSecurityPolicies(
                "RenderFrameHostImpl::OnDidAddContentSecurityPolicies",
                "frame_tree_node", frame_tree_node_->frame_tree_node_id());
 
-  std::vector<ContentSecurityPolicyHeader> headers;
+  std::vector<network::mojom::ContentSecurityPolicyHeaderPtr> headers;
   for (const ContentSecurityPolicy& policy : policies) {
     AddContentSecurityPolicy(policy);
-    headers.push_back(policy.header);
+    headers.push_back(
+        network::mojom::ContentSecurityPolicyHeader::New(policy.header));
   }
-  frame_tree_node()->AddContentSecurityPolicies(headers);
+  frame_tree_node()->AddContentSecurityPolicies(std::move(headers));
 }
 
 void RenderFrameHostImpl::OnOpenURL(const FrameHostMsg_OpenURL_Params& params) {

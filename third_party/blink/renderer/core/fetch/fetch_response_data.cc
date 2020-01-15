@@ -53,6 +53,12 @@ blink::CSPDirectivePtr ConvertToBlink(CSPDirectivePtr csp) {
                                   ConvertToBlink(std::move(csp->source_list)));
 }
 
+blink::ContentSecurityPolicyHeaderPtr ConvertToBlink(
+    ContentSecurityPolicyHeaderPtr header) {
+  return blink::ContentSecurityPolicyHeader::New(
+      String::FromUTF8(header->header_value), header->type, header->source);
+}
+
 blink::ContentSecurityPolicyPtr ConvertToBlink(ContentSecurityPolicyPtr csp) {
   WTF::Vector<blink::CSPDirectivePtr> directives;
   for (auto& directive : csp->directives)
@@ -62,9 +68,9 @@ blink::ContentSecurityPolicyPtr ConvertToBlink(ContentSecurityPolicyPtr csp) {
   for (auto& endpoint : csp->report_endpoints)
     report_endpoints.push_back(String::FromUTF8(endpoint));
 
-  return blink::ContentSecurityPolicy::New(std::move(directives), csp->type,
-                                           csp->source, csp->use_reporting_api,
-                                           std::move(report_endpoints));
+  return blink::ContentSecurityPolicy::New(
+      std::move(directives), ConvertToBlink(std::move(csp->header)),
+      csp->use_reporting_api, std::move(report_endpoints));
 }
 
 WTF::Vector<blink::ContentSecurityPolicyPtr> ConvertToBlink(

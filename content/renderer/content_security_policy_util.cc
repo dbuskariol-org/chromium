@@ -48,8 +48,8 @@ ContentSecurityPolicy BuildContentSecurityPolicy(
     report_endpoints.push_back(endpoint.Utf8());
 
   return ContentSecurityPolicy(
-      ContentSecurityPolicyHeader(policy.header.Utf8(), policy.disposition,
-                                  policy.source),
+      network::mojom::ContentSecurityPolicyHeader(
+          policy.header.Utf8(), policy.disposition, policy.source),
       directives, report_endpoints, policy.use_reporting_api);
 }
 

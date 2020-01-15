@@ -25,7 +25,6 @@
 #include "content/common/content_export.h"
 #include "content/common/content_param_traits.h"
 #include "content/common/content_security_policy/csp_context.h"
-#include "content/common/content_security_policy_header.h"
 #include "content/common/frame_delete_intention.h"
 #include "content/common/frame_message_structs.h"
 #include "content/common/frame_owner_properties.h"
@@ -588,7 +587,7 @@ IPC_STRUCT_TRAITS_BEGIN(content::ContentSecurityPolicy)
   IPC_STRUCT_TRAITS_MEMBER(use_reporting_api)
 IPC_STRUCT_TRAITS_END()
 
-IPC_STRUCT_TRAITS_BEGIN(content::ContentSecurityPolicyHeader)
+IPC_STRUCT_TRAITS_BEGIN(network::mojom::ContentSecurityPolicyHeader)
   IPC_STRUCT_TRAITS_MEMBER(header_value)
   IPC_STRUCT_TRAITS_MEMBER(type)
   IPC_STRUCT_TRAITS_MEMBER(source)
@@ -741,10 +740,6 @@ IPC_MESSAGE_ROUTED2(FrameMsg_DidSetFramePolicyHeaders,
 IPC_MESSAGE_ROUTED2(FrameMsg_DidUpdateName,
                     std::string /* name */,
                     std::string /* unique_name */)
-
-// Updates replicated ContentSecurityPolicy in a frame proxy.
-IPC_MESSAGE_ROUTED1(FrameMsg_AddContentSecurityPolicies,
-                    std::vector<content::ContentSecurityPolicyHeader>)
 
 // Update a proxy's replicated enforcement of insecure request policy.
 // Used when the frame's policy is changed in another process.

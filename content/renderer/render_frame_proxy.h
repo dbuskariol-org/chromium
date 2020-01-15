@@ -42,7 +42,6 @@ class ChildFrameCompositingHelper;
 class RenderFrameImpl;
 class RenderViewImpl;
 class RenderWidget;
-struct ContentSecurityPolicyHeader;
 struct FrameOwnerProperties;
 struct FrameReplicationState;
 struct ResourceTimingInfo;
@@ -241,8 +240,6 @@ class CONTENT_EXPORT RenderFrameProxy : public IPC::Listener,
       const ResourceTimingInfo& resource_timing);
   void OnSetNeedsOcclusionTracking(bool);
   void OnDidUpdateName(const std::string& name, const std::string& unique_name);
-  void OnAddContentSecurityPolicies(
-      const std::vector<ContentSecurityPolicyHeader>& header);
   void OnEnforceInsecureRequestPolicy(blink::WebInsecureRequestPolicy policy);
   void OnSetFrameOwnerProperties(const FrameOwnerProperties& properties);
   void OnSetPageFocus(bool is_focused);

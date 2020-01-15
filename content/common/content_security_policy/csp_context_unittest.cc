@@ -5,7 +5,6 @@
 #include <set>
 
 #include "content/common/content_security_policy/csp_context.h"
-#include "content/common/content_security_policy_header.h"
 #include "content/common/navigation_params.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -57,13 +56,10 @@ class CSPContextTest : public CSPContext {
 ContentSecurityPolicy BuildPolicy(CSPDirective::Name directive_name,
                                   std::vector<CSPSource> sources) {
   return ContentSecurityPolicy(
-      ContentSecurityPolicyHeader(
-          std::string(),  // header
-          network::mojom::ContentSecurityPolicyType::kEnforce,
-          network::mojom::ContentSecurityPolicySource::kHTTP),
+      {},
       {CSPDirective(directive_name,
                     CSPSourceList(false, false, false, sources))},
-      std::vector<std::string>(), false);  // report_end_points
+      {}, false);
 }
 
 }  // namespace
