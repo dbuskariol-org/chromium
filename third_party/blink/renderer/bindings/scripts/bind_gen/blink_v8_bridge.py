@@ -190,6 +190,9 @@ def native_value_tag(idl_type):
     if non_null_real_type.is_string:
         return "IDL{}V2".format(real_type.type_name)
 
+    if real_type.is_buffer_source_type:
+        return blink_type_info(real_type).value_t
+
     if real_type.is_symbol:
         assert False, "Blink does not support/accept IDL symbol type."
 
@@ -199,9 +202,12 @@ def native_value_tag(idl_type):
     if non_null_real_type.type_definition_object:
         return blink_class_name(non_null_real_type.type_definition_object)
 
-    if real_type.is_sequence or real_type.is_frozen_array:
+    if real_type.is_sequence:
         return "IDLSequence<{}>".format(
             native_value_tag(real_type.element_type))
+
+    if real_type.is_frozen_array:
+        return "IDLArray<{}>".format(native_value_tag(real_type.element_type))
 
     if real_type.is_record:
         return "IDLRecord<{}, {}>".format(
