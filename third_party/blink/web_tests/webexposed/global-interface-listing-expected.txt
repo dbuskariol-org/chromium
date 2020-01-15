@@ -5351,7 +5351,7 @@ interface NDEFRecord
 interface NDEFWriter
     attribute @@toStringTag
     method constructor
-    method push
+    method write
 interface NamedNodeMap
     attribute @@toStringTag
     getter length

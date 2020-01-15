@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// https://w3c.github.io/web-nfc/#the-ndefpushoptions-dictionary
+// https://w3c.github.io/web-nfc/#the-ndefwriteoptions-dictionary
 
-dictionary NDEFPushOptions {
+dictionary NDEFWriteOptions {
     boolean ignoreRead = true;
     AbortSignal? signal;
 };

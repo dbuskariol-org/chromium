@@ -25895,7 +25895,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3092" label="RegisterProtocolHandlerSameOriginAsTop"/>
   <int value="3093" label="RegisterProtocolHandlerCrossOriginSubframe"/>
   <int value="3094" label="WebNfcNdefReaderScan"/>
-  <int value="3095" label="WebNfcNdefWriterPush"/>
+  <int value="3095" label="WebNfcNdefWriterWrite"/>
   <int value="3096" label="HTMLPortalElement"/>
   <int value="3097" label="V8HTMLPortalElement_Activate_Method"/>
   <int value="3098" label="V8HTMLPortalElement_PostMessage_Method"/>

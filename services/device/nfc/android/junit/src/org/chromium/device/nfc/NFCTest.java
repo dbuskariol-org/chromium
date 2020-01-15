@@ -45,10 +45,10 @@ import org.chromium.base.test.util.Feature;
 import org.chromium.device.mojom.NdefError;
 import org.chromium.device.mojom.NdefErrorType;
 import org.chromium.device.mojom.NdefMessage;
-import org.chromium.device.mojom.NdefPushOptions;
 import org.chromium.device.mojom.NdefRecord;
 import org.chromium.device.mojom.NdefRecordTypeCategory;
 import org.chromium.device.mojom.NdefScanOptions;
+import org.chromium.device.mojom.NdefWriteOptions;
 import org.chromium.device.mojom.Nfc.CancelAllWatchesResponse;
 import org.chromium.device.mojom.Nfc.CancelPushResponse;
 import org.chromium.device.mojom.Nfc.CancelWatchResponse;
@@ -664,7 +664,7 @@ public class NFCTest {
         TestNfcImpl nfc = new TestNfcImpl(mContext, mDelegate);
         mDelegate.invokeCallback();
         PushResponse mockCallback = mock(PushResponse.class);
-        nfc.push(new NdefMessage(), createNdefPushOptions(), mockCallback);
+        nfc.push(new NdefMessage(), createNdefWriteOptions(), mockCallback);
         nfc.processPendingOperationsForTesting(mNfcTagHandler);
         verify(mockCallback).call(mErrorCaptor.capture());
         assertEquals(NdefErrorType.INVALID_MESSAGE, mErrorCaptor.getValue().errorType);
@@ -714,7 +714,7 @@ public class NFCTest {
         TestNfcImpl nfc = new TestNfcImpl(mContext, mDelegate);
         mDelegate.invokeCallback();
         PushResponse mockCallback = mock(PushResponse.class);
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockCallback);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockCallback);
         nfc.processPendingOperationsForTesting(mNfcTagHandler);
         verify(mockCallback).call(mErrorCaptor.capture());
         assertNull(mErrorCaptor.getValue());
@@ -730,7 +730,7 @@ public class NFCTest {
         mDelegate.invokeCallback();
         PushResponse mockPushCallback = mock(PushResponse.class);
         CancelPushResponse mockCancelPushCallback = mock(CancelPushResponse.class);
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockPushCallback);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockPushCallback);
         nfc.cancelPush(mockCancelPushCallback);
 
         // Check that push request was cancelled with OPERATION_CANCELLED.
@@ -1030,7 +1030,7 @@ public class NFCTest {
         nfc.watch(createNdefScanOptions(), mNextWatchId, mockWatchCallback);
         // Start a push.
         PushResponse mockCallback = mock(PushResponse.class);
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockCallback);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockCallback);
 
         // Pass null tag handler to simulate that the tag is not NDEF compatible.
         nfc.processPendingOperationsForTesting(null);
@@ -1113,7 +1113,7 @@ public class NFCTest {
         doThrow(IllegalStateException.class)
                 .when(mNfcTagHandler)
                 .write(any(android.nfc.NdefMessage.class));
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockCallback);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockCallback);
         nfc.processPendingOperationsForTesting(mNfcTagHandler);
         verify(mockCallback).call(mErrorCaptor.capture());
 
@@ -1133,8 +1133,8 @@ public class NFCTest {
 
         PushResponse mockCallback1 = mock(PushResponse.class);
         PushResponse mockCallback2 = mock(PushResponse.class);
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockCallback1);
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockCallback2);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockCallback1);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockCallback2);
 
         verify(mNfcAdapter, times(1))
                 .enableReaderMode(any(Activity.class), any(ReaderCallback.class), anyInt(),
@@ -1156,7 +1156,7 @@ public class NFCTest {
         mDelegate.invokeCallback();
         PushResponse mockCallback = mock(PushResponse.class);
 
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockCallback);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockCallback);
 
         verify(mNfcAdapter, times(1))
                 .enableReaderMode(any(Activity.class), any(ReaderCallback.class), anyInt(),
@@ -1186,8 +1186,8 @@ public class NFCTest {
 
         PushResponse mockCallback1 = mock(PushResponse.class);
         PushResponse mockCallback2 = mock(PushResponse.class);
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockCallback1);
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockCallback2);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockCallback1);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockCallback2);
 
         verify(mNfcAdapter, times(1))
                 .enableReaderMode(any(Activity.class), any(ReaderCallback.class), anyInt(),
@@ -1224,7 +1224,7 @@ public class NFCTest {
         nfc.watch(createNdefScanOptions(), mNextWatchId, mockWatchCallback);
 
         PushResponse mockPushCallback = mock(PushResponse.class);
-        nfc.push(createMojoNdefMessage(), createNdefPushOptions(), mockPushCallback);
+        nfc.push(createMojoNdefMessage(), createNdefWriteOptions(), mockPushCallback);
 
         verify(mNfcAdapter, times(1))
                 .enableReaderMode(any(Activity.class), any(ReaderCallback.class), anyInt(),
@@ -1267,17 +1267,17 @@ public class NFCTest {
         emptyNdefRecord.recordType = NdefMessageUtils.RECORD_TYPE_EMPTY;
         NdefMessage ndefMessage = createMojoNdefMessage(emptyNdefRecord);
 
-        nfc.push(ndefMessage, createNdefPushOptions(), mockCallback);
+        nfc.push(ndefMessage, createNdefWriteOptions(), mockCallback);
         nfc.processPendingOperationsForTesting(mNfcTagHandler);
         verify(mockCallback).call(mErrorCaptor.capture());
         assertNull(mErrorCaptor.getValue());
     }
 
     /**
-     * Creates NdefPushOptions with default values.
+     * Creates NdefWriteOptions with default values.
      */
-    private NdefPushOptions createNdefPushOptions() {
-        NdefPushOptions pushOptions = new NdefPushOptions();
+    private NdefWriteOptions createNdefWriteOptions() {
+        NdefWriteOptions pushOptions = new NdefWriteOptions();
         pushOptions.ignoreRead = false;
         return pushOptions;
     }

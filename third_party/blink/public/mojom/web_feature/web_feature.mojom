@@ -2461,7 +2461,7 @@ enum WebFeature {
   kRegisterProtocolHandlerSameOriginAsTop = 3092,
   kRegisterProtocolHandlerCrossOriginSubframe = 3093,
   kWebNfcNdefReaderScan = 3094,
-  kWebNfcNdefWriterPush = 3095,
+  kWebNfcNdefWriterWrite = 3095,
   kHTMLPortalElement = 3096,
   kV8HTMLPortalElement_Activate_Method = 3097,
   kV8HTMLPortalElement_PostMessage_Method = 3098,
