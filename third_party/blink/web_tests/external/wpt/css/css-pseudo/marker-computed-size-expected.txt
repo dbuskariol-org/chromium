@@ -1,0 +1,11 @@
+This is a testharness.js-based test.
+PASS Decimal ::marker
+PASS Decimal ::marker with custom value
+PASS String ::marker
+PASS ::marker with no box due to 'list-style'
+PASS ::marker with custom string contents
+PASS ::marker with custom image contents
+PASS ::marker with custom string and image contents
+FAIL ::marker with no box due to 'content' assert_equals: width expected "auto" but got "5px"
+Harness: the test ran to completion.
+

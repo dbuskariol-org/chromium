@@ -1227,6 +1227,7 @@ crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/span/in-nested-multi
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/span/inside-block-with-fixed-height.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/span/invalid-spanner-in-abspos.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/span/invalid-spanner-in-transform.html [ Failure ]
+crbug.com/1040947 virtual/layout_ng_block_frag/fast/multicol/span/list-multi-column-crash.html [ Crash ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/span/nested-multicol.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/span/outer-column-break-after-inner-spanner-2.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/span/outer-column-break-after-inner-spanner-and-float.html [ Failure ]
@@ -4011,7 +4012,6 @@ crbug.com/1031667 external/wpt/css/css-pseudo/marker-content-008.tentative.html 
 crbug.com/1031667 external/wpt/css/css-pseudo/marker-content-009.tentative.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-content-010.html [ Failure ]
 crbug.com/1031667 external/wpt/css/css-pseudo/marker-content-011.tentative.html [ Failure ]
-crbug.com/1031667 external/wpt/css/css-pseudo/marker-content-014.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-font-variant-numeric-normal.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-list-style-position.html [ Failure ]
 

@@ -71,11 +71,13 @@ crbug.com/591099 external/wpt/css/css-position/static-position/vrl-rtl-ltr.tenta
 crbug.com/591099 external/wpt/css/css-position/static-position/vrl-rtl-rtl.html [ Failure ]
 
 ### external/wpt/css/css-pseudo/
+crbug.com/457718 external/wpt/css/css-pseudo/marker-computed-size.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-content-003.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-content-003b.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-content-004.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-content-006.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-content-012.html [ Failure ]
+crbug.com/457718 external/wpt/css/css-pseudo/marker-content-014.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-content-015.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-content-016.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-content-017.html [ Failure ]

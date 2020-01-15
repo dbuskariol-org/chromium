@@ -2632,6 +2632,8 @@ void AXNodeObject::AddChildren() {
 
   for (Node* child = LayoutTreeBuilderTraversal::FirstChild(*node_); child;
        child = LayoutTreeBuilderTraversal::NextSibling(*child)) {
+    if (child->IsMarkerPseudoElement() && AccessibilityIsIgnored())
+      continue;
     AXObject* child_obj = AXObjectCache().GetOrCreate(child);
     if (child_obj && !AXObjectCache().IsAriaOwned(child_obj))
       AddChild(child_obj);
