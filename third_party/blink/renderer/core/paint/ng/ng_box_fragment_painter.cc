@@ -181,7 +181,8 @@ Vector<PhysicalRect> BuildBackplate(NGInlineCursor* descendants,
   // inlines.
   for (; *descendants; descendants->MoveToNext()) {
     const NGPaintFragment* child = descendants->CurrentPaintFragment();
-    DCHECK(child);  // TODO(kojii): Support NGFragmentItem
+    if (!child)  // TODO(kojii): Support NGFragmentItem
+      continue;
     const NGPhysicalFragment& child_fragment = child->PhysicalFragment();
     if (child_fragment.IsHiddenForPaint() || child_fragment.IsFloating())
       continue;
@@ -230,6 +231,12 @@ PhysicalRect NGBoxFragmentPainter::SelfInkOverflow() const {
   DCHECK(fragment.IsBox() && !fragment.IsInlineBox());
   return ToLayoutBox(fragment.GetLayoutObject())
       ->PhysicalSelfVisualOverflowRect();
+}
+
+PhysicalRect NGBoxFragmentPainter::ContentsInkOverflow() const {
+  const NGPhysicalFragment& fragment = PhysicalFragment();
+  return ToLayoutBox(fragment.GetLayoutObject())
+      ->PhysicalContentsVisualOverflowRect();
 }
 
 void NGBoxFragmentPainter::Paint(const PaintInfo& paint_info) {
@@ -384,9 +391,13 @@ void NGBoxFragmentPainter::PaintObject(
                          paint_offset_to_inline_formatting_context,
                          descendants_);
       } else if (items_) {
-        // Paint |NGFragmentItems| for this block if we have one.
-        NGInlineCursor cursor(*items_);
-        PaintInlineItems(paint_info.ForDescendants(), paint_offset, &cursor);
+        if (physical_box_fragment.IsBlockFlow()) {
+          PaintBlockFlowContents(paint_info, paint_offset);
+        } else {
+          DCHECK(physical_box_fragment.IsInlineBox());
+          NGInlineCursor cursor(*items_);
+          PaintInlineItems(paint_info.ForDescendants(), paint_offset, &cursor);
+        }
       } else if (physical_box_fragment.ChildrenInline()) {
         DCHECK(!RuntimeEnabledFeatures::LayoutNGFragmentItemEnabled());
         DCHECK(paint_fragment_);
@@ -445,14 +456,12 @@ void NGBoxFragmentPainter::PaintBlockFlowContents(
     const PhysicalOffset& paint_offset) {
   const NGPhysicalBoxFragment& fragment = PhysicalFragment();
   const LayoutObject* layout_object = fragment.GetLayoutObject();
-
   DCHECK(fragment.ChildrenInline());
-  DCHECK(paint_fragment_);
 
   // When the layout-tree gets into a bad state, we can end up trying to paint
   // a fragment with inline children, without a paint fragment. See:
   // http://crbug.com/1022545
-  if (!paint_fragment_) {
+  if ((!paint_fragment_ && !items_) || layout_object->NeedsLayout()) {
     NOTREACHED();
     return;
   }
@@ -470,7 +479,7 @@ void NGBoxFragmentPainter::PaintBlockFlowContents(
   // |LayoutOverflow()|, but this can be approximiated with
   // |ContentsInkOverflow()|.
   PhysicalRect content_ink_rect = fragment.LocalRect();
-  content_ink_rect.Unite(paint_fragment_->ContentsInkOverflow());
+  content_ink_rect.Unite(ContentsInkOverflow());
   content_ink_rect.offset += PhysicalOffset(paint_offset);
   if (!paint_info.GetCullRect().Intersects(content_ink_rect.ToLayoutRect()))
     return;
@@ -478,7 +487,13 @@ void NGBoxFragmentPainter::PaintBlockFlowContents(
   DCHECK(layout_object->IsLayoutBlockFlow());
   const auto& layout_block = To<LayoutBlock>(*layout_object);
   DCHECK(layout_block.ChildrenInline());
-  NGInlineCursor children(*paint_fragment_);
+  if (paint_fragment_) {
+    NGInlineCursor children(*paint_fragment_);
+    PaintLineBoxChildren(&children, paint_info.ForDescendants(), paint_offset);
+    return;
+  }
+  DCHECK(items_);
+  NGInlineCursor children(*items_);
   PaintLineBoxChildren(&children, paint_info.ForDescendants(), paint_offset);
 }
 
@@ -1005,10 +1020,6 @@ void NGBoxFragmentPainter::PaintAllPhasesAtomically(
 void NGBoxFragmentPainter::PaintInlineItems(const PaintInfo& paint_info,
                                             const PhysicalOffset& paint_offset,
                                             NGInlineCursor* cursor) {
-  ScopedPaintTimingDetectorBlockPaintHook
-      scoped_paint_timing_detector_block_paint_hook;
-  // TODO(kojii): Copy more from |PaintLineBoxChildren|.
-
   while (*cursor) {
     const NGFragmentItem* item = cursor->CurrentItem();
     DCHECK(item);
@@ -1017,18 +1028,14 @@ void NGBoxFragmentPainter::PaintInlineItems(const PaintInfo& paint_info,
       case NGFragmentItem::kGeneratedText:
         PaintTextItem(*cursor, paint_info, paint_offset);
         break;
-      case NGFragmentItem::kLine:
-        if (PaintLineBoxItem(*item, paint_info, paint_offset) ==
-            kSkipChildren) {
-          cursor->MoveToNextSkippingChildren();
-          continue;
-        }
-        break;
       case NGFragmentItem::kBox:
         if (PaintBoxItem(*item, paint_info, paint_offset) == kSkipChildren) {
           cursor->MoveToNextSkippingChildren();
           continue;
         }
+        break;
+      case NGFragmentItem::kLine:
+        NOTREACHED();
         break;
     }
     cursor->MoveToNext();
@@ -1102,6 +1109,11 @@ void NGBoxFragmentPainter::PaintLineBoxChildren(
     return;
   }
 
+  if (UNLIKELY(children->IsItemCursor())) {
+    PaintLineBoxChildItems(children, paint_info, paint_offset);
+    return;
+  }
+
   const bool is_horizontal = box_fragment_.Style().IsHorizontalWritingMode();
   for (; *children; children->MoveToNextSkippingChildren()) {
     const NGPaintFragment* line = children->CurrentPaintFragment();
@@ -1136,6 +1148,56 @@ void NGBoxFragmentPainter::PaintLineBoxChildren(
     PaintLineBox(child_fragment, *line, line, /* line_box_item */ nullptr,
                  paint_info, child_offset);
     PaintInlineChildren(line->Children(), paint_info, child_offset);
+  }
+}
+
+void NGBoxFragmentPainter::PaintLineBoxChildItems(
+    NGInlineCursor* children,
+    const PaintInfo& paint_info,
+    const PhysicalOffset& paint_offset) {
+  const bool is_horizontal = box_fragment_.Style().IsHorizontalWritingMode();
+  for (; *children; children->MoveToNextSkippingChildren()) {
+    const NGFragmentItem* child_item = children->CurrentItem();
+    DCHECK(child_item);
+
+    // Check if CullRect intersects with this child, only in block direction
+    // because soft-wrap and <br> needs to paint outside of InkOverflow() in
+    // inline direction.
+    const PhysicalOffset& child_offset = paint_offset + child_item->Offset();
+    const PhysicalRect child_rect = child_item->InkOverflow();
+    if (is_horizontal) {
+      LayoutUnit y = child_rect.offset.top + child_offset.top;
+      if (!paint_info.GetCullRect().IntersectsVerticalRange(
+              y, y + child_rect.size.height))
+        continue;
+    } else {
+      LayoutUnit x = child_rect.offset.left + child_offset.left;
+      if (!paint_info.GetCullRect().IntersectsHorizontalRange(
+              x, x + child_rect.size.width))
+        continue;
+    }
+
+    if (child_item->Type() == NGFragmentItem::kLine) {
+      const NGPhysicalLineBoxFragment* line_box_fragment =
+          child_item->LineBoxFragment();
+      DCHECK(line_box_fragment);
+      PaintLineBox(*line_box_fragment, *child_item,
+                   /* line_box_paint_fragment */ nullptr, child_item,
+                   paint_info, child_offset);
+      NGInlineCursor line_box_cursor = children->CursorForDescendants();
+      PaintInlineItems(paint_info, paint_offset, &line_box_cursor);
+      continue;
+    }
+
+    if (const NGPhysicalBoxFragment* child_fragment =
+            child_item->BoxFragment()) {
+      if (child_fragment->IsListMarker()) {
+        PaintBoxItem(*child_item, paint_info, paint_offset);
+        continue;
+      }
+    }
+
+    NOTREACHED();
   }
 }
 
