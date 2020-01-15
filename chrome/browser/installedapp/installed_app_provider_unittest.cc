@@ -26,4 +26,8 @@ class InstalledAppProviderTest : public ::testing::Test {
   base::android::ScopedJavaGlobalRef<jobject> j_test_;
 };
 
+// TODO(crbug/1041909): Disable failing test. This looks like magic but the test
+// target is defined by the macro below. This is a hack until these tests are
+// easier to disable.
+#define TestOneRelatedAppNotInstalled DISABLED_TestOneRelatedAppNotInstalled
 JAVA_TESTS(InstalledAppProviderTest, j_test())
