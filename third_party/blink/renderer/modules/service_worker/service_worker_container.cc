@@ -620,8 +620,7 @@ ServiceWorkerContainer::ServiceWorkerContainer(Document* document)
 
 ServiceWorkerContainer::ReadyProperty*
 ServiceWorkerContainer::CreateReadyProperty() {
-  return MakeGarbageCollected<ReadyProperty>(GetExecutionContext(), this,
-                                             ReadyProperty::kReady);
+  return MakeGarbageCollected<ReadyProperty>(GetExecutionContext());
 }
 
 void ServiceWorkerContainer::EnableClientMessageQueue() {

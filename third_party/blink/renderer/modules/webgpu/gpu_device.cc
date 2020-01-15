@@ -44,9 +44,7 @@ GPUDevice::GPUDevice(ExecutionContext* execution_context,
       queue_(MakeGarbageCollected<GPUQueue>(
           this,
           GetProcs().deviceCreateQueue(GetHandle()))),
-      lost_property_(MakeGarbageCollected<LostProperty>(execution_context,
-                                                        this,
-                                                        LostProperty::kLost)),
+      lost_property_(MakeGarbageCollected<LostProperty>(execution_context)),
       error_callback_(
           BindRepeatingDawnCallback(&GPUDevice::OnUncapturedError,
                                     WrapWeakPersistent(this),
@@ -77,7 +75,7 @@ void GPUDevice::OnUncapturedError(ExecutionContext* execution_context,
 
   // TODO: Use device lost callback instead of uncaptured error callback.
   if (errorType == WGPUErrorType_DeviceLost &&
-      lost_property_->GetState() == ScriptPromisePropertyBase::kPending) {
+      lost_property_->GetState() == LostProperty::kPending) {
     auto* device_lost_info = MakeGarbageCollected<GPUDeviceLostInfo>(message);
     lost_property_->Resolve(device_lost_info);
   }

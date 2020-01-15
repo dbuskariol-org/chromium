@@ -125,8 +125,7 @@ class MODULES_EXPORT ServiceWorkerContainer final
   class DomContentLoadedListener;
 
   using ReadyProperty =
-      ScriptPromiseProperty<Member<ServiceWorkerContainer>,
-                            Member<ServiceWorkerRegistration>,
+      ScriptPromiseProperty<Member<ServiceWorkerRegistration>,
                             Member<ServiceWorkerRegistration>>;
   ReadyProperty* CreateReadyProperty();
 
