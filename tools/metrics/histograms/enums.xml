@@ -37805,6 +37805,8 @@ from previous Chrome versions.
   <int value="-208587977" label="OmniboxMaterialDesignWeatherIcons:enabled"/>
   <int value="-208435024" label="EnableUsernameCorrection:enabled"/>
   <int value="-206393363" label="enable-scroll-prediction"/>
+  <int value="-205068159"
+      label="enable-experimental-accessibility-chromevox-search-menus"/>
   <int value="-204355195" label="secondary-ui-md"/>
   <int value="-203968600" label="SyncSupportSecondaryAccount:disabled"/>
   <int value="-202007318" label="AndroidAIAFetching:enabled"/>

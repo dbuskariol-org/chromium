@@ -3636,8 +3636,14 @@ const char kExperimentalAccessibilityChromeVoxLanguageSwitchingDescription[] =
     "Enable ChromeVox language switching, which changes ChromeVox's "
     "output language upon detection of new language.";
 
+const char kExperimentalAccessibilityChromeVoxSearchMenusName[] =
+    "Enable experimental ChromeVox search menus feature.";
+const char kExperimentalAccessibilityChromeVoxSearchMenusDescription[] =
+    "Allows users to search for items in the ChromeVox menu.";
+
 const char kExperimentalAccessibilityChromeVoxSubNodeLanguageSwitchingName[] =
-    "Enable experimental ChromeVox sub-node (word-level) language switching.";
+    "Enable experimental ChromeVox sub-node (word-level) language "
+    "switching.";
 const char
     kExperimentalAccessibilityChromeVoxSubNodeLanguageSwitchingDescription[] =
         "Enable ChromeVox language switching at the sub-node level, "

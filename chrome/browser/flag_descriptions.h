@@ -2167,6 +2167,9 @@ extern const char kExperimentalAccessibilityChromeVoxLanguageSwitchingName[];
 extern const char
     kExperimentalAccessibilityChromeVoxLanguageSwitchingDescription[];
 
+extern const char kExperimentalAccessibilityChromeVoxSearchMenusName[];
+extern const char kExperimentalAccessibilityChromeVoxSearchMenusDescription[];
+
 extern const char
     kExperimentalAccessibilityChromeVoxSubNodeLanguageSwitchingName[];
 extern const char
