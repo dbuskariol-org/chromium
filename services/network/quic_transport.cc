@@ -470,6 +470,18 @@ void QuicTransport::OnIncomingUnidirectionalStreamAvailable() {
   }
 }
 
+void QuicTransport::OnIncomingDatagramAvailable() {
+  // TODO(yhirano): Implement this.
+}
+
+void QuicTransport::OnCanCreateNewOutgoingBidirectionalStream() {
+  // TODO(yhirano): Implement this.
+}
+
+void QuicTransport::OnCanCreateNewOutgoingUnidirectionalStream() {
+  // TODO(yhirano): Implement this.
+}
+
 void QuicTransport::TearDown() {
   torn_down_ = true;
   receiver_.reset();

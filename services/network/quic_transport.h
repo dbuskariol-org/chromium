@@ -69,6 +69,9 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) QuicTransport final
   void OnError() override;
   void OnIncomingBidirectionalStreamAvailable() override;
   void OnIncomingUnidirectionalStreamAvailable() override;
+  void OnIncomingDatagramAvailable() override;
+  void OnCanCreateNewOutgoingBidirectionalStream() override;
+  void OnCanCreateNewOutgoingUnidirectionalStream() override;
 
   bool torn_down() const { return torn_down_; }
 
