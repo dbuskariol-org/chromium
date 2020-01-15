@@ -350,7 +350,7 @@ NodeRareData& Node::CreateRareData() {
 
   DCHECK(data_.rare_data_);
   SetFlag(kHasRareDataFlag);
-  MarkingVisitor::WriteBarrier(RareData());
+  MarkingVisitor::WriteBarrier(&data_.rare_data_);
   return *RareData();
 }
 
@@ -1033,7 +1033,7 @@ void Node::SetLayoutObject(LayoutObject* layout_object) {
   } else {
     data_.node_layout_data_ = node_layout_data;
     // We need the following line since data_.node_layout_data_ is not a Member.
-    MarkingVisitor::WriteBarrier(data_.node_layout_data_);
+    MarkingVisitor::WriteBarrier(&data_.node_layout_data_);
   }
 }
 
@@ -1070,7 +1070,7 @@ void Node::SetComputedStyle(scoped_refptr<const ComputedStyle> computed_style) {
   } else {
     data_.node_layout_data_ = node_layout_data;
     // We need the following line since data_.node_layout_data_ is not a Member.
-    MarkingVisitor::WriteBarrier(data_.node_layout_data_);
+    MarkingVisitor::WriteBarrier(&data_.node_layout_data_);
   }
 }
 
