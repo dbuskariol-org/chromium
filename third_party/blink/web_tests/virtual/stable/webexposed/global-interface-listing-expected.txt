@@ -1385,8 +1385,12 @@ interface Document : Node
     getter onvisibilitychange
     getter onvolumechange
     getter onwaiting
+    getter onwebkitanimationend
+    getter onwebkitanimationiteration
+    getter onwebkitanimationstart
     getter onwebkitfullscreenchange
     getter onwebkitfullscreenerror
+    getter onwebkittransitionend
     getter onwheel
     getter pictureInPictureElement
     getter pictureInPictureEnabled
@@ -1572,8 +1576,12 @@ interface Document : Node
     setter onvisibilitychange
     setter onvolumechange
     setter onwaiting
+    setter onwebkitanimationend
+    setter onwebkitanimationiteration
+    setter onwebkitanimationstart
     setter onwebkitfullscreenchange
     setter onwebkitfullscreenerror
+    setter onwebkittransitionend
     setter onwheel
     setter title
     setter vlinkColor
@@ -2353,6 +2361,10 @@ interface HTMLElement : Element
     getter ontransitionend
     getter onvolumechange
     getter onwaiting
+    getter onwebkitanimationend
+    getter onwebkitanimationiteration
+    getter onwebkitanimationstart
+    getter onwebkittransitionend
     getter onwheel
     getter outerText
     getter spellcheck
@@ -2461,6 +2473,10 @@ interface HTMLElement : Element
     setter ontransitionend
     setter onvolumechange
     setter onwaiting
+    setter onwebkitanimationend
+    setter onwebkitanimationiteration
+    setter onwebkitanimationstart
+    setter onwebkittransitionend
     setter onwheel
     setter outerText
     setter spellcheck
@@ -5680,6 +5696,10 @@ interface SVGElement : Element
     getter ontransitionend
     getter onvolumechange
     getter onwaiting
+    getter onwebkitanimationend
+    getter onwebkitanimationiteration
+    getter onwebkitanimationstart
+    getter onwebkittransitionend
     getter onwheel
     getter ownerSVGElement
     getter style
@@ -5774,6 +5794,10 @@ interface SVGElement : Element
     setter ontransitionend
     setter onvolumechange
     setter onwaiting
+    setter onwebkitanimationend
+    setter onwebkitanimationiteration
+    setter onwebkitanimationstart
+    setter onwebkittransitionend
     setter onwheel
     setter style
     setter tabIndex
