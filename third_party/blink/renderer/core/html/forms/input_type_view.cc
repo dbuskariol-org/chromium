@@ -128,6 +128,10 @@ void InputTypeView::DestroyShadowSubtree() {
     root->RemoveChildren();
 }
 
+HTMLInputElement* InputTypeView::UploadButton() const {
+  return nullptr;
+}
+
 void InputTypeView::AltAttributeChanged() {}
 
 void InputTypeView::SrcAttributeChanged() {}

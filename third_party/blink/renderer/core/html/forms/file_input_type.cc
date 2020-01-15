@@ -326,25 +326,27 @@ void FileInputType::CreateShadowSubtree() {
           GetElement().Multiple() ? IDS_FORM_MULTIPLE_FILES_BUTTON_LABEL
                                   : IDS_FORM_FILE_BUTTON_LABEL)));
   button->SetShadowPseudoId(AtomicString("-webkit-file-upload-button"));
+  button->SetActive(GetElement().CanReceiveDroppedFiles());
   GetElement().UserAgentShadowRoot()->AppendChild(button);
+}
+
+HTMLInputElement* FileInputType::UploadButton() const {
+  Node* node = GetElement().UserAgentShadowRoot()->firstChild();
+  CHECK(!node || IsA<HTMLInputElement>(node));
+  return To<HTMLInputElement>(node);
 }
 
 void FileInputType::DisabledAttributeChanged() {
   DCHECK(IsShadowHost(GetElement()));
-  CHECK(!GetElement().UserAgentShadowRoot()->firstChild() ||
-        IsA<Element>(GetElement().UserAgentShadowRoot()->firstChild()));
-  if (Element* button =
-          To<Element>(GetElement().UserAgentShadowRoot()->firstChild()))
+  if (Element* button = UploadButton()) {
     button->SetBooleanAttribute(html_names::kDisabledAttr,
                                 GetElement().IsDisabledFormControl());
+  }
 }
 
 void FileInputType::MultipleAttributeChanged() {
   DCHECK(IsShadowHost(GetElement()));
-  CHECK(!GetElement().UserAgentShadowRoot()->firstChild() ||
-        IsA<Element>(GetElement().UserAgentShadowRoot()->firstChild()));
-  if (Element* button =
-          To<Element>(GetElement().UserAgentShadowRoot()->firstChild())) {
+  if (Element* button = UploadButton()) {
     button->setAttribute(
         html_names::kValueAttr,
         AtomicString(GetLocale().QueryString(

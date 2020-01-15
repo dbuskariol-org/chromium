@@ -39,22 +39,13 @@ const int kDefaultWidthNumChars = 34;
 const int kButtonShadowHeight = 2;
 
 LayoutFileUploadControl::LayoutFileUploadControl(HTMLInputElement* input)
-    : LayoutBlockFlow(input),
-      can_receive_dropped_files_(input->CanReceiveDroppedFiles()) {}
+    : LayoutBlockFlow(input) {}
 
 LayoutFileUploadControl::~LayoutFileUploadControl() = default;
 
 void LayoutFileUploadControl::UpdateFromElement() {
   auto* input = To<HTMLInputElement>(GetNode());
   DCHECK_EQ(input->type(), input_type_names::kFile);
-
-  if (HTMLInputElement* button = UploadButton()) {
-    bool new_can_receive_dropped_files_state = input->CanReceiveDroppedFiles();
-    if (can_receive_dropped_files_ != new_can_receive_dropped_files_state) {
-      can_receive_dropped_files_ = new_can_receive_dropped_files_state;
-      button->SetActive(new_can_receive_dropped_files_state);
-    }
-  }
 
   // This only supports clearing out the files, but that's OK because for
   // security reasons that's the only change the DOM is allowed to make.
@@ -159,18 +150,7 @@ PositionWithAffinity LayoutFileUploadControl::PositionForPoint(
 }
 
 HTMLInputElement* LayoutFileUploadControl::UploadButton() const {
-  // FIXME: This should be on HTMLInputElement as an API like
-  // innerButtonElement().
-  auto* input = To<HTMLInputElement>(GetNode());
-  return DynamicTo<HTMLInputElement>(
-      input->UserAgentShadowRoot()->firstChild());
-}
-
-String LayoutFileUploadControl::ButtonValue() {
-  if (HTMLInputElement* button = UploadButton())
-    return button->value();
-
-  return String();
+  return To<HTMLInputElement>(GetNode())->UploadButton();
 }
 
 String LayoutFileUploadControl::FileTextValue() const {

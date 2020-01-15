@@ -1538,8 +1538,12 @@ void HTMLInputElement::SetCanReceiveDroppedFiles(
   if (!!can_receive_dropped_files_ == can_receive_dropped_files)
     return;
   can_receive_dropped_files_ = can_receive_dropped_files;
-  if (GetLayoutObject())
-    GetLayoutObject()->UpdateFromElement();
+  if (HTMLInputElement* button = UploadButton())
+    button->SetActive(can_receive_dropped_files);
+}
+
+HTMLInputElement* HTMLInputElement::UploadButton() const {
+  return input_type_view_->UploadButton();
 }
 
 String HTMLInputElement::SanitizeValue(const String& proposed_value) const {
