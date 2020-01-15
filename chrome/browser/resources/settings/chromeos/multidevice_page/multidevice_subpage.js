@@ -7,8 +7,6 @@
  * Subpage of settings-multidevice-page for managing multidevice features
  * individually and for forgetting a host.
  */
-cr.exportPath('settings');
-
 Polymer({
   is: 'settings-multidevice-subpage',
 

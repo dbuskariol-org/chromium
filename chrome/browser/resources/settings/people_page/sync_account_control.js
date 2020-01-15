@@ -6,10 +6,12 @@
  * 'settings-sync-account-section' is the settings page containing sign-in
  * settings.
  */
-cr.exportPath('settings');
+cr.define('settings', function() {
+  /** @const {number} */
+  const MAX_SIGNIN_PROMO_IMPRESSION = 10;
 
-/** @const {number} */
-settings.MAX_SIGNIN_PROMO_IMPRESSION = 10;
+  return {MAX_SIGNIN_PROMO_IMPRESSION};
+});
 
 Polymer({
   is: 'settings-sync-account-control',

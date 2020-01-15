@@ -10,12 +10,16 @@
  *
  *    <settings-ui prefs="{{prefs}}"></settings-ui>
  */
-cr.exportPath('settings');
-assert(
-    !settings.defaultResourceLoaded,
-    'settings_ui.js run twice. You probably have an invalid import.');
-/** Global defined when the main Settings script runs. */
-settings.defaultResourceLoaded = true;
+cr.define('settings', function() {
+  /** Global defined when the main Settings script runs. */
+  let defaultResourceLoaded = true;  // eslint-disable-line prefer-const
+
+  assert(
+      !window.settings || !settings.defaultResourceLoaded,
+      'settings_ui.js run twice. You probably have an invalid import.');
+
+  return {defaultResourceLoaded};
+});
 
 Polymer({
   is: 'os-settings-ui',

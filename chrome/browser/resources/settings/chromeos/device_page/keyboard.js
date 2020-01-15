@@ -2,27 +2,25 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/**
- * @fileoverview
- * 'settings-keyboard' is the settings subpage with keyboard settings.
- */
-cr.exportPath('settings');
+cr.define('settings', function() {
+  /**
+   * Modifier key IDs corresponding to the ModifierKey enumerators in
+   * /ui/base/ime/chromeos/ime_keyboard.h.
+   * @enum {number}
+   */
+  const ModifierKey = {
+    SEARCH_KEY: 0,
+    CONTROL_KEY: 1,
+    ALT_KEY: 2,
+    VOID_KEY: 3,  // Represents a disabled key.
+    CAPS_LOCK_KEY: 4,
+    ESCAPE_KEY: 5,
+    BACKSPACE_KEY: 6,
+    ASSISTANT_KEY: 7,
+  };
 
-/**
- * Modifier key IDs corresponding to the ModifierKey enumerators in
- * /ui/base/ime/chromeos/ime_keyboard.h.
- * @enum {number}
- */
-settings.ModifierKey = {
-  SEARCH_KEY: 0,
-  CONTROL_KEY: 1,
-  ALT_KEY: 2,
-  VOID_KEY: 3,  // Represents a disabled key.
-  CAPS_LOCK_KEY: 4,
-  ESCAPE_KEY: 5,
-  BACKSPACE_KEY: 6,
-  ASSISTANT_KEY: 7,
-};
+  return {ModifierKey};
+});
 
 Polymer({
   is: 'settings-keyboard',

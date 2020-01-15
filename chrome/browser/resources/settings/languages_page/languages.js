@@ -13,8 +13,6 @@
 (function() {
 'use strict';
 
-cr.exportPath('settings');
-
 const MoveType = chrome.languageSettingsPrivate.MoveType;
 
 // Translate server treats some language codes the same.

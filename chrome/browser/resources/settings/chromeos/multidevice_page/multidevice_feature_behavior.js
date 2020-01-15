@@ -7,7 +7,6 @@
  * intended to facilitate passing data between elements in the MultiDevice page
  * cleanly and concisely. It includes some constants and utility methods.
  */
-cr.exportPath('settings');
 
 /** @polymerBehavior */
 const MultiDeviceFeatureBehaviorImpl = {

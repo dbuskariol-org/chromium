@@ -2,29 +2,25 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-cr.exportPath('settings');
-
-/**
- * @enum {string}
- * A categorization of every possible Settings URL, necessary for implementing
- * a finite state machine.
- */
-settings.RouteState = {
-  // Initial state before anything has loaded yet.
-  INITIAL: 'initial',
-  // A dialog that has a dedicated URL (e.g. /importData).
-  DIALOG: 'dialog',
-  // A section (basically a scroll position within the top level page, e.g,
-  // /appearance.
-  SECTION: 'section',
-  // A subpage, or sub-subpage e.g, /searchEngins.
-  SUBPAGE: 'subpage',
-  // The top level Settings page, '/'.
-  TOP_LEVEL: 'top-level',
-};
-
 cr.define('settings', function() {
-  const RouteState = settings.RouteState;
+  /**
+   * @enum {string}
+   * A categorization of every possible Settings URL, necessary for implementing
+   * a finite state machine.
+   */
+  const RouteState = {
+    // Initial state before anything has loaded yet.
+    INITIAL: 'initial',
+    // A dialog that has a dedicated URL (e.g. /importData).
+    DIALOG: 'dialog',
+    // A section (basically a scroll position within the top level page, e.g,
+    // /appearance.
+    SECTION: 'section',
+    // A subpage, or sub-subpage e.g, /searchEngins.
+    SUBPAGE: 'subpage',
+    // The top level Settings page, '/'.
+    TOP_LEVEL: 'top-level',
+  };
 
   /**
    * @param {?settings.Route} route
@@ -394,5 +390,5 @@ cr.define('settings', function() {
     },
   };
 
-  return {MainPageBehavior: MainPageBehavior};
+  return {MainPageBehavior, RouteState};
 });

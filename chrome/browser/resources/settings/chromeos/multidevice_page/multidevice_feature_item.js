@@ -10,8 +10,6 @@
  * information relevant to the individual feature, such as a route to the
  * feature's autonomous page if there is one.
  */
-cr.exportPath('settings');
-
 Polymer({
   is: 'settings-multidevice-feature-item',
 

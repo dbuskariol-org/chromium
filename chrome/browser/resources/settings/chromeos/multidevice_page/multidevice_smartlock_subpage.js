@@ -2,12 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/**
- * @fileoverview
- * Subpage of settings-multidevice-feature for managing the Smart Lock feature.
- */
-cr.exportPath('settings');
-
 cr.define('settings', function() {
   /**
    * The state of the preference controlling Smart Lock's ability to sign-in the

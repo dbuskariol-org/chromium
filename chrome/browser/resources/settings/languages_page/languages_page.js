@@ -6,13 +6,15 @@
  * @fileoverview 'settings-languages-page' is the settings page
  * for language and input method settings.
  */
-cr.exportPath('settings');
+cr.define('settings', function() {
+  /**
+   * @type {number} Millisecond delay that can be used when closing an action
+   *      menu to keep it briefly on-screen.
+   */
+  const kMenuCloseDelay = 100;
 
-/**
- * @type {number} Millisecond delay that can be used when closing an action
- *      menu to keep it briefly on-screen.
- */
-settings.kMenuCloseDelay = 100;
+  return {kMenuCloseDelay};
+});
 
 /**
  * Name of the language setting is shown uma histogram.
