@@ -127,10 +127,17 @@ constexpr int kHistogramMin = 1;
 constexpr int kHistogramMax = 350000;
 constexpr int kHistogramBucketCount = 50;
 
+bool ShouldReportLatencyMetricsForSequenceType(
+    FrameSequenceTrackerType sequence_type) {
+  return sequence_type != FrameSequenceTrackerType::kUniversal;
+}
+
 std::string HistogramName(const int report_type_index,
                           FrameSequenceTrackerType frame_sequence_tracker_type,
                           const int stage_type_index) {
   DCHECK_LE(frame_sequence_tracker_type, FrameSequenceTrackerType::kMaxType);
+  DCHECK(
+      ShouldReportLatencyMetricsForSequenceType(frame_sequence_tracker_type));
   const char* tracker_type_name =
       FrameSequenceTracker::GetFrameSequenceTrackerTypeName(
           frame_sequence_tracker_type);
@@ -298,6 +305,8 @@ void CompositorFrameReporter::ReportStageHistogramWithBreakdown(
     CompositorFrameReporter::MissedFrameReportTypes report_type,
     const CompositorFrameReporter::StageData& stage,
     FrameSequenceTrackerType frame_sequence_tracker_type) const {
+  if (!ShouldReportLatencyMetricsForSequenceType(frame_sequence_tracker_type))
+    return;
   base::TimeDelta stage_delta = stage.end_time - stage.start_time;
   ReportHistogram(report_type, frame_sequence_tracker_type,
                   static_cast<int>(stage.stage_type), stage_delta);

@@ -8,6 +8,7 @@
 #include <climits>
 
 #include "base/bind.h"
+#include "base/metrics/statistics_recorder.h"
 #include "cc/animation/animation.h"
 #include "cc/animation/animation_curve.h"
 #include "cc/animation/animation_host.h"
@@ -1044,6 +1045,10 @@ class LayerTreeHostPresentationDuringAnimation
     EXPECT_GT(request_token_, 0u);
     EXPECT_GT(received_token_, request_token_);
     EXPECT_GE(received_token_, 5u);
+    EXPECT_TRUE(base::StatisticsRecorder::FindHistogram(
+        "CompositorLatency.TotalLatency"));
+    EXPECT_FALSE(base::StatisticsRecorder::FindHistogram(
+        "CompositorLatency.Universal.TotalLatency"));
   }
 
  private:
