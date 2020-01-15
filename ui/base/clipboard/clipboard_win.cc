@@ -629,7 +629,7 @@ void ClipboardWin::WriteBookmark(const char* title_data,
 }
 
 void ClipboardWin::WriteWebSmartPaste() {
-  DCHECK(clipboard_owner_->hwnd() != nullptr);
+  DCHECK_NE(clipboard_owner_->hwnd(), nullptr);
   ::SetClipboardData(
       ClipboardFormatType::GetWebKitSmartPasteType().ToFormatEtc().cfFormat,
       nullptr);
@@ -743,9 +743,10 @@ void ClipboardWin::WriteBitmapFromHandle(HBITMAP source_hbitmap,
 }
 
 void ClipboardWin::WriteToClipboard(unsigned int format, HANDLE handle) {
-  DCHECK(clipboard_owner_->hwnd() != nullptr);
+  DCHECK_NE(clipboard_owner_->hwnd(), nullptr);
   if (handle && !::SetClipboardData(format, handle)) {
-    DCHECK(ERROR_CLIPBOARD_NOT_OPEN != GetLastError());
+    DCHECK_NE(GetLastError(),
+              static_cast<unsigned long>(ERROR_CLIPBOARD_NOT_OPEN));
     FreeData(format, handle);
   }
 }
