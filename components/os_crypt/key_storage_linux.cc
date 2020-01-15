@@ -82,8 +82,6 @@ constexpr BackendUsage SelectedBackendToMetric(
   return BackendUsage::kDeferFailed;
 }
 
-#if defined(USE_LIBSECRET) || defined(USE_KEYRING) || defined(USE_KWALLET)
-
 const char* SelectedLinuxBackendToString(
     os_crypt::SelectedLinuxBackend selection) {
   switch (selection) {
@@ -105,9 +103,6 @@ const char* SelectedLinuxBackendToString(
   NOTREACHED();
   return nullptr;
 }
-
-#endif  // defined(USE_LIBSECRET) || defined(USE_KEYRING) ||
-        // defined(USE_KWALLET)
 
 }  // namespace
 
