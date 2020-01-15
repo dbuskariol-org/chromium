@@ -6386,7 +6386,7 @@ the Bookmarks menu.">
         </message>
       </if>
 
-      <!-- Tab Group Header Context Menu -->
+      <!-- Tab Group Editor Bubble -->
       <if expr="not use_titlecase">
         <message name="IDS_TAB_GROUP_HEADER_CXMENU_NEW_TAB_IN_GROUP" desc="The label of the tab group header context menu item for adding a new tab into the current group.">
           New tab in group
@@ -6399,6 +6399,9 @@ the Bookmarks menu.">
         </message>
         <message name="IDS_TAB_GROUP_HEADER_CXMENU_SEND_FEEDBACK" desc="The label of the tab group header context menu item for sending feedback for tab groups.">
           Send feedback
+        </message>
+        <message name="IDS_TAB_GROUP_HEADER_BUBBLE_TITLE_PLACEHOLDER" desc="The placeholder text to display within the input field of the tab group editor bubble for naming a tab group.">
+          Name this group
         </message>
       </if>
       <if expr="use_titlecase">
@@ -6413,6 +6416,9 @@ the Bookmarks menu.">
         </message>
         <message name="IDS_TAB_GROUP_HEADER_CXMENU_SEND_FEEDBACK" desc="In Title Case: The label of the tab group header context menu item for sending feedback for tab groups.">
           Send Feedback
+        </message>
+        <message name="IDS_TAB_GROUP_HEADER_BUBBLE_TITLE_PLACEHOLDER" desc="In Title Case: The placeholder text to display within the input field of the tab group editor bubble for naming a tab group.">
+          Name This Group
         </message>
       </if>
 

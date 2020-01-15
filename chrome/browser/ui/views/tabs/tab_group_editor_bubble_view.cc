@@ -102,6 +102,8 @@ TabGroupEditorBubbleView::TabGroupEditorBubbleView(
       std::make_unique<views::Textfield>());
   title_field_->SetText(title);
   title_field_->SetAccessibleName(base::ASCIIToUTF16("Group title"));
+  title_field_->SetPlaceholderText(
+      l10n_util::GetStringUTF16(IDS_TAB_GROUP_HEADER_BUBBLE_TITLE_PLACEHOLDER));
   title_field_->set_controller(&title_field_controller_);
 
   const SkColor initial_color = InitColorSet();
