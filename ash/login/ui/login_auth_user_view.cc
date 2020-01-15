@@ -79,8 +79,7 @@ constexpr int kDistanceFromTopOfBigUserViewToUserIconDp = 24;
 
 constexpr SkColor kChallengeResponseArrowBackgroundColor =
     SkColorSetARGB(0x2B, 0xFF, 0xFF, 0xFF);
-constexpr SkColor kChallengeResponseErrorColor =
-    SkColorSetRGB(0xEE, 0x67, 0x5C);
+constexpr SkColor kChallengeResponseErrorColor = gfx::kGoogleRed300;
 
 // Date time format containing only the day of the week, for example: "Tuesday".
 constexpr char kDayOfWeekOnlyTimeFormat[] = "EEEE";
