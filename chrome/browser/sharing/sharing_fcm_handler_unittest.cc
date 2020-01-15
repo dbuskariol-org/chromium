@@ -72,7 +72,7 @@ class MockSharingFCMSender : public SharingFCMSender {
                          /*sync_preference=*/nullptr,
                          /*vapid_key_manager=*/nullptr,
                          /*local_device_info_provider=*/nullptr) {}
-  ~MockSharingFCMSender() override {}
+  ~MockSharingFCMSender() override = default;
 
   MOCK_METHOD4(SendMessageToTargetInfo,
                void(syncer::DeviceInfo::SharingTargetInfo target,

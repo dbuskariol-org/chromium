@@ -101,15 +101,26 @@ void SharingMessageSender::OnMessageSent(
     return;
   }
 
+  // Got a new message id, store it for later.
   message_guids_.emplace(*message_id, message_guid);
+
+  // Check if we got the ack while waiting for the FCM response.
+  auto cached_iter = cached_ack_response_messages_.find(*message_id);
+  if (cached_iter != cached_ack_response_messages_.end()) {
+    OnAckReceived(*message_id, std::move(cached_iter->second));
+    cached_ack_response_messages_.erase(cached_iter);
+  }
 }
 
 void SharingMessageSender::OnAckReceived(
     const std::string& message_id,
     std::unique_ptr<chrome_browser_sharing::ResponseMessage> response) {
   auto guid_iter = message_guids_.find(message_id);
-  if (guid_iter == message_guids_.end())
+  if (guid_iter == message_guids_.end()) {
+    // We don't have the guid yet, store the response until we receive it.
+    cached_ack_response_messages_.emplace(message_id, std::move(response));
     return;
+  }
 
   std::string message_guid = std::move(guid_iter->second);
   message_guids_.erase(guid_iter);

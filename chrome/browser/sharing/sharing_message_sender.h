@@ -112,6 +112,10 @@ class SharingMessageSender {
   std::map<std::string, SentMessageMetadata> message_metadata_;
   // Map of FCM message_id to random GUID.
   std::map<std::string, std::string> message_guids_;
+  // Map of FCM message_id to received ACK response messages.
+  std::map<std::string,
+           std::unique_ptr<chrome_browser_sharing::ResponseMessage>>
+      cached_ack_response_messages_;
 
   // Registered delegates to send messages.
   std::map<DelegateType, std::unique_ptr<SendMessageDelegate>> send_delegates_;
