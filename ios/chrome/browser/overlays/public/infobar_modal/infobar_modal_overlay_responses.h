@@ -9,14 +9,6 @@
 
 // Response info used to create dispatched OverlayResponses that trigger the
 // infobar's main action for the modal view.
-class InfobarModalMainActionResponse
-    : public OverlayResponseInfo<InfobarModalMainActionResponse> {
- public:
-  ~InfobarModalMainActionResponse() override;
-
- private:
-  OVERLAY_USER_DATA_SETUP(InfobarModalMainActionResponse);
-  InfobarModalMainActionResponse();
-};
+DEFINE_STATELESS_OVERLAY_RESPONSE_INFO(InfobarModalMainActionResponse);
 
 #endif  // IOS_CHROME_BROWSER_OVERLAYS_PUBLIC_INFOBAR_MODAL_INFOBAR_MODAL_OVERLAY_RESPONSES_H_

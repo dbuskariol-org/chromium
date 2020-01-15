@@ -9,7 +9,3 @@
 #endif
 
 OVERLAY_USER_DATA_SETUP_IMPL(InfobarModalMainActionResponse);
-
-InfobarModalMainActionResponse::InfobarModalMainActionResponse() = default;
-
-InfobarModalMainActionResponse::~InfobarModalMainActionResponse() = default;
