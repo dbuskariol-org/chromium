@@ -51,6 +51,11 @@ constexpr char kTestPage2Url[] = "https://test.example.org/page2.html";
 constexpr char kTestPageForHashUrl[] =
     "https://test.example.org/hash.html#hello";
 
+constexpr char kDefaultHeaders[] =
+    "HTTP/1.1 200 OK\n"
+    "Content-Type: application/webbundle\n"
+    "X-Content-Type-Options: nosniff\n";
+
 base::FilePath GetTestDataPath(base::StringPiece file) {
   base::FilePath test_data_dir;
   CHECK(base::PathService::Get(base::DIR_SOURCE_ROOT, &test_data_dir));
@@ -1042,12 +1047,13 @@ class WebBundleNetworkBrowserTest : public WebBundleBrowserTestBase {
   }
 
   void SetHeaders(const std::string& headers) { headers_ = headers; }
+  void AddHeaders(const std::string& headers) { headers_ += headers; }
   void SetContents(const std::string& contents) { contents_ = contents; }
   const std::string& contents() const { return contents_; }
 
  private:
   base::test::ScopedFeatureList feature_list_;
-  std::string headers_;
+  std::string headers_ = kDefaultHeaders;
   std::string contents_;
 
   DISALLOW_COPY_AND_ASSIGN(WebBundleNetworkBrowserTest);
@@ -1057,9 +1063,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, Simple) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   const std::string primary_url_path = "/web_bundle/test.html";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   ASSERT_TRUE(embedded_test_server()->Start());
 
   const GURL wbn_url = embedded_test_server()->GetURL(wbn_path);
@@ -1072,9 +1075,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, Simple) {
 IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, SimpleWithScript) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   ASSERT_TRUE(embedded_test_server()->Start());
 
   const GURL wbn_url = embedded_test_server()->GetURL(wbn_path);
@@ -1101,10 +1101,7 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, Download) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   const std::string primary_url_path = "/web_bundle/test.html";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Disposition:attachment; filename=test.wbn\n"
-      "Content-Type:application/webbundle\n");
+  AddHeaders("Content-Disposition:attachment; filename=test.wbn\n");
   ASSERT_TRUE(embedded_test_server()->Start());
 
   const GURL wbn_url = embedded_test_server()->GetURL(wbn_path);
@@ -1131,11 +1128,8 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, ContentLength) {
   const GURL primary_url = embedded_test_server()->GetURL(primary_url_path);
 
   SetContents(CreateSimpleWebBundle(primary_url));
-  SetHeaders(
-      base::StringPrintf("HTTP/1.1 200 OK\n"
-                         "Content-Type:application/webbundle\n"
-                         "Content-Length: %" PRIuS "\n",
-                         contents().size()));
+  AddHeaders(
+      base::StringPrintf("Content-Length: %" PRIuS "\n", contents().size()));
   NavigateToBundleAndWaitForReady(wbn_url, primary_url);
 }
 
@@ -1143,9 +1137,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, NonSecureUrl) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   const std::string primary_url_path = "/web_bundle/test.html";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   ASSERT_TRUE(embedded_test_server()->Start());
 
   const GURL wbn_url = embedded_test_server()->GetURL("example.com", wbn_path);
@@ -1157,13 +1148,28 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, NonSecureUrl) {
       "Web Bundle response must be served from HTTPS or localhost HTTP.");
 }
 
+IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, MissingNosniff) {
+  const std::string wbn_path = "/web_bundle/test.wbn";
+  const std::string primary_url_path = "/web_bundle/test.html";
+  RegisterRequestHandler(wbn_path);
+  ASSERT_TRUE(embedded_test_server()->Start());
+
+  const GURL wbn_url = embedded_test_server()->GetURL(wbn_path);
+  const GURL primary_url = embedded_test_server()->GetURL(primary_url_path);
+
+  SetContents(CreateSimpleWebBundle(primary_url));
+  SetHeaders(
+      "HTTP/1.1 200 OK\n"
+      "Content-Type: application/webbundle\n");
+  TestNavigationFailure(wbn_url,
+                        "Web Bundle response must have "
+                        "\"X-Content-Type-Options: nosniff\" header.");
+}
+
 IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, PrimaryURLNotFound) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   const std::string primary_url_path = "/web_bundle/test.html";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   ASSERT_TRUE(embedded_test_server()->Start());
 
   const GURL wbn_url = embedded_test_server()->GetURL(wbn_path);
@@ -1184,9 +1190,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, OriginMismatch) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   const std::string primary_url_path = "/web_bundle/test.html";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   ASSERT_TRUE(embedded_test_server()->Start());
 
   const GURL primary_url =
@@ -1203,9 +1206,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, InvalidFile) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   const std::string primary_url_path = "/web_bundle/test.html";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   SetContents("This is an invalid Web Bundle file.");
   ASSERT_TRUE(embedded_test_server()->Start());
 
@@ -1217,9 +1217,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, InvalidFile) {
 IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, DataDecoderRestart) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   ASSERT_TRUE(embedded_test_server()->Start());
 
   const GURL primary_url =
@@ -1252,9 +1249,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, DataDecoderRestart) {
 IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, ParseMetadataCrash) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   SetContents("<title>Ready</title>");
   ASSERT_TRUE(embedded_test_server()->Start());
 
@@ -1273,9 +1267,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, ParseMetadataCrash) {
 IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, ParseResponseCrash) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   SetContents("<title>Ready</title>");
   ASSERT_TRUE(embedded_test_server()->Start());
 
@@ -1295,9 +1286,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, PathMismatch) {
   const std::string wbn_path = "/web_bundle/test.wbn";
   const std::string primary_url_path = "/other_dir/test.html";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   ASSERT_TRUE(embedded_test_server()->Start());
 
   const GURL wbn_url = embedded_test_server()->GetURL(wbn_path);
@@ -1314,9 +1302,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, PathMismatch) {
 IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, Navigations) {
   const std::string wbn_path = "/web_bundle/path_test/in_scope/path_test.wbn";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   ASSERT_TRUE(embedded_test_server()->Start());
   SetContents(CreatePathTestWebBundle(embedded_test_server()));
 
@@ -1342,9 +1327,6 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, Navigations) {
 IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, HistoryNavigations) {
   const std::string wbn_path = "/web_bundle/path_test/in_scope/path_test.wbn";
   RegisterRequestHandler(wbn_path);
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Content-Type:application/webbundle\n");
   ASSERT_TRUE(embedded_test_server()->Start());
   SetContents(CreatePathTestWebBundle(embedded_test_server()));
 
@@ -1395,7 +1377,8 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest,
   SetHeaders(
       "HTTP/1.1 200 OK\n"
       "Cache-Control:no-store\n"
-      "Content-Type:application/webbundle\n");
+      "Content-Type:application/webbundle\n"
+      "X-Content-Type-Options: nosniff\n");
   SetContents(CreateSimpleWebBundle(primary_url));
   NavigateToBundleAndWaitForReady(wbn_url, primary_url);
   NavigateToURLAndWaitForTitle(
@@ -1405,8 +1388,39 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest,
   SetHeaders(
       "HTTP/1.1 200 OK\n"
       "Cache-Control:no-store\n"
-      "Content-Type:application/foo_bar\n");
+      "Content-Type:application/foo_bar\n"
+      "X-Content-Type-Options: nosniff\n");
   HistoryBackAndWaitUntilConsoleError("Unexpected content type.");
+}
+
+IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest,
+                       HistoryNavigationError_MissingNosniff) {
+  const std::string wbn_path = "/web_bundle/test.wbn";
+  const std::string primary_url_path = "/web_bundle/test.html";
+  RegisterRequestHandler(wbn_path);
+  ASSERT_TRUE(embedded_test_server()->Start());
+
+  const GURL wbn_url = embedded_test_server()->GetURL(wbn_path);
+  const GURL primary_url = embedded_test_server()->GetURL(primary_url_path);
+
+  SetHeaders(
+      "HTTP/1.1 200 OK\n"
+      "Cache-Control:no-store\n"
+      "Content-Type:application/webbundle\n"
+      "X-Content-Type-Options: nosniff\n");
+  SetContents(CreateSimpleWebBundle(primary_url));
+  NavigateToBundleAndWaitForReady(wbn_url, primary_url);
+  NavigateToURLAndWaitForTitle(
+      embedded_test_server()->GetURL("/web_bundle/empty_page.html"),
+      "Empty Page");
+
+  SetHeaders(
+      "HTTP/1.1 200 OK\n"
+      "Cache-Control:no-store\n"
+      "Content-Type:application/webbundle\n");
+  HistoryBackAndWaitUntilConsoleError(
+      "Web Bundle response must have \"X-Content-Type-Options: nosniff\" "
+      "header.");
 }
 
 IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest,
@@ -1422,7 +1436,8 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest,
   SetHeaders(
       "HTTP/1.1 200 OK\n"
       "Cache-Control:no-store\n"
-      "Content-Type:application/webbundle\n");
+      "Content-Type:application/webbundle\n"
+      "X-Content-Type-Options: nosniff\n");
   SetContents(CreateSimpleWebBundle(primary_url));
   NavigateToBundleAndWaitForReady(wbn_url, primary_url);
   NavigateToURLAndWaitForTitle(
@@ -1431,7 +1446,8 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest,
 
   SetHeaders(
       "HTTP/1.1 302 OK\n"
-      "Location:/web_bundle/empty_page.html\n");
+      "Location:/web_bundle/empty_page.html\n"
+      "X-Content-Type-Options: nosniff\n");
   SetContents("");
   HistoryBackAndWaitUntilConsoleError("Unexpected redirect.");
 }
@@ -1446,10 +1462,7 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest,
   const GURL wbn_url = embedded_test_server()->GetURL(wbn_path);
   const GURL primary_url = embedded_test_server()->GetURL(primary_url_path);
 
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Cache-Control:no-store\n"
-      "Content-Type:application/webbundle\n");
+  AddHeaders("Cache-Control:no-store\n");
   SetContents(CreateSimpleWebBundle(primary_url));
   NavigateToBundleAndWaitForReady(wbn_url, primary_url);
   NavigateToURLAndWaitForTitle(
@@ -1472,10 +1485,7 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest,
   const GURL wbn_url = embedded_test_server()->GetURL(wbn_path);
   const GURL primary_url = embedded_test_server()->GetURL(primary_url_path);
 
-  SetHeaders(
-      "HTTP/1.1 200 OK\n"
-      "Cache-Control:no-store\n"
-      "Content-Type:application/webbundle\n");
+  AddHeaders("Cache-Control:no-store\n");
   SetContents(CreateSimpleWebBundle(primary_url));
   NavigateToBundleAndWaitForReady(wbn_url, primary_url);
   NavigateToURLAndWaitForTitle(
