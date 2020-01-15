@@ -1333,7 +1333,6 @@ crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-as
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/hittest-overlapping-margin.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/hittest-overlapping-order.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/quirks-auto-block-size-with-percentage-item.html [ Pass Failure ]
-crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/table-as-item-auto-min-width.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-intrinsic-ratio-003.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-intrinsic-ratio-004.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-intrinsic-ratio-004v.html [ Failure ]
@@ -1421,6 +1420,8 @@ crbug.com/953534 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox
 crbug.com/1003506 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/percentage-heights-007.html [ Failure ]
 crbug.com/1025630 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/select-element-zero-height-001.html [ Failure ]
 crbug.com/1025630 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/select-element-zero-height-002.html [ Failure ]
+crbug.com/782948 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/table-as-item-fixed-min-width.html  [ Failure ]
+crbug.com/782948 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/table-as-item-wide-content.html  [ Failure ]
 
 # Fieldset in NG
 #
@@ -2395,6 +2396,9 @@ crbug.com/249112 external/wpt/css/css-flexbox/flex-minimum-width-flex-items-007.
 # Not implemented yet
 crbug.com/336604 external/wpt/css/css-flexbox/flexbox_visibility-collapse-line-wrapping.html [ Failure ]
 crbug.com/336604 external/wpt/css/css-flexbox/flexbox_visibility-collapse.html [ Failure ]
+
+crbug.com/782948 external/wpt/css/css-flexbox/table-as-item-fixed-min-width.html [ Failure ]
+crbug.com/782948 external/wpt/css/css-flexbox/table-as-item-wide-content.html  [ Failure ]
 
 # Requires support for hit-testing based on flex order.
 crbug.com/844505 external/wpt/css/css-flexbox/hittest-overlapping-order.html [ Failure ]

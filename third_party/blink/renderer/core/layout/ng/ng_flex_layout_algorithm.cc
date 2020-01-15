@@ -480,60 +480,73 @@ void NGFlexLayoutAlgorithm::ConstructAndAppendFlexItems() {
                                             : child.Style().MinHeight();
     if (min.IsAuto()) {
       if (algorithm_->ShouldApplyMinSizeAutoForChild(*child.GetLayoutBox())) {
-        // TODO(dgrogan): Do the aspect ratio parts of
-        // https://www.w3.org/TR/css-flexbox-1/#min-size-auto
+        // TODO(dgrogan): This should probably apply to column flexboxes also,
+        // but that's not what legacy does.
+        if (child.IsTable() && !is_column_) {
+          MinMaxSize table_preferred_widths =
+              ComputeMinAndMaxContentContribution(
+                  Style(), child,
+                  MinMaxSizeInput(child_percentage_size_.block_size));
+          min_max_sizes_in_main_axis_direction.min_size =
+              table_preferred_widths.min_size;
+        } else {
+          // TODO(dgrogan): Do the aspect ratio parts of
+          // https://www.w3.org/TR/css-flexbox-1/#min-size-auto
 
-        LayoutUnit content_size_suggestion =
-            MainAxisIsInlineAxis(child) ? intrinsic_sizes_border_box.min_size
-                                        : layout_result->IntrinsicBlockSize();
-        content_size_suggestion =
-            std::min(content_size_suggestion,
-                     min_max_sizes_in_main_axis_direction.max_size);
-
-        if (child.MayHaveAspectRatio()) {
-          // TODO(dgrogan): We're including borders/padding in both
-          // content_size_suggestion and min_max_sizes_in_cross_axis_direction.
-          // Maybe we need to multiply the content size by the aspect ratio and
-          // then apply the border/padding from the other axis inside the
-          // Adjust* function. Test legacy/firefox. Start with
-          // https://jsfiddle.net/dgrogan/9uyg3aro/
+          LayoutUnit content_size_suggestion =
+              MainAxisIsInlineAxis(child) ? intrinsic_sizes_border_box.min_size
+                                          : layout_result->IntrinsicBlockSize();
           content_size_suggestion =
-              AdjustChildSizeForAspectRatioCrossAxisMinAndMax(
-                  child, content_size_suggestion,
-                  min_max_sizes_in_cross_axis_direction.min_size,
-                  min_max_sizes_in_cross_axis_direction.max_size);
-        }
+              std::min(content_size_suggestion,
+                       min_max_sizes_in_main_axis_direction.max_size);
 
-        LayoutUnit specified_size_suggestion(LayoutUnit::Max());
-        // If the item’s computed main size property is definite, then the
-        // specified size suggestion is that size.
-        if (MainAxisIsInlineAxis(child)) {
-          if (!specified_length_in_main_axis.IsAuto()) {
-            // TODO(dgrogan): Optimization opportunity: we may have already
-            // resolved specified_length_in_main_axis in the flex basis
-            // calculation. Reuse that if possible.
-            specified_size_suggestion = ResolveMainInlineLength(
-                flex_basis_space, child_style,
-                border_padding_in_child_writing_mode,
-                intrinsic_sizes_border_box, specified_length_in_main_axis);
+          if (child.MayHaveAspectRatio()) {
+            // TODO(dgrogan): We're including borders/padding in both
+            // content_size_suggestion and
+            // min_max_sizes_in_cross_axis_direction. Maybe we need to multiply
+            // the content size by the aspect ratio and then apply the
+            // border/padding from the other axis inside the Adjust* function.
+            // Test legacy/firefox. Start with
+            // https://jsfiddle.net/dgrogan/9uyg3aro/
+            content_size_suggestion =
+                AdjustChildSizeForAspectRatioCrossAxisMinAndMax(
+                    child, content_size_suggestion,
+                    min_max_sizes_in_cross_axis_direction.min_size,
+                    min_max_sizes_in_cross_axis_direction.max_size);
           }
-        } else if (!BlockLengthUnresolvable(flex_basis_space,
-                                            specified_length_in_main_axis,
-                                            LengthResolvePhase::kLayout)) {
-          specified_size_suggestion = ResolveMainBlockLength(
-              flex_basis_space, child_style,
-              border_padding_in_child_writing_mode,
-              specified_length_in_main_axis,
-              layout_result->IntrinsicBlockSize(), LengthResolvePhase::kLayout);
-          DCHECK_NE(specified_size_suggestion, kIndefiniteSize);
-        }
-        // Spec says to clamp specified_size_suggestion by max size but because
-        // content_size_suggestion already is, and we take the min of those
-        // two, we don't need to clamp specified_size_suggestion.
-        // https://github.com/w3c/csswg-drafts/issues/3669
 
-        min_max_sizes_in_main_axis_direction.min_size =
-            std::min(specified_size_suggestion, content_size_suggestion);
+          LayoutUnit specified_size_suggestion(LayoutUnit::Max());
+          // If the item’s computed main size property is definite, then the
+          // specified size suggestion is that size.
+          if (MainAxisIsInlineAxis(child)) {
+            if (!specified_length_in_main_axis.IsAuto()) {
+              // TODO(dgrogan): Optimization opportunity: we may have already
+              // resolved specified_length_in_main_axis in the flex basis
+              // calculation. Reuse that if possible.
+              specified_size_suggestion = ResolveMainInlineLength(
+                  flex_basis_space, child_style,
+                  border_padding_in_child_writing_mode,
+                  intrinsic_sizes_border_box, specified_length_in_main_axis);
+            }
+          } else if (!BlockLengthUnresolvable(flex_basis_space,
+                                              specified_length_in_main_axis,
+                                              LengthResolvePhase::kLayout)) {
+            specified_size_suggestion =
+                ResolveMainBlockLength(flex_basis_space, child_style,
+                                       border_padding_in_child_writing_mode,
+                                       specified_length_in_main_axis,
+                                       layout_result->IntrinsicBlockSize(),
+                                       LengthResolvePhase::kLayout);
+            DCHECK_NE(specified_size_suggestion, kIndefiniteSize);
+          }
+          // Spec says to clamp specified_size_suggestion by max size but
+          // because content_size_suggestion already is, and we take the min of
+          // those two, we don't need to clamp specified_size_suggestion.
+          // https://github.com/w3c/csswg-drafts/issues/3669
+
+          min_max_sizes_in_main_axis_direction.min_size =
+              std::min(specified_size_suggestion, content_size_suggestion);
+        }
       }
     } else if (MainAxisIsInlineAxis(child)) {
       min_max_sizes_in_main_axis_direction.min_size = ResolveMinInlineLength(
