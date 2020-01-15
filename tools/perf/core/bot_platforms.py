@@ -266,6 +266,7 @@ _DAWN_PERF_TESTS = ExecutableConfig(
     ], estimated_runtime=270)
 _PERFORMANCE_BROWSER_TESTS = ExecutableConfig(
     'performance_browser_tests',
+    path='browser_tests',
     flags=[
         '--full-performance-run',
         '--test-launcher-jobs=1',
@@ -284,9 +285,7 @@ _LINUX_BENCHMARK_CONFIGS = _OFFICIAL_EXCEPT_DISPLAY_LOCKING
 _MAC_HIGH_END_BENCHMARK_CONFIGS = _OFFICIAL_EXCEPT_DISPLAY_LOCKING
 _MAC_HIGH_END_EXECUTABLE_CONFIGS = frozenset([
     _DAWN_PERF_TESTS,
-    # TODO(crbug.com/1039019): Figure out how to get performance_browser_tests
-    # working on from the shard maps.
-    #_PERFORMANCE_BROWSER_TESTS,
+    _PERFORMANCE_BROWSER_TESTS,
     _NET_PERFTESTS,
     _MEDIA_PERFTESTS,
     _BASE_PERFTESTS
