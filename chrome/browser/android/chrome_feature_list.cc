@@ -505,7 +505,7 @@ const base::Feature kOmniboxSpareRenderer{"OmniboxSpareRenderer",
                                           base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kOverlayNewLayout{"OverlayNewLayout",
-                                      base::FEATURE_DISABLED_BY_DEFAULT};
+                                      base::FEATURE_ENABLED_BY_DEFAULT};
 
 // TODO(rouslan): Remove this.
 const base::Feature kPayWithGoogleV1{"PayWithGoogleV1",
