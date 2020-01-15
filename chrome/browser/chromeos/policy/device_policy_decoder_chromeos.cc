@@ -993,6 +993,19 @@ void DecodeAccessibilityPolicies(const em::ChromeDeviceSettingsProto& policy,
       }
     }
 
+    if (container.has_login_screen_shortcuts_enabled()) {
+      PolicyLevel level;
+      if (GetPolicyLevel(container.has_login_screen_shortcuts_enabled_options(),
+                         container.login_screen_shortcuts_enabled_options(),
+                         &level)) {
+        policies->Set(key::kDeviceLoginScreenAccessibilityShortcutsEnabled,
+                      level, POLICY_SCOPE_MACHINE, POLICY_SOURCE_CLOUD,
+                      std::make_unique<base::Value>(
+                          container.login_screen_shortcuts_enabled()),
+                      nullptr);
+      }
+    }
+
     if (container.has_login_screen_default_screen_magnifier_type()) {
       std::unique_ptr<base::Value> value(DecodeIntegerValue(
           container.login_screen_default_screen_magnifier_type()));

@@ -664,6 +664,7 @@
         'DeviceLoginScreenKeyboardFocusHighlightEnabled',
         'DeviceLoginScreenScreenMagnifierType',
         'DeviceLoginScreenShowOptionsInSystemTrayMenu',
+        'DeviceLoginScreenAccessibilityShortcutsEnabled',
       ],
     },
     {
@@ -10327,6 +10328,31 @@
           If this policy is left unset, high contrast mode is disabled initially but can be enabled by the user anytime.'''
     },
     {
+      'name': 'DeviceLoginScreenAccessibilityShortcutsEnabled',
+      'owners': ['amraboelkher@chromium.org', 'emaxx@chromium.org'],
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'supported_on': ['chrome_os:81-'],
+      'features': {
+        'can_be_recommended': True,
+        'dynamic_refresh': True,
+        'per_profile': True,
+      },
+      'example_value': True,
+      'id': 661,
+      'caption': '''Enable accessibility features shortcuts on the login screen''',
+      'tags': [],
+      'desc': '''Enable accessibility features shortcuts on the login screen.
+
+          If this policy is set to true, accessibility features shortcuts will always be enabled on the login screen.
+
+          If this policy is set to false, accessibility features shortcuts will always be disabled on the login screen.
+
+          If you set this policy, users cannot change or override it.
+
+          If this policy is left unset, accessibility features shortcuts will be enabled by default on the login screen.'''
+    },
+    {
       'name': 'AccessibilityShortcutsEnabled',
       'owners': ['amraboelkher@chromium.org', 'emaxx@chromium.org'],
       'type': 'main',
@@ -19768,6 +19794,7 @@ The recommended way to configure policy on Windows is via GPO, although provisio
     'DeviceLoginScreenDefaultSpokenFeedbackEnabled': 'accessibility_settings.login_screen_default_spoken_feedback_enabled',
     'DeviceLoginScreenDefaultHighContrastEnabled': 'accessibility_settings.login_screen_default_high_contrast_enabled',
     'DeviceLoginScreenHighContrastEnabled': 'accessibility_settings.login_screen_high_contrast_enabled',
+    'DeviceLoginScreenAccessibilityShortcutsEnabled': 'accessibility_settings.login_screen_shortcuts_enabled',
     'DeviceLoginScreenDefaultScreenMagnifierType': 'accessibility_settings.login_screen_default_screen_magnifier_type',
     'DeviceLoginScreenScreenMagnifierType': 'accessibility_settings.login_screen_screen_magnifier_type',
     'DeviceLoginScreenDefaultVirtualKeyboardEnabled': 'accessibility_settings.login_screen_default_virtual_keyboard_enabled',
@@ -20295,6 +20322,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 660,
+  'highest_id_currently_used': 661,
   'highest_atomic_group_id_currently_used': 38
 }
