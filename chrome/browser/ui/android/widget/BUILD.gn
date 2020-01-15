@@ -88,6 +88,7 @@ android_library("ui_widget_java_tests") {
     "java/src/org/chromium/chrome/browser/ui/widget/MoreProgressButtonTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/PromoDialogTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/RadioButtonLayoutTest.java",
+    "java/src/org/chromium/chrome/browser/ui/widget/RadioButtonRenderTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/RadioButtonWithDescriptionLayoutTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/RadioButtonWithEditTextTest.java",
     "java/src/org/chromium/chrome/browser/ui/widget/WrappingLayoutTest.java",

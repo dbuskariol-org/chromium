@@ -24,7 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/radio_button"
-        android:layout_centerVertical="true"
         android:textAppearance="@style/TextAppearance.BlackTitle1"
         android:inputType="text" />
 
