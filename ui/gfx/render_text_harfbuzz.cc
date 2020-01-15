@@ -108,6 +108,24 @@ bool IsBracket(UChar32 codepoint) {
          U_BPT_NONE;
 }
 
+// Remove ignorables codepoint from text.
+base::string16 RemoveIgnorableCodepoints(const base::StringPiece16 text) {
+  base::string16 result;
+  result.resize(text.size());
+  size_t offset = 0;
+  bool is_error = false;
+  for (base::i18n::UTF16CharIterator iter(text.data(), text.length());
+       !iter.end(); iter.Advance()) {
+    const UChar32 codepoint = iter.get();
+    if (!u_hasBinaryProperty(codepoint, UCHAR_DEFAULT_IGNORABLE_CODE_POINT)) {
+      U16_APPEND(&result[0], offset, result.length(), codepoint, is_error);
+    }
+  }
+  DCHECK(!is_error);
+  result.resize(offset);
+  return result;
+}
+
 // Writes the script and the script extensions of the Unicode |codepoint|.
 // Returns the number of written scripts.
 size_t GetScriptExtensions(UChar32 codepoint, UScriptCode* scripts) {
@@ -2002,6 +2020,16 @@ void RenderTextHarfBuzz::ShapeRuns(
                                          current_run->range.length());
       fallback_found =
           GetFallbackFont(primary_font, locale_, run_text, &fallback_font);
+
+      if (!fallback_found) {
+        // Ignorable codepoints are handled by Harfbuzz and can be safely
+        // ignored. The default behavior of harfbuzz is to hide these glyphs by
+        // using the space glyph and zeroing the advance width.
+        const base::string16 fallback_run_text =
+            RemoveIgnorableCodepoints(run_text);
+        fallback_found = GetFallbackFont(primary_font, locale_,
+                                         fallback_run_text, &fallback_font);
+      }
     }
 
     if (fallback_found) {

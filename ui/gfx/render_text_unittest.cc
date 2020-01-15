@@ -4584,6 +4584,24 @@ TEST_F(RenderTextTest, SameFontForParentheses) {
   }
 }
 
+TEST_F(RenderTextTest, SameFontAccrossIgnorableCodepoints) {
+  RenderText* render_text = GetRenderText();
+
+  render_text->SetText(WideToUTF16(L"\u060F"));
+  const std::vector<FontSpan> spans1 = GetFontSpans();
+  ASSERT_EQ(1u, spans1.size());
+  Font font1 = spans1[0].first;
+
+  render_text->SetText(WideToUTF16(L"\u060F\u200C\u060F"));
+  const std::vector<FontSpan> spans2 = GetFontSpans();
+  ASSERT_EQ(1u, spans2.size());
+  Font font2 = spans2[0].first;
+
+  // Ensures the same font is used with or without the joiners
+  // (see http://cdbug.com/1036652).
+  EXPECT_EQ(font1.GetFontName(), font2.GetFontName());
+}
+
 // Make sure the caret width is always >=1 so that the correct
 // caret is drawn at high DPI. crbug.com/164100.
 TEST_F(RenderTextTest, CaretWidth) {

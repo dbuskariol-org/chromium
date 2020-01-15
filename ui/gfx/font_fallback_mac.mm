@@ -16,6 +16,8 @@
 namespace gfx {
 namespace {
 
+constexpr char kLastResortFontName[] = ".LastResort";
+
 // CTFontCreateForString() sometimes re-wraps its result in a new CTFontRef with
 // identical attributes. This wastes time shaping the text run and confounds
 // Skia's internal typeface cache.
@@ -85,7 +87,7 @@ bool GetFallbackFont(const Font& font,
     return false;
 
   *result = Font(base::mac::CFToNSCast(ct_result.get()));
-  return true;
+  return result->GetFontName() != kLastResortFontName;
 }
 
 }  // namespace gfx
