@@ -1672,10 +1672,7 @@ TEST_P(PaintArtifactCompositorTest, ClipPushedUp) {
   }
 }
 
-// TODO(crbug.com/696842): The effect refuses to "decomposite" because it's in
-// a deeper transform space than its chunk. We should allow decomposite if
-// the two transform nodes share the same direct compositing ancestor.
-TEST_P(PaintArtifactCompositorTest, DISABLED_EffectPushedUp) {
+TEST_P(PaintArtifactCompositorTest, EffectPushedUp) {
   // Tests merging of an element which has an effect applied to it,
   // but has an ancestor transform of them. This can happen for fixed-
   // or absolute-position elements which escape scroll transforms.
@@ -1717,10 +1714,7 @@ TEST_P(PaintArtifactCompositorTest, DISABLED_EffectPushedUp) {
   }
 }
 
-// TODO(crbug.com/696842): The effect refuses to "decomposite" because it's in
-// a deeper transform space than its chunk. We should allow decomposite if
-// the two transform nodes share the same direct compositing ancestor.
-TEST_P(PaintArtifactCompositorTest, DISABLED_EffectAndClipPushedUp) {
+TEST_P(PaintArtifactCompositorTest, EffectAndClipPushedUp) {
   // Tests merging of an element which has an effect applied to it,
   // but has an ancestor transform of them. This can happen for fixed-
   // or absolute-position elements which escape scroll transforms.
