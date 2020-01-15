@@ -31,6 +31,7 @@
 
 #include "build/build_config.h"
 #include "third_party/blink/public/platform/task_type.h"
+#include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/public/strings/grit/blink_strings.h"
 #include "third_party/blink/renderer/bindings/core/v8/html_element_or_long.h"
 #include "third_party/blink/renderer/bindings/core/v8/html_option_element_or_html_opt_group_element.h"
@@ -74,6 +75,8 @@
 #include "third_party/blink/renderer/core/page/chrome_client.h"
 #include "third_party/blink/renderer/core/page/page.h"
 #include "third_party/blink/renderer/core/page/spatial_navigation.h"
+#include "third_party/blink/renderer/core/paint/paint_layer.h"
+#include "third_party/blink/renderer/core/paint/paint_layer_scrollable_area.h"
 #include "third_party/blink/renderer/platform/bindings/exception_state.h"
 #include "third_party/blink/renderer/platform/heap/heap.h"
 #include "third_party/blink/renderer/platform/instrumentation/tracing/trace_event.h"
@@ -937,7 +940,18 @@ void HTMLSelectElement::ScrollToOptionTask() {
   if (!GetLayoutObject() || !GetLayoutObject()->IsListBox())
     return;
   PhysicalRect bounds = option->BoundingBoxForScrollIntoView();
-  ToLayoutListBox(GetLayoutObject())->ScrollToRect(bounds);
+
+  // The following code will not scroll parent boxes unlike ScrollRectToVisible.
+  auto* box = GetLayoutBox();
+  if (!box->HasOverflowClip())
+    return;
+  DCHECK(box->Layer());
+  DCHECK(box->Layer()->GetScrollableArea());
+  box->Layer()->GetScrollableArea()->ScrollIntoView(
+      bounds, WebScrollIntoViewParams(ScrollAlignment::kAlignToEdgeIfNeeded,
+                                      ScrollAlignment::kAlignToEdgeIfNeeded,
+                                      kProgrammaticScroll, false,
+                                      kScrollBehaviorInstant));
 }
 
 void HTMLSelectElement::OptionSelectionStateChanged(HTMLOptionElement* option,
@@ -1514,6 +1528,15 @@ AutoscrollController* HTMLSelectElement::GetAutoscrollController() const {
   if (Page* page = GetDocument().GetPage())
     return &page->GetAutoscrollController();
   return nullptr;
+}
+
+LayoutBox* HTMLSelectElement::AutoscrollBox() {
+  return !UsesMenuList() ? GetLayoutBox() : nullptr;
+}
+
+void HTMLSelectElement::StopAutoscroll() {
+  if (!UsesMenuList() && !IsDisabledFormControl())
+    HandleMouseRelease();
 }
 
 void HTMLSelectElement::HandleMouseRelease() {

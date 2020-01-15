@@ -905,6 +905,9 @@ class CORE_EXPORT Node : public EventTarget {
 
   bool IsEffectiveRootScroller() const;
 
+  virtual LayoutBox* AutoscrollBox();
+  virtual void StopAutoscroll();
+
   // If the node is a plugin, then this returns its WebPluginContainer.
   WebPluginContainerImpl* GetWebPluginContainer() const;
 

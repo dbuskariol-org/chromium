@@ -3241,6 +3241,12 @@ bool Node::IsEffectiveRootScroller() const {
                            : false;
 }
 
+LayoutBox* Node::AutoscrollBox() {
+  return nullptr;
+}
+
+void Node::StopAutoscroll() {}
+
 WebPluginContainerImpl* Node::GetWebPluginContainer() const {
   if (!IsA<HTMLObjectElement>(this) && !IsA<HTMLEmbedElement>(this)) {
     return nullptr;

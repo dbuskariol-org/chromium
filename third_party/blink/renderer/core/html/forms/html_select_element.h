@@ -272,6 +272,8 @@ class CORE_EXPORT HTMLSelectElement final
                                                   SkipDirection) const;
   HTMLOptionElement* EventTargetOption(const Event&);
   AutoscrollController* GetAutoscrollController() const;
+  LayoutBox* AutoscrollBox() override;
+  void StopAutoscroll() override;
   void ScrollToOptionTask();
 
   bool AreAuthorShadowsAllowed() const override { return false; }
