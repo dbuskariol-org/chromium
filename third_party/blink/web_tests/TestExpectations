@@ -6316,7 +6316,6 @@ crbug.com/webrtc/11228 external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.
 crbug.com/webrtc/11228 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
 
 # Sheriff 2020-01-08
-crbug.com/850170 virtual/reporting-api/external/wpt/content-security-policy/reporting-api/reporting-api-doesnt-send-reports-without-violation.https.sub.html [ Pass Timeout ]
 crbug.com/1039643 [ Win ] external/wpt/content-security-policy/object-src/object-src-url-embed-allowed.html [ Pass Timeout ]
 
 # Failures that appeared while fuzzy-diff was on. TODO(jonross) triage these and
