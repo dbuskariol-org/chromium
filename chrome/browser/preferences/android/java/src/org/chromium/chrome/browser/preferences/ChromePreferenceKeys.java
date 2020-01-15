@@ -430,6 +430,17 @@ public final class ChromePreferenceKeys {
      */
     public static final String OFFLINE_INDICATOR_V2_ENABLED = "offline_indicator_v2_enabled";
 
+    /** Prefix of the preferences to persist use count of the payment instruments. */
+    public static final KeyPrefix PAYMENTS_PAYMENT_INSTRUMENT_USE_COUNT =
+            new KeyPrefix("payment_instrument_use_count_*");
+
+    /** Prefix of the preferences to persist last use date of the payment instruments. */
+    public static final KeyPrefix PAYMENTS_PAYMENT_INSTRUMENT_USE_DATE =
+            new KeyPrefix("payment_instrument_use_date_*");
+
+    /** Preference to indicate whether payment request has been completed successfully once.*/
+    public static final String PAYMENTS_PAYMENT_COMPLETE_ONCE = "payment_complete_once";
+
     public static final String PRIVACY_METRICS_REPORTING = "metrics_reporting";
     public static final String PRIVACY_METRICS_IN_SAMPLE = "in_metrics_sample";
     public static final String PRIVACY_NETWORK_PREDICTIONS = "network_predictions";
@@ -733,6 +744,7 @@ public final class ChromePreferenceKeys {
                 LOCALE_MANAGER_SEARCH_ENGINE_PROMO_SHOW_STATE,
                 LOCALE_MANAGER_WAS_IN_SPECIAL_LOCALE,
                 OFFLINE_INDICATOR_V2_ENABLED,
+                PAYMENTS_PAYMENT_COMPLETE_ONCE,
                 PRIVACY_ALLOW_PRERENDER_OLD,
                 PRIVACY_BANDWIDTH_NO_CELLULAR_OLD,
                 PRIVACY_BANDWIDTH_OLD,
@@ -776,7 +788,12 @@ public final class ChromePreferenceKeys {
 
     @CheckDiscard("Validation is performed in tests and in debug builds.")
     static List<KeyPrefix> createGrandfatheredPrefixesInUse() {
-        return Collections.EMPTY_LIST;
+        // clang-format off
+        return Arrays.asList(
+                PAYMENTS_PAYMENT_INSTRUMENT_USE_COUNT,
+                PAYMENTS_PAYMENT_INSTRUMENT_USE_DATE
+        );
+        // clang-format on
     }
 
     @CheckDiscard("Validation is performed in tests and in debug builds.")
