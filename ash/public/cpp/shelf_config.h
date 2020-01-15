@@ -170,6 +170,9 @@ class ASH_EXPORT ShelfConfig : public TabletModeObserver,
   // Returns the current blur radius to use for the control buttons.
   int GetShelfControlButtonBlurRadius() const;
 
+  // The padding between the app icon and the end of the scrollable shelf.
+  int GetAppIconEndPadding() const;
+
  private:
   friend class ShelfConfigTest;
 
@@ -263,6 +266,10 @@ class ASH_EXPORT ShelfConfig : public TabletModeObserver,
 
   // The height inset on the control buttons when in-app shelf is shown.
   const int in_app_control_button_height_inset_;
+
+  // The padding between the app icon and the end of the scrollable shelf in
+  // tablet mode.
+  const int app_icon_end_padding_;
 
   base::ObserverList<Observer> observers_;
 

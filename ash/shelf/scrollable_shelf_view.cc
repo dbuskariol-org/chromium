@@ -123,12 +123,6 @@ bool IsInTabletMode() {
   return true;
 }
 
-// Returns the padding between the app icon and the end of the ScrollableShelf.
-int GetAppIconEndPadding() {
-  return (chromeos::switches::ShouldShowShelfHotseat() && IsInTabletMode()) ? 4
-                                                                            : 0;
-}
-
 }  // namespace
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -394,9 +388,9 @@ void ScrollableShelfContainerView::Layout() {
       local_bounds.Contains(ideal_bounds) ? local_bounds : ideal_bounds;
 
   if (shelf_view_->shelf()->IsHorizontalAlignment())
-    shelf_view_bounds.set_x(GetAppIconEndPadding());
+    shelf_view_bounds.set_x(ShelfConfig::Get()->GetAppIconEndPadding());
   else
-    shelf_view_bounds.set_y(GetAppIconEndPadding());
+    shelf_view_bounds.set_y(ShelfConfig::Get()->GetAppIconEndPadding());
 
   shelf_view_->SetBoundsRect(shelf_view_bounds);
 }
@@ -614,7 +608,8 @@ int ScrollableShelfView::CalculateScrollUpperBound() const {
     return 0;
 
   // Calculate the length of the available space.
-  int available_length = GetSpaceForIcons() - 2 * GetAppIconEndPadding();
+  int available_length =
+      GetSpaceForIcons() - 2 * ShelfConfig::Get()->GetAppIconEndPadding();
 
   // Calculate the length of the preferred size.
   const gfx::Size shelf_preferred_size(
@@ -1207,7 +1202,7 @@ gfx::Insets ScrollableShelfView::CalculateEdgePadding() const {
 
   const int icons_size = shelf_view_->GetSizeOfAppIcons(
                              shelf_view_->number_of_visible_apps(), false) +
-                         2 * GetAppIconEndPadding();
+                         2 * ShelfConfig::Get()->GetAppIconEndPadding();
   const int base_padding = ShelfConfig::Get()->app_icon_group_margin();
 
   const int available_size_for_app_icons =
@@ -1237,7 +1232,7 @@ gfx::Insets ScrollableShelfView::CalculateEdgePadding() const {
 gfx::Insets ScrollableShelfView::CalculatePaddingForDisplayCentering() const {
   const int icons_size = shelf_view_->GetSizeOfAppIcons(
                              shelf_view_->number_of_visible_apps(), false) +
-                         2 * GetAppIconEndPadding();
+                         2 * ShelfConfig::Get()->GetAppIconEndPadding();
   const gfx::Rect display_bounds =
       screen_util::GetDisplayBoundsWithShelf(GetWidget()->GetNativeWindow());
   const int display_size_primary = GetShelf()->PrimaryAxisValue(
@@ -1485,7 +1480,7 @@ float ScrollableShelfView::CalculatePageScrollingOffset(
     // After scrolling, the left arrow button will show. Adapts the offset
     // to the extra arrow button.
     const int offset_for_extra_arrow =
-        kArrowButtonGroupWidth - GetAppIconEndPadding();
+        kArrowButtonGroupWidth - ShelfConfig::Get()->GetAppIconEndPadding();
 
     const int mod = space_excluding_arrow % GetUnit();
     offset = space_excluding_arrow - mod - offset_for_extra_arrow;
@@ -1501,7 +1496,7 @@ float ScrollableShelfView::CalculatePageScrollingOffset(
       const int extra_offset =
           -ShelfConfig::Get()->button_spacing() -
           (GetSpaceForIcons() - kArrowButtonGroupWidth) % GetUnit() +
-          GetAppIconEndPadding();
+          ShelfConfig::Get()->GetAppIconEndPadding();
       offset += extra_offset;
     }
   }
@@ -1662,7 +1657,7 @@ int ScrollableShelfView::GetActualScrollOffset(
   return (layout_strategy == kShowButtons ||
           layout_strategy == kShowLeftArrowButton)
              ? (main_axis_scroll_distance + kArrowButtonGroupWidth -
-                GetAppIconEndPadding())
+                ShelfConfig::Get()->GetAppIconEndPadding())
              : main_axis_scroll_distance;
 }
 
@@ -1741,7 +1736,7 @@ bool ScrollableShelfView::CanFitAllAppsWithoutScrolling() const {
   int preferred_length = GetShelf()->IsHorizontalAlignment()
                              ? preferred_size.width()
                              : preferred_size.height();
-  preferred_length += 2 * GetAppIconEndPadding();
+  preferred_length += 2 * ShelfConfig::Get()->GetAppIconEndPadding();
 
   return available_length >= preferred_length;
 }

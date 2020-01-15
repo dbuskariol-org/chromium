@@ -61,7 +61,8 @@ ShelfConfig::ShelfConfig()
       shelf_tooltip_preview_min_ratio_(0.666),  // = 2/3
       shelf_blur_radius_(30),
       mousewheel_scroll_offset_threshold_(20),
-      in_app_control_button_height_inset_(4) {
+      in_app_control_button_height_inset_(4),
+      app_icon_end_padding_(4) {
   UpdateConfig(is_app_list_visible_);
 }
 
@@ -310,6 +311,12 @@ int ShelfConfig::GetShelfControlButtonBlurRadius() const {
     return shelf_blur_radius_;
   }
   return 0;
+}
+
+int ShelfConfig::GetAppIconEndPadding() const {
+  return (chromeos::switches::ShouldShowShelfHotseat() && IsTabletMode())
+             ? app_icon_end_padding_
+             : 0;
 }
 
 void ShelfConfig::OnShelfConfigUpdated() {
