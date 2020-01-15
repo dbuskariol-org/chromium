@@ -11,6 +11,7 @@
 #include "base/test/scoped_feature_list.h"
 #include "components/autofill/core/common/password_form.h"
 #include "components/infobars/core/infobar.h"
+#include "components/infobars/core/infobar_feature.h"
 #include "ios/chrome/browser/infobars/infobar_ios.h"
 #import "ios/chrome/browser/overlays/public/infobar_banner/save_password_infobar_banner_overlay.h"
 #include "ios/chrome/browser/overlays/public/overlay_request.h"
@@ -18,7 +19,6 @@
 #import "ios/chrome/browser/passwords/ios_chrome_save_password_infobar_delegate.h"
 #import "ios/chrome/browser/passwords/test/mock_ios_chrome_save_passwords_infobar_delegate.h"
 #import "ios/chrome/browser/ui/infobars/banners/test/fake_infobar_banner_consumer.h"
-#import "ios/chrome/browser/ui/infobars/infobar_feature.h"
 #import "ios/chrome/browser/ui/infobars/test/fake_infobar_ui_delegate.h"
 #include "ios/chrome/grit/ios_strings.h"
 #import "testing/gtest_mac.h"
@@ -39,7 +39,7 @@ NSString* const kPassword = @"12345";
 class SavePasswordInfobarBannerOverlayMediatorTest : public PlatformTest {
  public:
   SavePasswordInfobarBannerOverlayMediatorTest() {
-    feature_list_.InitWithFeatures({kInfobarUIReboot}, {});
+    feature_list_.InitWithFeatures({kIOSInfobarUIReboot}, {});
   }
 
  private:

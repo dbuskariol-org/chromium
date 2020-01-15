@@ -5,10 +5,10 @@
 #import "ios/chrome/browser/infobars/overlays/browser_agent/interaction_handlers/passwords/password_infobar_banner_interaction_handler.h"
 
 #include "base/test/scoped_feature_list.h"
+#include "components/infobars/core/infobar_feature.h"
 #import "ios/chrome/browser/infobars/test/fake_infobar_ios.h"
 #import "ios/chrome/browser/overlays/public/overlay_request_queue.h"
 #import "ios/chrome/browser/passwords/test/mock_ios_chrome_save_passwords_infobar_delegate.h"
-#import "ios/chrome/browser/ui/infobars/infobar_feature.h"
 #import "ios/chrome/browser/ui/infobars/test/fake_infobar_ui_delegate.h"
 #import "ios/web/public/test/fakes/test_web_state.h"
 #include "testing/platform_test.h"
@@ -25,7 +25,7 @@ class PasswordInfobarBannerInteractionHandlerTest : public PlatformTest {
             [[FakeInfobarUIDelegate alloc] init],
             MockIOSChromeSavePasswordInfoBarDelegate::Create(@"username",
                                                              @"password")) {
-    scoped_feature_list_.InitWithFeatures({kInfobarUIReboot}, {});
+    scoped_feature_list_.InitWithFeatures({kIOSInfobarUIReboot}, {});
   }
 
   MockIOSChromeSavePasswordInfoBarDelegate& mock_delegate() {

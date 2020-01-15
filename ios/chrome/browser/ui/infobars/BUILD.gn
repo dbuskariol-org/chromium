@@ -51,7 +51,8 @@ source_set("feature_flags") {
     "infobar_feature.h",
     "infobar_feature.mm",
   ]
-  deps = [ "//base" ]
+  public_deps = [ "//base" ]
+  deps = [ "//components/infobars/core:feature_flags" ]
 }
 
 source_set("infobars_ui") {
