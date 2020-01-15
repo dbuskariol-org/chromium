@@ -411,16 +411,6 @@ const base::Feature kVizHitTestOcclusionCheck{
 const base::Feature kSetLowPriorityForBeacon{"SetLowPriorityForBeacon",
                                              base::FEATURE_DISABLED_BY_DEFAULT};
 
-// When enabled, JS function calls in a detached window will be reported.
-// Reporting has a non-zero probability of a performance impact, hence an easy
-// way to disable it may come in handy.
-const base::Feature kSetDetachedWindowReasonByNavigation{
-    "SetDetachedWindowReasonByNavigation", base::FEATURE_ENABLED_BY_DEFAULT};
-const base::Feature kSetDetachedWindowReasonByClosing{
-    "SetDetachedWindowReasonByClosing", base::FEATURE_ENABLED_BY_DEFAULT};
-const base::Feature kSetDetachedWindowReasonByOtherReason{
-    "SetDetachedWindowReasonByOtherReason", base::FEATURE_ENABLED_BY_DEFAULT};
-
 // When enabled allows the header name used in the blink
 // CacheStorageCodeCacheHint runtime feature to be modified.  This runtime
 // feature disables generating full code cache for responses stored in
