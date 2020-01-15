@@ -6499,7 +6499,7 @@
   },
 
   "UnsafeEventsReportingEnabled": {
-    "os": ["win", "linux", "mac"],
+    "os": ["win", "linux", "mac", "chromeos"],
     "policy_pref_mapping_test": [
       {
         "policies": {
@@ -6511,7 +6511,7 @@
   },
 
   "BlockLargeFileTransfer": {
-    "os": ["win", "linux", "mac"],
+    "os": ["win", "linux", "mac", "chromeos"],
     "policy_pref_mapping_test": [
       {
         "policies": {
@@ -6523,7 +6523,7 @@
   },
 
   "DelayDeliveryUntilVerdict": {
-    "os": ["win", "linux", "mac"],
+    "os": ["win", "linux", "mac", "chromeos"],
     "policy_pref_mapping_test": [
       {
         "policies": {
@@ -6535,7 +6535,7 @@
   },
 
   "AllowPasswordProtectedFiles": {
-    "os": ["win", "linux", "mac"],
+    "os": ["win", "linux", "mac", "chromeos"],
     "policy_pref_mapping_test": [
       {
         "policies": {
@@ -6547,7 +6547,7 @@
   },
 
   "CheckContentCompliance": {
-    "os": ["win", "linux", "mac"],
+    "os": ["win", "linux", "mac", "chromeos"],
     "policy_pref_mapping_test": [
       {
         "policies": { "CheckContentCompliance": 0 },
@@ -6556,11 +6556,35 @@
     ]
   },
 
-  "URLsToCheckComplianceOfDownloadedContent": {},
+  "URLsToCheckComplianceOfDownloadedContent": {
+    "os": ["win", "linux", "mac", "chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "URLsToCheckComplianceOfDownloadedContent": ["[*.]google.com"] },
+        "prefs": { "safebrowsing.urls_to_check_compliance_of_downloaded_content": { "local_state": true } }
+      }
+    ]
+  },
 
-  "URLsToNotCheckComplianceOfUploadedContent": {},
+  "URLsToCheckForMalwareOfUploadedContent": {
+    "os": ["win", "linux", "mac", "chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "URLsToCheckForMalwareOfUploadedContent": ["[*.]google.com"] },
+        "prefs": { "safebrowsing.urls_to_check_for_malware_of_uploaded_content": { "local_state": true } }
+      }
+    ]
+  },
 
-  "URLsToCheckForMalwareOfUploadedContent": {},
+  "URLsToNotCheckComplianceOfUploadedContent": {
+    "os": ["win", "linux", "mac", "chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "URLsToNotCheckComplianceOfUploadedContent": ["[*.]google.com"] },
+        "prefs": { "policy.urls_to_not_check_compliance_of_uploaded_content": { "local_state": true } }
+      }
+    ]
+  },
 
   "RendererCodeIntegrityEnabled": {
     "os": ["win"],

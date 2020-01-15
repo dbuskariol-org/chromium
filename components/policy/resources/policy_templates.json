@@ -18741,7 +18741,7 @@
         'per_profile': False,
       },
       'id': 600,
-      'supported_on': ['chrome.*:78-'],
+      'supported_on': ['chrome.*:78-', 'chrome_os:81-'],
       'future': True,
       'caption': '''URL patterns to check uploaded content for malware''',
       'tags': [],

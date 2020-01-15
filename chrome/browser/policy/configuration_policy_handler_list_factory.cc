@@ -1184,6 +1184,25 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kBrowserSwitcherDelay,
     browser_switcher::prefs::kDelay,
     base::Value::Type::INTEGER },
+#endif
+#if defined(OS_WIN)
+  { key::kBrowserSwitcherUseIeSitelist,
+    browser_switcher::prefs::kUseIeSitelist,
+    base::Value::Type::BOOLEAN },
+  { key::kBrowserSwitcherChromePath,
+    browser_switcher::prefs::kChromePath,
+    base::Value::Type::STRING },
+  { key::kBrowserSwitcherChromeParameters,
+    browser_switcher::prefs::kChromeParameters,
+    base::Value::Type::LIST },
+#endif
+#if defined(OS_LINUX) || defined(OS_WIN) || defined(OS_MACOSX)
+  { key::kBrowserGuestModeEnforced,
+    prefs::kBrowserGuestModeEnforced,
+    base::Value::Type::BOOLEAN },
+  { key::kUnsafeEventsReportingEnabled,
+    prefs::kUnsafeEventsReportingEnabled,
+    base::Value::Type::BOOLEAN },
   { key::kDelayDeliveryUntilVerdict,
     prefs::kDelayDeliveryUntilVerdict,
     base::Value::Type::INTEGER },
@@ -1205,25 +1224,6 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kURLsToNotCheckComplianceOfUploadedContent,
     prefs::kURLsToNotCheckComplianceOfUploadedContent,
     base::Value::Type::LIST },
-#endif
-#if defined(OS_WIN)
-  { key::kBrowserSwitcherUseIeSitelist,
-    browser_switcher::prefs::kUseIeSitelist,
-    base::Value::Type::BOOLEAN },
-  { key::kBrowserSwitcherChromePath,
-    browser_switcher::prefs::kChromePath,
-    base::Value::Type::STRING },
-  { key::kBrowserSwitcherChromeParameters,
-    browser_switcher::prefs::kChromeParameters,
-    base::Value::Type::LIST },
-#endif
-#if defined(OS_LINUX) || defined(OS_WIN) || defined(OS_MACOSX)
-  { key::kBrowserGuestModeEnforced,
-    prefs::kBrowserGuestModeEnforced,
-    base::Value::Type::BOOLEAN },
-  { key::kUnsafeEventsReportingEnabled,
-    prefs::kUnsafeEventsReportingEnabled,
-    base::Value::Type::BOOLEAN },
 #endif
   { key::kPasswordLeakDetectionEnabled,
     password_manager::prefs::kPasswordLeakDetectionEnabled,
