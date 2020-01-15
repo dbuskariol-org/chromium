@@ -79,37 +79,39 @@ class SharingMessageSender {
                             std::unique_ptr<SendMessageDelegate> delegate);
 
  private:
-  void OnMessageSent(base::TimeTicks start_time,
-                     const std::string& message_guid,
-                     chrome_browser_sharing::MessageType message_type,
-                     SharingDevicePlatform receiver_device_platform,
-                     base::TimeDelta last_updated_age,
+  struct SentMessageMetadata {
+    SentMessageMetadata(ResponseCallback callback,
+                        base::TimeTicks timestamp,
+                        chrome_browser_sharing::MessageType type,
+                        SharingDevicePlatform receiver_device_platform,
+                        base::TimeDelta last_updated_age);
+    SentMessageMetadata(SentMessageMetadata&& other);
+    SentMessageMetadata& operator=(SentMessageMetadata&& other);
+    ~SentMessageMetadata();
+
+    ResponseCallback callback;
+    base::TimeTicks timestamp;
+    chrome_browser_sharing::MessageType type;
+    SharingDevicePlatform receiver_device_platform;
+    base::TimeDelta last_updated_age;
+  };
+
+  void OnMessageSent(const std::string& message_guid,
                      SharingSendMessageResult result,
                      base::Optional<std::string> message_id);
 
   void InvokeSendMessageCallback(
       const std::string& message_guid,
-      chrome_browser_sharing::MessageType message_type,
-      SharingDevicePlatform receiver_device_platform,
-      base::TimeDelta last_updated_age,
       SharingSendMessageResult result,
       std::unique_ptr<chrome_browser_sharing::ResponseMessage> response);
 
   SharingSyncPreference* sync_prefs_;
   syncer::LocalDeviceInfoProvider* local_device_info_provider_;
 
-  // Map of random GUID to SendMessageCallback.
-  std::map<std::string, ResponseCallback> send_message_callbacks_;
-  // Map of FCM message_id to time at start of send message request to FCM.
-  std::map<std::string, base::TimeTicks> send_message_times_;
+  // Map of random GUID to SentMessageMetadata.
+  std::map<std::string, SentMessageMetadata> message_metadata_;
   // Map of FCM message_id to random GUID.
   std::map<std::string, std::string> message_guids_;
-  // Map of FCM message_id to platform of receiver device for metrics.
-  std::map<std::string, SharingDevicePlatform> receiver_device_platform_;
-  // Map of FCM message_id to age of last updated timestamp of receiver device.
-  std::map<std::string, base::TimeDelta> receiver_last_updated_age_;
-  // Map of FCM message_id to message type for metrics.
-  std::map<std::string, chrome_browser_sharing::MessageType> message_types_;
 
   // Registered delegates to send messages.
   std::map<DelegateType, std::unique_ptr<SendMessageDelegate>> send_delegates_;
