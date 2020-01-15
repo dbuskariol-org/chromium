@@ -787,7 +787,7 @@ const CSSSelector* CSSSelector::SerializeCompound(
         case kPseudoLang:
         case kPseudoState:
           builder.Append('(');
-          builder.Append(simple_selector->Argument());
+          SerializeIdentifier(simple_selector->Argument(), builder);
           builder.Append(')');
           break;
         case kPseudoNot:
@@ -804,7 +804,7 @@ const CSSSelector* CSSSelector::SerializeCompound(
       }
     } else if (simple_selector->match_ == kPseudoElement) {
       builder.Append("::");
-      builder.Append(simple_selector->SerializingValue());
+      SerializeIdentifier(simple_selector->SerializingValue(), builder);
       switch (simple_selector->GetPseudoType()) {
         case kPseudoPart: {
           char separator = '(';
