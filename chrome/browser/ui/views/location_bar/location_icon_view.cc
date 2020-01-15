@@ -217,6 +217,10 @@ void LocationIconView::Update(bool suppress_animations) {
   UpdateTextVisibility(suppress_animations);
   UpdateIcon();
 
+  // The label text color may have changed in response to changes in security
+  // level.
+  UpdateLabelColors();
+
   bool is_editing_or_empty = delegate_->IsEditingOrEmpty();
   // The tooltip should be shown if we are not editing or empty.
   SetTooltipText(is_editing_or_empty
