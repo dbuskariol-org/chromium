@@ -178,6 +178,7 @@ class ScriptPromise;
 class ScriptRunner;
 class ScriptableDocumentParser;
 class ScriptedAnimationController;
+class SecurityContextInit;
 class SecurityOrigin;
 class SelectorQueryCache;
 class SerializedScriptValue;
@@ -1499,7 +1500,9 @@ class CORE_EXPORT Document : public ContainerNode,
   LazyLoadImageObserver& EnsureLazyLoadImageObserver();
 
   WindowAgent& GetWindowAgent();
-  WindowAgentFactory* GetWindowAgentFactory() { return window_agent_factory_; }
+  WindowAgentFactory* GetWindowAgentFactory() const {
+    return window_agent_factory_;
+  }
 
   void CountPotentialFeaturePolicyViolation(
       mojom::FeaturePolicyFeature) const override;
@@ -1650,7 +1653,6 @@ class CORE_EXPORT Document : public ContainerNode,
   FRIEND_TEST_ALL_PREFIXES(FrameFetchContextSubresourceFilterTest,
                            DuringOnFreeze);
   class NetworkStateObserver;
-  class SecurityContextInit;
 
   Document(const DocumentInit& initization,
            SecurityContextInit init_helper,
