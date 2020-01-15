@@ -277,8 +277,8 @@ class TabLifecycleUnitExternalImpl : public TabLifecycleUnitExternal {
     tab_lifecycle_unit_->SetAutoDiscardable(auto_discardable);
   }
 
-  bool DiscardTab() override {
-    return tab_lifecycle_unit_->Discard(LifecycleUnitDiscardReason::EXTERNAL);
+  bool DiscardTab(LifecycleUnitDiscardReason reason) override {
+    return tab_lifecycle_unit_->Discard(reason);
   }
 
   bool IsDiscarded() const override {

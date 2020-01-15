@@ -1037,7 +1037,7 @@ TEST_F(TabManagerTest, TrackingNumberOfLoadedLifecycleUnits) {
   // WebContents.
   for (int i = 0; i < 5; i++) {
     TabLifecycleUnitExternal::FromWebContents(tab_strip->GetWebContentsAt(i))
-        ->DiscardTab();
+        ->DiscardTab(LifecycleUnitDiscardReason::URGENT);
     EXPECT_EQ(tab_manager_->num_loaded_lifecycle_units_, 4 - i);
   }
 

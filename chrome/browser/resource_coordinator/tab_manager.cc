@@ -261,8 +261,10 @@ WebContents* TabManager::DiscardTabByExtension(content::WebContents* contents) {
     TabLifecycleUnitExternal* tab_lifecycle_unit_external =
         TabLifecycleUnitExternal::FromWebContents(contents);
     DCHECK(tab_lifecycle_unit_external);
-    if (tab_lifecycle_unit_external->DiscardTab())
+    if (tab_lifecycle_unit_external->DiscardTab(
+            LifecycleUnitDiscardReason::EXTERNAL)) {
       return tab_lifecycle_unit_external->GetWebContents();
+    }
     return nullptr;
   }
 

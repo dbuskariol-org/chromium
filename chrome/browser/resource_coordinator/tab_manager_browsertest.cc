@@ -1341,7 +1341,8 @@ IN_PROC_BROWSER_TEST_F(TabManagerTest, DiscardedTabHasNoProcess) {
   int renderer_id = process->GetID();
 
   // Discard the tab. This simulates a tab discard.
-  TabLifecycleUnitExternal::FromWebContents(web_contents)->DiscardTab();
+  TabLifecycleUnitExternal::FromWebContents(web_contents)
+      ->DiscardTab(LifecycleUnitDiscardReason::URGENT);
   content::WebContents* new_web_contents = tsm()->GetActiveWebContents();
   EXPECT_NE(new_web_contents, web_contents);
   web_contents = new_web_contents;
@@ -1407,7 +1408,8 @@ IN_PROC_BROWSER_TEST_F(TabManagerTest,
   EXPECT_FALSE(before_discard_childframe_result);
 
   // Discard the tab. This simulates a tab discard.
-  TabLifecycleUnitExternal::FromWebContents(contents)->DiscardTab();
+  TabLifecycleUnitExternal::FromWebContents(contents)->DiscardTab(
+      LifecycleUnitDiscardReason::URGENT);
 
   // Here we simulate re-focussing the tab causing reload with navigation,
   // the navigation will reload the tab.

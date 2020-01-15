@@ -16,6 +16,7 @@
 #include "chrome/browser/performance_manager/decorators/page_aggregator.h"
 #include "chrome/browser/performance_manager/decorators/process_metrics_decorator.h"
 #include "chrome/browser/performance_manager/graph/policies/policy_features.h"
+#include "chrome/browser/performance_manager/graph/policies/urgent_page_discarding_policy.h"
 #include "chrome/browser/performance_manager/graph/policies/working_set_trimmer_policy.h"
 #include "chrome/browser/performance_manager/observers/isolation_context_metrics.h"
 #include "chrome/browser/performance_manager/observers/metrics_collector.h"
@@ -93,6 +94,14 @@ void ChromeBrowserMainExtraPartsPerformanceManager::CreatePoliciesAndDecorators(
 
 #if !defined(OS_ANDROID)
   graph->PassToGraph(FormInteractionTabHelper::CreateGraphObserver());
+
+  if (base::FeatureList::IsEnabled(
+          performance_manager::features::
+              kUrgentDiscardingFromPerformanceManager)) {
+    graph->PassToGraph(
+        std::make_unique<
+            performance_manager::policies::UrgentPageDiscardingPolicy>());
+  }
 #endif  // !defined(OS_ANDROID)
 }
 
