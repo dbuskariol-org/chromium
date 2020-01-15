@@ -320,8 +320,9 @@
                          browser:self.browser];
   [self.translateInfobarCoordinator start];
 
-  self.passKitCoordinator = [[PassKitCoordinator alloc]
-      initWithBaseViewController:self.viewController];
+  self.passKitCoordinator =
+      [[PassKitCoordinator alloc] initWithBaseViewController:self.viewController
+                                                     browser:self.browser];
 
   self.passwordBreachCoordinator = [[PasswordBreachCoordinator alloc]
       initWithBaseViewController:self.viewController];
