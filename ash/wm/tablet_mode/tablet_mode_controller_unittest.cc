@@ -1685,12 +1685,30 @@ TEST_P(TabletModeControllerScreenshotTest, DISABLED_FromOverviewNoScreenshot) {
   EXPECT_FALSE(IsScreenshotShown());
 }
 
+// Regression test for screenshot staying visible when entering tablet mode when
+// a window creation animation is still underway. See https://crbug.com/1035356.
+TEST_P(TabletModeControllerScreenshotTest, EnterTabletModeWhileAnimating) {
+  auto window = CreateTestWindow(gfx::Rect(200, 200));
+  ASSERT_TRUE(window->layer()->GetAnimator()->is_animating());
+
+  // Enter tablet mode.
+  TabletMode::Waiter waiter(/*enable=*/true);
+  SetTabletMode(true);
+  EXPECT_FALSE(IsScreenshotShown());
+
+  waiter.Wait();
+  EXPECT_FALSE(IsScreenshotShown());
+}
+
 // Tests that the screenshot is visible when a window animation happens when
 // entering tablet mode.
 TEST_P(TabletModeControllerScreenshotTest, ScreenshotVisibility) {
   auto window = CreateTestWindow(gfx::Rect(200, 200));
   auto window2 = CreateTestWindow(gfx::Rect(300, 200));
+
+  window->layer()->GetAnimator()->StopAnimating();
   ui::Layer* layer = window2->layer();
+  layer->GetAnimator()->StopAnimating();
   ASSERT_FALSE(IsScreenshotShown());
 
   TabletMode::Waiter waiter(/*enable=*/true);
@@ -1713,6 +1731,7 @@ TEST_P(TabletModeControllerScreenshotTest, ScreenshotVisibility) {
 TEST_P(TabletModeControllerScreenshotTest, NoCrashWhenExitingWithoutWaiting) {
   // One non-maximized window is needed for screenshot to be taken.
   auto window = CreateTestWindow(gfx::Rect(200, 200));
+  window->layer()->GetAnimator()->StopAnimating();
 
   SetTabletMode(true);
   SetTabletMode(false);
