@@ -432,6 +432,10 @@ void NativeWidgetAura::SetWindowIcons(const gfx::ImageSkia& window_icon,
 void NativeWidgetAura::InitModalType(ui::ModalType modal_type) {
   if (modal_type != ui::MODAL_TYPE_NONE)
     window_->SetProperty(aura::client::kModalKey, modal_type);
+  if (modal_type == ui::MODAL_TYPE_WINDOW) {
+    wm::TransientWindowManager::GetOrCreate(window_)
+        ->set_parent_controls_visibility(true);
+  }
 }
 
 gfx::Rect NativeWidgetAura::GetWindowBoundsInScreen() const {

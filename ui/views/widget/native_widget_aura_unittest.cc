@@ -681,5 +681,64 @@ TEST_F(NativeWidgetAuraTest, VisibilityOfChildBubbleWindow) {
   EXPECT_TRUE(child.IsVisible());
 }
 
+class ModalWidgetDelegate : public WidgetDelegate {
+ public:
+  explicit ModalWidgetDelegate(Widget* widget) : widget_(widget) {}
+  ~ModalWidgetDelegate() override = default;
+
+  // WidgetDelegate:
+  void DeleteDelegate() override { delete this; }
+  const Widget* GetWidgetImpl() const override { return widget_; }
+  ui::ModalType GetModalType() const override {
+    return ui::ModalType::MODAL_TYPE_WINDOW;
+  }
+
+ private:
+  Widget* widget_;
+
+  DISALLOW_COPY_AND_ASSIGN(ModalWidgetDelegate);
+};
+
+// Tests that for a child transient window, if its modal type is
+// ui::MODAL_TYPE_WINDOW, then its visibility is controlled by its transient
+// parent's visibility.
+TEST_F(NativeWidgetAuraTest, TransientChildModalWindowVisibility) {
+  // Create a parent window.
+  Widget parent;
+  Widget::InitParams parent_params(Widget::InitParams::TYPE_WINDOW);
+  parent_params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  parent_params.context = root_window();
+  parent.Init(std::move(parent_params));
+  parent.SetBounds(gfx::Rect(0, 0, 400, 400));
+  parent.Show();
+  EXPECT_TRUE(parent.IsVisible());
+
+  // Create a ui::MODAL_TYPE_WINDOW modal type transient child window.
+  Widget child;
+  Widget::InitParams child_params(Widget::InitParams::TYPE_WINDOW);
+  child_params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  child_params.parent = parent.GetNativeWindow();
+  child_params.delegate = new ModalWidgetDelegate(&child);
+  child.Init(std::move(child_params));
+  child.SetBounds(gfx::Rect(0, 0, 200, 200));
+  child.Show();
+  EXPECT_TRUE(parent.IsVisible());
+  EXPECT_TRUE(child.IsVisible());
+
+  // Hide the parent window should also hide the child window.
+  parent.Hide();
+  EXPECT_FALSE(parent.IsVisible());
+  EXPECT_FALSE(child.IsVisible());
+
+  // The child window can't be shown if the parent window is hidden.
+  child.Show();
+  EXPECT_FALSE(parent.IsVisible());
+  EXPECT_FALSE(child.IsVisible());
+
+  parent.Show();
+  EXPECT_TRUE(parent.IsVisible());
+  EXPECT_TRUE(child.IsVisible());
+}
+
 }  // namespace
 }  // namespace views
