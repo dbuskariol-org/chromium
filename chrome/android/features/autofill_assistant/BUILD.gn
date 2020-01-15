@@ -261,6 +261,7 @@ android_library("test_java") {
     "//chrome/browser/ui/android/widget:java",
     "//chrome/test/android:chrome_java_test_support",
     "//components/autofill_assistant/browser:proto_java",
+    "//components/browser_ui/widget/android:java",
     "//content/public/android:content_java",
     "//content/public/test/android:content_java_test_support",
     "//net/android:net_java_test_support",
