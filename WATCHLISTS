@@ -1617,17 +1617,12 @@
                   '|chrome/browser/ui/webui/settings/'\
                   '|chrome/test/data/webui/settings/',
     },
-    'settings_forked_os_settings': {
-      'filepath': 'chrome/browser/resources/settings/basic_page/'\
-                  '|chrome/browser/resources/settings/chromeos/'\
-                  '|chrome/browser/resources/settings/settings_menu/'\
-                  '|chrome/browser/resources/settings/settings_page/'\
-                  '|chrome/browser/resources/settings/settings_ui/'\
-                  '|chrome/browser/resources/settings/os_settings_resouces.grd'\
-                  '|chrome/browser/resources/settings/os_settings_resouces_vulcanized.grd',
-    },
     'settings_os_settings': {
-      'filepath': 'chrome/browser/resources/settings/chromeos/',
+      'filepath': 'chrome/browser/resources/settings/chromeos/'\
+                  '|chrome/browser/resources/settings/os_settings_resouces.grd'\
+                  '|chrome/browser/resources/settings/os_settings_resouces_vulcanized.grd'\
+                  '|chrome/browser/ui/webui/settings/chromeos/'\
+                  '|chrome/test/data/webui/settings/chromeos/',
     },
     'sharing': {
       'filepath': 'chrome/browser/sharing/|'\
@@ -2641,15 +2636,13 @@
                        'nhiroki@chromium.org',
                        'serviceworker-reviews@chromium.org',
                        'shimazu+serviceworker@chromium.org'],
-    'settings': ['michaelpg+watch-md-settings@chromium.org',
-                 'stevenjb+watch-md-settings@chromium.org',
-                 'hsuregan+watch@chromium.org',
-                 'jordynass+watch@chromium.org',
-                 'maybelle+watch@chromium.org'],
-    'settings_forked_os_settings': [
-                 'maybelle@chromium.org'],
-    'settings_os_settings': [
-                 'jhawkins+watch@chromium.org'],
+    'settings': ['dpapad+watch-settings@chromium.org',
+                 'michaelpg+watch-settings@chromium.org'],
+    'settings_os_settings': ['hsuregan+watch-os-settings@chromium.org',
+                             'jamescook+watch-os-settings@chromium.org',
+                             'jhawkins+watch-os-settings@chromium.org',
+                             'khorimoto+watch-os-settings@chromium.org',
+                             'zentaro+watch-os-settings@chromium.org'],
     'sharing': ['peter@chromium.org',
                 'unido-reviews@chromium.org'],
     'site_engagement': ['dominickn+watch-engagement@chromium.org'],
@@ -2758,10 +2751,10 @@
     'vulkan': ['cblume+vulkan@chromium.org'],
     'wake_lock': ['mattreynolds+watch@chromium.org',
                   'raphael.kubo.da.costa@intel.com'],
-    'wallpapers': ['hsuregan+watch@chromium.org',
-                   'jhawkins+watch@chromium.org',
-                   'jordynass+watch@chromium.org',
-                   'maybelle+watch@chromium.org'],
+    'wallpapers': ['hsuregan+watch-wallpapers@chromium.org',
+                   'jhawkins+watch-wallpapers@chromium.org',
+                   'khorimoto+watch-wallpapers@chromium.org',
+                   'zentaro+watch-wallpapers@chromium.org'],
     'web_applications': ['alancutter+chrome-cls@chromium.org',
                          'dominickn+watch-web_applications@chromium.org',
                          'ericwilligers+watch-bmo@chromium.org',
