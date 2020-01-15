@@ -468,7 +468,6 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
         TestCase("openQuickViewTabIndexText"),
         TestCase("pressEnterOnInfoBoxToOpenClose"),
         TestCase("closeQuickView"),
-        TestCase("cantOpenQuickViewWithMultipleFiles"),
         TestCase("openQuickViewFromDirectoryTree")));
 
 WRAPPED_INSTANTIATE_TEST_SUITE_P(

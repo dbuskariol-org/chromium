@@ -1200,39 +1200,6 @@
   };
 
   /**
-   * Tests that Quick View doesn't open with multiple files selected.
-   */
-  testcase.cantOpenQuickViewWithMultipleFiles = async () => {
-    // Open Files app on Downloads containing ENTRIES.hello and ENTRIES.world.
-    const appId = await setupAndWaitUntilReady(
-        RootPath.DOWNLOADS, [ENTRIES.hello, ENTRIES.world], []);
-
-    // Select all 2 files.
-    const ctrlA = ['#file-list', 'a', true, false, false];
-    await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, ctrlA);
-
-    // Wait for the files to be selected.
-    await remoteCall.waitForElement(
-        appId,
-        '#cancel-selection-button-wrapper:not([hidden]):not([disabled])');
-
-    // Attempt to open Quick View via its keyboard shortcut.
-    const space = ['#file-list', ' ', false, false, false];
-    await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, space);
-
-    // Wait for it to possibly open.
-    await new Promise((resolve) => {
-      window.setTimeout(resolve, 500);
-    });
-
-    // Check Quick View hasn't opened.
-    chrome.test.assertEq(
-        [],
-        await remoteCall.callRemoteTestUtil(
-            'deepQueryAllElements', appId, [['#quick-view', '#dialog[open]']]));
-  };
-
-  /**
    * Tests opening Quick View and closing with Escape key returns focus to file
    * list.
    */

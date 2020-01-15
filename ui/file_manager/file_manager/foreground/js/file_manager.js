@@ -580,7 +580,7 @@ class FileManager extends cr.EventTarget {
         this.ui_.listContainer.table, this.directoryModel_);
 
     this.quickViewModel_ = new QuickViewModel();
-    const fileListSelectionModel = /** @type {!cr.ui.ListSelectionModel} */ (
+    const fileListSelectionModel = /** @type {!FileListSelectionModel} */ (
         this.directoryModel_.getFileListSelection());
     this.quickViewUma_ =
         new QuickViewUma(assert(this.volumeManager_), assert(this.dialogType));
