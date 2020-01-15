@@ -1388,10 +1388,15 @@ TEST_F(ShelfViewTest, ShelfTooltipTest) {
 
 TEST_F(ShelfViewTestNotScrollable, ButtonTitlesTest) {
   AddAppShortcutsUntilOverflow();
-  EXPECT_EQ(base::UTF8ToUTF16("Launcher"),
-            shelf_view_->shelf_widget()->GetHomeButton()->GetAccessibleName());
+  EXPECT_EQ(base::UTF8ToUTF16("Launcher"), shelf_view_->shelf_widget()
+                                               ->navigation_widget()
+                                               ->GetHomeButton()
+                                               ->GetAccessibleName());
   EXPECT_EQ(l10n_util::GetStringUTF16(IDS_ASH_SHELF_BACK_BUTTON_TITLE),
-            shelf_view_->shelf_widget()->GetBackButton()->GetAccessibleName());
+            shelf_view_->shelf_widget()
+                ->navigation_widget()
+                ->GetBackButton()
+                ->GetAccessibleName());
   EXPECT_EQ(l10n_util::GetStringUTF16(IDS_ASH_SHELF_OVERFLOW_NAME),
             shelf_view_->GetOverflowButton()->GetAccessibleName());
 
@@ -1447,7 +1452,8 @@ TEST_F(ShelfViewTest, ShelfAlignmentClosesTooltip) {
 
 // Verifies that the time of button press is recorded correctly in clamshell.
 TEST_F(ShelfViewTest, HomeButtonMetricsInClamshell) {
-  const HomeButton* home_button = shelf_view_->shelf_widget()->GetHomeButton();
+  const HomeButton* home_button =
+      shelf_view_->shelf_widget()->navigation_widget()->GetHomeButton();
 
   // Make sure we're not showing the app list.
   EXPECT_FALSE(home_button->IsShowingAppList());
@@ -1466,7 +1472,8 @@ TEST_F(ShelfViewTest, HomeButtonMetricsInClamshell) {
 // Verifies that the time of button press is recorded correctly in tablet.
 TEST_F(ShelfViewTest, HomeButtonMetricsInTablet) {
   Shell::Get()->tablet_mode_controller()->SetEnabledForTest(true);
-  const HomeButton* home_button = shelf_view_->shelf_widget()->GetHomeButton();
+  const HomeButton* home_button =
+      shelf_view_->shelf_widget()->navigation_widget()->GetHomeButton();
 
   // Make sure we're not showing the app list.
   std::unique_ptr<aura::Window> window = CreateTestWindow();
@@ -1516,7 +1523,8 @@ TEST_P(HotseatShelfViewTest, ShouldHideTooltipTest) {
   // |AddItem| call seems to sometimes be missing some re-layout steps. We
   // should find out what's going on there.
   shelf_view_->UpdateVisibleShelfItemBoundsUnion();
-  const HomeButton* home_button = shelf_view_->shelf_widget()->GetHomeButton();
+  const HomeButton* home_button =
+      shelf_view_->shelf_widget()->navigation_widget()->GetHomeButton();
 
   // Make sure we're not showing the app list.
   EXPECT_FALSE(home_button->IsShowingAppList())
@@ -1598,7 +1606,8 @@ TEST_F(ShelfViewTest, ShouldHideTooltipWithAppListWindowTest) {
   }
 
   // The tooltip should hide on the home button if the app list is visible.
-  HomeButton* home_button = shelf_view_->shelf_widget()->GetHomeButton();
+  HomeButton* home_button =
+      shelf_view_->shelf_widget()->navigation_widget()->GetHomeButton();
   gfx::Point center_point = home_button->GetBoundsInScreen().CenterPoint();
   views::View::ConvertPointFromScreen(shelf_view_, &center_point);
   EXPECT_TRUE(shelf_view_->ShouldHideTooltip(gfx::Point(
@@ -2435,7 +2444,8 @@ TEST_F(ShelfViewTest, DragAppAfterContextMenuIsShownInAutoHideShelf) {
 // Tests that the home button does shows a context menu on right click.
 TEST_F(ShelfViewTest, HomeButtonDoesShowContextMenu) {
   ui::test::EventGenerator* generator = GetEventGenerator();
-  const HomeButton* home_button = shelf_view_->shelf_widget()->GetHomeButton();
+  const HomeButton* home_button =
+      shelf_view_->shelf_widget()->navigation_widget()->GetHomeButton();
   generator->MoveMouseTo(home_button->GetBoundsInScreen().CenterPoint());
   generator->PressRightButton();
   EXPECT_TRUE(test_api_->CloseMenu());
@@ -2508,6 +2518,7 @@ TEST_F(ShelfViewTest, IconCenteringTest) {
   // and the status area.
   ExpectWithinOnePixel(
       app_buttons[0]->GetBoundsInScreen().x() - shelf_view_->shelf_widget()
+                                                    ->navigation_widget()
                                                     ->GetHomeButton()
                                                     ->GetBoundsInScreen()
                                                     .right(),
@@ -3131,7 +3142,8 @@ class ShelfViewInkDropTest : public ShelfViewTest {
 
  protected:
   void InitHomeButtonInkDrop() {
-    home_button_ = shelf_view_->shelf_widget()->GetHomeButton();
+    home_button_ =
+        shelf_view_->shelf_widget()->navigation_widget()->GetHomeButton();
 
     auto home_button_ink_drop =
         std::make_unique<InkDropSpy>(std::make_unique<views::InkDropImpl>(
@@ -3532,6 +3544,7 @@ TEST_F(ShelfViewInkDropTest, DismissingMenuWithDoubleClickDoesntShowInkDrop) {
 
   // Show a context menu on the home button.
   generator->MoveMouseTo(shelf_view_->shelf_widget()
+                             ->navigation_widget()
                              ->GetHomeButton()
                              ->GetBoundsInScreen()
                              .CenterPoint());
@@ -4052,7 +4065,10 @@ TEST_F(ShelfViewFocusTest, Basic) {
 
   // The home button is focused initially because the back button is only
   // visible in tablet mode.
-  EXPECT_TRUE(shelf_view_->shelf_widget()->GetHomeButton()->HasFocus());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
 }
 
 // Tests that the expected views have focus when cycling through shelf items
@@ -4073,7 +4089,10 @@ TEST_F(ShelfViewFocusTest, ForwardCycling) {
 TEST_F(ShelfViewFocusTest, BackwardCycling) {
   // The first element is currently focused. Let's advance to the last element
   // first.
-  EXPECT_TRUE(shelf_view_->shelf_widget()->GetHomeButton()->HasFocus());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
   DoTab();
   DoTab();
   DoTab();
@@ -4102,7 +4121,10 @@ TEST_F(ShelfViewFocusTest, OverflowNotActivatedWhenOpened) {
 // Verifies that focus moves as expected between the shelf and the status area.
 TEST_F(ShelfViewFocusTest, FocusCyclingBetweenShelfAndStatusWidget) {
   // The first element of the shelf (the home button) is focused at start.
-  EXPECT_TRUE(shelf_view_->shelf_widget()->GetHomeButton()->HasFocus());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
 
   // Focus the next few elements.
   DoTab();
@@ -4131,14 +4153,20 @@ TEST_F(ShelfViewFocusTest, FocusCyclingBetweenShelfAndStatusWidget) {
   // And keep going forward, now we should be cycling back to the first shelf
   // element.
   DoTab();
-  EXPECT_TRUE(shelf_view_->shelf_widget()->GetHomeButton()->HasFocus());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
   ExpectNotFocused(status_area_);
 }
 
 // Verifies that hitting the Esc key can consistently unfocus the shelf.
 TEST_F(ShelfViewFocusTest, UnfocusWithEsc) {
   // The home button is focused at start.
-  EXPECT_TRUE(shelf_view_->shelf_widget()->GetHomeButton()->HasFocus());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
 
   // Focus the status area.
   DoShiftTab();
@@ -4211,14 +4239,20 @@ TEST_F(ShelfViewOverflowFocusTest, Basic) {
 
   EXPECT_EQ(last_item_on_main_shelf_index_, items_ - 5);
   EXPECT_TRUE(shelf_view_->shelf_widget()->navigation_widget()->IsActive());
-  EXPECT_TRUE(shelf_view_->shelf_widget()->GetHomeButton()->HasFocus());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
 }
 
 TEST_F(ShelfViewOverflowFocusTest, OpenOverflow) {
   OpenOverflow();
   ASSERT_TRUE(overflow_shelf_test_api_);
   EXPECT_TRUE(shelf_view_->IsShowingOverflowBubble());
-  EXPECT_TRUE(shelf_view_->shelf_widget()->GetHomeButton()->HasFocus());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
 }
 
 // Tests that when cycling through the items with tab, the items in the overflow
@@ -4337,7 +4371,10 @@ TEST_F(ShelfViewOverflowFocusTest, FocusCyclingBetweenShelfAndStatusWidget) {
   // Focus the shelf again.
   DoTab();
   ExpectFocused(navigation_view_);
-  EXPECT_TRUE(shelf_view_->shelf_widget()->GetHomeButton()->HasFocus());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
   ExpectNotFocused(shelf_view_);
   ExpectNotFocused(status_area_);
 
@@ -4376,6 +4413,9 @@ TEST_F(ShelfViewOverflowFocusTest, FocusCyclingBetweenShelfAndStatusWidget) {
   while (status_area_->GetWidget()->IsActive())
     DoTab();
   // This should have brought focus to the home button.
-  EXPECT_TRUE(shelf_view_->shelf_widget()->GetHomeButton()->HasFocus());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
 }
 }  // namespace ash

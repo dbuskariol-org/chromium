@@ -33,7 +33,10 @@ class BackButtonTest : public AshTestBase,
   ~BackButtonTest() override = default;
 
   BackButton* back_button() {
-    return test_api_->shelf_view()->shelf_widget()->GetBackButton();
+    return test_api_->shelf_view()
+        ->shelf_widget()
+        ->navigation_widget()
+        ->GetBackButton();
   }
   ShelfViewTestAPI* test_api() { return test_api_.get(); }
 

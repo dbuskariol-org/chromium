@@ -606,7 +606,8 @@ void ShelfWidget::PostCreateShelf() {
 }
 
 bool ShelfWidget::IsShowingAppList() const {
-  return GetHomeButton() && GetHomeButton()->IsShowingAppList();
+  return navigation_widget()->GetHomeButton() &&
+         navigation_widget()->GetHomeButton()->IsShowingAppList();
 }
 
 bool ShelfWidget::IsShowingMenu() const {
@@ -637,14 +638,6 @@ gfx::Rect ShelfWidget::GetScreenBoundsOfItemIconForWindow(
   return gfx::Rect(screen_origin.x() + bounds.x(),
                    screen_origin.y() + bounds.y(), bounds.width(),
                    bounds.height());
-}
-
-HomeButton* ShelfWidget::GetHomeButton() const {
-  return navigation_widget_.get()->GetHomeButton();
-}
-
-BackButton* ShelfWidget::GetBackButton() const {
-  return navigation_widget_.get()->GetBackButton();
 }
 
 ApplicationDragAndDropHost* ShelfWidget::GetDragAndDropHostForAppList() {

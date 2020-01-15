@@ -2782,7 +2782,8 @@ TEST_P(ShelfLayoutManagerTest, PressHomeButtonOnAutoHideShelf) {
   GetAppListTestHelper()->CheckVisibility(false);
 
   // Press the home button with touch.
-  views::View* home_button = GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+  views::View* home_button =
+      GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
   // Wait for the back button to finish animating from behind the home button.
   ShelfViewTestAPI(GetPrimaryShelf()->GetShelfViewForTesting())
       .RunMessageLoopUntilAnimationsDone(
@@ -2891,7 +2892,8 @@ TEST_P(ShelfLayoutManagerTest, MousePressAppListBtnWhenShelfBeingDragged) {
   GetPrimaryShelf()->shelf_widget()->OnGestureEvent(&update_event);
 
   // Press the AppList button by mouse.
-  views::View* home_button = GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+  views::View* home_button =
+      GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
   GetEventGenerator()->MoveMouseTo(
       home_button->GetBoundsInScreen().CenterPoint());
   GetEventGenerator()->ClickLeftButton();
@@ -3152,8 +3154,10 @@ TEST_P(ShelfLayoutManagerTest, TapShelfItemInAutoHideShelf) {
 
   // Tap home button should not open the app list and shelf should keep
   // hidden.
-  gfx::Rect home_button_bounds =
-      shelf->shelf_widget()->GetHomeButton()->GetBoundsInScreen();
+  gfx::Rect home_button_bounds = shelf->shelf_widget()
+                                     ->navigation_widget()
+                                     ->GetHomeButton()
+                                     ->GetBoundsInScreen();
   gfx::Rect display_bounds =
       display::Screen::GetScreen()->GetPrimaryDisplay().bounds();
   home_button_bounds.Intersect(display_bounds);
@@ -4383,7 +4387,8 @@ TEST_P(HotseatShelfLayoutManagerTest, HomeToOverviewChangesStateOnce) {
   wm::ActivateWindow(window.get());
   if (GetParam() == ShelfAutoHideBehavior::kAlways)
     SwipeUpOnShelf();
-  views::View* home_button = GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+  views::View* home_button =
+      GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
   GetEventGenerator()->GestureTapAt(
       home_button->GetBoundsInScreen().CenterPoint());
   GetAppListTestHelper()->CheckVisibility(true);
@@ -4429,7 +4434,7 @@ TEST_P(HotseatShelfLayoutManagerTest, InAppToHomeChangesStateOnce) {
   {
     HotseatStateWatcher watcher(GetShelfLayoutManager());
     views::View* home_button =
-        GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+        GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
     GetEventGenerator()->GestureTapAt(
         home_button->GetBoundsInScreen().CenterPoint());
 
@@ -4467,7 +4472,7 @@ TEST_P(HotseatShelfLayoutManagerTest, InAppToHomeChangesStateOnce) {
   {
     HotseatStateWatcher watcher(GetShelfLayoutManager());
     views::View* home_button =
-        GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+        GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
     GetEventGenerator()->GestureTapAt(
         home_button->GetBoundsInScreen().CenterPoint());
 
@@ -4503,7 +4508,8 @@ TEST_P(HotseatShelfLayoutManagerTest, HomeToOverviewAndBack) {
   OverviewController* overview_controller = Shell::Get()->overview_controller();
   EXPECT_TRUE(overview_controller->InOverviewSession());
 
-  views::View* home_button = GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+  views::View* home_button =
+      GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
   GetEventGenerator()->GestureTapAt(
       home_button->GetBoundsInScreen().CenterPoint());
 
@@ -4606,7 +4612,8 @@ TEST_P(HotseatShelfLayoutManagerTest, GoHomeDuringInAppToOverviewTransition) {
 
   // Press home button - expect transition to home (with hotseat in kShown
   // state, and in app shelf hidden).
-  views::View* home_button = GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+  views::View* home_button =
+      GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
   GetEventGenerator()->GestureTapAt(
       home_button->GetBoundsInScreen().CenterPoint());
 
@@ -4791,7 +4798,8 @@ TEST_F(HotseatShelfLayoutManagerTest,
       AshTestBase::CreateTestWindow(gfx::Rect(0, 0, 400, 400));
   wm::ActivateWindow(window.get());
   ASSERT_EQ(1, counter.count());
-  views::View* home_button = GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+  views::View* home_button =
+      GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
   GetEventGenerator()->GestureTapAt(
       home_button->GetBoundsInScreen().CenterPoint());
 
@@ -4835,9 +4843,10 @@ TEST_F(HotseatShelfLayoutManagerTest,
   wm::ActivateWindow(window.get());
   ASSERT_TRUE(ShelfConfig::Get()->is_in_app());
 
-  // Go to the home launcher, work area should not udpate.
+  // Go to the home launcher, work area should not update.
   DisplayWorkAreaChangeCounter counter;
-  views::View* home_button = GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+  views::View* home_button =
+      GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
   GetEventGenerator()->GestureTapAt(
       home_button->GetBoundsInScreen().CenterPoint());
 

@@ -57,7 +57,11 @@ class HomeButtonTest : public AshTestBase,
   }
 
   void SendGestureEvent(ui::GestureEvent* event) {
-    GetPrimaryShelf()->shelf_widget()->GetHomeButton()->OnGestureEvent(event);
+    GetPrimaryShelf()
+        ->shelf_widget()
+        ->navigation_widget()
+        ->GetHomeButton()
+        ->OnGestureEvent(event);
   }
 
   void SendGestureEventToSecondaryDisplay(ui::GestureEvent* event) {
@@ -66,12 +70,16 @@ class HomeButtonTest : public AshTestBase,
     // Send the gesture event to the secondary display.
     Shelf::ForWindow(Shell::GetAllRootWindows()[1])
         ->shelf_widget()
+        ->navigation_widget()
         ->GetHomeButton()
         ->OnGestureEvent(event);
   }
 
   const HomeButton* home_button() const {
-    return GetPrimaryShelf()->shelf_widget()->GetHomeButton();
+    return GetPrimaryShelf()
+        ->shelf_widget()
+        ->navigation_widget()
+        ->GetHomeButton();
   }
 
   AssistantState* assistant_state() const { return AssistantState::Get(); }
