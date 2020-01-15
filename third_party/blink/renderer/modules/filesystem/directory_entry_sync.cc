@@ -30,10 +30,10 @@
 
 #include "third_party/blink/renderer/modules/filesystem/directory_entry_sync.h"
 
+#include "third_party/blink/renderer/bindings/modules/v8/v8_file_system_flags.h"
 #include "third_party/blink/renderer/modules/filesystem/directory_reader_sync.h"
 #include "third_party/blink/renderer/modules/filesystem/entry.h"
 #include "third_party/blink/renderer/modules/filesystem/file_entry_sync.h"
-#include "third_party/blink/renderer/modules/filesystem/file_system_flags.h"
 #include "third_party/blink/renderer/modules/filesystem/sync_callback_helper.h"
 #include "third_party/blink/renderer/platform/bindings/exception_state.h"
 #include "third_party/blink/renderer/platform/wtf/casting.h"
