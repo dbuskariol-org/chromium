@@ -188,7 +188,7 @@ Polymer({
    * @private
    */
   onManageInputMethodsTap_() {
-    settings.navigateTo(settings.routes.INPUT_METHODS);
+    settings.Router.getInstance().navigateTo(settings.routes.INPUT_METHODS);
   },
 
   /**

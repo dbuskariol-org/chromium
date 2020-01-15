@@ -184,14 +184,16 @@ Polymer({
   /** @protected */
   currentRouteChanged() {
     this.showImportDataDialog_ =
-        settings.getCurrentRoute() == settings.routes.IMPORT_DATA;
+        settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.IMPORT_DATA;
 
-    if (settings.getCurrentRoute() == settings.routes.SIGN_OUT) {
+    if (settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.SIGN_OUT) {
       // If the sync status has not been fetched yet, optimistically display
       // the sign-out dialog. There is another check when the sync status is
       // fetched. The dialog will be closed when the user is not signed in.
       if (this.syncStatus && !this.syncStatus.signedIn) {
-        settings.navigateToPreviousRoute();
+        settings.Router.getInstance().navigateToPreviousRoute();
       } else {
         this.showSignoutDialog_ = true;
       }
@@ -313,7 +315,7 @@ Polymer({
     }
     // </if>
     // <if expr="not chromeos">
-    settings.navigateTo(settings.routes.MANAGE_PROFILE);
+    settings.Router.getInstance().navigateTo(settings.routes.MANAGE_PROFILE);
     // </if>
   },
 
@@ -336,31 +338,32 @@ Polymer({
     cr.ui.focusWithoutInk(assert(this.$$('#disconnectButton')));
     // </if>
 
-    if (settings.getCurrentRoute() == settings.routes.SIGN_OUT) {
-      settings.navigateToPreviousRoute();
+    if (settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.SIGN_OUT) {
+      settings.Router.getInstance().navigateToPreviousRoute();
     }
   },
 
   /** @private */
   onDisconnectTap_() {
-    settings.navigateTo(settings.routes.SIGN_OUT);
+    settings.Router.getInstance().navigateTo(settings.routes.SIGN_OUT);
   },
 
   /** @private */
   onSyncTap_() {
     // Users can go to sync subpage regardless of sync status.
-    settings.navigateTo(settings.routes.SYNC);
+    settings.Router.getInstance().navigateTo(settings.routes.SYNC);
   },
 
   // <if expr="not chromeos">
   /** @private */
   onImportDataTap_() {
-    settings.navigateTo(settings.routes.IMPORT_DATA);
+    settings.Router.getInstance().navigateTo(settings.routes.IMPORT_DATA);
   },
 
   /** @private */
   onImportDataDialogClosed_() {
-    settings.navigateToPreviousRoute();
+    settings.Router.getInstance().navigateToPreviousRoute();
     cr.ui.focusWithoutInk(assert(this.$.importDataDialogTrigger));
   },
 

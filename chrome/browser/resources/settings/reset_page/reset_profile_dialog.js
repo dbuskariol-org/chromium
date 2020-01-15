@@ -89,8 +89,8 @@ Polymer({
   },
 
   show() {
-    this.isTriggered_ =
-        settings.getCurrentRoute() == settings.routes.TRIGGERED_RESET_DIALOG;
+    this.isTriggered_ = settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.TRIGGERED_RESET_DIALOG;
     if (this.isTriggered_) {
       this.browserProxy_.getTriggeredResetToolName().then(name => {
         this.resetRequestOrigin_ = 'triggeredreset';
@@ -103,7 +103,7 @@ Polymer({
       // with the startup URL chrome://settings/resetProfileSettings#cct.
       const origin = window.location.hash.slice(1).toLowerCase() == 'cct' ?
           'cct' :
-          settings.getQueryParameters().get('origin');
+          settings.Router.getInstance().getQueryParameters().get('origin');
       this.resetRequestOrigin_ = origin || '';
       this.showDialog_();
     }

@@ -73,6 +73,7 @@ js_library("app_detail_view") {
     ":pwa_detail_view",
     ":store_client",
     "../../..:route",
+    "../../..:router",
   ]
 }
 
@@ -208,6 +209,8 @@ js_library("util") {
   deps = [
     ":constants",
     ":types",
+    "../../..:route",
+    "../../..:router",
     "//ui/webui/resources/js:cr",
   ]
 }

@@ -220,7 +220,7 @@ Polymer({
       return;
     }
 
-    const queryParams = settings.getQueryParameters();
+    const queryParams = settings.Router.getInstance().getQueryParameters();
     const guid = queryParams.get('guid') || '';
     if (!guid) {
       console.error('No guid specified for page:' + route);
@@ -267,7 +267,7 @@ Polymer({
       this.managedProperties_ = undefined;
       this.propertiesReceived_ = false;
 
-      settings.navigateToPreviousRoute();
+      settings.Router.getInstance().navigateToPreviousRoute();
     });
   },
 

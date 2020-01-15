@@ -145,7 +145,8 @@ Polymer({
 
   /** @override */
   attached() {
-    if (this.shouldAskForPassword_(settings.getCurrentRoute())) {
+    if (this.shouldAskForPassword_(
+            settings.Router.getInstance().getCurrentRoute())) {
       this.openPasswordPromptDialog_();
     }
 
@@ -214,7 +215,8 @@ Polymer({
 
   /** @private */
   onSetModesChanged_() {
-    if (this.shouldAskForPassword_(settings.getCurrentRoute())) {
+    if (this.shouldAskForPassword_(
+            settings.Router.getInstance().getCurrentRoute())) {
       this.showSetupPinDialog_ = false;
       this.openPasswordPromptDialog_();
     }
@@ -229,7 +231,7 @@ Polymer({
   onPasswordPromptDialogClose_() {
     this.showPasswordPromptDialog_ = false;
     if (!this.setModes_) {
-      settings.navigateToPreviousRoute();
+      settings.Router.getInstance().navigateToPreviousRoute();
     } else if (!this.$$('#unlockType').disabled) {
       cr.ui.focusWithoutInk(assert(this.$$('#unlockType')));
     } else {
@@ -286,7 +288,7 @@ Polymer({
 
   /** @private */
   onEditFingerprints_() {
-    settings.navigateTo(settings.routes.FINGERPRINT);
+    settings.Router.getInstance().navigateTo(settings.routes.FINGERPRINT);
   },
 
   /**

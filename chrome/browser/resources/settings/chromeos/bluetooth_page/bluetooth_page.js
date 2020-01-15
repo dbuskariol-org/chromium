@@ -256,6 +256,6 @@ Polymer({
 
   /** @private */
   openSubpage_() {
-    settings.navigateTo(settings.routes.BLUETOOTH_DEVICES);
+    settings.Router.getInstance().navigateTo(settings.routes.BLUETOOTH_DEVICES);
   }
 });

@@ -164,12 +164,13 @@ Polymer({
 
   /** @protected */
   currentRouteChanged() {
-    if (settings.getCurrentRoute() == settings.routes.SIGN_OUT) {
+    if (settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.SIGN_OUT) {
       // If the sync status has not been fetched yet, optimistically display
       // the sign-out dialog. There is another check when the sync status is
       // fetched. The dialog will be closed when the user is not signed in.
       if (this.syncStatus && !this.syncStatus.signedIn) {
-        settings.navigateToPreviousRoute();
+        settings.Router.getInstance().navigateToPreviousRoute();
       } else {
         this.showSignoutDialog_ = true;
       }
@@ -282,25 +283,26 @@ Polymer({
     this.showSignoutDialog_ = false;
     cr.ui.focusWithoutInk(assert(this.$$('#disconnectButton')));
 
-    if (settings.getCurrentRoute() == settings.routes.SIGN_OUT) {
-      settings.navigateToPreviousRoute();
+    if (settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.SIGN_OUT) {
+      settings.Router.getInstance().navigateToPreviousRoute();
     }
   },
 
   /** @private */
   onDisconnectTap_() {
-    settings.navigateTo(settings.routes.SIGN_OUT);
+    settings.Router.getInstance().navigateTo(settings.routes.SIGN_OUT);
   },
 
   /** @private */
   onSyncTap_() {
     if (this.splitSettingsSyncEnabled_) {
-      settings.navigateTo(settings.routes.OS_SYNC);
+      settings.Router.getInstance().navigateTo(settings.routes.OS_SYNC);
       return;
     }
 
     // Users can go to sync subpage regardless of sync status.
-    settings.navigateTo(settings.routes.SYNC);
+    settings.Router.getInstance().navigateTo(settings.routes.SYNC);
   },
 
   /**
@@ -312,7 +314,7 @@ Polymer({
     // dialog, so prevent the end of the tap event to focus what is underneath
     // it, which takes focus from the dialog.
     e.preventDefault();
-    settings.navigateTo(settings.routes.LOCK_SCREEN);
+    settings.Router.getInstance().navigateTo(settings.routes.LOCK_SCREEN);
   },
 
   /**
@@ -321,7 +323,7 @@ Polymer({
    */
   onAccountManagerTap_(e) {
     if (this.isAccountManagerEnabled_) {
-      settings.navigateTo(settings.routes.ACCOUNT_MANAGER);
+      settings.Router.getInstance().navigateTo(settings.routes.ACCOUNT_MANAGER);
     }
   },
 
@@ -330,12 +332,12 @@ Polymer({
    * @private
    */
   onKerberosAccountsTap_(e) {
-    settings.navigateTo(settings.routes.KERBEROS_ACCOUNTS);
+    settings.Router.getInstance().navigateTo(settings.routes.KERBEROS_ACCOUNTS);
   },
 
   /** @private */
   onManageOtherPeople_() {
-    settings.navigateTo(settings.routes.ACCOUNTS);
+    settings.Router.getInstance().navigateTo(settings.routes.ACCOUNTS);
   },
 
   /**

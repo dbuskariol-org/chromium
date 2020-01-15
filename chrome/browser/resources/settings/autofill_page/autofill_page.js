@@ -42,7 +42,7 @@ Polymer({
    * @private
    */
   onAddressesClick_(event) {
-    settings.navigateTo(settings.routes.ADDRESSES);
+    settings.Router.getInstance().navigateTo(settings.routes.ADDRESSES);
   },
 
   /**
@@ -50,7 +50,7 @@ Polymer({
    * @private
    */
   onPaymentsClick_() {
-    settings.navigateTo(settings.routes.PAYMENTS);
+    settings.Router.getInstance().navigateTo(settings.routes.PAYMENTS);
   },
 
   /**
@@ -63,6 +63,6 @@ Polymer({
     loadTimeData.getBoolean('navigateToGooglePasswordManager') ?
         settings.OpenWindowProxyImpl.getInstance().openURL(
             loadTimeData.getString('googlePasswordManagerUrl')) :
-        settings.navigateTo(settings.routes.PASSWORDS);
+        settings.Router.getInstance().navigateTo(settings.routes.PASSWORDS);
   },
 });

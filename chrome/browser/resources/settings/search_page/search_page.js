@@ -68,7 +68,7 @@ Polymer({
 
   /** @private */
   onManageSearchEnginesTap_() {
-    settings.navigateTo(settings.routes.SEARCH_ENGINES);
+    settings.Router.getInstance().navigateTo(settings.routes.SEARCH_ENGINES);
   },
 
   /**

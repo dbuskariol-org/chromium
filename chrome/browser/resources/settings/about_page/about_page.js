@@ -98,7 +98,8 @@ Polymer({
 
     // <if expr="not chromeos">
     this.startListening_();
-    if (settings.getQueryParameters().get('checkForUpdate') == 'true') {
+    if (settings.Router.getInstance().getQueryParameters().get(
+            'checkForUpdate') == 'true') {
       this.onUpdateStatusChanged_({status: UpdateStatus.CHECKING});
       this.aboutBrowserProxy_.requestUpdate();
     }

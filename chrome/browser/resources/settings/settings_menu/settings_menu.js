@@ -30,8 +30,8 @@ Polymer({
     // Focus the initially selected path.
     const anchors = this.root.querySelectorAll('a');
     for (let i = 0; i < anchors.length; ++i) {
-      const anchorRoute =
-          settings.router.getRouteForPath(anchors[i].getAttribute('href'));
+      const anchorRoute = settings.Router.getInstance().getRouteForPath(
+          anchors[i].getAttribute('href'));
       if (anchorRoute && anchorRoute.contains(newRoute)) {
         this.setSelectedUrl_(anchors[i].href);
         return;
@@ -75,9 +75,9 @@ Polymer({
     this.setSelectedUrl_(event.detail.selected);
 
     const path = new URL(event.detail.selected).pathname;
-    const route = settings.getRouteForPath(path);
+    const route = settings.Router.getInstance().getRouteForPath(path);
     assert(route, 'settings-menu has an entry with an invalid route.');
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         route, /* dynamicParams */ null, /* removeSearch */ true);
   },
 

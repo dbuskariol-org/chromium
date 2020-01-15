@@ -134,6 +134,7 @@ Polymer({
 
   /** @private */
   openTimeZoneSubpage_() {
-    settings.navigateTo(settings.routes.DATETIME_TIMEZONE_SUBPAGE);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.DATETIME_TIMEZONE_SUBPAGE);
   },
 });

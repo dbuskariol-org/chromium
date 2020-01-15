@@ -15,7 +15,7 @@ js_library("about_page") {
   deps = [
     ":about_page_browser_proxy",
     "..:lifetime_browser_proxy",
-    "..:route",
+    "..:router",
     "//ui/webui/resources/js:assert",
     "//ui/webui/resources/js:i18n_behavior",
     "//ui/webui/resources/js:parse_html_subset",

@@ -11,7 +11,7 @@ js_type_check("closure_compile") {
 js_library("os_settings_main") {
   deps = [
     "..:os_page_visibility",
-    "../..:route",
+    "../..:router",
     "../..:search_settings",
     "../../settings_page:main_page_behavior",
     "../os_settings_page:os_settings_page",

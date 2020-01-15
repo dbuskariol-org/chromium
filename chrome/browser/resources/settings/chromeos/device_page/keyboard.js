@@ -152,7 +152,7 @@ Polymer({
   },
 
   onShowLanguageInputTap_() {
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.LANGUAGES_DETAILS,
         /* dynamicParams */ null, /* removeSearch */ true);
   },

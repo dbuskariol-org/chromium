@@ -35,6 +35,6 @@ Polymer({
 
   /** @private */
   onTapSmbShares_() {
-    settings.navigateTo(settings.routes.SMB_SHARES);
+    settings.Router.getInstance().navigateTo(settings.routes.SMB_SHARES);
   },
 });

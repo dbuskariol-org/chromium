@@ -42,8 +42,9 @@ Polymer({
   /** @private */
   onPlayStoreEnabledChanged_(enabled) {
     if (!enabled &&
-        settings.getCurrentRoute() == settings.routes.ANDROID_APPS_DETAILS) {
-      settings.navigateToPreviousRoute();
+        settings.Router.getInstance().getCurrentRoute() ==
+            settings.routes.ANDROID_APPS_DETAILS) {
+      settings.Router.getInstance().navigateToPreviousRoute();
     }
   },
 

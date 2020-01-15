@@ -40,7 +40,7 @@ Polymer({
   /** @private */
   onLanguagesTap_() {
     // TODO(crbug.com/950007): Add UMA metric for opening language details.
-    settings.navigateTo(settings.routes.LANGUAGES_DETAILS);
+    settings.Router.getInstance().navigateTo(settings.routes.LANGUAGES_DETAILS);
   },
 
   /**

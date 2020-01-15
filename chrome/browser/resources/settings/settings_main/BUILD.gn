@@ -12,6 +12,7 @@ js_library("settings_main") {
   deps = [
     "..:page_visibility",
     "..:route",
+    "..:router",
     "..:search_settings",
     "../about_page",
     "../basic_page:basic_page",

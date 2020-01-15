@@ -71,7 +71,7 @@ Polymer({
     // Grab account list and - when done - pop up the reauthentication dialog if
     // there is a kerberos_reauth param.
     this.refreshAccounts_().then(() => {
-      const queryParams = settings.getQueryParameters();
+      const queryParams = settings.Router.getInstance().getQueryParameters();
       const reauthPrincipal = queryParams.get('kerberos_reauth');
       const reauthAccount = this.accounts_.find(account => {
         return account.principalName == reauthPrincipal;

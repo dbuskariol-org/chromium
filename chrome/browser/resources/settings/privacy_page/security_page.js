@@ -91,7 +91,7 @@ Polymer({
   /** @private */
   onManageCertificatesClick_() {
     // <if expr="use_nss_certs">
-    settings.navigateTo(settings.routes.CERTIFICATES);
+    settings.Router.getInstance().navigateTo(settings.routes.CERTIFICATES);
     // </if>
     // <if expr="is_win or is_macosx">
     this.browserProxy_.showManageSSLCertificates();
@@ -107,7 +107,7 @@ Polymer({
 
   /** @private */
   onSecurityKeysClick_() {
-    settings.navigateTo(settings.routes.SECURITY_KEYS);
+    settings.Router.getInstance().navigateTo(settings.routes.SECURITY_KEYS);
     this.browserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_SECURITY_KEYS);
   },

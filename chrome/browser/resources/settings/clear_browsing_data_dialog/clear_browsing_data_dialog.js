@@ -465,7 +465,7 @@ Polymer({
               'ClearBrowsingData_Sync_NavigateToError');
         }
         // In any other error case, navigate to the sync page.
-        settings.navigateTo(settings.routes.SYNC);
+        settings.Router.getInstance().navigateTo(settings.routes.SYNC);
       }
     }
   },

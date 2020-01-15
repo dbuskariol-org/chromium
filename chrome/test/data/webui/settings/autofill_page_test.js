@@ -296,7 +296,9 @@ cr.define('settings_autofill_page', function() {
       autofillPage.$$('#passwordManagerButton').click();
       Polymer.dom.flush();
 
-      assertEquals(settings.getCurrentRoute(), settings.routes.PASSWORDS);
+      assertEquals(
+          settings.Router.getInstance().getCurrentRoute(),
+          settings.routes.PASSWORDS);
     });
 
     test('Google Password Manager On', function() {

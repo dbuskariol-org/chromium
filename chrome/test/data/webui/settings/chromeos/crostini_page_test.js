@@ -117,7 +117,7 @@ suite('CrostiniPageTests', function() {
         assertTrue(cr.removeWebUIListener(v));
       });
 
-      settings.navigateTo(settings.routes.CROSTINI);
+      settings.Router.getInstance().navigateTo(settings.routes.CROSTINI);
       crostiniPage.$$('#crostini').click();
 
       const pageLoadPromise = flushAsync().then(() => {
@@ -246,7 +246,9 @@ suite('CrostiniPageTests', function() {
           1, crostiniBrowserProxy.getCallCount('requestRemoveCrostini'));
       setCrostiniPrefs(false);
       return whenPopState().then(function() {
-        assertEquals(settings.getCurrentRoute(), settings.routes.CROSTINI);
+        assertEquals(
+            settings.Router.getInstance().getCurrentRoute(),
+            settings.routes.CROSTINI);
         assertTrue(!!crostiniPage.$$('#enable'));
       });
     });
@@ -270,10 +272,13 @@ suite('CrostiniPageTests', function() {
 
     test('HideOnDisable', function() {
       assertEquals(
-          settings.getCurrentRoute(), settings.routes.CROSTINI_DETAILS);
+          settings.Router.getInstance().getCurrentRoute(),
+          settings.routes.CROSTINI_DETAILS);
       setCrostiniPrefs(false);
       return whenPopState().then(function() {
-        assertEquals(settings.getCurrentRoute(), settings.routes.CROSTINI);
+        assertEquals(
+            settings.Router.getInstance().getCurrentRoute(),
+            settings.routes.CROSTINI);
       });
     });
   });
@@ -284,7 +289,8 @@ suite('CrostiniPageTests', function() {
     setup(function() {
       setCrostiniPrefs(true, {'path1': ['termina'], 'path2': ['termina']});
       return flushAsync().then(() => {
-        settings.navigateTo(settings.routes.CROSTINI_SHARED_PATHS);
+        settings.Router.getInstance().navigateTo(
+            settings.routes.CROSTINI_SHARED_PATHS);
         return flushAsync().then(() => {
           subpage = crostiniPage.$$('settings-crostini-shared-paths');
           assertTrue(!!subpage);
@@ -349,7 +355,8 @@ suite('CrostiniPageTests', function() {
 
       return flushAsync()
           .then(() => {
-            settings.navigateTo(settings.routes.CROSTINI_SHARED_USB_DEVICES);
+            settings.Router.getInstance().navigateTo(
+                settings.routes.CROSTINI_SHARED_USB_DEVICES);
             return flushAsync();
           })
           .then(() => {

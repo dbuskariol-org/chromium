@@ -85,7 +85,7 @@ Polymer({
     // enablePowerSettings comes from loadTimeData, so it will always be set
     // before attached() is called.
     if (!this.enablePowerSettings) {
-      settings.navigateToPreviousRoute();
+      settings.Router.getInstance().navigateToPreviousRoute();
     }
   },
 

@@ -94,7 +94,8 @@ Polymer({
 
   /** @private */
   onManageAccessibilityFeaturesTap_() {
-    settings.navigateTo(settings.routes.MANAGE_ACCESSIBILITY);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.MANAGE_ACCESSIBILITY);
   },
 
 });

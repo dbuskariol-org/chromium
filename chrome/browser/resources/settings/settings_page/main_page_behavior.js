@@ -119,7 +119,7 @@ cr.define('settings', function() {
       }
 
       if (!this.inSearchMode) {
-        const route = settings.getCurrentRoute();
+        const route = settings.Router.getInstance().getCurrentRoute();
         if (this.containsRoute(route) &&
             classifyRoute(route) === RouteState.SECTION) {
           // Re-fire the showing-section event to trigger settings-main
@@ -219,7 +219,7 @@ cr.define('settings', function() {
       this.classList.remove('showing-subpage');
       return new Promise((res, rej) => {
         requestAnimationFrame(() => {
-          if (settings.lastRouteChangeWasPopstate()) {
+          if (settings.Router.getInstance().lastRouteChangeWasPopstate()) {
             this.scroller.scrollTop = this.lastScrollTop_;
           }
           this.fire('showing-main-page');
@@ -322,7 +322,7 @@ cr.define('settings', function() {
 
           // Scroll to the corresponding section, only if the user explicitly
           // navigated to a section (via the menu).
-          if (!settings.lastRouteChangeWasPopstate()) {
+          if (!settings.Router.getInstance().lastRouteChangeWasPopstate()) {
             this.scrollToSection_(newRoute);
           }
         } else if (newState == RouteState.SUBPAGE) {

@@ -212,7 +212,8 @@ Polymer({
 
   /** @private */
   onManageTtsSettingsTap_() {
-    settings.navigateTo(settings.routes.MANAGE_TTS_SETTINGS);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.MANAGE_TTS_SETTINGS);
   },
 
   /** @private */
@@ -222,7 +223,8 @@ Polymer({
 
   /** @private */
   onCaptionsClick_() {
-    settings.navigateTo(settings.routes.MANAGE_CAPTION_SETTINGS);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.MANAGE_CAPTION_SETTINGS);
   },
 
   /** @private */
@@ -232,12 +234,13 @@ Polymer({
 
   /** @private */
   onSwitchAccessSettingsTap_() {
-    settings.navigateTo(settings.routes.MANAGE_SWITCH_ACCESS_SETTINGS);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.MANAGE_SWITCH_ACCESS_SETTINGS);
   },
 
   /** @private */
   onDisplayTap_() {
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.DISPLAY,
         /* dynamicParams */ null, /* removeSearch */ true);
   },
@@ -250,14 +253,14 @@ Polymer({
 
   /** @private */
   onKeyboardTap_() {
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.KEYBOARD,
         /* dynamicParams */ null, /* removeSearch */ true);
   },
 
   /** @private */
   onMouseTap_() {
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.POINTERS,
         /* dynamicParams */ null, /* removeSearch */ true);
   },

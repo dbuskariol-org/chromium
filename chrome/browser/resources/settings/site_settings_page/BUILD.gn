@@ -11,6 +11,7 @@ js_type_check("closure_compile") {
 js_library("site_settings_page") {
   deps = [
     "..:route",
+    "..:router",
     "../site_settings:constants",
     "../site_settings:site_settings_behavior",
     "../site_settings:site_settings_prefs_browser_proxy",

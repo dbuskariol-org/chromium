@@ -190,7 +190,8 @@ Polymer({
    */
   onScreenLocked_(screenIsLocked) {
     if (!screenIsLocked &&
-        settings.getCurrentRoute() == settings.routes.FINGERPRINT) {
+        settings.Router.getInstance().getCurrentRoute() ==
+            settings.routes.FINGERPRINT) {
       this.onSetupFingerprintDialogClose_();
     }
   },

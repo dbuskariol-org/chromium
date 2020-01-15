@@ -61,7 +61,7 @@ Polymer({
 
   /** @private */
   navigateToChangePicture_() {
-    settings.navigateTo(settings.routes.CHANGE_PICTURE);
+    settings.Router.getInstance().navigateTo(settings.routes.CHANGE_PICTURE);
   },
 });
 })();

@@ -52,7 +52,8 @@ cr.define('settings', function() {
 
     /** @override */
     attached() {
-      this.active_ = settings.getCurrentRoute() == this.subpageRoute;
+      this.active_ =
+          settings.Router.getInstance().getCurrentRoute() == this.subpageRoute;
       scrollTargetResolver.promise.then(this._setScrollTarget.bind(this));
     },
 

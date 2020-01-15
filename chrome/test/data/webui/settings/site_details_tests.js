@@ -127,7 +127,7 @@ suite('SiteDetails', function() {
     const siteDetailsElement = document.createElement('site-details');
     document.body.appendChild(siteDetailsElement);
     siteDetailsElement.origin = origin;
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.SITE_SETTINGS_SITE_DETAILS,
         new URLSearchParams('site=' + origin));
     return siteDetailsElement;
@@ -511,12 +511,12 @@ suite('SiteDetails', function() {
     const invalid_url = 'invalid url';
     browserProxy.setIsOriginValid(false);
 
-    settings.navigateTo(settings.routes.SITE_SETTINGS);
+    settings.Router.getInstance().navigateTo(settings.routes.SITE_SETTINGS);
 
     testElement = createSiteDetails(invalid_url);
     assertEquals(
         settings.routes.SITE_SETTINGS_SITE_DETAILS.path,
-        settings.getCurrentRoute().path);
+        settings.Router.getInstance().getCurrentRoute().path);
     return browserProxy.whenCalled('isOriginValid')
         .then((args) => {
           assertEquals(invalid_url, args);
@@ -527,7 +527,7 @@ suite('SiteDetails', function() {
         .then(() => {
           assertEquals(
               settings.routes.SITE_SETTINGS.path,
-              settings.getCurrentRoute().path);
+              settings.Router.getInstance().getCurrentRoute().path);
         });
   });
 

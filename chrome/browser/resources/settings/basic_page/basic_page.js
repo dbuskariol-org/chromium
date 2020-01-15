@@ -131,7 +131,7 @@ Polymer({
 
   /** @override */
   attached() {
-    this.currentRoute_ = settings.getCurrentRoute();
+    this.currentRoute_ = settings.Router.getInstance().getCurrentRoute();
 
     this.addWebUIListener('change-password-visibility', visibility => {
       this.showChangePassword = visibility;

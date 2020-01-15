@@ -28,7 +28,8 @@ Polymer({
 
   /** @private */
   onSharedPathsClick_() {
-    settings.navigateTo(settings.routes.PLUGIN_VM_SHARED_PATHS);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.PLUGIN_VM_SHARED_PATHS);
   },
 
   /**

@@ -314,7 +314,8 @@ cr.define('settings', function() {
     /** @protected */
     currentRouteChanged() {
       this.showClearBrowsingDataDialog_ =
-          settings.getCurrentRoute() == settings.routes.CLEAR_BROWSER_DATA;
+          settings.Router.getInstance().getCurrentRoute() ==
+          settings.routes.CLEAR_BROWSER_DATA;
     },
 
     /**
@@ -421,7 +422,7 @@ cr.define('settings', function() {
     /** @private */
     onManageCertificatesTap_() {
       // <if expr="use_nss_certs">
-      settings.navigateTo(settings.routes.CERTIFICATES);
+      settings.Router.getInstance().navigateTo(settings.routes.CERTIFICATES);
       // </if>
       // <if expr="is_win or is_macosx">
       this.browserProxy_.showManageSSLCertificates();
@@ -455,32 +456,35 @@ cr.define('settings', function() {
 
     /** @private */
     onSiteDataTap_() {
-      settings.navigateTo(settings.routes.SITE_SETTINGS_SITE_DATA);
+      settings.Router.getInstance().navigateTo(
+          settings.routes.SITE_SETTINGS_SITE_DATA);
     },
 
     /** @private */
     onSiteSettingsTap_() {
-      settings.navigateTo(settings.routes.SITE_SETTINGS);
+      settings.Router.getInstance().navigateTo(settings.routes.SITE_SETTINGS);
       this.browserProxy_.recordSettingsPageHistogram(
           settings.SettingsPageInteractions.PRIVACY_SITE_SETTINGS);
     },
 
     /** @private */
     onClearBrowsingDataTap_() {
-      settings.navigateTo(settings.routes.CLEAR_BROWSER_DATA);
+      settings.Router.getInstance().navigateTo(
+          settings.routes.CLEAR_BROWSER_DATA);
       this.browserProxy_.recordSettingsPageHistogram(
           settings.SettingsPageInteractions.PRIVACY_CLEAR_BROWSING_DATA);
     },
 
     /** @private */
     onDialogClosed_() {
-      settings.navigateTo(settings.routes.CLEAR_BROWSER_DATA.parent);
+      settings.Router.getInstance().navigateTo(
+          settings.routes.CLEAR_BROWSER_DATA.parent);
       cr.ui.focusWithoutInk(assert(this.$.clearBrowsingData));
     },
 
     /** @private */
     onSecurityKeysTap_() {
-      settings.navigateTo(settings.routes.SECURITY_KEYS);
+      settings.Router.getInstance().navigateTo(settings.routes.SECURITY_KEYS);
       this.browserProxy_.recordSettingsPageHistogram(
           settings.SettingsPageInteractions.PRIVACY_SECURITY_KEYS);
     },

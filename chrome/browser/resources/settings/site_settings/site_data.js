@@ -289,7 +289,7 @@ Polymer({
     // returning to this page. To avoid this, the site select button is given
     // focus. See https://crbug.com/872197.
     this.focusOnSiteSelectButton_(event.model.index);
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.SITE_SETTINGS_DATA_DETAILS,
         new URLSearchParams('site=' + event.model.item.site));
     this.lastSelected_ = event.model;

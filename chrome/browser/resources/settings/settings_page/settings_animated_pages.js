@@ -61,7 +61,8 @@ Polymer({
     //  1) Not a direct navigation (such that the search box stays focused), and
     //  2) Not a "back" navigation, in which case the anchor element should be
     //     focused (further below in this function).
-    if (this.previousRoute_ && !settings.lastRouteChangeWasPopstate()) {
+    if (this.previousRoute_ &&
+        !settings.Router.getInstance().lastRouteChangeWasPopstate()) {
       const subpage = this.querySelector('settings-subpage.iron-selected');
       if (subpage) {
         subpage.initialFocus();
@@ -71,7 +72,7 @@ Polymer({
 
     // Don't attempt to focus any anchor element, unless last navigation was a
     // 'pop' (backwards) navigation.
-    if (!settings.lastRouteChangeWasPopstate()) {
+    if (!settings.Router.getInstance().lastRouteChangeWasPopstate()) {
       return;
     }
 
@@ -160,7 +161,7 @@ Polymer({
    * @private
    */
   ensureSubpageInstance_() {
-    const routePath = settings.getCurrentRoute().path;
+    const routePath = settings.Router.getInstance().getCurrentRoute().path;
     const domIf = this.querySelector(`dom-if[route-path='${routePath}']`);
 
     // Nothing to do if the subpage isn't wrapped in a <dom-if> or the template

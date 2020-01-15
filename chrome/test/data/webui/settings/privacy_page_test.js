@@ -411,7 +411,9 @@ cr.define('settings_privacy_page', function() {
         const passphraseLink = syncInfo.querySelector('a[href]');
         assertTrue(!!passphraseLink);
         passphraseLink.click();
-        assertEquals(settings.routes.SYNC, settings.getCurrentRoute());
+        assertEquals(
+            settings.routes.SYNC,
+            settings.Router.getInstance().getCurrentRoute());
       });
     });
   }
@@ -673,7 +675,8 @@ cr.define('settings_privacy_page', function() {
         settings.PrivacyPageBrowserProxyImpl.instance_ = testBrowserProxy;
         PolymerTest.clearBody();
 
-        settings.router.navigateTo(settings.routes.SITE_SETTINGS_SOUND);
+        settings.Router.getInstance().navigateTo(
+            settings.routes.SITE_SETTINGS_SOUND);
         page = document.createElement('settings-privacy-page');
         document.body.appendChild(page);
         return flushAsync();

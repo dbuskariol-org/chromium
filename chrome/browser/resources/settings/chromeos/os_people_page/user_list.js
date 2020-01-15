@@ -61,7 +61,8 @@ Polymer({
 
   /** @protected */
   currentRouteChanged() {
-    if (settings.getCurrentRoute() == settings.routes.ACCOUNTS) {
+    if (settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.ACCOUNTS) {
       chrome.usersPrivate.getWhitelistedUsers(users => {
         this.setUsers_(users);
       });

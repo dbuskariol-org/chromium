@@ -204,7 +204,8 @@ Polymer({
       this.hasInternetConnection_ = result;
     });
 
-    if (settings.getQueryParameters().get('checkForUpdate') == 'true') {
+    if (settings.Router.getInstance().getQueryParameters().get(
+            'checkForUpdate') == 'true') {
       this.onCheckUpdatesClick_();
     }
   },
@@ -456,7 +457,8 @@ Polymer({
 
   /** @private */
   onDetailedBuildInfoClick_() {
-    settings.navigateTo(settings.routes.DETAILED_BUILD_INFO);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.DETAILED_BUILD_INFO);
   },
 
   /** @private */

@@ -11,7 +11,7 @@
 /** @polymerBehavior */
 const MultiDeviceFeatureBehaviorImpl = {
   properties: {
-    /** @type {!MultiDevicePageContentData} */
+    /** @type {!settings.MultiDevicePageContentData} */
     pageContentData: Object,
 
     /**

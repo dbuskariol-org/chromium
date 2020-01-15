@@ -77,7 +77,8 @@ Polymer({
 
   /** @protected */
   currentRouteChanged() {
-    if (settings.getCurrentRoute() == settings.routes.MANAGE_PROFILE) {
+    if (settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.MANAGE_PROFILE) {
       if (this.profileName) {
         this.$.name.value = this.profileName;
       }

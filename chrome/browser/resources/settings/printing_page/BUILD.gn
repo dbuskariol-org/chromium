@@ -27,6 +27,7 @@ js_library("printing_page") {
   deps = [
     ":printing_browser_proxy",
     "..:route",
+    "..:router",
     "../settings_page:settings_animated_pages",
     "//ui/webui/resources/js:assert",
     "//ui/webui/resources/js:load_time_data",

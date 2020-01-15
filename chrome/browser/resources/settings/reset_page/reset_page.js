@@ -51,25 +51,26 @@ Polymer({
 
   /** @private */
   onShowResetProfileDialog_() {
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.RESET_DIALOG, new URLSearchParams('origin=userclick'));
   },
 
   /** @private */
   onResetProfileDialogClose_() {
-    settings.navigateToPreviousRoute();
+    settings.Router.getInstance().navigateToPreviousRoute();
     cr.ui.focusWithoutInk(assert(this.$.resetProfile));
   },
 
   // <if expr="_google_chrome and is_win">
   /** @private */
   onChromeCleanupTap_() {
-    settings.navigateTo(settings.routes.CHROME_CLEANUP);
+    settings.Router.getInstance().navigateTo(settings.routes.CHROME_CLEANUP);
   },
 
   /** @private */
   onIncompatibleApplicationsTap_() {
-    settings.navigateTo(settings.routes.INCOMPATIBLE_APPLICATIONS);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.INCOMPATIBLE_APPLICATIONS);
   },
   // </if>
 });

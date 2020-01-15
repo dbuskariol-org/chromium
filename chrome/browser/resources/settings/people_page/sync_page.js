@@ -264,14 +264,16 @@ Polymer({
     this.addWebUIListener(
         'sync-prefs-changed', this.handleSyncPrefsChanged_.bind(this));
 
-    if (settings.getCurrentRoute() == settings.routes.SYNC) {
+    if (settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.SYNC) {
       this.onNavigateToPage_();
     }
   },
 
   /** @override */
   detached() {
-    if (settings.routes.SYNC.contains(settings.getCurrentRoute())) {
+    if (settings.routes.SYNC.contains(
+            settings.Router.getInstance().getCurrentRoute())) {
       this.onNavigateAwayFromPage_();
     }
 
@@ -333,7 +335,8 @@ Polymer({
    * @private
    */
   fetchSWAA_() {
-    if (settings.getCurrentRoute() !== settings.routes.SYNC) {
+    if (settings.Router.getInstance().getCurrentRoute() !==
+        settings.routes.SYNC) {
       return;
     }
 
@@ -433,7 +436,7 @@ Polymer({
   onSetupCancelDialogConfirm_() {
     this.setupCancelConfirmed_ = true;
     this.$$('#setupCancelDialog').close();
-    settings.navigateTo(settings.routes.BASIC);
+    settings.Router.getInstance().navigateTo(settings.routes.BASIC);
     chrome.metricsPrivate.recordUserAction(
         'Signin_Signin_ConfirmCancelAdvancedSyncSettings');
   },
@@ -445,16 +448,19 @@ Polymer({
 
   /** @protected */
   currentRouteChanged() {
-    if (settings.getCurrentRoute() == settings.routes.SYNC) {
+    if (settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.SYNC) {
       this.onNavigateToPage_();
       return;
     }
 
-    if (settings.routes.SYNC.contains(settings.getCurrentRoute())) {
+    if (settings.routes.SYNC.contains(
+            settings.Router.getInstance().getCurrentRoute())) {
       return;
     }
 
-    const searchParams = settings.getQueryParameters().get('search');
+    const searchParams =
+        settings.Router.getInstance().getQueryParameters().get('search');
     if (searchParams) {
       // User navigated away via searching. Cancel sync without showing
       // confirmation dialog.
@@ -473,7 +479,7 @@ Polymer({
       // firing). Triggering navigation from within an observer leads to some
       // undefined behavior and runtime errors.
       requestAnimationFrame(() => {
-        settings.navigateTo(settings.routes.SYNC);
+        settings.Router.getInstance().navigateTo(settings.routes.SYNC);
         this.showSetupCancelDialog_ = true;
         // Flush to make sure that the setup cancel dialog is attached.
         Polymer.dom.flush();
@@ -515,7 +521,9 @@ Polymer({
 
   /** @private */
   onNavigateToPage_() {
-    assert(settings.getCurrentRoute() == settings.routes.SYNC);
+    assert(
+        settings.Router.getInstance().getCurrentRoute() ==
+        settings.routes.SYNC);
     this.sWAA_ = sWAAState.NOT_FETCHED;
     this.fetchSWAA_();
     if (this.beforeunloadCallback_) {
@@ -680,8 +688,9 @@ Polymer({
         this.pageStatus_ = pageStatus;
         return;
       case settings.PageStatus.DONE:
-        if (settings.getCurrentRoute() == settings.routes.SYNC) {
-          settings.navigateTo(settings.routes.PEOPLE);
+        if (settings.Router.getInstance().getCurrentRoute() ==
+            settings.routes.SYNC) {
+          settings.Router.getInstance().navigateTo(settings.routes.PEOPLE);
         }
         return;
       case settings.PageStatus.PASSPHRASE_FAILED:
@@ -803,7 +812,7 @@ Polymer({
 
   /** @private */
   onSyncAdvancedTap_() {
-    settings.navigateTo(settings.routes.SYNC_ADVANCED);
+    settings.Router.getInstance().navigateTo(settings.routes.SYNC_ADVANCED);
   },
 
   /**
@@ -821,7 +830,7 @@ Polymer({
       chrome.metricsPrivate.recordUserAction(
           'Signin_Signin_CancelAdvancedSyncSettings');
     }
-    settings.navigateTo(settings.routes.BASIC);
+    settings.Router.getInstance().navigateTo(settings.routes.BASIC);
   },
 
   /**
@@ -832,7 +841,9 @@ Polymer({
   focusPassphraseInput_() {
     const passphraseInput =
         /** @type {!CrInputElement} */ (this.$$('#existingPassphraseInput'));
-    if (passphraseInput && settings.getCurrentRoute() == settings.routes.SYNC) {
+    if (passphraseInput &&
+        settings.Router.getInstance().getCurrentRoute() ==
+            settings.routes.SYNC) {
       passphraseInput.focus();
     }
   },

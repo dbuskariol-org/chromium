@@ -67,11 +67,11 @@ Polymer({
    * @protected
    */
   currentRouteChanged(route) {
-    if (settings.getCurrentRoute() !=
+    if (settings.Router.getInstance().getCurrentRoute() !=
         settings.routes.SITE_SETTINGS_DATA_DETAILS) {
       return;
     }
-    const site = settings.getQueryParameters().get('site');
+    const site = settings.Router.getInstance().getQueryParameters().get('site');
     if (!site) {
       return;
     }

@@ -210,7 +210,8 @@ Polymer({
     }
 
     // Scans should only be triggered by the "networks" subpage.
-    if (settings.getCurrentRoute() != settings.routes.INTERNET_NETWORKS) {
+    if (settings.Router.getInstance().getCurrentRoute() !=
+        settings.routes.INTERNET_NETWORKS) {
       this.stopScanning_();
       return;
     }

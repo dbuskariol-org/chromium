@@ -35,6 +35,6 @@ Polymer({
 
   /** @private */
   onSubpageClick_(event) {
-    settings.navigateTo(settings.routes.PLUGIN_VM_DETAILS);
+    settings.Router.getInstance().navigateTo(settings.routes.PLUGIN_VM_DETAILS);
   },
 });

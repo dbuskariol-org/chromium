@@ -139,7 +139,7 @@ Polymer({
 
   /** @private */
   onTapBack_() {
-    settings.navigateToPreviousRoute();
+    settings.Router.getInstance().navigateToPreviousRoute();
   },
 
   /** @private */

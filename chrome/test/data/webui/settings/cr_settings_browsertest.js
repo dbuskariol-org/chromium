@@ -1683,7 +1683,9 @@ GEN('#endif');
 TEST_F('CrSettingsNonExistentRouteTest', 'MAYBE_NonExistentRoute', function() {
   suite('NonExistentRoutes', function() {
     test('redirect to basic', function() {
-      assertEquals(settings.routes.BASIC, settings.getCurrentRoute());
+      assertEquals(
+          settings.routes.BASIC,
+          settings.Router.getInstance().getCurrentRoute());
       assertEquals('/', location.pathname);
     });
   });
@@ -1706,24 +1708,41 @@ CrSettingsRouteDynamicParametersTest.prototype = {
 TEST_F('CrSettingsRouteDynamicParametersTest', 'All', function() {
   suite('DynamicParameters', function() {
     test('get parameters from URL and navigation', function(done) {
-      assertEquals(settings.routes.SEARCH, settings.getCurrentRoute());
-      assertEquals('a/b', settings.getQueryParameters().get('guid'));
-      assertEquals('42', settings.getQueryParameters().get('foo'));
+      assertEquals(
+          settings.routes.SEARCH,
+          settings.Router.getInstance().getCurrentRoute());
+      assertEquals(
+          'a/b',
+          settings.Router.getInstance().getQueryParameters().get('guid'));
+      assertEquals(
+          '42', settings.Router.getInstance().getQueryParameters().get('foo'));
 
       const params = new URLSearchParams();
       params.set('bar', 'b=z');
       params.set('biz', '3');
-      settings.navigateTo(settings.routes.SEARCH_ENGINES, params);
-      assertEquals(settings.routes.SEARCH_ENGINES, settings.getCurrentRoute());
-      assertEquals('b=z', settings.getQueryParameters().get('bar'));
-      assertEquals('3', settings.getQueryParameters().get('biz'));
+      settings.Router.getInstance().navigateTo(
+          settings.routes.SEARCH_ENGINES, params);
+      assertEquals(
+          settings.routes.SEARCH_ENGINES,
+          settings.Router.getInstance().getCurrentRoute());
+      assertEquals(
+          'b=z', settings.Router.getInstance().getQueryParameters().get('bar'));
+      assertEquals(
+          '3', settings.Router.getInstance().getQueryParameters().get('biz'));
       assertEquals('?bar=b%3Dz&biz=3', window.location.search);
 
       window.addEventListener('popstate', function(event) {
-        assertEquals('/search', settings.getCurrentRoute().path);
-        assertEquals(settings.routes.SEARCH, settings.getCurrentRoute());
-        assertEquals('a/b', settings.getQueryParameters().get('guid'));
-        assertEquals('42', settings.getQueryParameters().get('foo'));
+        assertEquals(
+            '/search', settings.Router.getInstance().getCurrentRoute().path);
+        assertEquals(
+            settings.routes.SEARCH,
+            settings.Router.getInstance().getCurrentRoute());
+        assertEquals(
+            'a/b',
+            settings.Router.getInstance().getQueryParameters().get('guid'));
+        assertEquals(
+            '42',
+            settings.Router.getInstance().getQueryParameters().get('foo'));
         done();
       });
       window.history.back();

@@ -65,8 +65,8 @@ Polymer({
     // Remove the search term when navigating to avoid potentially having any
     // visible search term reappear at a later time. See
     // https://crbug.com/989119.
-    settings.navigateTo(
-        this.subpageRoute, this.subpageRouteUrlSearchParams,
-        true /* opt_removeSearch */);
+    settings.Router.getInstance().navigateTo(
+        /** @type {!settings.Route} */ (this.subpageRoute),
+        this.subpageRouteUrlSearchParams, true /* opt_removeSearch */);
   },
 });

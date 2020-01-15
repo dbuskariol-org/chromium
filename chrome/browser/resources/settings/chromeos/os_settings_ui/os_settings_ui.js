@@ -115,7 +115,7 @@ Polymer({
 
   /** @override */
   created() {
-    settings.initializeRouteFromUrl();
+    settings.Router.getInstance().initializeRouteFromUrl();
   },
 
   /**
@@ -213,7 +213,7 @@ Polymer({
 
   /** @override */
   detached() {
-    settings.resetRouteForTesting();
+    settings.Router.getInstance().resetRouteForTesting();
   },
 
   /** @param {!settings.Route} route */
@@ -227,7 +227,8 @@ Polymer({
       this.showDropShadows();
     }
 
-    const urlSearchQuery = settings.getQueryParameters().get('search') || '';
+    const urlSearchQuery =
+        settings.Router.getInstance().getQueryParameters().get('search') || '';
     if (urlSearchQuery == this.lastSearchQuery_) {
       return;
     }
@@ -278,7 +279,7 @@ Polymer({
    */
   onSearchChanged_(e) {
     const query = e.detail;
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.BASIC,
         query.length > 0 ?
             new URLSearchParams('search=' + encodeURIComponent(query)) :
@@ -294,7 +295,7 @@ Polymer({
   onIronActivate_(e) {
     const section = e.detail.selected;
     const path = new URL(section).pathname;
-    const route = settings.getRouteForPath(path);
+    const route = settings.Router.getInstance().getRouteForPath(path);
     assert(route, 'os-settings-menu has an entry with an invalid route.');
     this.activeRoute_ = route;
 
@@ -320,7 +321,7 @@ Polymer({
    */
   navigateToActiveRoute_() {
     if (this.activeRoute_) {
-      settings.navigateTo(
+      settings.Router.getInstance().navigateTo(
           this.activeRoute_, /* dynamicParams */ null, /* removeSearch */ true);
       this.activeRoute_ = null;
     }

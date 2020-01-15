@@ -133,8 +133,8 @@ Polymer({
   browserBannerShowMetricRecorded_: false,
 
   /** @override */
-  attached() {
-    this.currentRoute_ = settings.getCurrentRoute();
+  attached: function() {
+    this.currentRoute_ = settings.Router.getInstance().getCurrentRoute();
 
     this.allowCrostini_ = loadTimeData.valueExists('allowCrostini') &&
         loadTimeData.getBoolean('allowCrostini');

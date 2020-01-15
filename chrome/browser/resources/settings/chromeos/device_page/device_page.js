@@ -153,7 +153,7 @@ Polymer({
    * @private
    */
   onPointersTap_() {
-    settings.navigateTo(settings.routes.POINTERS);
+    settings.Router.getInstance().navigateTo(settings.routes.POINTERS);
   },
 
   /**
@@ -161,7 +161,7 @@ Polymer({
    * @private
    */
   onKeyboardTap_() {
-    settings.navigateTo(settings.routes.KEYBOARD);
+    settings.Router.getInstance().navigateTo(settings.routes.KEYBOARD);
   },
 
   /**
@@ -169,7 +169,7 @@ Polymer({
    * @private
    */
   onStylusTap_() {
-    settings.navigateTo(settings.routes.STYLUS);
+    settings.Router.getInstance().navigateTo(settings.routes.STYLUS);
   },
 
   /**
@@ -177,7 +177,7 @@ Polymer({
    * @private
    */
   onDisplayTap_() {
-    settings.navigateTo(settings.routes.DISPLAY);
+    settings.Router.getInstance().navigateTo(settings.routes.DISPLAY);
   },
 
   /**
@@ -185,7 +185,7 @@ Polymer({
    * @private
    */
   onStorageTap_() {
-    settings.navigateTo(settings.routes.STORAGE);
+    settings.Router.getInstance().navigateTo(settings.routes.STORAGE);
   },
 
   /**
@@ -193,7 +193,7 @@ Polymer({
    * @private
    */
   onPowerTap_() {
-    settings.navigateTo(settings.routes.POWER);
+    settings.Router.getInstance().navigateTo(settings.routes.POWER);
   },
 
   /** @protected */
@@ -218,8 +218,9 @@ Polymer({
   checkPointerSubpage_() {
     // Check that the properties have explicitly been set to false.
     if (this.hasMouse_ === false && this.hasTouchpad_ === false &&
-        settings.getCurrentRoute() == settings.routes.POINTERS) {
-      settings.navigateTo(settings.routes.DEVICE);
+        settings.Router.getInstance().getCurrentRoute() ==
+            settings.routes.POINTERS) {
+      settings.Router.getInstance().navigateTo(settings.routes.DEVICE);
     }
   },
 });

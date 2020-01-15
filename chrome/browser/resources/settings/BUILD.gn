@@ -113,7 +113,9 @@ js_type_check("settings_resources") {
     ":open_window_proxy",
     ":page_visibility",
     ":route",
+    ":router",
     ":search_settings",
+    ":settings_routes",
   ]
 }
 
@@ -127,7 +129,7 @@ js_library("extension_control_browser_proxy") {
 
 js_library("global_scroll_target_behavior") {
   deps = [
-    ":route",
+    ":router",
     "//ui/webui/resources/js:cr",
   ]
 }

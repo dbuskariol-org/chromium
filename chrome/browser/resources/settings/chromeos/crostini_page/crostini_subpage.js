@@ -100,8 +100,9 @@ Polymer({
   /** @private */
   onCrostiniEnabledChanged_(enabled) {
     if (!enabled &&
-        settings.getCurrentRoute() == settings.routes.CROSTINI_DETAILS) {
-      settings.navigateToPreviousRoute();
+        settings.Router.getInstance().getCurrentRoute() ==
+            settings.routes.CROSTINI_DETAILS) {
+      settings.Router.getInstance().navigateToPreviousRoute();
     }
   },
 
@@ -112,12 +113,14 @@ Polymer({
 
   /** @private */
   onExportImportClick_() {
-    settings.navigateTo(settings.routes.CROSTINI_EXPORT_IMPORT);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.CROSTINI_EXPORT_IMPORT);
   },
 
   /** @private */
   onEnableArcAdbClick_() {
-    settings.navigateTo(settings.routes.CROSTINI_ANDROID_ADB);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.CROSTINI_ANDROID_ADB);
   },
 
   /**
@@ -139,12 +142,14 @@ Polymer({
 
   /** @private */
   onSharedPathsClick_() {
-    settings.navigateTo(settings.routes.CROSTINI_SHARED_PATHS);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.CROSTINI_SHARED_PATHS);
   },
 
   /** @private */
   onSharedUsbDevicesClick_() {
-    settings.navigateTo(settings.routes.CROSTINI_SHARED_USB_DEVICES);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.CROSTINI_SHARED_USB_DEVICES);
   },
 
   /** @private */

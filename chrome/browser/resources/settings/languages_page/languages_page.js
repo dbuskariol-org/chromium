@@ -628,7 +628,7 @@ Polymer({
    * @private
    */
   onEditDictionaryTap_() {
-    settings.navigateTo(settings.routes.EDIT_DICTIONARY);
+    settings.Router.getInstance().navigateTo(settings.routes.EDIT_DICTIONARY);
   },
 
   /**

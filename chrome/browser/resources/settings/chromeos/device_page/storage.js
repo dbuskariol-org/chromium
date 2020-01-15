@@ -119,7 +119,8 @@ Polymer({
     settings.RouteOriginBehaviorImpl.currentRouteChanged.call(
         this, newRoute, oldRoute);
 
-    if (settings.getCurrentRoute() != settings.routes.STORAGE) {
+    if (settings.Router.getInstance().getCurrentRoute() !=
+        settings.routes.STORAGE) {
       return;
     }
     this.onPageShown_();
@@ -163,7 +164,7 @@ Polymer({
    * @private
    */
   onCrostiniTap_() {
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.CROSTINI_DETAILS, /* dynamicParams */ null,
         /* removeSearch */ true);
   },
@@ -173,7 +174,7 @@ Polymer({
    * @private
    */
   onOtherUsersTap_() {
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.ACCOUNTS,
         /* dynamicParams */ null, /* removeSearch */ true);
   },
@@ -183,7 +184,8 @@ Polymer({
    * @private
    */
   onExternalStoragePreferencesTap_() {
-    settings.navigateTo(settings.routes.EXTERNAL_STORAGE_PREFERENCES);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.EXTERNAL_STORAGE_PREFERENCES);
   },
 
   /**
@@ -270,7 +272,8 @@ Polymer({
     // We update the storage usage every 5 seconds.
     if (this.updateTimerId_ == -1) {
       this.updateTimerId_ = window.setInterval(() => {
-        if (settings.getCurrentRoute() != settings.routes.STORAGE) {
+        if (settings.Router.getInstance().getCurrentRoute() !=
+            settings.routes.STORAGE) {
           this.stopPeriodicUpdate_();
           return;
         }

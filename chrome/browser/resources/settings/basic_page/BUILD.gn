@@ -12,6 +12,7 @@ js_library("basic_page") {
   deps = [
     "..:page_visibility",
     "..:route",
+    "..:router",
     "..:search_settings",
     "../change_password_page:change_password_browser_proxy",
     "../chrome_cleanup_page:chrome_cleanup_proxy",

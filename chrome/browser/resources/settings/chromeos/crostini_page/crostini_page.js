@@ -91,7 +91,8 @@ Polymer({
     }
 
     if (this.getPref('crostini.enabled.value')) {
-      settings.navigateTo(settings.routes.CROSTINI_DETAILS);
+      settings.Router.getInstance().navigateTo(
+          settings.routes.CROSTINI_DETAILS);
     }
   },
 });

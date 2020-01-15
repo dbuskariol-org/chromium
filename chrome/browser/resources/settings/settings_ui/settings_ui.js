@@ -82,7 +82,7 @@ Polymer({
 
   /** @override */
   created() {
-    settings.initializeRouteFromUrl();
+    settings.Router.getInstance().initializeRouteFromUrl();
   },
 
   /**
@@ -179,12 +179,13 @@ Polymer({
 
   /** @override */
   detached() {
-    settings.resetRouteForTesting();
+    settings.Router.getInstance().resetRouteForTesting();
   },
 
   /** @param {!settings.Route} route */
   currentRouteChanged(route) {
-    const urlSearchQuery = settings.getQueryParameters().get('search') || '';
+    const urlSearchQuery =
+        settings.Router.getInstance().getQueryParameters().get('search') || '';
     if (urlSearchQuery == this.lastSearchQuery_) {
       return;
     }
@@ -235,7 +236,7 @@ Polymer({
    */
   onSearchChanged_(e) {
     const query = e.detail;
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.BASIC,
         query.length > 0 ?
             new URLSearchParams('search=' + encodeURIComponent(query)) :

@@ -125,14 +125,14 @@ Polymer({
     if (route != settings.routes.SITE_SETTINGS_SITE_DETAILS) {
       return;
     }
-    const site = settings.getQueryParameters().get('site');
+    const site = settings.Router.getInstance().getQueryParameters().get('site');
     if (!site) {
       return;
     }
     this.origin_ = site;
     this.browserProxy.isOriginValid(this.origin_).then((valid) => {
       if (!valid) {
-        settings.navigateToPreviousRoute();
+        settings.Router.getInstance().navigateToPreviousRoute();
       } else {
         this.$.usageApi.fetchUsageTotal(this.toUrl(this.origin_).hostname);
         this.updatePermissions_(this.getCategoryList());

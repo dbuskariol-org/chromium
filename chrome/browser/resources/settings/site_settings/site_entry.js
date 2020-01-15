@@ -323,7 +323,7 @@ Polymer({
   navigateToSiteDetails_(origin) {
     this.fire(
         'site-entry-selected', {item: this.siteGroup, index: this.listIndex});
-    settings.navigateTo(
+    settings.Router.getInstance().navigateTo(
         settings.routes.SITE_SETTINGS_SITE_DETAILS,
         new URLSearchParams('site=' + origin));
   },

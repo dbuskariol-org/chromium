@@ -32,6 +32,6 @@ Polymer({
 
   /** @private */
   onTapCupsPrinters_() {
-    settings.navigateTo(settings.routes.CUPS_PRINTERS);
+    settings.Router.getInstance().navigateTo(settings.routes.CUPS_PRINTERS);
   },
 });

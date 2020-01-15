@@ -165,7 +165,7 @@ Polymer({
     if (route == settings.routes.INTERNET_NETWORKS) {
       // Handle direct navigation to the networks page,
       // e.g. chrome://settings/internet/networks?type=WiFi
-      const queryParams = settings.getQueryParameters();
+      const queryParams = settings.Router.getInstance().getQueryParameters();
       const type = queryParams.get('type');
       if (type) {
         this.subpageType_ = OncMojo.getNetworkTypeFromString(type);
@@ -173,7 +173,7 @@ Polymer({
     } else if (route == settings.routes.KNOWN_NETWORKS) {
       // Handle direct navigation to the known networks page,
       // e.g. chrome://settings/internet/knownNetworks?type=WiFi
-      const queryParams = settings.getQueryParameters();
+      const queryParams = settings.Router.getInstance().getQueryParameters();
       const type = queryParams.get('type');
       if (type) {
         this.knownNetworksType_ = OncMojo.getNetworkTypeFromString(type);
@@ -299,7 +299,8 @@ Polymer({
     params.append('guid', networkState.guid);
     params.append('type', OncMojo.getNetworkTypeString(networkState.type));
     params.append('name', OncMojo.getNetworkStateDisplayName(networkState));
-    settings.navigateTo(settings.routes.NETWORK_DETAIL, params);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.NETWORK_DETAIL, params);
   },
 
   /**
@@ -393,7 +394,8 @@ Polymer({
     this.knownNetworksType_ = type;
     const params = new URLSearchParams;
     params.append('type', OncMojo.getNetworkTypeString(type));
-    settings.navigateTo(settings.routes.KNOWN_NETWORKS, params);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.KNOWN_NETWORKS, params);
   },
 
   /** @private */
@@ -428,7 +430,8 @@ Polymer({
     const params = new URLSearchParams;
     params.append('type', OncMojo.getNetworkTypeString(type));
     this.subpageType_ = type;
-    settings.navigateTo(settings.routes.INTERNET_NETWORKS, params);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.INTERNET_NETWORKS, params);
   },
 
   /**
@@ -514,7 +517,8 @@ Polymer({
       params.append('name', displayName);
       params.append('showConfigure', true.toString());
 
-      settings.navigateTo(settings.routes.NETWORK_DETAIL, params);
+      settings.Router.getInstance().navigateTo(
+          settings.routes.NETWORK_DETAIL, params);
       return;
     }
 

@@ -166,7 +166,8 @@ Polymer({
     });
 
     if (this.storagePressureFlagEnabled_) {
-      const sortParam = settings.getQueryParameters().get('sort');
+      const sortParam =
+          settings.Router.getInstance().getQueryParameters().get('sort');
       if (Object.values(this.sortMethods_).includes(sortParam)) {
         this.$.sortMethod.value = sortParam;
       }

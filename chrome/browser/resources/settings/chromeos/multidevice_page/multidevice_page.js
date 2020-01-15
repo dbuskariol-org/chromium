@@ -219,7 +219,8 @@ Polymer({
       return;
     }
 
-    settings.navigateTo(settings.routes.MULTIDEVICE_FEATURES);
+    settings.Router.getInstance().navigateTo(
+        settings.routes.MULTIDEVICE_FEATURES);
   },
 
   /** @private */
@@ -343,7 +344,7 @@ Polymer({
   /** @private */
   onForgetDeviceRequested_() {
     this.browserProxy_.removeHostDevice();
-    settings.navigateTo(settings.routes.MULTIDEVICE);
+    settings.Router.getInstance().navigateTo(settings.routes.MULTIDEVICE);
   },
 
   /**
@@ -360,15 +361,17 @@ Polymer({
     // If the user gets to the a nested page without a host (e.g. by clicking a
     // stale 'existing user' notifications after forgetting their host) we
     // direct them back to the main settings page.
-    if (settings.routes.MULTIDEVICE != settings.getCurrentRoute() &&
-        settings.routes.MULTIDEVICE.contains(settings.getCurrentRoute()) &&
+    if (settings.routes.MULTIDEVICE !=
+            settings.Router.getInstance().getCurrentRoute() &&
+        settings.routes.MULTIDEVICE.contains(
+            settings.Router.getInstance().getCurrentRoute()) &&
         !this.isHostSet()) {
-      settings.navigateTo(settings.routes.MULTIDEVICE);
+      settings.Router.getInstance().navigateTo(settings.routes.MULTIDEVICE);
     }
   },
 
   /**
-   * @param {!MultiDevicePageContentData} newData
+   * @param {!settings.MultiDevicePageContentData} newData
    * @private
    */
   onPageContentDataChanged_(newData) {

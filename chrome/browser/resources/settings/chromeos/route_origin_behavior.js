@@ -51,7 +51,7 @@ cr.define('settings', function() {
     currentRouteChanged(newRoute, oldRoute) {
       // Don't attempt to focus any anchor element, unless last navigation was a
       // 'pop' (backwards) navigation.
-      if (!settings.lastRouteChangeWasPopstate()) {
+      if (!settings.Router.getInstance().lastRouteChangeWasPopstate()) {
         return;
       }
       const focusSelector = this.focusConfig_.get(oldRoute.path);

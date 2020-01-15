@@ -378,7 +378,7 @@ Polymer({
         break;
       case settings.StatusAction.SIGNOUT_AND_SIGNIN:
         if (this.syncStatus.domain) {
-          settings.navigateTo(settings.routes.SIGN_OUT);
+          settings.Router.getInstance().navigateTo(settings.routes.SIGN_OUT);
         } else {
           // Silently sign the user out without deleting their profile and
           // prompt them to sign back in.
@@ -387,7 +387,7 @@ Polymer({
         }
         break;
       case settings.StatusAction.UPGRADE_CLIENT:
-        settings.navigateTo(settings.routes.ABOUT);
+        settings.Router.getInstance().navigateTo(settings.routes.ABOUT);
         break;
       case settings.StatusAction.RETRIEVE_TRUSTED_VAULT_KEYS:
         this.syncBrowserProxy_.startKeyRetrieval();
@@ -395,7 +395,7 @@ Polymer({
       case settings.StatusAction.ENTER_PASSPHRASE:
       case settings.StatusAction.CONFIRM_SYNC_SETTINGS:
       default:
-        settings.navigateTo(settings.routes.SYNC);
+        settings.Router.getInstance().navigateTo(settings.routes.SYNC);
     }
   },
 
@@ -428,7 +428,7 @@ Polymer({
   /** @private */
   onTurnOffButtonTap_() {
     /* This will route to people_page's disconnect dialog. */
-    settings.navigateTo(settings.routes.SIGN_OUT);
+    settings.Router.getInstance().navigateTo(settings.routes.SIGN_OUT);
   },
 
   /** @private */

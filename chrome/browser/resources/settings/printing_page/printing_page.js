@@ -37,6 +37,6 @@ Polymer({
 
   /** @private */
   onTapCloudPrinters_() {
-    settings.navigateTo(settings.routes.CLOUD_PRINTERS);
+    settings.Router.getInstance().navigateTo(settings.routes.CLOUD_PRINTERS);
   },
 });

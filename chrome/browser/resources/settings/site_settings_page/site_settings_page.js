@@ -251,6 +251,6 @@ Polymer({
   onTapNavigate_(event) {
     const dataSet =
         /** @type {{route: string}} */ (event.currentTarget.dataset);
-    settings.navigateTo(settings.routes[dataSet.route]);
+    settings.Router.getInstance().navigateTo(settings.routes[dataSet.route]);
   },
 });

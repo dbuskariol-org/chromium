@@ -99,7 +99,7 @@ Polymer({
         AppManagementEntryPointsHistogramName,
         AppManagementEntryPoint.OsSettingsMainPage,
         Object.keys(AppManagementEntryPoint).length);
-    settings.navigateTo(settings.routes.APP_MANAGEMENT);
+    settings.Router.getInstance().navigateTo(settings.routes.APP_MANAGEMENT);
   },
 
   /**
@@ -126,7 +126,8 @@ Polymer({
       return;
     }
     if (this.androidAppsInfo.playStoreEnabled) {
-      settings.navigateTo(settings.routes.ANDROID_APPS_DETAILS);
+      settings.Router.getInstance().navigateTo(
+          settings.routes.ANDROID_APPS_DETAILS);
     }
   },
 

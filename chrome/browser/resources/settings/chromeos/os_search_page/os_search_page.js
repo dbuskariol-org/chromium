@@ -78,7 +78,7 @@ Polymer({
   /** @private */
   onGoogleAssistantTap_() {
     assert(this.isAssistantAllowed_);
-    settings.navigateTo(settings.routes.GOOGLE_ASSISTANT);
+    settings.Router.getInstance().navigateTo(settings.routes.GOOGLE_ASSISTANT);
   },
 
   /**

@@ -30,7 +30,8 @@ Polymer({
   currentRouteChanged(route) {
     if (route == settings.routes.SMB_SHARES) {
       this.showAddSmbDialog_ =
-          settings.getQueryParameters().get('showAddShare') == 'true';
+          settings.Router.getInstance().getQueryParameters().get(
+              'showAddShare') == 'true';
     }
   },
 

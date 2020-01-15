@@ -138,14 +138,14 @@ Polymer({
       settings.CaptionsBrowserProxyImpl.getInstance()
           .openSystemCaptionsDialog();
     } else {
-      settings.navigateTo(settings.routes.CAPTIONS);
+      settings.Router.getInstance().navigateTo(settings.routes.CAPTIONS);
     }
     // </if>
 
     // Navigate to the caption settings page for Linux as they do not have
     // system caption settings.
     // <if expr="is_linux">
-    settings.navigateTo(settings.routes.CAPTIONS);
+    settings.Router.getInstance().navigateTo(settings.routes.CAPTIONS);
     // </if>
   },
 });
