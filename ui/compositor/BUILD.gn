@@ -88,9 +88,7 @@ jumbo_component("compositor") {
 
   defines = [ "COMPOSITOR_IMPLEMENTATION" ]
 
-  public_deps = [
-    "//cc",
-  ]
+  public_deps = [ "//cc" ]
   deps = [
     "//base",
     "//base/third_party/dynamic_annotations",
@@ -167,9 +165,7 @@ jumbo_static_library("test_support") {
     sources += [ "test/test_compositor_host_win.cc" ]
   }
 
-  public_deps = [
-    ":compositor",
-  ]
+  public_deps = [ ":compositor" ]
   deps = [
     "//base/test:test_support",
     "//cc",
@@ -233,9 +229,7 @@ test("compositor_unittests") {
     "transform_animation_curve_adapter_unittest.cc",
   ]
 
-  data = [
-    "//ui/gfx/test/data/compositor/",
-  ]
+  data = [ "//ui/gfx/test/data/compositor/" ]
 
   deps = [
     ":compositor",
