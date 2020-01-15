@@ -398,6 +398,12 @@ class UntracedMember final
 
   UntracedMember(WTF::HashTableDeletedValueType x) : Parent(x) {}
 
+  UntracedMember& operator=(const UntracedMember& other) {
+    this->SetRaw(other);
+    this->CheckPointer();
+    return *this;
+  }
+
   template <typename U>
   UntracedMember& operator=(const Persistent<U>& other) {
     this->SetRaw(other);
