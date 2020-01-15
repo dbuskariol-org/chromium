@@ -54,11 +54,13 @@ const char kFCMOAuthScope[] =
 // Note: Taking |topic| and |private_topic_name| by value (rather than const
 // ref) because the caller (in practice, SubscriptionEntry) may be destroyed by
 // the callback.
-using SubscriptionFinishedCallback =
-    base::OnceCallback<void(Topic topic,
-                            Status code,
-                            std::string private_topic_name,
-                            PerUserTopicSubscriptionRequest::RequestType type)>;
+// This is a RepeatingCallback because in case of failure, the request will get
+// retried, so it might actually run multiple times.
+using SubscriptionFinishedCallback = base::RepeatingCallback<void(
+    Topic topic,
+    Status code,
+    std::string private_topic_name,
+    PerUserTopicSubscriptionRequest::RequestType type)>;
 
 static const net::BackoffEntry::Policy kBackoffPolicy = {
     // Number of initial errors (in sequence) to ignore before applying
@@ -201,8 +203,7 @@ PerUserTopicSubscriptionManager::SubscriptionEntry::~SubscriptionEntry() {}
 void PerUserTopicSubscriptionManager::SubscriptionEntry::SubscriptionFinished(
     const Status& code,
     const std::string& topic_name) {
-  if (completion_callback)
-    std::move(completion_callback).Run(topic, code, topic_name, type);
+  completion_callback.Run(topic, code, topic_name, type);
 }
 
 void PerUserTopicSubscriptionManager::SubscriptionEntry::Cancel() {
@@ -287,7 +288,7 @@ void PerUserTopicSubscriptionManager::UpdateSubscribedTopics(
 
       pending_subscriptions_[topic.first] = std::make_unique<SubscriptionEntry>(
           topic.first,
-          base::BindOnce(
+          base::BindRepeating(
               &PerUserTopicSubscriptionManager::SubscriptionFinishedForTopic,
               base::Unretained(this)),
           PerUserTopicSubscriptionRequest::SUBSCRIBE, topic.second.is_public);
@@ -305,7 +306,7 @@ void PerUserTopicSubscriptionManager::UpdateSubscribedTopics(
       // topic, we should probably cancel it first?
       pending_subscriptions_[topic] = std::make_unique<SubscriptionEntry>(
           topic,
-          base::BindOnce(
+          base::BindRepeating(
               &PerUserTopicSubscriptionManager::SubscriptionFinishedForTopic,
               base::Unretained(this)),
           PerUserTopicSubscriptionRequest::UNSUBSCRIBE);
@@ -406,9 +407,6 @@ void PerUserTopicSubscriptionManager::ActOnSuccessfulSubscription(
 
 void PerUserTopicSubscriptionManager::ScheduleRequestForRepetition(
     const Topic& topic) {
-  pending_subscriptions_[topic]->completion_callback = base::BindOnce(
-      &PerUserTopicSubscriptionManager::SubscriptionFinishedForTopic,
-      base::Unretained(this));
   pending_subscriptions_[topic]->request_backoff_.InformOfRequest(false);
   pending_subscriptions_[topic]->request_retry_timer_.Start(
       FROM_HERE,
@@ -473,6 +471,9 @@ void PerUserTopicSubscriptionManager::RequestAccessToken() {
   // Only one active request at a time.
   if (access_token_fetcher_ != nullptr)
     return;
+  // TODO(crbug.com/1020117): If the timer is already running, then this method
+  // should probably early-out instead of starting a request immediately. As it
+  // is, this might bypass the exponential backoff.
   request_access_token_retry_timer_.Stop();
   OAuth2AccessTokenManager::ScopeSet oauth2_scopes = {kFCMOAuthScope};
   // Invalidate previous token, otherwise the identity provider will return the
@@ -499,6 +500,8 @@ void PerUserTopicSubscriptionManager::OnAccessTokenRequestCompleted(
 void PerUserTopicSubscriptionManager::OnAccessTokenRequestSucceeded(
     const std::string& access_token) {
   // Reset backoff time after successful response.
+  // TODO(crbug.com/1020117): This should probably be .InformOfRequest(true)
+  // rather than .Reset().
   request_access_token_backoff_.Reset();
   access_token_ = access_token;
   // Emit ENABLED when successfully got the token.
