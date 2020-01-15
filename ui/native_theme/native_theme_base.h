@@ -64,7 +64,8 @@ class NATIVE_THEME_EXPORT NativeThemeBase : public NativeTheme {
     kSlider,
     kDisabledSlider,
     kHoveredSlider,
-    kPressedSlider
+    kPressedSlider,
+    kAutoCompleteBackground
   };
 
   NativeThemeBase();

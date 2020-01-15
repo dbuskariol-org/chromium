@@ -979,7 +979,13 @@ void NativeThemeBase::PaintTextField(cc::PaintCanvas* canvas,
     fill_flags.setStyle(cc::PaintFlags::kFill_Style);
     if (text.background_color != 0) {
       PaintLightenLayer(canvas, bounds, state, border_radius, color_scheme);
-      fill_flags.setColor(ControlsBackgroundColorForState(state, color_scheme));
+      SkColor text_field_background_color =
+          ControlsBackgroundColorForState(state, color_scheme);
+      if (text.auto_complete_active && state != kDisabled) {
+        text_field_background_color =
+            GetControlColor(kAutoCompleteBackground, color_scheme);
+      }
+      fill_flags.setColor(text_field_background_color);
       canvas->drawRoundRect(bounds, border_radius, border_radius, fill_flags);
     }
 
@@ -1608,6 +1614,8 @@ SkColor NativeThemeBase::GetControlColor(ControlColorId color_id,
       return SkColorSetRGB(0x37, 0x93, 0xFF);
     case kDisabledSlider:
       return SkColorSetRGB(0xCB, 0xCB, 0xCB);
+    case kAutoCompleteBackground:
+      return SkColorSetRGB(0xE8, 0xF0, 0xFE);
   }
   NOTREACHED();
   return gfx::kPlaceholderColor;
@@ -1640,6 +1648,7 @@ SkColor NativeThemeBase::GetHighContrastControlColor(
       case kHoveredFill:
       case kPressedFill:
       case kDisabledFill:
+      case kAutoCompleteBackground:
       case kLightenLayer:
         return system_colors_[SystemThemeColor::kWindow];
     }
@@ -1668,6 +1677,7 @@ SkColor NativeThemeBase::GetHighContrastControlColor(
       case kHoveredFill:
       case kPressedFill:
       case kDisabledFill:
+      case kAutoCompleteBackground:
       case kLightenLayer:
         return SK_ColorBLACK;
     }
