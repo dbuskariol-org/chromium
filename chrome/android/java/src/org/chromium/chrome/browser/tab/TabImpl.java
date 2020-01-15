@@ -1209,6 +1209,7 @@ public class TabImpl implements Tab {
                 : null;
         if (bounds != null) original.set(bounds);
 
+        mWebContents.setFocus(false);
         destroyWebContents(false /* do not delete native web contents */);
         hideNativePage(false, () -> {
             // Size of the new content is zero at this point. Set the view size in advance

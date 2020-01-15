@@ -224,8 +224,13 @@ public interface WebContents extends Parcelable {
      */
     boolean focusLocationBarByDefault();
 
+    /**
+     * Sets or removes page level focus.
+     * @param hasFocus Indicates if focus should be set or removed.
+     */
+    void setFocus(boolean hasFocus);
 
-     /**
+    /**
      * Inform WebKit that Fullscreen mode has been exited by the user.
      */
     void exitFullscreen();

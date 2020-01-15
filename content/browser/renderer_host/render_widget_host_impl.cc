@@ -969,6 +969,9 @@ void RenderWidgetHostImpl::FlushForTesting() {
 void RenderWidgetHostImpl::SetPageFocus(bool focused) {
   is_focused_ = focused;
 
+  // Portals should never get page focus.
+  DCHECK(!delegate_ || !delegate_->IsPortal() || !focused);
+
   if (!focused) {
     // If there is a pending mouse lock request, we don't want to reject it at
     // this point. The user can switch focus back to this view and approve the

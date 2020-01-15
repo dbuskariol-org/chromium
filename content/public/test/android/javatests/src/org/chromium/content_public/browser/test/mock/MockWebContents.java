@@ -145,6 +145,9 @@ public class MockWebContents implements WebContents {
     }
 
     @Override
+    public void setFocus(boolean hasFocus) {}
+
+    @Override
     public void exitFullscreen() {}
 
     @Override
