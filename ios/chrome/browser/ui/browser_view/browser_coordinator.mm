@@ -311,8 +311,8 @@
   [self.formInputAccessoryCoordinator start];
 
   self.snackbarCoordinator = [[SnackbarCoordinator alloc]
-      initWithBaseViewController:self.viewController];
-  self.snackbarCoordinator.dispatcher = self.dispatcher;
+      initWithBaseViewController:self.viewController
+                         browser:self.browser];
   [self.snackbarCoordinator start];
 
   self.translateInfobarCoordinator = [[LegacyTranslateInfobarCoordinator alloc]
