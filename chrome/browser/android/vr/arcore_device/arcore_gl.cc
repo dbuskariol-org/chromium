@@ -858,6 +858,10 @@ mojom::XRInputSourceStatePtr ArCoreGl::GetInputSourceState() {
     screen_touch_pending_ = false;
   }
 
+  // Save the touch point for use in Blink's XR input event deduplication.
+  state->overlay_pointer_position = base::make_optional<gfx::PointF>(
+      screen_last_touch_.x(), screen_last_touch_.y());
+
   state->description = device::mojom::XRInputSourceDescription::New();
 
   state->description->handedness = device::mojom::XRHandedness::NONE;

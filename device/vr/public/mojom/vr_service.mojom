@@ -182,6 +182,15 @@ struct XRInputSourceState {
   // null. The information is a snapshot of the controller state that was taken
   // at the time corresponding to the timestamp field's value.
   Gamepad? gamepad;
+
+  // If DOM Overlay is enabled and active, and if this input source's pointer
+  // ray intersects the DOM overlay element, this contains the 2D screen space
+  // coordinates of that intersection point within the DOM overlay content
+  // element, with origin at the top left. Null if there is no intersection
+  // point, or if DOM Overlay is not active or not supported. (Currently, only
+  // the ARCore device's immersive-ar mode supports it when requested via
+  // XRSessionFeature.DOM_OVERLAY aka "dom-overlay".)
+  gfx.mojom.PointF? overlay_pointer_position;
 };
 
 //

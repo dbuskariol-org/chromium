@@ -1428,6 +1428,12 @@ void XRSession::UpdatePresentationFrameState(
 
     OnInputStateChangeInternal(frame_id, input_states);
 
+    // World understanding includes hit testing for transient input sources, and
+    // these sources may have been hidden when touching DOM Overlay content
+    // that's inside cross-origin iframes. Since hit test subscriptions only
+    // happen for existing input_sources_ entries, these touches will not
+    // generate hit test results. For this to work, this step must happen
+    // after OnInputStateChangeInternal which updated input sources.
     UpdateWorldUnderstandingStateForFrame(timestamp, frame_data);
 
     // If this session uses input eventing, XR select events are handled via
@@ -1435,6 +1441,8 @@ void XRSession::UpdatePresentationFrameState(
     if (!uses_input_eventing_) {
       ProcessInputSourceEvents(input_states);
     }
+  } else {
+    UpdateWorldUnderstandingStateForFrame(timestamp, frame_data);
   }
 }
 
@@ -1627,23 +1635,45 @@ void XRSession::OnInputStateChangeInternal(
   HeapVector<Member<XRInputSource>> removed;
   last_frame_id_ = frame_id;
 
+  DVLOG(2) << __func__ << ": frame_id=" << frame_id
+           << " input_states.size()=" << input_states.size();
   // Build up our added array, and update the frame id of any active input
   // sources so we can flag the ones that are no longer active.
   for (const auto& input_state : input_states) {
+    DVLOG(2) << __func__ << ": input_state->primary_input_pressed="
+             << input_state->primary_input_pressed
+             << " clicked=" << input_state->primary_input_clicked;
+
     XRInputSource* stored_input_source =
         input_sources_->GetWithSourceId(input_state->source_id);
+    DVLOG(2) << __func__ << ": stored_input_source=" << stored_input_source;
     XRInputSource* input_source = XRInputSource::CreateOrUpdateFrom(
         stored_input_source, this, input_state);
 
+    bool hide_input_source = false;
+    if (overlay_element_ && input_state->overlay_pointer_position) {
+      input_source->ProcessOverlayHitTest(overlay_element_, input_state);
+      if (!stored_input_source && !input_source->IsVisible()) {
+        DVLOG(2) << __func__ << ": (new) hidden_input_source";
+        hide_input_source = true;
+      }
+    }
+
     // Using pointer equality to determine if the pointer needs to be set.
     if (stored_input_source != input_source) {
-      input_sources_->SetWithSourceId(input_state->source_id, input_source);
-      added.push_back(input_source);
+      DVLOG(2) << __func__ << ": stored_input_source != input_source";
+      if (!hide_input_source) {
+        input_sources_->SetWithSourceId(input_state->source_id, input_source);
+        added.push_back(input_source);
+        DVLOG(2) << __func__ << ": ADDED input_source "
+                 << input_state->source_id;
+      }
 
-      // If we previously had a stored_input_source, disconnect it's gamepad
+      // If we previously had a stored_input_source, disconnect its gamepad
       // and mark that it was removed.
       if (stored_input_source) {
         stored_input_source->SetGamepadConnected(false);
+        DVLOG(2) << __func__ << ": REMOVED stored_input_source";
         removed.push_back(stored_input_source);
       }
     }
@@ -1689,8 +1719,10 @@ void XRSession::ProcessInputSourceEvents(
 
     XRInputSource* input_source =
         input_sources_->GetWithSourceId(input_state->source_id);
-    DCHECK(input_source);
-    input_source->UpdateSelectState(input_state);
+    // The input source might not be in input_sources_ if it was created hidden.
+    if (input_source) {
+      input_source->UpdateSelectState(input_state);
+    }
   }
 }
 

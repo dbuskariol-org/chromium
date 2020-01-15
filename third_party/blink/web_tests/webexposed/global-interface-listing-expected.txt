@@ -2056,6 +2056,7 @@ interface Element : Node
     getter onbeforecopy
     getter onbeforecut
     getter onbeforepaste
+    getter onbeforexrselect
     getter onfullscreenchange
     getter onfullscreenerror
     getter onsearch
@@ -2183,6 +2184,7 @@ interface Element : Node
     setter onbeforecopy
     setter onbeforecut
     setter onbeforepaste
+    setter onbeforexrselect
     setter onfullscreenchange
     setter onfullscreenerror
     setter onsearch
