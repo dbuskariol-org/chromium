@@ -1857,6 +1857,25 @@
             ]
         }
     ],
+    "CrOSMinFilelistKb": [
+        {
+            "platforms": [
+                "chromeos"
+            ],
+            "experiments": [
+                {
+                    "name": "MinFilelist0MbLockedBrowserText",
+                    "params": {
+                        "CrOSMinFilelistMb": "0"
+                    },
+                    "enable_features": [
+                        "CrOSHugepageRemapAndLockInZygote",
+                        "CrOSTuneMinFilelist"
+                    ]
+                }
+            ]
+        }
+    ],
     "CrOSSystemAECDeactivatedGroups": [
         {
             "platforms": [
