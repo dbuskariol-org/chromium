@@ -27,6 +27,7 @@
 #include "storage/browser/blob/blob_impl.h"
 #include "storage/browser/blob/mojom/blob_storage_context.mojom.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "third_party/blink/public/common/blob/blob_utils.h"
 #include "third_party/blink/public/mojom/blob/blob.mojom.h"
 
 namespace storage {
@@ -114,6 +115,19 @@ class BlobStorageContextMojoTest : public testing::Test {
     exploded.millisecond = 0;
     EXPECT_TRUE(base::Time::FromUTCExploded(exploded, &time));
     return time;
+  }
+
+  void CreateFile(base::FilePath path,
+                  std::string data,
+                  base::Optional<base::Time> modification_time) {
+    base::ScopedAllowBlockingForTesting allow_blocking;
+    int size = base::WriteFile(path, data.data(), data.size());
+    ASSERT_GE(size, 0);
+    EXPECT_EQ(size, static_cast<int>(data.size()));
+    if (modification_time) {
+      ASSERT_TRUE(base::TouchFile(path, modification_time.value(),
+                                  modification_time.value()));
+    }
   }
 
   base::ScopedTempDir temp_dir_;
@@ -260,17 +274,10 @@ TEST_F(BlobStorageContextMojoTest, FileCopyOptimization) {
   base::FilePath copy_from_file =
       temp_dir_.GetPath().AppendASCII("SourceFile.txt");
 
-  // Create a 'modification_time' that is different from now.
+  // Create a file to copy from.
   base::Time modification_time =
       TruncateToSeconds(base::Time::Now() - base::TimeDelta::FromDays(1));
-  {
-    base::ScopedAllowBlockingForTesting allow_blocking;
-    int size = base::WriteFile(copy_from_file, kData.data(), kData.size());
-    ASSERT_GT(size, 0);
-    EXPECT_EQ(size, static_cast<int>(kData.size()));
-    ASSERT_TRUE(
-        base::TouchFile(copy_from_file, modification_time, modification_time));
-  }
+  CreateFile(copy_from_file, kData, modification_time);
 
   std::unique_ptr<BlobDataBuilder> builder =
       std::make_unique<BlobDataBuilder>("1234");
@@ -321,17 +328,10 @@ TEST_F(BlobStorageContextMojoTest, FileCopyOptimizationOffsetSize) {
   base::FilePath copy_from_file =
       temp_dir_.GetPath().AppendASCII("SourceFile.txt");
 
-  // Create a 'modification_time' that is different from now.
+  // Create a file to copy from.
   base::Time modification_time =
       TruncateToSeconds(base::Time::Now() - base::TimeDelta::FromDays(1));
-  {
-    base::ScopedAllowBlockingForTesting allow_blocking;
-    int size = base::WriteFile(copy_from_file, kData.data(), kData.size());
-    ASSERT_GT(size, 0);
-    EXPECT_EQ(size, static_cast<int>(kData.size()));
-    ASSERT_TRUE(
-        base::TouchFile(copy_from_file, modification_time, modification_time));
-  }
+  CreateFile(copy_from_file, kData, modification_time);
 
   std::unique_ptr<BlobDataBuilder> builder =
       std::make_unique<BlobDataBuilder>("1234");
@@ -379,16 +379,10 @@ TEST_F(BlobStorageContextMojoTest, FileCopyEmptyFile) {
   base::FilePath copy_from_file =
       temp_dir_.GetPath().AppendASCII("SourceFile.txt");
 
-  // Create a 'modification_time' that is different from now.
+  // Create a file to copy from.
   base::Time modification_time =
       TruncateToSeconds(base::Time::Now() - base::TimeDelta::FromDays(1));
-  {
-    base::ScopedAllowBlockingForTesting allow_blocking;
-    int size = base::WriteFile(copy_from_file, kData.data(), kData.size());
-    ASSERT_EQ(size, 0);
-    ASSERT_TRUE(
-        base::TouchFile(copy_from_file, modification_time, modification_time));
-  }
+  CreateFile(copy_from_file, kData, modification_time);
 
   std::unique_ptr<BlobDataBuilder> builder =
       std::make_unique<BlobDataBuilder>("1234");
@@ -437,16 +431,10 @@ TEST_F(BlobStorageContextMojoTest, InvalidInputFileSize) {
   base::FilePath copy_from_file =
       temp_dir_.GetPath().AppendASCII("SourceFile.txt");
 
-  // Create a 'modification_time' that is different from now.
+  // Create a file to copy from.
   base::Time modification_time =
       TruncateToSeconds(base::Time::Now() - base::TimeDelta::FromDays(1));
-  {
-    base::ScopedAllowBlockingForTesting allow_blocking;
-    int size = base::WriteFile(copy_from_file, kData.data(), kData.size());
-    ASSERT_EQ(size, static_cast<int>(kData.size()));
-    ASSERT_TRUE(
-        base::TouchFile(copy_from_file, modification_time, modification_time));
-  }
+  CreateFile(copy_from_file, kData, modification_time);
 
   std::unique_ptr<BlobDataBuilder> builder =
       std::make_unique<BlobDataBuilder>("1234");
@@ -482,21 +470,15 @@ TEST_F(BlobStorageContextMojoTest, InvalidInputFileTimeModified) {
   base::FilePath copy_from_file =
       temp_dir_.GetPath().AppendASCII("SourceFile.txt");
 
-  // Create a 'modification_time' that is different from now.
-  base::Time bad_modified_time =
-      TruncateToSeconds(base::Time::Now() - base::TimeDelta::FromDays(2));
   base::Time file_modified_time =
       TruncateToSeconds(base::Time::Now() - base::TimeDelta::FromDays(1));
-  {
-    base::ScopedAllowBlockingForTesting allow_blocking;
-    int size = base::WriteFile(copy_from_file, kData.data(), kData.size());
-    ASSERT_EQ(size, static_cast<int>(kData.size()));
-    ASSERT_TRUE(base::TouchFile(copy_from_file, file_modified_time,
-                                file_modified_time));
-  }
+  CreateFile(copy_from_file, kData, file_modified_time);
 
+  // Create the blob but give it the wrong modification time.
   std::unique_ptr<BlobDataBuilder> builder =
       std::make_unique<BlobDataBuilder>("1234");
+  base::Time bad_modified_time =
+      TruncateToSeconds(base::Time::Now() - base::TimeDelta::FromDays(2));
   builder->AppendFile(copy_from_file, 0ll, kData.size(), bad_modified_time);
   std::unique_ptr<BlobDataHandle> blob_handle =
       context_->AddFinishedBlob(std::move(builder));
@@ -584,6 +566,118 @@ TEST_F(BlobStorageContextMojoTest, InvalidPath) {
         loop.Quit();
       }));
   loop.Run();
+}
+
+TEST_F(BlobStorageContextMojoTest, SaveBlobToFileNoDirectory) {
+  SetUpOnDiskContext();
+  const std::string kData = "Hello There!";
+  mojo::Remote<mojom::BlobStorageContext> context = CreateContextConnection();
+
+  mojo::Remote<blink::mojom::Blob> blob;
+  context->RegisterFromMemory(
+      blob.BindNewPipeAndPassReceiver(), "1234",
+      mojo_base::BigBuffer(base::as_bytes(base::make_span(kData))));
+
+  // Create a 'last modified' that is different from now.
+  base::Time last_modified =
+      TruncateToSeconds(base::Time::Now() - base::TimeDelta::FromDays(1));
+
+  base::RunLoop loop;
+  base::FilePath file_path = temp_dir_.GetPath()
+                                 .AppendASCII("NotCreatedDirectory")
+                                 .AppendASCII("TestFile.txt");
+  context->WriteBlobToFile(
+      blob.Unbind(), file_path, true, last_modified,
+      base::BindLambdaForTesting([&](mojom::WriteBlobToFileResult result) {
+        EXPECT_EQ(result, mojom::WriteBlobToFileResult::kIOError);
+        loop.Quit();
+      }));
+  loop.Run();
+
+  base::ThreadRestrictions::SetIOAllowed(true);
+  EXPECT_FALSE(base::PathExists(file_path));
+  ASSERT_TRUE(temp_dir_.Delete());
+}
+
+TEST_F(BlobStorageContextMojoTest, SaveOptimizedBlobToFileNoDirectory) {
+  SetUpOnDiskContext();
+  const std::string kData = "Hello There!";
+
+  base::FilePath copy_from_file =
+      temp_dir_.GetPath().AppendASCII("SourceFile.txt");
+
+  // Create a file to copy from.
+  CreateFile(copy_from_file, kData, base::nullopt);
+
+  std::unique_ptr<BlobDataBuilder> builder =
+      std::make_unique<BlobDataBuilder>("1234");
+  builder->AppendFile(copy_from_file, 0, kData.size(), base::Time());
+  std::unique_ptr<BlobDataHandle> blob_handle =
+      context_->AddFinishedBlob(std::move(builder));
+
+  mojo::PendingRemote<blink::mojom::Blob> blob;
+  BlobImpl::Create(std::move(blob_handle),
+                   blob.InitWithNewPipeAndPassReceiver());
+
+  mojo::Remote<mojom::BlobStorageContext> context = CreateContextConnection();
+
+  base::RunLoop loop;
+  base::FilePath file_path = temp_dir_.GetPath()
+                                 .AppendASCII("NotCreatedDirectory")
+                                 .AppendASCII("TestFile.txt");
+  context->WriteBlobToFile(
+      std::move(blob), file_path, true, base::nullopt,
+      base::BindLambdaForTesting([&](mojom::WriteBlobToFileResult result) {
+        EXPECT_EQ(result, mojom::WriteBlobToFileResult::kIOError);
+        loop.Quit();
+      }));
+  loop.Run();
+
+  base::ThreadRestrictions::SetIOAllowed(true);
+  EXPECT_FALSE(base::PathExists(file_path));
+  ASSERT_TRUE(temp_dir_.Delete());
+}
+
+TEST_F(BlobStorageContextMojoTest, SaveOptimizedBlobNoFileSize) {
+  SetUpOnDiskContext();
+  const std::string kData = "Hello There!";
+
+  base::FilePath copy_from_file =
+      temp_dir_.GetPath().AppendASCII("SourceFile.txt");
+
+  // Create a file to copy from.
+  CreateFile(copy_from_file, kData, base::nullopt);
+
+  std::unique_ptr<BlobDataBuilder> builder =
+      std::make_unique<BlobDataBuilder>("1234");
+  builder->AppendFile(copy_from_file, 0, blink::BlobUtils::kUnknownSize,
+                      base::Time());
+  std::unique_ptr<BlobDataHandle> blob_handle =
+      context_->AddFinishedBlob(std::move(builder));
+
+  mojo::PendingRemote<blink::mojom::Blob> blob;
+  BlobImpl::Create(std::move(blob_handle),
+                   blob.InitWithNewPipeAndPassReceiver());
+
+  mojo::Remote<mojom::BlobStorageContext> context = CreateContextConnection();
+
+  base::RunLoop loop;
+  base::FilePath file_path = temp_dir_.GetPath().AppendASCII("TestFile.txt");
+  context->WriteBlobToFile(
+      std::move(blob), file_path, true, base::nullopt,
+      base::BindLambdaForTesting([&](mojom::WriteBlobToFileResult result) {
+        EXPECT_EQ(result, mojom::WriteBlobToFileResult::kSuccess);
+        loop.Quit();
+      }));
+  loop.Run();
+
+  base::ThreadRestrictions::SetIOAllowed(true);
+  std::string file_contents;
+  EXPECT_TRUE(base::ReadFileToString(file_path, &file_contents));
+  EXPECT_EQ(file_contents, kData);
+
+  base::DeleteFile(file_path, false);
+  ASSERT_TRUE(temp_dir_.Delete());
 }
 
 }  // namespace

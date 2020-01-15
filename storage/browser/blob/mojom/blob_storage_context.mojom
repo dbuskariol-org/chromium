@@ -75,9 +75,11 @@ interface BlobStorageContext {
 
   // Writes the given blob to the given file path. If the given |path| is not
   // under the blob storage context's profile directory or if it has references
-  // (like "..") then the implementation returns kBadPath. If a file already
-  // exists at |path| then it is overwritten. If |flush_on_write| is true, then
-  // Flush will be called on the new file before it is closed.
+  // (like "..") then the implementation returns kBadPath. If the directory
+  // that contains the file at |path| does not exist, then this function will
+  // return kIOError. If a file already exists at |path| then it is
+  // overwritten. If |flush_on_write| is true, then Flush will be called on the
+  // new file before it is closed.
   WriteBlobToFile(pending_remote<blink.mojom.Blob> blob,
                   mojo_base.mojom.FilePath path,
                   bool flush_on_write,
