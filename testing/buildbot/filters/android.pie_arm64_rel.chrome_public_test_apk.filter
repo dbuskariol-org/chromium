@@ -1,9 +1,6 @@
 # crbug/1033877
 -org.chromium.chrome.browser.autofill_assistant.AutofillAssistantDirectActionHandlerTest.testReportAvailableDirectActions
 
-#crbug.com/1041870
--org.chromium.chrome.browser.autofill_assistant.AutofillAssistantPaymentTest.testKeyboardIsHiddenOnLostFocus
-
 # crbug/1036413
 -org.chromium.chrome.browser.banners.AppBannerManagerTest.testBlockedAmbientBadgeDoesNotAppearAgainForMonths
 
