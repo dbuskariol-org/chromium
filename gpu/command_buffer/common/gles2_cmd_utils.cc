@@ -1223,6 +1223,8 @@ uint32_t GLES2Util::GetChannelsForFormat(int format) {
     case GL_RGB16I:
     case GL_RGB32UI:
     case GL_RGB32I:
+    case GL_RGB16_EXT:
+    case GL_RGB16_SNORM_EXT:
       return kRGB;
     case GL_BGRA_EXT:
     case GL_BGRA8_EXT:
@@ -1243,6 +1245,8 @@ uint32_t GLES2Util::GetChannelsForFormat(int format) {
     case GL_RGBA16I:
     case GL_RGBA32UI:
     case GL_RGBA32I:
+    case GL_RGBA16_EXT:
+    case GL_RGBA16_SNORM_EXT:
       return kRGBA;
     case GL_DEPTH_COMPONENT32_OES:
     case GL_DEPTH_COMPONENT24_OES:
@@ -1267,6 +1271,8 @@ uint32_t GLES2Util::GetChannelsForFormat(int format) {
     case GL_R16I:
     case GL_R32UI:
     case GL_R32I:
+    case GL_R16_EXT:
+    case GL_R16_SNORM_EXT:
       return kRed;
     case GL_RG_EXT:
     case GL_RG8:
@@ -1279,6 +1285,8 @@ uint32_t GLES2Util::GetChannelsForFormat(int format) {
     case GL_RG16I:
     case GL_RG32UI:
     case GL_RG32I:
+    case GL_RG16_EXT:
+    case GL_RG16_SNORM_EXT:
       return kRed | kGreen;
     default:
       return 0x0000;
@@ -1290,6 +1298,8 @@ bool GLES2Util::IsSizedColorFormat(uint32_t internal_format) {
     case GL_ALPHA16F_EXT:
     case GL_ALPHA32F_EXT:
     case GL_RGB8:
+    case GL_RGB16_EXT:
+    case GL_RGB16_SNORM_EXT:
     case GL_RGB565:
     case GL_RGB16F:
     case GL_RGB32F:
@@ -1307,6 +1317,8 @@ bool GLES2Util::IsSizedColorFormat(uint32_t internal_format) {
     case GL_RGBA16F:
     case GL_RGBA32F:
     case GL_RGBA8_OES:
+    case GL_RGBA16_EXT:
+    case GL_RGBA16_SNORM_EXT:
     case GL_RGBA4:
     case GL_RGB5_A1:
     case GL_SRGB8_ALPHA8:
@@ -1321,6 +1333,8 @@ bool GLES2Util::IsSizedColorFormat(uint32_t internal_format) {
     case GL_RGBA32I:
     case GL_R8:
     case GL_R8_SNORM:
+    case GL_R16_EXT:
+    case GL_R16_SNORM_EXT:
     case GL_R16F:
     case GL_R32F:
     case GL_R8UI:
@@ -1331,6 +1345,8 @@ bool GLES2Util::IsSizedColorFormat(uint32_t internal_format) {
     case GL_R32I:
     case GL_RG8:
     case GL_RG8_SNORM:
+    case GL_RG16_EXT:
+    case GL_RG16_SNORM_EXT:
     case GL_RG16F:
     case GL_RG32F:
     case GL_RG8UI:
@@ -1434,6 +1450,8 @@ void GLES2Util::GetColorFormatComponentSizes(
     case GL_RGB16F:
     case GL_RGB16UI:
     case GL_RGB16I:
+    case GL_RGB16_EXT:
+    case GL_RGB16_SNORM_EXT:
       *r = 16;
       *g = 16;
       *b = 16;
@@ -1469,6 +1487,8 @@ void GLES2Util::GetColorFormatComponentSizes(
     case GL_RGBA16F_EXT:
     case GL_RGBA16UI:
     case GL_RGBA16I:
+    case GL_RGBA16_EXT:
+    case GL_RGBA16_SNORM_EXT:
       *r = 16;
       *g = 16;
       *b = 16;
@@ -1511,6 +1531,7 @@ void GLES2Util::GetColorFormatComponentSizes(
     case GL_R16UI:
     case GL_R16I:
     case GL_R16_EXT:
+    case GL_R16_SNORM_EXT:
       *r = 16;
       break;
     case GL_R32F:
@@ -1528,6 +1549,8 @@ void GLES2Util::GetColorFormatComponentSizes(
     case GL_RG16F:
     case GL_RG16UI:
     case GL_RG16I:
+    case GL_RG16_EXT:
+    case GL_RG16_SNORM_EXT:
       *r = 16;
       *g = 16;
       break;
@@ -1792,6 +1815,8 @@ uint32_t GLES2Util::ConvertToSizedFormat(uint32_t format, uint32_t type) {
           return GL_RGB16F;
         case GL_FLOAT:
           return GL_RGB32F;
+        case GL_UNSIGNED_SHORT:
+          return GL_RGB16_EXT;
         default:
           NOTREACHED();
           break;
@@ -1809,6 +1834,8 @@ uint32_t GLES2Util::ConvertToSizedFormat(uint32_t format, uint32_t type) {
           return GL_RGBA16F;
         case GL_FLOAT:
           return GL_RGBA32F;
+        case GL_UNSIGNED_SHORT:
+          return GL_RGBA16_EXT;
         default:
           NOTREACHED();
           break;
@@ -1850,6 +1877,8 @@ uint32_t GLES2Util::ConvertToSizedFormat(uint32_t format, uint32_t type) {
           return GL_RG16F;
         case GL_FLOAT:
           return GL_RG32F;
+        case GL_UNSIGNED_SHORT:
+          return GL_RG16_EXT;
         default:
           NOTREACHED();
           break;
