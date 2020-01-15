@@ -222,7 +222,6 @@ bool HintCache::ProcessAndCacheHints(
   // If there's no update data, then there's nothing to do.
   if (!update_data)
     return false;
-
   bool processed_hints_to_store = false;
   // Process each hint in the the hint configuration. The hints are mutable
   // because once processing is completed on each individual hint, it is moved

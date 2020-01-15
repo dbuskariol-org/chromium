@@ -47434,8 +47434,11 @@ Called by update_net_trust_anchors.py.-->
   <int value="4" label="Fetcher Busy">
     Request not sent because fetcher busy with another request.
   </int>
-  <int value="5" label="No Hosts to Fetch">
-    Request not sent because no hosts left after filtering.
+  <int value="5" label="No Hosts or URLs to Fetch">
+    Request not sent because no hosts or URLs left after filtering.
+  </int>
+  <int value="6" label="No Supported Optimization Types to Fetch">
+    Request not sent because there were no supported optimizations types.
   </int>
 </enum>
 
@@ -47598,6 +47601,23 @@ Called by update_net_trust_anchors.py.-->
   </int>
   <int value="6" label="No supported hints found">
     Hints processed but no supported hints found.
+  </int>
+</enum>
+
+<enum name="OptimizationGuideRaceNavigationFetchAttemptStatus">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Fetch race not needed">
+    Hints for the current navigation were already available so the fetch race
+    was not needed.
+  </int>
+  <int value="2" label="Fetch race for navigation host">
+    The fetch race was attempted for only the host of the current navigation.
+  </int>
+  <int value="3" label="Fetch race for navigation URL">
+    The fetch race was attempted for only the URL of the current navigation.
+  </int>
+  <int value="4" label="Fetch race for navigation host and URL">
+    The fetch race was attempted for the host and URL of the current navigation.
   </int>
 </enum>
 
