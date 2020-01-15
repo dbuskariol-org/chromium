@@ -9,6 +9,7 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "net/base/data_url.h"
+#include "net/base/network_isolation_key.h"
 #include "services/network/public/cpp/resource_request.h"
 #include "services/network/public/cpp/simple_url_loader.h"
 #include "services/network/public/mojom/url_loader_factory.mojom.h"
@@ -91,6 +92,9 @@ WebApkIconHasher::WebApkIconHasher(
                  base::Unretained(this)));
 
   auto resource_request = std::make_unique<network::ResourceRequest>();
+  resource_request->trusted_params = network::ResourceRequest::TrustedParams();
+  resource_request->trusted_params->network_isolation_key =
+      net::NetworkIsolationKey(request_initiator, request_initiator);
   resource_request->request_initiator = request_initiator;
   resource_request->url = icon_url;
   simple_url_loader_ = network::SimpleURLLoader::Create(
