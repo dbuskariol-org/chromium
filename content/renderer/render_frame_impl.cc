@@ -1419,7 +1419,7 @@ RenderFrameImpl* RenderFrameImpl::CreateMainFrame(
   render_view->render_widget_ = RenderWidget::CreateForFrame(
       params->main_frame_widget_routing_id, compositor_deps,
       params->visual_properties.display_mode,
-      /*is_undead=*/false, render_view->widgets_never_composited());
+      render_view->widgets_never_composited());
 
   RenderWidget* render_widget = render_view->GetWidget();
   render_widget->set_delegate(render_view);
@@ -1431,9 +1431,13 @@ RenderFrameImpl* RenderFrameImpl::CreateMainFrame(
       blink::WebFrameWidget::CreateForMainFrame(render_widget, web_frame);
 
   render_widget->InitForMainFrame(std::move(show_callback), web_frame_widget,
-                                  &params->visual_properties.screen_info);
-  // AttachWebFrameWidget() is not needed here since InitForMainFrame() received
-  // the WebFrameWidget.
+                                  params->visual_properties.screen_info);
+  // The RenderWidget should start with valid VisualProperties, including a
+  // non-zero size. While RenderWidget would not normally receive IPCs and
+  // thus would not get VisualProperty updates while the frame is provisional,
+  // we need at least one update to them in order to meet expectations in the
+  // renderer, and that update comes as part of the CreateFrame message.
+  // TODO(crbug.com/419087): This could become part of RenderWidget Init.
   render_widget->OnUpdateVisualProperties(params->visual_properties);
 
   // The WebFrame created here was already attached to the Page as its
@@ -1566,60 +1570,45 @@ void RenderFrameImpl::CreateFrame(
     // Main frames are always local roots, so they should always have a
     // |widget_params| (and it always comes with a routing id). Surprisingly,
     // this routing id is *not* used though, as the routing id on the existing
-    // RenderWidget is not changed. (I don't know why.)
+    // RenderWidget is not changed (since the RenderWidgetHost objects are not
+    // destroyed along with the RenderWidget if the RenderView is kept alive).
     // TODO(crbug.com/888105): It's a bug that the RenderWidget is not using
-    // this routing id.
+    // this routing id, but it should be the same routing id at the moment
+    // anyway.
     DCHECK(widget_params);
     DCHECK_NE(widget_params->routing_id, MSG_ROUTING_NONE);
 
-    // We revive the undead main frame RenderWidget at the same time we would
-    // create the RenderWidget if the RenderFrame owned it instead of having the
-    // RenderWidget live for eternity on the RenderView (after setting up the
-    // WebFrameWidget since that would be part of creating the RenderWidget).
-    //
-    // This is equivalent to creating a new RenderWidget if it wasn't undead.
-    RenderWidget* render_widget =
-        render_view->ReviveUndeadMainFrameRenderWidget();
-    if (render_widget) {
-      DCHECK(!render_widget->GetWebWidget());
+    // TODO(crbug.com/419087): Can we merge this code with
+    // RenderFrameImpl::CreateMainFrame()?
 
-      // Non-owning pointer that is self-referencing and destroyed by calling
-      // Close(). The RenderViewImpl has a RenderWidget already, but not a
-      // WebFrameWidget, which is now attached here.
-      auto* web_frame_widget = blink::WebFrameWidget::CreateForMainFrame(
-          render_view->GetWidget(), web_frame);
-      // This is equivalent to calling InitForMainFrame() on a new RenderWidget
-      // if it wasn't undead.
-      render_widget->InitForRevivedMainFrame(
-          web_frame_widget, widget_params->visual_properties.screen_info);
-    } else {
-      // If RenderView was initialized with a remote main frame then it won't
-      // have an undead widget. We only have an undead widget after the first
-      // time a local main frame was created.
-      //
-      // This block of code mimics RenderFrameImpl::CreateMainFrame().
-      render_view->render_widget_ = RenderWidget::CreateForFrame(
-          widget_params->routing_id, compositor_deps,
-          widget_params->visual_properties.display_mode,
-          /*is_undead=*/false, render_view->widgets_never_composited());
+    render_view->render_widget_ = RenderWidget::CreateForFrame(
+        widget_params->routing_id, compositor_deps,
+        widget_params->visual_properties.display_mode,
+        render_view->widgets_never_composited());
 
-      render_widget = render_view->GetWidget();
-      render_widget->set_delegate(render_view);
+    RenderWidget* render_widget = render_view->GetWidget();
+    render_widget->set_delegate(render_view);
 
-      // Non-owning pointer that is self-referencing and destroyed by calling
-      // Close(). The RenderViewImpl has a RenderWidget already, but not a
-      // WebFrameWidget, which is now attached here.
-      auto* web_frame_widget =
-          blink::WebFrameWidget::CreateForMainFrame(render_widget, web_frame);
+    // Non-owning pointer that is self-referencing and destroyed by calling
+    // Close(). The RenderViewImpl has a RenderWidget already, but not a
+    // WebFrameWidget, which is now attached here.
+    auto* web_frame_widget =
+        blink::WebFrameWidget::CreateForMainFrame(render_widget, web_frame);
 
-      render_widget->InitForMainFrame(
-          RenderWidget::ShowCallback(), web_frame_widget,
-          &widget_params->visual_properties.screen_info);
-    }
+    render_widget->InitForMainFrame(
+        RenderWidget::ShowCallback(), web_frame_widget,
+        widget_params->visual_properties.screen_info);
+    // The RenderWidget should start with valid VisualProperties, including a
+    // non-zero size. While RenderWidget would not normally receive IPCs and
+    // thus would not get VisualProperty updates while the frame is provisional,
+    // we need at least one update to them in order to meet expectations in the
+    // renderer, and that update comes as part of the CreateFrame message.
+    // TODO(crbug.com/419087): This could become part of RenderWidget Init.
+    render_widget->OnUpdateVisualProperties(widget_params->visual_properties);
 
     // Note that we do *not* call WebViewImpl's DidAttachLocalMainFrame() here
-    // yet because this frame is provisional and not attached to the Page yet.
-    // We will tell WebViewImpl about it once it is swapped in.
+    // for yet because this frame is provisional and not attached to the Page
+    // yet. We will tell WebViewImpl about it once it is swapped in.
 
     render_frame->render_widget_ = render_widget;
     DCHECK(!render_frame->owned_render_widget_);
@@ -1643,7 +1632,7 @@ void RenderFrameImpl::CreateFrame(
     std::unique_ptr<RenderWidget> render_widget = RenderWidget::CreateForFrame(
         widget_params->routing_id, compositor_deps,
         widget_params->visual_properties.display_mode,
-        /*is_undead=*/false, render_view->widgets_never_composited());
+        render_view->widgets_never_composited());
 
     // Non-owning pointer that is self-referencing and destroyed by calling
     // Close(). We use the new RenderWidget as the client for this
@@ -1657,20 +1646,16 @@ void RenderFrameImpl::CreateFrame(
     // and run.
     render_widget->InitForChildLocalRoot(
         web_frame_widget, widget_params->visual_properties.screen_info);
-
-    render_frame->render_widget_ = render_widget.get();
-    render_frame->owned_render_widget_ = std::move(render_widget);
-  }
-
-  if (widget_params) {
-    DCHECK(render_frame->render_widget_);
     // The RenderWidget should start with valid VisualProperties, including a
     // non-zero size. While RenderWidget would not normally receive IPCs and
     // thus would not get VisualProperty updates while the frame is provisional,
     // we need at least one update to them in order to meet expectations in the
     // renderer, and that update comes as part of the CreateFrame message.
-    render_frame->render_widget_->OnUpdateVisualProperties(
-        widget_params->visual_properties);
+    // TODO(crbug.com/419087): This could become part of RenderWidget Init.
+    render_widget->OnUpdateVisualProperties(widget_params->visual_properties);
+
+    render_frame->render_widget_ = render_widget.get();
+    render_frame->owned_render_widget_ = std::move(render_widget);
   }
 
   if (has_committed_real_load)
@@ -4192,11 +4177,8 @@ void RenderFrameImpl::FrameDetached(DetachType type) {
   GetLocalRootRenderWidget()->UnregisterRenderFrame(this);
   if (is_main_frame_) {
     DCHECK(!owned_render_widget_);
-    // TODO(crbug.com/419087): The RenderWidget for the main frame can't be
-    // closed/destroyed here, since there is no way to recreate it without also
-    // fixing the lifetimes of the related browser side objects. Closing is
-    // delegated to the RenderViewImpl which will stash the RenderWidget away
-    // as undead if needed.
+    // TODO(crbug.com/419087): Move ownership of the main frame RenderWidget to
+    // RenderFrameImpl.
     render_view_->CloseMainFrameRenderWidget();
   } else if (render_widget_) {
     DCHECK(owned_render_widget_);
@@ -5771,8 +5753,7 @@ bool RenderFrameImpl::SwapIn() {
   in_frame_tree_ = true;
 
   // If this is the main frame going from a remote frame to a local frame,
-  // it needs to set RenderViewImpl's pointer for the main frame to itself,
-  // ensure RenderWidget is no longer undead.
+  // it needs to set RenderViewImpl's pointer for the main frame to itself.
   if (is_main_frame_) {
     CHECK(!render_view_->main_render_frame_);
     render_view_->main_render_frame_ = this;
