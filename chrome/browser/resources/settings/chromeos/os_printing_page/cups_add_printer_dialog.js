@@ -19,6 +19,7 @@
 const AddPrinterDialogs = {
   MANUALLY: 'add-printer-manually-dialog',
   MANUFACTURER: 'add-printer-manufacturer-model-dialog',
+  PRINTSERVER: 'add-print-server-dialog',
 };
 
 /**
@@ -69,6 +70,9 @@ Polymer({
       type: String,
       value: '',
     },
+
+    /** @type {boolean} */
+    printServersUiEnabled: Boolean,
   },
 
   observers: [
@@ -166,6 +170,12 @@ Polymer({
       this.$$('add-printer-dialog').close();
       this.fire('open-manufacturer-model-dialog');
     }
+  },
+
+  /** @private */
+  onPrintServerTap_: function() {
+    this.$$('add-printer-dialog').close();
+    this.fire('open-add-print-server-dialog');
   },
 
   /**
@@ -441,6 +451,84 @@ Polymer({
 });
 
 Polymer({
+  is: 'add-print-server-dialog',
+
+  properties: {
+    /** @private {string} */
+    printServerAddress_: {
+      type: String,
+      value: '',
+    },
+
+    /** @private {string} */
+    errorText_: {
+      type: String,
+      value: '',
+    },
+
+    /** @private {boolean} */
+    inProgress_: {
+      type: Boolean,
+      value: false,
+    },
+  },
+
+  /** @private */
+  onCancelTap_: function() {
+    this.$$('add-printer-dialog').close();
+  },
+
+  /** @private */
+  onAddPrintServerTap_: function() {
+    this.inProgress_ = true;
+    this.$$('#printServerAddressInput').invalid = false;
+    settings.CupsPrintersBrowserProxyImpl.getInstance()
+        .queryPrintServer(this.printServerAddress_)
+        .then(
+            this.onPrintServerAddedSucceeded_.bind(this),
+            this.onPrintServerAddedFailed_.bind(this));
+  },
+
+  /**
+   * @param {!CupsPrintersList} printers
+   * @private
+   */
+  onPrintServerAddedSucceeded_: function(printers) {
+    this.inProgress_ = false;
+    this.fire('show-cups-print-server-toast', {printers: printers});
+    this.$$('add-printer-dialog').close();
+  },
+
+  /**
+   * @param {*} addPrintServerError
+   * @private
+   */
+  onPrintServerAddedFailed_: function(addPrintServerError) {
+    this.inProgress_ = false;
+    if (addPrintServerError == PrintServerResult.INCORRECT_URL) {
+      this.$$('#printServerAddressInput').invalid = true;
+      return;
+    }
+    this.errorText_ = settings.printing.getPrintServerErrorText(
+        /** @type {PrintServerResult} */ (addPrintServerError));
+  },
+
+  /**
+   * Keypress event handler. If enter is pressed, trigger the add event.
+   * @param {!Event} event
+   * @private
+   */
+  onKeypress_: function(event) {
+    if (event.key != 'Enter') {
+      return;
+    }
+    event.stopPropagation();
+
+    this.onAddPrintServerTap_();
+  },
+});
+
+Polymer({
   is: 'settings-cups-add-printer-dialog',
 
   properties: {
@@ -466,12 +554,27 @@ Polymer({
       type: Boolean,
       value: false,
     },
+
+    /** @private {boolean} */
+    showAddPrintServerDialog_: {
+      type: Boolean,
+      value: false,
+    },
+
+    /** @private {boolean} */
+    printServersUiEnabled_: {
+      type: Boolean,
+      value: function() {
+        return loadTimeData.getBoolean('consumerPrintServerUiEnabled');
+      }
+    },
   },
 
   listeners: {
     'open-manually-add-printer-dialog': 'openManuallyAddPrinterDialog_',
     'open-manufacturer-model-dialog':
         'openManufacturerModelDialogForCurrentPrinter_',
+    'open-add-print-server-dialog': 'openPrintServerDialog_',
     'no-detected-printer': 'onNoDetectedPrinter_',
   },
 
@@ -511,6 +614,13 @@ Polymer({
     this.newPrinter = printer;
     this.switchDialog_(
         '', AddPrinterDialogs.MANUFACTURER, 'showManufacturerDialog_');
+  },
+
+  /** @private */
+  openPrintServerDialog_: function() {
+    this.switchDialog_(
+        this.currentDialog_, AddPrinterDialogs.PRINTSERVER,
+        'showAddPrintServerDialog_');
   },
 
   /**

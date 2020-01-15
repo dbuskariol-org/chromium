@@ -142,6 +142,23 @@ cr.define('settings.printing', function() {
   }
 
   /**
+   * Return the error string corresponding to the result code for print servers.
+   * @param {!PrintServerResult} result
+   * @return {string}
+   */
+  function getPrintServerErrorText(result) {
+    switch (result) {
+      case PrintServerResult.CONNECTION_ERROR:
+        return loadTimeData.getString('printServerConnectionError');
+      case PrintServerResult.CANNOT_PARSE_IPP_RESPONSE:
+      case PrintServerResult.HTTP_ERROR:
+        return loadTimeData.getString('printServerConfigurationErrorMessage');
+      default:
+        assertNotReached();
+    }
+  }
+
+  /**
    * We sort by printer type, which is based off of a maintained list in
    * cups_printers_types.js. If the types are the same, we sort alphabetically.
    * @param {!PrinterListEntry} first
@@ -182,6 +199,7 @@ cr.define('settings.printing', function() {
     getBaseName: getBaseName,
     alphabeticalSort: alphabeticalSort,
     getErrorText: getErrorText,
+    getPrintServerErrorText: getPrintServerErrorText,
     sortPrinters: sortPrinters,
     matchesSearchTerm: matchesSearchTerm,
     arePrinterIdsEqual: arePrinterIdsEqual,

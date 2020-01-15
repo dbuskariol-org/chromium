@@ -1030,11 +1030,18 @@ var OSSettingsPrintingPageTest = class extends OSSettingsBrowserTest {
   }
 
   /** @override */
+  get featureList() {
+    return {enabled: ['features::kPrintServerUi']};
+  }
+
+  /** @override */
   get extraLibraries() {
     return super.extraLibraries.concat([
       '//ui/webui/resources/js/assert.js',
       BROWSER_SETTINGS_PATH + '../test_util.js',
       BROWSER_SETTINGS_PATH + '../test_browser_proxy.js',
+      BROWSER_SETTINGS_PATH + '../chromeos/fake_network_config_mojom.js',
+      'cups_printer_test_utils.js',
       'test_cups_printers_browser_proxy.js',
       'cups_printer_test_utils.js',
       'cups_printer_page_tests.js',

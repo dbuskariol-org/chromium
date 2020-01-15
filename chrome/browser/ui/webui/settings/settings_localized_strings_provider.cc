@@ -2541,6 +2541,21 @@ void AddPrintingStrings(content::WebUIDataSource* html_source) {
     {"ippPrinterUnreachable", IDS_SETTINGS_PRINTING_CUPS_IPP_URI_UNREACHABLE},
     {"generalPrinterDialogError",
      IDS_SETTINGS_PRINTING_CUPS_DIALOG_GENERAL_ERROR},
+    {"printServerButtonText", IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER},
+    {"addPrintServerTitle", IDS_SETTINGS_PRINTING_CUPS_ADD_PRINT_SERVER_TITLE},
+    {"printServerAddress", IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_ADDRESS},
+    {"printServerFoundZeroPrinters",
+     IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_FOUND_ZERO_PRINTERS},
+    {"printServerFoundOnePrinter",
+     IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_FOUND_ONE_PRINTER},
+    {"printServerFoundManyPrinters",
+     IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_FOUND_MANY_PRINTERS},
+    {"printServerInvalidUrlAddress",
+     IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_INVALID_URL_ADDRESS},
+    {"printServerConnectionError",
+     IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_CONNECTION_ERROR},
+    {"printServerConfigurationErrorMessage",
+     IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_REACHABLE_BUT_CANNOT_ADD},
 #else
     {"localPrintersTitle", IDS_SETTINGS_PRINTING_LOCAL_PRINTERS_TITLE},
 #endif
@@ -2557,6 +2572,9 @@ void AddPrintingStrings(content::WebUIDataSource* html_source) {
   html_source->AddString(
       "printingCUPSPrintPpdLearnMoreUrl",
       GetHelpUrlWithBoard(chrome::kCupsPrintPPDLearnMoreURL));
+  html_source->AddBoolean(
+      "consumerPrintServerUiEnabled",
+      base::FeatureList::IsEnabled(features::kPrintServerUi));
 #endif
 }
 

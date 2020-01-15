@@ -84,6 +84,7 @@ Polymer({
   listeners: {
     'edit-cups-printer-details': 'onShowCupsEditPrinterDialog_',
     'show-cups-printer-toast': 'openResultToast_',
+    'show-cups-print-server-toast': 'openPrintServerResultToast_',
     'open-manufacturer-model-dialog-for-specified-printer':
         'openManufacturerModelDialogForSpecifiedPrinter_',
   },
@@ -181,6 +182,27 @@ Polymer({
     }
 
     this.$.errorToast.show();
+  },
+
+  /**
+   * @param {!CustomEvent<!{
+   *      printers: !CupsPrintersList
+   * }>} event
+   * @private
+   */
+  openPrintServerResultToast_: function(event) {
+    const length = event.detail.printers.printerList.length;
+    if (length === 0) {
+      this.addPrintServerResultText_ =
+          loadTimeData.getString('printServerFoundZeroPrinters');
+    } else if (length === 1) {
+      this.addPrintServerResultText_ =
+          loadTimeData.getString('printServerFoundOnePrinter');
+    } else {
+      this.addPrintServerResultText_ =
+          loadTimeData.getStringF('printServerFoundManyPrinters', length);
+    }
+    this.$.printServerErrorToast.show();
   },
 
   /**

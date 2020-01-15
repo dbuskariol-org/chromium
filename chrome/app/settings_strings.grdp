@@ -1526,6 +1526,9 @@
     Manage Cloud Print devices
   </message>
   <if expr="chromeos">
+    <message name="IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER" desc="Label for button that allows the user to access the add print server dialog.">
+      Print server
+    </message>
     <message name="IDS_SETTINGS_PRINTING_CUPS_PRINTERS" desc="In Printing Settings, the title of the CUPS printers setting section.">
       Printers
     </message>
@@ -1592,6 +1595,9 @@
     <message name="IDS_SETTINGS_PRINTING_CUPS_ADD_PRINTERS_MANUALLY_TITLE" desc="Text for the title of the dialog that is used to manually add a printer instead of automatically finding ones nearby.">
       Add a printer manually
     </message>
+    <message name="IDS_SETTINGS_PRINTING_CUPS_ADD_PRINT_SERVER_TITLE" desc="Text for the title of the dialog that is used to manually add a print server.">
+      Add a print server
+    </message>
     <message name="IDS_SETTINGS_PRINTING_CUPS_SELECT_MANUFACTURER_AND_MODEL_TITLE" desc="Text for the title of the dialog that is used to select a manufacturer and model from the drop down list.">
       Advanced printer configuration
     </message>
@@ -1605,6 +1611,9 @@
       Show advanced printer options
     </message>
     <message name="IDS_SETTINGS_PRINTING_CUPS_PRINTER_ADVANCED_ADDRESS" desc="Label for the CUPS printer address in the Advanced section in the printer details page.">
+      Address
+    </message>
+    <message name="IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_ADDRESS" desc="Label for the CUPS print server address in the in the print server details page.">
       Address
     </message>
     <message name="IDS_SETTINGS_PRINTING_CUPS_PRINTER_ADVANCED_PROTOCOL" desc="Label for the CUPS printer protocol in the Advanced section in the printer details page.">
@@ -1748,7 +1757,24 @@
     <message name="IDS_SETTINGS_PRINTING_CUPS_DIALOG_GENERAL_ERROR" desc="General message shown on the top of the add/edit printer dialogs when adding/editting a printer fails.">
       Unable to set up printer. Please check configuration and try again.
     </message>
-
+    <message name="IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_FOUND_ZERO_PRINTERS" desc="Message shown on a toast to indicate no printers were found from a print server.">
+      Did not find any printers from the print server.
+    </message>
+    <message name="IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_FOUND_ONE_PRINTER" desc="Message shown on a toast to indicate that only one printer was found from a print server.">
+      Found 1 printer from the print server.
+    </message>
+    <message name="IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_FOUND_MANY_PRINTERS" desc="Message shown on a toast to indicate the number of printers found on a print server.">
+      Found <ph name="NUM_PRINTERS">$1<ex>5</ex></ph> printers from the print server.
+    </message>
+    <message name="IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_INVALID_URL_ADDRESS" desc="Message shown on the address field of the print server dialog when attempting to connect to a print server with an invalid URL.">
+      Invalid address. Please check the address and try again.
+    </message>
+    <message name="IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_CONNECTION_ERROR" desc="Message shown on the print server dialog when the user has provided a valid URL but the server is unreachable.">
+      Couldn't detect the print server. Please check the address and try again.
+    </message>
+    <message name="IDS_SETTINGS_PRINTING_CUPS_PRINT_SERVER_REACHABLE_BUT_CANNOT_ADD" desc="Message shown on the print server dialog when we are able to reach the print server but still ran into some error with adding the print server.">
+      Couldn't add the print server. Please check the server's configuration and try again.
+    </message>
 
   </if>
   <if expr="not chromeos">
