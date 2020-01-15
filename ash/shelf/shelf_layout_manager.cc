@@ -461,8 +461,10 @@ gfx::Rect ShelfLayoutManager::GetIdealBounds() const {
 }
 
 gfx::Rect ShelfLayoutManager::GetIdealBoundsForWorkAreaCalculation() const {
-  if (!IsTabletModeEnabled() || !chromeos::switches::ShouldShowShelfHotseat())
+  if (!IsTabletModeEnabled() || !chromeos::switches::ShouldShowShelfHotseat() ||
+      state_.session_state != session_manager::SessionState::ACTIVE) {
     return GetIdealBounds();
+  }
 
   // For the work-area calculation in tablet mode, always use in-app shelf
   // bounds, because when the shelf is not in-app the UI is either showing
