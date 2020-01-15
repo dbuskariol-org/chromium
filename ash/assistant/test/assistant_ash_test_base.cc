@@ -55,7 +55,7 @@ void CheckCanProcessEvents(const views::View* view) {
 }
 
 void PressHomeButton() {
-  Shell::Get()->app_list_controller()->OnHomeButtonPressed(
+  Shell::Get()->app_list_controller()->ToggleAppList(
       display::Screen::GetScreen()->GetPrimaryDisplay().id(),
       AppListShowSource::kShelfButton, base::TimeTicks::Now());
 }

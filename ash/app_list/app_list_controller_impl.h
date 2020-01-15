@@ -153,6 +153,11 @@ class ASH_EXPORT AppListControllerImpl : public AppListController,
                                  float background_opacity);
   void EndDragFromShelf(AppListViewState app_list_state);
   void ProcessMouseWheelEvent(const ui::MouseWheelEvent& event);
+  // Toggles app list visibility. In tablet mode, this can only show the app
+  // list (by hiding any windows that might be shown over the homde launcher).
+  // |display_id| is the id of display where app list should toggle.
+  // |show_source| is the source of the event. |event_time_stamp| records the
+  // event timestamp.
   ShelfAction ToggleAppList(int64_t display_id,
                             AppListShowSource show_source,
                             base::TimeTicks event_time_stamp);
@@ -306,15 +311,6 @@ class ASH_EXPORT AppListControllerImpl : public AppListController,
   void Back();
 
   void SetKeyboardTraversalMode(bool engaged);
-
-  // Handles home button press event. (Search key should trigger the same
-  // behavior.) All three parameters are only used in clamshell mode.
-  // |display_id| is the id of display where app list should toggle.
-  // |show_source| is the source of the event. |event_time_stamp| records the
-  // event timestamp.
-  ShelfAction OnHomeButtonPressed(int64_t display_id,
-                                  AppListShowSource show_source,
-                                  base::TimeTicks event_time_stamp);
 
   // Returns current visibility of the Assistant page.
   bool IsShowingEmbeddedAssistantUI() const;

@@ -24,7 +24,6 @@
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/scoped_canvas.h"
 #include "ui/views/animation/flood_fill_ink_drop_ripple.h"
-#include "ui/views/animation/ink_drop_impl.h"
 #include "ui/views/controls/button/button_controller.h"
 
 namespace ash {
@@ -98,7 +97,8 @@ void HomeButton::ButtonPressed(views::Button* sender,
 
   const AppListShowSource show_source =
       event.IsShiftDown() ? kShelfButtonFullscreen : kShelfButton;
-  OnPressed(show_source, event.time_stamp());
+  Shell::Get()->app_list_controller()->ToggleAppList(
+      GetDisplayId(), show_source, event.time_stamp());
 }
 
 void HomeButton::OnAssistantAvailabilityChanged() {
@@ -107,17 +107,6 @@ void HomeButton::OnAssistantAvailabilityChanged() {
 
 bool HomeButton::IsShowingAppList() const {
   return controller_.is_showing_app_list();
-}
-
-void HomeButton::OnPressed(AppListShowSource show_source,
-                           base::TimeTicks time_stamp) {
-  ShelfAction shelf_action =
-      Shell::Get()->app_list_controller()->OnHomeButtonPressed(
-          GetDisplayId(), show_source, time_stamp);
-  if (shelf_action == SHELF_ACTION_APP_LIST_DISMISSED) {
-    GetInkDrop()->SnapToActivated();
-    GetInkDrop()->AnimateToState(views::InkDropState::HIDDEN);
-  }
 }
 
 int64_t HomeButton::GetDisplayId() const {

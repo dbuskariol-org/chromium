@@ -619,6 +619,19 @@ ShelfAction AppListControllerImpl::ToggleAppList(
     int64_t display_id,
     AppListShowSource show_source,
     base::TimeTicks event_time_stamp) {
+  if (IsTabletMode()) {
+    bool handled = Shell::Get()->home_screen_controller()->GoHome(display_id);
+
+    // Perform the "back" action for the app list.
+    if (!handled) {
+      Back();
+      return SHELF_ACTION_APP_LIST_BACK;
+    }
+
+    LogAppListShowSource(show_source);
+    return SHELF_ACTION_APP_LIST_SHOWN;
+  }
+
   ShelfAction action =
       presenter_.ToggleAppList(display_id, show_source, event_time_stamp);
   UpdateExpandArrowVisibility();
@@ -974,25 +987,6 @@ void AppListControllerImpl::SetKeyboardTraversalMode(bool engaged) {
     presenter_.GetView()->search_box_view()->SchedulePaint();
   else
     focused_view->SchedulePaint();
-}
-
-ShelfAction AppListControllerImpl::OnHomeButtonPressed(
-    int64_t display_id,
-    AppListShowSource show_source,
-    base::TimeTicks event_time_stamp) {
-  if (!IsTabletMode())
-    return ToggleAppList(display_id, show_source, event_time_stamp);
-
-  bool handled = Shell::Get()->home_screen_controller()->GoHome(display_id);
-
-  // Perform the "back" action for the app list.
-  if (!handled) {
-    Back();
-    return SHELF_ACTION_APP_LIST_BACK;
-  }
-
-  LogAppListShowSource(show_source);
-  return SHELF_ACTION_APP_LIST_SHOWN;
 }
 
 bool AppListControllerImpl::IsShowingEmbeddedAssistantUI() const {

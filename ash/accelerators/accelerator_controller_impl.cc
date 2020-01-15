@@ -784,10 +784,10 @@ void HandleToggleAppList(const ui::Accelerator& accelerator,
   if (accelerator.key_code() == ui::VKEY_LWIN)
     base::RecordAction(UserMetricsAction("Accel_Search_LWin"));
 
-  Shelf::ForWindow(Shell::GetRootWindowForNewWindows())
-      ->shelf_widget()
-      ->GetHomeButton()
-      ->OnPressed(show_source, accelerator.time_stamp());
+  aura::Window* const root_window = Shell::GetRootWindowForNewWindows();
+  Shell::Get()->app_list_controller()->ToggleAppList(
+      display::Screen::GetScreen()->GetDisplayNearestWindow(root_window).id(),
+      show_source, accelerator.time_stamp());
 }
 
 void HandleToggleFullscreen(const ui::Accelerator& accelerator) {
