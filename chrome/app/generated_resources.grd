@@ -4543,13 +4543,22 @@ Keep your key file in a safe place. You will need it to create new versions of y
       <message name="IDS_EXTENSIONS_MENU_UNPIN_BUTTON_TOOLTIP" desc="The tooltip for the pinning button for individual extensions in the Extensions Menu">
         Unpin extension
       </message>
-      <message name="IDS_EXTENSIONS_MENU_ACCESSING_SITE_DATA" desc="Header for section of extensions that are able to access the current site's data">
+      <message name="IDS_EXTENSIONS_MENU_ACCESSING_SITE_DATA_SHORT" desc="Header for section of extensions that are able to access the current site's data">
+        Full access
+      </message>
+      <message name="IDS_EXTENSIONS_MENU_ACCESSING_SITE_DATA" desc="Longer explanation for section of extensions that are able to access the current site's data">
         These extensions can see and change information on this site.
       </message>
-      <message name="IDS_EXTENSIONS_MENU_WANTS_TO_ACCESS_SITE_DATA" desc="Header for section of extensions that want to access the current site's data">
+      <message name="IDS_EXTENSIONS_MENU_WANTS_TO_ACCESS_SITE_DATA_SHORT" desc="Header for section of extensions that want to access the current site's data">
+        Access requested
+      </message>
+      <message name="IDS_EXTENSIONS_MENU_WANTS_TO_ACCESS_SITE_DATA" desc="Longer explanation for section of extensions that want to access the current site's data">
         To give an extension access to this site, click it.
       </message>
-      <message name="IDS_EXTENSIONS_MENU_CANT_ACCESS_SITE_DATA" desc="Header for section of extensions that can't access the current site's data">
+      <message name="IDS_EXTENSIONS_MENU_CANT_ACCESS_SITE_DATA_SHORT" desc="Header for section of extensions that can't access the current site's data">
+        No access needed
+      </message>
+      <message name="IDS_EXTENSIONS_MENU_CANT_ACCESS_SITE_DATA" desc="Longer explanation for section of extensions that can't access the current site's data">
         These extensions don't need to see and change information on this site.
       </message>
 

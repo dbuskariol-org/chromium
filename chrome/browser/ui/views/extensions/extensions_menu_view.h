@@ -129,7 +129,10 @@ class ExtensionsMenuView : public views::BubbleDialogDelegateView,
     views::View* menu_items;
 
     // The id of the string to use for the section heading.
-    const int label_string_id;
+    const int header_string_id;
+
+    // The id of the string to use for the longer description of the section.
+    const int description_string_id;
 
     // The PageInteractionStatus that this section is handling.
     const ToolbarActionViewController::PageInteractionStatus page_status;

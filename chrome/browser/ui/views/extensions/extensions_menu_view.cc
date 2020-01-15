@@ -77,12 +77,17 @@ ExtensionsMenuView::ExtensionsMenuView(
       toolbar_model_(ToolbarActionsModel::Get(browser_->profile())),
       toolbar_model_observer_(this),
       button_listener_(browser_),
-      cant_access_{nullptr, nullptr, IDS_EXTENSIONS_MENU_CANT_ACCESS_SITE_DATA,
+      cant_access_{nullptr, nullptr,
+                   IDS_EXTENSIONS_MENU_CANT_ACCESS_SITE_DATA_SHORT,
+                   IDS_EXTENSIONS_MENU_CANT_ACCESS_SITE_DATA,
                    ToolbarActionViewController::PageInteractionStatus::kNone},
       wants_access_{
-          nullptr, nullptr, IDS_EXTENSIONS_MENU_WANTS_TO_ACCESS_SITE_DATA,
+          nullptr, nullptr, IDS_EXTENSIONS_MENU_WANTS_TO_ACCESS_SITE_DATA_SHORT,
+          IDS_EXTENSIONS_MENU_WANTS_TO_ACCESS_SITE_DATA,
           ToolbarActionViewController::PageInteractionStatus::kPending},
-      has_access_{nullptr, nullptr, IDS_EXTENSIONS_MENU_ACCESSING_SITE_DATA,
+      has_access_{nullptr, nullptr,
+                  IDS_EXTENSIONS_MENU_ACCESSING_SITE_DATA_SHORT,
+                  IDS_EXTENSIONS_MENU_ACCESSING_SITE_DATA,
                   ToolbarActionViewController::PageInteractionStatus::kActive} {
   toolbar_model_observer_.Add(toolbar_model_);
   browser_->tab_strip_model()->AddObserver(this);
@@ -178,25 +183,35 @@ ExtensionsMenuView::CreateExtensionButtonsContainer() {
         container->SetLayoutManager(std::make_unique<views::BoxLayout>(
             views::BoxLayout::Orientation::kVertical));
 
-        // Add a label as header for non-empty groups of items.
-        auto label = std::make_unique<views::Label>(
-            l10n_util::GetStringUTF16(section->label_string_id),
-            ChromeTextContext::CONTEXT_BODY_TEXT_LARGE,
-            views::style::STYLE_SECONDARY);
-        label->SetMultiLine(true);
-        label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
         const int horizontal_spacing =
             ChromeLayoutProvider::Get()->GetDistanceMetric(
                 views::DISTANCE_BUTTON_HORIZONTAL_PADDING);
-        label->SetBorder(views::CreateEmptyBorder(
+
+        // Add an emphasized short header explaining the section.
+        auto header = std::make_unique<views::Label>(
+            l10n_util::GetStringUTF16(section->header_string_id),
+            ChromeTextContext::CONTEXT_BODY_TEXT_SMALL,
+            ChromeTextStyle::STYLE_EMPHASIZED_SECONDARY);
+        header->SetHorizontalAlignment(gfx::ALIGN_LEFT);
+        header->SetBorder(views::CreateEmptyBorder(
             ChromeLayoutProvider::Get()->GetDistanceMetric(
                 DISTANCE_CONTROL_LIST_VERTICAL),
-            horizontal_spacing,
+            horizontal_spacing, 0, horizontal_spacing));
+        container->AddChildView(std::move(header));
+
+        // Add longer text that explains the section in more detail.
+        auto description = std::make_unique<views::Label>(
+            l10n_util::GetStringUTF16(section->description_string_id),
+            ChromeTextContext::CONTEXT_BODY_TEXT_SMALL,
+            views::style::STYLE_SECONDARY);
+        description->SetMultiLine(true);
+        description->SetHorizontalAlignment(gfx::ALIGN_LEFT);
+        description->SetBorder(views::CreateEmptyBorder(
+            0, horizontal_spacing,
             ChromeLayoutProvider::Get()->GetDistanceMetric(
                 DISTANCE_RELATED_CONTROL_VERTICAL_SMALL),
             horizontal_spacing));
-
-        container->AddChildView(std::move(label));
+        container->AddChildView(std::move(description));
 
         // Add a (currently empty) section for the menu items of the section.
         auto menu_items = std::make_unique<views::View>();
