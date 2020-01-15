@@ -2112,7 +2112,7 @@
                     "name": "EnabledNTP79",
                     "params": {
                         "en_site_id": "ty52vxwjrabfvhusawtrmkmx6m",
-                        "probability": "0.2",
+                        "probability": "0.4",
                         "survey": "satisfaction"
                     },
                     "enable_features": [
