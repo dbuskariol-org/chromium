@@ -40,10 +40,10 @@ void WebApkIconHasher::DownloadAndComputeMurmur2Hash(
     network::mojom::URLLoaderFactory* url_loader_factory,
     const url::Origin& request_initiator,
     const GURL& icon_url,
-    const Murmur2HashCallback& callback) {
+    Murmur2HashCallback callback) {
   DownloadAndComputeMurmur2HashWithTimeout(
       url_loader_factory, request_initiator, icon_url,
-      kDownloadTimeoutInMilliseconds, callback);
+      kDownloadTimeoutInMilliseconds, std::move(callback));
 }
 
 // static
@@ -52,10 +52,10 @@ void WebApkIconHasher::DownloadAndComputeMurmur2HashWithTimeout(
     const url::Origin& request_initiator,
     const GURL& icon_url,
     int timeout_ms,
-    const Murmur2HashCallback& callback) {
+    Murmur2HashCallback callback) {
   if (!icon_url.is_valid()) {
-    base::ThreadTaskRunnerHandle::Get()->PostTask(FROM_HERE,
-                                                  base::BindOnce(callback, ""));
+    base::ThreadTaskRunnerHandle::Get()->PostTask(
+        FROM_HERE, base::BindOnce(std::move(callback), ""));
     return;
   }
 
@@ -67,13 +67,13 @@ void WebApkIconHasher::DownloadAndComputeMurmur2HashWithTimeout(
       hash = ComputeMurmur2Hash(data);
     }
     base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(callback, hash));
+        FROM_HERE, base::BindOnce(std::move(callback), hash));
     return;
   }
 
   // The icon hasher will delete itself when it is done.
   new WebApkIconHasher(url_loader_factory, request_initiator, icon_url,
-                       timeout_ms, callback);
+                       timeout_ms, std::move(callback));
 }
 
 WebApkIconHasher::WebApkIconHasher(
@@ -81,8 +81,8 @@ WebApkIconHasher::WebApkIconHasher(
     const url::Origin& request_initiator,
     const GURL& icon_url,
     int timeout_ms,
-    const Murmur2HashCallback& callback)
-    : callback_(callback) {
+    Murmur2HashCallback callback)
+    : callback_(std::move(callback)) {
   DCHECK(url_loader_factory);
 
   download_timeout_timer_.Start(
@@ -128,6 +128,6 @@ void WebApkIconHasher::OnDownloadTimedOut() {
 }
 
 void WebApkIconHasher::RunCallback(const std::string& icon_murmur2_hash) {
-  callback_.Run(icon_murmur2_hash);
+  std::move(callback_).Run(icon_murmur2_hash);
   delete this;
 }
