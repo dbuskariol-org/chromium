@@ -99,6 +99,12 @@ void TapOnWebElementWithID(const std::string& elementID) {
 
 // Tests that when the keyboard actually dismiss the right callback is done.
 - (void)testKeyboardHideState {
+// TODO(crbug.com/1041878): Re-enable this test.
+#if !TARGET_IPHONE_SIMULATOR
+  if (base::ios::IsRunningOnOrLater(12, 4, 1)) {
+    EARL_GREY_TEST_SKIPPED(@"Test fails iPhone iOS12");
+  }
+#endif  // TARGET_IPHONE_SIMULATOR
   // Opening the keyboard from a webview blocks EarlGrey's synchronization.
   ScopedSynchronizationDisabler disabler;
 
