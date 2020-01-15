@@ -23,8 +23,9 @@
 }
 
 - (void)modalInfobarButtonWasAccepted:(id)infobarModal {
-  [self dispatchResponseAndStopOverlay:OverlayResponse::CreateWithInfo<
-                                           InfobarModalMainActionResponse>()];
+  [self dispatchResponse:OverlayResponse::CreateWithInfo<
+                             InfobarModalMainActionResponse>()];
+  [self dismissOverlay];
 }
 
 - (void)modalInfobarWasDismissed:(id)infobarModal {

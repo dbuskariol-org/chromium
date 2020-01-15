@@ -55,10 +55,12 @@
 
 @implementation OverlayRequestMediator (Subclassing)
 
-- (void)dispatchResponseAndStopOverlay:
-    (std::unique_ptr<OverlayResponse>)response {
+- (void)dispatchResponse:(std::unique_ptr<OverlayResponse>)response {
   if (self.request)
     self.request->GetCallbackManager()->DispatchResponse(std::move(response));
+}
+
+- (void)dismissOverlay {
   [self.delegate stopOverlayForMediator:self];
 }
 

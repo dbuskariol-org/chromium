@@ -45,27 +45,27 @@
 - (void)bannerInfobarButtonWasPressed:(UIButton*)sender {
   // Notify the model layer to perform the infobar's main action before
   // dismissing the banner.
-  [self dispatchResponseAndStopOverlay:OverlayResponse::CreateWithInfo<
-                                           InfobarBannerMainActionResponse>()];
+  [self dispatchResponse:OverlayResponse::CreateWithInfo<
+                             InfobarBannerMainActionResponse>()];
+  [self dismissOverlay];
 }
 
 - (void)dismissInfobarBannerForUserInteraction:(BOOL)userInitiated {
   if (userInitiated) {
     // Notify the model layer of user-initiated banner dismissal before
     // dismissing the banner.
-    [self dispatchResponseAndStopOverlay:
-              OverlayResponse::CreateWithInfo<
-                  InfobarBannerUserInitiatedDismissalResponse>()];
-  } else {
-    [self.delegate stopOverlayForMediator:self];
+    [self dispatchResponse:OverlayResponse::CreateWithInfo<
+                               InfobarBannerUserInitiatedDismissalResponse>()];
   }
+  [self dismissOverlay];
 }
 
 - (void)presentInfobarModalFromBanner {
   // Notify the model layer to show the infobar modal before dismissing the
   // banner.
-  [self dispatchResponseAndStopOverlay:OverlayResponse::CreateWithInfo<
-                                           InfobarBannerShowModalResponse>()];
+  [self dispatchResponse:OverlayResponse::CreateWithInfo<
+                             InfobarBannerShowModalResponse>()];
+  [self dismissOverlay];
 }
 
 - (void)infobarBannerWasDismissed {

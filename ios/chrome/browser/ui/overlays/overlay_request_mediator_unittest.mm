@@ -39,9 +39,8 @@ TEST_F(OverlayRequestMediatorTest, ResetRequestAfterDestruction) {
   EXPECT_EQ(nullptr, mediator.request);
 }
 
-// Tests that the |-dispatchResponseAndStopOverlay:| correctly dispatches the
-// response and stops the overlay.
-TEST_F(OverlayRequestMediatorTest, DispatchResponseAndStopOverlay) {
+// Tests that |-dispatchResponse:| correctly dispatches the response.
+TEST_F(OverlayRequestMediatorTest, DispatchResponse) {
   std::unique_ptr<OverlayRequest> request =
       OverlayRequest::CreateWithConfig<FakeOverlayUserData>();
   // Add a dispatch callback that sets |dispatch_callback_executed| to true
@@ -58,13 +57,24 @@ TEST_F(OverlayRequestMediatorTest, DispatchResponseAndStopOverlay) {
                               DispatchInfo::ResponseSupport()));
   OverlayRequestMediator* mediator =
       [[OverlayRequestMediator alloc] initWithRequest:request.get()];
+  // Dispatch the response and verify |dipatch_callback_executed|.
+  [mediator dispatchResponse:std::move(dispatched_response)];
+
+  EXPECT_TRUE(dispatch_callback_executed);
+}
+
+// Tests that |-dismissOverlay| stops the overlay.
+TEST_F(OverlayRequestMediatorTest, DismissOverlay) {
+  std::unique_ptr<OverlayRequest> request =
+      OverlayRequest::CreateWithConfig<FakeOverlayUserData>();
+  OverlayRequestMediator* mediator =
+      [[OverlayRequestMediator alloc] initWithRequest:request.get()];
   id<OverlayRequestMediatorDelegate> delegate =
       OCMStrictProtocolMock(@protocol(OverlayRequestMediatorDelegate));
   mediator.delegate = delegate;
   OCMExpect([delegate stopOverlayForMediator:mediator]);
 
-  [mediator dispatchResponseAndStopOverlay:std::move(dispatched_response)];
+  [mediator dismissOverlay];
 
-  EXPECT_TRUE(dispatch_callback_executed);
   EXPECT_OCMOCK_VERIFY(delegate);
 }
