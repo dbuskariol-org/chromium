@@ -160,7 +160,7 @@ HRESULT FakeOSUserManager::AddUser(const wchar_t* username,
     *error = 0;
 
   if (should_fail_user_creation_)
-    return E_FAIL;
+    return fail_user_creation_hr_;
 
   // Username or password cannot be empty.
   if (username == nullptr || !username[0] || password == nullptr ||

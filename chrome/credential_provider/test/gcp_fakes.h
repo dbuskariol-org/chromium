@@ -123,6 +123,10 @@ class FakeOSUserManager : public OSUserManager {
     should_fail_user_creation_ = should_fail;
   }
 
+  void SetShouldUserCreationFailureReason(HRESULT hr) {
+    fail_user_creation_hr_ = hr;
+  }
+
   void SetIsDeviceDomainJoined(bool is_device_domain_joined) {
     is_device_domain_joined_ = is_device_domain_joined;
   }
@@ -196,6 +200,7 @@ class FakeOSUserManager : public OSUserManager {
   bool is_device_domain_joined_ = false;
   bool fail_change_password_ = false;
   HRESULT failed_change_password_hr_ = E_FAIL;
+  HRESULT fail_user_creation_hr_ = E_FAIL;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

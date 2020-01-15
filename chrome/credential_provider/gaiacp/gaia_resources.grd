@@ -199,6 +199,9 @@
       <message name="IDS_INVALID_AD_UPN" desc="">
         No Domain user could be found for your account. Please contact your administrator.
       </message>
+      <message name="IDS_CREATE_USER_PASSWORD_TOO_SHORT" desc="">
+        Account password is too short. Please contact your administrator.
+      </message>
     </messages>
   </release>
 </grit>

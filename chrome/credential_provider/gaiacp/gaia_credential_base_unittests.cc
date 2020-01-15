@@ -605,6 +605,24 @@ TEST_F(GcpGaiaCredentialBaseTest, FailedUserCreation) {
   ASSERT_EQ(S_OK, FinishLogonProcess(false, false, IDS_INTERNAL_ERROR_BASE));
 }
 
+TEST_F(GcpGaiaCredentialBaseTest, FailedUserCreation_PasswordTooShort) {
+  // Create provider and start logon.
+  Microsoft::WRL::ComPtr<ICredentialProviderCredential> cred;
+
+  ASSERT_EQ(S_OK, InitializeProviderAndGetCredential(0, &cred));
+
+  // Fail user creation.
+  fake_os_user_manager()->SetShouldFailUserCreation(true);
+  fake_os_user_manager()->SetShouldUserCreationFailureReason(
+      HRESULT_FROM_WIN32(NERR_PasswordTooShort));
+
+  ASSERT_EQ(S_OK, StartLogonProcessAndWait());
+
+  // Logon process should fail with an internal error.
+  ASSERT_EQ(S_OK, FinishLogonProcess(false, false,
+                                     IDS_CREATE_USER_PASSWORD_TOO_SHORT_BASE));
+}
+
 TEST_F(GcpGaiaCredentialBaseTest, FailOnInvalidDomain) {
   const base::string16 allowed_email_domains =
       L"acme.com,acme2.com,acme3.com";

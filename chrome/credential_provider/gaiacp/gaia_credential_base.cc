@@ -2255,6 +2255,10 @@ HRESULT CGaiaCredentialBase::ValidateOrCreateUser(const base::Value& result,
                  << "'. Maximum attempts reached.";
     *error_text = AllocErrorString(IDS_INTERNAL_ERROR_BASE);
     return hr;
+  } else if (hr == HRESULT_FROM_WIN32(NERR_PasswordTooShort)) {
+    LOGFN(ERROR) << "Password being used is too short as per the group "
+                 << "policies set by your IT admin on this device.";
+    *error_text = AllocErrorString(IDS_CREATE_USER_PASSWORD_TOO_SHORT_BASE);
   } else if (FAILED(hr)) {
     LOGFN(ERROR) << "Failed to create user '" << found_domain << "\\"
                  << found_username << "'. hr=" << putHR(hr);
