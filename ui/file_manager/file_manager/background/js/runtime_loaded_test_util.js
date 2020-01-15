@@ -287,6 +287,37 @@ test.util.sync.getActiveElement = (contentWindow, opt_styleNames) => {
 };
 
 /**
+ * Gets the information of the active element. However, unlike the previous
+ * helper, the shadow roots are searched as well.
+ *
+ * @param {Window} contentWindow Window to be tested.
+ * @param {Array<string>=} opt_styleNames List of CSS property name to be
+ *     obtained.
+ * @return {?{attributes:Object<string>, text:string,
+ *                  styles:(Object<string>|undefined), hidden:boolean}} Element
+ *     information that contains contentText, attribute names and
+ *     values, hidden attribute, and style names and values. If there is no
+ *     active element, returns null.
+ */
+test.util.sync.findActiveElement = (contentWindow, opt_styleNames) => {
+  if (!contentWindow.document || !contentWindow.document.activeElement) {
+    return null;
+  }
+
+  let activeElement = contentWindow.document.activeElement;
+  while (true) {
+    const shadow = activeElement.shadowRoot;
+    if (shadow && shadow.activeElement) {
+      activeElement = shadow.activeElement;
+    } else {
+      break;
+    }
+  }
+
+  return extractElementInfo(activeElement, contentWindow, opt_styleNames);
+};
+
+/**
  * Assigns the text to the input element.
  * @param {Window} contentWindow Window to be tested.
  * @param {string|!Array<string>} query Query for the input element.
