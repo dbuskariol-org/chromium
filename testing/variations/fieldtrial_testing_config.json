@@ -3177,8 +3177,8 @@
                 {
                     "name": "WideRange",
                     "params": {
-                        "RatioLowerBound": "0.1",
-                        "RatioUpperBound": "0.2"
+                        "IncognitoQuotaRatioLowerBound": "0.1",
+                        "IncognitoQuotaRatioUpperBound": "0.2"
                     },
                     "enable_features": [
                         "IncognitoDynamicQuota"
