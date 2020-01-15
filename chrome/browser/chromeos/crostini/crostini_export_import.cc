@@ -106,9 +106,16 @@ CrostiniExportImport::OperationData* CrostiniExportImport::NewOperationData(
 CrostiniExportImport::OperationData* CrostiniExportImport::NewOperationData(
     ExportImportType type,
     ContainerId container_id) {
-  TrackerFactory factory =
-      base::BindOnce(&CrostiniExportImportNotificationController::Create,
-                     profile_, container_id, GetUniqueNotificationId());
+  TrackerFactory factory = base::BindOnce(
+      [](Profile* profile, ContainerId container_id,
+         std::string notification_id, ExportImportType type,
+         base::FilePath path)
+          -> std::unique_ptr<CrostiniExportImportStatusTracker> {
+        return std::make_unique<CrostiniExportImportNotificationController>(
+            profile, type, std::move(notification_id), std::move(path),
+            std::move(container_id));
+      },
+      profile_, container_id, GetUniqueNotificationId());
   return NewOperationData(type, std::move(container_id), std::move(factory));
 }
 
@@ -205,8 +212,8 @@ void CrostiniExportImport::Start(
     return std::move(callback).Run(CrostiniResult::NOT_ALLOWED);
   }
 
-  auto* status_tracker = std::move(operation_data->tracker_factory)
-                             .Run(operation_data->type, path);
+  auto status_tracker = std::move(operation_data->tracker_factory)
+                            .Run(operation_data->type, path);
 
   auto it = status_trackers_.find(operation_data->container_id);
   if (it != status_trackers_.end()) {
@@ -218,7 +225,7 @@ void CrostiniExportImport::Start(
     return;
   } else {
     status_trackers_.emplace_hint(it, operation_data->container_id,
-                                  status_tracker);
+                                  std::move(status_tracker));
     for (auto& observer : observers_) {
       observer.OnCrostiniExportImportOperationStatusChanged(true);
     }
@@ -268,7 +275,7 @@ void CrostiniExportImport::ExportAfterSharing(
                << failure_reason;
     auto it = status_trackers_.find(container_id);
     if (it != status_trackers_.end()) {
-      RemoveTracker(it).SetStatusFailed();
+      RemoveTracker(it)->SetStatusFailed();
     } else {
       NOTREACHED() << container_id << " has no status_tracker to update";
     }
@@ -306,7 +313,7 @@ void CrostiniExportImport::OnExportComplete(
                         base::TaskPriority::BEST_EFFORT},
                        base::BindOnce(base::IgnoreResult(&base::DeleteFile),
                                       it->second->path(), false));
-        RemoveTracker(it).SetStatusCancelled();
+        RemoveTracker(it)->SetStatusCancelled();
         break;
       }
       case CrostiniExportImportStatusTracker::Status::RUNNING:
@@ -324,7 +331,7 @@ void CrostiniExportImport::OnExportComplete(
               "Crostini.BackupSizeRatio",
               std::round(compressed_size * 100.0 / container_size));
         }
-        RemoveTracker(it).SetStatusDone();
+        RemoveTracker(it)->SetStatusDone();
         break;
       default:
         NOTREACHED();
@@ -340,7 +347,7 @@ void CrostiniExportImport::OnExportComplete(
                         base::TaskPriority::BEST_EFFORT},
                        base::BindOnce(base::IgnoreResult(&base::DeleteFile),
                                       it->second->path(), false));
-        RemoveTracker(it).SetStatusCancelled();
+        RemoveTracker(it)->SetStatusCancelled();
         break;
       }
       default:
@@ -370,7 +377,7 @@ void CrostiniExportImport::OnExportComplete(
                CrostiniExportImportStatusTracker::Status::RUNNING ||
            it->second->status() ==
                CrostiniExportImportStatusTracker::Status::CANCELLING);
-    RemoveTracker(it).SetStatusFailed();
+    RemoveTracker(it)->SetStatusFailed();
   }
   UMA_HISTOGRAM_ENUMERATION("Crostini.Backup", enum_hist_result);
   std::move(callback).Run(result);
@@ -431,7 +438,7 @@ void CrostiniExportImport::ImportAfterSharing(
                << failure_reason;
     auto it = status_trackers_.find(container_id);
     if (it != status_trackers_.end()) {
-      RemoveTracker(it).SetStatusFailed();
+      RemoveTracker(it)->SetStatusFailed();
     } else {
       NOTREACHED() << container_id << " has no status_tracker to update";
     }
@@ -465,7 +472,7 @@ void CrostiniExportImport::OnImportComplete(
           // natural to pretend the cancel did not happen, and instead display
           // success.
         case CrostiniExportImportStatusTracker::Status::CANCELLING:
-          RemoveTracker(it).SetStatusDone();
+          RemoveTracker(it)->SetStatusDone();
           break;
         default:
           NOTREACHED();
@@ -478,7 +485,7 @@ void CrostiniExportImport::OnImportComplete(
     if (it != status_trackers_.end()) {
       switch (it->second->status()) {
         case CrostiniExportImportStatusTracker::Status::CANCELLING:
-          RemoveTracker(it).SetStatusCancelled();
+          RemoveTracker(it)->SetStatusCancelled();
           break;
         default:
           NOTREACHED();
@@ -514,7 +521,7 @@ void CrostiniExportImport::OnImportComplete(
       if (it != status_trackers_.end()) {
         DCHECK(it->second->status() ==
                CrostiniExportImportStatusTracker::Status::RUNNING);
-        RemoveTracker(it).SetStatusFailed();
+        RemoveTracker(it)->SetStatusFailed();
       } else {
         NOTREACHED() << container_id << " has no status_tracker to update";
       }
@@ -558,12 +565,12 @@ void CrostiniExportImport::OnImportContainerProgress(
       break;
     // Failure, set error message.
     case ImportContainerProgressStatus::FAILURE_ARCHITECTURE:
-      RemoveTracker(it).SetStatusFailedArchitectureMismatch(
+      RemoveTracker(it)->SetStatusFailedArchitectureMismatch(
           architecture_container, architecture_device);
       break;
     case ImportContainerProgressStatus::FAILURE_SPACE:
       DCHECK_GE(minimum_required_space, available_space);
-      RemoveTracker(it).SetStatusFailedInsufficientSpace(
+      RemoveTracker(it)->SetStatusFailedInsufficientSpace(
           minimum_required_space - available_space);
       break;
     default:
@@ -576,10 +583,12 @@ std::string CrostiniExportImport::GetUniqueNotificationId() {
                             next_status_tracker_id_++);
 }
 
-CrostiniExportImportStatusTracker& CrostiniExportImport::RemoveTracker(
-    std::map<ContainerId, CrostiniExportImportStatusTracker*>::iterator it) {
+std::unique_ptr<CrostiniExportImportStatusTracker>
+CrostiniExportImport::RemoveTracker(
+    std::map<ContainerId,
+             std::unique_ptr<CrostiniExportImportStatusTracker>>::iterator it) {
   DCHECK(it != status_trackers_.end());
-  auto& status_tracker = *it->second;
+  auto status_tracker = std::move(it->second);
   status_trackers_.erase(it);
   for (auto& observer : observers_) {
     observer.OnCrostiniExportImportOperationStatusChanged(false);
@@ -623,7 +632,8 @@ CrostiniExportImport::GetNotificationControllerForTesting(
   if (it == status_trackers_.end()) {
     return nullptr;
   }
-  return static_cast<CrostiniExportImportNotificationController*>(it->second)
+  return static_cast<CrostiniExportImportNotificationController*>(
+             it->second.get())
       ->GetWeakPtr();
 }
 

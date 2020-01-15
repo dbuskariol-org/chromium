@@ -68,9 +68,8 @@ class CrostiniExportImport : public KeyedService,
         bool in_progress) = 0;
   };
 
-  using TrackerFactory =
-      base::OnceCallback<CrostiniExportImportStatusTracker*(ExportImportType,
-                                                            base::FilePath)>;
+  using TrackerFactory = base::OnceCallback<std::unique_ptr<
+      CrostiniExportImportStatusTracker>(ExportImportType, base::FilePath)>;
 
   struct OperationData {
     OperationData(ExportImportType type,
@@ -201,12 +200,15 @@ class CrostiniExportImport : public KeyedService,
 
   std::string GetUniqueNotificationId();
 
-  CrostiniExportImportStatusTracker& RemoveTracker(
-      std::map<ContainerId, CrostiniExportImportStatusTracker*>::iterator it);
+  std::unique_ptr<CrostiniExportImportStatusTracker> RemoveTracker(
+      std::map<ContainerId,
+               std::unique_ptr<CrostiniExportImportStatusTracker>>::iterator
+          it);
 
   Profile* profile_;
   scoped_refptr<ui::SelectFileDialog> select_folder_dialog_;
-  std::map<ContainerId, CrostiniExportImportStatusTracker*> status_trackers_;
+  std::map<ContainerId, std::unique_ptr<CrostiniExportImportStatusTracker>>
+      status_trackers_;
   // |operation_data_storage_| persists the data required to complete an
   // operation while the file selection dialog is open/operation is in progress.
   std::unordered_map<OperationData*, std::unique_ptr<OperationData>>
