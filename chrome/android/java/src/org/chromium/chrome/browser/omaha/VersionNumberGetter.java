@@ -97,11 +97,11 @@ public class VersionNumberGetter {
      * @return Whether the current Android OS version is supported.
      */
     public static boolean isCurrentOsVersionSupported() {
-        // By default, only Android KitKat and above is supported.
-        int oldestSupportedVersion = Build.VERSION_CODES.KITKAT;
+        // By default, only Android Lollipop and above is supported.
+        int oldestSupportedVersion = Build.VERSION_CODES.LOLLIPOP;
 
-        if (ChromeFeatureList.isEnabled(ChromeFeatureList.JELLY_BEAN_SUPPORTED)) {
-            oldestSupportedVersion = Build.VERSION_CODES.JELLY_BEAN;
+        if (ChromeFeatureList.isEnabled(ChromeFeatureList.KITKAT_SUPPORTED)) {
+            oldestSupportedVersion = Build.VERSION_CODES.KITKAT;
         }
         return Build.VERSION.SDK_INT >= oldestSupportedVersion;
     }

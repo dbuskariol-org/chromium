@@ -160,7 +160,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kImmersiveUiMode,
     &kInlineUpdateFlow,
     &kIntentBlockExternalFormRedirectsNoGesture,
-    &kJellyBeanSupported,
+    &kKitKatSupported,
     &kNewPhotoPicker,
     &kNotificationSuspender,
     &kNTPLaunchAfterInactivity,
@@ -478,8 +478,8 @@ const base::Feature kIntentBlockExternalFormRedirectsNoGesture{
     "IntentBlockExternalFormRedirectsNoGesture",
     base::FEATURE_DISABLED_BY_DEFAULT};
 
-const base::Feature kJellyBeanSupported{"JellyBeanSupported",
-                                        base::FEATURE_DISABLED_BY_DEFAULT};
+const base::Feature kKitKatSupported{"KitKatSupported",
+                                     base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kSearchEnginePromoExistingDevice{
     "SearchEnginePromo.ExistingDevice", base::FEATURE_ENABLED_BY_DEFAULT};
