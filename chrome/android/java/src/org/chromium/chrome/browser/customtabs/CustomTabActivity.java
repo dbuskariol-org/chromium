@@ -78,17 +78,6 @@ public class CustomTabActivity extends BaseCustomTabActivity<CustomTabActivityCo
 
     private CustomTabNightModeStateController mNightModeStateController;
 
-    /**
-     * Return true when the activity has been launched in a separate task. The default behavior is
-     * to reuse the same task and put the activity on top of the previous one (i.e hiding it). A
-     * separate task creates a new entry in the Android recent screen.
-     **/
-    private boolean useSeparateTask() {
-        final int separateTaskFlags =
-                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-        return (getIntent().getFlags() & separateTaskFlags) != 0;
-    }
-
     private CustomTabActivityTabProvider.Observer mTabChangeObserver =
             new CustomTabActivityTabProvider.Observer() {
         @Override
@@ -271,43 +260,6 @@ public class CustomTabActivity extends BaseCustomTabActivity<CustomTabActivityCo
     public String getPackageName() {
         if (mShouldOverridePackage) return mIntentDataProvider.getClientPackageName();
         return super.getPackageName();
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        if (mIntentDataProvider != null && mIntentDataProvider.shouldAnimateOnFinish()) {
-            mShouldOverridePackage = true;
-            overridePendingTransition(mIntentDataProvider.getAnimationEnterRes(),
-                    mIntentDataProvider.getAnimationExitRes());
-            mShouldOverridePackage = false;
-        } else if (mIntentDataProvider != null && mIntentDataProvider.isOpenedByChrome()) {
-            overridePendingTransition(R.anim.no_anim, R.anim.activity_close_exit);
-        }
-    }
-
-    /**
-     * Internal implementation that finishes the activity and removes the references from Android
-     * recents.
-     */
-    protected void handleFinishAndClose() {
-        Runnable defaultBehavior = () -> {
-            if (useSeparateTask()) {
-                ApiCompatibilityUtils.finishAndRemoveTask(this);
-            } else {
-                finish();
-            }
-        };
-        if (mIntentDataProvider.isTrustedWebActivity()) {
-            // TODO(pshmakov): extract all finishing logic from CustomTabActivity.
-            // In addition to TwaFinishHandler, create DefaultFinishHandler, PaymentsFinishHandler,
-            // and SeparateTaskActivityFinishHandler, all implementing
-            // CustomTabActivityNavigationController#FinishHandler. Pass the mode enum into
-            // CustomTabActivityModule, so that it can provide the correct implementation.
-            getComponent().resolveTwaFinishHandler().onFinish(defaultBehavior);
-        } else {
-            defaultBehavior.run();
-        }
     }
 
     @Override

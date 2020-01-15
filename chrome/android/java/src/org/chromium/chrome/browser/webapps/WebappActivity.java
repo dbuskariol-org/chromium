@@ -561,16 +561,7 @@ public class WebappActivity extends BaseCustomTabActivity<WebappActivityComponen
                         if (getActivityTab().canGoBack()) {
                             getActivityTab().goBack();
                         } else {
-                            if (mWebappInfo.isSplashProvidedByWebApk()) {
-                                // We need to call into WebAPK to finish activity stack because:
-                                // 1) WebApkActivity is not the root of the task.
-                                // 2) The activity stack no longer has focus and thus cannot rely on
-                                //    the client's Activity#onResume() behaviour.
-                                WebApkServiceClient.getInstance().finishAndRemoveTaskSdk23(
-                                        (WebApkActivity) WebappActivity.this);
-                            } else {
-                                ApiCompatibilityUtils.finishAndRemoveTask(WebappActivity.this);
-                            }
+                            handleFinishAndClose();
                         }
                     }
                 }, MS_BEFORE_NAVIGATING_BACK_FROM_INTERSTITIAL);
@@ -697,14 +688,6 @@ public class WebappActivity extends BaseCustomTabActivity<WebappActivityComponen
         }
         ScreenOrientationProvider.getInstance().lockOrientation(
                 getWindowAndroid(), (byte) mWebappInfo.orientation());
-    }
-
-    /**
-     * Handles finishing activity on behalf of {@link CustomTabNavigationController}.
-     * Overridden by {@link WebApkActivity}.
-     */
-    protected void handleFinishAndClose() {
-        finish();
     }
 
     protected boolean isSplashShowing() {

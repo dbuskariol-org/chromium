@@ -189,21 +189,6 @@ public class WebApkActivity extends WebappActivity {
     }
 
     @Override
-    protected void handleFinishAndClose() {
-        if (getWebApkInfo().isSplashProvidedByWebApk() && isSplashShowing()) {
-            // When the WebAPK provides the splash screen, the splash screen activity is stacked
-            // underneath the WebAPK. The splash screen finishes itself in
-            // {@link Activity#onResume()}. When finishing the WebApkActivity, there is sometimes a
-            // frame of the splash screen drawn prior to the splash screen activity finishing
-            // itself. There are no glitches when the activity stack is finished via
-            // {@link ActivityManager.AppTask#finishAndRemoveTask()}.
-            WebApkServiceClient.getInstance().finishAndRemoveTaskSdk23(this);
-            return;
-        }
-        finish();
-    }
-
-    @Override
     @ActivityType
     public int getActivityType() {
         return ActivityType.WEB_APK;
