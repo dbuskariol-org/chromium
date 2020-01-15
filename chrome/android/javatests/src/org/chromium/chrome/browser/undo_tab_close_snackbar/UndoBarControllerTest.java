@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.snackbar.undo;
+package org.chromium.chrome.browser.undo_tab_close_snackbar;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SmallTest;
@@ -137,13 +137,15 @@ public class UndoBarControllerTest {
 
     private void clickSnackbar() {
         TestThreadUtils.runOnUiThreadBlocking(
-                () -> mSnackbarManager.onClick(mActivityTestRule.getActivity().findViewById(
+                ()
+                        -> mSnackbarManager.onClick(mActivityTestRule.getActivity().findViewById(
                                 R.id.snackbar_button)));
     }
 
     private void dismissSnackbars() {
         TestThreadUtils.runOnUiThreadBlocking(
-                () -> mSnackbarManager.dismissSnackbars(
+                ()
+                        -> mSnackbarManager.dismissSnackbars(
                                 mSnackbarManager.getCurrentSnackbarForTesting().getController()));
     }
 
