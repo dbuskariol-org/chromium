@@ -167,8 +167,6 @@ class MostVisitedElement extends PolymerElement {
     this.callbackRouter_ = callbackRouter;
     /** @private {newTabPage.mojom.PageHandlerRemote} */
     this.pageHandler_ = handler;
-    /** @private {?Debouncer} */
-    this.resizeDebouncer_ = null;
     /** @private {?number} */
     this.setMostVisitedInfoListenerId_ = null;
     /** @private {number} */

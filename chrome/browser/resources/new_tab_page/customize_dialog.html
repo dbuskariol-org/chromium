@@ -4,6 +4,7 @@
   }
 
   div[slot=body] {
+    color: var(--cr-primary-text-color);
     display: flex;
     flex-direction: row;
     min-height: 423px;
@@ -105,9 +106,7 @@
       <!-- TODO(crbug.com/1032328): Add support for selecting background
            image. -->
       <div page-name="backgrounds">backgrounds</div>
-      <!-- TODO(crbug.com/1032333): Add support for selecting shortcuts vs most
-           visited. -->
-      <div page-name="shortcuts">shortcuts</div>
+      <ntp-customize-shortcuts page-name="shortcuts"></ntp-customize-shortcuts>
       <ntp-customize-themes page-name="themes" theme="[[theme]]">
       </ntp-customize-themes>
     </iron-pages>

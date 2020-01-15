@@ -105,6 +105,26 @@ void NewTabPageHandler::ReorderMostVisitedTile(const GURL& url,
   instant_service_->ReorderCustomLink(url, new_pos);
 }
 
+void NewTabPageHandler::SetMostVisitedSettings(bool custom_links_enabled,
+                                               bool visible) {
+  auto pair = instant_service_->GetCurrentShortcutSettings();
+  // The first of the pair is true if most-visited tiles are being used.
+  bool old_custom_links_enabled = !pair.first;
+  bool old_visible = pair.second;
+  // |ToggleMostVisitedOrCustomLinks()| always notifies observers. Since we only
+  // want to notify once, we need to call |ToggleShortcutsVisibility()| with
+  // false if we are also going to call |ToggleMostVisitedOrCustomLinks()|.
+  bool toggleCustomLinksEnabled =
+      old_custom_links_enabled != custom_links_enabled;
+  if (old_visible != visible) {
+    instant_service_->ToggleShortcutsVisibility(
+        /* do_notify= */ !toggleCustomLinksEnabled);
+  }
+  if (toggleCustomLinksEnabled) {
+    instant_service_->ToggleMostVisitedOrCustomLinks();
+  }
+}
+
 void NewTabPageHandler::UndoMostVisitedTileAction() {
   if (instant_service_->IsCustomLinksEnabled()) {
     instant_service_->UndoCustomLinkAction();

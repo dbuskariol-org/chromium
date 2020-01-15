@@ -94,6 +94,8 @@ interface PageHandler {
   ReorderMostVisitedTile(url.mojom.Url url, uint8 new_pos);
   // Replaces the custom and most-visited tiles with the default tile set.
   RestoreMostVisitedDefaults();
+  // Set the visibility and whether custom links are enabled.
+  SetMostVisitedSettings(bool customLinksEnabled, bool visible);
   // Undoes the last action done to the tiles (add, delete, reorder, restore or
   // update). Note that only the last action can be undone.
   UndoMostVisitedTileAction();
