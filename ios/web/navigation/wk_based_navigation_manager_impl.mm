@@ -230,8 +230,17 @@ void WKBasedNavigationManagerImpl::AddPendingItem(
     NavigationItemImpl* current_item =
         GetNavigationItemFromWKItem(current_wk_item);
     if (!current_item) {
+      current_item = pending_item_.get();
       SetNavigationItemInWKItem(current_wk_item, std::move(pending_item_));
     }
+    if (user_agent_override_option == UserAgentOverrideOption::DESKTOP) {
+      current_item->SetUserAgentType(UserAgentType::DESKTOP,
+                                     /*update_inherited_user_agent =*/true);
+    } else if (user_agent_override_option == UserAgentOverrideOption::MOBILE) {
+      current_item->SetUserAgentType(UserAgentType::MOBILE,
+                                     /*update_inherited_user_agent =*/true);
+    }
+
     pending_item_.reset();
   }
 }

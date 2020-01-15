@@ -1574,10 +1574,7 @@ TEST_F(NavigationManagerTest, ReloadWithUserAgentType) {
 
   NavigationItem* pending_item =
       navigation_manager()->GetPendingItemInCurrentOrRestoredSession();
-  GURL reload_target_url;
-  ASSERT_TRUE(wk_navigation_util::ExtractTargetURL(pending_item->GetURL(),
-                                                   &reload_target_url));
-  EXPECT_EQ(url, reload_target_url);
+  EXPECT_EQ(url, pending_item->GetURL());
   EXPECT_EQ(virtual_url, pending_item->GetVirtualURL());
   EXPECT_EQ(UserAgentType::DESKTOP, pending_item->GetUserAgentType());
 }
@@ -1603,10 +1600,7 @@ TEST_F(NavigationManagerTest, ReloadWithUserAgentTypeOnIntenalUrl) {
 
   NavigationItem* pending_item =
       navigation_manager()->GetPendingItemInCurrentOrRestoredSession();
-  GURL reload_target_url;
-  ASSERT_TRUE(wk_navigation_util::ExtractTargetURL(pending_item->GetURL(),
-                                                   &reload_target_url));
-  EXPECT_EQ("http://www.1.com/", reload_target_url.spec());
+  EXPECT_EQ(url, pending_item->GetURL());
   EXPECT_EQ(virtual_url, pending_item->GetVirtualURL());
   EXPECT_EQ(UserAgentType::DESKTOP, pending_item->GetUserAgentType());
 }
