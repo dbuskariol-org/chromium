@@ -16,6 +16,7 @@
 #include "base/strings/string_piece.h"
 #include "base/strings/string_split.h"
 #include "base/strings/utf_string_conversions.h"
+#include "base/task/thread_pool/thread_pool_instance.h"
 #include "base/test/metrics/histogram_tester.h"
 #include "base/test/scoped_feature_list.h"
 #include "base/threading/thread_restrictions.h"
@@ -191,9 +192,11 @@ class ProfileNetworkContextServiceCacheSameBrowsertest
   base::HistogramTester histograms_;
 };
 
-// TODO(https://crbug.com/1041810): flaky
 IN_PROC_BROWSER_TEST_F(ProfileNetworkContextServiceCacheSameBrowsertest,
-                       DISABLED_TestCacheResetParameter) {
+                       TestCacheResetParameter) {
+  base::RunLoop().RunUntilIdle();
+  base::ThreadPoolInstance::Get()->FlushForTesting();
+
   // At this point, we have already called the initialization once on startup.
   // Verify that we have the correct values in the local_state.
   PrefService* local_state = g_browser_process->local_state();
@@ -228,9 +231,11 @@ class ProfileNetworkContextServiceCacheChangeBrowsertest
   base::HistogramTester histograms_;
 };
 
-// TODO(https://crbug.com/1041810): flaky
 IN_PROC_BROWSER_TEST_F(ProfileNetworkContextServiceCacheChangeBrowsertest,
-                       DISABLED_TestCacheResetParameter) {
+                       TestCacheResetParameter) {
+  base::RunLoop().RunUntilIdle();
+  base::ThreadPoolInstance::Get()->FlushForTesting();
+
   // At this point, we have already called the initialization once on startup.
   // Verify that we have the correct values in the local_state.
   PrefService* local_state = g_browser_process->local_state();
