@@ -306,6 +306,7 @@ PasswordPendingView::PasswordPendingView(content::WebContents* web_contents,
   }
 
   DialogDelegate::SetFootnoteView(CreateFooterView());
+  UpdateDialogButtons();
 }
 
 views::View* PasswordPendingView::GetUsernameTextfieldForTest() const {
