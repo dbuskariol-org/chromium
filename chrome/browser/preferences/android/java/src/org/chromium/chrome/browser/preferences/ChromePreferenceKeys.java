@@ -457,6 +457,9 @@ public final class ChromePreferenceKeys {
     public static final String SEARCH_ENGINE_CHOICE_REQUESTED_TIMESTAMP =
             "search_engine_choice_requested_timestamp";
 
+    public static final String SHARING_LAST_SHARED_CLASS_NAME = "last_shared_class_name";
+    public static final String SHARING_LAST_SHARED_PACKAGE_NAME = "last_shared_package_name";
+
     /**
      * Generic signin and sync promo preferences.
      */
@@ -728,6 +731,8 @@ public final class ChromePreferenceKeys {
                 SEARCH_ENGINE_CHOICE_DEFAULT_TYPE_BEFORE,
                 SEARCH_ENGINE_CHOICE_PRESENTED_VERSION,
                 SEARCH_ENGINE_CHOICE_REQUESTED_TIMESTAMP,
+                SHARING_LAST_SHARED_CLASS_NAME,
+                SHARING_LAST_SHARED_PACKAGE_NAME,
                 SIGNIN_AND_SYNC_PROMO_SHOW_COUNT,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_BOOKMARKS,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_SETTINGS,

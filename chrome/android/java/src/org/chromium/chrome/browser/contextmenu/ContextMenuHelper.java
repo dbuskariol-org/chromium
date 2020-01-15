@@ -243,7 +243,8 @@ public class ContextMenuHelper implements OnCreateContextMenuListener {
      */
     private void shareImageWithLastShareComponent() {
         retrieveImage((Uri imageUri) -> {
-            ShareHelper.shareImage(mWindow, ShareHelper.getLastShareComponentName(null), imageUri);
+            ShareHelper.shareImage(
+                    mWindow, ShareHelper.getLastShareByChromeComponentName(), imageUri);
         });
     }
 
