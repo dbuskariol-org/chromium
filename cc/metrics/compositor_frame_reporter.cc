@@ -164,7 +164,6 @@ CompositorFrameReporter::CompositorFrameReporter(
 }
 
 CompositorFrameReporter::~CompositorFrameReporter() {
-  latency_ukm_reporter_ = nullptr;
   TerminateReporter();
 }
 
@@ -353,9 +352,13 @@ void CompositorFrameReporter::ReportVizBreakdowns(
     CompositorFrameReporter::MissedFrameReportTypes report_type,
     base::TimeTicks start_time,
     FrameSequenceTrackerType frame_sequence_tracker_type) const {
-  // Check if viz_breakdown is set.
-  if (viz_breakdown_.received_compositor_frame_timestamp.is_null())
+  // Check if viz_breakdown is set. Testing indicates that sometimes the
+  // received_compositor_frame_timestamp can be earlier than the given
+  // start_time. Avoid reporting negative times.
+  if (viz_breakdown_.received_compositor_frame_timestamp.is_null() ||
+      viz_breakdown_.received_compositor_frame_timestamp < start_time) {
     return;
+  }
   base::TimeDelta submit_to_receive_compositor_frame_delta =
       viz_breakdown_.received_compositor_frame_timestamp - start_time;
   ReportHistogram(

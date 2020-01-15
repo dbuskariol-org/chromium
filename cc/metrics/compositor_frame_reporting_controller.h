@@ -99,17 +99,23 @@ class CC_EXPORT CompositorFrameReportingController {
   const bool is_single_threaded_;
   bool next_activate_has_invalidation_ = false;
 
-  // Mapping of frame token to pipeline reporter for submitted compositor
-  // frames.
-  base::circular_deque<SubmittedCompositorFrame> submitted_compositor_frames_;
-
   // The latency reporter passed to each CompositorFrameReporter. Owned here
   // because it must be common among all reporters.
+  // DO NOT reorder this line and the ones below. The latency_ukm_reporter_ must
+  // outlive the objects in stage_history_ and submitted_compositor_frames_.
   std::unique_ptr<LatencyUkmReporter> latency_ukm_reporter_;
+
+  // Mapping of frame token to pipeline reporter for submitted compositor
+  // frames.
+  // DO NOT reorder this line and the one above. The latency_ukm_reporter_ must
+  // outlive the objects in stage_history_ and submitted_compositor_frames_.
+  base::circular_deque<SubmittedCompositorFrame> submitted_compositor_frames_;
 
   // These keep track of stage durations for when a frame did not miss a
   // deadline. The history is used by reporter instances to determine if a
   // missed frame had a stage duration that was abnormally large.
+  // DO NOT reorder this line and the ones above. The latency_ukm_reporter_ must
+  // outlive the objects in stage_history_ and submitted_compositor_frames_.
   std::unique_ptr<RollingTimeDeltaHistory> stage_history_[static_cast<size_t>(
       CompositorFrameReporter::StageType::kStageTypeCount)];
 };
