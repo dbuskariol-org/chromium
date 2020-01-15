@@ -54549,6 +54549,11 @@ Called by update_net_trust_anchors.py.-->
   <int value="3" label="Audio and video"/>
 </enum>
 
+<enum name="RemoveCompromisedCredentialsReason">
+  <int value="0" label="Update - If the credentials was updated."/>
+  <int value="1" label="Remove - If the credentials was removed."/>
+</enum>
+
 <enum name="RendererSchedulerFrameOriginType">
   <int value="0" label="MainFrame"/>
   <int value="1" label="SameOriginFrame"/>
