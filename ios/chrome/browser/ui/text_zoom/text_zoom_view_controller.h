@@ -8,8 +8,17 @@
 #import <UIKit/UIKit.h>
 
 @protocol BrowserCommands;
+@class TextZoomViewController;
 
 @interface TextZoomViewController : UIViewController
+
+- (instancetype)initWithDarkAppearance:(BOOL)darkAppearance
+    NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString*)nibNameOrNil
+                         bundle:(NSBundle*)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder*)coder NS_UNAVAILABLE;
 
 @property(nonatomic, weak) id<BrowserCommands> commandHandler;
 

@@ -33,7 +33,10 @@
 #pragma mark - ChromeCoordinator
 
 - (void)start {
-  self.textZoomViewController = [[TextZoomViewController alloc] init];
+  DCHECK(self.browser);
+  DCHECK(self.browserState);
+  self.textZoomViewController = [[TextZoomViewController alloc]
+      initWithDarkAppearance:self.browserState->IsOffTheRecord()];
   self.textZoomViewController.commandHandler =
       HandlerForProtocol(self.browser->GetCommandDispatcher(), BrowserCommands);
 

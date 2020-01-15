@@ -27,9 +27,22 @@ source_set("text_zoom_ui") {
     "text_zoom_view_controller.mm",
   ]
   deps = [
+    ":constants",
+    "resources:text_zoom_zoom_in",
+    "resources:text_zoom_zoom_out",
     "//components/strings:components_strings",
+    "//ios/chrome/app/strings:ios_strings",
     "//ios/chrome/browser/ui/commands",
+    "//ios/chrome/common/colors",
     "//ui/base",
   ]
   configs += [ "//build/config/compiler:enable_arc" ]
+}
+
+source_set("constants") {
+  configs += [ "//build/config/compiler:enable_arc" ]
+  sources = [
+    "text_zoom_constants.h",
+    "text_zoom_constants.mm",
+  ]
 }
