@@ -244,8 +244,7 @@ TrustedTypePolicyFactory* LocalDOMWindow::trustedTypes() const {
   return trusted_types_.Get();
 }
 
-Document* LocalDOMWindow::CreateDocument(const String& mime_type,
-                                         const DocumentInit& init,
+Document* LocalDOMWindow::CreateDocument(const DocumentInit& init,
                                          bool force_xhtml) {
   Document* document = nullptr;
   if (force_xhtml) {
@@ -253,9 +252,7 @@ Document* LocalDOMWindow::CreateDocument(const String& mime_type,
     // XSLTProcessor::createDocumentFromSource().
     document = MakeGarbageCollected<Document>(init);
   } else {
-    document = DOMImplementation::createDocument(
-        mime_type, init,
-        init.GetFrame() ? init.GetFrame()->InViewSourceMode() : false);
+    document = DOMImplementation::createDocument(init);
   }
 
   return document;
@@ -266,14 +263,13 @@ LocalDOMWindow* LocalDOMWindow::From(const ScriptState* script_state) {
   return blink::ToLocalDOMWindow(script_state->GetContext());
 }
 
-Document* LocalDOMWindow::InstallNewDocument(const String& mime_type,
-                                             const DocumentInit& init,
+Document* LocalDOMWindow::InstallNewDocument(const DocumentInit& init,
                                              bool force_xhtml) {
   DCHECK_EQ(init.GetFrame(), GetFrame());
 
   ClearDocument();
 
-  document_ = CreateDocument(mime_type, init, force_xhtml);
+  document_ = CreateDocument(init, force_xhtml);
   document_->Initialize();
 
   if (!GetFrame())

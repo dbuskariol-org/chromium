@@ -1467,6 +1467,7 @@ void DocumentLoader::InstallNewDocument(
       DocumentInit::Create()
           .WithDocumentLoader(this)
           .WithURL(url)
+          .WithTypeFrom(mime_type)
           .WithOwnerDocument(owner_document)
           .WithInitiatorOrigin(initiator_origin)
           .WithOriginToCommit(origin_to_commit_)
@@ -1520,8 +1521,7 @@ void DocumentLoader::InstallNewDocument(
   if (!loading_url_as_javascript_)
     WillCommitNavigation();
 
-  Document* document =
-      frame_->DomWindow()->InstallNewDocument(mime_type, init, false);
+  Document* document = frame_->DomWindow()->InstallNewDocument(init, false);
 
   // Clear the user activation state.
   // TODO(crbug.com/736415): Clear this bit unconditionally for all frames.

@@ -748,6 +748,7 @@ Document::Document(const DocumentInit& initializer,
       ukm_source_id_(ukm::UkmRecorder::GetNewSourceID()),
       needs_to_record_ukm_outlive_time_(false),
       viewport_data_(MakeGarbageCollected<ViewportData>(*this)),
+      is_for_external_handler_(initializer.IsForExternalHandler()),
       isolated_world_csp_map_(
           MakeGarbageCollected<
               HeapHashMap<int, Member<ContentSecurityPolicy>>>()) {

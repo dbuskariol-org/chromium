@@ -96,9 +96,7 @@ class CORE_EXPORT LocalDOMWindow final : public DOMWindow,
     virtual void DidRemoveAllEventListeners(LocalDOMWindow*) = 0;
   };
 
-  static Document* CreateDocument(const String& mime_type,
-                                  const DocumentInit&,
-                                  bool force_xhtml);
+  static Document* CreateDocument(const DocumentInit&, bool force_xhtml);
 
   static LocalDOMWindow* From(const ScriptState*);
 
@@ -109,9 +107,7 @@ class CORE_EXPORT LocalDOMWindow final : public DOMWindow,
 
   void Trace(blink::Visitor*) override;
 
-  Document* InstallNewDocument(const String& mime_type,
-                               const DocumentInit&,
-                               bool force_xhtml);
+  Document* InstallNewDocument(const DocumentInit&, bool force_xhtml);
 
   // EventTarget overrides:
   ExecutionContext* GetExecutionContext() const override;

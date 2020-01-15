@@ -484,10 +484,6 @@ class CORE_EXPORT Document : public ContainerNode,
   }
 
   bool IsForExternalHandler() const { return is_for_external_handler_; }
-  void SetIsForExternalHandler() {
-    DCHECK(!is_for_external_handler_);
-    is_for_external_handler_ = true;
-  }
 
   // This is a DOM function.
   StyleSheetList& StyleSheets();
@@ -2095,7 +2091,7 @@ class CORE_EXPORT Document : public ContainerNode,
   // types that are handled externally. The document in this case is the
   // counterpart to a PluginDocument except that it contains a FrameView as
   // opposed to a PluginView.
-  bool is_for_external_handler_ = false;
+  bool is_for_external_handler_;
 
 #if DCHECK_IS_ON()
   // Allow traversal of Shadow DOM V0 traversal with dirty distribution.
