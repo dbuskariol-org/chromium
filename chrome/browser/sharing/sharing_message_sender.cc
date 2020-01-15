@@ -109,10 +109,10 @@ void SharingMessageSender::OnMessageSent(
   message_guids_.emplace(*message_id, message_guid);
   receiver_device_platform_.emplace(*message_id, receiver_device_platform);
   receiver_last_updated_age_.emplace(*message_id, last_updated_age);
+  message_types_.emplace(*message_id, message_type);
 }
 
 void SharingMessageSender::OnAckReceived(
-    chrome_browser_sharing::MessageType message_type,
     const std::string& message_id,
     std::unique_ptr<chrome_browser_sharing::ResponseMessage> response) {
   auto guid_iter = message_guids_.find(message_id);
@@ -121,6 +121,12 @@ void SharingMessageSender::OnAckReceived(
 
   std::string message_guid = std::move(guid_iter->second);
   message_guids_.erase(guid_iter);
+
+  auto message_types_iter = message_types_.find(message_id);
+  DCHECK(message_types_iter != message_types_.end());
+
+  chrome_browser_sharing::MessageType message_type = message_types_iter->second;
+  message_types_.erase(message_types_iter);
 
   auto times_iter = send_message_times_.find(message_id);
   DCHECK(times_iter != send_message_times_.end());

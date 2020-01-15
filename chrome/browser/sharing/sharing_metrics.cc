@@ -121,17 +121,10 @@ chrome_browser_sharing::MessageType SharingPayloadCaseToMessageType(
 }
 
 void LogSharingMessageReceived(
-    chrome_browser_sharing::MessageType original_message_type,
     chrome_browser_sharing::SharingMessage::PayloadCase payload_case) {
-  chrome_browser_sharing::MessageType actual_message_type =
-      SharingPayloadCaseToMessageType(payload_case);
   base::UmaHistogramExactLinear("Sharing.MessageReceivedType",
-                                actual_message_type,
+                                SharingPayloadCaseToMessageType(payload_case),
                                 chrome_browser_sharing::MessageType_ARRAYSIZE);
-  base::UmaHistogramExactLinear(
-      base::StrCat({"Sharing.MessageReceivedType.",
-                    MessageTypeToMessageSuffix(original_message_type)}),
-      actual_message_type, chrome_browser_sharing::MessageType_ARRAYSIZE);
 }
 
 void LogSharingRegistrationResult(SharingDeviceRegistrationResult result) {

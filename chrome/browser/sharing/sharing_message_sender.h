@@ -70,7 +70,6 @@ class SharingMessageSender {
       ResponseCallback callback);
 
   virtual void OnAckReceived(
-      chrome_browser_sharing::MessageType message_type,
       const std::string& message_id,
       std::unique_ptr<chrome_browser_sharing::ResponseMessage> response);
 
@@ -109,6 +108,8 @@ class SharingMessageSender {
   std::map<std::string, SharingDevicePlatform> receiver_device_platform_;
   // Map of FCM message_id to age of last updated timestamp of receiver device.
   std::map<std::string, base::TimeDelta> receiver_last_updated_age_;
+  // Map of FCM message_id to message type for metrics.
+  std::map<std::string, chrome_browser_sharing::MessageType> message_types_;
 
   // Registered delegates to send messages.
   std::map<DelegateType, std::unique_ptr<SendMessageDelegate>> send_delegates_;

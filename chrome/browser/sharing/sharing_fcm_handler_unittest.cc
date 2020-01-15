@@ -177,8 +177,6 @@ TEST_F(SharingFCMHandlerTest, PingMessageHandler) {
   SharingMessage sharing_ack_message;
   sharing_ack_message.mutable_ack_message()->set_original_message_id(
       kTestMessageId);
-  sharing_ack_message.mutable_ack_message()->set_original_message_type(
-      chrome_browser_sharing::PING_MESSAGE);
 
   // Tests OnMessage flow in SharingFCMHandler when no handler is registered.
   EXPECT_CALL(mock_sharing_message_handler_, OnMessage(_, _)).Times(0);
@@ -225,8 +223,6 @@ TEST_F(SharingFCMHandlerTest, PingMessageHandlerWithResponse) {
   SharingMessage sharing_ack_message;
   sharing_ack_message.mutable_ack_message()->set_original_message_id(
       kTestMessageId);
-  sharing_ack_message.mutable_ack_message()->set_original_message_type(
-      chrome_browser_sharing::PING_MESSAGE);
   sharing_ack_message.mutable_ack_message()->mutable_response_message();
 
   // Tests OnMessage flow in SharingFCMHandler after handler is added.
@@ -263,8 +259,6 @@ TEST_F(SharingFCMHandlerTest, PingMessageHandlerSecondaryUser) {
   SharingMessage sharing_ack_message;
   sharing_ack_message.mutable_ack_message()->set_original_message_id(
       kTestMessageId);
-  sharing_ack_message.mutable_ack_message()->set_original_message_type(
-      chrome_browser_sharing::PING_MESSAGE);
 
   // Tests OnMessage flow in SharingFCMHandler after handler is added.
   ON_CALL(mock_sharing_message_handler_,
@@ -300,8 +294,6 @@ TEST_F(SharingFCMHandlerTest, PingMessageHandlerWithRecipientInfo) {
   SharingMessage sharing_ack_message;
   sharing_ack_message.mutable_ack_message()->set_original_message_id(
       kTestMessageId);
-  sharing_ack_message.mutable_ack_message()->set_original_message_type(
-      chrome_browser_sharing::PING_MESSAGE);
 
   ON_CALL(mock_sharing_message_handler_,
           OnMessage(ProtoEquals(sharing_message), _))

@@ -46,11 +46,8 @@ chrome_browser_sharing::MessageType SharingPayloadCaseToMessageType(
     chrome_browser_sharing::SharingMessage::PayloadCase payload_case);
 
 // Logs the |payload_case| to UMA. This should be called when a SharingMessage
-// is received. Additionally, a suffixed version of the histogram is logged
-// using |original_message_type| which is different from the actual message type
-// for ack messages.
+// is received.
 void LogSharingMessageReceived(
-    chrome_browser_sharing::MessageType original_message_type,
     chrome_browser_sharing::SharingMessage::PayloadCase payload_case);
 
 // Logs the |result| to UMA. This should be called after attempting register
@@ -136,7 +133,7 @@ void LogSendSharingMessageResult(
     SharingDevicePlatform receiver_device_platform,
     SharingSendMessageResult result);
 
-// Logs to UMA result of sendin an ack of a SharingMessage.
+// Logs to UMA result of sending an ack of a SharingMessage.
 void LogSendSharingAckMessageResult(
     chrome_browser_sharing::MessageType message_type,
     SharingDevicePlatform ack_receiver_device_type,

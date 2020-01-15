@@ -158,9 +158,8 @@ TEST_F(SharingMessageSenderTest, MessageSent_AckTimedout) {
 
     // Callback already run with result timeout, ack received for same message
     // id is ignored.
-    sharing_message_sender_.OnAckReceived(
-        SharingPayloadCaseToMessageType(message.payload_case()),
-        kSenderMessageID, /*response=*/nullptr);
+    sharing_message_sender_.OnAckReceived(kSenderMessageID,
+                                          /*response=*/nullptr);
   };
 
   EXPECT_CALL(
@@ -200,9 +199,8 @@ TEST_F(SharingMessageSenderTest, SendMessageToDevice_InternalError) {
 
         // Callback already run with result timeout, ack received for same
         // message id is ignored.
-        sharing_message_sender_.OnAckReceived(
-            SharingPayloadCaseToMessageType(message.payload_case()),
-            kSenderMessageID, /*response=*/nullptr);
+        sharing_message_sender_.OnAckReceived(kSenderMessageID,
+                                              /*response=*/nullptr);
       };
 
   EXPECT_CALL(
@@ -263,9 +261,8 @@ TEST_F(SharingMessageSenderTest, MessageSent_AckReceived) {
                 std::make_unique<chrome_browser_sharing::ResponseMessage>();
         response_message->CopyFrom(expected_response_message);
 
-        sharing_message_sender_.OnAckReceived(
-            SharingPayloadCaseToMessageType(message.payload_case()),
-            kSenderMessageID, std::move(response_message));
+        sharing_message_sender_.OnAckReceived(kSenderMessageID,
+                                              std::move(response_message));
       };
 
   EXPECT_CALL(

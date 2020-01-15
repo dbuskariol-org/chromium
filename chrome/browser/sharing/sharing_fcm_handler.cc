@@ -95,16 +95,8 @@ void SharingFCMHandler::OnMessage(const std::string& app_id,
       << "No payload set in SharingMessage received";
 
   chrome_browser_sharing::MessageType message_type =
-      chrome_browser_sharing::UNKNOWN_MESSAGE;
-  if (sharing_message.payload_case() ==
-      chrome_browser_sharing::SharingMessage::kAckMessage) {
-    DCHECK(sharing_message.has_ack_message());
-    message_type = sharing_message.ack_message().original_message_type();
-  } else {
-    message_type =
-        SharingPayloadCaseToMessageType(sharing_message.payload_case());
-  }
-  LogSharingMessageReceived(message_type, sharing_message.payload_case());
+      SharingPayloadCaseToMessageType(sharing_message.payload_case());
+  LogSharingMessageReceived(sharing_message.payload_case());
 
   SharingMessageHandler* handler =
       handler_registry_->GetSharingHandler(sharing_message.payload_case());
@@ -170,7 +162,6 @@ void SharingFCMHandler::SendAckMessage(
   chrome_browser_sharing::AckMessage* ack_message =
       sharing_message.mutable_ack_message();
   ack_message->set_original_message_id(original_message_id);
-  ack_message->set_original_message_type(original_message_type);
   if (response)
     ack_message->set_allocated_response_message(response.release());
 
