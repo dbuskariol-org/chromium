@@ -347,7 +347,7 @@ class APP_LIST_EXPORT AppsGridView : public views::View,
   // number of apps.
   void UpdatePulsingBlockViews();
 
-  std::unique_ptr<AppListItemView> CreateViewForItemAtIndex(size_t index);
+  AppListItemView* CreateViewForItemAtIndex(size_t index);
 
   // Returns true if the event was handled by the pagination controller.
   bool HandleScroll(const gfx::Vector2d& offset, ui::EventType type);
