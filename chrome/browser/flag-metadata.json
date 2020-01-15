@@ -2506,6 +2506,11 @@
     "expiry_milestone": 90
   },
   {
+    "name": "interest-feed-feedback",
+    "owners": [ "petewil", "//chrome/android/feed/OWNERS" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "interest-feed-notifications",
     "owners": [ "iwells", "//chrome/android/feed/OWNERS" ],
     "expiry_milestone": 80

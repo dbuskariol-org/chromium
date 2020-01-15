@@ -2648,6 +2648,10 @@ const char kInterestFeedContentSuggestionsDescription[] =
 const char kInterestFeedContentSuggestionsName[] =
     "Interest Feed Content Suggestions";
 
+const char kInterestFeedFeedbackDescription[] =
+    "Allow the user to provide feedback from a feed card.";
+const char kInterestFeedFeedbackName[] = "Interest Feed Feedback";
+
 const char kManualPasswordGenerationAndroidName[] =
     "Manual password generation";
 const char kManualPasswordGenerationAndroidDescription[] =

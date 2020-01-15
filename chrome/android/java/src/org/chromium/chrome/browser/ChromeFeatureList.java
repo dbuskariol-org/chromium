@@ -265,6 +265,7 @@ public abstract class ChromeFeatureList {
     public static final String INTENT_BLOCK_EXTERNAL_FORM_REDIRECT_NO_GESTURE =
             "IntentBlockExternalFormRedirectsNoGesture";
     public static final String INTEREST_FEED_CONTENT_SUGGESTIONS = "InterestFeedContentSuggestions";
+    public static final String INTEREST_FEED_FEEDBACK = "InterestFeedFeedback";
     public static final String KITKAT_SUPPORTED = "KitKatSupported";
     public static final String LOOKALIKE_NAVIGATION_URL_SUGGESTIONS_UI =
             "LookalikeUrlNavigationSuggestionsUI";

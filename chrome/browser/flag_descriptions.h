@@ -1573,6 +1573,9 @@ extern const char kInterestFeedNotificationsDescription[];
 extern const char kInterestFeedContentSuggestionsName[];
 extern const char kInterestFeedContentSuggestionsDescription[];
 
+extern const char kInterestFeedFeedbackName[];
+extern const char kInterestFeedFeedbackDescription[];
+
 extern const char kManualPasswordGenerationAndroidName[];
 extern const char kManualPasswordGenerationAndroidDescription[];
 

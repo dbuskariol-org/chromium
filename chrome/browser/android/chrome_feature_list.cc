@@ -92,6 +92,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &feature_engagement::kIPHChromeDuetSearchFeature,
     &feature_engagement::kIPHChromeDuetTabSwitcherFeature,
     &feed::kInterestFeedContentSuggestions,
+    &feed::kInterestFeedFeedback,
     &kAdjustWebApkInstallationSpace,
     &kAllowNewIncognitoTabIntents,
     &kAllowRemoteContextForNotifications,

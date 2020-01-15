@@ -3382,6 +3382,21 @@
             ]
         }
     ],
+    "InterestFeedFeedback": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "FeedbackOnInterestFeed",
+                    "enable_features": [
+                        "InterestFeedFeedback"
+                    ]
+                }
+            ]
+        }
+    ],
     "InvalidationsGCMUpstream": [
         {
             "platforms": [
