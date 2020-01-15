@@ -7670,6 +7670,9 @@ be describing additional metrics about the same event.
     </summary>
   </metric>
   <metric name="navigation_restart_penalty">
+    <obsolete>
+      Feature removed in M79.
+    </obsolete>
     <summary>
       Set to the number of milliseconds spent restarting navigations when a Lite
       Page Redirect preview is attempted, whether or not it is committed, during
