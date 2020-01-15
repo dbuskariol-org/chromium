@@ -47,6 +47,8 @@ public final class ChromePreferenceKeys {
      */
     public static final String ACCESSIBILITY_TAB_SWITCHER = "accessibility_tab_switcher";
 
+    public static final String APP_LOCALE = "locale";
+
     /** Whether Autofill Assistant is enabled */
     public static final String AUTOFILL_ASSISTANT_ENABLED = "autofill_assistant_switch";
     /** Whether the Autofill Assistant onboarding has been accepted. */
@@ -635,6 +637,7 @@ public final class ChromePreferenceKeys {
         // clang-format off
         return Arrays.asList(
                 ACCESSIBILITY_TAB_SWITCHER,
+                APP_LOCALE,
                 AUTOFILL_ASSISTANT_ENABLED,
                 AUTOFILL_ASSISTANT_ONBOARDING_ACCEPTED,
                 AUTOFILL_ASSISTANT_SKIP_INIT_SCREEN,
