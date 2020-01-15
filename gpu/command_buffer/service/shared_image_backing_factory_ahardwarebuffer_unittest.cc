@@ -5,6 +5,7 @@
 #include "gpu/command_buffer/service/shared_image_backing_factory_ahardwarebuffer.h"
 
 #include "base/android/android_hardware_buffer_compat.h"
+#include "base/android/scoped_hardware_buffer_fence_sync.h"
 #include "base/bind_helpers.h"
 #include "gpu/command_buffer/common/mailbox.h"
 #include "gpu/command_buffer/common/shared_image_usage.h"
@@ -638,7 +639,8 @@ TEST_F(SharedImageBackingFactoryAHBTest, Overlay) {
       overlay_representation->BeginScopedReadAccess(true /* needs_gl_image */);
   EXPECT_TRUE(scoped_read_access);
   EXPECT_TRUE(scoped_read_access->gl_image());
-
+  auto buffer = scoped_read_access->gl_image()->GetAHardwareBuffer();
+  DCHECK(buffer);
   scoped_read_access.reset();
   skia_representation.reset();
 }
