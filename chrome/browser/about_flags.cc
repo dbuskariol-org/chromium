@@ -4329,8 +4329,7 @@ const FeatureEntry kFeatureEntries[] = {
 
     {"privacy-settings-redesign",
      flag_descriptions::kPrivacySettingsRedesignName,
-     flag_descriptions::kPrivacySettingsRedesignDescription,
-     kOsWin | kOsMac | kOsLinux,
+     flag_descriptions::kPrivacySettingsRedesignDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kPrivacySettingsRedesign)},
 
 #if defined(OS_CHROMEOS)
