@@ -750,7 +750,7 @@ void CorePageLoadMetricsObserver::RecordTimingHistograms(
   const page_load_metrics::ContentfulPaintTimingInfo&
       main_frame_largest_image_paint =
           largest_contentful_paint_handler_.MainFrameLargestImagePaint();
-  if (!main_frame_largest_image_paint.IsEmpty() &&
+  if (main_frame_largest_image_paint.ContainsValidTime() &&
       WasStartedInForegroundOptionalEventInForeground(
           main_frame_largest_image_paint.Time(), GetDelegate())) {
     PAGE_LOAD_HISTOGRAM(internal::kHistogramLargestImagePaint,
@@ -760,7 +760,7 @@ void CorePageLoadMetricsObserver::RecordTimingHistograms(
   const page_load_metrics::ContentfulPaintTimingInfo&
       main_frame_largest_text_paint =
           largest_contentful_paint_handler_.MainFrameLargestTextPaint();
-  if (!main_frame_largest_text_paint.IsEmpty() &&
+  if (main_frame_largest_text_paint.ContainsValidTime() &&
       WasStartedInForegroundOptionalEventInForeground(
           main_frame_largest_text_paint.Time(), GetDelegate())) {
     PAGE_LOAD_HISTOGRAM(internal::kHistogramLargestTextPaint,
@@ -770,7 +770,7 @@ void CorePageLoadMetricsObserver::RecordTimingHistograms(
   const page_load_metrics::ContentfulPaintTimingInfo&
       main_frame_largest_contentful_paint =
           largest_contentful_paint_handler_.MainFrameLargestContentfulPaint();
-  if (!main_frame_largest_contentful_paint.IsEmpty() &&
+  if (main_frame_largest_contentful_paint.ContainsValidTime() &&
       WasStartedInForegroundOptionalEventInForeground(
           main_frame_largest_contentful_paint.Time(), GetDelegate())) {
     PAGE_LOAD_HISTOGRAM(internal::kHistogramLargestContentfulPaintMainFrame,
@@ -783,7 +783,7 @@ void CorePageLoadMetricsObserver::RecordTimingHistograms(
   const page_load_metrics::ContentfulPaintTimingInfo&
       all_frames_largest_contentful_paint =
           largest_contentful_paint_handler_.MergeMainFrameAndSubframes();
-  if (!all_frames_largest_contentful_paint.IsEmpty() &&
+  if (all_frames_largest_contentful_paint.ContainsValidTime() &&
       WasStartedInForegroundOptionalEventInForeground(
           all_frames_largest_contentful_paint.Time(), GetDelegate())) {
     PAGE_LOAD_HISTOGRAM(internal::kHistogramLargestContentfulPaint,

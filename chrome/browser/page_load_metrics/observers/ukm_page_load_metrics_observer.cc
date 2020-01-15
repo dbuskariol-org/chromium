@@ -294,7 +294,7 @@ void UkmPageLoadMetricsObserver::RecordTimingMetrics(
   const page_load_metrics::ContentfulPaintTimingInfo&
       main_frame_largest_contentful_paint =
           largest_contentful_paint_handler_.MainFrameLargestContentfulPaint();
-  if (!main_frame_largest_contentful_paint.IsEmpty() &&
+  if (main_frame_largest_contentful_paint.ContainsValidTime() &&
       WasStartedInForegroundOptionalEventInForeground(
           main_frame_largest_contentful_paint.Time(), GetDelegate())) {
     builder.SetPaintTiming_NavigationToLargestContentfulPaint_MainFrame(
@@ -303,7 +303,7 @@ void UkmPageLoadMetricsObserver::RecordTimingMetrics(
   const page_load_metrics::ContentfulPaintTimingInfo&
       all_frames_largest_contentful_paint =
           largest_contentful_paint_handler_.MergeMainFrameAndSubframes();
-  if (!all_frames_largest_contentful_paint.IsEmpty() &&
+  if (all_frames_largest_contentful_paint.ContainsValidTime() &&
       WasStartedInForegroundOptionalEventInForeground(
           all_frames_largest_contentful_paint.Time(), GetDelegate())) {
     builder.SetPaintTiming_NavigationToLargestContentfulPaint(
@@ -610,7 +610,7 @@ void UkmPageLoadMetricsObserver::OnTimingUpdate(
   const page_load_metrics::ContentfulPaintTimingInfo& paint =
       largest_contentful_paint_handler_.MergeMainFrameAndSubframes();
 
-  if (!paint.IsEmpty()) {
+  if (paint.ContainsValidTime()) {
     TRACE_EVENT_INSTANT2(
         "loading",
         "NavStartToLargestContentfulPaint::Candidate::AllFrames::UKM",
