@@ -187,6 +187,10 @@ android_builder(
 )
 
 android_builder(
+    name = 'android-10-arm64-rel',
+)
+
+android_builder(
     name = 'android-webview-marshmallow-arm64-dbg',
 )
 

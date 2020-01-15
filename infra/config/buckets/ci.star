@@ -329,6 +329,10 @@ android_builder(
     name = 'android-pie-arm64-rel',
 )
 
+android_builder(
+    name = 'android-10-arm64-rel',
+)
+
 
 def android_fyi_builder(*, name, **kwargs):
   return builder(
