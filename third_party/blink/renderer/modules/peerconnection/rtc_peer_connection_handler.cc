@@ -1082,18 +1082,14 @@ RTCPeerConnectionHandler::~RTCPeerConnectionHandler() {
                              num_data_channels_created_);
 }
 
-void RTCPeerConnectionHandler::AssociateWithFrame(blink::WebLocalFrame* frame) {
-  DCHECK(task_runner_->RunsTasksInCurrentSequence());
-  DCHECK(frame);
-  frame_ = frame;
-}
-
 bool RTCPeerConnectionHandler::Initialize(
     const webrtc::PeerConnectionInterface::RTCConfiguration&
         server_configuration,
-    const MediaConstraints& options) {
+    const MediaConstraints& options,
+    WebLocalFrame* frame) {
   DCHECK(task_runner_->RunsTasksInCurrentSequence());
-  DCHECK(frame_);
+  DCHECK(frame);
+  frame_ = frame;
 
   CHECK(!initialize_called_);
   initialize_called_ = true;

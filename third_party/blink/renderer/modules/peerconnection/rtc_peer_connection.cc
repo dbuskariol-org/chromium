@@ -763,14 +763,9 @@ RTCPeerConnection::RTCPeerConnection(
     return;
   }
 
-  // TODO(crbug.com/787254): Can the frame be associated when
-  // calling RtcPeerConnectionHandler::Initialize()?
-  auto* web_local_frame =
+  auto* web_frame =
       static_cast<WebLocalFrame*>(WebFrame::FromFrame(document->GetFrame()));
-  if (web_local_frame)
-    peer_handler_->AssociateWithFrame(web_local_frame);
-
-  if (!peer_handler_->Initialize(configuration, constraints)) {
+  if (!peer_handler_->Initialize(configuration, constraints, web_frame)) {
     closed_ = true;
     stopped_ = true;
     exception_state.ThrowDOMException(
