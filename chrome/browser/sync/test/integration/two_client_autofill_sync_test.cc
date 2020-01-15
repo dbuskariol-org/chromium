@@ -57,12 +57,6 @@ class TwoClientAutofillProfileSyncTest : public SyncTest {
   TwoClientAutofillProfileSyncTest() : SyncTest(TWO_CLIENT) {}
   ~TwoClientAutofillProfileSyncTest() override {}
 
-  // Tests that check Sync.ModelTypeEntityChange* histograms require
-  // self-notifications. The reason is that every commit will eventually trigger
-  // an incoming update on the same client, and without self-notifications we
-  // have no good way to reliably trigger these updates.
-  bool TestUsesSelfNotifications() override { return true; }
-
  private:
   DISALLOW_COPY_AND_ASSIGN(TwoClientAutofillProfileSyncTest);
 };
@@ -642,6 +636,7 @@ IN_PROC_BROWSER_TEST_F(TwoClientAutofillProfileSyncTest, NoCreditCardSync) {
 
 IN_PROC_BROWSER_TEST_F(TwoClientAutofillProfileSyncTest,
                        E2E_ONLY(TwoClientsAddAutofillProfiles)) {
+  ResetSyncForPrimaryAccount();
   ASSERT_TRUE(SetupSync());
   base::HistogramTester histograms;
 
