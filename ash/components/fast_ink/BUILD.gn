@@ -15,7 +15,7 @@ source_set("fast_ink") {
   deps = [
     "//base",
     "//cc",
-    "//components/viz/service",
+    "//components/viz/common",
     "//gpu",
     "//gpu/command_buffer/client",
     "//gpu/command_buffer/common",
