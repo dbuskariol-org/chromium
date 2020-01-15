@@ -1772,6 +1772,8 @@ jumbo_static_library("browser") {
     "sync/sessions/sync_sessions_web_contents_router_factory.h",
     "sync/sync_encryption_keys_tab_helper.cc",
     "sync/sync_encryption_keys_tab_helper.h",
+    "sync/sync_error_infobar_delegate_android.cc",
+    "sync/sync_error_infobar_delegate_android.h",
     "sync/sync_startup_tracker.cc",
     "sync/sync_startup_tracker.h",
     "sync/trusted_vault_client_android.cc",
