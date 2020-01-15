@@ -80,6 +80,9 @@
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "ui/base/ui_base_switches.h"
 #include "ui/gfx/codec/png_codec.h"
+#include "ui/shell_dialogs/select_file_dialog.h"
+#include "ui/shell_dialogs/select_file_dialog_factory.h"
+#include "ui/shell_dialogs/select_file_policy.h"
 
 #if defined(OS_MACOSX)
 #include "base/mac/foundation_util.h"
@@ -532,6 +535,14 @@ bool BlinkTestController::ResetAfterWebTest() {
   waiting_for_main_frame_dump_ = false;
   composite_all_frames_node_queue_ = std::queue<Node*>();
   composite_all_frames_node_storage_.clear();
+  ui::SelectFileDialog::SetFactory(nullptr);
+  {
+    base::ScopedAllowBlockingForTesting allow_blocking;
+    if (writable_directory_for_tests_.IsValid()) {
+      if (!writable_directory_for_tests_.Delete())
+        LOG(ERROR) << "Failed to delete temporary directory";
+    }
+  }
   weak_factory_.InvalidateWeakPtrs();
 
   return true;
@@ -1252,6 +1263,77 @@ void BlinkTestController::OnNavigateSecondaryWindow(const GURL& url) {
 void BlinkTestController::OnInspectSecondaryWindow() {
   if (devtools_bindings_)
     devtools_bindings_->Attach();
+}
+
+base::FilePath BlinkTestController::GetWritableDirectoryForTests() {
+  base::ScopedAllowBlockingForTesting allow_blocking;
+  if (writable_directory_for_tests_.IsValid()) {
+    if (!writable_directory_for_tests_.Delete())
+      LOG(ERROR) << "Failed to delete temporary directory";
+  }
+  if (!writable_directory_for_tests_.CreateUniqueTempDir()) {
+    LOG(ERROR) << "Failed to create temporary directory, test might not work "
+                  "correctly";
+  }
+  return writable_directory_for_tests_.GetPath();
+}
+
+namespace {
+
+// A fake ui::SelectFileDialog, which will select a single pre-determined path.
+class FakeSelectFileDialog : public ui::SelectFileDialog {
+ public:
+  FakeSelectFileDialog(base::FilePath result,
+                       Listener* listener,
+                       std::unique_ptr<ui::SelectFilePolicy> policy)
+      : ui::SelectFileDialog(listener, std::move(policy)),
+        result_(std::move(result)) {}
+
+ protected:
+  ~FakeSelectFileDialog() override = default;
+
+  void SelectFileImpl(Type type,
+                      const base::string16& title,
+                      const base::FilePath& default_path,
+                      const FileTypeInfo* file_types,
+                      int file_type_index,
+                      const base::FilePath::StringType& default_extension,
+                      gfx::NativeWindow owning_window,
+                      void* params) override {
+    listener_->FileSelected(result_, 0, params);
+  }
+
+  bool IsRunning(gfx::NativeWindow owning_window) const override {
+    return false;
+  }
+  void ListenerDestroyed() override {}
+  bool HasMultipleFileTypeChoicesImpl() override { return false; }
+
+ private:
+  base::FilePath result_;
+};
+
+class FakeSelectFileDialogFactory : public ui::SelectFileDialogFactory {
+ public:
+  explicit FakeSelectFileDialogFactory(base::FilePath result)
+      : result_(std::move(result)) {}
+  ~FakeSelectFileDialogFactory() override = default;
+
+  ui::SelectFileDialog* Create(
+      ui::SelectFileDialog::Listener* listener,
+      std::unique_ptr<ui::SelectFilePolicy> policy) override {
+    return new FakeSelectFileDialog(result_, listener, std::move(policy));
+  }
+
+ private:
+  base::FilePath result_;
+};
+
+}  // namespace
+
+void BlinkTestController::SetFilePathForMockFileDialog(
+    const base::FilePath& path) {
+  ui::SelectFileDialog::SetFactory(new FakeSelectFileDialogFactory(path));
 }
 
 void BlinkTestController::OnGoToOffset(int offset) {

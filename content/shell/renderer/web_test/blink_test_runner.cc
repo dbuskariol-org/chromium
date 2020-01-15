@@ -413,6 +413,16 @@ void BlinkTestRunner::SetLocale(const std::string& locale) {
   setlocale(LC_NUMERIC, "C");
 }
 
+base::FilePath BlinkTestRunner::GetWritableDirectory() {
+  base::FilePath result;
+  Send(new WebTestHostMsg_GetWritableDirectory(routing_id(), &result));
+  return result;
+}
+
+void BlinkTestRunner::SetFilePathForMockFileDialog(const base::FilePath& path) {
+  Send(new WebTestHostMsg_SetFilePathForMockFileDialog(routing_id(), path));
+}
+
 void BlinkTestRunner::OnWebTestRuntimeFlagsChanged(
     const base::DictionaryValue& changed_values) {
   // Ignore changes that happen before we got the initial, accumulated

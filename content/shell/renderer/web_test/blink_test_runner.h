@@ -110,6 +110,8 @@ class BlinkTestRunner : public RenderViewObserver,
   void SetBlockThirdPartyCookies(bool block) override;
   std::string PathToLocalResource(const std::string& resource) override;
   void SetLocale(const std::string& locale) override;
+  base::FilePath GetWritableDirectory() override;
+  void SetFilePathForMockFileDialog(const base::FilePath& path) override;
   void OnWebTestRuntimeFlagsChanged(
       const base::DictionaryValue& changed_values) override;
   void TestFinished() override;
