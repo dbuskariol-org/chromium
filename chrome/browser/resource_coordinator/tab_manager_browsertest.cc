@@ -1497,7 +1497,7 @@ Browser* CreateBrowserWithTabs(int num_tabs) {
 #else
 #define MAYBE_DiscardTabsWithMinimizedWindow DiscardTabsWithMinimizedWindow
 #endif
-IN_PROC_BROWSER_TEST_F(TabManagerTest, DiscardTabsWithMinimizedWindow) {
+IN_PROC_BROWSER_TEST_F(TabManagerTest, MAYBE_DiscardTabsWithMinimizedWindow) {
   // Minimized browser.
   EnsureTabsInBrowser(browser(), 2);
   browser()->window()->Minimize();
@@ -1534,7 +1534,7 @@ IN_PROC_BROWSER_TEST_F(TabManagerTest, DiscardTabsWithMinimizedWindow) {
 #else
 #define MAYBE_DiscardTabsWithOccludedWindow DiscardTabsWithOccludedWindow
 #endif
-IN_PROC_BROWSER_TEST_F(TabManagerTest, DiscardTabsWithOccludedWindow) {
+IN_PROC_BROWSER_TEST_F(TabManagerTest, MAYBE_DiscardTabsWithOccludedWindow) {
   // Occluded browser.
   EnsureTabsInBrowser(browser(), 2);
   browser()->window()->SetBounds(gfx::Rect(10, 10, 10, 10));
