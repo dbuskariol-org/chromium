@@ -595,6 +595,7 @@
       name: "DisplayLocking",
       origin_trial_feature_name: "DisplayLocking",
       status: "experimental",
+      implied_by: ["CSSRenderSubtree"],
     },
     {
       name: "DocumentCookie",
