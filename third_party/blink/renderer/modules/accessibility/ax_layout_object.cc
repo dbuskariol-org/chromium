@@ -1742,8 +1742,7 @@ AXObject* AXLayoutObject::AccessibilityHitTest(const IntPoint& point) const {
     // control.
     if (result->IsAXLayoutObject()) {
       AXObject* control_object =
-          ToAXLayoutObject(result)
-              ->CorrespondingControlAXObjectForLabelElement();
+          ToAXLayoutObject(result)->CorrespondingControlForLabelElement();
       if (control_object && control_object->NameFromLabelElement())
         return control_object;
     }

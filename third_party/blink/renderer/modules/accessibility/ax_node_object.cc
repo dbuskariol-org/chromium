@@ -178,24 +178,21 @@ AXObjectInclusion AXNodeObject::ShouldIncludeBasedOnSemantics(
   if (IsTableLikeRole() || IsTableRowLikeRole() || IsTableCellLikeRole())
     return kIncludeObject;
 
-  // Ignore labels that are already referenced by a control but are not set to
-  // be focusable.
-  AXObject* control_ax_object = CorrespondingControlAXObjectForLabelElement();
-  if (control_ax_object && control_ax_object->IsCheckboxOrRadio() &&
-      control_ax_object->NameFromLabelElement() &&
+  // Ignore labels that are already referenced by a control.
+  AXObject* control_object = CorrespondingControlForLabelElement();
+  HTMLLabelElement* label = LabelElementContainer();
+  if (control_object && control_object->IsCheckboxOrRadio() &&
+      control_object->NameFromLabelElement() &&
       AccessibleNode::GetPropertyOrARIAAttribute(
-          LabelElementContainer(), AOMStringProperty::kRole) == g_null_atom) {
-    AXObject* label_ax_object = CorrespondingLabelAXObject();
-    // If the label is set to be focusable, we should expose it.
-    if (label_ax_object && label_ax_object->CanSetFocusAttribute())
-      return kIncludeObject;
-
+          label, AOMStringProperty::kRole) == g_null_atom) {
     if (ignored_reasons) {
-      if (label_ax_object && label_ax_object != this)
+      if (label && label != GetNode()) {
+        AXObject* label_ax_object = AXObjectCache().GetOrCreate(label);
         ignored_reasons->push_back(
             IgnoredReason(kAXLabelContainer, label_ax_object));
+      }
 
-      ignored_reasons->push_back(IgnoredReason(kAXLabelFor, control_ax_object));
+      ignored_reasons->push_back(IgnoredReason(kAXLabelFor, control_object));
     }
     return kIgnoreObject;
   }
@@ -2812,7 +2809,7 @@ void AXNodeObject::SetNode(Node* node) {
   node_ = node;
 }
 
-AXObject* AXNodeObject::CorrespondingControlAXObjectForLabelElement() const {
+AXObject* AXNodeObject::CorrespondingControlForLabelElement() const {
   HTMLLabelElement* label_element = LabelElementContainer();
   if (!label_element)
     return nullptr;
@@ -2828,14 +2825,6 @@ AXObject* AXNodeObject::CorrespondingControlAXObjectForLabelElement() const {
     return nullptr;
 
   return AXObjectCache().GetOrCreate(corresponding_control);
-}
-
-AXObject* AXNodeObject::CorrespondingLabelAXObject() const {
-  HTMLLabelElement* label_element = LabelElementContainer();
-  if (!label_element)
-    return nullptr;
-
-  return AXObjectCache().GetOrCreate(label_element);
 }
 
 HTMLLabelElement* AXNodeObject::LabelElementContainer() const {
