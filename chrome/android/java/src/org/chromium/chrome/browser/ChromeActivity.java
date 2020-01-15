@@ -85,7 +85,7 @@ import org.chromium.chrome.browser.download.items.OfflineContentAggregatorNotifi
 import org.chromium.chrome.browser.feature_engagement.TrackerFactory;
 import org.chromium.chrome.browser.firstrun.ForcedSigninProcessor;
 import org.chromium.chrome.browser.flags.ActivityType;
-import org.chromium.chrome.browser.flags.FeatureUtilities;
+import org.chromium.chrome.browser.flags.ChromeSessionState;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
 import org.chromium.chrome.browser.fullscreen.ComposedBrowserControlsVisibilityDelegate;
 import org.chromium.chrome.browser.gsa.ContextReporter;
@@ -907,9 +907,9 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
             if (webContents != null) webContents.notifyRendererPreferenceUpdate();
         }
 
-        FeatureUtilities.setCustomTabVisible(isCustomTab());
-        FeatureUtilities.setActivityType(getActivityType());
-        FeatureUtilities.setIsInMultiWindowMode(
+        ChromeSessionState.setCustomTabVisible(isCustomTab());
+        ChromeSessionState.setActivityType(getActivityType());
+        ChromeSessionState.setIsInMultiWindowMode(
                 MultiWindowUtils.getInstance().isInMultiWindowMode(this));
 
         if (mPictureInPictureController != null) {
@@ -1876,7 +1876,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
                 // stays in that state.
                 markSessionEnd();
                 markSessionResume();
-                FeatureUtilities.setIsInMultiWindowMode(
+                ChromeSessionState.setIsInMultiWindowMode(
                         MultiWindowUtils.getInstance().isInMultiWindowMode(this));
             }
         }

@@ -2303,6 +2303,8 @@ jumbo_static_library("browser") {
       "android/chrome_context_util.h",
       "android/chrome_feature_list.cc",
       "android/chrome_feature_list.h",
+      "android/chrome_session_state.cc",
+      "android/chrome_session_state.h",
       "android/chrome_startup_flags.cc",
       "android/chrome_startup_flags.h",
       "android/color_helpers.cc",

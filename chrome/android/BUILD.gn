@@ -544,11 +544,11 @@ action("chrome_android_java_google_api_keys_srcjar") {
 
 java_cpp_enum("chrome_android_java_enums_srcjar") {
   sources = [
+    "//chrome/browser/android/chrome_session_state.h",
     "//chrome/browser/android/customtabs/detached_resource_request.h",
     "//chrome/browser/android/digital_asset_links/digital_asset_links_handler.h",
     "//chrome/browser/android/explore_sites/explore_sites_bridge.h",
     "//chrome/browser/android/explore_sites/explore_sites_feature.h",
-    "//chrome/browser/android/feature_utilities.h",
     "//chrome/browser/android/feedback/connectivity_checker.cc",
     "//chrome/browser/android/policy/policy_auditor.cc",
     "//chrome/browser/android/shortcut_info.h",
@@ -2622,6 +2622,7 @@ generate_jni("chrome_jni_headers") {
     "java/src/org/chromium/chrome/browser/feedback/SystemInfoFeedbackSource.java",
     "java/src/org/chromium/chrome/browser/findinpage/FindInPageBridge.java",
     "java/src/org/chromium/chrome/browser/firstrun/FirstRunUtils.java",
+    "java/src/org/chromium/chrome/browser/flags/ChromeSessionState.java",
     "java/src/org/chromium/chrome/browser/flags/FeatureUtilities.java",
     "java/src/org/chromium/chrome/browser/gesturenav/CompositorNavigationGlow.java",
     "java/src/org/chromium/chrome/browser/history/BrowsingHistoryBridge.java",
