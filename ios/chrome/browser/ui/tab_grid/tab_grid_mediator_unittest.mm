@@ -10,12 +10,16 @@
 #include "base/mac/foundation_util.h"
 #include "ios/chrome/browser/browser_state/test_chrome_browser_state.h"
 #include "ios/chrome/browser/chrome_url_constants.h"
+#import "ios/chrome/browser/main/test_browser.h"
 #import "ios/chrome/browser/ntp/new_tab_page_tab_helper.h"
 #import "ios/chrome/browser/ntp/new_tab_page_tab_helper_delegate.h"
+#include "ios/chrome/browser/sessions/session_restoration_browser_agent.h"
+#import "ios/chrome/browser/sessions/test_session_service.h"
 #import "ios/chrome/browser/tabs/tab_model.h"
 #import "ios/chrome/browser/ui/tab_grid/grid/grid_commands.h"
 #import "ios/chrome/browser/ui/tab_grid/grid/grid_consumer.h"
 #import "ios/chrome/browser/ui/tab_grid/grid/grid_item.h"
+#import "ios/chrome/browser/web/page_placeholder_tab_helper.h"
 #import "ios/chrome/browser/web/tab_id_tab_helper.h"
 #include "ios/chrome/browser/web_state_list/fake_web_state_list_delegate.h"
 #include "ios/chrome/browser/web_state_list/web_state_list.h"
@@ -83,11 +87,11 @@
 
 @end
 
-// Fake WebStateList delegate that attaches the tab ID tab helper.
-class TabIdFakeWebStateListDelegate : public FakeWebStateListDelegate {
+// Fake WebStateList delegate that attaches the required tab helper.
+class TabHelperFakeWebStateListDelegate : public FakeWebStateListDelegate {
  public:
-  TabIdFakeWebStateListDelegate() {}
-  ~TabIdFakeWebStateListDelegate() override {}
+  TabHelperFakeWebStateListDelegate() {}
+  ~TabHelperFakeWebStateListDelegate() override {}
 
   // WebStateListDelegate implementation.
   void WillAddWebState(web::WebState* web_state) override {
@@ -95,6 +99,7 @@ class TabIdFakeWebStateListDelegate : public FakeWebStateListDelegate {
     // Create NTPTabHelper to ensure VisibleURL is set to kChromeUINewTabURL.
     id delegate = OCMProtocolMock(@protocol(NewTabPageTabHelperDelegate));
     NewTabPageTabHelper::CreateForWebState(web_state, delegate);
+    PagePlaceholderTabHelper::CreateForWebState(web_state);
   }
 };
 
@@ -107,9 +112,11 @@ class TabGridMediatorTest : public PlatformTest {
     PlatformTest::SetUp();
     browser_state_ = TestChromeBrowserState::Builder().Build();
     web_state_list_delegate_ =
-        std::make_unique<TabIdFakeWebStateListDelegate>();
+        std::make_unique<TabHelperFakeWebStateListDelegate>();
     web_state_list_ =
         std::make_unique<WebStateList>(web_state_list_delegate_.get());
+    browser_ = std::make_unique<TestBrowser>(browser_state_.get(),
+                                             web_state_list_.get());
     tab_model_ = OCMClassMock([TabModel class]);
     OCMStub([tab_model_ webStateList]).andReturn(web_state_list_.get());
     OCMStub([tab_model_ browserState]).andReturn(browser_state_.get());
@@ -138,16 +145,33 @@ class TabGridMediatorTest : public PlatformTest {
     mediator_.tabModel = tab_model_;
   }
 
+  // Prepare the mock method to restore the tabs.
+  void PrepareForRestoration() {
+    [[[tab_model_ expect] andDo:^(NSInvocation* inv) {
+      SessionWindowIOS* sessionWindow;
+      [inv retainArguments];
+      [inv getArgument:&sessionWindow atIndex:2];
+      TestSessionService* test_session_service =
+          [[TestSessionService alloc] init];
+      SessionRestorationBrowserAgent::CreateForBrowser(browser_.get(),
+                                                       test_session_service);
+      SessionRestorationBrowserAgent* session_restoration_agent =
+          SessionRestorationBrowserAgent::FromBrowser(browser_.get());
+      session_restoration_agent->RestoreSessionWindow(sessionWindow);
+    }] restoreSessionWindow:[OCMArg any] forInitialRestore:NO];
+  }
+
  protected:
   web::WebTaskEnvironment task_environment_;
   std::unique_ptr<ios::ChromeBrowserState> browser_state_;
-  std::unique_ptr<TabIdFakeWebStateListDelegate> web_state_list_delegate_;
+  std::unique_ptr<TabHelperFakeWebStateListDelegate> web_state_list_delegate_;
   std::unique_ptr<WebStateList> web_state_list_;
   id tab_model_;
   FakeConsumer* consumer_;
   TabGridMediator* mediator_;
   NSSet<NSString*>* original_identifiers_;
   NSString* original_selected_identifier_;
+  std::unique_ptr<Browser> browser_;
 };
 
 #pragma mark - Consumer tests
@@ -269,6 +293,7 @@ TEST_F(TabGridMediatorTest, SaveAndCloseAllItemsCommand) {
 // Tests that the |web_state_list_| is not restored to 3 items when
 // |-undoCloseAllItems| is called after |-discardSavedClosedItems| is called.
 TEST_F(TabGridMediatorTest, DiscardSavedClosedItemsCommand) {
+  PrepareForRestoration();
   // Previously there were 3 items.
   [mediator_ saveAndCloseAllItems];
   [mediator_ discardSavedClosedItems];
@@ -280,6 +305,7 @@ TEST_F(TabGridMediatorTest, DiscardSavedClosedItemsCommand) {
 // Tests that the |web_state_list_| is restored to 3 items when
 // |-undoCloseAllItems| is called.
 TEST_F(TabGridMediatorTest, UndoCloseAllItemsCommand) {
+  PrepareForRestoration();
   // Previously there were 3 items.
   [mediator_ saveAndCloseAllItems];
   [mediator_ undoCloseAllItems];

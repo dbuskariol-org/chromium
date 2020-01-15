@@ -28,8 +28,6 @@
 #import "ios/chrome/browser/web_state_list/web_state_list_observer_bridge.h"
 #import "ios/chrome/browser/web_state_list/web_state_list_serialization.h"
 #include "ios/chrome/browser/web_state_list/web_state_opener.h"
-#import "ios/chrome/browser/web_state_list/web_usage_enabler/web_state_list_web_usage_enabler.h"
-#import "ios/chrome/browser/web_state_list/web_usage_enabler/web_state_list_web_usage_enabler_factory.h"
 #import "ios/web/public/navigation/navigation_manager.h"
 #import "ios/web/public/web_state.h"
 #import "ios/web/public/web_state_observer_bridge.h"
@@ -330,11 +328,16 @@ web::WebState* GetWebStateWithId(WebStateList* web_state_list,
 - (void)undoCloseAllItems {
   if (!self.closedSessionWindow)
     return;
-  __weak TabGridMediator* weakSelf = self;
-  self.webStateList->PerformBatchOperation(
-      base::BindOnce(^(WebStateList* web_state_list) {
-        [weakSelf restoreClosedSessionWindowAndUpdateTabRestoreService];
-      }));
+  DCHECK(self.tabModel.browserState);
+  [self.tabModel restoreSessionWindow:self.closedSessionWindow
+                    forInitialRestore:NO];
+
+  self.closedSessionWindow = nil;
+  [self removeEntriesFromTabRestoreService];
+  self.closedTabsCount = 0;
+  // Unmark all images for deletion since they are now active tabs again.
+  ios::ChromeBrowserState* browserState = self.tabModel.browserState;
+  [SnapshotCacheFactory::GetForBrowserState(browserState) unmarkAllImages];
 }
 
 - (void)discardSavedClosedItems {
@@ -434,33 +437,6 @@ web::WebState* GetWebStateWithId(WebStateList* web_state_list,
   for (const SessionID sessionID : identifiers) {
     self.tabRestoreService->RemoveTabEntryById(sessionID);
   }
-}
-
-// Restores the saved |self.closedSessionWindow| and updates the
-// TabRestoreService.
-- (void)restoreClosedSessionWindowAndUpdateTabRestoreService {
-  if (!self.closedSessionWindow)
-    return;
-  DCHECK(self.tabModel.browserState);
-  // Don't trigger the initial load for these restored WebStates since the
-  // number of WKWebViews is unbounded and may lead to an OOM crash.
-  WebStateListWebUsageEnabler* webUsageEnabler =
-      WebStateListWebUsageEnablerFactory::GetInstance()->GetForBrowserState(
-          self.tabModel.browserState);
-  webUsageEnabler->SetTriggersInitialLoad(false);
-  web::WebState::CreateParams createParams(self.tabModel.browserState);
-  DeserializeWebStateList(
-      self.webStateList, self.closedSessionWindow,
-      base::BindRepeating(&web::WebState::CreateWithStorageSession,
-                          createParams));
-  webUsageEnabler->SetTriggersInitialLoad(true);
-
-  self.closedSessionWindow = nil;
-  [self removeEntriesFromTabRestoreService];
-  self.closedTabsCount = 0;
-  // Unmark all images for deletion since they are now active tabs again.
-  ios::ChromeBrowserState* browserState = self.tabModel.browserState;
-  [SnapshotCacheFactory::GetForBrowserState(browserState) unmarkAllImages];
 }
 
 // Returns a SnapshotCache for the current BrowserState.
