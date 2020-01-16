@@ -152,19 +152,12 @@ void CheckNativeFileSystemWriteRequest::MaybeStorePingsForDownload(
   // TODO(https://crbug.com/996797): Integrate with DownloadFeedbackService.
 }
 
-bool CheckNativeFileSystemWriteRequest::MaybeReturnAsynchronousVerdict(
-    DownloadCheckResultReason reason) {
-  return false;
-}
-
 bool CheckNativeFileSystemWriteRequest::ShouldUploadBinary(
     DownloadCheckResultReason reason) {
   return false;
 }
 
-void CheckNativeFileSystemWriteRequest::UploadBinary(
-    DownloadCheckResult result,
-    DownloadCheckResultReason reason) {}
+void CheckNativeFileSystemWriteRequest::UploadBinary() {}
 
 void CheckNativeFileSystemWriteRequest::NotifyRequestFinished(
     DownloadCheckResult result,
