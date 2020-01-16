@@ -403,6 +403,11 @@ void Portal::Activate(blink::TransferableMessage data,
       std::move(predecessor_web_contents), std::move(data),
       std::move(callback));
   successor_contents_raw->NotifyInsidePortal(false);
+
+  // This happens later than SwapWebContents so that the delegate can observe it
+  // happening after predecessor_web_contents has been moved into a portal.
+  successor_contents_raw->GetDelegate()->WebContentsBecamePortal(
+      outer_contents);
 }
 
 void Portal::PostMessageToGuest(
