@@ -7,6 +7,9 @@ MockRuntime.prototype.setHitTestResults = function(results) {
   this.hittest_results_ = results;
 };
 
+
+// XREnvironmentIntegrationProvider implementation
+
 MockRuntime.prototype.requestHitTest = function(ray) {
   var hit_results = this.hittest_results_;
   if (!hit_results) {
@@ -60,11 +63,11 @@ MockRuntime.featureToMojoMap["dom-overlay"] =
 
 ChromeXRTest.prototype.getService = function() {
   return this.mockVRService_;
-}
+};
 
 MockVRService.prototype.setFramesThrottled = function(throttled) {
   return this.frames_throttled_ = throttled;
-}
+};
 
 MockVRService.prototype.getFramesThrottled = function() {
   // Explicitly converted falsey states (i.e. undefined) to false.
