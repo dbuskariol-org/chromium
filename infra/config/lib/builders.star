@@ -144,26 +144,30 @@ def _chromium_tests_property(*, bucketed_triggers):
   return chromium_tests or None
 
 
-def _goma_property(*, goma_backend, goma_debug, goma_enable_ats, goma_jobs):
-  goma = {}
+def _goma_property(*, goma_backend, goma_debug, goma_enable_ats, goma_jobs, os):
+  goma_properties = {}
 
   goma_backend = _default('goma_backend', goma_backend)
   if goma_backend != None:
-    goma.update(goma_backend)
+    goma_properties.update(goma_backend)
 
   goma_debug = _default('goma_debug', goma_debug)
   if goma_debug:
-    goma['debug'] = True
+    goma_properties['debug'] = True
 
   goma_enable_ats = _default('goma_enable_ats', goma_enable_ats)
-  if goma_enable_ats:
-    goma['enable_ats'] = True
+  if goma_enable_ats:  # TODO(crbug.com/1040754): Remove this flag.
+    goma_properties['enable_ats'] = True
+  elif (goma_backend in (goma.backend.RBE_TOT, goma.backend.RBE_STAGING,
+                         goma.backend.RBE_PROD) and
+        (os and os.category == os_category.WINDOWS)):
+    goma_properties['enable_ats'] = True
 
   goma_jobs = _default('goma_jobs', goma_jobs)
   if goma_jobs != None:
-    goma['jobs'] = goma_jobs
+    goma_properties['jobs'] = goma_jobs
 
-  return goma or None
+  return goma_properties or None
 
 
 def _code_coverage_property(*, use_clang_coverage, use_java_coverage):
@@ -385,6 +389,7 @@ def builder(
       goma_debug = goma_debug,
       goma_enable_ats = goma_enable_ats,
       goma_jobs = goma_jobs,
+      os = os,
   )
   if goma != None:
     properties['$build/goma'] = goma

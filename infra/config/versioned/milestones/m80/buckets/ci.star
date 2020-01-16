@@ -142,7 +142,6 @@ gpu_builder(
 gpu_builder(
     name = 'GPU Win x64 Builder',
     builderless = True,
-    goma_enable_ats = True,
     os = os.WINDOWS_ANY,
 )
 
@@ -257,7 +256,6 @@ def win_builder(*, name, os=os.WINDOWS_DEFAULT, **kwargs):
   return builder(
       name = name,
       goma_backend = goma.backend.RBE_PROD,
-      goma_enable_ats = True,
       mastername = 'chromium.win',
       os = os,
       **kwargs
