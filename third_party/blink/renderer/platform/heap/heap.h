@@ -344,6 +344,10 @@ class PLATFORM_EXPORT ThreadHeap {
   // the executions of mutators.
   void MakeConsistentForMutator();
 
+  // Unmarks all objects in the entire heap. This is supposed to be called in
+  // the beginning of major GC.
+  void Unmark();
+
   void Compact();
 
   enum class SweepingType : uint8_t { kMutator, kConcurrent };

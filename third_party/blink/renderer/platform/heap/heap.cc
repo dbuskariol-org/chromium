@@ -453,14 +453,23 @@ BasePage* ThreadHeap::LookupPageForAddress(Address address) {
 
 void ThreadHeap::MakeConsistentForGC() {
   DCHECK(thread_state_->InAtomicMarkingPause());
-  for (int i = 0; i < BlinkGC::kNumberOfArenas; ++i)
-    arenas_[i]->MakeConsistentForGC();
+  for (BaseArena* arena : arenas_) {
+    arena->MakeConsistentForGC();
+  }
 }
 
 void ThreadHeap::MakeConsistentForMutator() {
   DCHECK(thread_state_->InAtomicMarkingPause());
-  for (int i = 0; i < BlinkGC::kNumberOfArenas; ++i)
-    arenas_[i]->MakeConsistentForMutator();
+  for (BaseArena* arena : arenas_) {
+    arena->MakeConsistentForMutator();
+  }
+}
+
+void ThreadHeap::Unmark() {
+  DCHECK(thread_state_->InAtomicMarkingPause());
+  for (BaseArena* arena : arenas_) {
+    arena->Unmark();
+  }
 }
 
 void ThreadHeap::Compact() {

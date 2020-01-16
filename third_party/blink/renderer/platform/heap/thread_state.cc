@@ -1614,6 +1614,13 @@ void ThreadState::MarkPhasePrologue(BlinkGC::CollectionType collection_type,
     Heap().Compaction()->Initialize(this);
   }
 
+#if BUILDFLAG(BLINK_HEAP_YOUNG_GENERATION)
+  if (collection_type == BlinkGC::CollectionType::kMajor) {
+    // Unmark heap before doing major collection cycle.
+    Heap().Unmark();
+  }
+#endif
+
   current_gc_data_.reason = reason;
   current_gc_data_.collection_type = collection_type;
   current_gc_data_.visitor =

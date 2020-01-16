@@ -215,6 +215,15 @@ void BaseArena::MakeConsistentForMutator() {
   VerifyObjectStartBitmap();
 }
 
+void BaseArena::Unmark() {
+  DCHECK(GetThreadState()->InAtomicMarkingPause());
+  DCHECK(SweepingAndFinalizationCompleted());
+
+  for (BasePage* page : swept_pages_) {
+    page->Unmark();
+  }
+}
+
 size_t BaseArena::ObjectPayloadSizeForTesting() {
 #if DCHECK_IS_ON()
   DCHECK(IsConsistentForGC());
@@ -1479,7 +1488,9 @@ bool NormalPage::Sweep(FinalizeType finalize_type) {
       found_finalizer = false;
     }
     object_start_bit_map()->SetBit(header_address);
+#if !BUILDFLAG(BLINK_HEAP_YOUNG_GENERATION)
     header->Unmark<HeapObjectHeader::AccessMode::kAtomic>();
+#endif
     header_address += size;
     start_of_gap = header_address;
   }
@@ -1543,7 +1554,9 @@ void NormalPage::SweepAndCompact(CompactionContext& context) {
       header_address += size;
       continue;
     }
+#if !BUILDFLAG(BLINK_HEAP_YOUNG_GENERATION)
     header->Unmark();
+#endif
     // Allocate and copy over the live object.
     Address compact_frontier = current_page->Payload() + allocation_point;
     if (compact_frontier + size > current_page->PayloadEnd()) {
@@ -1633,6 +1646,29 @@ void NormalPage::MakeConsistentForMutator() {
     normal_arena->AddToFreeList(start_of_gap, PayloadEnd() - start_of_gap);
 
   VerifyObjectStartBitmapIsConsistentWithPayload();
+}
+
+// This is assumed to be called from the atomic pause, so no concurrency should
+// be involved here.
+void NormalPage::Unmark() {
+  const Address current_allocation_point =
+      ArenaForNormalPage()->CurrentAllocationPoint();
+  const size_t allocation_area_size =
+      ArenaForNormalPage()->RemainingAllocationSize();
+  for (Address header_address = Payload(); header_address < PayloadEnd();) {
+    // Since unmarking can happen inside IncrementalMarkingStart, the current
+    // allocation point can be set and we need to skip over it.
+    if (header_address == current_allocation_point && allocation_area_size) {
+      header_address += allocation_area_size;
+      continue;
+    }
+    HeapObjectHeader* header =
+        reinterpret_cast<HeapObjectHeader*>(header_address);
+    if (header->IsMarked()) {
+      header->Unmark();
+    }
+    header_address += header->size();
+  }
 }
 
 #if defined(ADDRESS_SANITIZER)
@@ -1791,15 +1827,21 @@ bool LargeObjectPage::Sweep(FinalizeType) {
   if (!ObjectHeader()->IsMarked()) {
     return true;
   }
+#if !BUILDFLAG(BLINK_HEAP_YOUNG_GENERATION)
   ObjectHeader()->Unmark();
+#endif
   return false;
 }
 
-void LargeObjectPage::MakeConsistentForMutator() {
+void LargeObjectPage::Unmark() {
   HeapObjectHeader* header = ObjectHeader();
   if (header->IsMarked()) {
     header->Unmark();
   }
+}
+
+void LargeObjectPage::MakeConsistentForMutator() {
+  Unmark();
 }
 
 void LargeObjectPage::FinalizeSweep(SweepResult action) {

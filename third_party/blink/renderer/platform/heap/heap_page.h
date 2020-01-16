@@ -466,6 +466,7 @@ class BasePage {
   // Does not create free list entries for empty pages.
   virtual bool Sweep(FinalizeType) = 0;
   virtual void MakeConsistentForMutator() = 0;
+  virtual void Unmark() = 0;
 
   // Calls finalizers after sweeping is done.
   virtual void FinalizeSweep(SweepResult) = 0;
@@ -653,6 +654,7 @@ class PLATFORM_EXPORT NormalPage final : public BasePage {
   void RemoveFromHeap() override;
   bool Sweep(FinalizeType) override;
   void MakeConsistentForMutator() override;
+  void Unmark() override;
   void FinalizeSweep(SweepResult) override;
 #if defined(ADDRESS_SANITIZER)
   void PoisonUnmarkedObjects() override;
@@ -879,6 +881,7 @@ class PLATFORM_EXPORT LargeObjectPage final : public BasePage {
   void RemoveFromHeap() override;
   bool Sweep(FinalizeType) override;
   void MakeConsistentForMutator() override;
+  void Unmark() override;
   void FinalizeSweep(SweepResult) override;
 
   void CollectStatistics(
@@ -945,6 +948,7 @@ class PLATFORM_EXPORT BaseArena {
   virtual void MakeIterable() {}
   virtual void MakeConsistentForGC();
   void MakeConsistentForMutator();
+  void Unmark();
 #if DCHECK_IS_ON()
   virtual bool IsConsistentForGC() = 0;
 #endif
