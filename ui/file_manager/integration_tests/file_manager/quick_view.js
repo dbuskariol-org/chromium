@@ -1397,4 +1397,59 @@
       }
     }
   };
+
+  /**
+   * Tests the tab-index focus order when sending tab keys when a video file is
+   * shown in Quick View.
+   */
+  testcase.openQuickViewTabIndexVideo = async () => {
+    // Open Files app on Downloads containing ENTRIES.webm video.
+    const appId =
+        await setupAndWaitUntilReady(RootPath.DOWNLOADS, [ENTRIES.webm], []);
+
+    // Open the file in Quick View.
+    await openQuickView(appId, ENTRIES.webm.nameText);
+
+    // Prepare a list of tab-index focus queries.
+    const tabQueries = [
+      {'query': ['#quick-view', '[aria-label="Back"]:focus']},
+      {'query': ['#quick-view', '[aria-label="Open"]:focus']},
+      {'query': ['#quick-view', '[aria-label="File info"]:focus']},
+    ];
+
+    for (const query of tabQueries) {
+      // Make the browser dispatch a tab key event to FilesApp.
+      const result = await sendTestMessage(
+          {name: 'dispatchTabKey', shift: query.shift || false});
+      chrome.test.assertEq(
+          result, 'tabKeyDispatched', 'Tab key dispatch failure');
+
+      // Note: Allow 500ms between key events to filter out the focus
+      // traversal problems noted in crbug.com/907380#c10.
+      await wait(500);
+
+      // Check: the queried element should gain the focus.
+      await remoteCall.waitForElement(appId, query.query);
+    }
+
+    // Send tab keys until Back gains the focus again.
+    while (true) {
+      // Make the browser dispatch a tab key event to FilesApp.
+      const result =
+          await sendTestMessage({name: 'dispatchTabKey', shift: false});
+      chrome.test.assertEq(
+          result, 'tabKeyDispatched', 'Tab key dispatch failure');
+
+      // Note: Allow 500ms between key events to filter out the focus
+      // traversal problems noted in crbug.com/907380#c10.
+      await wait(500);
+
+      // Check: back should eventually get the focus again.
+      const activeElement = await remoteCall.callRemoteTestUtil(
+          'deepGetActiveElement', appId, []);
+      if (activeElement.attributes['aria-label'] === 'Back') {
+        break;
+      }
+    }
+  };
 })();

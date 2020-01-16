@@ -467,6 +467,7 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
         TestCase("openQuickViewTabIndexImage"),
         TestCase("openQuickViewTabIndexText"),
         TestCase("openQuickViewTabIndexAudio"),
+        TestCase("openQuickViewTabIndexVideo"),
         TestCase("pressEnterOnInfoBoxToOpenClose"),
         TestCase("closeQuickView"),
         TestCase("openQuickViewFromDirectoryTree")));
