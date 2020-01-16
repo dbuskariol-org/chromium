@@ -169,6 +169,8 @@ void PluginVmInstaller::OnDlcDownloadCompleted(
     state_ = State::DOWNLOAD_DLC_FAILED;
     if (observer_)
       observer_->OnDownloadFailed(FailureReason::DLC_DOWNLOAD_FAILED);
+    RecordPluginVmDlcUseResultHistogram(
+        PluginVmDlcUseResult::kFallbackToRootFsInvalidDlcError);
     return;
   }
 
@@ -178,6 +180,10 @@ void PluginVmInstaller::OnDlcDownloadCompleted(
     // PluginVM will be rootfs resident as a fallback.
     LOG(ERROR) << "PluginVM DLC installation failed, falling back to rootfs "
                   "resident PluginVM.";
+    RecordPluginVmDlcUseResultHistogram(
+        PluginVmDlcUseResult::kFallbackToRootFsInternalDlcError);
+  } else {
+    RecordPluginVmDlcUseResultHistogram(PluginVmDlcUseResult::kDlcSuccess);
   }
 
   if (observer_)
