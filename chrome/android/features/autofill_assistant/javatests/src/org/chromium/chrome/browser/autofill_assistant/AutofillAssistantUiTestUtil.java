@@ -25,7 +25,7 @@ import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.core.deps.guava.base.Preconditions;
 import android.support.test.espresso.matcher.BoundedMatcher;
-import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -235,13 +235,13 @@ class AutofillAssistantUiTestUtil {
             @Override
             public void perform(UiController uiController, View view) {
                 TextView textView = (TextView) view;
-                SpannableString spannableString = (SpannableString) textView.getText();
+                Spanned spannedString = (Spanned) textView.getText();
                 ClickableSpan[] spans =
-                        spannableString.getSpans(0, spannableString.length(), ClickableSpan.class);
+                        spannedString.getSpans(0, spannedString.length(), ClickableSpan.class);
                 for (ClickableSpan span : spans) {
                     if (textLink.contentEquals(
-                                spannableString.subSequence(spannableString.getSpanStart(span),
-                                        spannableString.getSpanEnd(span)))) {
+                                spannedString.subSequence(spannedString.getSpanStart(span),
+                                        spannedString.getSpanEnd(span)))) {
                         span.onClick(view);
                         return;
                     }
