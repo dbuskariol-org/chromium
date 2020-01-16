@@ -754,22 +754,6 @@
     "label": "//device:device_unittests",
     "type": "console_test_launcher",
   },
-  "devtools_type_check": {
-    "args": [
-      "../../third_party/devtools-frontend/src/scripts/test/run_type_check.py",
-    ],
-    "label": "//third_party/devtools-frontend/src:devtools_type_check",
-    "script": "//testing/scripts/run_devtools_check.py",
-    "type": "script",
-  },
-  "devtools_lint_check": {
-    "args": [
-      "../../third_party/devtools-frontend/src/scripts/test/run_lint_check.py",
-    ],
-    "label": "//third_party/devtools-frontend/src:devtools_lint_check",
-    "script": "//testing/scripts/run_devtools_check.py",
-    "type": "script",
-  },
   "display_unittests": {
     "label": "//ui/display:display_unittests",
     "type": "console_test_launcher",
