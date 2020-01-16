@@ -1200,6 +1200,7 @@ jumbo_source_set("browser") {
     "memory/swap_metrics_driver_impl_mac.cc",
     "memory/swap_metrics_driver_impl_mac.h",
     "memory/swap_metrics_driver_impl_win.cc",
+    "message_port.cc",
     "message_port_provider.cc",
     "mime_registry_impl.cc",
     "mime_registry_impl.h",

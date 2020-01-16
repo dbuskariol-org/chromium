@@ -208,6 +208,7 @@ jumbo_source_set("browser_sources") {
     "media_session_service.h",
     "media_stream_request.cc",
     "media_stream_request.h",
+    "message_port.h",
     "message_port_provider.h",
     "mhtml_extra_parts.h",
     "mhtml_generation_result.cc",
