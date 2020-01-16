@@ -795,6 +795,10 @@ UIView* SubviewWithAccessibilityIdentifier(NSString* accessibility_id,
   return grey_accessibilityID(kSettingsToolbarDeleteButtonId);
 }
 
++ (id<GREYMatcher>)settingsSearchEngineButton {
+  return grey_accessibilityID(kSettingsSearchEngineCellId);
+}
+
 + (id<GREYMatcher>)contentViewSmallerThanScrollView {
   GREYMatchesBlock matches = ^BOOL(UIView* view) {
     UIScrollView* scrollView = base::mac::ObjCCast<UIScrollView>(view);
