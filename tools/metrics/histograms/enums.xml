@@ -6471,6 +6471,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Exists"/>
 </enum>
 
+<enum name="BooleanExpected">
+  <int value="0" label="Unexpected"/>
+  <int value="1" label="Expected"/>
+</enum>
+
 <enum name="BooleanExpired">
   <int value="0" label="Unexpired"/>
   <int value="1" label="Expired"/>
