@@ -71,8 +71,6 @@ class CORE_EXPORT LayoutFileUploadControl final : public LayoutBlockFlow {
                    const PhysicalOffset& paint_offset) const override;
 
   int MaxFilenameWidth() const;
-
-  PositionWithAffinity PositionForPoint(const PhysicalOffset&) const override;
 };
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutFileUploadControl, IsFileUploadControl());

@@ -23,7 +23,6 @@
 #include <math.h>
 #include "third_party/blink/public/strings/grit/blink_strings.h"
 #include "third_party/blink/renderer/core/dom/shadow_root.h"
-#include "third_party/blink/renderer/core/editing/position_with_affinity.h"
 #include "third_party/blink/renderer/core/fileapi/file_list.h"
 #include "third_party/blink/renderer/core/html/forms/html_input_element.h"
 #include "third_party/blink/renderer/core/input_type_names.h"
@@ -142,11 +141,6 @@ void LayoutFileUploadControl::ComputePreferredLogicalWidths() {
   max_preferred_logical_width_ += to_add;
 
   ClearPreferredLogicalWidthsDirty();
-}
-
-PositionWithAffinity LayoutFileUploadControl::PositionForPoint(
-    const PhysicalOffset&) const {
-  return PositionWithAffinity();
 }
 
 HTMLInputElement* LayoutFileUploadControl::UploadButton() const {
