@@ -102,8 +102,7 @@ gfx::Rect GetGridBoundsInScreen(
 // Gets the bounds of a window if it were to be snapped or about to be snapped
 // in splitview. Returns nothing if we are not in tablet mode, or if we aren't
 // in splitview, or if we aren't showing a splitview preview.
-base::Optional<gfx::RectF> GetSplitviewBoundsMaintainingAspectRatio(
-    aura::Window* window);
+base::Optional<gfx::RectF> GetSplitviewBoundsMaintainingAspectRatio();
 
 // Check if kNewOverviewLayout is enabled for tablet mode.
 bool ShouldUseTabletModeGridLayout();

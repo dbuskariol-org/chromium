@@ -376,8 +376,7 @@ gfx::Rect GetGridBoundsInScreen(
   return bounds;
 }
 
-base::Optional<gfx::RectF> GetSplitviewBoundsMaintainingAspectRatio(
-    aura::Window* window) {
+base::Optional<gfx::RectF> GetSplitviewBoundsMaintainingAspectRatio() {
   if (!ShouldAllowSplitView())
     return base::nullopt;
   if (!Shell::Get()->tablet_mode_controller()->InTabletMode())

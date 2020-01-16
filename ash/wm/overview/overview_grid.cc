@@ -1501,7 +1501,7 @@ int OverviewGrid::CalculateWidthAndMaybeSetUnclippedBounds(OverviewItem* item,
   // Get the bounds of the window if there is a snapped window or a window
   // about to be snapped.
   base::Optional<gfx::RectF> split_view_bounds =
-      GetSplitviewBoundsMaintainingAspectRatio(item->GetWindow());
+      GetSplitviewBoundsMaintainingAspectRatio();
   if (!split_view_bounds) {
     item->set_unclipped_size(base::nullopt);
     return width;
