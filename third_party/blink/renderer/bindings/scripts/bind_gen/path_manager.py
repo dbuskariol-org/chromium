@@ -87,6 +87,14 @@ class PathManager(object):
 
         components = sorted(idl_definition.components)  # "core" < "modules"
 
+        if len(components) == 0:
+            assert isinstance(idl_definition, web_idl.Union)
+            # Unions of built-in types, e.g. DoubleOrString, do not have a
+            # component.
+            self._is_cross_components = False
+            default_component = web_idl.Component("core")
+            self._api_component = default_component
+            self._impl_component = default_component
         if len(components) == 1:
             component = components[0]
             self._is_cross_components = False
