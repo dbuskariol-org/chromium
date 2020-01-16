@@ -219,8 +219,6 @@ class TabGridMediatorTest : public PlatformTest {
         std::make_unique<TabHelperFakeWebStateListDelegate>();
     web_state_list_ =
         std::make_unique<WebStateList>(web_state_list_delegate_.get());
-    browser_ = std::make_unique<TestBrowser>(browser_state_.get(),
-                                             web_state_list_.get());
     tab_restore_service_ = std::make_unique<FakeTabRestoreService>();
     tab_model_ = OCMClassMock([TabModel class]);
     OCMStub([tab_model_ webStateList]).andReturn(web_state_list_.get());
@@ -235,6 +233,7 @@ class TabGridMediatorTest : public PlatformTest {
     web_state_list_->AddObserver(
         tab_model_closing_web_state_observer_bridge_.get());
     NSMutableSet<NSString*>* identifiers = [[NSMutableSet alloc] init];
+    browser_ = std::make_unique<TestBrowser>(browser_state_.get(), tab_model_);
 
     // Insert some web states.
     for (int i = 0; i < 3; i++) {
@@ -255,7 +254,7 @@ class TabGridMediatorTest : public PlatformTest {
             ->tab_id();
     consumer_ = [[FakeConsumer alloc] init];
     mediator_ = [[TabGridMediator alloc] initWithConsumer:consumer_];
-    mediator_.tabModel = tab_model_;
+    mediator_.browser = browser_.get();
     mediator_.tabRestoreService = tab_restore_service_.get();
   }
 
@@ -565,10 +564,10 @@ TEST_F(TabGridMediatorTest, InsertNewItemCommand) {
   EXPECT_NSEQ(identifier, consumer_.items[0]);
 }
 
-// Tests that |-insertNewItemAtIndex:| is a no-op if the mediator's TabModel
-// is nil.
-TEST_F(TabGridMediatorTest, InsertNewItemWithNoTabModelCommand) {
-  mediator_.tabModel = nil;
+// Tests that |-insertNewItemAtIndex:| is a no-op if the mediator's browser
+// is bullptr.
+TEST_F(TabGridMediatorTest, InsertNewItemWithNoBrowserCommand) {
+  mediator_.browser = nullptr;
   ASSERT_EQ(3, web_state_list_->count());
   ASSERT_EQ(1, web_state_list_->active_index());
   [mediator_ insertNewItemAtIndex:0];

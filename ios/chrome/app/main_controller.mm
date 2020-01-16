@@ -758,7 +758,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
   // Clear the OTR tab model and notify the _tabSwitcher that its otrBVC will
   // be destroyed.
-  [_tabSwitcher setOtrTabModel:nil];
+  [_tabSwitcher setOtrBrowser:nil];
 
   [_browserViewWrangler destroyAndRebuildIncognitoBrowser];
 
@@ -766,9 +766,9 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
     [self activateBVCAndMakeCurrentBVCPrimary];
   }
 
-  // Always set the new otr tab model for the tablet or grid switcher.
+  // Always set the new otr browser for the tablet or grid switcher.
   // Notify the _tabSwitcher with the new otrBVC.
-  [_tabSwitcher setOtrTabModel:self.otrTabModel];
+  [_tabSwitcher setOtrBrowser:self.mainBrowser];
 
   // This seems the best place to deem the destroying and rebuilding the
   // incognito browser state to be completed.
@@ -807,8 +807,8 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
         [[TabGridCoordinator alloc] initWithWindow:self.window
                         applicationCommandEndpoint:self.sceneController
                        browsingDataCommandEndpoint:self];
-    tabGridCoordinator.regularTabModel = self.mainTabModel;
-    tabGridCoordinator.incognitoTabModel = self.otrTabModel;
+    tabGridCoordinator.regularBrowser = self.mainBrowser;
+    tabGridCoordinator.incognitoBrowser = self.otrBrowser;
     _mainCoordinator = tabGridCoordinator;
   }
   return _mainCoordinator;
@@ -1422,6 +1422,11 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   return self.interfaceProvider.mainInterface.bvc;
 }
 
+- (Browser*)mainBrowser {
+  DCHECK(self.interfaceProvider);
+  return self.interfaceProvider.mainInterface.browser;
+}
+
 - (TabModel*)mainTabModel {
   DCHECK(self.interfaceProvider);
   return self.interfaceProvider.mainInterface.tabModel;
@@ -1435,6 +1440,11 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 - (TabModel*)otrTabModel {
   DCHECK(self.interfaceProvider);
   return self.interfaceProvider.incognitoInterface.tabModel;
+}
+
+- (Browser*)otrBrowser {
+  DCHECK(self.interfaceProvider);
+  return self.interfaceProvider.incognitoInterface.browser;
 }
 
 - (BrowserViewController*)currentBVC {
