@@ -7,6 +7,7 @@
 #include "base/memory/ptr_util.h"
 #include "base/memory/weak_ptr.h"
 #include "base/trace_event/trace_event.h"
+#include "content/browser/service_worker/service_worker_context_core.h"
 #include "content/browser/service_worker/service_worker_registration.h"
 #include "content/browser/service_worker/service_worker_version.h"
 #include "content/common/service_worker/service_worker_utils.h"
@@ -35,19 +36,25 @@ ServiceWorkerRegistry::ServiceWorkerRegistry(
     scoped_refptr<base::SequencedTaskRunner> database_task_runner,
     storage::QuotaManagerProxy* quota_manager_proxy,
     storage::SpecialStoragePolicy* special_storage_policy)
-    : storage_(ServiceWorkerStorage::Create(user_data_directory,
+    : context_(context),
+      storage_(ServiceWorkerStorage::Create(user_data_directory,
                                             context,
                                             std::move(database_task_runner),
                                             quota_manager_proxy,
                                             special_storage_policy,
-                                            this)) {}
+                                            this)) {
+  DCHECK(context_);
+}
 
 ServiceWorkerRegistry::ServiceWorkerRegistry(
     ServiceWorkerContextCore* context,
     ServiceWorkerRegistry* old_registry)
-    : storage_(ServiceWorkerStorage::Create(context,
+    : context_(context),
+      storage_(ServiceWorkerStorage::Create(context,
                                             old_registry->storage(),
-                                            this)) {}
+                                            this)) {
+  DCHECK(context_);
+}
 
 ServiceWorkerRegistry::~ServiceWorkerRegistry() = default;
 
@@ -162,6 +169,59 @@ ServiceWorkerRegistry::FindInstallingRegistrationForId(
   if (found == installing_registrations_.end())
     return nullptr;
   return found->second.get();
+}
+
+scoped_refptr<ServiceWorkerRegistration>
+ServiceWorkerRegistry::GetOrCreateRegistration(
+    const ServiceWorkerDatabase::RegistrationData& data,
+    const ResourceList& resources) {
+  scoped_refptr<ServiceWorkerRegistration> registration =
+      context_->GetLiveRegistration(data.registration_id);
+  if (registration)
+    return registration;
+
+  blink::mojom::ServiceWorkerRegistrationOptions options(
+      data.scope, data.script_type, data.update_via_cache);
+  registration = base::MakeRefCounted<ServiceWorkerRegistration>(
+      options, data.registration_id, context_->AsWeakPtr());
+  registration->set_resources_total_size_bytes(data.resources_total_size_bytes);
+  registration->set_last_update_check(data.last_update_check);
+  DCHECK(uninstalling_registrations().find(data.registration_id) ==
+         uninstalling_registrations().end());
+
+  scoped_refptr<ServiceWorkerVersion> version =
+      context_->GetLiveVersion(data.version_id);
+  if (!version) {
+    version = base::MakeRefCounted<ServiceWorkerVersion>(
+        registration.get(), data.script, data.script_type, data.version_id,
+        context_->AsWeakPtr());
+    version->set_fetch_handler_existence(
+        data.has_fetch_handler
+            ? ServiceWorkerVersion::FetchHandlerExistence::EXISTS
+            : ServiceWorkerVersion::FetchHandlerExistence::DOES_NOT_EXIST);
+    version->SetStatus(data.is_active ? ServiceWorkerVersion::ACTIVATED
+                                      : ServiceWorkerVersion::INSTALLED);
+    version->script_cache_map()->SetResources(resources);
+    if (data.origin_trial_tokens)
+      version->SetValidOriginTrialTokens(*data.origin_trial_tokens);
+
+    version->set_used_features(data.used_features);
+    version->set_cross_origin_embedder_policy(
+        data.cross_origin_embedder_policy);
+  }
+  version->set_script_response_time_for_devtools(data.script_response_time);
+
+  if (version->status() == ServiceWorkerVersion::ACTIVATED)
+    registration->SetActiveVersion(version);
+  else if (version->status() == ServiceWorkerVersion::INSTALLED)
+    registration->SetWaitingVersion(version);
+  else
+    NOTREACHED();
+
+  registration->EnableNavigationPreload(data.navigation_preload_state.enabled);
+  registration->SetNavigationPreloadHeader(
+      data.navigation_preload_state.header);
+  return registration;
 }
 
 void ServiceWorkerRegistry::DidFindRegistrationForClientUrl(

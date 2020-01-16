@@ -447,10 +447,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const ServiceWorkerDatabase::RegistrationData& data,
       const ResourceList& resources);
 
-  scoped_refptr<ServiceWorkerRegistration> GetOrCreateRegistration(
-      const ServiceWorkerDatabase::RegistrationData& data,
-      const ResourceList& resources);
-
   // Lazy disk_cache getter.
   ServiceWorkerDiskCache* disk_cache();
   void InitializeDiskCache();

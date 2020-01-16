@@ -9,6 +9,7 @@
 
 #include "base/files/file_path.h"
 #include "base/memory/scoped_refptr.h"
+#include "content/browser/service_worker/service_worker_database.h"
 #include "content/browser/service_worker/service_worker_storage.h"
 #include "content/common/content_export.h"
 
@@ -92,6 +93,13 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   ServiceWorkerRegistration* FindInstallingRegistrationForId(
       int64_t registration_id);
 
+  // TODO(crbug.com/1039200): Make this private once methods/fields related to
+  // ServiceWorkerRegistration in ServiceWorkerStorage are moved into this
+  // class.
+  scoped_refptr<ServiceWorkerRegistration> GetOrCreateRegistration(
+      const ServiceWorkerDatabase::RegistrationData& data,
+      const ResourceList& resources);
+
   using RegistrationRefsById =
       std::map<int64_t, scoped_refptr<ServiceWorkerRegistration>>;
   // TODO(crbug.com/1039200): Remove these accessors. These are tentatively
@@ -111,6 +119,9 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       FindRegistrationCallback callback,
       blink::ServiceWorkerStatusCode status,
       scoped_refptr<ServiceWorkerRegistration> registration);
+
+  // The ServiceWorkerContextCore object must outlive this.
+  ServiceWorkerContextCore* const context_;
 
   std::unique_ptr<ServiceWorkerStorage> storage_;
 

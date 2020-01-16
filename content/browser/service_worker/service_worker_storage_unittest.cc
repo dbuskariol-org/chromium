@@ -1259,7 +1259,7 @@ class ServiceWorkerResourceStorageTest : public ServiceWorkerStorageTest {
         ResourceRecord(resource_id1_, script_, resource_id1_size_));
     resources.push_back(
         ResourceRecord(resource_id2_, import_, resource_id2_size_));
-    registration_ = storage()->GetOrCreateRegistration(data, resources);
+    registration_ = registry()->GetOrCreateRegistration(data, resources);
     registration_->waiting_version()->SetStatus(ServiceWorkerVersion::NEW);
 
     // Add the resources ids to the uncommitted list.

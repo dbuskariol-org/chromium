@@ -1258,7 +1258,7 @@ void ServiceWorkerStorage::ReturnFoundRegistration(
     const ResourceList& resources) {
   DCHECK(!resources.empty());
   scoped_refptr<ServiceWorkerRegistration> registration =
-      GetOrCreateRegistration(data, resources);
+      registry_->GetOrCreateRegistration(data, resources);
   CompleteFindNow(std::move(registration), blink::ServiceWorkerStatusCode::kOk,
                   std::move(callback));
 }
@@ -1288,7 +1288,7 @@ void ServiceWorkerStorage::DidGetRegistrationsForOrigin(
   size_t index = 0;
   for (const auto& registration_data : *registration_data_list) {
     registration_ids.insert(registration_data.registration_id);
-    registrations.push_back(GetOrCreateRegistration(
+    registrations.push_back(registry_->GetOrCreateRegistration(
         registration_data, resources_list->at(index++)));
   }
 
@@ -1544,59 +1544,6 @@ void ServiceWorkerStorage::DidGetUserDataForAllRegistrations(
   if (status != ServiceWorkerDatabase::STATUS_OK)
     ScheduleDeleteAndStartOver();
   std::move(callback).Run(user_data, DatabaseStatusToStatusCode(status));
-}
-
-scoped_refptr<ServiceWorkerRegistration>
-ServiceWorkerStorage::GetOrCreateRegistration(
-    const ServiceWorkerDatabase::RegistrationData& data,
-    const ResourceList& resources) {
-  scoped_refptr<ServiceWorkerRegistration> registration =
-      context_->GetLiveRegistration(data.registration_id);
-  if (registration)
-    return registration;
-
-  blink::mojom::ServiceWorkerRegistrationOptions options(
-      data.scope, data.script_type, data.update_via_cache);
-  registration = new ServiceWorkerRegistration(options, data.registration_id,
-                                               context_->AsWeakPtr());
-  registration->set_resources_total_size_bytes(data.resources_total_size_bytes);
-  registration->set_last_update_check(data.last_update_check);
-  DCHECK(registry_->uninstalling_registrations().find(data.registration_id) ==
-         registry_->uninstalling_registrations().end());
-
-  scoped_refptr<ServiceWorkerVersion> version =
-      context_->GetLiveVersion(data.version_id);
-  if (!version) {
-    version = base::MakeRefCounted<ServiceWorkerVersion>(
-        registration.get(), data.script, data.script_type, data.version_id,
-        context_->AsWeakPtr());
-    version->set_fetch_handler_existence(
-        data.has_fetch_handler
-            ? ServiceWorkerVersion::FetchHandlerExistence::EXISTS
-            : ServiceWorkerVersion::FetchHandlerExistence::DOES_NOT_EXIST);
-    version->SetStatus(data.is_active ?
-        ServiceWorkerVersion::ACTIVATED : ServiceWorkerVersion::INSTALLED);
-    version->script_cache_map()->SetResources(resources);
-    if (data.origin_trial_tokens)
-      version->SetValidOriginTrialTokens(*data.origin_trial_tokens);
-
-    version->set_used_features(data.used_features);
-    version->set_cross_origin_embedder_policy(
-        data.cross_origin_embedder_policy);
-  }
-  version->set_script_response_time_for_devtools(data.script_response_time);
-
-  if (version->status() == ServiceWorkerVersion::ACTIVATED)
-    registration->SetActiveVersion(version);
-  else if (version->status() == ServiceWorkerVersion::INSTALLED)
-    registration->SetWaitingVersion(version);
-  else
-    NOTREACHED();
-
-  registration->EnableNavigationPreload(data.navigation_preload_state.enabled);
-  registration->SetNavigationPreloadHeader(
-      data.navigation_preload_state.header);
-  return registration;
 }
 
 ServiceWorkerDiskCache* ServiceWorkerStorage::disk_cache() {
