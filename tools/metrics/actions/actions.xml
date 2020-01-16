@@ -5685,6 +5685,13 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="DownloadNotification.Button_BypassDeepScanning">
+  <owner>drubery@chromium.org</owner>
+  <description>
+    User pushes &quot;Open now&quot; on the prompt for download deep scanning
+  </description>
+</action>
+
 <action name="DownloadNotification.Button_Cancel">
   <owner>yoshiki@chromium.org</owner>
   <description>

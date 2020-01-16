@@ -27,6 +27,7 @@
 #include "chrome/app/vector_icons/vector_icons.h"
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/download/chrome_download_manager_delegate.h"
+#include "chrome/browser/download/download_commands.h"
 #include "chrome/browser/download/download_item_model.h"
 #include "chrome/browser/download/download_stats.h"
 #include "chrome/browser/download/drag_download_item.h"
@@ -337,7 +338,7 @@ void DownloadItemView::OnDownloadUpdated() {
   bool is_danger_type_async_scanning =
       (model_->GetDangerType() ==
        download::DOWNLOAD_DANGER_TYPE_ASYNC_SCANNING);
-  if (model_->IsDangerous()) {
+  if (model_->IsDangerous() && model_->GetState() != DownloadItem::CANCELLED) {
     if (!IsShowingWarningDialog())
       TransitionToWarningDialog();
   } else if (is_danger_type_async_scanning &&
@@ -714,8 +715,10 @@ void DownloadItemView::ButtonPressed(views::Button* sender,
     return;
   }
 
-  if (sender == scan_button_)
+  if (sender == scan_button_) {
+    DownloadCommands(model_.get()).ExecuteCommand(DownloadCommands::DEEP_SCAN);
     return;
+  }
 
   DCHECK_EQ(discard_button_, sender);
   UMA_HISTOGRAM_LONG_TIMES("clickjacking.discard_download", warning_duration);
@@ -1134,6 +1137,7 @@ void DownloadItemView::ShowDeepScanningDialog() {
       deep_scanning_text, /*listener=*/nullptr);
   deep_scanning_label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   deep_scanning_label->SetAutoColorReadabilityEnabled(false);
+  deep_scanning_label->set_can_process_events_within_subtree(false);
   deep_scanning_label_ = AddChildView(std::move(deep_scanning_label));
   deep_scanning_label_->SetSize(AdjustTextAndGetSize(
       deep_scanning_label_,
