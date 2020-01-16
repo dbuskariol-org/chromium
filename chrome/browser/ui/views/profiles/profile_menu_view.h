@@ -32,8 +32,8 @@ class Browser;
 class ProfileMenuView : public ProfileMenuViewBase {
  public:
   ProfileMenuView(views::Button* anchor_button,
-                     Browser* browser,
-                     signin_metrics::AccessPoint access_point);
+                  Browser* browser,
+                  signin_metrics::AccessPoint access_point);
   ~ProfileMenuView() override;
 
   // ProfileMenuViewBase:
