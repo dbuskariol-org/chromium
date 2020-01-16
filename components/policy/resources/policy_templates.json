@@ -19492,6 +19492,22 @@
         Add an application with its |app_id| and |app_type| to |app_list| to whitelist the application.
        '''
     },
+    {
+      'name': 'LocalDiscoveryEnabled',
+      'owners': ['file://cloud_print/OWNERS'],
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'supported_on': ['chrome.*:81-', 'chrome_os:81-'],
+      'features': {
+        'dynamic_refresh': True,
+        'per_profile': True,
+      },
+      'example_value': True,
+      'id': 662,
+      'caption': '''Enable <ph name="CHROME_DEVICES_LINK">chrome://devices</ph>''',
+      'tags': [],
+      'desc': '''This policy controls access to controllable features in the local discovery UI (<ph name="CHROME_DEVICES_LINK">chrome://devices</ph>) which shows discoverable devices near the user as well as cloud devices registered to them. On all operating systems except for <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph>, the local discovery UI also allows users to add classic printers connected to their computers to <ph name="CLOUD_PRINT_NAME">Google Cloud Print</ph>.''',
+    },
   ],
 
   'messages': {
@@ -20322,6 +20338,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 661,
+  'highest_id_currently_used': 662,
   'highest_atomic_group_id_currently_used': 38
 }

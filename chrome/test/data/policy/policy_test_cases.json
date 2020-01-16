@@ -588,6 +588,17 @@
     ]
   },
 
+  "LocalDiscoveryEnabled" : {
+    "os": ["win", "linux", "mac", "chromeos"],
+    "can_be_recommended": true,
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "LocalDiscoveryEnabled": false },
+        "prefs": { "local_discovery.enabled": {} }
+      }
+    ]
+  },
+
   "SafeBrowsingEnabled": {
     "os": ["win", "linux", "mac", "chromeos"],
     "can_be_recommended": true,

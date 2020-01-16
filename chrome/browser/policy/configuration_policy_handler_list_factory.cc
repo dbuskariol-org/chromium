@@ -1264,6 +1264,12 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kDNSInterceptionChecksEnabled,
     prefs::kDNSInterceptionChecksEnabled,
     base::Value::Type::BOOLEAN },
+
+#if BUILDFLAG(ENABLE_SERVICE_DISCOVERY)
+  { key::kLocalDiscoveryEnabled,
+    prefs::kLocalDiscoveryEnabled,
+    base::Value::Type::BOOLEAN },
+#endif
 };
 // clang-format on
 
