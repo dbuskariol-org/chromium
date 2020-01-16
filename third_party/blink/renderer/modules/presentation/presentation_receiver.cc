@@ -53,11 +53,9 @@ PresentationReceiver* PresentationReceiver::From(Document& document) {
 }
 
 ScriptPromise PresentationReceiver::connectionList(ScriptState* script_state) {
-  ExecutionContext* execution_context = ExecutionContext::From(script_state);
-  RecordOriginTypeAccess(*execution_context);
   if (!connection_list_property_) {
-    connection_list_property_ =
-        MakeGarbageCollected<ConnectionListProperty>(execution_context);
+    connection_list_property_ = MakeGarbageCollected<ConnectionListProperty>(
+        ExecutionContext::From(script_state));
   }
 
   if (!connection_list_->IsEmpty() &&
@@ -114,18 +112,6 @@ void PresentationReceiver::RegisterConnection(
     ReceiverPresentationConnection* connection) {
   DCHECK(connection_list_);
   connection_list_->AddConnection(connection);
-}
-
-// static
-void PresentationReceiver::RecordOriginTypeAccess(
-    ExecutionContext& execution_context) {
-  if (execution_context.IsSecureContext()) {
-    UseCounter::Count(&execution_context,
-                      WebFeature::kPresentationReceiverSecureOrigin);
-  } else {
-    Deprecation::CountDeprecation(
-        &execution_context, WebFeature::kPresentationReceiverInsecureOrigin);
-  }
 }
 
 void PresentationReceiver::ContextDestroyed(ExecutionContext*) {

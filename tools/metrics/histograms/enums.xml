@@ -23666,7 +23666,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="937" label="CSSAnimationsStackedNeutralKeyframe"/>
   <int value="938" label="ReadingCheckedInClickHandler"/>
   <int value="939" label="FlexboxIntrinsicSizeAlgorithmIsDifferent"/>
-  <int value="940" label="HTMLImportsHasStyleSheets"/>
+  <int value="940" label="HTMLImportsHasStyleSheets_Obsolete"/>
   <int value="941" label="WebkitTextInClipProperty"/>
   <int value="942" label="WebkitTextInColorProperty"/>
   <int value="943" label="HeaderValueNotMatchingRFC7230"/>

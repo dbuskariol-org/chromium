@@ -401,16 +401,6 @@ DeprecationInfo GetDeprecationInfo(WebFeature feature) {
 
 #undef kWebComponentsV0DeprecationPost
 
-    case WebFeature::kPresentationRequestStartInsecureOrigin:
-    case WebFeature::kPresentationReceiverInsecureOrigin:
-      return {
-          "PresentationInsecureOrigin", kM72,
-          String("Using the Presentation API on insecure origins is "
-                 "deprecated and will be removed in M72. You should consider "
-                 "switching your application to a secure origin, such as "
-                 "HTTPS. See "
-                 "https://goo.gl/rStTGz for more details.")};
-
     case WebFeature::kLocalCSSFileExtensionRejected:
       return {"LocalCSSFileExtensionRejected", kM64,
               String("CSS cannot be loaded from `file:` URLs unless they end "
