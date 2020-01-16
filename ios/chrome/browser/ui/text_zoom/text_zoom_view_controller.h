@@ -7,10 +7,23 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ios/chrome/browser/ui/text_zoom/text_zoom_consumer.h"
+
 @protocol BrowserCommands;
 @class TextZoomViewController;
 
-@interface TextZoomViewController : UIViewController
+@protocol TextZoomHandler <NSObject>
+
+// Asks the handler to zoom in.
+- (void)zoomIn;
+// Asks the handler to zoom out.
+- (void)zoomOut;
+// Asks the handler to reset the zoom level to the default.
+- (void)resetZoom;
+
+@end
+
+@interface TextZoomViewController : UIViewController <TextZoomConsumer>
 
 - (instancetype)initWithDarkAppearance:(BOOL)darkAppearance
     NS_DESIGNATED_INITIALIZER;
@@ -21,6 +34,7 @@
 - (instancetype)initWithCoder:(NSCoder*)coder NS_UNAVAILABLE;
 
 @property(nonatomic, weak) id<BrowserCommands> commandHandler;
+@property(nonatomic, weak) id<TextZoomHandler> zoomHandler;
 
 @end
 

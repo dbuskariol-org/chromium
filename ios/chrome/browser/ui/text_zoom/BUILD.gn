@@ -6,6 +6,8 @@ source_set("text_zoom") {
   sources = [
     "text_zoom_coordinator.h",
     "text_zoom_coordinator.mm",
+    "text_zoom_mediator.h",
+    "text_zoom_mediator.mm",
   ]
   deps = [
     ":text_zoom_ui",
@@ -16,6 +18,8 @@ source_set("text_zoom") {
     "//ios/chrome/browser/ui/presenters",
     "//ios/chrome/browser/ui/toolbar/accessory",
     "//ios/chrome/browser/ui/toolbar/public:constants",
+    "//ios/chrome/browser/web",
+    "//ios/chrome/browser/web_state_list",
     "//ios/chrome/common/colors",
   ]
   configs += [ "//build/config/compiler:enable_arc" ]
@@ -23,6 +27,7 @@ source_set("text_zoom") {
 
 source_set("text_zoom_ui") {
   sources = [
+    "text_zoom_consumer.h",
     "text_zoom_view_controller.h",
     "text_zoom_view_controller.mm",
   ]

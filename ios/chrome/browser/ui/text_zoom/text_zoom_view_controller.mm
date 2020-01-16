@@ -42,8 +42,6 @@ const CGFloat kDividerWidth = 1;
 @property(nonatomic, strong) UIButton* incrementButton;
 @property(nonatomic, strong) UIButton* decrementButton;
 
-@property(nonatomic, assign) int stepperValue;
-
 @end
 
 @implementation TextZoomViewController
@@ -97,34 +95,6 @@ const CGFloat kDividerWidth = 1;
                                       forAxis:UILayoutConstraintAxisHorizontal];
 }
 
-#pragma mark - Private methods (control actions)
-
-- (void)closeButtonWasTapped:(id)sender {
-  [self.commandHandler hideTextZoom];
-}
-
-- (void)resetButtonWasTapped:(id)sender {
-  self.stepperValue = 0;
-}
-
-- (void)incrementButtonWasTapped:(id)sender {
-  self.stepperValue += 1;
-}
-
-- (void)decrementButtonWasTapped:(id)sender {
-  self.stepperValue -= 1;
-}
-
-- (void)updateStepperState {
-  self.incrementButton.enabled = self.stepperValue < 5;
-  self.decrementButton.enabled = self.stepperValue > -5;
-}
-
-- (void)setStepperValue:(int)stepperValue {
-  _stepperValue = stepperValue;
-  [self updateStepperState];
-}
-
 #pragma mark - Private property Accessors
 
 // Creates and returns the close button.
@@ -134,8 +104,8 @@ const CGFloat kDividerWidth = 1;
     [_closeButton setTitle:l10n_util::GetNSString(IDS_DONE)
                   forState:UIControlStateNormal];
     _closeButton.accessibilityIdentifier = kTextZoomCloseButtonID;
-    [_closeButton addTarget:self
-                     action:@selector(closeButtonWasTapped:)
+    [_closeButton addTarget:self.commandHandler
+                     action:@selector(hideTextZoom)
            forControlEvents:UIControlEventTouchUpInside];
   }
   return _closeButton;
@@ -147,8 +117,8 @@ const CGFloat kDividerWidth = 1;
     _resetButton = [self newButtonWithDefaultStyling];
     [_resetButton setTitle:l10n_util::GetNSString(IDS_IOS_RESET_ZOOM)
                   forState:UIControlStateNormal];
-    [_resetButton addTarget:self
-                     action:@selector(resetButtonWasTapped:)
+    [_resetButton addTarget:self.zoomHandler
+                     action:@selector(resetZoom)
            forControlEvents:UIControlEventTouchUpInside];
   }
   return _resetButton;
@@ -160,8 +130,8 @@ const CGFloat kDividerWidth = 1;
     _incrementButton = [self newButtonWithDefaultStyling];
     UIImage* image = [UIImage imageNamed:@"text_zoom_zoom_in"];
     [_incrementButton setImage:image forState:UIControlStateNormal];
-    [_incrementButton addTarget:self
-                         action:@selector(incrementButtonWasTapped:)
+    [_incrementButton addTarget:self.zoomHandler
+                         action:@selector(zoomIn)
                forControlEvents:UIControlEventTouchUpInside];
     [NSLayoutConstraint activateConstraints:@[
       [_incrementButton.heightAnchor constraintEqualToConstant:kButtonSize],
@@ -178,8 +148,8 @@ const CGFloat kDividerWidth = 1;
     _decrementButton = [self newButtonWithDefaultStyling];
     UIImage* image = [UIImage imageNamed:@"text_zoom_zoom_out"];
     [_decrementButton setImage:image forState:UIControlStateNormal];
-    [_decrementButton addTarget:self
-                         action:@selector(decrementButtonWasTapped:)
+    [_decrementButton addTarget:self.zoomHandler
+                         action:@selector(zoomOut)
                forControlEvents:UIControlEventTouchUpInside];
     [NSLayoutConstraint activateConstraints:@[
       [_decrementButton.heightAnchor constraintEqualToConstant:kButtonSize],
@@ -226,6 +196,16 @@ const CGFloat kDividerWidth = 1;
   button.translatesAutoresizingMaskIntoConstraints = NO;
   button.titleLabel.font = [UIFont systemFontOfSize:kButtonFontSize];
   return button;
+}
+
+#pragma mark - TextZoomConsumer
+
+- (void)setZoomInEnabled:(BOOL)enabled {
+  self.incrementButton.enabled = enabled;
+}
+
+- (void)setZoomOutEnabled:(BOOL)enabled {
+  self.decrementButton.enabled = enabled;
 }
 
 @end
