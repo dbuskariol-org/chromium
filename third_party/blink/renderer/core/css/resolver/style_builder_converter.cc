@@ -1089,7 +1089,7 @@ Length StyleBuilderConverter::ConvertLengthMaxSizing(StyleResolverState& state,
                                                      const CSSValue& value) {
   auto* identifier_value = DynamicTo<CSSIdentifierValue>(value);
   if (identifier_value && identifier_value->GetValueID() == CSSValueID::kNone)
-    return Length::MaxSizeNone();
+    return Length::None();
   return ConvertLengthSizing(state, value);
 }
 

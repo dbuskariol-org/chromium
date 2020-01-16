@@ -4157,7 +4157,7 @@ const CSSValue* MaxHeight::CSSValueFromComputedStyleInternal(
     const LayoutObject*,
     bool allow_visited_style) const {
   const Length& max_height = style.MaxHeight();
-  if (max_height.IsMaxSizeNone())
+  if (max_height.IsNone())
     return CSSIdentifierValue::Create(CSSValueID::kNone);
   return ComputedStyleUtils::ZoomAdjustedPixelValueForLength(max_height, style);
 }
@@ -4182,7 +4182,7 @@ const CSSValue* MaxWidth::CSSValueFromComputedStyleInternal(
     const LayoutObject*,
     bool allow_visited_style) const {
   const Length& max_width = style.MaxWidth();
-  if (max_width.IsMaxSizeNone())
+  if (max_width.IsNone())
     return CSSIdentifierValue::Create(CSSValueID::kNone);
   return ComputedStyleUtils::ZoomAdjustedPixelValueForLength(max_width, style);
 }
