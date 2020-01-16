@@ -41,6 +41,7 @@ class BinaryUploadService {
   // service's |binary_fcm_service_|.
   BinaryUploadService(
       scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory,
+      Profile* profile,
       std::unique_ptr<BinaryFCMService> binary_fcm_service);
   virtual ~BinaryUploadService();
 
@@ -213,12 +214,14 @@ class BinaryUploadService {
   base::flat_map<Request*, std::unique_ptr<DlpDeepScanningVerdict>>
       received_dlp_verdicts_;
 
-  // Indicates whether this browser can upload data.
+  // Indicates whether this browser can upload data for enterprise requests.
+  // Advanced Protection scans are validated using the user's Advanced
+  // Protection enrollment status.
   // base::nullopt means the response from the backend has not been received
   // yet.
   // true means the response indicates data can be uploaded.
   // false means the response indicates data cannot be uploaded.
-  base::Optional<bool> can_upload_data_ = base::nullopt;
+  base::Optional<bool> can_upload_enterprise_data_ = base::nullopt;
 
   // Callbacks waiting on IsAuthorized request.
   std::list<base::OnceCallback<void(bool)>> authorization_callbacks_;

@@ -37,8 +37,9 @@ using ::testing::ReturnRef;
 class FakeBinaryUploadService : public BinaryUploadService {
  public:
   FakeBinaryUploadService()
-      : BinaryUploadService(nullptr,
-                            std::unique_ptr<BinaryFCMService>(nullptr)),
+      : BinaryUploadService(/*url_loader_factory=*/nullptr,
+                            /*profile=*/nullptr,
+                            /*binary_fcm_service=*/nullptr),
         saved_result_(BinaryUploadService::Result::UNKNOWN),
         saved_response_(DeepScanningClientResponse()) {}
 
