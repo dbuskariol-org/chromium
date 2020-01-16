@@ -595,12 +595,78 @@ enum class EnterTabSwitcherSnapshotResult {
 - (void)tabSwitcher:(id<TabSwitcher>)tabSwitcher
     shouldFinishWithActiveModel:(TabModel*)tabModel
                    focusOmnibox:(BOOL)focusOmnibox {
-  [self.mainController beginDismissingTabSwitcherWithCurrentModel:tabModel
-                                                     focusOmnibox:focusOmnibox];
+  [self beginDismissingTabSwitcherWithCurrentModel:tabModel
+                                      focusOmnibox:focusOmnibox];
 }
 
 - (void)tabSwitcherDismissTransitionDidEnd:(id<TabSwitcher>)tabSwitcher {
-  [self.mainController finishDismissingTabSwitcher];
+  [self finishDismissingTabSwitcher];
+}
+
+- (void)beginDismissingTabSwitcherWithCurrentModel:(TabModel*)tabModel
+                                      focusOmnibox:(BOOL)focusOmnibox {
+  DCHECK(tabModel == self.mainInterface.tabModel ||
+         tabModel == self.incognitoInterface.tabModel);
+
+  self.mainController.dismissingTabSwitcher = YES;
+  ApplicationMode mode = (tabModel == self.mainInterface.tabModel)
+                             ? ApplicationMode::NORMAL
+                             : ApplicationMode::INCOGNITO;
+  [self setCurrentInterfaceForMode:mode];
+
+  // The call to set currentBVC above does not actually display the BVC, because
+  // _dismissingTabSwitcher is YES.  So: Force the BVC transition to start.
+  [self.mainController displayCurrentBVCAndFocusOmnibox:focusOmnibox];
+}
+
+- (void)finishDismissingTabSwitcher {
+  // In real world devices, it is possible to have an empty tab model at the
+  // finishing block of a BVC presentation animation. This can happen when the
+  // following occur: a) There is JS that closes the last incognito tab, b) that
+  // JS was paused while the user was in the tab switcher, c) the user enters
+  // the tab, activating the JS while the tab is being presented. Effectively,
+  // the BVC finishes the presentation animation, but there are no tabs to
+  // display. The only appropriate action is to dismiss the BVC and return the
+  // user to the tab switcher.
+  if (self.currentInterface.browser &&
+      self.currentInterface.browser->GetWebStateList() &&
+      self.currentInterface.browser->GetWebStateList()->count() == 0U) {
+    self.mainController.tabSwitcherIsActive = NO;
+    self.mainController.dismissingTabSwitcher = NO;
+    self.mainController.modeToDisplayOnTabSwitcherDismissal =
+        TabSwitcherDismissalMode::NONE;
+    self.mainController.NTPActionAfterTabSwitcherDismissal = NO_ACTION;
+    [self.mainController showTabSwitcher];
+    return;
+  }
+
+  // The tab switcher dismissal animation runs
+  // as part of the BVC presentation process.  The BVC is presented before the
+  // animations begin, so it should be the current active VC at this point.
+  DCHECK_EQ(self.mainController.mainCoordinator.activeViewController,
+            self.mainController.currentBVC);
+
+  if (self.mainController.modeToDisplayOnTabSwitcherDismissal ==
+      TabSwitcherDismissalMode::NORMAL) {
+    [self setCurrentInterfaceForMode:ApplicationMode::NORMAL];
+  } else if (self.mainController.modeToDisplayOnTabSwitcherDismissal ==
+             TabSwitcherDismissalMode::INCOGNITO) {
+    [self setCurrentInterfaceForMode:ApplicationMode::INCOGNITO];
+  }
+
+  self.mainController.modeToDisplayOnTabSwitcherDismissal =
+      TabSwitcherDismissalMode::NONE;
+
+  ProceduralBlock action = [self.mainController
+      completionBlockForTriggeringAction:
+          self.mainController.NTPActionAfterTabSwitcherDismissal];
+  self.mainController.NTPActionAfterTabSwitcherDismissal = NO_ACTION;
+  if (action) {
+    action();
+  }
+
+  self.mainController.tabSwitcherIsActive = NO;
+  self.mainController.dismissingTabSwitcher = NO;
 }
 
 #pragma mark - TabSwitching
