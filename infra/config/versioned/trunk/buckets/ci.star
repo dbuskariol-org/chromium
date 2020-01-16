@@ -100,7 +100,6 @@ def fyi_builder(
 # OS shouldn't matter.
 fyi_builder(
     name = 'mac-osxbeta-rel',
-    goma_backend = goma.backend.RBE_PROD,
 )
 
 
