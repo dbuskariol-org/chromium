@@ -13,7 +13,7 @@
    * @param {!Object} node The node to check.
    */
   function isTypeRootNode(node) {
-    return node.PARENT_ID == 'r' && node.UNIQUE_SERVER_TAG != '';
+    return node.PARENT_ID === 'r' && node.UNIQUE_SERVER_TAG !== '';
   }
 
   /**
@@ -23,10 +23,10 @@
    * @param {!Object} node The node to check.
    */
   function isChildOf(parentNode, node) {
-    if (node.PARENT_ID != '') {
-      return node.PARENT_ID == parentNode.ID;
+    if (node.PARENT_ID !== '') {
+      return node.PARENT_ID === parentNode.ID;
     } else {
-      return node.modelType == parentNode.modelType;
+      return node.modelType === parentNode.modelType;
     }
   }
 
@@ -43,7 +43,7 @@
     if (nodeA.hasOwnProperty('positionIndex') &&
         nodeB.hasOwnProperty('positionIndex')) {
       return nodeA.positionIndex - nodeB.positionIndex;
-    } else if (nodeA.NON_UNIQUE_NAME != nodeB.NON_UNIQUE_NAME) {
+    } else if (nodeA.NON_UNIQUE_NAME !== nodeB.NON_UNIQUE_NAME) {
       return nodeA.NON_UNIQUE_NAME.localeCompare(nodeB.NON_UNIQUE_NAME);
     } else {
       return nodeA.METAHANDLE - nodeB.METAHANDLE;

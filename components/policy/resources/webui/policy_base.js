@@ -100,7 +100,7 @@ cr.define('policy', function() {
      */
     initialize(scope, status) {
       const notSpecifiedString = loadTimeData.getString('notSpecified');
-      if (scope == 'device') {
+      if (scope === 'device') {
         // For device policy, set the appropriate title and populate the topmost
         // status item with the domain the device is enrolled into.
         this.querySelector('.legend').textContent =
@@ -131,7 +131,7 @@ cr.define('policy', function() {
                   status.isOffHoursActive ? 'offHoursActive' :
                                             'offHoursNotActive'));
         }
-      } else if (scope == 'machine') {
+      } else if (scope === 'machine') {
         // For machine policy, set the appropriate title and populate
         // machine enrollment status with the information that applies
         // to this machine.
@@ -191,10 +191,10 @@ cr.define('policy', function() {
     /** @param {Conflict} conflict */
     initialize(conflict) {
       this.querySelector('.scope').textContent = loadTimeData.getString(
-          conflict.scope == 'user' ? 'scopeUser' : 'scopeDevice');
+          conflict.scope === 'user' ? 'scopeUser' : 'scopeDevice');
       this.querySelector('.level').textContent = loadTimeData.getString(
-          conflict.level == 'recommended' ? 'levelRecommended' :
-                                            'levelMandatory');
+          conflict.level === 'recommended' ? 'levelRecommended' :
+                                             'levelMandatory');
       this.querySelector('.source').textContent =
           loadTimeData.getString(conflict.source);
       this.querySelector('.value.row .value').textContent = conflict.value;
@@ -260,12 +260,12 @@ cr.define('policy', function() {
       if (!this.unset_) {
         const scopeDisplay = this.querySelector('.scope');
         scopeDisplay.textContent = loadTimeData.getString(
-            policy.scope == 'user' ? 'scopeUser' : 'scopeDevice');
+            policy.scope === 'user' ? 'scopeUser' : 'scopeDevice');
 
         const levelDisplay = this.querySelector('.level');
         levelDisplay.textContent = loadTimeData.getString(
-            policy.level == 'recommended' ? 'levelRecommended' :
-                                            'levelMandatory');
+            policy.level === 'recommended' ? 'levelRecommended' :
+                                             'levelMandatory');
 
         const sourceDisplay = this.querySelector('.source');
         sourceDisplay.textContent = loadTimeData.getString(policy.source);

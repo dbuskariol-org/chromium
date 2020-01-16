@@ -67,7 +67,7 @@ cr.define('chrome.sync', function() {
       }
       let trafficEventDiv = e.target;
       // Click might be on div's child.
-      if (trafficEventDiv.nodeName != 'DIV') {
+      if (trafficEventDiv.nodeName !== 'DIV') {
         trafficEventDiv = trafficEventDiv.parentNode;
       }
       trafficEventDiv.classList.toggle(

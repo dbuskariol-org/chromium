@@ -146,13 +146,13 @@ cr.googleTranslate = (function() {
   function onTranslateProgress(progress, opt_finished, opt_error) {
     finished = opt_finished;
     // opt_error can be 'undefined'.
-    if (typeof opt_error == 'boolean' && opt_error) {
+    if (typeof opt_error === 'boolean' && opt_error) {
       // TODO(toyoshim): Remove boolean case once a server is updated.
       errorCode = ERROR['TRANSLATION_ERROR'];
       // We failed to translate, restore so the page is in a consistent state.
       lib.restore();
       invokeResultCallback();
-    } else if (typeof opt_error == 'number' && opt_error != 0) {
+    } else if (typeof opt_error === 'number' && opt_error !== 0) {
       errorCode = TRANSLATE_ERROR_TO_ERROR_CODE_MAP[opt_error];
       lib.restore();
       invokeResultCallback();
@@ -241,7 +241,7 @@ cr.googleTranslate = (function() {
      * @type {boolean}
      */
     get error() {
-      return errorCode != ERROR['NONE'];
+      return errorCode !== ERROR['NONE'];
     },
 
     /**
@@ -261,7 +261,7 @@ cr.googleTranslate = (function() {
      * @type {boolean}
      */
     get sourceLang() {
-      if (!libReady || !finished || errorCode != ERROR['NONE']) {
+      if (!libReady || !finished || errorCode !== ERROR['NONE']) {
         return '';
       }
       if (!lib.getDetectedLanguage) {
@@ -276,7 +276,7 @@ cr.googleTranslate = (function() {
      * @type {number}
      */
     get loadTime() {
-      if (loadedTime == 0) {
+      if (loadedTime === 0) {
         return 0;
       }
       return loadedTime - injectedTime;
@@ -414,10 +414,10 @@ cr.googleTranslate = (function() {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.onreadystatechange = function() {
-        if (this.readyState != this.DONE) {
+        if (this.readyState !== this.DONE) {
           return;
         }
-        if (this.status != 200) {
+        if (this.status !== 200) {
           errorCode = ERROR['SCRIPT_LOAD_ERROR'];
           return;
         }

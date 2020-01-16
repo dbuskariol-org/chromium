@@ -284,7 +284,7 @@ const NetExportView = (function() {
       ];
 
       for (const curDivId of kAllDivIds) {
-        $(curDivId).hidden = divId != curDivId;
+        $(curDivId).hidden = divId !== curDivId;
       }
     },
   };

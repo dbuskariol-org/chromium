@@ -272,7 +272,7 @@ Runner.prototype = {
    * @param {number|string} value
    */
   updateConfigSetting(setting, value) {
-    if (setting in this.config && value != undefined) {
+    if (setting in this.config && value !== undefined) {
       this.config[setting] = value;
 
       switch (setting) {
@@ -569,7 +569,7 @@ Runner.prototype = {
       const hasObstacles = this.runningTime > this.config.CLEAR_TIME;
 
       // First jump triggers the intro.
-      if (this.tRex.jumpCount == 1 && !this.playingIntro) {
+      if (this.tRex.jumpCount === 1 && !this.playingIntro) {
         this.playIntro();
       }
 
@@ -711,12 +711,12 @@ Runner.prototype = {
     if (this.isCanvasInView()) {
       if (!this.crashed && !this.paused) {
         if (Runner.keycodes.JUMP[e.keyCode] ||
-            e.type == Runner.events.TOUCHSTART) {
+            e.type === Runner.events.TOUCHSTART) {
           e.preventDefault();
           // Starting the game for the first time.
           if (!this.playing) {
             // Started by touch so create a touch controller.
-            if (!this.touchController && e.type == Runner.events.TOUCHSTART) {
+            if (!this.touchController && e.type === Runner.events.TOUCHSTART) {
               this.createTouchController();
             }
             this.loadSounds();
@@ -742,8 +742,9 @@ Runner.prototype = {
           }
         }
         // iOS only triggers touchstart and no pointer events.
-      } else if (IS_IOS && this.crashed && e.type == Runner.events.TOUCHSTART &&
-          e.currentTarget == this.containerEl) {
+      } else if (
+          IS_IOS && this.crashed && e.type === Runner.events.TOUCHSTART &&
+          e.currentTarget === this.containerEl) {
         this.handleGameOverClicks(e);
       }
     }
@@ -756,8 +757,7 @@ Runner.prototype = {
   onKeyUp(e) {
     const keyCode = String(e.keyCode);
     const isjumpKey = Runner.keycodes.JUMP[keyCode] ||
-       e.type == Runner.events.TOUCHEND ||
-       e.type == Runner.events.POINTERUP;
+        e.type === Runner.events.TOUCHEND || e.type === Runner.events.POINTERUP;
 
     if (this.isRunning() && isjumpKey) {
       this.tRex.endJump();
@@ -862,7 +862,7 @@ Runner.prototype = {
       previousState = this.previousGamepad.buttons[buttonIndex].pressed;
     }
     // Generate key events on the rising and falling edge of a button press.
-    if (state != previousState) {
+    if (state !== previousState) {
       const e = new KeyboardEvent(state ? Runner.events.KEYDOWN
                                       : Runner.events.KEYUP,
                                 { keyCode: keyCode });
@@ -900,7 +900,7 @@ Runner.prototype = {
    */
   isLeftClickOnCanvas(e) {
     return e.button != null && e.button < 2 &&
-        e.type == Runner.events.POINTERUP && e.target == this.canvas;
+        e.type === Runner.events.POINTERUP && e.target === this.canvas;
   },
 
   /**
@@ -1041,7 +1041,7 @@ Runner.prototype = {
    * @return {boolean}
    */
   isArcadeMode() {
-    return document.title == ARCADE_MODE_URL;
+    return document.title === ARCADE_MODE_URL;
   },
 
   /**
@@ -1075,8 +1075,8 @@ Runner.prototype = {
    * Pause the game if the tab is not in focus.
    */
   onVisibilityChange(e) {
-    if (document.hidden || document.webkitHidden || e.type == 'blur' ||
-      document.visibilityState != 'visible') {
+    if (document.hidden || document.webkitHidden || e.type === 'blur' ||
+        document.visibilityState !== 'visible') {
       this.stop();
     } else if (!this.crashed) {
       this.tRex.reset();
@@ -1156,7 +1156,7 @@ Runner.updateCanvasScaling = function(canvas, opt_width, opt_height) {
     // our canvas element.
     context.scale(ratio, ratio);
     return true;
-  } else if (devicePixelRatio == 1) {
+  } else if (devicePixelRatio === 1) {
     // Reset the canvas width / height. Fixes scaling bug when the page is
     // zoomed and the devicePixelRatio changes accordingly.
     canvas.style.width = canvas.width + 'px';
@@ -1613,7 +1613,7 @@ Obstacle.prototype = {
         this.timer += deltaTime;
         if (this.timer >= this.typeConfig.frameRate) {
           this.currentFrame =
-              this.currentFrame == this.typeConfig.numFrames - 1 ?
+              this.currentFrame === this.typeConfig.numFrames - 1 ?
               0 :
               this.currentFrame + 1;
           this.timer = 0;
@@ -1902,7 +1902,7 @@ Trex.prototype = {
       this.msPerFrame = Trex.animFrames[opt_status].msPerFrame;
       this.currentAnimFrames = Trex.animFrames[opt_status].frames;
 
-      if (opt_status == Trex.status.WAITING) {
+      if (opt_status === Trex.status.WAITING) {
         this.animStartTime = getTimeStamp();
         this.setBlinkDelay();
       }
@@ -1915,7 +1915,7 @@ Trex.prototype = {
       this.xInitialPos = this.xPos;
     }
 
-    if (this.status == Trex.status.WAITING) {
+    if (this.status === Trex.status.WAITING) {
       this.blink(getTimeStamp());
     } else {
       this.draw(this.currentAnimFrames[this.currentFrame], 0);
@@ -1929,7 +1929,7 @@ Trex.prototype = {
     }
 
     // Speed drop becomes duck if the down key is still being pressed.
-    if (this.speedDrop && this.yPos == this.groundYPos) {
+    if (this.speedDrop && this.yPos === this.groundYPos) {
       this.speedDrop = false;
       this.setDuck(true);
     }
@@ -1943,8 +1943,9 @@ Trex.prototype = {
   draw(x, y) {
     let sourceX = x;
     let sourceY = y;
-    let sourceWidth = this.ducking && this.status != Trex.status.CRASHED ?
-        this.config.WIDTH_DUCK : this.config.WIDTH;
+    let sourceWidth = this.ducking && this.status !== Trex.status.CRASHED ?
+        this.config.WIDTH_DUCK :
+        this.config.WIDTH;
     let sourceHeight = this.config.HEIGHT;
     const outputHeight = sourceHeight;
 
@@ -1960,14 +1961,14 @@ Trex.prototype = {
     sourceY += this.spritePos.y;
 
     // Ducking.
-    if (this.ducking && this.status != Trex.status.CRASHED) {
+    if (this.ducking && this.status !== Trex.status.CRASHED) {
       this.canvasCtx.drawImage(Runner.imageSprite, sourceX, sourceY,
           sourceWidth, sourceHeight,
           this.xPos, this.yPos,
           this.config.WIDTH_DUCK, outputHeight);
     } else {
       // Crashed whilst ducking. Trex is standing up so needs adjustment.
-      if (this.ducking && this.status == Trex.status.CRASHED) {
+      if (this.ducking && this.status === Trex.status.CRASHED) {
         this.xPos++;
       }
       // Standing / running
@@ -1996,7 +1997,7 @@ Trex.prototype = {
     if (deltaTime >= this.blinkDelay) {
       this.draw(this.currentAnimFrames[this.currentFrame], 0);
 
-      if (this.currentFrame == 1) {
+      if (this.currentFrame === 1) {
         // Set new random delay to blink.
         this.setBlinkDelay();
         this.animStartTime = time;
@@ -2077,10 +2078,10 @@ Trex.prototype = {
    * @param {boolean} isDucking
    */
   setDuck(isDucking) {
-    if (isDucking && this.status != Trex.status.DUCKING) {
+    if (isDucking && this.status !== Trex.status.DUCKING) {
       this.update(0, Trex.status.DUCKING);
       this.ducking = true;
-    } else if (this.status == Trex.status.DUCKING) {
+    } else if (this.status === Trex.status.DUCKING) {
       this.update(0, Trex.status.RUNNING);
       this.ducking = false;
     }
@@ -2291,8 +2292,8 @@ DistanceMeter.prototype = {
       }
 
       if (distance > 0) {
-        // Acheivement unlocked
-        if (distance % this.config.ACHIEVEMENT_DISTANCE == 0) {
+        // Achievement unlocked.
+        if (distance % this.config.ACHIEVEMENT_DISTANCE === 0) {
           // Flash score and play sound.
           this.achievement = true;
           this.flashTimer = 0;
@@ -2646,7 +2647,7 @@ NightMode.prototype = {
    */
   update(activated) {
     // Moon phase.
-    if (activated && this.opacity == 0) {
+    if (activated && this.opacity === 0) {
       this.currentPhase++;
 
       if (this.currentPhase >= NightMode.phases.length) {
@@ -2655,7 +2656,7 @@ NightMode.prototype = {
     }
 
     // Fade in / out.
-    if (activated && (this.opacity < 1 || this.opacity == 0)) {
+    if (activated && (this.opacity < 1 || this.opacity === 0)) {
       this.opacity += NightMode.config.FADE_SPEED;
     } else if (this.opacity > 0) {
       this.opacity -= NightMode.config.FADE_SPEED;
@@ -2690,8 +2691,8 @@ NightMode.prototype = {
   },
 
   draw() {
-    let moonSourceWidth = this.currentPhase == 3 ? NightMode.config.WIDTH * 2 :
-         NightMode.config.WIDTH;
+    let moonSourceWidth = this.currentPhase === 3 ? NightMode.config.WIDTH * 2 :
+                                                    NightMode.config.WIDTH;
     let moonSourceHeight = NightMode.config.HEIGHT;
     let moonSourceX = this.spritePos.x + NightMode.phases[this.currentPhase];
     const moonOutputWidth = moonSourceWidth;
@@ -2804,7 +2805,7 @@ HorizonLine.prototype = {
   setSourceDimensions() {
     for (const dimension in HorizonLine.dimensions) {
       if (IS_HIDPI) {
-        if (dimension != 'YPOS') {
+        if (dimension !== 'YPOS') {
           this.sourceDimensions[dimension] =
               HorizonLine.dimensions[dimension] * 2;
         }
@@ -2850,7 +2851,7 @@ HorizonLine.prototype = {
    */
   updateXPos(pos, increment) {
     const line1 = pos;
-    const line2 = pos == 0 ? 1 : 0;
+    const line2 = pos === 0 ? 1 : 0;
 
     this.xPos[line1] -= increment;
     this.xPos[line2] = this.xPos[line1] + this.dimensions.WIDTH;
@@ -3074,8 +3075,8 @@ Horizon.prototype = {
     let duplicateCount = 0;
 
     for (let i = 0; i < this.obstacleHistory.length; i++) {
-      duplicateCount = this.obstacleHistory[i] == nextObstacleType ?
-          duplicateCount + 1 : 0;
+      duplicateCount =
+          this.obstacleHistory[i] === nextObstacleType ? duplicateCount + 1 : 0;
     }
     return duplicateCount >= Runner.config.MAX_OBSTACLE_DUPLICATION;
   },
