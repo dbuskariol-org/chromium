@@ -4,8 +4,9 @@
 
 #include "chrome/browser/android/explore_sites/most_visited_client.h"
 
+#include "base/feature_list.h"
 #include "base/memory/ptr_util.h"
-#include "chrome/browser/android/explore_sites/explore_sites_feature.h"
+#include "chrome/browser/android/chrome_feature_list.h"
 #include "chrome/common/webui_url_constants.h"
 #include "chrome/grit/generated_resources.h"
 #include "ui/base/l10n/l10n_util.h"
@@ -13,6 +14,9 @@
 namespace explore_sites {
 
 std::unique_ptr<MostVisitedClient> MostVisitedClient::Create() {
+  if (!base::FeatureList::IsEnabled(chrome::android::kExploreSites))
+    return nullptr;
+
   // note: wrap_unique is used because the constructor is private.
   return base::WrapUnique(new MostVisitedClient());
 }
