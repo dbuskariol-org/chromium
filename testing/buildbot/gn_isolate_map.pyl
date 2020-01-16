@@ -1612,6 +1612,14 @@
     "label": "//tools/traffic_annotation/auditor:traffic_annotation_auditor_unittests",
     "type": "console_test_launcher",
   },
+  "trichrome_chrome_bundle_smoke_test": {
+    "label": "//chrome/android:trichrome_chrome_bundle_smoke_test",
+    "type": "console_test_launcher",
+  },
+  "trichrome_chrome_bundle_fake_modules_smoke_test": {
+    "label": "//chrome/android:trichrome_chrome_bundle_fake_modules_smoke_test",
+    "type": "console_test_launcher",
+  },
   "ui_android_unittests": {
     "label": "//ui/android:ui_android_unittests",
     "type": "console_test_launcher",
