@@ -178,12 +178,11 @@ void WebrtcVideoRendererAdapter::HandleFrameOnMainThread(
   base::PostTaskAndReplyWithResult(
       FROM_HERE,
       {base::ThreadPool(), base::TaskShutdownBehavior::CONTINUE_ON_SHUTDOWN},
-      base::BindOnce(&ConvertYuvToRgb, base::Passed(&frame),
-                     base::Passed(&rgb_frame),
-                     video_renderer_->GetFrameConsumer()->GetPixelFormat()),
-      base::BindOnce(&WebrtcVideoRendererAdapter::DrawFrame,
-                     weak_factory_.GetWeakPtr(), frame_id,
-                     base::Passed(&stats)));
+      base::Bind(&ConvertYuvToRgb, base::Passed(&frame),
+                 base::Passed(&rgb_frame),
+                 video_renderer_->GetFrameConsumer()->GetPixelFormat()),
+      base::Bind(&WebrtcVideoRendererAdapter::DrawFrame,
+                 weak_factory_.GetWeakPtr(), frame_id, base::Passed(&stats)));
 }
 
 void WebrtcVideoRendererAdapter::DrawFrame(

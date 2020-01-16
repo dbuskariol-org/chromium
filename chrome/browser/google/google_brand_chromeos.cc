@@ -100,7 +100,7 @@ void InitBrand(const base::Closure& callback) {
       FROM_HERE,
       {base::ThreadPool(), base::MayBlock(), base::TaskPriority::BEST_EFFORT,
        base::TaskShutdownBehavior::CONTINUE_ON_SHUTDOWN},
-      base::BindOnce(&ReadBrandFromFile), base::BindOnce(&SetBrand, callback));
+      base::Bind(&ReadBrandFromFile), base::Bind(&SetBrand, callback));
 }
 
 }  // namespace chromeos

@@ -136,10 +136,9 @@ void ChromeNetworkingCastPrivateDelegate::VerifyDestination(
   base::PostTaskAndReplyWithResult(
       FROM_HERE,
       {base::ThreadPool(), base::MayBlock(), base::TaskPriority::USER_VISIBLE},
-      base::BindOnce(&RunDecodeAndVerifyCredentials,
-                     base::Passed(&credentials)),
-      base::BindOnce(&VerifyDestinationCompleted, success_callback,
-                     failure_callback));
+      base::Bind(&RunDecodeAndVerifyCredentials, base::Passed(&credentials)),
+      base::Bind(&VerifyDestinationCompleted, success_callback,
+                 failure_callback));
 }
 
 void ChromeNetworkingCastPrivateDelegate::VerifyAndEncryptData(
@@ -150,10 +149,9 @@ void ChromeNetworkingCastPrivateDelegate::VerifyAndEncryptData(
   base::PostTaskAndReplyWithResult(
       FROM_HERE,
       {base::ThreadPool(), base::MayBlock(), base::TaskPriority::USER_VISIBLE},
-      base::BindOnce(&RunVerifyAndEncryptData, data,
-                     base::Passed(&credentials)),
-      base::BindOnce(&VerifyAndEncryptDataCompleted, success_callback,
-                     failure_callback));
+      base::Bind(&RunVerifyAndEncryptData, data, base::Passed(&credentials)),
+      base::Bind(&VerifyAndEncryptDataCompleted, success_callback,
+                 failure_callback));
 }
 
 }  // namespace extensions

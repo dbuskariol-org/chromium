@@ -68,12 +68,11 @@ void VersionInfoUpdater::StartUpdate(bool is_official_build) {
         FROM_HERE,
         {base::ThreadPool(), base::MayBlock(),
          base::TaskPriority::USER_VISIBLE},
-        base::BindOnce(&version_loader::GetVersion,
-                       is_official_build
-                           ? version_loader::VERSION_SHORT_WITH_DATE
-                           : version_loader::VERSION_FULL),
-        base::BindOnce(&VersionInfoUpdater::OnVersion,
-                       weak_pointer_factory_.GetWeakPtr()));
+        base::Bind(&version_loader::GetVersion,
+                   is_official_build ? version_loader::VERSION_SHORT_WITH_DATE
+                                     : version_loader::VERSION_FULL),
+        base::Bind(&VersionInfoUpdater::OnVersion,
+                   weak_pointer_factory_.GetWeakPtr()));
   } else {
     OnVersion("linux-chromeos");
   }

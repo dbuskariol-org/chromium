@@ -752,7 +752,7 @@ ExtensionFunction::ResponseAction FileSystemChooseEntryFunction::Run() {
     return RespondLater();
   }
 
-  base::OnceCallback<void(bool)> set_initial_path_callback = base::BindOnce(
+  base::Callback<void(bool)> set_initial_path_callback = base::Bind(
       &FileSystemChooseEntryFunction::SetInitialPathAndShowPicker, this,
       previous_path, suggested_name, file_type_info, picker_type);
 
@@ -762,16 +762,16 @@ ExtensionFunction::ResponseAction FileSystemChooseEntryFunction::Run() {
       ExtensionsAPIClient::Get()->GetNonNativeFileSystemDelegate();
   if (delegate &&
       delegate->IsUnderNonNativeLocalPath(browser_context(), previous_path)) {
-    delegate->IsNonNativeLocalPathDirectory(
-        browser_context(), previous_path, std::move(set_initial_path_callback));
+    delegate->IsNonNativeLocalPathDirectory(browser_context(), previous_path,
+                                            set_initial_path_callback);
     return RespondLater();
   }
 #endif
   base::PostTaskAndReplyWithResult(
       FROM_HERE,
       {base::ThreadPool(), base::MayBlock(), base::TaskPriority::BEST_EFFORT},
-      base::BindOnce(&base::DirectoryExists, previous_path),
-      std::move(set_initial_path_callback));
+      base::Bind(&base::DirectoryExists, previous_path),
+      set_initial_path_callback);
 
   return RespondLater();
 }

@@ -88,8 +88,8 @@ bool GoodiesDisplayer::Init() {
     base::PostTaskAndReplyWithResult(
         FROM_HERE,
         {base::ThreadPool(), base::MayBlock(), base::TaskPriority::BEST_EFFORT},
-        base::BindOnce(&CheckGoodiesPrefAgainstOobeTimestamp),
-        base::BindOnce(&UpdateGoodiesPrefCantShow));
+        base::Bind(&CheckGoodiesPrefAgainstOobeTimestamp),
+        base::Bind(&UpdateGoodiesPrefCantShow));
   }
   return can_show;
 }
