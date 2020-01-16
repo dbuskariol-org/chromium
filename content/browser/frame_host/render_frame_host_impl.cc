@@ -8000,6 +8000,14 @@ bool RenderFrameHostImpl::IsDOMContentLoaded() {
   return dom_content_loaded_;
 }
 
+void RenderFrameHostImpl::IsClipboardPasteAllowed(
+    const ui::ClipboardFormatType& data_type,
+    const std::string& data,
+    IsClipboardPasteAllowedCallback callback) {
+  delegate_->IsClipboardPasteAllowed(GetLastCommittedURL(), data_type, data,
+                                     std::move(callback));
+}
+
 RenderFrameHostImpl* RenderFrameHostImpl::ParentOrOuterDelegateFrame() {
   // Find the parent in the FrameTree (iframe).
   if (parent_)

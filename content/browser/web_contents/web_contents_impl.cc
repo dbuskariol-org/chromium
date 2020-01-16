@@ -7251,6 +7251,15 @@ bool WebContentsImpl::IsFrameLowPriority(
   return delegate_->IsFrameLowPriority(this, render_frame_host);
 }
 
+void WebContentsImpl::IsClipboardPasteAllowed(
+    const GURL& url,
+    const ui::ClipboardFormatType& data_type,
+    const std::string& data,
+    IsClipboardPasteAllowedCallback callback) {
+  GetContentClient()->browser()->IsClipboardPasteAllowed(
+      this, url, data_type, data, std::move(callback));
+}
+
 void WebContentsImpl::UpdateWebContentsVisibility(Visibility visibility) {
   // Occlusion is disabled when |features::kWebContentsOcclusion| is disabled
   // (for power and speed impact assessment) or when

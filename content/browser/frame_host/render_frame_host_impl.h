@@ -166,6 +166,10 @@ namespace network {
 class ResourceRequestBody;
 }  // namespace network
 
+namespace ui {
+struct ClipboardFormatType;
+}
+
 namespace content {
 class AppCacheNavigationHandle;
 class AuthenticatorImpl;
@@ -222,6 +226,11 @@ class CONTENT_EXPORT RenderFrameHostImpl
  public:
   using AXTreeSnapshotCallback =
       base::OnceCallback<void(const ui::AXTreeUpdate&)>;
+
+  // Callback used with IsClipboardPasteAllowed() method.
+  using ClipboardPasteAllowed = ContentBrowserClient::ClipboardPasteAllowed;
+  using IsClipboardPasteAllowedCallback =
+      ContentBrowserClient::IsClipboardPasteAllowedCallback;
 
   // An accessibility reset is only allowed to prevent very rare corner cases
   // or race conditions where the browser and renderer get out of sync. If
@@ -326,6 +335,14 @@ class CONTENT_EXPORT RenderFrameHostImpl
                                   bool animate) override;
   void Reload() override;
   bool IsDOMContentLoaded() override;
+
+  // Determines if a clipboard paste using |data| of type |data_type| is allowed
+  // in this renderer frame.  The implementation delegates to
+  // RenderFrameHostDelegate::IsClipboardPasteAllowed().  See the description of
+  // the latter method for complete details.
+  void IsClipboardPasteAllowed(const ui::ClipboardFormatType& data_type,
+                               const std::string& data,
+                               IsClipboardPasteAllowedCallback callback);
 
   void SendAccessibilityEventsToManager(
       const AXEventNotificationDetails& details);
