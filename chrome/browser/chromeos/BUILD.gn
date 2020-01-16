@@ -2617,7 +2617,6 @@ source_set("unit_tests") {
     "arc/bluetooth/arc_bluetooth_task_queue_unittest.cc",
     "arc/boot_phase_monitor/arc_boot_phase_monitor_bridge_unittest.cc",
     "arc/enterprise/cert_store/arc_cert_installer_unittest.cc",
-    "arc/enterprise/cert_store/arc_cert_installer_utils_unittest.cc",
     "arc/enterprise/cert_store/arc_smart_card_manager_bridge_unittest.cc",
     "arc/enterprise/cert_store/security_token_operation_bridge_unittest.cc",
     "arc/extensions/arc_support_message_host_unittest.cc",
