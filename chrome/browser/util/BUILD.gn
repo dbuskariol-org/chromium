@@ -45,7 +45,6 @@ android_library("javatests") {
   sources = [
     "android/java/src/org/chromium/chrome/browser/util/ChromeFileProviderTest.java",
     "android/java/src/org/chromium/chrome/browser/util/HashUtilTest.java",
-    "android/java/src/org/chromium/chrome/browser/util/UrlUtilitiesTest.java",
   ]
   deps = [
     ":java",

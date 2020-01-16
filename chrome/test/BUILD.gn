@@ -3763,6 +3763,7 @@ test("unit_tests") {
       "../browser/touch_to_fill/touch_to_fill_controller_unittest.cc",
       "../browser/translate/translate_manager_render_view_host_android_unittest.cc",
       "../browser/updates/update_notification_config_unittest.cc",
+      "../browser/util/url_utilities_unittest.cc",
     ]
     deps += [
       "//base:base_java",
