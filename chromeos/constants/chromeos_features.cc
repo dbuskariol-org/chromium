@@ -126,7 +126,7 @@ const base::Feature kEnableFileManagerFeedbackPanel{
 const base::Feature kEolWarningNotifications{"EolWarningNotifications",
                                              base::FEATURE_ENABLED_BY_DEFAULT};
 
-// Enable or disable pointer lock for exo windows.
+// Enable or disable pointer lock for Crostini windows.
 const base::Feature kExoPointerLock{"ExoPointerLock",
                                     base::FEATURE_DISABLED_BY_DEFAULT};
 
