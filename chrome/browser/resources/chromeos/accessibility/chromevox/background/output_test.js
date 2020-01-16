@@ -1287,3 +1287,22 @@ TEST_F('ChromeVoxOutputE2ETest', 'InitialSpeechProperties', function() {
             this.currentProperties);
       });
 });
+
+TEST_F('ChromeVoxOutputE2ETest', 'NameOrTextContent', function() {
+  this.runWithLoadedTree(
+      `
+        <div tabindex=-1>
+          <div aria-label="hello there world">
+            <p>hello world</p>
+          </div>
+        </div>
+      `,
+      function(root) {
+        var focusableDiv = root.firstChild;
+        assertEquals(RoleType.GENERIC_CONTAINER, focusableDiv.role);
+        assertEquals(
+            chrome.automation.NameFromType.CONTENTS, focusableDiv.nameFrom);
+        var o = new Output().withSpeech(cursors.Range.fromNode(focusableDiv));
+        assertEquals('hello there world', o.speechOutputForTest.string_);
+      });
+});

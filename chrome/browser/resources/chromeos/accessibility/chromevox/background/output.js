@@ -1669,7 +1669,7 @@ Output.prototype = {
                 related, related, Output.EventType.NAVIGATE, buff, ruleStr);
           }
         } else if (token == 'nameOrTextContent') {
-          if (node.name && node.nameFrom != NameFromType.CONTENTS) {
+          if (node.name) {
             ruleStr.writeToken(token);
             this.format_({
               node: node,
