@@ -390,7 +390,6 @@ void V4L2SliceVideoDecodeAccelerator::Destroy() {
         //    executes after all the tasks potentially posted by the IP.
         base::BindOnce(
             [](V4L2SliceVideoDecodeAccelerator* vda) {
-              vda->gl_image_device_ = nullptr;
               // The image processor's thread was the user of the image
               // processor device, so let it keep the last reference and destroy
               // it in its own thread.
@@ -534,11 +533,9 @@ bool V4L2SliceVideoDecodeAccelerator::SetupFormats() {
     }
     gl_image_planes_count_ = V4L2Device::GetNumPlanesOfV4L2PixFmt(
         gl_image_format_fourcc_->ToV4L2PixFmt());
-    gl_image_device_ = image_processor_device_;
   } else {
     gl_image_format_fourcc_ = output_format_fourcc_;
     gl_image_planes_count_ = output_planes_count_;
-    gl_image_device_ = device_;
   }
 
   // Only set fourcc for output; resolution, etc., will come from the
@@ -1395,20 +1392,22 @@ void V4L2SliceVideoDecodeAccelerator::CreateGLImageFor(
     return;
   }
 
+  V4L2Device* gl_device =
+      image_processor_device_ ? image_processor_device_.get() : device_.get();
   scoped_refptr<gl::GLImage> gl_image =
-      gl_image_device_->CreateGLImage(size, fourcc, std::move(handle));
+      gl_device->CreateGLImage(size, fourcc, std::move(handle));
   if (!gl_image) {
     VLOGF(1) << "Could not create GLImage,"
              << " index=" << buffer_index << " texture_id=" << texture_id;
     NOTIFY_ERROR(PLATFORM_FAILURE);
     return;
   }
-  gl::ScopedTextureBinder bind_restore(gl_image_device_->GetTextureTarget(),
+  gl::ScopedTextureBinder bind_restore(gl_device->GetTextureTarget(),
                                        texture_id);
-  bool ret = gl_image->BindTexImage(gl_image_device_->GetTextureTarget());
+  bool ret = gl_image->BindTexImage(gl_device->GetTextureTarget());
   DCHECK(ret);
-  bind_image_cb_.Run(client_texture_id, gl_image_device_->GetTextureTarget(),
-                     gl_image, true);
+  bind_image_cb_.Run(client_texture_id, gl_device->GetTextureTarget(), gl_image,
+                     true);
 }
 
 void V4L2SliceVideoDecodeAccelerator::ImportBufferForPicture(

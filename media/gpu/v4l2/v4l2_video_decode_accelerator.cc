@@ -491,7 +491,9 @@ void V4L2VideoDecodeAccelerator::CreateEGLImageFor(
 
   gl::ScopedTextureBinder bind_restore(GL_TEXTURE_EXTERNAL_OES, 0);
 
-  EGLImageKHR egl_image = egl_image_device_->CreateEGLImage(
+  V4L2Device* egl_device =
+      image_processor_device_ ? image_processor_device_.get() : device_.get();
+  EGLImageKHR egl_image = egl_device->CreateEGLImage(
       egl_display_, gl_context->GetHandle(), texture_id, size, buffer_index,
       fourcc, std::move(handle));
   if (egl_image == EGL_NO_IMAGE_KHR) {
@@ -1931,8 +1933,6 @@ void V4L2VideoDecodeAccelerator::DestroyTask() {
   // First liberate all the frames held by the client.
   buffers_at_client_.clear();
 
-  egl_image_device_ = nullptr;
-
   // The image processor's thread was the user of the image processor device,
   // so let it keep the last reference and destroy it in its own thread.
   image_processor_device_ = nullptr;
@@ -2366,10 +2366,8 @@ bool V4L2VideoDecodeAccelerator::SetupFormats() {
       VLOGF(1) << "Could not create a V4L2Device for image processor";
       return false;
     }
-    egl_image_device_ = image_processor_device_;
   } else {
     egl_image_format_fourcc_ = output_format_fourcc_;
-    egl_image_device_ = device_;
   }
   VLOGF(2) << "Output format=" << output_format_fourcc_->ToString();
 
