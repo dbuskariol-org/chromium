@@ -849,7 +849,7 @@ void ContentsView::AnimateToViewState(AppListViewState target_view_state,
   // |layer| - The layer to transform.
   // |y_offset| - The initial vertical offset - the layer's vertical offset will
   //              be animated to 0.
-  auto animate_transform = [](base::TimeDelta duration, int y_offset,
+  auto animate_transform = [](base::TimeDelta duration, float y_offset,
                               views::View* view) {
     ui::Layer* layer = view->layer();
     gfx::Transform transform;
@@ -941,6 +941,10 @@ void ContentsView::AnimateToViewState(AppListViewState target_view_state,
   // Schedule expand arrow repaint to ensure the view picks up the new target
   // state.
   expand_arrow_view()->SchedulePaint();
+  animate_transform(
+      duration,
+      expand_arrow_view()->CalculateOffsetFromCurrentAppListProgress(progress),
+      expand_arrow_view());
 }
 
 void ContentsView::SetExpandArrowViewVisibility(bool show) {
