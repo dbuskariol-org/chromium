@@ -69,11 +69,12 @@ void ClipboardHostImpl::IsFormatAvailable(blink::mojom::ClipboardFormat format,
   bool result = false;
   switch (format) {
     case blink::mojom::ClipboardFormat::kPlaintext:
-      result =
-          clipboard_->IsFormatAvailable(
-              ui::ClipboardFormatType::GetPlainTextWType(), clipboard_buffer) ||
-          clipboard_->IsFormatAvailable(
-              ui::ClipboardFormatType::GetPlainTextType(), clipboard_buffer);
+      result = clipboard_->IsFormatAvailable(
+          ui::ClipboardFormatType::GetPlainTextType(), clipboard_buffer);
+#if defined(OS_WIN)
+      result |= clipboard_->IsFormatAvailable(
+          ui::ClipboardFormatType::GetPlainTextAType(), clipboard_buffer);
+#endif
       break;
     case blink::mojom::ClipboardFormat::kHtml:
       result = clipboard_->IsFormatAvailable(
@@ -86,7 +87,7 @@ void ClipboardHostImpl::IsFormatAvailable(blink::mojom::ClipboardFormat format,
     case blink::mojom::ClipboardFormat::kBookmark:
 #if defined(OS_WIN) || defined(OS_MACOSX)
       result = clipboard_->IsFormatAvailable(
-          ui::ClipboardFormatType::GetUrlWType(), clipboard_buffer);
+          ui::ClipboardFormatType::GetUrlType(), clipboard_buffer);
 #else
       result = false;
 #endif
@@ -98,15 +99,18 @@ void ClipboardHostImpl::IsFormatAvailable(blink::mojom::ClipboardFormat format,
 void ClipboardHostImpl::ReadText(ui::ClipboardBuffer clipboard_buffer,
                                  ReadTextCallback callback) {
   base::string16 result;
-  if (clipboard_->IsFormatAvailable(
-          ui::ClipboardFormatType::GetPlainTextWType(), clipboard_buffer)) {
+  if (clipboard_->IsFormatAvailable(ui::ClipboardFormatType::GetPlainTextType(),
+                                    clipboard_buffer)) {
     clipboard_->ReadText(clipboard_buffer, &result);
-  } else if (clipboard_->IsFormatAvailable(
-                 ui::ClipboardFormatType::GetPlainTextType(),
-                 clipboard_buffer)) {
-    std::string ascii;
-    clipboard_->ReadAsciiText(clipboard_buffer, &ascii);
-    result = base::ASCIIToUTF16(ascii);
+  } else {
+#if defined(OS_WIN)
+    if (clipboard_->IsFormatAvailable(
+            ui::ClipboardFormatType::GetPlainTextAType(), clipboard_buffer)) {
+      std::string ascii;
+      clipboard_->ReadAsciiText(clipboard_buffer, &ascii);
+      result = base::ASCIIToUTF16(ascii);
+    }
+#endif
   }
   std::move(callback).Run(result);
 }

@@ -267,7 +267,7 @@ void ClipboardWin::ReadAvailableTypes(ClipboardBuffer buffer,
 
   types->clear();
   if (::IsClipboardFormatAvailable(
-          ClipboardFormatType::GetPlainTextType().ToFormatEtc().cfFormat))
+          ClipboardFormatType::GetPlainTextAType().ToFormatEtc().cfFormat))
     types->push_back(base::UTF8ToUTF16(kMimeTypeText));
   if (::IsClipboardFormatAvailable(
           ClipboardFormatType::GetHtmlType().ToFormatEtc().cfFormat))
@@ -524,7 +524,7 @@ void ClipboardWin::ReadBookmark(base::string16* title, std::string* url) const {
     return;
 
   HANDLE data = ::GetClipboardData(
-      ClipboardFormatType::GetUrlWType().ToFormatEtc().cfFormat);
+      ClipboardFormatType::GetUrlType().ToFormatEtc().cfFormat);
   if (!data)
     return;
 
@@ -624,7 +624,7 @@ void ClipboardWin::WriteBookmark(const char* title_data,
   base::string16 wide_bookmark = base::UTF8ToUTF16(bookmark);
   HGLOBAL glob = CreateGlobalData(wide_bookmark);
 
-  WriteToClipboard(ClipboardFormatType::GetUrlWType().ToFormatEtc().cfFormat,
+  WriteToClipboard(ClipboardFormatType::GetUrlType().ToFormatEtc().cfFormat,
                    glob);
 }
 
