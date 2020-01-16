@@ -192,6 +192,19 @@ cr.define('settings.printing', function() {
     return first.printerInfo.printerId == second.printerInfo.printerId;
   }
 
+  /**
+   * Finds the printers that are in |firstArr| but not in |secondArr|.
+   * @param {!Array<!PrinterListEntry>} firstArr
+   * @param {!Array<!PrinterListEntry>} secondArr
+   * @return {!Array<!PrinterListEntry>}
+   */
+  function findDifference(firstArr, secondArr) {
+    return firstArr.filter(p1 => {
+      return !secondArr.some(
+          p2 => p2.printerInfo.printerId == p1.printerInfo.printerId);
+    });
+  }
+
   return {
     isNetworkProtocol: isNetworkProtocol,
     isNameAndAddressValid: isNameAndAddressValid,
@@ -203,5 +216,6 @@ cr.define('settings.printing', function() {
     sortPrinters: sortPrinters,
     matchesSearchTerm: matchesSearchTerm,
     arePrinterIdsEqual: arePrinterIdsEqual,
+    findDifference: findDifference,
   };
 });
