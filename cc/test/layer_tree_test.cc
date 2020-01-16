@@ -595,8 +595,9 @@ class LayerTreeTestLayerTreeFrameSinkClient
   TestHooks* hooks_;
 };
 
-LayerTreeTest::LayerTreeTest()
-    : initial_root_bounds_(1, 1),
+LayerTreeTest::LayerTreeTest(LayerTreeTest::RendererType renderer_type)
+    : renderer_type_(renderer_type),
+      initial_root_bounds_(1, 1),
       layer_tree_frame_sink_client_(
           new LayerTreeTestLayerTreeFrameSinkClient(this)) {
   main_thread_weak_ptr_ = weak_factory_.GetWeakPtr();
@@ -631,6 +632,16 @@ LayerTreeTest::LayerTreeTest()
 #endif
   if (command_line->HasSwitch(switches::kCCLayerTreeTestLongTimeout))
     timeout_seconds_ = 5 * 60;
+
+  if (use_vulkan()) {
+    bool use_gpu = command_line->HasSwitch(::switches::kUseGpuInTests);
+    command_line->AppendSwitchASCII(
+        ::switches::kUseVulkan,
+        use_gpu ? ::switches::kVulkanImplementationNameNative
+                : ::switches::kVulkanImplementationNameSwiftshader);
+    command_line->AppendSwitchASCII(::switches::kGrContextType,
+                                    ::switches::kGrContextTypeVulkan);
+  }
 }
 
 LayerTreeTest::~LayerTreeTest() {
@@ -1045,17 +1056,6 @@ void LayerTreeTest::RunTest(CompositorMode mode) {
   // actions and less dependent on timings to make decisions.
   settings_.enable_latency_recovery = false;
   InitializeSettings(&settings_);
-
-  if (use_vulkan()) {
-    auto* command_line = base::CommandLine::ForCurrentProcess();
-    bool use_gpu = command_line->HasSwitch(::switches::kUseGpuInTests);
-    command_line->AppendSwitchASCII(
-        ::switches::kUseVulkan,
-        use_gpu ? ::switches::kVulkanImplementationNameNative
-                : ::switches::kVulkanImplementationNameSwiftshader);
-    command_line->AppendSwitchASCII(
-        ::switches::kGrContextType, ::switches::kGrContextTypeVulkan);
-  }
 
   base::ThreadTaskRunnerHandle::Get()->PostTask(
       FROM_HERE,
