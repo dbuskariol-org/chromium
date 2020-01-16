@@ -13,6 +13,7 @@ import "third_party/blink/public/mojom/frame/blocked_navigation_types.mojom";
 import "third_party/blink/public/mojom/frame/fullscreen.mojom";
 import "third_party/blink/public/mojom/frame/lifecycle.mojom";
 import "third_party/blink/public/mojom/frame/sudden_termination_disabler_type.mojom";
+import "third_party/blink/public/mojom/frame/user_activation_update_types.mojom";
 import "third_party/blink/public/mojom/input/scroll_direction.mojom";
 import "ui/events/mojom/scroll_granularity.mojom";
 import "url/mojom/origin.mojom";
@@ -278,4 +279,9 @@ interface RemoteFrame {
   // bubbling a logical scroll from a cross-process frame.
   BubbleLogicalScroll(ScrollDirection direction,
                       ui.mojom.ScrollGranularity granularity);
+
+  // Sent to the remote frame placeholder in the parent process to update the
+  // user activation state in appropriate part of the frame tree (ancestors for
+  // activation notification and all nodes for consumption).
+  UpdateUserActivationState(blink.mojom.UserActivationUpdateType state_update_type);
 };

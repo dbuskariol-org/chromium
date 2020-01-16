@@ -433,8 +433,6 @@ bool RenderFrameProxy::OnMessageReceived(const IPC::Message& msg) {
                         OnDidUpdateVisualProperties)
     IPC_MESSAGE_HANDLER(FrameMsg_EnableAutoResize, OnEnableAutoResize)
     IPC_MESSAGE_HANDLER(FrameMsg_DisableAutoResize, OnDisableAutoResize)
-    IPC_MESSAGE_HANDLER(FrameMsg_UpdateUserActivationState,
-                        OnUpdateUserActivationState)
     IPC_MESSAGE_HANDLER(FrameMsg_TransferUserActivationFrom,
                         OnTransferUserActivationFrom)
     IPC_MESSAGE_HANDLER(FrameMsg_ScrollRectToVisible, OnScrollRectToVisible)
@@ -516,11 +514,6 @@ void RenderFrameProxy::OnSetFrameOwnerProperties(
 
 void RenderFrameProxy::OnSetPageFocus(bool is_focused) {
   render_view_->SetFocus(is_focused);
-}
-
-void RenderFrameProxy::OnUpdateUserActivationState(
-    blink::mojom::UserActivationUpdateType update_type) {
-  web_frame_->UpdateUserActivationState(update_type);
 }
 
 void RenderFrameProxy::OnTransferUserActivationFrom(int32_t source_routing_id) {

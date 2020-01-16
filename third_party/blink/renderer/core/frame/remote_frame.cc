@@ -373,6 +373,25 @@ void RemoteFrame::BubbleLogicalScroll(
   parent_frame->BubbleLogicalScrollFromChildFrame(direction, granularity, this);
 }
 
+void RemoteFrame::UpdateUserActivationState(
+    mojom::blink::UserActivationUpdateType update_type) {
+  switch (update_type) {
+    case mojom::blink::UserActivationUpdateType::kNotifyActivation:
+      NotifyUserActivationInLocalTree();
+      break;
+    case mojom::blink::UserActivationUpdateType::kConsumeTransientActivation:
+      ConsumeTransientUserActivationInLocalTree();
+      break;
+    case mojom::blink::UserActivationUpdateType::kClearActivation:
+      ClearUserActivationInLocalTree();
+      break;
+    case mojom::blink::UserActivationUpdateType::
+        kNotifyActivationPendingBrowserVerification:
+      NOTREACHED() << "Unexpected UserActivationUpdateType from browser";
+      break;
+  }
+}
+
 bool RemoteFrame::IsIgnoredForHitTest() const {
   HTMLFrameOwnerElement* owner = DeprecatedLocalOwner();
   if (!owner || !owner->GetLayoutObject())

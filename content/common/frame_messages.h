@@ -838,13 +838,6 @@ IPC_MESSAGE_ROUTED2(FrameMsg_SetPepperVolume,
                     double /* volume */)
 #endif  // BUILDFLAG(ENABLE_PLUGINS)
 
-// Tells the frame to update the user activation state in appropriate part of
-// the frame tree (ancestors for activation notification and all nodes for
-// consumption).
-IPC_MESSAGE_ROUTED1(
-    FrameMsg_UpdateUserActivationState,
-    blink::mojom::UserActivationUpdateType /* type of state update */)
-
 // Updates the renderer with a list of unique WebFeature values representing
 // Blink features used, performed or encountered by the browser during the
 // current page load happening on the frame.

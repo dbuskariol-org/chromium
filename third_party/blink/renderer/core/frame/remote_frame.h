@@ -107,6 +107,8 @@ class CORE_EXPORT RemoteFrame final : public Frame,
   void BubbleLogicalScroll(
       mojom::blink::ScrollDirection direction,
       ui::input_types::ScrollGranularity granularity) override;
+  void UpdateUserActivationState(
+      mojom::blink::UserActivationUpdateType) override;
 
  private:
   // Frame protected overrides:
