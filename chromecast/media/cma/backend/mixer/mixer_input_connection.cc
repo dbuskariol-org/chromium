@@ -209,6 +209,8 @@ MixerInputConnection::MixerInputConnection(
   eos_task_ = base::BindRepeating(&MixerInputConnection::PostEos, weak_this_);
   ready_for_playback_task_ = base::BindRepeating(
       &MixerInputConnection::PostAudioReadyForPlayback, weak_this_);
+  post_stream_underrun_task_ = base::BindRepeating(
+      &MixerInputConnection::PostStreamUnderrun, weak_this_);
 
   CreateBufferPool(fill_size_);
   mixer_->AddInput(this);
@@ -755,6 +757,7 @@ int MixerInputConnection::FillAudioPlaybackFrames(
   int filled = 0;
   bool queued_more_data = false;
   bool signal_eos = false;
+  bool underrun = false;
   bool remove_self = false;
   {
     base::AutoLock lock(lock_);
@@ -778,6 +781,7 @@ int MixerInputConnection::FillAudioPlaybackFrames(
     if (state_ == State::kNormalPlayback && !can_complete_fill) {
       LOG_IF(INFO, !zero_fader_frames_) << "Stream underrun for " << this;
       zero_fader_frames_ = true;
+      underrun = true;
     } else {
       LOG_IF(INFO, started_ && zero_fader_frames_)
           << "Stream underrun recovered for " << this;
@@ -838,6 +842,9 @@ int MixerInputConnection::FillAudioPlaybackFrames(
   }
   if (signal_eos) {
     io_task_runner_->PostTask(FROM_HERE, eos_task_);
+  }
+  if (underrun) {
+    io_task_runner_->PostTask(FROM_HERE, post_stream_underrun_task_);
   }
 
   if (remove_self) {
@@ -1012,6 +1019,22 @@ void MixerInputConnection::PostAudioReadyForPlayback() {
   audio_ready_for_playback_fired_ = true;
 }
 
+void MixerInputConnection::PostStreamUnderrun() {
+  DCHECK(io_task_runner_->RunsTasksInCurrentSequence());
+  mixer_service::Generic message;
+  message.mutable_mixer_underrun()->set_type(
+      mixer_service::MixerUnderrun::INPUT_UNDERRUN);
+  socket_->SendProto(message);
+}
+
+void MixerInputConnection::PostOutputUnderrun() {
+  DCHECK(io_task_runner_->RunsTasksInCurrentSequence());
+  mixer_service::Generic message;
+  message.mutable_mixer_underrun()->set_type(
+      mixer_service::MixerUnderrun::OUTPUT_UNDERRUN);
+  socket_->SendProto(message);
+}
+
 void MixerInputConnection::OnAudioPlaybackError(MixerError error) {
   if (error == MixerError::kInputIgnored) {
     LOG(INFO) << "Mixer input " << this
@@ -1027,6 +1050,12 @@ void MixerInputConnection::OnAudioPlaybackError(MixerError error) {
   if (state_ == State::kRemoved) {
     mixer_->RemoveInput(this);
   }
+}
+
+void MixerInputConnection::OnOutputUnderrun() {
+  io_task_runner_->PostTask(
+      FROM_HERE,
+      base::BindOnce(&MixerInputConnection::PostOutputUnderrun, weak_this_));
 }
 
 void MixerInputConnection::PostError(MixerError error) {
