@@ -48,8 +48,9 @@ static_library("database_manager") {
     ":v4_get_hash_protocol_manager",
     ":v4_protocol_manager_util",
     "//base",
-    "//content/public/browser",
+    "//components/safe_browsing/core/common:thread_utils",
     "//net",
+    "//services/network/public/cpp",
     "//url",
   ]
 
@@ -117,7 +118,7 @@ static_library("v4_database") {
     ":v4_store",
     "//base",
     "//components/safe_browsing/core:webui_proto",
-    "//content/public/browser",
+    "//components/safe_browsing/core/common:thread_utils",
   ]
 }
 
@@ -132,8 +133,9 @@ static_library("v4_get_hash_protocol_manager") {
     ":v4_protocol_manager_util",
     "//base",
     "//components/safe_browsing/core:webui_proto",
-    "//content/public/browser",
+    "//components/safe_browsing/core/common:thread_utils",
     "//net",
+    "//services/network/public/cpp:cpp",
     "//url",
   ]
 }
@@ -285,7 +287,6 @@ source_set("unit_tests_shared") {
     ":v4_test_util",
     "//base",
     "//components/safe_browsing/core/common:test_support",
-    "//content/public/browser",
     "//net",
     "//net:test_support",
     "//services/network:test_support",
@@ -345,7 +346,7 @@ static_library("allowlist_checker_client") {
   deps = [
     ":database_manager",
     "//base:base",
-    "//content/public/browser",
+    "//components/safe_browsing/core/common:thread_utils",
     "//url:url",
   ]
 }

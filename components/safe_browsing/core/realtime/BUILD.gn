@@ -31,8 +31,9 @@ static_library("url_lookup_service") {
     ":policy_engine",
     "//base:base",
     "//components/safe_browsing/core:realtimeapi_proto",
+    "//components/safe_browsing/core/common:thread_utils",
     "//components/safe_browsing/core/db:v4_protocol_manager_util",
-    "//content/public/browser",
+    "//services/network/public/cpp:cpp",
     "//url:url",
   ]
 }

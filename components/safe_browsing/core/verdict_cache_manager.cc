@@ -10,10 +10,9 @@
 #include "base/strings/string_split.h"
 #include "base/task/post_task.h"
 #include "components/history/core/browser/history_service_observer.h"
+#include "components/safe_browsing/core/common/thread_utils.h"
 #include "components/safe_browsing/core/db/v4_protocol_manager_util.h"
 #include "components/safe_browsing/core/proto/csd.pb.h"
-#include "content/public/browser/browser_task_traits.h"
-#include "content/public/browser/browser_thread.h"
 
 namespace safe_browsing {
 
@@ -558,7 +557,7 @@ void VerdictCacheManager::CleanUpExpiredRealTimeUrlCheckVerdicts() {
 void VerdictCacheManager::OnURLsDeleted(
     history::HistoryService* history_service,
     const history::DeletionInfo& deletion_info) {
-  base::PostTask(FROM_HERE, {content::BrowserThread::UI},
+  base::PostTask(FROM_HERE, CreateTaskTraits(ThreadID::UI),
                  base::BindRepeating(
                      &VerdictCacheManager::RemoveContentSettingsOnURLsDeleted,
                      GetWeakPtr(), deletion_info.IsAllHistory(),
@@ -630,7 +629,7 @@ bool VerdictCacheManager::RemoveExpiredRealTimeUrlCheckVerdicts(
 void VerdictCacheManager::RemoveContentSettingsOnURLsDeleted(
     bool all_history,
     const history::URLRows& deleted_rows) {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK(CurrentlyOnThread(ThreadID::UI));
   DCHECK(content_settings_);
 
   if (all_history) {

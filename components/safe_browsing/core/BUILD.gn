@@ -98,8 +98,8 @@ if (!is_ios) {
       "//components/content_settings/core/browser",
       "//components/history/core/browser",
       "//components/password_manager/core/browser:browser",
+      "//components/safe_browsing/core/common:thread_utils",
       "//components/safe_browsing/core/db:v4_protocol_manager_util",
-      "//content/public/browser",
       "//url",
     ]
   }
