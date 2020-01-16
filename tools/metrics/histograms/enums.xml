@@ -65995,7 +65995,7 @@ Full version information for the fingerprint enum values:
   <int value="5" label="WebContentsDestroyed"/>
   <int value="6" label="WriteDataFailed"/>
   <int value="7" label="UserInstallDeclined"/>
-  <int value="8" label="ProfileDestroyed"/>
+  <int value="8" label="DEPRECATED: ProfileDestroyed"/>
   <int value="9" label="DEPRECATED: WindowOpened"/>
   <int value="10" label="NotValidManifestForWebApp"/>
   <int value="11" label="IntentToPlayStore"/>
@@ -66008,7 +66008,7 @@ Full version information for the fingerprint enum values:
   <int value="18" label="NotInstallable"/>
   <int value="19" label="BookmarkExtensionInstallError"/>
   <int value="20" label="ApkWebInstallFailed"/>
-  <int value="21" label="FailedShuttingDown"/>
+  <int value="21" label="CancelledOnWebAppProviderShuttingDown"/>
 </enum>
 
 <enum name="WebAppInstallSource">
