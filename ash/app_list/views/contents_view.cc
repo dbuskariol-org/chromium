@@ -794,6 +794,15 @@ void ContentsView::UpdateYPositionAndOpacity() {
                                    search_box_bounds);
   }
 
+  // If in drag, reset the transforms that might have been set in
+  // AnimateToViewState().
+  if (app_list_view_->is_in_drag()) {
+    search_box->layer()->SetTransform(gfx::Transform());
+    expand_arrow_view_->layer()->SetTransform(gfx::Transform());
+    for (AppListPage* page : app_list_pages_)
+      page->layer()->SetTransform(gfx::Transform());
+  }
+
   if (app_list_features::IsScalableAppListEnabled() ||
       current_state == AppListState::kStateApps) {
     // Layout the apps container at the position where it would be with apps
