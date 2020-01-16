@@ -1024,7 +1024,7 @@ void RenderWidgetHostViewAndroid::OnInterstitialPageAttached() {
 }
 
 void RenderWidgetHostViewAndroid::OnInterstitialPageGoingAway() {
-  sync_compositor_.reset();
+  ResetSynchronousCompositor();
 }
 
 std::unique_ptr<SyntheticGestureTarget>
@@ -1106,10 +1106,23 @@ void RenderWidgetHostViewAndroid::FrameTokenChangedForSynchronousCompositor(
 void RenderWidgetHostViewAndroid::SetSynchronousCompositorClient(
       SynchronousCompositorClient* client) {
   synchronous_compositor_client_ = client;
+  MaybeCreateSynchronousCompositor();
+}
+
+void RenderWidgetHostViewAndroid::MaybeCreateSynchronousCompositor() {
   if (!sync_compositor_ && synchronous_compositor_client_) {
     sync_compositor_ =
         SynchronousCompositorHost::Create(this, host()->GetFrameSinkId());
     view_.SetCopyOutputCallback(sync_compositor_->GetCopyViewCallback());
+    if (render_widget_initialized_)
+      sync_compositor_->InitMojo();
+  }
+}
+
+void RenderWidgetHostViewAndroid::ResetSynchronousCompositor() {
+  if (sync_compositor_) {
+    view_.SetCopyOutputCallback(ui::ViewAndroid::CopyViewCallback());
+    sync_compositor_.reset();
   }
 }
 
@@ -1900,9 +1913,13 @@ void RenderWidgetHostViewAndroid::UpdateNativeViewTree(
   }
 
   if (!has_view_tree) {
-    sync_compositor_.reset();
+    ResetSynchronousCompositor();
     return;
   }
+  // Parent native view can become null and then later non-null again, if
+  // WebContents swaps away from this, and then later back to it. Need to
+  // ensure SynchronousCompositor is recreated in this case.
+  MaybeCreateSynchronousCompositor();
 
   if (is_showing_ && view_.GetWindowAndroid())
     StartObservingRootWindow();
@@ -1950,6 +1967,7 @@ RenderWidgetHostViewAndroid::GetLocalSurfaceIdAllocation() const {
 }
 
 void RenderWidgetHostViewAndroid::OnRenderWidgetInit() {
+  render_widget_initialized_ = true;
   if (sync_compositor_)
     sync_compositor_->InitMojo();
 }

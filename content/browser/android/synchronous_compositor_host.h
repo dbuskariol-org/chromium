@@ -10,6 +10,7 @@
 
 #include <memory>
 
+#include "base/gtest_prod_util.h"
 #include "base/macros.h"
 #include "base/memory/ref_counted.h"
 #include "base/memory/weak_ptr.h"
@@ -17,6 +18,7 @@
 #include "components/viz/common/frame_sinks/begin_frame_source.h"
 #include "components/viz/common/quads/compositor_frame.h"
 #include "components/viz/common/surfaces/frame_sink_id.h"
+#include "content/common/content_export.h"
 #include "content/common/input/synchronous_compositor.mojom.h"
 #include "content/public/browser/android/synchronous_compositor.h"
 #include "content/public/common/input_event_ack_state.h"
@@ -38,9 +40,10 @@ class SynchronousCompositorClient;
 class SynchronousCompositorSyncCallBridge;
 struct SyncCompositorCommonRendererParams;
 
-class SynchronousCompositorHost : public SynchronousCompositor,
-                                  public mojom::SynchronousCompositorHost,
-                                  public viz::BeginFrameObserver {
+class CONTENT_EXPORT SynchronousCompositorHost
+    : public SynchronousCompositor,
+      public mojom::SynchronousCompositorHost,
+      public viz::BeginFrameObserver {
  public:
   static std::unique_ptr<SynchronousCompositorHost> Create(
       RenderWidgetHostViewAndroid* rwhva,
@@ -107,6 +110,8 @@ class SynchronousCompositorHost : public SynchronousCompositor,
   struct SharedMemoryWithSize;
   friend class ScopedSetZeroMemory;
   friend class SynchronousCompositorBase;
+  FRIEND_TEST_ALL_PREFIXES(SynchronousCompositorBrowserTest,
+                           RenderWidgetHostViewAndroidReuse);
 
   SynchronousCompositorHost(RenderWidgetHostViewAndroid* rwhva,
                             const viz::FrameSinkId& frame_sink_id,
