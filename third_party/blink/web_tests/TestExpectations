@@ -5642,7 +5642,7 @@ crbug.com/953153 external/wpt/speech-api/idlharness.window.html [ Pass Failure T
 # speculative navigation in the browser, and committing the navigation in the
 # renderer.
 crbug.com/838348 external/wpt/portals/csp/frame-src.sub.html [ Pass Crash ]
-crbug.com/838348 virtual/out-of-blink-frame-ancestors-disabled/external/wpt/portals/csp/frame-src.sub.html [ Pass Crash ]
+crbug.com/838348 virtual/out-of-blink-frame-ancestors/external/wpt/portals/csp/frame-src.sub.html [ Pass Crash ]
 
 # Sheriff 2019-04-17
 crbug.com/953591 [ Win ] css3/masking/mask-repeat-space-padding.html [ Pass Failure ]
