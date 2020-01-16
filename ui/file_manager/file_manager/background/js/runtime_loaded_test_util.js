@@ -299,7 +299,7 @@ test.util.sync.getActiveElement = (contentWindow, opt_styleNames) => {
  *     values, hidden attribute, and style names and values. If there is no
  *     active element, returns null.
  */
-test.util.sync.findActiveElement = (contentWindow, opt_styleNames) => {
+test.util.sync.deepGetActiveElement = (contentWindow, opt_styleNames) => {
   if (!contentWindow.document || !contentWindow.document.activeElement) {
     return null;
   }
