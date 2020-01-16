@@ -152,18 +152,8 @@ bool Launch(content::BrowserContext* context,
     return false;
   }
 
-  arc::mojom::IntentHelperInstance* intent_helper_instance =
-      GET_INTENT_HELPER_INSTANCE(SendBroadcast);
-  if (intent_helper_instance && IsMouseOrTouchEventFromFlags(event_flags)) {
-    base::DictionaryValue extras;
-    extras.SetBoolean("inTouchMode", IsMouseOrTouchEventFromFlags(event_flags));
-    std::string extras_string;
-    base::JSONWriter::Write(extras, &extras_string);
-    intent_helper_instance->SendBroadcast(
-        kSetInTouchModeIntent,
-        ArcIntentHelperBridge::kArcIntentHelperPackageName,
-        kIntentHelperClassName, extras_string);
-  }
+  if (IsMouseOrTouchEventFromFlags(event_flags))
+    SetTouchMode(IsMouseOrTouchEventFromFlags(event_flags));
 
   // Unthrottle the ARC instance before launching an ARC app. This is done
   // to minimize lag on an app launch.
@@ -436,6 +426,23 @@ void CloseTask(int task_id) {
   if (!app_instance)
     return;
   app_instance->CloseTask(task_id);
+}
+
+bool SetTouchMode(bool enable) {
+  arc::mojom::IntentHelperInstance* intent_helper_instance =
+      GET_INTENT_HELPER_INSTANCE(SendBroadcast);
+  if (!intent_helper_instance)
+    return false;
+
+  base::DictionaryValue extras;
+  extras.SetBoolean("inTouchMode", enable);
+  std::string extras_string;
+  base::JSONWriter::Write(extras, &extras_string);
+  intent_helper_instance->SendBroadcast(
+      kSetInTouchModeIntent, ArcIntentHelperBridge::kArcIntentHelperPackageName,
+      kIntentHelperClassName, extras_string);
+
+  return true;
 }
 
 std::vector<std::string> GetSelectedPackagesFromPrefs(
