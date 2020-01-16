@@ -193,12 +193,6 @@ MediaRecorder::MediaRecorder(ExecutionContext* context,
             mime_type_ + ") is not supported.");
     return;
   }
-  // If the user requested no mimeType, query |recorder_handler_|.
-  if (options->mimeType().IsEmpty()) {
-    const String actual_mime_type = recorder_handler_->ActualMimeType();
-    if (!actual_mime_type.IsEmpty())
-      mime_type_ = actual_mime_type;
-  }
   stopped_ = false;
 }
 
@@ -241,7 +235,6 @@ void MediaRecorder::start(int time_slice, ExceptionState& exception_state) {
         "There was an error starting the MediaRecorder.");
     return;
   }
-  ScheduleDispatchEvent(Event::Create(event_type_names::kStart));
 }
 
 void MediaRecorder::stop(ExceptionState& exception_state) {
@@ -361,9 +354,20 @@ void MediaRecorder::WriteData(const char* data,
                               size_t length,
                               bool last_in_slice,
                               double timecode) {
+  // Update mime_type_ when "onstart" is sent by the MediaRecorder. This method
+  // is used also from StopRecording, with a zero length. If we never wrote
+  // anything we don't want to send start or associated actions (update the mime
+  // type in that case).
+  if (!first_write_received_ && length) {
+    mime_type_ = recorder_handler_->ActualMimeType();
+  }
   if (stopped_ && !last_in_slice) {
     stopped_ = false;
     ScheduleDispatchEvent(Event::Create(event_type_names::kStart));
+    first_write_received_ = true;
+  } else if (!first_write_received_ && length) {
+    ScheduleDispatchEvent(Event::Create(event_type_names::kStart));
+    first_write_received_ = true;
   }
 
   if (!blob_data_) {
@@ -410,6 +414,8 @@ void MediaRecorder::StopRecording() {
     // have ended leading to a call to OnAllTracksEnded.
     return;
   }
+  // Make sure that starting the recorder again yields an onstart event.
+  first_write_received_ = false;
   state_ = State::kInactive;
 
   recorder_handler_->Stop();
