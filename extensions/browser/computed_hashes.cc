@@ -227,12 +227,12 @@ bool ComputedHashes::WriteToFile(const base::FilePath& path) const {
     int block_size = resource_info.second.first;
     const std::vector<std::string>& hashes = resource_info.second.second;
 
-    base::Value block_hashes(base::Value::Type::LIST);
-    block_hashes.GetList().reserve(hashes.size());
+    base::Value::ListStorage block_hashes;
+    block_hashes.reserve(hashes.size());
     for (const auto& hash : hashes) {
       std::string encoded;
       base::Base64Encode(hash, &encoded);
-      block_hashes.Append(std::move(encoded));
+      block_hashes.push_back(base::Value(std::move(encoded)));
     }
 
     base::Value dict(base::Value::Type::DICTIONARY);
@@ -240,7 +240,8 @@ bool ComputedHashes::WriteToFile(const base::FilePath& path) const {
         computed_hashes::kPathKey,
         relative_path.NormalizePathSeparatorsTo('/').AsUTF8Unsafe());
     dict.SetIntKey(computed_hashes::kBlockSizeKey, block_size);
-    dict.SetKey(computed_hashes::kBlockHashesKey, std::move(block_hashes));
+    dict.SetKey(computed_hashes::kBlockHashesKey,
+                base::Value(std::move(block_hashes)));
 
     file_list.Append(std::move(dict));
   }

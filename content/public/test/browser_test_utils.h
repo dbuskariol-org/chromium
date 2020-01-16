@@ -540,9 +540,9 @@ void ConvertToBaseValueList(base::Value::ListStorage* list,
 // string literals. |args| can be a mix of different types.
 template <typename... Args>
 base::ListValue ListValueOf(Args&&... args) {
-  base::ListValue result;
-  ConvertToBaseValueList(&result.GetList(), std::forward<Args>(args)...);
-  return result;
+  base::Value::ListStorage values;
+  ConvertToBaseValueList(&values, std::forward<Args>(args)...);
+  return base::ListValue(std::move(values));
 }
 
 // Replaces $1, $2, $3, etc in |script_template| with JS literal values
