@@ -2641,9 +2641,16 @@
             "experiments": [
                 {
                     "name": "Enabled",
+                    "params": {
+                        "availability": "any",
+                        "event_trigger": "name:ephemeral_tab_triggered;comparator:<2;window:90;storage:90",
+                        "event_used": "name:ephemeral_tab_used;comparator:==0;window:90;storage:90",
+                        "session_rate": "any"
+                    },
                     "enable_features": [
                         "EphemeralTab",
-                        "EphemeralTabUsingBottomSheet"
+                        "EphemeralTabUsingBottomSheet",
+                        "IPH_EphemeralTab"
                     ]
                 }
             ]

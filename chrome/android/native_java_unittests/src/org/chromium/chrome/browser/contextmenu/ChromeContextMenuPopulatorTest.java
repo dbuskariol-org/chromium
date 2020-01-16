@@ -78,6 +78,7 @@ public class ChromeContextMenuPopulatorTest {
         mPopulator =
                 Mockito.spy(new ChromeContextMenuPopulator(mItemDelegate, mShareDelegate, mode));
         doReturn(mTemplateUrlService).when(mPopulator).getTemplateUrlService();
+        doReturn(false).when(mPopulator).shouldTriggerEphemeralTabHelpUi();
     }
 
     private void checkMenuOptions(ContextMenuParams params, int[]... tabs) {
