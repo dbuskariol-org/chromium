@@ -17,10 +17,6 @@ namespace features {
 // All features in alphabetical order. The features should be documented
 // alongside the definition of their values in the .cc file.
 
-extern const base::Feature kAnimatedAvatarButton;
-extern const base::Feature kAnimatedAvatarButtonOnSignIn;
-extern const base::Feature kAnimatedAvatarButtonOnOpeningWindow;
-
 extern const base::Feature kEvDetailsInPageInfo;
 
 extern const base::Feature kExtensionsToolbarMenu;

@@ -3783,7 +3783,6 @@
                 {
                     "name": "Enabled",
                     "enable_features": [
-                        "AnimatedAvatarButton",
                         "AutofillCreditCardUploadFeedback",
                         "AutofillEnableToolbarStatusChip"
                     ]
