@@ -73,6 +73,9 @@ content::WebUIDataSource* CreateMdExtensionsSource(Profile* profile,
   webui::SetupBundledWebUIDataSource(source, "extensions.js",
                                      IDR_EXTENSIONS_EXTENSIONS_ROLLUP_JS,
                                      IDR_EXTENSIONS_EXTENSIONS_HTML);
+  source->AddResourcePath("checkup_image.svg", IDR_EXTENSIONS_CHECKUP_IMAGE);
+  source->AddResourcePath("checkup_image_dark.svg",
+                          IDR_EXTENSIONS_CHECKUP_IMAGE_DARK);
 #else
   webui::SetupWebUIDataSource(
       source, base::make_span(kExtensionsResources, kExtensionsResourcesSize),
