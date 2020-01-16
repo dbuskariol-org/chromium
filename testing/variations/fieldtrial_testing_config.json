@@ -4958,6 +4958,30 @@
             ]
         }
     ],
+    "PreconnectSameOriginDesktop": [
+        {
+            "platforms": [
+                "windows",
+                "chromeos",
+                "mac",
+                "linux"
+            ],
+            "experiments": [
+                {
+                    "name": "EnabledWithExtendedSocket",
+                    "params": {
+                        "unused_idle_socket_timeout_seconds": "60"
+                    },
+                    "enable_features": [
+                        "NetUnusedIdleSocketTimeout"
+                    ],
+                    "disable_features": [
+                        "NavigationPredictorPreconnectHoldback"
+                    ]
+                }
+            ]
+        }
+    ],
     "PrefetchSRPAndroid": [
         {
             "platforms": [
