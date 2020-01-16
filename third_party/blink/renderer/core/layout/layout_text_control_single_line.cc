@@ -249,14 +249,6 @@ LayoutUnit LayoutTextControlSingleLine::ComputeControlLogicalHeight(
   return line_height + non_content_height;
 }
 
-void LayoutTextControlSingleLine::Autoscroll(const PhysicalOffset& position) {
-  LayoutBox* layout_object = InnerEditorElement()->GetLayoutBox();
-  if (!layout_object)
-    return;
-
-  layout_object->Autoscroll(position);
-}
-
 LayoutUnit LayoutTextControlSingleLine::ScrollWidth() const {
   // If in preview state, fake the scroll width to prevent that any information
   // about the suggested content can be derived from the size.
