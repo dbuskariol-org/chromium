@@ -969,8 +969,7 @@ TEST_F(PermissionRequestManagerTest, TestWebKioskModeDifferentOrigin) {
 }
 #endif  // defined(OS_CHROMEOS)
 
-// TODO(andypaicu): re-enable ASAP. crbug.com/1042611
-TEST_F(PermissionRequestManagerTest, DISABLED_TestCrowdDenyHoldbackChance) {
+TEST_F(PermissionRequestManagerTest, TestCrowdDenyHoldbackChance) {
   const struct {
     std::string holdback_chance;
     bool enabled_in_prefs;
