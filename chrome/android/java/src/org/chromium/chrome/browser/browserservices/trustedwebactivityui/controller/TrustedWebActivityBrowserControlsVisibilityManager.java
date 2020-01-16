@@ -4,19 +4,17 @@
 
 package org.chromium.chrome.browser.browserservices.trustedwebactivityui.controller;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.chromium.chrome.browser.browserservices.BrowserServicesIntentDataProvider;
 import org.chromium.chrome.browser.customtabs.CloseButtonVisibilityManager;
 import org.chromium.chrome.browser.customtabs.content.CustomTabActivityTabProvider;
 import org.chromium.chrome.browser.customtabs.content.TabObserverRegistrar;
+import org.chromium.chrome.browser.customtabs.content.TabObserverRegistrar.CustomTabTabObserver;
 import org.chromium.chrome.browser.customtabs.features.toolbar.CustomTabToolbarCoordinator;
 import org.chromium.chrome.browser.dependency_injection.ActivityScope;
-import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabImpl;
-import org.chromium.chrome.browser.tab.TabObserver;
 import org.chromium.chrome.browser.webapps.WebDisplayMode;
 import org.chromium.chrome.browser.webapps.WebappExtras;
 import org.chromium.components.security_state.ConnectionSecurityLevel;
@@ -44,22 +42,19 @@ public class TrustedWebActivityBrowserControlsVisibilityManager {
 
     private @BrowserControlsState int mBrowserControlsState = DEFAULT_BROWSER_CONTROLS_STATE;
 
-    private final TabObserver mTabObserver = new EmptyTabObserver() {
+    private final CustomTabTabObserver mTabObserver = new CustomTabTabObserver() {
         @Override
         public void onSSLStateUpdated(Tab tab) {
             updateBrowserControlsState();
             updateCloseButtonVisibility();
         }
-    };
 
-    private final CustomTabActivityTabProvider.Observer mActivityTabObserver =
-            new CustomTabActivityTabProvider.Observer() {
-                @Override
-                public void onTabSwapped(@NonNull Tab tab) {
-                    updateBrowserControlsState();
-                    updateCloseButtonVisibility();
-                }
-            };
+        @Override
+        public void onObservingDifferentTab(@Nullable Tab tab) {
+            updateBrowserControlsState();
+            updateCloseButtonVisibility();
+        }
+    };
 
     @Inject
     public TrustedWebActivityBrowserControlsVisibilityManager(
@@ -91,10 +86,8 @@ public class TrustedWebActivityBrowserControlsVisibilityManager {
 
         if (mInTwaMode) {
             mTabObserverRegistrar.registerActivityTabObserver(mTabObserver);
-            mTabProvider.addObserver(mActivityTabObserver);
         } else {
             mTabObserverRegistrar.unregisterActivityTabObserver(mTabObserver);
-            mTabProvider.removeObserver(mActivityTabObserver);
         }
     }
 

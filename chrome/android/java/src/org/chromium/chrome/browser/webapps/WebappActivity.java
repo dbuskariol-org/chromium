@@ -38,17 +38,16 @@ import org.chromium.chrome.browser.customtabs.BaseCustomTabActivity;
 import org.chromium.chrome.browser.customtabs.CustomTabAppMenuPropertiesDelegate;
 import org.chromium.chrome.browser.customtabs.CustomTabDelegateFactory;
 import org.chromium.chrome.browser.customtabs.content.TabObserverRegistrar;
+import org.chromium.chrome.browser.customtabs.content.TabObserverRegistrar.CustomTabTabObserver;
 import org.chromium.chrome.browser.customtabs.features.ImmersiveModeController;
 import org.chromium.chrome.browser.dependency_injection.ChromeActivityCommonsModule;
 import org.chromium.chrome.browser.document.ChromeLauncherActivity;
 import org.chromium.chrome.browser.flags.ActivityType;
 import org.chromium.chrome.browser.metrics.WebApkUma;
-import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabBrowserControlsConstraintsHelper;
 import org.chromium.chrome.browser.tab.TabDelegateFactory;
 import org.chromium.chrome.browser.tab.TabImpl;
-import org.chromium.chrome.browser.tab.TabObserver;
 import org.chromium.chrome.browser.ui.appmenu.AppMenuPropertiesDelegate;
 import org.chromium.chrome.browser.usage_stats.UsageStatsService;
 import org.chromium.chrome.browser.util.AndroidTaskUtils;
@@ -511,8 +510,8 @@ public class WebappActivity extends BaseCustomTabActivity<WebappActivityComponen
     protected void onUpdatedLastUsedTime(
             WebappDataStorage storage, boolean previouslyLaunched, long previousUsageTimestamp) {}
 
-    protected TabObserver createTabObserver() {
-        return new EmptyTabObserver() {
+    protected CustomTabTabObserver createTabObserver() {
+        return new CustomTabTabObserver() {
             @Override
             public void onDidFinishNavigation(Tab tab, NavigationHandle navigation) {
                 if (navigation.hasCommitted() && navigation.isInMainFrame()) {
