@@ -1420,11 +1420,6 @@ blink::WebPagePopup* RenderViewImpl::CreatePopup(
   popup_widget->InitForPopup(std::move(opener_callback), opener_render_widget,
                              popup_web_widget,
                              opener_render_widget->GetOriginalScreenInfo());
-  // TODO(crbug.com/419087): RenderWidget has some weird logic for picking a
-  // WebWidget which doesn't apply to this case. So we verify. This can go away
-  // when RenderWidget::GetWebWidget() is just a simple accessor.
-  DCHECK_EQ(popup_widget->GetWebWidget(), popup_web_widget);
-
   return popup_web_widget;
 }
 
@@ -1437,9 +1432,7 @@ void RenderViewImpl::DoDeferredClose() {
 
 void RenderViewImpl::CloseWindowSoon() {
   DCHECK(RenderThread::IsMainThread());
-  // TODO(crbug.com/419087): Switch this to checking |main_render_frame_| since
-  // there's no undead RenderWidget now.
-  if (!render_widget_ || render_widget_->IsForProvisionalFrame()) {
+  if (!main_render_frame_) {
     // Ask the RenderViewHost with a local main frame to initiate close.  We
     // could be called from deep in Javascript.  If we ask the RenderViewHost to
     // close now, the window could be closed before the JS finishes executing,
@@ -1453,8 +1446,8 @@ void RenderViewImpl::CloseWindowSoon() {
   }
 
   // If the main frame is in this RenderView's frame tree, then the Close
-  // request gets routed through the RenderWidget for historical reasons.
-  // TODO(crbug.com/419087): Move this to RenderViewImpl?
+  // request gets routed through the RenderWidget since non-frame RenderWidgets
+  // share the code path.
   render_widget_->CloseWidgetSoon();
 }
 

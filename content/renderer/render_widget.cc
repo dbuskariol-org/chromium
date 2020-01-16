@@ -552,9 +552,12 @@ void RenderWidget::Initialize(ShowCallback show_callback,
   SetShowFPSCounter(command_line.HasSwitch(cc::switches::kShowFPSCounter));
 
   // If the widget is hidden, delay starting the compositor until the user
-  // shows it.
-  if (!is_hidden_)
-    StartStopCompositor();
+  // shows it. Otherwise start the compositor immediately. If the widget is
+  // for a provisional frame, this importantly starts the compositor before
+  // the frame is inserted into the frame tree, which impacts first paint
+  // metrics.
+  if (!is_hidden_ && !never_composited_)
+    layer_tree_view_->SetVisible(true);
 
   webwidget_ = web_widget;
   web_widget->SetAnimationHost(layer_tree_view_->animation_host());
@@ -1923,16 +1926,6 @@ void RenderWidget::InitCompositing(const ScreenInfo& screen_info) {
     widget_input_handler_manager_->AllowPreCommitInput();
 }
 
-void RenderWidget::StartStopCompositor() {
-  if (never_composited_)
-    return;
-
-  if (is_hidden_)
-    layer_tree_view_->SetVisible(false);
-  else
-    layer_tree_view_->SetVisible(true);
-}
-
 // static
 void RenderWidget::DoDeferredClose(int widget_routing_id) {
   // DoDeferredClose() was a posted task, which means the RenderWidget may have
@@ -2608,7 +2601,8 @@ void RenderWidget::SetHidden(bool hidden) {
   if (is_hidden_)
     widget_input_handler_manager_->InvokeInputProcessedCallback();
 
-  StartStopCompositor();
+  if (!never_composited_)
+    layer_tree_view_->SetVisible(!is_hidden_);
 }
 
 void RenderWidget::OnImeEventGuardStart(ImeEventGuard* guard) {

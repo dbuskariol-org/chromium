@@ -1564,9 +1564,6 @@ void RenderFrameImpl::CreateFrame(
   // We now have a WebLocalFrame for the new frame. The next step is to set
   // up a RenderWidget for it, if it is needed.
   if (is_main_frame) {
-    // For a main frame, we use the RenderWidget already attached to the
-    // RenderView (this is being changed by https://crbug.com/419087).
-
     // Main frames are always local roots, so they should always have a
     // |widget_params| (and it always comes with a routing id). Surprisingly,
     // this routing id is *not* used though, as the routing id on the existing

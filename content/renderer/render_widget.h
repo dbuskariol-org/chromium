@@ -256,8 +256,6 @@ class CONTENT_EXPORT RenderWidget
 
   // This can return nullptr while the RenderWidget is closing. When for_frame()
   // is true, the widget returned is a blink::WebFrameWidget.
-  // TODO(crbug.com/419087): The main frame RenderWidget will also return
-  // nullptr while the main frame is remote.
   blink::WebWidget* GetWebWidget() const { return webwidget_; }
 
   // Returns the current instance of WebInputMethodController which is to be
@@ -680,13 +678,6 @@ class CONTENT_EXPORT RenderWidget
   // Initializes the compositor and dependent systems, as part of the
   // Initialize() process.
   void InitCompositing(const ScreenInfo& screen_info);
-
-  // If appropriate, initiates the compositor to set up IPC channels and begin
-  // its scheduler. Otherwise, pauses the scheduler and tears down its IPC
-  // channels.
-  // TODO(crbug.com/419087): Simply code and remove this now that undead isn't a
-  // thing.
-  void StartStopCompositor();
 
   // Request the window to close from the renderer by sending the request to the
   // browser.
