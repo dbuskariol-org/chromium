@@ -608,7 +608,6 @@ GdkDisplay* GetGdkDisplay() {
 }
 
 int BuildXkbStateFromGdkEvent(unsigned int state, unsigned char group) {
-  DCHECK_EQ(0u, ((state >> 13) & 0x3));
   return state | ((group & 0x3) << 13);
 }
 
