@@ -306,6 +306,44 @@ public class RadioButtonWithDescriptionLayoutTest {
         Assert.assertTrue(b4.isChecked());
     }
 
+    @Test
+    @SmallTest
+    public void testSetEnable() {
+        View content = LayoutInflater.from(mContext).inflate(
+                R.layout.radio_button_with_description_layout_test, null, false);
+
+        RadioButtonWithDescriptionLayout layout =
+                content.findViewById(R.id.test_radio_button_layout);
+        RadioButtonWithDescription b1 = content.findViewById(R.id.test_radio_description_1);
+        RadioButtonWithDescription b2 = content.findViewById(R.id.test_radio_description_2);
+        RadioButtonWithEditText b3 = content.findViewById(R.id.test_radio_edit_text_1);
+        RadioButtonWithEditText b4 = content.findViewById(R.id.test_radio_edit_text_2);
+
+        final TextView textView1 = new TextView(mContext);
+        final TextView textView3 = new TextView(mContext);
+
+        layout.attachAccessoryView(textView1, b1);
+        layout.attachAccessoryView(textView3, b3);
+
+        layout.setEnabled(false);
+
+        Assert.assertFalse(b1.isEnabled());
+        Assert.assertFalse(b2.isEnabled());
+        Assert.assertFalse(b3.isEnabled());
+        Assert.assertFalse(b4.isEnabled());
+        Assert.assertFalse(textView1.isEnabled());
+        Assert.assertFalse(textView3.isEnabled());
+
+        layout.setEnabled(true);
+
+        Assert.assertTrue(b1.isEnabled());
+        Assert.assertTrue(b2.isEnabled());
+        Assert.assertTrue(b3.isEnabled());
+        Assert.assertTrue(b4.isEnabled());
+        Assert.assertTrue(textView1.isEnabled());
+        Assert.assertTrue(textView3.isEnabled());
+    }
+
     private RadioButtonWithDescription createRadioButtonWithDescription(
             String primary, String description, Object tag) {
         RadioButtonWithDescription b = new RadioButtonWithDescription(mContext, null);

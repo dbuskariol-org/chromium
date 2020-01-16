@@ -12,6 +12,8 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.VisibleForTesting;
 
+import org.chromium.ui.base.ViewUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +54,6 @@ public final class RadioButtonWithDescriptionLayout
     private final int mMarginBetweenRows;
     private final List<RadioButtonWithDescription> mRadioButtonsWithDescriptions;
     private OnCheckedChangeListener mOnCheckedChangeListener;
-    private View mAccessoryView;
 
     public RadioButtonWithDescriptionLayout(Context context) {
         this(context, null);
@@ -154,6 +155,14 @@ public final class RadioButtonWithDescriptionLayout
         if (radioButton.getId() == NO_ID) radioButton.setId(generateViewId());
         radioButton.setRadioButtonGroup(mRadioButtonsWithDescriptions);
         mRadioButtonsWithDescriptions.add(radioButton);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        for (int i = 0; i < getChildCount(); i++) {
+            ViewUtils.setEnabledRecursive(getChildAt(i), enabled);
+        }
     }
 
     /**

@@ -19,4 +19,11 @@
         android:hint="@string/test_uri"
         android:background="?attr/selectableItemBackground"
         app:descriptionText="@string/test_string" />
+
+    <!-- A View used to transfer focus of radio button-->
+    <Button
+        android:id="@+id/dummy_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/test_string" />
 </FrameLayout>

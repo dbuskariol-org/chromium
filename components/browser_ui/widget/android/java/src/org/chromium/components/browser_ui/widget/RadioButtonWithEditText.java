@@ -13,6 +13,8 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.chromium.ui.KeyboardVisibilityDelegate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +105,21 @@ public class RadioButtonWithEditText extends RadioButtonWithDescription {
                 }
             }
         });
+
+        // Handles keyboard actions
+        mEditText.setOnEditorActionListener((v, actionId, event) -> {
+            mEditText.clearFocus();
+            return false;
+        });
+
+        // Handle touches beside the Edit text
+        mEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                mEditText.setCursorVisible(true);
+            } else {
+                releaseFocusForEditText();
+            }
+        });
     }
 
     @Override
@@ -125,6 +142,15 @@ public class RadioButtonWithEditText extends RadioButtonWithDescription {
         setInputType(inputType);
 
         a.recycle();
+    }
+
+    /**
+     * Sets the checked status.
+     */
+    @Override
+    public void setChecked(boolean checked) {
+        super.setChecked(checked);
+        mEditText.clearFocus();
     }
 
     /**
@@ -163,5 +189,13 @@ public class RadioButtonWithEditText extends RadioButtonWithDescription {
      */
     public void setHint(int hintId) {
         mEditText.setHint(hintId);
+    }
+
+    /**
+     * Handle focus when the edit text is selected
+     */
+    private void releaseFocusForEditText() {
+        mEditText.setCursorVisible(false);
+        KeyboardVisibilityDelegate.getInstance().hideKeyboard(mEditText);
     }
 }

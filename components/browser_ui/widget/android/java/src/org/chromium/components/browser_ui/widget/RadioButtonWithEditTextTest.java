@@ -5,11 +5,14 @@
 package org.chromium.components.browser_ui.widget;
 
 import android.app.Activity;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SmallTest;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -20,7 +23,11 @@ import org.junit.runner.RunWith;
 
 import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.components.browser_ui.widget.test.R;
+import org.chromium.content_public.browser.test.util.Criteria;
+import org.chromium.content_public.browser.test.util.CriteriaHelper;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
+import org.chromium.content_public.browser.test.util.TouchCommon;
+import org.chromium.ui.KeyboardVisibilityDelegate;
 import org.chromium.ui.test.util.DummyUiActivityTestCase;
 
 /**
@@ -69,6 +76,8 @@ public class RadioButtonWithEditTextTest extends DummyUiActivityTestCase {
     private RadioButton mButton;
     private EditText mEditText;
 
+    private Button mDummyButton;
+
     @Override
     public void setUpTest() throws Exception {
         super.setUpTest();
@@ -86,7 +95,9 @@ public class RadioButtonWithEditTextTest extends DummyUiActivityTestCase {
 
             mRadioButtonWithEditText =
                     (RadioButtonWithEditText) layout.findViewById(R.id.test_radio_button);
+            mDummyButton = (Button) layout.findViewById(R.id.dummy_button);
             Assert.assertNotNull(mRadioButtonWithEditText);
+            Assert.assertNotNull(mDummyButton);
 
             mButton = layout.findViewById(R.id.radio_button);
             mEditText = layout.findViewById(R.id.edit_text);
@@ -198,5 +209,67 @@ public class RadioButtonWithEditTextTest extends DummyUiActivityTestCase {
                 mListener.getCurrentText().toString());
         Assert.assertEquals("TestListener#OnTextChanged should not be called any more", timesCalled,
                 mListener.getTimesCalled());
+    }
+
+    @Test
+    @SmallTest
+    public void testFocusChange() {
+        Assert.assertFalse(mRadioButtonWithEditText.hasFocus());
+        TestThreadUtils.runOnUiThreadBlocking(() -> { mRadioButtonWithEditText.setChecked(true); });
+        Assert.assertFalse("Edit text should not gain focus when radio button is checked",
+                mEditText.hasFocus());
+        Assert.assertFalse("Cursor in EditText should be hidden", mEditText.isCursorVisible());
+
+        // Test requesting focus on the EditText
+        TestThreadUtils.runOnUiThreadBlocking(() -> { mEditText.requestFocus(); });
+        Assert.assertTrue("Cursor in EditText should be visible", mEditText.isCursorVisible());
+
+        // Requesting focus elsewhere
+        TestThreadUtils.runOnUiThreadBlocking(() -> { mDummyButton.requestFocus(); });
+        Assert.assertFalse("Cursor in EditText should be visible", mEditText.isCursorVisible());
+        assertIsKeyboardShowing(false);
+
+        // Click to show keyboard
+        TouchCommon.singleClickView(mEditText);
+        Assert.assertTrue("Cursor in EditText should be visible", mEditText.isCursorVisible());
+        assertIsKeyboardShowing(true);
+
+        // Test editor action
+        InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_ENTER);
+        Assert.assertFalse("Cursor in EditText should be visible", mEditText.isCursorVisible());
+        assertIsKeyboardShowing(false);
+    }
+
+    @Test
+    @SmallTest
+    public void testSetEnabled() {
+        TestThreadUtils.runOnUiThreadBlocking(
+                () -> { mRadioButtonWithEditText.setEnabled(false); });
+        Assert.assertFalse("Primary TextView should be set to disabled.",
+                mRadioButtonWithEditText.getPrimaryTextView().isEnabled());
+        Assert.assertFalse("Description TextView should be set to disabled.",
+                mRadioButtonWithEditText.getDescriptionTextView().isEnabled());
+        Assert.assertFalse("RadioButton should be set to disabled.",
+                mRadioButtonWithEditText.getRadioButtonView().isEnabled());
+
+        TestThreadUtils.runOnUiThreadBlocking(() -> { mRadioButtonWithEditText.setEnabled(true); });
+        Assert.assertTrue("Primary TextView should be set to enabled.",
+                mRadioButtonWithEditText.getPrimaryTextView().isEnabled());
+        Assert.assertTrue("Description TextView should be set to enabled.",
+                mRadioButtonWithEditText.getDescriptionTextView().isEnabled());
+        Assert.assertTrue("RadioButton should be set to enabled.",
+                mRadioButtonWithEditText.getRadioButtonView().isEnabled());
+    }
+
+    private void assertIsKeyboardShowing(boolean isShowing) {
+        CriteriaHelper.pollUiThread(
+                new Criteria("Keyboard visibility does not consist with test setting.") {
+                    @Override
+                    public boolean isSatisfied() {
+                        return KeyboardVisibilityDelegate.getInstance().isKeyboardShowing(
+                                       mActivity, mEditText)
+                                == isShowing;
+                    }
+                });
     }
 }

@@ -238,6 +238,15 @@ public class RadioButtonWithDescription extends RelativeLayout implements OnClic
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+
+        mDescription.setEnabled(enabled);
+        mPrimary.setEnabled(enabled);
+        mRadioButton.setEnabled(enabled);
+    }
+
+    @Override
     protected Parcelable onSaveInstanceState() {
         // Since this View is designed to be used multiple times in the same layout and contains
         // children with ids, Android gets confused. This is because it will see two Views in the
