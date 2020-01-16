@@ -20,6 +20,7 @@
 
 #include "third_party/blink/renderer/core/html/html_frame_owner_element.h"
 
+#include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/mojom/feature_policy/feature_policy.mojom-blink.h"
 #include "third_party/blink/public/mojom/fetch/fetch_api_request.mojom-blink.h"
 #include "third_party/blink/renderer/core/accessibility/ax_object_cache.h"
@@ -551,6 +552,13 @@ void HTMLFrameOwnerElement::ParseAttribute(
     }
   } else {
     HTMLElement::ParseAttribute(params);
+  }
+}
+
+void HTMLFrameOwnerElement::FrameCrossOriginStatusChanged() {
+  if (base::FeatureList::IsEnabled(
+          blink::features::kCompositeCrossOriginIframes)) {
+    SetNeedsCompositingUpdate();
   }
 }
 
