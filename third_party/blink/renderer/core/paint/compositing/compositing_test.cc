@@ -213,8 +213,6 @@ TEST_P(CompositingTest, WillChangeTransformHint) {
 class CompositingSimTest : public PaintTestConfigurations, public SimTest {
  public:
   void InitializeWithHTML(const String& html) {
-    WebView().MainFrameWidget()->Resize(WebSize(800, 600));
-
     SimRequest request("https://example.com/test.html", "text/html");
     LoadURL("https://example.com/test.html");
     request.Complete(html);
@@ -261,6 +259,13 @@ class CompositingSimTest : public PaintTestConfigurations, public SimTest {
 
   PaintArtifactCompositor* paint_artifact_compositor() {
     return MainFrame().GetFrameView()->GetPaintArtifactCompositor();
+  }
+
+ private:
+  void SetUp() override {
+    SimTest::SetUp();
+    // Ensure a non-empty size so painting does not early-out.
+    WebView().Resize(WebSize(800, 600));
   }
 };
 
@@ -1075,7 +1080,6 @@ TEST_P(CompositingSimTest, PromoteCrossOriginIframeAfterLoading) {
   feature_list.InitWithFeatureState(
       blink::features::kCompositeCrossOriginIframes, true);
 
-  WebView().MainFrameWidget()->Resize(WebSize(800, 600));
   SimRequest main_resource("https://origin-a.com/a.html", "text/html");
   SimRequest frame_resource("https://origin-b.com/b.html", "text/html");
 
@@ -1097,7 +1101,6 @@ TEST_P(CompositingSimTest, PromoteCrossOriginIframeAfterDomainChange) {
   feature_list.InitWithFeatureState(
       blink::features::kCompositeCrossOriginIframes, true);
 
-  WebView().MainFrameWidget()->Resize(WebSize(800, 600));
   SimRequest main_resource("https://origin-a.com/a.html", "text/html");
   SimRequest frame_resource("https://sub.origin-a.com/b.html", "text/html");
 
