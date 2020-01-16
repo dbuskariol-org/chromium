@@ -18,10 +18,6 @@
 #include "headless/public/headless_shell.h"
 #include "ui/gfx/switches.h"
 
-#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-#include "components/crash/content/app/crashpad.h"
-#endif
-
 #if defined(OS_MACOSX)
 #include "chrome/app/chrome_main_mac.h"
 #endif
@@ -110,13 +106,6 @@ int ChromeMain(int argc, const char** argv) {
     return headless::HeadlessShellMain(params);
   }
 #endif  // defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_WIN)
-
-#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-  // TODO(https://crbug.com/942279): This can be removed when Chrome_ChromeOS
-  // and other embedders on Chrome OS and Linux are ready to use Crashpad.
-  base::CommandLine::ForCurrentProcess()->AppendSwitch(
-      crash_reporter::kEnableCrashpad);
-#endif
 
   int rv = content::ContentMain(params);
 
