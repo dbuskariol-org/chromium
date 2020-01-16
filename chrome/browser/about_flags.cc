@@ -3161,24 +3161,10 @@ const FeatureEntry kFeatureEntries[] = {
 #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
 
 #if !defined(OS_ANDROID)
-    {"chrome-colors", flag_descriptions::kChromeColorsName,
-     flag_descriptions::kChromeColorsDescription, kOsDesktop,
-     FEATURE_VALUE_TYPE(ntp_features::kChromeColors)},
-
-    {"chrome-colors-custom-color-picker",
-     flag_descriptions::kChromeColorsCustomColorPickerName,
-     flag_descriptions::kChromeColorsCustomColorPickerDescription, kOsDesktop,
-     FEATURE_VALUE_TYPE(ntp_features::kChromeColorsCustomColorPicker)},
-
     {"ntp-confirm-suggestion-removals",
      flag_descriptions::kNtpConfirmSuggestionRemovalsName,
      flag_descriptions::kNtpConfirmSuggestionRemovalsDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(ntp_features::kConfirmSuggestionRemovals)},
-
-    {"ntp-customization-menu-v2",
-     flag_descriptions::kNtpCustomizationMenuV2Name,
-     flag_descriptions::kNtpCustomizationMenuV2Description, kOsDesktop,
-     FEATURE_VALUE_TYPE(ntp_features::kCustomizationMenuV2)},
 
     {"ntp-dismiss-promos", flag_descriptions::kNtpDismissPromosName,
      flag_descriptions::kNtpDismissPromosDescription, kOsDesktop,

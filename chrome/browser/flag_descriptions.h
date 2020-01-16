@@ -1718,17 +1718,8 @@ extern const char kAutofillDropdownLayoutDescription[];
 extern const char kCastMediaRouteProviderName[];
 extern const char kCastMediaRouteProviderDescription[];
 
-extern const char kChromeColorsName[];
-extern const char kChromeColorsDescription[];
-
-extern const char kChromeColorsCustomColorPickerName[];
-extern const char kChromeColorsCustomColorPickerDescription[];
-
 extern const char kNtpConfirmSuggestionRemovalsName[];
 extern const char kNtpConfirmSuggestionRemovalsDescription[];
-
-extern const char kNtpCustomizationMenuV2Name[];
-extern const char kNtpCustomizationMenuV2Description[];
 
 extern const char kNtpDismissPromosName[];
 extern const char kNtpDismissPromosDescription[];

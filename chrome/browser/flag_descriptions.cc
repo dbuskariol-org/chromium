@@ -2916,24 +2916,11 @@ const char kCastMediaRouteProviderDescription[] =
     "Enables the native Cast Media Route Provider implementation to be used "
     "instead of the implementation in the Media Router component extension.";
 
-const char kChromeColorsName[] = "Chrome Colors menu";
-const char kChromeColorsDescription[] =
-    "Show Chrome Colors menu in the NTP customization menu.";
-
-const char kChromeColorsCustomColorPickerName[] =
-    "Custom color picker for Chrome Colors menu";
-const char kChromeColorsCustomColorPickerDescription[] =
-    "Show custom color picker in Chrome Colors menu.";
-
 const char kNtpConfirmSuggestionRemovalsName[] =
     "Confirm removing \"realbox\" suggestions on New Tab page";
 const char kNtpConfirmSuggestionRemovalsDescription[] =
     "Show a confirmation dialog when removing suggestions from the \"realbox\" "
     "on the New Tab page. Requires #ntp-realbox to be enabled.";
-
-const char kNtpCustomizationMenuV2Name[] = "NTP customization menu version 2";
-const char kNtpCustomizationMenuV2Description[] =
-    "Use the second version of the NTP customization menu.";
 
 const char kNtpDismissPromosName[] = "Dismiss promos on the New Tab Page";
 const char kNtpDismissPromosDescription[] =
