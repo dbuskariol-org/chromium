@@ -1018,6 +1018,8 @@ if (!is_android) {
       "../browser/net/network_request_metrics_browsertest.cc",
       "../browser/net/nss_context_chromeos_browsertest.cc",
       "../browser/net/profile_network_context_service_browsertest.cc",
+      "../browser/net/profile_network_context_service_test_utils.cc",
+      "../browser/net/profile_network_context_service_test_utils.h",
       "../browser/net/proxy_browsertest.cc",
       "../browser/net/proxy_test_utils.cc",
       "../browser/net/proxy_test_utils.h",
