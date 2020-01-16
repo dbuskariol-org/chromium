@@ -5957,13 +5957,6 @@ crbug.com/997669 [ Win ] http/tests/devtools/search/sources-search-scope-in-file
 crbug.com/997669 [ Win ] http/tests/devtools/search/sources-search-scope.js [ Pass Crash ]
 crbug.com/626703 external/wpt/css/css-paint-api/custom-property-animation-on-main-thread.https.html [ Pass Failure ]
 
-# Pending enabling scroll to text feature
-crbug.com/919204 external/wpt/scroll-to-text-fragment/scroll-to-text-fragment.html [ Skip ]
-crbug.com/919204 external/wpt/scroll-to-text-fragment/scroll-to-text-fragment-same-doc.html [ Skip ]
-crbug.com/919204 external/wpt/scroll-to-text-fragment/scroll-to-text-fragment-api.html [ Skip ]
-crbug.com/919204 external/wpt/scroll-to-text-fragment/scroll-to-text-fragment-security.html [ Skip ]
-crbug.com/919204 wpt_internal/display-lock/css-render-subtree/text-fragment-navigation-activates.html [ Skip ]
-
 crbug.com/999209 virtual/lazyload-image/http/tests/lazyload/style-dimension.html [ Timeout ]
 
 crbug.com/1015130 external/wpt/largest-contentful-paint/first-paint-equals-lcp-text.html [ Failure Pass ]

@@ -2521,6 +2521,9 @@ interface FormDataEvent : Event
     attribute @@toStringTag
     getter formData
     method constructor
+interface FragmentDirective
+    attribute @@toStringTag
+    method constructor
 interface GainNode : AudioNode
     attribute @@toStringTag
     getter gain
@@ -4669,6 +4672,7 @@ interface LinearAccelerationSensor : Accelerometer
     method constructor
 interface Location
     attribute @@toStringTag
+    getter fragmentDirective
     method constructor
 interface Lock
     attribute @@toStringTag
