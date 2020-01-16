@@ -7,6 +7,7 @@
 #include <memory>
 #include <utility>
 
+#include "android_webview/browser/gfx/aw_attaching_to_window_recorder.h"
 #include "android_webview/browser/gfx/browser_view_renderer_client.h"
 #include "android_webview/browser/gfx/compositor_frame_consumer.h"
 #include "android_webview/browser/gfx/root_frame_sink.h"
@@ -113,7 +114,8 @@ BrowserViewRenderer::BrowserViewRenderer(
       max_page_scale_factor_(0.f),
       on_new_picture_enable_(false),
       clear_view_(false),
-      offscreen_pre_raster_(false) {
+      offscreen_pre_raster_(false),
+      recorder_(base::MakeRefCounted<AwAttachingToWindowRecorder>()) {
   if (::features::IsUsingVizForWebView()) {
     root_frame_sink_proxy_ =
         std::make_unique<RootFrameSinkProxy>(ui_task_runner_, this);
@@ -121,9 +123,11 @@ BrowserViewRenderer::BrowserViewRenderer(
     begin_frame_source_ = std::make_unique<BeginFrameSourceWebView>();
   }
   UpdateBeginFrameSource();
+  recorder_->Start();
 }
 
 BrowserViewRenderer::~BrowserViewRenderer() {
+  recorder_->OnDestroyed();
   DCHECK(compositor_map_.empty());
   DCHECK(!current_compositor_frame_consumer_);
 }
@@ -506,6 +510,7 @@ void BrowserViewRenderer::OnAttachedToWindow(int width, int height) {
   if (offscreen_pre_raster_)
     ComputeTileRectAndUpdateMemoryPolicy();
   UpdateBeginFrameSource();
+  recorder_->OnAttachedToWindow();
 }
 
 void BrowserViewRenderer::OnDetachedFromWindow() {
