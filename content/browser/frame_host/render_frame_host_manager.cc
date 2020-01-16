@@ -58,6 +58,7 @@
 #include "content/public/common/referrer.h"
 #include "content/public/common/url_constants.h"
 #include "content/public/common/url_utils.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 
 #if defined(OS_MACOSX)
 #include "ui/gfx/mac/scoped_cocoa_disable_screen_updates.h"
@@ -1022,7 +1023,7 @@ void RenderFrameHostManager::CancelPendingIfNecessary(
 }
 
 void RenderFrameHostManager::UpdateUserActivationState(
-    blink::UserActivationUpdateType update_type) {
+    blink::mojom::UserActivationUpdateType update_type) {
   for (const auto& pair : proxy_hosts_) {
     pair.second->Send(new FrameMsg_UpdateUserActivationState(
         pair.second->GetRoutingID(), update_type));
@@ -1040,7 +1041,8 @@ void RenderFrameHostManager::UpdateUserActivationState(
                                                    ->render_manager()
                                                    ->GetProxyToOuterDelegate();
   if (outer_delegate_proxy &&
-      update_type == blink::UserActivationUpdateType::kNotifyActivation) {
+      update_type ==
+          blink::mojom::UserActivationUpdateType::kNotifyActivation) {
     outer_delegate_proxy->Send(new FrameMsg_UpdateUserActivationState(
         outer_delegate_proxy->GetRoutingID(), update_type));
     GetOuterDelegateNode()->UpdateUserActivationState(update_type);

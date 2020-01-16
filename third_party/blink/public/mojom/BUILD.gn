@@ -56,6 +56,7 @@ mojom("mojom_platform") {
     "frame/lifecycle.mojom",
     "frame/navigation_initiator.mojom",
     "frame/sudden_termination_disabler_type.mojom",
+    "frame/user_activation_update_types.mojom",
     "geolocation/geolocation_service.mojom",
     "hid/hid.mojom",
     "hyphenation/hyphenation.mojom",

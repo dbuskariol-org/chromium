@@ -53,6 +53,7 @@
 #include "skia/ext/platform_canvas.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/blink/public/common/frame/frame_policy.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 
 using base::Time;
 
@@ -440,7 +441,7 @@ TEST_F(NavigationControllerTest, LoadURL) {
   // Simulate a user gesture so that the above entry is not marked to be skipped
   // on back.
   main_test_rfh()->frame_tree_node()->UpdateUserActivationState(
-      blink::UserActivationUpdateType::kNotifyActivation);
+      blink::mojom::UserActivationUpdateType::kNotifyActivation);
 
   // Load another...
   controller.LoadURL(url2, Referrer(), ui::PAGE_TRANSITION_TYPED,
@@ -869,7 +870,7 @@ TEST_F(NavigationControllerTest, LoadURL_ExistingPending) {
   // Simulate a user gesture so that the above entry is not marked to be skipped
   // on back.
   main_test_rfh()->frame_tree_node()->UpdateUserActivationState(
-      blink::UserActivationUpdateType::kNotifyActivation);
+      blink::mojom::UserActivationUpdateType::kNotifyActivation);
 
   const GURL kExistingURL2("http://foo/bee");
   NavigationSimulator::NavigateAndCommitFromBrowser(contents(), kExistingURL2);
@@ -924,7 +925,7 @@ TEST_F(NavigationControllerTest, LoadURL_PrivilegedPending) {
   // Simulate a user gesture so that the above entry is not marked to be skipped
   // on back.
   main_test_rfh()->frame_tree_node()->UpdateUserActivationState(
-      blink::UserActivationUpdateType::kNotifyActivation);
+      blink::mojom::UserActivationUpdateType::kNotifyActivation);
 
   // Navigate cross-process to a second URL.
   const GURL kExistingURL2("http://foo/eh");
@@ -1613,7 +1614,7 @@ TEST_F(NavigationControllerTest, Back_NewPending) {
   // Simulate a user gesture so that the above entry is not marked to be skipped
   // on back.
   main_test_rfh()->frame_tree_node()->UpdateUserActivationState(
-      blink::UserActivationUpdateType::kNotifyActivation);
+      blink::mojom::UserActivationUpdateType::kNotifyActivation);
 
   // controller.LoadURL(kUrl2, ui::PAGE_TRANSITION_TYPED);
   NavigationSimulator::NavigateAndCommitFromDocument(kUrl2, main_test_rfh());
@@ -2211,7 +2212,7 @@ TEST_F(NavigationControllerTest, LinkClick) {
 
   // Simulate a user gesture.
   main_test_rfh()->frame_tree_node()->UpdateUserActivationState(
-      blink::UserActivationUpdateType::kNotifyActivation);
+      blink::mojom::UserActivationUpdateType::kNotifyActivation);
 
   NavigationSimulator::NavigateAndCommitFromDocument(url2, main_test_rfh());
   EXPECT_EQ(1U, navigation_entry_committed_counter_);

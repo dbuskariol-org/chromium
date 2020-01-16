@@ -24,7 +24,7 @@
 #include "third_party/blink/public/common/frame/frame_owner_element_type.h"
 #include "third_party/blink/public/common/frame/frame_policy.h"
 #include "third_party/blink/public/common/frame/user_activation_state.h"
-#include "third_party/blink/public/common/frame/user_activation_update_type.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/platform/web_insecure_request_policy.h"
 #include "url/gurl.h"
 #include "url/origin.h"
@@ -328,7 +328,8 @@ class CONTENT_EXPORT FrameTreeNode {
   // (which initiated the update).  Returns |false| if the update tries to
   // consume an already consumed/expired transient state, |true| otherwise.  See
   // the comment on user_activation_state_ below.
-  bool UpdateUserActivationState(blink::UserActivationUpdateType update_type);
+  bool UpdateUserActivationState(
+      blink::mojom::UserActivationUpdateType update_type);
 
   void OnSetHadStickyUserActivationBeforeNavigation(bool value);
 

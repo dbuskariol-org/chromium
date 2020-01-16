@@ -349,7 +349,7 @@ void RenderFrameProxy::SetReplicatedState(const FrameReplicationState& state) {
       state.feature_policy_header, state.opener_feature_state);
   if (state.has_received_user_gesture) {
     web_frame_->UpdateUserActivationState(
-        blink::UserActivationUpdateType::kNotifyActivation);
+        blink::mojom::UserActivationUpdateType::kNotifyActivation);
   }
   web_frame_->SetHadStickyUserActivationBeforeNavigation(
       state.has_received_user_gesture_before_nav);
@@ -519,7 +519,7 @@ void RenderFrameProxy::OnSetPageFocus(bool is_focused) {
 }
 
 void RenderFrameProxy::OnUpdateUserActivationState(
-    blink::UserActivationUpdateType update_type) {
+    blink::mojom::UserActivationUpdateType update_type) {
   web_frame_->UpdateUserActivationState(update_type);
 }
 

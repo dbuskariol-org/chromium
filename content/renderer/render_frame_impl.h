@@ -88,6 +88,7 @@
 #include "third_party/blink/public/mojom/commit_result/commit_result.mojom.h"
 #include "third_party/blink/public/mojom/devtools/console_message.mojom.h"
 #include "third_party/blink/public/mojom/fetch/fetch_api_request.mojom.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/mojom/renderer_preferences.mojom.h"
 #include "third_party/blink/public/mojom/service_worker/service_worker_object.mojom.h"
 #include "third_party/blink/public/mojom/use_counter/css_property_id.mojom.h"
@@ -694,7 +695,7 @@ class CONTENT_EXPORT RenderFrameImpl
       const blink::WebVector<blink::WebString>& stopped_matching_selectors)
       override;
   void UpdateUserActivationState(
-      blink::UserActivationUpdateType update_type) override;
+      blink::mojom::UserActivationUpdateType update_type) override;
   void SetMouseCapture(bool capture) override;
   bool ShouldReportDetailedMessageForSource(
       const blink::WebString& source) override;

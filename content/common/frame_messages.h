@@ -52,7 +52,6 @@
 #include "third_party/blink/public/common/feature_policy/feature_policy.h"
 #include "third_party/blink/public/common/frame/frame_owner_element_type.h"
 #include "third_party/blink/public/common/frame/frame_policy.h"
-#include "third_party/blink/public/common/frame/user_activation_update_type.h"
 #include "third_party/blink/public/common/media/media_player_action.h"
 #include "third_party/blink/public/common/messaging/message_port_channel.h"
 #include "third_party/blink/public/common/messaging/transferable_message.h"
@@ -63,6 +62,7 @@
 #include "third_party/blink/public/mojom/fetch/fetch_api_request.mojom.h"
 #include "third_party/blink/public/mojom/frame/blocked_navigation_types.mojom.h"
 #include "third_party/blink/public/mojom/frame/lifecycle.mojom.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/mojom/web_feature/web_feature.mojom.h"
 #include "third_party/blink/public/platform/viewport_intersection_state.h"
 #include "third_party/blink/public/platform/web_focus_type.h"
@@ -136,8 +136,8 @@ IPC_ENUM_TRAITS_MAX_VALUE(content::CSPDisposition,
                           content::CSPDisposition::LAST)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::TriggeringEventInfo,
                           blink::TriggeringEventInfo::kMaxValue)
-IPC_ENUM_TRAITS_MAX_VALUE(blink::UserActivationUpdateType,
-                          blink::UserActivationUpdateType::kMaxValue)
+IPC_ENUM_TRAITS_MAX_VALUE(blink::mojom::UserActivationUpdateType,
+                          blink::mojom::UserActivationUpdateType::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::MediaPlayerAction::Type,
                           blink::MediaPlayerAction::Type::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::mojom::FeaturePolicyDisposition,
@@ -841,8 +841,9 @@ IPC_MESSAGE_ROUTED2(FrameMsg_SetPepperVolume,
 // Tells the frame to update the user activation state in appropriate part of
 // the frame tree (ancestors for activation notification and all nodes for
 // consumption).
-IPC_MESSAGE_ROUTED1(FrameMsg_UpdateUserActivationState,
-                    blink::UserActivationUpdateType /* type of state update */)
+IPC_MESSAGE_ROUTED1(
+    FrameMsg_UpdateUserActivationState,
+    blink::mojom::UserActivationUpdateType /* type of state update */)
 
 // Updates the renderer with a list of unique WebFeature values representing
 // Blink features used, performed or encountered by the browser during the
@@ -1145,8 +1146,9 @@ IPC_MESSAGE_ROUTED2(FrameHostMsg_UpdateRenderThrottlingStatus,
 // Indicates that the user activation state in the current frame has been
 // updated, so the replicated states need to be synced (in the browser process
 // as well as in all other renderer processes).
-IPC_MESSAGE_ROUTED1(FrameHostMsg_UpdateUserActivationState,
-                    blink::UserActivationUpdateType /* type of state update */)
+IPC_MESSAGE_ROUTED1(
+    FrameHostMsg_UpdateUserActivationState,
+    blink::mojom::UserActivationUpdateType /* type of state update */)
 
 // Transfers user activation state from the source frame to the current frame.
 IPC_MESSAGE_ROUTED1(FrameMsg_TransferUserActivationFrom,

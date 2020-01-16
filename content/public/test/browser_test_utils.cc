@@ -3302,7 +3302,7 @@ void UpdateUserActivationStateMsgWaiter::Wait() {
 }
 
 void UpdateUserActivationStateMsgWaiter::OnUpdateUserActivationState(
-    blink::UserActivationUpdateType) {
+    blink::mojom::UserActivationUpdateType) {
   received_ = true;
   run_loop_.Quit();
 }

@@ -162,7 +162,6 @@
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/common/frame/sandbox_flags.h"
-#include "third_party/blink/public/common/frame/user_activation_update_type.h"
 #include "third_party/blink/public/common/input/web_keyboard_event.h"
 #include "third_party/blink/public/common/loader/url_loader_throttle.h"
 #include "third_party/blink/public/common/logging/logging_utils.h"
@@ -171,6 +170,7 @@
 #include "third_party/blink/public/mojom/blob/blob.mojom.h"
 #include "third_party/blink/public/mojom/choosers/file_chooser.mojom.h"
 #include "third_party/blink/public/mojom/fetch/fetch_api_request.mojom.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/mojom/loader/request_context_frame_type.mojom.h"
 #include "third_party/blink/public/mojom/permissions/permission.mojom.h"
 #include "third_party/blink/public/mojom/referrer.mojom.h"
@@ -4276,7 +4276,7 @@ void RenderFrameImpl::DidMatchCSS(
 }
 
 void RenderFrameImpl::UpdateUserActivationState(
-    blink::UserActivationUpdateType update_type) {
+    blink::mojom::UserActivationUpdateType update_type) {
   Send(new FrameHostMsg_UpdateUserActivationState(routing_id_, update_type));
 }
 

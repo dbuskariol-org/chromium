@@ -30,7 +30,7 @@
 #include "content/public/common/content_features.h"
 #include "content/public/common/navigation_policy.h"
 #include "third_party/blink/public/common/frame/sandbox_flags.h"
-#include "third_party/blink/public/common/frame/user_activation_update_type.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 
 namespace content {
 
@@ -231,7 +231,8 @@ void FrameTreeNode::ResetForNavigation() {
   // This frame has had its user activation bits cleared in the renderer
   // before arriving here. We just need to clear them here and in the other
   // renderer processes that may have a reference to this frame.
-  UpdateUserActivationState(blink::UserActivationUpdateType::kClearActivation);
+  UpdateUserActivationState(
+      blink::mojom::UserActivationUpdateType::kClearActivation);
 }
 
 size_t FrameTreeNode::GetFrameTreeSize() const {
@@ -620,20 +621,20 @@ bool FrameTreeNode::VerifyUserActivation() {
 }
 
 bool FrameTreeNode::UpdateUserActivationState(
-    blink::UserActivationUpdateType update_type) {
+    blink::mojom::UserActivationUpdateType update_type) {
   bool update_result = false;
   switch (update_type) {
-    case blink::UserActivationUpdateType::kConsumeTransientActivation:
+    case blink::mojom::UserActivationUpdateType::kConsumeTransientActivation:
       update_result = ConsumeTransientUserActivation();
       break;
-    case blink::UserActivationUpdateType::kNotifyActivation:
+    case blink::mojom::UserActivationUpdateType::kNotifyActivation:
       update_result = NotifyUserActivation();
       break;
-    case blink::UserActivationUpdateType::
+    case blink::mojom::UserActivationUpdateType::
         kNotifyActivationPendingBrowserVerification:
       if (VerifyUserActivation()) {
         update_result = NotifyUserActivation();
-        update_type = blink::UserActivationUpdateType::kNotifyActivation;
+        update_type = blink::mojom::UserActivationUpdateType::kNotifyActivation;
       } else {
         // TODO(crbug.com/848778): We need to decide what to do when user
         // activation verification failed. NOTREACHED here will make all
@@ -641,7 +642,7 @@ bool FrameTreeNode::UpdateUserActivationState(
         return false;
       }
       break;
-    case blink::UserActivationUpdateType::kClearActivation:
+    case blink::mojom::UserActivationUpdateType::kClearActivation:
       update_result = ClearUserActivation();
       break;
   }

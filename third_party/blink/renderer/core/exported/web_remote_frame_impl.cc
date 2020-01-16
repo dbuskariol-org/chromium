@@ -340,18 +340,19 @@ bool WebRemoteFrameImpl::IsIgnoredForHitTest() const {
 }
 
 void WebRemoteFrameImpl::UpdateUserActivationState(
-    UserActivationUpdateType update_type) {
+    mojom::blink::UserActivationUpdateType update_type) {
   switch (update_type) {
-    case UserActivationUpdateType::kNotifyActivation:
+    case mojom::blink::UserActivationUpdateType::kNotifyActivation:
       GetFrame()->NotifyUserActivationInLocalTree();
       break;
-    case UserActivationUpdateType::kConsumeTransientActivation:
+    case mojom::blink::UserActivationUpdateType::kConsumeTransientActivation:
       GetFrame()->ConsumeTransientUserActivationInLocalTree();
       break;
-    case UserActivationUpdateType::kClearActivation:
+    case mojom::blink::UserActivationUpdateType::kClearActivation:
       GetFrame()->ClearUserActivationInLocalTree();
       break;
-    case UserActivationUpdateType::kNotifyActivationPendingBrowserVerification:
+    case mojom::blink::UserActivationUpdateType::
+        kNotifyActivationPendingBrowserVerification:
       NOTREACHED() << "Unexpected UserActivationUpdateType from browser";
       break;
   }

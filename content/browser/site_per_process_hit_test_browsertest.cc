@@ -42,6 +42,7 @@
 #include "content/shell/common/shell_switches.h"
 #include "content/test/mock_overscroll_observer.h"
 #include "third_party/blink/public/common/features.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "ui/display/display_switches.h"
 #include "ui/events/base_event_utils.h"
 #include "ui/events/gesture_detection/gesture_configuration.h"
@@ -6665,7 +6666,7 @@ IN_PROC_BROWSER_TEST_F(SitePerProcessUserActivationHitTestBrowserTest,
 
   // Clear the activation state.
   root->UpdateUserActivationState(
-      blink::UserActivationUpdateType::kClearActivation);
+      blink::mojom::UserActivationUpdateType::kClearActivation);
 
   // Send a mouse down to child frame.
   mouse_event.SetType(blink::WebInputEvent::kMouseDown);

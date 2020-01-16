@@ -41,10 +41,10 @@
 #include "services/network/public/mojom/network_service.mojom.h"
 #include "storage/common/file_system/file_system_types.h"
 #include "testing/gtest/include/gtest/gtest.h"
-#include "third_party/blink/public/common/frame/user_activation_update_type.h"
 #include "third_party/blink/public/common/input/web_input_event.h"
 #include "third_party/blink/public/common/input/web_mouse_event.h"
 #include "third_party/blink/public/common/input/web_mouse_wheel_event.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/accessibility/ax_tree_update.h"
 #include "ui/events/keycodes/dom/dom_code.h"
@@ -1711,7 +1711,7 @@ class UpdateUserActivationStateMsgWaiter : public BrowserMessageFilter {
  private:
   ~UpdateUserActivationStateMsgWaiter() override = default;
 
-  void OnUpdateUserActivationState(blink::UserActivationUpdateType);
+  void OnUpdateUserActivationState(blink::mojom::UserActivationUpdateType);
 
   bool received_ = false;
   base::RunLoop run_loop_;

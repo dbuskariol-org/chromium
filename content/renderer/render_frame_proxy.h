@@ -22,7 +22,7 @@
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_registry.h"
 #include "third_party/blink/public/common/feature_policy/feature_policy.h"
-#include "third_party/blink/public/common/frame/user_activation_update_type.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/platform/web_focus_type.h"
 #include "third_party/blink/public/platform/web_insecure_request_policy.h"
 #include "third_party/blink/public/web/web_remote_frame.h"
@@ -242,7 +242,8 @@ class CONTENT_EXPORT RenderFrameProxy : public IPC::Listener,
   void OnEnforceInsecureRequestPolicy(blink::WebInsecureRequestPolicy policy);
   void OnSetFrameOwnerProperties(const FrameOwnerProperties& properties);
   void OnSetPageFocus(bool is_focused);
-  void OnUpdateUserActivationState(blink::UserActivationUpdateType update_type);
+  void OnUpdateUserActivationState(
+      blink::mojom::UserActivationUpdateType update_type);
   void OnTransferUserActivationFrom(int32_t source_routing_id);
   void OnScrollRectToVisible(const gfx::Rect& rect_to_scroll,
                              const blink::WebScrollIntoViewParams& params);

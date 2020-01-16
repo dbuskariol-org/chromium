@@ -82,7 +82,6 @@
 #include "services/viz/public/mojom/hit_test/input_target_client.mojom.h"
 #include "third_party/blink/public/common/feature_policy/feature_policy.h"
 #include "third_party/blink/public/common/frame/frame_owner_element_type.h"
-#include "third_party/blink/public/common/frame/user_activation_update_type.h"
 #include "third_party/blink/public/mojom/bluetooth/web_bluetooth.mojom.h"
 #include "third_party/blink/public/mojom/choosers/file_chooser.mojom.h"
 #include "third_party/blink/public/mojom/commit_result/commit_result.mojom.h"
@@ -92,6 +91,7 @@
 #include "third_party/blink/public/mojom/frame/find_in_page.mojom.h"
 #include "third_party/blink/public/mojom/frame/frame.mojom.h"
 #include "third_party/blink/public/mojom/frame/navigation_initiator.mojom.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/mojom/idle/idle_manager.mojom.h"
 #include "third_party/blink/public/mojom/image_downloader/image_downloader.mojom.h"
 #include "third_party/blink/public/mojom/installedapp/installed_app_provider.mojom.h"
@@ -1495,7 +1495,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
                           const gfx::Range& range);
   void OnFocusedNodeChanged(bool is_editable_element,
                             const gfx::Rect& bounds_in_frame_widget);
-  void OnUpdateUserActivationState(blink::UserActivationUpdateType update_type);
+  void OnUpdateUserActivationState(
+      blink::mojom::UserActivationUpdateType update_type);
   void OnSetNeedsOcclusionTracking(bool needs_tracking);
   void OnScrollRectToVisibleInParentFrame(
       const gfx::Rect& rect_to_scroll,

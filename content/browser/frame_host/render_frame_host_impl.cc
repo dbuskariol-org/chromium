@@ -200,6 +200,7 @@
 #include "third_party/blink/public/mojom/cache_storage/cache_storage.mojom.h"
 #include "third_party/blink/public/mojom/choosers/file_chooser.mojom.h"
 #include "third_party/blink/public/mojom/frame/fullscreen.mojom.h"
+#include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/mojom/geolocation/geolocation_service.mojom.h"
 #include "third_party/blink/public/mojom/loader/pause_subresource_loading_handle.mojom.h"
 #include "third_party/blink/public/mojom/loader/url_loader_factory_bundle.mojom.h"
@@ -1560,7 +1561,7 @@ void RenderFrameHostImpl::ExecuteJavaScriptWithUserGestureForTests(
   // JavaScriptExecuteRequestsForTests call is redundant with this update. We
   // should determine if the redundancy can be removed.
   frame_tree_node()->UpdateUserActivationState(
-      blink::UserActivationUpdateType::kNotifyActivation);
+      blink::mojom::UserActivationUpdateType::kNotifyActivation);
 
   const bool has_user_gesture = true;
   GetNavigationControl()->JavaScriptExecuteRequestForTests(
@@ -4082,7 +4083,7 @@ void RenderFrameHostImpl::DidReceiveFirstUserActivation() {
 }
 
 void RenderFrameHostImpl::OnUpdateUserActivationState(
-    blink::UserActivationUpdateType update_type) {
+    blink::mojom::UserActivationUpdateType update_type) {
   if (!is_active())
     return;
   frame_tree_node_->UpdateUserActivationState(update_type);
@@ -4376,7 +4377,7 @@ void RenderFrameHostImpl::CreateNewWindow(
     // Consume activation even w/o User Activation v2, to sync other renderers
     // with calling renderer.
     was_consumed = frame_tree_node_->UpdateUserActivationState(
-        blink::UserActivationUpdateType::kConsumeTransientActivation);
+        blink::mojom::UserActivationUpdateType::kConsumeTransientActivation);
   } else {
     std::move(callback).Run(mojom::CreateNewWindowStatus::kIgnore, nullptr);
     return;
