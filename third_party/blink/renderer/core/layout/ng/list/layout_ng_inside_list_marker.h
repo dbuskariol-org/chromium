@@ -20,7 +20,7 @@ class CORE_EXPORT LayoutNGInsideListMarker final : public LayoutInline {
 #if DCHECK_IS_ON()
   void AddChild(LayoutObject* new_child, LayoutObject* before_child) override {
     // List markers with 'content: normal' should have at most one child.
-    DCHECK(StyleRef().GetContentData() || !FirstChild());
+    DCHECK(!StyleRef().ContentBehavesAsNormal() || !FirstChild());
     LayoutInline::AddChild(new_child, before_child);
   }
 #endif

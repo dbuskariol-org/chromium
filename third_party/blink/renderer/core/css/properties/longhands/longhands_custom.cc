@@ -1968,7 +1968,10 @@ void Content::ApplyValue(StyleResolverState& state,
   if (auto* identifier_value = DynamicTo<CSSIdentifierValue>(value)) {
     DCHECK(identifier_value->GetValueID() == CSSValueID::kNormal ||
            identifier_value->GetValueID() == CSSValueID::kNone);
-    state.Style()->SetContent(nullptr);
+    if (identifier_value->GetValueID() == CSSValueID::kNone)
+      state.Style()->SetContent(MakeGarbageCollected<NoneContentData>());
+    else
+      state.Style()->SetContent(nullptr);
     return;
   }
   const CSSValueList& outer_list = To<CSSValueList>(value);

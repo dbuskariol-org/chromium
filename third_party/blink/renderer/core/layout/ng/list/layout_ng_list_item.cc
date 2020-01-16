@@ -274,7 +274,7 @@ void LayoutNGListItem::UpdateMarkerContentIfNeeded() {
   LayoutObject* child = marker->SlowFirstChild();
   // There should be at most one child.
   DCHECK(!child || !child->SlowFirstChild());
-  if (marker->StyleRef().GetContentData()) {
+  if (!marker->StyleRef().ContentBehavesAsNormal()) {
     marker_type_ = kStatic;
     is_marker_text_updated_ = true;
   } else if (IsMarkerImage()) {

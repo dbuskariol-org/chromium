@@ -2137,7 +2137,25 @@ class ComputedStyle : public ComputedStyleBase,
   bool HasIsolation() const { return Isolation() != EIsolation::kAuto; }
 
   // Content utility functions.
-  bool HasContent() const { return GetContentData(); }
+  bool ContentBehavesAsNormal() const {
+    switch (StyleType()) {
+      case kPseudoIdMarker:
+        return !GetContentData();
+      default:
+        return !GetContentData() || GetContentData()->IsNone();
+    }
+  }
+  bool ContentPreventsBoxGeneration() const {
+    switch (StyleType()) {
+      case kPseudoIdBefore:
+      case kPseudoIdAfter:
+        return ContentBehavesAsNormal();
+      case kPseudoIdMarker:
+        return GetContentData() && GetContentData()->IsNone();
+      default:
+        return false;
+    }
+  }
 
   // Cursor utility functions.
   CursorList* Cursors() const { return CursorDataInternal().Get(); }

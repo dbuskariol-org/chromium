@@ -307,7 +307,7 @@ AXObjectInclusion AXNodeObject::ShouldIncludeBasedOnSemantics(
 
 base::Optional<String> AXNodeObject::GetCSSAltText(Node* node) {
   if (!node || !node->GetComputedStyle() ||
-      !node->GetComputedStyle()->GetContentData()) {
+      node->GetComputedStyle()->ContentBehavesAsNormal()) {
     return base::nullopt;
   }
 

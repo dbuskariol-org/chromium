@@ -184,7 +184,7 @@ void PseudoElement::AttachLayoutTree(AttachContext& context) {
         ToLayoutNGListItem(layout_object->Parent())
             ->UpdateMarkerContentIfNeeded();
       }
-      if (!style.GetContentData())
+      if (style.ContentBehavesAsNormal())
         return;
       break;
     }
@@ -195,7 +195,8 @@ void PseudoElement::AttachLayoutTree(AttachContext& context) {
       return;
   }
 
-  DCHECK(style.GetContentData());
+  DCHECK(!style.ContentBehavesAsNormal());
+  DCHECK(!style.ContentPreventsBoxGeneration());
   for (const ContentData* content = style.GetContentData(); content;
        content = content->Next()) {
     LegacyLayout legacy = context.force_legacy_layout ? LegacyLayout::kForce
@@ -246,10 +247,10 @@ bool PseudoElementLayoutObjectIsNeeded(const ComputedStyle* pseudo_style,
       return true;
     case kPseudoIdBefore:
     case kPseudoIdAfter:
-      return pseudo_style->GetContentData();
+      return !pseudo_style->ContentPreventsBoxGeneration();
     case kPseudoIdMarker: {
-      if (pseudo_style->GetContentData())
-        return true;
+      if (!pseudo_style->ContentBehavesAsNormal())
+        return !pseudo_style->ContentPreventsBoxGeneration();
       const ComputedStyle* parent_style =
           originating_element->GetComputedStyle();
       return parent_style &&

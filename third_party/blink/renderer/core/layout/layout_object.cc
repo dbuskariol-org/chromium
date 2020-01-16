@@ -2532,7 +2532,7 @@ void LayoutObject::PropagateStyleToAnonymousChildren() {
 
   // Don't propagate style from markers with 'content: normal' because it's not
   // needed and it would be slow.
-  if (pseudo_id == kPseudoIdMarker && !StyleRef().GetContentData())
+  if (pseudo_id == kPseudoIdMarker && StyleRef().ContentBehavesAsNormal())
     return;
 
   // Propagate style from pseudo elements to generated content. We skip children
