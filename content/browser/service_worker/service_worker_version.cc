@@ -2185,9 +2185,11 @@ void ServiceWorkerVersion::NotifyControlleeRemoved(const std::string& uuid) {
 void ServiceWorkerVersion::PrepareForUpdate(
     std::map<GURL, ServiceWorkerUpdateChecker::ComparedScriptInfo>
         compared_script_info_map,
-    const GURL& updated_script_url) {
+    const GURL& updated_script_url,
+    network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy) {
   compared_script_info_map_ = std::move(compared_script_info_map);
   updated_script_url_ = updated_script_url;
+  cross_origin_embedder_policy_ = cross_origin_embedder_policy;
 }
 
 const std::map<GURL, ServiceWorkerUpdateChecker::ComparedScriptInfo>&

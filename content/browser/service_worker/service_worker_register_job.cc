@@ -513,8 +513,10 @@ void ServiceWorkerRegisterJob::StartWorkerForUpdate() {
 
   if (update_checker_) {
     DCHECK(blink::ServiceWorkerUtils::IsImportedScriptUpdateCheckEnabled());
-    new_version()->PrepareForUpdate(update_checker_->TakeComparedResults(),
-                                    update_checker_->updated_script_url());
+    new_version()->PrepareForUpdate(
+        update_checker_->TakeComparedResults(),
+        update_checker_->updated_script_url(),
+        update_checker_->cross_origin_embedder_policy());
     update_checker_.reset();
   }
 
