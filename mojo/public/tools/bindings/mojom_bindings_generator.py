@@ -207,7 +207,7 @@ class MojomProcessor(object):
     module = translate.OrderedModule(tree, module_path, imports)
 
     if args.scrambled_message_id_salt_paths:
-      salt = ''.join(
+      salt = b''.join(
           map(ReadFileContents, args.scrambled_message_id_salt_paths))
       ScrambleMethodOrdinals(module.interfaces, salt)
 
