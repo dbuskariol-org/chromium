@@ -151,21 +151,26 @@ static NDEFRecord* CreateTextRecord(const String& id,
     return nullptr;
   }
 
-  String encoding_label = !encoding.IsEmpty() ? encoding : "utf-8";
-  if (encoding_label != "utf-8" && encoding_label != "utf-16" &&
-      encoding_label != "utf-16be" && encoding_label != "utf-16le") {
-    exception_state.ThrowTypeError(
-        "Encoding must be either \"utf-8\", \"utf-16\", \"utf-16be\", or "
-        "\"utf-16le\".");
-    return nullptr;
-  }
-
+  String encoding_label = encoding.IsNull() ? "utf-8" : encoding;
   WTF::Vector<uint8_t> bytes;
   if (data.IsString()) {
+    if (encoding_label != "utf-8") {
+      exception_state.ThrowTypeError(
+          "A DOMString data source is always encoded as \"utf-8\" so other "
+          "encodings are not allowed.");
+      return nullptr;
+    }
     StringUTF8Adaptor utf8_string(data.GetAsString());
     bytes.Append(utf8_string.data(), utf8_string.size());
   } else {
     DCHECK(IsBufferSource(data));
+    if (encoding_label != "utf-8" && encoding_label != "utf-16" &&
+        encoding_label != "utf-16be" && encoding_label != "utf-16le") {
+      exception_state.ThrowTypeError(
+          "Encoding must be either \"utf-8\", \"utf-16\", \"utf-16be\", or "
+          "\"utf-16le\".");
+      return nullptr;
+    }
     if (!GetBytesOfBufferSource(data, &bytes, exception_state)) {
       return nullptr;
     }
