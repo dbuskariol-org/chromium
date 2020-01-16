@@ -32,6 +32,7 @@ OverlayProcessorAndroid::OverlayProcessorAndroid(
         base::Unretained(this));
     gpu_task_scheduler_->ScheduleGpuTask(std::move(callback), {});
   }
+
   // For Android, we do not have the ability to skip an overlay, since the
   // texture is already in a SurfaceView.  Ideally, we would honor a 'force
   // overlay' flag that FromDrawQuad would also check.
@@ -41,6 +42,8 @@ OverlayProcessorAndroid::OverlayProcessorAndroid(
   // https://crbug.com/842931 .
   strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
       this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
+
+  overlay_candidates_.clear();
 }
 
 OverlayProcessorAndroid::~OverlayProcessorAndroid() {
@@ -74,6 +77,31 @@ bool OverlayProcessorAndroid::IsOverlaySupported() const {
 
 bool OverlayProcessorAndroid::NeedsSurfaceOccludingDamageRect() const {
   return false;
+}
+
+void OverlayProcessorAndroid::ScheduleOverlays(
+    DisplayResourceProvider* resource_provider) {
+  if (!gpu_task_scheduler_)
+    return;
+
+  std::vector<
+      std::unique_ptr<DisplayResourceProvider::ScopedReadLockSharedImage>>
+      locks;
+  for (auto& candidate : overlay_candidates_) {
+    locks.emplace_back(
+        std::make_unique<DisplayResourceProvider::ScopedReadLockSharedImage>(
+            resource_provider, candidate.resource_id));
+  }
+
+  std::vector<gpu::SyncToken> locks_sync_tokens;
+  for (auto& read_lock : locks)
+    locks_sync_tokens.push_back(read_lock->sync_token());
+
+  auto task = base::BindOnce(&OverlayProcessorOnGpu::ScheduleOverlays,
+                             base::Unretained(processor_on_gpu_.get()),
+                             std::move(overlay_candidates_));
+  gpu_task_scheduler_->ScheduleGpuTask(std::move(task), locks_sync_tokens);
+  overlay_candidates_.clear();
 }
 
 void OverlayProcessorAndroid::CheckOverlaySupport(

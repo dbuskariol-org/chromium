@@ -129,6 +129,11 @@ class VIZ_SERVICE_EXPORT OverlayProcessorInterface {
   virtual void AdjustOutputSurfaceOverlay(
       base::Optional<OutputSurfaceOverlayPlane>* output_surface_plane) = 0;
 
+  // TODO(weiliangc): Make it pure virtual after it is implemented by every
+  // subclass.
+  virtual void ScheduleOverlays(
+      DisplayResourceProvider* display_resource_provider);
+
   // These two functions are used by Android SurfaceControl.
   virtual void SetDisplayTransformHint(gfx::OverlayTransform transform) {}
   virtual void SetViewportSize(const gfx::Size& size) {}

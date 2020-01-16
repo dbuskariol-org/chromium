@@ -152,4 +152,7 @@ OverlayProcessorInterface::ProcessOutputSurfaceAsOverlay(
   return overlay_plane;
 }
 
+void OverlayProcessorInterface::ScheduleOverlays(
+    DisplayResourceProvider* display_resource_provider) {}
+
 }  // namespace viz

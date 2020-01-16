@@ -36,6 +36,8 @@ class VIZ_SERVICE_EXPORT OverlayProcessorAndroid
 
   bool NeedsSurfaceOccludingDamageRect() const override;
 
+  void ScheduleOverlays(
+      DisplayResourceProvider* display_resource_provider) override;
   // Override OverlayProcessorUsingStrategy.
   void SetDisplayTransformHint(gfx::OverlayTransform transform) override {}
   void SetViewportSize(const gfx::Size& size) override {}
@@ -52,9 +54,10 @@ class VIZ_SERVICE_EXPORT OverlayProcessorAndroid
   // teardown the gpu side receiver.
   void InitializeOverlayProcessorOnGpu();
   void DestroyOverlayProcessorOnGpu(base::WaitableEvent* event);
-  void NotifyOverlayPromotion(DisplayResourceProvider* resource_provider,
-                              const OverlayCandidateList& candidate_list,
-                              const QuadList& quad_list) override;
+  void NotifyOverlayPromotion(
+      DisplayResourceProvider* display_resource_provider,
+      const OverlayCandidateList& candidate_list,
+      const QuadList& quad_list) override;
 
   // [id] == candidate's |display_rect| for all promotable resources.
   using PromotionHintInfoMap = std::map<ResourceId, gfx::RectF>;
@@ -68,7 +71,7 @@ class VIZ_SERVICE_EXPORT OverlayProcessorAndroid
   ResourceIdSet promotion_hint_requestor_set_;
 
   void NotifyOverlayPromotionUsingSkiaOutputSurface(
-      DisplayResourceProvider* resource_provider,
+      DisplayResourceProvider* display_resource_provider,
       const OverlayCandidateList& candidate_list);
 
   SkiaOutputSurface* const skia_output_surface_;
@@ -76,6 +79,8 @@ class VIZ_SERVICE_EXPORT OverlayProcessorAndroid
   const bool overlay_enabled_;
   // This class is created, accessed, and destroyed on the gpu thread.
   std::unique_ptr<OverlayProcessorOnGpu> processor_on_gpu_;
+
+  OverlayCandidateList overlay_candidates_;
 };
 
 }  // namespace viz

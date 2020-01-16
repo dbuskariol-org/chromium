@@ -13,4 +13,10 @@ OverlayProcessorOnGpu::OverlayProcessorOnGpu() {
 OverlayProcessorOnGpu::~OverlayProcessorOnGpu() {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 }
+
+void OverlayProcessorOnGpu::ScheduleOverlays(
+    CandidateList&& overlay_candidates) {
+  DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+  // TODO(weiliangc): Use shared image to schedule overlays.
+}
 }  // namespace viz
