@@ -496,7 +496,7 @@ class ConnectedCryptoClientStream final : public quic::QuicCryptoClientStream {
     return encryption_established_;
   }
 
-  bool handshake_confirmed() const override { return handshake_confirmed_; }
+  bool one_rtt_keys_available() const override { return handshake_confirmed_; }
 
  private:
   bool encryption_established_ = false;
@@ -708,8 +708,8 @@ class P2PQuicTransportTest : public testing::Test {
 
   void ExpectConnectionNotEstablished() {
     EXPECT_FALSE(client_peer_->quic_transport()->IsEncryptionEstablished());
-    EXPECT_FALSE(client_peer_->quic_transport()->IsCryptoHandshakeConfirmed());
-    EXPECT_FALSE(server_peer_->quic_transport()->IsCryptoHandshakeConfirmed());
+    EXPECT_FALSE(client_peer_->quic_transport()->OneRttKeysAvailable());
+    EXPECT_FALSE(server_peer_->quic_transport()->OneRttKeysAvailable());
     EXPECT_FALSE(server_peer_->quic_transport()->IsEncryptionEstablished());
   }
 
@@ -785,8 +785,8 @@ TEST_F(P2PQuicTransportTest, HandshakeConnectsPeersWithPreSharedKeys) {
   run_loop.RunUntilCallbacksFired();
 
   EXPECT_TRUE(client_peer()->quic_transport()->IsEncryptionEstablished());
-  EXPECT_TRUE(client_peer()->quic_transport()->IsCryptoHandshakeConfirmed());
-  EXPECT_TRUE(server_peer()->quic_transport()->IsCryptoHandshakeConfirmed());
+  EXPECT_TRUE(client_peer()->quic_transport()->OneRttKeysAvailable());
+  EXPECT_TRUE(server_peer()->quic_transport()->OneRttKeysAvailable());
   EXPECT_TRUE(server_peer()->quic_transport()->IsEncryptionEstablished());
 }
 
@@ -823,8 +823,8 @@ TEST_F(P2PQuicTransportTest, HandshakeConnectsPeersWithRemoteCertificates) {
   run_loop.RunUntilCallbacksFired();
 
   EXPECT_TRUE(client_peer()->quic_transport()->IsEncryptionEstablished());
-  EXPECT_TRUE(client_peer()->quic_transport()->IsCryptoHandshakeConfirmed());
-  EXPECT_TRUE(server_peer()->quic_transport()->IsCryptoHandshakeConfirmed());
+  EXPECT_TRUE(client_peer()->quic_transport()->OneRttKeysAvailable());
+  EXPECT_TRUE(server_peer()->quic_transport()->OneRttKeysAvailable());
   EXPECT_TRUE(server_peer()->quic_transport()->IsEncryptionEstablished());
 }
 

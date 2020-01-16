@@ -532,7 +532,7 @@ void P2PQuicTransportImpl::OnCryptoHandshakeEvent(CryptoHandshakeEvent event) {
   QuicSession::OnCryptoHandshakeEvent(event);
   if (event == HANDSHAKE_CONFIRMED) {
     DCHECK(IsEncryptionEstablished());
-    DCHECK(IsCryptoHandshakeConfirmed());
+    DCHECK(OneRttKeysAvailable());
     P2PQuicNegotiatedParams negotiated_params;
     // The guaranteed largest message payload will not change throughout the
     // connection.
@@ -552,7 +552,7 @@ void P2PQuicTransportImpl::SetDefaultEncryptionLevel(
   QuicSession::SetDefaultEncryptionLevel(level);
   if (level == quic::ENCRYPTION_FORWARD_SECURE) {
     DCHECK(IsEncryptionEstablished());
-    DCHECK(IsCryptoHandshakeConfirmed());
+    DCHECK(OneRttKeysAvailable());
     P2PQuicNegotiatedParams negotiated_params;
     // The guaranteed largest message payload will not change throughout the
     // connection.
