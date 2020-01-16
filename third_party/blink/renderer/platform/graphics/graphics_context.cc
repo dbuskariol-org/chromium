@@ -1418,7 +1418,7 @@ void GraphicsContext::SetURLForRect(const KURL& link,
                                     const IntRect& dest_rect) {
   if (ContextDisabled())
     return;
-  DCHECK(canvas_);
+  DCHECK(canvas_ || tracker_);
 
   // Intercept URL rects when painting previews.
   if (IsPaintingPreview() && tracker_) {
@@ -1435,7 +1435,7 @@ void GraphicsContext::SetURLFragmentForRect(const String& dest_name,
                                             const IntRect& rect) {
   if (ContextDisabled())
     return;
-  DCHECK(canvas_);
+  DCHECK(canvas_ || tracker_);
 
   // Intercept URL rects when painting previews.
   if (IsPaintingPreview() && tracker_) {
