@@ -36,6 +36,9 @@
       <include name="IDR_NEW_TAB_PAGE_THEME_ICON_JS"
           file="${root_gen_dir}/chrome/browser/resources/new_tab_page/theme_icon.js"
           use_base_dir="false" type="BINDATA" compress="gzip" />
+      <include name="IDR_NEW_TAB_PAGE_GRID_JS"
+          file="${root_gen_dir}/chrome/browser/resources/new_tab_page/grid.js"
+          use_base_dir="false" type="BINDATA" compress="gzip" />
       <include name="IDR_NEW_TAB_PAGE_ACCOUNT_CIRCLE_SVG"
           file="icons/account_circle.svg" type="BINDATA" compress="gzip" />
       <include name="IDR_NEW_TAB_PAGE_BRUSH_ICON_SVG"
