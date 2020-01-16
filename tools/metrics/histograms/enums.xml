@@ -18483,6 +18483,30 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   </int>
 </enum>
 
+<enum name="EnterpriseMacMDMStatusNew">
+  <summary>
+    The Mac MDM enrollment status (new API). See
+    https://blog.fleetsmith.com/what-is-user-approved-mdm-uamdm/ for more
+    details.
+  </summary>
+  <int value="0" label="API unavailable"/>
+  <int value="1" label="Unable to parse result"/>
+  <int value="2" label="No enrollment"/>
+  <int value="3" label="MDM enrollment (limited management capabilities)"/>
+  <int value="4" label="UAMDM enrollment (full management capabilities)"/>
+  <int value="5"
+      label="DEP Enrollment (automatically grants UAMDM status / full
+             management capabilities)"/>
+</enum>
+
+<enum name="EnterpriseMacMDMStatusOld">
+  <summary>The Mac MDM enrollment status (old API).</summary>
+  <int value="0" label="API unavailable"/>
+  <int value="1" label="Unable to parse result"/>
+  <int value="2" label="No enrollment"/>
+  <int value="3" label="MDM enrollment"/>
+</enum>
+
 <enum name="EnterprisePolicies">
 <!-- Generated from components/policy/resources/policy_templates.json -->
 
