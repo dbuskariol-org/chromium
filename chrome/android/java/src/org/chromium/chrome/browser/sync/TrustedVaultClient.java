@@ -4,17 +4,16 @@
 
 package org.chromium.chrome.browser.sync;
 
-import android.content.Context;
-import android.content.Intent;
+import android.app.Activity;
+import android.app.PendingIntent;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import org.chromium.base.Log;
 import org.chromium.base.Promise;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.chrome.browser.AppHooks;
-import org.chromium.chrome.browser.util.IntentUtils;
 import org.chromium.components.signin.base.CoreAccountInfo;
 
 import java.util.Collections;
@@ -39,14 +38,14 @@ public class TrustedVaultClient {
         Promise<List<byte[]>> fetchKeys(CoreAccountInfo accountInfo);
 
         /**
-         * Gets an Intent that can be used to display a UI that allows the user to reauthenticate
-         * and retrieve the sync encryption keys.
+         * Gets a PendingIntent that can be used to display a UI that allows the user to
+         * reauthenticate and retrieve the sync encryption keys.
          *
          * @param accountInfo Account representing the user.
-         * @return the Intent object or null is something went wrong.
+         * @return a promise for a PendingIntent object. The promise will be rejected if no
+         *         retrieval is actually required.
          */
-        @Nullable
-        Intent createKeyRetrievalIntent(CoreAccountInfo accountInfo);
+        Promise<PendingIntent> createKeyRetrievalIntent(CoreAccountInfo accountInfo);
 
         /**
          * Invoked when the result of fetchKeys() represents keys that cannot decrypt Nigori, which
@@ -69,8 +68,8 @@ public class TrustedVaultClient {
         }
 
         @Override
-        public Intent createKeyRetrievalIntent(CoreAccountInfo accountInfo) {
-            return null;
+        public Promise<PendingIntent> createKeyRetrievalIntent(CoreAccountInfo accountInfo) {
+            return Promise.rejected();
         }
 
         @Override
@@ -78,6 +77,8 @@ public class TrustedVaultClient {
             return Promise.fulfilled(false);
         }
     };
+
+    private static final String TAG = "TrustedVaultClient";
 
     private static TrustedVaultClient sInstance;
 
@@ -106,28 +107,35 @@ public class TrustedVaultClient {
     /**
      * Displays a UI that allows the user to reauthenticate and retrieve the sync encryption keys.
      *
-     * @param context Context to use when starting the dialog activity.
+     * @param activity Activity to use when starting the dialog.
      * @param accountInfo Account representing the user.
      */
-    public void displayKeyRetrievalDialog(Context context, CoreAccountInfo accountInfo) {
-        Intent intent = createKeyRetrievalIntent(accountInfo);
-        if (intent == null) return;
-
-        IntentUtils.safeStartActivity(context, intent);
-
-        // TODO(crbug.com/1012659): Upon intent completion, the new keys should
-        // fetched.
+    public void displayKeyRetrievalDialog(Activity activity, CoreAccountInfo accountInfo) {
+        createKeyRetrievalIntent(accountInfo)
+                .then(
+                        (pendingIntent)
+                                -> {
+                            try {
+                                // TODO(crbug.com/1012659): Upon intent completion, the new keys
+                                // should be fetched.
+                                pendingIntent.send(activity, 0, null, null, null, null, null);
+                            } catch (PendingIntent.CanceledException exception) {
+                                Log.w(TAG, "Error sending key retrieval intent: ", exception);
+                            }
+                        },
+                        (exception) -> {
+                            Log.e(TAG, "Error opening key retrieval dialog: ", exception);
+                        });
     }
 
     /**
      * Creates an intent that launches an activity that triggers the key retrieval UI.
      *
      * @param accountInfo Account representing the user.
-     * @return the intent for opening the key retrieval activity or null if none is actually
-     * required
+     * @return a promise with the intent for opening the key retrieval activity. The promise will be
+     *         rejected if no retrieval is actually required.
      */
-    @Nullable
-    public Intent createKeyRetrievalIntent(CoreAccountInfo accountInfo) {
+    public Promise<PendingIntent> createKeyRetrievalIntent(CoreAccountInfo accountInfo) {
         return mBackend.createKeyRetrievalIntent(accountInfo);
     }
 
