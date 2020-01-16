@@ -348,12 +348,11 @@ void MessageView::RemoveSlideObserver(MessageView::SlideObserver* observer) {
 }
 
 void MessageView::OnSlideOut() {
-  for (auto& observer : slide_observers_)
-    observer.OnSlideOut(notification_id_);
-
-  // RemoveNotification() may delete |this|.
   MessageCenter::Get()->RemoveNotification(notification_id_,
                                            true /* by_user */);
+
+  for (auto& observer : slide_observers_)
+    observer.OnSlideOut(notification_id_);
 }
 
 void MessageView::OnWillChangeFocus(views::View* before, views::View* now) {}
