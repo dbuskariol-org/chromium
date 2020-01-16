@@ -12,6 +12,7 @@
 #include "base/bind.h"
 #include "base/command_line.h"
 #include "base/memory/singleton.h"
+#include "chrome/browser/chromeos/arc/accessibility/arc_accessibility_util.h"
 #include "chrome/browser/chromeos/arc/accessibility/geometry_util.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/app_list/arc/arc_app_list_prefs_factory.h"
@@ -380,109 +381,57 @@ void ArcAccessibilityHelperBridge::OnAction(
     const ui::AXActionData& data) const {
   DCHECK(data.target_node_id);
 
+  AXTreeSourceArc* tree_source = GetFromTreeId(data.target_tree_id);
+  if (!tree_source)
+    return;
+
+  if (data.action == ax::mojom::Action::kInternalInvalidateTree) {
+    tree_source->InvalidateTree();
+    return;
+  }
+
+  base::Optional<int32_t> window_id = tree_source->window_id();
+  if (!window_id)
+    return;
+
   arc::mojom::AccessibilityActionDataPtr action_data =
       arc::mojom::AccessibilityActionData::New();
 
   action_data->node_id = data.target_node_id;
 
-  AXTreeSourceArc* tree_source = GetFromTreeId(data.target_tree_id);
-  if (!tree_source)
-    return;
-
-  base::Optional<int32_t> window_id = tree_source->window_id();
-  if (!window_id)
-    return;
   action_data->window_id = window_id.value();
 
-  switch (data.action) {
-    case ax::mojom::Action::kDoDefault:
-      action_data->action_type = arc::mojom::AccessibilityActionType::CLICK;
-      break;
-    case ax::mojom::Action::kFocus:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::ACCESSIBILITY_FOCUS;
-      break;
-    case ax::mojom::Action::kScrollToMakeVisible:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::SHOW_ON_SCREEN;
-      break;
-    case ax::mojom::Action::kScrollBackward:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::SCROLL_BACKWARD;
-      break;
-    case ax::mojom::Action::kScrollForward:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::SCROLL_FORWARD;
-      break;
-    case ax::mojom::Action::kScrollUp:
-      action_data->action_type = arc::mojom::AccessibilityActionType::SCROLL_UP;
-      break;
-    case ax::mojom::Action::kScrollDown:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::SCROLL_DOWN;
-      break;
-    case ax::mojom::Action::kScrollLeft:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::SCROLL_LEFT;
-      break;
-    case ax::mojom::Action::kScrollRight:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::SCROLL_RIGHT;
-      break;
-    case ax::mojom::Action::kCustomAction:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::CUSTOM_ACTION;
-      action_data->custom_action_id = data.custom_action_id;
-      break;
-    case ax::mojom::Action::kSetAccessibilityFocus:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::ACCESSIBILITY_FOCUS;
-      break;
-    case ax::mojom::Action::kClearAccessibilityFocus:
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::CLEAR_ACCESSIBILITY_FOCUS;
-      break;
-    case ax::mojom::Action::kGetTextLocation: {
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::GET_TEXT_LOCATION;
-      action_data->start_index = data.start_index;
-      action_data->end_index = data.end_index;
+  const base::Optional<mojom::AccessibilityActionType> action =
+      ConvertToAndroidAction(data.action);
+  if (!action.has_value())
+    return;
 
-      auto* instance = ARC_GET_INSTANCE_FOR_METHOD(
-          arc_bridge_service_->accessibility_helper(), RefreshWithExtraData);
-      if (!instance) {
-        OnActionResult(data, false);
-        return;
-      }
+  action_data->action_type = action.value();
 
-      instance->RefreshWithExtraData(
-          std::move(action_data),
-          base::BindOnce(
-              &ArcAccessibilityHelperBridge::OnGetTextLocationDataResult,
-              base::Unretained(this), data));
+  if (action_data->action_type ==
+      arc::mojom::AccessibilityActionType::GET_TEXT_LOCATION) {
+    action_data->start_index = data.start_index;
+    action_data->end_index = data.end_index;
+    auto* instance = ARC_GET_INSTANCE_FOR_METHOD(
+        arc_bridge_service_->accessibility_helper(), RefreshWithExtraData);
+    if (!instance) {
+      OnActionResult(data, false);
       return;
     }
-    case ax::mojom::Action::kShowTooltip: {
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::SHOW_TOOLTIP;
-      break;
-    }
-    case ax::mojom::Action::kHideTooltip: {
-      action_data->action_type =
-          arc::mojom::AccessibilityActionType::HIDE_TOOLTIP;
-      break;
-    }
-    case ax::mojom::Action::kInternalInvalidateTree:
-      tree_source->InvalidateTree();
-      break;
-    default:
-      return;
+    instance->RefreshWithExtraData(
+        std::move(action_data),
+        base::BindOnce(
+            &ArcAccessibilityHelperBridge::OnGetTextLocationDataResult,
+            base::Unretained(this), data));
+    return;
+  } else if (action_data->action_type ==
+             arc::mojom::AccessibilityActionType::CUSTOM_ACTION) {
+    action_data->custom_action_id = data.custom_action_id;
   }
-
   auto* instance = ARC_GET_INSTANCE_FOR_METHOD(
       arc_bridge_service_->accessibility_helper(), PerformAction);
   if (!instance) {
-    // This case should probably destroy all trees.
+    // TODO (b/146809329): This case should probably destroy all trees.
     OnActionResult(data, false);
     return;
   }
