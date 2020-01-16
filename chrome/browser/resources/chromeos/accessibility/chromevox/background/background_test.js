@@ -262,7 +262,8 @@ TEST_F(
       });
     });
 
-TEST_F('ChromeVoxBackgroundTest', 'SelectSingleBasic', function() {
+// Flaky: https://crbug.com/1042673
+TEST_F('ChromeVoxBackgroundTest', 'DISABLED_SelectSingleBasic', function() {
   var mockFeedback = this.createMockFeedback();
   this.runWithLoadedTree(this.formsDoc, function() {
     mockFeedback.expectSpeech('apple', 'has pop up', 'Collapsed')
