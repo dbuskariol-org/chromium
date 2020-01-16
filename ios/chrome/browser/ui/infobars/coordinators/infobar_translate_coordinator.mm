@@ -128,6 +128,13 @@ NSString* const kTranslateNotificationSnackbarCategory =
       break;
     case translate::TranslateStep::TRANSLATE_STEP_AFTER_TRANSLATE: {
       self.displayShowOriginalBanner = YES;
+      // Once the user asks for the page to be translated once, always make the
+      // banner presentation high priority even if the user requests to show the
+      // original language, since there is a possibility the user will be
+      // toggling between languages. In addition, reverting an infobar does not
+      // show the "Translate?" banner, so every subsequent banner presentation
+      // will be a "Show Original" one.
+      self.highPriorityPresentation = YES;
       [self.badgeDelegate infobarWasAccepted:self.infobarType
                                  forWebState:self.webState];
 
