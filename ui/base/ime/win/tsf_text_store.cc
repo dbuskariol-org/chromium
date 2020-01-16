@@ -1055,16 +1055,14 @@ bool TSFTextStore::GetCompositionStatus(
       if (*committed_size < static_cast<size_t>(start_pos + length))
         *committed_size = start_pos + length;
     } else {
+      // Check for the formats of the actively composed text.
       ImeTextSpan span;
       span.start_offset = start_pos;
       span.end_offset = start_pos + length;
       span.underline_color = SK_ColorBLACK;
       span.background_color = SK_ColorTRANSPARENT;
-      if (has_display_attribute) {
-        span.thickness = display_attribute.fBoldLine
-                             ? ImeTextSpan::Thickness::kThick
-                             : ImeTextSpan::Thickness::kThin;
-      }
+      if (has_display_attribute)
+        GetStyle(display_attribute, &span);
       spans->push_back(span);
     }
   }
@@ -1414,6 +1412,46 @@ void TSFTextStore::StartCompositionOnNewText(
           composition_range_, committed_string,
           /*is_composition_committed*/ true);
     }
+  }
+}
+
+void TSFTextStore::GetStyle(const TF_DISPLAYATTRIBUTE& attribute,
+                            ImeTextSpan* span) {
+  // Use the display attribute to pick the right formats for the underline and
+  // text.
+  // Set the default values first and then check if display attribute has
+  // any style or not.
+  span->thickness = attribute.fBoldLine ? ImeTextSpan::Thickness::kThick
+                                        : ImeTextSpan::Thickness::kThin;
+  span->underline_style = ImeTextSpan::UnderlineStyle::kSolid;
+  if (attribute.lsStyle != TF_LS_NONE) {
+    switch (attribute.lsStyle) {
+      case TF_LS_SOLID: {
+        span->underline_style = ImeTextSpan::UnderlineStyle::kSolid;
+        break;
+      }
+      case TF_LS_DOT: {
+        span->underline_style = ImeTextSpan::UnderlineStyle::kDot;
+        break;
+      }
+      case TF_LS_DASH: {
+        span->underline_style = ImeTextSpan::UnderlineStyle::kDash;
+        break;
+      }
+      default: {
+        span->underline_style = ImeTextSpan::UnderlineStyle::kSolid;
+      }
+    }
+  }
+  if (attribute.crText.type != TF_CT_NONE) {
+    span->text_color = SkColorSetRGB(GetRValue(attribute.crText.cr),
+                                     GetGValue(attribute.crText.cr),
+                                     GetBValue(attribute.crText.cr));
+  }
+  if (attribute.crLine.type != TF_CT_NONE) {
+    span->underline_color = SkColorSetRGB(GetRValue(attribute.crLine.cr),
+                                          GetGValue(attribute.crLine.cr),
+                                          GetBValue(attribute.crLine.cr));
   }
 }
 

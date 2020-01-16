@@ -304,7 +304,11 @@ class COMPONENT_EXPORT(UI_BASE_IME_WIN) TSFTextStore
                             size_t* committed_size,
                             ImeTextSpans* spans);
 
-  // The refrence count of this instance.
+  // Gets the style information from the display attribute for the actively
+  // composed text.
+  void GetStyle(const TF_DISPLAYATTRIBUTE& attribute, ImeTextSpan* span);
+
+  // The reference count of this instance.
   volatile LONG ref_count_ = 0;
 
   // A pointer of ITextStoreACPSink, this instance is given in AdviseSink.
