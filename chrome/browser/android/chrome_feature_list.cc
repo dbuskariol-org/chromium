@@ -512,8 +512,6 @@ const base::Feature kOverlayNewLayout{"OverlayNewLayout",
 const base::Feature kPayWithGoogleV1{"PayWithGoogleV1",
                                      base::FEATURE_ENABLED_BY_DEFAULT};
 
-// TODO(finnur): Before enabling by default, the issue of where decoding should
-// take place needs to be resolved.
 const base::Feature kPhotoPickerVideoSupport{"PhotoPickerVideoSupport",
                                              base::FEATURE_DISABLED_BY_DEFAULT};
 
