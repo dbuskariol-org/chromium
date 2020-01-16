@@ -50,9 +50,6 @@ def _TestharnessGenericBaselinesToCheck(input_api):
             input_api.os_path.join(this_dir, 'virtual') in path or
             input_api.os_path.join(this_dir, 'flag-specific') in path):
             continue
-        # Temporary workaround for crbug.com/1041588
-        if path.endswith('http/tests/security/sandbox-iframe-allows-modals-expected.txt'):
-            continue
         baseline_files.append(path)
     return baseline_files
 
