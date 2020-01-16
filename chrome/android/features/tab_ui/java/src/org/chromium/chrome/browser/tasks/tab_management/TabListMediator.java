@@ -374,12 +374,13 @@ class TabListMediator {
 
         @Override
         public void onUrlUpdated(Tab tab) {
+            if (!FeatureUtilities.isTabGroupsAndroidContinuationEnabled()) return;
             int index = mModel.indexFromId(tab.getId());
 
-            if (index == TabModel.INVALID_TAB_INDEX && mActionsOnAllRelatedTabs
-                    && FeatureUtilities.isTabGroupsAndroidContinuationEnabled()) {
+            if (index == TabModel.INVALID_TAB_INDEX && mActionsOnAllRelatedTabs) {
                 Tab currentGroupSelectedTab =
                         TabGroupUtils.getSelectedTabInGroupForTab(mTabModelSelector, tab);
+                if (currentGroupSelectedTab == null) return;
                 index = mModel.indexFromId(currentGroupSelectedTab.getId());
             }
 
@@ -1203,6 +1204,7 @@ class TabListMediator {
     }
 
     private String getUrlForTab(Tab tab) {
+        if (!FeatureUtilities.isTabGroupsAndroidContinuationEnabled()) return "";
         if (!mActionsOnAllRelatedTabs) return tab.getUrl();
 
         List<Tab> relatedTabs = getRelatedTabsForId(tab.getId());

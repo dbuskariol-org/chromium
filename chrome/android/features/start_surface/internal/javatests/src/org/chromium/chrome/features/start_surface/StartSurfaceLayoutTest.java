@@ -692,7 +692,7 @@ public class StartSurfaceLayoutTest {
     @CommandLineFlags.Add({BASE_PARAMS})
     @Features.EnableFeatures({ChromeFeatureList.TAB_GROUPS_ANDROID,
                     ChromeFeatureList.TAB_GROUPS_CONTINUATION_ANDROID})
-    public void testUrlUpdatedForUndoableClosedTabNotCrashing() throws Exception {
+    public void testUrlUpdatedNotCrashing_ForUndoableClosedTab() throws Exception {
         // clang-format on
         FeatureUtilities.setTabGroupsAndroidEnabledForTesting(true);
 
@@ -708,6 +708,29 @@ public class StartSurfaceLayoutTest {
             mActivityTestRule.getActivity().getTabModelSelector().getCurrentModel().closeTab(
                     tab, false, false, true);
         });
+        mActivityTestRule.loadUrlInTab(
+                mUrl, PageTransition.TYPED | PageTransition.FROM_ADDRESS_BAR, tab);
+    }
+
+    @Test
+    @MediumTest
+    // clang-format off
+    @CommandLineFlags.Add({BASE_PARAMS})
+    @Features.EnableFeatures({ChromeFeatureList.TAB_GROUPS_ANDROID,
+            ChromeFeatureList.TAB_GROUPS_CONTINUATION_ANDROID})
+    public void testUrlUpdatedNotCrashing_ForTabNotInCurrentModel() throws Exception {
+        // clang-format on
+        FeatureUtilities.setTabGroupsAndroidEnabledForTesting(true);
+
+        // Restart Chrome to have Group.
+        ApplicationTestUtils.finishActivity(mActivityTestRule.getActivity());
+        mActivityTestRule.startMainActivityFromLauncher();
+        prepareTabs(1, 1, null);
+        enterGTSWithThumbnailChecking();
+
+        Tab tab = mActivityTestRule.getActivity().getTabModelSelector().getCurrentTab();
+        switchTabModel(false);
+
         mActivityTestRule.loadUrlInTab(
                 mUrl, PageTransition.TYPED | PageTransition.FROM_ADDRESS_BAR, tab);
     }

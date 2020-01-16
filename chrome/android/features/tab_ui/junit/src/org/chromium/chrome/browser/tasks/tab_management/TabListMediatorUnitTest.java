@@ -115,8 +115,11 @@ import java.util.List;
  */
 @RunWith(LocalRobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
+// clang-format off
 @Features.EnableFeatures(ChromeFeatureList.TAB_TO_GTS_ANIMATION)
+@Features.DisableFeatures(ChromeFeatureList.TAB_GROUPS_CONTINUATION_ANDROID)
 public class TabListMediatorUnitTest {
+    // clang-format on
     @Rule
     public TestRule mProcessor = new Features.JUnitProcessor();
 
@@ -1491,8 +1494,9 @@ public class TabListMediatorUnitTest {
         doReturn(NEW_URL).when(mTab1).getUrl();
         mTabObserverCaptor.getValue().onUrlUpdated(mTab1);
 
-        assertEquals(NEW_URL, mModel.get(POSITION1).model.get(TabProperties.URL));
-        assertEquals(TAB2_URL, mModel.get(POSITION2).model.get(TabProperties.URL));
+        // TabProperties.URL is empty string if TabGroupsAndroidContinuationEnabled is false.
+        assertEquals("", mModel.get(POSITION1).model.get(TabProperties.URL));
+        assertEquals("", mModel.get(POSITION2).model.get(TabProperties.URL));
     }
 
     @Test
@@ -1787,9 +1791,6 @@ public class TabListMediatorUnitTest {
 
         assertThat(mModel.get(0).model.get(TabProperties.FAVICON), instanceOf(Drawable.class));
         assertThat(mModel.get(1).model.get(TabProperties.FAVICON), instanceOf(Drawable.class));
-
-        assertThat(mModel.get(0).model.get(TabProperties.URL), equalTo(TAB1_URL));
-        assertThat(mModel.get(1).model.get(TabProperties.URL), equalTo(TAB2_URL));
 
         assertThat(mModel.get(0).model.get(TabProperties.IS_SELECTED), equalTo(true));
         assertThat(mModel.get(1).model.get(TabProperties.IS_SELECTED), equalTo(false));
