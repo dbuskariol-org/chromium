@@ -6394,3 +6394,6 @@ virtual/omt-worker-fetch/http/tests/origin_trials/sample-api-script-added-after-
 # ecosystem-infra sheriff 2020-01-15
 # Has non-deterministic output on failure, so cannot match -expected.txt
 crbug.com/1042347 external/wpt/html/cross-origin-opener-policy/blob-popup.https.html [ Failure ]
+
+# Sheriff 2020-01-16
+crbug.com/1042681 external/wpt/html/cross-origin-embedder-policy/blob.https.html [ Pass Failure ]
