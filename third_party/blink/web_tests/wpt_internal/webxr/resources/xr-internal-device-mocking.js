@@ -27,6 +27,33 @@ MockRuntime.prototype.getMissingFrameCount = function() {
   return this.presentation_provider_.missing_frame_count_;
 };
 
+MockRuntime.prototype._injectAdditionalFrameData = function(options, frameData) {
+  if (!options || !options.includeLightingEstimationData) {
+    return;
+  }
+
+  frameData.lightEstimationData = {
+    lightProbe: {
+      sphericalHarmonics: {
+        coefficients: new Array(9).fill().map((x, i) => { return { red: i, green: i, blue: i }; }),
+      },
+      mainLightDirection: { x: 0, y: 1, z: 0 },
+      mainLightIntensity: { red: 1, green: 1, blue: 1 },
+    },
+    reflectionProbe: {
+      cubeMap: {
+        widthAndHeight: 16,
+        positiveX: new Array(16 * 16).fill({ red: 0, green: 0, blue: 0, alpha: 0 }),
+        negativeX: new Array(16 * 16).fill({ red: 0, green: 0, blue: 0, alpha: 0 }),
+        positiveY: new Array(16 * 16).fill({ red: 0, green: 0, blue: 0, alpha: 0 }),
+        negativeY: new Array(16 * 16).fill({ red: 0, green: 0, blue: 0, alpha: 0 }),
+        positiveZ: new Array(16 * 16).fill({ red: 0, green: 0, blue: 0, alpha: 0 }),
+        negativeZ: new Array(16 * 16).fill({ red: 0, green: 0, blue: 0, alpha: 0 }),
+      },
+    },
+  };
+};
+
 // Patch in experimental features.
 MockRuntime.featureToMojoMap["dom-overlay"] =
     device.mojom.XRSessionFeature.DOM_OVERLAY;

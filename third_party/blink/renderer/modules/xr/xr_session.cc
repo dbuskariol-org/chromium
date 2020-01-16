@@ -1455,10 +1455,13 @@ void XRSession::UpdateWorldUnderstandingStateForFrame(
         frame_data->detected_planes_data.get(), timestamp);
     ProcessAnchorsData(frame_data->anchors_data.get(), timestamp);
     ProcessHitTestData(frame_data->hit_test_subscription_results.get());
+    world_information_->ProcessLightEstimationData(
+        frame_data->light_estimation_data.get(), timestamp);
   } else {
     world_information_->ProcessPlaneInformation(nullptr, timestamp);
     ProcessAnchorsData(nullptr, timestamp);
     ProcessHitTestData(nullptr);
+    world_information_->ProcessLightEstimationData(nullptr, timestamp);
   }
 }
 
