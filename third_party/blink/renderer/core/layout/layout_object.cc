@@ -1628,14 +1628,12 @@ bool LayoutObject::MapToVisualRectInAncestorSpaceInternalFastPath(
   if (ancestor == this)
     return true;
 
-  const auto* property_container = this;
   AncestorSkipInfo skip_info(ancestor);
-  while (!property_container->FirstFragment().HasLocalBorderBoxProperties()) {
-    property_container = property_container->Container(&skip_info);
-    if (!property_container || skip_info.AncestorSkipped() ||
-        property_container->FirstFragment().NextFragment())
-      return false;
-  }
+  PropertyTreeState container_properties = PropertyTreeState::Uninitialized();
+  const LayoutObject* property_container =
+      GetPropertyContainer(&skip_info, &container_properties);
+  if (!property_container)
+    return false;
 
   // This works because it's not possible to have any intervening clips,
   // effects, transforms between |this| and |property_container|, and therefore
@@ -1645,13 +1643,9 @@ bool LayoutObject::MapToVisualRectInAncestorSpaceInternalFastPath(
   rect.Move(FirstFragment().PaintOffset());
   if (property_container != ancestor) {
     FloatClipRect clip_rect((FloatRect(rect)));
-    const auto& local_state =
-        property_container == this
-            ? FirstFragment().LocalBorderBoxProperties()
-            : property_container->FirstFragment().ContentsProperties();
     intersects = GeometryMapper::LocalToAncestorVisualRect(
-        local_state, ancestor->FirstFragment().ContentsProperties(), clip_rect,
-        kIgnorePlatformOverlayScrollbarSize,
+        container_properties, ancestor->FirstFragment().ContentsProperties(),
+        clip_rect, kIgnorePlatformOverlayScrollbarSize,
         (visual_rect_flags & kEdgeInclusive) ? kInclusiveIntersect
                                              : kNonInclusiveIntersect);
     rect = PhysicalRect::EnclosingRect(clip_rect.Rect());
@@ -1707,6 +1701,27 @@ bool LayoutObject::MapToVisualRectInAncestorSpaceInternal(
         ancestor, transform_state, visual_rect_flags);
   }
   return true;
+}
+
+const LayoutObject* LayoutObject::GetPropertyContainer(
+    AncestorSkipInfo* skip_info,
+    PropertyTreeState* container_properties) const {
+  const LayoutObject* property_container = this;
+  while (!property_container->FirstFragment().HasLocalBorderBoxProperties()) {
+    property_container = property_container->Container(skip_info);
+    if (!property_container || (skip_info && skip_info->AncestorSkipped()) ||
+        property_container->FirstFragment().NextFragment())
+      return nullptr;
+  }
+  if (container_properties) {
+    if (property_container == this) {
+      *container_properties = FirstFragment().LocalBorderBoxProperties();
+    } else {
+      *container_properties =
+          property_container->FirstFragment().ContentsProperties();
+    }
+  }
+  return property_container;
 }
 
 HitTestResult LayoutObject::HitTestForOcclusion(

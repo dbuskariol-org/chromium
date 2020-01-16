@@ -17,6 +17,7 @@
 #include "third_party/blink/renderer/core/layout/layout_view.h"
 #include "third_party/blink/renderer/core/page/page.h"
 #include "third_party/blink/renderer/core/paint/paint_layer.h"
+#include "third_party/blink/renderer/platform/graphics/paint/geometry_mapper.h"
 
 namespace blink {
 
@@ -157,6 +158,14 @@ LayoutObject* GetTargetLayoutObject(const Element& target_element) {
   return target;
 }
 
+bool CanUseGeometryMapper(const LayoutObject* object) {
+  // This checks for cases where we didn't just complete a successful lifecycle
+  // update, e.g., if the frame is throttled.
+  LayoutView* layout_view = object->GetDocument().GetLayoutView();
+  return layout_view && !layout_view->NeedsPaintPropertyUpdate() &&
+         !layout_view->DescendantNeedsPaintPropertyUpdate();
+}
+
 static const unsigned kConstructorFlagsMask =
     IntersectionGeometry::kShouldReportRootBounds |
     IntersectionGeometry::kShouldComputeVisibility |
@@ -261,8 +270,29 @@ void IntersectionGeometry::ComputeGeometry(const RootGeometry& root_geometry,
       ClipToRoot(root, target, root_rect_, unclipped_intersection_rect_,
                  intersection_rect_);
 
-  // Map target_rect_ to absolute coordinates for target's document
-  target_rect_ = target->LocalToAncestorRect(target_rect_, nullptr);
+  // Map target_rect_ to absolute coordinates for target's document.
+  // GeometryMapper is faster, so we use it when possible; otherwise, fall back
+  // to LocalToAncestorRect.
+  PropertyTreeState container_properties = PropertyTreeState::Uninitialized();
+  const LayoutObject* property_container =
+      CanUseGeometryMapper(target)
+          ? target->GetPropertyContainer(nullptr, &container_properties)
+          : nullptr;
+  if (property_container) {
+    LayoutRect target_layout_rect = target_rect_.ToLayoutRect();
+    target_layout_rect.Move(
+        target->FirstFragment().PaintOffset().ToLayoutSize());
+    GeometryMapper::SourceToDestinationRect(container_properties.Transform(),
+                                            target->GetDocument()
+                                                .GetLayoutView()
+                                                ->FirstFragment()
+                                                .LocalBorderBoxProperties()
+                                                .Transform(),
+                                            target_layout_rect);
+    target_rect_ = PhysicalRect(target_layout_rect);
+  } else {
+    target_rect_ = target->LocalToAncestorRect(target_rect_, nullptr);
+  }
   if (does_intersect) {
     if (RootIsImplicit()) {
       // Generate matrix to transform from the space of the implicit root to
@@ -367,14 +397,10 @@ bool IntersectionGeometry::ClipToRoot(const LayoutObject* root,
   if (!RootIsImplicit() || root->GetDocument().IsInMainFrame())
     local_ancestor = ToLayoutBox(root);
 
-  const LayoutView* layout_view = target->GetDocument().GetLayoutView();
-
   unsigned flags = kDefaultVisualRectFlags | kEdgeInclusive |
                    kDontApplyMainFrameOverflowClip;
-  if (!layout_view->NeedsPaintPropertyUpdate() &&
-      !layout_view->DescendantNeedsPaintPropertyUpdate()) {
+  if (CanUseGeometryMapper(target))
     flags |= kUseGeometryMapper;
-  }
   bool does_intersect = target->MapToVisualRectInAncestorSpace(
       local_ancestor, unclipped_intersection_rect,
       static_cast<VisualRectFlags>(flags));
