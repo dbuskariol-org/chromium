@@ -27,7 +27,7 @@ from .codegen_accumulator import CodeGenAccumulator
 from .codegen_context import CodeGenContext
 from .codegen_expr import expr_from_exposure
 from .codegen_format import format_template as _format
-from .codegen_utils import collect_include_headers
+from .codegen_utils import collect_include_headers_of_idl_types
 from .codegen_utils import component_export
 from .codegen_utils import enclose_with_header_guard
 from .codegen_utils import enclose_with_namespace
@@ -642,7 +642,8 @@ def generate_dictionary(dictionary):
         base_class_header = (
             "third_party/blink/renderer/platform/bindings/dictionary_base.h")
     header_node.accumulator.add_include_headers(
-        collect_include_headers(dictionary))
+        collect_include_headers_of_idl_types(
+            [member.idl_type for member in dictionary.own_members]))
     header_node.accumulator.add_include_headers([
         base_class_header,
         "v8/include/v8.h",
@@ -685,8 +686,6 @@ def generate_dictionary(dictionary):
         make_forward_declarations(source_node.accumulator),
         TextNode(""),
     ])
-    source_node.accumulator.add_include_headers(
-        collect_include_headers(dictionary))
 
     # Assemble the parts.
     header_blink_ns.body.append(class_def)
