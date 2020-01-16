@@ -61906,6 +61906,9 @@ would be helpful to identify which type is being sent.
 </enum>
 
 <enum name="SyncModelTypeStoreInitResult">
+  <obsolete>
+    Removed 2020-01
+  </obsolete>
   <int value="0" label="Success"/>
   <int value="1" label="Not found"/>
   <int value="2" label="Corruption"/>
