@@ -43,7 +43,6 @@ viz_component("host") {
   deps = [
     "//base",
     "//components/ui_devtools:buildflags",
-    "//components/viz/common",
     "//gpu/ipc/client",
     "//gpu/ipc/common",
     "//services/viz/privileged/mojom",
@@ -56,6 +55,7 @@ viz_component("host") {
   ]
 
   public_deps = [
+    "//components/viz/common",
     "//gpu/command_buffer/client",
     "//gpu/ipc/host",
     "//services/viz/privileged/mojom/compositing",
