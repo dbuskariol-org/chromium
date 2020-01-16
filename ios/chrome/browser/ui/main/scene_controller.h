@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ios/chrome/app/application_delegate/tab_opening.h"
 #import "ios/chrome/app/application_delegate/tab_switching.h"
 #import "ios/chrome/browser/ui/commands/application_commands.h"
 #import "ios/chrome/browser/ui/main/scene_controller_guts.h"
@@ -22,7 +23,8 @@
                                        ApplicationCommands,
                                        TabSwitcherDelegate,
                                        TabSwitching,
-                                       SceneControllerGuts>
+                                       SceneControllerGuts,
+                                       TabOpening>
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithSceneState:(SceneState*)sceneState

@@ -8,9 +8,12 @@
 #include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/strings/sys_string_conversions.h"
+#include "components/payments/core/features.h"
 #include "components/signin/public/identity_manager/identity_manager.h"
 #include "components/url_formatter/url_formatter.h"
+#import "ios/chrome/app/application_delegate/app_state.h"
 #include "ios/chrome/app/application_delegate/tab_opening.h"
+#import "ios/chrome/app/application_delegate/url_opener.h"
 #import "ios/chrome/app/chrome_overlay_window.h"
 #import "ios/chrome/app/deferred_initialization_runner.h"
 #import "ios/chrome/app/main_controller_guts.h"
@@ -22,6 +25,9 @@
 #import "ios/chrome/browser/chrome_url_util.h"
 #include "ios/chrome/browser/main/browser.h"
 #include "ios/chrome/browser/ntp/features.h"
+#include "ios/chrome/browser/payments/ios_payment_instrument_launcher.h"
+#include "ios/chrome/browser/payments/ios_payment_instrument_launcher_factory.h"
+#include "ios/chrome/browser/payments/payment_request_constants.h"
 #include "ios/chrome/browser/signin/identity_manager_factory.h"
 #import "ios/chrome/browser/snapshots/snapshot_tab_helper.h"
 #import "ios/chrome/browser/tabs/tab_model.h"
@@ -517,11 +523,11 @@ enum class EnterTabSwitcherSnapshotResult {
   UrlLoadParams params = UrlLoadParams::InNewTab([command URL]);
   params.web_params.transition_type = ui::PAGE_TRANSITION_TYPED;
   ProceduralBlock completion = ^{
-    [self.mainController dismissModalsAndOpenSelectedTabInMode:
-                             ApplicationModeForTabOpening::NORMAL
-                                             withUrlLoadParams:params
-                                                dismissOmnibox:YES
-                                                    completion:nil];
+    [self dismissModalsAndOpenSelectedTabInMode:ApplicationModeForTabOpening::
+                                                    NORMAL
+                              withUrlLoadParams:params
+                                 dismissOmnibox:YES
+                                     completion:nil];
   };
   [self closeSettingsAnimated:YES completion:completion];
 }
@@ -614,6 +620,118 @@ enum class EnterTabSwitcherSnapshotResult {
                         withUrlLoadParams:urlLoadParams
                                   atIndex:webStateList->count()];
   return YES;
+}
+
+#pragma mark - TabOpening implementation.
+
+- (void)dismissModalsAndOpenSelectedTabInMode:
+            (ApplicationModeForTabOpening)targetMode
+                            withUrlLoadParams:
+                                (const UrlLoadParams&)urlLoadParams
+                               dismissOmnibox:(BOOL)dismissOmnibox
+                                   completion:(ProceduralBlock)completion {
+  UrlLoadParams copyOfUrlLoadParams = urlLoadParams;
+  [self
+      dismissModalDialogsWithCompletion:^{
+        [self openSelectedTabInMode:targetMode
+                  withUrlLoadParams:copyOfUrlLoadParams
+                         completion:completion];
+      }
+                         dismissOmnibox:dismissOmnibox];
+}
+
+- (void)openTabFromLaunchOptions:(NSDictionary*)launchOptions
+              startupInformation:(id<StartupInformation>)startupInformation
+                        appState:(AppState*)appState {
+  if (launchOptions) {
+    BOOL applicationIsActive =
+        [[UIApplication sharedApplication] applicationState] ==
+        UIApplicationStateActive;
+
+    [URLOpener handleLaunchOptions:launchOptions
+                 applicationActive:applicationIsActive
+                         tabOpener:self
+                startupInformation:startupInformation
+                          appState:appState];
+  }
+}
+
+- (BOOL)shouldCompletePaymentRequestOnCurrentTab:
+    (id<StartupInformation>)startupInformation {
+  if (!startupInformation.startupParameters)
+    return NO;
+
+  if (!startupInformation.startupParameters.completePaymentRequest)
+    return NO;
+
+  if (!base::FeatureList::IsEnabled(payments::features::kWebPaymentsNativeApps))
+    return NO;
+
+  payments::IOSPaymentInstrumentLauncher* paymentAppLauncher =
+      payments::IOSPaymentInstrumentLauncherFactory::GetInstance()
+          ->GetForBrowserState(self.mainController.mainBrowserState);
+
+  if (!paymentAppLauncher->delegate())
+    return NO;
+
+  std::string payment_id =
+      startupInformation.startupParameters.externalURLParams
+          .find(payments::kPaymentRequestIDExternal)
+          ->second;
+  if (paymentAppLauncher->payment_request_id() != payment_id)
+    return NO;
+
+  std::string payment_response =
+      startupInformation.startupParameters.externalURLParams
+          .find(payments::kPaymentRequestDataExternal)
+          ->second;
+  paymentAppLauncher->ReceiveResponseFromIOSPaymentInstrument(payment_response);
+  [startupInformation setStartupParameters:nil];
+  return YES;
+}
+
+- (BOOL)URLIsOpenedInRegularMode:(const GURL&)URL {
+  WebStateList* webStateList =
+      self.mainController.interfaceProvider.mainInterface.tabModel.webStateList;
+  return webStateList && webStateList->GetIndexOfWebStateWithURL(URL) !=
+                             WebStateList::kInvalidIndex;
+}
+
+- (ProceduralBlock)completionBlockForTriggeringAction:
+    (NTPTabOpeningPostOpeningAction)action {
+  return [self.mainController completionBlockForTriggeringAction:action];
+}
+
+- (BOOL)shouldOpenNTPTabOnActivationOfTabModel:(TabModel*)tabModel {
+  if (self.mainController.tabSwitcherIsActive) {
+    TabModel* mainTabModel =
+        self.mainController.interfaceProvider.mainInterface.tabModel;
+    TabModel* otrTabModel =
+        self.mainController.interfaceProvider.incognitoInterface.tabModel;
+    // Only attempt to dismiss the tab switcher and open a new tab if:
+    // - there are no tabs open in either tab model, and
+    // - the tab switcher controller is not directly or indirectly presenting
+    // another view controller.
+    if (![mainTabModel isEmpty] || ![otrTabModel isEmpty])
+      return NO;
+
+    // If the tabSwitcher is contained, check if the parent container is
+    // presenting another view controller.
+    if ([[self.mainController.tabSwitcher viewController]
+                .parentViewController presentedViewController]) {
+      return NO;
+    }
+
+    // Check if the tabSwitcher is directly presenting another view controller.
+    if ([self.mainController.tabSwitcher viewController]
+            .presentedViewController) {
+      return NO;
+    }
+
+    return YES;
+  }
+  return ![tabModel count] && [tabModel browserState] &&
+             ![tabModel browserState] -> IsOffTheRecord();
 }
 
 #pragma mark - AppURLLoadingServiceDelegate

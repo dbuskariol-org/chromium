@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
+#include "ios/chrome/app/startup/chrome_app_startup_parameters.h"
 #import "ios/chrome/browser/crash_report/crash_restore_helper.h"
 #import "ios/chrome/browser/ui/settings/settings_navigation_controller.h"
 #import "ios/public/provider/chrome/browser/user_feedback/user_feedback_provider.h"
@@ -64,8 +65,7 @@ enum class TabSwitcherDismissalMode { NONE, NORMAL, INCOGNITO };
     BOOL tabSwitcherIsActive;
 
 // YES while animating the dismissal of tab switcher.
-@property(nonatomic, assign, getter=dismissingTabSwitcher)
-    BOOL dismissingTabSwitcher;
+@property(nonatomic, assign) BOOL dismissingTabSwitcher;
 
 // Returns YES if the settings are presented, either from
 // self.settingsNavigationController or from SigninInteractionCoordinator.
@@ -104,13 +104,6 @@ enum class TabSwitcherDismissalMode { NONE, NORMAL, INCOGNITO };
 - (TabGridCoordinator*)mainCoordinator;
 - (id<BrowserInterfaceProvider>)interfaceProvider;
 - (void)startVoiceSearchInCurrentBVC;
-
-- (void)dismissModalsAndOpenSelectedTabInMode:
-            (ApplicationModeForTabOpening)targetMode
-                            withUrlLoadParams:
-                                (const UrlLoadParams&)urlLoadParams
-                               dismissOmnibox:(BOOL)dismissOmnibox
-                                   completion:(ProceduralBlock)completion;
 - (void)showTabSwitcher;
 
 // TabSwitcherDelegate helpers

@@ -675,9 +675,9 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
   [_browserViewWrangler updateDeviceSharingManager];
 
-  [self openTabFromLaunchOptions:_launchOptions
-              startupInformation:self
-                        appState:self.appState];
+  [self.sceneController openTabFromLaunchOptions:_launchOptions
+                              startupInformation:self
+                                        appState:self.appState];
   _launchOptions = nil;
 
   if (!self.startupParameters) {
@@ -718,13 +718,14 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   if (self.startupParameters) {
     UrlLoadParams params =
         UrlLoadParams::InNewTab(self.startupParameters.externalURL);
-    [self dismissModalsAndOpenSelectedTabInMode:ApplicationModeForTabOpening::
-                                                    NORMAL
-                              withUrlLoadParams:params
-                                 dismissOmnibox:YES
-                                     completion:^{
-                                       [self setStartupParameters:nil];
-                                     }];
+    [self.sceneController
+        dismissModalsAndOpenSelectedTabInMode:ApplicationModeForTabOpening::
+                                                  NORMAL
+                            withUrlLoadParams:params
+                               dismissOmnibox:YES
+                                   completion:^{
+                                     [self setStartupParameters:nil];
+                                   }];
   }
 }
 
@@ -1285,7 +1286,8 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
                                         focusOmnibox:NO];
     [self finishDismissingTabSwitcher];
   }
-  if (firstRun || [self shouldOpenNTPTabOnActivationOfTabModel:tabModel]) {
+  if (firstRun ||
+      [self.sceneController shouldOpenNTPTabOnActivationOfTabModel:tabModel]) {
     OpenNewTabCommand* command = [OpenNewTabCommand
         commandWithIncognito:(self.currentBVC == self.otrBVC)];
     command.userInitiated = NO;
@@ -1544,33 +1546,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   [self.mainCoordinator showTabSwitcher:_tabSwitcher];
 }
 
-- (BOOL)shouldOpenNTPTabOnActivationOfTabModel:(TabModel*)tabModel {
-  if (self.tabSwitcherIsActive) {
-    // Only attempt to dismiss the tab switcher and open a new tab if:
-    // - there are no tabs open in either tab model, and
-    // - the tab switcher controller is not directly or indirectly presenting
-    // another view controller.
-    if (![self.mainTabModel isEmpty] || ![self.otrTabModel isEmpty])
-      return NO;
-
-    // If the tabSwitcher is contained, check if the parent container is
-    // presenting another view controller.
-    if ([[_tabSwitcher viewController]
-                .parentViewController presentedViewController]) {
-      return NO;
-    }
-
-    // Check if the tabSwitcher is directly presenting another view controller.
-    if ([_tabSwitcher viewController].presentedViewController) {
-      return NO;
-    }
-
-    return YES;
-  }
-  return ![tabModel count] && [tabModel browserState] &&
-         ![tabModel browserState]->IsOffTheRecord();
-}
-
 #pragma mark - TabSwitcherDelegate helper methods
 
 - (void)beginDismissingTabSwitcherWithCurrentModel:(TabModel*)tabModel
@@ -1732,51 +1707,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   prefs->CommitPendingWrite();
 }
 
-#pragma mark - TabOpening implementation.
-
-- (void)dismissModalsAndOpenSelectedTabInMode:
-            (ApplicationModeForTabOpening)targetMode
-                            withUrlLoadParams:
-                                (const UrlLoadParams&)urlLoadParams
-                               dismissOmnibox:(BOOL)dismissOmnibox
-                                   completion:(ProceduralBlock)completion {
-  UrlLoadParams copyOfUrlLoadParams = urlLoadParams;
-  [self.sceneController
-      dismissModalDialogsWithCompletion:^{
-        [self.sceneController openSelectedTabInMode:targetMode
-                                  withUrlLoadParams:copyOfUrlLoadParams
-                                         completion:completion];
-      }
-                         dismissOmnibox:dismissOmnibox];
-}
-
-- (void)openTabFromLaunchOptions:(NSDictionary*)launchOptions
-              startupInformation:(id<StartupInformation>)startupInformation
-                        appState:(AppState*)appState {
-  if (launchOptions) {
-    BOOL applicationIsActive =
-        [[UIApplication sharedApplication] applicationState] ==
-        UIApplicationStateActive;
-
-    [URLOpener handleLaunchOptions:launchOptions
-                 applicationActive:applicationIsActive
-                         tabOpener:self
-                startupInformation:startupInformation
-                          appState:appState];
-  }
-}
-
-// TODO(crbug.com/1021752): Remove this stub.
-- (BOOL)shouldCompletePaymentRequestOnCurrentTab:
-    (id<StartupInformation>)startupInformation {
-  return NO;
-}
-
-- (BOOL)URLIsOpenedInRegularMode:(const GURL&)URL {
-  WebStateList* webStateList = self.mainTabModel.webStateList;
-  return webStateList && webStateList->GetIndexOfWebStateWithURL(URL) !=
-                             WebStateList::kInvalidIndex;
-}
 
 #pragma mark - ApplicationCommands helpers
 

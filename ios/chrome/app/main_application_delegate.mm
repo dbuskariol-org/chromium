@@ -71,7 +71,6 @@
     [_mainController setMetricsMediator:_metricsMediator];
     _browserLauncher = _mainController;
     _startupInformation = _mainController;
-    _tabOpener = _mainController;
     _appState = [[AppState alloc] initWithBrowserLauncher:_browserLauncher
                                        startupInformation:_startupInformation
                                       applicationDelegate:self];
@@ -91,6 +90,7 @@
       _sceneController.mainController = (id<MainControllerGuts>)_mainController;
       _mainController.sceneController = _sceneController;
       _tabSwitcherProtocol = _sceneController;
+      _tabOpener = _sceneController;
     }
   }
   return self;

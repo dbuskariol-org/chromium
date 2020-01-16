@@ -59,6 +59,7 @@ source_set("unit_tests") {
     "//ios/chrome/browser",
     "//ios/chrome/browser/browser_state:test_support",
     "//ios/chrome/browser/tabs",
+    "//ios/chrome/browser/ui/main:scene",
     "//ios/chrome/common/app_group",
     "//ios/chrome/test:test_support",
     "//ios/public/provider/chrome/browser:browser",
