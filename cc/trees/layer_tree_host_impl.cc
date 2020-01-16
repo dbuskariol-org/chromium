@@ -375,6 +375,8 @@ void LayerTreeHostImpl::BeginMainFrameAborted(
   if (reason == CommitEarlyOutReason::ABORTED_NOT_VISIBLE ||
       reason == CommitEarlyOutReason::FINISHED_NO_UPDATES) {
     frame_trackers_.NotifyMainFrameCausedNoDamage(args);
+  } else {
+    frame_trackers_.NotifyMainFrameProcessed(args);
   }
 
   // If the begin frame data was handled, then scroll and scale set was applied
@@ -389,6 +391,10 @@ void LayerTreeHostImpl::BeginMainFrameAborted(
         swap_promise->DidNotSwap(SwapPromise::COMMIT_NO_UPDATE);
     }
   }
+}
+
+void LayerTreeHostImpl::ReadyToCommit(const viz::BeginFrameArgs& commit_args) {
+  frame_trackers_.NotifyMainFrameProcessed(commit_args);
 }
 
 void LayerTreeHostImpl::BeginCommit() {

@@ -174,7 +174,7 @@ void SingleThreadProxy::SetNeedsUpdateLayers() {
   SetNeedsCommit();
 }
 
-void SingleThreadProxy::DoCommit() {
+void SingleThreadProxy::DoCommit(const viz::BeginFrameArgs& commit_args) {
   TRACE_EVENT0("cc", "SingleThreadProxy::DoCommit");
   DCHECK(task_runner_provider_->IsMainThread());
 
@@ -187,7 +187,7 @@ void SingleThreadProxy::DoCommit() {
     DebugScopedSetMainThreadBlocked main_thread_blocked(task_runner_provider_);
     DebugScopedSetImplThread impl(task_runner_provider_);
 
-    host_impl_->ReadyToCommit();
+    host_impl_->ReadyToCommit(commit_args);
     host_impl_->BeginCommit();
 
     if (host_impl_->EvictedUIResourcesExist())
@@ -595,7 +595,7 @@ void SingleThreadProxy::CompositeImmediately(base::TimeTicks frame_begin_time,
     DoBeginMainFrame(begin_frame_args);
     commit_requested_ = false;
     DoPainting();
-    DoCommit();
+    DoCommit(begin_frame_args);
 
     DCHECK_EQ(
         0u,
@@ -900,7 +900,7 @@ DrawResult SingleThreadProxy::ScheduledActionDrawForced() {
 
 void SingleThreadProxy::ScheduledActionCommit() {
   DebugScopedSetMainThread main(task_runner_provider_);
-  DoCommit();
+  DoCommit(scheduler_on_impl_thread_->last_dispatched_begin_main_frame_args());
 }
 
 void SingleThreadProxy::ScheduledActionActivateSyncTree() {

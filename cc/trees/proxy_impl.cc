@@ -270,7 +270,8 @@ void ProxyImpl::NotifyReadyToCommitOnImpl(
   // But, we can avoid a PostTask in here.
   scheduler_->NotifyBeginMainFrameStarted(main_thread_start_time);
 
-  host_impl_->ReadyToCommit();
+  host_impl_->ReadyToCommit(
+      scheduler_->last_dispatched_begin_main_frame_args());
 
   commit_completion_event_ =
       std::make_unique<ScopedCompletionEvent>(completion);

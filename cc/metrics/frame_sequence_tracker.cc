@@ -293,6 +293,12 @@ void FrameSequenceTrackerCollection::NotifyBeginMainFrame(
     tracker.second->ReportBeginMainFrame(args);
 }
 
+void FrameSequenceTrackerCollection::NotifyMainFrameProcessed(
+    const viz::BeginFrameArgs& args) {
+  for (auto& tracker : frame_trackers_)
+    tracker.second->ReportMainFrameProcessed(args);
+}
+
 void FrameSequenceTrackerCollection::NotifyImplFrameCausedNoDamage(
     const viz::BeginFrameAck& ack) {
   for (auto& tracker : frame_trackers_) {
@@ -490,13 +496,40 @@ void FrameSequenceTracker::ReportBeginMainFrame(
   }
 #endif
 
+  // TODO(sad, xidachen): This DCHECK needs to be turned on, but the synthesized
+  // BeginMainFrame notifications from LayerTreeHostImpl needs to be removed
+  // first.
+  // DCHECK_EQ(awaiting_main_response_sequence_, 0u) << TRACKER_DCHECK_MSG;
+  awaiting_main_response_sequence_ = args.frame_id.sequence_number;
+
   UpdateTrackedFrameData(&begin_main_frame_data_, args.frame_id.source_id,
                          args.frame_id.sequence_number);
   if (!first_received_main_sequence_ ||
-      first_received_main_sequence_ <= last_no_main_damage_sequence_)
+      first_received_main_sequence_ <= last_no_main_damage_sequence_) {
     first_received_main_sequence_ = args.frame_id.sequence_number;
+  }
   main_throughput().frames_expected +=
       begin_main_frame_data_.previous_sequence_delta;
+}
+
+void FrameSequenceTracker::ReportMainFrameProcessed(
+    const viz::BeginFrameArgs& args) {
+  if (termination_status_ != TerminationStatus::kActive)
+    return;
+
+  if (ShouldIgnoreBeginFrameSource(args.frame_id.source_id))
+    return;
+
+  TRACKER_TRACE_STREAM << "E(" << args.frame_id.sequence_number << ")";
+  if (first_received_main_sequence_ &&
+      args.frame_id.sequence_number >= first_received_main_sequence_) {
+    // TODO(sad, xidachen): This DCHECK needs to be turned on, but the
+    // synthesized BeginMainFrame notifications from LayerTreeHostImpl needs to
+    // be removed first.
+    // DCHECK_EQ(awaiting_main_response_sequence_,
+    //           args.frame_id.sequence_number) << TRACKER_DCHECK_MSG;
+    awaiting_main_response_sequence_ = 0;
+  }
 }
 
 void FrameSequenceTracker::ReportSubmitFrame(
@@ -728,6 +761,13 @@ void FrameSequenceTracker::ReportMainFrameCausedNoDamage(
 
   if (last_no_main_damage_sequence_ == args.frame_id.sequence_number)
     return;
+
+  // TODO(sad, xidachen): This DCHECK needs to be turned on, but the synthesized
+  // BeginMainFrame notifications from LayerTreeHostImpl needs to be removed
+  // first.
+  // DCHECK_EQ(awaiting_main_response_sequence_, args.frame_id.sequence_number)
+  //    << TRACKER_DCHECK_MSG;
+  awaiting_main_response_sequence_ = 0;
 
   DCHECK_GT(main_throughput().frames_expected, 0u) << TRACKER_DCHECK_MSG;
   DCHECK_GT(main_throughput().frames_expected,

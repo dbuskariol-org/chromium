@@ -157,6 +157,7 @@ class CC_EXPORT FrameSequenceTrackerCollection {
   // Notifies all trackers of various events.
   void NotifyBeginImplFrame(const viz::BeginFrameArgs& args);
   void NotifyBeginMainFrame(const viz::BeginFrameArgs& args);
+  void NotifyMainFrameProcessed(const viz::BeginFrameArgs& args);
   void NotifyImplFrameCausedNoDamage(const viz::BeginFrameAck& ack);
   void NotifyMainFrameCausedNoDamage(const viz::BeginFrameArgs& args);
   void NotifyPauseFrameProduction();
@@ -235,6 +236,8 @@ class CC_EXPORT FrameSequenceTracker {
   // Notifies the tracker when a BeginFrameArgs is dispatched to the main
   // thread.
   void ReportBeginMainFrame(const viz::BeginFrameArgs& args);
+
+  void ReportMainFrameProcessed(const viz::BeginFrameArgs& args);
 
   // Notifies the tracker when the compositor submits a CompositorFrame.
   // |origin_args| represents the BeginFrameArgs that triggered the update from
@@ -361,6 +364,9 @@ class CC_EXPORT FrameSequenceTracker {
   // determine when it has received presentation-feedback for submitted frames.
   // This is used to decide when to terminate this FrameSequenceTracker object.
   uint32_t last_submitted_frame_ = 0;
+
+  // Keeps track of the begin-main-frame that needs to be processed next.
+  uint64_t awaiting_main_response_sequence_ = 0;
 
   // Keeps track of the last sequence-number that produced a frame from the
   // main-thread.
