@@ -8102,7 +8102,8 @@ void Document::ProcessDisplayLockActivationObservation(
         continue;
       DCHECK(context->ShouldCommitForActivation(
           DisplayLockActivationReason::kViewportIntersection));
-      context->CommitForActivationWithSignal(entry->target());
+      context->CommitForActivationWithSignal(
+          entry->target(), DisplayLockActivationReason::kViewportIntersection);
     } else if (!DisplayLockContext::IsAttributeVersion(context)) {
       // In a CSS version, if we're not visible, but are observing viewport
       // intersections, it means that we're either locked (in which case we

@@ -4386,7 +4386,7 @@ bool Element::ActivateDisplayLockIfNeeded(DisplayLockActivationReason reason) {
     if (auto* context = target.first->GetDisplayLockContext()) {
       if (context->ShouldCommitForActivation(reason)) {
         activated = true;
-        context->CommitForActivationWithSignal(target.second);
+        context->CommitForActivationWithSignal(target.second, reason);
       }
     }
   }

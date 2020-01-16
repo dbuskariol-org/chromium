@@ -14722,6 +14722,18 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="2" label="7.2 or later"/>
 </enum>
 
+<enum name="DisplayLockActivationReason">
+  <int value="0" label="Accessibility"/>
+  <int value="1" label="Find-in-page active match"/>
+  <int value="2" label="Fragment navigation"/>
+  <int value="3" label="Script driven focus"/>
+  <int value="4" label="Script driven scrollIntoView"/>
+  <int value="5" label="User selection"/>
+  <int value="6" label="Simulated click"/>
+  <int value="7" label="User focus (tab navigation)"/>
+  <int value="8" label="Viewport intersection"/>
+</enum>
+
 <enum name="DisplayMirrorModeTypes">
   <summary>
     Defines the types of mirror mode in which displays connected to the device
