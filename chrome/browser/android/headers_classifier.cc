@@ -3,8 +3,6 @@
 // found in the LICENSE file.
 
 #include "base/android/jni_string.h"
-#include "base/debug/crash_logging.h"
-#include "base/debug/dump_without_crashing.h"
 #include "base/hash/hash.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/strings/string_util.h"
@@ -28,17 +26,9 @@ jboolean JNI_IntentHeadersRecorder_IsCorsSafelistedHeader(
     return true;
 
   if (is_first_party) {
-    int hash = base::PersistentHash(base::ToLowerASCII(header_name));
-    base::UmaHistogramSparse("Android.IntentNonSafelistedHeaderNames", hash);
-    if (hash == -240302231) {
-      static base::debug::CrashKeyString* non_safelisted_header_name =
-          base::debug::AllocateCrashKeyString(
-              "intent_non_safelisted_header_name",
-              base::debug::CrashKeySize::Size256);
-      base::debug::ScopedCrashKeyString(non_safelisted_header_name,
-                                        header_name);
-      base::debug::DumpWithoutCrashing();
-    }
+    base::UmaHistogramSparse(
+        "Android.IntentNonSafelistedHeaderNames",
+        base::PersistentHash(base::ToLowerASCII(header_name)));
   }
 
   return false;
