@@ -62,20 +62,20 @@ struct CSPSourceList {
   bool allow_star = false;
 };
 
+enum CSPDirectiveName {
+  DefaultSrc,
+  ChildSrc,
+  FrameSrc,
+  FormAction,
+  UpgradeInsecureRequests,
+  NavigateTo,
+  FrameAncestors,
+
+  Unknown,
+};
+
 struct CSPDirective {
-  enum Name {
-    DefaultSrc,
-    ChildSrc,
-    FrameSrc,
-    FormAction,
-    UpgradeInsecureRequests,
-    NavigateTo,
-    FrameAncestors,
-
-    Unknown,
-  };
-
-  Name name;
+  CSPDirectiveName name;
   CSPSourceList source_list;
 };
 

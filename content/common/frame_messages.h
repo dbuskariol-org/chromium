@@ -128,8 +128,8 @@ IPC_ENUM_TRAITS(blink::WebSandboxFlags)  // Bitmask.
 IPC_ENUM_TRAITS_MAX_VALUE(blink::WebTreeScopeType,
                           blink::WebTreeScopeType::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(ui::MenuSourceType, ui::MENU_SOURCE_TYPE_LAST)
-IPC_ENUM_TRAITS_MAX_VALUE(content::CSPDirective::Name,
-                          content::CSPDirective::NameLast)
+IPC_ENUM_TRAITS_MAX_VALUE(network::mojom::CSPDirectiveName,
+                          network::mojom::CSPDirectiveName::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::mojom::FeaturePolicyFeature,
                           blink::mojom::FeaturePolicyFeature::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(content::CSPDisposition,

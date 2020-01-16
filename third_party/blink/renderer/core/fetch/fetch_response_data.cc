@@ -44,8 +44,8 @@ blink::CSPSourceListPtr ConvertToBlink(CSPSourceListPtr source_list) {
                                    source_list->allow_star);
 }
 
-blink::CSPDirective::Name ConvertToBlink(CSPDirective::Name name) {
-  return static_cast<blink::CSPDirective::Name>(name);
+blink::CSPDirectiveName ConvertToBlink(CSPDirectiveName name) {
+  return static_cast<blink::CSPDirectiveName>(name);
 }
 
 blink::CSPDirectivePtr ConvertToBlink(CSPDirectivePtr csp) {

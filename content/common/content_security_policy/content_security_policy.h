@@ -44,7 +44,7 @@ struct CONTENT_EXPORT ContentSecurityPolicy {
   // the |directive| for a given |context|.
   // Note: Any policy violation are reported to the |context|.
   static bool Allow(const ContentSecurityPolicy& policy,
-                    CSPDirective::Name directive,
+                    network::mojom::CSPDirectiveName directive,
                     const GURL& url,
                     bool has_followed_redirect,
                     bool is_response_check,

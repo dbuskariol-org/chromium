@@ -46,7 +46,7 @@ class CONTENT_EXPORT CSPContext {
   // * triggering the "SecurityPolicyViolation" javascript event.
   // * sending a JSON report to any uri defined with the "report-uri" directive.
   // Returns true when the request can proceed, false otherwise.
-  bool IsAllowedByCsp(CSPDirective::Name directive_name,
+  bool IsAllowedByCsp(network::mojom::CSPDirectiveName directive_name,
                       const GURL& url,
                       bool has_followed_redirect,
                       bool is_response_check,
@@ -93,7 +93,7 @@ class CONTENT_EXPORT CSPContext {
   // See https://crbug.com/721329
   virtual void SanitizeDataForUseInCspViolation(
       bool has_followed_redirect,
-      CSPDirective::Name directive,
+      network::mojom::CSPDirectiveName directive,
       GURL* blocked_url,
       SourceLocation* source_location) const;
 

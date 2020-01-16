@@ -2563,7 +2563,7 @@ void NavigationRequest::UpdateSiteURL(
 
 bool NavigationRequest::IsAllowedByCSPDirective(
     CSPContext* context,
-    CSPDirective::Name directive,
+    network::mojom::CSPDirectiveName directive,
     bool has_followed_redirect,
     bool url_upgraded_after_redirect,
     bool is_response_check,
@@ -2593,15 +2593,16 @@ net::Error NavigationRequest::CheckCSPDirectives(
     bool is_response_check,
     CSPContext::CheckCSPDisposition disposition) {
   bool navigate_to_allowed = IsAllowedByCSPDirective(
-      initiator_csp_context_.get(), CSPDirective::NavigateTo,
-      has_followed_redirect, url_upgraded_after_redirect, is_response_check,
-      disposition);
+      initiator_csp_context_.get(),
+      network::mojom::CSPDirectiveName::NavigateTo, has_followed_redirect,
+      url_upgraded_after_redirect, is_response_check, disposition);
 
   bool frame_src_allowed = true;
   if (parent) {
     frame_src_allowed = IsAllowedByCSPDirective(
-        parent, CSPDirective::FrameSrc, has_followed_redirect,
-        url_upgraded_after_redirect, is_response_check, disposition);
+        parent, network::mojom::CSPDirectiveName::FrameSrc,
+        has_followed_redirect, url_upgraded_after_redirect, is_response_check,
+        disposition);
   }
 
   if (navigate_to_allowed && frame_src_allowed)

@@ -1960,7 +1960,7 @@ void RenderFrameHostImpl::ReportContentSecurityPolicyViolation(
 
 void RenderFrameHostImpl::SanitizeDataForUseInCspViolation(
     bool is_redirect,
-    CSPDirective::Name directive,
+    network::mojom::CSPDirectiveName directive,
     GURL* blocked_url,
     SourceLocation* source_location) const {
   DCHECK(blocked_url);
@@ -1984,7 +1984,7 @@ void RenderFrameHostImpl::SanitizeDataForUseInCspViolation(
 
   // When a renderer tries to do a form submission, it already knows the url of
   // the blocked url, except when it is redirected.
-  if (!is_redirect && directive == CSPDirective::FormAction)
+  if (!is_redirect && directive == network::mojom::CSPDirectiveName::FormAction)
     sanitize_blocked_url = false;
 
   if (sanitize_blocked_url)

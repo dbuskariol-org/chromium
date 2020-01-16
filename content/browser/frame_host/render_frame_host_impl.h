@@ -372,7 +372,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   bool SchemeShouldBypassCSP(const base::StringPiece& scheme) override;
   void SanitizeDataForUseInCspViolation(
       bool is_redirect,
-      CSPDirective::Name directive,
+      network::mojom::CSPDirectiveName directive,
       GURL* blocked_url,
       SourceLocation* source_location) const override;
 

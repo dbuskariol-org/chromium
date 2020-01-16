@@ -122,7 +122,7 @@ class FrameAncestorCSPContext : public CSPContext {
 
   void SanitizeDataForUseInCspViolation(
       bool is_redirect,
-      CSPDirective::Name directive,
+      network::mojom::CSPDirectiveName directive,
       GURL* blocked_url,
       SourceLocation* source_location) const override {
     return navigated_frame_->SanitizeDataForUseInCspViolation(
@@ -219,7 +219,7 @@ NavigationThrottle::ThrottleCheckResult AncestorThrottle::ProcessResponseImpl(
               : request->GetRenderFrameHost()->GetParent();
       while (parent) {
         if (!csp_context.IsAllowedByCsp(
-                CSPDirective::FrameAncestors,
+                network::mojom::CSPDirectiveName::FrameAncestors,
                 parent->GetLastCommittedOrigin().GetURL(),
                 navigation_handle()->WasServerRedirect(),
                 true /* is_response_check */, empty_source_location,
