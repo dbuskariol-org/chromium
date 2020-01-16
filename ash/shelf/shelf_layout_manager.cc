@@ -1897,13 +1897,14 @@ ShelfAutoHideState ShelfLayoutManager::CalculateAutoHideState(
   if (shelf_->auto_hide_lock())
     return state_.auto_hide_state;
 
+  const bool in_tablet_mode = IsTabletModeEnabled();
   // Don't let the shelf auto-hide when in tablet mode and Chromevox is on.
-  if (IsTabletModeEnabled() &&
+  if (in_tablet_mode &&
       Shell::Get()->accessibility_controller()->spoken_feedback_enabled()) {
     return SHELF_AUTO_HIDE_SHOWN;
   }
 
-  if (shelf_widget_->IsShowingAppList() && !IsTabletModeEnabled())
+  if (!in_tablet_mode && shelf_widget_->IsShowingAppList())
     return SHELF_AUTO_HIDE_SHOWN;
 
   if (shelf_widget_->status_area_widget() &&
@@ -1975,10 +1976,8 @@ ShelfAutoHideState ShelfLayoutManager::CalculateAutoHideState(
       display::Screen::GetScreen()->GetCursorScreenPoint();
   // Cursor is invisible in tablet mode and plug in an external mouse in tablet
   // mode will switch to clamshell mode.
-  if (shelf_region.Contains(cursor_position_in_screen) &&
-      !IsTabletModeEnabled()) {
+  if (shelf_region.Contains(cursor_position_in_screen) && !in_tablet_mode)
     return SHELF_AUTO_HIDE_SHOWN;
-  }
 
   // When the shelf is auto hidden and the shelf is on the boundary between two
   // displays, it is hard to trigger showing the shelf. For instance, if a

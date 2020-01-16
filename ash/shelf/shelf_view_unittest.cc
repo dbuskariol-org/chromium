@@ -16,6 +16,7 @@
 #include "ash/display/screen_orientation_controller_test_api.h"
 #include "ash/focus_cycler.h"
 #include "ash/ime/ime_controller_impl.h"
+#include "ash/public/cpp/ash_features.h"
 #include "ash/public/cpp/shelf_config.h"
 #include "ash/public/cpp/shelf_item_delegate.h"
 #include "ash/public/cpp/shelf_model.h"
@@ -1388,6 +1389,10 @@ TEST_F(ShelfViewTest, ShelfTooltipTest) {
 
 TEST_F(ShelfViewTestNotScrollable, ButtonTitlesTest) {
   AddAppShortcutsUntilOverflow();
+
+  Shell::Get()->tablet_mode_controller()->SetEnabledForTest(true);
+  test_api_->RunMessageLoopUntilAnimationsDone();
+
   EXPECT_EQ(base::UTF8ToUTF16("Launcher"), shelf_view_->shelf_widget()
                                                ->navigation_widget()
                                                ->GetHomeButton()
@@ -4183,6 +4188,47 @@ TEST_F(ShelfViewFocusTest, UnfocusWithEsc) {
   shelf_view_->GetWidget()->OnKeyEvent(&key_event);
   ExpectNotFocused(status_area_);
   ExpectNotFocused(shelf_view_);
+}
+
+class ShelfViewFocusWithNoShelfNavigationTest : public ShelfViewFocusTest {
+ public:
+  ShelfViewFocusWithNoShelfNavigationTest() {
+    scoped_feature_list_.InitWithFeatures(
+        {chromeos::features::kShelfHotseat,
+         features::kHideShelfControlsInTabletMode},
+        {});
+  }
+  ~ShelfViewFocusWithNoShelfNavigationTest() override = default;
+
+ private:
+  base::test::ScopedFeatureList scoped_feature_list_;
+};
+
+TEST_F(ShelfViewFocusWithNoShelfNavigationTest,
+       ShelfWithoutNavigationControls) {
+  // The home button is focused at start.
+  ASSERT_TRUE(
+      shelf_view_->shelf_widget()->navigation_widget()->GetHomeButton());
+  EXPECT_TRUE(shelf_view_->shelf_widget()
+                  ->navigation_widget()
+                  ->GetHomeButton()
+                  ->HasFocus());
+
+  // Switch to tablet mode, which should hide navigation buttons.
+  Shell::Get()->tablet_mode_controller()->SetEnabledForTest(true);
+  test_api_->RunMessageLoopUntilAnimationsDone();
+
+  ASSERT_FALSE(
+      shelf_view_->shelf_widget()->navigation_widget()->GetHomeButton());
+  ExpectFocused(status_area_);
+
+  // Verify focus cycling skips the navigation widget.
+  DoTab();
+  ExpectFocused(status_area_);
+  DoTab();
+  ExpectFocused(shelf_view_);
+  DoShiftTab();
+  ExpectFocused(status_area_);
 }
 
 // TODO(https://crbug.com/1009638): remove when scrollable shelf is launched.

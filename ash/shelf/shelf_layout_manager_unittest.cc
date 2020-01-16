@@ -2781,20 +2781,20 @@ TEST_P(ShelfLayoutManagerTest, PressHomeButtonOnAutoHideShelf) {
   EXPECT_EQ(SHELF_AUTO_HIDE_SHOWN, shelf->GetAutoHideState());
   GetAppListTestHelper()->CheckVisibility(false);
 
-  // Press the home button with touch.
-  views::View* home_button =
-      GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
+  ShelfNavigationWidget::TestApi navigation_test_api(
+      shelf->shelf_widget()->navigation_widget());
+  ASSERT_TRUE(navigation_test_api.IsHomeButtonVisible());
   // Wait for the back button to finish animating from behind the home button.
   ShelfViewTestAPI(GetPrimaryShelf()->GetShelfViewForTesting())
       .RunMessageLoopUntilAnimationsDone(
-          GetPrimaryShelf()
-              ->GetShelfViewForTesting()
-              ->shelf_widget()
-              ->navigation_widget()
-              ->get_bounds_animator_for_testing());
+          navigation_test_api.GetBoundsAnimator());
 
-  GetEventGenerator()->GestureTapAt(
-      home_button->GetBoundsInScreen().CenterPoint());
+  // Press the home button with touch.
+  GetEventGenerator()->GestureTapAt(shelf->shelf_widget()
+                                        ->navigation_widget()
+                                        ->GetHomeButton()
+                                        ->GetBoundsInScreen()
+                                        .CenterPoint());
 
   // The app list should now be visible, and the window we created should hide.
   GetAppListTestHelper()->CheckVisibility(true);
