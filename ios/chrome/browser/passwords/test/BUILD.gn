@@ -21,5 +21,6 @@ source_set("test") {
     "//ios/chrome/browser/passwords:infobar_delegates",
     "//testing/gmock",
     "//testing/gtest",
+    "//url",
   ]
 }

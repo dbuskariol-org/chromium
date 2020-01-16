@@ -8,6 +8,8 @@ source_set("infobar_modal") {
     "infobar_modal_overlay_responses.mm",
     "password_infobar_modal_overlay_request_config.h",
     "password_infobar_modal_overlay_request_config.mm",
+    "password_infobar_modal_overlay_responses.h",
+    "password_infobar_modal_overlay_responses.mm",
   ]
 
   configs += [ "//build/config/compiler:enable_arc" ]
