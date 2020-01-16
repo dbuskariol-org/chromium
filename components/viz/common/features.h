@@ -19,7 +19,6 @@ VIZ_COMMON_EXPORT extern const base::Feature kVizForWebView;
 VIZ_COMMON_EXPORT extern const base::Feature kUsePreferredIntervalForVideo;
 VIZ_COMMON_EXPORT extern const base::Feature kUseRealBuffersForPageFlipTest;
 
-VIZ_COMMON_EXPORT bool IsVizDisplayCompositorEnabled();
 VIZ_COMMON_EXPORT bool IsVizHitTestingDebugEnabled();
 VIZ_COMMON_EXPORT bool IsUsingSkiaForGLReadback();
 VIZ_COMMON_EXPORT bool IsUsingSkiaRenderer();

@@ -47,11 +47,6 @@ const base::Feature kVizForWebView{"VizForWebView",
 const base::Feature kUseRealBuffersForPageFlipTest{
     "UseRealBuffersForPageFlipTest", base::FEATURE_DISABLED_BY_DEFAULT};
 
-bool IsVizDisplayCompositorEnabled() {
-  // TODO(crbug.com/936425): Delete function when it's no longer checked.
-  return true;
-}
-
 const base::Feature kUsePreferredIntervalForVideo{
     "UsePreferredIntervalForVideo", base::FEATURE_DISABLED_BY_DEFAULT};
 
