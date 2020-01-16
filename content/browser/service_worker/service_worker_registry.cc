@@ -5,11 +5,29 @@
 #include "content/browser/service_worker/service_worker_registry.h"
 
 #include "base/memory/ptr_util.h"
+#include "base/memory/weak_ptr.h"
+#include "base/trace_event/trace_event.h"
 #include "content/browser/service_worker/service_worker_registration.h"
 #include "content/browser/service_worker/service_worker_version.h"
 #include "content/common/service_worker/service_worker_utils.h"
 
 namespace content {
+
+namespace {
+
+void CompleteFindNow(scoped_refptr<ServiceWorkerRegistration> registration,
+                     blink::ServiceWorkerStatusCode status,
+                     ServiceWorkerRegistry::FindRegistrationCallback callback) {
+  if (registration && registration->is_deleted()) {
+    // It's past the point of no return and no longer findable.
+    std::move(callback).Run(blink::ServiceWorkerStatusCode::kErrorNotFound,
+                            nullptr);
+    return;
+  }
+  std::move(callback).Run(status, std::move(registration));
+}
+
+}  // namespace
 
 ServiceWorkerRegistry::ServiceWorkerRegistry(
     const base::FilePath& user_data_directory,
@@ -36,7 +54,18 @@ ServiceWorkerRegistry::~ServiceWorkerRegistry() = default;
 void ServiceWorkerRegistry::FindRegistrationForClientUrl(
     const GURL& client_url,
     FindRegistrationCallback callback) {
-  storage()->FindRegistrationForClientUrl(client_url, std::move(callback));
+  // To connect this TRACE_EVENT with the callback, Time::Now() is used as a
+  // trace event id.
+  int64_t trace_event_id =
+      base::Time::Now().ToDeltaSinceWindowsEpoch().InMicroseconds();
+  TRACE_EVENT_ASYNC_BEGIN1(
+      "ServiceWorker", "ServiceWorkerRegistry::FindRegistrationForClientUrl",
+      trace_event_id, "URL", client_url.spec());
+  storage()->FindRegistrationForClientUrl(
+      client_url,
+      base::BindOnce(&ServiceWorkerRegistry::DidFindRegistrationForClientUrl,
+                     weak_factory_.GetWeakPtr(), client_url, trace_event_id,
+                     std::move(callback)));
 }
 
 void ServiceWorkerRegistry::FindRegistrationForScope(
@@ -133,6 +162,40 @@ ServiceWorkerRegistry::FindInstallingRegistrationForId(
   if (found == installing_registrations_.end())
     return nullptr;
   return found->second.get();
+}
+
+void ServiceWorkerRegistry::DidFindRegistrationForClientUrl(
+    const GURL& client_url,
+    int64_t trace_event_id,
+    FindRegistrationCallback callback,
+    blink::ServiceWorkerStatusCode status,
+    scoped_refptr<ServiceWorkerRegistration> registration) {
+  if (status == blink::ServiceWorkerStatusCode::kErrorNotFound) {
+    // Look for something currently being installed.
+    scoped_refptr<ServiceWorkerRegistration> installing_registration =
+        FindInstallingRegistrationForClientUrl(client_url);
+    if (installing_registration) {
+      blink::ServiceWorkerStatusCode installing_status =
+          installing_registration->is_deleted()
+              ? blink::ServiceWorkerStatusCode::kErrorNotFound
+              : blink::ServiceWorkerStatusCode::kOk;
+      TRACE_EVENT_ASYNC_END2(
+          "ServiceWorker",
+          "ServiceWorkerRegistry::FindRegistrationForClientUrl", trace_event_id,
+          "Status", blink::ServiceWorkerStatusToString(status), "Info",
+          (installing_status == blink::ServiceWorkerStatusCode::kOk)
+              ? "Installing registration is found"
+              : "Any registrations are not found");
+      CompleteFindNow(std::move(installing_registration), installing_status,
+                      std::move(callback));
+      return;
+    }
+  }
+
+  TRACE_EVENT_ASYNC_END1(
+      "ServiceWorker", "ServiceWorkerRegistry::FindRegistrationForClientUrl",
+      trace_event_id, "Status", blink::ServiceWorkerStatusToString(status));
+  std::move(callback).Run(status, std::move(registration));
 }
 
 }  // namespace content

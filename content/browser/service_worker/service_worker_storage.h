@@ -386,9 +386,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void DidReadInitialData(std::unique_ptr<InitialData> data,
                           ServiceWorkerDatabase::Status status);
   void DidFindRegistrationForClientUrl(
-      const GURL& client_url,
       FindRegistrationCallback callback,
-      int64_t callback_id,
       const ServiceWorkerDatabase::RegistrationData& data,
       const ResourceList& resources,
       ServiceWorkerDatabase::Status status);

@@ -105,11 +105,20 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   }
 
  private:
+  void DidFindRegistrationForClientUrl(
+      const GURL& client_url,
+      int64_t trace_event_id,
+      FindRegistrationCallback callback,
+      blink::ServiceWorkerStatusCode status,
+      scoped_refptr<ServiceWorkerRegistration> registration);
+
   std::unique_ptr<ServiceWorkerStorage> storage_;
 
   // For finding registrations being installed or uninstalled.
   RegistrationRefsById installing_registrations_;
   RegistrationRefsById uninstalling_registrations_;
+
+  base::WeakPtrFactory<ServiceWorkerRegistry> weak_factory_{this};
 };
 
 }  // namespace content
