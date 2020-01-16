@@ -405,6 +405,17 @@ suite('TabList', () => {
         tabElements[anotherTabToGroup.index].parentElement);
   });
 
+  test('MoveTabGroup', () => {
+    const tabToGroup = tabs[1];
+    webUIListenerCallback(
+        'tab-group-state-changed', tabToGroup.id, tabToGroup.index, 'group0');
+    webUIListenerCallback('tab-group-moved', 'group0', 0);
+
+    const tabAtIndex0 = getUnpinnedTabs()[0];
+    assertEquals(tabAtIndex0.parentElement.tagName, 'TABSTRIP-TAB-GROUP');
+    assertEquals(tabAtIndex0.tab.id, tabToGroup.id);
+  });
+
   test('dragstart sets a drag image offset by the event coordinates', () => {
     // Drag and drop only works for pinned tabs
     tabs.forEach(pinTabAt);

@@ -279,6 +279,31 @@ void TabStripUIHandler::OnTabStripModelChanged(
     }
     case TabStripModelChange::kMoved: {
       auto* move = change.GetMove();
+
+      base::Optional<tab_groups::TabGroupId> tab_group_id =
+          tab_strip_model->GetTabGroupForTab(move->to_index);
+      if (tab_group_id.has_value()) {
+        const std::vector<int> tabs_in_group =
+            tab_strip_model->group_model()
+                ->GetTabGroup(tab_group_id.value())
+                ->ListTabs();
+        if (tabs_in_group == selection.new_model.selected_indices()) {
+          // If the selection includes all the tabs within the changed tab's
+          // group, it is an indication that the entire group is being moved.
+          // To prevent sending multiple events for the same batch move, fire a
+          // separate single tab-group-moved event once all tabs have been
+          // moved. All tabs have moved only after all the indices in the group
+          // are in the correct continuous order.
+          if (tabs_in_group.back() - tabs_in_group.front() + 1 ==
+              static_cast<int>(tabs_in_group.size())) {
+            FireWebUIListener("tab-group-moved",
+                              base::Value(tab_group_id.value().ToString()),
+                              base::Value(tabs_in_group[0]));
+          }
+          break;
+        }
+      }
+
       FireWebUIListener(
           "tab-moved",
           base::Value(extensions::ExtensionTabUtil::GetTabId(move->contents)),

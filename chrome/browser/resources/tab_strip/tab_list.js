@@ -8,7 +8,7 @@ import 'chrome://resources/cr_elements/cr_icon_button/cr_icon_button.m.js';
 import 'chrome://resources/cr_elements/icons.m.js';
 
 import {assert} from 'chrome://resources/js/assert.m.js';
-import {addWebUIListener} from 'chrome://resources/js/cr.m.js';
+import {addWebUIListener, removeWebUIListener, WebUIListener} from 'chrome://resources/js/cr.m.js';
 import {FocusOutlineManager} from 'chrome://resources/js/cr/ui/focus_outline_manager.m.js';
 import {loadTimeData} from 'chrome://resources/js/load_time_data.m.js';
 import {isRTL} from 'chrome://resources/js/util.m.js';
@@ -144,18 +144,21 @@ class TabListElement extends CustomElement {
         /** @type {!Element} */ (
             this.shadowRoot.querySelector('#unpinnedTabs'));
 
+    /** @private {!Array<!WebUIListener>} */
+    this.webUIListeners_ = [];
+
     /** @private {!Function} */
     this.windowBlurListener_ = () => this.onWindowBlur_();
 
     /** @private {!Function} */
     this.contextMenuListener_ = e => this.onContextMenu_(e);
 
-    addWebUIListener(
+    this.addWebUIListener_(
         'layout-changed', layout => this.applyCSSDictionary_(layout));
-    addWebUIListener('theme-changed', () => this.fetchAndUpdateColors_());
+    this.addWebUIListener_('theme-changed', () => this.fetchAndUpdateColors_());
     this.tabStripEmbedderProxy_.observeThemeChanges();
 
-    addWebUIListener(
+    this.addWebUIListener_(
         'tab-thumbnail-updated', this.tabThumbnailUpdated_.bind(this));
 
     this.addEventListener(
@@ -168,7 +171,7 @@ class TabListElement extends CustomElement {
     document.addEventListener('contextmenu', this.contextMenuListener_);
     document.addEventListener(
         'visibilitychange', this.documentVisibilityChangeListener_);
-    addWebUIListener(
+    this.addWebUIListener_(
         'received-keyboard-focus', () => this.onReceivedKeyboardFocus_());
     window.addEventListener('blur', this.windowBlurListener_);
 
@@ -194,6 +197,15 @@ class TabListElement extends CustomElement {
    */
   addAnimationPromise_(promise) {
     this.animationPromises = this.animationPromises.then(() => promise);
+  }
+
+  /**
+   * @param {string} eventName
+   * @param {!Function} callback
+   * @private
+   */
+  addWebUIListener_(eventName, callback) {
+    this.webUIListeners_.push(addWebUIListener(eventName, callback));
   }
 
   /**
@@ -265,21 +277,24 @@ class TabListElement extends CustomElement {
       this.tabStripEmbedderProxy_.reportTabCreationDuration(
           tabs.length, Date.now() - createTabsStartTimestamp);
 
-      addWebUIListener('tab-created', tab => this.onTabCreated_(tab));
-      addWebUIListener(
+      this.addWebUIListener_('tab-created', tab => this.onTabCreated_(tab));
+      this.addWebUIListener_(
           'tab-moved', (tabId, newIndex) => this.onTabMoved_(tabId, newIndex));
-      addWebUIListener('tab-removed', tabId => this.onTabRemoved_(tabId));
-      addWebUIListener(
+      this.addWebUIListener_('tab-removed', tabId => this.onTabRemoved_(tabId));
+      this.addWebUIListener_(
           'tab-replaced', (oldId, newId) => this.onTabReplaced_(oldId, newId));
-      addWebUIListener('tab-updated', tab => this.onTabUpdated_(tab));
-      addWebUIListener(
+      this.addWebUIListener_('tab-updated', tab => this.onTabUpdated_(tab));
+      this.addWebUIListener_(
           'tab-active-changed', tabId => this.onTabActivated_(tabId));
-      addWebUIListener(
+      this.addWebUIListener_(
           'tab-group-state-changed',
           (tabId, index, groupId) =>
               this.onTabGroupStateChanged_(tabId, index, groupId));
-      addWebUIListener(
+      this.addWebUIListener_(
           'tab-group-closed', groupId => this.onTabGroupClosed_(groupId));
+      this.addWebUIListener_(
+          'tab-group-moved',
+          (groupId, index) => this.onTabGroupMoved_(groupId, index));
     });
   }
 
@@ -288,6 +303,7 @@ class TabListElement extends CustomElement {
     document.removeEventListener(
         'visibilitychange', this.documentVisibilityChangeListener_);
     window.removeEventListener('blur', this.windowBlurListener_);
+    this.webUIListeners_.forEach(removeWebUIListener);
   }
 
   /**
@@ -567,6 +583,28 @@ class TabListElement extends CustomElement {
       return;
     }
     tabGroupElement.remove();
+  }
+
+  /**
+   * @param {string} groupId
+   * @param {number} index
+   * @private
+   */
+  onTabGroupMoved_(groupId, index) {
+    const tabGroupElement = this.findTabGroupElement_(groupId);
+    if (!tabGroupElement) {
+      return;
+    }
+    tabGroupElement.remove();
+
+    let elementAtIndex =
+        this.shadowRoot.querySelectorAll('tabstrip-tab')[index];
+    if (elementAtIndex && elementAtIndex.parentElement &&
+        isTabGroupElement(elementAtIndex.parentElement)) {
+      elementAtIndex = elementAtIndex.parentElement;
+    }
+
+    this.unpinnedTabsElement_.insertBefore(tabGroupElement, elementAtIndex);
   }
 
   /**

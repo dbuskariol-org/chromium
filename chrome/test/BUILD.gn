@@ -3528,6 +3528,11 @@ test("unit_tests") {
     ]
   }
 
+  if (enable_webui_tab_strip) {
+    sources +=
+        [ "../browser/ui/webui/tab_strip/tab_strip_ui_handler_unittest.cc" ]
+  }
+
   configs += [ "//build/config:precompiled_headers" ]
 
   if (is_android && notouch_build) {
