@@ -2405,6 +2405,14 @@ bool V4L2VideoDecodeAccelerator::CreateImageProcessor() {
            ? ImageProcessor::OutputMode::ALLOCATE
            : ImageProcessor::OutputMode::IMPORT);
 
+  // Start with a brand new image processor device, since the old one was
+  // already opened and attempting to open it again is not supported.
+  image_processor_device_ = V4L2Device::Create();
+  if (!image_processor_device_) {
+    VLOGF(1) << "Could not create a V4L2Device for image processor";
+    return false;
+  }
+
   image_processor_ = v4l2_vda_helpers::CreateImageProcessor(
       *output_format_fourcc_, *egl_image_format_fourcc_, coded_size_,
       egl_image_size_, visible_size_, output_buffer_map_.size(),

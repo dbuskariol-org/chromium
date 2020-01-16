@@ -577,6 +577,14 @@ bool V4L2SliceVideoDecodeAccelerator::CreateImageProcessor() {
            ? ImageProcessor::OutputMode::ALLOCATE
            : ImageProcessor::OutputMode::IMPORT);
 
+  // Start with a brand new image processor device, since the old one was
+  // already opened and attempting to open it again is not supported.
+  image_processor_device_ = V4L2Device::Create();
+  if (!image_processor_device_) {
+    VLOGF(1) << "Could not create a V4L2Device for image processor";
+    return false;
+  }
+
   image_processor_ = v4l2_vda_helpers::CreateImageProcessor(
       *output_format_fourcc_, *gl_image_format_fourcc_, coded_size_,
       gl_image_size_, decoder_->GetVisibleRect().size(),
