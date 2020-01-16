@@ -1,10 +1,5 @@
-# Omaha Protocol (V4)
-ATTENTION: The Omaha 4 protocol is not implemented by any known client and is
-subject to redesign and change. Potential clients are encouraged to implement
-the 3.1 protocol instead.
-
-
-This document describes version 4 of the Omaha Client-Server Protocol.
+# Omaha Protocol (V3.1)
+This document describes version 3.1 of the Omaha Client-Server Protocol.
 Previous versions are described at:
  * (Version 3)[https://github.com/google/omaha/blob/master/doc/ServerProtocolV3.md]
  * (Version 2)[https://github.com/google/omaha/blob/master/doc/ServerProtocolV2.md]
@@ -199,6 +194,11 @@ header, detailed [below](#headers-update-check-response).
 For download requets, clients should prefer to fall back to subsequent download
 URLs rather than attempting retries on a particular URL.
 
+### Safe JSON Prefixes
+JSON responses from the server are prefixed with `)]}'\n`, where \n indicates a
+new line character. This prevents them from being naively executed as a script
+in the context of the update server's origin.
+
 
 ## Update Checks
 An update check is the first phase of an Omaha session. In an update check, the
@@ -231,11 +231,25 @@ members:
 
 #### `request` Object (Update Check Request)
 A request object has the following members:
+ *   `@os`: A string identifying the operating system. Default: "". Known values
+     include:
+     *   "android": Android.
+     *   "cros": ChromeOS.
+     *   "fuchsia": Fuchsia.
+     *   "linux": Linux.
+     *   "mac": macOS.
+     *   "openbsd": OpenBSD. TODO(waffles@chromium.org): Also FreeBSD?
+     *   "win": Windows.
+ *   `@updater`: A string identifying the client software (e.g. "Omaha",
+     "Chrome", "Chrome Extension Updater"). Default: "".
  *   `acceptformat`: A string, formatted as a comma-separated list of strings
      describing the formats of update payloads that this client accepts.
      Default: "crx3". The following value(s) are supported:
      *   "crx3": The CRX file format, version 3.
  *   `app`: A list of `app` objects.
+ *   `dedup`: A string, must be "cr". This indicates to servers that the client
+     intends to use client-regulated counting algorithms rather than any sort of
+     unique identifier. Version 3.0 of the protocol also supported "uid".
  *   `dlpref`: Specifies the preferred download URL behavior. A comma-separated
      list of values, in order of descending priority. Default: "". Legal values
      include:
@@ -251,8 +265,7 @@ A request object has the following members:
      *   1: this client is installed in a cross-user context.
      *   0: this client is installed only for the current user.
  *   `os`: An `os` object.
- *   `otherupdater`: A list of `otherupdater` objects.
- *   `protocol`: The version of the Omaha protocol. Clients must transmit "4.0"
+ *   `protocol`: The version of the Omaha protocol. Clients must transmit "3.1"
      as the value when using this protocol.
  *   `requestid`: A randomly-generated string, unique to this request. Default:
      "" (empty string).
@@ -262,8 +275,7 @@ A request object has the following members:
      probers to distinguish this request from real user traffic. Any value
      other than the empty string indicates that the request should not be
      counted toward official metrics. Default: "" (empty string).
- *   `updater`: A string identifying the client software (e.g. "Omaha",
-     "Chrome", "Chrome Extension Updater"). Default: "".
+ *   `updater`: A list of `updater` objects.
  *   `updaterchannel`: If present, identifies the distribution channel of the
      client (e.g. "stable", "beta", "dev", "canary"). Default: "".
  *   `updaterversion`: The version of the client that is sending this request.
@@ -358,13 +370,24 @@ following members:
      for that request's response should be stored to use in all subsequent
      requests. To mitigate privacy risk, clients should fuzz the value to the
      week granularity by storing X - X % 7, where X is the server-provided date.
-     For offline installs, the client should send -2.
+     For offline installs, the client should send -2. Default: -2.
+ *   `installedby`: A string describing the original cause of the installation.
+     The string should be drawn from a small set of constant values, to minimize
+     entropy and the ability for the client to be fingerprinted. Default: "".
+ *   `installsource`: A string describing the immediate cause of this request.
+     Known values include: "" (a normal background update) and "ondemand" (a
+     foreground, user-initiated update). Default: "".
+     The string should be drawn from a small set of constant values, to minimize
+     entropy and the ability for the client to be fingerprinted.
  *   `ismachine`: "0" if the application is installed for the user specifically
      (i.e. elevated privileges are not needed to update it). "1" if the
      application is installed in a cross-user (system or privileged) context.
      "-1" if unknown or not applicable. Default: "-1"
  *   `lang`: The language of the application installation, in BCP 47
      representation, or "" if unknown or not applicable. Default: "".
+ *   `ping`: A `ping` object.
+ *   `rollback_allowed`: true if the client will accept a version downgrade.
+     Typically used in conjunction with a targetversionprefix. Default: false.
  *   `tag`: A string, representing arbitrary application-specific data that the
      client wishes to disclose to the server. Clients should prefer to extend
      this protocol with additional attributes rather than use this field, but in
@@ -375,6 +398,10 @@ following members:
      should change this version in future requests, even if the old version of
      the application may still be running.
      Default: "0".
+ *   `updatecheck`: An `updatecheck` object. This member may be omitted if the
+     client will not honor an update response.
+
+#### `ping` Objects (Update Check Request)
  *   `ad`: The date that the previous active report took place on, or "-1" if
      this is the first active report for the application. "-2" if the date of
      the previous active report is unknown or the app has not been active since
@@ -389,12 +416,10 @@ following members:
      regardless of the value of this member. In response to the previous roll
      call, the server responded with the date in the `response.clock.date`
      member. See [User Counting](#user-counting).
- *   `ping_freshness_rd`: A random 128-bit number, written into the client's
+ *   `ping_freshness`: A random 128-bit number, written into the client's
      storage alongside the next value of rd, and rotated whenever the client
      stores a new value for rd. See [Ping Freshess](#ping-freshness). A value of
      "" (empty string) indicates that no value was available. Default: "".
- *   `updatecheck`: An `updatecheck` object. This member may be omitted if the
-     client will not honor an update response.
 
 #### `data` Objects (Update Check Request)
 A data object represents a request for arbitrary specific application-specific
@@ -414,13 +439,6 @@ causes for a disabled state may exist.
 #### `updatecheck` Objects (Update Check Request)
 An updatecheck object represents the actual intent to update. It has the
 following members:
- *   `cause`: A string identifying why this update check has occurred. Legal
-     values are:
-     *   "": Cause unknown.
-     *   "ondemand": A user-initiated or app-initiated update check.
-     *   "scheduled": A scheduled and periodic background update check.
- *   `rollback_allowed`: true if the client will accept a version downgrade.
-     Typically used in conjunction with a targetversionprefix.
  *   `targetversionprefix`: A component-wise prefix of a version number, or a
      complete version number suffixed with the `$` character. The server SHOULD
      NOT return an update instruction to a version number that does not match
@@ -433,7 +451,7 @@ following members:
      client will ignore any update instruction) and "false" (indicating that the
      client will not attempt an update if one is instructed). Default: "false".
 
-#### `otherupdater` Objects (Update Check Request)
+#### `updater` Objects (Update Check Request)
 An otherupdater object represents the state of another sibling update program on
 the system. Clients report about other updaters present on the system to enable
 redundancy and recoverability of sibling updaters. For example, Chrome is
@@ -487,8 +505,8 @@ check response headers:
      86400 as 86400. Clients may still send a ping-back for this update session.
 
 ### Body (Update Check Response)
-The response body of an update check contains a JSON object with the following
-members:
+The response body of an update check begins with `)]}'\n`, where \n indicates a
+newline character, followed by a JSON object with the following members:
  *   `response`: A `response` object.
 
 #### `response` Objects (Update Check Response)
@@ -496,16 +514,16 @@ A response object contains the server's response to a corresponding `request`
 object in the update check request.
  *   `app`: A list of `app` objects. There is one object for each `app` in the
      request body.
- *   `clock`: A `clock` object.
+ *   `daystart`: A `daystart` object.
  *   `protocol`: The version of the Omaha protocol. Servers responding with this
-     protocol must send a value of "4.0".
+     protocol must send a value of "3.1".
  *   `server`: A string identifying the server or server family for diagnostic
       purposes. As examples, "production", "test". Default: "".
 
-#### `clock` Objects (Update Check Response)
+#### `daystart` Objects (Update Check Response)
 A clock object contains information about the current datetime according to the
 server's locale. It has the following members:
- *   `date`: An integer. The number of complete calendar days that have elapsed
+ *   `elapsed_days`: An integer. The number of complete calendar days that have elapsed
      since January 1st, 2007 in the server's locale, at the time the request was
      received. The client should generally save this value for use in future
      update checks (for examples, see `request.app.ping.rd` and
@@ -566,8 +584,9 @@ the following members:
      client independent of the outcome of the updatecheck. If coupled with an
      update response, the actions should be performed after the update, in the
      order they are listed. Default: [] (empty list).
- *   `info`: Provides a rationale for the status response, for use in debugging.
-     For example, "update disabled by client" or "bandwidth limit exceeded".
+ *   `info`: An optional string that provides a rationale for the status
+     response, for use in debugging.  For example, "update disabled by client"
+     or "bandwidth limit exceeded".  Default: "".
  *   `status`: Indicates the outcome of the updatecheck. Servers must always
      send a value here. Known values:
      *   "ok": An update is available and should be applied.
@@ -588,33 +607,76 @@ the following members:
          support from the Omaha 3 protocol, or may require some feature added in
          a later version of this protocol.)
 Additionally, the following members are set if and only if `status == "ok"`:
+ *   `manifest`: A `manifest` object.
+ *   `urls`: A `urls` object.
+
+#### `manifest` Objects (Update Check Response)
+A manifest object contains details about how to fetch and apply an update.
  *   `arguments`: A string, indicating command-line arguments that should be
-     passed to the binary specified in `run`.
- *   `diff`: A `download` object, indicating where a differential update can be
-     obtained. If no differential update is available, this member is omitted.
- *   `fp`: The [differential fingerprint](#differential-fingerprints) of the
-     update instruction.
- *   `full`: A `download` object, indicating where a full update can be
-     obtained. This member is always provided, even if a differential update is
-     also available.
+     passed to the binary specified in `run`. Default: "".
+ *   `packages`: A `packages` object.
  *   `run`: A path within the CRX archive to an executable to run as part of the
-     update. The executable is typically an application installer.
+     update. The executable is typically an application installer. If unsent or
+     the empty string, no particular update-delivered installer needs to be run.
+     Default: "" (empty string).
+ *   `version`: The new version the client should report for the application,
+     after successfully applying this update. Compatible servers must send this
+     member.
 
-#### `download` Objects
-A download object describes a download that may be fetched as a part of updating
-an application. It has the following members:
+
+#### `packages` Objects (Update Check Response)
+A packages object describes a set of downloadable files. The 3.1 protocol only
+supports a subset of the 3.0 packages, but may be extended in the future to
+implement more of the 3.0 protocol's package support. A packages object contains
+the following members:
+ *   `package`: A list of `package` objects. Clients may ignore all but the
+     first element in this list if they only implement single-package support.
+
+#### `package` Objects (Update Check Response)
+A package object describes a file that must be downloaded and installed as part
+of the update. In this version of the protocol, all packages describe CRX files.
+Packages can also come in differential update forms. Clients should attempt a
+differential patch of package first, and fall back to a full package if the
+differential patch fails to apply. A package object has the following members:
+ *   `fp`: The [differential fingerprint](#differential-fingerprints) of the
+     new version of the package.
  *   `size`: The size of the file, in octets.
- *   `sha256`: The SHA-256 hash of the file.
- *   `url`: A list of `url` objects. The file can be fetched from any of the
-     provided URLs. Clients should attempt to download from each URL in the
-     specified order, falling back to the next URL if a TCP or HTTP error is
-     encountered.  A 4xx or 5xx HTTP response qualifies as an error.
+ *   `sizediff`: The size of the differential file, in octets, if one is
+     available.
+ *   `hash_sha256`: The SHA-256 hash of the file, encoded as a lowercase base-16
+     string.
+ *   `hashdiff_sha256`: The SHA-256 hash of the differential file, encoded as a
+     lowercase base-16 string.
+ *   `name`: The basename of the file. The basename can be appended to each
+     `url.codebase` within this `manifest` object in order to compute a URL from
+     which the package can be fetched from.
+ *   `namediff`: The basename of the differential file. The basename can be
+     appended to each `url.codebasediff` within this `manifest` object in order
+     to compute a URL from which the package can be fetched from.
 
-#### `url` Objects
-A url object describes a URL. It has the following members:
- *   `url`: An absolute URL, in string format.
+#### `urls` Objects (Update Check Response)
+A urls object describes an ordered collection of download URL prefixes. Each URL
+in the collection is either a differential or full URL. When attempting a
+download of a differential or full package, clients must attempt downloads from
+each URL of the appropriate type in the specified order, falling back to the
+next URL if a TCP or HTTP error is encountered. A 4xx or 5xx HTTP response
+qualifies as an error that justifies a fallback. A successful download of a file
+that fails to hash to the expected hash or has an unexpected size also
+qualifies. Other network errors may also qualify.
+ *   `url`: A list of `url` objects.
 
-#### `action` Objects
+#### `url` Objects (Update Check Response)
+A url object describes a URL prefix. It has the following members:
+ *   `codebase`: An absolute URL prefix. Presence of this member indicates a
+     full download URL. This member will be present if and only if
+     `codebasediff` is not present. To create a full URL, the value must be
+     concatenated with a `package.name` member.
+ *   `codebasediff`: An absolute URL prefix. Presence of this member indicates a
+     differential download URL. This member will be present if and only if
+     `codebase` is not present. To create a full URL, the value must be
+     concatenated with a `package.namediff` member.
+
+#### `action` Objects (Update Check Response)
 An action represents a task that the update client must conduct after
 application of the update (if an update is provided), or immediately (if no
 update is provided). It has the following members:
@@ -635,7 +697,7 @@ update is provided). It has the following members:
 Additional members may be present, depending on the action type.
 
 For `type == "run"`:
- *   `path`: The path to the executable (relative to the root of the CRX archive
+ *   `run`: The path to the executable (relative to the root of the CRX archive
      that the client was served in this update (if an update was served) or in
      an update with the associated differential fingerprint (if this response
      does not contain an update for this application). For other action types,
@@ -648,8 +710,8 @@ For `type == "run"`:
 
 ## Downloads
 Download requests occur when an application update is needed, as a result of a
-`response.app.updatecheck.full` or `response.app.updatecheck.diff` member.
-Download requests are HTTP GET requests and can use any normal HTTP stack.
+`response.app.updatecheck.manifest.package` member.  Download requests are HTTP
+GET requests and can use any HTTP implementation.
 
 ### Request Headers
 In addition to the regular HTTP headers, this protocol defines the following
@@ -671,8 +733,8 @@ client handles the server's response.
 
 Ping-back requests can be **bundled** into a single HTTP transaction, or sent
 immediately as the events triggering the ping-back occurs. Bundling ping-backs
-reduces QPS to the server, but risks ping-back loss if the client crashes or
-loses connectivity or power before it transmits the bundle.
+reduces QPS to the server, but risks ping-back loss if the client crashes,
+loses connectivity, or loses power before it transmits the bundle.
 
 ### Ping-Back Request Headers
 Similarly to update-check requests, ping-back requests have additional headers
@@ -700,7 +762,7 @@ A ping-back `app` object cannot contain any of the following members:
  *   `data`
  *   `ad`
  *   `rd`
- *   `ping_freshness_rd`
+ *   `ping_freshness`
  *   `updatecheck`
 
 A ping-back `app` additionally contains the following members:
@@ -711,23 +773,61 @@ An event object represents a specific report about an operation the client
 attmpted as part of this update session. All events have the following members:
  *   `type`: The event type is a numeric value indicating the type of the event.
      It must always be specified by the client. The following values are known:
-     *   1: A download operation.
-     *   3: An update or install operation.
+     *   2: An install operation.
+     *   3: An update operation.
      *   4: An uninstall operation.
+     *   14: A download operation.
      *   42: An action operation.
  *   `result`: The outcome of the operation. Default: 0. Known values:
      *   0: error
      *   1: success
      *   4: cancelled
  *   `errorcat`: An error category, for use in distinguishing between different
-     classes of error codes. Default: 0.
- *   `errorcode`: The error code (if any) of the operation. Default: 0.
+     classes of error codes. Default: 0. The following values are known:
+     *   0: No category / unknown.
+     *   1: Errors acquiring the download.
+     *   2: Errors during CRX unpacking.
+     *   3: Errors during installation.
+     *   4: Errors within the update service itself.
+     *   5: Error during update check.
+ *   `errorcode`: The error code (if any) of the operation. Default: 0. The
+     meaning of an error code may depend on the error category. 0 always means
+     "no error" (success).
+     *   Additional values may exist in
+         (update_client_errors.h)[https://cs.chromium.org/chromium/src/components/update_client/update_client_errors.h]
  *   `extracode1`: Additional numeric information about the operation's result.
+     The meaning of an extra code depends on the error category and error code.
      Default: 0.
 
 Depending on the event type, additional members may be present:
 
-For `type == 1` events:
+For `type == 2` events:
+ *   `nextfp`: The [differential fingerprint](#differential-fingerprints) that
+     the client was attempting to update to, regardless of whether that update
+     was successful.
+ *   `nextversion`: The application version that the client was attempting to
+     update to, regardless of whether the update was successful.
+
+For `type == 3` events:
+ *   All the members of `type == 2` events.
+ *   `diffresult`: As `result` but specifically for a differential update. A
+     client that successfully applies a differential update should send the
+     result both here and in `result`. A client that attempts and fails a
+     differential update should send the result here, and use `result` to
+     indicate the outcome of the full update attempt.
+ *   `differrorcat`: As `errorcat` but for differential updates. Similar to
+     `differsult`.
+ *   `differrorcode`: As `errorcode` but for differential updates. Similar to
+     `differsult`.
+ *   `diffextracode1`: As `extracode1` but for differential updates. Similar to
+     `differsult`.
+ *   `previousfp`: The [differential fingerprint](#differential-fingerprints)
+     the client had prior to the update, regardless of whether that update
+     was successful.
+ *   `previousversion`: The application version the client had prior to the
+     update, regardless of whether that update was successful.
+
+For `type == 14` events:
  *   `download_time_ms`: The time elapsed between the start of the download and
      the end of the download, in milliseconds. -1 if unavailable or irrelevant.
      Default: -1.
@@ -741,29 +841,6 @@ For `type == 1` events:
  *   `expected_bytes`: The number of bytes expected to be downloaded. Default:
      0.
  *   `url`: The URL from which the download was attempted.
-
-For `type == 3` events:
- *   `diffresult`: As `result` but specifically for a differential update. A
-     client that successfully applies a differential update should send the
-     result both here and in `result`. A client that attempts and fails a
-     differential update should send the result here, and use `result` to
-     indicate the outcome of the full update attempt.
- *   `differrorcat`: As `errorcat` but for differential updates. Similar to
-     `differsult`.
- *   `differrorcode`: As `errorcode` but for differential updates. Similar to
-     `differsult`.
- *   `diffextracode1`: As `extracode1` but for differential updates. Similar to
-     `differsult`.
- *   `nextfp`: The [differential fingerprint](#differential-fingerprints) that
-     the client was attempting to update to, regardless of whether that update
-     was successful.
- *   `nextversion`: The application version that the client was attempting to
-     update to, regardless of whether the update was successful.
- *   `previousfp`: The [differential fingerprint](#differential-fingerprints)
-     the client had prior to the update, regardless of whether that update
-     was successful.
- *   `previousversion`: The application version the client had prior to the
-     update, regardless of whether that update was successful.
 
 For `type == 42` events:
  *   `actiontype`: The type of the action that caused this event.
@@ -803,5 +880,5 @@ the event. It has the following members:
 
 
 ## Future Work
-The 4.0 protocol is expected to expand as the cross-platform updater in
+The 3.1 protocol is expected to expand as the cross-platform updater in
 //src/chrome/updater continues to reach feature parity with Omaha 3.
