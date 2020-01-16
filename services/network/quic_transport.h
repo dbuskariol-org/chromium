@@ -61,6 +61,7 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) QuicTransport final
       BidirectionalStreamAcceptanceCallback callback) override;
   void AcceptUnidirectionalStream(
       UnidirectionalStreamAcceptanceCallback callback) override;
+  void SendFin(uint32_t stream_id) override;
 
   // net::QuicTransportClient::Visitor implementation:
   void OnConnected() override;

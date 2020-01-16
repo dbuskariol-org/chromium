@@ -106,6 +106,8 @@ class MockQuicTransport : public network::mojom::blink::QuicTransport {
                void(base::OnceCallback<
                     void(uint32_t, mojo::ScopedDataPipeConsumerHandle)>));
 
+  void SendFin(uint32_t stream_id) override {}
+
  private:
   mojo::Receiver<network::mojom::blink::QuicTransport> receiver_;
 };

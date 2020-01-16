@@ -60,7 +60,7 @@ class MODULES_EXPORT QuicTransport final
   void OnHandshakeFailed() override;
 
   // QuicTransportClient implementation
-  // TODO(ricea): Add methods.
+  void OnIncomingStreamClosed(uint32_t stream_id, bool fin_received) override;
 
   // Implementation of ContextLifecycleObserver
   void ContextDestroyed(ExecutionContext*) final;

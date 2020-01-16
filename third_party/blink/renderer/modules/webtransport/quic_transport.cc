@@ -177,6 +177,13 @@ void QuicTransport::OnHandshakeFailed() {
   Dispose();
 }
 
+void QuicTransport::OnIncomingStreamClosed(uint32_t stream_id,
+                                           bool fin_received) {
+  DVLOG(1) << "QuicTransport::OnIncomingStreamClosed(" << stream_id << ", "
+           << fin_received << ") this=" << this;
+  // TODO(ricea): Implement this.
+}
+
 void QuicTransport::ContextDestroyed(ExecutionContext* execution_context) {
   DVLOG(1) << "QuicTransport::ContextDestroyed() this=" << this;
   Dispose();
