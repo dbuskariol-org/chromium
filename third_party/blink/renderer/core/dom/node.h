@@ -627,6 +627,11 @@ class CORE_EXPORT Node : public EventTarget {
     return *tree_scope_;
   }
 
+  // Returns the tree scope where this element originated.
+  // Use this when resolving element references for (CSS url(...)s and #id).
+  // This differs from GetTreeScope for shadow clones inside <svg:use/>.
+  TreeScope& OriginatingTreeScope() const;
+
   bool InActiveDocument() const;
 
   // Returns true if this node is connected to a document, false otherwise.

@@ -1852,6 +1852,16 @@ ContainerNode* Node::ParentOrShadowHostOrTemplateHostNode() const {
   return ParentOrShadowHostNode();
 }
 
+TreeScope& Node::OriginatingTreeScope() const {
+  if (const SVGElement* svg_element = DynamicTo<SVGElement>(this)) {
+    if (const SVGElement* corr_element = svg_element->CorrespondingElement()) {
+      DCHECK(!corr_element->CorrespondingElement());
+      return corr_element->GetTreeScope();
+    }
+  }
+  return GetTreeScope();
+}
+
 Document* Node::ownerDocument() const {
   Document* doc = &GetDocument();
   return doc == this ? nullptr : doc;

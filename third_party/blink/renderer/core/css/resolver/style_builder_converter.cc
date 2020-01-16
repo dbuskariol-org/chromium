@@ -130,7 +130,7 @@ scoped_refptr<StyleSVGResource> StyleBuilderConverter::ConvertElementReference(
     return nullptr;
   SVGResource* resource =
       state.GetElementStyleResources().GetSVGResourceFromValue(
-          state.GetTreeScope(), *url_value);
+          state.GetElement().OriginatingTreeScope(), *url_value);
   return StyleSVGResource::Create(resource, url_value->ValueForSerialization());
 }
 
@@ -152,7 +152,7 @@ scoped_refptr<ClipPathOperation> StyleBuilderConverter::ConvertClipPath(
   if (const auto* url_value = DynamicTo<cssvalue::CSSURIValue>(value)) {
     SVGResource* resource =
         state.GetElementStyleResources().GetSVGResourceFromValue(
-            state.GetTreeScope(), *url_value);
+            state.GetElement().OriginatingTreeScope(), *url_value);
     // TODO(fs): Doesn't work with external SVG references (crbug.com/109212.)
     return ReferenceClipPathOperation::Create(
         url_value->ValueForSerialization(), resource);

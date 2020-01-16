@@ -2862,17 +2862,15 @@ void Document::UnscheduleUseShadowTreeUpdate(SVGUseElement& element) {
 }
 
 void Document::UpdateUseShadowTreesIfNeeded() {
-  if (use_elements_needing_update_.IsEmpty())
-    return;
-
   ScriptForbiddenScope forbid_script;
 
-  HeapHashSet<Member<SVGUseElement>> elements;
-  use_elements_needing_update_.swap(elements);
-  for (SVGUseElement* element : elements)
-    element->BuildPendingResource();
-
-  DCHECK(use_elements_needing_update_.IsEmpty());
+  // Breadth-first search since nested use elements add to the queue.
+  while (!use_elements_needing_update_.IsEmpty()) {
+    HeapHashSet<Member<SVGUseElement>> elements;
+    use_elements_needing_update_.swap(elements);
+    for (SVGUseElement* element : elements)
+      element->BuildPendingResource();
+  }
 }
 
 StyleResolver* Document::GetStyleResolver() const {
