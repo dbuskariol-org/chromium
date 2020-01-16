@@ -1622,7 +1622,9 @@
                   '|chrome/browser/resources/settings/os_settings_resouces.grd'\
                   '|chrome/browser/resources/settings/os_settings_resouces_vulcanized.grd'\
                   '|chrome/browser/ui/webui/settings/chromeos/'\
-                  '|chrome/test/data/webui/settings/chromeos/',
+                  '|chrome/test/data/webui/settings/chromeos/'\
+                  '|ui/webui/resources/cr_components/chromeos/'\
+                  '|ui/webui/resources/cr_elements/chromeos/',
     },
     'sharing': {
       'filepath': 'chrome/browser/sharing/|'\
