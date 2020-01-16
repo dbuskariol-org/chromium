@@ -150,10 +150,6 @@ class CORE_EXPORT HTMLFormControlElement : public HTMLElement,
 
   virtual void ResetImpl() {}
 
-  // This is called just after attaching a LayoutObject. However,
-  // GetLayoutObject() can be nullptr.
-  virtual void UpdateFromElement();
-
  private:
   bool IsFormControlElement() const final { return true; }
   bool AlwaysCreateUserAgentShadowRoot() const override { return true; }

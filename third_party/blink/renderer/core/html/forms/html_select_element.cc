@@ -357,7 +357,7 @@ void HTMLSelectElement::OptionElementChildrenChanged(
 
   if (GetLayoutObject()) {
     if (option.Selected() && UsesMenuList())
-      UpdateFromElement();
+      GetLayoutObject()->UpdateFromElement();
     if (AXObjectCache* cache =
             GetLayoutObject()->GetDocument().ExistingAXObjectCache())
       cache->ChildrenChanged(this);
@@ -903,8 +903,8 @@ void HTMLSelectElement::SetSuggestedOption(HTMLOptionElement* option) {
     return;
   suggested_option_ = option;
 
-  if (GetLayoutObject()) {
-    UpdateFromElement();
+  if (LayoutObject* layout_object = GetLayoutObject()) {
+    layout_object->UpdateFromElement();
     ScrollToOption(option);
   }
   if (PopupIsVisible())
@@ -1078,7 +1078,8 @@ void HTMLSelectElement::SelectOption(HTMLOptionElement* element,
   }
 
   // For the menu list case, this is what makes the selected element appear.
-  UpdateFromElement();
+  if (LayoutObject* layout_object = GetLayoutObject())
+    layout_object->UpdateFromElement();
   // PopupMenu::UpdateFromElement() posts an O(N) task.
   if (PopupIsVisible() && should_update_popup)
     popup_->UpdateFromElement(PopupMenu::kBySelectionChange);
@@ -1095,9 +1096,8 @@ void HTMLSelectElement::SelectOption(HTMLOptionElement* element,
       // Need to check UsesMenuList() again because event handlers might
       // change the status.
       if (UsesMenuList()) {
-        // DidUpdateMenuListActiveOption() is O(N) because of
-        // HTMLOptionElement::index().
-        DidUpdateMenuListActiveOption(element);
+        // DidSelectOption() is O(N) because of HTMLOptionElement::index().
+        ToLayoutMenuList(layout_object)->DidSelectOption(element);
       }
     }
   }
@@ -1508,27 +1508,6 @@ void HTMLSelectElement::UpdateSelectedState(HTMLOptionElement* clicked_option,
 
   SetActiveSelectionEnd(clicked_option);
   UpdateListBoxSelection(!multi_select);
-}
-
-void HTMLSelectElement::DidUpdateMenuListActiveOption(
-    HTMLOptionElement* option) {
-  if (!GetDocument().ExistingAXObjectCache())
-    return;
-
-  int option_index = option ? option->index() : -1;
-  if (ax_menulist_last_active_index_ == option_index)
-    return;
-  ax_menulist_last_active_index_ = option_index;
-
-  // We skip sending accessiblity notifications for the very first option,
-  // otherwise we get extra focus and select events that are undesired.
-  if (!has_updated_menulist_active_option_) {
-    has_updated_menulist_active_option_ = true;
-    return;
-  }
-
-  GetDocument().ExistingAXObjectCache()->HandleUpdateActiveMenuOption(
-      ToLayoutMenuList(GetLayoutObject()), option_index);
 }
 
 HTMLOptionElement* HTMLSelectElement::EventTargetOption(const Event& event) {
@@ -2023,7 +2002,8 @@ void HTMLSelectElement::PopupDidHide() {
 
 void HTMLSelectElement::SetIndexToSelectOnCancel(int list_index) {
   index_to_select_on_cancel_ = list_index;
-  UpdateFromElement();
+  if (GetLayoutObject())
+    GetLayoutObject()->UpdateFromElement();
 }
 
 HTMLOptionElement* HTMLSelectElement::OptionToBeShown() const {
@@ -2223,20 +2203,6 @@ void HTMLSelectElement::ChangeRendering() {
   DetachLayoutTree();
   SetNeedsStyleRecalc(kLocalStyleChange, StyleChangeReasonForTracing::Create(
                                              style_change_reason::kControl));
-
-  if (UsesMenuList()) {
-    ax_menulist_last_active_index_ = -1;
-    has_updated_menulist_active_option_ = false;
-  }
-}
-
-void HTMLSelectElement::UpdateFromElement() {
-  auto* layout_object = GetLayoutObject();
-  if (!layout_object)
-    return;
-  layout_object->UpdateFromElement();
-  if (UsesMenuList())
-    DidUpdateMenuListActiveOption(OptionToBeShown());
 }
 
 }  // namespace blink

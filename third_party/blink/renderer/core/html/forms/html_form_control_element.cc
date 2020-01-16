@@ -205,15 +205,13 @@ const AtomicString& HTMLFormControlElement::autocapitalize() const {
 void HTMLFormControlElement::AttachLayoutTree(AttachContext& context) {
   HTMLElement::AttachLayoutTree(context);
 
-  // The call to UpdateFromElement() needs to go after the call through
-  // to the base class's attachLayoutTree() because that can sometimes do a
-  // close on the LayoutObject.
-  UpdateFromElement();
-}
+  if (!GetLayoutObject())
+    return;
 
-void HTMLFormControlElement::UpdateFromElement() {
-  if (auto* layout_object = GetLayoutObject())
-    layout_object->UpdateFromElement();
+  // The call to updateFromElement() needs to go after the call through
+  // to the base class's attachLayoutTree() because that can sometimes do a
+  // close on the layoutObject.
+  GetLayoutObject()->UpdateFromElement();
 }
 
 void HTMLFormControlElement::DidMoveToNewDocument(Document& old_document) {
