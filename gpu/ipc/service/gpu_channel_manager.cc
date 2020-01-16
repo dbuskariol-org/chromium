@@ -527,6 +527,9 @@ scoped_refptr<SharedContextState> GpuChannelManager::GetSharedContextState(
       if (!shared_context_state_->InitializeGL(gpu_preferences_,
                                                feature_info.get())) {
         shared_context_state_ = nullptr;
+        LOG(ERROR) << "ContextResult::kFatalFailure: Failed to Initialize GL "
+                      "for SharedContextState";
+        *result = ContextResult::kFatalFailure;
         return nullptr;
       }
     }
