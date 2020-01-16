@@ -184,6 +184,8 @@ struct PerUserTopicSubscriptionManager::SubscriptionEntry {
 
   std::unique_ptr<PerUserTopicSubscriptionRequest> request;
 
+  bool has_retried_on_auth_error = false;
+
   DISALLOW_COPY_AND_ASSIGN(SubscriptionEntry);
 };
 
@@ -423,39 +425,50 @@ void PerUserTopicSubscriptionManager::SubscriptionFinishedForTopic(
     PerUserTopicSubscriptionRequest::RequestType type) {
   if (code.IsSuccess()) {
     ActOnSuccessfulSubscription(topic, private_topic_name, type);
-  } else {
-    auto it = pending_subscriptions_.find(topic);
-    if (code.IsAuthFailure()) {
-      // Invalidate previous token, otherwise the identity provider will return
-      // the same token again.
-      // TODO(crbug.com/1020117): Don't invalidate multiple access tokens in a
-      // row - just retry once, then give up. (Or at least use backoff!)
-      if (!access_token_.empty()) {
-        identity_provider_->InvalidateAccessToken({kFCMOAuthScope},
-                                                  access_token_);
-        access_token_.clear();
-      }
-      // Re-request access token and try subscription requests again.
-      RequestAccessToken();
-    } else {
-      // If one of the subscription requests failed, emit SUBSCRIPTION_FAILURE.
-      if (type == PerUserTopicSubscriptionRequest::SUBSCRIBE &&
-          base::FeatureList::IsEnabled(
-              invalidation::switches::kFCMInvalidationsConservativeEnabling)) {
-        NotifySubscriptionChannelStateChange(
-            SubscriptionChannelState::SUBSCRIPTION_FAILURE);
-      }
-      if (!code.ShouldRetry()) {
-        pending_subscriptions_.erase(it);
-        return;
-      }
-      // TODO(crbug.com/1020117): This should probably go through
-      // RequestAccessToken() to make sure we have a fresh one. (The identity
-      // code will only actually request a new one from the network if the
-      // existing one has expired.)
-      ScheduleRequestForRepetition(topic);
-    }
+    return;
   }
+
+  auto it = pending_subscriptions_.find(topic);
+  // If this is the first auth error we've encountered, then most likely the
+  // access token has just expired. Get a new one and retry immediately.
+  if (code.IsAuthFailure() && !it->second->has_retried_on_auth_error) {
+    it->second->has_retried_on_auth_error = true;
+    // Invalidate previous token, otherwise the identity provider will return
+    // the same token again.
+    if (!access_token_.empty()) {
+      // TODO(crbug.com/1020117): |access_token_| might already be different
+      // from the one we used for this request.
+      identity_provider_->InvalidateAccessToken({kFCMOAuthScope},
+                                                access_token_);
+      access_token_.clear();
+    }
+    // Re-request access token and try subscription requests again.
+    RequestAccessToken();
+    return;
+  }
+
+  // If one of the subscription requests failed (and we need to either observe
+  // backoff before retrying, or won't retry at all), emit SUBSCRIPTION_FAILURE.
+  if (type == PerUserTopicSubscriptionRequest::SUBSCRIBE &&
+      base::FeatureList::IsEnabled(
+          invalidation::switches::kFCMInvalidationsConservativeEnabling)) {
+    NotifySubscriptionChannelStateChange(
+        SubscriptionChannelState::SUBSCRIPTION_FAILURE);
+  }
+  if (!code.ShouldRetry()) {
+    // Note: This is a pretty bad (and "silent") failure case. The subscription
+    // will generally not be retried until the next Chrome restart (or user
+    // sign-out + re-sign-in).
+    DVLOG(1) << "Got a persistent error while trying to subscribe to topic "
+             << topic << ", giving up.";
+    pending_subscriptions_.erase(it);
+    return;
+  }
+  // TODO(crbug.com/1020117): This should probably go through
+  // RequestAccessToken() to make sure a fresh token is available for the
+  // request. (The identity code will only actually request a new one from the
+  // network if the existing one has expired.)
+  ScheduleRequestForRepetition(topic);
 }
 
 TopicSet PerUserTopicSubscriptionManager::GetSubscribedTopicsForTest() const {
