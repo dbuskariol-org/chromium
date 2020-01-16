@@ -2408,6 +2408,8 @@ source_set("chromeos") {
       "//chrome/services/cups_proxy/public/mojom",
     ]
     sources += [
+      "extensions/printing/print_job_controller.cc",
+      "extensions/printing/print_job_controller.h",
       "extensions/printing/printing_api.cc",
       "extensions/printing/printing_api.h",
       "extensions/printing/printing_api_handler.cc",
