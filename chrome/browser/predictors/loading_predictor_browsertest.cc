@@ -19,7 +19,6 @@
 #include "base/task/post_task.h"
 #include "base/test/scoped_feature_list.h"
 #include "chrome/browser/browser_features.h"
-#include "chrome/browser/navigation_predictor/navigation_predictor_preconnect_client.h"
 #include "chrome/browser/predictors/loading_predictor.h"
 #include "chrome/browser/predictors/loading_predictor_factory.h"
 #include "chrome/browser/predictors/loading_test_util.h"
@@ -931,8 +930,7 @@ class LoadingPredictorNetworkIsolationKeyBrowserTest
       case NetworkIsolationKeyMode::kNone:
         scoped_feature_list2_.InitWithFeatures(
             // enabled_features
-            {features::kLoadingPreconnectToRedirectTarget,
-             features::kNavigationPredictorPreconnectHoldback},
+            {features::kLoadingPreconnectToRedirectTarget},
             // disabled_features
             {net::features::kPartitionConnectionsByNetworkIsolationKey,
              net::features::kSplitCacheByNetworkIsolationKey,
@@ -947,8 +945,7 @@ class LoadingPredictorNetworkIsolationKeyBrowserTest
              // unfortunate if splitting the cache by the key as well broke
              // them.
              net::features::kSplitCacheByNetworkIsolationKey,
-             features::kLoadingPreconnectToRedirectTarget,
-             features::kNavigationPredictorPreconnectHoldback},
+             features::kLoadingPreconnectToRedirectTarget},
             // disabled_features
             {net::features::kAppendFrameOriginToNetworkIsolationKey});
         break;
@@ -958,8 +955,7 @@ class LoadingPredictorNetworkIsolationKeyBrowserTest
             {net::features::kPartitionConnectionsByNetworkIsolationKey,
              net::features::kSplitCacheByNetworkIsolationKey,
              net::features::kAppendFrameOriginToNetworkIsolationKey,
-             features::kLoadingPreconnectToRedirectTarget,
-             features::kNavigationPredictorPreconnectHoldback},
+             features::kLoadingPreconnectToRedirectTarget},
             // disabled_features
             {});
         break;
