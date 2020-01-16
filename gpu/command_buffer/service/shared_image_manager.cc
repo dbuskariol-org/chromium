@@ -20,6 +20,10 @@
 #include "gpu/command_buffer/service/shared_image_representation.h"
 #include "ui/gl/trace_util.h"
 
+#if defined(OS_ANDROID)
+#include "gpu/command_buffer/service/shared_image_batch_access_manager.h"
+#endif
+
 #if DCHECK_IS_ON()
 #define CALLED_ON_VALID_THREAD()                      \
   do {                                                \
@@ -78,6 +82,9 @@ SharedImageManager::SharedImageManager(bool thread_safe,
   DCHECK(!display_context_on_another_thread || thread_safe);
   if (thread_safe)
     lock_.emplace();
+#if defined(OS_ANDROID)
+  batch_access_manager_ = std::make_unique<SharedImageBatchAccessManager>();
+#endif
   CALLED_ON_VALID_THREAD();
 }
 
@@ -335,6 +342,22 @@ scoped_refptr<gfx::NativePixmap> SharedImageManager::GetNativePixmap(
   if (found == images_.end())
     return nullptr;
   return (*found)->GetNativePixmap();
+}
+
+bool SharedImageManager::BeginBatchReadAccess() {
+#if defined(OS_ANDROID)
+  return batch_access_manager_->BeginBatchReadAccess();
+#else
+  return true;
+#endif
+}
+
+bool SharedImageManager::EndBatchReadAccess() {
+#if defined(OS_ANDROID)
+  return batch_access_manager_->EndBatchReadAccess();
+#else
+  return true;
+#endif
 }
 
 }  // namespace gpu

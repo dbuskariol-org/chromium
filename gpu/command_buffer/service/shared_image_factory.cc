@@ -85,7 +85,8 @@ SharedImageFactory::SharedImageFactory(
   bool use_gl = gl::GetGLImplementation() != gl::kGLImplementationNone;
   if (use_gl) {
     gl_backing_factory_ = std::make_unique<SharedImageBackingFactoryGLTexture>(
-        gpu_preferences, workarounds, gpu_feature_info, image_factory);
+        gpu_preferences, workarounds, gpu_feature_info, image_factory,
+        shared_image_manager->batch_access_manager());
   }
 
   // For X11

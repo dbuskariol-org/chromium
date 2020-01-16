@@ -405,6 +405,8 @@ target(link_target_type, "gles2_sources") {
       "shared_image_backing_egl_image.h",
       "shared_image_backing_factory_ahardwarebuffer.cc",
       "shared_image_backing_factory_ahardwarebuffer.h",
+      "shared_image_batch_access_manager.cc",
+      "shared_image_batch_access_manager.h",
       "shared_image_video.cc",
       "shared_image_video.h",
       "stream_texture_shared_image_interface.h",

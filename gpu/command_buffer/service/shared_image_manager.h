@@ -10,12 +10,14 @@
 #include "base/optional.h"
 #include "base/synchronization/lock.h"
 #include "base/threading/thread_checker.h"
+#include "build/build_config.h"
 #include "gpu/command_buffer/common/mailbox.h"
 #include "gpu/command_buffer/service/shared_image_backing.h"
 #include "gpu/gpu_gles2_export.h"
 
 namespace gpu {
 class SharedImageRepresentationFactoryRef;
+class SharedImageBatchAccessManager;
 
 class GPU_GLES2_EXPORT SharedImageManager {
  public:
@@ -85,6 +87,17 @@ class GPU_GLES2_EXPORT SharedImageManager {
   // method is to facilitate pageflip testing on the viz thread.
   scoped_refptr<gfx::NativePixmap> GetNativePixmap(const gpu::Mailbox& mailbox);
 
+  SharedImageBatchAccessManager* batch_access_manager() const {
+#if defined(OS_ANDROID)
+    return batch_access_manager_.get();
+#else
+    return nullptr;
+#endif
+  }
+
+  bool BeginBatchReadAccess();
+  bool EndBatchReadAccess();
+
  private:
   class AutoLock;
   // The lock for protecting |images_|.
@@ -93,6 +106,10 @@ class GPU_GLES2_EXPORT SharedImageManager {
   base::flat_set<std::unique_ptr<SharedImageBacking>> images_ GUARDED_BY(lock_);
 
   const bool display_context_on_another_thread_;
+
+#if defined(OS_ANDROID)
+  std::unique_ptr<SharedImageBatchAccessManager> batch_access_manager_;
+#endif
 
   THREAD_CHECKER(thread_checker_);
 
