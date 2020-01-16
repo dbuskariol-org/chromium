@@ -58,9 +58,8 @@ std::string AudioContentTypeToString(media::AudioContentType type) {
   }
 }
 
-int64_t SamplesToMicroseconds(int64_t samples, int sample_rate) {
-  return ::media::AudioTimestampHelper::FramesToTime(samples, sample_rate)
-      .InMicroseconds();
+int64_t SamplesToMicroseconds(double samples, int sample_rate) {
+  return std::round(samples * 1000000 / sample_rate);
 }
 
 int GetFillSize(const mixer_service::OutputStreamParams& params) {
@@ -606,8 +605,9 @@ int64_t MixerInputConnection::QueueData(scoped_refptr<net::IOBuffer> data) {
         std::max(0, mixer_read_size_ - fader_.buffered_frames());
   }
 
-  return mixer_rendering_delay_.timestamp_microseconds +
-         mixer_rendering_delay_.delay_microseconds +
+  int64_t mixer_timestamp = mixer_rendering_delay_.timestamp_microseconds +
+                            mixer_rendering_delay_.delay_microseconds;
+  return mixer_timestamp +
          SamplesToMicroseconds(extra_delay_frames, input_samples_per_second_);
 }
 
@@ -810,8 +810,8 @@ int MixerInputConnection::FillAudioPlaybackFrames(
     for (int c = 0; c < num_channels_; ++c) {
       channels[c] = buffer->channel(c) + write_offset;
     }
-    filled +=
-        fader_.FillFrames(num_frames, playback_absolute_timestamp, channels);
+    filled += audio_clock_simulator_.FillFrames(
+        num_frames, playback_absolute_timestamp, channels);
     skip_next_fill_for_rate_change_ = false;
 
     mixer_rendering_delay_ = rendering_delay;
