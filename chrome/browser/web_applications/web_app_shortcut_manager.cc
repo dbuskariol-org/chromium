@@ -8,6 +8,7 @@
 
 #include "base/bind.h"
 #include "base/callback.h"
+#include "base/files/file_path.h"
 #include "base/stl_util.h"
 #include "base/strings/utf_string_conversions.h"
 #include "chrome/browser/profiles/profile.h"
@@ -34,6 +35,19 @@ WebAppShortcutManager::WebAppShortcutManager(
       file_handler_manager_(file_handler_manager) {}
 
 WebAppShortcutManager::~WebAppShortcutManager() = default;
+
+void WebAppShortcutManager::OnWebAppWillBeUninstalled(const AppId& app_id) {
+  const WebApp* app = GetWebAppRegistrar().GetAppById(app_id);
+  DCHECK(app);
+
+  std::unique_ptr<ShortcutInfo> shortcut_info = BuildShortcutInfoForWebApp(app);
+  base::FilePath shortcut_data_dir =
+      internals::GetShortcutDataDir(*shortcut_info);
+
+  internals::PostShortcutIOTask(
+      base::BindOnce(&internals::DeletePlatformShortcuts, shortcut_data_dir),
+      std::move(shortcut_info));
+}
 
 void WebAppShortcutManager::GetShortcutInfoForApp(
     const AppId& app_id,
