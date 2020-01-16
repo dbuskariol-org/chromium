@@ -262,12 +262,12 @@ function MediaSinkExtraDataAdapter(value) {
   this.$data = null;
   this.$tag = undefined;
 
-  if (value == undefined) {
+  if (value === undefined) {
     return;
   }
 
   var keys = Object.keys(value);
-  if (keys.length == 0) {
+  if (keys.length === 0) {
     return;
   }
 
@@ -295,7 +295,7 @@ MediaSinkExtraDataAdapter.Tags = {
 
 Object.defineProperty(MediaSinkExtraDataAdapter.prototype, 'dial_media_sink', {
   get: function() {
-    if (this.$tag != MediaSinkExtraDataAdapter.Tags.dial_media_sink) {
+    if (this.$tag !== MediaSinkExtraDataAdapter.Tags.dial_media_sink) {
       throw new ReferenceError(
           'MediaSinkExtraDataAdapter.dial_media_sink is not currently set.');
     }
@@ -310,7 +310,7 @@ Object.defineProperty(MediaSinkExtraDataAdapter.prototype, 'dial_media_sink', {
 
 Object.defineProperty(MediaSinkExtraDataAdapter.prototype, 'cast_media_sink', {
   get: function() {
-    if (this.$tag != MediaSinkExtraDataAdapter.Tags.cast_media_sink) {
+    if (this.$tag !== MediaSinkExtraDataAdapter.Tags.cast_media_sink) {
       throw new ReferenceError(
           'MediaSinkExtraDataAdapter.cast_media_sink is not currently set.');
     }
@@ -324,7 +324,7 @@ Object.defineProperty(MediaSinkExtraDataAdapter.prototype, 'cast_media_sink', {
 });
 
 MediaSinkExtraDataAdapter.fromNewVersion = function(other) {
-  if (other.$tag == mediaRouter.mojom.MediaSinkExtraData.Tags.dialMediaSink) {
+  if (other.$tag === mediaRouter.mojom.MediaSinkExtraData.Tags.dialMediaSink) {
     return new MediaSinkExtraDataAdapter({
       'dial_media_sink':
           DialMediaSinkAdapter.fromNewVersion(other.dialMediaSink),
@@ -338,7 +338,7 @@ MediaSinkExtraDataAdapter.fromNewVersion = function(other) {
 };
 
 MediaSinkExtraDataAdapter.prototype.toNewVersion = function() {
-  if (this.$tag == MediaSinkExtraDataAdapter.Tags.dial_media_sink) {
+  if (this.$tag === MediaSinkExtraDataAdapter.Tags.dial_media_sink) {
     return new mediaRouter.mojom.MediaSinkExtraData({
       'dialMediaSink': this.dial_media_sink.toNewVersion(),
     });
@@ -550,7 +550,7 @@ function routeToMojo_(route) {
  * @return {!mediaRouter.mojom.RouteMessage} A Mojo RouteMessage object.
  */
 function messageToMojo_(message) {
-  if ("string" == typeof message.message) {
+  if ('string' === typeof message.message) {
     return new mediaRouter.mojom.RouteMessage({
       'type': mediaRouter.mojom.RouteMessage.Type.TEXT,
       'message': message.message,
