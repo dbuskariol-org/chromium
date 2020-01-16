@@ -6463,6 +6463,9 @@ be describing additional metrics about the same event.
     </summary>
   </metric>
   <metric name="InteractiveTiming.FirstInputDelay.SkipFilteringComparison">
+    <obsolete>
+      Removed in January 2020 as the experiment is launched.
+    </obsolete>
     <summary>
       For comparing FirstInputDelay metrics in the SkipTouchEventFilter
       experiment. Measures First Input Delay, the duration between the hardware
@@ -6536,6 +6539,9 @@ be describing additional metrics about the same event.
     </summary>
   </metric>
   <metric name="InteractiveTiming.FirstInputTimestamp.SkipFilteringComparison">
+    <obsolete>
+      Removed in Jaunary 2020 as the experiment is launched.
+    </obsolete>
     <summary>
       The duration between navigation start and the hardware timestamp of the
       first meaningful input per navigation. See https://goo.gl/tr1oTZ for a

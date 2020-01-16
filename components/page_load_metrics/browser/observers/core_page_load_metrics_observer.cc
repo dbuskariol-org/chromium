@@ -97,17 +97,9 @@ const char kHistogramLargestContentfulPaintMainFrameContentType[] =
     "PageLoad.Internal.PaintTiming.LargestContentfulPaint.MainFrame."
     "ContentType";
 const char kHistogramFirstInputDelay[] =
-    "PageLoad.InteractiveTiming.FirstInputDelay3";
-const char kHistogramFirstInputTimestamp[] =
-    "PageLoad.InteractiveTiming.FirstInputTimestamp3";
-const char kHistogramFirstInputDelay4[] =
     "PageLoad.InteractiveTiming.FirstInputDelay4";
-const char kHistogramFirstInputTimestamp4[] =
+const char kHistogramFirstInputTimestamp[] =
     "PageLoad.InteractiveTiming.FirstInputTimestamp4";
-const char kHistogramFirstInputDelaySkipFilteringComparison[] =
-    "PageLoad.InteractiveTiming.FirstInputDelay.SkipFilteringComparison";
-const char kHistogramFirstInputTimestampSkipFilteringComparison[] =
-    "PageLoad.InteractiveTiming.FirstInputTimestamp.SkipFilteringComparison";
 const char kHistogramLongestInputDelay[] =
     "PageLoad.InteractiveTiming.LongestInputDelay4";
 const char kHistogramLongestInputTimestamp[] =
@@ -525,45 +517,13 @@ void CorePageLoadMetricsObserver::OnFirstInputInPage(
           timing.interactive_timing->first_input_timestamp, GetDelegate())) {
     return;
   }
-
-  // Input delay will often be ~0, and will only be > 10 seconds very
-  // rarely. Capture the range from 1ms to 60s.
-  // While the SkipTouchEventFilter experiment is running, always record
-  // first input metrics with the name "SkipFilteringComparison" so that
-  // we can compare with it on/off.
   UMA_HISTOGRAM_CUSTOM_TIMES(
-      internal::kHistogramFirstInputDelaySkipFilteringComparison,
+      internal::kHistogramFirstInputDelay,
       timing.interactive_timing->first_input_delay.value(),
       base::TimeDelta::FromMilliseconds(1), base::TimeDelta::FromSeconds(60),
       50);
-  PAGE_LOAD_HISTOGRAM(
-      internal::kHistogramFirstInputTimestampSkipFilteringComparison,
-      timing.interactive_timing->first_input_timestamp.value());
-  if (base::FeatureList::IsEnabled(features::kSkipTouchEventFilter)) {
-    // This experiment will change the FID and first input metric by
-    // changing the timestamp on pointerdown events on mobile pages with no
-    // pointer event handlers. If it is ramped up to 100% to launch, we need
-    // to update the metric name (v3->v4).
-    UMA_HISTOGRAM_CUSTOM_TIMES(
-        internal::kHistogramFirstInputDelay4,
-        timing.interactive_timing->first_input_delay.value(),
-        base::TimeDelta::FromMilliseconds(1), base::TimeDelta::FromSeconds(60),
-        50);
-    PAGE_LOAD_HISTOGRAM(
-        internal::kHistogramFirstInputTimestamp4,
-        timing.interactive_timing->first_input_timestamp.value());
-  } else {
-    // If the SkipTouchEventFilter experiment does not launch, we want to
-    // continue reporting first input events under the current name.
-    UMA_HISTOGRAM_CUSTOM_TIMES(
-        internal::kHistogramFirstInputDelay,
-        timing.interactive_timing->first_input_delay.value(),
-        base::TimeDelta::FromMilliseconds(1), base::TimeDelta::FromSeconds(60),
-        50);
-    PAGE_LOAD_HISTOGRAM(
-        internal::kHistogramFirstInputTimestamp,
-        timing.interactive_timing->first_input_timestamp.value());
-  }
+  PAGE_LOAD_HISTOGRAM(internal::kHistogramFirstInputTimestamp,
+                      timing.interactive_timing->first_input_timestamp.value());
 }
 
 void CorePageLoadMetricsObserver::OnParseStart(

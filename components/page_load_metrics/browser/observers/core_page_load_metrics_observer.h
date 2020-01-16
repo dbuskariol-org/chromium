@@ -19,8 +19,6 @@ namespace internal {
 extern const char kHistogramFirstLayout[];
 extern const char kHistogramFirstInputDelay[];
 extern const char kHistogramFirstInputTimestamp[];
-extern const char kHistogramFirstInputDelaySkipFilteringComparison[];
-extern const char kHistogramFirstInputTimestampSkipFilteringComparison[];
 extern const char kHistogramFirstInputDelay4[];
 extern const char kHistogramFirstInputTimestamp4[];
 extern const char kHistogramLongestInputDelay[];
