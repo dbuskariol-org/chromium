@@ -62,7 +62,7 @@ AccessibilityTest.define('SettingsA11yPasswords', {
           'object or string', 'Test', settings.routes.PASSWORDS.path);
 
       PasswordManagerImpl.instance_ = new TestPasswordManagerProxy();
-      this.passwordManager = PasswordManagerImpl.instance_;
+      this.passwordManager = PasswordManagerImpl.getInstance();
 
       const settingsUi = document.createElement('settings-ui');
 

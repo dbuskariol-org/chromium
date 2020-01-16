@@ -126,11 +126,11 @@ cr.define('settings_autofill_page', function() {
 
       // Override the AutofillManagerImpl for testing.
       autofillManager = new TestAutofillManager();
-      AutofillManagerImpl.instance_ = autofillManager;
+      settings.AutofillManagerImpl.instance_ = autofillManager;
 
       // Override the PaymentsManagerImpl for testing.
       paymentsManager = new TestPaymentsManager();
-      PaymentsManagerImpl.instance_ = paymentsManager;
+      settings.PaymentsManagerImpl.instance_ = paymentsManager;
     });
 
     test('baseLoadAndRemove', function() {

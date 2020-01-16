@@ -17,7 +17,7 @@ Polymer({
   properties: {
     /**
      * A saved credit card.
-     * @type {!PaymentsManager.CreditCardEntry}
+     * @type {!settings.PaymentsManager.CreditCardEntry}
      */
     creditCard: Object,
   },
