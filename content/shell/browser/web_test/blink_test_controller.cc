@@ -578,10 +578,9 @@ void BlinkTestController::OpenURL(const GURL& url) {
 }
 
 void BlinkTestController::OnTestFinishedInSecondaryRenderer() {
-  RenderViewHost* main_render_view_host =
-      main_window_->web_contents()->GetRenderViewHost();
-  main_render_view_host->Send(new BlinkTestMsg_TestFinishedInSecondaryRenderer(
-      main_render_view_host->GetRoutingID()));
+  GetWebTestControlRemote(
+      main_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
+      ->TestFinishedInSecondaryRenderer();
 }
 
 void BlinkTestController::OnInitiateCaptureDump(bool capture_navigation_history,
@@ -1041,14 +1040,15 @@ void BlinkTestController::OnTestFinished() {
 void BlinkTestController::OnCleanupFinished() {
   if (main_window_) {
     main_window_->web_contents()->Stop();
-    RenderViewHost* rvh = main_window_->web_contents()->GetRenderViewHost();
-    rvh->Send(new BlinkTestMsg_Reset(rvh->GetRoutingID()));
+    GetWebTestControlRemote(
+        main_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
+        ->Reset();
   }
   if (secondary_window_) {
     secondary_window_->web_contents()->Stop();
-    RenderViewHost* rvh =
-        secondary_window_->web_contents()->GetRenderViewHost();
-    rvh->Send(new BlinkTestMsg_Reset(rvh->GetRoutingID()));
+    GetWebTestControlRemote(
+        secondary_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
+        ->Reset();
   }
 }
 
@@ -1223,10 +1223,9 @@ void BlinkTestController::OnDumpFrameLayoutResponse(int frame_tree_node_id,
   }
 
   // Continue finishing the test.
-  RenderViewHost* render_view_host =
-      main_window_->web_contents()->GetRenderViewHost();
-  render_view_host->Send(new BlinkTestMsg_LayoutDumpCompleted(
-      render_view_host->GetRoutingID(), stitched_layout_dump));
+  GetWebTestControlRemote(
+      main_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
+      ->LayoutDumpCompleted(stitched_layout_dump);
 }
 
 void BlinkTestController::OnPrintMessage(const std::string& message) {
@@ -1404,9 +1403,10 @@ void BlinkTestController::OnGetBluetoothManualChooserEvents() {
         "getBluetoothManualChooserEvents.");
     return;
   }
-  RenderViewHost* rvh = main_window_->web_contents()->GetRenderViewHost();
-  rvh->Send(new BlinkTestMsg_ReplyBluetoothManualChooserEvents(
-      rvh->GetRoutingID(), bluetooth_chooser_factory_->GetAndResetEvents()));
+  GetWebTestControlRemote(
+      main_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
+      ->ReplyBluetoothManualChooserEvents(
+          bluetooth_chooser_factory_->GetAndResetEvents());
 }
 
 void BlinkTestController::OnSendBluetoothManualChooserEvent(

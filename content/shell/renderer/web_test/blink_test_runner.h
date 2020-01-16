@@ -51,7 +51,6 @@ class BlinkTestRunner : public RenderViewObserver,
   ~BlinkTestRunner() override;
 
   // RenderViewObserver implementation.
-  bool OnMessageReceived(const IPC::Message& message) override;
   void DidClearWindowObject(blink::WebLocalFrame* frame) override;
 
   // WebTestDelegate implementation.
@@ -154,14 +153,13 @@ class BlinkTestRunner : public RenderViewObserver,
   void OnSetupSecondaryRenderer();
   void CaptureDump(mojom::WebTestControl::CaptureDumpCallback callback);
   void DidCommitNavigationInMainFrame();
-
- private:
-  // Message handlers.
   void OnReset();
   void OnTestFinishedInSecondaryRenderer();
+  void OnLayoutDumpCompleted(std::string completed_layout_dump);
   void OnReplyBluetoothManualChooserEvents(
       const std::vector<std::string>& events);
 
+ private:
   // RenderViewObserver implementation.
   void OnDestruct() override;
 
@@ -170,7 +168,6 @@ class BlinkTestRunner : public RenderViewObserver,
 
   // After finishing the test, retrieves the audio, text, and pixel dumps from
   // the TestRunner library and sends them to the browser process.
-  void OnLayoutDumpCompleted(std::string completed_layout_dump);
   void OnPixelsDumpCompleted(const SkBitmap& snapshot);
   void CaptureDumpComplete();
   void CaptureLocalAudioDump();

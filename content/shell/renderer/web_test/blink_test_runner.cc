@@ -683,21 +683,6 @@ void BlinkTestRunner::DidClearWindowObject(WebLocalFrame* frame) {
   WebTestingSupport::InjectInternalsObject(frame);
 }
 
-bool BlinkTestRunner::OnMessageReceived(const IPC::Message& message) {
-  bool handled = true;
-  IPC_BEGIN_MESSAGE_MAP(BlinkTestRunner, message)
-    IPC_MESSAGE_HANDLER(BlinkTestMsg_Reset, OnReset)
-    IPC_MESSAGE_HANDLER(BlinkTestMsg_TestFinishedInSecondaryRenderer,
-                        OnTestFinishedInSecondaryRenderer)
-    IPC_MESSAGE_HANDLER(BlinkTestMsg_ReplyBluetoothManualChooserEvents,
-                        OnReplyBluetoothManualChooserEvents)
-    IPC_MESSAGE_HANDLER(BlinkTestMsg_LayoutDumpCompleted, OnLayoutDumpCompleted)
-    IPC_MESSAGE_UNHANDLED(handled = false)
-  IPC_END_MESSAGE_MAP()
-
-  return handled;
-}
-
 // Public methods - -----------------------------------------------------------
 
 void BlinkTestRunner::Reset(bool for_new_test) {
