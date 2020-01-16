@@ -38,6 +38,16 @@
     autofill::AutofillSaveCardInfoBarDelegateMobile* saveCardInfoBarDelegate;
 // YES if the Infobar has been Accepted.
 @property(nonatomic, assign) BOOL infobarAccepted;
+
+// TODO(crbug.com/1014652): Move these to future Mediator since these properties
+// don't belong in the Coordinator. Cardholder Name to be saved by
+// |saveCardInfoBarDelegate|.
+@property(nonatomic, copy) NSString* cardholderName;
+// Card Expiration month to be saved by |saveCardInfoBarDelegate|.
+@property(nonatomic, copy) NSString* expirationMonth;
+// Card Expiration year to be saved by |saveCardInfoBarDelegate|.
+@property(nonatomic, copy) NSString* expirationYear;
+
 @end
 
 @implementation InfobarSaveCardCoordinator
@@ -67,6 +77,7 @@
         initWithDelegate:self
            presentsModal:self.hasBadge
                     type:InfobarType::kInfobarTypeSaveCard];
+
     [self.bannerViewController
         setButtonText:self.saveCardInfoBarDelegate->upload()
                           ? l10n_util::GetNSString(
@@ -82,6 +93,13 @@
                             self.saveCardInfoBarDelegate->card_label())];
     self.bannerViewController.iconImage =
         [UIImage imageNamed:@"infobar_save_card_icon"];
+
+    self.cardholderName = base::SysUTF16ToNSString(
+        self.saveCardInfoBarDelegate->cardholder_name());
+    self.expirationMonth = base::SysUTF16ToNSString(
+        self.saveCardInfoBarDelegate->expiration_date_month());
+    self.expirationYear = base::SysUTF16ToNSString(
+        self.saveCardInfoBarDelegate->expiration_date_year());
   }
 }
 
@@ -115,7 +133,13 @@
     return;
   }
   // Ignore the Accept() return value since it always returns YES.
-  self.saveCardInfoBarDelegate->Accept();
+  DCHECK(self.cardholderName);
+  DCHECK(self.expirationMonth);
+  DCHECK(self.expirationYear);
+  self.saveCardInfoBarDelegate->UpdateAndAccept(
+      base::SysNSStringToUTF16(self.cardholderName),
+      base::SysNSStringToUTF16(self.expirationMonth),
+      base::SysNSStringToUTF16(self.expirationYear));
   self.infobarAccepted = YES;
 }
 
@@ -164,12 +188,9 @@
       stringWithFormat:@"•••• %@",
                        base::SysUTF16ToNSString(self.saveCardInfoBarDelegate
                                                     ->card_last_four_digits())];
-  self.modalViewController.cardholderName =
-      base::SysUTF16ToNSString(self.saveCardInfoBarDelegate->cardholder_name());
-  self.modalViewController.expirationMonth = base::SysUTF16ToNSString(
-      self.saveCardInfoBarDelegate->expiration_date_month());
-  self.modalViewController.expirationYear = base::SysUTF16ToNSString(
-      self.saveCardInfoBarDelegate->expiration_date_year());
+  self.modalViewController.cardholderName = self.cardholderName;
+  self.modalViewController.expirationMonth = self.expirationMonth;
+  self.modalViewController.expirationYear = self.expirationYear;
   self.modalViewController.currentCardSaved = !self.infobarAccepted;
   self.modalViewController.legalMessages = [self legalMessagesForModal];
   if ((base::FeatureList::IsEnabled(
@@ -210,8 +231,9 @@
 - (void)saveCardWithCardholderName:(NSString*)cardholderName
                    expirationMonth:(NSString*)month
                     expirationYear:(NSString*)year {
-  // TODO(crbug.com/1014652): Once editing is supported send these parameters to
-  // the Delegate for saving.
+  self.cardholderName = cardholderName;
+  self.expirationMonth = month;
+  self.expirationYear = year;
   [self modalInfobarButtonWasAccepted:self];
 }
 
