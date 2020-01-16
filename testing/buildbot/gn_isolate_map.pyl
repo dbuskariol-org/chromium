@@ -842,17 +842,6 @@
     "label": "//google_apis:google_apis_unittests",
     "type": "console_test_launcher",
   },
-  "gpu_perftests": {
-    "args": [
-      "gpu_perftests",
-      "--non-telemetry=true",
-      "--adb-path",
-      "src/third_party/android_sdk/public/platform-tools/adb",
-    ],
-    "label": "//gpu:gpu_perftests",
-    "script": "//testing/scripts/run_performance_tests.py",
-    "type": "script",
-  },
   "gpu_unittests": {
     "label": "//gpu:gpu_unittests",
     "type": "windowed_test_launcher",
