@@ -614,6 +614,7 @@ const char* ColorSpaceTransferIdToString(gfx::ColorSpace::TransferID id) {
     MATCH_ENUM_CASE(TransferID, LINEAR_HDR)
     MATCH_ENUM_CASE(TransferID, CUSTOM)
     MATCH_ENUM_CASE(TransferID, CUSTOM_HDR)
+    MATCH_ENUM_CASE(TransferID, PIECEWISE_HDR)
   }
 }
 
@@ -693,6 +694,7 @@ uint8_t StringToColorSpaceTransferId(const std::string& token) {
   MATCH_ENUM_CASE(TransferID, LINEAR_HDR)
   MATCH_ENUM_CASE(TransferID, CUSTOM)
   MATCH_ENUM_CASE(TransferID, CUSTOM_HDR)
+  MATCH_ENUM_CASE(TransferID, PIECEWISE_HDR)
   return -1;
 }
 
