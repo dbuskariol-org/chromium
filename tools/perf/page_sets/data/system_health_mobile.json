@@ -402,6 +402,9 @@
         "load:tools:gmail": {
             "DEFAULT": "system_health_mobile_048.wprgo"
         },
+        "load:tools:gmail:2019": {
+            "DEFAULT": "system_health_mobile_b8a3bd8e6d.wprgo"
+        },
         "load:tools:maps": {
             "DEFAULT": "system_health_mobile_004.wprgo"
         },

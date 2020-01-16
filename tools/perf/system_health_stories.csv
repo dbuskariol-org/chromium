@@ -142,6 +142,7 @@ load:tools:drive:2019,,"desktop,mobile","2019,javascript_heavy"
 load:tools:dropbox,,"desktop,mobile",2016
 load:tools:dropbox:2019,,mobile,2019
 load:tools:gmail,,"desktop,mobile",2016
+load:tools:gmail:2019,,"desktop,mobile",2019
 load:tools:stackoverflow:2018,Load a typical question & answer page of stackoverflow.com,"desktop,mobile","2018,health_check"
 load:tools:weather,,"desktop,mobile","2016,javascript_heavy"
 load:tools:weather:2019,,"desktop,mobile","2019,javascript_heavy"
