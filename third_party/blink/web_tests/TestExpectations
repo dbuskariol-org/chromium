@@ -2838,6 +2838,9 @@ crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-004.html [ Fail
 crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-005.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
+crbug.com/626703 [ Linux ] external/wpt/html/cross-origin-opener-policy/coep-blob-popup.https.html [ Timeout ]
+crbug.com/626703 [ Mac ] external/wpt/html/cross-origin-opener-policy/coep-blob-popup.https.html [ Timeout ]
+crbug.com/626703 [ Win ] external/wpt/html/cross-origin-opener-policy/coep-blob-popup.https.html [ Timeout ]
 crbug.com/626703 [ Win7 ] external/wpt/pointerevents/pointerevent_touch-action-inherit_child-auto-child-none_touch.html [ Timeout ]
 crbug.com/626703 [ Win7 ] external/wpt/content-security-policy/object-src/object-src-no-url-allowed.html [ Timeout ]
 crbug.com/626703 [ Win7 ] external/wpt/content-security-policy/plugin-types/plugintypes-nourl-allowed.html [ Timeout ]
