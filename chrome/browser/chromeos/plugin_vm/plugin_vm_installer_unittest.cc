@@ -610,12 +610,36 @@ TEST_F(PluginVmInstallerDriveTest, CancelledDriveDownloadTest) {
 
 TEST_F(PluginVmInstallerDriveTest, SuccessfulDriveDownloadTest) {
   SetPluginVmImagePref(kDriveUrl, kHash);
+  fake_dlcservice_client_->SetInstallError(dlcservice::kErrorNone);
 
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(*observer_, OnDownloadCompleted());
   EXPECT_CALL(*observer_,
               OnDownloadProgressUpdated(_, std::strlen(kContent), _))
       .Times(AtLeast(1));
+
+  StartAndRunToCompletion();
+}
+
+// TODO(b/145814572): Modify test to block once PluginVM DLC is stable and
+// rootfs PluginVM is no longer resident.
+TEST_F(PluginVmInstallerDriveTest,
+       InstallingPluingVmDlcFailureAllowsPassthrough) {
+  SetPluginVmImagePref(kDriveUrl, kHash);
+  fake_dlcservice_client_->SetInstallError(dlcservice::kErrorInternal);
+
+  EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
+  EXPECT_CALL(*observer_, OnDownloadCompleted());
+
+  StartAndRunToCompletion();
+}
+
+TEST_F(PluginVmInstallerDriveTest, InstallingPluginVmDlcWhenUnsupported) {
+  SetPluginVmImagePref(kDriveUrl, kHash);
+  fake_dlcservice_client_->SetInstallError(dlcservice::kErrorInvalidDlc);
+
+  EXPECT_CALL(*observer_, OnDlcDownloadCompleted()).Times(0);
+  EXPECT_CALL(*observer_, OnDownloadFailed(_)).Times(1);
 
   StartAndRunToCompletion();
 }
