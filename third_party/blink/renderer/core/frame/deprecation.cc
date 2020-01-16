@@ -480,13 +480,13 @@ DeprecationInfo GetDeprecationInfo(WebFeature feature) {
                   MilestoneString(kM72).Ascii().c_str())};
 
     case WebFeature::kNoSysexWebMIDIWithoutPermission:
-      return {"NoSysexWebMIDIWithoutPermission", kM77,
+      return {"NoSysexWebMIDIWithoutPermission", kM82,
               String::Format(
                   "Web MIDI will ask a permission to use even if the sysex is "
-                  "not specified in the MIDIOptions since %s. See "
+                  "not specified in the MIDIOptions since around %s. See "
                   "https://www.chromestatus.com/feature/5138066234671104 for "
                   "more details.",
-                  MilestoneString(kM77).Ascii().c_str())};
+                  MilestoneString(kM82).Ascii().c_str())};
 
     case WebFeature::kCustomCursorIntersectsViewport:
       return {
