@@ -66,7 +66,7 @@ class QuickViewController {
     this.entries_ = [];
 
     /**
-     * The current selection when in check-select mode.
+     * The current selection index of this.entries_.
      * @private {number}
      */
     this.currentSelection_ = 0;
@@ -197,7 +197,10 @@ class QuickViewController {
   }
 
   /**
-   * Changes the currently selected in single-select mode.
+   * Changes the currently selected entry when in single-select mode.  Sets
+   * the models |selectedIndex| to indirectly trigger onFileSelectionChanged_
+   * and populate |this.entries_|.
+   *
    * @param {boolean} down True if user pressed down arrow, false if up.
    * @private
    */
@@ -220,8 +223,8 @@ class QuickViewController {
   }
 
   /**
-   * Changes the currently selected in multi-select mode (aka what the file
-   * list calls "check-select" mode).
+   * Changes the currently selected entry when in multi-select mode (file
+   * list calls this "check-select" mode).
    *
    * @param {boolean} down True if user pressed down arrow, false if up.
    * @private
@@ -252,7 +255,7 @@ class QuickViewController {
    * @private
    */
   display_(wayToOpen) {
-    // On opening, always initalise the single-select mode selection.
+    // On opening Quick View, always reset the current selection index.
     this.currentSelection_ = 0;
 
     this.updateQuickView_().then(() => {
