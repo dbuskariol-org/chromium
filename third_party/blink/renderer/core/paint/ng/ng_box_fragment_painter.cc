@@ -167,32 +167,15 @@ bool FragmentRequiresLegacyFallback(const NGPhysicalFragment& fragment) {
 // the paragraph level. Store the results in paragraph_backplates.
 Vector<PhysicalRect> BuildBackplate(NGInlineCursor* descendants,
                                     const PhysicalOffset& paint_offset) {
-  Vector<PhysicalRect> paragraph_backplates;
-  PhysicalRect current_backplate;
-  int consecutive_line_breaks = 0;
-
   // The number of consecutive forced breaks that split the backplate by
   // paragraph.
   static constexpr int kMaxConsecutiveLineBreaks = 2;
 
-  // Build up and paint backplates of all child inline text boxes. We are not
-  // able to simply use the linebox rect to compute the backplate because the
-  // backplate should only be painted for inline text and not for atomic
-  // inlines.
-  for (; *descendants; descendants->MoveToNext()) {
-    const NGPaintFragment* child = descendants->CurrentPaintFragment();
-    if (!child)  // TODO(kojii): Support NGFragmentItem
-      continue;
-    const NGPhysicalFragment& child_fragment = child->PhysicalFragment();
-    if (child_fragment.IsHiddenForPaint() || child_fragment.IsFloating())
-      continue;
-    if (auto* text_fragment =
-            DynamicTo<NGPhysicalTextFragment>(child_fragment)) {
-      if (text_fragment->IsLineBreak()) {
-        consecutive_line_breaks++;
-        continue;
-      }
+  struct Backplates {
+    STACK_ALLOCATED();
 
+   public:
+    void AddTextRect(const PhysicalRect& box_rect) {
       if (consecutive_line_breaks >= kMaxConsecutiveLineBreaks) {
         // This is a paragraph point.
         paragraph_backplates.push_back(current_backplate);
@@ -200,15 +183,59 @@ Vector<PhysicalRect> BuildBackplate(NGInlineCursor* descendants,
       }
       consecutive_line_breaks = 0;
 
-      PhysicalRect box_rect(child->InlineOffsetToContainerBox() + paint_offset,
-                            child->Size());
       current_backplate.Unite(box_rect);
     }
+
+    void AddLineBreak() { consecutive_line_breaks++; }
+
+    Vector<PhysicalRect> paragraph_backplates;
+    PhysicalRect current_backplate;
+    int consecutive_line_breaks = 0;
+  } backplates;
+
+  // Build up and paint backplates of all child inline text boxes. We are not
+  // able to simply use the linebox rect to compute the backplate because the
+  // backplate should only be painted for inline text and not for atomic
+  // inlines.
+  for (; *descendants; descendants->MoveToNext()) {
+    if (const NGPaintFragment* child = descendants->CurrentPaintFragment()) {
+      const NGPhysicalFragment& child_fragment = child->PhysicalFragment();
+      if (child_fragment.IsHiddenForPaint() || child_fragment.IsFloating())
+        continue;
+      if (auto* text_fragment =
+              DynamicTo<NGPhysicalTextFragment>(child_fragment)) {
+        if (text_fragment->IsLineBreak()) {
+          backplates.AddLineBreak();
+          continue;
+        }
+
+        PhysicalRect box_rect(
+            child->InlineOffsetToContainerBox() + paint_offset, child->Size());
+        backplates.AddTextRect(box_rect);
+      }
+      continue;
+    }
+    if (const NGFragmentItem* child_item = descendants->CurrentItem()) {
+      if (child_item->IsHiddenForPaint())
+        continue;
+      if (child_item->IsText()) {
+        if (child_item->IsLineBreak()) {
+          backplates.AddLineBreak();
+          continue;
+        }
+
+        PhysicalRect box_rect(child_item->Offset() + paint_offset,
+                              child_item->Size());
+        backplates.AddTextRect(box_rect);
+      }
+      continue;
+    }
+    NOTREACHED();
   }
 
-  if (!current_backplate.IsEmpty())
-    paragraph_backplates.push_back(current_backplate);
-  return paragraph_backplates;
+  if (!backplates.current_backplate.IsEmpty())
+    backplates.paragraph_backplates.push_back(backplates.current_backplate);
+  return backplates.paragraph_backplates;
 }
 
 }  // anonymous namespace
