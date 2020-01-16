@@ -1281,7 +1281,7 @@ suite('PrintServerTests', function() {
     mojoApi_.addNetworksForTest([wifi1]);
 
     PolymerTest.clearBody();
-    settings.navigateTo(settings.routes.CUPS_PRINTERS);
+    settings.Router.getInstance().navigateTo(settings.routes.CUPS_PRINTERS);
 
     page = document.createElement('settings-cups-printers');
     document.body.appendChild(page);
