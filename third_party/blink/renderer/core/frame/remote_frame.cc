@@ -304,9 +304,7 @@ void RemoteFrame::AddReplicatedContentSecurityPolicies(
         headers) {
   for (auto& header : headers) {
     GetSecurityContext()->GetContentSecurityPolicy()->AddPolicyFromHeaderValue(
-        header->header_value,
-        static_cast<ContentSecurityPolicyHeaderType>(header->type),
-        static_cast<ContentSecurityPolicyHeaderSource>(header->source));
+        header->header_value, header->type, header->source);
   }
 }
 

@@ -285,9 +285,7 @@ void WebRemoteFrameImpl::AddReplicatedContentSecurityPolicyHeader(
   GetFrame()
       ->GetSecurityContext()
       ->GetContentSecurityPolicy()
-      ->AddPolicyFromHeaderValue(
-          header_value, static_cast<ContentSecurityPolicyHeaderType>(type),
-          static_cast<ContentSecurityPolicyHeaderSource>(source));
+      ->AddPolicyFromHeaderValue(header_value, type, source);
 }
 
 void WebRemoteFrameImpl::ResetReplicatedContentSecurityPolicy() {

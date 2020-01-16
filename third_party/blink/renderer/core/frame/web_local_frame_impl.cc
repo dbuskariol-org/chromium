@@ -2206,8 +2206,7 @@ void WebLocalFrameImpl::ReportContentSecurityPolicyViolation(
   document->GetContentSecurityPolicy()->ReportViolation(
       violation.directive, directive_type, violation.console_message,
       violation.blocked_url, report_endpoints, violation.use_reporting_api,
-      violation.header,
-      static_cast<ContentSecurityPolicyHeaderType>(violation.disposition),
+      violation.header, violation.disposition,
       ContentSecurityPolicy::ViolationType::kURLViolation,
       std::move(source_location), context_frame,
       violation.after_redirect ? RedirectStatus::kFollowedRedirect
