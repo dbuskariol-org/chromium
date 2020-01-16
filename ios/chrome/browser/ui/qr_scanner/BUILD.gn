@@ -41,6 +41,7 @@ source_set("coordinator") {
   deps = [
     ":qr_scanner",
     "//base",
+    "//ios/chrome/browser/main:public",
     "//ios/chrome/browser/ui/commands",
     "//ios/chrome/browser/ui/coordinators:chrome_coordinators",
     "//ios/chrome/browser/ui/scanner",

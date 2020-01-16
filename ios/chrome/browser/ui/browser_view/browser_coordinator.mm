@@ -331,8 +331,9 @@
   self.printController = [[PrintController alloc] init];
 
   self.qrScannerCoordinator = [[QRScannerLegacyCoordinator alloc]
-      initWithBaseViewController:self.viewController];
-  self.qrScannerCoordinator.dispatcher = self.dispatcher;
+      initWithBaseViewController:self.viewController
+                         browser:self.browser];
+  [self.qrScannerCoordinator start];
 
   /* ReadingListCoordinator is created and started by a BrowserCommand */
 
