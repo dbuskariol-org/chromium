@@ -15,6 +15,8 @@ import static org.hamcrest.core.AllOf.allOf;
 
 import static org.chromium.chrome.R.id.password_generation_dialog;
 import static org.chromium.chrome.browser.keyboard_accessory.ManualFillingTestHelper.selectTabAtPosition;
+import static org.chromium.chrome.browser.keyboard_accessory.ManualFillingTestHelper.whenDisplayed;
+import static org.chromium.chrome.browser.keyboard_accessory.tab_layout_component.KeyboardAccessoryTabTestHelper.isKeyboardAccessoryTabLayout;
 
 import android.view.Window;
 import android.widget.TextView;
@@ -27,7 +29,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.chromium.base.test.util.CommandLineFlags;
-import org.chromium.base.test.util.DisabledTest;
 import org.chromium.base.test.util.IntegrationTest;
 import org.chromium.chrome.browser.ChromeSwitches;
 import org.chromium.chrome.browser.infobar.InfoBarContainer;
@@ -66,6 +67,7 @@ public class PasswordGenerationIntegrationTest {
     @Before
     public void setUp() throws InterruptedException {
         mSyncTestRule.setUpTestAccountAndSignIn();
+        ManualFillingTestHelper.disableServerPredictions();
         mHelper.loadTestPage(FORM_URL, false);
     }
 
@@ -94,7 +96,6 @@ public class PasswordGenerationIntegrationTest {
 
     @Test
     @IntegrationTest
-    @DisabledTest(message = "crbug.com/1010540")
     public void testManualGenerationCancel() throws InterruptedException, TimeoutException {
         waitForGenerationLabel();
         focusField(PASSWORD_NODE_ID_MANUAL);
@@ -109,7 +110,6 @@ public class PasswordGenerationIntegrationTest {
 
     @Test
     @IntegrationTest
-    @DisabledTest(message = "crbug.com/1010344")
     public void testAutomaticGenerationUsePassword() throws InterruptedException, TimeoutException {
         waitForGenerationLabel();
         focusField(PASSWORD_NODE_ID);
@@ -131,7 +131,6 @@ public class PasswordGenerationIntegrationTest {
 
     @Test
     @IntegrationTest
-    @DisabledTest(message = "crbug.com/1010540")
     public void testManualGenerationUsePassword() throws InterruptedException, TimeoutException {
         waitForGenerationLabel();
         focusField(PASSWORD_NODE_ID_MANUAL);
@@ -148,13 +147,14 @@ public class PasswordGenerationIntegrationTest {
     }
 
     public void pressManualGenerationSuggestion() {
-        onView(allOf(isDescendantOfA(withId(R.id.passwords_sheet)),
-                       withText(R.string.password_generation_accessory_button)))
+        whenDisplayed(allOf(isDescendantOfA(withId(R.id.passwords_sheet)),
+                              withText(R.string.password_generation_accessory_button)))
                 .perform(click());
     }
 
     public void toggleAccessorySheet() {
-        mHelper.waitForViewOnActivityRoot(withId(R.id.tabs)).perform(selectTabAtPosition(0));
+        mHelper.waitForViewOnActivityRoot(isKeyboardAccessoryTabLayout())
+                .perform(selectTabAtPosition(0));
     }
 
     public void focusField(String node) throws TimeoutException, InterruptedException {
