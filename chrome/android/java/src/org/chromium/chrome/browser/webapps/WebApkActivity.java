@@ -118,14 +118,6 @@ public class WebApkActivity extends WebappActivity {
     }
 
     @Override
-    protected void onUpdatedLastUsedTime(
-            WebappDataStorage storage, boolean previouslyLaunched, long previousUsageTimestamp) {
-        if (previouslyLaunched) {
-            WebApkUma.recordLaunchInterval(storage.getLastUsedTimeMs() - previousUsageTimestamp);
-        }
-    }
-
-    @Override
     public void onPauseWithNative() {
         WebApkInfo info = getWebApkInfo();
         long sessionDuration = SystemClock.elapsedRealtime() - mStartTime;

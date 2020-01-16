@@ -490,25 +490,12 @@ public class WebappActivity extends BaseCustomTabActivity<WebappActivityComponen
         // app is not directly launched from the home screen, as this interferes
         // with the heuristic.
         if (mWebappInfo.isLaunchedFromHomescreen()) {
-            boolean previouslyLaunched = storage.hasBeenLaunched();
-            long previousUsageTimestamp = storage.getLastUsedTimeMs();
-            storage.setHasBeenLaunched();
             // TODO(yusufo): WebappRegistry#unregisterOldWebapps uses this information to delete
             // WebappDataStorage objects for legacy webapps which haven't been used in a while.
             // That will need to be updated to not delete anything for a TWA which remains installed
             storage.updateLastUsedTime();
-            onUpdatedLastUsedTime(storage, previouslyLaunched, previousUsageTimestamp);
         }
     }
-
-    /**
-     * Called after updating the last used time in {@link WebappDataStorage}.
-     * @param previouslyLaunched Whether the webapp has been previously launched from the home
-     *     screen.
-     * @param previousUsageTimestamp The previous time that the webapp was used.
-     */
-    protected void onUpdatedLastUsedTime(
-            WebappDataStorage storage, boolean previouslyLaunched, long previousUsageTimestamp) {}
 
     protected CustomTabTabObserver createTabObserver() {
         return new CustomTabTabObserver() {
