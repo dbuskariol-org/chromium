@@ -33,6 +33,7 @@ import static org.chromium.chrome.browser.tasks.tab_management.MessageService.Me
 import static org.chromium.chrome.browser.tasks.tab_management.MessageService.MessageType.TAB_SUGGESTION;
 import static org.chromium.chrome.browser.tasks.tab_management.TabListModel.CardProperties.CARD_TYPE;
 import static org.chromium.chrome.browser.tasks.tab_management.TabListModel.CardProperties.ModelType.MESSAGE;
+import static org.chromium.chrome.browser.tasks.tab_management.TabListModel.CardProperties.ModelType.OTHERS;
 import static org.chromium.chrome.browser.tasks.tab_management.TabListModel.CardProperties.ModelType.TAB;
 
 import android.app.Activity;
@@ -1740,6 +1741,30 @@ public class TabListMediatorUnitTest {
         // First time is when mTab2 initially added to mModel; second time is when mTab2 added back
         // to mModel because of undo action.
         verify(mTab2, times(2)).addObserver(mTabObserverCaptor.getValue());
+    }
+
+    @Test
+    public void testUnchangeCheckIgnoreNonTabs() {
+        initAndAssertAllProperties();
+        List<Tab> tabs = new ArrayList<>();
+        for (int i = 0; i < mTabModel.getCount(); i++) {
+            tabs.add(mTabModel.getTabAt(i));
+        }
+
+        boolean showQuickly = mMediator.resetWithListOfTabs(tabs, false, false);
+        assertThat(showQuickly, equalTo(true));
+
+        // Create a PropertyModel that is not a tab and add it to the existing TabListModel.
+        PropertyModel propertyModel = new PropertyModel.Builder(NewTabTileViewProperties.ALL_KEYS)
+                                              .with(CARD_TYPE, OTHERS)
+                                              .build();
+        mMediator.addSpecialItemToModel(
+                mModel.size(), TabProperties.UiType.NEW_TAB_TILE, propertyModel);
+        assertThat(mModel.size(), equalTo(tabs.size() + 1));
+
+        // TabListModel unchange check should ignore the non-Tab item.
+        showQuickly = mMediator.resetWithListOfTabs(tabs, false, false);
+        assertThat(showQuickly, equalTo(true));
     }
 
     private void initAndAssertAllProperties() {

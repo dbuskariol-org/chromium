@@ -730,9 +730,12 @@ class TabListMediator {
 
                 int nextTabId = Tab.INVALID_TAB_ID;
                 if (mModel.size() > 1) {
-                    nextTabId = closingTabIndex == 0
-                            ? mModel.get(closingTabIndex + 1).model.get(TabProperties.TAB_ID)
-                            : mModel.get(closingTabIndex - 1).model.get(TabProperties.TAB_ID);
+                    PropertyModel nextCardModel = closingTabIndex == 0
+                            ? mModel.get(closingTabIndex + 1).model
+                            : mModel.get(closingTabIndex - 1).model;
+                    nextTabId = nextCardModel.get(CARD_TYPE) == TAB
+                            ? nextCardModel.get(TabProperties.TAB_ID)
+                            : Tab.INVALID_TAB_ID;
                 }
 
                 return TabModelUtils.getTabById(mTabModelSelector.getCurrentModel(), nextTabId);
@@ -852,23 +855,32 @@ class TabListMediator {
         }
 
         assert mVisible;
-        int count = 0;
+        int selectedTabCount = 0;
+        int tabsCount = 0;
         for (int i = 0; i < mModel.size(); i++) {
             if (mModel.get(i).model.get(CARD_TYPE) != TAB) continue;
 
-            if (mModel.get(i).model.get(TabProperties.IS_SELECTED)) count++;
+            if (mModel.get(i).model.get(TabProperties.IS_SELECTED)) selectedTabCount++;
             mModel.get(i).model.set(TabProperties.IS_SELECTED, false);
+            tabsCount += 1;
         }
-        assert (count == 1 || mModel.size() == 0)
+        assert (selectedTabCount == 1 || tabsCount == 0)
             : "There should be exactly one selected tab or no tabs at all when calling "
               + "TabListMediator.prepareOverview()";
     }
 
     private boolean areTabsUnchanged(@Nullable List<Tab> tabs) {
-        if (tabs == null) {
-            return mModel.size() == 0;
+        int tabsCount = 0;
+        for (int i = 0; i < mModel.size(); i++) {
+            if (mModel.get(i).model.get(CARD_TYPE) == TAB) {
+                tabsCount += 1;
+            }
         }
-        if (tabs.size() != mModel.size()) return false;
+        if (tabs == null) {
+            return tabsCount == 0;
+        }
+        if (tabs.size() != tabsCount) return false;
+
         for (int i = 0; i < tabs.size(); i++) {
             if (mModel.get(i).model.get(CARD_TYPE) == TAB
                     && mModel.get(i).model.get(TabProperties.TAB_ID) != tabs.get(i).getId()) {
@@ -1315,6 +1327,8 @@ class TabListMediator {
         int index = TabModel.INVALID_TAB_INDEX;
         if (uiType == UiType.MESSAGE) {
             index = mModel.lastIndexForMessageItemFromType(itemIdentifier);
+        } else if (uiType == UiType.NEW_TAB_TILE) {
+            index = mModel.getIndexForNewTabTile();
         }
 
         if (index == TabModel.INVALID_TAB_INDEX) return;
@@ -1327,6 +1341,8 @@ class TabListMediator {
         if (uiType == UiType.MESSAGE) {
             return mModel.get(index).type == uiType
                     && mModel.get(index).model.get(MESSAGE_TYPE) == itemIdentifier;
+        } else if (uiType == UiType.NEW_TAB_TILE) {
+            return mModel.get(index).type == uiType;
         }
 
         return false;
