@@ -395,7 +395,7 @@ def _VerifyImportDeps(args, __):
     source_filename, _ = os.path.splitext(rel_path.relative_path())
     output_file = source_filename + '.v'
     output_file_path = os.path.join(args.gen_dir, output_file)
-    WriteFile(b"", output_file_path)
+    WriteFile("", output_file_path)
 
   return 0
 
