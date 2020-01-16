@@ -724,5 +724,15 @@
     "bases": ["clipboard/async-clipboard",
               "external/wpt/clipboard-apis/clipboard-item.https.html"],
     "args": ["--enable-features=RawClipboard"]
+  },
+  {
+    "prefix": "legacy-client-hints",
+    "bases": ["external/wpt/client-hints", "wpt_internal/client-hints"],
+    "args": ["--enable-features=AllowClientHintsToThirdParty"]
+  },
+  {
+    "prefix": "legacy-client-hints-no-fp-delegation",
+    "bases": ["external/wpt/client-hints"],
+    "args": ["--enable-features=AllowClientHintsToThirdParty", "--disable-blink-features=FeaturePolicyForClientHints"]
   }
 ]
