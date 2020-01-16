@@ -6383,6 +6383,7 @@ crbug.com/1041451 virtual/gpu-rasterization-disable-yuv/images/yuv-decode-eligib
 
 # Disabled for landing devtools changes
 crbug.com/1030746 http/tests/devtools/sources/debugger-ui/sourcemap-src-not-loaded.js [ Pass Failure ]
+crbug.com/1030746 http/tests/devtools/network/load-resource-for-frontend.js [ Pass Failure ]
 
 # Disable for landing devtools changes
 crbug.com/1006759 http/tests/devtools/console/argument-hints.js [ Pass Failure ]
