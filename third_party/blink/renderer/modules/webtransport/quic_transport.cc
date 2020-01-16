@@ -177,6 +177,12 @@ void QuicTransport::OnHandshakeFailed() {
   Dispose();
 }
 
+void QuicTransport::OnDatagramReceived(base::span<const uint8_t> data) {
+  DVLOG(1) << "QuicTransport::OnDatagramReceived(size: " << data.size()
+           << ") this =" << this;
+  // TODO(ricea): Implement this.
+}
+
 void QuicTransport::OnIncomingStreamClosed(uint32_t stream_id,
                                            bool fin_received) {
   DVLOG(1) << "QuicTransport::OnIncomingStreamClosed(" << stream_id << ", "

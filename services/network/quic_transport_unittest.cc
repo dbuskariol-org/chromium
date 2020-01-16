@@ -115,6 +115,7 @@ class TestClient final : public mojom::QuicTransportClient {
   }
 
   // mojom::QuicTransportClient implementation.
+  void OnDatagramReceived(base::span<const uint8_t> data) override {}
   void OnIncomingStreamClosed(uint32_t stream_id, bool fin_received) override {
     closed_incoming_streams_.insert(std::make_pair(stream_id, fin_received));
     if (quit_closure_for_incoming_stream_closure_) {
@@ -310,6 +311,9 @@ TEST_F(QuicTransportTest, SendDatagram) {
   run_loop_for_datagram.Run();
   EXPECT_TRUE(result);
 }
+
+// TODO(yhirano): Add a test for OnDatagramReceived. It would be difficult due
+// to the flaky nature of datagrams.
 
 TEST_F(QuicTransportTest, SendToolargeDatagram) {
   base::RunLoop run_loop_for_handshake;

@@ -39,6 +39,9 @@ interface QuicTransport {
 
 // A mojo interface for the client of QuicTransport.
 interface QuicTransportClient {
+  // A datagram message is sent from the server.
+  OnDatagramReceived(mojo_base.mojom.ReadOnlyBuffer data);
+
   // Notifies that the server will not write data to the Stream for |stream_id|.
   // |fin_received| is true when FIN is received from the server.
   // Note that OnIncomingStreamClosed and OnOutgoingStreamClosed can both be

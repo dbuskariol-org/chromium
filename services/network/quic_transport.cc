@@ -513,7 +513,15 @@ void QuicTransport::OnIncomingUnidirectionalStreamAvailable() {
 }
 
 void QuicTransport::OnIncomingDatagramAvailable() {
-  // TODO(yhirano): Implement this.
+  if (torn_down_) {
+    return;
+  }
+
+  base::Optional<std::string> datagram = transport_->session()->ReadDatagram();
+  DCHECK(datagram);
+
+  client_->OnDatagramReceived(base::make_span(
+      reinterpret_cast<const uint8_t*>(datagram->data()), datagram->size()));
 }
 
 void QuicTransport::OnCanCreateNewOutgoingBidirectionalStream() {
