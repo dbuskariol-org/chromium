@@ -163,7 +163,7 @@ bool FrameSequenceMetrics::HasDataLeftForReporting() const {
          main_throughput_.frames_expected > 0;
 }
 
-void FrameSequenceMetrics::ReportMetrics() {
+void FrameSequenceMetrics::ReportMetrics(const std::string& debug_trace) {
   DCHECK_LE(impl_throughput_.frames_produced, impl_throughput_.frames_expected);
   DCHECK_LE(main_throughput_.frames_produced, main_throughput_.frames_expected);
   TRACE_EVENT_ASYNC_END2(
@@ -176,6 +176,14 @@ void FrameSequenceMetrics::ReportMetrics() {
       type_, ThreadType::kCompositor,
       GetIndexForMetric(FrameSequenceMetrics::ThreadType::kCompositor, type_),
       impl_throughput_);
+#if DCHECK_IS_ON()
+  if (impl_throughput_percent.has_value()) {
+    DCHECK_EQ(impl_throughput_.frames_received,
+              impl_throughput_.frames_processed)
+        << debug_trace << " " << type_;
+  }
+#endif
+
   base::Optional<int> main_throughput_percent = ThroughputData::ReportHistogram(
       type_, ThreadType::kMain,
       GetIndexForMetric(FrameSequenceMetrics::ThreadType::kMain, type_),
@@ -358,8 +366,13 @@ void FrameSequenceTrackerCollection::NotifyFramePresented(
         metrics->Merge(std::move(accumulated_metrics_[tracker->type()]));
         accumulated_metrics_.erase(tracker->type());
       }
-      if (metrics->HasEnoughDataForReporting())
+      if (metrics->HasEnoughDataForReporting()) {
+#if DCHECK_IS_ON()
+        metrics->ReportMetrics(tracker->frame_sequence_trace_.str());
+#else
         metrics->ReportMetrics();
+#endif
+      }
       if (metrics->HasDataLeftForReporting())
         accumulated_metrics_[tracker->type()] = std::move(metrics);
     }
@@ -429,6 +442,9 @@ void FrameSequenceTracker::ScheduleTerminate() {
   if (last_processed_impl_sequence_ < last_started_impl_sequence_) {
     impl_throughput().frames_expected -=
         begin_impl_frame_data_.previous_sequence_delta;
+#if DCHECK_IS_ON()
+    --impl_throughput().frames_received;
+#endif
   }
 }
 
@@ -471,6 +487,9 @@ void FrameSequenceTracker::ReportBeginImplFrame(
                          args.frame_id.sequence_number);
   impl_throughput().frames_expected +=
       begin_impl_frame_data_.previous_sequence_delta;
+#if DCHECK_IS_ON()
+  ++impl_throughput().frames_received;
+#endif
 
   if (first_frame_timestamp_.is_null())
     first_frame_timestamp_ = args.frame_time;
@@ -546,6 +565,10 @@ void FrameSequenceTracker::ReportSubmitFrame(
 
 #if DCHECK_IS_ON()
   DCHECK(is_inside_frame_) << TRACKER_DCHECK_MSG;
+  DCHECK_LT(impl_throughput().frames_processed,
+            impl_throughput().frames_received)
+      << TRACKER_DCHECK_MSG;
+  ++impl_throughput().frames_processed;
 #endif
 
   last_processed_impl_sequence_ = ack.frame_id.sequence_number;
@@ -616,6 +639,12 @@ void FrameSequenceTracker::ReportFrameEnd(const viz::BeginFrameArgs& args) {
               impl_throughput().frames_produced)
         << TRACKER_DCHECK_MSG;
     --impl_throughput().frames_expected;
+#if DCHECK_IS_ON()
+    DCHECK_LT(impl_throughput().frames_processed,
+              impl_throughput().frames_received)
+        << TRACKER_DCHECK_MSG;
+    ++impl_throughput().frames_processed;
+#endif
     begin_impl_frame_data_.previous_sequence = 0;
   }
   frame_had_no_compositor_damage_ = false;

@@ -82,6 +82,10 @@ class CC_EXPORT FrameSequenceMetrics {
     void Merge(const ThroughputData& data) {
       frames_expected += data.frames_expected;
       frames_produced += data.frames_produced;
+#if DCHECK_IS_ON()
+      frames_processed += data.frames_processed;
+      frames_received += data.frames_received;
+#endif
     }
 
     // Tracks the number of frames that were expected to be shown during this
@@ -91,13 +95,22 @@ class CC_EXPORT FrameSequenceMetrics {
     // Tracks the number of frames that were actually presented to the user
     // during this frame-sequence.
     uint32_t frames_produced = 0;
+
+#if DCHECK_IS_ON()
+    // Tracks the number of frames that is either submitted or reported as no
+    // damage.
+    uint32_t frames_processed = 0;
+
+    // Tracks the number of begin-frames that are received.
+    uint32_t frames_received = 0;
+#endif
   };
 
   void Merge(std::unique_ptr<FrameSequenceMetrics> metrics);
   bool HasEnoughDataForReporting() const;
   bool HasDataLeftForReporting() const;
   // Report related metrics: throughput, checkboarding...
-  void ReportMetrics();
+  void ReportMetrics(const std::string& debug_trace = std::string());
 
   ThroughputData& impl_throughput() { return impl_throughput_; }
   ThroughputData& main_throughput() { return main_throughput_; }

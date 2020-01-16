@@ -487,15 +487,20 @@ TEST_F(FrameSequenceTrackerTest, ReportMetricsAtFixedInterval) {
   // args.frame_time is less than 5s of the tracker creation time, so won't
   // schedule this tracker to report its throughput.
   collection_.NotifyBeginImplFrame(args);
+  collection_.NotifyImplFrameCausedNoDamage(viz::BeginFrameAck(args, false));
+  collection_.NotifyFrameEnd(args);
+
   EXPECT_EQ(NumberOfTrackers(), 1u);
   EXPECT_EQ(NumberOfRemovalTrackers(), 0u);
 
-  ImplThroughput().frames_expected += 100;
+  ImplThroughput().frames_expected += 101;
   // Now args.frame_time is 5s since the tracker creation time, so this tracker
   // should be scheduled to report its throughput.
   args = CreateBeginFrameArgs(source, ++sequence,
                               args.frame_time + TimeDeltaToReort());
   collection_.NotifyBeginImplFrame(args);
+  collection_.NotifyImplFrameCausedNoDamage(viz::BeginFrameAck(args, false));
+  collection_.NotifyFrameEnd(args);
   EXPECT_EQ(NumberOfTrackers(), 1u);
   EXPECT_EQ(NumberOfRemovalTrackers(), 1u);
 }
