@@ -388,11 +388,11 @@ void RemoteFrame::UpdateHitTestOcclusionData() {
   bool unoccluded = false;
   if (base::FeatureList::IsEnabled(
           blink::features::kVizHitTestOcclusionCheck)) {
-    if (HTMLFrameOwnerElement* owner_element = DeprecatedLocalOwner()) {
-      if (LayoutObject* owner = owner_element->GetLayoutObject()) {
+    if (LayoutEmbeddedContent* owner = OwnerLayoutObject()) {
+      if (!owner->GetFrameView()->CanThrottleRendering()) {
         HitTestResult hit_test_result(owner->HitTestForOcclusion());
         const Node* hit_node = hit_test_result.InnerNode();
-        unoccluded = (!hit_node || hit_node == owner_element);
+        unoccluded = (!hit_node || hit_node == owner->GetNode());
       }
     }
   }
