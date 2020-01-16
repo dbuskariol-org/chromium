@@ -659,9 +659,8 @@ gpu::ContextResult InProcessCommandBuffer::InitializeOnGpuThread(
     // TODO(khushalsagar): A lot of this initialization code is duplicated in
     // GpuChannelManager. Pull it into a common util method.
     scoped_refptr<gl::GLContext> real_context =
-        use_virtualized_gl_context_
-            ? gl_share_group_->GetSharedContext(surface_.get())
-            : nullptr;
+        use_virtualized_gl_context_ ? gl_share_group_->shared_context()
+                                    : nullptr;
     if (real_context &&
         (!real_context->MakeCurrent(surface_.get()) ||
          real_context->CheckStickyGraphicsResetStatus() != GL_NO_ERROR)) {
@@ -686,7 +685,7 @@ gpu::ContextResult InProcessCommandBuffer::InitializeOnGpuThread(
       task_executor_->gpu_feature_info().ApplyToGLContext(real_context.get());
 
       if (use_virtualized_gl_context_)
-        gl_share_group_->SetSharedContext(surface_.get(), real_context.get());
+        gl_share_group_->SetSharedContext(real_context.get());
     }
 
     if (!real_context->MakeCurrent(surface_.get())) {
