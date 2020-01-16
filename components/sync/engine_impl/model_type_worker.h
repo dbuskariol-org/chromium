@@ -208,7 +208,9 @@ class ModelTypeWorker : public UpdateHandler,
   void DeduplicatePendingUpdatesBasedOnOriginatorClientItemId();
 
   // Callback for when our contribution gets a response.
-  void OnCommitResponse(const CommitResponseDataList& committed_response_list);
+  void OnCommitResponse(
+      const CommitResponseDataList& committed_response_list,
+      const FailedCommitResponseDataList& error_response_list);
 
   ModelType type_;
   DataTypeDebugInfoEmitter* debug_info_emitter_;

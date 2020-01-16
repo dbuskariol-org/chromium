@@ -32,7 +32,8 @@ class NonBlockingTypeCommitContribution : public CommitContribution {
       ModelType type,
       const sync_pb::DataTypeContext& context,
       CommitRequestDataList commit_requests,
-      base::OnceCallback<void(const CommitResponseDataList&)>
+      base::OnceCallback<void(const CommitResponseDataList&,
+                              const FailedCommitResponseDataList&)>
           on_commit_response_callback,
       Cryptographer* cryptographer,
       PassphraseType passphrase_type,
@@ -62,7 +63,8 @@ class NonBlockingTypeCommitContribution : public CommitContribution {
 
   // A callback to inform the object that created this contribution about commit
   // result.
-  base::OnceCallback<void(const CommitResponseDataList&)>
+  base::OnceCallback<void(const CommitResponseDataList&,
+                          const FailedCommitResponseDataList&)>
       on_commit_response_callback_;
 
   // A non-owned pointer to cryptographer to encrypt entities.
