@@ -2304,7 +2304,7 @@ class DirectoryTree extends cr.ui.Tree {
 
     window.requestAnimationFrame(() => {
       this.scrollRAFActive_ = false;
-      if (document.body.getAttribute('dir') === 'rtl') {
+      if (document.documentElement.getAttribute('dir') === 'rtl') {
         const scrollRight = this.scrollWidth - this.clientWidth;
         if (this.scrollLeft !== scrollRight) {
           this.scrollLeft = scrollRight;
