@@ -551,6 +551,11 @@ void RenderFrameProxyHost::OnAdvanceFocus(blink::WebFocusType type,
                                           int32_t source_routing_id) {
   RenderFrameHostImpl* target_rfh =
       frame_tree_node_->render_manager()->current_frame_host();
+  if (target_rfh->InsidePortal()) {
+    bad_message::ReceivedBadMessage(
+        GetProcess(), bad_message::RFPH_ADVANCE_FOCUS_INTO_PORTAL);
+    return;
+  }
 
   // Translate the source RenderFrameHost in this process to its equivalent
   // RenderFrameProxyHost in the target process.  This is needed for continuing

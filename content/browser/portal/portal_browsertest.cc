@@ -1577,6 +1577,33 @@ IN_PROC_BROWSER_TEST_F(PortalBrowserTest, DidFocusIPCFromFrameInsidePortal) {
   EXPECT_EQ(web_contents_impl->GetFocusedFrame(), main_frame);
 }
 
+// Test that a renderer process is killed if it sends an AdvanceFocus IPC to
+// advance focus into a portal.
+IN_PROC_BROWSER_TEST_F(PortalBrowserTest, AdvanceFocusIntoPortal) {
+  EXPECT_TRUE(NavigateToURL(
+      shell(), embedded_test_server()->GetURL("portal.test", "/title1.html")));
+  WebContentsImpl* web_contents_impl =
+      static_cast<WebContentsImpl*>(shell()->web_contents());
+  RenderFrameHostImpl* main_frame = web_contents_impl->GetMainFrame();
+
+  GURL url = embedded_test_server()->GetURL("a.com", "/title1.html");
+  Portal* portal = CreatePortalToUrl(web_contents_impl, url);
+  WebContentsImpl* portal_contents = portal->GetPortalContents();
+  RenderFrameHostImpl* portal_main_frame = portal_contents->GetMainFrame();
+
+  RenderFrameProxyHost* outer_delegate_proxy =
+      portal_main_frame->frame_tree_node()
+          ->render_manager()
+          ->GetProxyToOuterDelegate();
+  RenderProcessHostKillWaiter rph_kill_waiter(main_frame->GetProcess());
+  outer_delegate_proxy->OnMessageReceived(FrameHostMsg_AdvanceFocus(
+      outer_delegate_proxy->GetRoutingID(),
+      blink::WebFocusType::kWebFocusTypeNone, main_frame->GetRoutingID()));
+  base::Optional<bad_message::BadMessageReason> result = rph_kill_waiter.Wait();
+  EXPECT_TRUE(result.has_value());
+  EXPECT_EQ(result.value(), bad_message::RFPH_ADVANCE_FOCUS_INTO_PORTAL);
+}
+
 namespace {
 void WaitForAccessibilityTree(WebContents* web_contents) {
   AccessibilityNotificationWaiter waiter(web_contents, ui::kAXModeComplete,
