@@ -10,6 +10,7 @@
       "name": "LayoutNGBlockFlow (positioned) DIV class='test image'",
       "position": [8, 8],
       "bounds": [110, 44],
+      "contentsOpaque": true,
       "backgroundColor": "#000000",
       "paintInvalidations": [
         {
@@ -28,6 +29,7 @@
       "name": "LayoutNGBlockFlow (positioned) DIV class='test image size-contain'",
       "position": [108, 8],
       "bounds": [110, 44],
+      "contentsOpaque": true,
       "backgroundColor": "#000000",
       "paintInvalidations": [
         {
@@ -46,6 +48,7 @@
       "name": "LayoutNGBlockFlow (positioned) DIV class='test image percent-height'",
       "position": [208, 8],
       "bounds": [110, 44],
+      "contentsOpaque": true,
       "backgroundColor": "#000000",
       "paintInvalidations": [
         {
@@ -64,6 +67,7 @@
       "name": "LayoutNGBlockFlow (positioned) DIV class='test image bottom'",
       "position": [308, 8],
       "bounds": [110, 44],
+      "contentsOpaque": true,
       "backgroundColor": "#000000",
       "paintInvalidations": [
         {
@@ -113,6 +117,7 @@
       "name": "LayoutNGBlockFlow (positioned) DIV class='test generated'",
       "position": [8, 108],
       "bounds": [110, 44],
+      "contentsOpaque": true,
       "backgroundColor": "#000000",
       "paintInvalidations": [
         {
@@ -149,6 +154,7 @@
       "name": "LayoutNGBlockFlow (positioned) DIV class='test generated top'",
       "position": [258, 108],
       "bounds": [110, 44],
+      "contentsOpaque": true,
       "backgroundColor": "#000000",
       "paintInvalidations": [
         {

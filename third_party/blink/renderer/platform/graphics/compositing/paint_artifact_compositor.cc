@@ -447,18 +447,61 @@ PaintArtifactCompositor::PendingLayer::PendingLayer(
   paint_chunk_indices.push_back(chunk_index);
 }
 
+FloatRect PaintArtifactCompositor::PendingLayer::UniteRectsKnownToBeOpaque(
+    const FloatRect& a,
+    const FloatRect& b) {
+  // Check a or b by itself.
+  FloatRect maximum(a);
+  float maximum_area = a.Size().Area();
+  if (b.Size().Area() > maximum_area) {
+    maximum = b;
+    maximum_area = b.Size().Area();
+  }
+  // Check the regions that include the intersection of a and b. This can be
+  // done by taking the intersection and expanding it vertically and
+  // horizontally. These expanded intersections will both still be fully opaque.
+  FloatRect intersection = a;
+  intersection.InclusiveIntersect(b);
+  if (!intersection.IsZero()) {
+    FloatRect vert_expanded_intersection(intersection);
+    vert_expanded_intersection.ShiftYEdgeTo(std::min(a.Y(), b.Y()));
+    vert_expanded_intersection.ShiftMaxYEdgeTo(std::max(a.MaxY(), b.MaxY()));
+    if (vert_expanded_intersection.Size().Area() > maximum_area) {
+      maximum = vert_expanded_intersection;
+      maximum_area = vert_expanded_intersection.Size().Area();
+    }
+    FloatRect horiz_expanded_intersection(intersection);
+    horiz_expanded_intersection.ShiftXEdgeTo(std::min(a.X(), b.X()));
+    horiz_expanded_intersection.ShiftMaxXEdgeTo(std::max(a.MaxX(), b.MaxX()));
+    if (horiz_expanded_intersection.Size().Area() > maximum_area) {
+      maximum = horiz_expanded_intersection;
+      maximum_area = horiz_expanded_intersection.Size().Area();
+    }
+  }
+  return maximum;
+}
+
+FloatRect PaintArtifactCompositor::PendingLayer::MapRectKnownToBeOpaque(
+    const PropertyTreeState& new_state) const {
+  if (rect_known_to_be_opaque.IsEmpty())
+    return FloatRect();
+
+  FloatClipRect float_clip_rect(rect_known_to_be_opaque);
+  GeometryMapper::LocalToAncestorVisualRect(property_tree_state, new_state,
+                                            float_clip_rect);
+  return float_clip_rect.IsTight() ? float_clip_rect.Rect() : FloatRect();
+}
+
 bool PaintArtifactCompositor::PendingLayer::Merge(const PendingLayer& guest) {
-  if (!CanMerge(guest, guest.property_tree_state, &property_tree_state,
-                &bounds))
+  PropertyTreeState new_state = PropertyTreeState::Uninitialized();
+  if (!CanMerge(guest, guest.property_tree_state, &new_state, &bounds))
     return false;
 
   paint_chunk_indices.AppendVector(guest.paint_chunk_indices);
-
-  // TODO(crbug.com/701991): Upgrade GeometryMapper.
-  // If we knew the new bounds is enclosed by the mapped opaque region of
-  // the guest layer, we can deduce the merged layer being opaque too, and
-  // update rect_known_to_be_opaque accordingly.
-
+  rect_known_to_be_opaque =
+      UniteRectsKnownToBeOpaque(MapRectKnownToBeOpaque(new_state),
+                                guest.MapRectKnownToBeOpaque(new_state));
+  property_tree_state = new_state;
   return true;
 }
 
@@ -473,14 +516,8 @@ void PaintArtifactCompositor::PendingLayer::Upcast(
                                             float_clip_rect);
   bounds = float_clip_rect.Rect();
 
+  rect_known_to_be_opaque = MapRectKnownToBeOpaque(new_state);
   property_tree_state = new_state;
-  // TODO(crbug.com/701991): Upgrade GeometryMapper.
-  // A local visual rect mapped to an ancestor space may become a polygon
-  // (e.g. consider transformed clip), also effects may affect the opaque
-  // region. To determine whether the layer is still opaque, we need to
-  // query conservative opaque rect after mapping to an ancestor space,
-  // which is not supported by GeometryMapper yet.
-  rect_known_to_be_opaque = FloatRect();
 }
 
 const PaintChunk& PaintArtifactCompositor::PendingLayer::FirstPaintChunk(

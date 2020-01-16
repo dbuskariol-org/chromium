@@ -1905,6 +1905,50 @@ TEST_P(PaintArtifactCompositorTest, MightOverlap) {
   }
 }
 
+TEST_P(PaintArtifactCompositorTest, UniteRectsKnownToBeOpaque) {
+  // X aligned and intersect: unite.
+  EXPECT_EQ(FloatRect(10, 20, 30, 60),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(10, 20, 30, 40),
+                                                    FloatRect(10, 30, 30, 50)));
+  // X aligned and adjacent: unite.
+  EXPECT_EQ(FloatRect(10, 20, 30, 90),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(10, 20, 30, 40),
+                                                    FloatRect(10, 60, 30, 50)));
+  // X aligned and separate: choose the bigger one.
+  EXPECT_EQ(FloatRect(10, 61, 30, 50),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(10, 20, 30, 40),
+                                                    FloatRect(10, 61, 30, 50)));
+  // Y aligned and intersect: unite.
+  EXPECT_EQ(FloatRect(10, 20, 60, 40),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(10, 20, 30, 40),
+                                                    FloatRect(30, 20, 40, 40)));
+  // Y aligned and adjacent: unite.
+  EXPECT_EQ(FloatRect(10, 20, 70, 40),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(10, 20, 30, 40),
+                                                    FloatRect(40, 20, 40, 40)));
+  // Y aligned and separate: choose the bigger one.
+  EXPECT_EQ(FloatRect(41, 20, 40, 40),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(10, 20, 30, 40),
+                                                    FloatRect(41, 20, 40, 40)));
+  // Get the biggest expanded intersection.
+  EXPECT_EQ(FloatRect(0, 0, 9, 19),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(0, 0, 10, 10),
+                                                    FloatRect(0, 9, 9, 10)));
+  EXPECT_EQ(FloatRect(0, 0, 19, 9),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(0, 0, 10, 10),
+                                                    FloatRect(9, 0, 10, 9)));
+  // Otherwise choose the bigger one.
+  EXPECT_EQ(FloatRect(20, 30, 40, 50),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(10, 20, 30, 40),
+                                                    FloatRect(20, 30, 40, 50)));
+  EXPECT_EQ(FloatRect(10, 20, 40, 50),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(10, 20, 40, 50),
+                                                    FloatRect(20, 30, 30, 40)));
+  EXPECT_EQ(FloatRect(10, 20, 40, 50),
+            PendingLayer::UniteRectsKnownToBeOpaque(FloatRect(10, 20, 40, 50),
+                                                    FloatRect(20, 30, 40, 50)));
+}
+
 TEST_P(PaintArtifactCompositorTest, PendingLayer) {
   PaintChunk chunk1 = DefaultChunk();
   chunk1.properties = PropertyTreeState::Root();
@@ -1926,7 +1970,7 @@ TEST_P(PaintArtifactCompositorTest, PendingLayer) {
   // Bounds not equal to one PaintChunk.
   EXPECT_EQ(FloatRect(0, 0, 40, 60), pending_layer.bounds);
   EXPECT_EQ((Vector<wtf_size_t>{0, 1}), pending_layer.paint_chunk_indices);
-  EXPECT_NE(pending_layer.bounds, pending_layer.rect_known_to_be_opaque);
+  EXPECT_EQ(FloatRect(0, 0, 30, 40), pending_layer.rect_known_to_be_opaque);
 
   PaintChunk chunk3 = DefaultChunk();
   chunk3.properties = chunk1.properties;
@@ -1936,7 +1980,7 @@ TEST_P(PaintArtifactCompositorTest, PendingLayer) {
 
   EXPECT_EQ(FloatRect(-5, -25, 45, 85), pending_layer.bounds);
   EXPECT_EQ((Vector<wtf_size_t>{0, 1, 2}), pending_layer.paint_chunk_indices);
-  EXPECT_NE(pending_layer.bounds, pending_layer.rect_known_to_be_opaque);
+  EXPECT_EQ(FloatRect(0, 0, 30, 40), pending_layer.rect_known_to_be_opaque);
 }
 
 TEST_P(PaintArtifactCompositorTest, PendingLayerMergeWithGuestTransform) {
@@ -2013,7 +2057,7 @@ TEST_P(PaintArtifactCompositorTest, PendingLayerDontMergeSparse) {
   EXPECT_EQ(Vector<wtf_size_t>{0}, pending_layer.paint_chunk_indices);
 }
 
-TEST_P(PaintArtifactCompositorTest, PendingLayerMergeSparseWithTransforms) {
+TEST_P(PaintArtifactCompositorTest, PendingLayerDontMergeSparseWithTransforms) {
   auto t1 = Create2DTranslation(t0(), 20, 25);
   auto t2 = Create2DTranslation(t0(), 1000, 1000);
 
@@ -2078,9 +2122,7 @@ TEST_P(PaintArtifactCompositorTest,
   EXPECT_EQ((Vector<wtf_size_t>{0, 1}), pending_layer.paint_chunk_indices);
 }
 
-// TODO(crbug.com/701991):
-// The test is disabled because opaque rect mapping is not implemented yet.
-TEST_P(PaintArtifactCompositorTest, DISABLED_PendingLayerKnownOpaque) {
+TEST_P(PaintArtifactCompositorTest, PendingLayerKnownOpaque) {
   PaintChunk chunk1 = DefaultChunk();
   chunk1.properties = PropertyTreeState::Root();
   chunk1.bounds = IntRect(0, 0, 30, 40);
@@ -3831,7 +3873,7 @@ TEST_P(PaintArtifactCompositorTest, ContentsOpaque) {
 TEST_P(PaintArtifactCompositorTest, ContentsOpaqueUnitedNonOpaque) {
   TestPaintArtifact artifact;
   artifact.Chunk()
-      .RectDrawing(IntRect(100, 100, 200, 200), Color::kBlack)
+      .RectDrawing(IntRect(100, 100, 210, 210), Color::kBlack)
       .KnownToBeOpaque()
       .Chunk()
       .RectDrawing(IntRect(200, 200, 200, 200), Color::kBlack)
@@ -3840,6 +3882,23 @@ TEST_P(PaintArtifactCompositorTest, ContentsOpaqueUnitedNonOpaque) {
   ASSERT_EQ(1u, LayerCount());
   EXPECT_EQ(gfx::Size(300, 300), LayerAt(0)->bounds());
   EXPECT_FALSE(LayerAt(0)->contents_opaque());
+}
+
+TEST_P(PaintArtifactCompositorTest, ContentsOpaqueUnitedClippedToOpaque) {
+  // Almost the same as ContentsOpaqueUnitedNonOpaque, but with a clip which
+  // removes the non-opaque part of the layer, making the layer opaque.
+  auto clip1 = CreateClip(c0(), t0(), FloatRoundedRect(175, 175, 100, 100));
+  TestPaintArtifact artifact;
+  artifact.Chunk(t0(), *clip1, e0())
+      .RectDrawing(IntRect(100, 100, 210, 210), Color::kBlack)
+      .KnownToBeOpaque()
+      .Chunk(t0(), *clip1, e0())
+      .RectDrawing(IntRect(200, 200, 200, 200), Color::kBlack)
+      .KnownToBeOpaque();
+  Update(artifact.Build());
+  ASSERT_EQ(1u, LayerCount());
+  EXPECT_EQ(gfx::Size(100, 100), LayerAt(0)->bounds());
+  EXPECT_TRUE(LayerAt(0)->contents_opaque());
 }
 
 TEST_P(PaintArtifactCompositorTest, ContentsOpaqueUnitedOpaque1) {
@@ -3856,6 +3915,26 @@ TEST_P(PaintArtifactCompositorTest, ContentsOpaqueUnitedOpaque1) {
   EXPECT_TRUE(LayerAt(0)->contents_opaque());
 }
 
+TEST_P(PaintArtifactCompositorTest, ContentsOpaqueUnitedWithRoundedClip) {
+  // Almost the same as ContentsOpaqueUnitedOpaque1, but the first layer has a
+  // rounded clip.
+  FloatSize corner(5, 5);
+  auto clip1 = CreateClip(c0(), t0(),
+                          FloatRoundedRect(FloatRect(175, 175, 100, 100),
+                                           corner, corner, corner, corner));
+  TestPaintArtifact artifact;
+  artifact.Chunk(t0(), *clip1, e0())
+      .RectDrawing(IntRect(100, 100, 210, 210), Color::kBlack)
+      .KnownToBeOpaque()
+      .Chunk(t0(), c0(), e0())
+      .RectDrawing(IntRect(200, 200, 100, 100), Color::kBlack)
+      .KnownToBeOpaque();
+  Update(artifact.Build());
+  ASSERT_EQ(1u, LayerCount());
+  EXPECT_EQ(gfx::Size(125, 125), LayerAt(0)->bounds());
+  EXPECT_FALSE(LayerAt(0)->contents_opaque());
+}
+
 TEST_P(PaintArtifactCompositorTest, ContentsOpaqueUnitedOpaque2) {
   TestPaintArtifact artifact;
   artifact.Chunk()
@@ -3867,9 +3946,7 @@ TEST_P(PaintArtifactCompositorTest, ContentsOpaqueUnitedOpaque2) {
   Update(artifact.Build());
   ASSERT_EQ(1u, LayerCount());
   EXPECT_EQ(gfx::Size(300, 300), LayerAt(0)->bounds());
-  // TODO(crbug.com/701991): Upgrade GeometryMapper to make this test pass with
-  // the following EXPECT_FALSE changed to EXPECT_TRUE.
-  EXPECT_FALSE(LayerAt(0)->contents_opaque());
+  EXPECT_TRUE(LayerAt(0)->contents_opaque());
 }
 
 TEST_P(PaintArtifactCompositorTest, DecompositeEffectWithNoOutputClip) {

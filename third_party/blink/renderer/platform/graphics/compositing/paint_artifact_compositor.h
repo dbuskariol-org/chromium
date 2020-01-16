@@ -230,6 +230,11 @@ class PLATFORM_EXPORT PaintArtifactCompositor final
 
     const PaintChunk& FirstPaintChunk(const PaintArtifact&) const;
 
+    // Returns the largest rect known to be opaque given two opaque rects.
+    static FloatRect UniteRectsKnownToBeOpaque(const FloatRect&,
+                                               const FloatRect&);
+    FloatRect MapRectKnownToBeOpaque(const PropertyTreeState&) const;
+
     // The rects are in the space of property_tree_state.
     FloatRect bounds;
     FloatRect rect_known_to_be_opaque;
