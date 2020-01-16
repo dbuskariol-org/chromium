@@ -13,6 +13,7 @@ const DefaultActionVerb = chrome.automation.DefaultActionVerb;
  *    - isGroup
  *    - isInteresting
  *    - isInterestingSubtree
+ *    - isVisible
  *    - isTextInput
  *    - isNotContainer
  *    - isSwitchAccessMenuPanel
@@ -39,8 +40,7 @@ const SwitchAccessPredicate = {
     const state = node.state;
 
     // Skip things that are offscreen or invisible.
-    if (state[StateType.OFFSCREEN] || !loc || loc.top < 0 || loc.left < 0 ||
-        state[StateType.INVISIBLE]) {
+    if (!SwitchAccessPredicate.isVisible(node)) {
       return false;
     }
 
@@ -144,6 +144,16 @@ const SwitchAccessPredicate = {
    */
   isInteresting: (node, scope) => SwitchAccessPredicate.isActionable(node) ||
       SwitchAccessPredicate.isGroup(node, scope),
+
+  /**
+   * Returns true if the element is visible to the user for any reason.
+   *
+   * @param {chrome.automation.AutomationNode} node
+   * @return {boolean}
+   */
+  isVisible: (node) => !node.state[StateType.OFFSCREEN] && !!node.location &&
+      node.location.top >= 0 && node.location.left >= 0 &&
+      !node.state[StateType.INVISIBLE],
 
   /**
    * Returns true if there is an interesting node in the subtree containing

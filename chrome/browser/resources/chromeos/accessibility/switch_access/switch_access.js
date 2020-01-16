@@ -289,12 +289,13 @@ class SwitchAccess {
     }
   }
 
-  /** @return {chrome.automation.AutomationNode} */
+  /** @return {?chrome.automation.AutomationNode} */
   getBackButtonAutomationNode() {
     if (!this.backButtonAutomationNode_) {
       this.findBackButtonNode_();
       if (!this.backButtonAutomationNode_) {
         console.log('Error: unable to find back button');
+        return null;
       }
     }
     return this.backButtonAutomationNode_;
