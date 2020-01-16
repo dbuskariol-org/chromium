@@ -3422,6 +3422,11 @@ const char kDisableExplicitDmaFencesDescription[] =
     "Always rely on implicit syncrhonization between GPU and display "
     "controller instead of using dma-fences explcitily when available.";
 
+const char kDisplayChangeModalName[] = "Enable display change modal";
+const char kDisplayChangeModalDescription[] =
+    "If enabled, a modal dialog will be shown when resolution or refresh rate "
+    "is changed rather than a notification.";
+
 const char kEnableUseHDRTransferFunctionName[] =
     "Enable using HDR transfer function";
 const char kEnableUseHDRTransferFunctionDescription[] =

@@ -832,6 +832,11 @@
     "expiry_milestone": 80
   },
   {
+    "name": "display-change-modal",
+    "owners": [ "baileyberro", "zentaro" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "dns-over-https",
     "owners": [ "dalyk", "doh-core@google.com" ],
     "expiry_milestone": 81

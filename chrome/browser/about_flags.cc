@@ -4209,6 +4209,10 @@ const FeatureEntry kFeatureEntries[] = {
     {"enable-print-server-ui", flag_descriptions::kPrintServerUiName,
      flag_descriptions::kPrintServerUiDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(features::kPrintServerUi)},
+
+    {"display-change-modal", flag_descriptions::kDisplayChangeModalName,
+     flag_descriptions::kDisplayChangeModalDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(ash::features::kDisplayChangeModal)},
 #endif  // OS_CHROMEOS
 
     {"autofill-off-no-server-data",
