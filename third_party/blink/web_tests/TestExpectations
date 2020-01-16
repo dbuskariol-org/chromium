@@ -6378,7 +6378,7 @@ crbug.com/1041973 external/wpt/html/semantics/forms/constraints/form-validation-
 crbug.com/1041973 virtual/web-components-v0-disabled/external/wpt/html/semantics/forms/constraints/form-validation-reportValidity.html [ Pass Failure ]
 
 # Sheriff 2020-01-15
-crbug.com/1042199 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-allow-popups.https.html [ Pass Failure ]
+crbug.com/1042199 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-allow-popups.https.html [ Pass Timeout ]
 crbug.com/1041451 virtual/gpu-rasterization-disable-yuv/images/yuv-decode-eligible/color-profile-filter.html [ Pass Failure ]
 
 # Disabled for landing devtools changes
