@@ -6226,6 +6226,8 @@ crbug.com/1034374 virtual/threaded/http/tests/devtools/tracing/timeline-worker-e
 crbug.com/1034513 [ Win7 ] virtual/stable/fast/dom/Window/window-resize-contents.html [ Pass Failure ]
 crbug.com/1026712 [ Mac ] fast/forms/time-multiple-fields/time-multiple-fields-stepup-stepdown-from-renderer-hour.html [ Pass Timeout ]
 crbug.com/1026712 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/time-multiple-fields/time-multiple-fields-stepup-stepdown-from-renderer-hour.html [ Pass Timeout ]
+crbug.com/1026712 [ Mac ] fast/forms/time-multiple-fields/time-multiple-fields-stepup-stepdown-from-renderer.html [ Pass Timeout ]
+crbug.com/1026712 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/time-multiple-fields/time-multiple-fields-stepup-stepdown-from-renderer.html [ Pass Timeout ]
 
 # The Wasm code cache requires disabling the baseline compiler, so only the
 # virtual test should be run.
