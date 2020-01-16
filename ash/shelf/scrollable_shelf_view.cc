@@ -1368,9 +1368,11 @@ bool ScrollableShelfView::ProcessGestureEvent(const ui::GestureEvent& event) {
       return false;
     }
 
-    const int scroll_velocity = is_horizontal_alignment
-                                    ? event.details().velocity_x()
-                                    : event.details().velocity_y();
+    int scroll_velocity = is_horizontal_alignment
+                              ? event.details().velocity_x()
+                              : event.details().velocity_y();
+    if (ShouldAdaptToRTL())
+      scroll_velocity = -scroll_velocity;
     float page_scrolling_offset = CalculatePageScrollingOffset(
         scroll_velocity < 0, layout_strategy_before_main_axis_scrolling_);
 
@@ -1391,10 +1393,14 @@ bool ScrollableShelfView::ProcessGestureEvent(const ui::GestureEvent& event) {
 
   DCHECK(presentation_time_recorder_);
   presentation_time_recorder_->RequestNext();
-  if (GetShelf()->IsHorizontalAlignment())
-    ScrollByXOffset(-event.details().scroll_x(), /*animate=*/false);
-  else
+
+  const int scroll_x = -event.details().scroll_x();
+  if (GetShelf()->IsHorizontalAlignment()) {
+    ScrollByXOffset(ShouldAdaptToRTL() ? -scroll_x : scroll_x,
+                    /*animate=*/false);
+  } else {
     ScrollByYOffset(-event.details().scroll_y(), /*animate=*/false);
+  }
   return true;
 }
 
