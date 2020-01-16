@@ -5,6 +5,7 @@
 #include "chrome/browser/chromeos/arc/print_spooler/print_session_impl.h"
 
 #include <limits>
+#include <string>
 #include <utility>
 
 #include "ash/public/cpp/arc_custom_tab.h"
@@ -309,9 +310,7 @@ void PrintSessionImpl::OnPreviewDocumentRead(
                        weak_ptr_factory_.GetWeakPtr()));
   }
 
-  bool inserted =
-      callbacks_.emplace(std::make_pair(request_id, std::move(callback)))
-          .second;
+  bool inserted = callbacks_.emplace(request_id, std::move(callback)).second;
   DCHECK(inserted);
 
   pdf_flattener_->FlattenPdf(
