@@ -17,6 +17,7 @@
 #include "components/bookmarks/browser/bookmark_model.h"
 #include "components/bookmarks/browser/bookmark_node.h"
 #include "components/bookmarks/browser/bookmark_utils.h"
+#include "components/sync/base/client_tag_hash.h"
 #include "components/sync/base/data_type_histogram.h"
 #include "components/sync/base/model_type.h"
 #include "components/sync/base/time.h"
@@ -593,8 +594,10 @@ void BookmarkModelTypeProcessor::AppendNodeAndChildrenForDebugging(
   data.name = base::UTF16ToUTF8(node->GetTitle());
   data.is_folder = node->is_folder();
   data.unique_position = metadata->unique_position();
-  data.specifics = CreateSpecificsFromBookmarkNode(
-      node, bookmark_model_, /*force_favicon_load=*/false);
+  data.specifics = CreateSpecificsFromBookmarkNode(node, bookmark_model_,
+                                                   /*force_favicon_load=*/false,
+                                                   entity->has_final_guid());
+
   if (node->is_permanent_node()) {
     data.server_defined_unique_tag =
         ComputeServerDefinedUniqueTagForDebugging(node, bookmark_model_);

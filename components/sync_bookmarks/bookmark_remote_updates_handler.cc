@@ -131,16 +131,16 @@ void ApplyRemoteUpdate(
     return;
   }
 
-  // If there is a different GUID in the specifics and it is valid, we must
-  // replace the entire node in order to use it, as GUIDs are immutable. Further
-  // updates are then applied to the new node instead.
-  if (update_entity.specifics.bookmark().guid() != node->guid() &&
-      base::IsValidGUID(update_entity.specifics.bookmark().guid())) {
-    const bookmarks::BookmarkNode* old_node = node;
-    node = ReplaceBookmarkNodeGUID(
-        node, update_entity.specifics.bookmark().guid(), model);
-    tracker->UpdateBookmarkNodePointer(old_node, node);
+  // The GUID is immutable and cannot change. This check is somewhat redundant
+  // here because there is a similar one also accounted to kUnexpectedGuid, but
+  // in theory a misbehaving server could trigger this codepath.
+  // TODO(crbug.com/1032052): If the tracker becomes client-tag-centric, this
+  // shouldn't be necessary.
+  if (update_entity.specifics.bookmark().guid() != node->guid()) {
+    LogProblematicBookmark(RemoteBookmarkUpdateError::kUnexpectedGuid);
+    return;
   }
+
   UpdateBookmarkNodeFromSpecifics(update_entity.specifics.bookmark(), node,
                                   model, favicon_service);
   // Compute index information before updating the |tracker|.
@@ -222,6 +222,19 @@ void BookmarkRemoteUpdatesHandler::Process(
 
     const SyncedBookmarkTracker::Entity* tracked_entity =
         bookmark_tracker_->GetEntityForSyncId(update_entity.id);
+
+    // This may be a good chance to populate the client tag for the first time.
+    // TODO(crbug.com/1032052): Remove this code once all local sync metadata
+    // is required to populate the client tag (and be considered invalid
+    // otherwise).
+    if (tracked_entity && !tracked_entity->has_final_guid() &&
+        !update_entity.is_deleted() &&
+        update_entity.server_defined_unique_tag.empty()) {
+      DCHECK(base::IsValidGUID(update_entity.specifics.bookmark().guid()));
+      bookmark_tracker_->PopulateFinalGuid(
+          update_entity.id, update_entity.specifics.bookmark().guid());
+    }
+
     if (tracked_entity && tracked_entity->metadata()->server_version() >=
                               update->response_version) {
       // Seen this update before; just ignore it.
@@ -237,9 +250,7 @@ void BookmarkRemoteUpdatesHandler::Process(
     // |original_client_item_id|. If we have a entry by that description, we
     // should update the |sync_id| in |bookmark_tracker_|. The rest of code will
     // handle this a conflict and adjust the model if needed.
-    if (update_entity.originator_cache_guid ==
-            bookmark_tracker_->model_type_state().cache_guid() &&
-        bookmark_tracker_->GetEntityForSyncId(
+    if (bookmark_tracker_->GetEntityForSyncId(
             update_entity.originator_client_item_id) != nullptr) {
       if (tracked_entity) {
         // We generally shouldn't have an entry for both the old ID and the new

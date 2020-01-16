@@ -184,7 +184,8 @@ std::string InferGuidForLegacyBookmark(
 sync_pb::EntitySpecifics CreateSpecificsFromBookmarkNode(
     const bookmarks::BookmarkNode* node,
     bookmarks::BookmarkModel* model,
-    bool force_favicon_load) {
+    bool force_favicon_load,
+    bool include_guid) {
   sync_pb::EntitySpecifics specifics;
   sync_pb::BookmarkSpecifics* bm_specifics = specifics.mutable_bookmark();
   if (!node->is_folder()) {
@@ -194,8 +195,9 @@ sync_pb::EntitySpecifics CreateSpecificsFromBookmarkNode(
   DCHECK(!node->guid().empty());
   DCHECK(base::IsValidGUID(node->guid())) << "Actual: " << node->guid();
 
-  // TODO(crbug.com/978430): populate the GUID, as long as it's known to be
-  // consistent with the originator client item ID.
+  if (include_guid) {
+    bm_specifics->set_guid(node->guid());
+  }
 
   bm_specifics->set_title(SpecificsTitleFromNodeTitle(node->GetTitle()));
   bm_specifics->set_creation_time_us(

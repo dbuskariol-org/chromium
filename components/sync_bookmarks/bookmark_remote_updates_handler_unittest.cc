@@ -436,7 +436,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
 }
 
 TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
-       ShouldUpdateGUIDValueUponRemoteUpdate) {
+       ShouldLogGuidMismatchUponInvalidRemoteUpdate) {
   const std::string kId = "id";
   const std::string kTitle = "title";
   const std::string kOldGuid = base::GenerateGUID();
@@ -474,14 +474,20 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
       syncer::UniquePosition::InitialPosition(
           syncer::UniquePosition::RandomSuffix())));
 
+  base::HistogramTester histogram_tester;
   updates_handler()->Process(updates,
                              /*got_new_encryption_requirements=*/false);
 
-  // The GUID should have been updated.
+  // The GUID should not have been updated.
   const bookmarks::BookmarkNode* bookmark_bar_node =
       bookmark_model()->bookmark_bar_node();
   ASSERT_THAT(bookmark_bar_node->children().size(), Eq(1u));
-  EXPECT_THAT(bookmark_bar_node->children().front()->guid(), Eq(kNewGuid));
+  EXPECT_THAT(bookmark_bar_node->children().front()->guid(), Eq(kOldGuid));
+
+  histogram_tester.ExpectBucketCount(
+      "Sync.ProblematicServerSideBookmarks",
+      /*sample=*/ExpectedRemoteBookmarkUpdateError::kUnexpectedGuid,
+      /*count=*/1);
 }
 
 TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
@@ -592,6 +598,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   //  |- node4
 
   std::vector<std::string> ids;
+  std::vector<std::string> guids;
   std::vector<syncer::UniquePosition> positions;
 
   syncer::UniquePosition position = syncer::UniquePosition::InitialPosition(
@@ -599,11 +606,13 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   syncer::UpdateResponseDataList updates;
   for (int i = 0; i < 5; i++) {
     ids.push_back("node" + base::NumberToString(i));
+    guids.push_back(base::GenerateGUID());
     position = syncer::UniquePosition::After(
         position, syncer::UniquePosition::RandomSuffix());
     positions.push_back(position);
     updates.push_back(CreateUpdateResponseData(
-        /*server_id=*/ids[i], /*parent_id=*/kBookmarkBarId, /*title=*/ids[i],
+        /*server_id=*/ids[i], /*parent_id=*/kBookmarkBarId, /*guid=*/guids[i],
+        /*title=*/ids[i],
         /*is_deletion=*/false, /*version=*/0,
         /*unique_position=*/positions[i]));
   }
@@ -626,6 +635,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   updates.push_back(CreateUpdateResponseData(
       /*server_id=*/ids[3],
       /*parent_id=*/kBookmarkBarId,
+      /*guid=*/guids[3],
       /*title=*/ids[3],
       /*is_deletion=*/false,
       /*version=*/1,
@@ -652,6 +662,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   //  |- node4
 
   std::vector<std::string> ids;
+  std::vector<std::string> guids;
   std::vector<syncer::UniquePosition> positions;
 
   syncer::UniquePosition position = syncer::UniquePosition::InitialPosition(
@@ -659,11 +670,13 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   syncer::UpdateResponseDataList updates;
   for (int i = 0; i < 5; i++) {
     ids.push_back("node" + base::NumberToString(i));
+    guids.push_back(base::GenerateGUID());
     position = syncer::UniquePosition::After(
         position, syncer::UniquePosition::RandomSuffix());
     positions.push_back(position);
     updates.push_back(CreateUpdateResponseData(
-        /*server_id=*/ids[i], /*parent_id=*/kBookmarkBarId, /*title=*/ids[i],
+        /*server_id=*/ids[i], /*parent_id=*/kBookmarkBarId, /*guid=*/guids[i],
+        /*title=*/ids[i],
         /*is_deletion=*/false, /*version=*/0,
         /*unique_position=*/positions[i]));
   }
@@ -686,6 +699,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   updates.push_back(CreateUpdateResponseData(
       /*server_id=*/ids[1],
       /*parent_id=*/kBookmarkBarId,
+      /*guid=*/guids[1],
       /*title=*/ids[1],
       /*is_deletion=*/false,
       /*version=*/1,
@@ -712,6 +726,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   //  |- node4
 
   std::vector<std::string> ids;
+  std::vector<std::string> guids;
   std::vector<syncer::UniquePosition> positions;
 
   syncer::UniquePosition position = syncer::UniquePosition::InitialPosition(
@@ -719,11 +734,13 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   syncer::UpdateResponseDataList updates;
   for (int i = 0; i < 5; i++) {
     ids.push_back("node" + base::NumberToString(i));
+    guids.push_back(base::GenerateGUID());
     position = syncer::UniquePosition::After(
         position, syncer::UniquePosition::RandomSuffix());
     positions.push_back(position);
     updates.push_back(CreateUpdateResponseData(
-        /*server_id=*/ids[i], /*parent_id=*/kBookmarkBarId, /*title=*/ids[i],
+        /*server_id=*/ids[i], /*parent_id=*/kBookmarkBarId, /*guid=*/guids[i],
+        /*title=*/ids[i],
         /*is_deletion=*/false, /*version=*/0,
         /*unique_position=*/positions[i]));
   }
@@ -746,6 +763,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   updates.push_back(CreateUpdateResponseData(
       /*server_id=*/ids[4],
       /*parent_id=*/ids[1],
+      /*guid=*/guids[4],
       /*title=*/ids[4],
       /*is_deletion=*/false,
       /*version=*/1,
@@ -1300,6 +1318,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
 TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
        ShouldResolveConflictBetweenLocalAndRemoteUpdatesWithRemote) {
   const std::string kId = "id";
+  const std::string kGuid = base::GenerateGUID();
   const std::string kTitle = "title";
   const std::string kNewRemoteTitle = "remote title";
 
@@ -1308,6 +1327,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   updates.push_back(CreateUpdateResponseData(
       /*server_id=*/kId,
       /*parent_id=*/kBookmarkBarId,
+      /*guid=*/kGuid,
       /*title=*/kTitle,
       /*is_deletion=*/false,
       /*version=*/0,
@@ -1330,6 +1350,7 @@ TEST_F(BookmarkRemoteUpdatesHandlerWithInitialMergeTest,
   updates.push_back(CreateUpdateResponseData(
       /*server_id=*/kId,
       /*parent_id=*/kBookmarkBarId,
+      /*guid=*/kGuid,
       /*title=*/kNewRemoteTitle,
       /*is_deletion=*/false,
       /*version=*/1,
