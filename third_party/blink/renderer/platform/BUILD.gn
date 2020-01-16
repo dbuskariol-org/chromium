@@ -66,14 +66,10 @@ blink_python_runner("color_data") {
   script = "../build/scripts/gperf.py"
 
   color_data_gperf = "color_data.gperf"
-  inputs = [
-    color_data_gperf,
-  ]
+  inputs = [ color_data_gperf ]
 
   output_file = "$blink_platform_output_dir/color_data.cc"
-  outputs = [
-    output_file,
-  ]
+  outputs = [ output_file ]
 
   args = [
     gperf_exe,
@@ -88,9 +84,7 @@ blink_python_runner("color_data") {
 
 compiled_action("character_data") {
   tool = ":character_data_generator"
-  outputs = [
-    "$blink_platform_output_dir/character_property_data.cc",
-  ]
+  outputs = [ "$blink_platform_output_dir/character_property_data.cc" ]
   args = rebase_path(outputs, root_build_dir)
 }
 
@@ -226,9 +220,7 @@ config("blink_platform_pch") {
 }
 
 source_set("platform_export") {
-  sources = [
-    "platform_export.h",
-  ]
+  sources = [ "platform_export.h" ]
 
   visibility = []  # Allow re-assignment of list.
   visibility = [
@@ -1729,9 +1721,7 @@ jumbo_static_library("test_support") {
 }
 
 test("blink_platform_unittests") {
-  deps = [
-    ":blink_platform_unittests_sources",
-  ]
+  deps = [ ":blink_platform_unittests_sources" ]
 }
 
 jumbo_source_set("blink_platform_unittests_sources") {
@@ -1980,9 +1970,7 @@ jumbo_source_set("blink_platform_unittests_sources") {
     "//url/mojom:test_url_mojom_gurl_blink",
   ]
 
-  data_deps = [
-    ":blink_platform_unittests_data",
-  ]
+  data_deps = [ ":blink_platform_unittests_data" ]
 
   defines = [ "INSIDE_BLINK" ]
 }
@@ -1991,9 +1979,7 @@ executable("image_decode_bench") {
   visibility = []  # Allow re-assignment of list.
   visibility = [ "*" ]
 
-  sources = [
-    "testing/image_decode_bench.cc",
-  ]
+  sources = [ "testing/image_decode_bench.cc" ]
 
   deps = [
     ":platform",
@@ -2060,9 +2046,7 @@ if (current_cpu == "x86" || current_cpu == "x64") {
       ":blink_platform_implementation",
       "//third_party/blink/renderer:non_test_config",
     ]
-    public_deps = [
-      ":blink_platform_public_deps",
-    ]
+    public_deps = [ ":blink_platform_public_deps" ]
     if (is_win) {
       cflags = [ "/arch:AVX" ]
     } else {
@@ -2078,9 +2062,7 @@ test("blink_fuzzer_unittests") {
     "//third_party/blink/public:test_support",
   ]
 
-  sources = [
-    "testing/run_all_tests.cc",
-  ]
+  sources = [ "testing/run_all_tests.cc" ]
 
   if (is_linux) {
     deps += [
@@ -2108,9 +2090,7 @@ jumbo_source_set("blink_fuzzer_test_support") {
 
 # Fuzzer for blink::MHTMLParser.
 fuzzer_test("mhtml_parser_fuzzer") {
-  sources = [
-    "mhtml/mhtml_fuzzer.cc",
-  ]
+  sources = [ "mhtml/mhtml_fuzzer.cc" ]
   deps = [
     ":blink_fuzzer_test_support",
     ":platform",
@@ -2125,9 +2105,7 @@ fuzzer_test("mhtml_parser_fuzzer") {
 
 # Fuzzer for blink::WebIconSizesParser.
 fuzzer_test("web_icon_sizes_fuzzer") {
-  sources = [
-    "exported/web_icon_sizes_fuzzer.cc",
-  ]
+  sources = [ "exported/web_icon_sizes_fuzzer.cc" ]
   deps = [
     ":blink_fuzzer_test_support",
     ":platform",
@@ -2136,9 +2114,7 @@ fuzzer_test("web_icon_sizes_fuzzer") {
 }
 
 fuzzer_test("blink_png_decoder_fuzzer") {
-  sources = [
-    "png_fuzzer.cc",
-  ]
+  sources = [ "png_fuzzer.cc" ]
   deps = [
     ":blink_fuzzer_test_support",
     ":platform",
@@ -2154,9 +2130,7 @@ fuzzer_test("blink_png_decoder_fuzzer") {
 
 # Fuzzer for blink::DateTimeFormat.
 fuzzer_test("blink_date_time_format_fuzzer") {
-  sources = [
-    "text/date_time_format_fuzzer.cc",
-  ]
+  sources = [ "text/date_time_format_fuzzer.cc" ]
   deps = [
     ":blink_fuzzer_test_support",
     ":platform",
@@ -2167,9 +2141,7 @@ fuzzer_test("blink_date_time_format_fuzzer") {
 
 # Fuzzer for blink::JSONParser.
 fuzzer_test("blink_json_parser_fuzzer") {
-  sources = [
-    "json/json_parser_fuzzer.cc",
-  ]
+  sources = [ "json/json_parser_fuzzer.cc" ]
   deps = [
     ":blink_fuzzer_test_support",
     ":platform",
@@ -2178,9 +2150,7 @@ fuzzer_test("blink_json_parser_fuzzer") {
 }
 
 fuzzer_test("blink_harfbuzz_shaper_fuzzer") {
-  sources = [
-    "fonts/shaping/harfbuzz_shaper_fuzzer.cc",
-  ]
+  sources = [ "fonts/shaping/harfbuzz_shaper_fuzzer.cc" ]
   deps = [
     ":blink_fuzzer_test_support",
     ":platform",
@@ -2190,9 +2160,7 @@ fuzzer_test("blink_harfbuzz_shaper_fuzzer") {
 }
 
 fuzzer_test("blink_http_parsers_fuzzer") {
-  sources = [
-    "network/http_parsers_fuzzer.cc",
-  ]
+  sources = [ "network/http_parsers_fuzzer.cc" ]
   deps = [
     ":blink_fuzzer_test_support",
     ":platform",
@@ -2208,9 +2176,7 @@ template("blink_text_codec_fuzzer") {
   }
   name = target_name
   fuzzer_test("blink_text_codec_" + name + "_fuzzer") {
-    sources = [
-      "text_codec_fuzzer.cc",
-    ]
+    sources = [ "text_codec_fuzzer.cc" ]
     deps = [
       ":blink_fuzzer_test_support",
       ":platform",
