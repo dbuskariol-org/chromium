@@ -399,9 +399,10 @@ void WebPluginContainerImpl::Copy() {
   if (!web_plugin_->HasSelection())
     return;
 
-  SystemClipboard::GetInstance().WriteHTML(
+  LocalFrame* frame = element_->GetDocument().GetFrame();
+  frame->GetSystemClipboard()->WriteHTML(
       web_plugin_->SelectionAsMarkup(), KURL(), web_plugin_->SelectionAsText());
-  SystemClipboard::GetInstance().CommitWrite();
+  frame->GetSystemClipboard()->CommitWrite();
 }
 
 bool WebPluginContainerImpl::ExecuteEditCommand(const WebString& name) {

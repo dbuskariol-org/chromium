@@ -116,7 +116,6 @@
 #include "content/browser/push_messaging/push_messaging_manager.h"
 #include "content/browser/quota_dispatcher_host.h"
 #include "content/browser/renderer_host/agent_metrics_collector.h"
-#include "content/browser/renderer_host/clipboard_host_impl.h"
 #include "content/browser/renderer_host/code_cache_host_impl.h"
 #include "content/browser/renderer_host/embedded_frame_sink_provider_impl.h"
 #include "content/browser/renderer_host/file_utilities_host_impl.h"
@@ -2157,9 +2156,6 @@ void RenderProcessHostImpl::RegisterMojoInterfaces() {
       base::BindRepeating(
           &RenderProcessHostImpl::CreateBroadcastChannelProvider,
           weak_factory_.GetWeakPtr()));
-
-  AddUIThreadInterface(registry.get(),
-                       base::BindRepeating(&ClipboardHostImpl::Create));
 
   AddUIThreadInterface(
       registry.get(),

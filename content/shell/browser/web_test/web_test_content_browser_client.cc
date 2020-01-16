@@ -174,12 +174,6 @@ void WebTestContentBrowserClient::ExposeInterfacesToRenderer(
   registry->AddInterface(base::BindRepeating(&MojoWebTestHelper::Create));
   registry->AddInterface(
       base::BindRepeating(
-          &WebTestContentBrowserClient::BindClipboardHostForRequest,
-          base::Unretained(this)),
-      ui_task_runner);
-
-  registry->AddInterface(
-      base::BindRepeating(
           &WebTestContentBrowserClient::BindClientHintsControllerDelegate,
           base::Unretained(this)),
       ui_task_runner);
@@ -189,20 +183,6 @@ void WebTestContentBrowserClient::ExposeInterfacesToRenderer(
           &WebTestContentBrowserClient::BindPermissionAutomation,
           base::Unretained(this)),
       ui_task_runner);
-}
-
-void WebTestContentBrowserClient::BindClipboardHostForRequest(
-    blink::mojom::ClipboardHostRequest request) {
-  // Implicit conversion from ClipboardHostRequest to
-  // mojo::PendingReceiver<blink::mojom::ClipboardHost>.
-  BindClipboardHost(std::move(request));
-}
-
-void WebTestContentBrowserClient::BindClipboardHost(
-    mojo::PendingReceiver<blink::mojom::ClipboardHost> receiver) {
-  if (!mock_clipboard_host_)
-    mock_clipboard_host_ = std::make_unique<MockClipboardHost>();
-  mock_clipboard_host_->Bind(std::move(receiver));
 }
 
 void WebTestContentBrowserClient::BindClientHintsControllerDelegate(
@@ -357,6 +337,8 @@ void WebTestContentBrowserClient::RegisterBrowserInterfaceBindersForFrame(
     RenderFrameHost* render_frame_host,
     service_manager::BinderMapWithContext<content::RenderFrameHost*>* map) {
   map->Add<mojom::MojoWebTestHelper>(base::BindRepeating(&BindWebTestHelper));
+  map->Add<blink::mojom::ClipboardHost>(base::BindRepeating(
+      &WebTestContentBrowserClient::BindClipboardHost, base::Unretained(this)));
 }
 
 bool WebTestContentBrowserClient::CanAcceptUntrustedExchangesIfNeeded() {
@@ -371,6 +353,14 @@ WebTestContentBrowserClient::GetTtsControllerDelegate() {
 
 content::TtsPlatform* WebTestContentBrowserClient::GetTtsPlatform() {
   return WebTestTtsPlatform::GetInstance();
+}
+
+void WebTestContentBrowserClient::BindClipboardHost(
+    RenderFrameHost* render_frame_host,
+    mojo::PendingReceiver<blink::mojom::ClipboardHost> receiver) {
+  if (!mock_clipboard_host_)
+    mock_clipboard_host_ = std::make_unique<MockClipboardHost>();
+  mock_clipboard_host_->Bind(std::move(receiver));
 }
 
 std::unique_ptr<LoginDelegate> WebTestContentBrowserClient::CreateLoginDelegate(

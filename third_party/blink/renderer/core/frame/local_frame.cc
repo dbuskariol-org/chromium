@@ -244,6 +244,7 @@ void LocalFrame::Trace(blink::Visitor* visitor) {
   visitor->Trace(text_suggestion_controller_);
   visitor->Trace(smooth_scroll_sequencer_);
   visitor->Trace(content_capture_manager_);
+  visitor->Trace(system_clipboard_);
   Frame::Trace(visitor);
   Supplementable<LocalFrame>::Trace(visitor);
 }
@@ -1801,6 +1802,13 @@ void LocalFrame::SetIsCapturingMediaCallback(
 bool LocalFrame::IsCapturingMedia() const {
   return is_capturing_media_callback_ ? is_capturing_media_callback_.Run()
                                       : false;
+}
+
+SystemClipboard* LocalFrame::GetSystemClipboard() {
+  if (!system_clipboard_)
+    system_clipboard_ = MakeGarbageCollected<SystemClipboard>(this);
+
+  return system_clipboard_.Get();
 }
 
 void LocalFrame::EvictFromBackForwardCache() {

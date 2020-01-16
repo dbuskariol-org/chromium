@@ -120,6 +120,8 @@
 #include "third_party/blink/renderer/core/scroll/scroll_types.h"
 #include "third_party/blink/renderer/core/testing/color_scheme_helper.h"
 #include "third_party/blink/renderer/core/testing/fake_web_plugin.h"
+#include "third_party/blink/renderer/core/testing/mock_clipboard_host.h"
+#include "third_party/blink/renderer/core/testing/page_test_base.h"
 #include "third_party/blink/renderer/core/timing/dom_window_performance.h"
 #include "third_party/blink/renderer/core/timing/event_timing.h"
 #include "third_party/blink/renderer/core/timing/window_performance.h"
@@ -3286,6 +3288,14 @@ TEST_F(WebViewTest, MiddleClickAutoscrollCursor) {
     UpdateAllLifecyclePhases();
     RunPendingTasks();
 
+    LocalFrame* local_frame =
+        To<WebLocalFrameImpl>(web_view->MainFrame())->GetFrame();
+
+    // Setup a mock clipboard.  On linux, middle click can paste from the
+    // clipboard, so the input handler below will access the clipboard.
+    PageTestBase::MockClipboardHostProvider mock_clip_host_provider(
+        local_frame->GetBrowserInterfaceBroker());
+
     WebMouseEvent mouse_event(WebInputEvent::kMouseDown,
                               WebInputEvent::kNoModifiers,
                               WebInputEvent::GetStaticTimeStampForTests());
@@ -3301,9 +3311,6 @@ TEST_F(WebViewTest, MiddleClickAutoscrollCursor) {
         WebCoalescedInputEvent(mouse_event));
 
     EXPECT_EQ(current_test.expected_cursor, client.GetLastCursorType());
-
-    LocalFrame* local_frame =
-        To<WebLocalFrameImpl>(web_view->MainFrame())->GetFrame();
 
     // Even if a plugin tries to change the cursor type, that should be ignored
     // during middle-click autoscroll.

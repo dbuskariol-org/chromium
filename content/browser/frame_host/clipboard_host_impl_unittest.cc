@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/renderer_host/clipboard_host_impl.h"
-
 #include <stddef.h>
 #include <stdint.h>
 
@@ -12,6 +10,7 @@
 #include "base/run_loop.h"
 #include "base/strings/string16.h"
 #include "base/test/bind_test_util.h"
+#include "content/browser/frame_host/clipboard_host_impl.h"
 #include "content/public/test/browser_task_environment.h"
 #include "mojo/public/cpp/bindings/remote.h"
 #include "mojo/public/cpp/system/message_pipe.h"
@@ -26,7 +25,8 @@ class ClipboardHostImplTest : public ::testing::Test {
  protected:
   ClipboardHostImplTest()
       : clipboard_(ui::TestClipboard::CreateForCurrentThread()) {
-    ClipboardHostImpl::Create(remote_.BindNewPipeAndPassReceiver());
+    ClipboardHostImpl::Create(/*render_frame_host=*/nullptr,
+                              remote_.BindNewPipeAndPassReceiver());
   }
 
   ~ClipboardHostImplTest() override {

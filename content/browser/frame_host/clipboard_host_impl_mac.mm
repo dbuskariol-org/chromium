@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/renderer_host/clipboard_host_impl.h"
+#include "content/browser/frame_host/clipboard_host_impl.h"
 
 #import <Cocoa/Cocoa.h>
 #include <stddef.h>

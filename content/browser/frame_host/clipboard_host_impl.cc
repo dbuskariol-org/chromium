@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/renderer_host/clipboard_host_impl.h"
+#include "content/browser/frame_host/clipboard_host_impl.h"
 
 #include <utility>
 
@@ -14,6 +14,10 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/threading/sequenced_task_runner_handle.h"
 #include "build/build_config.h"
+#include "content/public/browser/render_frame_host.h"
+#include "content/public/browser/render_process_host.h"
+#include "content/public/common/child_process_host.h"
+#include "ipc/ipc_message.h"
 #include "mojo/public/cpp/system/platform_handle.h"
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "ui/base/clipboard/clipboard.h"
@@ -25,19 +29,30 @@
 namespace content {
 
 ClipboardHostImpl::ClipboardHostImpl(
+    RenderFrameHost* render_frame_host,
     mojo::PendingReceiver<blink::mojom::ClipboardHost> receiver)
     : receiver_(this, std::move(receiver)),
       clipboard_(ui::Clipboard::GetForCurrentThread()),
       clipboard_writer_(
-          new ui::ScopedClipboardWriter(ui::ClipboardBuffer::kCopyPaste)) {}
+          new ui::ScopedClipboardWriter(ui::ClipboardBuffer::kCopyPaste)) {
+  // |render_frame_host| may be null in unit tests.
+  if (render_frame_host) {
+    render_frame_routing_id_ = render_frame_host->GetRoutingID();
+    render_frame_pid_ = render_frame_host->GetProcess()->GetID();
+  } else {
+    render_frame_routing_id_ = MSG_ROUTING_NONE;
+    render_frame_pid_ = ChildProcessHost::kInvalidUniqueID;
+  }
+}
 
 void ClipboardHostImpl::Create(
+    RenderFrameHost* render_frame_host,
     mojo::PendingReceiver<blink::mojom::ClipboardHost> receiver) {
   // Clipboard implementations do interesting things, like run nested message
   // loops. Use manual memory management instead of SelfOwnedReceiver<T> which
   // synchronously destroys on failure and can result in some unfortunate
   // use-after-frees after the nested message loops exit.
-  auto* host = new ClipboardHostImpl(std::move(receiver));
+  auto* host = new ClipboardHostImpl(render_frame_host, std::move(receiver));
   host->receiver_.set_disconnect_handler(base::BindOnce(
       [](ClipboardHostImpl* host) {
         base::SequencedTaskRunnerHandle::Get()->DeleteSoon(FROM_HERE, host);

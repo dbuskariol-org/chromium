@@ -47,6 +47,7 @@
 #include "third_party/blink/public/mojom/web_feature/web_feature.mojom-blink-forward.h"
 #include "third_party/blink/public/platform/task_type.h"
 #include "third_party/blink/public/platform/viewport_intersection_state.h"
+#include "third_party/blink/renderer/core/clipboard/system_clipboard.h"
 #include "third_party/blink/renderer/core/core_export.h"
 #include "third_party/blink/renderer/core/dom/weak_identifier_map.h"
 #include "third_party/blink/renderer/core/editing/forward.h"
@@ -473,6 +474,8 @@ class CORE_EXPORT LocalFrame final : public Frame,
   void Focus() final;
   void ClearFocusedElement() final;
 
+  SystemClipboard* GetSystemClipboard();
+
  private:
   friend class FrameNavigationDisabler;
 
@@ -613,6 +616,9 @@ class CORE_EXPORT LocalFrame final : public Frame,
 
   mojo::AssociatedRemote<mojom::blink::LocalFrameHost> local_frame_host_remote_;
   mojo::AssociatedReceiver<mojom::blink::LocalFrame> receiver_{this};
+
+  // Access to the global system clipboard.
+  Member<SystemClipboard> system_clipboard_;
 };
 
 inline FrameLoader& LocalFrame::Loader() const {

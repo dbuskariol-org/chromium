@@ -641,11 +641,15 @@ mojom("content_test_mojo_bindings") {
     "frame_host_test_interface.mojom",
     "test_browser_associated_interfaces.mojom",
   ]
-  public_deps = [ "//url/mojom:url_mojom_gurl" ]
+  public_deps = [
+    "//url/mojom:url_mojom_gurl",
+  ]
 }
 
 mojom("web_ui_test_mojo_bindings") {
-  sources = [ "data/web_ui_test_mojo_bindings.mojom" ]
+  sources = [
+    "data/web_ui_test_mojo_bindings.mojom",
+  ]
 }
 
 mojom("mojo_web_test_bindings") {
@@ -663,7 +667,9 @@ mojom("mojo_web_test_bindings") {
 
 mojom("test_interfaces") {
   testonly = true
-  sources = [ "echo.mojom" ]
+  sources = [
+    "echo.mojom",
+  ]
 }
 
 if (is_android) {
@@ -681,9 +687,13 @@ if (is_android) {
       "../public/test/nested_message_pump_android.h",
     ]
 
-    public_deps = [ "//base" ]
+    public_deps = [
+      "//base",
+    ]
 
-    deps = [ "//content/public/test/android:test_support_content_jni_headers" ]
+    deps = [
+      "//content/public/test/android:test_support_content_jni_headers",
+    ]
   }
 }
 
@@ -1445,7 +1455,9 @@ test("content_browsertests") {
 
 static_library("run_all_unittests") {
   testonly = true
-  sources = [ "run_all_unittests.cc" ]
+  sources = [
+    "run_all_unittests.cc",
+  ]
   deps = [
     ":test_support",
     "//base/test:test_support",
@@ -1555,6 +1567,7 @@ test("content_unittests") {
     "../browser/file_system/file_system_operation_runner_unittest.cc",
     "../browser/frame_host/ancestor_throttle_unittest.cc",
     "../browser/frame_host/back_forward_cache_metrics_unittest.cc",
+    "../browser/frame_host/clipboard_host_impl_unittest.cc",
     "../browser/frame_host/form_submission_throttle_unittest.cc",
     "../browser/frame_host/frame_service_base_unittest.cc",
     "../browser/frame_host/frame_tree_node_blame_context_unittest.cc",
@@ -1657,7 +1670,6 @@ test("content_unittests") {
     "../browser/picture_in_picture/picture_in_picture_service_impl_unittest.cc",
     "../browser/plugin_list_unittest.cc",
     "../browser/presentation/presentation_service_impl_unittest.cc",
-    "../browser/renderer_host/clipboard_host_impl_unittest.cc",
     "../browser/renderer_host/cursor_manager_unittest.cc",
     "../browser/renderer_host/direct_manipulation_test_helper_win.cc",
     "../browser/renderer_host/direct_manipulation_test_helper_win.h",
@@ -2238,7 +2250,9 @@ test("content_unittests") {
 
 if (enable_nocompile_tests) {
   nocompile_test("content_nocompile_tests") {
-    sources = [ "../public/browser/browser_task_traits_unittest.nc" ]
+    sources = [
+      "../public/browser/browser_task_traits_unittest.nc",
+    ]
 
     deps = [
       ":run_all_unittests",
@@ -2256,7 +2270,9 @@ test("content_perftests") {
     check_includes = false
   }
 
-  sources = [ "../test/run_all_perftests.cc" ]
+  sources = [
+    "../test/run_all_perftests.cc",
+  ]
   deps = [
     "//base/test:test_support",
     "//cc",
@@ -2282,7 +2298,9 @@ test("content_perftests") {
 }
 
 group("fuzzers") {
-  deps = [ "//content/test/fuzzer" ]
+  deps = [
+    "//content/test/fuzzer",
+  ]
 }
 
 # This group defines the isolate files needed to run

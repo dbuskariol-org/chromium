@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_RENDERER_HOST_CLIPBOARD_HOST_IMPL_H_
-#define CONTENT_BROWSER_RENDERER_HOST_CLIPBOARD_HOST_IMPL_H_
+#ifndef CONTENT_BROWSER_FRAME_HOST_CLIPBOARD_HOST_IMPL_H_
+#define CONTENT_BROWSER_FRAME_HOST_CLIPBOARD_HOST_IMPL_H_
 
 #include <memory>
 #include <string>
@@ -25,18 +25,21 @@ class ScopedClipboardWriter;
 namespace content {
 
 class ClipboardHostImplTest;
+class RenderFrameHost;
 
 class CONTENT_EXPORT ClipboardHostImpl : public blink::mojom::ClipboardHost {
  public:
   ~ClipboardHostImpl() override;
 
   static void Create(
+      RenderFrameHost* render_frame_host,
       mojo::PendingReceiver<blink::mojom::ClipboardHost> receiver);
 
  private:
   friend class ClipboardHostImplTest;
 
-  explicit ClipboardHostImpl(
+  ClipboardHostImpl(
+      RenderFrameHost* render_frame_host,
       mojo::PendingReceiver<blink::mojom::ClipboardHost> receiver);
 
   // content::mojom::ClipboardHost
@@ -74,9 +77,11 @@ class CONTENT_EXPORT ClipboardHostImpl : public blink::mojom::ClipboardHost {
 
   mojo::Receiver<blink::mojom::ClipboardHost> receiver_;
   ui::Clipboard* const clipboard_;  // Not owned
+  int render_frame_routing_id_;
+  int render_frame_pid_;
   std::unique_ptr<ui::ScopedClipboardWriter> clipboard_writer_;
 };
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_RENDERER_HOST_CLIPBOARD_HOST_IMPL_H_
+#endif  // CONTENT_BROWSER_FRAME_HOST_CLIPBOARD_HOST_IMPL_H_
