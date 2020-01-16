@@ -372,7 +372,8 @@ namespace {
 
 int AdjustedFocusRingOffset(int offset, int width, bool is_outset) {
   if (::features::IsFormControlsRefreshEnabled()) {
-    return 0;
+    // For FormControlsRefresh the focus ring has a 2px inner padding.
+    return 2;
   }
 
 #if defined(OS_MACOSX)

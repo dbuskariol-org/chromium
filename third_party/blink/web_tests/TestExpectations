@@ -1808,6 +1808,7 @@ crbug.com/1035582 external/wpt/css/css-transforms/transform-input-015.html [ Ski
 # Focus ring related
 crbug.com/1035582 fast/forms/text/input-appearance-autocomplete-very-long-value.html [ Skip ]
 crbug.com/1035582 virtual/text-antialias/selection/mixed-directionality-selection.html [ Skip ]
+crbug.com/1035582 paint/pagination/composited-paginated-outlined-box.html [ Skip ]
 
 # Failed during rebaseline 3-1
 crbug.com/1035582 [ Fuchsia ] paint/invalidation/selection/selection-in-composited-scrolling-container.html [ Skip ]
