@@ -8,12 +8,13 @@
 #include <type_traits>
 
 #include "base/optional.h"
+#include "base/template_util.h"
 #include "base/time/time.h"
 #include "third_party/blink/renderer/bindings/core/v8/idl_types_base.h"
 #include "third_party/blink/renderer/bindings/core/v8/native_value_traits.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_string_resource.h"
 #include "third_party/blink/renderer/platform/heap/handle.h"
-#include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
+#include "third_party/blink/renderer/platform/wtf/forward.h"
 #include "third_party/blink/renderer/platform/wtf/vector.h"
 
 namespace blink {
@@ -21,6 +22,9 @@ namespace blink {
 class EventListener;
 class ScriptPromise;
 class ScriptValue;
+
+// The type names below are named as "IDL" prefix + Web IDL type name.
+// https://heycam.github.io/webidl/#dfn-type-name
 
 // Boolean
 struct IDLBoolean final : public IDLBaseHelper<bool> {};
@@ -144,6 +148,10 @@ struct IDLSequence final : public IDLBase {
   using ImplType = VectorOf<typename NativeValueTraits<T>::ImplType>;
 };
 
+// Frozen array types
+template <typename T>
+using IDLArray = IDLSequence<T>;
+
 // Record
 template <typename Key, typename Value>
 struct IDLRecord final : public IDLBase {
@@ -156,45 +164,25 @@ struct IDLRecord final : public IDLBase {
       VectorOfPairs<String, typename NativeValueTraits<Value>::ImplType>;
 };
 
-// Nullable (T?).
-// https://heycam.github.io/webidl/#idl-nullable-type
-// Types without a built-in notion of nullability are mapped to
-// base::Optional<T>.
-template <typename InnerType, typename = void>
+// Nullable
+template <typename InnerType, typename SFINAEHelper = void>
 struct IDLNullable final : public IDLBase {
- private:
-  using InnerTraits = NativeValueTraits<InnerType>;
-  using InnerResultType =
-      decltype(InnerTraits::NativeValue(std::declval<v8::Isolate*>(),
-                                        v8::Local<v8::Value>(),
-                                        std::declval<ExceptionState&>()));
-
- public:
-  using ResultType = base::Optional<std::decay_t<InnerResultType>>;
-  using ImplType = ResultType;
-  static inline ResultType NullValue() { return base::nullopt; }
+  using ImplType =
+      base::Optional<typename NativeValueTraits<InnerType>::ImplType>;
 };
 template <typename InnerType>
-struct IDLNullable<InnerType,
-                   decltype(void(NativeValueTraits<InnerType>::NullValue()))>
+struct IDLNullable<
+    InnerType,
+    base::void_t<decltype(NativeValueTraits<InnerType>::NullValue)>>
     final : public IDLBase {
- private:
-  using InnerTraits = NativeValueTraits<InnerType>;
-  using InnerResultType =
-      decltype(InnerTraits::NativeValue(std::declval<v8::Isolate*>(),
-                                        v8::Local<v8::Value>(),
-                                        std::declval<ExceptionState&>()));
-
- public:
-  using ResultType = InnerResultType;
-  using ImplType = typename InnerTraits::ImplType;
-  static inline ResultType NullValue() { return InnerTraits::NullValue(); }
+  using ImplType = typename NativeValueTraits<InnerType>::ImplType;
 };
 
 // EventHandler types
-struct IDLEventHandler : public IDLBaseHelper<EventListener*> {};
-struct IDLOnBeforeUnloadEventHandler : public IDLBaseHelper<EventListener*> {};
-struct IDLOnErrorEventHandler : public IDLBaseHelper<EventListener*> {};
+struct IDLEventHandler final : public IDLBaseHelper<EventListener> {};
+struct IDLOnBeforeUnloadEventHandler final
+    : public IDLBaseHelper<EventListener> {};
+struct IDLOnErrorEventHandler final : public IDLBaseHelper<EventListener> {};
 
 }  // namespace blink
 

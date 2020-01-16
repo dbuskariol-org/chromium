@@ -893,6 +893,8 @@ struct NativeValueTraits<
         << "is not yet implemented.";
     return nullptr;
   }
+
+  static constexpr T* NullValue() { return nullptr; }
 };
 
 // Dictionary
@@ -907,6 +909,8 @@ struct NativeValueTraits<
                         ExceptionState& exception_state) {
     return T::Create(isolate, value, exception_state);
   }
+
+  static constexpr T* NullValue() { return nullptr; }
 };
 
 // Interface
@@ -937,24 +941,49 @@ struct NativeValueTraits<
 };
 
 // Nullable
+//
+// Types without a built-in notion of nullability are mapped to
+// base::Optional<T>.
 template <typename InnerType>
 struct NativeValueTraits<IDLNullable<InnerType>>
     : public NativeValueTraitsBase<IDLNullable<InnerType>> {
   // https://heycam.github.io/webidl/#es-nullable-type
-  static typename IDLNullable<InnerType>::ResultType NativeValue(
-      v8::Isolate* isolate,
-      v8::Local<v8::Value> v8_value,
-      ExceptionState& exception_state) {
-    if (v8_value->IsNullOrUndefined())
-      return IDLNullable<InnerType>::NullValue();
-    return NativeValueTraits<InnerType>::NativeValue(isolate, v8_value,
+  using ImplType =
+      base::Optional<typename NativeValueTraits<InnerType>::ImplType>;
+
+  static ImplType NativeValue(v8::Isolate* isolate,
+                              v8::Local<v8::Value> value,
+                              ExceptionState& exception_state) {
+    if (value->IsNullOrUndefined())
+      return base::nullopt;
+    return NativeValueTraits<InnerType>::NativeValue(isolate, value,
                                                      exception_state);
   }
 };
+template <typename InnerType>
+struct NativeValueTraits<
+    IDLNullable<InnerType>,
+    base::void_t<decltype(NativeValueTraits<InnerType>::NullValue)>>
+    : public NativeValueTraitsBase<IDLNullable<InnerType>> {
+  // https://heycam.github.io/webidl/#es-nullable-type
+  using ImplType = typename NativeValueTraits<InnerType>::ImplType;
+
+  static decltype(auto) NativeValue(v8::Isolate* isolate,
+                                    v8::Local<v8::Value> value,
+                                    ExceptionState& exception_state) {
+    if (value->IsNullOrUndefined())
+      return NativeValueTraits<InnerType>::NullValue();
+    return NativeValueTraits<InnerType>::NativeValue(isolate, value,
+                                                     exception_state);
+  }
+};
+// IDLNullable<IDLNullable<T>> must not be used.
+template <typename T>
+struct NativeValueTraits<IDLNullable<IDLNullable<T>>>;
 
 // EventHandler
 template <>
-struct NativeValueTraits<IDLEventHandler>
+struct CORE_EXPORT NativeValueTraits<IDLEventHandler>
     : public NativeValueTraitsBase<IDLEventHandler> {
   static EventListener* NativeValue(v8::Isolate* isolate,
                                     v8::Local<v8::Value> value,
@@ -962,7 +991,7 @@ struct NativeValueTraits<IDLEventHandler>
 };
 
 template <>
-struct NativeValueTraits<IDLOnBeforeUnloadEventHandler>
+struct CORE_EXPORT NativeValueTraits<IDLOnBeforeUnloadEventHandler>
     : public NativeValueTraitsBase<IDLOnBeforeUnloadEventHandler> {
   static EventListener* NativeValue(v8::Isolate* isolate,
                                     v8::Local<v8::Value> value,
@@ -970,12 +999,21 @@ struct NativeValueTraits<IDLOnBeforeUnloadEventHandler>
 };
 
 template <>
-struct NativeValueTraits<IDLOnErrorEventHandler>
+struct CORE_EXPORT NativeValueTraits<IDLOnErrorEventHandler>
     : public NativeValueTraitsBase<IDLOnErrorEventHandler> {
   static EventListener* NativeValue(v8::Isolate* isolate,
                                     v8::Local<v8::Value> value,
                                     ExceptionState& exception_state);
 };
+
+// EventHandler and its family are nullable, so IDLNullable<IDLEventHandler>
+// must not be used.
+template <>
+struct NativeValueTraits<IDLNullable<IDLEventHandler>>;
+template <>
+struct NativeValueTraits<IDLNullable<IDLOnBeforeUnloadEventHandler>>;
+template <>
+struct NativeValueTraits<IDLNullable<IDLOnErrorEventHandler>>;
 
 }  // namespace blink
 
