@@ -166,7 +166,6 @@ std::unique_ptr<views::Button> CreateCircularImageButton(
 // static
 void ProfileMenuViewBase::ShowBubble(
     profiles::BubbleViewMode view_mode,
-    signin_metrics::AccessPoint access_point,
     views::Button* anchor_button,
     Browser* browser,
     bool is_source_keyboard) {
@@ -183,7 +182,7 @@ void ProfileMenuViewBase::ShowBubble(
   } else {
     DCHECK_EQ(profiles::BUBBLE_VIEW_MODE_PROFILE_CHOOSER, view_mode);
 #if !defined(OS_CHROMEOS)
-    bubble = new ProfileMenuView(anchor_button, browser, access_point);
+    bubble = new ProfileMenuView(anchor_button, browser);
 #else
     NOTREACHED();
     return;

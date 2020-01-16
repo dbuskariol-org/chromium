@@ -31,9 +31,7 @@ class Browser;
 // It displays a list of profiles and allows users to switch between profiles.
 class ProfileMenuView : public ProfileMenuViewBase {
  public:
-  ProfileMenuView(views::Button* anchor_button,
-                  Browser* browser,
-                  signin_metrics::AccessPoint access_point);
+  ProfileMenuView(views::Button* anchor_button, Browser* browser);
   ~ProfileMenuView() override;
 
   // ProfileMenuViewBase:
@@ -81,9 +79,6 @@ class ProfileMenuView : public ProfileMenuViewBase {
 
   // Clean-up done after an action was performed in the ProfileChooser.
   void PostActionPerformed(ProfileMetrics::ProfileDesktopMenu action_performed);
-
-  // The current access point of sign in.
-  const signin_metrics::AccessPoint access_point_;
 
   DISALLOW_COPY_AND_ASSIGN(ProfileMenuView);
 };

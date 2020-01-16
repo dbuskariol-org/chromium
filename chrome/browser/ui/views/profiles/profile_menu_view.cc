@@ -122,10 +122,8 @@ bool IsSyncPaused(Profile* profile) {
 // static
 bool ProfileMenuView::close_on_deactivate_for_testing_ = true;
 
-ProfileMenuView::ProfileMenuView(views::Button* anchor_button,
-                                 Browser* browser,
-                                 signin_metrics::AccessPoint access_point)
-    : ProfileMenuViewBase(anchor_button, browser), access_point_(access_point) {
+ProfileMenuView::ProfileMenuView(views::Button* anchor_button, Browser* browser)
+    : ProfileMenuViewBase(anchor_button, browser) {
   GetViewAccessibility().OverrideName(GetAccessibleWindowTitle());
   chrome::RecordDialogCreation(chrome::DialogIdentifier::PROFILE_CHOOSER);
   set_close_on_deactivate(close_on_deactivate_for_testing_);
@@ -251,13 +249,15 @@ void ProfileMenuView::OnSyncErrorButtonClicked(
             signin_metrics::SignoutDelete::IGNORE_METRIC);
         Hide();
         browser()->signin_view_controller()->ShowSignin(
-            profiles::BUBBLE_VIEW_MODE_GAIA_SIGNIN, browser(), access_point_);
+            profiles::BUBBLE_VIEW_MODE_GAIA_SIGNIN, browser(),
+            signin_metrics::AccessPoint::ACCESS_POINT_AVATAR_BUBBLE_SIGN_IN);
       }
       break;
     case sync_ui_util::AUTH_ERROR:
       Hide();
       browser()->signin_view_controller()->ShowSignin(
-          profiles::BUBBLE_VIEW_MODE_GAIA_REAUTH, browser(), access_point_);
+          profiles::BUBBLE_VIEW_MODE_GAIA_REAUTH, browser(),
+          signin_metrics::AccessPoint::ACCESS_POINT_AVATAR_BUBBLE_SIGN_IN);
       break;
     case sync_ui_util::UPGRADE_CLIENT_ERROR:
       chrome::OpenUpdateChromeDialog(browser());
@@ -280,14 +280,17 @@ void ProfileMenuView::OnSigninButtonClicked() {
   RecordClick(ActionableItem::kSigninButton);
   Hide();
   browser()->signin_view_controller()->ShowSignin(
-      profiles::BUBBLE_VIEW_MODE_GAIA_SIGNIN, browser(), access_point_);
+      profiles::BUBBLE_VIEW_MODE_GAIA_SIGNIN, browser(),
+      signin_metrics::AccessPoint::ACCESS_POINT_AVATAR_BUBBLE_SIGN_IN);
 }
 
 void ProfileMenuView::OnSigninAccountButtonClicked(AccountInfo account) {
   RecordClick(ActionableItem::kSigninAccountButton);
   Hide();
-  signin_ui_util::EnableSyncFromPromo(browser(), account, access_point_,
-                                      true /* is_default_promo_account */);
+  signin_ui_util::EnableSyncFromPromo(
+      browser(), account,
+      signin_metrics::AccessPoint::ACCESS_POINT_AVATAR_BUBBLE_SIGN_IN,
+      true /* is_default_promo_account */);
 }
 
 void ProfileMenuView::OnSignoutButtonClicked() {
