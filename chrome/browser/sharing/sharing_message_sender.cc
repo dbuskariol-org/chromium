@@ -29,7 +29,6 @@ void SharingMessageSender::SendMessageToDevice(
     chrome_browser_sharing::SharingMessage message,
     DelegateType delegate_type,
     ResponseCallback callback) {
-  DCHECK_GE(response_timeout, kAckTimeToLive);
   DCHECK(message.payload_case() !=
          chrome_browser_sharing::SharingMessage::kAckMessage);
 
@@ -86,7 +85,7 @@ void SharingMessageSender::SendMessageToDevice(
       send_tab_to_self::GetSharingDeviceNames(local_device_info).full_name);
 
   delegate->DoSendMessageToDevice(
-      device, response_timeout - kAckTimeToLive, std::move(message),
+      device, response_timeout, std::move(message),
       base::BindOnce(&SharingMessageSender::OnMessageSent,
                      weak_ptr_factory_.GetWeakPtr(), message_guid));
 }

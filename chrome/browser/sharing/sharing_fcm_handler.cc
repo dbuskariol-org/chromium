@@ -6,6 +6,8 @@
 
 #include "base/no_destructor.h"
 #include "base/strings/strcat.h"
+#include "base/time/time.h"
+#include "chrome/browser/sharing/features.h"
 #include "chrome/browser/sharing/sharing_constants.h"
 #include "chrome/browser/sharing/sharing_fcm_sender.h"
 #include "chrome/browser/sharing/sharing_handler_registry.h"
@@ -166,7 +168,9 @@ void SharingFCMHandler::SendAckMessage(
     ack_message->set_allocated_response_message(response.release());
 
   sharing_fcm_sender_->SendMessageToTargetInfo(
-      std::move(*target_info), kAckTimeToLive, std::move(sharing_message),
+      std::move(*target_info),
+      base::TimeDelta::FromSeconds(kSharingAckMessageTTLSeconds.Get()),
+      std::move(sharing_message),
       base::BindOnce(&SharingFCMHandler::OnAckMessageSent,
                      weak_ptr_factory_.GetWeakPtr(),
                      std::move(original_message_id), original_message_type,
