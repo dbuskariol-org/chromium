@@ -205,7 +205,7 @@ def collect_include_headers_of_idl_types(idl_types):
             type_def_obj = idl_type.union_definition_object
             header_paths.add(PathManager(type_def_obj).api_path(ext="h"))
         elif idl_type.is_nullable:
-            if not blink_type_info(idl_type.inner_type).is_nullable:
+            if not blink_type_info(idl_type.inner_type).has_null_value:
                 header_paths.add("base/optional.h")
         else:
             assert False, "Unknown type: {}".format(idl_type.syntactic_form)

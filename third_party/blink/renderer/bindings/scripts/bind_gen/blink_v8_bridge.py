@@ -50,8 +50,8 @@ def blink_type_info(idl_type):
       const_ref_t: A const-qualified reference type.
       value_t: The type of a variable that behaves as a value.  E.g. String =>
           String
-      is_nullable: True if the Blink implementation type can represent IDL null
-          value by itself.
+      has_null_value: True if the Blink implementation type can represent IDL
+          null value by itself without use of base::Optional<T>.
     """
     assert isinstance(idl_type, web_idl.IdlType)
 
@@ -62,13 +62,13 @@ def blink_type_info(idl_type):
                      ref_fmt="{}",
                      const_ref_fmt="{}",
                      value_fmt="{}",
-                     is_nullable=False):
+                     has_null_value=False):
             self.member_t = member_fmt.format(typename)
             self.ref_t = ref_fmt.format(typename)
             self.const_ref_t = const_ref_fmt.format(typename)
             self.value_t = value_fmt.format(typename)
             # Whether Blink impl type can represent IDL null or not.
-            self.is_nullable = is_nullable
+            self.has_null_value = has_null_value
 
     real_type = idl_type.unwrap(typedef=True)
 
@@ -95,7 +95,7 @@ def blink_type_info(idl_type):
             "String",
             ref_fmt="{}&",
             const_ref_fmt="const {}&",
-            is_nullable=True)
+            has_null_value=True)
 
     if real_type.is_buffer_source_type:
         return TypeInfo(
@@ -104,7 +104,7 @@ def blink_type_info(idl_type):
             ref_fmt="{}*",
             const_ref_fmt="const {}*",
             value_fmt="{}*",
-            is_nullable=True)
+            has_null_value=True)
 
     if real_type.is_symbol:
         assert False, "Blink does not support/accept IDL symbol type."
@@ -114,7 +114,7 @@ def blink_type_info(idl_type):
             "ScriptValue",
             ref_fmt="{}&",
             const_ref_fmt="const {}&",
-            is_nullable=True)
+            has_null_value=True)
 
     if real_type.is_void:
         assert False, "Blink does not support/accept IDL void type."
@@ -127,7 +127,7 @@ def blink_type_info(idl_type):
             ref_fmt="{}*",
             const_ref_fmt="const {}*",
             value_fmt="{}*",
-            is_nullable=True)
+            has_null_value=True)
 
     if (real_type.is_sequence or real_type.is_frozen_array
             or real_type.is_variadic):
@@ -156,11 +156,11 @@ def blink_type_info(idl_type):
             blink_impl_type,
             ref_fmt="{}&",
             const_ref_fmt="const {}&",
-            is_nullable=True)
+            has_null_value=True)
 
     if real_type.is_nullable:
         inner_type = blink_type_info(real_type.inner_type)
-        if inner_type.is_nullable:
+        if inner_type.has_null_value:
             return inner_type
         return TypeInfo(
             "base::Optional<{}>".format(inner_type.value_t),
@@ -261,7 +261,7 @@ def make_default_value_expr(idl_type, default_value):
             initializer = None  # <union_type>::IsNull() by default
             assignment_value = "{}()".format(type_info.value_t)
         else:
-            assert not type_info.is_nullable
+            assert not type_info.has_null_value
             initializer = None  # !base::Optional::has_value() by default
             assignment_value = "base::nullopt"
     elif default_value.idl_type.is_sequence:
