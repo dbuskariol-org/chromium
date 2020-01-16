@@ -652,6 +652,11 @@ const base::Feature kInternalMediaSession {
 const base::Feature kUseFakeDeviceForMediaStream{
     "use-fake-device-for-media-stream", base::FEATURE_DISABLED_BY_DEFAULT};
 
+// Makes VideoCadenceEstimator use Bresenham-like algorithm for frame cadence
+// estimations.
+const base::Feature kBresenhamCadence{"BresenhamCadence",
+                                      base::FEATURE_DISABLED_BY_DEFAULT};
+
 bool IsVideoCaptureAcceleratedJpegDecodingEnabled() {
   if (base::CommandLine::ForCurrentProcess()->HasSwitch(
           switches::kDisableAcceleratedMjpegDecode)) {
