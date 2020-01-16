@@ -411,7 +411,7 @@ void PerUserTopicSubscriptionManager::ScheduleRequestForRepetition(
   pending_subscriptions_[topic]->request_retry_timer_.Start(
       FROM_HERE,
       pending_subscriptions_[topic]->request_backoff_.GetTimeUntilRelease(),
-      base::BindRepeating(
+      base::BindOnce(
           &PerUserTopicSubscriptionManager::StartPendingSubscriptionRequest,
           base::Unretained(this), topic));
 }
@@ -426,6 +426,15 @@ void PerUserTopicSubscriptionManager::SubscriptionFinishedForTopic(
   } else {
     auto it = pending_subscriptions_.find(topic);
     if (code.IsAuthFailure()) {
+      // Invalidate previous token, otherwise the identity provider will return
+      // the same token again.
+      // TODO(crbug.com/1020117): Don't invalidate multiple access tokens in a
+      // row - just retry once, then give up. (Or at least use backoff!)
+      if (!access_token_.empty()) {
+        identity_provider_->InvalidateAccessToken({kFCMOAuthScope},
+                                                  access_token_);
+        access_token_.clear();
+      }
       // Re-request access token and try subscription requests again.
       RequestAccessToken();
     } else {
@@ -440,6 +449,10 @@ void PerUserTopicSubscriptionManager::SubscriptionFinishedForTopic(
         pending_subscriptions_.erase(it);
         return;
       }
+      // TODO(crbug.com/1020117): This should probably go through
+      // RequestAccessToken() to make sure we have a fresh one. (The identity
+      // code will only actually request a new one from the network if the
+      // existing one has expired.)
       ScheduleRequestForRepetition(topic);
     }
   }
@@ -462,12 +475,6 @@ void PerUserTopicSubscriptionManager::RemoveObserver(Observer* observer) {
 }
 
 void PerUserTopicSubscriptionManager::RequestAccessToken() {
-  // TODO(crbug.com/1020117): Implement traffic optimisation.
-  // * Before sending request to server ask for access token from identity
-  //   provider (don't invalidate previous token).
-  //   Identity provider will take care of retrieving/caching.
-  // * Only invalidate access token when server didn't accept it.
-
   // Only one active request at a time.
   if (access_token_fetcher_ != nullptr)
     return;
@@ -475,13 +482,9 @@ void PerUserTopicSubscriptionManager::RequestAccessToken() {
   // should probably early-out instead of starting a request immediately. As it
   // is, this might bypass the exponential backoff.
   request_access_token_retry_timer_.Stop();
-  OAuth2AccessTokenManager::ScopeSet oauth2_scopes = {kFCMOAuthScope};
-  // Invalidate previous token, otherwise the identity provider will return the
-  // same token again.
-  identity_provider_->InvalidateAccessToken(oauth2_scopes, access_token_);
   access_token_.clear();
   access_token_fetcher_ = identity_provider_->FetchAccessToken(
-      "fcm_invalidation", oauth2_scopes,
+      "fcm_invalidation", {kFCMOAuthScope},
       base::BindOnce(
           &PerUserTopicSubscriptionManager::OnAccessTokenRequestCompleted,
           base::Unretained(this)));
@@ -519,8 +522,8 @@ void PerUserTopicSubscriptionManager::OnAccessTokenRequestFailed(
   request_access_token_backoff_.InformOfRequest(false);
   request_access_token_retry_timer_.Start(
       FROM_HERE, request_access_token_backoff_.GetTimeUntilRelease(),
-      base::BindRepeating(&PerUserTopicSubscriptionManager::RequestAccessToken,
-                          base::Unretained(this)));
+      base::BindOnce(&PerUserTopicSubscriptionManager::RequestAccessToken,
+                     base::Unretained(this)));
 }
 
 void PerUserTopicSubscriptionManager::DropAllSavedSubscriptionsOnTokenChange() {
