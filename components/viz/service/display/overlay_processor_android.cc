@@ -4,8 +4,10 @@
 
 #include "components/viz/service/display/overlay_processor_android.h"
 
+#include "base/synchronization/waitable_event.h"
 #include "components/viz/common/quads/stream_video_draw_quad.h"
 #include "components/viz/service/display/display_resource_provider.h"
+#include "components/viz/service/display/overlay_processor_on_gpu.h"
 #include "components/viz/service/display/overlay_strategy_underlay.h"
 #include "components/viz/service/display/skia_output_surface.h"
 #include "ui/gfx/geometry/rect_conversions.h"
@@ -13,24 +15,58 @@
 namespace viz {
 OverlayProcessorAndroid::OverlayProcessorAndroid(
     SkiaOutputSurface* skia_output_surface,
+    scoped_refptr<gpu::GpuTaskSchedulerHelper> gpu_task_scheduler,
     bool enable_overlay)
     : OverlayProcessorUsingStrategy(),
       skia_output_surface_(skia_output_surface),
+      gpu_task_scheduler_(std::move(gpu_task_scheduler)),
       overlay_enabled_(enable_overlay) {
-  if (overlay_enabled_) {
-    // For Android, we do not have the ability to skip an overlay, since the
-    // texture is already in a SurfaceView.  Ideally, we would honor a 'force
-    // overlay' flag that FromDrawQuad would also check.
-    // For now, though, just skip the opacity check.  We really have no idea if
-    // the underlying overlay is opaque anyway; the candidate is referring to
-    // a dummy resource that has no relation to what the overlay contains.
-    // https://crbug.com/842931 .
-    strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
-        this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
+  if (!overlay_enabled_)
+    return;
+
+  if (gpu_task_scheduler_) {
+    // TODO(weiliangc): Eventually move the on gpu initialization to another
+    // static function.
+    auto callback = base::BindOnce(
+        &OverlayProcessorAndroid::InitializeOverlayProcessorOnGpu,
+        base::Unretained(this));
+    gpu_task_scheduler_->ScheduleGpuTask(std::move(callback), {});
+  }
+  // For Android, we do not have the ability to skip an overlay, since the
+  // texture is already in a SurfaceView.  Ideally, we would honor a 'force
+  // overlay' flag that FromDrawQuad would also check.
+  // For now, though, just skip the opacity check.  We really have no idea if
+  // the underlying overlay is opaque anyway; the candidate is referring to
+  // a dummy resource that has no relation to what the overlay contains.
+  // https://crbug.com/842931 .
+  strategies_.push_back(std::make_unique<OverlayStrategyUnderlay>(
+      this, OverlayStrategyUnderlay::OpaqueMode::AllowTransparentCandidates));
+}
+
+OverlayProcessorAndroid::~OverlayProcessorAndroid() {
+  if (gpu_task_scheduler_ && overlay_enabled_) {
+    // If we have a |gpu_task_scheduler_|, we must have started initializing
+    // a |processor_on_gpu_| on the |gpu_task_scheduler_|.
+    base::WaitableEvent event(base::WaitableEvent::ResetPolicy::MANUAL,
+                              base::WaitableEvent::InitialState::NOT_SIGNALED);
+    auto callback =
+        base::BindOnce(&OverlayProcessorAndroid::DestroyOverlayProcessorOnGpu,
+                       base::Unretained(this), &event);
+    gpu_task_scheduler_->ScheduleGpuTask(std::move(callback), {});
+    event.Wait();
   }
 }
 
-OverlayProcessorAndroid::~OverlayProcessorAndroid() {}
+void OverlayProcessorAndroid::InitializeOverlayProcessorOnGpu() {
+  processor_on_gpu_ = std::make_unique<OverlayProcessorOnGpu>();
+}
+
+void OverlayProcessorAndroid::DestroyOverlayProcessorOnGpu(
+    base::WaitableEvent* event) {
+  processor_on_gpu_ = nullptr;
+  DCHECK(event);
+  event->Signal();
+}
 
 bool OverlayProcessorAndroid::IsOverlaySupported() const {
   return overlay_enabled_;

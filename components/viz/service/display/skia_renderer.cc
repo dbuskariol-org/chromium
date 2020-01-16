@@ -672,9 +672,13 @@ class SkiaRenderer::ScopedYUVSkImageBuilder {
 SkiaRenderer::SkiaRenderer(const RendererSettings* settings,
                            OutputSurface* output_surface,
                            DisplayResourceProvider* resource_provider,
+                           OverlayProcessorInterface* overlay_processor,
                            SkiaOutputSurface* skia_output_surface,
                            DrawMode mode)
-    : DirectRenderer(settings, output_surface, resource_provider),
+    : DirectRenderer(settings,
+                     output_surface,
+                     resource_provider,
+                     overlay_processor),
       draw_mode_(mode),
       skia_output_surface_(skia_output_surface) {
   switch (draw_mode_) {
