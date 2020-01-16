@@ -385,17 +385,10 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void LazyInitialize(base::OnceClosure callback);
   void DidReadInitialData(std::unique_ptr<InitialData> data,
                           ServiceWorkerDatabase::Status status);
-  void DidFindRegistrationForClientUrl(
-      FindRegistrationCallback callback,
-      const ServiceWorkerDatabase::RegistrationData& data,
-      const ResourceList& resources,
-      ServiceWorkerDatabase::Status status);
-  void DidFindRegistrationForScope(
-      const GURL& scope,
-      FindRegistrationCallback callback,
-      const ServiceWorkerDatabase::RegistrationData& data,
-      const ResourceList& resources,
-      ServiceWorkerDatabase::Status status);
+  void DidFindRegistration(FindRegistrationCallback callback,
+                           const ServiceWorkerDatabase::RegistrationData& data,
+                           const ResourceList& resources,
+                           ServiceWorkerDatabase::Status status);
   void DidFindRegistrationForId(
       FindRegistrationCallback callback,
       const ServiceWorkerDatabase::RegistrationData& data,

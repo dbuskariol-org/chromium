@@ -78,7 +78,10 @@ void ServiceWorkerRegistry::FindRegistrationForClientUrl(
 void ServiceWorkerRegistry::FindRegistrationForScope(
     const GURL& scope,
     FindRegistrationCallback callback) {
-  storage()->FindRegistrationForScope(scope, std::move(callback));
+  storage()->FindRegistrationForScope(
+      scope,
+      base::BindOnce(&ServiceWorkerRegistry::DidFindRegistrationForScope,
+                     weak_factory_.GetWeakPtr(), scope, std::move(callback)));
 }
 
 void ServiceWorkerRegistry::FindRegistrationForId(
@@ -255,7 +258,26 @@ void ServiceWorkerRegistry::DidFindRegistrationForClientUrl(
   TRACE_EVENT_ASYNC_END1(
       "ServiceWorker", "ServiceWorkerRegistry::FindRegistrationForClientUrl",
       trace_event_id, "Status", blink::ServiceWorkerStatusToString(status));
-  std::move(callback).Run(status, std::move(registration));
+  CompleteFindNow(std::move(registration), status, std::move(callback));
+}
+
+void ServiceWorkerRegistry::DidFindRegistrationForScope(
+    const GURL& scope,
+    FindRegistrationCallback callback,
+    blink::ServiceWorkerStatusCode status,
+    scoped_refptr<ServiceWorkerRegistration> registration) {
+  if (status == blink::ServiceWorkerStatusCode::kErrorNotFound) {
+    // Look for something currently being installed.
+    scoped_refptr<ServiceWorkerRegistration> installing_registration =
+        FindInstallingRegistrationForScope(scope);
+    if (installing_registration) {
+      CompleteFindNow(std::move(installing_registration),
+                      blink::ServiceWorkerStatusCode::kOk, std::move(callback));
+      return;
+    }
+  }
+
+  CompleteFindNow(std::move(registration), status, std::move(callback));
 }
 
 }  // namespace content
