@@ -242,6 +242,12 @@ if (is_chromeos_device) {
     ]
   }
 
+  # Used to report the size of various partitions. For more details, see:
+  # https://source.chromium.org/search?q=report_disk_usage.go
+  tast_test("disk_usage_tast_test") {
+    tast_tests = [ "platform.ReportDiskUsage" ]
+  }
+
   # Tast test sources live in the Chromium OS repository.
   # To diagnose tast failures or disable tests, see go/tast-failures
   tast_test("chrome_all_tast_tests") {

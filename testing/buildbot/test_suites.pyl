@@ -415,6 +415,11 @@
         },
       },
       'cros_browser_sanity_test': {},
+      'disk_usage_tast_test': {
+        'swarming': {
+          'idempotent': False,  # https://crbug.com/923426#c27
+        },
+      },
     },
 
     'chromeos_device_all_chrome_tast_tests_informational': {

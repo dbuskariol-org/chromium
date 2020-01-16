@@ -754,6 +754,13 @@
     "label": "//device:device_unittests",
     "type": "console_test_launcher",
   },
+  "disk_usage_tast_test": {
+    "args": [
+      "--vm-logs-dir=${ISOLATED_OUTDIR}",
+    ],
+    "label": "//chromeos:disk_usage_tast_test",
+    "type": "raw",
+  },
   "display_unittests": {
     "label": "//ui/display:display_unittests",
     "type": "console_test_launcher",
