@@ -4,6 +4,8 @@
 
 package org.chromium.chrome.browser;
 
+import org.chromium.chrome.browser.flags.ChromeFeatureList;
+
 /**
  * Temporary class, identical to {@link ChromeFeatureList}, for migration.
  *

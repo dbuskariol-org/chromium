@@ -4,8 +4,8 @@
 
 package org.chromium.chrome.browser.settings.themes;
 
-import static org.chromium.chrome.browser.ChromeFeatureList.ANDROID_NIGHT_MODE;
-import static org.chromium.chrome.browser.ChromeFeatureList.DARKEN_WEBSITES_CHECKBOX_IN_THEMES_SETTING;
+import static org.chromium.chrome.browser.flags.ChromeFeatureList.ANDROID_NIGHT_MODE;
+import static org.chromium.chrome.browser.flags.ChromeFeatureList.DARKEN_WEBSITES_CHECKBOX_IN_THEMES_SETTING;
 import static org.chromium.chrome.browser.preferences.ChromePreferenceKeys.UI_THEME_DARKEN_WEBSITES_ENABLED;
 import static org.chromium.chrome.browser.preferences.ChromePreferenceKeys.UI_THEME_SETTING;
 
