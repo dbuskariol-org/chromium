@@ -178,12 +178,14 @@ viz::ResourceFormat TileRasterBufferFormat(
 
 void DidVisibilityChange(LayerTreeHostImpl* id, bool visible) {
   if (visible) {
-    TRACE_EVENT_ASYNC_BEGIN1("cc", "LayerTreeHostImpl::SetVisible", id,
-                             "LayerTreeHostImpl", id);
+    TRACE_EVENT_NESTABLE_ASYNC_BEGIN1("cc", "LayerTreeHostImpl::SetVisible",
+                                      TRACE_ID_LOCAL(id), "LayerTreeHostImpl",
+                                      id);
     return;
   }
 
-  TRACE_EVENT_ASYNC_END0("cc", "LayerTreeHostImpl::SetVisible", id);
+  TRACE_EVENT_NESTABLE_ASYNC_END0("cc", "LayerTreeHostImpl::SetVisible",
+                                  TRACE_ID_LOCAL(id));
 }
 
 enum ScrollThread { MAIN_THREAD, CC_THREAD };
@@ -2972,7 +2974,8 @@ void LayerTreeHostImpl::CreatePendingTree() {
   pending_tree_fully_painted_ = false;
 
   client_->OnCanDrawStateChanged(CanDraw());
-  TRACE_EVENT_ASYNC_BEGIN0("cc", "PendingTree:waiting", pending_tree_.get());
+  TRACE_EVENT_NESTABLE_ASYNC_BEGIN0("cc", "PendingTree:waiting",
+                                    TRACE_ID_LOCAL(pending_tree_.get()));
 
   DCHECK(!pending_tree_duration_timer_);
   pending_tree_duration_timer_.reset(new PendingTreeDurationHistogramTimer());
@@ -3009,7 +3012,8 @@ void LayerTreeHostImpl::PushScrollbarOpacitiesFromActiveToPending() {
 void LayerTreeHostImpl::ActivateSyncTree() {
   TRACE_EVENT0("cc,benchmark", "LayerTreeHostImpl::ActivateSyncTree()");
   if (pending_tree_) {
-    TRACE_EVENT_ASYNC_END0("cc", "PendingTree:waiting", pending_tree_.get());
+    TRACE_EVENT_NESTABLE_ASYNC_END0("cc", "PendingTree:waiting",
+                                    TRACE_ID_LOCAL(pending_tree_.get()));
     active_tree_->lifecycle().AdvanceTo(LayerTreeLifecycle::kBeginningSync);
 
     DCHECK(pending_tree_duration_timer_);

@@ -129,8 +129,8 @@ FrameSequenceMetrics::FrameSequenceMetrics(FrameSequenceTrackerType type,
     : type_(type),
       ukm_manager_(ukm_manager),
       throughput_ukm_reporter_(ukm_reporter) {
-  TRACE_EVENT_ASYNC_BEGIN1(
-      "cc,benchmark", "FrameSequenceTracker", this, "name",
+  TRACE_EVENT_NESTABLE_ASYNC_BEGIN1(
+      "cc,benchmark", "FrameSequenceTracker", TRACE_ID_LOCAL(this), "name",
       FrameSequenceTracker::GetFrameSequenceTrackerTypeName(type_));
 }
 
@@ -166,8 +166,8 @@ bool FrameSequenceMetrics::HasDataLeftForReporting() const {
 void FrameSequenceMetrics::ReportMetrics(const std::string& debug_trace) {
   DCHECK_LE(impl_throughput_.frames_produced, impl_throughput_.frames_expected);
   DCHECK_LE(main_throughput_.frames_produced, main_throughput_.frames_expected);
-  TRACE_EVENT_ASYNC_END2(
-      "cc,benchmark", "FrameSequenceTracker", this, "args",
+  TRACE_EVENT_NESTABLE_ASYNC_END2(
+      "cc,benchmark", "FrameSequenceTracker", TRACE_ID_LOCAL(this), "args",
       ThroughputData::ToTracedValue(impl_throughput_, main_throughput_),
       "checkerboard", frames_checkerboarded_);
 
@@ -687,8 +687,8 @@ void FrameSequenceTracker::ReportFramePresented(
   if (ignored_frame_tokens_.contains(frame_token))
     return;
 
-  TRACE_EVENT_ASYNC_STEP_INTO_WITH_TIMESTAMP0(
-      "cc,benchmark", "FrameSequenceTracker", metrics_.get(), "FramePresented",
+  TRACE_EVENT_NESTABLE_ASYNC_INSTANT_WITH_TIMESTAMP0(
+      "cc,benchmark", "FramePresented", TRACE_ID_LOCAL(metrics_.get()),
       feedback.timestamp);
   const bool was_presented = !feedback.timestamp.is_null();
   if (was_presented && last_submitted_frame_) {
