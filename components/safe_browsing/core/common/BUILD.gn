@@ -87,11 +87,9 @@ source_set("thread_utils") {
 
   if (is_ios) {
     sources += [ "//components/safe_browsing/ios/thread_utils_ios.cc" ]
-
     deps += [ "//ios/web/public/thread" ]
   } else {
     sources += [ "//components/safe_browsing/content/common/thread_utils.cc" ]
-
     deps += [ "//content/public/browser" ]
   }
 }
@@ -99,17 +97,14 @@ source_set("thread_utils") {
 source_set("test_support") {
   testonly = true
   sources = [ "test_task_environment.h" ]
-
   deps = [ "//base/test:test_support" ]
 
   if (is_ios) {
     sources += [ "//components/safe_browsing/ios/test_task_environment_ios.cc" ]
-
     deps += [ "//ios/web/public/test" ]
   } else {
     sources +=
         [ "//components/safe_browsing/content/common/test_task_environment.cc" ]
-
     deps += [ "//content/test:test_support" ]
   }
 }
