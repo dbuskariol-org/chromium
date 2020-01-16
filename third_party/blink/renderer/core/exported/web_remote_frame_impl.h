@@ -91,7 +91,6 @@ class CORE_EXPORT WebRemoteFrameImpl final
   void SetReplicatedInsecureRequestPolicy(WebInsecureRequestPolicy) override;
   void SetReplicatedInsecureNavigationsSet(const WebVector<unsigned>&) override;
   void ForwardResourceTimingToParent(const WebResourceTimingInfo&) override;
-  void SetNeedsOcclusionTracking(bool) override;
   void DidStartLoading() override;
   void DidStopLoading() override;
   bool IsIgnoredForHitTest() const override;

@@ -3540,8 +3540,7 @@ void RenderFrameHostImpl::SetNeedsOcclusionTracking(bool needs_tracking) {
     return;
   }
 
-  proxy->Send(new FrameMsg_SetNeedsOcclusionTracking(proxy->GetRoutingID(),
-                                                     needs_tracking));
+  proxy->GetAssociatedRemoteFrame()->SetNeedsOcclusionTracking(needs_tracking);
 }
 
 void RenderFrameHostImpl::LifecycleStateChanged(

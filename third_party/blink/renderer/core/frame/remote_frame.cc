@@ -361,6 +361,10 @@ void RemoteFrame::SetHadStickyUserActivationBeforeNavigation(bool value) {
   Frame::SetHadStickyUserActivationBeforeNavigation(value);
 }
 
+void RemoteFrame::SetNeedsOcclusionTracking(bool needs_tracking) {
+  View()->SetNeedsOcclusionTracking(needs_tracking);
+}
+
 void RemoteFrame::BubbleLogicalScroll(
     mojom::blink::ScrollDirection direction,
     ui::input_types::ScrollGranularity granularity) {

@@ -319,10 +319,6 @@ void WebRemoteFrameImpl::ForwardResourceTimingToParent(
                           mojo::NullReceiver() /* worker_timing_receiver */);
 }
 
-void WebRemoteFrameImpl::SetNeedsOcclusionTracking(bool needs_tracking) {
-  GetFrame()->View()->SetNeedsOcclusionTracking(needs_tracking);
-}
-
 void WebRemoteFrameImpl::DidStartLoading() {
   GetFrame()->SetIsLoading(true);
 }

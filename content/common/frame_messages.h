@@ -838,11 +838,6 @@ IPC_MESSAGE_ROUTED2(FrameMsg_SetPepperVolume,
                     double /* volume */)
 #endif  // BUILDFLAG(ENABLE_PLUGINS)
 
-// Notifies a parent frame that the child frame requires information about
-// whether it is occluded or has visual effects applied.
-IPC_MESSAGE_ROUTED1(FrameMsg_SetNeedsOcclusionTracking,
-                    bool /* needs_tracking */)
-
 // Tells the frame to update the user activation state in appropriate part of
 // the frame tree (ancestors for activation notification and all nodes for
 // consumption).
