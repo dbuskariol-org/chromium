@@ -341,9 +341,7 @@ mojom("mojom_core") {
 # to a type in renderer/modules. This also means these interfaces are not
 # available from renderer/platform or renderer/core.
 mojom("mojom_modules") {
-  sources = [
-    "indexeddb/indexeddb.mojom",
-  ]
+  sources = [ "indexeddb/indexeddb.mojom" ]
 
   public_deps = [
     ":android_mojo_bindings",
@@ -380,13 +378,9 @@ mojom("web_bluetooth_mojo_bindings") {
     "//third_party/blink/renderer/platform:blink_platform_public_deps",
   ]
 
-  sources = [
-    "bluetooth/web_bluetooth.mojom",
-  ]
+  sources = [ "bluetooth/web_bluetooth.mojom" ]
 
-  public_deps = [
-    "//device/bluetooth/public/mojom",
-  ]
+  public_deps = [ "//device/bluetooth/public/mojom" ]
 
   # The chromium variant must be linked with content and use the same export
   # settings in component build because of the WebBluetoothDeviceId typemap
@@ -407,9 +401,7 @@ mojom("web_bluetooth_mojo_bindings") {
 mojom("mojom_broadcastchannel_bindings") {
   visibility = [ "//content/*" ]
   visibility_blink = [ "//third_party/blink/renderer/core/*" ]
-  sources = [
-    "broadcastchannel/broadcast_channel.mojom",
-  ]
+  sources = [ "broadcastchannel/broadcast_channel.mojom" ]
   public_deps = [
     ":mojom_core",
     "//url/mojom:url_mojom_origin",
@@ -434,9 +426,7 @@ mojom("mojom_broadcastchannel_bindings") {
 
 mojom("mojom_mhtml_load_result") {
   generate_java = true
-  sources = [
-    "loader/mhtml_load_result.mojom",
-  ]
+  sources = [ "loader/mhtml_load_result.mojom" ]
 
   export_class_attribute = "BLINK_COMMON_EXPORT"
   export_define = "BLINK_COMMON_IMPLEMENTATION=1"
@@ -462,9 +452,7 @@ mojom_component("web_feature_mojo_bindings") {
 # content dependencies.
 mojom("web_client_hints_types_mojo_bindings") {
   generate_java = true
-  sources = [
-    "web_client_hints/web_client_hints_types.mojom",
-  ]
+  sources = [ "web_client_hints/web_client_hints_types.mojom" ]
 }
 
 # The embedded_frame_sink_mojo_bindings is separated from the rest of mojom
@@ -473,12 +461,8 @@ mojom("web_client_hints_types_mojo_bindings") {
 mojom("embedded_frame_sink_mojo_bindings") {
   visibility = [ "//content/*" ]
   visibility_blink = [ "//third_party/blink/renderer/platform" ]
-  sources = [
-    "frame_sinks/embedded_frame_sink.mojom",
-  ]
-  deps = [
-    "//services/viz/public/mojom",
-  ]
+  sources = [ "frame_sinks/embedded_frame_sink.mojom" ]
+  deps = [ "//services/viz/public/mojom" ]
 
   component_output_prefix = "blink_embedded_frame_sink_mojo_bindings"
 
@@ -495,9 +479,7 @@ mojom("embedded_frame_sink_mojo_bindings") {
 # This is a separate target because it needs unscrambled message IDs.
 mojom("authenticator_test_mojo_bindings") {
   generate_java = true
-  sources = [
-    "webauthn/virtual_authenticator.mojom",
-  ]
+  sources = [ "webauthn/virtual_authenticator.mojom" ]
 
   public_deps = [
     ":android_mojo_bindings",

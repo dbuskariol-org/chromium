@@ -203,8 +203,6 @@ source_set("headers") {
 
 if (is_android || is_win) {
   proto_library("font_unique_name_table_proto") {
-    sources = [
-      "font_unique_name_lookup/font_unique_name_table.proto",
-    ]
+    sources = [ "font_unique_name_lookup/font_unique_name_table.proto" ]
   }
 }
