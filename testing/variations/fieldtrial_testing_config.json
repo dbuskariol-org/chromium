@@ -4367,6 +4367,24 @@
             ]
         }
     ],
+    "OptimizationTargetPrediction": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "params": {
+                        "max_effective_connection_type_for_navigation_hints_fetch": "4G"
+                    },
+                    "enable_features": [
+                        "OptimizationTargetPrediction"
+                    ]
+                }
+            ]
+        }
+    ],
     "OutOfBlinkCors": [
         {
             "platforms": [
