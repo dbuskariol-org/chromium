@@ -95,8 +95,6 @@ class TabLifecycleUnitSource : public BrowserListObserver,
   friend class TabManagerTest;
   friend class TabActivityWatcherTest;
   FRIEND_TEST_ALL_PREFIXES(TabLifecycleUnitSourceTest,
-                           TabProactiveDiscardedByFrozenCallback);
-  FRIEND_TEST_ALL_PREFIXES(TabLifecycleUnitSourceTest,
                            CannotFreezeOriginTrialOptOut);
   FRIEND_TEST_ALL_PREFIXES(TabLifecycleUnitSourceTest,
                            CannotFreezeOriginTrialUnknown);
@@ -105,16 +103,6 @@ class TabLifecycleUnitSource : public BrowserListObserver,
   FRIEND_TEST_ALL_PREFIXES(TabManagerTest, TabManagerWasDiscarded);
   FRIEND_TEST_ALL_PREFIXES(TabManagerTest,
                            TabManagerWasDiscardedCrossSiteSubFrame);
-  FRIEND_TEST_ALL_PREFIXES(TabManagerTest,
-                           ProactiveFastShutdownSingleTabProcess);
-  FRIEND_TEST_ALL_PREFIXES(TabManagerTest,
-                           ProactiveFastShutdownSharedTabProcess);
-  FRIEND_TEST_ALL_PREFIXES(TabManagerTest,
-                           ProactiveFastShutdownWithUnloadHandler);
-  FRIEND_TEST_ALL_PREFIXES(TabManagerTest,
-                           ProactiveFastShutdownWithBeforeunloadHandler);
-  FRIEND_TEST_ALL_PREFIXES(TabManagerTestWithTwoTabs,
-                           TabFreezeDisallowedWhenProactivelyDiscarding);
 
   // Returns the TabLifecycleUnit instance associated with |web_contents|, or
   // nullptr if |web_contents| isn't a tab.

@@ -1063,19 +1063,10 @@ const FeatureEntry::FeatureVariation kOverscrollHistoryNavigationVariations[] =
 
 #if !defined(OS_ANDROID)
 const FeatureEntry::FeatureParam kTabFreeze_FreezeNoUnfreeze[] = {
-    {resource_coordinator::
-         kProactiveTabFreezeAndDiscard_ShouldProactivelyDiscardParam,
-     "false"},
-    {resource_coordinator::
-         kProactiveTabFreezeAndDiscard_ShouldPeriodicallyUnfreezeParam,
+    {resource_coordinator::kTabFreeze_ShouldPeriodicallyUnfreezeParam,
      "false"}};
 const FeatureEntry::FeatureParam kTabFreeze_FreezeWithUnfreeze[] = {
-    {resource_coordinator::
-         kProactiveTabFreezeAndDiscard_ShouldProactivelyDiscardParam,
-     "false"},
-    {resource_coordinator::
-         kProactiveTabFreezeAndDiscard_ShouldPeriodicallyUnfreezeParam,
-     "true"}};
+    {resource_coordinator::kTabFreeze_ShouldPeriodicallyUnfreezeParam, "true"}};
 const FeatureEntry::FeatureVariation kTabFreezeVariations[] = {
     {"Freeze - No Unfreeze", kTabFreeze_FreezeNoUnfreeze,
      base::size(kTabFreeze_FreezeNoUnfreeze), nullptr},
@@ -3622,9 +3613,9 @@ const FeatureEntry kFeatureEntries[] = {
     {"proactive-tab-freeze", flag_descriptions::kTabFreezeName,
      flag_descriptions::kTabFreezeDescription, kOsDesktop,
      FEATURE_WITH_PARAMS_VALUE_TYPE(
-         features::kProactiveTabFreezeAndDiscard,
+         features::kTabFreeze,
          kTabFreezeVariations,
-         resource_coordinator::kProactiveTabFreezeAndDiscardFeatureName)},
+         resource_coordinator::kTabFreezeFeatureName)},
 #endif
 
 #if defined(OS_CHROMEOS)
