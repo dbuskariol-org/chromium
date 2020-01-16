@@ -423,6 +423,9 @@ scoped_refptr<StaticBitmapImage> ApplyColorSpaceConversion(
   sk_sp<SkColorSpace> color_space = options.color_params.GetSkColorSpace();
   SkColorType color_type = kN32_SkColorType;
   sk_sp<SkImage> sk_image = image->PaintImageForCurrentFrame().GetSkImage();
+  if (!sk_image)
+    return nullptr;
+
   // If we should preserve color precision, don't lose it in color space
   // conversion.
   if (options.pixel_format == kImageBitmapPixelFormat_Default &&
