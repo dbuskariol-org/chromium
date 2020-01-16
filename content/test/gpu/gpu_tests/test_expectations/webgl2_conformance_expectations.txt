@@ -277,7 +277,6 @@ crbug.com/835364 [ opengl win passthrough ] conformance/renderbuffers/depth-rend
 
 # Passthrough command decoder / Linux / OpenGL / NVIDIA
 crbug.com/766918 [ opengl linux passthrough nvidia ] conformance2/textures/image_bitmap_from_video/* [ RetryOnFailure ]
-crbug.com/angleproject/4298 [ opengl linux passthrough nvidia ] conformance/uniforms/out-of-bounds-uniform-array-access.html [ Failure ]
 crbug.com/965648 [ opengl linux passthrough nvidia ] deqp/functional/gles3/shaderstruct.html [ RetryOnFailure ]
 
 
