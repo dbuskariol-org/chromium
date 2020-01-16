@@ -1421,8 +1421,8 @@ crbug.com/953534 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox
 crbug.com/1003506 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/percentage-heights-007.html [ Failure ]
 crbug.com/1025630 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/select-element-zero-height-001.html [ Failure ]
 crbug.com/1025630 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/select-element-zero-height-002.html [ Failure ]
-crbug.com/782948 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/table-as-item-fixed-min-width.html  [ Failure ]
-crbug.com/782948 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/table-as-item-wide-content.html  [ Failure ]
+crbug.com/782948 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/table-as-item-fixed-min-width.html [ Failure ]
+crbug.com/782948 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/table-as-item-wide-content.html [ Failure ]
 
 # Fieldset in NG
 #
@@ -2384,7 +2384,7 @@ crbug.com/336604 external/wpt/css/css-flexbox/flexbox_visibility-collapse-line-w
 crbug.com/336604 external/wpt/css/css-flexbox/flexbox_visibility-collapse.html [ Failure ]
 
 crbug.com/782948 external/wpt/css/css-flexbox/table-as-item-fixed-min-width.html [ Failure ]
-crbug.com/782948 external/wpt/css/css-flexbox/table-as-item-wide-content.html  [ Failure ]
+crbug.com/782948 external/wpt/css/css-flexbox/table-as-item-wide-content.html [ Failure ]
 
 # Requires support for hit-testing based on flex order.
 crbug.com/844505 external/wpt/css/css-flexbox/hittest-overlapping-order.html [ Failure ]
