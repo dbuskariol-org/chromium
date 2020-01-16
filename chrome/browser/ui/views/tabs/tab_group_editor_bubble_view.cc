@@ -12,6 +12,8 @@
 #include "base/containers/flat_map.h"
 #include "base/containers/span.h"
 #include "base/logging.h"
+#include "base/metrics/user_metrics.h"
+#include "base/metrics/user_metrics_action.h"
 #include "base/no_destructor.h"
 #include "base/strings/string16.h"
 #include "base/strings/utf_string_conversions.h"
@@ -256,6 +258,8 @@ void TabGroupEditorBubbleView::ButtonListener::ButtonPressed(
     const ui::Event& event) {
   switch (sender->GetID()) {
     case TAB_GROUP_HEADER_CXMENU_NEW_TAB_IN_GROUP:
+      base::RecordAction(
+          base::UserMetricsAction("TabGroups_TabGroupBubble_NewTabInGroup"));
       tab_controller_->AddNewTabInGroup(group_);
       break;
     case TAB_GROUP_HEADER_CXMENU_UNGROUP:
