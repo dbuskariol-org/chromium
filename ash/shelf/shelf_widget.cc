@@ -23,6 +23,7 @@
 #include "ash/shelf/login_shelf_view.h"
 #include "ash/shelf/overflow_bubble.h"
 #include "ash/shelf/overflow_bubble_view.h"
+#include "ash/shelf/scrollable_shelf_view.h"
 #include "ash/shelf/shelf.h"
 #include "ash/shelf/shelf_background_animator_observer.h"
 #include "ash/shelf/shelf_layout_manager.h"
@@ -629,6 +630,12 @@ gfx::Rect ShelfWidget::GetScreenBoundsOfItemIconForWindow(
   ShelfID id = ShelfID::Deserialize(window->GetProperty(kShelfIDKey));
   if (id.IsNull())
     return gfx::Rect();
+
+  if (chromeos::switches::ShouldShowShelfHotseat()) {
+    return hotseat_widget()
+        ->scrollable_shelf_view()
+        ->GetTargetScreenBoundsOfItemIcon(id);
+  }
 
   gfx::Rect bounds(
       hotseat_widget()->GetShelfView()->GetIdealBoundsOfItemIcon(id));
