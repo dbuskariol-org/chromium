@@ -2004,6 +2004,13 @@ void LayerTreeHostImpl::DidPresentCompositorFrame(
   PresentationTimeCallbackBuffer::PendingCallbacks activated =
       presentation_time_callbacks_.PopPendingCallbacks(frame_token);
 
+  // The callbacks in |compositor_thread_callbacks| expect to be run on the
+  // compositor thread so we'll run them now.
+  for (LayerTreeHost::PresentationTimeCallback& callback :
+       activated.compositor_thread_callbacks) {
+    std::move(callback).Run(details.presentation_feedback);
+  }
+
   // Send all the main-thread callbacks to the client in one batch. The client
   // is in charge of posting them to the main thread.
   client_->DidPresentCompositorFrameOnImplThread(
@@ -2646,6 +2653,15 @@ void LayerTreeHostImpl::UpdateTreeResourcesForGpuRasterizationIfNeeded() {
   // Prevent the active tree from drawing until activation.
   // TODO(crbug.com/469175): Replace with RequiresHighResToDraw.
   SetRequiresHighResToDraw();
+}
+
+void LayerTreeHostImpl::RegisterMainThreadPresentationTimeCallback(
+    uint32_t frame_token,
+    LayerTreeHost::PresentationTimeCallback callback) {
+  std::vector<LayerTreeHost::PresentationTimeCallback> as_vector;
+  as_vector.emplace_back(std::move(callback));
+  presentation_time_callbacks_.RegisterMainThreadPresentationCallbacks(
+      frame_token, std::move(as_vector));
 }
 
 void LayerTreeHostImpl::RegisterCompositorPresentationTimeCallback(
