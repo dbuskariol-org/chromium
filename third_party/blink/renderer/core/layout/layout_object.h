@@ -1362,6 +1362,8 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
     SetPreferredLogicalWidthsDirty();
   }
 
+  void InvalidateIntersectionObserverCachedRects();
+
   void SetPositionState(EPosition position) {
     DCHECK(
         (position != EPosition::kAbsolute && position != EPosition::kFixed) ||
@@ -2331,6 +2333,10 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
       layout_object_.UpdateInsideBlockingTouchEventHandler(inside);
     }
 
+    void InvalidateIntersectionObserverCachedRects() {
+      layout_object_.InvalidateIntersectionObserverCachedRects();
+    }
+
 #if DCHECK_IS_ON()
     // Same as setNeedsPaintPropertyUpdate() but does not mark ancestors as
     // having a descendant needing a paint property update.
@@ -2380,6 +2386,7 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
   // updated, SetNeedsPaintPropertyUpdate marks all ancestors as having a
   // descendant needing a paint property update too.
   void SetNeedsPaintPropertyUpdate();
+  void SetNeedsPaintPropertyUpdatePreservingCachedRects();
   bool NeedsPaintPropertyUpdate() const {
     return bitfields_.NeedsPaintPropertyUpdate();
   }

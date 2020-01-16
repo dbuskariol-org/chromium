@@ -2735,6 +2735,7 @@ Node::InsertionNotificationRequest Element::InsertedInto(
     ElementRareData* rare_data = GetElementRareData();
     if (ElementIntersectionObserverData* observer_data =
             rare_data->IntersectionObserverData()) {
+      observer_data->InvalidateCachedRects();
       if (observer_data->IsTargetOfImplicitRootObserver() ||
           observer_data->IsRoot()) {
         GetDocument().EnsureIntersectionObserverController().AddTrackedElement(
