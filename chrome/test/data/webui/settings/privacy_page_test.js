@@ -69,18 +69,23 @@ cr.define('settings_privacy_page', function() {
     return {
       browser: {
         clear_data: {
-          time_period: {
-            key: 'browser.clear_data.time_period',
-            type: chrome.settingsPrivate.PrefType.NUMBER,
-            value: 0,
-          },
-          time_period_basic: {
-            key: 'browser.clear_data.time_period_basic',
-            type: chrome.settingsPrivate.PrefType.NUMBER,
-            value: 0,
-          },
           browsing_history: {
             key: 'browser.clear_data.browsing_history',
+            type: chrome.settingsPrivate.PrefType.BOOLEAN,
+            value: false,
+          },
+          browsing_history_basic: {
+            key: 'browser.clear_data.browsing_history_basic',
+            type: chrome.settingsPrivate.PrefType.BOOLEAN,
+            value: false,
+          },
+          cache: {
+            key: 'browser.clear_data.cache',
+            type: chrome.settingsPrivate.PrefType.BOOLEAN,
+            value: false,
+          },
+          cache_basic: {
+            key: 'browser.clear_data.cache_basic',
             type: chrome.settingsPrivate.PrefType.BOOLEAN,
             value: false,
           },
@@ -94,10 +99,40 @@ cr.define('settings_privacy_page', function() {
             type: chrome.settingsPrivate.PrefType.BOOLEAN,
             value: false,
           },
-          cache_basic: {
-            key: 'browser.clear_data.cache_basic',
+          download_history: {
+            key: 'browser.clear_data.download_history',
             type: chrome.settingsPrivate.PrefType.BOOLEAN,
             value: false,
+          },
+          hosted_apps_data: {
+            key: 'browser.clear_data.hosted_apps_data',
+            type: chrome.settingsPrivate.PrefType.BOOLEAN,
+            value: false,
+          },
+          form_data: {
+            key: 'browser.clear_data.form_data',
+            type: chrome.settingsPrivate.PrefType.BOOLEAN,
+            value: false,
+          },
+          passwords: {
+            key: 'browser.clear_data.passwords',
+            type: chrome.settingsPrivate.PrefType.BOOLEAN,
+            value: false,
+          },
+          site_settings: {
+            key: 'browser.clear_data.site_settings',
+            type: chrome.settingsPrivate.PrefType.BOOLEAN,
+            value: false,
+          },
+          time_period: {
+            key: 'browser.clear_data.time_period',
+            type: chrome.settingsPrivate.PrefType.NUMBER,
+            value: 0,
+          },
+          time_period_basic: {
+            key: 'browser.clear_data.time_period_basic',
+            type: chrome.settingsPrivate.PrefType.NUMBER,
+            value: 0,
           },
         },
         last_clear_browsing_data_tab: {

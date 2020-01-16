@@ -121,11 +121,17 @@ Polymer({
 
   /** @private */
   onActionButtonTap_() {
+    const checkboxes = this.shadowRoot.querySelectorAll('settings-checkbox');
     if (this.isImportFromFileSelected_()) {
       this.browserProxy_.importFromBookmarksFile();
     } else {
-      this.browserProxy_.importData(this.$.browserSelect.selectedIndex);
+      const types = {};
+      checkboxes.forEach(checkbox => {
+        types[checkbox.pref.key] = checkbox.checked;
+      });
+      this.browserProxy_.importData(this.$.browserSelect.selectedIndex, types);
     }
+    checkboxes.forEach(checkbox => checkbox.sendPrefChange());
   },
 
   /** @private */

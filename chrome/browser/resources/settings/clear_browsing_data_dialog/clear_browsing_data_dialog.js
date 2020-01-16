@@ -389,6 +389,9 @@ Polymer({
       chrome.metricsPrivate.recordUserAction('ClearBrowsingData_AdvancedTab');
     }
 
+    this.shadowRoot.querySelectorAll('settings-checkbox[no-set-pref]')
+        .forEach(checkbox => checkbox.sendPrefChange());
+
     const shouldShowNotice = await this.browserProxy_.clearBrowsingData(
         dataTypes, timePeriod, this.installedApps_);
     this.clearingInProgress_ = false;

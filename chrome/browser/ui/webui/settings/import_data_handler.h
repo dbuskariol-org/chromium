@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_WEBUI_SETTINGS_SETTINGS_IMPORT_DATA_HANDLER_H_
-#define CHROME_BROWSER_UI_WEBUI_SETTINGS_SETTINGS_IMPORT_DATA_HANDLER_H_
+#ifndef CHROME_BROWSER_UI_WEBUI_SETTINGS_IMPORT_DATA_HANDLER_H_
+#define CHROME_BROWSER_UI_WEBUI_SETTINGS_IMPORT_DATA_HANDLER_H_
 
 #include <stdint.h>
 
@@ -38,9 +38,18 @@ class ImportDataHandler : public SettingsPageUIHandler,
   void StartImport(const importer::SourceProfile& source_profile,
                    uint16_t imported_items);
 
-  void ImportData(const base::ListValue* args);
+  // Handler for the "importData" message. First argument is the selected
+  // browser index, and second argument is the types of data to import.
+  void HandleImportData(const base::ListValue* args);
 
-  void InitializeDialog(const base::ListValue* args);
+  // Handler for the "initializeImportDialog" message. First argument is a
+  // callback id.
+  void HandleInitializeImportDialog(const base::ListValue* args);
+
+  // Handler for the "importFromBookmarksFile" message. Opens a file selection
+  // dialog to choose the bookmarks HTML file.
+  void HandleImportFromBookmarksFile(const base::ListValue* args);
+
   void SendBrowserProfileData(const std::string& callback_id);
 
   // importer::ImporterProgressObserver:
@@ -53,9 +62,6 @@ class ImportDataHandler : public SettingsPageUIHandler,
   void FileSelected(const base::FilePath& path,
                     int index,
                     void* params) override;
-
-  // Opens a file selection dialog to choose the bookmarks HTML file.
-  void HandleChooseBookmarksFile(const base::ListValue* args);
 
   std::unique_ptr<ImporterList> importer_list_;
 
@@ -72,4 +78,4 @@ class ImportDataHandler : public SettingsPageUIHandler,
 
 }  // namespace settings
 
-#endif  // CHROME_BROWSER_UI_WEBUI_SETTINGS_SETTINGS_IMPORT_DATA_HANDLER_H_
+#endif  // CHROME_BROWSER_UI_WEBUI_SETTINGS_IMPORT_DATA_HANDLER_H_

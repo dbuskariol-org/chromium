@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/webui/settings/settings_import_data_handler.h"
+#include "chrome/browser/ui/webui/settings/import_data_handler.h"
 
 #include <stddef.h>
 
@@ -38,10 +38,10 @@ namespace {
 const char kImportStatusInProgress[] = "inProgress";
 const char kImportStatusSucceeded[] = "succeeded";
 const char kImportStatusFailed[] = "failed";
-}
+}  // namespace
 
 ImportDataHandler::ImportDataHandler()
-    : importer_host_(NULL), import_did_succeed_(false) {
+    : importer_host_(nullptr), import_did_succeed_(false) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 }
 
@@ -49,7 +49,7 @@ ImportDataHandler::~ImportDataHandler() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
   if (importer_host_)
-    importer_host_->set_observer(NULL);
+    importer_host_->set_observer(nullptr);
 
   if (select_file_dialog_.get())
     select_file_dialog_->ListenerDestroyed();
@@ -60,14 +60,14 @@ void ImportDataHandler::RegisterMessages() {
 
   web_ui()->RegisterMessageCallback(
       "initializeImportDialog",
-      base::BindRepeating(&ImportDataHandler::InitializeDialog,
+      base::BindRepeating(&ImportDataHandler::HandleInitializeImportDialog,
                           base::Unretained(this)));
   web_ui()->RegisterMessageCallback(
-      "importData", base::BindRepeating(&ImportDataHandler::ImportData,
+      "importData", base::BindRepeating(&ImportDataHandler::HandleImportData,
                                         base::Unretained(this)));
   web_ui()->RegisterMessageCallback(
       "importFromBookmarksFile",
-      base::BindRepeating(&ImportDataHandler::HandleChooseBookmarksFile,
+      base::BindRepeating(&ImportDataHandler::HandleImportFromBookmarksFile,
                           base::Unretained(this)));
 }
 
@@ -77,7 +77,7 @@ void ImportDataHandler::OnJavascriptDisallowed() {
 
   // Stops listening to updates from any ongoing imports.
   if (importer_host_)
-    importer_host_->set_observer(NULL);
+    importer_host_->set_observer(nullptr);
 }
 
 void ImportDataHandler::StartImport(
@@ -90,7 +90,7 @@ void ImportDataHandler::StartImport(
 
   // If another import is already ongoing, let it finish silently.
   if (importer_host_)
-    importer_host_->set_observer(NULL);
+    importer_host_->set_observer(nullptr);
 
   FireWebUIListener("import-data-status-changed",
                     base::Value(kImportStatusInProgress));
@@ -99,32 +99,32 @@ void ImportDataHandler::StartImport(
   importer_host_ = new ExternalProcessImporterHost();
   importer_host_->set_observer(this);
   Profile* profile = Profile::FromWebUI(web_ui());
-  importer_host_->StartImportSettings(source_profile, profile,
-                                      imported_items,
+  importer_host_->StartImportSettings(source_profile, profile, imported_items,
                                       new ProfileWriter(profile));
 
   importer::LogImporterUseToMetrics("ImportDataHandler",
                                     source_profile.importer_type);
 }
 
-void ImportDataHandler::ImportData(const base::ListValue* args) {
+void ImportDataHandler::HandleImportData(const base::ListValue* args) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
   int browser_index;
   CHECK(args->GetInteger(0, &browser_index));
 
-  PrefService* prefs = Profile::FromWebUI(web_ui())->GetPrefs();
+  const base::DictionaryValue* types = nullptr;
+  CHECK(args->GetDictionary(1, &types));
 
   uint16_t selected_items = importer::NONE;
-  if (prefs->GetBoolean(prefs::kImportDialogAutofillFormData))
+  if (*types->FindBoolKey(prefs::kImportDialogAutofillFormData))
     selected_items |= importer::AUTOFILL_FORM_DATA;
-  if (prefs->GetBoolean(prefs::kImportDialogBookmarks))
+  if (*types->FindBoolKey(prefs::kImportDialogBookmarks))
     selected_items |= importer::FAVORITES;
-  if (prefs->GetBoolean(prefs::kImportDialogHistory))
+  if (*types->FindBoolKey(prefs::kImportDialogHistory))
     selected_items |= importer::HISTORY;
-  if (prefs->GetBoolean(prefs::kImportDialogSavedPasswords))
+  if (*types->FindBoolKey(prefs::kImportDialogSavedPasswords))
     selected_items |= importer::PASSWORDS;
-  if (prefs->GetBoolean(prefs::kImportDialogSearchEngine))
+  if (*types->FindBoolKey(prefs::kImportDialogSearchEngine))
     selected_items |= importer::SEARCH_ENGINES;
 
   const importer::SourceProfile& source_profile =
@@ -136,11 +136,12 @@ void ImportDataHandler::ImportData(const base::ListValue* args) {
     StartImport(source_profile, imported_items);
   } else {
     LOG(WARNING) << "There were no settings to import from '"
-        << source_profile.importer_name << "'.";
+                 << source_profile.importer_name << "'.";
   }
 }
 
-void ImportDataHandler::InitializeDialog(const base::ListValue* args) {
+void ImportDataHandler::HandleInitializeImportDialog(
+    const base::ListValue* args) {
   AllowJavascript();
 
   CHECK_EQ(1U, args->GetSize());
@@ -153,6 +154,28 @@ void ImportDataHandler::InitializeDialog(const base::ListValue* args) {
       true,  // include_interactive_profiles
       base::Bind(&ImportDataHandler::SendBrowserProfileData,
                  base::Unretained(this), callback_id));
+}
+
+void ImportDataHandler::HandleImportFromBookmarksFile(
+    const base::ListValue* args) {
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+
+  DCHECK(args && args->empty());
+  select_file_dialog_ = ui::SelectFileDialog::Create(
+      this,
+      std::make_unique<ChromeSelectFilePolicy>(web_ui()->GetWebContents()));
+
+  ui::SelectFileDialog::FileTypeInfo file_type_info;
+  file_type_info.extensions.resize(1);
+  file_type_info.extensions[0].push_back(FILE_PATH_LITERAL("html"));
+
+  Browser* browser =
+      chrome::FindBrowserWithWebContents(web_ui()->GetWebContents());
+
+  select_file_dialog_->SelectFile(
+      ui::SelectFileDialog::SELECT_OPEN_FILE, base::string16(),
+      base::FilePath(), &file_type_info, 0, base::FilePath::StringType(),
+      browser->window()->GetNativeWindow(), nullptr);
 }
 
 void ImportDataHandler::SendBrowserProfileData(const std::string& callback_id) {
@@ -169,13 +192,13 @@ void ImportDataHandler::SendBrowserProfileData(const std::string& callback_id) {
     browser_profile->SetString("name", source_profile.importer_name);
     browser_profile->SetInteger("index", i);
     browser_profile->SetBoolean("history",
-        (browser_services & importer::HISTORY) != 0);
+                                (browser_services & importer::HISTORY) != 0);
     browser_profile->SetBoolean("favorites",
-        (browser_services & importer::FAVORITES) != 0);
+                                (browser_services & importer::FAVORITES) != 0);
     browser_profile->SetBoolean("passwords",
-        (browser_services & importer::PASSWORDS) != 0);
-    browser_profile->SetBoolean("search",
-        (browser_services & importer::SEARCH_ENGINES) != 0);
+                                (browser_services & importer::PASSWORDS) != 0);
+    browser_profile->SetBoolean(
+        "search", (browser_services & importer::SEARCH_ENGINES) != 0);
     browser_profile->SetBoolean(
         "autofillFormData",
         (browser_services & importer::AUTOFILL_FORM_DATA) != 0);
@@ -206,8 +229,8 @@ void ImportDataHandler::ImportItemEnded(importer::ImportItem item) {
 void ImportDataHandler::ImportEnded() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
-  importer_host_->set_observer(NULL);
-  importer_host_ = NULL;
+  importer_host_->set_observer(nullptr);
+  importer_host_ = nullptr;
 
   FireWebUIListener("import-data-status-changed",
                     base::Value(import_did_succeed_ ? kImportStatusSucceeded
@@ -224,31 +247,6 @@ void ImportDataHandler::FileSelected(const base::FilePath& path,
   source_profile.source_path = path;
 
   StartImport(source_profile, importer::FAVORITES);
-}
-
-void ImportDataHandler::HandleChooseBookmarksFile(const base::ListValue* args) {
-  DCHECK_CURRENTLY_ON(BrowserThread::UI);
-
-  DCHECK(args && args->empty());
-  select_file_dialog_ = ui::SelectFileDialog::Create(
-      this,
-      std::make_unique<ChromeSelectFilePolicy>(web_ui()->GetWebContents()));
-
-  ui::SelectFileDialog::FileTypeInfo file_type_info;
-  file_type_info.extensions.resize(1);
-  file_type_info.extensions[0].push_back(FILE_PATH_LITERAL("html"));
-
-  Browser* browser =
-      chrome::FindBrowserWithWebContents(web_ui()->GetWebContents());
-
-  select_file_dialog_->SelectFile(ui::SelectFileDialog::SELECT_OPEN_FILE,
-                                  base::string16(),
-                                  base::FilePath(),
-                                  &file_type_info,
-                                  0,
-                                  base::FilePath::StringType(),
-                                  browser->window()->GetNativeWindow(),
-                                  NULL);
 }
 
 }  // namespace settings
