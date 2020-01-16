@@ -500,6 +500,8 @@ void XRFrameProvider::SubmitWebGLLayer(XRWebGLLayer* layer, bool was_changed) {
 
   frame_transport_->FramePreImage(webgl_context->ContextGL());
 
+  std::unique_ptr<viz::SingleReleaseCallback> image_release_callback;
+
   if (frame_transport_->DrawingIntoSharedBuffer()) {
     // Image is written to shared buffer already. Just submit with a
     // placeholder.
@@ -507,12 +509,13 @@ void XRFrameProvider::SubmitWebGLLayer(XRWebGLLayer* layer, bool was_changed) {
     DVLOG(3) << __FUNCTION__ << ": FrameSubmit for SharedBuffer mode";
     frame_transport_->FrameSubmit(immersive_presentation_provider_.get(),
                                   webgl_context->ContextGL(), webgl_context,
-                                  std::move(image_ref), frame_id_);
+                                  std::move(image_ref),
+                                  std::move(image_release_callback), frame_id_);
     return;
   }
 
   scoped_refptr<StaticBitmapImage> image_ref =
-      layer->TransferToStaticBitmapImage();
+      layer->TransferToStaticBitmapImage(&image_release_callback);
 
   if (!image_ref)
     return;
@@ -526,7 +529,8 @@ void XRFrameProvider::SubmitWebGLLayer(XRWebGLLayer* layer, bool was_changed) {
 
   frame_transport_->FrameSubmit(immersive_presentation_provider_.get(),
                                 webgl_context->ContextGL(), webgl_context,
-                                std::move(image_ref), frame_id_);
+                                std::move(image_ref),
+                                std::move(image_release_callback), frame_id_);
 
   // Reset our frame id, since anything we'd want to do (resizing/etc) can
   // no-longer happen to this frame.

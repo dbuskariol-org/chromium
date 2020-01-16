@@ -48,8 +48,7 @@ gpu::mojom::blink::MailboxPtr SharedBitmapIdToGpuMailboxPtr(
 CanvasResource::CanvasResource(base::WeakPtr<CanvasResourceProvider> provider,
                                SkFilterQuality filter_quality,
                                const CanvasColorParams& color_params)
-    : owning_thread_ref_(base::PlatformThread::CurrentRef()),
-      owning_thread_task_runner_(Thread::Current()->GetTaskRunner()),
+    : owning_thread_id_(base::PlatformThread::CurrentId()),
       provider_(std::move(provider)),
       filter_quality_(filter_quality),
       color_params_(color_params) {}
@@ -61,7 +60,7 @@ CanvasResource::~CanvasResource() {
 }
 
 void CanvasResource::OnDestroy() {
-  if (is_cross_thread()) {
+  if (owning_thread_id_ != base::PlatformThread::CurrentId()) {
     // Destroyed on wrong thread. This can happen when the thread of origin was
     // torn down, in which case the GPU context owning any underlying resources
     // no longer exists.
@@ -333,7 +332,8 @@ CanvasResourceSharedImage::CanvasResourceSharedImage(
                     BufferFormat(ColorParams().TransferableResourceFormat()),
                     context_provider_wrapper_->ContextProvider()
                         ->GetCapabilities())
-              : GL_TEXTURE_2D) {
+              : GL_TEXTURE_2D),
+      owning_thread_task_runner_(Thread::Current()->GetTaskRunner()) {
   if (!context_provider_wrapper_)
     return;
 
@@ -480,7 +480,15 @@ void CanvasResourceSharedImage::OnBitmapImageDestroyed(
     bool has_read_ref_on_texture,
     const gpu::SyncToken& sync_token,
     bool is_lost) {
-  DCHECK(!resource->is_cross_thread());
+  if (resource->is_cross_thread()) {
+    auto& task_runner = *resource->owning_thread_task_runner_;
+    PostCrossThreadTask(
+        task_runner, FROM_HERE,
+        CrossThreadBindOnce(&CanvasResourceSharedImage::OnBitmapImageDestroyed,
+                            std::move(resource), has_read_ref_on_texture,
+                            sync_token, is_lost));
+    return;
+  }
 
   if (has_read_ref_on_texture) {
     DCHECK_GT(resource->owning_thread_data().bitmap_image_read_refs, 0u);
@@ -562,8 +570,8 @@ scoped_refptr<StaticBitmapImage> CanvasResourceSharedImage::Bitmap() {
   gpu::SyncToken token = is_cross_thread() ? sync_token() : gpu::SyncToken();
   image = AcceleratedStaticBitmapImage::CreateFromCanvasMailbox(
       mailbox(), token, texture_id_for_image, image_info, texture_target_,
-      is_origin_top_left_, context_provider_wrapper_, owning_thread_ref_,
-      owning_thread_task_runner_, std::move(release_callback));
+      context_provider_wrapper_, owning_thread_id_, is_origin_top_left_,
+      std::move(release_callback));
 
   DCHECK(image);
   return image;
@@ -696,9 +704,8 @@ scoped_refptr<StaticBitmapImage> ExternalCanvasResource::Bitmap() {
 
   return AcceleratedStaticBitmapImage::CreateFromCanvasMailbox(
       mailbox_, GetSyncToken(), /*shared_image_texture_id=*/0u,
-      CreateSkImageInfo(), texture_target_, is_origin_top_left_,
-      context_provider_wrapper_, owning_thread_ref_, owning_thread_task_runner_,
-      std::move(release_callback));
+      CreateSkImageInfo(), texture_target_, context_provider_wrapper_,
+      owning_thread_id_, is_origin_top_left_, std::move(release_callback));
 }
 
 void ExternalCanvasResource::TearDown() {
@@ -782,7 +789,7 @@ scoped_refptr<StaticBitmapImage> CanvasResourceSwapChain::Bitmap() {
   // It's safe to share the front buffer texture id if we're on the same thread
   // since the |release_callback| ensures this resource will be alive.
   GLuint shared_texture_id = 0u;
-  if (!is_cross_thread())
+  if (base::PlatformThread::CurrentId() == owning_thread_id_)
     shared_texture_id = front_buffer_texture_id_;
 
   // The |release_callback| keeps a ref on this resource to ensure the backing
@@ -795,10 +802,8 @@ scoped_refptr<StaticBitmapImage> CanvasResourceSwapChain::Bitmap() {
 
   return AcceleratedStaticBitmapImage::CreateFromCanvasMailbox(
       front_buffer_mailbox_, sync_token_, shared_texture_id, image_info,
-      GL_TEXTURE_2D,
-      /*is_origin_top_left=*/true, context_provider_wrapper_,
-      owning_thread_ref_, owning_thread_task_runner_,
-      std::move(release_callback));
+      GL_TEXTURE_2D, context_provider_wrapper_, owning_thread_id_,
+      /*is_origin_top_left=*/true, std::move(release_callback));
 }
 
 void CanvasResourceSwapChain::Abandon() {
@@ -846,7 +851,7 @@ const gpu::SyncToken CanvasResourceSwapChain::GetSyncToken() {
 }
 
 void CanvasResourceSwapChain::PresentSwapChain() {
-  DCHECK(!is_cross_thread());
+  DCHECK_EQ(base::PlatformThread::CurrentId(), owning_thread_id_);
   DCHECK(context_provider_wrapper_);
   TRACE_EVENT0("blink", "CanvasResourceSwapChain::PresentSwapChain");
 

@@ -15,7 +15,9 @@ SingleReleaseCallback::SingleReleaseCallback(ReleaseCallback callback)
       << "Use a NULL SingleReleaseCallback for an empty callback.";
 }
 
-SingleReleaseCallback::~SingleReleaseCallback() = default;
+SingleReleaseCallback::~SingleReleaseCallback() {
+  DCHECK(callback_.is_null()) << "SingleReleaseCallback was never run.";
+}
 
 void SingleReleaseCallback::Run(const gpu::SyncToken& sync_token,
                                 bool is_lost) {

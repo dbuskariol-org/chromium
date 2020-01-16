@@ -74,7 +74,8 @@ class XRWebGLLayer final : public ScriptWrappable {
   // mailbox holder and its size respectively.
   void HandleBackgroundImage(const gpu::MailboxHolder&, const IntSize&) {}
 
-  scoped_refptr<StaticBitmapImage> TransferToStaticBitmapImage();
+  scoped_refptr<StaticBitmapImage> TransferToStaticBitmapImage(
+      std::unique_ptr<viz::SingleReleaseCallback>* out_release_callback);
 
   void Trace(blink::Visitor*) override;
 
