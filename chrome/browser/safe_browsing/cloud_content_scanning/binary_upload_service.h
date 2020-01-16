@@ -68,7 +68,10 @@ class BinaryUploadService {
     // The user is unauthorized to make the request.
     UNAUTHORIZED = 6,
 
-    kMaxValue = UNAUTHORIZED,
+    // Some or all parts of the file are encrypted.
+    FILE_ENCRYPTED = 7,
+
+    kMaxValue = FILE_ENCRYPTED,
   };
 
   // Callbacks used to pass along the results of scanning. The response protos
