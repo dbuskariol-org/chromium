@@ -132,6 +132,12 @@ class FrameAncestorCSPContext : public CSPContext {
   RenderFrameHostImpl* navigated_frame_;
 };
 
+// Returns the parent, including outer delegates in the case of portals.
+RenderFrameHostImpl* ParentForAncestorThrottle(RenderFrameHostImpl* frame) {
+  return frame->InsidePortal() ? frame->ParentOrOuterDelegateFrame()
+                               : frame->GetParent();
+}
+
 }  // namespace
 
 // static
@@ -214,9 +220,7 @@ NavigationThrottle::ThrottleCheckResult AncestorThrottle::ProcessResponseImpl(
       // We enforce frame-ancestors in the outer delegate for portals, but not
       // for other uses of inner/outer WebContents (GuestViews).
       RenderFrameHostImpl* parent =
-          is_portal
-              ? request->GetRenderFrameHost()->ParentOrOuterDelegateFrame()
-              : request->GetRenderFrameHost()->GetParent();
+          ParentForAncestorThrottle(request->GetRenderFrameHost());
       while (parent) {
         if (!csp_context.IsAllowedByCsp(
                 network::mojom::CSPDirectiveName::FrameAncestors,
@@ -227,11 +231,7 @@ NavigationThrottle::ThrottleCheckResult AncestorThrottle::ProcessResponseImpl(
                 navigation_handle()->IsFormSubmission())) {
           return NavigationThrottle::BLOCK_RESPONSE;
         }
-        if (parent->InsidePortal()) {
-          parent = parent->ParentOrOuterDelegateFrame();
-        } else {
-          parent = parent->GetParent();
-        }
+        parent = ParentForAncestorThrottle(parent);
       }
       return NavigationThrottle::PROCEED;
     }
@@ -334,7 +334,9 @@ void AncestorThrottle::ParseError(const std::string& value,
 
   // Log a console error in the parent of the current RenderFrameHost (as
   // the current RenderFrameHost itself doesn't yet have a document).
-  navigation_handle()->GetRenderFrameHost()->GetParent()->AddMessageToConsole(
+  auto* frame = static_cast<RenderFrameHostImpl*>(
+      navigation_handle()->GetRenderFrameHost());
+  ParentForAncestorThrottle(frame)->AddMessageToConsole(
       blink::mojom::ConsoleMessageLevel::kError, message);
 }
 
@@ -352,7 +354,9 @@ void AncestorThrottle::ConsoleError(HeaderDisposition disposition) {
 
   // Log a console error in the parent of the current RenderFrameHost (as
   // the current RenderFrameHost itself doesn't yet have a document).
-  navigation_handle()->GetRenderFrameHost()->GetParent()->AddMessageToConsole(
+  auto* frame = static_cast<RenderFrameHostImpl*>(
+      navigation_handle()->GetRenderFrameHost());
+  ParentForAncestorThrottle(frame)->AddMessageToConsole(
       blink::mojom::ConsoleMessageLevel::kError, message);
 }
 
