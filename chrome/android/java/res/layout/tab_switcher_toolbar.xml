@@ -18,13 +18,15 @@
         android:background="?attr/selectableItemBackground"
         android:orientation="horizontal"
         android:visibility="gone">
-        <org.chromium.chrome.browser.toolbar.NewTabButton
-            style="@style/ToolbarButton"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="@dimen/toolbar_button_width"
+            android:layout_height="56dp"
             android:layout_gravity="start|top"
+            android:scaleType="center"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:contentDescription="@string/accessibility_toolbar_btn_new_tab" />
+            app:srcCompat="@drawable/new_tab_icon"
+            android:contentDescription="@string/accessibility_toolbar_btn_new_tab"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
