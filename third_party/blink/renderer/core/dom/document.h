@@ -2157,6 +2157,8 @@ class CORE_EXPORT Document : public ContainerNode,
   Member<IntersectionObserver> display_lock_activation_observer_;
 
   bool in_forced_colors_mode_;
+
+  bool applying_scroll_restoration_logic_ = false;
 };
 
 extern template class CORE_EXTERN_TEMPLATE_EXPORT Supplement<Document>;

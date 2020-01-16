@@ -2592,6 +2592,17 @@ void Document::UpdateStyleAndLayoutForNode(const Node* node) {
 }
 
 void Document::ApplyScrollRestorationLogic() {
+  // This function in not re-entrant. However, the places that invoke this are
+  // re-entrant. Specifically, UpdateStyleAndLayout() calls this, which in turn
+  // can do a find-in-page for the scroll-to-text feature, which can cause
+  // UpdateStyleAndLayout to happen with render-subtree, which gets back here
+  // and recurses indefinitely. As a result, we ensure to early out from this
+  // function if are currently in process of restoring scroll.
+  if (applying_scroll_restoration_logic_)
+    return;
+  base::AutoReset<bool> applying_scroll_restoration_logic_scope(
+      &applying_scroll_restoration_logic_, true);
+
   // If we're restoring a scroll position from history, that takes precedence
   // over scrolling to the anchor in the URL.
   View()->InvokeFragmentAnchor();

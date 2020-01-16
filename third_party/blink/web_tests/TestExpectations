@@ -5956,6 +5956,7 @@ crbug.com/919204 external/wpt/scroll-to-text-fragment/scroll-to-text-fragment.ht
 crbug.com/919204 external/wpt/scroll-to-text-fragment/scroll-to-text-fragment-same-doc.html [ Skip ]
 crbug.com/919204 external/wpt/scroll-to-text-fragment/scroll-to-text-fragment-api.html [ Skip ]
 crbug.com/919204 external/wpt/scroll-to-text-fragment/scroll-to-text-fragment-security.html [ Skip ]
+crbug.com/919204 wpt_internal/display-lock/css-render-subtree/text-fragment-navigation-activates.html [ Skip ]
 
 crbug.com/999209 virtual/lazyload-image/http/tests/lazyload/style-dimension.html [ Timeout ]
 
