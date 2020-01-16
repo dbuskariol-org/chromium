@@ -26,6 +26,7 @@ class BluetoothAdapterWin;
 class BluetoothRemoteGattServiceWin;
 class BluetoothServiceRecordWin;
 class BluetoothSocketThread;
+class BluetoothUUID;
 
 class DEVICE_BLUETOOTH_EXPORT BluetoothDeviceWin
     : public BluetoothDevice,
@@ -102,7 +103,8 @@ class DEVICE_BLUETOOTH_EXPORT BluetoothDeviceWin
 
  protected:
   // BluetoothDevice override
-  void CreateGattConnectionImpl() override;
+  void CreateGattConnectionImpl(
+      base::Optional<BluetoothUUID> service_uuid) override;
   void DisconnectGatt() override;
 
  private:
