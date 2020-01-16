@@ -6401,3 +6401,4 @@ crbug.com/1042347 external/wpt/html/cross-origin-opener-policy/blob-popup.https.
 
 # Sheriff 2020-01-16
 crbug.com/1042681 external/wpt/html/cross-origin-embedder-policy/blob.https.html [ Pass Failure ]
+crbug.com/1042694 fast/forms/form-control-with-state-eager-tracing-crashTest.html [ Pass Timeout ]
