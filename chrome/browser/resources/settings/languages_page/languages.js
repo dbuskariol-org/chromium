@@ -1001,6 +1001,17 @@ Polymer({
       return 'no';
     }
 
+    // The installer still uses the old language code "iw", instead of "he",
+    // for Hebrew. It needs to be converted to "he", otherwise it will not be
+    // found in supportedLanguageMap_.
+    //
+    // Note that this value is saved in the user's local state. Even
+    // if the installer is changed to use "he", because the installer does not
+    // overwrite this value, the conversion is still needed for old users.
+    if (languageCode == 'iw') {
+      return 'he';
+    }
+
     // Match the characters before the hyphen.
     const result = languageCode.match(/^([^-]+)-?/);
     assert(result.length == 2);
