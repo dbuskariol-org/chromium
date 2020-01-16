@@ -86,6 +86,7 @@ class PackageHash {
 
         @VisibleForTesting
         public static void setGlobalSaltForTesting(byte[] salt) {
+            if (sInstance == null) getInstance();
             sInstance.mProfileSalt = salt.clone();
             sInstance.mIncognitoSalt = salt.clone();
         }
@@ -115,7 +116,7 @@ class PackageHash {
         }
         byte[] digest = hasher.doFinal(packageNameBytes);
         // Take just the first two bytes of the digest.
-        int hash = ((((int) digest[0]) & 0xff) << 8) | (((int) digest[1]) & 0xff);
+        int hash = (((digest[0]) & 0xff) << 8) | ((digest[1]) & 0xff);
         return (short) hash;
     }
 
