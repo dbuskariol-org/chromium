@@ -58,11 +58,6 @@ public class MainPreferences extends PreferenceFragmentCompat
     public static final String PREF_DOWNLOADS = "downloads";
     public static final String PREF_DEVELOPER = "developer";
 
-    public static final String AUTOFILL_GUID = "guid";
-    // Needs to be in sync with kSettingsOrigin[] in
-    // chrome/browser/ui/webui/options/autofill_options_handler.cc
-    public static final String SETTINGS_ORIGIN = "Chrome settings";
-
     private final ManagedPreferenceDelegate mManagedPreferenceDelegate;
     private final Map<String, Preference> mAllPreferences = new HashMap<>();
     private SignInPreference mSignInPreference;
