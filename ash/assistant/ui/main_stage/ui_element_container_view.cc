@@ -130,7 +130,7 @@ void UiElementContainerView::HandleResponse(const AssistantResponse& response) {
 void UiElementContainerView::OnCardElementAdded(
     const AssistantCardElement* card_element) {
   // The card, for some reason, is not embeddable so we'll have to ignore it.
-  if (!card_element->contents())
+  if (!card_element->contents_view())
     return;
 
   auto* card_element_view =

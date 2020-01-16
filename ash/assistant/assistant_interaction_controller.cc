@@ -792,15 +792,8 @@ void AssistantInteractionController::OnProcessPendingResponse() {
     return;
   }
 
-  // Bind an interface to a navigable contents factory that is needed for
-  // processing card elements.
-  mojo::Remote<content::mojom::NavigableContentsFactory> factory;
-  assistant_controller_->GetNavigableContentsFactory(
-      factory.BindNewPipeAndPassReceiver());
-
   // Start processing.
   model_.pending_response()->Process(
-      std::move(factory),
       base::BindOnce(
           &AssistantInteractionController::OnPendingResponseProcessed,
           weak_factory_.GetWeakPtr()));
