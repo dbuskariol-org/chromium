@@ -4328,6 +4328,48 @@ TEST_F(HotseatShelfLayoutManagerTest, FlingUpHotseatWithLongFling) {
       InAppShelfGestures::kFlingUpToShowHomeScreen, 1);
 }
 
+// Watches the shelf for state changes.
+class ShelfStateWatcher : public ShelfObserver {
+ public:
+  ShelfStateWatcher() { AshTestBase::GetPrimaryShelf()->AddObserver(this); }
+  ~ShelfStateWatcher() override {
+    AshTestBase::GetPrimaryShelf()->RemoveObserver(this);
+  }
+  void WillChangeVisibilityState(ShelfVisibilityState new_state) override {
+    state_change_count_++;
+  }
+  int state_change_count() const { return state_change_count_; }
+
+ private:
+  int state_change_count_ = 0;
+};
+
+// Tests that UpdateVisibilityState is ignored during a shelf drag. This
+// prevents drag from getting interrupted.
+TEST_F(HotseatShelfLayoutManagerTest, NoVisibilityStateUpdateDuringDrag) {
+  // Autohide the shelf, then start a shelf drag.
+  GetPrimaryShelf()->SetAutoHideBehavior(ShelfAutoHideBehavior::kAlways);
+  std::unique_ptr<aura::Window> window1 =
+      AshTestBase::CreateTestWindow(gfx::Rect(0, 0, 400, 400));
+  wm::ActivateWindow(window1.get());
+  ASSERT_EQ(SHELF_AUTO_HIDE_HIDDEN, GetPrimaryShelf()->GetAutoHideState());
+
+  // Drag the autohidden shelf up a bit, then open a new window and activate it
+  // during the drag. The shelf state should not change.
+  gfx::Point start_drag = GetVisibleShelfWidgetBoundsInScreen().top_center();
+  GetEventGenerator()->set_current_screen_location(start_drag);
+  GetEventGenerator()->PressTouch();
+  GetEventGenerator()->MoveTouchBy(0, -2);
+  auto shelf_state_watcher = std::make_unique<ShelfStateWatcher>();
+  std::unique_ptr<aura::Window> window2 =
+      AshTestBase::CreateTestWindow(gfx::Rect(0, 0, 400, 400));
+
+  wm::ActivateWindow(window2.get());
+  window2->SetBounds(gfx::Rect(0, 0, 200, 200));
+
+  EXPECT_EQ(0, shelf_state_watcher->state_change_count());
+}
+
 namespace {
 
 class OverviewAnimationWaiter : public OverviewObserver {
