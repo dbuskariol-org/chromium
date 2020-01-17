@@ -31,15 +31,18 @@
 
 #include "third_party/blink/renderer/core/workers/shared_worker.h"
 
+#include "base/optional.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "third_party/blink/public/common/blob/blob_utils.h"
 #include "third_party/blink/public/mojom/fetch/fetch_api_request.mojom-blink.h"
 #include "third_party/blink/public/mojom/worker/shared_worker_info.mojom-blink.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context.h"
+#include "third_party/blink/renderer/core/fetch/request.h"
 #include "third_party/blink/renderer/core/fileapi/public_url_manager.h"
 #include "third_party/blink/renderer/core/messaging/message_channel.h"
 #include "third_party/blink/renderer/core/messaging/message_port.h"
 #include "third_party/blink/renderer/core/probe/core_probes.h"
+#include "third_party/blink/renderer/core/script/script.h"
 #include "third_party/blink/renderer/core/workers/shared_worker_client_holder.h"
 #include "third_party/blink/renderer/core/workers/worker_options.h"
 #include "third_party/blink/renderer/platform/bindings/exception_state.h"
@@ -120,6 +123,14 @@ SharedWorker* SharedWorker::Create(ExecutionContext* context,
       return nullptr;
     }
     options->name = worker_options->name();
+    base::Optional<mojom::ScriptType> type_result =
+        Script::ParseScriptType(worker_options->type());
+    DCHECK(type_result);
+    options->type = type_result.value();
+    base::Optional<network::mojom::CredentialsMode> credentials_result =
+        Request::ParseCredentialsMode(worker_options->credentials());
+    DCHECK(credentials_result);
+    options->credentials = credentials_result.value();
   } else {
     NOTREACHED();
   }
