@@ -446,6 +446,13 @@ public final class ChromePreferenceKeys {
     /** Preference to indicate whether payment request has been completed successfully once.*/
     public static final String PAYMENTS_PAYMENT_COMPLETE_ONCE = "payment_complete_once";
 
+    public static final String PREFETCH_HAS_NEW_PAGES = "prefetch_notification_has_new_pages";
+    public static final String PREFETCH_IGNORED_NOTIFICATION_COUNTER =
+            "prefetch_notification_ignored_counter";
+    public static final String PREFETCH_NOTIFICATION_ENABLED = "prefetch_notification_enabled";
+    public static final String PREFETCH_NOTIFICATION_TIME = "prefetch_notification_shown_time";
+    public static final String PREFETCH_OFFLINE_COUNTER = "prefetch_notification_offline_counter";
+
     public static final String PRIVACY_METRICS_REPORTING = "metrics_reporting";
     public static final String PRIVACY_METRICS_IN_SAMPLE = "in_metrics_sample";
     public static final String PRIVACY_NETWORK_PREDICTIONS = "network_predictions";
@@ -766,6 +773,11 @@ public final class ChromePreferenceKeys {
                 NTP_SNIPPETS_IS_SCHEDULED,
                 OFFLINE_INDICATOR_V2_ENABLED,
                 PAYMENTS_PAYMENT_COMPLETE_ONCE,
+                PREFETCH_HAS_NEW_PAGES,
+                PREFETCH_IGNORED_NOTIFICATION_COUNTER,
+                PREFETCH_NOTIFICATION_ENABLED,
+                PREFETCH_NOTIFICATION_TIME,
+                PREFETCH_OFFLINE_COUNTER,
                 PRIVACY_ALLOW_PRERENDER_OLD,
                 PRIVACY_BANDWIDTH_NO_CELLULAR_OLD,
                 PRIVACY_BANDWIDTH_OLD,

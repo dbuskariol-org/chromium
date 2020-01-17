@@ -146,8 +146,7 @@ public class PrefetchedPagesNotifier {
         manager.notify(notification);
 
         // Increment ignored notification counter.  This will be reset on click.
-        PrefetchPrefs.setIgnoredNotificationCounter(
-                PrefetchPrefs.getIgnoredNotificationCounter() + 1);
+        PrefetchPrefs.incrementIgnoredNotificationCounter();
 
         // Metrics tracking
         recordNotificationAction(NOTIFICATION_ACTION_SHOWN);
