@@ -21,6 +21,7 @@ import org.chromium.base.annotations.CalledByNativeJavaTest;
 import org.chromium.blink_public.common.ContextMenuDataMediaType;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.contextmenu.ChromeContextMenuPopulator.ContextMenuMode;
+import org.chromium.chrome.browser.contextmenu.ContextMenuParams.PerformanceClass;
 import org.chromium.chrome.browser.firstrun.FirstRunStatus;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.share.ShareDelegate;
@@ -110,8 +111,9 @@ public class ChromeContextMenuPopulatorTest {
     @CalledByNativeJavaTest
     public void testHttpLink() {
         FirstRunStatus.setFirstRunFlowComplete(false);
-        ContextMenuParams contextMenuParams = new ContextMenuParams(0, PAGE_URL, LINK_URL,
-                LINK_TEXT, "", "", "", null, false, 0, 0, MenuSourceType.MENU_SOURCE_TOUCH);
+        ContextMenuParams contextMenuParams =
+                new ContextMenuParams(0, PAGE_URL, LINK_URL, LINK_TEXT, "", "", "", null, false, 0,
+                        0, MenuSourceType.MENU_SOURCE_TOUCH, PerformanceClass.PERFORMANCE_UNKNOWN);
 
         int[] expected = {R.id.contextmenu_copy_link_address, R.id.contextmenu_copy_link_text};
         checkMenuOptions(contextMenuParams, expected);
@@ -147,9 +149,9 @@ public class ChromeContextMenuPopulatorTest {
     @CalledByNativeJavaTest
     public void testMailLink() {
         FirstRunStatus.setFirstRunFlowComplete(false);
-        ContextMenuParams contextMenuParams =
-                new ContextMenuParams(0, PAGE_URL, "mailto:marcin@mwiacek.com", "MAIL!", "",
-                        PAGE_URL, "", null, false, 0, 0, MenuSourceType.MENU_SOURCE_TOUCH);
+        ContextMenuParams contextMenuParams = new ContextMenuParams(0, PAGE_URL,
+                "mailto:marcin@mwiacek.com", "MAIL!", "", PAGE_URL, "", null, false, 0, 0,
+                MenuSourceType.MENU_SOURCE_TOUCH, PerformanceClass.PERFORMANCE_UNKNOWN);
 
         int[] expected = {R.id.contextmenu_copy};
         checkMenuOptions(contextMenuParams, expected);
@@ -183,9 +185,9 @@ public class ChromeContextMenuPopulatorTest {
     @CalledByNativeJavaTest
     public void testTelLink() {
         FirstRunStatus.setFirstRunFlowComplete(false);
-        ContextMenuParams contextMenuParams =
-                new ContextMenuParams(0, PAGE_URL, "tel:0048221234567", "PHONE!", "", PAGE_URL, "",
-                        null, false, 0, 0, MenuSourceType.MENU_SOURCE_TOUCH);
+        ContextMenuParams contextMenuParams = new ContextMenuParams(0, PAGE_URL,
+                "tel:0048221234567", "PHONE!", "", PAGE_URL, "", null, false, 0, 0,
+                MenuSourceType.MENU_SOURCE_TOUCH, PerformanceClass.PERFORMANCE_UNKNOWN);
 
         int[] expected = {R.id.contextmenu_copy};
         checkMenuOptions(contextMenuParams, expected);
@@ -222,9 +224,9 @@ public class ChromeContextMenuPopulatorTest {
         FirstRunStatus.setFirstRunFlowComplete(false);
         String sourceUrl = "http://www.blah.com/";
         String url = sourceUrl + "I_love_mouse_video.avi";
-        ContextMenuParams contextMenuParams =
-                new ContextMenuParams(ContextMenuDataMediaType.VIDEO, PAGE_URL, url, "VIDEO!", "",
-                        sourceUrl, "", null, true, 0, 0, MenuSourceType.MENU_SOURCE_TOUCH);
+        ContextMenuParams contextMenuParams = new ContextMenuParams(ContextMenuDataMediaType.VIDEO,
+                PAGE_URL, url, "VIDEO!", "", sourceUrl, "", null, true, 0, 0,
+                MenuSourceType.MENU_SOURCE_TOUCH, PerformanceClass.PERFORMANCE_UNKNOWN);
 
         int[] expectedTab1 = {R.id.contextmenu_copy_link_address, R.id.contextmenu_copy_link_text};
         checkMenuOptions(contextMenuParams, expectedTab1);
@@ -263,7 +265,7 @@ public class ChromeContextMenuPopulatorTest {
         FirstRunStatus.setFirstRunFlowComplete(false);
         ContextMenuParams contextMenuParams = new ContextMenuParams(ContextMenuDataMediaType.IMAGE,
                 PAGE_URL, "", "", "", IMAGE_SRC_URL, IMAGE_TITLE_TEXT, null, true, 0, 0,
-                MenuSourceType.MENU_SOURCE_TOUCH);
+                MenuSourceType.MENU_SOURCE_TOUCH, PerformanceClass.PERFORMANCE_UNKNOWN);
 
         int[] expected = null;
         checkMenuOptions(contextMenuParams, expected);
@@ -297,7 +299,7 @@ public class ChromeContextMenuPopulatorTest {
         FirstRunStatus.setFirstRunFlowComplete(false);
         ContextMenuParams contextMenuParams = new ContextMenuParams(ContextMenuDataMediaType.IMAGE,
                 PAGE_URL, LINK_URL, LINK_TEXT, "", IMAGE_SRC_URL, IMAGE_TITLE_TEXT, null, true, 0,
-                0, MenuSourceType.MENU_SOURCE_TOUCH);
+                0, MenuSourceType.MENU_SOURCE_TOUCH, PerformanceClass.PERFORMANCE_UNKNOWN);
 
         int[] expected = {R.id.contextmenu_copy_link_address};
         checkMenuOptions(contextMenuParams, expected);

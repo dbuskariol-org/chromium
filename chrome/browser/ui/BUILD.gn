@@ -809,6 +809,7 @@ jumbo_static_library("ui") {
       "//components/app_modal/android:jni_headers",
       "//components/embedder_support/android:web_contents_delegate",
       "//components/navigation_interception",
+      "//components/optimization_guide/proto:optimization_guide_proto",
       "//components/subresource_filter/core/browser",
       "//crypto:platform",
       "//device/vr/buildflags",
