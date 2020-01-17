@@ -17,6 +17,7 @@ import "third_party/blink/public/mojom/frame/sudden_termination_disabler_type.mo
 import "third_party/blink/public/mojom/frame/user_activation_update_types.mojom";
 import "third_party/blink/public/mojom/input/scroll_direction.mojom";
 import "ui/events/mojom/scroll_granularity.mojom";
+import "ui/gfx/geometry/mojom/geometry.mojom";
 import "url/mojom/origin.mojom";
 import "url/mojom/url.mojom";
 
@@ -187,6 +188,14 @@ interface LocalFrame {
 
   // Notifies this frame to clear the focused element (if any).
   ClearFocusedElement();
+
+  // Copies the image at |window_point| to the clipboard (if there indeed is an
+  // image at that |window_point|).
+  CopyImageAt(gfx.mojom.Point window_point);
+
+  // Saves the image at |window_point| to the disk (if there indeed is an image
+  // at that |window_point|).
+  SaveImageAt(gfx.mojom.Point window_point);
 };
 
 // Implemented in Browser, this interface defines frame-specific methods that

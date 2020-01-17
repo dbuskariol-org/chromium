@@ -10911,24 +10911,24 @@ TEST_F(WebFrameTest, SaveImageAt) {
   web_view->MainFrameWidget()->Resize(WebSize(400, 400));
   UpdateAllLifecyclePhases(web_view);
 
-  WebLocalFrame* local_frame = web_view->MainFrameImpl();
+  LocalFrame* local_frame = To<LocalFrame>(web_view->GetPage()->MainFrame());
 
   client.Reset();
-  local_frame->SaveImageAt(WebPoint(1, 1));
+  local_frame->SaveImageAt(gfx::Point(1, 1));
   EXPECT_EQ(
       WebString::FromUTF8("data:image/gif;base64"
                           ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="),
       client.Result());
 
   client.Reset();
-  local_frame->SaveImageAt(WebPoint(1, 2));
+  local_frame->SaveImageAt(gfx::Point(1, 2));
   EXPECT_EQ(WebString(), client.Result());
 
   web_view->SetPageScaleFactor(4);
   web_view->SetVisualViewportOffset(gfx::PointF(1, 1));
 
   client.Reset();
-  local_frame->SaveImageAt(WebPoint(3, 3));
+  local_frame->SaveImageAt(gfx::Point(3, 3));
   EXPECT_EQ(
       WebString::FromUTF8("data:image/gif;base64"
                           ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="),
@@ -10949,24 +10949,24 @@ TEST_F(WebFrameTest, SaveImageWithImageMap) {
   WebViewImpl* web_view = helper.InitializeAndLoad(url, &client);
   web_view->MainFrameWidget()->Resize(WebSize(400, 400));
 
-  WebLocalFrame* local_frame = web_view->MainFrameImpl();
+  LocalFrame* local_frame = To<LocalFrame>(web_view->GetPage()->MainFrame());
 
   client.Reset();
-  local_frame->SaveImageAt(WebPoint(25, 25));
+  local_frame->SaveImageAt(gfx::Point(25, 25));
   EXPECT_EQ(
       WebString::FromUTF8("data:image/gif;base64"
                           ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="),
       client.Result());
 
   client.Reset();
-  local_frame->SaveImageAt(WebPoint(75, 25));
+  local_frame->SaveImageAt(gfx::Point(75, 25));
   EXPECT_EQ(
       WebString::FromUTF8("data:image/gif;base64"
                           ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="),
       client.Result());
 
   client.Reset();
-  local_frame->SaveImageAt(WebPoint(125, 25));
+  local_frame->SaveImageAt(gfx::Point(125, 25));
   EXPECT_EQ(WebString(), client.Result());
 
   // Explicitly reset to break dependency on locally scoped client.
@@ -10986,22 +10986,22 @@ TEST_F(WebFrameTest, CopyImageWithImageMap) {
   web_view->MainFrameWidget()->Resize(WebSize(400, 400));
 
   client.Reset();
-  WebLocalFrame* local_frame = web_view->MainFrameImpl();
-  local_frame->SaveImageAt(WebPoint(25, 25));
+  LocalFrame* local_frame = To<LocalFrame>(web_view->GetPage()->MainFrame());
+  local_frame->SaveImageAt(gfx::Point(25, 25));
   EXPECT_EQ(
       WebString::FromUTF8("data:image/gif;base64"
                           ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="),
       client.Result());
 
   client.Reset();
-  local_frame->SaveImageAt(WebPoint(75, 25));
+  local_frame->SaveImageAt(gfx::Point(75, 25));
   EXPECT_EQ(
       WebString::FromUTF8("data:image/gif;base64"
                           ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="),
       client.Result());
 
   client.Reset();
-  local_frame->SaveImageAt(WebPoint(125, 25));
+  local_frame->SaveImageAt(gfx::Point(125, 25));
   EXPECT_EQ(WebString(), client.Result());
   // Explicitly reset to break dependency on locally scoped client.
   helper.Reset();

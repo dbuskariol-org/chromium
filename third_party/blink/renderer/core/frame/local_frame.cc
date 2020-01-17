@@ -47,6 +47,7 @@
 #include "third_party/blink/public/platform/interface_registry.h"
 #include "third_party/blink/public/platform/scheduler/web_resource_loading_task_runner_handle.h"
 #include "third_party/blink/public/platform/web_content_settings_client.h"
+#include "third_party/blink/public/platform/web_string.h"
 #include "third_party/blink/public/platform/web_url_request.h"
 #include "third_party/blink/public/web/web_content_capture_client.h"
 #include "third_party/blink/public/web/web_local_frame_client.h"
@@ -85,6 +86,8 @@
 #include "third_party/blink/renderer/core/frame/report.h"
 #include "third_party/blink/renderer/core/frame/reporting_context.h"
 #include "third_party/blink/renderer/core/frame/settings.h"
+#include "third_party/blink/renderer/core/frame/visual_viewport.h"
+#include "third_party/blink/renderer/core/frame/web_frame_widget_base.h"
 #include "third_party/blink/renderer/core/frame/web_local_frame_impl.h"
 #include "third_party/blink/renderer/core/html/html_frame_element_base.h"
 #include "third_party/blink/renderer/core/html/html_plugin_element.h"
@@ -101,6 +104,7 @@
 #include "third_party/blink/renderer/core/loader/document_loader.h"
 #include "third_party/blink/renderer/core/loader/frame_load_request.h"
 #include "third_party/blink/renderer/core/loader/idleness_detector.h"
+#include "third_party/blink/renderer/core/page/chrome_client.h"
 #include "third_party/blink/renderer/core/page/drag_controller.h"
 #include "third_party/blink/renderer/core/page/focus_controller.h"
 #include "third_party/blink/renderer/core/page/plugin_data.h"
@@ -131,6 +135,7 @@
 #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
 #include "third_party/blink/renderer/platform/scheduler/public/frame_scheduler.h"
 #include "third_party/blink/renderer/platform/wtf/std_lib_extras.h"
+#include "ui/gfx/geometry/point.h"
 
 namespace blink {
 
@@ -1815,6 +1820,17 @@ void LocalFrame::EvictFromBackForwardCache() {
   GetLocalFrameHostRemote().EvictFromBackForwardCache();
 }
 
+HitTestResult LocalFrame::HitTestResultForVisualViewportPos(
+    const IntPoint& pos_in_viewport) {
+  IntPoint root_frame_point(
+      GetPage()->GetVisualViewport().ViewportToRootFrame(pos_in_viewport));
+  HitTestLocation location(View()->ConvertFromRootFrame(root_frame_point));
+  HitTestResult result = GetEventHandler().HitTestResultAtLocation(
+      location, HitTestRequest::kReadOnly | HitTestRequest::kActive);
+  result.SetToShadowHostIfInRestrictedShadowRoot();
+  return result;
+}
+
 void LocalFrame::DidChangeVisibleToHitTesting() {
   // LayoutEmbeddedContent does not propagate style updates to descendants.
   // Need to update the field manually.
@@ -1921,6 +1937,52 @@ void LocalFrame::ClearFocusedElement() {
   if (HasEditableStyle(*old_focused_element) ||
       old_focused_element->IsTextControl())
     Selection().Clear();
+}
+
+void LocalFrame::CopyImageAtViewportPoint(const IntPoint& viewport_point) {
+  HitTestResult result = HitTestResultForVisualViewportPos(viewport_point);
+  if (!IsA<HTMLCanvasElement>(result.InnerNodeOrImageMapImage()) &&
+      result.AbsoluteImageURL().IsEmpty()) {
+    // There isn't actually an image at these coordinates.  Might be because
+    // the window scrolled while the context menu was open or because the page
+    // changed itself between when we thought there was an image here and when
+    // we actually tried to retrieve the image.
+    //
+    // FIXME: implement a cache of the most recent HitTestResult to avoid having
+    //        to do two hit tests.
+    return;
+  }
+
+  // TODO(editing-dev): The use of UpdateStyleAndLayout
+  // needs to be audited.  See http://crbug.com/590369 for more details.
+  GetDocument()->UpdateStyleAndLayout();
+
+  GetEditor().CopyImage(result);
+}
+
+void LocalFrame::CopyImageAt(const gfx::Point& window_point) {
+  blink::WebFloatRect viewport_position(window_point.x(), window_point.y(), 0,
+                                        0);
+  GetPage()->GetChromeClient().WindowToViewportRect(*this, &viewport_position);
+  CopyImageAtViewportPoint(IntPoint(viewport_position.x, viewport_position.y));
+}
+
+void LocalFrame::SaveImageAt(const gfx::Point& window_point) {
+  blink::WebFloatRect viewport_position(window_point.x(), window_point.y(), 0,
+                                        0);
+  GetPage()->GetChromeClient().WindowToViewportRect(*this, &viewport_position);
+
+  IntPoint location(viewport_position.x, viewport_position.y);
+  Node* node =
+      HitTestResultForVisualViewportPos(location).InnerNodeOrImageMapImage();
+  if (!node || !(IsA<HTMLCanvasElement>(*node) || IsA<HTMLImageElement>(*node)))
+    return;
+
+  String url = To<Element>(*node).ImageSourceURL();
+  if (!KURL(NullURL(), url).ProtocolIsData())
+    return;
+
+  GetPage()->GetChromeClient().SaveImageFromDataURL(*this, url);
 }
 
 void LocalFrame::BindToReceiver(

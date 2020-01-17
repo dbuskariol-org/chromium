@@ -66,6 +66,10 @@ namespace base {
 class SingleThreadTaskRunner;
 }
 
+namespace gfx {
+class Point;
+}
+
 namespace service_manager {
 class InterfaceProvider;
 }
@@ -463,6 +467,8 @@ class CORE_EXPORT LocalFrame final : public Frame,
   void SetEmbeddingToken(const base::UnguessableToken& embedding_token);
   const base::Optional<base::UnguessableToken>& GetEmbeddingToken() const;
 
+  void CopyImageAtViewportPoint(const IntPoint& viewport_point);
+
   // blink::mojom::LocalFrame overrides:
   void GetTextSurroundingSelection(
       uint32_t max_length,
@@ -476,6 +482,8 @@ class CORE_EXPORT LocalFrame final : public Frame,
   void EnableViewSourceMode() final;
   void Focus() final;
   void ClearFocusedElement() final;
+  void CopyImageAt(const gfx::Point& window_point) final;
+  void SaveImageAt(const gfx::Point& window_point) final;
 
   SystemClipboard* GetSystemClipboard();
 
@@ -528,6 +536,9 @@ class CORE_EXPORT LocalFrame final : public Frame,
   void UnpauseContext();
 
   void EvictFromBackForwardCache();
+
+  HitTestResult HitTestResultForVisualViewportPos(
+      const IntPoint& pos_in_viewport);
 
   static void BindToReceiver(
       blink::LocalFrame* frame,

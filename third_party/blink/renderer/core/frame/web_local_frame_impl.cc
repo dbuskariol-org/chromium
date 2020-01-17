@@ -2401,38 +2401,8 @@ WebFrameWidget* WebLocalFrameImpl::FrameWidget() const {
   return frame_widget_;
 }
 
-void WebLocalFrameImpl::CopyImageAt(const WebPoint& pos_in_viewport) {
-  HitTestResult result = HitTestResultForVisualViewportPos(pos_in_viewport);
-  if (!IsA<HTMLCanvasElement>(result.InnerNodeOrImageMapImage()) &&
-      result.AbsoluteImageURL().IsEmpty()) {
-    // There isn't actually an image at these coordinates.  Might be because
-    // the window scrolled while the context menu was open or because the page
-    // changed itself between when we thought there was an image here and when
-    // we actually tried to retreive the image.
-    //
-    // FIXME: implement a cache of the most recent HitTestResult to avoid having
-    //        to do two hit tests.
-    return;
-  }
-
-  // TODO(editing-dev): The use of UpdateStyleAndLayout
-  // needs to be audited.  See http://crbug.com/590369 for more details.
-  GetFrame()->GetDocument()->UpdateStyleAndLayout();
-
-  GetFrame()->GetEditor().CopyImage(result);
-}
-
-void WebLocalFrameImpl::SaveImageAt(const WebPoint& pos_in_viewport) {
-  Node* node = HitTestResultForVisualViewportPos(pos_in_viewport)
-                   .InnerNodeOrImageMapImage();
-  if (!node || !(IsA<HTMLCanvasElement>(*node) || IsA<HTMLImageElement>(*node)))
-    return;
-
-  String url = To<Element>(*node).ImageSourceURL();
-  if (!KURL(NullURL(), url).ProtocolIsData())
-    return;
-
-  client_->SaveImageFromDataURL(url);
+void WebLocalFrameImpl::CopyImageAtForTesting(const WebPoint& pos_in_viewport) {
+  GetFrame()->CopyImageAtViewportPoint(pos_in_viewport);
 }
 
 WebSandboxFlags WebLocalFrameImpl::EffectiveSandboxFlagsForTesting() const {

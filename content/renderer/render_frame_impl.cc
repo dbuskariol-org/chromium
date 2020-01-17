@@ -2197,8 +2197,6 @@ bool RenderFrameImpl::OnMessageReceived(const IPC::Message& msg) {
 #if BUILDFLAG(ENABLE_PLUGINS)
     IPC_MESSAGE_HANDLER(FrameMsg_SetPepperVolume, OnSetPepperVolume)
 #endif
-    IPC_MESSAGE_HANDLER(FrameMsg_CopyImageAt, OnCopyImageAt)
-    IPC_MESSAGE_HANDLER(FrameMsg_SaveImageAt, OnSaveImageAt)
     IPC_MESSAGE_HANDLER(FrameMsg_VisualStateRequest,
                         OnVisualStateRequest)
     IPC_MESSAGE_HANDLER(FrameMsg_Reload, OnReload)
@@ -2509,18 +2507,6 @@ void RenderFrameImpl::OnClipboardHostError() {
   clipboard_host_.reset();
 }
 #endif
-
-void RenderFrameImpl::OnCopyImageAt(int x, int y) {
-  blink::WebFloatRect viewport_position(x, y, 0, 0);
-  GetLocalRootRenderWidget()->ConvertWindowToViewport(&viewport_position);
-  frame_->CopyImageAt(WebPoint(viewport_position.x, viewport_position.y));
-}
-
-void RenderFrameImpl::OnSaveImageAt(int x, int y) {
-  blink::WebFloatRect viewport_position(x, y, 0, 0);
-  GetLocalRootRenderWidget()->ConvertWindowToViewport(&viewport_position);
-  frame_->SaveImageAt(WebPoint(viewport_position.x, viewport_position.y));
-}
 
 void RenderFrameImpl::JavaScriptExecuteRequest(
     const base::string16& javascript,

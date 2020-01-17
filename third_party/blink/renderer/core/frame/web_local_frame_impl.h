@@ -269,8 +269,7 @@ class CORE_EXPORT WebLocalFrameImpl final
                       bool wrap_within_frame) override;
   void SetTickmarks(const WebVector<WebRect>&) override;
   WebNode ContextMenuNode() const override;
-  void CopyImageAt(const WebPoint&) override;
-  void SaveImageAt(const WebPoint&) override;
+  void CopyImageAtForTesting(const WebPoint&) override;
   void DispatchMessageEventWithOriginCheck(
       const WebSecurityOrigin& intended_target_origin,
       const WebDOMMessageEvent&) override;

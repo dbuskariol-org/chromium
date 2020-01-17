@@ -597,11 +597,7 @@ class WebLocalFrame : public WebFrame {
 
   // Copy to the clipboard the image located at a particular point in visual
   // viewport coordinates.
-  virtual void CopyImageAt(const WebPoint&) = 0;
-
-  // Save as the image located at a particular point in visual viewport
-  // coordinates.
-  virtual void SaveImageAt(const WebPoint&) = 0;
+  virtual void CopyImageAtForTesting(const WebPoint&) = 0;
 
   // Events --------------------------------------------------------------
 

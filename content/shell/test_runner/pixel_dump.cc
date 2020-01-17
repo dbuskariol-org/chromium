@@ -103,7 +103,8 @@ void CopyImageAtAndCapturePixels(
   uint64_t sequence_number_before = 0;
   clipboard->GetSequenceNumber(ui::ClipboardBuffer::kCopyPaste,
                                &sequence_number_before);
-  web_frame->CopyImageAt(blink::WebPoint(x, y));
+
+  web_frame->CopyImageAtForTesting(blink::WebPoint(x, y));
   uint64_t sequence_number_after = 0;
   while (sequence_number_before == sequence_number_after) {
     clipboard->GetSequenceNumber(ui::ClipboardBuffer::kCopyPaste,

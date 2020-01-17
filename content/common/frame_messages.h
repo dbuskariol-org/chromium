@@ -814,18 +814,6 @@ IPC_MESSAGE_ROUTED2(FrameMsg_AdvanceFocus,
 IPC_MESSAGE_ROUTED1(FrameMsg_AdvanceFocusInForm,
                     blink::WebFocusType /* direction for advancing focus */)
 
-// Copies the image at location x, y to the clipboard (if there indeed is an
-// image at that location).
-IPC_MESSAGE_ROUTED2(FrameMsg_CopyImageAt,
-                    int /* x */,
-                    int /* y */)
-
-// Saves the image at location x, y to the disk (if there indeed is an
-// image at that location).
-IPC_MESSAGE_ROUTED2(FrameMsg_SaveImageAt,
-                    int /* x */,
-                    int /* y */)
-
 // Notify the renderer of our overlay routing token.
 IPC_MESSAGE_ROUTED1(FrameMsg_SetOverlayRoutingToken,
                     base::UnguessableToken /* routing_token */)

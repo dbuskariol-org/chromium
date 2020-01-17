@@ -1075,8 +1075,6 @@ class CONTENT_EXPORT RenderFrameImpl
   void OnMoveCaret(const gfx::Point& point);
   void OnScrollFocusedEditableNodeIntoRect(const gfx::Rect& rect);
   void OnSelectRange(const gfx::Point& base, const gfx::Point& extent);
-  void OnCopyImageAt(int x, int y);
-  void OnSaveImageAt(int x, int y);
   void OnVisualStateRequest(uint64_t key);
   // TODO(https://crbug.com/995428): Deprecated.
   void OnReload();
