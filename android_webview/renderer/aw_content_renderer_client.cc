@@ -20,7 +20,6 @@
 #include "android_webview/renderer/aw_websocket_handshake_throttle_provider.h"
 #include "android_webview/renderer/browser_exposed_renderer_interfaces.h"
 #include "android_webview/renderer/js_java_interaction/js_java_configurator.h"
-#include "android_webview/renderer/print_render_frame_observer.h"
 #include "base/command_line.h"
 #include "base/i18n/rtl.h"
 #include "base/metrics/histogram_macros.h"
@@ -148,7 +147,6 @@ bool AwContentRendererClient::HandleNavigation(
 void AwContentRendererClient::RenderFrameCreated(
     content::RenderFrame* render_frame) {
   new AwContentSettingsClient(render_frame);
-  new PrintRenderFrameObserver(render_frame);
   new printing::PrintRenderFrameHelper(
       render_frame, std::make_unique<AwPrintRenderFrameHelperDelegate>());
   new AwRenderFrameExt(render_frame);

@@ -30,8 +30,6 @@ source_set("renderer") {
     "js_java_interaction/js_binding.h",
     "js_java_interaction/js_java_configurator.cc",
     "js_java_interaction/js_java_configurator.h",
-    "print_render_frame_observer.cc",
-    "print_render_frame_observer.h",
   ]
 
   deps = [

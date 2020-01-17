@@ -181,7 +181,7 @@
 
 #if BUILDFLAG(ENABLE_PRINTING)
 #include "chrome/browser/printing/print_view_manager_common.h"
-#include "components/printing/common/print_messages.h"
+#include "components/printing/common/print.mojom.h"
 
 #if BUILDFLAG(ENABLE_PRINT_PREVIEW)
 #include "chrome/browser/printing/print_preview_context_menu_observer.h"
@@ -2954,10 +2954,11 @@ void RenderViewContextMenu::ExecRestartPackagedApp() {
 void RenderViewContextMenu::ExecPrint() {
 #if BUILDFLAG(ENABLE_PRINTING)
   if (params_.media_type != ContextMenuDataMediaType::kNone) {
-    RenderFrameHost* render_frame_host = GetRenderFrameHost();
-    if (render_frame_host) {
-      render_frame_host->Send(new PrintMsg_PrintNodeUnderContextMenu(
-          render_frame_host->GetRoutingID()));
+    RenderFrameHost* rfh = GetRenderFrameHost();
+    if (rfh) {
+      mojo::AssociatedRemote<printing::mojom::PrintRenderFrame> remote;
+      rfh->GetRemoteAssociatedInterfaces()->GetInterface(&remote);
+      remote->PrintNodeUnderContextMenu();
     }
     return;
   }
