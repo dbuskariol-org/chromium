@@ -83,16 +83,6 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       ServiceWorkerRegistration* registration,
       ServiceWorkerRegistration::Status new_status);
 
-  // TODO(crbug.com/1039200): Make these methods private once methods/fields
-  // related to ServiceWorkerRegistration in ServiceWorkerStorage are moved
-  // into this class.
-  ServiceWorkerRegistration* FindInstallingRegistrationForClientUrl(
-      const GURL& client_url);
-  ServiceWorkerRegistration* FindInstallingRegistrationForScope(
-      const GURL& scope);
-  ServiceWorkerRegistration* FindInstallingRegistrationForId(
-      int64_t registration_id);
-
   // TODO(crbug.com/1039200): Make this private once methods/fields related to
   // ServiceWorkerRegistration in ServiceWorkerStorage are moved into this
   // class.
@@ -113,6 +103,13 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   }
 
  private:
+  ServiceWorkerRegistration* FindInstallingRegistrationForClientUrl(
+      const GURL& client_url);
+  ServiceWorkerRegistration* FindInstallingRegistrationForScope(
+      const GURL& scope);
+  ServiceWorkerRegistration* FindInstallingRegistrationForId(
+      int64_t registration_id);
+
   void DidFindRegistrationForClientUrl(
       const GURL& client_url,
       int64_t trace_event_id,
@@ -121,6 +118,11 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       scoped_refptr<ServiceWorkerRegistration> registration);
   void DidFindRegistrationForScope(
       const GURL& scope,
+      FindRegistrationCallback callback,
+      blink::ServiceWorkerStatusCode status,
+      scoped_refptr<ServiceWorkerRegistration> registration);
+  void DidFindRegistrationForId(
+      int64_t registration_id,
       FindRegistrationCallback callback,
       blink::ServiceWorkerStatusCode status,
       scoped_refptr<ServiceWorkerRegistration> registration);

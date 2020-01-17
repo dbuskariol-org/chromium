@@ -218,9 +218,8 @@ void ServiceWorkerStorage::FindRegistrationForId(
     FindRegistrationCallback callback) {
   switch (state_) {
     case STORAGE_STATE_DISABLED:
-      CompleteFindNow(scoped_refptr<ServiceWorkerRegistration>(),
-                      blink::ServiceWorkerStatusCode::kErrorAbort,
-                      std::move(callback));
+      std::move(callback).Run(blink::ServiceWorkerStatusCode::kErrorAbort,
+                              nullptr);
       return;
     case STORAGE_STATE_INITIALIZING:  // Fall-through.
     case STORAGE_STATE_UNINITIALIZED:
@@ -233,16 +232,10 @@ void ServiceWorkerStorage::FindRegistrationForId(
       break;
   }
 
-  // See if there are any stored registrations for the origin.
+  // Bypass database lookup when there is no stored registration.
   if (!base::Contains(registered_origins_, origin)) {
-    // Look for something currently being installed.
-    scoped_refptr<ServiceWorkerRegistration> installing_registration =
-        registry_->FindInstallingRegistrationForId(registration_id);
-    CompleteFindNow(installing_registration,
-                    installing_registration
-                        ? blink::ServiceWorkerStatusCode::kOk
-                        : blink::ServiceWorkerStatusCode::kErrorNotFound,
-                    std::move(callback));
+    std::move(callback).Run(blink::ServiceWorkerStatusCode::kErrorNotFound,
+                            nullptr);
     return;
   }
 
@@ -259,7 +252,7 @@ void ServiceWorkerStorage::FindRegistrationForId(
       base::BindOnce(
           &FindForIdInDB, database_.get(), base::ThreadTaskRunnerHandle::Get(),
           registration_id, origin,
-          base::BindOnce(&ServiceWorkerStorage::DidFindRegistrationForId,
+          base::BindOnce(&ServiceWorkerStorage::DidFindRegistration,
                          weak_factory_.GetWeakPtr(), std::move(callback))));
 }
 
@@ -268,8 +261,8 @@ void ServiceWorkerStorage::FindRegistrationForIdOnly(
     FindRegistrationCallback callback) {
   switch (state_) {
     case STORAGE_STATE_DISABLED:
-      CompleteFindNow(nullptr, blink::ServiceWorkerStatusCode::kErrorAbort,
-                      std::move(callback));
+      std::move(callback).Run(blink::ServiceWorkerStatusCode::kErrorAbort,
+                              nullptr);
       return;
     case STORAGE_STATE_INITIALIZING:  // Fall-through.
     case STORAGE_STATE_UNINITIALIZED:
@@ -298,7 +291,7 @@ void ServiceWorkerStorage::FindRegistrationForIdOnly(
       base::BindOnce(
           &FindForIdOnlyInDB, database_.get(),
           base::ThreadTaskRunnerHandle::Get(), registration_id,
-          base::BindOnce(&ServiceWorkerStorage::DidFindRegistrationForId,
+          base::BindOnce(&ServiceWorkerStorage::DidFindRegistration,
                          weak_factory_.GetWeakPtr(), std::move(callback))));
 }
 
@@ -1185,28 +1178,6 @@ void ServiceWorkerStorage::DidFindRegistration(
   if (status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND)
     ScheduleDeleteAndStartOver();
 
-  std::move(callback).Run(DatabaseStatusToStatusCode(status),
-                          scoped_refptr<ServiceWorkerRegistration>());
-}
-
-void ServiceWorkerStorage::DidFindRegistrationForId(
-    FindRegistrationCallback callback,
-    const ServiceWorkerDatabase::RegistrationData& data,
-    const ResourceList& resources,
-    ServiceWorkerDatabase::Status status) {
-  if (status == ServiceWorkerDatabase::STATUS_OK) {
-    ReturnFoundRegistration(std::move(callback), data, resources);
-    return;
-  }
-
-  if (status == ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
-    // TODO(nhiroki): Find a registration in |installing_registrations_|.
-    std::move(callback).Run(DatabaseStatusToStatusCode(status),
-                            scoped_refptr<ServiceWorkerRegistration>());
-    return;
-  }
-
-  ScheduleDeleteAndStartOver();
   std::move(callback).Run(DatabaseStatusToStatusCode(status),
                           scoped_refptr<ServiceWorkerRegistration>());
 }

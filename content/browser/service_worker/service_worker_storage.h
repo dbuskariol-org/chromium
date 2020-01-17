@@ -389,11 +389,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
                            const ServiceWorkerDatabase::RegistrationData& data,
                            const ResourceList& resources,
                            ServiceWorkerDatabase::Status status);
-  void DidFindRegistrationForId(
-      FindRegistrationCallback callback,
-      const ServiceWorkerDatabase::RegistrationData& data,
-      const ResourceList& resources,
-      ServiceWorkerDatabase::Status status);
   void DidGetRegistrationsForOrigin(GetRegistrationsCallback callback,
                                     RegistrationList* registration_data_list,
                                     std::vector<ResourceList>* resources_list,

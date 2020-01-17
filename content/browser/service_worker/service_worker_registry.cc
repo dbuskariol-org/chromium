@@ -88,14 +88,21 @@ void ServiceWorkerRegistry::FindRegistrationForId(
     int64_t registration_id,
     const GURL& origin,
     FindRegistrationCallback callback) {
-  storage()->FindRegistrationForId(registration_id, origin,
-                                   std::move(callback));
+  storage()->FindRegistrationForId(
+      registration_id, origin,
+      base::BindOnce(&ServiceWorkerRegistry::DidFindRegistrationForId,
+                     weak_factory_.GetWeakPtr(), registration_id,
+                     std::move(callback)));
 }
 
 void ServiceWorkerRegistry::FindRegistrationForIdOnly(
     int64_t registration_id,
     FindRegistrationCallback callback) {
-  storage()->FindRegistrationForIdOnly(registration_id, std::move(callback));
+  storage()->FindRegistrationForIdOnly(
+      registration_id,
+      base::BindOnce(&ServiceWorkerRegistry::DidFindRegistrationForId,
+                     weak_factory_.GetWeakPtr(), registration_id,
+                     std::move(callback)));
 }
 
 ServiceWorkerRegistration* ServiceWorkerRegistry::GetUninstallingRegistration(
@@ -270,6 +277,25 @@ void ServiceWorkerRegistry::DidFindRegistrationForScope(
     // Look for something currently being installed.
     scoped_refptr<ServiceWorkerRegistration> installing_registration =
         FindInstallingRegistrationForScope(scope);
+    if (installing_registration) {
+      CompleteFindNow(std::move(installing_registration),
+                      blink::ServiceWorkerStatusCode::kOk, std::move(callback));
+      return;
+    }
+  }
+
+  CompleteFindNow(std::move(registration), status, std::move(callback));
+}
+
+void ServiceWorkerRegistry::DidFindRegistrationForId(
+    int64_t registration_id,
+    FindRegistrationCallback callback,
+    blink::ServiceWorkerStatusCode status,
+    scoped_refptr<ServiceWorkerRegistration> registration) {
+  if (status == blink::ServiceWorkerStatusCode::kErrorNotFound) {
+    // Look for something currently being installed.
+    scoped_refptr<ServiceWorkerRegistration> installing_registration =
+        FindInstallingRegistrationForId(registration_id);
     if (installing_registration) {
       CompleteFindNow(std::move(installing_registration),
                       blink::ServiceWorkerStatusCode::kOk, std::move(callback));
