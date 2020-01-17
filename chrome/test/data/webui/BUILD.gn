@@ -227,9 +227,7 @@ js2gtest("browser_tests_js_mojo_lite_webui") {
     "usb_internals_browsertest.js",
   ]
 
-  deps = [
-    "//chrome/browser/ui",
-  ]
+  deps = [ "//chrome/browser/ui" ]
 
   if (is_win || is_mac || is_desktop_linux || is_chromeos) {
     sources += [ "discards/discards_browsertest.js" ]

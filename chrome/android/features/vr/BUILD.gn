@@ -21,9 +21,7 @@ java_strings_grd("java_strings_grd") {
 android_resources("java_resources") {
   resource_dirs = [ "java/res" ]
 
-  deps = [
-    ":java_strings_grd",
-  ]
+  deps = [ ":java_strings_grd" ]
 
   custom_package = "org.chromium.chrome.vr"
 }

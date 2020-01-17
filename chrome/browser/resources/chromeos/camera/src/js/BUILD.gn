@@ -124,15 +124,11 @@ js_library("background_ops") {
 }
 
 js_library("toast") {
-  deps = [
-    ":util",
-  ]
+  deps = [ ":util" ]
 }
 
 js_library("tooltip") {
-  deps = [
-    ":chrome_util",
-  ]
+  deps = [ ":chrome_util" ]
 }
 
 js_library("util") {
