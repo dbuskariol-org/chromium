@@ -225,6 +225,12 @@ Polymer({
         return 'cr:print';
       case DeviceReportingType.CROSTINI:
         return 'management:linux';
+      case DeviceReportingType.USERNAME:
+        return 'management:account-circle';
+      case DeviceReportingType.EXTENSION:
+        return 'cr:extension';
+      case DeviceReportingType.ANDROID_APPLICATION:
+        return 'management:android';
       default:
         return 'cr:computer';
     }
