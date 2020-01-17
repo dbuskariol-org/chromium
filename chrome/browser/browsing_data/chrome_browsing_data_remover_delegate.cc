@@ -146,7 +146,6 @@
 #endif  // defined(OS_CHROMEOS)
 
 #if defined(OS_MACOSX)
-#include "components/os_crypt/os_crypt_pref_names_mac.h"
 #include "device/fido/mac/credential_store.h"
 #endif  // defined(OS_MACOSX)
 
