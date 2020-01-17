@@ -53,6 +53,8 @@ Polymer({
   /** @override */
   ready() {
     this.browserProxy_ = settings.PrivacyPageBrowserProxyImpl.getInstance();
+
+    this.metricsBrowserProxy_ = settings.MetricsBrowserProxyImpl.getInstance();
   },
 
   /**
@@ -96,7 +98,7 @@ Polymer({
     // <if expr="is_win or is_macosx">
     this.browserProxy_.showManageSSLCertificates();
     // </if>
-    this.browserProxy_.recordSettingsPageHistogram(
+    this.metricsBrowserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_MANAGE_CERTIFICATES);
   },
 
@@ -108,7 +110,7 @@ Polymer({
   /** @private */
   onSecurityKeysClick_() {
     settings.Router.getInstance().navigateTo(settings.routes.SECURITY_KEYS);
-    this.browserProxy_.recordSettingsPageHistogram(
+    this.metricsBrowserProxy_.recordSettingsPageHistogram(
         settings.SettingsPageInteractions.PRIVACY_SECURITY_KEYS);
   },
 });
