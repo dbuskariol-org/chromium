@@ -85,6 +85,7 @@ jumbo_source_set("base") {
     "bit_reader_core.h",
     "bitstream_buffer.cc",
     "bitstream_buffer.h",
+    "buffering_state.cc",
     "buffering_state.h",
     "byte_queue.cc",
     "byte_queue.h",
