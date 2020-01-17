@@ -1408,21 +1408,17 @@ RenderFrameImpl* RenderFrameImpl::CreateMainFrame(
   if (params->has_committed_real_load)
     render_frame->frame_->SetCommittedFirstRealLoad();
 
-  // TODO(http://crbug.com/419087): Move ownership of the RenderWidget to the
-  // RenderFrame.
-  render_view->render_widget_ = RenderWidget::CreateForFrame(
+  std::unique_ptr<RenderWidget> render_widget = RenderWidget::CreateForFrame(
       params->main_frame_widget_routing_id, compositor_deps,
       params->visual_properties.display_mode,
       render_view->widgets_never_composited());
-
-  RenderWidget* render_widget = render_view->GetWidget();
   render_widget->set_delegate(render_view);
 
   // Non-owning pointer that is self-referencing and destroyed by calling
   // Close(). The RenderViewImpl has a RenderWidget already, but not a
   // WebFrameWidget, which is now attached here.
   auto* web_frame_widget =
-      blink::WebFrameWidget::CreateForMainFrame(render_widget, web_frame);
+      blink::WebFrameWidget::CreateForMainFrame(render_widget.get(), web_frame);
 
   render_widget->InitForMainFrame(std::move(show_callback), web_frame_widget,
                                   params->visual_properties.screen_info);
@@ -1439,8 +1435,8 @@ RenderFrameImpl* RenderFrameImpl::CreateMainFrame(
   // WebViewImpl's DidAttachLocalMainFrame().
   render_view->webview()->DidAttachLocalMainFrame();
 
-  render_frame->render_widget_ = render_widget;
-  DCHECK(!render_frame->owned_render_widget_);
+  render_frame->render_widget_ = render_widget.get();
+  render_frame->owned_render_widget_ = std::move(render_widget);
   render_frame->in_frame_tree_ = true;
   render_frame->Initialize();
 
@@ -1572,19 +1568,17 @@ void RenderFrameImpl::CreateFrame(
     // TODO(crbug.com/419087): Can we merge this code with
     // RenderFrameImpl::CreateMainFrame()?
 
-    render_view->render_widget_ = RenderWidget::CreateForFrame(
+    std::unique_ptr<RenderWidget> render_widget = RenderWidget::CreateForFrame(
         widget_params->routing_id, compositor_deps,
         widget_params->visual_properties.display_mode,
         render_view->widgets_never_composited());
-
-    RenderWidget* render_widget = render_view->GetWidget();
     render_widget->set_delegate(render_view);
 
     // Non-owning pointer that is self-referencing and destroyed by calling
     // Close(). The RenderViewImpl has a RenderWidget already, but not a
     // WebFrameWidget, which is now attached here.
-    auto* web_frame_widget =
-        blink::WebFrameWidget::CreateForMainFrame(render_widget, web_frame);
+    auto* web_frame_widget = blink::WebFrameWidget::CreateForMainFrame(
+        render_widget.get(), web_frame);
 
     render_widget->InitForMainFrame(
         RenderWidget::ShowCallback(), web_frame_widget,
@@ -1601,8 +1595,8 @@ void RenderFrameImpl::CreateFrame(
     // for yet because this frame is provisional and not attached to the Page
     // yet. We will tell WebViewImpl about it once it is swapped in.
 
-    render_frame->render_widget_ = render_widget;
-    DCHECK(!render_frame->owned_render_widget_);
+    render_frame->render_widget_ = render_widget.get();
+    render_frame->owned_render_widget_ = std::move(render_widget);
   } else if (widget_params) {
     DCHECK(widget_params->routing_id != MSG_ROUTING_NONE);
     // This frame is a child local root, so we require a separate RenderWidget
@@ -1959,7 +1953,10 @@ RenderWidget* RenderFrameImpl::GetLocalRootRenderWidget() {
 }
 
 RenderWidget* RenderFrameImpl::GetMainFrameRenderWidget() {
-  return render_view()->GetWidget();
+  RenderFrameImpl* local_main_frame = render_view()->GetMainRenderFrame();
+  if (!local_main_frame)
+    return nullptr;
+  return local_main_frame->render_widget_;
 }
 
 #if BUILDFLAG(ENABLE_PLUGINS)
@@ -2710,7 +2707,34 @@ void RenderFrameImpl::UpdateBrowserControlsState(
     BrowserControlsState constraints,
     BrowserControlsState current,
     bool animate) {
-  render_view_->UpdateBrowserControlsState(constraints, current, animate);
+  TRACE_EVENT2("renderer", "RenderFrameImpl::UpdateBrowserControlsState",
+               "Constraint", static_cast<int>(constraints), "Current",
+               static_cast<int>(current));
+  TRACE_EVENT_INSTANT1("renderer", "is_animated", TRACE_EVENT_SCOPE_THREAD,
+                       "animated", animate);
+
+  // TODO(danakj): There's no reason this IPC should be sent to a non-main frame
+  // so we could DCHECK this instead, but the BFCache code isn't exactly clear
+  // so do this separately.
+  if (is_main_frame_) {
+    cc::LayerTreeHost* host = render_widget_->layer_tree_host();
+
+    // Check content::BrowserControlsState, and cc::BrowserControlsState
+    // are kept in sync.
+    static_assert(int(BROWSER_CONTROLS_STATE_SHOWN) ==
+                      int(cc::BrowserControlsState::kShown),
+                  "mismatching enums: SHOWN");
+    static_assert(int(BROWSER_CONTROLS_STATE_HIDDEN) ==
+                      int(cc::BrowserControlsState::kHidden),
+                  "mismatching enums: HIDDEN");
+    static_assert(int(BROWSER_CONTROLS_STATE_BOTH) ==
+                      int(cc::BrowserControlsState::kBoth),
+                  "mismatching enums: BOTH");
+
+    host->UpdateBrowserControlsState(
+        static_cast<cc::BrowserControlsState>(constraints),
+        static_cast<cc::BrowserControlsState>(current), animate);
+  }
 }
 
 #if defined(OS_ANDROID)
@@ -4148,16 +4172,12 @@ void RenderFrameImpl::FrameDetached(DetachType type) {
   if (type == DetachType::kRemove)
     Send(new FrameHostMsg_Detach(routing_id_));
 
-  // Clean up the associated RenderWidget for the frame, if there is one.
+  // Clean up the associated RenderWidget for the frame.
   GetLocalRootRenderWidget()->UnregisterRenderFrame(this);
-  if (is_main_frame_) {
-    DCHECK(!owned_render_widget_);
-    // TODO(crbug.com/419087): Move ownership of the main frame RenderWidget to
-    // RenderFrameImpl.
-    render_view_->CloseMainFrameRenderWidget();
-  } else if (render_widget_) {
+
+  // Close/delete the RenderWidget if this frame was a local root.
+  if (render_widget_) {
     DCHECK(owned_render_widget_);
-    // This closes/deletes the RenderWidget if this frame was a local root.
     render_widget_->CloseForFrame(std::move(owned_render_widget_));
   }
 
