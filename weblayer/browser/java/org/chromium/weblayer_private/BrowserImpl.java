@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 
+import org.chromium.base.ObserverList;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.weblayer_private.interfaces.APICallException;
 import org.chromium.weblayer_private.interfaces.IBrowser;
@@ -29,6 +30,7 @@ import java.util.List;
  * Implementation of {@link IBrowser}.
  */
 public class BrowserImpl extends IBrowser.Stub {
+    private static final ObserverList<Observer> sLifecycleObservers = new ObserverList<Observer>();
     private final ProfileImpl mProfile;
     private BrowserViewController mViewController;
     private FragmentWindowAndroid mWindowAndroid;
@@ -37,8 +39,31 @@ public class BrowserImpl extends IBrowser.Stub {
     private IBrowserClient mClient;
     private LocaleChangedBroadcastReceiver mLocaleReceiver;
 
+    /**
+     * Observer interface that can be implemented to observe when the first
+     * fragment requiring WebLayer is attached, and when the last such fragment
+     * is detached.
+     */
+    public static interface Observer {
+        public void onBrowserCreated();
+        public void onBrowserDestroyed();
+    }
+
+    public static void addObserver(Observer observer) {
+        sLifecycleObservers.addObserver(observer);
+    }
+
+    public static void removeObserver(Observer observer) {
+        sLifecycleObservers.removeObserver(observer);
+    }
+
     public BrowserImpl(ProfileImpl profile, Bundle savedInstanceState) {
         mProfile = profile;
+
+        for (Observer observer : sLifecycleObservers) {
+            observer.onBrowserCreated();
+        }
+
         // Restore tabs etc from savedInstanceState here.
     }
 
@@ -215,6 +240,9 @@ public class BrowserImpl extends IBrowser.Stub {
         }
         mTabs.clear();
         destroyAttachmentState();
+        for (Observer observer : sLifecycleObservers) {
+            observer.onBrowserDestroyed();
+        }
     }
 
     private void destroyAttachmentState() {
