@@ -3380,6 +3380,10 @@ const char kCrostiniDiskResizingDescription[] =
     "Use preallocated user-resizeable disks for Crostini instead of sparse "
     "automatically sized disks.";
 
+const char kCrostiniUsernameName[] = "Allow picking your Crostini username";
+const char kCrostiniUsernameDescription[] =
+    "Allow picking your Crostini username";
+
 const char kCrostiniUseBusterImageName[] = "New Crostini containers use Buster";
 const char kCrostiniUseBusterImageDescription[] =
     "New Crostini containers use Debian Buster images instead of Debian "

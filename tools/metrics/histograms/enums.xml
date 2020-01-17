@@ -37119,6 +37119,7 @@ from previous Chrome versions.
   <int value="-1132704128" label="AndroidPaymentAppsFilter:disabled"/>
   <int value="-1128912963" label="MediaControlsExpandGesture:disabled"/>
   <int value="-1127996427" label="enable-files-details-panel"/>
+  <int value="-1127963300" label="CrostiniUsername:enabled"/>
   <int value="-1126217973" label="IdleTimeSpellChecking:disabled"/>
   <int value="-1125840399" label="ViewsBrowserWindows:enabled"/>
   <int value="-1125133283" label="disable-threaded-scrolling"/>
@@ -39683,6 +39684,7 @@ from previous Chrome versions.
   <int value="2098714203" label="enable-generic-sensors"/>
   <int value="2098907258" label="UseSurfaceLayerForVideo:disabled"/>
   <int value="2101151142" label="disable-direct-write"/>
+  <int value="2104340988" label="CrostiniUsername:disabled"/>
   <int value="2104788328" label="use-winrt-midi-api"/>
   <int value="2106798283" label="SafetyTip:disabled"/>
   <int value="2106855416" label="HostWindowsInAppShimProcess:enabled"/>

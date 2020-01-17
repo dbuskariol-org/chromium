@@ -4797,6 +4797,9 @@ const FeatureEntry kFeatureEntries[] = {
     {"crostini-disk-resizing", flag_descriptions::kCrostiniDiskResizingName,
      flag_descriptions::kCrostiniDiskResizingDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kCrostiniDiskResizing)},
+    {"crostini-username", flag_descriptions::kCrostiniUsernameName,
+     flag_descriptions::kCrostiniUsernameDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kCrostiniUsername)},
 #endif  // defined(OS_CHROMEOS)
 
 #if defined(OS_ANDROID)

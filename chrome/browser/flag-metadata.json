@@ -622,6 +622,11 @@
     "expiry_milestone": 82
   },
   {
+    "name": "crostini-username",
+    "owners": [ "davidmunro", "lxj", "clumptini" ],
+    "expiry_milestone": 83
+  },
+  {
     "name": "crostini-webui-upgrader",
     "owners": [ "nverne", "davidmunro", "benwells", "clumptini" ],
     "expiry_milestone": 84

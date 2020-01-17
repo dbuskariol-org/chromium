@@ -2007,6 +2007,9 @@ extern const char kCrostiniPortForwardingDescription[];
 extern const char kCrostiniDiskResizingName[];
 extern const char kCrostiniDiskResizingDescription[];
 
+extern const char kCrostiniUsernameName[];
+extern const char kCrostiniUsernameDescription[];
+
 extern const char kCrostiniUseBusterImageName[];
 extern const char kCrostiniUseBusterImageDescription[];
 
