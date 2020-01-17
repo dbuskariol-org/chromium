@@ -13,6 +13,7 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 
 import org.chromium.base.ContextUtils;
+import org.chromium.base.IntentUtils;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.chrome.R;
@@ -30,7 +31,6 @@ import org.chromium.chrome.browser.notifications.NotificationUmaTracker.SystemNo
 import org.chromium.chrome.browser.notifications.PendingIntentProvider;
 import org.chromium.chrome.browser.notifications.channels.ChannelDefinitions.ChannelId;
 import org.chromium.chrome.browser.profiles.Profile;
-import org.chromium.chrome.browser.util.IntentUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
