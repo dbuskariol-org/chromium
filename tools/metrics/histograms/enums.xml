@@ -6308,6 +6308,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Connection error happened"/>
 </enum>
 
+<enum name="BooleanConsistent">
+  <int value="0" label="Inconsistent"/>
+  <int value="1" label="Consistent"/>
+</enum>
+
 <enum name="BooleanContainedMeCard">
   <int value="0" label="Did not contain me card."/>
   <int value="1" label="Contained me card."/>
