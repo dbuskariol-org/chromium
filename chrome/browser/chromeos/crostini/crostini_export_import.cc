@@ -84,7 +84,7 @@ void CrostiniExportImport::Shutdown() {
 CrostiniExportImport::OperationData::OperationData(
     ExportImportType type,
     ContainerId container_id,
-    TrackerFactory tracker_factory)
+    OnceTrackerFactory tracker_factory)
     : type(type),
       container_id(std::move(container_id)),
       tracker_factory(std::move(tracker_factory)) {}
@@ -94,7 +94,7 @@ CrostiniExportImport::OperationData::~OperationData() = default;
 CrostiniExportImport::OperationData* CrostiniExportImport::NewOperationData(
     ExportImportType type,
     ContainerId container_id,
-    TrackerFactory factory) {
+    OnceTrackerFactory factory) {
   auto operation_data = std::make_unique<OperationData>(
       type, std::move(container_id), std::move(factory));
   OperationData* operation_data_ptr = operation_data.get();
@@ -106,7 +106,7 @@ CrostiniExportImport::OperationData* CrostiniExportImport::NewOperationData(
 CrostiniExportImport::OperationData* CrostiniExportImport::NewOperationData(
     ExportImportType type,
     ContainerId container_id) {
-  TrackerFactory factory = base::BindOnce(
+  OnceTrackerFactory factory = base::BindOnce(
       [](Profile* profile, ContainerId container_id,
          std::string notification_id, ExportImportType type,
          base::FilePath path)
@@ -131,6 +131,24 @@ void CrostiniExportImport::ExportContainer(content::WebContents* web_contents) {
 
 void CrostiniExportImport::ImportContainer(content::WebContents* web_contents) {
   OpenFileDialog(NewOperationData(ExportImportType::IMPORT), web_contents);
+}
+
+void CrostiniExportImport::ExportContainer(content::WebContents* web_contents,
+                                           ContainerId container_id,
+                                           OnceTrackerFactory tracker_factory) {
+  OpenFileDialog(
+      NewOperationData(ExportImportType::EXPORT, std::move(container_id),
+                       std::move(tracker_factory)),
+      web_contents);
+}
+
+void CrostiniExportImport::ImportContainer(content::WebContents* web_contents,
+                                           ContainerId container_id,
+                                           OnceTrackerFactory tracker_factory) {
+  OpenFileDialog(
+      NewOperationData(ExportImportType::IMPORT, std::move(container_id),
+                       std::move(tracker_factory)),
+      web_contents);
 }
 
 void CrostiniExportImport::OpenFileDialog(OperationData* operation_data,
@@ -181,7 +199,15 @@ void CrostiniExportImport::FileSelected(const base::FilePath& path,
 }
 
 void CrostiniExportImport::FileSelectionCanceled(void* params) {
-  operation_data_storage_.erase(static_cast<OperationData*>(params));
+  auto* operation_data = static_cast<OperationData*>(params);
+  if (operation_data->tracker_factory) {
+    // Create the status tracker so we can let it know the operation was
+    // canceled.
+    auto status_tracker = std::move(operation_data->tracker_factory)
+                              .Run(operation_data->type, base::FilePath());
+    status_tracker->SetStatusCancelled();
+  }
+  operation_data_storage_.erase(operation_data);
 }
 
 void CrostiniExportImport::ExportContainer(
@@ -204,8 +230,8 @@ void CrostiniExportImport::Start(
     OperationData* operation_data,
     base::FilePath path,
     CrostiniManager::CrostiniResultCallback callback) {
-  std::unique_ptr<OperationData> operation_data_deleter(
-      operation_data_storage_[operation_data].release());
+  std::unique_ptr<OperationData> operation_data_storage(
+      std::move(operation_data_storage_[operation_data]));
   operation_data_storage_.erase(operation_data);
 
   if (!crostini::CrostiniFeatures::Get()->IsExportImportUIAllowed(profile_)) {
@@ -584,9 +610,7 @@ std::string CrostiniExportImport::GetUniqueNotificationId() {
 }
 
 std::unique_ptr<CrostiniExportImportStatusTracker>
-CrostiniExportImport::RemoveTracker(
-    std::map<ContainerId,
-             std::unique_ptr<CrostiniExportImportStatusTracker>>::iterator it) {
+CrostiniExportImport::RemoveTracker(TrackerMap::iterator it) {
   DCHECK(it != status_trackers_.end());
   auto status_tracker = std::move(it->second);
   status_trackers_.erase(it);
