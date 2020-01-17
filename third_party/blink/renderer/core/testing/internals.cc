@@ -852,7 +852,7 @@ void Internals::selectColorInColorChooser(Element* element,
 void Internals::endColorChooser(Element* element) {
   DCHECK(element);
   if (auto* input = DynamicTo<HTMLInputElement>(*element))
-    input->EndColorChooser();
+    input->EndColorChooserForTesting();
 }
 
 bool Internals::hasAutofocusRequest(Document* document) {

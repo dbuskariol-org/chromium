@@ -1654,9 +1654,8 @@ void HTMLInputElement::SelectColorInColorChooser(const Color& color) {
     client->DidChooseColor(color);
 }
 
-void HTMLInputElement::EndColorChooser() {
-  if (ColorChooserClient* client = input_type_->GetColorChooserClient())
-    client->DidEndChooser();
+void HTMLInputElement::EndColorChooserForTesting() {
+  input_type_view_->ClosePopupView();
 }
 
 HTMLElement* HTMLInputElement::list() const {

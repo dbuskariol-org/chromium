@@ -261,7 +261,7 @@ class CORE_EXPORT HTMLInputElement
 
   // For test purposes.
   void SelectColorInColorChooser(const Color&);
-  void EndColorChooser();
+  void EndColorChooserForTesting();
 
   String DefaultToolTip() const override;
 
