@@ -205,11 +205,6 @@ PASS onmouseup: the default value must be null
 PASS onmouseup: the content attribute must be compiled into a function as the corresponding property
 PASS onmouseup: the content attribute must execute when an event is dispatched
 PASS onmouseup: dispatching an Event at a <meta> element must trigger element.onmouseup
-PASS onwheel: must be on the appropriate locations for GlobalEventHandlers
-PASS onwheel: the default value must be null
-PASS onwheel: the content attribute must be compiled into a function as the corresponding property
-PASS onwheel: the content attribute must execute when an event is dispatched
-PASS onwheel: dispatching an Event at a <meta> element must trigger element.onwheel
 PASS onpause: must be on the appropriate locations for GlobalEventHandlers
 PASS onpause: the default value must be null
 PASS onpause: the content attribute must be compiled into a function as the corresponding property
@@ -330,5 +325,10 @@ PASS onwebkittransitionend: the default value must be null
 PASS onwebkittransitionend: the content attribute must be compiled into a function as the corresponding property
 PASS onwebkittransitionend: the content attribute must execute when an event is dispatched
 PASS onwebkittransitionend: dispatching an Event at a <meta> element must trigger element.onwebkittransitionend
+PASS onwheel: must be on the appropriate locations for GlobalEventHandlers
+PASS onwheel: the default value must be null
+PASS onwheel: the content attribute must be compiled into a function as the corresponding property
+PASS onwheel: the content attribute must execute when an event is dispatched
+PASS onwheel: dispatching an Event at a <meta> element must trigger element.onwheel
 Harness: the test ran to completion.
 

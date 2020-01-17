@@ -1350,7 +1350,6 @@ PASS SVGElement interface: attribute onmousemove
 PASS SVGElement interface: attribute onmouseout
 PASS SVGElement interface: attribute onmouseover
 PASS SVGElement interface: attribute onmouseup
-PASS SVGElement interface: attribute onwheel
 PASS SVGElement interface: attribute onpause
 PASS SVGElement interface: attribute onplay
 PASS SVGElement interface: attribute onplaying
@@ -1375,6 +1374,7 @@ PASS SVGElement interface: attribute onwebkitanimationend
 PASS SVGElement interface: attribute onwebkitanimationiteration
 PASS SVGElement interface: attribute onwebkitanimationstart
 PASS SVGElement interface: attribute onwebkittransitionend
+PASS SVGElement interface: attribute onwheel
 PASS SVGElement interface: attribute oncopy
 PASS SVGElement interface: attribute oncut
 PASS SVGElement interface: attribute onpaste
