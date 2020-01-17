@@ -13,7 +13,6 @@ import org.chromium.base.ThreadUtils;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.chrome.browser.AppHooks;
-import org.chromium.chrome.browser.settings.website.WebsitePreferenceBridge;
 import org.chromium.components.location.LocationSettingsDialogContext;
 import org.chromium.components.location.LocationSettingsDialogOutcome;
 import org.chromium.components.location.LocationUtils;
@@ -89,21 +88,6 @@ public class LocationSettings {
                                 nativeCallback, result);
                     }
                 });
-    }
-
-    /**
-     * Returns true if location is enabled system-wide and the Chrome location setting is enabled.
-     */
-    public boolean areAllLocationSettingsEnabled() {
-        return isChromeLocationSettingEnabled()
-                && LocationUtils.getInstance().isSystemLocationSettingEnabled();
-    }
-
-    /**
-     * Returns whether Chrome's user-configurable location setting is enabled.
-     */
-    public boolean isChromeLocationSettingEnabled() {
-        return WebsitePreferenceBridge.isAllowLocationEnabled();
     }
 
     @VisibleForTesting

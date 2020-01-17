@@ -37,7 +37,6 @@ import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.settings.ChromeBaseCheckBoxPreference;
 import org.chromium.chrome.browser.settings.ChromeSwitchPreference;
-import org.chromium.chrome.browser.settings.LocationSettings;
 import org.chromium.chrome.browser.settings.NfcSystemLevelSetting;
 import org.chromium.chrome.browser.settings.SettingsActivity;
 import org.chromium.chrome.browser.settings.SettingsLauncher;
@@ -97,7 +96,7 @@ public class SiteSettingsTest {
 
             websitePreferences.onPreferenceChange(location, enabled);
             Assert.assertEquals("Location should be " + (enabled ? "allowed" : "blocked"), enabled,
-                    LocationSettings.getInstance().areAllLocationSettingsEnabled());
+                    WebsitePreferenceBridge.areAllLocationSettingsEnabled());
             settingsActivity.finish();
         });
     }
