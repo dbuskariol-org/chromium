@@ -154,6 +154,10 @@ Background = function() {
       (announceText) => {
         ChromeVox.tts.speak(announceText.join(' '), QueueMode.FLUSH);
       });
+
+  // Set the darkScreen state to false, since the display will be on whenever
+  // ChromeVox starts.
+  sessionStorage.setItem('darkScreen', 'false');
 };
 
 Background.prototype = {

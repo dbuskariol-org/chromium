@@ -2344,3 +2344,16 @@ TEST_F('ChromeVoxBackgroundTest', 'PhoneticsAndCommands', function() {
         mockFeedback.replay();
       });
 });
+
+TEST_F('ChromeVoxBackgroundTest', 'ToggleDarkScreen', function() {
+  var mockFeedback = this.createMockFeedback();
+  this.runWithLoadedTree('<div>Unimportant web content</div>', function() {
+    mockFeedback.call(doCmd('toggleDarkScreen'))
+        .expectSpeech('Darken screen')
+        .call(doCmd('toggleDarkScreen'))
+        .expectSpeech('Undarken screen')
+        .call(doCmd('toggleDarkScreen'))
+        .expectSpeech('Darken screen')
+        .replay();
+  });
+});
