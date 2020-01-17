@@ -546,9 +546,8 @@ UIView* SubviewWithAccessibilityIdentifier(NSString* accessibility_id,
       SubviewWithAccessibilityIdentifier(
           @"SettingNavigationBar",
           [[UIApplication sharedApplication] keyWindow]));
-  return grey_allOf(grey_anyOf(grey_accessibilityLabel(navBar.backItem.title),
-                               grey_accessibilityLabel(@"Back"), nil),
-                    grey_kindOfClass([UIButton class]),
+  return grey_allOf(grey_anyOf(grey_buttonTitle(navBar.backItem.title),
+                               grey_buttonTitle(@"Back"), nil),
                     grey_ancestor(grey_kindOfClass([UINavigationBar class])),
                     nil);
 }
