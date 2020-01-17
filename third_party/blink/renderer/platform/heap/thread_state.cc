@@ -1171,7 +1171,7 @@ void ThreadState::IncrementalMarkingStart(BlinkGC::GCReason reason) {
       // No active concurrent markers yet, so it is safe to write to
       // concurrently_marked_bytes_ without a lock.
       concurrently_marked_bytes_ = 0;
-      current_gc_data_.visitor->FlushMarkingWorklist();
+      current_gc_data_.visitor->FlushMarkingWorklists();
       // Check that the marking worklist has enough private segments for all
       // concurrent marking tasks.
       const uint8_t max_concurrent_task_id =
@@ -1238,7 +1238,7 @@ void ThreadState::IncrementalMarkingStep(BlinkGC::StackState stack_state,
 }
 
 bool ThreadState::ConcurrentMarkingStep() {
-  current_gc_data_.visitor->FlushMarkingWorklist();
+  current_gc_data_.visitor->FlushMarkingWorklists();
   if (!Heap().GetMarkingWorklist()->IsGlobalPoolEmpty()) {
     ScheduleConcurrentMarking();
     return false;

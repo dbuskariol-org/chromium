@@ -191,7 +191,7 @@ class PLATFORM_EXPORT MarkingVisitor
   // allowed to be in construction.
   void VisitMarkedHeader(HeapObjectHeader* header);
 
-  void FlushMarkingWorklist();
+  void FlushMarkingWorklists();
 
  private:
   // Exact version of the marking write barriers.

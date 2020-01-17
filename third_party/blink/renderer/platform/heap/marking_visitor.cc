@@ -280,8 +280,9 @@ void MarkingVisitor::ConservativelyMarkAddress(BasePage* page,
   AccountMarkedBytes(header);
 }
 
-void MarkingVisitor::FlushMarkingWorklist() {
+void MarkingVisitor::FlushMarkingWorklists() {
   marking_worklist_.FlushToGlobal();
+  write_barrier_worklist_.FlushToGlobal();
 }
 
 ConcurrentMarkingVisitor::ConcurrentMarkingVisitor(ThreadState* state,
