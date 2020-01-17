@@ -1418,6 +1418,15 @@ void ServiceWorkerContainerHost::GetRegistrationsComplete(
     }
   }
 
+  // Sort by Insertion order. Detail discussion can be found in:
+  // https://github.com/w3c/ServiceWorker/issues/1465
+  std::sort(
+      object_infos.begin(), object_infos.end(),
+      [](const blink::mojom::ServiceWorkerRegistrationObjectInfoPtr& ptr1,
+         const blink::mojom::ServiceWorkerRegistrationObjectInfoPtr& ptr2) {
+        return ptr1->registration_id < ptr2->registration_id;
+      });
+
   std::move(callback).Run(blink::mojom::ServiceWorkerErrorType::kNone,
                           base::nullopt, std::move(object_infos));
 }
