@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.findinpage;
+package org.chromium.components.find_in_page;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,7 +21,6 @@ import android.widget.FrameLayout;
 
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.MathUtils;
-import org.chromium.chrome.R;
 import org.chromium.components.embedder_support.view.ContentView;
 import org.chromium.ui.KeyboardVisibilityDelegate;
 import org.chromium.ui.base.LocalizationUtils;
@@ -38,7 +37,7 @@ import java.util.List;
  * The view that shows the positions of the find in page matches and allows scrubbing
  * between the entries.
  */
-class FindResultBar extends View {
+public class FindResultBar extends View {
     private static final int VISIBILITY_ANIMATION_DURATION_MS = 200;
 
     private final int mBackgroundColor;
@@ -59,7 +58,7 @@ class FindResultBar extends View {
     private FindInPageBridge mFindInPageBridge;
     private final ContentView mContentView;
 
-    int mRectsVersion = -1;
+    private int mRectsVersion = -1;
     private RectF[] mMatches = new RectF[0];
     private RectF mActiveMatch;
 
@@ -72,7 +71,7 @@ class FindResultBar extends View {
     private final Paint mFillPaint;
     private final Paint mStrokePaint;
 
-    boolean mWaitingForActivateAck;
+    private boolean mWaitingForActivateAck;
 
     private static Comparator<RectF> sComparator = new Comparator<RectF>() {
         @Override
@@ -107,7 +106,7 @@ class FindResultBar extends View {
                 ApiCompatibilityUtils.getColor(res, R.color.find_result_bar_active_border_color);
         mBarTouchWidth = res.getDimensionPixelSize(R.dimen.find_result_bar_touch_width);
         mBarDrawWidth = res.getDimensionPixelSize(R.dimen.find_result_bar_draw_width)
-                + res.getDimensionPixelSize(R.dimen.find_in_page_separator_width);
+                + res.getDimensionPixelSize(R.dimen.find_result_bar_separator_width);
         mResultMinHeight = res.getDimensionPixelSize(R.dimen.find_result_bar_result_min_height);
         mActiveMinHeight = res.getDimensionPixelSize(R.dimen.find_result_bar_active_min_height);
         mBarVerticalPadding = res.getDimensionPixelSize(R.dimen.find_result_bar_vertical_padding);
@@ -183,6 +182,16 @@ class FindResultBar extends View {
     /** Clears the tickmarks. */
     public void clearMatchRects() {
         setMatchRects(-1, new RectF[0], null);
+    }
+
+    /** To be called after a find result has come back. */
+    public void onFindResult() {
+        mWaitingForActivateAck = false;
+    }
+
+    /** Returns the last version passed to setMatchRects. */
+    public int getRectsVersion() {
+        return mRectsVersion;
     }
 
     @Override

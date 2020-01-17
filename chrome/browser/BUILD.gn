@@ -2470,8 +2470,6 @@ jumbo_static_library("browser") {
       "android/feedback/process_id_feedback_source.cc",
       "android/feedback/screenshot_task.cc",
       "android/feedback/system_info_feedback_source.cc",
-      "android/find_in_page/find_in_page_bridge.cc",
-      "android/find_in_page/find_in_page_bridge.h",
       "android/foreign_session_helper.cc",
       "android/foreign_session_helper.h",
       "android/headers_classifier.cc",

@@ -2,12 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ANDROID_FIND_IN_PAGE_FIND_IN_PAGE_BRIDGE_H_
-#define CHROME_BROWSER_ANDROID_FIND_IN_PAGE_FIND_IN_PAGE_BRIDGE_H_
+#ifndef COMPONENTS_FIND_IN_PAGE_ANDROID_FIND_IN_PAGE_BRIDGE_H_
+#define COMPONENTS_FIND_IN_PAGE_ANDROID_FIND_IN_PAGE_BRIDGE_H_
 
 #include "base/android/jni_weak_ref.h"
 #include "base/macros.h"
 #include "content/public/browser/web_contents.h"
+
+namespace find_in_page {
 
 class FindInPageBridge {
  public:
@@ -51,4 +53,6 @@ class FindInPageBridge {
   DISALLOW_COPY_AND_ASSIGN(FindInPageBridge);
 };
 
-#endif  // CHROME_BROWSER_ANDROID_FIND_IN_PAGE_FIND_IN_PAGE_BRIDGE_H_
+}  // namespace find_in_page
+
+#endif  // COMPONENTS_FIND_IN_PAGE_ANDROID_FIND_IN_PAGE_BRIDGE_H_

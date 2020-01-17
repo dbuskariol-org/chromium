@@ -20,4 +20,13 @@ static_library("find_in_page") {
     "//third_party/blink/public/mojom/frame",
     "//ui/gfx",
   ]
+
+  if (is_android) {
+    sources += [
+      "android/find_in_page_bridge.cc",
+      "android/find_in_page_bridge.h",
+    ]
+
+    deps += [ "//components/find_in_page/android:jni_headers" ]
+  }
 }

@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/android/find_in_page/find_in_page_bridge.h"
+#include "components/find_in_page/android/find_in_page_bridge.h"
 
 #include "base/android/jni_string.h"
-#include "chrome/android/chrome_jni_headers/FindInPageBridge_jni.h"
+#include "components/find_in_page/android/jni_headers/FindInPageBridge_jni.h"
 #include "components/find_in_page/find_tab_helper.h"
 #include "components/find_in_page/find_types.h"
 #include "content/public/browser/web_contents.h"
@@ -14,6 +14,8 @@ using base::android::ConvertUTF16ToJavaString;
 using base::android::JavaParamRef;
 using base::android::JavaRef;
 using base::android::ScopedJavaLocalRef;
+
+namespace find_in_page {
 
 FindInPageBridge::FindInPageBridge(JNIEnv* env,
                                    const JavaRef<jobject>& obj,
@@ -84,3 +86,5 @@ static jlong JNI_FindInPageBridge_Init(
   FindInPageBridge* bridge = new FindInPageBridge(env, obj, j_web_contents);
   return reinterpret_cast<intptr_t>(bridge);
 }
+
+}  // namespace find_in_page
