@@ -2315,6 +2315,7 @@ void RenderFrameHostImpl::DidNavigate(
   if (!is_same_document_navigation) {
     ResetFeaturePolicy();
     active_sandbox_flags_ = frame_tree_node()->active_sandbox_flags();
+    document_policy_ = blink::DocumentPolicy::CreateWithHeaderPolicy({});
   }
 
   // Reset the salt so that media device IDs are reset after the new navigation
@@ -3280,16 +3281,26 @@ bool RenderFrameHostImpl::IsFeatureEnabled(
     blink::mojom::FeaturePolicyFeature feature) {
   blink::mojom::PolicyValueType feature_type =
       feature_policy_->GetFeatureList().at(feature).second;
-  return feature_policy_ &&
-         feature_policy_->IsFeatureEnabledForOrigin(
-             feature, GetLastCommittedOrigin(),
-             blink::PolicyValue::CreateMaxPolicyValue(feature_type));
+  return IsFeatureEnabled(
+      feature, blink::PolicyValue::CreateMaxPolicyValue(feature_type));
 }
 
 bool RenderFrameHostImpl::IsFeatureEnabled(
     blink::mojom::FeaturePolicyFeature feature,
     blink::PolicyValue threshold_value) {
-  return feature_policy_ &&
+  // Use Document Policy to determine feature availability, but only if all of
+  // the following are true:
+  // * The DocumentPolicy RuntimeEnabledFeature is not disabled,
+  // * Document policy has been set on this object, and
+  // * Document policy infrastructure actually supports the feature.
+  // If any of those are false, assume true (enabled) here. Otherwise, check
+  // this object's policy.
+  bool document_policy_result =
+      !base::FeatureList::IsEnabled(features::kDocumentPolicy) ||
+      !document_policy_ || !document_policy_->IsFeatureSupported(feature) ||
+      document_policy_->IsFeatureEnabled(feature, threshold_value);
+
+  return document_policy_result && feature_policy_ &&
          feature_policy_->IsFeatureEnabledForOrigin(
              feature, GetLastCommittedOrigin(), threshold_value);
 }
@@ -3379,16 +3390,44 @@ void RenderFrameHostImpl::DidChangeName(const std::string& name,
 
 void RenderFrameHostImpl::DidSetFramePolicyHeaders(
     blink::WebSandboxFlags sandbox_flags,
-    const blink::ParsedFeaturePolicy& parsed_header) {
+    const blink::ParsedFeaturePolicy& feature_policy_header,
+    const blink::DocumentPolicy::FeatureState& document_policy_header) {
   if (!is_active())
     return;
-  // Rebuild the feature policy for this frame.
+  // Rebuild |feature_policy_| for this frame.
   ResetFeaturePolicy();
-  feature_policy_->SetHeaderPolicy(parsed_header);
+  feature_policy_->SetHeaderPolicy(feature_policy_header);
+
+  // Rebuild |document_policy_| for this frame.
+  // Note: document_policy_header is the document policy state used to
+  // initialize |document_policy_| in SecurityContext on renderer side. It is
+  // supposed to be compatible with required_document_policy. If not, kill the
+  // renderer.
+  if (blink::DocumentPolicy::IsPolicyCompatible(
+          frame_tree_node()->effective_frame_policy().required_document_policy,
+          document_policy_header)) {
+    document_policy_ =
+        blink::DocumentPolicy::CreateWithHeaderPolicy(document_policy_header);
+  } else {
+    bad_message::ReceivedBadMessage(
+        GetProcess(), bad_message::RFH_BAD_DOCUMENT_POLICY_HEADER);
+    return;
+  }
 
   // Update the feature policy and sandbox flags in the frame tree. This will
   // send any updates to proxies if necessary.
-  frame_tree_node()->UpdateFramePolicyHeaders(sandbox_flags, parsed_header);
+  //
+  // Feature policy's inheritance from parent frame's feature policy is through
+  // accessing parent frame's security context(either remote or local) when
+  // initializing child's security context, so the update to proxies is needed.
+  //
+  // Document policy's inheritance from parent frame's required document policy
+  // is done at |HTMLFrameOwnerElement::UpdateRequiredPolicy|. Parent frame owns
+  // both parent required document policy and child frame's frame owner element
+  // which contains child's required document policy, so there is no need to
+  // store required document policy in proxies.
+  frame_tree_node()->UpdateFramePolicyHeaders(sandbox_flags,
+                                              feature_policy_header);
 
   // Save a copy of the now-active sandbox flags on this RFHI.
   active_sandbox_flags_ = frame_tree_node()->active_sandbox_flags();

@@ -80,6 +80,7 @@
 #include "services/service_manager/public/cpp/binder_registry.h"
 #include "services/service_manager/public/mojom/interface_provider.mojom.h"
 #include "services/viz/public/mojom/hit_test/input_target_client.mojom.h"
+#include "third_party/blink/public/common/feature_policy/document_policy.h"
 #include "third_party/blink/public/common/feature_policy/feature_policy.h"
 #include "third_party/blink/public/common/frame/frame_owner_element_type.h"
 #include "third_party/blink/public/mojom/bluetooth/web_bluetooth.mojom.h"
@@ -1589,7 +1590,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
                      const std::string& unique_name) override;
   void DidSetFramePolicyHeaders(
       blink::WebSandboxFlags sandbox_flags,
-      const blink::ParsedFeaturePolicy& parsed_header) override;
+      const blink::ParsedFeaturePolicy& feature_policy_header,
+      const blink::DocumentPolicy::FeatureState& document_policy_header)
+      override;
   void CancelInitialHistoryLoad() override;
   void UpdateEncoding(const std::string& encoding) override;
   void FrameSizeChanged(const gfx::Size& frame_size) override;
@@ -2347,6 +2350,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // this RenderFrameHost, but may diverge if this RenderFrameHost is pending
   // deletion.
   blink::WebSandboxFlags active_sandbox_flags_;
+
+  // Tracks the document policy which has been set on this frame.
+  std::unique_ptr<blink::DocumentPolicy> document_policy_;
 
 #if defined(OS_ANDROID)
   // An InterfaceProvider for Java-implemented interfaces that are scoped to

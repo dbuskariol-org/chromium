@@ -806,8 +806,7 @@ Document::Document(const DocumentInit& initializer,
   }
 
   InitSecurityContext(initializer, security_initializer);
-  FeaturePolicyInitialized(initializer, security_initializer);
-
+  PoliciesInitialized(initializer, security_initializer);
   InitDNSPrefetch();
 
   InstanceCounters::IncrementCounter(InstanceCounters::kDocumentCounter);
@@ -6506,7 +6505,7 @@ HTMLLinkElement* Document::LinkCanonical() const {
   });
 }
 
-void Document::FeaturePolicyInitialized(
+void Document::PoliciesInitialized(
     const DocumentInit& document_initializer,
     const SecurityContextInit& security_initializer) {
   // Processing of the feature policy header is done before the SecurityContext
@@ -6521,7 +6520,8 @@ void Document::FeaturePolicyInitialized(
                                "Error with Feature-Policy header: " + message));
   }
   if (frame_) {
-    pending_parsed_headers_ = security_initializer.ParsedHeader();
+    pending_fp_headers_ = security_initializer.FeaturePolicyHeader();
+    pending_dp_headers_ = document_initializer.GetDocumentPolicy();
   }
 
   // At this point, the document will not have been installed in the frame's
@@ -6551,12 +6551,13 @@ const FeaturePolicy* Document::GetParentFeaturePolicy() const {
   return nullptr;
 }
 
-void Document::ApplyPendingFeaturePolicyHeaders() {
+void Document::ApplyPendingFramePolicyHeaders() {
   if (frame_) {
-    frame_->Client()->DidSetFramePolicyHeaders(GetSandboxFlags(),
-                                               pending_parsed_headers_);
+    frame_->Client()->DidSetFramePolicyHeaders(
+        GetSandboxFlags(), pending_fp_headers_, pending_dp_headers_);
   }
-  pending_parsed_headers_.clear();
+  pending_fp_headers_.clear();
+  pending_dp_headers_.clear();
 }
 
 void Document::ApplyReportOnlyFeaturePolicyFromHeader(

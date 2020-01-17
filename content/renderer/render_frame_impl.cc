@@ -4214,11 +4214,13 @@ void RenderFrameImpl::DidChangeFramePolicy(
 
 void RenderFrameImpl::DidSetFramePolicyHeaders(
     blink::WebSandboxFlags flags,
-    const blink::ParsedFeaturePolicy& parsed_header) {
-  // If either Feature Policy or Sandbox Flags are different from the default
-  // (empty) values, then send them to the browser.
-  if (!parsed_header.empty() || flags != blink::WebSandboxFlags::kNone) {
-    GetFrameHost()->DidSetFramePolicyHeaders(flags, parsed_header);
+    const blink::ParsedFeaturePolicy& fp_header,
+    const blink::DocumentPolicy::FeatureState& dp_header) {
+  // If any of Feature Policy or Sandbox Flags or Document Policy are different
+  // from the default (empty) values, then send them to the browser.
+  if (!dp_header.empty() || !fp_header.empty() ||
+      flags != blink::WebSandboxFlags::kNone) {
+    GetFrameHost()->DidSetFramePolicyHeaders(flags, fp_header, dp_header);
   }
 }
 
