@@ -436,7 +436,7 @@ export class DeviceOperator {
   async setReprocessOption(deviceId, effect) {
     const device = await this.getDevice_(deviceId);
     const {status, blob} = await device.setReprocessOption(effect);
-    if (blob === null) {
+    if (blob === null || status !== 0) {
       throw new Error('Set reprocess failed: ' + status);
     }
     return blob;
