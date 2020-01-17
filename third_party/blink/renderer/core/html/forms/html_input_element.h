@@ -319,6 +319,8 @@ class CORE_EXPORT HTMLInputElement
 
   void SetHasBeenPasswordField() { has_been_password_field_ = true; }
 
+  bool IsDraggedSlider() const;
+
  protected:
   void DefaultEventHandler(Event&) override;
   void CreateShadowSubtree();

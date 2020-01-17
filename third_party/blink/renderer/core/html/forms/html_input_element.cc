@@ -2003,4 +2003,8 @@ PaintLayerScrollableArea* HTMLInputElement::GetScrollableArea() const {
   return Element::GetScrollableArea();
 }
 
+bool HTMLInputElement::IsDraggedSlider() const {
+  return input_type_view_->IsDraggedSlider();
+}
+
 }  // namespace blink

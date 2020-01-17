@@ -135,6 +135,7 @@ class CORE_EXPORT InputTypeView : public GarbageCollectedMixin {
   virtual bool HasFallbackContent() const { return false; }
   virtual FormControlState SaveFormControlState() const;
   virtual void RestoreFormControlState(const FormControlState&);
+  virtual bool IsDraggedSlider() const;
 
   // Validation functions
   virtual bool HasBadInput() const;

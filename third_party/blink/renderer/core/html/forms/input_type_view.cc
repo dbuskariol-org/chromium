@@ -189,6 +189,10 @@ void InputTypeView::RestoreFormControlState(const FormControlState& state) {
   GetElement().setValue(state[0]);
 }
 
+bool InputTypeView::IsDraggedSlider() const {
+  return false;
+}
+
 bool InputTypeView::HasBadInput() const {
   return false;
 }
