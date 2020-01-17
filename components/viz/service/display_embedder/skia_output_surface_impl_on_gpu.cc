@@ -1015,6 +1015,16 @@ void SkiaOutputSurfaceImplOnGpu::SwapBuffers(
   destroy_after_swap_.clear();
 }
 
+void SkiaOutputSurfaceImplOnGpu::SwapBuffersSkipped(
+    base::OnceCallback<bool()> deferred_framebuffer_draw_closure) {
+  std::move(deferred_framebuffer_draw_closure).Run();
+
+  // Perform cleanup that would have otherwise happened in SwapBuffers().
+  scoped_output_device_paint_.reset();
+  context_state_->UpdateSkiaOwnedMemorySize();
+  destroy_after_swap_.clear();
+}
+
 void SkiaOutputSurfaceImplOnGpu::FinishPaintRenderPass(
     RenderPassId id,
     std::unique_ptr<SkDeferredDisplayList> ddl,
