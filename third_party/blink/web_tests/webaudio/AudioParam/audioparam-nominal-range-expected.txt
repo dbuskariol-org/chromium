@@ -1,46 +1,52 @@
-CONSOLE WARNING: line 399: Delay.delayTime.value -1 outside nominal range [0, 1.5]; value will be clamped.
-CONSOLE WARNING: line 399: Delay.delayTime.setValueAtTime value -1 outside nominal range [0, 1.5]; value will be clamped.
-CONSOLE WARNING: line 411: Delay.delayTime.value 4 outside nominal range [0, 1.5]; value will be clamped.
-CONSOLE WARNING: line 411: Delay.delayTime.setValueAtTime value 4 outside nominal range [0, 1.5]; value will be clamped.
-CONSOLE WARNING: line 399: StereoPanner.pan.value -3 outside nominal range [-1, 1]; value will be clamped.
-CONSOLE WARNING: line 399: StereoPanner.pan.setValueAtTime value -3 outside nominal range [-1, 1]; value will be clamped.
-CONSOLE WARNING: line 411: StereoPanner.pan.value 3 outside nominal range [-1, 1]; value will be clamped.
-CONSOLE WARNING: line 411: StereoPanner.pan.setValueAtTime value 3 outside nominal range [-1, 1]; value will be clamped.
-CONSOLE WARNING: line 399: DynamicsCompressor.threshold.value -201 outside nominal range [-100, 0]; value will be clamped.
-CONSOLE WARNING: line 399: DynamicsCompressor.threshold.setValueAtTime value -201 outside nominal range [-100, 0]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.threshold.value 1 outside nominal range [-100, 0]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.threshold.setValueAtTime value 1 outside nominal range [-100, 0]; value will be clamped.
-CONSOLE WARNING: line 399: DynamicsCompressor.knee.value -1 outside nominal range [0, 40]; value will be clamped.
-CONSOLE WARNING: line 399: DynamicsCompressor.knee.setValueAtTime value -1 outside nominal range [0, 40]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.knee.value 81 outside nominal range [0, 40]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.knee.setValueAtTime value 81 outside nominal range [0, 40]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.ratio.value 41 outside nominal range [1, 20]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.ratio.setValueAtTime value 41 outside nominal range [1, 20]; value will be clamped.
-CONSOLE WARNING: line 399: DynamicsCompressor.attack.value -1 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 399: DynamicsCompressor.attack.setValueAtTime value -1 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.attack.value 3 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.attack.setValueAtTime value 3 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 399: DynamicsCompressor.release.value -1 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 399: DynamicsCompressor.release.setValueAtTime value -1 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.release.value 3 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 411: DynamicsCompressor.release.setValueAtTime value 3 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 399: BiquadFilter.frequency.value -1 outside nominal range [0, 24000]; value will be clamped.
-CONSOLE WARNING: line 399: BiquadFilter.frequency.setValueAtTime value -1 outside nominal range [0, 24000]; value will be clamped.
-CONSOLE WARNING: line 411: BiquadFilter.frequency.value 48001 outside nominal range [0, 24000]; value will be clamped.
-CONSOLE WARNING: line 411: BiquadFilter.frequency.setValueAtTime value 48001 outside nominal range [0, 24000]; value will be clamped.
-CONSOLE WARNING: line 399: Oscillator.frequency.value -48001 outside nominal range [-24000, 24000]; value will be clamped.
-CONSOLE WARNING: line 399: Oscillator.frequency.setValueAtTime value -48001 outside nominal range [-24000, 24000]; value will be clamped.
-CONSOLE WARNING: line 411: Oscillator.frequency.value 48001 outside nominal range [-24000, 24000]; value will be clamped.
-CONSOLE WARNING: line 411: Oscillator.frequency.setValueAtTime value 48001 outside nominal range [-24000, 24000]; value will be clamped.
-CONSOLE WARNING: line 399: Oscillator.detune.value -307201 outside nominal range [-153600, 153600]; value will be clamped.
-CONSOLE WARNING: line 399: Oscillator.detune.setValueAtTime value -307201 outside nominal range [-153600, 153600]; value will be clamped.
-CONSOLE WARNING: line 411: Oscillator.detune.value 307201 outside nominal range [-153600, 153600]; value will be clamped.
-CONSOLE WARNING: line 411: Oscillator.detune.setValueAtTime value 307201 outside nominal range [-153600, 153600]; value will be clamped.
-CONSOLE WARNING: line 327: Delay.delayTime.setValueAtTime value -1 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 328: Delay.delayTime.linearRampToValueAtTime value 2 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 329: Delay.delayTime.exponentialRampToValue value 3 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 330: Delay.delayTime.setTargetAtTime value -1 outside nominal range [0, 1]; value will be clamped.
-CONSOLE WARNING: line 331: Delay.delayTime.setValueCurveAtTime value 1.5 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 406: Delay.delayTime.value -1 outside nominal range [0, 1.5]; value will be clamped.
+CONSOLE WARNING: line 406: Delay.delayTime.setValueAtTime value -1 outside nominal range [0, 1.5]; value will be clamped.
+CONSOLE WARNING: line 418: Delay.delayTime.value 4 outside nominal range [0, 1.5]; value will be clamped.
+CONSOLE WARNING: line 418: Delay.delayTime.setValueAtTime value 4 outside nominal range [0, 1.5]; value will be clamped.
+CONSOLE WARNING: line 406: StereoPanner.pan.value -3 outside nominal range [-1, 1]; value will be clamped.
+CONSOLE WARNING: line 406: StereoPanner.pan.setValueAtTime value -3 outside nominal range [-1, 1]; value will be clamped.
+CONSOLE WARNING: line 418: StereoPanner.pan.value 3 outside nominal range [-1, 1]; value will be clamped.
+CONSOLE WARNING: line 418: StereoPanner.pan.setValueAtTime value 3 outside nominal range [-1, 1]; value will be clamped.
+CONSOLE WARNING: line 406: DynamicsCompressor.threshold.value -201 outside nominal range [-100, 0]; value will be clamped.
+CONSOLE WARNING: line 406: DynamicsCompressor.threshold.setValueAtTime value -201 outside nominal range [-100, 0]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.threshold.value 1 outside nominal range [-100, 0]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.threshold.setValueAtTime value 1 outside nominal range [-100, 0]; value will be clamped.
+CONSOLE WARNING: line 406: DynamicsCompressor.knee.value -1 outside nominal range [0, 40]; value will be clamped.
+CONSOLE WARNING: line 406: DynamicsCompressor.knee.setValueAtTime value -1 outside nominal range [0, 40]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.knee.value 81 outside nominal range [0, 40]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.knee.setValueAtTime value 81 outside nominal range [0, 40]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.ratio.value 41 outside nominal range [1, 20]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.ratio.setValueAtTime value 41 outside nominal range [1, 20]; value will be clamped.
+CONSOLE WARNING: line 406: DynamicsCompressor.attack.value -1 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 406: DynamicsCompressor.attack.setValueAtTime value -1 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.attack.value 3 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.attack.setValueAtTime value 3 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 406: DynamicsCompressor.release.value -1 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 406: DynamicsCompressor.release.setValueAtTime value -1 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.release.value 3 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 418: DynamicsCompressor.release.setValueAtTime value 3 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 406: BiquadFilter.frequency.value -1 outside nominal range [0, 24000]; value will be clamped.
+CONSOLE WARNING: line 406: BiquadFilter.frequency.setValueAtTime value -1 outside nominal range [0, 24000]; value will be clamped.
+CONSOLE WARNING: line 418: BiquadFilter.frequency.value 48001 outside nominal range [0, 24000]; value will be clamped.
+CONSOLE WARNING: line 418: BiquadFilter.frequency.setValueAtTime value 48001 outside nominal range [0, 24000]; value will be clamped.
+CONSOLE WARNING: line 406: BiquadFilter.detune.value -307201 outside nominal range [-153600, 153600]; value will be clamped.
+CONSOLE WARNING: line 406: BiquadFilter.detune.setValueAtTime value -307201 outside nominal range [-153600, 153600]; value will be clamped.
+CONSOLE WARNING: line 418: BiquadFilter.detune.value 307201 outside nominal range [-153600, 153600]; value will be clamped.
+CONSOLE WARNING: line 418: BiquadFilter.detune.setValueAtTime value 307201 outside nominal range [-153600, 153600]; value will be clamped.
+CONSOLE WARNING: line 418: BiquadFilter.gain.value 3083.55 outside nominal range [-3.40282e+38, 1541.27]; value will be clamped.
+CONSOLE WARNING: line 418: BiquadFilter.gain.setValueAtTime value 3083.55 outside nominal range [-3.40282e+38, 1541.27]; value will be clamped.
+CONSOLE WARNING: line 406: Oscillator.frequency.value -48001 outside nominal range [-24000, 24000]; value will be clamped.
+CONSOLE WARNING: line 406: Oscillator.frequency.setValueAtTime value -48001 outside nominal range [-24000, 24000]; value will be clamped.
+CONSOLE WARNING: line 418: Oscillator.frequency.value 48001 outside nominal range [-24000, 24000]; value will be clamped.
+CONSOLE WARNING: line 418: Oscillator.frequency.setValueAtTime value 48001 outside nominal range [-24000, 24000]; value will be clamped.
+CONSOLE WARNING: line 406: Oscillator.detune.value -307201 outside nominal range [-153600, 153600]; value will be clamped.
+CONSOLE WARNING: line 406: Oscillator.detune.setValueAtTime value -307201 outside nominal range [-153600, 153600]; value will be clamped.
+CONSOLE WARNING: line 418: Oscillator.detune.value 307201 outside nominal range [-153600, 153600]; value will be clamped.
+CONSOLE WARNING: line 418: Oscillator.detune.setValueAtTime value 307201 outside nominal range [-153600, 153600]; value will be clamped.
+CONSOLE WARNING: line 334: Delay.delayTime.setValueAtTime value -1 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 335: Delay.delayTime.linearRampToValueAtTime value 2 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 336: Delay.delayTime.exponentialRampToValue value 3 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 337: Delay.delayTime.setTargetAtTime value -1 outside nominal range [0, 1]; value will be clamped.
+CONSOLE WARNING: line 338: Delay.delayTime.setValueCurveAtTime value 1.5 outside nominal range [0, 1]; value will be clamped.
 This is a testharness.js-based test.
 PASS # AUDIT TASK RUNNER STARTED.
 PASS > [initialize] 
@@ -65,7 +71,7 @@ PASS   DelayNode.delayTime.maxValue = 42 is not equal to 42.
 PASS   DelayNode.delayTime.maxValue is read-only is equal to true.
 PASS   Set DelayNode.delayTime.value = -1 is equal to 0.
 PASS   Set DelayNode.delayTime.value = 4 is equal to 1.5.
-PASS   DelayNode.delayTimewas clipped to lie within the nominal range is equal to true.
+PASS   DelayNode.delayTime was clipped to lie within the nominal range is equal to true.
 PASS   Nominal ranges for AudioParam(s) of DelayNode are correct
 PASS < [Offline createDelay] All assertions passed. (total 10 assertions)
 PASS > [Offline createBufferSource] 
@@ -92,7 +98,7 @@ PASS   StereoPannerNode.pan.maxValue = 42 is not equal to 42.
 PASS   StereoPannerNode.pan.maxValue is read-only is equal to true.
 PASS   Set StereoPannerNode.pan.value = -3 is equal to -1.
 PASS   Set StereoPannerNode.pan.value = 3 is equal to 1.
-PASS   StereoPannerNode.panwas clipped to lie within the nominal range is equal to true.
+PASS   StereoPannerNode.pan was clipped to lie within the nominal range is equal to true.
 PASS   Nominal ranges for AudioParam(s) of StereoPannerNode are correct
 PASS < [Offline createStereoPanner] All assertions passed. (total 10 assertions)
 PASS > [Offline createDynamicsCompressor] 
@@ -104,7 +110,7 @@ PASS   DynamicsCompressorNode.threshold.maxValue = 42 is not equal to 42.
 PASS   DynamicsCompressorNode.threshold.maxValue is read-only is equal to true.
 PASS   Set DynamicsCompressorNode.threshold.value = -201 is equal to -100.
 PASS   Set DynamicsCompressorNode.threshold.value = 1 is equal to 0.
-PASS   DynamicsCompressorNode.thresholdwas clipped to lie within the nominal range is equal to true.
+PASS   DynamicsCompressorNode.threshold was clipped to lie within the nominal range is equal to true.
 PASS   DynamicsCompressorNode.knee.minValue is equal to 0.
 PASS   DynamicsCompressorNode.knee.maxValue is equal to 40.
 PASS   DynamicsCompressorNode.knee.minValue = 42 is not equal to 42.
@@ -113,7 +119,7 @@ PASS   DynamicsCompressorNode.knee.maxValue = 42 is not equal to 42.
 PASS   DynamicsCompressorNode.knee.maxValue is read-only is equal to true.
 PASS   Set DynamicsCompressorNode.knee.value = -1 is equal to 0.
 PASS   Set DynamicsCompressorNode.knee.value = 81 is equal to 40.
-PASS   DynamicsCompressorNode.kneewas clipped to lie within the nominal range is equal to true.
+PASS   DynamicsCompressorNode.knee was clipped to lie within the nominal range is equal to true.
 PASS   DynamicsCompressorNode.ratio.minValue is equal to 1.
 PASS   DynamicsCompressorNode.ratio.maxValue is equal to 20.
 PASS   DynamicsCompressorNode.ratio.minValue = 42 is not equal to 42.
@@ -122,7 +128,7 @@ PASS   DynamicsCompressorNode.ratio.maxValue = 42 is not equal to 42.
 PASS   DynamicsCompressorNode.ratio.maxValue is read-only is equal to true.
 PASS   Set DynamicsCompressorNode.ratio.value = 1 is equal to 1.
 PASS   Set DynamicsCompressorNode.ratio.value = 41 is equal to 20.
-PASS   DynamicsCompressorNode.ratiowas clipped to lie within the nominal range is equal to true.
+PASS   DynamicsCompressorNode.ratio was clipped to lie within the nominal range is equal to true.
 PASS   DynamicsCompressorNode.attack.minValue is equal to 0.
 PASS   DynamicsCompressorNode.attack.maxValue is equal to 1.
 PASS   DynamicsCompressorNode.attack.minValue = 42 is not equal to 42.
@@ -131,7 +137,7 @@ PASS   DynamicsCompressorNode.attack.maxValue = 42 is not equal to 42.
 PASS   DynamicsCompressorNode.attack.maxValue is read-only is equal to true.
 PASS   Set DynamicsCompressorNode.attack.value = -1 is equal to 0.
 PASS   Set DynamicsCompressorNode.attack.value = 3 is equal to 1.
-PASS   DynamicsCompressorNode.attackwas clipped to lie within the nominal range is equal to true.
+PASS   DynamicsCompressorNode.attack was clipped to lie within the nominal range is equal to true.
 PASS   DynamicsCompressorNode.release.minValue is equal to 0.
 PASS   DynamicsCompressorNode.release.maxValue is equal to 1.
 PASS   DynamicsCompressorNode.release.minValue = 42 is not equal to 42.
@@ -140,7 +146,7 @@ PASS   DynamicsCompressorNode.release.maxValue = 42 is not equal to 42.
 PASS   DynamicsCompressorNode.release.maxValue is read-only is equal to true.
 PASS   Set DynamicsCompressorNode.release.value = -1 is equal to 0.
 PASS   Set DynamicsCompressorNode.release.value = 3 is equal to 1.
-PASS   DynamicsCompressorNode.releasewas clipped to lie within the nominal range is equal to true.
+PASS   DynamicsCompressorNode.release was clipped to lie within the nominal range is equal to true.
 PASS   Nominal ranges for AudioParam(s) of DynamicsCompressorNode are correct
 PASS < [Offline createDynamicsCompressor] All assertions passed. (total 46 assertions)
 PASS > [Offline createBiquadFilter] 
@@ -152,13 +158,16 @@ PASS   BiquadFilterNode.frequency.maxValue = 42 is not equal to 42.
 PASS   BiquadFilterNode.frequency.maxValue is read-only is equal to true.
 PASS   Set BiquadFilterNode.frequency.value = -1 is equal to 0.
 PASS   Set BiquadFilterNode.frequency.value = 48001 is equal to 24000.
-PASS   BiquadFilterNode.frequencywas clipped to lie within the nominal range is equal to true.
-PASS   BiquadFilterNode.detune.minValue is equal to -3.4028234663852886e+38.
-PASS   BiquadFilterNode.detune.maxValue is equal to 3.4028234663852886e+38.
+PASS   BiquadFilterNode.frequency was clipped to lie within the nominal range is equal to true.
+PASS   BiquadFilterNode.detune.minValue is equal to -153600.
+PASS   BiquadFilterNode.detune.maxValue is equal to 153600.
 PASS   BiquadFilterNode.detune.minValue = 42 is not equal to 42.
 PASS   BiquadFilterNode.detune.minValue is read-only is equal to true.
 PASS   BiquadFilterNode.detune.maxValue = 42 is not equal to 42.
 PASS   BiquadFilterNode.detune.maxValue is read-only is equal to true.
+PASS   Set BiquadFilterNode.detune.value = -307201 is equal to -153600.
+PASS   Set BiquadFilterNode.detune.value = 307201 is equal to 153600.
+PASS   BiquadFilterNode.detune was clipped to lie within the nominal range is equal to true.
 PASS   BiquadFilterNode.Q.minValue is equal to -3.4028234663852886e+38.
 PASS   BiquadFilterNode.Q.maxValue is equal to 3.4028234663852886e+38.
 PASS   BiquadFilterNode.Q.minValue = 42 is not equal to 42.
@@ -166,13 +175,15 @@ PASS   BiquadFilterNode.Q.minValue is read-only is equal to true.
 PASS   BiquadFilterNode.Q.maxValue = 42 is not equal to 42.
 PASS   BiquadFilterNode.Q.maxValue is read-only is equal to true.
 PASS   BiquadFilterNode.gain.minValue is equal to -3.4028234663852886e+38.
-PASS   BiquadFilterNode.gain.maxValue is equal to 3.4028234663852886e+38.
+PASS   BiquadFilterNode.gain.maxValue is equal to 1541.273681640625.
 PASS   BiquadFilterNode.gain.minValue = 42 is not equal to 42.
 PASS   BiquadFilterNode.gain.minValue is read-only is equal to true.
 PASS   BiquadFilterNode.gain.maxValue = 42 is not equal to 42.
 PASS   BiquadFilterNode.gain.maxValue is read-only is equal to true.
+PASS   Set BiquadFilterNode.gain.value = 3083.54736328125 is equal to 1541.273681640625.
+PASS   BiquadFilterNode.gain was clipped to lie within the nominal range is equal to true.
 PASS   Nominal ranges for AudioParam(s) of BiquadFilterNode are correct
-PASS < [Offline createBiquadFilter] All assertions passed. (total 28 assertions)
+PASS < [Offline createBiquadFilter] All assertions passed. (total 33 assertions)
 PASS > [Offline createOscillator] 
 PASS   OscillatorNode.frequency.minValue is equal to -24000.
 PASS   OscillatorNode.frequency.maxValue is equal to 24000.
@@ -182,7 +193,7 @@ PASS   OscillatorNode.frequency.maxValue = 42 is not equal to 42.
 PASS   OscillatorNode.frequency.maxValue is read-only is equal to true.
 PASS   Set OscillatorNode.frequency.value = -48001 is equal to -24000.
 PASS   Set OscillatorNode.frequency.value = 48001 is equal to 24000.
-PASS   OscillatorNode.frequencywas clipped to lie within the nominal range is equal to true.
+PASS   OscillatorNode.frequency was clipped to lie within the nominal range is equal to true.
 PASS   OscillatorNode.detune.minValue is equal to -153600.
 PASS   OscillatorNode.detune.maxValue is equal to 153600.
 PASS   OscillatorNode.detune.minValue = 42 is not equal to 42.
@@ -191,7 +202,7 @@ PASS   OscillatorNode.detune.maxValue = 42 is not equal to 42.
 PASS   OscillatorNode.detune.maxValue is read-only is equal to true.
 PASS   Set OscillatorNode.detune.value = -307201 is equal to -153600.
 PASS   Set OscillatorNode.detune.value = 307201 is equal to 153600.
-PASS   OscillatorNode.detunewas clipped to lie within the nominal range is equal to true.
+PASS   OscillatorNode.detune was clipped to lie within the nominal range is equal to true.
 PASS   Nominal ranges for AudioParam(s) of OscillatorNode are correct
 PASS < [Offline createOscillator] All assertions passed. (total 19 assertions)
 PASS > [Offline createPanner] 
