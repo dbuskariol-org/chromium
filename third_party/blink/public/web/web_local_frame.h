@@ -261,10 +261,6 @@ class WebLocalFrame : public WebFrame {
   // * form submission
   virtual bool IsNavigationScheduledWithin(base::TimeDelta interval) const = 0;
 
-  // Reports a list of Blink features used, performed or encountered by the
-  // browser during the current page load happening on the frame.
-  virtual void BlinkFeatureUsageReport(
-      const std::set<blink::mojom::WebFeature>& features) = 0;
   virtual void BlinkFeatureUsageReport(blink::mojom::WebFeature feature) = 0;
 
   // Informs the renderer that mixed content was found externally regarding this

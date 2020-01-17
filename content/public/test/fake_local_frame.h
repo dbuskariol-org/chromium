@@ -44,6 +44,8 @@ class FakeLocalFrame : public blink::mojom::LocalFrame {
   void ClearFocusedElement() override;
   void CopyImageAt(const gfx::Point& window_point) override;
   void SaveImageAt(const gfx::Point& window_point) override;
+  void ReportBlinkFeatureUsage(
+      const std::vector<blink::mojom::WebFeature>&) override;
 
  private:
   void BindFrameHostReceiver(mojo::ScopedInterfaceEndpointHandle handle);

@@ -89,7 +89,6 @@
 
 #include <algorithm>
 #include <memory>
-#include <set>
 #include <utility>
 
 #include "base/macros.h"
@@ -2253,14 +2252,6 @@ void WebLocalFrameImpl::SetCommittedFirstRealLoad() {
 bool WebLocalFrameImpl::HasCommittedFirstRealLoad() {
   DCHECK(GetFrame());
   return GetFrame()->Loader().StateMachine()->CommittedFirstRealDocumentLoad();
-}
-
-void WebLocalFrameImpl::BlinkFeatureUsageReport(
-    const std::set<blink::mojom::WebFeature>& features) {
-  DCHECK(!features.empty());
-  // Assimilate all features used/performed by the browser into UseCounter.
-  for (const auto& feature : features)
-    UseCounter::Count(GetFrame()->GetDocument(), feature);
 }
 
 void WebLocalFrameImpl::BlinkFeatureUsageReport(

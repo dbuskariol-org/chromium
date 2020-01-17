@@ -1094,8 +1094,6 @@ class CONTENT_EXPORT RenderFrameImpl
       const std::map<int, base::FilePath>& frame_routing_id_to_local_path,
       bool save_with_empty_url);
   void OnSuppressFurtherDialogs();
-  void OnBlinkFeatureUsageReport(
-      const std::set<blink::mojom::WebFeature>& features);
   void OnMixedContentFound(const FrameMsg_MixedContentFound_Params& params);
   void OnSetOverlayRoutingToken(const base::UnguessableToken& token);
   void OnMediaPlayerActionAt(const gfx::PointF&,

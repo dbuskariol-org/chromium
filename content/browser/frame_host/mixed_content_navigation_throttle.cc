@@ -11,10 +11,10 @@
 #include "content/browser/frame_host/frame_tree_node.h"
 #include "content/browser/frame_host/navigation_request.h"
 #include "content/browser/frame_host/render_frame_host_delegate.h"
+#include "content/browser/frame_host/render_frame_host_impl.h"
 #include "content/browser/renderer_host/render_view_host_impl.h"
 #include "content/common/frame_messages.h"
 #include "content/public/browser/content_browser_client.h"
-#include "content/public/browser/render_frame_host.h"
 #include "content/public/common/content_client.h"
 #include "content/public/common/navigation_policy.h"
 #include "content/public/common/origin_util.h"
@@ -292,9 +292,10 @@ FrameTreeNode* MixedContentNavigationThrottle::InWhichFrameIsContentMixed(
 void MixedContentNavigationThrottle::MaybeSendBlinkFeatureUsageReport() {
   if (!mixed_content_features_.empty()) {
     NavigationRequest* request = NavigationRequest::From(navigation_handle());
-    RenderFrameHost* rfh = request->frame_tree_node()->current_frame_host();
-    rfh->Send(new FrameMsg_BlinkFeatureUsageReport(rfh->GetRoutingID(),
-                                                   mixed_content_features_));
+    RenderFrameHostImpl* rfh = request->frame_tree_node()->current_frame_host();
+    rfh->GetAssociatedLocalFrame()->ReportBlinkFeatureUsage(
+        std::vector<blink::mojom::WebFeature>(mixed_content_features_.begin(),
+                                              mixed_content_features_.end()));
     mixed_content_features_.clear();
   }
 }

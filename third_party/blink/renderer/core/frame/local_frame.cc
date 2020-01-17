@@ -1985,6 +1985,17 @@ void LocalFrame::SaveImageAt(const gfx::Point& window_point) {
   GetPage()->GetChromeClient().SaveImageFromDataURL(*this, url);
 }
 
+void LocalFrame::ReportBlinkFeatureUsage(
+    const Vector<mojom::blink::WebFeature>& features) {
+  DCHECK(!features.IsEmpty());
+
+  // Assimilate all features used/performed by the browser into UseCounter.
+  auto* document = GetDocument();
+  DCHECK(document);
+  for (const auto& feature : features)
+    document->CountUse(feature);
+}
+
 void LocalFrame::BindToReceiver(
     blink::LocalFrame* frame,
     mojo::PendingAssociatedReceiver<mojom::blink::LocalFrame> receiver) {

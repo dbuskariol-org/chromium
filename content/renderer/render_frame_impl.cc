@@ -2216,8 +2216,6 @@ bool RenderFrameImpl::OnMessageReceived(const IPC::Message& msg) {
                         OnGetSavableResourceLinks)
     IPC_MESSAGE_HANDLER(FrameMsg_GetSerializedHtmlWithLocalLinks,
                         OnGetSerializedHtmlWithLocalLinks)
-    IPC_MESSAGE_HANDLER(FrameMsg_BlinkFeatureUsageReport,
-                        OnBlinkFeatureUsageReport)
     IPC_MESSAGE_HANDLER(FrameMsg_MixedContentFound, OnMixedContentFound)
     IPC_MESSAGE_HANDLER(FrameMsg_SetOverlayRoutingToken,
                         OnSetOverlayRoutingToken)
@@ -6193,11 +6191,6 @@ void RenderFrameImpl::OnWriteMHTMLComplete(
                 "mismatching enums: " #a)
 #undef STATIC_ASSERT_ENUM
 #endif
-
-void RenderFrameImpl::OnBlinkFeatureUsageReport(
-    const std::set<blink::mojom::WebFeature>& features) {
-  frame_->BlinkFeatureUsageReport(features);
-}
 
 void RenderFrameImpl::OnMixedContentFound(
     const FrameMsg_MixedContentFound_Params& params) {

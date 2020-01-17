@@ -16,6 +16,7 @@ import "third_party/blink/public/mojom/frame/lifecycle.mojom";
 import "third_party/blink/public/mojom/frame/sudden_termination_disabler_type.mojom";
 import "third_party/blink/public/mojom/frame/user_activation_update_types.mojom";
 import "third_party/blink/public/mojom/input/scroll_direction.mojom";
+import "third_party/blink/public/mojom/web_feature/web_feature.mojom";
 import "ui/events/mojom/scroll_granularity.mojom";
 import "ui/gfx/geometry/mojom/geometry.mojom";
 import "url/mojom/origin.mojom";
@@ -196,6 +197,11 @@ interface LocalFrame {
   // Saves the image at |window_point| to the disk (if there indeed is an image
   // at that |window_point|).
   SaveImageAt(gfx.mojom.Point window_point);
+
+  // Updates the frame with a list of unique WebFeature values representing
+  // Blink features used, performed or encountered by the browser during the
+  // current page load happening on the frame.
+  ReportBlinkFeatureUsage(array<blink.mojom.WebFeature> features);
 };
 
 // Implemented in Browser, this interface defines frame-specific methods that

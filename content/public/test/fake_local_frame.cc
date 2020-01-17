@@ -47,6 +47,9 @@ void FakeLocalFrame::CopyImageAt(const gfx::Point& window_point) {}
 
 void FakeLocalFrame::SaveImageAt(const gfx::Point& window_point) {}
 
+void FakeLocalFrame::ReportBlinkFeatureUsage(
+    const std::vector<blink::mojom::WebFeature>&) {}
+
 void FakeLocalFrame::BindFrameHostReceiver(
     mojo::ScopedInterfaceEndpointHandle handle) {
   receiver_.Bind(mojo::PendingAssociatedReceiver<blink::mojom::LocalFrame>(

@@ -830,12 +830,6 @@ IPC_MESSAGE_ROUTED2(FrameMsg_SetPepperVolume,
                     double /* volume */)
 #endif  // BUILDFLAG(ENABLE_PLUGINS)
 
-// Updates the renderer with a list of unique WebFeature values representing
-// Blink features used, performed or encountered by the browser during the
-// current page load happening on the frame.
-IPC_MESSAGE_ROUTED1(FrameMsg_BlinkFeatureUsageReport,
-                    std::set<blink::mojom::WebFeature>) /* features */
-
 // Informs the renderer that mixed content was found by the browser. The
 // included data is used for instance to report to the CSP policy and to log to
 // the frame console.
