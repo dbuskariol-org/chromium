@@ -184,7 +184,7 @@ void BlinkTestRunner::SetEditCommand(const std::string& name,
 }
 
 void BlinkTestRunner::PrintMessageToStderr(const std::string& message) {
-  GetWebTestClientRemote().PrintMessageToStderr(message);
+  Send(new BlinkTestHostMsg_PrintMessageToStderr(routing_id(), message));
 }
 
 void BlinkTestRunner::PrintMessage(const std::string& message) {
@@ -262,7 +262,8 @@ void BlinkTestRunner::ApplyPreferences() {
 }
 
 void BlinkTestRunner::SetPopupBlockingEnabled(bool block_popups) {
-  GetWebTestClientRemote().SetPopupBlockingEnabled(block_popups);
+  Send(
+      new BlinkTestHostMsg_SetPopupBlockingEnabled(routing_id(), block_popups));
 }
 
 void BlinkTestRunner::UseUnfortunateSynchronousResizeMode(bool enable) {
@@ -290,7 +291,7 @@ void BlinkTestRunner::ResetAutoResizeMode() {
 }
 
 void BlinkTestRunner::NavigateSecondaryWindow(const GURL& url) {
-  GetWebTestClientRemote().NavigateSecondaryWindow(url);
+  Send(new BlinkTestHostMsg_NavigateSecondaryWindow(routing_id(), url));
 }
 
 void BlinkTestRunner::InspectSecondaryWindow() {
@@ -359,19 +360,20 @@ void BlinkTestRunner::SetBluetoothFakeAdapter(const std::string& adapter_name,
 }
 
 void BlinkTestRunner::SetBluetoothManualChooser(bool enable) {
-  GetWebTestClientRemote().SetBluetoothManualChooser(enable);
+  Send(new BlinkTestHostMsg_SetBluetoothManualChooser(routing_id(), enable));
 }
 
 void BlinkTestRunner::GetBluetoothManualChooserEvents(
     base::OnceCallback<void(const std::vector<std::string>&)> callback) {
   get_bluetooth_events_callbacks_.push_back(std::move(callback));
-  GetWebTestClientRemote().GetBluetoothManualChooserEvents();
+  Send(new BlinkTestHostMsg_GetBluetoothManualChooserEvents(routing_id()));
 }
 
 void BlinkTestRunner::SendBluetoothManualChooserEvent(
     const std::string& event,
     const std::string& argument) {
-  GetWebTestClientRemote().SendBluetoothManualChooserEvent(event, argument);
+  Send(new BlinkTestHostMsg_SendBluetoothManualChooserEvent(routing_id(), event,
+                                                            argument));
 }
 
 void BlinkTestRunner::SetFocus(blink::WebView* web_view, bool focus) {
@@ -527,7 +529,7 @@ void BlinkTestRunner::CaptureLocalLayoutDump() {
     // TODO(vmpstr): Since CaptureDump is called from the browser, we can be
     // smart and move this logic directly to the browser.
     waiting_for_layout_dump_results_ = true;
-    GetWebTestClientRemote().InitiateLayoutDump();
+    Send(new BlinkTestHostMsg_InitiateLayoutDump(routing_id()));
   }
 }
 
@@ -588,7 +590,7 @@ void BlinkTestRunner::CaptureDumpComplete() {
 }
 
 void BlinkTestRunner::CloseRemainingWindows() {
-  GetWebTestClientRemote().CloseRemainingWindows();
+  Send(new BlinkTestHostMsg_CloseRemainingWindows(routing_id()));
 }
 
 void BlinkTestRunner::DeleteAllCookies() {
@@ -600,16 +602,16 @@ int BlinkTestRunner::NavigationEntryCount() {
 }
 
 void BlinkTestRunner::GoToOffset(int offset) {
-  GetWebTestClientRemote().GoToOffset(offset);
+  Send(new BlinkTestHostMsg_GoToOffset(routing_id(), offset));
 }
 
 void BlinkTestRunner::Reload() {
-  GetWebTestClientRemote().Reload();
+  Send(new BlinkTestHostMsg_Reload(routing_id()));
 }
 
 void BlinkTestRunner::LoadURLForFrame(const WebURL& url,
                                       const std::string& frame_name) {
-  GetWebTestClientRemote().LoadURLForFrame(url, frame_name);
+  Send(new BlinkTestHostMsg_LoadURLForFrame(routing_id(), url, frame_name));
 }
 
 bool BlinkTestRunner::AllowExternalPages() {
@@ -726,7 +728,7 @@ void BlinkTestRunner::DidCommitNavigationInMainFrame() {
   if (!url.IsAboutBlank())
     return;
   waiting_for_reset_ = false;
-  GetWebTestClientRemote().ResetDone();
+  Send(new BlinkTestHostMsg_ResetDone(routing_id()));
 }
 
 // Private methods  -----------------------------------------------------------
@@ -738,14 +740,6 @@ BlinkTestRunner::GetBluetoothFakeAdapterSetter() {
         bluetooth_fake_adapter_setter_.BindNewPipeAndPassReceiver());
   }
   return *bluetooth_fake_adapter_setter_;
-}
-
-mojom::WebTestClient& BlinkTestRunner::GetWebTestClientRemote() {
-  if (!web_test_client_remote_) {
-    RenderThread::Get()->BindHostReceiver(
-        web_test_client_remote_.BindNewPipeAndPassReceiver());
-  }
-  return *web_test_client_remote_;
 }
 
 void BlinkTestRunner::OnSetupSecondaryRenderer() {

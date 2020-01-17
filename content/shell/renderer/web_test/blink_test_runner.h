@@ -180,9 +180,6 @@ class BlinkTestRunner : public RenderViewObserver,
   mojo::Remote<mojom::WebTestBluetoothFakeAdapterSetter>
       bluetooth_fake_adapter_setter_;
 
-  mojom::WebTestClient& GetWebTestClientRemote();
-  mojo::Remote<mojom::WebTestClient> web_test_client_remote_;
-
   test_runner::TestPreferences prefs_;
 
   mojom::ShellTestConfigurationPtr test_config_;
