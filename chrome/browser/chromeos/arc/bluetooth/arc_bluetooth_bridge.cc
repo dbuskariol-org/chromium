@@ -1918,11 +1918,16 @@ void ArcBluetoothBridge::StopService(int32_t service_handle,
 void ArcBluetoothBridge::DeleteService(int32_t service_handle,
                                        DeleteServiceCallback callback) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-  DCHECK(gatt_identifier_.find(service_handle) != gatt_identifier_.end());
+  auto itr = gatt_identifier_.find(service_handle);
+  if (itr == gatt_identifier_.end()) {
+    LOG(WARNING) << "DeleteService called with invalid service handle.";
+    return;
+  }
+
   BluetoothLocalGattService* service =
-      bluetooth_adapter_->GetGattService(gatt_identifier_[service_handle]);
+      bluetooth_adapter_->GetGattService(itr->second);
   DCHECK(service);
-  gatt_identifier_.erase(service_handle);
+  gatt_identifier_.erase(itr);
   gatt_handle_.erase(service->GetIdentifier());
   service->Delete();
   OnGattOperationDone(std::move(callback));
