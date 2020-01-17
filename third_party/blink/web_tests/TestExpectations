@@ -1784,6 +1784,9 @@ crbug.com/1035582 external/wpt/css/css-transforms/transform-input-015.html [ Ski
 crbug.com/1035582 fast/forms/text/input-appearance-autocomplete-very-long-value.html [ Skip ]
 crbug.com/1035582 virtual/text-antialias/selection/mixed-directionality-selection.html [ Skip ]
 crbug.com/1035582 paint/pagination/composited-paginated-outlined-box.html [ Skip ]
+crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-hover-focused-unselected.html [ Skip ]
+crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-appearance-basic.html [ Skip ]
+
 
 # Failed during rebaseline 3-1
 crbug.com/1035582 [ Fuchsia ] paint/invalidation/selection/selection-in-composited-scrolling-container.html [ Skip ]
