@@ -315,6 +315,9 @@ void SettingsUI::InitBrowserSettingsWebUIHandlers() {
             account_manager, IdentityManagerFactory::GetForProfile(profile)));
   }
 
+  // MultideviceHandler is required in browser settings to show a special note
+  // under the notification permission that is auto-granted for Android Messages
+  // integration in ChromeOS.
   if (!profile->IsGuestSession()) {
     chromeos::android_sms::AndroidSmsService* android_sms_service =
         chromeos::android_sms::AndroidSmsServiceFactory::GetForBrowserContext(
