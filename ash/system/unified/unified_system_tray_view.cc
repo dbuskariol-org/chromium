@@ -27,6 +27,8 @@
 #include "ash/system/unified/unified_system_tray_controller.h"
 #include "ash/system/unified/unified_system_tray_model.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
+#include "ui/accessibility/ax_enums.mojom.h"
+#include "ui/accessibility/ax_node_data.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/scoped_canvas.h"
 #include "ui/message_center/message_center.h"
@@ -131,6 +133,25 @@ class DetailedViewContainer : public views::View {
 
  private:
   DISALLOW_COPY_AND_ASSIGN(DetailedViewContainer);
+};
+
+class AccessibilityFocusHelperView : public views::View {
+ public:
+  AccessibilityFocusHelperView(UnifiedSystemTrayController* controller)
+      : controller_(controller) {}
+
+  bool HandleAccessibleAction(const ui::AXActionData& action_data) override {
+    controller_->FocusOut(false);
+    return true;
+  }
+
+  // views::View:
+  void GetAccessibleNodeData(ui::AXNodeData* node_data) override {
+    node_data->role = ax::mojom::Role::kListItem;
+  }
+
+ private:
+  UnifiedSystemTrayController* controller_;
 };
 
 }  // namespace
@@ -336,6 +357,9 @@ UnifiedSystemTrayView::UnifiedSystemTrayView(
     detailed_view_container_->SetNextFocusableView(message_center_view_);
 
   top_shortcuts_view_->SetExpandedAmount(expanded_amount_);
+
+  system_tray_container_->AddChildView(
+      new AccessibilityFocusHelperView(controller_));
 }
 
 UnifiedSystemTrayView::~UnifiedSystemTrayView() = default;
