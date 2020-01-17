@@ -78,6 +78,17 @@ Polymer({
     this.fire('show-tooltip', {target: indicator, text});
   },
 
+  /** @private */
+  onShowIncognitoTooltip_: function() {
+    const tooltip = this.$.incognitoTooltip;
+    // The tooltip text is used by an paper-tooltip contained inside the
+    // cr-policy-pref-indicator. The text is currently held in a private
+    // property. This text is needed here to send up to the common tooltip
+    // component.
+    const text = loadTimeData.getString('incognitoSiteExceptionDesc');
+    this.fire('show-tooltip', {target: tooltip, text});
+  },
+
   /**
    * @return {boolean}
    * @private
@@ -136,8 +147,8 @@ Polymer({
 
   /**
    * Returns the appropriate site description to display. This can, for example,
-   * be blank, an 'embedded on <site>' or 'Current incognito session' (or a
-   * mix of the last two).
+   * be blank, an 'embedded on <site>' string, or a third-party exception
+   * description string.
    * @return {string}
    */
   computeSiteDescription_() {
@@ -164,14 +175,6 @@ Polymer({
     }
     // </if>
 
-    if (this.model.incognito) {
-      if (description.length > 0) {
-        description =
-            loadTimeData.getStringF('embeddedIncognitoSite', description);
-      } else {
-        description = loadTimeData.getString('incognitoSite');
-      }
-    }
     return description;
   },
 

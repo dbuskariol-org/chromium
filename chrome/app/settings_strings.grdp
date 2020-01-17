@@ -3910,11 +3910,8 @@
   <message name="IDS_SETTINGS_SITE_SETTINGS_INCOGNITO_ONLY" desc="A label for the checkbox to make the rule apply to the current incognito session only.">
     Current incognito session only
   </message>
-  <message name="IDS_SETTINGS_SITE_SETTINGS_INCOGNITO" desc="A label for a site rule that only applies to the current incognito session.">
-    Current incognito session
-  </message>
-  <message name="IDS_SETTINGS_SITE_SETTINGS_INCOGNITO_EMBEDDED" desc="A label for a site rule that specifies an embedded origin and only applies to the current incognito session.">
-    Current incognito session (<ph name="EMBEDDING">$1<ex>embedded on google.com</ex></ph>)
+  <message name="IDS_SETTINGS_SITE_SETTINGS_INCOGNITO_SITE_EXCEPTION_DESC" desc="The text displayed in order to explain to a user that a content setting only applies to the current incognito session.">
+    This exception will be automatically removed after you exit the current Incognito session
   </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_NO_ZOOMED_SITES" desc="A label explaining that no sites have a configured zoom in/out value.">
     No sites have been zoomed in or out
