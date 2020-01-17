@@ -1934,6 +1934,8 @@ void RenderProcessHostImpl::BindFileSystemManager(
     const url::Origin& origin,
     mojo::PendingReceiver<blink::mojom::FileSystemManager> receiver) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  // Note, the base::Unretained() is safe because the target object has an IO
+  // thread deleter and the callback is also targeting the IO thread.
   // TODO(https://crbug.com/873661): Pass origin to FileSystemManager.
   base::PostTask(
       FROM_HERE, {BrowserThread::IO},
@@ -2216,6 +2218,10 @@ void RenderProcessHostImpl::RegisterMojoInterfaces() {
         base::BindRepeating(&RenderProcessHostImpl::BindPushMessagingManager,
                             weak_factory_.GetWeakPtr()));
   } else {
+    // Note, the base::Unretained() is safe because the target object has an IO
+    // thread deleter and the callback is also targeting the IO thread.  When
+    // the RPHI is destroyed it also triggers the destruction of the registry
+    // on the IO thread.
     registry->AddInterface(
         base::BindRepeating(&PushMessagingManager::AddPushMessagingReceiver,
                             base::Unretained(push_messaging_manager_.get())));
@@ -2227,6 +2233,12 @@ void RenderProcessHostImpl::RegisterMojoInterfaces() {
   // This interface is still exposed by the RenderProcessHost's registry so
   // that it can be accessed by PepperFileSystemHost. Blink accesses this
   // interface through RenderFrameHost/RendererInterfaceBinders.
+  //
+  // Note, the base::Unretained() is safe because the target object has an IO
+  // thread deleter and the callback is also targeting the IO thread.  When
+  // the RPHI is destroyed it also triggers the destruction of the registry
+  // on the IO thread.
+  //
   // TODO(https://crbug.com/873661): Make PepperFileSystemHost access this with
   // the RenderFrameHost's registry, and remove this registration.
   registry->AddInterface(
@@ -2255,9 +2267,14 @@ void RenderProcessHostImpl::RegisterMojoInterfaces() {
       base::CreateSequencedTaskRunner({base::ThreadPool(), base::MayBlock(),
                                        base::TaskPriority::USER_VISIBLE}));
 
+  // Note, the base::Unretained() is safe because the target object has an IO
+  // thread deleter and the callback is also targeting the IO thread.  When
+  // the RPHI is destroyed it also triggers the destruction of the registry
+  // on the IO thread.
+  media_stream_track_metrics_host_.reset(new MediaStreamTrackMetricsHost());
   registry->AddInterface(base::BindRepeating(
-      &RenderProcessHostImpl::CreateMediaStreamTrackMetricsHost,
-      base::Unretained(this)));
+      &MediaStreamTrackMetricsHost::BindReceiver,
+      base::Unretained(media_stream_track_metrics_host_.get())));
 
   AddUIThreadInterface(
       registry.get(),
@@ -2303,6 +2320,9 @@ void RenderProcessHostImpl::RegisterMojoInterfaces() {
       std::make_unique<blink::AssociatedInterfaceRegistry>();
   blink::AssociatedInterfaceRegistry* associated_registry =
       associated_interfaces_.get();
+
+  // This base::Unretained() usage is safe since the associated_registry is
+  // owned by this RPHI.
   associated_registry->AddInterface(base::BindRepeating(
       &RenderProcessHostImpl::BindRouteProvider, base::Unretained(this)));
   associated_registry->AddInterface(base::BindRepeating(
@@ -4798,14 +4818,6 @@ RenderProcessHostImpl::FindReusableProcessHostForSiteInstance(
   }
 
   return nullptr;
-}
-
-void RenderProcessHostImpl::CreateMediaStreamTrackMetricsHost(
-    mojo::PendingReceiver<blink::mojom::MediaStreamTrackMetricsHost> receiver) {
-  DCHECK_CURRENTLY_ON(BrowserThread::IO);
-  if (!media_stream_track_metrics_host_)
-    media_stream_track_metrics_host_.reset(new MediaStreamTrackMetricsHost());
-  media_stream_track_metrics_host_->BindReceiver(std::move(receiver));
 }
 
 void RenderProcessHostImpl::CreateAgentMetricsCollectorHost(
