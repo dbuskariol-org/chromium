@@ -68,6 +68,7 @@ TEST_F(AACTest, BasicProfileTest) {
   EXPECT_TRUE(Parse(data));
   EXPECT_EQ(aac_.GetOutputSamplesPerSecond(false), 44100);
   EXPECT_EQ(aac_.GetChannelLayout(false), CHANNEL_LAYOUT_STEREO);
+  EXPECT_EQ(aac_.GetProfile(), AudioCodecProfile::kUnknown);
 }
 
 TEST_F(AACTest, ExtensionTest) {
@@ -80,6 +81,7 @@ TEST_F(AACTest, ExtensionTest) {
   EXPECT_EQ(aac_.GetOutputSamplesPerSecond(false), 48000);
   EXPECT_EQ(aac_.GetOutputSamplesPerSecond(true), 48000);
   EXPECT_EQ(aac_.GetChannelLayout(false), CHANNEL_LAYOUT_STEREO);
+  EXPECT_EQ(aac_.GetProfile(), AudioCodecProfile::kUnknown);
 }
 
 // Test implicit SBR with mono channel config.
@@ -97,10 +99,12 @@ TEST_F(AACTest, ImplicitSBR_ChannelConfig0) {
   // Test w/o implict SBR.
   EXPECT_EQ(aac_.GetOutputSamplesPerSecond(false), 24000);
   EXPECT_EQ(aac_.GetChannelLayout(false), CHANNEL_LAYOUT_MONO);
+  EXPECT_EQ(aac_.GetProfile(), AudioCodecProfile::kUnknown);
 
   // Test implicit SBR.
   EXPECT_EQ(aac_.GetOutputSamplesPerSecond(true), 48000);
   EXPECT_EQ(aac_.GetChannelLayout(true), CHANNEL_LAYOUT_STEREO);
+  EXPECT_EQ(aac_.GetProfile(), AudioCodecProfile::kUnknown);
 }
 
 // Tests implicit SBR with a stereo channel config.
@@ -115,10 +119,12 @@ TEST_F(AACTest, ImplicitSBR_ChannelConfig1) {
   // Test w/o implict SBR.
   EXPECT_EQ(aac_.GetOutputSamplesPerSecond(false), 24000);
   EXPECT_EQ(aac_.GetChannelLayout(false), CHANNEL_LAYOUT_STEREO);
+  EXPECT_EQ(aac_.GetProfile(), AudioCodecProfile::kUnknown);
 
   // Test implicit SBR.
   EXPECT_EQ(aac_.GetOutputSamplesPerSecond(true), 48000);
   EXPECT_EQ(aac_.GetChannelLayout(true), CHANNEL_LAYOUT_STEREO);
+  EXPECT_EQ(aac_.GetProfile(), AudioCodecProfile::kUnknown);
 }
 
 TEST_F(AACTest, SixChannelTest) {
@@ -130,6 +136,7 @@ TEST_F(AACTest, SixChannelTest) {
   EXPECT_TRUE(Parse(data));
   EXPECT_EQ(aac_.GetOutputSamplesPerSecond(false), 48000);
   EXPECT_EQ(aac_.GetChannelLayout(false), CHANNEL_LAYOUT_5_1_BACK);
+  EXPECT_EQ(aac_.GetProfile(), AudioCodecProfile::kUnknown);
 }
 
 TEST_F(AACTest, DataTooShortTest) {
@@ -247,6 +254,7 @@ TEST_F(AACTest, XHE_AAC) {
   EXPECT_TRUE(Parse(data));
   EXPECT_EQ(aac_.GetOutputSamplesPerSecond(false), 48000);
   EXPECT_EQ(aac_.GetChannelLayout(false), CHANNEL_LAYOUT_STEREO);
+  EXPECT_EQ(aac_.GetProfile(), AudioCodecProfile::kXHE_AAC);
 
   // ADTS conversion should do nothing since xHE-AAC can't be represented with
   // only two bits for the profile.

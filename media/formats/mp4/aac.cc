@@ -215,6 +215,11 @@ bool AAC::ConvertEsdsToADTS(std::vector<uint8_t>* buffer) const {
   return true;
 }
 
+AudioCodecProfile AAC::GetProfile() const {
+  return profile_ == kXHeAAcType ? AudioCodecProfile::kXHE_AAC
+                                 : AudioCodecProfile::kUnknown;
+}
+
 // Currently this function only support GASpecificConfig defined in
 // ISO 14496-3:2009 Table 4.1 - Syntax of GASpecificConfig()
 bool AAC::SkipDecoderGASpecificConfig(BitReader* bit_reader) const {

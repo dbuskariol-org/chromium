@@ -365,6 +365,7 @@ bool MP4StreamParser::ParseMoov(BoxReader* reader) {
       }
 
       AudioCodec codec = kUnknownAudioCodec;
+      AudioCodecProfile profile = AudioCodecProfile::kUnknown;
       ChannelLayout channel_layout = CHANNEL_LAYOUT_NONE;
       int sample_per_second = 0;
       int codec_delay_in_frames = 0;
@@ -423,6 +424,7 @@ bool MP4StreamParser::ParseMoov(BoxReader* reader) {
         if (ESDescriptor::IsAAC(audio_type)) {
           const AAC& aac = entry.esds.aac;
           codec = kCodecAAC;
+          profile = aac.GetProfile();
           channel_layout = aac.GetChannelLayout(has_sbr_);
           sample_per_second = aac.GetOutputSamplesPerSecond(has_sbr_);
 #if defined(OS_ANDROID)
@@ -478,8 +480,10 @@ bool MP4StreamParser::ParseMoov(BoxReader* reader) {
       audio_config.Initialize(codec, sample_format, channel_layout,
                               sample_per_second, extra_data, scheme,
                               seek_preroll, codec_delay_in_frames);
-      if (codec == kCodecAAC)
+      if (codec == kCodecAAC) {
         audio_config.disable_discard_decoder_delay();
+        audio_config.set_profile(profile);
+      }
 
       DVLOG(1) << "audio_track_id=" << audio_track_id
                << " config=" << audio_config.AsHumanReadableString();

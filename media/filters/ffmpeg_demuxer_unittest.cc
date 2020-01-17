@@ -1455,6 +1455,9 @@ TEST_F(FFmpegDemuxerTest, XHE_AAC) {
   DemuxerStream* audio = GetStream(DemuxerStream::AUDIO);
   ASSERT_TRUE(audio);
 
+  EXPECT_EQ(audio->audio_decoder_config().profile(),
+            AudioCodecProfile::kXHE_AAC);
+
   // ADTS bitstream conversion shouldn't be enabled for xHE-AAC since it can't
   // be represented with only two bits for the profile.
   audio->EnableBitstreamConverter();

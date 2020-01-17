@@ -401,6 +401,7 @@ TEST_F(MP4StreamParserTest, MPEG2_AAC_LC) {
   params.detected_video_track_count = 0;
   InitializeParserWithInitParametersExpectations(params);
   ParseMP4File("bear-mpeg2-aac-only_frag.mp4", 512);
+  EXPECT_EQ(audio_decoder_config_.profile(), AudioCodecProfile::kUnknown);
 }
 
 TEST_F(MP4StreamParserTest, MPEG4_XHE_AAC) {
@@ -415,6 +416,7 @@ TEST_F(MP4StreamParserTest, MPEG4_XHE_AAC) {
 
   InitializeParserWithInitParametersExpectations(params);
   ParseMP4File("noise-xhe-aac.mp4", 512);
+  EXPECT_EQ(audio_decoder_config_.profile(), AudioCodecProfile::kXHE_AAC);
 }
 
 // Test that a moov box is not always required after Flush() is called.
