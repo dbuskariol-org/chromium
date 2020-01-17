@@ -5586,6 +5586,12 @@
   <message name="IDS_SETTINGS_SECURITY_KEYS_BIO_ENROLLMENT_ENROLLING_LABEL" desc="A label instructing the user to repeatedly touch the fingerprint sensor on their security key (authentication hardware device) to take samples for a new fingerprint.">
     Keep touching your security key until your fingerprint is captured
   </message>
+  <message name="IDS_SETTINGS_SECURITY_KEYS_BIO_ENROLLMENT_TRY_AGAIN_LABEL" desc="A label instructing the user to touch the fingerprint sensor on their security key (authentication hardware device) again after taking a fingerprint sample failed.">
+    Try touching your security key again
+  </message>
+  <message name="IDS_SETTINGS_SECURITY_KEYS_BIO_ENROLLMENT_FAILED_LABEL" desc="An error shown after enrolling a new fingerprint to a security key (authentication hardware device) was unsuccessful.">
+    Adding a fingerprint to this security key failed
+  </message>
   <message name="IDS_SETTINGS_SECURITY_KEYS_BIO_ENROLLMENT_ENROLLING_COMPLETE_LABEL" desc="A label informing the user that adding a fingerprint to their security key succeeded.">
     Your fingerprint was captured
   </message>

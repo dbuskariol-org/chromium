@@ -88,7 +88,8 @@ cr.define('settings', function() {
       this.addWebUIListener(
           'security-keys-bio-enroll-error', this.onError_.bind(this));
       this.addWebUIListener(
-          'security-keys-bio-enroll-status', this.onEnrolling_.bind(this));
+          'security-keys-bio-enroll-status',
+          this.onEnrollmentSample_.bind(this));
       this.browserProxy_ =
           settings.SecurityKeysBioEnrollProxyImpl.getInstance();
       this.browserProxy_.startBioEnroll().then(() => {
@@ -195,50 +196,68 @@ cr.define('settings', function() {
       this.dialogPage_ = BioEnrollDialogPage.ENROLL;
 
       this.browserProxy_.startEnrolling().then(response => {
-        this.onEnrolling_(response);
+        this.onEnrollmentComplete_(response);
       });
     },
 
     /**
      * @private
-     * @param {!settings.EnrollmentStatus} response
+     * @param {!settings.SampleResponse} response
      */
-    onEnrolling_(response) {
+    onEnrollmentSample_(response) {
+      if (response.status != settings.SampleStatus.OK) {
+        this.progressArcLabel_ =
+            this.i18n('securityKeysBioEnrollmentTryAgainLabel');
+        this.fire('iron-announce', {text: this.progressArcLabel_});
+        return;
+      }
+
+      this.progressArcLabel_ =
+          this.i18n('securityKeysBioEnrollmentEnrollingLabel');
+
+      assert(response.remaining >= 0);
+
+      if (this.maxSamples_ == -1) {
+        this.maxSamples_ = response.remaining + 1;
+      }
+
+      this.$.arc.setProgress(
+          100 * (this.maxSamples_ - response.remaining - 1) / this.maxSamples_,
+          100 * (this.maxSamples_ - response.remaining) / this.maxSamples_,
+          false);
+    },
+
+    /**
+     * @private
+     * @param {!settings.EnrollmentResponse} response
+     */
+    onEnrollmentComplete_(response) {
       if (response.code == settings.Ctap2Status.ERR_KEEPALIVE_CANCEL) {
         this.showEnrollmentsPage_();
         return;
       }
+      if (response.code != settings.Ctap2Status.OK) {
+        this.onError_(
+            this.i18n('securityKeysBioEnrollmentEnrollingFailedLabel'));
+        return;
+      }
 
-      if (this.maxSamples_ == -1 && response.status != null) {
-        if (response.status == 0) {
-          // If the first sample is valid, remaining is one less than max
-          // samples required.
-          this.maxSamples_ = response.remaining + 1;
-        } else {
-          // If the first sample failed for any reason (timed out, key full,
-          // etc), the remaining number of samples is the max samples required.
-          this.maxSamples_ = response.remaining;
-        }
-      }
-      // If 0 samples remain, the enrollment has finished in some state.
-      // Currently not checking response['code'] for an error.
+      this.maxSamples_ = Math.max(this.maxSamples_, 1);
       this.$.arc.setProgress(
-          100 - (100 * (response.remaining + 1) / this.maxSamples_),
-          100 - (100 * response.remaining / this.maxSamples_),
-          response.remaining == 0);
-      if (response.remaining == 0) {
-        assert(response.enrollment);
-        this.recentEnrollmentId_ = response.enrollment.id;
-        this.recentEnrollmentName_ = response.enrollment.name;
-        this.cancelButtonVisible_ = false;
-        this.confirmButtonVisible_ = true;
-        this.confirmButtonDisabled_ = false;
-        this.progressArcLabel_ =
-            this.i18n('securityKeysBioEnrollmentEnrollingCompleteLabel');
-        this.$.confirmButton.focus();
-        // Make screen-readers announce enrollment completion.
-        this.fire('iron-announce', {text: this.progressArcLabel_});
-      }
+          100 * (this.maxSamples_ - 1) / this.maxSamples_, 100, true);
+
+      assert(response.enrollment);
+      this.recentEnrollmentId_ = response.enrollment.id;
+      this.recentEnrollmentName_ = response.enrollment.name;
+      this.cancelButtonVisible_ = false;
+      this.confirmButtonVisible_ = true;
+      this.confirmButtonDisabled_ = false;
+      this.progressArcLabel_ =
+          this.i18n('securityKeysBioEnrollmentEnrollingCompleteLabel');
+      this.$.confirmButton.focus();
+      // Make screen-readers announce enrollment completion.
+      this.fire('iron-announce', {text: this.progressArcLabel_});
+
       this.fire('bio-enroll-dialog-ready-for-testing');
     },
 
