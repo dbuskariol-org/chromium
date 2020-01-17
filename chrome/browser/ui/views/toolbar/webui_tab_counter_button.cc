@@ -313,7 +313,9 @@ void WebUITabCounterButton::OnTabStripModelChanged(
     TabStripModel* tab_strip_model,
     const TabStripModelChange& change,
     const TabStripSelectionChange& selection) {
-  UpdateText(tab_strip_model->count());
+  int num_tabs = tab_strip_model->count();
+  if (num_tabs != last_num_tabs_)
+    UpdateText(num_tabs);
 }
 
 }  // namespace
