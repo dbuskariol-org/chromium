@@ -307,18 +307,6 @@ bool JingleThreadWrapper::Peek(rtc::Message*, int) {
   return false;
 }
 
-void JingleThreadWrapper::PostAt(const rtc::Location& posted_from,
-                                 uint32_t,
-                                 rtc::MessageHandler*,
-                                 uint32_t,
-                                 rtc::MessageData*) {
-  NOTREACHED();
-}
-
-void JingleThreadWrapper::ReceiveSends() {
-  NOTREACHED();
-}
-
 int JingleThreadWrapper::GetDelay() {
   NOTREACHED();
   return 0;
