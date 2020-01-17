@@ -233,10 +233,6 @@ class MEDIA_GPU_EXPORT V4L2VideoEncodeAccelerator
   // Set controls in |ctrls| and return true if successful.
   bool SetExtCtrls(std::vector<struct v4l2_ext_control> ctrls);
 
-  // Return true if a V4L2 control of |ctrl_id| is supported by the device,
-  // false otherwise.
-  bool IsCtrlExposed(uint32_t ctrl_id);
-
   // Allocates |count| video frames with |visible_size| for image processor's
   // output buffers. Returns false if there's something wrong.
   bool AllocateImageProcessorOutputBuffers(size_t count,
