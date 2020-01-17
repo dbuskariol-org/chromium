@@ -61,6 +61,21 @@ Polymer({
         'destinations.*, searchQuery, loadingDestinations)',
   ],
 
+  /** @private {?function(Event)} */
+  boundUpdateHeight_: null,
+
+  /** @override */
+  attached() {
+    this.boundUpdateHeight_ = () => this.updateHeight_();
+    window.addEventListener('resize', this.boundUpdateHeight_);
+  },
+
+  /** @override */
+  detached() {
+    window.removeEventListener('resize', this.boundUpdateHeight_);
+    this.boundUpdateHeight_ = null;
+  },
+
   /**
    * This is a workaround to ensure that the iron-list correctly updates the
    * displayed destination information when the elements in the
@@ -74,6 +89,30 @@ Polymer({
     this.$.list.fire('iron-resize');
   },
 
+  /**
+   * @param {number=} numDestinations
+   * @private
+   */
+  updateHeight_(numDestinations) {
+    const count = numDestinations === undefined ?
+        this.matchingDestinations_.length :
+        numDestinations;
+
+    const maxDisplayedItems = this.offsetHeight / DESTINATION_ITEM_HEIGHT;
+    const isListFullHeight = maxDisplayedItems <= count;
+    const listHeight =
+        isListFullHeight ? this.offsetHeight : count * DESTINATION_ITEM_HEIGHT;
+
+    // Update the throbber and "No destinations" message.
+    this.hasDestinations_ = count > 0 || this.loadingDestinations;
+    this.throbberHidden_ =
+        !this.loadingDestinations || isListFullHeight || !this.hasDestinations_;
+
+    this.$.list.style.height = listHeight > DESTINATION_ITEM_HEIGHT ?
+        `${listHeight}px` :
+        `${DESTINATION_ITEM_HEIGHT}px`;
+  },
+
   /** @private */
   updateMatchingDestinations_() {
     if (this.destinations === undefined) {
@@ -85,20 +124,8 @@ Polymer({
             d => d.matches(/** @type {!RegExp} */ (this.searchQuery))) :
         this.destinations.slice();
 
-    const maxDisplayedItems = this.offsetHeight / DESTINATION_ITEM_HEIGHT;
-    const isListFullHeight = maxDisplayedItems <= matchingDestinations.length;
-    const listHeight = isListFullHeight ?
-        this.offsetHeight :
-        matchingDestinations.length * DESTINATION_ITEM_HEIGHT;
-
-    // Update the throbber and "No destinations" message.
-    this.hasDestinations_ =
-        matchingDestinations.length > 0 || this.loadingDestinations;
-    this.throbberHidden_ =
-        !this.loadingDestinations || isListFullHeight || !this.hasDestinations_;
-
     // Update the height before updating the list.
-    this.$.list.style.height = `${listHeight}px`;
+    this.updateHeight_(matchingDestinations.length);
     this.updateList(
         'matchingDestinations_', destination => destination.key,
         matchingDestinations);
