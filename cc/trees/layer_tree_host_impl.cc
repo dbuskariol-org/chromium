@@ -3400,6 +3400,7 @@ LayerTreeHostImpl::TakeCompletedImageDecodeRequests() {
 std::unique_ptr<MutatorEvents> LayerTreeHostImpl::TakeMutatorEvents() {
   std::unique_ptr<MutatorEvents> events = mutator_host_->CreateEvents();
   std::swap(events, mutator_events_);
+  mutator_host_->TakeTimeUpdatedEvents(events.get());
   return events;
 }
 
