@@ -101,16 +101,18 @@ export class App {
     util.setupI18nElements(document.body);
     this.setupToggles_();
 
+    const resolutionSettings = new ResolutionSettings(
+        this.infoUpdater_, this.photoPreferrer_, this.videoPreferrer_);
+
     // Set up views navigation by their DOM z-order.
     nav.setup([
       this.cameraView_,
       new MasterSettings(),
       new BaseSettings(ViewName.GRID_SETTINGS),
       new BaseSettings(ViewName.TIMER_SETTINGS),
-      new ResolutionSettings(
-          this.infoUpdater_, this.photoPreferrer_, this.videoPreferrer_),
-      new BaseSettings(ViewName.PHOTO_RESOLUTION_SETTINGS),
-      new BaseSettings(ViewName.VIDEO_RESOLUTION_SETTINGS),
+      resolutionSettings,
+      resolutionSettings.photoResolutionSettings,
+      resolutionSettings.videoResolutionSettings,
       new BaseSettings(ViewName.EXPERT_SETTINGS),
       new Warning(),
       new Dialog(ViewName.MESSAGE_DIALOG),
