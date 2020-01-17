@@ -506,6 +506,114 @@ TEST_F(QuicTransportTest, SendDatagramAfterClose) {
   EXPECT_TRUE(tester.IsRejected());
 }
 
+Vector<uint8_t> GetValueAsVector(ScriptState* script_state,
+                                 ScriptValue iterator_result) {
+  bool done = false;
+  v8::Local<v8::Value> value;
+  if (!V8UnpackIteratorResult(script_state,
+                              iterator_result.V8Value().As<v8::Object>(), &done)
+           .ToLocal(&value)) {
+    ADD_FAILURE() << "unable to unpack iterator_result";
+    return {};
+  }
+
+  EXPECT_FALSE(done);
+  auto* array =
+      V8Uint8Array::ToImplWithTypeCheck(script_state->GetIsolate(), value);
+  if (!array) {
+    ADD_FAILURE() << "value was not a Uint8Array";
+    return {};
+  }
+
+  Vector<uint8_t> result;
+  result.Append(array->Data(), array->lengthAsSizeT());
+  return result;
+}
+
+TEST_F(QuicTransportTest, ReceiveDatagramBeforeRead) {
+  V8TestingScope scope;
+  auto* quic_transport =
+      CreateAndConnectSuccessfully(scope, "quic-transport://example.com");
+
+  const std::array<uint8_t, 1> chunk = {'A'};
+  client_remote_->OnDatagramReceived(chunk);
+
+  test::RunPendingTasks();
+
+  auto* readable = quic_transport->receiveDatagrams();
+  auto* script_state = scope.GetScriptState();
+  auto* reader = readable->getReader(script_state, ASSERT_NO_EXCEPTION);
+  ScriptPromise result = reader->read(script_state, ASSERT_NO_EXCEPTION);
+  ScriptPromiseTester tester(script_state, result);
+  tester.WaitUntilSettled();
+  EXPECT_TRUE(tester.IsFulfilled());
+
+  EXPECT_THAT(GetValueAsVector(script_state, tester.Value()), ElementsAre('A'));
+}
+
+TEST_F(QuicTransportTest, ReceiveDatagramDuringRead) {
+  V8TestingScope scope;
+  auto* quic_transport =
+      CreateAndConnectSuccessfully(scope, "quic-transport://example.com");
+  auto* readable = quic_transport->receiveDatagrams();
+  auto* script_state = scope.GetScriptState();
+  auto* reader = readable->getReader(script_state, ASSERT_NO_EXCEPTION);
+  ScriptPromise result = reader->read(script_state, ASSERT_NO_EXCEPTION);
+
+  const std::array<uint8_t, 1> chunk = {'A'};
+  client_remote_->OnDatagramReceived(chunk);
+
+  ScriptPromiseTester tester(script_state, result);
+  tester.WaitUntilSettled();
+  EXPECT_TRUE(tester.IsFulfilled());
+
+  EXPECT_THAT(GetValueAsVector(script_state, tester.Value()), ElementsAre('A'));
+}
+
+// This test documents the current behaviour. If you improve the behaviour,
+// change the test!
+TEST_F(QuicTransportTest, DatagramsAreDropped) {
+  V8TestingScope scope;
+  auto* quic_transport =
+      CreateAndConnectSuccessfully(scope, "quic-transport://example.com");
+
+  // Chunk 'A' gets placed in the readable queue.
+  const std::array<uint8_t, 1> chunk1 = {'A'};
+  client_remote_->OnDatagramReceived(chunk1);
+
+  // Chunk 'B' gets dropped, because there is no space in the readable queue.
+  const std::array<uint8_t, 1> chunk2 = {'B'};
+  client_remote_->OnDatagramReceived(chunk2);
+
+  // Make sure that the calls have run.
+  test::RunPendingTasks();
+
+  auto* readable = quic_transport->receiveDatagrams();
+  auto* script_state = scope.GetScriptState();
+  auto* reader = readable->getReader(script_state, ASSERT_NO_EXCEPTION);
+  ScriptPromise result1 = reader->read(script_state, ASSERT_NO_EXCEPTION);
+  ScriptPromise result2 = reader->read(script_state, ASSERT_NO_EXCEPTION);
+
+  ScriptPromiseTester tester1(script_state, result1);
+  ScriptPromiseTester tester2(script_state, result2);
+  tester1.WaitUntilSettled();
+  EXPECT_TRUE(tester1.IsFulfilled());
+  EXPECT_FALSE(tester2.IsFulfilled());
+
+  EXPECT_THAT(GetValueAsVector(script_state, tester1.Value()),
+              ElementsAre('A'));
+
+  // Chunk 'C' fulfills the pending read.
+  const std::array<uint8_t, 1> chunk3 = {'C'};
+  client_remote_->OnDatagramReceived(chunk3);
+
+  tester2.WaitUntilSettled();
+  EXPECT_TRUE(tester2.IsFulfilled());
+
+  EXPECT_THAT(GetValueAsVector(script_state, tester2.Value()),
+              ElementsAre('C'));
+}
+
 }  // namespace
 
 }  // namespace blink

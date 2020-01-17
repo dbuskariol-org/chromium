@@ -19,7 +19,10 @@
 #include "third_party/blink/renderer/bindings/core/v8/v8_array_buffer_view.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/core/frame/csp/content_security_policy.h"
+#include "third_party/blink/renderer/core/streams/readable_stream.h"
+#include "third_party/blink/renderer/core/streams/readable_stream_default_controller_with_script_scope.h"
 #include "third_party/blink/renderer/core/streams/underlying_sink_base.h"
+#include "third_party/blink/renderer/core/streams/underlying_source_base.h"
 #include "third_party/blink/renderer/core/streams/writable_stream.h"
 #include "third_party/blink/renderer/core/typed_arrays/dom_typed_array.h"
 #include "third_party/blink/renderer/platform/bindings/exception_code.h"
@@ -118,6 +121,42 @@ class QuicTransport::DatagramUnderlyingSink final : public UnderlyingSinkBase {
   Member<QuicTransport> quic_transport_;
 };
 
+// Captures a pointer to the ReadableStreamDefaultControllerWithScriptScope in
+// the Start() method, and then does nothing else. Queuing of received datagrams
+// is done inside the implementation of QuicTransport.
+class QuicTransport::DatagramUnderlyingSource final
+    : public UnderlyingSourceBase {
+ public:
+  DatagramUnderlyingSource(ScriptState* script_state,
+                           QuicTransport* quic_transport)
+      : UnderlyingSourceBase(script_state), quic_transport_(quic_transport) {}
+
+  ScriptPromise Start(ScriptState* script_state) override {
+    quic_transport_->received_datagrams_controller_ = Controller();
+    return ScriptPromise::CastUndefined(script_state);
+  }
+
+  ScriptPromise pull(ScriptState* script_state) override {
+    return ScriptPromise::CastUndefined(script_state);
+  }
+
+  ScriptPromise Cancel(ScriptState* script_state, ScriptValue reason) override {
+    // Stop Enqueue() from being called again.
+
+    quic_transport_->received_datagrams_controller_ = nullptr;
+    quic_transport_ = nullptr;
+    return ScriptPromise::CastUndefined(script_state);
+  }
+
+  void Trace(Visitor* visitor) override {
+    visitor->Trace(quic_transport_);
+    UnderlyingSourceBase::Trace(visitor);
+  }
+
+ private:
+  Member<QuicTransport> quic_transport_;
+};
+
 QuicTransport* QuicTransport::Create(ScriptState* script_state,
                                      const String& url,
                                      ExceptionState& exception_state) {
@@ -140,6 +179,7 @@ void QuicTransport::close(const WebTransportCloseInfo* close_info) {
   // TODO(ricea): Send |close_info| to the network service.
 
   cleanly_closed_ = true;
+  received_datagrams_controller_->Close();
   // If we don't manage to close the writable stream here, then it will
   // error when a write() is attempted.
   if (!WritableStream::IsLocked(outgoing_datagrams_) &&
@@ -178,9 +218,24 @@ void QuicTransport::OnHandshakeFailed() {
 }
 
 void QuicTransport::OnDatagramReceived(base::span<const uint8_t> data) {
-  DVLOG(1) << "QuicTransport::OnDatagramReceived(size: " << data.size()
-           << ") this =" << this;
-  // TODO(ricea): Implement this.
+  ReadableStreamDefaultControllerWithScriptScope* controller =
+      received_datagrams_controller_;
+
+  // Discard datagrams if the readable has been cancelled.
+  if (!controller)
+    return;
+
+  // The spec says we should discard older datagrams first, but that's not what
+  // ReadableStream does, so instead we might need to maintain a separate queue
+  // with the desired semantics. But for now we'll just use a small queue in
+  // ReadableStream.
+  // TODO(ricea): Figure out how to get nice semantics here.
+
+  if (controller->DesiredSize() > 0) {
+    auto* array = DOMUint8Array::Create(
+        data.data(), base::checked_cast<wtf_size_t>(data.size()));
+    controller->Enqueue(array);
+  }
 }
 
 void QuicTransport::OnIncomingStreamClosed(uint32_t stream_id,
@@ -201,6 +256,8 @@ bool QuicTransport::HasPendingActivity() const {
 }
 
 void QuicTransport::Trace(Visitor* visitor) {
+  visitor->Trace(received_datagrams_);
+  visitor->Trace(received_datagrams_controller_);
   visitor->Trace(outgoing_datagrams_);
   visitor->Trace(script_state_);
   ContextLifecycleObserver::Trace(visitor);
@@ -265,6 +322,13 @@ void QuicTransport::Init(const String& url, ExceptionState& exception_state) {
 
   // TODO(ricea): Report something to devtools.
 
+  // The choice of 1 for the ReadableStream means that it will queue one
+  // datagram even when read() is not being called. Unfortunately, that datagram
+  // may become arbitrarily stale.
+  // TODO(ricea): Consider having a datagram queue inside this class instead.
+  received_datagrams_ = ReadableStream::CreateWithCountQueueingStrategy(
+      script_state_,
+      MakeGarbageCollected<DatagramUnderlyingSource>(script_state_, this), 1);
   outgoing_datagrams_ = WritableStream::CreateWithCountQueueingStrategy(
       script_state_, MakeGarbageCollected<DatagramUnderlyingSink>(this), 1);
 }
@@ -282,6 +346,7 @@ void QuicTransport::OnConnectionError() {
   if (!cleanly_closed_) {
     v8::Local<v8::Value> reason = V8ThrowException::CreateTypeError(
         script_state_->GetIsolate(), "Connection lost.");
+    received_datagrams_controller_->Error(reason);
     WritableStreamDefaultController::Error(
         script_state_, outgoing_datagrams_->Controller(), reason);
   }

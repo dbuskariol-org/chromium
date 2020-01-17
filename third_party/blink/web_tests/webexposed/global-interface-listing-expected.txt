@@ -6204,6 +6204,7 @@ interface QuicTransport
     attribute @@toStringTag
     method close
     method constructor
+    method receiveDatagrams
     method sendDatagrams
 interface RTCCertificate
     attribute @@toStringTag

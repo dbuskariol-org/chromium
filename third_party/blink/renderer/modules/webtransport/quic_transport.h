@@ -24,6 +24,8 @@ namespace blink {
 
 class ExceptionState;
 class ExecutionContext;
+class ReadableStream;
+class ReadableStreamDefaultControllerWithScriptScope;
 class ScriptState;
 class WebTransportCloseInfo;
 class WritableStream;
@@ -51,6 +53,8 @@ class MODULES_EXPORT QuicTransport final
   // QuicTransport IDL implementation.
   WritableStream* sendDatagrams() { return outgoing_datagrams_; }
 
+  ReadableStream* receiveDatagrams() { return received_datagrams_; }
+
   void close(const WebTransportCloseInfo*);
 
   // QuicTransportHandshakeClient implementation
@@ -75,12 +79,16 @@ class MODULES_EXPORT QuicTransport final
 
  private:
   class DatagramUnderlyingSink;
+  class DatagramUnderlyingSource;
 
   void Init(const String& url, ExceptionState&);
   void Dispose();
   void OnConnectionError();
 
   bool cleanly_closed_ = false;
+  Member<ReadableStream> received_datagrams_;
+  Member<ReadableStreamDefaultControllerWithScriptScope>
+      received_datagrams_controller_;
 
   // This corresponds to the [[SentDatagrams]] internal slot in the standard.
   Member<WritableStream> outgoing_datagrams_;

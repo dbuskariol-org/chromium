@@ -16,6 +16,7 @@
 
   // From DatagramTransport mixin
   WritableStream sendDatagrams();
+  ReadableStream receiveDatagrams();
 
   // From WebTransport mixin
   void close(optional WebTransportCloseInfo closeInfo);
