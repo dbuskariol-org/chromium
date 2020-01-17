@@ -397,24 +397,6 @@ BUILDERS = {
       'device_os_flavor': 'aosp',
     },
   },
-  'Android Nexus6 WebView Perf': {
-    'tests': [
-      {
-        'isolate': 'performance_webview_test_suite',
-        'extra_args': [
-            '--assert-gpu-compositing',
-        ],
-      }
-    ],
-    'platform': 'android-webview',
-    'dimension': {
-      'pool': 'chrome.tests.perf-webview',
-      'os': 'Android',
-      'device_type': 'shamu',
-      'device_os': 'MOB30K',
-      'device_os_flavor': 'aosp',
-    },
-  },
   'android-pixel2_webview-perf': {
     'tests': [
       {
