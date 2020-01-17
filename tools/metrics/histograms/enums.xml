@@ -5426,6 +5426,8 @@ Unknown properties are collapsed to zero. -->
   <int value="220" label="NC_SAME_DOCUMENT_POST_COMMIT_ERROR"/>
   <int value="221" label="RFH_INVALID_WEB_UI_CONTROLLER"/>
   <int value="222" label="RFPH_ADVANCE_FOCUS_INTO_PORTAL"/>
+  <int value="223" label="RFH_UNEXPECTED_EMBEDDING_TOKEN"/>
+  <int value="224" label="RFH_MISSING_EMBEDDING_TOKEN"/>
 </enum>
 
 <enum name="BadMessageReasonExtensions">

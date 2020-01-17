@@ -9,6 +9,8 @@
 #include <set>
 
 #include "base/callback.h"
+#include "base/optional.h"
+#include "base/unguessable_token.h"
 #include "services/network/public/mojom/fetch_api.mojom-shared.h"
 #include "third_party/blink/public/common/feature_policy/feature_policy.h"
 #include "third_party/blink/public/common/frame/sandbox_flags.h"
@@ -201,6 +203,17 @@ class WebLocalFrame : public WebFrame {
   virtual bool ScrollTo(const gfx::Point& scrollPosition,
                         bool animate,
                         base::OnceClosure on_finish) = 0;
+
+  // Sets an embedding token for the frame. This token is propagated to the
+  // remote parent of this frame (via the browser) such that it can uniquely
+  // refer to this frame.
+  virtual void SetEmbeddingToken(
+      const base::UnguessableToken& embedding_token) = 0;
+
+  // Returns the embedding token for this frame or nullopt if it isn't embedded.
+  // This is the token that the remote parent of this frame uses to uniquely
+  // identify it.
+  virtual const base::Optional<base::UnguessableToken>& GetEmbeddingToken() = 0;
 
   // Navigation Ping --------------------------------------------------------
 

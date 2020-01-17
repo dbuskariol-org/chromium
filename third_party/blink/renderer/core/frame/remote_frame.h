@@ -109,6 +109,8 @@ class CORE_EXPORT RemoteFrame final : public Frame,
       ui::input_types::ScrollGranularity granularity) override;
   void UpdateUserActivationState(
       mojom::blink::UserActivationUpdateType) override;
+  void SetEmbeddingToken(
+      const base::UnguessableToken& embedding_token) override;
 
  private:
   // Frame protected overrides:

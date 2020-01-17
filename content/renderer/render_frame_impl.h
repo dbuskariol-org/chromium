@@ -1256,8 +1256,10 @@ class CONTENT_EXPORT RenderFrameImpl
 
   // Build DidCommitProvisionalLoad_Params based on the frame internal state.
   std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params>
-  MakeDidCommitProvisionalLoadParams(blink::WebHistoryCommitType commit_type,
-                                     ui::PageTransition transition);
+  MakeDidCommitProvisionalLoadParams(
+      blink::WebHistoryCommitType commit_type,
+      ui::PageTransition transition,
+      const base::Optional<base::UnguessableToken>& embedding_token);
 
   // Updates the navigation history depending on the passed parameters.
   // This could result either in the creation of a new entry or a modification
@@ -1284,7 +1286,8 @@ class CONTENT_EXPORT RenderFrameImpl
       blink::WebHistoryCommitType commit_type,
       bool was_within_same_document,
       ui::PageTransition transition,
-      mojom::DidCommitProvisionalLoadInterfaceParamsPtr interface_params);
+      mojom::DidCommitProvisionalLoadInterfaceParamsPtr interface_params,
+      const base::Optional<base::UnguessableToken>& embedding_token);
 
   blink::WebComputedAXTree* GetOrCreateWebComputedAXTree() override;
 

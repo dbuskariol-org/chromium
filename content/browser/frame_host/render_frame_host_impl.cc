@@ -7066,6 +7066,27 @@ bool RenderFrameHostImpl::ValidateDidCommitParams(
     return false;
   }
 
+  // A cross-document navigation requires an embedding token for all embedded
+  // frames (a child frame to a remote parent). Embedding tokens should not
+  // exist for other cases.
+  if (!is_same_document_navigation) {
+    if (frame_tree_node()->IsMainFrame() &&
+        params->embedding_token.has_value()) {
+      bad_message::ReceivedBadMessage(
+          process, bad_message::RFH_UNEXPECTED_EMBEDDING_TOKEN);
+      return false;
+    } else if (IsCrossProcessSubframe() &&
+               !params->embedding_token.has_value()) {
+      bad_message::ReceivedBadMessage(process,
+                                      bad_message::RFH_MISSING_EMBEDDING_TOKEN);
+      return false;
+    }
+  } else if (params->embedding_token.has_value()) {
+    bad_message::ReceivedBadMessage(
+        process, bad_message::RFH_UNEXPECTED_EMBEDDING_TOKEN);
+    return false;
+  }
+
   return true;
 }
 

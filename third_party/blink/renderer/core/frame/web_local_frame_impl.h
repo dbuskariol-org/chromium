@@ -125,6 +125,9 @@ class CORE_EXPORT WebLocalFrameImpl final
   bool ScrollTo(const gfx::Point& scrollPosition,
                 bool animate,
                 base::OnceClosure on_finish) override;
+  void SetEmbeddingToken(
+      const base::UnguessableToken& embedding_token) override;
+  const base::Optional<base::UnguessableToken>& GetEmbeddingToken() override;
   void SendPings(const WebURL& destination_url) override;
   void StartReload(WebFrameLoadType) override;
   void StartNavigation(const WebURLRequest&) override;

@@ -2098,6 +2098,16 @@ bool WebLocalFrameImpl::ScrollTo(const gfx::Point& scrollPosition,
   return true;
 }
 
+void WebLocalFrameImpl::SetEmbeddingToken(
+    const base::UnguessableToken& embedding_token) {
+  frame_->SetEmbeddingToken(embedding_token);
+}
+
+const base::Optional<base::UnguessableToken>&
+WebLocalFrameImpl::GetEmbeddingToken() {
+  return frame_->GetEmbeddingToken();
+}
+
 void WebLocalFrameImpl::SendPings(const WebURL& destination_url) {
   DCHECK(GetFrame());
   if (Node* node = ContextMenuNodeInner()) {

@@ -4391,12 +4391,40 @@ void RenderFrameImpl::DidCommitProvisionalLoad(
   NavigationState* navigation_state = internal_data->navigation_state();
   DCHECK(!navigation_state->WasWithinSameDocument());
 
+  base::Optional<base::UnguessableToken> embedding_token = base::nullopt;
   if (previous_routing_id_ != MSG_ROUTING_NONE) {
     // If this is a provisional frame associated with a proxy (i.e., a frame
     // created for a remote-to-local navigation), swap it into the frame tree
     // now.
     if (!SwapIn())
       return;
+
+    // Main frames don't require an embedding token since they aren't embedded
+    // in anything. Frames local to their parent also aren't considered to be
+    // embedded.
+    if (!is_main_frame_ && frame_->Parent()->IsWebRemoteFrame()) {
+      embedding_token = base::UnguessableToken::Create();
+      GetWebFrame()->SetEmbeddingToken(embedding_token.value());
+    }
+  } else {
+    // If this is not a provisional frame then use the old embedding token. This
+    // will be base::nullopt if there was no old embedding token.
+    embedding_token = GetWebFrame()->GetEmbeddingToken();
+
+    // In the case a crashed subframe is navigating to the same site
+    // e.g. https://crbug.com/634368 then generate a new embedding token to
+    // restore a sane state.
+    //
+    // Logic behind this behavior:
+    // - Main frames don't have embedding tokens.
+    // - A remote subframe *must* have an embedding token.
+    // - If a remote subframe doesn't have an embedding token to re-use we
+    //   need to create one.
+    if (!is_main_frame_ && frame_->Parent()->IsWebRemoteFrame() &&
+        !embedding_token.has_value()) {
+      embedding_token = base::UnguessableToken::Create();
+      GetWebFrame()->SetEmbeddingToken(embedding_token.value());
+    }
   }
 
   // Navigations that change the document represent a new content source.  Keep
@@ -4495,7 +4523,8 @@ void RenderFrameImpl::DidCommitProvisionalLoad(
           ? mojom::DidCommitProvisionalLoadInterfaceParams::New(
                 std::move(remote_interface_provider_receiver),
                 std::move(browser_interface_broker_receiver))
-          : nullptr);
+          : nullptr,
+      embedding_token);
 
   // If we end up reusing this WebRequest (for example, due to a #ref click),
   // we don't want the transition type to persist.  Just clear it.
@@ -4750,7 +4779,8 @@ void RenderFrameImpl::DidFinishSameDocumentNavigation(
                               // was_within_same_document
                               true, transition,
                               // interface_params
-                              nullptr);
+                              nullptr,
+                              /*embedding_token=*/base::nullopt);
 
   // If we end up reusing this WebRequest (for example, due to a #ref click),
   // we don't want the transition type to persist.  Just clear it.
@@ -5338,7 +5368,8 @@ const RenderFrameImpl* RenderFrameImpl::GetLocalRoot() const {
 std::unique_ptr<FrameHostMsg_DidCommitProvisionalLoad_Params>
 RenderFrameImpl::MakeDidCommitProvisionalLoadParams(
     blink::WebHistoryCommitType commit_type,
-    ui::PageTransition transition) {
+    ui::PageTransition transition,
+    const base::Optional<base::UnguessableToken>& embedding_token) {
   WebDocumentLoader* document_loader = frame_->GetDocumentLoader();
   const WebURLResponse& response = document_loader->GetResponse();
 
@@ -5358,6 +5389,7 @@ RenderFrameImpl::MakeDidCommitProvisionalLoadParams(
       document_loader->ReplacesCurrentHistoryItem();
   params->post_id = -1;
   params->nav_entry_id = navigation_state->commit_params().nav_entry_id;
+  params->embedding_token = embedding_token;
 
   // Pass the navigation token back to the browser process, or generate a new
   // one if this navigation is committing without the browser process asking for
@@ -5612,7 +5644,8 @@ void RenderFrameImpl::DidCommitNavigationInternal(
     blink::WebHistoryCommitType commit_type,
     bool was_within_same_document,
     ui::PageTransition transition,
-    mojom::DidCommitProvisionalLoadInterfaceParamsPtr interface_params) {
+    mojom::DidCommitProvisionalLoadInterfaceParamsPtr interface_params,
+    const base::Optional<base::UnguessableToken>& embedding_token) {
   DCHECK(!(was_within_same_document && interface_params));
   UpdateStateForCommit(item, commit_type, transition);
 
@@ -5624,7 +5657,8 @@ void RenderFrameImpl::DidCommitNavigationInternal(
   // call chrome::ContentSettingsManager::OnContentBlocked, those calls arrive
   // after the browser process has already been informed of the provisional
   // load committing.
-  auto params = MakeDidCommitProvisionalLoadParams(commit_type, transition);
+  auto params = MakeDidCommitProvisionalLoadParams(commit_type, transition,
+                                                   embedding_token);
   if (was_within_same_document) {
     GetFrameHost()->DidCommitSameDocumentNavigation(std::move(params));
   } else {

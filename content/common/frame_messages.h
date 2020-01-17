@@ -425,6 +425,10 @@ IPC_STRUCT_BEGIN_WITH_PARENT(FrameHostMsg_DidCommitProvisionalLoad_Params,
   // A token that has been passed by the browser process when it asked the
   // renderer process to commit the navigation.
   IPC_STRUCT_MEMBER(base::UnguessableToken, navigation_token)
+
+  // An embedding token used to signify the relationship between the frame and
+  // its parent. This is populated for cross-document navigations in a subframe.
+  IPC_STRUCT_MEMBER(base::Optional<base::UnguessableToken>, embedding_token)
 IPC_STRUCT_END()
 
 IPC_STRUCT_BEGIN(FrameMsg_PostMessage_Params)

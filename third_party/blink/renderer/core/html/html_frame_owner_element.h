@@ -46,6 +46,7 @@ class WebPluginContainerImpl;
 class CORE_EXPORT HTMLFrameOwnerElement : public HTMLElement,
                                           public FrameOwner {
   USING_GARBAGE_COLLECTED_MIXIN(HTMLFrameOwnerElement);
+
  public:
   ~HTMLFrameOwnerElement() override;
 
@@ -126,6 +127,11 @@ class CORE_EXPORT HTMLFrameOwnerElement : public HTMLElement,
 
   void ParseAttribute(const AttributeModificationParams&) override;
 
+  void SetEmbeddingToken(const base::UnguessableToken& token);
+  const base::Optional<base::UnguessableToken>& GetEmbeddingToken() const {
+    return embedding_token_;
+  }
+
   void Trace(Visitor*) override;
 
  protected:
@@ -192,6 +198,7 @@ class CORE_EXPORT HTMLFrameOwnerElement : public HTMLElement,
   Member<Frame> content_frame_;
   Member<EmbeddedContentView> embedded_content_view_;
   FramePolicy frame_policy_;
+  base::Optional<base::UnguessableToken> embedding_token_;
 
   Member<LazyLoadFrameObserver> lazy_load_frame_observer_;
   bool should_lazy_load_children_;

@@ -392,6 +392,12 @@ void RemoteFrame::UpdateUserActivationState(
   }
 }
 
+void RemoteFrame::SetEmbeddingToken(
+    const base::UnguessableToken& embedding_token) {
+  FrameOwner* owner = Owner();
+  To<HTMLFrameOwnerElement>(owner)->SetEmbeddingToken(embedding_token);
+}
+
 bool RemoteFrame::IsIgnoredForHitTest() const {
   HTMLFrameOwnerElement* owner = DeprecatedLocalOwner();
   if (!owner || !owner->GetLayoutObject())

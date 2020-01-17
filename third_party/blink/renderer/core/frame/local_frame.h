@@ -460,6 +460,9 @@ class CORE_EXPORT LocalFrame final : public Frame,
   void SetPrescientNetworkingForTesting(
       std::unique_ptr<WebPrescientNetworking> prescient_networking);
 
+  void SetEmbeddingToken(const base::UnguessableToken& embedding_token);
+  const base::Optional<base::UnguessableToken>& GetEmbeddingToken() const;
+
   // blink::mojom::LocalFrame overrides:
   void GetTextSurroundingSelection(
       uint32_t max_length,
@@ -608,6 +611,8 @@ class CORE_EXPORT LocalFrame final : public Frame,
   IsCapturingMediaCallback is_capturing_media_callback_;
 
   std::unique_ptr<FrameOverlay> frame_color_overlay_;
+
+  base::Optional<base::UnguessableToken> embedding_token_;
 
   mojom::FrameLifecycleState lifecycle_state_;
   base::Optional<mojom::FrameLifecycleState> pending_lifecycle_state_;

@@ -6,6 +6,7 @@ module blink.mojom;
 
 import "cc/mojom/touch_action.mojom";
 import "mojo/public/mojom/base/string16.mojom";
+import "mojo/public/mojom/base/unguessable_token.mojom";
 import "services/network/public/mojom/content_security_policy.mojom";
 import "skia/public/mojom/skcolor.mojom";
 import "third_party/blink/public/mojom/devtools/console_message.mojom";
@@ -284,4 +285,9 @@ interface RemoteFrame {
   // user activation state in appropriate part of the frame tree (ancestors for
   // activation notification and all nodes for consumption).
   UpdateUserActivationState(blink.mojom.UserActivationUpdateType state_update_type);
+
+  // Sent to the process that owns this frame's HTMLFrameOwnerElement to
+  // set the embedding token. This token uniquely specifies the relationship
+  // between a frame and its parent.
+  SetEmbeddingToken(mojo_base.mojom.UnguessableToken embedding_token);
 };

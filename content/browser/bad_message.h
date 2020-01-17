@@ -248,6 +248,8 @@ enum BadMessageReason {
   NC_SAME_DOCUMENT_POST_COMMIT_ERROR = 220,
   RFH_INVALID_WEB_UI_CONTROLLER = 221,
   RFPH_ADVANCE_FOCUS_INTO_PORTAL = 222,
+  RFH_UNEXPECTED_EMBEDDING_TOKEN = 223,
+  RFH_MISSING_EMBEDDING_TOKEN = 224,
 
   // Please add new elements here. The naming convention is abbreviated class
   // name (e.g. RenderFrameHost becomes RFH) plus a unique description of the

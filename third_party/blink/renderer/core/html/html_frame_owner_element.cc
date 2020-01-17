@@ -225,6 +225,7 @@ void HTMLFrameOwnerElement::ClearContentFrame() {
 
   DCHECK_EQ(content_frame_->Owner(), this);
   content_frame_ = nullptr;
+  embedding_token_ = base::nullopt;
 
   for (ContainerNode* node = this; node; node = node->ParentOrShadowHostNode())
     node->DecrementConnectedSubframeCount();
@@ -560,6 +561,13 @@ void HTMLFrameOwnerElement::FrameCrossOriginStatusChanged() {
           blink::features::kCompositeCrossOriginIframes)) {
     SetNeedsCompositingUpdate();
   }
+}
+
+void HTMLFrameOwnerElement::SetEmbeddingToken(
+    const base::UnguessableToken& embedding_token) {
+  DCHECK(content_frame_);
+  DCHECK(content_frame_->IsRemoteFrame());
+  embedding_token_ = embedding_token;
 }
 
 void HTMLFrameOwnerElement::Trace(Visitor* visitor) {
