@@ -7741,12 +7741,15 @@ void RenderFrameHostImpl::AddMessageToConsoleImpl(
 
 void RenderFrameHostImpl::AddSameSiteCookieDeprecationMessage(
     const std::string& cookie_url,
-    net::CanonicalCookie::CookieInclusionStatus::WarningReason warning,
+    net::CanonicalCookie::CookieInclusionStatus status,
     bool is_lax_by_default_enabled,
     bool is_none_requires_secure_enabled) {
   std::string deprecation_message;
-  if (warning == net::CanonicalCookie::CookieInclusionStatus::WarningReason::
-                     WARN_SAMESITE_UNSPECIFIED_CROSS_SITE_CONTEXT) {
+  // The status will have, at most, one of these warning messages at any given
+  // time.
+  if (status.HasWarningReason(
+          net::CanonicalCookie::CookieInclusionStatus::WarningReason::
+              WARN_SAMESITE_UNSPECIFIED_CROSS_SITE_CONTEXT)) {
     if (!ShouldAddCookieSameSiteDeprecationMessage(
             cookie_url, &cookie_no_samesite_deprecation_url_hashes_)) {
       return;
@@ -7765,8 +7768,9 @@ void RenderFrameHostImpl::AddSameSiteCookieDeprecationMessage(
         "Application>Storage>Cookies and see more details at "
         "https://www.chromestatus.com/feature/5088147346030592 and "
         "https://www.chromestatus.com/feature/5633521622188032.";
-  } else if (warning == net::CanonicalCookie::CookieInclusionStatus::
-                            WarningReason::WARN_SAMESITE_NONE_INSECURE) {
+  } else if (status.HasWarningReason(
+                 net::CanonicalCookie::CookieInclusionStatus::WarningReason::
+                     WARN_SAMESITE_NONE_INSECURE)) {
     if (!ShouldAddCookieSameSiteDeprecationMessage(
             cookie_url,
             &cookie_samesite_none_insecure_deprecation_url_hashes_)) {
@@ -7785,9 +7789,9 @@ void RenderFrameHostImpl::AddSameSiteCookieDeprecationMessage(
         "can review cookies in developer tools under "
         "Application>Storage>Cookies and see more details at "
         "https://www.chromestatus.com/feature/5633521622188032.";
-  } else if (warning ==
-             net::CanonicalCookie::CookieInclusionStatus::WarningReason::
-                 WARN_SAMESITE_UNSPECIFIED_LAX_ALLOW_UNSAFE) {
+  } else if (status.HasWarningReason(
+                 net::CanonicalCookie::CookieInclusionStatus::WarningReason::
+                     WARN_SAMESITE_UNSPECIFIED_LAX_ALLOW_UNSAFE)) {
     if (!ShouldAddCookieSameSiteDeprecationMessage(
             cookie_url, &cookie_lax_allow_unsafe_deprecation_url_hashes_)) {
       return;
