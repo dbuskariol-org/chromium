@@ -625,6 +625,11 @@ void PeopleHandler::HandleSetEncryption(const base::ListValue* args) {
       // data types.
       passphrase_failed = !service->GetUserSettings()->SetDecryptionPassphrase(
           configuration.passphrase);
+    } else if (service->GetUserSettings()->IsTrustedVaultKeyRequired()) {
+      // There are pending keys due to trusted vault keys being required, likely
+      // because something changed since the UI was displayed. A passphrase
+      // cannot be set in such circumstances.
+      passphrase_failed = true;
     } else {
       // OK, the user sent us a passphrase, but we don't have pending keys. So
       // it either means that the pending keys were resolved somehow since the
@@ -1036,9 +1041,10 @@ void PeopleHandler::PushSyncPrefs() {
   args.SetBoolean("passphraseRequired",
                   sync_user_settings->IsPassphraseRequired());
 
-  args.SetBoolean(
-      "trustedVaultKeysRequired",
-      sync_user_settings->IsTrustedVaultKeyRequiredForPreferredDataTypes());
+  // Same as above, we call IsTrustedVaultKeyRequired() here instead of.
+  // IsTrustedVaultKeyRequiredForPreferredDataTypes().
+  args.SetBoolean("trustedVaultKeysRequired",
+                  sync_user_settings->IsTrustedVaultKeyRequired());
 
   syncer::PassphraseType passphrase_type =
       sync_user_settings->GetPassphraseType();

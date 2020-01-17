@@ -268,6 +268,18 @@ public class ManageSyncPreferences extends PreferenceFragmentCompat
             closeDialogIfOpen(FRAGMENT_ENTER_PASSPHRASE);
             return;
         }
+
+        if (mProfileSyncService.isTrustedVaultKeyRequired()) {
+            // The user cannot manually enter trusted vault keys, so it needs to gets treated as an
+            // error.
+            closeDialogIfOpen(FRAGMENT_CUSTOM_PASSPHRASE);
+            closeDialogIfOpen(FRAGMENT_ENTER_PASSPHRASE);
+            mSyncEncryption.setSummary(mProfileSyncService.isEncryptEverythingEnabled()
+                            ? R.string.sync_error_card_title
+                            : R.string.sync_passwords_error_card_title);
+            return;
+        }
+
         if (!mProfileSyncService.isPassphraseRequiredForPreferredDataTypes()) {
             closeDialogIfOpen(FRAGMENT_ENTER_PASSPHRASE);
         }
@@ -402,11 +414,9 @@ public class ManageSyncPreferences extends PreferenceFragmentCompat
     private void onSyncEncryptionClicked() {
         if (!mProfileSyncService.isEngineInitialized()) return;
 
-        // TODO(crbug.com/1019687): The two below should probably operate independently of the
-        // preferred datatypes.
         if (mProfileSyncService.isPassphraseRequiredForPreferredDataTypes()) {
             displayPassphraseDialog();
-        } else if (mProfileSyncService.isTrustedVaultKeyRequiredForPreferredDataTypes()) {
+        } else if (mProfileSyncService.isTrustedVaultKeyRequired()) {
             CoreAccountInfo primaryAccountInfo =
                     IdentityServicesProvider.get().getIdentityManager().getPrimaryAccountInfo();
             if (primaryAccountInfo != null) {
