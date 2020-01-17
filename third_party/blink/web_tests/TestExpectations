@@ -2824,7 +2824,6 @@ crbug.com/626703 [ Mac10.10 ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.ht
 crbug.com/626703 [ Mac10.12 ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.https.any.html?1-1000 [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.https.any.html?2001-3000 [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] virtual/web-components-v0-disabled/external/wpt/html/dom/idlharness.https.html?include=(Document|Window) [ Failure Timeout ]
-crbug.com/626703 [ Mac10.10 ] virtual/stable/external/wpt/html/cross-origin-embedder-policy/blob.https.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.12 ] external/wpt/css/cssom/CSSStyleSheet-constructable.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.https.any.worker.html?1001-2000 [ Failure Timeout ]
 crbug.com/626703 [ Mac10.12 ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.https.any.worker.html?1001-2000 [ Failure Timeout ]
@@ -6389,6 +6388,7 @@ crbug.com/1042347 external/wpt/html/cross-origin-opener-policy/blob-popup.https.
 # Sheriff 2020-01-16
 crbug.com/1042205 virtual/off-main-thread-css-paint/external/wpt/css/css-paint-api/paint2d-filter.https.html [ Pass Timeout ]
 crbug.com/1042681 external/wpt/html/cross-origin-embedder-policy/blob.https.html [ Pass Failure ]
+crbug.com/1042681 [ Mac ] virtual/stable/external/wpt/html/cross-origin-embedder-policy/blob.https.html [ Pass Failure Timeout ]
 crbug.com/1042694 fast/forms/form-control-with-state-eager-tracing-crashTest.html [ Pass Timeout ]
 crbug.com/1042689 [ Linux ] http/tests/devtools/coverage/gutter-css.js [ Pass Timeout ]
 crbug.com/1042689 [ Win ] http/tests/devtools/coverage/gutter-css.js [ Pass Timeout ]
