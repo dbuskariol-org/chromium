@@ -344,6 +344,7 @@ void QuicTransport::OnConnectionError() {
   DVLOG(1) << "QuicTransport::OnConnectionError() this=" << this;
 
   if (!cleanly_closed_) {
+    ScriptState::Scope scope(script_state_);
     v8::Local<v8::Value> reason = V8ThrowException::CreateTypeError(
         script_state_->GetIsolate(), "Connection lost.");
     received_datagrams_controller_->Error(reason);
