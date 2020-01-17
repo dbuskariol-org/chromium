@@ -45,6 +45,7 @@
 #include "components/sessions/core/session_command.h"
 #include "components/sessions/core/session_constants.h"
 #include "components/sessions/core/session_types.h"
+#include "components/sessions/core/snapshotting_command_storage_manager.h"
 #include "components/sessions/core/tab_restore_service.h"
 #include "components/tab_groups/tab_group_id.h"
 #include "components/tab_groups/tab_group_visual_data.h"
@@ -76,8 +77,8 @@ SessionService::SessionService(Profile* profile)
     : profile_(profile),
       should_use_delayed_save_(true),
       command_storage_manager_(
-          std::make_unique<sessions::CommandStorageManager>(
-              sessions::CommandStorageManager::SESSION_RESTORE,
+          std::make_unique<sessions::SnapshottingCommandStorageManager>(
+              sessions::SnapshottingCommandStorageManager::SESSION_RESTORE,
               profile->GetPath(),
               this)),
       has_open_trackable_browsers_(false),
@@ -93,8 +94,8 @@ SessionService::SessionService(const base::FilePath& save_path)
     : profile_(nullptr),
       should_use_delayed_save_(false),
       command_storage_manager_(
-          std::make_unique<sessions::CommandStorageManager>(
-              sessions::CommandStorageManager::SESSION_RESTORE,
+          std::make_unique<sessions::SnapshottingCommandStorageManager>(
+              sessions::SnapshottingCommandStorageManager::SESSION_RESTORE,
               save_path,
               this)),
       has_open_trackable_browsers_(false),

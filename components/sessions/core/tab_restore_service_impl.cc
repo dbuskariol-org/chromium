@@ -22,10 +22,10 @@
 #include "components/history/core/common/pref_names.h"
 #include "components/prefs/pref_service.h"
 #include "components/sessions/core/base_session_service_commands.h"
-#include "components/sessions/core/command_storage_manager.h"
 #include "components/sessions/core/command_storage_manager_delegate.h"
 #include "components/sessions/core/session_command.h"
 #include "components/sessions/core/session_constants.h"
+#include "components/sessions/core/snapshotting_command_storage_manager.h"
 #include "components/tab_groups/tab_group_color.h"
 #include "components/tab_groups/tab_group_id.h"
 #include "components/tab_groups/tab_group_visual_data.h"
@@ -455,7 +455,7 @@ class TabRestoreServiceImpl::PersistenceDelegate
   // The associated client.
   TabRestoreServiceClient* client_;
 
-  std::unique_ptr<CommandStorageManager> command_storage_manager_;
+  std::unique_ptr<SnapshottingCommandStorageManager> command_storage_manager_;
 
   TabRestoreServiceHelper* tab_restore_service_helper_;
 
@@ -482,10 +482,11 @@ class TabRestoreServiceImpl::PersistenceDelegate
 TabRestoreServiceImpl::PersistenceDelegate::PersistenceDelegate(
     TabRestoreServiceClient* client)
     : client_(client),
-      command_storage_manager_(std::make_unique<CommandStorageManager>(
-          CommandStorageManager::TAB_RESTORE,
-          client_->GetPathToSaveTo(),
-          this)),
+      command_storage_manager_(
+          std::make_unique<SnapshottingCommandStorageManager>(
+              SnapshottingCommandStorageManager::TAB_RESTORE,
+              client_->GetPathToSaveTo(),
+              this)),
       tab_restore_service_helper_(nullptr),
       entries_to_write_(0),
       entries_written_(0),

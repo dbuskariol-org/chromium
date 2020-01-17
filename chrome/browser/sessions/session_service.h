@@ -44,6 +44,7 @@ namespace sessions {
 class SessionCommand;
 struct SessionTab;
 struct SessionWindow;
+class SnapshottingCommandStorageManager;
 }  // namespace sessions
 
 // SessionService ------------------------------------------------------------
@@ -339,7 +340,8 @@ class SessionService : public sessions::CommandStorageManagerDelegate,
   // (which should only be used for testing).
   bool should_use_delayed_save_;
 
-  std::unique_ptr<sessions::CommandStorageManager> command_storage_manager_;
+  std::unique_ptr<sessions::SnapshottingCommandStorageManager>
+      command_storage_manager_;
 
   // Maps from session tab id to the range of navigation entries that has
   // been written to disk.

@@ -32,10 +32,6 @@ class SessionBackend;
 // and processed after a delay.
 class SESSIONS_EXPORT CommandStorageManager {
  public:
-  // Identifies the type of session service this is. This is used by the
-  // backend to determine the name of the files.
-  enum SessionType { SESSION_RESTORE, TAB_RESTORE };
-
   using GetCommandsCallback =
       base::OnceCallback<void(std::vector<std::unique_ptr<SessionCommand>>)>;
 
@@ -43,16 +39,9 @@ class SESSIONS_EXPORT CommandStorageManager {
   // Init. |delegate| will remain owned by the creator and it is guaranteed
   // that its lifetime surpasses this class.
   // |type| gives the type of session service, |path| the path to save files to.
-  CommandStorageManager(SessionType type,
-                        const base::FilePath& path,
+  CommandStorageManager(const base::FilePath& path,
                         CommandStorageManagerDelegate* delegate);
-  ~CommandStorageManager();
-
-  // Moves the current session to the last session.
-  void MoveCurrentSessionToLastSession();
-
-  // Deletes the last session.
-  void DeleteLastSession();
+  virtual ~CommandStorageManager();
 
   // Returns the set of commands which were scheduled to be written. Once
   // committed to the backend, the commands are removed from here.
@@ -95,18 +84,23 @@ class SESSIONS_EXPORT CommandStorageManager {
   // Passes all pending commands to the backend for saving.
   void Save();
 
-  // Uses the backend to load the last session commands from disc. |callback|
-  // gets called once the data has arrived.
-  base::CancelableTaskTracker::TaskId ScheduleGetLastSessionCommands(
-      GetCommandsCallback callback,
-      base::CancelableTaskTracker* tracker);
+ protected:
+  // Provided for subclasses.
+  CommandStorageManager(scoped_refptr<SessionBackend> backend,
+                        CommandStorageManagerDelegate* delegate);
+
+  // Creates a SequencedTaskRunner suitable for the backend.
+  static scoped_refptr<base::SequencedTaskRunner>
+  CreateDefaultBackendTaskRunner();
+
+  scoped_refptr<base::SequencedTaskRunner> backend_task_runner() {
+    return backend_task_runner_;
+  }
+
+  SessionBackend* backend() { return backend_.get(); }
 
  private:
   friend class CommandStorageManagerTestHelper;
-
-  // This posts the task to the TaskRunner.
-  void RunTaskOnBackendThread(const base::Location& from_here,
-                              base::OnceClosure task);
 
   // The backend object which reads and saves commands.
   scoped_refptr<SessionBackend> backend_;
@@ -116,10 +110,10 @@ class SESSIONS_EXPORT CommandStorageManager {
 
   // Whether the backend file should be recreated the next time we send
   // over the commands.
-  bool pending_reset_;
+  bool pending_reset_ = false;
 
   // The number of commands sent to the backend before doing a reset.
-  int commands_since_reset_;
+  int commands_since_reset_ = 0;
 
   CommandStorageManagerDelegate* delegate_;
 

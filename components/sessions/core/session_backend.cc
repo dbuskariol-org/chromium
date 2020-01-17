@@ -10,8 +10,6 @@
 
 #include "base/files/file.h"
 #include "base/files/file_util.h"
-#include "base/macros.h"
-#include "base/metrics/histogram_macros.h"
 #include "build/build_config.h"
 
 namespace sessions {
@@ -180,107 +178,44 @@ bool SessionFileReader::FillBuffer() {
 
 // SessionBackend -------------------------------------------------------------
 
-// File names (current and previous) for a type of TAB.
-static const char* kCurrentTabSessionFileName = "Current Tabs";
-static const char* kLastTabSessionFileName = "Last Tabs";
-
-// File names (current and previous) for a type of SESSION.
-static const char* kCurrentSessionFileName = "Current Session";
-static const char* kLastSessionFileName = "Last Session";
-
 // static
 const int SessionBackend::kFileReadBufferSize = 1024;
 
 SessionBackend::SessionBackend(
     scoped_refptr<base::SequencedTaskRunner> owning_task_runner,
-    sessions::CommandStorageManager::SessionType type,
-    const base::FilePath& path_to_dir)
-    : RefCountedDeleteOnSequence(owning_task_runner),
-      type_(type),
-      path_to_dir_(path_to_dir),
-      last_session_valid_(false),
-      inited_(false),
-      empty_file_(true) {
+    const base::FilePath& path)
+    : RefCountedDeleteOnSequence(owning_task_runner), path_(path) {
   // NOTE: this is invoked on the main thread, don't do file access here.
-}
-
-void SessionBackend::Init() {
-  if (inited_)
-    return;
-
-  inited_ = true;
-
-  // Create the directory for session info.
-  base::CreateDirectory(path_to_dir_);
-  MoveCurrentSessionToLastSession();
 }
 
 void SessionBackend::AppendCommands(
     std::vector<std::unique_ptr<sessions::SessionCommand>> commands,
-    bool reset_first) {
-  Init();
-  // Make sure and check current_session_file_, if opening the file failed
-  // current_session_file_ will be NULL.
-  if ((reset_first && !empty_file_) || !current_session_file_ ||
-      !current_session_file_->IsValid()) {
-    ResetFile();
+    bool truncate) {
+  InitIfNecessary();
+
+  // Make sure and check |file_|, if opening the file failed |file_| will be
+  // null.
+  if (truncate || !file_ || !file_->IsValid())
+    TruncateFile();
+
+  // Check |file_| again as TruncateFile() may fail.
+  if (file_ && file_->IsValid() &&
+      !AppendCommandsToFile(file_.get(), commands)) {
+    file_.reset();
   }
-  // Need to check current_session_file_ again, ResetFile may fail.
-  if (current_session_file_.get() && current_session_file_->IsValid() &&
-      !AppendCommandsToFile(current_session_file_.get(), commands)) {
-    current_session_file_.reset(nullptr);
-  }
-  empty_file_ = false;
 }
 
-void SessionBackend::ReadLastSessionCommands(
+void SessionBackend::ReadCurrentSessionCommands(
     const base::CancelableTaskTracker::IsCanceledCallback& is_canceled,
-    sessions::CommandStorageManager::GetCommandsCallback callback) {
+    GetCommandsCallback callback) {
   if (is_canceled.Run())
     return;
 
-  Init();
+  InitIfNecessary();
 
   std::vector<std::unique_ptr<sessions::SessionCommand>> commands;
-  ReadLastSessionCommandsImpl(&commands);
+  ReadCommandsFromFile(path_, &commands);
   std::move(callback).Run(std::move(commands));
-}
-
-bool SessionBackend::ReadLastSessionCommandsImpl(
-    std::vector<std::unique_ptr<sessions::SessionCommand>>* commands) {
-  Init();
-  SessionFileReader file_reader(GetLastSessionPath());
-  return file_reader.Read(commands);
-}
-
-void SessionBackend::DeleteLastSession() {
-  Init();
-  base::DeleteFile(GetLastSessionPath(), false);
-}
-
-void SessionBackend::MoveCurrentSessionToLastSession() {
-  Init();
-  current_session_file_.reset(nullptr);
-
-  const base::FilePath current_session_path = GetCurrentSessionPath();
-  const base::FilePath last_session_path = GetLastSessionPath();
-  if (base::PathExists(last_session_path))
-    base::DeleteFile(last_session_path, false);
-  if (base::PathExists(current_session_path))
-    last_session_valid_ = base::Move(current_session_path, last_session_path);
-
-  if (base::PathExists(current_session_path))
-    base::DeleteFile(current_session_path, false);
-
-  // Create and open the file for the current session.
-  ResetFile();
-}
-
-bool SessionBackend::ReadCurrentSessionCommandsImpl(
-    std::vector<std::unique_ptr<sessions::SessionCommand>>* commands) {
-  Init();
-  SessionFileReader file_reader(GetCurrentSessionPath());
-  return file_reader.Read(commands);
 }
 
 bool SessionBackend::AppendCommandsToFile(
@@ -318,34 +253,50 @@ bool SessionBackend::AppendCommandsToFile(
   return true;
 }
 
-SessionBackend::~SessionBackend() {
-  current_session_file_.reset();
+SessionBackend::~SessionBackend() = default;
+
+void SessionBackend::InitIfNecessary() {
+  if (inited_)
+    return;
+
+  inited_ = true;
+  DoInit();
 }
 
-void SessionBackend::ResetFile() {
+bool SessionBackend::ReadCommandsFromFile(
+    const base::FilePath& path,
+    std::vector<std::unique_ptr<sessions::SessionCommand>>* commands) {
+  SessionFileReader file_reader(path);
+  return file_reader.Read(commands);
+}
+
+void SessionBackend::CloseFile() {
+  file_.reset();
+}
+
+void SessionBackend::TruncateFile() {
   DCHECK(inited_);
-  if (current_session_file_) {
+  if (file_) {
     // File is already open, truncate it. We truncate instead of closing and
     // reopening to avoid the possibility of scanners locking the file out
     // from under us once we close it. If truncation fails, we'll try to
     // recreate.
     const int header_size = static_cast<int>(sizeof(FileHeader));
-    if (current_session_file_->Seek(
-            base::File::FROM_BEGIN, header_size) != header_size ||
-        !current_session_file_->SetLength(header_size))
-      current_session_file_.reset(nullptr);
+    if (file_->Seek(base::File::FROM_BEGIN, header_size) != header_size ||
+        !file_->SetLength(header_size))
+      file_.reset();
   }
-  if (!current_session_file_)
-    current_session_file_.reset(OpenAndWriteHeader(GetCurrentSessionPath()));
-  empty_file_ = true;
+  if (!file_)
+    file_ = OpenAndWriteHeader(path_);
 }
 
-base::File* SessionBackend::OpenAndWriteHeader(const base::FilePath& path) {
+std::unique_ptr<base::File> SessionBackend::OpenAndWriteHeader(
+    const base::FilePath& path) {
   DCHECK(!path.empty());
-  std::unique_ptr<base::File> file(new base::File(
+  std::unique_ptr<base::File> file = std::make_unique<base::File>(
       path, base::File::FLAG_CREATE_ALWAYS | base::File::FLAG_WRITE |
                 base::File::FLAG_EXCLUSIVE_WRITE |
-                base::File::FLAG_EXCLUSIVE_READ));
+                base::File::FLAG_EXCLUSIVE_READ);
   if (!file->IsValid())
     return nullptr;
   FileHeader header;
@@ -355,25 +306,7 @@ base::File* SessionBackend::OpenAndWriteHeader(const base::FilePath& path) {
                                       sizeof(header));
   if (wrote != sizeof(header))
     return nullptr;
-  return file.release();
-}
-
-base::FilePath SessionBackend::GetLastSessionPath() {
-  base::FilePath path = path_to_dir_;
-  if (type_ == sessions::CommandStorageManager::TAB_RESTORE)
-    path = path.AppendASCII(kLastTabSessionFileName);
-  else
-    path = path.AppendASCII(kLastSessionFileName);
-  return path;
-}
-
-base::FilePath SessionBackend::GetCurrentSessionPath() {
-  base::FilePath path = path_to_dir_;
-  if (type_ == sessions::CommandStorageManager::TAB_RESTORE)
-    path = path.AppendASCII(kCurrentTabSessionFileName);
-  else
-    path = path.AppendASCII(kCurrentSessionFileName);
-  return path;
+  return file;
 }
 
 }  // namespace sessions

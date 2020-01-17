@@ -10,10 +10,10 @@
 #include <memory>
 #include <vector>
 
+#include "base/files/file_path.h"
 #include "base/macros.h"
 #include "base/memory/ref_counted_delete_on_sequence.h"
 #include "base/task/cancelable_task_tracker.h"
-#include "components/sessions/core/command_storage_manager.h"
 #include "components/sessions/core/session_command.h"
 #include "components/sessions/core/sessions_export.h"
 
@@ -22,25 +22,18 @@ class File;
 }
 
 namespace sessions {
-// SessionBackend -------------------------------------------------------------
 
-// SessionBackend is the backend used by CommandStorageManager. It is
-// responsible for maintaining two files:
-//
-// . The current file, which is the file commands passed to AppendCommands
-//   get written to.
-// . The last file. When created the current file is moved to the last
-//   file.
-//
-// Each file contains an arbitrary set of commands supplied from
-// CommandStorageManager. A command consists of a unique id and a stream of
-// bytes. SessionBackend does not use the id in anyway, that is used by
-// CommandStorageManager.
+// SessionBackend is the backend used by CommandStorageManager. It writes
+// SessionCommands to disk with the ability to read back at a later date.
+// SessionBackend does not interpret the commands in anyway, it simply
+// reads/writes them.
 class SESSIONS_EXPORT SessionBackend
     : public base::RefCountedDeleteOnSequence<SessionBackend> {
  public:
-  typedef sessions::SessionCommand::id_type id_type;
-  typedef sessions::SessionCommand::size_type size_type;
+  using id_type = SessionCommand::id_type;
+  using size_type = SessionCommand::size_type;
+  using GetCommandsCallback =
+      base::OnceCallback<void(std::vector<std::unique_ptr<SessionCommand>>)>;
 
   // Initial size of the buffer used in reading the file. This is exposed
   // for testing.
@@ -50,58 +43,52 @@ class SESSIONS_EXPORT SessionBackend
   // and does no IO. The real work is done from Init, which is invoked on
   // a background task runer.
   //
-  // |path_to_dir| gives the path the files are written two, and |type|
-  // indicates which service is using this backend. |type| is used to determine
-  // the name of the files to use as well as for logging.
+  // |path| is the path the file is written to.
   SessionBackend(scoped_refptr<base::SequencedTaskRunner> owning_task_runner,
-                 sessions::CommandStorageManager::SessionType type,
-                 const base::FilePath& path_to_dir);
+                 const base::FilePath& path);
 
-  // Moves the current file to the last file, and recreates the current file.
-  //
-  // NOTE: this is invoked before every command, and does nothing if we've
-  // already Init'ed.
-  void Init();
-  bool inited() const { return inited_; }
+  base::SequencedTaskRunner* owning_task_runner() {
+    return base::RefCountedDeleteOnSequence<
+        SessionBackend>::owning_task_runner();
+  }
 
-  // Appends the specified commands to the current file. If reset_first is
-  // true the the current file is recreated.
+  // Appends the specified commands to the current file. If |truncate| is true
+  // the file is truncated.
   void AppendCommands(
       std::vector<std::unique_ptr<sessions::SessionCommand>> commands,
-      bool reset_first);
+      bool truncate);
 
   // Invoked from the service to read the commands that make up the last
   // session, invokes ReadLastSessionCommandsImpl to do the work.
-  void ReadLastSessionCommands(
+  void ReadCurrentSessionCommands(
       const base::CancelableTaskTracker::IsCanceledCallback& is_canceled,
-      sessions::CommandStorageManager::GetCommandsCallback callback);
+      GetCommandsCallback callback);
 
-  // Reads the commands from the last file.
-  //
-  // On success, the read commands are added to commands.
-  bool ReadLastSessionCommandsImpl(
-      std::vector<std::unique_ptr<sessions::SessionCommand>>* commands);
+  bool inited() const { return inited_; }
 
-  // Deletes the file containing the commands for the last session.
-  void DeleteLastSession();
+ protected:
+  virtual ~SessionBackend();
 
-  // Moves the current session to the last and resets the current. This is
-  // called during startup and if the user launchs the app and no tabbed
-  // browsers are running.
-  void MoveCurrentSessionToLastSession();
+  // Performs initialization on the background task run, calling DoInit() if
+  // necessary.
+  void InitIfNecessary();
+
+  // Called the first time InitIfNecessary() is called.
+  virtual void DoInit() {}
+
+  const base::FilePath& path() const { return path_; }
 
   // Reads the commands from the current file.
   //
   // On success, the read commands are added to commands. It is up to the
   // caller to delete the commands.
-  bool ReadCurrentSessionCommandsImpl(
+  bool ReadCommandsFromFile(
+      const base::FilePath& path,
       std::vector<std::unique_ptr<sessions::SessionCommand>>* commands);
 
- private:
-  friend class base::RefCountedDeleteOnSequence<SessionBackend>;
-  friend class base::DeleteHelper<SessionBackend>;
-
-  ~SessionBackend();
+  // Closes the file. The next time AppendCommands() is called the file will
+  // implicitly be reopened.
+  void CloseFile();
 
   // If current_session_file_ is open, it is truncated so that it is essentially
   // empty (only contains the header). If current_session_file_ isn't open, it
@@ -109,40 +96,30 @@ class SESSIONS_EXPORT SessionBackend
   // current_session_file_ contains no commands.
   // NOTE: current_session_file_ may be NULL if the file couldn't be opened or
   // the header couldn't be written.
-  void ResetFile();
+  void TruncateFile();
+
+ private:
+  friend class base::RefCountedDeleteOnSequence<SessionBackend>;
+  friend class base::DeleteHelper<SessionBackend>;
 
   // Opens the current file and writes the header. On success a handle to
   // the file is returned.
-  base::File* OpenAndWriteHeader(const base::FilePath& path);
+  std::unique_ptr<base::File> OpenAndWriteHeader(const base::FilePath& path);
 
   // Appends the specified commands to the specified file.
   bool AppendCommandsToFile(
       base::File* file,
       const std::vector<std::unique_ptr<sessions::SessionCommand>>& commands);
 
-  const sessions::CommandStorageManager::SessionType type_;
+  // Path commands are saved to.
+  const base::FilePath path_;
 
-  // Returns the path to the last file.
-  base::FilePath GetLastSessionPath();
+  // This may be null, created as necessary.
+  std::unique_ptr<base::File> file_;
 
-  // Returns the path to the current file.
-  base::FilePath GetCurrentSessionPath();
-
-  // Directory files are relative to.
-  const base::FilePath path_to_dir_;
-
-  // Whether the previous target file is valid.
-  bool last_session_valid_;
-
-  // Handle to the target file.
-  std::unique_ptr<base::File> current_session_file_;
-
-  // Whether we've inited. Remember, the constructor is run on the
-  // Main thread, all others on the IO thread, hence lazy initialization.
-  bool inited_;
-
-  // If true, the file is empty (no commands have been added to it).
-  bool empty_file_;
+  // Whether DoInit() was called. DoInit() is called on the background task
+  // runner.
+  bool inited_ = false;
 
   DISALLOW_COPY_AND_ASSIGN(SessionBackend);
 };
