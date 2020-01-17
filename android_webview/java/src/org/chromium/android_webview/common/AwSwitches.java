@@ -8,6 +8,10 @@ package org.chromium.android_webview.common;
  * Contains command line switches that are specific to Android WebView.
  */
 public final class AwSwitches {
+    // Native switch kEnableCrashReporterForTesting in //base/base_switches.h
+    public static final String CRASH_UPLOADS_ENABLED_FOR_TESTING_SWITCH =
+            "enable-crash-reporter-for-testing";
+
     // Allow mirroring JS console messages to system logs. This is the default behavior on
     // debuggable devices (userdebug or eng), so there is no reason for a user to specify this
     // explicitly. Native switch kWebViewLogJsConsoleMessages.

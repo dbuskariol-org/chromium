@@ -28,7 +28,7 @@ public final class ProductionSupportedFlagList {
                             + "compositing."),
             Flag.commandLine("webview-log-js-console-messages",
                     "Mirrors JavaScript console messages to system logs."),
-            Flag.commandLine(CommandLineUtil.CRASH_UPLOADS_ENABLED_FOR_TESTING_SWITCH,
+            Flag.commandLine(AwSwitches.CRASH_UPLOADS_ENABLED_FOR_TESTING_SWITCH,
                     "Used for turning on Breakpad crash reporting in a debug environment where "
                             + "crash reporting is typically compiled but disabled."),
             Flag.baseFeature("OutOfBlinkCors",

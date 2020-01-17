@@ -444,7 +444,6 @@ android_library("browser_java") {
   ]
   deps = [
     ":common_aidl_java",
-    ":common_commandline_java",
     ":common_crash_java",
     ":common_java",
     ":common_platform_services_java",
@@ -558,6 +557,7 @@ android_library("common_java") {
   sources = [
     "java/src/org/chromium/android_webview/common/AwResource.java",
     "java/src/org/chromium/android_webview/common/AwSwitches.java",
+    "java/src/org/chromium/android_webview/common/CommandLineUtil.java",
     "java/src/org/chromium/android_webview/common/DeveloperModeUtils.java",
     "java/src/org/chromium/android_webview/common/Flag.java",
     "java/src/org/chromium/android_webview/common/FlagOverrideHelper.java",
@@ -565,19 +565,8 @@ android_library("common_java") {
     "java/src/org/chromium/android_webview/common/services/ServiceNames.java",
   ]
   deps = [
-    ":common_commandline_java",
     "//base:base_java",
     "//third_party/android_deps:androidx_annotation_annotation_java",
-  ]
-}
-
-android_library("common_commandline_java") {
-  sources = [
-    "java/src/org/chromium/android_webview/common/CommandLineUtil.java",
-  ]
-
-  deps = [
-    "//base:base_java",
   ]
 }
 
