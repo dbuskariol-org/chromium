@@ -203,6 +203,9 @@ class ExtensionApps : public apps::mojom::Publisher,
   bool ShouldRecordAppWindowActivity(extensions::AppWindow* app_window);
   void RegisterInstance(extensions::AppWindow* app_window, InstanceState state);
 
+  void GetMenuModelForChromeBrowserApp(apps::mojom::MenuType menu_type,
+                                       GetMenuModelCallback callback);
+
   mojo::Receiver<apps::mojom::Publisher> receiver_{this};
   mojo::RemoteSet<apps::mojom::Subscriber> subscribers_;
 
