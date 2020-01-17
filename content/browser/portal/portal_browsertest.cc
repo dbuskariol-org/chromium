@@ -490,7 +490,14 @@ IN_PROC_BROWSER_TEST_F(PortalHitTestBrowserTest, NoInputToOOPIFInPortal) {
 
 // Tests that an OOPIF inside a portal receives input events after the portal is
 // activated.
-IN_PROC_BROWSER_TEST_F(PortalHitTestBrowserTest, InputToOOPIFAfterActivation) {
+// Flaky on macOS: https://crbug.com/1042703
+#if defined(OS_MACOSX)
+#define MAYBE_InputToOOPIFAfterActivation DISABLED_InputToOOPIFAfterActivation
+#else
+#define MAYBE_InputToOOPIFAfterActivation InputToOOPIFAfterActivation
+#endif
+IN_PROC_BROWSER_TEST_F(PortalHitTestBrowserTest,
+                       MAYBE_InputToOOPIFAfterActivation) {
   EXPECT_TRUE(NavigateToURL(
       shell(), embedded_test_server()->GetURL("portal.test", "/title1.html")));
   WebContentsImpl* web_contents_impl =
