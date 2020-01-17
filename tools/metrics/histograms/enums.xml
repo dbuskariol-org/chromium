@@ -14956,6 +14956,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="4" label="FINISHED_NO_INTERNET"/>
   <int value="5" label="FINISHED_BAD_CONFIG"/>
   <int value="6" label="FINISHED_NXDOMAIN"/>
+  <int value="7" label="FINISHED_BAD_SECURE_CONFIG"/>
 </enum>
 
 <enum name="DnsProbe.SystemIsLocalhost">
