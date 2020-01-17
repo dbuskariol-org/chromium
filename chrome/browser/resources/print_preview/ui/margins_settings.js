@@ -9,6 +9,7 @@ import './settings_section.js';
 import {html, Polymer} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 
 import {MarginsType} from '../data/margins.js';
+import {State} from '../data/state.js';
 
 import {SelectBehavior} from './select_behavior.js';
 import {SettingsBehavior} from './settings_behavior.js';
@@ -21,23 +22,66 @@ Polymer({
   behaviors: [SettingsBehavior, SelectBehavior],
 
   properties: {
-    disabled: Boolean,
+    disabled: {
+      type: Boolean,
+      observer: 'updateMarginsDisabled_',
+    },
+
+    /** @type {!State} */
+    state: {
+      type: Number,
+      observer: 'onStateChange_',
+    },
+
+    /** @private */
+    marginsDisabled_: Boolean,
 
     /** Mirroring the enum so that it can be used from HTML bindings. */
     MarginsTypeEnum: Object,
   },
 
-  observers: ['onMarginsSettingChange_(settings.margins.value)'],
+  observers: [
+    'onMarginsSettingChange_(settings.margins.value)',
+    'onMediaSizeOrLayoutChange_(' +
+        'settings.mediaSize.value, settings.layout.value)',
+    'onPagesPerSheetSettingChange_(settings.pagesPerSheet.value)'
+  ],
+
+  /** @private {boolean} */
+  loaded_: false,
 
   /** @override */
   ready() {
     this.MarginsTypeEnum = MarginsType;
   },
 
+  /** @private */
+  onStateChange_() {
+    if (this.state === State.READY) {
+      this.loaded_ = true;
+    }
+  },
+
+  /** @private */
+  onMediaSizeOrLayoutChange_() {
+    if (this.loaded_ &&
+        this.getSetting('margins').value === MarginsType.CUSTOM) {
+      this.setSetting('margins', MarginsType.DEFAULT);
+    }
+  },
+
   /**
-   * @param {*} newValue The new value of the margins setting.
+   * @param {number} newValue The new value of the pages per sheet setting.
    * @private
    */
+  onPagesPerSheetSettingChange_(newValue) {
+    if (newValue > 1) {
+      this.setSetting('margins', MarginsType.DEFAULT);
+    }
+    this.updateMarginsDisabled_();
+  },
+
+  /** @param {*} newValue The new value of the margins setting. */
   onMarginsSettingChange_(newValue) {
     this.selectedValue =
         /** @type {!MarginsType} */ (newValue).toString();
@@ -48,13 +92,10 @@ Polymer({
     this.setSetting('margins', parseInt(value, 10));
   },
 
-  /**
-   * @param {boolean} globallyDisabled Value of the |disabled| property.
-   * @param {number} pagesPerSheet Number of pages per sheet.
-   * @return {boolean} Whether the margins settings button should be disabled.
-   * @private
-   */
-  getMarginsSettingsDisabled_(globallyDisabled, pagesPerSheet) {
-    return globallyDisabled || pagesPerSheet > 1;
+  /** @private */
+  updateMarginsDisabled_() {
+    this.marginsDisabled_ =
+        /** @type {number} */ (this.getSettingValue('pagesPerSheet')) > 1 ||
+        this.disabled;
   },
 });

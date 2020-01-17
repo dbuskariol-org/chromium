@@ -194,13 +194,8 @@ Polymer({
     }
 
     this.resetMargins_ = true;
-    const marginsSetting = this.getSetting('margins');
-    if (marginsSetting.value === MarginsType.CUSTOM) {
-      // Set the margins value to default first.
-      this.setSetting('margins', MarginsType.DEFAULT);
-    }
-    // Reset custom margins so that the sticky value is not restored for the
-    // new paper size.
+    // Reset custom margins so that the sticky value is not restored for the new
+    // paper size.
     this.setSetting('customMargins', {});
   },
 
