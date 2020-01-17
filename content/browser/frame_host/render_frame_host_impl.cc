@@ -4817,7 +4817,7 @@ CanCommitStatus RenderFrameHostImpl::CanCommitOriginAndUrl(
 
   const auto origin_tuple_or_precursor_tuple =
       origin.GetTupleOrPrecursorTupleIfOpaque();
-  if (!origin_tuple_or_precursor_tuple.IsInvalid()) {
+  if (origin_tuple_or_precursor_tuple.IsValid()) {
     // Verify that the origin/precursor is allowed to commit in this process.
     // Note: This also handles non-standard cases for |url|, such as
     // about:blank, data, and blob URLs.

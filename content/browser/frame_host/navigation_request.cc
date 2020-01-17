@@ -3809,8 +3809,8 @@ bool NavigationRequest::RequiresSourceSiteInstance() const {
       common_params_->url.IsAboutBlank();
   const bool has_valid_initiator =
       common_params_->initiator_origin &&
-      !common_params_->initiator_origin->GetTupleOrPrecursorTupleIfOpaque()
-           .IsInvalid();
+      common_params_->initiator_origin->GetTupleOrPrecursorTupleIfOpaque()
+          .IsValid();
   return is_data_or_about && has_valid_initiator && !dest_site_instance_;
 }
 
