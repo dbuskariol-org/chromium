@@ -22,12 +22,12 @@ class SequencedTaskRunner;
 namespace sessions {
 class CommandStorageManagerDelegate;
 class SessionCommand;
-class SessionBackend;
+class CommandStorageBackend;
 
 // CommandStorageManager is responsible for reading/writing SessionCommands
 // to disk. SessionCommands are used to save and restore the state of the
 // browser. CommandStorageManager runs on the main thread and uses
-// SessionBackend (which runs on a background task runner) for the actual
+// CommandStorageBackend (which runs on a background task runner) for the actual
 // reading/writing. In hopes of minimizing IO, SessionCommands are queued up
 // and processed after a delay.
 class SESSIONS_EXPORT CommandStorageManager {
@@ -86,7 +86,7 @@ class SESSIONS_EXPORT CommandStorageManager {
 
  protected:
   // Provided for subclasses.
-  CommandStorageManager(scoped_refptr<SessionBackend> backend,
+  CommandStorageManager(scoped_refptr<CommandStorageBackend> backend,
                         CommandStorageManagerDelegate* delegate);
 
   // Creates a SequencedTaskRunner suitable for the backend.
@@ -97,13 +97,13 @@ class SESSIONS_EXPORT CommandStorageManager {
     return backend_task_runner_;
   }
 
-  SessionBackend* backend() { return backend_.get(); }
+  CommandStorageBackend* backend() { return backend_.get(); }
 
  private:
   friend class CommandStorageManagerTestHelper;
 
   // The backend object which reads and saves commands.
-  scoped_refptr<SessionBackend> backend_;
+  scoped_refptr<CommandStorageBackend> backend_;
 
   // Commands we need to send over to the backend.
   std::vector<std::unique_ptr<SessionCommand>> pending_commands_;

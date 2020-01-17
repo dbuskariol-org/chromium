@@ -64,7 +64,7 @@ class SnapshottingCommandStorageManager;
 // SessionService itself uses functions from session_service_commands to store
 // commands which can rebuild the open state of the browser (as |SessionWindow|,
 // |SessionTab| and |SerializedNavigationEntry|). The commands are periodically
-// flushed to |SessionBackend| and written to a file. Every so often
+// flushed to |CommandStorageBackend| and written to a file. Every so often
 // |SessionService| rebuilds the contents of the file from the open state of the
 // browser.
 class SessionService : public sessions::CommandStorageManagerDelegate,

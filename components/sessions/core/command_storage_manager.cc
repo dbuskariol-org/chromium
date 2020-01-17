@@ -13,8 +13,8 @@
 #include "base/task/post_task.h"
 #include "base/threading/thread.h"
 #include "base/threading/thread_task_runner_handle.h"
+#include "components/sessions/core/command_storage_backend.h"
 #include "components/sessions/core/command_storage_manager_delegate.h"
-#include "components/sessions/core/session_backend.h"
 
 namespace sessions {
 
@@ -25,10 +25,10 @@ constexpr base::TimeDelta kSaveDelay = base::TimeDelta::FromMilliseconds(2500);
 CommandStorageManager::CommandStorageManager(
     const base::FilePath& path,
     CommandStorageManagerDelegate* delegate)
-    : CommandStorageManager(
-          base::MakeRefCounted<SessionBackend>(CreateDefaultBackendTaskRunner(),
-                                               path),
-          delegate) {}
+    : CommandStorageManager(base::MakeRefCounted<CommandStorageBackend>(
+                                CreateDefaultBackendTaskRunner(),
+                                path),
+                            delegate) {}
 
 CommandStorageManager::~CommandStorageManager() = default;
 
@@ -95,8 +95,9 @@ void CommandStorageManager::Save() {
   // We create a new vector which will receive all elements from the
   // current commands. This will also clear the current list.
   backend_task_runner()->PostNonNestableTask(
-      FROM_HERE, base::BindOnce(&SessionBackend::AppendCommands, backend_,
-                                std::move(pending_commands_), pending_reset_));
+      FROM_HERE,
+      base::BindOnce(&CommandStorageBackend::AppendCommands, backend_,
+                     std::move(pending_commands_), pending_reset_));
 
   if (pending_reset_) {
     commands_since_reset_ = 0;
@@ -105,7 +106,7 @@ void CommandStorageManager::Save() {
 }
 
 CommandStorageManager::CommandStorageManager(
-    scoped_refptr<SessionBackend> backend,
+    scoped_refptr<CommandStorageBackend> backend,
     CommandStorageManagerDelegate* delegate)
     : backend_(std::move(backend)),
       delegate_(delegate),

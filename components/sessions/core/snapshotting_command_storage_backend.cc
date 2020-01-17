@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/sessions/core/snapshotting_session_backend.h"
+#include "components/sessions/core/snapshotting_command_storage_backend.h"
 
 #include "base/bind.h"
 #include "base/files/file_path.h"
@@ -43,17 +43,17 @@ base::FilePath GetLastFilePath(
 
 }  // namespace
 
-SnapshottingSessionBackend::SnapshottingSessionBackend(
+SnapshottingCommandStorageBackend::SnapshottingCommandStorageBackend(
     scoped_refptr<base::SequencedTaskRunner> owning_task_runner,
     SnapshottingCommandStorageManager::SessionType type,
     const base::FilePath& path_to_dir)
-    : SessionBackend(std::move(owning_task_runner),
-                     GetCurrentFilePath(type, path_to_dir)),
+    : CommandStorageBackend(std::move(owning_task_runner),
+                            GetCurrentFilePath(type, path_to_dir)),
       last_file_path_(GetLastFilePath(type, path_to_dir)) {
   // NOTE: this is invoked on the main thread, don't do file access here.
 }
 
-void SnapshottingSessionBackend::ReadLastSessionCommands(
+void SnapshottingCommandStorageBackend::ReadLastSessionCommands(
     const base::CancelableTaskTracker::IsCanceledCallback& is_canceled,
     GetCommandsCallback callback) {
   if (is_canceled.Run())
@@ -66,12 +66,12 @@ void SnapshottingSessionBackend::ReadLastSessionCommands(
   std::move(callback).Run(std::move(commands));
 }
 
-void SnapshottingSessionBackend::DeleteLastSession() {
+void SnapshottingCommandStorageBackend::DeleteLastSession() {
   InitIfNecessary();
   base::DeleteFile(last_file_path_, false);
 }
 
-void SnapshottingSessionBackend::MoveCurrentSessionToLastSession() {
+void SnapshottingCommandStorageBackend::MoveCurrentSessionToLastSession() {
   InitIfNecessary();
   CloseFile();
 
@@ -87,12 +87,13 @@ void SnapshottingSessionBackend::MoveCurrentSessionToLastSession() {
   TruncateFile();
 }
 
-void SnapshottingSessionBackend::DoInit() {
+void SnapshottingCommandStorageBackend::DoInit() {
   // Create the directory for session info.
   base::CreateDirectory(last_file_path_.DirName());
   MoveCurrentSessionToLastSession();
 }
 
-SnapshottingSessionBackend::~SnapshottingSessionBackend() = default;
+SnapshottingCommandStorageBackend::~SnapshottingCommandStorageBackend() =
+    default;
 
 }  // namespace sessions

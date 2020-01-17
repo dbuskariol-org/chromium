@@ -17,7 +17,7 @@ class FilePath;
 
 namespace sessions {
 class CommandStorageManagerDelegate;
-class SnapshottingSessionBackend;
+class SnapshottingCommandStorageBackend;
 
 // Adds snapshotting to CommandStorageManager. In this context a snapshot refers
 // to a copy of the current session file (in code, the snapshot is referred to
@@ -55,7 +55,7 @@ class SESSIONS_EXPORT SnapshottingCommandStorageManager
       base::CancelableTaskTracker* tracker);
 
  private:
-  SnapshottingSessionBackend* GetSnapshottingBackend();
+  SnapshottingCommandStorageBackend* GetSnapshottingBackend();
 };
 
 }  // namespace sessions

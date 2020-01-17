@@ -13,7 +13,7 @@
 #include "base/task/post_task.h"
 #include "base/threading/thread.h"
 #include "base/threading/thread_task_runner_handle.h"
-#include "components/sessions/core/snapshotting_session_backend.h"
+#include "components/sessions/core/snapshotting_command_storage_backend.h"
 
 namespace sessions {
 namespace {
@@ -47,11 +47,12 @@ SnapshottingCommandStorageManager::SnapshottingCommandStorageManager(
     SessionType type,
     const base::FilePath& path,
     CommandStorageManagerDelegate* delegate)
-    : CommandStorageManager(base::MakeRefCounted<SnapshottingSessionBackend>(
-                                CreateDefaultBackendTaskRunner(),
-                                type,
-                                path),
-                            delegate) {}
+    : CommandStorageManager(
+          base::MakeRefCounted<SnapshottingCommandStorageBackend>(
+              CreateDefaultBackendTaskRunner(),
+              type,
+              path),
+          delegate) {}
 
 SnapshottingCommandStorageManager::~SnapshottingCommandStorageManager() =
     default;
@@ -61,14 +62,15 @@ void SnapshottingCommandStorageManager::MoveCurrentSessionToLastSession() {
   backend_task_runner()->PostNonNestableTask(
       FROM_HERE,
       base::BindOnce(
-          &SnapshottingSessionBackend::MoveCurrentSessionToLastSession,
+          &SnapshottingCommandStorageBackend::MoveCurrentSessionToLastSession,
           GetSnapshottingBackend()));
 }
 
 void SnapshottingCommandStorageManager::DeleteLastSession() {
   backend_task_runner()->PostNonNestableTask(
-      FROM_HERE, base::BindOnce(&SnapshottingSessionBackend::DeleteLastSession,
-                                GetSnapshottingBackend()));
+      FROM_HERE,
+      base::BindOnce(&SnapshottingCommandStorageBackend::DeleteLastSession,
+                     GetSnapshottingBackend()));
 }
 
 base::CancelableTaskTracker::TaskId
@@ -89,15 +91,15 @@ SnapshottingCommandStorageManager::ScheduleGetLastSessionCommands(
 
   backend_task_runner()->PostNonNestableTask(
       FROM_HERE,
-      base::BindOnce(&SnapshottingSessionBackend::ReadLastSessionCommands,
-                     GetSnapshottingBackend(), is_canceled,
-                     std::move(callback_runner)));
+      base::BindOnce(
+          &SnapshottingCommandStorageBackend::ReadLastSessionCommands,
+          GetSnapshottingBackend(), is_canceled, std::move(callback_runner)));
   return id;
 }
 
-SnapshottingSessionBackend*
+SnapshottingCommandStorageBackend*
 SnapshottingCommandStorageManager::GetSnapshottingBackend() {
-  return static_cast<SnapshottingSessionBackend*>(backend());
+  return static_cast<SnapshottingCommandStorageBackend*>(backend());
 }
 
 }  // namespace sessions

@@ -5,9 +5,9 @@
 #include "chrome/browser/sessions/session_service_test_helper.h"
 
 #include "chrome/browser/sessions/session_service.h"
+#include "components/sessions/core/command_storage_backend.h"
 #include "components/sessions/core/command_storage_manager_test_helper.h"
 #include "components/sessions/core/serialized_navigation_entry_test_helper.h"
-#include "components/sessions/core/session_backend.h"
 #include "components/sessions/core/session_id.h"
 #include "components/sessions/core/session_types.h"
 #include "content/public/browser/browser_thread.h"

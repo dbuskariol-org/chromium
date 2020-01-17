@@ -6,9 +6,9 @@
 
 #include "base/bind.h"
 #include "base/test/bind_test_util.h"
+#include "components/sessions/core/command_storage_backend.h"
 #include "components/sessions/core/command_storage_manager.h"
-#include "components/sessions/core/session_backend.h"
-#include "components/sessions/core/snapshotting_session_backend.h"
+#include "components/sessions/core/snapshotting_command_storage_backend.h"
 
 namespace sessions {
 namespace {
@@ -37,7 +37,7 @@ bool CommandStorageManagerTestHelper::ProcessedAnyCommands() {
 
 void CommandStorageManagerTestHelper::ReadLastSessionCommands(
     std::vector<std::unique_ptr<SessionCommand>>* commands) {
-  static_cast<SnapshottingSessionBackend*>(
+  static_cast<SnapshottingCommandStorageBackend*>(
       command_storage_manager_->backend_.get())
       ->ReadLastSessionCommands(
           base::BindRepeating(&IsCanceled),

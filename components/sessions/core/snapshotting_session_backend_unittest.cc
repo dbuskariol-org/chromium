@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/sessions/core/snapshotting_session_backend.h"
+#include "components/sessions/core/snapshotting_command_storage_backend.h"
 
 #include <stddef.h>
 #include <utility>
@@ -46,7 +46,7 @@ bool IsCanceled() {
 
 }  // namespace
 
-class SnapshottingSessionBackendTest : public testing::Test {
+class SnapshottingCommandStorageBackendTest : public testing::Test {
  protected:
   void SetUp() override {
     ASSERT_TRUE(temp_dir_.CreateUniqueTempDir());
@@ -62,14 +62,14 @@ class SnapshottingSessionBackendTest : public testing::Test {
         memcmp(command->contents(), data.data.c_str(), command->size()) == 0);
   }
 
-  scoped_refptr<SnapshottingSessionBackend> CreateBackend() {
-    return MakeRefCounted<SnapshottingSessionBackend>(
+  scoped_refptr<SnapshottingCommandStorageBackend> CreateBackend() {
+    return MakeRefCounted<SnapshottingCommandStorageBackend>(
         task_environment_.GetMainThreadTaskRunner(),
         sessions::SnapshottingCommandStorageManager::SESSION_RESTORE, path_);
   }
 
   void ReadLastSessionCommands(
-      SnapshottingSessionBackend* backend,
+      SnapshottingCommandStorageBackend* backend,
       std::vector<std::unique_ptr<SessionCommand>>* commands) {
     backend->ReadLastSessionCommands(
         base::BindRepeating(&IsCanceled),
@@ -85,8 +85,8 @@ class SnapshottingSessionBackendTest : public testing::Test {
   base::ScopedTempDir temp_dir_;
 };
 
-TEST_F(SnapshottingSessionBackendTest, SimpleReadWrite) {
-  scoped_refptr<SnapshottingSessionBackend> backend = CreateBackend();
+TEST_F(SnapshottingCommandStorageBackendTest, SimpleReadWrite) {
+  scoped_refptr<SnapshottingCommandStorageBackend> backend = CreateBackend();
   struct TestData data = {1, "a"};
   SessionCommands commands;
   commands.push_back(CreateCommandFromData(data));
@@ -115,7 +115,7 @@ TEST_F(SnapshottingSessionBackendTest, SimpleReadWrite) {
   ASSERT_EQ(0U, commands.size());
 }
 
-TEST_F(SnapshottingSessionBackendTest, RandomData) {
+TEST_F(SnapshottingCommandStorageBackendTest, RandomData) {
   struct TestData data[] = {
       {1, "a"},
       {2, "ab"},
@@ -133,7 +133,7 @@ TEST_F(SnapshottingSessionBackendTest, RandomData) {
   };
 
   for (size_t i = 0; i < base::size(data); ++i) {
-    scoped_refptr<SnapshottingSessionBackend> backend = CreateBackend();
+    scoped_refptr<SnapshottingCommandStorageBackend> backend = CreateBackend();
     SessionCommands commands;
     if (i != 0) {
       // Read previous data.
@@ -149,18 +149,18 @@ TEST_F(SnapshottingSessionBackendTest, RandomData) {
   }
 }
 
-TEST_F(SnapshottingSessionBackendTest, BigData) {
+TEST_F(SnapshottingCommandStorageBackendTest, BigData) {
   struct TestData data[] = {
       {1, "a"},
       {2, "ab"},
   };
 
-  scoped_refptr<SnapshottingSessionBackend> backend = CreateBackend();
+  scoped_refptr<SnapshottingCommandStorageBackend> backend = CreateBackend();
   std::vector<std::unique_ptr<sessions::SessionCommand>> commands;
 
   commands.push_back(CreateCommandFromData(data[0]));
   const sessions::SessionCommand::size_type big_size =
-      SnapshottingSessionBackend::kFileReadBufferSize + 100;
+      SnapshottingCommandStorageBackend::kFileReadBufferSize + 100;
   const sessions::SessionCommand::id_type big_id = 50;
   std::unique_ptr<sessions::SessionCommand> big_command =
       std::make_unique<sessions::SessionCommand>(big_id, big_size);
@@ -186,10 +186,10 @@ TEST_F(SnapshottingSessionBackendTest, BigData) {
   commands.clear();
 }
 
-TEST_F(SnapshottingSessionBackendTest, EmptyCommand) {
+TEST_F(SnapshottingCommandStorageBackendTest, EmptyCommand) {
   TestData empty_command;
   empty_command.command_id = 1;
-  scoped_refptr<SnapshottingSessionBackend> backend = CreateBackend();
+  scoped_refptr<SnapshottingCommandStorageBackend> backend = CreateBackend();
   SessionCommands empty_commands;
   empty_commands.push_back(CreateCommandFromData(empty_command));
   backend->AppendCommands(std::move(empty_commands), true);
@@ -204,8 +204,8 @@ TEST_F(SnapshottingSessionBackendTest, EmptyCommand) {
 
 // Writes a command, appends another command with reset to true, then reads
 // making sure we only get back the second command.
-TEST_F(SnapshottingSessionBackendTest, Truncate) {
-  scoped_refptr<SnapshottingSessionBackend> backend = CreateBackend();
+TEST_F(SnapshottingCommandStorageBackendTest, Truncate) {
+  scoped_refptr<SnapshottingCommandStorageBackend> backend = CreateBackend();
   struct TestData first_data = {1, "a"};
   SessionCommands commands;
   commands.push_back(CreateCommandFromData(first_data));

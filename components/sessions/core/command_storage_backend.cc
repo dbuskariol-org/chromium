@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/sessions/core/session_backend.h"
+#include "components/sessions/core/command_storage_backend.h"
 
 #include <stdint.h>
 #include <limits>
@@ -42,20 +42,20 @@ class SessionFileReader {
 
   explicit SessionFileReader(const base::FilePath& path)
       : errored_(false),
-        buffer_(SessionBackend::kFileReadBufferSize, 0),
+        buffer_(CommandStorageBackend::kFileReadBufferSize, 0),
         buffer_position_(0),
         available_count_(0) {
-    file_.reset(new base::File(
-        path, base::File::FLAG_OPEN | base::File::FLAG_READ));
+    file_.reset(
+        new base::File(path, base::File::FLAG_OPEN | base::File::FLAG_READ));
   }
   // Reads the contents of the file specified in the constructor, returning
   // true on success, and filling up |commands| with commands.
   bool Read(std::vector<std::unique_ptr<sessions::SessionCommand>>* commands);
 
  private:
-  // Reads a single command, returning it. A return value of NULL indicates
+  // Reads a single command, returning it. A return value of null indicates
   // either there are no commands, or there was an error. Use errored_ to
-  // distinguish the two. If NULL is returned, and there is no error, it means
+  // distinguish the two. If null is returned, and there is no error, it means
   // the end of file was successfully reached.
   std::unique_ptr<sessions::SessionCommand> ReadCommand();
 
@@ -89,8 +89,8 @@ bool SessionFileReader::Read(
     return false;
   FileHeader header;
   int read_count;
-  read_count = file_->ReadAtCurrentPos(reinterpret_cast<char*>(&header),
-                                       sizeof(header));
+  read_count =
+      file_->ReadAtCurrentPos(reinterpret_cast<char*>(&header), sizeof(header));
   if (read_count != sizeof(header) || header.signature != kFileSignature ||
       header.version != kFileCurrentVersion)
     return false;
@@ -112,7 +112,7 @@ std::unique_ptr<sessions::SessionCommand> SessionFileReader::ReadCommand() {
     if (available_count_ < sizeof(size_type)) {
       VLOG(1) << "SessionFileReader::ReadCommand, file incomplete";
       // Still couldn't read a valid size for the command, assume write was
-      // incomplete and return NULL.
+      // incomplete and return null.
       return nullptr;
     }
   }
@@ -145,8 +145,7 @@ std::unique_ptr<sessions::SessionCommand> SessionFileReader::ReadCommand() {
       std::make_unique<sessions::SessionCommand>(
           command_id, command_size - sizeof(id_type));
   if (command_size > sizeof(id_type)) {
-    memcpy(command->contents(),
-           &(buffer_[buffer_position_ + sizeof(id_type)]),
+    memcpy(command->contents(), &(buffer_[buffer_position_ + sizeof(id_type)]),
            command_size - sizeof(id_type));
   }
   buffer_position_ += command_size;
@@ -162,8 +161,8 @@ bool SessionFileReader::FillBuffer() {
   buffer_position_ = 0;
   DCHECK(buffer_position_ + available_count_ < buffer_.size());
   int to_read = static_cast<int>(buffer_.size() - available_count_);
-  int read_count = file_->ReadAtCurrentPos(&(buffer_[available_count_]),
-                                           to_read);
+  int read_count =
+      file_->ReadAtCurrentPos(&(buffer_[available_count_]), to_read);
   if (read_count < 0) {
     errored_ = true;
     return false;
@@ -176,19 +175,20 @@ bool SessionFileReader::FillBuffer() {
 
 }  // namespace
 
-// SessionBackend -------------------------------------------------------------
+// CommandStorageBackend
+// -------------------------------------------------------------
 
 // static
-const int SessionBackend::kFileReadBufferSize = 1024;
+const int CommandStorageBackend::kFileReadBufferSize = 1024;
 
-SessionBackend::SessionBackend(
+CommandStorageBackend::CommandStorageBackend(
     scoped_refptr<base::SequencedTaskRunner> owning_task_runner,
     const base::FilePath& path)
     : RefCountedDeleteOnSequence(owning_task_runner), path_(path) {
   // NOTE: this is invoked on the main thread, don't do file access here.
 }
 
-void SessionBackend::AppendCommands(
+void CommandStorageBackend::AppendCommands(
     std::vector<std::unique_ptr<sessions::SessionCommand>> commands,
     bool truncate) {
   InitIfNecessary();
@@ -205,7 +205,7 @@ void SessionBackend::AppendCommands(
   }
 }
 
-void SessionBackend::ReadCurrentSessionCommands(
+void CommandStorageBackend::ReadCurrentSessionCommands(
     const base::CancelableTaskTracker::IsCanceledCallback& is_canceled,
     GetCommandsCallback callback) {
   if (is_canceled.Run())
@@ -218,13 +218,13 @@ void SessionBackend::ReadCurrentSessionCommands(
   std::move(callback).Run(std::move(commands));
 }
 
-bool SessionBackend::AppendCommandsToFile(
+bool CommandStorageBackend::AppendCommandsToFile(
     base::File* file,
     const std::vector<std::unique_ptr<sessions::SessionCommand>>& commands) {
   for (auto i = commands.begin(); i != commands.end(); ++i) {
     int wrote;
     const size_type content_size = static_cast<size_type>((*i)->size());
-    const size_type total_size =  content_size + sizeof(id_type);
+    const size_type total_size = content_size + sizeof(id_type);
     wrote = file->WriteAtCurrentPos(reinterpret_cast<const char*>(&total_size),
                                     sizeof(total_size));
     if (wrote != sizeof(total_size)) {
@@ -253,9 +253,9 @@ bool SessionBackend::AppendCommandsToFile(
   return true;
 }
 
-SessionBackend::~SessionBackend() = default;
+CommandStorageBackend::~CommandStorageBackend() = default;
 
-void SessionBackend::InitIfNecessary() {
+void CommandStorageBackend::InitIfNecessary() {
   if (inited_)
     return;
 
@@ -263,18 +263,18 @@ void SessionBackend::InitIfNecessary() {
   DoInit();
 }
 
-bool SessionBackend::ReadCommandsFromFile(
+bool CommandStorageBackend::ReadCommandsFromFile(
     const base::FilePath& path,
     std::vector<std::unique_ptr<sessions::SessionCommand>>* commands) {
   SessionFileReader file_reader(path);
   return file_reader.Read(commands);
 }
 
-void SessionBackend::CloseFile() {
+void CommandStorageBackend::CloseFile() {
   file_.reset();
 }
 
-void SessionBackend::TruncateFile() {
+void CommandStorageBackend::TruncateFile() {
   DCHECK(inited_);
   if (file_) {
     // File is already open, truncate it. We truncate instead of closing and
@@ -290,7 +290,7 @@ void SessionBackend::TruncateFile() {
     file_ = OpenAndWriteHeader(path_);
 }
 
-std::unique_ptr<base::File> SessionBackend::OpenAndWriteHeader(
+std::unique_ptr<base::File> CommandStorageBackend::OpenAndWriteHeader(
     const base::FilePath& path) {
   DCHECK(!path.empty());
   std::unique_ptr<base::File> file = std::make_unique<base::File>(
@@ -302,8 +302,8 @@ std::unique_ptr<base::File> SessionBackend::OpenAndWriteHeader(
   FileHeader header;
   header.signature = kFileSignature;
   header.version = kFileCurrentVersion;
-  int wrote = file->WriteAtCurrentPos(reinterpret_cast<char*>(&header),
-                                      sizeof(header));
+  int wrote =
+      file->WriteAtCurrentPos(reinterpret_cast<char*>(&header), sizeof(header));
   if (wrote != sizeof(header))
     return nullptr;
   return file;
