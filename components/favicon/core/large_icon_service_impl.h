@@ -62,6 +62,11 @@ class LargeIconServiceImpl : public LargeIconService {
       int desired_size_in_pixel,
       favicon_base::LargeIconCallback callback,
       base::CancelableTaskTracker* tracker) override;
+  base::CancelableTaskTracker::TaskId GetIconRawBitmapOrFallbackStyleForPageUrl(
+      const GURL& page_url,
+      int desired_size_in_pixel,
+      favicon_base::LargeIconCallback callback,
+      base::CancelableTaskTracker* tracker) override;
   void GetLargeIconOrFallbackStyleFromGoogleServerSkippingLocalCache(
       const GURL& page_url,
       bool may_page_url_be_private,

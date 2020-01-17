@@ -507,6 +507,26 @@ LargeIconServiceImpl::GetLargeIconRawBitmapOrFallbackStyleForIconUrl(
       tracker);
 }
 
+base::CancelableTaskTracker::TaskId
+LargeIconServiceImpl::GetIconRawBitmapOrFallbackStyleForPageUrl(
+    const GURL& page_url,
+    int desired_size_in_pixel,
+    favicon_base::LargeIconCallback callback,
+    base::CancelableTaskTracker* tracker) {
+  DCHECK_LE(0, desired_size_in_pixel);
+
+  scoped_refptr<LargeIconWorker> worker = base::MakeRefCounted<LargeIconWorker>(
+      desired_size_in_pixel, desired_size_in_pixel, std::move(callback),
+      favicon_base::LargeIconImageCallback(), tracker);
+
+  return favicon_service_->GetRawFaviconForPageURL(
+      page_url, {favicon_base::IconType::kFavicon}, desired_size_in_pixel,
+      /*fallback_to_host=*/true,
+      base::BindOnce(&LargeIconWorker::OnIconLookupComplete, worker,
+                     /*page_url_for_uma=*/GURL()),
+      tracker);
+}
+
 void LargeIconServiceImpl::
     GetLargeIconOrFallbackStyleFromGoogleServerSkippingLocalCache(
         const GURL& page_url,
