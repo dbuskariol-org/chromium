@@ -1072,13 +1072,9 @@ void LayerTreeHost::RegisterViewportPropertyIds(
   DCHECK(IsUsingLayerLists());
   viewport_property_ids_ = ids;
   // Outer viewport properties exist only if inner viewport property exists.
-  // TODO(bokan): Temporarily make this a CHECK to debug crbug.com/1037759.
-  if (ids.inner_scroll == ScrollTree::kInvalidNodeId) {
-    CHECK_EQ(ids.outer_scroll, ScrollTree::kInvalidNodeId);
-    CHECK_EQ(ids.outer_clip, ClipTree::kInvalidNodeId);
-  } else {
-    CHECK_NE(ids.outer_scroll, ScrollTree::kInvalidNodeId);
-  }
+  DCHECK(ids.inner_scroll != ScrollTree::kInvalidNodeId ||
+         (ids.outer_scroll == ScrollTree::kInvalidNodeId &&
+          ids.outer_clip == ClipTree::kInvalidNodeId));
 }
 
 Layer* LayerTreeHost::InnerViewportScrollLayerForTesting() const {

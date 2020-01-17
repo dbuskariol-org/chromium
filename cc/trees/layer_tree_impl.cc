@@ -259,13 +259,9 @@ void LayerTreeImpl::UpdateScrollbarGeometries() {
     if (is_viewport_scrollbar) {
       gfx::SizeF viewport_bounds(bounds_size);
       if (scroll_node->scrolls_inner_viewport) {
-        // TODO(bokan): Temporarily make these CHECKs to debug
-        // crbug.com/1037759.
-        CHECK_EQ(scroll_node, InnerViewportScrollNode());
+        DCHECK_EQ(scroll_node, InnerViewportScrollNode());
         auto* outer_scroll_node = OuterViewportScrollNode();
-        CHECK_NE(viewport_property_ids_.outer_scroll,
-                 ScrollTree::kInvalidNodeId);
-        CHECK(outer_scroll_node);
+        DCHECK(outer_scroll_node);
 
         // Add offset and bounds contribution of outer viewport.
         current_offset +=
