@@ -3400,11 +3400,6 @@
     "expiry_milestone": 85
   },
   {
-    "name": "split-settings",
-    "owners": [ "jamescook", "cros-system-services@google.com" ],
-    "expiry_milestone": 80
-  },
-  {
     "name": "split-settings-sync",
     "owners": [ "jamescook", "cros-system-services@google.com" ],
     "expiry_milestone": 82
