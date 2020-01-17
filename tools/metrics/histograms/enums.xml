@@ -25956,6 +25956,16 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3126" label="V8KeyframeEffect_Constructor"/>
   <int value="3127" label="WebNfcAPI"/>
   <int value="3128" label="HostCandidateAttributeGetter"/>
+  <int value="3129" label="CSPWithReasonableObjectRestrictions"/>
+  <int value="3130" label="CSPWithReasonableBaseRestrictions"/>
+  <int value="3131" label="CSPWithReasonableScriptRestrictions"/>
+  <int value="3132" label="CSPWithReasonableRestrictions"/>
+  <int value="3133" label="CSPROWithReasonableObjectRestrictions"/>
+  <int value="3134" label="CSPROWithReasonableBaseRestrictions"/>
+  <int value="3135" label="CSPROWithReasonableScriptRestrictions"/>
+  <int value="3136" label="CSPROWithReasonableRestrictions"/>
+  <int value="3137" label="CSPWithBetterThanReasonableRestrictions"/>
+  <int value="3138" label="CSPROWithBetterThanReasonableRestrictions"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
