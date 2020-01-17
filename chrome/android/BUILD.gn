@@ -259,6 +259,7 @@ android_library("chrome_java") {
     "//chrome/browser/preferences:java",
     "//chrome/browser/settings:java",
     "//chrome/browser/share/android:java_resources",
+    "//chrome/browser/share/android:screenshot_java",
     "//chrome/browser/ui/android/appmenu:factory_java",
     "//chrome/browser/ui/android/appmenu:java",
     "//chrome/browser/ui/android/widget:java",

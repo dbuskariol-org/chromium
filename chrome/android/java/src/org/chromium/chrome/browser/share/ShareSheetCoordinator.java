@@ -15,6 +15,7 @@ import org.chromium.chrome.browser.ActivityTabProvider;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.send_tab_to_self.SendTabToSelfShareActivity;
 import org.chromium.chrome.browser.share.qrcode.QrCodeCoordinator;
+import org.chromium.chrome.browser.share.screenshot.ScreenshotCoordinator;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabLaunchType;
 import org.chromium.chrome.browser.tabmodel.TabCreatorManager;
@@ -127,11 +128,12 @@ public class ShareSheetCoordinator {
                             .with(ShareSheetItemViewProperties.LABEL,
                                     activity.getResources().getString(R.string.sharing_screenshot))
                             .with(ShareSheetItemViewProperties.CLICK_LISTENER,
-                                    (shareParams)
-                                            -> {
-                                                    // TODO (crbug.1024586) initiate screenshot
-                                                    // fragment.
-                                            })
+                                    (shareParams) -> {
+                                        mBottomSheetController.hideContent(bottomSheet, true);
+                                        ScreenshotCoordinator screenshotCoordinator =
+                                                new ScreenshotCoordinator(activity);
+                                        screenshotCoordinator.takeScreenshot();
+                                    })
                             .build();
             models.add(screenshotPropertyModel);
         }
