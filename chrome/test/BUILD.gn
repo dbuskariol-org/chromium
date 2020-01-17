@@ -523,6 +523,7 @@ if (is_android) {
       "../browser/engagement/important_sites_util_browsertest.cc",
       "../browser/games/games_service_browsertest.cc",
       "../browser/payments/empty_parameters_browsertest.cc",
+      "../browser/payments/expandable_payment_handler_browsertest.cc",
       "../browser/payments/has_enrolled_instrument_browsertest.cc",
       "../browser/payments/has_enrolled_instrument_query_quota_browsertest.cc",
       "../browser/payments/hybrid_request_skip_ui_browsertest.cc",
