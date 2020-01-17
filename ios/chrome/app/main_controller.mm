@@ -286,11 +286,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   // The object that drives the Chrome startup/shutdown logic.
   std::unique_ptr<IOSChromeMain> _chromeMain;
 
-  // Wrangler to handle BVC and tab model creation, access, and related logic.
-  // Implements faetures exposed from this object through the
-  // BrowserViewInformation protocol.
-  BrowserViewWrangler* _browserViewWrangler;
-
   // TabSwitcher object -- the tab grid.
   id<TabSwitcher> _tabSwitcher;
 
@@ -336,6 +331,11 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   // If the animations were disabled.
   BOOL _animationDisabled;
 }
+
+// Wrangler to handle BVC and tab model creation, access, and related logic.
+// Implements faetures exposed from this object through the
+// BrowserViewInformation protocol.
+@property(nonatomic, strong) BrowserViewWrangler* browserViewWrangler;
 
 // The ChromeBrowserState associated with the main (non-OTR) browsing mode.
 @property(nonatomic, assign)
@@ -600,8 +600,8 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   // Initialize and set the main browser state.
   [self initializeBrowserState:chromeBrowserState];
   self.mainBrowserState = chromeBrowserState;
-  [_browserViewWrangler shutdown];
-  _browserViewWrangler = [[BrowserViewWrangler alloc]
+  [self.browserViewWrangler shutdown];
+  self.browserViewWrangler = [[BrowserViewWrangler alloc]
              initWithBrowserState:self.mainBrowserState
              webStateListObserver:self
        applicationCommandEndpoint:self.sceneController
@@ -625,7 +625,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
       ->NotifyEvent(feature_engagement::events::kChromeOpened);
 
   // Ensure the main tab model is created. This also creates the BVC.
-  [_browserViewWrangler createMainBrowser];
+  [self.browserViewWrangler createMainBrowser];
 
   _spotlightManager =
       [SpotlightManager spotlightManagerWithBrowserState:self.mainBrowserState];
@@ -671,7 +671,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
   [self scheduleLowPriorityStartupTasks];
 
-  [_browserViewWrangler updateDeviceSharingManager];
+  [self.browserViewWrangler updateDeviceSharingManager];
 
   [self.sceneController openTabFromLaunchOptions:_launchOptions
                               startupInformation:self
@@ -758,7 +758,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   // be destroyed.
   [_tabSwitcher setOtrBrowser:nil];
 
-  [_browserViewWrangler destroyAndRebuildIncognitoBrowser];
+  [self.browserViewWrangler destroyAndRebuildIncognitoBrowser];
 
   if (otrBVCIsCurrent) {
     [self activateBVCAndMakeCurrentBVCPrimary];
@@ -791,7 +791,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 #pragma mark - Property implementation.
 
 - (id<BrowserInterfaceProvider>)interfaceProvider {
-  return _browserViewWrangler;
+  return self.browserViewWrangler;
 }
 
 - (TabGridCoordinator*)mainCoordinator {
@@ -856,8 +856,8 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
   // Invariant: The UI is stopped before the model is shutdown.
   DCHECK(!_mainCoordinator);
-  [_browserViewWrangler shutdown];
-  _browserViewWrangler = nil;
+  [self.browserViewWrangler shutdown];
+  self.browserViewWrangler = nil;
 
   _extensionSearchEngineDataUpdater = nullptr;
 
@@ -1735,7 +1735,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 }
 
 - (DeviceSharingManager*)deviceSharingManager {
-  return [_browserViewWrangler deviceSharingManager];
+  return [self.browserViewWrangler deviceSharingManager];
 }
 
 - (void)setTabSwitcher:(id<TabSwitcher>)switcher {
