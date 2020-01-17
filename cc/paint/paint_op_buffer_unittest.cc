@@ -1988,8 +1988,7 @@ TEST(PaintOpSerializationTest, CompleteBufferSerialization) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   serializer.Serialize(&buffer, nullptr, preamble);
   ASSERT_NE(serializer.written(), 0u);
 
@@ -2068,8 +2067,7 @@ TEST(PaintOpSerializationTest, Preamble) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   serializer.Serialize(&buffer, nullptr, preamble);
   ASSERT_NE(serializer.written(), 0u);
 
@@ -2171,8 +2169,7 @@ TEST(PaintOpSerializationTest, SerializesNestedRecords) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   PaintOpBufferSerializer::Preamble preamble;
   serializer.Serialize(&buffer, nullptr, preamble);
   ASSERT_NE(serializer.written(), 0u);
@@ -2248,8 +2245,7 @@ TEST(PaintOpBufferTest, ClipsImagesDuringSerialization) {
         options_provider.client_paint_cache(), options_provider.strike_server(),
         options_provider.color_space(), options_provider.can_use_lcd_text(),
         options_provider.context_supports_distance_field_text(),
-        options_provider.max_texture_size(),
-        options_provider.max_texture_bytes());
+        options_provider.max_texture_size());
     PaintOpBufferSerializer::Preamble preamble;
     preamble.playback_rect = test_case.clip_rect;
     preamble.full_raster_rect = gfx::Rect(0, 0, test_case.clip_rect.right(),
@@ -2314,8 +2310,7 @@ TEST(PaintOpBufferSerializationTest, AlphaFoldingDuringSerialization) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   serializer.Serialize(&buffer, nullptr, preamble);
   ASSERT_NE(serializer.written(), 0u);
 
@@ -3119,8 +3114,7 @@ TEST(PaintOpBufferTest, ReplacesImagesFromProviderOOP) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   serializer.Serialize(&buffer);
   ASSERT_NE(serializer.written(), 0u);
 
@@ -3266,8 +3260,7 @@ TEST(PaintOpBufferTest, PaintRecordShaderSerialization) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   serializer.Serialize(&buffer);
   ASSERT_TRUE(serializer.valid());
   ASSERT_GT(serializer.written(), 0u);
@@ -3385,8 +3378,7 @@ TEST(PaintOpBufferTest, DrawImageRectSerializeScaledImages) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   serializer.Serialize(buffer.get());
 
   ASSERT_EQ(options_provider.decoded_images().size(), 1u);
@@ -3421,8 +3413,7 @@ TEST(PaintOpBufferTest, RecordShadersSerializeScaledImages) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   serializer.Serialize(buffer.get());
 
   ASSERT_EQ(options_provider.decoded_images().size(), 1u);
@@ -3460,8 +3451,7 @@ TEST(PaintOpBufferTest, RecordShadersCached) {
         options_provider.client_paint_cache(), options_provider.strike_server(),
         options_provider.color_space(), options_provider.can_use_lcd_text(),
         options_provider.context_supports_distance_field_text(),
-        options_provider.max_texture_size(),
-        options_provider.max_texture_bytes());
+        options_provider.max_texture_size());
     serializer.Serialize(buffer.get());
     memory_written = serializer.written();
   }
@@ -3486,8 +3476,7 @@ TEST(PaintOpBufferTest, RecordShadersCached) {
         options_provider.client_paint_cache(), options_provider.strike_server(),
         options_provider.color_space(), options_provider.can_use_lcd_text(),
         options_provider.context_supports_distance_field_text(),
-        options_provider.max_texture_size(),
-        options_provider.max_texture_bytes());
+        options_provider.max_texture_size());
     serializer.Serialize(buffer.get());
     memory_scaled_written = serializer.written();
   }
@@ -3579,8 +3568,7 @@ TEST(PaintOpBufferTest, RecordShadersCachedSize) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   options_provider.context_supports_distance_field_text();
   serializer.Serialize(buffer.get());
 
@@ -3632,8 +3620,7 @@ TEST(PaintOpBufferTest, NullImages) {
       options_provider.client_paint_cache(), options_provider.strike_server(),
       options_provider.color_space(), options_provider.can_use_lcd_text(),
       options_provider.context_supports_distance_field_text(),
-      options_provider.max_texture_size(),
-      options_provider.max_texture_bytes());
+      options_provider.max_texture_size());
   serializer.Serialize(&buffer);
   ASSERT_TRUE(serializer.valid());
   ASSERT_GT(serializer.written(), 0u);

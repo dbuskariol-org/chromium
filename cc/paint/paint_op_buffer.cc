@@ -341,7 +341,6 @@ PaintOp::SerializeOptions::SerializeOptions(
     bool can_use_lcd_text,
     bool context_supports_distance_field_text,
     int max_texture_size,
-    size_t max_texture_bytes,
     const SkMatrix& original_ctm)
     : image_provider(image_provider),
       transfer_cache(transfer_cache),
@@ -353,7 +352,6 @@ PaintOp::SerializeOptions::SerializeOptions(
       context_supports_distance_field_text(
           context_supports_distance_field_text),
       max_texture_size(max_texture_size),
-      max_texture_bytes(max_texture_bytes),
       original_ctm(original_ctm) {}
 
 PaintOp::SerializeOptions::SerializeOptions(const SerializeOptions&) = default;
