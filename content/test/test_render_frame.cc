@@ -101,7 +101,7 @@ class MockFrameHost : public mojom::FrameHost {
                          bool user_gesture) override {}
 
   void DidAddContentSecurityPolicies(
-      const std::vector<ContentSecurityPolicy>&) override {}
+      std::vector<network::mojom::ContentSecurityPolicyPtr>) override {}
 
  protected:
   // mojom::FrameHost:

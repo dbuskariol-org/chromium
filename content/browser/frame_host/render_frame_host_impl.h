@@ -1607,7 +1607,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
                          const gfx::Rect& initial_rect,
                          bool user_gesture) override;
   void DidAddContentSecurityPolicies(
-      const std::vector<ContentSecurityPolicy>& policies) override;
+      std::vector<network::mojom::ContentSecurityPolicyPtr> policies) override;
 #if defined(OS_ANDROID)
   void UpdateUserGestureCarryoverInfo() override;
 #endif

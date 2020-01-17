@@ -571,12 +571,12 @@ mojom::CommonNavigationParamsPtr MakeCommonNavigationParams(
       base::TimeTicks::Now(), info->url_request.HttpMethod().Latin1(),
       GetRequestBodyForWebURLRequest(info->url_request), source_location,
       false /* started_from_context_menu */, info->url_request.HasUserGesture(),
-      InitiatorCSPInfo(info->should_check_main_world_content_security_policy,
-                       BuildContentSecurityPolicyList(info->initiator_csp),
-                       info->initiator_csp.self_source.has_value()
-                           ? base::Optional<CSPSource>(BuildCSPSource(
-                                 info->initiator_csp.self_source.value()))
-                           : base::nullopt),
+      mojom::InitiatorCSPInfo::New(
+          info->should_check_main_world_content_security_policy,
+          BuildContentSecurityPolicyList(info->initiator_csp),
+          info->initiator_csp.self_source.has_value()
+              ? BuildCSPSource(info->initiator_csp.self_source.value())
+              : nullptr),
       initiator_origin_trial_features, info->href_translate.Latin1(),
       is_history_navigation_in_new_child_frame, info->input_start);
 }
@@ -4227,11 +4227,11 @@ void RenderFrameImpl::DidAddContentSecurityPolicies(
   // TODO(arthursonzogni): Send DidAddContentSecurityPolicies from blink side.
   // Mojo will automagically convert from/to blink types. This requires
   // converting native struct to mojo struct first.
-  std::vector<ContentSecurityPolicy> content_policies;
+  std::vector<network::mojom::ContentSecurityPolicyPtr> content_policies;
   for (const auto& policy : policies)
     content_policies.push_back(BuildContentSecurityPolicy(policy));
 
-  GetFrameHost()->DidAddContentSecurityPolicies(content_policies);
+  GetFrameHost()->DidAddContentSecurityPolicies(std::move(content_policies));
 }
 
 void RenderFrameImpl::DidChangeFrameOwnerProperties(

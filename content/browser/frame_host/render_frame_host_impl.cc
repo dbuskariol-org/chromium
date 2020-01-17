@@ -2562,16 +2562,15 @@ void RenderFrameHostImpl::DidFocusFrame() {
 }
 
 void RenderFrameHostImpl::DidAddContentSecurityPolicies(
-    const std::vector<ContentSecurityPolicy>& policies) {
+    std::vector<network::mojom::ContentSecurityPolicyPtr> policies) {
   TRACE_EVENT1("navigation",
                "RenderFrameHostImpl::OnDidAddContentSecurityPolicies",
                "frame_tree_node", frame_tree_node_->frame_tree_node_id());
 
   std::vector<network::mojom::ContentSecurityPolicyHeaderPtr> headers;
-  for (const ContentSecurityPolicy& policy : policies) {
-    AddContentSecurityPolicy(policy);
-    headers.push_back(
-        network::mojom::ContentSecurityPolicyHeader::New(policy.header));
+  for (auto& policy : policies) {
+    headers.push_back(policy->header.Clone());
+    AddContentSecurityPolicy(ContentSecurityPolicy(std::move(policy)));
   }
   frame_tree_node()->AddContentSecurityPolicies(std::move(headers));
 }
@@ -4814,7 +4813,7 @@ void RenderFrameHostImpl::NavigateToInterstitialURL(const GURL& data_url) {
       download_policy, false, GURL(), GURL(), PREVIEWS_OFF,
       base::TimeTicks::Now(), "GET", nullptr, base::Optional<SourceLocation>(),
       false /* started_from_context_menu */, false /* has_user_gesture */,
-      InitiatorCSPInfo(), std::vector<int>(), std::string(),
+      CreateInitiatorCSPInfo(), std::vector<int>(), std::string(),
       false /* is_history_navigation_in_new_child_frame */, base::TimeTicks());
   CommitNavigation(nullptr /* navigation_request */, std::move(common_params),
                    CreateCommitNavigationParams(), nullptr /* response_head */,
