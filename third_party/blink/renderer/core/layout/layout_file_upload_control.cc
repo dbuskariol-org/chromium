@@ -38,21 +38,11 @@ const int kDefaultWidthNumChars = 34;
 const int kButtonShadowHeight = 2;
 
 LayoutFileUploadControl::LayoutFileUploadControl(HTMLInputElement* input)
-    : LayoutBlockFlow(input) {}
+    : LayoutBlockFlow(input) {
+  DCHECK_EQ(input->type(), input_type_names::kFile);
+}
 
 LayoutFileUploadControl::~LayoutFileUploadControl() = default;
-
-void LayoutFileUploadControl::UpdateFromElement() {
-  auto* input = To<HTMLInputElement>(GetNode());
-  DCHECK_EQ(input->type(), input_type_names::kFile);
-
-  // This only supports clearing out the files, but that's OK because for
-  // security reasons that's the only change the DOM is allowed to make.
-  FileList* files = input->files();
-  DCHECK(files);
-  if (files && files->IsEmpty())
-    SetShouldDoFullPaintInvalidation();
-}
 
 int LayoutFileUploadControl::MaxFilenameWidth() const {
   int upload_button_width =

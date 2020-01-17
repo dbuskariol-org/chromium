@@ -24,7 +24,6 @@
 
 #include "third_party/blink/public/platform/file_path_conversion.h"
 #include "third_party/blink/public/strings/grit/blink_strings.h"
-#include "third_party/blink/renderer/core/css/style_change_reason.h"
 #include "third_party/blink/renderer/core/dom/events/event.h"
 #include "third_party/blink/renderer/core/dom/shadow_root.h"
 #include "third_party/blink/renderer/core/events/keyboard_event.h"
@@ -249,9 +248,8 @@ void FileInputType::SetValue(const String&,
     return;
 
   file_list_->clear();
-  GetElement().SetNeedsStyleRecalc(
-      kSubtreeStyleChange,
-      StyleChangeReasonForTracing::Create(style_change_reason::kControlValue));
+  if (auto* layout_object = GetElement().GetLayoutObject())
+    layout_object->SetShouldDoFullPaintInvalidation();
   GetElement().SetNeedsValidityCheck();
 }
 

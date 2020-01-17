@@ -62,7 +62,6 @@ class CORE_EXPORT LayoutFileUploadControl final : public LayoutBlockFlow {
   const char* GetName() const override { return "LayoutFileUploadControl"; }
 
  private:
-  void UpdateFromElement() override;
   void ComputeIntrinsicLogicalWidths(
       LayoutUnit& min_logical_width,
       LayoutUnit& max_logical_width) const override;
