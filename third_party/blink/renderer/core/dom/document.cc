@@ -2709,15 +2709,6 @@ void Document::LayoutUpdated() {
   }
 
   Markers().InvalidateRectsForAllTextMatchMarkers();
-
-  // TODO(esprehn): This doesn't really make sense, why not track the first
-  // beginFrame? This will catch the first layout in a page that does lots
-  // of layout thrashing even though that layout might not be followed by
-  // a paint for many seconds.
-  if (HaveRenderBlockingResourcesLoaded()) {
-    if (document_timing_.FirstLayout().is_null())
-      document_timing_.MarkFirstLayout();
-  }
 }
 
 void Document::ClearFocusedElementSoon() {
