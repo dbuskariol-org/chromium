@@ -1,5 +1,5 @@
 This is a testharness.js-based test.
-Found 496 tests; 466 PASS, 30 FAIL, 0 TIMEOUT, 0 NOTRUN.
+Found 496 tests; 468 PASS, 28 FAIL, 0 TIMEOUT, 0 NOTRUN.
 PASS idl_test setup
 PASS idl_test validation
 PASS Test driver for asyncInitCertificate
@@ -407,7 +407,7 @@ PASS RTCDataChannel interface: attribute bufferedAmountLowThreshold
 PASS RTCDataChannel interface: attribute onopen
 PASS RTCDataChannel interface: attribute onbufferedamountlow
 PASS RTCDataChannel interface: attribute onerror
-FAIL RTCDataChannel interface: attribute onclosing assert_true: The prototype object must have a property "onclosing" expected true got false
+PASS RTCDataChannel interface: attribute onclosing
 PASS RTCDataChannel interface: attribute onclose
 PASS RTCDataChannel interface: operation close()
 PASS RTCDataChannel interface: attribute onmessage
@@ -431,7 +431,7 @@ PASS RTCDataChannel interface: new RTCPeerConnection().createDataChannel('') mus
 PASS RTCDataChannel interface: new RTCPeerConnection().createDataChannel('') must inherit property "onopen" with the proper type
 PASS RTCDataChannel interface: new RTCPeerConnection().createDataChannel('') must inherit property "onbufferedamountlow" with the proper type
 PASS RTCDataChannel interface: new RTCPeerConnection().createDataChannel('') must inherit property "onerror" with the proper type
-FAIL RTCDataChannel interface: new RTCPeerConnection().createDataChannel('') must inherit property "onclosing" with the proper type assert_inherits: property "onclosing" not found in prototype chain
+PASS RTCDataChannel interface: new RTCPeerConnection().createDataChannel('') must inherit property "onclosing" with the proper type
 PASS RTCDataChannel interface: new RTCPeerConnection().createDataChannel('') must inherit property "onclose" with the proper type
 PASS RTCDataChannel interface: new RTCPeerConnection().createDataChannel('') must inherit property "close()" with the proper type
 PASS RTCDataChannel interface: new RTCPeerConnection().createDataChannel('') must inherit property "onmessage" with the proper type
