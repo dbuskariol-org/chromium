@@ -396,6 +396,8 @@ public final class ChromePreferenceKeys {
     public static final String FONT_USER_FONT_SCALE_FACTOR = "user_font_scale_factor";
     public static final String FONT_USER_SET_FORCE_ENABLE_ZOOM = "user_set_force_enable_zoom";
 
+    public static final String HISTORY_SHOW_HISTORY_INFO = "history_home_show_info";
+
     /** Keys used to save settings related to homepage. */
     public static final String HOMEPAGE_CUSTOM_URI = "homepage_custom_uri";
     public static final String HOMEPAGE_ENABLED = "homepage";
@@ -760,6 +762,7 @@ public final class ChromePreferenceKeys {
                 FLAGS_CACHED_TAB_GROUPS_ANDROID_ENABLED,
                 FONT_USER_FONT_SCALE_FACTOR,
                 FONT_USER_SET_FORCE_ENABLE_ZOOM,
+                HISTORY_SHOW_HISTORY_INFO,
                 HOMEPAGE_CUSTOM_URI,
                 HOMEPAGE_ENABLED,
                 HOMEPAGE_USE_DEFAULT_URI,
