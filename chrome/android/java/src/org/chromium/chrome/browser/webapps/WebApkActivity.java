@@ -24,9 +24,6 @@ import org.chromium.webapk.lib.common.WebApkConstants;
  * UI-less Chrome.
  */
 public class WebApkActivity extends WebappActivity {
-    /** Manages whether to check update for the WebAPK, and starts update check if needed. */
-    private WebApkUpdateManager mUpdateManager;
-
     /** The start time that the activity becomes focused in milliseconds since boot. */
     private long mStartTime;
 
@@ -90,8 +87,7 @@ public class WebApkActivity extends WebappActivity {
         WebApkUma.recordShellApkVersion(info.shellApkVersion(), info.distributor());
         storage.incrementLaunchCount();
 
-        mUpdateManager = new WebApkUpdateManager(storage);
-        mUpdateManager.updateIfNeeded(getActivityTab(), info);
+        getComponent().resolveWebApkUpdateManager().updateIfNeeded(storage, info);
     }
 
     @Override
@@ -129,10 +125,6 @@ public class WebApkActivity extends WebappActivity {
 
     @Override
     protected void onDestroyInternal() {
-        if (mUpdateManager != null) {
-            mUpdateManager.destroy();
-        }
-
         // The common case is to be connected to just one WebAPK's services. For the sake of
         // simplicity disconnect from the services of all WebAPKs.
         ChromeWebApkHost.disconnectFromAllServices(true /* waitForPendingWork */);
