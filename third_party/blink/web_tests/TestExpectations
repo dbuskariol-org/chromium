@@ -1734,80 +1734,52 @@ crbug.com/987224 [ IOS ] virtual/cascade/external/wpt/css/css-paint-api/idlharne
 # ======
 # From this point until the end of the Form Controls Refresh section, these are
 # in-progress rebaselines, tracked at crbug.com/1035582.
+#
+# PLEASE DO NOT PUT ANYTHING INSIDE THIS SECTION!!
 # ======
 
-# Group 1 Leftovers:
+# These need further investigation (baselines look broken):
+crbug.com/1035582 virtual/form-controls-refresh-disabled/fast/forms/select/menulist-update-text-popup.html [ Skip ]
+crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-key-operations.html [ Skip ]
+# Put back the one on 4788:
+crbug.com/1035582 fast/forms/suggested-value.html [ Skip ]
+crbug.com/1035582 fast/forms/select/listbox-tap.html [ Skip ]
 
-# Group 2 Leftovers:
-# Uncomment the one on 5715:
-crbug.com/1035582 fast/forms/suggested-value.html [ Failure Pass ]
-crbug.com/1035582 virtual/form-controls-refresh-disabled/fast/forms/select/menulist-update-text-popup.html [ Failure Pass ]
-
-# Group 7 leftovers:
-crbug.com/1035582 virtual/gpu-rasterization/images/12-55.html [ Skip ]
-crbug.com/1035582 virtual/gpu-rasterization/images/182.html [ Skip ]
-# Dark mode, flagged by schenney, looks wrong:
-crbug.com/1035582 virtual/dark-mode-native-theme-on/text-input-elements.html [ Failure Pass ]
-
-# Problems rebaselining:
-crbug.com/1035582 virtual/cascade/fast/forms/date/date-appearance-basic.html [ Skip ]
-crbug.com/1035582 virtual/cascade/fast/forms/month/month-appearance-basic.html [ Skip ]
-crbug.com/1035582 wpt_internal/storage/estimate-usage-details-filesystem.https.tentative.any.html [ Skip ]
-
-# These need test modification: the Color picker now pops up a dialog.
+# These need another look (timeout):
 crbug.com/1035582 external/wpt/css/selectors/focus-visible-003-manual.html [ Skip ]
 crbug.com/1035582 external/wpt/css/selectors/focus-visible-004-manual.html [ Skip ]
 
-# Failed in https://chromium-review.googlesource.com/c/chromium/src/+/1987072
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-key-operations.html [ Skip ]
-# Comment back in at line 3002:
-crbug.com/1035582 [ Win ] fast/forms/suggestion-picker/time-suggestion-picker-appearance-locale-hebrew.html [ Skip ]
-crbug.com/1035582 [ Linux ] fast/forms/suggestion-picker/time-suggestion-picker-appearance-locale-hebrew.html [ Skip ]
-crbug.com/1035582 [ Win ] fast/forms/suggestion-picker/datetimelocal-suggestion-picker-appearance-with-scroll-bar.html [ Skip ]
-crbug.com/1035582 [ Linux ] fast/forms/suggestion-picker/datetimelocal-suggestion-picker-appearance-with-scroll-bar.html [ Skip ]
-
-# Failed in https://chromium-review.googlesource.com/c/chromium/src/+/1987075
-crbug.com/1035582 [ Win ] fast/forms/range/slider-mouse-events.html [ Skip ]
-crbug.com/1035582 [ Linux ] fast/forms/range/slider-mouse-events.html [ Skip ]
-crbug.com/1035582 [ Win ] fast/forms/range/slider-zoomed.html [ Skip ]
-crbug.com/1035582 [ Linux ] fast/forms/range/slider-zoomed.html [ Skip ]
-crbug.com/1035582 [ Win ] fast/forms/button/button-with-float.html [ Skip ]
-crbug.com/1035582 [ Win ] fast/forms/select/listbox-overlay-scrollbar.html [ Skip ]
-crbug.com/1035582 [ Linux ] fast/forms/button/button-with-float.html [ Skip ]
-crbug.com/1035582 [ Linux ] fast/forms/select/listbox-overlay-scrollbar.html [ Skip ]
-
-# Failed in https://chromium-review.googlesource.com/c/chromium/src/+/1986622
-crbug.com/1035582 external/wpt/css/css-pseudo/spelling-error-003-manual.html [ Skip ]
+# These are flaky or something? Rebaselining doesn't help.
+# See https://test-results.appspot.com/data/layout_results/linux-blink-rel/26507/webkit_layout_tests%20%28with%20patch%29/layout-test-results/results.html
 crbug.com/1035582 external/wpt/css/css-transforms/transform-input-015.html [ Skip ]
-
-# Focus ring related
-crbug.com/1035582 fast/forms/text/input-appearance-autocomplete-very-long-value.html [ Skip ]
-crbug.com/1035582 virtual/text-antialias/selection/mixed-directionality-selection.html [ Skip ]
+crbug.com/1035582 fast/forms/button/button-with-float.html [ Skip ]
+crbug.com/1035582 fast/forms/select/listbox-overlay-scrollbar.html [ Skip ]
+crbug.com/1035582 paint/invalidation/scroll/caret-with-composited-scroll.html [ Skip ]
 crbug.com/1035582 paint/pagination/composited-paginated-outlined-box.html [ Skip ]
-crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-hover-focused-unselected.html [ Skip ]
-crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-appearance-basic.html [ Skip ]
-
-
-# Failed during rebaseline 3-1
-crbug.com/1035582 [ Fuchsia ] paint/invalidation/selection/selection-in-composited-scrolling-container.html [ Skip ]
-crbug.com/1035582 [ Linux ] paint/invalidation/scroll/caret-with-composited-scroll.html [ Skip ]
-crbug.com/1035582 [ Win ] paint/invalidation/forms/button-reset-focus-by-mouse-then-keydown.html [ Skip ]
-crbug.com/1035582 [ Win ] paint/invalidation/forms/radio-focus-by-mouse-then-keydown.html [ Skip ]
-crbug.com/1035582 [ Win ] paint/invalidation/scroll/caret-with-composited-scroll.html [ Skip ]
-crbug.com/1035582 [ Win7 ] virtual/gpu-rasterization/images/feature-policy-oversized-images-responsive-image.html [ Skip ]
-crbug.com/1035582 [ Win10 ] editing/caret/caret-position.html [ Skip ]
-crbug.com/1035582 [ Win10 ] editing/pasteboard/4806874.html [ Skip ]
-crbug.com/1035582 [ Win10 ] fast/forms/color/color-suggestion-picker-appearance-zoom125.html [ Skip ]
-crbug.com/1035582 [ Win10 ] fast/multicol/multicol-with-child-renderLayer-for-input.html [ Skip ]
-
-# This seems broken:
-crbug.com/1035582 fast/forms/select/listbox-tap.html [ Skip ]
-crbug.com/1035582 [ Win7 ] fast/forms/suggestion-picker/month-suggestion-picker-appearance-with-scroll-bar.html [ Skip ]
-
+# https://test-results.appspot.com/data/layout_results/win10-blink-rel/6784/webkit_layout_tests%20%28with%20patch%29/layout-test-results/results.html
+crbug.com/1035582 virtual/cascade/fast/forms/month/month-appearance-basic.html [ Skip ]
+# https://test-results.appspot.com/data/layout_results/win7-blink-rel/6571/webkit_layout_tests%20%28with%20patch%29/layout-test-results/results.html
+crbug.com/1035582 paint/invalidation/forms/button-reset-focus-by-mouse-then-keydown.html [ Skip ]
+crbug.com/1035582 paint/invalidation/forms/radio-focus-by-mouse-then-keydown.html [ Skip ]
+# Need rebaseline again??
+crbug.com/1035582 [ Win ] editing/caret/caret-position.html [ Skip ]
+crbug.com/1035582 [ Win ] editing/pasteboard/4806874.html [ Skip ]
+crbug.com/1035582 [ Win ] fast/forms/color/color-suggestion-picker-appearance-zoom125.html [ Skip ]
+crbug.com/1035582 [ Win ] fast/multicol/multicol-with-child-renderLayer-for-input.html [ Skip ]
+crbug.com/1035582 [ Win ] virtual/text-antialias/selection/mixed-directionality-selection.html [ Skip ]
 
 # ======
 # ====== End of rebaselines for crbug.com/1035582 ======
 # ======
+#
+# PLEASE put new 1035582-related files below this line (AND NOT ABOVE IT!!)...
+#
+crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-hover-focused-unselected.html [ Skip ]
+crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-appearance-basic.html [ Skip ]
+
+
+
+
 
 
 # ====== Form Controls Refresh failures until here ======
@@ -2022,7 +1994,6 @@ crbug.com/660185 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/datal
 crbug.com/953591 [ Win ] virtual/form-controls-refresh-disabled/fast/forms/datalist/input-appearance-range-with-transform.html [ Pass Failure ]
 crbug.com/591099 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/text/text-lineheight-centering.html [ Failure ]
 crbug.com/770971 [ Win7 ] virtual/form-controls-refresh-disabled/fast/forms/suggested-value.html [ Pass Failure ]
-crbug.com/1035582 virtual/form-controls-refresh-disabled/fast/forms/number/number-input-event-composed.html [ Pass Failure ]
 # From never fix tests:
 crbug.com/123456 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/select-popup/* [ Skip ]
 crbug.com/123456 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/date-open-picker-with-f4-key.html [ Skip ]
@@ -4833,7 +4804,7 @@ crbug.com/767469 http/tests/navigation/start-load-during-provisional-loader-deta
 crbug.com/767469 virtual/stable/http/tests/navigation/start-load-during-provisional-loader-detach.html [ Pass Failure ]
 
 # Sheriff failures 2017-10-02
-##crbug.com/770971 [ Win7 ] fast/forms/suggested-value.html [ Pass Failure ]
+###crbug.com/770971 [ Win7 ] fast/forms/suggested-value.html [ Pass Failure ]
 crbug.com/771492 [ Win ] external/wpt/css/css-tables/table-model-fixup-2.html [ Failure ]
 crbug.com/771492 [ Linux ] external/wpt/css/css-tables/table-model-fixup-2.html [ Failure ]
 crbug.com/771492 [ Mac ] external/wpt/css/css-tables/table-model-fixup-2.html [ Failure ]
