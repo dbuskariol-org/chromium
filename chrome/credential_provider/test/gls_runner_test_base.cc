@@ -309,6 +309,11 @@ HRESULT GlsRunnerTestBase::InternalInitializeProvider(
          other_user_tile_available)) {
       continue;
     }
+
+    // Don't add the gaia special account into the fake user array.
+    if (sid_and_username.second == kDefaultGaiaAccountName)
+      continue;
+
     fake_user_array_.AddUser(sid_and_username.first.c_str(),
                              sid_and_username.second.c_str());
   }
@@ -417,9 +422,34 @@ HRESULT GlsRunnerTestBase::ApplyProviderFilter(
   fake_associated_user_validator_.StartRefreshingTokenHandleValidity();
 
   // Perform initial filter code.
-  hr = filter->Filter(cpus_, 0, nullptr, nullptr, 0);
+  GUID CLSID_SystemCredProvider1 = {
+      0x11111111,
+      0x2222,
+      0x3333,
+      {0x44, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55}};
+  GUID CLSID_SystemCredProvider2 = {
+      0x11111211,
+      0x2122,
+      0x3333,
+      {0x44, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55}};
+  GUID provider_guids[] = {CLSID_GaiaCredentialProvider,
+                           CLSID_SystemCredProvider1,
+                           CLSID_SystemCredProvider2};
+  BOOL provider_allow[] = {TRUE, TRUE, TRUE};
+  DWORD provider_count = 3;
+  hr = filter->Filter(cpus_, 0, provider_guids, provider_allow, provider_count);
+
+  // None of the system CLSID should be filtered out.
+  EXPECT_EQ(TRUE, provider_allow[1]);
+  EXPECT_EQ(TRUE, provider_allow[2]);
+
+  BOOL all_providers_allowed =
+      provider_allow[0] && provider_allow[1] && provider_allow[2];
+
   if (FAILED(hr))
     return hr;
+  else if (!all_providers_allowed)
+    return E_FAIL;
 
   // Apply remote credentials if any.
   if (pcpcs_in && pcpcs_out && update_remote_credentials_hr)

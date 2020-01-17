@@ -752,8 +752,8 @@ TEST_F(GcpGaiaCredentialBaseTest, InvalidUserUnlockedAfterSignin) {
   ASSERT_EQ(S_OK, cred.As(&test));
 
   // User should have invalid token handle and be locked.
-  EXPECT_FALSE(
-      fake_associated_user_validator()->IsTokenHandleValidForUser(OLE2W(sid)));
+  EXPECT_TRUE(
+      fake_associated_user_validator()->IsAuthEnforcedForUser(OLE2W(sid)));
   EXPECT_EQ(true,
             fake_associated_user_validator()->IsUserAccessBlockedForTesting(
                 OLE2W(sid)));
@@ -802,25 +802,7 @@ TEST_F(GcpGaiaCredentialBaseTest, SigninNotBlockedWhenValidChromeNotFound) {
 
   // Create with invalid token handle response.
   SetDefaultTokenHandleResponse(kDefaultInvalidTokenHandleResponse);
-  ASSERT_EQ(S_OK, InitializeProviderAndGetCredential(0, &cred));
-
-  Microsoft::WRL::ComPtr<ITestCredential> test;
-  ASSERT_EQ(S_OK, cred.As(&test));
-
-  // User should have invalid token handle but sign-in should not be blocked
-  // just because Chrome was not found and GCPW cannot load.
-  EXPECT_FALSE(
-      fake_associated_user_validator()->IsTokenHandleValidForUser(OLE2W(sid)));
-  EXPECT_FALSE(fake_associated_user_validator()->IsUserAccessBlockedForTesting(
-      OLE2W(sid)));
-
-  ASSERT_EQ(S_OK, StartLogonProcessAndWait());
-
-  // Logon process should not raise an error message.
-  ASSERT_EQ(S_OK, FinishLogonProcess(true, true, 0));
-
-  EXPECT_FALSE(fake_associated_user_validator()->IsUserAccessBlockedForTesting(
-      OLE2W(sid)));
+  ASSERT_EQ(E_FAIL, InitializeProviderAndGetCredential(0, &cred));
 }
 
 TEST_F(GcpGaiaCredentialBaseTest, DenySigninBlockedDuringSignin) {
@@ -839,6 +821,9 @@ TEST_F(GcpGaiaCredentialBaseTest, DenySigninBlockedDuringSignin) {
                       base::UTF8ToUTF16(kDefaultGaiaId), base::string16(),
                       &first_sid));
   ASSERT_EQ(2ul, fake_os_user_manager()->GetUserCount());
+
+  std::vector<base::string16> reauth_sids;
+  reauth_sids.push_back((BSTR)first_sid);
 
   // Create provider and start logon.
   Microsoft::WRL::ComPtr<ICredentialProviderCredential> cred;
@@ -862,8 +847,9 @@ TEST_F(GcpGaiaCredentialBaseTest, DenySigninBlockedDuringSignin) {
 
   // Signin process has already started. User should not be locked even if their
   // token handle is invalid.
-  EXPECT_FALSE(fake_associated_user_validator()
-                   ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON));
+  EXPECT_FALSE(
+      fake_associated_user_validator()
+          ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON, reauth_sids));
   EXPECT_FALSE(fake_associated_user_validator()->IsUserAccessBlockedForTesting(
       OLE2W(first_sid)));
 
@@ -876,16 +862,18 @@ TEST_F(GcpGaiaCredentialBaseTest, DenySigninBlockedDuringSignin) {
   EXPECT_EQ(test->GetFinalEmail(), kDefaultEmail);
 
   // Result has not been reported yet, user signin should still not be denied.
-  EXPECT_FALSE(fake_associated_user_validator()
-                   ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON));
+  EXPECT_FALSE(
+      fake_associated_user_validator()
+          ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON, reauth_sids));
   EXPECT_FALSE(fake_associated_user_validator()->IsUserAccessBlockedForTesting(
       OLE2W(first_sid)));
 
   ReportLogonProcessResult(cred);
 
   // Now signin can be denied for the user if their token handle is invalid.
-  EXPECT_TRUE(fake_associated_user_validator()
-                  ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON));
+  EXPECT_TRUE(
+      fake_associated_user_validator()
+          ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON, reauth_sids));
   EXPECT_TRUE(fake_associated_user_validator()->IsUserAccessBlockedForTesting(
       OLE2W(first_sid)));
 
@@ -917,6 +905,9 @@ TEST_F(GcpGaiaCredentialBaseTest,
                       &first_sid));
   ASSERT_EQ(2ul, fake_os_user_manager()->GetUserCount());
 
+  std::vector<base::string16> reauth_sids;
+  reauth_sids.push_back((BSTR)first_sid);
+
   // Move the current time beyond staleness time period.
   base::Time last_online_login = base::Time::Now();
   base::string16 last_online_login_millis = base::NumberToString16(
@@ -947,8 +938,9 @@ TEST_F(GcpGaiaCredentialBaseTest,
   ASSERT_EQ(S_OK, cred.As(&test));
 
   // User access shouldn't be blocked before login starts.
-  EXPECT_FALSE(fake_associated_user_validator()
-                   ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON));
+  EXPECT_FALSE(
+      fake_associated_user_validator()
+          ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON, reauth_sids));
   EXPECT_FALSE(fake_associated_user_validator()->IsUserAccessBlockedForTesting(
       OLE2W(first_sid)));
 
@@ -964,8 +956,9 @@ TEST_F(GcpGaiaCredentialBaseTest,
       &BaseTimeClockOverrideValue::NowOverride, nullptr, nullptr);
 
   // User access should be blocked now that the time has been moved.
-  ASSERT_TRUE(fake_associated_user_validator()
-                  ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON));
+  ASSERT_TRUE(
+      fake_associated_user_validator()
+          ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON, reauth_sids));
   EXPECT_TRUE(fake_associated_user_validator()->IsUserAccessBlockedForTesting(
       OLE2W(first_sid)));
 
@@ -986,8 +979,9 @@ TEST_F(GcpGaiaCredentialBaseTest,
   ReportLogonProcessResult(cred);
 
   // User access shouldn't be blocked after login completes.
-  EXPECT_FALSE(fake_associated_user_validator()
-                   ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON));
+  EXPECT_FALSE(
+      fake_associated_user_validator()
+          ->DenySigninForUsersWithInvalidTokenHandles(CPUS_LOGON, reauth_sids));
   EXPECT_FALSE(fake_associated_user_validator()->IsUserAccessBlockedForTesting(
       OLE2W(first_sid)));
 
