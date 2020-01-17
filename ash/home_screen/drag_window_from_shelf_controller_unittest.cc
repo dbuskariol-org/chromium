@@ -7,6 +7,8 @@
 #include "ash/home_screen/drag_window_from_shelf_controller_test_api.h"
 #include "ash/home_screen/home_screen_controller.h"
 #include "ash/home_screen/home_screen_delegate.h"
+#include "ash/public/cpp/overview_test_api.h"
+#include "ash/public/cpp/test/shell_test_api.h"
 #include "ash/root_window_controller.h"
 #include "ash/shelf/shelf.h"
 #include "ash/shell.h"
@@ -784,10 +786,62 @@ TEST_F(DragWindowFromShelfControllerTest,
 
   StartDrag(window.get(), shelf_bounds.CenterPoint(), HotseatState::kExtended);
   Drag(gfx::Point(200, 200), 0.f, 1.f);
+  DragWindowFromShelfControllerTestApi().WaitUntilOverviewIsShown(
+      window_drag_controller());
+
   OverviewController* overview_controller = Shell::Get()->overview_controller();
   EXPECT_TRUE(overview_controller->InOverviewSession());
+  // During dragging, the active window should not change.
   EXPECT_EQ(window.get(), window_util::GetActiveWindow());
-  EndDrag(gfx::Point(0, 200), base::nullopt);
+  EndDrag(gfx::Point(200, 200), base::nullopt);
+  EXPECT_TRUE(overview_controller->InOverviewSession());
+  OverviewSession* overview_session = overview_controller->overview_session();
+  EXPECT_TRUE(overview_session->IsWindowInOverview(window.get()));
+  // After window is added to overview, the active window should change to the
+  // overview focus widget.
+  EXPECT_EQ(overview_session->GetOverviewFocusWindow(),
+            window_util::GetActiveWindow());
+}
+
+// Test that if the window are dropped in overview before the overview start
+// animation is completed, there is no crash.
+TEST_F(DragWindowFromShelfControllerTest,
+       NoCrashIfDropWindowInOverviewBeforeStartAnimationComplete) {
+  ui::ScopedAnimationDurationScaleMode test_duration_mode(
+      ui::ScopedAnimationDurationScaleMode::NON_ZERO_DURATION);
+  OverviewController* overview_controller = Shell::Get()->overview_controller();
+  overview_controller->set_delayed_animation_task_delay_for_test(
+      base::TimeDelta::FromMilliseconds(100));
+
+  UpdateDisplay("400x400");
+  const gfx::Rect shelf_bounds =
+      Shelf::ForWindow(Shell::GetPrimaryRootWindow())->GetIdealBounds();
+  auto window = CreateTestWindow();
+  wm::ActivateWindow(window.get());
+  EXPECT_EQ(window.get(), window_util::GetActiveWindow());
+
+  StartDrag(window.get(), shelf_bounds.CenterPoint(), HotseatState::kExtended);
+  Drag(gfx::Point(200, 200), 0.f, 1.f);
+  DragWindowFromShelfControllerTestApi().WaitUntilOverviewIsShown(
+      window_drag_controller());
+
+  EXPECT_TRUE(overview_controller->InOverviewSession());
+  // During dragging, the active window should not change.
+  EXPECT_EQ(window.get(), window_util::GetActiveWindow());
+  OverviewSession* overview_session = overview_controller->overview_session();
+  EndDrag(gfx::Point(200, 200), base::nullopt);
+  EXPECT_TRUE(overview_controller->InOverviewSession());
+  EXPECT_TRUE(overview_session->IsWindowInOverview(window.get()));
+  // After window is added to overview, the active window should change to the
+  // overview focus widget.
+  EXPECT_EQ(overview_session->GetOverviewFocusWindow(),
+            window_util::GetActiveWindow());
+
+  ShellTestApi().WaitForOverviewAnimationState(
+      OverviewAnimationState::kEnterAnimationComplete);
+  // After start animation is done, active window should remain the same.
+  EXPECT_EQ(overview_session->GetOverviewFocusWindow(),
+            window_util::GetActiveWindow());
 }
 
 }  // namespace ash
