@@ -67,7 +67,7 @@ public class TabUiTestHelper {
      * Enter tab switcher from a tab page.
      * @param cta  The current running activity.
      */
-    static void enterTabSwitcher(ChromeTabbedActivity cta) {
+    public static void enterTabSwitcher(ChromeTabbedActivity cta) {
         OverviewModeBehaviorWatcher showWatcher = createOverviewShowWatcher(cta);
         assertFalse(cta.getLayoutManager().overviewVisible());
         onView(withId(R.id.tab_switcher_button)).perform(click());
