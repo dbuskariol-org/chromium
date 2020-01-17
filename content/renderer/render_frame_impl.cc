@@ -2713,28 +2713,24 @@ void RenderFrameImpl::UpdateBrowserControlsState(
   TRACE_EVENT_INSTANT1("renderer", "is_animated", TRACE_EVENT_SCOPE_THREAD,
                        "animated", animate);
 
-  // TODO(danakj): There's no reason this IPC should be sent to a non-main frame
-  // so we could DCHECK this instead, but the BFCache code isn't exactly clear
-  // so do this separately.
-  if (is_main_frame_) {
-    cc::LayerTreeHost* host = render_widget_->layer_tree_host();
+  DCHECK(is_main_frame_);
 
-    // Check content::BrowserControlsState, and cc::BrowserControlsState
-    // are kept in sync.
-    static_assert(int(BROWSER_CONTROLS_STATE_SHOWN) ==
-                      int(cc::BrowserControlsState::kShown),
-                  "mismatching enums: SHOWN");
-    static_assert(int(BROWSER_CONTROLS_STATE_HIDDEN) ==
-                      int(cc::BrowserControlsState::kHidden),
-                  "mismatching enums: HIDDEN");
-    static_assert(int(BROWSER_CONTROLS_STATE_BOTH) ==
-                      int(cc::BrowserControlsState::kBoth),
-                  "mismatching enums: BOTH");
+  // Check content::BrowserControlsState, and cc::BrowserControlsState
+  // are kept in sync.
+  static_assert(int(BROWSER_CONTROLS_STATE_SHOWN) ==
+                    int(cc::BrowserControlsState::kShown),
+                "mismatching enums: SHOWN");
+  static_assert(int(BROWSER_CONTROLS_STATE_HIDDEN) ==
+                    int(cc::BrowserControlsState::kHidden),
+                "mismatching enums: HIDDEN");
+  static_assert(
+      int(BROWSER_CONTROLS_STATE_BOTH) == int(cc::BrowserControlsState::kBoth),
+      "mismatching enums: BOTH");
 
-    host->UpdateBrowserControlsState(
-        static_cast<cc::BrowserControlsState>(constraints),
-        static_cast<cc::BrowserControlsState>(current), animate);
-  }
+  cc::LayerTreeHost* host = render_widget_->layer_tree_host();
+  host->UpdateBrowserControlsState(
+      static_cast<cc::BrowserControlsState>(constraints),
+      static_cast<cc::BrowserControlsState>(current), animate);
 }
 
 #if defined(OS_ANDROID)
