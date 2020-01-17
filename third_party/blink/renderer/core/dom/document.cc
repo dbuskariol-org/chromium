@@ -7139,9 +7139,12 @@ SnapCoordinator& Document::GetSnapCoordinator() {
 
 void Document::PerformScrollSnappingTasks() {
   SnapCoordinator& snap_coordinator = GetSnapCoordinator();
+  if (!snap_coordinator.SnapContainerDataNeedsUpdate())
+    return;
   snap_coordinator.UpdateAllSnapContainerDataIfNeeded();
   if (RuntimeEnabledFeatures::ScrollSnapAfterLayoutEnabled())
     snap_coordinator.ResnapAllContainersIfNeeded();
+  snap_coordinator.SetSnapContainerDataNeedsUpdate(false);
 }
 
 void Document::SetContextFeatures(ContextFeatures& features) {
