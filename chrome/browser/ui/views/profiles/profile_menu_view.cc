@@ -209,7 +209,6 @@ void ProfileMenuView::OnManageProfilesButtonClicked() {
   base::RecordAction(base::UserMetricsAction("ProfileChooser_ManageClicked"));
   UserManager::Show(base::FilePath(),
                     profiles::USER_MANAGER_SELECT_PROFILE_NO_ACTION);
-  PostActionPerformed(ProfileMetrics::PROFILE_DESKTOP_MENU_OPEN_USER_MANAGER);
 }
 
 void ProfileMenuView::OnExitProfileButtonClicked() {
@@ -609,9 +608,4 @@ void ProfileMenuView::BuildProfileManagementFeatureButtons() {
         base::BindRepeating(&ProfileMenuView::OnAddNewProfileButtonClicked,
                             base::Unretained(this)));
   }
-}
-
-void ProfileMenuView::PostActionPerformed(
-    ProfileMetrics::ProfileDesktopMenu action_performed) {
-  ProfileMetrics::LogProfileDesktopMenu(action_performed);
 }

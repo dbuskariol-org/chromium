@@ -77,9 +77,6 @@ class ProfileMenuView : public ProfileMenuViewBase {
   void BuildSelectableProfiles();
   void BuildProfileManagementFeatureButtons();
 
-  // Clean-up done after an action was performed in the ProfileChooser.
-  void PostActionPerformed(ProfileMetrics::ProfileDesktopMenu action_performed);
-
   DISALLOW_COPY_AND_ASSIGN(ProfileMenuView);
 };
 

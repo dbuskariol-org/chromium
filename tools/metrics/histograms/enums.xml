@@ -52407,6 +52407,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="ProfileDesktopMenu">
+  <obsolete>
+    Deprecated. Code was deleted in M81.
+  </obsolete>
   <int value="0" label="Locked in Menu">
     User opened the user menu, and clicked lock.
   </int>

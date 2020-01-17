@@ -494,11 +494,6 @@ void ProfileMetrics::LogProfileAuthResult(ProfileAuth metric) {
                             NUM_PROFILE_AUTH_METRICS);
 }
 
-void ProfileMetrics::LogProfileDesktopMenu(ProfileDesktopMenu metric) {
-  UMA_HISTOGRAM_ENUMERATION("Profile.DesktopMenu.NonGAIA", metric,
-                            NUM_PROFILE_DESKTOP_MENU_METRICS);
-}
-
 void ProfileMetrics::LogProfileDelete(bool profile_was_signed_in) {
   UMA_HISTOGRAM_BOOLEAN("Profile.Delete", profile_was_signed_in);
 }
