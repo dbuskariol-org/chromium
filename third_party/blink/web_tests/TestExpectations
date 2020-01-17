@@ -6274,9 +6274,6 @@ crbug.com/963183 http/tests/devtools/jump-to-previous-editing-location.js [ Pass
 crbug.com/webrtc/11228 external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
 crbug.com/webrtc/11228 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
 
-# Sheriff 2020-01-08
-crbug.com/1039643 [ Win ] external/wpt/content-security-policy/object-src/object-src-url-embed-allowed.html [ Pass Timeout ]
-
 # Failures that appeared while fuzzy-diff was on. TODO(jonross) triage these and
 # update baselines as needed, or file more direct bugs.
 crbug.com/1039401 [ Linux ] compositing/lots-of-img-layers.html [ Failure ]
