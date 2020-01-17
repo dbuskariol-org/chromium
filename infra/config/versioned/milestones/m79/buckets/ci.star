@@ -76,7 +76,6 @@ def chromiumos_builder(*, name, **kwargs):
 
 chromiumos_builder(
     name = 'chromeos-amd64-generic-rel',
-    goma_enable_ats = True,
 )
 
 chromiumos_builder(

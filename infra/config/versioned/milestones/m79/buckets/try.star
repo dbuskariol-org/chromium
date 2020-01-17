@@ -151,7 +151,6 @@ def chromiumos_builder(*, name, **kwargs):
 
 chromiumos_builder(
     name = 'chromeos-amd64-generic-rel',
-    goma_enable_ats = True,
     tryjob = tryjob(
         # TODO(https://crbug.com/1024641) Make non-experimental
         experiment_percentage = 1,

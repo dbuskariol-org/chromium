@@ -444,32 +444,26 @@ chromiumos_builder(
 
 chromiumos_builder(
     name = 'chromeos-amd64-generic-asan-rel',
-    goma_enable_ats = True,
 )
 
 chromiumos_builder(
     name = 'chromeos-amd64-generic-cfi-thin-lto-rel',
-    goma_enable_ats = True,
 )
 
 chromiumos_builder(
     name = 'chromeos-amd64-generic-dbg',
-    goma_enable_ats = True,
 )
 
 chromiumos_builder(
     name = 'chromeos-arm-generic-dbg',
-    goma_enable_ats = True,
 )
 
 chromiumos_builder(
     name = 'chromeos-arm-generic-rel',
-    goma_enable_ats = True,
 )
 
 chromiumos_builder(
     name = 'chromeos-kevin-rel',
-    goma_enable_ats = True,
 )
 
 chromiumos_builder(
@@ -1044,12 +1038,10 @@ fyi_builder(
 
 fyi_builder(
     name = 'chromeos-amd64-generic-rel-vm-tests',
-    goma_enable_ats = True,
 )
 
 fyi_builder(
     name = 'chromeos-kevin-rel-hw-tests',
-    goma_enable_ats = True,
 )
 
 fyi_builder(

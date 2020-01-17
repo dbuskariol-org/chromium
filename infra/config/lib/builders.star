@@ -160,7 +160,7 @@ def _goma_property(*, goma_backend, goma_debug, goma_enable_ats, goma_jobs, os):
     goma_properties['enable_ats'] = True
   elif (goma_backend in (goma.backend.RBE_TOT, goma.backend.RBE_STAGING,
                          goma.backend.RBE_PROD) and
-        (os and os.category == os_category.WINDOWS)):
+        (os and os.category in (os_category.LINUX, os_category.WINDOWS))):
     goma_properties['enable_ats'] = True
 
   goma_jobs = _default('goma_jobs', goma_jobs)
