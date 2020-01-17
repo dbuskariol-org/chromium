@@ -65,8 +65,8 @@ class QuickAnswersClient : public ash::AssistantStateObserver {
   void OnAssistantContextEnabled(bool enabled) override;
   void OnLocaleChanged(const std::string& locale) override;
 
-  // Send a quick answer request. Virtual for testing.
-  virtual void SendRequest(const QuickAnswersRequest& quick_answers_request);
+  // Send a quick answer request.
+  void SendRequest(const QuickAnswersRequest& quick_answers_request);
 
  private:
   void OnQuickAnswerReceived(std::unique_ptr<QuickAnswer> quick_answer);
