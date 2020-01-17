@@ -745,6 +745,9 @@ extern const char kIgnorePreviewsBlacklistDescription[];
 extern const char kIgnoreLitePageRedirectHintsBlacklistName[];
 extern const char kIgnoreLitePageRedirectHintsBlacklistDescription[];
 
+extern const char kImprovedCookieControlsName[];
+extern const char kImprovedCookieControlsDescription[];
+
 extern const char kImprovedCookieControlsForThirdPartyCookieBlockingName[];
 extern const char
     kImprovedCookieControlsForThirdPartyCookieBlockingDescription[];
@@ -1732,9 +1735,6 @@ extern const char kNtpRealboxMatchOmniboxThemeDescription[];
 
 extern const char kNtpWebUIName[];
 extern const char kNtpWebUIDescription[];
-
-extern const char kImprovedCookieControlsName[];
-extern const char kImprovedCookieControlsDescription[];
 
 extern const char kEnableReaderModeName[];
 extern const char kEnableReaderModeDescription[];

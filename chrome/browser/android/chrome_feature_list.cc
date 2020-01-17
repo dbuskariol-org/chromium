@@ -69,6 +69,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &autofill_assistant::features::kAutofillAssistantChromeEntry,
     &autofill_assistant::features::kAutofillAssistantDirectActions,
     &autofill::features::kAutofillTouchToFill,
+    &content_settings::kImprovedCookieControls,
     &content_settings::kImprovedCookieControlsForThirdPartyCookieBlocking,
     &download::features::kDownloadAutoResumptionNative,
     &download::features::kUseDownloadOfflineContentProvider,
