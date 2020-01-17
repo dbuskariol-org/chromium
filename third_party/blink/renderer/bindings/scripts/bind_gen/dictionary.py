@@ -614,8 +614,8 @@ def generate_dictionary(dictionary):
         base_class_name=base_class_name)
 
     # Filepaths
-    header_path = path_manager.dict_path(ext="h")
-    source_path = path_manager.dict_path(ext="cc")
+    header_path = path_manager.api_path(ext="h")
+    source_path = path_manager.api_path(ext="cc")
 
     # Root nodes
     header_node = ListNode(tail="\n")
@@ -634,10 +634,7 @@ def generate_dictionary(dictionary):
 
     # Header part (copyright, include directives, and forward declarations)
     if dictionary.inherited:
-        # TODO(crbug.com/1034398): Use api_path() or impl_path() once we
-        # migrate IDL compiler and move generated code of dictionaries.
-        base_class_header = PathManager(
-            dictionary.inherited).dict_path(ext="h")
+        base_class_header = PathManager(dictionary.inherited).api_path(ext="h")
     else:
         base_class_header = (
             "third_party/blink/renderer/platform/bindings/dictionary_base.h")

@@ -154,8 +154,6 @@ def collect_include_headers(idl_definition):
     for type_def_obj in type_def_objs:
         if isinstance(type_def_obj, web_idl.Enumeration):
             continue
-        if isinstance(type_def_obj, web_idl.Dictionary):
-            header_paths.add(PathManager(type_def_obj).dict_path(ext="h"))
         header_paths.add(PathManager(type_def_obj).api_path(ext="h"))
 
     return header_paths
@@ -188,9 +186,6 @@ def collect_include_headers_of_idl_types(idl_types):
             header_paths.add(
                 "third_party/blink/renderer/platform/heap/handle.h")
             type_def_obj = idl_type.type_definition_object
-            # TODO(crbug.com/1034398): Remove this hack
-            if idl_type.is_dictionary:
-                header_paths.add(PathManager(type_def_obj).dict_path(ext="h"))
             header_paths.add(PathManager(type_def_obj).api_path(ext="h"))
         elif (idl_type.is_sequence or idl_type.is_frozen_array
               or idl_type.is_variadic or idl_type.is_record):

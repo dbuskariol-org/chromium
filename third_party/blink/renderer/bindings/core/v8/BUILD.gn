@@ -42,6 +42,7 @@ idl_compiler("generate_bindings_core_v8_interfaces") {
             generated_webcore_testing_idl_files
   if (use_v8_bind_gen_for_dictionary) {
     sources -= core_dictionary_idl_files
+    sources -= core_testing_dictionary_idl_files
   }
   output_dir = bindings_core_v8_output_dir
   output_name_suffix = ""
