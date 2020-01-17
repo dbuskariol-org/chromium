@@ -26,6 +26,7 @@
 #include "ash/system/unified/unified_system_info_view.h"
 #include "ash/system/unified/unified_system_tray_controller.h"
 #include "ash/system/unified/unified_system_tray_model.h"
+#include "ash/wm/tablet_mode/tablet_mode_controller.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/scoped_canvas.h"
 #include "ui/message_center/message_center.h"
@@ -230,20 +231,30 @@ class UnifiedSystemTrayView::FocusSearch : public views::FocusSearch {
 
 // static
 SkColor UnifiedSystemTrayView::GetBackgroundColor() {
-  if (features::IsBackgroundBlurEnabled()) {
-    AshColorProvider::BaseLayerType layer_type =
-        Shelf::ForWindow(Shell::GetPrimaryRootWindow())
-                    ->shelf_widget()
-                    ->GetBackgroundType() == ShelfBackgroundType::kHomeLauncher
-            ? AshColorProvider::BaseLayerType::kTransparent60
-            : AshColorProvider::BaseLayerType::kTransparent74;
-
-    return AshColorProvider::Get()->GetBaseLayerColor(
-        layer_type, AshColorProvider::AshColorMode::kDark);
+  if (!features::IsBackgroundBlurEnabled()) {
+    return AshColorProvider::Get()->DeprecatedGetBaseLayerColor(
+        AshColorProvider::BaseLayerType::kTransparent90,
+        kUnifiedMenuBackgroundColor);
   }
-  return AshColorProvider::Get()->DeprecatedGetBaseLayerColor(
-      AshColorProvider::BaseLayerType::kTransparent90,
-      kUnifiedMenuBackgroundColor);
+
+  AshColorProvider::BaseLayerType layer_type =
+      (Shell::Get()->tablet_mode_controller() &&
+       Shell::Get()->tablet_mode_controller()->InTabletMode())
+          ? AshColorProvider::BaseLayerType::kTransparent60
+          : AshColorProvider::BaseLayerType::kTransparent74;
+
+  auto background_type = Shelf::ForWindow(Shell::GetPrimaryRootWindow())
+                             ->shelf_widget()
+                             ->GetBackgroundType();
+  if (background_type == ShelfBackgroundType::kMaximized ||
+      background_type == ShelfBackgroundType::kInApp) {
+    layer_type = AshColorProvider::BaseLayerType::kTransparent90;
+  }
+
+  SkColor background_color = AshColorProvider::Get()->GetBaseLayerColor(
+      layer_type, AshColorProvider::AshColorMode::kDark);
+
+  return ShelfConfig::Get()->GetThemedColorFromWallpaper(background_color);
 }
 
 // static
