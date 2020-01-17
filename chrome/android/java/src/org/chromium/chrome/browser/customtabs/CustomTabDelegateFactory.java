@@ -19,6 +19,7 @@ import androidx.annotation.VisibleForTesting;
 import org.chromium.base.ContextUtils;
 import org.chromium.base.Log;
 import org.chromium.base.PackageManagerUtils;
+import org.chromium.base.supplier.Supplier;
 import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.browser.ShortcutHelper;
@@ -356,7 +357,6 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
     private final MultiWindowUtils mMultiWindowUtils;
     private final PendingIntent mFocusIntent;
     private ExternalIntentsPolicyProvider mExternalIntentsPolicyProvider;
-    private final ShareDelegate mShareDelegate;
 
     private TabWebContentsDelegateAndroid mWebContentsDelegateAndroid;
     private ExternalNavigationDelegateImpl mNavigationDelegate;
@@ -380,8 +380,7 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
             @WebDisplayMode int displayMode, boolean shouldEnableEmbeddedMediaExperience,
             BrowserControlsVisibilityDelegate visibilityDelegate, ExternalAuthUtils authUtils,
             MultiWindowUtils multiWindowUtils, @Nullable PendingIntent focusIntent,
-            ExternalIntentsPolicyProvider externalIntentsPolicyProvider,
-            ShareDelegate shareDelegate) {
+            ExternalIntentsPolicyProvider externalIntentsPolicyProvider) {
         mActivity = activity;
         mShouldHideBrowserControls = shouldHideBrowserControls;
         mIsOpenedByChrome = isOpenedByChrome;
@@ -394,7 +393,6 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
         mMultiWindowUtils = multiWindowUtils;
         mFocusIntent = focusIntent;
         mExternalIntentsPolicyProvider = externalIntentsPolicyProvider;
-        mShareDelegate = shareDelegate;
     }
 
     @Inject
@@ -408,7 +406,7 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
                 getDisplayMode(intentDataProvider),
                 intentDataProvider.shouldEnableEmbeddedMediaExperience(), visibilityDelegate,
                 authUtils, multiWindowUtils, intentDataProvider.getFocusIntent(),
-                externalIntentsPolicyProvider, activity.getShareDelegate());
+                externalIntentsPolicyProvider);
     }
 
     /**
@@ -417,7 +415,7 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
      */
     static CustomTabDelegateFactory createDummy() {
         return new CustomTabDelegateFactory(null, false, false, null, WebDisplayMode.BROWSER, false,
-                null, null, null, null, null, null);
+                null, null, null, null, null);
     }
 
     @Override
@@ -473,8 +471,10 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
     public ContextMenuPopulator createContextMenuPopulator(Tab tab) {
         @ChromeContextMenuPopulator.ContextMenuMode
         int contextMenuMode = getContextMenuMode(mActivityType);
+        Supplier<ShareDelegate> shareDelegateSupplier =
+                mActivity == null ? null : mActivity.getShareDelegateSupplier();
         return new ChromeContextMenuPopulator(
-                new TabContextMenuItemDelegate(tab), mShareDelegate, contextMenuMode);
+                new TabContextMenuItemDelegate(tab), shareDelegateSupplier, contextMenuMode);
     }
 
     /**
