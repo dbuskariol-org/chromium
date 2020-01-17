@@ -47,6 +47,7 @@
 #include "chrome/browser/ui/webui/settings/settings_page_ui_handler.h"
 #include "chrome/browser/ui/webui/settings/settings_security_key_handler.h"
 #include "chrome/browser/ui/webui/settings/settings_startup_pages_handler.h"
+#include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/site_settings_handler.h"
 #include "chrome/browser/web_applications/components/app_registrar.h"
 #include "chrome/browser/web_applications/web_app_provider.h"
@@ -281,7 +282,8 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
   html_source->SetDefaultResource(IDR_SETTINGS_SETTINGS_HTML);
 #endif
 
-  AddLocalizedStrings(html_source, profile, web_ui->GetWebContents());
+  AddSharedLocalizedStrings(html_source, profile, web_ui->GetWebContents());
+  AddBrowserLocalizedStrings(html_source, profile, web_ui->GetWebContents());
 
   ManagedUIHandler::Initialize(web_ui, html_source);
 
