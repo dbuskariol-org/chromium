@@ -2609,6 +2609,24 @@
             ]
         }
     ],
+    "EnableOverwritingPlaceholderUsernames": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "EnableOverwritingPlaceholderUsernames"
+                    ]
+                }
+            ]
+        }
+    ],
     "EnableSafetyTipUI": [
         {
             "platforms": [
