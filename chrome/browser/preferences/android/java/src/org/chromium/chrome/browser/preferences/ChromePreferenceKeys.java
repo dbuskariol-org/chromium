@@ -558,6 +558,19 @@ public final class ChromePreferenceKeys {
     public static final String VR_SHOULD_REGISTER_ASSETS_COMPONENT_ON_STARTUP =
             "should_register_vr_assets_component_on_startup";
 
+    /**
+     * Name of the shared preference for the version number of the dynamically loaded dex.
+     */
+    public static final String WEBAPK_EXTRACTED_DEX_VERSION =
+            "org.chromium.chrome.browser.webapps.extracted_dex_version";
+
+    /**
+     * Name of the shared preference for the Android OS version at the time that the dex was last
+     * extracted from Chrome's assets and optimized.
+     */
+    public static final String WEBAPK_LAST_SDK_VERSION =
+            "org.chromium.chrome.browser.webapps.last_sdk_version";
+
     /** Key for deferred recording of list of uninstalled WebAPK packages. */
     public static final String WEBAPK_UNINSTALLED_PACKAGES = "webapk_uninstalled_packages";
 
@@ -784,6 +797,8 @@ public final class ChromePreferenceKeys {
                 VARIATION_CACHED_BOTTOM_TOOLBAR,
                 VERIFIED_DIGITAL_ASSET_LINKS,
                 VR_SHOULD_REGISTER_ASSETS_COMPONENT_ON_STARTUP,
+                WEBAPK_EXTRACTED_DEX_VERSION,
+                WEBAPK_LAST_SDK_VERSION,
                 WEBAPK_UNINSTALLED_PACKAGES
         );
         // clang-format on
