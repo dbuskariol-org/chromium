@@ -2116,12 +2116,6 @@ void AppsGridView::StartDragAndDropHostDrag(const gfx::Point& grid_location) {
   if (!drag_view_ || !drag_and_drop_host_)
     return;
 
-  // Determine the mouse offset to the center of the icon so that the drag and
-  // drop host follows this layer.
-  gfx::Vector2d delta =
-      drag_view_offset_ - drag_view_->GetLocalBounds().CenterPoint();
-  delta.set_y(delta.y() + drag_view_->title()->size().height() / 2);
-
   // We have to hide the original item since the drag and drop host will do
   // the OS dependent code to "lift off the dragged item". Apply the scale
   // factor of this view's transform to the dragged view as well.
