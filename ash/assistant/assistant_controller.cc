@@ -109,6 +109,14 @@ void AssistantController::SendAssistantFeedback(
   assistant_->SendAssistantFeedback(std::move(assistant_feedback));
 }
 
+void AssistantController::StartTextInteraction(
+    const std::string& query,
+    bool allow_tts,
+    chromeos::assistant::mojom::AssistantQuerySource source) {
+  assistant_interaction_controller_.StartTextInteraction(query, allow_tts,
+                                                         source);
+}
+
 void AssistantController::StartSpeakerIdEnrollmentFlow() {
   if (assistant_state_controller_.consent_status().value_or(
           chromeos::assistant::prefs::ConsentStatus::kUnknown) ==

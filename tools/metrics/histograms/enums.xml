@@ -3141,6 +3141,7 @@ Unknown properties are collapsed to zero. -->
   <int value="8" label="kWarmerWelcome"/>
   <int value="9" label="kConversationStarter"/>
   <int value="10" label="kWhatsOnMyScreen"/>
+  <int value="11" label="kQuickAnswers"/>
 </enum>
 
 <enum name="AsyncDNSConfigParsePosix">

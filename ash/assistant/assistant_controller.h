@@ -92,6 +92,10 @@ class ASH_EXPORT AssistantController
   void SendAssistantFeedback(bool assistant_debug_info_allowed,
                              const std::string& feedback_description,
                              const std::string& screenshot_png) override;
+  void StartTextInteraction(
+      const std::string& query,
+      bool allow_tts,
+      chromeos::assistant::mojom::AssistantQuerySource source) override;
 
   // AssistantControllerObserver:
   void OnDeepLinkReceived(
