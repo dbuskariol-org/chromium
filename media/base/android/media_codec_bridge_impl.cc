@@ -112,7 +112,19 @@ bool GetCodecSpecificDataForAudio(AudioCodec codec,
     }
     case kCodecAAC: {
       output_csd0->assign(extra_data, extra_data + extra_data_size);
-      *output_frame_has_adts_header = true;
+
+      media::BitReader reader(extra_data, extra_data_size);
+
+      uint8_t profile = 0;
+      RETURN_ON_ERROR(reader.ReadBits(5, &profile));
+      if (profile == 31) {
+        uint8_t tmp;
+        RETURN_ON_ERROR(reader.ReadBits(6, &tmp));
+        profile = 32 + tmp;
+      }
+
+      // For xHE-AAC, ADTS does not have enough bits to convey the profile.
+      *output_frame_has_adts_header = profile != 42;
       break;
     }
     case kCodecOpus: {

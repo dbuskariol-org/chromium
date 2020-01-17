@@ -42,6 +42,13 @@ enum AudioCodec {
   kAudioCodecMax = kCodecMpegHAudio,
 };
 
+// TODO(dalecurtis): Add UKM and UMA metrics for AudioCodecProfile like we have
+// for VideoCodecProfile.
+enum class AudioCodecProfile {
+  kUnknown,
+  kXHE_AAC,
+};
+
 std::string MEDIA_EXPORT GetCodecName(AudioCodec codec);
 
 MEDIA_EXPORT AudioCodec StringToAudioCodec(const std::string& codec_id);

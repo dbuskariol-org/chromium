@@ -403,6 +403,20 @@ TEST_F(MP4StreamParserTest, MPEG2_AAC_LC) {
   ParseMP4File("bear-mpeg2-aac-only_frag.mp4", 512);
 }
 
+TEST_F(MP4StreamParserTest, MPEG4_XHE_AAC) {
+  InSequence s;
+  std::set<int> audio_object_types;
+  audio_object_types.insert(kISO_14496_3);
+  parser_.reset(new MP4StreamParser(audio_object_types, false, false));
+  auto params = GetDefaultInitParametersExpectations();
+  params.duration = base::TimeDelta::FromMicroseconds(1024000);
+  params.liveness = DemuxerStream::LIVENESS_RECORDED;
+  params.detected_video_track_count = 0;
+
+  InitializeParserWithInitParametersExpectations(params);
+  ParseMP4File("noise-xhe-aac.mp4", 512);
+}
+
 // Test that a moov box is not always required after Flush() is called.
 TEST_F(MP4StreamParserTest, NoMoovAfterFlush) {
   InitializeParser();

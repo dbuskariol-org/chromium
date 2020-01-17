@@ -236,6 +236,24 @@ TEST_F(AACTest, UnsupportedExFrequencyIndexTest) {
   EXPECT_TRUE(Parse(data));
 }
 
+TEST_F(AACTest, XHE_AAC) {
+  InSequence s;
+  uint8_t buffer[] = {0xf9, 0x46, 0x43, 0x22, 0x2c, 0xc0, 0x4c, 0x00,
+                      0x85, 0xa0, 0x01, 0x13, 0x84, 0x00, 0x20, 0x00,
+                      0x02, 0x50, 0x01, 0x19, 0x72, 0xc0, 0x00};
+  std::vector<uint8_t> data;
+  data.assign(buffer, buffer + sizeof(buffer));
+
+  EXPECT_TRUE(Parse(data));
+  EXPECT_EQ(aac_.GetOutputSamplesPerSecond(false), 48000);
+  EXPECT_EQ(aac_.GetChannelLayout(false), CHANNEL_LAYOUT_STEREO);
+
+  // ADTS conversion should do nothing since xHE-AAC can't be represented with
+  // only two bits for the profile.
+  EXPECT_TRUE(aac_.ConvertEsdsToADTS(&data));
+  EXPECT_EQ(data.size(), sizeof(buffer));
+}
+
 }  // namespace mp4
 
 }  // namespace media

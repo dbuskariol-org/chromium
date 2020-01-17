@@ -799,8 +799,16 @@ void FFmpegDemuxerStream::InitBitstreamConverter() {
       break;
 #endif
     case AV_CODEC_ID_AAC:
-      bitstream_converter_.reset(
-          new FFmpegAACBitstreamConverter(stream_->codecpar));
+      // FFmpeg doesn't understand xHE-AAC profiles yet, which can't be put in
+      // ADTS anyways, so skip bitstream conversion when the profile is
+      // unknown.
+      if (stream_->codecpar->profile != FF_PROFILE_UNKNOWN) {
+        bitstream_converter_.reset(
+            new FFmpegAACBitstreamConverter(stream_->codecpar));
+      } else {
+        DLOG(WARNING)
+            << "Skipping bitstream converstion for unknown AAC profile.";
+      }
       break;
     default:
       break;

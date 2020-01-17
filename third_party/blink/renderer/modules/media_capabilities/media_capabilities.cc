@@ -396,6 +396,7 @@ bool IsAudioConfigurationSupported(
     const String& mime_type,
     const String& codec) {
   media::AudioCodec audio_codec = media::kUnknownAudioCodec;
+  media::AudioCodecProfile audio_profile = media::AudioCodecProfile::kUnknown;
   bool is_audio_codec_ambiguous = true;
   bool is_spatial_rendering = false;
 
@@ -408,7 +409,8 @@ bool IsAudioConfigurationSupported(
   if (audio_config->hasSpatialRendering())
     is_spatial_rendering = audio_config->spatialRendering();
 
-  return media::IsSupportedAudioType({audio_codec, is_spatial_rendering});
+  return media::IsSupportedAudioType(
+      {audio_codec, audio_profile, is_spatial_rendering});
 }
 
 // Returns whether the VideoConfiguration is supported.

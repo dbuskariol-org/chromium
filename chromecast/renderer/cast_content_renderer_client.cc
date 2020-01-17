@@ -246,30 +246,34 @@ void CastContentRendererClient::AddSupportedKeySystems(
 
 bool CastContentRendererClient::IsSupportedAudioType(
     const ::media::AudioType& type) {
-  if (type.spatialRendering)
+  if (type.spatial_rendering)
     return false;
 
 #if defined(OS_ANDROID)
   // No ATV device we know of has (E)AC3 decoder, so it relies on the audio sink
   // device.
-  if (type.codec == ::media::kCodecEAC3)
+  if (type.codec == ::media::kCodecEAC3) {
     return kBitstreamAudioCodecEac3 &
            supported_bitstream_audio_codecs_info_.codecs;
-  if (type.codec == ::media::kCodecAC3)
+  }
+  if (type.codec == ::media::kCodecAC3) {
     return kBitstreamAudioCodecAc3 &
            supported_bitstream_audio_codecs_info_.codecs;
-  if (type.codec == ::media::kCodecMpegHAudio)
+  }
+  if (type.codec == ::media::kCodecMpegHAudio) {
     return kBitstreamAudioCodecMpegHAudio &
            supported_bitstream_audio_codecs_info_.codecs;
+  }
 
-  // TODO(sanfin): Implement this for Android.
-  return true;
+  return ::media::IsDefaultSupportedAudioType(type);
 #else
+  if (type.profile == ::media::AudioCodecProfile::kXHE_AAC)
+    return false;
+
   // If the HDMI sink supports bitstreaming the codec, then the vendor backend
   // does not need to support it.
-  if (IsSupportedBitstreamAudioCodec(type.codec)) {
+  if (IsSupportedBitstreamAudioCodec(type.codec))
     return true;
-  }
 
   media::AudioCodec codec = media::ToCastAudioCodec(type.codec);
   // Cast platform implements software decoding of Opus and FLAC, so only PCM
