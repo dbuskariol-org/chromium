@@ -395,7 +395,6 @@ android_library("browser_java") {
     "java/src/org/chromium/android_webview/AwServiceWorkerSettings.java",
     "java/src/org/chromium/android_webview/AwSettings.java",
     "java/src/org/chromium/android_webview/AwSupportLibIsomorphic.java",
-    "java/src/org/chromium/android_webview/AwSwitches.java",
     "java/src/org/chromium/android_webview/AwTracingController.java",
     "java/src/org/chromium/android_webview/AwVariationsSeedBridge.java",
     "java/src/org/chromium/android_webview/AwViewAndroidDelegate.java",
@@ -558,6 +557,7 @@ android_library("common_crash_java") {
 android_library("common_java") {
   sources = [
     "java/src/org/chromium/android_webview/common/AwResource.java",
+    "java/src/org/chromium/android_webview/common/AwSwitches.java",
     "java/src/org/chromium/android_webview/common/DeveloperModeUtils.java",
     "java/src/org/chromium/android_webview/common/Flag.java",
     "java/src/org/chromium/android_webview/common/FlagOverrideHelper.java",

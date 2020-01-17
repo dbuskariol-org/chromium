@@ -14,6 +14,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.StrictMode;
 
+import org.chromium.android_webview.common.AwSwitches;
 import org.chromium.android_webview.common.CommandLineUtil;
 import org.chromium.android_webview.common.PlatformServiceBridge;
 import org.chromium.android_webview.common.services.ICrashReceiverService;
