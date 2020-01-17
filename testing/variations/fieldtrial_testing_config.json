@@ -1872,7 +1872,7 @@
             ]
         }
     ],
-    "CrOSMinFilelistKb": [
+    "CrOSMinFilelistKB": [
         {
             "platforms": [
                 "chromeos"
