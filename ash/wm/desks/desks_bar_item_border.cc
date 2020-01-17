@@ -20,15 +20,15 @@ constexpr int kBorderPadding = 2;
 }  // namespace
 
 DesksBarItemBorder::DesksBarItemBorder(int corner_radius)
-    : corner_radius_(corner_radius) {}
+    : views::Border(SK_ColorTRANSPARENT), corner_radius_(corner_radius) {}
 
 void DesksBarItemBorder::Paint(const views::View& view, gfx::Canvas* canvas) {
-  if (color_ == SK_ColorTRANSPARENT)
+  if (color() == SK_ColorTRANSPARENT)
     return;
 
   cc::PaintFlags flags;
   flags.setStrokeWidth(kBorderSize);
-  flags.setColor(color_);
+  flags.setColor(color());
   flags.setStyle(cc::PaintFlags::kStroke_Style);
   flags.setAntiAlias(true);
 

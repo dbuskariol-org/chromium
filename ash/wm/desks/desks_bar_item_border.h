@@ -21,8 +21,6 @@ class DesksBarItemBorder : public views::Border {
   explicit DesksBarItemBorder(int corner_radius);
   ~DesksBarItemBorder() override = default;
 
-  void set_color(SkColor color) { color_ = color; }
-
   // views::Border:
   void Paint(const views::View& view, gfx::Canvas* canvas) override;
   gfx::Insets GetInsets() const override;
@@ -30,8 +28,6 @@ class DesksBarItemBorder : public views::Border {
 
  private:
   const int corner_radius_;
-
-  SkColor color_ = SK_ColorTRANSPARENT;
 
   DISALLOW_COPY_AND_ASSIGN(DesksBarItemBorder);
 };
