@@ -95,7 +95,7 @@ class PathManager(object):
             default_component = web_idl.Component("core")
             self._api_component = default_component
             self._impl_component = default_component
-        if len(components) == 1:
+        elif len(components) == 1:
             component = components[0]
             self._is_cross_components = False
             self._api_component = component
