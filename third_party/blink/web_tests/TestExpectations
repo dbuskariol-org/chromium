@@ -5169,10 +5169,6 @@ crbug.com/978620 external/wpt/html/user-activation/activation-hierarchy-parent-m
 crbug.com/860731 fast/scroll-snap/animate-fling-to-snap-points.html [ Failure Pass ]
 crbug.com/861682 [ Win ] external/wpt/css/mediaqueries/device-aspect-ratio-003.html [ Failure Pass ]
 
-# Other timeouts
-crbug.com/818324 [ Linux ] external/wpt/content-security-policy/embedded-enforcement/required_csp-header.html [ Timeout Pass ]
-crbug.com/818324 [ Mac ] external/wpt/content-security-policy/embedded-enforcement/required_csp-header.html [ Timeout Pass ]
-
 # S13N Sheriff 2018-7-11
 crbug.com/862643 http/tests/serviceworker/navigation_preload/use-counter.html [ Failure Pass ]
 crbug.com/862643 virtual/omt-service-worker-startup/http/tests/serviceworker/navigation_preload/use-counter.html [ Failure Pass ]
