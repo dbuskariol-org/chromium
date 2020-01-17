@@ -2490,6 +2490,7 @@ enum WebFeature {
   kWebkitBoxPackEndDoesSomething = 3125,
   kV8KeyframeEffect_Constructor = 3126,
   kWebNfcAPI = 3127,
+  kHostCandidateAttributeGetter = 3128,
 
   // Add new features immediately above this line. Don't change assigned
   // numbers of any item, and don't reuse removed slots.

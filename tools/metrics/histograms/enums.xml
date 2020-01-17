@@ -25954,6 +25954,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3125" label="WebkitBoxPackEndDoesSomething"/>
   <int value="3126" label="V8KeyframeEffect_Constructor"/>
   <int value="3127" label="WebNfcAPI"/>
+  <int value="3128" label="HostCandidateAttributeGetter"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">

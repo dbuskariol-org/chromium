@@ -444,11 +444,13 @@ TEST_F(PeerConnectionTrackerTest, IceCandidateError) {
   EXPECT_CALL(*mock_host_,
               UpdatePeerConnection(_, String("icecandidateerror"), _))
       .WillOnce(testing::SaveArg<2>(&update_value));
-  tracker_->TrackIceCandidateError(mock_handler_.get(), "[::1]", "test url",
-                                   404, "test error");
+  tracker_->TrackIceCandidateError(mock_handler_.get(), "1.1.1.1", 15, "[::1]",
+                                   "test url", 404, "test error");
   base::RunLoop().RunUntilIdle();
   String expected_value(
       "url: test url\n"
+      "address: 1.1.1.1\n"
+      "port: 15\n"
       "host_candidate: [::1]\n"
       "error_text: test error\n"
       "error_code: 404");

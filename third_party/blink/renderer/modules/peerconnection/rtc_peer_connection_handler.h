@@ -232,7 +232,9 @@ class MODULES_EXPORT RTCPeerConnectionHandler
                       int sdp_mline_index,
                       int component,
                       int address_family);
-  void OnIceCandidateError(const String& host_candidate,
+  void OnIceCandidateError(const String& address,
+                           base::Optional<uint16_t> port,
+                           const String& host_candidate,
                            const String& url,
                            int error_code,
                            const String& error_text);

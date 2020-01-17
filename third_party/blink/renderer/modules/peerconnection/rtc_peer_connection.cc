@@ -2671,14 +2671,17 @@ void RTCPeerConnection::DidGenerateICECandidate(
   RTCIceCandidate* ice_candidate = RTCIceCandidate::Create(platform_candidate);
   ScheduleDispatchEvent(RTCPeerConnectionIceEvent::Create(ice_candidate));
 }
-void RTCPeerConnection::DidFailICECandidate(const String& host_candidate,
+
+void RTCPeerConnection::DidFailICECandidate(const String& address,
+                                            base::Optional<uint16_t> port,
+                                            const String& host_candidate,
                                             const String& url,
                                             int error_code,
                                             const String& error_text) {
   DCHECK(!closed_);
   DCHECK(GetExecutionContext()->IsContextThread());
   ScheduleDispatchEvent(RTCPeerConnectionIceErrorEvent::Create(
-      host_candidate, url, error_code, error_text));
+      address, port, host_candidate, url, error_code, error_text));
 }
 
 void RTCPeerConnection::DidChangeSignalingState(

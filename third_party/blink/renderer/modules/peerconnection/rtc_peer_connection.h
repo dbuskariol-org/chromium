@@ -294,8 +294,11 @@ class MODULES_EXPORT RTCPeerConnection final
 
   // RTCPeerConnectionHandlerClient
   void NegotiationNeeded() override;
+
   void DidGenerateICECandidate(RTCIceCandidatePlatform*) override;
-  void DidFailICECandidate(const String& host_candidate,
+  void DidFailICECandidate(const String& address,
+                           base::Optional<uint16_t> port,
+                           const String& host_candidate,
                            const String& url,
                            int error_code,
                            const String& error_text) override;

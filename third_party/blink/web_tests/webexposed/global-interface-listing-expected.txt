@@ -6383,9 +6383,11 @@ interface RTCPeerConnection : EventTarget
     setter ontrack
 interface RTCPeerConnectionIceErrorEvent : Event
     attribute @@toStringTag
+    getter address
     getter errorCode
     getter errorText
     getter hostCandidate
+    getter port
     getter url
     method constructor
 interface RTCPeerConnectionIceEvent : Event
