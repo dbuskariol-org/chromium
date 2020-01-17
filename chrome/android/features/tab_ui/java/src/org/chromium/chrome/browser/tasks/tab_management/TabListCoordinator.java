@@ -20,13 +20,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.chromium.chrome.browser.ChromeActivity;
-import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.chrome.browser.lifecycle.Destroyable;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tasks.tab_groups.TabGroupUtils;
 import org.chromium.chrome.browser.tasks.tab_management.TabProperties.UiType;
+import org.chromium.chrome.browser.util.FeatureUtilities;
 import org.chromium.chrome.tab_ui.R;
 import org.chromium.components.feature_engagement.FeatureConstants;
 import org.chromium.ui.modelutil.MVCListAdapter;
@@ -129,6 +129,13 @@ public class TabListCoordinator implements Destroyable {
             }, TabGridViewBinder::bindClosableTab);
 
             recyclerListener = (holder) -> {
+                int holderItemViewType = holder.getItemViewType();
+
+                if (holderItemViewType != UiType.CLOSABLE
+                        && holderItemViewType != UiType.SELECTABLE) {
+                    return;
+                }
+
                 ViewLookupCachingFrameLayout root = (ViewLookupCachingFrameLayout) holder.itemView;
                 ImageView thumbnail = (ImageView) root.fastFindViewById(R.id.tab_thumbnail);
                 if (thumbnail == null) return;
@@ -322,5 +329,28 @@ public class TabListCoordinator implements Destroyable {
             MVCListAdapter.ViewBuilder<T> builder,
             PropertyModelChangeProcessor.ViewBinder<PropertyModel, T, PropertyKey> binder) {
         mAdapter.registerType(typeId, builder, binder);
+    }
+
+    /**
+     * Inserts a special {@link org.chromium.ui.modelutil.MVCListAdapter.ListItem} at given index of
+     * the model list.
+     * @see TabListMediator#addSpecialItemToModel(int, int, PropertyModel).
+     */
+    void addSpecialListItem(int index, @UiType int uiType, PropertyModel model) {
+        mMediator.addSpecialItemToModel(index, uiType, model);
+    }
+
+    /**
+     * Removes a special {@link org.chromium.ui.modelutil.MVCListAdapter.ListItem} that
+     * has the given {@code uiType} and/or its {@link PropertyModel} has the given
+     * {@code itemIdentifier}.
+     *
+     * @param uiType The uiType to match.
+     * @param itemIdentifier The itemIdentifier to match. This can be obsoleted if the {@link
+     *         org.chromium.ui.modelutil.MVCListAdapter.ListItem} does not need additional
+     *         identifier.
+     */
+    void removeSpecialListItem(@UiType int uiType, int itemIdentifier) {
+        mMediator.removeSpecialItemFromModel(uiType, itemIdentifier);
     }
 }

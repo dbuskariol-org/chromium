@@ -4,6 +4,9 @@
 
 package org.chromium.chrome.browser.tasks.tab_management;
 
+import static org.chromium.chrome.browser.tasks.tab_management.TabListModel.CardProperties.CARD_TYPE;
+import static org.chromium.chrome.browser.tasks.tab_management.TabListModel.CardProperties.ModelType.TAB;
+
 import android.app.Activity;
 import android.content.ComponentCallbacks;
 import android.content.Context;
@@ -661,9 +664,12 @@ class TabListMediator {
 
                 int nextTabId = Tab.INVALID_TAB_ID;
                 if (mModel.size() > 1) {
-                    nextTabId = closingTabIndex == 0
-                            ? mModel.get(closingTabIndex + 1).model.get(TabProperties.TAB_ID)
-                            : mModel.get(closingTabIndex - 1).model.get(TabProperties.TAB_ID);
+                    PropertyModel nextCardModel = closingTabIndex == 0
+                            ? mModel.get(closingTabIndex + 1).model
+                            : mModel.get(closingTabIndex - 1).model;
+                    nextTabId = nextCardModel.get(CARD_TYPE) == TAB
+                            ? nextCardModel.get(TabProperties.TAB_ID)
+                            : Tab.INVALID_TAB_ID;
                 }
 
                 return TabModelUtils.getTabById(mTabModelSelector.getCurrentModel(), nextTabId);
@@ -784,21 +790,32 @@ class TabListMediator {
         }
 
         assert mVisible;
-        int count = 0;
+        int selectedTabCount = 0;
+        int tabsCount = 0;
         for (int i = 0; i < mModel.size(); i++) {
-            if (mModel.get(i).model.get(TabProperties.IS_SELECTED)) count++;
+            if (mModel.get(i).model.get(CARD_TYPE) != TAB) continue;
+
+            if (mModel.get(i).model.get(TabProperties.IS_SELECTED)) selectedTabCount++;
             mModel.get(i).model.set(TabProperties.IS_SELECTED, false);
+            tabsCount += 1;
         }
-        assert (count == 1 || mModel.size() == 0)
+        assert (selectedTabCount == 1 || tabsCount == 0)
             : "There should be exactly one selected tab or no tabs at all when calling "
               + "TabListMediator.prepareOverview()";
     }
 
     private boolean areTabsUnchanged(@Nullable List<Tab> tabs) {
-        if (tabs == null) {
-            return mModel.size() == 0;
+        int tabsCount = 0;
+        for (int i = 0; i < mModel.size(); i++) {
+            if (mModel.get(i).model.get(CARD_TYPE) == TAB) {
+                tabsCount += 1;
+            }
         }
-        if (tabs.size() != mModel.size()) return false;
+        if (tabs == null) {
+            return tabsCount == 0;
+        }
+        if (tabs.size() != tabsCount) return false;
+
         for (int i = 0; i < tabs.size(); i++) {
             if (tabs.get(i).getId() != mModel.get(i).model.get(TabProperties.TAB_ID)) return false;
         }
@@ -864,7 +881,9 @@ class TabListMediator {
     void softCleanup() {
         assert !mVisible;
         for (int i = 0; i < mModel.size(); i++) {
-            mModel.get(i).model.set(TabProperties.THUMBNAIL_FETCHER, null);
+            if (mModel.get(i).model.get(CARD_TYPE) == TAB) {
+                mModel.get(i).model.set(TabProperties.THUMBNAIL_FETCHER, null);
+            }
         }
     }
 
@@ -1034,6 +1053,7 @@ class TabListMediator {
                                 selectedTabBackgroundDrawableId)
                         .with(TabProperties.TABSTRIP_FAVICON_BACKGROUND_COLOR_ID,
                                 tabstripFaviconBackgroundDrawableId)
+                        .with(CARD_TYPE, TAB)
                         .build();
 
         if (mUiType == UiType.SELECTABLE) {
@@ -1153,6 +1173,49 @@ class TabListMediator {
         };
         mTabListFaviconProvider.getFaviconForUrlAsync(
                 tab.getUrl(), tab.isIncognito(), faviconCallback);
+    }
+
+    /**
+     * Inserts a special {@link org.chromium.ui.modelutil.MVCListAdapter.ListItem} at given index of
+     * the current {@link TabListModel}.
+     *
+     * @param index The index of the {@link org.chromium.ui.modelutil.MVCListAdapter.ListItem} to be
+     *              inserted.
+     * @param uiType The view type the model will bind to.
+     * @param model The model that will be bound to a view.
+     */
+    void addSpecialItemToModel(int index, @UiType int uiType, PropertyModel model) {
+        mModel.add(index, new SimpleRecyclerViewAdapter.ListItem(uiType, model));
+    }
+
+    /**
+     * Removes a special {@link @link org.chromium.ui.modelutil.MVCListAdapter.ListItem} that
+     * has the given {@code uiType} and/or its {@link PropertyModel} has the given
+     * {@code itemIdentifier} from the current {@link TabListModel}.
+     *
+     * @param uiType The uiType to match.
+     * @param itemIdentifier The itemIdentifier to match. This can be obsoleted if the {@link @link
+     *         org.chromium.ui.modelutil.MVCListAdapter.ListItem} does not need additional
+     *         identifier.
+     */
+    void removeSpecialItemFromModel(@UiType int uiType, int itemIdentifier) {
+        int index = TabModel.INVALID_TAB_INDEX;
+        if (uiType == UiType.NEW_TAB_TILE) {
+            index = mModel.getIndexForNewTabTile();
+        }
+
+        if (index == TabModel.INVALID_TAB_INDEX) return;
+
+        assert validateItemAt(index, uiType, itemIdentifier);
+        mModel.removeAt(index);
+    }
+
+    private boolean validateItemAt(int index, @UiType int uiType, int itemIdentifier) {
+        if (uiType == UiType.NEW_TAB_TILE) {
+            return mModel.get(index).type == uiType;
+        }
+
+        return false;
     }
 
     @VisibleForTesting

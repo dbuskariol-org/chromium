@@ -61,6 +61,7 @@ public class TabSwitcherCoordinator
     private final TabSelectionEditorCoordinator mTabSelectionEditorCoordinator;
     private final UndoGroupSnackbarController mUndoGroupSnackbarController;
     private final TabModelSelector mTabModelSelector;
+    private NewTabTileCoordinator mNewTabTileCoordinator;
 
     private final MenuOrKeyboardActionController
             .MenuOrKeyboardActionHandler mTabSwitcherMenuActionHandler =
@@ -144,28 +145,23 @@ public class TabSwitcherCoordinator
 
         if (mode == TabListCoordinator.TabListMode.GRID) {
             if (ChromeFeatureList.isEnabled(ChromeFeatureList.CLOSE_TAB_SUGGESTIONS)) {
-                mTabListCoordinator.registerItemType(TabProperties.UiType.SUGGESTION, () -> {
+                mTabListCoordinator.registerItemType(TabProperties.UiType.MESSAGE, () -> {
                     return (ViewGroup) LayoutInflater.from(context).inflate(
                             R.layout.tab_suggestion_card_item, container, false);
                 }, TabGridMessageCardViewBinder::bind);
             }
 
-            assert mTabListCoordinator.getContainerView().getLayoutManager()
-                            instanceof GridLayoutManager;
-
-            // TODO(1004570): Have a flexible approach for span size look up for each UiType.
-            ((GridLayoutManager) mTabListCoordinator.getContainerView().getLayoutManager())
-                    .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                        @Override
-                        public int getSpanSize(int position) {
-                            int itemType = mTabListCoordinator.getContainerView()
-                                                   .getAdapter()
-                                                   .getItemViewType(position);
-
-                            if (itemType == TabProperties.UiType.SUGGESTION) return 2;
-                            return 1;
-                        }
-                    });
+            if (ChromeFeatureList
+                            .getFieldTrialParamByFeature(ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID,
+                                    "tab_grid_layout_android_new_tab_tile")
+                            .equals("NewTabTile")) {
+                mNewTabTileCoordinator =
+                        new NewTabTileCoordinator(tabModelSelector, tabCreatorManager);
+                mTabListCoordinator.registerItemType(TabProperties.UiType.NEW_TAB_TILE, () -> {
+                    return (ViewGroup) LayoutInflater.from(context).inflate(
+                            R.layout.new_tab_tile_card_item, container, false);
+                }, NewTabTileViewBinder::bind);
+            }
         }
 
         mMenuOrKeyboardActionController = menuOrKeyboardActionController;
@@ -283,7 +279,17 @@ public class TabSwitcherCoordinator
             }
         }
 
-        return mTabListCoordinator.resetWithListOfTabs(tabs, quickMode, mruMode);
+        boolean showQuickly = mTabListCoordinator.resetWithListOfTabs(tabs, quickMode, mruMode);
+        if (showQuickly) {
+            mTabListCoordinator.removeSpecialListItem(TabProperties.UiType.NEW_TAB_TILE, 0);
+        }
+
+        if (tabs != null && mNewTabTileCoordinator != null) {
+            mTabListCoordinator.addSpecialListItem(tabs.size(), TabProperties.UiType.NEW_TAB_TILE,
+                    mNewTabTileCoordinator.getModel());
+        }
+
+        return showQuickly;
     }
 
     private View getTabGridDialogAnimationSourceView(int tabId) {
@@ -318,6 +324,9 @@ public class TabSwitcherCoordinator
         }
         if (mTabGridIphItemCoordinator != null) {
             mTabGridIphItemCoordinator.destroy();
+        }
+        if (mNewTabTileCoordinator != null) {
+            mNewTabTileCoordinator.destroy();
         }
         mMultiThumbnailCardProvider.destroy();
         mTabSelectionEditorCoordinator.destroy();

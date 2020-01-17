@@ -6,6 +6,10 @@ package org.chromium.chrome.features.start_surface;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 import static org.junit.Assert.assertEquals;
@@ -13,6 +17,8 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import static org.chromium.base.test.util.CallbackHelper.WAIT_TIMEOUT_SECONDS;
+import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.verifyTabModelTabCount;
+import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.verifyTabSwitcherCardCount;
 import static org.chromium.chrome.browser.util.UrlConstants.NTP_URL;
 import static org.chromium.content_public.browser.test.util.CriteriaHelper.DEFAULT_MAX_TIME_TO_POLL;
 import static org.chromium.content_public.browser.test.util.CriteriaHelper.DEFAULT_POLLING_INTERVAL;
@@ -44,16 +50,20 @@ import org.chromium.base.GarbageCollectionTestUtils;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.test.util.CommandLineFlags;
 import org.chromium.base.test.util.DisabledTest;
+import org.chromium.base.test.util.Feature;
 import org.chromium.base.test.util.MinAndroidSdkLevel;
 import org.chromium.base.test.util.Restriction;
 import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.ChromeSwitches;
+import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.TabSelectionType;
 import org.chromium.chrome.browser.tasks.tab_management.TabSwitcher;
+import org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper;
 import org.chromium.chrome.browser.util.FeatureUtilities;
+import org.chromium.chrome.tab_ui.R;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.chrome.test.ChromeTabbedActivityTestRule;
 import org.chromium.chrome.test.util.ApplicationTestUtils;
@@ -95,6 +105,7 @@ public class StartSurfaceLayoutTest {
     private List<WeakReference<Bitmap>> mAllBitmaps = new LinkedList<>();
     private Callback<Bitmap> mBitmapListener =
             (bitmap) -> mAllBitmaps.add(new WeakReference<>(bitmap));
+    private TabSwitcher.TabListDelegate mTabListDelegate;
 
     @Before
     public void setUp() {
@@ -110,10 +121,9 @@ public class StartSurfaceLayoutTest {
         mUrl = testServer.getURL("/chrome/test/data/android/navigate/simple.html");
         mRepeat = 3;
 
-        TabSwitcher.TabListDelegate delegate =
-                mStartSurfaceLayout.getStartSurfaceForTesting().getTabListDelegate();
-        delegate.setBitmapCallbackForTesting(mBitmapListener);
-        Assert.assertEquals(0, delegate.getBitmapFetchCountForTesting());
+        mTabListDelegate = mStartSurfaceLayout.getStartSurfaceForTesting().getTabListDelegate();
+        mTabListDelegate.setBitmapCallbackForTesting(mBitmapListener);
+        Assert.assertEquals(0, mTabListDelegate.getBitmapFetchCountForTesting());
 
         mActivityTestRule.getActivity().getTabContentManager().setCaptureMinRequestTimeForTesting(
                 0);
@@ -570,6 +580,157 @@ public class StartSurfaceLayoutTest {
 
         onView(withId(org.chromium.chrome.tab_ui.R.id.tab_list_view))
                 .check(TabCountAssertion.havingTabCount(1));
+    }
+
+    @Test
+    @MediumTest
+    @Feature("NewTabTile")
+    // clang-format off
+    @Features.DisableFeatures({ChromeFeatureList.TAB_TO_GTS_ANIMATION,
+            ChromeFeatureList.CLOSE_TAB_SUGGESTIONS})
+    @CommandLineFlags.Add({BASE_PARAMS + "/tab_grid_layout_android_new_tab_tile/NewTabTile"
+            + "/tab_grid_layout_android_new_tab/false"})
+    public void testNewTabTile() throws InterruptedException {
+        // clang-format on
+        // TODO(yuezhanggg): Modify TabUiTestHelper.verifyTabSwitcherCardCount so that it can be
+        // used here to verify card count. Right now it doesn't work because when switching between
+        // normal/incognito, the tab list fading-in animation has not finished when check happens.
+        ChromeTabbedActivity cta = mActivityTestRule.getActivity();
+        prepareTabs(2, 0, null);
+
+        // New tab tile should be showing.
+        enterGTSWithThumbnailChecking();
+        onView(withId(R.id.new_tab_tile)).check(matches(isDisplayed()));
+        onView(withId(R.id.tab_list_view)).check(TabCountAssertion.havingTabCount(3));
+        verifyTabModelTabCount(cta, 2, 0);
+
+        // Clicking new tab tile in normal mode should create a normal tab.
+        onView(withId(R.id.new_tab_tile)).perform(click());
+        CriteriaHelper.pollUiThread(() -> !cta.getOverviewModeBehavior().overviewVisible());
+        enterGTSWithThumbnailChecking();
+        onView(withId(R.id.new_tab_tile)).check(matches(isDisplayed()));
+        onView(withId(R.id.tab_list_view)).check(TabCountAssertion.havingTabCount(4));
+        verifyTabModelTabCount(cta, 3, 0);
+
+        // New tab tile should be showing in incognito mode.
+        switchTabModel(true);
+        onView(withId(R.id.new_tab_tile)).check(matches(isDisplayed()));
+        onView(withId(R.id.tab_list_view)).check(TabCountAssertion.havingTabCount(1));
+
+        // Clicking new tab tile in incognito mode should create an incognito tab.
+        onView(withId(R.id.new_tab_tile)).perform(click());
+        CriteriaHelper.pollUiThread(() -> !cta.getOverviewModeBehavior().overviewVisible());
+        enterGTSWithThumbnailChecking();
+        onView(withId(R.id.new_tab_tile)).check(matches(isDisplayed()));
+        onView(withId(R.id.tab_list_view)).check(TabCountAssertion.havingTabCount(2));
+        verifyTabModelTabCount(cta, 3, 1);
+
+        // Close all normal tabs and incognito tabs, the new tab tile should still show in both
+        // modes.
+        switchTabModel(false);
+        onView(withId(R.id.tab_list_view)).check(TabCountAssertion.havingTabCount(4));
+        MenuUtils.invokeCustomMenuActionSync(
+                InstrumentationRegistry.getInstrumentation(), cta, R.id.close_all_tabs_menu_id);
+        onView(withId(R.id.tab_list_view)).check(TabCountAssertion.havingTabCount(1));
+        onView(withId(R.id.new_tab_tile)).check(matches(isDisplayed()));
+        switchTabModel(true);
+        onView(withId(R.id.tab_list_view)).check(TabCountAssertion.havingTabCount(1));
+        onView(withId(R.id.new_tab_tile)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    @MediumTest
+    @Feature("NewTabTile")
+    // clang-format off
+    @Features.DisableFeatures({ChromeFeatureList.TAB_TO_GTS_ANIMATION,
+            ChromeFeatureList.CLOSE_TAB_SUGGESTIONS})
+    @CommandLineFlags.Add({BASE_PARAMS + "/tab_grid_layout_android_new_tab_tile/false"
+            + "/tab_grid_layout_android_new_tab/false"})
+    public void testNewTabTile_Disabled() throws InterruptedException {
+        // clang-format on
+        ChromeTabbedActivity cta = mActivityTestRule.getActivity();
+        prepareTabs(2, 0, null);
+
+        enterGTSWithThumbnailChecking();
+
+        onView(withId(R.id.new_tab_tile)).check(doesNotExist());
+        verifyTabSwitcherCardCount(cta, 2);
+
+        switchTabModel(true);
+        onView(withId(R.id.new_tab_tile)).check(doesNotExist());
+        verifyTabSwitcherCardCount(cta, 0);
+    }
+
+    private void switchTabModel(boolean isIncognito) {
+        assertTrue(isIncognito
+                != mActivityTestRule.getActivity().getTabModelSelector().isIncognitoSelected());
+
+        onView(withContentDescription(isIncognito
+                               ? R.string.accessibility_tab_switcher_incognito_stack
+                               : R.string.accessibility_tab_switcher_standard_stack))
+                .perform(click());
+
+        CriteriaHelper.pollInstrumentationThread(()
+                                                         -> mActivityTestRule.getActivity()
+                                                                    .getTabModelSelector()
+                                                                    .isIncognitoSelected()
+                        == isIncognito);
+    }
+
+    /**
+     * Make Chrome have {@code numTabs} of regular Tabs and {@code numIncognitoTabs} of incognito
+     * tabs with {@code url} loaded, and assert no bitmap fetching occurred.
+     *
+     * @param numTabs The number of regular tabs.
+     * @param numIncognitoTabs The number of incognito tabs.
+     * @param url The URL to load.
+     */
+    private void prepareTabs(int numTabs, int numIncognitoTabs, @Nullable String url) {
+        int oldCount = mTabListDelegate.getBitmapFetchCountForTesting();
+        TabUiTestHelper.prepareTabsWithThumbnail(mActivityTestRule, numTabs, numIncognitoTabs, url);
+        assertEquals(0, mTabListDelegate.getBitmapFetchCountForTesting() - oldCount);
+    }
+
+    /**
+     * TODO(wychen): move some of the callers to {@link TabUiTestHelper#enterTabSwitcher}.
+     */
+    private void enterGTSWithThumbnailChecking() throws InterruptedException {
+        Tab currentTab = mActivityTestRule.getActivity().getTabModelSelector().getCurrentTab();
+        // Native tabs need to be invalidated first to trigger thumbnail taking, so skip them.
+        boolean checkThumbnail = !currentTab.isNativePage();
+
+        if (checkThumbnail) {
+            mActivityTestRule.getActivity().getTabContentManager().removeTabThumbnail(
+                    currentTab.getId());
+        }
+
+        int count = getCaptureCount();
+        waitForCaptureRateControl();
+        // TODO(wychen): use TabUiTestHelper.enterTabSwitcher() instead.
+        //  Might increase flakiness though. See crbug.com/1024742.
+        TestThreadUtils.runOnUiThreadBlocking(
+                () -> mActivityTestRule.getActivity().getLayoutManager().showOverview(true));
+        assertTrue(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
+
+        // Make sure the fading animation is done.
+        int delta;
+        if (TextUtils.equals(
+                    mActivityTestRule.getActivity().getCurrentWebContents().getLastCommittedUrl(),
+                    NTP_URL)) {
+            // NTP is not invalidated, so no new captures.
+            delta = 0;
+        } else {
+            // The final capture at StartSurfaceLayout#finishedShowing time.
+            delta = 1;
+            if (ChromeFeatureList.isEnabled(ChromeFeatureList.TAB_TO_GTS_ANIMATION)
+                    && areAnimatorsEnabled()) {
+                // The faster capturing without writing back to cache.
+                delta += 1;
+            }
+        }
+        checkCaptureCount(delta, count);
+        TabUiTestHelper.verifyAllTabsHaveThumbnail(
+                mActivityTestRule.getActivity().getCurrentTabModel());
     }
 
     private static class TabCountAssertion implements ViewAssertion {
