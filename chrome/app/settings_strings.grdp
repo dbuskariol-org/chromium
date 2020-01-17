@@ -5572,7 +5572,7 @@
     Add fingerprint
   </message>
   <message name="IDS_SETTINGS_SECURITY_KEYS_BIO_CHOOSE_NAME" desc="A label instructing the user to provide a descriptive name for a fingerprint enrolled to a security key.">
-    Choose a name for this fingerprint
+    Enter a name for this fingerprint
   </message>
   <message name="IDS_SETTINGS_SECURITY_KEYS_BIO_NAME_LABEL" desc="A label for a text input field containing a descriptive name for a fingerprint enrolled to a security key.">
     Name
