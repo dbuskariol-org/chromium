@@ -4039,6 +4039,10 @@ const FeatureEntry kFeatureEntries[] = {
     {"d3d11-video-decoder", flag_descriptions::kD3D11VideoDecoderName,
      flag_descriptions::kD3D11VideoDecoderDescription, kOsWin,
      FEATURE_VALUE_TYPE(media::kD3D11VideoDecoder)},
+#elif defined(OS_CHROMEOS)
+    {"chromeos-video-decoder", flag_descriptions::kChromeosVideoDecoderName,
+     flag_descriptions::kChromeosVideoDecoderDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(media::kChromeosVideoDecoder)},
 #endif
 
 #if defined(OS_ANDROID)

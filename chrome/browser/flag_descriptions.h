@@ -1983,6 +1983,9 @@ extern const char kBluetoothAggressiveAppearanceFilterDescription[];
 extern const char kCameraSystemWebAppName[];
 extern const char kCameraSystemWebAppDescription[];
 
+extern const char kChromeosVideoDecoderName[];
+extern const char kChromeosVideoDecoderDescription[];
+
 extern const char kCrOSContainerName[];
 extern const char kCrOSContainerDescription[];
 

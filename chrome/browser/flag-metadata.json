@@ -460,6 +460,13 @@
     "expiry_milestone": 83
   },
   {
+    "name": "chromeos-video-decoder",
+    "owners": [ "chromeos-video-eng@google.com" ],
+    // This flag should expire once all VDA-based ChromeOS video decoders have
+    // been removed.
+    "expiry_milestone": 90
+  },
+  {
     "name": "clear-old-browsing-data",
     "owners": [ "dullweber" ],
     "expiry_milestone": 78

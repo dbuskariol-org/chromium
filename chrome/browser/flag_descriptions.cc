@@ -3348,6 +3348,11 @@ const char kCameraSystemWebAppName[] = "Camera System Web App";
 const char kCameraSystemWebAppDescription[] =
     "Run the Chrome Camera App as a System Web App.";
 
+const char kChromeosVideoDecoderName[] = "New Chrome OS Video Decoder";
+const char kChromeosVideoDecoderDescription[] =
+    "Enables the new Chrome OS video decoder pipeline for hardware accelerated"
+    "video decoding.";
+
 const char kCrOSContainerName[] = "Chrome OS Container";
 const char kCrOSContainerDescription[] =
     "Enable the use of Chrome OS Container utility.";
