@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SESSIONS_CORE_BASE_SESSION_SERVICE_TEST_HELPER_H_
-#define COMPONENTS_SESSIONS_CORE_BASE_SESSION_SERVICE_TEST_HELPER_H_
+#ifndef COMPONENTS_SESSIONS_CORE_COMMAND_STORAGE_MANAGER_TEST_HELPER_H_
+#define COMPONENTS_SESSIONS_CORE_COMMAND_STORAGE_MANAGER_TEST_HELPER_H_
 
 #include <memory>
 #include <vector>
@@ -14,13 +14,13 @@
 
 namespace sessions {
 class SessionCommand;
-class BaseSessionService;
+class CommandStorageManager;
 
-class BaseSessionServiceTestHelper {
+class CommandStorageManagerTestHelper {
  public:
-  explicit BaseSessionServiceTestHelper(
-      BaseSessionService* base_session_service_);
-  ~BaseSessionServiceTestHelper();
+  explicit CommandStorageManagerTestHelper(
+      CommandStorageManager* command_storage_manager_);
+  ~CommandStorageManagerTestHelper() = default;
 
   // This posts the task to the SequencedWorkerPool, or run immediately
   // if the SequencedWorkerPool has been shutdown.
@@ -34,12 +34,14 @@ class BaseSessionServiceTestHelper {
   bool ReadLastSessionCommands(
       std::vector<std::unique_ptr<SessionCommand>>* commands);
 
- private:
-  BaseSessionService* base_session_service_;
+  scoped_refptr<base::SequencedTaskRunner> GetBackendTaskRunner();
 
-  DISALLOW_COPY_AND_ASSIGN(BaseSessionServiceTestHelper);
+ private:
+  CommandStorageManager* command_storage_manager_;
+
+  DISALLOW_COPY_AND_ASSIGN(CommandStorageManagerTestHelper);
 };
 
 }  // namespace sessions
 
-#endif  // COMPONENTS_SESSIONS_CORE_BASE_SESSION_SERVICE_TEST_HELPER_H_
+#endif  // COMPONENTS_SESSIONS_CORE_COMMAND_STORAGE_MANAGER_TEST_HELPER_H_

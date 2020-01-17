@@ -84,11 +84,11 @@ source_set("shared") {
   visibility = [ ":*" ]
 
   sources = [
-    "core/base_session_service.cc",
-    "core/base_session_service.h",
     "core/base_session_service_commands.cc",
     "core/base_session_service_commands.h",
-    "core/base_session_service_delegate.h",
+    "core/command_storage_manager.cc",
+    "core/command_storage_manager.h",
+    "core/command_storage_manager_delegate.h",
     "core/live_tab.cc",
     "core/live_tab.h",
     "core/live_tab_context.h",
@@ -159,8 +159,8 @@ static_library("test_support") {
 
   if (!is_android && !is_ios) {
     sources += [
-      "core/base_session_service_test_helper.cc",
-      "core/base_session_service_test_helper.h",
+      "core/command_storage_manager_test_helper.cc",
+      "core/command_storage_manager_test_helper.h",
     ]
   }
 

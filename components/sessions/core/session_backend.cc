@@ -14,8 +14,6 @@
 #include "base/metrics/histogram_macros.h"
 #include "build/build_config.h"
 
-using base::TimeTicks;
-
 namespace sessions {
 
 // File version number.
@@ -195,7 +193,7 @@ const int SessionBackend::kFileReadBufferSize = 1024;
 
 SessionBackend::SessionBackend(
     scoped_refptr<base::SequencedTaskRunner> owning_task_runner,
-    sessions::BaseSessionService::SessionType type,
+    sessions::CommandStorageManager::SessionType type,
     const base::FilePath& path_to_dir)
     : RefCountedDeleteOnSequence(owning_task_runner),
       type_(type),
@@ -214,7 +212,6 @@ void SessionBackend::Init() {
 
   // Create the directory for session info.
   base::CreateDirectory(path_to_dir_);
-
   MoveCurrentSessionToLastSession();
 }
 
@@ -238,7 +235,7 @@ void SessionBackend::AppendCommands(
 
 void SessionBackend::ReadLastSessionCommands(
     const base::CancelableTaskTracker::IsCanceledCallback& is_canceled,
-    sessions::BaseSessionService::GetCommandsCallback callback) {
+    sessions::CommandStorageManager::GetCommandsCallback callback) {
   if (is_canceled.Run())
     return;
 
@@ -363,7 +360,7 @@ base::File* SessionBackend::OpenAndWriteHeader(const base::FilePath& path) {
 
 base::FilePath SessionBackend::GetLastSessionPath() {
   base::FilePath path = path_to_dir_;
-  if (type_ == sessions::BaseSessionService::TAB_RESTORE)
+  if (type_ == sessions::CommandStorageManager::TAB_RESTORE)
     path = path.AppendASCII(kLastTabSessionFileName);
   else
     path = path.AppendASCII(kLastSessionFileName);
@@ -372,7 +369,7 @@ base::FilePath SessionBackend::GetLastSessionPath() {
 
 base::FilePath SessionBackend::GetCurrentSessionPath() {
   base::FilePath path = path_to_dir_;
-  if (type_ == sessions::BaseSessionService::TAB_RESTORE)
+  if (type_ == sessions::CommandStorageManager::TAB_RESTORE)
     path = path.AppendASCII(kCurrentTabSessionFileName);
   else
     path = path.AppendASCII(kCurrentSessionFileName);

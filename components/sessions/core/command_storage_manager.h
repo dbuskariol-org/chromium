@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SESSIONS_CORE_BASE_SESSION_SERVICE_H_
-#define COMPONENTS_SESSIONS_CORE_BASE_SESSION_SERVICE_H_
+#ifndef COMPONENTS_SESSIONS_CORE_COMMAND_STORAGE_MANAGER_H_
+#define COMPONENTS_SESSIONS_CORE_COMMAND_STORAGE_MANAGER_H_
 
 #include <memory>
 
@@ -20,34 +20,33 @@ class SequencedTaskRunner;
 }
 
 namespace sessions {
-class BaseSessionServiceDelegate;
+class CommandStorageManagerDelegate;
 class SessionCommand;
 class SessionBackend;
 
-// BaseSessionService is the super class of both tab restore service and
-// session service. It contains commonality needed by both, in particular
-// it manages a set of SessionCommands that are periodically sent to a
-// SessionBackend.
-class SESSIONS_EXPORT BaseSessionService {
+// CommandStorageManager is responsible for reading/writing SessionCommands
+// to disk. SessionCommands are used to save and restore the state of the
+// browser. CommandStorageManager runs on the main thread and uses
+// SessionBackend (which runs on a background task runner) for the actual
+// reading/writing. In hopes of minimizing IO, SessionCommands are queued up
+// and processed after a delay.
+class SESSIONS_EXPORT CommandStorageManager {
  public:
   // Identifies the type of session service this is. This is used by the
   // backend to determine the name of the files.
-  enum SessionType {
-    SESSION_RESTORE,
-    TAB_RESTORE
-  };
+  enum SessionType { SESSION_RESTORE, TAB_RESTORE };
 
   using GetCommandsCallback =
       base::OnceCallback<void(std::vector<std::unique_ptr<SessionCommand>>)>;
 
-  // Creates a new BaseSessionService. After creation you need to invoke
+  // Creates a new CommandStorageManager. After creation you need to invoke
   // Init. |delegate| will remain owned by the creator and it is guaranteed
   // that its lifetime surpasses this class.
   // |type| gives the type of session service, |path| the path to save files to.
-  BaseSessionService(SessionType type,
-                     const base::FilePath& path,
-                     BaseSessionServiceDelegate* delegate);
-  ~BaseSessionService();
+  CommandStorageManager(SessionType type,
+                        const base::FilePath& path,
+                        CommandStorageManagerDelegate* delegate);
+  ~CommandStorageManager();
 
   // Moves the current session to the last session.
   void MoveCurrentSessionToLastSession();
@@ -103,7 +102,7 @@ class SESSIONS_EXPORT BaseSessionService {
       base::CancelableTaskTracker* tracker);
 
  private:
-  friend class BaseSessionServiceTestHelper;
+  friend class CommandStorageManagerTestHelper;
 
   // This posts the task to the TaskRunner.
   void RunTaskOnBackendThread(const base::Location& from_here,
@@ -122,18 +121,18 @@ class SESSIONS_EXPORT BaseSessionService {
   // The number of commands sent to the backend before doing a reset.
   int commands_since_reset_;
 
-  BaseSessionServiceDelegate* delegate_;
+  CommandStorageManagerDelegate* delegate_;
 
   // TaskRunner all backend tasks are run on. This is a SequencedTaskRunner as
   // all tasks *must* be processed in the order they are scheduled.
   scoped_refptr<base::SequencedTaskRunner> backend_task_runner_;
 
   // Used to invoke Save.
-  base::WeakPtrFactory<BaseSessionService> weak_factory_{this};
+  base::WeakPtrFactory<CommandStorageManager> weak_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(BaseSessionService);
+  DISALLOW_COPY_AND_ASSIGN(CommandStorageManager);
 };
 
 }  // namespace sessions
 
-#endif  // COMPONENTS_SESSIONS_CORE_BASE_SESSION_SERVICE_H_
+#endif  // COMPONENTS_SESSIONS_CORE_COMMAND_STORAGE_MANAGER_H_

@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SESSIONS_CORE_BASE_SESSION_SERVICE_DELEGATE_H_
-#define COMPONENTS_SESSIONS_CORE_BASE_SESSION_SERVICE_DELEGATE_H_
+#ifndef COMPONENTS_SESSIONS_CORE_COMMAND_STORAGE_MANAGER_DELEGATE_H_
+#define COMPONENTS_SESSIONS_CORE_COMMAND_STORAGE_MANAGER_DELEGATE_H_
 
 namespace sessions {
 
-// The BaseSessionServiceDelegate decouples the BaseSessionService from
+// The CommandStorageManagerDelegate decouples the CommandStorageManager from
 // chrome/content dependencies.
-class BaseSessionServiceDelegate {
+class CommandStorageManagerDelegate {
  public:
-  BaseSessionServiceDelegate() {}
+  CommandStorageManagerDelegate() {}
 
   // Returns true if save operations can be performed as a delayed task - which
   // is usually only used by unit tests.
@@ -21,9 +21,9 @@ class BaseSessionServiceDelegate {
   virtual void OnWillSaveCommands() {}
 
  protected:
-  virtual ~BaseSessionServiceDelegate() {}
+  virtual ~CommandStorageManagerDelegate() {}
 };
 
 }  // namespace sessions
 
-#endif  // COMPONENTS_SESSIONS_CORE_BASE_SESSION_SERVICE_DELEGATE_H_
+#endif  // COMPONENTS_SESSIONS_CORE_COMMAND_STORAGE_MANAGER_DELEGATE_H_

@@ -13,7 +13,7 @@
 #include "base/macros.h"
 #include "base/memory/ref_counted_delete_on_sequence.h"
 #include "base/task/cancelable_task_tracker.h"
-#include "components/sessions/core/base_session_service.h"
+#include "components/sessions/core/command_storage_manager.h"
 #include "components/sessions/core/session_command.h"
 #include "components/sessions/core/sessions_export.h"
 
@@ -24,17 +24,18 @@ class File;
 namespace sessions {
 // SessionBackend -------------------------------------------------------------
 
-// SessionBackend is the backend used by BaseSessionService. It is responsible
-// for maintaining two files:
+// SessionBackend is the backend used by CommandStorageManager. It is
+// responsible for maintaining two files:
+//
 // . The current file, which is the file commands passed to AppendCommands
 //   get written to.
 // . The last file. When created the current file is moved to the last
 //   file.
 //
 // Each file contains an arbitrary set of commands supplied from
-// BaseSessionService. A command consists of a unique id and a stream of bytes.
-// SessionBackend does not use the id in anyway, that is used by
-// BaseSessionService.
+// CommandStorageManager. A command consists of a unique id and a stream of
+// bytes. SessionBackend does not use the id in anyway, that is used by
+// CommandStorageManager.
 class SESSIONS_EXPORT SessionBackend
     : public base::RefCountedDeleteOnSequence<SessionBackend> {
  public:
@@ -53,7 +54,7 @@ class SESSIONS_EXPORT SessionBackend
   // indicates which service is using this backend. |type| is used to determine
   // the name of the files to use as well as for logging.
   SessionBackend(scoped_refptr<base::SequencedTaskRunner> owning_task_runner,
-                 sessions::BaseSessionService::SessionType type,
+                 sessions::CommandStorageManager::SessionType type,
                  const base::FilePath& path_to_dir);
 
   // Moves the current file to the last file, and recreates the current file.
@@ -73,7 +74,7 @@ class SESSIONS_EXPORT SessionBackend
   // session, invokes ReadLastSessionCommandsImpl to do the work.
   void ReadLastSessionCommands(
       const base::CancelableTaskTracker::IsCanceledCallback& is_canceled,
-      sessions::BaseSessionService::GetCommandsCallback callback);
+      sessions::CommandStorageManager::GetCommandsCallback callback);
 
   // Reads the commands from the last file.
   //
@@ -119,7 +120,7 @@ class SESSIONS_EXPORT SessionBackend
       base::File* file,
       const std::vector<std::unique_ptr<sessions::SessionCommand>>& commands);
 
-  const sessions::BaseSessionService::SessionType type_;
+  const sessions::CommandStorageManager::SessionType type_;
 
   // Returns the path to the last file.
   base::FilePath GetLastSessionPath();

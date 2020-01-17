@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/sessions/core/base_session_service.h"
+#include "components/sessions/core/command_storage_manager.h"
 
 #include <utility>
 
@@ -13,10 +13,8 @@
 #include "base/task/post_task.h"
 #include "base/threading/thread.h"
 #include "base/threading/thread_task_runner_handle.h"
-#include "components/sessions/core/base_session_service_delegate.h"
+#include "components/sessions/core/command_storage_manager_delegate.h"
 #include "components/sessions/core/session_backend.h"
-
-// BaseSessionService ---------------------------------------------------------
 
 namespace sessions {
 namespace {
@@ -25,7 +23,7 @@ namespace {
 // thread if it's not canceled.
 void RunIfNotCanceled(
     const base::CancelableTaskTracker::IsCanceledCallback& is_canceled,
-    BaseSessionService::GetCommandsCallback callback,
+    CommandStorageManager::GetCommandsCallback callback,
     std::vector<std::unique_ptr<SessionCommand>> commands) {
   if (is_canceled.Run())
     return;
@@ -34,7 +32,7 @@ void RunIfNotCanceled(
 
 void PostOrRunInternalGetCommandsCallback(
     base::SequencedTaskRunner* task_runner,
-    BaseSessionService::GetCommandsCallback callback,
+    CommandStorageManager::GetCommandsCallback callback,
     std::vector<std::unique_ptr<SessionCommand>> commands) {
   if (task_runner->RunsTasksInCurrentSequence()) {
     std::move(callback).Run(std::move(commands));
@@ -50,9 +48,10 @@ void PostOrRunInternalGetCommandsCallback(
 // backend.
 static const int kSaveDelayMS = 2500;
 
-BaseSessionService::BaseSessionService(SessionType type,
-                                       const base::FilePath& path,
-                                       BaseSessionServiceDelegate* delegate)
+CommandStorageManager::CommandStorageManager(
+    SessionType type,
+    const base::FilePath& path,
+    CommandStorageManagerDelegate* delegate)
     : pending_reset_(false),
       commands_since_reset_(0),
       delegate_(delegate),
@@ -64,9 +63,9 @@ BaseSessionService::BaseSessionService(SessionType type,
   DCHECK(backend_);
 }
 
-BaseSessionService::~BaseSessionService() {}
+CommandStorageManager::~CommandStorageManager() {}
 
-void BaseSessionService::MoveCurrentSessionToLastSession() {
+void CommandStorageManager::MoveCurrentSessionToLastSession() {
   Save();
   RunTaskOnBackendThread(
       FROM_HERE,
@@ -74,12 +73,12 @@ void BaseSessionService::MoveCurrentSessionToLastSession() {
                      backend_));
 }
 
-void BaseSessionService::DeleteLastSession() {
+void CommandStorageManager::DeleteLastSession() {
   RunTaskOnBackendThread(
       FROM_HERE, base::BindOnce(&SessionBackend::DeleteLastSession, backend_));
 }
 
-void BaseSessionService::ScheduleCommand(
+void CommandStorageManager::ScheduleCommand(
     std::unique_ptr<SessionCommand> command) {
   DCHECK(command);
   commands_since_reset_++;
@@ -87,13 +86,13 @@ void BaseSessionService::ScheduleCommand(
   StartSaveTimer();
 }
 
-void BaseSessionService::AppendRebuildCommand(
+void CommandStorageManager::AppendRebuildCommand(
     std::unique_ptr<SessionCommand> command) {
   DCHECK(command);
   pending_commands_.push_back(std::move(command));
 }
 
-void BaseSessionService::EraseCommand(SessionCommand* old_command) {
+void CommandStorageManager::EraseCommand(SessionCommand* old_command) {
   auto it = std::find_if(
       pending_commands_.begin(), pending_commands_.end(),
       [old_command](const std::unique_ptr<SessionCommand>& command_ptr) {
@@ -103,7 +102,7 @@ void BaseSessionService::EraseCommand(SessionCommand* old_command) {
   pending_commands_.erase(it);
 }
 
-void BaseSessionService::SwapCommand(
+void CommandStorageManager::SwapCommand(
     SessionCommand* old_command,
     std::unique_ptr<SessionCommand> new_command) {
   auto it = std::find_if(
@@ -115,22 +114,23 @@ void BaseSessionService::SwapCommand(
   *it = std::move(new_command);
 }
 
-void BaseSessionService::ClearPendingCommands() {
+void CommandStorageManager::ClearPendingCommands() {
   pending_commands_.clear();
 }
 
-void BaseSessionService::StartSaveTimer() {
+void CommandStorageManager::StartSaveTimer() {
   // Don't start a timer when testing.
   if (delegate_->ShouldUseDelayedSave() &&
       base::ThreadTaskRunnerHandle::IsSet() && !weak_factory_.HasWeakPtrs()) {
     base::ThreadTaskRunnerHandle::Get()->PostDelayedTask(
         FROM_HERE,
-        base::BindOnce(&BaseSessionService::Save, weak_factory_.GetWeakPtr()),
+        base::BindOnce(&CommandStorageManager::Save,
+                       weak_factory_.GetWeakPtr()),
         base::TimeDelta::FromMilliseconds(kSaveDelayMS));
   }
 }
 
-void BaseSessionService::Save() {
+void CommandStorageManager::Save() {
   // Inform the delegate that we will save the commands now, giving it the
   // opportunity to append more commands.
   delegate_->OnWillSaveCommands();
@@ -151,7 +151,7 @@ void BaseSessionService::Save() {
 }
 
 base::CancelableTaskTracker::TaskId
-BaseSessionService::ScheduleGetLastSessionCommands(
+CommandStorageManager::ScheduleGetLastSessionCommands(
     GetCommandsCallback callback,
     base::CancelableTaskTracker* tracker) {
   base::CancelableTaskTracker::IsCanceledCallback is_canceled;
@@ -173,8 +173,9 @@ BaseSessionService::ScheduleGetLastSessionCommands(
   return id;
 }
 
-void BaseSessionService::RunTaskOnBackendThread(const base::Location& from_here,
-                                                base::OnceClosure task) {
+void CommandStorageManager::RunTaskOnBackendThread(
+    const base::Location& from_here,
+    base::OnceClosure task) {
   backend_task_runner_->PostNonNestableTask(from_here, std::move(task));
 }
 

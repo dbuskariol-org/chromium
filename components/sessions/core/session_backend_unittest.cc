@@ -59,7 +59,7 @@ class SessionBackendTest : public testing::Test {
   scoped_refptr<SessionBackend> CreateBackend() {
     return MakeRefCounted<SessionBackend>(
         task_environment_.GetMainThreadTaskRunner(),
-        sessions::BaseSessionService::SESSION_RESTORE, path_);
+        sessions::CommandStorageManager::SESSION_RESTORE, path_);
   }
 
   base::test::TaskEnvironment task_environment_;
