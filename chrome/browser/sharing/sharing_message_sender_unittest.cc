@@ -243,9 +243,10 @@ TEST_F(SharingMessageSenderTest, MessageSent_AckReceived) {
             send_tab_to_self::GetSharingDeviceNames(local_device).full_name,
             message.sender_device_name());
         ASSERT_TRUE(local_device->sharing_info().has_value());
-        ASSERT_EQ(kSenderVapidFcmToken, message.sender_info().fcm_token());
-        ASSERT_EQ(kSenderP256dh, message.sender_info().p256dh());
-        ASSERT_EQ(kSenderAuthSecret, message.sender_info().auth_secret());
+        auto& fcm_configuration = message.fcm_channel_configuration();
+        ASSERT_EQ(kSenderVapidFcmToken, fcm_configuration.fcm_token());
+        ASSERT_EQ(kSenderP256dh, fcm_configuration.p256dh());
+        ASSERT_EQ(kSenderAuthSecret, fcm_configuration.auth_secret());
 
         // Simulate ack message received.
         std::unique_ptr<chrome_browser_sharing::ResponseMessage>

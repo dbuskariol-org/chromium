@@ -139,11 +139,11 @@ void SharingFCMHandler::OnStoreReset() {
 base::Optional<syncer::DeviceInfo::SharingTargetInfo>
 SharingFCMHandler::GetTargetInfo(
     const chrome_browser_sharing::SharingMessage& original_message) {
-  if (original_message.has_sender_info()) {
-    auto& sender_info = original_message.sender_info();
-    return syncer::DeviceInfo::SharingTargetInfo{sender_info.fcm_token(),
-                                                 sender_info.p256dh(),
-                                                 sender_info.auth_secret()};
+  if (original_message.has_fcm_channel_configuration()) {
+    auto& fcm_configuration = original_message.fcm_channel_configuration();
+    return syncer::DeviceInfo::SharingTargetInfo{
+        fcm_configuration.fcm_token(), fcm_configuration.p256dh(),
+        fcm_configuration.auth_secret()};
   }
 
   return sync_preference_->GetTargetInfo(original_message.sender_guid());

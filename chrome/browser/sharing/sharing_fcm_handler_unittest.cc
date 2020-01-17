@@ -287,15 +287,15 @@ TEST_F(SharingFCMHandlerTest, PingMessageHandlerSecondaryUser) {
 
 // Test for handling of SharingMessage payload with RecipientInfo other than
 // AckMessage.
-TEST_F(SharingFCMHandlerTest, PingMessageHandlerWithRecipientInfo) {
+TEST_F(SharingFCMHandlerTest, PingMessageHandlerWithFCMChannelConfiguration) {
   SharingMessage sharing_message;
   sharing_message.set_sender_guid(kSenderGuid);
   sharing_message.mutable_ping_message();
-  chrome_browser_sharing::RecipientInfo* sender_info =
-      sharing_message.mutable_sender_info();
-  sender_info->set_fcm_token(kFCMToken);
-  sender_info->set_p256dh(kP256dh);
-  sender_info->set_auth_secret(kAuthSecret);
+  chrome_browser_sharing::FCMChannelConfiguration* fcm_configuration =
+      sharing_message.mutable_fcm_channel_configuration();
+  fcm_configuration->set_fcm_token(kFCMToken);
+  fcm_configuration->set_p256dh(kP256dh);
+  fcm_configuration->set_auth_secret(kAuthSecret);
   gcm::IncomingMessage incoming_message =
       CreateGCMIncomingMessage(kTestMessageId, sharing_message);
 

@@ -100,10 +100,11 @@ bool SharingFCMSender::SetMessageSenderInfo(SharingMessage* message) {
   if (!sharing_info)
     return false;
 
-  auto* sender_info = message->mutable_sender_info();
-  sender_info->set_fcm_token(sharing_info->vapid_target_info.fcm_token);
-  sender_info->set_p256dh(sharing_info->vapid_target_info.p256dh);
-  sender_info->set_auth_secret(sharing_info->vapid_target_info.auth_secret);
+  auto* fcm_configuration = message->mutable_fcm_channel_configuration();
+  fcm_configuration->set_fcm_token(sharing_info->vapid_target_info.fcm_token);
+  fcm_configuration->set_p256dh(sharing_info->vapid_target_info.p256dh);
+  fcm_configuration->set_auth_secret(
+      sharing_info->vapid_target_info.auth_secret);
   return true;
 }
 
