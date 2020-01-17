@@ -55,8 +55,8 @@ RemoteCall.prototype.isStepByStepEnabled_ = async function() {
  * registerRemoteTestUtils in test_util_base.js.
  *
  * @param {string} func Function name.
- * @param {?string} appId Target window's App ID or null for functions
- *     not requiring a window.
+ * @param {?string} appId App window Id or null for functions not requiring a
+ *     window.
  * @param {Array<*>} args Array of arguments.
  * @param {function(*)=} opt_callback Callback handling the function's result.
  * @return {!Promise} Promise to be fulfilled with the result of the remote
@@ -130,15 +130,15 @@ RemoteCall.prototype.waitForWindow = function(windowIdPrefix) {
 /**
  * Closes a window and waits until the window is closed.
  *
- * @param {string} windowId ID of the window to close.
+ * @param {string} appId App window Id.
  * @return {Promise} promise Promise to be fulfilled with the result (true:
  *     success, false: failed).
  */
-RemoteCall.prototype.closeWindowAndWait = async function(windowId) {
+RemoteCall.prototype.closeWindowAndWait = async function(appId) {
   const caller = getCaller();
 
   // Closes the window.
-  if (!await this.callRemoteTestUtil('closeWindow', null, [windowId])) {
+  if (!await this.callRemoteTestUtil('closeWindow', null, [appId])) {
     // Returns false when the closing is failed.
     return false;
   }
@@ -146,10 +146,10 @@ RemoteCall.prototype.closeWindowAndWait = async function(windowId) {
   return repeatUntil(async () => {
     const windows = await this.callRemoteTestUtil('getWindows', null, []);
     for (const id in windows) {
-      if (id === windowId) {
+      if (id === appId) {
         // Window is still available. Continues waiting.
         return pending(
-            caller, 'Window with the prefix %s is not found.', windowId);
+            caller, 'Window with the prefix %s is not found.', appId);
       }
     }
     // Window is not available. Closing is done successfully.
@@ -159,42 +159,42 @@ RemoteCall.prototype.closeWindowAndWait = async function(windowId) {
 
 /**
  * Waits until the window turns to the given size.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {number} width Requested width in pixels.
  * @param {number} height Requested height in pixels.
  */
-RemoteCall.prototype.waitForWindowGeometry = function(windowId, width, height) {
+RemoteCall.prototype.waitForWindowGeometry = function(appId, width, height) {
   const caller = getCaller();
   return repeatUntil(async () => {
     const windows = await this.callRemoteTestUtil('getWindows', null, []);
-    if (!windows[windowId]) {
-      return pending(caller, 'Window %s is not found.', windowId);
+    if (!windows[appId]) {
+      return pending(caller, 'Window %s is not found.', appId);
     }
-    if (windows[windowId].outerWidth !== width ||
-        windows[windowId].outerHeight !== height) {
+    if (windows[appId].outerWidth !== width ||
+        windows[appId].outerHeight !== height) {
       return pending(
           caller, 'Expected window size is %j, but it is %j',
-          {width: width, height: height}, windows[windowId]);
+          {width: width, height: height}, windows[appId]);
     }
   });
 };
 
 /**
  * Waits for the specified element appearing in the DOM.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {string|!Array<string>} query Query to specify the element.
  *     If query is an array, |query[0]| specifies the first
  *     element(s), |query[1]| specifies elements inside the shadow DOM of
  *     the first element, and so on.
  * @return {Promise} Promise to be fulfilled when the element appears.
  */
-RemoteCall.prototype.waitForElement = function(windowId, query) {
-  return this.waitForElementStyles(windowId, query, []);
+RemoteCall.prototype.waitForElement = function(appId, query) {
+  return this.waitForElementStyles(appId, query, []);
 };
 
 /**
  * Waits for the specified element appearing in the DOM.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {string|!Array<string>} query Query to specify the element.
  *     If query is an array, |query[0]| specifies the first
  *     element(s), |query[1]| specifies elements inside the shadow DOM of
@@ -204,12 +204,11 @@ RemoteCall.prototype.waitForElement = function(windowId, query) {
  *     TODO(lucmult): Add a typedef for the returned object.
  * @return {Promise} Promise to be fulfilled when the element appears.
  */
-RemoteCall.prototype.waitForElementStyles = function(
-    windowId, query, styleNames) {
+RemoteCall.prototype.waitForElementStyles = function(appId, query, styleNames) {
   const caller = getCaller();
   return repeatUntil(async () => {
     const elements = await this.callRemoteTestUtil(
-        'deepQueryAllElements', windowId, [query, styleNames]);
+        'deepQueryAllElements', appId, [query, styleNames]);
     if (elements.length > 0) {
       return elements[0];
     }
@@ -221,9 +220,9 @@ RemoteCall.prototype.waitForElementStyles = function(
  * Waits for a remote test function to return a specific result.
  *
  * @param {string} funcName Name of remote test function to be executed.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {function(Object): boolean|Object} expectedResult An value to be
- *     checked against the return value of |funcName| or a callabck that
+ *     checked against the return value of |funcName| or a callback that
  *     receives the return value of |funcName| and returns true if the result
  *     is the expected value.
  * @param {?Array<*>} args Arguments to be provided to |funcName| when executing
@@ -231,12 +230,11 @@ RemoteCall.prototype.waitForElementStyles = function(
  * @return {Promise} Promise to be fulfilled when the |expectedResult| is
  *     returned from |funcName| execution.
  */
-RemoteCall.prototype.waitFor = function(
-    funcName, windowId, expectedResult, args) {
+RemoteCall.prototype.waitFor = function(funcName, appId, expectedResult, args) {
   const caller = getCaller();
   args = args || [];
   return repeatUntil(async () => {
-    const result = await this.callRemoteTestUtil(funcName, windowId, args);
+    const result = await this.callRemoteTestUtil(funcName, appId, args);
     if (typeof expectedResult === 'function' && expectedResult(result)) {
       return result;
     }
@@ -252,18 +250,18 @@ RemoteCall.prototype.waitFor = function(
 
 /**
  * Waits for the specified element leaving from the DOM.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {string|!Array<string>} query Query to specify the element.
  *     If query is an array, |query[0]| specifies the first
  *     element(s), |query[1]| specifies elements inside the shadow DOM of
  *     the first element, and so on.
  * @return {Promise} Promise to be fulfilled when the element is lost.
  */
-RemoteCall.prototype.waitForElementLost = function(windowId, query) {
+RemoteCall.prototype.waitForElementLost = function(appId, query) {
   const caller = getCaller();
   return repeatUntil(async () => {
-    const elements = await this.callRemoteTestUtil(
-        'deepQueryAllElements', windowId, [query]);
+    const elements =
+        await this.callRemoteTestUtil('deepQueryAllElements', appId, [query]);
     if (elements.length > 0) {
       return pending(caller, 'Elements %j is still exists.', elements);
     }
@@ -273,7 +271,7 @@ RemoteCall.prototype.waitForElementLost = function(windowId, query) {
 
 /**
  * Sends a fake key down event.
- * @param {string} windowId Window ID.
+ * @param {string} appId App window Id.
  * @param {string|!Array<string>} query Query to specify the element.
  *     If query is an array, |query[0]| specifies the first
  *     element(s), |query[1]| specifies elements inside the shadow DOM of
@@ -286,9 +284,9 @@ RemoteCall.prototype.waitForElementLost = function(windowId, query) {
  *     result.
  */
 RemoteCall.prototype.fakeKeyDown =
-    async function(windowId, query, key, ctrlKey, shiftKey, altKey) {
+    async function(appId, query, key, ctrlKey, shiftKey, altKey) {
   const result = await this.callRemoteTestUtil(
-      'fakeKeyDown', windowId, [query, key, ctrlKey, shiftKey, altKey]);
+      'fakeKeyDown', appId, [query, key, ctrlKey, shiftKey, altKey]);
   if (result) {
     return true;
   } else {
@@ -327,7 +325,7 @@ RemoteCall.prototype.waitForAFile = function(volumeType, name) {
 
 /**
  * Shorthand for clicking an element.
- * @param {string} windowId Window id.
+ * @param {string} appId App window Id.
  * @param {string|!Array<string>} query Query to specify the element.
  *     If query is an array, |query[0]| specifies the first
  *     element(s), |query[1]| specifies elements inside the shadow DOM of
@@ -337,17 +335,17 @@ RemoteCall.prototype.waitForAFile = function(volumeType, name) {
  * @return {Promise} Promise to be fulfilled with the clicked element.
  */
 RemoteCall.prototype.waitAndClickElement =
-    async function(windowId, query, opt_keyModifiers) {
-  const element = await this.waitForElement(windowId, query);
+    async function(appId, query, opt_keyModifiers) {
+  const element = await this.waitForElement(appId, query);
   const result = await this.callRemoteTestUtil(
-      'fakeMouseClick', windowId, [query, opt_keyModifiers]);
+      'fakeMouseClick', appId, [query, opt_keyModifiers]);
   chrome.test.assertTrue(result, 'mouse click failed.');
   return element;
 };
 
 /**
  * Shorthand for right-clicking an element.
- * @param {string} windowId Window id.
+ * @param {string} appId App window Id.
  * @param {string|!Array<string>} query Query to specify the element.
  *     If query is an array, |query[0]| specifies the first
  *     element(s), |query[1]| specifies elements inside the shadow DOM of
@@ -357,31 +355,31 @@ RemoteCall.prototype.waitAndClickElement =
  * @return {Promise} Promise to be fulfilled with the clicked element.
  */
 RemoteCall.prototype.waitAndRightClick =
-    async function(windowId, query, opt_keyModifiers) {
-  const element = await this.waitForElement(windowId, query);
+    async function(appId, query, opt_keyModifiers) {
+  const element = await this.waitForElement(appId, query);
   const result = await this.callRemoteTestUtil(
-      'fakeMouseRightClick', windowId, [query, opt_keyModifiers]);
+      'fakeMouseRightClick', appId, [query, opt_keyModifiers]);
   chrome.test.assertTrue(result, 'mouse right-click failed.');
   return element;
 };
 
 /**
  * Shorthand for focusing an element.
- * @param {string} windowId Window id.
+ * @param {string} appId App window Id.
  * @param {!Array<string>} query Query to specify the element to be focused.
  * @return {Promise} Promise to be fulfilled with the focused element.
  */
-RemoteCall.prototype.focus = async function(windowId, query) {
-  const element = await this.waitForElement(windowId, query);
-  const result = await this.callRemoteTestUtil('focus', windowId, query);
+RemoteCall.prototype.focus = async function(appId, query) {
+  const element = await this.waitForElement(appId, query);
+  const result = await this.callRemoteTestUtil('focus', appId, query);
   chrome.test.assertTrue(result, 'focus failed.');
   return element;
 };
 
 /**
  * Simulate Click in the UI in the middle of the element.
- * @param{string} appId ID of the app that contains the element. NOTE: The click
- *     is simulated on most recent window in the window system.
+ * @param{string} appId App window ID contains the element. NOTE: The click is
+ * simulated on most recent window in the window system.
  * @param {string|!Array<string>} query Query to the element to be clicked.
  * @return {!Promise} A promise fulfilled after the click event.
  */
@@ -413,7 +411,7 @@ RemoteCallFilesApp.prototype.__proto__ = RemoteCall.prototype;
 
 /**
  * Waits for the file list turns to the given contents.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {Array<Array<string>>} expected Expected contents of file list.
  * @param {{orderCheck:?boolean, ignoreLastModifiedTime:?boolean}=} opt_options
  *     Options of the comparison. If orderCheck is true, it also compares the
@@ -423,11 +421,11 @@ RemoteCallFilesApp.prototype.__proto__ = RemoteCall.prototype;
  *     given contents.
  */
 RemoteCallFilesApp.prototype.waitForFiles = function(
-    windowId, expected, opt_options) {
+    appId, expected, opt_options) {
   const options = opt_options || {};
   const caller = getCaller();
   return repeatUntil(async () => {
-    const files = await this.callRemoteTestUtil('getFileList', windowId, []);
+    const files = await this.callRemoteTestUtil('getFileList', appId, []);
     if (!options.orderCheck) {
       files.sort();
       expected.sort();
@@ -459,15 +457,15 @@ RemoteCallFilesApp.prototype.waitForFiles = function(
  * number.
  * TODO(hirono): Remove the function.
  *
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {number} lengthBefore Number of items visible before.
  * @return {Promise} Promise to be fulfilled with the contents of files.
  */
 RemoteCallFilesApp.prototype.waitForFileListChange = function(
-    windowId, lengthBefore) {
+    appId, lengthBefore) {
   const caller = getCaller();
   return repeatUntil(async () => {
-    const files = await this.callRemoteTestUtil('getFileList', windowId, []);
+    const files = await this.callRemoteTestUtil('getFileList', appId, []);
     files.sort();
 
     const notReadyRows =
@@ -485,17 +483,16 @@ RemoteCallFilesApp.prototype.waitForFileListChange = function(
 
 /**
  * Waits until the given taskId appears in the executed task list.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {string} taskId Task ID to watch.
  * @return {Promise} Promise to be fulfilled when the task appears in the
  *     executed task list.
  */
-RemoteCallFilesApp.prototype.waitUntilTaskExecutes = function(
-    windowId, taskId) {
+RemoteCallFilesApp.prototype.waitUntilTaskExecutes = function(appId, taskId) {
   const caller = getCaller();
   return repeatUntil(async () => {
     const executedTasks =
-        await this.callRemoteTestUtil('getExecutedTasks', windowId, []);
+        await this.callRemoteTestUtil('getExecutedTasks', appId, []);
     if (executedTasks.indexOf(taskId) === -1) {
       return pending(caller, 'Executed task is %j', executedTasks);
     }
@@ -504,20 +501,20 @@ RemoteCallFilesApp.prototype.waitUntilTaskExecutes = function(
 
 /**
  * Check if the next tabforcus'd element has the given ID or not.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {string} elementId String of 'id' attribute which the next tabfocus'd
  *     element should have.
  * @return {Promise} Promise to be fulfilled with the result.
  */
 RemoteCallFilesApp.prototype.checkNextTabFocus =
-    async function(windowId, elementId) {
+    async function(appId, elementId) {
   const result = await sendTestMessage({name: 'dispatchTabKey'});
   chrome.test.assertEq(result, 'tabKeyDispatched', 'Tab key dispatch failure');
 
   const caller = getCaller();
   return repeatUntil(async () => {
     const element =
-        await this.callRemoteTestUtil('getActiveElement', windowId, []);
+        await this.callRemoteTestUtil('getActiveElement', appId, []);
     if (element && element.attributes['id'] === elementId) {
       return true;
     }
@@ -530,17 +527,16 @@ RemoteCallFilesApp.prototype.checkNextTabFocus =
 
 /**
  * Waits until the current directory is changed.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {string} expectedPath Path to be changed to.
  * @return {Promise} Promise to be fulfilled when the current directory is
  *     changed to expectedPath.
  */
 RemoteCallFilesApp.prototype.waitUntilCurrentDirectoryIsChanged = function(
-    windowId, expectedPath) {
+    appId, expectedPath) {
   const caller = getCaller();
   return repeatUntil(async () => {
-    const path =
-        await this.callRemoteTestUtil('getBreadcrumbPath', windowId, []);
+    const path = await this.callRemoteTestUtil('getBreadcrumbPath', appId, []);
     if (path !== expectedPath) {
       return pending(caller, 'Expected path is %s got %s', expectedPath, path);
     }
@@ -549,17 +545,17 @@ RemoteCallFilesApp.prototype.waitUntilCurrentDirectoryIsChanged = function(
 
 /**
  * Expands tree item.
- * @param {string} windowId Target window ID.
+ * @param {string} appId App window Id.
  * @param {string} query Query to the <tree-item> element.
  */
 RemoteCallFilesApp.prototype.expandTreeItemInDirectoryTree =
-    async function(windowId, query) {
-  await this.waitForElement(windowId, query);
+    async function(appId, query) {
+  await this.waitForElement(appId, query);
   const elements = await this.callRemoteTestUtil(
-      'queryAllElements', windowId, [`${query}[expanded]`]);
+      'queryAllElements', appId, [`${query}[expanded]`]);
   // If it's already expanded just set the focus on directory tree.
   if (elements.length > 0) {
-    return this.callRemoteTestUtil('focus', windowId, ['#directory-tree']);
+    return this.callRemoteTestUtil('focus', appId, ['#directory-tree']);
   }
 
   // We must wait until <tree-item> has attribute [has-children=true]
@@ -568,59 +564,59 @@ RemoteCallFilesApp.prototype.expandTreeItemInDirectoryTree =
   // operation since the [expanded] checks above.
   const expandIcon =
       query + ':not([expanded]) > .tree-row[has-children=true] > .expand-icon';
-  await this.waitAndClickElement(windowId, expandIcon);
+  await this.waitAndClickElement(appId, expandIcon);
   // Wait for the expansion to finish.
-  await this.waitForElement(windowId, query + '[expanded]');
+  await this.waitForElement(appId, query + '[expanded]');
   // Force the focus on directory tree.
-  await this.callRemoteTestUtil('focus', windowId, ['#directory-tree']);
+  await this.callRemoteTestUtil('focus', appId, ['#directory-tree']);
 };
 
 /**
  * Expands directory tree for specified path.
  */
 RemoteCallFilesApp.prototype.expandDirectoryTreeFor = function(
-    windowId, path, volumeType = 'downloads') {
+    appId, path, volumeType = 'downloads') {
   return this.expandDirectoryTreeForInternal_(
-      windowId, path.split('/'), 0, volumeType);
+      appId, path.split('/'), 0, volumeType);
 };
 
 /**
  * Internal function for expanding directory tree for specified path.
  */
 RemoteCallFilesApp.prototype.expandDirectoryTreeForInternal_ =
-    async function(windowId, components, index, volumeType) {
+    async function(appId, components, index, volumeType) {
   if (index >= components.length - 1) {
     return;
   }
 
   // First time we should expand the root/volume first.
   if (index === 0) {
-    await this.expandVolumeInDirectoryTree(windowId, volumeType);
+    await this.expandVolumeInDirectoryTree(appId, volumeType);
     return this.expandDirectoryTreeForInternal_(
-        windowId, components, index + 1, volumeType);
+        appId, components, index + 1, volumeType);
   }
   const path = '/' + components.slice(1, index + 1).join('/');
   await this.expandTreeItemInDirectoryTree(
-      windowId, `[full-path-for-testing="${path}"]`);
+      appId, `[full-path-for-testing="${path}"]`);
   await this.expandDirectoryTreeForInternal_(
-      windowId, components, index + 1, volumeType);
+      appId, components, index + 1, volumeType);
 };
 
 /**
  * Expands download volume in directory tree.
  */
 RemoteCallFilesApp.prototype.expandDownloadVolumeInDirectoryTree = function(
-    windowId) {
-  return this.expandVolumeInDirectoryTree(windowId, 'downloads');
+    appId) {
+  return this.expandVolumeInDirectoryTree(appId, 'downloads');
 };
 
 /**
  * Expands download volume in directory tree.
  */
 RemoteCallFilesApp.prototype.expandVolumeInDirectoryTree = function(
-    windowId, volumeType) {
+    appId, volumeType) {
   return this.expandTreeItemInDirectoryTree(
-      windowId, `[volume-type-for-testing="${volumeType}"]`);
+      appId, `[volume-type-for-testing="${volumeType}"]`);
 };
 
 /**
@@ -630,12 +626,12 @@ RemoteCallFilesApp.prototype.expandVolumeInDirectoryTree = function(
  * crbug.com/996626.
  */
 RemoteCallFilesApp.prototype.navigateWithDirectoryTree =
-    async function(windowId, path, rootLabel, volumeType = 'downloads') {
-  await this.expandDirectoryTreeFor(windowId, path, volumeType);
+    async function(appId, path, rootLabel, volumeType = 'downloads') {
+  await this.expandDirectoryTreeFor(appId, path, volumeType);
 
   // Select target path.
   await this.callRemoteTestUtil(
-      'fakeMouseClick', windowId, [`[full-path-for-testing="${path}"]`]);
+      'fakeMouseClick', appId, [`[full-path-for-testing="${path}"]`]);
 
   // Entries within Drive starts with /root/ but it isn't displayed in the
   // breadcrubms used by waitUntilCurrentDirectoryIsChanged.
@@ -651,8 +647,7 @@ RemoteCallFilesApp.prototype.navigateWithDirectoryTree =
   }
 
   // Wait until the Files app is navigated to the path.
-  return this.waitUntilCurrentDirectoryIsChanged(
-      windowId, `/${rootLabel}${path}`);
+  return this.waitUntilCurrentDirectoryIsChanged(appId, `/${rootLabel}${path}`);
 };
 
 /**
@@ -670,14 +665,14 @@ RemoteCallGallery.prototype.__proto__ = RemoteCall.prototype;
 /**
  * Waits until the expected image is shown.
  *
- * @param {string} windowId Window id.
+ * @param {string} appId App window Id.
  * @param {number} width Expected width of the image.
  * @param {number} height Expected height of the image.
  * @param {string|null} name Expected name of the image.
  * @return {Promise} Promsie to be fulfilled when the check is passed.
  */
 RemoteCallGallery.prototype.waitForSlideImage = function(
-    windowId, width, height, name) {
+    appId, width, height, name) {
   const expected = {};
   if (width) {
     expected.width = width;
@@ -693,8 +688,8 @@ RemoteCallGallery.prototype.waitForSlideImage = function(
   return repeatUntil(async () => {
     const query = '.gallery[mode="slide"] .image-container > .image';
     const [nameBox, image] = await Promise.all([
-      this.waitForElement(windowId, '#rename-input'),
-      this.waitForElementStyles(windowId, query, ['any'])
+      this.waitForElement(appId, '#rename-input'),
+      this.waitForElementStyles(appId, query, ['any'])
     ]);
     const actual = {};
     if (width && image) {
@@ -716,16 +711,15 @@ RemoteCallGallery.prototype.waitForSlideImage = function(
   });
 };
 
-RemoteCallGallery.prototype.changeNameAndWait =
-    async function(windowId, newName) {
-  await this.callRemoteTestUtil('changeName', windowId, [newName]);
-  return this.waitForSlideImage(windowId, 0, 0, newName);
+RemoteCallGallery.prototype.changeNameAndWait = async function(appId, newName) {
+  await this.callRemoteTestUtil('changeName', appId, [newName]);
+  return this.waitForSlideImage(appId, 0, 0, newName);
 };
 
 /**
  * Waits for the "Press Enter" message.
  *
- * @param {string} appId App id.
+ * @param {string} appId App window Id.
  * @return {Promise} Promise to be fulfilled when the element appears.
  */
 RemoteCallGallery.prototype.waitForPressEnterMessage = async function(appId) {
@@ -735,7 +729,7 @@ RemoteCallGallery.prototype.waitForPressEnterMessage = async function(appId) {
 
 /**
  * Shorthand for selecting an image in thumbnail mode.
- * @param {string} appId App id.
+ * @param {string} appId App window Id.
  * @param {string} name File name to be selected.
  * @return {!Promise<boolean>} A promise which will be resolved with true if the
  *     thumbnail has clicked. This method does not guarantee whether the
