@@ -1051,7 +1051,9 @@ std::pair<bool, V4L2ReadableBufferRef> V4L2Queue::DequeueBuffer() {
     switch (errno) {
       case EAGAIN:
       case EPIPE:
-        // This is not an error but won't provide a buffer either.
+        // This is not an error so we'll need to continue polling but won't
+        // provide a buffer.
+        device_->SchedulePoll();
         return std::make_pair(true, nullptr);
       default:
         VPQLOGF(1) << "VIDIOC_DQBUF failed";
