@@ -13,10 +13,8 @@
 <dom-module id="settings-security-page">
   <template>
     <style include="settings-shared"></style>
-    <div class="settings-box first">
-      <h2 class="cr-title-text">
-        $i18n{safeBrowsingSectionLabel}
-      </h2>
+    <div class="settings-box first line-only">
+      <h2 class="first">$i18n{safeBrowsingSectionLabel}</h2>
     </div>
     <settings-toggle-button id="safeBrowsingToggle"
         pref="{{prefs.safebrowsing.enabled}}"
@@ -36,8 +34,8 @@
         on-settings-boolean-control-change=
             "onSafeBrowsingReportingToggleChange_">
     </settings-toggle-button>
-    <div class="settings-box first">
-      <h2 class="cr-title-text">$i18n{securityPageAdvancedSectionLabel}</h2>
+    <div class="settings-box first line-only">
+      <h2>$i18n{securityPageAdvancedSectionLabel}</h2>
     </div>
     <template is="dom-if" if="[[enableSecurityKeysSubpage_]]">
         <cr-link-row id="security-keys-subpage-trigger"
