@@ -22,12 +22,14 @@
 #include "chrome/browser/android/chrome_feature_list.h"
 #include "chrome/browser/android/feature_utilities.h"
 #include "chrome/browser/android/hung_renderer_infobar_delegate.h"
+#include "chrome/browser/android/tab_android.h"
 #include "chrome/browser/banners/app_banner_manager_android.h"
 #include "chrome/browser/content_settings/sound_content_setting_observer.h"
 #include "chrome/browser/file_select_helper.h"
 #include "chrome/browser/infobars/infobar_service.h"
 #include "chrome/browser/media/protected_media_identifier_permission_context.h"
 #include "chrome/browser/media/webrtc/media_capture_devices_dispatcher.h"
+#include "chrome/browser/password_manager/chrome_password_manager_client.h"
 #include "chrome/browser/picture_in_picture/picture_in_picture_window_manager.h"
 #include "chrome/browser/prerender/prerender_manager.h"
 #include "chrome/browser/prerender/prerender_manager_factory.h"
@@ -39,6 +41,7 @@
 #include "chrome/browser/ui/android/infobars/framebust_block_infobar.h"
 #include "chrome/browser/ui/android/sms/sms_infobar.h"
 #include "chrome/browser/ui/android/tab_model/tab_model_list.h"
+#include "chrome/browser/ui/autofill/chrome_autofill_client.h"
 #include "chrome/browser/ui/blocked_content/popup_blocker.h"
 #include "chrome/browser/ui/blocked_content/popup_tracker.h"
 #include "chrome/browser/ui/browser_navigator_params.h"
@@ -137,6 +140,23 @@ TabWebContentsDelegateAndroid::TabWebContentsDelegateAndroid(JNIEnv* env,
 }
 
 TabWebContentsDelegateAndroid::~TabWebContentsDelegateAndroid() = default;
+
+void TabWebContentsDelegateAndroid::PortalWebContentsCreated(
+    content::WebContents* portal_contents) {
+  WebContentsDelegateAndroid::PortalWebContentsCreated(portal_contents);
+
+  // This is a subset of the tab helpers that would be attached by
+  // TabAndroid::AttachTabHelpers.
+  //
+  // TODO(jbroman): This doesn't adequately handle all of the tab helpers that
+  // might be wanted here, and there are also likely to be issues with tab
+  // helpers that are unprepared for portal activation to transition them.
+  autofill::ChromeAutofillClient::CreateForWebContents(portal_contents);
+  ChromePasswordManagerClient::CreateForWebContentsWithAutofillClient(
+      portal_contents,
+      autofill::ChromeAutofillClient::FromWebContents(portal_contents));
+  InfoBarService::CreateForWebContents(portal_contents);
+}
 
 void TabWebContentsDelegateAndroid::RunFileChooser(
     content::RenderFrameHost* render_frame_host,
