@@ -467,9 +467,8 @@ void ExtensionsMenuView::OnToolbarModelInitialized() {
 }
 
 void ExtensionsMenuView::OnToolbarPinnedActionsChanged() {
-  for (auto* menu_item : extensions_menu_items_) {
+  for (auto* menu_item : extensions_menu_items_)
     menu_item->UpdatePinButton();
-  }
 }
 
 // static
