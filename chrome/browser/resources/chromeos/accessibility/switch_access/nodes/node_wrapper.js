@@ -20,6 +20,9 @@ class NodeWrapper extends SAChildNode {
 
     /** @private {boolean} */
     this.isGroup_ = SwitchAccessPredicate.isGroup(this.baseNode_, parent);
+
+    /** @private {function(chrome.automation.AutomationEvent)} */
+    this.locationChangedHandler_ = SwitchAccess.refreshFocusRings;
   }
 
   // ================= Getters and setters =================
@@ -118,6 +121,20 @@ class NodeWrapper extends SAChildNode {
   }
 
   /** @override */
+  onFocus() {
+    this.baseNode_.addEventListener(
+        chrome.automation.EventType.LOCATION_CHANGED,
+        this.locationChangedHandler_, false /* is_capture */);
+  }
+
+  /** @override */
+  onUnfocus() {
+    this.baseNode_.removeEventListener(
+        chrome.automation.EventType.LOCATION_CHANGED,
+        this.locationChangedHandler_, false /* is_capture */);
+  }
+
+  /** @override */
   performAction(action) {
     let ancestor;
     switch (action) {
@@ -191,6 +208,9 @@ class RootNodeWrapper extends SARootNode {
 
     /** @private {!AutomationNode} */
     this.baseNode_ = baseNode;
+
+    /** @private {function(chrome.automation.AutomationEvent)} */
+    this.locationChangedHandler_ = SwitchAccess.refreshFocusRings;
   }
 
   // ================= Getters and setters =================
@@ -232,6 +252,20 @@ class RootNodeWrapper extends SARootNode {
   /** @override */
   isValidGroup() {
     return !!this.baseNode_.role && super.isValidGroup();
+  }
+
+  /** @override */
+  onFocus() {
+    this.baseNode_.addEventListener(
+        chrome.automation.EventType.LOCATION_CHANGED,
+        this.locationChangedHandler_, false /* is_capture */);
+  }
+
+  /** @override */
+  onUnfocus() {
+    this.baseNode_.removeEventListener(
+        chrome.automation.EventType.LOCATION_CHANGED,
+        this.locationChangedHandler_, false /* is_capture */);
   }
 
   // ================= Static methods =================

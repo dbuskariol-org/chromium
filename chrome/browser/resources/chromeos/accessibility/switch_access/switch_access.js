@@ -341,4 +341,11 @@ class SwitchAccess {
       return this.navigationManager_.getTreeForDebugging(wholeTree);
     }
   }
+
+  static refreshFocusRings() {
+    const switchAccess = SwitchAccess.get();
+    if (switchAccess.navigationManager_) {
+      switchAccess.navigationManager_.refreshFocusRings();
+    }
+  }
 }

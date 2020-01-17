@@ -121,6 +121,13 @@ class NavigationManager {
   }
 
   /**
+   * Updates the focus ring locations in response to an automation event.
+   */
+  refreshFocusRings() {
+    this.focusRingManager_.setFocusNodes(this.node_, this.group_);
+  }
+
+  /**
    * Selects the current node.
    */
   selectCurrentNode() {
