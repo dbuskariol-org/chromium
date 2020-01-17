@@ -78,7 +78,8 @@ public class SharedClipboardShareActivity
         if (!AndroidSyncSettings.get().isChromeSyncEnabled()) {
             chromeSettingsButton.setVisibility(View.VISIBLE);
             chromeSettingsButton.setOnClickListener(view -> {
-                SettingsLauncher.launchSettingsPage(ContextUtils.getApplicationContext(), null);
+                SettingsLauncher.getInstance().launchSettingsPage(
+                        ContextUtils.getApplicationContext(), null);
             });
         }
 

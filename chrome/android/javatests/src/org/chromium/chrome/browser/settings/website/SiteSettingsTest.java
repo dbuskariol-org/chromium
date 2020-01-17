@@ -900,7 +900,7 @@ public class SiteSettingsTest {
             mActivityTestRule.runJavaScriptCodeInCurrentTab("requestPermissionAndRespond()");
         }
 
-        Intent intent = SettingsLauncher.createIntentForSettingsPage(
+        Intent intent = SettingsLauncher.getInstance().createIntentForSettingsPage(
                 InstrumentationRegistry.getTargetContext(), SingleWebsiteSettings.class.getName(),
                 SingleWebsiteSettings.createFragmentArgsForSite(url));
         final SettingsActivity settingsActivity =

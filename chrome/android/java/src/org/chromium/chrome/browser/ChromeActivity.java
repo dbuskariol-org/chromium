@@ -2001,7 +2001,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
         }
 
         if (id == R.id.preferences_id) {
-            SettingsLauncher.launchSettingsPage(this, null);
+            SettingsLauncher.getInstance().launchSettingsPage(this, null);
             RecordUserAction.record("MobileMenuSettings");
         }
 
