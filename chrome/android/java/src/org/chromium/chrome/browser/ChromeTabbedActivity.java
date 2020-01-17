@@ -2165,14 +2165,15 @@ public class ChromeTabbedActivity extends ChromeActivity implements ScreenshotMo
     }
 
     private void showFullHistoryOnNavigationSheet(Tab tab) {
-        // TODO(jinsukkim): Make NavigationSheet a per-activity object using RootUiCoordinator.
+        // Another instance of NavigationSheet(for gesture navigation) may be running.
         if (NavigationSheet.isInstanceShowing(getBottomSheetController())) {
             mNavigationSheet = null;
             return;
         }
         mNavigationSheet = NavigationSheet.create(
                 getWindow().getDecorView().findViewById(android.R.id.content), this,
-                this::getBottomSheetController, new TabbedSheetDelegate(tab));
+                this::getBottomSheetController);
+        mNavigationSheet.setDelegate(new TabbedSheetDelegate(tab));
         if (!mNavigationSheet.startAndExpand(/* forward=*/false, /* animate=*/true)) {
             mNavigationSheet = null;
         } else {

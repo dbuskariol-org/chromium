@@ -18,6 +18,7 @@ import org.chromium.chrome.browser.datareduction.DataReductionPromoScreen;
 import org.chromium.chrome.browser.firstrun.FirstRunStatus;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.flags.FeatureUtilities;
+import org.chromium.chrome.browser.gesturenav.HistoryNavigationCoordinator;
 import org.chromium.chrome.browser.language.LanguageAskPrompt;
 import org.chromium.chrome.browser.lifecycle.NativeInitObserver;
 import org.chromium.chrome.browser.locale.LocaleManager;
@@ -48,6 +49,7 @@ public class TabbedRootUiCoordinator extends RootUiCoordinator implements Native
     private StatusIndicatorCoordinator mStatusIndicatorCoordinator;
     private StatusIndicatorCoordinator.StatusIndicatorObserver mStatusIndicatorObserver;
     private @Nullable ToolbarButtonInProductHelpController mToolbarButtonInProductHelpController;
+    private HistoryNavigationCoordinator mHistoryNavigationCoordinator;
     private boolean mIntentWithEffect;
 
     /**
@@ -95,6 +97,10 @@ public class TabbedRootUiCoordinator extends RootUiCoordinator implements Native
         if (mImmersiveModeManager != null) {
             getToolbarManager().setImmersiveModeManager(mImmersiveModeManager);
         }
+        mHistoryNavigationCoordinator = new HistoryNavigationCoordinator();
+        mHistoryNavigationCoordinator.init(mActivity.getLifecycleDispatcher(),
+                mActivity.getCompositorViewHolder(), mActivity.getActivityTabProvider(),
+                mActivity.getInsetObserverView());
     }
 
     /**

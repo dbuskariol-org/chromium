@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Base64;
+import android.view.ViewGroup;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
@@ -22,7 +23,6 @@ import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.favicon.RoundedIconGenerator;
-import org.chromium.chrome.browser.gesturenav.HistoryNavigationLayout;
 import org.chromium.chrome.browser.native_page.BasicNativePage;
 import org.chromium.chrome.browser.native_page.ContextMenuManager;
 import org.chromium.chrome.browser.native_page.NativePageHost;
@@ -96,7 +96,7 @@ public class ExploreSitesPage extends BasicNativePage {
     private Tab mTab;
     private TabObserver mTabObserver;
     private Profile mProfile;
-    private HistoryNavigationLayout mView;
+    private ViewGroup mView;
     private RecyclerView mRecyclerView;
     private StableScrollLayoutManager mLayoutManager;
     private String mTitle;
@@ -177,7 +177,7 @@ public class ExploreSitesPage extends BasicNativePage {
         mTab = tab;
 
         mTitle = activity.getString(R.string.explore_sites_title);
-        mView = (HistoryNavigationLayout) activity.getLayoutInflater().inflate(
+        mView = (ViewGroup) activity.getLayoutInflater().inflate(
                 R.layout.explore_sites_page_layout, null);
         mProfile = ((TabImpl) mTab).getProfile();
 
@@ -246,7 +246,6 @@ public class ExploreSitesPage extends BasicNativePage {
         CategoryCardAdapter adapterDelegate = new CategoryCardAdapter(
                 mModel, mLayoutManager, iconGenerator, mContextMenuManager, navDelegate, mProfile);
 
-        mView.setNavigationDelegate(host.createHistoryNavigationDelegate());
         mRecyclerView = mView.findViewById(R.id.explore_sites_category_recycler);
 
         CategoryCardViewHolderFactory factory = createCategoryCardViewHolderFactory();
