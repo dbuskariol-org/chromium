@@ -46,20 +46,9 @@ bool ShouldTreatURLSchemeAsCorsEnabled(const GURL& url) {
 bool IsUrlPotentiallySecure(const GURL& url) {
   // blob: and filesystem: URLs never hit the network, and access is restricted
   // to same-origin contexts, so they are not blocked.
-  bool is_secure = url.SchemeIs(url::kBlobScheme) ||
-                   url.SchemeIs(url::kFileSystemScheme) ||
-                   IsOriginSecure(url) ||
-                   IsPotentiallyTrustworthyOrigin(url::Origin::Create(url));
-
-  // TODO(mkwst): Remove this once the following draft is implemented:
-  // https://tools.ietf.org/html/draft-west-let-localhost-be-localhost-03. See:
-  // https://crbug.com/691930.
-  if (is_secure && url.SchemeIs(url::kHttpScheme) &&
-      net::IsLocalHostname(url.HostNoBracketsPiece(), nullptr)) {
-    is_secure = false;
-  }
-
-  return is_secure;
+  return url.SchemeIs(url::kBlobScheme) ||
+         url.SchemeIs(url::kFileSystemScheme) || IsOriginSecure(url) ||
+         IsPotentiallyTrustworthyOrigin(url::Origin::Create(url));
 }
 
 // This method should return the same results as
