@@ -318,6 +318,21 @@ bool ThreadHeap::AdvanceMarking(MarkingVisitor* visitor,
       ThreadHeapStatsCollector::Scope stats_scope(
           stats_collector(), ThreadHeapStatsCollector::kMarkProcessWorklist);
 
+      // Start with mutator-thread-only worklists (not fully constructed).
+      // If time runs out, concurrent markers can take care of the rest.
+
+      // Convert |previously_not_fully_constructed_worklist_| to
+      // |marking_worklist_|. This merely re-adds items with the proper
+      // callbacks.
+      finished = DrainWorklistWithDeadline(
+          deadline, previously_not_fully_constructed_worklist_.get(),
+          [visitor](const NotFullyConstructedItem& item) {
+            visitor->DynamicallyMarkAddress(reinterpret_cast<Address>(item));
+          },
+          WorklistTaskId::MutatorThread);
+      if (!finished)
+        break;
+
       finished = DrainWorklistWithDeadline(
           deadline, marking_worklist_.get(),
           [visitor](const MarkingItem& item) {
@@ -339,18 +354,6 @@ bool ThreadHeap::AdvanceMarking(MarkingVisitor* visitor,
                 .GCInfoFromIndex(header->GcInfoIndex())
                 ->trace(visitor, header->Payload());
             visitor->AccountMarkedBytes(header);
-          },
-          WorklistTaskId::MutatorThread);
-      if (!finished)
-        break;
-
-      // Convert |previously_not_fully_constructed_worklist_| to
-      // |marking_worklist_|. This merely re-adds items with the proper
-      // callbacks.
-      finished = DrainWorklistWithDeadline(
-          deadline, previously_not_fully_constructed_worklist_.get(),
-          [visitor](const NotFullyConstructedItem& item) {
-            visitor->DynamicallyMarkAddress(reinterpret_cast<Address>(item));
           },
           WorklistTaskId::MutatorThread);
       if (!finished)
