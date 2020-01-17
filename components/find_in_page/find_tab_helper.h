@@ -2,23 +2,41 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_FIND_BAR_FIND_TAB_HELPER_H_
-#define CHROME_BROWSER_UI_FIND_BAR_FIND_TAB_HELPER_H_
+#ifndef COMPONENTS_FIND_IN_PAGE_FIND_TAB_HELPER_H_
+#define COMPONENTS_FIND_IN_PAGE_FIND_TAB_HELPER_H_
 
-#include "base/macros.h"
+#include "base/strings/string16.h"
 #include "build/build_config.h"
-#include "chrome/browser/ui/find_bar/find_notification_details.h"
+#include "components/find_in_page/find_notification_details.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
 #include "ui/gfx/range/range.h"
 
+namespace find_in_page {
+
 class FindResultObserver;
-enum class FindOnPageSelectionAction;
+enum class SelectionAction;
 
 // Per-tab find manager. Handles dealing with the life cycle of find sessions.
 class FindTabHelper : public content::WebContentsObserver,
                       public content::WebContentsUserData<FindTabHelper> {
  public:
+  // The delegate tracks search text state.
+  class Delegate {
+   public:
+    // Informs the delegate when the user searches.
+    virtual void SetLastSearchText(const base::string16& text) = 0;
+
+    // Gets the text to prepopulate into the search field for new searches. May
+    // return an empty string.
+    virtual base::string16 GetSearchPrepopulateText() = 0;
+
+   protected:
+    virtual ~Delegate() = default;
+  };
+
+  FindTabHelper(const FindTabHelper&) = delete;
+  FindTabHelper& operator=(const FindTabHelper&) = delete;
   ~FindTabHelper() override;
 
   void AddObserver(FindResultObserver* observer);
@@ -36,16 +54,19 @@ class FindTabHelper : public content::WebContentsObserver,
                     bool run_synchronously_for_testing = false);
 
   // Stops the current Find operation.
-  void StopFinding(FindOnPageSelectionAction selection_action);
+  void StopFinding(SelectionAction selection_action);
 
   // When the user commits to a search query or jumps from one result
   // to the next, move accessibility focus to the next find result.
   void ActivateFindInPageResultForAccessibility();
 
+  // Retrieves the starting text for searching in the tab.
+  base::string16 GetInitialSearchText();
+
   // Accessors/Setters for find_ui_active_.
   bool find_ui_active() const { return find_ui_active_; }
   void set_find_ui_active(bool find_ui_active) {
-      find_ui_active_ = find_ui_active;
+    find_ui_active_ = find_ui_active;
   }
 
   // Setter for find_op_aborted_.
@@ -101,6 +122,8 @@ class FindTabHelper : public content::WebContentsObserver,
                        int active_match_ordinal,
                        bool final_update);
 
+  void set_delegate(Delegate* delegate) { delegate_ = delegate; }
+
  private:
   explicit FindTabHelper(content::WebContents* web_contents);
   friend class content::WebContentsUserData<FindTabHelper>;
@@ -112,14 +135,14 @@ class FindTabHelper : public content::WebContentsObserver,
   static int find_request_id_counter_;
 
   // True if the Find UI is active for this Tab.
-  bool find_ui_active_;
+  bool find_ui_active_ = false;
 
   // True if a Find operation was aborted. This can happen if the Find box is
   // closed or if the search term inside the Find box is erased while a search
   // is in progress. This can also be set if a page has been reloaded, and will
   // on FindNext result in a full Find operation so that the highlighting for
   // inactive matches can be repainted.
-  bool find_op_aborted_;
+  bool find_op_aborted_ = false;
 
   // This variable keeps track of what the most recent request ID is.
   int current_find_request_id_;
@@ -148,18 +171,21 @@ class FindTabHelper : public content::WebContentsObserver,
   gfx::Range selected_range_;
 
   // Whether the last search was case sensitive or not.
-  bool last_search_case_sensitive_;
+  bool last_search_case_sensitive_ = false;
 
   // The last find result. This object contains details about the number of
   // matches, the find selection rectangle, etc. The UI can access this
   // information to build its presentation.
   FindNotificationDetails last_search_result_;
 
+  // The optional delegate that remembers recent search text state.
+  Delegate* delegate_ = nullptr;
+
   base::ObserverList<FindResultObserver> observers_;
 
   WEB_CONTENTS_USER_DATA_KEY_DECL();
-
-  DISALLOW_COPY_AND_ASSIGN(FindTabHelper);
 };
 
-#endif  // CHROME_BROWSER_UI_FIND_BAR_FIND_TAB_HELPER_H_
+}  // namespace find_in_page
+
+#endif  // COMPONENTS_FIND_IN_PAGE_FIND_TAB_HELPER_H_

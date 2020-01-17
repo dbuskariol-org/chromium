@@ -2,16 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_FIND_BAR_FIND_RESULT_OBSERVER_H_
-#define CHROME_BROWSER_UI_FIND_BAR_FIND_RESULT_OBSERVER_H_
+#ifndef COMPONENTS_FIND_IN_PAGE_FIND_RESULT_OBSERVER_H_
+#define COMPONENTS_FIND_IN_PAGE_FIND_RESULT_OBSERVER_H_
 
 #include "base/observer_list_types.h"
-
-class FindTabHelper;
 
 namespace content {
 class WebContents;
 }
+
+namespace find_in_page {
+
+class FindTabHelper;
 
 class FindResultObserver : public base::CheckedObserver {
  public:
@@ -20,4 +22,6 @@ class FindResultObserver : public base::CheckedObserver {
   virtual void OnFindTabHelperDestroyed(FindTabHelper* helper) {}
 };
 
-#endif  // CHROME_BROWSER_UI_FIND_BAR_FIND_RESULT_OBSERVER_H_
+}  // namespace find_in_page
+
+#endif  // COMPONENTS_FIND_IN_PAGE_FIND_RESULT_OBSERVER_H_

@@ -42,8 +42,6 @@
 #include "chrome/browser/ui/blocked_content/popup_blocker.h"
 #include "chrome/browser/ui/blocked_content/popup_tracker.h"
 #include "chrome/browser/ui/browser_navigator_params.h"
-#include "chrome/browser/ui/find_bar/find_notification_details.h"
-#include "chrome/browser/ui/find_bar/find_tab_helper.h"
 #include "chrome/browser/ui/interventions/framebust_block_message_delegate.h"
 #include "chrome/browser/ui/javascript_dialogs/javascript_dialog_tab_helper.h"
 #include "chrome/browser/ui/tab_helpers.h"
@@ -51,6 +49,8 @@
 #include "chrome/common/chrome_switches.h"
 #include "chrome/common/url_constants.h"
 #include "components/app_modal/javascript_dialog_manager.h"
+#include "components/find_in_page/find_notification_details.h"
+#include "components/find_in_page/find_tab_helper.h"
 #include "components/infobars/core/infobar.h"
 #include "components/navigation_interception/intercept_navigation_delegate.h"
 #include "components/security_state/content/content_utils.h"
@@ -217,7 +217,8 @@ void TabWebContentsDelegateAndroid::FindReply(
     const gfx::Rect& selection_rect,
     int active_match_ordinal,
     bool final_update) {
-  FindTabHelper* find_tab_helper = FindTabHelper::FromWebContents(web_contents);
+  find_in_page::FindTabHelper* find_tab_helper =
+      find_in_page::FindTabHelper::FromWebContents(web_contents);
   if (!find_result_observer_.IsObserving(find_tab_helper))
     find_result_observer_.Add(find_tab_helper);
 
@@ -483,8 +484,8 @@ void TabWebContentsDelegateAndroid::OnFindResultAvailable(
   if (obj.is_null())
     return;
 
-  const FindNotificationDetails& find_result =
-      FindTabHelper::FromWebContents(web_contents)->find_result();
+  const find_in_page::FindNotificationDetails& find_result =
+      find_in_page::FindTabHelper::FromWebContents(web_contents)->find_result();
 
   ScopedJavaLocalRef<jobject> selection_rect =
       JNI_TabWebContentsDelegateAndroid_CreateJavaRect(
@@ -501,7 +502,7 @@ void TabWebContentsDelegateAndroid::OnFindResultAvailable(
 }
 
 void TabWebContentsDelegateAndroid::OnFindTabHelperDestroyed(
-    FindTabHelper* helper) {
+    find_in_page::FindTabHelper* helper) {
   find_result_observer_.Remove(helper);
 }
 

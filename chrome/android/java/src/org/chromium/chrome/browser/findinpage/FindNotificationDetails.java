@@ -8,7 +8,7 @@ import android.graphics.Rect;
 
 /**
  * Java equivalent to the C++ FindNotificationDetails class
- * defined in chrome/browser/ui/find_bar/find_notification_details.h
+ * defined in components/find_in_page/find_notification_details.h
  */
 public class FindNotificationDetails {
     /** How many matches were found. */

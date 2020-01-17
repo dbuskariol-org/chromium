@@ -6,8 +6,8 @@
 
 #include "base/android/jni_string.h"
 #include "chrome/android/chrome_jni_headers/FindInPageBridge_jni.h"
-#include "chrome/browser/ui/find_bar/find_tab_helper.h"
-#include "chrome/browser/ui/find_bar/find_types.h"
+#include "components/find_in_page/find_tab_helper.h"
+#include "components/find_in_page/find_types.h"
 #include "content/public/browser/web_contents.h"
 
 using base::android::ConvertUTF16ToJavaString;
@@ -31,33 +31,33 @@ void FindInPageBridge::StartFinding(JNIEnv* env,
                                     const JavaParamRef<jstring>& search_string,
                                     jboolean forward_direction,
                                     jboolean case_sensitive) {
-  FindTabHelper::FromWebContents(web_contents_)->
-      StartFinding(
+  find_in_page::FindTabHelper::FromWebContents(web_contents_)
+      ->StartFinding(
           base::android::ConvertJavaStringToUTF16(env, search_string),
-          forward_direction,
-          case_sensitive);
+          forward_direction, case_sensitive);
 }
 
 void FindInPageBridge::StopFinding(JNIEnv* env,
                                    const JavaParamRef<jobject>& obj,
                                    jboolean clearSelection) {
-  FindTabHelper::FromWebContents(web_contents_)
-      ->StopFinding(clearSelection ? FindOnPageSelectionAction::kClear
-                                   : FindOnPageSelectionAction::kKeep);
+  find_in_page::FindTabHelper::FromWebContents(web_contents_)
+      ->StopFinding(clearSelection ? find_in_page::SelectionAction::kClear
+                                   : find_in_page::SelectionAction::kKeep);
 }
 
 ScopedJavaLocalRef<jstring> FindInPageBridge::GetPreviousFindText(
     JNIEnv* env,
     const JavaParamRef<jobject>& obj) {
   return ConvertUTF16ToJavaString(
-      env, FindTabHelper::FromWebContents(web_contents_)->previous_find_text());
+      env, find_in_page::FindTabHelper::FromWebContents(web_contents_)
+               ->previous_find_text());
 }
 
 void FindInPageBridge::RequestFindMatchRects(JNIEnv* env,
                                              const JavaParamRef<jobject>& obj,
                                              jint current_version) {
-  FindTabHelper::FromWebContents(web_contents_)->
-      RequestFindMatchRects(current_version);
+  find_in_page::FindTabHelper::FromWebContents(web_contents_)
+      ->RequestFindMatchRects(current_version);
 }
 
 void FindInPageBridge::ActivateNearestFindResult(
@@ -65,15 +65,15 @@ void FindInPageBridge::ActivateNearestFindResult(
     const JavaParamRef<jobject>& obj,
     jfloat x,
     jfloat y) {
-  FindTabHelper::FromWebContents(web_contents_)->
-      ActivateNearestFindResult(x, y);
+  find_in_page::FindTabHelper::FromWebContents(web_contents_)
+      ->ActivateNearestFindResult(x, y);
 }
 
 void FindInPageBridge::ActivateFindInPageResultForAccessibility(
     JNIEnv* env,
     const JavaParamRef<jobject>& obj) {
-  FindTabHelper::FromWebContents(web_contents_)->
-      ActivateFindInPageResultForAccessibility();
+  find_in_page::FindTabHelper::FromWebContents(web_contents_)
+      ->ActivateFindInPageResultForAccessibility();
 }
 
 // static

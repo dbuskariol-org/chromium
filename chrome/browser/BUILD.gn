@@ -2015,6 +2015,7 @@ jumbo_static_library("browser") {
     "//components/favicon_base",
     "//components/feature_engagement",
     "//components/filename_generation",
+    "//components/find_in_page",
     "//components/flags_ui",
     "//components/games/core",
     "//components/gcm_driver",
