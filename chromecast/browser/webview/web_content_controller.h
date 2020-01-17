@@ -127,7 +127,6 @@ class WebContentController
   std::deque<TouchData> touch_queue_;
 
   exo::Surface* surface_ = nullptr;
-  content::RenderFrameHost* current_rfh_ = nullptr;
 
   std::set<std::string> current_javascript_channel_set_;
   std::set<content::RenderFrameHost*> current_render_frame_set_;
