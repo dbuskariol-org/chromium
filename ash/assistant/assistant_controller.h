@@ -38,7 +38,6 @@
 #include "mojo/public/cpp/bindings/receiver_set.h"
 #include "mojo/public/cpp/bindings/remote.h"
 #include "mojo/public/cpp/bindings/remote_set.h"
-#include "services/content/public/mojom/navigable_contents_factory.mojom-forward.h"
 
 class PrefRegistrySimple;
 
@@ -120,11 +119,6 @@ class ASH_EXPORT AssistantController
   void OpenUrl(const GURL& url,
                bool in_background = false,
                bool from_server = false);
-
-  // Acquires a NavigableContentsFactory from the Content Service to allow
-  // Assistant to display embedded web contents.
-  void GetNavigableContentsFactory(
-      mojo::PendingReceiver<content::mojom::NavigableContentsFactory> receiver);
 
   AssistantAlarmTimerController* alarm_timer_controller() {
     return &assistant_alarm_timer_controller_;
