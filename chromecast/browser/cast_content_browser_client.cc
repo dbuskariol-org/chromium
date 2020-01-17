@@ -82,6 +82,7 @@
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "net/ssl/ssl_cert_request_info.h"
 #include "net/url_request/url_request_context_getter.h"
+#include "services/network/public/cpp/network_switches.h"
 #include "services/service_manager/embedder/descriptors.h"
 #include "ui/display/display.h"
 #include "ui/display/screen.h"
@@ -436,7 +437,8 @@ void CastContentBrowserClient::AppendExtraCommandLineSwitches(
     // the renderer go here.
     static const char* const kForwardSwitches[] = {
         switches::kForceMediaResolutionHeight,
-        switches::kForceMediaResolutionWidth};
+        switches::kForceMediaResolutionWidth,
+        network::switches::kUnsafelyTreatInsecureOriginAsSecure};
     command_line->CopySwitchesFrom(*browser_command_line, kForwardSwitches,
                                    base::size(kForwardSwitches));
   } else if (process_type == switches::kUtilityProcess) {

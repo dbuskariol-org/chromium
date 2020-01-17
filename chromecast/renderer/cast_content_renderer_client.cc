@@ -32,9 +32,11 @@
 #include "mojo/public/cpp/bindings/interface_request.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "mojo/public/cpp/bindings/remote.h"
+#include "services/network/public/cpp/is_potentially_trustworthy.h"
 #include "services/service_manager/public/cpp/interface_provider.h"
 #include "third_party/blink/public/platform/web_runtime_features.h"
 #include "third_party/blink/public/web/web_frame_widget.h"
+#include "third_party/blink/public/web/web_security_policy.h"
 #include "third_party/blink/public/web/web_settings.h"
 #include "third_party/blink/public/web/web_view.h"
 
@@ -148,6 +150,12 @@ void CastContentRendererClient::RenderThreadStarted() {
       std::make_unique<extensions::ExtensionsGuestViewContainerDispatcher>();
   thread->AddObserver(guest_view_container_dispatcher_.get());
 #endif
+
+  for (auto& origin_or_hostname_pattern :
+       network::SecureOriginAllowlist::GetInstance().GetCurrentAllowlist()) {
+    blink::WebSecurityPolicy::AddOriginToTrustworthySafelist(
+        blink::WebString::FromUTF8(origin_or_hostname_pattern));
+  }
 }
 
 void CastContentRendererClient::RenderViewCreated(
