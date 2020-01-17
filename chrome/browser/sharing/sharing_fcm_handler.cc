@@ -86,6 +86,7 @@ void SharingFCMHandler::ShutdownHandler() {
 
 void SharingFCMHandler::OnMessage(const std::string& app_id,
                                   const gcm::IncomingMessage& message) {
+  base::TimeTicks message_received_time = base::TimeTicks::Now();
   std::string message_id = GetStrippedMessageId(message.message_id);
   chrome_browser_sharing::SharingMessage sharing_message;
   if (!sharing_message.ParseFromString(message.raw_data)) {
@@ -112,7 +113,8 @@ void SharingFCMHandler::OnMessage(const std::string& app_id,
       done_callback = base::BindOnce(
           &SharingFCMHandler::SendAckMessage, weak_ptr_factory_.GetWeakPtr(),
           std::move(message_id), message_type, GetTargetInfo(sharing_message),
-          sync_preference_->GetDevicePlatform(sharing_message.sender_guid()));
+          sync_preference_->GetDevicePlatform(sharing_message.sender_guid()),
+          message_received_time);
     }
 
     handler->OnMessage(std::move(sharing_message), std::move(done_callback));
@@ -152,7 +154,10 @@ void SharingFCMHandler::SendAckMessage(
     chrome_browser_sharing::MessageType original_message_type,
     base::Optional<syncer::DeviceInfo::SharingTargetInfo> target_info,
     SharingDevicePlatform sender_device_type,
+    base::TimeTicks message_received_time,
     std::unique_ptr<chrome_browser_sharing::ResponseMessage> response) {
+  LogSharingMessageHandlerTime(original_message_type,
+                               base::TimeTicks::Now() - message_received_time);
   if (!target_info) {
     LOG(ERROR) << "Unable to find target info";
     LogSendSharingAckMessageResult(original_message_type, sender_device_type,

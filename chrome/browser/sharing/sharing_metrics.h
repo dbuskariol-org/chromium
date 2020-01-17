@@ -103,6 +103,12 @@ void LogSharingMessageAckTime(chrome_browser_sharing::MessageType message_type,
                               SharingDevicePlatform receiver_device_platform,
                               base::TimeDelta time);
 
+// Logs to UMA the time from receiving a SharingMessage to sending
+// back an ack.
+void LogSharingMessageHandlerTime(
+    chrome_browser_sharing::MessageType message_type,
+    base::TimeDelta time_taken);
+
 // Logs to UMA the number of hours since the target device timestamp was last
 // updated. Logged when a message is sent to the device.
 void LogSharingDeviceLastUpdatedAge(

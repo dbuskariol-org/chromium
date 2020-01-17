@@ -241,6 +241,15 @@ void LogSharingMessageAckTime(chrome_browser_sharing::MessageType message_type,
   }
 }
 
+void LogSharingMessageHandlerTime(
+    chrome_browser_sharing::MessageType message_type,
+    base::TimeDelta time_taken) {
+  base::UmaHistogramMediumTimes(
+      base::StrCat({"Sharing.MessageHandlerTime.",
+                    MessageTypeToMessageSuffix(message_type)}),
+      time_taken);
+}
+
 void LogSharingDeviceLastUpdatedAge(
     chrome_browser_sharing::MessageType message_type,
     base::TimeDelta age) {
