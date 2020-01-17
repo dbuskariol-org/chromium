@@ -1343,7 +1343,6 @@ crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozi
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-intrinsic-ratio-004.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-intrinsic-ratio-004v.html [ Failure ]
 crbug.com/846557 [ Mac ] virtual/layout_ng_flex_box/css3/flexbox/button.html [ Failure ]
-crbug.com/996474 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-minimum-height-flex-items-009.html [ Pass Failure ]
 
 # Fail in both legacy flex and NG flex
 crbug.com/249112 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-minimum-height-flex-items-005.xht [ Failure ]
