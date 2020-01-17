@@ -19,6 +19,7 @@
 #include "base/test/metrics/histogram_tester.h"
 #include "base/threading/thread_restrictions.h"
 #include "base/values.h"
+#include "build/build_config.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/spellchecker/spell_check_host_chrome_impl.h"
 #include "chrome/browser/spellchecker/spellcheck_factory.h"
@@ -39,6 +40,10 @@
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/receiver.h"
 #include "mojo/public/cpp/bindings/remote.h"
+
+#if BUILDFLAG(USE_WIN_HYBRID_SPELLCHECKER)
+#include "components/spellcheck/common/spellcheck_features.h"
+#endif  // BUILDFLAG(USE_WIN_HYBRID_SPELLCHECKER)
 
 using content::BrowserContext;
 using content::RenderProcessHost;
@@ -445,6 +450,15 @@ IN_PROC_BROWSER_TEST_F(SpellcheckServiceHostBrowserTest, CallSpellingService) {
 // Tests that we can delete a corrupted BDICT file used by hunspell. We do not
 // run this test on Mac because Mac does not use hunspell by default.
 IN_PROC_BROWSER_TEST_F(SpellcheckServiceBrowserTest, DeleteCorruptedBDICT) {
+#if BUILDFLAG(USE_WIN_HYBRID_SPELLCHECKER)
+  if (spellcheck::UseWinHybridSpellChecker()) {
+    // If doing hybrid spell checking on Windows, Hunspell dictionaries are not
+    // used for en-US, so the corrupt dictionary event will never be raised.
+    // Skip this test.
+    return;
+  }
+#endif  // BUILDFLAG(USE_WIN_HYBRID_SPELLCHECKER)
+
   // Corrupted BDICT data: please do not use this BDICT data for other tests.
   const uint8_t kCorruptedBDICT[] = {
       0x42, 0x44, 0x69, 0x63, 0x02, 0x00, 0x01, 0x00, 0x20, 0x00, 0x00, 0x00,
