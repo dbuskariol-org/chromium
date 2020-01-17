@@ -605,6 +605,9 @@ CHAR-LIMIT guidelines:
       <message name="IDS_OPTIONS_HOMEPAGE_EDIT_LABEL" desc="The label for the edit text field that allows the user to change the URL that is opened when they tap on the home page button in the omnibox.">
         Open this page
       </message>
+      <message name="IDS_HOMEBUTTON_CONTEXT_MENU_SETTINGS" desc="The label displayed on home button context menu item, which navigate the user to the homepage settings.">
+        Edit homepage
+      </message>
 
       <!-- Notifications preferences -->
       <message name="IDS_PREFS_NOTIFICATIONS" desc="Title for Notification preferences.">
