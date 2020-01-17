@@ -428,7 +428,6 @@ bool RenderFrameProxy::OnMessageReceived(const IPC::Message& msg) {
                         OnEnforceInsecureRequestPolicy)
     IPC_MESSAGE_HANDLER(FrameMsg_SetFrameOwnerProperties,
                         OnSetFrameOwnerProperties)
-    IPC_MESSAGE_HANDLER(InputMsg_SetFocus, OnSetPageFocus)
     IPC_MESSAGE_HANDLER(FrameMsg_DidUpdateVisualProperties,
                         OnDidUpdateVisualProperties)
     IPC_MESSAGE_HANDLER(FrameMsg_EnableAutoResize, OnEnableAutoResize)
@@ -510,10 +509,6 @@ void RenderFrameProxy::OnSetFrameOwnerProperties(
     const FrameOwnerProperties& properties) {
   web_frame_->SetFrameOwnerProperties(
       ConvertFrameOwnerPropertiesToWebFrameOwnerProperties(properties));
-}
-
-void RenderFrameProxy::OnSetPageFocus(bool is_focused) {
-  render_view_->SetFocus(is_focused);
 }
 
 void RenderFrameProxy::OnTransferUserActivationFrom(int32_t source_routing_id) {

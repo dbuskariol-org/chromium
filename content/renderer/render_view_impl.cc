@@ -1956,12 +1956,6 @@ void RenderViewImpl::OnSetInsidePortal(bool inside_portal) {
   webview()->SetInsidePortal(inside_portal);
 }
 
-void RenderViewImpl::SetFocus(bool enable) {
-  // This is only called from RenderFrameProxy.
-  CHECK(!webview()->MainFrame()->IsWebLocalFrame());
-  webview()->SetFocus(enable);
-}
-
 void RenderViewImpl::PageScaleFactorChanged(float page_scale_factor) {
   if (!webview())
     return;

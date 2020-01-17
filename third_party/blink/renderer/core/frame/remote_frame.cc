@@ -8,6 +8,8 @@
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/platform/interface_registry.h"
+#include "third_party/blink/public/web/web_frame.h"
+#include "third_party/blink/public/web/web_view.h"
 #include "third_party/blink/renderer/bindings/core/v8/window_proxy.h"
 #include "third_party/blink/renderer/bindings/core/v8/window_proxy_manager.h"
 #include "third_party/blink/renderer/core/frame/csp/content_security_policy.h"
@@ -396,6 +398,10 @@ void RemoteFrame::SetEmbeddingToken(
     const base::UnguessableToken& embedding_token) {
   FrameOwner* owner = Owner();
   To<HTMLFrameOwnerElement>(owner)->SetEmbeddingToken(embedding_token);
+}
+
+void RemoteFrame::SetPageFocus(bool is_focused) {
+  WebFrame::FromFrame(this)->View()->SetFocus(is_focused);
 }
 
 bool RemoteFrame::IsIgnoredForHitTest() const {

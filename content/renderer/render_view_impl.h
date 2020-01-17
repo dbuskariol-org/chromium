@@ -189,10 +189,6 @@ class CONTENT_EXPORT RenderViewImpl : public blink::WebViewClient,
   void PropagatePageZoomToNewlyAttachedFrame(bool use_zoom_for_dsf,
                                              float device_scale_factor);
 
-  // Sets page-level focus in this view and notifies plugins and Blink's
-  // FocusController.
-  void SetFocus(bool enable);
-
   // Starts a timer to send an UpdateState message on behalf of |frame|, if the
   // timer isn't already running. This allows multiple state changing events to
   // be coalesced into one update.

@@ -299,4 +299,7 @@ interface RemoteFrame {
   // set the embedding token. This token uniquely specifies the relationship
   // between a frame and its parent.
   SetEmbeddingToken(mojo_base.mojom.UnguessableToken embedding_token);
+
+  // Sets page-level focus and notifies FocusController.
+  SetPageFocus(bool is_focused);
 };

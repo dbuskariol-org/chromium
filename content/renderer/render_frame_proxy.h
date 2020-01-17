@@ -241,7 +241,6 @@ class CONTENT_EXPORT RenderFrameProxy : public IPC::Listener,
   void OnDidUpdateName(const std::string& name, const std::string& unique_name);
   void OnEnforceInsecureRequestPolicy(blink::WebInsecureRequestPolicy policy);
   void OnSetFrameOwnerProperties(const FrameOwnerProperties& properties);
-  void OnSetPageFocus(bool is_focused);
   void OnTransferUserActivationFrom(int32_t source_routing_id);
   void OnScrollRectToVisible(const gfx::Rect& rect_to_scroll,
                              const blink::WebScrollIntoViewParams& params);

@@ -593,4 +593,9 @@ void RenderFrameProxyHost::OnPrintCrossProcessSubframe(const gfx::Rect& rect,
   rfh->delegate()->PrintCrossProcessSubframe(rect, document_cookie, rfh);
 }
 
+blink::AssociatedInterfaceProvider*
+RenderFrameProxyHost::GetRemoteAssociatedInterfacesTesting() {
+  return GetRemoteAssociatedInterfaces();
+}
+
 }  // namespace content

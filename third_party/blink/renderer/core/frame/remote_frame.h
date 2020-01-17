@@ -111,6 +111,7 @@ class CORE_EXPORT RemoteFrame final : public Frame,
       mojom::blink::UserActivationUpdateType) override;
   void SetEmbeddingToken(
       const base::UnguessableToken& embedding_token) override;
+  void SetPageFocus(bool is_focused) override;
 
  private:
   // Frame protected overrides:
