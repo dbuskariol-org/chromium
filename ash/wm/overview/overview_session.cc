@@ -480,12 +480,14 @@ void OverviewSession::CompleteDrag(OverviewItem* item,
                                    const gfx::PointF& location_in_screen) {
   DCHECK(window_drag_controller_);
   DCHECK_EQ(item, window_drag_controller_->item());
+
+  // Note: The highlight should be updated first as completing a drag may cause
+  // a selection which would destroy |item|.
+  highlight_controller_->SetFocusHighlightVisibility(true);
   const bool snap = window_drag_controller_->CompleteDrag(location_in_screen) ==
                     OverviewWindowDragController::DragResult::kSnap;
   for (std::unique_ptr<OverviewGrid>& grid : grid_list_)
     grid->OnSelectorItemDragEnded(snap);
-
-  highlight_controller_->SetFocusHighlightVisibility(true);
 }
 
 void OverviewSession::StartNormalDragMode(
