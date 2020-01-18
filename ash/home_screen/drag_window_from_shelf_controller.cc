@@ -539,7 +539,8 @@ SplitViewController::SnapPosition
 DragWindowFromShelfController::GetSnapPositionOnDragEnd(
     const gfx::PointF& location_in_screen,
     base::Optional<float> velocity_y) const {
-  if (ShouldRestoreToOriginalBounds(location_in_screen) ||
+  if (!Shell::Get()->overview_controller()->InOverviewSession() ||
+      ShouldRestoreToOriginalBounds(location_in_screen) ||
       ShouldGoToHomeScreen(location_in_screen, velocity_y)) {
     return SplitViewController::NONE;
   }
