@@ -5,7 +5,6 @@
 #ifndef ASH_ASSISTANT_MODEL_UI_ASSISTANT_UI_ELEMENT_H_
 #define ASH_ASSISTANT_MODEL_UI_ASSISTANT_UI_ELEMENT_H_
 
-#include "base/callback.h"
 #include "base/component_export.h"
 #include "base/macros.h"
 
@@ -24,17 +23,12 @@ enum class AssistantUiElementType {
 // Base class for a UI element that will be rendered inside of Assistant UI.
 class COMPONENT_EXPORT(ASSISTANT_MODEL) AssistantUiElement {
  public:
-  virtual ~AssistantUiElement();
+  virtual ~AssistantUiElement() = default;
 
   AssistantUiElementType type() const { return type_; }
 
-  // Invoke to being processing the UI element for rendering. Upon completion,
-  // the specified |callback| will be run to indicate success or failure.
-  using ProcessingCallback = base::OnceCallback<void(bool)>;
-  virtual void Process(ProcessingCallback callback);
-
  protected:
-  explicit AssistantUiElement(AssistantUiElementType type);
+  explicit AssistantUiElement(AssistantUiElementType type) : type_(type) {}
 
  private:
   const AssistantUiElementType type_;
