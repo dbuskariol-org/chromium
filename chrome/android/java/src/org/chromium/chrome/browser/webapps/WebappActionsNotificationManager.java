@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import org.chromium.base.ContextUtils;
-import org.chromium.base.IntentUtils;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.IntentHandler;
@@ -26,6 +25,7 @@ import org.chromium.chrome.browser.notifications.PendingIntentProvider;
 import org.chromium.chrome.browser.notifications.channels.ChannelDefinitions;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabImpl;
+import org.chromium.chrome.browser.util.IntentUtils;
 import org.chromium.ui.base.Clipboard;
 
 import java.lang.ref.WeakReference;

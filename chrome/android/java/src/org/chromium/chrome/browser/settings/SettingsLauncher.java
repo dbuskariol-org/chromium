@@ -13,7 +13,7 @@ import android.support.v4.app.Fragment;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import org.chromium.base.IntentUtils;
+import org.chromium.chrome.browser.util.IntentUtils;
 
 /**
  * A utility class for launching Chrome Settings.

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.base;
+package org.chromium.chrome.browser.util;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -18,6 +18,9 @@ import android.support.v4.app.BundleCompat;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+
+import org.chromium.base.ApiCompatibilityUtils;
+import org.chromium.base.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
