@@ -74,12 +74,14 @@ class BackButtonNode extends SAChildNode {
 
   /** @override */
   onFocus() {
+    super.onFocus();
     chrome.accessibilityPrivate.setSwitchAccessMenuState(
         true, this.group_.location, 0 /* num_actions */);
   }
 
   /** @override */
   onUnfocus() {
+    super.onUnfocus();
     chrome.accessibilityPrivate.setSwitchAccessMenuState(
         false, RectHelper.ZERO_RECT, 0 /* num_actions */);
   }
