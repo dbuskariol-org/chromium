@@ -60891,6 +60891,34 @@ Called by update_net_trust_anchors.py.-->
   <int value="16" label="Browser crash count"/>
 </enum>
 
+<enum name="StandardActions">
+  <summary>
+    Standard Activity Actions, as defined by
+    https://developer.android.com/reference/android/content/Intent.html#standard-activity-actions
+  </summary>
+  <int value="0" label="MAIN"/>
+  <int value="1" label="VIEW"/>
+  <int value="2" label="ATTACH_DATA"/>
+  <int value="3" label="EDIT"/>
+  <int value="4" label="PICK"/>
+  <int value="5" label="CHOOSER"/>
+  <int value="6" label="GET_CONTENT"/>
+  <int value="7" label="DIAL"/>
+  <int value="8" label="CALL"/>
+  <int value="9" label="SEND"/>
+  <int value="10" label="SENDTO"/>
+  <int value="11" label="ANSWER"/>
+  <int value="12" label="INSERT"/>
+  <int value="13" label="DELETE"/>
+  <int value="14" label="RUN"/>
+  <int value="15" label="SYNC"/>
+  <int value="16" label="PICK_ACTIVITY"/>
+  <int value="17" label="SEARCH"/>
+  <int value="18" label="WEB_SEARCH"/>
+  <int value="19" label="FACTORY_TEST"/>
+  <int value="20" label="OTHER"/>
+</enum>
+
 <enum name="StarsLaunchLocation">
   <int value="0" label="All Items"/>
   <int value="1" label="Uncategorized"/>
