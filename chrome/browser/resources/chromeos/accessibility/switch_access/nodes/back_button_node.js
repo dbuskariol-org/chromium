@@ -59,7 +59,7 @@ class BackButtonNode extends SAChildNode {
 
   /** @override */
   isEquivalentTo(node) {
-    return this.node_ === node;
+    return node instanceof BackButtonNode || this.node_ === node;
   }
 
   /** @override */

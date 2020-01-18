@@ -114,7 +114,7 @@ class SAChildNode {
   }
 
   /**
-   * @param {!chrome.automation.AutomationNode|!SAChildNode|!SARootNode} node
+   * @param {?chrome.automation.AutomationNode|!SAChildNode|!SARootNode} node
    * @return {boolean}
    * @abstract
    */
@@ -282,7 +282,7 @@ class SARootNode {
   }
 
   /**
-   * @param {chrome.automation.AutomationNode|!SARootNode|!SAChildNode} node
+   * @param {?chrome.automation.AutomationNode|!SARootNode|!SAChildNode} node
    * @return {boolean}
    */
   isEquivalentTo(node) {
