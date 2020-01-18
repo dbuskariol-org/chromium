@@ -5429,6 +5429,8 @@ Unknown properties are collapsed to zero. -->
   <int value="222" label="RFPH_ADVANCE_FOCUS_INTO_PORTAL"/>
   <int value="223" label="RFH_UNEXPECTED_EMBEDDING_TOKEN"/>
   <int value="224" label="RFH_MISSING_EMBEDDING_TOKEN"/>
+  <int value="225" label="RFH_BAD_DOCUMENT_POLICY_HEADER"/>
+  <int value="226" label="RFMF_INVALID_PLUGIN_EMBEDDER_ORIGIN"/>
 </enum>
 
 <enum name="BadMessageReasonExtensions">

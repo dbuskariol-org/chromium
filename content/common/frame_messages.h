@@ -983,8 +983,16 @@ IPC_MESSAGE_ROUTED1(FrameHostMsg_PluginContentOriginAllowed,
 // used to identify the proper process when the renderer notifies it that the
 // plugin is hung.
 //
+// |embedder_origin| provides the origin of the frame that embeds the plugin
+// (i.e. the origin of the document that contains the <embed> html tag).
+// |embedder_origin| needs to be included in the message payload, because the
+// message is received and handled on the IO thread in the browser process
+// (where it is not possible to consult
+// RenderFrameHostImpl::GetLastCommittedOrigin).
+//
 // On error an empty string and null handles are returned.
-IPC_SYNC_MESSAGE_CONTROL2_3(FrameHostMsg_OpenChannelToPepperPlugin,
+IPC_SYNC_MESSAGE_CONTROL3_3(FrameHostMsg_OpenChannelToPepperPlugin,
+                            url::Origin /* embedder_origin */,
                             base::FilePath /* path */,
                             base::Optional<url::Origin>, /* origin_lock */
                             IPC::ChannelHandle /* handle to channel */,
