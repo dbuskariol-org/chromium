@@ -529,16 +529,6 @@ BUILDERS = {
             '--assert-gpu-compositing',
         ],
       },
-      {
-        'isolate': 'performance_browser_tests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
-      },
-      {
-        'isolate': 'load_library_perf_tests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
-      }
     ],
     'platform': 'mac',
     'dimension': {
@@ -550,42 +540,11 @@ BUILDERS = {
   },
   'linux-perf': {
     'tests': [
-      # Add views_perftests, crbug.com/811766
       {
         'isolate': 'performance_test_suite',
         'extra_args': [
             '--assert-gpu-compositing',
         ],
-      },
-      {
-        'isolate': 'performance_browser_tests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
-      },
-      {
-        'isolate': 'load_library_perf_tests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
-      },
-      {
-        'isolate': 'net_perftests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
-      },
-      {
-        'isolate': 'tracing_perftests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
-      },
-      {
-        'isolate': 'media_perftests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
-      },
-      {
-        'isolate': 'base_perftests',
-        'num_shards': 1,
-        'type': TEST_TYPES.GTEST,
       },
     ],
     'platform': 'linux',
