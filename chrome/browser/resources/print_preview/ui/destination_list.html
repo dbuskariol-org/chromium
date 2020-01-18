@@ -51,14 +51,19 @@
 <div class="no-destinations-message" hidden$="[[hasDestinations_]]">
   $i18n{noDestinationsMessage}
 </div>
-<iron-list id="list" items="[[matchingDestinations_]]"
-    hidden$="[[hideList_]]">
+<iron-list id="list" items="[[matchingDestinations_]]" role="grid"
+    aria-rowcount$="[[matchingDestinations_.length]]"
+    aria-label="$i18n{printDestinationsTitle}" hidden$="[[hideList_]]">
   <template>
-    <print-preview-destination-list-item class="list-item"
-        search-query="[[searchQuery]]" destination="[[item]]"
-        on-click="onDestinationSelected_" on-keydown="onKeydown_"
-        tabindex$="[[tabIndex]]">
-    </print-preview-destination-list-item>
+    <div role="row" id$="destination_[[index]]"
+        aria-rowindex$="[[getAriaRowindex_(index)]]">
+      <print-preview-destination-list-item class="list-item"
+          search-query="[[searchQuery]]" destination="[[item]]"
+          on-click="onDestinationSelected_" on-keydown="onKeydown_"
+          role="gridcell" tabindex$="[[tabIndex]]"
+          iron-list-tab-index="[[tabIndex]]">
+      </print-preview-destination-list-item>
+    </div>
   </template>
 </iron-list>
 <div class="throbber-container" hidden$="[[throbberHidden_]]">

@@ -166,4 +166,14 @@ Polymer({
 
     this.fire('destination-selected', e.target);
   },
+
+  /**
+   * Returns a 1-based index for aria-rowindex.
+   * @param {number} index
+   * @return {number}
+   * @private
+   */
+  getAriaRowindex_(index) {
+    return index + 1;
+  },
 });

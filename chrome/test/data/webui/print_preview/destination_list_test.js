@@ -67,7 +67,7 @@ suite(destination_list_test.suiteName, function() {
     // Query is initialized to null. All items are shown and the hint is
     // hidden.
     assertFalse(ironList.hidden);
-    items.forEach(item => assertFalse(item.hidden));
+    items.forEach(item => assertFalse(item.parentNode.hidden));
     assertTrue(noMatchHint.hidden);
 
     // Searching for "e" should show "One", "Three", and "Five".
@@ -75,7 +75,7 @@ suite(destination_list_test.suiteName, function() {
     flush();
     assertFalse(ironList.hidden);
     assertEquals(undefined, Array.from(items).find(item => {
-      return !item.hidden &&
+      return !item.parentNode.hidden &&
           (item.destination.displayName == 'Two' ||
            item.destination.displayName == 'Four');
     }));
@@ -86,7 +86,7 @@ suite(destination_list_test.suiteName, function() {
     flush();
     assertFalse(ironList.hidden);
     assertEquals(undefined, Array.from(items).find(item => {
-      return !item.hidden && item.destination.displayName != 'One' &&
+      return !item.parentNode.hidden && item.destination.displayName != 'One' &&
           item.destination.displayName != 'Three';
     }));
     assertTrue(noMatchHint.hidden);
@@ -96,7 +96,8 @@ suite(destination_list_test.suiteName, function() {
     flush();
     assertFalse(ironList.hidden);
     assertEquals(undefined, Array.from(items).find(item => {
-      return !item.hidden && item.destination.displayName != 'Four' &&
+      return !item.parentNode.hidden &&
+          item.destination.displayName != 'Four' &&
           item.destination.displayName != 'Five';
     }));
     assertTrue(noMatchHint.hidden);
@@ -113,7 +114,7 @@ suite(destination_list_test.suiteName, function() {
     flush();
     assertFalse(ironList.hidden);
     assertEquals(undefined, Array.from(items).find(item => {
-      return !item.hidden &&
+      return !item.parentNode.hidden &&
           (item.destination.displayName == 'One' ||
            item.destination.displayName == 'Two');
     }));
@@ -123,7 +124,7 @@ suite(destination_list_test.suiteName, function() {
     list.searchQuery = null;
     flush();
     assertFalse(ironList.hidden);
-    items.forEach(item => assertFalse(item.hidden));
+    items.forEach(item => assertFalse(item.parentNode.hidden));
     assertTrue(noMatchHint.hidden);
   });
 
