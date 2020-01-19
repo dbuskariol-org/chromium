@@ -1708,8 +1708,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameHostMsg_ScrollRectToVisibleInParentFrame,
                         OnScrollRectToVisibleInParentFrame)
     IPC_MESSAGE_HANDLER(FrameHostMsg_FrameDidCallFocus, OnFrameDidCallFocus)
-    IPC_MESSAGE_HANDLER(FrameHostMsg_RenderFallbackContentInParentProcess,
-                        OnRenderFallbackContentInParentProcess)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DownloadUrl, OnDownloadUrl)
 #if BUILDFLAG(USE_EXTERNAL_POPUP_MENU)
     IPC_MESSAGE_HANDLER(FrameHostMsg_ShowPopup, OnShowPopup)
@@ -4171,7 +4169,7 @@ void RenderFrameHostImpl::OnFrameDidCallFocus() {
   delegate_->DidCallFocus();
 }
 
-void RenderFrameHostImpl::OnRenderFallbackContentInParentProcess() {
+void RenderFrameHostImpl::RenderFallbackContentInParentProcess() {
   bool is_object_type =
       frame_tree_node()->current_replication_state().frame_owner_element_type ==
       blink::FrameOwnerElementType::kObject;
@@ -4191,10 +4189,10 @@ void RenderFrameHostImpl::OnRenderFallbackContentInParentProcess() {
   // frame of the owner is a proxy.
   auto* rfh = frame_tree_node()->current_frame_host();
   if (rfh->GetSiteInstance() == rfh->GetParent()->GetSiteInstance()) {
-    rfh->Send(new FrameMsg_RenderFallbackContent(rfh->GetRoutingID()));
+    rfh->GetAssociatedLocalFrame()->RenderFallbackContent();
   } else if (auto* proxy =
                  frame_tree_node()->render_manager()->GetProxyToParent()) {
-    proxy->Send(new FrameMsg_RenderFallbackContent(proxy->GetRoutingID()));
+    proxy->GetAssociatedRemoteFrame()->RenderFallbackContent();
   }
 }
 
