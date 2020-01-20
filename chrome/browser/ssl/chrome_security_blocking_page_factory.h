@@ -6,6 +6,7 @@
 #define CHROME_BROWSER_SSL_CHROME_SECURITY_BLOCKING_PAGE_FACTORY_H_
 
 #include "base/macros.h"
+#include "chrome/browser/ssl/blocked_interception_blocking_page.h"
 #include "components/security_interstitials/content/bad_clock_blocking_page.h"
 #include "components/security_interstitials/content/captive_portal_blocking_page.h"
 #include "components/security_interstitials/content/mitm_software_blocking_page.h"
@@ -60,6 +61,15 @@ class ChromeSecurityBlockingPageFactory {
       const net::SSLInfo& ssl_info,
       const std::string& mitm_software_name,
       bool is_enterprise_managed);
+
+  // Creates a blocked interception blocking page. The caller is
+  // responsible for ownership of the returned object.
+  static BlockedInterceptionBlockingPage* CreateBlockedInterceptionBlockingPage(
+      content::WebContents* web_contents,
+      int cert_error,
+      const GURL& request_url,
+      std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
+      const net::SSLInfo& ssl_info);
 
   // Does setup on |page| that is specific to the client (Chrome).
   static void DoChromeSpecificSetup(SSLBlockingPageBase* page);

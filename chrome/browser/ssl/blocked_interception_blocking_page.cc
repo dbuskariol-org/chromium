@@ -4,10 +4,8 @@
 
 #include "chrome/browser/ssl/blocked_interception_blocking_page.h"
 
-#include "chrome/browser/interstitials/chrome_metrics_helper.h"
-#include "chrome/browser/ssl/chrome_security_blocking_page_factory.h"
-#include "chrome/browser/ssl/ssl_error_controller_client.h"
 #include "components/security_interstitials/content/cert_report_helper.h"
+#include "components/security_interstitials/content/security_interstitial_controller_client.h"
 #include "components/security_interstitials/content/ssl_cert_reporter.h"
 #include "components/security_interstitials/core/metrics_helper.h"
 #include "content/public/browser/interstitial_page.h"
@@ -32,21 +30,6 @@ const InterstitialPageDelegate::TypeID
 
 namespace {
 
-const char kBlockedInterceptionMetricsName[] = "blocked_interception";
-
-std::unique_ptr<ChromeMetricsHelper> CreateBlockedInterceptionMetricsHelper(
-    content::WebContents* web_contents,
-    const GURL& request_url) {
-  // Set up the metrics helper for the BlockedInterceptionUI.
-  security_interstitials::MetricsHelper::ReportDetails reporting_info;
-  reporting_info.metric_prefix = kBlockedInterceptionMetricsName;
-  std::unique_ptr<ChromeMetricsHelper> metrics_helper =
-      std::make_unique<ChromeMetricsHelper>(web_contents, request_url,
-                                            reporting_info);
-  metrics_helper.get()->StartRecordingCaptivePortalMetrics(false);
-  return metrics_helper;
-}
-
 }  // namespace
 
 // Note that we always create a navigation entry with SSL errors.
@@ -58,7 +41,10 @@ BlockedInterceptionBlockingPage::BlockedInterceptionBlockingPage(
     int cert_error,
     const GURL& request_url,
     std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
-    const net::SSLInfo& ssl_info)
+    const net::SSLInfo& ssl_info,
+    std::unique_ptr<
+        security_interstitials::SecurityInterstitialControllerClient>
+        controller_client)
     : SSLBlockingPageBase(
           web_contents,
           CertificateErrorReport::INTERSTITIAL_BLOCKED_INTERCEPTION,
@@ -67,21 +53,13 @@ BlockedInterceptionBlockingPage::BlockedInterceptionBlockingPage(
           std::move(ssl_cert_reporter),
           true /* overridable */,
           base::Time::Now(),
-          std::make_unique<SSLErrorControllerClient>(
-              web_contents,
-              ssl_info,
-              cert_error,
-              request_url,
-              CreateBlockedInterceptionMetricsHelper(web_contents,
-                                                     request_url))),
+          std::move(controller_client)),
       ssl_info_(ssl_info),
       blocked_interception_ui_(
           new security_interstitials::BlockedInterceptionUI(request_url,
                                                             cert_error,
                                                             ssl_info,
-                                                            controller())) {
-  ChromeSecurityBlockingPageFactory::DoChromeSpecificSetup(this);
-}
+                                                            controller())) {}
 
 BlockedInterceptionBlockingPage::~BlockedInterceptionBlockingPage() = default;
 

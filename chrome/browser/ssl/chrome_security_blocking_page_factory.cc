@@ -112,6 +112,19 @@ std::unique_ptr<ChromeMetricsHelper> CreateMitmSoftwareMetricsHelper(
   return metrics_helper;
 }
 
+std::unique_ptr<ChromeMetricsHelper> CreateBlockedInterceptionMetricsHelper(
+    content::WebContents* web_contents,
+    const GURL& request_url) {
+  // Set up the metrics helper for the BlockedInterceptionUI.
+  security_interstitials::MetricsHelper::ReportDetails reporting_info;
+  reporting_info.metric_prefix = "blocked_interception";
+  std::unique_ptr<ChromeMetricsHelper> metrics_helper =
+      std::make_unique<ChromeMetricsHelper>(web_contents, request_url,
+                                            reporting_info);
+  metrics_helper.get()->StartRecordingCaptivePortalMetrics(false);
+  return metrics_helper;
+}
+
 }  // namespace
 
 // static
@@ -237,6 +250,25 @@ ChromeSecurityBlockingPageFactory::CreateMITMSoftwareBlockingPage(
           CreateMitmSoftwareMetricsHelper(web_contents, request_url)));
 
   DoChromeSpecificSetup(page.get());
+  return page.release();
+}
+
+// static
+BlockedInterceptionBlockingPage*
+ChromeSecurityBlockingPageFactory::CreateBlockedInterceptionBlockingPage(
+    content::WebContents* web_contents,
+    int cert_error,
+    const GURL& request_url,
+    std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
+    const net::SSLInfo& ssl_info) {
+  auto page = std::make_unique<BlockedInterceptionBlockingPage>(
+      web_contents, cert_error, request_url, std::move(ssl_cert_reporter),
+      ssl_info,
+      std::make_unique<SSLErrorControllerClient>(
+          web_contents, ssl_info, cert_error, request_url,
+          CreateBlockedInterceptionMetricsHelper(web_contents, request_url)));
+
+  ChromeSecurityBlockingPageFactory::DoChromeSpecificSetup(page.get());
   return page.release();
 }
 

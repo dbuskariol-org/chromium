@@ -21,7 +21,10 @@ class BlockedInterceptionBlockingPage : public SSLBlockingPageBase {
       int cert_error,
       const GURL& request_url,
       std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
-      const net::SSLInfo& ssl_info);
+      const net::SSLInfo& ssl_info,
+      std::unique_ptr<
+          security_interstitials::SecurityInterstitialControllerClient>
+          controller_client);
   ~BlockedInterceptionBlockingPage() override;
 
   // InterstitialPageDelegate method:

@@ -185,8 +185,9 @@ BlockedInterceptionBlockingPage* CreateBlockedInterceptionBlockingPage(
 
   net::SSLInfo ssl_info;
   ssl_info.cert = ssl_info.unverified_cert = CreateFakeCert();
-  return new BlockedInterceptionBlockingPage(web_contents, cert_error,
-                                             request_url, nullptr, ssl_info);
+  return ChromeSecurityBlockingPageFactory::
+      CreateBlockedInterceptionBlockingPage(web_contents, cert_error,
+                                            request_url, nullptr, ssl_info);
 }
 
 BadClockBlockingPage* CreateBadClockBlockingPage(
