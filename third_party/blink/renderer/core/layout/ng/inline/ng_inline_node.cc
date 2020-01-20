@@ -1383,10 +1383,6 @@ const NGPaintFragment* NGInlineNode::ReusableLineBoxContainer(
           .HasOutOfFlowPositionedDescendants())
     return nullptr;
 
-  // Cached fragments are not for intermediate layout.
-  if (constraint_space.IsIntermediateLayout())
-    return nullptr;
-
   // Block fragmentation is not supported yet.
   if (constraint_space.HasBlockFragmentation())
     return nullptr;
@@ -1488,7 +1484,6 @@ static LayoutUnit ComputeContentSize(
   builder.SetAvailableSize({available_inline_size, kIndefiniteSize});
   builder.SetPercentageResolutionSize({LayoutUnit(), LayoutUnit()});
   builder.SetReplacedPercentageResolutionSize({LayoutUnit(), LayoutUnit()});
-  builder.SetIsIntermediateLayout(true);
   NGConstraintSpace space = builder.ToConstraintSpace();
 
   NGExclusionSpace empty_exclusion_space;
