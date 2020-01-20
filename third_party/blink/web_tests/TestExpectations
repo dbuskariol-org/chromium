@@ -6306,3 +6306,6 @@ crbug.com/1042694 fast/forms/form-control-with-state-eager-tracing-crashTest.htm
 crbug.com/1042689 [ Linux ] http/tests/devtools/coverage/gutter-css.js [ Pass Timeout ]
 crbug.com/1042689 [ Win ] http/tests/devtools/coverage/gutter-css.js [ Pass Timeout ]
 crbug.com/1042688 http/tests/devtools/elements/highlight/highlight-dom-updates.js [ Pass Timeout ]
+
+# Sheriff 2020-01-20
+crbug.com/1043357 http/tests/credentialmanager/credentialscontainer-get-with-virtual-authenticator.html [ Pass Timeout Failure ]
