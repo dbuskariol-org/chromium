@@ -494,6 +494,19 @@ public final class ChromePreferenceKeys {
     public static final String SHARING_LAST_SHARED_CLASS_NAME = "last_shared_class_name";
     public static final String SHARING_LAST_SHARED_PACKAGE_NAME = "last_shared_package_name";
 
+    public static final String SIGNIN_ACCOUNTS_CHANGED = "prefs_sync_accounts_changed";
+
+    /**
+     * Holds the new account's name if the currently signed in account has been renamed.
+     */
+    public static final String SIGNIN_ACCOUNT_RENAMED = "prefs_sync_account_renamed";
+
+    /**
+     * Holds the last read index of all the account changed events of the current signed in account.
+     */
+    public static final String SIGNIN_ACCOUNT_RENAME_EVENT_INDEX =
+            "prefs_sync_account_rename_event_index";
+
     /**
      * Generic signin and sync promo preferences.
      */
@@ -803,6 +816,9 @@ public final class ChromePreferenceKeys {
                 SEARCH_ENGINE_CHOICE_REQUESTED_TIMESTAMP,
                 SHARING_LAST_SHARED_CLASS_NAME,
                 SHARING_LAST_SHARED_PACKAGE_NAME,
+                SIGNIN_ACCOUNTS_CHANGED,
+                SIGNIN_ACCOUNT_RENAMED,
+                SIGNIN_ACCOUNT_RENAME_EVENT_INDEX,
                 SIGNIN_AND_SYNC_PROMO_SHOW_COUNT,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_BOOKMARKS,
                 SIGNIN_PROMO_IMPRESSIONS_COUNT_SETTINGS,
