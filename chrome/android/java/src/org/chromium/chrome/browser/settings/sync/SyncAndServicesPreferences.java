@@ -252,8 +252,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (ChromeFeatureList.isEnabled(ChromeFeatureList.SYNC_MANUAL_START_ANDROID)
-                && wasSigninFlowInterrupted()) {
+        if (wasSigninFlowInterrupted()) {
             // If the setup flow was previously interrupted, and now the user dismissed the page
             // without turning sync on, then mark first setup as complete (so that we won't show the
             // error again), but turn sync off.
@@ -348,8 +347,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
         if (PREF_SYNC_REQUESTED.equals(key)) {
             assert canDisableSync();
             SyncPreferenceUtils.enableSync((boolean) newValue);
-            if (ChromeFeatureList.isEnabled(ChromeFeatureList.SYNC_MANUAL_START_ANDROID)
-                    && wasSigninFlowInterrupted()) {
+            if (wasSigninFlowInterrupted()) {
                 // This flow should only be reached when user toggles sync on.
                 assert (boolean) newValue;
                 mProfileSyncService.setFirstSetupComplete(
@@ -462,7 +460,6 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
     private String getSyncErrorTitle(@SyncError int error) {
         switch (error) {
             case SyncError.SYNC_SETUP_INCOMPLETE:
-                assert ChromeFeatureList.isEnabled(ChromeFeatureList.SYNC_MANUAL_START_ANDROID);
                 return getString(R.string.sync_settings_not_confirmed_title);
             case SyncError.TRUSTED_VAULT_KEY_REQUIRED_FOR_EVERYTHING:
                 return getString(R.string.sync_error_card_title);
@@ -600,8 +597,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
         }
 
         mSyncRequested.setChecked(AndroidSyncSettings.get().isChromeSyncEnabled());
-        if (ChromeFeatureList.isEnabled(ChromeFeatureList.SYNC_MANUAL_START_ANDROID)
-                && wasSigninFlowInterrupted()) {
+        if (wasSigninFlowInterrupted()) {
             // If sync setup was not completed the sync request toggle should be off.
             // In this situation, switching it on will trigger a call to setFirstSetupComplete.
             mSyncRequested.setChecked(false);
@@ -680,10 +676,8 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
 
     private void confirmSettings() {
         RecordUserAction.record("Signin_Signin_ConfirmAdvancedSyncSettings");
-        if (ChromeFeatureList.isEnabled(ChromeFeatureList.SYNC_MANUAL_START_ANDROID)) {
-            ProfileSyncService.get().setFirstSetupComplete(
-                    SyncFirstSetupCompleteSource.ADVANCED_FLOW_CONFIRM);
-        }
+        ProfileSyncService.get().setFirstSetupComplete(
+                SyncFirstSetupCompleteSource.ADVANCED_FLOW_CONFIRM);
         UnifiedConsentServiceBridge.recordSyncSetupDataTypesHistogram();
         // Settings will be applied when mSyncSetupInProgressHandle is released in onDestroy.
         getActivity().finish();
