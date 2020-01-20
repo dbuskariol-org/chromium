@@ -965,10 +965,13 @@ TEST_F('CrSettingsPrivacyPageTest', 'InstalledAppsTests', () => {
 });
 
 GEN('#if defined(OS_MACOSX) || defined(OS_WIN)');
-TEST_F('CrSettingsPrivacyPageTest', 'CertificateManagerTests', function() {
-  settings_privacy_page.registerNativeCertificateManagerTests();
-  mocha.run();
-});
+// TODO(crbug.com/1043665): disabling due to failures on several builders.
+TEST_F(
+    'CrSettingsPrivacyPageTest', 'DISABLED_CertificateManagerTests',
+    function() {
+      settings_privacy_page.registerNativeCertificateManagerTests();
+      mocha.run();
+    });
 GEN('#endif');
 
 GEN('#if !defined(OS_CHROMEOS)');
