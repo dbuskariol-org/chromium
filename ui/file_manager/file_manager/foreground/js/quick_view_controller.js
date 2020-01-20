@@ -332,7 +332,11 @@ class QuickViewController {
                   values[1]));
           return this.onMetadataLoaded_(entry, items, tasks);
         })
-        .catch(console.error);
+        .catch(error => {
+          if (error) {
+            console.error(error.stack || error);
+          }
+        });
   }
 
   /**
