@@ -114,8 +114,7 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
     virtual bool IsErrorOverridable() const = 0;
     virtual void ShowCaptivePortalInterstitial(const GURL& landing_url) = 0;
     virtual void ShowMITMSoftwareInterstitial(
-        const std::string& mitm_software_name,
-        bool is_enterprise_managed) = 0;
+        const std::string& mitm_software_name) = 0;
     virtual void ShowSSLInterstitial(const GURL& support_url) = 0;
     virtual void ShowBadClockInterstitial(
         const base::Time& now,
@@ -184,8 +183,7 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
   FRIEND_TEST_ALL_PREFIXES(SSLErrorHandlerTest, CalculateOptionsMask);
 
   void ShowCaptivePortalInterstitial(const GURL& landing_url);
-  void ShowMITMSoftwareInterstitial(const std::string& mitm_software_name,
-                                    bool is_enterprise_managed);
+  void ShowMITMSoftwareInterstitial(const std::string& mitm_software_name);
   void ShowSSLInterstitial();
   void ShowBadClockInterstitial(const base::Time& now,
                                 ssl_errors::ClockState clock_state);

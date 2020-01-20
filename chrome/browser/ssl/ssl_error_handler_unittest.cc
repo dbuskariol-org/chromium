@@ -165,7 +165,6 @@ class TestSSLErrorHandlerDelegate : public SSLErrorHandler::Delegate {
         bad_clock_interstitial_shown_(false),
         captive_portal_interstitial_shown_(false),
         mitm_software_interstitial_shown_(false),
-        is_mitm_software_interstitial_enterprise_(false),
         blocked_interception_interstitial_shown_(false),
         redirected_to_suggested_url_(false),
         is_overridable_error_(true),
@@ -196,9 +195,6 @@ class TestSSLErrorHandlerDelegate : public SSLErrorHandler::Delegate {
   int mitm_software_interstitial_shown() const {
     return mitm_software_interstitial_shown_;
   }
-  bool is_mitm_software_interstitial_enterprise() const {
-    return is_mitm_software_interstitial_enterprise_;
-  }
   bool bad_clock_interstitial_shown() const {
     return bad_clock_interstitial_shown_;
   }
@@ -224,7 +220,6 @@ class TestSSLErrorHandlerDelegate : public SSLErrorHandler::Delegate {
     bad_clock_interstitial_shown_ = false;
     captive_portal_interstitial_shown_ = false;
     mitm_software_interstitial_shown_ = false;
-    is_mitm_software_interstitial_enterprise_ = false;
     redirected_to_suggested_url_ = false;
     has_blocked_interception_ = false;
   }
@@ -259,10 +254,9 @@ class TestSSLErrorHandlerDelegate : public SSLErrorHandler::Delegate {
     captive_portal_interstitial_shown_ = true;
   }
 
-  void ShowMITMSoftwareInterstitial(const std::string& mitm_software_name,
-                                    bool is_enterprise_managed) override {
+  void ShowMITMSoftwareInterstitial(
+      const std::string& mitm_software_name) override {
     mitm_software_interstitial_shown_ = true;
-    is_mitm_software_interstitial_enterprise_ = is_enterprise_managed;
   }
 
   void ShowBlockedInterceptionInterstitial() override {
@@ -298,7 +292,6 @@ class TestSSLErrorHandlerDelegate : public SSLErrorHandler::Delegate {
   bool bad_clock_interstitial_shown_;
   bool captive_portal_interstitial_shown_;
   bool mitm_software_interstitial_shown_;
-  bool is_mitm_software_interstitial_enterprise_;
   bool blocked_interception_interstitial_shown_;
   bool redirected_to_suggested_url_;
   bool is_overridable_error_;
@@ -1410,36 +1403,6 @@ TEST_F(SSLErrorAssistantProtoTest,
   ResetErrorHandlerFromFile(kOkayCertName, net::CERT_STATUS_AUTHORITY_INVALID);
   InitMITMSoftwareList();
   TestNoMITMSoftwareInterstitial();
-}
-
-// Tests that when a user's machine is enterprise managed the correct MITM
-// software interstitial is triggered.
-TEST_F(SSLErrorAssistantProtoTest, MITMSoftware_EnterpriseManaged) {
-  SetMITMSoftwareFeatureEnabled(true);
-
-  ResetErrorHandlerFromString(kMisconfiguredFirewallCert,
-                              net::CERT_STATUS_AUTHORITY_INVALID);
-  SSLErrorHandler::SetEnterpriseManagedForTesting(true);
-  ASSERT_TRUE(SSLErrorHandler::IsEnterpriseManagedFlagSetForTesting());
-  InitMITMSoftwareList();
-  TestMITMSoftwareInterstitial();
-
-  EXPECT_TRUE(delegate()->is_mitm_software_interstitial_enterprise());
-}
-
-// Tests that when a user's machine is not enterprise managed the correct MITM
-// software interstitial is triggered.
-TEST_F(SSLErrorAssistantProtoTest, MITMSoftware_NotEnterpriseManaged) {
-  SetMITMSoftwareFeatureEnabled(true);
-
-  ResetErrorHandlerFromString(kMisconfiguredFirewallCert,
-                              net::CERT_STATUS_AUTHORITY_INVALID);
-  SSLErrorHandler::SetEnterpriseManagedForTesting(false);
-  ASSERT_TRUE(SSLErrorHandler::IsEnterpriseManagedFlagSetForTesting());
-  InitMITMSoftwareList();
-  TestMITMSoftwareInterstitial();
-
-  EXPECT_FALSE(delegate()->is_mitm_software_interstitial_enterprise());
 }
 
 // Tests that the MITM software interstitial is not triggered when the feature

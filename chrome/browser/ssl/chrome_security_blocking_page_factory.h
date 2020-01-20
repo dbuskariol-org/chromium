@@ -59,8 +59,7 @@ class ChromeSecurityBlockingPageFactory {
       const GURL& request_url,
       std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
       const net::SSLInfo& ssl_info,
-      const std::string& mitm_software_name,
-      bool is_enterprise_managed);
+      const std::string& mitm_software_name);
 
   // Creates a blocked interception blocking page. The caller is
   // responsible for ownership of the returned object.
@@ -73,6 +72,10 @@ class ChromeSecurityBlockingPageFactory {
 
   // Does setup on |page| that is specific to the client (Chrome).
   static void DoChromeSpecificSetup(SSLBlockingPageBase* page);
+
+  // Overrides the calculation of whether the app is enterprise-managed for
+  // tests.
+  static void SetEnterpriseManagedForTesting(bool enterprise_managed);
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ChromeSecurityBlockingPageFactory);

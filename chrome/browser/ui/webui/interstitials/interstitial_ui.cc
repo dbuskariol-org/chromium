@@ -172,11 +172,14 @@ MITMSoftwareBlockingPage* CreateMITMSoftwareBlockingPage(
     is_enterprise_managed = is_enterprise_managed_param == "1";
   }
 
+  ChromeSecurityBlockingPageFactory::SetEnterpriseManagedForTesting(
+      is_enterprise_managed);
+
   net::SSLInfo ssl_info;
   ssl_info.cert = ssl_info.unverified_cert = CreateFakeCert();
   return ChromeSecurityBlockingPageFactory::CreateMITMSoftwareBlockingPage(
       web_contents, cert_error, request_url, nullptr, ssl_info,
-      mitm_software_name, is_enterprise_managed);
+      mitm_software_name);
 }
 
 BlockedInterceptionBlockingPage* CreateBlockedInterceptionBlockingPage(

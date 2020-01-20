@@ -42,6 +42,38 @@
 
 namespace {
 
+enum EnterpriseManaged {
+  ENTERPRISE_MANAGED_STATUS_NOT_SET,
+  ENTERPRISE_MANAGED_STATUS_TRUE,
+  ENTERPRISE_MANAGED_STATUS_FALSE
+};
+
+EnterpriseManaged g_is_enterprise_managed_for_testing =
+    ENTERPRISE_MANAGED_STATUS_NOT_SET;
+
+bool IsEnterpriseManaged() {
+  // Return the value of the testing flag if it's set.
+  if (g_is_enterprise_managed_for_testing == ENTERPRISE_MANAGED_STATUS_TRUE) {
+    return true;
+  }
+
+  if (g_is_enterprise_managed_for_testing == ENTERPRISE_MANAGED_STATUS_FALSE) {
+    return false;
+  }
+
+#if defined(OS_WIN)
+  if (base::IsMachineExternallyManaged()) {
+    return true;
+  }
+#elif defined(OS_CHROMEOS)
+  if (g_browser_process->platform_part()->browser_policy_connector_chromeos()) {
+    return true;
+  }
+#endif  // #if defined OS_WIN
+
+  return false;
+}
+
 // Opens the login page for a captive portal. Passed in to
 // CaptivePortalBlockingPage to be invoked when the user has pressed the
 // connect button.
@@ -240,11 +272,10 @@ ChromeSecurityBlockingPageFactory::CreateMITMSoftwareBlockingPage(
     const GURL& request_url,
     std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
     const net::SSLInfo& ssl_info,
-    const std::string& mitm_software_name,
-    bool is_enterprise_managed) {
+    const std::string& mitm_software_name) {
   auto page = std::make_unique<MITMSoftwareBlockingPage>(
       web_contents, cert_error, request_url, std::move(ssl_cert_reporter),
-      ssl_info, mitm_software_name, is_enterprise_managed,
+      ssl_info, mitm_software_name, IsEnterpriseManaged(),
       std::make_unique<SSLErrorControllerClient>(
           web_contents, ssl_info, cert_error, request_url,
           CreateMitmSoftwareMetricsHelper(web_contents, request_url)));
@@ -300,4 +331,13 @@ void ChromeSecurityBlockingPageFactory::DoChromeSpecificSetup(
         // optional.
         report->AddNetworkTimeInfo(g_browser_process->network_time_tracker());
       }));
+}
+
+void ChromeSecurityBlockingPageFactory::SetEnterpriseManagedForTesting(
+    bool enterprise_managed) {
+  if (enterprise_managed) {
+    g_is_enterprise_managed_for_testing = ENTERPRISE_MANAGED_STATUS_TRUE;
+  } else {
+    g_is_enterprise_managed_for_testing = ENTERPRISE_MANAGED_STATUS_FALSE;
+  }
 }
