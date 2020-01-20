@@ -42,6 +42,7 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   using ResourceList = ServiceWorkerStorage::ResourceList;
   using FindRegistrationCallback =
       ServiceWorkerStorage::FindRegistrationCallback;
+  using StatusCallback = ServiceWorkerStorage::StatusCallback;
 
   ServiceWorkerRegistry(
       const base::FilePath& user_data_directory,
@@ -72,6 +73,15 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
                                  FindRegistrationCallback callback);
 
   ServiceWorkerRegistration* GetUninstallingRegistration(const GURL& scope);
+
+  // Commits |registration| with the installed but not activated |version|
+  // to storage, overwriting any pre-existing registration data for the scope.
+  // A pre-existing version's script resources remain available if that version
+  // is live. ServiceWorkerStorage::PurgeResources() should be called when it's
+  // OK to delete them.
+  void StoreRegistration(ServiceWorkerRegistration* registration,
+                         ServiceWorkerVersion* version,
+                         StatusCallback callback);
 
   // Intended for use only by ServiceWorkerRegisterJob and
   // ServiceWorkerRegistration.
@@ -126,6 +136,10 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       FindRegistrationCallback callback,
       blink::ServiceWorkerStatusCode status,
       scoped_refptr<ServiceWorkerRegistration> registration);
+
+  void DidStoreRegistration(const ServiceWorkerDatabase::RegistrationData& data,
+                            StatusCallback callback,
+                            blink::ServiceWorkerStatusCode status);
 
   // The ServiceWorkerContextCore object must outlive this.
   ServiceWorkerContextCore* const context_;

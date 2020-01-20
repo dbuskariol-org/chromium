@@ -653,7 +653,7 @@ void ServiceWorkerRegisterJob::OnInstallFinished(
       has_fetch_handler
           ? ServiceWorkerVersion::FetchHandlerExistence::EXISTS
           : ServiceWorkerVersion::FetchHandlerExistence::DOES_NOT_EXIST);
-  context_->storage()->StoreRegistration(
+  context_->registry()->StoreRegistration(
       registration(), new_version(),
       base::BindOnce(&ServiceWorkerRegisterJob::OnStoreRegistrationComplete,
                      weak_factory_.GetWeakPtr()));

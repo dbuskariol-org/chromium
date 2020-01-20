@@ -45,7 +45,6 @@ class ServiceWorkerRegistry;
 class ServiceWorkerResponseMetadataWriter;
 class ServiceWorkerResponseReader;
 class ServiceWorkerResponseWriter;
-class ServiceWorkerVersion;
 struct ServiceWorkerRegistrationInfo;
 
 namespace service_worker_storage_unittest {
@@ -149,13 +148,11 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // Returns info about all stored and initially installing registrations.
   void GetAllRegistrationsInfos(GetRegistrationsInfosCallback callback);
 
-  // Commits |registration| with the installed but not activated |version|
-  // to storage, overwritting any pre-existing registration data for the scope.
-  // A pre-existing version's script resources remain available if that version
-  // is live. PurgeResources should be called when it's OK to delete them.
-  void StoreRegistration(ServiceWorkerRegistration* registration,
-                         ServiceWorkerVersion* version,
-                         StatusCallback callback);
+  // Stores |registration_data| and |resources| on persistent storage.
+  void StoreRegistrationData(
+      const ServiceWorkerDatabase::RegistrationData& registration_data,
+      const ResourceList& resources,
+      StatusCallback callback);
 
   // Updates the state of the registration's stored version to active.
   void UpdateToActiveState(int64_t registration_id,
@@ -282,6 +279,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   int64_t NewResourceId();
 
   void Disable();
+  bool IsDisabled() const;
 
   // Schedules deleting |resources| from the disk cache and removing their keys
   // as purgeable resources from the service worker database. It's OK to call
@@ -397,7 +395,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void DidGetAllRegistrationsInfos(GetRegistrationsInfosCallback callback,
                                    RegistrationList* registration_data_list,
                                    ServiceWorkerDatabase::Status status);
-  void DidStoreRegistration(
+  void DidStoreRegistrationData(
       StatusCallback callback,
       const ServiceWorkerDatabase::RegistrationData& new_version,
       const GURL& origin,
@@ -531,7 +529,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const std::set<GURL>& origins);
   static void PerformStorageCleanupInDB(ServiceWorkerDatabase* database);
 
-  bool IsDisabled() const;
   void ScheduleDeleteAndStartOver();
 
   // Posted by the underlying cache implementation after it finishes making

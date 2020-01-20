@@ -335,7 +335,7 @@ void ServiceWorkerRegistration::AbortPendingClear(StatusCallback callback) {
       waiting_version() ? waiting_version() : active_version();
   DCHECK(most_recent_version.get());
   context_->registry()->NotifyInstallingRegistration(this);
-  context_->storage()->StoreRegistration(
+  context_->registry()->StoreRegistration(
       this, most_recent_version.get(),
       base::BindOnce(&ServiceWorkerRegistration::OnRestoreFinished, this,
                      std::move(callback), most_recent_version));
