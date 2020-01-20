@@ -162,6 +162,10 @@ class AXTreeSourceArcTest : public testing::Test,
     tree_source_->NotifyAccessibilityEvent(event_data);
   }
 
+  void CallUpdateAccessibilityFocusLocation(int32_t id) {
+    tree_source_->UpdateAccessibilityFocusLocation(id);
+  }
+
   void CallGetChildren(
       AXNodeInfoData* node,
       std::vector<AccessibilityInfoDataWrapper*>* out_children) const {
@@ -1154,6 +1158,58 @@ TEST_F(AXTreeSourceArcTest, SerializeWebView) {
   // Node inside a WebView is not ignored even if it's not set importance.
   CallSerializeNode(node2, &data);
   ASSERT_FALSE(data->HasState(ax::mojom::State::kIgnored));
+}
+
+TEST_F(AXTreeSourceArcTest, SyncFocus) {
+  auto event = AXEventData::New();
+  event->source_id = 1;
+  event->task_id = 1;
+  event->event_type = AXEventType::VIEW_FOCUSED;
+
+  event->window_data = std::vector<mojom::AccessibilityWindowInfoDataPtr>();
+  event->window_data->emplace_back(AXWindowInfoData::New());
+  AXWindowInfoData* root_window = event->window_data->back().get();
+  root_window->window_id = 100;
+  root_window->root_node_id = 10;
+
+  event->node_data.emplace_back(AXNodeInfoData::New());
+  AXNodeInfoData* root = event->node_data.back().get();
+  root->id = 10;
+  SetProperty(root, AXIntListProperty::CHILD_NODE_IDS,
+              std::vector<int>({1, 2}));
+
+  // Add child nodes.
+  event->node_data.emplace_back(AXNodeInfoData::New());
+  AXNodeInfoData* node1 = event->node_data.back().get();
+  node1->id = 1;
+  SetProperty(node1, AXBooleanProperty::FOCUSABLE, true);
+  SetProperty(node1, AXBooleanProperty::IMPORTANCE, true);
+  node1->bounds_in_screen = gfx::Rect(0, 0, 50, 50);
+
+  event->node_data.emplace_back(AXNodeInfoData::New());
+  AXNodeInfoData* node2 = event->node_data.back().get();
+  node2->id = 2;
+  SetProperty(node2, AXBooleanProperty::FOCUSABLE, true);
+  SetProperty(node2, AXBooleanProperty::IMPORTANCE, true);
+  node2->bounds_in_screen = gfx::Rect(50, 50, 100, 100);
+
+  CallNotifyAccessibilityEvent(event.get());
+
+  // Initially |node1| has a focus.
+  ui::AXTreeData data;
+  EXPECT_TRUE(CallGetTreeData(&data));
+  EXPECT_EQ(node1->id, data.focus_id);
+
+  // Move Chrome accessibility focus to |node2|.
+  CallUpdateAccessibilityFocusLocation(node2->id);
+
+  // When focused node moved, dispatch kLocationChanged event.
+  event->source_id = root->id;
+  event->event_type = AXEventType::WINDOW_CONTENT_CHANGED;
+  node2->bounds_in_screen = gfx::Rect(100, 100, 150, 150);
+  CallNotifyAccessibilityEvent(event.get());
+
+  EXPECT_EQ(1, GetDispatchedEventCount(ax::mojom::Event::kLocationChanged));
 }
 
 }  // namespace arc

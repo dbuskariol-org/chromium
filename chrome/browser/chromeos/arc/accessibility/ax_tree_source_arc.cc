@@ -143,8 +143,8 @@ void AXTreeSourceArc::NotifyAccessibilityEvent(AXEventData* event_data) {
       // Sometimes Android sets focus on unfocusable node, e.g. ListView.
       AccessibilityInfoDataWrapper* adjusted_node =
           FindFirstFocusableNode(focused_node);
-      focused_id_ = IsValid(adjusted_node) ? adjusted_node->GetId()
-                                           : event_data->source_id;
+      android_focused_id_ = IsValid(adjusted_node) ? adjusted_node->GetId()
+                                                   : event_data->source_id;
     }
   } else if (event_data->event_type == AXEventType::WINDOW_STATE_CHANGED) {
     // When accessibility window changed, a11y event of WINDOW_CONTENT_CHANGED
@@ -156,25 +156,25 @@ void AXTreeSourceArc::NotifyAccessibilityEvent(AXEventData* event_data) {
     AccessibilityInfoDataWrapper* new_focus =
         FindFirstFocusableNode(focused_node);
     if (IsValid(new_focus))
-      focused_id_ = new_focus->GetId();
+      android_focused_id_ = new_focus->GetId();
 
     if (event_data->eventText)
       UpdateAXNameCache(focused_node, *event_data->eventText);
   }
-  if (!focused_id_.has_value()) {
+  if (!android_focused_id_.has_value()) {
     AccessibilityInfoDataWrapper* root = GetRoot();
     // TODO (sarakato): Add proper fix once cause of invalid node is known.
     if (!IsValid(root)) {
       return;
     } else if (root->IsNode()) {
-      focused_id_ = root_id_;
+      android_focused_id_ = root_id_;
     } else {
       std::vector<AccessibilityInfoDataWrapper*> children;
       root->GetChildren(&children);
       if (!children.empty()) {
         for (size_t i = 0; i < children.size(); ++i) {
           if (children[i]->IsNode()) {
-            focused_id_ = children[i]->GetId();
+            android_focused_id_ = children[i]->GetId();
             break;
           }
         }
@@ -193,11 +193,27 @@ void AXTreeSourceArc::NotifyAccessibilityEvent(AXEventData* event_data) {
   // When the focused node exists, give it as a hint to decide a Chrome
   // automation event type.
   AXNodeInfoData* focused_node = nullptr;
-  if (focused_id_.has_value() &&
-      tree_map_.find(*focused_id_) != tree_map_.end())
-    focused_node = tree_map_[*focused_id_]->GetNode();
+  if (android_focused_id_.has_value() &&
+      tree_map_.find(*android_focused_id_) != tree_map_.end())
+    focused_node = tree_map_[*android_focused_id_]->GetNode();
   event.event_type = ToAXEvent(event_data->event_type, focused_node);
   event.id = event_data->source_id;
+
+  if ((event_data->event_type == AXEventType::WINDOW_CONTENT_CHANGED ||
+       event_data->event_type == AXEventType::VIEW_SCROLLED) &&
+      chrome_focused_id_ && chrome_focused_bounds_) {
+    AccessibilityInfoDataWrapper* chrome_focused_node =
+        GetFromId(*chrome_focused_id_);
+    if (chrome_focused_node &&
+        chrome_focused_bounds_ != chrome_focused_node->GetBounds()) {
+      // Notify ChromeVox that the accessibility focus location changed.
+      event_bundle.events.emplace_back();
+      ui::AXEvent& additional_event = event_bundle.events.back();
+      additional_event.event_type = ax::mojom::Event::kLocationChanged;
+      additional_event.id = *chrome_focused_id_;
+      chrome_focused_bounds_ = chrome_focused_node->GetBounds();
+    }
+  }
 
   event_bundle.updates.emplace_back();
 
@@ -221,6 +237,14 @@ void AXTreeSourceArc::NotifyGetTextLocationDataResult(
     const ui::AXActionData& data,
     const base::Optional<gfx::Rect>& rect) {
   GetAutomationEventRouter()->DispatchGetTextLocationDataResult(data, rect);
+}
+
+void AXTreeSourceArc::UpdateAccessibilityFocusLocation(int32_t id) {
+  AccessibilityInfoDataWrapper* node = GetFromId(id);
+  if (!IsValid(node))
+    return;
+  chrome_focused_id_ = id;
+  chrome_focused_bounds_ = node->GetBounds();
 }
 
 const gfx::Rect AXTreeSourceArc::GetBounds(
@@ -285,8 +309,8 @@ bool AXTreeSourceArc::IsRootOfNodeTree(int32_t id) const {
 
 bool AXTreeSourceArc::GetTreeData(ui::AXTreeData* data) const {
   data->tree_id = ax_tree_id();
-  if (focused_id_.has_value())
-    data->focus_id = *focused_id_;
+  if (android_focused_id_.has_value())
+    data->focus_id = *android_focused_id_;
   return true;
 }
 
@@ -499,7 +523,7 @@ void AXTreeSourceArc::Reset() {
   current_tree_serializer_.reset(new AXTreeArcSerializer(this));
   root_id_.reset();
   window_id_.reset();
-  focused_id_.reset();
+  android_focused_id_.reset();
   extensions::AutomationEventRouterInterface* router =
       GetAutomationEventRouter();
   if (!router)
