@@ -912,8 +912,8 @@ void V4L2VideoEncodeAccelerator::Enqueue() {
 
   // STREAMON in CAPTURE queue first and then OUTPUT queue.
   // This is a workaround of a tegra driver bug that STREAMON in CAPTURE queue
-  // will never return (i.e. blocks |encoder_thread_| forever) if the STREAMON
-  // in CAPTURE queue is called after STREAMON in OUTPUT queue.
+  // will never return (i.e. blocks |encoder_task_runner_| forever) if the
+  // STREAMON in CAPTURE queue is called after STREAMON in OUTPUT queue.
   // Once nyan_kitty, which uses tegra driver, reaches EOL, crrev.com/c/1753982
   // should be reverted.
   if (do_streamon) {
@@ -1239,7 +1239,7 @@ void V4L2VideoEncodeAccelerator::NotifyError(Error error) {
     return;
   }
 
-  // Called on encoder_task_runner_.
+  // Called on |encoder_task_runner_|.
   child_task_runner_->PostTask(
       FROM_HERE, base::BindOnce(&Client::NotifyError, client_, error));
 }
