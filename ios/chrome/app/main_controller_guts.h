@@ -7,12 +7,16 @@
 
 #import <UIKit/UIKit.h>
 
+#import "base/ios/block_types.h"
+#include "components/browsing_data/core/browsing_data_utils.h"
 #include "ios/chrome/app/startup/chrome_app_startup_parameters.h"
+#include "ios/chrome/browser/browsing_data/browsing_data_remove_mask.h"
 #import "ios/chrome/browser/crash_report/crash_restore_helper.h"
 #import "ios/chrome/browser/ui/settings/settings_navigation_controller.h"
 #import "ios/public/provider/chrome/browser/user_feedback/user_feedback_provider.h"
 
 @class BrowserViewController;
+@class BrowserViewWrangler;
 @class HistoryCoordinator;
 @class SigninInteractionCoordinator;
 @class TabGridCoordinator;
@@ -91,9 +95,9 @@ enum class TabSwitcherDismissalMode { NONE, NORMAL, INCOGNITO };
 // Keeps track of the restore state during startup.
 @property(nonatomic, strong) CrashRestoreHelper* restoreHelper;
 
+- (BrowserViewWrangler*)browserViewWrangler;
 - (id<TabSwitcher>)tabSwitcher;
 - (TabModel*)currentTabModel;
-- (id<TabSwitcher>)tabSwitcher;
 - (ios::ChromeBrowserState*)mainBrowserState;
 - (ios::ChromeBrowserState*)currentBrowserState;
 - (BrowserViewController*)currentBVC;
@@ -102,14 +106,14 @@ enum class TabSwitcherDismissalMode { NONE, NORMAL, INCOGNITO };
 - (TabGridCoordinator*)mainCoordinator;
 - (id<BrowserInterfaceProvider>)interfaceProvider;
 - (void)startVoiceSearchInCurrentBVC;
-- (void)showTabSwitcher;
 
 // Sets |currentBVC| as the root view controller for the window.
 - (void)displayCurrentBVCAndFocusOmnibox:(BOOL)focusOmnibox;
 
-// Activates |mainBVC| and |otrBVC| and sets |currentBVC| as primary iff
-// |currentBVC| can be made active.
-- (void)activateBVCAndMakeCurrentBVCPrimary;
+- (void)removeBrowsingDataForBrowserState:(ios::ChromeBrowserState*)browserState
+                               timePeriod:(browsing_data::TimePeriod)timePeriod
+                               removeMask:(BrowsingDataRemoveMask)removeMask
+                          completionBlock:(ProceduralBlock)completionBlock;
 
 @end
 

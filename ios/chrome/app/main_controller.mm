@@ -276,8 +276,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 }  // namespace
 
 @interface MainController () <BrowserStateStorageSwitching,
-                              PrefObserverDelegate,
-                              WebStateListObserving> {
+                              PrefObserverDelegate> {
   IBOutlet UIWindow* _window;
 
   // Weak; owned by the ChromeBrowserProvider.
@@ -346,14 +345,8 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 // browser has started up to the FOREGROUND stage.
 @property(nonatomic, readonly) TabGridCoordinator* mainCoordinator;
 
-// Shows the tab switcher UI.
-- (void)showTabSwitcher;
 // Starts a voice search on the current BVC.
 - (void)startVoiceSearchInCurrentBVC;
-// Called when the last incognito tab was closed.
-- (void)lastIncognitoTabClosed;
-// Called when the last regular tab was closed.
-- (void)lastRegularTabClosed;
 // Returns whether the restore infobar should be displayed.
 - (bool)mustShowRestoreInfobar;
 // Switch all global states for the given mode (normal or incognito).
@@ -412,11 +405,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 - (void)scheduleShowPromo;
 // Crashes the application if requested.
 - (void)crashIfRequested;
-// Clears incognito data that is specific to iOS and won't be cleared by
-// deleting the browser state.
-- (void)clearIOSSpecificIncognitoData;
-// Destroys and rebuilds the incognito browser state.
-- (void)destroyAndRebuildIncognitoBrowserState;
 // Handles the notification that first run modal dialog UI is about to complete.
 - (void)handleFirstRunUIWillFinish;
 // Handles the notification that first run modal dialog UI completed.
@@ -603,7 +591,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   [self.browserViewWrangler shutdown];
   self.browserViewWrangler = [[BrowserViewWrangler alloc]
              initWithBrowserState:self.mainBrowserState
-             webStateListObserver:self
+             webStateListObserver:self.sceneController
        applicationCommandEndpoint:self.sceneController
       browsingDataCommandEndpoint:self
              appURLLoadingService:self.appURLLoadingService
@@ -640,7 +628,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   BOOL switchFromIncognito = startInIncognito && ![self canLaunchInIncognito];
 
   if (postCrashLaunch || switchFromIncognito) {
-    [self clearIOSSpecificIncognitoData];
+    [self.sceneController clearIOSSpecificIncognitoData];
     if (switchFromIncognito)
       [self switchGlobalStateToMode:ApplicationMode::NORMAL];
   }
@@ -739,54 +727,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
       triggerSystemPromptForNewUser:YES];
 }
 
-- (void)clearIOSSpecificIncognitoData {
-  DCHECK(self.mainBrowserState->HasOffTheRecordChromeBrowserState());
-  ios::ChromeBrowserState* otrBrowserState =
-      self.mainBrowserState->GetOffTheRecordChromeBrowserState();
-  [self removeBrowsingDataForBrowserState:otrBrowserState
-                               timePeriod:browsing_data::TimePeriod::ALL_TIME
-                               removeMask:BrowsingDataRemoveMask::REMOVE_ALL
-                          completionBlock:^{
-                            [self activateBVCAndMakeCurrentBVCPrimary];
-                          }];
-}
-
-- (void)destroyAndRebuildIncognitoBrowserState {
-  BOOL otrBVCIsCurrent = (self.currentBVC == self.otrBVC);
-
-  // Clear the OTR tab model and notify the _tabSwitcher that its otrBVC will
-  // be destroyed.
-  [_tabSwitcher setOtrBrowser:nil];
-
-  [self.browserViewWrangler destroyAndRebuildIncognitoBrowser];
-
-  if (otrBVCIsCurrent) {
-    [self activateBVCAndMakeCurrentBVCPrimary];
-  }
-
-  // Always set the new otr browser for the tablet or grid switcher.
-  // Notify the _tabSwitcher with the new otrBVC.
-  [_tabSwitcher setOtrBrowser:self.mainBrowser];
-
-  // This seems the best place to deem the destroying and rebuilding the
-  // incognito browser state to be completed.
-  breakpad_helper::SetDestroyingAndRebuildingIncognitoBrowserState(
-      /*in_progress=*/false);
-}
-
-- (void)activateBVCAndMakeCurrentBVCPrimary {
-  // If there are pending removal operations, the activation will be deferred
-  // until the callback is received.
-  BrowsingDataRemover* browsingDataRemover =
-      BrowsingDataRemoverFactory::GetForBrowserStateIfExists(
-          self.currentBrowserState);
-  if (browsingDataRemover && browsingDataRemover->IsRemoving())
-    return;
-
-  self.interfaceProvider.mainInterface.userInteractionEnabled = YES;
-  self.interfaceProvider.incognitoInterface.userInteractionEnabled = YES;
-  [self.currentBVC setPrimary:YES];
-}
 
 #pragma mark - Property implementation.
 
@@ -1452,54 +1392,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
 
 
-#pragma mark - Tab closure handlers
-
-- (void)lastIncognitoTabClosed {
-  // This seems the best place to mark the start of destroying the incognito
-  // browser state.
-  breakpad_helper::SetDestroyingAndRebuildingIncognitoBrowserState(
-      /*in_progress=*/true);
-  DCHECK(self.mainBrowserState->HasOffTheRecordChromeBrowserState());
-  [self clearIOSSpecificIncognitoData];
-
-  // OffTheRecordProfileIOData cannot be deleted before all the requests are
-  // deleted. Queue browser state recreation on IO thread.
-  base::PostTaskAndReply(FROM_HERE, {web::WebThread::IO}, base::DoNothing(),
-                         base::BindRepeating(^{
-                           [self destroyAndRebuildIncognitoBrowserState];
-                         }));
-
-  // a) The first condition can happen when the last incognito tab is closed
-  // from the tab switcher.
-  // b) The second condition can happen if some other code (like JS) triggers
-  // closure of tabs from the otr tab model when it's not current.
-  // Nothing to do here. The next user action (like clicking on an existing
-  // regular tab or creating a new incognito tab from the settings menu) will
-  // take care of the logic to mode switch.
-  if (self.tabSwitcherIsActive || ![self.currentTabModel isOffTheRecord]) {
-    return;
-  }
-
-  if ([self.currentTabModel count] == 0U) {
-    [self showTabSwitcher];
-  } else {
-    [self.sceneController setCurrentInterfaceForMode:ApplicationMode::NORMAL];
-  }
-}
-
-- (void)lastRegularTabClosed {
-  // a) The first condition can happen when the last regular tab is closed from
-  // the tab switcher.
-  // b) The second condition can happen if some other code (like JS) triggers
-  // closure of tabs from the main tab model when the main tab model is not
-  // current.
-  // Nothing to do here.
-  if (self.tabSwitcherIsActive || [self.currentTabModel isOffTheRecord]) {
-    return;
-  }
-
-  [self showTabSwitcher];
-}
 
 #pragma mark - Mode Switching
 
@@ -1540,39 +1432,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
 - (ios::ChromeBrowserState*)currentBrowserState {
   return self.currentBVC.browserState;
-}
-
-- (void)showTabSwitcher {
-  DCHECK(_tabSwitcher);
-  // Tab switcher implementations may need to rebuild state before being
-  // displayed.
-  [_tabSwitcher restoreInternalStateWithMainTabModel:self.mainTabModel
-                                         otrTabModel:self.otrTabModel
-                                      activeTabModel:self.currentTabModel];
-  self.tabSwitcherIsActive = YES;
-  [_tabSwitcher setDelegate:self.sceneController];
-
-  [self.mainCoordinator showTabSwitcher:_tabSwitcher];
-}
-
-#pragma mark - WebStateListObserving
-
-// Called when a WebState is removed. Triggers the switcher view when the last
-// WebState is closed on a device that uses the switcher.
-- (void)webStateList:(WebStateList*)notifiedWebStateList
-    didDetachWebState:(web::WebState*)webState
-              atIndex:(int)atIndex {
-  // Do nothing on initialization.
-  if (![self currentTabModel].webStateList)
-    return;
-
-  if (notifiedWebStateList->empty()) {
-    if (webState->GetBrowserState()->IsOffTheRecord()) {
-      [self lastIncognitoTabClosed];
-    } else {
-      [self lastRegularTabClosed];
-    }
-  }
 }
 
 #pragma mark - Tab opening utility methods.

@@ -8,6 +8,7 @@
 #include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/strings/sys_string_conversions.h"
+#include "base/task/post_task.h"
 #include "components/payments/core/features.h"
 #include "components/signin/public/identity_manager/identity_manager.h"
 #include "components/url_formatter/url_formatter.h"
@@ -23,6 +24,7 @@
 #include "ios/chrome/browser/browsing_data/browsing_data_remover_factory.h"
 #include "ios/chrome/browser/chrome_url_constants.h"
 #import "ios/chrome/browser/chrome_url_util.h"
+#include "ios/chrome/browser/crash_report/breakpad_helper.h"
 #include "ios/chrome/browser/main/browser.h"
 #include "ios/chrome/browser/ntp/features.h"
 #include "ios/chrome/browser/payments/ios_payment_instrument_launcher.h"
@@ -39,6 +41,7 @@
 #import "ios/chrome/browser/ui/commands/show_signin_command.h"
 #include "ios/chrome/browser/ui/history/history_coordinator.h"
 #import "ios/chrome/browser/ui/main/browser_interface_provider.h"
+#import "ios/chrome/browser/ui/main/browser_view_wrangler.h"
 #import "ios/chrome/browser/ui/settings/settings_navigation_controller.h"
 #import "ios/chrome/browser/ui/signin_interaction/signin_interaction_coordinator.h"
 #include "ios/chrome/browser/ui/tab_grid/tab_grid_coordinator.h"
@@ -50,10 +53,12 @@
 #import "ios/chrome/browser/url_loading/url_loading_service.h"
 #import "ios/chrome/browser/url_loading/url_loading_service_factory.h"
 #import "ios/chrome/browser/web_state_list/web_state_list.h"
+#import "ios/chrome/browser/web_state_list/web_state_list_observer_bridge.h"
 #include "ios/public/provider/chrome/browser/chrome_browser_provider.h"
 #include "ios/public/provider/chrome/browser/mailto/mailto_handler_provider.h"
 #include "ios/public/provider/chrome/browser/signin/chrome_identity_service.h"
 #import "ios/public/provider/chrome/browser/user_feedback/user_feedback_provider.h"
+#include "ios/web/public/thread/web_task_traits.h"
 #import "ios/web/public/web_state.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
@@ -90,7 +95,8 @@ enum class EnterTabSwitcherSnapshotResult {
 }  // namespace
 
 @interface SceneController () <UserFeedbackDataSource,
-                               SettingsNavigationControllerDelegate>
+                               SettingsNavigationControllerDelegate,
+                               WebStateListObserving>
 
 // A flag that keeps track of the UI initialization for the controlled scene.
 @property(nonatomic, assign) BOOL hasInitializedUI;
@@ -217,7 +223,7 @@ enum class EnterTabSwitcherSnapshotResult {
   DCHECK(!self.mainController.isTabSwitcherActive);
   if (!self.mainController.isProcessingVoiceSearchCommand) {
     [self.mainController.currentBVC userEnteredTabSwitcher];
-    [self.mainController showTabSwitcher];
+    [self showTabSwitcher];
     self.mainController.isProcessingTabSwitcherCommand = YES;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
                                  kExpectedTransitionDurationInNanoSeconds),
@@ -635,7 +641,7 @@ enum class EnterTabSwitcherSnapshotResult {
     self.mainController.modeToDisplayOnTabSwitcherDismissal =
         TabSwitcherDismissalMode::NONE;
     self.mainController.NTPActionAfterTabSwitcherDismissal = NO_ACTION;
-    [self.mainController showTabSwitcher];
+    [self showTabSwitcher];
     return;
   }
 
@@ -827,7 +833,7 @@ enum class EnterTabSwitcherSnapshotResult {
     [self.mainController displayCurrentBVCAndFocusOmnibox:NO];
 
   // Tell the BVC that was made current that it can use the web.
-  [self.mainController activateBVCAndMakeCurrentBVCPrimary];
+  [self activateBVCAndMakeCurrentBVCPrimary];
 }
 
 - (void)dismissModalDialogsWithCompletion:(ProceduralBlock)completion
@@ -1149,6 +1155,146 @@ enum class EnterTabSwitcherSnapshotResult {
   // privately.
   return top_view_controller::TopPresentedViewControllerFrom(
       self.mainController.mainCoordinator.viewController);
+}
+
+#pragma mark - WebStateListObserving
+
+// Called when a WebState is removed. Triggers the switcher view when the last
+// WebState is closed on a device that uses the switcher.
+- (void)webStateList:(WebStateList*)notifiedWebStateList
+    didDetachWebState:(web::WebState*)webState
+              atIndex:(int)atIndex {
+  // Do nothing on initialization.
+  if (![self currentTabModel].webStateList)
+    return;
+
+  if (notifiedWebStateList->empty()) {
+    if (webState->GetBrowserState()->IsOffTheRecord()) {
+      [self lastIncognitoTabClosed];
+    } else {
+      [self lastRegularTabClosed];
+    }
+  }
+}
+
+// Called when the last incognito tab was closed.
+- (void)lastIncognitoTabClosed {
+  // This seems the best place to mark the start of destroying the incognito
+  // browser state.
+  breakpad_helper::SetDestroyingAndRebuildingIncognitoBrowserState(
+      /*in_progress=*/true);
+  DCHECK(self.mainController.mainBrowserState
+             ->HasOffTheRecordChromeBrowserState());
+  [self clearIOSSpecificIncognitoData];
+
+  // OffTheRecordProfileIOData cannot be deleted before all the requests are
+  // deleted. Queue browser state recreation on IO thread.
+  base::PostTaskAndReply(FROM_HERE, {web::WebThread::IO}, base::DoNothing(),
+                         base::BindRepeating(^{
+                           [self destroyAndRebuildIncognitoBrowserState];
+                         }));
+
+  // a) The first condition can happen when the last incognito tab is closed
+  // from the tab switcher.
+  // b) The second condition can happen if some other code (like JS) triggers
+  // closure of tabs from the otr tab model when it's not current.
+  // Nothing to do here. The next user action (like clicking on an existing
+  // regular tab or creating a new incognito tab from the settings menu) will
+  // take care of the logic to mode switch.
+  if (self.mainController.tabSwitcherIsActive ||
+      ![self.mainController.currentTabModel isOffTheRecord]) {
+    return;
+  }
+
+  if ([self.mainController.currentTabModel count] == 0U) {
+    [self showTabSwitcher];
+  } else {
+    [self setCurrentInterfaceForMode:ApplicationMode::NORMAL];
+  }
+}
+
+// Called when the last regular tab was closed.
+- (void)lastRegularTabClosed {
+  // a) The first condition can happen when the last regular tab is closed from
+  // the tab switcher.
+  // b) The second condition can happen if some other code (like JS) triggers
+  // closure of tabs from the main tab model when the main tab model is not
+  // current.
+  // Nothing to do here.
+  if (self.mainController.tabSwitcherIsActive ||
+      [self.mainController.currentTabModel isOffTheRecord]) {
+    return;
+  }
+
+  [self showTabSwitcher];
+}
+
+- (void)clearIOSSpecificIncognitoData {
+  DCHECK(self.mainController.mainBrowserState
+             ->HasOffTheRecordChromeBrowserState());
+  ios::ChromeBrowserState* otrBrowserState =
+      self.mainController.mainBrowserState->GetOffTheRecordChromeBrowserState();
+  [self.mainController
+      removeBrowsingDataForBrowserState:otrBrowserState
+                             timePeriod:browsing_data::TimePeriod::ALL_TIME
+                             removeMask:BrowsingDataRemoveMask::REMOVE_ALL
+                        completionBlock:^{
+                          [self activateBVCAndMakeCurrentBVCPrimary];
+                        }];
+}
+
+- (void)activateBVCAndMakeCurrentBVCPrimary {
+  // If there are pending removal operations, the activation will be deferred
+  // until the callback is received.
+  BrowsingDataRemover* browsingDataRemover =
+      BrowsingDataRemoverFactory::GetForBrowserStateIfExists(
+          self.currentBrowserState);
+  if (browsingDataRemover && browsingDataRemover->IsRemoving())
+    return;
+
+  self.interfaceProvider.mainInterface.userInteractionEnabled = YES;
+  self.interfaceProvider.incognitoInterface.userInteractionEnabled = YES;
+  [self.mainController.currentBVC setPrimary:YES];
+}
+
+- (void)showTabSwitcher {
+  DCHECK(self.mainController.tabSwitcher);
+  // Tab switcher implementations may need to rebuild state before being
+  // displayed.
+  [self.mainController.tabSwitcher
+      restoreInternalStateWithMainTabModel:self.mainInterface.tabModel
+                               otrTabModel:self.incognitoInterface.tabModel
+                            activeTabModel:self.currentTabModel];
+  self.mainController.tabSwitcherIsActive = YES;
+  [self.mainController.tabSwitcher setDelegate:self];
+
+  [self.mainController.mainCoordinator
+      showTabSwitcher:self.mainController.tabSwitcher];
+}
+
+// Destroys and rebuilds the incognito browser state.
+- (void)destroyAndRebuildIncognitoBrowserState {
+  BOOL otrBVCIsCurrent = (self.interfaceProvider.mainInterface.bvc ==
+                          self.interfaceProvider.incognitoInterface.bvc);
+
+  // Clear the OTR tab model and notify the _tabSwitcher that its otrBVC will
+  // be destroyed.
+  [self.mainController.tabSwitcher setOtrBrowser:nil];
+
+  [self.mainController.browserViewWrangler destroyAndRebuildIncognitoBrowser];
+
+  if (otrBVCIsCurrent) {
+    [self activateBVCAndMakeCurrentBVCPrimary];
+  }
+
+  // Always set the new otr tab model for the tablet or grid switcher.
+  // Notify the _tabSwitcher with the new otrBVC.
+  [self.mainController.tabSwitcher setOtrBrowser:self.mainInterface.browser];
+
+  // This seems the best place to deem the destroying and rebuilding the
+  // incognito browser state to be completed.
+  breakpad_helper::SetDestroyingAndRebuildingIncognitoBrowserState(
+      /*in_progress=*/false);
 }
 
 @end
