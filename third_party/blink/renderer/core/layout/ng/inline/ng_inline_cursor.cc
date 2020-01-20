@@ -627,23 +627,138 @@ PhysicalOffset NGInlineCursor::LineEndPoint() const {
                                        pixel_size);
 }
 
-PositionWithAffinity NGInlineCursor::PositionForPoint(
-    const PhysicalOffset& point) {
-  if (root_paint_fragment_)
-    return root_paint_fragment_->PositionForPoint(point);
+PositionWithAffinity NGInlineCursor::PositionForPointInInlineFormattingContext(
+    const PhysicalOffset& point,
+    const NGPhysicalBoxFragment& container) {
   DCHECK(IsItemCursor());
   while (*this) {
-    const NGFragmentItem* item = CurrentItem();
-    DCHECK(item);
+    const NGFragmentItem* child_item = CurrentItem();
+    DCHECK(child_item);
     // TODO(kojii): Do more staff, when the point is not on any item but within
     // line box, etc., see |NGPaintFragment::PositionForPoint|.
-    if (!item->Rect().Contains(point)) {
+    if (!child_item->Rect().Contains(point)) {
       MoveToNextItemSkippingChildren();
       continue;
     }
-    if (item->Type() == NGFragmentItem::kText)
-      return item->PositionForPointInText(point, *this);
-    MoveToNext();
+    if (child_item->Type() == NGFragmentItem::kLine) {
+      if (const PositionWithAffinity child_position =
+              PositionForPointInInlineBox(point))
+        return child_position;
+      MoveToNextItemSkippingChildren();
+      continue;
+    }
+    DCHECK_NE(child_item->Type(), NGFragmentItem::kText);
+    MoveToNextItem();
+  }
+
+  return PositionWithAffinity();
+}
+
+PositionWithAffinity NGInlineCursor::PositionForPointInInlineBox(
+    const PhysicalOffset& point) const {
+  if (const NGPaintFragment* paint_fragment = CurrentPaintFragment()) {
+    DCHECK(paint_fragment->PhysicalFragment().IsLineBox());
+    return paint_fragment->PositionForPoint(point);
+  }
+  const NGFragmentItem* container = CurrentItem();
+  DCHECK(container);
+  DCHECK_EQ(container->Type(), NGFragmentItem::kLine);
+  const ComputedStyle& container_style = container->Style();
+  const WritingMode writing_mode = container_style.GetWritingMode();
+  const TextDirection direction = container_style.Direction();
+  const PhysicalSize& container_size = container->Size();
+  const LayoutUnit point_inline_offset =
+      point
+          .ConvertToLogical(writing_mode, direction, container_size,
+                            // |point| is actually a pixel with size 1x1.
+                            PhysicalSize(LayoutUnit(1), LayoutUnit(1)))
+          .inline_offset;
+
+  // Stores the closest child before |point| in the inline direction. Used if we
+  // can't find any child |point| falls in to resolve the position.
+  NGInlineCursorPosition closest_child_before;
+  LayoutUnit closest_child_before_inline_offset = LayoutUnit::Min();
+
+  // Stores the closest child after |point| in the inline direction. Used if we
+  // can't find any child |point| falls in to resolve the position.
+  NGInlineCursorPosition closest_child_after;
+  LayoutUnit closest_child_after_inline_offset = LayoutUnit::Max();
+
+  NGInlineCursor descendants = CursorForDescendants();
+  for (; descendants; descendants.MoveToNext()) {
+    const NGFragmentItem* child_item = descendants.CurrentItem();
+    DCHECK(child_item);
+    const LayoutUnit child_inline_offset =
+        child_item->Offset()
+            .ConvertToLogical(writing_mode, direction, container_size,
+                              child_item->Size())
+            .inline_offset;
+    if (point_inline_offset < child_inline_offset) {
+      if (child_inline_offset < closest_child_after_inline_offset) {
+        closest_child_after_inline_offset = child_inline_offset;
+        closest_child_after = descendants.Current();
+      }
+      continue;
+    }
+    const LayoutUnit child_inline_end_offset =
+        child_inline_offset +
+        child_item->Size().ConvertToLogical(writing_mode).inline_size;
+    if (point_inline_offset > child_inline_end_offset) {
+      if (child_inline_end_offset > closest_child_before_inline_offset) {
+        closest_child_before_inline_offset = child_inline_end_offset;
+        closest_child_before = descendants.Current();
+      }
+      continue;
+    }
+
+    if (const PositionWithAffinity child_position =
+            descendants.PositionForPointInChild(point, *child_item))
+      return child_position;
+  }
+
+  if (closest_child_after) {
+    descendants.MoveTo(closest_child_after);
+    if (const PositionWithAffinity child_position =
+            descendants.PositionForPointInChild(point, *closest_child_after))
+      return child_position;
+  }
+
+  if (closest_child_before) {
+    descendants.MoveTo(closest_child_before);
+    if (const PositionWithAffinity child_position =
+            descendants.PositionForPointInChild(point, *closest_child_before))
+      return child_position;
+  }
+
+  return PositionWithAffinity();
+}
+
+PositionWithAffinity NGInlineCursor::PositionForPointInChild(
+    const PhysicalOffset& point,
+    const NGFragmentItem& child_item) const {
+  DCHECK_EQ(&child_item, CurrentItem());
+  switch (child_item.Type()) {
+    case NGFragmentItem::kText:
+      return child_item.PositionForPointInText(point, *this);
+    case NGFragmentItem::kGeneratedText:
+      break;
+    case NGFragmentItem::kBox:
+      if (const NGPhysicalBoxFragment* box_fragment =
+              child_item.BoxFragment()) {
+        // We must fallback to legacy for old layout roots. We also fallback (to
+        // LayoutNGMixin::PositionForPoint()) for NG block layout, so that we
+        // can utilize LayoutBlock::PositionForPoint() that resolves the
+        // position in block layout.
+        // TODO(xiaochengh): Don't fallback to legacy for NG block layout.
+        if (box_fragment->IsBlockFlow() || box_fragment->IsLegacyLayoutRoot()) {
+          return child_item.GetLayoutObject()->PositionForPoint(
+              point - child_item.Offset());
+        }
+      }
+      break;
+    case NGFragmentItem::kLine:
+      NOTREACHED();
+      break;
   }
   return PositionWithAffinity();
 }

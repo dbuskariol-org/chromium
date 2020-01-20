@@ -266,7 +266,14 @@ class CORE_EXPORT NGInlineCursor {
 
   // Converts the given point, relative to the fragment itself, into a position
   // in DOM tree within the range of |this|.
-  PositionWithAffinity PositionForPoint(const PhysicalOffset&);
+  PositionWithAffinity PositionForPointInInlineFormattingContext(
+      const PhysicalOffset& point,
+      const NGPhysicalBoxFragment& container);
+  // Find the |Position| in the line box |Current()| points to. This variation
+  // ignores the block offset, and snaps to the nearest item in inline
+  // direction.
+  PositionWithAffinity PositionForPointInInlineBox(
+      const PhysicalOffset& point) const;
 
   //
   // Functions to move the current position.
@@ -395,6 +402,10 @@ class CORE_EXPORT NGInlineCursor {
   void MoveToNextPaintFragmentSkippingChildren();
   void MoveToPreviousPaintFragment();
   void MoveToPreviousSiblingPaintFragment();
+
+  PositionWithAffinity PositionForPointInChild(
+      const PhysicalOffset& point,
+      const NGFragmentItem& child_item) const;
 
   NGInlineCursorPosition current_;
 
