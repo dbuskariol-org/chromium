@@ -304,7 +304,7 @@ void ServiceWorkerRegistration::ClearWhenReady() {
     // already cleared.
     return;
   }
-  context_->storage()->DeleteRegistration(
+  context_->registry()->DeleteRegistration(
       this, scope().GetOrigin(),
       AdaptCallbackForRepeating(
           base::BindOnce(&ServiceWorkerRegistration::OnDeleteFinished, this)));
@@ -543,7 +543,7 @@ void ServiceWorkerRegistration::ForceDelete() {
 
   // Delete the registration and its state from storage.
   if (status() == Status::kIntact) {
-    context_->storage()->DeleteRegistration(
+    context_->registry()->DeleteRegistration(
         this, scope().GetOrigin(),
         base::BindOnce(&ServiceWorkerRegistration::OnDeleteFinished, protect));
   }

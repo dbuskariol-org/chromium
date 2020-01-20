@@ -345,7 +345,7 @@ TEST_F(ServiceWorkerVersionTest, StartUnregisteredButStillLiveWorker) {
   // Delete the registration.
   base::Optional<blink::ServiceWorkerStatusCode> status;
   base::RunLoop run_loop;
-  helper_->context()->storage()->DeleteRegistration(
+  helper_->context()->registry()->DeleteRegistration(
       registration_, registration_->scope().GetOrigin(),
       ReceiveServiceWorkerStatus(&status, run_loop.QuitClosure()));
   run_loop.Run();

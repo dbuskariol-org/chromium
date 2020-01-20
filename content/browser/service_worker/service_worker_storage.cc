@@ -468,39 +468,24 @@ void ServiceWorkerStorage::UpdateNavigationPreloadHeader(
       base::BindOnce(&DidUpdateNavigationPreloadState, std::move(callback)));
 }
 
-void ServiceWorkerStorage::DeleteRegistration(
-    scoped_refptr<ServiceWorkerRegistration> registration,
-    const GURL& origin,
-    StatusCallback callback) {
-  DCHECK(state_ == STORAGE_STATE_INITIALIZED ||
-         state_ == STORAGE_STATE_DISABLED)
-      << state_;
-  if (IsDisabled()) {
-    RunSoon(FROM_HERE,
-            base::BindOnce(std::move(callback),
-                           blink::ServiceWorkerStatusCode::kErrorAbort));
-    return;
-  }
+void ServiceWorkerStorage::DeleteRegistration(int64_t registration_id,
+                                              const GURL& origin,
+                                              StatusCallback callback) {
+  DCHECK_EQ(state_, STORAGE_STATE_INITIALIZED);
 
   if (!has_checked_for_stale_resources_)
     DeleteStaleResources();
 
-  DCHECK(!registration->is_deleted())
-      << "attempt to delete a registration twice";
-
   auto params = std::make_unique<DidDeleteRegistrationParams>(
-      registration->id(), origin, std::move(callback));
+      registration_id, origin, std::move(callback));
 
   database_task_runner_->PostTask(
       FROM_HERE,
       base::BindOnce(
           &DeleteRegistrationFromDB, database_.get(),
-          base::ThreadTaskRunnerHandle::Get(), registration->id(), origin,
+          base::ThreadTaskRunnerHandle::Get(), registration_id, origin,
           base::BindOnce(&ServiceWorkerStorage::DidDeleteRegistration,
                          weak_factory_.GetWeakPtr(), std::move(params))));
-
-  registry_->uninstalling_registrations()[registration->id()] = registration;
-  registration->SetStatus(ServiceWorkerRegistration::Status::kUninstalling);
 }
 
 void ServiceWorkerStorage::PerformStorageCleanup(base::OnceClosure callback) {

@@ -303,7 +303,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       const GURL& origin) {
     base::Optional<blink::ServiceWorkerStatusCode> result;
     base::RunLoop loop;
-    storage()->DeleteRegistration(
+    registry()->DeleteRegistration(
         registration, origin,
         base::BindLambdaForTesting([&](blink::ServiceWorkerStatusCode status) {
           result = status;

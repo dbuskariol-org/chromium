@@ -746,7 +746,7 @@ void ServiceWorkerRegisterJob::CompleteInternal(
       if (!registration()->newest_installed_version()) {
         registration()->NotifyRegistrationFailed();
         if (!registration()->is_deleted()) {
-          context_->storage()->DeleteRegistration(
+          context_->registry()->DeleteRegistration(
               registration(), registration()->scope().GetOrigin(),
               base::DoNothing());
           context_->registry()->NotifyDoneUninstallingRegistration(

@@ -6,6 +6,7 @@
 
 #include "base/memory/ptr_util.h"
 #include "base/memory/weak_ptr.h"
+#include "base/stl_util.h"
 #include "base/trace_event/trace_event.h"
 #include "content/browser/service_worker/service_worker_context_core.h"
 #include "content/browser/service_worker/service_worker_info.h"
@@ -182,6 +183,30 @@ void ServiceWorkerRegistry::StoreRegistration(
                      weak_factory_.GetWeakPtr(), data, std::move(callback)));
 }
 
+void ServiceWorkerRegistry::DeleteRegistration(
+    scoped_refptr<ServiceWorkerRegistration> registration,
+    const GURL& origin,
+    StatusCallback callback) {
+  if (storage()->IsDisabled()) {
+    RunSoon(FROM_HERE,
+            base::BindOnce(std::move(callback),
+                           blink::ServiceWorkerStatusCode::kErrorAbort));
+    return;
+  }
+
+  DCHECK(!registration->is_deleted())
+      << "attempt to delete a registration twice";
+
+  storage()->DeleteRegistration(
+      registration->id(), origin,
+      base::BindOnce(&ServiceWorkerRegistry::DidDeleteRegistration,
+                     weak_factory_.GetWeakPtr(), std::move(callback)));
+
+  DCHECK(!base::Contains(uninstalling_registrations_, registration->id()));
+  uninstalling_registrations_[registration->id()] = registration;
+  registration->SetStatus(ServiceWorkerRegistration::Status::kUninstalling);
+}
+
 void ServiceWorkerRegistry::NotifyInstallingRegistration(
     ServiceWorkerRegistration* registration) {
   DCHECK(installing_registrations_.find(registration->id()) ==
@@ -261,8 +286,7 @@ ServiceWorkerRegistry::GetOrCreateRegistration(
       options, data.registration_id, context_->AsWeakPtr());
   registration->set_resources_total_size_bytes(data.resources_total_size_bytes);
   registration->set_last_update_check(data.last_update_check);
-  DCHECK(uninstalling_registrations().find(data.registration_id) ==
-         uninstalling_registrations().end());
+  DCHECK(!base::Contains(uninstalling_registrations_, data.registration_id));
 
   scoped_refptr<ServiceWorkerVersion> version =
       context_->GetLiveVersion(data.version_id);
@@ -388,6 +412,15 @@ void ServiceWorkerRegistry::DidStoreRegistration(
   }
   context_->NotifyRegistrationStored(data.registration_id, data.scope);
 
+  std::move(callback).Run(status);
+}
+
+void ServiceWorkerRegistry::DidDeleteRegistration(
+    StatusCallback callback,
+    blink::ServiceWorkerStatusCode status) {
+  // TODO(crbug.com/1039200): Move code from
+  // ServiceWorkerStorage::DidDeleteRegistration() which depends on
+  // ServiceWorkerContextCore.
   std::move(callback).Run(status);
 }
 

@@ -177,16 +177,9 @@ class CONTENT_EXPORT ServiceWorkerStorage {
                                      const std::string& value,
                                      StatusCallback callback);
 
-  // Deletes the registration data for |registration|. The live registration is
-  // still findable via GetUninstallingRegistration(), and versions are usable
-  // because their script resources have not been deleted. After calling this,
-  // the caller should later:
-  // - Call NotifyDoneUninstallingRegistration() to let storage know the
-  //   uninstalling operation is done.
-  // - If it no longer wants versions to be usable, call PurgeResources() to
-  //   delete their script resources.
-  // If these aren't called, on the next profile session the cleanup occurs.
-  void DeleteRegistration(scoped_refptr<ServiceWorkerRegistration> registration,
+  // Deletes the registration specified by |registration_id|. This should be
+  // called only from ServiceWorkerRegistry.
+  void DeleteRegistration(int64_t registration_id,
                           const GURL& origin,
                           StatusCallback callback);
 
