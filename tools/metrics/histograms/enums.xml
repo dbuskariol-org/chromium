@@ -57658,6 +57658,19 @@ Called by update_net_trust_anchors.py.-->
   </int>
 </enum>
 
+<enum name="SessionType">
+  <int value="0" label="Existing Regular"/>
+  <int value="1" label="Guest"/>
+  <int value="2" label="New Regular"/>
+  <int value="3" label="Public Account"/>
+  <int value="4" label="Locally Managed"/>
+  <int value="5" label="Kiosk App"/>
+  <int value="6" label="Regular Supervised"/>
+  <int value="7" label="ARC Kiosk"/>
+  <int value="8" label="Active Directory"/>
+  <int value="9" label="Web App Kiosk"/>
+</enum>
+
 <enum name="SetDefaultAttemptResult">
   <obsolete>
     Deprecated 2016/03. Replaced by DefaultWebClientState.

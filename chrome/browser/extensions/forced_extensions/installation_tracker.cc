@@ -20,10 +20,51 @@
 #include "extensions/browser/updater/extension_downloader_delegate.h"
 #include "extensions/common/extension_urls.h"
 
+#if defined(OS_CHROMEOS)
+#include "components/user_manager/user_manager.h"
+#endif  // defined(OS_CHROMEOS)
+
 namespace {
 // Timeout to report UMA if not all force-installed extension were loaded.
 constexpr base::TimeDelta kInstallationTimeout =
     base::TimeDelta::FromMinutes(5);
+
+#if defined(OS_CHROMEOS)
+
+extensions::InstallationTracker::SessionType GetSessionFromUserType(
+    user_manager::UserType user_type) {
+  switch (user_type) {
+    case user_manager::USER_TYPE_REGULAR:
+      return extensions::InstallationTracker::SessionType::
+          SESSION_TYPE_REGULAR_EXISTING;
+    case user_manager::USER_TYPE_GUEST:
+      return extensions::InstallationTracker::SessionType::SESSION_TYPE_GUEST;
+    case user_manager::USER_TYPE_PUBLIC_ACCOUNT:
+      return extensions::InstallationTracker::SessionType::
+          SESSION_TYPE_PUBLIC_ACCOUNT;
+    case user_manager::USER_TYPE_SUPERVISED:
+      return extensions::InstallationTracker::SessionType::
+          SESSION_TYPE_SUPERVISED;
+    case user_manager::USER_TYPE_KIOSK_APP:
+      return extensions::InstallationTracker::SessionType::
+          SESSION_TYPE_KIOSK_APP;
+    case user_manager::USER_TYPE_CHILD:
+      return extensions::InstallationTracker::SessionType::SESSION_TYPE_CHILD;
+    case user_manager::USER_TYPE_ARC_KIOSK_APP:
+      return extensions::InstallationTracker::SessionType::
+          SESSION_TYPE_ARC_KIOSK_APP;
+    case user_manager::USER_TYPE_ACTIVE_DIRECTORY:
+      return extensions::InstallationTracker::SessionType::
+          SESSION_TYPE_ACTIVE_DIRECTORY;
+    case user_manager::USER_TYPE_WEB_KIOSK_APP:
+      return extensions::InstallationTracker::SessionType::
+          SESSION_TYPE_WEB_KIOSK_APP;
+    default:
+      NOTREACHED();
+  }
+  return extensions::InstallationTracker::SessionType::kMaxValue;
+}
+#endif  // defined(OS_CHROMEOS)
 }  // namespace
 
 namespace extensions {
@@ -157,6 +198,20 @@ void InstallationTracker::OnExtensionInstallationFailed(
     ReportResults();
 }
 
+#if defined(OS_CHROMEOS)
+// Returns the type of session in case extension fails to install.
+InstallationTracker::SessionType InstallationTracker::GetSessionType() {
+  SessionType current_session = GetSessionFromUserType(
+      user_manager::UserManager::Get()->GetActiveUser()->GetType());
+  // Check if it is regular user and if the user is a new one.
+  if (current_session == SessionType::SESSION_TYPE_REGULAR_EXISTING &&
+      user_manager::UserManager::Get()->IsCurrentUserNew())
+    return SessionType::SESSION_TYPE_REGULAR_NEW;
+
+  return current_session;
+}
+#endif  // defined(OS_CHROMEOS)
+
 void InstallationTracker::ReportResults() {
   DCHECK(!reported_);
   // Report only if there was non-empty list of force-installed extensions.
@@ -261,7 +316,16 @@ void InstallationTracker::ReportResults() {
               installation.fetch_tries.value(),
               ExtensionDownloader::kMaxRetries);
         }
-
+#if defined(OS_CHROMEOS)
+        // Report type of session in case Force Installed Extensions fail to
+        // install only if there is an active user. There can be extensions on
+        // the login screen. There is no active user on the login screen and
+        // thus we would not report in that case.
+        if (user_manager::UserManager::Get()->GetActiveUser()) {
+          UMA_HISTOGRAM_ENUMERATION(
+              "Extensions.ForceInstalledFailureSessionType", GetSessionType());
+        }
+#endif  // defined(OS_CHROMEOS)
         VLOG(2) << "Forced extension " << extension_id
                 << " failed to install with data="
                 << InstallationReporter::GetFormattedInstallationData(
