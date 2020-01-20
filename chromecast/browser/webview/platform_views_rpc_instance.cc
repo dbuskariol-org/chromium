@@ -59,7 +59,8 @@ void PlatformViewsRpcInstance::OnError(const std::string& error_message) {
 
 void PlatformViewsRpcInstance::ProcessRequestOnControllerThread(
     std::unique_ptr<webview::WebviewRequest> request) {
-  controller_->ProcessRequest(*request.get());
+  if (!errored_)
+    controller_->ProcessRequest(*request.get());
 }
 
 void PlatformViewsRpcInstance::InitComplete(bool ok) {
