@@ -518,27 +518,6 @@ goma_builder(
     goma_enable_ats = True,
 )
 
-goma_builder(
-    name = 'chromeos-amd64-generic-rel (Goma RBE FYI)',
-    builderless = True,
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
-)
-
-goma_builder(
-    name = 'fuchsia-fyi-arm64-rel (Goma RBE FYI)',
-    builderless = True,
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
-)
-
-goma_builder(
-    name = 'fuchsia-fyi-x64-rel (Goma RBE FYI)',
-    builderless = True,
-    goma_backend = goma.backend.RBE_PROD,
-    goma_enable_ats = True,
-)
-
 
 def goma_mac_builder(*, name, **kwargs):
   return goma_builder(
