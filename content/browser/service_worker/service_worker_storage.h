@@ -45,7 +45,6 @@ class ServiceWorkerRegistry;
 class ServiceWorkerResponseMetadataWriter;
 class ServiceWorkerResponseReader;
 class ServiceWorkerResponseWriter;
-struct ServiceWorkerRegistrationInfo;
 
 namespace service_worker_storage_unittest {
 class ServiceWorkerStorageTest;
@@ -79,9 +78,9 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       blink::ServiceWorkerStatusCode status,
       std::unique_ptr<RegistrationList> registrations,
       std::unique_ptr<std::vector<ResourceList>> resource_lists)>;
-  using GetRegistrationsInfosCallback = base::OnceCallback<void(
-      blink::ServiceWorkerStatusCode status,
-      const std::vector<ServiceWorkerRegistrationInfo>& registrations)>;
+  using GetAllRegistrationsCallback =
+      base::OnceCallback<void(blink::ServiceWorkerStatusCode status,
+                              std::unique_ptr<RegistrationList> registrations)>;
   using GetUserDataCallback =
       base::OnceCallback<void(const std::vector<std::string>& data,
                               blink::ServiceWorkerStatusCode status)>;
@@ -146,8 +145,8 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void GetRegistrationsForOrigin(const GURL& origin,
                                  GetRegistrationsDataCallback callback);
 
-  // Returns info about all stored and initially installing registrations.
-  void GetAllRegistrationsInfos(GetRegistrationsInfosCallback callback);
+  // Returns all stored registrations.
+  void GetAllRegistrations(GetAllRegistrationsCallback callback);
 
   // Stores |registration_data| and |resources| on persistent storage.
   void StoreRegistrationData(
@@ -385,9 +384,10 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       std::unique_ptr<RegistrationList> registrations,
       std::unique_ptr<std::vector<ResourceList>> resource_lists,
       ServiceWorkerDatabase::Status status);
-  void DidGetAllRegistrationsInfos(GetRegistrationsInfosCallback callback,
-                                   RegistrationList* registration_data_list,
-                                   ServiceWorkerDatabase::Status status);
+  void DidGetAllRegistrations(
+      GetAllRegistrationsCallback callback,
+      std::unique_ptr<RegistrationList> registration_data_list,
+      ServiceWorkerDatabase::Status status);
   void DidStoreRegistrationData(
       StatusCallback callback,
       const ServiceWorkerDatabase::RegistrationData& new_version,

@@ -720,7 +720,7 @@ void ServiceWorkerContextCore::ClearAllServiceWorkersForTest(
   if (!was_service_worker_registered_)
     return;
   was_service_worker_registered_ = false;
-  storage()->GetAllRegistrationsInfos(
+  registry()->GetAllRegistrationsInfos(
       base::BindOnce(&ClearAllServiceWorkersHelper::DidGetAllRegistrations,
                      helper, AsWeakPtr()));
 }

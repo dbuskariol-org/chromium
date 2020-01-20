@@ -318,7 +318,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       std::vector<ServiceWorkerRegistrationInfo>* registrations) {
     base::Optional<blink::ServiceWorkerStatusCode> result;
     base::RunLoop loop;
-    storage()->GetAllRegistrationsInfos(base::BindLambdaForTesting(
+    registry()->GetAllRegistrationsInfos(base::BindLambdaForTesting(
         [&](blink::ServiceWorkerStatusCode status,
             const std::vector<ServiceWorkerRegistrationInfo>& infos) {
           result = status;
