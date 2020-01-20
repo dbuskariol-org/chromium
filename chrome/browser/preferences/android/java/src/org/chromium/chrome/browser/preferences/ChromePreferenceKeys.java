@@ -530,6 +530,14 @@ public final class ChromePreferenceKeys {
 
     public static final String SNAPSHOT_DATABASE_REMOVED = "snapshot_database_removed";
 
+    public static final String SURVEY_DATE_LAST_ROLLED = "last_rolled_for_chrome_survey_key";
+    /**
+     *  The survey questions for this survey are the same as those in the survey used for Chrome
+     *  Home, so we reuse the old infobar key to prevent the users from seeing the same survey more
+     *  than once.
+     */
+    public static final String SURVEY_INFO_BAR_DISPLAYED = "chrome_home_survey_info_bar_displayed";
+
     public static final String SYNC_SESSIONS_UUID = "chromium.sync.sessions.id";
 
     public static final String TABBED_ACTIVITY_LAST_BACKGROUNDED_TIME_MS_PREF =
@@ -806,6 +814,8 @@ public final class ChromePreferenceKeys {
                 SIGNIN_PROMO_SETTINGS_PERSONALIZED_DISMISSED,
                 SNAPSHOT_DATABASE_REMOVED,
                 START_SURFACE_SINGLE_PANE_ENABLED_KEY,
+                SURVEY_DATE_LAST_ROLLED,
+                SURVEY_INFO_BAR_DISPLAYED,
                 SYNC_SESSIONS_UUID,
                 TABBED_ACTIVITY_LAST_BACKGROUNDED_TIME_MS_PREF,
                 TAB_ID_MANAGER_NEXT_ID,
