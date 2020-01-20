@@ -265,7 +265,8 @@ class CORE_EXPORT NGInlineCursor {
   PhysicalOffset LineEndPoint() const;
 
   // Converts the given point, relative to the fragment itself, into a position
-  // in DOM tree within the range of |this|.
+  // in DOM tree within the range of |this|. This variation ignores the inline
+  // offset, and snaps to the nearest line in the block direction.
   PositionWithAffinity PositionForPointInInlineFormattingContext(
       const PhysicalOffset& point,
       const NGPhysicalBoxFragment& container);

@@ -631,16 +631,59 @@ PositionWithAffinity NGInlineCursor::PositionForPointInInlineFormattingContext(
     const PhysicalOffset& point,
     const NGPhysicalBoxFragment& container) {
   DCHECK(IsItemCursor());
+  const ComputedStyle& container_style = container.Style();
+  const WritingMode writing_mode = container_style.GetWritingMode();
+  const TextDirection direction = container_style.Direction();
+  const PhysicalSize& container_size = container.Size();
+  const LayoutUnit point_block_offset =
+      point
+          .ConvertToLogical(writing_mode, direction, container_size,
+                            // |point| is actually a pixel with size 1x1.
+                            PhysicalSize(LayoutUnit(1), LayoutUnit(1)))
+          .block_offset;
+
+  // Stores the closest line box child above |point| in the block direction.
+  // Used if we can't find any child |point| falls in to resolve the position.
+  NGInlineCursorPosition closest_line_before;
+  LayoutUnit closest_line_before_block_offset = LayoutUnit::Min();
+
+  // Stores the closest line box child below |point| in the block direction.
+  // Used if we can't find any child |point| falls in to resolve the position.
+  NGInlineCursorPosition closest_line_after;
+  LayoutUnit closest_line_after_block_offset = LayoutUnit::Max();
+
   while (*this) {
     const NGFragmentItem* child_item = CurrentItem();
     DCHECK(child_item);
-    // TODO(kojii): Do more staff, when the point is not on any item but within
-    // line box, etc., see |NGPaintFragment::PositionForPoint|.
-    if (!child_item->Rect().Contains(point)) {
-      MoveToNextItemSkippingChildren();
-      continue;
-    }
     if (child_item->Type() == NGFragmentItem::kLine) {
+      // Try to resolve if |point| falls in a line box in block direction.
+      const LayoutUnit child_block_offset =
+          child_item->Offset()
+              .ConvertToLogical(writing_mode, direction, container_size,
+                                child_item->Size())
+              .block_offset;
+      if (point_block_offset < child_block_offset) {
+        if (child_block_offset < closest_line_after_block_offset) {
+          closest_line_after_block_offset = child_block_offset;
+          closest_line_after = Current();
+        }
+        MoveToNextItemSkippingChildren();
+        continue;
+      }
+
+      // Hitting on line bottom doesn't count, to match legacy behavior.
+      const LayoutUnit child_block_end_offset =
+          child_block_offset +
+          child_item->Size().ConvertToLogical(writing_mode).block_size;
+      if (point_block_offset >= child_block_end_offset) {
+        if (child_block_end_offset > closest_line_before_block_offset) {
+          closest_line_before_block_offset = child_block_end_offset;
+          closest_line_before = Current();
+        }
+        MoveToNextItemSkippingChildren();
+        continue;
+      }
+
       if (const PositionWithAffinity child_position =
               PositionForPointInInlineBox(point))
         return child_position;
@@ -649,6 +692,20 @@ PositionWithAffinity NGInlineCursor::PositionForPointInInlineFormattingContext(
     }
     DCHECK_NE(child_item->Type(), NGFragmentItem::kText);
     MoveToNextItem();
+  }
+
+  if (closest_line_after) {
+    MoveTo(closest_line_after);
+    if (const PositionWithAffinity child_position =
+            PositionForPointInInlineBox(point))
+      return child_position;
+  }
+
+  if (closest_line_before) {
+    MoveTo(closest_line_before);
+    if (const PositionWithAffinity child_position =
+            PositionForPointInInlineBox(point))
+      return child_position;
   }
 
   return PositionWithAffinity();
