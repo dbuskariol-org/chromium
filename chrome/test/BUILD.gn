@@ -5808,7 +5808,6 @@ if (!is_android) {
       }
       if (!is_chromeos) {
         sources += [ "../browser/ui/views/global_media_controls/media_dialog_view_interactive_browsertest.cc" ]
-        deps += [ "../browser/media/router:test_support" ]
       }
       if (use_aura || is_mac) {
         deps += [ "//ui/touch_selection" ]
