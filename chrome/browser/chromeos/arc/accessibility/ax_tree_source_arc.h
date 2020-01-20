@@ -106,11 +106,25 @@ class AXTreeSourceArc : public ui::AXTreeSource<AccessibilityInfoDataWrapper*,
   void ComputeEnclosingBoundsInternal(AccessibilityInfoDataWrapper* info_data,
                                       gfx::Rect& computed_bounds) const;
 
-  // Computes the node is clickable and there is no clickable descendant of it.
+  // Computes if the node is clickable and has no clickable descendants.
   bool ComputeIsClickableLeaf(
-      int32_t root_index,
       const std::vector<mojom::AccessibilityNodeInfoDataPtr>& nodes,
-      const std::map<int32_t, int32_t>& node_id_to_array_index) const;
+      int32_t node_index,
+      const std::map<int32_t, int32_t>& node_id_to_nodes_index) const;
+
+  // Builds a mapping from index in |nodes| to whether ignored state should be
+  // applied to the node in chrome accessibility.
+  // Assuming that |nodes[0]| is a root of the tree.
+  void BuildImportantMap(
+      const std::vector<mojom::AccessibilityNodeInfoDataPtr>& nodes,
+      const std::map<int32_t, int32_t>& node_id_to_nodes_index,
+      std::map<int32_t, bool>& out_node) const;
+
+  bool BuildImportantMapInternal(
+      int32_t nodes_index,
+      const std::vector<mojom::AccessibilityNodeInfoDataPtr>& nodes,
+      const std::map<int32_t, int32_t>& node_id_to_nodes_index,
+      std::map<int32_t, bool>& is_important_cache) const;
 
   // Find the most top-left focusable node under the given node.
   AccessibilityInfoDataWrapper* FindFirstFocusableNode(

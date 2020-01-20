@@ -248,6 +248,7 @@ TEST_F(AXTreeSourceArcTest, ReorderChildrenByLayout) {
   SetProperty(button1, AXBooleanProperty::VISIBLE_TO_USER, true);
   SetProperty(button1, AXBooleanProperty::FOCUSABLE, true);
   SetProperty(button1, AXBooleanProperty::IMPORTANCE, true);
+  SetProperty(button1, AXStringProperty::CONTENT_DESCRIPTION, "button1");
 
   // Add another child button.
   event->node_data.push_back(AXNodeInfoData::New());
@@ -257,6 +258,7 @@ TEST_F(AXTreeSourceArcTest, ReorderChildrenByLayout) {
   SetProperty(button2, AXBooleanProperty::VISIBLE_TO_USER, true);
   SetProperty(button2, AXBooleanProperty::FOCUSABLE, true);
   SetProperty(button2, AXBooleanProperty::IMPORTANCE, true);
+  SetProperty(button2, AXStringProperty::CONTENT_DESCRIPTION, "button2");
 
   // Non-overlapping, bottom to top.
   button1->bounds_in_screen = gfx::Rect(100, 100, 100, 100);
@@ -366,9 +368,9 @@ TEST_F(AXTreeSourceArcTest, ReorderChildrenByLayout) {
       "  id=10 genericContainer INVISIBLE (0, 0)-(0, 0) restriction=disabled "
       "modal=true child_ids=1,2\n"
       "    id=1 button FOCUSABLE (100, 100)-(100, 100) restriction=disabled "
-      "class_name=android.widget.Button\n"
+      "class_name=android.widget.Button name=button1\n"
       "    id=2 button FOCUSABLE (100, 100)-(10, 100) restriction=disabled "
-      "class_name=android.widget.Button\n");
+      "class_name=android.widget.Button name=button2\n");
 }
 
 TEST_F(AXTreeSourceArcTest, AccessibleNameComputation) {
@@ -1076,8 +1078,8 @@ TEST_F(AXTreeSourceArcTest, SerializeAndUnserialize) {
   EXPECT_EQ(1, GetDispatchedEventCount(ax::mojom::Event::kFocus));
   ExpectTree(
       "id=100 window (0, 0)-(0, 0) child_ids=10\n"
-      "  id=10 genericContainer INVISIBLE (0, 0)-(0, 0) restriction=disabled "
-      "modal=true child_ids=1\n"
+      "  id=10 genericContainer IGNORED INVISIBLE (0, 0)-(0, 0) "
+      "restriction=disabled modal=true child_ids=1\n"
       "    id=1 genericContainer IGNORED INVISIBLE (0, 0)-(0, 0) "
       "restriction=disabled child_ids=2\n"
       "      id=2 genericContainer IGNORED INVISIBLE (0, 0)-(0, 0) "
@@ -1100,9 +1102,9 @@ TEST_F(AXTreeSourceArcTest, SerializeAndUnserialize) {
       "id=100 window (0, 0)-(0, 0) child_ids=10\n"
       "  id=10 genericContainer INVISIBLE (0, 0)-(0, 0) restriction=disabled "
       "modal=true child_ids=1\n"
-      "    id=1 genericContainer IGNORED INVISIBLE (0, 0)-(0, 0) "
-      "restriction=disabled child_ids=2\n"
-      "      id=2 genericContainer IGNORED INVISIBLE (0, 0)-(0, 0) "
+      "    id=1 genericContainer INVISIBLE (0, 0)-(0, 0) restriction=disabled "
+      "child_ids=2\n"
+      "      id=2 genericContainer INVISIBLE (0, 0)-(0, 0) "
       "restriction=disabled child_ids=3\n"
       "        id=3 genericContainer INVISIBLE (0, 0)-(0, 0) "
       "restriction=disabled name=some text\n");
@@ -1141,6 +1143,7 @@ TEST_F(AXTreeSourceArcTest, SerializeWebView) {
       node2, AXIntListProperty::STANDARD_ACTION_IDS,
       std::vector<int>({static_cast<int>(AXActionType::NEXT_HTML_ELEMENT),
                         static_cast<int>(AXActionType::FOCUS)}));
+  SetProperty(node2, AXStringProperty::CONTENT_DESCRIPTION, "text");
 
   CallNotifyAccessibilityEvent(event.get());
 

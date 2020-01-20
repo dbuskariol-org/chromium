@@ -91,8 +91,8 @@ void AXTreeSourceArc::NotifyAccessibilityEvent(AXEventData* event_data) {
         std::make_unique<AccessibilityWindowInfoDataWrapper>(this, window);
 
     std::vector<int32_t> children;
-    if (GetIntListProperty(window, AXWindowIntListProperty::CHILD_WINDOW_IDS,
-                           &children)) {
+    if (GetProperty(window->int_list_properties,
+                    AXWindowIntListProperty::CHILD_WINDOW_IDS, &children)) {
       for (const int32_t child : children) {
         DCHECK(child != root_id_);
         parent_map_[child] = window_id;
@@ -106,19 +106,21 @@ void AXTreeSourceArc::NotifyAccessibilityEvent(AXEventData* event_data) {
     int32_t node_id = event_data->node_data[i]->id;
     node_data_index_map[node_id] = i;
     std::vector<int32_t> children;
-    if (GetIntListProperty(event_data->node_data[i].get(),
-                           AXIntListProperty::CHILD_NODE_IDS, &children)) {
+    if (GetProperty(event_data->node_data[i].get()->int_list_properties,
+                    AXIntListProperty::CHILD_NODE_IDS, &children)) {
       for (const int32_t child : children)
         parent_map_[child] = node_id;
     }
   }
-  for (size_t i = 0; i < event_data->node_data.size(); ++i) {
+  std::map<int32_t, bool> important_map;
+  BuildImportantMap(event_data->node_data, node_data_index_map, important_map);
+  for (int i = event_data->node_data.size() - 1; i >= 0; --i) {
     int32_t id = event_data->node_data[i]->id;
     AXNodeInfoData* node = event_data->node_data[i].get();
     bool is_clickable_leaf =
-        ComputeIsClickableLeaf(i, event_data->node_data, node_data_index_map);
+        ComputeIsClickableLeaf(event_data->node_data, i, node_data_index_map);
     tree_map_[id] = std::make_unique<AccessibilityNodeInfoDataWrapper>(
-        this, node, is_clickable_leaf);
+        this, node, is_clickable_leaf, important_map[i]);
   }
 
   // Assuming |nodeData| is in pre-order, compute cached bounds in post-order to
@@ -360,15 +362,16 @@ void AXTreeSourceArc::ComputeEnclosingBoundsInternal(
 }
 
 bool AXTreeSourceArc::ComputeIsClickableLeaf(
-    int32_t root_index,
     const std::vector<AXNodeInfoDataPtr>& nodes,
-    const std::map<int32_t, int32_t>& node_id_to_array_index) const {
-  AXNodeInfoData* node = nodes[root_index].get();
+    int32_t node_index,
+    const std::map<int32_t, int32_t>& node_id_to_nodes_index) const {
+  AXNodeInfoData* node = nodes[node_index].get();
   if (!GetBooleanProperty(node, AXBooleanProperty::CLICKABLE))
     return false;
 
   std::vector<int32_t> children;
-  if (!GetIntListProperty(node, AXIntListProperty::CHILD_NODE_IDS, &children))
+  if (!GetProperty(node->int_list_properties, AXIntListProperty::CHILD_NODE_IDS,
+                   &children))
     return true;
 
   std::stack<int32_t, std::vector<int32_t>> stack(children);
@@ -376,16 +379,51 @@ bool AXTreeSourceArc::ComputeIsClickableLeaf(
     int32_t parent_id = stack.top();
     stack.pop();
     AXNodeInfoData* parent_node =
-        nodes[node_id_to_array_index.at(parent_id)].get();
+        nodes[node_id_to_nodes_index.at(parent_id)].get();
     if (GetBooleanProperty(parent_node, AXBooleanProperty::CLICKABLE))
       return false;
-    if (GetIntListProperty(parent_node, AXIntListProperty::CHILD_NODE_IDS,
-                           &children)) {
+    if (GetProperty(parent_node->int_list_properties,
+                    AXIntListProperty::CHILD_NODE_IDS, &children)) {
       for (const int32_t child : children)
         stack.push(child);
     }
   }
   return true;
+}
+
+void AXTreeSourceArc::BuildImportantMap(
+    const std::vector<AXNodeInfoDataPtr>& nodes,
+    const std::map<int32_t, int32_t>& node_id_to_nodes_index,
+    std::map<int32_t, bool>& out_map) const {
+  // nodes can be empty only in tests.
+  if (nodes.size() > 0)
+    BuildImportantMapInternal(0, nodes, node_id_to_nodes_index, out_map);
+}
+
+bool AXTreeSourceArc::BuildImportantMapInternal(
+    int32_t nodes_index,
+    const std::vector<AXNodeInfoDataPtr>& nodes,
+    const std::map<int32_t, int32_t>& node_id_to_nodes_index,
+    std::map<int32_t, bool>& is_important_cache) const {
+  AXNodeInfoData* node = nodes[nodes_index].get();
+
+  bool is_important = IsImportantInAndroid(node) &&
+                      (HasImportantProperty(node) ||
+                       cached_names_.find(node->id) != cached_names_.end());
+
+  // If any child node has importance, this node is also important.
+  std::vector<int32_t> children;
+  if (GetProperty(node->int_list_properties, AXIntListProperty::CHILD_NODE_IDS,
+                  &children)) {
+    for (const int32_t child : children) {
+      is_important |=
+          BuildImportantMapInternal(node_id_to_nodes_index.at(child), nodes,
+                                    node_id_to_nodes_index, is_important_cache);
+    }
+  }
+
+  is_important_cache[nodes_index] = is_important;
+  return is_important;
 }
 
 AccessibilityInfoDataWrapper* AXTreeSourceArc::FindFirstFocusableNode(
