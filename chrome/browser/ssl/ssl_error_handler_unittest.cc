@@ -138,12 +138,14 @@ class TestSSLErrorHandler : public SSLErrorHandler {
                       Profile* profile,
                       int cert_error,
                       const net::SSLInfo& ssl_info,
+                      network_time::NetworkTimeTracker* network_time_tracker,
                       const GURL& request_url)
       : SSLErrorHandler(std::move(delegate),
                         web_contents,
                         profile,
                         cert_error,
                         ssl_info,
+                        network_time_tracker,
                         request_url) {}
 
   using SSLErrorHandler::StartHandlingError;
@@ -329,7 +331,7 @@ class SSLErrorHandlerNameMismatchTest : public ChromeRenderViewHostTestHarness {
     error_handler_.reset(new TestSSLErrorHandler(
         std::unique_ptr<SSLErrorHandler::Delegate>(delegate_), web_contents(),
         profile(), net::MapCertStatusToNetError(ssl_info_.cert_status),
-        ssl_info_, GURL() /*request_url*/));
+        ssl_info_, /*network_time_tracker=*/nullptr, GURL() /*request_url*/));
   }
 
   void TearDown() override {
@@ -591,7 +593,7 @@ class SSLErrorAssistantProtoTest : public ChromeRenderViewHostTestHarness {
     error_handler_.reset(new TestSSLErrorHandler(
         std::unique_ptr<SSLErrorHandler::Delegate>(delegate_), web_contents(),
         profile(), net::MapCertStatusToNetError(ssl_info_.cert_status),
-        ssl_info_, GURL() /*request_url*/));
+        ssl_info_, /*network_time_tracker=*/nullptr, GURL() /*request_url*/));
   }
 
   net::SSLInfo ssl_info_;
@@ -652,8 +654,7 @@ class SSLErrorHandlerDateInvalidTest : public ChromeRenderViewHostTestHarness {
     error_handler_.reset(new TestSSLErrorHandler(
         std::unique_ptr<SSLErrorHandler::Delegate>(delegate_), web_contents(),
         profile(), net::MapCertStatusToNetError(ssl_info_.cert_status),
-        ssl_info_, GURL() /*request_url*/));
-    error_handler_->SetNetworkTimeTrackerForTesting(tracker_.get());
+        ssl_info_, tracker_.get(), GURL() /*request_url*/));
 
     // Fix flakiness in case system time is off and triggers a bad clock
     // interstitial. https://crbug.com/666821#c50
@@ -1549,7 +1550,7 @@ TEST_F(SSLErrorHandlerTest, BlockedInterceptionInterstitial) {
   TestSSLErrorHandler error_handler(
       std::move(delegate), web_contents(), profile(),
       net::MapCertStatusToNetError(ssl_info.cert_status), ssl_info,
-      GURL() /*request_url*/);
+      /*network_time_tracker=*/nullptr, GURL() /*request_url*/);
 
   base::HistogramTester histograms;
   delegate_ptr->set_has_blocked_interception();

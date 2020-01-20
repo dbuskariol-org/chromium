@@ -186,7 +186,6 @@ class ConfigSingleton {
   base::TimeDelta interstitial_delay() const;
   SSLErrorHandler::TimerStartedCallback* timer_started_callback() const;
   base::Clock* clock() const;
-  network_time::NetworkTimeTracker* network_time_tracker() const;
 
   bool IsKnownCaptivePortalCertificate(const net::SSLInfo& ssl_info);
 
@@ -208,8 +207,6 @@ class ConfigSingleton {
   void SetTimerStartedCallbackForTesting(
       SSLErrorHandler::TimerStartedCallback* callback);
   void SetClockForTesting(base::Clock* clock);
-  void SetNetworkTimeTrackerForTesting(
-      network_time::NetworkTimeTracker* tracker);
   void SetReportNetworkConnectivityCallbackForTesting(
       base::OnceClosure callback);
 
@@ -240,8 +237,6 @@ class ConfigSingleton {
   // The clock to use when deciding which error type to display. Used for
   // testing.
   base::Clock* testing_clock_ = nullptr;
-
-  network_time::NetworkTimeTracker* network_time_tracker_ = nullptr;
 
   base::OnceClosure report_network_connectivity_callback_;
 
@@ -278,12 +273,6 @@ SSLErrorHandler::TimerStartedCallback* ConfigSingleton::timer_started_callback()
   return timer_started_callback_;
 }
 
-network_time::NetworkTimeTracker* ConfigSingleton::network_time_tracker()
-    const {
-  return network_time_tracker_ ? network_time_tracker_
-                               : g_browser_process->network_time_tracker();
-}
-
 base::Clock* ConfigSingleton::clock() const {
   return testing_clock_;
 }
@@ -292,7 +281,6 @@ void ConfigSingleton::ResetForTesting() {
   interstitial_delay_ =
       base::TimeDelta::FromMilliseconds(kInterstitialDelayInMilliseconds);
   timer_started_callback_ = nullptr;
-  network_time_tracker_ = nullptr;
   testing_clock_ = nullptr;
   ssl_error_assistant_->ResetForTesting();
   is_enterprise_managed_for_testing_ = ENTERPRISE_MANAGED_STATUS_NOT_SET;
@@ -312,11 +300,6 @@ void ConfigSingleton::SetTimerStartedCallbackForTesting(
 
 void ConfigSingleton::SetClockForTesting(base::Clock* clock) {
   testing_clock_ = clock;
-}
-
-void ConfigSingleton::SetNetworkTimeTrackerForTesting(
-    network_time::NetworkTimeTracker* tracker) {
-  network_time_tracker_ = tracker;
 }
 
 void ConfigSingleton::SetReportNetworkConnectivityCallbackForTesting(
@@ -596,6 +579,7 @@ void SSLErrorHandler::HandleSSLError(
     const net::SSLInfo& ssl_info,
     const GURL& request_url,
     std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
+    network_time::NetworkTimeTracker* network_time_tracker,
     base::OnceCallback<
         void(std::unique_ptr<security_interstitials::SecurityInterstitialPage>)>
         blocking_page_ready_callback) {
@@ -622,7 +606,8 @@ void SSLErrorHandler::HandleSSLError(
               web_contents, ssl_info, profile, cert_error, options_mask,
               request_url, std::move(ssl_cert_reporter),
               std::move(blocking_page_ready_callback))),
-      web_contents, profile, cert_error, ssl_info, request_url);
+      web_contents, profile, cert_error, ssl_info, network_time_tracker,
+      request_url);
   web_contents->SetUserData(UserDataKey(), base::WrapUnique(error_handler));
   error_handler->StartHandlingError();
 }
@@ -647,12 +632,6 @@ void SSLErrorHandler::SetInterstitialTimerStartedCallbackForTesting(
 // static
 void SSLErrorHandler::SetClockForTesting(base::Clock* testing_clock) {
   g_config.Pointer()->SetClockForTesting(testing_clock);
-}
-
-// static
-void SSLErrorHandler::SetNetworkTimeTrackerForTesting(
-    network_time::NetworkTimeTracker* tracker) {
-  g_config.Pointer()->SetNetworkTimeTrackerForTesting(tracker);
 }
 
 // static
@@ -699,22 +678,24 @@ void SSLErrorHandler::SetErrorAssistantProto(
   g_config.Pointer()->SetErrorAssistantProto(std::move(config_proto));
 }
 
-SSLErrorHandler::SSLErrorHandler(std::unique_ptr<Delegate> delegate,
-                                 content::WebContents* web_contents,
-                                 Profile* profile,
-                                 int cert_error,
-                                 const net::SSLInfo& ssl_info,
-                                 const GURL& request_url)
+SSLErrorHandler::SSLErrorHandler(
+    std::unique_ptr<Delegate> delegate,
+    content::WebContents* web_contents,
+    Profile* profile,
+    int cert_error,
+    const net::SSLInfo& ssl_info,
+    network_time::NetworkTimeTracker* network_time_tracker,
+    const GURL& request_url)
     : content::WebContentsObserver(web_contents),
       delegate_(std::move(delegate)),
       web_contents_(web_contents),
       profile_(profile),
       cert_error_(cert_error),
       ssl_info_(ssl_info),
-      request_url_(request_url) {}
+      request_url_(request_url),
+      network_time_tracker_(network_time_tracker) {}
 
-SSLErrorHandler::~SSLErrorHandler() {
-}
+SSLErrorHandler::~SSLErrorHandler() = default;
 
 void SSLErrorHandler::StartHandlingError() {
   RecordUMA(HANDLE_ALL);
@@ -995,9 +976,7 @@ void SSLErrorHandler::HandleCertDateInvalidError() {
   // Pass a weak pointer as the callback; if the timer fires before the
   // fetch completes and shows an interstitial, this SSLErrorHandler
   // will be deleted.
-  network_time::NetworkTimeTracker* tracker =
-      g_config.Pointer()->network_time_tracker();
-  if (!tracker->StartTimeFetch(
+  if (!network_time_tracker_->StartTimeFetch(
           base::BindOnce(&SSLErrorHandler::HandleCertDateInvalidErrorImpl,
                          weak_ptr_factory_.GetWeakPtr(), now))) {
     HandleCertDateInvalidErrorImpl(now);
@@ -1021,9 +1000,8 @@ void SSLErrorHandler::HandleCertDateInvalidErrorImpl(
   const base::Time now =
       testing_clock ? testing_clock->Now() : base::Time::NowFromSystemTime();
 
-  network_time::NetworkTimeTracker* tracker =
-      g_config.Pointer()->network_time_tracker();
-  ssl_errors::ClockState clock_state = ssl_errors::GetClockState(now, tracker);
+  ssl_errors::ClockState clock_state =
+      ssl_errors::GetClockState(now, network_time_tracker_);
   if (clock_state == ssl_errors::CLOCK_STATE_FUTURE ||
       clock_state == ssl_errors::CLOCK_STATE_PAST) {
     ShowBadClockInterstitial(now, clock_state);
