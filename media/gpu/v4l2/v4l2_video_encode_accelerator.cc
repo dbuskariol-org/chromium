@@ -1299,20 +1299,15 @@ bool V4L2VideoEncodeAccelerator::SetOutputFormat(
   DCHECK(!visible_size_.IsEmpty());
   output_buffer_byte_size_ = GetEncodeBitstreamBufferSize(visible_size_);
 
-  struct v4l2_format format{};
-  format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-  format.fmt.pix_mp.width = visible_size_.width();
-  format.fmt.pix_mp.height = visible_size_.height();
-  format.fmt.pix_mp.pixelformat = output_format_fourcc_;
-  format.fmt.pix_mp.plane_fmt[0].sizeimage =
-      base::checked_cast<__u32>(output_buffer_byte_size_);
-  format.fmt.pix_mp.num_planes = 1;
-  IOCTL_OR_ERROR_RETURN_FALSE(VIDIOC_S_FMT, &format);
-  DCHECK_EQ(format.fmt.pix_mp.pixelformat, output_format_fourcc_);
+  base::Optional<struct v4l2_format> format = output_queue_->SetFormat(
+      output_format_fourcc_, visible_size_, output_buffer_byte_size_);
+  if (!format) {
+    return false;
+  }
 
   // Device might have adjusted the required output size.
   size_t adjusted_output_buffer_size =
-      base::checked_cast<size_t>(format.fmt.pix_mp.plane_fmt[0].sizeimage);
+      base::checked_cast<size_t>(format->fmt.pix_mp.plane_fmt[0].sizeimage);
   output_buffer_byte_size_ = adjusted_output_buffer_size;
 
   return true;
@@ -1343,45 +1338,38 @@ bool V4L2VideoEncodeAccelerator::NegotiateInputFormat(
   }
 
   for (const auto pix_fmt : pix_fmt_candidates) {
-    size_t planes_count = V4L2Device::GetNumPlanesOfV4L2PixFmt(pix_fmt);
-    DCHECK_GT(planes_count, 0u);
-    DCHECK_LE(planes_count, static_cast<size_t>(VIDEO_MAX_PLANES));
     DVLOGF(3) << "Trying S_FMT with " << FourccToString(pix_fmt);
 
-    struct v4l2_format format{};
-    format.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-    format.fmt.pix_mp.width = size.width();
-    format.fmt.pix_mp.height = size.height();
-    format.fmt.pix_mp.pixelformat = pix_fmt;
-    format.fmt.pix_mp.num_planes = planes_count;
-    if (device_->Ioctl(VIDIOC_S_FMT, &format) == 0 &&
-        format.fmt.pix_mp.pixelformat == pix_fmt) {
-      DVLOGF(3) << "Success: S_FMT with " << FourccToString(pix_fmt);
-      device_input_layout_ = V4L2Device::V4L2FormatToVideoFrameLayout(format);
-      if (!device_input_layout_) {
-        VLOGF(1) << "Invalid device_input_layout_";
-        return false;
-      }
-      DVLOG(3) << "Negotiated device_input_layout_: " << *device_input_layout_;
-      if (!gfx::Rect(device_input_layout_->coded_size())
-               .Contains(gfx::Rect(size))) {
-        VLOGF(1) << "Input size " << size.ToString()
-                 << " exceeds encoder capability. Size encoder can handle: "
-                 << device_input_layout_->coded_size().ToString();
-        return false;
-      }
-      if (native_input_mode_) {
-        input_allocated_size_ =
-            gfx::Size(device_input_layout_->planes()[0].stride,
-                      device_input_layout_->coded_size().height());
-      } else {
-        // TODO(crbug.com/914700): Remove this once
-        // Client::RequireBitstreamBuffers uses input's VideoFrameLayout to
-        // allocate input buffer.
-        input_allocated_size_ = V4L2Device::AllocatedSizeFromV4L2Format(format);
-      }
-      return true;
+    base::Optional<struct v4l2_format> format =
+        input_queue_->SetFormat(pix_fmt, size, 0);
+    if (!format)
+      continue;
+
+    DVLOGF(3) << "Success: S_FMT with " << FourccToString(pix_fmt);
+    device_input_layout_ = V4L2Device::V4L2FormatToVideoFrameLayout(*format);
+    if (!device_input_layout_) {
+      VLOGF(1) << "Invalid device_input_layout_";
+      return false;
     }
+    DVLOG(3) << "Negotiated device_input_layout_: " << *device_input_layout_;
+    if (!gfx::Rect(device_input_layout_->coded_size())
+             .Contains(gfx::Rect(size))) {
+      VLOGF(1) << "Input size " << size.ToString()
+               << " exceeds encoder capability. Size encoder can handle: "
+               << device_input_layout_->coded_size().ToString();
+      return false;
+    }
+    if (native_input_mode_) {
+      input_allocated_size_ =
+          gfx::Size(device_input_layout_->planes()[0].stride,
+                    device_input_layout_->coded_size().height());
+    } else {
+      // TODO(crbug.com/914700): Remove this once
+      // Client::RequireBitstreamBuffers uses input's VideoFrameLayout to
+      // allocate input buffer.
+      input_allocated_size_ = V4L2Device::AllocatedSizeFromV4L2Format(*format);
+    }
+    return true;
   }
   return false;
 }
