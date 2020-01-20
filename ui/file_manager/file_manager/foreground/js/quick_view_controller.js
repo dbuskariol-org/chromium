@@ -293,7 +293,7 @@ class QuickViewController {
    * @private
    */
   getAvailableTasks_(entry) {
-    return this.taskController_.getFileTasks().then(tasks => {
+    return this.taskController_.getEntryFileTasks(entry).then(tasks => {
       return tasks.getTaskItems();
     });
   }
