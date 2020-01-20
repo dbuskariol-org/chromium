@@ -181,13 +181,12 @@ def native_value_tag(idl_type):
             return "IDL{}".format(idl_type.identifier)
 
     real_type = idl_type.unwrap(typedef=True)
-    non_null_real_type = real_type.unwrap(nullable=True)
 
     if (real_type.is_boolean or real_type.is_numeric or real_type.is_any
             or real_type.is_object):
         return "IDL{}".format(real_type.type_name)
 
-    if non_null_real_type.is_string:
+    if real_type.is_string:
         return "IDL{}V2".format(real_type.type_name)
 
     if real_type.is_buffer_source_type:
@@ -199,8 +198,8 @@ def native_value_tag(idl_type):
     if real_type.is_void:
         assert False, "Blink does not support/accept IDL void type."
 
-    if non_null_real_type.type_definition_object:
-        return blink_class_name(non_null_real_type.type_definition_object)
+    if real_type.type_definition_object:
+        return blink_class_name(real_type.type_definition_object)
 
     if real_type.is_sequence:
         return "IDLSequence<{}>".format(
