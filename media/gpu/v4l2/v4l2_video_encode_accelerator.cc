@@ -1048,11 +1048,9 @@ bool V4L2VideoEncodeAccelerator::EnqueueInputRecord(
   // Enqueue an input (VIDEO_OUTPUT) buffer.
   InputFrameInfo frame_info = encoder_input_queue_.front();
   if (frame_info.force_keyframe) {
-    std::vector<struct v4l2_ext_control> ctrls;
-    struct v4l2_ext_control ctrl{};
-    ctrl.id = V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME;
-    ctrls.push_back(ctrl);
-    if (!SetExtCtrls(ctrls)) {
+    if (!device_->SetExtCtrls(
+            V4L2_CTRL_CLASS_MPEG,
+            {V4L2ExtCtrl(V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME)})) {
       VLOGF(1) << "Failed requesting keyframe";
       NOTIFY_ERROR(kPlatformFailureError);
       return false;
@@ -1275,12 +1273,9 @@ void V4L2VideoEncodeAccelerator::RequestEncodingParametersChangeTask(
   DCHECK_GT(bitrate, 0u);
   DCHECK_GT(framerate, 0u);
 
-  std::vector<struct v4l2_ext_control> ctrls;
-  struct v4l2_ext_control ctrl{};
-  ctrl.id = V4L2_CID_MPEG_VIDEO_BITRATE;
-  ctrl.value = bitrate;
-  ctrls.push_back(ctrl);
-  if (!SetExtCtrls(ctrls)) {
+  if (!device_->SetExtCtrls(
+          V4L2_CTRL_CLASS_MPEG,
+          {V4L2ExtCtrl(V4L2_CID_MPEG_VIDEO_BITRATE, bitrate)})) {
     VLOGF(1) << "Failed changing bitrate";
     NOTIFY_ERROR(kPlatformFailureError);
     return;
@@ -1437,34 +1432,18 @@ bool V4L2VideoEncodeAccelerator::SetFormats(VideoPixelFormat input_format,
   return true;
 }
 
-bool V4L2VideoEncodeAccelerator::SetExtCtrls(
-    std::vector<struct v4l2_ext_control> ctrls) {
-  DCHECK_CALLED_ON_VALID_SEQUENCE(encoder_sequence_checker_);
-
-  struct v4l2_ext_controls ext_ctrls{};
-  ext_ctrls.ctrl_class = V4L2_CTRL_CLASS_MPEG;
-  ext_ctrls.count = ctrls.size();
-  ext_ctrls.controls = &ctrls[0];
-  return device_->Ioctl(VIDIOC_S_EXT_CTRLS, &ext_ctrls) == 0;
-}
-
 bool V4L2VideoEncodeAccelerator::InitControls(const Config& config) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(encoder_sequence_checker_);
 
-  std::vector<struct v4l2_ext_control> ctrls;
-  struct v4l2_ext_control ctrl{};
-
   // Enable frame-level bitrate control. This is the only mandatory control.
-  ctrl.id = V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE;
-  ctrl.value = 1;
-  ctrls.push_back(ctrl);
-  if (!SetExtCtrls(ctrls)) {
+  if (!device_->SetExtCtrls(
+          V4L2_CTRL_CLASS_MPEG,
+          {V4L2ExtCtrl(V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE, 1)})) {
     VLOGF(1) << "Failed enabling bitrate control";
     NOTIFY_ERROR(kPlatformFailureError);
     return false;
   }
 
-  ctrls.clear();
   if (output_format_fourcc_ == V4L2_PIX_FMT_H264) {
 #ifndef V4L2_CID_MPEG_VIDEO_H264_SPS_PPS_BEFORE_IDR
 #define V4L2_CID_MPEG_VIDEO_H264_SPS_PPS_BEFORE_IDR (V4L2_CID_MPEG_BASE + 388)
@@ -1472,15 +1451,12 @@ bool V4L2VideoEncodeAccelerator::InitControls(const Config& config) {
     // Request to inject SPS and PPS before each IDR, if the device supports
     // that feature. Otherwise we'll have to cache and inject ourselves.
     if (device_->IsCtrlExposed(V4L2_CID_MPEG_VIDEO_H264_SPS_PPS_BEFORE_IDR)) {
-      memset(&ctrl, 0, sizeof(ctrl));
-      ctrl.id = V4L2_CID_MPEG_VIDEO_H264_SPS_PPS_BEFORE_IDR;
-      ctrl.value = 1;
-      ctrls.push_back(ctrl);
-      if (!SetExtCtrls(ctrls)) {
+      if (!device_->SetExtCtrls(
+              V4L2_CTRL_CLASS_MPEG,
+              {V4L2ExtCtrl(V4L2_CID_MPEG_VIDEO_H264_SPS_PPS_BEFORE_IDR, 1)})) {
         NOTIFY_ERROR(kPlatformFailureError);
         return false;
       }
-      ctrls.clear();
       inject_sps_and_pps_ = false;
       DVLOGF(2) << "Device supports injecting SPS+PPS before each IDR";
     } else {
@@ -1488,18 +1464,13 @@ bool V4L2VideoEncodeAccelerator::InitControls(const Config& config) {
       DVLOGF(2) << "Will inject SPS+PPS before each IDR, unsupported by device";
     }
 
-    // Optional controls.
-    // No B-frames, for lowest decoding latency.
-    memset(&ctrl, 0, sizeof(ctrl));
-    ctrl.id = V4L2_CID_MPEG_VIDEO_B_FRAMES;
-    ctrl.value = 0;
-    ctrls.push_back(ctrl);
+    // Optional H264 controls.
+    std::vector<V4L2ExtCtrl> h264_ctrls;
 
+    // No B-frames, for lowest decoding latency.
+    h264_ctrls.emplace_back(V4L2_CID_MPEG_VIDEO_B_FRAMES, 0);
     // Quantization parameter maximum value (for variable bitrate control).
-    memset(&ctrl, 0, sizeof(ctrl));
-    ctrl.id = V4L2_CID_MPEG_VIDEO_H264_MAX_QP;
-    ctrl.value = 51;
-    ctrls.push_back(ctrl);
+    h264_ctrls.emplace_back(V4L2_CID_MPEG_VIDEO_H264_MAX_QP, 51);
 
     // Set H.264 profile.
     int32_t profile_value =
@@ -1508,10 +1479,7 @@ bool V4L2VideoEncodeAccelerator::InitControls(const Config& config) {
       NOTIFY_ERROR(kInvalidArgumentError);
       return false;
     }
-    memset(&ctrl, 0, sizeof(ctrl));
-    ctrl.id = V4L2_CID_MPEG_VIDEO_H264_PROFILE;
-    ctrl.value = profile_value;
-    ctrls.push_back(ctrl);
+    h264_ctrls.emplace_back(V4L2_CID_MPEG_VIDEO_H264_PROFILE, profile_value);
 
     // Set H.264 output level from config. Use Level 4.0 as fallback default.
     uint8_t h264_level =
@@ -1550,51 +1518,33 @@ bool V4L2VideoEncodeAccelerator::InitControls(const Config& config) {
     }
 
     int32_t level_value = V4L2Device::H264LevelIdcToV4L2H264Level(h264_level);
-    memset(&ctrl, 0, sizeof(ctrl));
-    ctrl.id = V4L2_CID_MPEG_VIDEO_H264_LEVEL;
-    ctrl.value = level_value;
-    ctrls.push_back(ctrl);
+    h264_ctrls.emplace_back(V4L2_CID_MPEG_VIDEO_H264_LEVEL, level_value);
 
     // Ask not to put SPS and PPS into separate bitstream buffers.
-    memset(&ctrl, 0, sizeof(ctrl));
-    ctrl.id = V4L2_CID_MPEG_VIDEO_HEADER_MODE;
-    ctrl.value = V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME;
-    ctrls.push_back(ctrl);
+    h264_ctrls.emplace_back(V4L2_CID_MPEG_VIDEO_HEADER_MODE,
+                            V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME);
+
+    // Ignore return value as these controls are optional.
+    device_->SetExtCtrls(V4L2_CTRL_CLASS_MPEG, std::move(h264_ctrls));
   }
 
-  // Enable macroblock-level bitrate control.
-  memset(&ctrl, 0, sizeof(ctrl));
-  ctrl.id = V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE;
-  ctrl.value = 1;
-  ctrls.push_back(ctrl);
-
-  // Set GOP length, or default 0 to disable periodic key frames.
-  memset(&ctrl, 0, sizeof(ctrl));
-  ctrl.id = V4L2_CID_MPEG_VIDEO_GOP_SIZE;
-  ctrl.value = config.gop_length.value_or(0);
-  ctrls.push_back(ctrl);
-
-  // Ignore return value as these controls are optional.
-  SetExtCtrls(ctrls);
+  // Optional controls:
+  // - Enable macroblock-level bitrate control.
+  // - Set GOP length, or default 0 to disable periodic key frames.
+  device_->SetExtCtrls(V4L2_CTRL_CLASS_MPEG,
+                       {V4L2ExtCtrl(V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE, 1),
+                        V4L2ExtCtrl(V4L2_CID_MPEG_VIDEO_GOP_SIZE,
+                                    config.gop_length.value_or(0))});
 
   // Optional Exynos specific controls.
-  ctrls.clear();
-  // Enable "tight" bitrate mode. For this to work properly, frame- and mb-level
-  // bitrate controls have to be enabled as well.
-  memset(&ctrl, 0, sizeof(ctrl));
-  ctrl.id = V4L2_CID_MPEG_MFC51_VIDEO_RC_REACTION_COEFF;
-  ctrl.value = 1;
-  ctrls.push_back(ctrl);
-
-  // Force bitrate control to average over a GOP (for tight bitrate
-  // tolerance).
-  memset(&ctrl, 0, sizeof(ctrl));
-  ctrl.id = V4L2_CID_MPEG_MFC51_VIDEO_RC_FIXED_TARGET_BIT;
-  ctrl.value = 1;
-  ctrls.push_back(ctrl);
-
-  // Ignore return value as these controls are optional.
-  SetExtCtrls(ctrls);
+  // - Enable "tight" bitrate mode. For this to work properly, frame- and
+  //   mb-level bitrate controls have to be enabled as well.
+  // - Force bitrate control to average over a GOP (for tight bitrate
+  //   tolerance).
+  device_->SetExtCtrls(
+      V4L2_CTRL_CLASS_MPEG,
+      {V4L2ExtCtrl(V4L2_CID_MPEG_MFC51_VIDEO_RC_REACTION_COEFF, 1),
+       V4L2ExtCtrl(V4L2_CID_MPEG_MFC51_VIDEO_RC_FIXED_TARGET_BIT, 1)});
 
   return true;
 }
