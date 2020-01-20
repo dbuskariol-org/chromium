@@ -706,8 +706,8 @@
   },
   {
     "name": "direct-actions",
-    "owners": [ "szermatt", "tedchoc", "twellington" ],
-    "expiry_milestone": 81
+    "owners": [ "//components/autofill_assistant/OWNERS" ],
+    "expiry_milestone": 90
   },
   {
     "name": "direct-manipulation-stylus",
