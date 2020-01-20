@@ -15835,6 +15835,18 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   </int>
 </enum>
 
+<enum name="DownloadFileUI">
+  <int value="0" label="Download UI is presented"/>
+  <int value="1" label="Download file started"/>
+</enum>
+
+<enum name="DownloadFileUIGoogleDrive">
+  <int value="0" label="Google drive is already installed"/>
+  <int value="1" label="Google drive is not installed"/>
+  <int value="2" label="Google drive installation started"/>
+  <int value="3" label="Google drive was installed after showing installator"/>
+</enum>
+
 <enum name="DownloadFrameGesture">
   <obsolete>
     Deprecated 11/2018.
