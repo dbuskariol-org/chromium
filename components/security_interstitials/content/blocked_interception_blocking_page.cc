@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ssl/blocked_interception_blocking_page.h"
+#include "components/security_interstitials/content/blocked_interception_blocking_page.h"
 
 #include "components/security_interstitials/content/cert_report_helper.h"
 #include "components/security_interstitials/content/security_interstitial_controller_client.h"
@@ -28,9 +28,7 @@ const InterstitialPageDelegate::TypeID
     BlockedInterceptionBlockingPage::kTypeForTesting =
         &BlockedInterceptionBlockingPage::kTypeForTesting;
 
-namespace {
-
-}  // namespace
+namespace {}  // namespace
 
 // Note that we always create a navigation entry with SSL errors.
 // No error happening loading a sub-resource triggers an interstitial so far.

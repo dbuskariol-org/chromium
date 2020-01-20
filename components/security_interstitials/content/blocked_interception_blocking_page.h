@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_SSL_BLOCKED_INTERCEPTION_BLOCKING_PAGE_H_
-#define CHROME_BROWSER_SSL_BLOCKED_INTERCEPTION_BLOCKING_PAGE_H_
+#ifndef COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_BLOCKED_INTERCEPTION_BLOCKING_PAGE_H_
+#define COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_BLOCKED_INTERCEPTION_BLOCKING_PAGE_H_
 
 #include "base/macros.h"
 #include "components/security_interstitials/content/ssl_blocking_page_base.h"
@@ -49,4 +49,4 @@ class BlockedInterceptionBlockingPage : public SSLBlockingPageBase {
   DISALLOW_COPY_AND_ASSIGN(BlockedInterceptionBlockingPage);
 };
 
-#endif  // CHROME_BROWSER_SSL_BLOCKED_INTERCEPTION_BLOCKING_PAGE_H_
+#endif  // COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_BLOCKED_INTERCEPTION_BLOCKING_PAGE_H_
