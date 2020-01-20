@@ -946,12 +946,15 @@ TEST_F('CrSettingsPrivacyPageTest', 'PrivacyPageTests', function() {
   mocha.run();
 });
 
-TEST_F('CrSettingsPrivacyPageTest', 'PrivacyPageSoundTests', function() {
-  settings_privacy_page.registerPrivacyPageSoundTests();
-  mocha.run();
-});
+// TODO(crbug.com/1043665): flaky crash on Linux Tests (dbg).
+TEST_F(
+    'CrSettingsPrivacyPageTest', 'DISABLED_PrivacyPageSoundTests', function() {
+      settings_privacy_page.registerPrivacyPageSoundTests();
+      mocha.run();
+    });
 
-TEST_F('CrSettingsPrivacyPageTest', 'UMALoggingTests', function() {
+// TODO(crbug.com/1043665): flaky crash on Linux Tests (dbg).
+TEST_F('CrSettingsPrivacyPageTest', 'DISABLED_UMALoggingTests', function() {
   settings_privacy_page.registerUMALoggingTests();
   mocha.run();
 });
