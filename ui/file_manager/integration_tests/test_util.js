@@ -312,10 +312,24 @@ const SharedOption = {
 };
 Object.freeze(SharedOption);
 
-/**
- * @enum {string}
- */
 
+/**
+ * @typedef {{
+ *   downloads: string,
+ *   drive: string,
+ *   android_files: string,
+ * }}
+ *
+ */
+let getRootPathsResult;
+
+/**
+ * @typedef {{
+ *   DOWNLOADS: string,
+ *   DRIVE: string,
+ *   ANDROID_FILES: string,
+ * }}
+ */
 const RootPath = {
   DOWNLOADS: '/must-be-filled-in-test-setup',
   DRIVE: '/must-be-filled-in-test-setup',
