@@ -119,9 +119,14 @@ class InstallationTracker : public ExtensionRegistryObserver,
   SessionType GetSessionType();
 #endif  // defined(OS_CHROMEOS)
 
-  // If |succeeded| report time elapsed for extensions load,
+  // If |kInstallationTimeout| report time elapsed for extensions load,
   // otherwise amount of not yet loaded extensions and reasons
   // why they were not installed.
+  void ReportMetrics();
+
+  // Calls ReportMetrics method if there is a non-empty list of
+  // force-installed extensions, and is responsible for cleanup of
+  // installation reporter and the observers.
   void ReportResults();
 
   // Unowned, but guaranteed to outlive this object.

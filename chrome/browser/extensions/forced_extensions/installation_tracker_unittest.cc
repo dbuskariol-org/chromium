@@ -74,6 +74,8 @@ constexpr char kSandboxUnpackFailureReason[] =
 constexpr char kFailureSessionStats[] =
     "Extensions.ForceInstalledFailureSessionType";
 #endif  // defined(OS_CHROMEOS)
+constexpr char kPossibleNonMisconfigurationFailures[] =
+    "Extensions.ForceInstalledSessionsWithNonMisconfigurationFailureOccured";
 }  // namespace
 
 namespace extensions {
@@ -390,6 +392,46 @@ TEST_F(ForcedExtensionsInstallationTrackerTest, ExtensionManifestFetchFailed) {
                                       -net::Error::ERR_INVALID_ARGUMENT, 1);
   histogram_tester_.ExpectBucketCount(kFetchRetriesManifestFetchFailedStats,
                                       kFetchTries, 2);
+}
+
+// Session in which either all the extensions installed successfully, or all
+// failures are admin-side misconfigurations. Misconfiguration failure includes
+// error KIOSK_MODE_ONLY, when force installed extension fails to install with
+// failure reason CRX_INSTALL_ERROR.
+TEST_F(ForcedExtensionsInstallationTrackerTest,
+       NonMisconfigurationFailureNotPresent) {
+  SetupForceList();
+  auto extension =
+      ExtensionBuilder(kExtensionName1).SetID(kExtensionId1).Build();
+  tracker_->OnExtensionLoaded(&profile_, extension.get());
+  installation_reporter_->ReportCrxInstallError(
+      kExtensionId2,
+      InstallationReporter::FailureReason::CRX_INSTALL_ERROR_DECLINED,
+      CrxInstallErrorDetail::KIOSK_MODE_ONLY);
+  // InstallationTracker shuts down timer because all extension are either
+  // loaded or failed.
+  EXPECT_FALSE(fake_timer_->IsRunning());
+  histogram_tester_.ExpectBucketCount(kPossibleNonMisconfigurationFailures, 0,
+                                      1);
+}
+
+// Session in which at least one non misconfiguration failure occurred.
+// Misconfiguration failure includes error KIOSK_MODE_ONLY, when force installed
+// extension fails to install with failure reason CRX_INSTALL_ERROR.
+TEST_F(ForcedExtensionsInstallationTrackerTest,
+       NonMisconfigurationFailurePresent) {
+  SetupForceList();
+  installation_reporter_->ReportFailure(
+      kExtensionId1, InstallationReporter::FailureReason::INVALID_ID);
+  installation_reporter_->ReportCrxInstallError(
+      kExtensionId2,
+      InstallationReporter::FailureReason::CRX_INSTALL_ERROR_DECLINED,
+      CrxInstallErrorDetail::KIOSK_MODE_ONLY);
+  // InstallationTracker shuts down timer because all extension are either
+  // loaded or failed.
+  EXPECT_FALSE(fake_timer_->IsRunning());
+  histogram_tester_.ExpectBucketCount(kPossibleNonMisconfigurationFailures, 1,
+                                      1);
 }
 
 TEST_F(ForcedExtensionsInstallationTrackerTest, NoExtensionsConfigured) {

@@ -212,110 +212,106 @@ InstallationTracker::SessionType InstallationTracker::GetSessionType() {
 }
 #endif  // defined(OS_CHROMEOS)
 
-void InstallationTracker::ReportResults() {
-  DCHECK(!reported_);
-  // Report only if there was non-empty list of force-installed extensions.
-  if (!extensions_.empty()) {
-    UMA_HISTOGRAM_COUNTS_100("Extensions.ForceInstalledTotalCandidateCount",
-                             extensions_.size());
-    std::set<ExtensionId> missing_forced_extensions;
-    for (const auto& extension : extensions_) {
-      if (extension.second.status != ExtensionStatus::LOADED)
-        missing_forced_extensions.insert(extension.first);
+void InstallationTracker::ReportMetrics() {
+  UMA_HISTOGRAM_COUNTS_100("Extensions.ForceInstalledTotalCandidateCount",
+                           extensions_.size());
+  std::set<ExtensionId> missing_forced_extensions;
+  for (const auto& extension : extensions_) {
+    if (extension.second.status != ExtensionStatus::LOADED)
+      missing_forced_extensions.insert(extension.first);
+  }
+  if (missing_forced_extensions.empty()) {
+    UMA_HISTOGRAM_LONG_TIMES("Extensions.ForceInstalledLoadTime",
+                             base::Time::Now() - start_time_);
+    // TODO(burunduk): Remove VLOGs after resolving crbug/917700 and
+    // crbug/904600.
+    VLOG(2) << "All forced extensions seems to be installed";
+    return;
+  }
+  InstallationReporter* installation_reporter =
+      InstallationReporter::Get(profile_);
+  size_t enabled_missing_count = missing_forced_extensions.size();
+  auto installed_extensions = registry_->GenerateInstalledExtensionsSet();
+  for (const auto& entry : *installed_extensions)
+    missing_forced_extensions.erase(entry->id());
+  size_t misconfigured_extensions = 0;
+  size_t installed_missing_count = missing_forced_extensions.size();
+
+  UMA_HISTOGRAM_COUNTS_100("Extensions.ForceInstalledTimedOutCount",
+                           enabled_missing_count);
+  UMA_HISTOGRAM_COUNTS_100(
+      "Extensions.ForceInstalledTimedOutAndNotInstalledCount",
+      installed_missing_count);
+  VLOG(2) << "Failed to install " << installed_missing_count
+          << " forced extensions.";
+  for (const auto& extension_id : missing_forced_extensions) {
+    InstallationReporter::InstallationData installation =
+        installation_reporter->Get(extension_id);
+    UMA_HISTOGRAM_ENUMERATION(
+        "Extensions.ForceInstalledFailureCacheStatus",
+        installation.downloading_cache_status.value_or(
+            ExtensionDownloaderDelegate::CacheStatus::CACHE_UNKNOWN));
+    if (!installation.failure_reason && installation.install_stage) {
+      installation.failure_reason =
+          InstallationReporter::FailureReason::IN_PROGRESS;
+      InstallationReporter::Stage install_stage =
+          installation.install_stage.value();
+      UMA_HISTOGRAM_ENUMERATION("Extensions.ForceInstalledStage",
+                                install_stage);
+      if (install_stage == InstallationReporter::Stage::DOWNLOADING) {
+        DCHECK(installation.downloading_stage);
+        ExtensionDownloaderDelegate::Stage downloading_stage =
+            installation.downloading_stage.value();
+        UMA_HISTOGRAM_ENUMERATION("Extensions.ForceInstalledDownloadingStage",
+                                  downloading_stage);
+      }
     }
-    if (missing_forced_extensions.empty()) {
-      UMA_HISTOGRAM_LONG_TIMES("Extensions.ForceInstalledLoadTime",
-                               base::Time::Now() - start_time_);
-      // TODO(burunduk): Remove VLOGs after resolving crbug/917700 and
-      // crbug/904600.
-      VLOG(2) << "All forced extensions seems to be installed";
+    InstallationReporter::FailureReason failure_reason =
+        installation.failure_reason.value_or(
+            InstallationReporter::FailureReason::UNKNOWN);
+    UMA_HISTOGRAM_ENUMERATION("Extensions.ForceInstalledFailureReason2",
+                              failure_reason);
+    if (extensions_[extension_id].is_from_store) {
+      UMA_HISTOGRAM_ENUMERATION(
+          "Extensions.WebStore_ForceInstalledFailureReason2", failure_reason);
     } else {
-      InstallationReporter* installation_reporter =
-          InstallationReporter::Get(profile_);
-      size_t enabled_missing_count = missing_forced_extensions.size();
-      auto installed_extensions = registry_->GenerateInstalledExtensionsSet();
-      for (const auto& entry : *installed_extensions)
-        missing_forced_extensions.erase(entry->id());
-      size_t installed_missing_count = missing_forced_extensions.size();
+      UMA_HISTOGRAM_ENUMERATION(
+          "Extensions.OffStore_ForceInstalledFailureReason2", failure_reason);
+    }
 
-      UMA_HISTOGRAM_COUNTS_100("Extensions.ForceInstalledTimedOutCount",
-                               enabled_missing_count);
-      UMA_HISTOGRAM_COUNTS_100(
-          "Extensions.ForceInstalledTimedOutAndNotInstalledCount",
-          installed_missing_count);
-      VLOG(2) << "Failed to install " << installed_missing_count
-              << " forced extensions.";
-      for (const auto& extension_id : missing_forced_extensions) {
-        InstallationReporter::InstallationData installation =
-            installation_reporter->Get(extension_id);
-        UMA_HISTOGRAM_ENUMERATION(
-            "Extensions.ForceInstalledFailureCacheStatus",
-            installation.downloading_cache_status.value_or(
-                ExtensionDownloaderDelegate::CacheStatus::CACHE_UNKNOWN));
-        if (!installation.failure_reason && installation.install_stage) {
-          installation.failure_reason =
-              InstallationReporter::FailureReason::IN_PROGRESS;
-          InstallationReporter::Stage install_stage =
-              installation.install_stage.value();
-          UMA_HISTOGRAM_ENUMERATION("Extensions.ForceInstalledStage",
-                                    install_stage);
-          if (install_stage == InstallationReporter::Stage::DOWNLOADING) {
-            DCHECK(installation.downloading_stage);
-            ExtensionDownloaderDelegate::Stage downloading_stage =
-                installation.downloading_stage.value();
-            UMA_HISTOGRAM_ENUMERATION(
-                "Extensions.ForceInstalledDownloadingStage", downloading_stage);
-          }
-        }
-        InstallationReporter::FailureReason failure_reason =
-            installation.failure_reason.value_or(
-                InstallationReporter::FailureReason::UNKNOWN);
-        UMA_HISTOGRAM_ENUMERATION("Extensions.ForceInstalledFailureReason2",
-                                  failure_reason);
-        if (extensions_[extension_id].is_from_store) {
-          UMA_HISTOGRAM_ENUMERATION(
-              "Extensions.WebStore_ForceInstalledFailureReason2",
-              failure_reason);
-        } else {
-          UMA_HISTOGRAM_ENUMERATION(
-              "Extensions.OffStore_ForceInstalledFailureReason2",
-              failure_reason);
-        }
+    // In case of CRX_FETCH_FAILURE, report the network error code, HTTP
+    // error code and number of fetch tries made.
+    if (failure_reason ==
+        InstallationReporter::FailureReason::CRX_FETCH_FAILED) {
+      base::UmaHistogramSparse("Extensions.ForceInstalledNetworkErrorCode",
+                               installation.network_error_code.value());
 
-        // In case of CRX_FETCH_FAILURE, report the network error code, HTTP
-        // error code and number of fetch tries made.
-        if (failure_reason ==
-            InstallationReporter::FailureReason::CRX_FETCH_FAILED) {
-          base::UmaHistogramSparse("Extensions.ForceInstalledNetworkErrorCode",
-                                   installation.network_error_code.value());
+      if (installation.response_code) {
+        base::UmaHistogramSparse("Extensions.ForceInstalledHttpErrorCode",
+                                 installation.response_code.value());
+      }
+      UMA_HISTOGRAM_EXACT_LINEAR("Extensions.ForceInstalledFetchTries",
+                                 installation.fetch_tries.value(),
+                                 ExtensionDownloader::kMaxRetries);
+    }
 
-          if (installation.response_code) {
-            base::UmaHistogramSparse("Extensions.ForceInstalledHttpErrorCode",
-                                     installation.response_code.value());
-          }
-          UMA_HISTOGRAM_EXACT_LINEAR("Extensions.ForceInstalledFetchTries",
-                                     installation.fetch_tries.value(),
-                                     ExtensionDownloader::kMaxRetries);
-        }
+    // In case of MANIFEST_FETCH_FAILURE, report the network error code,
+    // HTTP error code and number of fetch tries made.
+    if (failure_reason ==
+        InstallationReporter::FailureReason::MANIFEST_FETCH_FAILED) {
+      base::UmaHistogramSparse(
+          "Extensions.ForceInstalledManifestFetchFailedNetworkErrorCode",
+          installation.network_error_code.value());
 
-        // In case of MANIFEST_FETCH_FAILURE, report the network error code,
-        // HTTP error code and number of fetch tries made.
-        if (failure_reason ==
-            InstallationReporter::FailureReason::MANIFEST_FETCH_FAILED) {
-          base::UmaHistogramSparse(
-              "Extensions.ForceInstalledManifestFetchFailedNetworkErrorCode",
-              installation.network_error_code.value());
-
-          if (installation.response_code) {
-            base::UmaHistogramSparse(
-                "Extensions.ForceInstalledManifestFetchFailedHttpErrorCode",
-                installation.response_code.value());
-          }
-          UMA_HISTOGRAM_EXACT_LINEAR(
-              "Extensions.ForceInstalledManifestFetchFailedFetchTries",
-              installation.fetch_tries.value(),
-              ExtensionDownloader::kMaxRetries);
-        }
+      if (installation.response_code) {
+        base::UmaHistogramSparse(
+            "Extensions.ForceInstalledManifestFetchFailedHttpErrorCode",
+            installation.response_code.value());
+      }
+      UMA_HISTOGRAM_EXACT_LINEAR(
+          "Extensions.ForceInstalledManifestFetchFailedFetchTries",
+          installation.fetch_tries.value(), ExtensionDownloader::kMaxRetries);
+    }
 #if defined(OS_CHROMEOS)
         // Report type of session in case Force Installed Extensions fail to
         // install only if there is an active user. There can be extensions on
@@ -333,6 +329,9 @@ void InstallationTracker::ReportResults() {
         if (installation.install_error_detail) {
           CrxInstallErrorDetail detail =
               installation.install_error_detail.value();
+          // KIOSK_MODE_ONLY is a type of misconfiguration failure.
+          if (detail == CrxInstallErrorDetail::KIOSK_MODE_ONLY)
+            misconfigured_extensions++;
           UMA_HISTOGRAM_ENUMERATION(
               "Extensions.ForceInstalledFailureCrxInstallError", detail);
         }
@@ -342,9 +341,19 @@ void InstallationTracker::ReportResults() {
               installation.unpacker_failure_reason.value(),
               SandboxedUnpackerFailureReason::NUM_FAILURE_REASONS);
         }
-      }
-    }
   }
+  bool non_misconfigured_failure_occurred =
+      misconfigured_extensions != missing_forced_extensions.size();
+  UMA_HISTOGRAM_BOOLEAN(
+      "Extensions."
+      "ForceInstalledSessionsWithNonMisconfigurationFailureOccured",
+      non_misconfigured_failure_occurred);
+}
+void InstallationTracker::ReportResults() {
+  DCHECK(!reported_);
+  // Report only if there was non-empty list of force-installed extensions.
+  if (!extensions_.empty())
+    ReportMetrics();
   reported_ = true;
   InstallationReporter::Get(profile_)->Clear();
   registry_observer_.RemoveAll();
