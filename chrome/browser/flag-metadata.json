@@ -3561,11 +3561,6 @@
     "expiry_milestone": -1
   },
   {
-    "name": "unified-consent",
-    "owners": [ "msarda", "tangltom" ],
-    "expiry_milestone": 79
-  },
-  {
     "name": "unsafely-treat-insecure-origin-as-secure",
     "owners": [ "security-dev" ],
     "expiry_milestone": 82
