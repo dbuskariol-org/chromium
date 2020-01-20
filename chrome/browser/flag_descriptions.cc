@@ -465,21 +465,6 @@ const char kDisableBestEffortTasksDescription[] =
     "user data to disk, cleaning caches, reporting metrics or updating "
     "components won't be performed until shutdown.";
 
-const char kDisableIpcFloodingProtectionName[] =
-    "Disable IPC flooding protection";
-const char kDisableIpcFloodingProtectionDescription[] =
-    "Some javascript code can flood the inter process communication system. "
-    "This protection limits the rate (calls/seconds) at which theses function "
-    "can be used. This flag disables the protection. This flag is deprecated "
-    "and will be removed in Chrome 76. Use the switch "
-    "--disable-ipc-flooding-protection instead.";
-
-const char kDisablePushStateThrottleName[] = "Disable pushState throttling";
-const char kDisablePushStateThrottleDescription[] =
-    "Disables throttling of history.pushState and history.replaceState method "
-    "calls. This flag is deprecated and will be removed in Chrome 76. Use the "
-    "switch --disable-ipc-flooding-protection instead.";
-
 const char kDisallowDocWrittenScriptsUiName[] =
     "Block scripts loaded via document.write";
 const char kDisallowDocWrittenScriptsUiDescription[] =
