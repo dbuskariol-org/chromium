@@ -123,7 +123,6 @@
 #import "ios/chrome/browser/ui/main/scene_controller_guts.h"
 #import "ios/chrome/browser/ui/promos/signin_promo_view_controller.h"
 #import "ios/chrome/browser/ui/settings/settings_navigation_controller.h"
-#import "ios/chrome/browser/ui/signin_interaction/signin_interaction_coordinator.h"
 #include "ios/chrome/browser/ui/tab_grid/tab_grid_coordinator.h"
 #import "ios/chrome/browser/ui/tab_grid/tab_switcher.h"
 #import "ios/chrome/browser/ui/tab_grid/view_controller_swapping.h"
@@ -431,7 +430,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 @synthesize appURLLoadingService;
 @synthesize isProcessingTabSwitcherCommand;
 @synthesize isProcessingVoiceSearchCommand;
-@synthesize signinInteractionCoordinator;
 @synthesize dismissingTabSwitcher = _dismissingTabSwitcher;
 @synthesize restoreHelper = _restoreHelper;
 
@@ -756,11 +754,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   return [[PreviousSessionInfo sharedInstance] isFirstSessionAfterUpgrade];
 }
 
-- (BOOL)isSettingsViewPresented {
-  return [self.sceneController hasSettingsNavigationController] ||
-         self.signinInteractionCoordinator.isSettingsViewPresented;
-}
-
 #pragma mark - StartupInformation implementation.
 
 - (FirstUserActionRecorder*)firstUserActionRecorder {
@@ -784,9 +777,8 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 }
 
 - (void)stopChromeMain {
-  // The UI should be stopped before the models they observe are stopped.
-  [self.signinInteractionCoordinator cancel];
-  self.signinInteractionCoordinator = nil;
+  // Teardown UI state that is associated with scenes.
+  [self.sceneController teardownUI];
 
   [_mainCoordinator stop];
   _mainCoordinator = nil;

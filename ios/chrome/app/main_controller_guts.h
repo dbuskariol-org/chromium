@@ -18,7 +18,6 @@
 @class BrowserViewController;
 @class BrowserViewWrangler;
 @class HistoryCoordinator;
-@class SigninInteractionCoordinator;
 @class TabGridCoordinator;
 @protocol BrowserInterfaceProvider;
 @protocol TabSwitcher;
@@ -56,11 +55,6 @@ enum class TabSwitcherDismissalMode { NONE, NORMAL, INCOGNITO };
 // exclusive chrome commands sent at nearly the same time.
 @property(nonatomic, assign) BOOL isProcessingTabSwitcherCommand;
 @property(nonatomic, assign) BOOL isProcessingVoiceSearchCommand;
-// The SigninInteractionCoordinator to present Sign In UI. It is created the
-// first time Sign In UI is needed to be presented and should not be destroyed
-// while the UI is presented.
-@property(nonatomic, strong)
-    SigninInteractionCoordinator* signinInteractionCoordinator;
 
 // If YES, the tab switcher is currently active.
 @property(nonatomic, assign, getter=isTabSwitcherActive)
@@ -68,11 +62,6 @@ enum class TabSwitcherDismissalMode { NONE, NORMAL, INCOGNITO };
 
 // YES while animating the dismissal of tab switcher.
 @property(nonatomic, assign) BOOL dismissingTabSwitcher;
-
-// Returns YES if the settings are presented, either from
-// self.settingsNavigationController or from SigninInteractionCoordinator.
-@property(nonatomic, assign, readonly, getter=isSettingsViewPresented)
-    BOOL settingsViewPresented;
 
 // If not NONE, the current BVC should be switched to this BVC on completion
 // of tab switcher dismissal.

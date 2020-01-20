@@ -60,14 +60,17 @@ class ChromeBrowserState;
 - (void)presentSignedInAccountsViewControllerForBrowserState:
     (ios::ChromeBrowserState*)browserState;
 
-// Returns YES if the settings navigation controller exists.
-- (BOOL)hasSettingsNavigationController;
-
 // Clears incognito data that is specific to iOS and won't be cleared by
 // deleting the browser state.
 - (void)clearIOSSpecificIncognitoData;
 
 - (void)activateBVCAndMakeCurrentBVCPrimary;
+
+#pragma mark - iOS 12 compat
+
+// Method called on SceneController when the scene disconnects. Exposed here for
+// iOS 12 compatibility.
+- (void)teardownUI;
 
 @end
 
