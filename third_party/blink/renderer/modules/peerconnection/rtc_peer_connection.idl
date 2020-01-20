@@ -67,7 +67,7 @@ enum RTCPeerConnectionState {
     Exposed=Window
 ] interface RTCPeerConnection : EventTarget {
     // TODO(guidou): There should only be one constructor argument.
-    [CallWith=ExecutionContext, RaisesException] constructor(optional RTCConfiguration configuration, optional Dictionary mediaConstraints);
+    [CallWith=ExecutionContext, RaisesException] constructor(optional RTCConfiguration configuration = {}, optional Dictionary mediaConstraints = {});
     [CallWith=ScriptState, RaisesException] Promise<RTCSessionDescription> createOffer(optional RTCOfferOptions options = {});
     [CallWith=ScriptState, RaisesException] Promise<RTCSessionDescription> createAnswer(optional RTCAnswerOptions options = {});
     [CallWith=ScriptState, RaisesException] Promise<void> setLocalDescription(optional RTCSessionDescriptionInit description = {});
