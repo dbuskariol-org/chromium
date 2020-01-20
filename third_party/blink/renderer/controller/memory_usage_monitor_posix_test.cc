@@ -2,17 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/controller/memory_usage_monitor_android.h"
+#include "third_party/blink/renderer/controller/memory_usage_monitor_posix.h"
 
 #include <unistd.h>
+#include <utility>
 
 #include "base/files/file_util.h"
+#include "build/build_config.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
-TEST(MemoryUsageMonitorAndroidTest, CalculateProcessFootprint) {
-  MemoryUsageMonitorAndroid monitor;
+TEST(MemoryUsageMonitorPosixTest, CalculateProcessFootprint) {
+  MemoryUsageMonitorPosix monitor;
 
   const char kStatusFile[] =
       "First:    1\n"
@@ -41,8 +43,7 @@ TEST(MemoryUsageMonitorAndroidTest, CalculateProcessFootprint) {
   base::File status_file(status_path,
                          base::File::FLAG_OPEN | base::File::FLAG_READ);
 
-  monitor.ReplaceFileDescriptorsForTesting(std::move(statm_file),
-                                           std::move(status_file));
+  monitor.SetProcFiles(std::move(statm_file), std::move(status_file));
 
   MemoryUsage usage = monitor.GetCurrentMemoryUsage();
   EXPECT_EQ(expected_private_footprint_kb,

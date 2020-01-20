@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/controller/memory_usage_monitor_android.h"
+#include "third_party/blink/renderer/controller/memory_usage_monitor_posix.h"
 
 #include <ctype.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <utility>
 
 #include "third_party/blink/public/platform/platform.h"
 
@@ -25,12 +26,17 @@ bool ReadFileContents(int fd, base::span<char> contents) {
 
 static MemoryUsageMonitor* g_instance_for_testing = nullptr;
 
+MemoryUsageMonitorPosix& GetMemoryUsageMonitor() {
+  DEFINE_STATIC_LOCAL(MemoryUsageMonitorPosix, monitor, ());
+  return monitor;
+}
+
 }  // namespace
 
 // static
 MemoryUsageMonitor& MemoryUsageMonitor::Instance() {
-  DEFINE_STATIC_LOCAL(MemoryUsageMonitorAndroid, monitor, ());
-  return g_instance_for_testing ? *g_instance_for_testing : monitor;
+  return g_instance_for_testing ? *g_instance_for_testing
+                                : GetMemoryUsageMonitor();
 }
 
 // static
@@ -41,7 +47,7 @@ void MemoryUsageMonitor::SetInstanceForTesting(MemoryUsageMonitor* instance) {
 // Since the measurement is done every second in background, optimizations are
 // in place to get just the metrics we need from the proc files. So, this
 // calculation exists here instead of using the cross-process memory-infra code.
-bool MemoryUsageMonitorAndroid::CalculateProcessMemoryFootprint(
+bool MemoryUsageMonitorPosix::CalculateProcessMemoryFootprint(
     int statm_fd,
     int status_fd,
     uint64_t* private_footprint,
@@ -87,9 +93,10 @@ bool MemoryUsageMonitorAndroid::CalculateProcessMemoryFootprint(
   return true;
 }
 
-void MemoryUsageMonitorAndroid::GetProcessMemoryUsage(MemoryUsage& usage) {
+void MemoryUsageMonitorPosix::GetProcessMemoryUsage(MemoryUsage& usage) {
+#if defined(OS_ANDROID)
   ResetFileDescriptors();
-
+#endif
   if (!statm_fd_.is_valid() || !status_fd_.is_valid())
     return;
   uint64_t private_footprint, swap, vm_size, vm_hwm_size;
@@ -103,7 +110,8 @@ void MemoryUsageMonitorAndroid::GetProcessMemoryUsage(MemoryUsage& usage) {
   }
 }
 
-void MemoryUsageMonitorAndroid::ResetFileDescriptors() {
+#if defined(OS_ANDROID)
+void MemoryUsageMonitorPosix::ResetFileDescriptors() {
   if (file_descriptors_reset_)
     return;
   file_descriptors_reset_ = true;
@@ -114,12 +122,26 @@ void MemoryUsageMonitorAndroid::ResetFileDescriptors() {
   if (!status_fd_.is_valid())
     status_fd_.reset(open("/proc/self/status", O_RDONLY));
 }
+#endif
 
-void MemoryUsageMonitorAndroid::ReplaceFileDescriptorsForTesting(
-    base::File statm_file,
-    base::File status_file) {
+void MemoryUsageMonitorPosix::SetProcFiles(base::File statm_file,
+                                           base::File status_file) {
+  DCHECK(statm_file.IsValid());
+  DCHECK(status_file.IsValid());
+  DCHECK_EQ(-1, statm_fd_.get());
+  DCHECK_EQ(-1, status_fd_.get());
   statm_fd_.reset(statm_file.TakePlatformFile());
   status_fd_.reset(status_file.TakePlatformFile());
 }
+
+#if defined(OS_LINUX)
+// static
+void MemoryUsageMonitorPosix::Bind(
+    mojo::PendingReceiver<mojom::blink::MemoryUsageMonitorLinux> receiver) {
+  // This should be called only once per process on RenderProcessWillLaunch.
+  DCHECK(!GetMemoryUsageMonitor().receiver_.is_bound());
+  GetMemoryUsageMonitor().receiver_.Bind(std::move(receiver));
+}
+#endif
 
 }  // namespace blink
