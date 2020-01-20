@@ -335,7 +335,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       std::vector<scoped_refptr<ServiceWorkerRegistration>>* registrations) {
     base::Optional<blink::ServiceWorkerStatusCode> result;
     base::RunLoop loop;
-    storage()->GetRegistrationsForOrigin(
+    registry()->GetRegistrationsForOrigin(
         origin,
         base::BindLambdaForTesting(
             [&](blink::ServiceWorkerStatusCode status,

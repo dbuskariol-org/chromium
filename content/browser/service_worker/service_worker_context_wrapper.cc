@@ -1084,8 +1084,8 @@ void ServiceWorkerContextWrapper::GetRegistrationsForOrigin(
             std::vector<scoped_refptr<ServiceWorkerRegistration>>()));
     return;
   }
-  context_core_->storage()->GetRegistrationsForOrigin(origin.GetURL(),
-                                                      std::move(callback));
+  context_core_->registry()->GetRegistrationsForOrigin(origin.GetURL(),
+                                                       std::move(callback));
 }
 
 void ServiceWorkerContextWrapper::GetRegistrationUserData(

@@ -111,6 +111,15 @@ void ServiceWorkerRegistry::FindRegistrationForIdOnly(
                      std::move(callback)));
 }
 
+void ServiceWorkerRegistry::GetRegistrationsForOrigin(
+    const GURL& origin,
+    GetRegistrationsCallback callback) {
+  storage()->GetRegistrationsForOrigin(
+      origin,
+      base::BindOnce(&ServiceWorkerRegistry::DidGetRegistrationsForOrigin,
+                     weak_factory_.GetWeakPtr(), std::move(callback), origin));
+}
+
 ServiceWorkerRegistration* ServiceWorkerRegistry::GetUninstallingRegistration(
     const GURL& scope) {
   // TODO(bashi): Should we check state of ServiceWorkerStorage?
@@ -393,6 +402,46 @@ void ServiceWorkerRegistry::DidFindRegistrationForId(
   }
 
   CompleteFindNow(std::move(registration), status, std::move(callback));
+}
+
+void ServiceWorkerRegistry::DidGetRegistrationsForOrigin(
+    GetRegistrationsCallback callback,
+    const GURL& origin_filter,
+    blink::ServiceWorkerStatusCode status,
+    std::unique_ptr<RegistrationList> registration_data_list,
+    std::unique_ptr<std::vector<ResourceList>> resources_list) {
+  DCHECK(origin_filter.is_valid());
+
+  if (status != blink::ServiceWorkerStatusCode::kOk &&
+      status != blink::ServiceWorkerStatusCode::kErrorNotFound) {
+    std::move(callback).Run(
+        status, std::vector<scoped_refptr<ServiceWorkerRegistration>>());
+    return;
+  }
+
+  DCHECK(registration_data_list);
+  DCHECK(resources_list);
+
+  // Add all stored registrations.
+  std::set<int64_t> registration_ids;
+  std::vector<scoped_refptr<ServiceWorkerRegistration>> registrations;
+  size_t index = 0;
+  for (const auto& registration_data : *registration_data_list) {
+    registration_ids.insert(registration_data.registration_id);
+    registrations.push_back(GetOrCreateRegistration(
+        registration_data, resources_list->at(index++)));
+  }
+
+  // Add unstored registrations that are being installed.
+  for (const auto& registration : installing_registrations_) {
+    if (registration.second->scope().GetOrigin() != origin_filter)
+      continue;
+    if (registration_ids.insert(registration.first).second)
+      registrations.push_back(registration.second);
+  }
+
+  std::move(callback).Run(blink::ServiceWorkerStatusCode::kOk,
+                          std::move(registrations));
 }
 
 void ServiceWorkerRegistry::DidStoreRegistration(

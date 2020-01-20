@@ -480,7 +480,7 @@ void ServiceWorkerContextCore::UnregisterServiceWorker(
 void ServiceWorkerContextCore::DeleteForOrigin(const GURL& origin,
                                                StatusCallback callback) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-  storage()->GetRegistrationsForOrigin(
+  registry()->GetRegistrationsForOrigin(
       origin,
       base::BindOnce(
           &ServiceWorkerContextCore::DidGetRegistrationsForDeleteForOrigin,

@@ -297,14 +297,14 @@ void ServiceWorkerStorage::FindRegistrationForIdOnly(
 
 void ServiceWorkerStorage::GetRegistrationsForOrigin(
     const GURL& origin,
-    GetRegistrationsCallback callback) {
+    GetRegistrationsDataCallback callback) {
   switch (state_) {
     case STORAGE_STATE_DISABLED:
-      RunSoon(
-          FROM_HERE,
-          base::BindOnce(
-              std::move(callback), blink::ServiceWorkerStatusCode::kErrorAbort,
-              std::vector<scoped_refptr<ServiceWorkerRegistration>>()));
+      RunSoon(FROM_HERE,
+              base::BindOnce(std::move(callback),
+                             blink::ServiceWorkerStatusCode::kErrorAbort,
+                             /*registrations=*/nullptr,
+                             /*resource_lists=*/nullptr));
       return;
     case STORAGE_STATE_INITIALIZING:  // Fall-through.
     case STORAGE_STATE_UNINITIALIZED:
@@ -316,17 +316,19 @@ void ServiceWorkerStorage::GetRegistrationsForOrigin(
       break;
   }
 
-  RegistrationList* registrations = new RegistrationList;
-  std::vector<ResourceList>* resource_lists = new std::vector<ResourceList>;
+  auto registrations = std::make_unique<RegistrationList>();
+  auto resource_lists = std::make_unique<std::vector<ResourceList>>();
+  RegistrationList* registrations_ptr = registrations.get();
+  std::vector<ResourceList>* resource_lists_ptr = resource_lists.get();
+
   base::PostTaskAndReplyWithResult(
       database_task_runner_.get(), FROM_HERE,
       base::BindOnce(&ServiceWorkerDatabase::GetRegistrationsForOrigin,
-                     base::Unretained(database_.get()), origin, registrations,
-                     resource_lists),
+                     base::Unretained(database_.get()), origin,
+                     registrations_ptr, resource_lists_ptr),
       base::BindOnce(&ServiceWorkerStorage::DidGetRegistrationsForOrigin,
                      weak_factory_.GetWeakPtr(), std::move(callback),
-                     base::Owned(registrations), base::Owned(resource_lists),
-                     origin));
+                     std::move(registrations), std::move(resource_lists)));
 }
 
 void ServiceWorkerStorage::GetAllRegistrationsInfos(
@@ -1133,44 +1135,17 @@ void ServiceWorkerStorage::ReturnFoundRegistration(
 }
 
 void ServiceWorkerStorage::DidGetRegistrationsForOrigin(
-    GetRegistrationsCallback callback,
-    RegistrationList* registration_data_list,
-    std::vector<ResourceList>* resources_list,
-    const GURL& origin_filter,
+    GetRegistrationsDataCallback callback,
+    std::unique_ptr<RegistrationList> registration_data_list,
+    std::unique_ptr<std::vector<ResourceList>> resource_lists,
     ServiceWorkerDatabase::Status status) {
-  DCHECK(registration_data_list);
-  DCHECK(resources_list);
-  DCHECK(origin_filter.is_valid());
-
   if (status != ServiceWorkerDatabase::STATUS_OK &&
       status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
     ScheduleDeleteAndStartOver();
-    std::move(callback).Run(
-        DatabaseStatusToStatusCode(status),
-        std::vector<scoped_refptr<ServiceWorkerRegistration>>());
-    return;
   }
-
-  // Add all stored registrations.
-  std::set<int64_t> registration_ids;
-  std::vector<scoped_refptr<ServiceWorkerRegistration>> registrations;
-  size_t index = 0;
-  for (const auto& registration_data : *registration_data_list) {
-    registration_ids.insert(registration_data.registration_id);
-    registrations.push_back(registry_->GetOrCreateRegistration(
-        registration_data, resources_list->at(index++)));
-  }
-
-  // Add unstored registrations that are being installed.
-  for (const auto& registration : registry_->installing_registrations()) {
-    if (registration.second->scope().GetOrigin() != origin_filter)
-      continue;
-    if (registration_ids.insert(registration.first).second)
-      registrations.push_back(registration.second);
-  }
-
-  std::move(callback).Run(blink::ServiceWorkerStatusCode::kOk,
-                          std::move(registrations));
+  std::move(callback).Run(DatabaseStatusToStatusCode(status),
+                          std::move(registration_data_list),
+                          std::move(resource_lists));
 }
 
 void ServiceWorkerStorage::DidGetAllRegistrationsInfos(

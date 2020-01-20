@@ -40,8 +40,13 @@ class ServiceWorkerVersion;
 class CONTENT_EXPORT ServiceWorkerRegistry {
  public:
   using ResourceList = ServiceWorkerStorage::ResourceList;
+  using RegistrationList = ServiceWorkerStorage::RegistrationList;
   using FindRegistrationCallback =
       ServiceWorkerStorage::FindRegistrationCallback;
+  using GetRegistrationsCallback = base::OnceCallback<void(
+      blink::ServiceWorkerStatusCode status,
+      const std::vector<scoped_refptr<ServiceWorkerRegistration>>&
+          registrations)>;
   using StatusCallback = ServiceWorkerStorage::StatusCallback;
 
   ServiceWorkerRegistry(
@@ -71,6 +76,10 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
                              FindRegistrationCallback callback);
   void FindRegistrationForIdOnly(int64_t registration_id,
                                  FindRegistrationCallback callback);
+
+  // Returns all stored and installing registrations for a given origin.
+  void GetRegistrationsForOrigin(const GURL& origin,
+                                 GetRegistrationsCallback callback);
 
   ServiceWorkerRegistration* GetUninstallingRegistration(const GURL& scope);
 
@@ -146,6 +155,13 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       FindRegistrationCallback callback,
       blink::ServiceWorkerStatusCode status,
       scoped_refptr<ServiceWorkerRegistration> registration);
+
+  void DidGetRegistrationsForOrigin(
+      GetRegistrationsCallback callback,
+      const GURL& origin_filter,
+      blink::ServiceWorkerStatusCode status,
+      std::unique_ptr<RegistrationList> registration_data_list,
+      std::unique_ptr<std::vector<ResourceList>> resources_list);
 
   void DidStoreRegistration(const ServiceWorkerDatabase::RegistrationData& data,
                             StatusCallback callback,

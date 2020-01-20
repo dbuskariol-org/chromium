@@ -68,16 +68,17 @@ FORWARD_DECLARE_TEST(ServiceWorkerResourceStorageDiskTest,
 // See the toplevel description of ServiceWorkerRegistry.
 class CONTENT_EXPORT ServiceWorkerStorage {
  public:
+  using RegistrationList = std::vector<ServiceWorkerDatabase::RegistrationData>;
   using ResourceList = std::vector<ServiceWorkerDatabase::ResourceRecord>;
   using StatusCallback =
       base::OnceCallback<void(blink::ServiceWorkerStatusCode status)>;
   using FindRegistrationCallback = base::OnceCallback<void(
       blink::ServiceWorkerStatusCode status,
       scoped_refptr<ServiceWorkerRegistration> registration)>;
-  using GetRegistrationsCallback = base::OnceCallback<void(
+  using GetRegistrationsDataCallback = base::OnceCallback<void(
       blink::ServiceWorkerStatusCode status,
-      const std::vector<scoped_refptr<ServiceWorkerRegistration>>&
-          registrations)>;
+      std::unique_ptr<RegistrationList> registrations,
+      std::unique_ptr<std::vector<ResourceList>> resource_lists)>;
   using GetRegistrationsInfosCallback = base::OnceCallback<void(
       blink::ServiceWorkerStatusCode status,
       const std::vector<ServiceWorkerRegistrationInfo>& registrations)>;
@@ -143,7 +144,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
 
   // Returns all stored registrations for a given origin.
   void GetRegistrationsForOrigin(const GURL& origin,
-                                 GetRegistrationsCallback callback);
+                                 GetRegistrationsDataCallback callback);
 
   // Returns info about all stored and initially installing registrations.
   void GetAllRegistrationsInfos(GetRegistrationsInfosCallback callback);
@@ -331,7 +332,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
     kDelete
   };
 
-  using RegistrationList = std::vector<ServiceWorkerDatabase::RegistrationData>;
   using InitializeCallback =
       base::OnceCallback<void(std::unique_ptr<InitialData> data,
                               ServiceWorkerDatabase::Status status)>;
@@ -380,11 +380,11 @@ class CONTENT_EXPORT ServiceWorkerStorage {
                            const ServiceWorkerDatabase::RegistrationData& data,
                            const ResourceList& resources,
                            ServiceWorkerDatabase::Status status);
-  void DidGetRegistrationsForOrigin(GetRegistrationsCallback callback,
-                                    RegistrationList* registration_data_list,
-                                    std::vector<ResourceList>* resources_list,
-                                    const GURL& origin_filter,
-                                    ServiceWorkerDatabase::Status status);
+  void DidGetRegistrationsForOrigin(
+      GetRegistrationsDataCallback callback,
+      std::unique_ptr<RegistrationList> registrations,
+      std::unique_ptr<std::vector<ResourceList>> resource_lists,
+      ServiceWorkerDatabase::Status status);
   void DidGetAllRegistrationsInfos(GetRegistrationsInfosCallback callback,
                                    RegistrationList* registration_data_list,
                                    ServiceWorkerDatabase::Status status);
