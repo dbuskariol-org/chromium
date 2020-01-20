@@ -304,7 +304,6 @@ public abstract class ChromeFeatureList {
     public static final String OVERSCROLL_HISTORY_NAVIGATION = "OverscrollHistoryNavigation";
     public static final String PAINT_PREVIEW_TEST = "PaintPreviewTest";
     public static final String PASSWORD_EDITING_ANDROID = "PasswordEditingAndroid";
-    public static final String PASSWORD_LEAK_DETECTION = "PasswordLeakDetection";
     public static final String PASSWORD_MANAGER_ONBOARDING_ANDROID =
             "PasswordManagerOnboardingAndroid";
     public static final String PAY_WITH_GOOGLE_V1 = "PayWithGoogleV1";

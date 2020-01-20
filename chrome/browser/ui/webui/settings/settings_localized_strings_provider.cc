@@ -1735,10 +1735,6 @@ void AddAutofillStrings(content::WebUIDataSource* html_source,
       "fidoAuthenticationAvailableForAutofill",
       IsFidoAuthenticationAvailable(personal_data, web_contents));
 
-  html_source->AddBoolean(
-      "passwordsLeakDetectionEnabled",
-      base::FeatureList::IsEnabled(password_manager::features::kLeakDetection));
-
   ui::Accelerator undo_accelerator(ui::VKEY_Z, ui::EF_PLATFORM_ACCELERATOR);
   html_source->AddString(
       "undoDescription",

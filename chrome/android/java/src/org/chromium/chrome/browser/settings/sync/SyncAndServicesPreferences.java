@@ -135,7 +135,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
     private ChromeSwitchPreference mSearchSuggestions;
     private ChromeSwitchPreference mNavigationError;
     private ChromeSwitchPreference mSafeBrowsing;
-    private @Nullable ChromeSwitchPreference mPasswordLeakDetection;
+    private ChromeSwitchPreference mPasswordLeakDetection;
     private ChromeSwitchPreference mSafeBrowsingReporting;
     private ChromeSwitchPreference mUsageAndCrashReporting;
     private ChromeSwitchPreference mUrlKeyedAnonymizedData;
@@ -210,13 +210,8 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
                 (PreferenceCategory) findPreference(PREF_SERVICES_CATEGORY);
         mPasswordLeakDetection =
                 (ChromeSwitchPreference) findPreference(PREF_PASSWORD_LEAK_DETECTION);
-        if (ChromeFeatureList.isEnabled(ChromeFeatureList.PASSWORD_LEAK_DETECTION)) {
-            mPasswordLeakDetection.setOnPreferenceChangeListener(this);
-            mPasswordLeakDetection.setManagedPreferenceDelegate(mManagedPreferenceDelegate);
-        } else {
-            removePreference(servicesCategory, mPasswordLeakDetection);
-            mPasswordLeakDetection = null;
-        }
+        mPasswordLeakDetection.setOnPreferenceChangeListener(this);
+        mPasswordLeakDetection.setManagedPreferenceDelegate(mManagedPreferenceDelegate);
 
         mSafeBrowsingReporting =
                 (ChromeSwitchPreference) findPreference(PREF_SAFE_BROWSING_SCOUT_REPORTING);
@@ -623,8 +618,6 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
         mSafeBrowsingReporting.setEnabled(safe_browsing_enabled);
         mSafeBrowsingReporting.setChecked(safe_browsing_enabled
                 && SafeBrowsingBridge.isSafeBrowsingExtendedReportingEnabled());
-
-        if (mPasswordLeakDetection == null) return; // Early exit without leak detection to update.
 
         boolean has_token_for_leak_check = PasswordUIView.hasAccountForLeakCheckRequest();
         boolean leak_detection_enabled =
