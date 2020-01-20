@@ -57,17 +57,16 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
      */
     static class CustomTabNavigationDelegate extends ExternalNavigationDelegateImpl {
         private static final String TAG = "customtabs";
-        private final String mClientPackageName;
+        private final TabAssociatedApp mTabAssociatedApp;
         private final ExternalAuthUtils mExternalAuthUtils;
         private boolean mHasActivityStarted;
 
         /**
          * Constructs a new instance of {@link CustomTabNavigationDelegate}.
          */
-        CustomTabNavigationDelegate(Tab tab, String clientPackageName,
-                ExternalAuthUtils authUtils) {
+        CustomTabNavigationDelegate(Tab tab, ExternalAuthUtils authUtils) {
             super(tab);
-            mClientPackageName = clientPackageName;
+            mTabAssociatedApp = TabAssociatedApp.from(tab);
             mExternalAuthUtils = authUtils;
         }
 
@@ -84,9 +83,10 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
             try {
                 // For a URL chrome can handle and there is no default set, handle it ourselves.
                 if (!hasDefaultHandler) {
-                    if (!TextUtils.isEmpty(mClientPackageName)
-                            && isPackageSpecializedHandler(mClientPackageName, intent)) {
-                        intent.setPackage(mClientPackageName);
+                    String clientPackageName = mTabAssociatedApp.getAppId();
+                    if (!TextUtils.isEmpty(clientPackageName)
+                            && isPackageSpecializedHandler(clientPackageName, intent)) {
+                        intent.setPackage(clientPackageName);
                     } else if (!isExternalProtocol) {
                         return false;
                     }
@@ -133,10 +133,11 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
 
         @Override
         public boolean isIntentForTrustedCallingApp(Intent intent) {
-            if (TextUtils.isEmpty(mClientPackageName)) return false;
-            if (!mExternalAuthUtils.isGoogleSigned(mClientPackageName)) return false;
+            String clientPackageName = mTabAssociatedApp.getAppId();
+            if (TextUtils.isEmpty(clientPackageName)) return false;
+            if (!mExternalAuthUtils.isGoogleSigned(clientPackageName)) return false;
 
-            return isPackageSpecializedHandler(mClientPackageName, intent);
+            return isPackageSpecializedHandler(clientPackageName, intent);
         }
 
         /**
@@ -300,7 +301,7 @@ public class CustomTabDelegateFactory implements TabDelegateFactory {
             mNavigationDelegate = new ExternalNavigationDelegateImpl(tab);
         } else {
             mNavigationDelegate = new CustomTabNavigationDelegate(
-                    tab, TabAssociatedApp.getAppId(tab), mExternalAuthUtils);
+                    tab, mExternalAuthUtils);
         }
         return new ExternalNavigationHandler(mNavigationDelegate);
     }
