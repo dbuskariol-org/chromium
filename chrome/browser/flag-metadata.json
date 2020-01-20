@@ -305,7 +305,7 @@
   {
     "name": "autofill-keyboard-accessory-view",
     "owners": [ "fhorschig@chromium.org" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 83
   },
   {
     "name": "autofill-no-local-save-on-unmask-success",
@@ -357,12 +357,12 @@
   {
     "name": "autofill-use-improved-label-disambiguation",
     "owners": [ "fhorschig" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 83
   },
   {
     "name": "autofill-use-mobile-label-disambiguation",
     "owners": [ "fhorschig" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 83
   },
   {
     "name": "back-forward-cache",
@@ -1075,7 +1075,7 @@
   {
     "name": "enable-autofill-manual-fallback",
     "owners": [ "fhorschig@chromium.org" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 83
   },
   {
     "name": "enable-autofill-refresh-style",
@@ -1885,7 +1885,7 @@
   {
     "name": "enable-suggestions-with-substring-match",
     "owners": [ "fhorschig" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 83
   },
   {
     "name": "enable-surfacecontrol",
@@ -3031,8 +3031,8 @@
   },
   {
     "name": "password-editing-android",
-    "owners": [ "izuzic", "fhorschig" ],
-    "expiry_milestone": 80
+    "owners": [ "fhorschig" ],
+    "expiry_milestone": 83
   },
   {
     "name": "password-leak-detection",
