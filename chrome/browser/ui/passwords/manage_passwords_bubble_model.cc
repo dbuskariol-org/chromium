@@ -388,11 +388,6 @@ void ManagePasswordsBubbleModel::OnSignInToChromeClicked(
     delegate_->EnableSync(account, is_default_promo_account);
 }
 
-void ManagePasswordsBubbleModel::OnSkipSignInClicked() {
-  GetProfile()->GetPrefs()->SetBoolean(
-      password_manager::prefs::kWasSignInPasswordPromoClicked, true);
-}
-
 #if defined(PASSWORD_STORE_SELECT_ENABLED)
 void ManagePasswordsBubbleModel::OnToggleAccountStore(bool is_checked) {
   delegate_->GetPasswordFeatureManager()->SetDefaultPasswordStore(

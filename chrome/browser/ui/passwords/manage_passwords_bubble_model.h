@@ -86,10 +86,6 @@ class ManagePasswordsBubbleModel {
   void OnSignInToChromeClicked(const AccountInfo& account,
                                bool is_default_promo_account);
 
-  // Called by the view when the "No thanks" button in the promo bubble is
-  // clicked.
-  void OnSkipSignInClicked();
-
 #if defined(PASSWORD_STORE_SELECT_ENABLED)
   // Called by the view when the account store checkbox is toggled.
   void OnToggleAccountStore(bool is_checked);
