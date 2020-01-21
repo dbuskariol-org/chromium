@@ -13,12 +13,13 @@
 #error "This file requires ARC support."
 #endif
 
-PasswordInfobarInteractionHandler::PasswordInfobarInteractionHandler()
+PasswordInfobarInteractionHandler::PasswordInfobarInteractionHandler(
+    Browser* browser)
     : InfobarInteractionHandler(
           InfobarType::kInfobarTypePasswordSave,
           std::make_unique<PasswordInfobarBannerInteractionHandler>(),
           /*sheet_handler=*/nullptr,
-          std::make_unique<PasswordInfobarModalInteractionHandler>()) {}
+          std::make_unique<PasswordInfobarModalInteractionHandler>(browser)) {}
 
 PasswordInfobarInteractionHandler::~PasswordInfobarInteractionHandler() =
     default;

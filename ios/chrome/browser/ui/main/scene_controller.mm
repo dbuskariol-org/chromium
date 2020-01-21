@@ -482,6 +482,11 @@ enum class EnterTabSwitcherSnapshotResult {
 // TODO(crbug.com/779791) : Remove show settings commands from MainController.
 - (void)showSavedPasswordsSettingsFromViewController:
     (UIViewController*)baseViewController {
+  if (!baseViewController) {
+    // TODO(crbug.com/779791): Don't pass base view controller through
+    // dispatched command.
+    baseViewController = [self.mainController currentBVC];
+  }
   DCHECK(!self.signinInteractionCoordinator.isSettingsViewPresented);
   if (self.settingsNavigationController) {
     [self.settingsNavigationController
