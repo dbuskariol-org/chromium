@@ -4,6 +4,8 @@
 
 #include "chromeos/components/smbfs/smbfs_mounter.h"
 
+#include <utility>
+
 #include "base/files/file_util.h"
 #include "base/logging.h"
 #include "base/strings/strcat.h"
@@ -50,10 +52,6 @@ SmbFsMounter::~SmbFsMounter() {
     mojo_bootstrap::PendingConnectionManager::Get()
         .CancelExpectedOpenIpcChannel(token_);
   }
-  if (disk_mount_manager_) {
-    // Can be nullptr in unit tests.
-    disk_mount_manager_->RemoveObserver(this);
-  }
 }
 
 void SmbFsMounter::Mount(SmbFsMounter::DoneCallback callback) {
@@ -73,33 +71,24 @@ void SmbFsMounter::Mount(SmbFsMounter::DoneCallback callback) {
   bootstrap_.set_disconnect_handler(
       base::BindOnce(&SmbFsMounter::OnMojoDisconnect, base::Unretained(this)));
 
-  disk_mount_manager_->AddObserver(this);
-  disk_mount_manager_->MountPath(mount_url_, "", mount_dir_name_, {},
-                                 chromeos::MOUNT_TYPE_NETWORK_STORAGE,
-                                 chromeos::MOUNT_ACCESS_MODE_READ_WRITE);
+  chromeos::disks::MountPoint::Mount(
+      disk_mount_manager_, mount_url_, "" /* source_format */, mount_dir_name_,
+      {} /* mount_options */, chromeos::MOUNT_TYPE_NETWORK_STORAGE,
+      chromeos::MOUNT_ACCESS_MODE_READ_WRITE,
+      base::BindOnce(&SmbFsMounter::OnMountDone, weak_factory_.GetWeakPtr()));
   mount_timer_.Start(
       FROM_HERE, kMountTimeout,
       base::BindOnce(&SmbFsMounter::OnMountTimeout, base::Unretained(this)));
 }
 
-void SmbFsMounter::OnMountEvent(
-    chromeos::disks::DiskMountManager::MountEvent event,
+void SmbFsMounter::OnMountDone(
     chromeos::MountError error_code,
-    const chromeos::disks::DiskMountManager::MountPointInfo& mount_info) {
+    std::unique_ptr<chromeos::disks::MountPoint> mount_point) {
   if (!callback_) {
     // This can happen if the mount timeout expires and the callback is already
     // run with a timeout error.
     return;
   }
-
-  if (mount_url_.empty() ||
-      mount_info.mount_type != chromeos::MOUNT_TYPE_NETWORK_STORAGE ||
-      mount_info.source_path != mount_url_ ||
-      event != chromeos::disks::DiskMountManager::MOUNTING) {
-    return;
-  }
-
-  disk_mount_manager_->RemoveObserver(this);
 
   if (error_code != chromeos::MOUNT_ERROR_NONE) {
     LOG(WARNING) << "smbfs mount error: " << error_code;
@@ -107,8 +96,8 @@ void SmbFsMounter::OnMountEvent(
     return;
   }
 
-  DCHECK(!mount_info.mount_path.empty());
-  mount_path_ = mount_info.mount_path;
+  DCHECK(mount_point);
+  mount_point_ = std::move(mount_point);
 
   mojom::MountOptionsPtr mount_options = mojom::MountOptions::New();
   mount_options->share_path = share_path_;
@@ -170,10 +159,11 @@ void SmbFsMounter::OnMountShare(
     return;
   }
 
-  std::unique_ptr<SmbFsHost> host = std::make_unique<SmbFsHost>(
-      base::FilePath(mount_path_), delegate_, disk_mount_manager_,
-      mojo::Remote<mojom::SmbFs>(std::move(smbfs)),
-      std::move(delegate_receiver));
+  DCHECK(mount_point_);
+  std::unique_ptr<SmbFsHost> host =
+      std::make_unique<SmbFsHost>(std::move(mount_point_), delegate_,
+                                  mojo::Remote<mojom::SmbFs>(std::move(smbfs)),
+                                  std::move(delegate_receiver));
   std::move(callback_).Run(mojom::MountError::kOk, std::move(host));
 }
 
@@ -196,15 +186,7 @@ void SmbFsMounter::OnMountTimeout() {
 }
 
 void SmbFsMounter::ProcessMountError(mojom::MountError mount_error) {
-  if (!mount_path_.empty()) {
-    disk_mount_manager_->UnmountPath(
-        mount_path_, base::BindOnce([](chromeos::MountError error_code) {
-          LOG_IF(WARNING, error_code != chromeos::MOUNT_ERROR_NONE)
-              << "Error unmounting smbfs on setup failure: " << error_code;
-        }));
-    mount_path_ = {};
-  }
-
+  mount_point_.reset();
   std::move(callback_).Run(mount_error, nullptr);
 }
 
