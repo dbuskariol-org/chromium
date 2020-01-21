@@ -249,9 +249,8 @@ void FileInputType::SetValue(const String&,
     return;
 
   file_list_->clear();
-  if (auto* layout_object = GetElement().GetLayoutObject())
-    layout_object->SetShouldDoFullPaintInvalidation();
   GetElement().SetNeedsValidityCheck();
+  UpdateView();
 }
 
 FileList* FileInputType::CreateFileList(const FileChooserFileInfoList& files,
@@ -377,10 +376,7 @@ bool FileInputType::SetFiles(FileList* files) {
 
   GetElement().NotifyFormStateChanged();
   GetElement().SetNeedsValidityCheck();
-
-  if (GetElement().GetLayoutObject())
-    GetElement().GetLayoutObject()->SetShouldDoFullPaintInvalidation();
-
+  UpdateView();
   return files_changed;
 }
 
@@ -522,6 +518,11 @@ void FileInputType::WillOpenPopup() {
     UseCounter::Count(GetElement().GetDocument(),
                       WebFeature::kPopupOpenWhileFileChooserOpened);
   }
+}
+
+void FileInputType::UpdateView() {
+  if (auto* layout_object = GetElement().GetLayoutObject())
+    layout_object->SetShouldDoFullPaintInvalidation();
 }
 
 }  // namespace blink
