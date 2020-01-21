@@ -50,7 +50,7 @@ const base::Feature kPasswordProtectionForSavedPasswords{
 
 const base::Feature kPasswordProtectionShowDomainsForSavedPasswords{
     "SafeBrowsingPasswordProtectionShowDomainsForSavedPasswords",
-    base::FEATURE_ENABLED_BY_DEFAULT};
+    base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kPasswordProtectionForSignedInUsers{
     "SafeBrowsingPasswordProtectionForSignedInUsers",
@@ -85,7 +85,7 @@ const base::Feature kSendPasswordReusePing {
 
 const base::Feature kSendSampledPingsForAllowlistDomains{
     "SafeBrowsingSendSampledPingsForAllowlistDomain",
-    base::FEATURE_DISABLED_BY_DEFAULT};
+    base::FEATURE_ENABLED_BY_DEFAULT};
 
 constexpr base::FeatureParam<bool> kShouldFillOldPhishGuardProto{
     &kPasswordProtectionForSignedInUsers, "DeprecateOldProto", false};
