@@ -2545,11 +2545,6 @@
     "expiry_milestone": 88
   },
   {
-    "name": "mac-views-task-manager",
-    "owners": [ "ellyjones" ],
-    "expiry_milestone": 77
-  },
-  {
     "name": "media-app",
     "owners": [ "//chromeos/components/media_app_ui/OWNERS" ],
     "expiry_milestone": 90

@@ -1868,9 +1868,6 @@ extern const char kMacSyscallSandboxDescription[];
 extern const char kMacV2GPUSandboxName[];
 extern const char kMacV2GPUSandboxDescription[];
 
-extern const char kMacViewsTaskManagerName[];
-extern const char kMacViewsTaskManagerDescription[];
-
 extern const char kMacSystemMediaPermissionsInfoUiName[];
 extern const char kMacSystemMediaPermissionsInfoUiDescription[];
 

@@ -2294,9 +2294,6 @@ const FeatureEntry kFeatureEntries[] = {
     {"mac-v2-gpu-sandbox", flag_descriptions::kMacV2GPUSandboxName,
      flag_descriptions::kMacV2GPUSandboxDescription, kOsMac,
      FEATURE_VALUE_TYPE(features::kMacV2GPUSandbox)},
-    {"mac-views-task-manager", flag_descriptions::kMacViewsTaskManagerName,
-     flag_descriptions::kMacViewsTaskManagerDescription, kOsMac,
-     FEATURE_VALUE_TYPE(features::kViewsTaskManager)},
 #endif  // OS_MACOSX
 #if BUILDFLAG(ENABLE_VR)
     {"webxr", flag_descriptions::kWebXrName,

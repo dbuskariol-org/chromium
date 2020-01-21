@@ -3411,6 +3411,13 @@ jumbo_static_library("ui") {
         "views/ssl_client_certificate_selector_mac.h",
         "views/ssl_client_certificate_selector_mac.mm",
       ]
+
+      # The Views task manager is not used on Mac - a native Cocoa
+      # implementation is used instead.
+      sources -= [
+        "views/task_manager_view.cc",
+        "views/task_manager_view.h",
+      ]
     } else {
       sources += [
         "views/create_application_shortcut_view.cc",

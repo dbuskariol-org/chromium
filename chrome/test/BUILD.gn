@@ -2596,6 +2596,9 @@ if (!is_android) {
 
         # ProcessSingletonMac doesn"t do anything.
         "../browser/process_singleton_browsertest.cc",
+
+        # TaskManagerView is not used or built on Mac.
+        "../browser/ui/views/task_manager_view_browsertest.cc",
       ]
 
       if (safe_browsing_mode == 1) {
