@@ -31598,6 +31598,13 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="2" label="Different from baseUrl"/>
 </enum>
 
+<enum name="HomeButtonPreferenceStateType">
+  <int value="0" label="User Disabled"/>
+  <int value="1" label="User Enabled"/>
+  <int value="2" label="Managed Disabled"/>
+  <int value="3" label="Managed Enabled"/>
+</enum>
+
 <enum name="HomedirEncryptionType">
   <int value="1" label="Ecryptfs"/>
   <int value="2" label="Ext4 Dir Encryption"/>

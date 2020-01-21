@@ -460,7 +460,7 @@ const base::Feature kHandleMediaIntents{"HandleMediaIntents",
 // Enable the HomePage Location feature that allows enterprise policy set and
 // force the home page url for managed devices.
 const base::Feature kHomepageLocation{"HomepageLocationPolicy",
-                                      base::FEATURE_DISABLED_BY_DEFAULT};
+                                      base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kHomepageSettingsUIConversion{
     "HomepageSettingsUIConversion", base::FEATURE_DISABLED_BY_DEFAULT};
