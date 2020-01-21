@@ -256,6 +256,9 @@ bool CheckClientDownloadRequest::ShouldUploadForDlpScan() {
           CheckContentComplianceValues::CHECK_UPLOADS_AND_DOWNLOADS)
     return false;
 
+  // TODO(crbug/1013584): Call FileTypeSupported from DeepScanningUtils around
+  // here and handle both supported and unsupported types appropriately.
+
   Profile* profile = Profile::FromBrowserContext(GetBrowserContext());
   // If there's no valid DM token, the upload will fail, so we can skip
   // uploading now.
