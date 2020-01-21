@@ -1287,8 +1287,8 @@ enum class EnterTabSwitcherSnapshotResult {
   BOOL otrBVCIsCurrent = (self.interfaceProvider.mainInterface.bvc ==
                           self.interfaceProvider.incognitoInterface.bvc);
 
-  // Clear the OTR tab model and notify the _tabSwitcher that its otrBVC will
-  // be destroyed.
+  // Clear the Incognito Browser and notify the _tabSwitcher that its otrBrowser
+  // will be destroyed.
   [self.mainController.tabSwitcher setOtrBrowser:nil];
 
   [self.mainController.browserViewWrangler destroyAndRebuildIncognitoBrowser];
@@ -1297,9 +1297,10 @@ enum class EnterTabSwitcherSnapshotResult {
     [self activateBVCAndMakeCurrentBVCPrimary];
   }
 
-  // Always set the new otr tab model for the tablet or grid switcher.
-  // Notify the _tabSwitcher with the new otrBVC.
-  [self.mainController.tabSwitcher setOtrBrowser:self.mainInterface.browser];
+  // Always set the new otr Browser for the tablet or grid switcher.
+  // Notify the _tabSwitcher with the new Incognito Browser.
+  [self.mainController.tabSwitcher
+      setOtrBrowser:self.incognitoInterface.browser];
 
   // This seems the best place to deem the destroying and rebuilding the
   // incognito browser state to be completed.
