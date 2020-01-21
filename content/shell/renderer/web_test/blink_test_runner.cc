@@ -66,7 +66,6 @@
 #include "third_party/blink/public/platform/file_path_conversion.h"
 #include "third_party/blink/public/platform/platform.h"
 #include "third_party/blink/public/platform/scheduler/test/renderer_scheduler_test_support.h"
-#include "third_party/blink/public/platform/web_point.h"
 #include "third_party/blink/public/platform/web_rect.h"
 #include "third_party/blink/public/platform/web_size.h"
 #include "third_party/blink/public/platform/web_string.h"
@@ -95,7 +94,6 @@ using blink::WebElement;
 using blink::WebFrame;
 using blink::WebHistoryItem;
 using blink::WebLocalFrame;
-using blink::WebPoint;
 using blink::WebRect;
 using blink::WebScriptSource;
 using blink::WebSize;

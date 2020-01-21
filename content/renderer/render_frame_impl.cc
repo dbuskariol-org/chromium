@@ -182,7 +182,6 @@
 #include "third_party/blink/public/platform/web_http_body.h"
 #include "third_party/blink/public/platform/web_media_player.h"
 #include "third_party/blink/public/platform/web_media_player_source.h"
-#include "third_party/blink/public/platform/web_point.h"
 #include "third_party/blink/public/platform/web_runtime_features.h"
 #include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/public/platform/web_string.h"
@@ -274,7 +273,6 @@ using blink::WebNavigationType;
 using blink::WebNode;
 using blink::WebPluginDocument;
 using blink::WebPluginParams;
-using blink::WebPoint;
 using blink::WebPopupMenuInfo;
 using blink::WebRange;
 using blink::WebRect;
@@ -6220,7 +6218,7 @@ void RenderFrameImpl::OnMediaPlayerActionAt(
   blink::WebFloatRect viewport_position(location.x(), location.y(), 0, 0);
   GetLocalRootRenderWidget()->ConvertWindowToViewport(&viewport_position);
   frame_->PerformMediaPlayerAction(
-      WebPoint(viewport_position.x, viewport_position.y), action);
+      gfx::Point(viewport_position.x, viewport_position.y), action);
 }
 
 #if BUILDFLAG(USE_EXTERNAL_POPUP_MENU)
