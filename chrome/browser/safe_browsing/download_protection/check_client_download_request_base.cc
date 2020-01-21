@@ -161,11 +161,7 @@ CheckClientDownloadRequestBase::CheckClientDownloadRequestBase(
     is_under_advanced_protection_ =
         profile &&
         AdvancedProtectionStatusManagerFactory::GetForProfile(profile)
-            ->is_under_advanced_protection();
-    requests_ap_verdicts_ =
-        profile &&
-        AdvancedProtectionStatusManagerFactory::GetForProfile(profile)
-            ->RequestsAdvancedProtectionVerdicts();
+            ->IsUnderAdvancedProtection();
 
     int password_protected_allowed_policy =
         g_browser_process->local_state()->GetInteger(
@@ -559,7 +555,7 @@ void CheckClientDownloadRequestBase::SendRequest() {
     request->mutable_archived_binary()->Swap(&archived_binaries_);
   request->set_archive_file_count(file_count_);
   request->set_archive_directory_count(directory_count_);
-  request->set_request_ap_verdicts(requests_ap_verdicts_);
+  request->set_request_ap_verdicts(is_under_advanced_protection_);
 
   if (!request->SerializeToString(&client_download_request_data_)) {
     FinishRequest(DownloadCheckResult::UNKNOWN, REASON_INVALID_REQUEST_PROTO);

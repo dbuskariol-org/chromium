@@ -200,11 +200,6 @@ class CheckClientDownloadRequestBase {
   bool is_extended_reporting_ = false;
   bool is_incognito_ = false;
   bool is_under_advanced_protection_ = false;
-  // Boolean indicating whether the user requests AP verdicts. Note that this is
-  // distinct from |is_under_advanced_protection_| while:
-  //  - The feature is still partially rolled out
-  //  - The feature has been force enabled from chrome://flags
-  bool requests_ap_verdicts_ = false;
   bool password_protected_allowed_ = true;
 
   bool is_password_protected_ = false;

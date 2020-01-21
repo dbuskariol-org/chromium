@@ -1708,7 +1708,7 @@ int ChromePasswordProtectionService::GetStoredVerdictCount(
 #if BUILDFLAG(FULL_SAFE_BROWSING)
 bool ChromePasswordProtectionService::IsUnderAdvancedProtection() {
   return AdvancedProtectionStatusManagerFactory::GetForProfile(profile_)
-      ->is_under_advanced_protection();
+      ->IsUnderAdvancedProtection();
 }
 
 gfx::Size ChromePasswordProtectionService::GetCurrentContentAreaSize() const {

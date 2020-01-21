@@ -1076,7 +1076,7 @@ gfx::ImageSkia DownloadItemView::GetWarningIcon() {
     case download::DOWNLOAD_DANGER_TYPE_UNCOMMON_CONTENT:
       if (safe_browsing::AdvancedProtectionStatusManagerFactory::GetForProfile(
               model()->profile())
-              ->RequestsAdvancedProtectionVerdicts()) {
+              ->IsUnderAdvancedProtection()) {
         return gfx::CreateVectorIcon(
             vector_icons::kErrorIcon, GetErrorIconSize(),
             GetNativeTheme()->GetSystemColor(
