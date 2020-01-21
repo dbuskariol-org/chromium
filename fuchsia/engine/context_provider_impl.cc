@@ -46,6 +46,7 @@
 #include "fuchsia/engine/common/web_engine_content_client.h"
 #include "fuchsia/engine/switches.h"
 #include "gpu/command_buffer/service/gpu_switches.h"
+#include "gpu/config/gpu_finch_features.h"
 #include "media/base/key_system_names.h"
 #include "media/base/media_switches.h"
 #include "net/http/http_util.h"
@@ -329,10 +330,10 @@ void ContextProviderImpl::Create(
     DLOG(ERROR) << "Enabling Vulkan GPU acceleration.";
     // Vulkan requires use of SkiaRenderer, configured to a use Vulkan context.
     launch_command.AppendSwitch(switches::kUseVulkan);
+    const std::vector<base::StringPiece> enabled_features = {
+        features::kUseSkiaRenderer.name, features::kVulkan.name};
     launch_command.AppendSwitchASCII(switches::kEnableFeatures,
-                                     features::kUseSkiaRenderer.name);
-    launch_command.AppendSwitchASCII(switches::kGrContextType,
-                                     switches::kGrContextTypeVulkan);
+                                     base::JoinString(enabled_features, ","));
 
     // SkiaRenderer requires out-of-process rasterization be enabled.
     launch_command.AppendSwitch(switches::kEnableOopRasterization);
