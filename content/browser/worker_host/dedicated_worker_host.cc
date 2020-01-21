@@ -99,8 +99,9 @@ void DedicatedWorkerHost::LifecycleStateChanged(
   }
 }
 
-void DedicatedWorkerHost::RenderProcessHostDestroyed(
-    RenderProcessHost* render_process_host) {
+void DedicatedWorkerHost::RenderProcessExited(
+    RenderProcessHost* render_process_host,
+    const ChildProcessTerminationInfo& info) {
   DCHECK_EQ(worker_process_host_, render_process_host);
 
   delete this;

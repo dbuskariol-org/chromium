@@ -113,8 +113,8 @@ class DedicatedWorkerHost final : public blink::mojom::DedicatedWorkerHost,
 
  private:
   // RenderProcessHostObserver:
-  void RenderProcessHostDestroyed(
-      RenderProcessHost* render_process_host) override;
+  void RenderProcessExited(RenderProcessHost* render_process_host,
+                           const ChildProcessTerminationInfo& info) override;
 
   // Called from WorkerScriptFetchInitiator. Continues starting the dedicated
   // worker in the renderer process.
