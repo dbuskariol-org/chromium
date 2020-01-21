@@ -9503,7 +9503,7 @@ class RemoteNavigationClient
   void Navigate(const WebURLRequest& request,
                 bool should_replace_current_entry,
                 bool is_opener_navigation,
-                bool has_download_sandbox_flag,
+                bool initiator_frame_has_download_sandbox_flag,
                 bool blocking_downloads_in_sandbox_enabled,
                 bool initiator_frame_is_ad,
                 mojo::ScopedMessagePipeHandle) override {

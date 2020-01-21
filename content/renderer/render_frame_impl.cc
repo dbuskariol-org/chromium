@@ -1755,6 +1755,9 @@ void RenderFrameImpl::MaybeSetDownloadFramePolicy(
       }
     }
   }
+
+  download_policy->blocking_downloads_in_sandbox_enabled =
+      blocking_downloads_in_sandbox_enabled;
 }
 
 blink::WebURL RenderFrameImpl::OverrideFlashEmbedWithHTML(

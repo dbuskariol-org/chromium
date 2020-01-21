@@ -2392,10 +2392,9 @@ bool WebLocalFrameImpl::IsAllowedToDownload() const {
     }
     return !GetFrame()->Owner() ||
            GetFrame()->Owner()->GetFramePolicy().allowed_to_download;
-  } else {
-    return (GetFrame()->Loader().EffectiveSandboxFlags() &
-            WebSandboxFlags::kDownloads) == WebSandboxFlags::kNone;
   }
+  return (GetFrame()->Loader().PendingEffectiveSandboxFlags() &
+          WebSandboxFlags::kDownloads) == WebSandboxFlags::kNone;
 }
 
 void WebLocalFrameImpl::UsageCountChromeLoadTimes(const WebString& metric) {
