@@ -93,6 +93,8 @@ jumbo_static_library("ui") {
     "chrome_select_file_policy.h",
     "color_chooser.h",
     "confirm_bubble.h",
+    "cookie_controls/cookie_controls_controller.cc",
+    "cookie_controls/cookie_controls_controller.h",
     "crypto_module_password_dialog.h",
     "cryptuiapi_shim.h",
     "enterprise_startup_dialog.h",
@@ -2650,8 +2652,6 @@ jumbo_static_library("ui") {
       "autofill/payments/save_upi_bubble_controller_impl.cc",
       "autofill/payments/save_upi_bubble_controller_impl.h",
       "bubble_anchor_util.h",
-      "cookie_controls/cookie_controls_controller.cc",
-      "cookie_controls/cookie_controls_controller.h",
       "cookie_controls/cookie_controls_view.h",
       "manifest_web_app_browser_controller.cc",
       "manifest_web_app_browser_controller.h",
@@ -4308,6 +4308,10 @@ if (is_chromeos) {
 }
 
 if (is_android) {
+  java_cpp_enum("cookie_controls_controller_status_javagen") {
+    sources = [ "cookie_controls/cookie_controls_controller.h" ]
+  }
+
   java_cpp_enum("tab_model_enums_java") {
     sources = [ "android/tab_model/tab_model.h" ]
   }
