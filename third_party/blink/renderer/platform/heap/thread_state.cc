@@ -145,6 +145,11 @@ class ThreadState::IncrementalMarkingScheduler {
     ScheduleTask();
   }
 
+  void Restart() {
+    DCHECK(!task_.IsActive());
+    ScheduleTask();
+  }
+
   // Cancels incremental marking task in case there is any pending.
   void Cancel() { task_.Cancel(); }
 
@@ -635,7 +640,8 @@ void ThreadState::SetGCState(GCState gc_state) {
       DCHECK(CheckThread());
       VERIFY_STATE_TRANSITION(gc_state_ == kNoGCScheduled ||
                               gc_state_ == kIncrementalMarkingStepScheduled ||
-                              gc_state_ == kIncrementalGCScheduled);
+                              gc_state_ == kIncrementalGCScheduled ||
+                              gc_state_ == kIncrementalMarkingStepPaused);
       break;
     case kIncrementalMarkingFinalizeScheduled:
       DCHECK(CheckThread());
@@ -1286,6 +1292,13 @@ bool ThreadState::FinishIncrementalMarkingIfRunning(
     return true;
   }
   return false;
+}
+
+void ThreadState::RestartIncrementalMarkingIfPaused() {
+  if (GetGCState() != ThreadState::kIncrementalMarkingStepPaused)
+    return;
+  SetGCState(ThreadState::kIncrementalMarkingStepScheduled);
+  incremental_marking_scheduler_->Restart();
 }
 
 void ThreadState::CollectGarbage(BlinkGC::CollectionType collection_type,
