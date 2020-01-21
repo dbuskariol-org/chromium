@@ -4670,6 +4670,9 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kOmniboxRemoveSuggestionsFromClipboardDescription,
      kOsAndroid,
      FEATURE_VALUE_TYPE(omnibox::kOmniboxRemoveSuggestionsFromClipboard)},
+    {"context-menu-copy-image", flag_descriptions::kContextMenuCopyImageName,
+     flag_descriptions::kContextMenuCopyImageDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kContextMenuCopyImage)},
 #endif  // defined(OS_ANDROID)
 
     {"impulse-scroll-animations",

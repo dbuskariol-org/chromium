@@ -138,6 +138,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kContentIndexingDownloadHome,
     &kContentIndexingNTP,
     &kContentSuggestionsScrollToLoad,
+    &kContextMenuCopyImage,
     &kContextMenuSearchWithGoogleLens,
     &kContextualSearchDefinitions,
     &kContextualSearchLongpressResolve,
@@ -399,6 +400,9 @@ const base::Feature kContentIndexingNTP{"ContentIndexingNTP",
 
 const base::Feature kContentSuggestionsScrollToLoad{
     "ContentSuggestionsScrollToLoad", base::FEATURE_DISABLED_BY_DEFAULT};
+
+const base::Feature kContextMenuCopyImage{"ContextMenuCopyImage",
+                                          base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kContextMenuSearchWithGoogleLens{
     "ContextMenuSearchWithGoogleLens", base::FEATURE_DISABLED_BY_DEFAULT};

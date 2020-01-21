@@ -55,6 +55,7 @@ extern const base::Feature kCommandLineOnNonRooted;
 extern const base::Feature kContactsPickerSelectAll;
 extern const base::Feature kContentIndexingDownloadHome;
 extern const base::Feature kContentIndexingNTP;
+extern const base::Feature kContextMenuCopyImage;
 extern const base::Feature kContextMenuSearchWithGoogleLens;
 extern const base::Feature kContentSuggestionsScrollToLoad;
 extern const base::Feature kContextualSearchDefinitions;

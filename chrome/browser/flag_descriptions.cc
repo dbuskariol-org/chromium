@@ -2513,6 +2513,10 @@ const char kContentIndexingNTPName[] = "Content indexing in NTP";
 const char kContentIndexingNTPDescription[] =
     "Shows content indexing entry point UI in NTP";
 
+extern const char kContextMenuCopyImageName[] = "Copy Image";
+extern const char kContextMenuCopyImageDescription[] =
+    "Enable copying image to system clipboard via context menu.";
+
 const char kContextualSearchDefinitionsName[] = "Contextual Search definitions";
 const char kContextualSearchDefinitionsDescription[] =
     "Enables tap-activated contextual definitions of words on a page to be "
