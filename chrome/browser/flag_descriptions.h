@@ -96,9 +96,6 @@ extern const char kAudioWorkletRealtimeThreadDescription[];
 extern const char kUpdatedCellularActivationUiName[];
 extern const char kUpdatedCellularActivationUiDescription[];
 
-extern const char kUseMessagesGoogleComDomainName[];
-extern const char kUseMessagesGoogleComDomainDescription[];
-
 extern const char kUseMessagesStagingUrlName[];
 extern const char kUseMessagesStagingUrlDescription[];
 
