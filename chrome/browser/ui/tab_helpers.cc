@@ -372,7 +372,7 @@ void TabHelpers::AttachTabHelpers(WebContents* web_contents) {
 #endif
 
 #if BUILDFLAG(ENABLE_SUPERVISED_USERS)
-  SupervisedUserNavigationObserver::CreateForWebContents(web_contents);
+  SupervisedUserNavigationObserver::MaybeCreateForWebContents(web_contents);
 #endif
 
   if (predictors::LoadingPredictorFactory::GetForProfile(profile))
