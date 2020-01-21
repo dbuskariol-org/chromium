@@ -37,9 +37,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Helper methods for sync preferences.
+ * Helper methods for sync settings.
  */
-public class SyncPreferenceUtils {
+public class SyncSettingsUtils {
     private static final String DASHBOARD_URL = "https://www.google.com/settings/chrome/sync";
     private static final String MY_ACCOUNT_URL = "https://myaccount.google.com/smartlink/home";
 
@@ -251,8 +251,8 @@ public class SyncPreferenceUtils {
 
     /**
      * Creates a wrapper around {@link Runnable} that calls the runnable only if
-     * {@link PreferenceFragment} is still in resumed state. Click events that arrive after the
-     * fragment has been paused will be ignored. See http://b/5983282.
+     * {@link PreferenceFragmentCompat} is still in resumed state. Click events that arrive after
+     * the fragment has been paused will be ignored. See http://b/5983282.
      * @param fragment The fragment that hosts the preference.
      * @param runnable The runnable to call from {@link Preference.OnPreferenceClickListener}.
      */

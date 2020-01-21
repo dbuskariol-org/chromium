@@ -49,9 +49,9 @@ import java.util.Set;
 
 /**
  * Settings fragment to customize Sync options (data types, encryption). Can be accessed from
- * {@link SyncAndServicesPreferences}.
+ * {@link SyncAndServicesSettings}.
  */
-public class ManageSyncPreferences extends PreferenceFragmentCompat
+public class ManageSyncSettings extends PreferenceFragmentCompat
         implements PassphraseDialogFragment.Listener, PassphraseCreationDialogFragment.Listener,
                    PassphraseTypeDialogFragment.Listener, Preference.OnPreferenceChangeListener,
                    ProfileSyncService.SyncStateChangedListener {
@@ -126,10 +126,10 @@ public class ManageSyncPreferences extends PreferenceFragmentCompat
         mGoogleActivityControls = findPreference(PREF_GOOGLE_ACTIVITY_CONTROLS);
         mSyncEncryption = findPreference(PREF_ENCRYPTION);
         mSyncEncryption.setOnPreferenceClickListener(
-                SyncPreferenceUtils.toOnClickListener(this, this::onSyncEncryptionClicked));
+                SyncSettingsUtils.toOnClickListener(this, this::onSyncEncryptionClicked));
         mManageSyncData = findPreference(PREF_SYNC_MANAGE_DATA);
-        mManageSyncData.setOnPreferenceClickListener(SyncPreferenceUtils.toOnClickListener(
-                this, () -> SyncPreferenceUtils.openSyncDashboard(getActivity())));
+        mManageSyncData.setOnPreferenceClickListener(SyncSettingsUtils.toOnClickListener(
+                this, () -> SyncSettingsUtils.openSyncDashboard(getActivity())));
 
         mSyncTypePreferences =
                 new CheckBoxPreference[] {mSyncAutofill, mSyncBookmarks, mSyncPaymentsIntegration,
@@ -225,7 +225,7 @@ public class ManageSyncPreferences extends PreferenceFragmentCompat
             return;
         }
 
-        mGoogleActivityControls.setOnPreferenceClickListener(SyncPreferenceUtils.toOnClickListener(
+        mGoogleActivityControls.setOnPreferenceClickListener(SyncSettingsUtils.toOnClickListener(
                 this, () -> onGoogleActivityControlsClicked(signedInAccountName)));
 
         updateDataTypeState();

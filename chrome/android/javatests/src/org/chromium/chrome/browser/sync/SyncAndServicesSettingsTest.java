@@ -32,7 +32,7 @@ import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.settings.ChromeSwitchPreference;
 import org.chromium.chrome.browser.settings.SettingsActivity;
 import org.chromium.chrome.browser.settings.SettingsLauncher;
-import org.chromium.chrome.browser.settings.sync.SyncAndServicesPreferences;
+import org.chromium.chrome.browser.settings.sync.SyncAndServicesSettings;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.chrome.test.util.ApplicationTestUtils;
 import org.chromium.chrome.test.util.browser.Features.DisableFeatures;
@@ -42,13 +42,11 @@ import org.chromium.components.sync.AndroidSyncSettings;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
 
 /**
- * Tests for SyncAndServicesPreferences.
+ * Tests for SyncAndServicesSettings.
  */
 @RunWith(ChromeJUnit4ClassRunner.class)
 @CommandLineFlags.Add({ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE})
-public class SyncAndServicesPreferencesTest {
-    private static final String TAG = "SyncAndServicesPreferencesTest";
-
+public class SyncAndServicesSettingsTest {
     @Rule
     public SyncTestRule mSyncTestRule = new SyncTestRule();
 
@@ -65,7 +63,7 @@ public class SyncAndServicesPreferencesTest {
     public void testSyncSwitch() {
         mSyncTestRule.setUpTestAccountAndSignIn();
         SyncTestUtil.waitForSyncActive();
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         final ChromeSwitchPreference syncSwitch = getSyncSwitch(fragment);
 
         Assert.assertTrue(syncSwitch.isChecked());
@@ -87,7 +85,7 @@ public class SyncAndServicesPreferencesTest {
     public void testOpeningSettingsDoesntEnableSync() {
         mSyncTestRule.setUpTestAccountAndSignIn();
         mSyncTestRule.stopSync();
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         closeFragment(fragment);
         Assert.assertFalse(AndroidSyncSettings.get().isChromeSyncEnabled());
     }
@@ -113,7 +111,7 @@ public class SyncAndServicesPreferencesTest {
     public void testDefaultControlStatesWithSyncOffThenOn() {
         mSyncTestRule.setUpTestAccountAndSignIn();
         mSyncTestRule.stopSync();
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         assertSyncOffState(fragment);
         mSyncTestRule.togglePreference(getSyncSwitch(fragment));
         SyncTestUtil.waitForEngineInitialized();
@@ -126,7 +124,7 @@ public class SyncAndServicesPreferencesTest {
     public void testDefaultControlStatesWithSyncOnThenOff() {
         mSyncTestRule.setUpTestAccountAndSignIn();
         SyncTestUtil.waitForSyncActive();
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         assertSyncOnState(fragment);
         mSyncTestRule.togglePreference(getSyncSwitch(fragment));
         assertSyncOffState(fragment);
@@ -147,7 +145,7 @@ public class SyncAndServicesPreferencesTest {
                 "There should be server cards", mSyncTestRule.hasServerAutofillCreditCards());
 
         Assert.assertTrue(AndroidSyncSettings.get().isChromeSyncEnabled());
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         assertSyncOnState(fragment);
         ChromeSwitchPreference syncSwitch = getSyncSwitch(fragment);
         Assert.assertTrue(syncSwitch.isChecked());
@@ -179,7 +177,7 @@ public class SyncAndServicesPreferencesTest {
     public void testDismissedSettingsShowsSyncSwitchOffByDefault() throws Exception {
         mSyncTestRule.setUpTestAccountAndSignInWithSyncSetupAsIncomplete();
         startPreferencesForAdvancedSyncFlowAndInterruptIt();
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         assertSyncOffState(fragment);
     }
 
@@ -189,7 +187,7 @@ public class SyncAndServicesPreferencesTest {
     public void testDismissedSettingsShowsSyncErrorCard() throws Exception {
         mSyncTestRule.setUpTestAccountAndSignInWithSyncSetupAsIncomplete();
         startPreferencesForAdvancedSyncFlowAndInterruptIt();
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         Assert.assertNotNull("Sync error card should be shown", getSyncErrorCard(fragment));
     }
 
@@ -200,7 +198,7 @@ public class SyncAndServicesPreferencesTest {
         mSyncTestRule.setUpTestAccountAndSignInWithSyncSetupAsIncomplete();
         startPreferencesForAdvancedSyncFlowAndInterruptIt();
         // Open Settings and leave sync off.
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         pressBackAndDismissActivity(fragment.getActivity());
         // FirstSetupComplete should be set.
         TestThreadUtils.runOnUiThreadBlocking(
@@ -218,7 +216,7 @@ public class SyncAndServicesPreferencesTest {
         mSyncTestRule.setUpTestAccountAndSignInWithSyncSetupAsIncomplete();
         startPreferencesForAdvancedSyncFlowAndInterruptIt();
         // Open Settings and leave sync off.
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         ApplicationTestUtils.finishActivity(fragment.getActivity());
         // FirstSetupComplete should be set.
         TestThreadUtils.runOnUiThreadBlocking(
@@ -236,7 +234,7 @@ public class SyncAndServicesPreferencesTest {
         mSyncTestRule.setUpTestAccountAndSignInWithSyncSetupAsIncomplete();
         startPreferencesForAdvancedSyncFlowAndInterruptIt();
         // Open Settings and turn sync on.
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
         ChromeSwitchPreference syncSwitch = getSyncSwitch(fragment);
         mSyncTestRule.togglePreference(syncSwitch);
         Assert.assertTrue(syncSwitch.isChecked());
@@ -257,7 +255,7 @@ public class SyncAndServicesPreferencesTest {
         pss.setEngineInitialized(true);
         pss.setTrustedVaultKeyRequiredForPreferredDataTypes(true);
 
-        SyncAndServicesPreferences fragment = startSyncAndServicesPreferences();
+        SyncAndServicesSettings fragment = startSyncAndServicesPreferences();
 
         Assert.assertNotNull("Sync error card should be shown", getSyncErrorCard(fragment));
     }
@@ -265,7 +263,7 @@ public class SyncAndServicesPreferencesTest {
     /**
      * Test: if the onboarding was never shown, the AA chrome preference should not exist.
      *
-     * Note: presence of the {@link SyncAndServicesPreferences.PREF_AUTOFILL_ASSISTANT}
+     * Note: presence of the {@link SyncAndServicesSettings.PREF_AUTOFILL_ASSISTANT}
      * shared preference indicates whether onboarding was shown or not.
      */
     @Test
@@ -273,17 +271,17 @@ public class SyncAndServicesPreferencesTest {
     @Feature({"Sync"})
     @EnableFeatures(ChromeFeatureList.AUTOFILL_ASSISTANT)
     public void testAutofillAssistantNoPreferenceIfOnboardingNeverShown() {
-        final SyncAndServicesPreferences syncPrefs = startSyncAndServicesPreferences();
+        final SyncAndServicesSettings syncPrefs = startSyncAndServicesPreferences();
         TestThreadUtils.runOnUiThreadBlocking(() -> {
             Assert.assertNull(
-                    syncPrefs.findPreference(SyncAndServicesPreferences.PREF_AUTOFILL_ASSISTANT));
+                    syncPrefs.findPreference(SyncAndServicesSettings.PREF_AUTOFILL_ASSISTANT));
         });
     }
 
     /**
      * Test: if the onboarding was shown at least once, the AA chrome preference should also exist.
      *
-     * Note: presence of the {@link SyncAndServicesPreferences.PREF_AUTOFILL_ASSISTANT}
+     * Note: presence of the {@link SyncAndServicesSettings.PREF_AUTOFILL_ASSISTANT}
      * shared preference indicates whether onboarding was shown or not.
      */
     @Test
@@ -292,10 +290,10 @@ public class SyncAndServicesPreferencesTest {
     @EnableFeatures(ChromeFeatureList.AUTOFILL_ASSISTANT)
     public void testAutofillAssistantPreferenceShownIfOnboardingShown() {
         setAutofillAssistantSwitchValue(true);
-        final SyncAndServicesPreferences syncPrefs = startSyncAndServicesPreferences();
+        final SyncAndServicesSettings syncPrefs = startSyncAndServicesPreferences();
         TestThreadUtils.runOnUiThreadBlocking(() -> {
             Assert.assertNotNull(
-                    syncPrefs.findPreference(SyncAndServicesPreferences.PREF_AUTOFILL_ASSISTANT));
+                    syncPrefs.findPreference(SyncAndServicesSettings.PREF_AUTOFILL_ASSISTANT));
         });
     }
 
@@ -308,10 +306,10 @@ public class SyncAndServicesPreferencesTest {
     @DisableFeatures(ChromeFeatureList.AUTOFILL_ASSISTANT)
     public void testAutofillAssistantNoPreferenceIfFeatureDisabled() {
         setAutofillAssistantSwitchValue(true);
-        final SyncAndServicesPreferences syncPrefs = startSyncAndServicesPreferences();
+        final SyncAndServicesSettings syncPrefs = startSyncAndServicesPreferences();
         TestThreadUtils.runOnUiThreadBlocking(() -> {
             Assert.assertNull(
-                    syncPrefs.findPreference(SyncAndServicesPreferences.PREF_AUTOFILL_ASSISTANT));
+                    syncPrefs.findPreference(SyncAndServicesSettings.PREF_AUTOFILL_ASSISTANT));
         });
     }
 
@@ -324,19 +322,18 @@ public class SyncAndServicesPreferencesTest {
     @EnableFeatures(ChromeFeatureList.AUTOFILL_ASSISTANT)
     public void testAutofillAssistantSwitchOn() {
         TestThreadUtils.runOnUiThreadBlocking(() -> { setAutofillAssistantSwitchValue(true); });
-        final SyncAndServicesPreferences syncAndServicesPreferences =
-                startSyncAndServicesPreferences();
+        final SyncAndServicesSettings syncAndServicesSettings = startSyncAndServicesPreferences();
 
         TestThreadUtils.runOnUiThreadBlocking(() -> {
             ChromeSwitchPreference autofillAssistantSwitch =
-                    (ChromeSwitchPreference) syncAndServicesPreferences.findPreference(
-                            SyncAndServicesPreferences.PREF_AUTOFILL_ASSISTANT);
+                    (ChromeSwitchPreference) syncAndServicesSettings.findPreference(
+                            SyncAndServicesSettings.PREF_AUTOFILL_ASSISTANT);
             Assert.assertTrue(autofillAssistantSwitch.isChecked());
 
             autofillAssistantSwitch.performClick();
-            Assert.assertFalse(syncAndServicesPreferences.isAutofillAssistantSwitchOn());
+            Assert.assertFalse(syncAndServicesSettings.isAutofillAssistantSwitchOn());
             autofillAssistantSwitch.performClick();
-            Assert.assertTrue(syncAndServicesPreferences.isAutofillAssistantSwitchOn());
+            Assert.assertTrue(syncAndServicesSettings.isAutofillAssistantSwitchOn());
         });
     }
 
@@ -346,13 +343,12 @@ public class SyncAndServicesPreferencesTest {
     @EnableFeatures(ChromeFeatureList.AUTOFILL_ASSISTANT)
     public void testAutofillAssistantSwitchOff() {
         TestThreadUtils.runOnUiThreadBlocking(() -> { setAutofillAssistantSwitchValue(false); });
-        final SyncAndServicesPreferences syncAndServicesPreferences =
-                startSyncAndServicesPreferences();
+        final SyncAndServicesSettings syncAndServicesSettings = startSyncAndServicesPreferences();
 
         TestThreadUtils.runOnUiThreadBlocking(() -> {
             ChromeSwitchPreference autofillAssistantSwitch =
-                    (ChromeSwitchPreference) syncAndServicesPreferences.findPreference(
-                            SyncAndServicesPreferences.PREF_AUTOFILL_ASSISTANT);
+                    (ChromeSwitchPreference) syncAndServicesSettings.findPreference(
+                            SyncAndServicesSettings.PREF_AUTOFILL_ASSISTANT);
             Assert.assertFalse(autofillAssistantSwitch.isChecked());
         });
     }
@@ -373,13 +369,13 @@ public class SyncAndServicesPreferencesTest {
     }
 
     /**
-     * Start SyncAndServicesPreferences signin screen and dissmiss it without pressing confirm or
+     * Start SyncAndServicesSettings signin screen and dissmiss it without pressing confirm or
      * cancel.
      */
     private void startPreferencesForAdvancedSyncFlowAndInterruptIt() throws Exception {
         Context context = InstrumentationRegistry.getTargetContext();
-        String fragmentName = SyncAndServicesPreferences.class.getName();
-        final Bundle arguments = SyncAndServicesPreferences.createArguments(true);
+        String fragmentName = SyncAndServicesSettings.class.getName();
+        final Bundle arguments = SyncAndServicesSettings.createArguments(true);
         Intent intent = SettingsLauncher.getInstance().createIntentForSettingsPage(
                 context, fragmentName, arguments);
         Activity activity = InstrumentationRegistry.getInstrumentation().startActivitySync(intent);
@@ -387,14 +383,14 @@ public class SyncAndServicesPreferencesTest {
         ApplicationTestUtils.finishActivity(activity);
     }
 
-    private SyncAndServicesPreferences startSyncAndServicesPreferences() {
+    private SyncAndServicesSettings startSyncAndServicesPreferences() {
         mSettingsActivity =
-                mSyncTestRule.startSettingsActivity(SyncAndServicesPreferences.class.getName());
+                mSyncTestRule.startSettingsActivity(SyncAndServicesSettings.class.getName());
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
-        return (SyncAndServicesPreferences) mSettingsActivity.getMainFragment();
+        return (SyncAndServicesSettings) mSettingsActivity.getMainFragment();
     }
 
-    private void closeFragment(SyncAndServicesPreferences fragment) {
+    private void closeFragment(SyncAndServicesSettings fragment) {
         FragmentTransaction transaction =
                 mSettingsActivity.getSupportFragmentManager().beginTransaction();
         transaction.remove(fragment);
@@ -408,24 +404,24 @@ public class SyncAndServicesPreferencesTest {
         ApplicationTestUtils.finishActivity(activity);
     }
 
-    private ChromeSwitchPreference getSyncSwitch(SyncAndServicesPreferences fragment) {
+    private ChromeSwitchPreference getSyncSwitch(SyncAndServicesSettings fragment) {
         return (ChromeSwitchPreference) fragment.findPreference(
-                SyncAndServicesPreferences.PREF_SYNC_REQUESTED);
+                SyncAndServicesSettings.PREF_SYNC_REQUESTED);
     }
 
-    private Preference getSyncErrorCard(SyncAndServicesPreferences fragment) {
+    private Preference getSyncErrorCard(SyncAndServicesSettings fragment) {
         return ((PreferenceCategory) fragment.findPreference(
-                        SyncAndServicesPreferences.PREF_SYNC_CATEGORY))
-                .findPreference(SyncAndServicesPreferences.PREF_SYNC_ERROR_CARD);
+                        SyncAndServicesSettings.PREF_SYNC_CATEGORY))
+                .findPreference(SyncAndServicesSettings.PREF_SYNC_ERROR_CARD);
     }
 
-    private void assertSyncOnState(SyncAndServicesPreferences fragment) {
+    private void assertSyncOnState(SyncAndServicesSettings fragment) {
         Assert.assertTrue("The sync switch should be on.", getSyncSwitch(fragment).isChecked());
         Assert.assertTrue(
                 "The sync switch should be enabled.", getSyncSwitch(fragment).isEnabled());
     }
 
-    private void assertSyncOffState(SyncAndServicesPreferences fragment) {
+    private void assertSyncOffState(SyncAndServicesSettings fragment) {
         Assert.assertFalse("The sync switch should be off.", getSyncSwitch(fragment).isChecked());
         Assert.assertTrue(
                 "The sync switch should be enabled.", getSyncSwitch(fragment).isEnabled());

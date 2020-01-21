@@ -17,7 +17,7 @@ import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher;
 import org.chromium.chrome.browser.lifecycle.NativeInitObserver;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.settings.SettingsLauncher;
-import org.chromium.chrome.browser.settings.sync.SyncAndServicesPreferences;
+import org.chromium.chrome.browser.settings.sync.SyncAndServicesSettings;
 import org.chromium.chrome.browser.signin.IdentityServicesProvider;
 import org.chromium.chrome.browser.signin.ProfileDataCache;
 import org.chromium.chrome.browser.signin.SigninManager;
@@ -170,7 +170,7 @@ class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Obs
         mToolbarManager.enableExperimentalButton(view -> {
             recordIdentityDiscUsed();
             SettingsLauncher.getInstance().launchSettingsPage(
-                    mContext, SyncAndServicesPreferences.class);
+                    mContext, SyncAndServicesSettings.class);
         }, getProfileImage(accountName), R.string.accessibility_toolbar_btn_identity_disc);
     }
 

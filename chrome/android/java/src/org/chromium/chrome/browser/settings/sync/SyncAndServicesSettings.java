@@ -54,7 +54,7 @@ import org.chromium.chrome.browser.settings.SettingsActivity;
 import org.chromium.chrome.browser.settings.SettingsUtils;
 import org.chromium.chrome.browser.settings.password.PasswordUIView;
 import org.chromium.chrome.browser.settings.privacy.PrivacyPreferencesManager;
-import org.chromium.chrome.browser.settings.sync.SyncPreferenceUtils.SyncError;
+import org.chromium.chrome.browser.settings.sync.SyncSettingsUtils.SyncError;
 import org.chromium.chrome.browser.signin.IdentityServicesProvider;
 import org.chromium.chrome.browser.signin.UnifiedConsentServiceBridge;
 import org.chromium.chrome.browser.sync.ProfileSyncService;
@@ -74,7 +74,7 @@ import org.chromium.ui.widget.ButtonCompat;
 /**
  * Settings fragment to enable Sync and other services that communicate with Google.
  */
-public class SyncAndServicesPreferences extends PreferenceFragmentCompat
+public class SyncAndServicesSettings extends PreferenceFragmentCompat
         implements PassphraseDialogFragment.Listener, Preference.OnPreferenceChangeListener,
                    ProfileSyncService.SyncStateChangedListener,
                    SettingsActivity.OnBackPressedListener {
@@ -178,15 +178,15 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
         mSigninPreference = (SignInPreference) findPreference(PREF_SIGNIN);
         mSigninPreference.setPersonalizedPromoEnabled(false);
         mManageYourGoogleAccount = findPreference(PREF_MANAGE_YOUR_GOOGLE_ACCOUNT);
-        mManageYourGoogleAccount.setOnPreferenceClickListener(SyncPreferenceUtils.toOnClickListener(
-                this, () -> SyncPreferenceUtils.openGoogleMyAccount(getActivity())));
+        mManageYourGoogleAccount.setOnPreferenceClickListener(SyncSettingsUtils.toOnClickListener(
+                this, () -> SyncSettingsUtils.openGoogleMyAccount(getActivity())));
 
         mSyncCategory = (PreferenceCategory) findPreference(PREF_SYNC_CATEGORY);
         mSyncErrorCard = findPreference(PREF_SYNC_ERROR_CARD);
         mSyncErrorCard.setIcon(UiUtils.getTintedDrawable(
                 getActivity(), R.drawable.ic_sync_error_40dp, R.color.default_red));
         mSyncErrorCard.setOnPreferenceClickListener(
-                SyncPreferenceUtils.toOnClickListener(this, this::onSyncErrorCardClicked));
+                SyncSettingsUtils.toOnClickListener(this, this::onSyncErrorCardClicked));
         mSyncDisabledByAdministrator = findPreference(PREF_SYNC_DISABLED_BY_ADMINISTRATOR);
         mSyncDisabledByAdministrator.setIcon(
                 ManagedPreferencesUtils.getManagedByEnterpriseIconId());
@@ -257,7 +257,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
             // without turning sync on, then mark first setup as complete (so that we won't show the
             // error again), but turn sync off.
             assert !mSyncRequested.isChecked();
-            SyncPreferenceUtils.enableSync(false);
+            SyncSettingsUtils.enableSync(false);
             mProfileSyncService.setFirstSetupComplete(
                     SyncFirstSetupCompleteSource.ADVANCED_FLOW_INTERRUPTED_LEAVE_SYNC_OFF);
         }
@@ -346,7 +346,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
         String key = preference.getKey();
         if (PREF_SYNC_REQUESTED.equals(key)) {
             assert canDisableSync();
-            SyncPreferenceUtils.enableSync((boolean) newValue);
+            SyncSettingsUtils.enableSync((boolean) newValue);
             if (wasSigninFlowInterrupted()) {
                 // This flow should only be reached when user toggles sync on.
                 assert (boolean) newValue;
@@ -446,7 +446,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
     @SyncError
     private int getSyncError() {
         @SyncError
-        int error = SyncPreferenceUtils.getSyncError();
+        int error = SyncSettingsUtils.getSyncError();
         if (error == SyncError.SYNC_SETUP_INCOMPLETE && mIsFromSigninScreen) {
             return SyncError.NO_ERROR;
         }
@@ -592,7 +592,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
         } else {
             mSyncErrorCard.setTitle(getSyncErrorTitle(mCurrentSyncError));
             mSyncErrorCard.setSummary(
-                    SyncPreferenceUtils.getSyncErrorHint(getActivity(), mCurrentSyncError));
+                    SyncSettingsUtils.getSyncErrorHint(getActivity(), mCurrentSyncError));
             mSyncCategory.addPreference(mSyncErrorCard);
         }
 
@@ -692,7 +692,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
 
     /**
      * The dialog that offers the user to cancel sync. Only shown when
-     * {@link SyncAndServicesPreferences} is opened from the sign-in screen. Shown when the user
+     * {@link SyncAndServicesSettings} is opened from the sign-in screen. Shown when the user
      * tries to close the settings page without confirming settings.
      */
     public static class CancelSyncDialog extends DialogFragment {
@@ -718,7 +718,7 @@ public class SyncAndServicesPreferences extends PreferenceFragmentCompat
 
         public void onCancelSyncPressed() {
             RecordUserAction.record("Signin_Signin_ConfirmCancelAdvancedSyncSettings");
-            SyncAndServicesPreferences fragment = (SyncAndServicesPreferences) getTargetFragment();
+            SyncAndServicesSettings fragment = (SyncAndServicesSettings) getTargetFragment();
             fragment.cancelSync();
         }
     }
