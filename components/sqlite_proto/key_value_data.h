@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_DATA_H_
-#define COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_DATA_H_
+#ifndef COMPONENTS_SQLITE_PROTO_KEY_VALUE_DATA_H_
+#define COMPONENTS_SQLITE_PROTO_KEY_VALUE_DATA_H_
 
 #include <algorithm>
 #include <map>
@@ -18,8 +18,8 @@
 #include "base/memory/ref_counted.h"
 #include "base/sequence_checker.h"
 #include "base/timer/timer.h"
-#include "components/sqlite_proto/loading_predictor_key_value_table.h"
-#include "components/sqlite_proto/predictor_table_base.h"
+#include "components/sqlite_proto/key_value_table.h"
+#include "components/sqlite_proto/table_manager.h"
 
 class PredictorsHandler;
 
@@ -236,4 +236,4 @@ void LoadingPredictorKeyValueData<T, Compare>::FlushDataToDisk() {
 
 }  // namespace predictors
 
-#endif  // COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_DATA_H_
+#endif  // COMPONENTS_SQLITE_PROTO_KEY_VALUE_DATA_H_

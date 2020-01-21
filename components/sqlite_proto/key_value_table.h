@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_TABLE_H_
-#define COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_TABLE_H_
+#ifndef COMPONENTS_SQLITE_PROTO_KEY_VALUE_TABLE_H_
+#define COMPONENTS_SQLITE_PROTO_KEY_VALUE_TABLE_H_
 
 #include <map>
 #include <string>
@@ -120,4 +120,4 @@ void LoadingPredictorKeyValueTable<T>::DeleteAllData(sql::Database* db) {
 
 }  // namespace predictors
 
-#endif  // COMPONENTS_SQLITE_PROTO_LOADING_PREDICTOR_KEY_VALUE_TABLE_H_
+#endif  // COMPONENTS_SQLITE_PROTO_KEY_VALUE_TABLE_H_

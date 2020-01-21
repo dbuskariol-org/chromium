@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SQLITE_PROTO_PREDICTOR_TABLE_BASE_H_
-#define COMPONENTS_SQLITE_PROTO_PREDICTOR_TABLE_BASE_H_
+#ifndef COMPONENTS_SQLITE_PROTO_TABLE_MANAGER_H_
+#define COMPONENTS_SQLITE_PROTO_TABLE_MANAGER_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
@@ -67,4 +67,4 @@ class PredictorTableBase
 
 }  // namespace predictors
 
-#endif  // COMPONENTS_SQLITE_PROTO_PREDICTOR_TABLE_BASE_H_
+#endif  // COMPONENTS_SQLITE_PROTO_TABLE_MANAGER_H_

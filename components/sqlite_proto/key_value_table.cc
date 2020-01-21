@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/sqlite_proto/loading_predictor_key_value_table.h"
+#include "components/sqlite_proto/key_value_table.h"
 
 #include "base/strings/stringprintf.h"
 #include "third_party/protobuf/src/google/protobuf/message_lite.h"

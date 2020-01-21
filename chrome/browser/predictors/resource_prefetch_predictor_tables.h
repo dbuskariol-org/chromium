@@ -15,8 +15,8 @@
 #include "base/macros.h"
 #include "base/sequenced_task_runner.h"
 #include "chrome/browser/predictors/resource_prefetch_predictor.pb.h"
-#include "components/sqlite_proto/loading_predictor_key_value_table.h"
-#include "components/sqlite_proto/predictor_table_base.h"
+#include "components/sqlite_proto/key_value_table.h"
+#include "components/sqlite_proto/table_manager.h"
 
 namespace predictors {
 

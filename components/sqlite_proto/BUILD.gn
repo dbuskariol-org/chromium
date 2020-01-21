@@ -4,11 +4,11 @@
 
 static_library("sqlite_proto") {
   sources = [
-    "loading_predictor_key_value_data.h",
-    "loading_predictor_key_value_table.cc",
-    "loading_predictor_key_value_table.h",
-    "predictor_table_base.cc",
-    "predictor_table_base.h",
+    "key_value_data.h",
+    "key_value_table.cc",
+    "key_value_table.h",
+    "table_manager.cc",
+    "table_manager.h",
   ]
   deps = [
     "//base",
