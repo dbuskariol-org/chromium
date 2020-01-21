@@ -291,7 +291,7 @@ class CrostiniManager::CrostiniRestarter
     }
 
     // Allow concierge to choose an appropriate disk image size.
-    int64_t disk_size_available = 0;
+    int64_t disk_size_available = options_.disk_size.value_or(0);
     // If we have an already existing disk, CreateDiskImage will just return its
     // path so we can pass it to StartTerminaVm.
     StartStage(mojom::InstallerState::kCreateDiskImage);

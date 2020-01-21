@@ -160,6 +160,7 @@ class CrostiniManager : public KeyedService,
   struct RestartOptions {
     // This normally will not have effect on existing container.
     base::Optional<std::string> container_username;
+    base::Optional<int64_t> disk_size;
 
     RestartOptions();
     ~RestartOptions();
