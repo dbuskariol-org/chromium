@@ -2658,7 +2658,7 @@
   {
     "name": "notification-scheduler-debug-options",
     "owners": [ "//chrome/browser/notifications/scheduler/OWNERS" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 83
   },
   {
     "name": "ntp-confirm-suggestion-removals",
