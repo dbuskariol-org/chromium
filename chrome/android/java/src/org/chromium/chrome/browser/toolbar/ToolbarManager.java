@@ -251,6 +251,9 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
 
     private int mCurrentOrientation;
 
+    @OverviewModeState
+    private int mOverviewModeState = OverviewModeState.NOT_SHOWN;
+
     /**
      * Runnable for the home and search accelerator button when Start Surface home page is enabled.
      */
@@ -735,7 +738,11 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             @Override
             public void onOverviewModeStateChanged(
                     @OverviewModeState int overviewModeState, boolean showTabSwitcherToolbar) {
+                assert FeatureUtilities.isStartSurfaceEnabled();
                 mToolbar.updateTabSwitcherToolbarState(showTabSwitcherToolbar);
+                mOverviewModeState = overviewModeState;
+                mIdentityDiscController.updateButtonState(
+                        mOverviewModeState == OverviewModeState.SHOWN_HOMEPAGE);
             }
 
             @Override
@@ -757,6 +764,7 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             @Override
             public void onOverviewModeFinishedHiding() {
                 mToolbar.onTabSwitcherTransitionFinished();
+                updateButtonStatus();
             }
         };
 
@@ -1880,8 +1888,12 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         if (mToolbar.getMenuButtonWrapper() != null && !isBottomToolbarVisible()) {
             mToolbar.getMenuButtonWrapper().setVisibility(View.VISIBLE);
         }
+
+        // TODO(crbug.com/1041475): Separate enabling the IdentityDiscController from enabling the
+        // ExperimentalButton.
         mIdentityDiscController.updateButtonState(
-                mLocationBarModel.getNewTabPageForCurrentTab() != null);
+                mLocationBarModel.getNewTabPageForCurrentTab() != null
+                || mOverviewModeState == OverviewModeState.SHOWN_HOMEPAGE);
     }
 
     private void updateBookmarkButtonStatus() {
