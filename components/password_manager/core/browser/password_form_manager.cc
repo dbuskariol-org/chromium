@@ -388,6 +388,10 @@ void PasswordFormManager::OnPasswordsRevealed() {
   votes_uploader_.set_has_passwords_revealed_vote(true);
 }
 
+void PasswordFormManager::MoveCredentialsToAccountStore() {
+  password_save_manager_->MoveCredentialsToAccountStore();
+}
+
 bool PasswordFormManager::IsNewLogin() const {
   return password_save_manager_->IsNewLogin();
 }

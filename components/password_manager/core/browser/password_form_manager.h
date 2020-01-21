@@ -154,6 +154,7 @@ class PasswordFormManager : public PasswordFormManagerForUI,
   void OnNoInteraction(bool is_update) override;
   void PermanentlyBlacklist() override;
   void OnPasswordsRevealed() override;
+  void MoveCredentialsToAccountStore() override;
 
   bool IsNewLogin() const;
   FormFetcher* GetFormFetcher();

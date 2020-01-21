@@ -2524,6 +2524,12 @@ TEST_F(PasswordFormManagerTestWithMockedSaver, PermanentlyBlacklist) {
   EXPECT_TRUE(form_manager_->IsBlacklisted());
 }
 
+TEST_F(PasswordFormManagerTestWithMockedSaver, MoveCredentialsToAccountStore) {
+  TestMockTimeTaskRunner::ScopedContext scoped_context(task_runner_.get());
+  EXPECT_CALL(*mock_password_save_manager(), MoveCredentialsToAccountStore());
+  form_manager_->MoveCredentialsToAccountStore();
+}
+
 TEST_F(PasswordFormManagerTestWithMockedSaver, IsNewLogin) {
   EXPECT_CALL(*mock_password_save_manager(), IsNewLogin());
   form_manager_->IsNewLogin();
