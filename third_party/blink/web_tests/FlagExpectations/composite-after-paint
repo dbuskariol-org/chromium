@@ -85,9 +85,6 @@ fast/webgl/pixelated.html [ Failure ]
 fast/sub-pixel/transformed-iframe-copy-on-scroll.html [ Failure ]
 fullscreen/compositor-touch-hit-rects-fullscreen-video-controls.html [ Failure ]
 http/tests/devtools/layers/layers-3d-view-after-update.js [ Failure ]
-http/tests/input/discard-events-to-unstable-iframe.html [ Failure ]
-http/tests/misc/destroy-middle-click-locked-target-crash.html [ Timeout ]
-http/tests/misc/synthetic-gesture-initiated-in-cross-origin-frame.html [ Failure ]
 printing/fixed-positioned-headers-and-footers-absolute-covering-some-pages.html [ Failure ]
 printing/fixed-positioned-headers-and-footers-larger-than-page.html [ Failure ]
 printing/offscreencanvas-2d-printing.html [ Failure ]
@@ -102,9 +99,6 @@ virtual/threaded/external/wpt/web-animations/timing-model/animations/update-play
 virtual/threaded-prefer-compositing/fast/scrolling/keyboard-scroll-page-scale.html [ Failure Pass ]
 virtual/threaded-prefer-compositing/fast/scrolling/no-hover-during-scroll.html [ Failure Pass ]
 virtual/threaded-prefer-compositing/fast/scrolling/no-hover-during-smooth-js-scroll.html [ Crash Pass ]
-
-# Loading an image in a subframe.
-crbug.com/959936 http/tests/images/image-decode-in-frame.html [ Failure ]
 
 crbug.com/907601 virtual/threaded-prefer-compositing/fast/scrolling/events/scrollend-event-fired-after-snap.html [ Skip ]
 

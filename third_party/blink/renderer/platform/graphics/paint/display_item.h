@@ -100,6 +100,7 @@ class PLATFORM_EXPORT DisplayItem {
     kForeignLayerDevToolsOverlay,
     kForeignLayerPlugin,
     kForeignLayerVideo,
+    kForeignLayerRemoteFrame,
     kForeignLayerWrapper,
     kForeignLayerContentsWrapper,
     kForeignLayerLinkHighlight,
