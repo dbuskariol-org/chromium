@@ -3524,12 +3524,12 @@
   {
     "name": "trim-on-all-frames-frozen",
     "owners": [ "bgeffon", "sonnyrao" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 85
   },
   {
     "name": "trim-on-memory-pressure",
     "owners": [ "bgeffon", "sonnyrao" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 85
   },
   {
     "name": "try-supported-channel-layouts",
