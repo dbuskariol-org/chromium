@@ -45769,6 +45769,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="10"
       label="Clicked on the Refresh button in the all dismissed state"/>
   <int value="11" label="Opened an explore sites tile"/>
+  <int value="12" label="Opened the manage interests page from the feed"/>
 </enum>
 
 <enum name="NewTabPageActioniOS">
