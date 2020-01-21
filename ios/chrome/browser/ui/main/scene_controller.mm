@@ -24,7 +24,10 @@
 #include "ios/chrome/browser/browsing_data/browsing_data_remover_factory.h"
 #include "ios/chrome/browser/chrome_url_constants.h"
 #import "ios/chrome/browser/chrome_url_util.h"
+#include "ios/chrome/browser/crash_report/breadcrumbs/breadcrumb_manager_browser_agent.h"
+#include "ios/chrome/browser/crash_report/breadcrumbs/features.h"
 #include "ios/chrome/browser/crash_report/breakpad_helper.h"
+#include "ios/chrome/browser/crash_report/crash_report_helper.h"
 #include "ios/chrome/browser/main/browser.h"
 #include "ios/chrome/browser/ntp/features.h"
 #include "ios/chrome/browser/payments/ios_payment_instrument_launcher.h"
@@ -1291,7 +1294,20 @@ enum class EnterTabSwitcherSnapshotResult {
   // will be destroyed.
   [self.mainController.tabSwitcher setOtrBrowser:nil];
 
+  if (base::FeatureList::IsEnabled(kLogBreadcrumbs)) {
+    BreadcrumbManagerBrowserAgent::FromBrowser(self.incognitoInterface.browser)
+        ->SetLoggingEnabled(false);
+
+    breakpad::StopMonitoringBreadcrumbsForBrowserState(
+        self.incognitoInterface.browserState);
+  }
+
   [self.mainController.browserViewWrangler destroyAndRebuildIncognitoBrowser];
+
+  if (base::FeatureList::IsEnabled(kLogBreadcrumbs)) {
+    breakpad::MonitorBreadcrumbsForBrowserState(
+        self.incognitoInterface.browserState);
+  }
 
   if (otrBVCIsCurrent) {
     [self activateBVCAndMakeCurrentBVCPrimary];
