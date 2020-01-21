@@ -39836,6 +39836,7 @@ from previous Chrome versions.
   <int value="12" label="Failed to get OAuth2 token"/>
   <int value="13" label="Cryptohome missing from disk"/>
   <int value="14" label="Authentication disabled for user"/>
+  <int value="15" label="TPM firmware update is required"/>
 </enum>
 
 <enum name="LoginIsKnownUser">
