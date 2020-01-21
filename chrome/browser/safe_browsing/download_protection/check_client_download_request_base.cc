@@ -229,11 +229,10 @@ void CheckClientDownloadRequestBase::FinishRequest(
       UploadBinary();
       did_upload_binary = true;
     }
-  } else if (ShouldPromptForDeepScanning(reason)) {
-    result = DownloadCheckResult::PROMPT_FOR_SCANNING;
-    reason = DownloadCheckResultReason::REASON_ADVANCED_PROTECTION_PROMPT;
   }
 
+  DVLOG(2) << "SafeBrowsing download verdict for: " << source_url_
+           << " verdict:" << reason << " result:" << static_cast<int>(result);
   UMA_HISTOGRAM_ENUMERATION("SBClientDownload.CheckDownloadStats", reason,
                             REASON_MAX);
 

@@ -56,9 +56,6 @@ const base::Feature kPasswordProtectionForSignedInUsers{
     "SafeBrowsingPasswordProtectionForSignedInUsers",
     base::FEATURE_DISABLED_BY_DEFAULT};
 
-const base::Feature kPromptAppForDeepScanning{
-    "SafeBrowsingPromptAppForDeepScanning", base::FEATURE_DISABLED_BY_DEFAULT};
-
 const base::Feature kRealTimeUrlLookupEnabled{
     "SafeBrowsingRealTimeUrlLookupEnabled", base::FEATURE_DISABLED_BY_DEFAULT};
 
@@ -112,7 +109,7 @@ const base::Feature kUseNewDownloadWarnings{"UseNewDownloadWarnings",
 namespace {
 // List of Safe Browsing features. Boolean value for each list member should be
 // set to true if the experiment state should be listed on
-// chrome://safe-browsing. Features should be listed in alphabetical order.
+// chrome://safe-browsing.
 constexpr struct {
   const base::Feature* feature;
   // True if the feature's state should be listed on chrome://safe-browsing.
@@ -129,7 +126,6 @@ constexpr struct {
     {&kPasswordProtectionForSavedPasswords, true},
     {&kPasswordProtectionShowDomainsForSavedPasswords, true},
     {&kPasswordProtectionForSignedInUsers, true},
-    {&kPromptAppForDeepScanning, true},
     {&kRealTimeUrlLookupEnabled, true},
     {&kSendOnFocusPing, true},
     {&kSendPasswordReusePing, true},

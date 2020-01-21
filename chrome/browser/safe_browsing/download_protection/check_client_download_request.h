@@ -50,7 +50,7 @@ class CheckClientDownloadRequest : public CheckClientDownloadRequestBase,
   // CheckClientDownloadRequestBase overrides:
   bool IsSupportedDownload(DownloadCheckResultReason* reason,
                            ClientDownloadRequest::DownloadType* type) override;
-  content::BrowserContext* GetBrowserContext() const override;
+  content::BrowserContext* GetBrowserContext() override;
   bool IsCancelled() override;
   void PopulateRequest(ClientDownloadRequest* request) override;
   base::WeakPtr<CheckClientDownloadRequestBase> GetWeakPtr() override;
@@ -70,11 +70,6 @@ class CheckClientDownloadRequest : public CheckClientDownloadRequestBase,
   // Called when this request is completed.
   void NotifyRequestFinished(DownloadCheckResult result,
                              DownloadCheckResultReason reason) override;
-
-  // Called when finishing the download, to decide whether to prompt the user
-  // for deep scanning or not.
-  bool ShouldPromptForDeepScanning(
-      DownloadCheckResultReason reason) const override;
 
   // Returns true when the file should be uploaded for a DLP compliance scan.
   // This consults the CheckContentCompliance enterprise policy.

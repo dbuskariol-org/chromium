@@ -38,7 +38,7 @@ class CheckNativeFileSystemWriteRequest
   // CheckClientDownloadRequestBase overrides:
   bool IsSupportedDownload(DownloadCheckResultReason* reason,
                            ClientDownloadRequest::DownloadType* type) override;
-  content::BrowserContext* GetBrowserContext() const override;
+  content::BrowserContext* GetBrowserContext() override;
   bool IsCancelled() override;
   void PopulateRequest(ClientDownloadRequest* request) override;
   base::WeakPtr<CheckClientDownloadRequestBase> GetWeakPtr() override;
@@ -51,8 +51,6 @@ class CheckNativeFileSystemWriteRequest
                                   const std::string& response_body) override;
   bool ShouldUploadBinary(DownloadCheckResultReason reason) override;
   void UploadBinary() override;
-  bool ShouldPromptForDeepScanning(
-      DownloadCheckResultReason reason) const override;
   void NotifyRequestFinished(DownloadCheckResult result,
                              DownloadCheckResultReason reason) override;
 

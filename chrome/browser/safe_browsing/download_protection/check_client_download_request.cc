@@ -143,7 +143,7 @@ bool CheckClientDownloadRequest::IsSupportedDownload(
   return IsSupportedDownload(*item_, item_->GetTargetFilePath(), reason, type);
 }
 
-content::BrowserContext* CheckClientDownloadRequest::GetBrowserContext() const {
+content::BrowserContext* CheckClientDownloadRequest::GetBrowserContext() {
   return content::DownloadItemUtils::GetBrowserContext(item_);
 }
 
@@ -242,17 +242,6 @@ void CheckClientDownloadRequest::NotifyRequestFinished(
            << " verdict:" << reason << " result:" << static_cast<int>(result);
 
   item_->RemoveObserver(this);
-}
-
-bool CheckClientDownloadRequest::ShouldPromptForDeepScanning(
-    DownloadCheckResultReason reason) const {
-  if (reason != REASON_DOWNLOAD_UNCOMMON)
-    return false;
-
-  Profile* profile = Profile::FromBrowserContext(GetBrowserContext());
-  return base::FeatureList::IsEnabled(kPromptAppForDeepScanning) &&
-         AdvancedProtectionStatusManagerFactory::GetForProfile(profile)
-             ->is_under_advanced_protection();
 }
 
 bool CheckClientDownloadRequest::ShouldUploadForDlpScan() {

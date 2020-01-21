@@ -391,7 +391,6 @@ InterpretSafeBrowsingResult(safe_browsing::DownloadCheckResult result) {
     case Result::SENSITIVE_CONTENT_WARNING:
     case Result::SENSITIVE_CONTENT_BLOCK:
     case Result::DEEP_SCANNED_SAFE:
-    case Result::PROMPT_FOR_SCANNING:
       NOTREACHED();
       return ChromeNativeFileSystemPermissionContext::AfterWriteCheckResult::
           kAllow;

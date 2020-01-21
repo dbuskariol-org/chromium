@@ -92,8 +92,8 @@ bool CheckNativeFileSystemWriteRequest::IsSupportedDownload(
   return true;
 }
 
-content::BrowserContext* CheckNativeFileSystemWriteRequest::GetBrowserContext()
-    const {
+content::BrowserContext*
+CheckNativeFileSystemWriteRequest::GetBrowserContext() {
   return item_->browser_context;
 }
 
@@ -158,11 +158,6 @@ bool CheckNativeFileSystemWriteRequest::ShouldUploadBinary(
 }
 
 void CheckNativeFileSystemWriteRequest::UploadBinary() {}
-
-bool CheckNativeFileSystemWriteRequest::ShouldPromptForDeepScanning(
-    DownloadCheckResultReason reason) const {
-  return false;
-}
 
 void CheckNativeFileSystemWriteRequest::NotifyRequestFinished(
     DownloadCheckResult result,
