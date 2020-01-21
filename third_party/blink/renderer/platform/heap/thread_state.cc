@@ -1217,7 +1217,7 @@ void ThreadState::IncrementalMarkingStep(BlinkGC::StackState stack_state,
 
   if (base::FeatureList::IsEnabled(
           blink::features::kBlinkHeapConcurrentMarking)) {
-    complete = complete && ConcurrentMarkingStep();
+    complete = ConcurrentMarkingStep() && complete;
   }
 
   if (complete) {
