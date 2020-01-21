@@ -249,3 +249,5 @@ crbug.com/1035582 paint/invalidation/table/caret-contenteditable-content-after.h
 crbug.com/1035582 virtual/scalefactor150/fast/hidpi/static/calendar-picker-appearance.html [ Failure ]
 crbug.com/1035582 virtual/scalefactor150/fast/hidpi/static/data-suggestion-picker-appearance.html [ Failure ]
 crbug.com/1035582 virtual/scalefactor200withzoom/fast/hidpi/static/validation-bubble-appearance-hidpi.html [ Failure ]
+
+external/wpt/css/compositing/root-element-blend-mode.html [ Failure ]

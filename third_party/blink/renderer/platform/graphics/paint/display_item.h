@@ -61,6 +61,7 @@ class PLATFORM_EXPORT DisplayItem {
     kClippingMask,
     kColumnRules,
     kDebugDrawing,
+    kDocumentRootBackdrop,
     kDocumentBackground,
     kDragImage,
     kDragCaret,

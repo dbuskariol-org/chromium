@@ -78,6 +78,7 @@ static WTF::String SpecialDrawingTypeAsDebugString(DisplayItem::Type type) {
     DEBUG_STRING_CASE(ClippingMask);
     DEBUG_STRING_CASE(ColumnRules);
     DEBUG_STRING_CASE(DebugDrawing);
+    DEBUG_STRING_CASE(DocumentRootBackdrop);
     DEBUG_STRING_CASE(DocumentBackground);
     DEBUG_STRING_CASE(DragImage);
     DEBUG_STRING_CASE(DragCaret);
