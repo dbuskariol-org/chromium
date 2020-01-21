@@ -4535,10 +4535,6 @@ crbug.com/681468 [ Win ] virtual/scalefactor200/fast/hidpi/static/data-suggestio
 
 crbug.com/683800 [ Win7 Debug ] external/wpt/selection/* [ Failure Pass ]
 
-# Arrow function name inferring
-crbug.com/916975 http/tests/devtools/tracing/timeline-misc/timeline-event-causes.js [ Pass Failure ]
-crbug.com/916975 virtual/threaded/http/tests/devtools/tracing/timeline-misc/timeline-event-causes.js [ Pass Failure ]
-
 # Importing 'fetch' tests from WPT.
 crbug.com/705490 external/wpt/fetch/api/basic/error-after-response.html [ Timeout Pass ]
 crbug.com/820334 external/wpt/fetch/api/request/request-cache-default-conditional.html [ Timeout Pass ]
