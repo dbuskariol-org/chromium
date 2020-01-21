@@ -647,6 +647,7 @@ void ExtensionApps::UnpauseApps(const std::string& app_id) {
 
 void ExtensionApps::GetMenuModel(const std::string& app_id,
                                  apps::mojom::MenuType menu_type,
+                                 int64_t display_id,
                                  GetMenuModelCallback callback) {
   extensions::ExtensionRegistry* registry =
       extensions::ExtensionRegistry::Get(profile_);

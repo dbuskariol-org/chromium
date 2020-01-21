@@ -79,6 +79,7 @@ class AppServiceImpl : public apps::mojom::AppService {
   void GetMenuModel(apps::mojom::AppType app_type,
                     const std::string& app_id,
                     apps::mojom::MenuType menu_type,
+                    int64_t display_id,
                     GetMenuModelCallback callback);
   void OpenNativeSettings(apps::mojom::AppType app_type,
                           const std::string& app_id) override;

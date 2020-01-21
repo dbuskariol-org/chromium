@@ -492,6 +492,7 @@ void ArcApps::UnpauseApps(const std::string& app_id) {
 
 void ArcApps::GetMenuModel(const std::string& app_id,
                            apps::mojom::MenuType menu_type,
+                           int64_t display_id,
                            GetMenuModelCallback callback) {
   ArcAppListPrefs* prefs = ArcAppListPrefs::Get(profile_);
   if (!prefs) {

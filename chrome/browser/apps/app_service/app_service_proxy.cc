@@ -296,6 +296,7 @@ void AppServiceProxy::UnpauseApps(const std::set<std::string>& app_ids) {
 
 void AppServiceProxy::GetMenuModel(const std::string& app_id,
                                    apps::mojom::MenuType menu_type,
+                                   int64_t display_id,
                                    GetMenuModelCallback callback) {
   if (!app_service_.is_connected()) {
     return;
@@ -304,7 +305,7 @@ void AppServiceProxy::GetMenuModel(const std::string& app_id,
   // TODO(crbug.com/1038487): change to use below code to call
   // AppService->GetMenuModel when GetMenuModel is added to mojom.
   // apps::mojom::AppType app_type = cache_.GetAppType(app_id);
-  // app_service_->GetMenuModel(app_type, app_id, menu_type,
+  // app_service_->GetMenuModel(app_type, app_id, menu_type, display_id,
   //                            std::move(callback));
 }
 

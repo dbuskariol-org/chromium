@@ -100,6 +100,7 @@ class FakePublisher : public apps::mojom::Publisher {
       base::OnceCallback<void(apps::mojom::MenuItemsPtr)>;
   void GetMenuModel(const std::string& app_id,
                     apps::mojom::MenuType menu_type,
+                    int64_t display_id,
                     GetMenuModelCallback callback) {}
 
   void PauseApp(const std::string& app_id) override {}

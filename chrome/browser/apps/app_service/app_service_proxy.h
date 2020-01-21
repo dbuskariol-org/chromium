@@ -135,9 +135,11 @@ class AppServiceProxy : public KeyedService,
   // as false directly and removes the paused app icon effect.
   void UnpauseApps(const std::set<std::string>& app_ids);
 
-  // Returns the menu items for the given |app_id|.
+  // Returns the menu items for the given |app_id|. |display_id| is the id of
+  // the display from which the app is launched.
   void GetMenuModel(const std::string& app_id,
                     apps::mojom::MenuType menu_type,
+                    int64_t display_id,
                     GetMenuModelCallback callback);
 
   // Opens native settings for the app with |app_id|.
