@@ -59,7 +59,14 @@ class COMPONENT_EXPORT(SMBFS) SmbFsMounter {
   virtual void Mount(DoneCallback callback);
 
  protected:
+  // Additional constructors for tests.
   SmbFsMounter();
+  SmbFsMounter(const std::string& share_path,
+               const std::string& mount_dir_name,
+               const MountOptions& options,
+               SmbFsHost::Delegate* delegate,
+               chromeos::disks::DiskMountManager* disk_mount_manager,
+               mojo::Remote<mojom::SmbFsBootstrap> bootstrap);
 
  private:
   // Callback for MountPoint::Mount().

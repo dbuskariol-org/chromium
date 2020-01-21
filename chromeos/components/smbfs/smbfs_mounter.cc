@@ -33,13 +33,28 @@ SmbFsMounter::SmbFsMounter(
     const MountOptions& options,
     SmbFsHost::Delegate* delegate,
     chromeos::disks::DiskMountManager* disk_mount_manager)
+    : SmbFsMounter(share_path,
+                   mount_dir_name,
+                   options,
+                   delegate,
+                   disk_mount_manager,
+                   {}) {}
+
+SmbFsMounter::SmbFsMounter(
+    const std::string& share_path,
+    const std::string& mount_dir_name,
+    const MountOptions& options,
+    SmbFsHost::Delegate* delegate,
+    chromeos::disks::DiskMountManager* disk_mount_manager,
+    mojo::Remote<mojom::SmbFsBootstrap> bootstrap)
     : share_path_(share_path),
       mount_dir_name_(mount_dir_name),
       options_(options),
       delegate_(delegate),
       disk_mount_manager_(disk_mount_manager),
       token_(base::UnguessableToken::Create()),
-      mount_url_(base::StrCat({kMountUrlPrefix, token_.ToString()})) {
+      mount_url_(base::StrCat({kMountUrlPrefix, token_.ToString()})),
+      bootstrap_(std::move(bootstrap)) {
   DCHECK(delegate_);
   DCHECK(disk_mount_manager_);
 }
@@ -60,14 +75,18 @@ void SmbFsMounter::Mount(SmbFsMounter::DoneCallback callback) {
   CHECK(!mojo_fd_pending_);
 
   callback_ = std::move(callback);
-  mojo_bootstrap::PendingConnectionManager::Get().ExpectOpenIpcChannel(
-      token_,
-      base::BindOnce(&SmbFsMounter::OnIpcChannel, base::Unretained(this)));
-  mojo_fd_pending_ = true;
 
-  bootstrap_.Bind(mojo::PendingRemote<mojom::SmbFsBootstrap>(
-      bootstrap_invitation_.AttachMessagePipe(kMessagePipeName),
-      mojom::SmbFsBootstrap::Version_));
+  // If |bootstrap_| is already bound, it was provided by a test subclass.
+  if (!bootstrap_) {
+    mojo_bootstrap::PendingConnectionManager::Get().ExpectOpenIpcChannel(
+        token_,
+        base::BindOnce(&SmbFsMounter::OnIpcChannel, base::Unretained(this)));
+    mojo_fd_pending_ = true;
+
+    bootstrap_.Bind(mojo::PendingRemote<mojom::SmbFsBootstrap>(
+        bootstrap_invitation_.AttachMessagePipe(kMessagePipeName),
+        mojom::SmbFsBootstrap::Version_));
+  }
   bootstrap_.set_disconnect_handler(
       base::BindOnce(&SmbFsMounter::OnMojoDisconnect, base::Unretained(this)));
 
