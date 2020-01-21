@@ -377,7 +377,8 @@ TEST_F(ManagePasswordsBubbleModelTest, ClickUpdateInSaveState) {
 
 TEST_F(ManagePasswordsBubbleModelTest, GetInitialUsername_MatchedUsername) {
   PretendUpdatePasswordWaiting();
-  EXPECT_EQ(base::UTF8ToUTF16(kUsername), model()->GetCurrentUsername());
+  EXPECT_EQ(base::UTF8ToUTF16(kUsername),
+            model()->pending_password().username_value);
 }
 
 TEST_F(ManagePasswordsBubbleModelTest, EditCredential) {

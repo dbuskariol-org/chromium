@@ -136,9 +136,6 @@ class ManagePasswordsBubbleModel {
   // to Google account.
   bool ShouldShowFooter() const;
 
-  // Returns the value for the username field when the bubble is opened.
-  const base::string16& GetCurrentUsername() const;
-
   // Returns the ID of the picture to show above the title.
   int GetTopIllustration(bool dark_mode) const;
 

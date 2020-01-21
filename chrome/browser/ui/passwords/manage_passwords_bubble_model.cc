@@ -422,10 +422,6 @@ bool ManagePasswordsBubbleModel::ShouldShowFooter() const {
          IsSyncUser(GetProfile());
 }
 
-const base::string16& ManagePasswordsBubbleModel::GetCurrentUsername() const {
-  return pending_password_.username_value;
-}
-
 int ManagePasswordsBubbleModel::GetTopIllustration(bool dark_mode) const {
   if (state_ == password_manager::ui::PENDING_PASSWORD_UPDATE_STATE ||
       state_ == password_manager::ui::PENDING_PASSWORD_STATE) {
