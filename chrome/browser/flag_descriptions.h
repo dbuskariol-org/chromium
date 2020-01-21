@@ -2151,6 +2151,9 @@ extern const char kEnterpriseReportingInChromeOSDescription[];
 extern const char kExoPointerLockName[];
 extern const char kExoPointerLockDescription[];
 
+extern const char kExperimentalAccessibilityChromeVoxAnnotationsName[];
+extern const char kExperimentalAccessibilityChromeVoxAnnotationsDescription[];
+
 extern const char kExperimentalAccessibilityChromeVoxLanguageSwitchingName[];
 extern const char
     kExperimentalAccessibilityChromeVoxLanguageSwitchingDescription[];

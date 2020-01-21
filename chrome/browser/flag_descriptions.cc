@@ -3604,6 +3604,11 @@ const char kExoPointerLockDescription[] =
     "Allow Linux applications to request a pointer lock, i.e. exclusive use of "
     "the mouse pointer.";
 
+const char kExperimentalAccessibilityChromeVoxAnnotationsName[] =
+    "Enable experimental ChromeVox annotations feature.";
+const char kExperimentalAccessibilityChromeVoxAnnotationsDescription[] =
+    "Allows users to create custom annotations for elements using ChromeVox.";
+
 const char kExperimentalAccessibilityChromeVoxLanguageSwitchingName[] =
     "Enable experimental ChromeVox language switching.";
 const char kExperimentalAccessibilityChromeVoxLanguageSwitchingDescription[] =

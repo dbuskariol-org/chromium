@@ -2577,6 +2577,13 @@ const FeatureEntry kFeatureEntries[] = {
      kOsCrOS,
      SINGLE_VALUE_TYPE(
          ::switches::kEnableExperimentalAccessibilitySwitchAccessText)},
+    {"enable-experimental-accessibility-chromevox-annotations",
+     flag_descriptions::kExperimentalAccessibilityChromeVoxAnnotationsName,
+     flag_descriptions::
+         kExperimentalAccessibilityChromeVoxAnnotationsDescription,
+     kOsCrOS,
+     SINGLE_VALUE_TYPE(
+         ::switches::kEnableExperimentalAccessibilityChromeVoxAnnotations)},
     {"enable-experimental-accessibility-chromevox-language-switching",
      flag_descriptions::
          kExperimentalAccessibilityChromeVoxLanguageSwitchingName,
