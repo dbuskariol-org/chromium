@@ -57,8 +57,6 @@ class AppServiceProxy : public KeyedService,
                         public apps::mojom::Subscriber,
                         public apps::AppRegistryCache::Observer {
  public:
-  using GetMenuModelCallback =
-      base::OnceCallback<void(apps::mojom::MenuItemsPtr)>;
   using OnPauseDialogClosedCallback = base::OnceCallback<void()>;
 
   explicit AppServiceProxy(Profile* profile);
@@ -140,7 +138,7 @@ class AppServiceProxy : public KeyedService,
   void GetMenuModel(const std::string& app_id,
                     apps::mojom::MenuType menu_type,
                     int64_t display_id,
-                    GetMenuModelCallback callback);
+                    apps::mojom::Publisher::GetMenuModelCallback callback);
 
   // Opens native settings for the app with |app_id|.
   void OpenNativeSettings(const std::string& app_id);

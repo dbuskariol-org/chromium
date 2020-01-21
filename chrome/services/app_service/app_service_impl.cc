@@ -195,10 +195,8 @@ void AppServiceImpl::GetMenuModel(apps::mojom::AppType app_type,
     return;
   }
 
-  // TODO(crbug.com/1038487): change to use below code to call
-  // AppServiceProxy->GetMenuModel when GetMenuModel is added to mojom.
-  // iter->second->GetMenuModel(app_id, menu_type, display_id,
-  // std::move(callback));
+  iter->second->GetMenuModel(app_id, menu_type, display_id,
+                             std::move(callback));
 }
 
 void AppServiceImpl::OpenNativeSettings(apps::mojom::AppType app_type,

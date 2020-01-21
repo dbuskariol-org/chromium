@@ -53,9 +53,6 @@ class WebApps : public apps::mojom::Publisher,
   void ObserveArc();
 
  private:
-  using GetMenuModelCallback =
-      base::OnceCallback<void(apps::mojom::MenuItemsPtr)>;
-
   void Initialize(const mojo::Remote<apps::mojom::AppService>& app_service);
 
   const web_app::WebApp* GetWebApp(const web_app::AppId& app_id) const;
@@ -89,7 +86,7 @@ class WebApps : public apps::mojom::Publisher,
   void GetMenuModel(const std::string& app_id,
                     apps::mojom::MenuType menu_type,
                     int64_t display_id,
-                    GetMenuModelCallback callback);
+                    GetMenuModelCallback callback) override;
   void OpenNativeSettings(const std::string& app_id) override;
   void OnPreferredAppSet(const std::string& app_id,
                          apps::mojom::IntentFilterPtr intent_filter,
