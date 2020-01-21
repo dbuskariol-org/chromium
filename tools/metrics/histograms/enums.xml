@@ -47650,9 +47650,11 @@ Called by update_net_trust_anchors.py.-->
     The optimization type was not allowed to be applied based on information
     from a hint.
   </int>
-  <int value="6" label="No matching page hint for page load">
+  <int value="6" label="DEPRECATED: No matching page hint for page load">
     There was a hint loaded that matched the page load, but no matching page
-    hint for the page load.
+    hint for the page load. Deprecated as of 01/2020. Page loads that used to
+    match this decision are now recorded as &quot;Page load not allowed by
+    hint&quot;.
   </int>
   <int value="7" label="Hint on device but not loaded yet">
     A hint for the page load was on the device but was not loaded in time to
