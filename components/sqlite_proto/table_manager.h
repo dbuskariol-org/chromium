@@ -19,32 +19,37 @@ namespace sql {
 class Database;
 }
 
-namespace predictors {
+namespace sqlite_proto {
 
-// Base class for all tables in the PredictorDatabase.
+// Base class encapsulating database operation scheduling and management, scoped
+// to a collection of tables (possibly, but not necessarily, all of the
+// database's tables).
 //
-// Refcounted as it is created and destroyed in the UI thread but all database
-// related functions need to happen in the database sequence. The task runner
-// for this sequence is provided by the client to the constructor of this class.
-class PredictorTableBase
-    : public base::RefCountedThreadSafe<PredictorTableBase> {
+// Refcounted as it is created and destroyed in the main thread (e.g., the UI
+// thread in the browser process) but all database related functions need to
+// happen in the database sequence. The task runner for this sequence is
+// provided by the client to the constructor of this class.
+class TableManager : public base::RefCountedThreadSafe<TableManager> {
  public:
   // Returns a SequencedTaskRunner that is used to run tasks on the DB sequence.
   base::SequencedTaskRunner* GetTaskRunner();
 
-  typedef base::OnceCallback<void(sql::Database*)> DBTask;
+  TableManager(const TableManager&) = delete;
+  TableManager& operator=(const TableManager&) = delete;
 
-  virtual void ScheduleDBTask(const base::Location& from_here, DBTask task);
+  virtual void ScheduleDBTask(const base::Location& from_here,
+                              base::OnceCallback<void(sql::Database*)> task);
 
-  virtual void ExecuteDBTaskOnDBSequence(DBTask task);
+  virtual void ExecuteDBTaskOnDBSequence(
+      base::OnceCallback<void(sql::Database*)> task);
 
  protected:
-  explicit PredictorTableBase(
+  explicit TableManager(
       scoped_refptr<base::SequencedTaskRunner> db_task_runner);
-  virtual ~PredictorTableBase();
+  virtual ~TableManager();
 
   // DB sequence functions.
-  virtual void CreateTableIfNonExistent() = 0;
+  virtual void CreateTablesIfNonExistent() = 0;
   virtual void LogDatabaseStats() = 0;
   void Initialize(sql::Database* db);
   void SetCancelled();
@@ -57,14 +62,12 @@ class PredictorTableBase
  private:
   base::AtomicFlag cancelled_;
 
-  friend class base::RefCountedThreadSafe<PredictorTableBase>;
+  friend class base::RefCountedThreadSafe<TableManager>;
 
   scoped_refptr<base::SequencedTaskRunner> db_task_runner_;
   sql::Database* db_;
-
-  DISALLOW_COPY_AND_ASSIGN(PredictorTableBase);
 };
 
-}  // namespace predictors
+}  // namespace sqlite_proto
 
 #endif  // COMPONENTS_SQLITE_PROTO_TABLE_MANAGER_H_

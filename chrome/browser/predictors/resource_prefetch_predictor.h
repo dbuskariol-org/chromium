@@ -121,10 +121,9 @@ class ResourcePrefetchPredictor : public history::HistoryServiceObserver {
   };
 
   using RedirectDataMap =
-      LoadingPredictorKeyValueData<RedirectData,
-                                   internal::LastVisitTimeCompare>;
+      sqlite_proto::KeyValueData<RedirectData, internal::LastVisitTimeCompare>;
   using OriginDataMap =
-      LoadingPredictorKeyValueData<OriginData, internal::LastVisitTimeCompare>;
+      sqlite_proto::KeyValueData<OriginData, internal::LastVisitTimeCompare>;
   using NavigationMap =
       std::map<NavigationID, std::unique_ptr<PageRequestSummary>>;
 

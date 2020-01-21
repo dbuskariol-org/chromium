@@ -2,6 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import("//third_party/protobuf/proto_library.gni")
+
+proto_library("test_proto") {
+  testonly = true
+  sources = [ "test_proto.proto" ]
+}
+
 static_library("sqlite_proto") {
   sources = [
     "key_value_data.h",
@@ -14,5 +21,22 @@ static_library("sqlite_proto") {
     "//base",
     "//sql",
     "//third_party/protobuf:protobuf_lite",
+  ]
+}
+
+source_set("unit_tests") {
+  testonly = true
+  sources = [
+    "key_value_data_unittest.cc",
+    "key_value_table_unittest.cc",
+  ]
+  deps = [
+    ":sqlite_proto",
+    ":test_proto",
+    "//base",
+    "//base/test:test_support",
+    "//sql",
+    "//testing/gmock",
+    "//testing/gtest",
   ]
 }

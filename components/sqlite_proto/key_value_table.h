@@ -17,7 +17,7 @@ class MessageLite;
 }
 }  // namespace google
 
-namespace predictors {
+namespace sqlite_proto {
 
 namespace internal {
 
@@ -38,21 +38,24 @@ std::string GetDeleteAllSql(const std::string& table_name);
 // class doesn't manage the creation and the deletion of the table.
 //
 // All the functions except of the constructor must be called on a DB sequence
-// of the PredictorTableBase.
-// The preferred way to call the methods of this class is passing the method to
-// PredictorTableBase::ScheduleDBTask().
+// of the corresponding TableManager. The preferred way to call the methods of
+// this class is passing the method to TableManager::ScheduleDBTask().
 //
 // Example:
-// tables_->ScheduleDBTask(
+// manager_->ScheduleDBTask(
 //     FROM_HERE,
-//     base::BindOnce(&LoadingPredictorKeyValueTable<PrefetchData>::UpdateData,
+//     base::BindOnce(&KeyValueTable<PrefetchData>::UpdateData,
 //                    base::Unretained(table_), key, data));
 template <typename T>
-class LoadingPredictorKeyValueTable {
+class KeyValueTable {
  public:
-  explicit LoadingPredictorKeyValueTable(const std::string& table_name);
+  explicit KeyValueTable(const std::string& table_name);
   // Virtual for testing.
-  virtual ~LoadingPredictorKeyValueTable() {}
+  virtual ~KeyValueTable() = default;
+
+  KeyValueTable(const KeyValueTable&) = delete;
+  KeyValueTable& operator=(const KeyValueTable&) = delete;
+
   virtual void GetAllData(std::map<std::string, T>* data_map,
                           sql::Database* db) const;
   virtual void UpdateData(const std::string& key,
@@ -64,21 +67,17 @@ class LoadingPredictorKeyValueTable {
 
  private:
   const std::string table_name_;
-
-  DISALLOW_COPY_AND_ASSIGN(LoadingPredictorKeyValueTable);
 };
 
 template <typename T>
-LoadingPredictorKeyValueTable<T>::LoadingPredictorKeyValueTable(
-    const std::string& table_name)
+KeyValueTable<T>::KeyValueTable(const std::string& table_name)
     : table_name_(table_name) {}
 
 template <typename T>
-void LoadingPredictorKeyValueTable<T>::GetAllData(
-    std::map<std::string, T>* data_map,
-    sql::Database* db) const {
+void KeyValueTable<T>::GetAllData(std::map<std::string, T>* data_map,
+                                  sql::Database* db) const {
   sql::Statement reader(db->GetUniqueStatement(
-      ::predictors::internal::GetSelectAllSql(table_name_).c_str()));
+      ::sqlite_proto::internal::GetSelectAllSql(table_name_).c_str()));
   while (reader.Step()) {
     auto it = data_map->emplace(reader.ColumnString(0), T()).first;
     int size = reader.ColumnByteLength(1);
@@ -89,21 +88,20 @@ void LoadingPredictorKeyValueTable<T>::GetAllData(
 }
 
 template <typename T>
-void LoadingPredictorKeyValueTable<T>::UpdateData(const std::string& key,
-                                                  const T& data,
-                                                  sql::Database* db) {
+void KeyValueTable<T>::UpdateData(const std::string& key,
+                                  const T& data,
+                                  sql::Database* db) {
   sql::Statement inserter(db->GetUniqueStatement(
-      ::predictors::internal::GetReplaceSql(table_name_).c_str()));
-  ::predictors::internal::BindDataToStatement(key, data, &inserter);
+      ::sqlite_proto::internal::GetReplaceSql(table_name_).c_str()));
+  ::sqlite_proto::internal::BindDataToStatement(key, data, &inserter);
   inserter.Run();
 }
 
 template <typename T>
-void LoadingPredictorKeyValueTable<T>::DeleteData(
-    const std::vector<std::string>& keys,
-    sql::Database* db) {
+void KeyValueTable<T>::DeleteData(const std::vector<std::string>& keys,
+                                  sql::Database* db) {
   sql::Statement deleter(db->GetUniqueStatement(
-      ::predictors::internal::GetDeleteSql(table_name_).c_str()));
+      ::sqlite_proto::internal::GetDeleteSql(table_name_).c_str()));
   for (const auto& key : keys) {
     deleter.BindString(0, key);
     deleter.Run();
@@ -112,12 +110,12 @@ void LoadingPredictorKeyValueTable<T>::DeleteData(
 }
 
 template <typename T>
-void LoadingPredictorKeyValueTable<T>::DeleteAllData(sql::Database* db) {
+void KeyValueTable<T>::DeleteAllData(sql::Database* db) {
   sql::Statement deleter(db->GetUniqueStatement(
-      ::predictors::internal::GetDeleteAllSql(table_name_).c_str()));
+      ::sqlite_proto::internal::GetDeleteAllSql(table_name_).c_str()));
   deleter.Run();
 }
 
-}  // namespace predictors
+}  // namespace sqlite_proto
 
 #endif  // COMPONENTS_SQLITE_PROTO_KEY_VALUE_TABLE_H_

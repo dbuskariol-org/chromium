@@ -11,20 +11,22 @@
 #include "base/sequenced_task_runner.h"
 #include "sql/database.h"
 
-namespace predictors {
+namespace sqlite_proto {
 
-base::SequencedTaskRunner* PredictorTableBase::GetTaskRunner() {
+using DBTask = base::OnceCallback<void(sql::Database*)>;
+
+base::SequencedTaskRunner* TableManager::GetTaskRunner() {
   return db_task_runner_.get();
 }
 
-void PredictorTableBase::ScheduleDBTask(const base::Location& from_here,
-                                        DBTask task) {
+void TableManager::ScheduleDBTask(const base::Location& from_here,
+                                  DBTask task) {
   GetTaskRunner()->PostTask(
-      from_here, base::BindOnce(&PredictorTableBase::ExecuteDBTaskOnDBSequence,
-                                this, std::move(task)));
+      from_here, base::BindOnce(&TableManager::ExecuteDBTaskOnDBSequence, this,
+                                std::move(task)));
 }
 
-void PredictorTableBase::ExecuteDBTaskOnDBSequence(DBTask task) {
+void TableManager::ExecuteDBTaskOnDBSequence(DBTask task) {
   DCHECK(GetTaskRunner()->RunsTasksInCurrentSequence());
   if (CantAccessDatabase())
     return;
@@ -32,39 +34,39 @@ void PredictorTableBase::ExecuteDBTaskOnDBSequence(DBTask task) {
   std::move(task).Run(DB());
 }
 
-PredictorTableBase::PredictorTableBase(
+TableManager::TableManager(
     scoped_refptr<base::SequencedTaskRunner> db_task_runner)
     : db_task_runner_(std::move(db_task_runner)), db_(nullptr) {}
 
-PredictorTableBase::~PredictorTableBase() = default;
+TableManager::~TableManager() = default;
 
-void PredictorTableBase::Initialize(sql::Database* db) {
+void TableManager::Initialize(sql::Database* db) {
   DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
   db_ = db;
-  CreateTableIfNonExistent();
+  CreateTablesIfNonExistent();
 }
 
-void PredictorTableBase::SetCancelled() {
+void TableManager::SetCancelled() {
   cancelled_.Set();
 }
 
-bool PredictorTableBase::IsCancelled() {
+bool TableManager::IsCancelled() {
   return cancelled_.IsSet();
 }
 
-sql::Database* PredictorTableBase::DB() {
+sql::Database* TableManager::DB() {
   DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
   return db_;
 }
 
-void PredictorTableBase::ResetDB() {
+void TableManager::ResetDB() {
   DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
   db_ = nullptr;
 }
 
-bool PredictorTableBase::CantAccessDatabase() {
+bool TableManager::CantAccessDatabase() {
   DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
   return cancelled_.IsSet() || !db_;
 }
 
-}  // namespace predictors
+}  // namespace sqlite_proto

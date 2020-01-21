@@ -16,31 +16,62 @@
 #include "base/bind.h"
 #include "base/location.h"
 #include "base/memory/ref_counted.h"
+#include "base/optional.h"
 #include "base/sequence_checker.h"
 #include "base/timer/timer.h"
 #include "components/sqlite_proto/key_value_table.h"
 #include "components/sqlite_proto/table_manager.h"
 
-class PredictorsHandler;
+namespace sqlite_proto {
 
-namespace predictors {
+namespace internal {
+// FakeCompare is a dummy comparator provided so that clients using
+// KeyValueData<T> objects with unbounded-size caches need not
+// specify the Compare template parameter, which is used exclusively
+// for pruning the cache when it would exceed its size bound.
+template <typename T>
+struct FakeCompare {
+  bool operator()(const T& unused_lhs, const T& unused_rhs) { return true; }
+};
+}  // namespace internal
 
 // The class provides a synchronous access to the data backed by
-// LoadingPredictorKeyValueTable<T>. The current implementation caches all the
-// data in the memory. The cache size is limited by max_size parameter using
-// Compare function to decide which entry should be evicted.
+// KeyValueTable<T>. The current implementation caches all the
+// data in the memory. The cache size is limited by the |max_num_entries|
+// parameter, using the Compare function to decide which entries should
+// be evicted.
+//
+// NOTE: If the data store is larger than the maximum cache size, it
+// will be pruned on construction to satisfy the size invariant specified
+// by |max_num_entries|. If this is undesirable, set a sufficiently high
+// |max_num_entries| (or pass |max_num_entries| = base::nullopt for
+// unbounded size).
 //
 // InitializeOnDBSequence() must be called on the DB sequence of the
-// PredictorTableBase. All other methods must be called on UI thread.
-template <typename T, typename Compare>
-class LoadingPredictorKeyValueData {
+// TableManager. All other methods must be called on UI thread.
+template <typename T, typename Compare = internal::FakeCompare<T>>
+class KeyValueData {
  public:
-  LoadingPredictorKeyValueData(scoped_refptr<PredictorTableBase> tables,
-                               LoadingPredictorKeyValueTable<T>* backend,
-                               size_t max_size,
-                               base::TimeDelta flush_delay);
+  // Constructor. Parameters:
+  // - |manager| provides an interface for scheduling database tasks for
+  // execution on the database thread.
+  // - |backend| provides the operations for updating and querying the
+  // backing database (to be scheduled and executed using |manager|).
+  // - |max_num_entries|, if given, caps the size of the in-memory cache;
+  // the Compare template parameter requires a meaningful (in particular,
+  // non-default) value iff max_num_entries is non-nullopt.
+  // - |flush_delay| is the interval for which to gather writes and deletes
+  // passing them through to the backing store; a value of zero will
+  // pass writes and deletes through immediately.
+  KeyValueData(scoped_refptr<TableManager> manager,
+               KeyValueTable<T>* backend,
+               base::Optional<size_t> max_num_entries,
+               base::TimeDelta flush_delay);
 
-  // Must be called on the DB sequence of the ResourcePrefetchPredictorTables
+  KeyValueData(const KeyValueData&) = delete;
+  KeyValueData& operator=(const KeyValueData&) = delete;
+
+  // Must be called on the provided TableManager's DB sequence
   // before calling all other methods.
   void InitializeOnDBSequence();
 
@@ -48,6 +79,10 @@ class LoadingPredictorKeyValueData {
   // |key| exists, false otherwise. |data| pointer may be nullptr to get the
   // return value only.
   bool TryGetData(const std::string& key, T* data) const;
+
+  // Returns a view of all the cached data. (The next write or delete may
+  // invalidate this reference.)
+  const std::map<std::string, T>& GetAllCached() { return *data_cache_; }
 
   // Assigns data associated with the |key| to |data|.
   void UpdateData(const std::string& key, const T& data);
@@ -58,11 +93,7 @@ class LoadingPredictorKeyValueData {
   // Deletes all entries from the database.
   void DeleteAllData();
 
-  std::map<std::string, T>* DataCacheForTesting() { return data_cache_.get(); }
-
  private:
-  friend class ::PredictorsHandler;
-
   struct EntryCompare : private Compare {
     bool operator()(const std::pair<std::string, T>& lhs,
                     const std::pair<std::string, T>& rhs) {
@@ -74,61 +105,56 @@ class LoadingPredictorKeyValueData {
 
   void FlushDataToDisk();
 
-  scoped_refptr<PredictorTableBase> tables_;
-  LoadingPredictorKeyValueTable<T>* backend_table_;
+  scoped_refptr<TableManager> manager_;
+  KeyValueTable<T>* backend_table_;
   std::unique_ptr<std::map<std::string, T>> data_cache_;
   std::unordered_map<std::string, DeferredOperation> deferred_updates_;
   base::RepeatingTimer flush_timer_;
   const base::TimeDelta flush_delay_;
-  const size_t max_size_;
+  const base::Optional<size_t> max_num_entries_;
   EntryCompare entry_compare_;
 
   SEQUENCE_CHECKER(sequence_checker_);
-
-  DISALLOW_COPY_AND_ASSIGN(LoadingPredictorKeyValueData);
 };
 
 template <typename T, typename Compare>
-LoadingPredictorKeyValueData<T, Compare>::LoadingPredictorKeyValueData(
-    scoped_refptr<PredictorTableBase> tables,
-    LoadingPredictorKeyValueTable<T>* backend,
-    size_t max_size,
-    base::TimeDelta flush_delay)
-    : tables_(tables),
+KeyValueData<T, Compare>::KeyValueData(scoped_refptr<TableManager> manager,
+                                       KeyValueTable<T>* backend,
+                                       base::Optional<size_t> max_num_entries,
+                                       base::TimeDelta flush_delay)
+    : manager_(manager),
       backend_table_(backend),
       flush_delay_(flush_delay),
-      max_size_(max_size) {}
+      max_num_entries_(max_num_entries) {}
 
 template <typename T, typename Compare>
-void LoadingPredictorKeyValueData<T, Compare>::InitializeOnDBSequence() {
-  DCHECK(tables_->GetTaskRunner()->RunsTasksInCurrentSequence());
+void KeyValueData<T, Compare>::InitializeOnDBSequence() {
+  DCHECK(manager_->GetTaskRunner()->RunsTasksInCurrentSequence());
   auto data_map = std::make_unique<std::map<std::string, T>>();
-  tables_->ExecuteDBTaskOnDBSequence(
-      base::BindOnce(&LoadingPredictorKeyValueTable<T>::GetAllData,
+  manager_->ExecuteDBTaskOnDBSequence(
+      base::BindOnce(&KeyValueTable<T>::GetAllData,
                      base::Unretained(backend_table_), data_map.get()));
 
-  // To ensure invariant that data_cache_.size() <= max_size_.
+  // To ensure invariant that data_cache_.size() <= max_num_entries_.
   std::vector<std::string> keys_to_delete;
-  while (data_map->size() > max_size_) {
+  while (max_num_entries_.has_value() && data_map->size() > *max_num_entries_) {
     auto entry_to_delete =
         std::min_element(data_map->begin(), data_map->end(), entry_compare_);
     keys_to_delete.emplace_back(entry_to_delete->first);
     data_map->erase(entry_to_delete);
   }
   if (!keys_to_delete.empty()) {
-    tables_->ExecuteDBTaskOnDBSequence(
-        base::BindOnce(&LoadingPredictorKeyValueTable<T>::DeleteData,
-                       base::Unretained(backend_table_),
-                       std::vector<std::string>(keys_to_delete)));
+    manager_->ExecuteDBTaskOnDBSequence(base::BindOnce(
+        &KeyValueTable<T>::DeleteData, base::Unretained(backend_table_),
+        std::vector<std::string>(keys_to_delete)));
   }
 
   data_cache_ = std::move(data_map);
 }
 
 template <typename T, typename Compare>
-bool LoadingPredictorKeyValueData<T, Compare>::TryGetData(
-    const std::string& key,
-    T* data) const {
+bool KeyValueData<T, Compare>::TryGetData(const std::string& key,
+                                          T* data) const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(data_cache_);
   auto it = data_cache_->find(key);
@@ -141,14 +167,13 @@ bool LoadingPredictorKeyValueData<T, Compare>::TryGetData(
 }
 
 template <typename T, typename Compare>
-void LoadingPredictorKeyValueData<T, Compare>::UpdateData(
-    const std::string& key,
-    const T& data) {
+void KeyValueData<T, Compare>::UpdateData(const std::string& key,
+                                          const T& data) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(data_cache_);
   auto it = data_cache_->find(key);
   if (it == data_cache_->end()) {
-    if (data_cache_->size() == max_size_) {
+    if (data_cache_->size() == max_num_entries_) {
       auto entry_to_delete = std::min_element(
           data_cache_->begin(), data_cache_->end(), entry_compare_);
       deferred_updates_[entry_to_delete->first] = DeferredOperation::kDelete;
@@ -165,12 +190,12 @@ void LoadingPredictorKeyValueData<T, Compare>::UpdateData(
     FlushDataToDisk();
   } else if (!flush_timer_.IsRunning()) {
     flush_timer_.Start(FROM_HERE, flush_delay_, this,
-                       &LoadingPredictorKeyValueData::FlushDataToDisk);
+                       &KeyValueData::FlushDataToDisk);
   }
 }
 
 template <typename T, typename Compare>
-void LoadingPredictorKeyValueData<T, Compare>::DeleteData(
+void KeyValueData<T, Compare>::DeleteData(
     const std::vector<std::string>& keys) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(data_cache_);
@@ -185,21 +210,20 @@ void LoadingPredictorKeyValueData<T, Compare>::DeleteData(
 }
 
 template <typename T, typename Compare>
-void LoadingPredictorKeyValueData<T, Compare>::DeleteAllData() {
+void KeyValueData<T, Compare>::DeleteAllData() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(data_cache_);
   data_cache_->clear();
   deferred_updates_.clear();
   // Delete all the content of the database immediately because it was requested
   // by user.
-  tables_->ScheduleDBTask(
-      FROM_HERE,
-      base::BindOnce(&LoadingPredictorKeyValueTable<T>::DeleteAllData,
-                     base::Unretained(backend_table_)));
+  manager_->ScheduleDBTask(FROM_HERE,
+                           base::BindOnce(&KeyValueTable<T>::DeleteAllData,
+                                          base::Unretained(backend_table_)));
 }
 
 template <typename T, typename Compare>
-void LoadingPredictorKeyValueData<T, Compare>::FlushDataToDisk() {
+void KeyValueData<T, Compare>::FlushDataToDisk() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (deferred_updates_.empty())
     return;
@@ -211,11 +235,10 @@ void LoadingPredictorKeyValueData<T, Compare>::FlushDataToDisk() {
       case DeferredOperation::kUpdate: {
         auto it = data_cache_->find(key);
         if (it != data_cache_->end()) {
-          tables_->ScheduleDBTask(
-              FROM_HERE,
-              base::BindOnce(&LoadingPredictorKeyValueTable<T>::UpdateData,
-                             base::Unretained(backend_table_), key,
-                             it->second));
+          manager_->ScheduleDBTask(
+              FROM_HERE, base::BindOnce(&KeyValueTable<T>::UpdateData,
+                                        base::Unretained(backend_table_), key,
+                                        it->second));
         }
         break;
       }
@@ -225,15 +248,15 @@ void LoadingPredictorKeyValueData<T, Compare>::FlushDataToDisk() {
   }
 
   if (!keys_to_delete.empty()) {
-    tables_->ScheduleDBTask(
+    manager_->ScheduleDBTask(
         FROM_HERE,
-        base::BindOnce(&LoadingPredictorKeyValueTable<T>::DeleteData,
+        base::BindOnce(&KeyValueTable<T>::DeleteData,
                        base::Unretained(backend_table_), keys_to_delete));
   }
 
   deferred_updates_.clear();
 }
 
-}  // namespace predictors
+}  // namespace sqlite_proto
 
 #endif  // COMPONENTS_SQLITE_PROTO_KEY_VALUE_DATA_H_

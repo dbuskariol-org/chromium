@@ -7,7 +7,7 @@
 #include "base/strings/stringprintf.h"
 #include "third_party/protobuf/src/google/protobuf/message_lite.h"
 
-namespace predictors {
+namespace sqlite_proto {
 
 namespace internal {
 
@@ -38,4 +38,4 @@ std::string GetDeleteAllSql(const std::string& table_name) {
 }
 
 }  // namespace internal
-}  // namespace predictors
+}  // namespace sqlite_proto
