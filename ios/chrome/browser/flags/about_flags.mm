@@ -460,14 +460,6 @@ const flags_ui::FeatureEntry kFeatureEntries[] = {
      flags_ui::kOsIos,
      FEATURE_VALUE_TYPE(
          autofill::features::kAutofillNoLocalSaveOnUnmaskSuccess)},
-    {"new-omnibox-popup-layout", flag_descriptions::kNewOmniboxPopupLayoutName,
-     flag_descriptions::kNewOmniboxPopupLayoutDescription, flags_ui::kOsIos,
-     FEATURE_VALUE_TYPE(kNewOmniboxPopupLayout)},
-    {"omnibox-use-default-search-engine-favicon",
-     flag_descriptions::kOmniboxUseDefaultSearchEngineFaviconName,
-     flag_descriptions::kOmniboxUseDefaultSearchEngineFaviconDescription,
-     flags_ui::kOsIos,
-     FEATURE_VALUE_TYPE(kOmniboxUseDefaultSearchEngineFavicon)},
     {"omnibox-preserve-default-match-against-async-update",
      flag_descriptions::kOmniboxPreserveDefaultMatchAgainstAsyncUpdateName,
      flag_descriptions::
