@@ -14,7 +14,16 @@ suite('cr-slider', function() {
 
   setup(function() {
     PolymerTest.clearBody();
-    document.body.innerHTML = '<cr-slider min="0" max="100"></cr-slider>';
+    document.body.innerHTML = `
+      <style>
+        #wrapper {
+          width: 200px;
+        }
+      </style>
+      <div id="wrapper">
+        <cr-slider min="0" max="100"></cr-slider>
+      </div>
+    `;
 
     crSlider = document.body.querySelector('cr-slider');
     crSlider.value = 0;
