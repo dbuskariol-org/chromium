@@ -332,7 +332,6 @@ public abstract class ChromeFeatureList {
     public static final String SEND_TAB_TO_SELF = "SyncSendTabToSelf";
     public static final String SERVICE_MANAGER_FOR_DOWNLOAD = "ServiceManagerForDownload";
     public static final String SERVICE_WORKER_PAYMENT_APPS = "ServiceWorkerPaymentApps";
-    public static final String SETTINGS_MODERN_STATUS_BAR = "SettingsModernStatusBar";
     public static final String SHARED_CLIPBOARD_UI = "SharedClipboardUI";
     public static final String SHARING_QR_CODE_ANDROID = "SharingQrCodeAndroid";
     public static final String SHOPPING_ASSIST = "ShoppingAssist";
