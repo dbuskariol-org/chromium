@@ -2330,6 +2330,7 @@ class MockPasswordSaveManager : public PasswordSaveManager {
   std::unique_ptr<PasswordSaveManager> Clone() override {
     return std::make_unique<MockPasswordSaveManager>();
   }
+  MOCK_METHOD0(MoveCredentialsToAccountStore, void());
 
  private:
   DISALLOW_COPY_AND_ASSIGN(MockPasswordSaveManager);
