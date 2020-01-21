@@ -525,6 +525,11 @@ void ArcApps::GetMenuModel(const std::string& app_id,
                    &menu_items);
   }
 
+  if (menu_type == apps::mojom::MenuType::kShelf &&
+      base::Contains(app_id_to_task_ids_, app_id)) {
+    AddCommandItem(ash::MENU_CLOSE, IDS_SHELF_CONTEXT_MENU_CLOSE, &menu_items);
+  }
+
   std::move(callback).Run(std::move(menu_items));
 }
 
