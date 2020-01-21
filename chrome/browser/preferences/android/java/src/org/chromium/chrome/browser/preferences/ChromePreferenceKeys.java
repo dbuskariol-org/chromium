@@ -430,6 +430,11 @@ public final class ChromePreferenceKeys {
     public static final String LOCALE_MANAGER_WAS_IN_SPECIAL_LOCALE =
             "LocaleManager_WAS_IN_SPECIAL_LOCALE";
 
+    public static final String NOTIFICATIONS_LAST_SHOWN_NOTIFICATION_TYPE =
+            "NotificationUmaTracker.LastShownNotificationType";
+    public static final String NOTIFICATIONS_NEXT_TRIGGER =
+            "notification_trigger_scheduler.next_trigger";
+
     public static final String NTP_SNIPPETS_IS_SCHEDULED = "ntp_snippets.is_scheduled";
 
     /**
@@ -794,6 +799,8 @@ public final class ChromePreferenceKeys {
                 LOCALE_MANAGER_PROMO_SHOWN,
                 LOCALE_MANAGER_SEARCH_ENGINE_PROMO_SHOW_STATE,
                 LOCALE_MANAGER_WAS_IN_SPECIAL_LOCALE,
+                NOTIFICATIONS_LAST_SHOWN_NOTIFICATION_TYPE,
+                NOTIFICATIONS_NEXT_TRIGGER,
                 NTP_SNIPPETS_IS_SCHEDULED,
                 OFFLINE_INDICATOR_V2_ENABLED,
                 PAYMENTS_PAYMENT_COMPLETE_ONCE,
