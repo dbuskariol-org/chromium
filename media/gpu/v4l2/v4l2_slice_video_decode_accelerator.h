@@ -271,9 +271,9 @@ class MEDIA_GPU_EXPORT V4L2SliceVideoDecodeAccelerator
                                            gfx::NativePixmapHandle handle);
 
   // Create a GLImage for the buffer associated with V4L2 |buffer_index| and
-  // for |picture_buffer_id|, backed by dmabuf file descriptors in
-  // |dmabuf_fds|, taking ownership of them.
-  // The GLImage will be associated |client_texture_id| in gles2 decoder.
+  // for |picture_buffer_id|, backed by |handle|.
+  // The GLImage will be associated |client_texture_id| in gles2 decoder and is
+  // of format |fourcc|.
   void CreateGLImageFor(size_t buffer_index,
                         int32_t picture_buffer_id,
                         gfx::NativePixmapHandle handle,
