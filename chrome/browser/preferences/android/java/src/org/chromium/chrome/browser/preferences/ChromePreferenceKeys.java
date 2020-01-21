@@ -574,6 +574,8 @@ public final class ChromePreferenceKeys {
     public static final String TAB_ID_MANAGER_NEXT_ID =
             "org.chromium.chrome.browser.tab.TabIdManager.NEXT_ID";
 
+    public static final String TOS_ACKED_ACCOUNTS = "ToS acknowledged accounts";
+
     /**
      * Keys for deferred recording of the outcomes of showing the clear data dialog after
      * Trusted Web Activity client apps are uninstalled or have their data cleared.
@@ -854,6 +856,7 @@ public final class ChromePreferenceKeys {
                 SYNC_SESSIONS_UUID,
                 TABBED_ACTIVITY_LAST_BACKGROUNDED_TIME_MS_PREF,
                 TAB_ID_MANAGER_NEXT_ID,
+                TOS_ACKED_ACCOUNTS,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_CLEAR_DATA,
                 TWA_DIALOG_NUMBER_OF_DISMISSALS_ON_UNINSTALL,
                 TWA_DISCLOSURE_ACCEPTED_PACKAGES,
