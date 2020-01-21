@@ -279,7 +279,6 @@ class MEDIA_GPU_EXPORT V4L2SliceVideoDecodeAccelerator
                         gfx::NativePixmapHandle handle,
                         GLuint client_texture_id,
                         GLuint texture_id,
-                        const gfx::Size& size,
                         const Fourcc fourcc);
 
   // Performed on decoder_thread_ as a consequence of poll() on decoder_thread_
