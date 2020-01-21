@@ -1795,11 +1795,6 @@
     "expiry_milestone": 76
   },
   {
-    "name": "enable-service-worker-long-running-message",
-    "owners": [ "azeemarshad", "jlklein", "falken" ],
-    "expiry_milestone": 77
-  },
-  {
     "name": "enable-service-worker-on-ui",
     "owners": [ "falken" ],
     "expiry_milestone": 82

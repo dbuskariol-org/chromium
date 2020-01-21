@@ -1856,13 +1856,6 @@ const char kSendTabToSelfWhenSignedInDescription[] =
     "but not necessarily syncing. The tab-share data is thus ephemeral, "
     "rather than persistent sync data.";
 
-const char kServiceWorkerLongRunningMessageName[] =
-    "Service worker long running message dispatch.";
-const char kServiceWorkerLongRunningMessageDescription[] =
-    "Enables long running message dispatch method for service workers. "
-    "Messages sent with this method do not timeout, allowing the service "
-    "worker to run indefinitely.";
-
 const char kServiceWorkerOnUIName[] = "Service worker on UI thread";
 const char kServiceWorkerOnUIDescription[] =
     "Enables browser process logic related to service workers to run on the UI "

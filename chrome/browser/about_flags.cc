@@ -2920,13 +2920,6 @@ const FeatureEntry kFeatureEntries[] = {
      kOsAll,
      FEATURE_VALUE_TYPE(omnibox::kSpeculativeServiceWorkerStartOnQueryInput)},
 
-    // NOTE: This feature is generic and marked kOsAll but is used only in
-    // CrOS for AndroidMessagesIntegration feature.
-    {"enable-service-worker-long-running-message",
-     flag_descriptions::kServiceWorkerLongRunningMessageName,
-     flag_descriptions::kServiceWorkerLongRunningMessageDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kServiceWorkerLongRunningMessage)},
-
     {"enable-service-worker-on-ui", flag_descriptions::kServiceWorkerOnUIName,
      flag_descriptions::kServiceWorkerOnUIDescription, kOsAll,
      FEATURE_VALUE_TYPE(features::kServiceWorkerOnUI)},

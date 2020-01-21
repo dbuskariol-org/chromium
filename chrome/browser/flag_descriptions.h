@@ -1103,9 +1103,6 @@ extern const char kSendTabToSelfBroadcastDescription[];
 extern const char kSendTabToSelfWhenSignedInName[];
 extern const char kSendTabToSelfWhenSignedInDescription[];
 
-extern const char kServiceWorkerLongRunningMessageName[];
-extern const char kServiceWorkerLongRunningMessageDescription[];
-
 extern const char kServiceWorkerOnUIName[];
 extern const char kServiceWorkerOnUIDescription[];
 
