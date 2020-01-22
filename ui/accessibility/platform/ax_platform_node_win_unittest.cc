@@ -4239,10 +4239,11 @@ TEST_F(AXPlatformNodeWinTest, TestGetPropertyValue_IsControlElement) {
   update.tree_data.tree_id = tree_id;
   update.has_tree_data = true;
   update.root_id = 1;
-  update.nodes.resize(16);
+  update.nodes.resize(17);
   update.nodes[0].id = 1;
   update.nodes[0].role = ax::mojom::Role::kRootWebArea;
-  update.nodes[0].child_ids = {2, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+  update.nodes[0].child_ids = {2,  4,  6,  7,  8,  9,  10,
+                               11, 12, 13, 14, 15, 16, 17};
   update.nodes[1].id = 2;
   update.nodes[1].role = ax::mojom::Role::kButton;
   update.nodes[1].child_ids = {3};
@@ -4285,6 +4286,9 @@ TEST_F(AXPlatformNodeWinTest, TestGetPropertyValue_IsControlElement) {
   update.nodes[15].id = 16;
   update.nodes[15].role = ax::mojom::Role::kGenericContainer;
   update.nodes[15].AddState(ax::mojom::State::kFocusable);
+  update.nodes[16].id = 17;
+  update.nodes[16].role = ax::mojom::Role::kForm;
+  update.nodes[16].SetName("name");
 
   Init(update);
   TestAXNodeWrapper::SetGlobalIsWebContent(true);
@@ -4302,7 +4306,7 @@ TEST_F(AXPlatformNodeWinTest, TestGetPropertyValue_IsControlElement) {
   EXPECT_UIA_BOOL_EQ(GetIRawElementProviderSimpleFromTree(tree_id, 7),
                      UIA_IsControlElementPropertyId, true);
   EXPECT_UIA_BOOL_EQ(GetIRawElementProviderSimpleFromTree(tree_id, 8),
-                     UIA_IsControlElementPropertyId, true);
+                     UIA_IsControlElementPropertyId, false);
   EXPECT_UIA_BOOL_EQ(GetIRawElementProviderSimpleFromTree(tree_id, 9),
                      UIA_IsControlElementPropertyId, true);
   EXPECT_UIA_BOOL_EQ(GetIRawElementProviderSimpleFromTree(tree_id, 10),
@@ -4318,6 +4322,8 @@ TEST_F(AXPlatformNodeWinTest, TestGetPropertyValue_IsControlElement) {
   EXPECT_UIA_BOOL_EQ(GetIRawElementProviderSimpleFromTree(tree_id, 15),
                      UIA_IsControlElementPropertyId, true);
   EXPECT_UIA_BOOL_EQ(GetIRawElementProviderSimpleFromTree(tree_id, 16),
+                     UIA_IsControlElementPropertyId, true);
+  EXPECT_UIA_BOOL_EQ(GetIRawElementProviderSimpleFromTree(tree_id, 17),
                      UIA_IsControlElementPropertyId, true);
 }
 
@@ -4865,10 +4871,13 @@ TEST_F(AXPlatformNodeWinTest, TestUIALandmarkType) {
   TestLandmarkType(ax::mojom::Role::kComplementary, UIA_CustomLandmarkTypeId);
   TestLandmarkType(ax::mojom::Role::kContentInfo, UIA_CustomLandmarkTypeId);
   TestLandmarkType(ax::mojom::Role::kFooter, UIA_CustomLandmarkTypeId);
-  TestLandmarkType(ax::mojom::Role::kForm, UIA_FormLandmarkTypeId);
   TestLandmarkType(ax::mojom::Role::kMain, UIA_MainLandmarkTypeId);
   TestLandmarkType(ax::mojom::Role::kNavigation, UIA_NavigationLandmarkTypeId);
   TestLandmarkType(ax::mojom::Role::kSearch, UIA_SearchLandmarkTypeId);
+
+  // Only named forms should be exposed as landmarks.
+  TestLandmarkType(ax::mojom::Role::kForm, {});
+  TestLandmarkType(ax::mojom::Role::kForm, UIA_FormLandmarkTypeId, "name");
 
   // Only named regions should be exposed as landmarks.
   TestLandmarkType(ax::mojom::Role::kRegion, {});

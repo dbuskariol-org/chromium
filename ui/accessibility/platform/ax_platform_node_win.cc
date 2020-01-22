@@ -6686,7 +6686,19 @@ base::Optional<LONG> AXPlatformNodeWin::ComputeUIALandmarkType() const {
       return UIA_CustomLandmarkTypeId;
 
     case ax::mojom::Role::kForm:
-      return UIA_FormLandmarkTypeId;
+      // https://www.w3.org/TR/html-aam-1.0/#html-element-role-mappings
+      // https://w3c.github.io/core-aam/#mapping_role_table
+      // While the HTML-AAM spec states that <form> without an accessible name
+      // should have no corresponding role, removing the role breaks both
+      // aria-setsize and aria-posinset.
+      // The only other difference for UIA is that it should not be a landmark.
+      // If the author provided an accessible name, or the role was explicit,
+      // then allow the form landmark.
+      if (data.HasStringAttribute(ax::mojom::StringAttribute::kName) ||
+          data.HasStringAttribute(ax::mojom::StringAttribute::kRole)) {
+        return UIA_FormLandmarkTypeId;
+      }
+      return {};
 
     case ax::mojom::Role::kMain:
       return UIA_MainLandmarkTypeId;
