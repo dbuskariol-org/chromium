@@ -888,7 +888,6 @@ cr.define('certificate_manager', function() {
         });
       });
     }
-
   });
 
   suite('CertificateListTests', function() {
