@@ -140,6 +140,13 @@ void ArcKioskController::OnProfilePrepared(Profile* profile,
   // a profile load, so invalidate the delegate now.
   UserSessionManager::GetInstance()->DelegateDeleted(this);
   ArcKioskAppService::Get(profile_)->SetDelegate(this);
+
+  // This is needed to trigger input method extensions being loaded.
+  profile->InitChromeOSPreferences();
+
+  // Reset virtual keyboard to use IME engines in app profile early.
+  ChromeKeyboardControllerClient::Get()->RebuildKeyboardIfEnabled();
+
   if (arc_kiosk_splash_screen_view_) {
     arc_kiosk_splash_screen_view_->UpdateArcKioskState(
         ArcKioskSplashScreenView::ArcKioskState::WAITING_APP_LAUNCH);
