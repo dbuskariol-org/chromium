@@ -640,22 +640,16 @@ Document::Document() : Document(DocumentInit::Create()) {}
 Document::Document(const DocumentInit& initializer,
                    DocumentClassFlags document_classes)
     : Document(initializer,
-               SecurityContextInit(initializer, document_classes),
+               SecurityContextInit(initializer),
                document_classes) {}
 
 Document::Document(const DocumentInit& initializer,
-                   SecurityContextInit security_initializer,
+                   const SecurityContextInit& security_initializer,
                    DocumentClassFlags document_classes)
     : ContainerNode(nullptr, kCreateDocument),
       TreeScope(*this),
       ExecutionContext(V8PerIsolateData::MainThreadIsolate(),
-                       security_initializer.GetAgent(),
-                       security_initializer.GetOriginTrialContext(),
-                       security_initializer.GetSecurityOrigin(),
-                       security_initializer.GetSandboxFlags(),
-                       security_initializer.TakeFeaturePolicy(),
-                       security_initializer.TakeDocumentPolicy(),
-                       security_initializer.GetSecureContextMode()),
+                       security_initializer),
       evaluate_media_queries_on_style_recalc_(false),
       pending_sheet_layout_(kNoLayoutWithPendingSheets),
       window_agent_factory_(security_initializer.GetWindowAgentFactory()),

@@ -74,13 +74,13 @@ class CoreProbeSink;
 class DOMTimerCoordinator;
 class ErrorEvent;
 class EventTarget;
-class FeaturePolicy;
 class FrameOrWorkerScheduler;
 class KURL;
 class LocalDOMWindow;
 class OriginTrialContext;
 class PublicURLManager;
 class ResourceFetcher;
+class SecurityContextInit;
 class SecurityOrigin;
 class ScriptState;
 class TrustedTypePolicyFactory;
@@ -337,14 +337,7 @@ class CORE_EXPORT ExecutionContext : public ContextLifecycleNotifier,
   String addressSpaceForBindings() const;
 
  protected:
-  ExecutionContext(v8::Isolate* isolate,
-                   Agent* agent,
-                   OriginTrialContext* origin_trial_context,
-                   scoped_refptr<SecurityOrigin> origin,
-                   WebSandboxFlags sandbox_flags,
-                   std::unique_ptr<FeaturePolicy> feature_policy,
-                   std::unique_ptr<DocumentPolicy> document_policy,
-                   SecureContextMode secure_context_mode);
+  ExecutionContext(v8::Isolate* isolate, const SecurityContextInit&);
   ~ExecutionContext() override;
 
  private:

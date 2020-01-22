@@ -1656,7 +1656,7 @@ class CORE_EXPORT Document : public ContainerNode,
   class NetworkStateObserver;
 
   Document(const DocumentInit& initization,
-           SecurityContextInit init_helper,
+           const SecurityContextInit& init_helper,
            DocumentClassFlags document_classes);
 
   // Post initialization of the object handling of both feature policy and

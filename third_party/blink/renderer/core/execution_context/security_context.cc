@@ -31,6 +31,7 @@
 #include "third_party/blink/public/common/feature_policy/feature_policy.h"
 #include "third_party/blink/public/mojom/feature_policy/feature_policy.mojom-blink.h"
 #include "third_party/blink/public/platform/platform.h"
+#include "third_party/blink/renderer/core/execution_context/security_context_init.h"
 #include "third_party/blink/renderer/core/frame/csp/content_security_policy.h"
 #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
 #include "third_party/blink/renderer/platform/weborigin/security_origin.h"
@@ -83,16 +84,12 @@ WTF::Vector<unsigned> SecurityContext::SerializeInsecureNavigationSet(
   return serialized;
 }
 
-SecurityContext::SecurityContext(
-    scoped_refptr<SecurityOrigin> origin,
-    WebSandboxFlags sandbox_flags,
-    std::unique_ptr<FeaturePolicy> feature_policy,
-    std::unique_ptr<DocumentPolicy> document_policy,
-    SecurityContextType context_type)
-    : sandbox_flags_(sandbox_flags),
-      security_origin_(std::move(origin)),
-      feature_policy_(std::move(feature_policy)),
-      document_policy_(std::move(document_policy)),
+SecurityContext::SecurityContext(const SecurityContextInit& init,
+                                 SecurityContextType context_type)
+    : sandbox_flags_(init.GetSandboxFlags()),
+      security_origin_(init.GetSecurityOrigin()),
+      feature_policy_(init.CreateFeaturePolicy()),
+      document_policy_(init.CreateDocumentPolicy()),
       address_space_(network::mojom::IPAddressSpace::kUnknown),
       insecure_request_policy_(kLeaveInsecureRequestsAlone),
       require_safe_types_(false),

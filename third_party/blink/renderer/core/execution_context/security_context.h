@@ -49,6 +49,7 @@ namespace blink {
 class ContentSecurityPolicy;
 class FeaturePolicy;
 class PolicyValue;
+class SecurityContextInit;
 class SecurityOrigin;
 struct ParsedFeaturePolicyDeclaration;
 
@@ -73,11 +74,7 @@ class CORE_EXPORT SecurityContext {
  public:
   enum SecurityContextType { kLocal, kRemote };
 
-  SecurityContext(scoped_refptr<SecurityOrigin> origin,
-                  WebSandboxFlags sandbox_flags,
-                  std::unique_ptr<FeaturePolicy> feature_policy,
-                  std::unique_ptr<DocumentPolicy> document_policy,
-                  SecurityContextType context_type);
+  SecurityContext(const SecurityContextInit&, SecurityContextType context_type);
   virtual ~SecurityContext() = default;
 
   void Trace(blink::Visitor*);
