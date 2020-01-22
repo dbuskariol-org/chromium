@@ -1496,6 +1496,7 @@ enum HistogramValue {
   LOGIN_UNLOCKMANAGEDGUESTSESSION = 1433,
   AUTOTESTPRIVATE_SETARCTOUCHMODE = 1434,
   PRINTING_SUBMITJOB = 1435,
+  IDENTITYPRIVATE_SETCONSENTRESULT = 1436,
   // Last entry: Add new entries above, then run:
   // python tools/metrics/histograms/update_extension_histograms.py
   ENUM_BOUNDARY
