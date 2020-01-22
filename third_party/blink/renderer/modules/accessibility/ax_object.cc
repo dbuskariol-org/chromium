@@ -1629,6 +1629,8 @@ bool AXObject::IsHiddenForTextAlternativeCalculation() const {
 
   if (GetLayoutObject())
     return GetLayoutObject()->Style()->Visibility() != EVisibility::kVisible;
+  else if (GetNode() && IsA<HTMLNoScriptElement>(GetNode()))
+    return true;
 
   // This is an obscure corner case: if a node has no LayoutObject, that means
   // it's not rendered, but we still may be exploring it as part of a text
