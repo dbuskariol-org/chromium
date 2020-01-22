@@ -6303,3 +6303,7 @@ crbug.com/1042688 http/tests/devtools/elements/highlight/highlight-dom-updates.j
 # Sheriff 2020-01-20
 crbug.com/1043357 http/tests/credentialmanager/credentialscontainer-get-with-virtual-authenticator.html [ Pass Timeout Failure ]
 crbug.com/1043774 [ Linux ] virtual/web-components-v0-disabled/external/wpt/html/dom/reflection-grouping.html [ Pass Failure ]
+
+# Sheriff 2020-01-22
+crbug.com/1044567 [ Mac10.10 ] media/video-colorspace-yuv420.html [ Pass Failure ]
+crbug.com/1044567 [ Mac10.10 ] virtual/audio-service/media/video-colorspace-yuv420.html [ Pass Failure ]
