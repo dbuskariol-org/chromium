@@ -189,32 +189,22 @@ class TestHintsFetcher : public optimization_guide::HintsFetcher {
       override {
     switch (fetch_state_) {
       case HintsFetcherEndState::kFetchFailed:
-        std::move(hints_fetched_callback)
-            .Run(request_context,
-                 optimization_guide::HintsFetcherRequestStatus::kResponseError,
-                 base::nullopt);
+        std::move(hints_fetched_callback).Run(base::nullopt);
         return false;
       case HintsFetcherEndState::kFetchSuccessWithHostHints:
         hints_fetched_ = true;
         std::move(hints_fetched_callback)
-            .Run(request_context,
-                 optimization_guide::HintsFetcherRequestStatus::kSuccess,
-                 BuildHintsResponse({"host.com"}, {}));
+            .Run(BuildHintsResponse({"host.com"}, {}));
         return true;
       case HintsFetcherEndState::kFetchSuccessWithURLHints:
         hints_fetched_ = true;
         std::move(hints_fetched_callback)
-            .Run(request_context,
-                 optimization_guide::HintsFetcherRequestStatus::kSuccess,
-                 BuildHintsResponse({},
+            .Run(BuildHintsResponse({},
                                     {"https://somedomain.org/news/whatever"}));
         return true;
       case HintsFetcherEndState::kFetchSuccessWithNoHints:
         hints_fetched_ = true;
-        std::move(hints_fetched_callback)
-            .Run(request_context,
-                 optimization_guide::HintsFetcherRequestStatus::kSuccess,
-                 BuildHintsResponse({}, {}));
+        std::move(hints_fetched_callback).Run(BuildHintsResponse({}, {}));
         return true;
     }
     return true;
