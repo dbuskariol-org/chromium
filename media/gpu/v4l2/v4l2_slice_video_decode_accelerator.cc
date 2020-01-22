@@ -682,7 +682,7 @@ bool V4L2SliceVideoDecodeAccelerator::CreateOutputBuffers() {
   if (image_processor_device_) {
     // Try to get an image size as close as possible to the final one (i.e.
     // coded_size_ may include padding required by the decoder).
-    gl_image_size_ = pic_size;
+    gl_image_size_ = decoder_->GetVisibleRect().size();
     size_t planes_count;
     if (!V4L2ImageProcessorBackend::TryOutputFormat(
             output_format_fourcc_->ToV4L2PixFmt(),
