@@ -278,12 +278,11 @@ void DialogPlate::InitLayout() {
   InitVoiceLayoutContainer();
 
   // Settings.
-  settings_button_ = AssistantButton::Create(
+  settings_button_ = AddChildView(AssistantButton::Create(
       this, kSettingsIcon, kButtonSizeDip, kIconSizeDip,
       IDS_ASH_ASSISTANT_DIALOG_PLATE_SETTINGS_ACCNAME_TOOLTIP,
       AssistantButtonId::kSettings,
-      IDS_ASH_ASSISTANT_DIALOG_PLATE_SETTINGS_ACCNAME_TOOLTIP);
-  AddChildView(settings_button_);
+      IDS_ASH_ASSISTANT_DIALOG_PLATE_SETTINGS_ACCNAME_TOOLTIP));
 
   // Artificially trigger event to set initial state.
   OnInputModalityChanged(delegate_->GetInteractionModel()->input_modality());
@@ -328,12 +327,11 @@ void DialogPlate::InitKeyboardLayoutContainer() {
   layout_manager->SetFlexForView(textfield_, 1);
 
   // Voice input toggle.
-  voice_input_toggle_ =
+  voice_input_toggle_ = keyboard_layout_container_->AddChildView(
       AssistantButton::Create(this, kMicIcon, kButtonSizeDip, kIconSizeDip,
                               IDS_ASH_ASSISTANT_DIALOG_PLATE_MIC_ACCNAME,
                               AssistantButtonId::kVoiceInputToggle,
-                              IDS_ASH_ASSISTANT_DIALOG_PLATE_MIC_TOOLTIP);
-  keyboard_layout_container_->AddChildView(voice_input_toggle_);
+                              IDS_ASH_ASSISTANT_DIALOG_PLATE_MIC_TOOLTIP));
 
   input_modality_layout_container_->AddChildView(keyboard_layout_container_);
 }
@@ -354,12 +352,11 @@ void DialogPlate::InitVoiceLayoutContainer() {
       views::BoxLayout::CrossAxisAlignment::kCenter);
 
   // Keyboard input toggle.
-  keyboard_input_toggle_ =
+  keyboard_input_toggle_ = voice_layout_container_->AddChildView(
       AssistantButton::Create(this, kKeyboardIcon, kButtonSizeDip, kIconSizeDip,
                               IDS_ASH_ASSISTANT_DIALOG_PLATE_KEYBOARD_ACCNAME,
                               AssistantButtonId::kKeyboardInputToggle,
-                              IDS_ASH_ASSISTANT_DIALOG_PLATE_KEYBOARD_TOOLTIP);
-  voice_layout_container_->AddChildView(keyboard_input_toggle_);
+                              IDS_ASH_ASSISTANT_DIALOG_PLATE_KEYBOARD_TOOLTIP));
 
   // Spacer.
   views::View* spacer = new views::View();
