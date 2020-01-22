@@ -111,7 +111,6 @@ static void ReleaseFrameResources(
   // TODO(khushalsagar): If multiple readers had access to this resource, losing
   // it once should make sure subsequent releases don't try to recycle this
   // resource.
-  // Also what about single buffered canvas?
   if (lost_resource)
     resource->NotifyResourceLost();
   if (resource_provider && !lost_resource && resource->IsRecycleable())
@@ -286,6 +285,12 @@ void CanvasResourceSharedBitmap::Abandon() {
   shared_mapping_ = {};
 }
 
+void CanvasResourceSharedBitmap::NotifyResourceLost() {
+  // Release our reference to the shared memory mapping since the resource can
+  // no longer be safely recycled and this memory is needed for copy-on-write.
+  shared_mapping_ = {};
+}
+
 const gpu::Mailbox& CanvasResourceSharedBitmap::GetOrCreateGpuMailbox(
     MailboxSyncMode sync_mode) {
   return shared_bitmap_id_;
@@ -425,6 +430,8 @@ CanvasResourceSharedImage::~CanvasResourceSharedImage() {
 void CanvasResourceSharedImage::TearDown() {
   DCHECK(!is_cross_thread());
 
+  // The context deletes all shared images on destruction which means no
+  // cleanup is needed if the context was lost.
   if (ContextProviderWrapper()) {
     auto* raster_interface = RasterInterface();
     auto* shared_image_interface =
@@ -455,11 +462,8 @@ void CanvasResourceSharedImage::TearDown() {
 }
 
 void CanvasResourceSharedImage::Abandon() {
-  if (auto context_provider = SharedGpuContext::ContextProviderWrapper()) {
-    auto* sii = context_provider->ContextProvider()->SharedImageInterface();
-    if (sii)
-      sii->DestroySharedImage(gpu::SyncToken(), mailbox());
-  }
+  // Called when the owning thread has been torn down which will destroy the
+  // context on which the shared image was created so no cleanup is necessary.
 }
 
 void CanvasResourceSharedImage::WillDraw() {
@@ -807,17 +811,16 @@ scoped_refptr<StaticBitmapImage> CanvasResourceSwapChain::Bitmap() {
 }
 
 void CanvasResourceSwapChain::Abandon() {
-  if (auto context_provider = SharedGpuContext::ContextProviderWrapper()) {
-    auto* sii = context_provider->ContextProvider()->SharedImageInterface();
-    DCHECK(sii);
-    sii->DestroySharedImage(gpu::SyncToken(), front_buffer_mailbox_);
-    sii->DestroySharedImage(gpu::SyncToken(), back_buffer_mailbox_);
-  }
+  // Called when the owning thread has been torn down which will destroy the
+  // context on which the shared image was created so no cleanup is necessary.
 }
 
 void CanvasResourceSwapChain::TearDown() {
+  // The context deletes all shared images on destruction which means no
+  // cleanup is needed if the context was lost.
   if (!context_provider_wrapper_)
     return;
+
   auto* raster_interface =
       context_provider_wrapper_->ContextProvider()->RasterInterface();
   DCHECK(raster_interface);

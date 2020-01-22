@@ -140,12 +140,7 @@ class PLATFORM_EXPORT CanvasResource
   // token for the resource to be safely recycled and its the GL state may be
   // inconsistent with when the resource was given to the compositor. So it
   // should not be recycled for writing again but can be safely read from.
-  virtual void NotifyResourceLost() {
-    // TODO(khushalsagar): Some implementations respect the don't write again
-    // policy but some don't. Fix that once shared images replace all
-    // accelerated use-cases.
-    Abandon();
-  }
+  virtual void NotifyResourceLost() = 0;
 
   void SetFilterQuality(SkFilterQuality filter) { filter_quality_ = filter; }
   // The filter quality to use when the resource is drawn by the compositor.
@@ -240,6 +235,7 @@ class PLATFORM_EXPORT CanvasResourceSharedBitmap final : public CanvasResource {
   bool OriginClean() const final { return is_origin_clean_; }
   void SetOriginClean(bool flag) final { is_origin_clean_ = flag; }
   const gpu::Mailbox& GetOrCreateGpuMailbox(MailboxSyncMode) override;
+  void NotifyResourceLost() override;
 
  private:
   void TearDown() override;
@@ -420,6 +416,10 @@ class PLATFORM_EXPORT ExternalCanvasResource final : public CanvasResource {
   void Abandon() final;
   IntSize Size() const final { return size_; }
   void TakeSkImage(sk_sp<SkImage> image) final;
+  void NotifyResourceLost() override {
+    // Used for single buffering mode which doesn't need to care about sync
+    // token synchronization.
+  }
 
   scoped_refptr<StaticBitmapImage> Bitmap() override;
   const gpu::Mailbox& GetOrCreateGpuMailbox(MailboxSyncMode) override;
@@ -473,6 +473,10 @@ class PLATFORM_EXPORT CanvasResourceSwapChain final : public CanvasResource {
   void Abandon() final;
   IntSize Size() const final { return size_; }
   void TakeSkImage(sk_sp<SkImage> image) final;
+  void NotifyResourceLost() override {
+    // Used for single buffering mode which doesn't need to care about sync
+    // token synchronization.
+  }
 
   scoped_refptr<StaticBitmapImage> Bitmap() override;
 
