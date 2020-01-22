@@ -403,9 +403,7 @@ blink_python_runner("generated_settings_macros") {
              "../build/scripts/templates/settings_macros.h.tmpl",
              "frame/settings.json5",
            ]
-  outputs = [
-    "$blink_core_output_dir/settings_macros.h",
-  ]
+  outputs = [ "$blink_core_output_dir/settings_macros.h" ]
 
   args = [
     rebase_path("frame/settings.json5", root_build_dir),
@@ -464,9 +462,7 @@ css_properties("make_core_generated_computed_style_initial_values") {
   script = "../build/scripts/core/style/make_computed_style_initial_values.py"
   in_files = [ "style/computed_style_extra_fields.json5" ]
   other_inputs = [ "../build/scripts/core/style/templates/computed_style_initial_values.h.tmpl" ]
-  outputs = [
-    "$blink_core_output_dir/style/computed_style_initial_values.h",
-  ]
+  outputs = [ "$blink_core_output_dir/style/computed_style_initial_values.h" ]
 }
 
 css_properties("make_core_generated_computed_style_base") {
@@ -506,9 +502,7 @@ css_properties("make_core_generated_css_value_id_mappings") {
     "../build/scripts/core/css/templates/css_value_id_mappings_generated.h.tmpl",
     "../build/scripts/keyword_utils.py",
   ]
-  outputs = [
-    "$blink_core_output_dir/css/css_value_id_mappings_generated.h",
-  ]
+  outputs = [ "$blink_core_output_dir/css/css_value_id_mappings_generated.h" ]
 }
 
 css_properties("make_core_generated_css_property_instances") {
@@ -589,9 +583,7 @@ code_generator("make_core_generated_media_features") {
   other_inputs =
       scripts_for_json5_files + [ "../build/scripts/media_feature_symbol.py" ]
   templates = [ "../build/scripts/core/css/templates/media_features.h.tmpl" ]
-  outputs = [
-    "$blink_core_output_dir/css/media_features.h",
-  ]
+  outputs = [ "$blink_core_output_dir/css/media_features.h" ]
 }
 
 css_properties("make_core_generated_style_property_shorthand") {
@@ -715,9 +707,7 @@ process_json5_files("make_core_generated_svg_element_type_helpers") {
 
   in_files = [ "svg/svg_tag_names.json5" ]
   other_inputs = make_element_type_helpers_files
-  outputs = [
-    "$blink_core_output_dir/svg_element_type_helpers.h",
-  ]
+  outputs = [ "$blink_core_output_dir/svg_element_type_helpers.h" ]
 }
 
 # make_event_factory -----------------------------------------------------------
@@ -727,9 +717,7 @@ make_event_factory("make_core_generated_event_factory") {
     "$blink_core_output_dir/event_interface_names.json5",
     "events/event_interface_aliases.json5",
   ]
-  outputs = [
-    "$blink_core_output_dir/event_factory.cc",
-  ]
+  outputs = [ "$blink_core_output_dir/event_factory.cc" ]
 }
 
 # make_names -------------------------------------------------------------------
@@ -822,12 +810,8 @@ action("make_core_generated_html_entity_table") {
   visibility = [ ":*" ]
   script = "../build/scripts/make_html_entity_table.py"
 
-  inputs = [
-    "html/parser/html_entity_names.csv",
-  ]
-  outputs = [
-    "$blink_core_output_dir/html_entity_table.cc",
-  ]
+  inputs = [ "html/parser/html_entity_names.csv" ]
+  outputs = [ "$blink_core_output_dir/html_entity_table.cc" ]
 
   args = [ "-o" ] + rebase_path(outputs, root_build_dir)
   args += rebase_path(inputs, root_build_dir)
@@ -840,9 +824,7 @@ blink_python_runner("make_core_generated_css_tokenizer_codepoints") {
   visibility = [ ":*" ]
   script = "../build/scripts/core/css/make_css_tokenizer_codepoints.py"
 
-  outputs = [
-    "$blink_core_output_dir/css/css_tokenizer_codepoints.cc",
-  ]
+  outputs = [ "$blink_core_output_dir/css/css_tokenizer_codepoints.cc" ]
 
   args = [
     "--output_dir",
@@ -862,9 +844,7 @@ blink_python_runner("make_core_generated_css_primitive_value_unit_trie") {
              input_file,
              "../build/scripts/core/css/templates/css_primitive_value_unit_trie.cc.tmpl",
            ]
-  outputs = [
-    "$blink_core_output_dir/css/css_primitive_value_unit_trie.cc",
-  ]
+  outputs = [ "$blink_core_output_dir/css/css_primitive_value_unit_trie.cc" ]
 
   args = [
     rebase_path(input_file, root_build_dir),
@@ -884,9 +864,7 @@ blink_python_runner("make_core_generated_feature_policy_helper") {
              "../platform/runtime_enabled_features.json5",
              "../build/scripts/templates/feature_policy_helper.cc.tmpl",
            ]
-  outputs = [
-    "$blink_core_output_dir/feature_policy/feature_policy_helper.cc",
-  ]
+  outputs = [ "$blink_core_output_dir/feature_policy/feature_policy_helper.cc" ]
 
   args = [
     rebase_path("../platform/runtime_enabled_features.json5", root_build_dir),
@@ -930,9 +908,7 @@ blink_python_runner("make_core_generated_origin_trials") {
              "../platform/runtime_enabled_features.json5",
              "../build/scripts/templates/origin_trials.cc.tmpl",
            ]
-  outputs = [
-    "$blink_core_output_dir/origin_trials/origin_trials.cc",
-  ]
+  outputs = [ "$blink_core_output_dir/origin_trials/origin_trials.cc" ]
 
   args = [
     rebase_path("../platform/runtime_enabled_features.json5", root_build_dir),
@@ -948,9 +924,7 @@ blink_python_runner("make_core_generated_web_origin_trials") {
              "../platform/runtime_enabled_features.json5",
              "../build/scripts/templates/web_origin_trials.cc.tmpl",
            ]
-  outputs = [
-    "$blink_core_output_dir/exported/web_origin_trials.cc",
-  ]
+  outputs = [ "$blink_core_output_dir/exported/web_origin_trials.cc" ]
 
   args = [
     rebase_path("../platform/runtime_enabled_features.json5", root_build_dir),
@@ -1458,7 +1432,6 @@ jumbo_source_set("unit_tests") {
     "page/scrolling/scroll_into_view_test.cc",
     "page/scrolling/scroll_metrics_test.cc",
     "page/scrolling/scroll_state_test.cc",
-    "page/scrolling/scrolling_coordinator_test.cc",
     "page/scrolling/scrolling_test.cc",
     "page/scrolling/snap_coordinator_test.cc",
     "page/scrolling/text_fragment_anchor_metrics_test.cc",
@@ -1616,9 +1589,7 @@ jumbo_source_set("unit_tests") {
     "//third_party/blink/renderer/core/fileapi:unit_tests",
   ]
 
-  data_deps = [
-    ":unit_tests_data",
-  ]
+  data_deps = [ ":unit_tests_data" ]
 
   # FIXME: Enable mojo unittests on Android after fixing data dependency.
   # crbug.com/741925
@@ -1649,9 +1620,7 @@ group("unit_tests_data") {
 
 jumbo_source_set("perf_tests") {
   testonly = true
-  sources = [
-    "layout/visual_rect_mapping_perftest.cc",
-  ]
+  sources = [ "layout/visual_rect_mapping_perftest.cc" ]
 
   configs += [
     ":blink_core_pch",
@@ -1694,9 +1663,7 @@ jumbo_source_set("unit_test_support") {
 
 # Fuzzer for blink::StyleSheetContents
 fuzzer_test("stylesheet_contents_fuzzer") {
-  sources = [
-    "css/style_sheet_contents_fuzzer.cc",
-  ]
+  sources = [ "css/style_sheet_contents_fuzzer.cc" ]
   deps = [
     ":core",
     "../platform:blink_fuzzer_test_support",
@@ -1708,9 +1675,7 @@ fuzzer_test("stylesheet_contents_fuzzer") {
 
 # Fuzzer for blink::CSSParserFastPaths
 fuzzer_test("css_parser_fast_paths_fuzzer") {
-  sources = [
-    "css/parser/css_parser_fast_paths_fuzzer.cc",
-  ]
+  sources = [ "css/parser/css_parser_fast_paths_fuzzer.cc" ]
   deps = [
     ":core",
     "../platform:blink_fuzzer_test_support",
@@ -1734,9 +1699,7 @@ fuzzer_test("html_preload_scanner_fuzzer") {
 
 # Fuzzer for blink::ContentSecurityPolicy.
 fuzzer_test("content_security_policy_fuzzer") {
-  sources = [
-    "frame/csp/content_security_policy_fuzzer.cc",
-  ]
+  sources = [ "frame/csp/content_security_policy_fuzzer.cc" ]
   deps = [
     ":core",
     "//third_party/blink/renderer/platform:blink_fuzzer_test_support",
@@ -1761,16 +1724,12 @@ fuzzer_test("css_parser_proto_fuzzer") {
 }
 
 proto_library("css_proto") {
-  sources = [
-    "css/parser/css.proto",
-  ]
+  sources = [ "css/parser/css.proto" ]
 }
 
 # Fuzzers for blink::FeaturePolicy.
 fuzzer_test("feature_policy_fuzzer") {
-  sources = [
-    "feature_policy/feature_policy_fuzzer.cc",
-  ]
+  sources = [ "feature_policy/feature_policy_fuzzer.cc" ]
   deps = [
     "//third_party/blink/renderer/platform:blink_fuzzer_test_support",
     "//third_party/icu",
@@ -1781,9 +1740,7 @@ fuzzer_test("feature_policy_fuzzer") {
 }
 
 fuzzer_test("feature_policy_attr_fuzzer") {
-  sources = [
-    "feature_policy/feature_policy_attr_fuzzer.cc",
-  ]
+  sources = [ "feature_policy/feature_policy_attr_fuzzer.cc" ]
   deps = [
     "//third_party/blink/renderer/platform:blink_fuzzer_test_support",
     "//third_party/icu",
@@ -1794,9 +1751,7 @@ fuzzer_test("feature_policy_attr_fuzzer") {
 }
 
 fuzzer_test("feature_policy_value_fuzzer") {
-  sources = [
-    "feature_policy/feature_policy_value_fuzzer.cc",
-  ]
+  sources = [ "feature_policy/feature_policy_value_fuzzer.cc" ]
   deps = [
     "//third_party/blink/renderer/platform:blink_fuzzer_test_support",
     "//third_party/icu",
