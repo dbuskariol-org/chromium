@@ -147,7 +147,7 @@ class CrostiniManager : public KeyedService,
     virtual void OnConciergeStarted(bool success) {}
     virtual void OnDiskImageCreated(bool success,
                                     vm_tools::concierge::DiskImageStatus status,
-                                    int64_t disk_size_available) {}
+                                    int64_t disk_size_bytes) {}
     virtual void OnVmStarted(bool success) {}
     virtual void OnContainerDownloading(int32_t download_percent) {}
     virtual void OnContainerCreated(CrostiniResult result) {}
@@ -158,9 +158,9 @@ class CrostiniManager : public KeyedService,
   };
 
   struct RestartOptions {
-    // This normally will not have effect on existing container.
+    // These two options only affect new containers.
     base::Optional<std::string> container_username;
-    base::Optional<int64_t> disk_size;
+    base::Optional<int64_t> disk_size_bytes;
 
     RestartOptions();
     ~RestartOptions();

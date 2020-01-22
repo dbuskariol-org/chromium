@@ -292,25 +292,25 @@ class CrostiniManager::CrostiniRestarter
     }
 
     // Allow concierge to choose an appropriate disk image size.
-    int64_t disk_size_available = options_.disk_size.value_or(0);
+    int64_t disk_size_bytes = options_.disk_size_bytes.value_or(0);
     // If we have an already existing disk, CreateDiskImage will just return its
     // path so we can pass it to StartTerminaVm.
     StartStage(mojom::InstallerState::kCreateDiskImage);
     crostini_manager_->CreateDiskImage(
         base::FilePath(vm_name_),
         vm_tools::concierge::StorageLocation::STORAGE_CRYPTOHOME_ROOT,
-        disk_size_available,
+        disk_size_bytes,
         base::BindOnce(&CrostiniRestarter::CreateDiskImageFinished, this,
-                       disk_size_available));
+                       disk_size_bytes));
   }
 
-  void CreateDiskImageFinished(int64_t disk_size_available,
+  void CreateDiskImageFinished(int64_t disk_size_bytes,
                                bool success,
                                vm_tools::concierge::DiskImageStatus status,
                                const base::FilePath& result_path) {
     DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
     for (auto& observer : observer_list_) {
-      observer.OnDiskImageCreated(success, status, disk_size_available);
+      observer.OnDiskImageCreated(success, status, disk_size_bytes);
     }
     if (ReturnEarlyIfAborted()) {
       return;
