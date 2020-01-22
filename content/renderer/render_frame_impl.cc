@@ -5943,21 +5943,11 @@ void RenderFrameImpl::BeginNavigation(
     }
   }
 
-  bool should_dispatch_before_unload =
-      info->navigation_policy == blink::kWebNavigationPolicyCurrentTab &&
-      // No need to dispatch beforeunload if the frame has not committed a
-      // navigation and contains an empty initial document.
-      // TODO(dtapuska): crbug.com/1040954 Try to remove the
-      // HasAccessedInitialDocument interface for this. There shouldn't be a
-      // beforeunload handler if it hasn't accessed the initial document so it
-      // should be fine to dispatch in those cases.
-      (frame_->HasAccessedInitialDocument() || !current_history_item_.IsNull());
-
-  if (should_dispatch_before_unload) {
+  if (info->navigation_policy == blink::kWebNavigationPolicyCurrentTab) {
     // Execute the BeforeUnload event. If asked not to proceed or the frame is
     // destroyed, ignore the navigation.
     // Keep a WeakPtr to this RenderFrameHost to detect if executing the
-    // BeforeUnload event destriyed this frame.
+    // BeforeUnload event destroyed this frame.
     base::WeakPtr<RenderFrameImpl> weak_self = weak_factory_.GetWeakPtr();
 
     if (!frame_->DispatchBeforeUnloadEvent(info->navigation_type ==
