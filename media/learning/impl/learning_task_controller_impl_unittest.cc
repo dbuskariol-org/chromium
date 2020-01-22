@@ -137,6 +137,20 @@ class LearningTaskControllerImplTest : public testing::Test {
         id, ObservationCompletion(example.target_value, example.weight));
   }
 
+  void VerifyPrediction(const FeatureVector& features,
+                        base::Optional<TargetHistogram> expectation) {
+    base::Optional<TargetHistogram> observed_prediction;
+    controller_->PredictDistribution(
+        features, base::BindOnce(
+                      [](base::Optional<TargetHistogram>* test_storage,
+                         const base::Optional<TargetHistogram>& predicted) {
+                        *test_storage = predicted;
+                      },
+                      &observed_prediction));
+    task_environment_.RunUntilIdle();
+    EXPECT_EQ(observed_prediction, expectation);
+  }
+
   base::test::TaskEnvironment task_environment_;
 
   // Number of models that we trained.
@@ -256,6 +270,19 @@ TEST_F(LearningTaskControllerImplTest, FeatureSubsetsWork) {
   // Verify that the training data has the adjusted features.
   EXPECT_EQ(trainer_raw_->training_data().size(), 1u);
   EXPECT_EQ(trainer_raw_->training_data()[0].features, expected_features);
+}
+
+TEST_F(LearningTaskControllerImplTest, PredictDistribution) {
+  CreateController();
+
+  // Predictions should be base::nullopt until we have a model.
+  LabelledExample example;
+  VerifyPrediction(example.features, base::nullopt);
+
+  AddExample(example);
+  TargetHistogram expected_histogram;
+  expected_histogram += predicted_target_;
+  VerifyPrediction(example.features, expected_histogram);
 }
 
 }  // namespace learning

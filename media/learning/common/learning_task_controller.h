@@ -12,6 +12,7 @@
 #include "base/unguessable_token.h"
 #include "media/learning/common/labelled_example.h"
 #include "media/learning/common/learning_task.h"
+#include "media/learning/common/target_histogram.h"
 #include "services/metrics/public/cpp/ukm_source_id.h"
 
 namespace media {
@@ -49,6 +50,9 @@ struct ObservationCompletion {
 // observed to do that.
 class COMPONENT_EXPORT(LEARNING_COMMON) LearningTaskController {
  public:
+  using PredictionCB = base::OnceCallback<void(
+      const base::Optional<TargetHistogram>& predicted)>;
+
   LearningTaskController() = default;
   virtual ~LearningTaskController() = default;
 
@@ -90,6 +94,12 @@ class COMPONENT_EXPORT(LEARNING_COMMON) LearningTaskController {
 
   // Returns the LearningTask associated with |this|.
   virtual const LearningTask& GetLearningTask() = 0;
+
+  // Asynchronously predicts distribution for given |features|. |callback| will
+  // receive a base::nullopt prediction when model is not available. |callback|
+  // may be called immediately without posting.
+  virtual void PredictDistribution(const FeatureVector& features,
+                                   PredictionCB callback) = 0;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(LearningTaskController);

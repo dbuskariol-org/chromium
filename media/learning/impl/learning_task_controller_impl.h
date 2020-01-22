@@ -62,6 +62,8 @@ class COMPONENT_EXPORT(LEARNING_IMPL) LearningTaskControllerImpl
       base::UnguessableToken id,
       const base::Optional<TargetValue>& default_target) override;
   const LearningTask& GetLearningTask() override;
+  void PredictDistribution(const FeatureVector& features,
+                           PredictionCB callback) override;
 
  private:
   // Add |example| to the training data, and process it.

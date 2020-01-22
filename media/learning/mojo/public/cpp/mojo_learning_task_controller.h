@@ -40,6 +40,8 @@ class COMPONENT_EXPORT(MEDIA_LEARNING_MOJO) MojoLearningTaskController
       base::UnguessableToken id,
       const base::Optional<TargetValue>& default_target) override;
   const LearningTask& GetLearningTask() override;
+  void PredictDistribution(const FeatureVector& features,
+                           PredictionCB callback) override;
 
  private:
   LearningTask task_;

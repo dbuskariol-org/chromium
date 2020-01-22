@@ -50,6 +50,12 @@ class MojoLearningTaskControllerServiceTest : public ::testing::Test {
       return LearningTask::Empty();
     }
 
+    void PredictDistribution(const FeatureVector& features,
+                             PredictionCB callback) override {
+      predict_distribution_args_.features_ = features;
+      predict_distribution_args_.callback_ = std::move(callback);
+    }
+
     struct {
       base::UnguessableToken id_;
       FeatureVector features_;
@@ -69,6 +75,11 @@ class MojoLearningTaskControllerServiceTest : public ::testing::Test {
       base::UnguessableToken id_;
       base::Optional<TargetValue> default_target_;
     } update_default_args_;
+
+    struct {
+      FeatureVector features_;
+      PredictionCB callback_;
+    } predict_distribution_args_;
   };
 
  public:
@@ -191,6 +202,28 @@ TEST_F(MojoLearningTaskControllerServiceTest, UpdateDefaultTargetToNoValue) {
   EXPECT_EQ(id, controller_raw_->update_default_args_.id_);
   EXPECT_EQ(base::nullopt,
             controller_raw_->update_default_args_.default_target_);
+}
+
+TEST_F(MojoLearningTaskControllerServiceTest, PredictDistribution) {
+  FeatureVector features = {FeatureValue(123), FeatureValue(456)};
+  TargetHistogram observed_prediction;
+  service_->PredictDistribution(
+      features, base::BindOnce(
+                    [](TargetHistogram* test_storage,
+                       const base::Optional<TargetHistogram>& predicted) {
+                      *test_storage = *predicted;
+                    },
+                    &observed_prediction));
+  EXPECT_EQ(features, controller_raw_->predict_distribution_args_.features_);
+  EXPECT_FALSE(controller_raw_->predict_distribution_args_.callback_.is_null());
+
+  TargetHistogram expected_prediction;
+  expected_prediction[TargetValue(1)] = 1.0;
+  expected_prediction[TargetValue(2)] = 2.0;
+  expected_prediction[TargetValue(3)] = 3.0;
+  std::move(controller_raw_->predict_distribution_args_.callback_)
+      .Run(expected_prediction);
+  EXPECT_EQ(expected_prediction, observed_prediction);
 }
 
 }  // namespace learning

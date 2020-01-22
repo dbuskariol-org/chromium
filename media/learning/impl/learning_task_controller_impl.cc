@@ -92,6 +92,15 @@ const LearningTask& LearningTaskControllerImpl::GetLearningTask() {
   return task_;
 }
 
+void LearningTaskControllerImpl::PredictDistribution(
+    const FeatureVector& features,
+    PredictionCB callback) {
+  if (model_)
+    std::move(callback).Run(model_->PredictDistribution(features));
+  else
+    std::move(callback).Run(base::nullopt);
+}
+
 void LearningTaskControllerImpl::AddFinishedExample(LabelledExample example,
                                                     ukm::SourceId source_id) {
   // Verify that we have a trainer and that we got the right number of features.

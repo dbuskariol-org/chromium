@@ -90,6 +90,12 @@ class WeakLearningTaskController : public LearningTaskController {
 
   const LearningTask& GetLearningTask() override { return task_; }
 
+  void PredictDistribution(const FeatureVector& features,
+                           PredictionCB callback) override {
+    controller_->Post(FROM_HERE, &LearningTaskController::PredictDistribution,
+                      features, std::move(callback));
+  }
+
   base::WeakPtr<LearningSessionImpl> weak_session_;
   base::SequenceBound<LearningTaskController>* controller_;
   LearningTask task_;

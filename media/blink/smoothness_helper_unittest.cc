@@ -61,6 +61,8 @@ class SmoothnessHelperTest : public testing::Test {
                       const base::Optional<TargetValue>& default_target));
 
     MOCK_METHOD0(GetLearningTask, const LearningTask&());
+    MOCK_METHOD2(PredictDistribution,
+                 void(const FeatureVector& features, PredictionCB callback));
   };
 
   class MockClient : public SmoothnessHelper::Client {

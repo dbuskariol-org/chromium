@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "base/bind.h"
+#include "base/bind_helpers.h"
 #include "base/macros.h"
 #include "base/memory/ptr_util.h"
 #include "base/test/task_environment.h"
@@ -48,6 +49,12 @@ class MojoLearningTaskControllerTest : public ::testing::Test {
       update_default_args_.default_target_ = default_target;
     }
 
+    void PredictDistribution(const FeatureVector& features,
+                             PredictDistributionCallback callback) override {
+      predict_args_.features_ = features;
+      predict_args_.callback_ = std::move(callback);
+    }
+
     struct {
       base::UnguessableToken id_;
       FeatureVector features_;
@@ -67,6 +74,11 @@ class MojoLearningTaskControllerTest : public ::testing::Test {
       base::UnguessableToken id_;
       base::Optional<TargetValue> default_target_;
     } update_default_args_;
+
+    struct {
+      FeatureVector features_;
+      PredictDistributionCallback callback_;
+    } predict_args_;
   };
 
  public:
@@ -163,6 +175,31 @@ TEST_F(MojoLearningTaskControllerTest, Cancel) {
   learning_controller_->CancelObservation(id);
   task_environment_.RunUntilIdle();
   EXPECT_EQ(id, fake_learning_controller_.cancel_args_.id_);
+}
+
+TEST_F(MojoLearningTaskControllerTest, PredictDistribution) {
+  FeatureVector features = {FeatureValue(123), FeatureValue(456)};
+
+  TargetHistogram observed_prediction;
+  learning_controller_->PredictDistribution(
+      features, base::BindOnce(
+                    [](TargetHistogram* test_storage,
+                       const base::Optional<TargetHistogram>& predicted) {
+                      *test_storage = *predicted;
+                    },
+                    &observed_prediction));
+  task_environment_.RunUntilIdle();
+  EXPECT_EQ(features, fake_learning_controller_.predict_args_.features_);
+  EXPECT_FALSE(fake_learning_controller_.predict_args_.callback_.is_null());
+
+  TargetHistogram expected_prediction;
+  expected_prediction[TargetValue(1)] = 1.0;
+  expected_prediction[TargetValue(2)] = 2.0;
+  expected_prediction[TargetValue(3)] = 3.0;
+  std::move(fake_learning_controller_.predict_args_.callback_)
+      .Run(expected_prediction);
+  task_environment_.RunUntilIdle();
+  EXPECT_EQ(observed_prediction, expected_prediction);
 }
 
 }  // namespace learning

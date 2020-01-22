@@ -6,6 +6,7 @@
 
 #include <utility>
 
+#include "base/bind.h"
 #include "media/learning/common/learning_task_controller.h"
 
 namespace media {
@@ -70,6 +71,12 @@ void MojoLearningTaskControllerService::UpdateDefaultTarget(
     return;
 
   impl_->UpdateDefaultTarget(id, default_target);
+}
+
+void MojoLearningTaskControllerService::PredictDistribution(
+    const FeatureVector& features,
+    PredictDistributionCallback callback) {
+  impl_->PredictDistribution(features, std::move(callback));
 }
 
 }  // namespace learning

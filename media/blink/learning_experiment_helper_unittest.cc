@@ -37,8 +37,10 @@ class MockLearningTaskController : public LearningTaskController {
   MOCK_METHOD2(UpdateDefaultTarget,
                void(base::UnguessableToken id,
                     const base::Optional<TargetValue>& default_target));
+  MOCK_METHOD2(PredictDistribution,
+               void(const FeatureVector& features, PredictionCB callback));
 
-  const LearningTask& GetLearningTask() { return task_; }
+  const LearningTask& GetLearningTask() override { return task_; }
 
  private:
   LearningTask task_;

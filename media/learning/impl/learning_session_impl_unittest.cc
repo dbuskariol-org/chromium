@@ -45,14 +45,14 @@ class LearningSessionImplTest : public testing::Test {
         const FeatureVector& features,
         const base::Optional<TargetValue>& default_target) override {
       id_ = id;
-      features_ = features;
+      observation_features_ = features;
       default_target_ = default_target;
     }
 
     void CompleteObservation(base::UnguessableToken id,
                              const ObservationCompletion& completion) override {
       EXPECT_EQ(id_, id);
-      example_.features = std::move(features_);
+      example_.features = std::move(observation_features_);
       example_.target_value = completion.target_value;
       example_.weight = completion.weight;
     }
@@ -74,9 +74,17 @@ class LearningSessionImplTest : public testing::Test {
       return LearningTask::Empty();
     }
 
+    void PredictDistribution(const FeatureVector& features,
+                             PredictionCB callback) override {
+      predict_features_ = features;
+      predict_cb_ = std::move(callback);
+    }
+
     SequenceBoundFeatureProvider feature_provider_;
     base::UnguessableToken id_;
-    FeatureVector features_;
+    FeatureVector observation_features_;
+    FeatureVector predict_features_;
+    PredictionCB predict_cb_;
     base::Optional<TargetValue> default_target_;
     LabelledExample example_;
 
@@ -315,6 +323,35 @@ TEST_F(LearningSessionImplTest, ChangeDefaultTargetToNoValue) {
 
   // Shouldn't notify the underlying controller.
   EXPECT_FALSE(task_controllers_[0]->updated_id_);
+}
+
+TEST_F(LearningSessionImplTest, PredictDistribution) {
+  session_->RegisterTask(task_0_);
+
+  std::unique_ptr<LearningTaskController> controller =
+      session_->GetController(task_0_.name);
+  task_environment_.RunUntilIdle();
+
+  FeatureVector features = {FeatureValue(123), FeatureValue(456)};
+  TargetHistogram observed_prediction;
+  controller->PredictDistribution(
+      features, base::BindOnce(
+                    [](TargetHistogram* test_storage,
+                       const base::Optional<TargetHistogram>& predicted) {
+                      *test_storage = *predicted;
+                    },
+                    &observed_prediction));
+  task_environment_.RunUntilIdle();
+  EXPECT_EQ(features, task_controllers_[0]->predict_features_);
+  EXPECT_FALSE(task_controllers_[0]->predict_cb_.is_null());
+
+  TargetHistogram expected_prediction;
+  expected_prediction[TargetValue(1)] = 1.0;
+  expected_prediction[TargetValue(2)] = 2.0;
+  expected_prediction[TargetValue(3)] = 3.0;
+  std::move(task_controllers_[0]->predict_cb_).Run(expected_prediction);
+  task_environment_.RunUntilIdle();
+  EXPECT_EQ(expected_prediction, observed_prediction);
 }
 
 }  // namespace learning

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_LEARNING_IMPL_TARGET_HISTOGRAM_H_
-#define MEDIA_LEARNING_IMPL_TARGET_HISTOGRAM_H_
+#ifndef MEDIA_LEARNING_COMMON_TARGET_HISTOGRAM_H_
+#define MEDIA_LEARNING_COMMON_TARGET_HISTOGRAM_H_
 
 #include <ostream>
 #include <string>
@@ -14,17 +14,22 @@
 #include "media/learning/common/labelled_example.h"
 #include "media/learning/common/value.h"
 
+#include "mojo/public/cpp/bindings/struct_traits.h"  // nogncheck
+
 namespace media {
 namespace learning {
 
+namespace mojom {
+class TargetHistogramDataView;
+}
+
 // Histogram of target values that allows fractional counts.
-class COMPONENT_EXPORT(LEARNING_IMPL) TargetHistogram {
- private:
+class COMPONENT_EXPORT(LEARNING_COMMON) TargetHistogram {
+ public:
   // We use a flat_map since this will often have only one or two TargetValues,
   // such as "true" or "false".
   using CountMap = base::flat_map<TargetValue, double>;
 
- public:
   TargetHistogram();
   TargetHistogram(const TargetHistogram& rhs);
   TargetHistogram(TargetHistogram&& rhs);
@@ -81,6 +86,10 @@ class COMPONENT_EXPORT(LEARNING_IMPL) TargetHistogram {
   std::string ToString() const;
 
  private:
+  friend struct mojo::StructTraits<
+      media::learning::mojom::TargetHistogramDataView,
+      media::learning::TargetHistogram>;
+
   const CountMap& counts() const { return counts_; }
 
   // [value] == counts
@@ -89,10 +98,10 @@ class COMPONENT_EXPORT(LEARNING_IMPL) TargetHistogram {
   // Allow copy and assign.
 };
 
-COMPONENT_EXPORT(LEARNING_IMPL)
+COMPONENT_EXPORT(LEARNING_COMMON)
 std::ostream& operator<<(std::ostream& out, const TargetHistogram& dist);
 
 }  // namespace learning
 }  // namespace media
 
-#endif  // MEDIA_LEARNING_IMPL_TARGET_HISTOGRAM_H_
+#endif  // MEDIA_LEARNING_COMMON_TARGET_HISTOGRAM_H_

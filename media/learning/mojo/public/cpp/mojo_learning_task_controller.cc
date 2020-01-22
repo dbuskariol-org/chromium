@@ -45,5 +45,11 @@ const LearningTask& MojoLearningTaskController::GetLearningTask() {
   return task_;
 }
 
+void MojoLearningTaskController::PredictDistribution(
+    const FeatureVector& features,
+    PredictionCB callback) {
+  controller_->PredictDistribution(features, std::move(callback));
+}
+
 }  // namespace learning
 }  // namespace media
