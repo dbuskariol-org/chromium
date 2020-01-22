@@ -309,7 +309,6 @@
     "matches": [
       "chrome://bookmarks/*",
       "chrome://extensions/*",
-      "chrome://media-app-guest/*",
       "chrome://os-settings/*",
       "chrome://settings/*",
       "chrome://sync-confirmation/*",
