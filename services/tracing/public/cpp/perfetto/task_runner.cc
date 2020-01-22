@@ -27,9 +27,9 @@ PerfettoTaskRunner::PerfettoTaskRunner(
 
 PerfettoTaskRunner::~PerfettoTaskRunner() {
   DCHECK(GetOrCreateTaskRunner()->RunsTasksInCurrentSequence());
-#if defined(OS_POSIX)
+#if defined(OS_ANDROID)
   fd_controllers_.clear();
-#endif  // defined(OS_POSIX)
+#endif  // defined(OS_ANDROID)
 }
 
 void PerfettoTaskRunner::PostTask(std::function<void()> task) {
@@ -79,43 +79,26 @@ bool PerfettoTaskRunner::RunsTasksOnCurrentThread() const {
 void PerfettoTaskRunner::AddFileDescriptorWatch(
     int fd,
     std::function<void()> callback) {
-#if !defined(OS_POSIX)
+#if !defined(OS_ANDROID)
   NOTREACHED();
 #else
   DCHECK(GetOrCreateTaskRunner()->RunsTasksInCurrentSequence());
   DCHECK(!base::Contains(fd_controllers_, fd));
-  // Set it up as a nullptr to signal intent to add a watch.
-  fd_controllers_[fd];
-  task_runner_->PostTask(
-      FROM_HERE,
-      base::BindOnce(
-          [](PerfettoTaskRunner* perfetto_runner, int fd,
-             std::function<void()> callback) {
-            DCHECK(perfetto_runner->GetOrCreateTaskRunner()
-                       ->RunsTasksInCurrentSequence());
-            auto it = perfetto_runner->fd_controllers_.find(fd);
-            // If we can't find this fd, then RemoveFileDescriptor has already
-            // been called so just early out.
-            if (it == perfetto_runner->fd_controllers_.end()) {
-              return;
-            }
-            it->second = base::FileDescriptorWatcher::WatchReadable(
-                fd, base::BindRepeating(
-                        [](std::function<void()> callback) { callback(); },
-                        std::move(callback)));
-          },
-          base::Unretained(this), fd, std::move(callback)));
-#endif  // !defined(OS_POSIX)
+  fd_controllers_[fd] = base::FileDescriptorWatcher::WatchReadable(
+      fd,
+      base::BindRepeating([](std::function<void()> callback) { callback(); },
+                          std::move(callback)));
+#endif  // !defined(OS_ANDROID)
 }
 
 void PerfettoTaskRunner::RemoveFileDescriptorWatch(int fd) {
-#if !defined(OS_POSIX)
+#if !defined(OS_ANDROID)
   NOTREACHED();
 #else
   DCHECK(GetOrCreateTaskRunner()->RunsTasksInCurrentSequence());
   DCHECK(base::Contains(fd_controllers_, fd));
   fd_controllers_.erase(fd);
-#endif  // !defined(OS_POSIX)
+#endif  // !defined(OS_ANDROID)
 }
 
 void PerfettoTaskRunner::ResetTaskRunnerForTesting(
