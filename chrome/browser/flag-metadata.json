@@ -1091,11 +1091,6 @@
     "expiry_milestone": 82
   },
   {
-    "name": "enable-backdrop-filter",
-    "owners": [ "masonfreed", "paint-dev@chromium.org" ],
-    "expiry_milestone": 78
-  },
-  {
     "name": "enable-background-blur",
     "owners": [ "newcomer" ],
     "expiry_milestone": 86
