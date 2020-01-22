@@ -102,7 +102,7 @@ class CheckClientDownloadRequestBase {
   virtual bool IsSupportedDownload(
       DownloadCheckResultReason* reason,
       ClientDownloadRequest::DownloadType* type) = 0;
-  virtual content::BrowserContext* GetBrowserContext() = 0;
+  virtual content::BrowserContext* GetBrowserContext() const = 0;
   virtual bool IsCancelled() = 0;
   virtual base::WeakPtr<CheckClientDownloadRequestBase> GetWeakPtr() = 0;
 
@@ -142,6 +142,11 @@ class CheckClientDownloadRequestBase {
   // Called whenever a request has completed.
   virtual void NotifyRequestFinished(DownloadCheckResult result,
                                      DownloadCheckResultReason reason) = 0;
+
+  // Called when finishing the download, to decide whether to prompt the user
+  // for deep scanning or not.
+  virtual bool ShouldPromptForDeepScanning(
+      DownloadCheckResultReason reason) const = 0;
 
   // Source URL being downloaded from. This shuold always be set, but could be
   // for example an artificial blob: URL if there is no source URL.

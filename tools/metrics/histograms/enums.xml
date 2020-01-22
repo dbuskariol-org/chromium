@@ -56237,6 +56237,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="31" label="SENSITIVE_CONTENT_WARNING"/>
   <int value="32" label="SENSITIVE_CONTENT_BLOCK"/>
   <int value="33" label="DEEP_SCANNED_SAFE"/>
+  <int value="34" label="ADVANCED_PROTECTION_PROMPT"/>
 </enum>
 
 <enum name="SBClientDownloadCheckResult">
@@ -56253,6 +56254,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="10" label="SENSITIVE_CONTENT_WARNING"/>
   <int value="11" label="SENSITIVE_CONTENT_BLOCK"/>
   <int value="12" label="DEEP_SCANNED_SAFE"/>
+  <int value="13" label="PROMPT_FOR_SCANNING"/>
 </enum>
 
 <enum name="SBClientDownloadExtensions">
