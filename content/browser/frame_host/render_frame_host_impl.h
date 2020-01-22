@@ -1333,6 +1333,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
       blink::mojom::FindInPageResultAXParamsPtr params) override;
   void HandleAccessibilityFindInPageTermination() override;
   void DocumentOnLoadCompleted() override;
+  void ForwardResourceTimingToParent(
+      blink::mojom::ResourceTimingInfoPtr timing) override;
 
  protected:
   friend class RenderFrameHostFactory;

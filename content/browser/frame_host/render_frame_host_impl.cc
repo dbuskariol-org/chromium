@@ -206,6 +206,7 @@
 #include "third_party/blink/public/mojom/loader/url_loader_factory_bundle.mojom.h"
 #include "third_party/blink/public/mojom/service_worker/service_worker_object.mojom.h"
 #include "third_party/blink/public/mojom/sms/sms_receiver.mojom.h"
+#include "third_party/blink/public/mojom/timing/resource_timing.mojom.h"
 #include "third_party/blink/public/mojom/usb/web_usb_service.mojom.h"
 #include "third_party/blink/public/mojom/webauthn/virtual_authenticator.mojom.h"
 #include "ui/accessibility/ax_tree.h"
@@ -1681,8 +1682,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeFrameOwnerProperties,
                         OnDidChangeFrameOwnerProperties)
     IPC_MESSAGE_HANDLER(FrameHostMsg_UpdateTitle, OnUpdateTitle)
-    IPC_MESSAGE_HANDLER(FrameHostMsg_ForwardResourceTimingToParent,
-                        OnForwardResourceTimingToParent)
     IPC_MESSAGE_HANDLER(AccessibilityHostMsg_EventBundle, OnAccessibilityEvents)
     IPC_MESSAGE_HANDLER(AccessibilityHostMsg_LocationChanges,
                         OnAccessibilityLocationChanges)
@@ -3665,8 +3664,8 @@ void RenderFrameHostImpl::DocumentOnLoadCompleted() {
   delegate_->DocumentOnLoadCompleted(this);
 }
 
-void RenderFrameHostImpl::OnForwardResourceTimingToParent(
-    const ResourceTimingInfo& resource_timing) {
+void RenderFrameHostImpl::ForwardResourceTimingToParent(
+    blink::mojom::ResourceTimingInfoPtr timing) {
   // Don't forward the resource timing if this RFH is pending deletion. This can
   // happen in a race where this RenderFrameHost finishes loading just after
   // the frame navigates away. See https://crbug.com/626802.
@@ -3683,8 +3682,8 @@ void RenderFrameHostImpl::OnForwardResourceTimingToParent(
                                     bad_message::RFH_NO_PROXY_TO_PARENT);
     return;
   }
-  proxy->Send(new FrameMsg_ForwardResourceTimingToParent(proxy->GetRoutingID(),
-                                                         resource_timing));
+  proxy->GetAssociatedRemoteFrame()->AddResourceTimingFromChild(
+      std::move(timing));
 }
 
 RenderWidgetHostViewBase* RenderFrameHostImpl::GetViewForAccessibility() {

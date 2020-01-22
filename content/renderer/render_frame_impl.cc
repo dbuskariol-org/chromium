@@ -130,7 +130,6 @@
 #include "content/renderer/render_view_impl.h"
 #include "content/renderer/render_widget_fullscreen_pepper.h"
 #include "content/renderer/renderer_blink_platform_impl.h"
-#include "content/renderer/resource_timing_info_conversions.h"
 #include "content/renderer/savable_resources.h"
 #include "content/renderer/service_worker/service_worker_network_provider_for_frame.h"
 #include "content/renderer/service_worker/web_service_worker_provider_impl.h"
@@ -4762,12 +4761,6 @@ void RenderFrameImpl::DidFinishSameDocumentNavigation(
 
 void RenderFrameImpl::DidUpdateCurrentHistoryItem() {
   render_view_->StartNavStateSyncTimerIfNecessary(this);
-}
-
-void RenderFrameImpl::ForwardResourceTimingToParent(
-    const blink::WebResourceTimingInfo& info) {
-  Send(new FrameHostMsg_ForwardResourceTimingToParent(
-      routing_id_, WebResourceTimingInfoToResourceTimingInfo(info)));
 }
 
 base::UnguessableToken RenderFrameImpl::GetDevToolsFrameToken() {

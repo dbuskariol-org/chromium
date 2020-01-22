@@ -610,11 +610,6 @@ void LocalFrameClientImpl::DidStopLoading() {
     web_frame_->Client()->DidStopLoading();
 }
 
-void LocalFrameClientImpl::ForwardResourceTimingToParent(
-    const WebResourceTimingInfo& info) {
-  web_frame_->Client()->ForwardResourceTimingToParent(info);
-}
-
 void LocalFrameClientImpl::DownloadURL(
     const ResourceRequest& request,
     network::mojom::RedirectMode cross_origin_redirect_behavior) {
