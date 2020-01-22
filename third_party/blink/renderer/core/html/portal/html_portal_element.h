@@ -77,6 +77,12 @@ class CORE_EXPORT HTMLPortalElement : public HTMLFrameOwnerElement {
   void PortalContentsWillBeDestroyed(PortalContents*);
 
  private:
+  // Checks whether the Portals feature is enabled for this document, and logs a
+  // warning to the developer if not. Doing basically anything with an
+  // HTMLPortalElement in a document which doesn't support portals is forbidden.
+  bool CheckPortalsEnabledOrWarn() const;
+  bool CheckPortalsEnabledOrThrow(ExceptionState&) const;
+
   enum class GuestContentsEligibility {
     // Can have a guest contents.
     kEligible,
