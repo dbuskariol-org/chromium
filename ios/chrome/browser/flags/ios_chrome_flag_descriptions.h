@@ -303,6 +303,10 @@ extern const char kShowAutofillTypePredictionsDescription[];
 extern const char kSnapshotDrawViewName[];
 extern const char kSnapshotDrawViewDescription[];
 
+// Title and description for the flag to enable SSL committed interstitials.
+extern const char kSSLCommittedInterstitialsName[];
+extern const char kSSLCommittedInterstitialsDescription[];
+
 // Title and description for the flag to trigger the startup sign-in promo.
 extern const char kForceStartupSigninPromoName[];
 extern const char kForceStartupSigninPromoDescription[];

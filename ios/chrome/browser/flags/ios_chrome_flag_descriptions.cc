@@ -344,6 +344,12 @@ const char kSnapshotDrawViewName[] = "Use DrawViewHierarchy for Snapshots";
 const char kSnapshotDrawViewDescription[] =
     "When enabled, snapshots will be taken using |-drawViewHierarchy:|.";
 
+const char kSSLCommittedInterstitialsName[] =
+    "Enable SSL committed interstitials";
+const char kSSLCommittedInterstitialsDescription[] =
+    "When enabled, SSL interstitial pages will be committed rather than using "
+    "an overlay on the page.";
+
 const char kForceStartupSigninPromoName[] = "Display the startup sign-in promo";
 const char kForceStartupSigninPromoDescription[] =
     "When enabled, the startup sign-in promo is always displayed when starting "

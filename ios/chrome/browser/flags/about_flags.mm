@@ -593,6 +593,10 @@ const flags_ui::FeatureEntry kFeatureEntries[] = {
     {"clear-synced-data", flag_descriptions::kClearSyncedDataName,
      flag_descriptions::kClearSyncedDataDescription, flags_ui::kOsIos,
      FEATURE_VALUE_TYPE(kClearSyncedData)},
+    {"ssl-committed-interstitials",
+     flag_descriptions::kSSLCommittedInterstitialsName,
+     flag_descriptions::kSSLCommittedInterstitialsDescription, flags_ui::kOsIos,
+     FEATURE_VALUE_TYPE(web::features::kSSLCommittedInterstitials)},
 };
 
 // Add all switches from experimental flags to |command_line|.
