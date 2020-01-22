@@ -6307,3 +6307,4 @@ crbug.com/1043774 [ Linux ] virtual/web-components-v0-disabled/external/wpt/html
 # Sheriff 2020-01-22
 crbug.com/1044567 [ Mac10.10 ] media/video-colorspace-yuv420.html [ Pass Failure ]
 crbug.com/1044567 [ Mac10.10 ] virtual/audio-service/media/video-colorspace-yuv420.html [ Pass Failure ]
+crbug.com/1044568 [ Mac10.11 ] virtual/cascade/fast/forms/calendar-picker/calendar-picker-appearance-zoom125.html [ Pass Failure ]
