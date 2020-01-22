@@ -1561,6 +1561,9 @@ extern const char kHomepageLocationDescription[];
 extern const char kHomepageSettingsUIConversionName[];
 extern const char kHomepageSettingsUIConversionDescription[];
 
+extern const char kIntentBlockExternalFormRedirectsNoGestureName[];
+extern const char kIntentBlockExternalFormRedirectsNoGestureDescription[];
+
 extern const char kInterestFeedNotificationsName[];
 extern const char kInterestFeedNotificationsDescription[];
 

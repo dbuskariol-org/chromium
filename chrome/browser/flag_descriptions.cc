@@ -2618,6 +2618,12 @@ const char kHomepageSettingsUIConversionDescription[] =
     "homepage URL through a radio button group, and add promo box on NTP "
     "if homepage is not enabled.";
 
+const char kIntentBlockExternalFormRedirectsNoGestureName[] =
+    "Block intents from form submissions without user gesture";
+const char kIntentBlockExternalFormRedirectsNoGestureDescription[] =
+    "Require a user gesture that triggered a form submission in order to "
+    "allow for redirecting to an external intent.";
+
 const char kInterestFeedNotificationsName[] = "Interest Feed Notifications";
 const char kInterestFeedNotificationsDescription[] =
     "Show notifications for some suggested content from the interest feed. "

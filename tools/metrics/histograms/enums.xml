@@ -37844,6 +37844,8 @@ from previous Chrome versions.
   <int value="-320820051" label="enable-zero-copy"/>
   <int value="-319002650" label="ArcUsbStorageUI:enabled"/>
   <int value="-317195508" label="TabGroupsContinuationAndroid:disabled"/>
+  <int value="-315741215"
+      label="IntentBlockExternalFormRedirectsNoGesture:enabled"/>
   <int value="-315604713" label="WebUSB:enabled"/>
   <int value="-314910380" label="disable-distance-field-text"/>
   <int value="-314605926" label="protect-sync-credential-on-reauth:enabled"/>
@@ -38451,6 +38453,8 @@ from previous Chrome versions.
   <int value="451196246" label="disable-impl-side-painting"/>
   <int value="452139294" label="VrShellExperimentalRendering:enabled"/>
   <int value="452955571" label="EnableFilesystemInIncognito:disabled"/>
+  <int value="453017472"
+      label="IntentBlockExternalFormRedirectsNoGesture:disabled"/>
   <int value="453102772" label="OfflinePagesLoadSignalCollecting:disabled"/>
   <int value="455698038"
       label="disable-gesture-requirement-for-media-playback"/>
