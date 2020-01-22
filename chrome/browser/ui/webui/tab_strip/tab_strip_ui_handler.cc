@@ -411,6 +411,9 @@ void TabStripUIHandler::RegisterMessages() {
 }
 
 void TabStripUIHandler::HandleCreateNewTab(const base::ListValue* args) {
+  UMA_HISTOGRAM_ENUMERATION("Tab.NewTab",
+                            TabStripModel::NEW_TAB_BUTTON_IN_WEBUI_TAB_STRIP,
+                            TabStripModel::NEW_TAB_ENUM_COUNT);
   chrome::ExecuteCommand(browser_, IDC_NEW_TAB);
 }
 
