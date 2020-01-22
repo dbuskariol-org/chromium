@@ -4699,12 +4699,8 @@ void RenderFrameImpl::DidFailLoad(const WebURLError& error,
   // TODO(nasko): Move implementation here. No state needed.
   WebDocumentLoader* document_loader = frame_->GetDocumentLoader();
   DCHECK(document_loader);
-
-  base::string16 error_description;
-  GetContentClient()->renderer()->GetErrorDescription(
-      error, document_loader->HttpMethod().Ascii(), &error_description);
   GetFrameHost()->DidFailLoadWithError(document_loader->GetUrl(),
-                                       error.reason(), error_description);
+                                       error.reason());
 }
 
 void RenderFrameImpl::DidFinishLoad() {
