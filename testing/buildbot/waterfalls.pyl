@@ -643,6 +643,22 @@
         },
         'os_type': 'android',
       },
+      'android-lollipop-arm-rel': {
+        'mixins': [
+          # TODO(crbug.com/1032336): Pin to an exact L version.
+          'lollipop',
+          'hammerhead',
+        ],
+        'additional_compile_targets': [
+          'cronet_test_instrumentation_apk',
+          'monochrome_static_initializers',
+        ],
+        # TODO(crbug.com/1032336): Scale up these tests.
+        'test_suites': {
+          'gtest_tests': 'chromium_swarm_android_gtests',
+        },
+        'os_type': 'android',
+      },
       'android-marshmallow-arm64-rel': {
         'mixins': [
           'code-coverage',
