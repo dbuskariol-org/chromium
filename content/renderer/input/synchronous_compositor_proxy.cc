@@ -247,7 +247,6 @@ void SynchronousCompositorProxy::SubmitCompositorFrame(
 }
 
 void SynchronousCompositorProxy::SetNeedsBeginFrames(bool needs_begin_frames) {
-  DCHECK(!using_viz_for_webview_);
   if (needs_begin_frames_ == needs_begin_frames)
     return;
   needs_begin_frames_ = needs_begin_frames;
@@ -268,7 +267,6 @@ void SynchronousCompositorProxy::SetBeginFrameSourcePaused(bool paused) {
 void SynchronousCompositorProxy::BeginFrame(
     const viz::BeginFrameArgs& args,
     const viz::FrameTimingDetailsMap& timing_details) {
-  DCHECK(!using_viz_for_webview_);
 
   if (layer_tree_frame_sink_) {
     layer_tree_frame_sink_->DidPresentCompositorFrame(timing_details);
@@ -345,7 +343,6 @@ void SynchronousCompositorProxy::SendDemandDrawHwAsyncReply(
 
 void SynchronousCompositorProxy::SendBeginFrameResponse(
     const content::SyncCompositorCommonRendererParams& param) {
-  DCHECK(!using_viz_for_webview_);
   control_host_->BeginFrameResponse(param);
 }
 
@@ -388,8 +385,7 @@ void SynchronousCompositorProxy::HostDisconnected() {
   // blocking the renderer main thread forever on a commit. See
   // crbug.com/1010478 for when this happened. This is to prevent a similar
   // bug in the future.
-  if (!using_viz_for_webview_)
-    SetBeginFrameSourcePaused(true);
+  SetBeginFrameSourcePaused(true);
 }
 
 }  // namespace content

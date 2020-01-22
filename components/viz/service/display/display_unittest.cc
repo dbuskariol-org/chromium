@@ -54,8 +54,6 @@ static constexpr FrameSinkId kAnotherFrameSinkId2(5, 5);
 
 class TestSoftwareOutputDevice : public SoftwareOutputDevice {
  public:
-  TestSoftwareOutputDevice() {}
-
   gfx::Rect damage_rect() const { return damage_rect_; }
   gfx::Size viewport_pixel_size() const { return viewport_pixel_size_; }
 };
@@ -66,9 +64,9 @@ class TestDisplayScheduler : public DisplayScheduler {
                                 base::SingleThreadTaskRunner* task_runner)
       : DisplayScheduler(begin_frame_source, task_runner, 1) {}
 
-  ~TestDisplayScheduler() override {}
+  ~TestDisplayScheduler() override = default;
 
-  void OnDisplayDamaged() override {
+  void OnDisplayDamaged(SurfaceId surface_id) override {
     damaged_ = true;
     needs_draw_ = true;
   }
