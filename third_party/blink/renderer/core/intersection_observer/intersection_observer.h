@@ -72,11 +72,11 @@ class CORE_EXPORT IntersectionObserver final
 
   static IntersectionObserver* Create(const IntersectionObserverInit*,
                                       IntersectionObserverDelegate&,
-                                      ExceptionState&);
+                                      ExceptionState& = ASSERT_NO_EXCEPTION);
   static IntersectionObserver* Create(ScriptState*,
                                       V8IntersectionObserverCallback*,
                                       const IntersectionObserverInit*,
-                                      ExceptionState&);
+                                      ExceptionState& = ASSERT_NO_EXCEPTION);
 
   // Creates an IntersectionObserver that monitors changes to the intersection
   // between its target element relative to its implicit root and notifies via
@@ -110,7 +110,8 @@ class CORE_EXPORT IntersectionObserver final
   void observe(Element*, ExceptionState& = ASSERT_NO_EXCEPTION);
   void unobserve(Element*, ExceptionState& = ASSERT_NO_EXCEPTION);
   void disconnect(ExceptionState& = ASSERT_NO_EXCEPTION);
-  HeapVector<Member<IntersectionObserverEntry>> takeRecords(ExceptionState&);
+  HeapVector<Member<IntersectionObserverEntry>> takeRecords(
+      ExceptionState& = ASSERT_NO_EXCEPTION);
 
   // API attributes.
   Element* root() const { return root_.Get(); }

@@ -280,16 +280,17 @@ IntersectionObserver::IntersectionObserver(
     root->EnsureIntersectionObserverData().AddObserver(*this);
     root->GetDocument()
         .EnsureIntersectionObserverController()
-        .AddTrackedElement(*root, track_visibility);
+        .AddTrackedObserver(*this, track_visibility);
   }
 }
 
 void IntersectionObserver::ProcessCustomWeakness(const WeakCallbackInfo& info) {
-  if (RootIsImplicit() || (root() && info.IsHeapObjectAlive(root())))
-    return;
-  DummyExceptionStateForTesting exception_state;
-  disconnect(exception_state);
-  root_ = nullptr;
+  // For explicit-root observers, if the root element disappears for any reason,
+  // any remaining obsevations must be dismantled.
+  if (root() && !info.IsHeapObjectAlive(root()))
+    root_ = nullptr;
+  if (!RootIsImplicit() && !root())
+    disconnect();
 }
 
 bool IntersectionObserver::RootIsValid() const {
@@ -319,7 +320,7 @@ void IntersectionObserver::observe(Element* target,
     if (RootIsImplicit()) {
       target->GetDocument()
           .EnsureIntersectionObserverController()
-          .AddTrackedElement(*target, track_visibility_);
+          .AddTrackedObservation(*observation, track_visibility_);
     }
     if (LocalFrameView* frame_view = target_frame->View()) {
       // The IntersectionObsever spec requires that at least one observation
