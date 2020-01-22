@@ -21820,6 +21820,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="1432" label="LOGIN_LOCKMANAGEDGUESTSESSION"/>
   <int value="1433" label="LOGIN_UNLOCKMANAGEDGUESTSESSION"/>
   <int value="1434" label="AUTOTESTPRIVATE_SETARCTOUCHMODE"/>
+  <int value="1435" label="PRINTING_SUBMITJOB"/>
 </enum>
 
 <enum name="ExtensionIconState">

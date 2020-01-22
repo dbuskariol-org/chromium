@@ -2410,6 +2410,8 @@ source_set("chromeos") {
     sources += [
       "extensions/printing/print_job_controller.cc",
       "extensions/printing/print_job_controller.h",
+      "extensions/printing/print_job_submitter.cc",
+      "extensions/printing/print_job_submitter.h",
       "extensions/printing/printing_api.cc",
       "extensions/printing/printing_api.h",
       "extensions/printing/printing_api_handler.cc",
