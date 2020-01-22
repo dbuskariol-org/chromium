@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.native_page;
+package org.chromium.chrome.browser.ui.native_page;
 
 import android.view.View;
 
@@ -67,8 +67,7 @@ public class FrozenNativePage implements NativePage {
     }
 
     @Override
-    public void updateForUrl(String url) {
-    }
+    public void updateForUrl(String url) {}
 
     @Override
     public boolean isFrozen() {
@@ -76,6 +75,5 @@ public class FrozenNativePage implements NativePage {
     }
 
     @Override
-    public void destroy() {
-    }
+    public void destroy() {}
 }

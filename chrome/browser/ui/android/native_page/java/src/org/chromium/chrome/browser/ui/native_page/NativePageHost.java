@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.native_page;
+package org.chromium.chrome.browser.ui.native_page;
 
 import android.content.Context;
 import android.graphics.Rect;
