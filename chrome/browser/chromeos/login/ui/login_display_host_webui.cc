@@ -650,24 +650,6 @@ void LoginDisplayHostWebUI::OnStartAppLaunch() {
   login_view_->set_should_emit_login_prompt_visible(false);
 }
 
-void LoginDisplayHostWebUI::OnStartArcKiosk() {
-  finalize_animation_type_ = ANIMATION_FADE_OUT;
-  if (!login_window_) {
-    LoadURL(GURL(kAppLaunchSplashURL));
-  }
-
-  login_view_->set_should_emit_login_prompt_visible(false);
-}
-
-void LoginDisplayHostWebUI::OnStartWebKiosk() {
-  finalize_animation_type_ = ANIMATION_FADE_OUT;
-  if (!login_window_) {
-    LoadURL(GURL(kAppLaunchSplashURL));
-  }
-
-  login_view_->set_should_emit_login_prompt_visible(false);
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // LoginDisplayHostWebUI, public
 
