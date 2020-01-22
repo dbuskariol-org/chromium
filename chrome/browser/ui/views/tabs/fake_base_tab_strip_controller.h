@@ -69,6 +69,9 @@ class FakeBaseTabStripController : public TabStripController {
       const tab_groups::TabGroupId& group) const override;
   void UngroupAllTabsInGroup(const tab_groups::TabGroupId& group) override;
   void AddNewTabInGroup(const tab_groups::TabGroupId& group) override;
+  void AddTabToGroup(int model_index,
+                     const tab_groups::TabGroupId& group) override;
+  void RemoveTabFromGroup(int model_index) override;
   bool IsFrameCondensed() const override;
   bool HasVisibleBackgroundTabShapes() const override;
   bool EverHasVisibleBackgroundTabShapes() const override;

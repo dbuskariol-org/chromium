@@ -266,8 +266,8 @@ class TabStrip : public views::AccessiblePaneView,
   void ToggleSelected(Tab* tab) override;
   void AddSelectionFromAnchorTo(Tab* tab) override;
   void CloseTab(Tab* tab, CloseTabSource source) override;
-  void MoveTabLeft(Tab* tab) override;
-  void MoveTabRight(Tab* tab) override;
+  void ShiftTabLeft(Tab* tab) override;
+  void ShiftTabRight(Tab* tab) override;
   void MoveTabFirst(Tab* tab) override;
   void MoveTabLast(Tab* tab) override;
   void ShowContextMenuForTab(Tab* tab,
@@ -525,9 +525,9 @@ class TabStrip : public views::AccessiblePaneView,
   // Computes and stores values derived from contrast ratios.
   void UpdateContrastRatioValues();
 
-  // Determines whether a tab can be moved by |offset| positions and moves it if
-  // possible.
-  void MoveTabRelative(Tab* tab, int offset);
+  // Determines whether a tab can be shifted by one in the direction of |offset|
+  // and moves it if possible.
+  void ShiftTabRelative(Tab* tab, int offset);
 
   // -- Tab Resize Layout -----------------------------------------------------
 

@@ -73,64 +73,152 @@ IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabAndDeleteGroup) {
   EXPECT_EQ(groups[0], group);
 }
 
-IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabLeft_Success) {
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabLeft_Success) {
   AppendTab();
   AppendTab();
 
   const auto expected = GetWebContentsesInOrder({1, 0, 2});
-  tab_strip()->MoveTabLeft(tab_strip()->tab_at(1));
+  tab_strip()->ShiftTabLeft(tab_strip()->tab_at(1));
   EXPECT_EQ(expected, GetWebContentses());
 }
 
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabLeft_AddsToGroup) {
+  AppendTab();
+  AppendTab();
+
+  tab_groups::TabGroupId group = AddTabToNewGroup(1);
+
+  // Instead of moving, the tab should be added to the group.
+  const auto expected = GetWebContentsesInOrder({0, 1, 2});
+  tab_strip()->ShiftTabLeft(tab_strip()->tab_at(2));
+  EXPECT_EQ(expected, GetWebContentses());
+  EXPECT_EQ(tab_strip()->tab_at(2)->group().value(), group);
+}
+
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabLeft_RemovesFromGroup) {
+  AppendTab();
+  AppendTab();
+
+  AddTabToNewGroup(1);
+
+  // Instead of moving, the tab should be removed from the group.
+  const auto expected = GetWebContentsesInOrder({0, 1, 2});
+  tab_strip()->ShiftTabLeft(tab_strip()->tab_at(1));
+  EXPECT_EQ(expected, GetWebContentses());
+  EXPECT_EQ(tab_strip()->tab_at(1)->group(), base::nullopt);
+}
+
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabLeft_ShiftsBetweenGroups) {
+  AppendTab();
+  AppendTab();
+
+  tab_groups::TabGroupId group = AddTabToNewGroup(0);
+  AddTabToNewGroup(1);
+
+  // Instead of moving, the tab should be removed from its old group, then added
+  // to the new group.
+  const auto expected = GetWebContentsesInOrder({0, 1, 2});
+  tab_strip()->ShiftTabLeft(tab_strip()->tab_at(1));
+  EXPECT_EQ(expected, GetWebContentses());
+  EXPECT_EQ(tab_strip()->tab_at(1)->group(), base::nullopt);
+  tab_strip()->ShiftTabLeft(tab_strip()->tab_at(1));
+  EXPECT_EQ(expected, GetWebContentses());
+  EXPECT_EQ(tab_strip()->tab_at(1)->group().value(), group);
+}
+
 IN_PROC_BROWSER_TEST_F(TabStripBrowsertest,
-                       MoveTabLeft_Failure_EdgeOfTabstrip) {
+                       ShiftTabLeft_Failure_EdgeOfTabstrip) {
   AppendTab();
   AppendTab();
 
   const auto contentses = GetWebContentses();
-  tab_strip()->MoveTabLeft(tab_strip()->tab_at(0));
+  tab_strip()->ShiftTabLeft(tab_strip()->tab_at(0));
   // No change expected.
   EXPECT_EQ(contentses, GetWebContentses());
 }
 
-IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabLeft_Failure_Pinned) {
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabLeft_Failure_Pinned) {
   AppendTab();
   AppendTab();
   tab_strip_model()->SetTabPinned(0, true);
 
   const auto contentses = GetWebContentses();
-  tab_strip()->MoveTabLeft(tab_strip()->tab_at(1));
+  tab_strip()->ShiftTabLeft(tab_strip()->tab_at(1));
   // No change expected.
   EXPECT_EQ(contentses, GetWebContentses());
 }
 
-IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabRight_Success) {
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabRight_Success) {
   AppendTab();
   AppendTab();
 
   const auto expected = GetWebContentsesInOrder({1, 0, 2});
-  tab_strip()->MoveTabRight(tab_strip()->tab_at(0));
+  tab_strip()->ShiftTabRight(tab_strip()->tab_at(0));
   EXPECT_EQ(expected, GetWebContentses());
 }
 
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabRight_AddsToGroup) {
+  AppendTab();
+  AppendTab();
+
+  tab_groups::TabGroupId group = AddTabToNewGroup(1);
+
+  // Instead of moving, the tab should be added to the group.
+  const auto expected = GetWebContentsesInOrder({0, 1, 2});
+  tab_strip()->ShiftTabRight(tab_strip()->tab_at(0));
+  EXPECT_EQ(expected, GetWebContentses());
+  EXPECT_EQ(tab_strip()->tab_at(0)->group().value(), group);
+}
+
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabRight_RemovesFromGroup) {
+  AppendTab();
+  AppendTab();
+
+  AddTabToNewGroup(1);
+
+  // Instead of moving, the tab should be removed from the group.
+  const auto expected = GetWebContentsesInOrder({0, 1, 2});
+  tab_strip()->ShiftTabRight(tab_strip()->tab_at(1));
+  EXPECT_EQ(expected, GetWebContentses());
+  EXPECT_EQ(tab_strip()->tab_at(1)->group(), base::nullopt);
+}
+
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabRight_ShiftsBetweenGroups) {
+  AppendTab();
+  AppendTab();
+
+  AddTabToNewGroup(0);
+  tab_groups::TabGroupId group = AddTabToNewGroup(1);
+
+  // Instead of moving, the tab should be removed from its old group, then added
+  // to the new group.
+  const auto expected = GetWebContentsesInOrder({0, 1, 2});
+  tab_strip()->ShiftTabRight(tab_strip()->tab_at(0));
+  EXPECT_EQ(expected, GetWebContentses());
+  EXPECT_EQ(tab_strip()->tab_at(0)->group(), base::nullopt);
+  tab_strip()->ShiftTabRight(tab_strip()->tab_at(0));
+  EXPECT_EQ(expected, GetWebContentses());
+  EXPECT_EQ(tab_strip()->tab_at(0)->group().value(), group);
+}
+
 IN_PROC_BROWSER_TEST_F(TabStripBrowsertest,
-                       MoveTabRight_Failure_EdgeOfTabstrip) {
+                       ShiftTabRight_Failure_EdgeOfTabstrip) {
   AppendTab();
   AppendTab();
 
   const auto contentses = GetWebContentses();
-  tab_strip()->MoveTabRight(tab_strip()->tab_at(2));
+  tab_strip()->ShiftTabRight(tab_strip()->tab_at(2));
   // No change expected.
   EXPECT_EQ(contentses, GetWebContentses());
 }
 
-IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabRight_Failure_Pinned) {
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, ShiftTabRight_Failure_Pinned) {
   AppendTab();
   AppendTab();
   tab_strip_model()->SetTabPinned(0, true);
 
   const auto contentses = GetWebContentses();
-  tab_strip()->MoveTabRight(tab_strip()->tab_at(0));
+  tab_strip()->ShiftTabRight(tab_strip()->tab_at(0));
   // No change expected.
   EXPECT_EQ(contentses, GetWebContentses());
 }
@@ -154,6 +242,30 @@ IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabFirst_PinnedTabs_Success) {
   const auto expected = GetWebContentsesInOrder({0, 2, 1, 3});
   tab_strip()->MoveTabFirst(tab_strip()->tab_at(2));
   EXPECT_EQ(expected, GetWebContentses());
+}
+
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabFirst_DoesNotAddToGroup) {
+  AppendTab();
+  AppendTab();
+
+  AddTabToNewGroup(0);
+
+  tab_strip()->MoveTabFirst(tab_strip()->tab_at(1));
+  EXPECT_EQ(tab_strip()->tab_at(0)->group(), base::nullopt);
+}
+
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabFirst_RemovesFromGroup) {
+  AppendTab();
+  AppendTab();
+
+  AddTabToNewGroup(0);
+  AddTabToNewGroup(1);
+
+  tab_strip()->MoveTabFirst(tab_strip()->tab_at(0));
+  EXPECT_EQ(tab_strip()->tab_at(0)->group(), base::nullopt);
+
+  tab_strip()->MoveTabFirst(tab_strip()->tab_at(1));
+  EXPECT_EQ(tab_strip()->tab_at(0)->group(), base::nullopt);
 }
 
 IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabFirst_NoPinnedTabs_Failure) {
@@ -225,6 +337,30 @@ IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabLast_AllPinnedTabs_Success) {
   const auto expected = GetWebContentsesInOrder({0, 2, 1});
   tab_strip()->MoveTabLast(tab_strip()->tab_at(1));
   EXPECT_EQ(expected, GetWebContentses());
+}
+
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabLast_DoesNotAddToGroup) {
+  AppendTab();
+  AppendTab();
+
+  AddTabToNewGroup(2);
+
+  tab_strip()->MoveTabLast(tab_strip()->tab_at(1));
+  EXPECT_EQ(tab_strip()->tab_at(2)->group(), base::nullopt);
+}
+
+IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabLast_RemovesFromGroup) {
+  AppendTab();
+  AppendTab();
+
+  AddTabToNewGroup(1);
+  AddTabToNewGroup(2);
+
+  tab_strip()->MoveTabLast(tab_strip()->tab_at(2));
+  EXPECT_EQ(tab_strip()->tab_at(2)->group(), base::nullopt);
+
+  tab_strip()->MoveTabLast(tab_strip()->tab_at(1));
+  EXPECT_EQ(tab_strip()->tab_at(2)->group(), base::nullopt);
 }
 
 IN_PROC_BROWSER_TEST_F(TabStripBrowsertest, MoveTabLast_NoPinnedTabs_Failure) {

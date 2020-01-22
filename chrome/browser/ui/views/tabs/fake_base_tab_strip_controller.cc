@@ -65,6 +65,38 @@ void FakeBaseTabStripController::RemoveTab(int index) {
     tab_strip_->SetSelection(selection_model_);
 }
 
+base::string16 FakeBaseTabStripController::GetGroupTitle(
+    const tab_groups::TabGroupId& group_id) const {
+  return fake_group_data_.title();
+}
+
+tab_groups::TabGroupColorId FakeBaseTabStripController::GetGroupColorId(
+    const tab_groups::TabGroupId& group_id) const {
+  return fake_group_data_.color();
+}
+
+void FakeBaseTabStripController::SetVisualDataForGroup(
+    const tab_groups::TabGroupId& group,
+    const tab_groups::TabGroupVisualData& visual_data) {
+  fake_group_data_ = visual_data;
+}
+
+void FakeBaseTabStripController::UngroupAllTabsInGroup(
+    const tab_groups::TabGroupId& group) {}
+
+void FakeBaseTabStripController::AddNewTabInGroup(
+    const tab_groups::TabGroupId& group) {}
+
+void FakeBaseTabStripController::AddTabToGroup(
+    int model_index,
+    const tab_groups::TabGroupId& group) {
+  MoveTabIntoGroup(model_index, group);
+}
+
+void FakeBaseTabStripController::RemoveTabFromGroup(int model_index) {
+  MoveTabIntoGroup(model_index, base::nullopt);
+}
+
 void FakeBaseTabStripController::MoveTabIntoGroup(
     int index,
     base::Optional<tab_groups::TabGroupId> new_group) {
@@ -91,27 +123,6 @@ void FakeBaseTabStripController::MoveTabIntoGroup(
     tab_strip_->OnGroupContentsChanged(new_group.value());
   }
 }
-base::string16 FakeBaseTabStripController::GetGroupTitle(
-    const tab_groups::TabGroupId& group_id) const {
-  return fake_group_data_.title();
-}
-
-tab_groups::TabGroupColorId FakeBaseTabStripController::GetGroupColorId(
-    const tab_groups::TabGroupId& group_id) const {
-  return fake_group_data_.color();
-}
-
-void FakeBaseTabStripController::SetVisualDataForGroup(
-    const tab_groups::TabGroupId& group,
-    const tab_groups::TabGroupVisualData& visual_data) {
-  fake_group_data_ = visual_data;
-}
-
-void FakeBaseTabStripController::UngroupAllTabsInGroup(
-    const tab_groups::TabGroupId& group) {}
-
-void FakeBaseTabStripController::AddNewTabInGroup(
-    const tab_groups::TabGroupId& group) {}
 
 std::vector<int> FakeBaseTabStripController::ListTabsInGroup(
     const tab_groups::TabGroupId& group) const {
