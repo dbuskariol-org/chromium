@@ -72,6 +72,8 @@
 #include "ios/chrome/browser/chrome_url_constants.h"
 #import "ios/chrome/browser/chrome_url_util.h"
 #include "ios/chrome/browser/content_settings/host_content_settings_map_factory.h"
+#include "ios/chrome/browser/crash_report/breadcrumbs/breadcrumb_manager_keyed_service.h"
+#include "ios/chrome/browser/crash_report/breadcrumbs/breadcrumb_manager_keyed_service_factory.h"
 #include "ios/chrome/browser/crash_report/breadcrumbs/features.h"
 #include "ios/chrome/browser/crash_report/breakpad_helper.h"
 #include "ios/chrome/browser/crash_report/crash_loop_detection_util.h"
@@ -590,7 +592,9 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   self.mainBrowserState = chromeBrowserState;
 
   if (base::FeatureList::IsEnabled(kLogBreadcrumbs)) {
-    breakpad::MonitorBreadcrumbsForBrowserState(self.mainBrowserState);
+    breakpad::MonitorBreadcrumbManagerService(
+        BreadcrumbManagerKeyedServiceFactory::GetForBrowserState(
+            self.mainBrowserState));
   }
 
   [self.browserViewWrangler shutdown];
@@ -795,10 +799,13 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
   if (base::FeatureList::IsEnabled(kLogBreadcrumbs)) {
     if (self.mainBrowserState->HasOffTheRecordChromeBrowserState()) {
-      breakpad::StopMonitoringBreadcrumbsForBrowserState(
-          self.mainBrowserState->GetOffTheRecordChromeBrowserState());
+      breakpad::StopMonitoringBreadcrumbManagerService(
+          BreadcrumbManagerKeyedServiceFactory::GetForBrowserState(
+              self.mainBrowserState->GetOffTheRecordChromeBrowserState()));
     }
-    breakpad::StopMonitoringBreadcrumbsForBrowserState(self.mainBrowserState);
+    breakpad::StopMonitoringBreadcrumbManagerService(
+        BreadcrumbManagerKeyedServiceFactory::GetForBrowserState(
+            self.mainBrowserState));
   }
 
   // Invariant: The UI is stopped before the model is shutdown.
