@@ -774,7 +774,7 @@ void SSLErrorHandler::StartHandlingError() {
   // because profile_ isn't used. This is a no-op on platforms where
   // captive portal detection is disabled.
   registrar_.Add(this, chrome::NOTIFICATION_CAPTIVE_PORTAL_CHECK_RESULT,
-                 content::Source<Profile>(profile_));
+                 content::Source<content::BrowserContext>(profile_));
 
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
   CaptivePortalTabHelper* captive_portal_tab_helper =
