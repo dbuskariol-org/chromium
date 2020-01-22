@@ -3636,6 +3636,9 @@ void Document::ImplicitClose() {
   if (domWindow())
     domWindow()->DocumentWasClosed();
 
+  if (GetFrame() && GetFrame()->IsMainFrame())
+    GetFrame()->GetLocalFrameHostRemote().DocumentOnLoadCompleted();
+
   if (GetFrame()) {
     GetFrame()->Client()->DispatchDidHandleOnloadEvents();
     Loader()->GetApplicationCacheHost()->StopDeferringEvents();
