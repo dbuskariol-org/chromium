@@ -4774,10 +4774,6 @@ void RenderFrameImpl::ForwardResourceTimingToParent(
       routing_id_, WebResourceTimingInfoToResourceTimingInfo(info)));
 }
 
-void RenderFrameImpl::DispatchLoad() {
-  Send(new FrameHostMsg_DispatchLoad(routing_id_));
-}
-
 base::UnguessableToken RenderFrameImpl::GetDevToolsFrameToken() {
   return devtools_frame_token_;
 }
