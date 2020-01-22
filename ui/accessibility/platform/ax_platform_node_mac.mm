@@ -397,9 +397,9 @@ bool AlsoUseShowMenuActionForDefaultAction(const ui::AXNodeData& data) {
 - (void)detach {
   if (!_node)
     return;
+  _node = nil;
   NSAccessibilityPostNotification(
       self, NSAccessibilityUIElementDestroyedNotification);
-  _node = nil;
 }
 
 - (NSRect)boundsInScreen {
