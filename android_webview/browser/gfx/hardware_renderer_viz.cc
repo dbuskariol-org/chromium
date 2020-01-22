@@ -142,9 +142,9 @@ void HardwareRendererViz::OnViz::DrawAndSwapOnViz(
   DCHECK_CALLED_ON_VALID_THREAD(viz_thread_checker_);
   DCHECK(child_id.is_valid());
 
-  gfx::ColorSpace display_color_space =
-      color_space.IsValid() ? color_space : gfx::ColorSpace::CreateSRGB();
-  display_->SetColorSpace(display_color_space);
+  gfx::DisplayColorSpaces display_color_spaces(
+      color_space.IsValid() ? color_space : gfx::ColorSpace::CreateSRGB());
+  display_->SetDisplayColorSpaces(display_color_spaces);
 
   // Create a frame with a single SurfaceDrawQuad referencing the child
   // Surface and transformed using the given transform.

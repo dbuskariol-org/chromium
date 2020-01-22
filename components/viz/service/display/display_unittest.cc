@@ -234,10 +234,12 @@ TEST_F(DisplayTest, DisplayDamaged) {
   SetUpSoftwareDisplay(settings);
   gfx::ColorSpace color_space_1 = gfx::ColorSpace::CreateXYZD50();
   gfx::ColorSpace color_space_2 = gfx::ColorSpace::CreateSCRGBLinear();
+  gfx::DisplayColorSpaces color_spaces_1(color_space_1);
+  gfx::DisplayColorSpaces color_spaces_2(color_space_2);
 
   StubDisplayClient client;
   display_->Initialize(&client, manager_.surface_manager());
-  display_->SetColorSpace(color_space_1);
+  display_->SetDisplayColorSpaces(color_spaces_1);
 
   EXPECT_FALSE(scheduler_->damaged());
   id_allocator_.GenerateId();
@@ -287,7 +289,7 @@ TEST_F(DisplayTest, DisplayDamaged) {
 
     scheduler_->reset_swapped_for_test();
     EXPECT_EQ(color_space_1, output_surface_->last_reshape_color_space());
-    display_->SetColorSpace(color_space_2);
+    display_->SetDisplayColorSpaces(color_spaces_2);
     display_->DrawAndSwap(base::TimeTicks::Now());
     EXPECT_EQ(color_space_2, output_surface_->last_reshape_color_space());
     EXPECT_TRUE(scheduler_->swapped());
