@@ -1488,6 +1488,7 @@ void V4L2SliceVideoDecodeAccelerator::ImportBufferForPictureTask(
   // However the size of PictureBuffer might not be adjusted by ARC++. So we
   // keep this until ARC++ side is fixed.
   if (output_mode_ == Config::OutputMode::IMPORT) {
+    DCHECK_GT(handle.planes.size(), 0u);
     const int32_t stride = handle.planes[0].stride;
     const int plane_horiz_bits_per_pixel =
         VideoFrame::PlaneHorizontalBitsPerPixel(
@@ -1499,21 +1500,30 @@ void V4L2SliceVideoDecodeAccelerator::ImportBufferForPictureTask(
       NOTIFY_ERROR(INVALID_ARGUMENT);
       return;
     }
+
     int adjusted_coded_width = stride * 8 / plane_horiz_bits_per_pixel;
+    // If this is the first picture, then adjust the EGL width.
+    // Otherwise just check that it remains the same.
+    if (state_ == kAwaitingPictureBuffers) {
+      DCHECK_GE(adjusted_coded_width, gl_image_size_.width());
+      gl_image_size_.set_width(adjusted_coded_width);
+    }
+    DCHECK_EQ(gl_image_size_.width(), adjusted_coded_width);
+
+    DVLOGF(3) << "Original gl_image_size=" << gl_image_size_.ToString()
+              << ", adjusted coded width=" << adjusted_coded_width;
+
+    // For allocate mode, the IP will already have been created in
+    // AssignPictureBuffersTask.
     if (image_processor_device_ && !image_processor_) {
       DCHECK_EQ(kAwaitingPictureBuffers, state_);
       // This is the first buffer import. Create the image processor and change
       // the decoder state. The client may adjust the coded width. We don't have
       // the final coded size in AssignPictureBuffers yet. Use the adjusted
       // coded width to create the image processor.
-      DVLOGF(3) << "Original gl_image_size=" << gl_image_size_.ToString()
-                << ", adjusted coded width=" << adjusted_coded_width;
-      DCHECK_GE(adjusted_coded_width, gl_image_size_.width());
-      gl_image_size_.set_width(adjusted_coded_width);
       if (!CreateImageProcessor())
         return;
     }
-    DCHECK_EQ(gl_image_size_.width(), adjusted_coded_width);
   }
 
   // Put us in kIdle to allow further event processing.
