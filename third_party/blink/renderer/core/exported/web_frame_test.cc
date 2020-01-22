@@ -103,6 +103,7 @@
 #include "third_party/blink/renderer/core/editing/finder/text_finder.h"
 #include "third_party/blink/renderer/core/editing/frame_selection.h"
 #include "third_party/blink/renderer/core/editing/markers/document_marker_controller.h"
+#include "third_party/blink/renderer/core/editing/selection_template.h"
 #include "third_party/blink/renderer/core/editing/spellcheck/idle_spell_check_controller.h"
 #include "third_party/blink/renderer/core/editing/spellcheck/spell_checker.h"
 #include "third_party/blink/renderer/core/events/mouse_event.h"
@@ -10560,6 +10561,51 @@ TEST_F(WebFrameTest, CopyImageDocument) {
   EXPECT_EQ(2u, types.size());
   EXPECT_EQ("text/html", types[0]);
   EXPECT_EQ("image/png", types[1]);
+
+  // Clear clipboard data
+  system_clipboard->WritePlainText("");
+  system_clipboard->CommitWrite();
+}
+
+TEST_F(WebFrameTest, CopyTextInImageDocument) {
+  // If Javascript inserts other contents into an image document, we should be
+  // able to copy those contents, not just the image itself.
+
+  RegisterMockedHttpURLLoadWithMimeType("white-1x1.png", "image/png");
+  frame_test_helpers::WebViewHelper web_view_helper;
+  web_view_helper.InitializeAndLoad(base_url_ + "white-1x1.png");
+  WebViewImpl* web_view = web_view_helper.GetWebView();
+  WebLocalFrameImpl* web_frame = web_view->MainFrameImpl();
+  Document* document = web_frame->GetFrame()->GetDocument();
+
+  ASSERT_TRUE(document);
+  EXPECT_TRUE(IsA<ImageDocument>(document));
+
+  Node* text = document->createTextNode("copy me");
+  document->body()->appendChild(text);
+  document->GetFrame()->Selection().SetSelection(
+      SelectionInDOMTree::Builder().SelectAllChildren(*text).Build(),
+      SetSelectionOptions());
+
+  // Setup a mock clipboard host.
+  PageTestBase::MockClipboardHostProvider mock_clipboard_host_provider(
+      web_frame->GetFrame()->GetBrowserInterfaceBroker());
+
+  SystemClipboard* system_clipboard =
+      document->GetFrame()->GetSystemClipboard();
+  ASSERT_TRUE(system_clipboard);
+
+  EXPECT_TRUE(system_clipboard->ReadAvailableTypes().IsEmpty());
+
+  bool result = web_frame->ExecuteCommand("Copy");
+  test::RunPendingTasks();
+
+  EXPECT_TRUE(result);
+
+  Vector<String> types = system_clipboard->ReadAvailableTypes();
+  EXPECT_EQ(2u, types.size());
+  EXPECT_EQ("text/plain", types[0]);
+  EXPECT_EQ("text/html", types[1]);
 
   // Clear clipboard data
   system_clipboard->WritePlainText("");
