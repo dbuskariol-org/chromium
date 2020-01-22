@@ -61,7 +61,7 @@ SecurityContextInit::SecurityContextInit(const DocumentInit& initializer,
 }
 
 bool SecurityContextInit::FeaturePolicyFeatureObserved(
-    mojom::FeaturePolicyFeature feature) {
+    mojom::blink::FeaturePolicyFeature feature) {
   if (parsed_feature_policies_.Contains(feature))
     return true;
   parsed_feature_policies_.insert(feature);
@@ -281,7 +281,7 @@ void SecurityContextInit::InitializeFeaturePolicy(
     // Enforcing the policy for sandbox frames (for context see
     // https://crbug.com/954349).
     DisallowFeatureIfNotPresent(
-        mojom::FeaturePolicyFeature::kFocusWithoutUserActivation,
+        mojom::blink::FeaturePolicyFeature::kFocusWithoutUserActivation,
         container_policy);
   }
 

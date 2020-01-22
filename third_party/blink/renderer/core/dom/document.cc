@@ -5607,7 +5607,7 @@ void Document::setDomain(const String& raw_domain,
 
   const String feature_policy_error =
       "Setting `document.domain` is disabled by Feature Policy.";
-  if (!IsFeatureEnabled(mojom::FeaturePolicyFeature::kDocumentDomain,
+  if (!IsFeatureEnabled(mojom::blink::FeaturePolicyFeature::kDocumentDomain,
                         ReportOptions::kReportOnFailure,
                         feature_policy_error)) {
     exception_state.ThrowSecurityError(feature_policy_error);
@@ -6523,7 +6523,7 @@ void Document::PoliciesInitialized(
       frame_ && !frame_->IsMainFrame() &&
       RuntimeEnabledFeatures::ExperimentalProductivityFeaturesEnabled() &&
       !GetSecurityContext().GetFeaturePolicy()->IsFeatureEnabled(
-          mojom::FeaturePolicyFeature::kVerticalScroll);
+          mojom::blink::FeaturePolicyFeature::kVerticalScroll);
 }
 
 const ParsedFeaturePolicy Document::GetOwnerContainerPolicy() const {
@@ -6591,8 +6591,9 @@ bool Document::AllowedToUseDynamicMarkUpInsertion(
   if (!RuntimeEnabledFeatures::ExperimentalProductivityFeaturesEnabled()) {
     return true;
   }
-  if (!frame_ || IsFeatureEnabled(mojom::FeaturePolicyFeature::kDocumentWrite,
-                                  ReportOptions::kReportOnFailure)) {
+  if (!frame_ ||
+      IsFeatureEnabled(mojom::blink::FeaturePolicyFeature::kDocumentWrite,
+                       ReportOptions::kReportOnFailure)) {
     return true;
   }
 
@@ -7936,7 +7937,7 @@ bool Document::IsSlotAssignmentOrLegacyDistributionDirty() const {
 bool Document::IsLazyLoadPolicyEnforced() const {
   return RuntimeEnabledFeatures::ExperimentalProductivityFeaturesEnabled() &&
          !GetSecurityContext().GetFeaturePolicy()->IsFeatureEnabled(
-             mojom::FeaturePolicyFeature::kLazyLoad);
+             mojom::blink::FeaturePolicyFeature::kLazyLoad);
 }
 
 bool Document::IsFocusAllowed() const {
@@ -7965,7 +7966,7 @@ bool Document::IsFocusAllowed() const {
   if (!RuntimeEnabledFeatures::BlockingFocusWithoutUserActivationEnabled())
     return true;
   return IsFeatureEnabled(
-      mojom::FeaturePolicyFeature::kFocusWithoutUserActivation);
+      mojom::blink::FeaturePolicyFeature::kFocusWithoutUserActivation);
 }
 
 NavigationInitiatorImpl& Document::NavigationInitiator() {
@@ -7989,11 +7990,12 @@ WindowAgent& Document::GetWindowAgent() {
 }
 
 void Document::CountPotentialFeaturePolicyViolation(
-    mojom::FeaturePolicyFeature feature) const {
+    mojom::blink::FeaturePolicyFeature feature) const {
   wtf_size_t index = static_cast<wtf_size_t>(feature);
   if (potentially_violated_features_.size() == 0) {
     potentially_violated_features_.resize(
-        static_cast<wtf_size_t>(mojom::FeaturePolicyFeature::kMaxValue) + 1);
+        static_cast<wtf_size_t>(mojom::blink::FeaturePolicyFeature::kMaxValue) +
+        1);
   } else if (potentially_violated_features_[index]) {
     return;
   }
@@ -8002,7 +8004,7 @@ void Document::CountPotentialFeaturePolicyViolation(
                             feature);
 }
 void Document::ReportFeaturePolicyViolation(
-    mojom::FeaturePolicyFeature feature,
+    mojom::blink::FeaturePolicyFeature feature,
     mojom::FeaturePolicyDisposition disposition,
     const String& message,
     const String& source_file) const {

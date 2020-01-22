@@ -50,15 +50,15 @@ int BucketizeImageMetrics(double ratio) {
 }
 
 inline const char* GetImagePolicyHistogramName(
-    mojom::FeaturePolicyFeature feature) {
+    mojom::blink::FeaturePolicyFeature feature) {
   switch (feature) {
-    case mojom::FeaturePolicyFeature::kUnoptimizedLossyImages:
+    case mojom::blink::FeaturePolicyFeature::kUnoptimizedLossyImages:
       return "Blink.UseCounter.FeaturePolicy.LossyImageCompression";
-    case mojom::FeaturePolicyFeature::kUnoptimizedLosslessImages:
+    case mojom::blink::FeaturePolicyFeature::kUnoptimizedLosslessImages:
       return "Blink.UseCounter.FeaturePolicy.LosslessImageCompression";
-    case mojom::FeaturePolicyFeature::kUnoptimizedLosslessImagesStrict:
+    case mojom::blink::FeaturePolicyFeature::kUnoptimizedLosslessImagesStrict:
       return "Blink.UseCounter.FeaturePolicy.StrictLosslessImageCompression";
-    case mojom::FeaturePolicyFeature::kOversizedImages:
+    case mojom::blink::FeaturePolicyFeature::kOversizedImages:
       return "Blink.UseCounter.FeaturePolicy.ImageDownscalingRatio";
     default:
       NOTREACHED();
@@ -131,9 +131,9 @@ void SecurityContext::SetContentSecurityPolicy(
 
 bool SecurityContext::IsSandboxed(WebSandboxFlags mask) const {
   if (RuntimeEnabledFeatures::FeaturePolicyForSandboxEnabled()) {
-    mojom::FeaturePolicyFeature feature =
+    mojom::blink::FeaturePolicyFeature feature =
         FeaturePolicy::FeatureForSandboxFlag(mask);
-    if (feature != mojom::FeaturePolicyFeature::kNotFound)
+    if (feature != mojom::blink::FeaturePolicyFeature::kNotFound)
       return !feature_policy_->IsFeatureEnabled(feature);
   }
   return (sandbox_flags_ & mask) != WebSandboxFlags::kNone;
@@ -176,14 +176,14 @@ void SecurityContext::SetDocumentPolicyForTesting(
 }
 
 bool SecurityContext::IsFeatureEnabled(
-    mojom::FeaturePolicyFeature feature) const {
+    mojom::blink::FeaturePolicyFeature feature) const {
   return IsFeatureEnabled(
       feature, PolicyValue::CreateMaxPolicyValue(
                    feature_policy_->GetFeatureList().at(feature).second));
 }
 
 bool SecurityContext::IsFeatureEnabled(
-    mojom::FeaturePolicyFeature feature,
+    mojom::blink::FeaturePolicyFeature feature,
     PolicyValue threshold_value,
     base::Optional<mojom::FeaturePolicyDisposition>* disposition) const {
   // Use Document Policy to determine feature availability, but only if all of
@@ -210,17 +210,17 @@ bool SecurityContext::IsFeatureEnabled(
 }
 
 FeatureEnabledState SecurityContext::GetFeatureEnabledState(
-    mojom::FeaturePolicyFeature feature,
+    mojom::blink::FeaturePolicyFeature feature,
     PolicyValue threshold_value) const {
   // The policy should always be initialized before checking it to ensure we
   // properly inherit the parent policy.
   DCHECK(feature_policy_);
 
   // Log metrics for unoptimized-*-images and oversized-images policies.
-  if ((feature >= mojom::FeaturePolicyFeature::kUnoptimizedLossyImages &&
-       feature <=
-           mojom::FeaturePolicyFeature::kUnoptimizedLosslessImagesStrict) ||
-      feature == mojom::FeaturePolicyFeature::kOversizedImages) {
+  if ((feature >= mojom::blink::FeaturePolicyFeature::kUnoptimizedLossyImages &&
+       feature <= mojom::blink::FeaturePolicyFeature::
+                      kUnoptimizedLosslessImagesStrict) ||
+      feature == mojom::blink::FeaturePolicyFeature::kOversizedImages) {
     // Only log metrics if an image policy is specified.
     // If an image policy is specified, the policy value would be less than the
     // max value, otherwise by default the policy value is set to be the max
@@ -231,8 +231,8 @@ FeatureEnabledState SecurityContext::GetFeatureEnabledState(
         threshold_value < max_value) {
       STATIC_HISTOGRAM_POINTER_GROUP(
           GetImagePolicyHistogramName(feature), static_cast<int>(feature),
-          static_cast<int>(
-              mojom::FeaturePolicyFeature::kUnoptimizedLosslessImagesStrict) +
+          static_cast<int>(mojom::blink::FeaturePolicyFeature::
+                               kUnoptimizedLosslessImagesStrict) +
               1,
           Add(BucketizeImageMetrics(threshold_value.DoubleValue())),
           base::LinearHistogram::FactoryGet(

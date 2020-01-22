@@ -538,12 +538,14 @@ bool ImageResourceContent::IsAcceptableCompressionRatio(
   // ratio will be less than the max value.
   bool is_policy_specified =
       !context.IsFeatureEnabled(
-          mojom::FeaturePolicyFeature::kUnoptimizedLossyImages, max_value) ||
-      !context.IsFeatureEnabled(
-          mojom::FeaturePolicyFeature::kUnoptimizedLosslessImagesStrict,
+          mojom::blink::FeaturePolicyFeature::kUnoptimizedLossyImages,
           max_value) ||
       !context.IsFeatureEnabled(
-          mojom::FeaturePolicyFeature::kUnoptimizedLosslessImages, max_value);
+          mojom::blink::FeaturePolicyFeature::kUnoptimizedLosslessImagesStrict,
+          max_value) ||
+      !context.IsFeatureEnabled(
+          mojom::blink::FeaturePolicyFeature::kUnoptimizedLosslessImages,
+          max_value);
   if (is_policy_specified) {
     UMA_HISTOGRAM_ENUMERATION("Blink.UseCounter.FeaturePolicy.ImageFormats",
                               compression_format);
@@ -555,18 +557,18 @@ bool ImageResourceContent::IsAcceptableCompressionRatio(
   if (compression_format == ImageDecoder::kLossyFormat) {
     // Enforce the lossy image policy.
     return context.IsFeatureEnabled(
-        mojom::FeaturePolicyFeature::kUnoptimizedLossyImages,
+        mojom::blink::FeaturePolicyFeature::kUnoptimizedLossyImages,
         PolicyValue(compression_ratio_1k), ReportOptions::kReportOnFailure,
         g_empty_string, image_url);
   }
   if (compression_format == ImageDecoder::kLosslessFormat) {
     // Enforce the lossless image policy.
     bool enabled_by_10k_policy = context.IsFeatureEnabled(
-        mojom::FeaturePolicyFeature::kUnoptimizedLosslessImages,
+        mojom::blink::FeaturePolicyFeature::kUnoptimizedLosslessImages,
         PolicyValue(compression_ratio_10k), ReportOptions::kReportOnFailure,
         g_empty_string, image_url);
     bool enabled_by_1k_policy = context.IsFeatureEnabled(
-        mojom::FeaturePolicyFeature::kUnoptimizedLosslessImagesStrict,
+        mojom::blink::FeaturePolicyFeature::kUnoptimizedLosslessImagesStrict,
         PolicyValue(compression_ratio_1k), ReportOptions::kReportOnFailure,
         g_empty_string, image_url);
     return enabled_by_10k_policy && enabled_by_1k_policy;

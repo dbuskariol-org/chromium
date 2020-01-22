@@ -308,7 +308,7 @@ class CORE_EXPORT ExecutionContext : public ContextLifecycleNotifier,
   bool FeatureEnabled(OriginTrialFeature) const override;
   void CountFeaturePolicyUsage(mojom::WebFeature feature) override;
   bool FeaturePolicyFeatureObserved(
-      mojom::FeaturePolicyFeature feature) override;
+      mojom::blink::FeaturePolicyFeature feature) override;
 
   // Tests whether the policy-controlled feature is enabled in this frame.
   // Optionally sends a report to any registered reporting observers or
@@ -316,20 +316,20 @@ class CORE_EXPORT ExecutionContext : public ContextLifecycleNotifier,
   // disabled. The optional ConsoleMessage will be sent to the console if
   // present, or else a default message will be used instead.
   bool IsFeatureEnabled(
-      mojom::FeaturePolicyFeature,
+      mojom::blink::FeaturePolicyFeature,
       ReportOptions report_on_failure = ReportOptions::kDoNotReport,
       const String& message = g_empty_string,
       const String& source_file = g_empty_string) const;
   bool IsFeatureEnabled(
-      mojom::FeaturePolicyFeature,
+      mojom::blink::FeaturePolicyFeature,
       PolicyValue threshold_value,
       ReportOptions report_on_failure = ReportOptions::kDoNotReport,
       const String& message = g_empty_string,
       const String& source_file = g_empty_string) const;
   virtual void CountPotentialFeaturePolicyViolation(
-      mojom::FeaturePolicyFeature) const {}
+      mojom::blink::FeaturePolicyFeature) const {}
   virtual void ReportFeaturePolicyViolation(
-      mojom::FeaturePolicyFeature,
+      mojom::blink::FeaturePolicyFeature,
       mojom::FeaturePolicyDisposition,
       const String& message = g_empty_string,
       const String& source_file = g_empty_string) const {}

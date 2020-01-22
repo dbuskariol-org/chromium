@@ -1506,9 +1506,9 @@ class CORE_EXPORT Document : public ContainerNode,
   }
 
   void CountPotentialFeaturePolicyViolation(
-      mojom::FeaturePolicyFeature) const override;
+      mojom::blink::FeaturePolicyFeature) const override;
   void ReportFeaturePolicyViolation(
-      mojom::FeaturePolicyFeature,
+      mojom::blink::FeaturePolicyFeature,
       mojom::FeaturePolicyDisposition,
       const String& message = g_empty_string,
       // If source_file is set to empty string,

@@ -70,7 +70,8 @@ class SecurityContextInit : public FeaturePolicyParserDelegate {
     feature_count_.insert(feature);
   }
 
-  bool FeaturePolicyFeatureObserved(mojom::FeaturePolicyFeature) override;
+  bool FeaturePolicyFeatureObserved(
+      mojom::blink::FeaturePolicyFeature) override;
   bool FeatureEnabled(OriginTrialFeature feature) const override;
 
   void ApplyPendingDataToDocument(Document&);
@@ -96,7 +97,7 @@ class SecurityContextInit : public FeaturePolicyParserDelegate {
   Member<OriginTrialContext> origin_trials_;
   Member<Agent> agent_;
   Member<WindowAgentFactory> window_agent_factory_;
-  HashSet<mojom::FeaturePolicyFeature> parsed_feature_policies_;
+  HashSet<mojom::blink::FeaturePolicyFeature> parsed_feature_policies_;
   HashSet<mojom::WebFeature> feature_count_;
   bool bind_csp_immediately_ = false;
   base::Optional<SecureContextMode> secure_context_mode_;
