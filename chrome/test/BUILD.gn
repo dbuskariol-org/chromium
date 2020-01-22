@@ -2368,6 +2368,7 @@ if (!is_android) {
         "../browser/chromeos/web_applications/media_app_integration_browsertest.cc",
         "../browser/chromeos/web_applications/system_web_app_integration_test.cc",
         "../browser/chromeos/web_applications/system_web_app_integration_test.h",
+        "../browser/chromeos/wilco_dtc_supportd/wilco_dtc_supportd_web_request_service_browsertest.cc",
         "../browser/download/notification/download_notification_browsertest.cc",
         "../browser/drive/drive_notification_manager_factory_browsertest.cc",
         "../browser/extensions/api/certificate_provider/certificate_provider_apitest.cc",
