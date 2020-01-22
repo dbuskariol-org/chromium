@@ -6361,6 +6361,18 @@ crbug.com/1043774 [ Linux ] virtual/web-components-v0-disabled/external/wpt/html
 crbug.com/1044567 [ Mac10.10 ] media/video-colorspace-yuv420.html [ Pass Failure ]
 crbug.com/1044567 [ Mac10.10 ] virtual/audio-service/media/video-colorspace-yuv420.html [ Pass Failure ]
 crbug.com/1044568 [ Mac10.11 ] virtual/cascade/fast/forms/calendar-picker/calendar-picker-appearance-zoom125.html [ Pass Failure ]
+crbug.com/1044712 [ Win ] fast/forms/suggestion-picker/datetimelocal-suggestion-picker-appearance-with-scroll-bar.html [ Pass Failure ]
+crbug.com/1044712 [ Win ] fast/forms/suggestion-picker/month-suggestion-picker-appearance-with-scroll-bar.html [ Pass Failure ]
+crbug.com/1044712 [ Win ] fast/forms/suggestion-picker/time-suggestion-picker-appearance-locale-hebrew.html [ Pass Failure ]
+crbug.com/1044712 [ Win ] fast/forms/suggestion-picker/date-suggestion-picker-appearance.html [ Pass Failure ]
+crbug.com/1044712 [ Win ] fast/forms/suggestion-picker/date-suggestion-picker-appearance-rtl.html [ Pass Failure ]
+crbug.com/1044712 [ Win ] fast/forms/suggestion-picker/week-suggestion-picker-appearance-rtl.html [ Pass Failure ]
+crbug.com/1044712 [ Win ] fast/forms/suggestion-picker/time-suggestion-picker-appearance-with-scroll-bar.html [ Pass Failure ]
+crbug.com/1044712 [ Win ] fast/forms/suggestion-picker/month-suggestion-picker-appearance-rtl.html [ Pass Failure ]
+crbug.com/1044712 [ Win ] virtual/controls-refresh/color-scheme/suggestion-picker/date-suggestion-picker-appearance.html [ Pass Failure ]
+crbug.com/1044715 [ Win ] external/wpt/pointerevents/pointerevent_touch-action-pan-right-css_touch.html [ Pass Failure ]
+crbug.com/1044715 [ Win ] external/wpt/pointerevents/pointerevent_touch-action-inherit_parent-none_touch.html [ Pass Failure ]
+crbug.com/1044715 [ Win ] external/wpt/pointerevents/pointerevent_touch-action-inherit_child-pan-x-child-pan-x_touch.html [ Pass Failure ]
 
 # Ref_Tests which fail when SkiaRenderer is enable, and which cannot be
 # rebaselined. TODO(jonross): triage these into any existing bugs or file more
