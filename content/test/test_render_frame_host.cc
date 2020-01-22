@@ -642,7 +642,7 @@ void TestRenderFrameHost::SimulateLoadingCompleted(
             GetRenderViewHost()->GetRoutingID(),
             /* uses_temporary_zoom_level */ false));
 
-    OnMessageReceived(FrameHostMsg_DidFinishDocumentLoad(GetRoutingID()));
+    DidFinishDocumentLoad();
 
     DocumentOnLoadCompleted();
 

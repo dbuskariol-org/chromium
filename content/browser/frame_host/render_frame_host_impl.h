@@ -1335,6 +1335,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void DocumentOnLoadCompleted() override;
   void ForwardResourceTimingToParent(
       blink::mojom::ResourceTimingInfoPtr timing) override;
+  void DidFinishDocumentLoad() override;
 
  protected:
   friend class RenderFrameHostFactory;
@@ -1514,7 +1515,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
       ax::mojom::Event event_to_fire);
   void OnAccessibilitySnapshotResponse(int callback_id,
                                        const AXContentTreeUpdate& snapshot);
-  void OnDidFinishDocumentLoad();
   void OnDidStopLoading();
   void OnDidChangeLoadProgress(double load_progress);
   void OnSelectionChanged(const base::string16& text,

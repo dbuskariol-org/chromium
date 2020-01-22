@@ -85,6 +85,8 @@ void FakeLocalFrameHost::RenderFallbackContentInParentProcess() {}
 void FakeLocalFrameHost::ForwardResourceTimingToParent(
     mojom::blink::ResourceTimingInfoPtr timing) {}
 
+void FakeLocalFrameHost::DidFinishDocumentLoad() {}
+
 void FakeLocalFrameHost::BindFrameHostReceiver(
     mojo::ScopedInterfaceEndpointHandle handle) {
   receiver_.Bind(mojo::PendingAssociatedReceiver<mojom::blink::LocalFrameHost>(

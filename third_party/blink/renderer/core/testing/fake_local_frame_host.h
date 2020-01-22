@@ -63,6 +63,7 @@ class FakeLocalFrameHost : public mojom::blink::LocalFrameHost {
   void DocumentOnLoadCompleted() override;
   void ForwardResourceTimingToParent(
       mojom::blink::ResourceTimingInfoPtr timing) override;
+  void DidFinishDocumentLoad() override;
 
  private:
   void BindFrameHostReceiver(mojo::ScopedInterfaceEndpointHandle handle);

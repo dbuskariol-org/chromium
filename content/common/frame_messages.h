@@ -782,10 +782,6 @@ IPC_SYNC_MESSAGE_CONTROL1_1(FrameHostMsg_CreateChildFrame,
 // detached from the DOM.
 IPC_MESSAGE_ROUTED0(FrameHostMsg_Detach)
 
-// Notifies the browser that a document has been loaded.
-IPC_MESSAGE_ROUTED0(FrameHostMsg_DidFinishDocumentLoad)
-
-
 // Sent when the renderer is done loading a page.
 IPC_MESSAGE_ROUTED0(FrameHostMsg_DidStopLoading)
 

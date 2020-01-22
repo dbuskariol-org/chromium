@@ -189,6 +189,9 @@ interface LocalFrameHost {
   // Notifies the browser that resource timing information is available and
   // should be added to the performance entries of the parent frame.
   ForwardResourceTimingToParent(ResourceTimingInfo timing);
+
+  // Notifies the browser that a document has been loaded.
+  DidFinishDocumentLoad();
 };
 
 // Implemented in Blink, this interface defines frame-specific methods that will

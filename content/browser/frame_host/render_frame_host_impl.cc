@@ -1689,8 +1689,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
                         OnAccessibilityChildFrameHitTestResult)
     IPC_MESSAGE_HANDLER(AccessibilityHostMsg_SnapshotResponse,
                         OnAccessibilitySnapshotResponse)
-    IPC_MESSAGE_HANDLER(FrameHostMsg_DidFinishDocumentLoad,
-                        OnDidFinishDocumentLoad)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidStopLoading, OnDidStopLoading)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeLoadProgress,
                         OnDidChangeLoadProgress)
@@ -4054,7 +4052,7 @@ bool RenderFrameHostImpl::InsidePortal() {
   return GetRenderViewHost()->GetDelegate()->IsPortal();
 }
 
-void RenderFrameHostImpl::OnDidFinishDocumentLoad() {
+void RenderFrameHostImpl::DidFinishDocumentLoad() {
   dom_content_loaded_ = true;
   delegate_->DOMContentLoaded(this);
 }
