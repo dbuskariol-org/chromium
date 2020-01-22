@@ -149,6 +149,17 @@
           'shards': 15,
         }
       },
+      'Win10 Tests x64 Code Coverage': {
+        # crbug.com/868082
+        'args': [
+          '--disable-features=WebRTC-H264WithOpenH264FFmpeg',
+        ],
+        'swarming': {
+          # This is for slow test execution that often becomes a critical path of
+          # swarming jobs. crbug.com/868114
+          'shards': 15,
+        }
+      },
       'Win7 Tests (1)': {
         # This is for slow test execution that often becomes a critical path of
         # swarming jobs. crbug.com/868114
@@ -434,6 +445,12 @@
           # TODO(https://crbug.com/1007013): Remove this flag when it's no
           # longer necessary to figure out why the renderer process is crashing.
           '--no-sandbox',
+        ],
+      },
+      'Win10 Tests x64 Code Coverage': {
+        # crbug.com/868082
+        'args': [
+          '--disable-features=WebRTC-H264WithOpenH264FFmpeg',
         ],
       },
       'android-arm64-proguard-rel': {
@@ -1065,6 +1082,17 @@
           'shards': 20,
         },
       },
+      'Win10 Tests x64 Code Coverage': {
+        # crbug.com/868082
+        'args': [
+          '--disable-features=WebRTC-H264WithOpenH264FFmpeg',
+        ],
+        # This is for slow test execution that often becomes a critical path of
+        # swarming jobs. crbug.com/868114
+        'swarming': {
+          'shards': 20,
+        },
+      },
     },
   },
   'network_service_components_browsertests': {
@@ -1575,6 +1603,7 @@
       'Linux - Future (dbg)',  # client.v8.chromium
       'Win10 Tests x64',
       'Win10 Tests x64 (dbg)',
+      'Win10 Tests x64 Code Coverage',
     ],
   },
   'telemetry_unittests': {
@@ -1589,6 +1618,7 @@
       'Mac10.11 Tests',
 
       'Win10 Tests x64',
+      'Win10 Tests x64 Code Coverage',
     ],
   },
   'unit_tests': {
@@ -1949,6 +1979,15 @@
           '--target',
           'Debug_x64',
         ],
+      },
+      'Win10 Tests x64 Code Coverage': {
+        'args': [
+          '--target',
+          'Release_x64',
+        ],
+        'swarming': {
+          "shards": 28
+        },
       },
       'Win7 Tests (dbg)(1)': {
         'args': [
