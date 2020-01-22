@@ -15751,7 +15751,8 @@
             {
               "os": "Ubuntu-16.04"
             }
-          ]
+          ],
+          "shards": 2
         },
         "test": "blink_unittests",
         "test_target": "//third_party/blink/renderer/controller:blink_unittests"
@@ -15885,7 +15886,8 @@
             {
               "os": "Ubuntu-16.04"
             }
-          ]
+          ],
+          "shards": 2
         },
         "test": "components_unittests",
         "test_target": "//components:components_unittests"
@@ -15905,7 +15907,7 @@
               "os": "Ubuntu-16.04"
             }
           ],
-          "shards": 6
+          "shards": 4
         },
         "test": "content_browsertests",
         "test_target": "//content/test:content_browsertests"
@@ -16247,7 +16249,8 @@
             {
               "os": "Ubuntu-16.04"
             }
-          ]
+          ],
+          "shards": 4
         },
         "test": "net_unittests",
         "test_target": "//net:net_unittests"
