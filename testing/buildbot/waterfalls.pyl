@@ -4582,6 +4582,22 @@
     },
   },
   {
+    'name': 'tryserver.chromium.mac',
+    'machines': {
+      'mac-rel': {
+        'mixins': [
+            'mac_10.13',
+            'no_gpu',
+        ],
+        'test_suites': {
+          'gtest_tests': 'chromium_mac_gtests',
+          'isolated_scripts': 'chromium_mac_rel_isolated_scripts',
+          'scripts': 'chromium_mac_scripts',
+        },
+      },
+    },
+  },
+  {
     'name': 'tryserver.devtools-frontend',
     'machines': {
       'devtools_frontend_linux_blink_light_rel': {

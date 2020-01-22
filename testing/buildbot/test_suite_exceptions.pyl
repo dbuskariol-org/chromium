@@ -91,6 +91,7 @@
     'remove_from': [
       'CrWinAsan(dll)', # https://crbug.com/935598
       'linux-win_cross-rel',
+      'mac-rel',  # crbug.com/1042757
       'ToTLinuxTSan',  # https://crbug.com/368525
       'Mac10.10 Tests',  # https://crbug.com/828031
       'Mac10.13 Tests',  # https://crbug.com/1042757
@@ -1070,6 +1071,7 @@
       'Mac10.13 Tests (dbg)',
       'Mac ASan 64 Tests (1)',
       'ToTMacASan',
+      'mac-rel',
     ],
     'modifications': {
       'Win10 Tests x64': {
@@ -1109,6 +1111,7 @@
       'Mac10.13 Tests (dbg)',
       'Mac ASan 64 Tests (1)',
       'ToTMacASan',
+      'mac-rel',
     ],
   },
   'network_service_content_browsertests': {
@@ -1126,6 +1129,7 @@
       'Mac10.13 Tests (dbg)',
       'Mac ASan 64 Tests (1)',
       'ToTMacASan',
+      'mac-rel',
     ],
   },
   'network_service_extensions_browsertests': {
@@ -1142,6 +1146,7 @@
       'Mac10.13 Tests (dbg)',
       'Mac ASan 64 Tests (1)',
       'ToTMacASan',
+      'mac-rel',
     ],
   },
   'network_service_headless_browsertests': {
@@ -1163,6 +1168,7 @@
       'Mac10.13 Tests (dbg)',
       'Mac ASan 64 Tests (1)',
       'ToTMacASan',
+      'mac-rel',
     ],
     'modifications': {
       'Win10 Tests x64 (dbg)': {
@@ -1605,6 +1611,7 @@
       'Win10 Tests x64',
       'Win10 Tests x64 (dbg)',
       'Win10 Tests x64 Code Coverage',
+      'mac-rel',
     ],
   },
   'telemetry_unittests': {
@@ -2082,6 +2089,18 @@
         'args': [
           '--additional-driver-flag=--enable-blink-features=LayoutNGFragmentPaint',
         ],
+      },
+      'mac-rel': {
+        'swarming': {
+          'dimension_sets': [
+            {
+              # Run the layout tests on a consistent set of hardware
+              # (Mac Minis).
+              'gpu': '8086:0a2e',
+            },
+          ],
+          'shards': 25,
+        },
       },
       'mac10.10-blink-rel-dummy': {
         'swarming': {
