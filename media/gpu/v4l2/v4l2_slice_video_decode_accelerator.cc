@@ -2160,7 +2160,7 @@ bool V4L2SliceVideoDecodeAccelerator::ProcessFrame(
     // imported frame into another one that we can destruct.
     scoped_refptr<VideoFrame> wrapped_frame = VideoFrame::WrapVideoFrame(
         output_frame, output_frame->format(), output_frame->visible_rect(),
-        output_frame->coded_size());
+        output_frame->visible_rect().size());
     DCHECK(wrapped_frame);
 
     image_processor_->Process(
