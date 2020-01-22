@@ -6300,3 +6300,23 @@ crbug.com/1043774 [ Linux ] virtual/web-components-v0-disabled/external/wpt/html
 crbug.com/1044567 [ Mac10.10 ] media/video-colorspace-yuv420.html [ Pass Failure ]
 crbug.com/1044567 [ Mac10.10 ] virtual/audio-service/media/video-colorspace-yuv420.html [ Pass Failure ]
 crbug.com/1044568 [ Mac10.11 ] virtual/cascade/fast/forms/calendar-picker/calendar-picker-appearance-zoom125.html [ Pass Failure ]
+
+# Ref_Tests which fail when SkiaRenderer is enable, and which cannot be
+# rebaselined. TODO(jonross): triage these into any existing bugs or file more
+# specific bugs.
+crbug.com/1043675 [ Linux ] animations/animation-paused-hardware.html [ Failure ]
+crbug.com/1043675 [ Linux ] animations/missing-values-first-keyframe.html [ Failure ]
+crbug.com/1043675 [ Linux ] animations/missing-values-last-keyframe.html [ Failure ]
+crbug.com/1043675 [ Linux ] external/wpt/css/filter-effects/backdrop-filter-basic-opacity-2.html [ Failure ]
+crbug.com/1043675 [ Linux ] external/wpt/css/filter-effects/css-filters-animation-opacity.html [ Failure ]
+crbug.com/1043675 [ Linux ] http/tests/media/video-frame-size-change.html [ Failure ]
+crbug.com/1043675 [ Linux ] svg/custom/svg-root-with-opacity.html [ Failure ]
+crbug.com/1043675 [ Linux ] virtual/scalefactor200/external/wpt/css/filter-effects/backdrop-filter-basic-opacity-2.html [ Failure ]
+crbug.com/1043675 [ Linux ] virtual/scalefactor200/external/wpt/css/filter-effects/css-filters-animation-opacity.html [ Failure ]
+crbug.com/1043675 [ Linux ] virtual/threaded-no-composited-antialiasing/animations/animation-paused-hardware.html [ Failure ]
+crbug.com/1043675 [ Linux ] virtual/threaded-no-composited-antialiasing/animations/missing-values-first-keyframe.html [ Failure ]
+crbug.com/1043675 [ Linux ] virtual/threaded-no-composited-antialiasing/animations/missing-values-last-keyframe.html [ Failure ]
+
+# The transformed region bleeds into the foreground with SkiaRenderer enabled.
+crbug.com/1044032 [ Linux ] css3/filters/backdrop-filter-transform.html [ Failure ]
+crbug.com/1044032 [ Linux ] virtual/scalefactor200/css3/filters/backdrop-filter-transform.html [ Failure ]
