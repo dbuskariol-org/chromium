@@ -67,6 +67,11 @@ std::unique_ptr<JSONObject> PaintArtifactCompositor::GetLayersAsJSON(
     const PaintArtifact* paint_artifact) const {
   DCHECK(RuntimeEnabledFeatures::CompositeAfterPaintEnabled() ||
          paint_artifact);
+
+  if (RuntimeEnabledFeatures::CompositeAfterPaintEnabled() &&
+      !tracks_raster_invalidations_)
+    flags &= ~kLayerTreeIncludesPaintInvalidations;
+
   LayersAsJSON layers_as_json(flags);
   if (RuntimeEnabledFeatures::CompositeAfterPaintEnabled()) {
     for (const auto& layer : root_layer_->children()) {
