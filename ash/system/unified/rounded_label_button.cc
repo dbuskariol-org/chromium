@@ -31,6 +31,8 @@ RoundedLabelButton::RoundedLabelButton(views::ButtonListener* listener,
       1, gfx::Font::NORMAL, gfx::Font::Weight::MEDIUM));
   TrayPopupUtils::ConfigureTrayPopupButton(this);
   views::InstallPillHighlightPathGenerator(this);
+
+  focus_ring()->SetColor(UnifiedSystemTrayView::GetFocusRingColor());
 }
 
 RoundedLabelButton::~RoundedLabelButton() = default;

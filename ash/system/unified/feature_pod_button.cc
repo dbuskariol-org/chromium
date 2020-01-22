@@ -63,6 +63,7 @@ FeaturePodIconButton::FeaturePodIconButton(views::ButtonListener* listener,
   TrayPopupUtils::ConfigureTrayPopupButton(this);
   views::InstallCircleHighlightPathGenerator(this);
   GetViewAccessibility().OverrideIsLeaf(true);
+  focus_ring()->SetColor(UnifiedSystemTrayView::GetFocusRingColor());
 }
 
 FeaturePodIconButton::~FeaturePodIconButton() = default;
@@ -171,6 +172,8 @@ FeaturePodLabelButton::FeaturePodLabelButton(views::ButtonListener* listener)
 
   SetPaintToLayer();
   layer()->SetFillsBoundsOpaquely(false);
+
+  focus_ring()->SetColor(UnifiedSystemTrayView::GetFocusRingColor());
 }
 
 FeaturePodLabelButton::~FeaturePodLabelButton() = default;

@@ -22,6 +22,7 @@
 #include "ash/system/supervised/supervised_icon_string.h"
 #include "ash/system/tray/system_tray_notifier.h"
 #include "ash/system/tray/tray_popup_utils.h"
+#include "ash/system/unified/unified_system_tray_view.h"
 #include "base/i18n/time_formatting.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/time/time.h"
@@ -108,6 +109,7 @@ DateView::DateView(UnifiedSystemTrayController* controller)
 
   SetInstallFocusRingOnFocus(true);
   SetFocusForPlatform();
+  focus_ring()->SetColor(UnifiedSystemTrayView::GetFocusRingColor());
 
   SetInkDropMode(views::InkDropHostView::InkDropMode::OFF);
 }
@@ -278,6 +280,7 @@ ManagedStateView::ManagedStateView(views::ButtonListener* listener,
 
   SetInstallFocusRingOnFocus(true);
   SetFocusForPlatform();
+  focus_ring()->SetColor(UnifiedSystemTrayView::GetFocusRingColor());
 
   SetInkDropMode(views::InkDropHostView::InkDropMode::OFF);
 }
