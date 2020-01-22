@@ -645,11 +645,35 @@ void CrostiniManager::SetContainerSshfsMounted(std::string vm_name,
   }
 }
 
+namespace {
+
+ContainerOsVersion VersionFromOsRelease(
+    const vm_tools::cicerone::OsRelease& os_release) {
+  if (os_release.id() == "debian") {
+    if (os_release.version_id() == "9") {
+      return ContainerOsVersion::kDebianStretch;
+    } else if (os_release.version_id() == "10") {
+      return ContainerOsVersion::kDebianBuster;
+    } else {
+      return ContainerOsVersion::kDebianOther;
+    }
+  }
+  return ContainerOsVersion::kOtherOs;
+}
+
+}  // namespace
+
 void CrostiniManager::SetContainerOsRelease(
     std::string vm_name,
     std::string container_name,
     const vm_tools::cicerone::OsRelease& os_release) {
   ContainerId container_id(vm_name, container_name);
+  ContainerOsVersion version = VersionFromOsRelease(os_release);
+  // Store the os release version in prefs. We can use this value to decide if
+  // an upgrade can be offered.
+  UpdateContainerPref(profile_, container_id, prefs::kContainerOsVersionKey,
+                      base::Value(static_cast<int>(version)));
+
   VLOG(1) << container_id;
   VLOG(1) << "os_release.pretty_name " << os_release.pretty_name();
   VLOG(1) << "os_release.name " << os_release.name();
@@ -657,23 +681,7 @@ void CrostiniManager::SetContainerOsRelease(
   VLOG(1) << "os_release.version_id " << os_release.version_id();
   VLOG(1) << "os_release.id " << os_release.id();
   container_os_releases_.emplace(std::move(container_id), os_release);
-  EmitContainerVersionMetric(os_release);
-}
 
-void CrostiniManager::EmitContainerVersionMetric(
-    const vm_tools::cicerone::OsRelease& os_release) {
-  ContainerOsVersion version;
-  if (os_release.id() == "debian") {
-    if (os_release.version_id() == "9") {
-      version = ContainerOsVersion::kDebianStretch;
-    } else if (os_release.version_id() == "10") {
-      version = ContainerOsVersion::kDebianBuster;
-    } else {
-      version = ContainerOsVersion::kDebianOther;
-    }
-  } else {
-    version = ContainerOsVersion::kOtherOs;
-  }
   base::UmaHistogramEnumeration("Crostini.ContainerOsVersion", version);
 }
 
