@@ -3143,8 +3143,6 @@ jumbo_static_library("browser") {
       "enterprise_reporting/report_scheduler.h",
       "enterprise_reporting/report_uploader.cc",
       "enterprise_reporting/report_uploader.h",
-      "enterprise_reporting/request_timer.cc",
-      "enterprise_reporting/request_timer.h",
       "feedback/feedback_dialog_utils.cc",
       "feedback/feedback_dialog_utils.h",
       "feedback/feedback_uploader_chrome.cc",
