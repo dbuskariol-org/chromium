@@ -1484,34 +1484,25 @@ void V4L2SliceVideoDecodeAccelerator::ImportBufferForPictureTask(
     return;
   }
 
-  // TODO(crbug.com/982172): This must be done in AssignPictureBuffers().
-  // However the size of PictureBuffer might not be adjusted by ARC++. So we
-  // keep this until ARC++ side is fixed.
+  // TODO(crbug.com/982172): ARC++ may adjust the size of the buffer due to
+  // allocator constraints, but the VDA API does not provide a way for it to
+  // communicate the actual buffer size. If we are importing, make sure that the
+  // actual buffer size is coherent with what we expect, and adjust our size if
+  // needed.
   if (output_mode_ == Config::OutputMode::IMPORT) {
     DCHECK_GT(handle.planes.size(), 0u);
-    const int32_t stride = handle.planes[0].stride;
-    const int plane_horiz_bits_per_pixel =
-        VideoFrame::PlaneHorizontalBitsPerPixel(
-            gl_image_format_fourcc_->ToVideoPixelFormat(), 0);
-    if (plane_horiz_bits_per_pixel == 0 ||
-        (stride * 8) % plane_horiz_bits_per_pixel != 0) {
-      VLOGF(1) << "Invalid format " << gl_image_format_fourcc_->ToString()
-               << " or stride " << stride;
-      NOTIFY_ERROR(INVALID_ARGUMENT);
-      return;
-    }
+    const gfx::Size handle_size = v4l2_vda_helpers::NativePixmapSizeFromHandle(
+        handle, *gl_image_format_fourcc_, gl_image_size_);
 
-    int adjusted_coded_width = stride * 8 / plane_horiz_bits_per_pixel;
     // If this is the first picture, then adjust the EGL width.
     // Otherwise just check that it remains the same.
     if (state_ == kAwaitingPictureBuffers) {
-      DCHECK_GE(adjusted_coded_width, gl_image_size_.width());
-      gl_image_size_.set_width(adjusted_coded_width);
+      DCHECK_GE(handle_size.width(), gl_image_size_.width());
+      DVLOGF(3) << "Original gl_image_size=" << gl_image_size_.ToString()
+                << ", adjusted buffer size=" << handle_size.ToString();
+      gl_image_size_ = handle_size;
     }
-    DCHECK_EQ(gl_image_size_.width(), adjusted_coded_width);
-
-    DVLOGF(3) << "Original gl_image_size=" << gl_image_size_.ToString()
-              << ", adjusted coded width=" << adjusted_coded_width;
+    DCHECK_EQ(gl_image_size_, handle_size);
 
     // For allocate mode, the IP will already have been created in
     // AssignPictureBuffersTask.
