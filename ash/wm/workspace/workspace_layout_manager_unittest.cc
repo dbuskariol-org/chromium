@@ -48,7 +48,6 @@
 #include "ash/wm/workspace/workspace_window_resizer.h"
 #include "ash/wm/workspace_controller_test_api.h"
 #include "base/bind_helpers.h"
-#include "base/command_line.h"
 #include "base/run_loop.h"
 #include "chromeos/audio/chromeos_sounds.h"
 #include "ui/aura/client/aura_constants.h"
@@ -1906,10 +1905,8 @@ class WorkspaceLayoutManagerSystemUiAreaTest : public AshTestBase {
 
   // AshTestBase:
   void SetUp() override {
-    base::CommandLine::ForCurrentProcess()->AppendSwitch(
-        keyboard::switches::kEnableVirtualKeyboard);
     AshTestBase::SetUp();
-    SetTouchKeyboardEnabled(true);
+    SetVirtualKeyboardEnabled(true);
 
     window_ = CreateTestWindowInShellWithBounds(gfx::Rect(0, 0, 100, 100));
     WindowState* window_state = WindowState::Get(window_);
@@ -1919,7 +1916,7 @@ class WorkspaceLayoutManagerSystemUiAreaTest : public AshTestBase {
   }
 
   void TearDown() override {
-    SetTouchKeyboardEnabled(false);
+    SetVirtualKeyboardEnabled(false);
     AshTestBase::TearDown();
   }
 

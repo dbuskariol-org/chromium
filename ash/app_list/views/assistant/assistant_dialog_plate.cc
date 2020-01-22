@@ -52,6 +52,8 @@ constexpr base::TimeDelta kAnimationTransformInDuration =
     base::TimeDelta::FromMilliseconds(333);
 constexpr int kAnimationTranslationDip = 30;
 
+using keyboard::KeyboardUIController;
+
 // Textfield used for inputting text based Assistant queries.
 class AssistantTextfield : public views::Textfield {
  public:
@@ -63,8 +65,18 @@ class AssistantTextfield : public views::Textfield {
   const char* GetClassName() const override { return "AssistantTextfield"; }
 };
 
-void HideKeyboard() {
-  keyboard::KeyboardUIController::Get()->HideKeyboardImplicitlyByUser();
+void ShowKeyboardIfEnabled() {
+  auto* keyboard_controller = KeyboardUIController::Get();
+
+  if (keyboard_controller->IsEnabled())
+    keyboard_controller->ShowKeyboard(/*lock=*/false);
+}
+
+void HideKeyboardIfEnabled() {
+  auto* keyboard_controller = KeyboardUIController::Get();
+
+  if (keyboard_controller->IsEnabled())
+    keyboard_controller->HideKeyboardImplicitlyByUser();
 }
 
 }  // namespace
@@ -118,7 +130,7 @@ bool AssistantDialogPlate::HandleKeyEvent(views::Textfield* textfield,
       // In tablet mode the virtual keyboard should not be sticky, so we hide it
       // when committing a query.
       if (delegate_->IsTabletMode())
-        HideKeyboard();
+        HideKeyboardIfEnabled();
 
       const base::StringPiece16& trimmed_text = base::TrimWhitespace(
           textfield_->GetText(), base::TrimPositions::TRIM_ALL);
@@ -254,7 +266,7 @@ void AssistantDialogPlate::OnUiVisibilityChanged(
     // plate so that text does not persist across Assistant launches.
     textfield_->SetText(base::string16());
 
-    HideKeyboard();
+    HideKeyboardIfEnabled();
   }
 }
 
@@ -447,9 +459,9 @@ void AssistantDialogPlate::UpdateKeyboardVisibility() {
   bool should_show_keyboard = (input_modality() == InputModality::kKeyboard);
 
   if (should_show_keyboard)
-    keyboard::KeyboardUIController::Get()->ShowKeyboard(/*lock=*/false);
+    ShowKeyboardIfEnabled();
   else
-    HideKeyboard();
+    HideKeyboardIfEnabled();
 }
 
 void AssistantDialogPlate::OnAnimationStarted(
