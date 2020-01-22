@@ -4445,13 +4445,15 @@ void RenderFrameHostImpl::CreateNewWindow(
         dom_storage_context, params->session_storage_namespace_id);
   }
 
-  // On popup creation, if the opener and the openers's top-level document
-  // are same origin, then the popup's initial empty document inherits its COOP
-  // policy from the opener's top-level document.
-  // See https://gist.github.com/annevk/6f2dd8c79c77123f39797f6bdac43f3e#model
   network::mojom::CrossOriginOpenerPolicy popup_coop =
       network::mojom::CrossOriginOpenerPolicy::kUnsafeNone;
+  network::mojom::CrossOriginEmbedderPolicy popup_coep =
+      network::mojom::CrossOriginEmbedderPolicy::kNone;
   if (base::FeatureList::IsEnabled(network::features::kCrossOriginIsolation)) {
+    // On popup creation, if the opener and the openers's top-level document
+    // are same origin, then the popup's initial empty document inherits its
+    // COOP policy from the opener's top-level document. See
+    // https://gist.github.com/annevk/6f2dd8c79c77123f39797f6bdac43f3e#model
     RenderFrameHostImpl* top_level_opener = this;
     while (top_level_opener->GetParent()) {
       top_level_opener = top_level_opener->GetParent();
@@ -4470,6 +4472,11 @@ void RenderFrameHostImpl::CreateNewWindow(
       }
     }
   }
+
+  // The initial empty document in the popup inherits the COEP of its opener (if
+  // any).
+  if (!params->opener_suppressed)
+    popup_coep = cross_origin_embedder_policy();
 
   // If the opener is suppressed or script access is disallowed, we should
   // open the window in a new BrowsingInstance, and thus a new process. That
@@ -4509,6 +4516,7 @@ void RenderFrameHostImpl::CreateNewWindow(
   main_frame->SetOriginAndNetworkIsolationKeyOfNewFrame(
       GetLastCommittedOrigin());
   main_frame->cross_origin_opener_policy_ = popup_coop;
+  main_frame->cross_origin_embedder_policy_ = popup_coep;
 
   if (main_frame->waiting_for_init_) {
     // Need to check |waiting_for_init_| as some paths inside CreateNewWindow
