@@ -1755,9 +1755,6 @@ crbug.com/987224 [ IOS ] virtual/cascade/external/wpt/css/css-paint-api/idlharne
 # PLEASE DO NOT PUT ANYTHING INSIDE THIS SECTION!!
 # ======
 
-# These need further investigation (baselines look broken):
-crbug.com/1035582 virtual/form-controls-refresh-disabled/fast/forms/select/menulist-update-text-popup.html [ Skip ]
-crbug.com/1035582 fast/forms/calendar-picker/calendar-picker-key-operations.html [ Skip ]
 # Put back the one on 4788:
 crbug.com/1035582 fast/forms/suggested-value.html [ Skip ]
 crbug.com/1035582 fast/forms/select/listbox-tap.html [ Skip ]
@@ -1773,23 +1770,17 @@ crbug.com/1035582 fast/forms/button/button-with-float.html [ Skip ]
 crbug.com/1035582 fast/forms/select/listbox-overlay-scrollbar.html [ Skip ]
 crbug.com/1035582 paint/invalidation/scroll/caret-with-composited-scroll.html [ Skip ]
 crbug.com/1035582 paint/pagination/composited-paginated-outlined-box.html [ Skip ]
-# https://test-results.appspot.com/data/layout_results/win10-blink-rel/6784/webkit_layout_tests%20%28with%20patch%29/layout-test-results/results.html
-crbug.com/1035582 virtual/cascade/fast/forms/month/month-appearance-basic.html [ Skip ]
-# https://test-results.appspot.com/data/layout_results/win7-blink-rel/6571/webkit_layout_tests%20%28with%20patch%29/layout-test-results/results.html
-crbug.com/1035582 paint/invalidation/forms/button-reset-focus-by-mouse-then-keydown.html [ Skip ]
-crbug.com/1035582 paint/invalidation/forms/radio-focus-by-mouse-then-keydown.html [ Skip ]
-# Need rebaseline again??
-crbug.com/1035582 [ Win ] editing/caret/caret-position.html [ Skip ]
-crbug.com/1035582 [ Win ] editing/pasteboard/4806874.html [ Skip ]
-crbug.com/1035582 [ Win ] fast/forms/color/color-suggestion-picker-appearance-zoom125.html [ Skip ]
-crbug.com/1035582 [ Win ] fast/multicol/multicol-with-child-renderLayer-for-input.html [ Skip ]
-crbug.com/1035582 [ Win ] virtual/text-antialias/selection/mixed-directionality-selection.html [ Skip ]
+
+# https://ci.chromium.org/p/chromium/builders/try/win7-blink-rel/6652
+crbug.com/1035582 [ Win7 ] fast/forms/suggestion-picker/datetimelocal-suggestion-picker-appearance-locale-hebrew.html [ Skip ]
+crbug.com/1035582 [ Win7 ] fast/forms/suggestion-picker/time-suggestion-picker-appearance-rtl.html [ Skip ]
+
 
 # ======
 # ====== End of rebaselines for crbug.com/1035582 ======
 # ======
 #
-# PLEASE put new 1035582-related files below this line (AND NOT ABOVE IT!!)...
+# PLEASE put new form controls refresh failures BELOW THIS LINE, and CREATE A NEW BUG NUMBER.
 #
 crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-hover-focused-unselected.html [ Skip ]
 crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-appearance-basic.html [ Skip ]
