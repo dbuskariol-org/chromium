@@ -15,3 +15,5 @@ rootWebArea
 ++++++++cell name='Blink'
 ++++++++++staticText name='Blink'
 ++++++++++++inlineTextBox name='Blink'
+++++staticText name='Done'
+++++++inlineTextBox name='Done'
