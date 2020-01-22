@@ -302,14 +302,8 @@ IN_PROC_BROWSER_TEST_F(TwoClientAutofillProfileSyncTest,
 
 // Tests that adding the same profile on the two clients before sync is started
 // results in each client only having one profile after sync is started
-// Failing on Linux/Win/Mac. http://crbug.com/1044514
-#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_MACOSX)
-#define MAYBE_ClientsAddSameProfile DISABLED_ClientsAddSameProfile
-#else
-#define MAYBE_ClientsAddSameProfile ClientsAddSameProfile
-#endif
 IN_PROC_BROWSER_TEST_F(TwoClientAutofillProfileSyncTest,
-                       MAYBE_ClientsAddSameProfile) {
+                       ClientsAddSameProfile) {
   ASSERT_TRUE(SetupClients()) << "SetupClients() failed";
   base::HistogramTester histograms;
 
