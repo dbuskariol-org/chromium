@@ -2163,6 +2163,9 @@ void RenderFrameHostImpl::SetRenderFrameCreated(bool created) {
       delegate_->RenderFrameDeleted(this);
     }
   }
+  // TODO(http://crbug.com/1014212): Change to DCHECK.
+  if (created)
+    CHECK(frame_);
 
   if (created && GetLocalRenderWidgetHost()) {
     mojo::PendingRemote<mojom::Widget> widget;
@@ -5786,6 +5789,9 @@ void RenderFrameHostImpl::SetUpMojoIfNeeded() {
   mojo::Remote<mojom::FrameFactory>(std::move(frame_factory))
       ->CreateFrame(routing_id_, frame_.BindNewPipeAndPassReceiver());
 
+  // TODO(http://crbug.com/1014212): Change to DCHECK.
+  CHECK(frame_);
+
   mojo::PendingRemote<service_manager::mojom::InterfaceProvider>
       remote_interfaces;
   frame_->GetInterfaceProvider(
@@ -7661,6 +7667,8 @@ void RenderFrameHostImpl::RemoveServiceWorkerContainerHost(
 }
 
 void RenderFrameHostImpl::UpdateFrameFrozenState() {
+  // TODO(http://crbug.com/1014212): remove this.
+  CHECK(frame_);
   if (!IsFeatureEnabled(
           blink::mojom::FeaturePolicyFeature::kExecutionWhileNotRendered) &&
       visibility_ == blink::mojom::FrameVisibility::kNotRendered) {
