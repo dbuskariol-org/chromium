@@ -1629,6 +1629,21 @@
             ]
         }
     ],
+    "ChromeOSLauncherAssistantIntegration": [
+        {
+            "platforms": [
+                "chromeos"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "EnableEmbeddedAssistantUI"
+                    ]
+                }
+            ]
+        }
+    ],
     "ChromeSmartSelection": [
         {
             "platforms": [
