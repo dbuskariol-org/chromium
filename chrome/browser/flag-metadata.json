@@ -1019,7 +1019,7 @@
   },
   {
     "name": "enable-aura-tooltips-on-windows",
-    "owners": [ "cliffsmo" ],
+    "owners": [ "cliffsmo@microsoft.com" ],
     "expiry_milestone": 78
   },
   {
@@ -1127,7 +1127,7 @@
   },
   {
     "name": "enable-caption-settings",
-    "owners": [ "evliu" ],
+    "owners": [ "evliu@google.com" ],
     "expiry_milestone": 80
   },
   {
