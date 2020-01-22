@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_WEB_APPLICATIONS_COMPONENTS_WEB_APP_TAB_HELPER_H_
-#define CHROME_BROWSER_WEB_APPLICATIONS_COMPONENTS_WEB_APP_TAB_HELPER_H_
+#ifndef CHROME_BROWSER_WEB_APPLICATIONS_WEB_APP_TAB_HELPER_H_
+#define CHROME_BROWSER_WEB_APPLICATIONS_WEB_APP_TAB_HELPER_H_
 
 #include "base/macros.h"
 #include "base/scoped_observer.h"
@@ -11,8 +11,8 @@
 #include "chrome/browser/web_applications/components/app_registrar.h"
 #include "chrome/browser/web_applications/components/app_registrar_observer.h"
 #include "chrome/browser/web_applications/components/web_app_helpers.h"
+#include "chrome/browser/web_applications/components/web_app_tab_helper_base.h"
 #include "content/public/browser/web_contents_observer.h"
-#include "content/public/browser/web_contents_user_data.h"
 
 namespace content {
 class WebContents;
@@ -24,20 +24,21 @@ class WebAppProviderBase;
 
 // Per-tab web app helper. Allows to associate a tab (web page) with a web app
 // (or legacy bookmark app).
-class WebAppTabHelper : public content::WebContentsObserver,
-                        public content::WebContentsUserData<WebAppTabHelper>,
+class WebAppTabHelper : public WebAppTabHelperBase,
+                        public content::WebContentsObserver,
                         public AppRegistrarObserver {
  public:
-  using content::WebContentsUserData<WebAppTabHelper>::CreateForWebContents;
-  using content::WebContentsUserData<WebAppTabHelper>::FromWebContents;
+  static void CreateForWebContents(content::WebContents* contents);
 
   explicit WebAppTabHelper(content::WebContents* web_contents);
   ~WebAppTabHelper() override;
 
-  const AppId& app_id() const { return app_id_; }
-
-  // Set associated app_id.
-  void SetAppId(const AppId& app_id);
+  // WebAppTabHelperBase:
+  const AppId& GetAppId() const override;
+  void SetAppId(const AppId& app_id) override;
+  bool IsUserInstalled() const override;
+  bool IsFromInstallButton() const override;
+  const base::UnguessableToken& GetAudioFocusGroupIdForTesting() const override;
 
   // content::WebContentsObserver:
   void DidFinishNavigation(
@@ -46,18 +47,7 @@ class WebAppTabHelper : public content::WebContentsObserver,
       content::WebContents* old_web_contents,
       content::WebContents* new_web_contents) override;
 
-  // These methods require an app associated with the tab (valid app_id()).
-  //
-  // Returns true if the app was installed by user, false if default installed.
-  bool IsUserInstalled() const;
-  // For user-installed apps:
-  // Returns true if the app was installed through the install button.
-  // Returns false if the app was installed through the create shortcut button.
-  bool IsFromInstallButton() const;
-
  private:
-  WEB_CONTENTS_USER_DATA_KEY_DECL();
-
   friend class WebAppAudioFocusBrowserTest;
   friend class content::WebContentsUserData<WebAppTabHelper>;
 
@@ -98,4 +88,4 @@ class WebAppTabHelper : public content::WebContentsObserver,
 
 }  // namespace web_app
 
-#endif  // CHROME_BROWSER_WEB_APPLICATIONS_COMPONENTS_WEB_APP_TAB_HELPER_H_
+#endif  // CHROME_BROWSER_WEB_APPLICATIONS_WEB_APP_TAB_HELPER_H_

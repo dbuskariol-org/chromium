@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/web_applications/components/web_app_tab_helper.h"
+#include "chrome/browser/web_applications/web_app_tab_helper.h"
 
 #include "base/unguessable_token.h"
 #include "chrome/browser/profiles/profile.h"
@@ -17,7 +17,13 @@
 
 namespace web_app {
 
-WEB_CONTENTS_USER_DATA_KEY_IMPL(WebAppTabHelper)
+void WebAppTabHelper::CreateForWebContents(content::WebContents* contents) {
+  DCHECK(contents);
+  if (!FromWebContents(contents)) {
+    contents->SetUserData(UserDataKey(),
+                          std::make_unique<WebAppTabHelper>(contents));
+  }
+}
 
 WebAppTabHelper::WebAppTabHelper(content::WebContents* web_contents)
     : content::WebContentsObserver(web_contents),
@@ -30,6 +36,26 @@ WebAppTabHelper::WebAppTabHelper(content::WebContents* web_contents)
 }
 
 WebAppTabHelper::~WebAppTabHelper() = default;
+
+const AppId& WebAppTabHelper::GetAppId() const {
+  return app_id_;
+}
+
+bool WebAppTabHelper::IsUserInstalled() const {
+  return !app_id_.empty() && provider_->registrar().WasInstalledByUser(app_id_);
+}
+
+bool WebAppTabHelper::IsFromInstallButton() const {
+  // TODO(loyso): Use something better to record apps installed from promoted
+  // UIs. crbug.com/774918.
+  return !app_id_.empty() &&
+         provider_->registrar().GetAppScope(app_id_).has_value();
+}
+
+const base::UnguessableToken& WebAppTabHelper::GetAudioFocusGroupIdForTesting()
+    const {
+  return audio_focus_group_id_;
+}
 
 void WebAppTabHelper::SetAppId(const AppId& app_id) {
   DCHECK(app_id.empty() || provider_->registrar().IsInstalled(app_id));
@@ -64,18 +90,7 @@ void WebAppTabHelper::DidCloneToNewWebContents(
   auto* new_tab_helper = FromWebContents(new_web_contents);
 
   // Clone common state:
-  new_tab_helper->SetAppId(app_id());
-}
-
-bool WebAppTabHelper::IsUserInstalled() const {
-  return !app_id_.empty() && provider_->registrar().WasInstalledByUser(app_id_);
-}
-
-bool WebAppTabHelper::IsFromInstallButton() const {
-  // TODO(loyso): Use something better to record apps installed from promoted
-  // UIs. crbug.com/774918.
-  return !app_id_.empty() &&
-         provider_->registrar().GetAppScope(app_id_).has_value();
+  new_tab_helper->SetAppId(GetAppId());
 }
 
 bool WebAppTabHelper::IsInAppWindow() const {
@@ -90,7 +105,7 @@ void WebAppTabHelper::OnWebAppInstalled(const AppId& installed_app_id) {
 }
 
 void WebAppTabHelper::OnWebAppUninstalled(const AppId& uninstalled_app_id) {
-  if (app_id() == uninstalled_app_id)
+  if (GetAppId() == uninstalled_app_id)
     ResetAppId();
 }
 
