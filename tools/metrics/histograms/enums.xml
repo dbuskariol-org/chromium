@@ -2971,7 +2971,7 @@ Unknown properties are collapsed to zero. -->
   </summary>
   <int value="0" label="Closed by user"/>
   <int value="1" label="Notification's body clicked"/>
-  <int value="2" label="Notification's button clicked"/>
+  <int value="2" label="(Obsolete) Notification's button clicked"/>
 </enum>
 
 <enum name="AshGestureActionType">
