@@ -2181,7 +2181,6 @@ bool RenderFrameImpl::OnMessageReceived(const IPC::Message& msg) {
 
   bool handled = true;
   IPC_BEGIN_MESSAGE_MAP(RenderFrameImpl, msg)
-    IPC_MESSAGE_HANDLER(FrameMsg_BeforeUnload, OnBeforeUnload)
     IPC_MESSAGE_HANDLER(UnfreezableFrameMsg_Unload, OnUnload)
     IPC_MESSAGE_HANDLER(FrameMsg_SwapIn, OnSwapIn)
     IPC_MESSAGE_HANDLER(FrameMsg_Stop, OnStop)
@@ -2284,26 +2283,6 @@ void RenderFrameImpl::BindNavigationClient(
     mojo::PendingAssociatedReceiver<mojom::NavigationClient> receiver) {
   navigation_client_impl_ = std::make_unique<NavigationClient>(this);
   navigation_client_impl_->Bind(std::move(receiver));
-}
-
-void RenderFrameImpl::OnBeforeUnload(bool is_reload) {
-  TRACE_EVENT1("navigation,rail", "RenderFrameImpl::OnBeforeUnload",
-               "id", routing_id_);
-  // Save the routing_id, as the RenderFrameImpl can be deleted in
-  // dispatchBeforeUnloadEvent. See https://crbug.com/666714 for details.
-  int routing_id = routing_id_;
-
-  base::TimeTicks before_unload_start_time = base::TimeTicks::Now();
-
-  // This will execute the BeforeUnload event in this frame and all of its
-  // local descendant frames, including children of remote frames.  The browser
-  // process will send separate IPCs to dispatch beforeunload in any
-  // out-of-process child frames.
-  bool proceed = frame_->DispatchBeforeUnloadEvent(is_reload);
-
-  base::TimeTicks before_unload_end_time = base::TimeTicks::Now();
-  RenderThread::Get()->Send(new FrameHostMsg_BeforeUnload_ACK(
-      routing_id, proceed, before_unload_start_time, before_unload_end_time));
 }
 
 // Unload this RenderFrame so the frame can navigate to a document rendered by
