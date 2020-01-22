@@ -195,7 +195,8 @@ void ImageResourceContent::RemoveObserver(ImageResourceObserver* observer) {
   auto it = observers_.find(observer);
   bool fully_erased;
   if (it != observers_.end()) {
-    fully_erased = observers_.erase(it);
+    fully_erased = observers_.erase(it) && finished_observers_.find(observer) ==
+                                               finished_observers_.end();
   } else {
     it = finished_observers_.find(observer);
     DCHECK(it != finished_observers_.end());
