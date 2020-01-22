@@ -6180,7 +6180,6 @@ crbug.com/1027434 external/wpt/html/browsers/origin/cross-origin-objects/cross-o
 crbug.com/1027434 virtual/not-site-per-process/external/wpt/html/browsers/origin/cross-origin-objects/cross-origin-objects.html [ Pass Timeout ]
 
 # Sheriff 2019-12-02
-crbug.com/1029713 external/wpt/cookie-store/cookieStoreManager_getSubscriptions_multiple.tentative.https.any.html [ Pass Failure ]
 crbug.com/1029528 [ Linux ] http/tests/devtools/network/oopif-content.js [ Pass Failure ]
 crbug.com/1028477 [ Mac ] http/tests/devtools/appcache/appcache-manifest-with-non-existing-file.js [ Pass Timeout ]
 crbug.com/1028477 [ Win ] http/tests/devtools/appcache/appcache-manifest-with-non-existing-file.js [ Pass Timeout ]
