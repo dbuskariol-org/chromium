@@ -47,6 +47,7 @@ class FakeBaseTabStripController : public TabStripController {
   bool BeforeCloseTab(int index, CloseTabSource source) override;
   void CloseTab(int index, CloseTabSource source) override;
   void MoveTab(int from_index, int to_index) override;
+  void MoveGroup(const tab_groups::TabGroupId&, int to_index) override;
   void ShowContextMenuForTab(Tab* tab,
                              const gfx::Point& p,
                              ui::MenuSourceType source_type) override;

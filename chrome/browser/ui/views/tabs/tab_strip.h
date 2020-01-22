@@ -192,6 +192,12 @@ class TabStrip : public views::AccessiblePaneView,
   // associated view mappings are erased in OnGroupCloseAnimationCompleted().
   void OnGroupClosed(const tab_groups::TabGroupId& group);
 
+  // Attempts to move the specified group to the left.
+  void ShiftGroupLeft(const tab_groups::TabGroupId& group);
+
+  // Attempts to move the specified group to the right.
+  void ShiftGroupRight(const tab_groups::TabGroupId& group);
+
   // Returns true if the tab is not partly or fully clipped (due to overflow),
   // and the tab couldn't become partly clipped due to changing the selected tab
   // (for example, if currently the strip has the last tab selected, and
@@ -528,6 +534,10 @@ class TabStrip : public views::AccessiblePaneView,
   // Determines whether a tab can be shifted by one in the direction of |offset|
   // and moves it if possible.
   void ShiftTabRelative(Tab* tab, int offset);
+
+  // Determines whether a group can be shifted by one in the direction of
+  // |offset| and moves it if possible.
+  void ShiftGroupRelative(const tab_groups::TabGroupId& group, int offset);
 
   // -- Tab Resize Layout -----------------------------------------------------
 

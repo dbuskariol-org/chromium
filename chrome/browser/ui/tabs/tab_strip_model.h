@@ -285,6 +285,10 @@ class TabStripModel : public TabGroupController {
   // index + selected-pinned tab-count (3 + 1).
   void MoveSelectedTabsTo(int index);
 
+  // Moves all tabs in |group| to |to_index|. This has no checks to make sure
+  // the position is valid for a group to move to.
+  void MoveGroupTo(const tab_groups::TabGroupId& group, int to_index);
+
   // Returns the currently active WebContents, or NULL if there is none.
   content::WebContents* GetActiveWebContents() const;
 

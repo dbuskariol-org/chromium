@@ -49,6 +49,8 @@ void FakeBaseTabStripController::MoveTab(int from_index, int to_index) {
   tab_groups_.insert(tab_groups_.begin() + to_index, prev_group);
   tab_strip_->MoveTab(from_index, to_index, TabRendererData());
 }
+void FakeBaseTabStripController::MoveGroup(const tab_groups::TabGroupId& group,
+                                           int to_index) {}
 
 void FakeBaseTabStripController::RemoveTab(int index) {
   num_tabs_--;

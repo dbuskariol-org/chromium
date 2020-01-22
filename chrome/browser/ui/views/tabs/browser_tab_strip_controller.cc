@@ -345,6 +345,11 @@ void BrowserTabStripController::MoveTab(int start_index, int final_index) {
   model_->MoveWebContentsAt(start_index, final_index, false);
 }
 
+void BrowserTabStripController::MoveGroup(const tab_groups::TabGroupId& group,
+                                          int final_index) {
+  model_->MoveGroupTo(group, final_index);
+}
+
 void BrowserTabStripController::ShowContextMenuForTab(
     Tab* tab,
     const gfx::Point& p,

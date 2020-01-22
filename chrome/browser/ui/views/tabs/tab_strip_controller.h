@@ -99,6 +99,11 @@ class TabStripController {
   // any tabs in between left or right as appropriate.
   virtual void MoveTab(int start_index, int final_index) = 0;
 
+  // Moves all the tabs in |group| so that it is now at |final_index|, sliding
+  // any tabs in between left or right as appropriate.
+  virtual void MoveGroup(const tab_groups::TabGroupId& group,
+                         int final_index) = 0;
+
   // Shows a context menu for the tab at the specified point in screen coords.
   virtual void ShowContextMenuForTab(Tab* tab,
                                      const gfx::Point& p,
