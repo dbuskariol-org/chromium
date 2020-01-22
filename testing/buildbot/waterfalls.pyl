@@ -1829,7 +1829,7 @@
         'mixins': [
           'chrome-swarming-pool',
           'host_mac_10.14',
-          'xcode_11b53',
+          'xcode_11c29',
           'xcode_parallelization',
         ],
         'test_suites': {
