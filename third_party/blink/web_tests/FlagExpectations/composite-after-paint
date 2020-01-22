@@ -219,3 +219,4 @@ crbug.com/1041322 virtual/threaded/synthetic_gestures/synthetic-pinch-zoom-gestu
 crbug.com/1041322 virtual/threaded/synthetic_gestures/synthetic-pinch-zoom-gesture-touchscreen-zoom-out-slow.html [ Crash ]
 crbug.com/1041322 virtual/threaded/synthetic_gestures/synthetic-pinch-zoom-gesture-touchscreen.html [ Crash ]
 
+external/wpt/css/compositing/root-element-blend-mode.html [ Failure ]

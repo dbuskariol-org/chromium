@@ -53,6 +53,7 @@ crbug.com/887140 virtual/hdr/video-canvas-alpha.html [ Failure ]
 crbug.com/1014421 external/wpt/css/cssom-view/MediaQueryList-addListener-handleEvent.html [ Timeout ]
 
 # Tested by paint/background/root-element-background-transparency.html for now.
+external/wpt/css/compositing/root-element-background-transparency.html [ Failure ]
 
 # ====== Site Isolation failures from here ======
 # See also third_party/blink/web_tests/virtual/not-site-per-process/README.md
