@@ -466,6 +466,9 @@ class ASH_EXPORT ShelfLayoutManager
   ShelfAutoHideState CalculateAutoHideState(
       ShelfVisibilityState visibility_state) const;
 
+  base::Optional<ShelfAutoHideState>
+  CalculateAutoHideStateBasedOnCursorLocation() const;
+
   // Returns true if |window| is a descendant of the shelf.
   bool IsShelfWindow(aura::Window* window);
 
