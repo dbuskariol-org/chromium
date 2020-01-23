@@ -4327,6 +4327,21 @@
             ]
         }
     ],
+    "OmniboxAssistantVoiceSearch": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "OmniboxAssistantVoiceSearch"
+                    ]
+                }
+            ]
+        }
+    ],
     "OmniboxBundledExperimentV1": [
         {
             "platforms": [

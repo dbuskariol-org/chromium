@@ -1391,6 +1391,12 @@ const char kOfferStoreUnmaskedWalletCardsDescription[] =
     "Show the checkbox to offer local saving of a credit card downloaded from "
     "the server.";
 
+const char kOmniboxAssistantVoiceSearchName[] =
+    "Omnibox Assistant Voice Search";
+const char kOmniboxAssistantVoiceSearchDescription[] =
+    "When enabled, use Assistant for omnibox voice query recognition instead of"
+    " Android's built-in voice recognition service. Only works on Android.";
+
 const char kOmniboxAutocompleteTitlesName[] = "Omnibox Autocomplete Titles";
 const char kOmniboxAutocompleteTitlesDescription[] =
     "Allows autocompleting bookmark, history, and document suggestions when the"

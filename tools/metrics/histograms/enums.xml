@@ -37413,6 +37413,7 @@ from previous Chrome versions.
   <int value="-882434910" label="EnableAggregatedMlSearchRanking:enabled"/>
   <int value="-881447505" label="ash-disable-shelf-model-synchronization"/>
   <int value="-881054479" label="WebAssemblyStreaming:disabled"/>
+  <int value="-880201293" label="OmniboxAssistantVoiceSearch:disabled"/>
   <int value="-879055117" label="ClipboardContentSetting:enabled"/>
   <int value="-879031960" label="FetchKeepaliveTimeoutSetting:disabled"/>
   <int value="-876148583" label="ArcBootCompletedBroadcast:disabled"/>
@@ -39788,6 +39789,7 @@ from previous Chrome versions.
   <int value="2097048479" label="disable-auto-hiding-toolbar-threshold"/>
   <int value="2098714203" label="enable-generic-sensors"/>
   <int value="2098907258" label="UseSurfaceLayerForVideo:disabled"/>
+  <int value="2099945365" label="OmniboxAssistantVoiceSearch:enabled"/>
   <int value="2101151142" label="disable-direct-write"/>
   <int value="2104340988" label="CrostiniUsername:disabled"/>
   <int value="2104788328" label="use-winrt-midi-api"/>

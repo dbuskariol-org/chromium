@@ -2803,6 +2803,11 @@ const FeatureEntry kFeatureEntries[] = {
 #endif  // defined(OS_WIN)
 
 #if defined(OS_ANDROID)
+    {"omnibox-assistant-voice-search",
+     flag_descriptions::kOmniboxAssistantVoiceSearchName,
+     flag_descriptions::kOmniboxAssistantVoiceSearchDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(omnibox::kOmniboxAssistantVoiceSearch)},
+
     {"omnibox-search-engine-logo",
      flag_descriptions::kOmniboxSearchEngineLogoName,
      flag_descriptions::kOmniboxSearchEngineLogoDescription, kOsAndroid,

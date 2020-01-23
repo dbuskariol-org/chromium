@@ -2771,6 +2771,11 @@
     "expiry_milestone": 76
   },
   {
+    "name": "omnibox-assistant-voice-search",
+    "owners": [ "wylieb", "chrome-omnibox-team@google.com" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "omnibox-autocomplete-titles",
     "owners": [ "manukh", "chrome-omnibox-team@google.com" ],
     "expiry_milestone": 85
