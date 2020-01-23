@@ -21,6 +21,7 @@ class BrowserContext;
 
 namespace features {
 extern const base::Feature kPreconnectToSearch;
+extern const base::Feature kPreconnectToSearchNonGoogle;
 }  // namespace features
 
 // Class to preconnect to the user's default search engine at regular intervals.

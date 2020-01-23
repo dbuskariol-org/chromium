@@ -12,6 +12,7 @@
 #include "chrome/browser/predictors/loading_predictor_factory.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/search_engines/template_url_service_factory.h"
+#include "components/google/core/common/google_util.h"
 #include "components/search_engines/template_url_service.h"
 #include "content/public/browser/browser_context.h"
 #include "net/base/features.h"
@@ -20,6 +21,10 @@ namespace features {
 // Feature to control preconnect to search.
 const base::Feature kPreconnectToSearch{"PreconnectToSearch",
                                         base::FEATURE_DISABLED_BY_DEFAULT};
+
+// Feature to limit experimentation to Google search only.
+const base::Feature kPreconnectToSearchNonGoogle{
+    "PreconnectToSearchNonGoogle", base::FEATURE_DISABLED_BY_DEFAULT};
 }  // namespace features
 
 SearchEnginePreconnector::SearchEnginePreconnector(
@@ -36,6 +41,7 @@ SearchEnginePreconnector::SearchEnginePreconnector(
 #endif  // defined(OS_ANDROID)
       browser_context_(browser_context),
       currently_in_foreground_(true) {
+
   DCHECK(!browser_context_->IsOffTheRecord());
 
 #if defined(OS_ANDROID)
@@ -117,6 +123,13 @@ void SearchEnginePreconnector::PreconnectDSE() {
   GURL preconnect_url = GetDefaultSearchEngineOriginURL();
   if (preconnect_url.scheme() != url::kHttpScheme &&
       preconnect_url.scheme() != url::kHttpsScheme) {
+    return;
+  }
+  // Limit experimentation to [www].google.com only.
+  if (!base::FeatureList::IsEnabled(features::kPreconnectToSearchNonGoogle) &&
+      !google_util::IsGoogleDomainUrl(preconnect_url,
+                                      google_util::DISALLOW_SUBDOMAIN,
+                                      google_util::ALLOW_NON_STANDARD_PORTS)) {
     return;
   }
 
