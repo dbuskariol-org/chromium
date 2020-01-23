@@ -10,14 +10,13 @@
 #include "base/run_loop.h"
 #include "base/test/simple_test_tick_clock.h"
 #include "base/test/test_timeouts.h"
-#include "chrome/common/chrome_switches.h"
-#include "chrome/common/pref_names.h"
-#include "chrome/test/base/testing_profile.h"
 #include "components/captive_portal/content/captive_portal_service.h"
 #include "components/captive_portal/core/captive_portal_testing_utils.h"
 #include "components/embedder_support/pref_names.h"
-#include "components/prefs/pref_service.h"
+#include "components/prefs/pref_registry_simple.h"
+#include "components/prefs/testing_pref_service.h"
 #include "content/public/test/browser_task_environment.h"
+#include "content/public/test/test_browser_context.h"
 #include "net/base/net_errors.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -70,8 +69,7 @@ class CaptivePortalServiceTest : public testing::Test,
  public:
   CaptivePortalServiceTest()
       : old_captive_portal_testing_state_(
-            CaptivePortalService::get_state_for_testing()) {
-  }
+            CaptivePortalService::get_state_for_testing()) {}
 
   ~CaptivePortalServiceTest() override {
     CaptivePortalService::set_state_for_testing(
@@ -82,14 +80,17 @@ class CaptivePortalServiceTest : public testing::Test,
   // should be disabled.  This is different from enabling the captive portal
   // detection preference.
   void Initialize(CaptivePortalService::TestingState testing_state) {
+    pref_service_.registry()->RegisterBooleanPref(
+        embedder_support::kAlternateErrorPagesEnabled, true);
+
     CaptivePortalService::set_state_for_testing(testing_state);
 
-    profile_.reset(new TestingProfile());
+    browser_context_.reset(new content::TestBrowserContext());
     tick_clock_.reset(new base::SimpleTestTickClock());
     tick_clock_->Advance(base::TimeTicks::Now() - tick_clock_->NowTicks());
-    service_.reset(
-        new CaptivePortalService(profile_.get(), profile_->GetPrefs(),
-                                 tick_clock_.get(), test_loader_factory()));
+    service_.reset(new CaptivePortalService(browser_context_.get(),
+                                            &pref_service_, tick_clock_.get(),
+                                            test_loader_factory()));
 
     // Use no delays for most tests.
     set_initial_backoff_no_portal(base::TimeDelta());
@@ -118,8 +119,8 @@ class CaptivePortalServiceTest : public testing::Test,
 
   // Sets the captive portal checking preference.
   void EnableCaptivePortalDetectionPreference(bool enabled) {
-    profile()->GetPrefs()->SetBoolean(
-        embedder_support::kAlternateErrorPagesEnabled, enabled);
+    pref_service_.SetBoolean(embedder_support::kAlternateErrorPagesEnabled,
+                             enabled);
   }
 
   // Triggers a captive portal check, then simulates the URL request
@@ -200,14 +201,14 @@ class CaptivePortalServiceTest : public testing::Test,
   void RunBackoffTest(CaptivePortalResult expected_result,
                       int net_error,
                       int status_code) {
-    RunTest(expected_result, net_error, status_code, 0, NULL);
-    RunTest(expected_result, net_error, status_code, 0, NULL);
-    RunTest(expected_result, net_error, status_code, 100, NULL);
-    RunTest(expected_result, net_error, status_code, 200, NULL);
-    RunTest(expected_result, net_error, status_code, 400, NULL);
-    RunTest(expected_result, net_error, status_code, 800, NULL);
-    RunTest(expected_result, net_error, status_code, 1600, NULL);
-    RunTest(expected_result, net_error, status_code, 1600, NULL);
+    RunTest(expected_result, net_error, status_code, 0, nullptr);
+    RunTest(expected_result, net_error, status_code, 0, nullptr);
+    RunTest(expected_result, net_error, status_code, 100, nullptr);
+    RunTest(expected_result, net_error, status_code, 200, nullptr);
+    RunTest(expected_result, net_error, status_code, 400, nullptr);
+    RunTest(expected_result, net_error, status_code, 800, nullptr);
+    RunTest(expected_result, net_error, status_code, 1600, nullptr);
+    RunTest(expected_result, net_error, status_code, 1600, nullptr);
   }
 
   // Changes test time for the service and service's captive portal
@@ -217,9 +218,7 @@ class CaptivePortalServiceTest : public testing::Test,
     CaptivePortalDetectorTestBase::AdvanceTime(delta);
   }
 
-  bool TimerRunning() {
-    return service()->TimerRunning();
-  }
+  bool TimerRunning() { return service()->TimerRunning(); }
 
   base::TimeDelta GetTimeUntilNextRequest() {
     return service()->backoff_entry_->GetTimeUntilRelease();
@@ -255,7 +254,7 @@ class CaptivePortalServiceTest : public testing::Test,
     service()->recheck_policy().backoff_policy.jitter_factor = jitter_factor;
   }
 
-  TestingProfile* profile() { return profile_.get(); }
+  content::BrowserContext* browser_context() { return browser_context_.get(); }
 
   CaptivePortalService* service() { return service_.get(); }
 
@@ -267,17 +266,23 @@ class CaptivePortalServiceTest : public testing::Test,
   content::BrowserTaskEnvironment task_environment_;
 
   // Note that the construction order of these matters.
-  std::unique_ptr<TestingProfile> profile_;
+  std::unique_ptr<content::TestBrowserContext> browser_context_;
   std::unique_ptr<base::SimpleTestTickClock> tick_clock_;
+  TestingPrefServiceSimple pref_service_;
   std::unique_ptr<CaptivePortalService> service_;
 };
 
-// Verify that an observer doesn't get messages from the wrong profile.
-TEST_F(CaptivePortalServiceTest, CaptivePortalTwoProfiles) {
+// Verify that an observer doesn't get messages from the wrong browser_context.
+TEST_F(CaptivePortalServiceTest, CaptivePortalTwoBrowserContexts) {
   Initialize(CaptivePortalService::SKIP_OS_CHECK_FOR_TESTING);
-  TestingProfile profile2;
+  content::TestBrowserContext browser_context2;
+
+  TestingPrefServiceSimple pref_service2;
+  pref_service2.registry()->RegisterBooleanPref(
+      embedder_support::kAlternateErrorPagesEnabled, true);
+
   std::unique_ptr<CaptivePortalService> service2(
-      new CaptivePortalService(&profile2, profile2.GetPrefs()));
+      new CaptivePortalService(&browser_context2, &pref_service2));
   CaptivePortalObserver observer2(service2.get());
 
   RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 0, nullptr);
@@ -295,11 +300,14 @@ TEST_F(CaptivePortalServiceTest, CaptivePortalRecheckInternetConnected) {
   RunBackoffTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204);
 
   // Make sure that getting a new result resets the timer.
-  RunTest(
-      captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 1600, NULL);
-  RunTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 0, NULL);
-  RunTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 1, NULL);
-  RunTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 2, NULL);
+  RunTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 1600,
+          nullptr);
+  RunTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 0,
+          nullptr);
+  RunTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 1,
+          nullptr);
+  RunTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 2,
+          nullptr);
 }
 
 // Checks exponential backoff when there's an HTTP error.
@@ -313,9 +321,11 @@ TEST_F(CaptivePortalServiceTest, CaptivePortalRecheckError) {
   RunBackoffTest(captive_portal::RESULT_NO_RESPONSE, net::OK, 500);
 
   // Make sure that getting a new result resets the timer.
-  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 1600, NULL);
-  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 0, NULL);
-  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 100, NULL);
+  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 1600,
+          nullptr);
+  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 0, nullptr);
+  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 100,
+          nullptr);
 }
 
 // Checks exponential backoff when there's a captive portal.
@@ -329,9 +339,11 @@ TEST_F(CaptivePortalServiceTest, CaptivePortalRecheckBehindPortal) {
   RunBackoffTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200);
 
   // Make sure that getting a new result resets the timer.
-  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 1600, NULL);
-  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 0, NULL);
-  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 250, NULL);
+  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 1600,
+          nullptr);
+  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 0, nullptr);
+  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 250,
+          nullptr);
 }
 
 // Check that everything works as expected when captive portal checking is
@@ -352,7 +364,8 @@ TEST_F(CaptivePortalServiceTest, CaptivePortalPrefDisabled) {
 
   EnableCaptivePortalDetectionPreference(true);
 
-  RunTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 0, NULL);
+  RunTest(captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL, net::OK, 200, 0,
+          nullptr);
 }
 
 // Check that disabling the captive portal service while a check is running
@@ -430,7 +443,7 @@ TEST_F(CaptivePortalServiceTest, CaptivePortalPrefEnabledWhilePending) {
   ASSERT_TRUE(FetchingURL());
   EXPECT_FALSE(TimerRunning());
 
-  CompleteURLFetch(net::OK, 200, NULL);
+  CompleteURLFetch(net::OK, 200, nullptr);
   EXPECT_FALSE(FetchingURL());
   EXPECT_FALSE(TimerRunning());
 
@@ -450,8 +463,8 @@ TEST_F(CaptivePortalServiceTest, CaptivePortalJitter) {
   Initialize(CaptivePortalService::SKIP_OS_CHECK_FOR_TESTING);
   set_jitter_factor(0.3);
   set_initial_backoff_no_portal(base::TimeDelta::FromSeconds(100));
-  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 0, NULL);
-  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 0, NULL);
+  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 0, nullptr);
+  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 0, nullptr);
 
   for (int i = 0; i < 50; ++i) {
     int interval_sec = GetTimeUntilNextRequest().InSeconds();
@@ -471,7 +484,8 @@ TEST_F(CaptivePortalServiceTest, CaptivePortalRetryAfterSeconds) {
   // result and on subsequent requests.
   RunTest(captive_portal::RESULT_NO_RESPONSE, net::OK, 503, 0, retry_after);
   RunTest(captive_portal::RESULT_NO_RESPONSE, net::OK, 503, 101, retry_after);
-  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 101, NULL);
+  RunTest(captive_portal::RESULT_INTERNET_CONNECTED, net::OK, 204, 101,
+          nullptr);
 
   // Make sure that there's no effect on the next captive portal check after
   // login.
@@ -503,10 +517,7 @@ TEST_F(CaptivePortalServiceTest, CaptivePortalRetryAfterDate) {
       base::Time::FromString("Tue, 17 Apr 2012 18:02:00 GMT", &start_time));
   SetTime(start_time);
 
-  RunTest(captive_portal::RESULT_NO_RESPONSE,
-          net::OK,
-          503,
-          0,
+  RunTest(captive_portal::RESULT_NO_RESPONSE, net::OK, 503, 0,
           "HTTP/1.1 503 OK\nRetry-After: Tue, 17 Apr 2012 18:02:51 GMT\n\n");
   EXPECT_EQ(base::TimeDelta::FromSeconds(51), GetTimeUntilNextRequest());
 }

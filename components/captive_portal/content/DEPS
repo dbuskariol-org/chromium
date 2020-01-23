@@ -4,6 +4,7 @@ include_rules = [
   "+components/keyed_service/core",
   "+components/prefs",
   "+content/public/browser",
+  "+content/public/test",
   "+services/network/public/cpp",
   "+net",
   "+url",
