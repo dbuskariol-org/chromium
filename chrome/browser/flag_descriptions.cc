@@ -937,11 +937,6 @@ const char kEnableScrollAnchorSerializationDescription[] =
     "Save the scroll anchor and use it to restore the scroll position when "
     "navigating.";
 
-const char kEnableSharedArrayBufferName[] =
-    "Experimental enabled SharedArrayBuffer support in JavaScript.";
-const char kEnableSharedArrayBufferDescription[] =
-    "Enable SharedArrayBuffer support in JavaScript.";
-
 const char kEnableSubresourceRedirectName[] =
     "Enable Render Level Data Use Optimization";
 const char kEnableSubresourceRedirectDescription[] =
@@ -984,8 +979,7 @@ const char kEnableWasmSimdDescription[] =
 
 const char kEnableWasmThreadsName[] = "WebAssembly threads support";
 const char kEnableWasmThreadsDescription[] =
-    "Enables support for the WebAssembly Threads proposal. Implies "
-    "#shared-array-buffer and #enable-webassembly.";
+    "Enables support for the WebAssembly Threads proposal.";
 
 const char kEnableWasmTieringName[] = "WebAssembly tiering";
 const char kEnableWasmTieringDescription[] =

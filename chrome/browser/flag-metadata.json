@@ -3192,11 +3192,6 @@
     "expiry_milestone": -1
   },
   {
-    "name": "shared-array-buffer",
-    "owners": [ "binji" ],
-    "expiry_milestone": 78
-  },
-  {
     "name": "shared-clipboard-receiver",
     "owners": [ "//chrome/browser/sharing/OWNERS" ],
     "expiry_milestone": 82
