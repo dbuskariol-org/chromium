@@ -62,6 +62,7 @@ public class WebLayerShellActivity extends FragmentActivity {
     private View mMainView;
     private int mMainViewId;
     private ViewGroup mTopContentsContainer;
+    private TabListCallback mTabListCallback;
     private List<Tab> mPreviousTabList = new ArrayList<>();
     private Runnable mExitFullscreenRunnable;
 
@@ -140,36 +141,72 @@ public class WebLayerShellActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mTabListCallback != null) {
+            mBrowser.unregisterTabListCallback(mTabListCallback);
+            mTabListCallback = null;
+        }
+    }
+
     private void onWebLayerReady(WebLayer webLayer, Bundle savedInstanceState) {
         if (isFinishing() || isDestroyed()) return;
 
         webLayer.setRemoteDebuggingEnabled(true);
 
         Fragment fragment = getOrCreateBrowserFragment(savedInstanceState);
+
+        // Have WebLayer Shell retain the fragment instance to simulate the behavior of
+        // external embedders (note that if this is changed, then WebLayer Shell should handle
+        // rotations and resizes itself via its manifest, as otherwise the user loses all state
+        // when the shell is rotated in the foreground).
+        fragment.setRetainInstance(true);
         mBrowser = Browser.fromFragment(fragment);
-        mBrowser.registerTabListCallback(new TabListCallback() {
+        mTabListCallback = new TabListCallback() {
             @Override
             public void onActiveTabChanged(Tab activeTab) {
-                NavigationController navigationController = activeTab.getNavigationController();
-                if (navigationController.getNavigationListSize() > 0) {
-                    mUrlView.setText(
-                            navigationController
-                                    .getNavigationEntryDisplayUri(
-                                            navigationController.getNavigationListCurrentIndex())
-                                    .toString());
+                String currentDisplayUrl = getCurrentDisplayUrl();
+                if (currentDisplayUrl != null) {
+                    mUrlView.setText(currentDisplayUrl);
                 }
             }
-        });
+        };
+        mBrowser.registerTabListCallback(mTabListCallback);
         setTabCallbacks(mBrowser.getActiveTab(), fragment);
         mProfile = mBrowser.getProfile();
 
         mBrowser.setTopView(mTopContentsContainer);
 
-        String startupUrl = getUrlFromIntent(getIntent());
-        if (TextUtils.isEmpty(startupUrl)) {
-            startupUrl = "https://google.com";
+        // If there is already a url loaded in the current tab just display it in the top bar;
+        // otherwise load the startup url.
+        String currentDisplayUrl = getCurrentDisplayUrl();
+
+        if (currentDisplayUrl != null) {
+            mUrlView.setText(currentDisplayUrl);
+
+        } else {
+            String startupUrl = getUrlFromIntent(getIntent());
+            if (TextUtils.isEmpty(startupUrl)) {
+                startupUrl = "https://google.com";
+            }
+            loadUrl(startupUrl);
         }
-        loadUrl(startupUrl);
+    }
+
+    /* Returns the Url for the current tab as a String, or null if there is no
+     * current tab. */
+    private String getCurrentDisplayUrl() {
+        NavigationController navigationController =
+                mBrowser.getActiveTab().getNavigationController();
+
+        if (navigationController.getNavigationListSize() == 0) {
+            return null;
+        }
+
+        return navigationController
+                .getNavigationEntryDisplayUri(navigationController.getNavigationListCurrentIndex())
+                .toString();
     }
 
     private void setTabCallbacks(Tab tab, Fragment fragment) {
