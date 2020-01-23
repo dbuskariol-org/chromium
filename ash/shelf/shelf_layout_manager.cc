@@ -795,8 +795,11 @@ ShelfBackgroundType ShelfLayoutManager::GetShelfBackgroundType() const {
       return ShelfBackgroundType::kInApp;
     }
   } else if (app_list_is_visible) {
-    return maximized ? ShelfBackgroundType::kMaximizedWithAppList
-                     : ShelfBackgroundType::kAppList;
+    // When auto-hide shelf is enabled, shelf cannot be considered maximized.
+    if (maximized && state_.visibility_state != SHELF_AUTO_HIDE)
+      return ShelfBackgroundType::kMaximizedWithAppList;
+
+    return ShelfBackgroundType::kAppList;
   }
 
   if (maximized) {
