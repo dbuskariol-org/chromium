@@ -2600,7 +2600,7 @@ jumbo_static_library("ui") {
     }
     if (use_gtk) {
       # This is the only component that can interact with gtk.
-      deps += [ "//chrome/browser/ui/libgtkui" ]
+      deps += [ "//chrome/browser/ui/gtk" ]
     }
   }
 
@@ -3455,7 +3455,7 @@ jumbo_static_library("ui") {
           sources += [ "views/linux_ui/linux_ui_factory_gtk.cc" ]
 
           # This is the only component that can interact with gtk.
-          deps += [ "//chrome/browser/ui/libgtkui" ]
+          deps += [ "//chrome/browser/ui/gtk" ]
         } else {
           sources += [ "views/linux_ui/linux_ui_factory.cc" ]
         }
