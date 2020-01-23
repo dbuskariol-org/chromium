@@ -12,14 +12,13 @@
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
 #include "base/timer/timer.h"
+#include "chrome/browser/captive_portal/captive_portal_service.h"
 #include "components/security_interstitials/content/common_name_mismatch_handler.h"
 #include "components/security_interstitials/content/security_interstitial_page.h"
 #include "components/security_interstitials/content/ssl_cert_reporter.h"
 #include "components/security_interstitials/content/ssl_error_assistant.pb.h"
 #include "components/ssl_errors/error_classification.h"
 #include "content/public/browser/certificate_request_result_type.h"
-#include "content/public/browser/notification_observer.h"
-#include "content/public/browser/notification_registrar.h"
 #include "content/public/browser/restore_type.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
@@ -27,7 +26,6 @@
 #include "url/gurl.h"
 
 class CommonNameMismatchHandler;
-class Profile;
 struct DynamicInterstitialInfo;
 
 namespace base {
@@ -67,8 +65,7 @@ extern const base::Feature kCaptivePortalCertificateList;
 // uses captive_portal::CaptivePortalService which can only be accessed on the
 // UI thread.
 class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
-                        public content::WebContentsObserver,
-                        public content::NotificationObserver {
+                        public content::WebContentsObserver {
  public:
   typedef base::Callback<void(content::WebContents*)> TimerStartedCallback;
   typedef base::OnceCallback<void(
@@ -184,7 +181,6 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
  protected:
   SSLErrorHandler(std::unique_ptr<Delegate> delegate,
                   content::WebContents* web_contents,
-                  Profile* profile,
                   int cert_error,
                   const net::SSLInfo& ssl_info,
                   network_time::NetworkTimeTracker* network_time_tracker,
@@ -198,6 +194,10 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
  private:
   friend class content::WebContentsUserData<SSLErrorHandler>;
   FRIEND_TEST_ALL_PREFIXES(SSLErrorHandlerTest, CalculateOptionsMask);
+  FRIEND_TEST_ALL_PREFIXES(SSLErrorHandlerNameMismatchTest,
+                           ShouldShowCustomInterstitialOnCaptivePortalResult);
+  FRIEND_TEST_ALL_PREFIXES(SSLErrorHandlerNameMismatchTest,
+                           ShouldShowSSLInterstitialOnNoCaptivePortalResult);
 
   void ShowCaptivePortalInterstitial(const GURL& landing_url);
   void ShowMITMSoftwareInterstitial(const std::string& mitm_software_name);
@@ -213,11 +213,8 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
       CommonNameMismatchHandler::SuggestedUrlCheckResult result,
       const GURL& suggested_url);
 
-  // content::NotificationObserver:
-  void Observe(
-      int type,
-      const content::NotificationSource& source,
-      const content::NotificationDetails& details) override;
+  // Callback invoked with the result of a query for captive portal status.
+  void Observe(const CaptivePortalService::Results& results);
 
   // content::WebContentsObserver:
   void DidStartNavigation(
@@ -237,13 +234,13 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
 
   std::unique_ptr<Delegate> delegate_;
   content::WebContents* const web_contents_;
-  Profile* const profile_;
   const int cert_error_;
   const net::SSLInfo ssl_info_;
   const GURL request_url_;
   network_time::NetworkTimeTracker* network_time_tracker_;
 
-  content::NotificationRegistrar registrar_;
+  std::unique_ptr<CaptivePortalService::Subscription> subscription_;
+
   base::OneShotTimer timer_;
 
   std::unique_ptr<CommonNameMismatchHandler> common_name_mismatch_handler_;
