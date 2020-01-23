@@ -653,7 +653,7 @@ Document::Document(const DocumentInit& initializer,
                        security_initializer),
       evaluate_media_queries_on_style_recalc_(false),
       pending_sheet_layout_(kNoLayoutWithPendingSheets),
-      window_agent_factory_(security_initializer.GetWindowAgentFactory()),
+      window_agent_factory_(initializer.GetWindowAgentFactory()),
       frame_(initializer.GetFrame()),
       // TODO(dcheng): Why does this need both a LocalFrame and LocalDOMWindow
       // pointer?
@@ -748,7 +748,14 @@ Document::Document(const DocumentInit& initializer,
       isolated_world_csp_map_(
           MakeGarbageCollected<
               HeapHashMap<int, Member<ContentSecurityPolicy>>>()) {
+  // TODO(crbug.com/1029822): SecurityContextInit will eventually not be
+  // passed to the Document constructor. These will need to move.
   security_initializer.ApplyPendingDataToDocument(*this);
+  if (frame_) {
+    pending_fp_headers_ = security_initializer.FeaturePolicyHeader();
+    pending_dp_headers_ = initializer.GetDocumentPolicy();
+  }
+
   if (frame_) {
     DCHECK(frame_->GetPage());
     ProvideContextFeaturesToDocumentFrom(*this, *frame_->GetPage());
@@ -800,8 +807,8 @@ Document::Document(const DocumentInit& initializer,
     UpdateBaseURL();
   }
 
-  InitSecurityContext(initializer, security_initializer);
-  PoliciesInitialized(initializer, security_initializer);
+  InitSecurityContext(initializer);
+  PoliciesInitialized(initializer);
   InitDNSPrefetch();
 
   InstanceCounters::IncrementCounter(InstanceCounters::kDocumentCounter);
@@ -6494,24 +6501,11 @@ HTMLLinkElement* Document::LinkCanonical() const {
   });
 }
 
-void Document::PoliciesInitialized(
-    const DocumentInit& document_initializer,
-    const SecurityContextInit& security_initializer) {
+void Document::PoliciesInitialized(const DocumentInit& document_initializer) {
   // Processing of the feature policy header is done before the SecurityContext
   // is initialized. This method just records the usage.
   if (!document_initializer.FeaturePolicyHeader().IsEmpty())
     UseCounter::Count(*this, WebFeature::kFeaturePolicyHeader);
-  for (const auto& message :
-       security_initializer.FeaturePolicyParseMessages()) {
-    AddConsoleMessage(
-        ConsoleMessage::Create(mojom::ConsoleMessageSource::kSecurity,
-                               mojom::ConsoleMessageLevel::kError,
-                               "Error with Feature-Policy header: " + message));
-  }
-  if (frame_) {
-    pending_fp_headers_ = security_initializer.FeaturePolicyHeader();
-    pending_dp_headers_ = document_initializer.GetDocumentPolicy();
-  }
 
   // At this point, the document will not have been installed in the frame's
   // LocalDOMWindow, so we cannot call frame_->IsFeatureEnabled. This calls
@@ -6643,9 +6637,7 @@ void Document::InitContentSecurityPolicy(ContentSecurityPolicy* csp) {
       GetContentSecurityPolicyDelegate());
 }
 
-void Document::InitSecurityContext(
-    const DocumentInit& initializer,
-    const SecurityContextInit& security_initializer) {
+void Document::InitSecurityContext(const DocumentInit& initializer) {
   DCHECK(GetSecurityOrigin());
 
   // If the CSP was provided by the DocumentLoader or is from ImportsController
@@ -6655,12 +6647,6 @@ void Document::InitSecurityContext(
   // callbacks from binding the CSP delegate immediately would not get called
   // if it was bound immediately. eg. Callbacks back to browser or console
   // logging.
-  if (security_initializer.BindCSPImmediately()) {
-    InitContentSecurityPolicy(security_initializer.GetCSP());
-  } else {
-    GetSecurityContext().SetContentSecurityPolicy(
-        security_initializer.GetCSP());
-  }
   if (!initializer.HasSecurityContext()) {
     // No source for a security context.
     // This can occur via document.implementation.createDocument().
