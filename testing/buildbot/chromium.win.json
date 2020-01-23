@@ -603,6 +603,9 @@
         "test_target": "//chrome/installer/util:installer_util_unittests"
       },
       {
+        "args": [
+          "--test-launcher-filter-file=../../testing/buildbot/filters/autofill.interactive_ui_tests.filter"
+        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -7978,6 +7981,9 @@
         "test_target": "//chrome/installer/util:installer_util_unittests"
       },
       {
+        "args": [
+          "--test-launcher-filter-file=../../testing/buildbot/filters/autofill.interactive_ui_tests.filter"
+        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -9294,6 +9300,9 @@
         "test_target": "//chrome/installer/util:installer_util_unittests"
       },
       {
+        "args": [
+          "--test-launcher-filter-file=../../testing/buildbot/filters/autofill.interactive_ui_tests.filter"
+        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
