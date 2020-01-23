@@ -276,13 +276,19 @@ void ExtensionsToolbarContainer::OnToolbarActionRemoved(
   // could be handled inside the model and be invisible to the container when
   // permissions are unchanged.
 
-  // Delete the icon first so it unregisters it from the action.
+  auto iter = std::find_if(
+      actions_.begin(), actions_.end(),
+      [action_id](const auto& item) { return item->GetId() == action_id; });
+  DCHECK(iter != actions_.end());
+  // Ensure the action outlives the UI element to perform any cleanup.
+  std::unique_ptr<ToolbarActionViewController> controller = std::move(*iter);
+  actions_.erase(iter);
+  // Undo the popout, if necessary. Actions expect to not be popped out while
+  // destroying.
+  if (popped_out_action_ == controller.get())
+    UndoPopOut();
+
   icons_.erase(action_id);
-  base::EraseIf(
-      actions_,
-      [action_id](const std::unique_ptr<ToolbarActionViewController>& item) {
-        return item->GetId() == action_id;
-      });
 }
 
 void ExtensionsToolbarContainer::OnToolbarActionMoved(
