@@ -6388,6 +6388,101 @@ TEST_P(SplitViewOverviewSessionInClamshellTestMultiDisplayOnly,
   EXPECT_EQ(root1_drop_target_bounds(item3), root1_drop_target_bounds(item4));
 }
 
+// Test dragging from one overview grid and dropping into another overview grid.
+TEST_P(SplitViewOverviewSessionInClamshellTestMultiDisplayOnly,
+       DragAndDropIntoAnotherOverviewGrid) {
+  UpdateDisplay("800x600,800x600");
+  aura::Window::Windows root_windows = Shell::GetAllRootWindows();
+  ASSERT_EQ(2u, root_windows.size());
+  std::unique_ptr<aura::Window> window = CreateTestWindow();
+  ASSERT_EQ(root_windows[0], window->GetRootWindow());
+  ToggleOverview();
+  OverviewGrid* grid1 =
+      overview_session()->GetGridWithRootWindow(root_windows[0]);
+  OverviewGrid* grid2 =
+      overview_session()->GetGridWithRootWindow(root_windows[1]);
+
+  // Drag |window| from |grid1| and drop into |grid2|.
+  ui::test::EventGenerator* generator = GetEventGenerator();
+  generator->MoveMouseTo(
+      gfx::ToRoundedPoint(grid1->GetOverviewItemContaining(window.get())
+                              ->target_bounds()
+                              .CenterPoint()));
+  generator->PressLeftButton();
+  Shell::Get()->cursor_manager()->SetDisplay(
+      display::Screen::GetScreen()->GetDisplayNearestWindow(root_windows[1]));
+  generator->MoveMouseTo(1200, 300);
+  generator->ReleaseLeftButton();
+
+  EXPECT_EQ(root_windows[1], window->GetRootWindow());
+  EXPECT_TRUE(grid1->empty());
+  OverviewItem* item = grid2->GetOverviewItemContaining(window.get());
+  ASSERT_TRUE(item);
+  EXPECT_EQ(root_windows[1], item->root_window());
+}
+
+// Test that overview widgets are stacked in the correct order after an overview
+// window is dragged from one overview grid and dropped into another.
+TEST_P(SplitViewOverviewSessionInClamshellTestMultiDisplayOnly,
+       OverviewWidgetStackingOrderWithMultiDisplayDragging) {
+  UpdateDisplay("800x600,800x600");
+  aura::Window::Windows root_windows = Shell::GetAllRootWindows();
+  ASSERT_EQ(2u, root_windows.size());
+  const gfx::Rect bounds_within_root1(0, 0, 400, 400);
+  const gfx::Rect bounds_within_root2(800, 0, 400, 400);
+  std::unique_ptr<aura::Window> window3 = CreateTestWindow(bounds_within_root2);
+  std::unique_ptr<aura::Window> window2 = CreateTestWindow(bounds_within_root1);
+  std::unique_ptr<aura::Window> window1 = CreateTestWindow(bounds_within_root2);
+  aura::Window* parent_on_root1 = window2->parent();
+  aura::Window* parent_on_root2 = window1->parent();
+  ASSERT_NE(parent_on_root1, parent_on_root2);
+  ASSERT_EQ(window3->parent(), parent_on_root2);
+  ToggleOverview();
+  OverviewItem* item1 = GetOverviewItemForWindow(window1.get());
+  OverviewItem* item2 = GetOverviewItemForWindow(window2.get());
+  OverviewItem* item3 = GetOverviewItemForWindow(window3.get());
+
+  ASSERT_EQ(root_windows[0], item2->root_window());
+  // Verify that |item1| is stacked above |item3| (because we created |window1|
+  // after |window3|).
+  EXPECT_GT(IndexOf(item1->item_widget()->GetNativeWindow(), parent_on_root2),
+            IndexOf(item3->item_widget()->GetNativeWindow(), parent_on_root2));
+  // Verify that the item widget for each window is stacked below that window.
+  EXPECT_LT(IndexOf(item1->item_widget()->GetNativeWindow(), parent_on_root2),
+            IndexOf(window1.get(), parent_on_root2));
+  EXPECT_LT(IndexOf(item2->item_widget()->GetNativeWindow(), parent_on_root1),
+            IndexOf(window2.get(), parent_on_root1));
+  EXPECT_LT(IndexOf(item3->item_widget()->GetNativeWindow(), parent_on_root2),
+            IndexOf(window3.get(), parent_on_root2));
+
+  // Drag |item2| from the left display and drop into the right display.
+  ui::test::EventGenerator* generator = GetEventGenerator();
+  generator->MoveMouseTo(
+      gfx::ToRoundedPoint(item2->target_bounds().CenterPoint()));
+  generator->PressLeftButton();
+  Shell::Get()->cursor_manager()->SetDisplay(
+      display::Screen::GetScreen()->GetDisplayNearestWindow(root_windows[1]));
+  generator->MoveMouseTo(1200, 300);
+  generator->ReleaseLeftButton();
+  // |item2| is now a dangling pointer and we have to refresh it, because when
+  // an overview window is dragged from one grid and dropped into another, the
+  // original item is destroyed and a new one is created.
+  item2 = GetOverviewItemForWindow(window2.get());
+
+  ASSERT_EQ(window2->parent(), parent_on_root2);
+  ASSERT_EQ(root_windows[1], item2->root_window());
+  // With all three items on one grid, verify that their stacking order
+  // corresponds to the MRU order of the windows. The new |item2| is sandwiched
+  // between |item1| and |item3|.
+  EXPECT_GT(IndexOf(item1->item_widget()->GetNativeWindow(), parent_on_root2),
+            IndexOf(item2->item_widget()->GetNativeWindow(), parent_on_root2));
+  EXPECT_GT(IndexOf(item2->item_widget()->GetNativeWindow(), parent_on_root2),
+            IndexOf(item3->item_widget()->GetNativeWindow(), parent_on_root2));
+  // Verify that the item widget for the new |item2| is stacked below |window2|.
+  EXPECT_LT(IndexOf(item2->item_widget()->GetNativeWindow(), parent_on_root2),
+            IndexOf(window2.get(), parent_on_root2));
+}
+
 // Test dragging from one display to another and then snapping.
 TEST_P(SplitViewOverviewSessionInClamshellTestMultiDisplayOnly,
        DragFromOneDisplayToAnotherAndSnap) {
