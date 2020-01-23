@@ -539,6 +539,7 @@ if (is_android) {
       "../browser/payments/payment_request_can_make_payment_event_browsertest.cc",
       "../browser/payments/personal_data_manager_test_util.cc",
       "../browser/payments/personal_data_manager_test_util.h",
+      "../browser/profiles/profile_browsertest_android.cc",
       "../browser/ssl/crlset_browsertest.cc",
       "android/browsertests_apk/android_browsertests_jni_onload.cc",
       "base/android/android_browser_test_browsertest_android.cc",
