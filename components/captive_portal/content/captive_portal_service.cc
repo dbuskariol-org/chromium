@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/captive_portal/captive_portal_service.h"
+#include "components/captive_portal/content/captive_portal_service.h"
 
 #include "base/bind.h"
 #include "base/bind_helpers.h"
@@ -67,13 +67,12 @@ void RecordRepeatHistograms(CaptivePortalResult result,
   // pointers, so have to use the histogram functions directly.
 
   // Record number of times the last result was received in a row.
-  base::HistogramBase* result_repeated_histogram =
-      base::Histogram::FactoryGet(
-          "CaptivePortal.ResultRepeated." + CaptivePortalResultToString(result),
-          1,  // min
-          100,  // max
-          100,  // bucket_count
-          base::Histogram::kUmaTargetedHistogramFlag);
+  base::HistogramBase* result_repeated_histogram = base::Histogram::FactoryGet(
+      "CaptivePortal.ResultRepeated." + CaptivePortalResultToString(result),
+      1,    // min
+      100,  // max
+      100,  // bucket_count
+      base::Histogram::kUmaTargetedHistogramFlag);
   result_repeated_histogram->Add(repeat_count);
 
   if (repeat_count == 0)
@@ -84,8 +83,8 @@ void RecordRepeatHistograms(CaptivePortalResult result,
       base::Histogram::FactoryTimeGet(
           "CaptivePortal.ResultDuration." + CaptivePortalResultToString(result),
           base::TimeDelta::FromSeconds(1),  // min
-          base::TimeDelta::FromHours(1),  // max
-          50,  // bucket_count
+          base::TimeDelta::FromHours(1),    // max
+          50,                               // bucket_count
           base::Histogram::kUmaTargetedHistogramFlag);
   result_duration_histogram->AddTime(result_duration);
 }
@@ -99,22 +98,20 @@ CaptivePortalDetectionResult GetHistogramEntryForDetectionResult(
       return DETECTION_RESULT_INTERNET_CONNECTED;
     case captive_portal::RESULT_NO_RESPONSE:
       if (is_ip) {
-        return is_https ?
-            DETECTION_RESULT_NO_RESPONSE_HTTPS_LANDING_URL_IP_ADDRESS :
-            DETECTION_RESULT_NO_RESPONSE_IP_ADDRESS;
+        return is_https
+                   ? DETECTION_RESULT_NO_RESPONSE_HTTPS_LANDING_URL_IP_ADDRESS
+                   : DETECTION_RESULT_NO_RESPONSE_IP_ADDRESS;
       }
-      return is_https ?
-          DETECTION_RESULT_NO_RESPONSE_HTTPS_LANDING_URL :
-          DETECTION_RESULT_NO_RESPONSE;
+      return is_https ? DETECTION_RESULT_NO_RESPONSE_HTTPS_LANDING_URL
+                      : DETECTION_RESULT_NO_RESPONSE;
     case captive_portal::RESULT_BEHIND_CAPTIVE_PORTAL:
       if (is_ip) {
-        return is_https ?
-          DETECTION_RESULT_BEHIND_CAPTIVE_PORTAL_HTTPS_LANDING_URL_IP_ADDRESS :
-          DETECTION_RESULT_BEHIND_CAPTIVE_PORTAL_IP_ADDRESS;
+        return is_https
+                   ? DETECTION_RESULT_BEHIND_CAPTIVE_PORTAL_HTTPS_LANDING_URL_IP_ADDRESS
+                   : DETECTION_RESULT_BEHIND_CAPTIVE_PORTAL_IP_ADDRESS;
       }
-      return is_https ?
-          DETECTION_RESULT_BEHIND_CAPTIVE_PORTAL_HTTPS_LANDING_URL :
-          DETECTION_RESULT_BEHIND_CAPTIVE_PORTAL;
+      return is_https ? DETECTION_RESULT_BEHIND_CAPTIVE_PORTAL_HTTPS_LANDING_URL
+                      : DETECTION_RESULT_BEHIND_CAPTIVE_PORTAL;
     default:
       NOTREACHED();
       return DETECTION_RESULT_COUNT;
@@ -224,9 +221,7 @@ void CaptivePortalService::DetectCaptivePortal() {
   // Start asynchronously.
   state_ = STATE_TIMER_RUNNING;
   check_captive_portal_timer_.Start(
-      FROM_HERE,
-      time_until_next_check,
-      this,
+      FROM_HERE, time_until_next_check, this,
       &CaptivePortalService::DetectCaptivePortalInternal);
 }
 
@@ -344,8 +339,7 @@ void CaptivePortalService::Shutdown() {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   if (enabled_) {
     RecordRepeatHistograms(
-        last_detection_result_,
-        num_checks_with_same_result_,
+        last_detection_result_, num_checks_with_same_result_,
         GetCurrentTimeTicks() - first_check_time_with_same_result_);
   }
 }

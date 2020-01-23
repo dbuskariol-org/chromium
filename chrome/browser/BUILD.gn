@@ -1989,6 +1989,7 @@ jumbo_static_library("browser") {
     "//components/browser_sync",
     "//components/browsing_data/content",
     "//components/browsing_data/core",
+    "//components/captive_portal/content",
     "//components/captive_portal/core",
     "//components/captive_portal/core:buildflags",
     "//components/certificate_matching",
@@ -4487,8 +4488,6 @@ jumbo_static_library("browser") {
     sources += [
       "captive_portal/captive_portal_login_detector.cc",
       "captive_portal/captive_portal_login_detector.h",
-      "captive_portal/captive_portal_service.cc",
-      "captive_portal/captive_portal_service.h",
       "captive_portal/captive_portal_service_factory.cc",
       "captive_portal/captive_portal_service_factory.h",
       "captive_portal/captive_portal_tab_helper.cc",

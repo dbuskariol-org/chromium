@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/captive_portal/captive_portal_service.h"
+#include "components/captive_portal/content/captive_portal_service.h"
 
 #include "base/bind.h"
 #include "base/command_line.h"
@@ -10,10 +10,10 @@
 #include "base/run_loop.h"
 #include "base/test/simple_test_tick_clock.h"
 #include "base/test/test_timeouts.h"
-#include "chrome/browser/captive_portal/captive_portal_service.h"
 #include "chrome/common/chrome_switches.h"
 #include "chrome/common/pref_names.h"
 #include "chrome/test/base/testing_profile.h"
+#include "components/captive_portal/content/captive_portal_service.h"
 #include "components/captive_portal/core/captive_portal_testing_utils.h"
 #include "components/embedder_support/pref_names.h"
 #include "components/prefs/pref_service.h"

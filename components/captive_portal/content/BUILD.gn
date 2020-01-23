@@ -1,0 +1,30 @@
+# Copyright 2020 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+import("//components/captive_portal/core/features.gni")
+
+source_set("content") {
+  sources = []
+
+  if (enable_captive_portal_detection) {
+    sources += [
+      "captive_portal_service.cc",
+      "captive_portal_service.h",
+    ]
+  }
+
+  public_deps = [
+    "//base",
+    "//components/captive_portal/core",
+    "//components/keyed_service/core",
+    "//components/prefs",
+    "//net",
+    "//services/network/public/cpp",
+    "//url",
+  ]
+
+  deps = [
+    "//components/embedder_support",
+    "//content/public/browser",
+  ]
+}
