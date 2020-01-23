@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_CAPTIVE_PORTAL_CAPTIVE_PORTAL_TESTING_UTILS_H_
-#define COMPONENTS_CAPTIVE_PORTAL_CAPTIVE_PORTAL_TESTING_UTILS_H_
+#ifndef COMPONENTS_CAPTIVE_PORTAL_CORE_CAPTIVE_PORTAL_TESTING_UTILS_H_
+#define COMPONENTS_CAPTIVE_PORTAL_CORE_CAPTIVE_PORTAL_TESTING_UTILS_H_
 
 #include <string>
 
 #include "base/macros.h"
-#include "components/captive_portal/captive_portal_detector.h"
+#include "components/captive_portal/core/captive_portal_detector.h"
 #include "services/network/test/test_url_loader_factory.h"
 
 namespace base {
@@ -54,4 +54,4 @@ class CaptivePortalDetectorTestBase {
 
 }  // namespace captive_portal
 
-#endif  // COMPONENTS_CAPTIVE_PORTAL_CAPTIVE_PORTAL_TESTING_UTILS_H_
+#endif  // COMPONENTS_CAPTIVE_PORTAL_CORE_CAPTIVE_PORTAL_TESTING_UTILS_H_

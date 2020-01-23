@@ -172,7 +172,7 @@ source_set("chromeos") {
     "//components/arc/media_session",
     "//components/arc/mojom:mojom_traits",
     "//components/browser_sync",
-    "//components/captive_portal",
+    "//components/captive_portal/core",
     "//components/component_updater:crl_set_remover",
     "//components/consent_auditor:consent_auditor",
     "//components/constrained_window",

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/captive_portal/captive_portal_detector.h"
+#include "components/captive_portal/core/captive_portal_detector.h"
 
 #include <memory>
 
@@ -13,7 +13,7 @@
 #include "base/test/task_environment.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "base/time/time.h"
-#include "components/captive_portal/captive_portal_testing_utils.h"
+#include "components/captive_portal/core/captive_portal_testing_utils.h"
 #include "net/base/net_errors.h"
 #include "net/traffic_annotation/network_traffic_annotation_test_helper.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -26,8 +26,7 @@ namespace {
 class CaptivePortalClient {
  public:
   explicit CaptivePortalClient(CaptivePortalDetector* captive_portal_detector)
-      : num_results_received_(0) {
-  }
+      : num_results_received_(0) {}
 
   void OnPortalDetectionCompleted(
       const CaptivePortalDetector::Results& results) {
@@ -177,8 +176,8 @@ TEST_F(CaptivePortalDetectorTest, CaptivePortalRetryAfterDate) {
   // base has a function to get a time in the right format from a string, but
   // not the other way around.
   base::Time start_time;
-  ASSERT_TRUE(base::Time::FromString("Tue, 17 Apr 2012 18:02:00 GMT",
-                                     &start_time));
+  ASSERT_TRUE(
+      base::Time::FromString("Tue, 17 Apr 2012 18:02:00 GMT", &start_time));
   base::Time retry_after_time;
   ASSERT_TRUE(base::Time::FromString("Tue, 17 Apr 2012 18:02:51 GMT",
                                      &retry_after_time));

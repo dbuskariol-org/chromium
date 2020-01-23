@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/captive_portal/captive_portal_testing_utils.h"
+#include "components/captive_portal/core/captive_portal_testing_utils.h"
 
 #include "base/logging.h"
 #include "base/memory/ref_counted.h"
@@ -26,8 +26,7 @@ namespace captive_portal {
 CaptivePortalDetectorTestBase::CaptivePortalDetectorTestBase()
     : detector_(nullptr) {}
 
-CaptivePortalDetectorTestBase::~CaptivePortalDetectorTestBase() {
-}
+CaptivePortalDetectorTestBase::~CaptivePortalDetectorTestBase() {}
 
 void CaptivePortalDetectorTestBase::SetTime(const base::Time& time) {
   detector()->set_time_for_testing(time);

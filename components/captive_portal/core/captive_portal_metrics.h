@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_CAPTIVE_PORTAL_CAPTIVE_PORTAL_METRICS_H_
-#define COMPONENTS_CAPTIVE_PORTAL_CAPTIVE_PORTAL_METRICS_H_
+#ifndef COMPONENTS_CAPTIVE_PORTAL_CORE_CAPTIVE_PORTAL_METRICS_H_
+#define COMPONENTS_CAPTIVE_PORTAL_CORE_CAPTIVE_PORTAL_METRICS_H_
 
 #include "base/macros.h"
-#include "components/captive_portal/captive_portal_export.h"
+#include "components/captive_portal/core/captive_portal_export.h"
 
 namespace captive_portal {
 
@@ -30,4 +30,4 @@ class CAPTIVE_PORTAL_EXPORT CaptivePortalMetrics {
 
 }  // namespace captive_portal
 
-#endif  // COMPONENTS_CAPTIVE_PORTAL_CAPTIVE_PORTAL_METRICS_H_
+#endif  // COMPONENTS_CAPTIVE_PORTAL_CORE_CAPTIVE_PORTAL_METRICS_H_
