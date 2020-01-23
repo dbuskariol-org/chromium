@@ -4586,6 +4586,7 @@ crbug.com/689781 [ Win ] http/tests/media/media-source/mediasource-duration.html
 crbug.com/689781 [ Mac ] http/tests/media/media-source/mediasource-duration.html [ Failure Pass ]
 crbug.com/689781 [ Win ] virtual/audio-service/http/tests/media/media-source/mediasource-duration.html [ Failure Pass ]
 crbug.com/689781 [ Mac ] virtual/audio-service/http/tests/media/media-source/mediasource-duration.html [ Failure Pass ]
+crbug.com/1043450 [ Linux ] virtual/audio-service/http/tests/media/media-source/mediasource-duration.html [ Failure Pass ]
 
 crbug.com/681468 fast/forms/suggestion-picker/date-suggestion-picker-appearance-zoom125.html [ Failure Pass ]
 crbug.com/681468 fast/forms/suggestion-picker/date-suggestion-picker-appearance-zoom200.html [ Failure Pass ]
