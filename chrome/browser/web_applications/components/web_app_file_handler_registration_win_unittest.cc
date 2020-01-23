@@ -215,8 +215,8 @@ TEST_F(WebAppFileHandlerRegistrationWinTest, AppNameWithInvalidChars) {
       CreateDataDirectoryAndGetLauncherPathForApp(profile(), app_id,
                                                   "app_name");
 
-  RegisterFileHandlersWithOs(app_id, app_name, profile(),
-                             /*file_extensions*/ {"txt"}, /*mime_types=*/{});
+  RegisterFileHandlersWithOs(app_id, app_name, profile(), file_extensions,
+                             /*mime_types=*/{});
 
   base::ThreadPoolInstance::Get()->FlushForTesting();
   base::FilePath registered_app_path = ShellUtil::GetApplicationPathForProgId(
@@ -237,8 +237,8 @@ TEST_F(WebAppFileHandlerRegistrationWinTest, AppNameIsReservedFilename) {
   base::FilePath app_specific_launcher_path =
       CreateDataDirectoryAndGetLauncherPathForApp(profile(), app_id, "_con");
 
-  RegisterFileHandlersWithOs(app_id, app_name, profile(),
-                             /*file_extensions*/ {"txt"}, /*mime_types=*/{});
+  RegisterFileHandlersWithOs(app_id, app_name, profile(), file_extensions,
+                             /*mime_types=*/{});
 
   base::ThreadPoolInstance::Get()->FlushForTesting();
   base::FilePath registered_app_path = ShellUtil::GetApplicationPathForProgId(
@@ -262,8 +262,8 @@ TEST_F(WebAppFileHandlerRegistrationWinTest, AppNameContainsDot) {
           base::win::GetVersion() > base::win::Version::WIN7 ? "some.app.name"
                                                              : "some_app_name");
 
-  RegisterFileHandlersWithOs(app_id, app_name, profile(),
-                             /*file_extensions*/ {"txt"}, /*mime_types=*/{});
+  RegisterFileHandlersWithOs(app_id, app_name, profile(), file_extensions,
+                             /*mime_types=*/{});
 
   base::ThreadPoolInstance::Get()->FlushForTesting();
   base::FilePath registered_app_path = ShellUtil::GetApplicationPathForProgId(
