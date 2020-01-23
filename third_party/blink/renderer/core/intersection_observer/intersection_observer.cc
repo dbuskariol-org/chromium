@@ -160,7 +160,12 @@ IntersectionObserver* IntersectionObserver::Create(
     const IntersectionObserverInit* observer_init,
     IntersectionObserverDelegate& delegate,
     ExceptionState& exception_state) {
-  Element* root = observer_init->root();
+  Node* root = nullptr;
+  if (observer_init->root().IsElement()) {
+    root = observer_init->root().GetAsElement();
+  } else if (observer_init->root().IsDocument()) {
+    root = observer_init->root().GetAsDocument();
+  }
 
   DOMHighResTimeStamp delay = 0;
   bool track_visibility = false;
@@ -231,7 +236,7 @@ IntersectionObserver* IntersectionObserver::Create(
 
 IntersectionObserver::IntersectionObserver(
     IntersectionObserverDelegate& delegate,
-    Element* root,
+    Node* root,
     const Vector<Length>& root_margin,
     const Vector<float>& thresholds,
     ThresholdInterpretation semantics,
@@ -277,7 +282,14 @@ IntersectionObserver::IntersectionObserver(
       break;
   }
   if (root) {
-    root->EnsureIntersectionObserverData().AddObserver(*this);
+    if (root->IsDocumentNode()) {
+      To<Document>(root)
+          ->EnsureDocumentExplicitRootIntersectionObserverData()
+          .AddObserver(*this);
+    } else {
+      DCHECK(root->IsElementNode());
+      To<Element>(root)->EnsureIntersectionObserverData().AddObserver(*this);
+    }
     root->GetDocument()
         .EnsureIntersectionObserverController()
         .AddTrackedObserver(*this, track_visibility);

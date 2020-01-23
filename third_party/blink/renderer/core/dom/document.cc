@@ -226,6 +226,7 @@
 #include "third_party/blink/renderer/core/inspector/console_message.h"
 #include "third_party/blink/renderer/core/inspector/inspector_trace_events.h"
 #include "third_party/blink/renderer/core/inspector/main_thread_debugger.h"
+#include "third_party/blink/renderer/core/intersection_observer/element_intersection_observer_data.h"
 #include "third_party/blink/renderer/core/intersection_observer/intersection_observer_controller.h"
 #include "third_party/blink/renderer/core/intersection_observer/intersection_observer_entry.h"
 #include "third_party/blink/renderer/core/layout/adjust_for_absolute_zoom.h"
@@ -6839,6 +6840,20 @@ Document::EnsureIntersectionObserverController() {
   return *intersection_observer_controller_;
 }
 
+ElementIntersectionObserverData*
+Document::DocumentExplicitRootIntersectionObserverData() const {
+  return document_explicit_root_intersection_observer_data_.Get();
+}
+
+ElementIntersectionObserverData&
+Document::EnsureDocumentExplicitRootIntersectionObserverData() {
+  if (!document_explicit_root_intersection_observer_data_) {
+    document_explicit_root_intersection_observer_data_ =
+        MakeGarbageCollected<ElementIntersectionObserverData>();
+  }
+  return *document_explicit_root_intersection_observer_data_;
+}
+
 ResizeObserverController& Document::EnsureResizeObserverController() {
   if (!resize_observer_controller_) {
     resize_observer_controller_ =
@@ -7824,6 +7839,7 @@ void Document::Trace(Visitor* visitor) {
   visitor->Trace(elem_sheet_);
   visitor->Trace(node_iterators_);
   visitor->Trace(ranges_);
+  visitor->Trace(document_explicit_root_intersection_observer_data_);
   visitor->Trace(style_engine_);
   visitor->Trace(form_controller_);
   visitor->Trace(visited_link_state_);

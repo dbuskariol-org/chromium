@@ -54,6 +54,7 @@ class IntersectionObserverController
   const char* NameInHeapSnapshot() const override {
     return "IntersectionObserverController";
   }
+
   unsigned GetTrackedObserverCountForTesting() const {
     return explicit_root_observers_.size();
   }
@@ -72,7 +73,7 @@ class IntersectionObserverController
   // IntersectionObservers for which this is the execution context of the
   // callback, and with unsent notifications.
   HeapHashSet<Member<IntersectionObserver>> pending_intersection_observers_;
-  // This is 'true' if any tracked element is the target of an observer for
+  // This is 'true' if any tracked node is the target of an observer for
   // which observer->trackVisibility() is true.
   bool needs_occlusion_tracking_;
 };

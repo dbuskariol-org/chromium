@@ -13,6 +13,7 @@
 #include "third_party/blink/renderer/core/dom/element.h"
 #include "third_party/blink/renderer/core/exported/web_view_impl.h"
 #include "third_party/blink/renderer/core/frame/local_frame_view.h"
+#include "third_party/blink/renderer/core/frame/web_local_frame_impl.h"
 #include "third_party/blink/renderer/core/intersection_observer/element_intersection_observer_data.h"
 #include "third_party/blink/renderer/core/intersection_observer/intersection_observer_controller.h"
 #include "third_party/blink/renderer/core/intersection_observer/intersection_observer_delegate.h"
@@ -132,7 +133,7 @@ TEST_F(IntersectionObserverTest, NotificationSentWhenRootRemoved) {
   Element* root = GetDocument().getElementById("root");
   ASSERT_TRUE(root);
   IntersectionObserverInit* observer_init = IntersectionObserverInit::Create();
-  observer_init->setRoot(root);
+  observer_init->setRoot(ElementOrDocument::FromElement(root));
   DummyExceptionStateForTesting exception_state;
   TestIntersectionObserverDelegate* observer_delegate =
       MakeGarbageCollected<TestIntersectionObserverDelegate>(GetDocument());
@@ -159,27 +160,32 @@ TEST_F(IntersectionObserverTest, NotificationSentWhenRootRemoved) {
   EXPECT_FALSE(observer_delegate->LastEntry()->isIntersecting());
 }
 
-TEST_F(IntersectionObserverTest, ScrollingElementRootClips) {
+TEST_F(IntersectionObserverTest, DocumentRootClips) {
   ScopedIntersectionObserverDocumentScrollingElementRootForTest scope(true);
   WebView().MainFrameWidget()->Resize(WebSize(800, 600));
   SimRequest main_resource("https://example.com/", "text/html");
+  SimRequest iframe_resource("https://example.com/iframe.html", "text/html");
   LoadURL("https://example.com/");
   main_resource.Complete(R"HTML(
+    <iframe src="iframe.html" style="width:200px; height:100px"></iframe>
+  )HTML");
+  iframe_resource.Complete(R"HTML(
     <div id='target'>Hello, world!</div>
     <div id='spacer' style='height:2000px'></div>
   )HTML");
 
-  Element* root = GetDocument().scrollingElement();
-  ASSERT_TRUE(root);
+  Document* iframe_document = To<WebLocalFrameImpl>(MainFrame().FirstChild())
+                                  ->GetFrame()
+                                  ->GetDocument();
   IntersectionObserverInit* observer_init = IntersectionObserverInit::Create();
-  observer_init->setRoot(root);
+  observer_init->setRoot(ElementOrDocument::FromDocument(iframe_document));
   DummyExceptionStateForTesting exception_state;
   TestIntersectionObserverDelegate* observer_delegate =
       MakeGarbageCollected<TestIntersectionObserverDelegate>(GetDocument());
   IntersectionObserver* observer = IntersectionObserver::Create(
       observer_init, *observer_delegate, exception_state);
   ASSERT_FALSE(exception_state.HadException());
-  Element* target = GetDocument().getElementById("target");
+  Element* target = iframe_document->getElementById("target");
   ASSERT_TRUE(target);
   observer->observe(target, exception_state);
 
@@ -190,8 +196,8 @@ TEST_F(IntersectionObserverTest, ScrollingElementRootClips) {
   EXPECT_EQ(observer_delegate->EntryCount(), 1);
   EXPECT_TRUE(observer_delegate->LastEntry()->isIntersecting());
 
-  GetDocument().View()->LayoutViewport()->SetScrollOffset(ScrollOffset(0, 1000),
-                                                          kProgrammaticScroll);
+  iframe_document->View()->LayoutViewport()->SetScrollOffset(
+      ScrollOffset(0, 1000), kProgrammaticScroll);
   Compositor().BeginFrame();
   test::RunPendingTasks();
   EXPECT_EQ(observer_delegate->CallCount(), 2);
@@ -530,7 +536,7 @@ TEST_F(IntersectionObserverTest, TrackedRootBookkeeping) {
   Persistent<Element> target = GetDocument().getElementById("target1");
   Persistent<IntersectionObserverInit> observer_init =
       IntersectionObserverInit::Create();
-  observer_init->setRoot(root);
+  observer_init->setRoot(ElementOrDocument::FromElement(root));
   Persistent<TestIntersectionObserverDelegate> observer_delegate =
       MakeGarbageCollected<TestIntersectionObserverDelegate>(GetDocument());
   Persistent<IntersectionObserver> observer =
@@ -679,7 +685,7 @@ TEST_F(IntersectionObserverTest, CachedRectsTest) {
   Element* target2 = GetDocument().getElementById("target2");
 
   IntersectionObserverInit* observer_init = IntersectionObserverInit::Create();
-  observer_init->setRoot(root);
+  observer_init->setRoot(ElementOrDocument::FromElement(root));
   DummyExceptionStateForTesting exception_state;
   TestIntersectionObserverDelegate* observer_delegate =
       MakeGarbageCollected<TestIntersectionObserverDelegate>(GetDocument());
