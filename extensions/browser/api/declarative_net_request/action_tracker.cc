@@ -114,7 +114,7 @@ void ActionTracker::OnRuleMatched(const RequestAction& request_action,
   // badge text should only be set for valid tab IDs.
   const bool increment_action_count =
       tab_id != extension_misc::kUnknownTabId &&
-      request_action.type != RequestAction::Type::ALLOW;
+      !request_action.IsAllowOrAllowAllRequests();
 
   if (IsMainFrameNavigationRequest(request_info)) {
     DCHECK(request_info.navigation_id);
