@@ -180,12 +180,14 @@ interface Animation : EventTarget
     getter playState
     getter playbackRate
     getter ready
+    getter replaceState
     getter startTime
     getter timeline
     method cancel
     method constructor
     method finish
     method pause
+    method persist
     method play
     method reverse
     method updatePlaybackRate
