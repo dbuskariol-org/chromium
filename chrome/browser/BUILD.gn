@@ -1593,6 +1593,8 @@ jumbo_static_library("browser") {
     "sharing/sharing_handler_registry_impl.cc",
     "sharing/sharing_handler_registry_impl.h",
     "sharing/sharing_message_bridge.h",
+    "sharing/sharing_message_bridge_factory.cc",
+    "sharing/sharing_message_bridge_factory.h",
     "sharing/sharing_message_bridge_impl.cc",
     "sharing/sharing_message_bridge_impl.h",
     "sharing/sharing_message_handler.h",

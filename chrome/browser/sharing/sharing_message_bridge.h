@@ -7,17 +7,25 @@
 
 #include <memory>
 
+#include "base/memory/weak_ptr.h"
+#include "components/keyed_service/core/keyed_service.h"
 #include "components/sync/protocol/sharing_message_specifics.pb.h"
 
+namespace syncer {
+class ModelTypeControllerDelegate;
+}  // namespace syncer
+
 // Class to provide an interface to send sharing messages using Sync.
-class SharingMessageBridge {
+class SharingMessageBridge : public KeyedService {
  public:
   // TODO(crbug.com/1034930): take callbacks once commit error propagation back
   // to the bridge is implemented.
   virtual void SendSharingMessage(
       std::unique_ptr<sync_pb::SharingMessageSpecifics> specifics) = 0;
 
-  virtual ~SharingMessageBridge() = default;
+  // Returns the delegate for the controller, i.e. sync integration point.
+  virtual base::WeakPtr<syncer::ModelTypeControllerDelegate>
+  GetControllerDelegate() = 0;
 };
 
 #endif  // CHROME_BROWSER_SHARING_SHARING_MESSAGE_BRIDGE_H_

@@ -26,6 +26,8 @@ class SharingMessageBridgeImpl : public SharingMessageBridge,
   // SharingMessageBridge implementation.
   void SendSharingMessage(
       std::unique_ptr<sync_pb::SharingMessageSpecifics> specifics) override;
+  base::WeakPtr<syncer::ModelTypeControllerDelegate> GetControllerDelegate()
+      override;
 
   // ModelTypeSyncBridge implementation.
   std::unique_ptr<syncer::MetadataChangeList> CreateMetadataChangeList()

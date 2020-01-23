@@ -4,6 +4,7 @@
 
 #include "chrome/browser/sharing/sharing_message_bridge_impl.h"
 
+#include "base/guid.h"
 #include "components/sync/model/metadata_batch.h"
 #include "components/sync/model/mutable_data_batch.h"
 #include "components/sync/model_impl/in_memory_metadata_change_list.h"
@@ -13,6 +14,10 @@ namespace {
 std::unique_ptr<syncer::EntityData> MoveToEntityData(
     std::unique_ptr<sync_pb::SharingMessageSpecifics> specifics) {
   auto entity_data = std::make_unique<syncer::EntityData>();
+  const std::string guid = base::GenerateGUID();
+  entity_data->client_tag_hash =
+      syncer::ClientTagHash::FromUnhashed(syncer::SHARING_MESSAGE, guid);
+  entity_data->name = guid;
   entity_data->specifics.set_allocated_sharing_message(specifics.release());
   return entity_data;
 }
@@ -39,6 +44,11 @@ void SharingMessageBridgeImpl::SendSharingMessage(
   const std::string empty_storage_key;
   change_processor()->Put(empty_storage_key, std::move(entity_data),
                           metadata_change_list.get());
+}
+
+base::WeakPtr<syncer::ModelTypeControllerDelegate>
+SharingMessageBridgeImpl::GetControllerDelegate() {
+  return change_processor()->GetControllerDelegate();
 }
 
 std::unique_ptr<syncer::MetadataChangeList>
