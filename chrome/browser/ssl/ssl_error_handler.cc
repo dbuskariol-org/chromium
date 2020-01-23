@@ -56,12 +56,6 @@
 #include "chrome/browser/captive_portal/captive_portal_tab_helper.h"
 #endif
 
-#if defined(OS_WIN)
-#include "base/enterprise_util.h"
-#elif defined(OS_CHROMEOS)
-#include "chrome/browser/chromeos/policy/browser_policy_connector_chromeos.h"
-#endif  // #if defined(OS_WIN)
-
 #if defined(OS_ANDROID)
 #include "base/android/jni_android.h"
 #include "chrome/browser/ssl/captive_portal_helper_android.h"
