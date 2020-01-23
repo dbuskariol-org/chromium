@@ -452,6 +452,7 @@ TEST_P(NGInlineCursorTest, NextWithListItem) {
   Vector<String> list = ToDebugStringList(cursor);
   EXPECT_THAT(list,
               ElementsAre("LayoutNGListMarker ::marker", "#linebox", "abc"));
+  EXPECT_EQ(GetLayoutObjectByElementId("root"), cursor.GetLayoutBlockFlow());
 }
 
 TEST_P(NGInlineCursorTest, NextWithSoftHyphens) {
@@ -592,6 +593,10 @@ TEST_P(NGInlineCursorTest, NextWithInlineBox) {
       SetupCursor("<div id=root>abc<b id=ib>def</b>xyz</div>");
   Vector<String> list = ToDebugStringList(cursor);
   EXPECT_THAT(list, ElementsAre("#linebox", "abc", "#ib", "xyz"));
+
+  NGInlineCursor cursor2;
+  cursor2.MoveTo(*GetElementById("ib")->firstChild()->GetLayoutObject());
+  EXPECT_EQ(GetLayoutObjectByElementId("ib"), cursor2.GetLayoutBlockFlow());
 }
 
 TEST_P(NGInlineCursorTest, NextForSameLayoutObject) {
