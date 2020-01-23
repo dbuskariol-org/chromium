@@ -21,13 +21,16 @@ import org.chromium.chrome.browser.UnitTestUtils;
 import org.chromium.chrome.browser.instantapps.InstantAppsHandler;
 import org.chromium.installedapp.mojom.InstalledAppProvider;
 import org.chromium.installedapp.mojom.RelatedApplication;
+import org.chromium.url.mojom.Url;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Ensure that the InstalledAppProvider returns the correct apps. */
@@ -40,6 +43,8 @@ public class InstalledAppProviderTest {
             InstalledAppProviderImpl.ASSET_STATEMENT_NAMESPACE_WEB;
     private static final String PLATFORM_ANDROID =
             InstalledAppProviderImpl.RELATED_APP_PLATFORM_ANDROID;
+    private static final String PLATFORM_WEBAPP =
+            InstalledAppProviderImpl.RELATED_APP_PLATFORM_WEBAPP;
     private static final int MAX_ALLOWED_RELATED_APPS =
             InstalledAppProviderImpl.MAX_ALLOWED_RELATED_APPS;
     private static final String PLATFORM_OTHER = "itunes";
@@ -52,6 +57,7 @@ public class InstalledAppProviderTest {
     private static final String ORIGIN = "https://example.com:8000";
     private static final String URL_ON_ORIGIN =
             "https://example.com:8000/path/to/page.html?key=value#fragment";
+    private static final String MANIFEST_URL = "https://example.com:8000/manifest.json";
     private static final String ORIGIN_SYNTAX_ERROR = "https:{";
     private static final String ORIGIN_MISSING_SCHEME = "path/only";
     private static final String ORIGIN_MISSING_HOST = "file:///path/piece";
@@ -69,12 +75,23 @@ public class InstalledAppProviderTest {
         private Map<String, PackageInfo> mPackageInfo = new HashMap<>();
         private Map<String, Resources> mResources = new HashMap<>();
 
+        // The set of installed WebAPKs identified by their manifest URL.
+        private Set<String> mInstalledWebApks = new HashSet<>();
+
         public void addPackageInfo(PackageInfo packageInfo) {
             mPackageInfo.put(packageInfo.packageName, packageInfo);
         }
 
         public void addResources(String packageName, Resources resources) {
             mResources.put(packageName, resources);
+        }
+
+        public void addWebApk(String manifestUrl) {
+            mInstalledWebApks.add(manifestUrl);
+        }
+
+        public boolean isWebApkInstalled(String manifestUrl) {
+            return mInstalledWebApks.contains(manifestUrl);
         }
 
         @Override
@@ -98,7 +115,7 @@ public class InstalledAppProviderTest {
         }
     }
 
-    private static class InstalledAppProviderTestImpl extends InstalledAppProviderImpl {
+    private class InstalledAppProviderTestImpl extends InstalledAppProviderImpl {
         private long mLastDelayMillis;
 
         public InstalledAppProviderTestImpl(FrameUrlDelegate frameUrlDelegate,
@@ -115,6 +132,11 @@ public class InstalledAppProviderTest {
         protected void delayThenRun(Runnable r, long delayMillis) {
             mLastDelayMillis = delayMillis;
             r.run();
+        }
+
+        @Override
+        public boolean isWebApkInstalled(String manifestUrl) {
+            return mFakePackageManager.isWebApkInstalled(manifestUrl);
         }
     }
 
@@ -313,8 +335,11 @@ public class InstalledAppProviderTest {
     private void verifyInstalledApps(RelatedApplication[] manifestRelatedApps,
             RelatedApplication[] expectedInstalledRelatedApps) throws Exception {
         final AtomicBoolean called = new AtomicBoolean(false);
-        mInstalledAppProvider.filterInstalledApps(
-                manifestRelatedApps, new InstalledAppProvider.FilterInstalledAppsResponse() {
+        Url manifestUrl = new Url();
+        manifestUrl.url = MANIFEST_URL;
+
+        mInstalledAppProvider.filterInstalledApps(manifestRelatedApps, manifestUrl,
+                new InstalledAppProvider.FilterInstalledAppsResponse() {
                     @Override
                     public void call(RelatedApplication[] installedRelatedApps) {
                         Assert.assertEquals(
@@ -858,6 +883,15 @@ public class InstalledAppProviderTest {
         // This expectation is based on HMAC_SHA256(salt, packageName encoded in UTF-8), taking the
         // low 10 bits of the first two bytes of the result / 100.
         Assert.assertEquals(5, mInstalledAppProvider.getLastDelayMillis());
+
+        // WebAPK.
+        manifestRelatedApps = new RelatedApplication[] {
+                createRelatedApplication(PLATFORM_WEBAPP, null, MANIFEST_URL)};
+        expectedInstalledRelatedApps = new RelatedApplication[] {};
+        verifyInstalledApps(manifestRelatedApps, expectedInstalledRelatedApps);
+        // This expectation is based on HMAC_SHA256(salt, manifestUrl encoded in UTF-8), taking the
+        // low 10 bits of the first two bytes of the result / 100.
+        Assert.assertEquals(3, mInstalledAppProvider.getLastDelayMillis());
     }
 
     @Feature({"InstalledApp"})
@@ -899,6 +933,22 @@ public class InstalledAppProviderTest {
         // Although the app is installed, and verifiable, it was included after the maximum allowed
         // number of related apps.
         RelatedApplication[] expectedInstalledRelatedApps = new RelatedApplication[] {};
+        verifyInstalledApps(manifestRelatedApps, expectedInstalledRelatedApps);
+    }
+
+    /**
+     * Check that a website can find its own WebAPK when installed.
+     */
+    @Feature({"InstalledApp"})
+    @CalledByNativeJavaTest
+    public void testInstalledWebApkForWebsite() throws Exception {
+        RelatedApplication webApk = createRelatedApplication(PLATFORM_WEBAPP, null, MANIFEST_URL);
+        RelatedApplication manifestRelatedApps[] = new RelatedApplication[] {webApk};
+        mFakePackageManager.addWebApk(MANIFEST_URL);
+
+        // Although the app is installed, and verifiable, it was included after the maximum allowed
+        // number of related apps.
+        RelatedApplication[] expectedInstalledRelatedApps = new RelatedApplication[] {webApk};
         verifyInstalledApps(manifestRelatedApps, expectedInstalledRelatedApps);
     }
 }
