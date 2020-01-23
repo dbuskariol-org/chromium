@@ -2132,10 +2132,6 @@ void CrostiniManager::OnStartTerminaVm(
       vm_name, base::BindOnce(&CrostiniManager::OnStartTremplin,
                               weak_ptr_factory_.GetWeakPtr(), vm_name,
                               std::move(callback)));
-
-  // Share folders from Downloads, etc with VM.
-  guest_os::GuestOsSharePath::GetForProfile(profile_)->SharePersistedPaths(
-      vm_name, base::DoNothing());
 }
 
 void CrostiniManager::OnStartTremplin(std::string vm_name,
@@ -2144,6 +2140,14 @@ void CrostiniManager::OnStartTremplin(std::string vm_name,
   VLOG(1) << "Received TremplinStartedSignal, VM: " << owner_id_ << ", "
           << vm_name;
   UpdateVmState(vm_name, VmState::STARTED);
+
+  // Share fonts directory with the VM but don't persist as a shared path.
+  guest_os::GuestOsSharePath::GetForProfile(profile_)->SharePath(
+      vm_name, base::FilePath(file_manager::util::kSystemFontsPath),
+      /*persist=*/false, base::DoNothing());
+  // Share folders from Downloads, etc with VM.
+  guest_os::GuestOsSharePath::GetForProfile(profile_)->SharePersistedPaths(
+      vm_name, base::DoNothing());
 
   // Run the original callback.
   std::move(callback).Run(/*success=*/true);
