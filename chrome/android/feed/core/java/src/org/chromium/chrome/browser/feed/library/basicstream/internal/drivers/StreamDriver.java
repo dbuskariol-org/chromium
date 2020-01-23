@@ -11,7 +11,6 @@ import android.support.annotation.VisibleForTesting;
 
 import androidx.annotation.Nullable;
 
-import org.chromium.chrome.R;
 import org.chromium.chrome.browser.feed.library.api.client.stream.Stream.ContentChangedListener;
 import org.chromium.chrome.browser.feed.library.api.host.action.ActionApi;
 import org.chromium.chrome.browser.feed.library.api.host.config.Configuration;
@@ -603,8 +602,9 @@ public class StreamDriver
         removeDriver(modelChild);
         addNoContentCardOrZeroStateIfNecessary(ZeroStateShowReason.CONTENT_DISMISSED);
         mSnackbarApi.show(undoAction.getConfirmationLabel(),
-                undoAction.hasUndoLabel() ? undoAction.getUndoLabel()
-                                          : mContext.getResources().getString(R.string.undo),
+                undoAction.hasUndoLabel()
+                        ? undoAction.getUndoLabel()
+                        : mContext.getResources().getString(R.string.snackbar_default_action),
                 new SnackbarCallbackApi() {
                     @Override
                     public void onDismissNoAction() {
