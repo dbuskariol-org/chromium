@@ -990,20 +990,36 @@ SYNC_TEST_F('ChromeVoxOutputE2ETest', 'ValidateCommonProperties', function() {
   var notStated = [
     RoleType.CLIENT, RoleType.EMBEDDED_OBJECT, RoleType.INLINE_TEXT_BOX,
     RoleType.LINE_BREAK, RoleType.LIST_MARKER, RoleType.PARAGRAPH,
-    RoleType.ROOT_WEB_AREA, RoleType.STATIC_TEXT, RoleType.WINDOW
+    RoleType.ROOT_WEB_AREA, RoleType.STATIC_TEXT, RoleType.PLUGIN_OBJECT,
+    RoleType.WINDOW
   ];
   var notRestricted = [
-    RoleType.ALERT, RoleType.ALERT_DIALOG, RoleType.CELL, RoleType.CLIENT,
-    RoleType.EMBEDDED_OBJECT, RoleType.GENERIC_CONTAINER, RoleType.IMAGE,
-    RoleType.INLINE_TEXT_BOX, RoleType.LINE_BREAK, RoleType.LIST,
-    RoleType.LIST_MARKER, RoleType.PARAGRAPH, RoleType.REGION,
-    RoleType.ROOT_WEB_AREA, RoleType.ROW_HEADER, RoleType.STATIC_TEXT,
-    RoleType.TABLE_HEADER_CONTAINER, RoleType.TIMER, RoleType.WINDOW
+    RoleType.ALERT,
+    RoleType.ALERT_DIALOG,
+    RoleType.CELL,
+    RoleType.CLIENT,
+    RoleType.EMBEDDED_OBJECT,
+    RoleType.GENERIC_CONTAINER,
+    RoleType.IMAGE,
+    RoleType.INLINE_TEXT_BOX,
+    RoleType.LINE_BREAK,
+    RoleType.LIST,
+    RoleType.LIST_MARKER,
+    RoleType.PARAGRAPH,
+    RoleType.PLUGIN_OBJECT,
+    RoleType.REGION,
+    RoleType.ROOT_WEB_AREA,
+    RoleType.ROW_HEADER,
+    RoleType.STATIC_TEXT,
+    RoleType.TABLE_HEADER_CONTAINER,
+    RoleType.TIMER,
+    RoleType.WINDOW
   ];
   var notDescribed = [
     RoleType.CLIENT, RoleType.EMBEDDED_OBJECT, RoleType.INLINE_TEXT_BOX,
     RoleType.LINE_BREAK, RoleType.LIST_MARKER, RoleType.PARAGRAPH,
-    RoleType.ROOT_WEB_AREA, RoleType.STATIC_TEXT, RoleType.WINDOW
+    RoleType.PLUGIN_OBJECT, RoleType.ROOT_WEB_AREA, RoleType.STATIC_TEXT,
+    RoleType.WINDOW
   ];
   missingState = missingState.filter(function(state) {
     return notStated.indexOf(state) == -1;
