@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 # To create CIPD package run the following command.
-# cipd create --pkg-def cipd.yaml -tag version:3.0.0-cr0
-package: chromium/third_party/android_deps/libs/org_checkerframework_checker_qual
-description: "Checker Qual"
+# cipd create --pkg-def cipd.yaml -tag version:2.7.0-cr0
+package: chromium/third_party/android_deps/libs/com_github_ben_manes_caffeine_caffeine
+description: "Caffeine cache"
 data:
-- file: checker-qual-3.0.0.jar
+- file: caffeine-2.7.0.jar

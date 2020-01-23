@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 # To create CIPD package run the following command.
-# cipd create --pkg-def cipd.yaml -tag version:3.0.0-cr0
-package: chromium/third_party/android_deps/libs/org_checkerframework_checker_qual
-description: "Checker Qual"
+# cipd create --pkg-def cipd.yaml -tag version:0.1.0-cr0
+package: chromium/third_party/android_deps/libs/org_plumelib_require_javadoc
+description: "Plume-lib Require-Javadoc"
 data:
-- file: checker-qual-3.0.0.jar
+- file: require-javadoc-0.1.0.jar
