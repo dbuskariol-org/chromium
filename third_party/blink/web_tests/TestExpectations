@@ -2799,7 +2799,7 @@ crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-004.html [ Fail
 crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-005.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
-crbug.com/626703 [ Mac10.11 ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-animation.html [ Failure ]
+crbug.com/626703 [ Mac ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-animation.html [ Failure ]
 crbug.com/626703 [ Linux ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-canvas-parent.html [ Failure ]
 crbug.com/626703 [ Linux ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-canvas-sibling.html [ Failure ]
 crbug.com/626703 [ Linux ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-parent-with-border-radius.html [ Failure ]
