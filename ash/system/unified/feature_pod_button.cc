@@ -270,9 +270,8 @@ void FeaturePodLabelButton::ShowDetailedViewArrow() {
 
 void FeaturePodLabelButton::OnEnabledChanged() {
   const AshColorProvider* color_provider = AshColorProvider::Get();
-  const SkColor primary_text_color =
-      color_provider->DeprecatedGetContentLayerColor(
-          ContentLayerType::kTextPrimary, kUnifiedMenuTextColor);
+  const SkColor primary_text_color = color_provider->GetContentLayerColor(
+      ContentLayerType::kTextPrimary, AshColorMode::kDark);
   const SkColor secondary_text_color = color_provider->GetContentLayerColor(
       ContentLayerType::kTextSecondary, AshColorMode::kDark);
   label_->SetEnabledColor(

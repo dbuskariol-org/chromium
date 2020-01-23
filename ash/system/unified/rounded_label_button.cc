@@ -21,8 +21,9 @@ namespace ash {
 RoundedLabelButton::RoundedLabelButton(views::ButtonListener* listener,
                                        const base::string16& text)
     : views::LabelButton(listener, text) {
-  SetEnabledTextColors(AshColorProvider::Get()->DeprecatedGetContentLayerColor(
-      AshColorProvider::ContentLayerType::kTextPrimary, kUnifiedMenuTextColor));
+  SetEnabledTextColors(AshColorProvider::Get()->GetContentLayerColor(
+      AshColorProvider::ContentLayerType::kTextPrimary,
+      AshColorProvider::AshColorMode::kDark));
   SetHorizontalAlignment(gfx::ALIGN_CENTER);
   SetBorder(views::CreateEmptyBorder(gfx::Insets()));
   label()->SetElideBehavior(gfx::NO_ELIDE);
