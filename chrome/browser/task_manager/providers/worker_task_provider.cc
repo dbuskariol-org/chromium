@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/task_manager/providers/service_worker_task_provider.h"
+#include "chrome/browser/task_manager/providers/worker_task_provider.h"
 
 #include "base/stl_util.h"
 #include "chrome/browser/browser_process.h"
@@ -15,15 +15,15 @@ using content::BrowserThread;
 
 namespace task_manager {
 
-ServiceWorkerTaskProvider::ServiceWorkerTaskProvider() = default;
-ServiceWorkerTaskProvider::~ServiceWorkerTaskProvider() = default;
+WorkerTaskProvider::WorkerTaskProvider() = default;
 
-Task* ServiceWorkerTaskProvider::GetTaskOfUrlRequest(int child_id,
-                                                     int route_id) {
+WorkerTaskProvider::~WorkerTaskProvider() = default;
+
+Task* WorkerTaskProvider::GetTaskOfUrlRequest(int child_id, int route_id) {
   return nullptr;
 }
 
-void ServiceWorkerTaskProvider::OnProfileAdded(Profile* profile) {
+void WorkerTaskProvider::OnProfileAdded(Profile* profile) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
   observed_profiles_.Add(profile);
@@ -34,14 +34,13 @@ void ServiceWorkerTaskProvider::OnProfileAdded(Profile* profile) {
   scoped_context_observer_.Add(context);
 }
 
-void ServiceWorkerTaskProvider::OnOffTheRecordProfileCreated(
-    Profile* off_the_record) {
+void WorkerTaskProvider::OnOffTheRecordProfileCreated(Profile* off_the_record) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
   OnProfileAdded(off_the_record);
 }
 
-void ServiceWorkerTaskProvider::OnProfileWillBeDestroyed(Profile* profile) {
+void WorkerTaskProvider::OnProfileWillBeDestroyed(Profile* profile) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
   observed_profiles_.Remove(profile);
@@ -52,7 +51,7 @@ void ServiceWorkerTaskProvider::OnProfileWillBeDestroyed(Profile* profile) {
   scoped_context_observer_.Remove(context);
 }
 
-void ServiceWorkerTaskProvider::OnVersionStartedRunning(
+void WorkerTaskProvider::OnVersionStartedRunning(
     content::ServiceWorkerContext* context,
     int64_t version_id,
     const content::ServiceWorkerRunningInfo& running_info) {
@@ -61,7 +60,7 @@ void ServiceWorkerTaskProvider::OnVersionStartedRunning(
   CreateTask(context, version_id, running_info);
 }
 
-void ServiceWorkerTaskProvider::OnVersionStoppedRunning(
+void WorkerTaskProvider::OnVersionStoppedRunning(
     content::ServiceWorkerContext* context,
     int64_t version_id) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
@@ -69,7 +68,7 @@ void ServiceWorkerTaskProvider::OnVersionStoppedRunning(
   DeleteTask(context, version_id);
 }
 
-void ServiceWorkerTaskProvider::StartUpdating() {
+void WorkerTaskProvider::StartUpdating() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
   ProfileManager* profile_manager = g_browser_process->profile_manager();
@@ -88,7 +87,7 @@ void ServiceWorkerTaskProvider::StartUpdating() {
   }
 }
 
-void ServiceWorkerTaskProvider::StopUpdating() {
+void WorkerTaskProvider::StopUpdating() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
   // Stop observing profile creation and destruction.
@@ -102,7 +101,7 @@ void ServiceWorkerTaskProvider::StopUpdating() {
   service_worker_task_map_.clear();
 }
 
-void ServiceWorkerTaskProvider::CreateTasksForProfile(Profile* profile) {
+void WorkerTaskProvider::CreateTasksForProfile(Profile* profile) {
   content::ServiceWorkerContext* context =
       content::BrowserContext::GetDefaultStoragePartition(profile)
           ->GetServiceWorkerContext();
@@ -118,7 +117,7 @@ void ServiceWorkerTaskProvider::CreateTasksForProfile(Profile* profile) {
   }
 }
 
-void ServiceWorkerTaskProvider::CreateTask(
+void WorkerTaskProvider::CreateTask(
     content::ServiceWorkerContext* context,
     int64_t version_id,
     const content::ServiceWorkerRunningInfo& running_info) {
@@ -130,17 +129,16 @@ void ServiceWorkerTaskProvider::CreateTask(
   const int render_process_id = running_info.render_process_id;
   auto* host = content::RenderProcessHost::FromID(render_process_id);
   auto result = service_worker_task_map_.emplace(
-      key, std::make_unique<ServiceWorkerTask>(host->GetProcess().Handle(),
-                                               render_process_id,
-                                               running_info.script_url));
+      key, std::make_unique<WorkerTask>(
+               host->GetProcess().Handle(), running_info.script_url,
+               Task::Type::SERVICE_WORKER, render_process_id));
 
   DCHECK(result.second);
   NotifyObserverTaskAdded(result.first->second.get());
 }
 
-void ServiceWorkerTaskProvider::DeleteTask(
-    content::ServiceWorkerContext* context,
-    int version_id) {
+void WorkerTaskProvider::DeleteTask(content::ServiceWorkerContext* context,
+                                    int version_id) {
   const ServiceWorkerTaskKey key(context, version_id);
   auto it = service_worker_task_map_.find(key);
   DCHECK(it != service_worker_task_map_.end());

@@ -12,8 +12,8 @@
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_manager.h"
 #include "chrome/browser/profiles/profile_window.h"
-#include "chrome/browser/task_manager/providers/service_worker_task_provider.h"
 #include "chrome/browser/task_manager/providers/task_provider_observer.h"
+#include "chrome/browser/task_manager/providers/worker_task_provider.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_list.h"
 #include "chrome/browser/ui/browser_window.h"
@@ -62,19 +62,19 @@ int GetChildProcessID(Browser* browser) {
 
 }  // namespace
 
-class ServiceWorkerTaskProviderBrowserTest : public InProcessBrowserTest,
-                                             public TaskProviderObserver {
+class WorkerTaskProviderBrowserTest : public InProcessBrowserTest,
+                                      public TaskProviderObserver {
  public:
-  ServiceWorkerTaskProviderBrowserTest() = default;
+  WorkerTaskProviderBrowserTest() = default;
 
-  ~ServiceWorkerTaskProviderBrowserTest() override = default;
+  ~WorkerTaskProviderBrowserTest() override = default;
 
   void SetUpOnMainThread() override {
     ASSERT_TRUE(embedded_test_server()->Start());
   }
 
   void StartUpdating() {
-    task_provider_ = std::make_unique<ServiceWorkerTaskProvider>();
+    task_provider_ = std::make_unique<WorkerTaskProvider>();
     task_provider_->SetObserver(this);
   }
 
@@ -153,7 +153,7 @@ class ServiceWorkerTaskProviderBrowserTest : public InProcessBrowserTest,
   }
 
  private:
-  std::unique_ptr<ServiceWorkerTaskProvider> task_provider_;
+  std::unique_ptr<WorkerTaskProvider> task_provider_;
 
   // Tasks created by |task_provider_|.
   std::vector<Task*> tasks_;
@@ -163,11 +163,11 @@ class ServiceWorkerTaskProviderBrowserTest : public InProcessBrowserTest,
   uint64_t expected_task_count_ = 0;
 };
 
-// Make sure that the ServiceWorkerTaskProvider can create/delete
-// a ServiceWorkerTask based on the actual service worker status, and the task
+// Make sure that the WorkerTaskProvider can create/delete a WorkerTask of type
+// SERVICE_WORKER based on the actual service worker status, and the task
 // representing the service worker has the expected properties.
-IN_PROC_BROWSER_TEST_F(ServiceWorkerTaskProviderBrowserTest,
-                       CreateTasksForSingleProfile) {
+IN_PROC_BROWSER_TEST_F(WorkerTaskProviderBrowserTest,
+                       CreateServiceWorkerTasksForSingleProfile) {
   StartUpdating();
 
   EXPECT_TRUE(tasks().empty());
@@ -196,10 +196,10 @@ IN_PROC_BROWSER_TEST_F(ServiceWorkerTaskProviderBrowserTest,
   StopUpdating();
 }
 
-// If the profile is off the record, the ServiceWorkerTaskProvider can still
-// grab the correct information and create/delete the task.
-IN_PROC_BROWSER_TEST_F(ServiceWorkerTaskProviderBrowserTest,
-                       CreateTasksForOffTheRecordProfile) {
+// If the profile is off the record, the WorkerTaskProvider can still grab the
+// correct information and create/delete the task.
+IN_PROC_BROWSER_TEST_F(WorkerTaskProviderBrowserTest,
+                       CreateServiceWorkerTasksForOffTheRecordProfile) {
   StartUpdating();
 
   EXPECT_TRUE(tasks().empty());
@@ -235,8 +235,8 @@ IN_PROC_BROWSER_TEST_F(ServiceWorkerTaskProviderBrowserTest,
 }
 
 // If the profile are created dynamically and there is more than one profile
-// simultaneously, the ServiceWorkerTaskProvider can still works.
-IN_PROC_BROWSER_TEST_F(ServiceWorkerTaskProviderBrowserTest,
+// simultaneously, the WorkerTaskProvider can still works.
+IN_PROC_BROWSER_TEST_F(WorkerTaskProviderBrowserTest,
                        CreateTasksForMultiProfiles) {
   StartUpdating();
 
