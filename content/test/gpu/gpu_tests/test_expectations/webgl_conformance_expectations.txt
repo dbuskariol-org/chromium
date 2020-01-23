@@ -250,6 +250,7 @@ crbug.com/angleproject/2921 [ win vulkan passthrough ] conformance/uniforms/out-
 crbug.com/angleproject/2899 [ win vulkan passthrough ] WebglExtension_EXT_shader_texture_lod [ Failure ]
 crbug.com/angleproject/3111 [ win vulkan passthrough ] deqp/data/gles2/shaders/swizzles.html [ Skip ]
 crbug.com/angleproject/3741 [ win vulkan passthrough ] conformance/textures/misc/mipmap-fbo.html [ RetryOnFailure ]
+crbug.com/angleproject/4334 [ win vulkan passthrough ] conformance/textures/misc/canvas-teximage-after-multiple-drawimages.html [ Skip ]
 
 # Vulkan / Win / NVIDIA / Passthrough command decoder
 crbug.com/angleproject/3935 [ win nvidia vulkan passthrough ] conformance/canvas/viewport-unchanged-upon-resize.html [ Failure ]
