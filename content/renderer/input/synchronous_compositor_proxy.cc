@@ -28,7 +28,8 @@ SynchronousCompositorProxy::SynchronousCompositorProxy(
       use_in_process_zero_copy_software_draw_(
           base::CommandLine::ForCurrentProcess()->HasSwitch(
               switches::kSingleProcess)),
-      using_viz_for_webview_(features::IsUsingVizForWebView()),
+      viz_frame_submission_enabled_(
+          features::IsUsingVizFrameSubmissionForWebView()),
       page_scale_factor_(0.f),
       min_page_scale_factor_(0.f),
       max_page_scale_factor_(0.f),
@@ -232,7 +233,7 @@ void SynchronousCompositorProxy::SubmitCompositorFrame(
 
   if (hardware_draw_reply_) {
     // For viz the CF was submitted directly via CompositorFrameSink
-    DCHECK(frame || using_viz_for_webview_);
+    DCHECK(frame || viz_frame_submission_enabled_);
     std::move(hardware_draw_reply_)
         .Run(common_renderer_params, layer_tree_frame_sink_id,
              NextMetadataVersion(), std::move(frame));

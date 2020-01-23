@@ -171,7 +171,8 @@ SynchronousLayerTreeFrameSink::SynchronousLayerTreeFrameSink(
       unbound_compositor_frame_sink_(std::move(compositor_frame_sink_remote)),
       unbound_client_(std::move(client_receiver)),
       synthetic_begin_frame_source_(std::move(synthetic_begin_frame_source)),
-      viz_for_webview_enabled_(features::IsUsingVizForWebView()) {
+      viz_frame_submission_enabled_(
+          features::IsUsingVizFrameSubmissionForWebView()) {
   DCHECK(registry_);
   DCHECK(sender_);
   thread_checker_.DetachFromThread();
@@ -192,7 +193,7 @@ bool SynchronousLayerTreeFrameSink::BindToClient(
   if (!cc::LayerTreeFrameSink::BindToClient(sink_client))
     return false;
 
-  if (viz_for_webview_enabled_) {
+  if (viz_frame_submission_enabled_) {
     compositor_frame_sink_.Bind(std::move(unbound_compositor_frame_sink_));
     client_receiver_.Bind(std::move(unbound_client_), compositor_task_runner_);
   }
@@ -396,7 +397,7 @@ void SynchronousLayerTreeFrameSink::SubmitCompositorFrame(
     frame.metadata.local_surface_id_allocation_time =
         child_local_surface_id_allocation_.allocation_time();
 
-    if (viz_for_webview_enabled_) {
+    if (viz_frame_submission_enabled_) {
       frame.metadata.begin_frame_ack =
           viz::BeginFrameAck::CreateManualAckWithDamage();
 
@@ -409,8 +410,8 @@ void SynchronousLayerTreeFrameSink::SubmitCompositorFrame(
       submit_frame = std::move(frame);
     }
   }
-  // NOTE: submit_frame will be empty if viz_for_webview_enabled_ enabled, but
-  // it won't be used upstream
+  // NOTE: submit_frame will be empty if viz_frame_submission_enabled_ enabled,
+  // but it won't be used upstream
   sync_client_->SubmitCompositorFrame(layer_tree_frame_sink_id_,
                                       std::move(submit_frame));
   did_submit_frame_ = true;
@@ -566,7 +567,7 @@ bool SynchronousLayerTreeFrameSink::CalledOnValidThread() const {
 void SynchronousLayerTreeFrameSink::DidReceiveCompositorFrameAck(
     const std::vector<viz::ReturnedResource>& resources) {
   DCHECK(CalledOnValidThread());
-  DCHECK(viz_for_webview_enabled_);
+  DCHECK(viz_frame_submission_enabled_);
   client_->ReclaimResources(resources);
   // client_->DidReceiveCompositorFrameAck() is called just after frame
   // submission so cc won't be throttled on actual draw which can happen late
@@ -576,7 +577,7 @@ void SynchronousLayerTreeFrameSink::DidReceiveCompositorFrameAck(
 void SynchronousLayerTreeFrameSink::OnBeginFrame(
     const viz::BeginFrameArgs& args,
     const viz::FrameTimingDetailsMap& timing_details) {
-  DCHECK(viz_for_webview_enabled_);
+  DCHECK(viz_frame_submission_enabled_);
 
   // We do not receive BeginFrames via CompositorFrameSink, so we do not forward
   // it to cc. We still might get one with FrameTimingDetailsMap, so we report
@@ -592,12 +593,12 @@ void SynchronousLayerTreeFrameSink::OnBeginFrame(
 void SynchronousLayerTreeFrameSink::ReclaimResources(
     const std::vector<viz::ReturnedResource>& resources) {
   DCHECK(CalledOnValidThread());
-  DCHECK(viz_for_webview_enabled_);
+  DCHECK(viz_frame_submission_enabled_);
   client_->ReclaimResources(resources);
 }
 
 void SynchronousLayerTreeFrameSink::OnBeginFramePausedChanged(bool paused) {
-  DCHECK(viz_for_webview_enabled_);
+  DCHECK(viz_frame_submission_enabled_);
 }
 
 void SynchronousLayerTreeFrameSink::OnNeedsBeginFrames(
@@ -610,7 +611,7 @@ void SynchronousLayerTreeFrameSink::OnNeedsBeginFrames(
 
 void SynchronousLayerTreeFrameSink::DidPresentCompositorFrame(
     const viz::FrameTimingDetailsMap& timing_details) {
-  DCHECK(!viz_for_webview_enabled_ || timing_details.empty());
+  DCHECK(!viz_frame_submission_enabled_ || timing_details.empty());
 
   if (!client_)
     return;

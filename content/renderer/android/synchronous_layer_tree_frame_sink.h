@@ -221,7 +221,7 @@ class SynchronousLayerTreeFrameSink
   base::ThreadChecker thread_checker_;
 
   // Indicates that webview using viz
-  bool viz_for_webview_enabled_;
+  const bool viz_frame_submission_enabled_;
   bool begin_frames_paused_ = false;
   bool needs_begin_frames_ = false;
 
