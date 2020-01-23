@@ -422,10 +422,9 @@
             ],
             "experiments": [
                 {
-                    "name": "Enabled_WithNotification",
+                    "name": "Enabled_NoNotification",
                     "params": {
-                        "update_notification_interval_days": "21",
-                        "update_notification_state": "true"
+                        "flow": "best_effort"
                     },
                     "enable_features": [
                         "InlineUpdateFlow"
