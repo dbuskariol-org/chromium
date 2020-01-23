@@ -3360,7 +3360,7 @@
   {
     "name": "split-settings-sync",
     "owners": [ "jamescook", "cros-system-services@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 84
   },
   {
     "name": "stop-in-background",
