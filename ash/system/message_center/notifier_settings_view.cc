@@ -276,6 +276,21 @@ class EmptyNotifierView : public views::View {
   DISALLOW_COPY_AND_ASSIGN(EmptyNotifierView);
 };
 
+class NotifierViewCheckbox : public views::Checkbox {
+ public:
+  using views::Checkbox::Checkbox;
+
+ private:
+  // views::Checkbox:
+  SkColor GetIconImageColor(int icon_state) const override {
+    if (icon_state & IconState::CHECKED) {
+      return AshColorProvider::Get()->GetContentLayerColor(
+          ContentLayerType::kProminentIconButton, AshColorMode::kDark);
+    }
+    return views::Checkbox::GetIconImageColor(icon_state);
+  }
+};
+
 }  // namespace
 
 // NotifierSettingsView::NotifierButton ---------------------------------------
@@ -288,8 +303,8 @@ NotifierSettingsView::NotifierButton::NotifierButton(
     : views::Button(listener), notifier_id_(notifier.notifier_id) {
   auto icon_view = std::make_unique<views::ImageView>();
   auto name_view = std::make_unique<views::Label>(notifier.name);
-  auto checkbox =
-      std::make_unique<views::Checkbox>(base::string16(), this /* listener */);
+  auto checkbox = std::make_unique<NotifierViewCheckbox>(base::string16(),
+                                                         this /* listener */);
   name_view->SetAutoColorReadabilityEnabled(false);
   name_view->SetEnabledColor(AshColorProvider::Get()->GetContentLayerColor(
       ContentLayerType::kTextPrimary, AshColorMode::kDark));
