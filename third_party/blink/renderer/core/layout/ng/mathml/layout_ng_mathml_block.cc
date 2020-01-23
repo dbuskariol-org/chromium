@@ -27,16 +27,7 @@ void LayoutNGMathMLBlock::UpdateBlockLayout(bool relayout_children) {
     return;
   }
 
-  NGConstraintSpace constraint_space =
-      NGConstraintSpace::CreateFromLayoutObject(
-          *this, !View()->GetLayoutState()->Next() /* is_layout_root */);
-
-  scoped_refptr<const NGLayoutResult> result =
-      NGBlockNode(this).Layout(constraint_space);
-
-  for (const auto& descendant :
-       result->PhysicalFragment().OutOfFlowPositionedDescendants())
-    descendant.node.UseLegacyOutOfFlowPositioning();
+  UpdateInFlowBlockLayout();
 }
 
 bool LayoutNGMathMLBlock::IsOfType(LayoutObjectType type) const {
