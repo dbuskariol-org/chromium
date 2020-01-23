@@ -20,6 +20,9 @@ class SharingMessageBridge : public KeyedService {
  public:
   // TODO(crbug.com/1034930): take callbacks once commit error propagation back
   // to the bridge is implemented.
+  // TODO(crbug.com/1034932): take each parameter separately and construct
+  // specifics inside. Currently this method updates given |specifics| and
+  // fills in |message_id| field.
   virtual void SendSharingMessage(
       std::unique_ptr<sync_pb::SharingMessageSpecifics> specifics) = 0;
 

@@ -42,8 +42,6 @@ class SharingMessageBridgeImpl : public SharingMessageBridge,
   void GetAllDataForDebugging(DataCallback callback) override;
   std::string GetClientTag(const syncer::EntityData& entity_data) override;
   std::string GetStorageKey(const syncer::EntityData& entity_data) override;
-  bool SupportsGetClientTag() const override;
-  bool SupportsGetStorageKey() const override;
 };
 
 #endif  // CHROME_BROWSER_SHARING_SHARING_MESSAGE_BRIDGE_IMPL_H_

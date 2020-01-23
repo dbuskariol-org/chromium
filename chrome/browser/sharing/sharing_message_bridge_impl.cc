@@ -14,10 +14,7 @@ namespace {
 std::unique_ptr<syncer::EntityData> MoveToEntityData(
     std::unique_ptr<sync_pb::SharingMessageSpecifics> specifics) {
   auto entity_data = std::make_unique<syncer::EntityData>();
-  const std::string guid = base::GenerateGUID();
-  entity_data->client_tag_hash =
-      syncer::ClientTagHash::FromUnhashed(syncer::SHARING_MESSAGE, guid);
-  entity_data->name = guid;
+  entity_data->name = specifics->message_id();
   entity_data->specifics.set_allocated_sharing_message(specifics.release());
   return entity_data;
 }
@@ -39,10 +36,12 @@ void SharingMessageBridgeImpl::SendSharingMessage(
     std::unique_ptr<sync_pb::SharingMessageSpecifics> specifics) {
   std::unique_ptr<syncer::MetadataChangeList> metadata_change_list =
       CreateMetadataChangeList();
+  // Fill in the internal message id with unique generated identifier.
+  const std::string message_id = base::GenerateGUID();
+  specifics->set_message_id(message_id);
   std::unique_ptr<syncer::EntityData> entity_data =
       MoveToEntityData(std::move(specifics));
-  const std::string empty_storage_key;
-  change_processor()->Put(empty_storage_key, std::move(entity_data),
+  change_processor()->Put(message_id, std::move(entity_data),
                           metadata_change_list.get());
 }
 
@@ -96,16 +95,6 @@ std::string SharingMessageBridgeImpl::GetClientTag(
 
 std::string SharingMessageBridgeImpl::GetStorageKey(
     const syncer::EntityData& entity_data) {
-  NOTREACHED();
-  return "";
-}
-
-// This is commit-only data type without storing any data on persistent storage.
-// We do not need keys here.
-bool SharingMessageBridgeImpl::SupportsGetClientTag() const {
-  return false;
-}
-
-bool SharingMessageBridgeImpl::SupportsGetStorageKey() const {
-  return false;
+  DCHECK(entity_data.specifics.has_sharing_message());
+  return entity_data.specifics.sharing_message().message_id();
 }
