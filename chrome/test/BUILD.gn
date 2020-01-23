@@ -3426,7 +3426,6 @@ test("unit_tests") {
     "../browser/ui/passwords/manage_passwords_state_unittest.cc",
     "../browser/ui/passwords/manage_passwords_view_utils_unittest.cc",
     "../browser/ui/passwords/password_generation_popup_controller_impl_unittest.cc",
-    "../browser/ui/passwords/settings/password_access_authenticator_unittest.cc",
     "../browser/ui/passwords/settings/password_manager_porter_unittest.cc",
     "../browser/ui/passwords/settings/password_manager_presenter_unittest.cc",
     "../browser/ui/search_engines/keyword_editor_controller_unittest.cc",

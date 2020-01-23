@@ -48791,6 +48791,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="Malformed response"/>
 </enum>
 
+<enum name="PasswordManager.ReauthResult">
+  <int value="0" label="Success"/>
+  <int value="1" label="Failure"/>
+  <int value="2" label="Skipped"/>
+</enum>
+
 <enum name="PasswordManagerActionsTaken">
   <obsolete>
     Deprecated as of Chrome 32. See PasswordManagerActionsTakenWithPsl
@@ -53772,12 +53778,6 @@ Called by update_net_trust_anchors.py.-->
   <int value="0" label="Success"/>
   <int value="1" label="Failure"/>
   <int value="2" label="Will retry"/>
-</enum>
-
-<enum name="ReauthToAccessPasswordInSettingsEvent">
-  <int value="0" label="Success"/>
-  <int value="1" label="Failure"/>
-  <int value="2" label="Skipped"/>
 </enum>
 
 <enum name="RecentTabsAction">
