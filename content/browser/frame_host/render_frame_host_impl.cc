@@ -1369,6 +1369,13 @@ base::UnguessableToken RenderFrameHostImpl::GetDevToolsFrameToken() {
   return frame_tree_node_->devtools_frame_token();
 }
 
+base::Optional<base::UnguessableToken>
+RenderFrameHostImpl::GetEmbeddingToken() {
+  if (!IsCurrent())
+    return base::nullopt;
+  return frame_tree_node_->GetEmbeddingToken();
+}
+
 const std::string& RenderFrameHostImpl::GetFrameName() {
   return frame_tree_node_->frame_name();
 }

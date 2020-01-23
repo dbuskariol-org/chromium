@@ -164,6 +164,13 @@ class CONTENT_EXPORT RenderFrameHost : public IPC::Listener,
   // never used to look up the FrameTreeNode instance.
   virtual base::UnguessableToken GetDevToolsFrameToken() = 0;
 
+  // Returns the embedding token for this frame that is used by a remote parent
+  // to uniquely identify it. This will be null if the frame
+  // - is not embedded by a parent
+  // - is a local child
+  // - is not the current RFH (for example, when pending deletion)
+  virtual base::Optional<base::UnguessableToken> GetEmbeddingToken() = 0;
+
   // Returns the assigned name of the frame, the name of the iframe tag
   // declaring it. For example, <iframe name="framename">[...]</iframe>. It is
   // quite possible for a frame to have no name, in which case GetFrameName will

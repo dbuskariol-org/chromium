@@ -259,6 +259,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   bool IsDescendantOf(RenderFrameHost*) override;
   int GetFrameTreeNodeId() override;
   base::UnguessableToken GetDevToolsFrameToken() override;
+  base::Optional<base::UnguessableToken> GetEmbeddingToken() override;
   const std::string& GetFrameName() override;
   bool IsFrameDisplayNone() override;
   const base::Optional<gfx::Size>& GetFrameSize() override;

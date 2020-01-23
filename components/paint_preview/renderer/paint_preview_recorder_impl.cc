@@ -40,8 +40,7 @@ PaintPreviewRecorderImpl::PaintPreviewRecorderImpl(
     content::RenderFrame* render_frame)
     : content::RenderFrameObserver(render_frame),
       is_painting_preview_(false),
-      is_main_frame_(render_frame->IsMainFrame()),
-      routing_id_(render_frame->GetRoutingID()) {
+      is_main_frame_(render_frame->IsMainFrame()) {
   render_frame->GetAssociatedInterfaceRegistry()->AddInterface(
       base::BindRepeating(&PaintPreviewRecorderImpl::BindPaintPreviewRecorder,
                           weak_ptr_factory_.GetWeakPtr()));
@@ -88,6 +87,12 @@ void PaintPreviewRecorderImpl::CapturePaintPreviewInternal(
     mojom::PaintPreviewCaptureResponse* response,
     mojom::PaintPreviewStatus* status) {
   blink::WebLocalFrame* frame = render_frame()->GetWebFrame();
+  // Ensure the a frame actually exists to avoid a possible crash.
+  if (!frame) {
+    DVLOG(1) << "Error: renderer has no frame yet!";
+    return;
+  }
+
   // Warm up paint for an out-of-lifecycle paint phase.
   frame->DispatchBeforePrintEvent();
 
@@ -101,7 +106,8 @@ void PaintPreviewRecorderImpl::CapturePaintPreviewInternal(
   }
 
   cc::PaintRecorder recorder;
-  PaintPreviewTracker tracker(params->guid, routing_id_, is_main_frame_);
+  PaintPreviewTracker tracker(params->guid, frame->GetEmbeddingToken(),
+                              is_main_frame_);
   cc::PaintCanvas* canvas =
       recorder.beginRecording(bounds.width(), bounds.height());
   canvas->SetPaintPreviewTracker(&tracker);
