@@ -61717,6 +61717,11 @@ would be helpful to identify which type is being sent.
   <int value="3" label="Suspected to None"/>
 </enum>
 
+<enum name="SwipeHomeToOverviewResult">
+  <int value="0" label="Remained on the home screen"/>
+  <int value="1" label="Transitioned to overview"/>
+</enum>
+
 <enum name="SwReporterRunningTimeRegistryError">
   <int value="0" label="No error"/>
   <int value="1" label="Registry key invalid"/>
