@@ -35,6 +35,7 @@ import android.widget.VideoView;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.DiscardableReferencePool.DiscardableReference;
+import org.chromium.base.ThreadUtils;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.task.AsyncTask;
 import org.chromium.base.task.PostTask;
@@ -319,6 +320,13 @@ public class PickerCategoryView extends RelativeLayout
             mPickerAdapter.notifyDataSetChanged();
             mRecyclerView.requestLayout();
         }
+
+        if (mVideoControls.getVisibility() != View.GONE) {
+            // When configuration changes, the video overlay controls need to be synced to the new
+            // video size. Post a task, so that size adjustments happen after layout of the video
+            // controls has completed.
+            ThreadUtils.postOnUiThread(() -> { syncOverlayControlsSize(); });
+        }
     }
 
     /**
@@ -352,11 +360,7 @@ public class PickerCategoryView extends RelativeLayout
             startVideoPlayback();
 
             mMediaPlayer.setOnVideoSizeChangedListener(
-                    (MediaPlayer player, int width, int height) -> {
-                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                                mVideoView.getMeasuredWidth(), mVideoView.getMeasuredHeight());
-                        mVideoControls.setLayoutParams(params);
-                    });
+                    (MediaPlayer player, int width, int height) -> { syncOverlayControlsSize(); });
 
             if (sProgressCallback != null) {
                 mMediaPlayer.setOnInfoListener((MediaPlayer player, int what, int extra) -> {
@@ -908,6 +912,12 @@ public class PickerCategoryView extends RelativeLayout
         } else {
             startVideoPlayback();
         }
+    }
+
+    private void syncOverlayControlsSize() {
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                mVideoView.getMeasuredWidth(), mVideoView.getMeasuredHeight());
+        mVideoControls.setLayoutParams(params);
     }
 
     private void toggleMute() {
