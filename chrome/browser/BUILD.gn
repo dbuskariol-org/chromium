@@ -2990,6 +2990,7 @@ jumbo_static_library("browser") {
       "//components/page_load_metrics/browser",
       "//components/paint_preview/browser/android",
       "//components/paint_preview/browser/android:jni_headers",
+      "//components/password_manager/content/browser",
       "//components/payments/content/android",
       "//components/resources:components_resources",
       "//components/send_tab_to_self",
