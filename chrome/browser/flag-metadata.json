@@ -3115,6 +3115,11 @@
     // enabling the feature on every page.
     "expiry_milestone": -1
   },
+  {
+    "name": "recover-from-never-save-android",
+    "owners": ["ioanap"],
+    "expiry_milestone": 83
+  },
   { "name": "reduce-display-notifications",
     "owners": [ "baileyberro", "zentaro" ],
     "expiry_milestone": 82
