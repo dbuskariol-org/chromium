@@ -148,6 +148,10 @@ class PLATFORM_EXPORT CanvasResource
 
   SkImageInfo CreateSkImageInfo() const;
 
+  bool is_cross_thread() const {
+    return base::PlatformThread::CurrentRef() != owning_thread_ref_;
+  }
+
  protected:
   CanvasResource(base::WeakPtr<CanvasResourceProvider>,
                  SkFilterQuality,
@@ -194,7 +198,8 @@ class PLATFORM_EXPORT CanvasResource
   CanvasResourceProvider* Provider() { return provider_.get(); }
   base::WeakPtr<CanvasResourceProvider> WeakProvider() { return provider_; }
 
-  const base::PlatformThreadId owning_thread_id_;
+  const base::PlatformThreadRef owning_thread_ref_;
+  const scoped_refptr<base::SingleThreadTaskRunner> owning_thread_task_runner_;
 
  protected:
   // Returns the texture target for the resource.
@@ -294,9 +299,6 @@ class PLATFORM_EXPORT CanvasResourceSharedImage final : public CanvasResource {
   GLenum TextureTarget() const override { return texture_target_; }
 
   void WillDraw();
-  bool is_cross_thread() const {
-    return base::PlatformThread::CurrentId() != owning_thread_id_;
-  }
   bool has_read_access() const {
     return owning_thread_data().bitmap_image_read_refs > 0u;
   }
@@ -350,11 +352,11 @@ class PLATFORM_EXPORT CanvasResourceSharedImage final : public CanvasResource {
                             uint32_t shared_image_usage_flags);
 
   OwningThreadData& owning_thread_data() {
-    DCHECK_EQ(base::PlatformThread::CurrentId(), owning_thread_id_);
+    DCHECK(!is_cross_thread());
     return owning_thread_data_;
   }
   const OwningThreadData& owning_thread_data() const {
-    DCHECK_EQ(base::PlatformThread::CurrentId(), owning_thread_id_);
+    DCHECK(!is_cross_thread());
     return owning_thread_data_;
   }
 
@@ -387,7 +389,6 @@ class PLATFORM_EXPORT CanvasResourceSharedImage final : public CanvasResource {
   const bool is_accelerated_;
   const bool is_overlay_candidate_;
   const GLenum texture_target_;
-  const scoped_refptr<base::SingleThreadTaskRunner> owning_thread_task_runner_;
 
   OwningThreadData owning_thread_data_;
 };
