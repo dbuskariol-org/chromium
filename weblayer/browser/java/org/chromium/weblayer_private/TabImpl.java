@@ -220,7 +220,7 @@ public final class TabImpl extends ITab.Stub {
         StrictModeWorkaround.apply();
         if (client != null) {
             if (mDownloadCallbackProxy == null) {
-                mDownloadCallbackProxy = new DownloadCallbackProxy(mNativeTab, client);
+                mDownloadCallbackProxy = new DownloadCallbackProxy(mBrowser, mNativeTab, client);
             } else {
                 mDownloadCallbackProxy.setClient(client);
             }

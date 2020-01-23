@@ -48,6 +48,9 @@ public final class WebLayer {
     private static Context sRemoteContext;
 
     @Nullable
+    private static Context sAppContext;
+
+    @Nullable
     private static WebLayerLoader sLoader;
 
     @NonNull
@@ -123,6 +126,10 @@ public final class WebLayer {
         return sLoader;
     }
 
+    IWebLayer getImpl() {
+        return mImpl;
+    }
+
     /**
      * Returns the supported version. Using any functions defined in a newer version than
      * returned by {@link getSupportedMajorVersion} result in throwing an
@@ -149,6 +156,12 @@ public final class WebLayer {
                     "This should only be called once WebLayer is initialized");
         }
         return sLoader.getMajorVersion();
+    }
+
+    // Internal getter for the app Context. This should only be used when you know WebLayer has
+    // been initialized.
+    static Context getAppContext() {
+        return sAppContext;
     }
 
     /**
@@ -405,6 +418,7 @@ public final class WebLayer {
         }
         Class<?> webViewFactoryClass = Class.forName("android.webkit.WebViewFactory");
         String implPackageName = getImplPackageName(appContext);
+        sAppContext = appContext;
         if (implPackageName != null) {
             sRemoteContext = createRemoteContextFromPackageName(appContext, implPackageName);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

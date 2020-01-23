@@ -4,7 +4,6 @@
 
 package org.chromium.weblayer.shell;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -281,11 +280,7 @@ public class WebLayerShellActivity extends FragmentActivity {
             @Override
             public boolean onInterceptDownload(Uri uri, String userAgent, String contentDisposition,
                     String mimetype, long contentLength) {
-                DownloadManager.Request request = new DownloadManager.Request(uri);
-                request.setNotificationVisibility(
-                        DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                getSystemService(DownloadManager.class).enqueue(request);
-                return true;
+                return false;
             }
 
             @Override
