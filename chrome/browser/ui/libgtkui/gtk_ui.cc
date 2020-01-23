@@ -740,6 +740,13 @@ bool GtkUi::PreferDarkTheme() const {
   return dark;
 }
 
+bool GtkUi::AnimationsEnabled() const {
+  gboolean animations_enabled = false;
+  g_object_get(gtk_settings_get_default(), "gtk-enable-animations",
+               &animations_enabled, nullptr);
+  return animations_enabled;
+}
+
 #if BUILDFLAG(ENABLE_NATIVE_WINDOW_NAV_BUTTONS)
 std::unique_ptr<views::NavButtonProvider> GtkUi::CreateNavButtonProvider() {
   if (GtkVersionCheck(3, 14))
