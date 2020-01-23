@@ -95,7 +95,8 @@ void ChooseImportOrKeepDataSepareteDialog(id<GREYMatcher> choiceButtonMatcher) {
 
   // Sign in to |fakeIdentity1|.
   [SigninEarlGreyUI signinWithFakeIdentity:fakeIdentity1];
-  [SigninEarlGreyUI signOutWithManagedAccount:NO];
+  [SigninEarlGreyUI
+      signOutWithSignOutConfirmation:SignOutConfirmationNonManagedUser];
 
   // Sign in with |fakeIdentity2|.
   [ChromeEarlGreyUI openSettingsMenu];
@@ -170,7 +171,8 @@ void ChooseImportOrKeepDataSepareteDialog(id<GREYMatcher> choiceButtonMatcher) {
   [SigninEarlGreyUI signinWithFakeIdentity:fakeIdentity];
 
   // Sign out.
-  [SigninEarlGreyUI signOutWithManagedAccount:NO];
+  [SigninEarlGreyUI
+      signOutWithSignOutConfirmation:SignOutConfirmationNonManagedUser];
 }
 
 // Tests that signing out of a managed account from the Settings works
@@ -182,7 +184,8 @@ void ChooseImportOrKeepDataSepareteDialog(id<GREYMatcher> choiceButtonMatcher) {
   [SigninEarlGreyUI signinWithFakeIdentity:fakeIdentity isManagedAccount:YES];
 
   // Sign out.
-  [SigninEarlGreyUI signOutWithManagedAccount:YES];
+  [SigninEarlGreyUI
+      signOutWithSignOutConfirmation:SignOutConfirmationManagedUser];
 
   // Check that there is no signed in user.
   [SigninEarlGreyUtils checkSignedOut];
@@ -266,8 +269,8 @@ void ChooseImportOrKeepDataSepareteDialog(id<GREYMatcher> choiceButtonMatcher) {
   [SigninEarlGreyUI signinWithFakeIdentity:fakeIdentity2];
 
   // Sign out.
-  [SigninEarlGreyUI signOutWithManagedAccount:NO];
-
+  [SigninEarlGreyUI
+      signOutWithSignOutConfirmation:SignOutConfirmationNonManagedUser];
   // Sign in with |fakeIdentity1|.
   [ChromeEarlGreyUI openSettingsMenu];
   [[EarlGrey selectElementWithMatcher:SecondarySignInButton()]
