@@ -382,10 +382,37 @@ public final class WebLayer {
      */
     @NonNull
     public static Fragment createBrowserFragment(@Nullable String profileName) {
+        return createBrowserFragment(profileName, null);
+    }
+
+    /**
+     * Creates a new WebLayer Fragment.
+     *
+     * {@link persistenceId} uniquely identifies the Browser for saving the set of tabs and
+     * navigations. A value of null does not save/restore any state. A non-null value results in
+     * asynchronously restoring the tabs and navigations. Supplying a non-null value means the
+     * Browser initially has no tabs (until restore is complete).
+     *
+     * @param profileName Null to indicate in-memory profile. Otherwise, name cannot be empty
+     * and should contain only alphanumeric and underscore characters since it will be used as
+     * a directory name in the file system.
+     * @param persistenceId If non-null (which includes an empty string) uniquely identifies the
+     * Browser for saving state.
+     *
+     * @since 81
+     */
+    public static Fragment createBrowserFragment(
+            @Nullable String profileName, @Nullable String persistenceId) {
         ThreadCheck.ensureOnUiThread();
+        if (persistenceId != null && getSupportedMajorVersionInternal() < 81) {
+            throw new UnsupportedOperationException();
+        }
         // TODO: use a profile id instead of the path to the actual file.
         Bundle args = new Bundle();
         args.putString(BrowserFragmentArgs.PROFILE_NAME, sanitizeProfileName(profileName));
+        if (persistenceId != null) {
+            args.putString(BrowserFragmentArgs.PERSISTENCE_ID, persistenceId);
+        }
         BrowserFragment fragment = new BrowserFragment();
         fragment.setArguments(args);
         return fragment;

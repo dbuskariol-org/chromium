@@ -85,7 +85,7 @@ public final class TabImpl extends ITab.Stub {
 
     /**
      * This constructor is called when the native side triggers creation of a TabImpl
-     * (as happens with popups).
+     * (as happens with popups and other scenarios).
      */
     public TabImpl(ProfileImpl profile, WindowAndroid windowAndroid, long nativeTab) {
         mId = ++sNextId;
