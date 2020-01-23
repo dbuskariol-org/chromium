@@ -383,6 +383,16 @@ TEST_P(NGInlineCursorTest, FirstLastLogicalLeafWithImages) {
   EXPECT_EQ("#last", ToDebugString(last_logical_leaf));
 }
 
+TEST_P(NGInlineCursorTest, IsEmptyLineBox) {
+  InsertStyleElement("b { margin-bottom: 1px; }");
+  NGInlineCursor cursor = SetupCursor("<div id=root>abc<br><b></b></div>");
+
+  EXPECT_FALSE(cursor.IsEmptyLineBox()) << "'abc\\n' is in non-empty line box.";
+  cursor.MoveToNextLine();
+  EXPECT_TRUE(cursor.IsEmptyLineBox())
+      << "<b></b> with margin produces empty line box.";
+}
+
 TEST_P(NGInlineCursorTest, LastChild) {
   // TDOO(yosin): Remove <style> once NGFragmentItem don't do culled inline.
   InsertStyleElement("a, b { background: gray; }");
