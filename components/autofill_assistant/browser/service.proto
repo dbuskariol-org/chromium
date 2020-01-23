@@ -1679,10 +1679,6 @@ message ConfigureBottomSheetProto {
 
     // Show swipe handle, header, progress bar, suggestions and actions.
     HANDLE_HEADER_CAROUSELS = 3;
-
-    // Entirely hide the bottom sheet when collapsed.
-    // TBD:
-    HIDDEN = 4;
   }
 
   // Whether the viewport should be resized. Resizing the viewport is an
