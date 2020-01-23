@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/updates/update_notification_service_bridge.h"
+#include "chrome/browser/updates/update_notification_service_bridge_android.h"
 
 #include <utility>
 
@@ -41,13 +41,15 @@ void JNI_UpdateNotificationServiceBridge_Schedule(
 //
 // C++ -> Java
 //
-void UpdateLastShownTimeStamp(base::Time timestamp) {
+void UpdateNotificationServiceBridgeAndroid::UpdateLastShownTimeStamp(
+    base::Time timestamp) {
   JNIEnv* env = base::android::AttachCurrentThread();
   Java_UpdateNotificationServiceBridge_updateLastShownTimeStamp(
       env, timestamp.ToJavaTime());
 }
 
-base::Optional<base::Time> GetLastShownTimeStamp() {
+base::Optional<base::Time>
+UpdateNotificationServiceBridgeAndroid::GetLastShownTimeStamp() {
   JNIEnv* env = base::android::AttachCurrentThread();
   auto timestamp =
       Java_UpdateNotificationServiceBridge_getLastShownTimeStamp(env);
@@ -56,13 +58,15 @@ base::Optional<base::Time> GetLastShownTimeStamp() {
              : (base::make_optional(base::Time::FromJavaTime(timestamp)));
 }
 
-void UpdateThrottleInterval(base::TimeDelta interval) {
+void UpdateNotificationServiceBridgeAndroid::UpdateThrottleInterval(
+    base::TimeDelta interval) {
   JNIEnv* env = base::android::AttachCurrentThread();
   Java_UpdateNotificationServiceBridge_updateThrottleInterval(
       env, interval.InMilliseconds());
 }
 
-base::Optional<base::TimeDelta> GetThrottleInterval() {
+base::Optional<base::TimeDelta>
+UpdateNotificationServiceBridgeAndroid::GetThrottleInterval() {
   JNIEnv* env = base::android::AttachCurrentThread();
   auto interval = Java_UpdateNotificationServiceBridge_getThrottleInterval(env);
   return interval == 0 ? base::nullopt
@@ -70,17 +74,17 @@ base::Optional<base::TimeDelta> GetThrottleInterval() {
                              base::TimeDelta::FromMilliseconds(interval)));
 }
 
-void UpdateUserDismissCount(int count) {
+void UpdateNotificationServiceBridgeAndroid::UpdateUserDismissCount(int count) {
   JNIEnv* env = base::android::AttachCurrentThread();
   Java_UpdateNotificationServiceBridge_updateUserDismissCount(env, count);
 }
 
-int GetUserDismissCount() {
+int UpdateNotificationServiceBridgeAndroid::GetUserDismissCount() {
   JNIEnv* env = base::android::AttachCurrentThread();
   return Java_UpdateNotificationServiceBridge_getUserDismissCount(env);
 }
 
-void LaunchChromeActivity() {
+void UpdateNotificationServiceBridgeAndroid::LaunchChromeActivity() {
   JNIEnv* env = base::android::AttachCurrentThread();
   Java_UpdateNotificationServiceBridge_launchChromeActivity(env);
 }

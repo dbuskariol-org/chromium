@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UPDATES_UPDATE_NOTIFICATION_SERVICE_IMPL_H_
-#define CHROME_BROWSER_UPDATES_UPDATE_NOTIFICATION_SERVICE_IMPL_H_
+#ifndef CHROME_BROWSER_UPDATES_INTERNAL_UPDATE_NOTIFICATION_SERVICE_IMPL_H_
+#define CHROME_BROWSER_UPDATES_INTERNAL_UPDATE_NOTIFICATION_SERVICE_IMPL_H_
 
 #include "chrome/browser/updates/update_notification_service.h"
 
@@ -21,11 +21,14 @@ namespace updates {
 
 struct UpdateNotificationConfig;
 struct UpdateNotificationInfo;
+class UpdateNotificationServiceBridge;
 
 class UpdateNotificationServiceImpl : public UpdateNotificationService {
  public:
   UpdateNotificationServiceImpl(
-      notifications::NotificationScheduleService* schedule_service);
+      notifications::NotificationScheduleService* schedule_service,
+      std::unique_ptr<UpdateNotificationConfig> config,
+      std::unique_ptr<UpdateNotificationServiceBridge> bridge);
   ~UpdateNotificationServiceImpl() override;
 
  private:
@@ -56,6 +59,8 @@ class UpdateNotificationServiceImpl : public UpdateNotificationService {
 
   std::unique_ptr<UpdateNotificationConfig> config_;
 
+  std::unique_ptr<UpdateNotificationServiceBridge> bridge_;
+
   base::WeakPtrFactory<UpdateNotificationServiceImpl> weak_ptr_factory_{this};
 
   DISALLOW_COPY_AND_ASSIGN(UpdateNotificationServiceImpl);
@@ -63,4 +68,4 @@ class UpdateNotificationServiceImpl : public UpdateNotificationService {
 
 }  // namespace updates
 
-#endif  // CHROME_BROWSER_UPDATES_UPDATE_NOTIFICATION_SERVICE_IMPL_H_
+#endif  // CHROME_BROWSER_UPDATES_INTERNAL_UPDATE_NOTIFICATION_SERVICE_IMPL_H_

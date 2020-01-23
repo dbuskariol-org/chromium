@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/updates/update_notification_service_impl.h"
+#include "chrome/browser/updates/internal/update_notification_service_impl.h"
 
 #include <memory>
 #include <utility>
@@ -38,9 +38,12 @@ constexpr int kNumMaxNotificationsLimit = 1;
 constexpr int kNumConsecutiveDismissCountCap = 2;
 
 UpdateNotificationServiceImpl::UpdateNotificationServiceImpl(
-    notifications::NotificationScheduleService* schedule_service)
+    notifications::NotificationScheduleService* schedule_service,
+    std::unique_ptr<UpdateNotificationConfig> config,
+    std::unique_ptr<UpdateNotificationServiceBridge> bridge)
     : schedule_service_(schedule_service),
-      config_(UpdateNotificationConfig::Create()) {}
+      config_(std::move(config)),
+      bridge_(std::move(bridge)) {}
 
 UpdateNotificationServiceImpl::~UpdateNotificationServiceImpl() = default;
 
@@ -54,8 +57,8 @@ void UpdateNotificationServiceImpl::Schedule(UpdateNotificationInfo data) {
 bool UpdateNotificationServiceImpl::IsReadyToDisplay() const {
   if (!config_->is_enabled)
     return false;
-
-  auto last_shown_timestamp = updates::GetLastShownTimeStamp();
+  // TODO(hesen): Get last shown timestamp through bridge.(issue:1043237)
+  base::Optional<base::Time> last_shown_timestamp;
   if (last_shown_timestamp.has_value()) {
     return (GetThrottleInterval() <
             base::Time::Now() - last_shown_timestamp.value());
@@ -64,7 +67,7 @@ bool UpdateNotificationServiceImpl::IsReadyToDisplay() const {
 }
 
 base::TimeDelta UpdateNotificationServiceImpl::GetThrottleInterval() const {
-  auto throttle_interval = updates::GetThrottleInterval();
+  auto throttle_interval = bridge_->GetThrottleInterval();
   return throttle_interval.has_value() ? throttle_interval.value()
                                        : config_->default_interval;
 }
@@ -108,12 +111,12 @@ UpdateNotificationServiceImpl::BuildScheduleParams() {
 }
 
 void UpdateNotificationServiceImpl::OnUserDismiss() {
-  int count = updates::GetUserDismissCount() + 1;
+  int count = bridge_->GetUserDismissCount() + 1;
   if (count >= kNumConsecutiveDismissCountCap) {
     ApplyLinearThrottle();
     count = 0;
   }
-  updates::UpdateUserDismissCount(count);
+  bridge_->UpdateUserDismissCount(count);
 }
 
 void UpdateNotificationServiceImpl::ApplyLinearThrottle() {
@@ -121,11 +124,11 @@ void UpdateNotificationServiceImpl::ApplyLinearThrottle() {
   auto offset =
       base::TimeDelta::FromDays(config_->throttle_interval_linear_co_offset);
   auto interval = GetThrottleInterval();
-  updates::UpdateThrottleInterval(scale * interval + offset);
+  bridge_->UpdateThrottleInterval(scale * interval + offset);
 }
 
 void UpdateNotificationServiceImpl::OnUserClick() {
-  updates::LaunchChromeActivity();
+  bridge_->LaunchChromeActivity();
 }
 
 }  // namespace updates

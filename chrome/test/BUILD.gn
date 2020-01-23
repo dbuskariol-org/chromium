@@ -3788,7 +3788,6 @@ test("unit_tests") {
       "../browser/toolbar/toolbar_security_icon_unittest.cc",
       "../browser/touch_to_fill/touch_to_fill_controller_unittest.cc",
       "../browser/translate/translate_manager_render_view_host_android_unittest.cc",
-      "../browser/updates/update_notification_config_unittest.cc",
       "../browser/util/url_utilities_unittest.cc",
     ]
     deps += [
@@ -3799,6 +3798,7 @@ test("unit_tests") {
       "//chrome/android:native_j_unittests_jni_headers",
       "//chrome/android:native_java_unittests_java",
       "//chrome/android/features/media_router:java",
+      "//chrome/browser/updates:unit_tests",
       "//chrome/services/media_gallery_util:unit_tests",
       "//components/download/internal/common:internal_java",
       "//components/favicon/core/test:test_support",
