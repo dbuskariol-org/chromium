@@ -304,7 +304,7 @@ crbug.com/905007 [ mac amd ] conformance/glsl/bugs/bool-type-cast-bug-int-float.
 crbug.com/642822 [ mac amd ] conformance/rendering/clipping-wide-points.html [ Failure ]
 crbug.com/929009 [ mac amd ] conformance/glsl/misc/shader-with-non-reserved-words.html [ RetryOnFailure ]
 
-# TODO(kbr): uncomment the following exepectation after test has
+# TODO(kbr): uncomment the following expectation after test has
 # been made more robust.
 # crbug.com/735483 [ mac amd release ] conformance/rendering/texture-switch-performance.html [ Failure ]
 
