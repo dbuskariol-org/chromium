@@ -302,10 +302,6 @@ class OverviewSessionTest : public MultiDisplayOverviewAndSplitViewTest {
     return gfx::Rect();
   }
 
-  views::Widget* item_widget(OverviewItem* item) {
-    return item->item_widget_.get();
-  }
-
   const ScopedOverviewTransformWindow& transform_window(
       OverviewItem* item) const {
     return item->transform_window_;
@@ -2318,9 +2314,9 @@ TEST_P(OverviewSessionTest, OverviewWidgetStackingOrder) {
   OverviewItem* item2 = GetOverviewItemForWindow(window.get());
   OverviewItem* item3 = GetOverviewItemForWindow(window3.get());
 
-  views::Widget* widget1 = item_widget(item1);
-  views::Widget* widget2 = item_widget(item2);
-  views::Widget* widget3 = item_widget(item3);
+  views::Widget* widget1 = item1->item_widget();
+  views::Widget* widget2 = item2->item_widget();
+  views::Widget* widget3 = item3->item_widget();
 
   // The original order of stacking is determined by the order the associated
   // window was activated.
@@ -2510,12 +2506,12 @@ TEST_P(OverviewSessionTest, DISABLED_RoundedEdgeMaskVisibility) {
   item2 = GetOverviewItemForWindow(window2.get());
   EXPECT_FALSE(HasRoundedCorner(item1));
   EXPECT_FALSE(HasRoundedCorner(item2));
-  item_widget(item1)
+  item1->item_widget()
       ->GetNativeWindow()
       ->layer()
       ->GetAnimator()
       ->StopAnimating();
-  item_widget(item2)
+  item2->item_widget()
       ->GetNativeWindow()
       ->layer()
       ->GetAnimator()
@@ -2619,9 +2615,9 @@ TEST_P(OverviewSessionTest, ShadowBounds) {
   OverviewItem* tall_item = GetOverviewItemForWindow(tall.get());
   OverviewItem* normal_item = GetOverviewItemForWindow(normal.get());
 
-  views::Widget* wide_widget = item_widget(wide_item);
-  views::Widget* tall_widget = item_widget(tall_item);
-  views::Widget* normal_widget = item_widget(normal_item);
+  views::Widget* wide_widget = wide_item->item_widget();
+  views::Widget* tall_widget = tall_item->item_widget();
+  views::Widget* normal_widget = normal_item->item_widget();
 
   OverviewGrid* grid = overview_session()->grid_list()[0].get();
 
@@ -2966,7 +2962,7 @@ TEST_P(OverviewSessionWithDragFromShelfFeatureTest, FadeIn) {
 
   // Verify that the item widget's transform is not animated as part of the
   // animation.
-  views::Widget* widget = item_widget(item);
+  views::Widget* widget = item->item_widget();
   EXPECT_FALSE(widget->GetLayer()->GetAnimator()->IsAnimatingProperty(
       ui::LayerAnimationElement::TRANSFORM));
 
@@ -3005,7 +3001,7 @@ TEST_P(OverviewSessionWithDragFromShelfFeatureTest, FadeOutExit) {
   // dereference the widget pointer immediately (synchronously) after the
   // session ends.
   OverviewItem* item = GetOverviewItemForWindow(test_widget->GetNativeWindow());
-  views::Widget* grid_item_widget = item_widget(item);
+  views::Widget* grid_item_widget = item->item_widget();
   gfx::Rect item_bounds = grid_item_widget->GetWindowBoundsInScreen();
 
   ToggleOverview(OverviewSession::EnterExitOverviewType::kFadeOutExit);
