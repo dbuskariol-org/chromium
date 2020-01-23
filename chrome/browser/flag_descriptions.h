@@ -2175,9 +2175,6 @@ extern const char kExperimentalAccessibilitySwitchAccessDescription[];
 extern const char kExperimentalAccessibilitySwitchAccessTextName[];
 extern const char kExperimentalAccessibilitySwitchAccessTextDescription[];
 
-extern const char kFileManagerFeedbackPanelDescription[];
-extern const char kFileManagerFeedbackPanelName[];
-
 extern const char kFileManagerTouchModeName[];
 extern const char kFileManagerTouchModeDescription[];
 

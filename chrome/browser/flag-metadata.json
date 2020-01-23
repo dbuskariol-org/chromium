@@ -2255,11 +2255,6 @@
     "expiry_milestone": 82
   },
   {
-    "name": "file-manager-feedback-panel",
-    "owners": [ "adanilo" ],
-    "expiry_milestone": 81
-  },
-  {
     "name": "files-ng",
     "owners": [ "adanilo", "noel" ],
     "expiry_milestone": 82

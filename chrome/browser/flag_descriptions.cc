@@ -3647,10 +3647,6 @@ const char kExperimentalAccessibilitySwitchAccessTextDescription[] =
     "Enable experimental or in-progress Switch Access features for improved "
     "text input";
 
-const char kFileManagerFeedbackPanelDescription[] =
-    "Enable feedback panel in the Files app.";
-const char kFileManagerFeedbackPanelName[] = "Files App. feedback panel";
-
 const char kFileManagerTouchModeName[] = "Files App. touch mode";
 const char kFileManagerTouchModeDescription[] =
     "Touchscreen-specific interactions of the Files app.";
