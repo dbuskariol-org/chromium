@@ -6,18 +6,14 @@
 
 #include "base/bind.h"
 #include "base/debug/dump_without_crashing.h"
-#include "chrome/browser/browser_process.h"
 #include "chrome/browser/captive_portal/captive_portal_login_detector.h"
 #include "chrome/browser/captive_portal/captive_portal_service_factory.h"
 #include "chrome/browser/captive_portal/captive_portal_tab_reloader.h"
 #include "chrome/browser/chrome_notification_types.h"
-#include "chrome/browser/net/system_network_context_manager.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/browser_tabstrip.h"
-#include "chrome/browser/ui/browser_window.h"
-#include "chrome/browser/ui/tab_contents/tab_contents_iterator.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/navigation_handle.h"
@@ -30,7 +26,6 @@
 #include "content/public/browser/render_view_host.h"
 #include "content/public/browser/web_contents.h"
 #include "net/base/net_errors.h"
-#include "net/dns/dns_config.h"
 #include "net/ssl/ssl_info.h"
 
 using captive_portal::CaptivePortalResult;
@@ -165,48 +160,6 @@ void CaptivePortalTabHelper::OpenLoginTabForWebContents(
   // If the Profile doesn't have a tabbed browser window open, do nothing.
   if (!browser)
     return;
-
-  bool insecure_stub_resolver_enabled;
-  net::DnsConfig::SecureDnsMode secure_dns_mode;
-  base::Optional<std::vector<network::mojom::DnsOverHttpsServerPtr>>
-      dns_over_https_servers;
-  SystemNetworkContextManager::GetStubResolverConfig(
-      g_browser_process->local_state(), &insecure_stub_resolver_enabled,
-      &secure_dns_mode, &dns_over_https_servers);
-
-  // If the DNS mode is SECURE, captive portal login tabs should be opened in
-  // new popup windows where secure DNS will be disabled.
-  if (secure_dns_mode == net::DnsConfig::SecureDnsMode::SECURE) {
-    // If there is already a captive portal popup window, do not create another.
-    for (auto* contents : AllTabContentses()) {
-      CaptivePortalTabHelper* captive_portal_tab_helper =
-          CaptivePortalTabHelper::FromWebContents(contents);
-      if (captive_portal_tab_helper->IsLoginTab()) {
-        Browser* browser_with_login_tab =
-            chrome::FindBrowserWithWebContents(contents);
-        browser_with_login_tab->window()->Show();
-        browser_with_login_tab->tab_strip_model()->ActivateTabAt(
-            browser_with_login_tab->tab_strip_model()->GetIndexOfWebContents(
-                contents));
-        return;
-      }
-    }
-
-    // Otherwise, create a captive portal popup window.
-    NavigateParams params(
-        browser,
-        CaptivePortalServiceFactory::GetForProfile(browser->profile())
-            ->test_url(),
-        ui::PAGE_TRANSITION_TYPED);
-    params.disposition = WindowOpenDisposition::NEW_POPUP;
-    Navigate(&params);
-    content::WebContents* new_contents = params.navigated_or_inserted_contents;
-    CaptivePortalTabHelper* captive_portal_tab_helper =
-        CaptivePortalTabHelper::FromWebContents(new_contents);
-    captive_portal_tab_helper->set_is_captive_portal_window();
-    captive_portal_tab_helper->SetIsLoginTab();
-    return;
-  }
 
   // Check if the Profile's topmost browser window already has a login tab.
   // If so, do nothing.
