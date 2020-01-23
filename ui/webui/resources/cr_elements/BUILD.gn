@@ -140,7 +140,10 @@ polymer_modulizer("search_highlight_style_css") {
 }
 
 js_modulizer("modulize") {
-  input_files = [ "cr_container_shadow_behavior.js" ]
+  input_files = [
+    "cr_container_shadow_behavior.js",
+    "cr_scrollable_behavior.js",
+  ]
   deps = []
 }
 
@@ -196,12 +199,26 @@ group("polymer3_elements") {
 }
 
 js_type_check("cr_elements_module_resources") {
-  uses_js_modules = true
-  deps = [ ":cr_container_shadow_behavior.m" ]
+  is_polymer3 = true
+  deps = [
+    ":cr_container_shadow_behavior.m",
+    ":cr_scrollable_behavior.m",
+  ]
 }
 
 js_library("cr_container_shadow_behavior.m") {
   sources = [ "$root_gen_dir/ui/webui/resources/cr_elements/cr_container_shadow_behavior.m.js" ]
   deps = [ "//ui/webui/resources/js:assert.m" ]
+  extra_deps = [ ":modulize" ]
+}
+
+js_library("cr_scrollable_behavior.m") {
+  sources = [
+    "$root_gen_dir/ui/webui/resources/cr_elements/cr_scrollable_behavior.m.js",
+  ]
+  deps = [
+    "//third_party/polymer/v3_0/components-chromium/iron-list:iron-list",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+  ]
   extra_deps = [ ":modulize" ]
 }
