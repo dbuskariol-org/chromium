@@ -296,7 +296,7 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
   web_ui()->AddMessageHandler(
       std::make_unique<chromeos::settings::WallpaperHandler>(web_ui()));
 
-  if (plugin_vm::IsPluginVmEnabled(profile)) {
+  if (plugin_vm::IsPluginVmAllowedForProfile(profile)) {
     web_ui()->AddMessageHandler(
         std::make_unique<chromeos::settings::PluginVmHandler>(profile));
   }
@@ -387,7 +387,7 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
       "allowCrostini", crostini::CrostiniFeatures::Get()->IsUIAllowed(profile));
 
   html_source->AddBoolean("showPluginVm",
-                          plugin_vm::IsPluginVmEnabled(profile));
+                          plugin_vm::IsPluginVmAllowedForProfile(profile));
 
   html_source->AddBoolean("isDemoSession",
                           chromeos::DemoSession::IsDeviceInDemoMode());
