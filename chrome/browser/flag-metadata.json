@@ -1362,7 +1362,7 @@
   {
     "name": "enable-experimental-productivity-features",
     "owners": [ "feature-control@chromium.org" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 86
   },
   {
     "name": "enable-experimental-web-platform-features",
