@@ -6,6 +6,7 @@
 
 #include <utility>
 
+#include "base/metrics/histogram_functions.h"
 #include "base/strings/strcat.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/task/post_task.h"
@@ -344,7 +345,14 @@ void PaintPreviewClient::OnFinished(base::UnguessableToken guid,
                                     PaintPreviewData* document_data) {
   if (!document_data)
     return;
+
+  base::UmaHistogramBoolean("Browser.PaintPreview.Capture.Success",
+                            document_data->proto != nullptr);
   if (document_data->proto) {
+    base::UmaHistogramCounts100(
+        "Browser.PaintPreview.Capture.NumberOfFramesCaptured",
+        document_data->finished_subframes.size());
+
     // At a minimum one frame was captured successfully, it is up to the
     // caller to decide if a partial success is acceptable based on what is
     // contained in the proto.
