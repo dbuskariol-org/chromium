@@ -6324,6 +6324,9 @@ crbug.com/1030746 http/tests/devtools/network/load-resource-for-frontend.js [ Pa
 # Disable for landing devtools changes
 crbug.com/1006759 http/tests/devtools/console/argument-hints.js [ Pass Failure ]
 
+# Disable for landing devtools changes
+crbug.com/1010534 http/tests/devtools/profiler/agents-disabled-check.js [ Pass Failure ]
+
 # Failing origin trial for css proeprties test
 crbug.com/1041993 http/tests/origin_trials/sample-api-script-added-after-css-declaration.html [ Failure ]
 virtual/omt-worker-fetch/http/tests/origin_trials/sample-api-script-added-after-css-declaration.html [ Failure ]
