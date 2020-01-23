@@ -50,6 +50,7 @@
 #include "third_party/blink/renderer/core/events/composition_event.h"
 #include "third_party/blink/renderer/core/frame/local_dom_window.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
+#include "third_party/blink/renderer/core/geometry/dom_rect.h"
 #include "third_party/blink/renderer/core/html/forms/html_input_element.h"
 #include "third_party/blink/renderer/core/html/forms/html_text_area_element.h"
 #include "third_party/blink/renderer/core/input/event_handler.h"
@@ -1318,6 +1319,31 @@ void InputMethodController::DeleteSurroundingTextInCodePoints(int before,
     return;
 
   return DeleteSurroundingText(before_length, after_length);
+}
+
+void InputMethodController::GetLayoutBounds(WebRect* control_bounds,
+                                            WebRect* selection_bounds) {
+  if (!IsAvailable())
+    return;
+
+  if (GetActiveEditContext()) {
+    return GetActiveEditContext()->GetLayoutBounds(control_bounds,
+                                                   selection_bounds);
+  }
+  if (!GetFrame().Selection().IsAvailable())
+    return;
+  Element* element = RootEditableElementOfSelection(GetFrame().Selection());
+  if (!element)
+    return;
+  // Fetch the control bounds of the active editable element.
+  // Selection bounds are currently populated only for EditContext.
+  // For editable elements we use GetCompositionCharacterBounds to fetch the
+  // selection bounds.
+  DOMRect* editable_rect = element->getBoundingClientRect();
+  control_bounds->x = editable_rect->x();
+  control_bounds->y = editable_rect->y();
+  control_bounds->width = editable_rect->width();
+  control_bounds->height = editable_rect->height();
 }
 
 WebTextInputInfo InputMethodController::TextInputInfo() const {

@@ -1406,7 +1406,7 @@ TEST_F(RenderViewImplTest, ShouldSuppressKeyboardIsPropagated) {
 }
 
 TEST_F(RenderViewImplTest, EditContextGetLayoutBoundsAndInputPanelPolicy) {
-  // Load an HTML page consisting of one input fields.
+  // Load an HTML page.
   LoadHTML(
       "<html>"
       "<head>"
@@ -1433,6 +1433,35 @@ TEST_F(RenderViewImplTest, EditContextGetLayoutBoundsAndInputPanelPolicy) {
             std::get<0>(params).edit_context_control_bounds.value());
   EXPECT_EQ(edit_context_selection_bounds_expected,
             std::get<0>(params).edit_context_selection_bounds.value());
+}
+
+TEST_F(RenderViewImplTest, ActiveElementGetLayoutBounds) {
+  // Load an HTML page consisting of one input fields.
+  LoadHTML(
+      "<html>"
+      "<head>"
+      "</head>"
+      "<body>"
+      "<input id=\"test\" type=\"text\"></input>"
+      "</body>"
+      "</html>");
+  render_thread_->sink().ClearMessages();
+  // Create an EditContext with control and selection bounds and set input
+  // panel policy to auto.
+  ExecuteJavaScriptForTests("document.getElementById('test').focus();");
+  base::RunLoop().RunUntilIdle();
+  // Update the IME status and verify if our IME backend sends an IPC message
+  // to notify layout bounds of the EditContext.
+  main_widget()->UpdateTextInputState();
+  auto params = ProcessAndReadIPC<WidgetHostMsg_TextInputStateChanged>();
+  blink::WebInputMethodController* controller =
+      frame()->GetWebFrame()->GetInputMethodController();
+  blink::WebRect expected_control_bounds;
+  blink::WebRect temp_selection_bounds;
+  controller->GetLayoutBounds(&expected_control_bounds, &temp_selection_bounds);
+  blink::WebRect actual_active_element_control_bounds(
+      std::get<0>(params).edit_context_control_bounds.value());
+  EXPECT_EQ(actual_active_element_control_bounds, expected_control_bounds);
 }
 
 // Test that our IME backend can compose CJK words.
