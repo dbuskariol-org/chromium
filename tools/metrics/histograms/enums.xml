@@ -63840,6 +63840,10 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="UnifiedConsentSyncAndGoogleServicesSettings">
+  <obsolete>
+    Deprecated 01/2020 because only make searches and browsing better is
+    recorded as a Boolean.
+  </obsolete>
   <int value="0" label="None of the services are enabled"/>
   <int value="1" label="(Obsolete) 'Sync and all Google services' is enabled"/>
   <int value="2" label="(Obsolete) 'Activity and interactions' is enabled"/>
