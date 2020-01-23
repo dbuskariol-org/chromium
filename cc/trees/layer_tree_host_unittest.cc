@@ -6838,7 +6838,7 @@ class LayerTreeHostTestCrispUpAfterPinchEnds : public LayerTreeHostTest {
           viz::TileDrawQuad::MaterialCast(draw_quad);
       float quad_scale =
           quad->tex_coord_rect.width() / static_cast<float>(quad->rect.width());
-      float transform_scale = SkMScalarToFloat(
+      float transform_scale = SkScalarToFloat(
           quad->shared_quad_state->quad_to_target_transform.matrix().get(0, 0));
       float scale = quad_scale / transform_scale;
       if (frame_scale != 0.f && frame_scale != scale)
@@ -7129,7 +7129,7 @@ class LayerTreeHostTestContinuousDrawWhenCreatingVisibleTiles
           viz::TileDrawQuad::MaterialCast(draw_quad);
       float quad_scale =
           quad->tex_coord_rect.width() / static_cast<float>(quad->rect.width());
-      float transform_scale = SkMScalarToFloat(
+      float transform_scale = SkScalarToFloat(
           quad->shared_quad_state->quad_to_target_transform.matrix().get(0, 0));
       float scale = quad_scale / transform_scale;
       if (frame_scale != 0.f && frame_scale != scale)
