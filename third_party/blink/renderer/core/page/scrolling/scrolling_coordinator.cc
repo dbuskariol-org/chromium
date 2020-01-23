@@ -378,12 +378,15 @@ void ScrollingCoordinator::ScrollableAreaScrollbarLayerDidChange(
   }
 }
 
-bool ScrollingCoordinator::UpdateCompositedScrollOffset(
-    ScrollableArea* scrollable_area) {
-  cc::Layer* scroll_layer = scrollable_area->LayerForScrolling();
-  scroll_layer->SetScrollOffset(
-      static_cast<gfx::ScrollOffset>(scrollable_area->ScrollPosition()));
-  return true;
+bool ScrollingCoordinator::UpdateCompositorScrollOffset(
+    const LocalFrame& frame,
+    const ScrollableArea& scrollable_area) {
+  auto* paint_artifact_compositor =
+      frame.LocalFrameRoot().View()->GetPaintArtifactCompositor();
+  if (!paint_artifact_compositor)
+    return false;
+  return paint_artifact_compositor->DirectlyUpdateScrollOffset(
+      scrollable_area.GetScrollElementId(), scrollable_area.ScrollPosition());
 }
 
 void ScrollingCoordinator::ScrollableAreaScrollLayerDidChange(
