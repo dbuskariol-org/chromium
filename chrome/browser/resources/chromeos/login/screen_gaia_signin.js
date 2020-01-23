@@ -1494,6 +1494,8 @@ Polymer({
       // initialization.
       return;
     }
+    if (oldValue === null && newValue !== null)
+      chrome.send('securityTokenPinDialogShownForTest');
     if ((oldValue !== null && newValue === null) ||
         (oldValue !== null && newValue !== null &&
          !this.pinDialogResultReported_)) {
