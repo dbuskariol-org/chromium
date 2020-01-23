@@ -91,8 +91,10 @@ class MojoLearningTaskControllerTest : public ::testing::Test {
     task_.name = "MyLearningTask";
 
     // Tell |learning_controller_| to forward to the fake learner impl.
-    learning_controller_ = std::make_unique<MojoLearningTaskController>(
-        task_, learning_controller_receiver_.BindNewPipeAndPassRemote());
+    mojo::Remote<media::learning::mojom::LearningTaskController> remote(
+        learning_controller_receiver_.BindNewPipeAndPassRemote());
+    learning_controller_ =
+        std::make_unique<MojoLearningTaskController>(task_, std::move(remote));
   }
 
   // Mojo stuff.
@@ -113,7 +115,8 @@ TEST_F(MojoLearningTaskControllerTest, GetLearningTask) {
 TEST_F(MojoLearningTaskControllerTest, BeginWithoutDefaultTarget) {
   base::UnguessableToken id = base::UnguessableToken::Create();
   FeatureVector features = {FeatureValue(123), FeatureValue(456)};
-  learning_controller_->BeginObservation(id, features, base::nullopt);
+  learning_controller_->BeginObservation(id, features, base::nullopt,
+                                         base::nullopt);
   task_environment_.RunUntilIdle();
   EXPECT_EQ(id, fake_learning_controller_.begin_args_.id_);
   EXPECT_EQ(features, fake_learning_controller_.begin_args_.features_);
@@ -124,7 +127,8 @@ TEST_F(MojoLearningTaskControllerTest, BeginWithDefaultTarget) {
   base::UnguessableToken id = base::UnguessableToken::Create();
   TargetValue default_target(987);
   FeatureVector features = {FeatureValue(123), FeatureValue(456)};
-  learning_controller_->BeginObservation(id, features, default_target);
+  learning_controller_->BeginObservation(id, features, default_target,
+                                         base::nullopt);
   task_environment_.RunUntilIdle();
   EXPECT_EQ(id, fake_learning_controller_.begin_args_.id_);
   EXPECT_EQ(features, fake_learning_controller_.begin_args_.features_);
@@ -136,7 +140,8 @@ TEST_F(MojoLearningTaskControllerTest, UpdateDefaultTargetToValue) {
   // Test if we can update the default target to a non-nullopt.
   base::UnguessableToken id = base::UnguessableToken::Create();
   FeatureVector features = {FeatureValue(123), FeatureValue(456)};
-  learning_controller_->BeginObservation(id, features, base::nullopt);
+  learning_controller_->BeginObservation(id, features, base::nullopt,
+                                         base::nullopt);
   TargetValue default_target(987);
   learning_controller_->UpdateDefaultTarget(id, default_target);
   task_environment_.RunUntilIdle();
@@ -151,7 +156,8 @@ TEST_F(MojoLearningTaskControllerTest, UpdateDefaultTargetToNoValue) {
   base::UnguessableToken id = base::UnguessableToken::Create();
   FeatureVector features = {FeatureValue(123), FeatureValue(456)};
   TargetValue default_target(987);
-  learning_controller_->BeginObservation(id, features, default_target);
+  learning_controller_->BeginObservation(id, features, default_target,
+                                         base::nullopt);
   learning_controller_->UpdateDefaultTarget(id, base::nullopt);
   task_environment_.RunUntilIdle();
   EXPECT_EQ(id, fake_learning_controller_.update_default_args_.id_);

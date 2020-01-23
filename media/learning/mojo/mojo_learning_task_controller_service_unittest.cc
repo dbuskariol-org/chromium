@@ -13,6 +13,11 @@
 #include "media/learning/mojo/mojo_learning_task_controller_service.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
+namespace {
+// Meaningless, but non-empty, source id.
+ukm::SourceId kSourceId{123};
+}  // namespace
+
 namespace media {
 namespace learning {
 
@@ -23,10 +28,12 @@ class MojoLearningTaskControllerServiceTest : public ::testing::Test {
     void BeginObservation(
         base::UnguessableToken id,
         const FeatureVector& features,
-        const base::Optional<TargetValue>& default_target) override {
+        const base::Optional<TargetValue>& default_target,
+        const base::Optional<ukm::SourceId>& source_id) override {
       begin_args_.id_ = id;
       begin_args_.features_ = features;
-      begin_args_.default_target_ = std::move(default_target);
+      begin_args_.default_target_ = default_target;
+      begin_args_.source_id_ = source_id;
     }
 
     void CompleteObservation(base::UnguessableToken id,
@@ -60,6 +67,7 @@ class MojoLearningTaskControllerServiceTest : public ::testing::Test {
       base::UnguessableToken id_;
       FeatureVector features_;
       base::Optional<TargetValue> default_target_;
+      base::Optional<ukm::SourceId> source_id_;
     } begin_args_;
 
     struct {
@@ -97,7 +105,7 @@ class MojoLearningTaskControllerServiceTest : public ::testing::Test {
 
     // Tell |learning_controller_| to forward to the fake learner impl.
     service_ = std::make_unique<MojoLearningTaskControllerService>(
-        task_, std::move(controller));
+        task_, kSourceId, std::move(controller));
   }
 
   LearningTask task_;
@@ -118,6 +126,8 @@ TEST_F(MojoLearningTaskControllerServiceTest, BeginComplete) {
   EXPECT_EQ(id, controller_raw_->begin_args_.id_);
   EXPECT_EQ(features, controller_raw_->begin_args_.features_);
   EXPECT_FALSE(controller_raw_->begin_args_.default_target_);
+  EXPECT_TRUE(controller_raw_->begin_args_.source_id_);
+  EXPECT_EQ(*controller_raw_->begin_args_.source_id_, kSourceId);
 
   ObservationCompletion completion(TargetValue(1234));
   service_->CompleteObservation(id, completion);
@@ -148,6 +158,8 @@ TEST_F(MojoLearningTaskControllerServiceTest, BeginWithDefaultTarget) {
   EXPECT_EQ(id, controller_raw_->begin_args_.id_);
   EXPECT_EQ(features, controller_raw_->begin_args_.features_);
   EXPECT_EQ(default_target, controller_raw_->begin_args_.default_target_);
+  EXPECT_TRUE(controller_raw_->begin_args_.source_id_);
+  EXPECT_EQ(*controller_raw_->begin_args_.source_id_, kSourceId);
 }
 
 TEST_F(MojoLearningTaskControllerServiceTest, TooFewFeaturesIsIgnored) {

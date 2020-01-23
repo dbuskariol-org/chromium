@@ -43,10 +43,12 @@ class LearningSessionImplTest : public testing::Test {
     void BeginObservation(
         base::UnguessableToken id,
         const FeatureVector& features,
-        const base::Optional<TargetValue>& default_target) override {
+        const base::Optional<TargetValue>& default_target,
+        const base::Optional<ukm::SourceId>& source_id) override {
       id_ = id;
       observation_features_ = features;
       default_target_ = default_target;
+      source_id_ = source_id;
     }
 
     void CompleteObservation(base::UnguessableToken id,
@@ -86,6 +88,7 @@ class LearningSessionImplTest : public testing::Test {
     FeatureVector predict_features_;
     PredictionCB predict_cb_;
     base::Optional<TargetValue> default_target_;
+    base::Optional<ukm::SourceId> source_id_;
     LabelledExample example_;
 
     // Most recently cancelled id.
@@ -188,7 +191,8 @@ TEST_F(LearningSessionImplTest, ExamplesAreForwardedToCorrectTask) {
                             TargetValue(1234));
   std::unique_ptr<LearningTaskController> ltc_0 =
       session_->GetController(task_0_.name);
-  ltc_0->BeginObservation(id, example_0.features);
+  ukm::SourceId source_id(123);
+  ltc_0->BeginObservation(id, example_0.features, base::nullopt, source_id);
   ltc_0->CompleteObservation(
       id, ObservationCompletion(example_0.target_value, example_0.weight));
 
@@ -203,6 +207,7 @@ TEST_F(LearningSessionImplTest, ExamplesAreForwardedToCorrectTask) {
 
   task_environment_.RunUntilIdle();
   EXPECT_EQ(task_controllers_[0]->example_, example_0);
+  EXPECT_EQ(task_controllers_[0]->source_id_, source_id);
   EXPECT_EQ(task_controllers_[1]->example_, example_1);
 }
 

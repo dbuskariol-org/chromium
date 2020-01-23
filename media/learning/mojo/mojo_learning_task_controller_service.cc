@@ -18,8 +18,9 @@ static const size_t kMaxInFlightObservations = 16;
 
 MojoLearningTaskControllerService::MojoLearningTaskControllerService(
     const LearningTask& task,
+    ukm::SourceId source_id,
     std::unique_ptr<::media::learning::LearningTaskController> impl)
-    : task_(task), impl_(std::move(impl)) {}
+    : task_(task), source_id_(source_id), impl_(std::move(impl)) {}
 
 MojoLearningTaskControllerService::~MojoLearningTaskControllerService() =
     default;
@@ -39,7 +40,7 @@ void MojoLearningTaskControllerService::BeginObservation(
 
   // Since we own |impl_|, we don't need to keep track of in-flight
   // observations.  We'll release |impl_| on destruction, which cancels them.
-  impl_->BeginObservation(id, features, default_target);
+  impl_->BeginObservation(id, features, default_target, source_id_);
 }
 
 void MojoLearningTaskControllerService::CompleteObservation(
