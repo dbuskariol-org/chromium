@@ -42,4 +42,10 @@ bool LayoutNGMathMLBlock::IsChildAllowed(LayoutObject* child,
   return child->GetNode() && child->GetNode()->IsMathMLElement();
 }
 
+bool LayoutNGMathMLBlock::CanHaveChildren() const {
+  if (GetNode() && GetNode()->HasTagName(mathml_names::kMspaceTag))
+    return false;
+  return LayoutNGMixin<LayoutBlock>::CanHaveChildren();
+}
+
 }  // namespace blink
