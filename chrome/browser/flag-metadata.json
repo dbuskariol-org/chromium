@@ -397,7 +397,7 @@
   {
     "name": "calculate-native-win-occlusion",
     "owners": [ "davidbienvenu", "fdoray" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 84
   },
   {
     "name": "camera-system-web-app",
@@ -3678,8 +3678,8 @@
   },
   {
     "name": "web-contents-occlusion",
-    "owners": [ "davidbienvenu" ],
-    "expiry_milestone": 81
+    "owners": [ "davidbienvenu", "fdoray" ],
+    "expiry_milestone": 84
   },
   {
     "name": "webui-a11y-enhancements",
