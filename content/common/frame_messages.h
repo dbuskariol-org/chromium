@@ -37,7 +37,6 @@
 #include "content/public/common/context_menu_params.h"
 #include "content/public/common/favicon_url.h"
 #include "content/public/common/frame_navigate_params.h"
-#include "content/public/common/javascript_dialog_type.h"
 #include "content/public/common/page_state.h"
 #include "content/public/common/previews_state.h"
 #include "content/public/common/referrer.h"
@@ -107,9 +106,6 @@ IPC_ENUM_TRAITS_MAX_VALUE(blink::WebScrollIntoViewParams::Type,
                           blink::WebScrollIntoViewParams::kLastType)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::WebScrollIntoViewParams::Behavior,
                           blink::WebScrollIntoViewParams::kLastBehavior)
-IPC_ENUM_TRAITS_MIN_MAX_VALUE(content::JavaScriptDialogType,
-                              content::JAVASCRIPT_DIALOG_TYPE_ALERT,
-                              content::JAVASCRIPT_DIALOG_TYPE_PROMPT)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::ContextMenuDataMediaType,
                           blink::ContextMenuDataMediaType::kLast)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::ContextMenuDataInputFieldType,
@@ -1033,14 +1029,6 @@ IPC_MESSAGE_ROUTED3(FrameHostMsg_SelectionChanged,
                     base::string16 /* text covers the selection range */,
                     uint32_t /* the offset of the text in the document */,
                     gfx::Range /* selection range in the document */)
-
-// A request to run a JavaScript dialog.
-IPC_SYNC_MESSAGE_ROUTED3_2(FrameHostMsg_RunJavaScriptDialog,
-                           base::string16 /* in - alert message */,
-                           base::string16 /* in - default prompt */,
-                           content::JavaScriptDialogType /* in - type */,
-                           bool /* out - success */,
-                           base::string16 /* out - user_input field */)
 
 // Displays a dialog to confirm that the user wants to navigate away from the
 // page. Replies true if yes, and false otherwise. The reply string is ignored,

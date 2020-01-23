@@ -1685,10 +1685,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameHostMsg_Unload_ACK, OnUnloadACK)
     IPC_MESSAGE_HANDLER(FrameHostMsg_ContextMenu, OnContextMenu)
     IPC_MESSAGE_HANDLER(FrameHostMsg_VisualStateResponse, OnVisualStateResponse)
-    IPC_MESSAGE_HANDLER_DELAY_REPLY(FrameHostMsg_RunJavaScriptDialog,
-                                    OnRunJavaScriptDialog)
-    IPC_MESSAGE_HANDLER_DELAY_REPLY(FrameHostMsg_RunBeforeUnloadConfirm,
-                                    OnRunBeforeUnloadConfirm)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeOpener, OnDidChangeOpener)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeFramePolicy,
                         OnDidChangeFramePolicy)
@@ -3115,15 +3111,56 @@ void RenderFrameHostImpl::OnVisualStateResponse(uint64_t id) {
   }
 }
 
-void RenderFrameHostImpl::OnRunJavaScriptDialog(
+void RenderFrameHostImpl::RunModalAlertDialog(
+    const base::string16& alert_message,
+    RunModalAlertDialogCallback response_callback) {
+  auto dialog_closed_callback = base::BindOnce(
+      [](RunModalAlertDialogCallback response_callback, bool success,
+         const base::string16& response) {
+        // The response string is unused but we use a generic mechanism for
+        // closing the javascript dialog that returns two arguments.
+        std::move(response_callback).Run();
+      },
+      std::move(response_callback));
+  RunJavaScriptDialog(alert_message, base::string16(),
+                      JAVASCRIPT_DIALOG_TYPE_ALERT,
+                      std::move(dialog_closed_callback));
+}
+
+void RenderFrameHostImpl::RunModalConfirmDialog(
+    const base::string16& alert_message,
+    RunModalConfirmDialogCallback response_callback) {
+  auto dialog_closed_callback = base::BindOnce(
+      [](RunModalConfirmDialogCallback response_callback, bool success,
+         const base::string16& response) {
+        // The response string is unused but we use a generic mechanism for
+        // closing the javascript dialog that returns two arguments.
+        std::move(response_callback).Run(success);
+      },
+      std::move(response_callback));
+  RunJavaScriptDialog(alert_message, base::string16(),
+                      JAVASCRIPT_DIALOG_TYPE_CONFIRM,
+                      std::move(dialog_closed_callback));
+}
+
+void RenderFrameHostImpl::RunModalPromptDialog(
+    const base::string16& alert_message,
+    const base::string16& default_value,
+    RunModalPromptDialogCallback response_callback) {
+  RunJavaScriptDialog(alert_message, default_value,
+                      JAVASCRIPT_DIALOG_TYPE_PROMPT,
+                      std::move(response_callback));
+}
+
+void RenderFrameHostImpl::RunJavaScriptDialog(
     const base::string16& message,
     const base::string16& default_prompt,
     JavaScriptDialogType dialog_type,
-    IPC::Message* reply_msg) {
+    JavaScriptDialogCallback ipc_response_callback) {
   // Don't show the dialog if it's triggered on a frame that's pending deletion
   // (e.g., from an unload handler), or when the tab is being closed.
   if (!is_active()) {
-    SendJavaScriptDialogReply(reply_msg, true, base::string16());
+    std::move(ipc_response_callback).Run(true, base::string16());
     return;
   }
 
@@ -3131,12 +3168,16 @@ void RenderFrameHostImpl::OnRunJavaScriptDialog(
   // process input events.
   GetProcess()->SetBlocked(true);
 
-  delegate_->RunJavaScriptDialog(this, message, default_prompt, dialog_type,
-                                 reply_msg);
+  delegate_->RunJavaScriptDialog(
+      this, message, default_prompt, dialog_type,
+      base::BindOnce(&RenderFrameHostImpl::JavaScriptDialogClosed,
+                     weak_ptr_factory_.GetWeakPtr(),
+                     std::move(ipc_response_callback)));
 }
 
-void RenderFrameHostImpl::OnRunBeforeUnloadConfirm(bool is_reload,
-                                                   IPC::Message* reply_msg) {
+void RenderFrameHostImpl::RunBeforeUnloadConfirm(
+    bool is_reload,
+    RunBeforeUnloadConfirmCallback ipc_response_callback) {
   TRACE_EVENT1("navigation", "RenderFrameHostImpl::OnRunBeforeUnloadConfirm",
                "frame_tree_node", frame_tree_node_->frame_tree_node_id());
 
@@ -3147,8 +3188,7 @@ void RenderFrameHostImpl::OnRunBeforeUnloadConfirm(bool is_reload,
     // before-unload type wants to ignore it, then short-circuit the request and
     // respond as if the user decided to stay on the page, canceling the unload.
     if (beforeunload_initiator->beforeunload_dialog_request_cancels_unload_) {
-      SendJavaScriptDialogReply(reply_msg, false /* success */,
-                                base::string16());
+      std::move(ipc_response_callback).Run(/*success=*/false);
       return;
     }
 
@@ -3157,8 +3197,7 @@ void RenderFrameHostImpl::OnRunBeforeUnloadConfirm(bool is_reload,
       // for Document.BeforeUnloadDialog and add the intervention console
       // message to match renderer-side behavior in
       // Document::DispatchBeforeUnloadEvent().
-      SendJavaScriptDialogReply(reply_msg, true /* success */,
-                                base::string16());
+      std::move(ipc_response_callback).Run(/*success=*/true);
       return;
     }
     beforeunload_initiator->has_shown_beforeunload_dialog_ = true;
@@ -3185,7 +3224,20 @@ void RenderFrameHostImpl::OnRunBeforeUnloadConfirm(bool is_reload,
       frame->beforeunload_timeout_->Stop();
   }
 
-  delegate_->RunBeforeUnloadConfirm(this, is_reload, reply_msg);
+  auto ipc_callback_wrapper = base::BindOnce(
+      [](RunBeforeUnloadConfirmCallback response_callback, bool success,
+         const base::string16& response) {
+        // The response string is unused but we use a generic mechanism for
+        // closing the javascript dialog that returns two arguments.
+        std::move(response_callback).Run(success);
+      },
+      std::move(ipc_response_callback));
+  auto dialog_closed_callback = base::BindOnce(
+      &RenderFrameHostImpl::JavaScriptDialogClosed,
+      weak_ptr_factory_.GetWeakPtr(), std::move(ipc_callback_wrapper));
+
+  delegate_->RunBeforeUnloadConfirm(this, is_reload,
+                                    std::move(dialog_closed_callback));
 }
 
 void RenderFrameHostImpl::RequestTextSurroundingSelection(
@@ -5190,13 +5242,11 @@ void RenderFrameHostImpl::AdvanceFocus(blink::WebFocusType type,
 }
 
 void RenderFrameHostImpl::JavaScriptDialogClosed(
-    IPC::Message* reply_msg,
+    JavaScriptDialogCallback dialog_closed_callback,
     bool success,
     const base::string16& user_input) {
   GetProcess()->SetBlocked(false);
-
-  SendJavaScriptDialogReply(reply_msg, success, user_input);
-
+  std::move(dialog_closed_callback).Run(success, user_input);
   // If executing as part of beforeunload event handling, there may have been
   // timers stopped in this frame or a frame up in the frame hierarchy. Restart
   // any timers that were stopped in OnRunBeforeUnloadConfirm().
@@ -5206,15 +5256,6 @@ void RenderFrameHostImpl::JavaScriptDialogClosed(
       frame->beforeunload_timeout_->Start(beforeunload_timeout_delay_);
     }
   }
-}
-
-void RenderFrameHostImpl::SendJavaScriptDialogReply(
-    IPC::Message* reply_msg,
-    bool success,
-    const base::string16& user_input) {
-  FrameHostMsg_RunJavaScriptDialog::WriteReplyParams(reply_msg, success,
-                                                     user_input);
-  Send(reply_msg);
 }
 
 void RenderFrameHostImpl::CommitNavigation(

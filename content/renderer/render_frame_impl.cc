@@ -2828,24 +2828,6 @@ void RenderFrameImpl::OnReload() {
   frame_->StartReload(WebFrameLoadType::kReload);
 }
 
-bool RenderFrameImpl::RunJavaScriptDialog(JavaScriptDialogType type,
-                                          const base::string16& message,
-                                          const base::string16& default_value,
-                                          base::string16* result) {
-  // 10k ought to be enough for anyone.
-  const base::string16::size_type kMaxMessageSize = 10 * 1024;
-  base::string16 truncated_message = message.substr(0, kMaxMessageSize);
-
-  bool success = false;
-  base::string16 result_temp;
-  if (!result)
-    result = &result_temp;
-
-  Send(new FrameHostMsg_RunJavaScriptDialog(
-      routing_id_, truncated_message, default_value, type, &success, result));
-  return success;
-}
-
 void RenderFrameImpl::NotifyObserversOfFailedProvisionalLoad() {
   for (auto& observer : observers_)
     observer.DidFailProvisionalLoad();
@@ -4802,38 +4784,6 @@ bool RenderFrameImpl::HandleCurrentKeyboardEvent() {
   }
 
   return did_execute_command;
-}
-
-void RenderFrameImpl::RunModalAlertDialog(const blink::WebString& message) {
-  RunJavaScriptDialog(JAVASCRIPT_DIALOG_TYPE_ALERT, message.Utf16(),
-                      base::string16(), nullptr);
-}
-
-bool RenderFrameImpl::RunModalConfirmDialog(const blink::WebString& message) {
-  return RunJavaScriptDialog(JAVASCRIPT_DIALOG_TYPE_CONFIRM, message.Utf16(),
-                             base::string16(), nullptr);
-}
-
-bool RenderFrameImpl::RunModalPromptDialog(
-    const blink::WebString& message,
-    const blink::WebString& default_value,
-    blink::WebString* actual_value) {
-  base::string16 result;
-  bool ok = RunJavaScriptDialog(JAVASCRIPT_DIALOG_TYPE_PROMPT, message.Utf16(),
-                                default_value.Utf16(), &result);
-  if (ok)
-    *actual_value = WebString::FromUTF16(result);
-  return ok;
-}
-
-bool RenderFrameImpl::RunModalBeforeUnloadDialog(bool is_reload) {
-  bool success = false;
-  // This is an ignored return value, but is included so we can accept the same
-  // response as RunJavaScriptDialog.
-  base::string16 ignored_result;
-  Send(new FrameHostMsg_RunBeforeUnloadConfirm(routing_id_, is_reload, &success,
-                                               &ignored_result));
-  return success;
 }
 
 void RenderFrameImpl::ShowContextMenu(const blink::WebContextMenuData& data) {
