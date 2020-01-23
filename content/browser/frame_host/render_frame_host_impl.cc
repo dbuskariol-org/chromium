@@ -200,6 +200,7 @@
 #include "third_party/blink/public/mojom/cache_storage/cache_storage.mojom.h"
 #include "third_party/blink/public/mojom/choosers/file_chooser.mojom.h"
 #include "third_party/blink/public/mojom/frame/fullscreen.mojom.h"
+#include "third_party/blink/public/mojom/frame/media_player_action.mojom.h"
 #include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/mojom/geolocation/geolocation_service.mojom.h"
 #include "third_party/blink/public/mojom/loader/pause_subresource_loading_handle.mojom.h"
@@ -1434,10 +1435,15 @@ RenderFrameHostImpl::PauseSubresourceLoading() {
 
 void RenderFrameHostImpl::ExecuteMediaPlayerActionAtLocation(
     const gfx::Point& location,
-    const blink::MediaPlayerAction& action) {
+    const blink::mojom::MediaPlayerAction& action) {
+  auto media_player_action = blink::mojom::MediaPlayerAction::New();
+  media_player_action->type = action.type;
+  media_player_action->enable = action.enable;
   gfx::PointF point_in_view = GetView()->TransformRootPointToViewCoordSpace(
       gfx::PointF(location.x(), location.y()));
-  Send(new FrameMsg_MediaPlayerActionAt(routing_id_, point_in_view, action));
+  GetAssociatedLocalFrame()->MediaPlayerActionAt(
+      gfx::Point(point_in_view.x(), point_in_view.y()),
+      std::move(media_player_action));
 }
 
 bool RenderFrameHostImpl::CreateNetworkServiceDefaultFactory(

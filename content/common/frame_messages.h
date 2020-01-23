@@ -51,7 +51,6 @@
 #include "third_party/blink/public/common/feature_policy/feature_policy.h"
 #include "third_party/blink/public/common/frame/frame_owner_element_type.h"
 #include "third_party/blink/public/common/frame/frame_policy.h"
-#include "third_party/blink/public/common/media/media_player_action.h"
 #include "third_party/blink/public/common/messaging/message_port_channel.h"
 #include "third_party/blink/public/common/messaging/transferable_message.h"
 #include "third_party/blink/public/common/navigation/triggering_event_info.h"
@@ -135,8 +134,6 @@ IPC_ENUM_TRAITS_MAX_VALUE(blink::TriggeringEventInfo,
                           blink::TriggeringEventInfo::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::mojom::UserActivationUpdateType,
                           blink::mojom::UserActivationUpdateType::kMaxValue)
-IPC_ENUM_TRAITS_MAX_VALUE(blink::MediaPlayerAction::Type,
-                          blink::MediaPlayerAction::Type::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::mojom::FeaturePolicyDisposition,
                           blink::mojom::FeaturePolicyDisposition::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::mojom::FrameVisibility,
@@ -575,11 +572,6 @@ IPC_STRUCT_TRAITS_BEGIN(content::PepperRendererInstanceData)
 IPC_STRUCT_TRAITS_END()
 #endif
 
-IPC_STRUCT_TRAITS_BEGIN(blink::MediaPlayerAction)
-  IPC_STRUCT_TRAITS_MEMBER(type)
-  IPC_STRUCT_TRAITS_MEMBER(enable)
-IPC_STRUCT_TRAITS_END()
-
 // -----------------------------------------------------------------------------
 // Messages sent from the browser to the renderer.
 
@@ -750,12 +742,6 @@ IPC_MESSAGE_ROUTED1(FrameMsg_MixedContentFound,
 IPC_MESSAGE_ROUTED2(FrameMsg_ScrollRectToVisible,
                     gfx::Rect /* rect_to_scroll */,
                     blink::WebScrollIntoViewParams /* properties */)
-
-// Tells the renderer to perform the given action on the media player location
-// at the given point in the view coordinate space.
-IPC_MESSAGE_ROUTED2(FrameMsg_MediaPlayerActionAt,
-                    gfx::PointF /* location */,
-                    blink::MediaPlayerAction)
 
 // Tell the renderer to add a property to the WebUI binding object.  This
 // only works if we allowed WebUI bindings.

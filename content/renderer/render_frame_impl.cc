@@ -2211,7 +2211,6 @@ bool RenderFrameImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameMsg_MixedContentFound, OnMixedContentFound)
     IPC_MESSAGE_HANDLER(FrameMsg_SetOverlayRoutingToken,
                         OnSetOverlayRoutingToken)
-    IPC_MESSAGE_HANDLER(FrameMsg_MediaPlayerActionAt, OnMediaPlayerActionAt)
 #if BUILDFLAG(USE_EXTERNAL_POPUP_MENU)
 #if defined(OS_MACOSX)
     IPC_MESSAGE_HANDLER(FrameMsg_SelectPopupMenuItem, OnSelectPopupMenuItem)
@@ -6159,15 +6158,6 @@ void RenderFrameImpl::RequestOverlayRoutingToken(
   Send(new FrameHostMsg_RequestOverlayRoutingToken(routing_id_));
 
   pending_routing_token_callbacks_.push_back(std::move(callback));
-}
-
-void RenderFrameImpl::OnMediaPlayerActionAt(
-    const gfx::PointF& location,
-    const blink::MediaPlayerAction& action) {
-  blink::WebFloatRect viewport_position(location.x(), location.y(), 0, 0);
-  GetLocalRootRenderWidget()->ConvertWindowToViewport(&viewport_position);
-  frame_->PerformMediaPlayerAction(
-      gfx::Point(viewport_position.x, viewport_position.y), action);
 }
 
 #if BUILDFLAG(USE_EXTERNAL_POPUP_MENU)

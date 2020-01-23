@@ -14,6 +14,7 @@ import "third_party/blink/public/mojom/devtools/console_message.mojom";
 import "third_party/blink/public/mojom/frame/blocked_navigation_types.mojom";
 import "third_party/blink/public/mojom/frame/fullscreen.mojom";
 import "third_party/blink/public/mojom/frame/lifecycle.mojom";
+import "third_party/blink/public/mojom/frame/media_player_action.mojom";
 import "third_party/blink/public/mojom/frame/sudden_termination_disabler_type.mojom";
 import "third_party/blink/public/mojom/frame/user_activation_update_types.mojom";
 import "third_party/blink/public/mojom/input/scroll_direction.mojom";
@@ -271,6 +272,10 @@ interface LocalFrame {
   BeforeUnload(bool is_reload)
       => (bool proceed, mojo_base.mojom.TimeTicks before_unload_start_time,
           mojo_base.mojom.TimeTicks before_unload_end_time);
+
+  // Tells the renderer to perform the given action on the media player location
+  // at the given point in the view coordinate space.
+  MediaPlayerActionAt(gfx.mojom.Point location, blink.mojom.MediaPlayerAction action);
 };
 
 // Implemented in Browser, this interface defines frame-specific methods that
