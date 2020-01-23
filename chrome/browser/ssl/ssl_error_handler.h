@@ -146,8 +146,8 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
       const net::SSLInfo& ssl_info,
       const GURL& request_url,
       std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
-      network_time::NetworkTimeTracker* network_time_tracker,
       BlockingPageReadyCallback blocking_page_ready_callback,
+      network_time::NetworkTimeTracker* network_time_tracker,
       bool user_can_proceed_past_interstitial = true);
 
   // Sets the binary proto for SSL error assistant. The binary proto

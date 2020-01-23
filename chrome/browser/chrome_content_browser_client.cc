@@ -674,7 +674,6 @@ void HandleSSLErrorWrapper(
     const net::SSLInfo& ssl_info,
     const GURL& request_url,
     std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
-    network_time::NetworkTimeTracker* network_time_tracker,
     SSLErrorHandler::BlockingPageReadyCallback blocking_page_ready_callback) {
   Profile* profile =
       Profile::FromBrowserContext(web_contents->GetBrowserContext());
@@ -688,8 +687,8 @@ void HandleSSLErrorWrapper(
 
   SSLErrorHandler::HandleSSLError(
       web_contents, cert_error, ssl_info, request_url,
-      std::move(ssl_cert_reporter), network_time_tracker,
-      std::move(blocking_page_ready_callback),
+      std::move(ssl_cert_reporter), std::move(blocking_page_ready_callback),
+      g_browser_process->network_time_tracker(),
       profile->GetPrefs()->GetBoolean(prefs::kSSLErrorOverrideAllowed));
 }
 
@@ -3960,7 +3959,6 @@ ChromeContentBrowserClient::CreateThrottlesForNavigation(
   throttles.push_back(std::make_unique<SSLErrorNavigationThrottle>(
       handle,
       std::make_unique<CertificateReportingServiceCertReporter>(web_contents),
-      g_browser_process->network_time_tracker(),
       base::BindOnce(&HandleSSLErrorWrapper), base::BindOnce(&IsInHostedApp)));
 
   throttles.push_back(std::make_unique<LoginNavigationThrottle>(handle));
