@@ -44,12 +44,13 @@ public final class Tab {
     private static final Map<Integer, Tab> sTabMap = new HashMap<Integer, Tab>();
 
     private final ITab mImpl;
-    private FullscreenCallbackClientImpl mFullscreenCallbackClient;
     private final NavigationController mNavigationController;
+    private final FindInPageController mFindInPageController;
     private final ObserverList<TabCallback> mCallbacks;
     private Browser mBrowser;
     private DownloadCallbackClientImpl mDownloadCallbackClient;
     private ErrorPageCallbackClientImpl mErrorPageCallbackClient;
+    private FullscreenCallbackClientImpl mFullscreenCallbackClient;
     private NewTabCallback mNewTabCallback;
     // Id from the remote side.
     private final int mId;
@@ -66,6 +67,7 @@ public final class Tab {
 
         mCallbacks = new ObserverList<TabCallback>();
         mNavigationController = NavigationController.create(mImpl);
+        mFindInPageController = new FindInPageController(mImpl);
         registerTab(this);
     }
 
@@ -209,6 +211,12 @@ public final class Tab {
     public NavigationController getNavigationController() {
         ThreadCheck.ensureOnUiThread();
         return mNavigationController;
+    }
+
+    @NonNull
+    public FindInPageController getFindInPageController() {
+        ThreadCheck.ensureOnUiThread();
+        return mFindInPageController;
     }
 
     public void registerTabCallback(@Nullable TabCallback callback) {
