@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef SERVICES_TRACING_PUBLIC_CPP_PERFETTO_POSIX_SYSTEM_PRODUCER_H_
-#define SERVICES_TRACING_PUBLIC_CPP_PERFETTO_POSIX_SYSTEM_PRODUCER_H_
+#ifndef SERVICES_TRACING_PUBLIC_CPP_PERFETTO_ANDROID_SYSTEM_PRODUCER_H_
+#define SERVICES_TRACING_PUBLIC_CPP_PERFETTO_ANDROID_SYSTEM_PRODUCER_H_
 
 #include <memory>
 #include <set>
@@ -26,7 +26,7 @@ class SharedMemory;
 
 namespace tracing {
 
-class COMPONENT_EXPORT(TRACING_CPP) PosixSystemProducer
+class COMPONENT_EXPORT(TRACING_CPP) AndroidSystemProducer
     : public SystemProducer {
  public:
   enum class State {
@@ -35,10 +35,10 @@ class COMPONENT_EXPORT(TRACING_CPP) PosixSystemProducer
     kConnected = 2,
     kDisconnected = 3
   };
-  PosixSystemProducer(const char* socket, PerfettoTaskRunner* task_runner);
-  ~PosixSystemProducer() override;
+  AndroidSystemProducer(const char* socket, PerfettoTaskRunner* task_runner);
+  ~AndroidSystemProducer() override;
 
-  // Functions needed for PosixSystemProducer only.
+  // Functions needed for AndroidSystemProducer only.
   //
   // Lets tests ignore the SDK check (Perfetto only runs on post Android Pie
   // devices by default, so for trybots on older OSs we need to ignore the check
@@ -47,7 +47,7 @@ class COMPONENT_EXPORT(TRACING_CPP) PosixSystemProducer
   // TODO(nuskos): We need to make this possible for telemetry as well, since
   // they might have side loaded the app.
   void SetDisallowPreAndroidPieForTesting(bool disallow);
-  // |socket| must remain alive as long as PosixSystemProducer is around
+  // |socket| must remain alive as long as AndroidSystemProducer is around
   // trying to connect to it.
   void SetNewSocketForTesting(const char* socket);
 
@@ -128,7 +128,7 @@ class COMPONENT_EXPORT(TRACING_CPP) PosixSystemProducer
   void ConnectSocket();
   // Returns true if we should skip setup because this Android device is Android
   // O or below.
-  bool SkipIfOnAndroidAndPreAndroidPie() const;
+  bool SkipIfPreAndroidPie() const;
   // If any OnDisconnect callbacks are stored, this will invoke them and delete
   // references to them must be called on the proper sequence.
   void InvokeStoredOnDisconnectCallbacks();
@@ -146,13 +146,7 @@ class COMPONENT_EXPORT(TRACING_CPP) PosixSystemProducer
 
   // Connection to the Perfetto service and the shared memory that it provides.
   perfetto::SharedMemory* shared_memory_ = nullptr;
-  // Arbiters must outlive all trace writers, but some trace writers will never
-  // flush until future tracing sessions, which means even on disconnecting we
-  // have to keep these around. So instead of destroying any arbiters we store
-  // them forever (leaking their amount of memory).
-  //
-  // TODO(nuskos): We should improve this once we're on the client library.
-  std::vector<std::unique_ptr<perfetto::SharedMemoryArbiter>> shared_memory_arbiters_;
+  std::unique_ptr<perfetto::SharedMemoryArbiter> shared_memory_arbiter_;
   std::unique_ptr<perfetto::TracingService::ProducerEndpoint> service_;
   // First value is the flush ID, the second is the number of
   // replies we're still waiting for.
@@ -161,10 +155,10 @@ class COMPONENT_EXPORT(TRACING_CPP) PosixSystemProducer
   SEQUENCE_CHECKER(sequence_checker_);
   // NOTE: Weak pointers must be invalidated before all other member variables.
   // and thus must be the last member variable.
-  base::WeakPtrFactory<PosixSystemProducer> weak_ptr_factory_{this};
-  DISALLOW_COPY_AND_ASSIGN(PosixSystemProducer);
+  base::WeakPtrFactory<AndroidSystemProducer> weak_ptr_factory_{this};
+  DISALLOW_COPY_AND_ASSIGN(AndroidSystemProducer);
 };
 
 }  // namespace tracing
 
-#endif  // SERVICES_TRACING_PUBLIC_CPP_PERFETTO_POSIX_SYSTEM_PRODUCER_H_
+#endif  // SERVICES_TRACING_PUBLIC_CPP_PERFETTO_ANDROID_SYSTEM_PRODUCER_H_

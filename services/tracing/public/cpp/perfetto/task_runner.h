@@ -16,12 +16,12 @@
 #include "services/tracing/public/mojom/perfetto_service.mojom.h"
 #include "third_party/perfetto/include/perfetto/base/task_runner.h"
 
-#if defined(OS_POSIX)
-// Needed for base::FileDescriptorWatcher::Controller and for implementing
-// AddFileDescriptorWatch & RemoveFileDescriptorWatch.
+#if defined(OS_ANDROID)
 #include <map>
+// Needed for base::FileDescriptorWatcher::Controller and for implementing
+// AddFileDescriptorWatch & RemoveFileDescriptorWatch on Android.
 #include "base/files/file_descriptor_watcher_posix.h"
-#endif  // defined(OS_POSIX)
+#endif  // defined(OS_ANDROID)
 
 namespace tracing {
 
@@ -62,10 +62,10 @@ class COMPONENT_EXPORT(TRACING_CPP) PerfettoTaskRunner
   void OnDeferredTasksDrainTimer();
 
   scoped_refptr<base::SequencedTaskRunner> task_runner_;
-#if defined(OS_POSIX)
+#if defined(OS_ANDROID)
   std::map<int, std::unique_ptr<base::FileDescriptorWatcher::Controller>>
       fd_controllers_;
-#endif  // defined(OS_POSIX)
+#endif  // defined(OS_ANDROID)
 
   DISALLOW_COPY_AND_ASSIGN(PerfettoTaskRunner);
 };
