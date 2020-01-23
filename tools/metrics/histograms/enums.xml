@@ -12544,6 +12544,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="47" label="CONTAINER_CONFIGURATION_FAILED"/>
   <int value="48" label="LOAD_COMPONENT_UPDATE_IN_PROGRESS"/>
   <int value="49" label="NEVER_FINISHED"/>
+  <int value="50" label="CONTAINER_SETUP_FAILED"/>
 </enum>
 
 <enum name="CrostiniSettingsEvent">
