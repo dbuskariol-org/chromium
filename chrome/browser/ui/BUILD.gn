@@ -2577,6 +2577,7 @@ jumbo_static_library("ui") {
       configs += [ "//build/config/linux:x11" ]
       deps += [
         "//components/dbus/menu",
+        "//ui/base:wm_role_names",
         "//ui/events/devices",
         "//ui/events/devices/x11",
         "//ui/events/platform/x11",
