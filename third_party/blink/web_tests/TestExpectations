@@ -5379,7 +5379,6 @@ crbug.com/911515 [ Mac ] transforms/shadows.html [ Pass Failure ]
 crbug.com/911782 [ Mac ] paint/invalidation/forms/submit-focus-by-mouse-then-keydown.html [ Pass Failure ]
 
 # Sheriff 2018-12-06
-crbug.com/912793 http/tests/devtools/sources/debugger-breakpoints/restore-locations-for-breakpoint-with-broken-source-map.js [ Pass Failure ]
 crbug.com/912793 crbug.com/899087 virtual/android/fullscreen/full-screen-iframe-allowed-video.html [ Crash Pass Failure Timeout ]
 
 # Sheriff 2018-12-07
@@ -6384,3 +6383,8 @@ crbug.com/1043675 [ Linux ] virtual/threaded-no-composited-antialiasing/animatio
 # The transformed region bleeds into the foreground with SkiaRenderer enabled.
 crbug.com/1044032 [ Linux ] css3/filters/backdrop-filter-transform.html [ Failure ]
 crbug.com/1044032 [ Linux ] virtual/scalefactor200/css3/filters/backdrop-filter-transform.html [ Failure ]
+
+# Required to land DevTools change
+crbug.com/106759 http/tests/devtools/command-line-api-inspect.js [ Pass Failure ]
+crbug.com/106759 http/tests/devtools/sources/debugger-breakpoints/restore-locations-for-breakpoint-with-broken-source-map.js [ Pass Failure ]
+crbug.com/106759 http/tests/devtools/sources/debugger-console/debugger-command-line-api.js [ Pass Failure ]
