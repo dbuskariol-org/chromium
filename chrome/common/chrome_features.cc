@@ -487,11 +487,6 @@ const base::Feature kKernelnextVMs{"KernelnextVMs",
                                    base::FEATURE_DISABLED_BY_DEFAULT};
 #endif
 
-// Uses KidsManagement UrlClassification instead of SafeSearch for supervised
-// accounts.
-const base::Feature kKidsManagementUrlClassification{
-    "KidsManagementUrlClassification", base::FEATURE_ENABLED_BY_DEFAULT};
-
 #if defined(OS_MACOSX)
 // Uses NSFullSizeContentViewWindowMask where available instead of adding our
 // own views to the window frame. This is a temporary kill switch, it can be

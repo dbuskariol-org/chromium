@@ -1980,11 +1980,6 @@ const char kIsolateOriginsDescription[] =
     "Requires dedicated processes for an additional set of origins, "
     "specified as a comma-separated list.";
 
-const char kKidsManagementUrlClassificationName[] =
-    "KidsMangement Url Classification";
-const char kKidsManagementUrlClassificationDescription[] =
-    "Uses KidsManagementService to classify URLs for Kid Accounts.";
-
 const char kSiteIsolationOptOutName[] = "Disable site isolation";
 const char kSiteIsolationOptOutDescription[] =
     "Disables site isolation "
