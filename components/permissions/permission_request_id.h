@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_ID_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_ID_H_
+#ifndef COMPONENTS_PERMISSIONS_PERMISSION_REQUEST_ID_H_
+#define COMPONENTS_PERMISSIONS_PERMISSION_REQUEST_ID_H_
 
 #include <string>
 
@@ -12,6 +12,8 @@
 namespace content {
 class RenderFrameHost;
 }  // namespace content
+
+namespace permissions {
 
 // Uniquely identifies a particular permission request.
 // None of the different attributes (render_process_id, render_frame_id or
@@ -45,4 +47,6 @@ class PermissionRequestID {
   int request_id_;
 };
 
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_ID_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_PERMISSION_REQUEST_ID_H_

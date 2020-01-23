@@ -2,10 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_result.h"
+#include "components/permissions/permission_result.h"
+
+namespace permissions {
 
 PermissionResult::PermissionResult(ContentSetting cs,
                                    PermissionStatusSource pss)
     : content_setting(cs), source(pss) {}
 
 PermissionResult::~PermissionResult() {}
+
+}  // namespace permissions

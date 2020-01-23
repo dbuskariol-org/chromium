@@ -2,10 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_RESULT_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_RESULT_H_
+#ifndef COMPONENTS_PERMISSIONS_PERMISSION_RESULT_H_
+#define COMPONENTS_PERMISSIONS_PERMISSION_RESULT_H_
 
 #include "components/content_settings/core/common/content_settings.h"
+
+namespace permissions {
 
 // Identifies the source or reason for a permission status being returned.
 enum class PermissionStatusSource {
@@ -46,4 +48,6 @@ struct PermissionResult {
   PermissionStatusSource source;
 };
 
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_RESULT_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_PERMISSION_RESULT_H_

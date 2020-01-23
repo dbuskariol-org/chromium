@@ -2,8 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_request.h"
+#include "components/permissions/permission_request.h"
 #include "build/build_config.h"
+
+namespace permissions {
 
 PermissionRequest::PermissionRequest() {}
 
@@ -24,3 +26,5 @@ base::string16 PermissionRequest::GetQuietMessageText() const {
   return GetMessageText();
 }
 #endif
+
+}  // namespace permissions

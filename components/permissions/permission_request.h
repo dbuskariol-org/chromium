@@ -2,17 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_H_
+#ifndef COMPONENTS_PERMISSIONS_PERMISSION_REQUEST_H_
+#define COMPONENTS_PERMISSIONS_PERMISSION_REQUEST_H_
 
 #include "base/macros.h"
 #include "base/strings/string16.h"
+#include "build/build_config.h"
 #include "components/content_settings/core/common/content_settings_types.h"
 #include "url/gurl.h"
 
 namespace gfx {
 struct VectorIcon;
 }
+
+namespace permissions {
 
 // Used for UMA to record the types of permission prompts shown.
 // When updating, you also need to update:
@@ -152,4 +155,6 @@ class PermissionRequest {
   DISALLOW_COPY_AND_ASSIGN(PermissionRequest);
 };
 
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_PERMISSION_REQUEST_H_
