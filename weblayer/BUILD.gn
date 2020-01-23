@@ -207,6 +207,7 @@ jumbo_static_library("weblayer_lib") {
     "//components/embedder_support",
     "//components/network_time",
     "//components/prefs",
+    "//components/safe_browsing/core:features",
     "//components/security_interstitials/content:security_interstitial_page",
     "//components/security_interstitials/content/renderer:security_interstitial_page_controller",
     "//components/security_interstitials/core",
