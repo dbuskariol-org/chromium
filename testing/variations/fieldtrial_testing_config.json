@@ -2703,6 +2703,21 @@
             ]
         }
     ],
+    "ExpandablePaymentHandler": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "ScrollToExpandPaymentHandler"
+                    ]
+                }
+            ]
+        }
+    ],
     "ExpectCTReporting": [
         {
             "platforms": [
