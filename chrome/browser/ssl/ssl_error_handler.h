@@ -131,14 +131,18 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
     virtual bool HasBlockedInterception() const = 0;
   };
 
-  // Entry point for the class. All parameters except
-  // |blocking_page_ready_callback| are the same as SSLBlockingPage constructor.
+  // Entry point for the class. Most parameters are the same as
+  // SSLBlockingPage constructor.
+  // Extra parameters:
   // |blocking_page_ready_callback| is intended for committed interstitials. If
   // |blocking_page_ready_callback| is null, this function will create a
   // blocking page and call Show() on it. Otherwise, this function creates an
   // interstitial and passes it to |blocking_page_ready_callback|.
   // |blocking_page_ready_callback| is guaranteed not to be called
   // synchronously.
+  // |user_can_proceed_past_interstitial| can be given a value of false to
+  // change the default behavior of giving users the option to proceed past
+  // SSL error interstitials.
   static void HandleSSLError(
       content::WebContents* web_contents,
       int cert_error,
@@ -146,7 +150,8 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
       const GURL& request_url,
       std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
       network_time::NetworkTimeTracker* network_time_tracker,
-      BlockingPageReadyCallback blocking_page_ready_callback);
+      BlockingPageReadyCallback blocking_page_ready_callback,
+      bool user_can_proceed_past_interstitial = true);
 
   // Sets the binary proto for SSL error assistant. The binary proto
   // can be downloaded by the component updater, or set by tests.

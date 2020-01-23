@@ -26,7 +26,6 @@
 #include "chrome/browser/ssl/captive_portal_helper.h"
 #include "chrome/browser/ssl/chrome_security_blocking_page_factory.h"
 #include "chrome/browser/ssl/ssl_error_assistant.h"
-#include "chrome/common/pref_names.h"
 #include "components/captive_portal/core/buildflags.h"
 #include "components/network_time/network_time_tracker.h"
 #include "components/prefs/pref_service.h"
@@ -554,21 +553,16 @@ void SSLErrorHandler::HandleSSLError(
     network_time::NetworkTimeTracker* network_time_tracker,
     base::OnceCallback<
         void(std::unique_ptr<security_interstitials::SecurityInterstitialPage>)>
-        blocking_page_ready_callback) {
+        blocking_page_ready_callback,
+    bool user_can_proceed_past_interstitial /*=true*/) {
   DCHECK(!FromWebContents(web_contents));
 
   Profile* profile =
       Profile::FromBrowserContext(web_contents->GetBrowserContext());
+  DCHECK(profile);
 
-  // This can happen if GetBrowserContext no longer exist by the time this gets
-  // called (e.g. the SSL error was in a webview that has since been destroyed),
-  // if that's the case we don't need to handle the error (and will crash if we
-  // attempt to).
-  if (!profile)
-    return;
+  bool hard_override_disabled = !user_can_proceed_past_interstitial;
 
-  bool hard_override_disabled =
-      !profile->GetPrefs()->GetBoolean(prefs::kSSLErrorOverrideAllowed);
   int options_mask = security_interstitials::CalculateSSLErrorOptionsMask(
       cert_error, hard_override_disabled, ssl_info.is_fatal_cert_error);
 

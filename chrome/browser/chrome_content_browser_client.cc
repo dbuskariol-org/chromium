@@ -666,6 +666,33 @@ const base::Feature kRendererCodeIntegrity{"RendererCodeIntegrity",
 #endif  // defined(OS_WIN) && !defined(COMPONENT_BUILD) &&
         // !defined(ADDRESS_SANITIZER)
 
+// Wrapper for SSLErrorHandler::HandleSSLError() that supplies //chrome-level
+// parameters.
+void HandleSSLErrorWrapper(
+    content::WebContents* web_contents,
+    int cert_error,
+    const net::SSLInfo& ssl_info,
+    const GURL& request_url,
+    std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
+    network_time::NetworkTimeTracker* network_time_tracker,
+    SSLErrorHandler::BlockingPageReadyCallback blocking_page_ready_callback) {
+  Profile* profile =
+      Profile::FromBrowserContext(web_contents->GetBrowserContext());
+
+  // This can happen if GetBrowserContext no longer exists by the time this
+  // gets called (e.g. the SSL error was in a webview that has since been
+  // destroyed); if that's the case we don't need to handle the error (and will
+  // crash if we attempt to).
+  if (!profile)
+    return;
+
+  SSLErrorHandler::HandleSSLError(
+      web_contents, cert_error, ssl_info, request_url,
+      std::move(ssl_cert_reporter), network_time_tracker,
+      std::move(blocking_page_ready_callback),
+      profile->GetPrefs()->GetBoolean(prefs::kSSLErrorOverrideAllowed));
+}
+
 enum AppLoadedInTabSource {
   // A platform app page tried to load one of its own URLs in a tab.
   APP_LOADED_IN_TAB_SOURCE_APP = 0,
@@ -3934,8 +3961,7 @@ ChromeContentBrowserClient::CreateThrottlesForNavigation(
       handle,
       std::make_unique<CertificateReportingServiceCertReporter>(web_contents),
       g_browser_process->network_time_tracker(),
-      base::BindOnce(&SSLErrorHandler::HandleSSLError),
-      base::BindOnce(&IsInHostedApp)));
+      base::BindOnce(&HandleSSLErrorWrapper), base::BindOnce(&IsInHostedApp)));
 
   throttles.push_back(std::make_unique<LoginNavigationThrottle>(handle));
 
