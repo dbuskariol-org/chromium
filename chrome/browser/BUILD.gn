@@ -3117,6 +3117,8 @@ jumbo_static_library("browser") {
       "enterprise_reporting/extension_info.h",
       "enterprise_reporting/notification/extension_request_notification.cc",
       "enterprise_reporting/notification/extension_request_notification.h",
+      "enterprise_reporting/notification/extension_request_observer.cc",
+      "enterprise_reporting/notification/extension_request_observer.h",
       "enterprise_reporting/policy_info.cc",
       "enterprise_reporting/policy_info.h",
       "enterprise_reporting/prefs.cc",
