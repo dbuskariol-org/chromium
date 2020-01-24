@@ -3600,6 +3600,8 @@ jumbo_static_library("ui") {
       "app_list/app_service/app_service_app_item.h",
       "app_list/app_service/app_service_app_model_builder.cc",
       "app_list/app_service/app_service_app_model_builder.h",
+      "app_list/app_service/app_service_context_menu.cc",
+      "app_list/app_service/app_service_context_menu.h",
       "app_list/arc/arc_app_context_menu.cc",
       "app_list/arc/arc_app_context_menu.h",
       "app_list/arc/arc_app_dialog.h",
