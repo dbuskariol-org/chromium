@@ -285,11 +285,8 @@ bool SwiftShaderAllowed() {
 #endif
 }
 
-// These functions are never called on the Fuchsia path. Leave them undefined to
-// fix a compiler warning.
-#if !defined(OS_FUCHSIA)
 // Determines if Vulkan is available for the GPU process.
-bool VulkanAllowed() {
+bool ALLOW_UNUSED_TYPE VulkanAllowed() {
 #if BUILDFLAG(ENABLE_VULKAN)
   // Vulkan will be enabled if certain flags are present.
   // --enable-features=Vulkan will cause Vulkan to be used for compositing and
@@ -307,14 +304,13 @@ bool VulkanAllowed() {
 }
 
 // Determines if Metal is available for the GPU process.
-bool MetalAllowed() {
+bool ALLOW_UNUSED_TYPE MetalAllowed() {
 #if defined(OS_MACOSX)
   return base::FeatureList::IsEnabled(features::kMetal);
 #else
   return false;
 #endif
 }
-#endif  // !OS_FUCHSIA
 
 // These values are logged to UMA. Entries should not be renumbered and numeric
 // values should never be reused. Please keep in sync with "CompositingMode" in
@@ -717,9 +713,19 @@ void GpuDataManagerImplPrivate::UpdateGpuFeatureInfo(
     const base::Optional<gpu::GpuFeatureInfo>&
         gpu_feature_info_for_hardware_gpu) {
   gpu_feature_info_ = gpu_feature_info;
-  // If Vulkan initialization fails, the GPU process can silently fallback to
-  // GL. Update the GPU mode for this case.
 #if !defined(OS_FUCHSIA)
+  // With Vulkan or Metal, GL might be blocked, so make sure we don't fallback
+  // to it later.
+  if (HardwareAccelerationEnabled() &&
+      gpu_feature_info_.status_values[gpu::GPU_FEATURE_TYPE_ACCELERATED_GL] !=
+          gpu::GpuFeatureStatus::kGpuFeatureStatusEnabled) {
+    fallback_modes_.erase(
+        std::remove(fallback_modes_.begin(), fallback_modes_.end(),
+                    gpu::GpuMode::HARDWARE_GL),
+        fallback_modes_.end());
+  }
+  // If Vulkan initialization fails, the GPU process can silently fallback to
+  // GL.
   if (gpu_mode_ == gpu::GpuMode::HARDWARE_VULKAN &&
       gpu_feature_info_.status_values[gpu::GPU_FEATURE_TYPE_VULKAN] !=
           gpu::GpuFeatureStatus::kGpuFeatureStatusEnabled) {
