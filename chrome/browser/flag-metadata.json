@@ -1478,7 +1478,7 @@
   },
   {
     "name": "enable-immersive-fullscreen-toolbar",
-    "owners": [ "sdy" ],
+    "owners": [ "ellyjones" ],
     "expiry_milestone": 80
   },
   {
