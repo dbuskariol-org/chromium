@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ssl/ssl_error_assistant.h"
+#include "components/security_interstitials/content/ssl_error_assistant.h"
 
 #include <memory>
 
-#include "chrome/test/base/chrome_render_view_host_test_harness.h"
 #include "components/security_interstitials/content/ssl_error_assistant.pb.h"
+#include "content/public/test/test_renderer_host.h"
 #include "crypto/sha2.h"
 #include "net/cert/asn1_util.h"
 #include "net/test/cert_test_util.h"
@@ -72,10 +72,10 @@ const char kMisconfigSoftwareRegexCheckCert[] =
 
 }  // namespace
 
-class SSLErrorAssistantTest : public ChromeRenderViewHostTestHarness {
+class SSLErrorAssistantTest : public content::RenderViewHostTestHarness {
  public:
   void SetUp() override {
-    ChromeRenderViewHostTestHarness::SetUp();
+    content::RenderViewHostTestHarness::SetUp();
     error_assistant_.reset(new SSLErrorAssistant());
 
     ssl_info_.cert = net::ImportCertFromFile(
@@ -87,7 +87,7 @@ class SSLErrorAssistantTest : public ChromeRenderViewHostTestHarness {
 
   void TearDown() override {
     error_assistant_.reset();
-    ChromeRenderViewHostTestHarness::TearDown();
+    content::RenderViewHostTestHarness::TearDown();
   }
 
   void TestMITMSoftwareMatchFromString(const std::string& cert,

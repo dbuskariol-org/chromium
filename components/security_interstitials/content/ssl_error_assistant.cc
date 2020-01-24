@@ -2,13 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ssl/ssl_error_assistant.h"
+#include "components/security_interstitials/content/ssl_error_assistant.h"
 
 #include <memory>
 
 #include "base/macros.h"
 #include "build/build_config.h"
-#include "chrome/common/buildflags.h"
 #include "components/grit/components_resources.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/web_contents.h"

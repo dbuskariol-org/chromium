@@ -14,9 +14,12 @@ include_rules = [
   "+content/public/browser",
   "+content/public/common",
   "+content/public/test",
+  "+crypto",
   "+net",
   "+net/test",
   "+services/network/public",
   "+services/network/test",
   "+third_party/blink/public/mojom",
+  "+third_party/protobuf",
+  "+third_party/re2",
 ]
