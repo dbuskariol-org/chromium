@@ -4863,6 +4863,10 @@ const FeatureEntry kFeatureEntries[] = {
          password_manager::features::kRecoverFromNeverSaveAndroid)},
 #endif  // defined(OS_ANDROID)
 
+    {"freeze-user-agent", flag_descriptions::kFreezeUserAgentName,
+     flag_descriptions::kFreezeUserAgentDescription, kOsDesktop | kOsAndroid,
+     FEATURE_VALUE_TYPE(blink::features::kFreezeUserAgent)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

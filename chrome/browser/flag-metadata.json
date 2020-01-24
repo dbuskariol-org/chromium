@@ -2336,6 +2336,11 @@
     "expiry_milestone": 81
   },
   {
+    "name": "freeze-user-agent",
+    "owners": [ "yoavweiss", "aarontag" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "fuzzy-app-search",
     "owners": [ "thanhdng", "jiameng" ],
     "expiry_milestone": 82

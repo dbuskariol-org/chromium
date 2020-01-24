@@ -1068,6 +1068,12 @@ const char kFractionalScrollOffsetsDescription[] =
     "Enables fractional scroll offsets inside Blink, exposing non-integer "
     "offsets to web APIs.";
 
+const char kFreezeUserAgentName[] = "Freeze User-Agent request header";
+const char kFreezeUserAgentDescription[] =
+    "Set the User-Agent request header to a static string that conforms to the "
+    "current User-Agent string format but only reveals desktop vs Android and "
+    "if the 'mobile' flag is set";
+
 const char kForceEffectiveConnectionTypeName[] =
     "Override effective connection type";
 const char kForceEffectiveConnectionTypeDescription[] =

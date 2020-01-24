@@ -639,6 +639,9 @@ extern const char kFilteringScrollPredictionDescription[];
 extern const char kFractionalScrollOffsetsName[];
 extern const char kFractionalScrollOffsetsDescription[];
 
+extern const char kFreezeUserAgentName[];
+extern const char kFreezeUserAgentDescription[];
+
 extern const char kForceEffectiveConnectionTypeName[];
 extern const char kForceEffectiveConnectionTypeDescription[];
 extern const char kEffectiveConnectionTypeUnknownDescription[];
