@@ -379,6 +379,12 @@ void TabStripUIHandler::RegisterMessages() {
       "getThemeColors", base::Bind(&TabStripUIHandler::HandleGetThemeColors,
                                    base::Unretained(this)));
   web_ui()->RegisterMessageCallback(
+      "groupTab",
+      base::Bind(&TabStripUIHandler::HandleGroupTab, base::Unretained(this)));
+  web_ui()->RegisterMessageCallback(
+      "ungroupTab",
+      base::Bind(&TabStripUIHandler::HandleUngroupTab, base::Unretained(this)));
+  web_ui()->RegisterMessageCallback(
       "setThumbnailTracked",
       base::Bind(&TabStripUIHandler::HandleSetThumbnailTracked,
                  base::Unretained(this)));
@@ -565,6 +571,38 @@ void TabStripUIHandler::HandleGetThemeColors(const base::ListValue* args) {
                            ui::NativeTheme::kColorId_FocusedBorderColor)));
 
   ResolveJavascriptCallback(callback_id, colors);
+}
+
+void TabStripUIHandler::HandleGroupTab(const base::ListValue* args) {
+  int tab_id = args->GetList()[0].GetInt();
+
+  int tab_index = -1;
+  bool got_tab = extensions::ExtensionTabUtil::GetTabById(
+      tab_id, browser_->profile(), /*include_incognito=*/true, nullptr, nullptr,
+      nullptr, &tab_index);
+  DCHECK(got_tab);
+
+  const std::string group_id_string = args->GetList()[1].GetString();
+
+  for (tab_groups::TabGroupId group_id :
+       browser_->tab_strip_model()->group_model()->ListTabGroups()) {
+    if (group_id.ToString() == group_id_string) {
+      browser_->tab_strip_model()->AddToExistingGroup({tab_index}, group_id);
+      break;
+    }
+  }
+}
+
+void TabStripUIHandler::HandleUngroupTab(const base::ListValue* args) {
+  int tab_id = args->GetList()[0].GetInt();
+
+  int tab_index = -1;
+  bool got_tab = extensions::ExtensionTabUtil::GetTabById(
+      tab_id, browser_->profile(), /*include_incognito=*/true, nullptr, nullptr,
+      nullptr, &tab_index);
+  DCHECK(got_tab);
+
+  browser_->tab_strip_model()->RemoveFromGroup({tab_index});
 }
 
 void TabStripUIHandler::HandleCloseContainer(const base::ListValue* args) {
