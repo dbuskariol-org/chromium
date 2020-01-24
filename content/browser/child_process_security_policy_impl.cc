@@ -11,6 +11,7 @@
 #include "base/command_line.h"
 #include "base/debug/crash_logging.h"
 #include "base/debug/dump_without_crashing.h"
+#include "base/feature_list.h"
 #include "base/files/file_path.h"
 #include "base/logging.h"
 #include "base/macros.h"
@@ -35,6 +36,7 @@
 #include "content/public/common/bindings_policy.h"
 #include "content/public/common/child_process_host.h"
 #include "content/public/common/content_client.h"
+#include "content/public/common/content_features.h"
 #include "content/public/common/url_constants.h"
 #include "net/base/filename_util.h"
 #include "net/base/url_util.h"
@@ -549,6 +551,7 @@ class ChildProcessSecurityPolicyImpl::SecurityState {
   DISALLOW_COPY_AND_ASSIGN(SecurityState);
 };
 
+// IsolatedOriginEntry implementation.
 ChildProcessSecurityPolicyImpl::IsolatedOriginEntry::IsolatedOriginEntry(
     const url::Origin& origin,
     BrowsingInstanceId min_browsing_instance_id,
@@ -1904,7 +1907,109 @@ bool ChildProcessSecurityPolicyImpl::GetMatchingIsolatedOrigin(
     }
   }
 
+  // If no match was found via IsolatedOrigins, then check the opt-in
+  // isolation status of |origin| in |isolation_context|. Note that while
+  // IsolatedOrigins considers any sub-origin of an isolated origin as also
+  // being isolated, with opt-in we will always either return false, or true
+  // with result set to |origin|.
+  if (!found && DoesOriginRequestOptInIsolation(isolation_context, origin)) {
+    *result = origin;
+    found = true;
+  }
+
   return found;
+}
+
+bool ChildProcessSecurityPolicyImpl::DoesOriginRequestOptInIsolation(
+    const IsolationContext& isolation_context,
+    const url::Origin& origin) {
+  // IsolationOptIn is only available when OriginPolicy is enabled.
+  // We only isolate HTTPS, so early-out if we see other schemes.
+  if (!base::FeatureList::IsEnabled(features::kOriginPolicy) ||
+      !origin.GetURL().SchemeIs(url::kHttpsScheme)) {
+    return false;
+  }
+
+  base::AutoLock origins_isolation_opt_in_lock(origins_isolation_opt_in_lock_);
+  // See if the same origin exists in the BrowsingInstance already, and if so
+  // return its isolation status.
+  // There are two cases we're worried about here: (i) we've previously seen the
+  // origin and isolated it, but it's no longer in the global map, in which case
+  // we should continue to isolate it, and TODO(wjmaclean): (ii) we've
+  // previously seen the origin and *not* isolated it, in which case we should
+  // continue to not isolate it.
+  BrowsingInstanceId browsing_instance_id(
+      isolation_context.browsing_instance_id());
+  if (!browsing_instance_id.is_null()) {
+    auto it = origin_isolation_by_browsing_instance_.find(browsing_instance_id);
+    if (it != origin_isolation_by_browsing_instance_.end()) {
+      if (std::find(it->second.begin(), it->second.end(), origin) !=
+          it->second.end()) {
+        return true;
+      }
+    }
+  }
+
+  // If |origin| isn't already in BrowserInstance, check the master opt_ins set.
+  return origin_isolation_opt_ins_.contains(origin);
+}
+
+void ChildProcessSecurityPolicyImpl::
+    RemoveOptInIsolatedOriginsForBrowsingInstance(
+        const IsolationContext& isolation_context) {
+  BrowsingInstanceId browsing_instance_id(
+      isolation_context.browsing_instance_id());
+  // If a BrowsingInstance is destructing, we should always have an id for it.
+  CHECK(!browsing_instance_id.is_null());
+
+  base::AutoLock origins_isolation_opt_in_lock(origins_isolation_opt_in_lock_);
+  origin_isolation_by_browsing_instance_.erase(browsing_instance_id);
+}
+
+void ChildProcessSecurityPolicyImpl::AddOptInIsolatedOriginForBrowsingInstance(
+    const IsolationContext& isolation_context,
+    const url::Origin& origin) {
+  // Origin Policy only exists for HTTPS, so nothing we isolate will be HTTP.
+  if (!origin.GetURL().SchemeIs(url::kHttpsScheme))
+    return;
+
+  BrowsingInstanceId browsing_instance_id(
+      isolation_context.browsing_instance_id());
+  // This function should only be called when a BrowsingInstance is registering
+  // a new SiteInstance, so |browsing_instance_id| should always be defined.
+  CHECK(!browsing_instance_id.is_null());
+
+  base::AutoLock origins_isolation_opt_in_lock(origins_isolation_opt_in_lock_);
+  auto it = origin_isolation_by_browsing_instance_.find(browsing_instance_id);
+  if (it == origin_isolation_by_browsing_instance_.end()) {
+    origin_isolation_by_browsing_instance_.try_emplace(
+        browsing_instance_id, std::vector<url::Origin>());
+    it = origin_isolation_by_browsing_instance_.find(browsing_instance_id);
+  }
+  // We only support adding new entries, not modifying existing ones. If at
+  // some point in the future we allow isolation status to change during the
+  // lifetime of a BrowsingInstance, then this will need to be updated.
+  if (std::find(it->second.begin(), it->second.end(), origin) ==
+      it->second.end()) {
+    it->second.push_back(origin);
+  }
+}
+
+void ChildProcessSecurityPolicyImpl::UpdateOriginIsolationOptInListIfNecessary(
+    const url::Origin& origin,
+    bool requests_isolation) {
+  // Avoid dealing with non-HTTP/HTTPS and other non-valid-for-isolation
+  // origins.
+  if (!origin.GetURL().SchemeIs(url::kHttpsScheme) ||
+      !IsolatedOriginUtil::IsValidIsolatedOrigin(origin)) {
+    return;
+  }
+
+  base::AutoLock origins_isolation_opt_in_lock(origins_isolation_opt_in_lock_);
+  if (requests_isolation)
+    origin_isolation_opt_ins_.insert(origin);
+  else
+    origin_isolation_opt_ins_.erase(origin);
 }
 
 void ChildProcessSecurityPolicyImpl::RemoveIsolatedOriginForTesting(
