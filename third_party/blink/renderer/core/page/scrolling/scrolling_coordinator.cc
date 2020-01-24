@@ -235,10 +235,7 @@ void ScrollingCoordinator::RemoveScrollbarLayer(
   ScrollbarMap& scrollbars = orientation == kHorizontalScrollbar
                                  ? horizontal_scrollbars_
                                  : vertical_scrollbars_;
-  if (scoped_refptr<cc::ScrollbarLayerBase> scrollbar_layer =
-          scrollbars.Take(scrollable_area)) {
-    GraphicsLayer::UnregisterContentsLayer(scrollbar_layer.get());
-  }
+  scrollbars.erase(scrollable_area);
 }
 
 static scoped_refptr<cc::ScrollbarLayerBase> CreateScrollbarLayer(
@@ -256,7 +253,6 @@ static scoped_refptr<cc::ScrollbarLayerBase> CreateScrollbarLayer(
         cc::PaintedScrollbarLayer::Create(std::move(scrollbar_delegate));
   }
   scrollbar_layer->SetElementId(scrollbar.GetElementId());
-  GraphicsLayer::RegisterContentsLayer(scrollbar_layer.get());
   return scrollbar_layer;
 }
 
@@ -273,7 +269,6 @@ ScrollingCoordinator::CreateSolidColorScrollbarLayer(
       cc_orientation, thumb_thickness, track_start,
       is_left_side_vertical_scrollbar);
   scrollbar_layer->SetElementId(element_id);
-  GraphicsLayer::RegisterContentsLayer(scrollbar_layer.get());
   return scrollbar_layer;
 }
 
@@ -456,11 +451,6 @@ void ScrollingCoordinator::UpdateTouchEventTargetRectsIfNeeded(
 }
 
 void ScrollingCoordinator::Reset(LocalFrame* frame) {
-  for (const auto& scrollbar : horizontal_scrollbars_)
-    GraphicsLayer::UnregisterContentsLayer(scrollbar.value.get());
-  for (const auto& scrollbar : vertical_scrollbars_)
-    GraphicsLayer::UnregisterContentsLayer(scrollbar.value.get());
-
   horizontal_scrollbars_.clear();
   vertical_scrollbars_.clear();
 }
@@ -530,12 +520,7 @@ void ScrollingCoordinator::WillCloseAnimationHost(LocalFrameView* view) {
 
 void ScrollingCoordinator::WillBeDestroyed() {
   DCHECK(page_);
-
   page_ = nullptr;
-  for (const auto& scrollbar : horizontal_scrollbars_)
-    GraphicsLayer::UnregisterContentsLayer(scrollbar.value.get());
-  for (const auto& scrollbar : vertical_scrollbars_)
-    GraphicsLayer::UnregisterContentsLayer(scrollbar.value.get());
 }
 
 bool ScrollingCoordinator::CoordinatesScrollingForFrameView(

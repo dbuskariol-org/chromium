@@ -152,7 +152,6 @@ Canvas2DLayerBridge::~Canvas2DLayerBridge() {
     return;
 
   if (acceleration_mode_ != kDisableAcceleration) {
-    GraphicsLayer::UnregisterContentsLayer(layer_.get());
     layer_->ClearTexture();
     // Orphaning the layer is required to trigger the recreation of a new layer
     // in the case where destruction is caused by a canvas resize. Test:
@@ -364,7 +363,6 @@ CanvasResourceProvider* Canvas2DLayerBridge::GetOrCreateResourceProvider(
     layer_->SetBlendBackgroundColor(ColorParams().GetOpacityMode() != kOpaque);
     layer_->SetNearestNeighbor(resource_host_->FilterQuality() ==
                                kNone_SkFilterQuality);
-    GraphicsLayer::RegisterContentsLayer(layer_.get());
   }
 
   if (!IsHibernating())
