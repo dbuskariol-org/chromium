@@ -20,6 +20,10 @@ class PasswordSaveConfirmationView : public PasswordBubbleViewBase,
   ~PasswordSaveConfirmationView() override;
 
  private:
+  // PasswordBubbleViewBase
+  PasswordBubbleControllerBase* GetController() override;
+  const PasswordBubbleControllerBase* GetController() const override;
+
   // views::StyledLabelListener:
   void StyledLabelLinkClicked(views::StyledLabel* label,
                               const gfx::Range& range,

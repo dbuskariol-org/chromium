@@ -93,15 +93,30 @@ void PasswordBubbleViewBase::ActivateBubble() {
 }
 
 const content::WebContents* PasswordBubbleViewBase::GetWebContents() const {
-  return model_.GetWebContents();
+  const PasswordBubbleControllerBase* controller = GetController();
+  if (controller) {
+    return controller->GetWebContents();
+  }
+  DCHECK(model_);
+  return model_->GetWebContents();
 }
 
 base::string16 PasswordBubbleViewBase::GetWindowTitle() const {
-  return model_.title();
+  const PasswordBubbleControllerBase* controller = GetController();
+  if (controller) {
+    return controller->GetTitle();
+  }
+  DCHECK(model_);
+  return model_->title();
 }
 
 bool PasswordBubbleViewBase::ShouldShowWindowTitle() const {
-  return !model_.title().empty();
+  const PasswordBubbleControllerBase* controller = GetController();
+  if (controller) {
+    return controller->GetTitle().empty();
+  }
+  DCHECK(model_);
+  return model_->title().empty();
 }
 
 PasswordBubbleViewBase::PasswordBubbleViewBase(
@@ -109,12 +124,20 @@ PasswordBubbleViewBase::PasswordBubbleViewBase(
     views::View* anchor_view,
     DisplayReason reason,
     bool easily_dismissable)
-    : LocationBarBubbleDelegateView(anchor_view, web_contents),
-      model_(PasswordsModelDelegateFromWebContents(web_contents),
-             reason == AUTOMATIC ? ManagePasswordsBubbleModel::AUTOMATIC
-                                 : ManagePasswordsBubbleModel::USER_ACTION) {
-  // The |mouse_handler| closes the bubble if a keyboard or mouse interactions
-  // happens outside of the bubble. By this the bubble becomes
+    : LocationBarBubbleDelegateView(anchor_view, web_contents) {
+  base::WeakPtr<PasswordsModelDelegate> delegate =
+      PasswordsModelDelegateFromWebContents(web_contents);
+  // Create the model only for the states that hasn't been migrated to using the
+  // bubble controllers.
+  if (delegate->GetState() != password_manager::ui::AUTO_SIGNIN_STATE) {
+    model_ = std::make_unique<ManagePasswordsBubbleModel>(
+        delegate, reason == AUTOMATIC
+                      ? ManagePasswordsBubbleModel::AUTOMATIC
+                      : ManagePasswordsBubbleModel::USER_ACTION);
+  }
+
+  // The |mouse_handler| closes the bubble if a keyboard or mouse
+  // interactions happens outside of the bubble. By this the bubble becomes
   // 'easily-dissmisable' and this behavior can be enforced by the
   // corresponding flag.
   if (easily_dismissable) {
@@ -138,5 +161,11 @@ void PasswordBubbleViewBase::OnWidgetClosing(views::Widget* widget) {
   // them and it doesn't understand the sequence [open1, open2, close1, close2].
   // Therefore, we reset the model early (before the bubble destructor) to get
   // the following sequence of events [open1, close1, open2, close2].
-  model_.OnBubbleClosing();
+  PasswordBubbleControllerBase* controller = GetController();
+  if (controller) {
+    controller->OnBubbleClosing();
+    return;
+  }
+  DCHECK(model_);
+  model_->OnBubbleClosing();
 }

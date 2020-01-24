@@ -315,6 +315,14 @@ views::View* PasswordPendingView::GetUsernameTextfieldForTest() const {
 
 PasswordPendingView::~PasswordPendingView() = default;
 
+PasswordBubbleControllerBase* PasswordPendingView::GetController() {
+  return nullptr;
+}
+
+const PasswordBubbleControllerBase* PasswordPendingView::GetController() const {
+  return nullptr;
+}
+
 bool PasswordPendingView::Accept() {
   UpdateUsernameAndPasswordInModel();
   model()->OnSaveClicked();

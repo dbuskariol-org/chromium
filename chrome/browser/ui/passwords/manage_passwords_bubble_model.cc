@@ -215,8 +215,6 @@ ManagePasswordsBubbleModel::ManagePasswordsBubbleModel(
   } else if (state_ == password_manager::ui::CONFIRMATION_STATE) {
     title_ =
         l10n_util::GetStringUTF16(IDS_PASSWORD_MANAGER_CONFIRM_SAVED_TITLE);
-  } else if (state_ == password_manager::ui::AUTO_SIGNIN_STATE) {
-    pending_password_ = delegate_->GetPendingPassword();
   } else if (state_ == password_manager::ui::MANAGE_STATE) {
     local_credentials_ = DeepCopyForms(delegate_->GetCurrentForms());
     UpdateManageStateTitle();
@@ -269,8 +267,6 @@ ManagePasswordsBubbleModel::ManagePasswordsBubbleModel(
             metrics_util::AUTOMATIC_GENERATED_PASSWORD_CONFIRMATION;
         break;
       case password_manager::ui::AUTO_SIGNIN_STATE:
-        display_disposition = metrics_util::AUTOMATIC_SIGNIN_TOAST;
-        break;
       case password_manager::ui::MANAGE_STATE:
       case password_manager::ui::CREDENTIAL_REQUEST_STATE:
       case password_manager::ui::CHROME_SIGN_IN_PROMO_STATE:
@@ -354,11 +350,6 @@ void ManagePasswordsBubbleModel::
       metrics_util::CLICKED_PASSWORDS_DASHBOARD);
   if (delegate_)
     delegate_->NavigateToPasswordManagerAccountDashboard(referrer);
-}
-
-void ManagePasswordsBubbleModel::OnAutoSignInToastTimeout() {
-  interaction_keeper_->set_dismissal_reason(
-      metrics_util::AUTO_SIGNIN_TOAST_TIMEOUT);
 }
 
 void ManagePasswordsBubbleModel::OnPasswordAction(

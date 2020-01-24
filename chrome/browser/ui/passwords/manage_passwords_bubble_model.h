@@ -72,10 +72,6 @@ class ManagePasswordsBubbleModel {
   void OnNavigateToPasswordManagerAccountDashboardLinkClicked(
       password_manager::ManagePasswordsReferrer referrer);
 
-  // Called by the view code when the auto-signin toast is about to close due to
-  // timeout.
-  void OnAutoSignInToastTimeout();
-
   // Called by the view code to delete or add a password form to the
   // PasswordStore.
   void OnPasswordAction(const autofill::PasswordForm& password_form,

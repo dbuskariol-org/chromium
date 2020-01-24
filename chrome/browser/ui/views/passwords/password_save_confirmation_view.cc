@@ -40,6 +40,15 @@ PasswordSaveConfirmationView::PasswordSaveConfirmationView(
 
 PasswordSaveConfirmationView::~PasswordSaveConfirmationView() = default;
 
+PasswordBubbleControllerBase* PasswordSaveConfirmationView::GetController() {
+  return nullptr;
+}
+
+const PasswordBubbleControllerBase*
+PasswordSaveConfirmationView::GetController() const {
+  return nullptr;
+}
+
 bool PasswordSaveConfirmationView::ShouldShowCloseButton() const {
   return true;
 }
