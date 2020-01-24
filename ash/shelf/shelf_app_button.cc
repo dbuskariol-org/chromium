@@ -419,6 +419,10 @@ gfx::Rect ShelfAppButton::GetIconBounds() const {
   return icon_view_->bounds();
 }
 
+gfx::Rect ShelfAppButton::GetIconBoundsInScreen() const {
+  return icon_view_->GetBoundsInScreen();
+}
+
 views::InkDrop* ShelfAppButton::GetInkDropForTesting() {
   return GetInkDrop();
 }

@@ -23,8 +23,10 @@
 #include "ui/compositor/paint_recorder.h"
 #include "ui/compositor/scoped_layer_animation_settings.h"
 #include "ui/gfx/geometry/insets.h"
+#include "ui/gfx/geometry/rect_f.h"
 #include "ui/gfx/geometry/vector2d_conversions.h"
 #include "ui/gfx/skia_paint_util.h"
+#include "ui/gfx/transform_util.h"
 #include "ui/strings/grit/ui_strings.h"
 #include "ui/views/focus/focus_search.h"
 #include "ui/views/view_targeter_delegate.h"
@@ -132,10 +134,12 @@ class ScrollableShelfView::DragIconDropAnimationDelegate
     : public ui::ImplicitAnimationObserver {
  public:
   DragIconDropAnimationDelegate(views::View* original_view,
-                                const gfx::Rect& target_bounds,
+                                const gfx::RectF& src_bounds_in_screen,
+                                const gfx::RectF& dst_bounds_in_screen,
                                 std::unique_ptr<DragImageView> proxy_view)
       : original_view_(original_view),
-        target_bounds_(target_bounds),
+        src_bounds_in_screen_(src_bounds_in_screen),
+        dst_bounds_in_screen_(dst_bounds_in_screen),
         proxy_view_(std::move(proxy_view)) {}
   ~DragIconDropAnimationDelegate() override = default;
 
@@ -151,7 +155,8 @@ class ScrollableShelfView::DragIconDropAnimationDelegate
         ui::LayerAnimator::IMMEDIATELY_SET_NEW_TARGET);
     animation_settings.AddObserver(this);
 
-    proxy_view_->layer()->SetBounds(target_bounds_);
+    proxy_view_->layer()->SetTransform(gfx::TransformBetweenRects(
+        src_bounds_in_screen_, dst_bounds_in_screen_));
   }
 
   // ui::ImplicitAnimationObserver:
@@ -166,13 +171,14 @@ class ScrollableShelfView::DragIconDropAnimationDelegate
 
  private:
   // Original app icon being dragged in ShelfView.
-  views::View* original_view_ = nullptr;
+  views::View* const original_view_ = nullptr;
 
-  // The target bounds after icon is dropped in |proxy_view_| parent's
-  // coordinates.
-  gfx::Rect target_bounds_;
-
-  // Placeholder icon representing |original_icon_| that moves with the pointer
+  // Bounds of the DragImageView, aka the DragIconProxy created by the user of
+  // ApplicationDragAndDropHost.
+  gfx::RectF const src_bounds_in_screen_;
+  // Bounds of the ShelfAppButton which DragImageView is imitating.
+  gfx::RectF const dst_bounds_in_screen_;
+  // Placeholder icon representing |original_view_| that moves with the pointer
   // while being dragged.
   std::unique_ptr<DragImageView> proxy_view_;
 };
@@ -1205,7 +1211,7 @@ void ScrollableShelfView::DestroyDragIconProxy() {
   if (page_flip_timer_.IsRunning())
     page_flip_timer_.AbandonAndStop();
 
-  views::View* drag_view = shelf_view_->drag_view();
+  ShelfAppButton* drag_view = shelf_view_->drag_view();
 
   const bool should_start_animation =
       drag_view && !shelf_view_->dragged_off_shelf() && drag_icon_.get();
@@ -1218,13 +1224,13 @@ void ScrollableShelfView::DestroyDragIconProxy() {
   views::ViewModel* shelf_view_model = shelf_view_->view_model();
   const gfx::Rect target_bounds = shelf_view_model->ideal_bounds(
       shelf_view_model->GetIndexOfView(drag_view));
-  const gfx::Rect mirrored_target_bounds =
+  const gfx::Rect mirrored_target_bounds_in_shelf_view =
       shelf_view_->GetMirroredRect(target_bounds);
 
   // No animation is created if the target slot for the drag icon is not on the
   // current page. This edge case may be triggered by trying to move the icon of
   // a running app to the area exclusively for pinned apps.
-  gfx::RectF target_bounds_in_local(mirrored_target_bounds);
+  gfx::RectF target_bounds_in_local(mirrored_target_bounds_in_shelf_view);
   ConvertRectToTarget(shelf_view_, this, &target_bounds_in_local);
   if (!visible_space_.Contains(gfx::ToEnclosedRect(target_bounds_in_local))) {
     drag_icon_.reset();
@@ -1232,16 +1238,38 @@ void ScrollableShelfView::DestroyDragIconProxy() {
     return;
   }
 
-  // Converts the ideal bounds to |drag_icon_|'s coordinates. Notes that
-  // |drag_icon_| and |shelf_view_| are in different widgets.
-  gfx::Point origin_point = mirrored_target_bounds.origin();
-  ConvertPointToScreen(shelf_view_, &origin_point);
-  ConvertPointFromScreen(drag_icon_->parent(), &origin_point);
+  const bool drag_originated_from_app_list =
+      chromeos::switches::ShouldShowScrollableShelf() &&
+      shelf_view_->IsShelfViewHandlingDragAndDrop();
+
+  // The drag proxy is the DragImageView created for the DragAndDropHost which
+  // could be either the ShelfView or ScrollableShelfView depending on where the
+  // drag originated from.
+  std::unique_ptr<DragImageView> drag_proxy =
+      drag_originated_from_app_list
+          ? std::unique_ptr<DragImageView>(
+                shelf_view_->RetrieveDragIconProxyAndClearDragProxyState())
+          : std::move(drag_icon_);
+  gfx::RectF start_in_screen(drag_proxy->GetBoundsInScreen());
+
+  gfx::RectF end_in_screen;
+  if (drag_originated_from_app_list) {
+    // If the drag originated from the AppList, |drag_view| bounds are no longer
+    // correct, so calculate the ideal bounds of the dragged icon.
+    end_in_screen = gfx::RectF(
+        GetTargetScreenBoundsOfItemIcon(shelf_view_->drag_and_drop_shelf_id()));
+  } else {
+    end_in_screen = gfx::RectF(drag_view->GetIconBoundsInScreen());
+  }
+
+  if (start_in_screen.IsEmpty() || end_in_screen.IsEmpty()) {
+    drag_proxy.reset();
+    return;
+  }
 
   drag_icon_drop_animation_delegate_ =
       std::make_unique<DragIconDropAnimationDelegate>(
-          drag_view, gfx::Rect(origin_point, target_bounds.size()),
-          std::move(drag_icon_));
+          drag_view, start_in_screen, end_in_screen, std::move(drag_proxy));
   drag_icon_drop_animation_delegate_->StartAnimation();
 }
 

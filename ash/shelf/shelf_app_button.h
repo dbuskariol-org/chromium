@@ -66,6 +66,9 @@ class ASH_EXPORT ShelfAppButton : public ShelfButton,
   // Returns the bounds of the icon.
   gfx::Rect GetIconBounds() const;
 
+  // Returns the bounds of the icon in screen coordinates.
+  gfx::Rect GetIconBoundsInScreen() const;
+
   views::InkDrop* GetInkDropForTesting();
 
   // Called when user started dragging the shelf button.

@@ -470,6 +470,14 @@ void ShelfView::StopAnimatingViewIfAny(views::View* view) {
     bounds_animator_->StopAnimatingView(view);
 }
 
+bool ShelfView::IsShelfViewHandlingDragAndDrop() const {
+  // If the ShelfView has a drag icon proxy, the drag originated from the
+  // AppsGridView. When the drag originates from the shelf, the
+  // ScrollableShelfView is the ApplicationDragAndDropHost, so ShelfView will
+  // not have a drag proxy.
+  return drag_image_ != nullptr;
+}
+
 bool ShelfView::ShouldHideTooltip(const gfx::Point& cursor_location) const {
   // There are thin gaps between launcher buttons but the tooltip shouldn't hide
   // in the gaps, but the tooltip should hide if the mouse moved totally outside
@@ -958,6 +966,12 @@ void ShelfView::CreateDragIconProxyByLocationWithNoAnimation(
   drag_image_->GetWidget()->SetVisibilityAnimationTransition(
       views::Widget::ANIMATE_NONE);
   drag_image_->SetWidgetVisible(true);
+  if (chromeos::switches::ShouldShowScrollableShelf()) {
+    // Add a layer in order to ensure the icon properly animates when a drag
+    // starts from AppsGridView and ends in the Shelf.
+    drag_image_->SetPaintToLayer();
+    drag_image_->layer()->SetFillsBoundsOpaquely(false);
+  }
 }
 
 void ShelfView::UpdateDragIconProxy(
@@ -1282,6 +1296,14 @@ void ShelfView::UpdateAllButtonsVisibilityInOverflowMode() {
 void ShelfView::DestroyDragIconProxy() {
   drag_image_.reset();
   drag_image_offset_ = gfx::Vector2d(0, 0);
+}
+
+DragImageView* ShelfView::RetrieveDragIconProxyAndClearDragProxyState() {
+  // TODO(https://crub.com/1045186): Make ScrollableShelfView the only
+  // ApplicationDragAndDropHost in the view hierarchy, and remove this.
+  DragImageView* temp_drag_image_view = drag_image_.release();
+  DestroyDragIconProxy();
+  return temp_drag_image_view;
 }
 
 bool ShelfView::StartDrag(const std::string& app_id,
