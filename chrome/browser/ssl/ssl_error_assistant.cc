@@ -9,7 +9,7 @@
 #include "base/macros.h"
 #include "build/build_config.h"
 #include "chrome/common/buildflags.h"
-#include "chrome/grit/browser_resources.h"
+#include "components/grit/components_resources.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/web_contents.h"
 #include "third_party/protobuf/src/google/protobuf/io/zero_copy_stream_impl_lite.h"

@@ -17,7 +17,7 @@ import sys
 
 
 DEST_BUCKET = 'gs://chrome-components-ssl-error-assistant'
-RESOURCE_SUBDIR = 'chrome/browser/resources/ssl/ssl_error_assistant'
+RESOURCE_SUBDIR = 'components/resources/ssl/ssl_error_assistant'
 
 # Subdirectory to be copied to Google Cloud Storage. Contains a copy of the
 # generated proto under a versioned directory.

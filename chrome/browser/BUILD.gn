@@ -5447,7 +5447,6 @@ grit("resources") {
   deps = [
     ":chrome_internal_resources_gen",
     "//chrome/browser/resources/browser_switch:app_module",
-    "//chrome/browser/resources/ssl/ssl_error_assistant:make_ssl_error_assistant_protobuf",
     "//chrome/browser/ui/webui/usb_internals:mojo_bindings_js",
     "//device/bluetooth/public/mojom:deprecated_experimental_interfaces_js",
     "//device/bluetooth/public/mojom:mojom_js",
