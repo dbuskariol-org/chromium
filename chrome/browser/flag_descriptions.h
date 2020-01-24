@@ -2385,13 +2385,6 @@ extern const char kDirectManipulationStylusDescription[];
 
 #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
 
-#if defined(OS_MACOSX) || defined(OS_CHROMEOS)
-
-extern const char kForceEnableSystemAecName[];
-extern const char kForceEnableSystemAecDescription[];
-
-#endif  // defined(OS_MACOSX) || defined(OS_CHROMEOS)
-
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_CHROMEOS)
 
 extern const char kWebContentsOcclusionName[];

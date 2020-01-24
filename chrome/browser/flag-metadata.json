@@ -2292,11 +2292,6 @@
     "expiry_milestone": -1
   },
   {
-    "name": "force-enable-system-aec",
-    "owners": [ "armax", "guidou" ],
-    "expiry_milestone": 80
-  },
-  {
     "name": "force-show-update-menu-badge",
     "owners": [ "//chrome/android/java/src/org/chromium/chrome/browser/omaha/OWNERS" ],
     // This is required by test teams to verify functionality on devices which

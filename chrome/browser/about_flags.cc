@@ -3935,12 +3935,6 @@ const FeatureEntry kFeatureEntries[] = {
          chromeos::assistant::features::kEnableStereoAudioInput)},
 #endif  // defined(OS_CHROMEOS)
 
-#if defined(OS_MACOSX) || defined(OS_CHROMEOS)
-    {"force-enable-system-aec", flag_descriptions::kForceEnableSystemAecName,
-     flag_descriptions::kForceEnableSystemAecDescription, kOsMac | kOsCrOS,
-     FEATURE_VALUE_TYPE(features::kForceEnableSystemAec)},
-#endif  // defined(OS_MACOSX) || defined(OS_CHROMEOS)
-
 #if BUILDFLAG(ENABLE_PRINT_PREVIEW) && defined(OS_MACOSX)
     {"enable-custom-mac-paper-sizes",
      flag_descriptions::kEnableCustomMacPaperSizesName,
