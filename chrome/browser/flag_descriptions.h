@@ -1540,9 +1540,6 @@ extern const char kEnableOfflinePreviewsDescription[];
 extern const char kEnableWebNfcName[];
 extern const char kEnableWebNfcDescription[];
 
-extern const char kEphemeralTabName[];
-extern const char kEphemeralTabDescription[];
-
 extern const char kEphemeralTabUsingBottomSheetName[];
 extern const char kEphemeralTabUsingBottomSheetDescription[];
 

@@ -2585,14 +2585,11 @@ const char kEnableOfflinePreviewsDescription[] =
 const char kEnableWebNfcName[] = "WebNFC";
 const char kEnableWebNfcDescription[] = "Enable WebNFC support.";
 
-const char kEphemeralTabName[] = "An ephemeral Preview Tab in an Overlay Panel";
-const char kEphemeralTabDescription[] =
-    "Enable a 'Preview page/image' at a linked page into an overlay.";
-
 const char kEphemeralTabUsingBottomSheetName[] =
-    "An ephemeral Preview Tab in the bottom sheet";
+    "An ephemeral Preview Tab using the bottom sheet";
 const char kEphemeralTabUsingBottomSheetDescription[] =
-    "Enable a 'Preview page/image' at a linked page into the bottom sheet.";
+    "Enable a 'Preview page/image' at a linked page into the bottom sheet. "
+    "No other flags are needed for this feature.";
 
 const char kExploreSitesName[] = "Explore websites";
 const char kExploreSitesDescription[] =

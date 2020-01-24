@@ -2695,7 +2695,6 @@
                         "session_rate": "any"
                     },
                     "enable_features": [
-                        "EphemeralTab",
                         "EphemeralTabUsingBottomSheet",
                         "IPH_EphemeralTab"
                     ]
