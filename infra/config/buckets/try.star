@@ -1374,6 +1374,7 @@ win_builder(
     name = 'win10_chromium_x64_coverage_rel_ng',
     os = os.WINDOWS_10,
     use_clang_coverage = True,
+    goma_jobs = goma.jobs.J150,
     tryjob = tryjob(experiment_percentage = 3),
 )
 
