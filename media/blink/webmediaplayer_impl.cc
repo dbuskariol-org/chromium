@@ -3090,8 +3090,10 @@ void WebMediaPlayerImpl::ReportMemoryUsage() {
   if (demuxer_ && !IsNetworkStateError(network_state_)) {
     base::PostTaskAndReplyWithResult(
         media_task_runner_.get(), FROM_HERE,
-        base::Bind(&Demuxer::GetMemoryUsage, base::Unretained(demuxer_.get())),
-        base::Bind(&WebMediaPlayerImpl::FinishMemoryUsageReport, weak_this_));
+        base::BindOnce(&Demuxer::GetMemoryUsage,
+                       base::Unretained(demuxer_.get())),
+        base::BindOnce(&WebMediaPlayerImpl::FinishMemoryUsageReport,
+                       weak_this_));
   } else {
     FinishMemoryUsageReport(0);
   }
