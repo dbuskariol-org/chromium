@@ -836,7 +836,7 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   return self.browser ? self.browser->GetTabModel() : nil;
 }
 
-- (ios::ChromeBrowserState*)browserState {
+- (ChromeBrowserState*)browserState {
   return self.browser ? self.browser->GetBrowserState() : nullptr;
 }
 
