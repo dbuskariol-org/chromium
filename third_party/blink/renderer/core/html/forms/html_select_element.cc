@@ -2132,6 +2132,7 @@ void HTMLSelectElement::DetachLayoutTree(bool performing_reattach) {
     popup_->DisconnectClient();
   popup_is_visible_ = false;
   popup_ = nullptr;
+  option_style_ = nullptr;
   UnobserveTreeMutation();
 }
 
