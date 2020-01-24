@@ -172,6 +172,12 @@ class CORE_EXPORT InputMethodController final
   // Returns false if the frame was destroyed, true otherwise.
   bool DeleteSelection() WARN_UNUSED_RESULT;
 
+  // Returns false if the frame was destroyed, true otherwise.
+  // The difference between this function and DeleteSelection() is that
+  // DeleteSelection() code path may modify the selection to visible units,
+  // which we don't want when deleting code point.
+  bool DeleteSelectionWithoutAdjustment() WARN_UNUSED_RESULT;
+
   // Returns true if moved caret successfully.
   bool MoveCaret(int new_caret_position);
 
