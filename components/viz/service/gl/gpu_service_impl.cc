@@ -848,6 +848,20 @@ void GpuServiceImpl::GpuSwitched(gl::GpuPreference active_gpu_heuristic) {
         active_gpu_heuristic);
 }
 
+void GpuServiceImpl::DisplayAdded() {
+  DVLOG(1) << "GPU: A monitor is plugged in";
+
+  if (!in_host_process())
+    ui::GpuSwitchingManager::GetInstance()->NotifyDisplayAdded();
+}
+
+void GpuServiceImpl::DisplayRemoved() {
+  DVLOG(1) << "GPU: A monitor is unplugged ";
+
+  if (!in_host_process())
+    ui::GpuSwitchingManager::GetInstance()->NotifyDisplayRemoved();
+}
+
 void GpuServiceImpl::DestroyAllChannels() {
   if (io_runner_->BelongsToCurrentThread()) {
     main_runner_->PostTask(

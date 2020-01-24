@@ -55,6 +55,7 @@
 #include "gpu/vulkan/buildflags.h"
 #include "media/media_buildflags.h"
 #include "ui/base/ui_base_switches.h"
+#include "ui/display/screen.h"
 #include "ui/gfx/switches.h"
 #include "ui/gl/buildflags.h"
 #include "ui/gl/gl_implementation.h"
@@ -349,6 +350,12 @@ GpuDataManagerImplPrivate::GpuDataManagerImplPrivate(GpuDataManagerImpl* owner)
   CGDisplayRegisterReconfigurationCallback(DisplayReconfigCallback, owner_);
 #endif  // OS_MACOSX
 
+#if defined(OS_WIN)
+  if (BrowserThread::CurrentlyOn(BrowserThread::UI) &&
+      display::Screen::GetScreen())
+    display::Screen::GetScreen()->AddObserver(owner_);
+#endif
+
   // For testing only.
   if (command_line->HasSwitch(switches::kDisableDomainBlockingFor3DAPIs))
     domain_blocking_enabled_ = false;
@@ -364,6 +371,11 @@ GpuDataManagerImplPrivate::GpuDataManagerImplPrivate(GpuDataManagerImpl* owner)
 GpuDataManagerImplPrivate::~GpuDataManagerImplPrivate() {
 #if defined(OS_MACOSX)
   CGDisplayRemoveReconfigurationCallback(DisplayReconfigCallback, owner_);
+#endif
+
+#if defined(OS_WIN)
+  if (display::Screen::GetScreen())
+    display::Screen::GetScreen()->RemoveObserver(owner_);
 #endif
 }
 
@@ -907,8 +919,9 @@ void GpuDataManagerImplPrivate::OnGpuBlocked() {
   NotifyGpuInfoUpdate();
 }
 
-void GpuDataManagerImplPrivate::AddLogMessage(
-    int level, const std::string& header, const std::string& message) {
+void GpuDataManagerImplPrivate::AddLogMessage(int level,
+                                              const std::string& header,
+                                              const std::string& message) {
   // Some clients emit many log messages. This has been observed to consume GBs
   // of memory in the wild
   // https://bugs.chromium.org/p/chromium/issues/detail?id=798012. Use a limit
@@ -953,6 +966,32 @@ void GpuDataManagerImplPrivate::HandleGpuSwitch() {
               host->gpu_service()->GpuSwitched(active_gpu);
           },
           active_gpu_heuristic_));
+}
+
+void GpuDataManagerImplPrivate::OnDisplayAdded(
+    const display::Display& new_display) {
+  base::AutoUnlock unlock(owner_->lock_);
+  // Notify observers in the browser process.
+  ui::GpuSwitchingManager::GetInstance()->NotifyDisplayAdded();
+  // Pass the notification to the GPU process to notify observers there.
+  GpuProcessHost::CallOnIO(GPU_PROCESS_KIND_SANDBOXED, false /* force_create */,
+                           base::BindOnce([](GpuProcessHost* host) {
+                             if (host)
+                               host->gpu_service()->DisplayAdded();
+                           }));
+}
+
+void GpuDataManagerImplPrivate::OnDisplayRemoved(
+    const display::Display& old_display) {
+  base::AutoUnlock unlock(owner_->lock_);
+  // Notify observers in the browser process.
+  ui::GpuSwitchingManager::GetInstance()->NotifyDisplayRemoved();
+  // Pass the notification to the GPU process to notify observers there.
+  GpuProcessHost::CallOnIO(GPU_PROCESS_KIND_SANDBOXED, false /* force_create */,
+                           base::BindOnce([](GpuProcessHost* host) {
+                             if (host)
+                               host->gpu_service()->DisplayRemoved();
+                           }));
 }
 
 bool GpuDataManagerImplPrivate::UpdateActiveGpu(uint32_t vendor_id,

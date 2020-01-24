@@ -21,6 +21,7 @@
 #include "ui/gl/gl_angle_util_win.h"
 #include "ui/gl/gl_surface_presentation_helper.h"
 #include "ui/gl/gl_switches.h"
+#include "ui/gl/gpu_switching_manager.h"
 #include "ui/gl/vsync_thread_win.h"
 
 #ifndef EGL_ANGLE_flexible_surface_compatibility
@@ -227,9 +228,11 @@ DirectCompositionSurfaceWin::DirectCompositionSurfaceWin(
   // Call GetWeakPtr() on main thread before calling on vsync thread so that the
   // internal weak reference is initialized in a thread-safe way.
   weak_ptr_ = weak_factory_.GetWeakPtr();
+  ui::GpuSwitchingManager::GetInstance()->AddObserver(this);
 }
 
 DirectCompositionSurfaceWin::~DirectCompositionSurfaceWin() {
+  ui::GpuSwitchingManager::GetInstance()->RemoveObserver(this);
   Destroy();
 }
 
@@ -755,6 +758,13 @@ void DirectCompositionSurfaceWin::HandleVSyncOnMainThread(
     vsync_callback_.Run(vsync_time, interval);
   }
 }
+
+void DirectCompositionSurfaceWin::OnGpuSwitched(
+    gl::GpuPreference active_gpu_heuristic) {}
+
+void DirectCompositionSurfaceWin::OnDisplayAdded() {}
+
+void DirectCompositionSurfaceWin::OnDisplayRemoved() {}
 
 scoped_refptr<base::TaskRunner>
 DirectCompositionSurfaceWin::GetWindowTaskRunnerForTesting() {
