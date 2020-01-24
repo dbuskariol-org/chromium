@@ -323,7 +323,13 @@ class PLATFORM_EXPORT ResourceFetcher
   void StopFetchingIncludingKeepaliveLoaders();
 
   // RevalidationPolicy enum values are used in UMAs https://crbug.com/579496.
-  enum RevalidationPolicy { kUse, kRevalidate, kReload, kLoad };
+  enum class RevalidationPolicy {
+    kUse,
+    kRevalidate,
+    kReload,
+    kLoad,
+    kMaxValue = kLoad
+  };
 
   // A wrapper just for placing a trace_event macro.
   RevalidationPolicy DetermineRevalidationPolicy(
