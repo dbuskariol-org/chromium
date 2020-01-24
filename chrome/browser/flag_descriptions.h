@@ -561,9 +561,6 @@ extern const char kEnableUseZoomForDsfChoiceDisabled[];
 extern const char kEnableScrollAnchorSerializationName[];
 extern const char kEnableScrollAnchorSerializationDescription[];
 
-extern const char kEnableWasmName[];
-extern const char kEnableWasmDescription[];
-
 extern const char kEnableWebAuthenticationCableV2SupportName[];
 extern const char kEnableWebAuthenticationCableV2SupportDescription[];
 
