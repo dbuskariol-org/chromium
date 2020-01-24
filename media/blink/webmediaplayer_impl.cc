@@ -2428,6 +2428,14 @@ void WebMediaPlayerImpl::OnSeekBackward(double seconds) {
   client_->RequestSeek(CurrentTime() - seconds);
 }
 
+void WebMediaPlayerImpl::OnEnterPictureInPicture() {
+  client_->RequestEnterPictureInPicture();
+}
+
+void WebMediaPlayerImpl::OnExitPictureInPicture() {
+  client_->RequestExitPictureInPicture();
+}
+
 void WebMediaPlayerImpl::OnVolumeMultiplierUpdate(double multiplier) {
   volume_multiplier_ = multiplier;
   SetVolume(volume_);

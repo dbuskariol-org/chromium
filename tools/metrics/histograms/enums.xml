@@ -41971,6 +41971,8 @@ Called by update_use_counter_css.py.-->
   <int value="10" label="Stop"/>
   <int value="11" label="Seek to"/>
   <int value="12" label="Scrub to"/>
+  <int value="13" label="Enter picture-in-picture"/>
+  <int value="14" label="Exit picture-in-picture"/>
 </enum>
 
 <enum name="MediaSinkType">
