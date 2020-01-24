@@ -172,6 +172,7 @@ crbug.com/951628 [ win no-passthrough ] conformance/rendering/blending.html [ Fa
 # Win NVIDIA failures
 crbug.com/626524 [ win nvidia no-passthrough ] conformance/textures/misc/texture-npot-video.html [ RetryOnFailure ]
 crbug.com/630860 [ win nvidia ] conformance/textures/misc/texture-upload-size.html [ RetryOnFailure ]
+crbug.com/1045339 [ win10 debug nvidia ] conformance/extensions/oes-texture-half-float-with-video.html [ RetryOnFailure ]
 
 # crbug.com/679696 [ win nvidia no_passthrough ] conformance/extensions/ext-sRGB.html [ Failure ]
 
@@ -562,5 +563,3 @@ crbug.com/1043953 [ chromeos ] conformance/textures/misc/texture-size-limit.html
 # ChromeOS: AMD
 crbug.com/995652 [ chromeos amd ] conformance/uniforms/out-of-bounds-uniform-array-access.html [ Skip ]
 crbug.com/1042897 [ chromeos amd ] conformance/textures/webgl_canvas/tex-2d-rgba-rgba-unsigned_byte.html [ RetryOnFailure ]
-
-crbug.com/1045339 [ Win10 debug nvidia ] conformance/extensions/oes-texture-half-float-with-video.html [ RetryOnFailure ]
