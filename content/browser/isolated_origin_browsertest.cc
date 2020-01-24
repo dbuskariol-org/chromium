@@ -1674,7 +1674,9 @@ IN_PROC_BROWSER_TEST_F(
 // will be rejected.
 IN_PROC_BROWSER_TEST_F(IsolatedOriginTest,
                        LocalStorageOriginEnforcement_OpaqueOrigin) {
-  url::Origin opaque_origin;
+  url::Origin precursor_origin =
+      url::Origin::Create(GURL("https://non-isolated.com"));
+  url::Origin opaque_origin = precursor_origin.DeriveNewOpaqueOrigin();
   RenderProcessHostImpl::SetStoragePartitionServiceRequestHandlerForTesting(
       base::BindRepeating(&CreateTestStoragePartitionService, opaque_origin));
 

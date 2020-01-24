@@ -1328,15 +1328,6 @@ CanCommitStatus ChildProcessSecurityPolicyImpl::CanCommitOriginAndUrl(
     const GURL& url) {
   const url::Origin url_origin = url::Origin::Resolve(url, origin);
   if (!CanAccessDataForOrigin(child_id, url_origin)) {
-    // Allow opaque origins w/o precursors to commit.
-    // TODO(acolwell): Investigate all cases that trigger this path and fix
-    // them so we have precursor information. Remove this logic once that has
-    // been completed.
-    if (url_origin.opaque() &&
-        !url_origin.GetTupleOrPrecursorTupleIfOpaque().IsValid()) {
-      return CanCommitStatus::CAN_COMMIT_ORIGIN_AND_URL;
-    }
-
     // Check for special cases, like blob:null/ and data: URLs, where the
     // origin does not contain information to match against the process lock,
     // but using the whole URL can result in a process lock match.
@@ -1349,17 +1340,8 @@ CanCommitStatus ChildProcessSecurityPolicyImpl::CanCommitOriginAndUrl(
     return CanCommitStatus::CANNOT_COMMIT_URL;
   }
 
-  if (!CanAccessDataForOrigin(child_id, origin)) {
-    // Allow opaque origins w/o precursors to commit.
-    // TODO(acolwell): Investigate all cases that trigger this path and fix
-    // them so we have precursor information. Remove this logic once that has
-    // been completed.
-    if (origin.opaque() &&
-        !origin.GetTupleOrPrecursorTupleIfOpaque().IsValid()) {
-      return CanCommitStatus::CAN_COMMIT_ORIGIN_AND_URL;
-    }
+  if (!CanAccessDataForOrigin(child_id, origin))
     return CanCommitStatus::CANNOT_COMMIT_ORIGIN;
-  }
 
   // Ensure that the origin derived from |url| is consistent with |origin|.
   // Note: We can't use origin.IsSameOriginWith() here because opaque origins
@@ -1408,20 +1390,14 @@ bool ChildProcessSecurityPolicyImpl::CanAccessDataForOrigin(
   if (origin.opaque()) {
     auto precursor_tuple = origin.GetTupleOrPrecursorTupleIfOpaque();
     if (!precursor_tuple.IsValid()) {
-      // We don't have precursor information so we only allow access if
-      // the process lock isn't set yet.
+      // Allow opaque origins w/o precursors (if the security state exists).
+      // TODO(acolwell): Investigate all cases that trigger this path (e.g.,
+      // browser-initiated navigations to data: URLs) and fix them so we have
+      // precursor information (or the process lock is compatible with a missing
+      // precursor). Remove this logic once that has been completed.
       base::AutoLock lock(lock_);
       SecurityState* security_state = GetSecurityState(child_id);
-
-      if (security_state && security_state->origin_lock().is_empty())
-        return true;
-
-      LogCanAccessDataForOriginCrashKeys(
-          /* expected_process_lock= */ "(empty)",
-          GetKilledProcessOriginLock(security_state), origin.GetDebugString(),
-          "opaque_origin_without_precursor_in_locked_process");
-
-      return false;
+      return !!security_state;
     } else {
       url_to_check = precursor_tuple.GetURL();
     }

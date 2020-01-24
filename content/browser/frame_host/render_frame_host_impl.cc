@@ -497,16 +497,13 @@ url::Origin GetOriginForURLLoaderFactory(
   url::Origin result =
       GetOriginForURLLoaderFactoryUnchecked(navigation_request);
 
-  // Any non-opaque |result| must be an origin that is allowed to be accessed
-  // from the process that is the target of this navigation.
-  //
-  // TODO(lukasza): https://crbug.com/1029092: The CHECK below should also apply
-  // to opaque origin.
-  if (!result.opaque()) {
+  // |result| must be an origin that is allowed to be accessed from the process
+  // that is the target of this navigation.
+  if (navigation_request) {
+    int process_id =
+        navigation_request->GetRenderFrameHost()->GetProcess()->GetID();
     auto* policy = ChildProcessSecurityPolicyImpl::GetInstance();
-    CHECK(policy->CanAccessDataForOrigin(
-        navigation_request->GetRenderFrameHost()->GetProcess()->GetID(),
-        result));
+    CHECK(policy->CanAccessDataForOrigin(process_id, result));
   }
 
   return result;
