@@ -46,6 +46,10 @@ void FontSizeTabHelper::RegisterBrowserStatePrefs(
   registry->RegisterDictionaryPref(prefs::kIosUserZoomMultipliers);
 }
 
+void FontSizeTabHelper::ClearUserZoomPrefs(PrefService* pref_service) {
+  pref_service->ClearPref(prefs::kIosUserZoomMultipliers);
+}
+
 void FontSizeTabHelper::SetPageFontSize(int size) {
   tab_helper_has_zoomed_ = true;
   if (web_state_->ContentIsHTML()) {
