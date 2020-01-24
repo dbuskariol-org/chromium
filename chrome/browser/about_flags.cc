@@ -175,8 +175,8 @@
 #endif
 
 #if defined(OS_ANDROID)
-#include "chrome/browser/android/chrome_feature_list.h"
 #include "chrome/browser/android/explore_sites/explore_sites_feature.h"
+#include "chrome/browser/flags/android/chrome_feature_list.h"
 #include "ui/android/buildflags.h"
 #else  // OS_ANDROID
 #include "chrome/browser/media/router/media_router_feature.h"

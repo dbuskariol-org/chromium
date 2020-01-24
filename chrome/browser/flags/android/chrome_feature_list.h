@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ANDROID_CHROME_FEATURE_LIST_H_
-#define CHROME_BROWSER_ANDROID_CHROME_FEATURE_LIST_H_
+#ifndef CHROME_BROWSER_FLAGS_ANDROID_CHROME_FEATURE_LIST_H_
+#define CHROME_BROWSER_FLAGS_ANDROID_CHROME_FEATURE_LIST_H_
 
 #include <base/feature_list.h>
 #include <jni.h>
@@ -133,4 +133,4 @@ extern const base::Feature kWebApkAdaptiveIcon;
 }  // namespace android
 }  // namespace chrome
 
-#endif  // CHROME_BROWSER_ANDROID_CHROME_FEATURE_LIST_H_
+#endif  // CHROME_BROWSER_FLAGS_ANDROID_CHROME_FEATURE_LIST_H_

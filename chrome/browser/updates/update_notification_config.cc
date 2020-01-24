@@ -5,7 +5,7 @@
 #include "chrome/browser/updates/update_notification_config.h"
 
 #include "base/metrics/field_trial_params.h"
-#include "chrome/browser/android/chrome_feature_list.h"
+#include "chrome/browser/flags/android/chrome_feature_list.h"
 
 namespace updates {
 namespace {
