@@ -44,6 +44,7 @@
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/browsing_data/browsing_data_helper.h"
 #include "chrome/browser/browsing_data/chrome_browsing_data_remover_delegate.h"
+#include "chrome/browser/captive_portal/captive_portal_service_factory.h"
 #include "chrome/browser/chrome_content_browser_client_parts.h"
 #include "chrome/browser/chrome_quota_permission_context.h"
 #include "chrome/browser/content_settings/cookie_settings_factory.h"
@@ -184,6 +185,7 @@
 #include "chrome/installer/util/google_update_settings.h"
 #include "components/autofill/core/common/autofill_switches.h"
 #include "components/browsing_data/core/browsing_data_utils.h"
+#include "components/captive_portal/content/captive_portal_service.h"
 #include "components/captive_portal/core/buildflags.h"
 #include "components/cdm/browser/cdm_message_filter_android.h"
 #include "components/certificate_matching/certificate_principal_pattern.h"
@@ -685,10 +687,16 @@ void HandleSSLErrorWrapper(
   if (!profile)
     return;
 
+  CaptivePortalService* captive_portal_service = nullptr;
+
+#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
+  captive_portal_service = CaptivePortalServiceFactory::GetForProfile(profile);
+#endif
+
   SSLErrorHandler::HandleSSLError(
       web_contents, cert_error, ssl_info, request_url,
       std::move(ssl_cert_reporter), std::move(blocking_page_ready_callback),
-      g_browser_process->network_time_tracker(),
+      g_browser_process->network_time_tracker(), captive_portal_service,
       profile->GetPrefs()->GetBoolean(prefs::kSSLErrorOverrideAllowed));
 }
 

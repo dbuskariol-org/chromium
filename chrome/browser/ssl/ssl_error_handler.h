@@ -13,6 +13,7 @@
 #include "base/memory/weak_ptr.h"
 #include "base/timer/timer.h"
 #include "components/captive_portal/content/captive_portal_service.h"
+#include "components/captive_portal/core/buildflags.h"
 #include "components/security_interstitials/content/common_name_mismatch_handler.h"
 #include "components/security_interstitials/content/security_interstitial_page.h"
 #include "components/security_interstitials/content/ssl_cert_reporter.h"
@@ -148,6 +149,7 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
       std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
       BlockingPageReadyCallback blocking_page_ready_callback,
       network_time::NetworkTimeTracker* network_time_tracker,
+      CaptivePortalService* captive_portal_service,
       bool user_can_proceed_past_interstitial = true);
 
   // Sets the binary proto for SSL error assistant. The binary proto
@@ -184,6 +186,7 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
                   int cert_error,
                   const net::SSLInfo& ssl_info,
                   network_time::NetworkTimeTracker* network_time_tracker,
+                  CaptivePortalService* captive_portal_service,
                   const GURL& request_url);
 
   // Called when an SSL cert error is encountered. Triggers a captive portal
@@ -238,6 +241,12 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
   const net::SSLInfo ssl_info_;
   const GURL request_url_;
   network_time::NetworkTimeTracker* network_time_tracker_;
+
+  // The below field is unused if captive portal detection is not enabled,
+  // which causes a compiler error.
+#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
+  CaptivePortalService* captive_portal_service_;
+#endif
 
   std::unique_ptr<CaptivePortalService::Subscription> subscription_;
 
