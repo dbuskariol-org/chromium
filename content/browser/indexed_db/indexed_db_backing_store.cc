@@ -264,8 +264,9 @@ Status MergeDatabaseIntoActiveBlobJournal(
 // Blob Data is encoded as a series of:
 //   { is_file [bool], blob_number [int64_t as varInt],
 //     type [string-with-length, may be empty],
-//     (for Blobs only) size [int64_t as varInt]
+//     size [int64_t as varInt]
 //     (for Files only) fileName [string-with-length]
+//     (for Files only) lastModified [int64_t as varInt, in microseconds]
 //   }
 // There is no length field; just read until you run out of data.
 std::string EncodeBlobInfos(const std::vector<IndexedDBBlobInfo>& blob_info) {
@@ -274,12 +275,51 @@ std::string EncodeBlobInfos(const std::vector<IndexedDBBlobInfo>& blob_info) {
     EncodeBool(info.is_file(), &ret);
     EncodeVarInt(info.blob_number(), &ret);
     EncodeStringWithLength(info.type(), &ret);
-    if (info.is_file())
+    EncodeVarInt(info.size(), &ret);
+    if (info.is_file()) {
       EncodeStringWithLength(info.file_name(), &ret);
-    else
-      EncodeVarInt(info.size(), &ret);
+      EncodeVarInt(
+          info.last_modified().ToDeltaSinceWindowsEpoch().InMicroseconds(),
+          &ret);
+    }
   }
   return ret;
+}
+
+bool DecodeV3BlobInfos(const base::StringPiece& data,
+                       std::vector<IndexedDBBlobInfo>* output) {
+  std::vector<IndexedDBBlobInfo> ret;
+  output->clear();
+  StringPiece slice(data);
+  while (!slice.empty()) {
+    bool is_file;
+    int64_t blob_number;
+    base::string16 type;
+    int64_t size;
+    base::string16 file_name;
+
+    if (!DecodeBool(&slice, &is_file))
+      return false;
+    if (!DecodeVarInt(&slice, &blob_number) ||
+        !DatabaseMetaDataKey::IsValidBlobNumber(blob_number))
+      return false;
+    if (!DecodeStringWithLength(&slice, &type))
+      return false;
+    if (is_file) {
+      if (!DecodeStringWithLength(&slice, &file_name))
+        return false;
+      ret.push_back(IndexedDBBlobInfo(blob_number, type, file_name,
+                                      base::Time(),
+                                      IndexedDBBlobInfo::kUnknownSize));
+    } else {
+      if (!DecodeVarInt(&slice, &size) || size < 0)
+        return false;
+      ret.push_back(IndexedDBBlobInfo(type, size, blob_number));
+    }
+  }
+  output->swap(ret);
+
+  return true;
 }
 
 bool DecodeBlobInfos(const std::string& data,
@@ -301,15 +341,22 @@ bool DecodeBlobInfos(const std::string& data,
       return false;
     if (!DecodeStringWithLength(&slice, &type))
       return false;
-    if (is_file) {
-      if (!DecodeStringWithLength(&slice, &file_name))
-        return false;
-      ret.push_back(IndexedDBBlobInfo(blob_number, type, file_name));
-    } else {
-      if (!DecodeVarInt(&slice, &size) || size < 0)
-        return false;
+    if (!DecodeVarInt(&slice, &size) || size < 0)
+      return false;
+    if (!is_file) {
       ret.push_back(IndexedDBBlobInfo(type, size, blob_number));
+      continue;
     }
+    if (!DecodeStringWithLength(&slice, &file_name))
+      return false;
+    int64_t last_modified;
+    if (!DecodeVarInt(&slice, &last_modified) || size < 0)
+      return false;
+    ret.push_back(
+        IndexedDBBlobInfo(blob_number, type, file_name,
+                          base::Time::FromDeltaSinceWindowsEpoch(
+                              base::TimeDelta::FromMicroseconds(last_modified)),
+                          size));
   }
   output->swap(ret);
 
@@ -644,6 +691,7 @@ leveldb::Status IndexedDBBackingStore::Initialize(bool clean_active_journal) {
     INTERNAL_READ_ERROR(SET_UP_METADATA);
     return s;
   }
+  std::vector<base::FilePath> empty_blobs_to_delete;
   indexed_db::ReportSchemaVersion(db_schema_version, origin_);
   if (!found) {
     // Initialize new backing store.
@@ -732,6 +780,17 @@ leveldb::Status IndexedDBBackingStore::Initialize(bool clean_active_journal) {
             PutInt(write_batch.get(), schema_version_key, db_schema_version));
       }
     }
+    if (db_schema_version < 4) {
+      s = UpgradeBlobEntriesToV4(db_.get(), write_batch.get(),
+                                 &empty_blobs_to_delete);
+      if (!s.ok()) {
+        INTERNAL_CONSISTENCY_ERROR_UNTESTED(SET_UP_METADATA);
+        return InternalInconsistencyStatus();
+      }
+      db_schema_version = 4;
+      ignore_result(
+          PutInt(write_batch.get(), schema_version_key, db_schema_version));
+    }
   }
 
   if (!s.ok()) {
@@ -779,6 +838,12 @@ leveldb::Status IndexedDBBackingStore::Initialize(bool clean_active_journal) {
         origin_);
     INTERNAL_WRITE_ERROR_UNTESTED(SET_UP_METADATA);
     return s;
+  }
+
+  // Delete all empty files that resulted from the migration to v4. If this
+  // fails it's not a big deal.
+  for (const auto& path : empty_blobs_to_delete) {
+    ignore_result(base::DeleteFile(path, /*recursive=*/false));
   }
 
   if (clean_active_journal) {
@@ -842,6 +907,88 @@ Status IndexedDBBackingStore::AnyDatabaseContainsBlobs(
         *blobs_exist = true;
         return Status::OK();
       }
+    }
+
+    if (!status.ok())
+      return status;
+  }
+  return Status::OK();
+}
+
+Status IndexedDBBackingStore::UpgradeBlobEntriesToV4(
+    TransactionalLevelDBDatabase* db,
+    LevelDBWriteBatch* write_batch,
+    std::vector<base::FilePath>* empty_blobs_to_delete) {
+  Status status = leveldb::Status::OK();
+  std::vector<base::string16> names;
+  IndexedDBMetadataCoding metadata_coding;
+  status = metadata_coding.ReadDatabaseNames(db, origin_identifier_, &names);
+  if (!status.ok())
+    return status;
+
+  for (const auto& name : names) {
+    IndexedDBDatabaseMetadata metadata;
+    bool found = false;
+    status = metadata_coding.ReadMetadataForDatabaseName(
+        db, origin_identifier_, name, &metadata, &found);
+    if (!found)
+      return Status::NotFound("Metadata not found for \"%s\".",
+                              base::UTF16ToUTF8(name));
+    for (const auto& store_id_metadata_pair : metadata.object_stores) {
+      leveldb::ReadOptions options;
+      // Since this is a scan, don't fill up the cache, as it's not likely these
+      // blocks will be reloaded.
+      options.fill_cache = false;
+      options.verify_checksums = true;
+      std::unique_ptr<TransactionalLevelDBIterator> iterator =
+          db->CreateIterator(options);
+      std::string min_key = BlobEntryKey::EncodeMinKeyForObjectStore(
+          metadata.id, store_id_metadata_pair.first);
+      std::string max_key = BlobEntryKey::EncodeStopKeyForObjectStore(
+          metadata.id, store_id_metadata_pair.first);
+      status = iterator->Seek(base::StringPiece(min_key));
+      if (status.IsNotFound()) {
+        status = Status::OK();
+        continue;
+      }
+      if (!status.ok())
+        return status;
+      // Loop through all blob entries in for the given object store.
+      for (; status.ok() && iterator->IsValid() &&
+             db->leveldb_state()->comparator()->Compare(
+                 leveldb_env::MakeSlice(iterator->Key()), max_key) < 0;
+           status = iterator->Next()) {
+        std::vector<IndexedDBBlobInfo> temp_blob_infos;
+        DecodeV3BlobInfos(iterator->Value(), &temp_blob_infos);
+        bool needs_rewrite = false;
+        // Read the old entries & modify them to add the missing data.
+        for (auto& blob_info : temp_blob_infos) {
+          if (!blob_info.is_file())
+            continue;
+          needs_rewrite = true;
+          base::File::Info info;
+          base::FilePath path =
+              GetBlobFileName(metadata.id, blob_info.blob_number());
+          if (!base::GetFileInfo(path, &info)) {
+            return leveldb::Status::Corruption(
+                "Unable to upgrade to database version 4.", "");
+          }
+          blob_info.set_size(info.size);
+          blob_info.set_last_modified(info.last_modified);
+          if (info.size == 0)
+            empty_blobs_to_delete->push_back(path);
+        }
+        if (!needs_rewrite)
+          continue;
+        std::string data = EncodeBlobInfos(temp_blob_infos);
+        write_batch->Put(iterator->Key(), data);
+        if (!status.ok())
+          return status;
+      }
+      if (status.IsNotFound())
+        status = leveldb::Status::OK();
+      if (!status.ok())
+        return status;
     }
 
     if (!status.ok())
@@ -1509,6 +1656,11 @@ class IndexedDBBackingStore::Transaction::ChainedBlobWriterImpl
       std::move(callback_).Run(BlobWriteResult::kRunPhaseTwoAsync);
       return;
     } else {
+      if (iter_->size() == 0) {
+        waiting_for_callback_ = true;
+        ReportWriteCompletion(true, 0);
+        return;
+      }
       if (!write_file_callback_.Run(database_id_, *iter_, this)) {
         std::move(callback_).Run(BlobWriteResult::kFailure);
         return;
@@ -1624,6 +1776,10 @@ bool IndexedDBBackingStore::WriteBlobFile(
 #endif
   if (!MakeIDBBlobDirectory(blob_path_, database_id, descriptor.blob_number()))
     return false;
+
+  // Writing empty files to android is a problem, as we seem to be unable to set
+  // the last_modified time of an empty file.
+  DCHECK_NE(descriptor.size(), 0);
 
   bool use_copy_file = descriptor.is_file() && !descriptor.file_path().empty();
 
@@ -1913,15 +2069,6 @@ Status IndexedDBBackingStore::Transaction::GetBlobInfoForRecord(
       entry.set_release_callback(
           backing_store_->active_blob_registry()->GetFinalReleaseCallback(
               database_id, entry.blob_number()));
-      if (entry.is_file() && !entry.file_path().empty()) {
-        base::File::Info info;
-        if (base::GetFileInfo(entry.file_path(), &info)) {
-          // This should always work, but it isn't fatal if it doesn't; it just
-          // means a potential slow synchronous call from the renderer later.
-          entry.set_last_modified(info.last_modified);
-          entry.set_size(info.size);
-        }
-      }
     }
   }
   return Status::OK();

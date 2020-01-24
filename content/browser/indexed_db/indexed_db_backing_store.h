@@ -49,6 +49,7 @@ struct IndexedDBDatabaseMetadata;
 
 namespace content {
 class IndexedDBActiveBlobRegistry;
+class LevelDBWriteBatch;
 class TransactionalLevelDBDatabase;
 class TransactionalLevelDBFactory;
 class TransactionalLevelDBIterator;
@@ -508,6 +509,11 @@ class CONTENT_EXPORT IndexedDBBackingStore {
   leveldb::Status AnyDatabaseContainsBlobs(
       TransactionalLevelDBDatabase* database,
       bool* blobs_exist);
+
+  leveldb::Status UpgradeBlobEntriesToV4(
+      TransactionalLevelDBDatabase* database,
+      LevelDBWriteBatch* write_batch,
+      std::vector<base::FilePath>* empty_blobs_to_delete);
 
   // TODO(dmurph): Move this completely to IndexedDBMetadataFactory.
   leveldb::Status GetCompleteMetadata(
