@@ -9,6 +9,7 @@
 #include "base/strings/string_number_conversions.h"
 #include "chrome/browser/sharing/sharing_device_registration_result.h"
 #include "components/version_info/version_info.h"
+#include "content/public/browser/browser_thread.h"
 
 namespace {
 const char* GetEnumStringValue(SharingFeatureName feature) {
@@ -46,9 +47,20 @@ std::string DevicePlatformToString(SharingDevicePlatform device_platform) {
   }
 }
 
-// Maps SharingSendMessageResult enum values to strings used as histogram
-// suffixes. Keep in sync with "SharingSendMessageResult" in histograms.xml.
-std::string SendMessageResultToSuffix(SharingSendMessageResult result) {
+// Major Chrome version comparison with the receiver device.
+// These values are logged to UMA. Entries should not be renumbered and numeric
+// values should never be reused. Please keep in sync with
+// "SharingMajorVersionComparison" in enums.xml.
+enum class SharingMajorVersionComparison {
+  kUnknown = 0,
+  kSenderIsLower = 1,
+  kSame = 2,
+  kSenderIsHigher = 3,
+  kMaxValue = kSenderIsHigher,
+};
+}  // namespace
+
+std::string SharingSendMessageResultToString(SharingSendMessageResult result) {
   switch (result) {
     case SharingSendMessageResult::kSuccessful:
       return "Successful";
@@ -64,32 +76,6 @@ std::string SendMessageResultToSuffix(SharingSendMessageResult result) {
       return "InternalError";
   }
 }
-
-const std::string& MessageTypeToMessageSuffix(
-    chrome_browser_sharing::MessageType message_type) {
-  // For proto3 enums unrecognized enum values are kept when parsing and their
-  // name is an empty string. We don't want to use that as a histogram suffix.
-  // The returned values must match the values of the SharingMessage suffixes
-  // defined in histograms.xml.
-  if (!chrome_browser_sharing::MessageType_IsValid(message_type)) {
-    return chrome_browser_sharing::MessageType_Name(
-        chrome_browser_sharing::UNKNOWN_MESSAGE);
-  }
-  return chrome_browser_sharing::MessageType_Name(message_type);
-}
-
-// Major Chrome version comparison with the receiver device.
-// These values are logged to UMA. Entries should not be renumbered and numeric
-// values should never be reused. Please keep in sync with
-// "SharingMajorVersionComparison" in enums.xml.
-enum class SharingMajorVersionComparison {
-  kUnknown = 0,
-  kSenderIsLower = 1,
-  kSame = 2,
-  kSenderIsHigher = 3,
-  kMaxValue = kSenderIsHigher,
-};
-}  // namespace
 
 chrome_browser_sharing::MessageType SharingPayloadCaseToMessageType(
     chrome_browser_sharing::SharingMessage::PayloadCase payload_case) {
@@ -122,6 +108,23 @@ chrome_browser_sharing::MessageType SharingPayloadCaseToMessageType(
   // PAYLOAD_NOT_SET. Explicitly return UNKNOWN_MESSAGE here to handle this
   // case.
   return chrome_browser_sharing::UNKNOWN_MESSAGE;
+}
+
+const std::string& SharingMessageTypeToString(
+    chrome_browser_sharing::MessageType message_type) {
+  // For proto3 enums unrecognized enum values are kept when parsing and their
+  // name is an empty string. We don't want to use that as a histogram suffix.
+  if (!chrome_browser_sharing::MessageType_IsValid(message_type)) {
+    return chrome_browser_sharing::MessageType_Name(
+        chrome_browser_sharing::UNKNOWN_MESSAGE);
+  }
+  return chrome_browser_sharing::MessageType_Name(message_type);
+}
+
+int GenerateSharingTraceId() {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  static int next_id = 0;
+  return next_id++;
 }
 
 void LogSharingMessageReceived(
@@ -218,11 +221,11 @@ void LogSharingMessageAckTime(chrome_browser_sharing::MessageType message_type,
                               SharingDevicePlatform receiver_device_platform,
                               base::TimeDelta time) {
   std::string suffixed_name = base::StrCat(
-      {"Sharing.MessageAckTime.", MessageTypeToMessageSuffix(message_type)});
+      {"Sharing.MessageAckTime.", SharingMessageTypeToString(message_type)});
   std::string platform_suffixed_name =
       base::StrCat({"Sharing.MessageAckTime.",
                     DevicePlatformToString(receiver_device_platform), ".",
-                    MessageTypeToMessageSuffix(message_type)});
+                    SharingMessageTypeToString(message_type)});
   switch (message_type) {
     case chrome_browser_sharing::MessageType::UNKNOWN_MESSAGE:
     case chrome_browser_sharing::MessageType::PING_MESSAGE:
@@ -251,7 +254,7 @@ void LogSharingMessageHandlerTime(
     base::TimeDelta time_taken) {
   base::UmaHistogramMediumTimes(
       base::StrCat({"Sharing.MessageHandlerTime.",
-                    MessageTypeToMessageSuffix(message_type)}),
+                    SharingMessageTypeToString(message_type)}),
       time_taken);
 }
 
@@ -262,7 +265,7 @@ void LogSharingDeviceLastUpdatedAge(
   int hours = age.InHours();
   base::UmaHistogramCounts1000(kBase, hours);
   base::UmaHistogramCounts1000(
-      base::StrCat({kBase, ".", MessageTypeToMessageSuffix(message_type)}),
+      base::StrCat({kBase, ".", SharingMessageTypeToString(message_type)}),
       hours);
 }
 
@@ -270,7 +273,7 @@ void LogSharingDeviceLastUpdatedAgeWithResult(SharingSendMessageResult result,
                                               base::TimeDelta age) {
   base::UmaHistogramCounts1000(
       base::StrCat({"Sharing.DeviceLastUpdatedAgeWithResult.",
-                    SendMessageResultToSuffix(result)}),
+                    SharingSendMessageResultToString(result)}),
       age.InHours());
 }
 
@@ -300,7 +303,7 @@ void LogSharingVersionComparison(
   constexpr char kBase[] = "Sharing.MajorVersionComparison";
   base::UmaHistogramEnumeration(kBase, result);
   base::UmaHistogramEnumeration(
-      base::StrCat({kBase, ".", MessageTypeToMessageSuffix(message_type)}),
+      base::StrCat({kBase, ".", SharingMessageTypeToString(message_type)}),
       result);
 }
 
@@ -319,7 +322,7 @@ void LogSendSharingMessageResult(
   base::UmaHistogramEnumeration(metric_prefix, result);
   base::UmaHistogramEnumeration(
       base::StrCat(
-          {metric_prefix, ".", MessageTypeToMessageSuffix(message_type)}),
+          {metric_prefix, ".", SharingMessageTypeToString(message_type)}),
       result);
 
   base::UmaHistogramEnumeration(
@@ -329,7 +332,7 @@ void LogSendSharingMessageResult(
   base::UmaHistogramEnumeration(
       base::StrCat({metric_prefix, ".",
                     DevicePlatformToString(receiving_device_platform), ".",
-                    MessageTypeToMessageSuffix(message_type)}),
+                    SharingMessageTypeToString(message_type)}),
       result);
 }
 
@@ -342,7 +345,7 @@ void LogSendSharingAckMessageResult(
   base::UmaHistogramEnumeration(metric_prefix, result);
   base::UmaHistogramEnumeration(
       base::StrCat(
-          {metric_prefix, ".", MessageTypeToMessageSuffix(message_type)}),
+          {metric_prefix, ".", SharingMessageTypeToString(message_type)}),
       result);
 
   base::UmaHistogramEnumeration(
@@ -352,7 +355,7 @@ void LogSendSharingAckMessageResult(
   base::UmaHistogramEnumeration(
       base::StrCat({metric_prefix, ".",
                     DevicePlatformToString(ack_receiver_device_type), ".",
-                    MessageTypeToMessageSuffix(message_type)}),
+                    SharingMessageTypeToString(message_type)}),
       result);
 }
 
@@ -365,7 +368,8 @@ void LogSharedClipboardRetries(int retries, SharingSendMessageResult result) {
   constexpr char kBase[] = "Sharing.SharedClipboardRetries";
   base::UmaHistogramExactLinear(kBase, retries, /*value_max=*/20);
   base::UmaHistogramExactLinear(
-      base::StrCat({kBase, ".", SendMessageResultToSuffix(result)}), retries,
+      base::StrCat({kBase, ".", SharingSendMessageResultToString(result)}),
+      retries,
       /*value_max=*/20);
 }
 

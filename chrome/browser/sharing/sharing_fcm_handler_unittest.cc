@@ -17,6 +17,7 @@
 #include "components/sync_device_info/device_info.h"
 #include "components/sync_device_info/fake_device_info_sync_service.h"
 #include "components/sync_preferences/testing_pref_service_syncable.h"
+#include "content/public/test/browser_task_environment.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -128,6 +129,8 @@ class SharingFCMHandlerTest : public testing::Test {
     sharing_message.SerializeToString(&incoming_message.raw_data);
     return incoming_message;
   }
+
+  content::BrowserTaskEnvironment task_environment_;
 
   FakeSharingHandlerRegistry handler_registry_;
 
