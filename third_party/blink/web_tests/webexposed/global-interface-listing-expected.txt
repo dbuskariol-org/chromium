@@ -8683,6 +8683,15 @@ interface VideoTrackList : EventTarget
     setter onaddtrack
     setter onchange
     setter onremovetrack
+interface VideoTrackReader
+    attribute @@toStringTag
+    getter readable
+    method constructor
+interface VideoTrackWriter
+    attribute @@toStringTag
+    getter track
+    getter writable
+    method constructor
 interface VisualViewport : EventTarget
     attribute @@toStringTag
     getter height
