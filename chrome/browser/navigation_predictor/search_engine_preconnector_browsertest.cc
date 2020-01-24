@@ -28,6 +28,10 @@
 
 namespace {
 
+// Feature to control preconnect to search.
+const base::Feature kPreconnectToSearchTest{"PreconnectToSearch",
+                                            base::FEATURE_DISABLED_BY_DEFAULT};
+
 // TODO(https://crbug.com/1042727): Fix test GURL scoping and remove this getter
 // function.
 GURL FakeSearch() {
@@ -125,8 +129,7 @@ class SearchEnginePreconnectorNoDelaysBrowserTest
   SearchEnginePreconnectorNoDelaysBrowserTest() {
     {
       feature_list_.InitWithFeaturesAndParameters(
-          {{features::kPreconnectToSearch, {{"startup_delay_ms", "0"}}},
-           {features::kPreconnectToSearchNonGoogle, {{}}},
+          {{kPreconnectToSearchTest, {{"startup_delay_ms", "0"}}},
            {net::features::kNetUnusedIdleSocketTimeout,
             {{"unused_idle_socket_timeout_seconds", "0"}}}},
           {});
@@ -236,8 +239,7 @@ class SearchEnginePreconnectorKeepSocketBrowserTest
   SearchEnginePreconnectorKeepSocketBrowserTest() {
     {
       feature_list_.InitWithFeaturesAndParameters(
-          {{features::kPreconnectToSearch, {{"startup_delay_ms", "0"}}},
-           {features::kPreconnectToSearchNonGoogle, {{}}},
+          {{kPreconnectToSearchTest, {{"startup_delay_ms", "0"}}},
            {net::features::kNetUnusedIdleSocketTimeout,
             {{"unused_idle_socket_timeout_seconds", "60"}}}},
           {});
@@ -326,69 +328,6 @@ IN_PROC_BROWSER_TEST_F(SearchEnginePreconnectorKeepSocketBrowserTest,
         kv.second.get(),
         ukm::builders::PageLoad::kMainFrameResource_SocketReusedName));
   }
-}
-
-class SearchEnginePreconnectorGoogleOnlyBrowserTest
-    : public SearchEnginePreconnectorBrowserTest {
- public:
-  SearchEnginePreconnectorGoogleOnlyBrowserTest() {
-    {
-      feature_list_.InitWithFeaturesAndParameters(
-          {{features::kPreconnectToSearch, {{"startup_delay_ms", "0"}}},
-           {net::features::kNetUnusedIdleSocketTimeout,
-            {{"unused_idle_socket_timeout_seconds", "60"}}}},
-          {
-              {features::kPreconnectToSearchNonGoogle, {{}}},
-          });
-    }
-  }
-
-  ~SearchEnginePreconnectorGoogleOnlyBrowserTest() override = default;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(SearchEnginePreconnectorGoogleOnlyBrowserTest);
-};
-
-IN_PROC_BROWSER_TEST_F(SearchEnginePreconnectorGoogleOnlyBrowserTest,
-                       GoogleOnly) {
-  static const char kShortName[] = "test";
-  static const char kSearchURL[] =
-      "/anchors_different_area.html?q={searchTerms}";
-  TemplateURLService* model =
-      TemplateURLServiceFactory::GetForProfile(browser()->profile());
-  ASSERT_TRUE(model);
-  search_test_utils::WaitForTemplateURLServiceToLoad(model);
-  ASSERT_TRUE(model->loaded());
-
-  TemplateURLData data;
-  data.SetShortName(base::ASCIIToUTF16(kShortName));
-  data.SetKeyword(data.short_name());
-  data.SetURL(GetTestURL(kSearchURL).spec());
-
-  // Set the DSE to the test URL.
-  TemplateURL* template_url = model->Add(std::make_unique<TemplateURL>(data));
-  ASSERT_TRUE(template_url);
-  model->SetUserSelectedDefaultSearchProvider(template_url);
-
-  // Ensure that we wait long enough to trigger preconnects.
-  WaitForDelay(base::TimeDelta::FromMilliseconds(200));
-
-  TemplateURLData data_google_search;
-  data_google_search.SetShortName(base::ASCIIToUTF16(kShortName));
-  data_google_search.SetKeyword(data.short_name());
-  data_google_search.SetURL(GoogleSearch().spec());
-
-  template_url = model->Add(std::make_unique<TemplateURL>(data_google_search));
-  ASSERT_TRUE(template_url);
-  model->SetUserSelectedDefaultSearchProvider(template_url);
-
-  WaitForPreresolveCountForURL(GoogleSearch(), 2);
-
-  // Preconnect should occur for Google search (2 since there are 2 NIKs).
-  EXPECT_EQ(2, preresolve_counts_[GoogleSearch()]);
-
-  // No preconnects should have been issued for the test URL.
-  EXPECT_EQ(0, preresolve_counts_[GetTestURL("/").GetOrigin()]);
 }
 
 }  // namespace
