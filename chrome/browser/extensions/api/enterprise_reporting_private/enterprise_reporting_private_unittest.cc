@@ -308,6 +308,8 @@ TEST_F(EnterpriseReportingPrivateGetDeviceInfoTest, GetDeviceInfo) {
   EXPECT_EQ("macOS", info.os_name);
 #elif defined(OS_WIN)
   EXPECT_EQ("windows", info.os_name);
+#elif defined(OS_LINUX)
+  EXPECT_EQ("linux", info.os_name);
 #else
   // Verify a stub implementation.
   EXPECT_EQ("stubOS", info.os_name);

@@ -1040,6 +1040,8 @@ jumbo_static_library("extensions") {
       "api/enterprise_reporting_private/chrome_desktop_report_request_helper.h",
       "api/enterprise_reporting_private/device_info_fetcher.cc",
       "api/enterprise_reporting_private/device_info_fetcher.h",
+      "api/enterprise_reporting_private/device_info_fetcher_linux.cc",
+      "api/enterprise_reporting_private/device_info_fetcher_linux.h",
       "api/enterprise_reporting_private/device_info_fetcher_mac.h",
       "api/enterprise_reporting_private/device_info_fetcher_mac.mm",
       "api/enterprise_reporting_private/device_info_fetcher_win.cc",
