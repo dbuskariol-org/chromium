@@ -149,13 +149,6 @@ void MacAppsNavigationThrottle::OnIntentPickerClosed(
                  configuration:@{}
                          error:nil];
     }
-    PickerAction action = apps::AppsNavigationThrottle::GetPickerAction(
-        entry_type, close_reason, should_persist);
-    Platform platform = apps::AppsNavigationThrottle::GetDestinationPlatform(
-        launch_name, action);
-    apps::AppsNavigationThrottle::RecordUma(launch_name, entry_type,
-                                            close_reason, Source::kHttpOrHttps,
-                                            should_persist, action, platform);
     return;
   }
   apps::AppsNavigationThrottle::OnIntentPickerClosed(
