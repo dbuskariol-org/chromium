@@ -354,6 +354,12 @@ IN_PROC_BROWSER_TEST_F(TracingControllerTest, EnableAndStopTracing) {
   TestStartAndStopTracingString();
 }
 
+#if defined(OS_ANDROID) && defined(ADDRESS_SANITIZER)
+#define MAYBE_DisableRecordingStoresMetadata \
+  DISABLED_DisableRecordingStoresMetadata
+#else
+#define MAYBE_DisableRecordingStoresMetadata DisableRecordingStoresMetadata
+#endif
 IN_PROC_BROWSER_TEST_F(TracingControllerTest,
                        DisableRecordingStoresMetadata) {
   TestStartAndStopTracingString();
@@ -387,6 +393,12 @@ IN_PROC_BROWSER_TEST_F(TracingControllerTest,
 #endif
 }
 
+#if defined(OS_ANDROID) && defined(ADDRESS_SANITIZER)
+#define MAYBE_NotWhitelistedMetadataStripped \
+  DISABLED_NotWhitelistedMetadataStripped
+#else
+#define MAYBE_NotWhitelistedMetadataStripped NotWhitelistedMetadataStripped
+#endif
 IN_PROC_BROWSER_TEST_F(TracingControllerTest, NotWhitelistedMetadataStripped) {
   TestStartAndStopTracingStringWithFilter();
   // Check that a number of important keys exist in the metadata dictionary.
@@ -408,6 +420,12 @@ IN_PROC_BROWSER_TEST_F(TracingControllerTest, NotWhitelistedMetadataStripped) {
   EXPECT_TRUE(KeyEquals(metadata_json, "v8-version", "__stripped__"));
 }
 
+#if defined(OS_ANDROID) && defined(ADDRESS_SANITIZER)
+#define MAYBE_EnableAndStopTracingWithFilePath \
+  DISABLED_EnableAndStopTracingWithFilePath
+#else
+#define MAYBE_EnableAndStopTracingWithFilePath EnableAndStopTracingWithFilePath
+#endif
 IN_PROC_BROWSER_TEST_F(TracingControllerTest,
                        EnableAndStopTracingWithFilePath) {
   base::FilePath file_path;
@@ -419,6 +437,13 @@ IN_PROC_BROWSER_TEST_F(TracingControllerTest,
   EXPECT_EQ(file_path.value(), last_actual_recording_file_path().value());
 }
 
+#if defined(OS_ANDROID) && defined(ADDRESS_SANITIZER)
+#define MAYBE_EnableAndStopTracingWithCompression \
+  DISABLED_EnableAndStopTracingWithCompression
+#else
+#define MAYBE_EnableAndStopTracingWithCompression \
+  EnableAndStopTracingWithCompression
+#endif
 IN_PROC_BROWSER_TEST_F(TracingControllerTest,
                        EnableAndStopTracingWithCompression) {
   TestStartAndStopTracingCompressed();
@@ -472,6 +497,11 @@ IN_PROC_BROWSER_TEST_F(TracingControllerTest, MAYBE_SystemTraceEvents) {
   EXPECT_TRUE(last_data().find("systemTraceEvents") != std::string::npos);
 }
 
+#if defined(OS_ANDROID) && defined(ADDRESS_SANITIZER)
+#define MAYBE_ProcessesPresentInTrace DISABLED_ProcessesPresentInTrace
+#else
+#define MAYBE_ProcessesPresentInTrace ProcessesPresentInTrace
+#endif
 IN_PROC_BROWSER_TEST_F(TracingControllerTest, ProcessesPresentInTrace) {
   TestStartAndStopTracingString();
   EXPECT_TRUE(last_data().find("CrBrowserMain") != std::string::npos);
