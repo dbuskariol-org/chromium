@@ -711,9 +711,9 @@ deps = {
   'src/third_party/android_build_tools/bundletool': {
       'packages': [
           {
-       'package': 'chromium/third_party/android_tools_bundletool',
-       'version': 'VVve-571EEzx-giwEOU0vCrIe9D9a_TjP6ka1GgeVSUC',
-   },
+               'package': 'chromium/third_party/android_tools_bundletool',
+               'version': 'P0-ZY8wc-hAu5TZYFH7bId8H9Ucy7mNGCg1IPzXuZpEC',
+          },
       ],
       'condition': 'checkout_android',
       'dep_type': 'cipd',
