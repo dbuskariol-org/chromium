@@ -1433,7 +1433,8 @@ bool SkiaOutputSurfaceImplOnGpu::Initialize() {
     if (!InitializeForGL())
       return false;
   }
-  max_resource_cache_bytes_ = context_state_->max_resource_cache_bytes();
+  max_resource_cache_bytes_ =
+      context_state_->gr_context()->getResourceCacheLimit();
   return true;
 }
 
