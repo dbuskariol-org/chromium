@@ -2185,6 +2185,37 @@ TEST_F(ClientTagBasedModelTypeProcessorTest,
   EXPECT_EQ(nullptr, GetEntityForStorageKey(kKey1));
 }
 
+// Tests that UntrackEntityForClientTagHash won't propagate storage key to
+// ProcessorEntity, and no entity's metadata are added into MetadataChangeList.
+// This test is pretty same as ShouldUntrackEntityForStorageKey.
+TEST_F(ClientTagBasedModelTypeProcessorTest,
+       ShouldUntrackEntityForClientTagHash) {
+  InitializeToReadyState();
+
+  bridge()->WriteItem(kKey1, kValue1);
+  worker()->VerifyPendingCommits({{GetHash(kKey1)}});
+  worker()->AckOnePendingCommit();
+
+  // Check the processor tracks the entity.
+  StatusCounters status_counters;
+  type_processor()->GetStatusCountersForDebugging(
+      base::BindOnce(&CaptureStatusCounters, &status_counters));
+  ASSERT_EQ(1u, status_counters.num_entries);
+  ASSERT_NE(nullptr, GetEntityForStorageKey(kKey1));
+
+  // The bridge deletes the data locally and does not want to sync the deletion.
+  // It only untracks the entity.
+  type_processor()->UntrackEntityForClientTagHash(GetHash(kKey1));
+
+  // The deletion is not synced up.
+  worker()->VerifyPendingCommits({});
+  // The processor tracks no entity any more.
+  type_processor()->GetStatusCountersForDebugging(
+      base::BindOnce(&CaptureStatusCounters, &status_counters));
+  EXPECT_EQ(status_counters.num_entries, 0U);
+  EXPECT_EQ(nullptr, GetEntityForStorageKey(kKey1));
+}
+
 // Tests that the processor reports an error for updates with a version GC
 // directive that are received for types that support incremental updates.
 TEST_F(ClientTagBasedModelTypeProcessorTest,
