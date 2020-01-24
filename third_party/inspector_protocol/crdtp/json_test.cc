@@ -259,6 +259,7 @@ class Log : public ParserHandler {
   }
 
   void HandleString16(span<uint16_t> chars) override {
+    raw_log_string16_.emplace_back(chars.begin(), chars.end());
     log_ << "string16: " << UTF16ToUTF8(chars) << "\n";
   }
 
@@ -282,10 +283,15 @@ class Log : public ParserHandler {
 
   std::string str() const { return status_.ok() ? log_.str() : ""; }
 
+  std::vector<std::vector<uint16_t>> raw_log_string16() const {
+    return raw_log_string16_;
+  }
+
   Status status() const { return status_; }
 
  private:
   std::ostringstream log_;
+  std::vector<std::vector<uint16_t>> raw_log_string16_;
   Status status_;
 };
 
@@ -404,6 +410,31 @@ TEST_F(JsonParserTest, Unicode_ParseUtf16) {
       "string16: 🌎 🌙.\n"
       "map end\n",
       log_.str());
+}
+
+TEST_F(JsonParserTest, Unicode_ParseUtf16_SingleEscapeUpToFFFF) {
+  // 0xFFFF is the max codepoint that can be represented as a single \u escape.
+  // One way to write this is \uffff, another way is to encode it as a 3 byte
+  // UTF-8 sequence (0xef 0xbf 0xbf). Both are equivalent.
+
+  // Example with both ways of encoding code point 0xFFFF in a JSON string.
+  std::string json = "{\"escape\": \"\xef\xbf\xbf or \\uffff\"}";
+  ParseJSON(SpanFrom(json), &log_);
+  EXPECT_TRUE(log_.status().ok());
+
+  // Shows both inputs result in equivalent output once converted to UTF-8.
+  EXPECT_EQ(
+      "map begin\n"
+      "string16: escape\n"
+      "string16: \xEF\xBF\xBF or \xEF\xBF\xBF\n"
+      "map end\n",
+      log_.str());
+
+  // Make an even stronger assertion: The parser represents \xffff as a single
+  // UTF-16 char.
+  ASSERT_EQ(2u, log_.raw_log_string16().size());
+  std::vector<uint16_t> expected = {0xffff, ' ', 'o', 'r', ' ', 0xffff};
+  EXPECT_EQ(expected, log_.raw_log_string16()[1]);
 }
 
 TEST_F(JsonParserTest, Unicode_ParseUtf8) {
