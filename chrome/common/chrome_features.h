@@ -268,6 +268,9 @@ COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kHappinessTrackingSurveysForDesktop;
 
 COMPONENT_EXPORT(CHROME_FEATURES)
+extern const base::Feature kHappinessTrackingSurveysForDesktopSettings;
+
+COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kHappinessTrackingSurveysForDesktopDemo;
 #endif
 

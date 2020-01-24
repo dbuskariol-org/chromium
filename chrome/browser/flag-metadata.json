@@ -2395,6 +2395,11 @@
     "expiry_milestone": 82
   },
   {
+    "name": "happiness-tracking-surveys-for-desktop-settings",
+    "owners": [ "msramek", "chrome-friendly-settings" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "hardware-media-key-handling",
     "owners": [ "steimel", "media-dev" ],
     "expiry_milestone": 84

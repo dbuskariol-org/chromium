@@ -36730,6 +36730,8 @@ from previous Chrome versions.
   <int value="-1703709912" label="enable-new-ntp"/>
   <int value="-1703308540" label="disable-webaudio"/>
   <int value="-1701123067" label="ShowManagedUi:enabled"/>
+  <int value="-1696778023"
+      label="HappinessTrackingSurveysForDesktopSettings:disabled"/>
   <int value="-1696619241" label="OmniboxWrapPopupPosition:disabled"/>
   <int value="-1696366449" label="disable-permissions-bubbles"/>
   <int value="-1695774453" label="skip-extra-ash-window-positioning"/>
@@ -37140,6 +37142,8 @@ from previous Chrome versions.
   <int value="-1224962996" label="PwaImprovedSplashScreen:disabled"/>
   <int value="-1222805155" label="PdfIsolation:enabled"/>
   <int value="-1222556118" label="VirtualDesks:disabled"/>
+  <int value="-1222159993"
+      label="HappinessTrackingSurveysForDesktopSettings:enabled"/>
   <int value="-1218608640" label="disable-offline-load-stale-cache"/>
   <int value="-1217623062"
       label="AutofillAlwaysReturnCloudTokenizedCard:disabled"/>
