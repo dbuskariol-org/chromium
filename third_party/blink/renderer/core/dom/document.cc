@@ -2839,8 +2839,10 @@ void Document::SetIsImmersiveArOverlay(bool val) {
     // strictly necessary if the compositing changes are based on visibility
     // settings, but helps ensure consistency in case it's changed to
     // detaching layers or re-rooting the graphics layer tree.
-    GetLayoutView()->Compositor()->SetNeedsCompositingUpdate(
-        kCompositingUpdateRebuildTree);
+    if (!RuntimeEnabledFeatures::CompositeAfterPaintEnabled()) {
+      auto* compositor = GetLayoutView()->Compositor();
+      compositor->SetNeedsCompositingUpdate(kCompositingUpdateRebuildTree);
+    }
   }
 }
 
@@ -2987,7 +2989,8 @@ void Document::Shutdown() {
 
   if (frame_->IsLocalRoot())
     GetPage()->GetChromeClient().AttachRootLayer(nullptr, frame_.Get());
-  layout_view_->CleanUpCompositor();
+  if (!RuntimeEnabledFeatures::CompositeAfterPaintEnabled())
+    layout_view_->CleanUpCompositor();
 
   if (RegistrationContext())
     RegistrationContext()->DocumentWasDetached();

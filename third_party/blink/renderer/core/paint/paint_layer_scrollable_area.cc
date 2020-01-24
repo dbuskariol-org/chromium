@@ -2344,7 +2344,7 @@ void PaintLayerScrollableArea::UpdateCompositingLayersAfterScroll() {
   DCHECK(!RuntimeEnabledFeatures::CompositeAfterPaintEnabled());
 
   PaintLayerCompositor* compositor = GetLayoutBox()->View()->Compositor();
-  if (!compositor->InCompositingMode())
+  if (!compositor || !compositor->InCompositingMode())
     return;
 
   if (UsesCompositedScrolling()) {
@@ -2483,7 +2483,9 @@ bool PaintLayerScrollableArea::ComputeNeedsCompositedScrolling(
       !layer_->CompositesWithTransform() && !layer_->CompositesWithOpacity();
 
   if (!force_prefer_compositing_to_lcd_text &&
-      !layer_->Compositor()->PreferCompositingToLCDTextEnabled() &&
+      !box->GetDocument()
+           .GetSettings()
+           ->GetPreferCompositingToLCDTextEnabled() &&
       !background_supports_lcd_text) {
     if (layer_->CompositesWithOpacity()) {
       non_composited_main_thread_scrolling_reasons_ |=
