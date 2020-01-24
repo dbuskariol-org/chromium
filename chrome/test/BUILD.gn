@@ -3782,8 +3782,6 @@ test("unit_tests") {
       "../browser/payments/android/android_payment_app_finder_unittest.cc",
       "../browser/payments/android/payment_manifest_verifier_unittest.cc",
       "../browser/permissions/permission_prompt_android_unittest.cc",
-      "../browser/permissions/permission_request_notification_android_unittest.cc",
-      "../browser/permissions/permission_request_notification_handler_unittest.cc",
       "../browser/tabmodel/tab_persistent_store_unittest.cc",
       "../browser/toolbar/toolbar_security_icon_unittest.cc",
       "../browser/touch_to_fill/touch_to_fill_controller_unittest.cc",
