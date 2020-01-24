@@ -767,6 +767,9 @@ bool CrostiniManager::IsContainerUpgradeable(const ContainerId& container_id) {
 
 bool CrostiniManager::ShouldPromptContainerUpgrade(
     const ContainerId& container_id) {
+  if (!CrostiniFeatures::Get()->IsContainerUpgradeUIAllowed(profile_)) {
+    return false;
+  }
   if (container_upgrade_prompt_shown_.count(container_id) != 0) {
     // Already shown the upgrade dialog.
     return false;
