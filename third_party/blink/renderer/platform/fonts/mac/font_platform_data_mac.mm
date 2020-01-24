@@ -136,35 +136,34 @@ std::unique_ptr<FontPlatformData> FontPlatformDataFromNSFont(
     typeface = LoadFromBrowserProcess(ns_font, size);
   }
 
+  auto make_typeface_fontplatformdata = [&typeface, &size, &synthetic_bold,
+                                         &synthetic_italic, &orientation]() {
+    return std::make_unique<FontPlatformData>(
+        std::move(typeface), std::string(), size, synthetic_bold,
+        synthetic_italic, orientation);
+  };
+
   wtf_size_t valid_configured_axes =
       variation_settings && variation_settings->size() < UINT16_MAX
           ? variation_settings->size()
           : 0;
 
   // No variable font requested, return static font.
-  if (!valid_configured_axes) {
-    return std::make_unique<FontPlatformData>(
-        std::move(typeface), std::string(), size, synthetic_bold,
-        synthetic_italic, orientation);
-  }
+  if (!valid_configured_axes)
+    return make_typeface_fontplatformdata();
 
   int existing_axes = typeface->getVariationDesignPosition(nullptr, 0);
-  // Don't apply variation parameters if the font does not have axes or we fail
-  // to retrieve the existing ones.
-  if (existing_axes <= 0) {
-    return std::make_unique<FontPlatformData>(
-        std::move(typeface), std::string(), size, synthetic_bold,
-        synthetic_italic, orientation);
-  }
+  // Don't apply variation parameters if the font does not have axes or we
+  // fail to retrieve the existing ones.
+  if (existing_axes <= 0)
+    return make_typeface_fontplatformdata();
 
   Vector<SkFontArguments::VariationPosition::Coordinate> coordinates_to_set;
   coordinates_to_set.resize(existing_axes);
 
   if (typeface->getVariationDesignPosition(coordinates_to_set.data(),
                                            existing_axes) != existing_axes) {
-    return std::make_unique<FontPlatformData>(
-        std::move(typeface), std::string(), size, synthetic_bold,
-        synthetic_italic, orientation);
+    return make_typeface_fontplatformdata();
   }
 
   // Iterate over the font's axes and find a missing tag from variation
@@ -192,9 +191,7 @@ std::unique_ptr<FontPlatformData> FontPlatformDataFromNSFont(
 
   if (!reconfigured_axes) {
     // No variable axes touched, return the previous typeface.
-    return std::make_unique<FontPlatformData>(
-        std::move(typeface), std::string(), size, synthetic_bold,
-        synthetic_italic, orientation);
+    return make_typeface_fontplatformdata();
   }
 
   SkFontArguments::VariationPosition variation_design_position{
@@ -203,11 +200,7 @@ std::unique_ptr<FontPlatformData> FontPlatformDataFromNSFont(
   typeface = typeface->makeClone(
       SkFontArguments().setVariationDesignPosition(variation_design_position));
 
-  return std::make_unique<FontPlatformData>(
-      std::move(typeface),
-      std::string(),  // family_ doesn't exist on Mac, this avoids conversion
-                      // from NSString which requires including a //base header
-      size, synthetic_bold, synthetic_italic, orientation);
+  return make_typeface_fontplatformdata();
 }
 
 void FontPlatformData::SetupSkFont(SkFont* skfont,
