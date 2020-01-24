@@ -2815,11 +2815,11 @@ base::OnceClosure ChromeContentBrowserClient::SelectClientCertificate(
       Profile::FromBrowserContext(web_contents->GetBrowserContext());
 #if defined(OS_CHROMEOS)
   if (chromeos::ProfileHelper::IsSigninProfile(profile)) {
-    // TODO(pmarko): crbug.com/723849: Set |may_show_cert_selection| to false
-    // and remove the command-line flag after prototype phase when the
-    // DeviceLoginScreenAutoSelectCertificateForUrls policy is live.
-    may_show_cert_selection =
-        chromeos::switches::IsSigninFrameClientCertUserSelectionEnabled();
+    // On the sign-in profile, never show certificate selection to the user. A
+    // client certificate is an identifier that can be stable for a long time,
+    // so only the administrator is allowed to decide which endpoints should see
+    // it.
+    may_show_cert_selection = false;
 
     content::StoragePartition* storage_partition =
         content::BrowserContext::GetStoragePartition(
