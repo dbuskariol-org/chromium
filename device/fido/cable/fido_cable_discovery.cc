@@ -381,21 +381,43 @@ void FidoCableDiscovery::DeviceRemoved(BluetoothAdapter* adapter,
 
 void FidoCableDiscovery::AdapterPoweredChanged(BluetoothAdapter* adapter,
                                                bool powered) {
-  // If Bluetooth adapter is powered on, resume scanning for nearby Cable
-  // devices and start advertising client EIDs.
-  if (powered) {
-    StartCableDiscovery();
-  } else {
+  // Windows is causing multiple of these callbacks for a single power-on
+  // event, and calling RegisterAdvertisement() more than once
+  // breaks it. Hence ignore all but the first event.
+  if (is_powered_ == powered) {
+    return;
+  }
+  is_powered_ = powered;
+
+  if (!is_powered_) {
     // In order to prevent duplicate client EIDs from being advertised when
     // BluetoothAdapter is powered back on, unregister all existing client
     // EIDs.
     StopAdvertisements(base::DoNothing());
+    return;
   }
+
+#if defined(OS_WIN)
+  // On Windows, the (first) power-on event appears to race against
+  // initialization of the adapter, such that one of the WinRT API calls inside
+  // BluetoothAdapter::StartDiscoverySessionWithFilter() can fail with "Device
+  // not ready for use". So wait for things to actually be ready.
+  base::SequencedTaskRunnerHandle::Get()->PostDelayedTask(
+      FROM_HERE,
+      base::BindOnce(&FidoCableDiscovery::StartCableDiscovery,
+                     weak_factory_.GetWeakPtr()),
+      base::TimeDelta::FromMilliseconds(500));
+#else
+  StartCableDiscovery();
+#endif  // defined(OS_WIN)
 }
 
 void FidoCableDiscovery::OnSetPowered() {
   DCHECK(adapter());
-
+  if (is_powered_) {
+    return;
+  }
+  is_powered_ = true;
   base::SequencedTaskRunnerHandle::Get()->PostTask(
       FROM_HERE, base::BindOnce(&FidoCableDiscovery::StartCableDiscovery,
                                 weak_factory_.GetWeakPtr()));
