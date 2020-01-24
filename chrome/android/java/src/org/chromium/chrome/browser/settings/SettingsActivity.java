@@ -102,7 +102,7 @@ public class SettingsActivity extends ChromeBaseAppCompatActivity
         // If savedInstanceState is non-null, then the activity is being
         // recreated and super.onCreate() has already recreated the fragment.
         if (savedInstanceState == null) {
-            if (initialFragment == null) initialFragment = MainPreferences.class.getName();
+            if (initialFragment == null) initialFragment = MainSettings.class.getName();
 
             Fragment fragment = Fragment.instantiate(this, initialFragment, initialArguments);
             getSupportFragmentManager()

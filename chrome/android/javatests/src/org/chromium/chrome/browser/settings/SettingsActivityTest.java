@@ -66,7 +66,7 @@ public class SettingsActivityTest {
         });
 
         SettingsActivityTest.startSettingsActivity(
-                InstrumentationRegistry.getInstrumentation(), MainPreferences.class.getName());
+                InstrumentationRegistry.getInstrumentation(), MainSettings.class.getName());
 
         onView(withText(R.string.prefs_saved_passwords_title)).perform(click());
         onView(withText(R.string.prefs_saved_passwords)).check(matches(isDisplayed()));

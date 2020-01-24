@@ -42,7 +42,7 @@ import java.util.Map;
 /**
  * The main settings screen, shown when the user first opens Settings.
  */
-public class MainPreferences extends PreferenceFragmentCompat
+public class MainSettings extends PreferenceFragmentCompat
         implements TemplateUrlService.LoadListener, ProfileSyncService.SyncStateChangedListener,
                    SigninManager.SignInStateObserver {
     public static final String PREF_ACCOUNT_SECTION = "account_section";
@@ -62,7 +62,7 @@ public class MainPreferences extends PreferenceFragmentCompat
     private final Map<String, Preference> mAllPreferences = new HashMap<>();
     private SignInPreference mSignInPreference;
 
-    public MainPreferences() {
+    public MainSettings() {
         setHasOptionsMenu(true);
         mManagedPreferenceDelegate = createManagedPreferenceDelegate();
     }
