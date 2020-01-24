@@ -268,6 +268,13 @@ IntRect NGFragmentItem::VisualRect() const {
   return GetLayoutObject()->VisualRectForInlineBox();
 }
 
+IntRect NGFragmentItem::PartialInvalidationVisualRect() const {
+  // TODO(yosin): Need to reconsider the storage of |VisualRect|, to integrate
+  // better with |FragmentData| and to avoid dependency to |LayoutObject|.
+  DCHECK(GetLayoutObject());
+  return GetLayoutObject()->PartialInvalidationVisualRectForInlineBox();
+}
+
 PhysicalRect NGFragmentItem::LocalVisualRectFor(
     const LayoutObject& layout_object) {
   DCHECK(RuntimeEnabledFeatures::LayoutNGFragmentItemEnabled());

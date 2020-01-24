@@ -175,6 +175,7 @@ class CORE_EXPORT NGFragmentItem : public DisplayItemClient {
   // DisplayItemClient overrides
   String DebugName() const override;
   IntRect VisualRect() const override;
+  IntRect PartialInvalidationVisualRect() const override;
 
   // Find |NGFragmentItem|s that are associated with a |LayoutObject|.
   class CORE_EXPORT ItemsForLayoutObject {
