@@ -164,6 +164,10 @@
 #include "chrome/browser/supervised_user/supervised_user_navigation_observer.h"
 #endif
 
+#if defined(OS_CHROMEOS)
+#include "chrome/browser/chromeos/child_accounts/time_limits/web_time_navigation_observer.h"
+#endif
+
 using content::WebContents;
 
 namespace {
@@ -375,6 +379,11 @@ void TabHelpers::AttachTabHelpers(WebContents* web_contents) {
 
 #if BUILDFLAG(ENABLE_SUPERVISED_USERS)
   SupervisedUserNavigationObserver::MaybeCreateForWebContents(web_contents);
+#endif
+
+#if defined(OS_CHROMEOS)
+  chromeos::app_time::WebTimeNavigationObserver::MaybeCreateForWebContents(
+      web_contents);
 #endif
 
   if (predictors::LoadingPredictorFactory::GetForProfile(profile))
