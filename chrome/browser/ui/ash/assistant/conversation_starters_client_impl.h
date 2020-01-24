@@ -18,6 +18,9 @@ class ConversationStartersClientImpl : public ash::ConversationStartersClient {
       ConversationStartersClientImpl& assign) = delete;
   ~ConversationStartersClientImpl() override;
 
+  // ash::ConversationStartersClient:
+  void FetchConversationStarters(Callback callback) override;
+
  private:
   Profile* const profile_;
 };

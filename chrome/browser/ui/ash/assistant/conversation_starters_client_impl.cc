@@ -4,6 +4,9 @@
 
 #include "chrome/browser/ui/ash/assistant/conversation_starters_client_impl.h"
 
+#include <vector>
+
+#include "ash/public/cpp/assistant/conversation_starter.h"
 #include "chrome/browser/profiles/profile.h"
 
 ConversationStartersClientImpl::ConversationStartersClientImpl(Profile* profile)
@@ -12,3 +15,9 @@ ConversationStartersClientImpl::ConversationStartersClientImpl(Profile* profile)
 }
 
 ConversationStartersClientImpl::~ConversationStartersClientImpl() = default;
+
+// TODO(dmblack): Fetch conversation starters from the server.
+void ConversationStartersClientImpl::FetchConversationStarters(
+    Callback callback) {
+  std::move(callback).Run(std::vector<ash::ConversationStarter>());
+}
