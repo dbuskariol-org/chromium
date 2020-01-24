@@ -1071,6 +1071,40 @@ suite('EditPrinterDialog', function() {
           assertEquals(expectedName, dialog.activePrinter.printerName);
         });
   });
+
+  test('PrintServerPrinterEdit', function() {
+    const expectedName = 'edited name';
+    return initializeAndOpenEditDialog(
+               /*name=*/ 'name', /*address=*/ 'address', /*id=*/ 'id',
+               /*autoconf=*/ true, /*manufacturer=*/ 'make',
+               /*model=*/ 'model', /*protocol=*/ 'ipp',
+               /*serverAddress=*/ 'ipp://192.168.1.1:631')
+        .then(() => {
+          // Verify the only the name field is not disabled.
+          assertTrue(dialog.$$('#printerAddress').disabled);
+          assertTrue(dialog.$$('.md-select').disabled);
+          assertTrue(dialog.$$('#printerQueue').disabled);
+
+          const nameField = dialog.$$('.printer-name-input');
+          assertTrue(!!nameField);
+          assertFalse(nameField.disabled);
+
+          nameField.value = expectedName;
+          nameField.fire('input');
+
+          Polymer.dom.flush();
+
+          const saveButton = dialog.$$('.action-button');
+          assertTrue(!!saveButton);
+          assertFalse(saveButton.disabled);
+
+          clickSaveButton(dialog);
+          return cupsPrintersBrowserProxy.whenCalled('updateCupsPrinter');
+        })
+        .then(function() {
+          assertEquals(expectedName, dialog.activePrinter.printerName);
+        });
+  });
 });
 
 suite('PrintServerTests', function() {
