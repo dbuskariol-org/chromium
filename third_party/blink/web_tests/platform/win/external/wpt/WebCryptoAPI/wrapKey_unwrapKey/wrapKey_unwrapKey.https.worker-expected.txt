@@ -227,8 +227,6 @@ PASS Can unwrap HMAC non-extractable keys using jwk and AES-GCM
 PASS Can wrap and unwrap RSASSA-PKCS1-v1_5 public key keys using jwk and AES-KW
 PASS Can wrap and unwrap RSA-PSS public key keys using jwk and AES-KW
 PASS Can wrap and unwrap RSA-OAEP public key keys using jwk and AES-KW
-PASS Can wrap and unwrap RSA-OAEP private key keys using pkcs8 and AES-KW
-PASS Can wrap and unwrap RSA-OAEP private key keys as non-extractable using pkcs8 and AES-KW
 PASS Can wrap and unwrap AES-CTR keys using raw and AES-KW
 PASS Can wrap and unwrap AES-CTR keys as non-extractable using raw and AES-KW
 PASS Can wrap and unwrap AES-CBC keys using raw and AES-KW
