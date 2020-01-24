@@ -6676,9 +6676,9 @@ bool AXPlatformNodeWin::IsUIAControl() const {
     }
     return true;
   }
-  // non web-content case
+  // non web-content case.
   const ui::AXNodeData& data = GetData();
-  return !(GetData().IsReadOnlyOrDisabled() ||
+  return !((IsReadOnlySupported(data.role) && data.IsReadOnlyOrDisabled()) ||
            data.HasState(ax::mojom::State::kInvisible) ||
            data.role == ax::mojom::Role::kIgnored);
 }
