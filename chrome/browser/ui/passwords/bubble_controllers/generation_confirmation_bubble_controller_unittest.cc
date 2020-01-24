@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/passwords/bubble_controllers/save_confirmation_bubble_controller.h"
+#include "chrome/browser/ui/passwords/bubble_controllers/generation_confirmation_bubble_controller.h"
 
 #include "base/strings/utf_string_conversions.h"
 #include "base/test/metrics/histogram_tester.h"
@@ -20,39 +20,41 @@ constexpr char kUIDismissalReasonGeneralMetric[] =
 
 }  // namespace
 
-class SaveConfirmationBubbleControllerTest : public ::testing::Test {
+class GenerationConfirmationBubbleControllerTest : public ::testing::Test {
  public:
-  SaveConfirmationBubbleControllerTest() {
+  GenerationConfirmationBubbleControllerTest() {
     mock_delegate_ =
         std::make_unique<testing::NiceMock<PasswordsModelDelegateMock>>();
     ON_CALL(*mock_delegate_, GetPasswordFormMetricsRecorder())
         .WillByDefault(Return(nullptr));
   }
-  ~SaveConfirmationBubbleControllerTest() override = default;
+  ~GenerationConfirmationBubbleControllerTest() override = default;
 
   PasswordsModelDelegateMock* delegate() { return mock_delegate_.get(); }
-  SaveConfirmationBubbleController* controller() { return controller_.get(); }
+  GenerationConfirmationBubbleController* controller() {
+    return controller_.get();
+  }
 
   void Init();
   void DestroyController();
 
  private:
   std::unique_ptr<PasswordsModelDelegateMock> mock_delegate_;
-  std::unique_ptr<SaveConfirmationBubbleController> controller_;
+  std::unique_ptr<GenerationConfirmationBubbleController> controller_;
 };
 
-void SaveConfirmationBubbleControllerTest::Init() {
+void GenerationConfirmationBubbleControllerTest::Init() {
   EXPECT_CALL(*delegate(), OnBubbleShown());
-  controller_.reset(new SaveConfirmationBubbleController(
+  controller_.reset(new GenerationConfirmationBubbleController(
       mock_delegate_->AsWeakPtr(), ManagePasswordsBubbleModel::AUTOMATIC));
   ASSERT_TRUE(testing::Mock::VerifyAndClearExpectations(delegate()));
 }
 
-void SaveConfirmationBubbleControllerTest::DestroyController() {
+void GenerationConfirmationBubbleControllerTest::DestroyController() {
   controller_.reset();
 }
 
-TEST_F(SaveConfirmationBubbleControllerTest,
+TEST_F(GenerationConfirmationBubbleControllerTest,
        NavigateToDashboardWithBubbleClosing) {
   Init();
 
@@ -71,7 +73,7 @@ TEST_F(SaveConfirmationBubbleControllerTest,
       password_manager::metrics_util::CLICKED_PASSWORDS_DASHBOARD, 1);
 }
 
-TEST_F(SaveConfirmationBubbleControllerTest,
+TEST_F(GenerationConfirmationBubbleControllerTest,
        NavigateToDashboardWithoutBubbleClosing) {
   Init();
 

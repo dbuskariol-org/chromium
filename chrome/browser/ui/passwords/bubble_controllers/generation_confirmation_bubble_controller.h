@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_PASSWORDS_BUBBLE_CONTROLLERS_SAVE_CONFIRMATION_BUBBLE_CONTROLLER_H_
-#define CHROME_BROWSER_UI_PASSWORDS_BUBBLE_CONTROLLERS_SAVE_CONFIRMATION_BUBBLE_CONTROLLER_H_
+#ifndef CHROME_BROWSER_UI_PASSWORDS_BUBBLE_CONTROLLERS_GENERATION_CONFIRMATION_BUBBLE_CONTROLLER_H_
+#define CHROME_BROWSER_UI_PASSWORDS_BUBBLE_CONTROLLERS_GENERATION_CONFIRMATION_BUBBLE_CONTROLLER_H_
 
 #include "chrome/browser/ui/passwords/bubble_controllers/password_bubble_controller_base.h"
 
@@ -12,13 +12,14 @@
 #include "ui/gfx/range/range.h"
 
 // This controller provides data and actions for the
-// PasswordSaveConfirmationView.
-class SaveConfirmationBubbleController : public PasswordBubbleControllerBase {
+// PasswordGenerationConfirmationView.
+class GenerationConfirmationBubbleController
+    : public PasswordBubbleControllerBase {
  public:
-  SaveConfirmationBubbleController(
+  GenerationConfirmationBubbleController(
       base::WeakPtr<PasswordsModelDelegate> delegate,
       ManagePasswordsBubbleModel::DisplayReason display_reason);
-  ~SaveConfirmationBubbleController() override;
+  ~GenerationConfirmationBubbleController() override;
 
   // Called by the view code when the navigate to passwords.google.com link is
   // clicked by the user.
@@ -43,4 +44,4 @@ class SaveConfirmationBubbleController : public PasswordBubbleControllerBase {
   password_manager::metrics_util::UIDismissalReason dismissal_reason_;
 };
 
-#endif  // CHROME_BROWSER_UI_PASSWORDS_BUBBLE_CONTROLLERS_SAVE_CONFIRMATION_BUBBLE_CONTROLLER_H_
+#endif  // CHROME_BROWSER_UI_PASSWORDS_BUBBLE_CONTROLLERS_GENERATION_CONFIRMATION_BUBBLE_CONTROLLER_H_

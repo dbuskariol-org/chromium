@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/views/passwords/password_save_confirmation_view.h"
+#include "chrome/browser/ui/views/passwords/password_generation_confirmation_view.h"
 
 #include <memory>
 
@@ -16,7 +16,7 @@
 #include "ui/views/controls/styled_label.h"
 #include "ui/views/layout/fill_layout.h"
 
-PasswordSaveConfirmationView::PasswordSaveConfirmationView(
+PasswordGenerationConfirmationView::PasswordGenerationConfirmationView(
     content::WebContents* web_contents,
     views::View* anchor_view,
     DisplayReason reason)
@@ -43,22 +43,24 @@ PasswordSaveConfirmationView::PasswordSaveConfirmationView(
   AddChildView(label.release());
 }
 
-PasswordSaveConfirmationView::~PasswordSaveConfirmationView() = default;
+PasswordGenerationConfirmationView::~PasswordGenerationConfirmationView() =
+    default;
 
-PasswordBubbleControllerBase* PasswordSaveConfirmationView::GetController() {
+PasswordBubbleControllerBase*
+PasswordGenerationConfirmationView::GetController() {
   return &controller_;
 }
 
 const PasswordBubbleControllerBase*
-PasswordSaveConfirmationView::GetController() const {
+PasswordGenerationConfirmationView::GetController() const {
   return &controller_;
 }
 
-bool PasswordSaveConfirmationView::ShouldShowCloseButton() const {
+bool PasswordGenerationConfirmationView::ShouldShowCloseButton() const {
   return true;
 }
 
-void PasswordSaveConfirmationView::StyledLabelLinkClicked(
+void PasswordGenerationConfirmationView::StyledLabelLinkClicked(
     views::StyledLabel* label,
     const gfx::Range& range,
     int event_flags) {
@@ -69,7 +71,7 @@ void PasswordSaveConfirmationView::StyledLabelLinkClicked(
   CloseBubble();
 }
 
-gfx::Size PasswordSaveConfirmationView::CalculatePreferredSize() const {
+gfx::Size PasswordGenerationConfirmationView::CalculatePreferredSize() const {
   const int width = ChromeLayoutProvider::Get()->GetDistanceMetric(
                         DISTANCE_BUBBLE_PREFERRED_WIDTH) -
                     margins().width();

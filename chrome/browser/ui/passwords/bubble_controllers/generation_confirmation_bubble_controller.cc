@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/passwords/bubble_controllers/save_confirmation_bubble_controller.h"
+#include "chrome/browser/ui/passwords/bubble_controllers/generation_confirmation_bubble_controller.h"
 
 #include "chrome/browser/ui/passwords/passwords_model_delegate.h"
 #include "chrome/grit/generated_resources.h"
@@ -11,7 +11,7 @@
 
 namespace metrics_util = password_manager::metrics_util;
 
-SaveConfirmationBubbleController::SaveConfirmationBubbleController(
+GenerationConfirmationBubbleController::GenerationConfirmationBubbleController(
     base::WeakPtr<PasswordsModelDelegate> delegate,
     ManagePasswordsBubbleModel::DisplayReason display_reason)
     : PasswordBubbleControllerBase(
@@ -28,12 +28,13 @@ SaveConfirmationBubbleController::SaveConfirmationBubbleController(
   save_confirmation_link_range_ = gfx::Range(offset, offset + link.length());
 }
 
-SaveConfirmationBubbleController::~SaveConfirmationBubbleController() {
+GenerationConfirmationBubbleController::
+    ~GenerationConfirmationBubbleController() {
   if (!interaction_reported_)
     OnBubbleClosing();
 }
 
-void SaveConfirmationBubbleController::
+void GenerationConfirmationBubbleController::
     OnNavigateToPasswordManagerAccountDashboardLinkClicked(
         password_manager::ManagePasswordsReferrer referrer) {
   dismissal_reason_ = metrics_util::CLICKED_PASSWORDS_DASHBOARD;
@@ -41,11 +42,11 @@ void SaveConfirmationBubbleController::
     delegate_->NavigateToPasswordManagerAccountDashboard(referrer);
 }
 
-base::string16 SaveConfirmationBubbleController::GetTitle() const {
+base::string16 GenerationConfirmationBubbleController::GetTitle() const {
   return l10n_util::GetStringUTF16(IDS_PASSWORD_MANAGER_CONFIRM_SAVED_TITLE);
 }
 
-void SaveConfirmationBubbleController::ReportInteractions() {
+void GenerationConfirmationBubbleController::ReportInteractions() {
   metrics_util::LogGeneralUIDismissalReason(dismissal_reason_);
   // Record UKM statistics on dismissal reason.
   if (metrics_recorder_)
