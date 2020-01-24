@@ -18,7 +18,7 @@ GS_COPY_DIR = "gs_copy"
 # Import the binary proto generator. Walks up to the root of the source tree
 # which is six directories above, and finds the protobufs directory from there.
 proto_generator_path = os.path.normpath(os.path.join(os.path.abspath(__file__),
-    *[os.path.pardir] * 6 + ['chrome/browser/resources/protobufs']))
+    *[os.path.pardir] * 6 + ['components/resources/protobufs']))
 sys.path.insert(0, proto_generator_path)
 from binary_proto_generator import BinaryProtoGenerator
 
