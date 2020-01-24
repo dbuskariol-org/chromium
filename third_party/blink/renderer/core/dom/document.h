@@ -1645,6 +1645,9 @@ class CORE_EXPORT Document : public ContainerNode,
 
   void ApplyScrollRestorationLogic();
 
+  void MarkHasFindInPageRequest();
+  void MarkHasFindInPageRenderSubtreeActiveMatch();
+
  protected:
   void ClearXMLVersion() { xml_version_ = String(); }
 
@@ -1662,6 +1665,7 @@ class CORE_EXPORT Document : public ContainerNode,
   friend class NthIndexCache;
   FRIEND_TEST_ALL_PREFIXES(FrameFetchContextSubresourceFilterTest,
                            DuringOnFreeze);
+  FRIEND_TEST_ALL_PREFIXES(DocumentTest, FindInPageUkm);
   class NetworkStateObserver;
 
   Document(const DocumentInit& initization,
@@ -2181,6 +2185,10 @@ class CORE_EXPORT Document : public ContainerNode,
   bool in_forced_colors_mode_;
 
   bool applying_scroll_restoration_logic_ = false;
+
+  // Records find-in-page metrics, which are sent to UKM on shutdown.
+  bool had_find_in_page_request_ = false;
+  bool had_find_in_page_render_subtree_active_match_ = false;
 };
 
 extern template class CORE_EXTERN_TEMPLATE_EXPORT Supplement<Document>;

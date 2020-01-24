@@ -2649,6 +2649,38 @@ void Document::ApplyScrollRestorationLogic() {
   View()->GetScrollableArea()->ApplyPendingHistoryRestoreScrollOffset();
 }
 
+void Document::MarkHasFindInPageRequest() {
+  // Note that although find-in-page requests happen in non-main frames, we only
+  // record the main frame results (per UKM policy). Additionally, we only
+  // record the event once.
+  if (had_find_in_page_request_ || !IsInMainFrame())
+    return;
+
+  auto* recorder = UkmRecorder();
+  DCHECK(recorder);
+  DCHECK(UkmSourceID() != ukm::kInvalidSourceId);
+  ukm::builders::Blink_FindInPage(UkmSourceID())
+      .SetDidSearch(true)
+      .Record(recorder);
+  had_find_in_page_request_ = true;
+}
+
+void Document::MarkHasFindInPageRenderSubtreeActiveMatch() {
+  // Note that although find-in-page in render-subtree requests happen in
+  // non-main frames, we only record the main frame results (per UKM policy).
+  // Additionally, we only record the event once.
+  if (had_find_in_page_render_subtree_active_match_ || !IsInMainFrame())
+    return;
+
+  auto* recorder = UkmRecorder();
+  DCHECK(recorder);
+  DCHECK(UkmSourceID() != ukm::kInvalidSourceId);
+  ukm::builders::Blink_FindInPage(UkmSourceID())
+      .SetDidHaveRenderSubtreeMatch(true)
+      .Record(recorder);
+  had_find_in_page_render_subtree_active_match_ = true;
+}
+
 void Document::UpdateStyleAndLayout(ForcedLayoutStatus status) {
   DCHECK(IsMainThread());
   LocalFrameView* frame_view = View();
