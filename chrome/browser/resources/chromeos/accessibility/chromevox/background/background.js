@@ -40,6 +40,7 @@ goog.require('ChromeVoxBackground');
 goog.require('ChromeVoxEditableTextBase');
 goog.require('ExtensionBridge');
 goog.require('NavBraille');
+goog.require('NodeIdentifier');
 
 goog.scope(function() {
 var AutomationNode = chrome.automation.AutomationNode;
