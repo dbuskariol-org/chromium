@@ -1340,9 +1340,11 @@ bool ShelfView::StartDrag(const std::string& app_id,
   drag_and_drop_view->SetSize(gfx::Size());
 
   // First we have to center the mouse cursor over the item.
-  gfx::Point pt = drag_and_drop_view->GetBoundsInScreen().CenterPoint();
+  const gfx::Point start_point_in_screen =
+      drag_and_drop_view->GetBoundsInScreen().CenterPoint();
+  gfx::Point pt = start_point_in_screen;
   views::View::ConvertPointFromScreen(drag_and_drop_view, &pt);
-  gfx::Point point_in_root = location_in_screen_coordinates;
+  gfx::Point point_in_root = start_point_in_screen;
   wm::ConvertPointFromScreen(
       window_util::GetRootWindowAt(location_in_screen_coordinates),
       &point_in_root);

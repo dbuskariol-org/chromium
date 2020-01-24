@@ -1962,8 +1962,6 @@ void ScrollableShelfView::UpdateAvailableSpace() {
   padding_insets_ = CalculateEdgePadding(/*use_target_bounds=*/false);
   available_space_ = GetLocalBounds();
   available_space_.Inset(padding_insets_);
-  if (ShouldAdaptToRTL())
-    available_space_ = GetMirroredRect(available_space_);
 
   // The hotseat uses |available_space_| to determine where to show its
   // background, so notify it when it is recalculated.
@@ -1975,8 +1973,10 @@ void ScrollableShelfView::UpdateAvailableSpace() {
   // Paddings are within the shelf view. It makes sure that |shelf_view_|'s
   // bounds are not changed by adding/removing the shelf icon under the same
   // layout strategy.
+  const int horizontal_inset =
+      ShouldAdaptToRTL() ? padding_insets_.right() : padding_insets_.left();
   shelf_view_->set_app_icons_layout_offset(GetShelf()->IsHorizontalAlignment()
-                                               ? padding_insets_.left()
+                                               ? horizontal_inset
                                                : padding_insets_.top());
 }
 
