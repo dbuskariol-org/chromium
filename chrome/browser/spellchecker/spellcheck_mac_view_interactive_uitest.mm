@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #import <Cocoa/Cocoa.h>
+
 #include "chrome/browser/ui/browser.h"
 #include "chrome/test/base/in_process_browser_test.h"
 #include "chrome/test/base/ui_test_utils.h"
@@ -17,13 +18,14 @@
 
 namespace {
 
-class SpellCheckMacViewBrowserTest : public InProcessBrowserTest {
+class SpellCheckMacViewInteractiveUiTest : public InProcessBrowserTest {
  public:
-  SpellCheckMacViewBrowserTest() {}
+  SpellCheckMacViewInteractiveUiTest() {}
 };
 
 #if BUILDFLAG(ENABLE_SPELLCHECK)
-IN_PROC_BROWSER_TEST_F(SpellCheckMacViewBrowserTest, SpellCheckPanelVisible) {
+IN_PROC_BROWSER_TEST_F(SpellCheckMacViewInteractiveUiTest,
+                       SpellCheckPanelVisible) {
   spellcheck::SpellCheckPanelBrowserTestHelper test_helper;
 
   ASSERT_TRUE(embedded_test_server()->Start());
