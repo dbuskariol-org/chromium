@@ -12,7 +12,6 @@ namespace vr {
 // are no runtimes available.
 IN_PROC_BROWSER_TEST_F(WebXrVrRuntimelessBrowserTest,
                        TestInlineIdentityAlwaysAvailable) {
-  browser()->tab_strip_model()->GetActiveWebContents()->Focus();
   LoadUrlAndAwaitInitialization(
       GetFileUrlForHtmlTestFile("test_inline_viewer_available"));
   WaitOnJavaScriptStep();

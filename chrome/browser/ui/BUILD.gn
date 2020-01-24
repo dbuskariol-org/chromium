@@ -941,8 +941,6 @@ jumbo_static_library("ui") {
       "find_bar/find_bar_platform_helper.cc",
       "find_bar/find_bar_platform_helper.h",
       "find_bar/find_bar_platform_helper_mac.mm",
-      "focus_tab_after_navigation_helper.cc",
-      "focus_tab_after_navigation_helper.h",
       "global_error/global_error.cc",
       "global_error/global_error.h",
       "global_error/global_error_bubble_view_base.h",
