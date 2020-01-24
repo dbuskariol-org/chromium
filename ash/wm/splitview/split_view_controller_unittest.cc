@@ -174,15 +174,6 @@ class SplitViewControllerTest : public MultiDisplayOverviewAndSplitViewTest {
 
   void EndSplitView() { split_view_controller()->EndSplitView(); }
 
-  void ToggleOverview() {
-    OverviewController* overview_controller =
-        Shell::Get()->overview_controller();
-    if (overview_controller->InOverviewSession())
-      overview_controller->EndOverview();
-    else
-      overview_controller->StartOverview();
-  }
-
   void LongPressOnOverivewButtonTray() {
     ui::GestureEvent event(0, 0, 0, base::TimeTicks(),
                            ui::GestureEventDetails(ui::ET_GESTURE_LONG_PRESS));
