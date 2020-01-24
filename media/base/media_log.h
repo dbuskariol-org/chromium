@@ -91,6 +91,7 @@ class MEDIA_EXPORT MediaLog {
   // Note: The base class definition only produces empty messages. See
   // RenderMediaLog for where this method is meaningful.
   // Inheritors should override GetErrorMessageLocked().
+  // TODO(tmathmeyer) Use a MediaError when that is ready.
   std::string GetErrorMessage();
 
   // Getter for |id_|. Used by MojoMediaLogService to construct MediaLogRecords
