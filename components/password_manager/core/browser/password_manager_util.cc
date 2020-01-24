@@ -53,6 +53,44 @@ bool IsBetterMatch(const PasswordForm* lhs, const PasswordForm* rhs) {
          std::make_pair(!rhs->is_public_suffix_match, rhs->date_last_used);
 }
 
+// Returns whether the account-scoped password storage can be enabled in
+// principle for the current profile. This is constant for a given profile
+// (until browser restart).
+bool CanAccountStorageBeEnabled(const syncer::SyncService* sync_service) {
+  if (!base::FeatureList::IsEnabled(
+          password_manager::features::kEnablePasswordsAccountStorage)) {
+    return false;
+  }
+
+  // |sync_service| is null in incognito mode, or if --disable-sync was
+  // specified on the command-line.
+  if (!sync_service)
+    return false;
+
+  return true;
+}
+
+// Whether the currently signed-in user (if any) is eligible for using the
+// account-scoped password storage. This is the case if:
+// - The account storage can be enabled in principle.
+// - Sync-the-transport is running (i.e. there's a signed-in user, Sync is not
+//   disabled by policy, etc).
+// - There is no custom passphrase (because Sync transport offers no way to
+//   enter the passphrase yet). Note that checking this requires the SyncEngine
+//   to be initialized.
+// - Sync-the-feature is NOT enabled (if it is, there's only a single combined
+//   storage).
+bool IsUserEligibleForAccountStorage(const syncer::SyncService* sync_service) {
+  return CanAccountStorageBeEnabled(sync_service) &&
+         sync_service->GetTransportState() !=
+             syncer::SyncService::TransportState::DISABLED &&
+         sync_service->IsEngineInitialized() &&
+         !sync_service->GetUserSettings()->IsUsingSecondaryPassphrase() &&
+         !sync_service->IsSyncFeatureEnabled();
+}
+
+// TODO(crbug.com/1035407): Don't use CoreAccountId as a persistent
+// identifier; see comment on CoreAccountId itself. Use the GAIA ID instead.
 std::string GetAccountHash(const CoreAccountId& account_id) {
   std::string account_hash;
   base::Base64Encode(crypto::SHA256HashString(account_id.ToString()),
@@ -60,7 +98,18 @@ std::string GetAccountHash(const CoreAccountId& account_id) {
   return account_hash;
 }
 
+PasswordForm::Store PasswordStoreFromInt(int value) {
+  switch (value) {
+    case static_cast<int>(PasswordForm::Store::kProfileStore):
+      return PasswordForm::Store::kProfileStore;
+    case static_cast<int>(PasswordForm::Store::kAccountStore):
+      return PasswordForm::Store::kAccountStore;
+  }
+  return PasswordForm::Store::kNotSet;
+}
+
 const char kAccountStorageOptedInKey[] = "opted_in";
+const char kAccountStorageDefaultStoreKey[] = "default_store";
 
 // Helper class for reading account storage settings for a given account.
 class AccountStorageSettingsReader {
@@ -80,6 +129,16 @@ class AccountStorageSettingsReader {
       return false;
     return account_settings_->FindBoolKey(kAccountStorageOptedInKey)
         .value_or(false);
+  }
+
+  PasswordForm::Store GetDefaultStore() const {
+    if (!account_settings_)
+      return PasswordForm::Store::kNotSet;
+    base::Optional<int> value =
+        account_settings_->FindIntKey(kAccountStorageDefaultStoreKey);
+    if (!value)
+      return PasswordForm::Store::kNotSet;
+    return PasswordStoreFromInt(*value);
   }
 
  private:
@@ -108,6 +167,11 @@ class ScopedAccountStorageSettingsUpdate {
 
   void SetOptedIn(bool opt_in) {
     account_settings_->SetBoolKey(kAccountStorageOptedInKey, opt_in);
+  }
+
+  void SetDefaultStore(PasswordForm::Store default_store) {
+    account_settings_->SetIntKey(kAccountStorageDefaultStoreKey,
+                                 static_cast<int>(default_store));
   }
 
  private:
@@ -386,14 +450,7 @@ bool IsOptedInForAccountStorage(const PrefService* pref_service,
                                 const syncer::SyncService* sync_service) {
   DCHECK(pref_service);
 
-  if (!base::FeatureList::IsEnabled(
-          password_manager::features::kEnablePasswordsAccountStorage)) {
-    return false;
-  }
-
-  // |sync_service| is null in incognito mode, or if --disable-sync was
-  // specified on the command-line.
-  if (!sync_service)
+  if (!CanAccountStorageBeEnabled(sync_service))
     return false;
 
   CoreAccountId account_id = sync_service->GetAuthenticatedAccountId();
@@ -407,29 +464,8 @@ bool ShouldShowAccountStorageOptIn(const PrefService* pref_service,
                                    const syncer::SyncService* sync_service) {
   DCHECK(pref_service);
 
-  if (!base::FeatureList::IsEnabled(
-          password_manager::features::kEnablePasswordsAccountStorage)) {
-    return false;
-  }
-
-  // |sync_service| is null in incognito mode, or if --disable-sync was
-  // specified on the command-line.
-  if (!sync_service)
-    return false;
-
-  // Only show the opt-in if:
-  // - Sync transport is enabled (i.e. user is signed in, Sync is not disabled
-  //   by policy etc) - otherwise there's no point in asking.
-  // - There is no custom Sync passphrase (Sync transport offers no way to enter
-  //   the passphrase yet). Note that checking this requires the SyncEngine to
-  //   be initialized.
-  // - Sync feature is NOT enabled - Sync feature doesn't depend on this opt-in.
-  // - Not already opted in.
-  return sync_service->GetTransportState() !=
-             syncer::SyncService::TransportState::DISABLED &&
-         sync_service->IsEngineInitialized() &&
-         !sync_service->GetUserSettings()->IsUsingSecondaryPassphrase() &&
-         !sync_service->IsSyncFeatureEnabled() &&
+  // Show the opt-in if the user is eligible, but not yet opted in.
+  return IsUserEligibleForAccountStorage(sync_service) &&
          !IsOptedInForAccountStorage(pref_service, sync_service);
 }
 
@@ -449,6 +485,53 @@ void SetAccountStorageOptIn(PrefService* pref_service,
   }
   ScopedAccountStorageSettingsUpdate(pref_service, account_id)
       .SetOptedIn(opt_in);
+}
+
+PasswordForm::Store GetDefaultPasswordStore(
+    const PrefService* pref_service,
+    const syncer::SyncService* sync_service) {
+  DCHECK(pref_service);
+
+  if (!IsUserEligibleForAccountStorage(sync_service))
+    return PasswordForm::Store::kProfileStore;
+
+  CoreAccountId account_id = sync_service->GetAuthenticatedAccountId();
+  if (account_id.empty())
+    return PasswordForm::Store::kProfileStore;
+
+  PasswordForm::Store default_store =
+      AccountStorageSettingsReader(pref_service, account_id).GetDefaultStore();
+  // If none of the early-outs above triggered, then we *can* save to the
+  // account store in principle (though the user might not have opted in to that
+  // yet). In this case, default to the account store.
+  if (default_store == PasswordForm::Store::kNotSet)
+    return PasswordForm::Store::kAccountStore;
+  return default_store;
+}
+
+void SetDefaultPasswordStore(PrefService* pref_service,
+                             const syncer::SyncService* sync_service,
+                             PasswordForm::Store default_store) {
+  DCHECK(pref_service);
+  DCHECK(sync_service);
+  DCHECK(base::FeatureList::IsEnabled(
+      password_manager::features::kEnablePasswordsAccountStorage));
+
+  CoreAccountId account_id = sync_service->GetAuthenticatedAccountId();
+  if (account_id.empty()) {
+    // Maybe the account went away since the UI was shown. This should be rare,
+    // but is ultimately harmless - just do nothing here.
+    return;
+  }
+  ScopedAccountStorageSettingsUpdate(pref_service, account_id)
+      .SetDefaultStore(default_store);
+  if (account_id.empty()) {
+    // Maybe the account went away since the UI was shown. This should be rare,
+    // but is ultimately harmless - just do nothing here.
+    return;
+  }
+  ScopedAccountStorageSettingsUpdate(pref_service, account_id)
+      .SetDefaultStore(default_store);
 }
 
 }  // namespace password_manager_util
