@@ -335,6 +335,10 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
   }
 
   html_source->AddBoolean(
+      "privacySettingsRedesignEnabled",
+      base::FeatureList::IsEnabled(::features::kPrivacySettingsRedesign));
+
+  html_source->AddBoolean(
       "multideviceAllowedByPolicy",
       chromeos::multidevice_setup::AreAnyMultiDeviceFeaturesAllowed(
           profile->GetPrefs()));
