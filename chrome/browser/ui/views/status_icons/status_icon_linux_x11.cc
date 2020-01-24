@@ -4,9 +4,6 @@
 
 #include "chrome/browser/ui/views/status_icons/status_icon_linux_x11.h"
 
-#include <X11/X.h>
-#include <X11/Xlib.h>
-
 #include <limits>
 #include <memory>
 
@@ -16,27 +13,15 @@
 #include "ui/aura/window.h"
 #include "ui/aura/window_tree_host.h"
 #include "ui/base/wm_role_names_linux.h"
-#include "ui/base/x/x11_util.h"
-#include "ui/events/platform/x11/x11_event_source.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/scoped_canvas.h"
 #include "ui/gfx/transform.h"
-#include "ui/gfx/x/x11.h"
-#include "ui/gfx/x/x11_atom_cache.h"
-#include "ui/gfx/x/x11_error_tracker.h"
-#include "ui/gfx/x/x11_types.h"
 #include "ui/views/background.h"
 #include "ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
 #include "ui/views/widget/desktop_aura/desktop_window_tree_host_x11.h"
 
 namespace {
-
-constexpr long kSystemTrayRequestDock = 0;
-
-constexpr int kXembedInfoProtocolVersion = 0;
-constexpr int kXembedFlagMap = 1 << 0;
-constexpr int kXembedInfoFlags = kXembedFlagMap;
 
 const int16_t kInitialWindowPos = std::numeric_limits<int16_t>::min();
 
@@ -67,16 +52,6 @@ void StatusIconLinuxX11::UpdatePlatformContextMenu(ui::MenuModel* model) {
 }
 
 void StatusIconLinuxX11::OnSetDelegate() {
-  XDisplay* const display = gfx::GetXDisplay();
-  std::string atom_name =
-      "_NET_SYSTEM_TRAY_S" + base::NumberToString(DefaultScreen(display));
-  XID manager = XGetSelectionOwner(display, gfx::GetAtom(atom_name.c_str()));
-  if (manager == x11::None) {
-    delegate_->OnImplInitializationFailed();
-    // |this| may be destroyed!
-    return;
-  }
-
   widget_ = std::make_unique<StatusIconWidget>();
 
   auto native_widget =
@@ -112,22 +87,11 @@ void StatusIconLinuxX11::OnSetDelegate() {
   widget_->Init(std::move(params));
 
   Window window = host_->GetAcceleratedWidget();
-  DCHECK(window);
-
-  ui::SetIntArrayProperty(window, "_XEMBED_INFO", "CARDINAL",
-                          {kXembedInfoProtocolVersion, kXembedInfoFlags});
-
-  XSetWindowAttributes attrs;
-  unsigned long flags = 0;
-  if (widget_->ShouldWindowContentsBeTransparent()) {
-    flags |= CWBackPixel;
-    attrs.background_pixel = 0;
-  } else {
-    ui::SetIntProperty(window, "CHROMIUM_COMPOSITE_WINDOW", "CARDINAL", 1);
-    flags |= CWBackPixmap;
-    attrs.background_pixmap = ParentRelative;
+  if (!window) {
+    delegate_->OnImplInitializationFailed();
+    // |this| might be destroyed.
+    return;
   }
-  XChangeWindowAttributes(display, window, flags, &attrs);
 
   widget_->SetContentsView(this);
   set_owned_by_client();
@@ -136,27 +100,6 @@ void StatusIconLinuxX11::OnSetDelegate() {
   SetIcon(delegate_->GetImage());
   SetTooltipText(delegate_->GetToolTip());
   set_context_menu_controller(this);
-
-  XEvent ev;
-  memset(&ev, 0, sizeof(ev));
-  ev.xclient.type = ClientMessage;
-  ev.xclient.window = manager;
-  ev.xclient.message_type = gfx::GetAtom("_NET_SYSTEM_TRAY_OPCODE");
-  ev.xclient.format = 32;
-  ev.xclient.data.l[0] = ui::X11EventSource::GetInstance()->GetTimestamp();
-  ev.xclient.data.l[1] = kSystemTrayRequestDock;
-  ev.xclient.data.l[2] = window;
-
-  bool error;
-  {
-    gfx::X11ErrorTracker error_tracker;
-    XSendEvent(display, manager, false, NoEventMask, &ev);
-    error = error_tracker.FoundNewError();
-  }
-  if (error) {
-    delegate_->OnImplInitializationFailed();
-    // |this| may be destroyed!
-  }
 }
 
 void StatusIconLinuxX11::ShowContextMenuForViewImpl(
