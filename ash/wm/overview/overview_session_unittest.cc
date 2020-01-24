@@ -2464,10 +2464,9 @@ TEST_P(OverviewSessionTest, Backdrop) {
   ToggleOverview();
 }
 
-// Test that the mask that is applied to add rounded corners in overview mode
-// is removed during animations.
+// Test that the rounded corners are removed during animations.
 // TODO(https://crbug.com/1000730): Re-enable this test.
-TEST_P(OverviewSessionTest, DISABLED_RoundedEdgeMaskVisibility) {
+TEST_P(OverviewSessionTest, DISABLED_RoundedCornersVisibility) {
   std::unique_ptr<aura::Window> window1(CreateTestWindow());
   std::unique_ptr<aura::Window> window2(CreateTestWindow());
 
@@ -2477,48 +2476,35 @@ TEST_P(OverviewSessionTest, DISABLED_RoundedEdgeMaskVisibility) {
   ui::ScopedAnimationDurationScaleMode test_duration_mode(
       ui::ScopedAnimationDurationScaleMode::NON_ZERO_DURATION);
 
-  // Test that entering overview mode normally will disable all the masks until
-  // the animation is complete.
+  // Test that entering overview mode normally will disable all the rounded
+  // corners until the animation is complete.
   EnterTabletMode();
   ToggleOverview();
   OverviewItem* item1 = GetOverviewItemForWindow(window1.get());
   OverviewItem* item2 = GetOverviewItemForWindow(window2.get());
   EXPECT_FALSE(HasRoundedCorner(item1));
   EXPECT_FALSE(HasRoundedCorner(item2));
-  window1->layer()->GetAnimator()->StopAnimating();
-  window2->layer()->GetAnimator()->StopAnimating();
-
-  // Mask is set asynchronously.
-  EXPECT_FALSE(HasRoundedCorner(item1));
-  EXPECT_FALSE(HasRoundedCorner(item2));
-  base::RunLoop().RunUntilIdle();
+  ShellTestApi().WaitForOverviewAnimationState(
+      OverviewAnimationState::kEnterAnimationComplete);
   EXPECT_TRUE(HasRoundedCorner(item1));
   EXPECT_TRUE(HasRoundedCorner(item2));
 
   // Tests that entering overview mode with all windows minimized (launcher
-  // button pressed) will still disable all the masks until the animation is
-  // complete.
+  // button pressed) will still disable all the rounded corners until the
+  // animation is complete.
   ToggleOverview();
+  ShellTestApi().WaitForOverviewAnimationState(
+      OverviewAnimationState::kExitAnimationComplete);
   WindowState::Get(window1.get())->Minimize();
   WindowState::Get(window2.get())->Minimize();
+
   ToggleOverview();
   item1 = GetOverviewItemForWindow(window1.get());
   item2 = GetOverviewItemForWindow(window2.get());
   EXPECT_FALSE(HasRoundedCorner(item1));
   EXPECT_FALSE(HasRoundedCorner(item2));
-  item1->item_widget()
-      ->GetNativeWindow()
-      ->layer()
-      ->GetAnimator()
-      ->StopAnimating();
-  item2->item_widget()
-      ->GetNativeWindow()
-      ->layer()
-      ->GetAnimator()
-      ->StopAnimating();
-  EXPECT_FALSE(HasRoundedCorner(item1));
-  EXPECT_FALSE(HasRoundedCorner(item2));
-  base::RunLoop().RunUntilIdle();
+  ShellTestApi().WaitForOverviewAnimationState(
+      OverviewAnimationState::kEnterAnimationComplete);
   EXPECT_TRUE(HasRoundedCorner(item1));
   EXPECT_TRUE(HasRoundedCorner(item2));
 

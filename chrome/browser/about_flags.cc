@@ -3993,11 +3993,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kAppServiceShelfDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(features::kAppServiceShelf)},
 
-    {"ash-enable-overview-rounded-corners",
-     flag_descriptions::kAshEnableOverviewRoundedCornersName,
-     flag_descriptions::kAshEnableOverviewRoundedCornersDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(ash::features::kEnableOverviewRoundedCorners)},
-
     {"ash-swiping-from-left-edge-to-go-back",
      flag_descriptions::kAshSwipingFromLeftEdgeToGoBackName,
      flag_descriptions::kAshSwipingFromLeftEdgeToGoBackDescription, kOsCrOS,
