@@ -35,10 +35,10 @@
 #include "components/password_manager/core/common/password_manager_pref_names.h"
 #include "components/prefs/pref_service.h"
 #include "components/prefs/scoped_user_pref_update.h"
+#include "components/signin/public/identity_manager/account_info.h"
 #include "components/sync/driver/sync_service.h"
 #include "components/sync/driver/sync_user_settings.h"
 #include "crypto/sha2.h"
-#include "google_apis/gaia/core_account_id.h"
 
 using autofill::PasswordForm;
 
@@ -89,12 +89,9 @@ bool IsUserEligibleForAccountStorage(const syncer::SyncService* sync_service) {
          !sync_service->IsSyncFeatureEnabled();
 }
 
-// TODO(crbug.com/1035407): Don't use CoreAccountId as a persistent
-// identifier; see comment on CoreAccountId itself. Use the GAIA ID instead.
-std::string GetAccountHash(const CoreAccountId& account_id) {
+std::string GetAccountHash(const std::string& gaia_id) {
   std::string account_hash;
-  base::Base64Encode(crypto::SHA256HashString(account_id.ToString()),
-                     &account_hash);
+  base::Base64Encode(crypto::SHA256HashString(gaia_id), &account_hash);
   return account_hash;
 }
 
@@ -115,13 +112,13 @@ const char kAccountStorageDefaultStoreKey[] = "default_store";
 class AccountStorageSettingsReader {
  public:
   AccountStorageSettingsReader(const PrefService* prefs,
-                               const CoreAccountId& account_id) {
-    DCHECK(!account_id.empty());
+                               const std::string& gaia_id) {
+    DCHECK(!gaia_id.empty());
 
     const base::DictionaryValue* global_pref = prefs->GetDictionary(
         password_manager::prefs::kAccountStoragePerAccountSettings);
     if (global_pref)
-      account_settings_ = global_pref->FindDictKey(GetAccountHash(account_id));
+      account_settings_ = global_pref->FindDictKey(GetAccountHash(gaia_id));
   }
 
   bool IsOptedIn() {
@@ -152,11 +149,11 @@ class AccountStorageSettingsReader {
 class ScopedAccountStorageSettingsUpdate {
  public:
   ScopedAccountStorageSettingsUpdate(PrefService* prefs,
-                                     const CoreAccountId& account_id)
+                                     const std::string& gaia_id)
       : update_(prefs,
                 password_manager::prefs::kAccountStoragePerAccountSettings) {
-    DCHECK(!account_id.empty());
-    const std::string account_hash = GetAccountHash(account_id);
+    DCHECK(!gaia_id.empty());
+    const std::string account_hash = GetAccountHash(gaia_id);
     account_settings_ = update_->FindDictKey(account_hash);
     if (!account_settings_) {
       account_settings_ =
@@ -453,11 +450,11 @@ bool IsOptedInForAccountStorage(const PrefService* pref_service,
   if (!CanAccountStorageBeEnabled(sync_service))
     return false;
 
-  CoreAccountId account_id = sync_service->GetAuthenticatedAccountId();
-  if (account_id.empty())
+  std::string gaia_id = sync_service->GetAuthenticatedAccountInfo().gaia;
+  if (gaia_id.empty())
     return false;
 
-  return AccountStorageSettingsReader(pref_service, account_id).IsOptedIn();
+  return AccountStorageSettingsReader(pref_service, gaia_id).IsOptedIn();
 }
 
 bool ShouldShowAccountStorageOptIn(const PrefService* pref_service,
@@ -477,14 +474,13 @@ void SetAccountStorageOptIn(PrefService* pref_service,
   DCHECK(base::FeatureList::IsEnabled(
       password_manager::features::kEnablePasswordsAccountStorage));
 
-  CoreAccountId account_id = sync_service->GetAuthenticatedAccountId();
-  if (account_id.empty()) {
+  std::string gaia_id = sync_service->GetAuthenticatedAccountInfo().gaia;
+  if (gaia_id.empty()) {
     // Maybe the account went away since the opt-in UI was shown. This should be
     // rare, but is ultimately harmless - just do nothing here.
     return;
   }
-  ScopedAccountStorageSettingsUpdate(pref_service, account_id)
-      .SetOptedIn(opt_in);
+  ScopedAccountStorageSettingsUpdate(pref_service, gaia_id).SetOptedIn(opt_in);
 }
 
 PasswordForm::Store GetDefaultPasswordStore(
@@ -495,12 +491,12 @@ PasswordForm::Store GetDefaultPasswordStore(
   if (!IsUserEligibleForAccountStorage(sync_service))
     return PasswordForm::Store::kProfileStore;
 
-  CoreAccountId account_id = sync_service->GetAuthenticatedAccountId();
-  if (account_id.empty())
+  std::string gaia_id = sync_service->GetAuthenticatedAccountInfo().gaia;
+  if (gaia_id.empty())
     return PasswordForm::Store::kProfileStore;
 
   PasswordForm::Store default_store =
-      AccountStorageSettingsReader(pref_service, account_id).GetDefaultStore();
+      AccountStorageSettingsReader(pref_service, gaia_id).GetDefaultStore();
   // If none of the early-outs above triggered, then we *can* save to the
   // account store in principle (though the user might not have opted in to that
   // yet). In this case, default to the account store.
@@ -517,20 +513,20 @@ void SetDefaultPasswordStore(PrefService* pref_service,
   DCHECK(base::FeatureList::IsEnabled(
       password_manager::features::kEnablePasswordsAccountStorage));
 
-  CoreAccountId account_id = sync_service->GetAuthenticatedAccountId();
-  if (account_id.empty()) {
+  std::string gaia_id = sync_service->GetAuthenticatedAccountInfo().gaia;
+  if (gaia_id.empty()) {
     // Maybe the account went away since the UI was shown. This should be rare,
     // but is ultimately harmless - just do nothing here.
     return;
   }
-  ScopedAccountStorageSettingsUpdate(pref_service, account_id)
+  ScopedAccountStorageSettingsUpdate(pref_service, gaia_id)
       .SetDefaultStore(default_store);
-  if (account_id.empty()) {
+  if (gaia_id.empty()) {
     // Maybe the account went away since the UI was shown. This should be rare,
     // but is ultimately harmless - just do nothing here.
     return;
   }
-  ScopedAccountStorageSettingsUpdate(pref_service, account_id)
+  ScopedAccountStorageSettingsUpdate(pref_service, gaia_id)
       .SetDefaultStore(default_store);
 }
 
