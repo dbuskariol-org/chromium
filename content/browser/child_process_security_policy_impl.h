@@ -178,6 +178,11 @@ class CONTENT_EXPORT ChildProcessSecurityPolicyImpl
   // Identical to the above method, but takes url::Origin as input.
   bool CanAccessDataForOrigin(int child_id, const url::Origin& origin);
 
+  // Shared helper for GURL and url::Origin processing.
+  bool CanAccessDataForOrigin(int child_id,
+                              const GURL& url,
+                              bool url_is_precursor_of_opaque_origin);
+
   // Determines if the combination of |origin| & |url| is safe to commit to
   // the process associated with |child_id|.
   //

@@ -1425,7 +1425,8 @@ bool ChildProcessSecurityPolicyImpl::CanAccessDataForOrigin(
   } else {
     url_to_check = origin.GetURL();
   }
-  bool success = CanAccessDataForOrigin(child_id, url_to_check);
+  bool success =
+      CanAccessDataForOrigin(child_id, url_to_check, origin.opaque());
   if (success)
     return true;
 
@@ -1440,6 +1441,14 @@ bool ChildProcessSecurityPolicyImpl::CanAccessDataForOrigin(
 
 bool ChildProcessSecurityPolicyImpl::CanAccessDataForOrigin(int child_id,
                                                             const GURL& url) {
+  constexpr bool kUrlIsPrecursorOfOpaqueOrigin = false;
+  return CanAccessDataForOrigin(child_id, url, kUrlIsPrecursorOfOpaqueOrigin);
+}
+
+bool ChildProcessSecurityPolicyImpl::CanAccessDataForOrigin(
+    int child_id,
+    const GURL& url,
+    bool url_is_precursor_of_opaque_origin) {
   DCHECK(IsRunningOnExpectedThread());
   base::AutoLock lock(lock_);
 
@@ -1468,6 +1477,21 @@ bool ChildProcessSecurityPolicyImpl::CanAccessDataForOrigin(int child_id,
       // from origins that require exactly the same lock.
       if (actual_process_lock == expected_process_lock)
         return true;
+
+      // TODO(acolwell, nasko): https://crbug.com/1029092: Ensure the precursor
+      // of opaque origins matches the renderer's origin lock.
+      if (url_is_precursor_of_opaque_origin) {
+        // SitePerProcessBrowserTest.TwoBlobURLsWithNullOriginDontShareProcess.
+        if (actual_process_lock.SchemeIsBlob() &&
+            actual_process_lock.path_piece().starts_with("null/")) {
+          return true;
+        }
+
+        // DeclarativeApiTest.PersistRules.
+        if (actual_process_lock.SchemeIs(url::kDataScheme))
+          return true;
+      }
+
       failure_reason = "lock_mismatch";
     } else {
       // Citadel-style enforcement - an unlocked process should not be able to
