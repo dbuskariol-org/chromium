@@ -1252,6 +1252,9 @@ const FeatureEntry::FeatureParam kStartSurfaceAndroid_Toolbar[] = {
 const FeatureEntry::FeatureParam kStartSurfaceAndroid_TasksOnly[] = {
     {"start_surface_variation", "tasksonly"}};
 
+const FeatureEntry::FeatureParam kStartSurfaceAndroid_OmniboxOnly[] = {
+    {"start_surface_variation", "omniboxonly"}};
+
 const FeatureEntry::FeatureVariation kStartSurfaceAndroidVariations[] = {
     {"Single Surface", kStartSurfaceAndroid_SingleSurface,
      base::size(kStartSurfaceAndroid_SingleSurface), nullptr},
@@ -1260,7 +1263,9 @@ const FeatureEntry::FeatureVariation kStartSurfaceAndroidVariations[] = {
     {"Start Surface Toolbar", kStartSurfaceAndroid_Toolbar,
      base::size(kStartSurfaceAndroid_Toolbar), nullptr},
     {"Tasks Only", kStartSurfaceAndroid_TasksOnly,
-     base::size(kStartSurfaceAndroid_TasksOnly), nullptr}};
+     base::size(kStartSurfaceAndroid_TasksOnly), nullptr},
+    {"Omnibox Only", kStartSurfaceAndroid_OmniboxOnly,
+     base::size(kStartSurfaceAndroid_OmniboxOnly), nullptr}};
 #endif  // OS_ANDROID
 
 #if defined(OS_ANDROID)
