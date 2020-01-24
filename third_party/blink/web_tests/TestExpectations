@@ -6503,3 +6503,5 @@ crbug.com/1045050 [ Mac ] virtual/gpu-rasterization/images/sprite-no-bleed.html 
 crbug.com/1045050 [ Linux ] virtual/prefer_compositing_to_lcd_text/compositing/overflow/mask-with-filter.html [ Pass Failure ]
 crbug.com/1045050 [ Linux ] virtual/prefer_compositing_to_lcd_text/compositing/overflow/nested-render-surfaces-with-rotation.html [ Pass Failure ]
 crbug.com/1045050 [ Linux ] virtual/prefer_compositing_to_lcd_text/compositing/overflow/rotate-then-clip-effect-interleave.html [ Pass Failure ]
+
+crbug.com/1045260 external/wpt/IndexedDB/keypath-exceptions.htm [ Pass Failure ]
