@@ -6,6 +6,7 @@
 #define CHROME_BROWSER_CHROMEOS_CHILD_ACCOUNTS_TIME_LIMITS_APP_ACTIVITY_REGISTRY_H_
 
 #include <map>
+#include <memory>
 #include <set>
 
 #include "base/optional.h"
@@ -22,8 +23,14 @@ namespace enterprise_management {
 class ChildStatusReportRequest;
 }  // namespace enterprise_management
 
+namespace base {
+class OneShotTimer;
+}  // namespace base
+
 namespace chromeos {
 namespace app_time {
+
+class AppTimeNotificationDelegate;
 
 // Keeps track of app activity and time limits information.
 // Stores app activity between user session. Information about uninstalled apps
@@ -43,7 +50,8 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
     AppActivityRegistry* const registry_;
   };
 
-  explicit AppActivityRegistry(AppServiceWrapper* app_service_wrapper);
+  AppActivityRegistry(AppServiceWrapper* app_service_wrapper,
+                      AppTimeNotificationDelegate* notification_delegate);
   AppActivityRegistry(const AppActivityRegistry&) = delete;
   AppActivityRegistry& operator=(const AppActivityRegistry&) = delete;
   ~AppActivityRegistry() override;
@@ -66,9 +74,18 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
   bool IsAppTimeLimitReached(const AppId& app_id) const;
   bool IsAppActive(const AppId& app_id) const;
 
+  // Sets the timelimit for the |app_id| to |time_limit|. Notifies
+  // |notification_delegate_| if there has been a change in the state of
+  // |app_id|.
+  bool SetAppTimeLimitForTest(const AppId& app_id,
+                              base::TimeDelta time_limit,
+                              base::Time timestamp);
+
   // Returns the total active time for the application since the last time limit
   // reset.
   base::TimeDelta GetActiveTime(const AppId& app_id) const;
+
+  AppState GetAppState(const AppId& app_id) const;
 
   // Populates |report| with collected app activity. Returns whether any data
   // were reported.
@@ -83,13 +100,16 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
   // Updates time limits for the installed apps.
   void UpdateAppLimits(const std::map<AppId, AppLimit>& app_limits);
 
+  // Reset time has been reached at |timestamp|.
+  void OnResetTimeReached(base::Time timestamp);
+
  private:
   // Bundles detailed data stored for a specific app.
   struct AppDetails {
     AppDetails();
     explicit AppDetails(const AppActivity& activity);
-    AppDetails(const AppDetails&);
-    AppDetails& operator=(const AppDetails&);
+    AppDetails(const AppDetails&) = delete;
+    AppDetails& operator=(const AppDetails&) = delete;
     ~AppDetails();
 
     // Contains information about current app state and logged activity.
@@ -100,6 +120,9 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
 
     // Contains information about restriction set for the app.
     base::Optional<AppLimit> limit;
+
+    // Timer set up for when the app time limit is expected to be reached.
+    std::unique_ptr<base::OneShotTimer> app_limit_timer;
   };
 
   // Adds an ap to the registry if it does not exist.
@@ -107,15 +130,25 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
 
   // Convenience methods to access state of the app identified by |app_id|.
   // Should only be called if app exists in the registry.
-  AppState GetAppState(const AppId& app_id) const;
   void SetAppState(const AppId& app_id, AppState app_state);
 
   // Methods to set the application as active and inactive respectively.
   void SetAppActive(const AppId& app_id, base::Time timestamp);
   void SetAppInactive(const AppId& app_id, base::Time timestamp);
 
+  base::Optional<base::TimeDelta> GetTimeLeftForApp(const AppId& app_id) const;
+
+  // Schedules a time limit check for application when it becomes active.
+  void ScheduleTimeLimitCheckForApp(const AppId& app_id);
+
+  // Checks the limit and shows notification if needed.
+  void CheckTimeLimitForApp(const AppId& app_id);
+
   // Owned by AppTimeController.
   AppServiceWrapper* const app_service_wrapper_;
+
+  // Notification delegate.
+  AppTimeNotificationDelegate* const notification_delegate_;
 
   std::map<AppId, AppDetails> activity_registry_;
 };

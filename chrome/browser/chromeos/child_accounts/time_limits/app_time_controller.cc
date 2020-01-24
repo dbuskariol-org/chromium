@@ -13,6 +13,7 @@
 #include "chrome/browser/chromeos/child_accounts/time_limits/app_service_wrapper.h"
 #include "chrome/browser/chromeos/child_accounts/time_limits/app_time_limits_whitelist_policy_wrapper.h"
 #include "chrome/browser/chromeos/child_accounts/time_limits/app_time_policy_helpers.h"
+#include "chrome/browser/chromeos/child_accounts/time_limits/app_types.h"
 #include "chrome/browser/chromeos/child_accounts/time_limits/web_time_limit_enforcer.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/common/chrome_features.h"
@@ -51,13 +52,22 @@ void AppTimeController::RegisterProfilePrefs(PrefRegistrySimple* registry) {
 AppTimeController::AppTimeController(Profile* profile)
     : app_service_wrapper_(std::make_unique<AppServiceWrapper>(profile)),
       app_registry_(
-          std::make_unique<AppActivityRegistry>(app_service_wrapper_.get())) {
+          std::make_unique<AppActivityRegistry>(app_service_wrapper_.get(),
+                                                this)) {
   DCHECK(profile);
 
   if (WebTimeLimitEnforcer::IsEnabled())
     web_time_enforcer_ = std::make_unique<WebTimeLimitEnforcer>(this);
+
   PrefService* pref_service = profile->GetPrefs();
   RegisterProfilePrefObservers(pref_service);
+
+  // TODO: Update the following from PerAppTimeLimit policy.
+  limits_reset_time_ = base::TimeDelta::FromHours(6);
+
+  // TODO: Update the following from user pref.instead of setting it to Now().
+  SetLastResetTime(base::Time::Now());
+  ScheduleForTimeLimitReset();
 }
 
 AppTimeController::~AppTimeController() = default;
@@ -116,6 +126,61 @@ void AppTimeController::TimeLimitsWhitelistPolicyUpdated(
   AppTimeLimitsWhitelistPolicyWrapper wrapper(policy);
 
   web_time_enforcer_->OnTimeLimitWhitelistChanged(wrapper);
+}
+
+void AppTimeController::ShowAppTimeLimitNotification(
+    const AppId& app_id,
+    AppNotification notification) {
+  // TODO(1015658): Show the notification.
+  NOTIMPLEMENTED_LOG_ONCE();
+}
+
+base::Time AppTimeController::GetNextResetTime() const {
+  // UTC time now.
+  base::Time now = base::Time::Now();
+
+  // UTC time local midnight.
+  base::Time nearest_midnight = now.LocalMidnight();
+
+  base::Time prev_midnight;
+  if (now > nearest_midnight)
+    prev_midnight = nearest_midnight;
+  else
+    prev_midnight = nearest_midnight - base::TimeDelta::FromHours(24);
+
+  base::Time next_reset_time = prev_midnight + limits_reset_time_;
+
+  if (next_reset_time > now)
+    return next_reset_time;
+
+  // We have already reset for this day. The reset time is the next day.
+  return next_reset_time + base::TimeDelta::FromHours(24);
+}
+
+void AppTimeController::ScheduleForTimeLimitReset() {
+  if (reset_timer_.IsRunning())
+    reset_timer_.AbandonAndStop();
+
+  base::TimeDelta time_until_reset = GetNextResetTime() - base::Time::Now();
+  reset_timer_.Start(FROM_HERE, time_until_reset,
+                     base::BindOnce(&AppTimeController::OnResetTimeReached,
+                                    base::Unretained(this)));
+}
+
+void AppTimeController::OnResetTimeReached() {
+  base::Time now = base::Time::Now();
+
+  app_registry_->OnResetTimeReached(now);
+
+  SetLastResetTime(now);
+
+  ScheduleForTimeLimitReset();
+}
+
+void AppTimeController::SetLastResetTime(base::Time timestamp) {
+  last_limits_reset_time_ = timestamp;
+  // TODO(crbug.com/1015658) : |last_limits_reset_time_| should be persisted
+  // across sessions.
 }
 
 }  // namespace app_time

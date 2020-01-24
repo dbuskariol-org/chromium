@@ -820,6 +820,7 @@ source_set("chromeos") {
     "child_accounts/time_limits/app_time_controller.h",
     "child_accounts/time_limits/app_time_limits_whitelist_policy_wrapper.cc",
     "child_accounts/time_limits/app_time_limits_whitelist_policy_wrapper.h",
+    "child_accounts/time_limits/app_time_notification_delegate.h",
     "child_accounts/time_limits/app_time_policy_helpers.cc",
     "child_accounts/time_limits/app_time_policy_helpers.h",
     "child_accounts/time_limits/app_types.cc",
