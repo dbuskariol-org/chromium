@@ -129,7 +129,8 @@ PasswordBubbleViewBase::PasswordBubbleViewBase(
       PasswordsModelDelegateFromWebContents(web_contents);
   // Create the model only for the states that hasn't been migrated to using the
   // bubble controllers.
-  if (delegate->GetState() != password_manager::ui::AUTO_SIGNIN_STATE) {
+  if (delegate->GetState() != password_manager::ui::AUTO_SIGNIN_STATE &&
+      delegate->GetState() != password_manager::ui::CONFIRMATION_STATE) {
     model_ = std::make_unique<ManagePasswordsBubbleModel>(
         delegate, reason == AUTOMATIC
                       ? ManagePasswordsBubbleModel::AUTOMATIC

@@ -6,6 +6,7 @@
 
 #include <memory>
 
+#include "chrome/browser/ui/passwords/passwords_model_delegate.h"
 #include "chrome/browser/ui/views/chrome_layout_provider.h"
 #include "chrome/browser/ui/views/chrome_typography.h"
 #include "chrome/grit/generated_resources.h"
@@ -22,18 +23,22 @@ PasswordSaveConfirmationView::PasswordSaveConfirmationView(
     : PasswordBubbleViewBase(web_contents,
                              anchor_view,
                              reason,
-                             /*auto_dismissable=*/false) {
+                             /*auto_dismissable=*/false),
+      controller_(PasswordsModelDelegateFromWebContents(web_contents),
+                  reason == AUTOMATIC
+                      ? ManagePasswordsBubbleModel::AUTOMATIC
+                      : ManagePasswordsBubbleModel::USER_ACTION) {
   SetLayoutManager(std::make_unique<views::FillLayout>());
 
   DialogDelegate::set_buttons(ui::DIALOG_BUTTON_NONE);
 
   auto label = std::make_unique<views::StyledLabel>(
-      model()->save_confirmation_text(), this);
+      controller_.save_confirmation_text(), this);
   label->SetTextContext(CONTEXT_BODY_TEXT_LARGE);
   label->SetDefaultTextStyle(views::style::STYLE_SECONDARY);
   auto link_style = views::StyledLabel::RangeStyleInfo::CreateForLink();
   link_style.disable_line_wrapping = false;
-  label->AddStyleRange(model()->save_confirmation_link_range(), link_style);
+  label->AddStyleRange(controller_.save_confirmation_link_range(), link_style);
 
   AddChildView(label.release());
 }
@@ -41,12 +46,12 @@ PasswordSaveConfirmationView::PasswordSaveConfirmationView(
 PasswordSaveConfirmationView::~PasswordSaveConfirmationView() = default;
 
 PasswordBubbleControllerBase* PasswordSaveConfirmationView::GetController() {
-  return nullptr;
+  return &controller_;
 }
 
 const PasswordBubbleControllerBase*
 PasswordSaveConfirmationView::GetController() const {
-  return nullptr;
+  return &controller_;
 }
 
 bool PasswordSaveConfirmationView::ShouldShowCloseButton() const {
@@ -57,8 +62,8 @@ void PasswordSaveConfirmationView::StyledLabelLinkClicked(
     views::StyledLabel* label,
     const gfx::Range& range,
     int event_flags) {
-  DCHECK_EQ(range, model()->save_confirmation_link_range());
-  model()->OnNavigateToPasswordManagerAccountDashboardLinkClicked(
+  DCHECK_EQ(range, controller_.save_confirmation_link_range());
+  controller_.OnNavigateToPasswordManagerAccountDashboardLinkClicked(
       password_manager::ManagePasswordsReferrer::
           kPasswordGenerationConfirmation);
   CloseBubble();
