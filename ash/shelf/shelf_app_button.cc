@@ -334,9 +334,11 @@ ShelfAppButton::ShelfAppButton(ShelfView* shelf_view,
     notification_indicator_->SetVisible(false);
     AddChildView(notification_indicator_);
   }
+  GetInkDrop()->AddObserver(this);
 }
 
 ShelfAppButton::~ShelfAppButton() {
+  GetInkDrop()->RemoveObserver(this);
   if (destroyed_flag_)
     *destroyed_flag_ = true;
 }
@@ -660,6 +662,17 @@ void ShelfAppButton::Layout() {
 
 void ShelfAppButton::ChildPreferredSizeChanged(views::View* child) {
   Layout();
+}
+
+void ShelfAppButton::InkDropAnimationStarted() {
+  shelf_view_->shelf()->SetRoundedCornersForInkDrop(/*show=*/true,
+                                                    /*ink_drop_host=*/this);
+}
+
+void ShelfAppButton::InkDropRippleAnimationEnded(views::InkDropState state) {
+  if (state == views::InkDropState::HIDDEN)
+    shelf_view_->shelf()->SetRoundedCornersForInkDrop(/*show=*/false,
+                                                      /*ink_drop_host=*/this);
 }
 
 void ShelfAppButton::OnGestureEvent(ui::GestureEvent* event) {

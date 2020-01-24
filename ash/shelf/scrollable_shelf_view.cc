@@ -652,6 +652,33 @@ views::View* ScrollableShelfView::GetShelfContainerViewForTest() {
   return shelf_container_view_;
 }
 
+void ScrollableShelfView::SetRoundedCornersForShelf(
+    bool show,
+    views::View* ink_drop_host) {
+  shelf_container_view_->layer()->SetRoundedCornerRadius(
+      show && InkDropNeedsClipping(ink_drop_host)
+          ? CalculateShelfContainerRoundedCorners()
+          : gfx::RoundedCornersF());
+  shelf_container_view_->layer()->SetIsFastRoundedCorner(true);
+}
+
+bool ScrollableShelfView::InkDropNeedsClipping(views::View* ink_drop_host) {
+  // The ink drop needs to be clipped only if the host is the app at one of the
+  // corners of the shelf. This happens if it is either the first or the last
+  // tappable app and no arrow is showing on its side.
+  if (shelf_view_->view_model()->view_at(first_tappable_app_index_) ==
+      ink_drop_host) {
+    return !(layout_strategy_ == kShowButtons ||
+             layout_strategy_ == kShowLeftArrowButton);
+  }
+  if (shelf_view_->view_model()->view_at(last_tappable_app_index_) ==
+      ink_drop_host) {
+    return !(layout_strategy_ == kShowButtons ||
+             layout_strategy_ == kShowRightArrowButton);
+  }
+  return false;
+}
+
 bool ScrollableShelfView::ShouldAdjustForTest() const {
   return CalculateAdjustmentOffset(CalculateMainAxisScrollDistance(),
                                    layout_strategy_, GetSpaceForIcons());
@@ -859,9 +886,6 @@ void ScrollableShelfView::Layout() {
 
   // Layout |shelf_container_view_|.
   shelf_container_view_->SetBoundsRect(shelf_container_bounds);
-
-  shelf_container_view_->layer()->SetRoundedCornerRadius(
-      CalculateShelfContainerRoundedCorners());
 }
 
 void ScrollableShelfView::ChildPreferredSizeChanged(views::View* child) {
@@ -1992,7 +2016,7 @@ ScrollableShelfView::CalculateShelfContainerRoundedCorners() const {
   const bool is_horizontal_alignment = GetShelf()->IsHorizontalAlignment();
   const float radius = (is_horizontal_alignment ? height() : width()) / 2.f;
 
-  const int upper_left = left_arrow_->GetVisible() ? 0 : radius;
+  int upper_left = left_arrow_->GetVisible() ? 0 : radius;
 
   int upper_right;
   if (is_horizontal_alignment)
@@ -2000,13 +2024,18 @@ ScrollableShelfView::CalculateShelfContainerRoundedCorners() const {
   else
     upper_right = left_arrow_->GetVisible() ? 0 : radius;
 
-  const int lower_right = right_arrow_->GetVisible() ? 0 : radius;
+  int lower_right = right_arrow_->GetVisible() ? 0 : radius;
 
   int lower_left;
   if (is_horizontal_alignment)
     lower_left = left_arrow_->GetVisible() ? 0 : radius;
   else
     lower_left = right_arrow_->GetVisible() ? 0 : radius;
+
+  if (ShouldAdaptToRTL()) {
+    std::swap(upper_left, upper_right);
+    std::swap(lower_left, lower_right);
+  }
 
   return gfx::RoundedCornersF(upper_left, upper_right, lower_right, lower_left);
 }

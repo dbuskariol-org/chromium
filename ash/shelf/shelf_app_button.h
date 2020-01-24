@@ -10,6 +10,8 @@
 #include "base/macros.h"
 #include "base/timer/timer.h"
 #include "ui/gfx/shadow_value.h"
+#include "ui/views/animation/ink_drop_observer.h"
+#include "ui/views/animation/ink_drop_state.h"
 
 namespace views {
 class ImageView;
@@ -20,7 +22,8 @@ struct ShelfItem;
 class ShelfView;
 
 // Button used for app shortcuts on the shelf..
-class ASH_EXPORT ShelfAppButton : public ShelfButton {
+class ASH_EXPORT ShelfAppButton : public ShelfButton,
+                                  public views::InkDropObserver {
  public:
   static const char kViewClassName[];
 
@@ -85,6 +88,10 @@ class ASH_EXPORT ShelfAppButton : public ShelfButton {
   bool OnMouseDragged(const ui::MouseEvent& event) override;
   void Layout() override;
   void ChildPreferredSizeChanged(views::View* child) override;
+
+  // views::InkDropListener:
+  void InkDropAnimationStarted() override;
+  void InkDropRippleAnimationEnded(views::InkDropState state) override;
 
   // Update button state from ShelfItem.
   void ReflectItemStatus(const ShelfItem& item);
