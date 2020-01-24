@@ -504,6 +504,11 @@ class BLINK_EXPORT WebLocalFrameClient {
   // Called when the frame rects changed.
   virtual void FrameRectsChanged(const WebRect&) {}
 
+  // Called when a frame's intersection with the main frame's document has
+  // changed.
+  virtual void OnMainFrameDocumentIntersectionChanged(
+      const WebRect& intersection_rect) {}
+
   // Low-level resource notifications ------------------------------------
 
   // A request is about to be sent out, and the client may modify it.  Request

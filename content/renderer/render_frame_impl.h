@@ -740,6 +740,8 @@ class CONTENT_EXPORT RenderFrameImpl
   void ShowContextMenu(const blink::WebContextMenuData& data) override;
   void SaveImageFromDataURL(const blink::WebString& data_url) override;
   void FrameRectsChanged(const blink::WebRect& frame_rect) override;
+  void OnMainFrameDocumentIntersectionChanged(
+      const blink::WebRect& intersect_rect) override;
   void WillSendRequest(blink::WebURLRequest& request) override;
   void DidLoadResourceFromMemoryCache(
       const blink::WebURLRequest& request,
@@ -1599,6 +1601,10 @@ class CONTENT_EXPORT RenderFrameImpl
   // Used for tracking the frame's size and replicating it to the browser
   // process when it changes.
   base::Optional<gfx::Size> frame_size_;
+
+  // Used for tracking a frame's main frame document intersection and
+  // and replicating it to the browser when it changes.
+  base::Optional<blink::WebRect> mainframe_document_intersection_rect_;
 
 #if defined(OS_MACOSX)
   // Return the mojo interface for making ClipboardHost calls.

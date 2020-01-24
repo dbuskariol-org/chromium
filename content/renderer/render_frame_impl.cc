@@ -4851,6 +4851,20 @@ void RenderFrameImpl::FrameRectsChanged(const blink::WebRect& frame_rect) {
   }
 }
 
+void RenderFrameImpl::OnMainFrameDocumentIntersectionChanged(
+    const blink::WebRect& mainframe_document_intersection_rect) {
+  if (!mainframe_document_intersection_rect_ ||
+      mainframe_document_intersection_rect !=
+          mainframe_document_intersection_rect_) {
+    mainframe_document_intersection_rect_ =
+        mainframe_document_intersection_rect;
+    for (auto& observer : observers_) {
+      observer.OnMainFrameDocumentIntersectionChanged(
+          mainframe_document_intersection_rect);
+    }
+  }
+}
+
 void RenderFrameImpl::WillSendRequest(blink::WebURLRequest& request) {
   // This method is called for subresources, while transition type is
   // a navigation concept. We pass ui::PAGE_TRANSITION_LINK as default one.

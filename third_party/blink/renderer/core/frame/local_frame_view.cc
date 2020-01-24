@@ -3624,6 +3624,12 @@ void LocalFrameView::NotifyFrameRectsChangedIfNeeded() {
   }
 }
 
+void LocalFrameView::SetViewportIntersection(
+    const ViewportIntersectionState& intersection_state) {
+  GetFrame().Client()->OnMainFrameDocumentIntersectionChanged(
+      intersection_state.main_frame_document_intersection);
+}
+
 PhysicalOffset LocalFrameView::ViewportToFrame(
     const PhysicalOffset& point_in_viewport) const {
   PhysicalOffset point_in_root_frame = PhysicalOffset::FromFloatPointRound(

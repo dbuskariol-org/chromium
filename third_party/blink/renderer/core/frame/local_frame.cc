@@ -1351,6 +1351,12 @@ bool LocalFrame::ClipsContent() const {
 void LocalFrame::SetViewportIntersectionFromParent(
     const ViewportIntersectionState& intersection_state) {
   DCHECK(IsLocalRoot());
+  // Notify the render frame observers when the main frame intersection changes.
+  if (intersection_state_.main_frame_document_intersection !=
+      intersection_state.main_frame_document_intersection) {
+    Client()->OnMainFrameDocumentIntersectionChanged(
+        intersection_state.main_frame_document_intersection);
+  }
   // We only schedule an update if the viewport intersection or occlusion state
   // has changed; neither the viewport offset nor the compositing bounds will
   // affect IntersectionObserver.

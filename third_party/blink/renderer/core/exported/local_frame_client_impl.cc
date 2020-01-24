@@ -1044,6 +1044,13 @@ void LocalFrameClientImpl::FrameRectsChanged(const IntRect& frame_rect) {
   web_frame_->Client()->FrameRectsChanged(frame_rect);
 }
 
+void LocalFrameClientImpl::OnMainFrameDocumentIntersectionChanged(
+    const IntRect& intersection_rect) {
+  DCHECK(web_frame_->Client());
+  web_frame_->Client()->OnMainFrameDocumentIntersectionChanged(
+      intersection_rect);
+}
+
 bool LocalFrameClientImpl::IsPluginHandledExternally(
     HTMLPlugInElement& plugin_element,
     const KURL& resource_url,

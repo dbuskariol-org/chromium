@@ -261,6 +261,9 @@ class LocalFrameClientImpl final : public LocalFrameClient {
 
   void FrameRectsChanged(const IntRect&) override;
 
+  void OnMainFrameDocumentIntersectionChanged(
+      const IntRect& intersection_rect) override;
+
   bool IsPluginHandledExternally(HTMLPlugInElement&,
                                  const KURL&,
                                  const String&) override;
