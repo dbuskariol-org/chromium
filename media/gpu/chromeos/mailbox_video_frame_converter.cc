@@ -39,9 +39,11 @@ class MailboxVideoFrameConverter::ScopedSharedImage {
       gpu::SharedImageStub::SharedImageDestructionCallback;
 
   ScopedSharedImage(const gpu::Mailbox& mailbox,
+                    const gfx::Size& size,
                     scoped_refptr<base::SingleThreadTaskRunner> gpu_task_runner,
                     DestroySharedImageCB destroy_shared_image_cb)
       : mailbox_(mailbox),
+        size_(size),
         destroy_shared_image_cb_(std::move(destroy_shared_image_cb)),
         destruction_task_runner_(std::move(gpu_task_runner)) {}
   ~ScopedSharedImage() {
@@ -55,9 +57,11 @@ class MailboxVideoFrameConverter::ScopedSharedImage {
   }
 
   const gpu::Mailbox& mailbox() const { return mailbox_; }
+  const gfx::Size& size() const { return size_; }
 
  private:
   const gpu::Mailbox mailbox_;
+  const gfx::Size size_;
   DestroySharedImageCB destroy_shared_image_cb_;
   const scoped_refptr<base::SequencedTaskRunner> destruction_task_runner_;
 
@@ -150,8 +154,14 @@ void MailboxVideoFrameConverter::ConvertFrame(scoped_refptr<VideoFrame> frame) {
 
   gpu::Mailbox mailbox;
   const UniqueID origin_frame_id = origin_frame->unique_id();
-  if (shared_images_.find(origin_frame_id) != shared_images_.end())
-    mailbox = shared_images_[origin_frame_id]->mailbox();
+  if (shared_images_.find(origin_frame_id) != shared_images_.end()) {
+    // If visible_rect()'s size is changed, recreate SharedImage with the new
+    // visible_rect() size.
+    if (shared_images_[origin_frame_id]->size() == frame->visible_rect().size())
+      mailbox = shared_images_[origin_frame_id]->mailbox();
+    else
+      shared_images_[origin_frame_id].reset();
+  }
 
   input_frame_queue_.emplace(frame, origin_frame_id);
 
@@ -242,7 +252,8 @@ void MailboxVideoFrameConverter::ConvertFrameOnGPUThread(
   }
 
   std::unique_ptr<ScopedSharedImage> scoped_shared_image;
-  scoped_shared_image = GenerateSharedImageOnGPUThread(origin_frame);
+  scoped_shared_image = GenerateSharedImageOnGPUThread(
+      origin_frame, frame->visible_rect().size());
   if (!scoped_shared_image)
     return;
 
@@ -262,7 +273,8 @@ void MailboxVideoFrameConverter::ConvertFrameOnGPUThread(
 
 std::unique_ptr<MailboxVideoFrameConverter::ScopedSharedImage>
 MailboxVideoFrameConverter::GenerateSharedImageOnGPUThread(
-    VideoFrame* video_frame) {
+    VideoFrame* video_frame,
+    const gfx::Size& visible_size) {
   DCHECK(gpu_task_runner_->BelongsToCurrentThread());
   DVLOGF(4) << "frame: " << video_frame->unique_id();
 
@@ -300,8 +312,8 @@ MailboxVideoFrameConverter::GenerateSharedImageOnGPUThread(
   const bool success = shared_image_stub->CreateSharedImage(
       mailbox, shared_image_stub->channel()->client_id(),
       std::move(gpu_memory_buffer_handle), *buffer_format,
-      gpu::kNullSurfaceHandle, video_frame->coded_size(),
-      video_frame->ColorSpace(), shared_image_usage);
+      gpu::kNullSurfaceHandle, visible_size, video_frame->ColorSpace(),
+      shared_image_usage);
   if (!success) {
     OnError(FROM_HERE, "Failed to create shared image.");
     return nullptr;
@@ -309,7 +321,7 @@ MailboxVideoFrameConverter::GenerateSharedImageOnGPUThread(
   // There's no need to UpdateSharedImage() after CreateSharedImage().
 
   return std::make_unique<ScopedSharedImage>(
-      mailbox, gpu_task_runner_,
+      mailbox, visible_size, gpu_task_runner_,
       shared_image_stub->GetSharedImageDestructionCallback(mailbox));
 }
 
