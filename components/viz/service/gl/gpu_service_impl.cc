@@ -178,6 +178,10 @@ GpuServiceImpl::GpuServiceImpl(
   GrContextOptions context_options;
   context_options.fGlyphCacheTextureMaximumBytes =
       max_glyph_cache_texture_bytes;
+  if (gpu_preferences_.force_max_texture_size) {
+    context_options.fMaxTextureSizeOverride =
+        gpu_preferences_.force_max_texture_size;
+  }
 
 #if BUILDFLAG(ENABLE_VULKAN)
   if (vulkan_implementation_) {
