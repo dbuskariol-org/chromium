@@ -8,6 +8,7 @@
 #include "base/callback.h"
 #include "base/memory/ptr_util.h"
 #include "base/threading/thread_task_runner_handle.h"
+#include "chrome/services/sharing/public/cpp/sharing_webrtc_metrics.h"
 #include "third_party/webrtc/api/jsep.h"
 
 namespace {
@@ -454,16 +455,13 @@ void SharingWebRtcConnection::AddIceCandidates(
         webrtc::CreateIceCandidate(
             ice_candidate->sdp_mid, ice_candidate->sdp_mline_index,
             ice_candidate->candidate, /*error=*/nullptr));
+
     if (candidate) {
       peer_connection_->AddIceCandidate(
-          std::move(candidate), [](webrtc::RTCError error) {
-            if (!error.ok()) {
-              LOG(ERROR) << "Failed to add IceCandidate: " << error.message()
-                         << " (" << webrtc::ToString(error.type()) << ")";
-            }
-          });
+          std::move(candidate),
+          [](webrtc::RTCError error) { LogWebRtcAddIceCandidate(error.ok()); });
     } else {
-      LOG(ERROR) << "Skipping invalid IceCandidate";
+      LogWebRtcAddIceCandidate(false);
     }
   }
 }
