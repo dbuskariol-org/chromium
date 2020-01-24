@@ -94,7 +94,6 @@ const int kQuietModeViewSpacing = 18;
 constexpr gfx::Insets kHeaderViewPadding(4, 0);
 constexpr gfx::Insets kQuietModeViewPadding(0, 18, 0, 0);
 constexpr gfx::Insets kQuietModeLabelPadding(16, 0, 15, 0);
-constexpr gfx::Insets kQuietModeTogglePadding(0, 14);
 constexpr SkColor kTopBorderColor = SkColorSetA(SK_ColorBLACK, 0x1F);
 const int kLabelFontSizeDelta = 1;
 
@@ -465,11 +464,8 @@ NotifierSettingsView::NotifierSettingsView() {
       quiet_mode_view->AddChildView(std::move(quiet_mode_label));
   quiet_mode_layout->SetFlexForView(quiet_mode_label_ptr, 1);
 
-  auto quiet_mode_toggle = std::make_unique<views::ToggleButton>(this);
-  quiet_mode_toggle->SetAccessibleName(l10n_util::GetStringUTF16(
-      IDS_ASH_MESSAGE_CENTER_QUIET_MODE_BUTTON_TOOLTIP));
-  quiet_mode_toggle->SetBorder(
-      views::CreateEmptyBorder(kQuietModeTogglePadding));
+  views::ToggleButton* quiet_mode_toggle = TrayPopupUtils::CreateToggleButton(
+      this, IDS_ASH_MESSAGE_CENTER_QUIET_MODE_BUTTON_TOOLTIP);
   quiet_mode_toggle->EnableCanvasFlippingForRTLUI(true);
   quiet_mode_toggle_ =
       quiet_mode_view->AddChildView(std::move(quiet_mode_toggle));
