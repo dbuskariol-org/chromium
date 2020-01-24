@@ -6498,3 +6498,6 @@ crbug.com/1045050 [ Linux ] virtual/prefer_compositing_to_lcd_text/compositing/o
 crbug.com/1045050 [ Linux ] virtual/prefer_compositing_to_lcd_text/compositing/overflow/rotate-then-clip-effect-interleave.html [ Pass Failure ]
 
 crbug.com/1045260 external/wpt/IndexedDB/keypath-exceptions.htm [ Pass Failure ]
+
+crbug.com/1045472 [ Win ] external/wpt/WebCryptoAPI/wrapKey_unwrapKey/test_wrapKey_unwrapKey.https.html [ Pass Failure ]
+crbug.com/1045472 [ Win ] external/wpt/WebCryptoAPI/wrapKey_unwrapKey/wrapKey_unwrapKey.https.worker.html [ Pass Failure ]
