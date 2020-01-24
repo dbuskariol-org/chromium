@@ -2,13 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CAPTIVE_PORTAL_CAPTIVE_PORTAL_LOGIN_DETECTOR_H_
-#define CHROME_BROWSER_CAPTIVE_PORTAL_CAPTIVE_PORTAL_LOGIN_DETECTOR_H_
+#ifndef COMPONENTS_CAPTIVE_PORTAL_CONTENT_CAPTIVE_PORTAL_LOGIN_DETECTOR_H_
+#define COMPONENTS_CAPTIVE_PORTAL_CONTENT_CAPTIVE_PORTAL_LOGIN_DETECTOR_H_
 
 #include "base/macros.h"
 #include "components/captive_portal/content/captive_portal_service.h"
-
-class Profile;
 
 // Triggers a captive portal test on navigations that may indicate a captive
 // portal has been logged into.  Currently only tracks if a page was opened
@@ -20,7 +18,8 @@ class Profile;
 // successfully reloaded, trigger a captive portal check.
 class CaptivePortalLoginDetector {
  public:
-  explicit CaptivePortalLoginDetector(Profile* profile);
+  explicit CaptivePortalLoginDetector(
+      CaptivePortalService* captive_portal_service);
 
   ~CaptivePortalLoginDetector();
 
@@ -33,7 +32,7 @@ class CaptivePortalLoginDetector {
   void SetIsLoginTab();
 
  private:
-  Profile* profile_;
+  CaptivePortalService* captive_portal_service_;
 
   // True if this is a login tab.  Set manually, automatically cleared once
   // login is detected.
@@ -46,4 +45,4 @@ class CaptivePortalLoginDetector {
   DISALLOW_COPY_AND_ASSIGN(CaptivePortalLoginDetector);
 };
 
-#endif  // CHROME_BROWSER_CAPTIVE_PORTAL_CAPTIVE_PORTAL_LOGIN_DETECTOR_H_
+#endif  // COMPONENTS_CAPTIVE_PORTAL_CONTENT_CAPTIVE_PORTAL_LOGIN_DETECTOR_H_

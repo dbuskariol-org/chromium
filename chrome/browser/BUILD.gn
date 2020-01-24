@@ -4477,8 +4477,6 @@ jumbo_static_library("browser") {
 
   if (enable_captive_portal_detection) {
     sources += [
-      "captive_portal/captive_portal_login_detector.cc",
-      "captive_portal/captive_portal_login_detector.h",
       "captive_portal/captive_portal_service_factory.cc",
       "captive_portal/captive_portal_service_factory.h",
       "captive_portal/captive_portal_tab_helper.cc",

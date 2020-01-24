@@ -8,6 +8,8 @@ source_set("content") {
 
   if (enable_captive_portal_detection) {
     sources += [
+      "captive_portal_login_detector.cc",
+      "captive_portal_login_detector.h",
       "captive_portal_service.cc",
       "captive_portal_service.h",
     ]

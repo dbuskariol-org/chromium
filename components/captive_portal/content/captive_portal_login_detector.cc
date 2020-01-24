@@ -2,22 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/captive_portal/captive_portal_login_detector.h"
+#include "components/captive_portal/content/captive_portal_login_detector.h"
 
-#include "chrome/browser/captive_portal/captive_portal_service_factory.h"
 #include "components/captive_portal/core/captive_portal_types.h"
 
 using captive_portal::CaptivePortalResult;
 
 CaptivePortalLoginDetector::CaptivePortalLoginDetector(
-    Profile* profile)
-    : profile_(profile),
+    CaptivePortalService* captive_portal_service)
+    : captive_portal_service_(captive_portal_service),
       is_login_tab_(false),
-      first_login_tab_load_(false) {
-}
+      first_login_tab_load_(false) {}
 
-CaptivePortalLoginDetector::~CaptivePortalLoginDetector() {
-}
+CaptivePortalLoginDetector::~CaptivePortalLoginDetector() {}
 
 void CaptivePortalLoginDetector::OnStoppedLoading() {
   // Do nothing if this is not a login tab, or if this is a login tab's first
@@ -27,9 +24,7 @@ void CaptivePortalLoginDetector::OnStoppedLoading() {
     return;
   }
 
-  // The service is guaranteed to exist if |is_login_tab_| is true, since it's
-  // only set to true once a captive portal is detected.
-  CaptivePortalServiceFactory::GetForProfile(profile_)->DetectCaptivePortal();
+  captive_portal_service_->DetectCaptivePortal();
 }
 
 void CaptivePortalLoginDetector::OnCaptivePortalResults(
