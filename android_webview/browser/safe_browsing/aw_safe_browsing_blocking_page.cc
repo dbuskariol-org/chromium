@@ -17,9 +17,10 @@
 #include "components/safe_browsing/core/features.h"
 #include "components/safe_browsing/core/triggers/trigger_manager.h"
 #include "components/security_interstitials/content/security_interstitial_controller_client.h"
-#include "components/security_interstitials/content/unsafe_resource.h"
+#include "components/security_interstitials/content/unsafe_resource_util.h"
 #include "components/security_interstitials/core/base_safe_browsing_error_ui.h"
 #include "components/security_interstitials/core/safe_browsing_quiet_error_ui.h"
+#include "components/security_interstitials/core/unsafe_resource.h"
 #include "content/public/browser/interstitial_page.h"
 #include "content/public/browser/navigation_entry.h"
 #include "content/public/browser/storage_partition.h"
@@ -130,7 +131,7 @@ AwSafeBrowsingBlockingPage* AwSafeBrowsingBlockingPage::CreateBlockingPage(
   // committed interstitials, it can be cleaned up when removing non-committed
   // interstitials.
   content::NavigationEntry* entry =
-      unsafe_resource.GetNavigationEntryForResource();
+      GetNavigationEntryForResource(unsafe_resource);
   GURL url =
       (main_frame_url.is_empty() && entry) ? entry->GetURL() : main_frame_url;
 

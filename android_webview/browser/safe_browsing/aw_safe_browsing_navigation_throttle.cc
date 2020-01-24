@@ -9,7 +9,7 @@
 #include "android_webview/browser/safe_browsing/aw_safe_browsing_ui_manager.h"
 #include "base/memory/ptr_util.h"
 #include "components/security_interstitials/content/security_interstitial_tab_helper.h"
-#include "components/security_interstitials/content/unsafe_resource.h"
+#include "components/security_interstitials/core/unsafe_resource.h"
 #include "content/public/browser/navigation_handle.h"
 
 namespace android_webview {

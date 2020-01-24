@@ -22,7 +22,8 @@
 #include "components/safe_browsing/core/db/database_manager.h"
 #include "components/safe_browsing/core/db/v4_protocol_manager_util.h"
 #include "components/safe_browsing/core/web_ui/constants.h"
-#include "components/security_interstitials/content/unsafe_resource.h"
+#include "components/security_interstitials/content/unsafe_resource_util.h"
+#include "components/security_interstitials/core/unsafe_resource.h"
 #include "components/security_interstitials/core/urls.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
@@ -183,7 +184,7 @@ void AwUrlCheckerDelegateImpl::DoApplicationResponse(
       NOTREACHED();
   }
 
-  content::NavigationEntry* entry = resource.GetNavigationEntryForResource();
+  content::NavigationEntry* entry = GetNavigationEntryForResource(resource);
   GURL main_frame_url = entry ? entry->GetURL() : GURL();
 
   // Navigate back for back-to-safety on subresources

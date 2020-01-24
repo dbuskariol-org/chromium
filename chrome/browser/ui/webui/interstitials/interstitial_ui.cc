@@ -29,8 +29,10 @@
 #include "components/security_interstitials/content/blocked_interception_blocking_page.h"
 #include "components/security_interstitials/content/mitm_software_blocking_page.h"
 #include "components/security_interstitials/content/origin_policy_ui.h"
+#include "components/security_interstitials/content/unsafe_resource_util.h"
 #include "components/security_interstitials/core/ssl_error_options_mask.h"
 #include "components/security_interstitials/core/ssl_error_ui.h"
+#include "components/security_interstitials/core/unsafe_resource.h"
 #include "content/public/browser/interstitial_page_delegate.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
@@ -295,10 +297,9 @@ safe_browsing::SafeBrowsingBlockingPage* CreateSafeBrowsingBlockingPage(
   resource.is_subresource = request_url != main_frame_url;
   resource.is_subframe = false;
   resource.threat_type = threat_type;
-  resource.web_contents_getter =
-      security_interstitials::UnsafeResource::GetWebContentsGetter(
-          web_contents->GetMainFrame()->GetProcess()->GetID(),
-          web_contents->GetMainFrame()->GetRoutingID());
+  resource.web_contents_getter = security_interstitials::GetWebContentsGetter(
+      web_contents->GetMainFrame()->GetProcess()->GetID(),
+      web_contents->GetMainFrame()->GetRoutingID());
   resource.threat_source = g_browser_process->safe_browsing_service()
                                ->database_manager()
                                ->GetThreatSource();
@@ -347,10 +348,9 @@ TestSafeBrowsingBlockingPageQuiet* CreateSafeBrowsingQuietBlockingPage(
   resource.is_subresource = request_url != main_frame_url;
   resource.is_subframe = false;
   resource.threat_type = threat_type;
-  resource.web_contents_getter =
-      security_interstitials::UnsafeResource::GetWebContentsGetter(
-          web_contents->GetMainFrame()->GetProcess()->GetID(),
-          web_contents->GetMainFrame()->GetRoutingID());
+  resource.web_contents_getter = security_interstitials::GetWebContentsGetter(
+      web_contents->GetMainFrame()->GetProcess()->GetID(),
+      web_contents->GetMainFrame()->GetRoutingID());
   resource.threat_source = g_browser_process->safe_browsing_service()
                                ->database_manager()
                                ->GetThreatSource();

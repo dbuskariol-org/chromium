@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_UNSAFE_RESOURCE_H_
-#define COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_UNSAFE_RESOURCE_H_
+#ifndef COMPONENTS_SECURITY_INTERSTITIALS_CORE_UNSAFE_RESOURCE_H_
+#define COMPONENTS_SECURITY_INTERSTITIALS_CORE_UNSAFE_RESOURCE_H_
 
 #include <vector>
 
@@ -11,11 +11,9 @@
 #include "base/memory/ref_counted.h"
 #include "base/single_thread_task_runner.h"
 #include "components/safe_browsing/core/db/hit_report.h"
-#include "components/safe_browsing/core/db/util.h"
 #include "url/gurl.h"
 
 namespace content {
-class NavigationEntry;
 class WebContents;
 }  // namespace content
 
@@ -38,23 +36,6 @@ struct UnsafeResource {
   // committed.
   bool IsMainPageLoadBlocked() const;
 
-  // Returns the NavigationEntry for this resource (for a main frame hit) or
-  // for the page which contains this resource (for a subresource hit).
-  // This method must only be called while the UnsafeResource is still
-  // "valid".
-  // I.e,
-  //   For MainPageLoadBlocked resources, it must not be called if the load
-  //   was aborted (going back or replaced with a different navigation),
-  //   or resumed (proceeded through warning or matched whitelist).
-  //   For non-MainPageLoadBlocked resources, it must not be called if any
-  //   other navigation has committed (whether by going back or unrelated
-  //   navigations), though a pending navigation is okay.
-  content::NavigationEntry* GetNavigationEntryForResource() const;
-
-  // Helper to build a getter for WebContents* from render frame id.
-  static base::RepeatingCallback<content::WebContents*(void)>
-  GetWebContentsGetter(int render_process_host_id, int render_frame_id);
-
   GURL url;
   GURL original_url;
   GURL navigation_url;
@@ -73,6 +54,6 @@ struct UnsafeResource {
   std::string token;
 };
 
-}  // security_interstitials
+}  // namespace security_interstitials
 
-#endif  // COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_UNSAFE_RESOURCE_H_
+#endif  // COMPONENTS_SECURITY_INTERSTITIALS_CORE_UNSAFE_RESOURCE_H_
