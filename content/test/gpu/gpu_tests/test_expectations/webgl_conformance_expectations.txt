@@ -562,3 +562,5 @@ crbug.com/1043953 [ chromeos ] conformance/textures/misc/texture-size-limit.html
 # ChromeOS: AMD
 crbug.com/995652 [ chromeos amd ] conformance/uniforms/out-of-bounds-uniform-array-access.html [ Skip ]
 crbug.com/1042897 [ chromeos amd ] conformance/textures/webgl_canvas/tex-2d-rgba-rgba-unsigned_byte.html [ RetryOnFailure ]
+
+crbug.com/1045339 [ Win10 debug nvidia ] conformance/extensions/oes-texture-half-float-with-video.html [ RetryOnFailure ]
