@@ -5508,15 +5508,25 @@ void RenderFrameHostImpl::CommitNavigation(
     subresource_loader_factories->pending_default_factory() =
         std::move(pending_default_factory);
 
-    // Only file resources can load file subresources.
+    // Only file resources and about:blank with an initiator that can load files
+    // can load file subresources.
     //
-    // Other URLs like about:srcdoc or about:blank might be able load files, but
-    // only because they will inherit loaders from their parents instead of the
-    // ones provided by the browser process here.
+    // Other URLs like about:srcdoc might be able load files, but only because
+    // they will inherit loaders from their parents instead of the ones
+    // provided by the browser process here.
+    // TODO(crbug.com/949510): Make about:srcdoc also use this path instead of
+    // inheriting loaders from the parent.
     //
     // For loading Web Bundle files, we don't set FileURLLoaderFactory.
     // Because loading local files from a Web Bundle file is prohibited.
-    if (common_params->url.SchemeIsFile() && !navigation_to_web_bundle) {
+    //
+    // TODO(crbug.com/888079): In the future, use
+    // GetOriginForURLLoaderFactory/GetOriginToCommit.
+    if ((common_params->url.SchemeIsFile() ||
+         (common_params->url.IsAboutBlank() &&
+          common_params->initiator_origin &&
+          common_params->initiator_origin->scheme() == url::kFileScheme)) &&
+        !navigation_to_web_bundle) {
       auto file_factory = std::make_unique<FileURLLoaderFactory>(
           browser_context->GetPath(),
           browser_context->GetSharedCorsOriginAccessList(),
