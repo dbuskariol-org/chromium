@@ -2,15 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/captive_portal/captive_portal_tab_reloader.h"
+#include "components/captive_portal/content/captive_portal_tab_reloader.h"
 
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/location.h"
 #include "base/single_thread_task_runner.h"
 #include "base/threading/thread_task_runner_handle.h"
-#include "chrome/browser/captive_portal/captive_portal_service_factory.h"
-#include "components/captive_portal/content/captive_portal_service.h"
 #include "content/public/browser/interstitial_page.h"
 #include "content/public/browser/navigation_controller.h"
 #include "content/public/browser/navigation_entry.h"
@@ -44,10 +42,10 @@ bool SslNetErrorMayImplyCaptivePortal(int error) {
 }  // namespace
 
 CaptivePortalTabReloader::CaptivePortalTabReloader(
-    Profile* profile,
+    CaptivePortalService* captive_portal_service,
     content::WebContents* web_contents,
     const OpenLoginTabCallback& open_login_tab_callback)
-    : profile_(profile),
+    : captive_portal_service_(captive_portal_service),
       web_contents_(web_contents),
       state_(STATE_NONE),
       provisional_main_frame_load_(false),
@@ -56,8 +54,7 @@ CaptivePortalTabReloader::CaptivePortalTabReloader(
           base::TimeDelta::FromSeconds(kDefaultSlowSSLTimeSeconds)),
       open_login_tab_callback_(open_login_tab_callback) {}
 
-CaptivePortalTabReloader::~CaptivePortalTabReloader() {
-}
+CaptivePortalTabReloader::~CaptivePortalTabReloader() {}
 
 void CaptivePortalTabReloader::OnLoadStart(bool is_ssl) {
   provisional_main_frame_load_ = true;
@@ -195,8 +192,7 @@ void CaptivePortalTabReloader::SetState(State new_state) {
   // Check for unexpected state transitions.
   switch (state_) {
     case STATE_NONE:
-      DCHECK(new_state == STATE_NONE ||
-             new_state == STATE_TIMER_RUNNING);
+      DCHECK(new_state == STATE_NONE || new_state == STATE_TIMER_RUNNING);
       break;
     case STATE_TIMER_RUNNING:
       DCHECK(new_state == STATE_NONE ||
@@ -204,13 +200,11 @@ void CaptivePortalTabReloader::SetState(State new_state) {
              new_state == STATE_NEEDS_RELOAD);
       break;
     case STATE_MAYBE_BROKEN_BY_PORTAL:
-      DCHECK(new_state == STATE_NONE ||
-             new_state == STATE_BROKEN_BY_PORTAL ||
+      DCHECK(new_state == STATE_NONE || new_state == STATE_BROKEN_BY_PORTAL ||
              new_state == STATE_NEEDS_RELOAD);
       break;
     case STATE_BROKEN_BY_PORTAL:
-      DCHECK(new_state == STATE_NONE ||
-             new_state == STATE_NEEDS_RELOAD);
+      DCHECK(new_state == STATE_NONE || new_state == STATE_NEEDS_RELOAD);
       break;
     case STATE_NEEDS_RELOAD:
       DCHECK_EQ(STATE_NONE, new_state);
@@ -224,11 +218,8 @@ void CaptivePortalTabReloader::SetState(State new_state) {
 
   switch (state_) {
     case STATE_TIMER_RUNNING:
-      slow_ssl_load_timer_.Start(
-          FROM_HERE,
-          slow_ssl_load_time_,
-          this,
-          &CaptivePortalTabReloader::OnSlowSSLConnect);
+      slow_ssl_load_timer_.Start(FROM_HERE, slow_ssl_load_time_, this,
+                                 &CaptivePortalTabReloader::OnSlowSSLConnect);
       break;
 
     case STATE_MAYBE_BROKEN_BY_PORTAL:
@@ -275,8 +266,6 @@ void CaptivePortalTabReloader::MaybeOpenCaptivePortalLoginTab() {
 }
 
 void CaptivePortalTabReloader::CheckForCaptivePortal() {
-  CaptivePortalService* service =
-      CaptivePortalServiceFactory::GetForProfile(profile_);
-  if (service)
-    service->DetectCaptivePortal();
+  if (captive_portal_service_)
+    captive_portal_service_->DetectCaptivePortal();
 }

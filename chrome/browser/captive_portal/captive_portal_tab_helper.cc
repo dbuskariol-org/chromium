@@ -7,13 +7,13 @@
 #include "base/bind.h"
 #include "base/debug/dump_without_crashing.h"
 #include "chrome/browser/captive_portal/captive_portal_service_factory.h"
-#include "chrome/browser/captive_portal/captive_portal_tab_reloader.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/browser_tabstrip.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "components/captive_portal/content/captive_portal_login_detector.h"
+#include "components/captive_portal/content/captive_portal_tab_reloader.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/navigation_handle.h"
 #include "content/public/browser/render_frame_host.h"
@@ -31,7 +31,7 @@ CaptivePortalTabHelper::CaptivePortalTabHelper(
       profile_(Profile::FromBrowserContext(web_contents->GetBrowserContext())),
       navigation_handle_(nullptr),
       tab_reloader_(new CaptivePortalTabReloader(
-          profile_,
+          CaptivePortalServiceFactory::GetForProfile(profile_),
           web_contents,
           base::Bind(&CaptivePortalTabHelper::OpenLoginTabForWebContents,
                      web_contents,

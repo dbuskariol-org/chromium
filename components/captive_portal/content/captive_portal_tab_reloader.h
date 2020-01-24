@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CAPTIVE_PORTAL_CAPTIVE_PORTAL_TAB_RELOADER_H_
-#define CHROME_BROWSER_CAPTIVE_PORTAL_CAPTIVE_PORTAL_TAB_RELOADER_H_
+#ifndef COMPONENTS_CAPTIVE_PORTAL_CONTENT_CAPTIVE_PORTAL_TAB_RELOADER_H_
+#define COMPONENTS_CAPTIVE_PORTAL_CONTENT_CAPTIVE_PORTAL_TAB_RELOADER_H_
 
 #include "base/callback_forward.h"
 #include "base/compiler_specific.h"
@@ -12,8 +12,6 @@
 #include "base/time/time.h"
 #include "base/timer/timer.h"
 #include "components/captive_portal/content/captive_portal_service.h"
-
-class Profile;
 
 namespace content {
 class WebContents;
@@ -69,10 +67,11 @@ class CaptivePortalTabReloader {
   // Function to open a login tab, if there isn't one already.
   typedef base::Callback<void()> OpenLoginTabCallback;
 
-  // |profile| and |web_contents| will only be dereferenced in ReloadTab,
-  // MaybeOpenCaptivePortalLoginTab, and CheckForCaptivePortal, so they can
-  // both be NULL in the unit tests as long as those functions are not called.
-  CaptivePortalTabReloader(Profile* profile,
+  // |captive_portal_service| and |web_contents| will only be dereferenced in
+  // ReloadTab, MaybeOpenCaptivePortalLoginTab, and CheckForCaptivePortal, so
+  // they can both be NULL in the unit tests as long as those functions are not
+  // called.
+  CaptivePortalTabReloader(CaptivePortalService* captive_portal_service,
                            content::WebContents* web_contents,
                            const OpenLoginTabCallback& open_login_tab_callback);
 
@@ -148,16 +147,16 @@ class CaptivePortalTabReloader {
   // Reloads the tab.
   virtual void ReloadTab();
 
-  // Opens a login tab in the topmost browser window for the |profile_|, if the
-  // profile has a tabbed browser window and the window doesn't already have a
-  // login tab.  Otherwise, does nothing.
+  // Opens a login tab in the topmost browser window for the
+  // |captive_portal_service_|, if the captive_portal_service has a tabbed
+  // browser window and the window doesn't already have a login tab.  Otherwise,
+  // does nothing.
   virtual void MaybeOpenCaptivePortalLoginTab();
 
-  // Tries to get |profile_|'s CaptivePortalService and have it start a captive
-  // portal check.
+  // Has |captive_portal_service_| (if present) start a captive portal check.
   virtual void CheckForCaptivePortal();
 
-  Profile* profile_;
+  CaptivePortalService* captive_portal_service_;
   content::WebContents* web_contents_;
 
   State state_;
@@ -183,4 +182,4 @@ class CaptivePortalTabReloader {
   DISALLOW_COPY_AND_ASSIGN(CaptivePortalTabReloader);
 };
 
-#endif  // CHROME_BROWSER_CAPTIVE_PORTAL_CAPTIVE_PORTAL_TAB_RELOADER_H_
+#endif  // COMPONENTS_CAPTIVE_PORTAL_CONTENT_CAPTIVE_PORTAL_TAB_RELOADER_H_

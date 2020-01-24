@@ -5024,10 +5024,8 @@ test("unit_tests") {
   }
 
   if (enable_captive_portal_detection) {
-    sources += [
-      "../browser/captive_portal/captive_portal_tab_helper_unittest.cc",
-      "../browser/captive_portal/captive_portal_tab_reloader_unittest.cc",
-    ]
+    sources +=
+        [ "../browser/captive_portal/captive_portal_tab_helper_unittest.cc" ]
   }
   if (enable_session_service) {
     sources += [

@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/captive_portal/captive_portal_tab_reloader.h"
+#include "components/captive_portal/content/captive_portal_tab_reloader.h"
 
 #include "base/callback.h"
 #include "base/macros.h"
 #include "base/run_loop.h"
-#include "chrome/test/base/chrome_render_view_host_test_harness.h"
 #include "components/captive_portal/content/captive_portal_service.h"
 #include "content/public/browser/interstitial_page.h"
 #include "content/public/browser/interstitial_page_delegate.h"
 #include "content/public/browser/web_contents.h"
+#include "content/public/test/test_renderer_host.h"
 #include "net/base/net_errors.h"
 #include "net/cert/cert_status_flags.h"
 #include "net/ssl/ssl_info.h"
@@ -28,21 +28,16 @@ class TestCaptivePortalTabReloader : public CaptivePortalTabReloader {
   explicit TestCaptivePortalTabReloader(content::WebContents* web_contents)
       : CaptivePortalTabReloader(NULL,
                                  web_contents,
-                                 base::Callback<void(void)>()) {
-  }
+                                 base::Callback<void(void)>()) {}
 
   ~TestCaptivePortalTabReloader() override {}
 
-  bool TimerRunning() {
-    return slow_ssl_load_timer_.IsRunning();
-  }
+  bool TimerRunning() { return slow_ssl_load_timer_.IsRunning(); }
 
   // The following methods are aliased so they can be publicly accessed by the
   // unit tests.
 
-  State state() const {
-    return CaptivePortalTabReloader::state();
-  }
+  State state() const { return CaptivePortalTabReloader::state(); }
 
   void set_slow_ssl_load_time(base::TimeDelta slow_ssl_load_time) {
     EXPECT_FALSE(TimerRunning());
@@ -64,11 +59,10 @@ class MockInterstitialPageDelegate : public content::InterstitialPageDelegate {
   // The newly created MockInterstitialPageDelegate will be owned by the
   // WebContents' InterstitialPage, and cleaned up when the WebContents
   // destroys it.
-  explicit MockInterstitialPageDelegate(
-      content::WebContents* web_contents) {
+  explicit MockInterstitialPageDelegate(content::WebContents* web_contents) {
     content::InterstitialPage* interstitial_page =
-        content::InterstitialPage::Create(
-            web_contents, true, GURL("http://blah"), this);
+        content::InterstitialPage::Create(web_contents, true,
+                                          GURL("http://blah"), this);
     interstitial_page->DontCreateViewForTesting();
     interstitial_page->Show();
   }
@@ -82,13 +76,13 @@ class MockInterstitialPageDelegate : public content::InterstitialPageDelegate {
   DISALLOW_COPY_AND_ASSIGN(MockInterstitialPageDelegate);
 };
 
-class CaptivePortalTabReloaderTest : public ChromeRenderViewHostTestHarness {
+class CaptivePortalTabReloaderTest : public content::RenderViewHostTestHarness {
  public:
   // testing::Test:
   void SetUp() override {
-    ChromeRenderViewHostTestHarness::SetUp();
-    tab_reloader_.reset(new testing::StrictMock<TestCaptivePortalTabReloader>(
-        web_contents()));
+    content::RenderViewHostTestHarness::SetUp();
+    tab_reloader_.reset(
+        new testing::StrictMock<TestCaptivePortalTabReloader>(web_contents()));
 
     // Most tests don't run the message loop, so don't use a timer for them.
     tab_reloader_->set_slow_ssl_load_time(base::TimeDelta());
@@ -97,7 +91,7 @@ class CaptivePortalTabReloaderTest : public ChromeRenderViewHostTestHarness {
   void TearDown() override {
     EXPECT_FALSE(tab_reloader().TimerRunning());
     tab_reloader_.reset(NULL);
-    ChromeRenderViewHostTestHarness::TearDown();
+    content::RenderViewHostTestHarness::TearDown();
   }
 
   TestCaptivePortalTabReloader& tab_reloader() { return *tab_reloader_.get(); }
