@@ -49,7 +49,6 @@ public final class Tab {
     private final ObserverList<TabCallback> mCallbacks;
     private Browser mBrowser;
     private DownloadCallbackClientImpl mDownloadCallbackClient;
-    private ErrorPageCallbackClientImpl mErrorPageCallbackClient;
     private FullscreenCallbackClientImpl mFullscreenCallbackClient;
     private NewTabCallback mNewTabCallback;
     // Id from the remote side.
@@ -125,13 +124,8 @@ public final class Tab {
     public void setErrorPageCallback(@Nullable ErrorPageCallback callback) {
         ThreadCheck.ensureOnUiThread();
         try {
-            if (callback != null) {
-                mErrorPageCallbackClient = new ErrorPageCallbackClientImpl(callback);
-                mImpl.setErrorPageCallbackClient(mErrorPageCallbackClient);
-            } else {
-                mErrorPageCallbackClient = null;
-                mImpl.setErrorPageCallbackClient(null);
-            }
+            mImpl.setErrorPageCallbackClient(
+                    callback == null ? null : new ErrorPageCallbackClientImpl(callback));
         } catch (RemoteException e) {
             throw new APICallException(e);
         }

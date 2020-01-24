@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 
 import org.chromium.base.annotations.JNINamespace;
 import org.chromium.content_public.browser.WebContents;
-import org.chromium.ui.base.ViewAndroidDelegate;
 import org.chromium.ui.base.WindowAndroid;
 
 /**
@@ -53,13 +52,6 @@ public final class BrowserViewController
         mTopControlsContainerView.setId(View.generateViewId());
         mContentView = ContentView.createContentView(
                 context, mTopControlsContainerView.getEventOffsetHandler());
-        ViewAndroidDelegate viewAndroidDelegate = new ViewAndroidDelegate(mContentView) {
-            @Override
-            public void onTopControlsChanged(int topControlsOffsetY, int topContentOffsetY) {
-                mTopControlsContainerView.onTopControlsChanged(
-                        topControlsOffsetY, topContentOffsetY);
-            }
-        };
         mContentViewRenderView.addView(mContentView,
                 new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
                         FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY));
