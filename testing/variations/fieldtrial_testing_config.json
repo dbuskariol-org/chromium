@@ -7350,6 +7350,23 @@
             ]
         }
     ],
+    "UserDataSnapshot": [
+        {
+            "platforms": [
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "UserDataSnapshot",
+                    "enable_features": [
+                        "UserDataSnapshot"
+                    ]
+                }
+            ]
+        }
+    ],
     "UsernameFirstFlow": [
         {
             "platforms": [

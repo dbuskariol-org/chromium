@@ -4867,6 +4867,13 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kFreezeUserAgentDescription, kOsDesktop | kOsAndroid,
      FEATURE_VALUE_TYPE(blink::features::kFreezeUserAgent)},
 
+#if !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
+    {"enable-user-data-snapshot", flag_descriptions::kUserDataSnapshotName,
+     flag_descriptions::kUserDataSnapshotDescription,
+     kOsMac | kOsWin | kOsLinux,
+     FEATURE_VALUE_TYPE(features::kUserDataSnapshot)},
+#endif
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

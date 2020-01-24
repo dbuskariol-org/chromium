@@ -2448,6 +2448,13 @@ extern const char kWebrtcPipeWireCapturerDescription[];
 
 #endif  // #if defined(WEBRTC_USE_PIPEWIRE)
 
+#if !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
+
+extern const char kUserDataSnapshotName[];
+extern const char kUserDataSnapshotDescription[];
+
+#endif  // !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
+
 // ============================================================================
 // Don't just add flags to the end, put them in the right section in
 // alphabetical order. See top instructions for more.

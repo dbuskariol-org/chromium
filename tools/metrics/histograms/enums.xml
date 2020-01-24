@@ -37706,6 +37706,7 @@ from previous Chrome versions.
   <int value="-528149352" label="WebRtcUseEchoCanceller3:enabled"/>
   <int value="-526236814" label="WebAssemblyTiering:enabled"/>
   <int value="-523030434" label="EnableBackgroundBlur:enabled"/>
+  <int value="-520221221" label="UserDataSnapshot:enabled"/>
   <int value="-520004021" label="WebXRHitTest:disabled"/>
   <int value="-519960638" label="enable-site-engagement-service"/>
   <int value="-518104091" label="NewAudioRenderingMixingStrategy:enabled"/>
@@ -37721,6 +37722,7 @@ from previous Chrome versions.
   <int value="-506706655" label="respect-autocomplete-off-autofill"/>
   <int value="-506366023" label="VizHitTest:enabled"/>
   <int value="-505679399" label="FontCacheScaling:enabled"/>
+  <int value="-503601144" label="UserDataSnapshot:disabled"/>
   <int value="-503430431" label="XRSandbox:enabled"/>
   <int value="-499186481"
       label="OmniboxGroupSuggestionsBySearchVsUrl:disabled"/>

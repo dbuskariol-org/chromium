@@ -2000,6 +2000,11 @@
     "expiry_milestone": 80
   },
   {
+    "name": "enable-user-data-snapshot",
+    "owners": [ "ydago", "grt" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "enable-vaapi-jpeg-image-decode-acceleration",
     "owners": [ "chromeos-gfx@google.com" ],
     "expiry_milestone": 83

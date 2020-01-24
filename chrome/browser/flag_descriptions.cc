@@ -4057,6 +4057,15 @@ extern const char kWebrtcPipeWireCapturerDescription[] =
 
 #endif  // #if defined(WEBRTC_USE_PIPEWIRE)
 
+#if !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
+
+const char kUserDataSnapshotName[] = "Enable user data snapshots";
+const char kUserDataSnapshotDescription[] =
+    "Enables taking snapshots of the user data directory after a Chrome "
+    "update and restoring them after a version rollback.";
+
+#endif  // !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
+
 // ============================================================================
 // Don't just add flags to the end, put them in the right section in
 // alphabetical order just like the header file.
