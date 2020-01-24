@@ -6295,10 +6295,6 @@ crbug.com/963183 http/tests/devtools/jump-to-previous-editing-location.js [ Pass
 crbug.com/webrtc/11228 external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
 crbug.com/webrtc/11228 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
 
-# Failures that appeared while fuzzy-diff was on. TODO(jonross) triage these and
-# update baselines as needed, or file more direct bugs.
-crbug.com/1039401 [ Linux ] virtual/form-controls-refresh-disabled/fast/forms/select/input-select-after-resize.html [ Failure ]
-
 # Sheriff 2020-01-09
 crbug.com/1040270 http/tests/devtools/elements/styles-1/disable-property-workingcopy-update.js [ Pass Timeout ]
 
