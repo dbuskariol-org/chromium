@@ -44,6 +44,7 @@
 #include "chrome/browser/plugins/pdf_plugin_placeholder_observer.h"
 #include "chrome/browser/predictors/loading_predictor_factory.h"
 #include "chrome/browser/predictors/loading_predictor_tab_helper.h"
+#include "chrome/browser/prerender/isolated/isolated_prerender_tab_helper.h"
 #include "chrome/browser/prerender/prerender_tab_helper.h"
 #include "chrome/browser/previews/previews_lite_page_redirect_predictor.h"
 #include "chrome/browser/previews/previews_ui_tab_helper.h"
@@ -235,6 +236,7 @@ void TabHelpers::AttachTabHelpers(WebContents* web_contents) {
   HistoryTabHelper::CreateForWebContents(web_contents);
   InfoBarService::CreateForWebContents(web_contents);
   InstallableManager::CreateForWebContents(web_contents);
+  IsolatedPrerenderTabHelper::CreateForWebContents(web_contents);
   metrics::RendererUptimeWebContentsObserver::CreateForWebContents(
       web_contents);
   MixedContentSettingsTabHelper::CreateForWebContents(web_contents);

@@ -602,6 +602,11 @@ const base::Feature kPrerenderFallbackToPreconnect{
 const base::Feature kIsolatePrerenders{"IsolatePrerenders",
                                        base::FEATURE_DISABLED_BY_DEFAULT};
 
+// Prefetches main frame HTML resources for results on Google SRPs.
+const base::Feature kPrefetchSRPNavigationPredictions_HTMLOnly{
+    "PrefetchSRPNavigationPredictions_HTMLOnly",
+    base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Whether to display redesign of the chrome privacy settings page
 // to the user.
 const base::Feature kPrivacySettingsRedesign{"PrivacySettingsRedesign",
