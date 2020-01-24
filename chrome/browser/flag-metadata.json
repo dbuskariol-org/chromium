@@ -1013,11 +1013,6 @@
     "expiry_milestone": 82
   },
   {
-    "name": "enable-aura-tooltips-on-windows",
-    "owners": [ "cliffsmo@microsoft.com" ],
-    "expiry_milestone": 78
-  },
-  {
     "name": "enable-autofill-account-wallet-storage",
     "owners": [ "treib", "jsaul@google.com", "butter-team@google.com" ],
     "expiry_milestone": 83
