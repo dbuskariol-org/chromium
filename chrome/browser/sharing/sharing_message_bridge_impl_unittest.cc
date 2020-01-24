@@ -134,8 +134,8 @@ TEST_F(SharingMessageBridgeTest, ShouldInvokeCallbackOnFailure) {
   {
     syncer::FailedCommitResponseData response;
     response.client_tag_hash = entity_data.client_tag_hash;
-    response.sharing_message_error.set_error_code(
-        sync_pb::SharingMessageCommitError::PERMISSION_DENIED);
+    response.datatype_specific_error.mutable_sharing_message_error()
+        ->set_error_code(sync_pb::SharingMessageCommitError::PERMISSION_DENIED);
     response_list.push_back(std::move(response));
   }
   bridge()->OnCommitAttemptErrors(response_list);

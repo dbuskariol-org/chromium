@@ -126,8 +126,9 @@ void SharingMessageBridgeImpl::OnCommitAttemptErrors(
     // TODO(rushans): untrack entity in change processor on error. We cannot
     // untrack it by only client tag hash and there is no storage key in
     // response data.
-    ProcessCommitResponse(response.client_tag_hash,
-                          response.sharing_message_error);
+    ProcessCommitResponse(
+        response.client_tag_hash,
+        response.datatype_specific_error.sharing_message_error());
   }
 }
 
