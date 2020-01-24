@@ -3351,6 +3351,10 @@ test("unit_tests") {
     "../browser/sessions/restore_on_startup_policy_handler_unittest.cc",
     "../browser/sessions/session_common_utils_unittest.cc",
     "../browser/sharing/ack_message_handler_unittest.cc",
+    "../browser/sharing/fake_device_info.cc",
+    "../browser/sharing/fake_device_info.h",
+    "../browser/sharing/fake_sharing_handler_registry.cc",
+    "../browser/sharing/fake_sharing_handler_registry.h",
     "../browser/sharing/mock_sharing_service.cc",
     "../browser/sharing/mock_sharing_service.h",
     "../browser/sharing/sharing_device_registration_unittest.cc",
@@ -3521,6 +3525,8 @@ test("unit_tests") {
   if (!is_android) {
     sources += [
       "../browser/profiles/profile_avatar_icon_util_unittest.cc",
+      "../browser/sharing/webrtc/sharing_webrtc_connection_host_unittest.cc",
+      "../browser/sharing/webrtc/webrtc_signalling_host_fcm_unittest.cc",
       "../browser/storage/storage_notification_service_unittest.cc",
       "../browser/tab_contents/form_interaction_tab_helper_unittest.cc",
       "../browser/ui/autofill/payments/autofill_dialog_models_unittest.cc",

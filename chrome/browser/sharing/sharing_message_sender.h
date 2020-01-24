@@ -53,6 +53,7 @@ class SharingMessageSender {
   // Delegate type used to send a message.
   enum class DelegateType {
     kFCM,
+    kWebRtc,
   };
 
   SharingMessageSender(

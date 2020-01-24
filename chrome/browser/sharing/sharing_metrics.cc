@@ -94,10 +94,11 @@ chrome_browser_sharing::MessageType SharingPayloadCaseToMessageType(
       return chrome_browser_sharing::SMS_FETCH_REQUEST;
     case chrome_browser_sharing::SharingMessage::kRemoteCopyMessage:
       return chrome_browser_sharing::REMOTE_COPY_MESSAGE;
-    case chrome_browser_sharing::SharingMessage::kSignallingMessage:
-      return chrome_browser_sharing::SIGNALLING_MESSAGE;
-    case chrome_browser_sharing::SharingMessage::kIceCandidateMessage:
-      return chrome_browser_sharing::ICE_CANDIDATE_MESSAGE;
+    case chrome_browser_sharing::SharingMessage::kPeerConnectionOfferMessage:
+      return chrome_browser_sharing::PEER_CONNECTION_OFFER_MESSAGE;
+    case chrome_browser_sharing::SharingMessage::
+        kPeerConnectionIceCandidatesMessage:
+      return chrome_browser_sharing::PEER_CONNECTION_ICE_CANDIDATES_MESSAGE;
     case chrome_browser_sharing::SharingMessage::kDiscoveryRequest:
       return chrome_browser_sharing::DISCOVERY_REQUEST;
     case chrome_browser_sharing::SharingMessage::kWebRtcSignalingFrame:
@@ -231,6 +232,9 @@ void LogSharingMessageAckTime(chrome_browser_sharing::MessageType message_type,
     case chrome_browser_sharing::MessageType::PING_MESSAGE:
     case chrome_browser_sharing::MessageType::CLICK_TO_CALL_MESSAGE:
     case chrome_browser_sharing::MessageType::SHARED_CLIPBOARD_MESSAGE:
+    case chrome_browser_sharing::MessageType::PEER_CONNECTION_OFFER_MESSAGE:
+    case chrome_browser_sharing::MessageType::
+        PEER_CONNECTION_ICE_CANDIDATES_MESSAGE:
       base::UmaHistogramMediumTimes(suffixed_name, time);
       base::UmaHistogramMediumTimes(platform_suffixed_name, time);
       break;

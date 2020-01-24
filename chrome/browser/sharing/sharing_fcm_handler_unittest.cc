@@ -6,6 +6,7 @@
 
 #include <memory>
 
+#include "chrome/browser/sharing/fake_sharing_handler_registry.h"
 #include "chrome/browser/sharing/features.h"
 #include "chrome/browser/sharing/sharing_constants.h"
 #include "chrome/browser/sharing/sharing_fcm_handler.h"
@@ -37,39 +38,6 @@ const char kSenderName[] = "test_sender_name";
 const char kFCMToken[] = "test_vapid_fcm_token";
 const char kP256dh[] = "test_p256_dh";
 const char kAuthSecret[] = "test_auth_secret";
-
-class FakeSharingHandlerRegistry : public SharingHandlerRegistry {
- public:
-  FakeSharingHandlerRegistry() = default;
-  ~FakeSharingHandlerRegistry() override = default;
-
-  SharingMessageHandler* GetSharingHandler(
-      SharingMessage::PayloadCase payload_case) override {
-    auto it = handler_map_.find(payload_case);
-    return it != handler_map_.end() ? it->second : nullptr;
-  }
-
-  void SetSharingHandler(SharingMessage::PayloadCase payload_case,
-                         SharingMessageHandler* handler) {
-    handler_map_[payload_case] = handler;
-  }
-
-  void RegisterSharingHandler(
-      std::unique_ptr<SharingMessageHandler> handler,
-      chrome_browser_sharing::SharingMessage::PayloadCase payload_case)
-      override {
-    NOTIMPLEMENTED();
-  }
-
-  void UnregisterSharingHandler(
-      chrome_browser_sharing::SharingMessage::PayloadCase payload_case)
-      override {
-    NOTIMPLEMENTED();
-  }
-
- private:
-  std::map<SharingMessage::PayloadCase, SharingMessageHandler*> handler_map_;
-};
 
 class MockSharingMessageHandler : public SharingMessageHandler {
  public:
