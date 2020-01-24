@@ -24,8 +24,6 @@ void UpdateNotificationClient::BeforeShowNotification(
     std::move(callback).Run(nullptr);
     return;
   }
-  // TODO(hesen): Client code doesn't own the bridge, update last shown
-  // timestamp in service layer instead.(issue:1043237)
   // TODO(hesen): Record metrics, and add iHNR buttons.
   std::move(callback).Run(std::move(notification_data));
 }

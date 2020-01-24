@@ -55,14 +55,13 @@ void UpdateNotificationServiceImpl::Schedule(UpdateNotificationInfo data) {
 }
 
 bool UpdateNotificationServiceImpl::IsReadyToDisplay() const {
-  if (!config_->is_enabled)
+  auto last_shown_timestamp = bridge_->GetLastShownTimeStamp();
+  bool wait_next_trottle_event =
+      last_shown_timestamp.has_value() &&
+      GetThrottleInterval() >= base::Time::Now() - last_shown_timestamp.value();
+  if (!config_->is_enabled || wait_next_trottle_event)
     return false;
-  // TODO(hesen): Get last shown timestamp through bridge.(issue:1043237)
-  base::Optional<base::Time> last_shown_timestamp;
-  if (last_shown_timestamp.has_value()) {
-    return (GetThrottleInterval() <
-            base::Time::Now() - last_shown_timestamp.value());
-  }
+  bridge_->UpdateLastShownTimeStamp(base::Time::Now());
   return true;
 }
 
