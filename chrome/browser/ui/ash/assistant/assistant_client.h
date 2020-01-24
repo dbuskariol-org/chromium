@@ -21,6 +21,7 @@
 class AssistantImageDownloader;
 class AssistantSetup;
 class AssistantWebViewFactoryImpl;
+class ConversationStartersClientImpl;
 class ProactiveSuggestionsClientImpl;
 class Profile;
 
@@ -106,6 +107,7 @@ class AssistantClient : chromeos::assistant::mojom::Client,
   std::unique_ptr<AssistantSetup> assistant_setup_;
   std::unique_ptr<AssistantWebViewFactoryImpl> assistant_web_view_factory_;
 
+  std::unique_ptr<ConversationStartersClientImpl> conversation_starters_client_;
   std::unique_ptr<ProactiveSuggestionsClientImpl> proactive_suggestions_client_;
 
   // Assistant interface receivers to be bound once we're initialized. These
