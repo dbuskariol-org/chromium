@@ -4,9 +4,9 @@
 
 #include "chrome/renderer/subresource_redirect/subresource_redirect_url_loader_throttle.h"
 
+#include "base/metrics/field_trial_params.h"
 #include "base/metrics/histogram_macros.h"
 #include "chrome/renderer/previews/resource_loading_hints_agent.h"
-#include "chrome/renderer/subresource_redirect/subresource_redirect_experiments.h"
 #include "chrome/renderer/subresource_redirect/subresource_redirect_hints_agent.h"
 #include "chrome/renderer/subresource_redirect/subresource_redirect_params.h"
 #include "chrome/renderer/subresource_redirect/subresource_redirect_util.h"
@@ -67,11 +67,11 @@ void SubresourceRedirectURLLoaderThrottle::WillStartRequest(
   if (!subresource_redirect_hints_agent->ShouldRedirectImage(request->url))
     return;
 
-  // Image subresources that have paths that do not end in one of the
-  // following common formats are commonly single pixel images that will not
-  // benefit from being sent to the compression server.
-  if (!ShouldIncludeMediaSuffix(request->url))
+  if (!base::GetFieldTrialParamByFeatureAsBool(
+          blink::features::kSubresourceRedirect, "enable_lite_page_redirect",
+          false)) {
     return;
+  }
 
   request->url = GetSubresourceURLForURL(request->url);
   *defer = false;

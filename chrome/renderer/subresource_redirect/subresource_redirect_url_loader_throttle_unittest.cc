@@ -91,8 +91,10 @@ TEST(SubresourceRedirectURLLoaderThrottleTest, TestMaybeCreateThrottle) {
   for (const TestCase& test_case : kTestCases) {
     base::test::ScopedFeatureList scoped_feature_list;
     if (test_case.is_subresource_redirect_feature_enabled) {
-      scoped_feature_list.InitAndEnableFeature(
-          blink::features::kSubresourceRedirect);
+      scoped_feature_list.InitWithFeaturesAndParameters(
+          {{blink::features::kSubresourceRedirect,
+            {{"enable_lite_page_redirect", "true"}}}},
+          {});
     } else {
       scoped_feature_list.InitAndDisableFeature(
           blink::features::kSubresourceRedirect);
@@ -142,8 +144,10 @@ TEST(SubresourceRedirectURLLoaderThrottleTest, TestGetSubresourceURL) {
       },
   };
   base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeature(
-      blink::features::kSubresourceRedirect);
+  scoped_feature_list.InitWithFeaturesAndParameters(
+      {{blink::features::kSubresourceRedirect,
+        {{"enable_lite_page_redirect", "true"}}}},
+      {});
 
   for (const TestCase& test_case : kTestCases) {
     auto throttle = CreateSubresourceRedirectURLLoaderThrottle(
@@ -170,8 +174,10 @@ TEST(SubresourceRedirectURLLoaderThrottleTest, TestGetSubresourceURL) {
 
 TEST(SubresourceRedirectURLLoaderThrottleTest, DeferOverridenToFalse) {
   base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeature(
-      blink::features::kSubresourceRedirect);
+  scoped_feature_list.InitWithFeaturesAndParameters(
+      {{blink::features::kSubresourceRedirect,
+        {{"enable_lite_page_redirect", "true"}}}},
+      {});
 
   auto throttle = CreateSubresourceRedirectURLLoaderThrottle(
       GURL("https://www.test.com/test.jpg"), content::ResourceType::kImage,
