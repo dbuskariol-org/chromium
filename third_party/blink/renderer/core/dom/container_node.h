@@ -343,18 +343,18 @@ class CORE_EXPORT ContainerNode : public Node {
     }
 
     ChildrenChangeType type;
-    Member<Node> sibling_changed;
+    Node* sibling_changed = nullptr;
     // |siblingBeforeChange| is
     //  - siblingChanged.previousSibling before node removal
     //  - siblingChanged.previousSibling after single node insertion
     //  - previousSibling of the first inserted node after multiple node
     //    insertion
-    Member<Node> sibling_before_change;
+    Node* sibling_before_change = nullptr;
     // |siblingAfterChange| is
     //  - siblingChanged.nextSibling before node removal
     //  - siblingChanged.nextSibling after single node insertion
     //  - nextSibling of the last inserted node after multiple node insertion.
-    Member<Node> sibling_after_change;
+    Node* sibling_after_change = nullptr;
     ChildrenChangeSource by_parser;
   };
 

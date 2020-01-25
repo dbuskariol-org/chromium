@@ -122,7 +122,7 @@ class ScopedRGBEmulationColorMask {
   ~ScopedRGBEmulationColorMask();
 
  private:
-  Member<WebGLRenderingContextBase> context_;
+  WebGLRenderingContextBase* context_;
   GLboolean color_mask_[4];
   const bool requires_emulation_;
 };
@@ -986,7 +986,7 @@ class MODULES_EXPORT WebGLRenderingContextBase : public CanvasRenderingContext,
 
    private:
     DrawingBuffer* drawing_buffer_;
-    Member<WebGLFramebuffer> read_framebuffer_binding_;
+    WebGLFramebuffer* read_framebuffer_binding_;
   };
 
   // Errors raised by synthesizeGLError() while the context is lost.

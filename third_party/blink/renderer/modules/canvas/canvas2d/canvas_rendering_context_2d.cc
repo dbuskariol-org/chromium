@@ -109,7 +109,7 @@ class CanvasRenderingContext2DAutoRestoreSkCanvas {
   }
 
  private:
-  Member<CanvasRenderingContext2D> context_;
+  CanvasRenderingContext2D* context_;
   int save_count_;
 };
 

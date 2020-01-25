@@ -162,8 +162,8 @@ class Parser final {
     NOTREACHED() << node;
   }
 
-  Member<Node> anchor_node_;
-  Member<Node> focus_node_;
+  Node* anchor_node_ = nullptr;
+  Node* focus_node_ = nullptr;
   int anchor_offset_ = 0;
   int focus_offset_ = 0;
 };

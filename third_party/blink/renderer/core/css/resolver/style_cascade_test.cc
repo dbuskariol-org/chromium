@@ -265,7 +265,7 @@ class TestCascadeResolver {
  private:
   friend class TestCascadeAutoLock;
 
-  Member<Document> document_;
+  Document* document_;
   StyleCascadeSlots slots_;
   StyleCascade::Excluder excluder_;
   StyleCascade::Resolver resolver_;
@@ -348,7 +348,7 @@ class StyleCascadeTest : public PageTestBase, private ScopedCSSCascadeForTest {
       return document_->GetStyleEngine().EnsureEnvironmentVariables();
     }
 
-    Member<Document> document_;
+    Document* document_;
     AtomicString name_;
   };
 };

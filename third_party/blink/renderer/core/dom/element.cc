@@ -3826,7 +3826,7 @@ void Element::ChildrenChanged(const ChildrenChange& change) {
     CheckForSiblingStyleChanges(
         change.type == kElementRemoved ? kSiblingElementRemoved
                                        : kSiblingElementInserted,
-        To<Element>(change.sibling_changed.Get()), change.sibling_before_change,
+        To<Element>(change.sibling_changed), change.sibling_before_change,
         change.sibling_after_change);
 
   if (ShadowRoot* shadow_root = GetShadowRoot())

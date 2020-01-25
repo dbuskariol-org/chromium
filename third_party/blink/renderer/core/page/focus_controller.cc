@@ -183,9 +183,7 @@ class ScopedFocusNavigation {
                : PreviousFocusableElement();
   }
 
-  Element* CurrentElement() const {
-    return const_cast<Element*>(current_.Get());
-  }
+  Element* CurrentElement() const { return const_cast<Element*>(current_); }
   Element* Owner() const;
 
   static ScopedFocusNavigation CreateFor(const Element&,
@@ -224,8 +222,8 @@ class ScopedFocusNavigation {
   void MoveToFirst();
   void MoveToLast();
 
-  Member<const Element> current_;
-  Member<FocusNavigation> navigation_;
+  const Element* current_;
+  FocusNavigation* navigation_;
 };
 
 ScopedFocusNavigation::ScopedFocusNavigation(

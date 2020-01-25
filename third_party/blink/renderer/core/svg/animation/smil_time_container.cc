@@ -63,7 +63,7 @@ class SMILTimeContainer::TimingUpdate {
 
  public:
   TimingUpdate(SMILTimeContainer& time_container, SMILTime target_time)
-      : target_time_(target_time), time_container_(time_container) {}
+      : target_time_(target_time), time_container_(&time_container) {}
 
   const SMILTime& Time() const { return time_container_->latest_update_time_; }
   bool TryAdvanceTime(SMILTime next_time) {
@@ -86,7 +86,7 @@ class SMILTimeContainer::TimingUpdate {
   }
 
   SMILTime target_time_;
-  Member<SMILTimeContainer> time_container_;
+  SMILTimeContainer* time_container_;
 };
 
 void SMILTimeContainer::TimingUpdate::HandleEvents(

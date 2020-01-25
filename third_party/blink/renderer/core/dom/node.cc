@@ -1245,7 +1245,7 @@ class AllowDirtyShadowV0TraversalScope {
   }
 
  private:
-  Member<Document> document_;
+  Document* document_;
   bool old_value_;
 };
 }  // namespace

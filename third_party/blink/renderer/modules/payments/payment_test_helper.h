@@ -116,7 +116,7 @@ class PaymentRequestMockFunctionScope {
     String* value_;
   };
 
-  Member<ScriptState> script_state_;
+  ScriptState* script_state_;
   Vector<Persistent<MockFunction>> mock_functions_;
 };
 

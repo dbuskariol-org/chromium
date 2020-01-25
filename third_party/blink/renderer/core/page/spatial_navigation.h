@@ -57,8 +57,8 @@ struct FocusCandidate {
   // areas of imagemaps, where visibleNode would represent the image element and
   // focusableNode would represent the area element.  In all other cases,
   // visibleNode and focusableNode are one and the same.
-  Member<Node> visible_node;
-  Member<Node> focusable_node;
+  Node* visible_node;
+  Node* focusable_node;
   PhysicalRect rect_in_root_frame;
   bool is_offscreen;
 };

@@ -329,7 +329,7 @@ ResourceFetcherInit::ResourceFetcherInit(
     FetchContext* context,
     scoped_refptr<base::SingleThreadTaskRunner> task_runner,
     ResourceFetcher::LoaderFactory* loader_factory)
-    : properties(properties),
+    : properties(&properties),
       context(context),
       task_runner(std::move(task_runner)),
       loader_factory(loader_factory) {
@@ -540,10 +540,10 @@ ResourceFetcher::ResourceFetcher(const ResourceFetcherInit& init)
       context_(init.context),
       task_runner_(init.task_runner),
       use_counter_(init.use_counter
-                       ? init.use_counter.Get()
+                       ? init.use_counter
                        : MakeGarbageCollected<DetachableUseCounter>(nullptr)),
       console_logger_(init.console_logger
-                          ? init.console_logger.Get()
+                          ? init.console_logger
                           : MakeGarbageCollected<DetachableConsoleLogger>()),
       loader_factory_(init.loader_factory),
       scheduler_(MakeGarbageCollected<ResourceLoadScheduler>(

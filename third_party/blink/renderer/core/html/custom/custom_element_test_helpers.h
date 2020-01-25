@@ -153,7 +153,7 @@ class CreateElement {
   }
 
   operator Element*() const {
-    Document* document = document_.Get();
+    Document* document = document_;
     if (!document)
       document = MakeGarbageCollected<HTMLDocument>();
     NonThrowableExceptionState no_exceptions;
@@ -166,7 +166,7 @@ class CreateElement {
   }
 
  private:
-  Member<Document> document_;
+  Document* document_ = nullptr;
   AtomicString namespace_uri_;
   AtomicString local_name_;
   AtomicString is_value_;

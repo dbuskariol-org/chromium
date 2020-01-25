@@ -1272,7 +1272,7 @@ bool SelectorChecker::CheckPseudoClass(const SelectorCheckingContext& context,
         return false;
       if (context.scope == &element.GetDocument())
         return element == element.GetDocument().documentElement();
-      if (auto* shadow_root = DynamicTo<ShadowRoot>(context.scope.Get()))
+      if (auto* shadow_root = DynamicTo<ShadowRoot>(context.scope))
         return element == shadow_root->host();
       return context.scope == &element;
     case CSSSelector::kPseudoUnresolved:

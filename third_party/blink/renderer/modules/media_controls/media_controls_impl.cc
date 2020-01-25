@@ -211,7 +211,7 @@ class MediaControlsImpl::BatchedControlUpdate {
   }
 
  private:
-  Member<MediaControlsImpl> controls_;
+  MediaControlsImpl* controls_;
   static int batch_depth_;
 
   DISALLOW_COPY_AND_ASSIGN(BatchedControlUpdate);

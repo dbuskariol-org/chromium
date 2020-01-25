@@ -156,8 +156,8 @@ struct FocusParams {
   SelectionBehaviorOnFocus selection_behavior =
       SelectionBehaviorOnFocus::kRestore;
   mojom::blink::FocusType type = mojom::blink::FocusType::kNone;
-  Member<InputDeviceCapabilities> source_capabilities = nullptr;
-  Member<const FocusOptions> options;
+  InputDeviceCapabilities* source_capabilities = nullptr;
+  const FocusOptions* options = nullptr;
 };
 
 typedef HeapVector<Member<Attr>> AttrNodeList;

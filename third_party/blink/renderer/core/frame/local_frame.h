@@ -714,7 +714,7 @@ class FrameNavigationDisabler {
   ~FrameNavigationDisabler();
 
  private:
-  Member<LocalFrame> frame_;
+  LocalFrame* frame_;
 
   DISALLOW_COPY_AND_ASSIGN(FrameNavigationDisabler);
 };
@@ -750,7 +750,7 @@ class ScopedFrameBlamer {
  private:
   void LeaveContext();
 
-  Member<LocalFrame> frame_;
+  LocalFrame* frame_;
 
   DISALLOW_COPY_AND_ASSIGN(ScopedFrameBlamer);
 };

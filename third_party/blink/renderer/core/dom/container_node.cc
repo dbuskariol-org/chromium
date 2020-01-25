@@ -85,9 +85,9 @@ class DOMTreeMutationDetector {
  public:
   DOMTreeMutationDetector(const Node& node, const Node& parent)
       : node_(&node),
-        node_document_(node.GetDocument()),
-        parent_document_(parent.GetDocument()),
-        parent_(parent),
+        node_document_(&node.GetDocument()),
+        parent_document_(&parent.GetDocument()),
+        parent_(&parent),
         original_node_document_version_(node_document_->DomTreeVersion()),
         original_parent_document_version_(parent_document_->DomTreeVersion()) {}
 
@@ -106,10 +106,10 @@ class DOMTreeMutationDetector {
   }
 
  private:
-  const Member<const Node> node_;
-  const Member<Document> node_document_;
-  const Member<Document> parent_document_;
-  const Member<const Node> parent_;
+  const Node* const node_;
+  Document* const node_document_;
+  Document* const parent_document_;
+  const Node* const parent_;
   const uint64_t original_node_document_version_;
   const uint64_t original_parent_document_version_;
 };

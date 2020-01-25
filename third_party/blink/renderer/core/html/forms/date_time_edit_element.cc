@@ -75,7 +75,7 @@ class DateTimeEditBuilder : private DateTimeFormat::TokenHandler {
 
   DateTimeEditElement& EditElement() const;
 
-  Member<DateTimeEditElement> edit_element_;
+  DateTimeEditElement* edit_element_;
   const DateComponents date_value_;
   const DateTimeEditElement::LayoutParameters& parameters_;
   DateTimeNumericFieldElement::Range day_range_;

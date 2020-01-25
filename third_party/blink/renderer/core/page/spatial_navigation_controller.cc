@@ -117,9 +117,8 @@ static void ConsiderForBestCandidate(SpatialNavigationDirection direction,
   if (distance == kMaxDistance)
     return;
 
-  Element* candidate_element = To<Element>(candidate.visible_node.Get());
-  Element* best_candidate_element =
-      To<Element>(best_candidate->visible_node.Get());
+  Element* candidate_element = To<Element>(candidate.visible_node);
+  Element* best_candidate_element = To<Element>(best_candidate->visible_node);
 
   if (candidate_element->IsDescendantOf(best_candidate_element) &&
       IsSkippableCandidate(best_candidate_element) &&
@@ -416,7 +415,7 @@ bool SpatialNavigationController::AdvanceWithinContainer(
     return ScrollInDirection(&container, direction);
   }
 
-  auto* element = To<Element>(candidate.focusable_node.Get());
+  auto* element = To<Element>(candidate.focusable_node);
   DCHECK(element);
   MoveInterestTo(element);
   return true;
