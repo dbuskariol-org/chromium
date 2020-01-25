@@ -609,16 +609,6 @@ const base::Feature kPredictivePrefetchingAllowedOnAllConnectionTypes{
 const base::Feature kPrerenderFallbackToPreconnect{
     "PrerenderFallbackToPreconnect", base::FEATURE_DISABLED_BY_DEFAULT};
 
-// Forces all eligible prerenders to be done in an isolated manner such that no
-// user-identifying information is used during the prefetch.
-const base::Feature kIsolatePrerenders{"IsolatePrerenders",
-                                       base::FEATURE_DISABLED_BY_DEFAULT};
-
-// Prefetches main frame HTML resources for results on Google SRPs.
-const base::Feature kPrefetchSRPNavigationPredictions_HTMLOnly{
-    "PrefetchSRPNavigationPredictions_HTMLOnly",
-    base::FEATURE_DISABLED_BY_DEFAULT};
-
 // Whether to display redesign of the chrome privacy settings page
 // to the user.
 const base::Feature kPrivacySettingsRedesign{"PrivacySettingsRedesign",

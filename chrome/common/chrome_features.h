@@ -383,12 +383,6 @@ COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kPrerenderFallbackToPreconnect;
 
 COMPONENT_EXPORT(CHROME_FEATURES)
-extern const base::Feature kIsolatePrerenders;
-
-COMPONENT_EXPORT(CHROME_FEATURES)
-extern const base::Feature kPrefetchSRPNavigationPredictions_HTMLOnly;
-
-COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kPrivacySettingsRedesign;
 
 #if BUILDFLAG(ENABLE_PLUGINS)

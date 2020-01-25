@@ -9,10 +9,9 @@
 
 namespace features {
 
-// TODO(robertogden): Migrate other IsolatedPrerender features here from
-// chrome/common.
-
+extern const base::Feature kIsolatePrerenders;
 extern const base::Feature kIsolatedPrerenderUsesProxy;
+extern const base::Feature kPrefetchSRPNavigationPredictions_HTMLOnly;
 
 }  // namespace features
 

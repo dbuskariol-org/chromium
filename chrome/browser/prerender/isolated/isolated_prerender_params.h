@@ -8,8 +8,6 @@
 #include "base/optional.h"
 #include "url/gurl.h"
 
-// TODO(robertogden): Add feature enabled checks here.
-
 // Returns the URL of the proxy server to use in isolated prerenders, if any.
 base::Optional<GURL> IsolatedPrerenderProxyServer();
 
