@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 
 import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.base.test.util.Feature;
-import org.chromium.chrome.browser.settings.password.SavePasswordsPreferences;
+import org.chromium.chrome.browser.settings.password.PasswordSettings;
 import org.chromium.chrome.browser.sync.ProfileSyncService;
 import org.chromium.components.signin.AccountManagerFacade;
 import org.chromium.components.signin.test.util.AccountHolder;
@@ -61,7 +61,7 @@ public class PasswordViewingTypeTest {
                 InstrumentationRegistry.getInstrumentation(), mContext)
                                 .getMainFragment();
         mPasswordsPref = (ChromeBasePreference) mMainSettings.findPreference(
-                MainSettings.PREF_SAVED_PASSWORDS);
+                MainSettings.PREF_PASSWORDS);
         AndroidSyncSettings.overrideForTests(mSyncContentResolverDelegate, null);
         mAuthority = AndroidSyncSettings.get().getContractAuthority();
         AndroidSyncSettings.get().updateAccount(mAccount);
@@ -145,7 +145,7 @@ public class PasswordViewingTypeTest {
             Assert.assertFalse(ProfileSyncService.get().isUsingSecondaryPassphrase());
         });
         Assert.assertEquals(
-                SavePasswordsPreferences.class.getCanonicalName(), mPasswordsPref.getFragment());
+                PasswordSettings.class.getCanonicalName(), mPasswordsPref.getFragment());
     }
 
     /**
@@ -158,7 +158,7 @@ public class PasswordViewingTypeTest {
         setSyncability(true);
         overrideProfileSyncService(true);
         Assert.assertEquals(
-                SavePasswordsPreferences.class.getCanonicalName(), mPasswordsPref.getFragment());
+                PasswordSettings.class.getCanonicalName(), mPasswordsPref.getFragment());
         Assert.assertNotNull(mMainSettings.getActivity().getIntent());
     }
 
@@ -170,7 +170,7 @@ public class PasswordViewingTypeTest {
     public void testNonSyncingNativePasswordView() throws InterruptedException {
         setSyncability(false);
         Assert.assertEquals(
-                SavePasswordsPreferences.class.getCanonicalName(), mPasswordsPref.getFragment());
+                PasswordSettings.class.getCanonicalName(), mPasswordsPref.getFragment());
     }
 
 }

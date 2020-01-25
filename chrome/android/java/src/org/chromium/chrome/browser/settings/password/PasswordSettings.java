@@ -43,10 +43,10 @@ import org.chromium.ui.text.SpanApplier;
 import java.util.Locale;
 
 /**
- * The "Save passwords" screen in Settings, which allows the user to enable or disable password
- * saving, to view saved passwords (just the username and URL), and to delete saved passwords.
+ * The "Passwords" screen in Settings, which allows the user to enable or disable password saving,
+ * to view saved passwords (just the username and URL), and to delete saved passwords.
  */
-public class SavePasswordsPreferences
+public class PasswordSettings
         extends PreferenceFragmentCompat implements PasswordManagerHandler.PasswordListObserver,
                                                     Preference.OnPreferenceClickListener {
     // Keys for name/password dictionaries.
@@ -107,12 +107,12 @@ public class SavePasswordsPreferences
         mExportFlow.onCreate(savedInstanceState, new ExportFlow.Delegate() {
             @Override
             public Activity getActivity() {
-                return SavePasswordsPreferences.this.getActivity();
+                return PasswordSettings.this.getActivity();
             }
 
             @Override
             public FragmentManager getFragmentManager() {
-                return SavePasswordsPreferences.this.getFragmentManager();
+                return PasswordSettings.this.getFragmentManager();
             }
 
             @Override
@@ -120,7 +120,7 @@ public class SavePasswordsPreferences
                 return getView().getId();
             }
         });
-        getActivity().setTitle(R.string.prefs_saved_passwords_title);
+        getActivity().setTitle(R.string.password_settings_title);
         setPreferenceScreen(getPreferenceManager().createPreferenceScreen(getStyledContext()));
         PasswordManagerHandlerProvider.getInstance().addObserver(this);
 
@@ -260,7 +260,7 @@ public class SavePasswordsPreferences
         if (mSearchQuery == null) {
             PreferenceCategory profileCategory = new PreferenceCategory(getStyledContext());
             profileCategory.setKey(PREF_KEY_CATEGORY_SAVED_PASSWORDS);
-            profileCategory.setTitle(R.string.prefs_saved_passwords_title);
+            profileCategory.setTitle(R.string.password_settings_title);
             profileCategory.setOrder(ORDER_SAVED_PASSWORDS);
             getPreferenceScreen().addPreference(profileCategory);
             passwordParent = profileCategory;
@@ -387,8 +387,7 @@ public class SavePasswordsPreferences
             // Launch preference activity with PasswordEntryViewer fragment with
             // intent extras specifying the object.
             Bundle fragmentAgs = new Bundle(preference.getExtras());
-            fragmentAgs.putBoolean(
-                    SavePasswordsPreferences.EXTRA_FOUND_VIA_SEARCH, mSearchQuery != null);
+            fragmentAgs.putBoolean(PasswordSettings.EXTRA_FOUND_VIA_SEARCH, mSearchQuery != null);
             SettingsLauncher.getInstance().launchSettingsPage(
                     getActivity(), PasswordEntryViewer.class, fragmentAgs);
         }
@@ -398,7 +397,7 @@ public class SavePasswordsPreferences
     private void createSavePasswordsSwitch() {
         mSavePasswordsSwitch = new ChromeSwitchPreference(getStyledContext(), null);
         mSavePasswordsSwitch.setKey(PREF_SAVE_PASSWORDS_SWITCH);
-        mSavePasswordsSwitch.setTitle(R.string.prefs_saved_passwords);
+        mSavePasswordsSwitch.setTitle(R.string.password_settings_save_passwords);
         mSavePasswordsSwitch.setOrder(ORDER_SWITCH);
         mSavePasswordsSwitch.setSummaryOn(R.string.text_on);
         mSavePasswordsSwitch.setSummaryOff(R.string.text_off);

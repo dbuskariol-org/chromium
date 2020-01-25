@@ -49,7 +49,7 @@ public class MainSettings extends PreferenceFragmentCompat
     public static final String PREF_SIGN_IN = "sign_in";
     public static final String PREF_SYNC_AND_SERVICES = "sync_and_services";
     public static final String PREF_SEARCH_ENGINE = "search_engine";
-    public static final String PREF_SAVED_PASSWORDS = "saved_passwords";
+    public static final String PREF_PASSWORDS = "passwords";
     public static final String PREF_HOMEPAGE = "homepage";
     public static final String PREF_UI_THEME = "ui_theme";
     public static final String PREF_DATA_REDUCTION = "data_reduction";
@@ -250,7 +250,7 @@ public class MainSettings extends PreferenceFragmentCompat
     }
 
     private void updatePasswordsPreference() {
-        Preference passwordsPreference = findPreference(PREF_SAVED_PASSWORDS);
+        Preference passwordsPreference = findPreference(PREF_PASSWORDS);
         passwordsPreference.setOnPreferenceClickListener(preference -> {
             PasswordManagerLauncher.showPasswordSettings(
                     getActivity(), ManagePasswordsReferrer.CHROME_SETTINGS);

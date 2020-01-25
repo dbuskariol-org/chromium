@@ -280,7 +280,7 @@ public class SigninTest {
         // Verify that its preference UI is enabled.
         SettingsActivity settingsActivity = mActivityTestRule.startSettingsActivity(null);
         MainSettings mainPrefs = getMainSettings(settingsActivity);
-        Preference passwordPref = mainPrefs.findPreference(MainSettings.PREF_SAVED_PASSWORDS);
+        Preference passwordPref = mainPrefs.findPreference(MainSettings.PREF_PASSWORDS);
         Assert.assertNotNull(passwordPref);
         // This preference opens a new fragment when clicked.
         Assert.assertNotNull(passwordPref.getFragment());

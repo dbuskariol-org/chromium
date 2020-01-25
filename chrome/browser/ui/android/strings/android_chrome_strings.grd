@@ -471,11 +471,11 @@ CHAR-LIMIT guidelines:
           other {<ph name="CONTACT_PREVIEW">%1$s<ex>Jerry, 438-123-1922</ex></ph>\u2026 and <ph name="NUMBER_OF_ADDITIONAL_CONTACTS">%2$s<ex>2</ex></ph> more}}
       </message>
 
-      <!-- Save passwords preferences -->
-      <message name="IDS_PREFS_SAVED_PASSWORDS_TITLE" desc="Title for the preferences screen with saved passwords and the header for the list of saved passwords in that screen. [CHAR-LIMIT=32]">
+      <!-- Password Settings -->
+      <message name="IDS_PASSWORD_SETTINGS_TITLE" desc="Title for the settings screen with saved passwords and the header for the list of saved passwords in that screen. [CHAR-LIMIT=32]">
         Passwords
       </message>
-      <message name="IDS_PREFS_SAVED_PASSWORDS" desc="Title for the checkbox toggling whether passwords are saved or not. [CHAR-LIMIT=32]">
+      <message name="IDS_PASSWORD_SETTINGS_SAVE_PASSWORDS" desc="Title for the checkbox toggling whether passwords are saved or not. [CHAR-LIMIT=32]">
         Save passwords
       </message>
       <message name="IDS_PASSWORDS_AUTO_SIGNIN_TITLE" desc="Title for checkbox to enable automatically signing the user in to websites">
@@ -556,10 +556,10 @@ CHAR-LIMIT guidelines:
       <message name="IDS_PASSWORD_GENERATION_POPUP_CONTENT_DESCRIPTION" desc="The text announced by the screen reader when the password generation popup is shown.">
         Showing password generation popup
       </message>
-      <message name="IDS_SAVE_PASSWORD_PREFERENCES_EXPORT_ACTION_TITLE" desc="The title of a menu item to trigger exporting passwords from the password settings.">
+      <message name="IDS_PASSWORD_SETTINGS_EXPORT_ACTION_TITLE" desc="The title of a menu item to trigger exporting passwords from the password settings.">
         Export passwords…
       </message>
-      <message name="IDS_SAVE_PASSWORD_PREFERENCES_EXPORT_ACTION_DESCRIPTION" desc="The description of a menu item to trigger exporting passwords from the password settings.">
+      <message name="IDS_PASSWORD_SETTINGS_EXPORT_ACTION_DESCRIPTION" desc="The description of a menu item to trigger exporting passwords from the password settings.">
         Export passwords stored with Chrome
       </message>
       <message name="IDS_SETTINGS_PASSWORDS_EXPORT_DESCRIPTION" desc="Text shown to the user who initiated exporting passwords, as a warning before any passwords have been exported.">
@@ -568,19 +568,19 @@ CHAR-LIMIT guidelines:
       <message name="IDS_SETTINGS_PASSWORDS_PREPARING_EXPORT" desc="Text shown to the user above a progress bar, informing the user that passwords are being prepared for export.">
         Preparing passwords…
       </message>
-      <message name="IDS_SAVE_PASSWORD_PREFERENCES_EXPORT_ERROR_TITLE" desc="The title of a dialog showing an error encountered during exporting passwords from the passwords settings.">
+      <message name="IDS_PASSWORD_SETTINGS_EXPORT_ERROR_TITLE" desc="The title of a dialog showing an error encountered during exporting passwords from the passwords settings.">
         Can’t export passwords
       </message>
-      <message name="IDS_SAVE_PASSWORD_PREFERENCES_EXPORT_LEARN_GOOGLE_DRIVE" desc="The label of a button in an error dialog after exporting passwords from the settings failed. The button takes the user to a help article about using Google Drive.">
+      <message name="IDS_PASSWORD_SETTINGS_EXPORT_LEARN_GOOGLE_DRIVE" desc="The label of a button in an error dialog after exporting passwords from the settings failed. The button takes the user to a help article about using Google Drive.">
         Learn how to use Google Drive
       </message>
-      <message name="IDS_SAVE_PASSWORD_PREFERENCES_EXPORT_NO_APP" desc="The explanation of the error when exporting passwords fails because the user has no Android app installed which could consume the exported data. The description is shown in the body of an alert dialog.">
+      <message name="IDS_PASSWORD_SETTINGS_EXPORT_NO_APP" desc="The explanation of the error when exporting passwords fails because the user has no Android app installed which could consume the exported data. The description is shown in the body of an alert dialog.">
         Your device doesn’t have an app to store the passwords file.
       </message>
-      <message name="IDS_SAVE_PASSWORD_PREFERENCES_EXPORT_TIPS" desc="Tips on how to fix an error with exporting passwords. They are shown in the body of an alert dialog.">
+      <message name="IDS_PASSWORD_SETTINGS_EXPORT_TIPS" desc="Tips on how to fix an error with exporting passwords. They are shown in the body of an alert dialog.">
         Try the following tips: make sure there is enough space on your device, try to export again.
       </message>
-      <message name="IDS_SAVE_PASSWORD_PREFERENCES_EXPORT_ERROR_DETAILS" desc="A short prefix to introduce a technical error message passed to the user from Android after exporting passwords through a temporary file fails. Both the prefix and the error message are shown in the body of an alert dialog.">
+      <message name="IDS_PASSWORD_SETTINGS_EXPORT_ERROR_DETAILS" desc="A short prefix to introduce a technical error message passed to the user from Android after exporting passwords through a temporary file fails. Both the prefix and the error message are shown in the body of an alert dialog.">
         Details: <ph name="ERROR_DESCRIPTION">%1$s<ex>IOException: No space left on device</ex></ph>
       </message>
 
@@ -594,7 +594,7 @@ CHAR-LIMIT guidelines:
       <message name="IDS_LOCKSCREEN_DESCRIPTION_EXPORT" desc="When a user attempts to export saved passwords in Chrome's settings, Chrome launches a lock screen to verify the user's identity and displays the following explanation.">
         Unlock to export your passwords
       </message>
-      <message name="IDS_SAVE_PASSWORD_PREFERENCES_EXPORT_SUBJECT" desc="Chrome sets this string to be the subject of the sharing intent for sharing exported passwords. How the subject is interpreted is up to the consumer app, e.g., Google Drive will make it the filename, GMail will make it the e-mail subject. In general, it describes what is being shared.">
+      <message name="IDS_PASSWORD_SETTINGS_EXPORT_SUBJECT" desc="Chrome sets this string to be the subject of the sharing intent for sharing exported passwords. How the subject is interpreted is up to the consumer app, e.g., Google Drive will make it the filename, GMail will make it the e-mail subject. In general, it describes what is being shared.">
         Chrome Passwords
       </message>
 
