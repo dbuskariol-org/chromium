@@ -20,6 +20,10 @@ namespace features {
 // Feature to control preconnect to search.
 const base::Feature kPreconnectToSearch{"PreconnectToSearch",
                                         base::FEATURE_DISABLED_BY_DEFAULT};
+
+// Feature to limit experimentation to Google search only.
+const base::Feature kPreconnectToSearchNonGoogle{
+    "PreconnectToSearchNonGoogle", base::FEATURE_DISABLED_BY_DEFAULT};
 }  // namespace features
 
 SearchEnginePreconnector::SearchEnginePreconnector(
@@ -60,6 +64,13 @@ void SearchEnginePreconnector::PreconnectDSE() {
   GURL preconnect_url = GetDefaultSearchEngineOriginURL();
   if (preconnect_url.scheme() != url::kHttpScheme &&
       preconnect_url.scheme() != url::kHttpsScheme) {
+    return;
+  }
+  // Limit experimentation to [www].google.com only.
+  if (!base::FeatureList::IsEnabled(features::kPreconnectToSearchNonGoogle) &&
+      !google_util::IsGoogleDomainUrl(preconnect_url,
+                                      google_util::DISALLOW_SUBDOMAIN,
+                                      google_util::ALLOW_NON_STANDARD_PORTS)) {
     return;
   }
 
