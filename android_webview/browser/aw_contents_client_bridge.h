@@ -116,7 +116,8 @@ class AwContentsClientBridge {
   // host name lookup failure etc.)
   void OnReceivedError(const AwWebResourceRequest& request,
                        int error_code,
-                       bool safebrowsing_hit);
+                       bool safebrowsing_hit,
+                       bool should_omit_notifications_for_safebrowsing_hit);
 
   void OnSafeBrowsingHit(const AwWebResourceRequest& request,
                          const safe_browsing::SBThreatType& threat_type,
