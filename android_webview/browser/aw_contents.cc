@@ -260,7 +260,7 @@ AwContents::AwContents(std::unique_ptr<WebContents> web_contents)
     InitAutofillIfNecessary(autofill_manager_delegate->GetSaveFormData());
   content::SynchronousCompositor::SetClientForWebContents(
       web_contents_.get(), &browser_view_renderer_);
-  AwContentsLifecycleNotifier::OnWebViewCreated();
+  AwContentsLifecycleNotifier::GetInstance().OnWebViewCreated(this);
 }
 
 void AwContents::SetJavaPeers(
@@ -362,7 +362,7 @@ AwContents::~AwContents() {
         base::MemoryPressureListener::MEMORY_PRESSURE_LEVEL_CRITICAL);
   }
   browser_view_renderer_.SetCurrentCompositorFrameConsumer(nullptr);
-  AwContentsLifecycleNotifier::OnWebViewDestroyed();
+  AwContentsLifecycleNotifier::GetInstance().OnWebViewDestroyed(this);
 }
 
 base::android::ScopedJavaLocalRef<jobject> AwContents::GetWebContents(
