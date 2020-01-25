@@ -2577,8 +2577,8 @@ jumbo_static_library("ui") {
         "views/javascript_app_modal_dialog_views_x11.h",
         "views/javascript_app_modal_event_blocker_x11.cc",
         "views/javascript_app_modal_event_blocker_x11.h",
-        "views/status_icons/status_icon_linux_x11.cc",
-        "views/status_icons/status_icon_linux_x11.h",
+        "views/status_icons/status_icon_button_linux.cc",
+        "views/status_icons/status_icon_button_linux.h",
       ]
       configs += [ "//build/config/linux:x11" ]
       deps += [

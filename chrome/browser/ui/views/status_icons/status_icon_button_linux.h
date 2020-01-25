@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_STATUS_ICONS_STATUS_ICON_LINUX_X11_H_
-#define CHROME_BROWSER_UI_VIEWS_STATUS_ICONS_STATUS_ICON_LINUX_X11_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_STATUS_ICONS_STATUS_ICON_BUTTON_LINUX_H_
+#define CHROME_BROWSER_UI_VIEWS_STATUS_ICONS_STATUS_ICON_BUTTON_LINUX_H_
 
 #include <memory>
 
@@ -19,16 +19,17 @@ namespace aura {
 class WindowTreeHost;
 }
 
-// A status icon that uses the XEmbed protocol.
-// https://standards.freedesktop.org/xembed-spec/xembed-spec-latest.html
-class StatusIconLinuxX11 : public views::StatusIconLinux,
-                           public views::Button,
-                           public views::ContextMenuController,
-                           public views::ButtonListener,
-                           public views::DesktopWindowTreeHostObserverX11 {
+// A button that is internally mapped as a status icon if the underlaying
+// platform supports that kind of windows. Otherwise, calls
+// OnImplInitializationFailed.
+class StatusIconButtonLinux : public views::StatusIconLinux,
+                              public views::Button,
+                              public views::ContextMenuController,
+                              public views::ButtonListener,
+                              public views::DesktopWindowTreeHostObserverX11 {
  public:
-  StatusIconLinuxX11();
-  ~StatusIconLinuxX11() override;
+  StatusIconButtonLinux();
+  ~StatusIconButtonLinux() override;
 
   // views::StatusIcon:
   void SetIcon(const gfx::ImageSkia& image) override;
@@ -58,7 +59,7 @@ class StatusIconLinuxX11 : public views::StatusIconLinux,
 
   std::unique_ptr<views::MenuRunner> menu_runner_;
 
-  DISALLOW_COPY_AND_ASSIGN(StatusIconLinuxX11);
+  DISALLOW_COPY_AND_ASSIGN(StatusIconButtonLinux);
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_STATUS_ICONS_STATUS_ICON_LINUX_X11_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_STATUS_ICONS_STATUS_ICON_BUTTON_LINUX_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/views/status_icons/status_icon_linux_x11.h"
+#include "chrome/browser/ui/views/status_icons/status_icon_button_linux.h"
 
 #include <limits>
 #include <memory>
@@ -35,23 +35,23 @@ class StatusIconWidget : public views::Widget {
 
 }  // namespace
 
-StatusIconLinuxX11::StatusIconLinuxX11() : Button(this) {}
+StatusIconButtonLinux::StatusIconButtonLinux() : Button(this) {}
 
-StatusIconLinuxX11::~StatusIconLinuxX11() = default;
+StatusIconButtonLinux::~StatusIconButtonLinux() = default;
 
-void StatusIconLinuxX11::SetIcon(const gfx::ImageSkia& image) {
+void StatusIconButtonLinux::SetIcon(const gfx::ImageSkia& image) {
   SchedulePaint();
 }
 
-void StatusIconLinuxX11::SetToolTip(const base::string16& tool_tip) {
+void StatusIconButtonLinux::SetToolTip(const base::string16& tool_tip) {
   SetTooltipText(tool_tip);
 }
 
-void StatusIconLinuxX11::UpdatePlatformContextMenu(ui::MenuModel* model) {
+void StatusIconButtonLinux::UpdatePlatformContextMenu(ui::MenuModel* model) {
   // Nothing to do.
 }
 
-void StatusIconLinuxX11::OnSetDelegate() {
+void StatusIconButtonLinux::OnSetDelegate() {
   widget_ = std::make_unique<StatusIconWidget>();
 
   auto native_widget =
@@ -102,7 +102,7 @@ void StatusIconLinuxX11::OnSetDelegate() {
   set_context_menu_controller(this);
 }
 
-void StatusIconLinuxX11::ShowContextMenuForViewImpl(
+void StatusIconButtonLinux::ShowContextMenuForViewImpl(
     View* source,
     const gfx::Point& point,
     ui::MenuSourceType source_type) {
@@ -116,11 +116,12 @@ void StatusIconLinuxX11::ShowContextMenuForViewImpl(
                           views::MenuAnchorPosition::kTopLeft, source_type);
 }
 
-void StatusIconLinuxX11::ButtonPressed(Button* sender, const ui::Event& event) {
+void StatusIconButtonLinux::ButtonPressed(Button* sender,
+                                          const ui::Event& event) {
   delegate_->OnClick();
 }
 
-void StatusIconLinuxX11::PaintButtonContents(gfx::Canvas* canvas) {
+void StatusIconButtonLinux::PaintButtonContents(gfx::Canvas* canvas) {
   gfx::ScopedCanvas scoped_canvas(canvas);
   canvas->UndoDeviceScaleFactor();
 
@@ -146,11 +147,11 @@ void StatusIconLinuxX11::PaintButtonContents(gfx::Canvas* canvas) {
                        image.width(), image.height(), true, flags);
 }
 
-void StatusIconLinuxX11::OnWindowMapped(unsigned long xid) {
+void StatusIconButtonLinux::OnWindowMapped(unsigned long xid) {
   // The window gets mapped by the system tray implementation.  Show() the
   // window (which will be a no-op) so aura is convinced the window is mapped
   // and will begin drawing frames.
   widget_->Show();
 }
 
-void StatusIconLinuxX11::OnWindowUnmapped(unsigned long xid) {}
+void StatusIconButtonLinux::OnWindowUnmapped(unsigned long xid) {}
