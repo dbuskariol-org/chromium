@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/android/mock_location_settings.h"
+#include "chrome/browser/geolocation/android/mock_location_settings.h"
 
 #include "base/lazy_instance.h"
 
@@ -22,11 +22,9 @@ static base::LazyInstance<
 
 }  // namespace
 
-MockLocationSettings::MockLocationSettings() : LocationSettings() {
-}
+MockLocationSettings::MockLocationSettings() : LocationSettings() {}
 
-MockLocationSettings::~MockLocationSettings() {
-}
+MockLocationSettings::~MockLocationSettings() {}
 
 void MockLocationSettings::SetLocationStatus(
     bool has_android_location_permission,

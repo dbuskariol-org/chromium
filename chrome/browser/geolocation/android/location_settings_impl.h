@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ANDROID_LOCATION_SETTINGS_IMPL_H_
-#define CHROME_BROWSER_ANDROID_LOCATION_SETTINGS_IMPL_H_
+#ifndef CHROME_BROWSER_GEOLOCATION_ANDROID_LOCATION_SETTINGS_IMPL_H_
+#define CHROME_BROWSER_GEOLOCATION_ANDROID_LOCATION_SETTINGS_IMPL_H_
 
 #include <memory>
 
 #include "base/android/jni_weak_ref.h"
 #include "base/android/scoped_java_ref.h"
 #include "base/macros.h"
-#include "chrome/browser/android/location_settings.h"
+#include "chrome/browser/geolocation/android/location_settings.h"
 
 class LocationSettingsImpl : public LocationSettings {
  public:
@@ -32,4 +32,4 @@ class LocationSettingsImpl : public LocationSettings {
   DISALLOW_COPY_AND_ASSIGN(LocationSettingsImpl);
 };
 
-#endif  // CHROME_BROWSER_ANDROID_LOCATION_SETTINGS_IMPL_H_
+#endif  // CHROME_BROWSER_GEOLOCATION_ANDROID_LOCATION_SETTINGS_IMPL_H_

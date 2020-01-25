@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/android/location_settings_impl.h"
+#include "chrome/browser/geolocation/android/location_settings_impl.h"
 
 #include "base/android/jni_android.h"
-#include "chrome/android/chrome_jni_headers/LocationSettings_jni.h"
+#include "chrome/browser/geolocation/android/jni_headers/LocationSettings_jni.h"
 #include "content/public/browser/web_contents.h"
 
 using base::android::AttachCurrentThread;

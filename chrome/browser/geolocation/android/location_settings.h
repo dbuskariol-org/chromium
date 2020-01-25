@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ANDROID_LOCATION_SETTINGS_H_
-#define CHROME_BROWSER_ANDROID_LOCATION_SETTINGS_H_
+#ifndef CHROME_BROWSER_GEOLOCATION_ANDROID_LOCATION_SETTINGS_H_
+#define CHROME_BROWSER_GEOLOCATION_ANDROID_LOCATION_SETTINGS_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
@@ -59,4 +59,4 @@ class LocationSettings {
       LocationSettingsDialogOutcomeCallback callback) = 0;
 };
 
-#endif  // CHROME_BROWSER_ANDROID_LOCATION_SETTINGS_H_
+#endif  // CHROME_BROWSER_GEOLOCATION_ANDROID_LOCATION_SETTINGS_H_

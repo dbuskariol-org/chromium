@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ANDROID_MOCK_LOCATION_SETTINGS_H_
-#define CHROME_BROWSER_ANDROID_MOCK_LOCATION_SETTINGS_H_
+#ifndef CHROME_BROWSER_GEOLOCATION_ANDROID_MOCK_LOCATION_SETTINGS_H_
+#define CHROME_BROWSER_GEOLOCATION_ANDROID_MOCK_LOCATION_SETTINGS_H_
 
 #include "base/macros.h"
-#include "chrome/browser/android/location_settings.h"
+#include "chrome/browser/geolocation/android/location_settings.h"
 #include "components/location/android/location_settings_dialog_context.h"
 #include "components/location/android/location_settings_dialog_outcome.h"
 
@@ -42,4 +42,4 @@ class MockLocationSettings : public LocationSettings {
   DISALLOW_COPY_AND_ASSIGN(MockLocationSettings);
 };
 
-#endif  // CHROME_BROWSER_ANDROID_MOCK_LOCATION_SETTINGS_H_
+#endif  // CHROME_BROWSER_GEOLOCATION_ANDROID_MOCK_LOCATION_SETTINGS_H_
