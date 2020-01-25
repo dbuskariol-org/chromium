@@ -35,7 +35,6 @@ public class VrModuleProvider implements ModuleInstallUi.FailureUiListener {
      */
     public static void maybeInit() {
         if (!VrBuildConfig.IS_VR_ENABLED) return;
-        VrModuleProviderJni.get().init();
         // Always install the VR module on Daydream-ready devices.
         maybeRequestModuleIfDaydreamReady();
     }
@@ -168,7 +167,6 @@ public class VrModuleProvider implements ModuleInstallUi.FailureUiListener {
 
     @NativeMethods
     interface Natives {
-        void init();
         void registerJni();
         void onInstalledModule(
                 long nativeVrModuleProvider, VrModuleProvider caller, boolean success);

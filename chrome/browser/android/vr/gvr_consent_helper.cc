@@ -2,53 +2,25 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/android/vr/gvr_consent_helper_impl.h"
+#include "chrome/browser/android/vr/gvr_consent_helper.h"
 
 #include <utility>
 
 #include "base/android/jni_string.h"
+#include "base/bind.h"
 #include "base/callback.h"
 #include "base/macros.h"
 #include "chrome/android/features/vr/jni_headers/VrConsentDialog_jni.h"
-#include "chrome/browser/android/tab_android.h"
-#include "content/public/browser/render_frame_host.h"
-#include "content/public/browser/web_contents.h"
 
 using base::android::AttachCurrentThread;
-using base::android::ScopedJavaLocalRef;
 
 namespace vr {
 
-namespace {
+GvrConsentHelper::GvrConsentHelper() : XrConsentHelper() {}
 
-base::android::ScopedJavaLocalRef<jobject> GetTabFromRenderer(
-    int render_process_id,
-    int render_frame_id) {
-  content::RenderFrameHost* render_frame_host =
-      content::RenderFrameHost::FromID(render_process_id, render_frame_id);
-  DCHECK(render_frame_host);
+GvrConsentHelper::~GvrConsentHelper() = default;
 
-  content::WebContents* web_contents =
-      content::WebContents::FromRenderFrameHost(render_frame_host);
-  DCHECK(web_contents);
-
-  TabAndroid* tab_android = TabAndroid::FromWebContents(web_contents);
-  DCHECK(tab_android);
-
-  base::android::ScopedJavaLocalRef<jobject> j_tab_android =
-      tab_android->GetJavaObject();
-  DCHECK(!j_tab_android.is_null());
-
-  return j_tab_android;
-}
-
-}  // namespace
-
-GvrConsentHelperImpl::GvrConsentHelperImpl() {}
-
-GvrConsentHelperImpl::~GvrConsentHelperImpl() = default;
-
-void GvrConsentHelperImpl::PromptUserAndGetConsent(
+void GvrConsentHelper::ShowConsentPrompt(
     int render_process_id,
     int render_frame_id,
     XrConsentPromptLevel consent_level,
@@ -70,9 +42,7 @@ void GvrConsentHelperImpl::PromptUserAndGetConsent(
   }
 }
 
-void GvrConsentHelperImpl::OnUserConsentResult(
-    JNIEnv* env,
-    jboolean is_granted) {
+void GvrConsentHelper::OnUserConsentResult(JNIEnv* env, jboolean is_granted) {
   jdelegate_.Reset();
   if (!on_user_consent_callback_)
     return;
@@ -97,14 +67,14 @@ void GvrConsentHelperImpl::OnUserConsentResult(
 
   if (!module_delegate_->ModuleInstalled()) {
     module_delegate_->InstallModule(base::BindOnce(
-        &GvrConsentHelperImpl::OnModuleInstalled, weak_ptr_.GetWeakPtr()));
+        &GvrConsentHelper::OnModuleInstalled, weak_ptr_.GetWeakPtr()));
     return;
   }
 
   std::move(on_user_consent_callback_).Run(consent_level_, true);
 }
 
-void GvrConsentHelperImpl::OnModuleInstalled(bool success) {
+void GvrConsentHelper::OnModuleInstalled(bool success) {
   if (!success) {
     std::move(on_user_consent_callback_).Run(consent_level_, false);
     return;
