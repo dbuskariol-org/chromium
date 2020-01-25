@@ -697,9 +697,6 @@ IN_PROC_BROWSER_TEST_F(IndexedDBBrowserTest, EmptyBlob) {
 #else
   SimpleTest(GURL(test_url.spec()));
 #endif
-  // As both of these files are empty, they do not create BlobDataItems.
-  // As they can't be read, the backing files are immediately released.
-  EXPECT_EQ(0, RequestBlobFileCount(FileOrigin()));
 }
 
 // Very flaky on many bots. See crbug.com/459835
