@@ -21,7 +21,6 @@ import androidx.annotation.StringRes;
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.MathUtils;
 import org.chromium.chrome.browser.ui.widget.R;
-import org.chromium.chrome.browser.util.AccessibilityUtil;
 import org.chromium.ui.widget.AnchoredPopupWindow;
 import org.chromium.ui.widget.RectProvider;
 import org.chromium.ui.widget.ViewRectProvider;
@@ -81,6 +80,8 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
     /** The accessibility string associated with the bubble. */
     private final String mAccessibilityString;
 
+    private final boolean mIsAccessibilityEnabled;
+
     /** The content view shown in the popup window. */
     protected View mContentView;
 
@@ -92,11 +93,13 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
      * @param stringId The id of the string resource for the text that should be shown.
      * @param accessibilityStringId The id of the string resource of the accessibility text.
      * @param anchorView The {@link View} used to anchor the bubble.
+     * @param isAccessibilityEnabled Whether accessibility mode is enabled. Used to determine bubble
+     *         text and dismiss UX.
      */
     public TextBubble(Context context, View rootView, @StringRes int stringId,
-            @StringRes int accessibilityStringId, View anchorView) {
+            @StringRes int accessibilityStringId, View anchorView, boolean isAccessibilityEnabled) {
         this(context, rootView, stringId, accessibilityStringId, true,
-                new ViewRectProvider(anchorView));
+                new ViewRectProvider(anchorView), isAccessibilityEnabled);
     }
 
     /**
@@ -107,11 +110,13 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
      * @param stringId The id of the string resource for the text that should be shown.
      * @param accessibilityStringId The id of the string resource of the accessibility text.
      * @param anchorRect The {@link Rect} used to anchor the text bubble.
+     * @param isAccessibilityEnabled Whether accessibility mode is enabled. Used to determine bubble
+     *         text and dismiss UX.
      */
     public TextBubble(Context context, View rootView, @StringRes int stringId,
-            @StringRes int accessibilityStringId, Rect anchorRect) {
-        this(context, rootView, stringId, accessibilityStringId, true,
-                new RectProvider(anchorRect));
+            @StringRes int accessibilityStringId, Rect anchorRect, boolean isAccessibilityEnabled) {
+        this(context, rootView, stringId, accessibilityStringId, true, new RectProvider(anchorRect),
+                isAccessibilityEnabled);
     }
 
     /**
@@ -123,11 +128,14 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
      * @param accessibilityStringId The id of the string resource of the accessibility text.
      * @param showArrow Whether the bubble should have an arrow.
      * @param anchorRect The {@link Rect} used to anchor the text bubble.
+     * @param isAccessibilityEnabled Whether accessibility mode is enabled. Used to determine bubble
+     *         text and dismiss UX.
      */
     public TextBubble(Context context, View rootView, @StringRes int stringId,
-            @StringRes int accessibilityStringId, boolean showArrow, Rect anchorRect) {
+            @StringRes int accessibilityStringId, boolean showArrow, Rect anchorRect,
+            boolean isAccessibilityEnabled) {
         this(context, rootView, stringId, accessibilityStringId, showArrow,
-                new RectProvider(anchorRect));
+                new RectProvider(anchorRect), isAccessibilityEnabled);
     }
 
     /**
@@ -139,8 +147,10 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
      * @param anchorRectProvider The {@link RectProvider} used to anchor the text bubble.
      */
     public TextBubble(Context context, View rootView, @StringRes int stringId,
-            @StringRes int accessibilityStringId, RectProvider anchorRectProvider) {
-        this(context, rootView, stringId, accessibilityStringId, true, anchorRectProvider);
+            @StringRes int accessibilityStringId, RectProvider anchorRectProvider,
+            boolean isAccessibilityEnabled) {
+        this(context, rootView, stringId, accessibilityStringId, true, anchorRectProvider,
+                isAccessibilityEnabled);
     }
 
     /**
@@ -151,12 +161,15 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
      * @param accessibilityStringId The id of the string resource of the accessibility text.
      * @param showArrow Whether the bubble should have an arrow.
      * @param anchorRectProvider The {@link RectProvider} used to anchor the text bubble.
+     * @param isAccessibilityEnabled Whether accessibility mode is enabled. Used to determine bubble
+     *         text and dismiss UX.
      */
     public TextBubble(Context context, View rootView, @StringRes int stringId,
             @StringRes int accessibilityStringId, boolean showArrow,
-            RectProvider anchorRectProvider) {
+            RectProvider anchorRectProvider, boolean isAccessibilityEnabled) {
         this(context, rootView, context.getString(stringId),
-                context.getString(accessibilityStringId), showArrow, anchorRectProvider);
+                context.getString(accessibilityStringId), showArrow, anchorRectProvider,
+                isAccessibilityEnabled);
     }
 
     /**
@@ -167,12 +180,16 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
      * @param accessibilityString The string shown in the bubble when accessibility is enabled.
      * @param showArrow Whether the bubble should have an arrow.
      * @param anchorRectProvider The {@link RectProvider} used to anchor the text bubble.
+     * @param isAccessibilityEnabled Whether accessibility mode is enabled. Used to determine bubble
+     *         text and dismiss UX.
      */
     public TextBubble(Context context, View rootView, String contentString,
-            String accessibilityString, boolean showArrow, RectProvider anchorRectProvider) {
+            String accessibilityString, boolean showArrow, RectProvider anchorRectProvider,
+            boolean isAccessibilityEnabled) {
         mContext = context;
         mString = contentString;
         mAccessibilityString = accessibilityString;
+        mIsAccessibilityEnabled = isAccessibilityEnabled;
 
         mDrawable = new ArrowBubbleDrawable(context);
         mDrawable.setShowArrow(showArrow);
@@ -197,7 +214,7 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
         mPopupWindow.setAnimationStyle(R.style.TextBubbleAnimation);
 
         addOnDismissListener(mDismissListener);
-        if (AccessibilityUtil.isAccessibilityEnabled()) setDismissOnTouchInteraction(true);
+        if (mIsAccessibilityEnabled) setDismissOnTouchInteraction(true);
 
         // Set predefined styles for the TextBubble.
         mDrawable.setBubbleColor(ApiCompatibilityUtils.getColor(
@@ -273,7 +290,7 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
      *                  {@link #NO_TIMEOUT} for no timeout.
      */
     public void setAutoDismissTimeout(long timeoutMs) {
-        if (AccessibilityUtil.isAccessibilityEnabled()) return;
+        if (mIsAccessibilityEnabled) return;
 
         mAutoDismissTimeoutMs = timeoutMs;
         mHandler.removeCallbacks(mDismissRunnable);
@@ -290,9 +307,7 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
     public void setDismissOnTouchInteraction(boolean dismiss) {
         // For accessibility mode, since there is no timeout value, the bubble can be dismissed
         // only on touch interaction.
-        if (AccessibilityUtil.isAccessibilityEnabled()) dismiss = true;
-
-        mPopupWindow.setDismissOnTouchInteraction(dismiss);
+        mPopupWindow.setDismissOnTouchInteraction(mIsAccessibilityEnabled || dismiss);
     }
 
     /**
@@ -337,6 +352,6 @@ public class TextBubble implements AnchoredPopupWindow.LayoutObserver {
      * @param view The {@link TextView} to set text on.
      */
     protected void setText(TextView view) {
-        view.setText(AccessibilityUtil.isAccessibilityEnabled() ? mAccessibilityString : mString);
+        view.setText(mIsAccessibilityEnabled ? mAccessibilityString : mString);
     }
 }

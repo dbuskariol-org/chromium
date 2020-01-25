@@ -27,11 +27,14 @@ public class ImageTextBubble extends TextBubble {
      * @param showArrow Whether the bubble should have an arrow.
      * @param anchorRectProvider The {@link RectProvider} used to anchor the text bubble.
      * @param imageDrawableId The resource id of the image to show at the start of the text bubble.
+     * @param isAccessibilityEnabled Whether accessibility mode is enabled. Used to determine bubble
+     *         text and dismiss UX.
      */
     public ImageTextBubble(Context context, View rootView, @StringRes int stringId,
             @StringRes int accessibilityStringId, boolean showArrow,
-            RectProvider anchorRectProvider, int imageDrawableId) {
-        super(context, rootView, stringId, accessibilityStringId, showArrow, anchorRectProvider);
+            RectProvider anchorRectProvider, int imageDrawableId, boolean isAccessibilityEnabled) {
+        super(context, rootView, stringId, accessibilityStringId, showArrow, anchorRectProvider,
+                isAccessibilityEnabled);
 
         ((ImageView) mContentView.findViewById(R.id.image)).setImageResource(imageDrawableId);
     }

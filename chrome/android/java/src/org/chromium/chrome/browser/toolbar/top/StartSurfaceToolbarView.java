@@ -25,6 +25,7 @@ import org.chromium.chrome.browser.toolbar.NewTabButton;
 import org.chromium.chrome.browser.toolbar.top.StartSurfaceToolbarProperties.IPHContainer;
 import org.chromium.chrome.browser.ui.appmenu.AppMenuButtonHelper;
 import org.chromium.chrome.browser.ui.widget.textbubble.TextBubble;
+import org.chromium.chrome.browser.util.AccessibilityUtil;
 import org.chromium.chrome.browser.util.ColorUtils;
 import org.chromium.components.browser_ui.styles.ChromeColors;
 
@@ -218,7 +219,8 @@ class StartSurfaceToolbarView extends RelativeLayout {
      */
     void showIPHOnIdentityDisc(IPHContainer iphContainer) {
         TextBubble textBubble = new TextBubble(getContext(), mIdentityDiscButton,
-                iphContainer.stringId, iphContainer.accessibilityStringId, mIdentityDiscButton);
+                iphContainer.stringId, iphContainer.accessibilityStringId, mIdentityDiscButton,
+                AccessibilityUtil.isAccessibilityEnabled());
         textBubble.setDismissOnTouchInteraction(true);
         if (iphContainer.dismissedCallback != null) {
             textBubble.addOnDismissListener(() -> { iphContainer.dismissedCallback.run(); });
