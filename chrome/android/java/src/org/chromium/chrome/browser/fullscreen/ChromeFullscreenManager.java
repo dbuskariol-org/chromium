@@ -360,7 +360,7 @@ public class ChromeFullscreenManager extends FullscreenManager
                 mBrowserVisibilityDelegate.showControlsTransient();
                 updateMultiTouchZoomSupport(!getPersistentFullscreenMode());
                 TabGestureStateListener.from(tab).setFullscreenManager(this);
-                restoreControlsPositions();
+                if (tab.isUserInteractable()) restoreControlsPositions();
             }
         }
 
