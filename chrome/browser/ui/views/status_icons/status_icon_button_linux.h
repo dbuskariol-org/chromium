@@ -12,7 +12,6 @@
 #include "ui/views/controls/button/button.h"
 #include "ui/views/controls/menu/menu_runner.h"
 #include "ui/views/linux_ui/status_icon_linux.h"
-#include "ui/views/widget/desktop_aura/desktop_window_tree_host_observer_x11.h"
 #include "ui/views/widget/widget.h"
 
 namespace aura {
@@ -25,8 +24,7 @@ class WindowTreeHost;
 class StatusIconButtonLinux : public views::StatusIconLinux,
                               public views::Button,
                               public views::ContextMenuController,
-                              public views::ButtonListener,
-                              public views::DesktopWindowTreeHostObserverX11 {
+                              public views::ButtonListener {
  public:
   StatusIconButtonLinux();
   ~StatusIconButtonLinux() override;
@@ -47,10 +45,6 @@ class StatusIconButtonLinux : public views::StatusIconLinux,
 
   // views::Button:
   void PaintButtonContents(gfx::Canvas* canvas) override;
-
-  // views::DesktopWindowTreeHostObserverX11:
-  void OnWindowMapped(unsigned long xid) override;
-  void OnWindowUnmapped(unsigned long xid) override;
 
  private:
   std::unique_ptr<views::Widget> widget_;

@@ -10,16 +10,11 @@
 #include "base/memory/ptr_util.h"
 #include "base/memory/scoped_refptr.h"
 #include "chrome/browser/ui/ui_features.h"
+#include "chrome/browser/ui/views/status_icons/status_icon_button_linux.h"
 #include "ui/message_center/public/cpp/notifier_id.h"
 
 #if defined(USE_DBUS)
 #include "chrome/browser/ui/views/status_icons/status_icon_linux_dbus.h"
-#endif
-
-// TODO(msisov): remove USE_X11 when the StatusIconButtonLinux stops using
-// DesktopWindowTreeHostObserverX11.
-#if defined(USE_X11)
-#include "chrome/browser/ui/views/status_icons/status_icon_button_linux.h"
 #endif
 
 namespace {
@@ -123,7 +118,6 @@ ui::MenuModel* StatusIconLinuxWrapper::GetMenuModel() const {
 void StatusIconLinuxWrapper::OnImplInitializationFailed() {
   switch (status_icon_type_) {
     case kTypeDbus:
-#if defined(USE_X11)
 #if defined(USE_DBUS)
       status_icon_dbus_.reset();
 #endif
@@ -132,11 +126,6 @@ void StatusIconLinuxWrapper::OnImplInitializationFailed() {
       status_icon_type_ = kTypeWindowed;
       status_icon_->SetDelegate(this);
       return;
-#else
-      // Fallthrough needs to be omitted if USE_X11, otherwise clang will
-      // complain about an unreachable fallthrough.
-      FALLTHROUGH;
-#endif
     case kTypeWindowed:
       status_icon_linux_.reset();
       status_icon_ = nullptr;
@@ -162,12 +151,10 @@ StatusIconLinuxWrapper::CreateWrappedStatusIcon(
 #if defined(USE_DBUS)
   return base::WrapUnique(new StatusIconLinuxWrapper(
       base::MakeRefCounted<StatusIconLinuxDbus>(), image, tool_tip));
-#elif defined(USE_X11)
+#else
   return base::WrapUnique(
       new StatusIconLinuxWrapper(std::make_unique<StatusIconButtonLinux>(),
                                  kTypeWindowed, image, tool_tip));
-#else
-  return nullptr;
 #endif
 }
 

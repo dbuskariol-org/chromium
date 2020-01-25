@@ -5,10 +5,8 @@
 #include "chrome/browser/ui/views/status_icons/status_icon_button_linux.h"
 
 #include <limits>
-#include <memory>
 
 #include "base/logging.h"
-#include "base/strings/string_number_conversions.h"
 #include "chrome/browser/shell_integration_linux.h"
 #include "ui/aura/window.h"
 #include "ui/aura/window_tree_host.h"
@@ -17,9 +15,6 @@
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/scoped_canvas.h"
 #include "ui/gfx/transform.h"
-#include "ui/views/background.h"
-#include "ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
-#include "ui/views/widget/desktop_aura/desktop_window_tree_host_x11.h"
 
 namespace {
 
@@ -54,29 +49,16 @@ void StatusIconButtonLinux::UpdatePlatformContextMenu(ui::MenuModel* model) {
 void StatusIconButtonLinux::OnSetDelegate() {
   widget_ = std::make_unique<StatusIconWidget>();
 
-  auto native_widget =
-      std::make_unique<views::DesktopNativeWidgetAura>(widget_.get());
-
-  auto host = std::make_unique<views::DesktopWindowTreeHostX11>(
-      widget_.get(), native_widget.get());
-  host_ = host.get();
-
-  // We outlive the host, so no need to remove ourselves as an observer.
-  host->AddObserver(this);
-
   const int width = std::max(1, delegate_->GetImage().width());
   const int height = std::max(1, delegate_->GetImage().height());
 
   views::Widget::InitParams params;
-  params.type = views::Widget::InitParams::TYPE_CONTROL;
+  params.type = views::Widget::InitParams::TYPE_WINDOW_FRAMELESS;
   params.opacity = views::Widget::InitParams::WindowOpacity::kTranslucent;
   params.activatable = views::Widget::InitParams::ACTIVATABLE_NO;
-  params.remove_standard_frame = true;
   params.bounds =
       gfx::Rect(kInitialWindowPos, kInitialWindowPos, width, height);
   params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
-  params.native_widget = native_widget.release();
-  params.desktop_window_tree_host = host.release();
   params.wm_role_name = ui::kStatusIconWmRoleName;
   params.wm_class_name = shell_integration_linux::GetProgramClassName();
   params.wm_class_class = shell_integration_linux::GetProgramClassClass();
@@ -86,8 +68,10 @@ void StatusIconButtonLinux::OnSetDelegate() {
 
   widget_->Init(std::move(params));
 
-  Window window = host_->GetAcceleratedWidget();
-  if (!window) {
+  auto* window = widget_->GetNativeWindow();
+  DCHECK(window);
+  host_ = window->GetHost();
+  if (!host_->GetAcceleratedWidget()) {
     delegate_->OnImplInitializationFailed();
     // |this| might be destroyed.
     return;
@@ -100,6 +84,8 @@ void StatusIconButtonLinux::OnSetDelegate() {
   SetIcon(delegate_->GetImage());
   SetTooltipText(delegate_->GetToolTip());
   set_context_menu_controller(this);
+
+  widget_->Show();
 }
 
 void StatusIconButtonLinux::ShowContextMenuForViewImpl(
@@ -146,12 +132,3 @@ void StatusIconButtonLinux::PaintButtonContents(gfx::Canvas* canvas) {
   canvas->DrawImageInt(image, 0, 0, image.width(), image.height(), 0, 0,
                        image.width(), image.height(), true, flags);
 }
-
-void StatusIconButtonLinux::OnWindowMapped(unsigned long xid) {
-  // The window gets mapped by the system tray implementation.  Show() the
-  // window (which will be a no-op) so aura is convinced the window is mapped
-  // and will begin drawing frames.
-  widget_->Show();
-}
-
-void StatusIconButtonLinux::OnWindowUnmapped(unsigned long xid) {}
