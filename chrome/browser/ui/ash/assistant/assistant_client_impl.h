@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_ASH_ASSISTANT_ASSISTANT_CLIENT_H_
-#define CHROME_BROWSER_UI_ASH_ASSISTANT_ASSISTANT_CLIENT_H_
+#ifndef CHROME_BROWSER_UI_ASH_ASSISTANT_ASSISTANT_CLIENT_IMPL_H_
+#define CHROME_BROWSER_UI_ASH_ASSISTANT_ASSISTANT_CLIENT_IMPL_H_
 
 #include <memory>
 #include <vector>
 
+#include "ash/public/cpp/assistant/assistant_client.h"
 #include "ash/public/mojom/assistant_state_controller.mojom.h"
 #include "base/macros.h"
 #include "chrome/browser/ui/ash/assistant/device_actions.h"
@@ -26,20 +27,21 @@ class ProactiveSuggestionsClientImpl;
 class Profile;
 
 // Class to handle all Assistant in-browser-process functionalities.
-class AssistantClient : chromeos::assistant::mojom::Client,
-                        public signin::IdentityManager::Observer,
-                        public session_manager::SessionManagerObserver {
+class AssistantClientImpl : public ash::AssistantClient,
+                            public chromeos::assistant::mojom::Client,
+                            public signin::IdentityManager::Observer,
+                            public session_manager::SessionManagerObserver {
  public:
-  static AssistantClient* Get();
-
-  AssistantClient();
-  ~AssistantClient() override;
+  AssistantClientImpl();
+  ~AssistantClientImpl() override;
 
   void MaybeInit(Profile* profile);
   void MaybeStartAssistantOptInFlow();
 
+  // ash::AssistantClient overrides:
   void BindAssistant(
-      mojo::PendingReceiver<chromeos::assistant::mojom::Assistant> receiver);
+      mojo::PendingReceiver<chromeos::assistant::mojom::Assistant> receiver)
+      override;
 
   // assistant::mojom::Client overrides:
   void OnAssistantStatusChanged(ash::mojom::AssistantState new_state) override;
@@ -121,7 +123,7 @@ class AssistantClient : chromeos::assistant::mojom::Client,
   Profile* profile_ = nullptr;
   signin::IdentityManager* identity_manager_ = nullptr;
 
-  DISALLOW_COPY_AND_ASSIGN(AssistantClient);
+  DISALLOW_COPY_AND_ASSIGN(AssistantClientImpl);
 };
 
-#endif  // CHROME_BROWSER_UI_ASH_ASSISTANT_ASSISTANT_CLIENT_H_
+#endif  // CHROME_BROWSER_UI_ASH_ASSISTANT_ASSISTANT_CLIENT_IMPL_H_

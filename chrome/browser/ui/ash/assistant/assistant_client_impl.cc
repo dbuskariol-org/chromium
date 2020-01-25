@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/ash/assistant/assistant_client.h"
+#include "chrome/browser/ui/ash/assistant/assistant_client_impl.h"
 
 #include <utility>
 
@@ -31,40 +31,21 @@
 #include "content/public/browser/service_process_host.h"
 #include "services/identity/public/mojom/identity_service.mojom.h"
 
-namespace {
-
-// Owned by ChromeBrowserMainChromeOS:
-AssistantClient* g_instance = nullptr;
-
-}  // namespace
-
-// static
-AssistantClient* AssistantClient::Get() {
-  DCHECK(g_instance);
-  return g_instance;
-}
-
-AssistantClient::AssistantClient() {
-  DCHECK_EQ(nullptr, g_instance);
-  g_instance = this;
-
+AssistantClientImpl::AssistantClientImpl() {
   auto* session_manager = session_manager::SessionManager::Get();
-  // AssistantClient must be created before any user session is created.
+  // AssistantClientImpl must be created before any user session is created.
   // Otherwise, it will not get OnUserProfileLoaded notification.
   DCHECK(session_manager->sessions().empty());
   session_manager->AddObserver(this);
 }
 
-AssistantClient::~AssistantClient() {
-  DCHECK(g_instance);
-  g_instance = nullptr;
-
+AssistantClientImpl::~AssistantClientImpl() {
   session_manager::SessionManager::Get()->RemoveObserver(this);
   if (identity_manager_)
     identity_manager_->RemoveObserver(this);
 }
 
-void AssistantClient::MaybeInit(Profile* profile) {
+void AssistantClientImpl::MaybeInit(Profile* profile) {
   if (assistant::IsAssistantAllowedForProfile(profile) !=
       ash::mojom::AssistantAllowedState::ALLOWED) {
     return;
@@ -108,14 +89,14 @@ void AssistantClient::MaybeInit(Profile* profile) {
   pending_assistant_receivers_.clear();
 }
 
-void AssistantClient::MaybeStartAssistantOptInFlow() {
+void AssistantClientImpl::MaybeStartAssistantOptInFlow() {
   if (!initialized_)
     return;
 
   assistant_setup_->MaybeStartAssistantOptInFlow();
 }
 
-void AssistantClient::BindAssistant(
+void AssistantClientImpl::BindAssistant(
     mojo::PendingReceiver<chromeos::assistant::mojom::Assistant> receiver) {
   if (!initialized_) {
     pending_assistant_receivers_.push_back(std::move(receiver));
@@ -126,71 +107,71 @@ void AssistantClient::BindAssistant(
       std::move(receiver));
 }
 
-void AssistantClient::OnAssistantStatusChanged(
+void AssistantClientImpl::OnAssistantStatusChanged(
     ash::mojom::AssistantState new_state) {
   ash::AssistantState::Get()->NotifyStatusChanged(new_state);
 }
 
-void AssistantClient::RequestAssistantStructure(
+void AssistantClientImpl::RequestAssistantStructure(
     RequestAssistantStructureCallback callback) {
   RequestAssistantStructureForActiveBrowserWindow(std::move(callback));
 }
 
-void AssistantClient::RequestAssistantController(
+void AssistantClientImpl::RequestAssistantController(
     mojo::PendingReceiver<chromeos::assistant::mojom::AssistantController>
         receiver) {
   ash::AssistantInterfaceBinder::GetInstance()->BindController(
       std::move(receiver));
 }
 
-void AssistantClient::RequestAssistantAlarmTimerController(
+void AssistantClientImpl::RequestAssistantAlarmTimerController(
     mojo::PendingReceiver<ash::mojom::AssistantAlarmTimerController> receiver) {
   ash::AssistantInterfaceBinder::GetInstance()->BindAlarmTimerController(
       std::move(receiver));
 }
 
-void AssistantClient::RequestAssistantNotificationController(
+void AssistantClientImpl::RequestAssistantNotificationController(
     mojo::PendingReceiver<ash::mojom::AssistantNotificationController>
         receiver) {
   ash::AssistantInterfaceBinder::GetInstance()->BindNotificationController(
       std::move(receiver));
 }
 
-void AssistantClient::RequestAssistantScreenContextController(
+void AssistantClientImpl::RequestAssistantScreenContextController(
     mojo::PendingReceiver<ash::mojom::AssistantScreenContextController>
         receiver) {
   ash::AssistantInterfaceBinder::GetInstance()->BindScreenContextController(
       std::move(receiver));
 }
 
-void AssistantClient::RequestAssistantVolumeControl(
+void AssistantClientImpl::RequestAssistantVolumeControl(
     mojo::PendingReceiver<ash::mojom::AssistantVolumeControl> receiver) {
   ash::AssistantInterfaceBinder::GetInstance()->BindVolumeControl(
       std::move(receiver));
 }
 
-void AssistantClient::RequestAssistantStateController(
+void AssistantClientImpl::RequestAssistantStateController(
     mojo::PendingReceiver<ash::mojom::AssistantStateController> receiver) {
   ash::AssistantInterfaceBinder::GetInstance()->BindStateController(
       std::move(receiver));
 }
 
-void AssistantClient::RequestBatteryMonitor(
+void AssistantClientImpl::RequestBatteryMonitor(
     mojo::PendingReceiver<device::mojom::BatteryMonitor> receiver) {
   content::GetDeviceService().BindBatteryMonitor(std::move(receiver));
 }
 
-void AssistantClient::RequestWakeLockProvider(
+void AssistantClientImpl::RequestWakeLockProvider(
     mojo::PendingReceiver<device::mojom::WakeLockProvider> receiver) {
   content::GetDeviceService().BindWakeLockProvider(std::move(receiver));
 }
 
-void AssistantClient::RequestAudioStreamFactory(
+void AssistantClientImpl::RequestAudioStreamFactory(
     mojo::PendingReceiver<audio::mojom::StreamFactory> receiver) {
   content::GetAudioService().BindStreamFactory(std::move(receiver));
 }
 
-void AssistantClient::RequestAudioDecoderFactory(
+void AssistantClientImpl::RequestAudioDecoderFactory(
     mojo::PendingReceiver<
         chromeos::assistant::mojom::AssistantAudioDecoderFactory> receiver) {
   content::ServiceProcessHost::Launch(
@@ -201,39 +182,40 @@ void AssistantClient::RequestAudioDecoderFactory(
           .Pass());
 }
 
-void AssistantClient::RequestIdentityAccessor(
+void AssistantClientImpl::RequestIdentityAccessor(
     mojo::PendingReceiver<identity::mojom::IdentityAccessor> receiver) {
   identity::mojom::IdentityService* service = profile_->GetIdentityService();
   if (service)
     service->BindIdentityAccessor(std::move(receiver));
 }
 
-void AssistantClient::RequestAudioFocusManager(
+void AssistantClientImpl::RequestAudioFocusManager(
     mojo::PendingReceiver<media_session::mojom::AudioFocusManager> receiver) {
   content::GetMediaSessionService().BindAudioFocusManager(std::move(receiver));
 }
 
-void AssistantClient::RequestMediaControllerManager(
+void AssistantClientImpl::RequestMediaControllerManager(
     mojo::PendingReceiver<media_session::mojom::MediaControllerManager>
         receiver) {
   content::GetMediaSessionService().BindMediaControllerManager(
       std::move(receiver));
 }
 
-void AssistantClient::RequestNetworkConfig(
+void AssistantClientImpl::RequestNetworkConfig(
     mojo::PendingReceiver<chromeos::network_config::mojom::CrosNetworkConfig>
         receiver) {
   ash::GetNetworkConfigService(std::move(receiver));
 }
 
-void AssistantClient::OnExtendedAccountInfoUpdated(const AccountInfo& info) {
+void AssistantClientImpl::OnExtendedAccountInfoUpdated(
+    const AccountInfo& info) {
   if (initialized_)
     return;
 
   MaybeInit(profile_);
 }
 
-void AssistantClient::OnUserProfileLoaded(const AccountId& account_id) {
+void AssistantClientImpl::OnUserProfileLoaded(const AccountId& account_id) {
   // Initialize Assistant when primary user profile is loaded so that it could
   // be used in post oobe steps. OnUserSessionStarted() is too late
   // because it happens after post oobe steps
@@ -245,7 +227,7 @@ void AssistantClient::OnUserProfileLoaded(const AccountId& account_id) {
   MaybeInit(user_profile);
 }
 
-void AssistantClient::OnUserSessionStarted(bool is_primary_user) {
+void AssistantClientImpl::OnUserSessionStarted(bool is_primary_user) {
   if (is_primary_user && !chromeos::switches::ShouldSkipOobePostLogin())
     MaybeStartAssistantOptInFlow();
 }
