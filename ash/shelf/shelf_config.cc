@@ -101,7 +101,12 @@ void ShelfConfig::Shutdown() {
   shell->tablet_mode_controller()->RemoveObserver(this);
 }
 
-void ShelfConfig::OnTabletModeStarted() {
+void ShelfConfig::OnTabletModeStarting() {
+  // Update the shelf config at the "starting" stage of the tablet mode
+  // transition, so that the shelf bounds are set and remains stable during the
+  // transition animation. Otherwise, updating the shelf bounds during the
+  // animation will lead to work-area bounds changes which lead to many
+  // re-layouts, hurting the animation's smoothness. https://crbug.com/1044316.
   UpdateConfig(is_app_list_visible_);
 }
 
