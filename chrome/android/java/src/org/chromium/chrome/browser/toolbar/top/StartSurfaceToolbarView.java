@@ -24,10 +24,10 @@ import org.chromium.chrome.browser.toolbar.MenuButton;
 import org.chromium.chrome.browser.toolbar.NewTabButton;
 import org.chromium.chrome.browser.toolbar.top.StartSurfaceToolbarProperties.IPHContainer;
 import org.chromium.chrome.browser.ui.appmenu.AppMenuButtonHelper;
-import org.chromium.chrome.browser.ui.widget.textbubble.TextBubble;
 import org.chromium.chrome.browser.util.AccessibilityUtil;
 import org.chromium.chrome.browser.util.ColorUtils;
 import org.chromium.components.browser_ui.styles.ChromeColors;
+import org.chromium.components.browser_ui.widget.textbubble.TextBubble;
 
 /** View of the StartSurfaceToolbar */
 class StartSurfaceToolbarView extends RelativeLayout {

@@ -9,9 +9,9 @@ import android.view.View;
 
 import org.chromium.chrome.browser.download.DirectoryOption;
 import org.chromium.chrome.browser.download.DownloadDirectoryProvider;
-import org.chromium.chrome.browser.ui.widget.highlight.ViewHighlighter;
-import org.chromium.chrome.browser.ui.widget.textbubble.TextBubble;
 import org.chromium.chrome.browser.util.AccessibilityUtil;
+import org.chromium.components.browser_ui.widget.highlight.ViewHighlighter;
+import org.chromium.components.browser_ui.widget.textbubble.TextBubble;
 import org.chromium.components.feature_engagement.FeatureConstants;
 import org.chromium.components.feature_engagement.Tracker;
 import org.chromium.ui.widget.ViewRectProvider;
