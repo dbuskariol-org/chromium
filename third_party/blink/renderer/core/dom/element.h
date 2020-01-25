@@ -26,7 +26,7 @@
 #define THIRD_PARTY_BLINK_RENDERER_CORE_DOM_ELEMENT_H_
 
 #include "third_party/blink/public/common/input/pointer_id.h"
-#include "third_party/blink/public/platform/web_focus_type.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
 #include "third_party/blink/renderer/core/animation/animatable.h"
 #include "third_party/blink/renderer/core/core_export.h"
 #include "third_party/blink/renderer/core/css/css_primitive_value.h"
@@ -145,7 +145,7 @@ struct FocusParams {
  public:
   FocusParams() : options(FocusOptions::Create()) {}
   FocusParams(SelectionBehaviorOnFocus selection,
-              WebFocusType focus_type,
+              mojom::blink::FocusType focus_type,
               InputDeviceCapabilities* capabilities,
               const FocusOptions* focus_options = FocusOptions::Create())
       : selection_behavior(selection),
@@ -155,7 +155,7 @@ struct FocusParams {
 
   SelectionBehaviorOnFocus selection_behavior =
       SelectionBehaviorOnFocus::kRestore;
-  WebFocusType type = kWebFocusTypeNone;
+  mojom::blink::FocusType type = mojom::blink::FocusType::kNone;
   Member<InputDeviceCapabilities> source_capabilities = nullptr;
   Member<const FocusOptions> options;
 };
@@ -690,16 +690,16 @@ class CORE_EXPORT Element : public ContainerNode, public Animatable {
 
   virtual void DispatchFocusEvent(
       Element* old_focused_element,
-      WebFocusType,
+      mojom::blink::FocusType,
       InputDeviceCapabilities* source_capabilities = nullptr);
   virtual void DispatchBlurEvent(
       Element* new_focused_element,
-      WebFocusType,
+      mojom::blink::FocusType,
       InputDeviceCapabilities* source_capabilities = nullptr);
   virtual void DispatchFocusInEvent(
       const AtomicString& event_type,
       Element* old_focused_element,
-      WebFocusType,
+      mojom::blink::FocusType,
       InputDeviceCapabilities* source_capabilities = nullptr);
   void DispatchFocusOutEvent(
       const AtomicString& event_type,

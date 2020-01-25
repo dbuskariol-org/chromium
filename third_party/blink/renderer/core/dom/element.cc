@@ -4132,8 +4132,8 @@ Element* Element::GetFocusableArea() const {
 }
 
 void Element::focus(const FocusOptions* options) {
-  focus(FocusParams(SelectionBehaviorOnFocus::kRestore, kWebFocusTypeNone,
-                    nullptr, options));
+  focus(FocusParams(SelectionBehaviorOnFocus::kRestore,
+                    mojom::blink::FocusType::kNone, nullptr, options));
 }
 
 void Element::focus(const FocusParams& params) {
@@ -4165,8 +4165,8 @@ void Element::focus(const FocusParams& params) {
       // Unlike the specification, we re-run focus() for new_focus_target
       // because we can't change |this| in a member function.
       new_focus_target->focus(FocusParams(SelectionBehaviorOnFocus::kReset,
-                                          kWebFocusTypeForward, nullptr,
-                                          params.options));
+                                          mojom::blink::FocusType::kForward,
+                                          nullptr, params.options));
     }
     // 2. If new focus target is null, then:
     //  2.1. If no fallback target was specified, then return.
@@ -4175,7 +4175,7 @@ void Element::focus(const FocusParams& params) {
   // If script called focus(), then the type would be none. This means we are
   // activating because of a script action (kScriptFocus). Otherwise, this is a
   // user activation (kUserFocus).
-  ActivateDisplayLockIfNeeded(params.type == kWebFocusTypeNone
+  ActivateDisplayLockIfNeeded(params.type == mojom::blink::FocusType::kNone
                                   ? DisplayLockActivationReason::kScriptFocus
                                   : DisplayLockActivationReason::kUserFocus);
   DispatchActivateInvisibleEventIfNeeded();
@@ -4554,7 +4554,7 @@ Element* Element::AdjustedFocusedElementInTreeScope() const {
 }
 
 void Element::DispatchFocusEvent(Element* old_focused_element,
-                                 WebFocusType type,
+                                 mojom::blink::FocusType type,
                                  InputDeviceCapabilities* source_capabilities) {
   DispatchEvent(*FocusEvent::Create(
       event_type_names::kFocus, Event::Bubbles::kNo, GetDocument().domWindow(),
@@ -4562,7 +4562,7 @@ void Element::DispatchFocusEvent(Element* old_focused_element,
 }
 
 void Element::DispatchBlurEvent(Element* new_focused_element,
-                                WebFocusType type,
+                                mojom::blink::FocusType type,
                                 InputDeviceCapabilities* source_capabilities) {
   DispatchEvent(*FocusEvent::Create(
       event_type_names::kBlur, Event::Bubbles::kNo, GetDocument().domWindow(),
@@ -4572,7 +4572,7 @@ void Element::DispatchBlurEvent(Element* new_focused_element,
 void Element::DispatchFocusInEvent(
     const AtomicString& event_type,
     Element* old_focused_element,
-    WebFocusType,
+    mojom::blink::FocusType,
     InputDeviceCapabilities* source_capabilities) {
 #if DCHECK_IS_ON()
   DCHECK(!EventDispatchForbiddenScope::IsEventDispatchForbidden());

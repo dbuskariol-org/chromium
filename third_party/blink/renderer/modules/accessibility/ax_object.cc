@@ -29,6 +29,7 @@
 #include "third_party/blink/renderer/modules/accessibility/ax_object.h"
 
 #include "third_party/blink/public/common/features.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
 #include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/renderer/core/aom/accessible_node.h"
 #include "third_party/blink/renderer/core/aom/accessible_node_list.h"
@@ -3194,8 +3195,8 @@ bool AXObject::OnNativeClickAction() {
       if (page) {
         page->GetFocusController().SetFocusedElement(
             element, GetDocument()->GetFrame(),
-            FocusParams(SelectionBehaviorOnFocus::kNone, kWebFocusTypeMouse,
-                        nullptr));
+            FocusParams(SelectionBehaviorOnFocus::kNone,
+                        mojom::blink::FocusType::kMouse, nullptr));
       }
     }
 

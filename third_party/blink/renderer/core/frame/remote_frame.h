@@ -8,7 +8,7 @@
 #include "mojo/public/cpp/bindings/associated_receiver.h"
 #include "mojo/public/cpp/bindings/associated_remote.h"
 #include "third_party/blink/public/mojom/frame/frame.mojom-blink.h"
-#include "third_party/blink/public/platform/web_focus_type.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink-forward.h"
 #include "third_party/blink/renderer/core/core_export.h"
 #include "third_party/blink/renderer/core/execution_context/remote_security_context.h"
 #include "third_party/blink/renderer/core/frame/frame.h"
@@ -67,7 +67,7 @@ class CORE_EXPORT RemoteFrame final : public Frame,
     return prevent_contents_opaque_changes_;
   }
 
-  void AdvanceFocus(WebFocusType, LocalFrame* source);
+  void AdvanceFocus(mojom::blink::FocusType, LocalFrame* source);
 
   void SetView(RemoteFrameView*);
   void CreateView();

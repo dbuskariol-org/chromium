@@ -5,6 +5,7 @@
 #include "third_party/blink/renderer/core/page/spatial_navigation_controller.h"
 
 #include "third_party/blink/public/common/browser_interface_broker_proxy.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
 #include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/element.h"
@@ -220,9 +221,9 @@ bool SpatialNavigationController::HandleEnterKeyboardEvent(
     // convert the Enter key into click on down and press (and up) events.
     if (RuntimeEnabledFeatures::FocuslessSpatialNavigationEnabled() &&
         enter_key_down_seen_ && enter_key_press_seen_) {
-      interest_element->focus(FocusParams(SelectionBehaviorOnFocus::kReset,
-                                          kWebFocusTypeSpatialNavigation,
-                                          nullptr));
+      interest_element->focus(
+          FocusParams(SelectionBehaviorOnFocus::kReset,
+                      mojom::blink::FocusType::kSpatialNavigation, nullptr));
       // We need enter to activate links, etc. The click should be after the
       // focus in case the site transfers focus upon clicking.
       interest_element->DispatchSimulatedClick(event, kSendMouseUpDownEvents);
@@ -511,7 +512,8 @@ void SpatialNavigationController::MoveInterestTo(Node* next_node) {
   ClearFocusInExitedFrames(old_frame, next_node->GetDocument().GetFrame());
 
   element->focus(FocusParams(SelectionBehaviorOnFocus::kReset,
-                             kWebFocusTypeSpatialNavigation, nullptr));
+                             mojom::blink::FocusType::kSpatialNavigation,
+                             nullptr));
   // The focused element could be changed due to elm.focus() on focus handlers.
   // So we need to update the current focused element before DispatchMouseMove.
   // This is tested in snav-applies-hover-with-focused.html.
@@ -612,7 +614,8 @@ void SpatialNavigationController::FullscreenStateChanged(Element* element) {
     return;
   if (IsA<HTMLMediaElement>(element)) {
     element->focus(FocusParams(SelectionBehaviorOnFocus::kReset,
-                               kWebFocusTypeSpatialNavigation, nullptr));
+                               mojom::blink::FocusType::kSpatialNavigation,
+                               nullptr));
   }
 }
 
@@ -658,7 +661,7 @@ bool SpatialNavigationController::UpdateHasNextFormElement(Element* element) {
   bool has_next_form_element =
       IsFocused(element) &&
       page_->GetFocusController().NextFocusableElementInForm(
-          element, kWebFocusTypeForward);
+          element, mojom::blink::FocusType::kForward);
   if (has_next_form_element == spatial_navigation_state_->has_next_form_element)
     return false;
 

@@ -33,9 +33,9 @@
 
 #include "base/time/time.h"
 #include "third_party/blink/public/common/page/page_visibility_state.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-shared.h"
 #include "third_party/blink/public/mojom/manifest/display_mode.mojom-shared.h"
 #include "third_party/blink/public/platform/web_drag_operation.h"
-#include "third_party/blink/public/platform/web_focus_type.h"
 #include "third_party/blink/public/platform/web_string.h"
 #include "third_party/skia/include/core/SkColor.h"
 
@@ -172,9 +172,9 @@ class WebView {
   virtual void AdvanceFocus(bool reverse) {}
 
   // Advance the focus from the frame |from| to the next in sequence
-  // (determined by WebFocusType) focusable element in frame |to|. Used when
+  // (determined by mojom::FocusType) focusable element in frame |to|. Used when
   // focus needs to advance to/from a cross-process frame.
-  virtual void AdvanceFocusAcrossFrames(WebFocusType,
+  virtual void AdvanceFocusAcrossFrames(mojom::FocusType,
                                         WebRemoteFrame* from,
                                         WebLocalFrame* to) {}
 

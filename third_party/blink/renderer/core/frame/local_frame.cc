@@ -2083,6 +2083,26 @@ void LocalFrame::MediaPlayerActionAt(
   MediaPlayerActionAtViewportPoint(location, action->type, action->enable);
 }
 
+void LocalFrame::AdvanceFocusInForm(mojom::blink::FocusType focus_type) {
+  auto* focused_frame = GetPage()->GetFocusController().FocusedFrame();
+  if (focused_frame != this)
+    return;
+
+  DCHECK(GetDocument());
+  Element* element = GetDocument()->FocusedElement();
+  if (!element)
+    return;
+
+  Element* next_element =
+      GetPage()->GetFocusController().NextFocusableElementInForm(element,
+                                                                 focus_type);
+  if (!next_element)
+    return;
+
+  next_element->scrollIntoViewIfNeeded(true /*centerIfNeeded*/);
+  next_element->focus();
+}
+
 void LocalFrame::BindToReceiver(
     blink::LocalFrame* frame,
     mojo::PendingAssociatedReceiver<mojom::blink::LocalFrame> receiver) {

@@ -5227,7 +5227,7 @@ void RenderFrameHostImpl::SetFocusedFrame() {
   GetAssociatedLocalFrame()->Focus();
 }
 
-void RenderFrameHostImpl::AdvanceFocus(blink::WebFocusType type,
+void RenderFrameHostImpl::AdvanceFocus(blink::mojom::FocusType type,
                                        RenderFrameProxyHost* source_proxy) {
   DCHECK(!source_proxy ||
          (source_proxy->GetProcess()->GetID() == GetProcess()->GetID()));

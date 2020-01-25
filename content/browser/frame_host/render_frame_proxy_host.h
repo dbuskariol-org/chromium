@@ -17,7 +17,7 @@
 #include "ipc/ipc_sender.h"
 #include "mojo/public/cpp/bindings/associated_receiver.h"
 #include "third_party/blink/public/mojom/frame/frame.mojom.h"
-#include "third_party/blink/public/platform/web_focus_type.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-forward.h"
 
 struct FrameHostMsg_OpenURL_Params;
 struct FrameMsg_PostMessage_Params;
@@ -154,7 +154,7 @@ class RenderFrameProxyHost : public IPC::Listener,
   void OnOpenURL(const FrameHostMsg_OpenURL_Params& params);
   void OnRouteMessageEvent(const FrameMsg_PostMessage_Params& params);
   void OnDidChangeOpener(int32_t opener_routing_id);
-  void OnAdvanceFocus(blink::WebFocusType type, int32_t source_routing_id);
+  void OnAdvanceFocus(blink::mojom::FocusType type, int32_t source_routing_id);
   void OnPrintCrossProcessSubframe(const gfx::Rect& rect, int document_cookie);
 
   // IPC::Listener

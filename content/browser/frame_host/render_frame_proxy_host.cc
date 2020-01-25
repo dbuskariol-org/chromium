@@ -556,7 +556,7 @@ void RenderFrameProxyHost::OnDidChangeOpener(int32_t opener_routing_id) {
                                                       GetSiteInstance());
 }
 
-void RenderFrameProxyHost::OnAdvanceFocus(blink::WebFocusType type,
+void RenderFrameProxyHost::OnAdvanceFocus(blink::mojom::FocusType type,
                                           int32_t source_routing_id) {
   RenderFrameHostImpl* target_rfh =
       frame_tree_node_->render_manager()->current_frame_host();

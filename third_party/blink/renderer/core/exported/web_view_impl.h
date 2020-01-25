@@ -37,6 +37,7 @@
 #include "build/build_config.h"
 #include "third_party/blink/public/common/input/web_gesture_event.h"
 #include "third_party/blink/public/common/input/web_input_event.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink-forward.h"
 #include "third_party/blink/public/mojom/manifest/display_mode.mojom-shared.h"
 #include "third_party/blink/public/platform/web_input_event_result.h"
 #include "third_party/blink/public/platform/web_rect.h"
@@ -144,7 +145,7 @@ class CORE_EXPORT WebViewImpl final : public WebView,
                     int target_y,
                     base::TimeDelta duration) override;
   void AdvanceFocus(bool reverse) override;
-  void AdvanceFocusAcrossFrames(WebFocusType,
+  void AdvanceFocusAcrossFrames(mojom::blink::FocusType,
                                 WebRemoteFrame* from,
                                 WebLocalFrame* to) override;
   double ZoomLevel() override;

@@ -467,7 +467,8 @@ void RemoteFrame::SetCcLayer(cc::Layer* cc_layer,
   To<HTMLFrameOwnerElement>(Owner())->SetNeedsCompositingUpdate();
 }
 
-void RemoteFrame::AdvanceFocus(WebFocusType type, LocalFrame* source) {
+void RemoteFrame::AdvanceFocus(mojom::blink::FocusType type,
+                               LocalFrame* source) {
   Client()->AdvanceFocus(type, source);
 }
 

@@ -170,6 +170,7 @@
 #include "third_party/blink/public/mojom/choosers/file_chooser.mojom.h"
 #include "third_party/blink/public/mojom/fetch/fetch_api_request.mojom.h"
 #include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom.h"
 #include "third_party/blink/public/mojom/loader/request_context_frame_type.mojom.h"
 #include "third_party/blink/public/mojom/permissions/permission.mojom.h"
 #include "third_party/blink/public/mojom/referrer.mojom.h"
@@ -177,7 +178,6 @@
 #include "third_party/blink/public/platform/modules/service_worker/web_service_worker_network_provider.h"
 #include "third_party/blink/public/platform/url_conversion.h"
 #include "third_party/blink/public/platform/web_data.h"
-#include "third_party/blink/public/platform/web_focus_type.h"
 #include "third_party/blink/public/platform/web_http_body.h"
 #include "third_party/blink/public/platform/web_media_player.h"
 #include "third_party/blink/public/platform/web_media_player_source.h"
@@ -2201,7 +2201,6 @@ bool RenderFrameImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameMsg_SetFrameOwnerProperties,
                         OnSetFrameOwnerProperties)
     IPC_MESSAGE_HANDLER(FrameMsg_AdvanceFocus, OnAdvanceFocus)
-    IPC_MESSAGE_HANDLER(FrameMsg_AdvanceFocusInForm, OnAdvanceFocusInForm)
     IPC_MESSAGE_HANDLER(FrameMsg_SetTextTrackSettings,
                         OnTextTrackSettingsChanged)
     IPC_MESSAGE_HANDLER(FrameMsg_GetSavableResourceLinks,
@@ -2742,24 +2741,18 @@ void RenderFrameImpl::OnSetFrameOwnerProperties(
           frame_owner_properties));
 }
 
-void RenderFrameImpl::OnAdvanceFocus(blink::WebFocusType type,
+void RenderFrameImpl::OnAdvanceFocus(blink::mojom::FocusType type,
                                      int32_t source_routing_id) {
   RenderFrameProxy* source_frame =
       RenderFrameProxy::FromRoutingID(source_routing_id);
   if (!source_frame) {
-    render_view_->webview()->SetInitialFocus(type ==
-                                             blink::kWebFocusTypeBackward);
+    render_view_->webview()->SetInitialFocus(
+        type == blink::mojom::FocusType::kBackward);
     return;
   }
 
   render_view_->webview()->AdvanceFocusAcrossFrames(
       type, source_frame->web_frame(), frame_);
-}
-
-void RenderFrameImpl::OnAdvanceFocusInForm(blink::WebFocusType focus_type) {
-  if (render_view_->webview()->FocusedFrame() != frame_)
-    return;
-  frame_->AdvanceFocusInForm(focus_type);
 }
 
 void RenderFrameImpl::OnTextTrackSettingsChanged(

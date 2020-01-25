@@ -598,12 +598,12 @@ scoped_refptr<ComputedStyle> DateTimeEditElement::CustomStyleForLayoutObject() {
   return style;
 }
 
-void DateTimeEditElement::DidBlurFromField(WebFocusType focus_type) {
+void DateTimeEditElement::DidBlurFromField(mojom::blink::FocusType focus_type) {
   if (edit_control_owner_)
     edit_control_owner_->DidBlurFromControl(focus_type);
 }
 
-void DateTimeEditElement::DidFocusOnField(WebFocusType focus_type) {
+void DateTimeEditElement::DidFocusOnField(mojom::blink::FocusType focus_type) {
   if (edit_control_owner_)
     edit_control_owner_->DidFocusOnControl(focus_type);
 }

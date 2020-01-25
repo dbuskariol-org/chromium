@@ -30,6 +30,7 @@
 #include "third_party/blink/renderer/core/html/forms/html_select_element.h"
 
 #include "build/build_config.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
 #include "third_party/blink/public/platform/task_type.h"
 #include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/public/strings/grit/blink_strings.h"
@@ -1115,7 +1116,7 @@ void HTMLSelectElement::SelectOption(HTMLOptionElement* element,
 
 void HTMLSelectElement::DispatchFocusEvent(
     Element* old_focused_element,
-    WebFocusType type,
+    mojom::blink::FocusType type,
     InputDeviceCapabilities* source_capabilities) {
   // Save the selection so it can be compared to the new selection when
   // dispatching change events during blur event dispatch.
@@ -1127,7 +1128,7 @@ void HTMLSelectElement::DispatchFocusEvent(
 
 void HTMLSelectElement::DispatchBlurEvent(
     Element* new_focused_element,
-    WebFocusType type,
+    mojom::blink::FocusType type,
     InputDeviceCapabilities* source_capabilities) {
   type_ahead_.ResetSession();
   // We only need to fire change events here for menu lists, because we fire
@@ -1439,8 +1440,8 @@ void HTMLSelectElement::MenuListDefaultEventHandler(Event& event) {
             .domWindow()
             ->GetInputDeviceCapabilities()
             ->FiresTouchEvents(ToMouseEvent(event).FromTouch());
-    focus(FocusParams(SelectionBehaviorOnFocus::kRestore, kWebFocusTypeNone,
-                      source_capabilities));
+    focus(FocusParams(SelectionBehaviorOnFocus::kRestore,
+                      mojom::blink::FocusType::kNone, source_capabilities));
     if (GetLayoutObject() && GetLayoutObject()->IsMenuList() &&
         !IsDisabledFormControl()) {
       if (PopupIsVisible()) {

@@ -340,7 +340,7 @@ void HTMLInputElement::EndEditing() {
 void HTMLInputElement::DispatchFocusInEvent(
     const AtomicString& event_type,
     Element* old_focused_element,
-    WebFocusType type,
+    mojom::blink::FocusType type,
     InputDeviceCapabilities* source_capabilities) {
   if (event_type == event_type_names::kDOMFocusIn)
     input_type_view_->HandleFocusInEvent(old_focused_element, type);

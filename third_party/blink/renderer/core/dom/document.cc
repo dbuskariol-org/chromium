@@ -52,6 +52,7 @@
 #include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/common/thread_safe_browser_interface_broker_proxy.h"
 #include "third_party/blink/public/mojom/feature_policy/feature_policy.mojom-blink.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
 #include "third_party/blink/public/mojom/insecure_input/insecure_input_service.mojom-blink.h"
 #include "third_party/blink/public/mojom/ukm/ukm.mojom-blink.h"
 #include "third_party/blink/public/platform/interface_provider.h"
@@ -667,7 +668,7 @@ Document::Document(const DocumentInit& initializer,
       is_painting_preview_(false),
       compatibility_mode_(kNoQuirksMode),
       compatibility_mode_locked_(false),
-      last_focus_type_(kWebFocusTypeNone),
+      last_focus_type_(mojom::blink::FocusType::kNone),
       had_keyboard_event_(false),
       clear_focused_element_timer_(
           GetTaskRunner(TaskType::kInternalUserInteraction),
@@ -4940,7 +4941,7 @@ void Document::SetAnnotatedRegions(
   SetAnnotatedRegionsDirty(false);
 }
 
-void Document::SetLastFocusType(WebFocusType last_focus_type) {
+void Document::SetLastFocusType(mojom::blink::FocusType last_focus_type) {
   last_focus_type_ = last_focus_type;
 }
 
@@ -5026,7 +5027,7 @@ bool Document::SetFocusedElement(Element* new_focused_element,
     SetSequentialFocusNavigationStartingPoint(focused_element_.Get());
 
     // Keep track of last focus from user interaction, ignoring focus from code.
-    if (params.type != kWebFocusTypeNone)
+    if (params.type != mojom::blink::FocusType::kNone)
       last_focus_type_ = params.type;
 
     focused_element_->SetFocused(true, params.type);
@@ -5099,8 +5100,9 @@ bool Document::SetFocusedElement(Element* new_focused_element,
 }
 
 void Document::ClearFocusedElement() {
-  SetFocusedElement(nullptr, FocusParams(SelectionBehaviorOnFocus::kNone,
-                                         kWebFocusTypeNone, nullptr));
+  SetFocusedElement(nullptr,
+                    FocusParams(SelectionBehaviorOnFocus::kNone,
+                                mojom::blink::FocusType::kNone, nullptr));
 }
 
 void Document::NotifyFocusedElementChanged(Element* old_focused_element,
@@ -5133,7 +5135,7 @@ void Document::SetSequentialFocusNavigationStartingPoint(Node* node) {
 }
 
 Element* Document::SequentialFocusNavigationStartingPoint(
-    WebFocusType type) const {
+    mojom::blink::FocusType type) const {
   if (focused_element_)
     return focused_element_.Get();
   if (!sequential_focus_navigation_starting_point_)
@@ -5145,7 +5147,7 @@ Element* Document::SequentialFocusNavigationStartingPoint(
               sequential_focus_navigation_starting_point_->endContainer());
     if (auto* element = DynamicTo<Element>(node))
       return element;
-    if (Element* neighbor_element = type == kWebFocusTypeForward
+    if (Element* neighbor_element = type == mojom::blink::FocusType::kForward
                                         ? ElementTraversal::Previous(*node)
                                         : ElementTraversal::Next(*node))
       return neighbor_element;
@@ -5169,7 +5171,7 @@ Element* Document::SequentialFocusNavigationStartingPoint(
     // TODO(tkent): Using FlatTreeTraversal is inconsistent with
     // FocusController. Ideally we should find backward/forward focusable
     // elements before the starting point is disconnected. crbug.com/606582
-    if (type == kWebFocusTypeForward) {
+    if (type == mojom::blink::FocusType::kForward) {
       Node* previous = FlatTreeTraversal::Previous(*next_node);
       for (; previous; previous = FlatTreeTraversal::Previous(*previous)) {
         if (auto* element = DynamicTo<Element>(previous))

@@ -28,6 +28,7 @@
 
 #include <algorithm>
 
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
 #include "third_party/blink/renderer/bindings/core/v8/node_or_string_or_trusted_script.h"
 #include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_script.h"
 #include "third_party/blink/renderer/core/accessibility/ax_object_cache.h"
@@ -3097,8 +3098,8 @@ HTMLSlotElement* Node::assignedSlotForBinding() {
   return nullptr;
 }
 
-void Node::SetFocused(bool flag, WebFocusType focus_type) {
-  if (focus_type == kWebFocusTypeMouse)
+void Node::SetFocused(bool flag, mojom::blink::FocusType focus_type) {
+  if (focus_type == mojom::blink::FocusType::kMouse)
     GetDocument().SetHadKeyboardEvent(false);
   GetDocument().UserActionElements().SetFocused(this, flag);
 }

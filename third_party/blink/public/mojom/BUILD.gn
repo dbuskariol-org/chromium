@@ -62,6 +62,7 @@ mojom("mojom_platform") {
     "hyphenation/hyphenation.mojom",
     "idle/idle_manager.mojom",
     "image_downloader/image_downloader.mojom",
+    "input/focus_type.mojom",
     "input/scroll_direction.mojom",
     "insecure_input/insecure_input_service.mojom",
     "keyboard_lock/keyboard_lock.mojom",

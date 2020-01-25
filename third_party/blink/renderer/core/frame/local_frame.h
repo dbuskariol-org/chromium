@@ -42,6 +42,7 @@
 #include "third_party/blink/public/mojom/ad_tagging/ad_frame.mojom-blink-forward.h"
 #include "third_party/blink/public/mojom/frame/frame.mojom-blink.h"
 #include "third_party/blink/public/mojom/frame/lifecycle.mojom-blink-forward.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink-forward.h"
 #include "third_party/blink/public/mojom/loader/pause_subresource_loading_handle.mojom-blink-forward.h"
 #include "third_party/blink/public/mojom/reporting/reporting.mojom-blink.h"
 #include "third_party/blink/public/mojom/web_feature/web_feature.mojom-blink-forward.h"
@@ -494,6 +495,7 @@ class CORE_EXPORT LocalFrame final : public Frame,
   void MediaPlayerActionAt(
       const gfx::Point& window_point,
       blink::mojom::blink::MediaPlayerActionPtr action) final;
+  void AdvanceFocusInForm(mojom::blink::FocusType focus_type) final;
 
   SystemClipboard* GetSystemClipboard();
 

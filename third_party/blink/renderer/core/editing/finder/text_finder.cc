@@ -30,6 +30,7 @@
 
 #include "third_party/blink/renderer/core/editing/finder/text_finder.h"
 
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
 #include "third_party/blink/public/platform/web_float_rect.h"
 #include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/public/platform/web_vector.h"
@@ -268,7 +269,7 @@ void TextFinder::SetFindEndstateFocusAndSelection() {
                 .Build());
         GetFrame()->GetDocument()->SetFocusedElement(
             element, FocusParams(SelectionBehaviorOnFocus::kNone,
-                                 kWebFocusTypeNone, nullptr));
+                                 mojom::blink::FocusType::kNone, nullptr));
         return;
       }
     }
@@ -284,7 +285,7 @@ void TextFinder::SetFindEndstateFocusAndSelection() {
     if (element->IsFocusable()) {
       GetFrame()->GetDocument()->SetFocusedElement(
           element, FocusParams(SelectionBehaviorOnFocus::kNone,
-                               kWebFocusTypeNone, nullptr));
+                               mojom::blink::FocusType::kNone, nullptr));
       return;
     }
   }

@@ -1101,7 +1101,8 @@ void ContainerNode::FocusWithinStateChanged() {
     this_element->PseudoStateChanged(CSSSelector::kPseudoFocusWithin);
 }
 
-void ContainerNode::SetFocused(bool received, WebFocusType focus_type) {
+void ContainerNode::SetFocused(bool received,
+                               mojom::blink::FocusType focus_type) {
   // Recurse up author shadow trees to mark shadow hosts if it matches :focus.
   // TODO(kochi): Handle UA shadows which marks multiple nodes as focused such
   // as <input type="date"> the same way as author shadow.

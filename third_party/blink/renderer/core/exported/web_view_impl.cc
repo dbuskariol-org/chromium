@@ -44,6 +44,7 @@
 #include "third_party/blink/public/common/input/web_menu_source_type.h"
 #include "third_party/blink/public/common/page/page_zoom.h"
 #include "third_party/blink/public/common/plugin/plugin_action.h"
+#include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
 #include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/public/platform/web_text_autosizer_page_info.h"
 #include "third_party/blink/public/platform/web_text_input_info.h"
@@ -2078,7 +2079,8 @@ void WebViewImpl::SetInitialFocus(bool reverse) {
       document->ClearFocusedElement();
   }
   GetPage()->GetFocusController().SetInitialFocus(
-      reverse ? kWebFocusTypeBackward : kWebFocusTypeForward);
+      reverse ? mojom::blink::FocusType::kBackward
+              : mojom::blink::FocusType::kForward);
 }
 
 // TODO(dglazkov): Remove and replace with Node:hasEditableStyle.
@@ -2296,11 +2298,12 @@ void WebViewImpl::ComputeScaleAndScrollForEditableElementRects(
 }
 
 void WebViewImpl::AdvanceFocus(bool reverse) {
-  GetPage()->GetFocusController().AdvanceFocus(reverse ? kWebFocusTypeBackward
-                                                       : kWebFocusTypeForward);
+  GetPage()->GetFocusController().AdvanceFocus(
+      reverse ? mojom::blink::FocusType::kBackward
+              : mojom::blink::FocusType::kForward);
 }
 
-void WebViewImpl::AdvanceFocusAcrossFrames(WebFocusType type,
+void WebViewImpl::AdvanceFocusAcrossFrames(mojom::blink::FocusType type,
                                            WebRemoteFrame* from,
                                            WebLocalFrame* to) {
   // TODO(alexmos): Pass in proper with sourceCapabilities.
