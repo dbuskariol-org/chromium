@@ -12,6 +12,7 @@ import org.chromium.chrome.R;
 import org.chromium.chrome.browser.modules.ModuleInstallUi;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.components.module_installer.engine.InstallListener;
+import org.chromium.ui.vr.VrModeObserver;
 
 import java.util.ArrayList;
 import java.util.List;
