@@ -24,34 +24,33 @@ goog.provide('NodeIdentifier');
  */
 var Attributes;
 
-/**
- * @param {!AutomationNode} node
- * @constructor
- */
-NodeIdentifier = function(node) {
+NodeIdentifier = class {
   /**
-   * @type {!Attributes}
+   * @param {!AutomationNode} node
    */
-  this.attributes = this.createAttributes_(node);
+  constructor(node) {
+    /**
+     * @type {!Attributes}
+     */
+    this.attributes = this.createAttributes_(node);
 
-  /**
-   * @type {!string}
-   */
-  this.pageUrl = node.root.docUrl || '';
+    /**
+     * @type {!string}
+     */
+    this.pageUrl = node.root.docUrl || '';
 
-  /**
-   * @type {!Array<!Attributes>}
-   */
-  this.ancestry = this.createAttributesAncestry_(node);
-};
+    /**
+     * @type {!Array<!Attributes>}
+     */
+    this.ancestry = this.createAttributesAncestry_(node);
+  }
 
-NodeIdentifier.prototype = {
   /**
    * Returns true if |this| is equal to |other|.
    * @param {!NodeIdentifier} other
    * @return {boolean}
    */
-  equals: function(other) {
+  equals(other) {
     // If pageUrl and HTML Id match, we know they refer to the same node.
     if (this.pageUrl && this.attributes.id && this.pageUrl === other.pageUrl &&
         this.attributes.id === other.attributes.id) {
@@ -73,14 +72,14 @@ NodeIdentifier.prototype = {
       }
     }
     return true;
-  },
+  }
 
   /**
    * @param {!AutomationNode} node
    * @return {!Attributes}
    * @private
    */
-  createAttributes_: function(node) {
+  createAttributes_(node) {
     return {
       id: (node.htmlAttributes) ? node.htmlAttributes['id'] || '' : '',
       name: node.name || '',
@@ -92,14 +91,14 @@ NodeIdentifier.prototype = {
       className: node.className || '',
       htmlTag: node.htmlTag || ''
     };
-  },
+  }
 
   /**
    * @param {!AutomationNode} node
    * @return {!Array<!Attributes>}
    * @private
    */
-  createAttributesAncestry_: function(node) {
+  createAttributesAncestry_(node) {
     var ancestry = [];
     var scanNode = node.parent;
     var treeRoot = node.root;
@@ -108,7 +107,7 @@ NodeIdentifier.prototype = {
       scanNode = scanNode.parent;
     }
     return ancestry;
-  },
+  }
 
   /**
    * @param {!Attributes} target
@@ -116,7 +115,7 @@ NodeIdentifier.prototype = {
    * @return {boolean}
    * @private
    */
-  matchingAttributes_: function(target, candidate) {
+  matchingAttributes_(target, candidate) {
     for (var [key, targetValue] of Object.entries(target)) {
       if (candidate[key] !== targetValue) {
         return false;

@@ -35,10 +35,10 @@ def CheckChangeOnUpload(input_api, output_api):
     from check_chromevox import CheckChromeVox
   finally:
     sys.path.pop(0)
-  success, output = CheckChromeVox(paths)
-  if not success:
-    return [
-        output_api.PresubmitError(
-            'ChromeVox closure compilation failed', long_text=output)
-    ]
+    success, output = CheckChromeVox(paths)
+    if not success:
+      return [
+          output_api.PresubmitError(
+              'ChromeVox closure compilation failed', long_text=output)
+      ]
   return []
