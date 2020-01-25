@@ -1983,8 +1983,7 @@ void LayoutObject::SetPseudoElementStyle(
 }
 
 void LayoutObject::MarkContainerChainForOverflowRecalcIfNeeded(
-    bool mark_container_chain_layout_overflow_recalc,
-    bool mark_container_chain_visual_overflow_recalc) {
+    bool mark_container_chain_layout_overflow_recalc) {
   LayoutObject* object = this;
   do {
     // Cell and row need to propagate the flag to their containing section and
@@ -1996,8 +1995,7 @@ void LayoutObject::MarkContainerChainForOverflowRecalcIfNeeded(
     if (object) {
       if (mark_container_chain_layout_overflow_recalc)
         object->SetChildNeedsLayoutOverflowRecalc();
-      if (mark_container_chain_visual_overflow_recalc)
-        object->MarkSelfPaintingLayerForVisualOverflowRecalc();
+      object->MarkSelfPaintingLayerForVisualOverflowRecalc();
     }
 
   } while (object);
@@ -2005,13 +2003,11 @@ void LayoutObject::MarkContainerChainForOverflowRecalcIfNeeded(
 
 void LayoutObject::SetNeedsOverflowRecalc(
     OverflowRecalcType overflow_recalc_type) {
-  bool mark_container_chain_layout_overflow_recalc = false;
-  bool mark_container_chain_visual_overflow_recalc = false;
+  bool mark_container_chain_layout_overflow_recalc =
+      !SelfNeedsLayoutOverflowRecalc();
 
   if (overflow_recalc_type ==
       OverflowRecalcType::kLayoutAndVisualOverflowRecalc) {
-    mark_container_chain_layout_overflow_recalc =
-        !SelfNeedsLayoutOverflowRecalc();
     SetSelfNeedsLayoutOverflowRecalc();
   }
 
@@ -2020,15 +2016,12 @@ void LayoutObject::SetNeedsOverflowRecalc(
          overflow_recalc_type ==
              OverflowRecalcType::kLayoutAndVisualOverflowRecalc);
   SetShouldCheckForPaintInvalidation();
-  mark_container_chain_visual_overflow_recalc =
-      !SelfPaintingLayerNeedsVisualOverflowRecalc();
   MarkSelfPaintingLayerForVisualOverflowRecalc();
 
-  if (mark_container_chain_layout_overflow_recalc ||
-      mark_container_chain_visual_overflow_recalc) {
+  if (mark_container_chain_layout_overflow_recalc) {
     MarkContainerChainForOverflowRecalcIfNeeded(
-        mark_container_chain_layout_overflow_recalc,
-        mark_container_chain_visual_overflow_recalc);
+        overflow_recalc_type ==
+        OverflowRecalcType::kLayoutAndVisualOverflowRecalc);
   }
 }
 

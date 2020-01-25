@@ -2748,8 +2748,7 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
 
   bool SelfPaintingLayerNeedsVisualOverflowRecalc() const;
   inline void MarkContainerChainForOverflowRecalcIfNeeded(
-      bool mark_container_chain_layout_overflow_recalc,
-      bool mark_container_chain_visual_overflow_recalc);
+      bool mark_container_chain_layout_overflow_recalc);
 
   inline void SetNeedsPaintOffsetAndVisualRectUpdate();
 
