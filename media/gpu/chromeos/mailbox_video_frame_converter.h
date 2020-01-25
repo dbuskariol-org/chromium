@@ -99,8 +99,7 @@ class MEDIA_GPU_EXPORT MailboxVideoFrameConverter : public VideoFrameConverter {
   // alive for the duration of this method. This method runs on
   // |gpu_task_runner_|.
   std::unique_ptr<ScopedSharedImage> GenerateSharedImageOnGPUThread(
-      VideoFrame* video_frame,
-      const gfx::Size& visible_size);
+      VideoFrame* video_frame);
 
   // Registers the mapping between a DMA-buf VideoFrame and the SharedImage.
   // |origin_frame| must be kept alive for the duration of this method.
