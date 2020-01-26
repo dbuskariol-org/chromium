@@ -218,8 +218,8 @@ bool AppLauncherTabHelper::ShouldAllowRequest(
   bool is_link_transition = ui::PageTransitionTypeIncludingQualifiersIs(
       request_info.transition_type, ui::PAGE_TRANSITION_LINK);
 
-  ios::ChromeBrowserState* browser_state =
-      ios::ChromeBrowserState::FromBrowserState(web_state_->GetBrowserState());
+  ChromeBrowserState* browser_state =
+      ChromeBrowserState::FromBrowserState(web_state_->GetBrowserState());
 
   if (!is_link_transition && original_pending_url.is_valid()) {
     // At this stage the navigation will be canceled in all cases. If this
