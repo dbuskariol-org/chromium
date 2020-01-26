@@ -4,7 +4,6 @@
 
 #include "components/arc/session/arc_vm_client_adapter.h"
 
-#include <iterator>
 #include <memory>
 #include <string>
 #include <utility>
@@ -753,10 +752,7 @@ TEST_F(ArcVmClientAdapterTest, KernelParam_RO) {
 
   // Check "rw" is not in |params|.
   auto request = GetTestConciergeClient()->start_arc_vm_request();
-  const std::vector<std::string> params(
-      std::make_move_iterator(request.mutable_params()->begin()),
-      std::make_move_iterator(request.mutable_params()->end()));
-  EXPECT_FALSE(base::Contains(params, "rw"));
+  EXPECT_FALSE(base::Contains(request.params(), "rw"));
 }
 
 // Tests that the kernel parameter does include "rw" when '/' is writable and
@@ -771,10 +767,7 @@ TEST_F(ArcVmClientAdapterTest, KernelParam_RW) {
 
   // Check "rw" is in |params|.
   auto request = GetTestConciergeClient()->start_arc_vm_request();
-  const std::vector<std::string> params(
-      std::make_move_iterator(request.mutable_params()->begin()),
-      std::make_move_iterator(request.mutable_params()->end()));
-  EXPECT_TRUE(base::Contains(params, "rw"));
+  EXPECT_TRUE(base::Contains(request.params(), "rw"));
 }
 
 // Tests that CreateArcVmClientAdapter(), the non-testing version, doesn't
