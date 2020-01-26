@@ -44,6 +44,7 @@
 #include "media/blink/video_frame_compositor.h"
 #include "media/blink/webmediaplayer_params.h"
 #include "media/filters/pipeline_controller.h"
+#include "media/learning/common/media_learning_tasks.h"
 #include "media/renderers/paint_canvas_video_renderer.h"
 #include "mojo/public/cpp/bindings/remote.h"
 #include "services/media_session/public/cpp/media_position.h"
@@ -638,6 +639,10 @@ class MEDIA_BLINK_EXPORT WebMediaPlayerImpl
   // that we want now.  Will destroy the helper if we shouldn't be measuring
   // smoothness right now.
   void UpdateSmoothnessHelper();
+
+  // Get the LearningTaskController for |task_id|.
+  std::unique_ptr<learning::LearningTaskController> GetLearningTaskController(
+      learning::MediaLearningTasks::Id task_id);
 
   blink::WebLocalFrame* const frame_;
 
