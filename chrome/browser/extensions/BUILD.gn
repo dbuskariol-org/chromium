@@ -790,6 +790,7 @@ jumbo_static_library("extensions") {
     "//chrome/browser:theme_properties",
     "//chrome/browser/devtools",
     "//chrome/browser/engagement:mojo_bindings",
+    "//chrome/browser/image_decoder",
     "//chrome/browser/media/router",
     "//chrome/browser/media/router/discovery",
     "//chrome/browser/resource_coordinator:mojo_bindings",

@@ -212,6 +212,7 @@ android_library("chrome_public_java") {
 
 android_library("chrome_java") {
   deps = [
+    ":chrome_android_java_switches",
     ":chrome_app_java_resources",
     ":chrome_download_java_resources",
     ":chrome_public_android_manifest",
@@ -219,7 +220,6 @@ android_library("chrome_java") {
     ":chrome_public_java",
     ":chrome_version_constants",
     ":partner_location_descriptor_proto_java",
-    ":thumbnail_cache_entry_proto_java",
     ":update_proto_java",
     ":usage_stats_proto_java",
     "$google_play_services_package:google_play_services_auth_base_java",
@@ -255,6 +255,7 @@ android_library("chrome_java") {
     "//chrome/browser/settings:java",
     "//chrome/browser/share/android:java_resources",
     "//chrome/browser/share/android:screenshot_java",
+    "//chrome/browser/thumbnail:java",
     "//chrome/browser/ui/android/appmenu:factory_java",
     "//chrome/browser/ui/android/appmenu:java",
     "//chrome/browser/ui/android/native_page:java",
@@ -379,7 +380,6 @@ android_library("chrome_java") {
   srcjar_deps = [
     ":chrome_android_java_enums_srcjar",
     ":chrome_android_java_google_api_keys_srcjar",
-    ":chrome_android_java_switches_srcjar",
     ":chrome_product_config",
     ":photo_picker_aidl",
     ":resource_id_javagen",
@@ -592,14 +592,13 @@ java_cpp_strings("chrome_android_java_switches_srcjar") {
   template = "//chrome/android/java_templates/ChromeSwitches.java.tmpl"
 }
 
+android_library("chrome_android_java_switches") {
+  srcjar_deps = [ ":chrome_android_java_switches_srcjar" ]
+}
+
 proto_java_library("partner_location_descriptor_proto_java") {
   proto_path = "java/src/org/chromium/chrome/browser/omnibox/geo"
   sources = [ "$proto_path/partner_location_descriptor.proto" ]
-}
-
-proto_java_library("thumbnail_cache_entry_proto_java") {
-  proto_path = "java/src/org/chromium/chrome/browser/widget"
-  sources = [ "$proto_path/thumbnail_cache_entry.proto" ]
 }
 
 proto_java_library("update_proto_java") {
@@ -647,6 +646,7 @@ junit_binary("chrome_junit_tests") {
     "//chrome/android/webapk/test:junit_test_support",
     "//chrome/browser/image_fetcher:java",
     "//chrome/browser/preferences:preferences_junit_tests",
+    "//chrome/browser/thumbnail:java",
     "//chrome/browser/ui/android/appmenu/internal:junit",
     "//chrome/browser/ui/messages/android:junit",
     "//chrome/test/android:chrome_java_test_support",
@@ -738,6 +738,7 @@ android_library("chrome_test_java") {
 
   deps = [
     ":browser_java_test_support",
+    ":chrome_android_java_switches",
     ":chrome_app_java_resources",
     ":chrome_test_util_java",
     ":partner_location_descriptor_proto_java",
@@ -767,6 +768,8 @@ android_library("chrome_test_java") {
     "//chrome/browser/flags:java",
     "//chrome/browser/preferences:java",
     "//chrome/browser/settings:java",
+    "//chrome/browser/thumbnail:java",
+    "//chrome/browser/thumbnail:javatests",
     "//chrome/browser/ui/android/appmenu:java",
     "//chrome/browser/ui/android/appmenu:test_support_java",
     "//chrome/browser/ui/messages/android:java",
@@ -1480,6 +1483,7 @@ java_group("chrome_public_base_module_java_for_test") {
     "//chrome/android/features/autofill_assistant:autofill_assistant_java_test_support",
     "//chrome/browser/android/metrics:ukm_java_test_support",
     "//chrome/browser/subresource_filter:subresource_filter_java_test_support",
+    "//chrome/browser/thumbnail:thumbnail_java_test_support",
     "//components/minidump_uploader:minidump_uploader_java",
     "//content/public/test/android:content_java_test_support",
   ]
@@ -1544,6 +1548,7 @@ static_library("browser_test_support") {
   deps = [
     ":test_support_jni_headers",
     "//chrome/browser",
+    "//chrome/browser/thumbnail:test_support",
     "//components/offline_pages/core/background:test_support",
     "//content/test:test_support",
   ]
@@ -2598,8 +2603,6 @@ generate_jni("chrome_jni_headers") {
     "java/src/org/chromium/chrome/browser/download/DownloadItem.java",
     "java/src/org/chromium/chrome/browser/download/DownloadLocationDialogBridge.java",
     "java/src/org/chromium/chrome/browser/download/DownloadManagerService.java",
-    "java/src/org/chromium/chrome/browser/download/DownloadMediaData.java",
-    "java/src/org/chromium/chrome/browser/download/DownloadMediaParserBridge.java",
     "java/src/org/chromium/chrome/browser/download/DownloadUtils.java",
     "java/src/org/chromium/chrome/browser/download/home/rename/RenameUtils.java",
     "java/src/org/chromium/chrome/browser/download/items/OfflineContentAggregatorFactory.java",
@@ -2812,7 +2815,6 @@ generate_jni("chrome_jni_headers") {
     "java/src/org/chromium/chrome/browser/webapps/addtohomescreen/AddToHomescreenCoordinator.java",
     "java/src/org/chromium/chrome/browser/webapps/addtohomescreen/AddToHomescreenInstaller.java",
     "java/src/org/chromium/chrome/browser/webapps/addtohomescreen/AddToHomescreenMediator.java",
-    "java/src/org/chromium/chrome/browser/widget/ThumbnailGenerator.java",
   ]
 
   # Used for testing only, should not be shipped to end users.
