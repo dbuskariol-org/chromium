@@ -1735,26 +1735,14 @@ crbug.com/987224 [ IOS ] virtual/cascade/external/wpt/css/css-paint-api/idlharne
 # PLEASE DO NOT PUT ANYTHING INSIDE THIS SECTION!!
 # ======
 
-# Put back the one on 4788:
-crbug.com/1035582 fast/forms/suggested-value.html [ Skip ]
-crbug.com/1035582 fast/forms/select/listbox-tap.html [ Skip ]
-
 # These need another look (timeout):
 crbug.com/1035582 external/wpt/css/selectors/focus-visible-003-manual.html [ Skip ]
 crbug.com/1035582 external/wpt/css/selectors/focus-visible-004-manual.html [ Skip ]
 
-# These are flaky or something? Rebaselining doesn't help.
-# See https://test-results.appspot.com/data/layout_results/linux-blink-rel/26507/webkit_layout_tests%20%28with%20patch%29/layout-test-results/results.html
-crbug.com/1035582 external/wpt/css/css-transforms/transform-input-015.html [ Skip ]
+# Still broken, all platforms:
 crbug.com/1035582 fast/forms/button/button-with-float.html [ Skip ]
 crbug.com/1035582 fast/forms/select/listbox-overlay-scrollbar.html [ Skip ]
-crbug.com/1035582 paint/invalidation/scroll/caret-with-composited-scroll.html [ Skip ]
-crbug.com/1035582 paint/pagination/composited-paginated-outlined-box.html [ Skip ]
-
-# https://ci.chromium.org/p/chromium/builders/try/win7-blink-rel/6652
-crbug.com/1035582 [ Win7 ] fast/forms/suggestion-picker/datetimelocal-suggestion-picker-appearance-locale-hebrew.html [ Skip ]
-crbug.com/1035582 [ Win7 ] fast/forms/suggestion-picker/time-suggestion-picker-appearance-rtl.html [ Skip ]
-
+crbug.com/1035582 external/wpt/css/css-transforms/transform-input-015.html [ Skip ]
 
 # ======
 # ====== End of rebaselines for crbug.com/1035582 ======
@@ -1765,9 +1753,8 @@ crbug.com/1035582 [ Win7 ] fast/forms/suggestion-picker/time-suggestion-picker-a
 crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-hover-focused-unselected.html [ Skip ]
 crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-appearance-basic.html [ Skip ]
 
-
-
-
+# Bug in FormControlsRefresh <select multiple> tap behavior:
+crbug.com/1045672 fast/forms/select/listbox-tap.html [ Failure ]
 
 
 # ====== Form Controls Refresh failures until here ======
@@ -4858,7 +4845,7 @@ crbug.com/767469 http/tests/navigation/start-load-during-provisional-loader-deta
 crbug.com/767469 virtual/stable/http/tests/navigation/start-load-during-provisional-loader-detach.html [ Pass Failure ]
 
 # Sheriff failures 2017-10-02
-###crbug.com/770971 [ Win7 ] fast/forms/suggested-value.html [ Pass Failure ]
+crbug.com/770971 [ Win7 ] fast/forms/suggested-value.html [ Pass Failure ]
 crbug.com/771492 [ Win ] external/wpt/css/css-tables/table-model-fixup-2.html [ Failure ]
 crbug.com/771492 [ Linux ] external/wpt/css/css-tables/table-model-fixup-2.html [ Failure ]
 crbug.com/771492 [ Mac ] external/wpt/css/css-tables/table-model-fixup-2.html [ Failure ]
