@@ -128,8 +128,8 @@ void FontSizeTabHelper::PageLoaded(
 }
 
 PrefService* FontSizeTabHelper::GetPrefService() const {
-  ios::ChromeBrowserState* chrome_browser_state =
-      ios::ChromeBrowserState::FromBrowserState(web_state_->GetBrowserState());
+  ChromeBrowserState* chrome_browser_state =
+      ChromeBrowserState::FromBrowserState(web_state_->GetBrowserState());
   return chrome_browser_state->GetPrefs();
 }
 
