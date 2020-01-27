@@ -106,7 +106,6 @@ import org.chromium.chrome.browser.metrics.ActivityTabStartupMetricsTracker;
 import org.chromium.chrome.browser.metrics.LaunchMetrics;
 import org.chromium.chrome.browser.metrics.UmaSessionStats;
 import org.chromium.chrome.browser.multiwindow.MultiWindowUtils;
-import org.chromium.chrome.browser.nfc.BeamController;
 import org.chromium.chrome.browser.night_mode.NightModeReparentingController;
 import org.chromium.chrome.browser.ntp.NewTabPage;
 import org.chromium.chrome.browser.ntp.NewTabPageUma;
@@ -1053,16 +1052,6 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
             }
             mUpdateNotificationController.onNewIntent(getIntent());
             UpdateMenuItemHelper.getInstance().registerObserver(mUpdateStateChangedListener);
-        });
-
-        DeferredStartupHandler.getInstance().addDeferredTask(() -> {
-            if (isActivityFinishingOrDestroyed()) return;
-            BeamController.registerForBeam(ChromeActivity.this, () -> {
-                Tab currentTab = getActivityTab();
-                if (currentTab == null) return null;
-                if (!currentTab.isUserInteractable()) return null;
-                return currentTab.getUrl();
-            });
         });
 
         final String simpleName = getClass().getSimpleName();

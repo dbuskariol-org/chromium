@@ -4,18 +4,14 @@
 
 package org.chromium.chrome.browser.settings;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Process;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.Preference;
@@ -109,15 +105,6 @@ public class SettingsActivity extends ChromeBaseAppCompatActivity
                     .beginTransaction()
                     .replace(android.R.id.content, fragment)
                     .commit();
-        }
-
-        if (ApiCompatibilityUtils.checkPermission(
-                    this, Manifest.permission.NFC, Process.myPid(), Process.myUid())
-                == PackageManager.PERMISSION_GRANTED) {
-            // Disable Android Beam on JB and later devices.
-            // In ICS it does nothing - i.e. we will send a Play Store link if NFC is used.
-            NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-            if (nfcAdapter != null) nfcAdapter.setNdefPushMessage(null, this);
         }
 
         Resources res = getResources();
