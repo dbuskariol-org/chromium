@@ -6450,3 +6450,6 @@ crbug.com/1045510 [ Win7 ] fast/forms/suggestion-picker/date-suggestion-picker-a
 
 # TODO(michaelludwig) - Temporary suppression for Skia change + rebaseline
 crbug.com/1045050 [ Mac ] media/video-layer-crash.html [ Pass Failure ]
+
+crbug.com/1045329 external/wpt/animation-worklet/idlharness.any.worker.html [ Pass Timeout ]
+crbug.com/1045329 virtual/threaded/external/wpt/animation-worklet/idlharness.any.worker.html [ Pass Timeout ]
