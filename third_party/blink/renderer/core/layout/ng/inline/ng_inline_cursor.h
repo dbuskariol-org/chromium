@@ -404,6 +404,10 @@ class CORE_EXPORT NGInlineCursor {
   void MoveToPreviousPaintFragment();
   void MoveToPreviousSiblingPaintFragment();
 
+  ItemsSpan::iterator SlowFirstItemIteratorFor(
+      const LayoutObject& layout_object) const;
+  unsigned SpanIndexFromItemIndex(unsigned index) const;
+
   PositionWithAffinity PositionForPointInChild(
       const PhysicalOffset& point,
       const NGFragmentItem& child_item) const;
