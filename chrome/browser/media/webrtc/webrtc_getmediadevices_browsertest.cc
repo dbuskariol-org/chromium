@@ -263,6 +263,9 @@ IN_PROC_BROWSER_TEST_F(WebRtcGetMediaDevicesBrowserTest,
   ui_test_utils::NavigateToURL(browser(), url);
   content::WebContents* tab =
       browser()->tab_strip_model()->GetActiveWebContents();
+
+  EXPECT_TRUE(GetUserMediaAndAccept(tab));
+
   std::vector<MediaDeviceInfo> devices;
   EnumerateDevices(tab, &devices);
 
@@ -292,6 +295,9 @@ IN_PROC_BROWSER_TEST_F(WebRtcGetMediaDevicesBrowserTest,
       ->SetDefaultCookieSetting(CONTENT_SETTING_BLOCK);
   content::WebContents* tab1 =
       browser()->tab_strip_model()->GetActiveWebContents();
+
+  EXPECT_TRUE(GetUserMediaAndAccept(tab1));
+
   std::vector<MediaDeviceInfo> devices;
   EnumerateDevices(tab1, &devices);
 
@@ -316,6 +322,9 @@ IN_PROC_BROWSER_TEST_F(WebRtcGetMediaDevicesBrowserTest,
       ->SetDefaultCookieSetting(CONTENT_SETTING_BLOCK);
   content::WebContents* tab =
       browser()->tab_strip_model()->GetActiveWebContents();
+
+  EXPECT_TRUE(GetUserMediaAndAccept(tab));
+
   std::vector<MediaDeviceInfo> devices;
   EnumerateDevices(tab, &devices);
 
