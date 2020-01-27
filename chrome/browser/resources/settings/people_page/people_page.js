@@ -206,8 +206,9 @@ Polymer({
    * @private
    */
   getEditPersonAssocControl_() {
-    return this.diceEnabled_ ? assert(this.$$('#edit-profile')) :
-                               assert(this.$$('#picture-subpage-trigger'));
+    return this.syncStatus.signinAllowed ?
+        assert(this.$$('#edit-profile')) :
+        assert(this.$$('#picture-subpage-trigger'));
   },
 
   /**

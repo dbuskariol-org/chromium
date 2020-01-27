@@ -243,7 +243,8 @@
 <if expr="not chromeos">
       <template is="dom-if" route-path="/manageProfile">
         <settings-subpage
-            associated-control="[[getEditPersonAssocControl_(diceEnabled_)]]"
+            associated-control="[[getEditPersonAssocControl_(
+                syncStatus.signinAllowed)]]"
             page-title="$i18n{editPerson}">
           <settings-manage-profile profile-name="[[profileName_]]"
               sync-status="[[syncStatus]]">
