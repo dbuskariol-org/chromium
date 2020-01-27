@@ -952,7 +952,7 @@
 <translation id="2300383962156589922">Налаштування та керування <ph name="APP_NAME" /></translation>
 <translation id="2301382460326681002">Кореневий каталог розширення недійсний.</translation>
 <translation id="23030561267973084">"<ph name="EXTENSION_NAME" />" запитує додаткові дозволи.</translation>
-<translation id="23055578400314116">Виберіть ім’я користувача</translation>
+<translation id="23055578400314116">Виберіть ім'я користувача</translation>
 <translation id="2307462900900812319">Установити параметри мережі</translation>
 <translation id="230927227160767054">Ця сторінка хоче встановити обробника служби.</translation>
 <translation id="2309620859903500144">Доступ цього сайту до датчиків руху чи світла заблоковано.</translation>
@@ -4429,7 +4429,7 @@
 <translation id="7241389281993241388">Увійдіть у <ph name="TOKEN_NAME" />, щоб імпортувати сертифікат клієнта.</translation>
 <translation id="7241443820034350811">Якщо ключ безпеки не вказано в списку, утримуйте його кнопку принаймні 5 секунд.</translation>
 <translation id="7243632151880336635">Очистити та вийти з облікового запису</translation>
-<translation id="7243784282103630670">Не вдалось оновити Linux. МИ відновимо контейнер із резервної копії.</translation>
+<translation id="7243784282103630670">Не вдалось оновити Linux. Ми відновимо контейнер із резервної копії.</translation>
 <translation id="7245628041916450754"><ph name="WIDTH" />x<ph name="HEIGHT" /> (найвища)</translation>
 <translation id="7246230585855757313">Знову вставте ключ безпеки та повторіть спробу</translation>
 <translation id="7246947237293279874">Проксі-сервер FTP</translation>

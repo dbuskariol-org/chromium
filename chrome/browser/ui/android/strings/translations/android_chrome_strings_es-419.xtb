@@ -279,6 +279,7 @@
 <translation id="3060635849835183725">{BOOKMARKS_COUNT,plural, =1{<ph name="BOOKMARKS_COUNT_ONE" /> favorito}other{<ph name="BOOKMARKS_COUNT_MANY" /> favoritos}}</translation>
 <translation id="3089395242580810162">Abrir en pestaña de incógnito</translation>
 <translation id="3123473560110926937">Bloqueados en algunos sitios</translation>
+<translation id="3123734510202723619">Anuncios</translation>
 <translation id="3137521801621304719">Salir del modo de navegación de incógnito</translation>
 <translation id="3143515551205905069">Cancelar sincronización</translation>
 <translation id="3157842584138209013">Para ver cuántos datos redujiste, selecciona el botón Más opciones</translation>

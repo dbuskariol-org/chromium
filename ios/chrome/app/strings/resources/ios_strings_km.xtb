@@ -192,6 +192,7 @@
 <translation id="3474649192738347024">បានបំពេញបែបបទ</translation>
 <translation id="3478058380795961209">ខែផុតកំណត់</translation>
 <translation id="3482959374254649722">កំពុងធ្វើសមកាលកម្មផ្ទាំងរបស់អ្នក...</translation>
+<translation id="3484946776651937681">បើកនៅក្នុង "ទាញយក"</translation>
 <translation id="3493531032208478708"><ph name="BEGIN_LINK" />ស្វែងយល់បន្ថែម<ph name="END_LINK" />អំពីមាតិកាដែលបានណែនាំ</translation>
 <translation id="3494788280727468875">បញ្ជាក់ការសម្អាតទិន្នន័យរុករក</translation>
 <translation id="35083190962747987">បើក ${url}</translation>
@@ -537,6 +538,7 @@ Handoff ត្រូវបើកដំណើរការនៅក្នុងផ
 <translation id="8319076807703933069">ការស្វែងរក​ថ្មី</translation>
 <translation id="8323906514956095947">ចុចឱ្យជាប់ ដើម្បី​ទទួលបានជម្រើស​ផ្ទាំង​ច្រើនទៀត</translation>
 <translation id="8328777765163860529">បិទ​ទាំងអស់</translation>
+<translation id="8386068868580335421">កំណត់ឡើងវិញ</translation>
 <translation id="8407669440184693619">រកមិនឃើញ​ពាក្យសម្ងាត់​សម្រាប់គេហទំព័រ​នេះទេ</translation>
 <translation id="842017693807136194">បានចូល​គណនី​ដោយប្រើ</translation>
 <translation id="8428045167754449968">រដ្ឋធានី ឬ ទីក្រុង</translation>
@@ -553,7 +555,7 @@ Handoff ត្រូវបើកដំណើរការនៅក្នុងផ
 <translation id="8532105204136943229">ឆ្នាំផុតកំណត់</translation>
 <translation id="8534481786647257214">ការបង្ហោះតាម Google+ បានបញ្ចប់។</translation>
 <translation id="8548878600947630424">ស្វែងរកក្នុងទំព័រ...</translation>
-<translation id="8574235780160508979">លក្ខខណ្ឌប្រើប្រាស់​របស់ Chrome នឹងផ្លាស់ប្ដូរនៅថ្ងៃទី 31 ខែមីនា។ <ph name="BEGIN_LINK" />សូម​វាយ​តម្លៃ<ph name="END_LINK" /></translation>
+<translation id="8574235780160508979">លក្ខខណ្ឌប្រើប្រាស់​របស់ Chrome នឹងផ្លាស់ប្ដូរនៅថ្ងៃទី 31 ខែមីនា។ <ph name="BEGIN_LINK" />សូម​ពិនិត្យមើល<ph name="END_LINK" /></translation>
 <translation id="8588404856427128947">បិទ</translation>
 <translation id="8605219856220328675">បិទផ្ទាំង</translation>
 <translation id="8620640915598389714">កែសម្រួល</translation>

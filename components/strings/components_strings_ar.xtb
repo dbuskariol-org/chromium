@@ -342,7 +342,7 @@
 <translation id="2465655957518002998">اختيار طريقة التسليم للمستخدم</translation>
 <translation id="2465688316154986572">وضع دبوس واحد</translation>
 <translation id="2467694685043708798"><ph name="BEGIN_LINK" />تشغيل بيانات تشخيص الشبكة<ph name="END_LINK" /></translation>
-<translation id="2469153820345007638">‏طلب 1 من N</translation>
+<translation id="2469153820345007638">طباعة الصفحات بالترتيب الأساسي</translation>
 <translation id="2473195200299095979">ترجم هذه الصفحة</translation>
 <translation id="2479410451996844060">‏عنوان URL للبحث غير صالح.</translation>
 <translation id="2482878487686419369">الإشعارات</translation>
@@ -803,7 +803,7 @@
 <translation id="4482953324121162758">لن تتم ترجمة هذا الموقع.</translation>
 <translation id="4490717597759821841">A7</translation>
 <translation id="4492519888999857993">‏يتم إيقاف هذه الميزات تلقائيًا. لن تكون الميزات متاحة في الإصدارات المستقبلية من Chrome.</translation>
-<translation id="4493480324863638523">‏عنوان URL غير صحيح. يجب أن يحتوي عنوان URL على نظام قياسي، مثل http://example.com أو https://example.com.</translation>
+<translation id="4493480324863638523">‏عنوان URL غير صحيح. يجب أن يحتوي عنوان URL على نظام عادي، مثل http://example.com أو https://example.com.</translation>
 <translation id="4503882053543859973">Architecture-D</translation>
 <translation id="4506176782989081258">خطأ في عملية التحقق: <ph name="VALIDATION_ERROR" />.</translation>
 <translation id="4506599922270137252">الاتصال بمشرف النظام</translation>
@@ -1138,7 +1138,7 @@
 <translation id="5990559369517809815">تم حظر الطلبات المقدمة إلى الخادم بواسطة إحدى الإضافات.</translation>
 <translation id="5992691462791905444">‏تصميم الطي على شكل حرف Z</translation>
 <translation id="6000758707621254961"><ph name="RESULT_COUNT" /> من نتائج البحث عن "<ph name="SEARCH_TEXT" />"</translation>
-<translation id="6008122969617370890">‏طلب 1 من N</translation>
+<translation id="6008122969617370890">طباعة الصفحات بالترتيب المعكوس</translation>
 <translation id="6008256403891681546">JCB</translation>
 <translation id="6014801569448771146">التحقق من كلمات المرور</translation>
 <translation id="6015796118275082299">عام</translation>
@@ -1524,7 +1524,7 @@
 <translation id="7716147886133743102">تم الحظر من قبل المشرف</translation>
 <translation id="7716424297397655342">لا يمكن تحميل موقع الويب هذا من ذاكرة التخزين المؤقت</translation>
 <translation id="7723047071702270851">تعديل البطاقة</translation>
-<translation id="7740996059027112821">قياسي</translation>
+<translation id="7740996059027112821">عادي</translation>
 <translation id="774634243536837715">تم حظر المحتوى الخطير.</translation>
 <translation id="7752995774971033316">غير مُدار</translation>
 <translation id="7757555340166475417">Dai-Pa-Kai</translation>

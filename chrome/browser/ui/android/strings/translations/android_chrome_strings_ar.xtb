@@ -279,6 +279,7 @@
 <translation id="3060635849835183725">{BOOKMARKS_COUNT,plural, =1{إشارة مرجعية <ph name="BOOKMARKS_COUNT_ONE" />}zero{<ph name="BOOKMARKS_COUNT_MANY" /> إشارات مرجعية}two{إشارتان مرجعيتان (<ph name="BOOKMARKS_COUNT_MANY" />)}few{<ph name="BOOKMARKS_COUNT_MANY" /> إشارات مرجعية}many{<ph name="BOOKMARKS_COUNT_MANY" /> إشارةً مرجعيةً}other{<ph name="BOOKMARKS_COUNT_MANY" /> إشارة مرجعية}}</translation>
 <translation id="3089395242580810162">الفتح في علامة تبويب تصفّح متخفي</translation>
 <translation id="3123473560110926937">حظر الإعلانات في بعض المواقع</translation>
+<translation id="3123734510202723619">الإعلامات</translation>
 <translation id="3137521801621304719">مغادرة وضع التصفح المتخفي</translation>
 <translation id="3143515551205905069">إلغاء المزامنة</translation>
 <translation id="3157842584138209013">الاطّلاع على مقدار البيانات التي وفّرتها بالنقر على "مزيد من الخيارات"</translation>

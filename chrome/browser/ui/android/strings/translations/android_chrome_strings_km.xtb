@@ -134,6 +134,7 @@
 <translation id="1994173015038366702">URL គេហទំព័រ</translation>
 <translation id="2000419248597011803">បញ្ជូនការស្វែងរក និងខូគី​មួយចំនួនពី​របារអាសយដ្ឋាន និង​ប្រអប់​ស្វែងរកទៅ​ម៉ាស៊ីន​ស្វែងរក​លំនាំដើម​របស់​អ្នក</translation>
 <translation id="2002537628803770967">បណ្ណ​ឥណទាន និង​អាសយដ្ឋាន​ដែល​ប្រើ Google Pay</translation>
+<translation id="2012973609889389923">គេហទំព័រ​លឿន</translation>
 <translation id="2013642289801508067">{FILE_COUNT,plural, =1{ឯកសារ #}other{ឯកសារ #}}</translation>
 <translation id="2017836877785168846">សម្អាត​ប្រវត្តិ និងការ​បំពេញស្វ័យប្រវត្តិ​នៅក្នុង​របារ​អាសយដ្ឋាន។</translation>
 <translation id="2021896219286479412">ការគ្រប់គ្រងទំព័រពេញអេក្រង់</translation>
@@ -278,6 +279,7 @@
 <translation id="3060635849835183725">{BOOKMARKS_COUNT,plural, =1{ចំណាំ <ph name="BOOKMARKS_COUNT_ONE" />}other{ចំណាំ <ph name="BOOKMARKS_COUNT_MANY" />}}</translation>
 <translation id="3089395242580810162">បើកនៅក្នុងផ្ទាំងអនាមិក</translation>
 <translation id="3123473560110926937">បាន​ទប់ស្កាត់នៅលើគេហទំព័រ​មួយចំនួន</translation>
+<translation id="3123734510202723619">សេចក្តីប្រកាស</translation>
 <translation id="3137521801621304719">ចាកចេញពីរបៀបអនាមិក</translation>
 <translation id="3143515551205905069">បោះបង់​ការ​ធ្វើ​សម​កាល​កម្ម</translation>
 <translation id="3157842584138209013">មើលចំនួនទិន្នន័យដែល​អ្នក​បានរក្សាទុក​ពីប៊ូតុង​ជម្រើសច្រើនទៀត</translation>
@@ -306,6 +308,7 @@
 <translation id="3298243779924642547">មុខងារ​ស្រាល</translation>
 <translation id="3303414029551471755">បន្តដើម្បីទាញយកមាតិកានេះ?</translation>
 <translation id="3306398118552023113">កម្មវិធីនេះ​កំពុងដំណើរការនៅក្នុង Chrome</translation>
+<translation id="3312292613668865961">សួរ​មុនពេល​អនុញ្ញាតឱ្យ​គេហទំព័រចូលប្រើទិន្នន័យ និងឧបករណ៍ VR របស់អ្នក (បានណែនាំ)</translation>
 <translation id="3315103659806849044">ឥឡូវនេះ អ្នកកំពុងប្ដូរ​ការកំណត់សេវាកម្ម Google និង​សមកាលកម្ម​របស់អ្នកតាមបំណង។ ដើម្បីបញ្ចប់ការបើក​សមកាលកម្ម សូមចុចប៊ូតុង "បញ្ជាក់" នៅជិតផ្នែកខាងក្រោម​នៃអេក្រង់។ រំកិលឡើងលើ</translation>
 <translation id="3328801116991980348">ព័ត៌មានគេហទំព័រ</translation>
 <translation id="3333961966071413176">ទំនាក់​ទំនង​ទាំងអស់</translation>
@@ -511,6 +514,7 @@
 <translation id="4915549754973153784"><ph name="BEGIN_LINK" />ទទួលជំនួយ<ph name="END_LINK" /> ខណៈពេលស្កេនរកឧបករណ៍…</translation>
 <translation id="4921180162323349895">{FILE_COUNT,plural, =1{# ទំព័រ}other{# ទំព័រ}}</translation>
 <translation id="4932247056774066048">ទិន្នន័យ Chrome របស់អ្នក​នឹងលុប​ចេញពីឧបករណ៍នេះ ដោយសារ​អ្នកចេញពី​គណនីដែល​គ្រប់គ្រង​ដោយ <ph name="DOMAIN_NAME" /> ។ ទិន្នន័យនេះ​នឹងនៅតែ​មាននៅក្នុងគណនី Google របស់អ្នកដដែល។</translation>
+<translation id="4935305910887312910">សួរ​មុនពេល​អនុញ្ញាតឱ្យ​គេហទំព័រទទួលទីតាំងកាមេរ៉ា ឬកំណត់ទីតាំងបន្ទប់របស់អ្នក (បានណែនាំ)</translation>
 <translation id="4943703118917034429">VR</translation>
 <translation id="4943872375798546930">គ្មានលទ្ធផលទេ</translation>
 <translation id="4958708863221495346"><ph name="URL_OF_THE_CURRENT_TAB" /> កំពុងចែករំលែកអេក្រង់របស់អ្នក។</translation>
@@ -742,6 +746,7 @@
 <translation id="6573431926118603307">ផ្ទាំងដែលអ្នកបានបើកនៅក្នុង Chrome នៅលើឧបករណ៍ផ្សេងទៀតរបស់អ្នកនឹងបង្ហាញនៅទីនេះ</translation>
 <translation id="6583199322650523874">ចំណាំទំព័របច្ចុប្បន្ននេះ</translation>
 <translation id="6593061639179217415">ទំព័រ​អេក្រង់​កុំព្យូទ័រ</translation>
+<translation id="6597891566292541626">ដាក់កូដ QR/បារកូដនៅក្នុងស៊ុមនេះ។</translation>
 <translation id="6600954340915313787">បានចម្លងទៅ Chrome</translation>
 <translation id="6608650720463149374"><ph name="GIGABYTES" /> GB</translation>
 <translation id="6612358246767739896">មាតិកាដែលបានការពារ</translation>
@@ -951,6 +956,7 @@
 <translation id="8109613176066109935">ដើម្បី​ទទួលបាន​ចំណាំរបស់អ្នកនៅលើឧបករណ៍​ទាំងអស់​របស់អ្នក សូម​បើក​សមកាលកម្ម</translation>
 <translation id="8110087112193408731">បង្ហាញសកម្មភាព Chrome របស់អ្នក​នៅក្នុងសុខុមាលភាព​ឌីជីថល?</translation>
 <translation id="8116925261070264013">បានបិទសំឡេង</translation>
+<translation id="8127542551745560481">កែទំព័រដើម</translation>
 <translation id="813082847718468539">មើលព័ត៌មានគេហទំព័រ</translation>
 <translation id="8156139159503939589">តើអ្នក​អានជាភាសាអ្វី?</translation>
 <translation id="8168435359814927499">មាតិកា</translation>
@@ -1022,6 +1028,7 @@
 <translation id="8676374126336081632">ជម្រះការបញ្ចូល</translation>
 <translation id="8687353297350450808">{N_BARS,plural, =1{កម្រិត​កម្លាំង​រលកសញ្ញា៖ # កាំ}other{កម្រិត​កម្លាំង​រលកសញ្ញា៖ # កាំ}}</translation>
 <translation id="868929229000858085">ស្វែងរក​ទំនាក់ទំនង​របស់អ្នក</translation>
+<translation id="8698438463325761328">ទប់ស្កាត់​គេហទំព័រ​មិនឱ្យ​ចូល​ប្រើ​ទិន្នន័យ និងឧបករណ៍ VR របស់អ្នក</translation>
 <translation id="869891660844655955">កាលបរិច្ឆេទការផុតកំណត់</translation>
 <translation id="8728487861892616501">ប្រសិនបើ​ប្រើកម្មវិធីនេះ មានន័យថាអ្នកយល់ស្របតាម<ph name="BEGIN_LINK1" />លក្ខខណ្ឌប្រើប្រាស់<ph name="END_LINK1" /> និង<ph name="BEGIN_LINK2" />ការជូនដំណឹងអំពីឯកជនភាព<ph name="END_LINK2" />របស់ Chrome និង<ph name="BEGIN_LINK3" />ការជូនដំណឹងអំពីឯកជនភាពសម្រាប់គណនី Google ដែលត្រូវបានគ្រប់គ្រងដោយប្រើ Family Link<ph name="END_LINK3" /> ។</translation>
 <translation id="8748850008226585750">បានលាក់មាតិកា</translation>
@@ -1038,6 +1045,7 @@
 <translation id="883806473910249246">មាន​បញ្ហាកើត​ឡើង ខណៈពេល​កំពុង​ទាញយក​ខ្លឹមសារ។</translation>
 <translation id="8840953339110955557">ទំព័រ​នេះ​អាច​នឹង​ខុស​​ពី​កំណែ​លើ​អ៊ីនធឺណិត។</translation>
 <translation id="8847988622838149491">USB</translation>
+<translation id="884828189055900810">ទប់ស្កាត់​គេហទំព័រ​មិនឱ្យទទួល​ទីតាំងកាមេរ៉ា ឬកំណត់ទីតាំងបន្ទប់របស់អ្នក</translation>
 <translation id="8853345339104747198"><ph name="TAB_TITLE" /> ផ្ទាំង</translation>
 <translation id="885701979325669005">ឧបករណ៍ផ្ទុកទិន្នន័យ</translation>
 <translation id="889338405075704026">ចូលទៅកាន់​ការកំណត់ Chrome</translation>
@@ -1045,6 +1053,7 @@
 <translation id="8909135823018751308">ចែករំលែក…</translation>
 <translation id="8912362522468806198">គណនី Google</translation>
 <translation id="8920114477895755567">កំពុងរង់ចាំព័ត៌មានលំអិតអំពីឪពុកម្តាយ។</translation>
+<translation id="8921772741368021346"><ph name="POSITION" /> / <ph name="DURATION" /></translation>
 <translation id="8922289737868596582">ទាញយកទំព័រ​ពីប៊ូតុង​ជម្រើសច្រើនទៀត ដើម្បីប្រើប្រាស់​ពួកវា​ដោយគ្មានអ៊ីនធឺណិត</translation>
 <translation id="8926666909099850184">NFC ត្រូវ​បាន​បិទសម្រាប់​ឧបករណ៍​នេះ។ បើក NFC នៅក្នុង<ph name="BEGIN_LINK" />ការកំណត់ Android<ph name="END_LINK" />។</translation>
 <translation id="8937772741022875483">លុបសកម្មភាព Chrome របស់អ្នកពី​សុខុមាលភាព​ឌីជីថល?</translation>

@@ -279,6 +279,7 @@
 <translation id="3060635849835183725">{BOOKMARKS_COUNT,plural, =1{<ph name="BOOKMARKS_COUNT_ONE" /> bokmärke}other{<ph name="BOOKMARKS_COUNT_MANY" /> bokmärken}}</translation>
 <translation id="3089395242580810162">Öppna i inkognitoflik</translation>
 <translation id="3123473560110926937">Blockeras på vissa webbplatser</translation>
+<translation id="3123734510202723619">Meddelanden</translation>
 <translation id="3137521801621304719">Inaktivera inkognitoläge</translation>
 <translation id="3143515551205905069">Avbryt synkronisering</translation>
 <translation id="3157842584138209013">Under Fler alternativ kan du se hur mycket data du har sparat</translation>
@@ -513,7 +514,7 @@ Det kan finnas andra former av webbhistorik i Google-kontot på <ph name="BEGIN_
 <translation id="4915549754973153784"><ph name="BEGIN_LINK" />Få hjälp<ph name="END_LINK" /> under sökningen efter enheter …</translation>
 <translation id="4921180162323349895">{FILE_COUNT,plural, =1{# sida}other{# sidor}}</translation>
 <translation id="4932247056774066048">Eftersom du loggar ut från ett konto som hanteras av <ph name="DOMAIN_NAME" /> raderas din Chrome-data från den här enheten. Den finns kvar på ditt Google-konto.</translation>
-<translation id="4935305910887312910">Fråga innan webbplatser tillåts att få kamerans position kartlägga rummet (rekommenderas)</translation>
+<translation id="4935305910887312910">Fråga innan webbplatser tillåts att få kamerans position eller kartlägga rummet (rekommenderas)</translation>
 <translation id="4943703118917034429">Virtuell verklighet</translation>
 <translation id="4943872375798546930">Inga resultat</translation>
 <translation id="4958708863221495346"><ph name="URL_OF_THE_CURRENT_TAB" /> delar skärmen</translation>

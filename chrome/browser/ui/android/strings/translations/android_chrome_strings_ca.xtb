@@ -279,6 +279,7 @@
 <translation id="3060635849835183725">{BOOKMARKS_COUNT,plural, =1{<ph name="BOOKMARKS_COUNT_ONE" /> adreça d'interès}other{<ph name="BOOKMARKS_COUNT_MANY" /> adreces d'interès}}</translation>
 <translation id="3089395242580810162">Obre en pestanya d'incògnit</translation>
 <translation id="3123473560110926937">Bloquejat en alguns llocs web</translation>
+<translation id="3123734510202723619">Anuncis</translation>
 <translation id="3137521801621304719">Surt del mode d'incògnit</translation>
 <translation id="3143515551205905069">Cancel·la la sincronització</translation>
 <translation id="3157842584138209013">Consulta la quantitat de dades que has estalviat des del botó Més opcions</translation>
