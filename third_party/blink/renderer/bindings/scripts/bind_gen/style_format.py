@@ -5,20 +5,39 @@
 import os.path
 import subprocess
 
+import gclient_paths
+
 _clang_format_command_path = None
+_gn_command_path = None
 
 
-def init(command_path):
-    """
-    Args:
-        command_path: Path to the clang_format command.
-    """
-    assert isinstance(command_path, str)
-    assert os.path.exists(command_path)
-
+def init():
     global _clang_format_command_path
-    assert _clang_format_command_path is None
+    global _gn_command_path
+
+    # //buildtools/<platform>/clang-format
+    command_name = "clang-format{}".format(gclient_paths.GetExeSuffix())
+    command_path = os.path.abspath(
+        os.path.join(gclient_paths.GetBuildtoolsPlatformBinaryPath(),
+                     command_name))
     _clang_format_command_path = command_path
+
+    # //buildtools/<platform>/gn
+    command_name = "gn{}".format(gclient_paths.GetExeSuffix())
+    command_path = os.path.abspath(
+        os.path.join(gclient_paths.GetBuildtoolsPlatformBinaryPath(),
+                     command_name))
+    _gn_command_path = command_path
+
+
+def auto_format(contents, filename):
+    assert isinstance(filename, str)
+
+    _, ext = os.path.splitext(filename)
+    if ext in (".gn", ".gni"):
+        return gn_format(contents, filename)
+
+    return clang_format(contents, filename)
 
 
 def clang_format(contents, filename=None):
@@ -26,19 +45,31 @@ def clang_format(contents, filename=None):
     if filename is not None:
         command_line.append('-assume-filename={}'.format(filename))
 
+    return _invoke_format_command(command_line, filename, contents)
+
+
+def gn_format(contents, filename=None):
+    command_line = [_gn_command_path, "format", "--stdin"]
+    if filename is not None:
+        command_line.append('-assume-filename={}'.format(filename))
+
+    return _invoke_format_command(command_line, filename, contents)
+
+
+def _invoke_format_command(command_line, filename, contents):
     proc = subprocess.Popen(
         command_line, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     stdout_output, stderr_output = proc.communicate(input=contents)
     exit_code = proc.wait()
 
-    return ClangFormatResult(
+    return StyleFormatResult(
         stdout_output=stdout_output,
         stderr_output=stderr_output,
         exit_code=exit_code,
         filename=filename)
 
 
-class ClangFormatResult(object):
+class StyleFormatResult(object):
     def __init__(self, stdout_output, stderr_output, exit_code, filename):
         self._stdout_output = stdout_output
         self._stderr_output = stderr_output

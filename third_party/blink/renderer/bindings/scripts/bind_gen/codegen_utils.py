@@ -5,8 +5,8 @@
 import web_idl
 
 from . import name_style
+from . import style_format
 from .blink_v8_bridge import blink_type_info
-from .clang_format import clang_format
 from .code_node import CodeNode
 from .code_node import EmptyNode
 from .code_node import LiteralNode
@@ -162,6 +162,12 @@ def write_code_node_to_file(code_node, filepath):
 
     rendered_text = render_code_node(code_node)
 
-    format_result = clang_format(rendered_text, filename=filepath)
+    format_result = style_format.auto_format(rendered_text, filename=filepath)
+    if not format_result.did_succeed:
+        raise RuntimeError("Style-formatting failed: filename = {filename}\n"
+                           "---- stderr ----\n"
+                           "{stderr}:".format(
+                               filename=format_result.filename,
+                               stderr=format_result.error_message))
 
     web_idl.file_io.write_to_file_if_changed(filepath, format_result.contents)
