@@ -6347,6 +6347,8 @@ crbug.com/1044715 [ Win ] external/wpt/pointerevents/pointerevent_touch-action-p
 crbug.com/1044715 [ Win ] external/wpt/pointerevents/pointerevent_touch-action-inherit_parent-none_touch.html [ Pass Failure ]
 crbug.com/1044715 [ Win ] external/wpt/pointerevents/pointerevent_touch-action-inherit_child-pan-x-child-pan-x_touch.html [ Pass Failure ]
 
+crbug.com/1041848 virtual/off-main-thread-css-paint/external/wpt/css/css-paint-api/idlharness.html [ Pass Timeout ]
+
 # Ref_Tests which fail when SkiaRenderer is enable, and which cannot be
 # rebaselined. TODO(jonross): triage these into any existing bugs or file more
 # specific bugs.
