@@ -123,6 +123,9 @@ void ServicesDelegateDesktop::ShutdownServices() {
   // Delete the ChromePasswordProtectionService instances.
   password_protection_service_map_.clear();
 
+  // Delete the BinaryUploadService instances.
+  binary_upload_service_map_.clear();
+
   // Must shut down last.
   download_service_.reset();
 }
