@@ -1324,21 +1324,6 @@
             ]
         }
     ],
-    "BlockedMediaSystemPermissionUI": [
-        {
-            "platforms": [
-                "mac"
-            ],
-            "experiments": [
-                {
-                    "name": "MacSystemMediaPermissionsInfoUI",
-                    "enable_features": [
-                        "MacSystemMediaPermissionsInfoUI"
-                    ]
-                }
-            ]
-        }
-    ],
     "BookmarkInProductHelp": [
         {
             "platforms": [
@@ -3545,6 +3530,21 @@
                     "name": "Enabled",
                     "enable_features": [
                         "MacMDDownloadShelf"
+                    ]
+                }
+            ]
+        }
+    ],
+    "MacSystemMediaPermissionsInfoUI": [
+        {
+            "platforms": [
+                "mac"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "MacSystemMediaPermissionsInfoUI"
                     ]
                 }
             ]
