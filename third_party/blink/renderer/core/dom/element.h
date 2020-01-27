@@ -27,6 +27,7 @@
 
 #include "third_party/blink/public/common/input/pointer_id.h"
 #include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
+#include "third_party/blink/renderer/bindings/core/v8/v8_focus_options.h"
 #include "third_party/blink/renderer/core/animation/animatable.h"
 #include "third_party/blink/renderer/core/core_export.h"
 #include "third_party/blink/renderer/core/css/css_primitive_value.h"
@@ -37,7 +38,6 @@
 #include "third_party/blink/renderer/core/dom/element_data.h"
 #include "third_party/blink/renderer/core/dom/names_map.h"
 #include "third_party/blink/renderer/core/dom/whitespace_attacher.h"
-#include "third_party/blink/renderer/core/html/focus_options.h"
 #include "third_party/blink/renderer/core/html_names.h"
 #include "third_party/blink/renderer/core/trustedtypes/trusted_types_util.h"
 #include "third_party/blink/renderer/platform/heap/handle.h"
@@ -65,7 +65,6 @@ class ElementRareData;
 class ExceptionState;
 class FloatQuad;
 class FloatSize;
-class FocusOptions;
 class Image;
 class InputDeviceCapabilities;
 class Locale;
