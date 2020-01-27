@@ -1,8 +1,8 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/public/browser/message_port.h"
+#include "third_party/blink/public/common/messaging/simple_message_port.h"
 
 #include "base/run_loop.h"
 #include "base/strings/string16.h"
@@ -11,18 +11,18 @@
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-namespace content {
+namespace blink {
 
 namespace {
 
-using Message = MessagePort::Message;
+using Message = SimpleMessagePort::Message;
 
-class LenientMockReceiver : public MessagePort::MessageReceiver {
+class LenientMockReceiver : public SimpleMessagePort::MessageReceiver {
  public:
   LenientMockReceiver() = default;
   ~LenientMockReceiver() override = default;
 
-  // MessagePort::MessageReceiver implementation:
+  // SimpleMessagePort::MessageReceiver implementation:
   MOCK_METHOD1(OnMessage, bool(Message));
   MOCK_METHOD0(OnPipeError, void());
 };
@@ -34,11 +34,11 @@ using testing::Invoke;
 
 }  // namespace
 
-TEST(MessagePortTest, EndToEnd) {
+TEST(SimpleMessagePortTest, EndToEnd) {
   base::test::SingleThreadTaskEnvironment task_env;
 
   // Create a dummy pipe and ensure it behaves as expected.
-  MessagePort port0;
+  SimpleMessagePort port0;
   EXPECT_FALSE(port0.IsValid());
   EXPECT_FALSE(port0.is_errored());
   EXPECT_TRUE(port0.is_closed());
@@ -47,9 +47,9 @@ TEST(MessagePortTest, EndToEnd) {
   EXPECT_FALSE(port0.CanPostMessage());
 
   // Create a pipe.
-  auto pipe = MessagePort::CreatePair();
+  auto pipe = SimpleMessagePort::CreatePair();
   port0 = std::move(pipe.first);
-  MessagePort port1 = std::move(pipe.second);
+  SimpleMessagePort port1 = std::move(pipe.second);
 
   EXPECT_TRUE(port0.IsValid());
   EXPECT_FALSE(port0.is_errored());
@@ -103,7 +103,7 @@ TEST(MessagePortTest, EndToEnd) {
   }
 
   // Send a message the other way (from 1 to 0) with a port.
-  auto pipe2 = MessagePort::CreatePair();
+  auto pipe2 = SimpleMessagePort::CreatePair();
   {
     base::RunLoop run_loop;
     EXPECT_CALL(receiver0, OnMessage(_))
@@ -154,4 +154,4 @@ TEST(MessagePortTest, EndToEnd) {
   EXPECT_FALSE(port1.CanPostMessage());
 }
 
-}  // namespace content
+}  // namespace blink

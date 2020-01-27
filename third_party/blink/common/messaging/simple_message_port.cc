@@ -1,8 +1,8 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/public/browser/message_port.h"
+#include "third_party/blink/public/common/messaging/simple_message_port.h"
 
 #include "base/memory/ptr_util.h"
 #include "third_party/blink/public/common/messaging/message_port_channel.h"
@@ -11,63 +11,67 @@
 #include "third_party/blink/public/common/messaging/transferable_message_mojom_traits.h"
 #include "third_party/blink/public/mojom/messaging/transferable_message.mojom.h"
 
-namespace content {
+namespace blink {
 
-MessagePort::Message::Message() = default;
-MessagePort::Message::Message(Message&&) = default;
-MessagePort::Message& MessagePort::Message::operator=(Message&&) = default;
-MessagePort::Message::~Message() = default;
+SimpleMessagePort::Message::Message() = default;
+SimpleMessagePort::Message::Message(Message&&) = default;
+SimpleMessagePort::Message& SimpleMessagePort::Message::operator=(Message&&) =
+    default;
+SimpleMessagePort::Message::~Message() = default;
 
-MessagePort::Message::Message(const base::string16& data) : data(data) {}
+SimpleMessagePort::Message::Message(const base::string16& data) : data(data) {}
 
-MessagePort::Message::Message(std::vector<MessagePort> ports)
+SimpleMessagePort::Message::Message(std::vector<SimpleMessagePort> ports)
     : ports(std::move(ports)) {}
 
-MessagePort::Message::Message(MessagePort&& port) {
+SimpleMessagePort::Message::Message(SimpleMessagePort&& port) {
   ports.emplace_back(std::move(port));
 }
 
-MessagePort::Message::Message(const base::string16& data,
-                              std::vector<MessagePort> ports)
+SimpleMessagePort::Message::Message(const base::string16& data,
+                                    std::vector<SimpleMessagePort> ports)
     : data(data), ports(std::move(ports)) {}
 
-MessagePort::Message::Message(const base::string16& data, MessagePort port)
+SimpleMessagePort::Message::Message(const base::string16& data,
+                                    SimpleMessagePort port)
     : data(data) {
   ports.emplace_back(std::move(port));
 }
 
-MessagePort::MessageReceiver::MessageReceiver() = default;
-MessagePort::MessageReceiver::~MessageReceiver() = default;
-bool MessagePort::MessageReceiver::OnMessage(Message) {
+SimpleMessagePort::MessageReceiver::MessageReceiver() = default;
+SimpleMessagePort::MessageReceiver::~MessageReceiver() = default;
+bool SimpleMessagePort::MessageReceiver::OnMessage(Message) {
   return true;
 }
 
-MessagePort::MessagePort() = default;
+SimpleMessagePort::SimpleMessagePort() = default;
 
-MessagePort::MessagePort(MessagePort&& other) {
+SimpleMessagePort::SimpleMessagePort(SimpleMessagePort&& other) {
   Take(std::move(other));
 }
 
-MessagePort& MessagePort::operator=(MessagePort&& other) {
+SimpleMessagePort& SimpleMessagePort::operator=(SimpleMessagePort&& other) {
   Take(std::move(other));
   return *this;
 }
 
-MessagePort::~MessagePort() {
+SimpleMessagePort::~SimpleMessagePort() {
   CloseIfNecessary();
 }
 
 // static
-std::pair<MessagePort, MessagePort> MessagePort::CreatePair() {
+std::pair<SimpleMessagePort, SimpleMessagePort>
+SimpleMessagePort::CreatePair() {
   mojo::ScopedMessagePipeHandle handle0, handle1;
   CHECK_EQ(MOJO_RESULT_OK,
            mojo::CreateMessagePipe(nullptr, &handle0, &handle1));
-  return std::make_pair(MessagePort(std::move(handle0)),
-                        MessagePort(std::move(handle1)));
+  return std::make_pair(SimpleMessagePort(std::move(handle0)),
+                        SimpleMessagePort(std::move(handle1)));
 }
 
-void MessagePort::SetReceiver(MessageReceiver* receiver,
-                              scoped_refptr<base::SequencedTaskRunner> runner) {
+void SimpleMessagePort::SetReceiver(
+    MessageReceiver* receiver,
+    scoped_refptr<base::SequencedTaskRunner> runner) {
   DCHECK(receiver);
   DCHECK(runner.get());
 
@@ -84,10 +88,10 @@ void MessagePort::SetReceiver(MessageReceiver* receiver,
       std::move(runner));
   connector_->set_incoming_receiver(this);
   connector_->set_connection_error_handler(
-      base::BindOnce(&MessagePort::OnPipeError, base::Unretained(this)));
+      base::BindOnce(&SimpleMessagePort::OnPipeError, base::Unretained(this)));
 }
 
-void MessagePort::ClearReceiver() {
+void SimpleMessagePort::ClearReceiver() {
   if (!connector_)
     return;
   port_ = connector_->PassMessagePipe();
@@ -95,13 +99,13 @@ void MessagePort::ClearReceiver() {
   receiver_ = nullptr;
 }
 
-base::SequencedTaskRunner* MessagePort::GetTaskRunner() const {
+base::SequencedTaskRunner* SimpleMessagePort::GetTaskRunner() const {
   if (!connector_)
     return nullptr;
   return connector_->task_runner();
 }
 
-mojo::ScopedMessagePipeHandle MessagePort::PassHandle() {
+mojo::ScopedMessagePipeHandle SimpleMessagePort::PassHandle() {
   DCHECK(is_transferable_);
 
   // Clear the receiver, which takes the handle out of the connector if it
@@ -112,17 +116,17 @@ mojo::ScopedMessagePipeHandle MessagePort::PassHandle() {
   return handle;
 }
 
-MessagePort::MessagePort(mojo::ScopedMessagePipeHandle&& port)
+SimpleMessagePort::SimpleMessagePort(mojo::ScopedMessagePipeHandle&& port)
     : port_(std::move(port)), is_closed_(false), is_transferable_(true) {
   DCHECK(port_.is_valid());
 }
 
-bool MessagePort::CanPostMessage() const {
+bool SimpleMessagePort::CanPostMessage() const {
   return connector_ && connector_->is_valid() && !is_closed_ && !is_errored_ &&
          receiver_;
 }
 
-bool MessagePort::PostMessage(Message&& message) {
+bool SimpleMessagePort::PostMessage(Message&& message) {
   if (!CanPostMessage())
     return false;
 
@@ -160,24 +164,24 @@ bool MessagePort::PostMessage(Message&& message) {
   return true;
 }
 
-bool MessagePort::IsValid() const {
+bool SimpleMessagePort::IsValid() const {
   if (connector_)
     return connector_->is_valid();
   return port_.is_valid();
 }
 
-void MessagePort::Close() {
+void SimpleMessagePort::Close() {
   CloseIfNecessary();
 }
 
-void MessagePort::Reset() {
+void SimpleMessagePort::Reset() {
   CloseIfNecessary();
   is_closed_ = true;
   is_errored_ = false;
   is_transferable_ = false;
 }
 
-void MessagePort::Take(MessagePort&& other) {
+void SimpleMessagePort::Take(SimpleMessagePort&& other) {
   port_ = std::move(other.port_);
   connector_ = std::move(other.connector_);
   is_closed_ = std::exchange(other.is_closed_, true);
@@ -186,7 +190,7 @@ void MessagePort::Take(MessagePort&& other) {
   receiver_ = std::exchange(other.receiver_, nullptr);
 }
 
-void MessagePort::OnPipeError() {
+void SimpleMessagePort::OnPipeError() {
   DCHECK(!is_transferable_);
   if (is_errored_)
     return;
@@ -195,7 +199,7 @@ void MessagePort::OnPipeError() {
     receiver_->OnPipeError();
 }
 
-void MessagePort::CloseIfNecessary() {
+void SimpleMessagePort::CloseIfNecessary() {
   if (is_closed_)
     return;
   is_closed_ = true;
@@ -203,7 +207,7 @@ void MessagePort::CloseIfNecessary() {
   port_.reset();
 }
 
-bool MessagePort::Accept(mojo::Message* mojo_message) {
+bool SimpleMessagePort::Accept(mojo::Message* mojo_message) {
   DCHECK(receiver_);
   DCHECK(!is_transferable_);
 
@@ -226,11 +230,11 @@ bool MessagePort::Accept(mojo::Message* mojo_message) {
   auto handles =
       blink::MessagePortChannel::ReleaseHandles(transferable_message.ports);
   for (auto& handle : handles) {
-    message.ports.emplace_back(MessagePort(std::move(handle)));
+    message.ports.emplace_back(SimpleMessagePort(std::move(handle)));
   }
 
   // Pass the message on to the receiver.
   return receiver_->OnMessage(std::move(message));
 }
 
-}  // namespace content
+}  // namespace blink

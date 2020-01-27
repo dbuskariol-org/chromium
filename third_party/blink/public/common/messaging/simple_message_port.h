@@ -1,51 +1,56 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_PUBLIC_BROWSER_MESSAGE_PORT_H_
-#define CONTENT_PUBLIC_BROWSER_MESSAGE_PORT_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_MESSAGING_SIMPLE_MESSAGE_PORT_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_MESSAGING_SIMPLE_MESSAGE_PORT_H_
 
 #include <utility>
 
 #include "base/strings/string16.h"
-#include "content/common/content_export.h"
 #include "mojo/public/cpp/bindings/connector.h"
 #include "mojo/public/cpp/bindings/message.h"
 #include "mojo/public/cpp/system/message_pipe.h"
+#include "third_party/blink/public/common/common_export.h"
 
-namespace content {
+namespace blink {
 
-// Defines a MessagePort, which is used for sending and receiving messages to
-// Javascript content. This is a more limited version of blink::MessagePort
-// that is intended for use by embedders. It is a lightweight wrapper of
-// a Mojo message pipe, and provides functionality for sending and
-// receiving messages, automatically handling the serialization. It is
-// analogous to the Java org.chromium.content_public.browser.MessagePort.
+// Defines a SimpleMessagePort, which is used by embedders to send and receive
+// messages to and from Javascript content. This is a simplified version of the
+// full MessagePort concept implemented by renderer/core/messaging/message_port.
+// It is a lightweight wrapper of a Mojo message pipe, and provides
+// functionality for sending and receiving messages that consist of text content
+// and a vector of ports, automatically handling the message serialization and
+// formatting. Note the Mojo pipe is bound in SINGLE_THREADED_SEND mode. If you
+// need to send more complex message types then refer to transferable_message.*
+// and string_message_codec.*.
 //
 // Intended embedder usage is as follows:
 //
 //  // Create a pair of ports. The two ends of the pipe are conjugates of each
 //  // other.
-//  std::pair<MessagePort, MessagePort> ports = MessagePort::CreatePair();
+//  std::pair<SimpleMessagePort, SimpleMessagePort> ports =
+//      SimpleMessagePort::CreatePair();
 //
 //  // Keep one end for ourselves.
-//  MessageReceiverImpl receiver;  // Implements MessagePort::MessageReceiver.
+//  MessageReceiverImpl receiver;  // Implements MessageReceiver.
 //  auto embedder_port = std::move(ports.first);
 //  embedder_port.SetReceiver(&receiver, task_runner);
 //
 //  // Send the other end of the pipe to a WebContents. This will arrive in the
-//  // main frame of that WebContents.
+//  // main frame of that WebContents. See
+//  // content/browser/public/message_port_provider.h for the API that allows
+//  // this injection.
 //  std::vector<mojo::ScopedMessagePipeHandle> handles;
 //  handles.emplace_back(ports.second.PassHandle());
 //  MessagePortProvider::PostMessageToFrame(
 //      web_contents, ..., std::move(handles));
 //
 //  // The web contents can now talk back to us via |embedder_port|, and we can
-//  // talk back directly to it over that same pipe rather than via the
-//  // MessagePortProvider API.
+//  // talk back directly to it over that same pipe.
 //
 // Note that some embedders provide "PostMessageToFrame" functions directly on
-// their wrapped WebContents equivalents (Android and Cast for example). Also
+// their wrapped WebContents equivalents (Android and Cast, for example). Also
 // note that for Android embedders, there are equivalent Java interfaces defined
 // in org.chromium.content_public.browser.
 //
@@ -58,25 +63,25 @@ namespace content {
 // sequence. The sequence from which it is used does not have to be the same
 // sequence that the bound receiver uses.
 //
-// Further note that a MessagePort is not "reusable". That is, once it has been
-// bound via SetReceiver, it is no longer transmittable (can't be passed as a
-// port in part of a Message). This is enforced via runtime CHECKs.
-class CONTENT_EXPORT MessagePort : public mojo::MessageReceiver {
+// Further note that a SimpleMessagePort is not "reusable". That is, once it has
+// been bound via SetReceiver, it is no longer transmittable (can't be passed as
+// a port in part of a Message). This is enforced via runtime CHECKs.
+class BLINK_COMMON_EXPORT SimpleMessagePort : public mojo::MessageReceiver {
  public:
   // See below for definitions.
   struct Message;
   class MessageReceiver;
 
-  MessagePort();
-  MessagePort(const MessagePort&) = delete;
-  MessagePort(MessagePort&&);
-  MessagePort& operator=(const MessagePort&) = delete;
-  MessagePort& operator=(MessagePort&&);
-  ~MessagePort() override;
+  SimpleMessagePort();
+  SimpleMessagePort(const SimpleMessagePort&) = delete;
+  SimpleMessagePort(SimpleMessagePort&&);
+  SimpleMessagePort& operator=(const SimpleMessagePort&) = delete;
+  SimpleMessagePort& operator=(SimpleMessagePort&&);
+  ~SimpleMessagePort() override;
 
   // Factory function for creating two ends of a message channel. The two ports
   // are conjugates of each other.
-  static std::pair<MessagePort, MessagePort> CreatePair();
+  static std::pair<SimpleMessagePort, SimpleMessagePort> CreatePair();
 
   // Sets a message receiver for this message port. Once bound any incoming
   // messages to this port will be routed to the provided |receiver| with
@@ -84,7 +89,7 @@ class CONTENT_EXPORT MessagePort : public mojo::MessageReceiver {
   // *after* a pipe has already transitioned to being in error, you will not
   // receive an "OnPipeError" callback; you should instead manually check
   // "is_errored" before setting the receiver. Once a receiver has been set a
-  // MessagePort is no longer transferable.
+  // SimpleMessagePort is no longer transferable.
   void SetReceiver(MessageReceiver* receiver,
                    scoped_refptr<base::SequencedTaskRunner> runner);
 
@@ -95,14 +100,14 @@ class CONTENT_EXPORT MessagePort : public mojo::MessageReceiver {
   // continue to be invoked after calling this.
   void ClearReceiver();
 
-  // Returns true if this MessagePort currently has a receiver.
+  // Returns true if this SimpleMessagePort currently has a receiver.
   bool HasReceiver() const { return receiver_; }
 
-  // Returns the receiver to which this MessagePort is bound. This can return
-  // nullptr if it has not been bound to a receiver.
+  // Returns the receiver to which this SimpleMessagePort is bound. This can
+  // return nullptr if it has not been bound to a receiver.
   MessageReceiver* receiver() const { return receiver_; }
 
-  // Returns the task runner to which this MessagePort is bound. This can
+  // Returns the task runner to which this SimpleMessagePort is bound. This can
   // return nullptr if the port is not bound to a receiver.
   base::SequencedTaskRunner* GetTaskRunner() const;
 
@@ -120,15 +125,15 @@ class CONTENT_EXPORT MessagePort : public mojo::MessageReceiver {
   // Returns true if this port is bound to a valid message pipe.
   bool IsValid() const;
 
-  // Returns true if this MessagePort has been closed.
+  // Returns true if this SimpleMessagePort has been closed.
   bool is_closed() const { return is_closed_; }
 
-  // Returns true if this MessagePort has experienced an error.
+  // Returns true if this SimpleMessagePort has experienced an error.
   bool is_errored() const { return is_errored_; }
 
-  // Returns true if this MessagePort is transferable as part of a Message. This
-  // is true for a brand new MessagePort, but becomes false if SetReceiver is
-  // ever called.
+  // Returns true if this SimpleMessagePort is transferable as part of a
+  // Message. This is true for a brand new SimpleMessagePort, but becomes false
+  // if SetReceiver is ever called.
   bool is_transferable() const { return is_transferable_; }
 
   // Closes this message port. This also clears the receiver, if it is set.
@@ -137,9 +142,9 @@ class CONTENT_EXPORT MessagePort : public mojo::MessageReceiver {
   // was closed. This function can be called at any time, and repeatedly.
   void Close();
 
-  // Reset this MessagePort to a completely default state. Similar to close, but
-  // also resets the "is_closed", "is_errored" and "is_transferable" states. Can
-  // be called at any time, and repeatedly.
+  // Reset this SimpleMessagePort to a completely default state. Similar to
+  // close, but also resets the "is_closed", "is_errored" and "is_transferable"
+  // states. Can be called at any time, and repeatedly.
   void Reset();
 
   // Passes out the underlying handle. This port will be reset after calling
@@ -151,9 +156,9 @@ class CONTENT_EXPORT MessagePort : public mojo::MessageReceiver {
   // Creates a message port that wraps the provided |port|. This provided |port|
   // must be valid. This is private as it should only be called by message
   // deserialization code, or the CreatePair factory.
-  explicit MessagePort(mojo::ScopedMessagePipeHandle&& port);
+  explicit SimpleMessagePort(mojo::ScopedMessagePipeHandle&& port);
 
-  void Take(MessagePort&& other);
+  void Take(SimpleMessagePort&& other);
   void OnPipeError();
   void CloseIfNecessary();
 
@@ -171,7 +176,7 @@ class CONTENT_EXPORT MessagePort : public mojo::MessageReceiver {
 // A very simple message format. This is a subset of a TransferableMessage, as
 // many of the fields in the full message type aren't appropriate for messages
 // originating from the embedder.
-struct CONTENT_EXPORT MessagePort::Message {
+struct BLINK_COMMON_EXPORT SimpleMessagePort::Message {
   Message();
   Message(const Message&) = delete;
   Message(Message&&);
@@ -183,27 +188,27 @@ struct CONTENT_EXPORT MessagePort::Message {
   explicit Message(const base::string16& data);
 
   // Creates a message with the given collection of |ports| to be transferred.
-  explicit Message(std::vector<MessagePort> ports);
+  explicit Message(std::vector<SimpleMessagePort> ports);
 
   // Creates a message with a single |port| to be transferred.
-  explicit Message(MessagePort&& port);
+  explicit Message(SimpleMessagePort&& port);
 
   // Creates a message with |data| and a collection of |ports| to be
   // transferred.
-  Message(const base::string16& data, std::vector<MessagePort> ports);
+  Message(const base::string16& data, std::vector<SimpleMessagePort> ports);
 
   // Creates a message with |data| and a single |port| to be transferred.
-  Message(const base::string16& data, MessagePort port);
+  Message(const base::string16& data, SimpleMessagePort port);
 
   // A UTF-16 message.
   base::string16 data;
 
   // Other message ports that are to be transmitted as part of this message.
-  std::vector<MessagePort> ports;
+  std::vector<SimpleMessagePort> ports;
 };
 
 // Interface to be implemented by receivers.
-class CONTENT_EXPORT MessagePort::MessageReceiver {
+class BLINK_COMMON_EXPORT SimpleMessagePort::MessageReceiver {
  public:
   MessageReceiver();
   MessageReceiver(const MessageReceiver&) = delete;
@@ -221,6 +226,6 @@ class CONTENT_EXPORT MessagePort::MessageReceiver {
   virtual void OnPipeError() {}
 };
 
-}  // namespace content
+}  // namespace blink
 
-#endif  // CONTENT_PUBLIC_BROWSER_MESSAGE_PORT_H_
+#endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_MESSAGING_SIMPLE_MESSAGE_PORT_H_
