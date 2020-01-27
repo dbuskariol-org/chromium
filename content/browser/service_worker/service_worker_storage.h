@@ -81,6 +81,14 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   using GetAllRegistrationsCallback =
       base::OnceCallback<void(blink::ServiceWorkerStatusCode status,
                               std::unique_ptr<RegistrationList> registrations)>;
+  using StoreRegistrationDataCallback = base::OnceCallback<void(
+      blink::ServiceWorkerStatusCode status,
+      int64_t deleted_version_id,
+      const std::vector<int64_t>& newly_purgeable_resources)>;
+  using DeleteRegistrationCallback = base::OnceCallback<void(
+      blink::ServiceWorkerStatusCode status,
+      int64_t deleted_version_id,
+      const std::vector<int64_t>& newly_purgeable_resources)>;
   using GetUserDataCallback =
       base::OnceCallback<void(const std::vector<std::string>& data,
                               blink::ServiceWorkerStatusCode status)>;
@@ -152,7 +160,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void StoreRegistrationData(
       const ServiceWorkerDatabase::RegistrationData& registration_data,
       const ResourceList& resources,
-      StatusCallback callback);
+      StoreRegistrationDataCallback callback);
 
   // Updates the state of the registration's stored version to active.
   void UpdateToActiveState(int64_t registration_id,
@@ -181,7 +189,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // called only from ServiceWorkerRegistry.
   void DeleteRegistration(int64_t registration_id,
                           const GURL& origin,
-                          StatusCallback callback);
+                          DeleteRegistrationCallback callback);
 
   // Removes traces of deleted data on disk.
   void PerformStorageCleanup(base::OnceClosure callback);
@@ -280,6 +288,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // uncommitted resources, as long as the caller does its own cleanup to remove
   // the uncommitted resource keys.
   void PurgeResources(const ResourceList& resources);
+  void PurgeResources(const std::vector<int64_t>& resource_ids);
 
   void LazyInitializeForTest();
 
@@ -316,11 +325,11 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   struct DidDeleteRegistrationParams {
     int64_t registration_id;
     GURL origin;
-    StatusCallback callback;
+    DeleteRegistrationCallback callback;
 
     DidDeleteRegistrationParams(int64_t registration_id,
                                 GURL origin,
-                                StatusCallback callback);
+                                DeleteRegistrationCallback callback);
     ~DidDeleteRegistrationParams();
   };
 
@@ -339,7 +348,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const ServiceWorkerDatabase::RegistrationData& deleted_version_data,
       const std::vector<int64_t>& newly_purgeable_resources,
       ServiceWorkerDatabase::Status status)>;
-  using DeleteRegistrationCallback = base::OnceCallback<void(
+  using DeleteRegistrationInDBCallback = base::OnceCallback<void(
       OriginState origin_state,
       const ServiceWorkerDatabase::RegistrationData& deleted_version_data,
       const std::vector<int64_t>& newly_purgeable_resources,
@@ -389,7 +398,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       std::unique_ptr<RegistrationList> registration_data_list,
       ServiceWorkerDatabase::Status status);
   void DidStoreRegistrationData(
-      StatusCallback callback,
+      StoreRegistrationDataCallback callback,
       const ServiceWorkerDatabase::RegistrationData& new_version,
       const GURL& origin,
       const ServiceWorkerDatabase::RegistrationData& deleted_version,
@@ -461,7 +470,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       scoped_refptr<base::SequencedTaskRunner> original_task_runner,
       int64_t registration_id,
       const GURL& origin,
-      DeleteRegistrationCallback callback);
+      DeleteRegistrationInDBCallback callback);
   static void WriteRegistrationInDB(
       ServiceWorkerDatabase* database,
       scoped_refptr<base::SequencedTaskRunner> original_task_runner,

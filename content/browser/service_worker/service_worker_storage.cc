@@ -96,7 +96,7 @@ ServiceWorkerStorage::InitialData::~InitialData() {
 ServiceWorkerStorage::DidDeleteRegistrationParams::DidDeleteRegistrationParams(
     int64_t registration_id,
     GURL origin,
-    StatusCallback callback)
+    DeleteRegistrationCallback callback)
     : registration_id(registration_id),
       origin(origin),
       callback(std::move(callback)) {}
@@ -365,7 +365,7 @@ void ServiceWorkerStorage::GetAllRegistrations(
 void ServiceWorkerStorage::StoreRegistrationData(
     const ServiceWorkerDatabase::RegistrationData& registration_data,
     const ResourceList& resources,
-    StatusCallback callback) {
+    StoreRegistrationDataCallback callback) {
   DCHECK_EQ(state_, STORAGE_STATE_INITIALIZED);
 
   if (!has_checked_for_stale_resources_)
@@ -472,9 +472,10 @@ void ServiceWorkerStorage::UpdateNavigationPreloadHeader(
       base::BindOnce(&DidUpdateNavigationPreloadState, std::move(callback)));
 }
 
-void ServiceWorkerStorage::DeleteRegistration(int64_t registration_id,
-                                              const GURL& origin,
-                                              StatusCallback callback) {
+void ServiceWorkerStorage::DeleteRegistration(
+    int64_t registration_id,
+    const GURL& origin,
+    DeleteRegistrationCallback callback) {
   DCHECK_EQ(state_, STORAGE_STATE_INITIALIZED);
 
   if (!has_checked_for_stale_resources_)
@@ -1009,6 +1010,13 @@ void ServiceWorkerStorage::PurgeResources(const ResourceList& resources) {
   StartPurgingResources(resources);
 }
 
+void ServiceWorkerStorage::PurgeResources(
+    const std::vector<int64_t>& resource_ids) {
+  if (!has_checked_for_stale_resources_)
+    DeleteStaleResources();
+  StartPurgingResources(resource_ids);
+}
+
 ServiceWorkerStorage::ServiceWorkerStorage(
     const base::FilePath& user_data_directory,
     ServiceWorkerContextCore* context,
@@ -1163,7 +1171,7 @@ void ServiceWorkerStorage::DidGetAllRegistrations(
 }
 
 void ServiceWorkerStorage::DidStoreRegistrationData(
-    StatusCallback callback,
+    StoreRegistrationDataCallback callback,
     const ServiceWorkerDatabase::RegistrationData& new_version,
     const GURL& origin,
     const ServiceWorkerDatabase::RegistrationData& deleted_version,
@@ -1171,7 +1179,9 @@ void ServiceWorkerStorage::DidStoreRegistrationData(
     ServiceWorkerDatabase::Status status) {
   if (status != ServiceWorkerDatabase::STATUS_OK) {
     ScheduleDeleteAndStartOver();
-    std::move(callback).Run(DatabaseStatusToStatusCode(status));
+    std::move(callback).Run(DatabaseStatusToStatusCode(status),
+                            deleted_version.version_id,
+                            newly_purgeable_resources);
     return;
   }
   registered_origins_.insert(origin);
@@ -1185,23 +1195,9 @@ void ServiceWorkerStorage::DidStoreRegistrationData(
             deleted_version.resources_total_size_bytes);
   }
 
-  // Purge the deleted version's resources now if needed. This is subtle. The
-  // version might still be used for a long time even after it's deleted. We can
-  // only purge safely once the version is REDUNDANT, since it will never be
-  // used again.
-  //
-  // If the deleted version's ServiceWorkerVersion doesn't exist, we can assume
-  // it's effectively REDUNDANT so it's safe to purge now. This is because the
-  // caller is assumed to promote the new version to active unless the deleted
-  // version is doing work, and it can't be doing work if it's not live.
-  //
-  // If the ServiceWorkerVersion does exist, it triggers purging once it reaches
-  // REDUNDANT. Otherwise, purging happens on the next browser session (via
-  // DeleteStaleResources).
-  if (!context_->GetLiveVersion(deleted_version.version_id))
-    StartPurgingResources(newly_purgeable_resources);
-
-  std::move(callback).Run(blink::ServiceWorkerStatusCode::kOk);
+  std::move(callback).Run(blink::ServiceWorkerStatusCode::kOk,
+                          deleted_version.version_id,
+                          newly_purgeable_resources);
 }
 
 void ServiceWorkerStorage::DidUpdateToActiveState(
@@ -1222,9 +1218,12 @@ void ServiceWorkerStorage::DidDeleteRegistration(
     ServiceWorkerDatabase::Status status) {
   if (status != ServiceWorkerDatabase::STATUS_OK) {
     ScheduleDeleteAndStartOver();
-    std::move(params->callback).Run(DatabaseStatusToStatusCode(status));
+    std::move(params->callback)
+        .Run(DatabaseStatusToStatusCode(status), deleted_version.version_id,
+             newly_purgeable_resources);
     return;
   }
+
   if (quota_manager_proxy_) {
     // Can be nullptr in tests.
     quota_manager_proxy_->NotifyStorageModified(
@@ -1233,12 +1232,13 @@ void ServiceWorkerStorage::DidDeleteRegistration(
         blink::mojom::StorageType::kTemporary,
         -deleted_version.resources_total_size_bytes);
   }
+
   if (origin_state == OriginState::kDelete)
     registered_origins_.erase(params->origin);
-  std::move(params->callback).Run(blink::ServiceWorkerStatusCode::kOk);
 
-  if (!context_->GetLiveVersion(deleted_version.version_id))
-    StartPurgingResources(newly_purgeable_resources);
+  std::move(params->callback)
+      .Run(blink::ServiceWorkerStatusCode::kOk, deleted_version.version_id,
+           newly_purgeable_resources);
 }
 
 void ServiceWorkerStorage::DidWriteUncommittedResourceIds(
@@ -1541,7 +1541,7 @@ void ServiceWorkerStorage::DeleteRegistrationFromDB(
     scoped_refptr<base::SequencedTaskRunner> original_task_runner,
     int64_t registration_id,
     const GURL& origin,
-    DeleteRegistrationCallback callback) {
+    DeleteRegistrationInDBCallback callback) {
   DCHECK(database);
 
   ServiceWorkerDatabase::RegistrationData deleted_version;

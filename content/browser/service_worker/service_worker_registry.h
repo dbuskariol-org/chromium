@@ -170,11 +170,17 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       blink::ServiceWorkerStatusCode status,
       std::unique_ptr<RegistrationList> registration_data_list);
 
-  void DidStoreRegistration(const ServiceWorkerDatabase::RegistrationData& data,
-                            StatusCallback callback,
-                            blink::ServiceWorkerStatusCode status);
-  void DidDeleteRegistration(StatusCallback callback,
-                             blink::ServiceWorkerStatusCode status);
+  void DidStoreRegistration(
+      const ServiceWorkerDatabase::RegistrationData& data,
+      StatusCallback callback,
+      blink::ServiceWorkerStatusCode status,
+      int64_t deleted_version_id,
+      const std::vector<int64_t>& newly_purgeable_resources);
+  void DidDeleteRegistration(
+      StatusCallback callback,
+      blink::ServiceWorkerStatusCode status,
+      int64_t deleted_version_id,
+      const std::vector<int64_t>& newly_purgeable_resources);
 
   // The ServiceWorkerContextCore object must outlive this.
   ServiceWorkerContextCore* const context_;
