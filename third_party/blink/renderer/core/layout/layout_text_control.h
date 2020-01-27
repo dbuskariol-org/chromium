@@ -106,6 +106,9 @@ DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutTextControl, IsTextControl());
 // We can't use LayoutFlexibleBox directly, because flexboxes have a different
 // baseline definition, and then inputs of different types wouldn't line up
 // anymore.
+//
+// TODO(crbug.com/1040828): Remove this class. The baseline adjustment is not
+// necessary any longer.
 class LayoutTextControlInnerContainer final : public LayoutFlexibleBox {
  public:
   explicit LayoutTextControlInnerContainer(Element* element)
