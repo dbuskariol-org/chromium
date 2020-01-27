@@ -9,6 +9,7 @@
 #include "base/path_service.h"
 #include "base/task/post_task.h"
 #include "base/test/scoped_feature_list.h"
+#include "build/build_config.h"
 #include "chrome/browser/extensions/chrome_test_extension_loader.h"
 #include "chrome/browser/extensions/extension_action_runner.h"
 #include "chrome/browser/extensions/scripting_permissions_modifier.h"
@@ -378,8 +379,14 @@ IN_PROC_BROWSER_TEST_F(ExtensionsMenuViewBrowserTest,
   EXPECT_FALSE(ExtensionsMenuView::IsShowing());
 }
 
+#if defined(OS_WIN)
+#define MAYBE_CreatesOneMenuItemPerExtension \
+  DISABLED_CreatesOneMenuItemPerExtension
+#else
+#define MAYBE_CreatesOneMenuItemPerExtension CreatesOneMenuItemPerExtension
+#endif
 IN_PROC_BROWSER_TEST_F(ExtensionsMenuViewBrowserTest,
-                       CreatesOneMenuItemPerExtension) {
+                       MAYBE_CreatesOneMenuItemPerExtension) {
   LoadTestExtension("extensions/uitest/long_name");
   LoadTestExtension("extensions/uitest/window_open");
   ShowUi("");
