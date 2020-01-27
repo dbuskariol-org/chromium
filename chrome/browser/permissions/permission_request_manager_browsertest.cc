@@ -417,7 +417,7 @@ IN_PROC_BROWSER_TEST_F(PermissionRequestManagerBrowserTest,
   ui_test_utils::NavigateToURLWithDisposition(
       browser(), embedded_test_server()->GetURL("/empty.html"),
       WindowOpenDisposition::NEW_FOREGROUND_TAB,
-      ui_test_utils::BROWSER_TEST_WAIT_FOR_NAVIGATION);
+      ui_test_utils::BROWSER_TEST_WAIT_FOR_LOAD_STOP);
 
   // SetUp() only creates a mock prompt factory for the first tab.
   MockPermissionPromptFactory* bubble_factory_0 = bubble_factory();
@@ -481,7 +481,7 @@ IN_PROC_BROWSER_TEST_F(PermissionRequestManagerBrowserTest,
   ui_test_utils::NavigateToURLWithDisposition(
       browser(), embedded_test_server()->GetURL("/empty.html"),
       WindowOpenDisposition::NEW_FOREGROUND_TAB,
-      ui_test_utils::BROWSER_TEST_WAIT_FOR_NAVIGATION);
+      ui_test_utils::BROWSER_TEST_WAIT_FOR_LOAD_STOP);
 
   // Navigate background tab, prompt should be removed.
   ExecuteScriptAndGetValue(

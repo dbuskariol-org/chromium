@@ -386,10 +386,10 @@ IN_PROC_BROWSER_TEST_F(HistoryBrowserTest, MultiTabsWindowsHistory) {
   ui_test_utils::NavigateToURL(browser2, url2);
   ui_test_utils::NavigateToURLWithDisposition(
       browser2, url3, WindowOpenDisposition::NEW_FOREGROUND_TAB,
-      ui_test_utils::BROWSER_TEST_WAIT_FOR_NAVIGATION);
+      ui_test_utils::BROWSER_TEST_WAIT_FOR_LOAD_STOP);
   ui_test_utils::NavigateToURLWithDisposition(
       browser2, url4, WindowOpenDisposition::NEW_FOREGROUND_TAB,
-      ui_test_utils::BROWSER_TEST_WAIT_FOR_NAVIGATION);
+      ui_test_utils::BROWSER_TEST_WAIT_FOR_LOAD_STOP);
 
   std::vector<GURL> urls(GetHistoryContents());
   ASSERT_EQ(4u, urls.size());
@@ -596,7 +596,7 @@ IN_PROC_BROWSER_TEST_F(HistoryBrowserTest, ReloadBringPageToTop) {
   ui_test_utils::NavigateToURL(browser(), url1);
   ui_test_utils::NavigateToURLWithDisposition(
       browser(), url2, WindowOpenDisposition::NEW_BACKGROUND_TAB,
-      ui_test_utils::BROWSER_TEST_WAIT_FOR_NAVIGATION);
+      ui_test_utils::BROWSER_TEST_WAIT_FOR_LOAD_STOP);
 
   std::vector<GURL> urls(GetHistoryContents());
   ASSERT_EQ(2u, urls.size());
@@ -772,7 +772,7 @@ IN_PROC_BROWSER_TEST_F(HistoryBrowserTest, OneHistoryTabPerWindow) {
   ui_test_utils::NavigateToURLWithDisposition(
       browser(), GURL(url::kAboutBlankURL),
       WindowOpenDisposition::NEW_FOREGROUND_TAB,
-      ui_test_utils::BROWSER_TEST_WAIT_FOR_NAVIGATION);
+      ui_test_utils::BROWSER_TEST_WAIT_FOR_LOAD_STOP);
   chrome::ExecuteCommand(browser(), IDC_SHOW_HISTORY);
 
   content::WebContents* active_web_contents =
