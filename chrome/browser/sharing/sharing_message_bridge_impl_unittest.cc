@@ -138,6 +138,9 @@ TEST_F(SharingMessageBridgeTest, ShouldInvokeCallbackOnFailure) {
         ->set_error_code(sync_pb::SharingMessageCommitError::PERMISSION_DENIED);
     response_list.push_back(std::move(response));
   }
+  EXPECT_CALL(*processor(),
+              UntrackEntityForClientTagHash(entity_data.client_tag_hash));
+
   bridge()->OnCommitAttemptErrors(response_list);
 
   EXPECT_TRUE(commit_error.has_error_code());
