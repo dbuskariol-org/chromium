@@ -314,7 +314,13 @@ TEST_F(QuicTransportTest, SuccessfulConnect) {
   V8TestingScope scope;
   auto* quic_transport =
       CreateAndConnectSuccessfully(scope, "quic-transport://example.com");
+  ScriptPromiseTester ready_tester(scope.GetScriptState(),
+                                   quic_transport->ready());
+
   EXPECT_TRUE(quic_transport->HasPendingActivity());
+
+  ready_tester.WaitUntilSettled();
+  EXPECT_TRUE(ready_tester.IsFulfilled());
 }
 
 TEST_F(QuicTransportTest, FailedConnect) {
@@ -323,6 +329,8 @@ TEST_F(QuicTransportTest, FailedConnect) {
   auto* quic_transport = QuicTransport::Create(
       scope.GetScriptState(), String("quic-transport://example.com/"),
       ASSERT_NO_EXCEPTION);
+  ScriptPromiseTester ready_tester(scope.GetScriptState(),
+                                   quic_transport->ready());
   ScriptPromiseTester closed_tester(scope.GetScriptState(),
                                     quic_transport->closed());
 
@@ -338,6 +346,7 @@ TEST_F(QuicTransportTest, FailedConnect) {
 
   test::RunPendingTasks();
   EXPECT_FALSE(quic_transport->HasPendingActivity());
+  EXPECT_TRUE(ready_tester.IsRejected());
   EXPECT_TRUE(closed_tester.IsRejected());
 }
 
@@ -347,6 +356,8 @@ TEST_F(QuicTransportTest, CloseDuringConnect) {
   auto* quic_transport = QuicTransport::Create(
       scope.GetScriptState(), String("quic-transport://example.com/"),
       ASSERT_NO_EXCEPTION);
+  ScriptPromiseTester ready_tester(scope.GetScriptState(),
+                                   quic_transport->ready());
   ScriptPromiseTester closed_tester(scope.GetScriptState(),
                                     quic_transport->closed());
 
@@ -360,6 +371,7 @@ TEST_F(QuicTransportTest, CloseDuringConnect) {
   test::RunPendingTasks();
 
   EXPECT_FALSE(quic_transport->HasPendingActivity());
+  EXPECT_TRUE(ready_tester.IsRejected());
   EXPECT_TRUE(closed_tester.IsFulfilled());
 }
 
@@ -367,6 +379,8 @@ TEST_F(QuicTransportTest, CloseAfterConnection) {
   V8TestingScope scope;
   auto* quic_transport =
       CreateAndConnectSuccessfully(scope, "quic-transport://example.com");
+  ScriptPromiseTester ready_tester(scope.GetScriptState(),
+                                   quic_transport->ready());
   ScriptPromiseTester closed_tester(scope.GetScriptState(),
                                     quic_transport->closed());
 
@@ -381,6 +395,7 @@ TEST_F(QuicTransportTest, CloseAfterConnection) {
   // start sending it.
 
   EXPECT_FALSE(quic_transport->HasPendingActivity());
+  EXPECT_TRUE(ready_tester.IsFulfilled());
   EXPECT_TRUE(closed_tester.IsFulfilled());
 
   // Calling close again does nothing.

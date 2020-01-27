@@ -184,6 +184,9 @@ IN_PROC_BROWSER_TEST_F(QuicTransportTest, ClientIndicationFailure) {
       // on the server.
       const transport = new QuicTransport('quic-transport:localhost:%d/X');
 
+      // Client indication is NOT part of handshake.
+      await transport.ready;
+
       try {
         await transport.closed;
       } catch (e) {
