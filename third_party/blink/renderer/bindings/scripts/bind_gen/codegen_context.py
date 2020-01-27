@@ -142,13 +142,13 @@ class CodeGenContext(object):
         for attr in self._context_attrs.iterkeys():
             value = getattr(self, attr)
             if value is None:
-                value = NonRenderable()
+                value = NonRenderable(attr)
             bindings[attr] = value
 
         for attr in self._computational_attrs:
             value = getattr(self, attr)
             if value is None:
-                value = NonRenderable()
+                value = NonRenderable(attr)
             bindings[attr.strip("_")] = value
 
         return bindings

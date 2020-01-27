@@ -39,6 +39,7 @@ bind_gen/codegen_expr.py
 bind_gen/codegen_format.py
 bind_gen/codegen_utils.py
 bind_gen/dictionary.py
+bind_gen/enumeration.py
 bind_gen/interface.py
 bind_gen/mako_renderer.py
 bind_gen/name_style.py

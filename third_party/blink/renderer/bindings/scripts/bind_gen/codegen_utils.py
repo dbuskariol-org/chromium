@@ -114,7 +114,7 @@ def collect_include_headers_of_idl_types(idl_types):
 
         if idl_type.is_numeric or idl_type.is_boolean or idl_type.is_typedef:
             pass
-        elif idl_type.is_string or idl_type.is_enumeration:
+        elif idl_type.is_string:
             header_paths.add("third_party/blink/renderer/"
                              "platform/wtf/text/wtf_string.h")
         elif idl_type.is_buffer_source_type:

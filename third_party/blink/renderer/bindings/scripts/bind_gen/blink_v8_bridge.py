@@ -24,7 +24,8 @@ def blink_class_name(idl_definition):
         return class_name
 
     if isinstance(idl_definition,
-                  (web_idl.CallbackFunction, web_idl.CallbackInterface)):
+                  (web_idl.CallbackFunction, web_idl.CallbackInterface,
+                   web_idl.Enumeration)):
         return name_style.class_("v8", idl_definition.identifier)
     else:
         return name_style.class_(idl_definition.identifier)
@@ -60,7 +61,7 @@ def blink_type_info(idl_type):
                      typename,
                      member_fmt="{}",
                      ref_fmt="{}",
-                     const_ref_fmt="{}",
+                     const_ref_fmt="const {}",
                      value_fmt="{}",
                      has_null_value=False):
             self.typename = typename
@@ -91,7 +92,7 @@ def blink_type_info(idl_type):
         }
         return TypeInfo(cxx_type[real_type.keyword_typename])
 
-    if real_type.is_string or real_type.is_enumeration:
+    if real_type.is_string:
         return TypeInfo(
             "String",
             ref_fmt="{}&",
@@ -119,6 +120,10 @@ def blink_type_info(idl_type):
 
     if real_type.is_void:
         assert False, "Blink does not support/accept IDL void type."
+
+    if real_type.is_enumeration:
+        blink_impl_type = blink_class_name(real_type.type_definition_object)
+        return TypeInfo(blink_impl_type)
 
     if real_type.type_definition_object is not None:
         blink_impl_type = blink_class_name(real_type.type_definition_object)
