@@ -10,6 +10,21 @@ export class TabGroupElement extends CustomElement {
     return `{__html_template__}`;
   }
 
+  connectedCallback() {
+    this.setAttribute('draggable', 'true');
+  }
+
+  /** @return {!HTMLElement} */
+  getDragImage() {
+    // TODO(johntlee): Update drag image.
+    return this;
+  }
+
+  /** @param {boolean} isDragging */
+  setDragging(isDragging) {
+    // TODO(johntlee): Update UI when dragging.
+  }
+
   /**
    * @param {!TabGroupVisualData} visualData
    */

@@ -91,8 +91,8 @@ class TabListElement extends CustomElement {
         this.onDocumentVisibilityChange_();
 
     /**
-     * The TabElement that is currently being dragged.
-     * @private {!TabElement|undefined}
+     * The element that is currently being dragged.
+     * @private {!TabElement|!TabGroupElement|undefined}
      */
     this.draggedItem_;
 
@@ -490,18 +490,56 @@ class TabListElement extends CustomElement {
     }
 
     event.dataTransfer.dropEffect = 'move';
+    if (isTabGroupElement(this.draggedItem_)) {
+      this.onDragOverWithGroupElement_(event);
+      return;
+    }
+    this.onDragOverWithTabElement_(event);
+  }
 
-    const composedPath = event.composedPath();
-    const dragOverTabElement =
-        composedPath.find(item => isTabElement(/** @type {!Element} */ (item)));
+  /**
+   * @param {!DragEvent} event
+   * @private
+   */
+  onDragOverWithGroupElement_(event) {
+    const composedPath = /** @type {!Array<!Element>} */ (event.composedPath());
+    if (composedPath.includes(assert(this.draggedItem_))) {
+      // Dragging over itself or a child of itself.
+      return;
+    }
+
+    const allTabElements =
+        Array.from(this.shadowRoot.querySelectorAll('tabstrip-tab'));
+
+    const dragOverTabElement = composedPath.find(isTabElement);
+    if (dragOverTabElement && !dragOverTabElement.tab.pinned) {
+      const dragOverIndex = allTabElements.indexOf(dragOverTabElement);
+      this.tabsApi_.moveGroup(this.draggedItem_.dataset.groupId, dragOverIndex);
+      return;
+    }
+
+    const dragOverGroupElement = composedPath.find(isTabGroupElement);
+    if (dragOverGroupElement) {
+      const dragOverIndex =
+          allTabElements.indexOf(dragOverGroupElement.firstElementChild);
+      this.tabsApi_.moveGroup(this.draggedItem_.dataset.groupId, dragOverIndex);
+    }
+  }
+
+  /**
+   * @param {!DragEvent} event
+   * @private
+   */
+  onDragOverWithTabElement_(event) {
+    const composedPath = /** @type {!Array<!Element>} */ (event.composedPath());
+    const dragOverTabElement = composedPath.find(isTabElement);
     if (dragOverTabElement &&
         dragOverTabElement.tab.pinned !== this.draggedItem_.tab.pinned) {
       // Can only drag between the same pinned states.
       return;
     }
 
-    const dragOverTabGroup = composedPath.find(
-        item => isTabGroupElement(/** @type {!Element} */ (item)));
+    const dragOverTabGroup = composedPath.find(isTabGroupElement);
     if (dragOverTabGroup &&
         dragOverTabGroup.dataset.groupId !== this.draggedItem_.tab.groupId) {
       this.tabsApi_.groupTab(
@@ -529,7 +567,7 @@ class TabListElement extends CustomElement {
    */
   onDragStart_(event) {
     const draggedItem = event.path[0];
-    if (!isTabElement(draggedItem)) {
+    if (!isTabElement(draggedItem) && !isTabGroupElement(draggedItem)) {
       return;
     }
 

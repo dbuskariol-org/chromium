@@ -252,10 +252,10 @@ export class TabElement extends CustomElement {
   }
 
   /**
-   * @param {boolean} dragging
+   * @param {boolean} isDragging
    */
-  setDragging(dragging) {
-    this.toggleAttribute('dragging_', dragging);
+  setDragging(isDragging) {
+    this.toggleAttribute('dragging_', isDragging);
   }
 
   /**

@@ -201,6 +201,12 @@ void TabStripUIHandler::OnTabGroupChanged(const TabGroupChange& change) {
     }
 
     case TabGroupChange::kMoved: {
+      FireWebUIListener("tab-group-moved", base::Value(change.group.ToString()),
+                        base::Value(browser_->tab_strip_model()
+                                        ->group_model()
+                                        ->GetTabGroup(change.group)
+                                        ->ListTabs()
+                                        .front()));
       break;
     }
 
@@ -253,6 +259,8 @@ void TabStripUIHandler::OnTabStripModelChanged(
     case TabStripModelChange::kMoved: {
       auto* move = change.GetMove();
 
+      // TODO(johntlee): Investigate if this is still needed, when
+      // TabGroupChange::kMoved exists.
       base::Optional<tab_groups::TabGroupId> tab_group_id =
           tab_strip_model->GetTabGroupForTab(move->to_index);
       if (tab_group_id.has_value()) {
@@ -346,6 +354,9 @@ void TabStripUIHandler::RegisterMessages() {
   web_ui()->RegisterMessageCallback(
       "ungroupTab",
       base::Bind(&TabStripUIHandler::HandleUngroupTab, base::Unretained(this)));
+  web_ui()->RegisterMessageCallback(
+      "moveGroup",
+      base::Bind(&TabStripUIHandler::HandleMoveGroup, base::Unretained(this)));
   web_ui()->RegisterMessageCallback(
       "setThumbnailTracked",
       base::Bind(&TabStripUIHandler::HandleSetThumbnailTracked,
@@ -565,6 +576,18 @@ void TabStripUIHandler::HandleUngroupTab(const base::ListValue* args) {
   DCHECK(got_tab);
 
   browser_->tab_strip_model()->RemoveFromGroup({tab_index});
+}
+
+void TabStripUIHandler::HandleMoveGroup(const base::ListValue* args) {
+  const std::string group_id_string = args->GetList()[0].GetString();
+
+  for (tab_groups::TabGroupId group_id :
+       browser_->tab_strip_model()->group_model()->ListTabGroups()) {
+    if (group_id.ToString() == group_id_string) {
+      int to_index = args->GetList()[1].GetInt();
+      browser_->tab_strip_model()->MoveGroupTo(group_id, to_index);
+    }
+  }
 }
 
 void TabStripUIHandler::HandleCloseContainer(const base::ListValue* args) {
