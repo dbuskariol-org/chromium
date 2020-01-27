@@ -9,7 +9,6 @@
 #import "components/remote_cocoa/app_shim/bridged_content_view.h"
 #import "components/remote_cocoa/app_shim/native_widget_ns_window_bridge.h"
 #include "components/remote_cocoa/common/native_widget_ns_window_host.mojom.h"
-#import "ui/base/cocoa/touch_bar_forward_declarations.h"
 
 namespace {
 
