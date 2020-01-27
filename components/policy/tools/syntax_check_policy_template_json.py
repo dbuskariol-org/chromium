@@ -1474,8 +1474,7 @@ class PolicyTemplateChecker(object):
         description='Syntax check a policy_templates.json file.')
     parser.add_argument(
         '--device_policy_proto_path',
-        help='[REQUIRED] File path of the device policy proto file.',
-        type='string')
+        help='[REQUIRED] File path of the device policy proto file.')
     parser.add_argument(
         '--fix', action='store_true', help='Automatically fix formatting.')
     parser.add_argument(
