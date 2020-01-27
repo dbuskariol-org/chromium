@@ -1401,7 +1401,7 @@ if (!is_android) {
       "../renderer/chrome_render_frame_observer_browsertest.cc",
       "../renderer/content_settings_agent_impl_browsertest.cc",
       "../renderer/media/cast_session_browsertest.cc",
-      "../renderer/translate/translate_helper_browsertest.cc",
+      "../renderer/translate/translate_agent_browsertest.cc",
       "../renderer/translate/translate_script_browsertest.cc",
       "base/chrome_render_view_test.cc",
       "base/chrome_render_view_test.h",

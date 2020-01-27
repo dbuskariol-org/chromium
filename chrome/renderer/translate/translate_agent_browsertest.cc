@@ -11,7 +11,7 @@
 #include "chrome/common/chrome_isolated_world_ids.h"
 #include "chrome/test/base/chrome_render_view_test.h"
 #include "components/translate/content/common/translate.mojom.h"
-#include "components/translate/content/renderer/translate_helper.h"
+#include "components/translate/content/renderer/translate_agent.h"
 #include "components/translate/core/common/translate_constants.h"
 #include "content/public/renderer/render_frame.h"
 #include "content/public/renderer/render_view.h"
@@ -24,9 +24,9 @@
 #include "third_party/blink/public/common/browser_interface_broker_proxy.h"
 #include "third_party/blink/public/web/web_local_frame.h"
 
+using testing::_;
 using testing::AtLeast;
 using testing::Return;
-using testing::_;
 
 namespace {
 
@@ -44,9 +44,10 @@ class FakeContentTranslateDriver
   }
 
   // translate::mojom::ContentTranslateDriver implementation.
-  void RegisterPage(mojo::PendingRemote<translate::mojom::Page> page,
-                    const translate::LanguageDetectionDetails& details,
-                    bool page_needs_translation) override {
+  void RegisterPage(
+      mojo::PendingRemote<translate::mojom::TranslateAgent> translate_agent,
+      const translate::LanguageDetectionDetails& details,
+      bool page_needs_translation) override {
     called_new_page_ = true;
     details_ = details;
     page_needs_translation_ = page_needs_translation;
@@ -68,12 +69,12 @@ class FakeContentTranslateDriver
 
 }  // namespace
 
-class TestTranslateHelper : public translate::TranslateHelper {
+class TestTranslateAgent : public translate::TranslateAgent {
  public:
-  explicit TestTranslateHelper(content::RenderFrame* render_frame)
-      : translate::TranslateHelper(render_frame,
-                                   ISOLATED_WORLD_ID_TRANSLATE,
-                                   extensions::kExtensionScheme) {}
+  explicit TestTranslateAgent(content::RenderFrame* render_frame)
+      : translate::TranslateAgent(render_frame,
+                                  ISOLATED_WORLD_ID_TRANSLATE,
+                                  extensions::kExtensionScheme) {}
 
   base::TimeDelta AdjustDelay(int delayInMs) override {
     // Just returns base::TimeDelta() which has initial value 0.
@@ -92,9 +93,9 @@ class TestTranslateHelper : public translate::TranslateHelper {
     trans_result_error_type_ = translate::TranslateErrors::NONE;
 
     // Will get new result values via OnPageTranslated.
-    Translate(translate_script, source_lang, target_lang,
-              base::Bind(&TestTranslateHelper::OnPageTranslated,
-                         base::Unretained(this)));
+    TranslateFrame(translate_script, source_lang, target_lang,
+                   base::Bind(&TestTranslateAgent::OnPageTranslated,
+                              base::Unretained(this)));
   }
 
   bool GetPageTranslatedResult(std::string* original_lang,
@@ -143,17 +144,17 @@ class TestTranslateHelper : public translate::TranslateHelper {
   base::Optional<std::string> trans_result_translated_lang_;
   translate::TranslateErrors::Type trans_result_error_type_;
 
-  DISALLOW_COPY_AND_ASSIGN(TestTranslateHelper);
+  DISALLOW_COPY_AND_ASSIGN(TestTranslateAgent);
 };
 
-class TranslateHelperBrowserTest : public ChromeRenderViewTest {
+class TranslateAgentBrowserTest : public ChromeRenderViewTest {
  public:
-  TranslateHelperBrowserTest() : translate_helper_(NULL) {}
+  TranslateAgentBrowserTest() : translate_agent_(nullptr) {}
 
  protected:
   void SetUp() override {
     ChromeRenderViewTest::SetUp();
-    translate_helper_ = new TestTranslateHelper(view_->GetMainRenderFrame());
+    translate_agent_ = new TestTranslateAgent(view_->GetMainRenderFrame());
 
     view_->GetMainRenderFrame()
         ->GetBrowserInterfaceBroker()
@@ -169,82 +170,82 @@ class TranslateHelperBrowserTest : public ChromeRenderViewTest {
         ->SetBinderForTesting(translate::mojom::ContentTranslateDriver::Name_,
                               {});
 
-    delete translate_helper_;
+    delete translate_agent_;
     ChromeRenderViewTest::TearDown();
   }
 
-  TestTranslateHelper* translate_helper_;
+  TestTranslateAgent* translate_agent_;
   FakeContentTranslateDriver fake_translate_driver_;
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(TranslateHelperBrowserTest);
+  DISALLOW_COPY_AND_ASSIGN(TranslateAgentBrowserTest);
 };
 
 // Tests that the browser gets notified of the translation failure if the
 // translate library fails/times-out during initialization.
-TEST_F(TranslateHelperBrowserTest, TranslateLibNeverReady) {
+TEST_F(TranslateAgentBrowserTest, TranslateLibNeverReady) {
   // We make IsTranslateLibAvailable true so we don't attempt to inject the
   // library.
-  EXPECT_CALL(*translate_helper_, IsTranslateLibAvailable())
+  EXPECT_CALL(*translate_agent_, IsTranslateLibAvailable())
       .Times(AtLeast(1))
       .WillRepeatedly(Return(true));
 
-  EXPECT_CALL(*translate_helper_, IsTranslateLibReady())
+  EXPECT_CALL(*translate_agent_, IsTranslateLibReady())
       .Times(AtLeast(5))  // See kMaxTranslateInitCheckAttempts in
-                          // translate_helper.cc
+                          // translate_agent.cc
       .WillRepeatedly(Return(false));
 
-  EXPECT_CALL(*translate_helper_, GetErrorCode())
+  EXPECT_CALL(*translate_agent_, GetErrorCode())
       .Times(AtLeast(5))
       .WillRepeatedly(Return(translate::TranslateErrors::NONE));
 
-  translate_helper_->TranslatePage("en", "fr", std::string());
+  translate_agent_->TranslatePage("en", "fr", std::string());
   base::RunLoop().RunUntilIdle();
 
   translate::TranslateErrors::Type error;
-  ASSERT_TRUE(translate_helper_->GetPageTranslatedResult(NULL, NULL, &error));
+  ASSERT_TRUE(
+      translate_agent_->GetPageTranslatedResult(nullptr, nullptr, &error));
   EXPECT_EQ(translate::TranslateErrors::TRANSLATION_TIMEOUT, error);
 }
 
 // Tests that the browser gets notified of the translation success when the
 // translation succeeds.
-TEST_F(TranslateHelperBrowserTest, TranslateSuccess) {
+TEST_F(TranslateAgentBrowserTest, TranslateSuccess) {
   // We make IsTranslateLibAvailable true so we don't attempt to inject the
   // library.
-  EXPECT_CALL(*translate_helper_, IsTranslateLibAvailable())
+  EXPECT_CALL(*translate_agent_, IsTranslateLibAvailable())
       .Times(AtLeast(1))
       .WillRepeatedly(Return(true));
 
-  EXPECT_CALL(*translate_helper_, IsTranslateLibReady())
+  EXPECT_CALL(*translate_agent_, IsTranslateLibReady())
       .WillOnce(Return(false))
       .WillOnce(Return(true));
 
-  EXPECT_CALL(*translate_helper_, GetErrorCode())
+  EXPECT_CALL(*translate_agent_, GetErrorCode())
       .WillOnce(Return(translate::TranslateErrors::NONE));
 
-  EXPECT_CALL(*translate_helper_, StartTranslation()).WillOnce(Return(true));
+  EXPECT_CALL(*translate_agent_, StartTranslation()).WillOnce(Return(true));
 
   // Succeed after few checks.
-  EXPECT_CALL(*translate_helper_, HasTranslationFailed())
+  EXPECT_CALL(*translate_agent_, HasTranslationFailed())
       .WillRepeatedly(Return(false));
-  EXPECT_CALL(*translate_helper_, HasTranslationFinished())
+  EXPECT_CALL(*translate_agent_, HasTranslationFinished())
       .WillOnce(Return(false))
       .WillOnce(Return(false))
       .WillOnce(Return(true));
 
   // V8 call for performance monitoring should be ignored.
-  EXPECT_CALL(*translate_helper_,
-              ExecuteScriptAndGetDoubleResult(_)).Times(3);
+  EXPECT_CALL(*translate_agent_, ExecuteScriptAndGetDoubleResult(_)).Times(3);
 
   std::string original_lang("en");
   std::string target_lang("fr");
-  translate_helper_->TranslatePage(original_lang, target_lang, std::string());
+  translate_agent_->TranslatePage(original_lang, target_lang, std::string());
   base::RunLoop().RunUntilIdle();
 
   std::string received_original_lang;
   std::string received_target_lang;
   translate::TranslateErrors::Type error;
-  ASSERT_TRUE(translate_helper_->GetPageTranslatedResult(
+  ASSERT_TRUE(translate_agent_->GetPageTranslatedResult(
       &received_original_lang, &received_target_lang, &error));
   EXPECT_EQ(original_lang, received_original_lang);
   EXPECT_EQ(target_lang, received_target_lang);
@@ -253,80 +254,76 @@ TEST_F(TranslateHelperBrowserTest, TranslateSuccess) {
 
 // Tests that the browser gets notified of the translation failure when the
 // translation fails.
-TEST_F(TranslateHelperBrowserTest, TranslateFailure) {
+TEST_F(TranslateAgentBrowserTest, TranslateFailure) {
   // We make IsTranslateLibAvailable true so we don't attempt to inject the
   // library.
-  EXPECT_CALL(*translate_helper_, IsTranslateLibAvailable())
+  EXPECT_CALL(*translate_agent_, IsTranslateLibAvailable())
       .Times(AtLeast(1))
       .WillRepeatedly(Return(true));
 
-  EXPECT_CALL(*translate_helper_, IsTranslateLibReady())
-      .WillOnce(Return(true));
+  EXPECT_CALL(*translate_agent_, IsTranslateLibReady()).WillOnce(Return(true));
 
-  EXPECT_CALL(*translate_helper_, StartTranslation()).WillOnce(Return(true));
+  EXPECT_CALL(*translate_agent_, StartTranslation()).WillOnce(Return(true));
 
   // Fail after few checks.
-  EXPECT_CALL(*translate_helper_, HasTranslationFailed())
+  EXPECT_CALL(*translate_agent_, HasTranslationFailed())
       .WillOnce(Return(false))
       .WillOnce(Return(false))
       .WillOnce(Return(false))
       .WillOnce(Return(true));
 
-  EXPECT_CALL(*translate_helper_, HasTranslationFinished())
+  EXPECT_CALL(*translate_agent_, HasTranslationFinished())
       .Times(AtLeast(1))
       .WillRepeatedly(Return(false));
 
-  EXPECT_CALL(*translate_helper_, GetErrorCode())
+  EXPECT_CALL(*translate_agent_, GetErrorCode())
       .WillOnce(Return(translate::TranslateErrors::TRANSLATION_ERROR));
 
   // V8 call for performance monitoring should be ignored.
-  EXPECT_CALL(*translate_helper_,
-              ExecuteScriptAndGetDoubleResult(_)).Times(2);
+  EXPECT_CALL(*translate_agent_, ExecuteScriptAndGetDoubleResult(_)).Times(2);
 
-  translate_helper_->TranslatePage("en", "fr", std::string());
+  translate_agent_->TranslatePage("en", "fr", std::string());
   base::RunLoop().RunUntilIdle();
 
   translate::TranslateErrors::Type error;
-  ASSERT_TRUE(translate_helper_->GetPageTranslatedResult(NULL, NULL, &error));
+  ASSERT_TRUE(
+      translate_agent_->GetPageTranslatedResult(nullptr, nullptr, &error));
   EXPECT_EQ(translate::TranslateErrors::TRANSLATION_ERROR, error);
 }
 
 // Tests that when the browser translate a page for which the language is
 // undefined we query the translate element to get the language.
-TEST_F(TranslateHelperBrowserTest, UndefinedSourceLang) {
+TEST_F(TranslateAgentBrowserTest, UndefinedSourceLang) {
   // We make IsTranslateLibAvailable true so we don't attempt to inject the
   // library.
-  EXPECT_CALL(*translate_helper_, IsTranslateLibAvailable())
+  EXPECT_CALL(*translate_agent_, IsTranslateLibAvailable())
       .Times(AtLeast(1))
       .WillRepeatedly(Return(true));
 
-  EXPECT_CALL(*translate_helper_, IsTranslateLibReady())
-      .WillOnce(Return(true));
+  EXPECT_CALL(*translate_agent_, IsTranslateLibReady()).WillOnce(Return(true));
 
-  EXPECT_CALL(*translate_helper_, GetOriginalPageLanguage())
+  EXPECT_CALL(*translate_agent_, GetOriginalPageLanguage())
       .WillOnce(Return("de"));
 
-  EXPECT_CALL(*translate_helper_, StartTranslation()).WillOnce(Return(true));
-  EXPECT_CALL(*translate_helper_, HasTranslationFailed())
+  EXPECT_CALL(*translate_agent_, StartTranslation()).WillOnce(Return(true));
+  EXPECT_CALL(*translate_agent_, HasTranslationFailed())
       .WillOnce(Return(false));
-  EXPECT_CALL(*translate_helper_, HasTranslationFinished())
+  EXPECT_CALL(*translate_agent_, HasTranslationFinished())
       .Times(AtLeast(1))
       .WillRepeatedly(Return(true));
 
   // V8 call for performance monitoring should be ignored.
-  EXPECT_CALL(*translate_helper_,
-              ExecuteScriptAndGetDoubleResult(_)).Times(3);
+  EXPECT_CALL(*translate_agent_, ExecuteScriptAndGetDoubleResult(_)).Times(3);
 
-  translate_helper_->TranslatePage(translate::kUnknownLanguageCode,
-                                   "fr",
-                                   std::string());
+  translate_agent_->TranslatePage(translate::kUnknownLanguageCode, "fr",
+                                  std::string());
   base::RunLoop().RunUntilIdle();
 
   translate::TranslateErrors::Type error;
   std::string original_lang;
   std::string target_lang;
-  ASSERT_TRUE(translate_helper_->GetPageTranslatedResult(&original_lang,
-                                                         &target_lang, &error));
+  ASSERT_TRUE(translate_agent_->GetPageTranslatedResult(&original_lang,
+                                                        &target_lang, &error));
   EXPECT_EQ("de", original_lang);
   EXPECT_EQ("fr", target_lang);
   EXPECT_EQ(translate::TranslateErrors::NONE, error);
@@ -334,38 +331,37 @@ TEST_F(TranslateHelperBrowserTest, UndefinedSourceLang) {
 
 // Tests that starting a translation while a similar one is pending does not
 // break anything.
-TEST_F(TranslateHelperBrowserTest, MultipleSimilarTranslations) {
+TEST_F(TranslateAgentBrowserTest, MultipleSimilarTranslations) {
   // We make IsTranslateLibAvailable true so we don't attempt to inject the
   // library.
-  EXPECT_CALL(*translate_helper_, IsTranslateLibAvailable())
+  EXPECT_CALL(*translate_agent_, IsTranslateLibAvailable())
       .Times(AtLeast(1))
       .WillRepeatedly(Return(true));
 
-  EXPECT_CALL(*translate_helper_, IsTranslateLibReady())
+  EXPECT_CALL(*translate_agent_, IsTranslateLibReady())
       .WillRepeatedly(Return(true));
-  EXPECT_CALL(*translate_helper_, StartTranslation())
+  EXPECT_CALL(*translate_agent_, StartTranslation())
       .WillRepeatedly(Return(true));
-  EXPECT_CALL(*translate_helper_, HasTranslationFailed())
+  EXPECT_CALL(*translate_agent_, HasTranslationFailed())
       .WillRepeatedly(Return(false));
-  EXPECT_CALL(*translate_helper_, HasTranslationFinished())
+  EXPECT_CALL(*translate_agent_, HasTranslationFinished())
       .WillOnce(Return(true));
 
   // V8 call for performance monitoring should be ignored.
-  EXPECT_CALL(*translate_helper_,
-              ExecuteScriptAndGetDoubleResult(_)).Times(3);
+  EXPECT_CALL(*translate_agent_, ExecuteScriptAndGetDoubleResult(_)).Times(3);
 
   std::string original_lang("en");
   std::string target_lang("fr");
-  translate_helper_->TranslatePage(original_lang, target_lang, std::string());
+  translate_agent_->TranslatePage(original_lang, target_lang, std::string());
   // While this is running call again TranslatePage to make sure noting bad
   // happens.
-  translate_helper_->TranslatePage(original_lang, target_lang, std::string());
+  translate_agent_->TranslatePage(original_lang, target_lang, std::string());
   base::RunLoop().RunUntilIdle();
 
   std::string received_original_lang;
   std::string received_target_lang;
   translate::TranslateErrors::Type error;
-  ASSERT_TRUE(translate_helper_->GetPageTranslatedResult(
+  ASSERT_TRUE(translate_agent_->GetPageTranslatedResult(
       &received_original_lang, &received_target_lang, &error));
   EXPECT_EQ(original_lang, received_original_lang);
   EXPECT_EQ(target_lang, received_target_lang);
@@ -373,36 +369,35 @@ TEST_F(TranslateHelperBrowserTest, MultipleSimilarTranslations) {
 }
 
 // Tests that starting a translation while a different one is pending works.
-TEST_F(TranslateHelperBrowserTest, MultipleDifferentTranslations) {
-  EXPECT_CALL(*translate_helper_, IsTranslateLibAvailable())
+TEST_F(TranslateAgentBrowserTest, MultipleDifferentTranslations) {
+  EXPECT_CALL(*translate_agent_, IsTranslateLibAvailable())
       .Times(AtLeast(1))
       .WillRepeatedly(Return(true));
-  EXPECT_CALL(*translate_helper_, IsTranslateLibReady())
+  EXPECT_CALL(*translate_agent_, IsTranslateLibReady())
       .WillRepeatedly(Return(true));
-  EXPECT_CALL(*translate_helper_, StartTranslation())
+  EXPECT_CALL(*translate_agent_, StartTranslation())
       .WillRepeatedly(Return(true));
-  EXPECT_CALL(*translate_helper_, HasTranslationFailed())
+  EXPECT_CALL(*translate_agent_, HasTranslationFailed())
       .WillRepeatedly(Return(false));
-  EXPECT_CALL(*translate_helper_, HasTranslationFinished())
+  EXPECT_CALL(*translate_agent_, HasTranslationFinished())
       .WillOnce(Return(true));
 
   // V8 call for performance monitoring should be ignored.
-  EXPECT_CALL(*translate_helper_,
-              ExecuteScriptAndGetDoubleResult(_)).Times(5);
+  EXPECT_CALL(*translate_agent_, ExecuteScriptAndGetDoubleResult(_)).Times(5);
 
   std::string original_lang("en");
   std::string target_lang("fr");
-  translate_helper_->TranslatePage(original_lang, target_lang, std::string());
+  translate_agent_->TranslatePage(original_lang, target_lang, std::string());
   // While this is running call again TranslatePage with a new target lang.
   std::string new_target_lang("de");
-  translate_helper_->TranslatePage(
-      original_lang, new_target_lang, std::string());
+  translate_agent_->TranslatePage(original_lang, new_target_lang,
+                                  std::string());
   base::RunLoop().RunUntilIdle();
 
   std::string received_original_lang;
   std::string received_target_lang;
   translate::TranslateErrors::Type error;
-  ASSERT_TRUE(translate_helper_->GetPageTranslatedResult(
+  ASSERT_TRUE(translate_agent_->GetPageTranslatedResult(
       &received_original_lang, &received_target_lang, &error));
   EXPECT_EQ(original_lang, received_original_lang);
   EXPECT_EQ(new_target_lang, received_target_lang);
@@ -411,7 +406,7 @@ TEST_F(TranslateHelperBrowserTest, MultipleDifferentTranslations) {
 
 // Tests that we send the right translate language message for a page and that
 // we respect the "no translate" meta-tag.
-TEST_F(TranslateHelperBrowserTest, TranslatablePage) {
+TEST_F(TranslateAgentBrowserTest, TranslatablePage) {
   LoadHTML("<html><body>A random page with random content.</body></html>");
 
   base::RunLoop().RunUntilIdle();
@@ -421,8 +416,9 @@ TEST_F(TranslateHelperBrowserTest, TranslatablePage) {
   fake_translate_driver_.ResetNewPageValues();
 
   // Now the page specifies the META tag to prevent translation.
-  LoadHTML("<html><head><meta name=\"google\" value=\"notranslate\"></head>"
-           "<body>A random page with random content.</body></html>");
+  LoadHTML(
+      "<html><head><meta name=\"google\" value=\"notranslate\"></head>"
+      "<body>A random page with random content.</body></html>");
 
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
@@ -431,8 +427,9 @@ TEST_F(TranslateHelperBrowserTest, TranslatablePage) {
   fake_translate_driver_.ResetNewPageValues();
 
   // Try the alternate version of the META tag (content instead of value).
-  LoadHTML("<html><head><meta name=\"google\" content=\"notranslate\"></head>"
-           "<body>A random page with random content.</body></html>");
+  LoadHTML(
+      "<html><head><meta name=\"google\" content=\"notranslate\"></head>"
+      "<body>A random page with random content.</body></html>");
 
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
@@ -442,9 +439,10 @@ TEST_F(TranslateHelperBrowserTest, TranslatablePage) {
 
 // Tests that the language meta tag takes precedence over the CLD when reporting
 // the page's language.
-TEST_F(TranslateHelperBrowserTest, LanguageMetaTag) {
-  LoadHTML("<html><head><meta http-equiv=\"content-language\" content=\"es\">"
-           "</head><body>A random page with random content.</body></html>");
+TEST_F(TranslateAgentBrowserTest, LanguageMetaTag) {
+  LoadHTML(
+      "<html><head><meta http-equiv=\"content-language\" content=\"es\">"
+      "</head><body>A random page with random content.</body></html>");
 
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
@@ -452,9 +450,10 @@ TEST_F(TranslateHelperBrowserTest, LanguageMetaTag) {
   fake_translate_driver_.ResetNewPageValues();
 
   // Makes sure we support multiple languages specified.
-  LoadHTML("<html><head><meta http-equiv=\"content-language\" "
-           "content=\" fr , es,en \">"
-           "</head><body>A random page with random content.</body></html>");
+  LoadHTML(
+      "<html><head><meta http-equiv=\"content-language\" "
+      "content=\" fr , es,en \">"
+      "</head><body>A random page with random content.</body></html>");
 
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
@@ -463,18 +462,20 @@ TEST_F(TranslateHelperBrowserTest, LanguageMetaTag) {
 
 // Tests that the language meta tag works even with non-all-lower-case.
 // http://code.google.com/p/chromium/issues/detail?id=145689
-TEST_F(TranslateHelperBrowserTest, LanguageMetaTagCase) {
-  LoadHTML("<html><head><meta http-equiv=\"Content-Language\" content=\"es\">"
-           "</head><body>A random page with random content.</body></html>");
+TEST_F(TranslateAgentBrowserTest, LanguageMetaTagCase) {
+  LoadHTML(
+      "<html><head><meta http-equiv=\"Content-Language\" content=\"es\">"
+      "</head><body>A random page with random content.</body></html>");
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
   EXPECT_EQ("es", fake_translate_driver_.details_->adopted_language);
   fake_translate_driver_.ResetNewPageValues();
 
   // Makes sure we support multiple languages specified.
-  LoadHTML("<html><head><meta http-equiv=\"Content-Language\" "
-           "content=\" fr , es,en \">"
-           "</head><body>A random page with random content.</body></html>");
+  LoadHTML(
+      "<html><head><meta http-equiv=\"Content-Language\" "
+      "content=\" fr , es,en \">"
+      "</head><body>A random page with random content.</body></html>");
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
   EXPECT_EQ("fr", fake_translate_driver_.details_->adopted_language);
@@ -483,25 +484,28 @@ TEST_F(TranslateHelperBrowserTest, LanguageMetaTagCase) {
 // Tests that the language meta tag is converted to Chrome standard of dashes
 // instead of underscores and proper capitalization.
 // http://code.google.com/p/chromium/issues/detail?id=159487
-TEST_F(TranslateHelperBrowserTest, LanguageCommonMistakesAreCorrected) {
-  LoadHTML("<html><head><meta http-equiv='Content-Language' content='EN_us'>"
-           "</head><body>A random page with random content.</body></html>");
+TEST_F(TranslateAgentBrowserTest, LanguageCommonMistakesAreCorrected) {
+  LoadHTML(
+      "<html><head><meta http-equiv='Content-Language' content='EN_us'>"
+      "</head><body>A random page with random content.</body></html>");
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
   EXPECT_EQ("en", fake_translate_driver_.details_->adopted_language);
   fake_translate_driver_.ResetNewPageValues();
 
-  LoadHTML("<html><head><meta http-equiv='Content-Language' content='ZH_tw'>"
-           "</head><body>A random page with random content.</body></html>");
+  LoadHTML(
+      "<html><head><meta http-equiv='Content-Language' content='ZH_tw'>"
+      "</head><body>A random page with random content.</body></html>");
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
   EXPECT_EQ("zh-TW", fake_translate_driver_.details_->adopted_language);
 }
 
 // Tests that a back navigation gets a translate language message.
-TEST_F(TranslateHelperBrowserTest, BackToTranslatablePage) {
-  LoadHTML("<html><head><meta http-equiv=\"content-language\" content=\"es\">"
-           "</head><body>This page is in Spanish.</body></html>");
+TEST_F(TranslateAgentBrowserTest, BackToTranslatablePage) {
+  LoadHTML(
+      "<html><head><meta http-equiv=\"content-language\" content=\"es\">"
+      "</head><body>This page is in Spanish.</body></html>");
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
   EXPECT_EQ("es", fake_translate_driver_.details_->adopted_language);
@@ -509,8 +513,9 @@ TEST_F(TranslateHelperBrowserTest, BackToTranslatablePage) {
 
   content::PageState back_state = GetCurrentPageState();
 
-  LoadHTML("<html><head><meta http-equiv=\"content-language\" content=\"fr\">"
-           "</head><body>This page is in French.</body></html>");
+  LoadHTML(
+      "<html><head><meta http-equiv=\"content-language\" content=\"fr\">"
+      "</head><body>This page is in French.</body></html>");
   base::RunLoop().RunUntilIdle();
   ASSERT_TRUE(fake_translate_driver_.called_new_page_);
   EXPECT_EQ("fr", fake_translate_driver_.details_->adopted_language);

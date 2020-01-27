@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_TRANSLATE_CONTENT_RENDERER_TRANSLATE_HELPER_H_
-#define COMPONENTS_TRANSLATE_CONTENT_RENDERER_TRANSLATE_HELPER_H_
+#ifndef COMPONENTS_TRANSLATE_CONTENT_RENDERER_TRANSLATE_AGENT_H_
+#define COMPONENTS_TRANSLATE_CONTENT_RENDERER_TRANSLATE_AGENT_H_
 
 #include <memory>
 #include <string>
@@ -27,14 +27,14 @@ class WebLocalFrame;
 namespace translate {
 
 // This class deals with page translation.
-// There is one TranslateHelper per RenderView.
-class TranslateHelper : public content::RenderFrameObserver,
-                        public mojom::Page {
+// There is one TranslateAgent per RenderView.
+class TranslateAgent : public content::RenderFrameObserver,
+                       public mojom::TranslateAgent {
  public:
-  TranslateHelper(content::RenderFrame* render_frame,
-                  int world_id,
-                  const std::string& extension_scheme);
-  ~TranslateHelper() override;
+  TranslateAgent(content::RenderFrame* render_frame,
+                 int world_id,
+                 const std::string& extension_scheme);
+  ~TranslateAgent() override;
 
   // Informs us that the page's text has been extracted.
   void PageCaptured(const base::string16& contents);
@@ -44,11 +44,11 @@ class TranslateHelper : public content::RenderFrameObserver,
   // this URL loads, this is the time to prepare for it.
   void PrepareForUrl(const GURL& url);
 
-  // mojom::Page implementation.
-  void Translate(const std::string& translate_script,
-                 const std::string& source_lang,
-                 const std::string& target_lang,
-                 TranslateCallback callback) override;
+  // mojom::TranslateAgent implementation.
+  void TranslateFrame(const std::string& translate_script,
+                      const std::string& source_lang,
+                      const std::string& target_lang,
+                      TranslateFrameCallback callback) override;
   void RevertTranslation() override;
 
  protected:
@@ -109,7 +109,7 @@ class TranslateHelper : public content::RenderFrameObserver,
   virtual int64_t ExecuteScriptAndGetIntegerResult(const std::string& script);
 
  private:
-  FRIEND_TEST_ALL_PREFIXES(TranslateHelperTest, TestBuildTranslationScript);
+  FRIEND_TEST_ALL_PREFIXES(TranslateAgentTest, TestBuildTranslationScript);
 
   // Converts language code to the one used in server supporting list.
   static void ConvertLanguageCodeSynonym(std::string* code);
@@ -145,12 +145,12 @@ class TranslateHelper : public content::RenderFrameObserver,
   // with |error|.
   void NotifyBrowserTranslationFailed(TranslateErrors::Type error);
 
-  // Convenience method to access the main frame.  Can return NULL, typically
+  // Convenience method to access the main frame.  Can return nullptr, typically
   // if the page is being closed.
   blink::WebLocalFrame* GetMainFrame();
 
   // The states associated with the current translation.
-  TranslateCallback translate_callback_pending_;
+  TranslateFrameCallback translate_callback_pending_;
   std::string source_lang_;
   std::string target_lang_;
 
@@ -174,14 +174,14 @@ class TranslateHelper : public content::RenderFrameObserver,
   // Mojo interface).
   mojo::Remote<mojom::ContentTranslateDriver> translate_handler_;
 
-  mojo::Receiver<mojom::Page> receiver_{this};
+  mojo::Receiver<mojom::TranslateAgent> receiver_{this};
 
   // Method factory used to make calls to TranslatePageImpl.
-  base::WeakPtrFactory<TranslateHelper> weak_method_factory_{this};
+  base::WeakPtrFactory<TranslateAgent> weak_method_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(TranslateHelper);
+  DISALLOW_COPY_AND_ASSIGN(TranslateAgent);
 };
 
 }  // namespace translate
 
-#endif  // COMPONENTS_TRANSLATE_CONTENT_RENDERER_TRANSLATE_HELPER_H_
+#endif  // COMPONENTS_TRANSLATE_CONTENT_RENDERER_TRANSLATE_AGENT_H_
