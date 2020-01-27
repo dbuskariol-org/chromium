@@ -148,15 +148,14 @@ operator=(const SuggestResult& rhs) = default;
 void SearchSuggestionParser::SuggestResult::ClassifyMatchContents(
     const bool allow_bolding_all,
     const base::string16& input_text) {
-  // Start with the trivial nothing-bolded classification.
   DCHECK(!match_contents_.empty());
-  match_contents_class_.clear();
-  match_contents_class_.push_back(
-      ACMatchClassification(0, ACMatchClassification::NONE));
 
   // Leave trivial classification alone in the ZeroSuggest case.
-  if (input_text.empty())
+  if (input_text.empty()) {
+    match_contents_class_ = {
+        ACMatchClassification(0, ACMatchClassification::NONE)};
     return;
+  }
 
   base::string16 lookup_text = input_text;
   if (type_ == AutocompleteMatchType::SEARCH_SUGGEST_TAIL) {
