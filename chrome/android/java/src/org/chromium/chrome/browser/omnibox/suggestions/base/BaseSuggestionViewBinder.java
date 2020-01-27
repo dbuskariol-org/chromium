@@ -25,6 +25,8 @@ import org.chromium.ui.modelutil.PropertyModelChangeProcessor.ViewBinder;
  *
  * This binder should be used by all suggestions that also utilize BaseSuggestionView<T> to
  * construct the view, and manages shared suggestion properties (such as decorations or theme).
+ *
+ * @param <T> The inner content view type being updated.
  */
 public final class BaseSuggestionViewBinder<T extends View>
         implements ViewBinder<PropertyModel, BaseSuggestionView<T>, PropertyKey> {
@@ -62,12 +64,13 @@ public final class BaseSuggestionViewBinder<T extends View>
     }
 
     /** Update attributes of decorated suggestion icon. */
-    private static void updateSuggestionIcon(PropertyModel model, BaseSuggestionView baseView) {
-        final RoundedCornerImageView view = baseView.getSuggestionImageView();
+    private static <T extends View> void updateSuggestionIcon(
+            PropertyModel model, BaseSuggestionView<T> baseView) {
+        final RoundedCornerImageView rciv = baseView.getSuggestionImageView();
         final SuggestionDrawableState sds = model.get(BaseSuggestionViewProperties.ICON);
 
         if (sds != null) {
-            final Resources res = view.getContext().getResources();
+            final Resources res = rciv.getContext().getResources();
             final int paddingStart = res.getDimensionPixelSize(sds.isLarge
                             ? R.dimen.omnibox_suggestion_36dp_icon_margin_start
                             : R.dimen.omnibox_suggestion_24dp_icon_margin_start);
@@ -78,23 +81,23 @@ public final class BaseSuggestionViewBinder<T extends View>
                             ? R.dimen.omnibox_suggestion_36dp_icon_size
                             : R.dimen.omnibox_suggestion_24dp_icon_size);
 
-            view.setPadding(paddingStart, 0, paddingEnd, 0);
-            view.setMinimumHeight(edgeSize);
+            rciv.setPadding(paddingStart, 0, paddingEnd, 0);
+            rciv.setMinimumHeight(edgeSize);
 
             // TODO(ender): move logic applying corner rounding to updateIcon when action images use
             // RoundedCornerImageView too.
-            RoundedCornerImageView rciv = (RoundedCornerImageView) view;
             int radius = sds.useRoundedCorners
                     ? res.getDimensionPixelSize(R.dimen.default_rounded_corner_radius)
                     : 0;
             rciv.setRoundedCorners(radius, radius, radius, radius);
         }
 
-        updateIcon(view, sds, !isDarkMode(model));
+        updateIcon(rciv, sds, !isDarkMode(model));
     }
 
     /** Update attributes of decorated suggestion icon. */
-    private static void updateActionIcon(PropertyModel model, BaseSuggestionView baseView) {
+    private static <T extends View> void updateActionIcon(
+            PropertyModel model, BaseSuggestionView<T> baseView) {
         final ImageView view = baseView.getActionImageView();
         final SuggestionDrawableState sds = model.get(BaseSuggestionViewProperties.ACTION_ICON);
         updateIcon(view, sds, !isDarkMode(model));
@@ -105,9 +108,8 @@ public final class BaseSuggestionViewBinder<T extends View>
      * This is required only to adjust the leading padding for undecorated suggestions.
      * TODO(crbug.com/1019937): remove after suggestion favicons are launched.
      */
-    private static void updateContentViewPadding(
-            PropertyModel model, DecoratedSuggestionView view) {
-        final int direction = view.getLayoutDirection();
+    private static <T extends View> void updateContentViewPadding(
+            PropertyModel model, DecoratedSuggestionView<T> view) {
         final SuggestionDrawableState sds = model.get(BaseSuggestionViewProperties.ICON);
         final int startSpace = sds == null ? view.getResources().getDimensionPixelSize(
                                        R.dimen.omnibox_suggestion_start_offset_without_icon)
