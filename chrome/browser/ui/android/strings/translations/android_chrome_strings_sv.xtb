@@ -690,7 +690,6 @@ Det kan finnas andra former av webbhistorik i Google-kontot på <ph name="BEGIN_
 <translation id="6201345951596836663">Länken har kopierats</translation>
 <translation id="6206551242102657620">Anslutningen är säker. Webbplatsinformation</translation>
 <translation id="6210748933810148297">Inte <ph name="EMAIL" />?</translation>
-<translation id="6216432067784365534">Alternativ för <ph name="NAME_OF_LIST_ITEM" /></translation>
 <translation id="6221633008163990886">Lås upp om du vill exportera dina lösenord</translation>
 <translation id="6232535412751077445">Om du aktiverar Do Not Track inkluderas en begäran i din surftrafik. Eventuella effekter beror på om webbplatsen svarar på begäran och hur begäran tolkas.
 
@@ -736,7 +735,6 @@ Vissa webbplatser kan till exempel svara på begäran genom att visa annonser so
 <translation id="6534565668554028783">Google tog för lång tid på sig att svara</translation>
 <translation id="6538442820324228105"><ph name="GBS" /> GB har laddats ned</translation>
 <translation id="6539092367496845964">Något gick fel. Försök igen senare.</translation>
-<translation id="654446541061731451">Välj en flik som du vill överföra</translation>
 <translation id="6545017243486555795">Rensa all data</translation>
 <translation id="6545864417968258051">Bluetooth-sökning</translation>
 <translation id="6560414384669816528">Sök med Sogou</translation>
@@ -1031,7 +1029,6 @@ Webbplatsen får INTE tillgång till kameran. Bara du kan se kamerabilderna.</tr
 <translation id="868929229000858085">Sök bland kontakterna</translation>
 <translation id="8698438463325761328">Blockera webbplatser från att komma åt VR-enheter och VR-data</translation>
 <translation id="869891660844655955">Utgångsdatum</translation>
-<translation id="8719023831149562936">Den aktuella fliken kan inte överföras</translation>
 <translation id="8728487861892616501">Genom att fortsätta att använda programmet godkänner du Chromes <ph name="BEGIN_LINK1" />användarvillkor<ph name="END_LINK1" />, <ph name="BEGIN_LINK2" />sekretessmeddelande<ph name="END_LINK2" /> och <ph name="BEGIN_LINK3" />sekretessmeddelandet för Google-konton som hanteras via Family Link<ph name="END_LINK3" />.</translation>
 <translation id="8748850008226585750">Innehållet har dolts</translation>
 <translation id="8751914237388039244">Välj en bild</translation>

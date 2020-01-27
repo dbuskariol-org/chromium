@@ -687,7 +687,6 @@
 <translation id="6201345951596836663">Спасылка скапіравана</translation>
 <translation id="6206551242102657620">Падключэнне бяспечнае. Звесткі пра сайт</translation>
 <translation id="6210748933810148297"><ph name="EMAIL" /> – гэта не вы?</translation>
-<translation id="6216432067784365534"><ph name="NAME_OF_LIST_ITEM" />: параметры</translation>
 <translation id="6221633008163990886">Каб экспартаваць паролі, трэба зняць блакіроўку</translation>
 <translation id="6232535412751077445">Калі функцыя "Не адсочваць" уключана, пры праглядзе старонак у інтэрнэце браўзер будзе адпраўляць адпаведны запыт. Сайты могуць апрацоўваць і інтэрпрэтаваць гэты запыт па-рознаму.
 
@@ -733,7 +732,6 @@
 <translation id="6534565668554028783">Чаканне адказу ад Google заняло занадта шмат часу</translation>
 <translation id="6538442820324228105">Спампавана <ph name="GBS" /> ГБ</translation>
 <translation id="6539092367496845964">Нешта пайшло не так. Паўтарыце спробу пазней.</translation>
-<translation id="654446541061731451">Выберыце ўкладку для перадачы</translation>
 <translation id="6545017243486555795">Ачысціць усе даныя</translation>
 <translation id="6545864417968258051">Пошук прылад Bluetooth</translation>
 <translation id="6560414384669816528">Пошук праз Sogou</translation>
@@ -1024,7 +1022,6 @@
 <translation id="8687353297350450808">{N_BARS,plural, =1{Узровень сігналу: # палоска}one{Узровень сігналу: # палоска}few{Узровень сігналу: # палоскі}many{Узровень сігналу: # палосак}other{Узровень сігналу: # палоскі}}</translation>
 <translation id="868929229000858085">Пошук у кантактах</translation>
 <translation id="869891660844655955">Тэрмін дзеяння</translation>
-<translation id="8719023831149562936">Немагчыма перадаць бягучую ўкладку</translation>
 <translation id="8728487861892616501">Выкарыстоўваючы гэту праграму, вы згаджаецеся з <ph name="BEGIN_LINK1" />Умовамі выкарыстання<ph name="END_LINK1" /> і <ph name="BEGIN_LINK2" />Паведамленнем аб прыватнасці<ph name="END_LINK2" /> браўзера Chrome, а таксама з <ph name="BEGIN_LINK3" />Паведамленнем аб прыватнасці ў дачыненні да Уліковых запісаў Google, якія кіруюцца праз Family Link<ph name="END_LINK3" />.</translation>
 <translation id="8748850008226585750">Змесціва схавана</translation>
 <translation id="8751914237388039244">Выберыце відарыс</translation>

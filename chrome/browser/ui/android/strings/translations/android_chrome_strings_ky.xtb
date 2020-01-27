@@ -687,7 +687,6 @@ Google аккаунтуңуздун башка Google кызматтарынан
 <translation id="6201345951596836663">Шилтеме көчүрүлдү</translation>
 <translation id="6206551242102657620">Туташуу корголгон. Сайт тууралуу маалымат</translation>
 <translation id="6210748933810148297"><ph name="EMAIL" /> эмеспи?</translation>
-<translation id="6216432067784365534"><ph name="NAME_OF_LIST_ITEM" /> Параметрлер</translation>
 <translation id="6221633008163990886">Сырсөздөрүңүздү экспорттоо үчүн кулпусун ачыңыз</translation>
 <translation id="6232535412751077445">"Байкоо салынбасын" сурамы иштетилгенде, ал серептелген нерселердин трафигине кошулат. Бул аракет вебсайттын сурамга жооп кайтарып же кайтарбай тургандыгына жана сурамдын чечмеленишине түздөн-түз байланыштуу болот.
 
@@ -733,7 +732,6 @@ Google аккаунтуңуздун башка Google кызматтарынан
 <translation id="6534565668554028783">Google'дун жооп берүүсү өтө узакка созулуп кетти</translation>
 <translation id="6538442820324228105"><ph name="GBS" /> Гб жүктөлүп алынды</translation>
 <translation id="6539092367496845964">Бир жерден ката кетти. Кийинчерээк кайталаңыз.</translation>
-<translation id="654446541061731451">Өткөрүлө турган өтмөктү тандаңыз</translation>
 <translation id="6545017243486555795">Бардык дайындарды тазалоо</translation>
 <translation id="6545864417968258051">Bluetooth түзмөктөрүн издөө</translation>
 <translation id="6560414384669816528">Sogou менен издөө</translation>
@@ -1025,7 +1023,6 @@ Google аккаунтуңуздун башка Google кызматтарынан
 <translation id="8687353297350450808">{N_BARS,plural, =1{Сигналдын күчү: # тилке}other{Сигналдын күчү: # тилке}}</translation>
 <translation id="868929229000858085">Байланыштарыңызды издеңиз</translation>
 <translation id="869891660844655955">Мөөнөтү аяктай турган күн</translation>
-<translation id="8719023831149562936">Учурдагы өтмөк өткөрүлбөй жатат</translation>
 <translation id="8728487861892616501">Бул колдонмону пайдалануу менен, Chrome'дун <ph name="BEGIN_LINK1" />Тейлөө шарттарына<ph name="END_LINK1" />, <ph name="BEGIN_LINK2" />Купуялык эскертүүсүнө<ph name="END_LINK2" /> жана <ph name="BEGIN_LINK3" />Family Link'те башкарылган Google каттоо эсептери үчүн Купуялык эскертүүсүнө<ph name="END_LINK3" /> макулдугуңузду билдиресиз.</translation>
 <translation id="8748850008226585750">Жашырылган мазмундар</translation>
 <translation id="8751914237388039244">Сүрөт тандоо</translation>

@@ -687,7 +687,6 @@ Google есептік жазбасының шолу тарихы басқа Goog
 <translation id="6201345951596836663">Сілтеме көшірілді.</translation>
 <translation id="6206551242102657620">Байланыс қорғалған. Сайт ақпараты</translation>
 <translation id="6210748933810148297"><ph name="EMAIL" /> емес пе?</translation>
-<translation id="6216432067784365534"><ph name="NAME_OF_LIST_ITEM" /> опциялары</translation>
 <translation id="6221633008163990886">Құпия сөздерді экспорттау үшін құлпын ашыңыз</translation>
 <translation id="6232535412751077445">"Бақыламау" опциясын қосқанда, шолу трафигінде сұрау қамтылады. Нәтиже веб-сайттың сұрауға жауап беруіне және сұраудың қалай түсіндірілуіне байланысты.
 
@@ -733,7 +732,6 @@ Google есептік жазбасының шолу тарихы басқа Goog
 <translation id="6534565668554028783">Google ұзақ уақыт жауап бермеуде</translation>
 <translation id="6538442820324228105"><ph name="GBS" /> ГБ жүктелді</translation>
 <translation id="6539092367496845964">Бірдеңе дұрыс болмады. Кейінірек қайталап көріңіз.</translation>
-<translation id="654446541061731451">Тарату үшін қойындыны таңдаңыз</translation>
 <translation id="6545017243486555795">Барлық деректерді өшіру</translation>
 <translation id="6545864417968258051">Bluetooth құрылғыларын іздеу</translation>
 <translation id="6560414384669816528">Sogou қызметімен іздеу</translation>
@@ -1025,7 +1023,6 @@ Google есептік жазбасының шолу тарихы басқа Goog
 <translation id="8687353297350450808">{N_BARS,plural, =1{Сигнал деңгейі: # сызықша}other{Сигнал деңгейі: # сызықша}}</translation>
 <translation id="868929229000858085">Контактілеріңізді іздеңіз</translation>
 <translation id="869891660844655955">Аяқталу мерзімі</translation>
-<translation id="8719023831149562936">Ағымдағы қойындыны тарату мүмкін емес</translation>
 <translation id="8728487861892616501">Осы қолданбаны пайдалана отырып, Chrome <ph name="BEGIN_LINK1" />Қызмет көрсету шарттары<ph name="END_LINK1" />, <ph name="BEGIN_LINK2" />Құпиялылық туралы ескертпе<ph name="END_LINK2" /> және <ph name="BEGIN_LINK3" />Family Link қызметінде жасалған Google есептік жазбаларына арналған құпиялылық туралы ескертпе<ph name="END_LINK3" /> талаптарына келісім бересіз.</translation>
 <translation id="8748850008226585750">Мазмұны жасырылған</translation>
 <translation id="8751914237388039244">Кескін таңдау</translation>

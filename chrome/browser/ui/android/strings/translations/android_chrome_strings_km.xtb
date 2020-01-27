@@ -687,7 +687,6 @@
 <translation id="6201345951596836663">បានចម្លង​តំណ</translation>
 <translation id="6206551242102657620">ការតភ្ជាប់​មាន​សុវត្ថិភាព។ ព័ត៌មាន​អំពីគេហទំព័រ</translation>
 <translation id="6210748933810148297">មិនមែន <ph name="EMAIL" /> ទេ?</translation>
-<translation id="6216432067784365534">ជម្រើស <ph name="NAME_OF_LIST_ITEM" /></translation>
 <translation id="6221633008163990886">ដោះសោ​ដើម្បី​នាំពាក្យ​សម្ងាត់​របស់​អ្នកចេញ</translation>
 <translation id="6232535412751077445">ការបើកដំណើរការរបៀប “កុំតាមដាន” មានន័យថាការស្នើសុំនឹងត្រូវរាប់បញ្ចូលជាមួយចរាចរណ៍នៃការរុករករបស់អ្នក។ ផលប៉ះពាល់ទាំងឡាយគឺអាស្រ័យលើថាតើគេហទំព័រឆ្លើយតបទៅនឹងការស្នើសុំ ឬអត់ ហើយការស្នើសុំត្រូវបានបកស្រាយយ៉ាងដូចម្តេច។
 
@@ -733,7 +732,6 @@
 <translation id="6534565668554028783">Google បាន​ចំណាយពេល​យូរពេក​ក្នុងការ​ឆ្លើយតប</translation>
 <translation id="6538442820324228105">បាន​ទាញយក <ph name="GBS" /> GB</translation>
 <translation id="6539092367496845964">មានអ្វីមួយខុសប្រក្រតី។ សូមព្យាយាមម្តង​ទៀតនៅ​ពេលក្រោយ។</translation>
-<translation id="654446541061731451">ជ្រើសរើសផ្ទាំងមួយដើម្បីប៊ីម</translation>
 <translation id="6545017243486555795">ជម្រះទិន្នន័យទាំងអស់</translation>
 <translation id="6545864417968258051">ការស្កេនប៊្លូធូស</translation>
 <translation id="6560414384669816528">ស្វែងរកដោយប្រើ Sogou</translation>
@@ -1025,7 +1023,6 @@
 <translation id="8687353297350450808">{N_BARS,plural, =1{កម្រិត​កម្លាំង​រលកសញ្ញា៖ # កាំ}other{កម្រិត​កម្លាំង​រលកសញ្ញា៖ # កាំ}}</translation>
 <translation id="868929229000858085">ស្វែងរក​ទំនាក់ទំនង​របស់អ្នក</translation>
 <translation id="869891660844655955">កាលបរិច្ឆេទការផុតកំណត់</translation>
-<translation id="8719023831149562936">មិនអាចប៊ីមផ្ទាំងបច្ចុប្បន្នទេ</translation>
 <translation id="8728487861892616501">ប្រសិនបើ​ប្រើកម្មវិធីនេះ មានន័យថាអ្នកយល់ស្របតាម<ph name="BEGIN_LINK1" />លក្ខខណ្ឌប្រើប្រាស់<ph name="END_LINK1" /> និង<ph name="BEGIN_LINK2" />ការជូនដំណឹងអំពីឯកជនភាព<ph name="END_LINK2" />របស់ Chrome និង<ph name="BEGIN_LINK3" />ការជូនដំណឹងអំពីឯកជនភាពសម្រាប់គណនី Google ដែលត្រូវបានគ្រប់គ្រងដោយប្រើ Family Link<ph name="END_LINK3" /> ។</translation>
 <translation id="8748850008226585750">បានលាក់មាតិកា</translation>
 <translation id="8751914237388039244">ជ្រើសរើស​រូបភាព</translation>

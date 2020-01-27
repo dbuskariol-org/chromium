@@ -24,6 +24,7 @@
 <translation id="1029317248976101138">縮放</translation>
 <translation id="1030706264415084469"><ph name="URL" /> 要求在你的裝置上永久儲存大量資料</translation>
 <translation id="1031362278801463162">正在載入預覽畫面</translation>
+<translation id="1032605640136438169">請詳閱新版條款</translation>
 <translation id="103279545524624934">請釋出磁碟空間以啟動 Android 應用程式。</translation>
 <translation id="1033780634303702874">存取你的序列裝置</translation>
 <translation id="1034942643314881546">啟用 ADB 以建立應用程式圖例</translation>
@@ -3036,6 +3037,7 @@
 <translation id="5311304534597152726">使用以下身分登入：</translation>
 <translation id="53116743016968120"><ph name="ERROR_MESSAGE" />請再試一次。</translation>
 <translation id="5313628438272378649">這個上傳項目違反貴機構的安全性政策，因此無法完成上傳。</translation>
+<translation id="5314381603623123224">Chrome 的服務條款將於 3 月 31 日變更</translation>
 <translation id="5315738755890845852">多餘的大括弧：<ph name="ERROR_LINE" /></translation>
 <translation id="5315873049536339193">身分</translation>
 <translation id="5317780077021120954">儲存</translation>

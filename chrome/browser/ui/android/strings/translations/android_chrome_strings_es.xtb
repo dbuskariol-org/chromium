@@ -690,7 +690,6 @@ Para cambiar esta opción, <ph name="BEGIN_LINK" />restablece la sincronización
 <translation id="6201345951596836663">Enlace copiado</translation>
 <translation id="6206551242102657620">La conexión es segura. Información del sitio web</translation>
 <translation id="6210748933810148297">¿No eres <ph name="EMAIL" />?</translation>
-<translation id="6216432067784365534">Opciones de <ph name="NAME_OF_LIST_ITEM" /></translation>
 <translation id="6221633008163990886">Desbloquea el dispositivo para exportar las contraseñas</translation>
 <translation id="6232535412751077445">Al habilitar la opción No hacer seguimiento, se incluirá una solicitud con el tráfico de navegación. El efecto dependerá de si algún sitio web responde a la solicitud y de cómo se interpreta.
 
@@ -736,7 +735,6 @@ Por ejemplo, algunos sitios web pueden responder a la solicitud mostrándote anu
 <translation id="6534565668554028783">Google ha tardado demasiado en responder</translation>
 <translation id="6538442820324228105">GB descargados: <ph name="GBS" /></translation>
 <translation id="6539092367496845964">Se ha producido un error. Vuelve a intentarlo más tarde.</translation>
-<translation id="654446541061731451">Selecciona una pestaña para compartir</translation>
 <translation id="6545017243486555795">Borrar todos los datos</translation>
 <translation id="6545864417968258051">Búsqueda de dispositivos Bluetooth</translation>
 <translation id="6560414384669816528">Realizar búsquedas con Sogou</translation>
@@ -1031,7 +1029,6 @@ El sitio web no obtendrá acceso a la cámara. Solo tú puedes ver las imágenes
 <translation id="868929229000858085">Buscar en tus contactos</translation>
 <translation id="8698438463325761328">Impedir que los sitios web accedan a tu dispositivo o tus datos de realidad virtual</translation>
 <translation id="869891660844655955">Fecha de caducidad</translation>
-<translation id="8719023831149562936">No se puede compartir la pestaña actual.</translation>
 <translation id="8728487861892616501">Si utilizas esta aplicación, aceptas las <ph name="BEGIN_LINK1" />condiciones de servicio<ph name="END_LINK1" /> y el <ph name="BEGIN_LINK2" />aviso de privacidad<ph name="END_LINK2" /> de Chrome, así como el <ph name="BEGIN_LINK3" />aviso de privacidad para cuentas de Google gestionadas con Family Link<ph name="END_LINK3" />.</translation>
 <translation id="8748850008226585750">Contenidos ocultos</translation>
 <translation id="8751914237388039244">Selecciona una imagen</translation>
