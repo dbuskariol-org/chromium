@@ -670,6 +670,7 @@ public final class ChromePreferenceKeys {
     static List<String> createDeprecatedKeysForTesting() {
         // clang-format off
         return Arrays.asList(
+                "PersistedNotificationId",
                 "PhysicalWeb.ActivityReferral",
                 "PhysicalWeb.HasDeferredMetrics",
                 "PhysicalWeb.OptIn.DeclineButtonPressed",
