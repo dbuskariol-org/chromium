@@ -263,6 +263,54 @@ void ServiceWorkerRegistry::NotifyDoneUninstallingRegistration(
   uninstalling_registrations_.erase(registration->id());
 }
 
+void ServiceWorkerRegistry::GetUserData(int64_t registration_id,
+                                        const std::vector<std::string>& keys,
+                                        GetUserDataCallback callback) {
+  if (registration_id == blink::mojom::kInvalidServiceWorkerRegistrationId ||
+      keys.empty()) {
+    RunSoon(FROM_HERE,
+            base::BindOnce(std::move(callback), std::vector<std::string>(),
+                           blink::ServiceWorkerStatusCode::kErrorFailed));
+    return;
+  }
+  for (const std::string& key : keys) {
+    if (key.empty()) {
+      RunSoon(FROM_HERE,
+              base::BindOnce(std::move(callback), std::vector<std::string>(),
+                             blink::ServiceWorkerStatusCode::kErrorFailed));
+      return;
+    }
+  }
+
+  storage()->GetUserData(
+      registration_id, keys,
+      base::BindOnce(&ServiceWorkerRegistry::DidGetUserData,
+                     weak_factory_.GetWeakPtr(), std::move(callback)));
+}
+
+void ServiceWorkerRegistry::GetUserDataByKeyPrefix(
+    int64_t registration_id,
+    const std::string& key_prefix,
+    GetUserDataCallback callback) {
+  if (registration_id == blink::mojom::kInvalidServiceWorkerRegistrationId) {
+    RunSoon(FROM_HERE,
+            base::BindOnce(std::move(callback), std::vector<std::string>(),
+                           blink::ServiceWorkerStatusCode::kErrorFailed));
+    return;
+  }
+  if (key_prefix.empty()) {
+    RunSoon(FROM_HERE,
+            base::BindOnce(std::move(callback), std::vector<std::string>(),
+                           blink::ServiceWorkerStatusCode::kErrorFailed));
+    return;
+  }
+
+  storage()->GetUserDataByKeyPrefix(
+      registration_id, key_prefix,
+      base::BindOnce(&ServiceWorkerRegistry::DidGetUserData,
+                     weak_factory_.GetWeakPtr(), std::move(callback)));
+}
+
 ServiceWorkerRegistration*
 ServiceWorkerRegistry::FindInstallingRegistrationForClientUrl(
     const GURL& client_url) {
@@ -595,6 +643,28 @@ void ServiceWorkerRegistry::DidDeleteRegistration(
     storage()->PurgeResources(newly_purgeable_resources);
 
   std::move(callback).Run(status);
+}
+
+void ServiceWorkerRegistry::DidGetUserData(
+    GetUserDataCallback callback,
+    const std::vector<std::string>& data,
+    ServiceWorkerDatabase::Status status) {
+  if (status != ServiceWorkerDatabase::STATUS_OK &&
+      status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
+    ScheduleDeleteAndStartOver();
+  }
+  std::move(callback).Run(
+      data, ServiceWorkerStorage::DatabaseStatusToStatusCode(status));
+}
+
+void ServiceWorkerRegistry::ScheduleDeleteAndStartOver() {
+  if (storage()->IsDisabled()) {
+    // Recovery process has already been scheduled.
+    return;
+  }
+
+  storage()->Disable();
+  context_->ScheduleDeleteAndStartOver();
 }
 
 }  // namespace content

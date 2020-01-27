@@ -89,9 +89,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       blink::ServiceWorkerStatusCode status,
       int64_t deleted_version_id,
       const std::vector<int64_t>& newly_purgeable_resources)>;
-  using GetUserDataCallback =
-      base::OnceCallback<void(const std::vector<std::string>& data,
-                              blink::ServiceWorkerStatusCode status)>;
   using GetUserKeysAndDataCallback = base::OnceCallback<void(
       const base::flat_map<std::string, std::string>& data_map,
       blink::ServiceWorkerStatusCode status)>;
@@ -99,7 +96,14 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const std::vector<std::pair<int64_t, std::string>>& user_data,
       blink::ServiceWorkerStatusCode status)>;
 
+  using GetUserDataInDBCallback =
+      base::OnceCallback<void(const std::vector<std::string>& data,
+                              ServiceWorkerDatabase::Status)>;
+
   ~ServiceWorkerStorage();
+
+  static blink::ServiceWorkerStatusCode DatabaseStatusToStatusCode(
+      ServiceWorkerDatabase::Status status);
 
   // TODO(crbug.com/1039200): Stop passing ServiceWorkerRegistry once
   // ServiceWorkerRegistration dependencies are moved to ServiceWorkerRegistry.
@@ -218,12 +222,12 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // and the callback's data will be empty.
   void GetUserData(int64_t registration_id,
                    const std::vector<std::string>& keys,
-                   GetUserDataCallback callback);
+                   GetUserDataInDBCallback callback);
   // GetUserDataByKeyPrefix responds OK with a vector containing data rows that
   // had matching keys assuming the database was read successfully.
   void GetUserDataByKeyPrefix(int64_t registration_id,
                               const std::string& key_prefix,
-                              GetUserDataCallback callback);
+                              GetUserDataInDBCallback callback);
   // GetUserKeysAndDataByKeyPrefix responds OK with a flat_map containing
   // matching keys and their data assuming the database was read successfully.
   // The map keys have |key_prefix| stripped from them.
@@ -360,9 +364,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   using GetUserKeysAndDataInDBCallback = base::OnceCallback<void(
       const base::flat_map<std::string, std::string>& data_map,
       ServiceWorkerDatabase::Status)>;
-  using GetUserDataInDBCallback =
-      base::OnceCallback<void(const std::vector<std::string>& data,
-                              ServiceWorkerDatabase::Status)>;
   using GetUserDataForAllRegistrationsInDBCallback = base::OnceCallback<void(
       const std::vector<std::pair<int64_t, std::string>>& user_data,
       ServiceWorkerDatabase::Status)>;
@@ -417,9 +418,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
                                       ServiceWorkerDatabase::Status status);
   void DidStoreUserData(StatusCallback callback,
                         ServiceWorkerDatabase::Status status);
-  void DidGetUserData(GetUserDataCallback callback,
-                      const std::vector<std::string>& data,
-                      ServiceWorkerDatabase::Status status);
   void DidGetUserKeysAndData(
       GetUserKeysAndDataCallback callback,
       const base::flat_map<std::string, std::string>& map,
@@ -531,6 +529,9 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const std::set<GURL>& origins);
   static void PerformStorageCleanupInDB(ServiceWorkerDatabase* database);
 
+  // TODO(crbug.com/1039200): Remove this method. This relies on
+  // ServiceWorkerContextCore but it won't be available when this class is moved
+  // to the Storage Service.
   void ScheduleDeleteAndStartOver();
 
   // Posted by the underlying cache implementation after it finishes making

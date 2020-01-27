@@ -57382,6 +57382,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="3" label="Corruption Error"/>
   <int value="4" label="Operation Error"/>
   <int value="5" label="Not Supported Error"/>
+  <int value="6" label="Database Disabled Error"/>
 </enum>
 
 <enum name="ServiceWorkerDeleteAndStartOverResult">
