@@ -6447,3 +6447,6 @@ crbug.com/1045472 [ Win ] external/wpt/WebCryptoAPI/wrapKey_unwrapKey/wrapKey_un
 crbug.com/1045510 [ Win7 ] fast/forms/suggestion-picker/time-suggestion-picker-appearance.html [ Pass Failure ]
 crbug.com/1045510 [ Win7 ] fast/forms/suggestion-picker/week-suggestion-picker-appearance-with-scroll-bar.html [ Pass Failure ]
 crbug.com/1045510 [ Win7 ] fast/forms/suggestion-picker/date-suggestion-picker-appearance-with-scroll-bar.html [ Pass Failure ]
+
+# TODO(michaelludwig) - Temporary suppression for Skia change + rebaseline
+crbug.com/1045050 [ Mac ] media/video-layer-crash.html [ Pass Failure ]
