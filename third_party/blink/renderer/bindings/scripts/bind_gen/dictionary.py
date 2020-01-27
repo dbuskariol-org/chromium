@@ -719,5 +719,5 @@ def generate_dictionary(dictionary):
 
 
 def generate_dictionaries(web_idl_database):
-    dictionary = web_idl_database.find("MediaStreamConstraints")
+    dictionary = web_idl_database.find('BasePropertyIndexedKeyframe')
     generate_dictionary(dictionary)
