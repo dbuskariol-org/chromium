@@ -780,7 +780,12 @@ class RawDevtoolsProtocolTest
   }
 };
 
+#if defined(OS_WIN)
+// TODO(crbug.com/1045980): Disabled due to flakiness.
+DISABLED_HEADLESS_ASYNC_DEVTOOLED_TEST_F(RawDevtoolsProtocolTest);
+#else
 HEADLESS_ASYNC_DEVTOOLED_TEST_F(RawDevtoolsProtocolTest);
+#endif
 
 class DevToolsAttachAndDetachNotifications
     : public HeadlessAsyncDevTooledBrowserTest {
@@ -1226,6 +1231,11 @@ class NavigatorLanguages : public HeadlessAsyncDevTooledBrowserTest {
   }
 };
 
+#if defined(OS_WIN)
+// TODO(crbug.com/1045980): Disabled due to flakiness.
+DISABLED_HEADLESS_ASYNC_DEVTOOLED_TEST_F(NavigatorLanguages);
+#else
 HEADLESS_ASYNC_DEVTOOLED_TEST_F(NavigatorLanguages);
+#endif
 
 }  // namespace headless
