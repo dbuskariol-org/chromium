@@ -232,7 +232,7 @@ IN_PROC_BROWSER_TEST_F(WebRtcGetMediaDevicesBrowserTest,
   std::vector<MediaDeviceInfo> devices;
   EnumerateDevices(tab1, &devices);
 
-  chrome::AddTabAt(browser(), GURL(), -1, true);
+  chrome::AddTabAt(browser(), GURL(url::kAboutBlankURL), -1, true);
   ui_test_utils::NavigateToURL(browser(), url);
   content::WebContents* tab2 =
       browser()->tab_strip_model()->GetActiveWebContents();
@@ -301,7 +301,7 @@ IN_PROC_BROWSER_TEST_F(WebRtcGetMediaDevicesBrowserTest,
   std::vector<MediaDeviceInfo> devices;
   EnumerateDevices(tab1, &devices);
 
-  chrome::AddTabAt(browser(), GURL(), -1, true);
+  chrome::AddTabAt(browser(), GURL(url::kAboutBlankURL), -1, true);
   ui_test_utils::NavigateToURL(browser(), url);
   content::WebContents* tab2 =
       browser()->tab_strip_model()->GetActiveWebContents();
