@@ -169,6 +169,8 @@ android_builder(
             '.+/[+]/chrome/android/javatests/src/org/chromium/chrome/browser/vr/.+',
             '.+/[+]/chrome/browser/vr/.+',
             '.+/[+]/third_party/gvr-android-sdk/.+',
+            '.+/[+]/third_party/arcore-android-sdk/.+',
+            '.+/[+]/third_party/arcore-android-sdk-client/.+',
         ],
     ),
 )

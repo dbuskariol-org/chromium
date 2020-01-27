@@ -91,6 +91,8 @@ builder.
   * [`//chrome/android/javatests/src/org/chromium/chrome/browser/vr/.+`](https://cs.chromium.org/chromium/src/chrome/android/javatests/src/org/chromium/chrome/browser/vr/)
   * [`//chrome/browser/vr/.+`](https://cs.chromium.org/chromium/src/chrome/browser/vr/)
   * [`//third_party/gvr-android-sdk/.+`](https://cs.chromium.org/chromium/src/third_party/gvr-android-sdk/)
+  * [`//third_party/arcore-android-sdk/.+`](https://cs.chromium.org/chromium/src/third_party/arcore-android-sdk/)
+  * [`//third_party/arcore-android-sdk-client/.+`](https://cs.chromium.org/chromium/src/third_party/arcore-android-sdk-client/)
 
 * [android_compile_x64_dbg](https://ci.chromium.org/p/chromium/builders/try/android_compile_x64_dbg) ([definition](https://cs.chromium.org/search?q=package:%5Echromium$+file:/cq.star$+-file:/beta/+-file:/stable/+android_compile_x64_dbg)) ([matching builders](https://cs.chromium.org/search?q=+file:trybots.py+android_compile_x64_dbg))
 
