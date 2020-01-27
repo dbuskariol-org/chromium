@@ -413,8 +413,14 @@ IN_PROC_BROWSER_TEST_F(NaClBrowserTestPnacl,
   RunLoadTest(FILE_PATH_LITERAL("pnacl_options.html?use_nmf=o_2"));
 }
 
+#if defined(OS_WIN)
+// TODO(https://crbug.com/1046033): Flaky on Windows 7.
+#define MAYBE_PnaclNMFOptionsOlarge DISABLED_PnaclNMFOptionsOlarge
+#else
+#define MAYBE_PnaclNMFOptionsOlarge PnaclNMFOptionsOlarge
+#endif
 IN_PROC_BROWSER_TEST_F(NaClBrowserTestPnacl,
-                       MAYBE_PNACL(PnaclNMFOptionsOlarge)) {
+                       MAYBE_PNACL(MAYBE_PnaclNMFOptionsOlarge)) {
   RunLoadTest(FILE_PATH_LITERAL("pnacl_options.html?use_nmf=o_large"));
 }
 
