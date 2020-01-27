@@ -6,7 +6,6 @@ package org.chromium.chrome.browser.omnibox.suggestions.base;
 
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.support.annotation.ColorRes;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.content.res.AppCompatResources;
 import android.view.View;
@@ -91,18 +90,14 @@ public final class BaseSuggestionViewBinder<T extends View>
             rciv.setRoundedCorners(radius, radius, radius, radius);
         }
 
-        @ColorRes
-        int tint = isDarkMode(model) ? R.color.default_icon_color_secondary_list
-                                     : R.color.white_mode_tint;
-
-        updateIcon(view, sds, tint);
+        updateIcon(view, sds, !isDarkMode(model));
     }
 
     /** Update attributes of decorated suggestion icon. */
     private static void updateActionIcon(PropertyModel model, BaseSuggestionView baseView) {
         final ImageView view = baseView.getActionImageView();
         final SuggestionDrawableState sds = model.get(BaseSuggestionViewProperties.ACTION_ICON);
-        updateIcon(view, sds, ChromeColors.getIconTintRes(!isDarkMode(model)));
+        updateIcon(view, sds, !isDarkMode(model));
     }
 
     /**
@@ -128,7 +123,7 @@ public final class BaseSuggestionViewBinder<T extends View>
 
     /** Update image view using supplied drawable state object. */
     private static void updateIcon(
-            ImageView view, SuggestionDrawableState sds, @ColorRes int tintRes) {
+            ImageView view, SuggestionDrawableState sds, boolean useDarkColors) {
         final Resources res = view.getContext().getResources();
 
         view.setVisibility(sds == null ? View.GONE : View.VISIBLE);
@@ -140,7 +135,8 @@ public final class BaseSuggestionViewBinder<T extends View>
 
         ColorStateList tint = null;
         if (sds.allowTint) {
-            tint = AppCompatResources.getColorStateList(view.getContext(), tintRes);
+            tint = AppCompatResources.getColorStateList(
+                    view.getContext(), ChromeColors.getIconTintRes(useDarkColors));
         }
 
         view.setImageDrawable(sds.drawable);
