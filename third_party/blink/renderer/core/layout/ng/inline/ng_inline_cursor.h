@@ -61,6 +61,8 @@ class CORE_EXPORT NGInlineCursorPosition {
 
   NGStyleVariant StyleVariant() const;
 
+  const DisplayItemClient* GetDisplayItemClient() const;
+
  private:
   const NGPaintFragment* paint_fragment_ = nullptr;
   const NGFragmentItem* item_ = nullptr;
@@ -208,7 +210,6 @@ class CORE_EXPORT NGInlineCursor {
   // line.
   TextDirection CurrentBaseDirection() const;
   const NGPhysicalBoxFragment* CurrentBoxFragment() const;
-  const DisplayItemClient* CurrentDisplayItemClient() const;
   const LayoutObject* CurrentLayoutObject() const;
   LayoutObject* CurrentMutableLayoutObject() const;
   Node* CurrentNode() const;

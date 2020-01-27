@@ -2480,7 +2480,7 @@ void LayoutText::InvalidateDisplayItemClients(
     NGInlineCursor cursor;
     for (cursor.MoveTo(*this); cursor; cursor.MoveToNextForSameLayoutObject()) {
       paint_invalidator.InvalidateDisplayItemClient(
-          *cursor.CurrentDisplayItemClient(), invalidation_reason);
+          *cursor.Current().GetDisplayItemClient(), invalidation_reason);
     }
     return;
   }

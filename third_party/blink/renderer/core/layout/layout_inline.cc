@@ -1761,13 +1761,14 @@ void LayoutInline::InvalidateDisplayItemClients(
   }
 
   if (IsInLayoutNGInlineFormattingContext()) {
-    if (!ShouldCreateBoxFragment())
+    if (!ShouldCreateBoxFragment() &&
+        !RuntimeEnabledFeatures::LayoutNGFragmentItemEnabled())
       return;
     NGInlineCursor cursor;
     for (cursor.MoveTo(*this); cursor; cursor.MoveToNextForSameLayoutObject()) {
       DCHECK_EQ(cursor.CurrentLayoutObject(), this);
       paint_invalidator.InvalidateDisplayItemClient(
-          *cursor.CurrentDisplayItemClient(), invalidation_reason);
+          *cursor.Current().GetDisplayItemClient(), invalidation_reason);
     }
     return;
   }

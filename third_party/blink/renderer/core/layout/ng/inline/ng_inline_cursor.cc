@@ -439,11 +439,11 @@ const NGPhysicalBoxFragment* NGInlineCursor::CurrentBoxFragment() const {
   return nullptr;
 }
 
-const DisplayItemClient* NGInlineCursor::CurrentDisplayItemClient() const {
-  if (current_.paint_fragment_)
-    return current_.paint_fragment_;
-  if (current_.item_)
-    return current_.item_;
+const DisplayItemClient* NGInlineCursorPosition::GetDisplayItemClient() const {
+  if (paint_fragment_)
+    return paint_fragment_;
+  if (item_)
+    return item_;
   NOTREACHED();
   return nullptr;
 }
