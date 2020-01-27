@@ -29,7 +29,6 @@ import org.chromium.chrome.browser.download.home.list.ListItem.OfflineItemListIt
 import org.chromium.chrome.browser.download.home.list.ListItem.SectionHeaderListItem;
 import org.chromium.chrome.browser.download.home.list.mutator.DateOrderedListMutator;
 import org.chromium.chrome.browser.download.home.list.mutator.ListMutationController;
-import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.components.offline_items_collection.OfflineItem;
 import org.chromium.components.offline_items_collection.OfflineItemFilter;
 import org.chromium.components.offline_items_collection.OfflineItemState;
@@ -38,8 +37,6 @@ import org.chromium.ui.modelutil.ListObservable.ListObserver;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /** Unit tests for the DateOrderedListMutator class. */
 @RunWith(BaseRobolectricTestRunner.class)
@@ -59,10 +56,6 @@ public class DateOrderedListMutatorTest {
     @Before
     public void setUp() {
         mModel = new ListItemModel();
-        Map<String, Boolean> testFeatures = new HashMap<>();
-        testFeatures.put(ChromeFeatureList.DOWNLOAD_OFFLINE_CONTENT_PROVIDER, true);
-        testFeatures.put(ChromeFeatureList.CONTENT_INDEXING_DOWNLOAD_HOME, false);
-        ChromeFeatureList.setTestFeatures(testFeatures);
     }
 
     @After
@@ -879,7 +872,10 @@ public class DateOrderedListMutatorTest {
     }
 
     private DateOrderedListMutator createMutatorWithoutJustNowProvider() {
-        DownloadManagerUiConfig config = new DownloadManagerUiConfig.Builder().build();
+        DownloadManagerUiConfig config = new DownloadManagerUiConfig.Builder()
+                                                 .setUseNewDownloadPath(true)
+                                                 .setSupportsGrouping(false)
+                                                 .build();
         JustNowProvider justNowProvider = new JustNowProvider(config) {
             @Override
             public boolean isJustNowItem(OfflineItem item) {
@@ -893,7 +889,10 @@ public class DateOrderedListMutatorTest {
     }
 
     private DateOrderedListMutator createMutatorWithJustNowProvider() {
-        DownloadManagerUiConfig config = new DownloadManagerUiConfig.Builder().build();
+        DownloadManagerUiConfig config = new DownloadManagerUiConfig.Builder()
+                                                 .setUseNewDownloadPath(true)
+                                                 .setSupportsGrouping(false)
+                                                 .build();
         JustNowProvider justNowProvider = new JustNowProvider(config);
         DateOrderedListMutator mutator =
                 new DateOrderedListMutator(mSource, mModel, justNowProvider);

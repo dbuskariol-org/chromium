@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.download.home.glue;
+package org.chromium.chrome.browser.download.home;
 
 import android.text.TextUtils;
 
 import org.chromium.base.Callback;
 import org.chromium.base.CollectionUtil;
+import org.chromium.base.ObserverList;
 import org.chromium.base.task.PostTask;
 import org.chromium.chrome.browser.download.DownloadInfo;
 import org.chromium.chrome.browser.download.DownloadItem;
@@ -18,6 +19,7 @@ import org.chromium.chrome.browser.download.DownloadUtils;
 import org.chromium.components.offline_items_collection.ContentId;
 import org.chromium.components.offline_items_collection.LegacyHelpers;
 import org.chromium.components.offline_items_collection.OfflineContentProvider;
+import org.chromium.components.offline_items_collection.OfflineContentProvider.Observer;
 import org.chromium.components.offline_items_collection.OfflineItem;
 import org.chromium.components.offline_items_collection.OfflineItemShareInfo;
 import org.chromium.components.offline_items_collection.ShareCallback;
@@ -33,25 +35,16 @@ import java.util.List;
  * that need to happen in Java before hitting the service and (2) converting from
  * {@link DownloadItem}s to {@link OfflineItem}s.
  */
-public class DownloadGlue implements DownloadObserver {
-    private final ArrayList < Callback < ArrayList<OfflineItem>>> mRequests = new ArrayList<>();
-    private final ArrayList < Callback < ArrayList<OfflineItem>>> mOffTheRecordRequests =
+class LegacyDownloadProviderImpl implements DownloadObserver, LegacyDownloadProvider {
+    private final ArrayList<Callback<ArrayList<OfflineItem>>> mRequests = new ArrayList<>();
+    private final ArrayList<Callback<ArrayList<OfflineItem>>> mOffTheRecordRequests =
             new ArrayList<>();
 
-    private final OfflineContentProvider.Observer mDelegate;
+    private final ObserverList<OfflineContentProvider.Observer> mObservers = new ObserverList<>();
 
-    /** Creates an instance of a {@link DownloadGlue}. */
-    public DownloadGlue(OfflineContentProvider.Observer delegate) {
-        mDelegate = delegate;
+    /** Creates an instance of a {@link LegacyDownloadProvider}. */
+    public LegacyDownloadProviderImpl() {
         DownloadManagerService.getDownloadManagerService().addDownloadObserver(this);
-    }
-
-    /**
-     * Called to tear down the connections to singletons.  This needs to be called when this class
-     * is no longer in use.
-     */
-    public void destroy() {
-        DownloadManagerService.getDownloadManagerService().removeDownloadObserver(this);
     }
 
     // DownloadObserver (OfflineContentProvider.Observer glue) implementation.
@@ -59,7 +52,10 @@ public class DownloadGlue implements DownloadObserver {
     @Override
     public void onDownloadItemCreated(DownloadItem item) {
         if (!canShowDownloadItem(item)) return;
-        mDelegate.onItemsAdded(CollectionUtil.newArrayList(DownloadItem.createOfflineItem(item)));
+        for (OfflineContentProvider.Observer observer : mObservers) {
+            observer.onItemsAdded(
+                    CollectionUtil.newArrayList(DownloadItem.createOfflineItem(item)));
+        }
     }
 
     /** @see OfflineContentProvider.Observer#onItemUpdated(OfflineItem) */
@@ -68,7 +64,9 @@ public class DownloadGlue implements DownloadObserver {
         if (!canShowDownloadItem(item)) return;
 
         OfflineItem offlineItem = DownloadItem.createOfflineItem(item);
-        mDelegate.onItemUpdated(offlineItem, null);
+        for (OfflineContentProvider.Observer observer : mObservers) {
+            observer.onItemUpdated(offlineItem, null);
+        }
 
         if (offlineItem.externallyRemoved) {
             PostTask.postTask(UiThreadTaskTraits.DEFAULT, () -> removeItem(offlineItem));
@@ -78,12 +76,14 @@ public class DownloadGlue implements DownloadObserver {
     /** @see OfflineContentProvider.Observer#onItemRemoved(ContentId) */
     @Override
     public void onDownloadItemRemoved(String guid, boolean isOffTheRecord) {
-        mDelegate.onItemRemoved(LegacyHelpers.buildLegacyContentId(false, guid));
+        for (OfflineContentProvider.Observer observer : mObservers) {
+            observer.onItemRemoved(LegacyHelpers.buildLegacyContentId(false, guid));
+        }
     }
 
     @Override
     public void onAllDownloadsRetrieved(List<DownloadItem> items, boolean offTheRecord) {
-        List < Callback < ArrayList<OfflineItem>>> list =
+        List<Callback<ArrayList<OfflineItem>>> list =
                 offTheRecord ? mOffTheRecordRequests : mRequests;
         if (list.isEmpty()) return;
 
@@ -94,7 +94,7 @@ public class DownloadGlue implements DownloadObserver {
         }
 
         // Copy the list and clear the original in case the callbacks are reentrant.
-        List < Callback < ArrayList<OfflineItem>>> listCopy = new ArrayList<>(list);
+        List<Callback<ArrayList<OfflineItem>>> listCopy = new ArrayList<>(list);
         list.clear();
 
         for (Callback<ArrayList<OfflineItem>> callback : listCopy) callback.onResult(offlineItems);
@@ -103,34 +103,49 @@ public class DownloadGlue implements DownloadObserver {
     @Override
     public void onAddOrReplaceDownloadSharedPreferenceEntry(ContentId id) {}
 
-    // OfflineContentProvider glue implementation.
-    /** @see OfflineContentProvider#openItem(ContentId) */
+    // LegacyDownloadProvider implementation.
+    @Override
+    public void addObserver(Observer observer) {
+        mObservers.addObserver(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        mObservers.removeObserver(observer);
+    }
+
+    @Override
+    public void destroy() {
+        DownloadManagerService.getDownloadManagerService().removeDownloadObserver(this);
+    }
+
+    @Override
     public void openItem(OfflineItem item) {
         // TODO(shaktisahu): May be pass metrics as a param.
         DownloadManagerService.getDownloadManagerService().openDownload(
                 item.id, item.isOffTheRecord, DownloadOpenSource.DOWNLOAD_HOME);
     }
 
-    /** @see OfflineContentProvider#removeItem(ContentId) */
+    @Override
     public void removeItem(OfflineItem item) {
         DownloadManagerService.getDownloadManagerService().removeDownload(
                 item.id.id, item.isOffTheRecord, item.externallyRemoved);
         FileDeletionQueue.get().delete(item.filePath);
     }
 
-    /** @see OfflineContentProvider#cancelDownload(ContentId) */
+    @Override
     public void cancelDownload(OfflineItem item) {
         DownloadManagerService.getDownloadManagerService().cancelDownload(
                 item.id, item.isOffTheRecord);
     }
 
-    /** @see OfflineContentProvider#pauseDownload(ContentId) */
+    @Override
     public void pauseDownload(OfflineItem item) {
         DownloadManagerService.getDownloadManagerService().pauseDownload(
                 item.id, item.isOffTheRecord);
     }
 
-    /** @see OfflineContentProvider#resumeDownload(ContentId, boolean) */
+    @Override
     public void resumeDownload(OfflineItem item, boolean hasUserGesture) {
         DownloadInfo.Builder builder = DownloadInfo.builderFromOfflineItem(item, null);
 
@@ -150,15 +165,15 @@ public class DownloadGlue implements DownloadObserver {
         }
     }
 
-    /** @see OfflineContentProvider#getItemById(ContentId, Callback) */
+    @Override
     public void getItemById(ContentId id, Callback<OfflineItem> callback) {
         assert false : "Not supported.";
         PostTask.postTask(UiThreadTaskTraits.DEFAULT, () -> callback.onResult(null));
     }
 
-    /** @see OfflineContentProvider#getAllItems(Callback) */
+    @Override
     public void getAllItems(Callback<ArrayList<OfflineItem>> callback, boolean offTheRecord) {
-        List < Callback < ArrayList<OfflineItem>>> list =
+        List<Callback<ArrayList<OfflineItem>>> list =
                 offTheRecord ? mOffTheRecordRequests : mRequests;
 
         list.add(callback);
@@ -166,12 +181,12 @@ public class DownloadGlue implements DownloadObserver {
         DownloadManagerService.getDownloadManagerService().getAllDownloads(offTheRecord);
     }
 
-    /** @see OfflineContentProvider#getVisualsForItem(ContentId, VisualsCallback) */
+    @Override
     public void getVisualsForItem(ContentId id, VisualsCallback callback) {
         PostTask.postTask(UiThreadTaskTraits.DEFAULT, () -> callback.onVisualsAvailable(id, null));
     }
 
-    /** @see OfflineContentProvider#getShareInfoForItem(ContentId, ShareCallback) */
+    @Override
     public void getShareInfoForItem(OfflineItem item, ShareCallback callback) {
         OfflineItemShareInfo info = new OfflineItemShareInfo();
         info.uri = DownloadUtils.getUriForItem(item.filePath);
@@ -179,7 +194,7 @@ public class DownloadGlue implements DownloadObserver {
                 UiThreadTaskTraits.DEFAULT, () -> callback.onShareInfoAvailable(item.id, info));
     }
 
-    /** @see OfflineContentProvider#renameItem(ContentId, String, Callback)*/
+    @Override
     public void renameItem(
             OfflineItem item, String name, Callback</*RenameResult*/ Integer> callback) {
         DownloadManagerService.getDownloadManagerService().renameDownload(
