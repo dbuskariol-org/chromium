@@ -315,7 +315,7 @@ void ScrollableArea::ProgrammaticScrollHelper(const ScrollOffset& offset,
         std::move(callback), WrapWeakPersistent(this)));
   }
 
-  if (scroll_behavior == kScrollBehaviorSmooth) {
+  if (scroll_behavior == kScrollBehaviorSmooth && ScrollAnimatorEnabled()) {
     GetProgrammaticScrollAnimator().AnimateToOffset(offset, is_sequenced_scroll,
                                                     std::move(callback));
   } else {

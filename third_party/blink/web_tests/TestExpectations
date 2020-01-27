@@ -5188,6 +5188,11 @@ crbug.com/875884 [ Linux ] lifecycle/background-change-lifecycle-count.html [ Pa
 crbug.com/875884 [ Win ] lifecycle/background-change-lifecycle-count.html [ Pass Failure ]
 crbug.com/875884 [ Win ] virtual/threaded/lifecycle/background-change-lifecycle-count.html [ Pass Failure ]
 
+# Broken when smooth scrolling was enabled in Mac web tests (real failure)
+crbug.com/1044137 [ Mac ] fast/scrolling/no-hover-during-smooth-keyboard-scroll.html [ Failure ]
+crbug.com/1044137 [ Mac ] virtual/scroll_customization/fast/scrolling/no-hover-during-smooth-keyboard-scroll.html [ Failure ]
+crbug.com/1044137 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/no-hover-during-smooth-keyboard-scroll.html [ Failure ]
+
 # Test frequently times out on Mac CQ bots.
 crbug.com/874703 [ Mac ] http/tests/devtools/extensions/extensions-panel.js [ Timeout Pass ]
 
