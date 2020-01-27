@@ -18,6 +18,7 @@ Turning off outlining because it caused issues when synchronized proguarding
 Trichrome due to illegal dex references (crbug.com/956839). Will only be used
 for android_apk() targets that set `disable_r8_outlining = true`):
 
-Increase callGraphCycleEliminatorMaxDepthThreshold (b/143685705).
+Adding command line support for having R8 generate feature module .dex files
+(crbug.com/1032609).
 
 Patch is located at //third_party/r8/local_modifications.diff.
