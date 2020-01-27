@@ -90,19 +90,6 @@ def enclose_with_header_guard(code_node, header_guard):
     ])
 
 
-def enclose_with_namespace(code_node, namespace):
-    assert isinstance(code_node, CodeNode)
-    assert isinstance(namespace, str)
-
-    return SequenceNode([
-        LiteralNode("namespace {} {{".format(namespace)),
-        EmptyNode(),
-        code_node,
-        EmptyNode(),
-        LiteralNode("}}  // namespace {}".format(namespace)),
-    ])
-
-
 def collect_include_headers_of_idl_types(idl_types):
     """
     Returns a set of header paths that are required by |idl_types|.
