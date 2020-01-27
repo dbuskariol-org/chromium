@@ -308,7 +308,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling feed
   # and whatever else without interference from each other.
-  'shaderc_revision': 'a4f9acedf3c042537db8b28065728df484ca5663',
+  'shaderc_revision': '0681dd61d3b0eaf9f99aa066f8d1d9a834be6d72',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling feed
   # and whatever else without interference from each other.
@@ -963,7 +963,7 @@ deps = {
   },
 
   'src/third_party/glslang/src':
-    Var('chromium_git') + '/external/github.com/KhronosGroup/glslang.git' + '@' + 'b0ada80356ca7b560c600b93a596af1331442542',
+    Var('chromium_git') + '/external/github.com/KhronosGroup/glslang.git' + '@' + '07a55839eed550d84ef62e0c7f503e0d67692708',
 
   'src/third_party/google_toolbox_for_mac/src': {
       'url': Var('chromium_git') + '/external/github.com/google/google-toolbox-for-mac.git' + '@' + Var('google_toolbox_for_mac_revision'),
