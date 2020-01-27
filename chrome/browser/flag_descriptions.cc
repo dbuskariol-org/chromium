@@ -2540,6 +2540,12 @@ const char kContextualSearchSecondTapDescription[] =
     "Enables triggering on a second tap gesture even when Ranker would "
     "normally suppress that tap.";
 
+const char kContextualSearchTranslationsName[] =
+    "Contextual Search translations";
+const char kContextualSearchTranslationsDescription[] =
+    "Enables automatic translations of words on a page to be presented in the "
+    "caption of the bottom bar.";
+
 const char kDirectActionsName[] = "Direct actions";
 const char kDirectActionsDescription[] =
     "Enables direct actions (Android Q and more).";

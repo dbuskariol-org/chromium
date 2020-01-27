@@ -1605,13 +1605,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kContextualSearchDefinitionsName,
      flag_descriptions::kContextualSearchDefinitionsDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kContextualSearchDefinitions)},
-
     {"contextual-search-longpress-resolve",
      flag_descriptions::kContextualSearchLongpressResolveName,
      flag_descriptions::kContextualSearchLongpressResolveDescription,
      kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kContextualSearchLongpressResolve)},
-
     {"contextual-search-ml-tap-suppression",
      flag_descriptions::kContextualSearchMlTapSuppressionName,
      flag_descriptions::kContextualSearchMlTapSuppressionDescription,
@@ -1625,6 +1623,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kContextualSearchSecondTapName,
      flag_descriptions::kContextualSearchSecondTapDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kContextualSearchSecondTap)},
+    {"contextual-search-translations",
+     flag_descriptions::kContextualSearchTranslationsName,
+     flag_descriptions::kContextualSearchTranslationsDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kContextualSearchTranslations)},
+
     {"direct-actions", flag_descriptions::kDirectActionsName,
      flag_descriptions::kDirectActionsDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kDirectActions)},

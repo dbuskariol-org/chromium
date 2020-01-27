@@ -1510,6 +1510,9 @@ extern const char kContextualSearchRankerQueryDescription[];
 extern const char kContextualSearchSecondTapName[];
 extern const char kContextualSearchSecondTapDescription[];
 
+extern const char kContextualSearchTranslationsName[];
+extern const char kContextualSearchTranslationsDescription[];
+
 extern const char kDirectActionsName[];
 extern const char kDirectActionsDescription[];
 
