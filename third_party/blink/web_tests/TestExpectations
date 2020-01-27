@@ -3088,7 +3088,6 @@ crbug.com/967018 external/wpt/html/semantics/scripting-1/the-script-element/css-
 crbug.com/967018 external/wpt/html/semantics/scripting-1/the-script-element/css-module/utf8.tentative.html [ Failure ]
 crbug.com/967018 virtual/web-components-v0-disabled/external/wpt/html/semantics/scripting-1/the-script-element/css-module/utf8.tentative.html [ Failure ]
 crbug.com/626703 external/wpt/css/css-ui/webkit-appearance-auto-001.html [ Failure ]
-crbug.com/626703 external/wpt/web-animations/interfaces/Animation/persist.html [ Timeout ]
 crbug.com/626703 external/wpt/css/css-writing-modes/text-combine-upright-digits-004-manual.html [ Skip ]
 crbug.com/626703 external/wpt/html/semantics/scripting-1/the-script-element/json-module/parse-error.tentative.html [ Timeout ]
 crbug.com/626703 [ Mac10.13 ] external/wpt/preload/onload-event.html [ Failure Timeout ]
