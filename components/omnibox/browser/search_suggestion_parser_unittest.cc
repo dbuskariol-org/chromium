@@ -197,3 +197,40 @@ TEST(SearchSuggestionParserTest, SuggestClassification) {
       {0, AutocompleteMatch::ACMatchClassification::MATCH}};
   EXPECT_EQ(kBoldAll, result.match_contents_class());
 }
+
+TEST(SearchSuggestionParserTest, NavigationClassification) {
+  TestSchemeClassifier scheme_classifier;
+  SearchSuggestionParser::NavigationResult result(
+      scheme_classifier, GURL("https://news.google.com/"),
+      AutocompleteMatchType::Type::NAVSUGGEST, 0, base::string16(),
+      std::string(), false, 400, true, base::ASCIIToUTF16("google"));
+  AutocompleteMatch::ValidateClassifications(result.match_contents(),
+                                             result.match_contents_class());
+  const ACMatchClassifications kBoldMiddle = {
+      {0, AutocompleteMatch::ACMatchClassification::URL},
+      {5, AutocompleteMatch::ACMatchClassification::URL |
+              AutocompleteMatch::ACMatchClassification::MATCH},
+      {11, AutocompleteMatch::ACMatchClassification::URL}};
+  EXPECT_EQ(kBoldMiddle, result.match_contents_class());
+
+  // Reclassifying in a way that would cause bold-none if it's disallowed should
+  // do nothing.
+  result.CalculateAndClassifyMatchContents(
+      false, base::ASCIIToUTF16("term not found"));
+  EXPECT_EQ(kBoldMiddle, result.match_contents_class());
+
+  // Test the allow bold-nothing case too.
+  result.CalculateAndClassifyMatchContents(
+      true, base::ASCIIToUTF16("term not found"));
+  const ACMatchClassifications kAnnotateUrlOnly = {
+      {0, AutocompleteMatch::ACMatchClassification::URL}};
+  EXPECT_EQ(kAnnotateUrlOnly, result.match_contents_class());
+
+  // Nothing should be bolded for ZeroSuggest classified input.
+  result.CalculateAndClassifyMatchContents(true, base::string16());
+  AutocompleteMatch::ValidateClassifications(result.match_contents(),
+                                             result.match_contents_class());
+  const ACMatchClassifications kNone = {
+      {0, AutocompleteMatch::ACMatchClassification::NONE}};
+  EXPECT_EQ(kNone, result.match_contents_class());
+}
