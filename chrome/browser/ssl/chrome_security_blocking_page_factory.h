@@ -17,10 +17,17 @@
 // interstitial pages.
 class ChromeSecurityBlockingPageFactory {
  public:
+  ChromeSecurityBlockingPageFactory() = default;
+  ~ChromeSecurityBlockingPageFactory() = default;
+  ChromeSecurityBlockingPageFactory(const ChromeSecurityBlockingPageFactory&) =
+      delete;
+  ChromeSecurityBlockingPageFactory& operator=(
+      const ChromeSecurityBlockingPageFactory&) = delete;
+
   // Creates an SSL blocking page. |options_mask| must be a bitwise mask of
   // SSLErrorUI::SSLErrorOptionsMask values. The caller is responsible for
   // ownership of the returned object.
-  static SSLBlockingPage* CreateSSLPage(
+  SSLBlockingPage* CreateSSLPage(
       content::WebContents* web_contents,
       int cert_error,
       const net::SSLInfo& ssl_info,
@@ -32,7 +39,7 @@ class ChromeSecurityBlockingPageFactory {
 
   // Creates a captive portal blocking page. The caller is responsible for
   // ownership of the returned object.
-  static CaptivePortalBlockingPage* CreateCaptivePortalBlockingPage(
+  CaptivePortalBlockingPage* CreateCaptivePortalBlockingPage(
       content::WebContents* web_contents,
       const GURL& request_url,
       const GURL& login_url,
@@ -42,7 +49,7 @@ class ChromeSecurityBlockingPageFactory {
 
   // Creates a bad clock blocking page. The caller is responsible for
   // ownership of the returned object.
-  static BadClockBlockingPage* CreateBadClockBlockingPage(
+  BadClockBlockingPage* CreateBadClockBlockingPage(
       content::WebContents* web_contents,
       int cert_error,
       const net::SSLInfo& ssl_info,
@@ -53,7 +60,7 @@ class ChromeSecurityBlockingPageFactory {
 
   // Creates a man-in-the-middle software blocking page. The caller is
   // responsible for ownership of the returned object.
-  static MITMSoftwareBlockingPage* CreateMITMSoftwareBlockingPage(
+  MITMSoftwareBlockingPage* CreateMITMSoftwareBlockingPage(
       content::WebContents* web_contents,
       int cert_error,
       const GURL& request_url,
@@ -63,22 +70,20 @@ class ChromeSecurityBlockingPageFactory {
 
   // Creates a blocked interception blocking page. The caller is
   // responsible for ownership of the returned object.
-  static BlockedInterceptionBlockingPage* CreateBlockedInterceptionBlockingPage(
+  BlockedInterceptionBlockingPage* CreateBlockedInterceptionBlockingPage(
       content::WebContents* web_contents,
       int cert_error,
       const GURL& request_url,
       std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
       const net::SSLInfo& ssl_info);
 
-  // Does setup on |page| that is specific to the client (Chrome).
-  static void DoChromeSpecificSetup(SSLBlockingPageBase* page);
-
   // Overrides the calculation of whether the app is enterprise-managed for
   // tests.
   static void SetEnterpriseManagedForTesting(bool enterprise_managed);
 
  private:
-  DISALLOW_IMPLICIT_CONSTRUCTORS(ChromeSecurityBlockingPageFactory);
+  // Does setup on |page| that is specific to the client (Chrome).
+  static void DoChromeSpecificSetup(SSLBlockingPageBase* page);
 };
 
 #endif  // CHROME_BROWSER_SSL_CHROME_SECURITY_BLOCKING_PAGE_FACTORY_H_

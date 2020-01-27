@@ -132,6 +132,7 @@
 #include "chrome/browser/site_isolation/site_isolation_policy.h"
 #include "chrome/browser/speech/chrome_speech_recognition_manager_delegate.h"
 #include "chrome/browser/speech/tts_controller_delegate_impl.h"
+#include "chrome/browser/ssl/chrome_security_blocking_page_factory.h"
 #include "chrome/browser/ssl/ssl_client_auth_metrics.h"
 #include "chrome/browser/ssl/ssl_client_certificate_selector.h"
 #include "chrome/browser/ssl/ssl_error_handler.h"
@@ -698,6 +699,7 @@ void HandleSSLErrorWrapper(
       web_contents, cert_error, ssl_info, request_url,
       std::move(ssl_cert_reporter), std::move(blocking_page_ready_callback),
       g_browser_process->network_time_tracker(), captive_portal_service,
+      std::make_unique<ChromeSecurityBlockingPageFactory>(),
       profile->GetPrefs()->GetBoolean(prefs::kSSLErrorOverrideAllowed));
 }
 

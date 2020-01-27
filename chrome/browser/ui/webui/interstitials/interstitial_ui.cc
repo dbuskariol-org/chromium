@@ -156,9 +156,10 @@ SSLBlockingPage* CreateSslBlockingPage(content::WebContents* web_contents) {
   if (strict_enforcement)
     options_mask |=
         security_interstitials::SSLErrorOptionsMask::STRICT_ENFORCEMENT;
-  return ChromeSecurityBlockingPageFactory::CreateSSLPage(
-      web_contents, cert_error, ssl_info, request_url, options_mask,
-      time_triggered_, GURL(), nullptr);
+  ChromeSecurityBlockingPageFactory blocking_page_factory;
+  return blocking_page_factory.CreateSSLPage(web_contents, cert_error, ssl_info,
+                                             request_url, options_mask,
+                                             time_triggered_, GURL(), nullptr);
 }
 
 MITMSoftwareBlockingPage* CreateMITMSoftwareBlockingPage(
@@ -174,12 +175,12 @@ MITMSoftwareBlockingPage* CreateMITMSoftwareBlockingPage(
     is_enterprise_managed = is_enterprise_managed_param == "1";
   }
 
-  ChromeSecurityBlockingPageFactory::SetEnterpriseManagedForTesting(
-      is_enterprise_managed);
+  ChromeSecurityBlockingPageFactory blocking_page_factory;
+  blocking_page_factory.SetEnterpriseManagedForTesting(is_enterprise_managed);
 
   net::SSLInfo ssl_info;
   ssl_info.cert = ssl_info.unverified_cert = CreateFakeCert();
-  return ChromeSecurityBlockingPageFactory::CreateMITMSoftwareBlockingPage(
+  return blocking_page_factory.CreateMITMSoftwareBlockingPage(
       web_contents, cert_error, request_url, nullptr, ssl_info,
       mitm_software_name);
 }
@@ -191,9 +192,9 @@ BlockedInterceptionBlockingPage* CreateBlockedInterceptionBlockingPage(
 
   net::SSLInfo ssl_info;
   ssl_info.cert = ssl_info.unverified_cert = CreateFakeCert();
-  return ChromeSecurityBlockingPageFactory::
-      CreateBlockedInterceptionBlockingPage(web_contents, cert_error,
-                                            request_url, nullptr, ssl_info);
+  ChromeSecurityBlockingPageFactory blocking_page_factory;
+  return blocking_page_factory.CreateBlockedInterceptionBlockingPage(
+      web_contents, cert_error, request_url, nullptr, ssl_info);
 }
 
 BadClockBlockingPage* CreateBadClockBlockingPage(
@@ -241,7 +242,8 @@ BadClockBlockingPage* CreateBadClockBlockingPage(
   if (strict_enforcement)
     options_mask |=
         security_interstitials::SSLErrorOptionsMask::STRICT_ENFORCEMENT;
-  return ChromeSecurityBlockingPageFactory::CreateBadClockBlockingPage(
+  ChromeSecurityBlockingPageFactory blocking_page_factory;
+  return blocking_page_factory.CreateBadClockBlockingPage(
       web_contents, cert_error, ssl_info, request_url, base::Time::Now(),
       clock_state, nullptr);
 }
@@ -401,8 +403,9 @@ CaptivePortalBlockingPage* CreateCaptivePortalBlockingPage(
   }
   net::SSLInfo ssl_info;
   ssl_info.cert = ssl_info.unverified_cert = CreateFakeCert();
+  ChromeSecurityBlockingPageFactory blocking_page_factory;
   CaptivePortalBlockingPage* blocking_page =
-      ChromeSecurityBlockingPageFactory::CreateCaptivePortalBlockingPage(
+      blocking_page_factory.CreateCaptivePortalBlockingPage(
           web_contents, request_url, landing_url, nullptr, ssl_info,
           net::ERR_CERT_COMMON_NAME_INVALID);
   blocking_page->OverrideWifiInfoForTesting(is_wifi_connection, wifi_ssid);

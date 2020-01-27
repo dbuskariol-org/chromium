@@ -347,6 +347,7 @@ class SSLErrorHandlerDelegateImpl : public SSLErrorHandler::Delegate {
       const GURL& request_url,
       std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
       CaptivePortalService* captive_portal_service,
+      std::unique_ptr<ChromeSecurityBlockingPageFactory> blocking_page_factory,
       SSLErrorHandler::OnBlockingPageShownCallback
           on_blocking_page_shown_callback,
       SSLErrorHandler::BlockingPageReadyCallback blocking_page_ready_callback)
@@ -360,6 +361,7 @@ class SSLErrorHandlerDelegateImpl : public SSLErrorHandler::Delegate {
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
         captive_portal_service_(captive_portal_service),
 #endif
+        blocking_page_factory_(std::move(blocking_page_factory)),
         on_blocking_page_shown_callback_(on_blocking_page_shown_callback),
         blocking_page_ready_callback_(std::move(blocking_page_ready_callback)) {
     DCHECK(!blocking_page_ready_callback_.is_null());
@@ -403,6 +405,7 @@ class SSLErrorHandlerDelegateImpl : public SSLErrorHandler::Delegate {
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
   CaptivePortalService* captive_portal_service_;
 #endif
+  std::unique_ptr<ChromeSecurityBlockingPageFactory> blocking_page_factory_;
   SSLErrorHandler::OnBlockingPageShownCallback on_blocking_page_shown_callback_;
   SSLErrorHandler::BlockingPageReadyCallback blocking_page_ready_callback_;
 };
@@ -463,24 +466,22 @@ bool SSLErrorHandlerDelegateImpl::IsErrorOverridable() const {
 void SSLErrorHandlerDelegateImpl::ShowCaptivePortalInterstitial(
     const GURL& landing_url) {
   // Show captive portal blocking page. The interstitial owns the blocking page.
-  OnBlockingPageReady(
-      ChromeSecurityBlockingPageFactory::CreateCaptivePortalBlockingPage(
-          web_contents_, request_url_, landing_url,
-          std::move(ssl_cert_reporter_), ssl_info_, cert_error_));
+  OnBlockingPageReady(blocking_page_factory_->CreateCaptivePortalBlockingPage(
+      web_contents_, request_url_, landing_url, std::move(ssl_cert_reporter_),
+      ssl_info_, cert_error_));
 }
 
 void SSLErrorHandlerDelegateImpl::ShowMITMSoftwareInterstitial(
     const std::string& mitm_software_name) {
   // Show MITM software blocking page. The interstitial owns the blocking page.
-  OnBlockingPageReady(
-      ChromeSecurityBlockingPageFactory::CreateMITMSoftwareBlockingPage(
-          web_contents_, cert_error_, request_url_,
-          std::move(ssl_cert_reporter_), ssl_info_, mitm_software_name));
+  OnBlockingPageReady(blocking_page_factory_->CreateMITMSoftwareBlockingPage(
+      web_contents_, cert_error_, request_url_, std::move(ssl_cert_reporter_),
+      ssl_info_, mitm_software_name));
 }
 
 void SSLErrorHandlerDelegateImpl::ShowSSLInterstitial(const GURL& support_url) {
   // Show SSL blocking page. The interstitial owns the blocking page.
-  OnBlockingPageReady(ChromeSecurityBlockingPageFactory::CreateSSLPage(
+  OnBlockingPageReady(blocking_page_factory_->CreateSSLPage(
       web_contents_, cert_error_, ssl_info_, request_url_, options_mask_,
       base::Time::NowFromSystemTime(), support_url,
       std::move(ssl_cert_reporter_)));
@@ -490,16 +491,15 @@ void SSLErrorHandlerDelegateImpl::ShowBadClockInterstitial(
     const base::Time& now,
     ssl_errors::ClockState clock_state) {
   // Show bad clock page. The interstitial owns the blocking page.
-  OnBlockingPageReady(
-      ChromeSecurityBlockingPageFactory::CreateBadClockBlockingPage(
-          web_contents_, cert_error_, ssl_info_, request_url_, now, clock_state,
-          std::move(ssl_cert_reporter_)));
+  OnBlockingPageReady(blocking_page_factory_->CreateBadClockBlockingPage(
+      web_contents_, cert_error_, ssl_info_, request_url_, now, clock_state,
+      std::move(ssl_cert_reporter_)));
 }
 
 void SSLErrorHandlerDelegateImpl::ShowBlockedInterceptionInterstitial() {
   // Show interception blocking page. The interstitial owns the blocking page.
   OnBlockingPageReady(
-      ChromeSecurityBlockingPageFactory::CreateBlockedInterceptionBlockingPage(
+      blocking_page_factory_->CreateBlockedInterceptionBlockingPage(
           web_contents_, cert_error_, request_url_,
           std::move(ssl_cert_reporter_), ssl_info_));
 }
@@ -549,6 +549,7 @@ void SSLErrorHandler::HandleSSLError(
         blocking_page_ready_callback,
     network_time::NetworkTimeTracker* network_time_tracker,
     CaptivePortalService* captive_portal_service,
+    std::unique_ptr<ChromeSecurityBlockingPageFactory> blocking_page_factory,
     bool user_can_proceed_past_interstitial /*=true*/) {
   DCHECK(!FromWebContents(web_contents));
 
@@ -563,6 +564,7 @@ void SSLErrorHandler::HandleSSLError(
               web_contents, ssl_info, web_contents->GetBrowserContext(),
               cert_error, options_mask, request_url,
               std::move(ssl_cert_reporter), captive_portal_service,
+              std::move(blocking_page_factory),
               g_config.Pointer()->on_blocking_page_shown_callback(),
               std::move(blocking_page_ready_callback))),
       web_contents, cert_error, ssl_info, network_time_tracker,
