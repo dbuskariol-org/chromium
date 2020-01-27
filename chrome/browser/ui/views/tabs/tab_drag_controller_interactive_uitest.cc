@@ -1849,8 +1849,14 @@ void CloseTabsWhileDetachedStep2(const BrowserList* browser_list) {
 
 // Selects 2 tabs out of 4, drags them out and closes the new browser window
 // while dragging tabs.
+#if (defined(OS_WIN) || defined(OS_MACOSX))
+// TODO(crbug.com/1031801) Test is flaky on Windows and Mac.
+#define MAYBE_DeleteTabsWhileDetached DISABLED_DeleteTabsWhileDetached
+#else
+#define MAYBE_DeleteTabsWhileDetached DeleteTabsWhileDetached
+#endif
 IN_PROC_BROWSER_TEST_P(DetachToBrowserTabDragControllerTest,
-                       DeleteTabsWhileDetached) {
+                       MAYBE_DeleteTabsWhileDetached) {
   AddTabsAndResetBrowser(browser(), 3);
   TabStrip* tab_strip = GetTabStripForBrowser(browser());
   EXPECT_EQ("0 1 2 3", IDString(browser()->tab_strip_model()));
