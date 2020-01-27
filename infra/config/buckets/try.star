@@ -1375,6 +1375,7 @@ win_builder(
     os = os.WINDOWS_10,
     use_clang_coverage = True,
     goma_jobs = goma.jobs.J150,
+    ssd = True,
     tryjob = tryjob(experiment_percentage = 3),
 )
 
