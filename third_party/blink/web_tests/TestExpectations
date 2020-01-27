@@ -6375,6 +6375,11 @@ crbug.com/106759 http/tests/devtools/command-line-api-inspect.js [ Pass Failure 
 crbug.com/106759 http/tests/devtools/sources/debugger-breakpoints/restore-locations-for-breakpoint-with-broken-source-map.js [ Pass Failure ]
 crbug.com/106759 http/tests/devtools/sources/debugger-console/debugger-command-line-api.js [ Pass Failure ]
 
+crbug.com/989665 [ Mac ] external/wpt/resource-timing/resource_timing_buffer_full_eventually.html [ Crash Pass ]
+crbug.com/989665 [ Mac ] virtual/omt-worker-fetch/external/wpt/resource-timing/resource_timing_buffer_full_eventually.html [ Crash Pass ]
+crbug.com/989665 [ Linux ] virtual/omt-worker-fetch/external/wpt/resource-timing/resource_timing_buffer_full_eventually.html [ Crash Pass ]
+crbug.com/989665 [ Win ] virtual/omt-worker-fetch/external/wpt/resource-timing/resource_timing_buffer_full_eventually.html [ Pass Timeout ]
+
 # Sheriff 2020-01-23
 crbug.com/1043396 http/tests/devtools/network/network-eventsource.js [ Pass Timeout ]
 crbug.com/1043381 [ Release Win ] http/tests/devtools/elements/highlight/highlight-node-scroll.js [ Pass Timeout ]
