@@ -415,9 +415,12 @@ Vector<LayoutText::TextBoxInfo> LayoutText::GetTextBoxInfo() const {
 
 bool LayoutText::HasTextBoxes() const {
   if (RuntimeEnabledFeatures::LayoutNGEnabled()) {
-    auto fragments = NGPaintFragment::InlineFragmentsFor(this);
-    if (fragments.IsInLayoutNGInlineFormattingContext())
-      return !(fragments.begin() == fragments.end());
+    if (IsInLayoutNGInlineFormattingContext()) {
+      NGInlineCursor cursor;
+      cursor.MoveTo(*this);
+      return cursor.IsNotNull();
+    }
+
     // When legacy is forced, IsInLayoutNGInlineFormattingContext is false,
     // and we fall back to normal HasTextBox
     return FirstTextBox();
