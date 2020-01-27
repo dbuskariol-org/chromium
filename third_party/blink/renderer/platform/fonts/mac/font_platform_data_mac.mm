@@ -27,7 +27,6 @@
 #import <AvailabilityMacros.h>
 
 #include "base/mac/foundation_util.h"
-#include "base/mac/scoped_cftyperef.h"
 #include "base/mac/scoped_nsobject.h"
 #include "base/stl_util.h"
 #import "third_party/blink/public/platform/mac/web_sandbox_support.h"
@@ -59,10 +58,10 @@ static bool CanLoadInProcess(NSFont* ns_font) {
   return ![font_name isEqualToString:@"LastResort"];
 }
 
-static CTFontDescriptorRef CascadeToLastResortFontDescriptor() {
-  static CTFontDescriptorRef descriptor;
-  if (descriptor)
-    return descriptor;
+static CFDictionaryRef CascadeToLastResortFontAttributes() {
+  static CFDictionaryRef attributes;
+  if (attributes)
+    return attributes;
 
   base::ScopedCFTypeRef<CTFontDescriptorRef> last_resort(
       CTFontDescriptorCreateWithNameAndSize(CFSTR("LastResort"), 0));
@@ -73,13 +72,10 @@ static CTFontDescriptorRef CascadeToLastResortFontDescriptor() {
 
   const void* keys[] = {kCTFontCascadeListAttribute};
   const void* values[] = {values_array};
-  base::ScopedCFTypeRef<CFDictionaryRef> attributes(CFDictionaryCreate(
+  attributes = CFDictionaryCreate(
       kCFAllocatorDefault, keys, values, base::size(keys),
-      &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks));
-
-  descriptor = CTFontDescriptorCreateWithAttributes(attributes);
-
-  return descriptor;
+      &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+  return attributes;
 }
 
 static sk_sp<SkTypeface> LoadFromBrowserProcess(NSFont* ns_font,
@@ -94,19 +90,22 @@ static sk_sp<SkTypeface> LoadFromBrowserProcess(NSFont* ns_font,
     return nullptr;
   }
 
-  CTFontRef loaded_ct_font;
+  base::ScopedCFTypeRef<CTFontDescriptorRef> loaded_data_descriptor;
   uint32_t font_id;
   if (!sandbox_support->LoadFont(base::mac::NSToCFCast(ns_font),
-                                 &loaded_ct_font, &font_id)) {
+                                 &loaded_data_descriptor, &font_id)) {
     // TODO crbug.com/461279: Make this appear in the inspector console?
     DLOG(ERROR)
         << "Loading user font \"" << [[ns_font familyName] UTF8String]
         << "\" from non system location failed. Corrupt or missing font file?";
     return nullptr;
   }
-  base::ScopedCFTypeRef<CTFontRef> ct_font_base(loaded_ct_font);
-  base::ScopedCFTypeRef<CTFontRef> ct_font(CTFontCreateCopyWithAttributes(
-      ct_font_base, text_size, 0, CascadeToLastResortFontDescriptor()));
+
+  base::ScopedCFTypeRef<CTFontDescriptorRef> data_descriptor_with_cascade(
+      CTFontDescriptorCreateCopyWithAttributes(
+          loaded_data_descriptor, CascadeToLastResortFontAttributes()));
+  base::ScopedCFTypeRef<CTFontRef> ct_font(CTFontCreateWithFontDescriptor(
+      data_descriptor_with_cascade.get(), text_size, 0));
   sk_sp<SkTypeface> return_font(SkCreateTypefaceFromCTFont(ct_font));
 
   if (!return_font.get())
