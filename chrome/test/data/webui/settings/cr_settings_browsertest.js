@@ -517,8 +517,7 @@ CrSettingsPeoplePageSyncControlsTest.prototype = {
   ]),
 };
 
-// TODO(crbug.com/1043665): disabling due to deterministic failures.
-TEST_F('CrSettingsPeoplePageSyncControlsTest', 'DISABLED_All', function() {
+TEST_F('CrSettingsPeoplePageSyncControlsTest', 'All', function() {
   mocha.run();
 });
 
