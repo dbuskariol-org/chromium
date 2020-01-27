@@ -148,7 +148,7 @@ std::unique_ptr<FontPlatformData> FontPlatformDataFromNSFont(
           : 0;
 
   // No variable font requested, return static font.
-  if (!valid_configured_axes)
+  if (!valid_configured_axes && optical_sizing == kNoneOpticalSizing)
     return make_typeface_fontplatformdata();
 
   int existing_axes = typeface->getVariationDesignPosition(nullptr, 0);
@@ -171,7 +171,7 @@ std::unique_ptr<FontPlatformData> FontPlatformDataFromNSFont(
   for (auto& coordinate : coordinates_to_set) {
     // Set opsz to font size but allow having it overriden by
     // font-variation-settings in case it has 'opsz'.
-    if (coordinate.axis == kOpszTag) {
+    if (coordinate.axis == kOpszTag && optical_sizing == kAutoOpticalSizing) {
       if (coordinate.value != SkFloatToScalar(size)) {
         coordinate.value = SkFloatToScalar(size);
         axes_reconfigured = true;
