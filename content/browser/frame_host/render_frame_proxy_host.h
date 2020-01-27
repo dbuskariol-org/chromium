@@ -18,13 +18,13 @@
 #include "mojo/public/cpp/bindings/associated_receiver.h"
 #include "third_party/blink/public/mojom/frame/frame.mojom.h"
 #include "third_party/blink/public/mojom/input/focus_type.mojom-forward.h"
+#include "third_party/blink/public/mojom/scroll/scroll_into_view_params.mojom-forward.h"
 
 struct FrameHostMsg_OpenURL_Params;
 struct FrameMsg_PostMessage_Params;
 
 namespace blink {
 class AssociatedInterfaceProvider;
-struct WebScrollIntoViewParams;
 }
 
 namespace gfx {
@@ -126,7 +126,7 @@ class RenderFrameProxyHost : public IPC::Listener,
   // the frame's current process. |rect_to_scroll| is with respect to the
   // coordinates of the originating frame in OOPIF process.
   void ScrollRectToVisible(const gfx::Rect& rect_to_scroll,
-                           const blink::WebScrollIntoViewParams& params);
+                           blink::mojom::ScrollIntoViewParamsPtr params);
 
   // Sets render frame proxy created state. If |created| is false, any existing
   // mojo connections to RenderFrameProxyHost will be closed.

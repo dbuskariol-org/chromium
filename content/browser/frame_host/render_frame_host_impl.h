@@ -104,6 +104,7 @@
 #include "third_party/blink/public/mojom/permissions/permission.mojom.h"
 #include "third_party/blink/public/mojom/portal/portal.mojom-forward.h"
 #include "third_party/blink/public/mojom/presentation/presentation.mojom.h"
+#include "third_party/blink/public/mojom/scroll/scroll_into_view_params.mojom.h"
 #include "third_party/blink/public/mojom/service_worker/service_worker_provider.mojom.h"
 #include "third_party/blink/public/mojom/sms/sms_receiver.mojom-forward.h"
 #include "third_party/blink/public/mojom/speech/speech_synthesis.mojom-forward.h"
@@ -150,7 +151,6 @@ class AssociatedInterfaceProvider;
 class AssociatedInterfaceRegistry;
 struct FramePolicy;
 struct TransferableMessage;
-struct WebScrollIntoViewParams;
 
 namespace mojom {
 class CacheStorage;
@@ -1318,6 +1318,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
       bool present,
       blink::mojom::SuddenTerminationDisablerType disabler_type) override;
   void HadStickyUserActivationBeforeNavigationChanged(bool value) override;
+  void ScrollRectToVisibleInParentFrame(
+      const gfx::Rect& rect_to_scroll,
+      blink::mojom::ScrollIntoViewParamsPtr params) override;
   void BubbleLogicalScrollInParentFrame(
       blink::mojom::ScrollDirection direction,
       ui::input_types::ScrollGranularity granularity) override;
@@ -1529,9 +1532,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void OnUpdateUserActivationState(
       blink::mojom::UserActivationUpdateType update_type);
   void OnSetNeedsOcclusionTracking(bool needs_tracking);
-  void OnScrollRectToVisibleInParentFrame(
-      const gfx::Rect& rect_to_scroll,
-      const blink::WebScrollIntoViewParams& params);
   void OnFrameDidCallFocus();
   void OnDownloadUrl(const FrameHostMsg_DownloadUrl_Params& params);
   void OnSaveImageFromDataURL(const std::string& url_str);

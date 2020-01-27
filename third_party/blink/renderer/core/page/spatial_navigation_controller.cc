@@ -6,7 +6,7 @@
 
 #include "third_party/blink/public/common/browser_interface_broker_proxy.h"
 #include "third_party/blink/public/mojom/input/focus_type.mojom-blink.h"
-#include "third_party/blink/public/platform/web_scroll_into_view_params.h"
+#include "third_party/blink/public/mojom/scroll/scroll_into_view_params.mojom-blink.h"
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/element.h"
 #include "third_party/blink/renderer/core/dom/element_traversal.h"
@@ -29,6 +29,7 @@
 #include "third_party/blink/renderer/core/page/focus_controller.h"
 #include "third_party/blink/renderer/core/page/page.h"
 #include "third_party/blink/renderer/core/page/spatial_navigation.h"
+#include "third_party/blink/renderer/core/scroll/scroll_into_view_params_type_converters.h"
 #include "third_party/blink/renderer/platform/geometry/layout_rect.h"
 #include "third_party/blink/renderer/platform/instrumentation/histogram.h"
 
@@ -483,7 +484,8 @@ void SpatialNavigationController::MoveInterestTo(Node* next_node) {
       DCHECK(layout_object);
 
       layout_object->ScrollRectToVisible(
-          element->BoundingBoxForScrollIntoView(), WebScrollIntoViewParams());
+          element->BoundingBoxForScrollIntoView(),
+          CreateScrollIntoViewParams());
     }
 
     // Despite the name, we actually do move focus in "focusless" mode if we're

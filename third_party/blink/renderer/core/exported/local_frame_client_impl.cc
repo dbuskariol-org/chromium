@@ -43,7 +43,6 @@
 #include "third_party/blink/public/platform/modules/service_worker/web_service_worker_provider_client.h"
 #include "third_party/blink/public/platform/platform.h"
 #include "third_party/blink/public/platform/web_media_player_source.h"
-#include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/public/platform/web_security_origin.h"
 #include "third_party/blink/public/platform/web_url.h"
 #include "third_party/blink/public/platform/web_url_error.h"
@@ -1002,13 +1001,6 @@ void LocalFrameClientImpl::AnnotatedRegionsChanged() {
 
 base::UnguessableToken LocalFrameClientImpl::GetDevToolsFrameToken() const {
   return web_frame_->Client()->GetDevToolsFrameToken();
-}
-
-void LocalFrameClientImpl::ScrollRectToVisibleInParentFrame(
-    const WebRect& rect_to_scroll,
-    const WebScrollIntoViewParams& params) {
-  web_frame_->Client()->ScrollRectToVisibleInParentFrame(rect_to_scroll,
-                                                         params);
 }
 
 String LocalFrameClientImpl::evaluateInInspectorOverlayForTesting(

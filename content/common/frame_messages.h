@@ -65,7 +65,6 @@
 #include "third_party/blink/public/platform/viewport_intersection_state.h"
 #include "third_party/blink/public/platform/web_insecure_request_policy.h"
 #include "third_party/blink/public/platform/web_intrinsic_sizing_info.h"
-#include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/public/web/web_frame_owner_properties.h"
 #include "third_party/blink/public/web/web_tree_scope_type.h"
 #include "ui/gfx/geometry/rect.h"
@@ -99,13 +98,6 @@ IPC_ENUM_TRAITS_MAX_VALUE(content::FrameDeleteIntention,
                           content::FrameDeleteIntention::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::FrameOwnerElementType,
                           blink::FrameOwnerElementType::kMaxValue)
-IPC_ENUM_TRAITS_MAX_VALUE(
-    blink::WebScrollIntoViewParams::AlignmentBehavior,
-    blink::WebScrollIntoViewParams::kLastAlignmentBehavior)
-IPC_ENUM_TRAITS_MAX_VALUE(blink::WebScrollIntoViewParams::Type,
-                          blink::WebScrollIntoViewParams::kLastType)
-IPC_ENUM_TRAITS_MAX_VALUE(blink::WebScrollIntoViewParams::Behavior,
-                          blink::WebScrollIntoViewParams::kLastBehavior)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::ContextMenuDataMediaType,
                           blink::ContextMenuDataMediaType::kLast)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::ContextMenuDataInputFieldType,
@@ -157,24 +149,6 @@ IPC_STRUCT_TRAITS_BEGIN(blink::WebIntrinsicSizingInfo)
   IPC_STRUCT_TRAITS_MEMBER(aspect_ratio)
   IPC_STRUCT_TRAITS_MEMBER(has_width)
   IPC_STRUCT_TRAITS_MEMBER(has_height)
-IPC_STRUCT_TRAITS_END()
-
-IPC_STRUCT_TRAITS_BEGIN(blink::WebScrollIntoViewParams::Alignment)
-  IPC_STRUCT_TRAITS_MEMBER(rect_visible)
-  IPC_STRUCT_TRAITS_MEMBER(rect_hidden)
-  IPC_STRUCT_TRAITS_MEMBER(rect_partial)
-IPC_STRUCT_TRAITS_END()
-
-IPC_STRUCT_TRAITS_BEGIN(blink::WebScrollIntoViewParams)
-  IPC_STRUCT_TRAITS_MEMBER(align_x)
-  IPC_STRUCT_TRAITS_MEMBER(align_y)
-  IPC_STRUCT_TRAITS_MEMBER(type)
-  IPC_STRUCT_TRAITS_MEMBER(make_visible_in_visual_viewport)
-  IPC_STRUCT_TRAITS_MEMBER(behavior)
-  IPC_STRUCT_TRAITS_MEMBER(is_for_scroll_sequence)
-  IPC_STRUCT_TRAITS_MEMBER(zoom_into_rect)
-  IPC_STRUCT_TRAITS_MEMBER(relative_element_bounds)
-  IPC_STRUCT_TRAITS_MEMBER(relative_caret_bounds)
 IPC_STRUCT_TRAITS_END()
 
 IPC_STRUCT_TRAITS_BEGIN(content::ContextMenuParams)
@@ -729,11 +703,6 @@ IPC_MESSAGE_ROUTED2(FrameMsg_SetPepperVolume,
 IPC_MESSAGE_ROUTED1(FrameMsg_MixedContentFound,
                     FrameMsg_MixedContentFound_Params)
 
-// Sent to the parent process of a cross-process frame to request scrolling.
-IPC_MESSAGE_ROUTED2(FrameMsg_ScrollRectToVisible,
-                    gfx::Rect /* rect_to_scroll */,
-                    blink::WebScrollIntoViewParams /* properties */)
-
 // Tell the renderer to add a property to the WebUI binding object.  This
 // only works if we allowed WebUI bindings.
 IPC_MESSAGE_ROUTED2(FrameMsg_SetWebUIProperty,
@@ -1104,11 +1073,6 @@ IPC_MESSAGE_ROUTED1(FrameHostMsg_UpdateFaviconURL,
 IPC_MESSAGE_ROUTED2(FrameHostMsg_WebUISend,
                     std::string /* message */,
                     base::ListValue /* args */)
-
-// Sent by a local root to request scrolling in its parent process.
-IPC_MESSAGE_ROUTED2(FrameHostMsg_ScrollRectToVisibleInParentFrame,
-                    gfx::Rect /* rect_to_scroll */,
-                    blink::WebScrollIntoViewParams /* properties */)
 
 // Sent to notify that a frame called |window.focus()|.
 IPC_MESSAGE_ROUTED0(FrameHostMsg_FrameDidCallFocus)

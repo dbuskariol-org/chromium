@@ -119,7 +119,6 @@ struct WebContextMenuData;
 struct WebPluginParams;
 struct WebPopupMenuInfo;
 struct WebRect;
-struct WebScrollIntoViewParams;
 struct WebURLError;
 
 class BLINK_EXPORT WebLocalFrameClient {
@@ -605,12 +604,6 @@ class BLINK_EXPORT WebLocalFrameClient {
 
   // Informs the browser that the draggable regions have been updated.
   virtual void DraggableRegionsChanged() {}
-
-  // Scrolls a local frame in its remote process. Called on the
-  // WebLocalFrameClient of a local frame only.
-  virtual void ScrollRectToVisibleInParentFrame(
-      const WebRect&,
-      const WebScrollIntoViewParams&) {}
 
   // MediaStream -----------------------------------------------------
 

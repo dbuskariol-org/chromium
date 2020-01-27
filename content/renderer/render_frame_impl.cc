@@ -182,7 +182,6 @@
 #include "third_party/blink/public/platform/web_media_player.h"
 #include "third_party/blink/public/platform/web_media_player_source.h"
 #include "third_party/blink/public/platform/web_runtime_features.h"
-#include "third_party/blink/public/platform/web_scroll_into_view_params.h"
 #include "third_party/blink/public/platform/web_string.h"
 #include "third_party/blink/public/platform/web_url.h"
 #include "third_party/blink/public/platform/web_url_error.h"
@@ -6714,14 +6713,6 @@ RenderFrameImpl::CreateURLLoaderFactory() {
 void RenderFrameImpl::DraggableRegionsChanged() {
   for (auto& observer : observers_)
     observer.DraggableRegionsChanged();
-}
-
-void RenderFrameImpl::ScrollRectToVisibleInParentFrame(
-    const blink::WebRect& rect_to_scroll,
-    const blink::WebScrollIntoViewParams& params) {
-  DCHECK(IsLocalRoot());
-  Send(new FrameHostMsg_ScrollRectToVisibleInParentFrame(
-      routing_id_, rect_to_scroll, params));
 }
 
 bool RenderFrameImpl::IsBrowserSideNavigationPending() {

@@ -430,7 +430,6 @@ bool RenderFrameProxy::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameMsg_DisableAutoResize, OnDisableAutoResize)
     IPC_MESSAGE_HANDLER(FrameMsg_TransferUserActivationFrom,
                         OnTransferUserActivationFrom)
-    IPC_MESSAGE_HANDLER(FrameMsg_ScrollRectToVisible, OnScrollRectToVisible)
     IPC_MESSAGE_HANDLER(UnfreezableFrameMsg_DeleteProxy, OnDeleteProxy)
     IPC_MESSAGE_UNHANDLED(handled = false)
   IPC_END_MESSAGE_MAP()
@@ -506,12 +505,6 @@ void RenderFrameProxy::OnTransferUserActivationFrom(int32_t source_routing_id) {
   if (!source_proxy)
     return;
   web_frame()->TransferUserActivationFrom(source_proxy->web_frame());
-}
-
-void RenderFrameProxy::OnScrollRectToVisible(
-    const gfx::Rect& rect_to_scroll,
-    const blink::WebScrollIntoViewParams& params) {
-  web_frame_->ScrollRectToVisible(rect_to_scroll, params);
 }
 
 void RenderFrameProxy::OnDidUpdateVisualProperties(

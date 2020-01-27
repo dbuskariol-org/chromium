@@ -131,7 +131,6 @@ struct FramePolicy;
 struct WebContextMenuData;
 struct WebCursorInfo;
 struct WebImeTextSpan;
-struct WebScrollIntoViewParams;
 }  // namespace blink
 
 namespace gfx {
@@ -783,12 +782,6 @@ class CONTENT_EXPORT RenderFrameImpl
       blink::WebSetSinkIdCompleteCallback callback) override;
   std::unique_ptr<blink::WebURLLoaderFactory> CreateURLLoaderFactory() override;
   void DraggableRegionsChanged() override;
-  // |rect_to_scroll| is with respect to this frame's origin. |rect_to_scroll|
-  // will later be converted to this frame's parent frame origin before being
-  // continuing recursive scrolling in the parent frame's process.
-  void ScrollRectToVisibleInParentFrame(
-      const blink::WebRect& rect_to_scroll,
-      const blink::WebScrollIntoViewParams& params) override;
   blink::BrowserInterfaceBrokerProxy* GetBrowserInterfaceBroker() override;
 
   // WebFrameSerializerClient implementation:

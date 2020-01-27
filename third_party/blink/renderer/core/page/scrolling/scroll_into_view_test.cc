@@ -4,7 +4,7 @@
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/blink/public/mojom/frame/find_in_page.mojom-blink.h"
-#include "third_party/blink/public/platform/web_scroll_into_view_params.h"
+#include "third_party/blink/public/mojom/scroll/scroll_into_view_params.mojom-blink.h"
 #include "third_party/blink/public/web/web_script_source.h"
 #include "third_party/blink/renderer/bindings/core/v8/scroll_into_view_options_or_boolean.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_scroll_into_view_options.h"
@@ -19,6 +19,7 @@
 #include "third_party/blink/renderer/core/layout/layout_object.h"
 #include "third_party/blink/renderer/core/page/scrolling/top_document_root_scroller_controller.h"
 #include "third_party/blink/renderer/core/paint/paint_layer_scrollable_area.h"
+#include "third_party/blink/renderer/core/scroll/scroll_into_view_params_type_converters.h"
 #include "third_party/blink/renderer/core/testing/sim/sim_compositor.h"
 #include "third_party/blink/renderer/core/testing/sim/sim_request.h"
 #include "third_party/blink/renderer/core/testing/sim/sim_test.h"
@@ -588,12 +589,12 @@ TEST_F(ScrollIntoViewTest, StopAtLayoutViewportOption) {
   // stop_at_main_frame_layout_viewport.
   LayoutObject* target =
       GetDocument().getElementById("target")->GetLayoutObject();
-  WebScrollIntoViewParams params(
+  auto params = CreateScrollIntoViewParams(
       ScrollAlignment::kAlignLeftAlways, ScrollAlignment::kAlignTopAlways,
       kProgrammaticScroll, false, kScrollBehaviorInstant);
-  params.stop_at_main_frame_layout_viewport = true;
+  params->stop_at_main_frame_layout_viewport = true;
   target->ScrollRectToVisible(PhysicalRect(target->AbsoluteBoundingBoxRect()),
-                              params);
+                              std::move(params));
 
   ScrollableArea* root_scroller =
       ToLayoutBox(root->GetLayoutObject())->GetScrollableArea();
@@ -683,8 +684,9 @@ TEST_F(ScrollIntoViewTest, SmoothUserScrollNotAbortedByProgrammaticScrolls) {
   Element* content = GetDocument().getElementById("content");
   content->GetLayoutObject()->ScrollRectToVisible(
       content->BoundingBoxForScrollIntoView(),
-      {ScrollAlignment::kAlignToEdgeIfNeeded, ScrollAlignment::kAlignTopAlways,
-       kUserScroll, false, kScrollBehaviorSmooth, true});
+      CreateScrollIntoViewParams(ScrollAlignment::kAlignToEdgeIfNeeded,
+                                 ScrollAlignment::kAlignTopAlways, kUserScroll,
+                                 false, kScrollBehaviorSmooth, true));
 
   // Animating the container
   Compositor().BeginFrame();  // update run_state_.

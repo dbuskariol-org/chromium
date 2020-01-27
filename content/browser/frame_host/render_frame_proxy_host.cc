@@ -34,6 +34,7 @@
 #include "ipc/ipc_message.h"
 #include "mojo/public/cpp/bindings/pending_associated_receiver.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
+#include "third_party/blink/public/mojom/scroll/scroll_into_view_params.mojom.h"
 
 namespace content {
 
@@ -329,8 +330,9 @@ void RenderFrameProxyHost::SetFocusedFrame() {
 
 void RenderFrameProxyHost::ScrollRectToVisible(
     const gfx::Rect& rect_to_scroll,
-    const blink::WebScrollIntoViewParams& params) {
-  Send(new FrameMsg_ScrollRectToVisible(routing_id_, rect_to_scroll, params));
+    blink::mojom::ScrollIntoViewParamsPtr params) {
+  GetAssociatedRemoteFrame()->ScrollRectToVisible(rect_to_scroll,
+                                                  std::move(params));
 }
 
 void RenderFrameProxyHost::OnDetach() {
