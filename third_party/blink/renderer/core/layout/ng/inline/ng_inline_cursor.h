@@ -124,7 +124,7 @@ class CORE_EXPORT NGInlineCursor {
   // or after last fragment in tree.
   bool IsNull() const { return !Current(); }
   bool IsNotNull() const { return Current(); }
-  explicit operator bool() const { return Current(); }
+  operator bool() const { return Current(); }
 
   // True if fragment at the current position can have children.
   bool CanHaveChildren() const;
