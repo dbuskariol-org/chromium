@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_DOCUMENT_METADATA_COPYLESS_PASTE_SERVER_H_
-#define THIRD_PARTY_BLINK_RENDERER_MODULES_DOCUMENT_METADATA_COPYLESS_PASTE_SERVER_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_DOCUMENT_METADATA_DOCUMENT_METADATA_SERVER_H_
+#define THIRD_PARTY_BLINK_RENDERER_MODULES_DOCUMENT_METADATA_DOCUMENT_METADATA_SERVER_H_
 
 #include "mojo/public/cpp/bindings/pending_receiver.h"
-#include "third_party/blink/public/mojom/document_metadata/copyless_paste.mojom-blink.h"
+#include "third_party/blink/public/mojom/document_metadata/document_metadata.mojom-blink.h"
 #include "third_party/blink/renderer/modules/modules_export.h"
 #include "third_party/blink/renderer/platform/heap/persistent.h"
 
@@ -15,14 +15,14 @@ namespace blink {
 class LocalFrame;
 
 // Mojo interface to return extracted metadata for AppIndexing.
-class MODULES_EXPORT CopylessPasteServer final
-    : public mojom::document_metadata::blink::CopylessPaste {
+class MODULES_EXPORT DocumentMetadataServer final
+    : public mojom::blink::DocumentMetadata {
  public:
-  explicit CopylessPasteServer(LocalFrame&);
+  explicit DocumentMetadataServer(LocalFrame&);
 
   static void BindMojoReceiver(
       LocalFrame*,
-      mojo::PendingReceiver<mojom::document_metadata::blink::CopylessPaste>);
+      mojo::PendingReceiver<mojom::blink::DocumentMetadata>);
 
   void GetEntities(GetEntitiesCallback) override;
 
@@ -32,4 +32,4 @@ class MODULES_EXPORT CopylessPasteServer final
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_DOCUMENT_METADATA_COPYLESS_PASTE_SERVER_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_DOCUMENT_METADATA_DOCUMENT_METADATA_SERVER_H_

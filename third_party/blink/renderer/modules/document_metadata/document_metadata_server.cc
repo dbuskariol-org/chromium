@@ -2,38 +2,38 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/modules/document_metadata/copyless_paste_server.h"
+#include "third_party/blink/renderer/modules/document_metadata/document_metadata_server.h"
 
 #include <memory>
 #include <utility>
 
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
-#include "third_party/blink/renderer/modules/document_metadata/copyless_paste_extractor.h"
+#include "third_party/blink/renderer/modules/document_metadata/document_metadata_extractor.h"
 
 namespace blink {
 
-CopylessPasteServer::CopylessPasteServer(LocalFrame& frame) : frame_(frame) {}
+DocumentMetadataServer::DocumentMetadataServer(LocalFrame& frame)
+    : frame_(frame) {}
 
-void CopylessPasteServer::BindMojoReceiver(
+void DocumentMetadataServer::BindMojoReceiver(
     LocalFrame* frame,
-    mojo::PendingReceiver<mojom::document_metadata::blink::CopylessPaste>
-        receiver) {
+    mojo::PendingReceiver<mojom::blink::DocumentMetadata> receiver) {
   DCHECK(frame);
 
   // TODO(wychen): remove BindMojoReceiver pattern, and make this a service
   // associated with frame lifetime.
-  mojo::MakeSelfOwnedReceiver(std::make_unique<CopylessPasteServer>(*frame),
+  mojo::MakeSelfOwnedReceiver(std::make_unique<DocumentMetadataServer>(*frame),
                               std::move(receiver));
 }
 
-void CopylessPasteServer::GetEntities(GetEntitiesCallback callback) {
+void DocumentMetadataServer::GetEntities(GetEntitiesCallback callback) {
   if (!frame_ || !frame_->GetDocument()) {
     std::move(callback).Run(nullptr);
     return;
   }
   std::move(callback).Run(
-      CopylessPasteExtractor::Extract(*frame_->GetDocument()));
+      DocumentMetadataExtractor::Extract(*frame_->GetDocument()));
 }
 
 }  // namespace blink
