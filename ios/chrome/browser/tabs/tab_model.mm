@@ -37,9 +37,8 @@
 #import "ios/chrome/browser/sessions/session_window_ios.h"
 #import "ios/chrome/browser/snapshots/snapshot_cache.h"
 #import "ios/chrome/browser/snapshots/snapshot_cache_factory.h"
-#import "ios/chrome/browser/tabs/tab_model_closing_web_state_observer.h"
+#import "ios/chrome/browser/tabs/closing_web_state_observer.h"
 #import "ios/chrome/browser/tabs/tab_model_list.h"
-#import "ios/chrome/browser/tabs/tab_model_selected_tab_observer.h"
 #import "ios/chrome/browser/tabs/tab_model_synced_window_delegate.h"
 #import "ios/chrome/browser/tabs/tab_parenting_observer.h"
 #import "ios/chrome/browser/web/tab_id_tab_helper.h"
@@ -311,28 +310,19 @@ void RecordMainFrameNavigationMetric(web::WebState* web_state) {
     NSMutableArray<id<WebStateListObserving>>* retainedWebStateListObservers =
         [[NSMutableArray alloc] init];
 
-    TabModelClosingWebStateObserver* tabModelClosingWebStateObserver =
-        [[TabModelClosingWebStateObserver alloc]
-            initWithTabModel:self
-              restoreService:IOSChromeTabRestoreServiceFactory::
-                                 GetForBrowserState(_browserState)];
-    [retainedWebStateListObservers addObject:tabModelClosingWebStateObserver];
+    ClosingWebStateObserver* closingWebStateObserver =
+        [[ClosingWebStateObserver alloc]
+            initWithRestoreService:IOSChromeTabRestoreServiceFactory::
+                                       GetForBrowserState(_browserState)];
+    [retainedWebStateListObservers addObject:closingWebStateObserver];
 
     _webStateListObservers.push_back(
         std::make_unique<WebStateListObserverBridge>(self));
 
     _webStateListObservers.push_back(
-        std::make_unique<WebStateListObserverBridge>(
-            tabModelClosingWebStateObserver));
+        std::make_unique<WebStateListObserverBridge>(closingWebStateObserver));
 
     _webStateListObservers.push_back(std::make_unique<TabParentingObserver>());
-
-    TabModelSelectedTabObserver* tabModelSelectedTabObserver =
-        [[TabModelSelectedTabObserver alloc] initWithTabModel:self];
-    [retainedWebStateListObservers addObject:tabModelSelectedTabObserver];
-    _webStateListObservers.push_back(
-        std::make_unique<WebStateListObserverBridge>(
-            tabModelSelectedTabObserver));
 
     auto webStateListMetricsObserver =
         std::make_unique<WebStateListMetricsObserver>();
