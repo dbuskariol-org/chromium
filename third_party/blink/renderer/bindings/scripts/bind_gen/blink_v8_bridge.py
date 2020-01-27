@@ -259,6 +259,10 @@ def make_default_value_expr(idl_type, default_value):
         elif idl_type.unwrap().is_string:
             initializer = None  # String::IsNull() by default
             assignment_value = "String()"
+        elif idl_type.unwrap().is_buffer_source_type:
+            initializer = "nullptr"
+            is_initializer_lightweight = True
+            assignment_value = "nullptr"
         elif type_info.value_t == "ScriptValue":
             initializer = None  # ScriptValue::IsEmpty() by default
             assignment_value = "ScriptValue()"
