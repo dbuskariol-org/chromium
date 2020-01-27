@@ -27,6 +27,7 @@ static_library("security_interstitial_page") {
     "origin_policy_interstitial_page.h",
     "origin_policy_ui.cc",
     "origin_policy_ui.h",
+    "security_blocking_page_factory.h",
     "security_interstitial_controller_client.cc",
     "security_interstitial_controller_client.h",
     "security_interstitial_page.cc",

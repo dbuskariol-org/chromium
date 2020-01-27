@@ -22,13 +22,13 @@
 #include "base/time/time.h"
 #include "build/build_config.h"
 #include "chrome/browser/ssl/captive_portal_helper.h"
-#include "chrome/browser/ssl/chrome_security_blocking_page_factory.h"
 #include "components/network_time/network_time_tracker.h"
 #include "components/prefs/pref_service.h"
 #include "components/security_interstitials/content/bad_clock_blocking_page.h"
 #include "components/security_interstitials/content/blocked_interception_blocking_page.h"
 #include "components/security_interstitials/content/captive_portal_blocking_page.h"
 #include "components/security_interstitials/content/mitm_software_blocking_page.h"
+#include "components/security_interstitials/content/security_blocking_page_factory.h"
 #include "components/security_interstitials/content/security_interstitial_page.h"
 #include "components/security_interstitials/content/ssl_blocking_page.h"
 #include "components/security_interstitials/content/ssl_cert_reporter.h"
@@ -347,7 +347,7 @@ class SSLErrorHandlerDelegateImpl : public SSLErrorHandler::Delegate {
       const GURL& request_url,
       std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
       CaptivePortalService* captive_portal_service,
-      std::unique_ptr<ChromeSecurityBlockingPageFactory> blocking_page_factory,
+      std::unique_ptr<SecurityBlockingPageFactory> blocking_page_factory,
       SSLErrorHandler::OnBlockingPageShownCallback
           on_blocking_page_shown_callback,
       SSLErrorHandler::BlockingPageReadyCallback blocking_page_ready_callback)
@@ -405,7 +405,7 @@ class SSLErrorHandlerDelegateImpl : public SSLErrorHandler::Delegate {
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
   CaptivePortalService* captive_portal_service_;
 #endif
-  std::unique_ptr<ChromeSecurityBlockingPageFactory> blocking_page_factory_;
+  std::unique_ptr<SecurityBlockingPageFactory> blocking_page_factory_;
   SSLErrorHandler::OnBlockingPageShownCallback on_blocking_page_shown_callback_;
   SSLErrorHandler::BlockingPageReadyCallback blocking_page_ready_callback_;
 };
@@ -549,7 +549,7 @@ void SSLErrorHandler::HandleSSLError(
         blocking_page_ready_callback,
     network_time::NetworkTimeTracker* network_time_tracker,
     CaptivePortalService* captive_portal_service,
-    std::unique_ptr<ChromeSecurityBlockingPageFactory> blocking_page_factory,
+    std::unique_ptr<SecurityBlockingPageFactory> blocking_page_factory,
     bool user_can_proceed_past_interstitial /*=true*/) {
   DCHECK(!FromWebContents(web_contents));
 

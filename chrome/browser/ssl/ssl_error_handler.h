@@ -26,7 +26,7 @@
 #include "net/ssl/ssl_info.h"
 #include "url/gurl.h"
 
-class ChromeSecurityBlockingPageFactory;
+class SecurityBlockingPageFactory;
 class CommonNameMismatchHandler;
 struct DynamicInterstitialInfo;
 
@@ -142,6 +142,8 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
   // |user_can_proceed_past_interstitial| can be given a value of false to
   // change the default behavior of giving users the option to proceed past
   // SSL error interstitials.
+  // |blocking_page_factory| will be used to create the interstitial pages
+  // shown.
   static void HandleSSLError(
       content::WebContents* web_contents,
       int cert_error,
@@ -151,7 +153,7 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
       BlockingPageReadyCallback blocking_page_ready_callback,
       network_time::NetworkTimeTracker* network_time_tracker,
       CaptivePortalService* captive_portal_service,
-      std::unique_ptr<ChromeSecurityBlockingPageFactory> blocking_page_factory,
+      std::unique_ptr<SecurityBlockingPageFactory> blocking_page_factory,
       bool user_can_proceed_past_interstitial = true);
 
   // Sets the binary proto for SSL error assistant. The binary proto
