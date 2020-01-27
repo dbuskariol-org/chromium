@@ -187,7 +187,6 @@ public abstract class ChromeFeatureList {
             "BackgroundTaskSchedulerForBackgroundSync";
     public static final String BIOMETRIC_TOUCH_TO_FILL = "BiometricTouchToFill";
     public static final String BOOKMARKS_SHOW_IN_FOLDER = "BookmarksShowInFolder";
-    public static final String CAPTION_SETTINGS = "CaptionSettings";
     public static final String CAPTIVE_PORTAL_CERTIFICATE_LIST = "CaptivePortalCertificateList";
     public static final String CCT_BACKGROUND_TAB = "CCTBackgroundTab";
     public static final String CCT_INCOGNITO = "CCTIncognito";

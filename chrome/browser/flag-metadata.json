@@ -1111,11 +1111,6 @@
     "expiry_milestone": 76
   },
   {
-    "name": "enable-caption-settings",
-    "owners": [ "evliu@google.com" ],
-    "expiry_milestone": 80
-  },
-  {
     "name": "enable-chrome-duet",
     "owners": [ "mdjones" ],
     "expiry_milestone": 82
