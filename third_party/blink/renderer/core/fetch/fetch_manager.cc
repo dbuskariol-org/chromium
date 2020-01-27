@@ -319,9 +319,6 @@ void FetchManager::Loader::DidReceiveResponse(
     const ResourceResponse& response) {
   // Verify that we're dealing with the URL we expect (which could be an
   // HTTPS-upgraded variant of `url_list_.back()`.
-  //
-  // TODO(horo): This check could be false when we will use the response url
-  // in service worker responses. (crbug.com/553535)
   DCHECK(
       response.CurrentRequestUrl() == url_list_.back() ||
       (response.CurrentRequestUrl().ProtocolIs("https") &&
