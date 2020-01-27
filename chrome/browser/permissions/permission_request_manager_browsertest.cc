@@ -19,7 +19,6 @@
 #include "chrome/browser/permissions/mock_permission_request.h"
 #include "chrome/browser/permissions/permission_context_base.h"
 #include "chrome/browser/permissions/permission_request_impl.h"
-#include "chrome/browser/permissions/permission_util.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/permission_bubble/mock_permission_prompt_factory.h"
@@ -31,6 +30,7 @@
 #include "chrome/test/base/ui_test_utils.h"
 #include "chrome/test/permissions/permission_request_manager_test_api.h"
 #include "components/content_settings/core/common/content_settings_types.h"
+#include "components/permissions/permission_util.h"
 #include "components/variations/variations_associated_data.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
@@ -82,8 +82,8 @@ class PermissionRequestManagerBrowserTest : public InProcessBrowserTest {
 
   void EnableKillSwitch(ContentSettingsType content_settings_type) {
     std::map<std::string, std::string> params;
-    params[PermissionUtil::GetPermissionString(content_settings_type)] =
-        kPermissionsKillSwitchBlockedValue;
+    params[permissions::PermissionUtil::GetPermissionString(
+        content_settings_type)] = kPermissionsKillSwitchBlockedValue;
     variations::AssociateVariationParams(
         kPermissionsKillSwitchFieldStudy, kPermissionsKillSwitchTestGroup,
         params);

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_UTIL_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_UTIL_H_
+#ifndef COMPONENTS_PERMISSIONS_PERMISSION_UTIL_H_
+#define COMPONENTS_PERMISSIONS_PERMISSION_UTIL_H_
 
 #include <string>
 
@@ -11,15 +11,12 @@
 #include "components/content_settings/core/common/content_settings.h"
 #include "components/content_settings/core/common/content_settings_types.h"
 #include "components/permissions/permission_request.h"
-#include "url/gurl.h"
-
-class Profile;
 
 namespace content {
 enum class PermissionType;
 }  // namespace content
 
-enum class PermissionSourceUI;
+namespace permissions {
 
 // This enum backs a UMA histogram, so it must be treated as append-only.
 enum class PermissionAction {
@@ -40,13 +37,11 @@ class PermissionUtil {
   static std::string GetPermissionString(ContentSettingsType);
 
   // Returns the request type corresponding to a permission type.
-  static permissions::PermissionRequestType GetRequestType(
-      ContentSettingsType permission);
+  static PermissionRequestType GetRequestType(ContentSettingsType permission);
 
   // Returns the gesture type corresponding to whether a permission request is
   // made with or without a user gesture.
-  static permissions::PermissionRequestGestureType GetGestureType(
-      bool user_gesture);
+  static PermissionRequestGestureType GetGestureType(bool user_gesture);
 
   // Limited conversion of ContentSettingsType to PermissionType. Returns true
   // if the conversion was performed.
@@ -61,36 +56,10 @@ class PermissionUtil {
   // PermissionManager.
   static bool IsPermission(ContentSettingsType type);
 
-  // A scoped class that will check the current resolved content setting on
-  // construction and report a revocation metric accordingly if the revocation
-  // condition is met (from ALLOW to something else).
-  class ScopedRevocationReporter {
-   public:
-    ScopedRevocationReporter(Profile* profile,
-                             const GURL& primary_url,
-                             const GURL& secondary_url,
-                             ContentSettingsType content_type,
-                             PermissionSourceUI source_ui);
-
-    ScopedRevocationReporter(Profile* profile,
-                             const ContentSettingsPattern& primary_pattern,
-                             const ContentSettingsPattern& secondary_pattern,
-                             ContentSettingsType content_type,
-                             PermissionSourceUI source_ui);
-
-    ~ScopedRevocationReporter();
-
-   private:
-    Profile* profile_;
-    const GURL primary_url_;
-    const GURL secondary_url_;
-    ContentSettingsType content_type_;
-    PermissionSourceUI source_ui_;
-    bool is_initially_allowed_;
-  };
-
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PermissionUtil);
 };
 
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_UTIL_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_PERMISSION_UTIL_H_

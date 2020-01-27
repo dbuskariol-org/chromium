@@ -2,18 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_util.h"
+#include "components/permissions/permission_util.h"
 
-#include "build/build_config.h"
-#include "base/feature_list.h"
 #include "base/logging.h"
-#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
-#include "chrome/browser/permissions/permission_uma_util.h"
-#include "chrome/common/chrome_features.h"
-#include "components/content_settings/core/browser/host_content_settings_map.h"
+#include "build/build_config.h"
 #include "content/public/browser/permission_type.h"
 
 using content::PermissionType;
+
+namespace permissions {
 
 // The returned strings must match any Field Trial configs for the Permissions
 // kill switch e.g. Permissions.Action.Geolocation etc..
@@ -73,48 +70,43 @@ std::string PermissionUtil::GetPermissionString(
   return std::string();
 }
 
-permissions::PermissionRequestType PermissionUtil::GetRequestType(
-    ContentSettingsType type) {
+PermissionRequestType PermissionUtil::GetRequestType(ContentSettingsType type) {
   switch (type) {
     case ContentSettingsType::GEOLOCATION:
-      return permissions::PermissionRequestType::PERMISSION_GEOLOCATION;
+      return PermissionRequestType::PERMISSION_GEOLOCATION;
     case ContentSettingsType::NOTIFICATIONS:
-      return permissions::PermissionRequestType::PERMISSION_NOTIFICATIONS;
+      return PermissionRequestType::PERMISSION_NOTIFICATIONS;
     case ContentSettingsType::MIDI_SYSEX:
-      return permissions::PermissionRequestType::PERMISSION_MIDI_SYSEX;
+      return PermissionRequestType::PERMISSION_MIDI_SYSEX;
     case ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER:
-      return permissions::PermissionRequestType::
-          PERMISSION_PROTECTED_MEDIA_IDENTIFIER;
+      return PermissionRequestType::PERMISSION_PROTECTED_MEDIA_IDENTIFIER;
     case ContentSettingsType::PLUGINS:
-      return permissions::PermissionRequestType::PERMISSION_FLASH;
+      return PermissionRequestType::PERMISSION_FLASH;
     case ContentSettingsType::MEDIASTREAM_MIC:
-      return permissions::PermissionRequestType::PERMISSION_MEDIASTREAM_MIC;
+      return PermissionRequestType::PERMISSION_MEDIASTREAM_MIC;
     case ContentSettingsType::MEDIASTREAM_CAMERA:
-      return permissions::PermissionRequestType::PERMISSION_MEDIASTREAM_CAMERA;
+      return PermissionRequestType::PERMISSION_MEDIASTREAM_CAMERA;
     case ContentSettingsType::ACCESSIBILITY_EVENTS:
-      return permissions::PermissionRequestType::
-          PERMISSION_ACCESSIBILITY_EVENTS;
+      return PermissionRequestType::PERMISSION_ACCESSIBILITY_EVENTS;
     case ContentSettingsType::CLIPBOARD_READ_WRITE:
-      return permissions::PermissionRequestType::
-          PERMISSION_CLIPBOARD_READ_WRITE;
+      return PermissionRequestType::PERMISSION_CLIPBOARD_READ_WRITE;
     case ContentSettingsType::PAYMENT_HANDLER:
-      return permissions::PermissionRequestType::PERMISSION_PAYMENT_HANDLER;
+      return PermissionRequestType::PERMISSION_PAYMENT_HANDLER;
     case ContentSettingsType::NFC:
-      return permissions::PermissionRequestType::PERMISSION_NFC;
+      return PermissionRequestType::PERMISSION_NFC;
     case ContentSettingsType::VR:
-      return permissions::PermissionRequestType::PERMISSION_VR;
+      return PermissionRequestType::PERMISSION_VR;
     case ContentSettingsType::AR:
-      return permissions::PermissionRequestType::PERMISSION_AR;
+      return PermissionRequestType::PERMISSION_AR;
     default:
       NOTREACHED();
-      return permissions::PermissionRequestType::UNKNOWN;
+      return PermissionRequestType::UNKNOWN;
   }
 }
 
-permissions::PermissionRequestGestureType PermissionUtil::GetGestureType(
-    bool user_gesture) {
-  return user_gesture ? permissions::PermissionRequestGestureType::GESTURE
-                      : permissions::PermissionRequestGestureType::NO_GESTURE;
+PermissionRequestGestureType PermissionUtil::GetGestureType(bool user_gesture) {
+  return user_gesture ? PermissionRequestGestureType::GESTURE
+                      : PermissionRequestGestureType::NO_GESTURE;
 }
 
 bool PermissionUtil::GetPermissionType(ContentSettingsType type,
@@ -199,55 +191,4 @@ bool PermissionUtil::IsPermission(ContentSettingsType type) {
   }
 }
 
-PermissionUtil::ScopedRevocationReporter::ScopedRevocationReporter(
-    Profile* profile,
-    const GURL& primary_url,
-    const GURL& secondary_url,
-    ContentSettingsType content_type,
-    PermissionSourceUI source_ui)
-    : profile_(profile),
-      primary_url_(primary_url),
-      secondary_url_(secondary_url),
-      content_type_(content_type),
-      source_ui_(source_ui) {
-  if (!primary_url_.is_valid() ||
-      (!secondary_url_.is_valid() && !secondary_url_.is_empty())) {
-    is_initially_allowed_ = false;
-    return;
-  }
-  HostContentSettingsMap* settings_map =
-      HostContentSettingsMapFactory::GetForProfile(profile_);
-  ContentSetting initial_content_setting = settings_map->GetContentSetting(
-      primary_url_, secondary_url_, content_type_, std::string());
-  is_initially_allowed_ = initial_content_setting == CONTENT_SETTING_ALLOW;
-}
-
-PermissionUtil::ScopedRevocationReporter::ScopedRevocationReporter(
-    Profile* profile,
-    const ContentSettingsPattern& primary_pattern,
-    const ContentSettingsPattern& secondary_pattern,
-    ContentSettingsType content_type,
-    PermissionSourceUI source_ui)
-    : ScopedRevocationReporter(
-          profile,
-          GURL(primary_pattern.ToString()),
-          GURL((secondary_pattern == ContentSettingsPattern::Wildcard())
-                   ? primary_pattern.ToString()
-                   : secondary_pattern.ToString()),
-          content_type,
-          source_ui) {}
-
-PermissionUtil::ScopedRevocationReporter::~ScopedRevocationReporter() {
-  if (!is_initially_allowed_)
-    return;
-  HostContentSettingsMap* settings_map =
-      HostContentSettingsMapFactory::GetForProfile(profile_);
-  ContentSetting final_content_setting = settings_map->GetContentSetting(
-      primary_url_, secondary_url_, content_type_, std::string());
-  if (final_content_setting != CONTENT_SETTING_ALLOW) {
-    // PermissionUmaUtil takes origins, even though they're typed as GURL.
-    GURL requesting_origin = primary_url_.GetOrigin();
-    PermissionUmaUtil::PermissionRevoked(content_type_, source_ui_,
-                                         requesting_origin, profile_);
-  }
-}
+}  // namespace permissions

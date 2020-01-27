@@ -1183,8 +1183,6 @@ jumbo_static_library("browser") {
     "permissions/permission_request_manager.h",
     "permissions/permission_uma_util.cc",
     "permissions/permission_uma_util.h",
-    "permissions/permission_util.cc",
-    "permissions/permission_util.h",
     "permissions/quiet_notification_permission_ui_config.cc",
     "permissions/quiet_notification_permission_ui_config.h",
     "permissions/quiet_notification_permission_ui_state.cc",
