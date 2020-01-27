@@ -417,21 +417,11 @@ void RecordMainFrameNavigationMetric(web::WebState* web_state) {
 
 #pragma mark - SessionWindowRestoring(public)
 
-- (void)saveSessionImmediately:(BOOL)immediately {
-  if (!_sessionRestorationBrowserAgent)
-    return;
-  _sessionRestorationBrowserAgent->SaveSession(immediately);
-}
-
 - (BOOL)isWebUsageEnabled {
   DCHECK(_browserState);
   return WebStateListWebUsageEnablerFactory::GetInstance()
       ->GetForBrowserState(_browserState)
       ->IsWebUsageEnabled();
-}
-
-- (BOOL)isRestoringSession {
-  return _sessionRestorationBrowserAgent->IsRestoringSession();
 }
 
 - (BOOL)restoreSessionWindow:(SessionWindowIOS*)window
@@ -471,7 +461,7 @@ void RecordMainFrameNavigationMetric(web::WebState* web_state) {
 
   // Normally, the session is saved after some timer expires but since the app
   // is about to enter the background send YES to save the session immediately.
-  [self saveSessionImmediately:YES];
+  _sessionRestorationBrowserAgent->SaveSession(/*immediately=*/true);
 
   // Write out a grey version of the current website to disk.
   if (self.webUsageEnabled && _webStateList->GetActiveWebState()) {
