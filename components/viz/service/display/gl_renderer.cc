@@ -455,6 +455,11 @@ void GLRenderer::PrepareSurfaceForPass(
       ClearFramebuffer();
       break;
   }
+
+  if (OverdrawTracingEnabled()) {
+    gl_->GenQueriesEXT(1, &occlusion_query_);
+    gl_->BeginQueryEXT(GL_SAMPLES_PASSED_ARB, occlusion_query_);
+  }
 }
 
 void GLRenderer::ClearFramebuffer() {
@@ -2760,8 +2765,34 @@ void GLRenderer::FinishDrawingFrame() {
                  num_triangles_drawn_);
 }
 
+bool GLRenderer::OverdrawTracingEnabled() {
+  // Only collect trace data if we select viz.overdraw.
+  bool tracing_enabled;
+  TRACE_EVENT_CATEGORY_GROUP_ENABLED(TRACE_DISABLED_BY_DEFAULT("viz.overdraw"),
+                                     &tracing_enabled);
+  // ARB_occlusion_query is required for tracing.
+  // Trace only the root render pass.
+  return tracing_enabled && use_occlusion_query_ &&
+         current_frame()->current_render_pass ==
+             current_frame()->root_render_pass;
+}
+
 void GLRenderer::FinishDrawingQuadList() {
   FlushTextureQuadCache(SHARED_BINDING);
+  if (occlusion_query_) {
+    // Use the current surface area as max result. The effect is that overdraw
+    // is reported as a percentage of the output surface size. ie. 2x overdraw
+    // for the whole screen is reported as 200.
+    const int surface_area = current_surface_size_.GetArea();
+    DCHECK_GT(surface_area, 0);
+
+    gl_->EndQueryEXT(GL_SAMPLES_PASSED_ARB);
+    context_support_->SignalQuery(
+        occlusion_query_, base::BindOnce(&GLRenderer::ProcessOverdrawFeedback,
+                                         weak_ptr_factory_.GetWeakPtr(),
+                                         surface_area, occlusion_query_));
+    occlusion_query_ = 0;
+  }
 }
 
 void GLRenderer::GenerateMipmap() {
@@ -3868,75 +3899,24 @@ void GLRenderer::FlushOverdrawFeedback(const gfx::Rect& output_rect) {
       {4, GL_LESS, 4, 0x7fff0000},   // Red: Overdrawn four or more times.
   };
 
-  // Occlusion queries can be expensive, so only collect trace data if we select
-  // cc.debug.overdraw.
-  bool tracing_enabled;
-  TRACE_EVENT_CATEGORY_GROUP_ENABLED(TRACE_DISABLED_BY_DEFAULT("viz.overdraw"),
-                                     &tracing_enabled);
-
-  // Trace only the root render pass.
-  if (current_frame()->current_render_pass != current_frame()->root_render_pass)
-    tracing_enabled = false;
-
-  // ARB_occlusion_query is required for tracing.
-  if (!use_occlusion_query_)
-    tracing_enabled = false;
-
-  // Use the current surface area as max result. The effect is that overdraw
-  // is reported as a percentage of the output surface size. ie. 2x overdraw
-  // for the whole screen is reported as 200.
-  int max_result = current_surface_size_.GetArea();
-  DCHECK_GT(max_result, 0);
-
-  // Callback is repeating to allow sharing the owned vector<int>.
-  auto overdraw_feedback_callback = base::BindRepeating(
-      &GLRenderer::ProcessOverdrawFeedback, weak_ptr_factory_.GetWeakPtr(),
-      base::Owned(new std::vector<int>), base::size(stencil_tests), max_result);
-
   for (const auto& test : stencil_tests) {
-    GLuint query = 0;
-    if (tracing_enabled) {
-      gl_->GenQueriesEXT(1, &query);
-      gl_->BeginQueryEXT(GL_SAMPLES_PASSED_ARB, query);
-    }
-
     gl_->StencilFunc(test.func, test.ref, 0xffffffff);
     // Transparent color unless color-coding of overdraw is enabled.
     SetShaderColor(settings_->show_overdraw_feedback ? test.color : 0, 1.f);
     gl_->DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
-
-    if (query) {
-      gl_->EndQueryEXT(GL_SAMPLES_PASSED_ARB);
-      context_support_->SignalQuery(
-          query,
-          base::BindOnce(overdraw_feedback_callback, query, test.multiplier));
-    }
   }
 }
 
-void GLRenderer::ProcessOverdrawFeedback(std::vector<int>* overdraw,
-                                         size_t num_expected_results,
-                                         int max_result,
-                                         unsigned query,
-                                         int multiplier) {
+void GLRenderer::ProcessOverdrawFeedback(int surface_area,
+                                         unsigned occlusion_query) {
   unsigned result = 0;
-  if (query) {
-    gl_->GetQueryObjectuivEXT(query, GL_QUERY_RESULT_EXT, &result);
-    gl_->DeleteQueriesEXT(1, &query);
-  }
+  DCHECK(occlusion_query);
+  gl_->GetQueryObjectuivEXT(occlusion_query, GL_QUERY_RESULT_EXT, &result);
+  gl_->DeleteQueriesEXT(1, &occlusion_query);
 
-  // Apply multiplier to get the amount of overdraw.
-  overdraw->push_back(result * multiplier);
-
-  // Return early if we are expecting more results.
-  if (overdraw->size() < num_expected_results)
-    return;
-
-  // Report GPU overdraw as a percentage of |max_result|.
-  TRACE_COUNTER1(
-      TRACE_DISABLED_BY_DEFAULT("viz.overdraw"), "GPU Overdraw",
-      (std::accumulate(overdraw->begin(), overdraw->end(), 0) * 100) /
-          max_result);
+  // Report GPU overdraw as a percentage of |surface_area|.
+  TRACE_COUNTER1(TRACE_DISABLED_BY_DEFAULT("viz.overdraw"), "GPU Overdraw",
+                 (result * 100.0 / surface_area));
 }
 
 void GLRenderer::UpdateRenderPassTextures(
