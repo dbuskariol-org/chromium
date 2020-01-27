@@ -192,6 +192,7 @@ class BLINK_EXPORT WebLocalFrameClient {
   // Returns a blame context for attributing work belonging to this frame.
   virtual BlameContext* GetFrameBlameContext() { return nullptr; }
 
+  // DEPRECATED. Please use GetBrowserInterfaceBroker() instead.
   // Returns an InterfaceProvider the frame can use to request interfaces from
   // the browser. This method may not return nullptr.
   virtual service_manager::InterfaceProvider* GetInterfaceProvider();
