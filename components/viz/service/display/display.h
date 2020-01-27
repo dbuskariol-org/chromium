@@ -234,7 +234,6 @@ class VIZ_SERVICE_EXPORT Display : public DisplaySchedulerClient,
 #endif
   std::unique_ptr<OutputSurface> output_surface_;
   SkiaOutputSurface* const skia_output_surface_;
-  std::unique_ptr<OverlayProcessorInterface> overlay_processor_;
   std::unique_ptr<DisplayDamageTracker> damage_tracker_;
   std::unique_ptr<DisplaySchedulerBase> scheduler_;
   std::unique_ptr<DisplayResourceProvider> resource_provider_;
@@ -244,6 +243,7 @@ class VIZ_SERVICE_EXPORT Display : public DisplaySchedulerClient,
   scoped_refptr<base::SingleThreadTaskRunner> current_task_runner_;
   std::unique_ptr<DirectRenderer> renderer_;
   SoftwareRenderer* software_renderer_ = nullptr;
+  std::unique_ptr<OverlayProcessorInterface> overlay_processor_;
   std::vector<ui::LatencyInfo> stored_latency_info_;
 
   // |pending_presentation_group_timings_| stores a

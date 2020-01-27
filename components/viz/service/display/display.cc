@@ -176,9 +176,9 @@ Display::Display(
       frame_sink_id_(frame_sink_id),
       output_surface_(std::move(output_surface)),
       skia_output_surface_(output_surface_->AsSkiaOutputSurface()),
-      overlay_processor_(std::move(overlay_processor)),
       scheduler_(std::move(scheduler)),
       current_task_runner_(std::move(current_task_runner)),
+      overlay_processor_(std::move(overlay_processor)),
       swapped_trace_id_(GetStartingTraceId()),
       last_swap_ack_trace_id_(swapped_trace_id_),
       last_presented_trace_id_(swapped_trace_id_) {
@@ -724,6 +724,7 @@ void Display::DidReceiveSwapBuffersAck(const gfx::SwapTimings& timings) {
   if (no_pending_swaps_callback_ && pending_swaps_ == 0)
     std::move(no_pending_swaps_callback_).Run();
 
+  overlay_processor_->OverlayPresentationComplete();
   if (renderer_)
     renderer_->SwapBuffersComplete();
 
