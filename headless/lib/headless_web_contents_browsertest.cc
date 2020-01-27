@@ -793,7 +793,13 @@ class HeadlessWebContentsBeginFrameControlBasicTest
   }
 };
 
+#if defined(OS_WIN)
+// TODO(crbug.com/1045980): Disabled due to flakiness.
+DISABLED_HEADLESS_ASYNC_DEVTOOLED_TEST_F(
+    HeadlessWebContentsBeginFrameControlBasicTest);
+#else
 HEADLESS_ASYNC_DEVTOOLED_TEST_F(HeadlessWebContentsBeginFrameControlBasicTest);
+#endif
 
 class HeadlessWebContentsBeginFrameControlViewportTest
     : public HeadlessWebContentsBeginFrameControlTest {
@@ -909,7 +915,12 @@ class CookiesEnabled : public HeadlessAsyncDevTooledBrowserTest,
   }
 };
 
+#if defined(OS_WIN)
+// TODO(crbug.com/1045980): Disabled due to flakiness.
+DISABLED_HEADLESS_ASYNC_DEVTOOLED_TEST_F(CookiesEnabled);
+#else
 HEADLESS_ASYNC_DEVTOOLED_TEST_F(CookiesEnabled);
+#endif
 
 namespace {
 const char* kPageWhichOpensAWindow = R"(
@@ -964,7 +975,12 @@ class DontBlockWebContentsOpenTest : public WebContentsOpenTest {
   }
 };
 
+#if defined(OS_WIN)
+// TODO(crbug.com/1045980): Disabled due to flakiness.
+DISABLED_HEADLESS_ASYNC_DEVTOOLED_TEST_F(DontBlockWebContentsOpenTest);
+#else
 HEADLESS_ASYNC_DEVTOOLED_TEST_F(DontBlockWebContentsOpenTest);
+#endif
 
 class BlockWebContentsOpenTest : public WebContentsOpenTest {
  public:
@@ -980,6 +996,11 @@ class BlockWebContentsOpenTest : public WebContentsOpenTest {
   }
 };
 
+#if defined(OS_WIN)
+// TODO(crbug.com/1045980): Disabled due to flakiness.
+DISABLED_HEADLESS_ASYNC_DEVTOOLED_TEST_F(BlockWebContentsOpenTest);
+#else
 HEADLESS_ASYNC_DEVTOOLED_TEST_F(BlockWebContentsOpenTest);
+#endif
 
 }  // namespace headless
