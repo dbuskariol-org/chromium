@@ -56746,6 +56746,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="6" label="MODEL_MISSING_FIELDS"/>
   <int value="7" label="MODEL_INVALID_VERSION_NUMBER"/>
   <int value="8" label="BAD_HASH_IDS"/>
+  <int value="9" label="MODEL_NEVER_FETCHED"/>
 </enum>
 
 <enum name="SBClientPhishingScorerCreationStatus">
