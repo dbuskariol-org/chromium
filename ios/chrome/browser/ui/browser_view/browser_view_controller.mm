@@ -2498,12 +2498,12 @@ NSString* const kBrowserViewControllerSnackbarCategory =
 - (CGRect)ntpFrameForWebState:(web::WebState*)webState {
   NewTabPageTabHelper* NTPHelper = NewTabPageTabHelper::FromWebState(webState);
   DCHECK(NTPHelper && NTPHelper->IsActive());
-  // NTP expects to be laid out behind the bottom toolbar.
-  UIEdgeInsets viewportInsets = [self viewportInsetsForView:self.contentArea];
-  if (IsRegularXRegularSizeClass())
-    viewportInsets.bottom = 0.0;
-  if (IsSplitToolbarMode(self))
-    viewportInsets.top = 0;
+  // NTP is laid out only in the visible part of the screen.
+  UIEdgeInsets viewportInsets = UIEdgeInsetsZero;
+  if (!IsRegularXRegularSizeClass())
+    viewportInsets.bottom = [self bottomToolbarHeight];
+  if (!IsSplitToolbarMode(self))
+    viewportInsets.top = [self expandedTopToolbarHeight];
   return UIEdgeInsetsInsetRect(self.contentArea.bounds, viewportInsets);
 }
 
