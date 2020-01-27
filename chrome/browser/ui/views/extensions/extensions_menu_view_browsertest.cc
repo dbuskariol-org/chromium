@@ -442,6 +442,31 @@ IN_PROC_BROWSER_TEST_F(ExtensionsMenuViewBrowserTest,
       browser()->tab_strip_model()->GetActiveWebContents()->GetVisibleURL());
 }
 
+// Tests that clicking on the context menu button of an extension item opens the
+// context menu.
+IN_PROC_BROWSER_TEST_F(ExtensionsMenuViewBrowserTest,
+                       ClickingContextMenuButton) {
+  LoadTestExtension("extensions/uitest/window_open");
+  ClickExtensionsMenuButton();
+
+  auto menu_items = GetExtensionsMenuItemViews();
+  ASSERT_EQ(1u, menu_items.size());
+  ExtensionsMenuItemView* item_view = menu_items[0];
+  EXPECT_FALSE(item_view->IsContextMenuRunning());
+
+  views::ImageButton* context_menu_button =
+      menu_items[0]->context_menu_button_for_testing();
+  ui::MouseEvent press_event(ui::ET_MOUSE_PRESSED, gfx::Point(), gfx::Point(),
+                             base::TimeTicks(), ui::EF_LEFT_MOUSE_BUTTON, 0);
+  context_menu_button->OnMousePressed(press_event);
+  ui::MouseEvent release_event(ui::ET_MOUSE_RELEASED, gfx::Point(),
+                               gfx::Point(), base::TimeTicks(),
+                               ui::EF_LEFT_MOUSE_BUTTON, 0);
+  context_menu_button->OnMouseReleased(release_event);
+
+  EXPECT_TRUE(item_view->IsContextMenuRunning());
+}
+
 IN_PROC_BROWSER_TEST_F(ExtensionsMenuViewBrowserTest, InvokeUi_InstallDialog) {
   ShowAndVerifyUi();
 }
