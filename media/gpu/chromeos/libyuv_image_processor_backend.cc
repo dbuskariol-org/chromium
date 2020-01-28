@@ -77,7 +77,8 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
   // input.
   VideoFrame::StorageType input_storage_type = VideoFrame::STORAGE_UNKNOWN;
   for (auto input_type : input_config.preferred_storage_types) {
-    if (input_type == VideoFrame::STORAGE_DMABUFS) {
+    if (input_type == VideoFrame::STORAGE_DMABUFS ||
+        input_type == VideoFrame::STORAGE_GPU_MEMORY_BUFFER) {
       input_frame_mapper = VideoFrameMapperFactory::CreateMapper(
           input_config.fourcc.ToVideoPixelFormat(), input_type, true);
       if (input_frame_mapper) {
@@ -99,7 +100,8 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
   std::unique_ptr<VideoFrameMapper> output_frame_mapper;
   VideoFrame::StorageType output_storage_type = VideoFrame::STORAGE_UNKNOWN;
   for (auto output_type : output_config.preferred_storage_types) {
-    if (output_type == VideoFrame::STORAGE_DMABUFS) {
+    if (output_type == VideoFrame::STORAGE_DMABUFS ||
+        output_type == VideoFrame::STORAGE_GPU_MEMORY_BUFFER) {
       output_frame_mapper = VideoFrameMapperFactory::CreateMapper(
           output_config.fourcc.ToVideoPixelFormat(), output_type, true);
       if (output_frame_mapper) {
@@ -189,7 +191,8 @@ void LibYUVImageProcessorBackend::Process(
     FrameReadyCB cb) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(backend_sequence_checker_);
   DVLOGF(4);
-  if (input_frame->storage_type() == VideoFrame::STORAGE_DMABUFS) {
+  if (input_frame->storage_type() == VideoFrame::STORAGE_DMABUFS ||
+      input_frame->storage_type() == VideoFrame::STORAGE_GPU_MEMORY_BUFFER) {
     DCHECK_NE(input_frame_mapper_.get(), nullptr);
     input_frame = input_frame_mapper_->Map(std::move(input_frame));
     if (!input_frame) {
@@ -202,7 +205,8 @@ void LibYUVImageProcessorBackend::Process(
   // We don't replace |output_frame| with a mapped frame, because |output_frame|
   // is the output of ImageProcessor.
   scoped_refptr<VideoFrame> mapped_frame = output_frame;
-  if (output_frame->storage_type() == VideoFrame::STORAGE_DMABUFS) {
+  if (output_frame->storage_type() == VideoFrame::STORAGE_DMABUFS ||
+      output_frame->storage_type() == VideoFrame::STORAGE_GPU_MEMORY_BUFFER) {
     DCHECK_NE(output_frame_mapper_.get(), nullptr);
     mapped_frame = output_frame_mapper_->Map(output_frame);
     if (!mapped_frame) {
