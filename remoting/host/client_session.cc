@@ -40,7 +40,6 @@
 #include "remoting/protocol/session_config.h"
 #include "remoting/protocol/video_frame_pump.h"
 #include "third_party/webrtc/modules/desktop_capture/desktop_capturer.h"
-#include "third_party/webrtc/modules/desktop_capture/mouse_cursor.h"
 
 namespace remoting {
 
@@ -390,6 +389,7 @@ void ClientSession::OnConnectionChannelsConnected() {
   mouse_shape_pump_.reset(
       new MouseShapePump(desktop_environment_->CreateMouseCursorMonitor(),
                          connection_->client_stub()));
+  mouse_shape_pump_->SetMouseCursorMonitorCallback(this);
 
   // Create KeyboardLayoutMonitor to send keyboard layout.
   // Unretained is sound because callback will never be called after
@@ -505,15 +505,29 @@ ClientSessionControl* ClientSession::session_control() {
 
 void ClientSession::OnPointerLockChanged(bool active) {
   if (active) {
-    mouse_shape_pump_->SetMouseCursorMonitorCallback(
-        desktop_and_cursor_composer_raw_);
+    if (mouse_cursor_ && desktop_and_cursor_composer_raw_)
+      desktop_and_cursor_composer_raw_->OnMouseCursor(
+          webrtc::MouseCursor::CopyOf(*mouse_cursor_));
   } else if (desktop_and_cursor_composer_raw_) {
-    mouse_shape_pump_->SetMouseCursorMonitorCallback(nullptr);
     webrtc::MouseCursor* empty = new webrtc::MouseCursor(
         new webrtc::BasicDesktopFrame(webrtc::DesktopSize(0, 0)),
         webrtc::DesktopVector(0, 0));
     desktop_and_cursor_composer_raw_->OnMouseCursor(empty);
   }
+  pointer_lock_active_ = active;
+}
+
+void ClientSession::OnMouseCursor(webrtc::MouseCursor* mouse_cursor) {
+  mouse_cursor_.reset(mouse_cursor);
+  if (pointer_lock_active_ && desktop_and_cursor_composer_raw_)
+    desktop_and_cursor_composer_raw_->OnMouseCursor(
+        webrtc::MouseCursor::CopyOf(*mouse_cursor_));
+}
+
+void ClientSession::OnMouseCursorPosition(
+    const webrtc::DesktopVector& position) {
+  if (pointer_lock_active_ && desktop_and_cursor_composer_raw_)
+    desktop_and_cursor_composer_raw_->OnMouseCursorPosition(position);
 }
 
 void ClientSession::RegisterCreateHandlerCallbackForTesting(

@@ -41,6 +41,7 @@
 #include "third_party/webrtc/modules/desktop_capture/desktop_and_cursor_composer.h"
 #include "third_party/webrtc/modules/desktop_capture/desktop_capture_types.h"
 #include "third_party/webrtc/modules/desktop_capture/desktop_geometry.h"
+#include "third_party/webrtc/modules/desktop_capture/mouse_cursor.h"
 #include "third_party/webrtc/modules/desktop_capture/mouse_cursor_monitor.h"
 #include "ui/events/event.h"
 
@@ -65,7 +66,8 @@ class ClientSession : public protocol::HostStub,
                       public protocol::VideoStream::Observer,
                       public ClientSessionControl,
                       public ClientSessionDetails,
-                      public PointerLockDetector::EventHandler {
+                      public PointerLockDetector::EventHandler,
+                      public webrtc::MouseCursorMonitor::Callback {
  public:
   // Callback interface for passing events to the ChromotingHost.
   class EventHandler {
@@ -153,6 +155,10 @@ class ClientSession : public protocol::HostStub,
 
   // PointerLockDetector::EventHandler interface
   void OnPointerLockChanged(bool active) override;
+
+  // webrtc::MouseCursorMonitor::Callback implementation.
+  void OnMouseCursor(webrtc::MouseCursor* mouse_cursor) override;
+  void OnMouseCursorPosition(const webrtc::DesktopVector& position) override;
 
   protocol::ConnectionToClient* connection() const { return connection_.get(); }
 
@@ -314,6 +320,9 @@ class ClientSession : public protocol::HostStub,
   // TODO(crbug.com/1043325): Replace this with something more robust if the
   // relative pointer experiment is a success.
   webrtc::DesktopAndCursorComposer* desktop_and_cursor_composer_raw_ = nullptr;
+
+  std::unique_ptr<webrtc::MouseCursor> mouse_cursor_;
+  bool pointer_lock_active_ = false;
 
   SEQUENCE_CHECKER(sequence_checker_);
 
