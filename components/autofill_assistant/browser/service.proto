@@ -1391,7 +1391,7 @@ message UserFormSectionProto {
 
 // Asks to provide the data used by UseAddressAction and
 // UseCreditCardAction.
-// Next: 22
+// Next: 25
 message CollectUserDataProto {
   enum TermsAndConditionsState {
     // No choice has been made yet.
@@ -1464,6 +1464,8 @@ message CollectUserDataProto {
   repeated UserFormSectionProto additional_appended_sections = 19;
   // Backend-configured user interface to show.
   optional GenericUserInterfaceProto generic_user_interface = 22;
+  // Text to be shown in a separate info section.
+  optional string info_section_text = 24;
 }
 
 // Resets Autofill Assistant: clears any state and server payload.
