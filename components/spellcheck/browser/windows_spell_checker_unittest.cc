@@ -7,15 +7,19 @@
 #include <stddef.h>
 
 #include "base/bind.h"
+#include "base/no_destructor.h"
 #include "base/run_loop.h"
 #include "base/single_thread_task_runner.h"
 #include "base/stl_util.h"
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
+#include "base/task/post_task.h"
 #include "base/test/scoped_feature_list.h"
 #include "base/test/task_environment.h"
+#include "base/threading/thread_task_runner_handle.h"
 #include "base/win/windows_version.h"
 #include "build/build_config.h"
+#include "components/spellcheck/browser/windows_spell_checker.h"
 #include "components/spellcheck/common/spellcheck_features.h"
 #include "components/spellcheck/common/spellcheck_result.h"
 #include "components/spellcheck/spellcheck_buildflags.h"
@@ -24,8 +28,20 @@
 
 namespace {
 
-class SpellcheckPlatformWinTest : public testing::Test {
+class WindowsSpellCheckerTest : public testing::Test {
  public:
+  WindowsSpellCheckerTest() {
+    if (spellcheck::WindowsVersionSupportsSpellchecker()) {
+      win_spell_checker_ = std::make_unique<WindowsSpellChecker>(
+          base::ThreadTaskRunnerHandle::Get(),
+          base::CreateCOMSTATaskRunner({base::ThreadPool(), base::MayBlock()}));
+    }
+  }
+
+  WindowsSpellChecker* GetWindowsSpellChecker() {
+    return win_spell_checker_.get();
+  }
+
   void RunUntilResultReceived() {
     if (callback_finished_)
       return;
@@ -77,8 +93,8 @@ class SpellcheckPlatformWinTest : public testing::Test {
   }
 #endif  // BUILDFLAG(USE_WINDOWS_PREFERRED_LANGUAGES_FOR_SPELLCHECK
 
-  // TODO(crbug.com/1035044) Make these methods actual tests. See the
-  //                         task_environment_ comment below.
+  // TODO(gujen) Make these methods actual tests. See the task_environment_
+  // comment below.
   void RequestTextCheckTests() {
     static const struct {
       const char* text_to_check;
@@ -99,11 +115,10 @@ class SpellcheckPlatformWinTest : public testing::Test {
       const base::string16 word(base::ASCIIToUTF16(test_case.text_to_check));
 
       // Check if the suggested words occur.
-      spellcheck_platform::RequestTextCheck(
+      GetWindowsSpellChecker()->RequestTextCheckForAllLanguages(
           1, word,
-          base::BindOnce(
-              &SpellcheckPlatformWinTest::TextCheckCompletionCallback,
-              base::Unretained(this)));
+          base::BindOnce(&WindowsSpellCheckerTest::TextCheckCompletionCallback,
+                         base::Unretained(this)));
       RunUntilResultReceived();
 
       ASSERT_EQ(1u, spell_check_results_.size())
@@ -127,8 +142,8 @@ class SpellcheckPlatformWinTest : public testing::Test {
 
 #if BUILDFLAG(USE_WINDOWS_PREFERRED_LANGUAGES_FOR_SPELLCHECK)
   void RetrieveSupportedWindowsPreferredLanguagesTests() {
-    spellcheck_platform::RetrieveSupportedWindowsPreferredLanguages(
-        base::BindOnce(&SpellcheckPlatformWinTest::
+    GetWindowsSpellChecker()->RetrieveSupportedWindowsPreferredLanguages(
+        base::BindOnce(&WindowsSpellCheckerTest::
                            RetrieveSupportedWindowsPreferredLanguagesCallback,
                        base::Unretained(this)));
 
@@ -143,11 +158,11 @@ class SpellcheckPlatformWinTest : public testing::Test {
 
 #if BUILDFLAG(USE_WIN_HYBRID_SPELLCHECKER)
   void PerLanguageSuggestionsTests() {
-    spellcheck_platform::GetPerLanguageSuggestions(
+    GetWindowsSpellChecker()->GetPerLanguageSuggestions(
         base::ASCIIToUTF16("tihs"),
-        base::BindOnce(&SpellcheckPlatformWinTest::
-                           PerLanguageSuggestionsCompletionCallback,
-                       base::Unretained(this)));
+        base::BindOnce(
+            &WindowsSpellCheckerTest::PerLanguageSuggestionsCompletionCallback,
+            base::Unretained(this)));
     RunUntilResultReceived();
 
     ASSERT_EQ(per_language_suggestions_.size(), 1u);
@@ -156,7 +171,10 @@ class SpellcheckPlatformWinTest : public testing::Test {
 #endif  // BUILDFLAG(USE_WIN_HYBRID_SPELLCHECKER)
 
  protected:
+  std::unique_ptr<WindowsSpellChecker> win_spell_checker_;
+
   bool callback_finished_ = false;
+  base::OnceClosure quit_;
 
   bool set_language_result_;
   std::vector<SpellCheckResult> spell_check_results_;
@@ -166,24 +184,23 @@ class SpellcheckPlatformWinTest : public testing::Test {
 #if BUILDFLAG(USE_WINDOWS_PREFERRED_LANGUAGES_FOR_SPELLCHECK)
   std::vector<std::string> preferred_languages_;
 #endif  // BUILDFLAG(USE_WINDOWS_PREFERRED_LANGUAGES_FOR_SPELLCHECK
-  base::OnceClosure quit_;
 
-  // The WindowsSpellChecker class is instantiated with static storage using
-  // base::NoDestructor (see GetWindowsSpellChecker) and creates its own task
-  // runner. The thread pool is destroyed together with TaskEnvironment when the
-  // test fixture object is destroyed. Therefore without some elaborate
-  // test-only code added to the WindowsSpellChecker class or a means to keep
-  // the TaskEnvironment alive (which would set off leak detection), easiest
-  // approach for now is to add all test coverage for Windows spellchecking to
-  // a single test.
+  // TODO(gujen) (crbug.com/1035044) The WindowsSpellChecker class is
+  // instantiated with static storage using base::NoDestructor (see
+  // GetWindowsSpellChecker) and creates its own task runner. The thread pool is
+  // destroyed together with TaskEnvironment when the test fixture object is
+  // destroyed. Therefore without some elaborate test-only code added to the
+  // WindowsSpellChecker class or a means to keep the TaskEnvironment alive
+  // (which would set off leak detection), easiest approach for now is to add
+  // all test coverage for Windows spellchecking to a single test.
   base::test::TaskEnvironment task_environment_{
       base::test::TaskEnvironment::MainThreadType::UI};
 };
 
-// TODO(crbug.com/1035044) Split this test into multiple tests instead of
-//                         individual methods. See the task_environment_
-//                         comment in the SpellcheckPlatformWinTest class.
-TEST_F(SpellcheckPlatformWinTest, SpellCheckAsyncMethods) {
+// TODO(gujen) Split this test into multiple tests instead of individual
+//             methods. See the task_environment_ comment in the
+//             WindowsSpellCheckerTest class.
+TEST_F(WindowsSpellCheckerTest, SpellCheckAsyncMethods) {
   if (!spellcheck::WindowsVersionSupportsSpellchecker()) {
     return;
   }
@@ -191,9 +208,9 @@ TEST_F(SpellcheckPlatformWinTest, SpellCheckAsyncMethods) {
   base::test::ScopedFeatureList feature_list;
   feature_list.InitAndEnableFeature(spellcheck::kWinUseBrowserSpellChecker);
 
-  spellcheck_platform::SetLanguage(
+  GetWindowsSpellChecker()->CreateSpellChecker(
       "en-US",
-      base::BindOnce(&SpellcheckPlatformWinTest::SetLanguageCompletionCallback,
+      base::BindOnce(&WindowsSpellCheckerTest::SetLanguageCompletionCallback,
                      base::Unretained(this)));
 
   RunUntilResultReceived();
