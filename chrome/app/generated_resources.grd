@@ -1685,6 +1685,10 @@ are declared in tools/grit/grit_rule.gni.
         desc="Message shown in the download shelf when a download is being scanned">
         <ph name="FILE_NAME">$1<ex>bla.exe</ex></ph> is being scanned.
       </message>
+      <message name="IDS_PROMPT_CONFIRM_MIXED_CONTENT_DOWNLOAD"
+        desc="Message shown to the user to validate the download when the download content is a mixed-content download.">
+        <ph name="FILE_NAME">$1<ex>bla.exe</ex></ph> can't be downloaded securely.
+      </message>
       <message name="IDS_PROMPT_DOWNLOAD_BLOCKED_TOO_LARGE"
         desc="Message shown in the download shelf when a download is blocked for being too large">
         <ph name="FILE_NAME">$1<ex>bla.exe</ex></ph> is too large for cloud scanning and has been blocked from opening.
@@ -1709,6 +1713,14 @@ are declared in tools/grit/grit_rule.gni.
         desc="Message shown in the download shelf when a download is finished being scanned, and issues were found">
         Download contains malware.
       </message>
+      <message name="IDS_PROMPT_DOWNLOAD_MIXED_CONTENT_WARNING"
+        desc="Message shown in the download shelf when a download is mixed content, and Chrome needs to show a warning.">
+        <ph name="FILE_NAME">$1<ex>bla.exe</ex></ph> can't be downloaded securely.
+      </message>
+      <message name="IDS_PROMPT_DOWNLOAD_MIXED_CONTENT_BLOCKED"
+        desc="Message shown in the download shelf when a download is mixed content, and Chrome has blocked it.">
+        <ph name="FILE_NAME">$1<ex>bla.exe</ex></ph> can't be downloaded securely.
+      </message>
       <message name="IDS_PROMPT_APP_DEEP_SCANNING"
         desc="Message shown in the download shelf when Chrome recommends uploading the file for additional scanning">
         <ph name="FILE_NAME">$1<ex>bla.exe</ex></ph> is unknown. Scan file to minimize risk.
@@ -1724,6 +1736,10 @@ are declared in tools/grit/grit_rule.gni.
       <message name="IDS_BLOCK_REASON_GENERIC_DOWNLOAD"
          desc="Message shown to the user on chrome://downloads page to explain that this download is blocked because it may be dangerous.">
         This type of file may harm your computer.
+      </message>
+      <message name="IDS_BLOCK_REASON_MIXED_CONTENT"
+         desc="Message shown to the user on chrome://downloads page to explain that this download is blocked because it is mixed-content.">
+        This file can't be downloaded securely.
       </message>
       <message name="IDS_DEEP_SCANNED_SAFE_DESCRIPTION"
         desc="Message shown to the user on chrome://downloads page to explain this this download was deep scanned, and found to be safe.">
@@ -2038,6 +2054,10 @@ are declared in tools/grit/grit_rule.gni.
                    desc="Download context menu: Show information about interrupted downloads">
             &amp;More information
           </message>
+          <message name="IDS_DOWNLOAD_MENU_LEARN_MORE_MIXED_CONTENT"
+                   desc="Download context menu: Show information about mixed content downloads">
+            &amp;Learn more
+          </message>
         </if>
         <if expr="use_titlecase">
            <if expr="is_macosx">
@@ -2101,6 +2121,10 @@ are declared in tools/grit/grit_rule.gni.
           <message name="IDS_DOWNLOAD_MENU_LEARN_MORE_INTERRUPTED"
                    desc="In Title Case: Download context menu: Show information about interrupted downloads">
             &amp;More Information
+          </message>
+          <message name="IDS_DOWNLOAD_MENU_LEARN_MORE_MIXED_CONTENT"
+                   desc="In Title Case: Download context menu: Show information about mixed content downloads">
+            &amp;Learn More
           </message>
         </if>  <!-- not use_titlecase -->
         <if expr="is_win">
