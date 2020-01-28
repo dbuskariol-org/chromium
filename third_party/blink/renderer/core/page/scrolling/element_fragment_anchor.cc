@@ -157,7 +157,8 @@ void ElementFragmentAnchor::Installed() {
   needs_invoke_ = true;
 }
 
-void ElementFragmentAnchor::DidScroll(ScrollType type) {
+void ElementFragmentAnchor::DidScroll(
+    mojom::blink::ScrollIntoViewParams::Type type) {
   if (!IsExplicitScrollType(type))
     return;
 

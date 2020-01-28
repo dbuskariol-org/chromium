@@ -36,51 +36,6 @@ TypeConverter<blink::ScrollAlignment, blink::mojom::blink::ScrollAlignmentPtr>::
 }
 
 // static
-blink::mojom::blink::ScrollIntoViewParams::Type
-TypeConverter<blink::mojom::blink::ScrollIntoViewParams::Type,
-              blink::ScrollType>::Convert(blink::ScrollType type) {
-  switch (type) {
-    case blink::kUserScroll:
-      return blink::mojom::blink::ScrollIntoViewParams::Type::kUser;
-    case blink::kProgrammaticScroll:
-      return blink::mojom::blink::ScrollIntoViewParams::Type::kProgrammatic;
-    case blink::kClampingScroll:
-      return blink::mojom::blink::ScrollIntoViewParams::Type::kClamping;
-    case blink::kCompositorScroll:
-      return blink::mojom::blink::ScrollIntoViewParams::Type::kCompositor;
-    case blink::kAnchoringScroll:
-      return blink::mojom::blink::ScrollIntoViewParams::Type::kAnchoring;
-    case blink::kSequencedScroll:
-      return blink::mojom::blink::ScrollIntoViewParams::Type::kSequenced;
-  }
-  NOTREACHED();
-  return blink::mojom::blink::ScrollIntoViewParams::Type::kUser;
-}
-
-// static
-blink::ScrollType
-TypeConverter<blink::ScrollType,
-              blink::mojom::blink::ScrollIntoViewParams::Type>::
-    Convert(blink::mojom::blink::ScrollIntoViewParams::Type type) {
-  switch (type) {
-    case blink::mojom::blink::ScrollIntoViewParams::Type::kUser:
-      return blink::kUserScroll;
-    case blink::mojom::blink::ScrollIntoViewParams::Type::kProgrammatic:
-      return blink::kProgrammaticScroll;
-    case blink::mojom::blink::ScrollIntoViewParams::Type::kClamping:
-      return blink::kClampingScroll;
-    case blink::mojom::blink::ScrollIntoViewParams::Type::kCompositor:
-      return blink::kCompositorScroll;
-    case blink::mojom::blink::ScrollIntoViewParams::Type::kAnchoring:
-      return blink::kAnchoringScroll;
-    case blink::mojom::blink::ScrollIntoViewParams::Type::kSequenced:
-      return blink::kSequencedScroll;
-  }
-  NOTREACHED();
-  return blink::kUserScroll;
-}
-
-// static
 blink::mojom::blink::ScrollAlignment::Behavior TypeConverter<
     blink::mojom::blink::ScrollAlignment::Behavior,
     blink::ScrollAlignmentBehavior>::Convert(blink::ScrollAlignmentBehavior
@@ -137,7 +92,7 @@ namespace blink {
 mojom::blink::ScrollIntoViewParamsPtr CreateScrollIntoViewParams(
     ScrollAlignment align_x,
     ScrollAlignment align_y,
-    ScrollType scroll_type,
+    mojom::blink::ScrollIntoViewParams::Type scroll_type,
     bool make_visible_in_visual_viewport,
     mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior,
     bool is_for_scroll_sequence,
@@ -145,8 +100,7 @@ mojom::blink::ScrollIntoViewParamsPtr CreateScrollIntoViewParams(
   auto params = mojom::blink::ScrollIntoViewParams::New();
   params->align_x = mojom::blink::ScrollAlignment::From(align_x);
   params->align_y = mojom::blink::ScrollAlignment::From(align_y);
-  params->type =
-      mojo::ConvertTo<mojom::blink::ScrollIntoViewParams::Type>(scroll_type);
+  params->type = scroll_type;
   params->make_visible_in_visual_viewport = make_visible_in_visual_viewport;
   params->behavior = scroll_behavior;
   params->is_for_scroll_sequence = is_for_scroll_sequence;

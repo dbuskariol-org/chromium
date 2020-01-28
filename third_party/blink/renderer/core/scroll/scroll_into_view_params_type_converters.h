@@ -28,20 +28,6 @@ struct CORE_EXPORT TypeConverter<blink::ScrollAlignment,
 };
 
 template <>
-struct TypeConverter<blink::mojom::blink::ScrollIntoViewParams::Type,
-                     blink::ScrollType> {
-  static blink::mojom::blink::ScrollIntoViewParams::Type Convert(
-      blink::ScrollType type);
-};
-
-template <>
-struct TypeConverter<blink::ScrollType,
-                     blink::mojom::blink::ScrollIntoViewParams::Type> {
-  static blink::ScrollType Convert(
-      blink::mojom::blink::ScrollIntoViewParams::Type type);
-};
-
-template <>
 struct TypeConverter<blink::mojom::blink::ScrollAlignment::Behavior,
                      blink::ScrollAlignmentBehavior> {
   static blink::mojom::blink::ScrollAlignment::Behavior Convert(
@@ -62,7 +48,8 @@ namespace blink {
 CORE_EXPORT mojom::blink::ScrollIntoViewParamsPtr CreateScrollIntoViewParams(
     ScrollAlignment = ScrollAlignment::kAlignCenterIfNeeded,
     ScrollAlignment = ScrollAlignment::kAlignCenterIfNeeded,
-    ScrollType scroll_type = kProgrammaticScroll,
+    mojom::blink::ScrollIntoViewParams::Type scroll_type =
+        mojom::blink::ScrollIntoViewParams::Type::kProgrammatic,
     bool make_visible_in_visual_viewport = true,
     mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior =
         mojom::blink::ScrollIntoViewParams::Behavior::kAuto,

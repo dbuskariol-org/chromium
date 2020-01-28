@@ -751,11 +751,11 @@ PhysicalRect LayoutObject::ScrollRectToVisible(
   if (!enclosing_box)
     return rect;
 
-  auto type = mojo::ConvertTo<ScrollType>(params->type);
-
   GetDocument().GetFrame()->GetSmoothScrollSequencer().AbortAnimations();
-  GetDocument().GetFrame()->GetSmoothScrollSequencer().SetScrollType(type);
-  params->is_for_scroll_sequence |= type == kProgrammaticScroll;
+  GetDocument().GetFrame()->GetSmoothScrollSequencer().SetScrollType(
+      params->type);
+  params->is_for_scroll_sequence |=
+      params->type == mojom::blink::ScrollIntoViewParams::Type::kProgrammatic;
   PhysicalRect new_location =
       enclosing_box->ScrollRectToVisibleRecursive(rect, std::move(params));
   GetDocument().GetFrame()->GetSmoothScrollSequencer().RunQueuedAnimations();

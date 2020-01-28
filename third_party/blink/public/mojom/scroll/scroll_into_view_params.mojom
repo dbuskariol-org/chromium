@@ -39,6 +39,9 @@ struct ScrollIntoViewParams {
     kClamping,
     kCompositor,
     kAnchoring,
+    // These are programmatic sequenced scrolls from SmoothScrollSequencer.
+    // SetScrollOffset called with kSequencedScroll should not abort the smooth
+    // scroll sequence.
     kSequenced,
   };
 

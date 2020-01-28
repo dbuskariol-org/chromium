@@ -2781,8 +2781,9 @@ void AXObject::SetScrollOffset(const IntPoint& offset) const {
     return;
 
   // TODO(bokan): This should potentially be a UserScroll.
-  area->SetScrollOffset(ScrollOffset(offset.X(), offset.Y()),
-                        kProgrammaticScroll);
+  area->SetScrollOffset(
+      ScrollOffset(offset.X(), offset.Y()),
+      mojom::blink::ScrollIntoViewParams::Type::kProgrammatic);
 }
 
 bool AXObject::IsTableLikeRole() const {
@@ -3298,7 +3299,8 @@ bool AXObject::OnNativeScrollToMakeVisibleAction() const {
       target_rect,
       CreateScrollIntoViewParams(
           ScrollAlignment::kAlignCenterIfNeeded,
-          ScrollAlignment::kAlignCenterIfNeeded, kProgrammaticScroll, false,
+          ScrollAlignment::kAlignCenterIfNeeded,
+          mojom::blink::ScrollIntoViewParams::Type::kProgrammatic, false,
           mojom::blink::ScrollIntoViewParams::Behavior::kAuto));
   AXObjectCache().PostNotification(
       AXObjectCache().GetOrCreate(GetDocument()->GetLayoutView()),
@@ -3317,11 +3319,11 @@ bool AXObject::OnNativeScrollToMakeVisibleWithSubFocusAction(
   PhysicalRect target_rect =
       layout_object->LocalToAbsoluteRect(PhysicalRect(rect));
   layout_object->ScrollRectToVisible(
-      target_rect,
-      CreateScrollIntoViewParams(
-          horizontal_scroll_alignment, vertical_scroll_alignment,
-          kProgrammaticScroll, false /* make_visible_in_visual_viewport */,
-          mojom::blink::ScrollIntoViewParams::Behavior::kAuto));
+      target_rect, CreateScrollIntoViewParams(
+                       horizontal_scroll_alignment, vertical_scroll_alignment,
+                       mojom::blink::ScrollIntoViewParams::Type::kProgrammatic,
+                       false /* make_visible_in_visual_viewport */,
+                       mojom::blink::ScrollIntoViewParams::Behavior::kAuto));
   AXObjectCache().PostNotification(
       AXObjectCache().GetOrCreate(GetDocument()->GetLayoutView()),
       ax::mojom::Event::kLocationChanged);
@@ -3340,7 +3342,7 @@ bool AXObject::OnNativeScrollToGlobalPointAction(
       target_rect,
       CreateScrollIntoViewParams(
           ScrollAlignment::kAlignLeftAlways, ScrollAlignment::kAlignTopAlways,
-          kProgrammaticScroll, false,
+          mojom::blink::ScrollIntoViewParams::Type::kProgrammatic, false,
           mojom::blink::ScrollIntoViewParams::Behavior::kAuto));
   AXObjectCache().PostNotification(
       AXObjectCache().GetOrCreate(GetDocument()->GetLayoutView()),

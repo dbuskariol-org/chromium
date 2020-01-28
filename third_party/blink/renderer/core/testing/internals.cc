@@ -290,8 +290,8 @@ void Internals::ResetToConsistentState(Page* page) {
   }
 
   LocalFrame* frame = page->DeprecatedLocalMainFrame();
-  frame->View()->LayoutViewport()->SetScrollOffset(ScrollOffset(),
-                                                   kProgrammaticScroll);
+  frame->View()->LayoutViewport()->SetScrollOffset(
+      ScrollOffset(), mojom::blink::ScrollIntoViewParams::Type::kProgrammatic);
   OverrideUserPreferredLanguagesForTesting(Vector<AtomicString>());
   if (page->DeprecatedLocalMainFrame()->GetEditor().IsOverwriteModeEnabled())
     page->DeprecatedLocalMainFrame()->GetEditor().ToggleOverwriteModeEnabled();

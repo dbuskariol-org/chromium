@@ -962,7 +962,8 @@ void HTMLSelectElement::ScrollToOptionTask() {
       bounds,
       CreateScrollIntoViewParams(
           ScrollAlignment::kAlignToEdgeIfNeeded,
-          ScrollAlignment::kAlignToEdgeIfNeeded, kProgrammaticScroll, false,
+          ScrollAlignment::kAlignToEdgeIfNeeded,
+          mojom::blink::ScrollIntoViewParams::Type::kProgrammatic, false,
           mojom::blink::ScrollIntoViewParams::Behavior::kInstant));
 }
 
