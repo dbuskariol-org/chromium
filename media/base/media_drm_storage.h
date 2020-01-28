@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_BASE_ANDROID_MEDIA_DRM_STORAGE_H_
-#define MEDIA_BASE_ANDROID_MEDIA_DRM_STORAGE_H_
+#ifndef MEDIA_BASE_MEDIA_DRM_STORAGE_H_
+#define MEDIA_BASE_MEDIA_DRM_STORAGE_H_
 
 #include <stdint.h>
 
@@ -15,7 +15,7 @@
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
 #include "base/optional.h"
-#include "media/base/android/media_drm_key_type.h"
+#include "media/base/media_drm_key_type.h"
 #include "media/base/media_export.h"
 #include "url/origin.h"
 
@@ -34,7 +34,7 @@ class MEDIA_EXPORT MediaDrmStorage
   // If not specified, the device specific origin ID is to be used.
   using MediaDrmOriginId = base::Optional<base::UnguessableToken>;
 
-  struct SessionData {
+  struct MEDIA_EXPORT SessionData {
     SessionData(std::vector<uint8_t> key_set_id,
                 std::string mime_type,
                 MediaDrmKeyType key_type);
@@ -103,4 +103,4 @@ using CreateStorageCB = base::Callback<std::unique_ptr<MediaDrmStorage>()>;
 
 }  // namespace media
 
-#endif  // MEDIA_BASE_ANDROID_MEDIA_DRM_STORAGE_H_
+#endif  // MEDIA_BASE_MEDIA_DRM_STORAGE_H_

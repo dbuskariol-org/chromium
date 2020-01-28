@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_BASE_ANDROID_MEDIA_DRM_KEY_TYPE_H_
-#define MEDIA_BASE_ANDROID_MEDIA_DRM_KEY_TYPE_H_
+#ifndef MEDIA_BASE_MEDIA_DRM_KEY_TYPE_H_
+#define MEDIA_BASE_MEDIA_DRM_KEY_TYPE_H_
 
 #include <stdint.h>
 
@@ -22,4 +22,4 @@ enum class MediaDrmKeyType : uint32_t {
 };
 
 }  // namespace media
-#endif  // MEDIA_BASE_ANDROID_MEDIA_DRM_KEY_TYPE_H_
+#endif  // MEDIA_BASE_MEDIA_DRM_KEY_TYPE_H_
