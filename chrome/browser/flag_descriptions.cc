@@ -2939,12 +2939,6 @@ const char kEnableReaderModeDescription[] =
     "Allows viewing of simplified web pages by selecting 'Customize and "
     "control Chrome'>'Distill page'";
 
-const char kEnableWebAuthenticationBleSupportName[] =
-    "Web Authentication API BLE support";
-const char kEnableWebAuthenticationBleSupportDescription[] =
-    "Enable support for using Web Authentication API via Bluetooth security "
-    "keys";
-
 const char kEnableWebAuthenticationTestingAPIName[] =
     "Web Authentication Testing API";
 const char kEnableWebAuthenticationTestingAPIDescription[] =

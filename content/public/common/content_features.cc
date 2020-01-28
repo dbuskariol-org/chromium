@@ -669,11 +669,6 @@ const base::Feature kWebContentsOcclusion {
 const base::Feature kWebAuth{"WebAuthentication",
                              base::FEATURE_ENABLED_BY_DEFAULT};
 
-// Controls whether BLE authenticators can be used via the WebAuthentication
-// API. https://w3c.github.io/webauthn
-const base::Feature kWebAuthBle{"WebAuthenticationBle",
-                                base::FEATURE_DISABLED_BY_DEFAULT};
-
 // Controls whether CTAP2 devices can communicate via the WebAuthentication API
 // using pairingless BLE protocol.
 // https://w3c.github.io/webauthn
