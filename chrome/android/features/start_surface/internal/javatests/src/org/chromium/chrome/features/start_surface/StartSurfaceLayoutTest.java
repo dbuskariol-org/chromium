@@ -745,7 +745,6 @@ public class StartSurfaceLayoutTest {
     @Feature("TabSuggestion")
     // clang-format off
     @Features.EnableFeatures(ChromeFeatureList.CLOSE_TAB_SUGGESTIONS + "<Study")
-    @Features.DisableFeatures(ChromeFeatureList.TAB_TO_GTS_ANIMATION)
     @CommandLineFlags.Add({BASE_PARAMS + "/close_tab_suggestions_stale_time_ms/0"})
     public void testTabSuggestionMessageCard_dismiss() throws InterruptedException {
         // clang-format on
@@ -781,7 +780,6 @@ public class StartSurfaceLayoutTest {
     @Feature("TabSuggestion")
     // clang-format off
     @Features.EnableFeatures(ChromeFeatureList.CLOSE_TAB_SUGGESTIONS + "<Study")
-    @Features.DisableFeatures(ChromeFeatureList.TAB_TO_GTS_ANIMATION)
     @CommandLineFlags.Add({BASE_PARAMS + "/close_tab_suggestions_stale_time_ms/0"})
     public void testTabSuggestionMessageCard_review() throws InterruptedException {
         // clang-format on
@@ -813,8 +811,7 @@ public class StartSurfaceLayoutTest {
     @MediumTest
     @Feature("NewTabTile")
     // clang-format off
-    @Features.DisableFeatures({ChromeFeatureList.TAB_TO_GTS_ANIMATION,
-            ChromeFeatureList.CLOSE_TAB_SUGGESTIONS})
+    @Features.DisableFeatures({ChromeFeatureList.CLOSE_TAB_SUGGESTIONS})
     @CommandLineFlags.Add({BASE_PARAMS + "/tab_grid_layout_android_new_tab_tile/NewTabTile"
             + "/tab_grid_layout_android_new_tab/false"})
     public void testNewTabTile() throws InterruptedException {
@@ -870,7 +867,6 @@ public class StartSurfaceLayoutTest {
     @Feature("TabSuggestion")
     // clang-format off
     @Features.EnableFeatures(ChromeFeatureList.CLOSE_TAB_SUGGESTIONS + "<Study")
-    @Features.DisableFeatures(ChromeFeatureList.TAB_TO_GTS_ANIMATION)
     @CommandLineFlags.Add({BASE_PARAMS + "/close_tab_suggestions_stale_time_ms/0"})
     public void testTabSuggestionMessageCard_orientation() throws InterruptedException {
         // clang-format on
