@@ -68,6 +68,8 @@ namespace blink {
 
 namespace {
 
+enum PseudoPriority { kMarker, kBefore, kOther, kAfter };
+
 unsigned NextSequenceNumber() {
   static unsigned next = 0;
   return ++next;
@@ -91,6 +93,16 @@ double Min(base::Optional<double> a, double b) {
   if (a.has_value())
     return std::min(a.value(), b);
   return b;
+}
+
+PseudoPriority ConvertStringtoPriority(const String& pseudo) {
+  if (pseudo == "::marker")
+    return PseudoPriority::kMarker;
+  if (pseudo == "::before")
+    return PseudoPriority::kBefore;
+  if (pseudo == "::after")
+    return PseudoPriority::kAfter;
+  return PseudoPriority::kOther;
 }
 
 Animation::AnimationClassPriority AnimationPriority(
@@ -444,6 +456,68 @@ bool Animation::HasLowerCompositeOrdering(const Animation* animation1,
   AnimationClassPriority priority2 = AnimationPriority(animation2);
   if (priority1 != priority2)
     return priority1 < priority2;
+
+  // If the the animation class is CssAnimation or CssTransition, then first
+  // compare the owning element of animation1 and animation2, sort two of them
+  // by tree order of their conrresponding owning element
+  // The specs:
+  // https://drafts.csswg.org/css-animations-2/#animation-composite-order
+  // https://drafts.csswg.org/css-transitions-2/#animation-composite-order
+  if (priority1 != kDefaultPriority && animation1->effect() &&
+      animation2->effect()) {
+    // TODO(crbug.com/1043778): Implement and use OwningElement on CSSAnimation
+    // and CSSTransition.
+    auto* effect1 = DynamicTo<KeyframeEffect>(animation1->effect());
+    auto* effect2 = DynamicTo<KeyframeEffect>(animation2->effect());
+    Element* target1 = effect1->target();
+    Element* target2 = effect2->target();
+
+    if (*target1 != *target2) {
+      return target1->compareDocumentPosition(target2) &
+             Node::kDocumentPositionFollowing;
+    }
+
+    // A pseudo-element has a higher composite ordering than its originating
+    // element, but lower than the originating element's children.  Two
+    // pseudo-elements sharing the same originating element are sorted as
+    // follows:
+    // ::marker
+    // ::before
+    // ::other
+    // ::after
+    // The "::other" category is a catch-all for any pseudo-element that does
+    // not match another label. This category is not currently covered in the
+    // spec.
+    // TODO: revisit when the spec is clarified
+    // (https://github.com/w3c/csswg-drafts/issues/4502).
+    const String& pseudo1 =
+        const_cast<KeyframeEffect*>(effect1)->pseudoElement();
+    const String& pseudo2 =
+        const_cast<KeyframeEffect*>(effect2)->pseudoElement();
+
+    if (!pseudo1.IsEmpty() && !pseudo2.IsEmpty()) {
+      PseudoPriority priority1 = ConvertStringtoPriority(pseudo1);
+      PseudoPriority priority2 = ConvertStringtoPriority(pseudo2);
+      // In this case, we are comparing the SequenceNumber for now.
+      // TODO(crbug.com/1045835): compare them via Animation Name Property
+      if (priority1 == priority2)
+        return animation1->SequenceNumber() < animation2->SequenceNumber();
+      return priority1 < priority2;
+    }
+
+    // If one is pseudo element and the other one is not, then we compare the
+    // hosting element and the owning element.
+    if (!pseudo1.IsEmpty())
+      return false;
+
+    if (!pseudo2.IsEmpty())
+      return true;
+    // TODO: Sort animation1 and animation2 based on their position in the
+    // computed value of "animation-name" property
+  }
+  // If the anmiations are not-CSS web animation or both animations have the
+  // same owning element then just compare them via generation time/ sequence
+  // number
   return animation1->SequenceNumber() < animation2->SequenceNumber();
 }
 
