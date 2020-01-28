@@ -589,14 +589,6 @@ IPC_MESSAGE_ROUTED0(FrameMsg_SwapIn)
 // Instructs the frame to stop the load in progress, if any.
 IPC_MESSAGE_ROUTED0(FrameMsg_Stop)
 
-// A message sent to RenderFrameProxy to indicate that its corresponding
-// RenderFrame has started loading a document.
-IPC_MESSAGE_ROUTED0(FrameMsg_DidStartLoading)
-
-// A message sent to RenderFrameProxy to indicate that its corresponding
-// RenderFrame has completed loading.
-IPC_MESSAGE_ROUTED0(FrameMsg_DidStopLoading)
-
 // TODO(https://crbug.com/995428): Deprecated.
 // Tells the renderer to reload the frame.
 IPC_MESSAGE_ROUTED0(FrameMsg_Reload)

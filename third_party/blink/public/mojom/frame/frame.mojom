@@ -441,4 +441,12 @@ interface RemoteFrame {
   // Sent to the remote frame placeholder in the parent process to request
   // scrolling.
   ScrollRectToVisible(gfx.mojom.Rect rect, ScrollIntoViewParams params);
+
+  // Notifies this remote frame that its corresponding document has started
+  // loading.
+  DidStartLoading();
+
+  // Notifies this remote frame that its corresponding document has completed
+  // loading.
+  DidStopLoading();
 };

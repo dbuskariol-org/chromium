@@ -6,6 +6,7 @@
 
 #include <stdint.h>
 
+#include <map>
 #include <string>
 #include <tuple>
 #include <unordered_set>
@@ -98,19 +99,6 @@ void CheckInsecureRequestPolicyIPC(
   FrameMsg_EnforceInsecureRequestPolicy::Param params;
   EXPECT_TRUE(FrameMsg_EnforceInsecureRequestPolicy::Read(message, &params));
   EXPECT_EQ(expected_param, std::get<0>(params));
-}
-
-// Helper function to find a message with the specified type and routing ID in
-// an IPC sink.
-bool FindMessageForRoutingId(const IPC::TestSink& sink,
-                             uint32_t type,
-                             int routing_id) {
-  for (size_t i = 0; i < sink.message_count(); i++) {
-    const IPC::Message* msg = sink.GetMessageAt(i);
-    if (msg->type() == type && msg->routing_id() == routing_id)
-      return true;
-  }
-  return false;
 }
 
 class RenderFrameHostManagerTestWebUIControllerFactory
@@ -3008,11 +2996,52 @@ TEST_F(RenderFrameHostManagerTestWithSiteIsolation,
       root->child_at(0)->current_replication_state().insecure_request_policy);
 }
 
+// This class intercepts RenderFrameProxyHost creations, and overrides their
+// respective blink::mojom::RemoteFrame instances, so that it can watch the
+// start and stop loading states.
+class StartStopLoadingProxyObserver {
+ public:
+  StartStopLoadingProxyObserver() {
+    RenderFrameProxyHost::SetCreatedCallbackForTesting(base::BindRepeating(
+        &StartStopLoadingProxyObserver::RenderFrameProxyHostCreatedCallback,
+        base::Unretained(this)));
+  }
+  ~StartStopLoadingProxyObserver() {
+    RenderFrameProxyHost::SetCreatedCallbackForTesting(
+        RenderFrameProxyHost::CreatedCallback());
+  }
+  bool IsLoading(RenderFrameProxyHost* proxy) {
+    return remote_frames_[proxy]->is_loading();
+  }
+
+ private:
+  class Remote : public content::FakeRemoteFrame {
+   public:
+    explicit Remote(RenderFrameProxyHost* proxy) {
+      Init(proxy->GetRemoteAssociatedInterfacesTesting());
+    }
+    void DidStartLoading() override { is_loading_ = true; }
+    void DidStopLoading() override { is_loading_ = false; }
+    bool is_loading() { return is_loading_; }
+
+   private:
+    bool is_loading_ = false;
+  };
+
+  void RenderFrameProxyHostCreatedCallback(RenderFrameProxyHost* proxy_host) {
+    remote_frames_[proxy_host] = std::make_unique<Remote>(proxy_host);
+  }
+
+  std::map<RenderFrameProxyHost*, std::unique_ptr<Remote>> remote_frames_;
+};
+
 // Tests that new frame proxies receive an IPC to update their loading state,
 // if they are created for a frame that's currently loading.  See
 // https://crbug.com/916137.
 TEST_F(RenderFrameHostManagerTestWithSiteIsolation,
        NewProxyReceivesLoadingState) {
+  StartStopLoadingProxyObserver proxy_observer;
+
   const GURL kUrl1("http://www.chromium.org");
   const GURL kUrl2("http://www.google.com");
   const GURL kUrl3("http://foo.com");
@@ -3044,15 +3073,14 @@ TEST_F(RenderFrameHostManagerTestWithSiteIsolation,
           child_host->GetSiteInstance());
   ASSERT_TRUE(proxy_to_child);
   ASSERT_EQ(proxy_to_child->GetProcess(), child_host->GetProcess());
+  base::RunLoop().RunUntilIdle();
 
   // Since the main frame was loading at the time the main frame proxy was
   // created in child frame's process, verify that we sent a separate IPC to
   // update the proxy's loading state.  Note that we'll create two proxies for
   // the main frame and subframe, and we're interested in the message for
   // the main frame proxy.
-  EXPECT_TRUE(FindMessageForRoutingId(child_host->GetProcess()->sink(),
-                                      FrameMsg_DidStartLoading::ID,
-                                      proxy_to_child->GetRoutingID()));
+  EXPECT_TRUE(proxy_observer.IsLoading(proxy_to_child));
 
   // Simulate load stop in the main frame.
   navigation->StopLoading();
@@ -3064,13 +3092,12 @@ TEST_F(RenderFrameHostManagerTestWithSiteIsolation,
       child_host->GetSiteInstance());
   ASSERT_TRUE(proxy_to_child);
   ASSERT_EQ(proxy_to_child->GetProcess(), child_host->GetProcess());
+  base::RunLoop().RunUntilIdle();
 
   // Since this time the main frame wasn't loading at the time |proxy_to_child|
   // was created in the process for |kUrl3|, verify that we didn't send any
   // extra IPCs to update that proxy's loading state.
-  EXPECT_FALSE(FindMessageForRoutingId(child_host->GetProcess()->sink(),
-                                       FrameMsg_DidStartLoading::ID,
-                                       proxy_to_child->GetRoutingID()));
+  EXPECT_FALSE(proxy_observer.IsLoading(proxy_to_child));
 }
 
 // Tests that a BeginNavigation IPC from a no longer active RFH is ignored.

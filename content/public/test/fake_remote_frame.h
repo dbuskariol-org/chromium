@@ -65,6 +65,8 @@ class FakeRemoteFrame : public blink::mojom::RemoteFrame {
   void ScrollRectToVisible(
       const gfx::Rect& rect,
       blink::mojom::ScrollIntoViewParamsPtr params) override;
+  void DidStartLoading() override;
+  void DidStopLoading() override;
 
  private:
   void BindFrameHostReceiver(mojo::ScopedInterfaceEndpointHandle handle);

@@ -906,16 +906,13 @@ RenderFrameHostManager::UnsetSpeculativeRenderFrameHost() {
 }
 
 void RenderFrameHostManager::OnDidStartLoading() {
-  for (const auto& pair : proxy_hosts_) {
-    pair.second->Send(
-        new FrameMsg_DidStartLoading(pair.second->GetRoutingID()));
-  }
+  for (const auto& pair : proxy_hosts_)
+    pair.second->GetAssociatedRemoteFrame()->DidStartLoading();
 }
 
 void RenderFrameHostManager::OnDidStopLoading() {
-  for (const auto& pair : proxy_hosts_) {
-    pair.second->Send(new FrameMsg_DidStopLoading(pair.second->GetRoutingID()));
-  }
+  for (const auto& pair : proxy_hosts_)
+    pair.second->GetAssociatedRemoteFrame()->DidStopLoading();
 }
 
 void RenderFrameHostManager::OnDidUpdateName(const std::string& name,
@@ -2167,7 +2164,7 @@ bool RenderFrameHostManager::InitRenderView(
     // finished loading, let the renderer know so it can also mark the proxy as
     // loading. See https://crbug.com/916137.
     if (frame_tree_node_->IsLoading())
-      proxy->Send(new FrameMsg_DidStartLoading(proxy->GetRoutingID()));
+      proxy->GetAssociatedRemoteFrame()->DidStartLoading();
   }
 
   return created;

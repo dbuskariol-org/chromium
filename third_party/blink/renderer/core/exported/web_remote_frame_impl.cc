@@ -299,19 +299,7 @@ void WebRemoteFrameImpl::SetReplicatedAdFrameType(
 }
 
 void WebRemoteFrameImpl::DidStartLoading() {
-  GetFrame()->SetIsLoading(true);
-}
-
-void WebRemoteFrameImpl::DidStopLoading() {
-  GetFrame()->SetIsLoading(false);
-
-  // When a subframe finishes loading, the parent should check if *all*
-  // subframes have finished loading (which may mean that the parent can declare
-  // that the parent itself has finished loading).  This remote-subframe-focused
-  // code has a local-subframe equivalent in FrameLoader::DidFinishNavigation.
-  Frame* parent = GetFrame()->Tree().Parent();
-  if (parent)
-    parent->CheckCompleted();
+  GetFrame()->DidStartLoading();
 }
 
 bool WebRemoteFrameImpl::IsIgnoredForHitTest() const {

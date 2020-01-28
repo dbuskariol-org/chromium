@@ -121,6 +121,8 @@ class CORE_EXPORT RemoteFrame final : public Frame,
   void ScrollRectToVisible(
       const WebRect& rect_to_scroll,
       mojom::blink::ScrollIntoViewParamsPtr params) override;
+  void DidStartLoading() override;
+  void DidStopLoading() override;
 
  private:
   // Frame protected overrides:

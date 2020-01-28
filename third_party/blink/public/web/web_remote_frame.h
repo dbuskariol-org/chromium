@@ -127,7 +127,6 @@ class WebRemoteFrame : public WebFrame {
       blink::mojom::AdFrameType ad_frame_type) = 0;
 
   virtual void DidStartLoading() = 0;
-  virtual void DidStopLoading() = 0;
 
   // Returns true if this frame should be ignored during hittesting.
   virtual bool IsIgnoredForHitTest() const = 0;

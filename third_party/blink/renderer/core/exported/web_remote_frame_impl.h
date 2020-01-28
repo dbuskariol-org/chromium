@@ -93,7 +93,6 @@ class CORE_EXPORT WebRemoteFrameImpl final
   void SetReplicatedAdFrameType(
       mojom::blink::AdFrameType ad_frame_type) override;
   void DidStartLoading() override;
-  void DidStopLoading() override;
   bool IsIgnoredForHitTest() const override;
   void UpdateUserActivationState(
       mojom::blink::UserActivationUpdateType) override;

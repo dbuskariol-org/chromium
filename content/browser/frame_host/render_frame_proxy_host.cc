@@ -245,7 +245,7 @@ bool RenderFrameProxyHost::InitRenderFrameProxy() {
   // let the renderer know so it can also mark the proxy as loading. See
   // https://crbug.com/916137.
   if (frame_tree_node_->IsLoading())
-    Send(new FrameMsg_DidStartLoading(routing_id_));
+    GetAssociatedRemoteFrame()->DidStartLoading();
 
   // For subframes, initialize the proxy's FrameOwnerProperties only if they
   // differ from default values.

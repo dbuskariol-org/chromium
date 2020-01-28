@@ -67,6 +67,10 @@ void FakeRemoteFrame::ScrollRectToVisible(
     const gfx::Rect& rect,
     blink::mojom::ScrollIntoViewParamsPtr params) {}
 
+void FakeRemoteFrame::DidStartLoading() {}
+
+void FakeRemoteFrame::DidStopLoading() {}
+
 void FakeRemoteFrame::FakeRemoteFrame::BindFrameHostReceiver(
     mojo::ScopedInterfaceEndpointHandle handle) {
   receiver_.Bind(mojo::PendingAssociatedReceiver<blink::mojom::RemoteFrame>(
