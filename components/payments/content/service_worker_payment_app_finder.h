@@ -81,7 +81,6 @@ class ServiceWorkerPaymentAppFinder {
   friend class HybridRequestSkipUITest;
   friend class JourneyLoggerTest;
   friend class PaymentHandlerJustInTimeInstallationTest;
-  friend class PaymentMethodViewControllerTest;
 
   ServiceWorkerPaymentAppFinder();
   ~ServiceWorkerPaymentAppFinder();

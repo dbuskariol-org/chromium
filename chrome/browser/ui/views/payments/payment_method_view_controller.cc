@@ -180,8 +180,7 @@ PaymentMethodViewController::PaymentMethodViewController(
     PaymentRequestDialogView* dialog)
     : PaymentRequestSheetController(spec, state, dialog),
       payment_method_list_(dialog),
-      enable_add_card_(!state->is_retry_called() &&
-                       spec->supports_basic_card()) {
+      enable_add_card_(!state->is_retry_called()) {
   const std::vector<std::unique_ptr<PaymentApp>>& available_apps =
       state->available_apps();
   for (const auto& app : available_apps) {
