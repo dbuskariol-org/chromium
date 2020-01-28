@@ -81,6 +81,7 @@
 #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
 #include "third_party/blink/renderer/platform/text/platform_locale.h"
 #include "third_party/blink/renderer/platform/wtf/math_extras.h"
+#include "ui/base/ui_base_features.h"
 
 namespace blink {
 
@@ -290,6 +291,16 @@ bool HTMLInputElement::IsKeyboardFocusable() const {
 
 bool HTMLInputElement::MayTriggerVirtualKeyboard() const {
   return input_type_->MayTriggerVirtualKeyboard();
+}
+
+bool HTMLInputElement::ShouldHaveFocusAppearance() const {
+  // For FormControlsRefresh don't draw focus ring for an input that has its
+  // popup open.
+  if (::features::IsFormControlsRefreshEnabled() &&
+      input_type_view_->HasOpenedPopup())
+    return false;
+
+  return TextControlElement::ShouldHaveFocusAppearance();
 }
 
 void HTMLInputElement::UpdateFocusAppearanceWithOptions(
