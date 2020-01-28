@@ -25,7 +25,6 @@ import android.os.HandlerThread;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
-import android.view.WindowManager;
 
 import androidx.annotation.IntDef;
 
@@ -35,6 +34,7 @@ import org.chromium.base.Log;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
+import org.chromium.ui.display.DisplayAndroidManager;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -238,10 +238,8 @@ public class ScreenCapture extends Fragment {
             return false;
         }
 
-        WindowManager windowManager =
-                (WindowManager) ContextUtils.getApplicationContext().getSystemService(
-                        Context.WINDOW_SERVICE);
-        mDisplay = windowManager.getDefaultDisplay();
+        mDisplay = DisplayAndroidManager.getDefaultDisplayForContext(
+                ContextUtils.getApplicationContext());
 
         DisplayMetrics metrics = new DisplayMetrics();
         mDisplay.getMetrics(metrics);
