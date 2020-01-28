@@ -6416,8 +6416,8 @@ crbug.com/1044418 [ Release Mac ] http/tests/devtools/elements/shadow/elements-p
 
 crbug.com/1045260 external/wpt/IndexedDB/keypath-exceptions.htm [ Pass Failure ]
 
-crbug.com/1045472 [ Win ] external/wpt/WebCryptoAPI/wrapKey_unwrapKey/test_wrapKey_unwrapKey.https.html [ Pass Failure ]
-crbug.com/1045472 [ Win ] external/wpt/WebCryptoAPI/wrapKey_unwrapKey/wrapKey_unwrapKey.https.worker.html [ Pass Failure ]
+crbug.com/1045472 external/wpt/WebCryptoAPI/wrapKey_unwrapKey/test_wrapKey_unwrapKey.https.html [ Pass Failure ]
+crbug.com/1045472 external/wpt/WebCryptoAPI/wrapKey_unwrapKey/wrapKey_unwrapKey.https.worker.html [ Pass Failure ]
 
 crbug.com/1045510 [ Win7 ] fast/forms/suggestion-picker/time-suggestion-picker-appearance.html [ Pass Failure ]
 crbug.com/1045510 [ Win7 ] fast/forms/suggestion-picker/week-suggestion-picker-appearance-with-scroll-bar.html [ Pass Failure ]
