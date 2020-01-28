@@ -376,6 +376,10 @@ class ASH_EXPORT LockContentsView
   // factors including policy settings, channel and Alt-V accelerator.
   bool GetSystemInfoVisibility() const;
 
+  // Toggles the visibility of the |bottom_status_indicator_| based on its
+  // content type and whether the extension UI window is opened.
+  void UpdateBottomStatusIndicatorVisibility();
+
   const LockScreen::ScreenType screen_type_;
 
   std::vector<UserState> users_;
@@ -428,6 +432,9 @@ class ASH_EXPORT LockContentsView
 
   // Bottom status indicator displaying entreprise domain or ADB enabled alert
   BottomStatusIndicator* bottom_status_indicator_;
+
+  // Tracks the visibility of the extension Ui window.
+  bool extension_ui_visible_ = false;
 
   int unlock_attempt_ = 0;
 

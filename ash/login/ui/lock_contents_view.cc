@@ -620,7 +620,9 @@ void LockContentsView::ShowEntrepriseDomainName(
                                  ui::GetChromeOSDeviceName(),
                                  base::UTF8ToUTF16(entreprise_domain_name)),
       gfx::kGoogleGrey200);
-  bottom_status_indicator_->SetVisible(true);
+  bottom_status_indicator_->set_content_type(
+      BottomStatusIndicator::ContentType::kManagedDevice);
+  UpdateBottomStatusIndicatorVisibility();
 }
 
 void LockContentsView::ShowAdbEnabled() {
@@ -629,7 +631,9 @@ void LockContentsView::ShowAdbEnabled() {
   bottom_status_indicator_->SetText(
       l10n_util::GetStringUTF16(IDS_ASH_LOGIN_SCREEN_UNVERIFIED_CODE_WARNING),
       gfx::kGoogleRed300);
-  bottom_status_indicator_->SetVisible(true);
+  bottom_status_indicator_->set_content_type(
+      BottomStatusIndicator::ContentType::kAdbSideLoadingEnabled);
+  UpdateBottomStatusIndicatorVisibility();
 }
 
 void LockContentsView::ShowSystemInfo() {
@@ -1259,9 +1263,12 @@ void LockContentsView::OnFocusLeavingLockScreenApps(bool reverse) {
 
 void LockContentsView::OnOobeDialogStateChanged(OobeDialogState state) {
   oobe_dialog_visible_ = state != OobeDialogState::HIDDEN;
+  extension_ui_visible_ = state == OobeDialogState::EXTENSION_LOGIN;
 
   // Show either oobe dialog or lock screen.
   SetVisible(!oobe_dialog_visible_);
+
+  UpdateBottomStatusIndicatorVisibility();
 
   if (!oobe_dialog_visible_ && primary_big_view_)
     primary_big_view_->RequestFocus();
@@ -2182,6 +2189,16 @@ bool LockContentsView::GetSystemInfoVisibility() const {
   } else {
     return enable_system_info_if_possible_;
   }
+}
+
+void LockContentsView::UpdateBottomStatusIndicatorVisibility() {
+  bool visible =
+      bottom_status_indicator_->content_type() ==
+          BottomStatusIndicator::ContentType::kAdbSideLoadingEnabled ||
+      (bottom_status_indicator_->content_type() ==
+           BottomStatusIndicator::ContentType::kManagedDevice &&
+       !extension_ui_visible_);
+  bottom_status_indicator_->SetVisible(visible);
 }
 
 }  // namespace ash
