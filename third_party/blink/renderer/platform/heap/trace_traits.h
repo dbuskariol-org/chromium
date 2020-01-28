@@ -483,19 +483,7 @@ struct TraceHashTableBackingInCollectionTrait {
     // Use the payload size as recorded by the heap to determine how many
     // elements to trace.
     size_t length = header->PayloadSize() / sizeof(Value);
-    const bool is_concurrent = visitor->IsConcurrent();
     for (size_t i = 0; i < length; ++i) {
-      // If tracing concurrently, use a concurrent-safe version of
-      // IsEmptyOrDeletedBucket (check performed on a local copy instead
-      // of directly on the bucket).
-      if (is_concurrent &&
-          !HashTableHelper<Value, typename Table::ExtractorType,
-                           typename Table::KeyTraitsType>::
-              IsEmptyOrDeletedBucketSafe(array[i])) {
-        blink::TraceCollectionIfEnabled<WeakHandling, Value, Traits>::Trace(
-            visitor, &array[i]);
-        continue;
-      }
       if (!HashTableHelper<Value, typename Table::ExtractorType,
                            typename Table::KeyTraitsType>::
               IsEmptyOrDeletedBucket(array[i])) {
@@ -506,6 +494,7 @@ struct TraceHashTableBackingInCollectionTrait {
     return false;
   }
 };
+
 template <typename Table>
 struct TraceInCollectionTrait<kNoWeakHandling,
                               blink::HeapHashTableBacking<Table>,
@@ -515,6 +504,7 @@ struct TraceInCollectionTrait<kNoWeakHandling,
                                                   Table>::Trace(visitor, self);
   }
 };
+
 template <typename Table>
 struct TraceInCollectionTrait<kWeakHandling,
                               blink::HeapHashTableBacking<Table>,
@@ -560,21 +550,11 @@ struct TraceInCollectionTrait<
     blink::HeapObjectHeader* header =
         blink::HeapObjectHeader::FromPayload(self);
     size_t length = header->PayloadSize() / sizeof(Node*);
-    const bool is_concurrent = visitor->IsConcurrent();
     for (size_t i = 0; i < length; ++i) {
-      Node* node;
-      if (is_concurrent) {
-        // If tracing concurrently, IsEmptyOrDeletedBucket can cause data
-        // races. Loading array[i] atomically prevents possible data races.
-        // array[i] is of type Node* so can directly loaded atomically.
-        node = AsAtomicPtr(&array[i])->load(std::memory_order_relaxed);
-      } else {
-        node = array[i];
-      }
-      if (!HashTableHelper<
-              Node*, typename Table::ExtractorType,
-              typename Table::KeyTraitsType>::IsEmptyOrDeletedBucket(node)) {
-        visitor->Trace(node);
+      if (!HashTableHelper<Node*, typename Table::ExtractorType,
+                           typename Table::KeyTraitsType>::
+              IsEmptyOrDeletedBucket(array[i])) {
+        visitor->Trace(array[i]);
       }
     }
     return false;
