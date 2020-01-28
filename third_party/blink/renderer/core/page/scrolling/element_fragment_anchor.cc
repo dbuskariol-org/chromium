@@ -25,7 +25,7 @@ Node* FindAnchorFromFragment(const String& fragment, Document& doc) {
   // Implement the rule that "" and "top" both mean top of page as in other
   // browsers.
   if (!anchor_node &&
-      (fragment.IsEmpty() || DeprecatedEqualIgnoringCase(fragment, "top")))
+      (fragment.IsEmpty() || EqualIgnoringASCIICase(fragment, "top")))
     return &doc;
 
   return anchor_node;

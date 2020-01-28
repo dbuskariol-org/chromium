@@ -242,8 +242,7 @@ bool IsRootEditableElementWithCounting(const Element& element) {
       UseCounter::Count(doc, WebFeature::kWebKitUserModifyReadWriteEffective);
       UseCounter::Count(doc, WebFeature::kWebKitUserModifyEffective);
     }
-  } else if (ce_value.IsEmpty() ||
-             DeprecatedEqualIgnoringCase(ce_value, "true")) {
+  } else if (ce_value.IsEmpty() || EqualIgnoringASCIICase(ce_value, "true")) {
     if (user_modify == EUserModify::kReadWritePlaintextOnly) {
       UseCounter::Count(doc, WebFeature::kPlainTextEditingEffective);
       UseCounter::Count(doc, WebFeature::kWebKitUserModifyPlainTextEffective);
@@ -252,7 +251,7 @@ bool IsRootEditableElementWithCounting(const Element& element) {
       UseCounter::Count(doc, WebFeature::kWebKitUserModifyReadOnlyEffective);
       UseCounter::Count(doc, WebFeature::kWebKitUserModifyEffective);
     }
-  } else if (DeprecatedEqualIgnoringCase(ce_value, "plaintext-only")) {
+  } else if (EqualIgnoringASCIICase(ce_value, "plaintext-only")) {
     UseCounter::Count(doc, WebFeature::kPlainTextEditingEffective);
     if (user_modify == EUserModify::kReadWrite) {
       UseCounter::Count(doc, WebFeature::kWebKitUserModifyReadWriteEffective);
@@ -4827,8 +4826,8 @@ void Element::resetSubtreeRendered() {
 static Node* ContextNodeForInsertion(const String& where,
                                      Element* element,
                                      ExceptionState& exception_state) {
-  if (DeprecatedEqualIgnoringCase(where, "beforeBegin") ||
-      DeprecatedEqualIgnoringCase(where, "afterEnd")) {
+  if (EqualIgnoringASCIICase(where, "beforeBegin") ||
+      EqualIgnoringASCIICase(where, "afterEnd")) {
     Node* parent = element->parentNode();
     if (!parent || IsA<Document>(parent)) {
       exception_state.ThrowDOMException(
@@ -4838,8 +4837,8 @@ static Node* ContextNodeForInsertion(const String& where,
     }
     return parent;
   }
-  if (DeprecatedEqualIgnoringCase(where, "afterBegin") ||
-      DeprecatedEqualIgnoringCase(where, "beforeEnd"))
+  if (EqualIgnoringASCIICase(where, "afterBegin") ||
+      EqualIgnoringASCIICase(where, "beforeEnd"))
     return element;
   exception_state.ThrowDOMException(
       DOMExceptionCode::kSyntaxError,
@@ -5629,8 +5628,8 @@ SpellcheckAttributeState Element::GetSpellcheckAttributeState() const {
   const AtomicString& value = FastGetAttribute(html_names::kSpellcheckAttr);
   if (value == g_null_atom)
     return kSpellcheckAttributeDefault;
-  if (DeprecatedEqualIgnoringCase(value, "true") ||
-      DeprecatedEqualIgnoringCase(value, ""))
+  if (EqualIgnoringASCIICase(value, "true") ||
+      EqualIgnoringASCIICase(value, ""))
     return kSpellcheckAttributeTrue;
   if (DeprecatedEqualIgnoringCase(value, "false"))
     return kSpellcheckAttributeFalse;
