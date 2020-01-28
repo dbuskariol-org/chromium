@@ -227,7 +227,7 @@ bool HTMLInputElement::RangeOverflow() const {
 }
 
 String HTMLInputElement::validationMessage() const {
-  if (CustomError())
+  if (willValidate() && CustomError())
     return CustomValidationMessage();
 
   return input_type_->ValidationMessage(*input_type_view_).first;
