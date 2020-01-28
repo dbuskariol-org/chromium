@@ -381,7 +381,8 @@ if (internal_khronos_glcts_tests) {
 
     public_deps = [ ":qphelper" ]
 
-    include_dirs = [ "//third_party/khronos_glcts/framework/delibs/libpng" ]  #png.hpp
+    include_dirs =
+        [ "//third_party/khronos_glcts/framework/delibs/libpng" ]  # png.hpp
 
     configs += [ ":defaults_config" ]
     configs -= [ "//build/config/compiler:chromium_code" ]

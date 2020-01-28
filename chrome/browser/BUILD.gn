@@ -55,9 +55,9 @@ if (is_win) {
       "cryptui.lib",
       "dwmapi.lib",
       "netapi32.lib",
-      "ndfapi.lib",  # Used by browser/net/net_error_diagnostics_dialog_win.h
-      "pdh.lib",  # Used by browser/private_working_set_snapshot.h
-      "wbemuuid.lib",  # Used by browser/metrics/antivirus_metrics_provider_win.cc
+      "ndfapi.lib",  # For browser/net/net_error_diagnostics_dialog_win.h
+      "pdh.lib",  # For browser/private_working_set_snapshot.h
+      "wbemuuid.lib",  # For browser/metrics/antivirus_metrics_provider_win.cc
     ]
     ldflags = [
       "/DELAYLOAD:ndfapi.dll",
@@ -2977,7 +2977,7 @@ jumbo_static_library("browser") {
       "//components/payments/content/android",
       "//components/resources:components_resources",
       "//components/send_tab_to_self",
-      "//components/signin/internal/identity_manager",  # see android/signin/DEPS
+      "//components/signin/internal/identity_manager",  # cf android/signin/DEPS
       "//media/mojo/clients",
       "//rlz:rlz_utils",
       "//sandbox",
@@ -3564,7 +3564,9 @@ jumbo_static_library("browser") {
       "signin/signin_promo.h",
       "signin/signin_ui_util.cc",
       "signin/signin_ui_util.h",
-      "speech/extension_api/tts_extension_api_constants.cc",  # Should be moved to extensions section?
+      "speech/extension_api/tts_extension_api_constants.cc",  # Should be moved
+                                                              # to extensions
+                                                              # section?
       "speech/extension_api/tts_extension_api_constants.h",
       "ssl/ssl_client_auth_observer.cc",
       "ssl/ssl_client_auth_observer.h",

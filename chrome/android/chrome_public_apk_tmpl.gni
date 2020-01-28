@@ -225,7 +225,7 @@ template("chrome_public_common_apk_or_module_tmpl") {
         if (!defined(negative_main_dex_globs)) {
           negative_main_dex_globs = [
             "*ApplicationStatus*",  # Doesn't work in non-browser process.
-            "*ChromeActivity*",  # Pulls in the world, so ensure it doesn't slip in.
+            "*ChromeActivity*",  # Pulls in the world; ensure it stays out.
             "*GoogleApiAvailability*",  # Play Services only in browser process.
             "*R\$*",  # Should not use resources from non-browser process.
           ]
