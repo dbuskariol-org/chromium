@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/modules/document_metadata/document_metadata_extractor.h"
+#include "third_party/blink/renderer/modules/document_metadata/copyless_paste_extractor.h"
 
 #include <algorithm>
 #include <memory>
 #include <utility>
 
-#include "third_party/blink/public/mojom/document_metadata/document_metadata.mojom-blink.h"
+#include "third_party/blink/public/mojom/document_metadata/copyless_paste.mojom-blink.h"
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/element_traversal.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
@@ -26,14 +26,14 @@ namespace blink {
 
 namespace {
 
-using mojom::blink::Entity;
-using mojom::blink::EntityPtr;
-using mojom::blink::Property;
-using mojom::blink::PropertyPtr;
-using mojom::blink::Values;
-using mojom::blink::ValuesPtr;
-using mojom::blink::WebPage;
-using mojom::blink::WebPagePtr;
+using mojom::document_metadata::blink::Entity;
+using mojom::document_metadata::blink::EntityPtr;
+using mojom::document_metadata::blink::Property;
+using mojom::document_metadata::blink::PropertyPtr;
+using mojom::document_metadata::blink::Values;
+using mojom::document_metadata::blink::ValuesPtr;
+using mojom::document_metadata::blink::WebPage;
+using mojom::document_metadata::blink::WebPagePtr;
 
 // App Indexing enforces a max nesting depth of 5. Our top level message
 // corresponds to the WebPage, so this only leaves 4 more levels. We will parse
@@ -284,8 +284,8 @@ ExtractionStatus ExtractMetadata(const Element& root,
 
 }  // namespace
 
-WebPagePtr DocumentMetadataExtractor::Extract(const Document& document) {
-  TRACE_EVENT0("blink", "DocumentMetadataExtractor::Extract");
+WebPagePtr CopylessPasteExtractor::Extract(const Document& document) {
+  TRACE_EVENT0("blink", "CopylessPasteExtractor::Extract");
 
   if (!document.GetFrame() || !document.GetFrame()->IsMainFrame())
     return nullptr;

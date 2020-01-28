@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-module blink.mojom;
+module blink.mojom.document_metadata;
 
 import "url/mojom/url.mojom";
 
@@ -36,6 +36,6 @@ struct WebPage {
 };
 
 // Null page denotes no results.
-interface DocumentMetadata {
+interface CopylessPaste {
   GetEntities() => (WebPage? page);
 };

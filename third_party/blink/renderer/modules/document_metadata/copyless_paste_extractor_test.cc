@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/modules/document_metadata/document_metadata_extractor.h"
+#include "third_party/blink/renderer/modules/document_metadata/copyless_paste_extractor.h"
 
 #include <memory>
 #include <utility>
 
 #include "testing/gtest/include/gtest/gtest.h"
-#include "third_party/blink/public/mojom/document_metadata/document_metadata.mojom-blink.h"
+#include "third_party/blink/public/mojom/document_metadata/copyless_paste.mojom-blink.h"
 #include "third_party/blink/renderer/core/dom/element.h"
 #include "third_party/blink/renderer/core/testing/page_test_base.h"
 #include "third_party/blink/renderer/platform/json/json_values.h"
@@ -18,18 +18,18 @@ namespace blink {
 
 namespace {
 
-using mojom::blink::Entity;
-using mojom::blink::EntityPtr;
-using mojom::blink::Property;
-using mojom::blink::PropertyPtr;
-using mojom::blink::Values;
-using mojom::blink::ValuesPtr;
-using mojom::blink::WebPage;
-using mojom::blink::WebPagePtr;
+using mojom::document_metadata::blink::Entity;
+using mojom::document_metadata::blink::EntityPtr;
+using mojom::document_metadata::blink::Property;
+using mojom::document_metadata::blink::PropertyPtr;
+using mojom::document_metadata::blink::Values;
+using mojom::document_metadata::blink::ValuesPtr;
+using mojom::document_metadata::blink::WebPage;
+using mojom::document_metadata::blink::WebPagePtr;
 
-class DocumentMetadataExtractorTest : public PageTestBase {
+class CopylessPasteExtractorTest : public PageTestBase {
  public:
-  DocumentMetadataExtractorTest() = default;
+  CopylessPasteExtractorTest() = default;
 
  protected:
   void TearDown() override {
@@ -37,7 +37,7 @@ class DocumentMetadataExtractorTest : public PageTestBase {
   }
 
   WebPagePtr Extract() {
-    return DocumentMetadataExtractor::Extract(GetDocument());
+    return CopylessPasteExtractor::Extract(GetDocument());
   }
 
   void SetHTMLInnerHTML(const String&);
@@ -57,20 +57,19 @@ class DocumentMetadataExtractorTest : public PageTestBase {
   WebPagePtr CreateWebPage(const String& url, const String& title);
 };
 
-void DocumentMetadataExtractorTest::SetHTMLInnerHTML(
-    const String& html_content) {
+void CopylessPasteExtractorTest::SetHTMLInnerHTML(const String& html_content) {
   GetDocument().documentElement()->SetInnerHTMLFromString((html_content));
 }
 
-void DocumentMetadataExtractorTest::SetURL(const String& url) {
+void CopylessPasteExtractorTest::SetURL(const String& url) {
   GetDocument().SetURL(blink::KURL(url));
 }
 
-void DocumentMetadataExtractorTest::SetTitle(const String& title) {
+void CopylessPasteExtractorTest::SetTitle(const String& title) {
   GetDocument().setTitle(title);
 }
 
-PropertyPtr DocumentMetadataExtractorTest::CreateStringProperty(
+PropertyPtr CopylessPasteExtractorTest::CreateStringProperty(
     const String& name,
     const String& value) {
   PropertyPtr property = Property::New();
@@ -80,7 +79,7 @@ PropertyPtr DocumentMetadataExtractorTest::CreateStringProperty(
   return property;
 }
 
-PropertyPtr DocumentMetadataExtractorTest::CreateBooleanProperty(
+PropertyPtr CopylessPasteExtractorTest::CreateBooleanProperty(
     const String& name,
     const bool& value) {
   PropertyPtr property = Property::New();
@@ -90,7 +89,7 @@ PropertyPtr DocumentMetadataExtractorTest::CreateBooleanProperty(
   return property;
 }
 
-PropertyPtr DocumentMetadataExtractorTest::CreateLongProperty(
+PropertyPtr CopylessPasteExtractorTest::CreateLongProperty(
     const String& name,
     const int64_t& value) {
   PropertyPtr property = Property::New();
@@ -100,9 +99,8 @@ PropertyPtr DocumentMetadataExtractorTest::CreateLongProperty(
   return property;
 }
 
-PropertyPtr DocumentMetadataExtractorTest::CreateEntityProperty(
-    const String& name,
-    EntityPtr value) {
+PropertyPtr CopylessPasteExtractorTest::CreateEntityProperty(const String& name,
+                                                             EntityPtr value) {
   PropertyPtr property = Property::New();
   property->name = name;
   property->values = Values::New();
@@ -111,19 +109,19 @@ PropertyPtr DocumentMetadataExtractorTest::CreateEntityProperty(
   return property;
 }
 
-WebPagePtr DocumentMetadataExtractorTest::CreateWebPage(const String& url,
-                                                        const String& title) {
+WebPagePtr CopylessPasteExtractorTest::CreateWebPage(const String& url,
+                                                     const String& title) {
   WebPagePtr page = WebPage::New();
   page->url = blink::KURL(url);
   page->title = title;
   return page;
 }
 
-TEST_F(DocumentMetadataExtractorTest, empty) {
+TEST_F(CopylessPasteExtractorTest, empty) {
   ASSERT_TRUE(Extract().is_null());
 }
 
-TEST_F(DocumentMetadataExtractorTest, basic) {
+TEST_F(CopylessPasteExtractorTest, basic) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -153,7 +151,7 @@ TEST_F(DocumentMetadataExtractorTest, basic) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, header) {
+TEST_F(CopylessPasteExtractorTest, header) {
   SetHTMLInnerHTML(
       "<head>"
       "<script type=\"application/ld+json\">"
@@ -184,7 +182,7 @@ TEST_F(DocumentMetadataExtractorTest, header) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, booleanValue) {
+TEST_F(CopylessPasteExtractorTest, booleanValue) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -213,7 +211,7 @@ TEST_F(DocumentMetadataExtractorTest, booleanValue) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, longValue) {
+TEST_F(CopylessPasteExtractorTest, longValue) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -242,7 +240,7 @@ TEST_F(DocumentMetadataExtractorTest, longValue) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, doubleValue) {
+TEST_F(CopylessPasteExtractorTest, doubleValue) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -271,7 +269,7 @@ TEST_F(DocumentMetadataExtractorTest, doubleValue) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, multiple) {
+TEST_F(CopylessPasteExtractorTest, multiple) {
   SetHTMLInnerHTML(
       "<head>"
       "<script type=\"application/ld+json\">"
@@ -322,7 +320,7 @@ TEST_F(DocumentMetadataExtractorTest, multiple) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, nested) {
+TEST_F(CopylessPasteExtractorTest, nested) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -367,7 +365,7 @@ TEST_F(DocumentMetadataExtractorTest, nested) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, repeated) {
+TEST_F(CopylessPasteExtractorTest, repeated) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -406,7 +404,7 @@ TEST_F(DocumentMetadataExtractorTest, repeated) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, repeatedObject) {
+TEST_F(CopylessPasteExtractorTest, repeatedObject) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -462,7 +460,7 @@ TEST_F(DocumentMetadataExtractorTest, repeatedObject) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, truncateLongString) {
+TEST_F(CopylessPasteExtractorTest, truncateLongString) {
   StringBuilder maxLengthString;
   for (int i = 0; i < 200; ++i) {
     maxLengthString.Append("a");
@@ -501,7 +499,7 @@ TEST_F(DocumentMetadataExtractorTest, truncateLongString) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, enforceTypeExists) {
+TEST_F(CopylessPasteExtractorTest, enforceTypeExists) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -519,7 +517,7 @@ TEST_F(DocumentMetadataExtractorTest, enforceTypeExists) {
   ASSERT_TRUE(extracted.is_null());
 }
 
-TEST_F(DocumentMetadataExtractorTest, UnhandledTypeIgnored) {
+TEST_F(CopylessPasteExtractorTest, UnhandledTypeIgnored) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -538,7 +536,7 @@ TEST_F(DocumentMetadataExtractorTest, UnhandledTypeIgnored) {
   ASSERT_TRUE(extracted.is_null());
 }
 
-TEST_F(DocumentMetadataExtractorTest, truncateTooManyValuesInField) {
+TEST_F(CopylessPasteExtractorTest, truncateTooManyValuesInField) {
   StringBuilder largeRepeatedField;
   largeRepeatedField.Append("[");
   for (int i = 0; i < 101; ++i) {
@@ -588,7 +586,7 @@ TEST_F(DocumentMetadataExtractorTest, truncateTooManyValuesInField) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, truncateTooManyFields) {
+TEST_F(CopylessPasteExtractorTest, truncateTooManyFields) {
   StringBuilder tooManyFields;
   for (int i = 0; i < 20; ++i) {
     tooManyFields.AppendFormat("\"%d\": \"a\"", i);
@@ -628,7 +626,7 @@ TEST_F(DocumentMetadataExtractorTest, truncateTooManyFields) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, ignorePropertyWithEmptyArray) {
+TEST_F(CopylessPasteExtractorTest, ignorePropertyWithEmptyArray) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -657,7 +655,7 @@ TEST_F(DocumentMetadataExtractorTest, ignorePropertyWithEmptyArray) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, ignorePropertyWithMixedTypes) {
+TEST_F(CopylessPasteExtractorTest, ignorePropertyWithMixedTypes) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -686,7 +684,7 @@ TEST_F(DocumentMetadataExtractorTest, ignorePropertyWithMixedTypes) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, ignorePropertyWithNestedArray) {
+TEST_F(CopylessPasteExtractorTest, ignorePropertyWithNestedArray) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -715,7 +713,7 @@ TEST_F(DocumentMetadataExtractorTest, ignorePropertyWithNestedArray) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, enforceMaxNestingDepth) {
+TEST_F(CopylessPasteExtractorTest, enforceMaxNestingDepth) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
@@ -770,7 +768,7 @@ TEST_F(DocumentMetadataExtractorTest, enforceMaxNestingDepth) {
   EXPECT_EQ(expected, extracted);
 }
 
-TEST_F(DocumentMetadataExtractorTest, maxNestingDepthWithTerminalProperty) {
+TEST_F(CopylessPasteExtractorTest, maxNestingDepthWithTerminalProperty) {
   SetHTMLInnerHTML(
       "<body>"
       "<script type=\"application/ld+json\">"
