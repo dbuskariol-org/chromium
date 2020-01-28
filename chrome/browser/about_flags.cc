@@ -4841,6 +4841,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kRecoverFromNeverSaveAndroidDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(
          password_manager::features::kRecoverFromNeverSaveAndroid)},
+    {"photo-picker-video-support",
+     flag_descriptions::kPhotoPickerVideoSupportName,
+     flag_descriptions::kPhotoPickerVideoSupportDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kPhotoPickerVideoSupport)},
 #endif  // defined(OS_ANDROID)
 
     {"freeze-user-agent", flag_descriptions::kFreezeUserAgentName,
