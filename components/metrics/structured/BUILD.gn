@@ -42,7 +42,6 @@ source_set("unit_tests") {
     "//base/test:test_support",
     "//components/prefs",
     "//testing/gtest",
-    "//tools/metrics/structured:structured_events",
   ]
 }
 
