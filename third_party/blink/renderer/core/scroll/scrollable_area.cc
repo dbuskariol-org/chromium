@@ -160,6 +160,8 @@ float ScrollableArea::ScrollStep(ScrollGranularity granularity,
     case ScrollGranularity::kScrollByPixel:
     case ScrollGranularity::kScrollByPrecisePixel:
       return PixelStep(orientation);
+    case ScrollGranularity::kScrollByPercentage:
+      return PercentageStep(orientation);
     default:
       NOTREACHED();
       return 0.0f;
@@ -770,6 +772,14 @@ int ScrollableArea::DocumentStep(ScrollbarOrientation orientation) const {
 
 float ScrollableArea::PixelStep(ScrollbarOrientation) const {
   return 1;
+}
+
+float ScrollableArea::PercentageStep(ScrollbarOrientation orientation) const {
+  int percent_basis =
+      (orientation == ScrollbarOrientation::kHorizontalScrollbar)
+          ? VisibleWidth()
+          : VisibleHeight();
+  return static_cast<float>(percent_basis);
 }
 
 int ScrollableArea::VerticalScrollbarWidth(

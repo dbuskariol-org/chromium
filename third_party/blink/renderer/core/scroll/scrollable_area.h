@@ -569,6 +569,12 @@ class CORE_EXPORT ScrollableArea : public GarbageCollectedMixin {
   virtual int DocumentStep(ScrollbarOrientation) const;
   virtual float PixelStep(ScrollbarOrientation) const;
 
+  // This returns the amount a percent-based delta should be resolved against;
+  // which is the visible height of the scroller. This value is eventually
+  // used to scroll the incoming scroll delta, where a scroll delta of 1
+  // represents one hundred percent.
+  float PercentageStep(ScrollbarOrientation) const;
+
   // Returns true if a snap point was found.
   bool PerformSnapping(
       const cc::SnapSelectionStrategy& strategy,

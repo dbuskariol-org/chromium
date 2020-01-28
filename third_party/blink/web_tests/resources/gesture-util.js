@@ -166,7 +166,7 @@ const GestureSourceType = (function() {
 // https://crbug.com/893608
 const SPEED_INSTANT = 400000;
 
-function smoothScroll(pixels_to_scroll, start_x, start_y, gesture_source_type, direction, speed_in_pixels_s, precise_scrolling_deltas, scroll_by_page, cursor_visible) {
+function smoothScroll(pixels_to_scroll, start_x, start_y, gesture_source_type, direction, speed_in_pixels_s, precise_scrolling_deltas, scroll_by_page, cursor_visible, scroll_by_percentage) {
   return new Promise((resolve, reject) => {
     if (window.chrome && chrome.gpuBenchmarking) {
       chrome.gpuBenchmarking.smoothScrollBy(pixels_to_scroll,
@@ -178,7 +178,8 @@ function smoothScroll(pixels_to_scroll, start_x, start_y, gesture_source_type, d
                                             speed_in_pixels_s,
                                             precise_scrolling_deltas,
                                             scroll_by_page,
-                                            cursor_visible);
+                                            cursor_visible,
+                                            scroll_by_percentage);
     } else {
       reject('This test requires chrome.gpuBenchmarking');
     }
