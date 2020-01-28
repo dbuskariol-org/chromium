@@ -376,6 +376,10 @@ crbug.com/1042453 [ Win ] external/wpt/css/filter-effects/idlharness.any.html [ 
 crbug.com/1042453 [ Mac ] external/wpt/css/filter-effects/idlharness.any.html [ Timeout Pass ]
 crbug.com/1042453 [ Win ] external/wpt/css/filter-effects/idlharness.any.worker.html [ Timeout Pass ]
 crbug.com/1042453 [ Mac ] external/wpt/css/filter-effects/idlharness.any.worker.html [ Timeout Pass ]
+crbug.com/1042453 [ Win ] virtual/scalefactor200/external/wpt/css/filter-effects/idlharness.any.html [ Timeout Pass ]
+crbug.com/1042453 [ Mac ] virtual/scalefactor200/external/wpt/css/filter-effects/idlharness.any.html [ Timeout Pass ]
+crbug.com/1042453 [ Win ] virtual/scalefactor200/external/wpt/css/filter-effects/idlharness.any.worker.html [ Timeout Pass ]
+crbug.com/1042453 [ Mac ] virtual/scalefactor200/external/wpt/css/filter-effects/idlharness.any.worker.html [ Timeout Pass ]
 
 crbug.com/1042783 external/wpt/css/css-backgrounds/background-size/background-size-near-zero-png.html [ Failure ]
 crbug.com/1042783 external/wpt/css/css-backgrounds/background-size/background-size-near-zero-svg.html [ Failure ]
