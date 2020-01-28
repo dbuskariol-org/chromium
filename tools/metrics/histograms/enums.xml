@@ -31721,7 +31721,8 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
 <enum name="HotseatInAppGesture">
   <int value="0" label="Swipe up the hotseat"/>
   <int value="1" label="Swipe down the hotseat"/>
-  <int value="2" label="Fling up the hotseat"/>
+  <int value="2" label="Fling up the hotseat to show homescreen"/>
+  <int value="3" label="Interact outside of shelf to hide hotseat"/>
 </enum>
 
 <enum name="HotwordAvailability">
