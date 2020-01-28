@@ -604,8 +604,8 @@ class LoginAuthUserView::ChallengeResponseView : public views::View,
     if (state == State::kFailure) {
       reset_state_timer_.Start(
           FROM_HERE, kChallengeResponseResetAfterFailureDelay,
-          base::BindRepeating(&ChallengeResponseView::SetState,
-                              base::Unretained(this), State::kInitial));
+          base::BindOnce(&ChallengeResponseView::SetState,
+                         base::Unretained(this), State::kInitial));
     }
 
     arrow_button_->EnableLoadingAnimation(state == State::kAuthenticating);
