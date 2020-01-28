@@ -819,7 +819,6 @@ crbug.com/591099 virtual/mouseevent_fractional/fast/events/touch/compositor-touc
 crbug.com/591099 virtual/mouseevent_fractional/fast/events/touch/compositor-touch-hit-rects.html [ Failure ]
 crbug.com/591099 external/wpt/paint-timing/sibling-painting-first-image.html [ Failure ]
 crbug.com/591099 virtual/paint-timing/external/wpt/paint-timing/sibling-painting-first-image.html [ Failure ]
-crbug.com/1041709 [ Linux Debug ] external/wpt/paint-timing/first-image-child.html [ Pass Timeout ]
 crbug.com/591099 virtual/scalefactor200/css3/filters/composited-layer-child-bounds-after-composited-to-sw-shadow-change.html [ Failure ]
 
 # LayoutNG ref-tests that need to be updated (cannot be rebaselined).
