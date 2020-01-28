@@ -857,7 +857,7 @@
     },
     {
       name: "IntersectionObserverDocumentScrollingElementRoot",
-      status: "experimental",
+      status: "stable",
     },
     {
       name: "IntersectionObserverV2",
