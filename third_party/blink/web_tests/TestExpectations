@@ -6447,3 +6447,5 @@ crbug.com/1043043 http/tests/devtools/elements/styles-4/styles-inline-element-st
 crbug.com/1046201 [ Mac ] fast/forms/calendar-picker/calendar-picker-appearance-zoom125.html [ Pass Failure ]
 crbug.com/1046201 [ Mac ] virtual/cascade/fast/forms/calendar-picker/calendar-picker-appearance-zoom125.html [ Pass Failure ]
 crbug.com/1046201 [ Win10 ] virtual/cascade/fast/forms/calendar-picker/calendar-picker-appearance-zoom125.html [ Pass Failure ]
+crbug.com/1046256 fast/events/popup-blocking-timers6.html [ Pass Failure Timeout ]
+crbug.com/1046256 virtual/mouseevent_fractional/fast/events/popup-blocking-timers6.html [ Pass Failure Timeout ]
