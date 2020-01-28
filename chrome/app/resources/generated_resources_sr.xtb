@@ -151,7 +151,7 @@
 <translation id="1197979282329025000">Дошло је до грешке при преузимању могућности за штампач <ph name="PRINTER_NAME" />. Тај штампач није било могуће регистровати помоћу <ph name="CLOUD_PRINT_NAME" />.</translation>
 <translation id="119944043368869598">Обриши све</translation>
 <translation id="1201402288615127009">Даље</translation>
-<translation id="1202556750060561551">Бришу се сви подаци и колачићи које чува <ph name="SITE_GROUP_NAME" />, сви сајтови у оквиру те групе и све инсталиране апликације.</translation>
+<translation id="1202556750060561551">Бришу се сви подаци и колачићи које чува <ph name="SITE_GROUP_NAME" />, као и сви сајтови у оквиру те групе и све инсталиране апликације.</translation>
 <translation id="1202596434010270079">Киоск апликација је ажурирана. Уклоните USB меморију.</translation>
 <translation id="120368089816228251">Музичка нота</translation>
 <translation id="1205489148908752564">Читање и мењање корисника на белој листи</translation>
@@ -5697,7 +5697,7 @@
 <translation id="8985264973231822211">Последња активност: пре <ph name="DEVICE_LAST_ACTIVATED_TIME" /> дан/а</translation>
 <translation id="8986362086234534611">Заборави</translation>
 <translation id="8986494364107987395">Аутоматски шаљи Google-у статистичке податке о коришћењу и извештаје о отказивању</translation>
-<translation id="8986651757229422279">Овим бришете све податке и колачиће које чува сајт <ph name="ORIGIN_NAME" /> и његова инсталирана апликација.</translation>
+<translation id="8986651757229422279">Овим бришете све податке и колачиће које чувају сајт <ph name="ORIGIN_NAME" /> и његова инсталирана апликација.</translation>
 <translation id="8987927404178983737">Месец</translation>
 <translation id="8991520179165052608">Сајт може да користи микрофон</translation>
 <translation id="899403249577094719">Основна URL адреса за Netscape сертификат</translation>

@@ -3139,7 +3139,7 @@
 <translation id="5427459444770871191">Завъртане &amp;по часовниковата стрелка</translation>
 <translation id="542872847390508405">Сърфирате като гост</translation>
 <translation id="5428850089342283580"><ph name="ACCNAME_APP" /> (Налице е актуализация)</translation>
-<translation id="542948651837270806">Трябва да бъде инсталирана актуализация на фърмуера на модула за надеждна платформа. Вижте информацията на адрес<ph name="TPM_FIRMWARE_UPDATE_LINK" /></translation>
+<translation id="542948651837270806">Трябва да бъде инсталирана актуализация на фърмуера на модула за надеждна платформа. Вижте информацията на адрес <ph name="TPM_FIRMWARE_UPDATE_LINK" /></translation>
 <translation id="5430931332414098647">Незабавен тетъринг</translation>
 <translation id="5431318178759467895">Цветно</translation>
 <translation id="5431825016875453137">OpenVPN/L2TP</translation>

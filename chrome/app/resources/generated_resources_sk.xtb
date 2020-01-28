@@ -1369,7 +1369,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="2865919525181940183">Snímky programov, ktoré sú momentálne na obrazovke</translation>
 <translation id="286674810810214575">Kontrolujú sa zdroje napájania…</translation>
 <translation id="2867768963760577682">Otvoriť ako pevnú kartu</translation>
-<translation id="2868184003987917410">Nepovoliť webom používať vaše zariadenia virtuálnej reality a spojené údaje</translation>
+<translation id="2868184003987917410">Nepovoliť webom používať vaše zariadenia a údaje virtuálnej reality</translation>
 <translation id="2868746137289129307">Toto rozšírenie je zastarané a je zakázané podnikovým pravidlom. Možno bude opäť automaticky povolené, keď bude k dispozícii novšia verzia.</translation>
 <translation id="2870560284913253234">Web</translation>
 <translation id="2870909136778269686">Prebieha aktualizácia...</translation>
@@ -2512,7 +2512,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="4501530680793980440">Potvrdiť odstránenie</translation>
 <translation id="4502423230170890588">Odstrániť z tohto zariadenia</translation>
 <translation id="4504940961672722399">Rozšírenie použijete stlačením klávesov <ph name="EXTENSION_SHORTCUT" />.</translation>
-<translation id="4507164039066603071">Nepovoliť webom používať polohu kamery alebo mapovať vašu miestnosť</translation>
+<translation id="4507164039066603071">Nepovoliť webom používať polohu kamery ani mapovať vašu miestnosť</translation>
 <translation id="4508051413094283164">Otvoriť všetky v okne inkognito</translation>
 <translation id="4508265954913339219">Aktivácia zlyhala</translation>
 <translation id="4508765956121923607">&amp;Zobraziť zdrojový kód</translation>
@@ -4270,7 +4270,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="703001695939087067">Vstúpili ste do režimu prehľadu okien. Môžete ich prechádzať pomocou klávesa Tab.</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" /> – sériový port je pripojený</translation>
 <translation id="7031962166228839643">Model TPM sa pripravuje, čakajte (môže to trvať niekoľko minút)...</translation>
-<translation id="7034615910652881882">Opýtať sa, keď chce web používať vaše zariadenia virtuálnej reality a spojené údaje</translation>
+<translation id="7034615910652881882">Opýtať sa, keď chce web používať vaše zariadenia a údaje virtuálnej reality.</translation>
 <translation id="7037509989619051237">Ukážka textu</translation>
 <translation id="7039326228527141150">Pristupovať k zariadením USB od dodávateľa <ph name="VENDOR_NAME" /></translation>
 <translation id="7039912931802252762">Karta Smart Card – prihlásenie</translation>
@@ -4568,7 +4568,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="7443806024147773267">Získajte prístup k svojim heslám, keď sa prihlásite do účtu Google</translation>
 <translation id="7444983668544353857">Zakázať zariadenie <ph name="NETWORKDEVICE" /></translation>
 <translation id="7448430327655618736">Inštalujte aplikácie automaticky</translation>
-<translation id="7448625729116931228">Opýtať sa, keď chce web používať vaše zariadenia virtuálnej reality a spojené údaje</translation>
+<translation id="7448625729116931228">Opýtať sa, keď chce web používať vaše zariadenia a údaje virtuálnej reality (odporúčané)</translation>
 <translation id="7450761244949417357">Otvára sa v prehliadači <ph name="ALTERNATIVE_BROWSER_NAME" /></translation>
 <translation id="7453008956351770337">Výberom tejto tlačiarne udeľujete nasledujúcemu rozšíreniu povolenie k tlačiarni pristupovať:</translation>
 <translation id="7454548535253569100">Portál: <ph name="SUBFRAME_SITE" /></translation>

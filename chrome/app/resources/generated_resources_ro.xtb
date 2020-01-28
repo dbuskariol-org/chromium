@@ -151,7 +151,7 @@
 <translation id="1197979282329025000">A apărut o eroare la preluarea caracteristicilor imprimantei <ph name="PRINTER_NAME" />. Această imprimantă nu a putut fi înregistrată la <ph name="CLOUD_PRINT_NAME" />.</translation>
 <translation id="119944043368869598">Șterge-le pe toate</translation>
 <translation id="1201402288615127009">Înainte</translation>
-<translation id="1202556750060561551">Toate datele și cookie-urile stocate de <ph name="SITE_GROUP_NAME" /> și de site-urile subordonate vor fi șterse.</translation>
+<translation id="1202556750060561551">Toate datele și cookie-urile stocate de <ph name="SITE_GROUP_NAME" /> și de site-urile subordonate, precum și aplicațiile instalate asociate vor fi șterse.</translation>
 <translation id="1202596434010270079">Aplicația de tip chioșc a fost actualizată. Scoate stickul USB.</translation>
 <translation id="120368089816228251">Notă muzicală</translation>
 <translation id="1205489148908752564">Citește și schimbă utilizatorii trecuți în lista albă</translation>
@@ -1762,7 +1762,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="3448492834076427715">Actualizează contul</translation>
 <translation id="3449839693241009168">Apasă pe <ph name="SEARCH_KEY" /> pentru a trimite comenzi la <ph name="EXTENSION_NAME" /></translation>
 <translation id="3450157232394774192">Procentaj de ocupare în starea inactivă</translation>
-<translation id="3451332697983754369">Sincronizează <ph name="DEVICE_TYPE" /></translation>
+<translation id="3451332697983754369">Sincronizează dispozitivul <ph name="DEVICE_TYPE" /></translation>
 <translation id="3453612417627951340">Necesită autorizare</translation>
 <translation id="3454157711543303649">Activarea a fost finalizată</translation>
 <translation id="3454213325559396544">Aceasta este cea mai recentă actualizare automată de software și securitate pentru acest dispozitiv <ph name="DEVICE_TYPE" />. Pentru a primi actualizări viitoare, fă upgrade la un model mai nou.</translation>
@@ -2715,7 +2715,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="480990236307250886">Deschide pagina de pornire</translation>
 <translation id="4813136279048157860">Imaginile mele</translation>
 <translation id="4813512666221746211">Eroare de rețea</translation>
-<translation id="4814378367953456825">Introdu un nume pentru amprenta digitală</translation>
+<translation id="4814378367953456825">Introdu un nume pentru amprentă</translation>
 <translation id="4820236583224459650">Setează ca tichet activ</translation>
 <translation id="4821935166599369261">&amp;Analizare activată</translation>
 <translation id="4823484602432206655">Citește și modifică setările pentru dispozitiv și pentru utilizator</translation>
@@ -2762,7 +2762,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="4876895919560854374">Blochează și deblochează ecranul</translation>
 <translation id="4877276003880815204">Inspectează elementele</translation>
 <translation id="4878653975845355462">Administratorul a dezactivat fundalurile personalizate</translation>
-<translation id="4878718769565915065">Nu s-a putut adăuga o amprentă digitală la cheia de securitate</translation>
+<translation id="4878718769565915065">Nu s-a putut adăuga o amprentă la cheia de securitate</translation>
 <translation id="4879491255372875719">Automat (prestabilit)</translation>
 <translation id="4880328057631981605">Nume punct de acces</translation>
 <translation id="4880827082731008257">Caută în istoric</translation>
@@ -4618,7 +4618,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="7513029293694390567">Te conectezi automat la site-uri folosind datele de conectare stocate. Dacă funcția este dezactivată, ți se va solicita confirmarea de fiecare dată înainte de a te conecta la un site.</translation>
 <translation id="7514239104543605883">Copiază pe dispozitiv</translation>
 <translation id="7514365320538308">Descarcă</translation>
-<translation id="7520766081042531487">Portal Incognito: <ph name="SUBFRAME_SITE" /></translation>
+<translation id="7520766081042531487">Portal incognito: <ph name="SUBFRAME_SITE" /></translation>
 <translation id="7521387064766892559">JavaScript</translation>
 <translation id="7522255036471229694">Rostește „Ok Google”</translation>
 <translation id="7525067979554623046">Creați</translation>

@@ -1097,7 +1097,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="2501278716633472235">Nazad</translation>
 <translation id="2501797496290880632">Upišite prečac</translation>
 <translation id="2502441965851148920">Automatska ažuriranja su omogućena. Administrator je onemogućio ručna ažuriranja.</translation>
-<translation id="2502719318159902502">Potpuni pristup</translation>
+<translation id="2502719318159902502">Puni pristup</translation>
 <translation id="2505127913256479918">Ovaj račun pod nadzorom uskoro će biti uklonjen</translation>
 <translation id="2505324914378689427">{SCREEN_INDEX,plural, =1{#. ekran}one{#. ekran}few{#. ekran}other{#. ekran}}</translation>
 <translation id="2505402373176859469"><ph name="RECEIVED_AMOUNT" /> od <ph name="TOTAL_SIZE" /></translation>
@@ -1370,7 +1370,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="2865919525181940183">Snimak ekrana programa koji su trenutno na ekranu.</translation>
 <translation id="286674810810214575">Provjeravanje izvora napajanja...</translation>
 <translation id="2867768963760577682">Otvori kao zakačenu karticu</translation>
-<translation id="2868184003987917410">Nemoj dozvoliti web lokacijama da pristupaju uređajima/podacima virtualne realnosti</translation>
+<translation id="2868184003987917410">Nemoj dozvoliti web lokacijama da pristupaju uređajima/podacima virtuelne realnosti</translation>
 <translation id="2868746137289129307">Ova ekstenzija je zastarjela i onemogućena je pravilom preduzeća. Može se omogućiti automatski kada nova verzija postane dostupna.</translation>
 <translation id="2870560284913253234">Web lokacija</translation>
 <translation id="2870909136778269686">Ažuriranje…</translation>
@@ -1698,7 +1698,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="3348038390189153836">Otkriven je uklonjivi uređaj</translation>
 <translation id="3349933790966648062">Otisak iz memorije</translation>
 <translation id="3350117557200012647">Pokreni način rada za uparivanje</translation>
-<translation id="3350244554415289209">Pitaj kada web lokacija želi pristupiti položaju moje kamere ili mapirati moju sobu (preporučeno)</translation>
+<translation id="3350244554415289209">Pitaj me kada web lokacija želi pristupiti položaju moje kamere ili mapirati moju sobu (preporučeno)</translation>
 <translation id="3355936511340229503">Greška prilikom povezivanja</translation>
 <translation id="3356580349448036450">Završi</translation>
 <translation id="3359256513598016054">Ograničenja pravila za potvrdu</translation>
@@ -3140,7 +3140,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="5427459444770871191">Rotiraj u smjeru kretanja kazaljki na satu</translation>
 <translation id="542872847390508405">Pregledavate kao gost</translation>
 <translation id="5428850089342283580"><ph name="ACCNAME_APP" /> (Dostupno je ažuriranje)</translation>
-<translation id="542948651837270806">Potrebno je instalirati ažuriranje za firmer modula pouzdane platforme. Pogledajte <ph name="TPM_FIRMWARE_UPDATE_LINK" /></translation>
+<translation id="542948651837270806">Potrebno je instalirati ažuriranje za firmver modula pouzdane platforme. Pogledajte <ph name="TPM_FIRMWARE_UPDATE_LINK" /></translation>
 <translation id="5430931332414098647">Trenutno povezivanje putem mobitela</translation>
 <translation id="5431318178759467895">Boja</translation>
 <translation id="5431825016875453137">OpenVPN/L2TP</translation>
@@ -4271,7 +4271,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="703001695939087067">Ušli ste u način rada pregleda prozora. Pritisnite karticu za navigaciju.</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" /> – serijski priključak je povezan</translation>
 <translation id="7031962166228839643">TPM se trenutno priprema. Pričekajte (ovo može potrajati nekoliko minuta)...</translation>
-<translation id="7034615910652881882">Pitaj kada web lokacija želi pristupiti mojim uređajima/podacima virtuelne realnosti</translation>
+<translation id="7034615910652881882">Pitaj me kada web lokacija želi pristupiti mojim uređajima/podacima virtuelne realnosti</translation>
 <translation id="7037509989619051237">Tekst za pregledanje</translation>
 <translation id="7039326228527141150">Pristup USB uređajima dobavljača <ph name="VENDOR_NAME" /></translation>
 <translation id="7039912931802252762">Prijava na Microsoft pametnu karticu</translation>
@@ -4569,7 +4569,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="7443806024147773267">Pristupite svojim lozinkama kad god ste prijavljeni na Google račun.</translation>
 <translation id="7444983668544353857">Onemogući <ph name="NETWORKDEVICE" /></translation>
 <translation id="7448430327655618736">Instalirajte aplikacije automatski</translation>
-<translation id="7448625729116931228">Pitaj kada web lokacija želi pristupiti mojim uređajima/podacima virtuelne realnosti (preporučeno)</translation>
+<translation id="7448625729116931228">Pitaj me kada web lokacija želi pristupiti mojim uređajima/podacima virtuelne realnosti (preporučeno)</translation>
 <translation id="7450761244949417357">Otvaranje u pregledniku <ph name="ALTERNATIVE_BROWSER_NAME" /></translation>
 <translation id="7453008956351770337">Ako odaberete ovaj štampač, sljedećoj ekstenziji dajete odobrenje da pristupi vašem štampaču:</translation>
 <translation id="7454548535253569100">Portal: <ph name="SUBFRAME_SITE" /></translation>
@@ -4707,7 +4707,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="7652808307838961528">Uređivanje osobe, <ph name="PROFILE_NAME" /></translation>
 <translation id="765293928828334535">Aplikacije, ekstenzije i korisničke skripte se ne mogu dodati s ove web lokacije.</translation>
 <translation id="7652954539215530680">Kreirajte PIN</translation>
-<translation id="7653295403398566475">Pitaj kada web lokacija želi pristupiti položaju moje kamere ili mapirati moju sobu</translation>
+<translation id="7653295403398566475">Pitaj me kada web lokacija želi pristupiti položaju moje kamere ili mapirati moju sobu</translation>
 <translation id="7654941827281939388">Ovaj račun se već koristi na ovom računaru.</translation>
 <translation id="7658239707568436148">Otkaži</translation>
 <translation id="7659584679870740384">Nemate odobrenje za korištenje ovog uređaja. Kontaktirajte administratora zbog odobrenja za prijavu.</translation>

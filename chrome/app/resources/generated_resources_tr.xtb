@@ -279,7 +279,7 @@
 <translation id="138784436342154190">Varsayılan başlangıç sayfası geri yüklensin mi?</translation>
 <translation id="1390548061267426325">Normal Sekme Olarak Aç</translation>
 <translation id="1393283411312835250">Güneş ve bulutlar</translation>
-<translation id="1393787139683794508">Bu işlem, <ph name="ORIGIN_NAME" /> web sitesinin depoladığı tüm verileri ve çerezleri temizler.</translation>
+<translation id="1393787139683794508">Bu işlem, <ph name="ORIGIN_NAME" /> tarafından depolanan tüm verileri ve çerezleri temizler.</translation>
 <translation id="1395730723686586365">Güncelleyici başladı</translation>
 <translation id="1396139853388185343">Yazıcı kurulum hatası</translation>
 <translation id="1396259464226642517">Bu beklenmeyen bir sonuç muydu? <ph name="BEGIN_LINK" />Geri bildirim gönder<ph name="END_LINK" /></translation>
@@ -5699,7 +5699,7 @@ Anahtar dosyanızı güvenli bir yerde saklayın. Uzantınızın yeni sürümler
 <translation id="8985264973231822211"><ph name="DEVICE_LAST_ACTIVATED_TIME" /> gün önce etkinleştirildi</translation>
 <translation id="8986362086234534611">Unut</translation>
 <translation id="8986494364107987395">Kullanım istatistiklerini ve çökme raporlarını otomatik olarak Google'a gönder</translation>
-<translation id="8986651757229422279">Bu işlem, <ph name="ORIGIN_NAME" /> web sitesinin depoladığı tüm veriler ve çerezler ile sitenin yüklediği uygulamaları temizleyecek.</translation>
+<translation id="8986651757229422279">Bu işlem, <ph name="ORIGIN_NAME" /> tarafından depolanan tüm veriler ve çerezler ile yüklemiş olduğu uygulamayı temizleyecek.</translation>
 <translation id="8987927404178983737">Ay</translation>
 <translation id="8991520179165052608">Site, mikrofonunuzu kullanabilir</translation>
 <translation id="899403249577094719">Netscape Sertifikası Temel URL'si</translation>

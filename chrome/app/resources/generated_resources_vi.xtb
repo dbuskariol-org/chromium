@@ -3931,7 +3931,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="6532101170117367231">Lưu vào Google Drive</translation>
 <translation id="6532106788206463496">Lưu thay đổi</translation>
 <translation id="6532206849875187177">Bảo mật và đăng nhập</translation>
-<translation id="6532527800157340614">Không đăng nhập được do không thể lấy mã thông báo truy cập. Vui lòng kiểm tra kết nối mạng rồi thử lại.</translation>
+<translation id="6532527800157340614">Không đăng nhập được do không thể lấy mã truy cập. Vui lòng kiểm tra kết nối mạng rồi thử lại.</translation>
 <translation id="6532663472409656417">Do doanh nghiệp đăng ký</translation>
 <translation id="654039047105555694"><ph name="BEGIN_BOLD" />Lưu ý:<ph name="END_BOLD" /> Chỉ bật nếu bạn biết mình đang làm gì hoặc nếu bạn đã được yêu cầu bật vì việc thu thập dữ liệu có thể giảm hiệu suất hoạt động.</translation>
 <translation id="6541638731489116978">Trang web này đã bị chặn sử dụng cảm biến chuyển động.</translation>
@@ -3939,7 +3939,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="6545864417968258051">Quét tìm Bluetooth</translation>
 <translation id="6545867563032584178">Micrô ở trạng thái tắt trong System Preferences (Tùy chọn hệ thống) trên máy Mac</translation>
 <translation id="6547354035488017500">Hãy giải phóng ít nhất 512 MB dung lượng, nếu không thiết bị sẽ không phản hồi. Để giải phóng dung lượng, hãy xóa các tệp khỏi bộ nhớ thiết bị.</translation>
-<translation id="6549966385318247177">Trang web này bị chặn do chứa nội dung dành cho người trưởng thành.</translation>
+<translation id="6549966385318247177">Tiện ích này bị chặn do chứa nội dung dành cho người trưởng thành.</translation>
 <translation id="6550675742724504774">Tùy chọn</translation>
 <translation id="6551508934388063976">Lệnh không khả dụng. Nhấn phím control-N để mở cửa sổ mới.</translation>
 <translation id="6551612971599078809">Trang web đang sử dụng USB</translation>
@@ -5434,7 +5434,7 @@ Giữ tệp khóa của bạn ở nơi an toàn. Bạn sẽ cần tệp khóa đ
 <translation id="8650543407998814195">Mặc dù không thể truy cập vào hồ sơ cũ của mình nữa, nhưng bạn vẫn có thể xóa hồ sơ đó.</translation>
 <translation id="8651585100578802546">Bắt buộc Tải lại Trang Này</translation>
 <translation id="8652400352452647993">Lỗi đóng gói tiện ích</translation>
-<translation id="8653578191563425126">Dung lượng ổ đĩa dự trữ cho Crostini (bạn có thể thay đổi dung lượng này sau).</translation>
+<translation id="8653578191563425126">Dung lượng ổ đĩa dự trữ cho Crostini (bạn có thể thay đổi dung lượng này sau đó).</translation>
 <translation id="8654151524613148204">Rất tiếc, tệp quá lớn để máy tính của bạn có thể xử lý.</translation>
 <translation id="8655295600908251630">Kênh</translation>
 <translation id="8655319619291175901">Rất tiếc, đã xảy ra lỗi.</translation>

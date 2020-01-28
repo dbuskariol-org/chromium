@@ -4510,7 +4510,7 @@
 <translation id="7360233684753165754">Печать <ph name="PAGE_NUMBER" /> стр. на принтере <ph name="PRINTER_NAME" /></translation>
 <translation id="7361297102842600584">Нажмите правой кнопкой мыши, чтобы запустить плагин "<ph name="PLUGIN_NAME" />"</translation>
 <translation id="7363117941401515667">Обновлено <ph name="HOURS" /> ч. назад</translation>
-<translation id="7364591875953874521">Расширения, запросившие право на доступ</translation>
+<translation id="7364591875953874521">Расширения, запросившие доступ</translation>
 <translation id="7364796246159120393">Выберите файл</translation>
 <translation id="7366415735885268578">Добавление сайта</translation>
 <translation id="7366909168761621528">Данные о работе в браузере</translation>

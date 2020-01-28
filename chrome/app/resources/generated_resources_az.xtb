@@ -552,7 +552,7 @@
 <translation id="1758018619400202187">EAP-TLS</translation>
 <translation id="17584710573359123">Chrome Veb Mağazada baxın</translation>
 <translation id="176193854664720708">Barmaq izi sensoru yandırıb-söndürmə düyməsindədir. Barmağınızla ona yavaşca toxunun.</translation>
-<translation id="176273057789108760">Təşkilatınız təhlükəsizliyin təsdiq edilməsi üçün sürüşdürülən faylları skanlayır.</translation>
+<translation id="176273057789108760">Təşkilatınız təhlükəsizliyin təsdiq edilməsi üçün daşınan faylları skanlayır.</translation>
 <translation id="1763046204212875858">Tətbiq qısayolları yaradın</translation>
 <translation id="1763108912552529023">Araşdırmağa davam edin</translation>
 <translation id="1763808908432309942">Yeni tabda açır</translation>
@@ -1896,7 +1896,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="3630132874740063857">Telefonunuz</translation>
 <translation id="3630995161997703415">Hər hansı bir vaxt istifadə etmək üçün bu saytı rəfinizə əlavə edin</translation>
 <translation id="3634507049637220048"><ph name="NETWORK_INDEX" />/<ph name="NETWORK_COUNT" /> şəbəkə, <ph name="NETWORK_NAME" />, <ph name="CONNECTION_STATUS" />, Administratorunuz tərəfindən idarə olunur, Detallar</translation>
-<translation id="3635241501480133979">Bu data təşkilatınızın təhlükəsizlik siyasətlərini pozur və yerləşdirilməsi mümkün deyil.</translation>
+<translation id="3635241501480133979">Bu datanın daşınması təşkilatınızın təhlükəsizlik siyasətlərini pozduğu üçün mümkün deyil.</translation>
 <translation id="3635353578505343390">Google'a rəy göndərin</translation>
 <translation id="3636096452488277381">Necəsiniz, <ph name="USER_GIVEN_NAME" />.</translation>
 <translation id="3636766455281737684"><ph name="PERCENTAGE" />% - <ph name="TIME" /> qalıb</translation>
@@ -2459,7 +2459,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="4421932782753506458">Tüklü</translation>
 <translation id="4423376891418188461">Ayarları Bərpa Edin</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, administrator parolu dəyişməyinizi tələb edir.</translation>
-<translation id="4429030830601238961">Bu data təşkilatınızın təhlükəsizlik siyasətlərini pozur və əlavə edilməsi mümkün deyil.</translation>
+<translation id="4429030830601238961">Bu datanın əlavə edilməsi təşkilatınızın təhlükəsizlik siyasətlərini pozduğu üçün mümkün deyil.</translation>
 <translation id="4430019312045809116">Həcm</translation>
 <translation id="4430369329743628066">Əlfəcin əlavə olundu</translation>
 <translation id="4434045419905280838">Popap və yönləndirmələr</translation>
@@ -3930,7 +3930,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="6545864417968258051">Bluetooth skanı</translation>
 <translation id="6545867563032584178">Mikrofon Mac Sistem Tərcihlərində deaktivdir</translation>
 <translation id="6547354035488017500">Ən az 512 MB boşaldın əks halda cihazınız reaksiya verməyəcək. Yer boşaltmaq üçün, cihaz yaddaşından faylları silin.</translation>
-<translation id="6549966385318247177">Bu, yetkin məzmunu olduğu üçün bloklanıb.</translation>
+<translation id="6549966385318247177">Böyüklər üçün məzmun olması səbəbindən bloklanıb.</translation>
 <translation id="6550675742724504774">Seçimlər</translation>
 <translation id="6551508934388063976">Əmr əlçatmazdır. Yeni pəncərə açmaq üçün control-N basın.</translation>
 <translation id="6551612971599078809">Sayt USB istifadə edir</translation>
@@ -4302,7 +4302,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="7081952801286122383">Gizli rejimindəsiniz</translation>
 <translation id="708278670402572152">Skanı aktiv etmək üçün bağlantını kəsin</translation>
 <translation id="7085389578340536476">Chrome'a səs yazmaq icazəsi verilsin?</translation>
-<translation id="7086467953285486445">Bu fayllar təşkilatınızın təhlükəsizlik siyasətlərini pozur və onları yerləşdirmək mümkün deyil.</translation>
+<translation id="7086467953285486445">Bu faylların daşınması təşkilatınızın təhlükəsizlik siyasətlərini pozduğu üçün mümkün deyil.</translation>
 <translation id="7088434364990739311">Güncəlləmə yoxlanışı başladıla bilmədi (xəta kodu <ph name="ERROR" />).</translation>
 <translation id="7088561041432335295">Zip Archiver - ZIP fayllarını Fayl tətbiqində açın və paketləyin.</translation>
 <translation id="7088674813905715446">Bu cihaz administrator tərəfindən deproviziya edilmiş duruma yerləşdirildi. Qeydiyyatdan keçirmək üçün administrator onu gözləmə durumuna keçirməlidir.</translation>

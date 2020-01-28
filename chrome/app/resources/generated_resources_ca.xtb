@@ -3138,7 +3138,7 @@ en almenys <ph name="INSTALL_SIZE" /> d'espai lliure. Per alliberar espai, supri
 <translation id="5427459444770871191">Gira en el sentit de les &amp;agulles del rellotge</translation>
 <translation id="542872847390508405">Esteu navegant com a convidat.</translation>
 <translation id="5428850089342283580"><ph name="ACCNAME_APP" /> (l'actualització està disponible)</translation>
-<translation id="542948651837270806">Cal instal·lar una actualització del microprogramari del mòdul de plataforma de confiança. Consulta <ph name="TPM_FIRMWARE_UPDATE_LINK" />.</translation>
+<translation id="542948651837270806">Cal instal·lar una actualització per al microprogramari del mòdul de plataforma de confiança. Consulta <ph name="TPM_FIRMWARE_UPDATE_LINK" />.</translation>
 <translation id="5430931332414098647">Compartició de xarxa instantània</translation>
 <translation id="5431318178759467895">Color</translation>
 <translation id="5431825016875453137">OpenVPN/L2TP</translation>
