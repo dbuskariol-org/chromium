@@ -2796,6 +2796,9 @@ crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-004.html [ Fail
 crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-005.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
+crbug.com/626703 [ Linux ] external/wpt/webaudio/the-audio-api/the-audioworklet-interface/process-parameters.https.html [ Timeout ]
+crbug.com/626703 [ Mac ] external/wpt/webaudio/the-audio-api/the-audioworklet-interface/process-parameters.https.html [ Timeout ]
+crbug.com/626703 [ Win ] external/wpt/webaudio/the-audio-api/the-audioworklet-interface/process-parameters.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.12 ] external/wpt/eventsource/eventsource-constructor-url-bogus.any.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/webrtc/RTCPeerConnection-createDataChannel.html [ Failure Crash ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/html/webappapis/scripting/events/event-handler-attributes-body-window.html [ Failure Timeout ]
