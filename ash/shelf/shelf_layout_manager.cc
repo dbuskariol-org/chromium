@@ -489,7 +489,7 @@ void ShelfLayoutManager::LayoutShelf(bool animate) {
   if (in_shutdown_)
     return;
 
-  CalculateTargetBoundsAndUpdateWorkArea(hotseat_state());
+  CalculateTargetBoundsAndUpdateWorkArea();
   UpdateBoundsAndOpacity(animate);
 
   // Update insets in ShelfWindowTargeter when shelf bounds change.
@@ -1031,7 +1031,7 @@ void ShelfLayoutManager::OnSessionStateChanged(
   if (was_locked != state_.IsScreenLocked())
     UpdateShelfVisibilityAfterLoginUIChange();
 
-  CalculateTargetBoundsAndUpdateWorkArea(hotseat_state());
+  CalculateTargetBoundsAndUpdateWorkArea();
   UpdateBoundsAndOpacity(true /* animate */);
   UpdateVisibilityState();
 }
@@ -1055,7 +1055,7 @@ void ShelfLayoutManager::OnDisplayMetricsChanged(
     return;
 
   // Update |user_work_area_bounds_| for the new display arrangement.
-  CalculateTargetBoundsAndUpdateWorkArea(hotseat_state());
+  CalculateTargetBoundsAndUpdateWorkArea();
 }
 
 void ShelfLayoutManager::OnLocaleChanged() {
@@ -1167,7 +1167,7 @@ void ShelfLayoutManager::ResumeWorkAreaUpdate() {
 
   UpdateVisibilityState();
 
-  CalculateTargetBoundsAndUpdateWorkArea(hotseat_state());
+  CalculateTargetBoundsAndUpdateWorkArea();
   UpdateBoundsAndOpacity(/*animate=*/true);
   MaybeUpdateShelfBackground(AnimationChangeType::ANIMATE);
 }
@@ -1175,7 +1175,6 @@ void ShelfLayoutManager::ResumeWorkAreaUpdate() {
 void ShelfLayoutManager::SetState(ShelfVisibilityState visibility_state) {
   if (suspend_visibility_update_)
     return;
-
   State state;
   const HotseatState previous_hotseat_state = hotseat_state();
   state.visibility_state = visibility_state;
@@ -1183,7 +1182,8 @@ void ShelfLayoutManager::SetState(ShelfVisibilityState visibility_state) {
   state.window_state =
       GetShelfWorkspaceWindowState(shelf_widget_->GetNativeWindow());
   HotseatState new_hotseat_state =
-      CalculateHotseatState(state.visibility_state, state.auto_hide_state);
+      CalculateHotseatState(visibility_state, state.auto_hide_state);
+
   // Preserve the log in screen states.
   state.session_state = state_.session_state;
   state.pre_lock_screen_animation_active =
@@ -1234,7 +1234,7 @@ void ShelfLayoutManager::SetState(ShelfVisibilityState visibility_state) {
   if (!delay_background_change)
     MaybeUpdateShelfBackground(change_type);
 
-  CalculateTargetBoundsAndUpdateWorkArea(new_hotseat_state);
+  CalculateTargetBoundsAndUpdateWorkArea();
   UpdateBoundsAndOpacity(true /* animate */);
 
   // OnAutoHideStateChanged Should be emitted when:
@@ -1427,7 +1427,7 @@ void ShelfLayoutManager::SetDimmed(bool dimmed) {
     return;
 
   dimmed_for_inactivity_ = dimmed;
-  CalculateTargetBoundsAndUpdateWorkArea(hotseat_state());
+  CalculateTargetBoundsAndUpdateWorkArea();
 
   AnimateOpacity(shelf_widget_->navigation_widget(), target_bounds_.opacity,
                  kDimAnimationDuration, gfx::Tween::LINEAR);
@@ -1727,8 +1727,9 @@ void ShelfLayoutManager::CalculateTargetBounds(
   }
 }
 
-void ShelfLayoutManager::CalculateTargetBoundsAndUpdateWorkArea(
-    HotseatState hotseat_target_state) {
+void ShelfLayoutManager::CalculateTargetBoundsAndUpdateWorkArea() {
+  HotseatState hotseat_target_state =
+      CalculateHotseatState(visibility_state(), auto_hide_state());
   CalculateTargetBounds(state_, hotseat_target_state);
   gfx::Rect shelf_bounds_for_workarea_calculation = target_bounds_.shelf_bounds;
   // When the hotseat is enabled, only use the in-app shelf bounds when

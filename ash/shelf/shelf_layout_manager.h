@@ -408,10 +408,9 @@ class ASH_EXPORT ShelfLayoutManager
   void CalculateTargetBounds(const State& state,
                              HotseatState hotseat_target_state);
 
-  // Calculates the target bounds using |state_|, |hotseat_target_state|, and
-  // updates the |user_work_area_bounds_|.
-  void CalculateTargetBoundsAndUpdateWorkArea(
-      HotseatState hotseat_target_state);
+  // Calculates the target bounds using |state_| and updates the
+  // |user_work_area_bounds_|.
+  void CalculateTargetBoundsAndUpdateWorkArea();
 
   // Updates the target bounds if a gesture-drag is in progress. This is only
   // used by |CalculateTargetBounds()|.
