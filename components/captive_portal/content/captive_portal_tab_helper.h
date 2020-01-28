@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CAPTIVE_PORTAL_CAPTIVE_PORTAL_TAB_HELPER_H_
-#define CHROME_BROWSER_CAPTIVE_PORTAL_CAPTIVE_PORTAL_TAB_HELPER_H_
+#ifndef COMPONENTS_CAPTIVE_PORTAL_CONTENT_CAPTIVE_PORTAL_TAB_HELPER_H_
+#define COMPONENTS_CAPTIVE_PORTAL_CONTENT_CAPTIVE_PORTAL_TAB_HELPER_H_
 
 #include <memory>
 
@@ -13,14 +13,11 @@
 #include "components/captive_portal/content/captive_portal_tab_reloader.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
-#include "content/public/common/resource_type.h"
-
-class Profile;
 
 namespace content {
 class NavigationHandle;
 class WebContents;
-}
+}  // namespace content
 
 namespace net {
 class SSLInfo;
@@ -82,6 +79,7 @@ class CaptivePortalTabHelper
 
   static void CreateForWebContents(
       content::WebContents* web_contents,
+      CaptivePortalService* captive_portal_service,
       const CaptivePortalTabReloader::OpenLoginTabCallback&
           open_login_tab_callback);
 
@@ -91,6 +89,7 @@ class CaptivePortalTabHelper
 
   friend class content::WebContentsUserData<CaptivePortalTabHelper>;
   CaptivePortalTabHelper(content::WebContents* web_contents,
+                         CaptivePortalService* captive_portal_service,
                          const CaptivePortalTabReloader::OpenLoginTabCallback&
                              open_login_tab_callback);
   void Observe(const CaptivePortalService::Results& results);
@@ -104,8 +103,6 @@ class CaptivePortalTabHelper
   void SetTabReloaderForTest(CaptivePortalTabReloader* tab_reloader);
 
   CaptivePortalTabReloader* GetTabReloaderForTest();
-
-  Profile* profile_;
 
   // The current main frame navigation happening for the WebContents, or
   // nullptr if there is none. If there are two main frame navigations
@@ -127,4 +124,4 @@ class CaptivePortalTabHelper
   DISALLOW_COPY_AND_ASSIGN(CaptivePortalTabHelper);
 };
 
-#endif  // CHROME_BROWSER_CAPTIVE_PORTAL_CAPTIVE_PORTAL_TAB_HELPER_H_
+#endif  // COMPONENTS_CAPTIVE_PORTAL_CONTENT_CAPTIVE_PORTAL_TAB_HELPER_H_

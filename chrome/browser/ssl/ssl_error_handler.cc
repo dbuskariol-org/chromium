@@ -50,7 +50,7 @@
 #include "third_party/protobuf/src/google/protobuf/io/zero_copy_stream_impl_lite.h"
 
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
-#include "chrome/browser/captive_portal/captive_portal_tab_helper.h"
+#include "components/captive_portal/content/captive_portal_tab_helper.h"
 #endif
 
 #if defined(OS_ANDROID)

@@ -39,7 +39,6 @@
 
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
 #include "chrome/browser/captive_portal/captive_portal_service_factory.h"
-#include "chrome/browser/captive_portal/captive_portal_tab_helper.h"
 #include "chrome/browser/net/system_network_context_manager.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
@@ -47,6 +46,7 @@
 #include "chrome/browser/ui/browser_window.h"
 #include "chrome/browser/ui/tab_contents/tab_contents_iterator.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
+#include "components/captive_portal/content/captive_portal_tab_helper.h"
 #include "net/base/net_errors.h"
 #include "net/dns/dns_config.h"
 #endif

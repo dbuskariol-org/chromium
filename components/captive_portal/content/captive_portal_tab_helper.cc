@@ -2,12 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/captive_portal/captive_portal_tab_helper.h"
+#include "components/captive_portal/content/captive_portal_tab_helper.h"
 
 #include "base/bind.h"
 #include "base/debug/dump_without_crashing.h"
-#include "chrome/browser/captive_portal/captive_portal_service_factory.h"
-#include "chrome/browser/profiles/profile.h"
 #include "components/captive_portal/content/captive_portal_login_detector.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/navigation_handle.h"
@@ -22,35 +20,34 @@ using captive_portal::CaptivePortalResult;
 // static
 void CaptivePortalTabHelper::CreateForWebContents(
     content::WebContents* contents,
+    CaptivePortalService* captive_portal_service,
     const CaptivePortalTabReloader::OpenLoginTabCallback&
         open_login_tab_callback) {
   if (FromWebContents(contents))
     return;
-  contents->SetUserData(UserDataKey(),
-                        base::WrapUnique(new CaptivePortalTabHelper(
-                            contents, open_login_tab_callback)));
+  contents->SetUserData(
+      UserDataKey(),
+      base::WrapUnique(new CaptivePortalTabHelper(
+          contents, captive_portal_service, open_login_tab_callback)));
 }
 
 CaptivePortalTabHelper::CaptivePortalTabHelper(
     content::WebContents* web_contents,
+    CaptivePortalService* captive_portal_service,
     const CaptivePortalTabReloader::OpenLoginTabCallback&
         open_login_tab_callback)
 
     : content::WebContentsObserver(web_contents),
-      profile_(Profile::FromBrowserContext(web_contents->GetBrowserContext())),
       navigation_handle_(nullptr),
-      tab_reloader_(new CaptivePortalTabReloader(
-          CaptivePortalServiceFactory::GetForProfile(profile_),
-          web_contents,
-          open_login_tab_callback)),
+      tab_reloader_(new CaptivePortalTabReloader(captive_portal_service,
+                                                 web_contents,
+                                                 open_login_tab_callback)),
 
-      login_detector_(new CaptivePortalLoginDetector(
-          CaptivePortalServiceFactory::GetForProfile(profile_))),
+      login_detector_(new CaptivePortalLoginDetector(captive_portal_service)),
       is_captive_portal_window_(false),
-      subscription_(
-          CaptivePortalServiceFactory::GetForProfile(profile_)
-              ->RegisterCallback(base::Bind(&CaptivePortalTabHelper::Observe,
-                                            base::Unretained(this)))) {
+      subscription_(captive_portal_service->RegisterCallback(
+          base::Bind(&CaptivePortalTabHelper::Observe,
+                     base::Unretained(this)))) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 }
 
