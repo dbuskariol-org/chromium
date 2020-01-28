@@ -179,12 +179,12 @@ public class DownloadActivityV2Test extends DummyUiActivityTestCase {
 
         Matcher filesTabMatcher = allOf(
                 withText(equalToIgnoringCase("My Files")), isDescendantOfA(withId(R.id.tabs)));
-        Matcher prefetchTabMatcher = allOf(withText(equalToIgnoringCase("Articles for you")),
+        Matcher prefetchTabMatcher = allOf(withText(equalToIgnoringCase("Explore Offline")),
                 isDescendantOfA(withId(R.id.tabs)));
         onView(filesTabMatcher).check(matches(isDisplayed()));
         onView(prefetchTabMatcher).check(matches(isDisplayed()));
 
-        // Select Articles for you tab, and verify the contents.
+        // Select Explore Offline tab, and verify the contents.
         onView(prefetchTabMatcher).perform(ViewActions.click());
         checkItemsDisplayed(false, false, false, false);
 
@@ -233,7 +233,7 @@ public class DownloadActivityV2Test extends DummyUiActivityTestCase {
         onView(withId(R.id.empty)).check(matches(not(isDisplayed())));
 
         // Go to Prefetch tab. It should be empty.
-        onView(withText(equalToIgnoringCase("Articles for you")))
+        onView(withText(equalToIgnoringCase("Explore Offline")))
                 .check(matches(isDisplayed()))
                 .perform(ViewActions.click());
         onView(withText(containsString("Articles appear here"))).check(matches(isDisplayed()));
