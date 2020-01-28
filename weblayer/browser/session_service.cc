@@ -69,7 +69,7 @@ SessionService::SessionService(const base::FilePath& path, BrowserImpl* browser)
   command_storage_manager_->ScheduleGetCurrentSessionCommands(
       base::BindOnce(&SessionService::OnGotCurrentSessionCommands,
                      base::Unretained(this)),
-      &cancelable_task_tracker_);
+      std::vector<uint8_t>(), &cancelable_task_tracker_);
 }
 
 SessionService::~SessionService() {
