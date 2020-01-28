@@ -188,7 +188,7 @@ bool V4L2VideoEncodeAccelerator::Initialize(const Config& config,
   TRACE_EVENT0("media,gpu", "V4L2VEA::Initialize");
   VLOGF(2) << ": " << config.AsHumanReadableString();
 
-  visible_size_ = config.input_visible_size;
+  encoder_input_visible_rect_ = gfx::Rect(config.input_visible_size);
 
   client_ptr_factory_.reset(new base::WeakPtrFactory<Client>(client));
   client_ = client_ptr_factory_->GetWeakPtr();
@@ -266,7 +266,7 @@ void V4L2VideoEncodeAccelerator::InitializeTask(const Config& config,
 
     // TODO(hiroh): Decide the appropriate planar in some way.
     auto input_layout = VideoFrameLayout::CreateMultiPlanar(
-        config.input_format, visible_size_,
+        config.input_format, encoder_input_visible_rect_.size(),
         std::vector<ColorPlaneLayout>(
             VideoFrame::NumPlanes(config.input_format)));
     if (!input_layout) {
@@ -274,8 +274,10 @@ void V4L2VideoEncodeAccelerator::InitializeTask(const Config& config,
       return;
     }
 
+    // ImageProcessor for a pixel format conversion.
     if (!CreateImageProcessor(*input_layout, *device_input_layout_,
-                              visible_size_)) {
+                              encoder_input_visible_rect_,
+                              encoder_input_visible_rect_)) {
       VLOGF(1) << "Failed to create image processor";
       return;
     }
@@ -307,25 +309,25 @@ void V4L2VideoEncodeAccelerator::InitializeTask(const Config& config,
 bool V4L2VideoEncodeAccelerator::CreateImageProcessor(
     const VideoFrameLayout& input_layout,
     const VideoFrameLayout& output_layout,
-    const gfx::Size& visible_size) {
+    const gfx::Rect& input_visible_rect,
+    const gfx::Rect& output_visible_rect) {
   VLOGF(2);
   DCHECK_CALLED_ON_VALID_SEQUENCE(encoder_sequence_checker_);
   DCHECK_NE(input_layout.format(), output_layout.format());
 
-  // Convert from |config.input_format| to |device_input_layout_->format()|,
-  // keeping the size at |visible_size| and requiring the output buffers to
-  // be of at least |device_input_layout_->coded_size()|.
+  // Convert from |config.input_format| + |input_visible_rect| to
+  // |device_input_layout_->format()| + |output_visible_rect|, requiring the
+  // output buffers to be of at least |device_input_layout_->coded_size()|.
   // |input_storage_type| can be STORAGE_SHMEM and STORAGE_MOJO_SHARED_BUFFER.
   // However, it doesn't matter VideoFrame::STORAGE_OWNED_MEMORY is specified
   // for |input_storage_type| here, as long as VideoFrame on Process()'s data
   // can be accessed by VideoFrame::data().
-  auto input_config =
-      VideoFrameLayoutToPortConfig(input_layout, gfx::Rect(visible_size),
-                                   {VideoFrame::STORAGE_OWNED_MEMORY});
+  auto input_config = VideoFrameLayoutToPortConfig(
+      input_layout, input_visible_rect, {VideoFrame::STORAGE_OWNED_MEMORY});
   if (!input_config)
     return false;
   auto output_config = VideoFrameLayoutToPortConfig(
-      output_layout, gfx::Rect(visible_size),
+      output_layout, output_visible_rect,
       {VideoFrame::STORAGE_DMABUFS, VideoFrame::STORAGE_OWNED_MEMORY});
   if (!output_config)
     return false;
@@ -362,13 +364,11 @@ bool V4L2VideoEncodeAccelerator::CreateImageProcessor(
   free_image_processor_output_buffer_indices_.resize(kImageProcBufferCount);
   std::iota(free_image_processor_output_buffer_indices_.begin(),
             free_image_processor_output_buffer_indices_.end(), 0);
-  return AllocateImageProcessorOutputBuffers(kImageProcBufferCount,
-                                             visible_size);
+  return AllocateImageProcessorOutputBuffers(kImageProcBufferCount);
 }
 
 bool V4L2VideoEncodeAccelerator::AllocateImageProcessorOutputBuffers(
-    size_t count,
-    const gfx::Size& visible_size) {
+    size_t count) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(encoder_sequence_checker_);
   DCHECK(image_processor_);
   // Allocate VideoFrames for image processor output if its mode is IMPORT.
@@ -377,14 +377,14 @@ bool V4L2VideoEncodeAccelerator::AllocateImageProcessorOutputBuffers(
   }
 
   image_processor_output_buffers_.resize(count);
-  const auto output_storage_type =
-      image_processor_->output_config().storage_type();
+  const ImageProcessor::PortConfig& output_config =
+      image_processor_->output_config();
   for (size_t i = 0; i < count; i++) {
-    switch (output_storage_type) {
+    switch (output_config.storage_type()) {
       case VideoFrame::STORAGE_OWNED_MEMORY:
         image_processor_output_buffers_[i] = VideoFrame::CreateFrameWithLayout(
-            *device_input_layout_, gfx::Rect(visible_size), visible_size,
-            base::TimeDelta(), true);
+            *device_input_layout_, output_config.visible_rect,
+            output_config.visible_rect.size(), base::TimeDelta(), true);
         if (!image_processor_output_buffers_[i]) {
           VLOG(1) << "Failed to create VideoFrame";
           return false;
@@ -393,7 +393,7 @@ bool V4L2VideoEncodeAccelerator::AllocateImageProcessorOutputBuffers(
       // TODO(crbug.com/910590): Support VideoFrame::STORAGE_DMABUFS.
       default:
         VLOGF(1) << "Unsupported output storage type of image processor: "
-                 << output_storage_type;
+                 << output_config.storage_type();
         return false;
     }
   }
@@ -640,8 +640,7 @@ void V4L2VideoEncodeAccelerator::EncodeTask(scoped_refptr<VideoFrame> frame,
     return;
   }
 
-  if (frame &&
-      !ReconfigureFormatIfNeeded(frame->format(), frame->coded_size())) {
+  if (frame && !ReconfigureFormatIfNeeded(*frame)) {
     NOTIFY_ERROR(kInvalidArgumentError);
     encoder_state_ = kError;
     return;
@@ -662,18 +661,17 @@ void V4L2VideoEncodeAccelerator::EncodeTask(scoped_refptr<VideoFrame> frame,
 }
 
 bool V4L2VideoEncodeAccelerator::ReconfigureFormatIfNeeded(
-    VideoPixelFormat format,
-    const gfx::Size& new_frame_size) {
+    const VideoFrame& frame) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(encoder_sequence_checker_);
 
   // We should apply the frame size change to ImageProcessor if there is.
   if (image_processor_) {
     // Stride is the same. There is no need of executing S_FMT again.
-    if (image_processor_->input_config().size == new_frame_size) {
+    if (image_processor_->input_config().size == frame.coded_size()) {
       return true;
     }
 
-    VLOGF(2) << "Call S_FMT with a new size=" << new_frame_size.ToString()
+    VLOGF(2) << "Call S_FMT with a new size=" << frame.coded_size().ToString()
              << ", the previous size ="
              << device_input_layout_->coded_size().ToString();
     if (!input_buffer_map_.empty()) {
@@ -682,22 +680,14 @@ bool V4L2VideoEncodeAccelerator::ReconfigureFormatIfNeeded(
       return false;
     }
 
-    // TODO(hiroh): Decide the appropriate planar in some way.
-    auto input_layout = VideoFrameLayout::CreateMultiPlanar(
-        format, new_frame_size,
-        std::vector<ColorPlaneLayout>(VideoFrame::NumPlanes(format)));
-    if (!input_layout) {
-      VLOGF(1) << "Invalid image processor input layout";
-      return false;
-    }
-
-    if (!CreateImageProcessor(*input_layout, *device_input_layout_,
-                              visible_size_)) {
+    if (!CreateImageProcessor(frame.layout(), *device_input_layout_,
+                              frame.visible_rect(),
+                              encoder_input_visible_rect_)) {
       NOTIFY_ERROR(kPlatformFailureError);
       return false;
     }
     if (image_processor_->input_config().size.width() !=
-        new_frame_size.width()) {
+        frame.coded_size().width()) {
       NOTIFY_ERROR(kPlatformFailureError);
       return false;
     }
@@ -713,8 +703,8 @@ bool V4L2VideoEncodeAccelerator::ReconfigureFormatIfNeeded(
   // whose frame size as |input_allocated_size_|. VEAClient for ARC++ might give
   // a different frame size but |input_allocated_size_| is always the same as
   // |device_input_layout_->coded_size()|.
-  if (new_frame_size != input_allocated_size_) {
-    VLOGF(2) << "Call S_FMT with a new size=" << new_frame_size.ToString()
+  if (frame.coded_size() != input_allocated_size_) {
+    VLOGF(2) << "Call S_FMT with a new size=" << frame.coded_size().ToString()
              << ", the previous size ="
              << device_input_layout_->coded_size().ToString()
              << " (the size requested to client="
@@ -724,11 +714,13 @@ bool V4L2VideoEncodeAccelerator::ReconfigureFormatIfNeeded(
       NOTIFY_ERROR(kInvalidArgumentError);
       return false;
     }
-    if (!NegotiateInputFormat(device_input_layout_->format(), new_frame_size)) {
+    if (!NegotiateInputFormat(device_input_layout_->format(),
+                              frame.coded_size())) {
       NOTIFY_ERROR(kPlatformFailureError);
       return false;
     }
-    if (device_input_layout_->coded_size().width() != new_frame_size.width()) {
+    if (device_input_layout_->coded_size().width() !=
+        frame.coded_size().width()) {
       NOTIFY_ERROR(kPlatformFailureError);
       return false;
     }
@@ -1296,11 +1288,13 @@ bool V4L2VideoEncodeAccelerator::SetOutputFormat(
   DCHECK(!input_queue_->IsStreaming());
   DCHECK(!output_queue_->IsStreaming());
 
-  DCHECK(!visible_size_.IsEmpty());
-  output_buffer_byte_size_ = GetEncodeBitstreamBufferSize(visible_size_);
+  DCHECK(!encoder_input_visible_rect_.IsEmpty());
+  output_buffer_byte_size_ =
+      GetEncodeBitstreamBufferSize(encoder_input_visible_rect_.size());
 
   base::Optional<struct v4l2_format> format = output_queue_->SetFormat(
-      output_format_fourcc_, visible_size_, output_buffer_byte_size_);
+      output_format_fourcc_, encoder_input_visible_rect_.size(),
+      output_buffer_byte_size_);
   if (!format) {
     return false;
   }
@@ -1384,14 +1378,14 @@ bool V4L2VideoEncodeAccelerator::SetFormats(VideoPixelFormat input_format,
   if (!SetOutputFormat(output_profile))
     return false;
 
-  if (!NegotiateInputFormat(input_format, visible_size_))
+  if (!NegotiateInputFormat(input_format, encoder_input_visible_rect_.size()))
     return false;
 
   struct v4l2_rect visible_rect;
-  visible_rect.left = 0;
-  visible_rect.top = 0;
-  visible_rect.width = visible_size_.width();
-  visible_rect.height = visible_size_.height();
+  visible_rect.left = encoder_input_visible_rect_.x();
+  visible_rect.top = encoder_input_visible_rect_.y();
+  visible_rect.width = encoder_input_visible_rect_.width();
+  visible_rect.height = encoder_input_visible_rect_.height();
 
   struct v4l2_selection selection_arg{};
   selection_arg.type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
@@ -1399,7 +1393,7 @@ bool V4L2VideoEncodeAccelerator::SetFormats(VideoPixelFormat input_format,
   selection_arg.r = visible_rect;
 
   // The width and height might be adjusted by driver.
-  // Need to read it back and set to visible_size_.
+  // Need to read it back and set to |encoder_input_visible_rect_|.
   if (device_->Ioctl(VIDIOC_S_SELECTION, &selection_arg) == 0) {
     DVLOGF(2) << "VIDIOC_S_SELECTION is supported";
     visible_rect = selection_arg.r;
@@ -1413,10 +1407,11 @@ bool V4L2VideoEncodeAccelerator::SetFormats(VideoPixelFormat input_format,
     visible_rect = crop.c;
   }
 
-  visible_size_.SetSize(visible_rect.width, visible_rect.height);
-  VLOGF(2) << "After adjusted by driver, visible_size_="
-           << visible_size_.ToString();
-
+  encoder_input_visible_rect_ =
+      gfx::Rect(visible_rect.left, visible_rect.top, visible_rect.width,
+                visible_rect.height);
+  VLOGF(2) << "After adjusted by driver, encoder_input_visible_rect_="
+           << encoder_input_visible_rect_.ToString();
   return true;
 }
 
