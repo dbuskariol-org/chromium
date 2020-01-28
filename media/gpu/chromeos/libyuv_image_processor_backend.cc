@@ -34,14 +34,25 @@ SupportResult IsFormatSupported(Fourcc input_fourcc, Fourcc output_fourcc) {
       {Fourcc::XB24, Fourcc::NV12, true},
   };
 
+  const auto single_input_fourcc = input_fourcc.ToSinglePlanar();
+  const auto single_output_fourcc = output_fourcc.ToSinglePlanar();
+  if (!single_input_fourcc || !single_output_fourcc)
+    return SupportResult::Unsupported;
+
+  // Compare fourccs by formatting single planar formats because LibyuvIP can
+  // process either single- or multi-planar formats.
   for (const auto& conv : kSupportFormatConversionArray) {
     const auto conv_input_fourcc = Fourcc::FromUint32(conv.input);
     const auto conv_output_fourcc = Fourcc::FromUint32(conv.output);
     if (!conv_input_fourcc || !conv_output_fourcc)
-      return SupportResult::Unsupported;
+      continue;
+    const auto single_conv_input_fourcc = conv_input_fourcc->ToSinglePlanar();
+    const auto single_conv_output_fourcc = conv_output_fourcc->ToSinglePlanar();
+    if (!single_conv_input_fourcc || !single_conv_output_fourcc)
+      continue;
 
-    if (*conv_input_fourcc == input_fourcc &&
-        *conv_output_fourcc == output_fourcc) {
+    if (single_input_fourcc == single_conv_input_fourcc &&
+        single_output_fourcc == single_conv_output_fourcc) {
       return conv.need_pivot ? SupportResult::SupportedWithPivot
                              : SupportResult::Supported;
     }
