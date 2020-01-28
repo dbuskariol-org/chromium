@@ -166,10 +166,7 @@ Polymer({
     this.processingCompletion_ = false;
     this.hasValue_ = false;
     this.userEdited_ = false;
-    // Note: setting the focus synchronously, to avoid flakiness in tests due to
-    // racing between the asynchronous caret positioning and the PIN characters
-    // input.
-    this.$.pinKeyboard.focusInputSynchronously();
+    this.$.pinKeyboard.focusInput();
   },
 
   /**
