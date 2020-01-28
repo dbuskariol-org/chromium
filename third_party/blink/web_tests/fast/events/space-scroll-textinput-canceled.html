@@ -2,7 +2,6 @@
 <html>
 <head>
 <script src="../../resources/js-test.js"></script>
-<script src="../../resources/gesture-util.js"></script>
 <style type="text/css">
 ::-webkit-scrollbar {
     width: 0px;
@@ -28,7 +27,7 @@ txt.addEventListener('textInput', function(e) {
     }
 }, false);
 
-async function focusAndPressSpace()
+function focusAndPressSpace()
 {
     document.getElementById('txt').focus();
     // Leave some space for PageUp
@@ -38,16 +37,13 @@ async function focusAndPressSpace()
     // Space key shouldn't cancel PageUp
     eventSender.keyDown(" ", []);
 
-    await waitForCompositorCommit();
-    await waitForAnimationEndTimeBased(() => { return document.scrollingElement.scrollTop; });
-
     // PageUp should finish
     shouldBecomeEqual("document.scrollingElement.scrollTop", "0", finishJSTest);
 }
 
 jsTestIsAsync = true;
 
-async function runTest()
+function runTest()
 {
     if (window.eventSender) {
         focusAndPressSpace();

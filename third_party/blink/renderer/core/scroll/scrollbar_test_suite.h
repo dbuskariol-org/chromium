@@ -93,7 +93,7 @@ class MockScrollableArea : public GarbageCollected<MockScrollableArea>,
   CompositorElementId GetScrollElementId() const override {
     return CompositorElementId();
   }
-  bool ScrollAnimatorEnabled() const override { return true; }
+  bool ScrollAnimatorEnabled() const override { return false; }
   int PageStep(ScrollbarOrientation) const override { return 0; }
   void ScrollControlWasSetNeedsPaintInvalidation() override {}
   IntPoint ConvertFromRootFrame(const IntPoint& point_in_root_frame) const {
@@ -129,12 +129,11 @@ class MockScrollableArea : public GarbageCollected<MockScrollableArea>,
     ScrollableArea::Trace(visitor);
   }
 
- protected:
+ private:
   void SetMaximumScrollOffset(const ScrollOffset& maximum_scroll_offset) {
     maximum_scroll_offset_ = maximum_scroll_offset;
   }
 
- private:
   ScrollOffset scroll_offset_;
   ScrollOffset maximum_scroll_offset_;
   Member<MockPlatformChromeClient> chrome_client_;
