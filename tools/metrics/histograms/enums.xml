@@ -53612,6 +53612,7 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="QuickAnswersResultType">
+  <int value="0" label="kNoResult"/>
   <int value="5493" label="kDefinitionResult"/>
   <int value="6613" label="kTranslationResult"/>
   <int value="13668" label="kUnitConversionResult"/>
