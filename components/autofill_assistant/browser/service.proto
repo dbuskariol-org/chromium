@@ -630,6 +630,22 @@ message UnexpectedErrorInfoProto {
 
 // Message to report autofill related errors for debugging purposes.
 message AutofillErrorInfoProto {
+  message AutofillFieldError {
+    // The field the error occurred for.
+    optional ElementReferenceProto field = 1;
+
+    // The key of the fallback field. Matches the RequiredField::X enum entry.
+    optional int32 field_key = 2;
+
+    oneof error_type {
+      // No fallback value for this field.
+      bool no_fallback_value = 3;
+
+      // The status of the action.
+      ProcessedActionStatusProto status = 4;
+    }
+  }
+
   // Comma separated list of address keys in the client memory when the
   // unexpected error occurred. Memory values are never reported this way since
   // they may contain PII. Only the address key names!
@@ -644,6 +660,9 @@ message AutofillErrorInfoProto {
 
   // Error status of the Chrome autofill attempt.
   optional ProcessedActionStatusProto autofill_error_status = 4;
+
+  // Errors that occurred during fallback filling of autofill fields.
+  repeated AutofillFieldError autofill_field_error = 5;
 }
 
 // Next: 22
