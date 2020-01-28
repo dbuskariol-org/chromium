@@ -639,6 +639,10 @@ TEST_P(SplitViewControllerTest, SplitDividerBasicTest) {
 // while being dragged from the top.
 TEST_P(SplitViewControllerTest,
        DividerSetAsAlwaysOnTopAfterWindowDestroyedDuringDraggingFromTop) {
+  base::test::ScopedFeatureList scoped_features;
+  scoped_features.InitWithFeatures(
+      /*enabled_features=*/{features::kDragWindowFromTop},
+      /*disabled_features=*/{});
   std::unique_ptr<aura::Window> window1 = CreateTestWindow();
   std::unique_ptr<aura::Window> window2 = CreateTestWindow();
   std::unique_ptr<aura::Window> window3 = CreateTestWindow();
@@ -2661,7 +2665,11 @@ TEST_P(SplitViewControllerTest, EndSplitViewWhileDragging) {
 // window.
 class SplitViewTabDraggingTest : public SplitViewControllerTest {
  public:
-  SplitViewTabDraggingTest() = default;
+  SplitViewTabDraggingTest() {
+    scoped_features_.InitWithFeatures(
+        /*enabled_features=*/{features::kDragWindowFromTop},
+        /*disabled_features=*/{});
+  }
   ~SplitViewTabDraggingTest() override = default;
 
  protected:
@@ -2801,6 +2809,8 @@ class SplitViewTabDraggingTest : public SplitViewControllerTest {
   }
 
  private:
+  base::test::ScopedFeatureList scoped_features_;
+
   DISALLOW_COPY_AND_ASSIGN(SplitViewTabDraggingTest);
 };
 

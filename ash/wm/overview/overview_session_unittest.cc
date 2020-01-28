@@ -988,9 +988,13 @@ TEST_P(OverviewSessionTest, ActivationCancelsOverview) {
   EXPECT_EQ(window1.get(), window_util::GetFocusedWindow());
 }
 
-// Tests that if a window is dragged while overview is open, the activation
-// of the dragged window does not cancel overview.
+// Tests that if a window is dragged from top while overview is open, the
+//  activation of the dragged window does not cancel overview.
 TEST_P(OverviewSessionTest, ActivateDraggedWindowNotCancelOverview) {
+  base::test::ScopedFeatureList scoped_features;
+  scoped_features.InitWithFeatures(
+      /*enabled_features=*/{features::kDragWindowFromTop},
+      /*disabled_features=*/{});
   UpdateDisplay("800x600");
   EnterTabletMode();
   std::unique_ptr<aura::Window> window1(CreateTestWindow());
@@ -1014,9 +1018,13 @@ TEST_P(OverviewSessionTest, ActivateDraggedWindowNotCancelOverview) {
   EXPECT_FALSE(InOverviewSession());
 }
 
-// Tests that activate a non-dragged window during window drag will not cancel
-// overview mode.
+// Tests that activate a non-dragged window during window drag from top will not
+// cancel overview mode.
 TEST_P(OverviewSessionTest, ActivateAnotherWindowDuringDragNotCancelOverview) {
+  base::test::ScopedFeatureList scoped_features;
+  scoped_features.InitWithFeatures(
+      /*enabled_features=*/{features::kDragWindowFromTop},
+      /*disabled_features=*/{});
   UpdateDisplay("800x600");
   EnterTabletMode();
   std::unique_ptr<aura::Window> window1(CreateTestWindow());
@@ -1393,6 +1401,10 @@ TEST_P(OverviewSessionTest, DropTargetOnCorrectDisplayForDraggingFromOverview) {
 // dragged from the top.
 TEST_P(OverviewSessionTest,
        DropTargetRemovedIfWindowDraggedFromTopIsDestroyed) {
+  base::test::ScopedFeatureList scoped_features;
+  scoped_features.InitWithFeatures(
+      /*enabled_features=*/{features::kDragWindowFromTop},
+      /*disabled_features=*/{});
   EnterTabletMode();
   std::unique_ptr<aura::Window> window = CreateTestWindow();
   std::unique_ptr<aura::Window> window2 = CreateTestWindow();
@@ -2376,6 +2388,10 @@ TEST_P(OverviewSessionTest, OverviewWidgetStackingOrder) {
 // Test that dragging a window from the top creates a drop target stacked at the
 // bottom. Test that dropping into overview removes the drop target.
 TEST_P(OverviewSessionTest, DropTargetStackedAtBottomForWindowDraggedFromTop) {
+  base::test::ScopedFeatureList scoped_features;
+  scoped_features.InitWithFeatures(
+      /*enabled_features=*/{features::kDragWindowFromTop},
+      /*disabled_features=*/{});
   UpdateDisplay("800x600");
   EnterTabletMode();
   std::unique_ptr<aura::Window> window1(CreateTestWindow());
