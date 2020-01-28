@@ -1461,6 +1461,15 @@ TEST_P(SplitViewControllerTest, LongPressWithUnsnappableWindow) {
   EXPECT_FALSE(split_view_controller()->InSplitViewMode());
 }
 
+// Tests that long press works even if the window is minimized.
+TEST_P(SplitViewControllerTest, LongPressWithMinimizedWindow) {
+  std::unique_ptr<aura::Window> window(CreateWindow(gfx::Rect(400, 400)));
+  WindowState::Get(window.get())->Minimize();
+
+  LongPressOnOverivewButtonTray();
+  EXPECT_TRUE(split_view_controller()->InSplitViewMode());
+}
+
 // Test the rotation functionalities in split view mode.
 TEST_P(SplitViewControllerTest, RotationTest) {
   UpdateDisplay("807x407");
