@@ -2598,7 +2598,7 @@
   {
     "name": "mobile-identity-consistency",
     "owners": [ "bsazonov", "droger", "msarda" ],
-    "expiry_milestone": 80
+    "expiry_milestone": 84
   },
   {
     "name": "mouse-subframe-no-implicit-capture",
