@@ -343,6 +343,7 @@ void RenderFrameProxy::SetReplicatedState(const FrameReplicationState& state) {
   web_frame_->SetReplicatedInsecureRequestPolicy(state.insecure_request_policy);
   web_frame_->SetReplicatedInsecureNavigationsSet(
       state.insecure_navigations_set);
+  web_frame_->SetReplicatedAdFrameType(state.ad_frame_type);
   web_frame_->SetReplicatedFeaturePolicyHeaderAndOpenerPolicies(
       state.feature_policy_header, state.opener_feature_state);
   if (state.has_received_user_gesture) {

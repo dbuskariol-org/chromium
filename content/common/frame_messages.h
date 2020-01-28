@@ -98,6 +98,8 @@ IPC_ENUM_TRAITS_MAX_VALUE(content::FrameDeleteIntention,
                           content::FrameDeleteIntention::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::FrameOwnerElementType,
                           blink::FrameOwnerElementType::kMaxValue)
+IPC_ENUM_TRAITS_MAX_VALUE(blink::mojom::AdFrameType,
+                          blink::mojom::AdFrameType::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::ContextMenuDataMediaType,
                           blink::ContextMenuDataMediaType::kLast)
 IPC_ENUM_TRAITS_MAX_VALUE(blink::ContextMenuDataInputFieldType,
@@ -399,6 +401,7 @@ IPC_STRUCT_TRAITS_BEGIN(content::FrameReplicationState)
   IPC_STRUCT_TRAITS_MEMBER(has_received_user_gesture)
   IPC_STRUCT_TRAITS_MEMBER(has_received_user_gesture_before_nav)
   IPC_STRUCT_TRAITS_MEMBER(frame_owner_element_type)
+  IPC_STRUCT_TRAITS_MEMBER(ad_frame_type)
 IPC_STRUCT_TRAITS_END()
 
 // Parameters included with an OpenURL request.

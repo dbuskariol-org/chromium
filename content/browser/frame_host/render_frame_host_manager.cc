@@ -1012,6 +1012,14 @@ void RenderFrameHostManager::OnDidUpdateOrigin(
   }
 }
 
+void RenderFrameHostManager::OnDidSetAdFrameType(
+    blink::mojom::AdFrameType ad_frame_type) {
+  for (const auto& pair : proxy_hosts_) {
+    pair.second->GetAssociatedRemoteFrame()->SetReplicatedAdFrameType(
+        ad_frame_type);
+  }
+}
+
 RenderFrameHostManager::SiteInstanceDescriptor::SiteInstanceDescriptor(
     BrowserContext* browser_context,
     GURL dest_url,
