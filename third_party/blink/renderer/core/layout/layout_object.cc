@@ -309,6 +309,7 @@ LayoutObject::LayoutObject(Node* node)
 LayoutObject::~LayoutObject() {
 #if DCHECK_IS_ON()
   DCHECK(!has_ax_object_);
+  DCHECK(BeingDestroyed());
 #endif
   InstanceCounters::DecrementCounter(InstanceCounters::kLayoutObjectCounter);
 }
@@ -3330,7 +3331,14 @@ void LayoutObject::DestroyAndCleanupAnonymousWrappers() {
 }
 
 void LayoutObject::Destroy() {
+  // Mark as being destroyed to avoid trouble with merges in |RemoveChild()| and
+  // other house keepings.
+  bitfields_.SetBeingDestroyed(true);
   WillBeDestroyed();
+  DeleteThis();
+}
+
+void LayoutObject::DeleteThis() {
   delete this;
 }
 
