@@ -3335,9 +3335,6 @@ const char kCrostiniAppSearchName[] = "Crostini App Search";
 const char kCrostiniAppSearchDescription[] =
     "Enable search and installation of Crostini apps in the launcher.";
 
-const char kCrostiniBackupName[] = "Crostini Backup";
-const char kCrostiniBackupDescription[] = "Enable Crostini export and import.";
-
 const char kCrostiniPortForwardingName[] = "Crostini Port Forwarding";
 const char kCrostiniPortForwardingDescription[] =
     "Enable Crostini port forwarding.";

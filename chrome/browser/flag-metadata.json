@@ -592,11 +592,6 @@
     "expiry_milestone": 83
   },
   {
-    "name": "crostini-backup",
-    "owners": [ "joelhockey", "nverne", "benwells" ],
-    "expiry_milestone": 77
-  },
-  {
     "name": "crostini-disk-resizing",
     "owners": [ "davidmunro", "nverne", "clumptini" ],
     "expiry_milestone": 83
