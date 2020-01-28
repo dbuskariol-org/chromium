@@ -2601,7 +2601,7 @@ crbug.com/1009892 [ Mac ] virtual/compositor_threaded_scrollbar_scrolling_hidpi/
 # These cause a violation of a DCHECK in CC by sending a GestureScrollBegin
 # without closing an existing one.
 crbug.com/979408 virtual/compositor_threaded_scrollbar_scrolling/fast/scrolling/scrollbars/mouse-autoscrolling-on-scrollbar.html [ Crash Failure Timeout ]
-crbug.com/979408 virtual/compositor_threaded_scrollbar_scrolling/fast/scrolling/scrollbars/mouse-scrolling-on-div-scrollbar-thumb.html [ Crash ]
+crbug.com/979408 virtual/compositor_threaded_scrollbar_scrolling/fast/scrolling/scrollbars/mouse-scrolling-on-div-scrollbar-thumb.html [ Pass Crash Timeout ]
 
 # Some control characters still not visible
 crbug.com/893490 [ Mac ] external/wpt/css/css-text/white-space/control-chars-001.html [ Failure ]
