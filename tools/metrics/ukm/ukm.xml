@@ -6948,6 +6948,14 @@ be describing additional metrics about the same event.
       navigation for this page load was initiated.
     </summary>
   </metric>
+  <metric name="Net.JavaScriptBytes">
+    <summary>
+      The sum of decoded body lengths of all JavaScript resouces that completed
+      loading on the page. This is rounded down to the nearest exponential
+      bucket (with a bucket spacing factor of 10). On mobile this only records
+      bytes up until the page/app is backgrounded.
+    </summary>
+  </metric>
   <metric name="Net.NetworkBytes">
     <obsolete>
       Deprecated 03/2019 in favor of Net.NetworkBytes2.

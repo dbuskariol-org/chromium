@@ -134,6 +134,9 @@ class UkmPageLoadMetricsObserver
   int64_t cache_bytes_ = 0;
   int64_t network_bytes_ = 0;
 
+  // Sum of decoded body lengths of JS resources in bytes.
+  int64_t js_decoded_bytes_ = 0;
+
   // Network quality estimates.
   net::EffectiveConnectionType effective_connection_type_ =
       net::EFFECTIVE_CONNECTION_TYPE_UNKNOWN;

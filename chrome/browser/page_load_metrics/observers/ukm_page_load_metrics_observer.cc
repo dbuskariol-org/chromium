@@ -34,6 +34,7 @@
 #include "services/metrics/public/cpp/ukm_builders.h"
 #include "services/metrics/public/cpp/ukm_recorder.h"
 #include "services/network/public/cpp/network_quality_tracker.h"
+#include "third_party/blink/public/common/mime_util/mime_util.h"
 #include "third_party/metrics_proto/system_profile.pb.h"
 #include "ui/events/blink/blink_features.h"
 
@@ -223,9 +224,15 @@ void UkmPageLoadMetricsObserver::OnResourceDataUseObserved(
     return;
   for (auto const& resource : resources) {
     network_bytes_ += resource->delta_bytes;
-    if (resource->is_complete &&
-        resource->cache_type !=
-            page_load_metrics::mojom::CacheType::kNotCached) {
+
+    // Only sum body lengths for completed resources.
+    if (!resource->is_complete)
+      continue;
+    if (blink::IsSupportedJavascriptMimeType(resource->mime_type)) {
+      js_decoded_bytes_ += resource->decoded_body_length;
+    }
+    if (resource->cache_type !=
+        page_load_metrics::mojom::CacheType::kNotCached) {
       cache_bytes_ += resource->encoded_body_length;
     }
   }
@@ -351,6 +358,10 @@ void UkmPageLoadMetricsObserver::RecordTimingMetrics(
   builder.SetNet_CacheBytes2(ukm::GetExponentialBucketMin(cache_bytes_, 1.3));
   builder.SetNet_NetworkBytes2(
       ukm::GetExponentialBucketMin(network_bytes_, 1.3));
+
+  // Use a bucket spacing factor of 10 for JS bytes.
+  builder.SetNet_JavaScriptBytes(
+      ukm::GetExponentialBucketMin(js_decoded_bytes_, 10));
 
   if (main_frame_timing_)
     ReportMainResourceTimingMetrics(timing, &builder);
