@@ -2279,6 +2279,37 @@ IN_PROC_BROWSER_TEST_F(PDFExtensionTest, DidStopLoading) {
   content::WaitForLoadStop(web_contents);
 }
 
+// This test verifies that it is possible to add an <embed src=pdf> element into
+// a new popup window when using document.write.  See also
+// https://crbug.com/1041880.
+IN_PROC_BROWSER_TEST_F(PDFExtensionTest, DocumentWriteIntoNewPopup) {
+  // Navigate to an empty/boring test page.
+  GURL main_url(embedded_test_server()->GetURL("/title1.html"));
+  ui_test_utils::NavigateToURL(browser(), main_url);
+
+  // Open a new popup and call document.write to add an embedded PDF.
+  content::WebContents* popup = nullptr;
+  {
+    GURL pdf_url = embedded_test_server()->GetURL("/pdf/test.pdf");
+    const char kScriptTemplate[] = R"(
+        const url = $1;
+        const html = '<embed type="application/pdf" src="' + url + '">';
+
+        const popup = window.open('', '_blank');
+        popup.document.write(html);
+    )";
+    content::WebContentsAddedObserver popup_observer;
+    content::WebContents* web_contents =
+        browser()->tab_strip_model()->GetActiveWebContents();
+    ASSERT_TRUE(content::ExecJs(web_contents,
+                                content::JsReplace(kScriptTemplate, pdf_url)));
+    popup = popup_observer.GetWebContents();
+  }
+
+  // Verify the PDF loaded successfully.
+  ASSERT_TRUE(pdf_extension_test_util::EnsurePDFHasLoaded(popup));
+}
+
 // This test suite does a simple text-extraction based on the accessibility
 // internals, breaking lines & paragraphs where appropriate.  Unlike
 // TreeDumpTests, this allows us to verify the kNextOnLine and kPreviousOnLine
