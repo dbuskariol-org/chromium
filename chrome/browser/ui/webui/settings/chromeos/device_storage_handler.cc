@@ -234,7 +234,6 @@ void StorageHandler::OnGetSizeStat(int64_t* total_size,
                                    int64_t* available_size) {
   int64_t used_size = *total_size - *available_size;
   base::DictionaryValue size_stat;
-  size_stat.SetString("totalSize", ui::FormatBytes(*total_size));
   size_stat.SetString("availableSize", ui::FormatBytes(*available_size));
   size_stat.SetString("usedSize", ui::FormatBytes(used_size));
   size_stat.SetDouble("usedRatio",
