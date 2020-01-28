@@ -72,16 +72,15 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
     scoped_refptr<base::SequencedTaskRunner> backend_task_runner) {
   VLOGF(2);
 
-  std::unique_ptr<VideoFrameMapper> video_frame_mapper;
+  std::unique_ptr<VideoFrameMapper> input_frame_mapper;
   // LibYUVImageProcessorBackend supports only memory-based video frame for
   // input.
   VideoFrame::StorageType input_storage_type = VideoFrame::STORAGE_UNKNOWN;
   for (auto input_type : input_config.preferred_storage_types) {
     if (input_type == VideoFrame::STORAGE_DMABUFS) {
-      video_frame_mapper = VideoFrameMapperFactory::CreateMapper(
-          input_config.fourcc.ToVideoPixelFormat(), VideoFrame::STORAGE_DMABUFS,
-          true);
-      if (video_frame_mapper) {
+      input_frame_mapper = VideoFrameMapperFactory::CreateMapper(
+          input_config.fourcc.ToVideoPixelFormat(), input_type, true);
+      if (input_frame_mapper) {
         input_storage_type = input_type;
         break;
       }
@@ -97,10 +96,18 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
     return nullptr;
   }
 
-  // LibYUVImageProcessorBackend supports only memory-based video frame for
-  // output.
+  std::unique_ptr<VideoFrameMapper> output_frame_mapper;
   VideoFrame::StorageType output_storage_type = VideoFrame::STORAGE_UNKNOWN;
   for (auto output_type : output_config.preferred_storage_types) {
+    if (output_type == VideoFrame::STORAGE_DMABUFS) {
+      output_frame_mapper = VideoFrameMapperFactory::CreateMapper(
+          output_config.fourcc.ToVideoPixelFormat(), output_type, true);
+      if (output_frame_mapper) {
+        output_storage_type = output_type;
+        break;
+      }
+    }
+
     if (VideoFrame::IsStorageTypeMappable(output_type)) {
       output_storage_type = output_type;
       break;
@@ -139,7 +146,8 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
 
   auto processor =
       base::WrapUnique<ImageProcessorBackend>(new LibYUVImageProcessorBackend(
-          std::move(video_frame_mapper), std::move(intermediate_frame),
+          std::move(input_frame_mapper), std::move(output_frame_mapper),
+          std::move(intermediate_frame),
           PortConfig(input_config.fourcc, input_config.size,
                      input_config.planes, input_config.visible_rect,
                      {input_storage_type}),
@@ -154,7 +162,8 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
 }
 
 LibYUVImageProcessorBackend::LibYUVImageProcessorBackend(
-    std::unique_ptr<VideoFrameMapper> video_frame_mapper,
+    std::unique_ptr<VideoFrameMapper> input_frame_mapper,
+    std::unique_ptr<VideoFrameMapper> output_frame_mapper,
     scoped_refptr<VideoFrame> intermediate_frame,
     const PortConfig& input_config,
     const PortConfig& output_config,
@@ -166,7 +175,8 @@ LibYUVImageProcessorBackend::LibYUVImageProcessorBackend(
                             output_mode,
                             std::move(error_cb),
                             std::move(backend_task_runner)),
-      video_frame_mapper_(std::move(video_frame_mapper)),
+      input_frame_mapper_(std::move(input_frame_mapper)),
+      output_frame_mapper_(std::move(output_frame_mapper)),
       intermediate_frame_(std::move(intermediate_frame)) {}
 
 LibYUVImageProcessorBackend::~LibYUVImageProcessorBackend() {
@@ -180,8 +190,8 @@ void LibYUVImageProcessorBackend::Process(
   DCHECK_CALLED_ON_VALID_SEQUENCE(backend_sequence_checker_);
   DVLOGF(4);
   if (input_frame->storage_type() == VideoFrame::STORAGE_DMABUFS) {
-    DCHECK_NE(video_frame_mapper_.get(), nullptr);
-    input_frame = video_frame_mapper_->Map(std::move(input_frame));
+    DCHECK_NE(input_frame_mapper_.get(), nullptr);
+    input_frame = input_frame_mapper_->Map(std::move(input_frame));
     if (!input_frame) {
       VLOGF(1) << "Failed to map input VideoFrame";
       error_cb_.Run();
@@ -189,7 +199,19 @@ void LibYUVImageProcessorBackend::Process(
     }
   }
 
-  int res = DoConversion(input_frame.get(), output_frame.get());
+  // We don't replace |output_frame| with a mapped frame, because |output_frame|
+  // is the output of ImageProcessor.
+  scoped_refptr<VideoFrame> mapped_frame = output_frame;
+  if (output_frame->storage_type() == VideoFrame::STORAGE_DMABUFS) {
+    DCHECK_NE(output_frame_mapper_.get(), nullptr);
+    mapped_frame = output_frame_mapper_->Map(output_frame);
+    if (!mapped_frame) {
+      VLOGF(1) << "Failed to map output VideoFrame";
+      error_cb_.Run();
+      return;
+    }
+  }
+  int res = DoConversion(input_frame.get(), mapped_frame.get());
   if (res != 0) {
     VLOGF(1) << "libyuv::I420ToNV12 returns non-zero code: " << res;
     error_cb_.Run();
