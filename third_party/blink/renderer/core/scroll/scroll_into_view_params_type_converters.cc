@@ -10,15 +10,9 @@ blink::mojom::blink::ScrollAlignmentPtr TypeConverter<
     blink::mojom::blink::ScrollAlignmentPtr,
     blink::ScrollAlignment>::Convert(const blink::ScrollAlignment& input) {
   auto output = blink::mojom::blink::ScrollAlignment::New();
-  output->rect_visible =
-      ConvertTo<blink::mojom::blink::ScrollAlignment::Behavior>(
-          input.rect_visible_);
-  output->rect_hidden =
-      ConvertTo<blink::mojom::blink::ScrollAlignment::Behavior>(
-          input.rect_hidden_);
-  output->rect_partial =
-      ConvertTo<blink::mojom::blink::ScrollAlignment::Behavior>(
-          input.rect_partial_);
+  output->rect_visible = input.rect_visible_;
+  output->rect_hidden = input.rect_hidden_;
+  output->rect_partial = input.rect_partial_;
   return output;
 }
 
@@ -26,63 +20,10 @@ blink::ScrollAlignment
 TypeConverter<blink::ScrollAlignment, blink::mojom::blink::ScrollAlignmentPtr>::
     Convert(const blink::mojom::blink::ScrollAlignmentPtr& input) {
   blink::ScrollAlignment output;
-  output.rect_visible_ =
-      ConvertTo<blink::ScrollAlignmentBehavior>(input->rect_visible);
-  output.rect_hidden_ =
-      ConvertTo<blink::ScrollAlignmentBehavior>(input->rect_hidden);
-  output.rect_partial_ =
-      ConvertTo<blink::ScrollAlignmentBehavior>(input->rect_partial);
+  output.rect_visible_ = input->rect_visible;
+  output.rect_hidden_ = input->rect_hidden;
+  output.rect_partial_ = input->rect_partial;
   return output;
-}
-
-// static
-blink::mojom::blink::ScrollAlignment::Behavior TypeConverter<
-    blink::mojom::blink::ScrollAlignment::Behavior,
-    blink::ScrollAlignmentBehavior>::Convert(blink::ScrollAlignmentBehavior
-                                                 alignment) {
-  switch (alignment) {
-    case blink::kScrollAlignmentNoScroll:
-      return blink::mojom::blink::ScrollAlignment::Behavior::kNoScroll;
-    case blink::kScrollAlignmentCenter:
-      return blink::mojom::blink::ScrollAlignment::Behavior::kCenter;
-    case blink::kScrollAlignmentTop:
-      return blink::mojom::blink::ScrollAlignment::Behavior::kTop;
-    case blink::kScrollAlignmentBottom:
-      return blink::mojom::blink::ScrollAlignment::Behavior::kBottom;
-    case blink::kScrollAlignmentLeft:
-      return blink::mojom::blink::ScrollAlignment::Behavior::kLeft;
-    case blink::kScrollAlignmentRight:
-      return blink::mojom::blink::ScrollAlignment::Behavior::kRight;
-    case blink::kScrollAlignmentClosestEdge:
-      return blink::mojom::blink::ScrollAlignment::Behavior::kClosestEdge;
-  }
-  NOTREACHED();
-  return blink::mojom::blink::ScrollAlignment::Behavior::kNoScroll;
-}
-
-// static
-blink::ScrollAlignmentBehavior
-TypeConverter<blink::ScrollAlignmentBehavior,
-              blink::mojom::blink::ScrollAlignment::Behavior>::
-    Convert(blink::mojom::blink::ScrollAlignment::Behavior alignment) {
-  switch (alignment) {
-    case blink::mojom::blink::ScrollAlignment::Behavior::kNoScroll:
-      return blink::kScrollAlignmentNoScroll;
-    case blink::mojom::blink::ScrollAlignment::Behavior::kCenter:
-      return blink::kScrollAlignmentCenter;
-    case blink::mojom::blink::ScrollAlignment::Behavior::kTop:
-      return blink::kScrollAlignmentTop;
-    case blink::mojom::blink::ScrollAlignment::Behavior::kBottom:
-      return blink::kScrollAlignmentBottom;
-    case blink::mojom::blink::ScrollAlignment::Behavior::kLeft:
-      return blink::kScrollAlignmentLeft;
-    case blink::mojom::blink::ScrollAlignment::Behavior::kRight:
-      return blink::kScrollAlignmentRight;
-    case blink::mojom::blink::ScrollAlignment::Behavior::kClosestEdge:
-      return blink::kScrollAlignmentClosestEdge;
-  }
-  NOTREACHED();
-  return blink::kScrollAlignmentNoScroll;
 }
 
 }  // namespace mojo

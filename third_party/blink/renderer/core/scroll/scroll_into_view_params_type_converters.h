@@ -27,20 +27,6 @@ struct CORE_EXPORT TypeConverter<blink::ScrollAlignment,
       const blink::mojom::blink::ScrollAlignmentPtr& input);
 };
 
-template <>
-struct TypeConverter<blink::mojom::blink::ScrollAlignment::Behavior,
-                     blink::ScrollAlignmentBehavior> {
-  static blink::mojom::blink::ScrollAlignment::Behavior Convert(
-      blink::ScrollAlignmentBehavior behavior);
-};
-
-template <>
-struct TypeConverter<blink::ScrollAlignmentBehavior,
-                     blink::mojom::blink::ScrollAlignment::Behavior> {
-  static blink::ScrollAlignmentBehavior Convert(
-      blink::mojom::blink::ScrollAlignment::Behavior type);
-};
-
 }  // namespace mojo
 
 namespace blink {
