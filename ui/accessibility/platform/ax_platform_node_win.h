@@ -1231,11 +1231,22 @@ class AX_EXPORT __declspec(uuid("26f5641a-246d-457b-a96d-07f3fae6acf2"))
   // Return the text to use for IAccessibleText.
   base::string16 TextForIAccessibleText();
 
-  // Search forwards (direction == 1) or backwards (direction == -1)
-  // from the given offset until the given boundary is found, and
-  // return the offset of that boundary.
-  LONG FindBoundary(const base::string16& text,
-                    IA2TextBoundaryType ia2_boundary,
+  // Enum used to specify whether IAccessibleText is requesting text
+  // At, Before, or After a specified offset.
+  enum class TextOffsetType { kAtOffset, kBeforeOffset, kAfterOffset };
+
+  // Helper for implementing IAccessibleText::get_text{At|Before|After}Offset.
+  HRESULT IAccessibleTextGetTextForOffsetType(
+      TextOffsetType text_offset_type,
+      LONG offset,
+      enum IA2TextBoundaryType boundary_type,
+      LONG* start_offset,
+      LONG* end_offset,
+      BSTR* text);
+
+  // Search forwards or backwards from the given offset until the given IA2
+  // text boundary is found, and return the offset of that boundary.
+  LONG FindBoundary(IA2TextBoundaryType ia2_boundary,
                     LONG start_offset,
                     AXTextBoundaryDirection direction);
 

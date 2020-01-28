@@ -322,48 +322,8 @@ IFACEMETHODIMP BrowserAccessibilityComWin::get_textAtOffset(
     LONG* start_offset,
     LONG* end_offset,
     BSTR* text) {
-  WIN_ACCESSIBILITY_API_HISTOGRAM(UMA_API_GET_TEXT_AT_OFFSET);
-  AddAccessibilityModeFlags(kScreenReaderAndHTMLAccessibilityModes |
-                            ui::AXMode::kInlineTextBoxes);
-  if (!owner())
-    return E_FAIL;
-
-  if (!start_offset || !end_offset || !text)
-    return E_INVALIDARG;
-
-  *start_offset = 0;
-  *end_offset = 0;
-  *text = nullptr;
-
-  HandleSpecialTextOffset(&offset);
-  if (offset < 0)
-    return E_INVALIDARG;
-
-  const base::string16& text_str = GetHypertext();
-  LONG text_len = text_str.length();
-  if (offset > text_len)
-    return E_INVALIDARG;
-
-  // The IAccessible2 spec says we don't have to implement the "sentence"
-  // boundary type, we can just let the screenreader handle it.
-  if (boundary_type == IA2_TEXT_BOUNDARY_SENTENCE)
-    return S_FALSE;
-
-  // According to the IA2 Spec, only line boundaries should succeed when
-  // the offset is one past the end of the text.
-  if (offset == text_len && boundary_type != IA2_TEXT_BOUNDARY_LINE)
-    return S_FALSE;
-
-  LONG start = FindIA2Boundary(boundary_type, offset,
-                               ui::AXTextBoundaryDirection::kBackwards);
-  LONG end = FindIA2Boundary(boundary_type, offset,
-                             ui::AXTextBoundaryDirection::kForwards);
-  if (end < offset)
-    return S_FALSE;
-
-  *start_offset = start;
-  *end_offset = end;
-  return get_text(start, end, text);
+  return AXPlatformNodeWin::get_textAtOffset(offset, boundary_type,
+                                             start_offset, end_offset, text);
 }
 
 IFACEMETHODIMP BrowserAccessibilityComWin::get_textBeforeOffset(
@@ -372,33 +332,8 @@ IFACEMETHODIMP BrowserAccessibilityComWin::get_textBeforeOffset(
     LONG* start_offset,
     LONG* end_offset,
     BSTR* text) {
-  WIN_ACCESSIBILITY_API_HISTOGRAM(UMA_API_GET_TEXT_BEFORE_OFFSET);
-  AddAccessibilityModeFlags(kScreenReaderAndHTMLAccessibilityModes |
-                            ui::AXMode::kInlineTextBoxes);
-  if (!owner())
-    return E_FAIL;
-
-  if (!start_offset || !end_offset || !text)
-    return E_INVALIDARG;
-
-  *start_offset = 0;
-  *end_offset = 0;
-  *text = NULL;
-
-  const base::string16& text_str = GetHypertext();
-  LONG text_len = text_str.length();
-  if (offset > text_len)
-    return E_INVALIDARG;
-
-  // The IAccessible2 spec says we don't have to implement the "sentence"
-  // boundary type, we can just let the screenreader handle it.
-  if (boundary_type == IA2_TEXT_BOUNDARY_SENTENCE)
-    return S_FALSE;
-
-  *start_offset = FindIA2Boundary(boundary_type, offset,
-                                  ui::AXTextBoundaryDirection::kBackwards);
-  *end_offset = offset;
-  return get_text(*start_offset, *end_offset, text);
+  return AXPlatformNodeWin::get_textBeforeOffset(
+      offset, boundary_type, start_offset, end_offset, text);
 }
 
 IFACEMETHODIMP BrowserAccessibilityComWin::get_textAfterOffset(
@@ -407,33 +342,8 @@ IFACEMETHODIMP BrowserAccessibilityComWin::get_textAfterOffset(
     LONG* start_offset,
     LONG* end_offset,
     BSTR* text) {
-  WIN_ACCESSIBILITY_API_HISTOGRAM(UMA_API_GET_TEXT_AFTER_OFFSET);
-  AddAccessibilityModeFlags(kScreenReaderAndHTMLAccessibilityModes |
-                            ui::AXMode::kInlineTextBoxes);
-  if (!owner())
-    return E_FAIL;
-
-  if (!start_offset || !end_offset || !text)
-    return E_INVALIDARG;
-
-  *start_offset = 0;
-  *end_offset = 0;
-  *text = NULL;
-
-  const base::string16& text_str = GetHypertext();
-  LONG text_len = text_str.length();
-  if (offset > text_len)
-    return E_INVALIDARG;
-
-  // The IAccessible2 spec says we don't have to implement the "sentence"
-  // boundary type, we can just let the screenreader handle it.
-  if (boundary_type == IA2_TEXT_BOUNDARY_SENTENCE)
-    return S_FALSE;
-
-  *start_offset = offset;
-  *end_offset = FindIA2Boundary(boundary_type, offset,
-                                ui::AXTextBoundaryDirection::kForwards);
-  return get_text(*start_offset, *end_offset, text);
+  return AXPlatformNodeWin::get_textAfterOffset(offset, boundary_type,
+                                                start_offset, end_offset, text);
 }
 
 IFACEMETHODIMP BrowserAccessibilityComWin::get_newText(
@@ -1829,25 +1739,6 @@ void BrowserAccessibilityComWin::SetIA2HypertextSelection(LONG start_offset,
   HandleSpecialTextOffset(&start_offset);
   HandleSpecialTextOffset(&end_offset);
   SetHypertextSelection(start_offset, end_offset);
-}
-
-LONG BrowserAccessibilityComWin::FindIA2Boundary(
-    IA2TextBoundaryType ia2_boundary,
-    LONG start_offset,
-    ui::AXTextBoundaryDirection direction) {
-  HandleSpecialTextOffset(&start_offset);
-
-  // If the |start_offset| is equal to the location of the caret, then use the
-  // focus affinity, otherwise default to downstream affinity.
-  ax::mojom::TextAffinity affinity = ax::mojom::TextAffinity::kDownstream;
-  int selection_start, selection_end;
-  GetSelectionOffsets(&selection_start, &selection_end);
-  if (selection_end >= 0 && start_offset == selection_end)
-    affinity = Manager()->GetTreeData().sel_focus_affinity;
-
-  ui::AXTextBoundary boundary = ui::FromIA2TextBoundary(ia2_boundary);
-  return static_cast<LONG>(
-      FindTextBoundary(boundary, start_offset, direction, affinity));
 }
 
 LONG BrowserAccessibilityComWin::FindStartOfStyle(
