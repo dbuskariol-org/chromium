@@ -39225,6 +39225,7 @@ from previous Chrome versions.
   <int value="1268470658" label="disable-android-password-link"/>
   <int value="1269940659" label="EnumerateAudioDevices:enabled"/>
   <int value="1269952439" label="AndroidAIAFetching:disabled"/>
+  <int value="1271871811" label="LegacyTLSEnforced:enabled"/>
   <int value="1272699563" label="enable-hosted-mode"/>
   <int value="1272923911" label="NewMessageListView:disabled"/>
   <int value="1274717741" label="top-chrome-touch-ui"/>
@@ -39646,6 +39647,7 @@ from previous Chrome versions.
   <int value="1795186324" label="SyncPseudoUSSExtensionSettings:disabled"/>
   <int value="1798347197"
       label="ContextualSuggestionsIPHReverseScroll:disabled"/>
+  <int value="1799521026" label="LegacyTLSEnforced:disabled"/>
   <int value="1803465156" label="enable-zero-suggest-most-visited"/>
   <int value="1803470125" label="SyncUSSSessions:enabled"/>
   <int value="1803914892" label="TemporaryUnexpireFlagsM76:enabled"/>

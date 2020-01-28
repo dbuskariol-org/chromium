@@ -661,6 +661,9 @@ extern const char kJavascriptHarmonyDescription[];
 extern const char kJavascriptHarmonyShippingName[];
 extern const char kJavascriptHarmonyShippingDescription[];
 
+extern const char kLegacyTLSEnforcedName[];
+extern const char kLegacyTLSEnforcedDescription[];
+
 extern const char kLegacyTLSWarningsName[];
 extern const char kLegacyTLSWarningsDescription[];
 

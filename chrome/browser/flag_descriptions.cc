@@ -1117,6 +1117,13 @@ const char kJavascriptHarmonyShippingDescription[] =
     "conflict with the latest JavaScript features. This flag allows disabling "
     "support of those features for compatibility with such pages.";
 
+const char kLegacyTLSEnforcedName[] =
+    "Enforce deprecation of legacy TLS versions";
+const char kLegacyTLSEnforcedDescription[] =
+    "Enable connection errors and interstitials for sites that use legacy TLS "
+    "versions (TLS 1.0 and TLS 1.1), which are deprecated and will be removed "
+    " in the future.";
+
 const char kLegacyTLSWarningsName[] =
     "Show security warnings for sites using legacy TLS versions";
 const char kLegacyTLSWarningsDescription[] =

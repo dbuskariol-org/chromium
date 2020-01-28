@@ -2494,6 +2494,11 @@
     "expiry_milestone": 90
   },
   {
+    "name": "legacy-tls-enforced",
+    "owners": [ "cthomp" ],
+    "expiry_milestone": 87
+  },
+  {
     "name": "list-all-display-modes",
     "owners": [ "//ui/display/OWNERS" ],
     // This flag is used for debugging and development purposes to list all

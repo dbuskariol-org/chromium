@@ -4858,6 +4858,10 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kUserDataSnapshot)},
 #endif
 
+    {"legacy-tls-enforced", flag_descriptions::kLegacyTLSEnforcedName,
+     flag_descriptions::kLegacyTLSEnforcedDescription, kOsDesktop | kOsAndroid,
+     FEATURE_VALUE_TYPE(net::features::kLegacyTLSEnforced)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the
