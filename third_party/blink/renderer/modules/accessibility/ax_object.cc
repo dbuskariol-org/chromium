@@ -381,6 +381,7 @@ const InternalRoleEntry kInternalRoles[] = {
     {ax::mojom::Role::kNote, "Note"},
     {ax::mojom::Role::kPane, "Pane"},
     {ax::mojom::Role::kParagraph, "Paragraph"},
+    {ax::mojom::Role::kPdfActionableHighlight, "PdfActionableHighlight"},
     {ax::mojom::Role::kPluginObject, "PluginObject"},
     {ax::mojom::Role::kPopUpButton, "PopUpButton"},
     {ax::mojom::Role::kPortal, "Portal"},
@@ -3657,6 +3658,12 @@ bool AXObject::NameFromContents(bool recursive) const {
     case ax::mojom::Role::kRubyAnnotation:
     case ax::mojom::Role::kSection:
       result = recursive || (CanReceiveAccessibilityFocus() && !IsEditable());
+      break;
+
+    case ax::mojom::Role::kPdfActionableHighlight:
+      LOG(ERROR) << "PDF specific highlight role, Blink shouldn't generate "
+                    "this role type";
+      NOTREACHED();
       break;
 
     case ax::mojom::Role::kUnknown:
