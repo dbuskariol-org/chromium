@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_ARC_SESSION_ARC_VM_CLIENT_ADAPTER_UTIL_H_
-#define COMPONENTS_ARC_SESSION_ARC_VM_CLIENT_ADAPTER_UTIL_H_
+#ifndef COMPONENTS_ARC_SESSION_ARC_PROPERTY_UTIL_H_
+#define COMPONENTS_ARC_SESSION_ARC_PROPERTY_UTIL_H_
 
 #include <string>
 
@@ -46,4 +46,4 @@ bool ExpandPropertyFile(const base::FilePath& input,
 
 }  // namespace arc
 
-#endif  // COMPONENTS_ARC_SESSION_ARC_VM_CLIENT_ADAPTER_UTIL_H_
+#endif  // COMPONENTS_ARC_SESSION_ARC_PROPERTY_UTIL_H_

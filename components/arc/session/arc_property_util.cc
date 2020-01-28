@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/arc/session/arc_vm_client_adapter_util.h"
+#include "components/arc/session/arc_property_util.h"
 
 #include <algorithm>
 #include <vector>
