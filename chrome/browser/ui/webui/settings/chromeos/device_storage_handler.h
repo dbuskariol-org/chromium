@@ -53,6 +53,24 @@ class StorageHandler
     STORAGE_SPACE_CRITICALLY_LOW = 2,
   };
 
+  // Class used by tests to interact with StorageHandler internals.
+  class TestAPI {
+   public:
+    explicit TestAPI(StorageHandler* handler) { handler_ = handler; }
+
+    TestAPI(const TestAPI&) = delete;
+    TestAPI& operator=(const TestAPI&) = delete;
+
+    // Simulate a request from WebUI to update global size statistics.
+    void UpdateSizeStat();
+
+    // Simulate a callback with controlled total and available size inputs.
+    void OnGetSizeStat(int64_t* total_size, int64_t* available_size);
+
+   private:
+    StorageHandler* handler_;  // Not owned.
+  };
+
   StorageHandler(Profile* profile, content::WebUIDataSource* html_source);
   ~StorageHandler() override;
 

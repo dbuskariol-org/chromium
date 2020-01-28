@@ -55,6 +55,16 @@ using chromeos::disks::DiskMountManager;
 
 namespace chromeos {
 namespace settings {
+
+void StorageHandler::TestAPI::UpdateSizeStat() {
+  handler_->UpdateSizeStat();
+}
+
+void StorageHandler::TestAPI::OnGetSizeStat(int64_t* total_size,
+                                            int64_t* available_size) {
+  handler_->OnGetSizeStat(total_size, available_size);
+}
+
 namespace {
 
 void GetSizeStatBlocking(const base::FilePath& mount_path,
