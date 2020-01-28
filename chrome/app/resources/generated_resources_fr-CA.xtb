@@ -33,7 +33,6 @@
 <translation id="1036982837258183574">Appuyez sur |<ph name="ACCELERATOR" />| pour quitter le mode plein écran</translation>
 <translation id="1038168778161626396">Chiffrer seulement</translation>
 <translation id="1039337018183941703">Fichier non valide ou corrompu</translation>
-<translation id="1039850285407663109">Le fichier sélectionné est inconnu et peut être dangereux. Envisagez d'analyser ce fichier avant de l'ouvrir.</translation>
 <translation id="1041175011127912238">Cette page ne répond pas</translation>
 <translation id="1041263367839475438">Appareils accessibles</translation>
 <translation id="1042174272890264476">Votre ordinateur est fourni avec la bibliothèque RLZ de <ph name="SHORT_PRODUCT_NAME" />. RLZ attribue une étiquette non unique et qui ne permet pas d'identifier des internautes afin de mesurer les recherches et l'utilisation de <ph name="SHORT_PRODUCT_NAME" /> générées par une campagne de promotion particulière. Ces étiquettes s'affichent parfois dans les requêtes de recherche Google dans <ph name="PRODUCT_NAME" />.</translation>
@@ -633,7 +632,6 @@
 <translation id="1858585891038687145">Considérer ce certificat comme fiable pour identifier les concepteurs de logiciels</translation>
 <translation id="1861262398884155592">Ce dossier est vide</translation>
 <translation id="1863182668524159459">Aucun port série n'a été trouvé</translation>
-<translation id="1863552924692672565"><ph name="FILE_NAME" /> est inconnu. Analyser le fichier pour minimiser le risque.</translation>
 <translation id="1864111464094315414">Connexion</translation>
 <translation id="1864400682872660285">Plus froid</translation>
 <translation id="1864454756846565995">Appareil USB-C (port arrière)</translation>

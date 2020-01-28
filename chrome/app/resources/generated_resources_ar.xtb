@@ -26,7 +26,6 @@
 <translation id="1031362278801463162">تحميل المعاينة</translation>
 <translation id="1032605640136438169">يُرجى مراجعة البنود الجديدة.</translation>
 <translation id="103279545524624934">‏احرص على تفريغ مساحة على القرص لتشغيل تطبيقات Android.</translation>
-<translation id="1033343386521881354">تم العثور على طابعة واحدة من خادم الطباعة.</translation>
 <translation id="1033780634303702874">الوصول إلى الأجهزة التسلسلية</translation>
 <translation id="1034942643314881546">‏تفعيل ADB لإنشاء رسم توضيحي للتطبيقات</translation>
 <translation id="1036348656032585052">إيقاف</translation>
@@ -34,7 +33,6 @@
 <translation id="1036982837258183574">اضغط على |<ph name="ACCELERATOR" />| للخروج من وضع ملء الشاشة</translation>
 <translation id="1038168778161626396">التشفير فقط</translation>
 <translation id="1039337018183941703">ملف تالف أو غير صالح</translation>
-<translation id="1039850285407663109">الملف الذي تم اختياره غير معروف ويمكن أن يكون ضارًا. يُرجى فحص الملف قبل فتحه.</translation>
 <translation id="1041175011127912238">الصفحة لا تستجيب.</translation>
 <translation id="1041263367839475438">الأجهزة المتوفِّرة</translation>
 <translation id="1042174272890264476">‏يأتي جهاز الكمبيوتر أيضًا مزودًا بمكتبة RLZ مضمنة للمنتج <ph name="SHORT_PRODUCT_NAME" />. تعيّن RLZ علامة غير فريدة وغير متعلقة بتحديد الشخصية من أجل قياس عمليات البحث ومعدل استخدام <ph name="SHORT_PRODUCT_NAME" /> الذي تؤثر فيه حملة ترويجية محددة. تظهر هذه التصنيفات أحيانًا في طلبات بحث Google في <ph name="PRODUCT_NAME" />.</translation>
@@ -639,7 +637,6 @@
 <translation id="1858585891038687145">الوثوق بهذه الشهادة لتحديد هوية مصممي البرامج</translation>
 <translation id="1861262398884155592">هذا المجلد فارغ</translation>
 <translation id="1863182668524159459">لم يتم العثور على منافذ تسلسلية</translation>
-<translation id="1863552924692672565"><ph name="FILE_NAME" /> غير معروف. يُفضَّل فحص الملف لتقليل المخاطر.</translation>
 <translation id="1864111464094315414">تسجيل الدخول</translation>
 <translation id="1864400682872660285">أكثر برودة</translation>
 <translation id="1864454756846565995">‏جهاز USB-C (المنفذ الخلفي)</translation>
@@ -4023,7 +4020,6 @@
 <translation id="6678717876183468697">‏عنوان URL للاستعلام</translation>
 <translation id="6680442031740878064">المساحة المتاحة: <ph name="AVAILABLE_SPACE" /></translation>
 <translation id="6680650203439190394">تقييم</translation>
-<translation id="6681301928961274620">لم يتم العثور على أيّ طابعات من خادم الطباعة.</translation>
 <translation id="6681668084120808868">التقاط صورة</translation>
 <translation id="6681964764822470072">سيتم إلغاء تثبيت "<ph name="APP_NAME" />".</translation>
 <translation id="668599234725812620">‏فتح Google Play</translation>
@@ -5553,7 +5549,6 @@
 <translation id="8794025342371547160">‏عنوان IP مقيد</translation>
 <translation id="879413103056696865">أثناء تشغيل نقطة الاتصال، سينفّذ جهاز <ph name="PHONE_NAME" /> ما يلي:</translation>
 <translation id="8795916974678578410">نافذة جديدة</translation>
-<translation id="8797086401386164142">تم العثور على <ph name="NUM_PRINTERS" /> طابعات من خادم الطباعة.</translation>
 <translation id="8797459392481275117">عدم ترجمة هذا الموقع مطلقًا</translation>
 <translation id="8798099450830957504">التلقائي</translation>
 <translation id="8798441408945964110">اسم مقدم الخدمة</translation>

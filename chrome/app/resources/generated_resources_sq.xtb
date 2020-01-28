@@ -26,7 +26,6 @@
 <translation id="1031362278801463162">Po ngarkohet pamja paraprake...</translation>
 <translation id="1032605640136438169">Shqyrto kushtet e reja</translation>
 <translation id="103279545524624934">Liro hapësirë në disk për të nisur aplikacionet Android.</translation>
-<translation id="1033343386521881354">U gjet 1 printer nga serveri i printimit.</translation>
 <translation id="1033780634303702874">Qasu në pajisjet e tua seriale</translation>
 <translation id="1034942643314881546">ADB-ja po aktivizohet për të krijuar ilustrimin e aplikacioneve</translation>
 <translation id="1036348656032585052">Çaktivizo</translation>
@@ -34,7 +33,6 @@
 <translation id="1036982837258183574">Shtyp |<ph name="ACCELERATOR" />| për të dalë nga ekrani i plotë</translation>
 <translation id="1038168778161626396">Vetëm shifrues</translation>
 <translation id="1039337018183941703">Skedar i pavlefshëm ose i dëmtuar</translation>
-<translation id="1039850285407663109">Skedari i zgjedhur është i panjohur dhe mund të jetë i rrezikshëm. Ki parasysh ta skanosh këtë skedar para se ta hapësh.</translation>
 <translation id="1041175011127912238">Kjo faqe nuk përgjigjet</translation>
 <translation id="1041263367839475438">Pajisjet që ofrohen</translation>
 <translation id="1042174272890264476">Kompjuteri yt vjen po ashtu me bibliotekën RLZ të <ph name="SHORT_PRODUCT_NAME" /> të integruar. Parametri RLZ cakton një etiketë jo unike, jo personalisht të identifikueshme për të matur kërkimet dhe përdorimin e <ph name="SHORT_PRODUCT_NAME" /> të nxitur nga një fushatë promocionale të veçantë. Këto etiketa ndonjëherë shfaqen në pyetjet e "Kërko me Google" në <ph name="PRODUCT_NAME" />.</translation>
@@ -636,7 +634,6 @@
 <translation id="1858585891038687145">Besoji kësaj certifikate për identifikimin e prodhuesve të softuerëve</translation>
 <translation id="1861262398884155592">Kjo dosje është bosh</translation>
 <translation id="1863182668524159459">Nuk u gjet asnjë portë seriale</translation>
-<translation id="1863552924692672565"><ph name="FILE_NAME" /> është i panjohur. Skano skedarin për të minimizuar rrezikun.</translation>
 <translation id="1864111464094315414">Identifikimi</translation>
 <translation id="1864400682872660285">Më freskët</translation>
 <translation id="1864454756846565995">Pajisja USB-C (porta prapa)</translation>
@@ -4022,7 +4019,6 @@ Cilësimet e kësaj llogarie mund t'i menaxhosh duke instaluar aplikacionin Fami
 <translation id="6678717876183468697">URL-ja e pyetjes</translation>
 <translation id="6680442031740878064">Në dispozicion: <ph name="AVAILABLE_SPACE" /></translation>
 <translation id="6680650203439190394">Shpejtësia</translation>
-<translation id="6681301928961274620">Nuk u gjet asnjë printer nga serveri i printimit.</translation>
 <translation id="6681668084120808868">Nxirr një fotografi</translation>
 <translation id="6681964764822470072">"<ph name="APP_NAME" />" do të çinstalohet.</translation>
 <translation id="668599234725812620">Hap Google Play</translation>
@@ -5550,7 +5546,6 @@ Mbaje skedarin e çelësit tënd në një vend të sigurt. Do të të duhet për
 <translation id="8794025342371547160">Adresa IP e kufizuar</translation>
 <translation id="879413103056696865">Kur zona e qasjes për internet është aktive, telefoni yt <ph name="PHONE_NAME" /> do të:</translation>
 <translation id="8795916974678578410">Dritare e re</translation>
-<translation id="8797086401386164142">U gjetën <ph name="NUM_PRINTERS" /> printerë nga serveri i printimit.</translation>
 <translation id="8797459392481275117">Asnjëherë mos e përkthe këtë sajt</translation>
 <translation id="8798099450830957504">I parazgjedhur</translation>
 <translation id="8798441408945964110">Emri i ofruesit</translation>

@@ -26,7 +26,6 @@
 <translation id="1031362278801463162">Chargement de l'aperçu...</translation>
 <translation id="1032605640136438169">Veuillez consulter les nouvelles conditions</translation>
 <translation id="103279545524624934">Libérez de l'espace disque pour lancer des applications Android.</translation>
-<translation id="1033343386521881354">1 imprimante trouvée sur le serveur d'impression.</translation>
 <translation id="1033780634303702874">Accéder à vos appareils reliés via le port série</translation>
 <translation id="1034942643314881546">Illustration de l'activation d'ADB pour créer des applications</translation>
 <translation id="1036348656032585052">Désactiver</translation>
@@ -34,7 +33,6 @@
 <translation id="1036982837258183574">Appuyez sur |<ph name="ACCELERATOR" />| pour quitter le mode plein écran.</translation>
 <translation id="1038168778161626396">Chiffrer seulement</translation>
 <translation id="1039337018183941703">Fichier non valide ou corrompu</translation>
-<translation id="1039850285407663109">Le fichier sélectionné est inconnu et peut présenter un danger. Vous devriez l'analyser avant de l'ouvrir.</translation>
 <translation id="1041175011127912238">Cette page ne répond pas</translation>
 <translation id="1041263367839475438">Appareils disponibles</translation>
 <translation id="1042174272890264476">Votre ordinateur est fourni avec la bibliothèque RLZ de <ph name="SHORT_PRODUCT_NAME" />. RLZ attribue un tag non unique (et qui n'identifie pas personnellement les internautes) afin de mesurer les recherches et l'utilisation de <ph name="SHORT_PRODUCT_NAME" /> générées par une campagne de promotion spécifique. Ces libellés s'affichent parfois dans les requêtes de recherche Google dans <ph name="PRODUCT_NAME" />.</translation>
@@ -639,7 +637,6 @@
 <translation id="1858585891038687145">Considérer ce certificat comme fiable pour identifier les développeurs de logiciels</translation>
 <translation id="1861262398884155592">Ce dossier est vide</translation>
 <translation id="1863182668524159459">Ports série introuvables</translation>
-<translation id="1863552924692672565">Fichier <ph name="FILE_NAME" /> inconnu. Analysez le fichier pour minimiser les risques.</translation>
 <translation id="1864111464094315414">Connexion</translation>
 <translation id="1864400682872660285">Plus froid</translation>
 <translation id="1864454756846565995">Appareil USB de type C (port situé sur l'arrière de l'appareil)</translation>
@@ -4026,7 +4023,6 @@ Assurez-vous de ne pas dévoiler d'informations sensibles.</translation>
 <translation id="6678717876183468697">URL de requête</translation>
 <translation id="6680442031740878064">Espace disponible : <ph name="AVAILABLE_SPACE" /></translation>
 <translation id="6680650203439190394">Cadence</translation>
-<translation id="6681301928961274620">Aucune imprimante trouvée sur le serveur d'impression.</translation>
 <translation id="6681668084120808868">Prendre une photo</translation>
 <translation id="6681964764822470072">L'application "<ph name="APP_NAME" />" va être désinstallée.</translation>
 <translation id="668599234725812620">Ouvrir Google Play</translation>
@@ -5556,7 +5552,6 @@ Conservez votre fichier de clé en lieu sûr. Vous en aurez besoin lors de la cr
 <translation id="8794025342371547160">IP limitée</translation>
 <translation id="879413103056696865">Lors de l'utilisation du point d'accès, votre <ph name="PHONE_NAME" /> :</translation>
 <translation id="8795916974678578410">Nouvelle fenêtre</translation>
-<translation id="8797086401386164142"><ph name="NUM_PRINTERS" /> imprimante(s) trouvée(s) sur le serveur d'impression.</translation>
 <translation id="8797459392481275117">Ne jamais traduire ce site</translation>
 <translation id="8798099450830957504">Par défaut</translation>
 <translation id="8798441408945964110">Nom du fournisseur</translation>

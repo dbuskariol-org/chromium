@@ -26,7 +26,6 @@
 <translation id="1031362278801463162">ಪೂರ್ವವೀಕ್ಷಣೆ ಲೋಡ್ ಆಗುತ್ತಿದೆ</translation>
 <translation id="1032605640136438169">ಹೊಸ ನಿಯಮಗಳನ್ನು ಪರಿಶೀಲಿಸಿ</translation>
 <translation id="103279545524624934">Android ಅಪ್ಲಿಕೇಶನ್‌ಗಳನ್ನು ಪ್ರಾರಂಭಿಸಲು ಡಿಸ್ಕ್ ಸ್ಥಳಾವಕಾಶ ಮುಕ್ತಗೊಳಿಸಿ.</translation>
-<translation id="1033343386521881354">ಮುದ್ರಣ ಸರ್ವರ್‌ನಿಂದ 1 ಪ್ರಿಂಟರ್‌ ಕಂಡುಬಂದಿದೆ.</translation>
 <translation id="1033780634303702874">ನಿಮ್ಮ ಸರಣಿ ಸಾಧನಗಳನ್ನು ಪ್ರವೇಶಿಸಿ</translation>
 <translation id="1034942643314881546">ಆ್ಯಪ್‌ಗಳ ನಿದರ್ಶನವನ್ನು ರಚಿಸಲು adb ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗುತ್ತಿದೆ</translation>
 <translation id="1036348656032585052">ಆಫ್ ಮಾಡು</translation>
@@ -34,7 +33,6 @@
 <translation id="1036982837258183574">ಪೂರ್ಣಪರದೆಯಿಂದ ನಿರ್ಗಮಿಸಲು |<ph name="ACCELERATOR" />| ಒತ್ತಿರಿ</translation>
 <translation id="1038168778161626396">ಸಂಕೇತಲಿಪಿ ಮಾತ್ರ</translation>
 <translation id="1039337018183941703">ಅಮಾನ್ಯ ಅಥವಾ ದೋಷಯುಕ್ತ ಫೈಲ್</translation>
-<translation id="1039850285407663109">ಆಯ್ಕೆ ಮಾಡಿದ ಫೈಲ್, ಅಪರಿಚಿತವಾಗಿದೆ ಮತ್ತು ಇದು ಅಪಾಯಕಾರಿಯಾಗಿರಬಹುದು. ಈ ಫೈಲ್ ಅನ್ನು ತೆರೆಯುವ ಮೊದಲು, ಸ್ಕ್ಯಾನ್ ಮಾಡುವ ಕುರಿತು ಯೋಚಿಸಿ.</translation>
 <translation id="1041175011127912238">ಈ ಪುಟವು ಪ್ರತಿಕ್ರಿಯಿಸುತ್ತಿಲ್ಲ</translation>
 <translation id="1041263367839475438">ಲಭ್ಯವಿರುವ ಸಾಧನಗಳು</translation>
 <translation id="1042174272890264476">ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್ ಅಂತರ್‌ನಿರ್ಮಿತ <ph name="SHORT_PRODUCT_NAME" /> ನ RLZ ಲೈಬ್ರರಿಯೊಂದಿಗೆ ಸಹ ಬರುತ್ತದೆ. ಹುಡುಕಾಟಗಳನ್ನು ಅಳತೆ ಮಾಡಲು ಮತ್ತು ಒಂದು ನಿರ್ದಿಷ್ಟ ಪ್ರಚಾರದ ಶಿಬಿರದಿಂದ <ph name="SHORT_PRODUCT_NAME" /> ಬಳಕೆಯಿಂದ ಗಳಿಸಿದ ಅನನ್ಯವಲ್ಲದ, ವೈಯಕ್ತಿಕವಾಗಿ ಗುರುತಿಸದಂತಹ ಟ್ಯಾಗ್ ಅನ್ನು RLZ ಆಯೋಜಿಸುತ್ತದೆ. ಈ ಲೇಬಲ್‌ಗಳು ಕೆಲವು ಬಾರಿ <ph name="PRODUCT_NAME" /> ನಲ್ಲಿ Google ಹುಡುಕಾಟ ಪ್ರಶ್ನೆಗಳಲ್ಲಿ ಗೋಚರಿಸುತ್ತವೆ.</translation>
@@ -640,7 +638,6 @@
 <translation id="1858585891038687145">ಸಾಫ್ಟ್‌ವೇರ್ ತಯಾರಕರನ್ನು ಗುರುತಿಸುವುದಕ್ಕಾಗಿ ಈ ಪ್ರಮಾಣಪತ್ರದ ಮೇಲೆ ವಿಶ್ವಾಸವಿಡಿ</translation>
 <translation id="1861262398884155592">ಈ ಫೋಲ್ಡರ್ ಖಾಲಿಯಾಗಿದೆ</translation>
 <translation id="1863182668524159459">ಯಾವುದೇ ಸೀರಿಯಲ್ ಪೋರ್ಟ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ</translation>
-<translation id="1863552924692672565"><ph name="FILE_NAME" /> ಅಪರಿಚಿತವಾಗಿದೆ. ಅಪಾಯವನ್ನು ಆದಷ್ಟು ಕಡಿಮೆ ಮಾಡಲು ಫೈಲ್ ಅನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ.</translation>
 <translation id="1864111464094315414">ಲಾಗಿನ್</translation>
 <translation id="1864400682872660285">ಕೂಲರ್</translation>
 <translation id="1864454756846565995">USB-C ಸಾಧನ (ಹಿಂದಿನ ಪೋರ್ಟ್)</translation>
@@ -4027,7 +4024,6 @@
 <translation id="6678717876183468697">ಕ್ವೆರಿ URL</translation>
 <translation id="6680442031740878064">ಲಭ್ಯವಿದೆ: <ph name="AVAILABLE_SPACE" /></translation>
 <translation id="6680650203439190394">ದರ</translation>
-<translation id="6681301928961274620">ಮುದ್ರಣ ಸರ್ವರ್‌ನಿಂದ ಯಾವುದೇ ಪ್ರಿಂಟರ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ.</translation>
 <translation id="6681668084120808868">ಫೋಟೋ ತೆಗೆಯಿರಿ</translation>
 <translation id="6681964764822470072">"<ph name="APP_NAME" />" ಅಸ್ಥಾಪಿಸಲಾಗುವುದು.</translation>
 <translation id="668599234725812620">Google Play ತೆರೆಯಿರಿ</translation>
@@ -5556,7 +5552,6 @@
 <translation id="8794025342371547160">ನಿರ್ಬಂಧಿಸಲಾಗಿರುವ ಐಪಿ</translation>
 <translation id="879413103056696865">ಹಾಟ್‌ಸ್ಪಾಟ್ ಆನ್ ಆಗಿರುವಾಗ, ನಿಮ್ಮ <ph name="PHONE_NAME" />:</translation>
 <translation id="8795916974678578410">ಹೊಸ ವಿಂಡೊ</translation>
-<translation id="8797086401386164142">ಮುದ್ರಣ ಸರ್ವರ್‌ನಿಂದ <ph name="NUM_PRINTERS" /> ಪ್ರಿಂಟರ್‌ಗಳು ಕಂಡುಬಂದಿವೆ.</translation>
 <translation id="8797459392481275117">ಈ ಸೈಟ್ ಅನ್ನು ಎಂದಿಗೂ ಅನುವಾದಿಸಬೇಡಿ</translation>
 <translation id="8798099450830957504">ಡಿಫಾಲ್ಟ್</translation>
 <translation id="8798441408945964110">ಪೂರೈಕೆದಾರರ ಹೆಸರು</translation>
