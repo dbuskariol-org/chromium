@@ -4298,6 +4298,7 @@
                 {
                     "name": "Enabled",
                     "params": {
+                        "fetch_random_max_delay_secs": "60",
                         "max_effective_connection_type_for_navigation_hints_fetch": "4G"
                     },
                     "enable_features": [
