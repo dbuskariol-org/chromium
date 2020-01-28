@@ -546,6 +546,7 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/download/home/LegacyDownloadProvider.java",
   "java/src/org/chromium/chrome/browser/download/home/LegacyDownloadProviderImpl.java",
   "java/src/org/chromium/chrome/browser/download/home/OfflineItemSource.java",
+  "java/src/org/chromium/chrome/browser/download/home/PrefetchEnabledSupplier.java",
   "java/src/org/chromium/chrome/browser/download/home/StableIds.java",
   "java/src/org/chromium/chrome/browser/download/home/empty/EmptyCoordinator.java",
   "java/src/org/chromium/chrome/browser/download/home/empty/EmptyProperties.java",
