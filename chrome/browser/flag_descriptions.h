@@ -1935,9 +1935,6 @@ extern const char kArcUsbHostDescription[];
 extern const char kArcUsbStorageUIName[];
 extern const char kArcUsbStorageUIDescription[];
 
-extern const char kArcVpnName[];
-extern const char kArcVpnDescription[];
-
 extern const char kAshDragWindowFromShelfName[];
 extern const char kAshDragWindowFromShelfDescription[];
 

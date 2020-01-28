@@ -3260,10 +3260,6 @@ const char kArcUsbStorageUIName[] = "Enable ARC USB Storage UI";
 const char kArcUsbStorageUIDescription[] =
     "Enable experimental UI for controlling ARC access to USB storage devices.";
 
-const char kArcVpnName[] = "Enable ARC VPN integration";
-const char kArcVpnDescription[] =
-    "Allow Android VPN clients to tunnel Chrome traffic.";
-
 const char kAshDragWindowFromShelfName[] =
     "Enable dragging a window from shelf to overview or home screen.";
 const char kAshDragWindowFromShelfDescription[] =
