@@ -3761,15 +3761,9 @@
             "experiments": [
                 {
                     "name": "Enabled",
-                    "params": {
-                        "ZeroSuggestVariant:15:*": "RemoteNoUrl,Local",
-                        "ZeroSuggestVariant:1:*": "RemoteNoUrl,Local",
-                        "ZeroSuggestVariant:7:*": "RemoteNoUrl,Local"
-                    },
                     "enable_features": [
                         "NtpRealbox",
                         "NtpRealboxMatchOmniboxTheme",
-                        "OmniboxOnFocusSuggestions",
                         "OmniboxSuggestionTransparencyOptions"
                     ]
                 }
@@ -4155,7 +4149,10 @@
                     "name": "DesktopExperiments",
                     "params": {
                         "OmniboxMaxURLMatches": "7",
-                        "UIMaxAutocompleteMatches": "8"
+                        "UIMaxAutocompleteMatches": "8",
+                        "ZeroSuggestVariant:15:*": "RemoteNoUrl,Local",
+                        "ZeroSuggestVariant:1:*": "RemoteNoUrl,Local",
+                        "ZeroSuggestVariant:7:*": "RemoteNoUrl,Local"
                     },
                     "enable_features": [
                         "OmniboxDisplayTitleForCurrentUrl",
@@ -4163,6 +4160,7 @@
                         "OmniboxEnableClipboardProviderTextSuggestions",
                         "OmniboxLocalEntitySuggestions",
                         "OmniboxMaxURLMatches",
+                        "OmniboxOnFocusSuggestions",
                         "OmniboxRemoveSuggestionsFromClipboard",
                         "OmniboxRichEntitySuggestions",
                         "OmniboxUIExperimentMaxAutocompleteMatches",
