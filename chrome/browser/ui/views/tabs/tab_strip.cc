@@ -1623,6 +1623,8 @@ void TabStrip::CloseTab(Tab* tab, CloseTabSource source) {
   }
 
   UpdateHoverCard(nullptr);
+  if (tab->group().has_value())
+    base::RecordAction(base::UserMetricsAction("CloseGroupedTab"));
   controller_->CloseTab(model_index, source);
 }
 
