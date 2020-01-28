@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/supervised_user/experimental/supervised_user_blacklist.h"
+#include "chrome/browser/supervised_user/supervised_user_blacklist.h"
 
 #include <algorithm>
 #include <cstring>
@@ -33,8 +33,7 @@ ReadFromBinaryFileOnFileThread(const base::FilePath& path) {
   host_hashes->resize(hash_count);
 
   for (size_t i = 0; i < hash_count; i++) {
-    memcpy((*host_hashes.get())[i].data,
-           file.data() + i * base::kSHA1Length,
+    memcpy((*host_hashes.get())[i].data, file.data() + i * base::kSHA1Length,
            base::kSHA1Length);
   }
 
@@ -43,7 +42,7 @@ ReadFromBinaryFileOnFileThread(const base::FilePath& path) {
   return host_hashes;
 }
 
-} // namespace
+}  // namespace
 
 SupervisedUserBlacklist::Hash::Hash(const std::string& host) {
   const unsigned char* host_bytes =
