@@ -458,7 +458,7 @@ gfx::Rect ShelfLayoutManager::GetIdealBounds() const {
   const int shelf_size = ShelfConfig::Get()->shelf_size();
   aura::Window* shelf_window = shelf_widget_->GetNativeWindow();
   gfx::Rect rect(screen_util::GetDisplayBoundsInParent(shelf_window));
-  return SelectValueForShelfAlignment(
+  return shelf_->SelectValueForShelfAlignment(
       gfx::Rect(rect.x(), rect.bottom() - shelf_size, rect.width(), shelf_size),
       gfx::Rect(rect.x(), rect.y(), shelf_size, rect.height()),
       gfx::Rect(rect.right() - shelf_size, rect.y(), shelf_size,
@@ -1603,13 +1603,15 @@ void ShelfLayoutManager::CalculateTargetBounds(
       screen_util::GetDisplayBoundsWithShelf(shelf_widget_->GetNativeWindow());
   available_bounds.Inset(work_area->GetAccessibilityInsets());
 
-  int shelf_width = PrimaryAxisValue(available_bounds.width(), shelf_size);
-  int shelf_height = PrimaryAxisValue(shelf_size, available_bounds.height());
-  const int shelf_primary_position = SelectValueForShelfAlignment(
+  int shelf_width =
+      shelf_->PrimaryAxisValue(available_bounds.width(), shelf_size);
+  int shelf_height =
+      shelf_->PrimaryAxisValue(shelf_size, available_bounds.height());
+  const int shelf_primary_position = shelf_->SelectValueForShelfAlignment(
       available_bounds.bottom() - shelf_in_screen_portion,
       available_bounds.x() - shelf_size + shelf_in_screen_portion,
       available_bounds.right() - shelf_in_screen_portion);
-  gfx::Point shelf_origin = SelectValueForShelfAlignment(
+  gfx::Point shelf_origin = shelf_->SelectValueForShelfAlignment(
       gfx::Point(available_bounds.x(), shelf_primary_position),
       gfx::Point(shelf_primary_position, available_bounds.y()),
       gfx::Point(shelf_primary_position, available_bounds.y()));
@@ -1625,7 +1627,7 @@ void ShelfLayoutManager::CalculateTargetBounds(
   else
     status_size.set_width(shelf_size);
 
-  gfx::Point status_origin = SelectValueForShelfAlignment(
+  gfx::Point status_origin = shelf_->SelectValueForShelfAlignment(
       gfx::Point(0, 0),
       gfx::Point(shelf_width - status_size.width(),
                  shelf_height - status_size.height()),
@@ -1684,7 +1686,7 @@ void ShelfLayoutManager::CalculateTargetBounds(
   if (drag_status_ == kDragInProgress)
     UpdateTargetBoundsForGesture(hotseat_target_state);
 
-  target_bounds_.shelf_insets = SelectValueForShelfAlignment(
+  target_bounds_.shelf_insets = shelf_->SelectValueForShelfAlignment(
       gfx::Insets(0, 0,
                   GetShelfInset(state.visibility_state,
                                 IsHotseatEnabled()
@@ -1698,7 +1700,7 @@ void ShelfLayoutManager::CalculateTargetBounds(
   // that can change the size of the shelf.
   const bool showing_login_shelf = !state.IsActiveSessionState();
   if (chromeos::switches::ShouldShowScrollableShelf() && !showing_login_shelf) {
-    target_bounds_.shelf_bounds_in_shelf = SelectValueForShelfAlignment(
+    target_bounds_.shelf_bounds_in_shelf = shelf_->SelectValueForShelfAlignment(
         gfx::Rect(target_bounds_.nav_bounds_in_shelf.right(), 0,
                   shelf_width - status_size.width() -
                       target_bounds_.nav_bounds_in_shelf.width() -
@@ -1715,7 +1717,7 @@ void ShelfLayoutManager::CalculateTargetBounds(
                       target_bounds_.nav_bounds_in_shelf.height() -
                       home_button_edge_spacing));
   } else {
-    target_bounds_.shelf_bounds_in_shelf = SelectValueForShelfAlignment(
+    target_bounds_.shelf_bounds_in_shelf = shelf_->SelectValueForShelfAlignment(
         gfx::Rect(0, 0, shelf_width - status_size.width(),
                   target_bounds_.shelf_bounds.height()),
         gfx::Rect(0, 0, target_bounds_.shelf_bounds.width(),
@@ -1771,7 +1773,7 @@ void ShelfLayoutManager::UpdateTargetBoundsForGesture(
     // because there should be a linear transition to the home launcher gesture.
     translate = drag_amount_;
   } else {
-    const bool resist = SelectValueForShelfAlignment(
+    const bool resist = shelf_->SelectValueForShelfAlignment(
         drag_amount_<-resistance_free_region, drag_amount_>
             resistance_free_region,
         drag_amount_ < -resistance_free_region);
@@ -1789,7 +1791,7 @@ void ShelfLayoutManager::UpdateTargetBoundsForGesture(
 
   const gfx::Rect available_bounds =
       screen_util::GetDisplayBoundsWithShelf(shelf_widget_->GetNativeWindow());
-  const int baseline = SelectValueForShelfAlignment(
+  const int baseline = shelf_->SelectValueForShelfAlignment(
       available_bounds.bottom() - (shelf_hidden_at_start ? 0 : shelf_size),
       available_bounds.x() - (shelf_hidden_at_start ? shelf_size : 0),
       available_bounds.right() - (shelf_hidden_at_start ? 0 : shelf_size));
@@ -1880,7 +1882,7 @@ gfx::Rect ShelfLayoutManager::GetVisibleShelfBounds() const {
 
 gfx::Rect ShelfLayoutManager::GetAutoHideShowShelfRegionInScreen() const {
   gfx::Rect shelf_bounds_in_screen = GetVisibleShelfBounds();
-  gfx::Vector2d offset = SelectValueForShelfAlignment(
+  gfx::Vector2d offset = shelf_->SelectValueForShelfAlignment(
       gfx::Vector2d(0, shelf_bounds_in_screen.height()),
       gfx::Vector2d(-kMaxAutoHideShowShelfRegionSize, 0),
       gfx::Vector2d(shelf_bounds_in_screen.width(), 0));
@@ -2446,7 +2448,7 @@ void ShelfLayoutManager::UpdateDrag(const ui::LocatedEvent& event_in_screen,
   } else {
     if (drag_start_point_in_screen_ == gfx::Point())
       drag_start_point_in_screen_ = event_in_screen.location();
-    drag_amount_ += PrimaryAxisValue(scroll_y, scroll_x);
+    drag_amount_ += shelf_->PrimaryAxisValue(scroll_y, scroll_x);
     if (event_in_screen.type() == ui::ET_SCROLL_FLING_START) {
       last_drag_velocity_ =
           event_in_screen.AsGestureEvent()->details().velocity_y();

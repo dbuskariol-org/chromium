@@ -268,28 +268,6 @@ class ASH_EXPORT ShelfLayoutManager
     return drag_status_ == kDragAppListInProgress;
   }
 
-  // TODO(harrym|oshima): These templates will be moved to a new Shelf class.
-  // A helper function for choosing values specific to a shelf alignment.
-  template <typename T>
-  T SelectValueForShelfAlignment(T bottom, T left, T right) const {
-    switch (shelf_->alignment()) {
-      case ShelfAlignment::kBottom:
-      case ShelfAlignment::kBottomLocked:
-        return bottom;
-      case ShelfAlignment::kLeft:
-        return left;
-      case ShelfAlignment::kRight:
-        return right;
-    }
-    NOTREACHED();
-    return right;
-  }
-
-  template <typename T>
-  T PrimaryAxisValue(T horizontal, T vertical) const {
-    return shelf_->IsHorizontalAlignment() ? horizontal : vertical;
-  }
-
  private:
   class UpdateShelfObserver;
   friend class DimShelfLayoutManagerTestBase;
