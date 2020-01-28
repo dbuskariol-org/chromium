@@ -63806,6 +63806,7 @@ Full version information for the fingerprint enum values:
 <enum name="UkmResetReason">
   <int value="0" label="OnUkmAllowedStateChanged"/>
   <int value="1" label="UpdatePermissions"/>
+  <int value="2" label="ClonedInstall"/>
 </enum>
 
 <enum name="UkmSyncDisableInfo">
