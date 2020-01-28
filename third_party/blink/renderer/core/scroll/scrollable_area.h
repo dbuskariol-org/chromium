@@ -113,12 +113,6 @@ class CORE_EXPORT ScrollableArea : public GarbageCollectedMixin {
                 mojom::blink::ScrollIntoViewParams::Type,
                 mojom::blink::ScrollIntoViewParams::Behavior =
                     mojom::blink::ScrollIntoViewParams::Behavior::kInstant);
-  void SetScrollOffsetSingleAxis(
-      ScrollbarOrientation,
-      float,
-      mojom::blink::ScrollIntoViewParams::Type,
-      mojom::blink::ScrollIntoViewParams::Behavior =
-          mojom::blink::ScrollIntoViewParams::Behavior::kInstant);
 
   virtual void SetPendingHistoryRestoreScrollOffset(
       const HistoryItem::ViewState& view_state,
