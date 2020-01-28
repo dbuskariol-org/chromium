@@ -3383,6 +3383,11 @@
     "expiry_milestone": 77
   },
   {
+    "name": "sync-error-infobar",
+    "owners": [ "triploblastic", "bsazonov" ],
+    "expiry_milestone": 82
+  },
+  {
     "name": "sync-setup-friendly-settings",
     "owners": ["msalama"],
     "expiry_milestone": 84
