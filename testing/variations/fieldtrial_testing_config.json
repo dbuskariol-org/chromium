@@ -5979,24 +5979,6 @@
             ]
         }
     ],
-    "SchedulerConfiguration": [
-        {
-            "platforms": [
-                "chromeos"
-            ],
-            "experiments": [
-                {
-                    "name": "Conservative",
-                    "params": {
-                        "config": "conservative"
-                    },
-                    "enable_features": [
-                        "SchedulerConfiguration"
-                    ]
-                }
-            ]
-        }
-    ],
     "ScriptStreamingOnPreload": [
         {
             "platforms": [
