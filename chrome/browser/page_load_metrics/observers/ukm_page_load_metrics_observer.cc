@@ -230,6 +230,8 @@ void UkmPageLoadMetricsObserver::OnResourceDataUseObserved(
       continue;
     if (blink::IsSupportedJavascriptMimeType(resource->mime_type)) {
       js_decoded_bytes_ += resource->decoded_body_length;
+      if (resource->decoded_body_length > js_max_decoded_bytes_)
+        js_max_decoded_bytes_ = resource->decoded_body_length;
     }
     if (resource->cache_type !=
         page_load_metrics::mojom::CacheType::kNotCached) {
@@ -362,6 +364,8 @@ void UkmPageLoadMetricsObserver::RecordTimingMetrics(
   // Use a bucket spacing factor of 10 for JS bytes.
   builder.SetNet_JavaScriptBytes(
       ukm::GetExponentialBucketMin(js_decoded_bytes_, 10));
+  builder.SetNet_JavaScriptMaxBytes(
+      ukm::GetExponentialBucketMin(js_max_decoded_bytes_, 10));
 
   if (main_frame_timing_)
     ReportMainResourceTimingMetrics(timing, &builder);

@@ -1213,7 +1213,7 @@ TEST_F(UkmPageLoadMetricsObserverTest, JSSizeMetrics) {
   DeleteContents();
 
   // Metrics look at decoded body length.
-  // 30 + 50 = 80 kilobytes
+  // 30 + 50 = 80 kilobytes.
   int64_t bucketed_network_js_bytes =
       ukm::GetExponentialBucketMin(80 * 1024, 10);
 
@@ -1227,6 +1227,57 @@ TEST_F(UkmPageLoadMetricsObserverTest, JSSizeMetrics) {
                                                           GURL(kTestUrl1));
     tester()->test_ukm_recorder().ExpectEntryMetric(
         kv.second.get(), "Net.JavaScriptBytes", bucketed_network_js_bytes);
+  }
+}
+
+TEST_F(UkmPageLoadMetricsObserverTest, JSMaxSizeMetrics) {
+  NavigateAndCommit(GURL(kTestUrl1));
+
+  std::vector<page_load_metrics::mojom::ResourceDataUpdatePtr> resources;
+
+  // 30 kilobytes after decoding.
+  resources.push_back(CreateResource(true /* was_cached */, 0 /* delta_bytes */,
+                                     20 * 1024 /* encoded_body_length */,
+                                     30 * 1024 /* decoded_body_length */,
+                                     true /* is_complete */));
+
+  // 500 kilobytes after decoding.
+  resources.push_back(CreateResource(
+      false /* was_cached */, 400 * 1024 /* delta_bytes */,
+      400 * 1024 /* encoded_body_length */,
+      500 * 1024 /* decoded_body_length */, true /* is_complete */));
+
+  // 120 kilobytes after decoding, not JS.
+  resources.push_back(CreateResource(
+      false /* was_cached */, 40 * 1024 /* delta_bytes */,
+      100 * 1024 /* encoded_body_length */,
+      120 * 1024 /* decoded_body_length */, true /* is_complete */));
+
+  resources[0]->mime_type = "application/javascript";
+  resources[1]->mime_type = "application/javascript";
+  resources[2]->mime_type = "test";
+
+  tester()->SimulateResourceDataUseUpdate(resources);
+
+  // Simulate closing the tab.
+  DeleteContents();
+
+  // Metrics look at max decoded body length.
+  // max(30,500) = 500 kilobytes.
+  int64_t bucketed_network_js_max_bytes =
+      ukm::GetExponentialBucketMin(500 * 1024, 10);
+
+  std::map<ukm::SourceId, ukm::mojom::UkmEntryPtr> merged_entries =
+      tester()->test_ukm_recorder().GetMergedEntriesByName(
+          PageLoad::kEntryName);
+  EXPECT_EQ(1ul, merged_entries.size());
+
+  for (const auto& kv : merged_entries) {
+    tester()->test_ukm_recorder().ExpectEntrySourceHasUrl(kv.second.get(),
+                                                          GURL(kTestUrl1));
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(), "Net.JavaScriptMaxBytes",
+        bucketed_network_js_max_bytes);
   }
 }
 
