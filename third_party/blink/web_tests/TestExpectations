@@ -6449,3 +6449,5 @@ crbug.com/1046201 [ Mac ] virtual/cascade/fast/forms/calendar-picker/calendar-pi
 crbug.com/1046201 [ Win10 ] virtual/cascade/fast/forms/calendar-picker/calendar-picker-appearance-zoom125.html [ Pass Failure ]
 crbug.com/1046256 fast/events/popup-blocking-timers6.html [ Pass Failure Timeout ]
 crbug.com/1046256 virtual/mouseevent_fractional/fast/events/popup-blocking-timers6.html [ Pass Failure Timeout ]
+crbug.com/1042848 virtual/audio-service/external/wpt/mediacapture-streams/idlharness.https.window.html [ Pass Timeout ]
+crbug.com/1042848 virtual/feature-policy-permissions/external/wpt/mediacapture-streams/idlharness.https.window.html [ Pass Timeout ]
