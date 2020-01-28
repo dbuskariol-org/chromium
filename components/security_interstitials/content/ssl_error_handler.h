@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_SSL_SSL_ERROR_HANDLER_H_
-#define CHROME_BROWSER_SSL_SSL_ERROR_HANDLER_H_
+#ifndef COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_SSL_ERROR_HANDLER_H_
+#define COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_SSL_ERROR_HANDLER_H_
 
 #include <string>
 
@@ -33,7 +33,7 @@ struct DynamicInterstitialInfo;
 namespace base {
 class Clock;
 class TimeDelta;
-}
+}  // namespace base
 
 namespace content {
 class WebContents;
@@ -265,4 +265,4 @@ class SSLErrorHandler : public content::WebContentsUserData<SSLErrorHandler>,
   DISALLOW_COPY_AND_ASSIGN(SSLErrorHandler);
 };
 
-#endif  // CHROME_BROWSER_SSL_SSL_ERROR_HANDLER_H_
+#endif  // COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_SSL_ERROR_HANDLER_H_

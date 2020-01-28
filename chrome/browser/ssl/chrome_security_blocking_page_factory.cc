@@ -31,7 +31,7 @@
 
 #if defined(OS_ANDROID)
 #include "base/android/jni_android.h"
-#include "chrome/browser/ssl/captive_portal_helper_android.h"
+#include "components/security_interstitials/content/captive_portal_helper_android.h"
 #include "content/public/common/referrer.h"
 #include "net/android/network_library.h"
 #include "ui/base/window_open_disposition.h"
@@ -93,7 +93,7 @@ void OpenLoginPage(content::WebContents* web_contents) {
   // OpenLoginTabForWebContents() is not available on Android (the only
   // platform on which captive portal detection is not enabled). Simply open
   // the platform's portal detection URL in a new tab.
-  const std::string url = chrome::android::GetCaptivePortalServerUrl(
+  const std::string url = security_interstitials::GetCaptivePortalServerUrl(
       base::android::AttachCurrentThread());
   content::OpenURLParams params(GURL(url), content::Referrer(),
                                 WindowOpenDisposition::NEW_FOREGROUND_TAB,

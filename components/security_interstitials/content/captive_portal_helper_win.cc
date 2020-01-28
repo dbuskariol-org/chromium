@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ssl/captive_portal_helper.h"
+#include "components/security_interstitials/content/captive_portal_helper.h"
 
 #include <netlistmgr.h>
 #include <wrl/client.h>
@@ -57,7 +57,7 @@ bool IsNetworkBehindCaptivePortal(INetwork* network) {
 
 }  // namespace
 
-namespace chrome {
+namespace security_interstitials {
 
 bool IsBehindCaptivePortal() {
   // Assume the device is behind a captive portal if there is at least one
@@ -101,4 +101,4 @@ bool IsBehindCaptivePortal() {
   return found;
 }
 
-}  // namespace chrome
+}  // namespace security_interstitials

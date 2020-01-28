@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ssl/ssl_error_handler.h"
+#include "components/security_interstitials/content/ssl_error_handler.h"
 
 #include <stdint.h>
 
@@ -21,12 +21,12 @@
 #include "base/time/clock.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
-#include "chrome/browser/ssl/captive_portal_helper.h"
 #include "components/network_time/network_time_tracker.h"
 #include "components/prefs/pref_service.h"
 #include "components/security_interstitials/content/bad_clock_blocking_page.h"
 #include "components/security_interstitials/content/blocked_interception_blocking_page.h"
 #include "components/security_interstitials/content/captive_portal_blocking_page.h"
+#include "components/security_interstitials/content/captive_portal_helper.h"
 #include "components/security_interstitials/content/mitm_software_blocking_page.h"
 #include "components/security_interstitials/content/security_blocking_page_factory.h"
 #include "components/security_interstitials/content/security_interstitial_page.h"
@@ -55,7 +55,7 @@
 
 #if defined(OS_ANDROID)
 #include "base/android/jni_android.h"
-#include "chrome/browser/ssl/captive_portal_helper_android.h"
+#include "components/security_interstitials/content/captive_portal_helper_android.h"
 #endif
 
 const base::Feature kMITMSoftwareInterstitial{"MITMSoftwareInterstitial",
@@ -427,7 +427,7 @@ void SSLErrorHandlerDelegateImpl::CheckForCaptivePortal() {
 
 bool SSLErrorHandlerDelegateImpl::DoesOSReportCaptivePortal() {
 #if defined(OS_ANDROID) || defined(OS_WIN)
-  return chrome::IsBehindCaptivePortal();
+  return security_interstitials::IsBehindCaptivePortal();
 #else
   return false;
 #endif
@@ -507,7 +507,7 @@ void SSLErrorHandlerDelegateImpl::ShowBlockedInterceptionInterstitial() {
 void SSLErrorHandlerDelegateImpl::ReportNetworkConnectivity(
     base::OnceClosure callback) {
 #if defined(OS_ANDROID)
-  chrome::android::ReportNetworkConnectivity(
+  security_interstitials::ReportNetworkConnectivity(
       base::android::AttachCurrentThread());
 #else
 // Nothing to do on other platforms.
@@ -902,7 +902,7 @@ void SSLErrorHandler::DidStartNavigation(
 }
 
 void SSLErrorHandler::NavigationStopped() {
-// Destroy the error handler when the page load is stopped.
+  // Destroy the error handler when the page load is stopped.
   DeleteSSLErrorHandler();
 }
 

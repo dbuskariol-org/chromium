@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ssl/captive_portal_helper_android.h"
+#include "components/security_interstitials/content/captive_portal_helper_android.h"
 #include "base/task/post_task.h"
-#include "chrome/browser/ssl/captive_portal_helper.h"
+#include "components/security_interstitials/content/captive_portal_helper.h"
 #include "content/public/browser/browser_task_traits.h"
 
 #include <stddef.h>
@@ -15,14 +15,13 @@
 #include "base/bind.h"
 #include "base/logging.h"
 #include "base/threading/thread_task_runner_handle.h"
-#include "chrome/android/chrome_jni_headers/CaptivePortalHelper_jni.h"
-#include "chrome/browser/ssl/ssl_error_handler.h"
+#include "components/security_interstitials/content/android/jni_headers/CaptivePortalHelper_jni.h"
 #include "components/security_interstitials/content/ssl_error_assistant.h"
+#include "components/security_interstitials/content/ssl_error_handler.h"
 #include "content/public/browser/browser_thread.h"
 #include "net/android/network_library.h"
 
-namespace chrome {
-namespace android {
+namespace security_interstitials {
 
 void JNI_CaptivePortalHelper_SetCaptivePortalCertificateForTesting(
     JNIEnv* env,
@@ -62,10 +61,8 @@ std::string GetCaptivePortalServerUrl(JNIEnv* env) {
       Java_CaptivePortalHelper_getCaptivePortalServerUrl(env));
 }
 
-}  // namespace android
-
 bool IsBehindCaptivePortal() {
   return net::android::GetIsCaptivePortal();
 }
 
-}  // namespace chrome
+}  // namespace security_interstitials

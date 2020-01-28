@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ssl;
+package org.chromium.components.security_interstitials;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -19,7 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /** Helper class for captive portal related methods on Android. */
-@JNINamespace("chrome::android")
+@JNINamespace("security_interstitials")
 public class CaptivePortalHelper {
     private static final String DEFAULT_PORTAL_CHECK_URL =
             "http://connectivitycheck.gstatic.com/generate_204";
