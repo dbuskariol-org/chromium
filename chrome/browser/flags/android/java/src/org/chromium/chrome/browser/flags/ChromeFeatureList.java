@@ -220,6 +220,7 @@ public abstract class ChromeFeatureList {
     public static final String CONTENT_INDEXING_NTP = "ContentIndexingNTP";
     public static final String CONTENT_INDEXING_DOWNLOAD_HOME = "ContentIndexingDownloadHome";
     public static final String CONTEXT_MENU_COPY_IMAGE = "ContextMenuCopyImage";
+    public static final String CONTEXT_MENU_PERFORMANCE_INFO = "ContextMenuPerformanceInfo";
     public static final String CONTEXT_MENU_SEARCH_WITH_GOOGLE_LENS =
             "ContextMenuSearchWithGoogleLens";
     public static final String CONTEXTUAL_SEARCH_DEFINITIONS = "ContextualSearchDefinitions";
