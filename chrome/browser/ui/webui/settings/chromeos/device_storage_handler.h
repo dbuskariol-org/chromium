@@ -67,6 +67,9 @@ class StorageHandler
     // Simulate a callback with controlled total and available size inputs.
     void OnGetSizeStat(int64_t* total_size, int64_t* available_size);
 
+    // Simulate a request to update MyFiles size.
+    void UpdateMyFilesSize();
+
    private:
     StorageHandler* handler_;  // Not owned.
   };
@@ -110,7 +113,8 @@ class StorageHandler
   void UpdateMyFilesSize();
 
   // Computes the size of My Files and Play files.
-  int64_t ComputeLocalFilesSize(const base::FilePath& my_files_path);
+  int64_t ComputeLocalFilesSize(const base::FilePath& my_files_path,
+                                const base::FilePath& android_files_path);
 
   // Callback to update the UI about the size of Downloads directory.
   void OnGetMyFilesSize(int64_t size);

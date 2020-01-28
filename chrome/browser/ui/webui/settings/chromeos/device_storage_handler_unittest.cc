@@ -3,11 +3,17 @@
 // found in the LICENSE file.
 
 #include "chrome/browser/ui/webui/settings/chromeos/device_storage_handler.h"
+
+#include "base/files/file.h"
+#include "base/files/file_util.h"
+#include "base/path_service.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/system/sys_info.h"
 #include "chrome/browser/chromeos/arc/session/arc_session_manager.h"
 #include "chrome/browser/chromeos/file_manager/fake_disk_mount_manager.h"
 #include "chrome/browser/chromeos/file_manager/path_util.h"
+#include "chrome/browser/chromeos/scoped_set_running_on_chromeos_for_testing.h"
+#include "chrome/common/chrome_paths.h"
 #include "chrome/common/webui_url_constants.h"
 #include "chrome/test/base/testing_browser_process.h"
 #include "chrome/test/base/testing_profile_manager.h"
@@ -16,6 +22,7 @@
 #include "content/public/browser/web_ui_data_source.h"
 #include "content/public/test/browser_task_environment.h"
 #include "content/public/test/test_web_ui.h"
+#include "storage/browser/file_system/external_mount_points.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "ui/base/text/bytes_formatting.h"
 
@@ -23,6 +30,10 @@ namespace chromeos {
 namespace settings {
 
 namespace {
+
+const char kLsbRelease[] =
+    "CHROMEOS_RELEASE_NAME=Chrome OS\n"
+    "CHROMEOS_RELEASE_VERSION=1.2.3.4\n";
 
 class TestStorageHandler : public StorageHandler {
  public:
@@ -63,12 +74,26 @@ class StorageHandlerTest : public testing::Test {
         std::make_unique<StorageHandler::TestAPI>(handler_.get());
     handler_->set_web_ui(&web_ui_);
     handler_->AllowJavascriptForTesting();
+
+    // Create and register My files directory.
+    // By emulating chromeos running, GetMyFilesFolderForProfile will return the
+    // profile's temporary location instead of $HOME/Downloads.
+    chromeos::ScopedSetRunningOnChromeOSForTesting fake_release(kLsbRelease,
+                                                                base::Time());
+    const base::FilePath my_files_path =
+        file_manager::util::GetMyFilesFolderForProfile(profile_);
+    CHECK(base::CreateDirectory(my_files_path));
+    CHECK(storage::ExternalMountPoints::GetSystemInstance()->RegisterFileSystem(
+        file_manager::util::GetDownloadsMountPointName(profile_),
+        storage::kFileSystemTypeNativeLocal, storage::FileSystemMountOption(),
+        my_files_path));
   }
 
   void TearDown() override {
     handler_.reset();
     handler_test_api_.reset();
     chromeos::disks::DiskMountManager::Shutdown();
+    storage::ExternalMountPoints::GetSystemInstance()->RevokeAllFileSystems();
   }
 
  protected:
@@ -84,8 +109,9 @@ class StorageHandlerTest : public testing::Test {
     return space_state;
   }
 
-  // Expects a callback message with a given event_name. A non null base::Value
-  // is returned if the callback message is found and has associated data.
+  // Expects a callback message with a given |event_name|. A non null
+  // base::Value is returned if the callback message is found and has associated
+  // data.
   const base::Value* GetWebUICallbackMessage(const std::string& event_name) {
     for (auto it = web_ui_.call_data().rbegin();
          it != web_ui_.call_data().rend(); ++it) {
@@ -99,6 +125,38 @@ class StorageHandlerTest : public testing::Test {
         return data->arg2();
     }
     return nullptr;
+  }
+
+  // Get the path to file manager's test data directory.
+  base::FilePath GetTestDataFilePath(const std::string& file_name) {
+    // Get the path to file manager's test data directory.
+    base::FilePath source_dir;
+    CHECK(base::PathService::Get(base::DIR_SOURCE_ROOT, &source_dir));
+    base::FilePath test_data_dir = source_dir.AppendASCII("chrome")
+                                       .AppendASCII("test")
+                                       .AppendASCII("data")
+                                       .AppendASCII("chromeos")
+                                       .AppendASCII("file_manager");
+
+    // Return full test data path to the given |file_name|.
+    return test_data_dir.Append(base::FilePath::FromUTF8Unsafe(file_name));
+  }
+
+  // Copy a file from the file manager's test data directory to the specified
+  // target_path.
+  void AddFile(const std::string& file_name,
+               int64_t expected_size,
+               base::FilePath target_path) {
+    const base::FilePath entry_path = GetTestDataFilePath(file_name);
+    target_path = target_path.AppendASCII(file_name);
+    ASSERT_TRUE(base::CopyFile(entry_path, target_path))
+        << "Copy from " << entry_path.value() << " to " << target_path.value()
+        << " failed.";
+    // Verify file size.
+    base::stat_wrapper_t stat;
+    const int res = base::File::Lstat(target_path.value().c_str(), &stat);
+    ASSERT_FALSE(res < 0) << "Couldn't stat" << target_path.value();
+    ASSERT_EQ(expected_size, stat.st_size);
   }
 
   std::unique_ptr<TestStorageHandler> handler_;
@@ -171,6 +229,49 @@ TEST_F(StorageHandlerTest, StorageSpaceState) {
   available_size = 1024 * 1024 * 1024;
   space_state = GetSpaceState(&total_size, &available_size);
   EXPECT_EQ(handler_->STORAGE_SPACE_NORMAL, space_state);
+}
+
+TEST_F(StorageHandlerTest, MyFilesSize) {
+  base::ScopedAllowBlockingForTesting allow_blocking;
+
+  const base::FilePath my_files_path =
+      file_manager::util::GetMyFilesFolderForProfile(profile_);
+  const base::FilePath downloads_path =
+      file_manager::util::GetDownloadsFolderForProfile(profile_);
+  const base::FilePath android_files_path =
+      profile_->GetPath().Append("AndroidFiles");
+  const base::FilePath android_files_download_path =
+      android_files_path.Append("Download");
+
+  // Create directories.
+  CHECK(base::CreateDirectory(downloads_path));
+  CHECK(base::CreateDirectory(android_files_path));
+  CHECK(base::CreateDirectory(android_files_download_path));
+
+  // Register android files mount point.
+  CHECK(storage::ExternalMountPoints::GetSystemInstance()->RegisterFileSystem(
+      file_manager::util::GetAndroidFilesMountPointName(),
+      storage::kFileSystemTypeNativeLocal, storage::FileSystemMountOption(),
+      android_files_path));
+
+  // Add files in My files and android files.
+  AddFile("random.bin", 8092, my_files_path);      // ~7.9K
+  AddFile("tall.pdf", 15271, android_files_path);  // ~14.9K
+  // Add file in Downloads and simulate bind mount with
+  // [android files]/Download.
+  AddFile("video.ogv", 59943, downloads_path);  // ~58.6K
+  AddFile("video.ogv", 59943, android_files_download_path);
+
+  // Calculate My files size.
+  handler_test_api_->UpdateMyFilesSize();
+  task_environment_.RunUntilIdle();
+
+  const base::Value* callback =
+      GetWebUICallbackMessage("storage-my-files-size-changed");
+  ASSERT_TRUE(callback) << "No 'storage-my-files-size-changed' callback";
+
+  // Check return value.
+  EXPECT_EQ("81.4 KB", callback->GetString());
 }
 
 }  // namespace
