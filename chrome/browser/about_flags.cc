@@ -3314,10 +3314,6 @@ const FeatureEntry kFeatureEntries[] = {
 #endif  // BUILDFLAG(ENABLE_PDF)
 
 #if BUILDFLAG(ENABLE_PRINTING)
-    {"harfbuzz-pdf-subsetter", flag_descriptions::kHarfBuzzPDFSubsetterName,
-     flag_descriptions::kHarfBuzzPDFSubsetterDescription, kOsAll,
-     FEATURE_VALUE_TYPE(printing::features::kHarfBuzzPDFSubsetter)},
-
 #if defined(OS_WIN)
     {"use-xps-for-printing", flag_descriptions::kUseXpsForPrintingName,
      flag_descriptions::kUseXpsForPrintingDescription, kOsWin,

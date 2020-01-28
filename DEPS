@@ -175,10 +175,6 @@ vars = {
   'swiftshader_git': 'https://swiftshader.googlesource.com',
   'webrtc_git': 'https://webrtc.googlesource.com',
   # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling sfntly
-  # and whatever else without interference from each other.
-  'sfntly_revision': '48312c98332a4608572459dc71584c2a9dbb1792',
-  # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Skia
   # and whatever else without interference from each other.
   'skia_revision': '3234ce1347c5c258068a58a1f36a56934f752a52',
@@ -1438,9 +1434,6 @@ deps = {
       'condition': 'checkout_android',
       'dep_type': 'cipd',
   },
-
-  'src/third_party/sfntly/src':
-    Var('chromium_git') + '/external/github.com/googlefonts/sfntly.git' + '@' + Var('sfntly_revision'),
 
   'src/third_party/skia':
     Var('skia_git') + '/skia.git' + '@' +  Var('skia_revision'),
