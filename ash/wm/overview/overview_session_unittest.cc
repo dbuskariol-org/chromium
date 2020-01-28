@@ -6315,6 +6315,34 @@ TEST_P(SplitViewOverviewSessionInClamshellTestMultiDisplayOnly,
   EXPECT_EQ(grid1->GetDropTarget(), grid1->window_list()[2].get());
 }
 
+// Verify that the drop target in each overview grid has the correct bounds when
+// a maximized window is being dragged.
+TEST_P(SplitViewOverviewSessionInClamshellTestMultiDisplayOnly,
+       DropTargetBoundsForMaximizedWindowDraggedToOtherDisplay) {
+  UpdateDisplay("1000x400,1000x400/l");
+  std::unique_ptr<aura::Window> window = CreateTestWindow();
+  WindowState::Get(window.get())->Maximize();
+  ToggleOverview();
+  OverviewItem* item = GetOverviewItemForWindow(window.get());
+  // Verify that |item| is letter boxed.
+  EXPECT_EQ(ScopedOverviewTransformWindow::GridWindowFillMode::kLetterBoxed,
+            item->GetWindowDimensionsType());
+  EXPECT_EQ(2.f,
+            item->target_bounds().width() / item->target_bounds().height());
+  overview_session()->InitiateDrag(item, item->target_bounds().CenterPoint(),
+                                   /*is_touch_dragging=*/false);
+  Shell::Get()->cursor_manager()->SetDisplay(
+      display_manager()->GetSecondaryDisplay());
+  overview_session()->Drag(item, gfx::PointF(1200.f, 0.f));
+  OverviewItem* drop_target = GetDropTarget(1);
+  ASSERT_TRUE(drop_target);
+  // Verify that |drop_target| is effectively pillar boxed. Avoid calling
+  // |OverviewItem::GetWindowDimensionsType|, because it does not work for drop
+  // targets (and that is okay).
+  EXPECT_EQ(0.5f, drop_target->target_bounds().width() /
+                      drop_target->target_bounds().height());
+}
+
 // Verify that the drop target in each overview grid has bounds representing
 // anticipation that if the dragged window is dropped into that grid, it will
 // shrink to fit into the corresponding work area.
