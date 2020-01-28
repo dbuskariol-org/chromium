@@ -73,6 +73,8 @@ class ASH_EXPORT LockContentsView
       public KeyboardControllerObserver,
       public chromeos::PowerManagerClient::Observer {
  public:
+  class AuthErrorBubble;
+
   // TestApi is used for tests to get internal implementation details.
   class ASH_EXPORT TestApi {
    public:
@@ -420,7 +422,7 @@ class ASH_EXPORT LockContentsView
   // All error bubbles and the tooltip view are child views of LockContentsView,
   // and will be torn down when LockContentsView is torn down.
   // Bubble for displaying authentication error.
-  LoginErrorBubble* auth_error_bubble_;
+  AuthErrorBubble* auth_error_bubble_;
   // Bubble for displaying detachable base errors.
   LoginErrorBubble* detachable_base_error_bubble_;
   // Bubble for displaying easy-unlock tooltips.
