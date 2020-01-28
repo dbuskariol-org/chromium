@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/media/router/providers/openscreen/platform/network_util.h"
+#include "components/openscreen_platform/network_util.h"
 
 #include <array>
 #include <memory>
@@ -11,10 +11,9 @@
 #include "net/base/ip_endpoint.h"
 #include "net/base/net_errors.h"
 
-namespace media_router {
-namespace network_util {
+namespace openscreen_platform {
 
-const net::IPAddress ToChromeNetAddress(const openscreen::IPAddress& address) {
+const net::IPAddress ToNetAddress(const openscreen::IPAddress& address) {
   switch (address.version()) {
     case openscreen::IPAddress::Version::kV4: {
       std::array<uint8_t, openscreen::IPAddress::kV4Size> bytes_v4;
@@ -29,9 +28,8 @@ const net::IPAddress ToChromeNetAddress(const openscreen::IPAddress& address) {
   }
 }
 
-const net::IPEndPoint ToChromeNetEndpoint(
-    const openscreen::IPEndpoint& endpoint) {
-  return net::IPEndPoint(ToChromeNetAddress(endpoint.address), endpoint.port);
+const net::IPEndPoint ToNetEndPoint(const openscreen::IPEndpoint& endpoint) {
+  return net::IPEndPoint(ToNetAddress(endpoint.address), endpoint.port);
 }
 
 openscreen::IPAddress::Version ToOpenScreenVersion(
@@ -48,7 +46,7 @@ openscreen::IPAddress::Version ToOpenScreenVersion(
   }
 }
 
-const openscreen::IPEndpoint ToOpenScreenEndpoint(
+const openscreen::IPEndpoint ToOpenScreenEndPoint(
     const net::IPEndPoint& endpoint) {
   const openscreen::IPAddress::Version version =
       ToOpenScreenVersion(endpoint.GetFamily());
@@ -57,5 +55,4 @@ const openscreen::IPEndpoint ToOpenScreenEndpoint(
       endpoint.port()};
 }
 
-}  // namespace network_util
-}  // namespace media_router
+}  // namespace openscreen_platform

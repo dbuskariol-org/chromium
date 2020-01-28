@@ -14,9 +14,9 @@ using std::chrono::seconds;
 namespace openscreen {
 
 Clock::time_point Clock::now() noexcept {
-  // Open Screen requires at least 10,000
-  // ticks per second, according to the docs. If IsHighResolution is false, the
-  // supplied resolution is much worse than that (potentially up to ~15.6ms).
+  // Open Screen requires at least 10,000 ticks per second, according to the
+  // docs. If IsHighResolution is false, the supplied resolution is much worse
+  // than that (potentially up to ~15.6ms).
   if (UNLIKELY(!base::TimeTicks::IsHighResolution())) {
     static bool need_to_log_once = true;
     LOG_IF(ERROR, need_to_log_once)
