@@ -43,6 +43,8 @@
 #include "third_party/blink/renderer/core/animation/keyframe_effect.h"
 #include "third_party/blink/renderer/core/animation/pending_animations.h"
 #include "third_party/blink/renderer/core/animation/scroll_timeline.h"
+#include "third_party/blink/renderer/core/css/properties/css_property_ref.h"
+#include "third_party/blink/renderer/core/css/resolver/style_resolver.h"
 #include "third_party/blink/renderer/core/css/style_change_reason.h"
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/dom_node_ids.h"
@@ -2034,6 +2036,77 @@ String Animation::replaceState() {
     default:
       NOTREACHED();
       return "";
+  }
+}
+
+// https://drafts.csswg.org/web-animations-1/#dom-animation-commitstyles
+void Animation::commitStyles(ExceptionState& exception_state) {
+  Element* target = content_ && content_->IsKeyframeEffect()
+                        ? To<KeyframeEffect>(effect())->target()
+                        : nullptr;
+
+  // 1. If target is not an element capable of having a style attribute
+  //    (for example, it is a pseudo-element or is an element in a document
+  //    format for which style attributes are not defined) throw a
+  //    "NoModificationAllowedError" DOMException and abort these steps.
+  if (!target || !target->IsStyledElement() ||
+      !To<KeyframeEffect>(effect())->pseudoElement().IsEmpty()) {
+    exception_state.ThrowDOMException(
+        DOMExceptionCode::kNoModificationAllowedError,
+        "Animation not associated with a styled target element");
+    return;
+  }
+  // 2. If, after applying any pending style changes, target is not being
+  //    rendered, throw an "InvalidStateError" DOMException and abort these
+  //    steps.
+  target->GetDocument().UpdateStyleAndLayoutTreeForNode(target);
+  if (!target->GetLayoutObject()) {
+    exception_state.ThrowDOMException(DOMExceptionCode::kInvalidStateError,
+                                      "Target element is not rendered.");
+    return;
+  }
+
+  // 3. Let inline style be the result of getting the CSS declaration block
+  //    corresponding to target’s style attribute. If target does not have a
+  //    style attribute, let inline style be a new empty CSS declaration block
+  //    with the readonly flag unset and owner node set to target.
+  CSSStyleDeclaration* inline_style = target->style();
+
+  // 4. Let targeted properties be the set of physical longhand properties
+  //    that are a target property for at least one animation effect
+  //    associated with animation whose effect target is target.
+  PropertyHandleSet animation_properties =
+      To<KeyframeEffect>(effect())->Model()->Properties();
+
+  // 5. For each property, property, in targeted properties:
+  //   5.1 Let partialEffectStack be a copy of the effect stack for property
+  //       on target.
+  //   5.2 If animation’s replace state is removed, add all animation effects
+  //       associated with animation whose effect target is target and which
+  //       include property as a target property to partialEffectStack.
+  //   5.3 Remove from partialEffectStack any animation effects whose
+  //       associated animation has a higher composite order than animation.
+  //   5.4 Let effect value be the result of calculating the result of
+  //       partialEffectStack for property using target’s computed style
+  //       (see § 5.4.3 Calculating the result of an effect stack).
+  //   5.5 Set a CSS declaration property for effect value in inline style.
+  // 6. Update style attribute for inline style.
+  ActiveInterpolationsMap interpolations_map =
+      To<KeyframeEffect>(effect())->InterpolationsForCommitStyles();
+  StyleResolver& resolver = target->GetDocument().EnsureStyleResolver();
+  scoped_refptr<ComputedStyle> style =
+      resolver.StyleForInterpolations(*target, interpolations_map);
+
+  for (const auto& property : animation_properties) {
+    if (!property.IsCSSProperty())
+      continue;
+
+    CSSPropertyRef ref(property.GetCSSPropertyName(), target->GetDocument());
+    const CSSValue* value = ref.GetProperty().CSSValueFromComputedStyle(
+       *style, nullptr, false);
+    inline_style->setProperty(&target->GetDocument(),
+                              property.GetCSSPropertyName().ToAtomicString(),
+                              value->CssText(), "", ASSERT_NO_EXCEPTION);
   }
 }
 

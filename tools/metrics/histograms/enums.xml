@@ -26132,6 +26132,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3147" label="V8Animation_Onremove_AttributeSetter"/>
   <int value="3148" label="ClassicSharedWorker"/>
   <int value="3149" label="ModuleSharedWorker"/>
+  <int value="3150" label="V8Animation_CommitStyles_Method"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
