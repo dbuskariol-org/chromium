@@ -16,6 +16,7 @@
 #include "base/bind_helpers.h"
 #include "base/callback_helpers.h"
 #include "base/command_line.h"
+#include "base/feature_list.h"
 #include "base/location.h"
 #include "base/optional.h"
 #include "base/run_loop.h"
@@ -37,6 +38,7 @@
 #include "content/browser/child_process_security_policy_impl.h"
 #include "content/browser/code_cache/generated_code_cache.h"
 #include "content/browser/code_cache/generated_code_cache_context.h"
+#include "content/browser/conversions/conversion_manager.h"
 #include "content/browser/cookie_store/cookie_store_context.h"
 #include "content/browser/devtools/devtools_url_loader_interceptor.h"
 #include "content/browser/file_system/browser_file_system_helper.h"
@@ -1326,6 +1328,15 @@ void StoragePartitionImpl::Initialize() {
           filesystem_context_, blob_context,
           browser_context_->GetNativeFileSystemPermissionContext(),
           browser_context_->IsOffTheRecord());
+
+  // The Conversion Measurement API is not available in Incognito mode.
+  if (!is_in_memory_ &&
+      base::FeatureList::IsEnabled(features::kConversionMeasurement)) {
+    conversion_manager_ = std::make_unique<ConversionManager>(
+        path,
+        base::CreateSequencedTaskRunner({base::ThreadPool(), base::MayBlock(),
+                                         base::TaskPriority::BEST_EFFORT}));
+  }
 
   GeneratedCodeCacheSettings settings =
       GetContentClient()->browser()->GetGeneratedCodeCacheSettings(
