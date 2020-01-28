@@ -10,6 +10,7 @@
 #include "base/compiler_specific.h"
 #include "base/macros.h"
 #include "components/captive_portal/content/captive_portal_service.h"
+#include "components/captive_portal/content/captive_portal_tab_reloader.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
 #include "content/public/common/resource_type.h"
@@ -72,30 +73,32 @@ class CaptivePortalTabHelper
   // page.  This is set to false when a captive portal is no longer detected.
   bool IsLoginTab() const;
 
-  // Opens a login tab if the profile's active window doesn't have one already.
-  static void OpenLoginTabForWebContents(content::WebContents* web_contents,
-                                         bool focus);
+  // Called to indicate a tab is at, or is navigating to, the captive portal
+  // login page.
+  void SetIsLoginTab();
 
   bool is_captive_portal_window() const { return is_captive_portal_window_; }
   void set_is_captive_portal_window() { is_captive_portal_window_ = true; }
+
+  static void CreateForWebContents(
+      content::WebContents* web_contents,
+      const CaptivePortalTabReloader::OpenLoginTabCallback&
+          open_login_tab_callback);
 
  private:
   friend class CaptivePortalBrowserTest;
   friend class CaptivePortalTabHelperTest;
 
   friend class content::WebContentsUserData<CaptivePortalTabHelper>;
-  explicit CaptivePortalTabHelper(content::WebContents* web_contents);
-
+  CaptivePortalTabHelper(content::WebContents* web_contents,
+                         const CaptivePortalTabReloader::OpenLoginTabCallback&
+                             open_login_tab_callback);
   void Observe(const CaptivePortalService::Results& results);
 
   // Called by Observe in response to the corresponding event.
   void OnCaptivePortalResults(
       captive_portal::CaptivePortalResult previous_result,
       captive_portal::CaptivePortalResult result);
-
-  // Called to indicate a tab is at, or is navigating to, the captive portal
-  // login page.
-  void SetIsLoginTab();
 
   // |this| takes ownership of |tab_reloader|.
   void SetTabReloaderForTest(CaptivePortalTabReloader* tab_reloader);

@@ -572,7 +572,8 @@ TEST_F(ChromeContentBrowserClientCaptivePortalBrowserTest,
   bool invoked_url_factory = false;
   cp_rph_factory_.SetupForTracking(&invoked_url_factory,
                                    true /* expected_disable_secure_dns */);
-  CaptivePortalTabHelper::CreateForWebContents(web_contents());
+  CaptivePortalTabHelper::CreateForWebContents(web_contents(),
+                                               base::Callback<void(void)>());
   CaptivePortalTabHelper::FromWebContents(web_contents())
       ->set_is_captive_portal_window();
   NavigateAndCommit(GURL("https://www.google.com"), ui::PAGE_TRANSITION_LINK);

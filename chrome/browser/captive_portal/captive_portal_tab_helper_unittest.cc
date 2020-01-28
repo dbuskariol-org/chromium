@@ -73,7 +73,8 @@ class CaptivePortalTabHelperTest : public ChromeRenderViewHostTestHarness {
         content::WebContentsTester::For(web_contents());
     web_contents_tester->NavigateAndCommit(GURL(kStartUrl));
 
-    tab_helper_.reset(new CaptivePortalTabHelper(web_contents()));
+    tab_helper_.reset(
+        new CaptivePortalTabHelper(web_contents(), base::DoNothing()));
     tab_helper_->profile_ = nullptr;
     tab_helper_->SetTabReloaderForTest(mock_reloader_);
   }

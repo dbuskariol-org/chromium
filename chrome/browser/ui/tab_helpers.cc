@@ -56,6 +56,7 @@
 #include "chrome/browser/safe_browsing/safe_browsing_navigation_observer.h"
 #include "chrome/browser/safe_browsing/trigger_creator.h"
 #include "chrome/browser/sessions/session_tab_helper_factory.h"
+#include "chrome/browser/ssl/chrome_security_blocking_page_factory.h"
 #include "chrome/browser/ssl/connection_help_tab_helper.h"
 #include "chrome/browser/ssl/security_state_tab_helper.h"
 #include "chrome/browser/subresource_filter/chrome_subresource_filter_client.h"
@@ -355,7 +356,10 @@ void TabHelpers::AttachTabHelpers(WebContents* web_contents) {
   // --- Feature tab helpers behind flags ---
 
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
-  CaptivePortalTabHelper::CreateForWebContents(web_contents);
+  CaptivePortalTabHelper::CreateForWebContents(
+      web_contents,
+      base::Bind(&ChromeSecurityBlockingPageFactory::OpenLoginTabForWebContents,
+                 web_contents, false));
 #endif
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
