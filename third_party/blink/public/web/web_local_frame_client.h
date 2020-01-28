@@ -359,11 +359,6 @@ class BLINK_EXPORT WebLocalFrameClient {
   virtual void DidStartLoading() {}
   virtual void DidStopLoading() {}
 
-  // Notification that some progress was made loading the current frame.
-  // loadProgress is a value between 0 (nothing loaded) and 1.0 (frame fully
-  // loaded).
-  virtual void DidChangeLoadProgress(double load_progress) {}
-
   // A form submission has been requested, but the page's submit event handler
   // hasn't yet had a chance to run (and possibly alter/interrupt the submit.)
   virtual void WillSendSubmitEvent(const WebFormElement&) {}
