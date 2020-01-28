@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+<html>
 <title>Test the basics of the video.requestAnimationFrame() API.</title>
-<script src="../resources/testharness.js"></script>
-<script src="../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/common/media.js"></script>
 <script>
-
 var testVideo = {
-  url: "content/test.webm",
-  height: 180,
+  url: getVideoURI('/media/movie_5'),
+  height: 240,
   width: 320,
 }
 
@@ -73,3 +74,4 @@ test(function(t) {
 
 }, 'Test invalid calls to the video.rAF API.');
 </script>
+</html>

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<title>Test calling video.requestAnimationFrame() from a video.rAF callback.</title>
-<script src="../resources/testharness.js"></script>
-<script src="../resources/testharnessreport.js"></script>
+<html>
+<title>Test repeatedly chaining video.rAF() callbacks.</title>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/common/media.js"></script>
 <script>
 
 async_test(function(t) {
@@ -26,10 +28,10 @@ async_test(function(t) {
 
     }));
 
-    video.src = "content/test.webm";
+    video.src = getVideoURI('/media/movie_5');
     video.play();
 
-}, 'Test callbacks are only called on the next frame.');
+}, 'Test new callbacks are only called on the next frame.');
 
 async_test(function(t) {
     let video = document.createElement('video');
@@ -51,8 +53,9 @@ async_test(function(t) {
 
     video.requestAnimationFrame(t.step_func(frameNumberVerifier));
 
-    video.src = "content/test.webm";
+    video.src = getVideoURI('/media/movie_5');
     video.play();
 
 }, 'Test chaining calls to video.rAF.');
 </script>
+</html>
