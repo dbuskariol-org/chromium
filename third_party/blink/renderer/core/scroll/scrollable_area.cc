@@ -325,7 +325,8 @@ void ScrollableArea::ProgrammaticScrollHelper(
   }
 
   if (scroll_behavior ==
-      mojom::blink::ScrollIntoViewParams::Behavior::kSmooth) {
+          mojom::blink::ScrollIntoViewParams::Behavior::kSmooth &&
+      ScrollAnimatorEnabled()) {
     GetProgrammaticScrollAnimator().AnimateToOffset(offset, is_sequenced_scroll,
                                                     std::move(callback));
   } else {
