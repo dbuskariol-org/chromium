@@ -42895,6 +42895,12 @@ Called by update_use_counter_css.py.-->
   <int value="1" label="PresentedAfterUpdateBanner"/>
 </enum>
 
+<enum name="MobileMessagesSaveCardModalEvent">
+  <int value="0" label="EditedCardHolderName"/>
+  <int value="1" label="EditedExpirationMonth"/>
+  <int value="2" label="EditedExpirationYear"/>
+</enum>
+
 <enum name="MobileMessagesTranslateBannerEvent">
   <int value="0" label="Translate"/>
   <int value="1" label="ShowOriginal"/>
