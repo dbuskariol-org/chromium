@@ -1639,7 +1639,8 @@ void ShelfLayoutManager::CalculateTargetBounds(
 
   // Enlarge the widget to take up available space, this ensures events which
   // are outside of the HomeButton bounds can be received.
-  nav_size.Enlarge(home_button_edge_spacing, home_button_edge_spacing);
+  if (!nav_size.IsEmpty())
+    nav_size.Enlarge(home_button_edge_spacing, home_button_edge_spacing);
 
   if (shelf_->IsHorizontalAlignment() && base::i18n::IsRTL())
     nav_origin.set_x(shelf_width - nav_size.width());
