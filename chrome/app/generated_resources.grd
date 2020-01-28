@@ -39,6 +39,7 @@ are declared in tools/grit/grit_rule.gni.
       <output filename="generated_resources_sq.pak" type="data_package" lang="sq" />
       <output filename="generated_resources_ur.pak" type="data_package" lang="ur" />
       <output filename="generated_resources_uz.pak" type="data_package" lang="uz" />
+      <output filename="generated_resources_zh-HK.pak" type="data_package" lang="zh-HK" />
       <output filename="generated_resources_zu.pak" type="data_package" lang="zu" />
     </if>
     <output filename="generated_resources_am.pak" type="data_package" lang="am" />
@@ -178,6 +179,7 @@ are declared in tools/grit/grit_rule.gni.
       <output filename="java/res/values-uz/generated_resources.xml" lang="uz" type="android" context="android_java" />
       <output filename="java/res/values-vi/generated_resources.xml" lang="vi" type="android" context="android_java" />
       <output filename="java/res/values-zh-rCN/generated_resources.xml" lang="zh-CN" type="android" context="android_java" />
+      <output filename="java/res/values-zh-rHK/generated_resources.xml" lang="zh-HK" type="android" context="android_java" />
       <output filename="java/res/values-zh-rTW/generated_resources.xml" lang="zh-TW" type="android" context="android_java" />
       <output filename="java/res/values-zu/generated_resources.xml" lang="zu" type="android" context="android_java" />
     </if>
