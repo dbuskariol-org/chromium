@@ -487,8 +487,9 @@ template("monochrome_public_common_apk_or_module_tmpl") {
           [ "//chrome/android:libmonochrome_64($_hwasan_toolchain)" ]
 
       if (use_chromium_linker) {
-        shared_libraries +=
-            [ "//base/android/linker:chromium_android_linker($_hwasan_toolchain)" ]
+        shared_libraries += [
+          "//base/android/linker:chromium_android_linker($_hwasan_toolchain)",
+        ]
       }
     }
 
