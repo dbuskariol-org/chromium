@@ -248,6 +248,11 @@ class MEDIA_GPU_EXPORT V4L2VideoEncodeAccelerator
   const scoped_refptr<base::SingleThreadTaskRunner> child_task_runner_;
   SEQUENCE_CHECKER(child_sequence_checker_);
 
+  // A coded_size() of VideoFrame on VEA::Encode(). This is updated on the first
+  // time Encode() if the coded size is different from the expected one by VEA.
+  // For example, it happens in WebRTC simulcast case.
+  gfx::Size input_frame_size_;
+
   // Visible rectangle of VideoFrame to be fed to an encoder driver, in other
   // words, a visible rectangle that output encoded bitstream buffers represent.
   gfx::Rect encoder_input_visible_rect_;
@@ -257,12 +262,6 @@ class MEDIA_GPU_EXPORT V4L2VideoEncodeAccelerator
 
   // Stands for whether an input buffer is native graphic buffer.
   bool native_input_mode_;
-
-  // Input allocated size calculated by
-  // V4L2Device::AllocatedSizeFromV4L2Format().
-  // TODO(crbug.com/914700): Remove this once Client::RequireBitstreamBuffers
-  // uses input's VideoFrameLayout to allocate input buffer.
-  gfx::Size input_allocated_size_;
 
   size_t output_buffer_byte_size_;
   uint32_t output_format_fourcc_;

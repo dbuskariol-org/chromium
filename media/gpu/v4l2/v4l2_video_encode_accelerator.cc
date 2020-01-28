@@ -294,13 +294,14 @@ void V4L2VideoEncodeAccelerator::InitializeTask(const Config& config,
   RequestEncodingParametersChangeTask(
       config.initial_bitrate, config.initial_framerate.value_or(
                                   VideoEncodeAccelerator::kDefaultFramerate));
+
+  const gfx::Size input_size = image_processor_.get()
+                                   ? image_processor_->input_config().size
+                                   : input_frame_size_;
   child_task_runner_->PostTask(
-      FROM_HERE, base::BindOnce(&Client::RequireBitstreamBuffers, client_,
-                                kInputBufferCount,
-                                image_processor_.get()
-                                    ? image_processor_->input_config().size
-                                    : input_allocated_size_,
-                                output_buffer_byte_size_));
+      FROM_HERE,
+      base::BindOnce(&Client::RequireBitstreamBuffers, client_,
+                     kInputBufferCount, input_size, output_buffer_byte_size_));
 
   // Finish initialization.
   *result = true;
@@ -696,19 +697,19 @@ bool V4L2VideoEncodeAccelerator::ReconfigureFormatIfNeeded(
   }
 
   // Here we should compare |device_input_layout_->coded_size()|. However, VEA
-  // requests a client |input_allocated_size_|, which might be a larger size
-  // than |device_input_layout_->coded_size()|. The size is larger if there is
-  // an extra data in planes, that happens on MediaTek.
+  // requests a client |input_frame_size_|, which might be a larger size than
+  // |device_input_layout_->coded_size()|. The size is larger if there is an
+  // extra data in planes, that happens on MediaTek.
   // This comparison will work because VEAClient within Chrome gives the buffer
-  // whose frame size as |input_allocated_size_|. VEAClient for ARC++ might give
-  // a different frame size but |input_allocated_size_| is always the same as
+  // whose frame size as |input_frame_size_|. VEAClient for ARC++ might give a
+  // different frame size but |input_frame_size_| is always the same as
   // |device_input_layout_->coded_size()|.
-  if (frame.coded_size() != input_allocated_size_) {
+  if (frame.coded_size() != input_frame_size_) {
     VLOGF(2) << "Call S_FMT with a new size=" << frame.coded_size().ToString()
              << ", the previous size ="
              << device_input_layout_->coded_size().ToString()
              << " (the size requested to client="
-             << input_allocated_size_.ToString();
+             << input_frame_size_.ToString();
     if (!input_buffer_map_.empty()) {
       VLOGF(1) << "Input frame size is changed during encoding";
       NOTIFY_ERROR(kInvalidArgumentError);
@@ -1354,14 +1355,11 @@ bool V4L2VideoEncodeAccelerator::NegotiateInputFormat(
       return false;
     }
     if (native_input_mode_) {
-      input_allocated_size_ =
+      input_frame_size_ =
           gfx::Size(device_input_layout_->planes()[0].stride,
                     device_input_layout_->coded_size().height());
     } else {
-      // TODO(crbug.com/914700): Remove this once
-      // Client::RequireBitstreamBuffers uses input's VideoFrameLayout to
-      // allocate input buffer.
-      input_allocated_size_ = V4L2Device::AllocatedSizeFromV4L2Format(*format);
+      input_frame_size_ = V4L2Device::AllocatedSizeFromV4L2Format(*format);
     }
     return true;
   }
