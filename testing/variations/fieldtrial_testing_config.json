@@ -5650,6 +5650,22 @@
             ]
         }
     ],
+    "SafeBrowsingPasswordProtectionForSavedPasswordsAndroid": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "SafeBrowsingPasswordProtectionForSavedPasswords",
+                        "SafeBrowsingPasswordProtectionShowDomainsForSavedPasswords"
+                    ]
+                }
+            ]
+        }
+    ],
     "SafeBrowsingPasswordProtectionForSignedInUsers": [
         {
             "platforms": [
