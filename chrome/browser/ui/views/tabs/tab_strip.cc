@@ -508,8 +508,16 @@ class TabStrip::TabDragContextImpl : public TabDragContext {
 
   int GetTabAreaWidth() const override { return tab_strip_->GetTabAreaWidth(); }
 
-  int TabDragAreaEndX() const override {
+  int GetTabDragAreaWidth() const override {
     return tab_strip_->width() - tab_strip_->FrameGrabWidth();
+  }
+
+  int TabDragAreaBeginX() const override {
+    return tab_strip_->GetMirroredXWithWidthInView(0, GetTabDragAreaWidth());
+  }
+
+  int TabDragAreaEndX() const override {
+    return TabDragAreaBeginX() + GetTabDragAreaWidth();
   }
 
   int GetHorizontalDragThreshold() const override {
@@ -1326,8 +1334,9 @@ bool TabStrip::ShouldTabBeVisible(const Tab* tab) const {
   // If the tab is currently clipped by the trailing edge of the strip, it
   // shouldn't be visible.
   const int right_edge = tab->bounds().right();
-  const int tabstrip_right =
-      tab->dragging() ? drag_context_->TabDragAreaEndX() : GetTabAreaWidth();
+  const int tabstrip_right = tab->dragging()
+                                 ? drag_context_->GetTabDragAreaWidth()
+                                 : GetTabAreaWidth();
   if (right_edge > tabstrip_right)
     return false;
 
@@ -2679,7 +2688,7 @@ int TabStrip::GetInactiveTabWidth() const {
 }
 
 int TabStrip::GetTabAreaWidth() const {
-  return drag_context_->TabDragAreaEndX() -
+  return drag_context_->GetTabDragAreaWidth() -
          new_tab_button_ideal_bounds_.width() - TabToNewTabButtonSpacing();
 }
 
