@@ -1723,7 +1723,7 @@ are declared in tools/grit/grit_rule.gni.
       </message>
       <message name="IDS_PROMPT_APP_DEEP_SCANNING"
         desc="Message shown in the download shelf when Chrome recommends uploading the file for additional scanning">
-        <ph name="FILE_NAME">$1<ex>bla.exe</ex></ph> is unknown. Scan file to minimize risk.
+        Advanced Protection recommends sending <ph name="FILE_NAME">$1<ex>bla.exe</ex></ph> to Google to check for malware.
       </message>
       <message name="IDS_BLOCK_REASON_UNCOMMON_DOWNLOAD"
          desc="Message shown to the user on chrome://downloads page to explain that this download is blocked because it is uncommon.">
@@ -10547,7 +10547,7 @@ Please help our engineers fix this problem. Tell us what happened right before y
       Scan before opening?
     </message>
     <message name="IDS_DEEP_SCANNING_INFO_DIALOG_MESSAGE" desc="Message shown in tab modal dialog when the user opens a download that recommends deep scanning">
-      The selected file is unknown and may be dangerous. Consider scanning before opening this file.
+      The selected file is unknown and may be dangerous. Advanced Protection recommends sending this file to Google to check for malware.
     </message>
     <message name="IDS_DEEP_SCANNING_INFO_DIALOG_ACCEPT_BUTTON" desc="The text on the accept button in tab modal dialog when the user opens a download that recommends deep scanning">
       Scan
