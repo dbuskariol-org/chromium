@@ -47866,6 +47866,10 @@ Called by update_net_trust_anchors.py.-->
   <int value="4" label="Fetch race for navigation host and URL">
     The fetch race was attempted for the host and URL of the current navigation.
   </int>
+  <int value="5" label="Fetch race already in progress">
+    A fetch race for the host and URL of the current navigation is already in
+    progress.
+  </int>
 </enum>
 
 <enum name="OptOutBlacklistReason">
