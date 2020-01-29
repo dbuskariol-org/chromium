@@ -88,15 +88,6 @@ class UserClassifier {
   PrefService* pref_service_;
   base::Clock* clock_;
 
-  // Params of the rate.
-  const double discount_rate_per_hour_;
-  const double min_hours_;
-  const double max_hours_;
-
-  // Params of the classification.
-  const double active_consumer_clicks_at_least_once_per_hours_;
-  const double rare_viewer_opens_surface_at_most_once_per_hours_;
-
   DISALLOW_COPY_AND_ASSIGN(UserClassifier);
 };
 

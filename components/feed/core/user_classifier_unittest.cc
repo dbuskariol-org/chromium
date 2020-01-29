@@ -9,10 +9,8 @@
 #include <utility>
 
 #include "base/test/metrics/histogram_tester.h"
-#include "base/test/scoped_feature_list.h"
 #include "base/test/simple_test_clock.h"
 #include "base/time/time.h"
-#include "components/feed/feed_feature_list.h"
 #include "components/prefs/pref_registry_simple.h"
 #include "components/prefs/testing_pref_service.h"
 #include "testing/gmock/include/gmock/gmock.h"
@@ -81,30 +79,6 @@ TEST_F(FeedUserClassifierTest,
 }
 
 TEST_F(FeedUserClassifierTest,
-       ShouldBecomeActiveSuggestionsConsumerByClickingOftenWithDecreasedParam) {
-  // Increase the param to one half.
-  base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeatureWithParameters(
-      kInterestFeedContentSuggestions,
-      {{"user_classifier_active_consumer_clicks_at_least_once_per_hours",
-        "36"}});
-  UserClassifier* user_classifier = CreateUserClassifier();
-
-  // After two clicks still only an active user.
-  user_classifier->OnEvent(UserClassifier::Event::kSuggestionsUsed);
-  test_clock()->Advance(base::TimeDelta::FromHours(1));
-  user_classifier->OnEvent(UserClassifier::Event::kSuggestionsUsed);
-  EXPECT_THAT(user_classifier->GetUserClass(),
-              Eq(UserClass::kActiveSuggestionsViewer));
-
-  // One more click to become an active consumer.
-  test_clock()->Advance(base::TimeDelta::FromHours(1));
-  user_classifier->OnEvent(UserClassifier::Event::kSuggestionsUsed);
-  EXPECT_THAT(user_classifier->GetUserClass(),
-              Eq(UserClass::kActiveSuggestionsConsumer));
-}
-
-TEST_F(FeedUserClassifierTest,
        ShouldBecomeRareSuggestionsViewerUserByNoActivity) {
   UserClassifier* user_classifier = CreateUserClassifier();
 
@@ -115,26 +89,6 @@ TEST_F(FeedUserClassifierTest,
 
   // Two more days to become a rare user.
   test_clock()->Advance(base::TimeDelta::FromDays(2));
-  EXPECT_THAT(user_classifier->GetUserClass(),
-              Eq(UserClass::kRareSuggestionsViewer));
-}
-
-TEST_F(FeedUserClassifierTest,
-       ShouldBecomeRareSuggestionsViewerByNoActivityWithDecreasedParam) {
-  // Decrease the param to one half.
-  base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeatureWithParameters(
-      kInterestFeedContentSuggestions,
-      {{"user_classifier_rare_user_views_at_most_once_per_hours", "48"}});
-  UserClassifier* user_classifier = CreateUserClassifier();
-
-  // After one days of waiting still an active user.
-  test_clock()->Advance(base::TimeDelta::FromDays(1));
-  EXPECT_THAT(user_classifier->GetUserClass(),
-              Eq(UserClass::kActiveSuggestionsViewer));
-
-  // One more day to become a rare user.
-  test_clock()->Advance(base::TimeDelta::FromDays(1));
   EXPECT_THAT(user_classifier->GetUserClass(),
               Eq(UserClass::kRareSuggestionsViewer));
 }
@@ -220,31 +174,6 @@ TEST_P(FeedUserClassifierEventTest, ShouldIgnoreSubsequentEventsForHalfAnHour) {
   EXPECT_THAT(user_classifier->GetEstimatedAvgTime(event), Lt(old_rate));
 }
 
-TEST_P(FeedUserClassifierEventTest,
-       ShouldIgnoreSubsequentEventsWithIncreasedLimit) {
-  UserClassifier::Event event = GetParam().first;
-  // Increase the min_hours to 1.0, i.e. 60 minutes.
-  base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeatureWithParameters(
-      kInterestFeedContentSuggestions, {{"user_classifier_min_hours", "1.0"}});
-  UserClassifier* user_classifier = CreateUserClassifier();
-
-  // The initial event.
-  user_classifier->OnEvent(event);
-  // Subsequent events get ignored for the next 60 minutes.
-  for (int i = 0; i < 11; i++) {
-    test_clock()->Advance(base::TimeDelta::FromMinutes(5));
-    double old_rate = user_classifier->GetEstimatedAvgTime(event);
-    user_classifier->OnEvent(event);
-    EXPECT_THAT(user_classifier->GetEstimatedAvgTime(event), Eq(old_rate));
-  }
-  // An event 60 minutes after the initial event is finally not ignored.
-  test_clock()->Advance(base::TimeDelta::FromMinutes(5));
-  double old_rate = user_classifier->GetEstimatedAvgTime(event);
-  user_classifier->OnEvent(event);
-  EXPECT_THAT(user_classifier->GetEstimatedAvgTime(event), Lt(old_rate));
-}
-
 TEST_P(FeedUserClassifierEventTest, ShouldCapDelayBetweenEvents) {
   UserClassifier::Event event = GetParam().first;
   UserClassifier* user_classifier = CreateUserClassifier();
@@ -260,33 +189,6 @@ TEST_P(FeedUserClassifierEventTest, ShouldCapDelayBetweenEvents) {
   user_classifier->ClearClassificationForDebugging();
   user_classifier->OnEvent(event);
   test_clock()->Advance(base::TimeDelta::FromDays(7));
-  user_classifier->OnEvent(event);
-
-  // The results should be the same.
-  EXPECT_THAT(user_classifier->GetEstimatedAvgTime(event),
-              Eq(rate_after_a_year));
-}
-
-TEST_P(FeedUserClassifierEventTest,
-       ShouldCapDelayBetweenEventsWithDecreasedLimit) {
-  UserClassifier::Event event = GetParam().first;
-  // Decrease the max_hours to 72, i.e. 3 days.
-  base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeatureWithParameters(
-      kInterestFeedContentSuggestions, {{"user_classifier_max_hours", "72"}});
-  UserClassifier* user_classifier = CreateUserClassifier();
-
-  // The initial event.
-  user_classifier->OnEvent(event);
-  // Wait for an insane amount of time
-  test_clock()->Advance(base::TimeDelta::FromDays(365));
-  user_classifier->OnEvent(event);
-  double rate_after_a_year = user_classifier->GetEstimatedAvgTime(event);
-
-  // Now repeat the same with s/one year/two days.
-  user_classifier->ClearClassificationForDebugging();
-  user_classifier->OnEvent(event);
-  test_clock()->Advance(base::TimeDelta::FromDays(3));
   user_classifier->OnEvent(event);
 
   // The results should be the same.

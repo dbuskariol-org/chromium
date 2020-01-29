@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cfloat>
+#include <cmath>
 #include <string>
 
 #include "base/metrics/histogram_macros.h"
@@ -17,7 +18,6 @@
 #include "components/feed/feed_feature_list.h"
 #include "components/prefs/pref_registry_simple.h"
 #include "components/prefs/pref_service.h"
-#include "components/variations/variations_associated_data.h"
 
 namespace feed {
 
@@ -25,30 +25,27 @@ namespace {
 
 // The discount rate for computing the discounted-average rates. Must be
 // strictly larger than 0 and strictly smaller than 1!
-const double kDiscountRatePerDay = 0.25;
-const char kDiscountRatePerDayParam[] = "user_classifier_discount_rate_per_day";
+constexpr double kDiscountRatePerDay = 0.25;
+static_assert(kDiscountRatePerDay > 0 && kDiscountRatePerDay < 1,
+              "invalid value");
+// Compute discount_rate_per_hour such that
+//   kDiscountRatePerDay = 1 - e^{-kDiscountRatePerHour * 24}.
+const double kDiscountRatePerHour =
+    std::log(1.0 / (1.0 - kDiscountRatePerDay)) / 24.0;
 
 // Never consider any larger interval than this (so that extreme situations such
 // as losing your phone or going for a long offline vacation do not skew the
 // average too much).
-// When overriding via variation parameters, it is better to use smaller values
-// than |kMaxHours| as this it the maximum value reported in the histograms.
 const double kMaxHours = 7 * 24;
-const char kMaxHoursParam[] = "user_classifier_max_hours";
 
 // Ignore events within |kMinHours| hours since the last event (|kMinHours| is
 // the length of the browsing session where subsequent events of the same type
 // do not count again).
 const double kMinHours = 0.5;
-const char kMinHoursParam[] = "user_classifier_min_hours";
 
 // Classification constants.
 const double kActiveConsumerClicksAtLeastOncePerHours = 96;
-const char kActiveConsumerClicksAtLeastOncePerHoursParam[] =
-    "user_classifier_active_consumer_clicks_at_least_once_per_hours";
 const double kRareUserViewsAtMostOncePerHours = 96;
-const char kRareUserViewsAtMostOncePerHoursParam[] =
-    "user_classifier_rare_user_views_at_most_once_per_hours";
 
 // Histograms for logging the estimated average hours to next event. During
 // launch these must match legacy histogram names.
@@ -61,67 +58,35 @@ const char kHistogramAverageHoursToUseSuggestions[] =
 const UserClassifier::Event kEvents[] = {
     UserClassifier::Event::kSuggestionsViewed,
     UserClassifier::Event::kSuggestionsUsed};
-
-// Arrays of pref names, indexed by Event's int value.
-const char* kRateKeys[] = {prefs::kUserClassifierAverageSuggestionsViwedPerHour,
-                           prefs::kUserClassifierAverageSuggestionsUsedPerHour};
-const char* kLastTimeKeys[] = {prefs::kUserClassifierLastTimeToViewSuggestions,
-                               prefs::kUserClassifierLastTimeToUseSuggestions};
-
-// Default lengths of the intervals for new users for the events.
-const double kInitialHoursBetweenEvents[] = {24, 120};
-const char* kInitialHoursBetweenEventsParams[] = {
-    "user_classifier_default_interval_suggestions_viewed",
-    "user_classifier_default_interval_suggestions_used"};
-
-// This verifies that each of the arrays has exactly the same number of values
-// as the number of enum values in UserClassifier::Event. These arrays are all
-// indexed by the integer value of UserClassifier::Event values.
 static_assert(base::size(kEvents) ==
-                      static_cast<int>(UserClassifier::Event::kMaxValue) + 1 &&
-                  base::size(kRateKeys) ==
-                      static_cast<int>(UserClassifier::Event::kMaxValue) + 1 &&
-                  base::size(kLastTimeKeys) ==
-                      static_cast<int>(UserClassifier::Event::kMaxValue) + 1 &&
-                  base::size(kInitialHoursBetweenEvents) ==
-                      static_cast<int>(UserClassifier::Event::kMaxValue) + 1 &&
-                  base::size(kInitialHoursBetweenEventsParams) ==
-                      static_cast<int>(UserClassifier::Event::kMaxValue) + 1,
-              "Fill in info for all event types.");
+                  static_cast<int>(UserClassifier::Event::kMaxValue) + 1,
+              "kEvents should have all enum values.");
 
-// Computes the discount rate.
-double GetDiscountRatePerHour() {
-  double discount_rate_per_day = variations::GetVariationParamByFeatureAsDouble(
-      kInterestFeedContentSuggestions, kDiscountRatePerDayParam,
-      kDiscountRatePerDay);
-  // Check for illegal values.
-  if (discount_rate_per_day <= 0 || discount_rate_per_day >= 1) {
-    DLOG(WARNING) << "Illegal value " << discount_rate_per_day
-                  << " for the parameter " << kDiscountRatePerDayParam
-                  << " (must be strictly between 0 and 1; the default "
-                  << kDiscountRatePerDay << " is used, instead).";
-    discount_rate_per_day = kDiscountRatePerDay;
+const char* GetRateKey(UserClassifier::Event event) {
+  switch (event) {
+    case UserClassifier::Event::kSuggestionsViewed:
+      return prefs::kUserClassifierAverageSuggestionsViwedPerHour;
+    case UserClassifier::Event::kSuggestionsUsed:
+      return prefs::kUserClassifierAverageSuggestionsUsedPerHour;
   }
-  // Compute discount_rate_per_hour such that
-  //   discount_rate_per_day = 1 - e^{-discount_rate_per_hour * 24}.
-  return std::log(1.0 / (1.0 - discount_rate_per_day)) / 24.0;
+}
+
+const char* GetLastTimeKey(UserClassifier::Event event) {
+  switch (event) {
+    case UserClassifier::Event::kSuggestionsViewed:
+      return prefs::kUserClassifierLastTimeToViewSuggestions;
+    case UserClassifier::Event::kSuggestionsUsed:
+      return prefs::kUserClassifierLastTimeToUseSuggestions;
+  }
 }
 
 double GetInitialHoursBetweenEvents(UserClassifier::Event event) {
-  return variations::GetVariationParamByFeatureAsDouble(
-      kInterestFeedContentSuggestions,
-      kInitialHoursBetweenEventsParams[static_cast<int>(event)],
-      kInitialHoursBetweenEvents[static_cast<int>(event)]);
-}
-
-double GetMinHours() {
-  return variations::GetVariationParamByFeatureAsDouble(
-      kInterestFeedContentSuggestions, kMinHoursParam, kMinHours);
-}
-
-double GetMaxHours() {
-  return variations::GetVariationParamByFeatureAsDouble(
-      kInterestFeedContentSuggestions, kMaxHoursParam, kMaxHours);
+  switch (event) {
+    case UserClassifier::Event::kSuggestionsViewed:
+      return 24;
+    case UserClassifier::Event::kSuggestionsUsed:
+      return 120;
+  }
 }
 
 // Returns the new value of the rate using its |old_value|, assuming
@@ -178,21 +143,7 @@ double GetRateForEstimateHoursBetweenEvents(double estimate_hours,
 }  // namespace
 
 UserClassifier::UserClassifier(PrefService* pref_service, base::Clock* clock)
-    : pref_service_(pref_service),
-      clock_(clock),
-      discount_rate_per_hour_(GetDiscountRatePerHour()),
-      min_hours_(GetMinHours()),
-      max_hours_(GetMaxHours()),
-      active_consumer_clicks_at_least_once_per_hours_(
-          variations::GetVariationParamByFeatureAsDouble(
-              kInterestFeedContentSuggestions,
-              kActiveConsumerClicksAtLeastOncePerHoursParam,
-              kActiveConsumerClicksAtLeastOncePerHours)),
-      rare_viewer_opens_surface_at_most_once_per_hours_(
-          variations::GetVariationParamByFeatureAsDouble(
-              kInterestFeedContentSuggestions,
-              kRareUserViewsAtMostOncePerHoursParam,
-              kRareUserViewsAtMostOncePerHours)) {
+    : pref_service_(pref_service), clock_(clock) {
   // The pref_service_ can be null in tests.
   if (!pref_service_) {
     return;
@@ -214,25 +165,19 @@ UserClassifier::~UserClassifier() = default;
 
 // static
 void UserClassifier::RegisterProfilePrefs(PrefRegistrySimple* registry) {
-  double discount_rate = GetDiscountRatePerHour();
-  double min_hours = GetMinHours();
-  double max_hours = GetMaxHours();
-
   for (Event event : kEvents) {
     double default_rate = GetRateForEstimateHoursBetweenEvents(
-        GetInitialHoursBetweenEvents(event), discount_rate, min_hours,
-        max_hours);
-    registry->RegisterDoublePref(kRateKeys[static_cast<int>(event)],
-                                 default_rate);
-    registry->RegisterTimePref(kLastTimeKeys[static_cast<int>(event)],
-                               base::Time());
+        GetInitialHoursBetweenEvents(event), kDiscountRatePerHour, kMinHours,
+        kMaxHours);
+    registry->RegisterDoublePref(GetRateKey(event), default_rate);
+    registry->RegisterTimePref(GetLastTimeKey(event), base::Time());
   }
 }
 
 void UserClassifier::OnEvent(Event event) {
   double metric_value = UpdateRateOnEvent(event);
-  double avg = GetEstimateHoursBetweenEvents(
-      metric_value, discount_rate_per_hour_, min_hours_, max_hours_);
+  double avg = GetEstimateHoursBetweenEvents(metric_value, kDiscountRatePerHour,
+                                             kMinHours, kMaxHours);
   // We use kMaxHours as the max value below as the maximum value for the
   // histograms must be constant.
   switch (event) {
@@ -249,8 +194,8 @@ void UserClassifier::OnEvent(Event event) {
 
 double UserClassifier::GetEstimatedAvgTime(Event event) const {
   double rate = GetUpToDateRate(event);
-  return GetEstimateHoursBetweenEvents(rate, discount_rate_per_hour_,
-                                       min_hours_, max_hours_);
+  return GetEstimateHoursBetweenEvents(rate, kDiscountRatePerHour, kMinHours,
+                                       kMaxHours);
 }
 
 UserClass UserClassifier::GetUserClass() const {
@@ -260,12 +205,12 @@ UserClass UserClassifier::GetUserClass() const {
   }
 
   if (GetEstimatedAvgTime(Event::kSuggestionsViewed) >=
-      rare_viewer_opens_surface_at_most_once_per_hours_) {
+      kRareUserViewsAtMostOncePerHours) {
     return UserClass::kRareSuggestionsViewer;
   }
 
   if (GetEstimatedAvgTime(Event::kSuggestionsUsed) <=
-      active_consumer_clicks_at_least_once_per_hours_) {
+      kActiveConsumerClicksAtLeastOncePerHours) {
     return UserClass::kActiveSuggestionsConsumer;
   }
 
@@ -304,9 +249,9 @@ double UserClassifier::UpdateRateOnEvent(Event event) {
   }
 
   double hours_since_last_time =
-      std::min(max_hours_, GetHoursSinceLastTime(event));
+      std::min(kMaxHours, GetHoursSinceLastTime(event));
   // Ignore events within the same "browsing session".
-  if (hours_since_last_time < min_hours_) {
+  if (hours_since_last_time < kMinHours) {
     return GetUpToDateRate(event);
   }
 
@@ -315,7 +260,7 @@ double UserClassifier::UpdateRateOnEvent(Event event) {
   double rate = GetRate(event);
   // Add 1 to the discounted rate as the event has happened right now.
   double new_rate =
-      1 + DiscountRate(rate, hours_since_last_time, discount_rate_per_hour_);
+      1 + DiscountRate(rate, hours_since_last_time, kDiscountRatePerHour);
   SetRate(event, new_rate);
   return new_rate;
 }
@@ -326,11 +271,11 @@ double UserClassifier::GetUpToDateRate(Event event) const {
     return 0;
   }
 
-  double hours_since_last_time =
-      std::min(max_hours_, GetHoursSinceLastTime(event));
+  const double hours_since_last_time =
+      std::min(kMaxHours, GetHoursSinceLastTime(event));
 
-  double rate = GetRate(event);
-  return DiscountRate(rate, hours_since_last_time, discount_rate_per_hour_);
+  const double rate = GetRate(event);
+  return DiscountRate(rate, hours_since_last_time, kDiscountRatePerHour);
 }
 
 double UserClassifier::GetHoursSinceLastTime(Event event) const {
@@ -339,29 +284,28 @@ double UserClassifier::GetHoursSinceLastTime(Event event) const {
   }
 
   base::TimeDelta since_last_time =
-      clock_->Now() -
-      pref_service_->GetTime(kLastTimeKeys[static_cast<int>(event)]);
+      clock_->Now() - pref_service_->GetTime(GetLastTimeKey(event));
   return since_last_time.InSecondsF() / 3600;
 }
 
 bool UserClassifier::HasLastTime(Event event) const {
-  return pref_service_->HasPrefPath(kLastTimeKeys[static_cast<int>(event)]);
+  return pref_service_->HasPrefPath(GetLastTimeKey(event));
 }
 
 void UserClassifier::SetLastTimeToNow(Event event) {
-  pref_service_->SetTime(kLastTimeKeys[static_cast<int>(event)], clock_->Now());
+  pref_service_->SetTime(GetLastTimeKey(event), clock_->Now());
 }
 
 double UserClassifier::GetRate(Event event) const {
-  return pref_service_->GetDouble(kRateKeys[static_cast<int>(event)]);
+  return pref_service_->GetDouble(GetRateKey(event));
 }
 
 void UserClassifier::SetRate(Event event, double rate) {
-  pref_service_->SetDouble(kRateKeys[static_cast<int>(event)], rate);
+  pref_service_->SetDouble(GetRateKey(event), rate);
 }
 
 void UserClassifier::ClearRate(Event event) {
-  pref_service_->ClearPref(kRateKeys[static_cast<int>(event)]);
+  pref_service_->ClearPref(GetRateKey(event));
 }
 
 }  // namespace feed
