@@ -19620,6 +19620,22 @@
       When this policy is disabled, any calls to screen-share APIs will fail
       with an error.''',
     },
+    {
+      'name': 'AdvancedProtectionDeepScanningEnabled',
+      'owners': ['file://chrome/browser/safe_browsing/OWNERS'],
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'supported_on': ['chrome.*:81-'],
+      'features': {
+        'dynamic_refresh': True,
+        'per_profile': True,
+      },
+      'example_value': True,
+      'id': 667,
+      'caption': '''Enable sending downloads to Google for deep scanning for users enrolled in the Advanced Protection program''',
+      'tags': [],
+      'desc': '''This policy controls whether users enrolled in the Advanced Protection program are allowed to send their downloads to Google for malware scanning. If set to True or not set, enrolled users will be be prompted to send their files to Google for deep scanning. If the user selects 'Scan', their download will be sent to Google. If set to False, users will not be prompted and their downloads will not be sent to Google.''',
+    },
   ],
 
   'messages': {
@@ -20452,6 +20468,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 666,
+  'highest_id_currently_used': 667,
   'highest_atomic_group_id_currently_used': 38
 }

@@ -1277,6 +1277,10 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
     prefs::kLocalDiscoveryEnabled,
     base::Value::Type::BOOLEAN },
 #endif
+
+  { key::kAdvancedProtectionDeepScanningEnabled,
+    prefs::kAdvancedProtectionDeepScanningEnabled,
+    base::Value::Type::BOOLEAN },
 };
 // clang-format on
 

@@ -248,10 +248,16 @@ bool CheckClientDownloadRequest::ShouldPromptForDeepScanning(
   if (reason != REASON_DOWNLOAD_UNCOMMON)
     return false;
 
+#if defined(OS_CHROMEOS)
+  return false;
+#else
   Profile* profile = Profile::FromBrowserContext(GetBrowserContext());
   return base::FeatureList::IsEnabled(kPromptAppForDeepScanning) &&
+         profile->GetPrefs()->GetBoolean(
+             prefs::kAdvancedProtectionDeepScanningEnabled) &&
          AdvancedProtectionStatusManagerFactory::GetForProfile(profile)
              ->IsUnderAdvancedProtection();
+#endif
 }
 
 bool CheckClientDownloadRequest::ShouldUploadForDlpScan() {
