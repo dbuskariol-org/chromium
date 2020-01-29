@@ -869,6 +869,10 @@ class CONTENT_EXPORT ServiceWorkerVersion
 
   void InitializeGlobalScope();
 
+  // Update the idle delay if the worker is starting or running and we don't
+  // have to terminate the worker ASAP (e.g. for activation).
+  void UpdateIdleDelayIfNeeded(base::TimeDelta delay);
+
   const int64_t version_id_;
   const int64_t registration_id_;
   const GURL script_url_;
