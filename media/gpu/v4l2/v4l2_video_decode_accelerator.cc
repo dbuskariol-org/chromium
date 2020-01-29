@@ -2463,6 +2463,7 @@ bool V4L2VideoDecodeAccelerator::ProcessFrame(int32_t bitstream_buffer_id,
 
 bool V4L2VideoDecodeAccelerator::CreateOutputBuffers() {
   VLOGF(2);
+  DCHECK(decoder_thread_.task_runner()->BelongsToCurrentThread());
   DCHECK(decoder_state_ == kInitialized ||
          decoder_state_ == kChangingResolution);
   DCHECK(output_queue_);
