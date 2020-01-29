@@ -1957,6 +1957,21 @@ crbug.com/411164 [ Win ] http/tests/security/powerfulFeatureRestrictions/service
 
 crbug.com/686118 http/tests/security/setDomainRelaxationForbiddenForURLScheme.html [ Crash Pass ]
 
+# Flaky tests on Mac after enabling scroll animations in web_tests
+crbug.com/944583 [ Mac ] fast/events/keyboard-scroll-by-page.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] fast/events/platform-wheelevent-paging-xy-in-scrolling-div.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] fast/events/platform-wheelevent-paging-xy-in-scrolling-page.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] fast/events/space-scroll-textinput-canceled.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] fast/scrolling/percentage-mousewheel-scroll-on-iframe.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] fast/scrolling/percentage-mousewheel-scroll.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] virtual/mouseevent_fractional/fast/events/space-scroll-textinput-canceled.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] virtual/mouseevent_fractional/fast/events/platform-wheelevent-paging-y-in-scrolling-div.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] virtual/mouseevent_fractional/fast/events/keyboard-scroll-by-page.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] virtual/mouseevent_fractional/fast/events/platform-wheelevent-paging-xy-in-scrolling-page.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] virtual/mouseevent_fractional/fast/events/platform-wheelevent-paging-xy-in-scrolling-div.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] virtual/scroll_customization/fast/scrolling/percentage-mousewheel-scroll-on-iframe.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] virtual/scroll_customization/fast/scrolling/percentage-mousewheel-scroll.html [ Pass Failure ]
+
 # In external/wpt/html/, we prefer checking in failure
 # expectation files. The following tests with [ Failure ] don't have failure
 # expectation files because they contain local path names.
