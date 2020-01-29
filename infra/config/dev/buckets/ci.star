@@ -53,23 +53,23 @@ def ci_builder(*, name, **kwargs):
   )
 
 ci_builder(
-    name = 'Android N5 Swarm',
+    name = 'android-kitkat-arm-rel-swarming',
 )
 
 ci_builder(
-    name = 'Android N5X Swarm',
+    name = 'android-marshmallow-arm64-rel-swarming',
 )
 
 ci_builder(
-    name = 'Linux Swarm',
+    name = 'linux-rel-swarming',
 )
 
 ci_builder(
-    name = 'Mac Swarm',
+    name = 'mac-rel-swarming',
     os = os.MAC_DEFAULT,
 )
 
 ci_builder(
-    name = 'Windows Swarm',
+    name = 'win-rel-swarming',
     os = os.WINDOWS_DEFAULT,
 )

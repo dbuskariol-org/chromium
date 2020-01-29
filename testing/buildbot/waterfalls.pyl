@@ -3981,7 +3981,7 @@
   {
     'name': 'chromium.swarm',
     'machines': {
-      'Android N5 Swarm': {
+      'android-kitkat-arm-rel-swarming': {
         'mixins': [
           'kitkat',
           'hammerhead',
@@ -3994,7 +3994,7 @@
         },
         'os_type': 'android',
       },
-      'Android N5X Swarm': {
+      'android-marshmallow-arm64-rel-swarming': {
         'test_suites': {
            'gtest_tests': 'chromium_swarm_android_gtests',
         },
@@ -4010,7 +4010,7 @@
         },
         'os_type': 'android',
       },
-      'Linux Swarm': {
+      'linux-rel-swarming': {
         'mixins': [
           'linux-xenial',
         ],
@@ -4018,12 +4018,12 @@
            'gtest_tests': 'chromium_swarm_linux_gtests',
         },
       },
-      'Mac Swarm': {
+      'mac-rel-swarming': {
         'test_suites': {
            'gtest_tests': 'chromium_swarm_desktop_gtests',
         },
       },
-      'Windows Swarm': {
+      'win-rel-swarming': {
         'test_suites': {
            'gtest_tests': 'chromium_swarm_desktop_gtests',
         },
