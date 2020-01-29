@@ -24,9 +24,10 @@ namespace content {
 struct CONTENT_EXPORT CSPDirective {
   CSPDirective();
   CSPDirective(network::mojom::CSPDirectiveName name,
-               const CSPSourceList& source_list);
-  CSPDirective(const CSPDirective&);
+               CSPSourceList source_list);
   explicit CSPDirective(network::mojom::CSPDirectivePtr directive);
+  CSPDirective(const CSPDirective&) = delete;
+  CSPDirective(CSPDirective&&);
 
   network::mojom::CSPDirectiveName name;
   CSPSourceList source_list;

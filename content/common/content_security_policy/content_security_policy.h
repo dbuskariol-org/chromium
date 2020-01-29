@@ -26,11 +26,12 @@ struct CONTENT_EXPORT ContentSecurityPolicy {
   ContentSecurityPolicy();
   ContentSecurityPolicy(
       const network::mojom::ContentSecurityPolicyHeader& header,
-      const std::vector<CSPDirective>& directives,
+      std::vector<CSPDirective> directives,
       const std::vector<std::string>& report_endpoints,
       bool use_reporting_api);
   explicit ContentSecurityPolicy(network::mojom::ContentSecurityPolicyPtr);
-  ContentSecurityPolicy(const ContentSecurityPolicy&);
+  ContentSecurityPolicy(const ContentSecurityPolicy&) = delete;
+  ContentSecurityPolicy(ContentSecurityPolicy&&);
   ~ContentSecurityPolicy();
 
   network::mojom::ContentSecurityPolicyHeader header;

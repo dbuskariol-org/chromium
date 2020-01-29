@@ -27,12 +27,12 @@ bool Allow(const CSPSourceList& source_list,
 TEST(CSPSourceList, MultipleSource) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GURL("http://example.com")));
-  CSPSourceList source_list(
-      false,  // allow_self
-      false,  // allow_star
-      false,  // allow_redirects
-      {CSPSource("", "a.com", false, url::PORT_UNSPECIFIED, false, ""),
-       CSPSource("", "b.com", false, url::PORT_UNSPECIFIED, false, "")});
+  std::vector<network::mojom::CSPSourcePtr> sources;
+  sources.push_back(network::mojom::CSPSource::New(
+      "", "a.com", url::PORT_UNSPECIFIED, "", false, false));
+  sources.push_back(network::mojom::CSPSource::New(
+      "", "b.com", url::PORT_UNSPECIFIED, "", false, false));
+  CSPSourceList source_list(false, false, false, std::move(sources));
   EXPECT_TRUE(Allow(source_list, GURL("http://a.com"), &context));
   EXPECT_TRUE(Allow(source_list, GURL("http://b.com"), &context));
   EXPECT_FALSE(Allow(source_list, GURL("http://c.com"), &context));
@@ -41,10 +41,10 @@ TEST(CSPSourceList, MultipleSource) {
 TEST(CSPSourceList, AllowStar) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GURL("http://example.com")));
-  CSPSourceList source_list(false,                      // allow_self
-                            true,                       // allow_star
-                            false,                      // allow_redirects
-                            std::vector<CSPSource>());  // source_list
+  CSPSourceList source_list(false,  // allow_self
+                            true,   // allow_star
+                            false,  // allow_redirects
+                            {});    // source_list
   EXPECT_TRUE(Allow(source_list, GURL("http://not-example.com"), &context));
   EXPECT_TRUE(Allow(source_list, GURL("https://not-example.com"), &context));
   EXPECT_TRUE(Allow(source_list, GURL("ws://not-example.com"), &context));
@@ -63,10 +63,10 @@ TEST(CSPSourceList, AllowStar) {
 TEST(CSPSourceList, AllowSelf) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GURL("http://example.com")));
-  CSPSourceList source_list(true,                       // allow_self
-                            false,                      // allow_star
-                            false,                      // allow_redirects
-                            std::vector<CSPSource>());  // source_list
+  CSPSourceList source_list(true,   // allow_self
+                            false,  // allow_star
+                            false,  // allow_redirects
+                            {});    // source_list
   EXPECT_TRUE(Allow(source_list, GURL("http://example.com"), &context));
   EXPECT_FALSE(Allow(source_list, GURL("http://not-example.com"), &context));
   EXPECT_TRUE(Allow(source_list, GURL("https://example.com"), &context));
@@ -79,7 +79,7 @@ TEST(CSPSourceList, AllowStarAndSelf) {
   CSPSourceList source_list(false,  // allow_self
                             false,  // allow_star
                             false,  // allow_redirects
-                            std::vector<CSPSource>());
+                            {});
 
   // If the request is allowed by {*} and not by {'self'} then it should be
   // allowed by the union {*,'self'}.
@@ -97,10 +97,10 @@ TEST(CSPSourceList, AllowStarAndSelf) {
 TEST(CSPSourceList, AllowSelfWithUnspecifiedPort) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GetWebUIURL("print")));
-  CSPSourceList source_list(true,                       // allow_self
-                            false,                      // allow_star
-                            false,                      // allow_redirects
-                            std::vector<CSPSource>());  // source_list
+  CSPSourceList source_list(true,   // allow_self
+                            false,  // allow_star
+                            false,  // allow_redirects
+                            {});    // source_list
 
   EXPECT_TRUE(Allow(source_list,
                     GURL(GetWebUIURLString("print/pdf/index.html?") +
@@ -111,20 +111,20 @@ TEST(CSPSourceList, AllowSelfWithUnspecifiedPort) {
 TEST(CSPSourceList, AllowNone) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GURL("http://example.com")));
-  CSPSourceList source_list(false,                      // allow_self
-                            false,                      // allow_star
-                            false,                      // allow_redirects
-                            std::vector<CSPSource>());  // source_list
+  CSPSourceList source_list(false,  // allow_self
+                            false,  // allow_star
+                            false,  // allow_redirects
+                            {});    // source_list
   EXPECT_FALSE(Allow(source_list, GURL("http://example.com"), &context));
   EXPECT_FALSE(Allow(source_list, GURL("https://example.test/"), &context));
 }
 
 TEST(CSPSourceTest, SelfIsUnique) {
   // Policy: 'self'
-  CSPSourceList source_list(true,                       // allow_self
-                            false,                      // allow_star
-                            false,                      // allow_redirects
-                            std::vector<CSPSource>());  // source_list
+  CSPSourceList source_list(true,   // allow_self
+                            false,  // allow_star
+                            false,  // allow_redirects
+                            {});    // source_list
   CSPContext context;
 
   context.SetSelf(url::Origin::Create(GURL("http://a.com")));

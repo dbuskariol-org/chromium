@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include "content/common/content_security_policy/csp_source.h"
+#include "content/common/content_export.h"
 #include "services/network/public/mojom/content_security_policy.mojom-forward.h"
 #include "url/gurl.h"
 
@@ -20,9 +20,10 @@ struct CONTENT_EXPORT CSPSourceList {
   CSPSourceList(bool allow_self,
                 bool allow_star,
                 bool allow_response_redirects,
-                std::vector<CSPSource> source_list);
+                std::vector<network::mojom::CSPSourcePtr> source_list);
   explicit CSPSourceList(network::mojom::CSPSourceListPtr csp_source_list);
-  CSPSourceList(const CSPSourceList&);
+  CSPSourceList(CSPSourceList&&);
+  CSPSourceList(const CSPSourceList&) = delete;
   ~CSPSourceList();
 
   // Wildcard hosts and 'self' aren't stored in source_list, but as attributes
@@ -30,7 +31,7 @@ struct CONTENT_EXPORT CSPSourceList {
   bool allow_self;
   bool allow_star;
   bool allow_response_redirects;
-  std::vector<CSPSource> sources;
+  std::vector<network::mojom::CSPSourcePtr> sources;
 
   std::string ToString() const;
 

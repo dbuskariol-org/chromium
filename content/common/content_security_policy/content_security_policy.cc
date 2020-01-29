@@ -7,6 +7,7 @@
 #include "base/strings/string_split.h"
 #include "base/strings/string_util.h"
 #include "content/common/content_security_policy/csp_context.h"
+#include "content/common/content_security_policy/csp_source.h"
 #include "services/network/public/cpp/content_security_policy.h"
 
 namespace content {
@@ -95,7 +96,7 @@ void ReportViolation(CSPContext* context,
   // ensure that these are not transmitted between different cross-origin
   // renderers.
   GURL blocked_url = (directive_name == CSPDirectiveName::FrameAncestors)
-                         ? GURL(context->self_source()->ToString())
+                         ? GURL(ToString(context->self_source()))
                          : url;
   SourceLocation safe_source_location = source_location;
   context->SanitizeDataForUseInCspViolation(has_followed_redirect,
@@ -169,11 +170,11 @@ ContentSecurityPolicy::ContentSecurityPolicy() = default;
 
 ContentSecurityPolicy::ContentSecurityPolicy(
     const network::mojom::ContentSecurityPolicyHeader& header,
-    const std::vector<CSPDirective>& directives,
+    std::vector<CSPDirective> directives,
     const std::vector<std::string>& report_endpoints,
     bool use_reporting_api)
     : header(header),
-      directives(directives),
+      directives(std::move(directives)),
       report_endpoints(report_endpoints),
       use_reporting_api(use_reporting_api) {}
 
@@ -188,8 +189,8 @@ ContentSecurityPolicy::ContentSecurityPolicy(
     directives.emplace_back(std::move(directive));
 }
 
-ContentSecurityPolicy::ContentSecurityPolicy(
-    const ContentSecurityPolicy& other) = default;
+ContentSecurityPolicy::ContentSecurityPolicy(ContentSecurityPolicy&& other) =
+    default;
 
 ContentSecurityPolicy::~ContentSecurityPolicy() = default;
 

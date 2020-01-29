@@ -1040,14 +1040,10 @@ NavigationRequest::NavigationRequest(
     for (auto& policy : mojo_policies)
       initiator_policies.push_back(ContentSecurityPolicy(std::move(policy)));
 
-    base::Optional<CSPSource> initiator_self;
-    if (common_params_->initiator_csp_info->initiator_self_source) {
-      initiator_self = CSPSource(
-          std::move(common_params_->initiator_csp_info->initiator_self_source));
-    }
-
     initiator_csp_context_.reset(new InitiatorCSPContext(
-        initiator_policies, initiator_self, std::move(navigation_initiator)));
+        std::move(initiator_policies),
+        std::move(common_params_->initiator_csp_info->initiator_self_source),
+        std::move(navigation_initiator)));
   }
 
   navigation_entry_offset_ = EstimateHistoryOffset();

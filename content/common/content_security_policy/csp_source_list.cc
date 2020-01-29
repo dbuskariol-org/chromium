@@ -3,17 +3,18 @@
 // found in the LICENSE file.
 
 #include "content/common/content_security_policy/csp_context.h"
+#include "content/common/content_security_policy/csp_source.h"
 
 namespace content {
 
 namespace {
 
 bool AllowFromSources(const GURL& url,
-                      const std::vector<CSPSource>& sources,
+                      const std::vector<network::mojom::CSPSourcePtr>& sources,
                       CSPContext* context,
                       bool has_followed_redirect) {
-  for (const CSPSource& source : sources) {
-    if (CSPSource::Allow(source, url, context, has_followed_redirect))
+  for (const auto& source : sources) {
+    if (CheckCSPSource(source, url, context, has_followed_redirect))
       return true;
   }
   return false;
@@ -22,29 +23,25 @@ bool AllowFromSources(const GURL& url,
 }  // namespace
 
 CSPSourceList::CSPSourceList()
-    : allow_self(false),
-      allow_star(false),
-      allow_response_redirects(false),
-      sources() {}
+    : allow_self(false), allow_star(false), allow_response_redirects(false) {}
+
+CSPSourceList::CSPSourceList(CSPSourceList&&) = default;
 
 CSPSourceList::CSPSourceList(bool allow_self,
                              bool allow_star,
                              bool allow_response_redirects,
-                             std::vector<CSPSource> sources)
+                             std::vector<network::mojom::CSPSourcePtr> sources)
     : allow_self(allow_self),
       allow_star(allow_star),
       allow_response_redirects(allow_response_redirects),
-      sources(sources) {}
+      sources(std::move(sources)) {}
 
 CSPSourceList::CSPSourceList(network::mojom::CSPSourceListPtr csp_source_list)
     : allow_self(csp_source_list->allow_self),
       allow_star(csp_source_list->allow_star),
-      allow_response_redirects(csp_source_list->allow_response_redirects) {
-  for (auto& source : csp_source_list->sources)
-    sources.push_back(CSPSource(std::move(source)));
-}
+      allow_response_redirects(csp_source_list->allow_response_redirects),
+      sources(std::move(csp_source_list->sources)) {}
 
-CSPSourceList::CSPSourceList(const CSPSourceList&) = default;
 CSPSourceList::~CSPSourceList() = default;
 
 // static
@@ -73,8 +70,8 @@ bool CSPSourceList::Allow(const CSPSourceList& source_list,
   }
 
   if (source_list.allow_self && context->self_source() &&
-      CSPSource::Allow(context->self_source().value(), url, context,
-                       has_followed_redirect)) {
+      CheckCSPSource(context->self_source(), url, context,
+                     has_followed_redirect)) {
     return true;
   }
 
@@ -98,7 +95,7 @@ std::string CSPSourceList::ToString() const {
   for (const auto& source : sources) {
     if (!is_empty)
       text << " ";
-    text << source.ToString();
+    text << content::ToString(source);
     is_empty = false;
   }
 
