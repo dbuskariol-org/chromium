@@ -1051,8 +1051,14 @@ void OptimizationGuideHintsManager::MaybeFetchHintsForNavigation(
     return;
   }
 
-  // TODO(crbug/1036490): Add Finch feature to control number of concurrent
-  // fetches.
+  if (page_navigation_hints_fetchers_.size() >=
+      optimization_guide::features::MaxConcurrentPageNavigationFetches()) {
+    race_navigation_recorder.set_race_attempt_status(
+        optimization_guide::RaceNavigationFetchAttemptStatus::
+            kRaceNavigationFetchNotAttemptedTooManyConcurrentFetches);
+    return;
+  }
+
   DCHECK(hints_fetcher_factory_);
   page_navigation_hints_fetchers_[url] =
       hints_fetcher_factory_->BuildInstance();

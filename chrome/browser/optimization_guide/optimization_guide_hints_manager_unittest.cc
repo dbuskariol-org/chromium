@@ -1854,8 +1854,9 @@ class OptimizationGuideHintsManagerFetchingTest
     : public OptimizationGuideHintsManagerTest {
  public:
   OptimizationGuideHintsManagerFetchingTest() {
-    scoped_list_.InitAndEnableFeature(
-        optimization_guide::features::kRemoteOptimizationGuideFetching);
+    scoped_list_.InitAndEnableFeatureWithParameters(
+        optimization_guide::features::kRemoteOptimizationGuideFetching,
+        {{"max_concurrent_page_navigation_fetches", "2"}});
   }
 
  private:
@@ -2752,16 +2753,30 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
   std::unique_ptr<content::MockNavigationHandle> navigation_handle2 =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
           url_without_hints());
+  std::unique_ptr<content::MockNavigationHandle> navigation_handle3 =
+      CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
+          GURL("https://doesntmatter.com/"));
 
-  // Attempt to fetch a hint but initiate the next navigation right away to
+  // Attempt to fetch a hint but initiate the next navigations right away to
   // simulate being mid-fetch.
   base::HistogramTester histogram_tester;
   hints_manager()->OnNavigationStartOrRedirect(navigation_handle.get(),
                                                base::DoNothing());
   hints_manager()->OnNavigationStartOrRedirect(navigation_handle2.get(),
                                                base::DoNothing());
+  hints_manager()->OnNavigationStartOrRedirect(navigation_handle3.get(),
+                                               base::DoNothing());
+  // The third one is over the max so should not be recorded.
+  histogram_tester.ExpectTotalCount(
+      "OptimizationGuide.HintsManager.ConcurrentPageNavigationFetches", 2);
   histogram_tester.ExpectBucketCount(
       "OptimizationGuide.HintsManager.ConcurrentPageNavigationFetches", 1, 1);
   histogram_tester.ExpectBucketCount(
       "OptimizationGuide.HintsManager.ConcurrentPageNavigationFetches", 2, 1);
+  // We expect a sample to be recorded with too many concurrent fetches.
+  histogram_tester.ExpectBucketCount(
+      "OptimizationGuide.HintsManager.RaceNavigationFetchAttemptStatus",
+      optimization_guide::RaceNavigationFetchAttemptStatus::
+          kRaceNavigationFetchNotAttemptedTooManyConcurrentFetches,
+      1);
 }
