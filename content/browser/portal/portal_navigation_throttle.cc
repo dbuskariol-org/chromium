@@ -75,7 +75,7 @@ PortalNavigationThrottle::WillStartOrRedirectRequest() {
       base::StringPrintf("Navigating a portal to cross-origin content (from "
                          "%s) is not currently permitted and was blocked.",
                          origin.Serialize().c_str()));
-  return BLOCK_REQUEST;
+  return CANCEL;
 }
 
 }  // namespace content

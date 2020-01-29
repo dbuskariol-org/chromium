@@ -320,6 +320,15 @@ void Portal::Activate(blink::TransferableMessage data,
       << "The binding should have been closed when the portal's outer "
          "FrameTreeNode was deleted due to swap out.";
 
+  // If no navigation has yet committed in the portal, it cannot be activated as
+  // this would lead to an empty tab contents (without even an about:blank).
+  DCHECK(portal_contents_);
+  if (portal_contents_->GetController().GetLastCommittedEntryIndex() < 0) {
+    std::move(callback).Run(
+        blink::mojom::PortalActivateResult::kRejectedDueToPortalNotReady);
+    return;
+  }
+
   // If a navigation in the main frame is occurring, stop it if possible and
   // reject the activation if it's too late. There are a few cases here:
   // - a different RenderFrameHost has been assigned to the FrameTreeNode
