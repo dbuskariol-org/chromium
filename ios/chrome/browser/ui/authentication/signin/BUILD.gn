@@ -4,7 +4,14 @@
 
 import("//build/config/chrome_build.gni")
 
-source_set("signin") {
+# Public target.
+group("signin") {
+  public_deps = [ ":signin_headers" ]
+  deps = [ ":signin_impl" ]
+}
+
+# Contains public headers.
+source_set("signin_headers") {
   configs += [ "//build/config/compiler:enable_arc" ]
   sources = [ "signin_coordinator.h" ]
   public_deps = [
@@ -14,8 +21,9 @@ source_set("signin") {
   ]
 }
 
-source_set("private") {
+# Contains sign-in implementation.
+source_set("signin_impl") {
   configs += [ "//build/config/compiler:enable_arc" ]
   sources = [ "signin_coordinator.mm" ]
-  deps = [ ":signin" ]
+  deps = [ ":signin_headers" ]
 }
