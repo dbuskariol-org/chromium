@@ -451,6 +451,15 @@ class CommandHandler {
     handler.canExecute.call(
         /** @type {Command} */ (handler), event, this.fileManager_);
   }
+
+  /**
+   * Returns command handler by name.
+   * @param {string} name The command name.
+   * @public
+   */
+  static getCommand(name) {
+    return CommandHandler.COMMANDS_[name];
+  }
 }
 
 /**
