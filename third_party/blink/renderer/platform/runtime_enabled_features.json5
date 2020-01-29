@@ -1879,6 +1879,11 @@
       status: "experimental"
     },
     {
+      name: "WebXRHitTestEntityTypes",
+      depends_on: ["WebXRHitTest"],
+      status: "experimental"
+    },
+    {
       name: "WebXRIncubations",
       // depends_on: ["WebXRARModule"],  // TODO(https://crbug.com/954679): uncomment once bug is fixed
       status: "experimental",
