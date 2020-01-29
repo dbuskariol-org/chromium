@@ -69,7 +69,8 @@ void RootFrameSink::OnNeedsBeginFrames(bool needs_begin_frames) {
                        TRACE_EVENT_SCOPE_THREAD, "needs_begin_frames",
                        needs_begin_frames);
   needs_begin_frames_ = needs_begin_frames;
-  client_->SetNeedsBeginFrames(needs_begin_frames);
+  if (client_)
+    client_->SetNeedsBeginFrames(needs_begin_frames);
 }
 
 void RootFrameSink::AddChildFrameSinkId(const viz::FrameSinkId& frame_sink_id) {
@@ -111,7 +112,8 @@ void RootFrameSink::SetNeedsDraw(bool needs_draw) {
   // It's possible that client submitted last frame and unsubscribed from
   // BeginFrames, but we haven't draw it yet.
   if (!needs_begin_frames_ && needs_draw) {
-    client_->Invalidate();
+    if (client_)
+      client_->Invalidate();
   }
 }
 
@@ -123,8 +125,13 @@ void RootFrameSink::ReturnResources(
     viz::FrameSinkId frame_sink_id,
     uint32_t layer_tree_frame_sink_id,
     std::vector<viz::ReturnedResource> resources) {
-  client_->ReturnResources(frame_sink_id, layer_tree_frame_sink_id,
-                           std::move(resources));
+  if (client_)
+    client_->ReturnResources(frame_sink_id, layer_tree_frame_sink_id,
+                             std::move(resources));
+}
+
+void RootFrameSink::DettachClient() {
+  client_ = nullptr;
 }
 
 }  // namespace android_webview

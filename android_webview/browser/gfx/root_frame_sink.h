@@ -55,6 +55,7 @@ class RootFrameSink : public base::RefCounted<RootFrameSink>,
   void SetBeginFrameSourcePaused(bool paused);
   void SetNeedsDraw(bool needs_draw);
   bool IsChildSurface(const viz::FrameSinkId& frame_sink_id);
+  void DettachClient();
 
   void ReturnResources(viz::FrameSinkId frame_sink_id,
                        uint32_t layer_tree_frame_sink_id,
@@ -84,7 +85,7 @@ class RootFrameSink : public base::RefCounted<RootFrameSink>,
 
   bool needs_begin_frames_ = false;
   bool needs_draw_ = false;
-  RootFrameSinkClient* const client_;
+  RootFrameSinkClient* client_;
 
   THREAD_CHECKER(thread_checker_);
 
