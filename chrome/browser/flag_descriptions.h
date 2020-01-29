@@ -1613,6 +1613,9 @@ extern const char kOmniboxLooseMaxLimitOnDedicatedRowsDescription[];
 extern const char kOmniboxPedalSuggestionsName[];
 extern const char kOmniboxPedalSuggestionsDescription[];
 
+extern const char kOmniboxSuggestionButtonRowName[];
+extern const char kOmniboxSuggestionButtonRowDescription[];
+
 extern const char kOmniboxReverseAnswersName[];
 extern const char kOmniboxReverseAnswersDescription[];
 

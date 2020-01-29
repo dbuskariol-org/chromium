@@ -2807,6 +2807,11 @@ const char kOmniboxPedalSuggestionsDescription[] =
     "Enable omnibox Pedal suggestions to accelerate actions within Chrome by "
     "detecting user intent and offering direct access to the end goal.";
 
+const char kOmniboxSuggestionButtonRowName[] = "Omnibox suggestion button row";
+const char kOmniboxSuggestionButtonRowDescription[] =
+    "Enable a button row on omnibox suggestions to present actionable items "
+    "such as keyword search, tab-switch buttons, and Pedals.";
+
 const char kOmniboxReverseAnswersName[] = "Omnibox reverse answers";
 const char kOmniboxReverseAnswersDescription[] =
     "Display answers with rows reversed (swapped); except definitions.";
