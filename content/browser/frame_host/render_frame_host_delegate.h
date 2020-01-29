@@ -73,7 +73,7 @@ class FullscreenOptions;
 }  // namespace blink
 
 namespace ui {
-struct ClipboardFormatType;
+class ClipboardFormatType;
 }
 
 namespace content {

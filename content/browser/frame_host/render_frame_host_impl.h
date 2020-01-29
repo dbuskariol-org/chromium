@@ -168,7 +168,7 @@ class ResourceRequestBody;
 }  // namespace network
 
 namespace ui {
-struct ClipboardFormatType;
+class ClipboardFormatType;
 }
 
 namespace content {
