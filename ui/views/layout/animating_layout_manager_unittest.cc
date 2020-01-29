@@ -4186,7 +4186,7 @@ TEST_F(AnimatingLayoutManagerRealtimeTest, TestAnimateStretch) {
 
 TEST_F(AnimatingLayoutManagerRealtimeTest, TestConstrainedSpaceStopsAnimation) {
   constexpr gfx::Insets kChildMargins(5);
-  static const SizeBounds kSizeBounds(45, base::nullopt);
+  constexpr SizeBounds kSizeBounds(45, base::nullopt);
   layout()->SetShouldAnimateBounds(true);
   layout()->SetAnimationDuration(kMinimumAnimationTime);
   auto* const flex_layout =
@@ -4230,7 +4230,7 @@ TEST_F(AnimatingLayoutManagerRealtimeTest, TestConstrainedSpaceStopsAnimation) {
 
 TEST_F(AnimatingLayoutManagerRealtimeTest, TestConstrainedSpaceDoesNotRestart) {
   constexpr gfx::Insets kChildMargins(5);
-  static const SizeBounds kSizeBounds(45, base::nullopt);
+  constexpr SizeBounds kSizeBounds(45, base::nullopt);
   layout()->SetShouldAnimateBounds(true);
   layout()->SetAnimationDuration(kMinimumAnimationTime);
   auto* const flex_layout =
@@ -4278,7 +4278,7 @@ TEST_F(AnimatingLayoutManagerRealtimeTest, TestConstrainedSpaceDoesNotRestart) {
 TEST_F(AnimatingLayoutManagerRealtimeTest,
        TestConstrainedSpaceRestartedAnimationSucceeds) {
   constexpr gfx::Insets kChildMargins(5);
-  static const SizeBounds kSizeBounds(45, base::nullopt);
+  constexpr SizeBounds kSizeBounds(45, base::nullopt);
   layout()->SetShouldAnimateBounds(true);
   layout()->SetAnimationDuration(kMinimumAnimationTime);
   auto* const flex_layout =
@@ -4287,7 +4287,7 @@ TEST_F(AnimatingLayoutManagerRealtimeTest,
   flex_layout->SetCollapseMargins(true);
   flex_layout->SetCrossAxisAlignment(LayoutAlignment::kStart);
   flex_layout->SetDefault(kMarginsKey, kChildMargins);
-  InitRootView(std::move(kSizeBounds));
+  InitRootView(kSizeBounds);
   child(0)->SetProperty(kFlexBehaviorKey, FlexSpecification::ForSizeRule(
                                               MinimumFlexSizeRule::kScaleToZero,
                                               MaximumFlexSizeRule::kPreferred));
