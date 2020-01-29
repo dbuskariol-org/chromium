@@ -47,4 +47,12 @@ public final class TestWebLayer {
     public boolean isNetworkChangeAutoDetectOn() throws RemoteException {
         return mITestWebLayer.isNetworkChangeAutoDetectOn();
     }
+
+    public static Context getRemoteContext(@NonNull Context appContext) {
+        try {
+            return WebLayer.getOrCreateRemoteContext(appContext);
+        } catch (PackageManager.NameNotFoundException | ReflectiveOperationException e) {
+            throw new AndroidRuntimeException(e);
+        }
+    }
 }

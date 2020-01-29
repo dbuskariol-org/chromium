@@ -55,6 +55,7 @@ android_library("weblayer_private_java_tests") {
     "src/org/chromium/weblayer/test/InstrumentationActivityTestRule.java",
     "src/org/chromium/weblayer/test/NavigationWaiter.java",
     "src/org/chromium/weblayer/test/NetworkChangeNotifierTest.java",
+    "src/org/chromium/weblayer/test/ResourceLoadingTest.java",
     "src/org/chromium/weblayer/test/WebLayerJUnit4ClassRunner.java",
   ]
   deps = [

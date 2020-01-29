@@ -171,6 +171,9 @@ public final class WebLayerImpl extends IWebLayer.Stub {
 
         BuildInfo.setBrowserPackageInfo(packageInfo);
         int resourcesPackageId = getPackageId(appContext, packageInfo.packageName);
+        if (resourcesPackageId < 0x7f && resourcesPackageId != 2) {
+            throw new AndroidRuntimeException("WebLayer can't be used with another shared library");
+        }
         // TODO: The call to onResourcesLoaded() can be slow, we may need to parallelize this with
         // other expensive startup tasks.
         R.onResourcesLoaded(resourcesPackageId);
