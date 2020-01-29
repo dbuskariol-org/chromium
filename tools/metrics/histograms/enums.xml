@@ -41336,11 +41336,11 @@ Called by update_use_counter_css.py.-->
   <int value="645" label="overscroll-behavior-block"/>
   <int value="646" label="content-size"/>
   <int value="647" label="font-optical-sizing"/>
-  <int value="648" label="intrinsic-block-size"/>
-  <int value="649" label="intrinsic-height"/>
-  <int value="650" label="intrinsic-inline-size"/>
-  <int value="651" label="intrinsic-size"/>
-  <int value="652" label="intrinsic-width"/>
+  <int value="648" label="contain-intrinsic-block-size"/>
+  <int value="649" label="contain-intrinsic-height"/>
+  <int value="650" label="contain-intrinsic-inline-size"/>
+  <int value="651" label="contain-intrinsic-size"/>
+  <int value="652" label="contain-intrinsic-width"/>
   <int value="653" label="render-subtree"/>
   <int value="654" label="origin-trial-test-property"/>
 </enum>
