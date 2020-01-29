@@ -72,6 +72,8 @@ source_set("common") {
     "content_ipc_logging.cc",
     "content_message_generator.cc",
     "content_message_generator.h",
+    "content_navigation_policy.cc",
+    "content_navigation_policy.h",
     "content_param_traits.cc",
     "content_param_traits.h",
     "content_param_traits_macros.h",
