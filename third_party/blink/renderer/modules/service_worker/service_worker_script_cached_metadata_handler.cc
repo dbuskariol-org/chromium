@@ -17,6 +17,12 @@ ServiceWorkerScriptCachedMetadataHandler::
         std::unique_ptr<Vector<uint8_t>> meta_data)
     : global_scope_(global_scope), script_url_(script_url) {
   if (meta_data) {
+    // Non-null |meta_data| means the "platform" already has the CachedMetadata.
+    // In that case, set |cached_metadata_| to this incoming metadata. In
+    // contrast, SetCachedMetadata() is called when there is new metadata to be
+    // cached. In that case, |cached_metadata_| is set to the metadata and
+    // additionally it is sent back to the "platform" via ServiceWorkerHost if
+    // |type| is kSendToPlatform.
     cached_metadata_ =
         CachedMetadata::CreateFromSerializedData(std::move(*meta_data));
   }
@@ -46,9 +52,9 @@ void ServiceWorkerScriptCachedMetadataHandler::SetCachedMetadata(
 
 void ServiceWorkerScriptCachedMetadataHandler::ClearCachedMetadata(
     CacheType type) {
+  cached_metadata_ = nullptr;
   if (type != kSendToPlatform)
     return;
-  cached_metadata_ = nullptr;
   global_scope_->GetServiceWorkerHost()->ClearCachedMetadata(script_url_);
 }
 
