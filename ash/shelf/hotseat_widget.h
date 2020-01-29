@@ -61,14 +61,14 @@ class ASH_EXPORT HotseatWidget : public views::Widget,
   // Returns the target opacity (between 0 and 1) given current conditions.
   float CalculateOpacity() const;
 
-  // Sets the bounds of the opaque background which functions as the hotseat
-  // background.
-  void SetOpaqueBackground(const gfx::Rect& background_bounds);
+  // Sets the bounds of the translucent background which functions as the
+  // hotseat background.
+  void SetTranslucentBackground(const gfx::Rect& background_bounds);
 
   // Updates this widget's layout according to current conditions.
   void UpdateLayout(bool animate);
 
-  gfx::Size GetOpaqueBackgroundSize() const;
+  gfx::Size GetTranslucentBackgroundSize() const;
 
   // Sets the focus cycler and adds the hotseat to the cycle.
   void SetFocusCycler(FocusCycler* focus_cycler);
