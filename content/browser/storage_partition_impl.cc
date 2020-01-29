@@ -1373,7 +1373,7 @@ void StoragePartitionImpl::Initialize() {
   payment_app_context_ = new PaymentAppContextImpl();
   payment_app_context_->Init(service_worker_context_);
 
-  broadcast_channel_provider_ = new BroadcastChannelProvider();
+  broadcast_channel_provider_ = std::make_unique<BroadcastChannelProvider>();
 
   bluetooth_allowed_devices_map_ = new BluetoothAllowedDevicesMap();
 
