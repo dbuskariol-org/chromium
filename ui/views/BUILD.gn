@@ -444,6 +444,7 @@ jumbo_component("views") {
     "widget/widget_aura_utils.cc",
     "widget/widget_delegate.cc",
     "widget/widget_deletion_observer.cc",
+    "widget/widget_getter.cc",
     "widget/widget_utils.cc",
     "window/caption_button_layout_constants.cc",
     "window/client_view.cc",
