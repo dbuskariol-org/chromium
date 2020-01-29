@@ -298,9 +298,8 @@ IN_PROC_BROWSER_TEST_F(SingleClientStandaloneTransportSyncTest,
 class SingleClientStandaloneTransportOsSyncTest : public OsSyncTest {
  public:
   SingleClientStandaloneTransportOsSyncTest() : OsSyncTest(SINGLE_CLIENT) {
-    // Don't auto-start browser sync. Enable in-development types.
-    scoped_features_.InitWithFeatures({switches::kSyncManualStartChromeOS,
-                                       features::kDesktopPWAsWithoutExtensions,
+    // Enable in-development types.
+    scoped_features_.InitWithFeatures({features::kDesktopPWAsWithoutExtensions,
                                        switches::kSyncWifiConfigurations},
                                       {});
   }
