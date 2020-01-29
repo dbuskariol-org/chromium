@@ -5,12 +5,9 @@
 package org.chromium.url;
 
 import org.junit.Assert;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.CalledByNativeJavaTest;
-import org.chromium.base.library_loader.LibraryLoader;
 
 import java.net.URISyntaxException;
 
@@ -20,17 +17,8 @@ import java.net.URISyntaxException;
  * correctly.
  */
 public class GURLJavaTest {
-    @Mock
-    private LibraryLoader mLibraryLoader;
-
     @CalledByNative
     private GURLJavaTest() {}
-
-    @CalledByNative
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        LibraryLoader.setLibraryLoaderForTesting(mLibraryLoader);
-    }
 
     @CalledByNative
     public GURL createGURL(String uri) {

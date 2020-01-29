@@ -20,10 +20,6 @@ class GURLAndroidTest : public ::testing::Test {
   GURLAndroidTest()
       : j_test_(Java_GURLJavaTest_Constructor(AttachCurrentThread())) {}
 
-  void SetUp() override {
-    Java_GURLJavaTest_setUp(AttachCurrentThread(), j_test_);
-  }
-
   const base::android::ScopedJavaGlobalRef<jobject>& j_test() {
     return j_test_;
   }
