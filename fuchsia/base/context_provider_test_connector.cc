@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "fuchsia/engine/test/context_provider_test_connector.h"
+#include "fuchsia/base/context_provider_test_connector.h"
 
 #include <unistd.h>
 
@@ -15,14 +15,19 @@
 #include "base/fuchsia/default_context.h"
 #include "base/fuchsia/fuchsia_logging.h"
 #include "base/logging.h"
+#include "base/strings/strcat.h"
+#include "fuchsia/base/release_channel.h"
 
-fuchsia::web::ContextProviderPtr StartWebEngineForTests(
+namespace cr_fuchsia {
+
+fuchsia::web::ContextProviderPtr ConnectContextProvider(
     fidl::InterfaceRequest<fuchsia::sys::ComponentController>
         component_controller_request,
     const base::CommandLine& command_line) {
   fuchsia::sys::LaunchInfo launch_info;
-  launch_info.url =
-      "fuchsia-pkg://fuchsia.com/web_engine#meta/context_provider.cmx";
+  launch_info.url = base::StrCat({"fuchsia-pkg://fuchsia.com/web_engine",
+                                  BUILDFLAG(FUCHSIA_RELEASE_CHANNEL_SUFFIX),
+                                  "#meta/context_provider.cmx"});
   launch_info.arguments = command_line.argv();
 
   // Clone stderr from the current process to WebEngine and ask it to
@@ -51,3 +56,5 @@ fuchsia::web::ContextProviderPtr StartWebEngineForTests(
   web_engine_service_dir.Connect(context_provider.NewRequest());
   return context_provider;
 }
+
+}  // namespace cr_fuchsia
