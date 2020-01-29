@@ -2046,6 +2046,19 @@ base::string16 BrowserView::GetAccessibleTabLabel(bool include_app_name,
   base::string16 title =
       browser_->GetWindowTitleForTab(include_app_name, index);
 
+  base::Optional<tab_groups::TabGroupId> group =
+      tabstrip_->tab_at(index)->group();
+  if (group.has_value()) {
+    base::string16 group_title = tabstrip_->GetGroupTitle(group.value());
+    if (group_title.empty()) {
+      title = l10n_util::GetStringFUTF16(IDS_TAB_AX_LABEL_UNNAMED_GROUP_FORMAT,
+                                         title);
+    } else {
+      title = l10n_util::GetStringFUTF16(IDS_TAB_AX_LABEL_NAMED_GROUP_FORMAT,
+                                         title, group_title);
+    }
+  }
+
   // Tab has crashed.
   if (tabstrip_->IsTabCrashed(index))
     return l10n_util::GetStringFUTF16(IDS_TAB_AX_LABEL_CRASHED_FORMAT, title);
