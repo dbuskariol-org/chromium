@@ -1699,11 +1699,9 @@ void SkiaOutputSurfaceImplOnGpu::MarkContextLost() {
 
 void SkiaOutputSurfaceImplOnGpu::ScheduleCheckReadbackCompletion() {
   if (num_readbacks_pending_ > 0 && !readback_poll_pending_) {
-    base::ThreadTaskRunnerHandle::Get()->PostDelayedTask(
-        FROM_HERE,
+    dependency_->ScheduleDelayedGPUTaskFromGPUThread(
         base::BindOnce(&SkiaOutputSurfaceImplOnGpu::CheckReadbackCompletion,
-                       weak_ptr_factory_.GetWeakPtr()),
-        kReadbackPollingInterval);
+                       weak_ptr_factory_.GetWeakPtr()));
     readback_poll_pending_ = true;
   }
 }
