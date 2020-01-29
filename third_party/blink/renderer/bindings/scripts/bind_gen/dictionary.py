@@ -347,7 +347,7 @@ def make_fill_dict_members_def(cg_context):
     if len(required_own_members) > 0:
         check_required_members_node = T("""\
 if (v8_value->IsNullOrUndefined()) {
-  exception_state.ThrowError(ExceptionMessages::FailedToConstruct(
+  exception_state.ThrowTypeError(ExceptionMessages::FailedToConstruct(
       "${dictionary.identifier}",
       "has required members, but null/undefined was passed."));
   return;
@@ -446,7 +446,7 @@ def make_fill_own_dict_member(key_index, member):
 
     pattern = """
 if (!v8_dictionary->Get(${current_context}, member_names[{_1}].Get(${isolate}))
-         .ToLocal(&v8_memer)) {{
+         .ToLocal(&v8_value)) {{
   ${exception_state}.RethrowV8Exception(try_block.Exception());
   return;
 }}"""
@@ -543,7 +543,7 @@ static ${class_name}* Create() {
 }
 static ${class_name}* Create(
     v8::Isolate* isolate,
-    v8::Local<v8::value> v8_value,
+    v8::Local<v8::Value> v8_value,
     ExceptionState& exception_state);
 ${class_name}() = default;
 ~${class_name}() = default;
