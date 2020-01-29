@@ -2,20 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_APP_LIST_APP_SERVICE_APP_SERVICE_CONTEXT_MENU_H_
-#define CHROME_BROWSER_UI_APP_LIST_APP_SERVICE_APP_SERVICE_CONTEXT_MENU_H_
+#ifndef CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_SERVICE_SHELF_CONTEXT_MENU_H_
+#define CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_SERVICE_SHELF_CONTEXT_MENU_H_
 
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "base/memory/weak_ptr.h"
-#include "chrome/browser/ui/app_list/app_context_menu.h"
+#include "chrome/browser/ui/ash/launcher/shelf_context_menu.h"
 #include "chrome/services/app_service/public/mojom/types.mojom.h"
+#include "extensions/common/constants.h"
 
-class AppContextMenuDelegate;
-class AppListControllerDelegate;
-class Profile;
+class ChromeLauncherController;
 
 namespace arc {
 class ArcAppShortcutsMenuBuilder;
@@ -25,18 +24,18 @@ namespace extensions {
 class ContextMenuMatcher;
 }
 
-class AppServiceContextMenu : public app_list::AppContextMenu {
+class AppServiceShelfContextMenu : public ShelfContextMenu {
  public:
-  AppServiceContextMenu(app_list::AppContextMenuDelegate* delegate,
-                        Profile* profile,
-                        const std::string& app_id,
-                        AppListControllerDelegate* controller);
-  ~AppServiceContextMenu() override;
+  AppServiceShelfContextMenu(ChromeLauncherController* controller,
+                             const ash::ShelfItem* item,
+                             int64_t display_id);
+  ~AppServiceShelfContextMenu() override;
 
-  AppServiceContextMenu(const AppServiceContextMenu&) = delete;
-  AppServiceContextMenu& operator=(const AppServiceContextMenu&) = delete;
+  AppServiceShelfContextMenu(const AppServiceShelfContextMenu&) = delete;
+  AppServiceShelfContextMenu& operator=(const AppServiceShelfContextMenu&) =
+      delete;
 
-  // AppContextMenu overrides:
+  // ShelfContextMenu:
   void GetMenuModel(GetMenuModelCallback callback) override;
   void ExecuteCommand(int command_id, int event_flags) override;
   bool IsCommandIdChecked(int command_id) const override;
@@ -56,7 +55,16 @@ class AppServiceContextMenu : public app_list::AppContextMenu {
 
   void ShowAppInfo();
 
+  // Helpers to set the launch type.
   void SetLaunchType(int command_id);
+
+  // Helpers to set the launch type for the extension item.
+  void SetExtensionLaunchType(int command_id);
+
+  // Helpers to get the launch type for the extension item.
+  extensions::LaunchType GetExtensionLaunchType() const;
+
+  bool ShouldAddPinMenu();
 
   apps::mojom::AppType app_type_;
 
@@ -67,7 +75,7 @@ class AppServiceContextMenu : public app_list::AppContextMenu {
 
   std::unique_ptr<arc::ArcAppShortcutsMenuBuilder> arc_shortcuts_menu_builder_;
 
-  base::WeakPtrFactory<AppServiceContextMenu> weak_ptr_factory_{this};
+  base::WeakPtrFactory<AppServiceShelfContextMenu> weak_ptr_factory_{this};
 };
 
-#endif  // CHROME_BROWSER_UI_APP_LIST_APP_SERVICE_APP_SERVICE_CONTEXT_MENU_H_
+#endif  // CHROME_BROWSER_UI_ASH_LAUNCHER_APP_SERVICE_APP_SERVICE_SHELF_CONTEXT_MENU_H_
