@@ -112,7 +112,7 @@ namespace blink {
 DocumentLoader::DocumentLoader(
     LocalFrame* frame,
     WebNavigationType navigation_type,
-    base::Optional<ContentSecurityPolicy*> content_security_policy,
+    ContentSecurityPolicy* content_security_policy,
     std::unique_ptr<WebNavigationParams> navigation_params)
     : params_(std::move(navigation_params)),
       frame_(frame),
@@ -218,14 +218,13 @@ DocumentLoader::DocumentLoader(
   if (!params_->origin_to_commit.IsNull())
     origin_to_commit_ = params_->origin_to_commit.Get()->IsolatedCopy();
 
+  loading_srcdoc_ = url_.IsAboutSrcdocURL();
   loading_url_as_empty_document_ =
       !params_->is_static_data && WillLoadUrlAsEmpty(url_);
-  loading_srcdoc_ = url_.IsAboutSrcdocURL();
 
-  DCHECK(content_security_policy.has_value() || loading_url_as_empty_document_);
-  // Take into account the CSP for this document load if applicable.
-  if (content_security_policy.has_value()) {
-    content_security_policy_ = content_security_policy.value();
+  if (!loading_url_as_empty_document_) {
+    content_security_policy_ = content_security_policy;
+
     // The CSP are null when the CSP check done in the FrameLoader failed.
     if (!content_security_policy_) {
       // Loading the document was blocked by the CSP check. Pretend that

@@ -937,12 +937,15 @@ void FrameLoader::CommitNavigation(
   DCHECK(!StateMachine()->CreatingInitialEmptyDocument());
   HistoryItem* previous_history_item = GetDocumentLoader()->GetHistoryItem();
 
+  bool loading_url_as_empty_document =
+      !navigation_params->is_static_data &&
+      DocumentLoader::WillLoadUrlAsEmpty(navigation_params->url);
+
   // Check if the CSP of the response allow should block the new document from
   // committing before unloading the current document. This will allow to report
   // violations and display console messages properly.
-  base::Optional<ContentSecurityPolicy*> content_security_policy;
-  if (navigation_params->is_static_data ||
-      !DocumentLoader::WillLoadUrlAsEmpty(navigation_params->url)) {
+  ContentSecurityPolicy* content_security_policy;
+  if (!loading_url_as_empty_document) {
     content_security_policy =
         CreateCSP(navigation_params->url,
                   navigation_params->response.ToResourceResponse(),
