@@ -41,6 +41,7 @@ class CORE_EXPORT NGLayoutResult : public RefCounted<NGLayoutResult> {
     kSuccess = 0,
     kBfcBlockOffsetResolved = 1,
     kNeedsEarlierBreak = 2,
+    kOutOfFragmentainerSpace = 3,
     // When adding new values, make sure the bit size of |Bitfields::status| is
     // large enough to store.
   };

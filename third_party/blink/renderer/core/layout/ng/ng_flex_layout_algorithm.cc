@@ -702,6 +702,10 @@ scoped_refptr<const NGLayoutResult> NGFlexLayoutAlgorithm::Layout() {
       NGConstraintSpace child_space = space_builder.ToConstraintSpace();
       flex_item.layout_result =
           flex_item.ng_input_node.Layout(child_space, nullptr /*break token*/);
+
+      // TODO(layout-dev): Handle abortions caused by block fragmentation.
+      DCHECK_EQ(flex_item.layout_result->Status(), NGLayoutResult::kSuccess);
+
       flex_item.cross_axis_size =
           is_horizontal_flow_
               ? flex_item.layout_result->PhysicalFragment().Size().height
