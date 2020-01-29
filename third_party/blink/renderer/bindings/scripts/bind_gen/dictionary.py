@@ -300,7 +300,7 @@ def make_dict_create_def(cg_context):
         class_name=cg_context.class_name,
         arg_decls=[
             "v8::Isolate* isolate",
-            "v8::Local<v8::Object> v8_dictionary",
+            "v8::Local<v8::Value> v8_value",
             "ExceptionState& exception_state",
         ],
         return_type=T("${class_name}*"))
@@ -310,8 +310,10 @@ def make_dict_create_def(cg_context):
 
     body.append(
         T("""\
+DCHECK(!v8_value.IsEmpty());
+
 ${class_name}* dictionary = MakeGarbageCollected<${class_name}>();
-dictionary->FillMembers(isolate, v8_dictionary, exception_state);
+dictionary->FillMembers(isolate, v8_value, exception_state);
 if (exception_state.HadException()) {
   return nullptr;
 }
@@ -335,44 +337,50 @@ def make_fill_dict_members_def(cg_context):
         class_name=cg_context.class_name,
         arg_decls=[
             "v8::Isolate* isolate",
-            "v8::Local<v8::Object> v8_dictionary",
+            "v8::Local<v8::Value> v8_value",
             "ExceptionState& exception_state",
         ],
         return_type="void")
     func_def.add_template_vars(cg_context.template_bindings())
 
-    body = func_def.body
-
-    text = "if (v8_dictionary->IsUndefinedOrNull()) { return; }"
     if len(required_own_members) > 0:
-        text = """\
-if (v8_dictionary->IsUndefinedOrNull()) {
+        check_required_members_node = T("""\
+if (v8_value->IsNullOrUndefined()) {
   exception_state.ThrowError(ExceptionMessages::FailedToConstruct(
       "${dictionary.identifier}",
       "has required members, but null/undefined was passed."));
   return;
-}"""
-    body.append(T(text))
+}""")
+    else:
+        check_required_members_node = T("""\
+if (v8_value->IsNullOrUndefined()) {
+  return;
+}""")
 
     # [PermissiveDictionaryConversion]
     if "PermissiveDictionaryConversion" in dictionary.extended_attributes:
-        text = """\
-if (!v8_dictionary->IsObject()) {
+        permissive_conversion_node = T("""\
+if (!v8_value->IsObject()) {
   // [PermissiveDictionaryConversion]
   return;
-}"""
+}""")
     else:
-        text = """\
-if (!v8_dictionary->IsObject()) {
+        permissive_conversion_node = T("""\
+if (!v8_value->IsObject()) {
   exception_state.ThrowTypeError(
       ExceptionMessages::FailedToConstruct(
           "${dictionary.identifier}", "The value is not of type Object"));
   return;
-}"""
-    body.append(T(text))
+}""")
 
-    body.append(
-        T("FillMembersInternal(isolate, v8_dictionary, exception_state);"))
+    call_internal_func_node = T("""\
+FillMembersInternal(isolate, v8_value.As<v8::Object>(), exception_state);""")
+
+    func_def.body.extend([
+        check_required_members_node,
+        permissive_conversion_node,
+        call_internal_func_node,
+    ])
 
     return func_def
 
@@ -534,7 +542,7 @@ static ${class_name}* Create() {
 }
 static ${class_name}* Create(
     v8::Isolate* isolate,
-    v8::Local<v8::Object> v8_dictionary,
+    v8::Local<v8::value> v8_value,
     ExceptionState& exception_state);
 ${class_name}() = default;
 ~${class_name}() = default;
@@ -577,7 +585,7 @@ bool FillWithOwnMembers(
 
 void FillMembers(
     v8::Isolate* isolate,
-    v8::Local<v8::Object> v8_dictionary,
+    v8::Local<v8::Value> v8_value,
     ExceptionState& exception_state);
 """))
 
