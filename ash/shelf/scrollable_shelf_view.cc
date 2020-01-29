@@ -947,8 +947,15 @@ void ScrollableShelfView::OnBoundsChanged(const gfx::Rect& previous_bounds) {
   // The changed view bounds may lead to update on the available space.
   UpdateAvailableSpaceAndScroll();
 
-  // When AdjustOffset() returns true, shelf view is scrolled by animation.
-  if (!AdjustOffset() && old_scroll_offset != scroll_offset_)
+  // Avoids calling AdjustOffset() when the scrollable shelf view is
+  // under scroll along the main axis. Otherwise, animation will conflict with
+  // scroll gesture. Meanwhile, translates the shelf view
+  // if AdjustOffset() returns false since when AdjustOffset() returns true,
+  // shelf view is scrolled by animation.
+  const bool should_translate_shelf_view =
+      scroll_status_ == kAlongMainAxisScroll || !AdjustOffset();
+
+  if (should_translate_shelf_view && old_scroll_offset != scroll_offset_)
     shelf_container_view_->TranslateShelfView(scroll_offset_);
 }
 
