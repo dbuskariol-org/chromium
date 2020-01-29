@@ -24,6 +24,7 @@
 #include "base/lazy_instance.h"
 #include "base/macros.h"
 #include "base/memory/ref_counted_memory.h"
+#include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/values.h"
 #include "build/build_config.h"
@@ -172,16 +173,16 @@ void ReportPrintSettingHistogram(PrintSettingsBuckets setting) {
 
 void ReportPrintDocumentTypeAndSizeHistograms(PrintDocumentTypeBuckets doctype,
                                               size_t average_page_size_in_kb) {
-  UMA_HISTOGRAM_ENUMERATION("PrintPreview.PrintDocumentType", doctype,
-                            PRINT_DOCUMENT_TYPE_BUCKET_BOUNDARY);
+  base::UmaHistogramEnumeration("PrintPreview.PrintDocumentType", doctype,
+                                PRINT_DOCUMENT_TYPE_BUCKET_BOUNDARY);
   switch (doctype) {
     case HTML_DOCUMENT:
-      UMA_HISTOGRAM_MEMORY_KB("PrintPreview.PrintDocumentSize.HTML",
-                              average_page_size_in_kb);
+      base::UmaHistogramMemoryKB("PrintPreview.PrintDocumentSize.HTML",
+                                 average_page_size_in_kb);
       break;
     case PDF_DOCUMENT:
-      UMA_HISTOGRAM_MEMORY_KB("PrintPreview.PrintDocumentSize.PDF",
-                              average_page_size_in_kb);
+      base::UmaHistogramMemoryKB("PrintPreview.PrintDocumentSize.PDF",
+                                 average_page_size_in_kb);
       break;
     default:
       NOTREACHED();
@@ -536,8 +537,8 @@ PrintPreviewHandler::PrintPreviewHandler()
 }
 
 PrintPreviewHandler::~PrintPreviewHandler() {
-  UMA_HISTOGRAM_COUNTS_1M("PrintPreview.ManagePrinters",
-                          manage_printers_dialog_request_count_);
+  base::UmaHistogramCounts1M("PrintPreview.ManagePrinters",
+                             manage_printers_dialog_request_count_);
   UnregisterForGaiaCookieChanges();
 }
 
@@ -849,8 +850,9 @@ void PrintPreviewHandler::HandleGetPreview(const base::ListValue* args) {
 void PrintPreviewHandler::HandlePrint(const base::ListValue* args) {
   // Record the number of times the user requests to regenerate preview data
   // before printing.
-  UMA_HISTOGRAM_COUNTS_1M("PrintPreview.RegeneratePreviewRequest.BeforePrint",
-                          regenerate_preview_request_count_);
+  base::UmaHistogramCounts1M(
+      "PrintPreview.RegeneratePreviewRequest.BeforePrint",
+      regenerate_preview_request_count_);
   std::string callback_id;
   CHECK(args->GetString(0, &callback_id));
   CHECK(!callback_id.empty());
@@ -1030,8 +1032,9 @@ void PrintPreviewHandler::HandleClosePreviewDialog(
 
   // Record the number of times the user requests to regenerate preview data
   // before cancelling.
-  UMA_HISTOGRAM_COUNTS_1M("PrintPreview.RegeneratePreviewRequest.BeforeCancel",
-                          regenerate_preview_request_count_);
+  base::UmaHistogramCounts1M(
+      "PrintPreview.RegeneratePreviewRequest.BeforeCancel",
+      regenerate_preview_request_count_);
 }
 
 #if defined(OS_CHROMEOS)
