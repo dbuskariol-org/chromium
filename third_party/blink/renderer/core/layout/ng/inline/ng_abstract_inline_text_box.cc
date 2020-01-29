@@ -218,7 +218,7 @@ LayoutRect NGAbstractInlineTextBox::LocalBounds() const {
   const NGInlineCursor& cursor = GetCursor();
   if (!cursor)
     return LayoutRect();
-  return cursor.CurrentRect().ToLayoutRect();
+  return cursor.Current().RectInContainerBlock().ToLayoutRect();
 }
 
 unsigned NGAbstractInlineTextBox::Len() const {

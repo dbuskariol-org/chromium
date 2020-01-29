@@ -2406,7 +2406,7 @@ void LayoutBlockFlow::AddVisualOverflowFromInlineChildren() {
           continue;
         PhysicalRect child_rect = child->InkOverflow();
         if (!child_rect.IsEmpty()) {
-          child_rect.offset += child->Offset();
+          child_rect.offset += child->OffsetInContainerBlock();
           AddContentsVisualOverflow(child_rect);
         }
       }

@@ -63,6 +63,11 @@ class CORE_EXPORT NGInlineCursorPosition {
 
   const DisplayItemClient* GetDisplayItemClient() const;
 
+  // The offset relative to the root of the inline formatting context.
+  const PhysicalRect RectInContainerBlock() const;
+  const PhysicalOffset OffsetInContainerBlock() const;
+  const PhysicalSize Size() const;
+
  private:
   const NGPaintFragment* paint_fragment_ = nullptr;
   const NGFragmentItem* item_ = nullptr;
@@ -231,10 +236,6 @@ class CORE_EXPORT NGInlineCursor {
   // InkOverflow of itself, including contents if they contribute to the ink
   // overflow of this object (e.g. when not clipped,) in the local coordinate.
   const PhysicalRect CurrentInkOverflow() const;
-  // The offset relative to the root of the inline formatting context.
-  const PhysicalOffset CurrentOffset() const;
-  const PhysicalRect CurrentRect() const;
-  const PhysicalSize CurrentSize() const;
 
   // Returns start/end of offset in text content of current text fragment.
   // It is error when this cursor doesn't point to text fragment.

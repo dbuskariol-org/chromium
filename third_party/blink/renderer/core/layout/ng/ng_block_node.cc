@@ -1082,7 +1082,8 @@ void NGBlockNode::CopyFragmentDataToLayoutBoxForInlineChildren(
       if (!layout_object)
         continue;
       if (LayoutBox* layout_box = ToLayoutBoxOrNull(layout_object)) {
-        PhysicalOffset maybe_flipped_offset = cursor.CurrentOffset();
+        PhysicalOffset maybe_flipped_offset =
+            cursor.Current().OffsetInContainerBlock();
         if (initial_container_is_flipped) {
           maybe_flipped_offset.left = container.Size().width -
                                       child->Size().width -
