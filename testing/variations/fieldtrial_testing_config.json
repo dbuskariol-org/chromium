@@ -7787,6 +7787,24 @@
             ]
         }
     ],
+    "low-priority-ad-processes": [
+        {
+            "platforms": [
+                "chromeos",
+                "ios",
+                "linux",
+                "mac"
+            ],
+            "experiments": [
+                {
+                    "name": "LowPriorityAdProcesses",
+                    "enable_features": [
+                        "UseFramePriorityInRenderProcessHost"
+                    ]
+                }
+            ]
+        }
+    ],
     "use-new-media-cache": [
         {
             "platforms": [
