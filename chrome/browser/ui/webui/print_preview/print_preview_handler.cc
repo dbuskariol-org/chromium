@@ -8,7 +8,6 @@
 #include <stddef.h>
 
 #include <memory>
-#include <set>
 #include <string>
 #include <utility>
 #include <vector>
@@ -17,7 +16,7 @@
 #include "base/bind.h"
 #include "base/bind_helpers.h"
 #include "base/command_line.h"
-#include "base/debug/dump_without_crashing.h"
+#include "base/containers/flat_set.h"
 #include "base/feature_list.h"
 #include "base/i18n/number_formatting.h"
 #include "base/json/json_reader.h"
@@ -343,23 +342,22 @@ void ReportPrintSettingsStats(const base::Value& print_settings,
 
   base::Optional<int> color_mode_opt = print_settings.FindIntKey(kSettingColor);
   if (color_mode_opt.has_value()) {
-    if (color_mode_opt.value() != UNKNOWN_COLOR_MODEL) {
+    bool unknown_color_model = color_mode_opt.value() == UNKNOWN_COLOR_MODEL;
+    if (!unknown_color_model) {
       base::Optional<bool> is_color =
           IsColorModelSelected(color_mode_opt.value());
       ReportPrintSettingHistogram(is_color.value() ? COLOR : BLACK_AND_WHITE);
-    } else {
-      // Getting to this block means the printing backend does not understand
-      // the printer's color capabilities. Record a non-fatal crash dump for
-      // this once per device.
-      // TODO(thestig): Make sure the crash dump has sufficient information so
-      // developers can take action and fix the parsing of the printer's color
-      // capabilities.
-      static base::NoDestructor<std::set<std::string>> seen_devices;
-      auto result = seen_devices->insert(
-          *print_settings.FindStringKey(kSettingDeviceName));
-      bool inserted = result.second;
-      if (inserted)
-        base::debug::DumpWithoutCrashing();
+    }
+
+    // Record whether the printing backend does not understand the printer's
+    // color capabilities. Do this only once per device.
+    static base::NoDestructor<base::flat_set<std::string>> seen_devices;
+    auto result =
+        seen_devices->insert(*print_settings.FindStringKey(kSettingDeviceName));
+    bool is_new_device = result.second;
+    if (is_new_device) {
+      base::UmaHistogramBoolean("Printing.CUPS.UnknownPpdColorModel",
+                                unknown_color_model);
     }
   }
 
