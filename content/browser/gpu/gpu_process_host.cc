@@ -155,8 +155,13 @@ int GetForgiveMinutes(gpu::GpuMode gpu_mode) {
 // Feature controlling whether or not memory pressure signals will be forwarded
 // to the GPU process.
 const base::Feature kForwardMemoryPressureEventsToGpuProcess{
-    "ForwardMemoryPressureEventsToGpuProcess",
-    base::FEATURE_DISABLED_BY_DEFAULT};
+  "ForwardMemoryPressureEventsToGpuProcess",
+#if defined(OS_FUCHSIA)
+      base::FEATURE_ENABLED_BY_DEFAULT
+#else
+      base::FEATURE_DISABLED_BY_DEFAULT
+#endif
+};
 #endif
 
 // This matches base::TerminationStatus.
