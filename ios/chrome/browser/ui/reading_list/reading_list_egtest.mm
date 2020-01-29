@@ -676,6 +676,11 @@ void AssertIsShowingDistillablePage(bool online, const GURL& distillable_url) {
       EARL_GREY_TEST_SKIPPED(@"Test skipped on Ipad Air 2, iOS12.");
   }
 
+  // TODO(crbug.com/1046978): Test fails on iOS 13.3 iPad
+  if ([ChromeEarlGrey isIPadIdiom] && base::ios::IsRunningOnOrLater(13, 3, 0)) {
+    EARL_GREY_TEST_SKIPPED(@"Test disabled on iOS 13.3 iPad and later.");
+  }
+
   AddEntriesAndOpenReadingList();
 
   [[EarlGrey
