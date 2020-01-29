@@ -4141,6 +4141,23 @@ be describing additional metrics about the same event.
   </metric>
 </event>
 
+<event name="InputEvent">
+  <owner>hbsong@chromium.org</owner>
+  <summary>
+    Metrics associated with user input events. This event is recorded in Blink
+    and may not be recorded for the same page visits as events like PageLoad.
+    Consumers of this event's metrics should be aware of this when making
+    comparisons between InputEvent metrics and PageLoad metrics.
+  </summary>
+  <metric name="InteractiveTiming.InputDelay">
+    <summary>
+      Measures Input Delay, the duration between the hardware timestamp and the
+      start of event processing on the main thread for the meaningful input. In
+      ms. (go/FirstInputDelay)
+    </summary>
+  </metric>
+</event>
+
 <event name="Intervention.DocumentWrite.ScriptBlock" singular="True">
   <owner>bmcquade@chromium.org</owner>
   <summary>
