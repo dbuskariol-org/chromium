@@ -1,14 +1,18 @@
-// Copyright 2020 The Chromium Authors. All rights reserved.
+// Copyright 2019 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_EMBEDDER_SUPPORT_ANDROID_METRICS_MEMORY_METRICS_LOGGER_H_
-#define COMPONENTS_EMBEDDER_SUPPORT_ANDROID_METRICS_MEMORY_METRICS_LOGGER_H_
+#ifndef ANDROID_WEBVIEW_BROWSER_METRICS_MEMORY_METRICS_LOGGER_H_
+#define ANDROID_WEBVIEW_BROWSER_METRICS_MEMORY_METRICS_LOGGER_H_
+
+#include <jni.h>
+#include <memory>
 
 #include "base/callback_forward.h"
+#include "base/macros.h"
 #include "base/memory/scoped_refptr.h"
 
-namespace metrics {
+namespace android_webview {
 
 // MemoryMetricsLogger is responsible for logging the memory related heartbeat
 // metrics. MemoryMetricsLogger logs metrics at certain intervals for as long
@@ -22,8 +26,11 @@ class MemoryMetricsLogger {
   MemoryMetricsLogger();
   ~MemoryMetricsLogger();
 
-  MemoryMetricsLogger(const MemoryMetricsLogger&) = delete;
-  MemoryMetricsLogger& operator=(const MemoryMetricsLogger&) = delete;
+ private:
+  struct State;
+
+  friend jboolean JNI_MemoryMetricsLoggerUtils_ForceRecordHistograms(
+      JNIEnv* env);
 
   // Returns the single instance, if one was created.
   static MemoryMetricsLogger* GetInstanceForTesting();
@@ -32,9 +39,6 @@ class MemoryMetricsLogger {
   // result of recording metrics. |done_callback| is run on a background
   // TaskRunner.
   void ScheduleRecordForTesting(RecordCallback done_callback);
-
- private:
-  struct State;
 
   // Called on the task runner to record metrics after a delay.
   static void RecordMemoryMetricsAfterDelay(scoped_refptr<State> state);
@@ -46,8 +50,10 @@ class MemoryMetricsLogger {
                                   RecordCallback done_callback);
 
   scoped_refptr<State> state_;
+
+  DISALLOW_COPY_AND_ASSIGN(MemoryMetricsLogger);
 };
 
-}  // namespace metrics
+}  // namespace android_webview
 
-#endif  // COMPONENTS_EMBEDDER_SUPPORT_ANDROID_METRICS_MEMORY_METRICS_LOGGER_H_
+#endif  // ANDROID_WEBVIEW_BROWSER_METRICS_MEMORY_METRICS_LOGGER_H_

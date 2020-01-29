@@ -11,9 +11,7 @@ import android.os.HandlerThread;
 import androidx.annotation.NonNull;
 
 import org.chromium.base.Callback;
-import org.chromium.base.Consumer;
 import org.chromium.base.ThreadUtils;
-import org.chromium.components.metrics.AndroidMetricsLogUploader;
 
 /**
  * This class manages platform-specific services. (i.e. Google Services) The platform
@@ -29,14 +27,7 @@ public abstract class PlatformServiceBridge {
     private static Handler sHandler;
     private static final Object sHandlerLock = new Object();
 
-    protected PlatformServiceBridge() {
-        AndroidMetricsLogUploader.setUploader(new Consumer<byte[]>() {
-            @Override
-            public void accept(byte[] data) {
-                logMetrics(data);
-            }
-        });
-    }
+    protected PlatformServiceBridge() {}
 
     @SuppressWarnings("unused")
     public static PlatformServiceBridge getInstance() {

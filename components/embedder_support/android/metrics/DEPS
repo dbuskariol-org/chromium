@@ -1,6 +1,0 @@
-include_rules = [
-  "+components/metrics",
-  "+components/prefs",
-  "+content/public/browser",
-  "+services/resource_coordinator/public/cpp/memory_instrumentation",
-]
