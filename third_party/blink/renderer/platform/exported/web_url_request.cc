@@ -52,29 +52,17 @@ namespace blink {
 
 WebURLRequest::ExtraData::ExtraData() : render_frame_id_(MSG_ROUTING_NONE) {}
 
-// The purpose of this struct is to permit allocating a ResourceRequest on the
-// heap, which is otherwise disallowed by DISALLOW_NEW annotation on
-// ResourceRequest.
-// TODO(keishi): Replace with GCWrapper<ResourceRequest>
-struct WebURLRequest::ResourceRequestContainer {
-  ResourceRequestContainer() = default;
-  explicit ResourceRequestContainer(const ResourceRequest& r) {
-    resource_request.CopyFrom(r);
-  }
-
-  ResourceRequest resource_request;
-};
-
 WebURLRequest::~WebURLRequest() = default;
 
 WebURLRequest::WebURLRequest()
-    : owned_resource_request_(new ResourceRequestContainer()),
-      resource_request_(&owned_resource_request_->resource_request) {}
+    : owned_resource_request_(std::make_unique<ResourceRequest>()),
+      resource_request_(owned_resource_request_.get()) {}
 
 WebURLRequest::WebURLRequest(const WebURLRequest& r)
-    : owned_resource_request_(
-          new ResourceRequestContainer(*r.resource_request_)),
-      resource_request_(&owned_resource_request_->resource_request) {}
+    : owned_resource_request_(std::make_unique<ResourceRequest>()),
+      resource_request_(owned_resource_request_.get()) {
+  resource_request_->CopyFrom(*r.resource_request_);
+}
 
 WebURLRequest::WebURLRequest(const WebURL& url) : WebURLRequest() {
   SetUrl(url);
