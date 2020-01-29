@@ -26,6 +26,7 @@ import org.chromium.base.test.params.ParameterAnnotations;
 import org.chromium.base.test.params.ParameterizedRunner;
 import org.chromium.base.test.util.CallbackHelper;
 import org.chromium.base.test.util.CommandLineFlags;
+import org.chromium.base.test.util.DisabledTest;
 import org.chromium.base.test.util.RetryOnFailure;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeSwitches;
@@ -553,6 +554,7 @@ public class BookmarkReorderTest extends BookmarkTest {
 
     @Test
     @MediumTest
+    @DisabledTest(message = "crbug.com/1046653")
     public void testMoveButtonsGoneInSearchMode() throws Exception {
         addFolder(TEST_FOLDER_TITLE);
         openBookmarkManager();
