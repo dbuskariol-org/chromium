@@ -58281,6 +58281,14 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="Private key export failed"/>
 </enum>
 
+<enum name="SharingWebRtcConnectionType">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Host"/>
+  <int value="2" label="Server Reflexive"/>
+  <int value="3" label="Peer Reflexive"/>
+  <int value="4" label="Relay"/>
+</enum>
+
 <enum name="SharingWebRtcTimeoutState">
   <int value="0" label="Connecting"/>
   <int value="1" label="Message received"/>
