@@ -7,6 +7,7 @@
 
 #include "ash/ash_export.h"
 #include "ash/system/model/update_model.h"
+#include "base/files/file_path.h"
 #include "base/macros.h"
 
 namespace ash {
@@ -27,10 +28,15 @@ class ASH_EXPORT UpdateNotificationController : public UpdateObserver {
   base::string16 GetNotificationTitle() const;
   base::string16 GetNotificationMessage() const;
   void HandleNotificationClick(base::Optional<int> index);
+  void GenerateUpdateNotification(
+      base::Optional<bool> slow_boot_file_path_exists);
 
   static const char kNotificationId[];
 
   UpdateModel* const model_;
+
+  base::FilePath slow_boot_file_path_;
+  bool slow_boot_file_path_exists_ = false;
 
   base::WeakPtrFactory<UpdateNotificationController> weak_ptr_factory_{this};
 
