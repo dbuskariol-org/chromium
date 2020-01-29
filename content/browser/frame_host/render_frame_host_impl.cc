@@ -2346,6 +2346,10 @@ const url::Origin& RenderFrameHostImpl::ComputeTopFrameOrigin(
   }
 
   DCHECK(parent_);
+  // It's important to go through parent_ rather than via
+  // frame_free_->root() here in case we're in process of being deleted, as the
+  // latter might point to what our ancestor is being replaced with rather than
+  // the actual ancestor.
   RenderFrameHostImpl* host = parent_;
   while (host->parent_) {
     host = host->parent_;
@@ -2388,7 +2392,7 @@ net::SiteForCookies RenderFrameHostImpl::ComputeSiteForCookiesInternal(
 #endif
 
   const url::Origin& top_document_origin =
-      frame_tree_->root()->current_frame_host()->GetLastCommittedOrigin();
+      ComputeTopFrameOrigin(render_frame_host->last_committed_origin_);
   net::SiteForCookies candidate =
       net::SiteForCookies::FromOrigin(top_document_origin);
 

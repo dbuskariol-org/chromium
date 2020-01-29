@@ -1424,6 +1424,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
                            SubframeShowsDialogWhenMainFrameNavigates);
   FRIEND_TEST_ALL_PREFIXES(RenderFrameHostImplBeforeUnloadBrowserTest,
                            TimerNotRestartedBySecondDialog);
+  FRIEND_TEST_ALL_PREFIXES(RenderFrameHostImplBrowserTest,
+                           ComputeSiteForCookiesParentNavigatedAway);
   FRIEND_TEST_ALL_PREFIXES(RenderFrameHostManagerTest,
                            CreateRenderViewAfterProcessKillAndClosedProxy);
   FRIEND_TEST_ALL_PREFIXES(RenderFrameHostManagerTest, DontSelectInvalidFiles);
