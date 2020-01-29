@@ -967,14 +967,12 @@ bool URLHasExtensionBackgroundPermission(
 
 #endif
 
-chrome::mojom::PrerenderCanceler* GetPrerenderCanceller(
+mojo::PendingRemote<chrome::mojom::PrerenderCanceler> GetPrerenderCanceler(
     const base::Callback<content::WebContents*()>& wc_getter) {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-  auto* web_contents = wc_getter.Run();
-  if (!web_contents)
-    return nullptr;
-
-  return prerender::PrerenderContents::FromWebContents(web_contents);
+  mojo::PendingRemote<chrome::mojom::PrerenderCanceler> canceler;
+  prerender::PrerenderContents::FromWebContents(wc_getter.Run())
+      ->AddPrerenderCancelerReceiver(canceler.InitWithNewPipeAndPassReceiver());
+  return canceler;
 }
 
 void LaunchURL(const GURL& url,
@@ -4306,8 +4304,7 @@ ChromeContentBrowserClient::CreateURLLoaderThrottles(
     result.push_back(std::make_unique<prerender::PrerenderURLLoaderThrottle>(
         chrome_navigation_ui_data->prerender_mode(),
         chrome_navigation_ui_data->prerender_histogram_prefix(),
-        base::BindOnce(GetPrerenderCanceller, wc_getter),
-        base::CreateSingleThreadTaskRunner({BrowserThread::UI})));
+        GetPrerenderCanceler(wc_getter)));
   }
 
   signin::IdentityManager* identity_manager =

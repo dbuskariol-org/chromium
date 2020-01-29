@@ -719,10 +719,9 @@ void PrerenderContents::CancelPrerenderForUnsupportedScheme(const GURL& url) {
   ReportUnsupportedPrerenderScheme(url);
 }
 
-void PrerenderContents::OnPrerenderCancelerReceiver(
+void PrerenderContents::AddPrerenderCancelerReceiver(
     mojo::PendingReceiver<chrome::mojom::PrerenderCanceler> receiver) {
-  if (!prerender_canceler_receiver_.is_bound())
-    prerender_canceler_receiver_.Bind(std::move(receiver));
+  prerender_canceler_receiver_set_.Add(this, std::move(receiver));
 }
 
 void PrerenderContents::AddNetworkBytes(int64_t bytes) {

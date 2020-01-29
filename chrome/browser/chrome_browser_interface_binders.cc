@@ -238,7 +238,7 @@ void BindPrerenderCanceler(
       prerender::PrerenderContents::FromWebContents(web_contents);
   if (!prerender_contents)
     return;
-  prerender_contents->OnPrerenderCancelerReceiver(std::move(receiver));
+  prerender_contents->AddPrerenderCancelerReceiver(std::move(receiver));
 }
 
 void BindDocumentCoordinationUnit(
