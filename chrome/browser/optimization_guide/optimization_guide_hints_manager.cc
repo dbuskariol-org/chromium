@@ -864,6 +864,8 @@ OptimizationGuideHintsManager::CanApplyOptimization(
     optimization_guide::proto::OptimizationType optimization_type,
     optimization_guide::OptimizationMetadata* optimization_metadata) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK(registered_optimization_types_.find(optimization_type) !=
+         registered_optimization_types_.end());
 
   return CanApplyOptimization(
       OptimizationGuideNavigationData::GetFromNavigationHandle(
@@ -909,6 +911,13 @@ OptimizationGuideHintsManager::CanApplyOptimization(
   // Clear out optimization metadata if provided.
   if (optimization_metadata)
     *optimization_metadata = {};
+
+  // If the type is not registered, we probably don't have a hint for it, so
+  // just return.
+  if (registered_optimization_types_.find(optimization_type) ==
+      registered_optimization_types_.end()) {
+    return optimization_guide::OptimizationTypeDecision::kNoHintAvailable;
+  }
 
   // If the URL doesn't have a host, we cannot query the hint for it, so just
   // return early.

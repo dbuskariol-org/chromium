@@ -10,6 +10,7 @@
 #include "base/base64.h"
 #include "base/command_line.h"
 #include "base/files/file_util.h"
+#include "base/test/gtest_util.h"
 #include "base/test/metrics/histogram_tester.h"
 #include "base/test/scoped_feature_list.h"
 #include "chrome/browser/optimization_guide/optimization_guide_navigation_data.h"
@@ -1146,7 +1147,8 @@ TEST_F(OptimizationGuideHintsManagerTest,
   std::unique_ptr<content::MockNavigationHandle> navigation_handle =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
           GURL("https://whatever.com/123"));
-
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::LITE_PAGE_REDIRECT});
   optimization_guide::OptimizationTypeDecision optimization_type_decision =
       hints_manager()->CanApplyOptimization(
           navigation_handle.get(),
@@ -1165,6 +1167,10 @@ TEST_F(OptimizationGuideHintsManagerTest,
   EXPECT_FALSE(navigation_data->has_hint_after_commit().value());
   EXPECT_EQ(base::nullopt, navigation_data->serialized_hint_version_string());
   EXPECT_FALSE(navigation_data->has_page_hint_value());
+
+  // Run until idle to ensure we don't crash because the test object has gone
+  // away.
+  RunUntilIdle();
 }
 
 TEST_F(OptimizationGuideHintsManagerTest,
@@ -1317,6 +1323,8 @@ TEST_F(OptimizationGuideHintsManagerTest,
 TEST_F(OptimizationGuideHintsManagerTest,
        CanApplyOptimizationAndPopulatesMetadataWithFirstOptThatMatchesNoExp) {
   InitializeWithDefaultConfig("1.0.0.0");
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::NOSCRIPT});
 
   std::unique_ptr<content::MockNavigationHandle> navigation_handle =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
@@ -1398,6 +1406,8 @@ TEST_F(OptimizationGuideHintsManagerTest,
 TEST_F(OptimizationGuideHintsManagerTest,
        CanApplyOptimizationHasPageHintButNoMatchingOptType) {
   InitializeWithDefaultConfig("1.0.0.0");
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::DEFER_ALL_SCRIPT});
 
   std::unique_ptr<content::MockNavigationHandle> navigation_handle =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
@@ -1428,6 +1438,8 @@ TEST_F(OptimizationGuideHintsManagerTest,
 TEST_F(OptimizationGuideHintsManagerTest,
        CanApplyOptimizationUsesCachedPageHintFromNavigationData) {
   InitializeWithDefaultConfig("1.0.0.0");
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::DEFER_ALL_SCRIPT});
 
   std::unique_ptr<content::MockNavigationHandle> navigation_handle =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
@@ -1478,6 +1490,8 @@ TEST_F(OptimizationGuideHintsManagerTest,
       optimization_guide::proto::PERFORMANCE_SLOW);
 
   ProcessHints(config, "1.0.0.0");
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::PERFORMANCE_HINTS});
 
   std::unique_ptr<content::MockNavigationHandle> navigation_handle =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
@@ -1516,6 +1530,8 @@ TEST_F(OptimizationGuideHintsManagerTest,
   opt->mutable_public_image_metadata()->add_url("someimage");
 
   ProcessHints(config, "1.0.0.0");
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::COMPRESS_PUBLIC_IMAGES});
 
   std::unique_ptr<content::MockNavigationHandle> navigation_handle =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
@@ -1586,6 +1602,8 @@ TEST_F(OptimizationGuideHintsManagerTest,
                                                run_loop.QuitClosure());
   run_loop.Run();
 
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::NOSCRIPT});
   optimization_guide::OptimizationTypeDecision optimization_type_decision =
       hints_manager()->CanApplyOptimization(navigation_handle.get(),
                                             optimization_guide::proto::NOSCRIPT,
@@ -1612,6 +1630,8 @@ TEST_F(OptimizationGuideHintsManagerTest,
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
           GURL("https://nohint.com"));
 
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::NOSCRIPT});
   optimization_guide::OptimizationMetadata optimization_metadata;
   optimization_metadata.previews_metadata.set_inflation_percent(12345);
   optimization_guide::OptimizationTypeDecision optimization_type_decision =
@@ -1641,6 +1661,8 @@ TEST_F(OptimizationGuideHintsManagerTest,
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
           url_with_hints());
 
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::NOSCRIPT});
   optimization_guide::OptimizationMetadata optimization_metadata;
   optimization_guide::OptimizationTypeDecision optimization_type_decision =
       hints_manager()->CanApplyOptimization(navigation_handle.get(),
@@ -1798,6 +1820,8 @@ TEST_F(OptimizationGuideHintsManagerExperimentTest,
                                                run_loop.QuitClosure());
   run_loop.Run();
 
+  hints_manager()->RegisterOptimizationTypes(
+      {optimization_guide::proto::NOSCRIPT});
   optimization_guide::OptimizationMetadata optimization_metadata;
   optimization_guide::OptimizationTypeDecision optimization_type_decision =
       hints_manager()->CanApplyOptimization(navigation_handle.get(),
