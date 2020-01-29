@@ -7213,6 +7213,9 @@ Unknown properties are collapsed to zero. -->
 </enum>
 
 <enum name="BooleanStarsSalientImageFound">
+  <obsolete>
+    Removed 01/2020 as we no longer record this metric.
+  </obsolete>
   <int value="0" label="Salient image was not found."/>
   <int value="1" label="Salient image was found."/>
 </enum>
@@ -61204,6 +61207,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="StarsLaunchLocation">
+  <obsolete>
+    Removed 01/2020 as we no longer record this metric.
+  </obsolete>
   <int value="0" label="All Items"/>
   <int value="1" label="Uncategorized"/>
   <int value="2" label="Folder"/>
