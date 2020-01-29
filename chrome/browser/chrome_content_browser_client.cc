@@ -4285,12 +4285,20 @@ ChromeContentBrowserClient::CreateURLLoaderThrottles(
             ? safe_browsing_service_->GetVerdictCacheManagerWeakPtr(profile)
             : nullptr;
 
+    // |identity_manager| is used when real time url check with token is
+    // enabled.
+    signin::IdentityManager* identity_manager =
+        safe_browsing::RealTimePolicyEngine::CanPerformFullURLLookupWithToken(
+            profile)
+            ? IdentityManagerFactory::GetForProfile(profile)
+            : nullptr;
+
     result.push_back(safe_browsing::BrowserURLLoaderThrottle::Create(
         base::BindOnce(
             &ChromeContentBrowserClient::GetSafeBrowsingUrlCheckerDelegate,
             base::Unretained(this),
             profile->GetPrefs()->GetBoolean(prefs::kSafeBrowsingEnabled)),
-        wc_getter, frame_tree_node_id, cache_manager));
+        wc_getter, frame_tree_node_id, cache_manager, identity_manager));
   }
 #endif
 
