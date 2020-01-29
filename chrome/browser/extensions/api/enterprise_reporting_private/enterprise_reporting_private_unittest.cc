@@ -332,6 +332,8 @@ TEST_F(EnterpriseReportingPrivateGetDeviceInfoTest, GetDeviceInfo) {
 #elif defined(OS_WIN)
   EXPECT_EQ("windows", info.os_name);
 #elif defined(OS_LINUX)
+  std::unique_ptr<base::Environment> env(base::Environment::Create());
+  env->SetVar("XDG_CURRENT_DESKTOP", "XFCE");
   EXPECT_EQ("linux", info.os_name);
 #else
   // Verify a stub implementation.
