@@ -24,6 +24,7 @@ import static org.chromium.chrome.test.util.ToolbarTestUtils.checkToolbarVisibil
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.support.test.filters.MediumTest;
 
 import org.junit.After;
@@ -128,8 +129,10 @@ public class AdaptiveToolbarTest {
     @Test
     @MediumTest
     // clang-format off
+    @DisableIf.Build(message = "Flaky on KitKat: crbug.com/1046317",
+            sdk_is_less_than = Build.VERSION_CODES.LOLLIPOP)
     @CommandLineFlags.Add({"enable-features=" + ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID +
-        "<Study", "force-fieldtrials=Study/Group", NO_NEW_TAB_VARIATION_PARAMS})
+            "<Study", "force-fieldtrials=Study/Group", NO_NEW_TAB_VARIATION_PARAMS})
     public void testTopToolbar_WithGTS_WithBottomToolbar_Home_Search_Tab_Switcher_IncognitoDisabled() {
         // clang-format on
         IncognitoUtils.setEnabledForTesting(false);
@@ -167,6 +170,8 @@ public class AdaptiveToolbarTest {
     @Test
     @MediumTest
     // clang-format off
+    @DisableIf.Build(message = "Flaky on KitKat: crbug.com/1046316",
+            sdk_is_less_than = Build.VERSION_CODES.LOLLIPOP)
     @CommandLineFlags.Add({"enable-features=" + ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID +
             "<Study", "force-fieldtrials=Study/Group", NO_NEW_TAB_VARIATION_PARAMS})
     public void testTopToolbar_WithGTS_WithBottomToolbar_Home_Search_Share() {
@@ -287,7 +292,11 @@ public class AdaptiveToolbarTest {
 
     @Test
     @MediumTest
+    // clang-format off
+    @DisableIf.Build(message = "Flaky on KitKat: crbug.com/1045729",
+            sdk_is_less_than = Build.VERSION_CODES.LOLLIPOP)
     public void testTopToolbar_WithoutGTS_WithBottomToolbar_Home_Search_Share() {
+        // clang-format on
         BottomToolbarVariationManager.setVariation(Variations.HOME_SEARCH_SHARE);
         setupFlagsAndLaunchActivity(true, false);
         final ChromeTabbedActivity cta = mActivityTestRule.getActivity();
