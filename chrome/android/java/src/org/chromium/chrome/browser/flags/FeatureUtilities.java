@@ -223,18 +223,6 @@ public class FeatureUtilities {
      * Do not add new simple boolean flags here, use {@link #cacheNativeFlags} instead.
      */
     public static void cacheAdditionalNativeFlags() {
-        cacheFeature(ChromeFeatureList.COMMAND_LINE_ON_NON_ROOTED);
-        cacheFeature(ChromeFeatureList.CHROME_DUET);
-        cacheFeature(ChromeFeatureList.CHROME_DUET_ADAPTIVE);
-        cacheFeature(ChromeFeatureList.CHROME_DUET_LABELED);
-        cacheFeature(ChromeFeatureList.ANDROID_NIGHT_MODE_CCT);
-        cacheFeature(ChromeFeatureList.DOWNLOADS_AUTO_RESUMPTION_NATIVE);
-        cacheFeature(ChromeFeatureList.PRIORITIZE_BOOTSTRAP_TASKS);
-        cacheFeature(ChromeFeatureList.INTEREST_FEED_CONTENT_SUGGESTIONS);
-        cacheFeature(ChromeFeatureList.IMMERSIVE_UI_MODE);
-        cacheFeature(ChromeFeatureList.SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT);
-        cacheFeature(ChromeFeatureList.START_SURFACE_ANDROID);
-        cacheFeature(ChromeFeatureList.PAINT_PREVIEW_TEST);
         cacheNightModeAvailable();
         cacheNightModeDefaultToLight();
         cacheNetworkServiceWarmUpEnabled();
@@ -248,18 +236,6 @@ public class FeatureUtilities {
         // LibraryLoader itself because it lives in //base and can't depend on ChromeFeatureList.
         LibraryLoader.setReachedCodeProfilerEnabledOnNextRuns(
                 ChromeFeatureList.isEnabled(ChromeFeatureList.REACHED_CODE_PROFILER));
-    }
-
-    /**
-     * Caches flags that are enabled in ServiceManager only mode and must take effect on startup but
-     * are set via native code. This function needs to be called in ServiceManager only mode to mark
-     * these field trials as active, otherwise histogram data recorded in ServiceManager only mode
-     * won't be tagged with their corresponding field trial experiments.
-     */
-    public static void cacheNativeFlagsForServiceManagerOnlyMode() {
-        // TODO(crbug.com/995355): Move other related flags from {@link cacheNativeFlags} to here.
-        cacheFeature(ChromeFeatureList.SERVICE_MANAGER_FOR_DOWNLOAD);
-        cacheFeature(ChromeFeatureList.SERVICE_MANAGER_FOR_BACKGROUND_PREFETCH);
     }
 
     /**
