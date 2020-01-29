@@ -671,8 +671,7 @@ def generate_dictionary(dictionary):
         "Visitor",
     ])
     source_node.accumulator.add_include_headers([
-        "third_party/blink/renderer/bindings/core/v8/"
-        "native_value_traits_impl.h",
+        "third_party/blink/renderer/bindings/core/v8/native_value_traits_impl.h",
         "third_party/blink/renderer/platform/bindings/exception_messages.h",
         "third_party/blink/renderer/platform/bindings/exception_state.h",
         "third_party/blink/renderer/platform/bindings/v8_per_isolate_data.h",
