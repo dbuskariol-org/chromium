@@ -1343,8 +1343,8 @@ void StoragePartitionImpl::Initialize() {
   shared_worker_service_ = std::make_unique<SharedWorkerServiceImpl>(
       this, service_worker_context_, appcache_service_);
 
-  push_messaging_context_ =
-      new PushMessagingContext(browser_context_, service_worker_context_);
+  push_messaging_context_ = std::make_unique<PushMessagingContext>(
+      browser_context_, service_worker_context_);
 
 #if !defined(OS_ANDROID)
   host_zoom_level_context_ = new HostZoomLevelContext(

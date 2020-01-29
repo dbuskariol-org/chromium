@@ -443,7 +443,7 @@ class CONTENT_EXPORT StoragePartitionImpl
   scoped_refptr<ServiceWorkerContextWrapper> service_worker_context_;
   std::unique_ptr<DedicatedWorkerServiceImpl> dedicated_worker_service_;
   std::unique_ptr<SharedWorkerServiceImpl> shared_worker_service_;
-  scoped_refptr<PushMessagingContext> push_messaging_context_;
+  std::unique_ptr<PushMessagingContext> push_messaging_context_;
   scoped_refptr<storage::SpecialStoragePolicy> special_storage_policy_;
 #if !defined(OS_ANDROID)
   scoped_refptr<HostZoomLevelContext> host_zoom_level_context_;
