@@ -459,6 +459,9 @@ extern const char kEnableNewDownloadBackendDescription[];
 extern const char kEnablePortalsName[];
 extern const char kEnablePortalsDescription[];
 
+extern const char kEnablePortalsCrossOriginName[];
+extern const char kEnablePortalsCrossOriginDescription[];
+
 extern const char kEnablePixelCanvasRecordingName[];
 extern const char kEnablePixelCanvasRecordingDescription[];
 

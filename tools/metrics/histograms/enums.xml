@@ -38737,6 +38737,7 @@ from previous Chrome versions.
   <int value="373193557" label="LongPressBackNewDesign:enabled"/>
   <int value="375485858" label="EnableZeroStateMixedTypesRanker:disabled"/>
   <int value="375785554" label="UserActivationV2:disabled"/>
+  <int value="375934458" label="PortalsCrossOrigin:enabled"/>
   <int value="377093001" label="WebRtcHWH264Encoding:disabled"/>
   <int value="378994579" label="Previews:enabled"/>
   <int value="379190682" label="ReorderBookmarks:enabled"/>
@@ -39310,6 +39311,7 @@ from previous Chrome versions.
   <int value="1112051724" label="DetectingHeavyPages:enabled"/>
   <int value="1113196543" label="ShowManagedUi:disabled"/>
   <int value="1113365156" label="tab-management-experiment-type-chive"/>
+  <int value="1114270092" label="PortalsCrossOrigin:disabled"/>
   <int value="1114629582" label="enable-floating-virtual-keyboard"/>
   <int value="1115635149" label="EnableUnifiedMultiDeviceSetup:enabled"/>
   <int value="1116593018" label="CaptureThumbnailOnLoadFinished:disabled"/>
