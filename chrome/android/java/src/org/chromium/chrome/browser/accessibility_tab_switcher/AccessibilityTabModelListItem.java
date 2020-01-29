@@ -334,9 +334,10 @@ public class AccessibilityTabModelListItem extends FrameLayout implements OnClic
         } else {
             setBackgroundResource(R.color.modern_primary_color);
             mFaviconView.getBackground().setLevel(mDefaultLevel);
-            ApiCompatibilityUtils.setTextAppearance(mTitleView, R.style.TextAppearance_BlackTitle1);
             ApiCompatibilityUtils.setTextAppearance(
-                    mDescriptionView, R.style.TextAppearance_BlackBody);
+                    mTitleView, R.style.TextAppearance_TextLarge_Primary);
+            ApiCompatibilityUtils.setTextAppearance(
+                    mDescriptionView, R.style.TextAppearance_TextMedium_Secondary);
             ApiCompatibilityUtils.setImageTintList(mCloseButton, mDefaultCloseIconColor);
         }
 
