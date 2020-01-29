@@ -145,14 +145,8 @@ const char kAutofillAlwaysReturnCloudTokenizedCardDescription[] =
     "(cloud tokenized version of the Primary Account Number) and dCVV (dynamic "
     "CVV).";
 
-extern const char kAutofillAlwaysShowServerCardsInSyncTransportName[] =
-    "AlwaysShowServerCardsInSyncTransport";
-extern const char kAutofillAlwaysShowServerCardsInSyncTransportDescription[] =
-    "Always show server cards when in sync transport mode for wallet data";
-
-extern const char kAutofillAssistantChromeEntryName[] =
-    "AutofillAssistantChromeEntry";
-extern const char kAutofillAssistantChromeEntryDescription[] =
+const char kAutofillAssistantChromeEntryName[] = "AutofillAssistantChromeEntry";
+const char kAutofillAssistantChromeEntryDescription[] =
     "Initiate autofill assistant from within Chrome.";
 
 extern const char kAutofillAssistantDirectActionsName[] =
@@ -256,9 +250,9 @@ const char kAutofillRichMetadataQueriesDescription[] =
     "Transmit rich form/field metadata when querying the autofill server. "
     "This feature only works on the Canary and Dev channels.";
 
-extern const char kAutofillSaveAndFillVPAName[] =
+const char kAutofillSaveAndFillVPAName[] =
     "Offer save and autofill of UPI/VPA values";
-extern const char kAutofillSaveAndFillVPADescription[] =
+const char kAutofillSaveAndFillVPADescription[] =
     "If enabled, when autofill recognizes a UPI/VPA value in a payment form, "
     "it will offer to save it. If saved, it will be offered for filling in "
     "fields which expect a VPA.";
@@ -515,9 +509,9 @@ const char kEnableDeferAllScriptWithoutOptimizationHintsDescription[] =
     "that the ECT trigger threshold is set to 4G (which is otherwise provided "
     "by the optimization hints). Rest of the checks are still executed.";
 
-extern const char kEnableEduCoexistenceName[] =
+const char kEnableEduCoexistenceName[] =
     "Enable Family Link managed accounts and EDU accounts coexistence";
-extern const char kEnableEduCoexistenceDescription[] =
+const char kEnableEduCoexistenceDescription[] =
     "Allows Family Link managed users to add secondary EDU accounts.";
 
 const char kEnableSaveDataName[] = "Enables save data feature";
@@ -562,20 +556,19 @@ const char kDesktopMinimalUIDescription[] =
     "PWAs with display mode minimal-ui open in a window with Back and Refresh "
     "buttons.";
 
-extern const char kDesktopPWAsLocalUpdatingName[] =
-    "Desktop PWAs local updating";
-extern const char kDesktopPWAsLocalUpdatingDescription[] =
+const char kDesktopPWAsLocalUpdatingName[] = "Desktop PWAs local updating";
+const char kDesktopPWAsLocalUpdatingDescription[] =
     "Enable installed PWAs to update their app manifest data when the site "
     "manifest data has changed.";
 
-extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceName[] =
+const char kDesktopPWAsLocalUpdatingThrottlePersistenceName[] =
     "Desktop PWAs local updating throttle persistence";
-extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceDescription[] =
+const char kDesktopPWAsLocalUpdatingThrottlePersistenceDescription[] =
     "Persist the throttling of local PWA manifest update checks across browser "
     "restarts.";
 
-extern const char kDesktopPWAsTabStripName[] = "Desktop PWA tab strips";
-extern const char kDesktopPWAsTabStripDescription[] =
+const char kDesktopPWAsTabStripName[] = "Desktop PWA tab strips";
+const char kDesktopPWAsTabStripDescription[] =
     "Experimental UI for exploring what PWA windows would look like with a tab "
     "strip.";
 
@@ -1162,9 +1155,8 @@ const char kLookalikeUrlNavigationSuggestionsDescription[] =
 const char kMarkHttpAsName[] = "Mark non-secure origins as non-secure";
 const char kMarkHttpAsDescription[] = "Change the UI treatment for HTTP pages";
 
-extern const char kMediaInspectorLoggingName[] =
-    "Enable media log in developer tools";
-extern const char kMediaInspectorLoggingDescription[] =
+const char kMediaInspectorLoggingName[] = "Enable media log in developer tools";
+const char kMediaInspectorLoggingDescription[] =
     "Move media logging from chrome://media-internals into the developer tools "
     "project; #enable-devtools-experiments must also be enabled as well on "
     "desktop platforms";
@@ -1827,8 +1819,8 @@ const char kSpeculativeServiceWorkerStartOnQueryInputDescription[] =
     "a query, any service worker associated with the search engine the query "
     "will be sent to is started early.";
 
-extern const char kStrictOriginIsolationName[] = "Strict-Origin-Isolation";
-extern const char kStrictOriginIsolationDescription[] =
+const char kStrictOriginIsolationName[] = "Strict-Origin-Isolation";
+const char kStrictOriginIsolationDescription[] =
     "Experimental security mode that strengthens the site isolation policy. "
     "Controls whether site isolation should use origins instead of scheme and "
     "eTLD+1.";
@@ -2322,8 +2314,8 @@ const char kContentIndexingNTPName[] = "Content indexing in NTP";
 const char kContentIndexingNTPDescription[] =
     "Shows content indexing entry point UI in NTP";
 
-extern const char kContextMenuCopyImageName[] = "Copy Image";
-extern const char kContextMenuCopyImageDescription[] =
+const char kContextMenuCopyImageName[] = "Copy Image";
+const char kContextMenuCopyImageDescription[] =
     "Enable copying image to system clipboard via context menu.";
 
 const char kContextualSearchDefinitionsName[] = "Contextual Search definitions";
@@ -2550,9 +2542,9 @@ const char kPhotoPickerVideoSupportName[] = "Photo Picker Video Support";
 const char kPhotoPickerVideoSupportDescription[] =
     "Enables video files to be shown in the Photo Picker dialog";
 
-extern const char kProcessSharingWithDefaultSiteInstancesName[] =
+const char kProcessSharingWithDefaultSiteInstancesName[] =
     "Process sharing with default site instances";
-extern const char kProcessSharingWithDefaultSiteInstancesDescription[] =
+const char kProcessSharingWithDefaultSiteInstancesDescription[] =
     "When site isolation is disabled, this mode changes how sites are lumped "
     "in to shared processes. For sites that do not require isolation, this "
     "feature groups them into a single 'default' site instance (per browsing "
@@ -2560,9 +2552,9 @@ extern const char kProcessSharingWithDefaultSiteInstancesDescription[] =
     "enables resource savings by creating fewer processes for sites that do "
     "not need isolation.";
 
-extern const char kProcessSharingWithStrictSiteInstancesName[] =
+const char kProcessSharingWithStrictSiteInstancesName[] =
     "Process sharing with strict site instances";
-extern const char kProcessSharingWithStrictSiteInstancesDescription[] =
+const char kProcessSharingWithStrictSiteInstancesDescription[] =
     "When site isolation is disabled, this mode changes how sites are lumped "
     "in to a shared process. Process selection is usually controlled with "
     "site instances. With strict site isolation, each site on a page gets its "
@@ -2631,9 +2623,9 @@ const char kStrictSiteIsolationDescription[] =
     "#site-isolation-trial-opt-out for how to disable site isolation for "
     "testing.";
 
-extern const char kTabSwitcherLongpressMenuName[] =
+const char kTabSwitcherLongpressMenuName[] =
     "Enable tab switcher long-press menu";
-extern const char kTabSwitcherLongpressMenuDescription[] =
+const char kTabSwitcherLongpressMenuDescription[] =
     "Enable showing a popup menu when the tab switcher is long-pressed, which "
     "displays options for 'NewTab', 'New incognito tab' and 'Close tab'.";
 
@@ -3083,12 +3075,6 @@ const char kAshEnableUnifiedDesktopDescription[] =
     "Enable unified desktop mode which allows a window to span multiple "
     "displays.";
 
-extern const char kAshNotificationStackingBarRedesignName[] =
-    "Redesigned notification stacking bar";
-extern const char kAshNotificationStackingBarRedesignDescription[] =
-    "Enables the redesigned notification stacking bar UI with a \"Clear all\" "
-    "button.";
-
 const char kAshSwapSideVolumeButtonsForOrientationName[] =
     "Swap side volume buttons to match screen orientation.";
 const char kAshSwapSideVolumeButtonsForOrientationDescription[] =
@@ -3465,8 +3451,8 @@ const char kLockScreenNotificationName[] = "Lock screen notification";
 const char kLockScreenNotificationDescription[] =
     "Enable notifications on the lock screen.";
 
-extern const char kMediaAppName[] = "Media App";
-extern const char kMediaAppDescription[] =
+const char kMediaAppName[] = "Media App";
+const char kMediaAppDescription[] =
     "Enables the chrome://media-app System Web App (SWA)";
 
 const char kMediaSessionNotificationsName[] = "Media session notifications";
@@ -3784,8 +3770,8 @@ const char kPaintHoldingDescription[] =
 
 #if defined(WEBRTC_USE_PIPEWIRE)
 
-extern const char kWebrtcPipeWireCapturerName[] = "WebRTC PipeWire support";
-extern const char kWebrtcPipeWireCapturerDescription[] =
+const char kWebrtcPipeWireCapturerName[] = "WebRTC PipeWire support";
+const char kWebrtcPipeWireCapturerDescription[] =
     "When enabled the WebRTC will use the PipeWire multimedia server for "
     "capturing the desktop content on the Wayland display server.";
 
