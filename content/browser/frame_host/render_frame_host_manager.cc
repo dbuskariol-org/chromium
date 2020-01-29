@@ -2371,8 +2371,8 @@ bool RenderFrameHostManager::ReinitializeRenderFrame(
   // Main frames need both the RenderView and RenderFrame reinitialized, so
   // use InitRenderView.  For cross-process subframes, InitRenderView won't
   // recreate the RenderFrame, so use InitRenderFrame instead.  Note that for
-  // subframe RenderFrameHosts, the swapped out RenderView in their
-  // SiteInstance will be recreated as part of CreateOpenerProxies above.
+  // subframe RenderFrameHosts, the inactive RenderView in their SiteInstance
+  // will be recreated as part of CreateOpenerProxies above.
   if (!frame_tree_node_->parent()) {
     DCHECK(!GetRenderFrameProxyHost(render_frame_host->GetSiteInstance()));
     if (!InitRenderView(render_frame_host->render_view_host(), nullptr))
@@ -2684,14 +2684,6 @@ std::unique_ptr<RenderFrameHostImpl> RenderFrameHostManager::SetRenderFrameHost(
   return old_render_frame_host;
 }
 
-RenderViewHostImpl* RenderFrameHostManager::GetSwappedOutRenderViewHost(
-    SiteInstance* instance) const {
-  RenderFrameProxyHost* proxy = GetRenderFrameProxyHost(instance);
-  if (proxy)
-    return proxy->GetRenderViewHost();
-  return nullptr;
-}
-
 RenderFrameProxyHost* RenderFrameHostManager::GetRenderFrameProxyHost(
     SiteInstance* instance) const {
   auto it = proxy_hosts_.find(instance->GetId());
@@ -2924,7 +2916,7 @@ void RenderFrameHostManager::CreateNewFrameForInnerDelegateAttachIfNecessary() {
     NotifyPrepareForInnerDelegateAttachComplete(false /* success */);
     return;
   }
-  // Swap in the speculative frame. It will later on be swapped out when the
+  // Swap in the speculative frame. It will later be replaced when
   // WebContents::AttachToOuterWebContentsFrame is called.
   speculative_render_frame_host_->Send(
       new FrameMsg_SwapIn(speculative_render_frame_host_->GetRoutingID()));
