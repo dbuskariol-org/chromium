@@ -36,6 +36,7 @@ import org.junit.runner.RunWith;
 
 import org.chromium.base.test.util.CommandLineFlags;
 import org.chromium.base.test.util.DisableIf;
+import org.chromium.base.test.util.DisabledTest;
 import org.chromium.base.test.util.Restriction;
 import org.chromium.chrome.browser.ChromeSwitches;
 import org.chromium.chrome.browser.ChromeTabbedActivity;
@@ -133,6 +134,7 @@ public class AdaptiveToolbarTest {
             sdk_is_less_than = Build.VERSION_CODES.LOLLIPOP)
     @CommandLineFlags.Add({"enable-features=" + ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID +
             "<Study", "force-fieldtrials=Study/Group", NO_NEW_TAB_VARIATION_PARAMS})
+    @DisabledTest(message = "crbug.com/1046748")
     public void testTopToolbar_WithGTS_WithBottomToolbar_Home_Search_Tab_Switcher_IncognitoDisabled() {
         // clang-format on
         IncognitoUtils.setEnabledForTesting(false);
