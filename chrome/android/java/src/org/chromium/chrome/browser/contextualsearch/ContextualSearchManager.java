@@ -507,10 +507,10 @@ public class ContextualSearchManager implements ContextualSearchManagementDelega
     }
 
     @Override
-    public void startSearchTermResolutionRequest(String selection, boolean isRestrictedResolve) {
+    public void startSearchTermResolutionRequest(String selection, boolean isExactResolve) {
         WebContents baseWebContents = getBaseWebContents();
         if (baseWebContents != null && mContext != null && mContext.canResolve()) {
-            if (isRestrictedResolve) mContext.setRestrictedResolve();
+            if (isExactResolve) mContext.setExactResolve();
             ContextualSearchManagerJni.get().startSearchTermResolutionRequest(
                     mNativeContextualSearchManagerPtr, this, mContext, getBaseWebContents());
         } else {
