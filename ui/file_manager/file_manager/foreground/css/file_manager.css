@@ -73,6 +73,10 @@ a:focus {
   position: relative;
 }
 
+body.files-ng .dialog-container {
+  background-color: rgb(255, 255, 255);
+}
+
 /* List and grid are inside this container. */
 .dialog-main {
   align-items: stretch;
@@ -80,6 +84,10 @@ a:focus {
   display: flex;
   flex: auto;
   flex-direction: column;
+}
+
+body.files-ng .dialog-main {
+  background-color: inherit;
 }
 
 /* Directory tree at the left. */
@@ -94,6 +102,10 @@ a:focus {
   overflow: auto;
   position: relative;
   width: 240px;
+}
+
+body.files-ng .dialog-navigation-list {
+  background-color: inherit;
 }
 
 .dialog-navigation-list-contents {
