@@ -92,10 +92,10 @@ constexpr base::TimeDelta kManualAnimationDuration =
 // The duration of the temperature change animation for
 // AnimationDurationType::kLong.
 constexpr base::TimeDelta kAutomaticAnimationDuration =
-    base::TimeDelta::FromSeconds(20);
+    base::TimeDelta::FromSeconds(60);
 
 // The color temperature animation frames per second.
-constexpr int kNightLightAnimationFrameRate = 30;
+constexpr int kNightLightAnimationFrameRate = 15;
 
 // The following are color temperatues in Kelvin.
 // The min/max are a reasonable range we can clamp the values to.
