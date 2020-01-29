@@ -1354,14 +1354,16 @@ gfx::Insets ScrollableShelfView::CalculateEdgePadding(
 
 int ScrollableShelfView::GetStatusWidgetSizeOnPrimaryAxis(
     bool use_target_bounds) const {
-  const gfx::Size status_widget_size =
-      use_target_bounds
-          ? GetShelf()->shelf_layout_manager()->GetStatusAreaBounds().size()
-          : GetShelf()
-                ->shelf_widget()
-                ->status_area_widget()
-                ->GetWindowBoundsInScreen()
-                .size();
+  const gfx::Size status_widget_size = use_target_bounds
+                                           ? GetShelf()
+                                                 ->shelf_layout_manager()
+                                                 ->GetStatusAreaBoundsInScreen()
+                                                 .size()
+                                           : GetShelf()
+                                                 ->shelf_widget()
+                                                 ->status_area_widget()
+                                                 ->GetWindowBoundsInScreen()
+                                                 .size();
   return GetShelf()->PrimaryAxisValue(status_widget_size.width(),
                                       status_widget_size.height());
 }

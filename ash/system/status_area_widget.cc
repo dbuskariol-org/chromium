@@ -197,7 +197,7 @@ void StatusAreaWidget::UpdateLayout(bool animate) {
   animation_setter.SetTweenType(gfx::Tween::EASE_OUT);
   animation_setter.SetPreemptionStrategy(
       ui::LayerAnimator::IMMEDIATELY_ANIMATE_TO_NEW_TARGET);
-  SetBounds(layout_manager->GetStatusAreaBounds());
+  SetBounds(layout_manager->GetStatusAreaBoundsInScreen());
 }
 
 void StatusAreaWidget::CalculateButtonVisibilityForCollapsedState() {
