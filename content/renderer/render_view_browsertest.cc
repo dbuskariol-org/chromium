@@ -123,6 +123,7 @@
 #include "ui/events/keycodes/keyboard_code_conversion.h"
 #include "ui/events/test/events_test_utils.h"
 #include "ui/events/test/events_test_utils_x11.h"
+#include "ui/events/x/x11_event_translation.h"
 #include "ui/gfx/x/x11.h"
 #endif
 
@@ -371,8 +372,8 @@ class RenderViewImplTest : public RenderViewTest {
     xevent.InitKeyEvent(ui::ET_KEY_PRESSED,
                         static_cast<ui::KeyboardCode>(key_code),
                         flags);
-    ui::KeyEvent event1(xevent);
-    NativeWebKeyboardEvent keydown_event(event1);
+    auto event1 = ui::BuildKeyEventFromXEvent(*xevent);
+    NativeWebKeyboardEvent keydown_event(*event1);
     SendNativeKeyEvent(keydown_event);
 
     // X11 doesn't actually have native character events, but give the test
@@ -380,19 +381,19 @@ class RenderViewImplTest : public RenderViewTest {
     xevent.InitKeyEvent(ui::ET_KEY_PRESSED,
                         static_cast<ui::KeyboardCode>(key_code),
                         flags);
-    ui::KeyEvent event2(xevent);
-    event2.set_character(
-        DomCodeToUsLayoutCharacter(event2.code(), event2.flags()));
-    ui::KeyEventTestApi test_event2(&event2);
+    auto event2 = ui::BuildKeyEventFromXEvent(*xevent);
+    event2->set_character(
+        DomCodeToUsLayoutCharacter(event2->code(), event2->flags()));
+    ui::KeyEventTestApi test_event2(event2.get());
     test_event2.set_is_char(true);
-    NativeWebKeyboardEvent char_event(event2);
+    NativeWebKeyboardEvent char_event(*event2);
     SendNativeKeyEvent(char_event);
 
     xevent.InitKeyEvent(ui::ET_KEY_RELEASED,
                         static_cast<ui::KeyboardCode>(key_code),
                         flags);
-    ui::KeyEvent event3(xevent);
-    NativeWebKeyboardEvent keyup_event(event3);
+    auto event3 = ui::BuildKeyEventFromXEvent(*xevent);
+    NativeWebKeyboardEvent keyup_event(*event3);
     SendNativeKeyEvent(keyup_event);
 
     long c = DomCodeToUsLayoutCharacter(
