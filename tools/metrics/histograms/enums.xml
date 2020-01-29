@@ -58280,6 +58280,15 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="Right"/>
 </enum>
 
+<enum name="ShelfWindowDragResult">
+  <int value="0" label="Goes to home screen after drag"/>
+  <int value="1"
+      label="Dragged window restored to its original bounds after drag"/>
+  <int value="2" label="Dragged window is dropped to overview after drag"/>
+  <int value="3" label="Enters splitview mode after drag"/>
+  <int value="4" label="Drag is canceled instead of ending normally"/>
+</enum>
+
 <enum name="ShillSuspendTerminationDarkResumeActionResult">
   <summary>
     The termination/suspend/dark resume action result types come from

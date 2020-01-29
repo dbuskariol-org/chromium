@@ -15,6 +15,7 @@
 #include "ash/public/cpp/wallpaper_controller_observer.h"
 #include "ash/session/session_observer.h"
 #include "ash/shelf/shelf.h"
+#include "ash/shelf/shelf_metrics.h"
 #include "ash/shelf/shelf_widget.h"
 #include "ash/shell_observer.h"
 #include "ash/system/locale/locale_update_controller_impl.h"
@@ -492,9 +493,7 @@ class ASH_EXPORT ShelfLayoutManager
                   float scroll_y);
   void CompleteDrag(const ui::LocatedEvent& event_in_screen);
   void CompleteAppListDrag(const ui::LocatedEvent& event_in_screen);
-  void CancelDrag(
-      base::Optional<DragWindowFromShelfController::ShelfWindowDragResult>
-          window_drag_result);
+  void CancelDrag(base::Optional<ShelfWindowDragResult> window_drag_result);
   void CompleteDragWithChangedVisibility();
 
   float GetAppListBackgroundOpacityOnShelfOpacity();
@@ -522,8 +521,8 @@ class ASH_EXPORT ShelfLayoutManager
                                      const gfx::Vector2dF& scroll);
   void MaybeUpdateWindowDrag(const ui::LocatedEvent& event_in_screen,
                              const gfx::Vector2dF& scroll);
-  base::Optional<DragWindowFromShelfController::ShelfWindowDragResult>
-  MaybeEndWindowDrag(const ui::LocatedEvent& event_in_screen);
+  base::Optional<ShelfWindowDragResult> MaybeEndWindowDrag(
+      const ui::LocatedEvent& event_in_screen);
   // If overview session is active, goes to home screen if the gesture should
   // initiate transition to home. It handles the gesture only if the
   // |window_drag_controller_| is not handling a window drag (for example, in

@@ -77,9 +77,6 @@
 namespace ash {
 namespace {
 
-using ShelfWindowDragResult =
-    DragWindowFromShelfController::ShelfWindowDragResult;
-
 // Default Target Dim Opacity for floating shelf.
 constexpr float kFloatingShelfDimOpacity = 0.74f;
 
@@ -2461,8 +2458,8 @@ void ShelfLayoutManager::UpdateDrag(const ui::LocatedEvent& event_in_screen,
 
 void ShelfLayoutManager::CompleteDrag(const ui::LocatedEvent& event_in_screen) {
   // End the possible window drag before checking the shelf visibility.
-  base::Optional<DragWindowFromShelfController::ShelfWindowDragResult>
-      window_drag_result = MaybeEndWindowDrag(event_in_screen);
+  base::Optional<ShelfWindowDragResult> window_drag_result =
+      MaybeEndWindowDrag(event_in_screen);
   HotseatState old_hotseat_state = hotseat_state();
 
   const bool transitioned_from_overview_to_home =
@@ -2532,8 +2529,7 @@ void ShelfLayoutManager::CompleteAppListDrag(
 }
 
 void ShelfLayoutManager::CancelDrag(
-    base::Optional<DragWindowFromShelfController::ShelfWindowDragResult>
-        window_drag_result) {
+    base::Optional<ShelfWindowDragResult> window_drag_result) {
   if (drag_status_ == kDragAppListInProgress ||
       drag_status_ == kDragHomeToOverviewInProgress) {
     HomeLauncherGestureHandler* home_launcher_handler =
@@ -2560,8 +2556,7 @@ void ShelfLayoutManager::CancelDrag(
         (!Shell::Get()->overview_controller()->InOverviewSession() ||
          (window_drag_result.has_value() &&
           window_drag_result.value() ==
-              DragWindowFromShelfController::ShelfWindowDragResult::
-                  kRestoreToOriginalBounds)));
+              ShelfWindowDragResult::kRestoreToOriginalBounds)));
 
     hotseat_presentation_time_recorder_.reset();
   }
