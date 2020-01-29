@@ -99,7 +99,7 @@ constexpr int kNightLightAnimationFrameRate = 30;
 
 // The following are color temperatues in Kelvin.
 // The min/max are a reasonable range we can clamp the values to.
-constexpr float kMinColorTemperatureInKelvin = 5700;
+constexpr float kMinColorTemperatureInKelvin = 4500;
 constexpr float kNeutralColorTemperatureInKelvin = 6500;
 constexpr float kMaxColorTemperatureInKelvin = 7500;
 
@@ -455,8 +455,8 @@ float NightLightControllerImpl::GetNonLinearTemperature(float temperature) {
 float NightLightControllerImpl::RemapAmbientColorTemperature(
     float temperature_in_kelvin) {
   // This function maps sensor input temperatures to other values since we want
-  // to avoid extreme color temperatures (e.g: temperatures below 5700 and
-  // above 7450 are too extreme.)
+  // to avoid extreme color temperatures (e.g: temperatures below 4500 and
+  // above 7500 are too extreme.)
   // The following table was created with internal user studies.
   constexpr struct {
     int32_t input_temperature;
@@ -516,8 +516,8 @@ NightLightControllerImpl::ColorScalesFromRemappedTemperatureInKevin(
     float temperature_decrement =
         (kNeutralColorTemperatureInKelvin - temperature_in_kelvin) /
         (kNeutralColorTemperatureInKelvin - kMinColorTemperatureInKelvin);
-    green = 1.f - temperature_decrement * 0.0368f;
-    blue = 1.f - temperature_decrement * 0.0882f;
+    green = 1.f - temperature_decrement * 0.1211f;
+    blue = 1.f - temperature_decrement * 0.2749f;
   }
   return {red, green, blue};
 }
