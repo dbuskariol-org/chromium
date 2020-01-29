@@ -15,6 +15,9 @@
 #include "base/trace_event/traced_value.h"
 #include "chrome/browser/content_settings/cookie_settings_factory.h"
 #include "chrome/browser/page_load_metrics/observers/page_load_metrics_observer_test_harness.h"
+#include "chrome/browser/search_engines/template_url_service_factory.h"
+#include "chrome/common/pref_names.h"
+#include "chrome/test/base/search_test_utils.h"
 #include "chrome/test/base/testing_profile.h"
 #include "components/content_settings/core/browser/cookie_settings.h"
 #include "components/content_settings/core/common/content_settings.h"
@@ -23,6 +26,7 @@
 #include "components/page_load_metrics/browser/page_load_tracker.h"
 #include "components/page_load_metrics/common/test/page_load_metrics_test_util.h"
 #include "components/prefs/pref_service.h"
+#include "components/search_engines/template_url_service.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/test/navigation_simulator.h"
 #include "net/base/ip_endpoint.h"
@@ -44,6 +48,7 @@ using testing::Return;
 namespace {
 
 using PageLoad = ukm::builders::PageLoad;
+using GeneratedNavigation = ukm::builders::GeneratedNavigation;
 
 const char kTestUrl1[] = "https://www.google.com/";
 const char kTestUrl2[] = "https://www.example.com/";
@@ -87,6 +92,9 @@ class UkmPageLoadMetricsObserverTest
     EXPECT_CALL(mock_network_quality_provider_, GetDownstreamThroughputKbps())
         .Times(AnyNumber())
         .WillRepeatedly(Return(int32_t()));
+    TemplateURLServiceFactory::GetInstance()->SetTestingFactoryAndUse(
+        profile(),
+        base::BindRepeating(&TemplateURLServiceFactory::BuildInstanceFor));
   }
 
   MockNetworkQualityProvider& mock_network_quality_provider() {
@@ -1511,6 +1519,102 @@ TEST_F(UkmPageLoadMetricsObserverTest,
     tester()->test_ukm_recorder().ExpectEntryMetric(
         kv.second.get(), PageLoad::kThirdPartyCookieBlockingEnabledForSiteName,
         false);
+  }
+}
+
+TEST_F(UkmPageLoadMetricsObserverTest, NotSearchOrHomePage) {
+  static const char kOtherURL[] = "https://www.other.com";
+
+  NavigateAndCommit(GURL(kOtherURL));
+
+  // Simulate closing the tab.
+  DeleteContents();
+
+  std::map<ukm::SourceId, ukm::mojom::UkmEntryPtr> merged_entries =
+      tester()->test_ukm_recorder().GetMergedEntriesByName(
+          GeneratedNavigation::kEntryName);
+  EXPECT_EQ(0ul, merged_entries.size());
+}
+
+TEST_F(UkmPageLoadMetricsObserverTest, HomePageReported) {
+  static const char kOtherURL[] = "https://www.homepage.com/";
+
+  Profile::FromBrowserContext(browser_context())
+      ->GetPrefs()
+      ->SetString(prefs::kHomePage, kOtherURL);
+
+  NavigateAndCommit(GURL(kOtherURL));
+
+  // Simulate closing the tab.
+  DeleteContents();
+
+  std::map<ukm::SourceId, ukm::mojom::UkmEntryPtr> merged_entries =
+      tester()->test_ukm_recorder().GetMergedEntriesByName(
+          GeneratedNavigation::kEntryName);
+  EXPECT_EQ(1ul, merged_entries.size());
+
+  for (const auto& kv : merged_entries) {
+    tester()->test_ukm_recorder().ExpectEntrySourceHasUrl(kv.second.get(),
+                                                          GURL(kOtherURL));
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(),
+        GeneratedNavigation::kFirstURLIsDefaultSearchEngineName, false);
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(),
+        GeneratedNavigation::kFinalURLIsDefaultSearchEngineName, false);
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(), GeneratedNavigation::kFirstURLIsHomePageName, true);
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(), GeneratedNavigation::kFinalURLIsHomePageName, true);
+  }
+}
+
+TEST_F(UkmPageLoadMetricsObserverTest, DefaultSearchReported) {
+  static const char kShortName[] = "test";
+  static const char kSearchURL[] =
+      "https://www.searchurl.com/search?q={searchTerms}";
+  static const char kSearchURLWithQuery[] =
+      "https://www.searchurl.com/search?q=somequery";
+
+  TemplateURLService* model = TemplateURLServiceFactory::GetForProfile(
+      Profile::FromBrowserContext(browser_context()));
+  ASSERT_TRUE(model);
+  search_test_utils::WaitForTemplateURLServiceToLoad(model);
+  ASSERT_TRUE(model->loaded());
+
+  TemplateURLData data;
+  data.SetShortName(base::ASCIIToUTF16(kShortName));
+  data.SetKeyword(data.short_name());
+  data.SetURL(kSearchURL);
+
+  // Set the DSE to the test URL.
+  TemplateURL* template_url = model->Add(std::make_unique<TemplateURL>(data));
+  ASSERT_TRUE(template_url);
+  model->SetUserSelectedDefaultSearchProvider(template_url);
+
+  NavigateAndCommit(GURL(kSearchURLWithQuery));
+
+  // Simulate closing the tab.
+  DeleteContents();
+
+  std::map<ukm::SourceId, ukm::mojom::UkmEntryPtr> merged_entries =
+      tester()->test_ukm_recorder().GetMergedEntriesByName(
+          GeneratedNavigation::kEntryName);
+  EXPECT_EQ(1ul, merged_entries.size());
+
+  for (const auto& kv : merged_entries) {
+    tester()->test_ukm_recorder().ExpectEntrySourceHasUrl(
+        kv.second.get(), GURL(kSearchURLWithQuery));
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(),
+        GeneratedNavigation::kFirstURLIsDefaultSearchEngineName, true);
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(),
+        GeneratedNavigation::kFinalURLIsDefaultSearchEngineName, true);
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(), GeneratedNavigation::kFirstURLIsHomePageName, false);
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(), GeneratedNavigation::kFinalURLIsHomePageName, false);
   }
 }
 
