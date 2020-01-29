@@ -4,13 +4,15 @@
 
 package org.chromium.media;
 
+import android.content.Context;
 import android.graphics.ImageFormat;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import org.chromium.base.ContextUtils;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.ui.display.DisplayAndroid;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -155,9 +157,25 @@ public abstract class VideoCapture {
     }
 
     protected final int getDeviceRotation() {
-        DisplayAndroid display =
-                DisplayAndroid.getNonMultiDisplay(ContextUtils.getApplicationContext());
-        return display.getRotationDegrees();
+        final int orientation;
+        WindowManager wm = (WindowManager) ContextUtils.getApplicationContext().getSystemService(
+                Context.WINDOW_SERVICE);
+        switch (wm.getDefaultDisplay().getRotation()) {
+            case Surface.ROTATION_90:
+                orientation = 90;
+                break;
+            case Surface.ROTATION_180:
+                orientation = 180;
+                break;
+            case Surface.ROTATION_270:
+                orientation = 270;
+                break;
+            case Surface.ROTATION_0:
+            default:
+                orientation = 0;
+                break;
+        }
+        return orientation;
     }
 
     // {@link VideoCaptureJni.get().onPhotoTaken()} needs to be called back if there's any
