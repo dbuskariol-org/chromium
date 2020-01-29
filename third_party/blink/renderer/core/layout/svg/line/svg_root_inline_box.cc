@@ -103,10 +103,10 @@ FloatRect SVGRootInlineBox::LayoutInlineBoxes(InlineBox& box) {
   box.SetLogicalWidth(logical_rect.Width());
   if (box.IsSVGInlineTextBox())
     ToSVGInlineTextBox(box).SetLogicalHeight(logical_rect.Height());
-  else if (box.IsSVGInlineFlowBox())
-    ToSVGInlineFlowBox(box).SetLogicalHeight(logical_rect.Height());
+  else if (auto* svg_inline_flow_box = DynamicTo<SVGInlineFlowBox>(box))
+    svg_inline_flow_box->SetLogicalHeight(logical_rect.Height());
   else
-    ToSVGRootInlineBox(box).SetLogicalHeight(logical_rect.Height());
+    To<SVGRootInlineBox>(box).SetLogicalHeight(logical_rect.Height());
 
   return rect;
 }

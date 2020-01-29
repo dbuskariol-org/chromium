@@ -957,7 +957,7 @@ RootInlineBox* LayoutBlockFlow::CreateLineBoxesFromBidiRuns(
   // text selection in RTL boxes would not work as expected.
   if (is_svg_root_inline_box) {
     DCHECK(IsSVGText());
-    ToSVGRootInlineBox(line_box)->ComputePerCharacterLayoutInformation();
+    To<SVGRootInlineBox>(line_box)->ComputePerCharacterLayoutInformation();
   }
 
   // Compute our overflow now.

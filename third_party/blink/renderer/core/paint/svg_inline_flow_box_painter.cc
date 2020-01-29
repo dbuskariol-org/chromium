@@ -24,8 +24,8 @@ void SVGInlineFlowBoxPainter::PaintSelectionBackground(
     if (child->IsSVGInlineTextBox())
       SVGInlineTextBoxPainter(*ToSVGInlineTextBox(child))
           .PaintSelectionBackground(child_paint_info);
-    else if (child->IsSVGInlineFlowBox())
-      SVGInlineFlowBoxPainter(*ToSVGInlineFlowBox(child))
+    else if (auto* svg_inline_flow_box = DynamicTo<SVGInlineFlowBox>(child))
+      SVGInlineFlowBoxPainter(*svg_inline_flow_box)
           .PaintSelectionBackground(child_paint_info);
   }
 }

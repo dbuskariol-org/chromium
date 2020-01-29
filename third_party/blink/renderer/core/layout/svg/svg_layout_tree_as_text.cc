@@ -408,7 +408,7 @@ static WTF::TextStream& operator<<(WTF::TextStream& ts,
 
 static void WriteLayoutSVGTextBox(WTF::TextStream& ts,
                                   const LayoutSVGText& text) {
-  SVGRootInlineBox* box = ToSVGRootInlineBox(text.FirstRootBox());
+  auto* box = To<SVGRootInlineBox>(text.FirstRootBox());
   if (!box)
     return;
 

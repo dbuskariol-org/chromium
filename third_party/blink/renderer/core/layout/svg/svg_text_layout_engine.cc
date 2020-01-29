@@ -272,7 +272,7 @@ void SVGTextLayoutEngine::LayoutCharactersInTextBoxes(InlineFlowBox* start) {
       if (!node)
         continue;
 
-      SVGInlineFlowBox* flow_box = ToSVGInlineFlowBox(child);
+      auto* flow_box = To<SVGInlineFlowBox>(child);
       bool is_text_path = IsA<SVGTextPathElement>(*node);
       if (is_text_path)
         BeginTextPathLayout(flow_box);
