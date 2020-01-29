@@ -9,6 +9,7 @@
 
 #include "base/bind.h"
 #include "chrome/android/features/vr/jni_headers/ArConsentDialog_jni.h"
+#include "chrome/browser/android/vr/android_vr_utils.h"
 #include "chrome/browser/android/vr/ar_jni_headers/ArCoreInstallUtils_jni.h"
 #include "chrome/browser/android/vr/arcore_device/arcore_device_provider.h"
 #include "device/vr/android/arcore/arcore_device_provider_factory.h"

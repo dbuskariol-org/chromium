@@ -5293,7 +5293,6 @@ jumbo_static_library("browser") {
       "vr/service/browser_xr_runtime.h",
       "vr/service/vr_service_impl.cc",
       "vr/service/vr_service_impl.h",
-      "vr/service/xr_consent_helper.cc",
       "vr/service/xr_consent_helper.h",
       "vr/service/xr_runtime_manager.cc",
       "vr/service/xr_runtime_manager.h",

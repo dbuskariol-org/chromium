@@ -16,6 +16,8 @@ static_library("vr_android") {
   sources = [
     "android_ui_gesture_target.cc",
     "android_ui_gesture_target.h",
+    "android_vr_utils.cc",
+    "android_vr_utils.h",
     "android_vsync_helper.cc",
     "android_vsync_helper.h",
     "autocomplete_controller.cc",
