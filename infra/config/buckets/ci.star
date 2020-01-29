@@ -2,14 +2,11 @@ load('//lib/builders.star', 'builder', 'cpu', 'defaults', 'goma', 'os')
 
 # Defaults that apply to all branch versions of the bucket
 
-luci.recipe.defaults.cipd_package.set(
-    'infra/recipe_bundles/chromium.googlesource.com/chromium/tools/build')
-
 defaults.build_numbers.set(True)
 defaults.configure_kitchen.set(True)
 defaults.cores.set(8)
 defaults.cpu.set(cpu.X86_64)
-defaults.executable.set(luci.recipe(name = 'chromium'))
+defaults.executable.set('recipe:chromium')
 defaults.execution_timeout.set(3 * time.hour)
 defaults.os.set(os.LINUX_DEFAULT)
 defaults.service_account.set(
@@ -47,7 +44,7 @@ XCODE_IOS_11_CACHE = swarming.cache(
 
 builder(
     name = 'android-avd-packager',
-    executable = luci.recipe(name = 'android/avd_packager'),
+    executable = 'recipe:android/avd_packager',
     properties = {
         'avd_configs': [
             'tools/android/avd/proto/generic_android23.textpb',
@@ -59,7 +56,7 @@ builder(
 
 builder(
     name = 'android-sdk-packager',
-    executable = luci.recipe(name = 'android/sdk_packager'),
+    executable = 'recipe:android/sdk_packager',
     service_account = 'chromium-cipd-builder@chops-service-accounts.iam.gserviceaccount.com',
     properties = {
         # We still package part of build-tools;25.0.2 to support
@@ -200,13 +197,13 @@ android_builder(
 
 android_builder(
     name = 'Deterministic Android',
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
 android_builder(
     name = 'Deterministic Android (dbg)',
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
@@ -297,7 +294,7 @@ android_builder(
     name = 'android-cronet-marshmallow-arm64-perf-rel',
     cores = None,
     cpu = None,
-    executable = luci.recipe(name = 'cronet'),
+    executable = 'recipe:cronet',
     notifies = ['cronet'],
     os = os.ANDROID,
 )
@@ -557,7 +554,7 @@ clang_builder(
 
 clang_builder(
     name = 'ToTLinuxCoverage',
-    executable = luci.recipe(name = 'chromium_clang_coverage_tot'),
+    executable = 'recipe:chromium_clang_coverage_tot',
 )
 
 clang_builder(
@@ -631,7 +628,7 @@ def clang_ios_builder(*, name, **kwargs):
       name = name,
       caches = [XCODE_IOS_11_CACHE],
       cores = None,
-      executable = luci.recipe(name = 'ios/unified_builder_tester'),
+      executable = 'recipe:ios/unified_builder_tester',
       os = os.MAC_10_14,
       ssd = True,
   )
@@ -670,7 +667,7 @@ clang_mac_builder(
 
 clang_mac_builder(
     name = 'ToTMacCoverage',
-    executable = luci.recipe(name = 'chromium_clang_coverage_tot'),
+    executable = 'recipe:chromium_clang_coverage_tot',
 )
 
 def dawn_builder(*, name, builderless=True, **kwargs):
@@ -857,7 +854,7 @@ fuzz_builder(
 
 fuzz_builder(
     name = 'Afl Upload Linux ASan',
-    executable = luci.recipe(name = 'chromium_afl'),
+    executable = 'recipe:chromium_afl',
 )
 
 fuzz_builder(
@@ -922,7 +919,7 @@ fuzz_builder(
 def fuzz_libfuzzer_builder(*, name, **kwargs):
   return fuzz_builder(
       name = name,
-      executable = luci.recipe(name = 'chromium_libfuzzer'),
+      executable = 'recipe:chromium_libfuzzer',
       **kwargs
   )
 
@@ -1001,7 +998,7 @@ def fyi_builder(
 
 fyi_builder(
     name = 'Closure Compilation Linux',
-    executable = luci.recipe(name = 'closure_compilation'),
+    executable = 'recipe:closure_compilation',
 )
 
 fyi_builder(
@@ -1121,7 +1118,7 @@ def fyi_celab_builder(*, name, **kwargs):
       name = name,
       mastername = 'chromium.fyi',
       os = os.WINDOWS_ANY,
-      executable = luci.recipe(name = 'celab'),
+      executable = 'recipe:celab',
       goma_backend = goma.backend.RBE_PROD,
       properties = {
           'exclude': 'chrome_only',
@@ -1209,7 +1206,7 @@ fyi_coverage_builder(
 def fyi_ios_builder(
     *,
     name,
-    executable=luci.recipe(name = 'ios/unified_builder_tester'),
+    executable='recipe:ios/unified_builder_tester',
     **kwargs):
   return fyi_builder(
       name = name,
@@ -1223,7 +1220,7 @@ def fyi_ios_builder(
 
 fyi_ios_builder(
     name = 'ios-simulator-cr-recipe',
-    executable = luci.recipe(name = 'chromium'),
+    executable = 'recipe:chromium',
     properties = {
         'xcode_build_version': '11a1027',
     },
@@ -1280,14 +1277,14 @@ fyi_mac_builder(
 fyi_mac_builder(
     name = 'Mac deterministic',
     cores = None,
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
 fyi_mac_builder(
     name = 'Mac deterministic (dbg)',
     cores = None,
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
@@ -1805,21 +1802,21 @@ linux_builder(
 
 linux_builder(
     name = 'Deterministic Fuchsia (dbg)',
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
     goma_jobs = None,
 )
 
 linux_builder(
     name = 'Deterministic Linux',
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
 linux_builder(
     name = 'Deterministic Linux (dbg)',
     cores = 32,
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
@@ -1875,7 +1872,7 @@ linux_builder(
 
 linux_builder(
     name = 'linux_chromium_component_updater',
-    executable = luci.recipe(name = 'findit/chromium/update_components'),
+    executable = 'recipe:findit/chromium/update_components',
     service_account = 'component-mapping-updater@chops-service-accounts.iam.gserviceaccount.com'
 )
 
@@ -1910,7 +1907,7 @@ def mac_ios_builder(*, name, **kwargs):
   return mac_builder(
       name = name,
       caches = [XCODE_IOS_11_CACHE],
-      executable = luci.recipe(name = 'ios/unified_builder_tester'),
+      executable = 'recipe:ios/unified_builder_tester',
       goma_backend = None,
       os = os.MAC_ANY,
       **kwargs
@@ -2186,6 +2183,6 @@ win_builder(
 
 win_builder(
     name = 'Windows deterministic',
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )

@@ -1,13 +1,11 @@
 load('//lib/builders.star', 'builder', 'cpu', 'defaults', 'goma', 'os')
 
-luci.recipe.defaults.cipd_package.set('infra/recipe_bundles/chromium.googlesource.com/chromium/tools/build')
-
 defaults.bucket.set('try')
 defaults.build_numbers.set(True)
 defaults.configure_kitchen.set(True)
 defaults.cores.set(8)
 defaults.cpu.set(cpu.X86_64)
-defaults.executable.set(luci.recipe(name = 'chromium_trybot'))
+defaults.executable.set('recipe:chromium_trybot')
 defaults.execution_timeout.set(6 * time.hour)
 defaults.expiration_timeout.set(2 * time.hour)
 defaults.os.set(os.LINUX_DEFAULT)
@@ -432,4 +430,3 @@ gpu_win_builder(
     name = 'gpu-try-win10-nvidia-rel',
     pool = 'luci.chromium.gpu.win10.nvidia.try',
 )
-

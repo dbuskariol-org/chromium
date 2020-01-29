@@ -1,13 +1,12 @@
 load('//lib/builders.star', 'builder', 'cpu', 'defaults', 'goma', 'os')
 
 # Defaults that apply to all branch versions of the bucket
-luci.recipe.defaults.cipd_package.set('infra/recipe_bundles/chromium.googlesource.com/chromium/tools/build')
 
 defaults.build_numbers.set(True)
 defaults.configure_kitchen.set(True)
 defaults.cores.set(8)
 defaults.cpu.set(cpu.X86_64)
-defaults.executable.set(luci.recipe(name = 'chromium_trybot'))
+defaults.executable.set('recipe:chromium_trybot')
 defaults.execution_timeout.set(4 * time.hour)
 # Max. pending time for builds. CQ considers builds pending >2h as timed
 # out: http://shortn/_8PaHsdYmlq. Keep this in sync.
@@ -108,7 +107,7 @@ android_builder(
 
 android_builder(
     name = 'android-binary-size',
-    executable = luci.recipe(name = 'binary_size_trybot'),
+    executable = 'recipe:binary_size_trybot',
     goma_jobs = goma.jobs.J150,
     tryjob = tryjob(),
 )
@@ -130,13 +129,13 @@ android_builder(
 
 android_builder(
     name = 'android-deterministic-dbg',
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
 android_builder(
     name = 'android-deterministic-rel',
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
@@ -798,7 +797,7 @@ linux_builder(
 
 linux_builder(
     name = 'closure_compilation',
-    executable = luci.recipe(name = 'closure_compilation'),
+    executable = 'recipe:closure_compilation',
     tryjob = tryjob(
         location_regexp = [
             '.+/[+]/third_party/closure_compiler/.+',
@@ -879,13 +878,13 @@ linux_builder(
 
 linux_builder(
     name = 'linux-clang-tidy-dbg',
-    executable = luci.recipe(name = 'tricium_clang_tidy_wrapper'),
+    executable = 'recipe:tricium_clang_tidy_wrapper',
     goma_jobs = goma.jobs.J150,
 )
 
 linux_builder(
     name = 'linux-clang-tidy-rel',
-    executable = luci.recipe(name = 'tricium_clang_tidy_wrapper'),
+    executable = 'recipe:tricium_clang_tidy_wrapper',
     goma_jobs = goma.jobs.J150,
 )
 
@@ -900,7 +899,7 @@ linux_builder(
 
 linux_builder(
     name = 'linux-libfuzzer-asan-rel',
-    executable = luci.recipe(name = 'chromium_libfuzzer_trybot'),
+    executable = 'recipe:chromium_libfuzzer_trybot',
     tryjob = tryjob(),
 )
 
@@ -959,7 +958,7 @@ linux_builder(
 
 linux_builder(
     name = 'linux_chromium_clobber_deterministic',
-    executable = luci.recipe(name = 'swarming/deterministic_build'),
+    executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
@@ -1066,7 +1065,7 @@ linux_builder(
     name = 'linux_upload_clang',
     builderless = True,
     cores = 32,
-    executable = luci.recipe(name = 'chromium_upload_clang'),
+    executable = 'recipe:chromium_upload_clang',
     goma_backend = None,
     os = os.LINUX_TRUSTY,
 )
@@ -1086,7 +1085,7 @@ linux_builder(
 
 linux_builder(
     name = 'tricium-metrics-analysis',
-    executable = luci.recipe(name = 'tricium_metrics'),
+    executable = 'recipe:tricium_metrics',
 )
 
 
@@ -1166,7 +1165,7 @@ mac_builder(
             path = 'xcode_mac_9a235.app',
         ),
     ],
-    executable = luci.recipe(name = 'chromium_upload_clang'),
+    executable = 'recipe:chromium_upload_clang',
     execution_timeout = 6 * time.hour,
     goma_backend = None,  # Does not use Goma.
     properties = {
@@ -1177,7 +1176,7 @@ mac_builder(
 )
 
 
-def mac_ios_builder(*, name, executable=luci.recipe(name = 'ios/try'), **kwargs):
+def mac_ios_builder(*, name, executable='recipe:ios/try', **kwargs):
   return try_builder(
       name = name,
       caches = [
@@ -1203,7 +1202,7 @@ mac_ios_builder(
 
 mac_ios_builder(
     name = 'ios-simulator-cr-recipe',
-    executable = luci.recipe(name = 'chromium_trybot'),
+    executable = 'recipe:chromium_trybot',
     properties = {
         'xcode_build_version': '11a1027',
     },
@@ -1356,7 +1355,7 @@ win_builder(
 
 win_builder(
     name = 'win-celab-try-rel',
-    executable = luci.recipe(name = 'celab'),
+    executable = 'recipe:celab',
     properties = {
         'exclude': 'chrome_only',
         'pool_name': 'celab-chromium-try',
@@ -1368,7 +1367,7 @@ win_builder(
 win_builder(
     name = 'win-libfuzzer-asan-rel',
     builderless = False,
-    executable = luci.recipe(name = 'chromium_libfuzzer_trybot'),
+    executable = 'recipe:chromium_libfuzzer_trybot',
     os = os.WINDOWS_ANY,
     tryjob = tryjob(),
 )
@@ -1430,7 +1429,7 @@ win_builder(
     name = 'win_upload_clang',
     builderless = False,
     cores = 32,
-    executable = luci.recipe(name = 'chromium_upload_clang'),
+    executable = 'recipe:chromium_upload_clang',
     goma_backend = None,
     os = os.WINDOWS_ANY,
 )

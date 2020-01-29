@@ -165,7 +165,7 @@ def linux_builder(*, name, **kwargs):
 
 linux_builder(
     name = 'chromium_presubmit',
-    executable = luci.recipe(name = 'presubmit'),
+    executable = 'recipe:presubmit',
     properties = {
         '$depot_tools/presubmit': {
             'runhooks': True,
@@ -211,7 +211,7 @@ mac_builder(
     tryjob = tryjob(),
 )
 
-def mac_ios_builder(*, name, executable=luci.recipe(name = 'ios/try'), **kwargs):
+def mac_ios_builder(*, name, executable='recipe:ios/try', **kwargs):
   return try_builder(
       name = name,
       caches = [

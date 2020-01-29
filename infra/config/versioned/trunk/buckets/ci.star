@@ -239,7 +239,7 @@ def mac_ios_builder(*, name, **kwargs):
   return mac_builder(
       name = name,
       caches = [XCODE_IOS_11_CACHE],
-      executable = luci.recipe(name = 'ios/unified_builder_tester'),
+      executable = 'recipe:ios/unified_builder_tester',
       goma_backend = None,
       os = os.MAC_ANY,
       **kwargs
