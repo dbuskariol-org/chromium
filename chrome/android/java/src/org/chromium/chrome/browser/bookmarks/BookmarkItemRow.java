@@ -64,7 +64,7 @@ public class BookmarkItemRow extends BookmarkRow implements LargeIconCallback {
     BookmarkItem setBookmarkId(BookmarkId bookmarkId) {
         BookmarkItem item = super.setBookmarkId(bookmarkId);
         mUrl = item.getUrl();
-        mIconView.setImageDrawable(null);
+        mStartIconView.setImageDrawable(null);
         mTitleView.setText(item.getTitle());
         mDescriptionView.setText(item.getUrlForDisplay());
         mDelegate.getLargeIconBridge().getLargeIconForUrl(mUrl, mMinIconSize, this);
@@ -78,6 +78,6 @@ public class BookmarkItemRow extends BookmarkRow implements LargeIconCallback {
             @IconType int iconType) {
         Drawable iconDrawable = FaviconUtils.getIconDrawableWithoutFilter(
                 icon, mUrl, fallbackColor, mIconGenerator, getResources(), mDisplayedIconSize);
-        setIconDrawable(iconDrawable);
+        setStartIconDrawable(iconDrawable);
     }
 }

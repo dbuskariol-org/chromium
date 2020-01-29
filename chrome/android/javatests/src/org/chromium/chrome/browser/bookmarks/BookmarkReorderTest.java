@@ -91,11 +91,12 @@ public class BookmarkReorderTest extends BookmarkTest {
         BookmarkRow test =
                 (BookmarkRow) mItemsContainer.findViewHolderForAdapterPosition(2).itemView;
         View testMoreButton = test.findViewById(R.id.more);
-        View testDragHandle = test.findViewById(R.id.drag_handle);
+        View testDragHandle = test.getDragHandleViewForTests();
 
-        View testFolderA = mItemsContainer.findViewHolderForAdapterPosition(1).itemView;
+        BookmarkRow testFolderA =
+                (BookmarkRow) mItemsContainer.findViewHolderForAdapterPosition(1).itemView;
         View aMoreButton = testFolderA.findViewById(R.id.more);
-        View aDragHandle = testFolderA.findViewById(R.id.drag_handle);
+        View aDragHandle = testFolderA.getDragHandleViewForTests();
 
         toggleSelectionAndEndAnimation(testId, test);
 
@@ -137,11 +138,11 @@ public class BookmarkReorderTest extends BookmarkTest {
         BookmarkRow test =
                 (BookmarkRow) mItemsContainer.findViewHolderForAdapterPosition(2).itemView;
         View testMoreButton = test.findViewById(R.id.more);
-        View testDragHandle = test.findViewById(R.id.drag_handle);
+        View testDragHandle = test.getDragHandleViewForTests();
 
-        View a = mItemsContainer.findViewHolderForAdapterPosition(1).itemView;
+        BookmarkRow a = (BookmarkRow) mItemsContainer.findViewHolderForAdapterPosition(1).itemView;
         View aMoreButton = a.findViewById(R.id.more);
-        View aDragHandle = a.findViewById(R.id.drag_handle);
+        View aDragHandle = a.getDragHandleViewForTests();
 
         TestThreadUtils.runOnUiThreadBlocking(searchButton::performClick);
 
