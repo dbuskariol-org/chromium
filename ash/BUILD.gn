@@ -939,6 +939,8 @@ component("ash") {
     "system/session/logout_confirmation_dialog.h",
     "system/session/session_limit_notification_controller.cc",
     "system/session/session_limit_notification_controller.h",
+    "system/session/shutdown_confirmation_dialog.cc",
+    "system/session/shutdown_confirmation_dialog.h",
     "system/status_area_layout_manager.cc",
     "system/status_area_layout_manager.h",
     "system/status_area_widget.cc",

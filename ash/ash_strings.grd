@@ -1575,6 +1575,12 @@ This file contains the strings for ash.
       <message name="IDS_ASH_YES_BUTTON" desc="The text for the button on a dialog OK button that agrees to the contents of the dialog.">
         Yes
       </message>
+      <message name="IDS_ASH_SHUTDOWN_CONFIRMATION_OK_BUTTON" desc="The text for the OK button in the shutdown confirmation dialog.">
+        Restart
+      </message>
+      <message name="IDS_ASH_SHUTDOWN_CONFIRMATION_CANCEL_BUTTON" desc="The text for the Cancel button in the shutdown confirmation dialog.">
+        Do it later
+      </message>
 
       <message name="IDS_ASH_AUTO_NIGHT_LIGHT_NOTIFY_TITLE" desc="The title of the notification shown when Night Light turns on automatically when the auto-night-light feature is enabled.">
         Night Light turns on automatically at sunset
