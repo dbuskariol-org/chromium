@@ -558,6 +558,11 @@ bool FillWithMembers(
     v8::Isolate* isolate,
     v8::Local<v8::Object> creation_context,
     v8::Local<v8::Object> v8_dictionary) const override;
+
+void FillMembersInternal(
+    v8::Isolate* isolate,
+    v8::Local<v8::Object> v8_dictionary,
+    ExceptionState& exception_state);
 """))
 
     private_section = class_def.private_section
@@ -571,10 +576,6 @@ bool FillWithOwnMembers(
     v8::Local<v8::Object> v8_dictionary) const;
 
 void FillMembers(
-    v8::Isolate* isolate,
-    v8::Local<v8::Object> v8_dictionary,
-    ExceptionState& exception_state);
-void FillMembersInternal(
     v8::Isolate* isolate,
     v8::Local<v8::Object> v8_dictionary,
     ExceptionState& exception_state);
