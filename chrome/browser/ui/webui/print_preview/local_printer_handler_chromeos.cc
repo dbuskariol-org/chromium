@@ -26,7 +26,6 @@
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/webui/print_preview/print_preview_utils.h"
 #include "chrome/common/pref_names.h"
-#include "chrome/common/webui_url_constants.h"
 #include "chromeos/dbus/dbus_thread_manager.h"
 #include "chromeos/dbus/debug_daemon/debug_daemon_client.h"
 #include "chromeos/printing/printer_configuration.h"
@@ -267,7 +266,7 @@ void LocalPrinterHandlerChromeos::OnResolvedEulaUrl(
     return;
   }
 
-  GURL eula_url(chrome::kChromeUIOSCreditsURL + license);
+  GURL eula_url = chromeos::PrinterConfigurer::GeneratePrinterEulaUrl(license);
   std::move(cb).Run(eula_url.spec());
 }
 
