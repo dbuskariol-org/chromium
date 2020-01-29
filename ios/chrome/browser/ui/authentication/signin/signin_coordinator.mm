@@ -2,7 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/ui/authentication/signin/signin_coordinator.h"
+#import "ios/chrome/browser/ui/authentication/signin/signin_coordinator.h"
+
+#import "ios/chrome/browser/ui/authentication/signin/add_account_signin/add_account_signin_coordinator.h"
+#import "ios/chrome/browser/ui/authentication/signin/advanced_settings_signin/advanced_settings_signin_coordinator.h"
+#import "ios/chrome/browser/ui/authentication/signin/user_signin/user_signin_coordinator.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
@@ -20,36 +24,45 @@ using signin_metrics::PromoAction;
                                        identity:(ChromeIdentity*)identity
                                     accessPoint:(AccessPoint)accessPoint
                                     promoAction:(PromoAction)promoAction {
-  // TODO(crbug.com/971989): Needs implementation.
-  NOTIMPLEMENTED();
-  return nil;
+  return
+      [[UserSigninCoordinator alloc] initWithBaseViewController:viewController
+                                                        browser:browser
+                                                       identity:identity
+                                                    accessPoint:accessPoint
+                                                    promoAction:promoAction];
 }
 
 + (instancetype)
     firstRunCoordinatorWithBaseViewController:(UIViewController*)viewController
                                       browser:(Browser*)browser
                                 syncPresenter:(id<SyncPresenter>)syncPresenter {
-  // TODO(crbug.com/971989): Needs implementation.
-  NOTIMPLEMENTED();
-  return nil;
+  return [[UserSigninCoordinator alloc]
+      initWithBaseViewController:viewController
+                         browser:browser
+                        identity:nil
+                     accessPoint:AccessPoint::ACCESS_POINT_START_PAGE
+                     promoAction:PromoAction::PROMO_ACTION_NO_SIGNIN_PROMO];
 }
 
 + (instancetype)
     upgradeSigninPromoCoordinatorWithBaseViewController:
         (UIViewController*)viewController
                                                 browser:(Browser*)browser {
-  // TODO(crbug.com/971989): Needs implementation.
-  NOTIMPLEMENTED();
-  return nil;
+  return [[UserSigninCoordinator alloc]
+      initWithBaseViewController:viewController
+                         browser:browser
+                        identity:nil
+                     accessPoint:AccessPoint::ACCESS_POINT_SIGNIN_PROMO
+                     promoAction:PromoAction::PROMO_ACTION_NO_SIGNIN_PROMO];
 }
 
 + (instancetype)
     advancedSettingsSigninCoordinatorWithBaseViewController:
         (UIViewController*)viewController
                                                     browser:(Browser*)browser {
-  // TODO(crbug.com/971989): Needs implementation.
-  NOTIMPLEMENTED();
-  return nil;
+  return [[AdvancedSettingsSigninCoordinator alloc]
+      initWithBaseViewController:viewController
+                         browser:browser];
 }
 
 + (instancetype)addAccountCoordinatorWithBaseViewController:
@@ -57,9 +70,11 @@ using signin_metrics::PromoAction;
                                                     browser:(Browser*)browser
                                                 accessPoint:
                                                     (AccessPoint)accessPoint {
-  // TODO(crbug.com/971989): Needs implementation.
-  NOTIMPLEMENTED();
-  return nil;
+  return [[AddAccountSigninCoordinator alloc]
+      initWithBaseViewController:viewController
+                         browser:browser
+                     accessPoint:accessPoint
+                     promoAction:PromoAction::PROMO_ACTION_NO_SIGNIN_PROMO];
 }
 
 + (instancetype)
@@ -69,9 +84,11 @@ using signin_metrics::PromoAction;
 
                                           accessPoint:(AccessPoint)accessPoint
                                           promoAction:(PromoAction)promoAction {
-  // TODO(crbug.com/971989): Needs implementation.
-  NOTIMPLEMENTED();
-  return nil;
+  return [[AddAccountSigninCoordinator alloc]
+      initWithBaseViewController:viewController
+                         browser:browser
+                     accessPoint:accessPoint
+                     promoAction:PromoAction::PROMO_ACTION_NO_SIGNIN_PROMO];
 }
 
 - (void)interruptWithAction:(SigninCoordinatorInterruptAction)action

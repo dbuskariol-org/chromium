@@ -25,5 +25,10 @@ source_set("signin_headers") {
 source_set("signin_impl") {
   configs += [ "//build/config/compiler:enable_arc" ]
   sources = [ "signin_coordinator.mm" ]
-  deps = [ ":signin_headers" ]
+  deps = [
+    ":signin_headers",
+    "//ios/chrome/browser/ui/authentication/signin/add_account_signin",
+    "//ios/chrome/browser/ui/authentication/signin/advanced_settings_signin",
+    "//ios/chrome/browser/ui/authentication/signin/user_signin",
+  ]
 }
