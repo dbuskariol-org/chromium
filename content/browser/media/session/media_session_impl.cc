@@ -316,6 +316,11 @@ void MediaSessionImpl::DidUpdateFaviconURL(
     observer->MediaSessionImagesChanged(this->images_);
 }
 
+void MediaSessionImpl::MediaPictureInPictureChanged(
+    bool is_picture_in_picture) {
+  RebuildAndNotifyMediaSessionInfoChanged();
+}
+
 bool MediaSessionImpl::AddPlayer(MediaSessionPlayerObserver* observer,
                                  int player_id,
                                  media::MediaContentType media_content_type) {
@@ -922,6 +927,13 @@ MediaSessionImpl::GetMediaSessionInfoSync() {
 
   // If the browser context is off the record then it should be sensitive.
   info->is_sensitive = web_contents()->GetBrowserContext()->IsOffTheRecord();
+
+  info->picture_in_picture_state =
+      web_contents()->HasPictureInPictureVideo()
+          ? media_session::mojom::MediaPictureInPictureState::
+                kInPictureInPicture
+          : media_session::mojom::MediaPictureInPictureState::
+                kNotInPictureInPicture;
 
   return info;
 }
