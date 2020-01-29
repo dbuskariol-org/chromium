@@ -21,8 +21,8 @@
     <div id="main-message">
       <h1 id="block-page-header">$i18n{blockPageHeader}</h1>
       <p id="block-page-message">$i18n{blockPageMessage}</p>
-      <h1 id="request-failed-message" hidden>$i18n{requestFailedMessage}</h1>
-      <h1 id="request-sent-message" hidden>$i18n{requestSentMessage}</h1>
+      <h1 id="request-failed-message" role="alert" hidden>$i18n{requestFailedMessage}</h1>
+      <h1 id="request-sent-message" role="alert" hidden>$i18n{requestSentMessage}</h1>
     </div>
     <div id="custodians-information" hidden>
       <div id="custodian-information" class="custodian-information">
@@ -58,7 +58,7 @@
     </button>
   </div>
   <div id="details" hidden>
-    <p id="details-header">$i18n{blockReasonHeader}</p>
+    <p id="details-header" role="alert" >$i18n{blockReasonHeader}</p>
     <p id="feedback">$i18nRaw{feedbackLink}</p>
   </div>
 </div>

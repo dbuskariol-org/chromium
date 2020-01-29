@@ -117,7 +117,10 @@ function initialize() {
  */
 function setRequestStatus(isSuccessful, isMainFrame) {
   console.log('setRequestStatus(' + isSuccessful +')');
-  requestCreated(isSuccessful, isMainFrame)
+  requestCreated(isSuccessful, isMainFrame);
+  if (isSuccessful) {
+    $('back-button').focus();
+  }
 }
 
 /**
