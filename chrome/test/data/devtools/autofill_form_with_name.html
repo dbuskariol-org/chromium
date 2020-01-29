@@ -9,12 +9,14 @@ function run()
         console.log("ready");
         return;
     }
-    document.getElementById("name").value = "Abbf";
-    document.getElementById("submit").click();
+}
+function send()
+{
+  document.getElementById("submit").click();
 }
 </script>
 </head>
-<body onload="run()">
+<body onload="run()" onclick="send()">
     <form action="?" onsubmit="this.action += window.location.hash">
         <input type="text" id="name" name="name" value="" />
         <input type="submit" id="submit" value="submit" />
