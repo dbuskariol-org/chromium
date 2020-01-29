@@ -52,6 +52,7 @@ class X11MoveLoop;
 // handles the views drag events.
 class VIEWS_EXPORT DesktopDragDropClientAuraX11
     : public ui::XDragDropClient,
+      public ui::XDragDropClient::Delegate,
       public aura::client::DragDropClient,
       public ui::PlatformEventDispatcher,
       public aura::WindowObserver,
@@ -113,9 +114,9 @@ class VIEWS_EXPORT DesktopDragDropClientAuraX11
   // then unsubscribes |target_window_| from ourselves and forgets it.
   void NotifyDragLeave();
 
-  // ui::XDragDropClient
+  // ui::XDragDropClient::Delegate
   std::unique_ptr<ui::XTopmostWindowFinder> CreateWindowFinder() override;
-  int GetDragOperation(const gfx::Point& screen_point) override;
+  int UpdateDrag(const gfx::Point& screen_point) override;
   void UpdateCursor(
       ui::DragDropTypes::DragOperation negotiated_operation) override;
   ui::SelectionFormatMap GetFormatMap() const override;

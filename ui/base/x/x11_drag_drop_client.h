@@ -28,6 +28,50 @@ DragDropTypes::DragOperation AtomToDragOperation(Atom atom);
 
 class COMPONENT_EXPORT(UI_BASE_X) XDragDropClient {
  public:
+  // Handlers and callbacks that should be implemented at the consumer side.
+  class Delegate {
+   public:
+    // Creates the window finder.
+    virtual std::unique_ptr<XTopmostWindowFinder> CreateWindowFinder() = 0;
+
+    // Updates the drag status by the new position.  Returns the drag operation
+    // possible at that position.
+    //
+    // Handling XdndPosition can be paused while waiting for more data; this is
+    // called either synchronously from OnXdndPosition, or asynchronously after
+    // we've received data requested from the other window.
+    virtual int UpdateDrag(const gfx::Point& screen_point) = 0;
+
+    // Updates the mouse cursor shape.
+    virtual void UpdateCursor(
+        DragDropTypes::DragOperation negotiated_operation) = 0;
+
+    // Returns a representation of the data we're offering in this drag.  This
+    // is done to bypass an asynchronous roundtrip with the X11 server.
+    virtual SelectionFormatMap GetFormatMap() const = 0;
+
+    // Extracts available targets from the data provider.
+    virtual void RetrieveTargets(std::vector<Atom>* targets) const = 0;
+
+    // Called when data from another application enters the window.
+    virtual void OnBeginForeignDrag(XID window) = 0;
+
+    // Called when data from another application is about to leave the window.
+    virtual void OnEndForeignDrag() = 0;
+
+    // Called just before the drag leaves the window.
+    virtual void OnBeforeDragLeave() = 0;
+
+    // Drops data at the current location and returns the resulting operation.
+    virtual int PerformDrop() = 0;
+
+    // Called to end the move loop that is maintained by the subclass.
+    virtual void EndMoveLoop() = 0;
+
+   protected:
+    virtual ~Delegate() {}
+  };
+
   // Handling XdndPosition can be paused while waiting for more data; this is
   // called either synchronously from OnXdndPosition, or asynchronously after
   // we've received data requested from the other window.
@@ -70,47 +114,11 @@ class COMPONENT_EXPORT(UI_BASE_X) XDragDropClient {
     kOther,
   };
 
-  XDragDropClient(Display* xdisplay, XID xwindow);
+  XDragDropClient(Delegate* delegate, Display* xdisplay, XID xwindow);
   virtual ~XDragDropClient();
 
   XDragDropClient(const XDragDropClient&) = delete;
   XDragDropClient& operator=(const XDragDropClient&) = delete;
-
-  // Handlers and callbacks that the subclass should implement.
-
-  // Creates the window finder.
-  virtual std::unique_ptr<XTopmostWindowFinder> CreateWindowFinder() = 0;
-
-  // Handling XdndPosition can be paused while waiting for more data; this is
-  // called either synchronously from OnXdndPosition, or asynchronously after
-  // we've received data requested from the other window.
-  virtual int GetDragOperation(const gfx::Point& screen_point) = 0;
-
-  // Updates the mouse cursor shape.
-  virtual void UpdateCursor(
-      DragDropTypes::DragOperation negotiated_operation) = 0;
-
-  // Returns a representation of the data we're offering in this drag.  This is
-  // done to bypass an asynchronous roundtrip with the X11 server.
-  virtual SelectionFormatMap GetFormatMap() const = 0;
-
-  // Extracts available targets from the data provider.
-  virtual void RetrieveTargets(std::vector<Atom>* targets) const = 0;
-
-  // Called when data from another application enters the window.
-  virtual void OnBeginForeignDrag(XID window) = 0;
-
-  // Called when data from another application is about to leave the window.
-  virtual void OnEndForeignDrag() = 0;
-
-  // Called just before the drag leaves the window.
-  virtual void OnBeforeDragLeave() = 0;
-
-  // Drops data at the current location and returns the resulting operation.
-  virtual int PerformDrop() = 0;
-
-  // Called to end the move loop that is maintained by the subclass.
-  virtual void EndMoveLoop() = 0;
 
   Display* xdisplay() const { return xdisplay_; }
   XID xwindow() const { return xwindow_; }
@@ -176,6 +184,10 @@ class COMPONENT_EXPORT(UI_BASE_X) XDragDropClient {
   // so that we'd able to short circuit sending X11 messages to windows in our
   // process.
   static XDragDropClient* GetForWindow(XID window);
+
+  void EndMoveLoop();
+
+  Delegate* const delegate_;
 
   Display* const xdisplay_;
   const XID xwindow_;

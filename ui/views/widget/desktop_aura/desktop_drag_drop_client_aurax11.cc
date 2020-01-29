@@ -183,10 +183,9 @@ DesktopDragDropClientAuraX11::DesktopDragDropClientAuraX11(
     views::DesktopNativeCursorManager* cursor_manager,
     ::Display* display,
     XID window)
-    : XDragDropClient(display, window),
+    : XDragDropClient(this, display, window),
       root_window_(root_window),
-      cursor_manager_(cursor_manager) {
-}
+      cursor_manager_(cursor_manager) {}
 
 DesktopDragDropClientAuraX11::~DesktopDragDropClientAuraX11() {
   // This is necessary when the parent native widget gets destroyed while a drag
@@ -432,15 +431,16 @@ DesktopDragDropClientAuraX11::CreateWindowFinder() {
   return std::make_unique<X11TopmostWindowFinder>();
 }
 
-int DesktopDragDropClientAuraX11::GetDragOperation(
-    const gfx::Point& screen_point) {
-  int drag_operation = ui::DragDropTypes::DRAG_NONE;
+int DesktopDragDropClientAuraX11::UpdateDrag(const gfx::Point& screen_point) {
+  // The drop target event holds a reference to data, that's why we have to hold
+  // the data until the event is passed and handled.
   std::unique_ptr<ui::OSExchangeData> data;
   std::unique_ptr<ui::DropTargetEvent> drop_target_event;
   DragDropDelegate* delegate = nullptr;
   DragTranslate(screen_point, &data, &drop_target_event, &delegate);
-  if (delegate)
-    drag_operation = delegate->OnDragUpdated(*drop_target_event);
+  int drag_operation =
+      delegate ? drag_operation = delegate->OnDragUpdated(*drop_target_event)
+               : ui::DragDropTypes::DRAG_NONE;
   UMA_HISTOGRAM_BOOLEAN("Event.DragDrop.AcceptDragUpdate",
                         drag_operation != ui::DragDropTypes::DRAG_NONE);
 
