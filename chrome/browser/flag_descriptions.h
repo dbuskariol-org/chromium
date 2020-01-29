@@ -1988,6 +1988,9 @@ extern const char kFuzzyAppSearchDescription[];
 extern const char kGaiaActionButtonsName[];
 extern const char kGaiaActionButtonsDescription[];
 
+extern const char kHelpAppName[];
+extern const char kHelpAppDescription[];
+
 extern const char kHideArcMediaNotificationsName[];
 extern const char kHideArcMediaNotificationsDescription[];
 

@@ -3422,6 +3422,10 @@ const char kGaiaActionButtonsName[] =
 const char kGaiaActionButtonsDescription[] =
     "Enable primary/secondary action button on Gaia login screen.";
 
+extern const char kHelpAppName[] = "Help App";
+extern const char kHelpAppDescription[] =
+    "Enables the chrome://help-app System Web App (SWA)";
+
 const char kHideArcMediaNotificationsName[] = "Hide ARC media notifications";
 const char kHideArcMediaNotificationsDescription[] =
     "Hides media notifications for ARC apps. Requires "

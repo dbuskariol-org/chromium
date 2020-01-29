@@ -2405,6 +2405,11 @@
     "expiry_milestone": 82
   },
   {
+    "name": "help-app",
+    "owners": [ "//chromeos/components/help_app_ui/OWNERS" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "homepage-settings-ui-conversion",
     "owners": [ "wenyufu", "chrome-android-app@chromium.org" ],
     "expiry_milestone": 84

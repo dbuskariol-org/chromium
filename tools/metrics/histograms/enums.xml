@@ -37866,6 +37866,7 @@ from previous Chrome versions.
   <int value="-457174225" label="Av1Decoder:enabled"/>
   <int value="-456321929" label="ForceEnableSystemAec:disabled"/>
   <int value="-455203267" label="use_new_features_summary"/>
+  <int value="-454362199" label="HelpAppV2:disabled"/>
   <int value="-450976085"
       label="AutofillSaveCreditCardUsesImprovedMessaging:disabled"/>
   <int value="-449465495" label="disable-browser-task-scheduler"/>
@@ -39563,6 +39564,7 @@ from previous Chrome versions.
   <int value="1689123607" label="enable-app-link"/>
   <int value="1689183477" label="enable-merge-key-char-events"/>
   <int value="1689275095" label="InterestFeedFeedback:disabled"/>
+  <int value="1690248203" label="HelpAppV2:enabled"/>
   <int value="1690837904" label="save-previous-document-resources"/>
   <int value="1691568199" label="AndroidSpellCheckerNonLowEnd:disabled"/>
   <int value="1693094211" label="FilesNG:disabled"/>
