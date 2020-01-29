@@ -2741,8 +2741,6 @@ jumbo_static_library("ui") {
       "views/autofill/payments/save_card_sign_in_promo_bubble_views.h",
       "views/autofill/payments/save_upi_offer_bubble_views.cc",
       "views/autofill/payments/save_upi_offer_bubble_views.h",
-      "views/autofill/view_util.cc",
-      "views/autofill/view_util.h",
       "views/bookmarks/bookmark_bar_view.cc",
       "views/bookmarks/bookmark_bar_view.h",
       "views/bookmarks/bookmark_bar_view_observer.h",
