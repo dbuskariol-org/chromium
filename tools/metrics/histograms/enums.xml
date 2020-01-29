@@ -5019,6 +5019,16 @@ Unknown properties are collapsed to zero. -->
   <int value="30" label="ServiceWorker claim"/>
 </enum>
 
+<enum name="BackForwardCacheReloadsAfterHistoryNavigation">
+  <int value="0" label="NotServedFromBackForwardCache"/>
+  <int value="1" label="ServedFromBackForwardCache"/>
+</enum>
+
+<enum name="BackForwardCacheReloadsAndHistoryNavigations">
+  <int value="0" label="HistoryNavigation"/>
+  <int value="1" label="ReloadAfterHistoryNavigation"/>
+</enum>
+
 <enum name="BackForwardNavigationType">
   <int value="0" label="Fast back navigation with WKBackForwardList"/>
   <int value="1" label="Slow back navigation"/>
