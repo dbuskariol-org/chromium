@@ -105,9 +105,8 @@ def collect_include_headers_of_idl_types(idl_types):
             header_paths.add("third_party/blink/renderer/"
                              "platform/wtf/text/wtf_string.h")
         elif idl_type.is_buffer_source_type:
-            basename = name_style.file("DOM", idl_type.type_name)
             header_paths.add("third_party/blink/renderer/core/typed_arrays/"
-                             "{}.h".format(basename))
+                             "dom_typed_array.h")
             header_paths.add(
                 "third_party/blink/renderer/platform/heap/handle.h")
         elif idl_type.is_object or idl_type.is_any:

@@ -30,6 +30,7 @@ from .codegen_expr import expr_from_exposure
 from .codegen_format import format_template as _format
 from .codegen_utils import collect_include_headers_of_idl_types
 from .codegen_utils import component_export
+from .codegen_utils import component_export_header
 from .codegen_utils import enclose_with_header_guard
 from .codegen_utils import make_copyright_header
 from .codegen_utils import make_forward_declarations
@@ -662,6 +663,7 @@ def generate_dictionary(dictionary):
             [member.idl_type for member in dictionary.own_members]))
     header_node.accumulator.add_include_headers([
         base_class_header,
+        component_export_header(dictionary.components[0]),
         "v8/include/v8.h",
     ])
     header_node.accumulator.add_class_decls([
@@ -669,10 +671,12 @@ def generate_dictionary(dictionary):
         "Visitor",
     ])
     source_node.accumulator.add_include_headers([
+        "third_party/blink/renderer/bindings/core/v8/"
+        "native_value_traits_impl.h",
         "third_party/blink/renderer/platform/bindings/exception_messages.h",
         "third_party/blink/renderer/platform/bindings/exception_state.h",
+        "third_party/blink/renderer/platform/bindings/v8_per_isolate_data.h",
         "third_party/blink/renderer/platform/heap/visitor.h",
-        "v8/include/v8.h",
     ])
 
     header_node.extend([
