@@ -86,16 +86,19 @@ class QuickViewController {
       // Selection menu command can be triggered with focus outside of file list
       // or button e.g.: from the directory tree.
       if (event.command.id === 'get-info') {
+        event.stopPropagation();
         this.display_(QuickViewUma.WayToOpen.SELECTION_MENU);
       }
     });
     this.listContainer_.element.addEventListener('command', event => {
       if (event.command.id === 'get-info') {
+        event.stopPropagation();
         this.display_(QuickViewUma.WayToOpen.CONTEXT_MENU);
       }
     });
     selectionMenuButton.addEventListener('command', event => {
       if (event.command.id === 'get-info') {
+        event.stopPropagation();
         this.display_(QuickViewUma.WayToOpen.SELECTION_MENU);
       }
     });
