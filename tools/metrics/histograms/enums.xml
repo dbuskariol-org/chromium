@@ -1900,6 +1900,163 @@ Unknown properties are collapsed to zero. -->
   <int value="2" label="EXPERIMENT_ENABLED"/>
 </enum>
 
+<enum name="AndroidXWebkitApiCall">
+  <int value="0" label="ADD_WEB_MESSAGE_LISTENER">
+    WebViewCompat#addWebMessageListener(WebView,String,List(String),WebMessageListener)
+  </int>
+  <int value="1" label="CLEAR_PROXY_OVERRIDE">
+    ProxyController#clearProxyOverride(Executor,Runnable)
+  </int>
+  <int value="2" label="GET_PROXY_CONTROLLER">
+    ProxyController#getInstance()
+  </int>
+  <int value="3" label="GET_SAFE_BROWSING_PRIVACY_POLICY_URL">
+    WebViewCompat#getSafeBrowsingPrivacyPolicyUrl()
+  </int>
+  <int value="4" label="GET_SERVICE_WORKER_CONTROLLER">
+    ServiceWorkerControllerCompat#getInstance()
+  </int>
+  <int value="5" label="GET_SERVICE_WORKER_WEB_SETTINGS">
+    ServiceWorkerControllerCompat#getServiceWorkerWebSettings()
+  </int>
+  <int value="6" label="GET_TRACING_CONTROLLER">
+    TracingController#getInstance()
+  </int>
+  <int value="7" label="GET_WEBCHROME_CLIENT">
+    WebViewCompat#getWebchromeClient(WebView)
+  </int>
+  <int value="8" label="GET_WEBVIEW_CLIENT">
+    WebViewCompat#getWebViewClient(WebView)
+  </int>
+  <int value="9" label="GET_WEBVIEW_RENDERER">
+    WebViewCompat#getWebViewRenderer(WebView)
+  </int>
+  <int value="10" label="GET_WEBVIEW_RENDERER_CLIENT">
+    WebViewCompat#getWebViewRenderProcessClient(WebView)
+  </int>
+  <int value="11" label="INIT_SAFE_BROWSING">
+    WebViewCompat#startSafeBrowsing(Context,ValueCallback(Boolean))
+  </int>
+  <int value="12" label="INSERT_VISUAL_STATE_CALLBACK">
+    WebViewCompat#postVisualStateCallback(WebView,long,VisualStateCallback)
+  </int>
+  <int value="13" label="IS_MULTI_PROCESS_ENABLED">
+    WebViewCompat#isMultiProcessEnabled()
+  </int>
+  <int value="14" label="JS_REPLY_POST_MESSAGE">
+    JsReplyProxy#postMessage(String)
+  </int>
+  <int value="15" label="POST_MESSAGE_TO_MAIN_FRAME">
+    WebViewCompat#postWebMessage(WebView,WebMessageCompat,Uri)
+  </int>
+  <int value="16" label="REMOVE_WEB_MESSAGE_LISTENER">
+    WebViewCompat#removeWebMessageListener(WebView,String)
+  </int>
+  <int value="17" label="SERVICE_WORKER_SETTINGS_GET_ALLOW_CONTENT_ACCESS">
+    ServiceWorkerWebSettingsCompat#getAllowContentAccess()
+  </int>
+  <int value="18" label="SERVICE_WORKER_SETTINGS_GET_ALLOW_FILE_ACCESS">
+    ServiceWorkerWebSettingsCompat#getAllowFileAccess()
+  </int>
+  <int value="19" label="SERVICE_WORKER_SETTINGS_GET_BLOCK_NETWORK_LOADS">
+    ServiceWorkerWebSettingsCompat#getBlockNetworkLoads()
+  </int>
+  <int value="20" label="SERVICE_WORKER_SETTINGS_GET_CACHE_MODE">
+    ServiceWorkerWebSettingsCompat#getCacheMode()
+  </int>
+  <int value="21" label="SERVICE_WORKER_SETTINGS_SET_ALLOW_CONTENT_ACCESS">
+    ServiceWorkerWebSettingsCompat#setAllowContentAccess(boolean)
+  </int>
+  <int value="22" label="SERVICE_WORKER_SETTINGS_SET_ALLOW_FILE_ACCESS">
+    ServiceWorkerWebSettingsCompat#setAllowFileAccess(boolean)
+  </int>
+  <int value="23" label="SERVICE_WORKER_SETTINGS_SET_BLOCK_NETWORK_LOADS">
+    ServiceWorkerWebSettingsCompat#setBlockNetworkLoads(boolean)
+  </int>
+  <int value="24" label="SERVICE_WORKER_SETTINGS_SET_CACHE_MODE">
+    ServiceWorkerWebSettingsCompat#setCacheMode(int)
+  </int>
+  <int value="25" label="SET_PROXY_OVERRIDE">
+    ProxyController#setProxyOverride(Executor,Runnable)
+  </int>
+  <int value="26" label="SET_SAFE_BROWSING_WHITELIST">
+    WebViewCompat#setSafeBrowsingWhitelist(List(String),ValueCallback(Boolean))
+  </int>
+  <int value="27" label="SET_SERVICE_WORKER_CLIENT">
+    ServiceWorkerControllerCompat#setServiceWorkerClient(ServiceWorkerClientCompat)
+  </int>
+  <int value="28" label="SET_WEBVIEW_RENDERER_CLIENT">
+    WebViewCompat#setWebViewRenderProcessClient(WebView,WebViewRenderProcessClient)
+  </int>
+  <int value="29" label="TRACING_CONTROLLER_IS_TRACING">
+    TracingController#isTracing()
+  </int>
+  <int value="30" label="TRACING_CONTROLLER_START">
+    TracingController#start(TracingConfig)
+  </int>
+  <int value="31" label="TRACING_CONTROLLER_STOP">
+    TracingController#stop(OutputStream,Executor)
+  </int>
+  <int value="32" label="WEB_MESSAGE_GET_DATA">WebMessageCompat#getData()</int>
+  <int value="33" label="WEB_MESSAGE_GET_PORTS">
+    WebMessageCompat#getPorts()
+  </int>
+  <int value="34" label="WEB_MESSAGE_PORT_CLOSE">
+    WebMessagePortCompat#close()
+  </int>
+  <int value="35" label="WEB_MESSAGE_PORT_POST_MESSAGE">
+    WebMessagePortCompat#postMessage(WebMessageCompat)
+  </int>
+  <int value="36" label="WEB_MESSAGE_PORT_SET_CALLBACK">
+    WebMessagePortCompat#setCallback(WebMessageCallbackCompat)
+  </int>
+  <int value="37" label="WEB_MESSAGE_PORT_SET_CALLBACK_WITH_HANDLER">
+    WebMessagePortCompat#setCallback(Handler,WebMessageCallbackCompat)
+  </int>
+  <int value="38" label="WEB_RESOURCE_REQUEST_IS_REDIRECT">
+    WebResourceRequestCompat#isRedirect(WebResourceRequest)
+  </int>
+  <int value="39" label="WEB_SETTINGS_GET_DISABLED_ACTION_MODE_MENU_ITEMS">
+    WebSettingsCompat#getDisabledActionModeMenuItems(WebSettings)
+  </int>
+  <int value="40" label="WEB_SETTINGS_GET_FORCE_DARK">
+    WebSettingsCompat#getForceDark(WebSettings)
+  </int>
+  <int value="41" label="WEB_SETTINGS_GET_FORCE_DARK_BEHAVIOR">
+    WebSettingsCompat#getForceDarkStrategy(WebSettings)
+  </int>
+  <int value="42" label="WEB_SETTINGS_GET_OFFSCREEN_PRE_RASTER">
+    WebSettingsCompat#getOffscreenPreRaster(WebSettings)
+  </int>
+  <int value="43" label="WEB_SETTINGS_GET_SAFE_BROWSING_ENABLED">
+    WebSettingsCompat#getSafeBrowsingEnabled(WebSettings)
+  </int>
+  <int value="44" label="WEB_SETTINGS_GET_WILL_SUPPRESS_ERROR_PAGE">
+    WebSettingsCompat#willSuppressErrorPage(WebSettings)
+  </int>
+  <int value="45" label="WEB_SETTINGS_SET_DISABLED_ACTION_MODE_MENU_ITEMS">
+    WebSettingsCompat#setDisabledActionModeMenuItems(WebSettings,int)
+  </int>
+  <int value="46" label="WEB_SETTINGS_SET_FORCE_DARK">
+    WebSettingsCompat#setForceDark(WebSettings,int)
+  </int>
+  <int value="47" label="WEB_SETTINGS_SET_FORCE_DARK_BEHAVIOR">
+    WebSettingsCompat#setForceDarkStrategy(WebSettings,int)
+  </int>
+  <int value="48" label="WEB_SETTINGS_SET_OFFSCREEN_PRE_RASTER">
+    WebSettingsCompat#setOffscreenPreRaster(WebSettings,boolean)
+  </int>
+  <int value="49" label="WEB_SETTINGS_SET_SAFE_BROWSING_ENABLED">
+    WebSettingsCompat#setSafeBrowsingEnabled(WebSettings,boolean)
+  </int>
+  <int value="50" label="WEB_SETTINGS_SET_WILL_SUPPRESS_ERROR_PAGE">
+    WebSettingsCompat#setWillSuppressErrorPage(WebSettings,boolean)
+  </int>
+  <int value="51" label="WEBVIEW_RENDERER_TERMINATE">
+    WebViewRenderProcess#terminate()
+  </int>
+</enum>
+
 <enum name="ANGLEProgramCacheResult">
   <int value="0" label="Cache Miss"/>
   <int value="1" label="Cache Hit From Memory"/>
