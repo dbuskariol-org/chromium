@@ -6325,13 +6325,13 @@
   },
 
   "CloudReportingEnabled": {
-    "os": ["win", "linux", "mac"],
+    "os": ["win", "linux", "mac", "chromeos"],
     "policy_pref_mapping_test": [
       {
         "policies": {
           "CloudReportingEnabled": true
         },
-        "prefs": { "enterprise_reporting.chrome_cloud_reporting": {} }
+        "prefs": { "enterprise_reporting.chrome_cloud_reporting": { "local_state": true } }
       }
     ]
   },
