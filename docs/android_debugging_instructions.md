@@ -25,6 +25,9 @@ with:
 out/Default/bin/chrome_public_apk logcat [-v]  # Use -v to show logs for other processes
 ```
 
+If this doesn't display the logs you're looking for, try `adb logcat` with your system `adb`
+or the one in `//third_party/android_sdk/`.
+
 ### Warnings for Blink developers
 *   **Do not use fprintf or printf debugging!** This does not
     redirect to logcat.
