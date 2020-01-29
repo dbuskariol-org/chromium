@@ -440,6 +440,20 @@ public class SafeBrowsingTest {
         final String responseUrl = mTestServer.getURL(path);
         mActivityTestRule.loadUrlAsync(mAwContents, responseUrl);
         if (AwFeatureList.isEnabled(AwFeatures.SAFE_BROWSING_COMMITTED_INTERSTITIALS)) {
+            // Subresource triggered interstitials will trigger after the page containing the
+            // subresource has loaded (and displayed), so we first wait for the interstitial to be
+            // attached to the web contents, then for a visual state callback to allow the
+            // interstitial to render.
+            CriteriaHelper.pollUiThread(new Criteria() {
+                @Override
+                public boolean isSatisfied() {
+                    try {
+                        return mAwContents.isDisplayingInterstitialForTesting();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
             // Wait for the interstitial to actually render.
             mActivityTestRule.waitForVisualStateCallback(mAwContents);
         } else {
