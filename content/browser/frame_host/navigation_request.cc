@@ -1749,8 +1749,10 @@ void NavigationRequest::OnResponseStarted(
   if (render_frame_host_) {
     render_frame_host_->set_cross_origin_embedder_policy(
         cross_origin_embedder_policy);
-    render_frame_host_->set_cross_origin_opener_policy(
-        response_head_->cross_origin_opener_policy);
+    if (IsOriginSecure(common_params_->url)) {
+      render_frame_host_->set_cross_origin_opener_policy(
+          response_head_->cross_origin_opener_policy);
+    }
   }
 
   if (!browser_initiated_ && render_frame_host_ &&

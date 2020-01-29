@@ -590,7 +590,8 @@ class CONTENT_EXPORT RenderFrameHostManager
       const GURL& destination_effective_url,
       bool destination_is_view_source_mode,
       bool is_failure,
-      bool is_reload) const;
+      bool is_reload,
+      bool cross_origin_opener_policy_mismatch) const;
 
   // Returns the SiteInstance to use for the navigation.
   scoped_refptr<SiteInstance> GetSiteInstanceForNavigation(
@@ -603,7 +604,8 @@ class CONTENT_EXPORT RenderFrameHostManager
       bool is_reload,
       bool dest_is_restore,
       bool dest_is_view_source_mode,
-      bool was_server_redirect);
+      bool was_server_redirect,
+      bool cross_origin_opener_policy_mismatch);
 
   // Returns a descriptor of the appropriate SiteInstance object for the given
   // |dest_url|, possibly reusing the current, source or destination

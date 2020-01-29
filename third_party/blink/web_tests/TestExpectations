@@ -2831,9 +2831,6 @@ crbug.com/626703 [ Mac10.12 ] external/wpt/html/dom/idlharness.https.html?exclud
 crbug.com/626703 [ Mac10.10 ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.https.any.html?1001-2000 [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/mathml/relations/html5-tree/math-global-event-handlers.tentative.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] virtual/web-components-v0-disabled/external/wpt/html/dom/idlharness.https.html?include=HTML.\* [ Failure Timeout ]
-crbug.com/626703 [ Linux ] external/wpt/html/cross-origin-opener-policy/coep-blob-popup.https.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/html/cross-origin-opener-policy/coep-blob-popup.https.html [ Timeout ]
-crbug.com/626703 [ Win ] external/wpt/html/cross-origin-opener-policy/coep-blob-popup.https.html [ Timeout ]
 crbug.com/626703 [ Win7 ] external/wpt/pointerevents/pointerevent_touch-action-inherit_child-auto-child-none_touch.html [ Timeout ]
 crbug.com/626703 [ Win7 ] external/wpt/content-security-policy/object-src/object-src-no-url-allowed.html [ Timeout ]
 crbug.com/626703 [ Win7 ] external/wpt/content-security-policy/plugin-types/plugintypes-nourl-allowed.html [ Timeout ]
@@ -3925,7 +3922,6 @@ crbug.com/964181 external/wpt/css/css-text/word-break/word-break-break-all-inlin
 crbug.com/964181 external/wpt/css/css-text/word-break/word-break-break-all-inline-010.html [ Failure ]
 
 # Sheriff 2019-08-19:
-crbug.com/626703 external/wpt/html/cross-origin-opener-policy/coop-sandbox.https.html [ Failure ]
 crbug.com/626703 [ Debug ] virtual/stable/external/wpt/html/cross-origin-embedder-policy/require-corp.https.html [ Failure ]
 crbug.com/626703 [ Debug ] external/wpt/html/cross-origin-embedder-policy/require-corp.https.html [ Pass Failure ]
 
@@ -6053,9 +6049,6 @@ crbug.com/1016364 [ Mac Debug ] http/tests/devtools/console/console-search.js [ 
 crbug.com/1016457 [ Linux Debug ] external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
 crbug.com/1016457 [ Mac Debug ] external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
 
-# ecosystem-infra sheriff 2019-10-22
-crbug.com/1016762 external/wpt/html/cross-origin-opener-policy/popup-redirect-cache.https.html [ Pass Failure ]
-
 # Sheriff 2019-10-24
 crbug.com/1017626 [ Linux ] external/wpt/compat/idlharness.window.html [ Pass Timeout ]
 crbug.com/925325 [ Win ] storage/indexeddb/index-population.html [ Pass Timeout ]
@@ -6264,6 +6257,8 @@ crbug.com/963183 http/tests/devtools/animation/animation-timeline.js [ Pass Fail
 # Popup and no-opener may crash WPTs: crrev.com/c/1984306
 crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-to-unsafe-none.https.html [ Pass Crash ]
 crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-to-same-origin.https.html [ Pass Crash ]
+crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-allow-popups-to-same-origin.https.html [ Pass Crash ]
+crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-unsafe-none-to-same-origin.https.html [ Pass Crash ]
 
 # Broken in https://chromium-review.googlesource.com/c/chromium/src/+/1636716
 crbug.com/963183 http/tests/devtools/sources/debugger-breakpoints/disable-breakpoints.js [ Pass Failure ]
@@ -6287,10 +6282,6 @@ crbug.com/1006759 http/tests/devtools/console/argument-hints.js [ Pass Failure ]
 # Failing origin trial for css proeprties test
 crbug.com/1041993 http/tests/origin_trials/sample-api-script-added-after-css-declaration.html [ Failure ]
 virtual/omt-worker-fetch/http/tests/origin_trials/sample-api-script-added-after-css-declaration.html [ Failure ]
-
-# ecosystem-infra sheriff 2020-01-15
-# Has non-deterministic output on failure, so cannot match -expected.txt
-crbug.com/1042347 external/wpt/html/cross-origin-opener-policy/blob-popup.https.html [ Failure ]
 
 # Sheriff 2020-01-16
 crbug.com/1042205 virtual/off-main-thread-css-paint/external/wpt/css/css-paint-api/paint2d-filter.https.html [ Pass Timeout ]
@@ -6465,3 +6456,9 @@ crbug.com/1046440 fast/loader/submit-form-while-parsing-2.html [ Pass Failure Ti
 crbug.com/1041851 [ Mac ] external/wpt/bluetooth/idl/idlharness.tentative.https.window.html [ Pass Timeout ]
 crbug.com/1041851 [ Win10 ] external/wpt/bluetooth/idl/idlharness.tentative.https.window.html [ Pass Timeout ]
 crbug.com/1045346 external/wpt/offscreen-canvas/fill-and-stroke-styles/2d.pattern.basic.nocontext.worker.html [ Crash Pass Timeout ]
+
+# COOP window name issue.
+crbug.com/1018655 external/wpt/html/cross-origin-opener-policy/blob-popup.https.html [ Failure ]
+
+# COOP random timeout failure.
+crbug.com/1046698 external/wpt/html/cross-origin-opener-policy/coep-blob-popup.https.html [ Timeout ]
