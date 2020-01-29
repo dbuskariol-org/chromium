@@ -7,8 +7,10 @@ package org.chromium.weblayer_private;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 
+import org.chromium.components.browser_ui.styles.R;
 import org.chromium.components.embedder_support.application.ClassLoaderContextWrapperFactory;
 import org.chromium.weblayer_private.interfaces.BrowserFragmentArgs;
 import org.chromium.weblayer_private.interfaces.IBrowser;
@@ -39,7 +41,8 @@ public class BrowserFragmentImpl extends RemoteFragmentImpl {
     public void onAttach(Context context) {
         StrictModeWorkaround.apply();
         super.onAttach(context);
-        mContext = ClassLoaderContextWrapperFactory.get(context);
+        mContext = new ContextThemeWrapper(
+                ClassLoaderContextWrapperFactory.get(context), R.style.Theme_BrowserUI);
         if (mBrowser != null) { // On first creation, onAttach is called before onCreate
             mBrowser.onFragmentAttached(mContext, new FragmentWindowAndroid(mContext, this));
         }
