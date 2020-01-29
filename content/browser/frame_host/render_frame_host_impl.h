@@ -1305,6 +1305,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
                                  bool user_gesture) override;
   void DidDisplayInsecureContent() override;
   void DidContainInsecureFormAction() override;
+  void DocumentAvailableInMainFrame(bool uses_temporary_zoom_level) override;
   void SetNeedsOcclusionTracking(bool needs_tracking) override;
   void LifecycleStateChanged(blink::mojom::FrameLifecycleState state) override;
   void EvictFromBackForwardCache() override;

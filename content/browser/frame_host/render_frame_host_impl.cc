@@ -226,6 +226,7 @@
 #include "content/public/browser/android/java_interfaces.h"
 #else
 #include "content/browser/hid/hid_service.h"
+#include "content/browser/host_zoom_map_impl.h"
 #include "content/browser/serial/serial_service.h"
 #endif
 
@@ -3604,6 +3605,27 @@ void RenderFrameHostImpl::DidDisplayInsecureContent() {
 
 void RenderFrameHostImpl::DidContainInsecureFormAction() {
   delegate_->DidContainInsecureFormAction();
+}
+
+void RenderFrameHostImpl::DocumentAvailableInMainFrame(
+    bool uses_temporary_zoom_level) {
+  if (!frame_tree_node_->IsMainFrame()) {
+    bad_message::ReceivedBadMessage(
+        GetProcess(), bad_message::RFH_INVALID_CALL_FROM_NOT_MAIN_FRAME);
+    return;
+  }
+  delegate_->DocumentAvailableInMainFrame();
+
+  if (!uses_temporary_zoom_level)
+    return;
+
+#if !defined(OS_ANDROID)
+  HostZoomMapImpl* host_zoom_map =
+      static_cast<HostZoomMapImpl*>(HostZoomMap::Get(GetSiteInstance()));
+  host_zoom_map->SetTemporaryZoomLevel(GetProcess()->GetID(),
+                                       render_view_host()->GetRoutingID(),
+                                       host_zoom_map->GetDefaultZoomLevel());
+#endif  // !defined(OS_ANDROID)
 }
 
 void RenderFrameHostImpl::SetNeedsOcclusionTracking(bool needs_tracking) {
