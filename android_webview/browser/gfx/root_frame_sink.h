@@ -21,6 +21,7 @@ class ExternalBeginFrameSource;
 }  // namespace viz
 
 namespace android_webview {
+class ChildFrame;
 
 class RootFrameSinkClient {
  public:
@@ -57,9 +58,8 @@ class RootFrameSink : public base::RefCounted<RootFrameSink>,
   bool IsChildSurface(const viz::FrameSinkId& frame_sink_id);
   void DettachClient();
 
-  void ReturnResources(viz::FrameSinkId frame_sink_id,
-                       uint32_t layer_tree_frame_sink_id,
-                       std::vector<viz::ReturnedResource> resources);
+  void SubmitChildCompositorFrame(ChildFrame* child_frame);
+  viz::FrameTimingDetailsMap TakeChildFrameTimingDetailsMap();
 
   // viz::mojom::CompositorFrameSinkClient implementation.
   void DidReceiveCompositorFrameAck(
@@ -75,13 +75,20 @@ class RootFrameSink : public base::RefCounted<RootFrameSink>,
 
  private:
   friend class base::RefCounted<RootFrameSink>;
+  class ChildCompositorFrameSink;
+
   ~RootFrameSink() override;
   viz::FrameSinkManagerImpl* GetFrameSinkManager();
+  void ReturnResources(viz::FrameSinkId frame_sink_id,
+                       uint32_t layer_tree_frame_sink_id,
+                       std::vector<viz::ReturnedResource> resources);
 
   const viz::FrameSinkId root_frame_sink_id_;
   base::flat_set<viz::FrameSinkId> child_frame_sink_ids_;
   std::unique_ptr<viz::CompositorFrameSinkSupport> support_;
   std::unique_ptr<viz::ExternalBeginFrameSource> begin_frame_source_;
+
+  std::unique_ptr<ChildCompositorFrameSink> child_sink_support_;
 
   bool needs_begin_frames_ = false;
   bool needs_draw_ = false;
