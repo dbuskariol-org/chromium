@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_GCM_DRIVER_CRYPTO_JSON_WEB_TOKEN_UTIL_H_
-#define COMPONENTS_GCM_DRIVER_CRYPTO_JSON_WEB_TOKEN_UTIL_H_
+#ifndef CHROME_BROWSER_SHARING_WEB_PUSH_JSON_WEB_TOKEN_UTIL_H_
+#define CHROME_BROWSER_SHARING_WEB_PUSH_JSON_WEB_TOKEN_UTIL_H_
 
 #include <string>
 
@@ -13,8 +13,6 @@
 namespace crypto {
 class ECPrivateKey;
 }
-
-namespace gcm {
 
 // Creates JSON web token with provided |payload|, and sign  with provided
 // |private_key|, as per RFC7519.
@@ -28,6 +26,4 @@ base::Optional<std::string> CreateJSONWebToken(
     const base::Value& claims,
     crypto::ECPrivateKey* private_key);
 
-}  // namespace gcm
-
-#endif  // COMPONENTS_GCM_DRIVER_CRYPTO_JSON_WEB_TOKEN_UTIL_H_
+#endif  // CHROME_BROWSER_SHARING_WEB_PUSH_JSON_WEB_TOKEN_UTIL_H_

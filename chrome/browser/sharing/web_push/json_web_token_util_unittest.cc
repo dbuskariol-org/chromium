@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/gcm_driver/crypto/json_web_token_util.h"
+#include "chrome/browser/sharing/web_push/json_web_token_util.h"
 
 #include <stdint.h>
 
@@ -17,8 +17,6 @@
 #include "third_party/boringssl/src/include/openssl/bn.h"
 #include "third_party/boringssl/src/include/openssl/ecdsa.h"
 #include "third_party/boringssl/src/include/openssl/mem.h"
-
-namespace gcm {
 
 namespace {
 
@@ -103,5 +101,3 @@ TEST(JSONWebTokenUtilTest, VerifiesCreateJSONWebToken) {
 }
 
 }  // namespace
-
-}  // namespace gcm

@@ -58259,6 +58259,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="3" label="Payload is too large"/>
   <int value="4" label="Timeout waiting for ack"/>
   <int value="5" label="Other internal error"/>
+  <int value="6" label="Encryption error"/>
 </enum>
 
 <enum name="SharingVapidKeyCreationResult">

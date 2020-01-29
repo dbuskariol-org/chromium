@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_GCM_DRIVER_WEB_PUSH_SENDER_H_
-#define COMPONENTS_GCM_DRIVER_WEB_PUSH_SENDER_H_
+#ifndef CHROME_BROWSER_SHARING_WEB_PUSH_WEB_PUSH_SENDER_H_
+#define CHROME_BROWSER_SHARING_WEB_PUSH_WEB_PUSH_SENDER_H_
 
 #include "base/macros.h"
 #include "base/optional.h"
-#include "components/gcm_driver/web_push_common.h"
+#include "chrome/browser/sharing/web_push/web_push_common.h"
 #include "services/network/public/cpp/shared_url_loader_factory.h"
 
 namespace network {
@@ -18,8 +18,6 @@ namespace crypto {
 class ECPrivateKey;
 }
 
-namespace gcm {
-
 struct WebPushMessage;
 
 // Class for sending a message via Firebase Cloud Messaging (FCM) Web Push.
@@ -27,7 +25,7 @@ class WebPushSender {
  public:
   explicit WebPushSender(
       scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory);
-  ~WebPushSender();
+  virtual ~WebPushSender();
 
   // Sends a WebPushMessage via FCM Web Push. Authenticates with FCM server
   // using Voluntary Application Server Identification for Web Push (VAPID)
@@ -37,10 +35,10 @@ class WebPushSender {
   // |message|: WebPushMessage to be sent.
   // |callback|: To be invoked with message_id if asynchronous operation
   // succeeded, or base::nullopt if operation failed.
-  void SendMessage(const std::string& fcm_token,
-                   crypto::ECPrivateKey* vapid_key,
-                   WebPushMessage message,
-                   WebPushCallback callback);
+  virtual void SendMessage(const std::string& fcm_token,
+                           crypto::ECPrivateKey* vapid_key,
+                           WebPushMessage message,
+                           WebPushCallback callback);
 
  private:
   void OnMessageSent(std::unique_ptr<network::SimpleURLLoader> url_loader,
@@ -54,6 +52,4 @@ class WebPushSender {
   DISALLOW_COPY_AND_ASSIGN(WebPushSender);
 };
 
-}  // namespace gcm
-
-#endif  // COMPONENTS_GCM_DRIVER_WEB_PUSH_SENDER_H_
+#endif  // CHROME_BROWSER_SHARING_WEB_PUSH_WEB_PUSH_SENDER_H_

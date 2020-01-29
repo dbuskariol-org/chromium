@@ -2,15 +2,40 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_GCM_DRIVER_WEB_PUSH_COMMON_H_
-#define COMPONENTS_GCM_DRIVER_WEB_PUSH_COMMON_H_
+#ifndef CHROME_BROWSER_SHARING_WEB_PUSH_WEB_PUSH_COMMON_H_
+#define CHROME_BROWSER_SHARING_WEB_PUSH_WEB_PUSH_COMMON_H_
 
 #include <string>
 
 #include "base/callback.h"
 #include "base/optional.h"
 
-namespace gcm {
+// Message to be delivered to the other party via Web Push.
+struct WebPushMessage {
+  WebPushMessage();
+  WebPushMessage(WebPushMessage&& other);
+  ~WebPushMessage();
+  WebPushMessage& operator=(WebPushMessage&& other);
+
+  // Urgency of a WebPushMessage as defined in RFC 8030 section 5.3.
+  // https://tools.ietf.org/html/rfc8030#section-5.3
+  enum class Urgency {
+    kVeryLow,
+    kLow,
+    kNormal,
+    kHigh,
+  };
+
+  // In seconds.
+  int time_to_live = kMaximumTTL;
+  std::string payload;
+  Urgency urgency = Urgency::kNormal;
+
+  static const int kMaximumTTL;
+
+  WebPushMessage(const WebPushMessage&) = delete;
+  WebPushMessage& operator=(const WebPushMessage&) = delete;
+};
 
 // Result of sending web push message.
 // These values are persisted to logs. Entries should not be renumbered and
@@ -49,6 +74,4 @@ void LogSendWebPushMessageStatusCode(int status_code);
 // Categorize response body when 403: Forbidden is received and log as enum.
 void LogSendWebPushMessageForbiddenBody(const std::string* response_body);
 
-}  // namespace gcm
-
-#endif  // COMPONENTS_GCM_DRIVER_WEB_PUSH_COMMON_H_
+#endif  // CHROME_BROWSER_SHARING_WEB_PUSH_WEB_PUSH_COMMON_H_

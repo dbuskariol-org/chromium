@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/gcm_driver/web_push_common.h"
+#include "chrome/browser/sharing/web_push/web_push_common.h"
 
 #include "base/metrics/histogram_functions.h"
 #include "base/strings/string_util.h"
@@ -153,7 +153,15 @@ ForbiddenResponseBody GetResposneBodyEnum(const std::string* response_body) {
 
 }  // namespace
 
-namespace gcm {
+const int WebPushMessage::kMaximumTTL = 24 * 60 * 60;  // 1 day.
+
+WebPushMessage::WebPushMessage() = default;
+
+WebPushMessage::WebPushMessage(WebPushMessage&& other) = default;
+
+WebPushMessage::~WebPushMessage() = default;
+
+WebPushMessage& WebPushMessage::operator=(WebPushMessage&& other) = default;
 
 void InvokeWebPushCallback(WebPushCallback callback,
                            SendWebPushMessageResult result,
@@ -179,5 +187,3 @@ void LogSendWebPushMessageForbiddenBody(const std::string* response_body) {
   base::UmaHistogramEnumeration("GCM.SendWebPushMessageForbiddenBody",
                                 GetResposneBodyEnum(response_body));
 }
-
-}  // namespace gcm

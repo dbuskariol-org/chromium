@@ -2,12 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/gcm_driver/web_push_sender.h"
+#include "chrome/browser/sharing/web_push/web_push_sender.h"
 
 #include "base/base64.h"
 #include "base/base64url.h"
 #include "base/json/json_reader.h"
-#include "components/gcm_driver/common/gcm_message.h"
 #include "content/public/test/browser_task_environment.h"
 #include "crypto/ec_private_key.h"
 #include "net/http/http_request_headers.h"
@@ -27,8 +26,6 @@ const char kPrivateKey[] =
     "fTU3MTWnImDNnkPxtXm58K7Uax8jFxA4TeXJ";
 
 }  // namespace
-
-namespace gcm {
 
 WebPushMessage CreateMessage() {
   WebPushMessage message;
@@ -251,5 +248,3 @@ INSTANTIATE_TEST_SUITE_P(
     /* no prefix */,
     WebPushHttpStatusTest,
     testing::ValuesIn(kWebPushHttpStatusTestData));
-
-}  // namespace gcm

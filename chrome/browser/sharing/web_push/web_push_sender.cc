@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/gcm_driver/web_push_sender.h"
+#include "chrome/browser/sharing/web_push/web_push_sender.h"
 
 #include <limits.h>
 
@@ -11,8 +11,7 @@
 #include "base/no_destructor.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/stringprintf.h"
-#include "components/gcm_driver/common/gcm_message.h"
-#include "components/gcm_driver/crypto/json_web_token_util.h"
+#include "chrome/browser/sharing/web_push/json_web_token_util.h"
 #include "components/gcm_driver/crypto/p256_key_util.h"
 #include "net/http/http_request_headers.h"
 #include "net/http/http_status_code.h"
@@ -20,8 +19,6 @@
 #include "services/network/public/cpp/resource_request.h"
 #include "services/network/public/cpp/simple_url_loader.h"
 #include "url/gurl.h"
-
-namespace gcm {
 
 namespace {
 
@@ -68,7 +65,7 @@ base::Optional<std::string> GetAuthHeader(crypto::ECPrivateKey* vapid_key) {
     return base::nullopt;
 
   std::string public_key;
-  if (!GetRawPublicKey(*vapid_key, &public_key))
+  if (!gcm::GetRawPublicKey(*vapid_key, &public_key))
     return base::nullopt;
 
   std::string base64_public_key;
@@ -252,5 +249,3 @@ void WebPushSender::OnMessageSent(
                         SendWebPushMessageResult::kSuccessful,
                         /*message_id=*/location.substr(slash_pos + 1));
 }
-
-}  // namespace gcm

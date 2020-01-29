@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/gcm_driver/crypto/json_web_token_util.h"
+#include "chrome/browser/sharing/web_push/json_web_token_util.h"
 
 #include <stdint.h>
 
@@ -19,8 +19,6 @@ const char kAlgES256[] = "ES256";
 const char kKeyTyp[] = "typ";
 const char kTypJwt[] = "JWT";
 }  // namespace
-
-namespace gcm {
 
 base::Optional<std::string> CreateJSONWebToken(
     const base::Value& claims,
@@ -78,5 +76,3 @@ base::Optional<std::string> CreateJSONWebToken(
 
   return base::StrCat({data, ".", signature_base64});
 }
-
-}  // namespace gcm
