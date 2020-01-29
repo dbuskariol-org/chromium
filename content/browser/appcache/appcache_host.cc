@@ -100,6 +100,11 @@ AppCacheHost::AppCacheHost(
       main_resource_blocked_(false),
       associated_cache_info_pending_(false) {
   service_->AddObserver(this);
+  if (process_id_ != ChildProcessHost::kInvalidUniqueID) {
+    security_policy_handle_ =
+        ChildProcessSecurityPolicyImpl::GetInstance()->CreateHandle(
+            process_id_);
+  }
 }
 
 AppCacheHost::~AppCacheHost() {
@@ -622,8 +627,11 @@ void AppCacheHost::NotifyMainResourceBlocked(const GURL& manifest_url) {
 
 void AppCacheHost::SetProcessId(int process_id) {
   DCHECK_EQ(process_id_, ChildProcessHost::kInvalidUniqueID);
+  DCHECK(!security_policy_handle_.is_valid());
   DCHECK_NE(process_id, ChildProcessHost::kInvalidUniqueID);
   process_id_ = process_id;
+  security_policy_handle_ =
+      ChildProcessSecurityPolicyImpl::GetInstance()->CreateHandle(process_id_);
 }
 
 base::WeakPtr<AppCacheHost> AppCacheHost::GetWeakPtr() {
