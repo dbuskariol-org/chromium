@@ -3242,6 +3242,11 @@
     "expiry_milestone": 82
   },
   {
+    "name": "shelf-hide-buttons-in-tablet",
+    "owners": [ "tbarzic", "//ash/shelf/OWNERS" ],
+    "expiry_milestone": 84
+  },
+  {
     "name": "shelf-hotseat",
     "owners": [ "manucornet", "mmourgos", "newcomer" ],
     "expiry_milestone": 82

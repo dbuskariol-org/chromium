@@ -621,6 +621,9 @@ extern const char kHorizontalTabSwitcherAndroidDescription[];
 extern const char kTabSwitcherOnReturnName[];
 extern const char kTabSwitcherOnReturnDescription[];
 
+extern const char kHideShelfControlsInTabletModeName[];
+extern const char kHideShelfControlsInTabletModeDescription[];
+
 extern const char kHostedAppQuitNotificationName[];
 extern const char kHostedAppQuitNotificationDescription[];
 
