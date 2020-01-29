@@ -41,13 +41,9 @@ public class BookmarkItemRow extends BookmarkRow implements LargeIconCallback {
 
     @Override
     public void onClick() {
-        int launchLocation = -1;
         switch (mDelegate.getCurrentState()) {
             case BookmarkUIState.STATE_FOLDER:
-                launchLocation = BookmarkLaunchLocation.FOLDER;
-                break;
             case BookmarkUIState.STATE_SEARCHING:
-                launchLocation = BookmarkLaunchLocation.SEARCH;
                 break;
             case BookmarkUIState.STATE_LOADING:
                 assert false :
@@ -57,7 +53,7 @@ public class BookmarkItemRow extends BookmarkRow implements LargeIconCallback {
                 assert false : "State not valid";
                 break;
         }
-        mDelegate.openBookmark(mBookmarkId, launchLocation);
+        mDelegate.openBookmark(mBookmarkId);
     }
 
     @Override
