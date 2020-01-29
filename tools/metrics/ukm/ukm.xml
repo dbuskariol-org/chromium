@@ -8199,6 +8199,28 @@ be describing additional metrics about the same event.
   </metric>
 </event>
 
+<event name="SameSiteDifferentSchemeRequest">
+  <owner>bingler@chromium.org</owner>
+  <metric name="SameSiteContextWithSchemes" enum="SameSiteCookieContext">
+    <summary>
+      An enum that records the type of same-site context if a cookie marked with
+      SameSite=Lax or SameSite=Strict is sent across schemes on a request. E.x.:
+      An http site making a request to an https site.
+    </summary>
+  </metric>
+</event>
+
+<event name="SameSiteDifferentSchemeResponse">
+  <owner>bingler@chromium.org</owner>
+  <metric name="SameSiteContextWithSchemes" enum="SameSiteCookieContext">
+    <summary>
+      An enum that records the type of same-site context if a cookie marked with
+      SameSite=Lax or SameSite=Strict is set across schemes on a response. E.x.:
+      An http site returning a response to an https site.
+    </summary>
+  </metric>
+</event>
+
 <event name="ScreenBrightness">
   <owner>pdyson@chromium.org</owner>
   <summary>
