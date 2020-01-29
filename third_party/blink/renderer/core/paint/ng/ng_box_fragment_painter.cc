@@ -416,14 +416,15 @@ void NGBoxFragmentPainter::PaintObject(
             paint_offset - box_item_->Offset();
         PaintInlineItems(paint_info.ForDescendants(),
                          paint_offset_to_inline_formatting_context,
-                         descendants_);
+                         box_item_->Offset(), descendants_);
       } else if (items_) {
         if (physical_box_fragment.IsBlockFlow()) {
           PaintBlockFlowContents(paint_info, paint_offset);
         } else {
           DCHECK(physical_box_fragment.IsInlineBox());
           NGInlineCursor cursor(*items_);
-          PaintInlineItems(paint_info.ForDescendants(), paint_offset, &cursor);
+          PaintInlineItems(paint_info.ForDescendants(), paint_offset,
+                           PhysicalOffset(), &cursor);
         }
       } else if (physical_box_fragment.ChildrenInline()) {
         DCHECK(!RuntimeEnabledFeatures::LayoutNGFragmentItemEnabled());
@@ -1046,6 +1047,7 @@ void NGBoxFragmentPainter::PaintAllPhasesAtomically(
 
 void NGBoxFragmentPainter::PaintInlineItems(const PaintInfo& paint_info,
                                             const PhysicalOffset& paint_offset,
+                                            const PhysicalOffset& parent_offset,
                                             NGInlineCursor* cursor) {
   while (*cursor) {
     const NGFragmentItem* item = cursor->CurrentItem();
@@ -1053,19 +1055,18 @@ void NGBoxFragmentPainter::PaintInlineItems(const PaintInfo& paint_info,
     switch (item->Type()) {
       case NGFragmentItem::kText:
       case NGFragmentItem::kGeneratedText:
-        PaintTextItem(*cursor, paint_info, paint_offset);
+        PaintTextItem(*cursor, paint_info, paint_offset, parent_offset);
+        cursor->MoveToNext();
         break;
       case NGFragmentItem::kBox:
-        if (PaintBoxItem(*item, paint_info, paint_offset) == kSkipChildren) {
-          cursor->MoveToNextSkippingChildren();
-          continue;
-        }
+        PaintBoxItem(*item, *cursor, paint_info, paint_offset);
+        cursor->MoveToNextSkippingChildren();
         break;
       case NGFragmentItem::kLine:
         NOTREACHED();
+        cursor->MoveToNext();
         break;
     }
-    cursor->MoveToNext();
   }
 }
 
@@ -1212,14 +1213,15 @@ void NGBoxFragmentPainter::PaintLineBoxChildItems(
                    /* line_box_paint_fragment */ nullptr, child_item,
                    paint_info, child_offset);
       NGInlineCursor line_box_cursor = children->CursorForDescendants();
-      PaintInlineItems(paint_info, paint_offset, &line_box_cursor);
+      PaintInlineItems(paint_info, paint_offset, child_item->Offset(),
+                       &line_box_cursor);
       continue;
     }
 
     if (const NGPhysicalBoxFragment* child_fragment =
             child_item->BoxFragment()) {
       if (child_fragment->IsListMarker()) {
-        PaintBoxItem(*child_item, paint_info, paint_offset);
+        PaintBoxItem(*child_item, *children, paint_info, paint_offset);
         continue;
       }
     }
@@ -1329,7 +1331,8 @@ void NGBoxFragmentPainter::PaintTextChild(const NGPaintFragment& paint_fragment,
 
 void NGBoxFragmentPainter::PaintTextItem(const NGInlineCursor& cursor,
                                          const PaintInfo& paint_info,
-                                         const PhysicalOffset& paint_offset) {
+                                         const PhysicalOffset& paint_offset,
+                                         const PhysicalOffset& parent_offset) {
   DCHECK(cursor.CurrentItem());
   const NGFragmentItem& item = *cursor.CurrentItem();
   DCHECK(item.IsText()) << item;
@@ -1346,7 +1349,7 @@ void NGBoxFragmentPainter::PaintTextItem(const NGInlineCursor& cursor,
   if (UNLIKELY(!IsVisibleToPaint(item, item.Style())))
     return;
 
-  NGTextFragmentPainter<NGInlineCursor> text_painter(cursor);
+  NGTextFragmentPainter<NGInlineCursor> text_painter(cursor, parent_offset);
   text_painter.Paint(paint_info, paint_offset);
 }
 
@@ -1365,40 +1368,40 @@ NGBoxFragmentPainter::MoveTo NGBoxFragmentPainter::PaintLineBoxItem(
   return kDontSkipChildren;
 }
 
-NGBoxFragmentPainter::MoveTo NGBoxFragmentPainter::PaintBoxItem(
-    const NGFragmentItem& item,
-    const PaintInfo& paint_info,
-    const PhysicalOffset& paint_offset) {
+void NGBoxFragmentPainter::PaintBoxItem(const NGFragmentItem& item,
+                                        const NGInlineCursor& cursor,
+                                        const PaintInfo& paint_info,
+                                        const PhysicalOffset& paint_offset) {
   DCHECK_EQ(item.Type(), NGFragmentItem::kBox);
+  DCHECK_EQ(&item, cursor.Current().Item());
 
   const ComputedStyle& style = item.Style();
   if (UNLIKELY(!IsVisibleToPaint(item, style)))
-    return kSkipChildren;
+    return;
 
-  // Nothing to paint if this is a culled inline box. Proceed to its
-  // descendants.
-  const NGPhysicalBoxFragment* child_fragment = item.BoxFragment();
-  if (!child_fragment)
-    return kDontSkipChildren;
+  if (const NGPhysicalBoxFragment* child_fragment = item.BoxFragment()) {
+    DCHECK(!child_fragment->IsHiddenForPaint());
+    if (child_fragment->HasSelfPaintingLayer() || child_fragment->IsFloating())
+      return;
 
-  DCHECK(!child_fragment->IsHiddenForPaint());
-  if (child_fragment->HasSelfPaintingLayer() || child_fragment->IsFloating())
-    return kSkipChildren;
+    // TODO(kojii): Check CullRect.
 
-  // TODO(kojii): Check CullRect.
-
-  if (child_fragment->IsAtomicInline() || child_fragment->IsListMarker()) {
-    if (FragmentRequiresLegacyFallback(*child_fragment)) {
-      PaintInlineChildBoxUsingLegacyFallback(*child_fragment, paint_info);
-      return kDontSkipChildren;
+    if (child_fragment->IsAtomicInline() || child_fragment->IsListMarker()) {
+      if (FragmentRequiresLegacyFallback(*child_fragment)) {
+        PaintInlineChildBoxUsingLegacyFallback(*child_fragment, paint_info);
+        return;
+      }
+      NGBoxFragmentPainter(*child_fragment)
+          .PaintAllPhasesAtomically(paint_info);
+      return;
     }
-    NGBoxFragmentPainter(*child_fragment).PaintAllPhasesAtomically(paint_info);
-    return kDontSkipChildren;
+
+    NGInlineBoxFragmentPainter(item, *child_fragment)
+        .Paint(paint_info, paint_offset);
   }
 
-  NGInlineBoxFragmentPainter(item, *child_fragment)
-      .Paint(paint_info, paint_offset);
-  return kDontSkipChildren;
+  NGInlineCursor children = cursor.CursorForDescendants();
+  PaintInlineItems(paint_info, paint_offset, item.Offset(), &children);
 }
 
 bool NGBoxFragmentPainter::IsPaintingScrollingBackground(
