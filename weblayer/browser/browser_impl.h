@@ -46,6 +46,8 @@ class BrowserImpl : public Browser {
 
   ProfileImpl* profile() { return profile_; }
 
+  // Creates and adds a Tab from session restore. The returned tab is owned by
+  // this Browser.
   TabImpl* CreateTabForSessionRestore(
       std::unique_ptr<content::WebContents> web_contents);
 
@@ -79,11 +81,11 @@ class BrowserImpl : public Browser {
 #endif
 
   // Browser:
-  void AddTab(Tab* tab) override;
-  void RemoveTab(Tab* tab) override;
+  Tab* AddTab(std::unique_ptr<Tab> tab) override;
+  std::unique_ptr<Tab> RemoveTab(Tab* tab) override;
   void SetActiveTab(Tab* tab) override;
   Tab* GetActiveTab() override;
-  const std::vector<Tab*>& GetTabs() override;
+  std::vector<Tab*> GetTabs() override;
   void PrepareForShutdown() override;
   std::string GetPersistenceId() override;
   void AddObserver(BrowserObserver* observer) override;
@@ -100,7 +102,7 @@ class BrowserImpl : public Browser {
 #endif
   base::ObserverList<BrowserObserver> browser_observers_;
   ProfileImpl* profile_;
-  std::vector<Tab*> tabs_;
+  std::vector<std::unique_ptr<Tab>> tabs_;
   TabImpl* active_tab_ = nullptr;
   const std::string persistence_id_;
   std::unique_ptr<SessionService> session_service_;

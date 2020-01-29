@@ -163,8 +163,7 @@ TabImpl::TabImpl(ProfileImpl* profile,
 }
 
 TabImpl::~TabImpl() {
-  if (browser_)
-    browser_->RemoveTab(this);
+  DCHECK(!browser_);
 
   GetFindTabHelper()->RemoveObserver(this);
 
@@ -268,7 +267,13 @@ static jlong JNI_TabImpl_CreateTab(
 }
 
 static void JNI_TabImpl_DeleteTab(JNIEnv* env, jlong tab) {
-  delete reinterpret_cast<TabImpl*>(tab);
+  std::unique_ptr<Tab> owned_tab;
+  TabImpl* tab_impl = reinterpret_cast<TabImpl*>(tab);
+  DCHECK(tab_impl);
+  if (tab_impl->browser())
+    owned_tab = tab_impl->browser()->RemoveTab(tab_impl);
+  else
+    owned_tab.reset(tab_impl);
 }
 
 base::android::ScopedJavaLocalRef<jobject> TabImpl::GetWebContents(
