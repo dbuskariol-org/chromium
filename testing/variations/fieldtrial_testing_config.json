@@ -1520,7 +1520,7 @@
                 {
                     "name": "Enabled",
                     "params": {
-                        "start_surface_variation": "tasksonly",
+                        "start_surface_variation": "single",
                         "tab_switcher_on_return_time_ms": "3600000"
                     },
                     "enable_features": [
