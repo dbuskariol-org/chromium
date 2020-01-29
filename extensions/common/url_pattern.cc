@@ -302,7 +302,7 @@ URLPattern::ParseResult URLPattern::Parse(base::StringPiece pattern) {
 
     if (host_piece == "*") {
       match_subdomains_ = true;
-      host_piece.clear();
+      host_piece = base::StringPiece();
     } else if (host_piece.starts_with("*.")) {
       if (host_piece.length() == 2) {
         // We don't allow just '*.' as a host.
