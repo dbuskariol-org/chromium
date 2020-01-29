@@ -335,7 +335,7 @@ class AX_EXPORT __declspec(uuid("26f5641a-246d-457b-a96d-07f3fae6acf2"))
                                              &IID_IAccessible2_4,
                                              &LIBID_IAccessible2Lib>,
                         public IAccessibleEx,
-                        public IAccessibleText,
+                        public IAccessibleHypertext,
                         public IAccessibleTable,
                         public IAccessibleTable2,
                         public IAccessibleTableCell,
@@ -374,6 +374,7 @@ class AX_EXPORT __declspec(uuid("26f5641a-246d-457b-a96d-07f3fae6acf2"))
     COM_INTERFACE_ENTRY(IAccessible2_4)
     COM_INTERFACE_ENTRY(IAccessibleEx)
     COM_INTERFACE_ENTRY(IAccessibleText)
+    COM_INTERFACE_ENTRY(IAccessibleHypertext)
     COM_INTERFACE_ENTRY(IAccessibleTable)
     COM_INTERFACE_ENTRY(IAccessibleTable2)
     COM_INTERFACE_ENTRY(IAccessibleTableCell)
@@ -924,6 +925,18 @@ class AX_EXPORT __declspec(uuid("26f5641a-246d-457b-a96d-07f3fae6acf2"))
                        boolean* is_selected) override;
 
   IFACEMETHODIMP get_table(IUnknown** table) override;
+
+  //
+  // IAccessibleHypertext methods not implemented.
+  //
+
+  IFACEMETHODIMP get_nHyperlinks(LONG* hyperlink_count) override;
+
+  IFACEMETHODIMP
+  get_hyperlink(LONG index, IAccessibleHyperlink** hyperlink) override;
+
+  IFACEMETHODIMP
+  get_hyperlinkIndex(LONG char_index, LONG* hyperlink_index) override;
 
   //
   // IAccessibleText methods not implemented.

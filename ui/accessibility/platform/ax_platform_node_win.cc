@@ -3631,6 +3631,25 @@ IFACEMETHODIMP AXPlatformNodeWin::setSelection(LONG selection_index,
 }
 
 //
+// IAccessibleHypertext methods not implemented.
+//
+
+IFACEMETHODIMP AXPlatformNodeWin::get_nHyperlinks(LONG* hyperlink_count) {
+  return E_NOTIMPL;
+}
+
+IFACEMETHODIMP AXPlatformNodeWin::get_hyperlink(
+    LONG index,
+    IAccessibleHyperlink** hyperlink) {
+  return E_NOTIMPL;
+}
+
+IFACEMETHODIMP AXPlatformNodeWin::get_hyperlinkIndex(LONG char_index,
+                                                     LONG* hyperlink_index) {
+  return E_NOTIMPL;
+}
+
+//
 // IAccessibleText methods not implemented.
 //
 

@@ -216,14 +216,6 @@ IFACEMETHODIMP BrowserAccessibilityComWin::get_imageSize(LONG* height,
 // IAccessibleText methods.
 //
 
-IFACEMETHODIMP BrowserAccessibilityComWin::get_nCharacters(LONG* n_characters) {
-  return AXPlatformNodeWin::get_nCharacters(n_characters);
-}
-
-IFACEMETHODIMP BrowserAccessibilityComWin::get_caretOffset(LONG* offset) {
-  return AXPlatformNodeWin::get_caretOffset(offset);
-}
-
 IFACEMETHODIMP BrowserAccessibilityComWin::get_characterExtents(
     LONG offset,
     IA2CoordinateType coordinate_type,
@@ -316,36 +308,6 @@ IFACEMETHODIMP BrowserAccessibilityComWin::get_text(LONG start_offset,
   return S_OK;
 }
 
-IFACEMETHODIMP BrowserAccessibilityComWin::get_textAtOffset(
-    LONG offset,
-    IA2TextBoundaryType boundary_type,
-    LONG* start_offset,
-    LONG* end_offset,
-    BSTR* text) {
-  return AXPlatformNodeWin::get_textAtOffset(offset, boundary_type,
-                                             start_offset, end_offset, text);
-}
-
-IFACEMETHODIMP BrowserAccessibilityComWin::get_textBeforeOffset(
-    LONG offset,
-    IA2TextBoundaryType boundary_type,
-    LONG* start_offset,
-    LONG* end_offset,
-    BSTR* text) {
-  return AXPlatformNodeWin::get_textBeforeOffset(
-      offset, boundary_type, start_offset, end_offset, text);
-}
-
-IFACEMETHODIMP BrowserAccessibilityComWin::get_textAfterOffset(
-    LONG offset,
-    IA2TextBoundaryType boundary_type,
-    LONG* start_offset,
-    LONG* end_offset,
-    BSTR* text) {
-  return AXPlatformNodeWin::get_textAfterOffset(offset, boundary_type,
-                                                start_offset, end_offset, text);
-}
-
 IFACEMETHODIMP BrowserAccessibilityComWin::get_newText(
     IA2TextSegment* new_text) {
   WIN_ACCESSIBILITY_API_HISTOGRAM(UMA_API_GET_NEW_TEXT);
@@ -398,14 +360,6 @@ IFACEMETHODIMP BrowserAccessibilityComWin::get_oldText(
   return S_OK;
 }
 
-IFACEMETHODIMP BrowserAccessibilityComWin::get_offsetAtPoint(
-    LONG x,
-    LONG y,
-    IA2CoordinateType coord_type,
-    LONG* offset) {
-  return AXPlatformNodeWin::get_offsetAtPoint(x, y, coord_type, offset);
-}
-
 IFACEMETHODIMP BrowserAccessibilityComWin::scrollSubstringTo(
     LONG start_index,
     LONG end_index,
@@ -442,16 +396,6 @@ IFACEMETHODIMP BrowserAccessibilityComWin::scrollSubstringToPoint(
   y -= string_bounds.y();
 
   return scrollToPoint(coordinate_type, x, y);
-}
-
-IFACEMETHODIMP BrowserAccessibilityComWin::addSelection(LONG start_offset,
-                                                        LONG end_offset) {
-  return AXPlatformNodeWin::addSelection(start_offset, end_offset);
-}
-
-IFACEMETHODIMP BrowserAccessibilityComWin::removeSelection(
-    LONG selection_index) {
-  return AXPlatformNodeWin::removeSelection(selection_index);
 }
 
 IFACEMETHODIMP BrowserAccessibilityComWin::setCaretOffset(LONG offset) {
