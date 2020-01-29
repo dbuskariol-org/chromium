@@ -104,7 +104,7 @@ class QuicTransportTest : public ContentBrowserTest {
         base::StringPrintf("localhost:%d", server_.server_address().port()));
     command_line->AppendSwitch(switches::kEnableQuic);
     command_line->AppendSwitchASCII(switches::kQuicVersion,
-                                    base::StringPrintf("h3-24"));
+                                    base::StringPrintf("h3-25"));
     // The value is calculated from net/data/ssl/certificates/quic-chain.pem.
     command_line->AppendSwitchASCII(
         network::switches::kIgnoreCertificateErrorsSPKIList,
