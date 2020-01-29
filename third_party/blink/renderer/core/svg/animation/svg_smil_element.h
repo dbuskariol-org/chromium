@@ -237,6 +237,8 @@ class CORE_EXPORT SVGSMILElement : public SVGElement, public SVGTests {
 
   ProgressState CalculateProgressState(SMILTime presentation_time) const;
 
+  SMILTime LastIntervalEndTime() const;
+
   Member<SVGElement> target_element_;
   Member<IdTargetObserver> target_id_observer_;
 

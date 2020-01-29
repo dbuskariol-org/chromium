@@ -908,6 +908,23 @@ bool SVGSMILElement::HandleIntervalRestart(SMILTime presentation_time) {
   return false;
 }
 
+SMILTime SVGSMILElement::LastIntervalEndTime() const {
+  // If we're still waiting for the first interval we lack a time reference.
+  if (!is_waiting_for_first_interval_) {
+    // If we have a current interval (which likely just ended or restarted) use
+    // the end of that.
+    if (interval_.IsResolved())
+      return interval_.end;
+    // If we don't have a current interval (maybe because it got discarded for
+    // not having started yet) but we have a previous interval, then use the
+    // end of that.
+    if (previous_interval_.IsResolved())
+      return previous_interval_.end;
+  }
+  // We have to start from the beginning.
+  return SMILTime::Earliest();
+}
+
 void SVGSMILElement::UpdateInterval(SMILTime presentation_time) {
   if (instance_lists_have_changed_) {
     instance_lists_have_changed_ = false;
@@ -915,10 +932,7 @@ void SVGSMILElement::UpdateInterval(SMILTime presentation_time) {
   }
   if (!HandleIntervalRestart(presentation_time))
     return;
-  SMILTime begin_after =
-      !is_waiting_for_first_interval_ && interval_.IsResolved()
-          ? interval_.end
-          : SMILTime::Earliest();
+  SMILTime begin_after = LastIntervalEndTime();
   SMILInterval next_interval = ResolveInterval(begin_after, presentation_time);
   // It's the same interval that we resolved before. Do nothing.
   if (next_interval == interval_)
