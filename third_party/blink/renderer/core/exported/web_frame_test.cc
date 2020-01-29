@@ -9507,7 +9507,7 @@ class RemoteNavigationClient
                 bool blocking_downloads_in_sandbox_enabled,
                 bool initiator_frame_is_ad,
                 mojo::ScopedMessagePipeHandle) override {
-    last_request_ = request;
+    last_request_.CopyFrom(request);
   }
 
   const WebURLRequest& LastRequest() const { return last_request_; }

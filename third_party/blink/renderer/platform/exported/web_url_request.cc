@@ -58,25 +58,22 @@ WebURLRequest::WebURLRequest()
     : owned_resource_request_(std::make_unique<ResourceRequest>()),
       resource_request_(owned_resource_request_.get()) {}
 
-WebURLRequest::WebURLRequest(const WebURLRequest& r)
-    : owned_resource_request_(std::make_unique<ResourceRequest>()),
-      resource_request_(owned_resource_request_.get()) {
-  resource_request_->CopyFrom(*r.resource_request_);
-}
+WebURLRequest::WebURLRequest(WebURLRequest&& src) = default;
+
+WebURLRequest& WebURLRequest::operator=(WebURLRequest&& src) = default;
 
 WebURLRequest::WebURLRequest(const WebURL& url) : WebURLRequest() {
   SetUrl(url);
 }
 
-WebURLRequest& WebURLRequest::operator=(const WebURLRequest& r) {
+void WebURLRequest::CopyFrom(const WebURLRequest& r) {
   // Copying subclasses that have different m_resourceRequest ownership
   // semantics via this operator is just not supported.
   DCHECK(owned_resource_request_);
-  DCHECK(resource_request_);
-  if (&r != this) {
-    resource_request_->CopyFrom(*r.resource_request_);
-  }
-  return *this;
+  DCHECK_EQ(owned_resource_request_.get(), resource_request_);
+  DCHECK(owned_resource_request_->IsNull());
+  DCHECK(this != &r);
+  resource_request_->CopyFrom(*r.resource_request_);
 }
 
 bool WebURLRequest::IsNull() const {

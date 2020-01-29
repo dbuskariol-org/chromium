@@ -174,9 +174,12 @@ class WebURLRequest {
 
   BLINK_PLATFORM_EXPORT ~WebURLRequest();
   BLINK_PLATFORM_EXPORT WebURLRequest();
-  BLINK_PLATFORM_EXPORT WebURLRequest(const WebURLRequest&);
+  WebURLRequest(const WebURLRequest&) = delete;
+  BLINK_PLATFORM_EXPORT WebURLRequest(WebURLRequest&&);
   BLINK_PLATFORM_EXPORT explicit WebURLRequest(const WebURL&);
-  BLINK_PLATFORM_EXPORT WebURLRequest& operator=(const WebURLRequest&);
+  WebURLRequest& operator=(const WebURLRequest&) = delete;
+  BLINK_PLATFORM_EXPORT WebURLRequest& operator=(WebURLRequest&&);
+  BLINK_PLATFORM_EXPORT void CopyFrom(const WebURLRequest&);
 
   BLINK_PLATFORM_EXPORT bool IsNull() const;
 

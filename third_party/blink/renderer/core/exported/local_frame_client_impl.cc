@@ -485,7 +485,7 @@ void LocalFrameClientImpl::BeginNavigation(
     return;
 
   auto navigation_info = std::make_unique<WebNavigationInfo>();
-  navigation_info->url_request = WrappedResourceRequest(request);
+  navigation_info->url_request.CopyFrom(WrappedResourceRequest(request));
   navigation_info->frame_type = frame_type;
   navigation_info->navigation_type = type;
   navigation_info->navigation_policy = static_cast<WebNavigationPolicy>(policy);
