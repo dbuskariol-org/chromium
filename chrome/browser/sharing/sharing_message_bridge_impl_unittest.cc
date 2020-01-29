@@ -30,6 +30,10 @@ ACTION_TEMPLATE(SaveArgPointeeMove,
   *pointer = std::move(*testing::get<k>(args));
 }
 
+MATCHER_P(HasErrorCode, expected_error_code, "") {
+  return arg.error_code() == expected_error_code;
+}
+
 class SharingMessageBridgeTest : public testing::Test {
  protected:
   SharingMessageBridgeTest() {
@@ -95,22 +99,15 @@ TEST_F(SharingMessageBridgeTest, ShouldInvokeCallbackOnSuccess) {
   EXPECT_CALL(*processor(), Put(_, _, _)).WillOnce(SaveArg<0>(&storage_key));
 
   base::MockCallback<SharingMessageBridge::CommitFinishedCallback> callback;
-  sync_pb::SharingMessageCommitError commit_error;
-  EXPECT_CALL(callback, Run).WillOnce(SaveArg<0>(&commit_error));
-
   bridge()->SendSharingMessage(CreateSpecifics("payload"), callback.Get());
-
-  // The callback should be called only after committing data.
-  EXPECT_FALSE(commit_error.has_error_code());
+  EXPECT_CALL(callback,
+              Run(HasErrorCode(sync_pb::SharingMessageCommitError::NONE)));
 
   // Mark data as committed.
   syncer::EntityChangeList change_list;
   change_list.push_back(syncer::EntityChange::CreateDelete(storage_key));
   bridge()->ApplySyncChanges(nullptr, std::move(change_list));
 
-  EXPECT_TRUE(commit_error.has_error_code());
-  EXPECT_EQ(commit_error.error_code(),
-            sync_pb::SharingMessageCommitError::NONE);
   EXPECT_EQ(bridge()->GetCallbacksCountForTesting(), 0u);
 }
 
@@ -146,6 +143,34 @@ TEST_F(SharingMessageBridgeTest, ShouldInvokeCallbackOnFailure) {
   EXPECT_TRUE(commit_error.has_error_code());
   EXPECT_EQ(commit_error.error_code(),
             sync_pb::SharingMessageCommitError::PERMISSION_DENIED);
+  EXPECT_EQ(bridge()->GetCallbacksCountForTesting(), 0u);
+}
+
+TEST_F(SharingMessageBridgeTest, ShouldInvokeCallbackIfSyncIsDisabled) {
+  ON_CALL(*processor(), IsTrackingMetadata()).WillByDefault(Return(false));
+  EXPECT_CALL(*processor(), Put).Times(0);
+
+  base::MockCallback<SharingMessageBridge::CommitFinishedCallback> callback;
+  sync_pb::SharingMessageCommitError commit_error;
+  EXPECT_CALL(callback, Run).WillOnce(SaveArg<0>(&commit_error));
+
+  bridge()->SendSharingMessage(CreateSpecifics("test_payload"), callback.Get());
+
+  EXPECT_EQ(commit_error.error_code(),
+            sync_pb::SharingMessageCommitError::SYNC_TURNED_OFF);
+  EXPECT_EQ(bridge()->GetCallbacksCountForTesting(), 0u);
+}
+
+TEST_F(SharingMessageBridgeTest, ShouldInvokeCallbackOnSyncStoppedEvent) {
+  base::MockCallback<SharingMessageBridge::CommitFinishedCallback> callback;
+  bridge()->SendSharingMessage(CreateSpecifics("test_payload"), callback.Get());
+  ASSERT_EQ(bridge()->GetCallbacksCountForTesting(), 1u);
+
+  EXPECT_CALL(
+      callback,
+      Run(HasErrorCode(sync_pb::SharingMessageCommitError::SYNC_TURNED_OFF)));
+  bridge()->ApplyStopSyncChanges(nullptr);
+
   EXPECT_EQ(bridge()->GetCallbacksCountForTesting(), 0u);
 }
 
