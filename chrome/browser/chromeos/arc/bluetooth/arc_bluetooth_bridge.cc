@@ -412,6 +412,12 @@ std::vector<uint8_t> MakeCCCDValue(uint8_t value) {
   return {value, 0};
 }
 
+void SendRssiOnGetConnectionInfoDone(
+    arc::ArcBluetoothBridge::ReadRemoteRssiCallback callback,
+    const device::BluetoothDevice::ConnectionInfo& conn_info) {
+  std::move(callback).Run(conn_info.rssi);
+}
+
 }  // namespace
 
 namespace arc {
@@ -1756,8 +1762,14 @@ void ArcBluetoothBridge::ReadRemoteRssi(mojom::BluetoothAddressPtr remote_addr,
     std::move(callback).Run(mojom::kUnknownPower);
     return;
   }
-  std::move(callback).Run(
-      device->GetInquiryRSSI().value_or(mojom::kUnknownPower));
+
+  if (device->IsConnected()) {
+    device->GetConnectionInfo(base::AdaptCallbackForRepeating(
+        base::BindOnce(&SendRssiOnGetConnectionInfoDone, std::move(callback))));
+  } else {
+    std::move(callback).Run(
+        device->GetInquiryRSSI().value_or(mojom::kUnknownPower));
+  }
 }
 
 void ArcBluetoothBridge::OpenBluetoothSocket(
