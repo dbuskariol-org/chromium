@@ -59,9 +59,12 @@
 using autofill::FormData;
 using autofill::FormFieldData;
 using autofill::FormStructure;
+using autofill::NO_SERVER_DATA;
+using autofill::NOT_USERNAME;
 using autofill::PasswordForm;
 using autofill::PasswordFormFillData;
 using autofill::ServerFieldType;
+using autofill::SINGLE_USERNAME;
 using autofill::mojom::PasswordFormFieldPredictionType;
 using base::ASCIIToUTF16;
 using base::Feature;
@@ -3372,15 +3375,14 @@ TEST_F(PasswordManagerTest, UsernameFirstFlow) {
   EXPECT_EQ(password, saved_form.password_value);
 }
 
-//  Checks that username is saved on username first flow.
-TEST_F(PasswordManagerTest, UsernameFirstFlowFillingLocalPredictions) {
+#if !defined(OS_IOS)
+//  Checks that username is filled on username first flow based on server and
+//  local predictions.
+TEST_F(PasswordManagerTest, UsernameFirstFlowFillingServerAndLocalPredictions) {
   base::test::ScopedFeatureList feature_list;
   feature_list.InitAndEnableFeature(features::kUsernameFirstFlow);
   EXPECT_CALL(*store_, GetLogins(_, _))
       .WillRepeatedly(WithArg<1>(InvokeConsumer(MakeSavedForm())));
-
-  manager()->OnPasswordFormsParsed(&driver_, {} /* observed */);
-
   EXPECT_CALL(client_, IsSavingAndFillingEnabled).WillRepeatedly(Return(true));
 
   constexpr uint32_t kFieldRendererId = 1;
@@ -3391,17 +3393,37 @@ TEST_F(PasswordManagerTest, UsernameFirstFlowFillingLocalPredictions) {
   field.unique_renderer_id = kFieldRendererId;
   non_password_form.fields.push_back(field);
 
-  FormStructure form_structure(non_password_form);
-
   MockFieldInfoManager mock_field_manager;
   ON_CALL(client_, GetFieldInfoManager())
       .WillByDefault(Return(&mock_field_manager));
-  EXPECT_CALL(mock_field_manager, GetFieldType(_, _))
-      .WillOnce(Return(autofill::SINGLE_USERNAME));
 
-  EXPECT_CALL(driver_, FillPasswordForm(_));
-  manager()->ProcessAutofillPredictions(&driver_, {&form_structure});
+  for (auto server_type : {NO_SERVER_DATA, SINGLE_USERNAME, NOT_USERNAME}) {
+    for (auto local_type : {NO_SERVER_DATA, SINGLE_USERNAME, NOT_USERNAME}) {
+      SCOPED_TRACE(testing::Message("server_type=")
+                   << server_type << " "
+                   << "local_type=" << local_type);
+      manager()->OnPasswordFormsParsed(&driver_, {} /* observed */);
+      EXPECT_CALL(mock_field_manager, GetFieldType(_, _))
+          .WillOnce(Return(local_type));
+
+      // Simulate filling of different forms on each iteration.
+      ++non_password_form.unique_renderer_id;
+      non_password_form.name += ASCIIToUTF16("1");  // for iOS.
+
+      FormStructure form_structure(non_password_form);
+      form_structure.field(0)->set_server_type(server_type);
+
+      bool should_be_filled =
+          server_type == SINGLE_USERNAME || local_type == SINGLE_USERNAME;
+      EXPECT_CALL(driver_, FillPasswordForm(_)).Times(should_be_filled ? 1 : 0);
+      manager()->ProcessAutofillPredictions(&driver_, {&form_structure});
+
+      Mock::VerifyAndClearExpectations(&client_);
+      Mock::VerifyAndClearExpectations(&mock_field_manager);
+    }
+  }
 }
+#endif
 
 TEST_F(PasswordManagerTest, FormSubmittedOnMainFrame) {
   EXPECT_CALL(client_, IsSavingAndFillingEnabled).WillRepeatedly(Return(true));

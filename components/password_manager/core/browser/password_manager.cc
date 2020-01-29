@@ -51,6 +51,7 @@ using autofill::NEW_PASSWORD;
 using autofill::NOT_USERNAME;
 using autofill::PasswordForm;
 using autofill::SINGLE_USERNAME;
+using autofill::USERNAME;
 using autofill::mojom::PasswordFormFieldPredictionType;
 #if defined(SYNC_PASSWORD_REUSE_DETECTION_ENABLED)
 using password_manager::metrics_util::GaiaPasswordHashChange;
@@ -166,9 +167,15 @@ void AddLocallySavedPredictions(FieldInfoManager* field_info_manager,
   for (PasswordFieldPrediction& field : predictions->fields) {
     auto local_prediction = field_info_manager->GetFieldType(
         predictions->form_signature, field.signature);
-    if (local_prediction != SINGLE_USERNAME && local_prediction != NOT_USERNAME)
-      continue;
-    field.type = local_prediction;
+    if (local_prediction == SINGLE_USERNAME) {
+      field.type = SINGLE_USERNAME;
+    } else if (local_prediction == NOT_USERNAME) {
+      // Now local prediction NOT_USERNAME is based on the weak signal (the user
+      // ignored or rejected the prompt) so use it only if the server does not
+      // have data.
+      if (field.type != SINGLE_USERNAME && field.type != USERNAME)
+        field.type = NOT_USERNAME;
+    }
   }
 }
 
