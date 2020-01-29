@@ -136,16 +136,20 @@ void HardwareDisplayPlaneManager::PopulateSupportedFormats() {
 }
 
 void HardwareDisplayPlaneManager::ResetCurrentPlaneList(
-    const HardwareDisplayPlaneList& plane_list) const {
-  for (auto* hardware_plane : plane_list.plane_list) {
+    HardwareDisplayPlaneList* plane_list) const {
+  for (auto* hardware_plane : plane_list->plane_list) {
     hardware_plane->set_in_use(false);
     hardware_plane->set_owning_crtc(0);
   }
+
+  plane_list->plane_list.clear();
+  plane_list->legacy_page_flips.clear();
+  plane_list->atomic_property_set.reset(drmModeAtomicAlloc());
 }
 
 void HardwareDisplayPlaneManager::BeginFrame(
-    const HardwareDisplayPlaneList& plane_list) {
-  for (auto* plane : plane_list.old_plane_list) {
+    HardwareDisplayPlaneList* plane_list) {
+  for (auto* plane : plane_list->old_plane_list) {
     plane->set_in_use(false);
   }
 }
@@ -166,7 +170,7 @@ bool HardwareDisplayPlaneManager::AssignOverlayPlanes(
         FindNextUnusedPlane(&plane_idx, crtc_index, plane);
     if (!hw_plane) {
       LOG(ERROR) << "Failed to find a free plane for crtc " << crtc_id;
-      ResetCurrentPlaneList(*plane_list);
+      ResetCurrentPlaneList(plane_list);
       return false;
     }
 
@@ -187,7 +191,7 @@ bool HardwareDisplayPlaneManager::AssignOverlayPlanes(
     }
 
     if (!SetPlaneData(plane_list, hw_plane, plane, crtc_id, fixed_point_rect)) {
-      ResetCurrentPlaneList(*plane_list);
+      ResetCurrentPlaneList(plane_list);
       return false;
     }
 
@@ -216,19 +220,6 @@ std::vector<uint64_t> HardwareDisplayPlaneManager::GetFormatModifiers(
   }
 
   return std::vector<uint64_t>();
-}
-
-std::vector<HardwareDisplayPlane*>
-HardwareDisplayPlaneManager::GetOwnedPlanesForCrtcs(
-    const std::vector<uint32_t>& crtcs) {
-  std::vector<HardwareDisplayPlane*> result;
-  for (const auto& plane : planes()) {
-    if (std::find(crtcs.begin(), crtcs.end(), plane->owning_crtc()) !=
-        crtcs.end()) {
-      result.push_back(plane.get());
-    }
-  }
-  return result;
 }
 
 bool HardwareDisplayPlaneManager::SetColorMatrix(

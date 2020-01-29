@@ -19,11 +19,10 @@ class HardwareDisplayPlaneManagerAtomic : public HardwareDisplayPlaneManager {
   ~HardwareDisplayPlaneManagerAtomic() override;
 
   // HardwareDisplayPlaneManager:
-  bool Commit(const HardwareDisplayPlaneList& plane_list,
+  bool Commit(HardwareDisplayPlaneList* plane_list,
               scoped_refptr<PageFlipRequest> page_flip_request,
               std::unique_ptr<gfx::GpuFence>* out_fence) override;
-  bool DisableOverlayPlanes(
-      const std::vector<HardwareDisplayPlane*>& plane_list) override;
+  bool DisableOverlayPlanes(HardwareDisplayPlaneList* plane_list) override;
 
   bool SetColorCorrectionOnAllCrtcPlanes(
       uint32_t crtc_id,
