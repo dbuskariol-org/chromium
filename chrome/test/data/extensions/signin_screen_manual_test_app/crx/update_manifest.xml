@@ -7,7 +7,7 @@
 <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
   <app appid='bjaiihebfngildkcjkjckolinodhliff'>
     <updatecheck
-        codebase='http://mock.http/extensions/signin_screen_manual_test_app/crx/3.0/app_signed_by_webstore.crx'
-        version='3.0' />
+        codebase='http://mock.http/extensions/signin_screen_manual_test_app/crx/app_signed_by_webstore.crx'
+        version='4.0' />
    </app>
 </gupdate>
