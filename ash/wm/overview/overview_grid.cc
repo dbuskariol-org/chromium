@@ -382,8 +382,10 @@ void OverviewGrid::Shutdown() {
         single_animation_in_clamshell);
   }
 
-  while (!window_list_.empty())
-    RemoveItem(window_list_.back().get());
+  while (!window_list_.empty()) {
+    RemoveItem(window_list_.back().get(), /*item_destroying=*/false,
+               /*reposition=*/false);
+  }
 
   // RemoveItem() uses `overview_session_`, so clear it at the end.
   overview_session_ = nullptr;
@@ -553,7 +555,7 @@ void OverviewGrid::AddItemInMruOrder(aura::Window* window,
                                      bool reposition,
                                      bool animate) {
   AddItem(window, reposition, animate, /*ignored_items=*/{},
-          FindInsertionIndex(window));
+          FindInsertionIndex(window), /*use_spawn_animation=*/false);
 }
 
 void OverviewGrid::RemoveItem(OverviewItem* overview_item,

@@ -588,7 +588,10 @@ OverviewWindowDragController::CompleteNormalDrag(
     // Get the window and bounds from |item_| before removing it from its grid.
     aura::Window* window = item_->GetWindow();
     const gfx::RectF bounds = item_->target_bounds();
-    item_->overview_grid()->RemoveItem(item_);
+    // Remove |item_| from its grid, with reposition=false because soon we will
+    // call |OverviewSession::PositionWindows| anyway.
+    item_->overview_grid()->RemoveItem(item_, /*item_destroying=*/false,
+                                       /*reposition=*/false);
     item_ = nullptr;
     // Use |OverviewSession::set_ignore_window_hierarchy_changes| to prevent
     // |OverviewSession::OnWindowHierarchyChanged| from ending overview as we

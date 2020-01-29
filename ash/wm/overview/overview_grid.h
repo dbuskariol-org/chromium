@@ -98,13 +98,13 @@ class ASH_EXPORT OverviewGrid : public SplitViewObserver,
                bool animate,
                const base::flat_set<OverviewItem*>& ignored_items,
                size_t index,
-               bool use_spawn_animation = false);
+               bool use_spawn_animation);
 
   // Similar to the above function, but adds the window to the end of the grid.
   void AppendItem(aura::Window* window,
                   bool reposition,
                   bool animate,
-                  bool use_spawn_animation = false);
+                  bool use_spawn_animation);
 
   // Like |AddItem|, but adds |window| at the correct position according to MRU
   // order.
@@ -116,8 +116,8 @@ class ASH_EXPORT OverviewGrid : public SplitViewObserver,
   // and |reposition| are both true, all items are repositioned with animation.
   // |reposition| has no effect if |item_destroying| is false.
   void RemoveItem(OverviewItem* overview_item,
-                  bool item_destroying = false,
-                  bool reposition = false);
+                  bool item_destroying,
+                  bool reposition);
 
   // Adds a drop target for |dragged_item|, at the index immediately following
   // |dragged_item|. Repositions all items except |dragged_item|, so that the

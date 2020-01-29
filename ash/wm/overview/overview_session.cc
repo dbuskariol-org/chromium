@@ -405,7 +405,8 @@ void OverviewSession::AddItem(
   if (!grid || grid->GetOverviewItemContaining(window))
     return;
 
-  grid->AddItem(window, reposition, animate, ignored_items, index);
+  grid->AddItem(window, reposition, animate, ignored_items, index,
+                /*use_spawn_animation=*/false);
   OnItemAdded(window);
 }
 
@@ -439,7 +440,8 @@ void OverviewSession::RemoveItem(OverviewItem* overview_item) {
       restore_focus_window_ = nullptr;
   }
 
-  overview_item->overview_grid()->RemoveItem(overview_item);
+  overview_item->overview_grid()->RemoveItem(
+      overview_item, /*item_destroying=*/false, /*reposition=*/false);
   --num_items_;
 
   UpdateNoWindowsWidget();
