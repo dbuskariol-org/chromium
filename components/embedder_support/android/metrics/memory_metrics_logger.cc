@@ -1,8 +1,8 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "android_webview/browser/metrics/memory_metrics_logger.h"
+#include "components/embedder_support/android/metrics/memory_metrics_logger.h"
 
 #include "base/bind.h"
 #include "base/bind_helpers.h"
@@ -20,7 +20,7 @@
 using memory_instrumentation::GetPrivateFootprintHistogramName;
 using memory_instrumentation::HistogramProcessType;
 
-namespace android_webview {
+namespace metrics {
 namespace {
 
 MemoryMetricsLogger* g_instance = nullptr;
@@ -56,6 +56,8 @@ void RecordMemoryMetricsImpl(
       }
 
       // WebView only supports the browser and possibly renderer process.
+      // TODO(weblayer-team): refactor to allow the embedder to record GPU
+      // metrics.
       case memory_instrumentation::mojom::ProcessType::GPU:
         FALLTHROUGH;
       case memory_instrumentation::mojom::ProcessType::ARC:
@@ -146,4 +148,4 @@ void MemoryMetricsLogger::RecordMemoryMetrics(scoped_refptr<State> state,
   RecordMemoryMetricsAfterDelay(state);
 }
 
-}  // namespace android_webview
+}  // namespace metrics
