@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/public/common/messaging/simple_message_port.h"
+#include "third_party/blink/public/common/messaging/web_message_port.h"
 
 #include "base/run_loop.h"
 #include "base/strings/string16.h"
@@ -15,14 +15,14 @@ namespace blink {
 
 namespace {
 
-using Message = SimpleMessagePort::Message;
+using Message = WebMessagePort::Message;
 
-class LenientMockReceiver : public SimpleMessagePort::MessageReceiver {
+class LenientMockReceiver : public WebMessagePort::MessageReceiver {
  public:
   LenientMockReceiver() = default;
   ~LenientMockReceiver() override = default;
 
-  // SimpleMessagePort::MessageReceiver implementation:
+  // WebMessagePort::MessageReceiver implementation:
   MOCK_METHOD1(OnMessage, bool(Message));
   MOCK_METHOD0(OnPipeError, void());
 };
@@ -34,11 +34,11 @@ using testing::Invoke;
 
 }  // namespace
 
-TEST(SimpleMessagePortTest, EndToEnd) {
+TEST(WebMessagePortTest, EndToEnd) {
   base::test::SingleThreadTaskEnvironment task_env;
 
   // Create a dummy pipe and ensure it behaves as expected.
-  SimpleMessagePort port0;
+  WebMessagePort port0;
   EXPECT_FALSE(port0.IsValid());
   EXPECT_FALSE(port0.is_errored());
   EXPECT_TRUE(port0.is_closed());
@@ -47,9 +47,9 @@ TEST(SimpleMessagePortTest, EndToEnd) {
   EXPECT_FALSE(port0.CanPostMessage());
 
   // Create a pipe.
-  auto pipe = SimpleMessagePort::CreatePair();
+  auto pipe = WebMessagePort::CreatePair();
   port0 = std::move(pipe.first);
-  SimpleMessagePort port1 = std::move(pipe.second);
+  WebMessagePort port1 = std::move(pipe.second);
 
   EXPECT_TRUE(port0.IsValid());
   EXPECT_FALSE(port0.is_errored());
@@ -103,7 +103,7 @@ TEST(SimpleMessagePortTest, EndToEnd) {
   }
 
   // Send a message the other way (from 1 to 0) with a port.
-  auto pipe2 = SimpleMessagePort::CreatePair();
+  auto pipe2 = WebMessagePort::CreatePair();
   {
     base::RunLoop run_loop;
     EXPECT_CALL(receiver0, OnMessage(_))

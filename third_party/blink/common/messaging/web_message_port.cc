@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/public/common/messaging/simple_message_port.h"
+#include "third_party/blink/public/common/messaging/web_message_port.h"
 
 #include "base/memory/ptr_util.h"
 #include "third_party/blink/public/common/messaging/message_port_channel.h"
@@ -13,63 +13,67 @@
 
 namespace blink {
 
-SimpleMessagePort::Message::Message() = default;
-SimpleMessagePort::Message::Message(Message&&) = default;
-SimpleMessagePort::Message& SimpleMessagePort::Message::operator=(Message&&) =
+WebMessagePort::Message::Message() = default;
+WebMessagePort::Message::Message(Message&&) = default;
+WebMessagePort::Message& WebMessagePort::Message::operator=(Message&&) =
     default;
-SimpleMessagePort::Message::~Message() = default;
+WebMessagePort::Message::~Message() = default;
 
-SimpleMessagePort::Message::Message(const base::string16& data) : data(data) {}
+WebMessagePort::Message::Message(const base::string16& data) : data(data) {}
 
-SimpleMessagePort::Message::Message(std::vector<SimpleMessagePort> ports)
+WebMessagePort::Message::Message(std::vector<WebMessagePort> ports)
     : ports(std::move(ports)) {}
 
-SimpleMessagePort::Message::Message(SimpleMessagePort&& port) {
+WebMessagePort::Message::Message(WebMessagePort&& port) {
   ports.emplace_back(std::move(port));
 }
 
-SimpleMessagePort::Message::Message(const base::string16& data,
-                                    std::vector<SimpleMessagePort> ports)
+WebMessagePort::Message::Message(const base::string16& data,
+                                 std::vector<WebMessagePort> ports)
     : data(data), ports(std::move(ports)) {}
 
-SimpleMessagePort::Message::Message(const base::string16& data,
-                                    SimpleMessagePort port)
+WebMessagePort::Message::Message(const base::string16& data,
+                                 WebMessagePort port)
     : data(data) {
   ports.emplace_back(std::move(port));
 }
 
-SimpleMessagePort::MessageReceiver::MessageReceiver() = default;
-SimpleMessagePort::MessageReceiver::~MessageReceiver() = default;
-bool SimpleMessagePort::MessageReceiver::OnMessage(Message) {
+WebMessagePort::MessageReceiver::MessageReceiver() = default;
+WebMessagePort::MessageReceiver::~MessageReceiver() = default;
+bool WebMessagePort::MessageReceiver::OnMessage(Message) {
   return true;
 }
 
-SimpleMessagePort::SimpleMessagePort() = default;
+WebMessagePort::WebMessagePort() = default;
 
-SimpleMessagePort::SimpleMessagePort(SimpleMessagePort&& other) {
+WebMessagePort::WebMessagePort(WebMessagePort&& other) {
   Take(std::move(other));
 }
 
-SimpleMessagePort& SimpleMessagePort::operator=(SimpleMessagePort&& other) {
+WebMessagePort& WebMessagePort::operator=(WebMessagePort&& other) {
   Take(std::move(other));
   return *this;
 }
 
-SimpleMessagePort::~SimpleMessagePort() {
+WebMessagePort::~WebMessagePort() {
   CloseIfNecessary();
 }
 
 // static
-std::pair<SimpleMessagePort, SimpleMessagePort>
-SimpleMessagePort::CreatePair() {
+std::pair<WebMessagePort, WebMessagePort> WebMessagePort::CreatePair() {
   mojo::ScopedMessagePipeHandle handle0, handle1;
   CHECK_EQ(MOJO_RESULT_OK,
            mojo::CreateMessagePipe(nullptr, &handle0, &handle1));
-  return std::make_pair(SimpleMessagePort(std::move(handle0)),
-                        SimpleMessagePort(std::move(handle1)));
+  return std::make_pair(WebMessagePort(std::move(handle0)),
+                        WebMessagePort(std::move(handle1)));
 }
 
-void SimpleMessagePort::SetReceiver(
+// static
+WebMessagePort WebMessagePort::Create(mojo::ScopedMessagePipeHandle port) {
+  return WebMessagePort(std::move(port));
+}
+
+void WebMessagePort::SetReceiver(
     MessageReceiver* receiver,
     scoped_refptr<base::SequencedTaskRunner> runner) {
   DCHECK(receiver);
@@ -88,10 +92,10 @@ void SimpleMessagePort::SetReceiver(
       std::move(runner));
   connector_->set_incoming_receiver(this);
   connector_->set_connection_error_handler(
-      base::BindOnce(&SimpleMessagePort::OnPipeError, base::Unretained(this)));
+      base::BindOnce(&WebMessagePort::OnPipeError, base::Unretained(this)));
 }
 
-void SimpleMessagePort::ClearReceiver() {
+void WebMessagePort::ClearReceiver() {
   if (!connector_)
     return;
   port_ = connector_->PassMessagePipe();
@@ -99,13 +103,13 @@ void SimpleMessagePort::ClearReceiver() {
   receiver_ = nullptr;
 }
 
-base::SequencedTaskRunner* SimpleMessagePort::GetTaskRunner() const {
+base::SequencedTaskRunner* WebMessagePort::GetTaskRunner() const {
   if (!connector_)
     return nullptr;
   return connector_->task_runner();
 }
 
-mojo::ScopedMessagePipeHandle SimpleMessagePort::PassHandle() {
+mojo::ScopedMessagePipeHandle WebMessagePort::PassHandle() {
   DCHECK(is_transferable_);
 
   // Clear the receiver, which takes the handle out of the connector if it
@@ -116,17 +120,17 @@ mojo::ScopedMessagePipeHandle SimpleMessagePort::PassHandle() {
   return handle;
 }
 
-SimpleMessagePort::SimpleMessagePort(mojo::ScopedMessagePipeHandle&& port)
+WebMessagePort::WebMessagePort(mojo::ScopedMessagePipeHandle&& port)
     : port_(std::move(port)), is_closed_(false), is_transferable_(true) {
   DCHECK(port_.is_valid());
 }
 
-bool SimpleMessagePort::CanPostMessage() const {
+bool WebMessagePort::CanPostMessage() const {
   return connector_ && connector_->is_valid() && !is_closed_ && !is_errored_ &&
          receiver_;
 }
 
-bool SimpleMessagePort::PostMessage(Message&& message) {
+bool WebMessagePort::PostMessage(Message&& message) {
   if (!CanPostMessage())
     return false;
 
@@ -164,24 +168,24 @@ bool SimpleMessagePort::PostMessage(Message&& message) {
   return true;
 }
 
-bool SimpleMessagePort::IsValid() const {
+bool WebMessagePort::IsValid() const {
   if (connector_)
     return connector_->is_valid();
   return port_.is_valid();
 }
 
-void SimpleMessagePort::Close() {
+void WebMessagePort::Close() {
   CloseIfNecessary();
 }
 
-void SimpleMessagePort::Reset() {
+void WebMessagePort::Reset() {
   CloseIfNecessary();
   is_closed_ = true;
   is_errored_ = false;
   is_transferable_ = false;
 }
 
-void SimpleMessagePort::Take(SimpleMessagePort&& other) {
+void WebMessagePort::Take(WebMessagePort&& other) {
   port_ = std::move(other.port_);
   connector_ = std::move(other.connector_);
   is_closed_ = std::exchange(other.is_closed_, true);
@@ -190,7 +194,7 @@ void SimpleMessagePort::Take(SimpleMessagePort&& other) {
   receiver_ = std::exchange(other.receiver_, nullptr);
 }
 
-void SimpleMessagePort::OnPipeError() {
+void WebMessagePort::OnPipeError() {
   DCHECK(!is_transferable_);
   if (is_errored_)
     return;
@@ -199,7 +203,7 @@ void SimpleMessagePort::OnPipeError() {
     receiver_->OnPipeError();
 }
 
-void SimpleMessagePort::CloseIfNecessary() {
+void WebMessagePort::CloseIfNecessary() {
   if (is_closed_)
     return;
   is_closed_ = true;
@@ -207,7 +211,7 @@ void SimpleMessagePort::CloseIfNecessary() {
   port_.reset();
 }
 
-bool SimpleMessagePort::Accept(mojo::Message* mojo_message) {
+bool WebMessagePort::Accept(mojo::Message* mojo_message) {
   DCHECK(receiver_);
   DCHECK(!is_transferable_);
 
@@ -230,7 +234,7 @@ bool SimpleMessagePort::Accept(mojo::Message* mojo_message) {
   auto handles =
       blink::MessagePortChannel::ReleaseHandles(transferable_message.ports);
   for (auto& handle : handles) {
-    message.ports.emplace_back(SimpleMessagePort(std::move(handle)));
+    message.ports.emplace_back(WebMessagePort(std::move(handle)));
   }
 
   // Pass the message on to the receiver.
