@@ -265,13 +265,6 @@ void TakeHistoryForActivation(WebContentsImpl* activated_contents,
   // Activation would have discarded any pending entry in the host contents.
   DCHECK(!predecessor_controller.GetPendingEntry());
 
-  // TODO(mcnee): Don't allow activation of an empty contents (see
-  // https://crbug.com/942198).
-  if (!activated_controller.GetLastCommittedEntry()) {
-    DLOG(WARNING) << "An empty portal WebContents was activated.";
-    return;
-  }
-
   // If the predecessor has no committed entries (e.g. by using window.open()
   // and then activating a portal from about:blank), there's nothing to do here.
   // TODO(mcnee): This should also be disallowed.
@@ -291,6 +284,7 @@ void TakeHistoryForActivation(WebContentsImpl* activated_contents,
   if (activated_controller.GetPendingEntryIndex() != -1) {
     return;
   }
+  DCHECK(activated_controller.GetLastCommittedEntry());
   DCHECK(activated_controller.CanPruneAllButLastCommitted());
 
   // TODO(mcnee): Allow for portal activations to replace history entries and to
