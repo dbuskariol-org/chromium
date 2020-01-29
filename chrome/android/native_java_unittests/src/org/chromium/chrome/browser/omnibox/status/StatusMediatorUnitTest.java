@@ -11,40 +11,34 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.Robolectric;
-import org.robolectric.annotation.Config;
 
 import org.chromium.base.Callback;
-import org.chromium.base.test.BaseRobolectricTestRunner;
+import org.chromium.base.ContextUtils;
+import org.chromium.base.annotations.CalledByNative;
+import org.chromium.base.annotations.CalledByNativeJavaTest;
+import org.chromium.base.annotations.NativeJavaTestFeatures;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.ntp.NewTabPage;
 import org.chromium.chrome.browser.omnibox.UrlBarEditingTextStateProvider;
 import org.chromium.chrome.browser.toolbar.ToolbarCommonPropertiesModel;
 import org.chromium.chrome.browser.util.UrlConstants;
-import org.chromium.chrome.test.util.browser.Features;
 import org.chromium.ui.modelutil.PropertyModel;
 
 /**
  * Unit tests for {@link StatusMediator}.
  */
-@RunWith(BaseRobolectricTestRunner.class)
-@Config(manifest = Config.NONE)
 public final class StatusMediatorUnitTest {
     private static final String TEST_SEARCH_URL = "https://www.test.com";
 
@@ -61,7 +55,6 @@ public final class StatusMediatorUnitTest {
     @Captor
     ArgumentCaptor<String> mUrlCaptor;
 
-    Activity mActivity;
     Context mContext;
     Resources mResources;
 
@@ -69,16 +62,18 @@ public final class StatusMediatorUnitTest {
     StatusMediator mMediator;
     Bitmap mBitmap;
 
-    @Before
+    @CalledByNative
+    private StatusMediatorUnitTest() {}
+
+    @CalledByNative
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mActivity = Robolectric.buildActivity(Activity.class).setup().get();
-        mContext = mActivity.getApplicationContext();
-        mResources = mActivity.getResources();
+        mContext = ContextUtils.getApplicationContext();
+        mResources = mContext.getResources();
 
         mModel = new PropertyModel(StatusProperties.ALL_KEYS);
         mMediator =
-                new StatusMediator(mModel, mResources, mActivity, mUrlBarEditingTextStateProvider);
+                new StatusMediator(mModel, mResources, mContext, mUrlBarEditingTextStateProvider);
         mMediator.setToolbarCommonPropertiesModel(mToolbarCommonPropertiesModel);
         mMediator.setDelegateForTesting(mDelegate);
         mBitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
@@ -87,8 +82,8 @@ public final class StatusMediatorUnitTest {
                 .thenAnswer(invocation -> mUrlCaptor.getValue().equals(TEST_SEARCH_URL));
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_showGoogleLogo() {
         setupSearchEngineLogoForTesting(true, false, false);
 
@@ -99,8 +94,8 @@ public final class StatusMediatorUnitTest {
                 mModel.get(StatusProperties.STATUS_ICON_RESOURCE).getIconResForTesting());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_showGoogleLogo_hideAfterAnimationFinished() {
         setupSearchEngineLogoForTesting(true, false, false);
         doReturn(mNewTabPage).when(mToolbarCommonPropertiesModel).getNewTabPageForCurrentTab();
@@ -113,8 +108,8 @@ public final class StatusMediatorUnitTest {
         Assert.assertFalse(mModel.get(StatusProperties.SHOW_STATUS_ICON));
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_showGoogleLogo_noHideIconAfterAnimationFinishedWhenScrolled() {
         setupSearchEngineLogoForTesting(true, false, false);
 
@@ -126,8 +121,8 @@ public final class StatusMediatorUnitTest {
         Assert.assertTrue(mModel.get(StatusProperties.SHOW_STATUS_ICON));
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_showGoogleLogoOnNtpScroll() {
         setupSearchEngineLogoForTesting(true, false, false);
 
@@ -138,8 +133,8 @@ public final class StatusMediatorUnitTest {
         Assert.assertTrue(mModel.get(StatusProperties.SHOW_STATUS_ICON));
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_showGoogleLogo_whenScrolled() {
         setupSearchEngineLogoForTesting(true, false, false);
         doReturn(false).when(mToolbarCommonPropertiesModel).isLoading();
@@ -154,8 +149,8 @@ public final class StatusMediatorUnitTest {
                 mModel.get(StatusProperties.STATUS_ICON_RESOURCE).getIconResForTesting());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_showGoogleLogo_searchLoupeEverywhere() {
         setupSearchEngineLogoForTesting(true, true, true);
 
@@ -166,8 +161,8 @@ public final class StatusMediatorUnitTest {
                 mModel.get(StatusProperties.STATUS_ICON_RESOURCE).getIconResForTesting());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_showNonGoogleLogo() {
         setupSearchEngineLogoForTesting(true, false, false);
         doAnswer(invocation -> {
@@ -191,8 +186,8 @@ public final class StatusMediatorUnitTest {
         Mockito.verify(mDelegate, Mockito.times(1)).getSearchEngineLogoFavicon(any(), any());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_showNonGoogleLogo_defaultsToLoupeWhenFaviconIsNull() {
         setupSearchEngineLogoForTesting(true, false, false);
         doAnswer(invocation -> {
@@ -214,8 +209,8 @@ public final class StatusMediatorUnitTest {
         Mockito.verify(mDelegate, Mockito.times(1)).getSearchEngineLogoFavicon(any(), any());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_showNonGoogleLogo_searchLoupeEverywhere() {
         setupSearchEngineLogoForTesting(true, false, true);
 
@@ -230,8 +225,8 @@ public final class StatusMediatorUnitTest {
         Mockito.verify(mDelegate, Mockito.times(0)).getSearchEngineLogoFavicon(any(), any());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_onTextChanged_globeReplacesIconWhenTextIsSite() {
         setupSearchEngineLogoForTesting(true, true, false);
 
@@ -244,8 +239,8 @@ public final class StatusMediatorUnitTest {
                 mModel.get(StatusProperties.STATUS_ICON_RESOURCE).getIconResForTesting());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_onTextChanged_globeReplacesIconWhenAutocompleteSiteContainsText() {
         setupSearchEngineLogoForTesting(true, true, false);
 
@@ -258,8 +253,8 @@ public final class StatusMediatorUnitTest {
                 mModel.get(StatusProperties.STATUS_ICON_RESOURCE).getIconResForTesting());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_onTextChanged_noGlobeReplacementWhenUrlBarTextDoesNotMatch() {
         setupSearchEngineLogoForTesting(true, true, false);
 
@@ -273,8 +268,8 @@ public final class StatusMediatorUnitTest {
                 mModel.get(StatusProperties.STATUS_ICON_RESOURCE).getIconResForTesting());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_onTextChanged_noGlobeReplacementWhenUrlBarTextIsEmpty() {
         setupSearchEngineLogoForTesting(true, true, false);
 
@@ -290,8 +285,8 @@ public final class StatusMediatorUnitTest {
                 mModel.get(StatusProperties.STATUS_ICON_RESOURCE).getIconResForTesting());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_incognitoNoIcon() {
         setupSearchEngineLogoForTesting(true, true, false);
         doReturn(true).when(mToolbarCommonPropertiesModel).isIncognito();
@@ -304,8 +299,8 @@ public final class StatusMediatorUnitTest {
         Assert.assertEquals(null, mModel.get(StatusProperties.STATUS_ICON_RESOURCE));
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_maybeUpdateStatusIconForSearchEngineIconChanges() {
         setupSearchEngineLogoForTesting(true, true, false);
 
@@ -319,8 +314,8 @@ public final class StatusMediatorUnitTest {
                 mModel.get(StatusProperties.STATUS_ICON_RESOURCE).getIconResForTesting());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void searchEngineLogo_maybeUpdateStatusIconForSearchEngineIconNoChanges() {
         setupSearchEngineLogoForTesting(true, true, false);
 
@@ -332,8 +327,8 @@ public final class StatusMediatorUnitTest {
         Assert.assertFalse(mMediator.maybeUpdateStatusIconForSearchEngineIcon());
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void setSecurityIconTintForSearchEngineIcon_zeroForGoogleAndNoIcon() {
         mMediator.setUseDarkColors(false);
         Assert.assertEquals(0, mMediator.getSecurityIconTintForSearchEngineIcon(0));
@@ -345,8 +340,8 @@ public final class StatusMediatorUnitTest {
                 mMediator.getSecurityIconTintForSearchEngineIcon(R.drawable.ic_logo_googleg_20dp));
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void setSecurityIconTintForSearchEngineIcon_correctForDarkColors() {
         mMediator.setUseDarkColors(true);
         Assert.assertEquals(R.color.default_icon_color_secondary_list,
@@ -355,8 +350,8 @@ public final class StatusMediatorUnitTest {
                 mMediator.getSecurityIconTintForSearchEngineIcon(R.drawable.ic_search));
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void setSecurityIconTintForSearchEngineIcon_correctForLightColors() {
         mMediator.setUseDarkColors(false);
         Assert.assertEquals(R.color.tint_on_dark_bg,
@@ -365,15 +360,15 @@ public final class StatusMediatorUnitTest {
                 mMediator.getSecurityIconTintForSearchEngineIcon(R.drawable.ic_search));
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void resolveUrlBarTextWithAutocomplete_urlBarTextEmpty() {
         Assert.assertEquals("Empty urlBarText should resolve to empty urlBarTextWithAutocomplete",
                 "", mMediator.resolveUrlBarTextWithAutocomplete(""));
     }
 
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
+    @CalledByNativeJavaTest
+    @NativeJavaTestFeatures.Enable(ChromeFeatureList.OMNIBOX_SEARCH_ENGINE_LOGO)
     public void resolveUrlBarTextWithAutocomplete_urlBarTextMismatchesAutocompleteText() {
         doReturn("https://foo.com").when(mUrlBarEditingTextStateProvider).getTextWithAutocomplete();
         String msg = "The urlBarText should only resolve to the autocomplete text if it's a "
