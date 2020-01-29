@@ -1325,6 +1325,18 @@ const FeatureEntry::FeatureVariation kAndroidNightModeFeatureVariations[] = {
     {"(default to light theme)", kAndroidNightModeDefaultToLightConstant,
      base::size(kAndroidNightModeDefaultToLightConstant), nullptr}};
 
+const FeatureEntry::FeatureParam kOmniboxAssistantVoiceSearch_Variations[] = {
+    {"min_agsa_version", ""},
+    {"min_android_sdk", ""},
+    {"min_memory_mb", ""},
+    {"enabled_locales", ""}};
+
+const FeatureEntry::FeatureVariation kOmniboxAssistantVoiceSearchVariations[] =
+    {
+        {"(with params)", kOmniboxAssistantVoiceSearch_Variations,
+         base::size(kOmniboxAssistantVoiceSearch_Variations), nullptr},
+};
+
 const FeatureEntry::FeatureParam
     kOmniboxSearchEngineLogoRoundedEdgesVariationConstant[] = {
         {"rounded_edges", "true"}};
@@ -2799,7 +2811,9 @@ const FeatureEntry kFeatureEntries[] = {
     {"omnibox-assistant-voice-search",
      flag_descriptions::kOmniboxAssistantVoiceSearchName,
      flag_descriptions::kOmniboxAssistantVoiceSearchDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(omnibox::kOmniboxAssistantVoiceSearch)},
+     FEATURE_WITH_PARAMS_VALUE_TYPE(omnibox::kOmniboxAssistantVoiceSearch,
+                                    kOmniboxAssistantVoiceSearchVariations,
+                                    "OmniboxAssistantVoiceSearch")},
 
     {"omnibox-search-engine-logo",
      flag_descriptions::kOmniboxSearchEngineLogoName,

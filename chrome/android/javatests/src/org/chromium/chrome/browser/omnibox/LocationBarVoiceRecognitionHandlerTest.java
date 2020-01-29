@@ -564,7 +564,8 @@ public class LocationBarVoiceRecognitionHandlerTest {
         Activity testActivity = Mockito.mock(Activity.class);
         PackageManager testPackageManager = Mockito.mock(PackageManager.class);
         PackageInfo testPackageInfo = new PackageInfo();
-        testPackageInfo.versionCode = LocationBarVoiceRecognitionHandler.ASSISTANT_AGSA_MIN_VERSION;
+        testPackageInfo.versionCode =
+                LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_AGSA_MIN_VERSION;
         doReturn(testPackageInfo)
                 .when(testPackageManager)
                 .getPackageInfo(IntentHandler.PACKAGE_GSA, 0);
@@ -578,7 +579,7 @@ public class LocationBarVoiceRecognitionHandlerTest {
         doReturn(true).when(mExternalAuthUtils).isGoogleSigned(IntentHandler.PACKAGE_GSA);
 
         SysUtils.setAmountOfPhysicalMemoryKBForTesting(
-                LocationBarVoiceRecognitionHandler.ASSISTANT_MIN_MEMORY_MB
+                LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_MIN_MEMORY_MB
                 * ConversionUtils.BYTES_PER_KILOBYTE);
         startVoiceRecognition(VoiceInteractionSource.OMNIBOX);
 

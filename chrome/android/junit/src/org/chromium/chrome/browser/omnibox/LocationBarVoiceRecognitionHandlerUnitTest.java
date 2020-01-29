@@ -31,9 +31,12 @@ import org.chromium.chrome.browser.search_engines.TemplateUrlServiceFactory;
 import org.chromium.components.search_engines.TemplateUrlService;
 import org.chromium.ui.base.WindowAndroid;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Tests for LocationBarVoiceRecognitionHandler.
@@ -62,7 +65,8 @@ public class LocationBarVoiceRecognitionHandlerUnitTest {
                 Mockito.mock(Delegate.class), mExternalAuthUtils);
 
         mPackageInfo = new PackageInfo();
-        mPackageInfo.versionCode = LocationBarVoiceRecognitionHandler.ASSISTANT_AGSA_MIN_VERSION;
+        mPackageInfo.versionCode =
+                LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_AGSA_MIN_VERSION;
         doReturn(mPackageInfo).when(mPackageManager).getPackageInfo(IntentHandler.PACKAGE_GSA, 0);
 
         doReturn(true).when(mTemplateUrlService).isDefaultSearchEngineGoogle();
@@ -80,7 +84,8 @@ public class LocationBarVoiceRecognitionHandlerUnitTest {
     @Test
     @Feature("OmniboxAssistantVoiceSearch")
     public void testStartVoiceRecognition_StartsAssistantVoiceSearch() {
-        mPackageInfo.versionCode = LocationBarVoiceRecognitionHandler.ASSISTANT_AGSA_MIN_VERSION;
+        mPackageInfo.versionCode =
+                LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_AGSA_MIN_VERSION;
 
         Assert.assertTrue(
                 mLocationBarVoiceRecognitionHandler.requestAssistantVoiceSearchIfConditionsMet(
@@ -92,7 +97,7 @@ public class LocationBarVoiceRecognitionHandlerUnitTest {
     @Feature("OmniboxAssistantVoiceSearch")
     public void testStartVoiceRecognition_StartsAssistantVoiceSearch_AGSAVersionTooLow() {
         mPackageInfo.versionCode =
-                LocationBarVoiceRecognitionHandler.ASSISTANT_AGSA_MIN_VERSION - 1;
+                LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_AGSA_MIN_VERSION - 1;
 
         Assert.assertFalse(
                 mLocationBarVoiceRecognitionHandler.requestAssistantVoiceSearchIfConditionsMet(
@@ -116,7 +121,8 @@ public class LocationBarVoiceRecognitionHandlerUnitTest {
     @Test
     @Feature("OmniboxAssistantVoiceSearch")
     public void testStartVoiceRecognition_StartsAssistantVoiceSearch_AGSANotSigned() {
-        mPackageInfo.versionCode = LocationBarVoiceRecognitionHandler.ASSISTANT_AGSA_MIN_VERSION;
+        mPackageInfo.versionCode =
+                LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_AGSA_MIN_VERSION;
 
         doReturn(false).when(mExternalAuthUtils).isGoogleSigned(IntentHandler.PACKAGE_GSA);
 
@@ -130,23 +136,61 @@ public class LocationBarVoiceRecognitionHandlerUnitTest {
     @Feature("OmniboxAssistantVoiceSearch")
     public void testAssistantEligibility_MimimumSpecs() {
         Assert.assertTrue(mLocationBarVoiceRecognitionHandler.isDeviceEligibleForAssistant(
-                mPackageManager, LocationBarVoiceRecognitionHandler.ASSISTANT_MIN_MEMORY_MB,
-                LocationBarVoiceRecognitionHandler.ASSISTANT_DEFAULT_LOCALES.iterator().next()));
+                mPackageManager, LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_MIN_MEMORY_MB,
+                LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_LOCALES.iterator().next()));
     }
 
     @Test
     @Feature("OmniboxAssistantVoiceSearch")
     public void testAssistantEligibility_MemoryTooLow() {
         Assert.assertFalse(mLocationBarVoiceRecognitionHandler.isDeviceEligibleForAssistant(
-                mPackageManager, LocationBarVoiceRecognitionHandler.ASSISTANT_MIN_MEMORY_MB - 1,
-                LocationBarVoiceRecognitionHandler.ASSISTANT_DEFAULT_LOCALES.iterator().next()));
+                mPackageManager,
+                LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_MIN_MEMORY_MB - 1,
+                LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_LOCALES.iterator().next()));
     }
 
     @Test
     @Feature("OmniboxAssistantVoiceSearch")
     public void testAssistantEligibility_UnsupportedLocale() {
         Assert.assertFalse(mLocationBarVoiceRecognitionHandler.isDeviceEligibleForAssistant(
-                mPackageManager, LocationBarVoiceRecognitionHandler.ASSISTANT_MIN_MEMORY_MB,
+                mPackageManager, LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_MIN_MEMORY_MB,
                 new Locale("br")));
+    }
+
+    @Test
+    @Feature("OmniboxAssistantVoiceSearch")
+    public void parseLocalesFromString_SingleValid() {
+        String encodedLocales = "en-us";
+        Set<Locale> locales = new HashSet<>(Arrays.asList(new Locale("en", "us")));
+
+        Assert.assertEquals(locales,
+                mLocationBarVoiceRecognitionHandler.parseLocalesFromString(encodedLocales));
+    }
+
+    @Test
+    @Feature("OmniboxAssistantVoiceSearch")
+    public void parseLocalesFromString_SingleInvalid() {
+        String encodedLocales = "en)us";
+        Assert.assertEquals(LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_LOCALES,
+                mLocationBarVoiceRecognitionHandler.parseLocalesFromString(encodedLocales));
+    }
+
+    @Test
+    @Feature("OmniboxAssistantVoiceSearch")
+    public void parseLocalesFromString_MultipleValid() {
+        String encodedLocales = "en-us,es-us,hi-in";
+        Set<Locale> locales = new HashSet<>(Arrays.asList(
+                new Locale("en", "us"), new Locale("es", "us"), new Locale("hi", "in")));
+
+        Assert.assertEquals(locales,
+                mLocationBarVoiceRecognitionHandler.parseLocalesFromString(encodedLocales));
+    }
+
+    @Test
+    @Feature("OmniboxAssistantVoiceSearch")
+    public void parseLocalesFromString_MultipleLastInvalid() {
+        String encodedLocales = "en-us,es-us,hi*in";
+        Assert.assertEquals(LocationBarVoiceRecognitionHandler.DEFAULT_ASSISTANT_LOCALES,
+                mLocationBarVoiceRecognitionHandler.parseLocalesFromString(encodedLocales));
     }
 }

@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import androidx.annotation.IntDef;
 import androidx.annotation.VisibleForTesting;
 
+import org.chromium.base.LocaleUtils;
 import org.chromium.base.SysUtils;
 import org.chromium.base.ThreadUtils;
 import org.chromium.base.metrics.CachedMetrics;
@@ -83,13 +84,13 @@ public class LocationBarVoiceRecognitionHandler {
     // TODO(crbug.com/1041576): Update this placeholder to a the real min version once the code has
     //                          landed.
     @VisibleForTesting
-    static final int ASSISTANT_AGSA_MIN_VERSION = 400000000;
+    static final int DEFAULT_ASSISTANT_AGSA_MIN_VERSION = 400000000;
     @VisibleForTesting
-    static final int ASSISTANT_MIN_ANDROID_SDK_VERSION = Build.VERSION_CODES.LOLLIPOP;
+    static final int DEFAULT_ASSISTANT_MIN_ANDROID_SDK_VERSION = Build.VERSION_CODES.LOLLIPOP;
     @VisibleForTesting
-    static final int ASSISTANT_MIN_MEMORY_MB = 1024;
+    static final int DEFAULT_ASSISTANT_MIN_MEMORY_MB = 1024;
     @VisibleForTesting
-    static final Set<Locale> ASSISTANT_DEFAULT_LOCALES = new HashSet<>(
+    static final Set<Locale> DEFAULT_ASSISTANT_LOCALES = new HashSet<>(
             Arrays.asList(new Locale("en", "us"), new Locale("en", "gb"), new Locale("en", "in"),
                     new Locale("hi", "in"), new Locale("bn", "in"), new Locale("te", "in"),
                     new Locale("mr", "in"), new Locale("ta", "in"), new Locale("kn", "in"),
@@ -413,6 +414,79 @@ public class LocationBarVoiceRecognitionHandler {
     }
 
     /**
+     * @return The min Agsa version required for assistant voice search. This method checks the
+     *         chrome feature list for this value before using the default.
+     */
+    private int getAgsaMinVersion() {
+        if (!ChromeFeatureList.isInitialized()) return DEFAULT_ASSISTANT_AGSA_MIN_VERSION;
+
+        int minVersion = ChromeFeatureList.getFieldTrialParamByFeatureAsInt(
+                ChromeFeatureList.OMNIBOX_ASSISTANT_VOICE_SEARCH, "min_agsa_version",
+                DEFAULT_ASSISTANT_AGSA_MIN_VERSION);
+        return minVersion;
+    }
+
+    /**
+     * @return The min Android sdk required for assistant voice search. This method checks the
+     *         chrome feature list for this value before using the default.
+     */
+    private int getMinAndroidSdk() {
+        if (!ChromeFeatureList.isInitialized()) return DEFAULT_ASSISTANT_MIN_ANDROID_SDK_VERSION;
+
+        int minAndroidSdk = ChromeFeatureList.getFieldTrialParamByFeatureAsInt(
+                ChromeFeatureList.OMNIBOX_ASSISTANT_VOICE_SEARCH, "min_android_sdk",
+                DEFAULT_ASSISTANT_MIN_ANDROID_SDK_VERSION);
+        return minAndroidSdk;
+    }
+
+    /**
+     * @return The min memory (mb) required for assistant voice search. This method checks the
+     *         chrome feature list for this value before using the default.
+     */
+    private int getMinMemoryMb() {
+        if (!ChromeFeatureList.isInitialized()) return DEFAULT_ASSISTANT_MIN_MEMORY_MB;
+
+        int minMemoryMb = ChromeFeatureList.getFieldTrialParamByFeatureAsInt(
+                ChromeFeatureList.OMNIBOX_ASSISTANT_VOICE_SEARCH, "min_memory_mb",
+                DEFAULT_ASSISTANT_MIN_MEMORY_MB);
+        return minMemoryMb;
+    }
+
+    /**
+     * @return The list of supported locales for assistant voice search. This method checks the
+     *         chrome feature list for this value before using the default.
+     */
+    private Set<Locale> getEnabledLocales() {
+        if (!ChromeFeatureList.isInitialized()) return DEFAULT_ASSISTANT_LOCALES;
+
+        String encodedEnabledLocalesList = ChromeFeatureList.getFieldTrialParamByFeature(
+                ChromeFeatureList.OMNIBOX_ASSISTANT_VOICE_SEARCH, "enabled_locales");
+        return parseLocalesFromString(encodedEnabledLocalesList);
+    }
+
+    /**
+     * @return List of locales parsed from the given input string, or a default list if the parsing
+     * fails.
+     */
+    @VisibleForTesting
+    Set<Locale> parseLocalesFromString(String encodedEnabledLocalesList) {
+        if (TextUtils.isEmpty(encodedEnabledLocalesList)) return DEFAULT_ASSISTANT_LOCALES;
+
+        String[] encodedEnabledLocales = encodedEnabledLocalesList.split(",");
+        HashSet<Locale> enabledLocales = new HashSet<>(encodedEnabledLocales.length);
+        for (int i = 0; i < encodedEnabledLocales.length; i++) {
+            Locale locale = LocaleUtils.forLanguageTag(encodedEnabledLocales[i]);
+            if (TextUtils.isEmpty(locale.getCountry()) || TextUtils.isEmpty(locale.getLanguage())) {
+                // Error with the locale encoding, fallback to the default locales.
+                return DEFAULT_ASSISTANT_LOCALES;
+            }
+            enabledLocales.add(locale);
+        }
+
+        return enabledLocales;
+    }
+
+    /**
      * Checks to see if the call to this method can be resolved with assistant voice search and
      * resolves it if possible.
      *
@@ -462,21 +536,17 @@ public class LocationBarVoiceRecognitionHandler {
     protected boolean isDeviceEligibleForAssistant(
             PackageManager packageManager, long availableMemoryMb, Locale currentLocale) {
         // TODO(crbug.com/1045203): Move AGSA-related logic over to GSAState.java.
-        // TODO(crbug.com/1042087): Allow the locales/minimum-memory to be specified server-side.
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(IntentHandler.PACKAGE_GSA, 0);
-            // TODO(crbug.com/1041598): Allow the AGSA min version to be configurable from the
-            // server.
-            if (packageInfo.versionCode < ASSISTANT_AGSA_MIN_VERSION) return false;
+            if (packageInfo.versionCode < getAgsaMinVersion()) return false;
         } catch (NameNotFoundException e) {
             return false;
         }
 
         if (!mExternalAuthUtils.isGoogleSigned(IntentHandler.PACKAGE_GSA)) return false;
 
-        return ASSISTANT_MIN_MEMORY_MB <= availableMemoryMb
-                && ASSISTANT_MIN_ANDROID_SDK_VERSION <= Build.VERSION.SDK_INT
-                && ASSISTANT_DEFAULT_LOCALES.contains(currentLocale);
+        return getMinMemoryMb() <= availableMemoryMb && getMinAndroidSdk() <= Build.VERSION.SDK_INT
+                && getEnabledLocales().contains(currentLocale);
     }
 
     /**
