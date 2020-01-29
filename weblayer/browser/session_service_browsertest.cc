@@ -7,6 +7,7 @@
 #include "base/files/file_path.h"
 #include "base/path_service.h"
 #include "base/run_loop.h"
+#include "build/build_config.h"
 #include "components/sessions/core/command_storage_manager_test_helper.h"
 #include "content/public/test/browser_test_utils.h"
 #include "content/public/test/url_loader_interceptor.h"
@@ -198,6 +199,12 @@ IN_PROC_BROWSER_TEST_F(SessionServiceTest, SingleTab) {
   EXPECT_EQ(1, browser->GetTabs()[0]
                    ->GetNavigationController()
                    ->GetNavigationListSize());
+
+  // A DCHECK goes off in //content if the Tab created via session restore
+  // leaks at shutdown.
+  // TODO(crbug.com/1046406): Rationalize the ownership model here.
+  Tab* restored_tab = browser->GetTabs()[0];
+  delete restored_tab;
 }
 
 IN_PROC_BROWSER_TEST_F(SessionServiceTest, TwoTabs) {
@@ -215,14 +222,15 @@ IN_PROC_BROWSER_TEST_F(SessionServiceTest, TwoTabs) {
   NavigateAndWaitForCompletion(url2, tab2.get());
   browser->SetActiveTab(tab2.get());
 
-  // Shutdown the service and run the assertions twice to ensure we handle
+  // Shut down the service.
+  ShutdownSessionServiceAndWait(browser.get());
+  tab1.reset();
+  tab2.reset();
+  browser.reset();
+
+  // Recreate the browser and run the assertions twice to ensure we handle
   // correctly storing state of tabs that need to be reloaded.
   for (int i = 0; i < 2; ++i) {
-    ShutdownSessionServiceAndWait(browser.get());
-    tab1.reset();
-    tab2.reset();
-    browser.reset();
-
     browser = CreateBrowser(GetProfile(), "x");
     // Should be no tabs while waiting for restore.
     EXPECT_TRUE(browser->GetTabs().empty()) << "iteration " << i;
@@ -244,6 +252,18 @@ IN_PROC_BROWSER_TEST_F(SessionServiceTest, TwoTabs) {
                      ->GetNavigationController()
                      ->GetNavigationListSize())
         << "iteration " << i;
+
+    ShutdownSessionServiceAndWait(browser.get());
+
+    // A DCHECK goes off in //content if the Tabs created via session restore
+    // leak at shutdown.
+    // TODO(crbug.com/1046406): Rationalize the ownership model here.
+    Tab* restored_tab_1 = browser->GetTabs()[0];
+    Tab* restored_tab_2 = browser->GetTabs()[1];
+    delete restored_tab_1;
+    delete restored_tab_2;
+
+    browser.reset();
   }
 }
 
@@ -305,6 +325,15 @@ IN_PROC_BROWSER_TEST_F(SessionServiceTest, MoveBetweenBrowsers) {
   EXPECT_TRUE(restored_tab_3->web_contents()->GetController().NeedsReload());
   restored_tab_3->web_contents()->GetController().LoadIfNecessary();
   content::WaitForLoadStop(restored_tab_3->web_contents());
+
+  // A DCHECK goes off in //content if the Tabs created via session restore
+  // leak at shutdown.
+  // TODO(crbug.com/1046406): Rationalize the ownership model here.
+  Tab* restored_tab_1 = browser1->GetTabs()[0];
+  Tab* restored_tab_2 = browser2->GetTabs()[1];
+  delete restored_tab_1;
+  delete restored_tab_2;
+  delete restored_tab_3;
 }
 
 }  // namespace weblayer

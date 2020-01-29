@@ -126,6 +126,10 @@ bool BrowserMainPartsImpl::MainMessageLoopRun(int* result_code) {
   return !run_message_loop_;
 }
 
+void BrowserMainPartsImpl::PostMainMessageLoopRun() {
+  params_->delegate->PostMainMessageLoopRun();
+}
+
 void BrowserMainPartsImpl::PreDefaultMainMessageLoopRun(
     base::OnceClosure quit_closure) {
   // Wrap the method that stops the message loop so we can do other shutdown

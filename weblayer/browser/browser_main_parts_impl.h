@@ -28,6 +28,7 @@ class BrowserMainPartsImpl : public content::BrowserMainParts {
   int PreEarlyInitialization() override;
   void PreMainMessageLoopStart() override;
   void PreMainMessageLoopRun() override;
+  void PostMainMessageLoopRun() override;
   bool MainMessageLoopRun(int* result_code) override;
   void PreDefaultMainMessageLoopRun(base::OnceClosure quit_closure) override;
 
