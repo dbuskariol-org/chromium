@@ -23,6 +23,11 @@
           '--gtest_filter=-ImportantSitesUtilBrowserTest.DSENotConsideredImportantInRegularMode', # https://crbug.com/1034001
         ],
       },
+      'android-pie-x86-fyi-rel': {
+        'args': [
+          '--gtest_filter=-ImportantSitesUtilBrowserTest.DSENotConsideredImportantInRegularMode', # https://crbug.com/1034001
+        ],
+      },
     },
   },
   'android_webview_unittests': {
@@ -1456,6 +1461,11 @@
         ],
       },
       'android-marshmallow-x86-fyi-rel': {
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.sandbox_linux_unittests.filter',
+        ]
+      },
+      'android-pie-x86-fyi-rel': {
         'args': [
           '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.sandbox_linux_unittests.filter',
         ]
