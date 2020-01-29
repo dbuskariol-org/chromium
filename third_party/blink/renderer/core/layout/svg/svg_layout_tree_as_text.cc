@@ -493,10 +493,11 @@ static inline void WriteSVGInlineTextBoxes(WTF::TextStream& ts,
                                            const LayoutText& text,
                                            int indent) {
   for (InlineTextBox* box : text.TextBoxes()) {
-    if (!box->IsSVGInlineTextBox())
+    auto* svg_inline_text_box = DynamicTo<SVGInlineTextBox>(box);
+    if (!svg_inline_text_box)
       continue;
 
-    WriteSVGInlineTextBox(ts, ToSVGInlineTextBox(box), indent);
+    WriteSVGInlineTextBox(ts, svg_inline_text_box, indent);
   }
 }
 

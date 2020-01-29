@@ -263,9 +263,9 @@ void SVGTextLayoutEngine::LayoutCharactersInTextBoxes(InlineFlowBox* start) {
 
   for (InlineBox* child = start->FirstChild(); child;
        child = child->NextOnLine()) {
-    if (child->IsSVGInlineTextBox()) {
+    if (auto* svg_inline_text_box = DynamicTo<SVGInlineTextBox>(child)) {
       DCHECK(child->GetLineLayoutItem().IsSVGInlineText());
-      LayoutInlineTextBox(ToSVGInlineTextBox(child));
+      LayoutInlineTextBox(svg_inline_text_box);
     } else {
       // Skip generated content.
       Node* node = child->GetLineLayoutItem().GetNode();
