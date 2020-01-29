@@ -1383,7 +1383,8 @@ void ProfileSyncService::ConfigureDataTypeManager(ConfigureReason reason) {
 }
 
 ModelTypeSet ProfileSyncService::GetModelTypesForTransportOnlyMode() const {
-  ModelTypeSet allowed_types = {USER_CONSENTS, SECURITY_EVENTS};
+  ModelTypeSet allowed_types = {USER_CONSENTS, SECURITY_EVENTS,
+                                SHARING_MESSAGE};
 
   if (autofill_enable_account_wallet_storage_) {
     if (!GetUserSettings()->IsUsingSecondaryPassphrase() ||
