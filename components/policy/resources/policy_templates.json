@@ -18699,6 +18699,57 @@
       '''
     },
     {
+      'name': 'BlockUnsupportedFiletypes',
+      'owners': ['rogerta@chromium.org', 'mad@chromium.org'],
+      'type': 'int-enum',
+      'schema': {
+        'type': 'integer',
+        'enum': [ 0, 1, 2, 3 ],
+      },
+      'items': [
+        {
+          'name': 'Block-unsupported-filetypes-none',
+          'value': 0,
+          'caption': '''Do not block unsupported filetypes''',
+        },
+        {
+          'name': 'Block-unsupported-filetypes-downloads',
+          'value': 1,
+          'caption': '''Block download of unsupported filetypes''',
+        },
+        {
+          'name': 'Block-unsupported-filetypes-uploads',
+          'value': 2,
+          'caption': '''Block upload of unsupported filetypes''',
+        },
+        {
+          'name': 'Block-unsupported-filetypes-uploads-and-downloads',
+          'value': 3,
+          'caption': '''Block uploads and downloads of unsupported filetypes''',
+        },
+      ],
+      'example_value': 0,
+      'features': {
+        'dynamic_refresh': True,
+        'per_profile': False,
+      },
+      'id': 668,
+      'supported_on': ['chrome.*:81-', 'chrome_os:81-'],
+      'future': True,
+      'caption': '''Block users from uploading or downloading files that are presently unsupported for a DLP or malware scan.''',
+      'tags': [],
+      'desc': '''Controls how <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> handles data that is uploaded, downloaded, pasted from the clipboard, or dragged and dropped that have unsupported filetypes regarding DLP or malware scan.
+
+      If this policy is not set or set to 'Block unsupported filetypes none' (0), <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> allows upload or download for data with unsupported filetypes regarding DLP or malware scan.
+
+      If this policy is set to 'Block unsupported filetypes downloads' (1) and the user attempts to download a file from a URL in the <ph name="DOMAINS_TO_CHECK_COMPLIANCE_OF_DOWNLOADED_CONTENT_POLICTY_NAME">URLsToCheckComplianceOfDownloadedContent</ph> policy and has unsupported filetypes regarding DLP or malware scan, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will block the data downloaded.
+
+      If this policy is set to 'Block unsupported filetypes uploads' (2) and the user attempts to upload a file to a domain not in the <ph name="DOMAINS_TO_NOT_CHECK_COMPLIANCE_OF_UPLOADED_CONTENT_POLICY_NAME">URLsToNotCheckComplianceOfUploadedContent</ph> and the file has unsupported filetype regarding DLP or malware scan, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will block the file uploaded, data pasted from the clipboard, or data dragged and dropped.
+
+      If this policy is set to 'Block unsupported filetypes uploads and downloads' (3), <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> behaves according to the rules described under 'Block unsupported filetypes uploads' and 'Block unsupported filetypes downloads'.
+      '''
+    },
+    {
       'name': 'CheckContentCompliance',
       'owners': ['rogerta@chromium.org', 'mad@chromium.org'],
       'type': 'int-enum',
@@ -20469,6 +20520,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 667,
+  'highest_id_currently_used': 668,
   'highest_atomic_group_id_currently_used': 38
 }

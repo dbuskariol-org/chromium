@@ -1400,6 +1400,16 @@
     "note": "This policy has no pref as it is only directly read by the policy system."
   },
 
+  "BlockUnsupportedFiletypes": {
+    "os": ["win", "linux", "mac", "chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "BlockUnsupportedFiletypes": 0 },
+        "prefs": { "safebrowsing.block_unsupported_filetypes": { "local_state": true } }
+      }
+    ]
+  },
+
   "BlockExternalExtensions": {
     "os": ["win", "linux", "mac"],
     "policy_pref_mapping_test": [

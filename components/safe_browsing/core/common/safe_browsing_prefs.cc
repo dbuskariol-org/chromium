@@ -119,6 +119,8 @@ const char kDelayDeliveryUntilVerdict[] =
 const char kAllowPasswordProtectedFiles[] =
     "safebrowsing.allow_password_protected_files";
 const char kCheckContentCompliance[] = "safebrowsing.check_content_compliance";
+const char kBlockUnsupportedFiletypes[] =
+    "safebrowsing.block_unsupported_filetypes";
 const char kURLsToCheckComplianceOfDownloadedContent[] =
     "safebrowsing.urls_to_check_compliance_of_downloaded_content";
 const char kURLsToCheckForMalwareOfUploadedContent[] =
@@ -206,6 +208,8 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
       prefs::kAllowPasswordProtectedFiles,
       AllowPasswordProtectedFilesValues::ALLOW_UPLOADS_AND_DOWNLOADS);
   registry->RegisterIntegerPref(prefs::kCheckContentCompliance, CHECK_NONE);
+  registry->RegisterIntegerPref(prefs::kBlockUnsupportedFiletypes,
+                                BLOCK_UNSUPPORTED_FILETYPES_NONE);
   registry->RegisterListPref(prefs::kURLsToCheckComplianceOfDownloadedContent);
   registry->RegisterListPref(prefs::kURLsToNotCheckComplianceOfUploadedContent);
   registry->RegisterListPref(prefs::kURLsToCheckForMalwareOfUploadedContent);
