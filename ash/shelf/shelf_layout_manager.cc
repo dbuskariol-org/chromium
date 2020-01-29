@@ -1071,6 +1071,10 @@ void ShelfLayoutManager::OnDeskSwitchAnimationFinished() {
     UpdateVisibilityState();
 }
 
+gfx::Rect ShelfLayoutManager::GetShelfBoundsInScreen() const {
+  return target_bounds_.shelf_bounds;
+}
+
 gfx::Rect ShelfLayoutManager::GetNavigationBounds() const {
   gfx::Vector2d nav_offset = target_bounds_.shelf_bounds.OffsetFromOrigin();
   gfx::Rect nav_bounds = target_bounds_.nav_bounds_in_shelf;

@@ -250,6 +250,7 @@ class ASH_EXPORT ShelfLayoutManager
   int CalculateHotseatYInShelf(HotseatState hotseat_target_state) const;
 
   // Getters for bounds and opacity of the various sub-components.
+  gfx::Rect GetShelfBoundsInScreen() const;
   gfx::Rect GetNavigationBounds() const;
   gfx::Rect GetHotseatBounds() const;
   gfx::Rect GetStatusAreaBounds() const;
