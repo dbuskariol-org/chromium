@@ -356,6 +356,7 @@ cr.define('settings', function() {
     },
   };
 
+  // #cr_define_end
   return {
     Route: Route,    // The Route class definition.
     Router: Router,  // The Router class definition.

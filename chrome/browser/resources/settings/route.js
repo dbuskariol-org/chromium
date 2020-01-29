@@ -221,6 +221,7 @@ cr.define('settings', function() {
   // ChromePass that limits the syntax of what can be returned from cr.define().
   const routes = settings.Router.getInstance().getRoutes();
 
+  // #cr_define_end
   return {
     buildRouterForTesting: buildRouter,
     routes: routes,

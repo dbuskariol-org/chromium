@@ -391,5 +391,6 @@ cr.define('settings', function() {
     },
   };
 
+  // #cr_define_end
   return {MainPageBehavior, RouteState};
 });
