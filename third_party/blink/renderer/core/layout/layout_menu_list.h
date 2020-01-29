@@ -73,8 +73,6 @@ class CORE_EXPORT LayoutMenuList final : public LayoutFlexibleBox {
 
   void StyleDidChange(StyleDifference, const ComputedStyle* old_style) override;
 
-  bool HasLineIfEmpty() const override { return true; }
-
   void CreateInnerBlock();
   scoped_refptr<ComputedStyle> CreateInnerStyle();
   void UpdateInnerStyle();
@@ -87,7 +85,6 @@ class CORE_EXPORT LayoutMenuList final : public LayoutFlexibleBox {
   LayoutText* button_text_;
   LayoutBlock* inner_block_;
 
-  bool is_empty_ : 1;
   LayoutUnit inner_block_height_;
   // m_optionsWidth is calculated and cached on demand.
   // updateOptionsWidth() should be called before reading them.

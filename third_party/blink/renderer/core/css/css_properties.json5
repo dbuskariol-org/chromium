@@ -5784,6 +5784,28 @@
       slots: ["zoom"],
     },
 
+    // Name: -internal-empty-line-height:
+    // Value: none | fabricated
+    //    If the element is inline or contains visible text, this property has
+    //    no effect.
+    //
+    // 'none'
+    //   The box's intrinsic height is 0, and it defines no baseline.
+    // 'fabricated'
+    //   The box has intrinsic height and baseline, computed from the current
+    //   font metrics.
+    {
+      name: "-internal-empty-line-height",
+      property_methods: ["ParseSingleValue" ],
+      inherited: false,
+      field_group: "*",
+      field_template: "primitive",
+      type_name: "bool",
+      default_value: "false",
+      name_for_methods: "HasLineIfEmpty",
+      converter: "ConvertInternalEmptyLineHeight",
+    },
+
     // Internal UA
 
     {

@@ -1214,5 +1214,9 @@
     "invisible",
     "skip-activation",
     "skip-viewport-activation",
+
+    // -internal-empty-line-height
+    // none
+    "fabricated",
   ],
 }

@@ -8133,5 +8133,13 @@ void Zoom::ApplyValue(StyleResolverState& state, const CSSValue& value) const {
   state.SetZoom(StyleBuilderConverter::ConvertZoom(state, value));
 }
 
+const CSSValue* InternalEmptyLineHeight::ParseSingleValue(
+    CSSParserTokenRange& range,
+    const CSSParserContext&,
+    const CSSParserLocalContext&) const {
+  return css_property_parser_helpers::ConsumeIdent<CSSValueID::kFabricated,
+                                                   CSSValueID::kNone>(range);
+}
+
 }  // namespace css_longhand
 }  // namespace blink

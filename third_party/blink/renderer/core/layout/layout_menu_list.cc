@@ -45,7 +45,6 @@ LayoutMenuList::LayoutMenuList(Element* element)
     : LayoutFlexibleBox(element),
       button_text_(nullptr),
       inner_block_(nullptr),
-      is_empty_(false),
       inner_block_height_(LayoutUnit()),
       options_width_(0) {
   DCHECK(IsA<HTMLSelectElement>(element));
@@ -124,6 +123,7 @@ void LayoutMenuList::AdjustInnerStyle(ComputedStyle& inner_style) const {
   inner_style.SetFlexShrink(1);
   // min-width: 0; is needed for correct shrinking.
   inner_style.SetMinWidth(Length::Fixed(0));
+  inner_style.SetHasLineIfEmpty(true);
 
   // Use margin:auto instead of align-items:center to get safe centering, i.e.
   // when the content overflows, treat it the same as align-items: flex-start.
@@ -237,20 +237,7 @@ void LayoutMenuList::UpdateFromElement() {
 }
 
 void LayoutMenuList::SetText(const String& s) {
-  if (s.IsEmpty()) {
-    // FIXME: This is a hack. We need the select to have the same baseline
-    // positioning as any surrounding text. Wihtout any content, we align the
-    // bottom of the select to the bottom of the text. With content (In this
-    // case the faked " ") we correctly align the middle of the select to the
-    // middle of the text. It should be possible to remove this, just set
-    // s.impl() into the text and have things align correctly...
-    // crbug.com/485982
-    is_empty_ = true;
-    button_text_->ForceSetText(StringImpl::Create(" ", 1));
-  } else {
-    is_empty_ = false;
-    button_text_->ForceSetText(s.Impl());
-  }
+  button_text_->ForceSetText(s.Impl());
   // LayoutMenuList::ControlClipRect() depends on inner_block_->ContentsSize().
   SetNeedsPaintPropertyUpdate();
   if (Layer())
@@ -258,7 +245,7 @@ void LayoutMenuList::SetText(const String& s) {
 }
 
 String LayoutMenuList::GetText() const {
-  return button_text_ && !is_empty_ ? button_text_->GetText() : String();
+  return button_text_ ? button_text_->GetText() : String();
 }
 
 PhysicalRect LayoutMenuList::ControlClipRect(

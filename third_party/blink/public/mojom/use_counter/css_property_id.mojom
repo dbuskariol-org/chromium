@@ -16,6 +16,7 @@ enum CSSSampleId {
     // These internal properties exist but are mapped to 0 to ensure they don't get
     // reported in use counter.
     kInternalEffectiveZoom = 0,
+    kInternalEmptyLineHeight = 0,
     kInternalUaBackgroundAttachment = 0,
     kInternalUaBackgroundBlendMode = 0,
     kInternalUaBackgroundClip = 0,
