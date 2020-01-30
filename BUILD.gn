@@ -13,6 +13,7 @@ import("//build/config/features.gni")
 import("//build/config/sanitizers/sanitizers.gni")
 import("//build/config/ui.gni")
 import("//build/util/generate_wrapper.gni")
+import("//chrome/browser/buildflags.gni")
 import("//chrome/browser/media/router/features.gni")
 import("//components/nacl/features.gni")
 import("//device/vr/buildflags/buildflags.gni")
@@ -1329,6 +1330,10 @@ if (closure_compile) {
     }
     if (is_android) {
       data_deps += [ "components/offline_pages/resources:closure_compile" ]
+    }
+    if (enable_kaleidoscope) {
+      data_deps +=
+          [ "chrome/browser/media/kaleidoscope/internal:closure_compile" ]
     }
   }
 }
