@@ -70,6 +70,50 @@ bool IsProfileManaged(Profile* profile) {
   return profile->GetProfilePolicyConnector()->IsManaged();
 }
 
+void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
+  static constexpr webui::LocalizedString kLocalizedStrings[] = {
+      {"add", IDS_ADD},
+      {"advancedPageTitle", IDS_SETTINGS_ADVANCED},
+      {"back", IDS_ACCNAME_BACK},
+      {"basicPageTitle", IDS_SETTINGS_BASIC},
+      {"cancel", IDS_CANCEL},
+      {"clear", IDS_SETTINGS_CLEAR},
+      {"close", IDS_CLOSE},
+      {"confirm", IDS_CONFIRM},
+      {"continue", IDS_SETTINGS_CONTINUE},
+      {"delete", IDS_SETTINGS_DELETE},
+      {"deviceOff", IDS_SETTINGS_DEVICE_OFF},
+      {"deviceOn", IDS_SETTINGS_DEVICE_ON},
+      {"disable", IDS_DISABLE},
+      {"done", IDS_DONE},
+      {"edit", IDS_SETTINGS_EDIT},
+      {"extensionsLinkTooltip", IDS_SETTINGS_MENU_EXTENSIONS_LINK_TOOLTIP},
+      {"learnMore", IDS_LEARN_MORE},
+      {"menu", IDS_MENU},
+      {"menuButtonLabel", IDS_SETTINGS_MENU_BUTTON_LABEL},
+      {"moreActions", IDS_SETTINGS_MORE_ACTIONS},
+      {"ok", IDS_OK},
+      {"restart", IDS_SETTINGS_RESTART},
+      {"save", IDS_SAVE},
+      {"searchResultBubbleText", IDS_SEARCH_RESULT_BUBBLE_TEXT},
+      {"searchResultsBubbleText", IDS_SEARCH_RESULTS_BUBBLE_TEXT},
+      {"settings", IDS_SETTINGS_SETTINGS},
+      {"settingsAltPageTitle", IDS_SETTINGS_ALT_PAGE_TITLE},
+      {"subpageArrowRoleDescription", IDS_SETTINGS_SUBPAGE_BUTTON},
+      {"notValidWebAddress", IDS_SETTINGS_NOT_VALID_WEB_ADDRESS},
+      {"notValidWebAddressForContentType",
+       IDS_SETTINGS_NOT_VALID_WEB_ADDRESS_FOR_CONTENT_TYPE},
+  };
+  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
+
+  html_source->AddBoolean(
+      "isGuest",
+      user_manager::UserManager::Get()->IsLoggedInAsGuest() ||
+          user_manager::UserManager::Get()->IsLoggedInAsPublicAccount());
+
+  html_source->AddBoolean("isSupervised", profile->IsSupervised());
+}
+
 void AddA11yStrings(content::WebUIDataSource* html_source) {
   static constexpr webui::LocalizedString kLocalizedStrings[] = {
       {"a11yPageTitle", IDS_SETTINGS_ACCESSIBILITY},
@@ -1188,6 +1232,7 @@ void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
   AddAppsStrings(html_source);
   AddBluetoothStrings(html_source);
   AddChromeOSUserStrings(html_source, profile);
+  AddCommonStrings(html_source, profile);
   AddCrostiniStrings(html_source, profile);
   AddDeviceStrings(html_source);
   AddFilesStrings(html_source);

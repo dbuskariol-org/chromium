@@ -140,10 +140,6 @@ void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
     {"continue", IDS_SETTINGS_CONTINUE},
     {"controlledByExtension", IDS_SETTINGS_CONTROLLED_BY_EXTENSION},
     {"delete", IDS_SETTINGS_DELETE},
-#if defined(OS_CHROMEOS)
-    {"deviceOff", IDS_SETTINGS_DEVICE_OFF},
-    {"deviceOn", IDS_SETTINGS_DEVICE_ON},
-#endif
     {"disable", IDS_DISABLE},
     {"done", IDS_DONE},
     {"edit", IDS_SETTINGS_EDIT},
