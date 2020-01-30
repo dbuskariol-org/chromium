@@ -27,18 +27,12 @@ class VR_EXPORT ArCoreInstallHelper : public XrInstallHelper {
                        OnInstallFinishedCallback install_callback) override;
 
   // Called from Java end.
-  void OnRequestInstallArModuleResult(JNIEnv* env, bool success);
   void OnRequestInstallSupportedArCoreResult(JNIEnv* env, bool success);
 
  private:
-  void RequestArCoreInstallOrUpdate();
-
   void RunInstallFinishedCallback(bool succeeded);
+
   OnInstallFinishedCallback install_finished_callback_;
-
-  int render_process_id_;
-  int render_frame_id_;
-
   base::android::ScopedJavaGlobalRef<jobject> java_install_utils_;
 };
 

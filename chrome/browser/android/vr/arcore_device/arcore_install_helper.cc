@@ -66,42 +66,11 @@ void ArCoreInstallHelper::EnsureInstalled(
     OnInstallFinishedCallback install_callback) {
   DCHECK(!install_finished_callback_);
   install_finished_callback_ = std::move(install_callback);
-  render_process_id_ = render_process_id;
-  render_frame_id_ = render_frame_id;
 
   if (java_install_utils_.is_null()) {
     RunInstallFinishedCallback(false);
     return;
   }
-
-  // First check if the DFM needs to be installed.
-  if (Java_ArCoreInstallUtils_shouldRequestInstallArModule(
-          AttachCurrentThread(), java_install_utils_)) {
-    // AR DFM is disabled - if we think we should install AR module, then it
-    // means that we are using a build that does not support AR capabilities.
-    // Treat this as if the AR module installation failed.
-    LOG(WARNING) << "AR is not supported on this build";
-
-    RunInstallFinishedCallback(false);
-    return;
-  }
-
-  // The AR DFM is disabled, so pretend like its installation succeeded.
-  OnRequestInstallArModuleResult(nullptr, true);
-}
-
-void ArCoreInstallHelper::OnRequestInstallArModuleResult(JNIEnv* env,
-                                                         bool success) {
-  DVLOG(1) << __func__;
-  DCHECK(success) << "AR DFM installation disabled, so should always 'succeed'";
-
-  // Now that the DFM is successfully installed, check if ARCore needs to be
-  // installed or updated next.
-  RequestArCoreInstallOrUpdate();
-}
-
-void ArCoreInstallHelper::RequestArCoreInstallOrUpdate() {
-  DVLOG(1) << __func__;
 
   JNIEnv* env = AttachCurrentThread();
 
@@ -110,7 +79,7 @@ void ArCoreInstallHelper::RequestArCoreInstallOrUpdate() {
     // When completed, java will call: OnRequestInstallSupportedArCoreResult
     Java_ArCoreInstallUtils_requestInstallSupportedArCore(
         env, java_install_utils_,
-        GetTabFromRenderer(render_process_id_, render_frame_id_));
+        GetTabFromRenderer(render_process_id, render_frame_id));
     return;
   }
 
