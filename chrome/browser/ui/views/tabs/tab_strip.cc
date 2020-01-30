@@ -1798,15 +1798,6 @@ const Tab* TabStrip::GetAdjacentTab(const Tab* tab, int offset) {
 
 void TabStrip::OnMouseEventInTab(views::View* source,
                                  const ui::MouseEvent& event) {
-  // Record time from cursor entering the tabstrip to first tap on a tab to
-  // switch.
-  if (should_log_click_ && event.type() == ui::ET_MOUSE_PRESSED &&
-      !strcmp(source->GetClassName(), Tab::kViewClassName)) {
-    should_log_click_ = false;
-    UMA_HISTOGRAM_MEDIUM_TIMES(
-        "TabStrip.TimeToSwitch",
-        base::TimeTicks::Now() - mouse_entered_tabstrip_time_);
-  }
   UpdateStackedLayoutFromMouseEvent(source, event);
 }
 
@@ -3471,8 +3462,6 @@ void TabStrip::OnMouseMoved(const ui::MouseEvent& event) {
 }
 
 void TabStrip::OnMouseEntered(const ui::MouseEvent& event) {
-  should_log_click_ = true;
-  mouse_entered_tabstrip_time_ = base::TimeTicks::Now();
   SetResetToShrinkOnExit(true);
 }
 
