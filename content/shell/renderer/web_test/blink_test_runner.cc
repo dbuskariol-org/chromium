@@ -256,7 +256,7 @@ void BlinkTestRunner::ApplyPreferences() {
   WebPreferences prefs = render_view()->GetWebkitPreferences();
   ExportWebTestSpecificPreferences(prefs_, &prefs);
   render_view()->SetWebkitPreferences(prefs);
-  Send(new BlinkTestHostMsg_OverridePreferences(routing_id(), prefs));
+  GetWebTestClientRemote().OverridePreferences(prefs);
 }
 
 void BlinkTestRunner::SetPopupBlockingEnabled(bool block_popups) {
