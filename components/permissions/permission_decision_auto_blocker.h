@@ -2,28 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_DECISION_AUTO_BLOCKER_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_DECISION_AUTO_BLOCKER_H_
+#ifndef COMPONENTS_PERMISSIONS_PERMISSION_DECISION_AUTO_BLOCKER_H_
+#define COMPONENTS_PERMISSIONS_PERMISSION_DECISION_AUTO_BLOCKER_H_
 
 #include "base/callback.h"
 #include "base/gtest_prod_util.h"
 #include "base/macros.h"
-#include "base/memory/ref_counted.h"
 #include "base/memory/singleton.h"
 #include "base/time/default_clock.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "components/content_settings/core/common/content_settings_types.h"
-#include "components/keyed_service/content/browser_context_keyed_service_factory.h"
 #include "components/keyed_service/core/keyed_service.h"
 #include "components/permissions/permission_result.h"
 #include "url/gurl.h"
 
 class GURL;
-class Profile;
 
 namespace settings {
 FORWARD_DECLARE_TEST(SiteSettingsHandlerTest, GetAllSites);
 }  // namespace settings
+
+namespace permissions {
 
 // The PermissionDecisionAutoBlocker decides whether or not a given origin
 // should be automatically blocked from requesting a permission. When an origin
@@ -35,46 +34,26 @@ FORWARD_DECLARE_TEST(SiteSettingsHandlerTest, GetAllSites);
 // threshold.
 class PermissionDecisionAutoBlocker : public KeyedService {
  public:
-  class Factory : public BrowserContextKeyedServiceFactory {
-   public:
-    static PermissionDecisionAutoBlocker* GetForProfile(Profile* profile);
-    static PermissionDecisionAutoBlocker::Factory* GetInstance();
-
-   private:
-    friend struct base::DefaultSingletonTraits<Factory>;
-
-    Factory();
-    ~Factory() override;
-
-    // BrowserContextKeyedServiceFactory
-    KeyedService* BuildServiceInstanceFor(
-        content::BrowserContext* context) const override;
-
-    content::BrowserContext* GetBrowserContextToUse(
-        content::BrowserContext* context) const override;
-  };
-
-  static PermissionDecisionAutoBlocker* GetForProfile(Profile* profile);
+  explicit PermissionDecisionAutoBlocker(HostContentSettingsMap* settings_map);
+  ~PermissionDecisionAutoBlocker() override;
 
   // Checks the status of the content setting to determine if |request_origin|
   // is under embargo for |permission|. This checks all types of embargo.
   // Prefer to use PermissionManager::GetPermissionStatus when possible. This
   // method is only exposed to facilitate permission checks from threads other
   // than the UI thread. See https://crbug.com/658020.
-  static permissions::PermissionResult GetEmbargoResult(
-      HostContentSettingsMap* settings_map,
-      const GURL& request_origin,
-      ContentSettingsType permission,
-      base::Time current_time);
+  static PermissionResult GetEmbargoResult(HostContentSettingsMap* settings_map,
+                                           const GURL& request_origin,
+                                           ContentSettingsType permission,
+                                           base::Time current_time);
 
   // Updates the threshold to start blocking prompts from the field trial.
   static void UpdateFromVariations();
 
   // Checks the status of the content setting to determine if |request_origin|
   // is under embargo for |permission|. This checks all types of embargo.
-  permissions::PermissionResult GetEmbargoResult(
-      const GURL& request_origin,
-      ContentSettingsType permission);
+  PermissionResult GetEmbargoResult(const GURL& request_origin,
+                                    ContentSettingsType permission);
 
   // Returns the most recent recorded time either an ignore or dismiss embargo
   // was started. Records of embargo start times persist beyond the duration of
@@ -128,13 +107,11 @@ class PermissionDecisionAutoBlocker : public KeyedService {
   // Removes any recorded counts for urls which match |filter|.
   void RemoveCountsByUrl(base::Callback<bool(const GURL& url)> filter);
 
+  static const char* GetPromptDismissCountKeyForTesting();
+
  private:
-  friend class PermissionContextBaseTests;
   friend class PermissionDecisionAutoBlockerUnitTest;
   FRIEND_TEST_ALL_PREFIXES(settings::SiteSettingsHandlerTest, GetAllSites);
-
-  explicit PermissionDecisionAutoBlocker(Profile* profile);
-  ~PermissionDecisionAutoBlocker() override;
 
   void PlaceUnderEmbargo(const GURL& request_origin,
                          ContentSettingsType permission,
@@ -150,10 +127,13 @@ class PermissionDecisionAutoBlocker : public KeyedService {
   static const char kPermissionDismissalEmbargoKey[];
   static const char kPermissionIgnoreEmbargoKey[];
 
-  Profile* profile_;
+  HostContentSettingsMap* settings_map_;
 
   base::Clock* clock_;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(PermissionDecisionAutoBlocker);
 };
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_DECISION_AUTO_BLOCKER_H_
+
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_PERMISSION_DECISION_AUTO_BLOCKER_H_
