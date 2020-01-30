@@ -1347,19 +1347,23 @@ class ComputedStyle : public ComputedStyleBase,
   // Grid utility functions.
   GridAutoFlow GetGridAutoFlow() const { return GridAutoFlowInternal(); }
   bool IsGridAutoFlowDirectionRow() const {
-    return (GridAutoFlowInternal() & kInternalAutoFlowDirectionRow) ==
+    return (GridAutoFlowInternal() &
+            static_cast<int>(kInternalAutoFlowDirectionRow)) ==
            kInternalAutoFlowDirectionRow;
   }
   bool IsGridAutoFlowDirectionColumn() const {
-    return (GridAutoFlowInternal() & kInternalAutoFlowDirectionColumn) ==
+    return (GridAutoFlowInternal() &
+            static_cast<int>(kInternalAutoFlowDirectionColumn)) ==
            kInternalAutoFlowDirectionColumn;
   }
   bool IsGridAutoFlowAlgorithmSparse() const {
-    return (GridAutoFlowInternal() & kInternalAutoFlowAlgorithmSparse) ==
+    return (GridAutoFlowInternal() &
+            static_cast<int>(kInternalAutoFlowAlgorithmSparse)) ==
            kInternalAutoFlowAlgorithmSparse;
   }
   bool IsGridAutoFlowAlgorithmDense() const {
-    return (GridAutoFlowInternal() & kInternalAutoFlowAlgorithmDense) ==
+    return (GridAutoFlowInternal() &
+            static_cast<int>(kInternalAutoFlowAlgorithmDense)) ==
            kInternalAutoFlowAlgorithmDense;
   }
 
