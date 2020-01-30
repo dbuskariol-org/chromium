@@ -62655,6 +62655,18 @@ would be helpful to identify which type is being sent.
   <int value="5" label="CLEAR_SERVER_DATA"/>
 </enum>
 
+<enum name="SyncSharingMessageCommitErrorCode">
+  <int value="0" label="Ok"/>
+  <int value="1" label="Invalid argument"/>
+  <int value="2" label="Not found"/>
+  <int value="3" label="Internal"/>
+  <int value="4" label="Unavailable"/>
+  <int value="5" label="Resource exhausted"/>
+  <int value="6" label="Unauthenticated"/>
+  <int value="7" label="Permission denied"/>
+  <int value="8" label="Sync turned off"/>
+</enum>
+
 <enum name="SyncSimpleConflictResolutions">
   <summary>
     Sync simple conflict resolutions. The codes are listed in
