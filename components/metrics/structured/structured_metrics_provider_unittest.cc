@@ -13,10 +13,10 @@
 #include "base/values.h"
 #include "components/metrics/structured/event_base.h"
 #include "components/metrics/structured/recorder.h"
+#include "components/metrics/structured/structured_events.h"
 #include "components/prefs/json_pref_store.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/metrics_proto/chrome_user_metrics_extension.pb.h"
-#include "tools/metrics/structured/structured_events.h"
 
 namespace metrics {
 namespace structured {
