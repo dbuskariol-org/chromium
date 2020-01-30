@@ -112,8 +112,10 @@ class UserData {
   std::unique_ptr<autofill::CreditCard> selected_card_;
   std::string login_choice_identifier_;
   TermsAndConditionsState terms_and_conditions_ = NOT_SELECTED;
-  DateTimeProto date_time_range_start_;
-  DateTimeProto date_time_range_end_;
+  base::Optional<DateProto> date_time_range_start_date_;
+  base::Optional<DateProto> date_time_range_end_date_;
+  base::Optional<int> date_time_range_start_timeslot_;
+  base::Optional<int> date_time_range_end_timeslot_;
 
   // A set of additional key/value pairs to be stored in client_memory.
   std::map<std::string, std::string> additional_values_;

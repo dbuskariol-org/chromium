@@ -1665,24 +1665,259 @@ TEST_F(ControllerTest, SetOverlayColors) {
 }
 
 TEST_F(ControllerTest, SetDateTimeRange) {
+  testing::InSequence seq;
+
   auto options = std::make_unique<MockCollectUserDataOptions>();
-  auto user_data = std::make_unique<UserData>();
+  options->request_date_time_range = true;
+  auto* time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("08:00 AM");
+  time_slot->set_comparison_value(0);
+  time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("09:00 AM");
+  time_slot->set_comparison_value(1);
+
   controller_->SetCollectUserDataOptions(options.get());
 
   EXPECT_CALL(mock_observer_,
               OnUserDataChanged(Not(nullptr),
                                 UserData::FieldChange::DATE_TIME_RANGE_START))
       .Times(1);
-  controller_->SetDateTimeRangeStart(2019, 11, 14, 9, 42, 0);
-  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_.date().day(),
-            14);
+  DateProto start_date;
+  start_date.set_year(2020);
+  start_date.set_month(1);
+  start_date.set_day(20);
+  controller_->SetDateTimeRangeStartDate(start_date);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_->year(),
+            2020);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_->month(),
+            1);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_->day(), 20);
+
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_START))
+      .Times(1);
+  controller_->SetDateTimeRangeStartTimeSlot(0);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_timeslot_, 0);
 
   EXPECT_CALL(mock_observer_,
               OnUserDataChanged(Not(nullptr),
                                 UserData::FieldChange::DATE_TIME_RANGE_END))
       .Times(1);
-  controller_->SetDateTimeRangeEnd(2019, 11, 15, 9, 42, 0);
-  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_.date().day(), 15);
+  DateProto end_date;
+  end_date.set_year(2020);
+  end_date.set_month(1);
+  end_date.set_day(25);
+  controller_->SetDateTimeRangeEndDate(end_date);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_->year(),
+            2020);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_->month(), 1);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_->day(), 25);
+
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_END))
+      .Times(1);
+  controller_->SetDateTimeRangeEndTimeSlot(1);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_timeslot_, 1);
+}
+
+TEST_F(ControllerTest, SetDateTimeRangeStartDateAfterEndDate) {
+  testing::InSequence seq;
+
+  auto options = std::make_unique<MockCollectUserDataOptions>();
+  options->request_date_time_range = true;
+  auto* time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("08:00 AM");
+  time_slot->set_comparison_value(0);
+  time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("09:00 AM");
+  time_slot->set_comparison_value(1);
+
+  DateProto date;
+  date.set_year(2020);
+  date.set_month(1);
+  date.set_day(20);
+  GetUserData()->date_time_range_start_date_ = date;
+  GetUserData()->date_time_range_end_date_ = date;
+
+  controller_->SetCollectUserDataOptions(options.get());
+
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_START))
+      .Times(1);
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_END))
+      .Times(1);
+
+  date.set_day(21);
+  controller_->SetDateTimeRangeStartDate(date);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_->year(),
+            2020);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_->month(),
+            1);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_->day(), 21);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_,
+            base::nullopt);
+}
+
+TEST_F(ControllerTest, SetDateTimeRangeEndDateBeforeStartDate) {
+  testing::InSequence seq;
+
+  auto options = std::make_unique<MockCollectUserDataOptions>();
+  options->request_date_time_range = true;
+  auto* time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("08:00 AM");
+  time_slot->set_comparison_value(0);
+  time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("09:00 AM");
+  time_slot->set_comparison_value(1);
+
+  DateProto date;
+  date.set_year(2020);
+  date.set_month(1);
+  date.set_day(20);
+  GetUserData()->date_time_range_start_date_ = date;
+  GetUserData()->date_time_range_end_date_ = date;
+
+  controller_->SetCollectUserDataOptions(options.get());
+
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_END))
+      .Times(1);
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_START))
+      .Times(1);
+
+  date.set_day(19);
+  controller_->SetDateTimeRangeEndDate(date);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_->year(),
+            2020);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_->month(), 1);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_->day(), 19);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_,
+            base::nullopt);
+}
+
+TEST_F(ControllerTest, SetDateTimeRangeSameDatesStartTimeAfterEndTime) {
+  testing::InSequence seq;
+
+  auto options = std::make_unique<MockCollectUserDataOptions>();
+  options->request_date_time_range = true;
+  auto* time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("08:00 AM");
+  time_slot->set_comparison_value(0);
+  time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("09:00 AM");
+  time_slot->set_comparison_value(1);
+
+  DateProto date;
+  date.set_year(2020);
+  date.set_month(1);
+  date.set_day(20);
+  GetUserData()->date_time_range_start_date_ = date;
+  GetUserData()->date_time_range_end_date_ = date;
+  GetUserData()->date_time_range_end_timeslot_ = 0;
+
+  controller_->SetCollectUserDataOptions(options.get());
+
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_START))
+      .Times(1);
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_END))
+      .Times(1);
+
+  controller_->SetDateTimeRangeStartTimeSlot(1);
+  EXPECT_EQ(*controller_->GetUserData()->date_time_range_start_timeslot_, 1);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_timeslot_,
+            base::nullopt);
+}
+
+TEST_F(ControllerTest, SetDateTimeRangeSameDatesEndTimeBeforeStartTime) {
+  testing::InSequence seq;
+
+  auto options = std::make_unique<MockCollectUserDataOptions>();
+  options->request_date_time_range = true;
+  auto* time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("08:00 AM");
+  time_slot->set_comparison_value(0);
+  time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("09:00 AM");
+  time_slot->set_comparison_value(1);
+
+  DateProto date;
+  date.set_year(2020);
+  date.set_month(1);
+  date.set_day(20);
+  GetUserData()->date_time_range_start_date_ = date;
+  GetUserData()->date_time_range_end_date_ = date;
+  GetUserData()->date_time_range_start_timeslot_ = 1;
+
+  controller_->SetCollectUserDataOptions(options.get());
+
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_END))
+      .Times(1);
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_START))
+      .Times(1);
+
+  controller_->SetDateTimeRangeEndTimeSlot(0);
+  EXPECT_EQ(*controller_->GetUserData()->date_time_range_end_timeslot_, 0);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_timeslot_,
+            base::nullopt);
+}
+
+TEST_F(ControllerTest, SetDateTimeRangeSameDateValidTime) {
+  testing::InSequence seq;
+
+  auto options = std::make_unique<MockCollectUserDataOptions>();
+  options->request_date_time_range = true;
+  auto* time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("08:00 AM");
+  time_slot->set_comparison_value(0);
+  time_slot = options->date_time_range.add_time_slots();
+  time_slot->set_label("09:00 AM");
+  time_slot->set_comparison_value(1);
+
+  DateProto date;
+  date.set_year(2020);
+  date.set_month(1);
+  date.set_day(20);
+  GetUserData()->date_time_range_start_date_ = date;
+  GetUserData()->date_time_range_end_date_ = date;
+
+  controller_->SetCollectUserDataOptions(options.get());
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_START))
+      .Times(1);
+  EXPECT_CALL(mock_observer_,
+              OnUserDataChanged(Not(nullptr),
+                                UserData::FieldChange::DATE_TIME_RANGE_END))
+      .Times(1);
+  controller_->SetDateTimeRangeStartTimeSlot(0);
+  controller_->SetDateTimeRangeEndTimeSlot(1);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_->year(),
+            2020);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_->month(),
+            1);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_date_->day(), 20);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_->year(),
+            2020);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_->month(), 1);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_end_date_->day(), 20);
+  EXPECT_EQ(controller_->GetUserData()->date_time_range_start_timeslot_, 0);
+  EXPECT_EQ(*controller_->GetUserData()->date_time_range_end_timeslot_, 1);
 }
 
 TEST_F(ControllerTest, ChangeClientSettings) {
