@@ -2753,10 +2753,36 @@ LayoutUnit LayoutBlockFlow::StartAlignedOffsetForLine(
 
 void LayoutBlockFlow::SetShouldDoFullPaintInvalidationForFirstLine() {
   DCHECK(ChildrenInline());
+
+  if (const NGPaintFragment* paint_fragment = PaintFragment()) {
+    paint_fragment->SetShouldDoFullPaintInvalidationForFirstLine();
+    return;
+  }
+
+  if (const NGFragmentItems* fragment_items = FragmentItems()) {
+    NGInlineCursor first_line(*fragment_items);
+    if (first_line) {
+      DCHECK(!FirstRootBox());
+      first_line.MoveToFirstLine();
+      if (first_line && first_line.Current().UsesFirstLineStyle()) {
+        // Mark all descendants of the first line if first-line style.
+        for (NGInlineCursor descendants = first_line.CursorForDescendants();
+             descendants; descendants.MoveToNext()) {
+          LayoutObject* layout_object =
+              descendants.Current()->GetMutableLayoutObject();
+          DCHECK(layout_object);
+          layout_object->StyleRef().ClearCachedPseudoElementStyles();
+          layout_object->SetShouldDoFullPaintInvalidation();
+        }
+        StyleRef().ClearCachedPseudoElementStyles();
+        SetShouldDoFullPaintInvalidation();
+      }
+    }
+    return;
+  }
+
   if (RootInlineBox* first_root_box = FirstRootBox())
     first_root_box->SetShouldDoFullPaintInvalidationForFirstLine();
-  else if (const NGPaintFragment* paint_fragment = PaintFragment())
-    paint_fragment->SetShouldDoFullPaintInvalidationForFirstLine();
 }
 
 bool LayoutBlockFlow::PaintedOutputOfObjectHasNoEffectRegardlessOfSize() const {

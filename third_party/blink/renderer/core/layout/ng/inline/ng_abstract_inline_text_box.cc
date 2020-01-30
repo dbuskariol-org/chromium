@@ -161,7 +161,7 @@ String NGAbstractInlineTextBox::GetTextContent() const {
     return To<NGPhysicalTextFragment>(paint_fragment->PhysicalFragment())
         .TextContent();
   }
-  return cursor.Items().Text(cursor.UsesFirstLineStyle());
+  return cursor.Items().Text(cursor.Current().UsesFirstLineStyle());
 }
 
 bool NGAbstractInlineTextBox::NeedsTrailingSpace() const {
