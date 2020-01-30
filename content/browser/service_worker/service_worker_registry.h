@@ -175,6 +175,15 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       const GURL& origin,
       const std::vector<std::pair<std::string, std::string>>& key_value_pairs,
       StatusCallback callback);
+  void ClearUserData(int64_t registration_id,
+                     const std::vector<std::string>& keys,
+                     StatusCallback callback);
+  void ClearUserDataByKeyPrefixes(int64_t registration_id,
+                                  const std::vector<std::string>& key_prefixes,
+                                  StatusCallback callback);
+  void ClearUserDataForAllRegistrationsByKeyPrefix(
+      const std::string& key_prefix,
+      StatusCallback callback);
 
   // TODO(crbug.com/1039200): Make this private once methods/fields related to
   // ServiceWorkerRegistration in ServiceWorkerStorage are moved into this
@@ -248,6 +257,8 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       const base::flat_map<std::string, std::string>& data_map,
       ServiceWorkerDatabase::Status status);
   void DidStoreUserData(StatusCallback callback,
+                        ServiceWorkerDatabase::Status status);
+  void DidClearUserData(StatusCallback callback,
                         ServiceWorkerDatabase::Status status);
 
   void ScheduleDeleteAndStartOver();

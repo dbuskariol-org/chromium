@@ -229,12 +229,12 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // Responds OK if all are successfully deleted or not found in the database.
   void ClearUserData(int64_t registration_id,
                      const std::vector<std::string>& keys,
-                     StatusCallback callback);
+                     DatabaseStatusCallback callback);
   // Responds OK if all are successfully deleted or not found in the database.
   // Neither |key_prefixes| nor the prefixes within can be empty.
   void ClearUserDataByKeyPrefixes(int64_t registration_id,
                                   const std::vector<std::string>& key_prefixes,
-                                  StatusCallback callback);
+                                  DatabaseStatusCallback callback);
   // Responds with all registrations that have user data with a particular key,
   // as well as that user data.
   void GetUserDataForAllRegistrations(
@@ -249,7 +249,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // |key_prefix| cannot be empty.
   void ClearUserDataForAllRegistrationsByKeyPrefix(
       const std::string& key_prefix,
-      StatusCallback callback);
+      DatabaseStatusCallback callback);
 
   // Deletes the storage and starts over.
   void DeleteAndStartOver(StatusCallback callback);
@@ -399,8 +399,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void DidWriteUncommittedResourceIds(ServiceWorkerDatabase::Status status);
   void DidPurgeUncommittedResourceIds(const std::set<int64_t>& resource_ids,
                                       ServiceWorkerDatabase::Status status);
-  void DidDeleteUserData(StatusCallback callback,
-                         ServiceWorkerDatabase::Status status);
   void DidGetUserDataForAllRegistrations(
       GetUserDataForAllRegistrationsCallback callback,
       const std::vector<std::pair<int64_t, std::string>>& user_data,

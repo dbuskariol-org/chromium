@@ -679,12 +679,12 @@ void ServiceWorkerStorage::GetUserKeysAndDataByKeyPrefix(
 
 void ServiceWorkerStorage::ClearUserData(int64_t registration_id,
                                          const std::vector<std::string>& keys,
-                                         StatusCallback callback) {
+                                         DatabaseStatusCallback callback) {
   switch (state_) {
     case STORAGE_STATE_DISABLED:
       RunSoon(FROM_HERE,
               base::BindOnce(std::move(callback),
-                             blink::ServiceWorkerStatusCode::kErrorAbort));
+                             ServiceWorkerDatabase::STATUS_ERROR_DISABLED));
       return;
     case STORAGE_STATE_INITIALIZING:  // Fall-through.
     case STORAGE_STATE_UNINITIALIZED:
@@ -696,39 +696,27 @@ void ServiceWorkerStorage::ClearUserData(int64_t registration_id,
       break;
   }
 
-  if (registration_id == blink::mojom::kInvalidServiceWorkerRegistrationId ||
-      keys.empty()) {
-    RunSoon(FROM_HERE,
-            base::BindOnce(std::move(callback),
-                           blink::ServiceWorkerStatusCode::kErrorFailed));
-    return;
-  }
-  for (const std::string& key : keys) {
-    if (key.empty()) {
-      RunSoon(FROM_HERE,
-              base::BindOnce(std::move(callback),
-                             blink::ServiceWorkerStatusCode::kErrorFailed));
-      return;
-    }
-  }
+  // TODO(bashi): Consider replacing these DCHECKs with returning errors once
+  // this class is moved to the Storage Service.
+  DCHECK_NE(registration_id, blink::mojom::kInvalidServiceWorkerRegistrationId);
+  DCHECK(!keys.empty());
 
   base::PostTaskAndReplyWithResult(
       database_task_runner_.get(), FROM_HERE,
       base::BindOnce(&ServiceWorkerDatabase::DeleteUserData,
                      base::Unretained(database_.get()), registration_id, keys),
-      base::BindOnce(&ServiceWorkerStorage::DidDeleteUserData,
-                     weak_factory_.GetWeakPtr(), std::move(callback)));
+      std::move(callback));
 }
 
 void ServiceWorkerStorage::ClearUserDataByKeyPrefixes(
     int64_t registration_id,
     const std::vector<std::string>& key_prefixes,
-    StatusCallback callback) {
+    DatabaseStatusCallback callback) {
   switch (state_) {
     case STORAGE_STATE_DISABLED:
       RunSoon(FROM_HERE,
               base::BindOnce(std::move(callback),
-                             blink::ServiceWorkerStatusCode::kErrorAbort));
+                             ServiceWorkerDatabase::STATUS_ERROR_DISABLED));
       return;
     case STORAGE_STATE_INITIALIZING:  // Fall-through.
     case STORAGE_STATE_UNINITIALIZED:
@@ -741,29 +729,17 @@ void ServiceWorkerStorage::ClearUserDataByKeyPrefixes(
       break;
   }
 
-  if (registration_id == blink::mojom::kInvalidServiceWorkerRegistrationId ||
-      key_prefixes.empty()) {
-    RunSoon(FROM_HERE,
-            base::BindOnce(std::move(callback),
-                           blink::ServiceWorkerStatusCode::kErrorFailed));
-    return;
-  }
-  for (const std::string& key_prefix : key_prefixes) {
-    if (key_prefix.empty()) {
-      RunSoon(FROM_HERE,
-              base::BindOnce(std::move(callback),
-                             blink::ServiceWorkerStatusCode::kErrorFailed));
-      return;
-    }
-  }
+  // TODO(bashi): Consider replacing these DCHECKs with returning errors once
+  // this class is moved to the Storage Service.
+  DCHECK_NE(registration_id, blink::mojom::kInvalidServiceWorkerRegistrationId);
+  DCHECK(!key_prefixes.empty());
 
   base::PostTaskAndReplyWithResult(
       database_task_runner_.get(), FROM_HERE,
       base::BindOnce(&ServiceWorkerDatabase::DeleteUserDataByKeyPrefixes,
                      base::Unretained(database_.get()), registration_id,
                      key_prefixes),
-      base::BindOnce(&ServiceWorkerStorage::DidDeleteUserData,
-                     weak_factory_.GetWeakPtr(), std::move(callback)));
+      std::move(callback));
 }
 
 void ServiceWorkerStorage::GetUserDataForAllRegistrations(
@@ -844,12 +820,12 @@ void ServiceWorkerStorage::GetUserDataForAllRegistrationsByKeyPrefix(
 
 void ServiceWorkerStorage::ClearUserDataForAllRegistrationsByKeyPrefix(
     const std::string& key_prefix,
-    StatusCallback callback) {
+    DatabaseStatusCallback callback) {
   switch (state_) {
     case STORAGE_STATE_DISABLED:
       RunSoon(FROM_HERE,
               base::BindOnce(std::move(callback),
-                             blink::ServiceWorkerStatusCode::kErrorAbort));
+                             ServiceWorkerDatabase::STATUS_ERROR_DISABLED));
       return;
     case STORAGE_STATE_INITIALIZING:  // Fall-through.
     case STORAGE_STATE_UNINITIALIZED:
@@ -861,20 +837,16 @@ void ServiceWorkerStorage::ClearUserDataForAllRegistrationsByKeyPrefix(
       break;
   }
 
-  if (key_prefix.empty()) {
-    RunSoon(FROM_HERE,
-            base::BindOnce(std::move(callback),
-                           blink::ServiceWorkerStatusCode::kErrorFailed));
-    return;
-  }
+  // TODO(bashi): Consider replacing this DCHECK with returning errors once
+  // this class is moved to the Storage Service.
+  DCHECK(!key_prefix.empty());
 
   base::PostTaskAndReplyWithResult(
       database_task_runner_.get(), FROM_HERE,
       base::BindOnce(
           &ServiceWorkerDatabase::DeleteUserDataForAllRegistrationsByKeyPrefix,
           base::Unretained(database_.get()), key_prefix),
-      base::BindOnce(&ServiceWorkerStorage::DidDeleteUserData,
-                     weak_factory_.GetWeakPtr(), std::move(callback)));
+      std::move(callback));
 }
 
 void ServiceWorkerStorage::DeleteAndStartOver(StatusCallback callback) {
@@ -1175,14 +1147,6 @@ void ServiceWorkerStorage::DidPurgeUncommittedResourceIds(
     return;
   }
   StartPurgingResources(resource_ids);
-}
-
-void ServiceWorkerStorage::DidDeleteUserData(
-    StatusCallback callback,
-    ServiceWorkerDatabase::Status status) {
-  if (status != ServiceWorkerDatabase::STATUS_OK)
-    ScheduleDeleteAndStartOver();
-  std::move(callback).Run(DatabaseStatusToStatusCode(status));
 }
 
 void ServiceWorkerStorage::DidGetUserDataForAllRegistrations(

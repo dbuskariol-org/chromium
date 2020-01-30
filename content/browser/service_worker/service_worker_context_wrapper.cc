@@ -1260,8 +1260,8 @@ void ServiceWorkerContextWrapper::ClearRegistrationUserDataOnCoreThread(
     std::move(callback).Run(blink::ServiceWorkerStatusCode::kErrorAbort);
     return;
   }
-  context_core_->storage()->ClearUserData(registration_id, keys,
-                                          std::move(callback));
+  context_core_->registry()->ClearUserData(registration_id, keys,
+                                           std::move(callback));
 }
 
 void ServiceWorkerContextWrapper::ClearRegistrationUserDataByKeyPrefixes(
@@ -1294,7 +1294,7 @@ void ServiceWorkerContextWrapper::
     std::move(callback).Run(blink::ServiceWorkerStatusCode::kErrorAbort);
     return;
   }
-  context_core_->storage()->ClearUserDataByKeyPrefixes(
+  context_core_->registry()->ClearUserDataByKeyPrefixes(
       registration_id, key_prefixes, std::move(callback));
 }
 
@@ -1395,7 +1395,7 @@ void ServiceWorkerContextWrapper::
     std::move(callback).Run(blink::ServiceWorkerStatusCode::kErrorAbort);
     return;
   }
-  context_core_->storage()->ClearUserDataForAllRegistrationsByKeyPrefix(
+  context_core_->registry()->ClearUserDataForAllRegistrationsByKeyPrefix(
       key_prefix, std::move(callback));
 }
 

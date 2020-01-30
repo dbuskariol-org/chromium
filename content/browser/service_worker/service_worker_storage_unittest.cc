@@ -397,7 +397,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       const std::vector<std::string>& keys) {
     base::RunLoop loop;
     base::Optional<blink::ServiceWorkerStatusCode> result;
-    storage()->ClearUserData(
+    registry()->ClearUserData(
         registration_id, keys,
         base::BindOnce(&StatusCallback, loop.QuitClosure(), &result));
     EXPECT_FALSE(result);  // always async
@@ -410,7 +410,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       const std::vector<std::string>& key_prefixes) {
     base::RunLoop loop;
     base::Optional<blink::ServiceWorkerStatusCode> result;
-    storage()->ClearUserDataByKeyPrefixes(
+    registry()->ClearUserDataByKeyPrefixes(
         registration_id, key_prefixes,
         base::BindOnce(&StatusCallback, loop.QuitClosure(), &result));
     EXPECT_FALSE(result.has_value());  // always async
@@ -441,7 +441,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       const std::string& key_prefix) {
     base::RunLoop loop;
     base::Optional<blink::ServiceWorkerStatusCode> result;
-    storage()->ClearUserDataForAllRegistrationsByKeyPrefix(
+    registry()->ClearUserDataForAllRegistrationsByKeyPrefix(
         key_prefix,
         base::BindOnce(&StatusCallback, loop.QuitClosure(), &result));
     EXPECT_FALSE(result.has_value());  // always async
