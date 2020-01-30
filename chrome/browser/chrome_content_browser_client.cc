@@ -4341,8 +4341,8 @@ ChromeContentBrowserClient::CreateURLLoaderThrottles(
 
   auto delegate =
       std::make_unique<signin::HeaderModificationDelegateImpl>(profile);
-  auto signin_throttle = signin::URLLoaderThrottle::MaybeCreate(
-      std::move(delegate), navigation_ui_data, wc_getter);
+  auto signin_throttle =
+      signin::URLLoaderThrottle::MaybeCreate(std::move(delegate), wc_getter);
   if (signin_throttle)
     result.push_back(std::move(signin_throttle));
 
