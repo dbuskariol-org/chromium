@@ -2581,7 +2581,7 @@ void RenderFrameHostImpl::DidAddContentSecurityPolicies(
   std::vector<network::mojom::ContentSecurityPolicyHeaderPtr> headers;
   for (auto& policy : policies) {
     headers.push_back(policy->header.Clone());
-    AddContentSecurityPolicy(ContentSecurityPolicy(std::move(policy)));
+    AddContentSecurityPolicy(std::move(policy));
   }
   frame_tree_node()->AddContentSecurityPolicies(std::move(headers));
 }
