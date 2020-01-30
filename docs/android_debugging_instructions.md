@@ -216,8 +216,8 @@ file as follows:
    test.
 4. Download the `.mapping` file for the APK used by the test (e.g.,
    `ChromePublic.apk.mapping`). Note that you may need to use the
-   `tools/swarming_client/isolateserver.py` script to download the mapping
-   file if it's too big. The viewer will provide instructions for this.
+   `tools/luci-go/isolated` to download the mapping file if it's too big. The
+   viewer will provide instructions for this.
 
 **Googlers Only**: For official build mapping files, see
 [go/chromejavadeobfuscation](https://goto.google.com/chromejavadeobfuscation).
