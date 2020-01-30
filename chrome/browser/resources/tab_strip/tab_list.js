@@ -45,6 +45,11 @@ function getTabIdDataType() {
   return loadTimeData.getString('tabIdDataType');
 }
 
+/** @return {string} */
+function getGroupIdDataType() {
+  return loadTimeData.getString('tabGroupIdDataType');
+}
+
 /**
  * @enum {string}
  */
@@ -602,6 +607,9 @@ class TabListElement extends CustomElement {
     if (isTabElement(draggedItem)) {
       event.dataTransfer.setData(
           getTabIdDataType(), this.draggedItem_.tab.id.toString());
+    } else if (isTabGroupElement(draggedItem)) {
+      event.dataTransfer.setData(
+          getGroupIdDataType(), this.draggedItem_.dataset.groupId);
     }
   }
 
@@ -623,6 +631,9 @@ class TabListElement extends CustomElement {
         return;
       }
       this.tabsApi_.moveTab(tabId, this.windowId_, -1);
+    } else if (event.dataTransfer.types.includes(getGroupIdDataType())) {
+      const groupId = event.dataTransfer.getData(getGroupIdDataType());
+      this.tabsApi_.moveGroup(groupId, -1);
     }
   }
 
