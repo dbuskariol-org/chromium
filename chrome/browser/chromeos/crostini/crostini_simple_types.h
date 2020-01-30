@@ -140,7 +140,10 @@ struct StreamingExportStatus {
 struct ContainerInfo {
   ContainerInfo(std::string name, std::string username, std::string homedir);
   ~ContainerInfo();
+  ContainerInfo(ContainerInfo&&);
   ContainerInfo(const ContainerInfo&);
+  ContainerInfo& operator=(ContainerInfo&&);
+  ContainerInfo& operator=(const ContainerInfo&);
 
   std::string name;
   std::string username;
