@@ -6510,3 +6510,4 @@ crbug.com/1047164 [ Mac ] fast/scroll-snap/snaps-after-keyboard-scrolling.html [
 crbug.com/1047208 virtual/omt-service-worker-startup/http/tests/serviceworker/update-served-from-cache.html [ Pass Failure ]
 crbug.com/1047208 http/tests/serviceworker/update-served-from-cache.html [ Pass Failure ]
 crbug.com/1047293 [ Mac ] editing/pasteboard/pasteboard_with_unfocused_selection.html [ Pass Failure ]
+crbug.com/1047420 [ Mac ] http/tests/devtools/persistence/persistence-move-breakpoints-on-reload.js [ Pass Failure ]
