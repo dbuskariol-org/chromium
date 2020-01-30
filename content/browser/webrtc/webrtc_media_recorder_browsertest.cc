@@ -84,7 +84,14 @@ IN_PROC_BROWSER_TEST_F(MAYBE_WebRtcMediaRecorderTest, StartAndStop) {
   MakeTypicalCall("testStartStopAndRecorderState();", kMediaRecorderHtmlFile);
 }
 
-IN_PROC_BROWSER_TEST_P(MAYBE_WebRtcMediaRecorderTest, StartAndDataAvailable) {
+// Flaky on TSAN. See https://crbug.com/1043828
+#if defined(THREAD_SANITIZER)
+#define MAYBE_StartAndDataAvailable DISABLED_StartAndDataAvailable
+#else
+#define MAYBE_StartAndDataAvailable StartAndDataAvailable
+#endif
+IN_PROC_BROWSER_TEST_P(MAYBE_WebRtcMediaRecorderTest,
+                       MAYBE_StartAndDataAvailable) {
   MaybeForceDisableEncodeAccelerator(GetParam().disable_accelerator);
   MakeTypicalCall(base::StringPrintf("testStartAndDataAvailable(\"%s\");",
                                      GetParam().mime_type.c_str()),
