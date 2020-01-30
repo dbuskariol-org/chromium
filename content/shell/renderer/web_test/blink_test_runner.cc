@@ -801,7 +801,7 @@ void BlinkTestRunner::OnReset() {
   // by the renderer.
   waiting_for_reset_ = true;
 
-  auto request = blink::WebURLRequest(GURL(url::kAboutBlankURL));
+  blink::WebURLRequest request{GURL(url::kAboutBlankURL)};
   request.SetMode(network::mojom::RequestMode::kNavigate);
   request.SetRedirectMode(network::mojom::RedirectMode::kManual);
   request.SetRequestContext(blink::mojom::RequestContextType::INTERNAL);

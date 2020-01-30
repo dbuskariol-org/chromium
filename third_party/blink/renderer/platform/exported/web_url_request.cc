@@ -58,9 +58,25 @@ WebURLRequest::WebURLRequest()
     : owned_resource_request_(std::make_unique<ResourceRequest>()),
       resource_request_(owned_resource_request_.get()) {}
 
-WebURLRequest::WebURLRequest(WebURLRequest&& src) = default;
+WebURLRequest::WebURLRequest(WebURLRequest&& src) {
+  *this = std::move(src);
+}
 
-WebURLRequest& WebURLRequest::operator=(WebURLRequest&& src) = default;
+WebURLRequest& WebURLRequest::operator=(WebURLRequest&& src) {
+  if (this == &src) {
+    return *this;
+  }
+  if (src.owned_resource_request_) {
+    owned_resource_request_ = std::move(src.owned_resource_request_);
+    resource_request_ = owned_resource_request_.get();
+  } else {
+    owned_resource_request_ = std::make_unique<ResourceRequest>();
+    resource_request_ = owned_resource_request_.get();
+    CopyFrom(src);
+  }
+  src.resource_request_ = nullptr;
+  return *this;
+}
 
 WebURLRequest::WebURLRequest(const WebURL& url) : WebURLRequest() {
   SetUrl(url);
