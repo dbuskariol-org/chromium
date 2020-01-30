@@ -318,8 +318,8 @@ class PasswordFormManager : public PasswordFormManagerForUI,
 
   VotesUploader votes_uploader_;
 
-  // |is_submitted_| = true means that a submission of the managed form was seen
-  // and then |submitted_form_| contains the submitted form.
+  // |is_submitted_| = true means that |*this| is ready for saving.
+  // TODO(https://crubg.com/875768): Come up with a better name.
   bool is_submitted_ = false;
   autofill::FormData submitted_form_;
   std::unique_ptr<autofill::PasswordForm> parsed_submitted_form_;

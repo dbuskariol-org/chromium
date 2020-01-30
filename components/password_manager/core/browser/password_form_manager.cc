@@ -612,11 +612,17 @@ bool PasswordFormManager::ProvisionallySave(
   RecordMetricOnReadonly(parser_.readonly_status(), !!parsed_submitted_form,
                          FormDataParser::Mode::kSaving);
 
-  // This function might be called multiple times. Consider as success if the
-  // submitted form was successfully parsed on a previous call.
-  if (!parsed_submitted_form ||
-      !parsed_submitted_form->HasNonEmptyPasswordValue()) {
-    return is_submitted_;
+  bool have_password_to_save =
+      parsed_submitted_form &&
+      parsed_submitted_form->HasNonEmptyPasswordValue();
+
+  if (!have_password_to_save) {
+    // In case of error during parsing, reset the state.
+    parsed_submitted_form_.reset();
+    submitted_form_ = FormData();
+    password_save_manager_->ResetPendingCrednetials();
+    is_submitted_ = false;
+    return false;
   }
 
   parsed_submitted_form_ = std::move(parsed_submitted_form);

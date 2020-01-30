@@ -637,12 +637,11 @@ TEST_P(PasswordFormManagerTest, SetSubmittedMultipleTimes) {
   // Make the submitted form to be invalid password form.
   submitted_form_.fields.clear();
 
-  // Expect that |form_manager_| is still in submitted state because the first
-  // time the submited form was valid.
-  EXPECT_TRUE(
+  EXPECT_FALSE(
       form_manager_->ProvisionallySave(submitted_form_, &driver_, nullptr));
-  EXPECT_TRUE(form_manager_->is_submitted());
-  EXPECT_TRUE(form_manager_->GetSubmittedForm());
+  EXPECT_FALSE(form_manager_->is_submitted());
+  EXPECT_FALSE(form_manager_->GetSubmittedForm());
+  EXPECT_EQ(PasswordForm(), form_manager_->GetPendingCredentials());
 }
 
 // Tests that when PasswordFormManager receives saved matches it waits for
