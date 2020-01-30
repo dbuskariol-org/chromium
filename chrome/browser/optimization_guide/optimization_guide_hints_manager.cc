@@ -890,8 +890,11 @@ void OptimizationGuideHintsManager::CanApplyOptimizationAsync(
   // Also return early if the decision came from an optimization filter.
   if (decision == optimization_guide::OptimizationGuideDecision::kTrue ||
       HasLoadedOptimizationFilter(optimization_type)) {
-    // TODO(crbug/1036490): Add UMA for what the decision was for the
-    // optimization type.
+    base::UmaHistogramEnumeration(
+        "OptimizationGuide.ApplyDecisionAsync." +
+            optimization_guide::GetStringNameForOptimizationType(
+                optimization_type),
+        type_decision);
     std::move(callback).Run(decision, metadata);
     return;
   }
@@ -1034,13 +1037,16 @@ void OptimizationGuideHintsManager::OnReadyToInvokeRegisteredCallbacks(
     optimization_guide::OptimizationTypeDecision type_decision =
         CanApplyOptimization(/*navigation_data=*/nullptr, navigation_url,
                              opt_type, &metadata);
-    // TODO(crbug/1036490): Add UMA for what the decision was for the
-    // optimization type.
     optimization_guide::OptimizationGuideDecision decision =
         GetOptimizationGuideDecisionFromOptimizationTypeDecision(type_decision);
 
-    for (auto& callback : opt_type_and_callbacks.second)
+    for (auto& callback : opt_type_and_callbacks.second) {
+      base::UmaHistogramEnumeration(
+          "OptimizationGuide.ApplyDecisionAsync." +
+              optimization_guide::GetStringNameForOptimizationType(opt_type),
+          type_decision);
       std::move(callback).Run(decision, metadata);
+    }
   }
   registered_callbacks_.erase(navigation_url);
 }
