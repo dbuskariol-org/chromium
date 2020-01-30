@@ -104,9 +104,6 @@ ASH_PUBLIC_EXPORT extern const base::Feature kUnlockWithExternalBinary;
 // Enables views login.
 ASH_PUBLIC_EXPORT extern const base::Feature kViewsLogin;
 
-// Enables the Virtual Desks feature.
-ASH_PUBLIC_EXPORT extern const base::Feature kVirtualDesks;
-
 // Enables using the BluetoothSystem Mojo interface for Bluetooth operations.
 ASH_PUBLIC_EXPORT extern const base::Feature kUseBluetoothSystemInAsh;
 
@@ -170,8 +167,6 @@ ASH_PUBLIC_EXPORT bool IsSeparateNetworkIconsEnabled();
 ASH_PUBLIC_EXPORT bool IsTrilinearFilteringEnabled();
 
 ASH_PUBLIC_EXPORT bool IsViewsLoginEnabled();
-
-ASH_PUBLIC_EXPORT bool IsVirtualDesksEnabled();
 
 ASH_PUBLIC_EXPORT bool IsSupervisedUserDeprecationNoticeEnabled();
 

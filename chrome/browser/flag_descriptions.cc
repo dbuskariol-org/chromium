@@ -3331,10 +3331,6 @@ const char kEnableVideoPlayerNativeControlsName[] =
 const char kEnableVideoPlayerNativeControlsDescription[] =
     "Enable native controls in video player app";
 
-const char kEnableVirtualDesksName[] = "Enable Virtual Desks";
-const char kEnableVirtualDesksDescription[] =
-    "A preview of the upcoming Virtual Desks features on Chrome OS devices.";
-
 const char kTrimOnFreezeName[] = "Trim Working Set on freeze";
 const char kTrimOnFreezeDescription[] = "Trim Working Set on all frames frozen";
 

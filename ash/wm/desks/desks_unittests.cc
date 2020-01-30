@@ -275,22 +275,15 @@ class TestDeskObserver : public Desk::Observer {
   DISALLOW_COPY_AND_ASSIGN(TestDeskObserver);
 };
 
+// Defines a test fixture to test Virtual Desks behavior, parameterized to run
+// some window drag tests with both touch gestures and with mouse events.
 class DesksTest : public AshTestBase,
                   public ::testing::WithParamInterface<bool> {
  public:
   DesksTest() = default;
   ~DesksTest() override = default;
 
-  // AshTestBase:
-  void SetUp() override {
-    scoped_feature_list_.InitAndEnableFeature(features::kVirtualDesks);
-
-    AshTestBase::SetUp();
-  }
-
  private:
-  base::test::ScopedFeatureList scoped_feature_list_;
-
   DISALLOW_COPY_AND_ASSIGN(DesksTest);
 };
 
@@ -2099,8 +2092,7 @@ class DesksWithSplitViewTest : public AshTestBase {
   // AshTestBase:
   void SetUp() override {
     scoped_feature_list_.InitWithFeatures(
-        /*enabled_features=*/{features::kVirtualDesks,
-                              features::kDragToSnapInClamshellMode},
+        /*enabled_features=*/{features::kDragToSnapInClamshellMode},
         /*disabled_features=*/{});
 
     AshTestBase::SetUp();
@@ -2215,8 +2207,6 @@ class DesksMultiUserTest : public NoSessionAshTestBase,
 
   // AshTestBase:
   void SetUp() override {
-    scoped_feature_list_.InitAndEnableFeature(features::kVirtualDesks);
-
     NoSessionAshTestBase::SetUp();
     TestSessionControllerClient* session_controller =
         GetSessionControllerClient();
@@ -2258,7 +2248,6 @@ class DesksMultiUserTest : public NoSessionAshTestBase,
   }
 
  private:
-  base::test::ScopedFeatureList scoped_feature_list_;
   std::unique_ptr<MultiUserWindowManager> multi_user_window_manager_;
 
   DISALLOW_COPY_AND_ASSIGN(DesksMultiUserTest);

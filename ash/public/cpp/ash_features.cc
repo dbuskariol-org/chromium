@@ -83,9 +83,6 @@ const base::Feature kUnlockWithExternalBinary{
 
 const base::Feature kViewsLogin{"ViewsLogin", base::FEATURE_ENABLED_BY_DEFAULT};
 
-const base::Feature kVirtualDesks{"VirtualDesks",
-                                  base::FEATURE_ENABLED_BY_DEFAULT};
-
 const base::Feature kUseBluetoothSystemInAsh{"UseBluetoothSystemInAsh",
                                              base::FEATURE_DISABLED_BY_DEFAULT};
 
@@ -160,10 +157,6 @@ bool IsTrilinearFilteringEnabled() {
   static bool use_trilinear_filtering =
       base::FeatureList::IsEnabled(kTrilinearFiltering);
   return use_trilinear_filtering;
-}
-
-bool IsVirtualDesksEnabled() {
-  return base::FeatureList::IsEnabled(kVirtualDesks);
 }
 
 bool IsViewsLoginEnabled() {
