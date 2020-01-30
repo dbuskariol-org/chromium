@@ -1164,6 +1164,11 @@ void FrameLoader::CommitDocumentLoader(
     // TODO(dgozman): make DidCreateScriptContext notification call currently
     // triggered by installing new document happen here, after commit.
   }
+  if (!is_initialization) {
+    // Note: this must be called after DispatchDidCommitLoad() for
+    // metrics to be correctly sent to the browser process.
+    document_loader_->GetUseCounterHelper().DidCommitLoad(frame_);
+  }
   if (document_loader_->LoadType() == WebFrameLoadType::kBackForward) {
     if (Page* page = frame_->GetPage())
       page->HistoryNavigationVirtualTimePauser().UnpauseVirtualTime();
