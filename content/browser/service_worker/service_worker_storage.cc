@@ -243,14 +243,6 @@ void ServiceWorkerStorage::FindRegistrationForId(
     return;
   }
 
-  scoped_refptr<ServiceWorkerRegistration> registration =
-      context_->GetLiveRegistration(registration_id);
-  if (registration) {
-    CompleteFindNow(std::move(registration),
-                    blink::ServiceWorkerStatusCode::kOk, std::move(callback));
-    return;
-  }
-
   database_task_runner_->PostTask(
       FROM_HERE,
       base::BindOnce(
@@ -276,18 +268,6 @@ void ServiceWorkerStorage::FindRegistrationForIdOnly(
       return;
     case STORAGE_STATE_INITIALIZED:
       break;
-  }
-
-  scoped_refptr<ServiceWorkerRegistration> registration =
-      context_->GetLiveRegistration(registration_id);
-  if (registration) {
-    // Delegate to FindRegistrationForId to make sure the same subset of live
-    // registrations is returned.
-    // TODO(mek): CompleteFindNow should really do all the required checks, so
-    // calling that directly here should be enough.
-    FindRegistrationForId(registration_id, registration->scope().GetOrigin(),
-                          std::move(callback));
-    return;
   }
 
   database_task_runner_->PostTask(

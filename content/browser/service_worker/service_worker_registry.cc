@@ -129,6 +129,25 @@ void ServiceWorkerRegistry::FindRegistrationForId(
     int64_t registration_id,
     const GURL& origin,
     FindRegistrationCallback callback) {
+  // Registration lookup is expected to abort when storage is disabled.
+  if (storage()->IsDisabled()) {
+    CompleteFindNow(nullptr, blink::ServiceWorkerStatusCode::kErrorAbort,
+                    std::move(callback));
+    return;
+  }
+
+  // Lookup live registration first.
+  base::Optional<scoped_refptr<ServiceWorkerRegistration>> registration =
+      FindFromLiveRegistrationsForId(registration_id);
+  if (registration) {
+    blink::ServiceWorkerStatusCode status =
+        registration.value() ? blink::ServiceWorkerStatusCode::kOk
+                             : blink::ServiceWorkerStatusCode::kErrorNotFound;
+    CompleteFindNow(std::move(registration.value()), status,
+                    std::move(callback));
+    return;
+  }
+
   storage()->FindRegistrationForId(
       registration_id, origin,
       base::BindOnce(&ServiceWorkerRegistry::DidFindRegistrationForId,
@@ -139,6 +158,25 @@ void ServiceWorkerRegistry::FindRegistrationForId(
 void ServiceWorkerRegistry::FindRegistrationForIdOnly(
     int64_t registration_id,
     FindRegistrationCallback callback) {
+  // Registration lookup is expected to abort when storage is disabled.
+  if (storage()->IsDisabled()) {
+    CompleteFindNow(nullptr, blink::ServiceWorkerStatusCode::kErrorAbort,
+                    std::move(callback));
+    return;
+  }
+
+  // Lookup live registration first.
+  base::Optional<scoped_refptr<ServiceWorkerRegistration>> registration =
+      FindFromLiveRegistrationsForId(registration_id);
+  if (registration) {
+    blink::ServiceWorkerStatusCode status =
+        registration.value() ? blink::ServiceWorkerStatusCode::kOk
+                             : blink::ServiceWorkerStatusCode::kErrorNotFound;
+    CompleteFindNow(std::move(registration.value()), status,
+                    std::move(callback));
+    return;
+  }
+
   storage()->FindRegistrationForIdOnly(
       registration_id,
       base::BindOnce(&ServiceWorkerRegistry::DidFindRegistrationForId,
@@ -251,7 +289,8 @@ void ServiceWorkerRegistry::DeleteRegistration(
   storage()->DeleteRegistration(
       registration->id(), origin,
       base::BindOnce(&ServiceWorkerRegistry::DidDeleteRegistration,
-                     weak_factory_.GetWeakPtr(), std::move(callback)));
+                     weak_factory_.GetWeakPtr(), registration->id(),
+                     std::move(callback)));
 
   DCHECK(!base::Contains(uninstalling_registrations_, registration->id()));
   uninstalling_registrations_[registration->id()] = registration;
@@ -397,6 +436,7 @@ ServiceWorkerRegistry::GetOrCreateRegistration(
       data.scope, data.script_type, data.update_via_cache);
   registration = base::MakeRefCounted<ServiceWorkerRegistration>(
       options, data.registration_id, context_->AsWeakPtr());
+  registration->SetStored();
   registration->set_resources_total_size_bytes(data.resources_total_size_bytes);
   registration->set_last_update_check(data.last_update_check);
   DCHECK(!base::Contains(uninstalling_registrations_, data.registration_id));
@@ -434,6 +474,26 @@ ServiceWorkerRegistry::GetOrCreateRegistration(
   registration->SetNavigationPreloadHeader(
       data.navigation_preload_state.header);
   return registration;
+}
+
+base::Optional<scoped_refptr<ServiceWorkerRegistration>>
+ServiceWorkerRegistry::FindFromLiveRegistrationsForId(int64_t registration_id) {
+  scoped_refptr<ServiceWorkerRegistration> registration =
+      context_->GetLiveRegistration(registration_id);
+  if (registration) {
+    // The registration is considered as findable when it's stored or in
+    // installing state.
+    if (registration->IsStored() ||
+        base::Contains(installing_registrations_, registration_id)) {
+      return registration;
+    }
+    // Otherwise, the registration should not be findable even if it's still
+    // alive.
+    return nullptr;
+  }
+  // There is no live registration. Storage lookup is required. Returning
+  // nullopt results in storage lookup.
+  return base::nullopt;
 }
 
 void ServiceWorkerRegistry::DidFindRegistrationForClientUrl(
@@ -653,6 +713,7 @@ void ServiceWorkerRegistry::DidStoreRegistration(
   scoped_refptr<ServiceWorkerRegistration> registration =
       context_->GetLiveRegistration(data.registration_id);
   if (registration) {
+    registration->SetStored();
     registration->set_resources_total_size_bytes(
         data.resources_total_size_bytes);
   }
@@ -662,12 +723,18 @@ void ServiceWorkerRegistry::DidStoreRegistration(
 }
 
 void ServiceWorkerRegistry::DidDeleteRegistration(
+    int64_t registration_id,
     StatusCallback callback,
     blink::ServiceWorkerStatusCode status,
     int64_t deleted_version_id,
     const std::vector<int64_t>& newly_purgeable_resources) {
   if (!context_->GetLiveVersion(deleted_version_id))
     storage()->PurgeResources(newly_purgeable_resources);
+
+  scoped_refptr<ServiceWorkerRegistration> registration =
+      context_->GetLiveRegistration(registration_id);
+  if (registration)
+    registration->UnsetStored();
 
   std::move(callback).Run(status);
 }

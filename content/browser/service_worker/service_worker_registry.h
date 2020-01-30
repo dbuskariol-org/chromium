@@ -86,6 +86,10 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
                                     FindRegistrationCallback callback);
   void FindRegistrationForScope(const GURL& scope,
                                 FindRegistrationCallback callback);
+  // These FindRegistrationForId() methods look up live registrations and may
+  // return a "findable" registration without looking up storage. A registration
+  // is considered as "findable" when the registration is stored or in the
+  // installing state.
   void FindRegistrationForId(int64_t registration_id,
                              const GURL& origin,
                              FindRegistrationCallback callback);
@@ -160,6 +164,12 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   ServiceWorkerRegistration* FindInstallingRegistrationForId(
       int64_t registration_id);
 
+  // Looks up live registrations and returns an optional value which may contain
+  // a "findable" registration. See the implementation of this method for
+  // what "findable" means and when a registration is returned.
+  base::Optional<scoped_refptr<ServiceWorkerRegistration>>
+  FindFromLiveRegistrationsForId(int64_t registration_id);
+
   void DidFindRegistrationForClientUrl(
       const GURL& client_url,
       int64_t trace_event_id,
@@ -194,6 +204,7 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       int64_t deleted_version_id,
       const std::vector<int64_t>& newly_purgeable_resources);
   void DidDeleteRegistration(
+      int64_t registration_id,
       StatusCallback callback,
       blink::ServiceWorkerStatusCode status,
       int64_t deleted_version_id,
