@@ -35,8 +35,10 @@
 #include "chromeos/strings/grit/chromeos_strings.h"
 #include "components/strings/grit/components_strings.h"
 #include "content/public/browser/web_ui_data_source.h"
+#include "content/public/common/content_features.h"
 #include "content/public/common/content_switches.h"
 #include "device/bluetooth/strings/grit/bluetooth_strings.h"
+#include "media/base/media_switches.h"
 #include "ui/accessibility/accessibility_switches.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/webui/web_ui_util.h"
@@ -69,8 +71,19 @@ bool IsProfileManaged(Profile* profile) {
 }
 
 void AddA11yStrings(content::WebUIDataSource* html_source) {
-  ::settings::AddSharedA11yStrings(html_source);
   static constexpr webui::LocalizedString kLocalizedStrings[] = {
+      {"a11yPageTitle", IDS_SETTINGS_ACCESSIBILITY},
+      {"a11yWebStore", IDS_SETTINGS_ACCESSIBILITY_WEB_STORE},
+      {"moreFeaturesLinkDescription",
+       IDS_SETTINGS_MORE_FEATURES_LINK_DESCRIPTION},
+      {"accessibleImageLabelsTitle",
+       IDS_SETTINGS_ACCESSIBLE_IMAGE_LABELS_TITLE},
+      {"accessibleImageLabelsSubtitle",
+       IDS_SETTINGS_ACCESSIBLE_IMAGE_LABELS_SUBTITLE},
+      {"settingsSliderRoleDescription",
+       IDS_SETTINGS_SLIDER_MIN_MAX_ARIA_ROLE_DESCRIPTION},
+      {"manageAccessibilityFeatures",
+       IDS_SETTINGS_ACCESSIBILITY_MANAGE_ACCESSIBILITY_FEATURES},
       {"optionsInMenuLabel", IDS_SETTINGS_OPTIONS_IN_MENU_LABEL},
       {"largeMouseCursorLabel", IDS_SETTINGS_LARGE_MOUSE_CURSOR_LABEL},
       {"largeMouseCursorSizeLabel", IDS_SETTINGS_LARGE_MOUSE_CURSOR_SIZE_LABEL},
@@ -245,6 +258,15 @@ void AddA11yStrings(content::WebUIDataSource* html_source) {
       "showExperimentalAccessibilitySwitchAccessImprovedTextInput",
       cmd.HasSwitch(
           ::switches::kEnableExperimentalAccessibilitySwitchAccessText));
+
+  html_source->AddBoolean("showExperimentalA11yLabels",
+                          base::FeatureList::IsEnabled(
+                              ::features::kExperimentalAccessibilityLabels));
+
+  html_source->AddBoolean("enableLiveCaption",
+                          base::FeatureList::IsEnabled(media::kLiveCaption));
+
+  ::settings::AddCaptionSubpageStrings(html_source);
 }
 
 void AddLanguagesStrings(content::WebUIDataSource* html_source) {

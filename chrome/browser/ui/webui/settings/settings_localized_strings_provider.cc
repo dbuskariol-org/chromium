@@ -186,19 +186,35 @@ void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
 void AddA11yStrings(content::WebUIDataSource* html_source) {
   static constexpr webui::LocalizedString kLocalizedStrings[] = {
     {"moreFeaturesLink", IDS_SETTINGS_MORE_FEATURES_LINK},
+    {"a11yPageTitle", IDS_SETTINGS_ACCESSIBILITY},
+    {"a11yWebStore", IDS_SETTINGS_ACCESSIBILITY_WEB_STORE},
+    {"moreFeaturesLinkDescription",
+     IDS_SETTINGS_MORE_FEATURES_LINK_DESCRIPTION},
+    {"accessibleImageLabelsTitle", IDS_SETTINGS_ACCESSIBLE_IMAGE_LABELS_TITLE},
+    {"accessibleImageLabelsSubtitle",
+     IDS_SETTINGS_ACCESSIBLE_IMAGE_LABELS_SUBTITLE},
+    {"settingsSliderRoleDescription",
+     IDS_SETTINGS_SLIDER_MIN_MAX_ARIA_ROLE_DESCRIPTION},
 #if defined(OS_CHROMEOS)
+    {"manageAccessibilityFeatures",
+     IDS_SETTINGS_ACCESSIBILITY_MANAGE_ACCESSIBILITY_FEATURES},
     {"androidAppsManageAppLinks", IDS_SETTINGS_ANDROID_APPS_MANAGE_APP_LINKS},
 #endif
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 
-#if !defined(OS_CHROMEOS)
-  AddSharedA11yStrings(html_source);
-#endif
 #if defined(OS_WIN)
   html_source->AddBoolean("isWindows10OrNewer",
                           base::win::GetVersion() >= base::win::Version::WIN10);
 #endif
+  html_source->AddBoolean(
+      "showExperimentalA11yLabels",
+      base::FeatureList::IsEnabled(features::kExperimentalAccessibilityLabels));
+
+  html_source->AddBoolean("enableLiveCaption",
+                          base::FeatureList::IsEnabled(media::kLiveCaption));
+
+  AddCaptionSubpageStrings(html_source);
 }
 
 void AddAboutStrings(content::WebUIDataSource* html_source) {
