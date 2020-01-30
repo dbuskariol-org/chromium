@@ -253,6 +253,8 @@ component("ash") {
     "display/cursor_window_controller.h",
     "display/display_animator.cc",
     "display/display_animator.h",
+    "display/display_change_dialog.cc",
+    "display/display_change_dialog.h",
     "display/display_color_manager.cc",
     "display/display_color_manager.h",
     "display/display_configuration_controller.cc",
