@@ -14,6 +14,7 @@ import "third_party/blink/public/mojom/ad_tagging/ad_frame.mojom";
 import "third_party/blink/public/mojom/devtools/console_message.mojom";
 import "third_party/blink/public/mojom/frame/blocked_navigation_types.mojom";
 import "third_party/blink/public/mojom/frame/fullscreen.mojom";
+import "third_party/blink/public/mojom/frame/intrinsic_sizing_info.mojom";
 import "third_party/blink/public/mojom/frame/lifecycle.mojom";
 import "third_party/blink/public/mojom/frame/media_player_action.mojom";
 import "third_party/blink/public/mojom/frame/sudden_termination_disabler_type.mojom";
@@ -454,4 +455,9 @@ interface RemoteFrame {
   // Notifies this remote frame that its corresponding document has completed
   // loading.
   DidStopLoading();
+
+  // Sent to the remote frame placeholder in the parent process indicating the
+  // intrinsic sizing parameters of the content frame have changed. Generated
+  // when the browser receives a WidgetHostMsg_IntrinsicSizingInfoChanged.
+  IntrinsicSizingInfoOfChildChanged(IntrinsicSizingInfo sizing_info);
 };
