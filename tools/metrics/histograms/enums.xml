@@ -54130,6 +54130,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="RasterSourceClearType">
+  <obsolete>
+    Not used after M77. No longer tuning this code.
+  </obsolete>
   <int value="0" label="No clear"/>
   <int value="1" label="Full clear"/>
   <int value="2" label="Border clear"/>
