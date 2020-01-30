@@ -5050,10 +5050,6 @@ test("unit_tests") {
     }
   }
 
-  if (enable_captive_portal_detection) {
-    sources +=
-        [ "../browser/captive_portal/captive_portal_tab_helper_unittest.cc" ]
-  }
   if (enable_session_service) {
     sources += [
       "../browser/sessions/session_restore_observer_unittest.cc",

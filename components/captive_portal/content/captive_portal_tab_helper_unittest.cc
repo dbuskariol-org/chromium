@@ -8,11 +8,11 @@
 
 #include "base/callback.h"
 #include "base/macros.h"
-#include "chrome/browser/captive_portal/captive_portal_service_factory.h"
-#include "chrome/browser/chrome_notification_types.h"
-#include "chrome/test/base/chrome_render_view_host_test_harness.h"
 #include "components/captive_portal/content/captive_portal_service.h"
 #include "components/captive_portal/content/captive_portal_tab_reloader.h"
+#include "components/embedder_support/pref_names.h"
+#include "components/prefs/pref_registry_simple.h"
+#include "components/prefs/testing_pref_service.h"
 #include "content/public/browser/render_process_host.h"
 #include "content/public/browser/render_view_host.h"
 #include "content/public/browser/web_contents.h"
@@ -42,8 +42,7 @@ const char* const kHttpsUrl2 = "https://cross_process.com/";
 class MockCaptivePortalTabReloader : public CaptivePortalTabReloader {
  public:
   MockCaptivePortalTabReloader()
-      : CaptivePortalTabReloader(nullptr, nullptr, base::Callback<void()>()) {
-  }
+      : CaptivePortalTabReloader(nullptr, nullptr, base::Callback<void()>()) {}
 
   MOCK_METHOD1(OnLoadStart, void(bool));
   MOCK_METHOD1(OnLoadCommitted, void(int));
@@ -53,19 +52,19 @@ class MockCaptivePortalTabReloader : public CaptivePortalTabReloader {
                void(CaptivePortalResult, CaptivePortalResult));
 };
 
-// Inherits from the ChromeRenderViewHostTestHarness to gain access to
-// CreateTestWebContents.  Since the tests need to micromanage order of
-// WebContentsObserver function calls, does not actually make sure of
-// the harness in any other way.
-class CaptivePortalTabHelperTest : public ChromeRenderViewHostTestHarness {
+class CaptivePortalTabHelperTest : public content::RenderViewHostTestHarness {
  public:
   CaptivePortalTabHelperTest()
       : mock_reloader_(new testing::StrictMock<MockCaptivePortalTabReloader>) {}
   ~CaptivePortalTabHelperTest() override {}
 
   void SetUp() override {
-    ChromeRenderViewHostTestHarness::SetUp();
+    content::RenderViewHostTestHarness::SetUp();
 
+    pref_service_.registry()->RegisterBooleanPref(
+        embedder_support::kAlternateErrorPagesEnabled, true);
+    captive_portal_service_ = std::make_unique<CaptivePortalService>(
+        browser_context(), &pref_service_);
     // Load kStartUrl. This ensures that any subsequent navigation to kHttpsUrl2
     // will be properly registered as cross-process. It should be different than
     // the rest of the URLs used, otherwise unit tests will clasify navigations
@@ -75,14 +74,14 @@ class CaptivePortalTabHelperTest : public ChromeRenderViewHostTestHarness {
     web_contents_tester->NavigateAndCommit(GURL(kStartUrl));
 
     tab_helper_.reset(new CaptivePortalTabHelper(
-        web_contents(), CaptivePortalServiceFactory::GetForProfile(profile()),
-        base::DoNothing()));
+        web_contents(), captive_portal_service_.get(), base::DoNothing()));
     tab_helper_->SetTabReloaderForTest(mock_reloader_);
   }
 
   void TearDown() override {
     tab_helper_.reset();
-    ChromeRenderViewHostTestHarness::TearDown();
+    captive_portal_service_.reset();
+    content::RenderViewHostTestHarness::TearDown();
   }
 
   // Simulates a successful load of |url|.
@@ -145,14 +144,13 @@ class CaptivePortalTabHelperTest : public ChromeRenderViewHostTestHarness {
   // Simulates a captive portal redirect by calling the Observe method.
   void ObservePortalResult(CaptivePortalResult previous_result,
                            CaptivePortalResult result) {
-    content::Source<Profile> source_profile(nullptr);
-
     CaptivePortalService::Results results;
     results.previous_result = previous_result;
     results.result = result;
 
-    EXPECT_CALL(mock_reloader(), OnCaptivePortalResults(previous_result,
-                                                        result)).Times(1);
+    EXPECT_CALL(mock_reloader(),
+                OnCaptivePortalResults(previous_result, result))
+        .Times(1);
     tab_helper()->Observe(results);
   }
 
@@ -161,6 +159,8 @@ class CaptivePortalTabHelperTest : public ChromeRenderViewHostTestHarness {
   void SetIsLoginTab() { tab_helper()->SetIsLoginTab(); }
 
  private:
+  TestingPrefServiceSimple pref_service_;
+  std::unique_ptr<CaptivePortalService> captive_portal_service_;
   std::unique_ptr<CaptivePortalTabHelper> tab_helper_;
 
   // Owned by |tab_helper_|.
@@ -240,7 +240,8 @@ TEST_F(CaptivePortalTabHelperTest, UnexpectedProvisionalLoad) {
 
   // A same-site load for the original RenderViewHost starts.
   EXPECT_CALL(mock_reloader(),
-              OnLoadStart(same_site_url.SchemeIsCryptographic())).Times(1);
+              OnLoadStart(same_site_url.SchemeIsCryptographic()))
+      .Times(1);
   std::unique_ptr<NavigationSimulator> same_site_navigation =
       NavigationSimulator::CreateRendererInitiated(same_site_url, main_rfh());
   same_site_navigation->Start();
@@ -250,7 +251,8 @@ TEST_F(CaptivePortalTabHelperTest, UnexpectedProvisionalLoad) {
   // navigating before the old navigation cancels.
   EXPECT_CALL(mock_reloader(), OnAbort()).Times(1);
   EXPECT_CALL(mock_reloader(),
-              OnLoadStart(cross_process_url.SchemeIsCryptographic())).Times(1);
+              OnLoadStart(cross_process_url.SchemeIsCryptographic()))
+      .Times(1);
   std::unique_ptr<NavigationSimulator> cross_process_navigation =
       NavigationSimulator::CreateBrowserInitiated(cross_process_url,
                                                   web_contents());
@@ -271,7 +273,8 @@ TEST_F(CaptivePortalTabHelperTest, UnexpectedCommit) {
 
   // A same-site load for the original RenderViewHost starts.
   EXPECT_CALL(mock_reloader(),
-              OnLoadStart(same_site_url.SchemeIsCryptographic())).Times(1);
+              OnLoadStart(same_site_url.SchemeIsCryptographic()))
+      .Times(1);
   std::unique_ptr<NavigationSimulator> same_site_navigation =
       NavigationSimulator::CreateRendererInitiated(same_site_url, main_rfh());
   same_site_navigation->ReadyToCommit();
@@ -280,7 +283,8 @@ TEST_F(CaptivePortalTabHelperTest, UnexpectedCommit) {
   // navigating before the old navigation commits.
   EXPECT_CALL(mock_reloader(), OnAbort()).Times(1);
   EXPECT_CALL(mock_reloader(),
-              OnLoadStart(cross_process_url.SchemeIsCryptographic())).Times(1);
+              OnLoadStart(cross_process_url.SchemeIsCryptographic()))
+      .Times(1);
   std::unique_ptr<NavigationSimulator> cross_process_navigation =
       NavigationSimulator::CreateBrowserInitiated(cross_process_url,
                                                   web_contents());
