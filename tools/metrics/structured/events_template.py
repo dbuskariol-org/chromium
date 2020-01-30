@@ -82,8 +82,7 @@ namespace events {{\
 
 IMPL_EVENT_TEMPLATE = """
 
-{event.name}::{event.name}() :
-  ::metrics::structured::EventBase(kEventNameHash) {{}}
+{event.name}::{event.name}() {{}}
 {event.name}::~{event.name}() = default;\
 {metric_code}\
 """

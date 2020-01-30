@@ -19,10 +19,17 @@ class EventBase {
   EventBase(const EventBase& other);
   virtual ~EventBase();
 
+  // Finalizes the event and sends it for recording. After this call, the event
+  // is left in an invalid state and should not be used further.
+  void Record();
+
+ protected:
+  EventBase();
+
   // Specifies which value type a Metric object holds.
   enum class MetricType {
-    kString = 0,
-    kInt = 1,
+    STRING = 0,
+    INT = 1,
   };
 
   // Stores all information about a single metric: name hash, value, and a
@@ -46,22 +53,18 @@ class EventBase {
     int int_value;
   };
 
-  // Finalizes the event and sends it for recording. After this call, the event
-  // is left in an invalid state and should not be used further.
-  void Record();
+  void AddStringMetric(uint64_t name_hash, const std::string& value) {
+    Metric metric(name_hash, MetricType::STRING);
+    metric.string_value = value;
+    metrics_.push_back(metric);
+  }
 
-  std::vector<Metric> metrics() const { return metrics_; }
+  void AddIntMetric(uint64_t name_hash, int value) {
+    Metric metric(name_hash, MetricType::INT);
+    metric.int_value = value;
+    metrics_.push_back(metric);
+  }
 
-  uint64_t name_hash() const { return event_name_hash_; }
-
- protected:
-  explicit EventBase(uint64_t event_name_hash);
-
-  void AddStringMetric(uint64_t name_hash, const std::string& value);
-
-  void AddIntMetric(uint64_t name_hash, int value);
-
- private:
   // First 8 bytes of the MD5 hash of the event name, as defined in
   // structured.xml. This is calculated by tools/metrics/structured/codegen.py.
   uint64_t event_name_hash_;
