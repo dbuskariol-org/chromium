@@ -167,7 +167,6 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       blink::ServiceWorkerStatusCode status,
       scoped_refptr<ServiceWorkerRegistration> registration);
   void DidFindRegistrationForScope(
-      const GURL& scope,
       FindRegistrationCallback callback,
       blink::ServiceWorkerStatusCode status,
       scoped_refptr<ServiceWorkerRegistration> registration);
