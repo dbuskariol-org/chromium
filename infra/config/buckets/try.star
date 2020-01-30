@@ -1202,5 +1202,13 @@ chrome_internal_verifier(
 )
 
 chrome_internal_verifier(
+    builder = 'ipad-device',
+)
+
+chrome_internal_verifier(
+    builder = 'iphone-device',
+)
+
+chrome_internal_verifier(
     builder = 'linux-chromeos-chrome',
 )
