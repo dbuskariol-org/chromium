@@ -364,7 +364,8 @@ const chromeos::NetworkState* GetShillBackedNetwork(
     return nullptr;
 
   // Non-Tether networks are already backed by Shill.
-  if (!chromeos::NetworkTypePattern::Tether().MatchesType(network->type()))
+  const std::string type = network->type();
+  if (type.empty() || !chromeos::NetworkTypePattern::Tether().MatchesType(type))
     return network;
 
   // Tether networks which are not connected are also not backed by Shill.
