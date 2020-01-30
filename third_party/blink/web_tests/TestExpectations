@@ -1372,7 +1372,6 @@ virtual/layout_ng_block_frag/fragmentation/scrolling-contents-scroll.html [ Cras
 #
 # Fail in NG flex, pass in legacy flex.
 crbug.com/845235 virtual/layout_ng_flex_box/css3/flexbox/minimum-size-image.html [ Failure ]
-crbug.com/845235 virtual/layout_ng_flex_box/css3/flexbox/negative-overflow.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/css3/flexbox/overflow-auto-resizes-correctly.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/css3/flexbox/relpos-with-percentage-top.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flex-aspect-ratio-img-column-004.html [ Failure ]
