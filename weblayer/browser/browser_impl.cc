@@ -10,6 +10,7 @@
 #include "base/path_service.h"
 #include "components/base32/base32.h"
 #include "content/public/browser/browser_context.h"
+#include "weblayer/browser/persistence/minimal_browser_persister.h"
 #include "weblayer/browser/profile_impl.h"
 #include "weblayer/browser/session_service.h"
 #include "weblayer/browser/tab_impl.h"
@@ -47,7 +48,7 @@ BrowserImpl::BrowserImpl(ProfileImpl* profile,
     : profile_(profile),
       persistence_id_(persistence_info ? persistence_info->id : std::string()) {
   if (persistence_info)
-    CreateSessionServiceAndRestore(*persistence_info);
+    RestoreStateIfNecessary(*persistence_info);
 }
 
 BrowserImpl::~BrowserImpl() {
@@ -156,7 +157,20 @@ BrowserImpl::GetSessionServiceCryptoKey(
   return base::android::ToJavaByteArray(env, key);
 }
 
+base::android::ScopedJavaLocalRef<jbyteArray>
+BrowserImpl::GetMinimalPersistenceState(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>& caller) {
+  auto state = GetMinimalPersistenceState();
+  return base::android::ToJavaByteArray(env, &(state.front()), state.size());
+}
+
 #endif
+
+std::vector<uint8_t> BrowserImpl::GetMinimalPersistenceState(
+    int max_size_in_bytes) {
+  return PersistMinimalState(this, max_size_in_bytes);
+}
 
 Tab* BrowserImpl::AddTab(std::unique_ptr<Tab> tab) {
   DCHECK(tab);
@@ -241,6 +255,11 @@ std::string BrowserImpl::GetPersistenceId() {
   return persistence_id_;
 }
 
+std::vector<uint8_t> BrowserImpl::GetMinimalPersistenceState() {
+  // 0 means use the default max.
+  return GetMinimalPersistenceState(0);
+}
+
 void BrowserImpl::AddObserver(BrowserObserver* observer) {
   browser_observers_.AddObserver(observer);
 }
@@ -262,10 +281,14 @@ base::FilePath BrowserImpl::GetSessionServiceDataPath() {
   return base_path.AppendASCII("State" + encoded_name);
 }
 
-void BrowserImpl::CreateSessionServiceAndRestore(
+void BrowserImpl::RestoreStateIfNecessary(
     const PersistenceInfo& persistence_info) {
-  session_service_ = std::make_unique<SessionService>(
-      GetSessionServiceDataPath(), this, persistence_info.last_crypto_key);
+  if (!persistence_info.id.empty()) {
+    session_service_ = std::make_unique<SessionService>(
+        GetSessionServiceDataPath(), this, persistence_info.last_crypto_key);
+  } else if (!persistence_info.minimal_state.empty()) {
+    RestoreMinimalState(this, persistence_info.minimal_state);
+  }
 }
 
 #if defined(OS_ANDROID)

@@ -154,9 +154,10 @@ test("weblayer_browsertests") {
     product_config_java_packages = [ weblayer_product_config_java_package ]
   } else {
     sources += [
-      # This test creates Browser objects from C++, which the Java side is not
-      # setup for. SessionService related tests for Java will be done as
+      # These tests create Browser objects from C++, which the Java side is not
+      # setup for. Persistence related tests for Java will be done as
       # integration tests.
+      "../browser/persistence/minimal_browser_persister_browsertest.cc",
       "../browser/session_service_browsertest.cc",
     ]
   }
