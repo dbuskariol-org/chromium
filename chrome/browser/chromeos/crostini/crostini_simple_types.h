@@ -161,7 +161,10 @@ struct Icon {
 
 struct LinuxPackageInfo {
   LinuxPackageInfo();
+  LinuxPackageInfo(LinuxPackageInfo&&);
   LinuxPackageInfo(const LinuxPackageInfo&);
+  LinuxPackageInfo& operator=(LinuxPackageInfo&&);
+  LinuxPackageInfo& operator=(const LinuxPackageInfo&);
   ~LinuxPackageInfo();
 
   bool success;

@@ -632,7 +632,11 @@ void CrostiniManager::AddRunningVmForTesting(std::string vm_name) {
 }
 
 LinuxPackageInfo::LinuxPackageInfo() = default;
+LinuxPackageInfo::LinuxPackageInfo(LinuxPackageInfo&&) = default;
 LinuxPackageInfo::LinuxPackageInfo(const LinuxPackageInfo&) = default;
+LinuxPackageInfo& LinuxPackageInfo::operator=(LinuxPackageInfo&&) = default;
+LinuxPackageInfo& LinuxPackageInfo::operator=(const LinuxPackageInfo&) =
+    default;
 LinuxPackageInfo::~LinuxPackageInfo() = default;
 
 ContainerInfo::ContainerInfo(std::string container_name,
