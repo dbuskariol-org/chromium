@@ -1407,8 +1407,7 @@ void Color::ApplyInitial(StyleResolverState& state) const {
         CSSIdentifierValue::Create(CSSValueID::kInitial));
     return;
   }
-  blink::Color color = ComputedStyleInitialValues::InitialColor();
-  state.Style()->SetColor(color);
+  state.Style()->SetColor(state.Style()->InitialColorForColorScheme());
 }
 
 void Color::ApplyInherit(StyleResolverState& state) const {
@@ -1417,11 +1416,7 @@ void Color::ApplyInherit(StyleResolverState& state) const {
         CSSIdentifierValue::Create(CSSValueID::kInherit));
     return;
   }
-  blink::Color color = state.ParentStyle()->GetColor();
-  if (state.ParentStyle()->IsColorInternalText())
-    state.Style()->SetIsColorInternalText(true);
-  else
-    state.Style()->SetColor(color);
+  state.Style()->SetColor(state.ParentStyle()->GetColor());
 }
 
 void Color::ApplyValue(StyleResolverState& state, const CSSValue& value) const {
@@ -1436,13 +1431,7 @@ void Color::ApplyValue(StyleResolverState& state, const CSSValue& value) const {
     ApplyInherit(state);
     return;
   }
-
-  if (identifier_value &&
-      identifier_value->GetValueID() == CSSValueID::kInternalRootColor) {
-    state.Style()->SetIsColorInternalText(true);
-  } else {
-    state.Style()->SetColor(StyleBuilderConverter::ConvertColor(state, value));
-  }
+  state.Style()->SetColor(StyleBuilderConverter::ConvertColor(state, value));
 }
 
 const CSSValue* ColorInterpolation::CSSValueFromComputedStyleInternal(
@@ -2876,8 +2865,8 @@ void InternalVisitedColor::ApplyInitial(StyleResolverState& state) const {
         CSSIdentifierValue::Create(CSSValueID::kInitial));
     return;
   }
-  auto color = ComputedStyleInitialValues::InitialColor();
-  state.Style()->SetInternalVisitedColor(color);
+  state.Style()->SetInternalVisitedColor(
+      state.Style()->InitialColorForColorScheme());
 }
 
 void InternalVisitedColor::ApplyInherit(StyleResolverState& state) const {

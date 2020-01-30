@@ -25,7 +25,6 @@
 
 html {
     display: block;
-    color: -internal-root-color;
 }
 
 /* children of the <head> element all have display:none */

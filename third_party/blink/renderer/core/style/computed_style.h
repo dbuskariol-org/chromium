@@ -960,7 +960,6 @@ class ComputedStyle : public ComputedStyleBase,
 
   // color
   void SetColor(const Color&);
-  void ResolveInternalTextColor(const Color&);
 
   // line-height
   Length LineHeight() const;
@@ -2571,6 +2570,14 @@ class ComputedStyle : public ComputedStyleBase,
 
   enum WebColorScheme UsedColorSchemeForInitialColors() const {
     return DarkColorScheme() ? WebColorScheme::kDark : WebColorScheme::kLight;
+  }
+
+  Color InitialColorForColorScheme() const {
+    // TODO(crbug.com/1046753, crbug.com/929098): The initial value of the color
+    // property should be canvastext, but since we do not yet ship color-scheme
+    // aware system colors, we use this method instead. This should be replaced
+    // by default_value:"canvastext" in css_properties.json5.
+    return DarkColorScheme() ? Color::kWhite : Color::kBlack;
   }
 
   Color ForcedBackplateColor() const {
