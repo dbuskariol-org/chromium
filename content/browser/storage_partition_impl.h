@@ -436,7 +436,7 @@ class CONTENT_EXPORT StoragePartitionImpl
   scoped_refptr<storage::DatabaseTracker> database_tracker_;
   scoped_refptr<DOMStorageContextWrapper> dom_storage_context_;
   std::unique_ptr<IdleManager> idle_manager_;
-  scoped_refptr<LockManager> lock_manager_;
+  std::unique_ptr<LockManager> lock_manager_;
   mojo::Remote<storage::mojom::IndexedDBControl> indexed_db_control_;
   scoped_refptr<IndexedDBContextImpl> indexed_db_context_;
   scoped_refptr<CacheStorageContextImpl> cache_storage_context_;

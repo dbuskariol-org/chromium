@@ -1318,7 +1318,7 @@ void StoragePartitionImpl::Initialize() {
       relative_partition_path_, browser_context_->GetSpecialStoragePolicy());
 
   idle_manager_ = std::make_unique<IdleManager>();
-  lock_manager_ = new LockManager();
+  lock_manager_ = std::make_unique<LockManager>();
 
   base::FilePath path = is_in_memory_ ? base::FilePath() : partition_path_;
   indexed_db_context_ = new IndexedDBContextImpl(
