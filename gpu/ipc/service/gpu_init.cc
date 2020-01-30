@@ -409,7 +409,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
 
   // Collect GPU process info
   if (!gl_disabled) {
-    if (!CollectGpuExtraInfo(&gpu_extra_info_))
+    if (!CollectGpuExtraInfo(&gpu_extra_info_, gpu_preferences))
       return false;
   }
 
