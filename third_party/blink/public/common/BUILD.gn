@@ -36,6 +36,7 @@ source_set("headers") {
     "//chrome/*",
     "//chromecast/*",
     "//content/*",
+    "//fuchsia/*",
     "//third_party/blink/*",
     "//components/*",
     "//services/*",
