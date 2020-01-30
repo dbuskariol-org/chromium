@@ -353,8 +353,10 @@ bool GCMMessageCryptographer::Decrypt(
   DCHECK_EQ(salt.size(), 16u);
   DCHECK(plaintext);
 
-  if (record_size <= 1)
+  if (record_size <= 1) {
+    LOG(ERROR) << "Invalid record size passed.";
     return false;
+  }
 
   std::string prk = encryption_scheme_->DerivePseudoRandomKey(
       recipient_public_key, sender_public_key, ecdh_shared_secret, auth_secret);
@@ -367,20 +369,24 @@ bool GCMMessageCryptographer::Decrypt(
 
   if (!encryption_scheme_->ValidateCiphertextSize(ciphertext.size(),
                                                   record_size)) {
+    LOG(ERROR) << "Invalid ciphertext size passed.";
     return false;
   }
 
   std::string decrypted_record_string;
   if (!TransformRecord(Direction::DECRYPT, ciphertext, content_encryption_key,
                        nonce, &decrypted_record_string)) {
+    LOG(ERROR) << "Unable to transform the record.";
     return false;
   }
 
   DCHECK(!decrypted_record_string.empty());
 
   base::StringPiece decrypted_record(decrypted_record_string);
-  if (!encryption_scheme_->ValidateAndRemovePadding(decrypted_record))
+  if (!encryption_scheme_->ValidateAndRemovePadding(decrypted_record)) {
+    LOG(ERROR) << "Padding could not be validated or removed.";
     return false;
+  }
 
   plaintext->assign(decrypted_record.data(), decrypted_record.size());
   return true;
