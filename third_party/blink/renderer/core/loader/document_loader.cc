@@ -176,10 +176,22 @@ DocumentLoader::DocumentLoader(
   force_fetch_cache_mode_ = params_->force_fetch_cache_mode;
   response_ = params_->response.ToResourceResponse();
   frame_policy_ = params_->frame_policy.value_or(FramePolicy());
+
   document_policy_ = CreateDocumentPolicy();
-  // Initialize |frame_policy_| in frame after the update to
-  // |frame_policy_.required_document_policy| in CreateDocumentPolicy.
-  frame_->SetFramePolicy(frame_policy_);
+  // If the document is blocked by document policy, there won't be content
+  // in the sub-frametree, thus no need to initialize required_policy for
+  // subtree.
+  if (!was_blocked_by_document_policy_) {
+    // Require-Document-Policy header only affects subtree of current document,
+    // but not the current document.
+    const DocumentPolicy::FeatureState header_required_policy =
+        DocumentPolicy::Parse(
+            response_.HttpHeaderField(http_names::kRequireDocumentPolicy)
+                .Ascii())
+            .value_or(DocumentPolicy::FeatureState{});
+    frame_->SetRequiredDocumentPolicy(DocumentPolicy::MergeFeatureState(
+        frame_policy_.required_document_policy, header_required_policy));
+  }
 
   WebNavigationTimings& timings = params_->navigation_timings;
   if (!timings.input_start.is_null())
@@ -806,18 +818,10 @@ DocumentPolicy::FeatureState DocumentLoader::CreateDocumentPolicy() {
   if (!RuntimeEnabledFeatures::DocumentPolicyEnabled())
     return DocumentPolicy::FeatureState{};
 
-  const DocumentPolicy::FeatureState header_policy =
+  DocumentPolicy::FeatureState header_policy =
       DocumentPolicy::Parse(
           response_.HttpHeaderField(http_names::kDocumentPolicy).Ascii())
           .value_or(DocumentPolicy::FeatureState{});
-
-  const DocumentPolicy::FeatureState header_required_policy =
-      DocumentPolicy::Parse(
-          response_.HttpHeaderField(http_names::kRequireDocumentPolicy).Ascii())
-          .value_or(DocumentPolicy::FeatureState{});
-
-  frame_policy_.required_document_policy = DocumentPolicy::MergeFeatureState(
-      frame_policy_.required_document_policy, header_required_policy);
 
   if (!DocumentPolicy::IsPolicyCompatible(
           frame_policy_.required_document_policy, header_policy)) {
@@ -826,6 +830,7 @@ DocumentPolicy::FeatureState DocumentLoader::CreateDocumentPolicy() {
     // policy to initialize document policy for the document.
     return frame_policy_.required_document_policy;
   }
+
   return header_policy;
 }
 
