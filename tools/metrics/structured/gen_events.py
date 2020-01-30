@@ -24,7 +24,7 @@ def main(argv):
   args = parser.parse_args()
 
   data = model.XML_TYPE.Parse(open(args.input).read())
-  relpath = 'components/metrics/structured'
+  relpath = 'tools/metrics/structured'
   events_template.WriteFiles(args.output, relpath, data)
 
   return 0
