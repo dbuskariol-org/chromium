@@ -55,4 +55,12 @@ public final class TestWebLayer {
             throw new AndroidRuntimeException(e);
         }
     }
+
+    public void setMockLocationProvider(boolean enabled) throws RemoteException {
+        mITestWebLayer.setMockLocationProvider(enabled);
+    }
+
+    public boolean isMockLocationProviderRunning() throws RemoteException {
+        return mITestWebLayer.isMockLocationProviderRunning();
+    }
 }
