@@ -470,6 +470,15 @@ class ModelTypeWorkerTest : public ::testing::Test {
     contribution->CleanUp();
   }
 
+  void DoCommitFailure() {
+    std::unique_ptr<CommitContribution> contribution(
+        worker()->GetContribution(INT_MAX));
+    DCHECK(contribution);
+
+    contribution->ProcessCommitFailure();
+    contribution->CleanUp();
+  }
+
   // Callback when processor got disconnected with sync.
   void DisconnectProcessor() {
     DCHECK(!is_processor_disconnected_);
@@ -583,6 +592,7 @@ TEST_F(ModelTypeWorkerTest, SimpleCommit) {
                     /*expected_deletion_count=*/0);
 
   // Exhaustively verify the commit response returned to the model thread.
+  ASSERT_EQ(0U, processor()->GetNumCommitFailures());
   ASSERT_EQ(1U, processor()->GetNumCommitResponses());
   EXPECT_EQ(1U, processor()->GetNthCommitResponse(0).size());
   ASSERT_TRUE(processor()->HasCommitResponse(kHash1));
@@ -1593,6 +1603,16 @@ TEST_F(ModelTypeWorkerTest,
       syncer::UniquePosition::FromProto(data.unique_position).IsValid());
   histogram_tester.ExpectTotalCount("Sync.Entities.PositioningScheme",
                                     /*count=*/0);
+}
+
+TEST_F(ModelTypeWorkerTest, ShouldPropagateCommitFailure) {
+  NormalInitialize();
+  processor()->SetCommitRequest(GenerateCommitRequest(kTag1, kValue1));
+
+  DoCommitFailure();
+
+  EXPECT_EQ(1U, processor()->GetNumCommitFailures());
+  EXPECT_EQ(0U, processor()->GetNumCommitResponses());
 }
 
 TEST_F(ModelTypeWorkerTest, PopulateUpdateResponseDataForBookmarkWithGUID) {

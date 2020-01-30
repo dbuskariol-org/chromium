@@ -400,6 +400,8 @@ std::unique_ptr<CommitContribution> ModelTypeWorker::GetContribution(
       GetModelType(), model_type_state_.type_context(), std::move(response),
       base::BindOnce(&ModelTypeWorker::OnCommitResponse,
                      weak_ptr_factory_.GetWeakPtr()),
+      base::BindOnce(&ModelTypeWorker::OnFullCommitFailure,
+                     weak_ptr_factory_.GetWeakPtr()),
       cryptographer_.get(), passphrase_type_, debug_info_emitter_,
       CommitOnlyTypes().Has(GetModelType()));
 }
@@ -418,6 +420,12 @@ void ModelTypeWorker::OnCommitResponse(
   // permanent storage) and which failed (it can e.g. notify the user).
   model_type_processor_->OnCommitCompleted(
       model_type_state_, committed_response_list, error_response_list);
+}
+
+void ModelTypeWorker::OnFullCommitFailure() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
+  model_type_processor_->OnCommitFailed();
 }
 
 void ModelTypeWorker::AbortMigration() {
