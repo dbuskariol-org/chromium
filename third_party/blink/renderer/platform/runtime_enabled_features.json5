@@ -794,7 +794,7 @@
     },
     {
       name: "GetDisplayMedia",
-      status: "stable",
+      status: {"Android": "", "default": "stable"},
     },
     {
       name: "GroupEffect",
