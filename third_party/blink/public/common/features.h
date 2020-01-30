@@ -47,6 +47,9 @@ BLINK_COMMON_EXPORT extern const base::Feature kRawClipboard;
 BLINK_COMMON_EXPORT extern const base::Feature kRTCGetDisplayMedia;
 BLINK_COMMON_EXPORT extern const base::Feature kRTCUnifiedPlanByDefault;
 BLINK_COMMON_EXPORT extern const base::Feature kRTCOfferExtmapAllowMixed;
+BLINK_COMMON_EXPORT extern const base::Feature kWebRtcHWH264Encoding;
+BLINK_COMMON_EXPORT extern const base::Feature kWebRtcHWVP8Encoding;
+BLINK_COMMON_EXPORT extern const base::Feature kWebRtcHWVP9Encoding;
 BLINK_COMMON_EXPORT extern const base::Feature kWebRtcMultiplexCodec;
 BLINK_COMMON_EXPORT extern const base::Feature kWebRtcHideLocalIpsWithMdns;
 
