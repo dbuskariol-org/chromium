@@ -963,9 +963,6 @@ extern const char kScalableAppListDescription[];
 extern const char kScrollableTabStripName[];
 extern const char kScrollableTabStripDescription[];
 
-extern const char kSecurityInterstitialsDarkModeName[];
-extern const char kSecurityInterstitialsDarkModeDescription[];
-
 extern const char kSendTabToSelfBroadcastName[];
 extern const char kSendTabToSelfBroadcastDescription[];
 

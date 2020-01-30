@@ -78,11 +78,6 @@ function setupEvents() {
   const showRecurrentErrorParagraph = loadTimeData.getBoolean(
     'show_recurrent_error_paragraph');
 
-  if (loadTimeData.valueExists('darkModeAvailable') &&
-      loadTimeData.getBoolean('darkModeAvailable')) {
-    $('body').classList.add('dark-mode-available');
-  }
-
   if (ssl || originPolicy || blockedInterception || legacyTls) {
     $('body').classList.add(badClock ? 'bad-clock' : 'ssl');
     $('error-code').textContent = loadTimeData.getString('errorCode');

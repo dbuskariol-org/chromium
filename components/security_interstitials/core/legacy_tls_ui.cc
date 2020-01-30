@@ -54,7 +54,6 @@ void LegacyTLSUI::PopulateStringsForHTML(
   common_string_util::PopulateSSLLayoutStrings(cert_error_, load_time_data);
   common_string_util::PopulateSSLDebuggingStrings(
       ssl_info_, base::Time::NowFromSystemTime(), load_time_data);
-  common_string_util::PopulateDarkModeDisplaySetting(load_time_data);
   load_time_data->SetBoolean("overridable", true);
   load_time_data->SetBoolean("hide_primary_button", false);
   load_time_data->SetBoolean("bad_clock", false);

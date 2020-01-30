@@ -4367,12 +4367,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kEvDetailsInPageInfoDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kEvDetailsInPageInfo)},
 
-    {"security-interstitials-dark-mode",
-     flag_descriptions::kSecurityInterstitialsDarkModeName,
-     flag_descriptions::kSecurityInterstitialsDarkModeDescription, kOsAll,
-     FEATURE_VALUE_TYPE(
-         security_interstitials::kSecurityInterstitialsDarkMode)},
-
     {"enable-autofill-credit-card-upload-feedback",
      flag_descriptions::kEnableAutofillCreditCardUploadFeedbackName,
      flag_descriptions::kEnableAutofillCreditCardUploadFeedbackDescription,
