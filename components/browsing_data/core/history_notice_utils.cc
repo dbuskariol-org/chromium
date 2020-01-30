@@ -15,7 +15,11 @@
 #include "components/version_info/version_info.h"
 
 namespace {
-const char kQueryWebAndAppActivityPartialNetworkAnnotation[] = R"(
+constexpr net::PartialNetworkTrafficAnnotationTag
+    kHistoryRecordingEnabledAnnotation =
+        net::DefinePartialNetworkTrafficAnnotation("history_recording_enabled",
+                                                   "web_history_service",
+                                                   R"(
         semantics {
           description:
             "Queries history.google.com to find out if user has the 'Include "
@@ -39,7 +43,7 @@ const char kQueryWebAndAppActivityPartialNetworkAnnotation[] = R"(
               SyncDisabled: true
             }
           }
-        })";
+        })");
 
 // Merges several asynchronous boolean callbacks into one that returns a boolean
 // product of their responses. Deletes itself when done.
@@ -99,14 +103,10 @@ CreateQueryWebAndAppActivityRequest(
                             const base::Optional<bool>&)> callback) {
   DCHECK(identity_manager);
   DCHECK(url_loader_factory);
-  net::PartialNetworkTrafficAnnotationTag partial_traffic_annotation =
-      net::DefinePartialNetworkTrafficAnnotation(
-          "history_recording_enabled", "web_history_service",
-          kQueryWebAndAppActivityPartialNetworkAnnotation);
 
   return history::WebHistoryService::CreateQueryWebAndAppActivityRequest(
       identity_manager, url_loader_factory, std::move(callback),
-      partial_traffic_annotation);
+      kHistoryRecordingEnabledAnnotation);
 }
 
 void IsHistoryRecordingEnabledAndCanBeUsed(
@@ -128,13 +128,8 @@ void IsHistoryRecordingEnabledAndCanBeUsed(
     return;
   }
 
-  net::PartialNetworkTrafficAnnotationTag partial_traffic_annotation =
-      net::DefinePartialNetworkTrafficAnnotation(
-          "history_recording_enabled", "web_history_service",
-          kQueryWebAndAppActivityPartialNetworkAnnotation);
-
   history_service->QueryWebAndAppActivity(std::move(callback),
-                                          partial_traffic_annotation);
+                                          kHistoryRecordingEnabledAnnotation);
 }
 
 void ShouldPopupDialogAboutOtherFormsOfBrowsingHistory(
