@@ -401,6 +401,33 @@ void ServiceWorkerRegistry::GetUserKeysAndDataByKeyPrefix(
                      weak_factory_.GetWeakPtr(), std::move(callback)));
 }
 
+void ServiceWorkerRegistry::StoreUserData(
+    int64_t registration_id,
+    const GURL& origin,
+    const std::vector<std::pair<std::string, std::string>>& key_value_pairs,
+    StatusCallback callback) {
+  if (registration_id == blink::mojom::kInvalidServiceWorkerRegistrationId ||
+      key_value_pairs.empty()) {
+    RunSoon(FROM_HERE,
+            base::BindOnce(std::move(callback),
+                           blink::ServiceWorkerStatusCode::kErrorFailed));
+    return;
+  }
+  for (const auto& kv : key_value_pairs) {
+    if (kv.first.empty()) {
+      RunSoon(FROM_HERE,
+              base::BindOnce(std::move(callback),
+                             blink::ServiceWorkerStatusCode::kErrorFailed));
+      return;
+    }
+  }
+
+  storage()->StoreUserData(
+      registration_id, origin, key_value_pairs,
+      base::BindOnce(&ServiceWorkerRegistry::DidStoreUserData,
+                     weak_factory_.GetWeakPtr(), std::move(callback)));
+}
+
 ServiceWorkerRegistration*
 ServiceWorkerRegistry::FindInstallingRegistrationForClientUrl(
     const GURL& client_url) {
@@ -797,6 +824,20 @@ void ServiceWorkerRegistry::DidGetUserKeysAndData(
   }
   std::move(callback).Run(
       data_map, ServiceWorkerStorage::DatabaseStatusToStatusCode(status));
+}
+
+void ServiceWorkerRegistry::DidStoreUserData(
+    StatusCallback callback,
+    ServiceWorkerDatabase::Status status) {
+  // |status| can be NOT_FOUND when the associated registration did not exist in
+  // the database. In the case, we don't have to schedule the corruption
+  // recovery.
+  if (status != ServiceWorkerDatabase::STATUS_OK &&
+      status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
+    ScheduleDeleteAndStartOver();
+  }
+  std::move(callback).Run(
+      ServiceWorkerStorage::DatabaseStatusToStatusCode(status));
 }
 
 void ServiceWorkerRegistry::ScheduleDeleteAndStartOver() {

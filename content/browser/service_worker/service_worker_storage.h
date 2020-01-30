@@ -93,6 +93,8 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const std::vector<std::pair<int64_t, std::string>>& user_data,
       blink::ServiceWorkerStatusCode status)>;
 
+  using DatabaseStatusCallback =
+      base::OnceCallback<void(ServiceWorkerDatabase::Status status)>;
   using GetUserDataInDBCallback =
       base::OnceCallback<void(const std::vector<std::string>& data,
                               ServiceWorkerDatabase::Status)>;
@@ -223,7 +225,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       int64_t registration_id,
       const GURL& origin,
       const std::vector<std::pair<std::string, std::string>>& key_value_pairs,
-      StatusCallback callback);
+      DatabaseStatusCallback callback);
   // Responds OK if all are successfully deleted or not found in the database.
   void ClearUserData(int64_t registration_id,
                      const std::vector<std::string>& keys,
@@ -397,8 +399,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void DidWriteUncommittedResourceIds(ServiceWorkerDatabase::Status status);
   void DidPurgeUncommittedResourceIds(const std::set<int64_t>& resource_ids,
                                       ServiceWorkerDatabase::Status status);
-  void DidStoreUserData(StatusCallback callback,
-                        ServiceWorkerDatabase::Status status);
   void DidDeleteUserData(StatusCallback callback,
                          ServiceWorkerDatabase::Status status);
   void DidGetUserDataForAllRegistrations(

@@ -1227,8 +1227,9 @@ void ServiceWorkerContextWrapper::StoreRegistrationUserDataOnCoreThread(
     std::move(callback).Run(blink::ServiceWorkerStatusCode::kErrorAbort);
     return;
   }
-  context_core_->storage()->StoreUserData(registration_id, origin.GetOrigin(),
-                                          key_value_pairs, std::move(callback));
+  context_core_->registry()->StoreUserData(registration_id, origin.GetOrigin(),
+                                           key_value_pairs,
+                                           std::move(callback));
 }
 
 void ServiceWorkerContextWrapper::ClearRegistrationUserData(

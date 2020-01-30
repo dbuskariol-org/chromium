@@ -384,7 +384,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       const std::vector<std::pair<std::string, std::string>>& key_value_pairs) {
     base::RunLoop loop;
     base::Optional<blink::ServiceWorkerStatusCode> result;
-    storage()->StoreUserData(
+    registry()->StoreUserData(
         registration_id, origin, key_value_pairs,
         base::BindOnce(&StatusCallback, loop.QuitClosure(), &result));
     EXPECT_FALSE(result.has_value());  // always async
