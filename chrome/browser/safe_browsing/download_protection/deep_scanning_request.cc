@@ -119,7 +119,13 @@ bool ShouldUploadForMalwareScanByPolicy(download::DownloadItem* item) {
           SendFilesForMalwareCheckValues::SEND_UPLOADS_AND_DOWNLOADS)
     return false;
 
-  return true;
+  // If the item's URL does not match the do-not-check list it must be
+  // uploaded for scanning.
+  const base::ListValue* domains = g_browser_process->local_state()->GetList(
+      prefs::kURLsToNotCheckForMalwareOfDownloadedContent);
+  url_matcher::URLMatcher matcher;
+  policy::url_util::AddAllowFilters(&matcher, domains);
+  return matcher.MatchURL(item->GetURL()).empty();
 }
 
 }  // namespace
