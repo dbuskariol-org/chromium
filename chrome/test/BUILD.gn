@@ -2944,7 +2944,7 @@ group("angle_perftests") {
 group("dawn_perf_tests") {
   testonly = true
   data_deps = [ "//testing:run_perf_test" ]
-  if (use_dawn) {
+  if (build_dawn_tests) {
     data_deps += [ "//third_party/dawn:dawn_perf_tests_temp_group" ]
   }
 }

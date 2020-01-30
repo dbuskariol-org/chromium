@@ -814,7 +814,7 @@ group("gn_all") {
     ]
   }
 
-  if (use_dawn) {
+  if (build_dawn_tests) {
     deps += [
       "//third_party/dawn:dawn_end2end_tests_temp_group",
       "//third_party/dawn:dawn_unittests_temp_group",
