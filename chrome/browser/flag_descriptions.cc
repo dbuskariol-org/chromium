@@ -2883,11 +2883,6 @@ const char kD3D11VideoDecoderName[] = "D3D11 Video Decoder";
 const char kD3D11VideoDecoderDescription[] =
     "Enables D3D11VideoDecoder for hardware accelerated video decoding.";
 
-const char kEnableGpuAppcontainerName[] = "Enable GPU AppContainer Lockdown.";
-const char kEnableGpuAppcontainerDescription[] =
-    "Enables the use of an AppContainer for the GPU sandboxed processes to "
-    "improve security.";
-
 const char kGdiTextPrinting[] = "GDI Text Printing";
 const char kGdiTextPrintingDescription[] =
     "Use GDI to print text as simply text";

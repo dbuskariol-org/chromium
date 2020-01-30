@@ -1401,11 +1401,6 @@
     "expiry_milestone": 76
   },
   {
-    "name": "enable-gpu-appcontainer",
-    "owners": [ "forshaw", "wfh" ],
-    "expiry_milestone": 82
-  },
-  {
     "name": "enable-gpu-rasterization",
     "owners": [ "enne", "vmiura", "ericrk" ],
     // A debugging flag intended for end-users where there may not be any other

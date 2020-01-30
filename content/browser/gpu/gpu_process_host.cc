@@ -227,10 +227,6 @@ static const char* const kSwitchNames[] = {
     service_manager::switches::kDisableGpuSandbox,
     service_manager::switches::kNoSandbox,
 #if defined(OS_WIN)
-    service_manager::switches::kAddGpuAppContainerCaps,
-    service_manager::switches::kDisableGpuAppContainer,
-    service_manager::switches::kDisableGpuLpac,
-    service_manager::switches::kEnableGpuAppContainer,
     switches::kDisableHighResTimer,
 #endif  // defined(OS_WIN)
     switches::kEnableANGLEFeatures,

@@ -1659,9 +1659,6 @@ extern const char kCloudPrintXpsDescription[];
 extern const char kD3D11VideoDecoderName[];
 extern const char kD3D11VideoDecoderDescription[];
 
-extern const char kEnableGpuAppcontainerName[];
-extern const char kEnableGpuAppcontainerDescription[];
-
 extern const char kGdiTextPrinting[];
 extern const char kGdiTextPrintingDescription[];
 
