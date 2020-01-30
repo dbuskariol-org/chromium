@@ -40452,7 +40452,7 @@ from previous Chrome versions.
 <enum name="MachineLearningServiceMojoConnectionEvent">
   <int value="0" label="Mojo bootstrap requested over D-Bus"/>
   <int value="1" label="Mojo bootstrap succeeded"/>
-  <int value="2" label="Connection error"/>
+  <int value="2" label="Connection closed"/>
 </enum>
 
 <enum name="MachineLevelUserCloudPolicyEnrollmentResult">
