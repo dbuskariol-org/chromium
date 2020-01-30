@@ -4190,8 +4190,9 @@ NSString* const kBrowserViewControllerSnackbarCategory =
     [self.activityOverlayCoordinator stop];
     self.activityOverlayCoordinator = nil;
   } else if (!self.activityOverlayCoordinator) {
-    self.activityOverlayCoordinator =
-        [[ActivityOverlayCoordinator alloc] initWithBaseViewController:self];
+    self.activityOverlayCoordinator = [[ActivityOverlayCoordinator alloc]
+        initWithBaseViewController:self
+                           browser:self.browser];
     [self.activityOverlayCoordinator start];
   }
 }
