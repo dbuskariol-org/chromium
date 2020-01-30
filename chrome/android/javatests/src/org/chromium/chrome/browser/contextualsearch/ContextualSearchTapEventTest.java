@@ -103,6 +103,7 @@ public class ContextualSearchTapEventTest {
             selectionPopupController.setSelectionClient(this.getContextualSearchSelectionClient());
             MockContextualSearchPolicy policy = new MockContextualSearchPolicy();
             setContextualSearchPolicy(policy);
+            getSelectionController().setPolicy(policy);
         }
 
         @Override

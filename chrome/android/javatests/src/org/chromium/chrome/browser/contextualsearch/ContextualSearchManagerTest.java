@@ -220,6 +220,7 @@ public class ContextualSearchManagerTest {
         mSelectionController = mManager.getSelectionController();
         mPolicy = mManager.getContextualSearchPolicy();
         mPolicy.overrideDecidedStateForTesting(true);
+        mSelectionController.setPolicy(mPolicy);
         resetCounters();
 
         mFakeServer = new ContextualSearchFakeServer(mPolicy, this, mManager,
@@ -2697,6 +2698,18 @@ public class ContextualSearchManagerTest {
             }
         }, 3000 * waitFactor, DEFAULT_POLLING_INTERVAL * waitFactor);
     }
+
+    @Test
+    @SmallTest
+    @Feature({"ContextualSearch"})
+    @Features.EnableFeatures("ContextualSearchTranslations")
+    public void testTranslationFeatureImpliesLongpressFeature() throws TimeoutException {
+        Assert.assertTrue(mPolicy.canResolveLongpress());
+    }
+
+    //============================================================================================
+    // END Translate Tests
+    //============================================================================================
 
     /**
      * Tests that Contextual Search works in fullscreen. Specifically, tests that tapping a word
