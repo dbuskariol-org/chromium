@@ -5045,13 +5045,15 @@ TEST_P(SplitViewOverviewSessionTest,
 
 // Verify that if overview mode is active and the split view divider is dragged
 // all the way to the opposite edge, then the split view window is reinserted
-// into the overview grid at the correct position according to MRU order.
+// into the overview grid at the correct position according to MRU order, and
+// the stacking order is also correct.
 TEST_P(
     SplitViewOverviewSessionTest,
     SplitViewWindowReinsertedToOverviewAtCorrectPositionWhenSplitViewIsEnded) {
   const gfx::Rect bounds(400, 400);
   std::unique_ptr<aura::Window> window1(CreateWindow(bounds));
   std::unique_ptr<aura::Window> window2(CreateWindow(bounds));
+  std::unique_ptr<aura::Window> window3(CreateWindow(bounds));
   ToggleOverview();
   DragWindowTo(GetOverviewItemForWindow(window1.get()), gfx::PointF());
   DragWindowTo(GetOverviewItemForWindow(window2.get()),
@@ -5067,21 +5069,44 @@ TEST_P(
   GetEventGenerator()->DragMouseTo(0, 0);
   SkipDividerSnapAnimation();
 
+  // Verify the grid arrangement.
   ASSERT_TRUE(InOverviewSession());
-  const std::vector<aura::Window*> expected_mru_list = {window2.get(),
-                                                        window1.get()};
-  const std::vector<aura::Window*> expected_overview_list = {window2.get(),
-                                                             window1.get()};
+  const std::vector<aura::Window*> expected_mru_list = {
+      window2.get(), window1.get(), window3.get()};
+  const std::vector<aura::Window*> expected_overview_list = {
+      window2.get(), window1.get(), window3.get()};
   EXPECT_EQ(
       expected_mru_list,
       Shell::Get()->mru_window_tracker()->BuildMruWindowList(kActiveDesk));
   EXPECT_EQ(expected_overview_list,
             overview_controller()->GetWindowsListInOverviewGridsForTest());
+
+  // Verify the stacking order.
+  aura::Window* parent = window1->parent();
+  ASSERT_EQ(parent, window2->parent());
+  ASSERT_EQ(parent, window3->parent());
+  EXPECT_GT(IndexOf(GetOverviewItemForWindow(window2.get())
+                        ->item_widget()
+                        ->GetNativeWindow(),
+                    parent),
+            IndexOf(GetOverviewItemForWindow(window1.get())
+                        ->item_widget()
+                        ->GetNativeWindow(),
+                    parent));
+  EXPECT_GT(IndexOf(GetOverviewItemForWindow(window1.get())
+                        ->item_widget()
+                        ->GetNativeWindow(),
+                    parent),
+            IndexOf(GetOverviewItemForWindow(window3.get())
+                        ->item_widget()
+                        ->GetNativeWindow(),
+                    parent));
 }
 
 // Verify that if a window is dragged from overview and snapped in place of
 // another split view window, then the old split view window is reinserted into
-// the overview grid at the correct position according to MRU order.
+// the overview grid at the correct position according to MRU order, and the
+// stacking order is also correct.
 TEST_P(
     SplitViewOverviewSessionTest,
     SplitViewWindowReinsertedToOverviewAtCorrectPositionWhenAnotherWindowTakesItsPlace) {
@@ -5089,6 +5114,7 @@ TEST_P(
   std::unique_ptr<aura::Window> window1(CreateWindow(bounds));
   std::unique_ptr<aura::Window> window2(CreateWindow(bounds));
   std::unique_ptr<aura::Window> window3(CreateWindow(bounds));
+  std::unique_ptr<aura::Window> window4(CreateWindow(bounds));
   ToggleOverview();
   DragWindowTo(GetOverviewItemForWindow(window1.get()), gfx::PointF());
   DragWindowTo(GetOverviewItemForWindow(window2.get()),
@@ -5099,16 +5125,38 @@ TEST_P(
   DragWindowTo(GetOverviewItemForWindow(window3.get()), gfx::PointF());
   EXPECT_EQ(window3.get(), split_view_controller()->left_window());
 
+  // Verify the grid arrangement.
   ASSERT_TRUE(InOverviewSession());
   const std::vector<aura::Window*> expected_mru_list = {
-      window3.get(), window2.get(), window1.get()};
-  const std::vector<aura::Window*> expected_overview_list = {window2.get(),
-                                                             window1.get()};
+      window3.get(), window2.get(), window1.get(), window4.get()};
+  const std::vector<aura::Window*> expected_overview_list = {
+      window2.get(), window1.get(), window4.get()};
   EXPECT_EQ(
       expected_mru_list,
       Shell::Get()->mru_window_tracker()->BuildMruWindowList(kActiveDesk));
   EXPECT_EQ(expected_overview_list,
             overview_controller()->GetWindowsListInOverviewGridsForTest());
+
+  // Verify the stacking order.
+  aura::Window* parent = window1->parent();
+  ASSERT_EQ(parent, window2->parent());
+  ASSERT_EQ(parent, window4->parent());
+  EXPECT_GT(IndexOf(GetOverviewItemForWindow(window2.get())
+                        ->item_widget()
+                        ->GetNativeWindow(),
+                    parent),
+            IndexOf(GetOverviewItemForWindow(window1.get())
+                        ->item_widget()
+                        ->GetNativeWindow(),
+                    parent));
+  EXPECT_GT(IndexOf(GetOverviewItemForWindow(window1.get())
+                        ->item_widget()
+                        ->GetNativeWindow(),
+                    parent),
+            IndexOf(GetOverviewItemForWindow(window4.get())
+                        ->item_widget()
+                        ->GetNativeWindow(),
+                    parent));
 }
 
 // Verify that if the split view divider is dragged close to the edge, the grid

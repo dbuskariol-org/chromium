@@ -93,12 +93,17 @@ class ASH_EXPORT OverviewGrid : public SplitViewObserver,
   // overview is already active, it will use a special spawn animation on its
   // first position in the grid. |use_spawn_animation| has no effect if either
   // |animate| or |reposition| are false.
+  // If |reposition|, |animate|, and |restack| are all true, the stacking order
+  // will be adjusted after the animation. If |restack| is true but at least one
+  // of |reposition| and |animate| is false, the stacking order will be adjusted
+  // immediately.
   void AddItem(aura::Window* window,
                bool reposition,
                bool animate,
                const base::flat_set<OverviewItem*>& ignored_items,
                size_t index,
-               bool use_spawn_animation);
+               bool use_spawn_animation,
+               bool restack);
 
   // Similar to the above function, but adds the window to the end of the grid.
   void AppendItem(aura::Window* window,
@@ -108,7 +113,10 @@ class ASH_EXPORT OverviewGrid : public SplitViewObserver,
 
   // Like |AddItem|, but adds |window| at the correct position according to MRU
   // order.
-  void AddItemInMruOrder(aura::Window* window, bool reposition, bool animate);
+  void AddItemInMruOrder(aura::Window* window,
+                         bool reposition,
+                         bool animate,
+                         bool restack);
 
   // Removes |overview_item| from the grid. |overview_item| cannot already be
   // absent from the grid. If |item_destroying| is true, we may want to notify

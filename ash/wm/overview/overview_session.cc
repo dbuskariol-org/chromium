@@ -406,7 +406,7 @@ void OverviewSession::AddItem(
     return;
 
   grid->AddItem(window, reposition, animate, ignored_items, index,
-                /*use_spawn_animation=*/false);
+                /*use_spawn_animation=*/false, /*restack=*/false);
   OnItemAdded(window);
 }
 
@@ -422,13 +422,15 @@ void OverviewSession::AppendItem(aura::Window* window,
   OnItemAdded(window);
 }
 
-void OverviewSession::AddItemInMruOrder(aura::Window* window, bool animate) {
+void OverviewSession::AddItemInMruOrder(aura::Window* window,
+                                        bool animate,
+                                        bool restack) {
   // Early exit if a grid already contains |window|.
   OverviewGrid* grid = GetGridWithRootWindow(window->GetRootWindow());
   if (!grid || grid->GetOverviewItemContaining(window))
     return;
 
-  grid->AddItemInMruOrder(window, /*reposition=*/true, animate);
+  grid->AddItemInMruOrder(window, /*reposition=*/true, animate, restack);
   OnItemAdded(window);
 }
 

@@ -605,10 +605,10 @@ OverviewWindowDragController::CompleteNormalDrag(
 
     OverviewGrid* target_grid =
         overview_session_->GetGridWithRootWindow(target_root);
-    // Add |window| to |target_grid| with reposition=false because soon we will
-    // call |OverviewSession::PositionWindows| anyway.
+    // Add |window| to |target_grid| with reposition=false and restack=false,
+    // because soon we will handle both repositioning and restacking anyway.
     target_grid->AddItemInMruOrder(window, /*reposition=*/false,
-                                   /*animate=*/false);
+                                   /*animate=*/false, /*restack=*/false);
     item_ = target_grid->GetOverviewItemContaining(window);
     // Put the new item where the old item ended, so it looks like it is the
     // same item. The following call to |OverviewSession::PositionWindows| will
