@@ -1196,7 +1196,13 @@ TEST_P(PasswordProtectionServiceTest, VerifyShouldShowModalWarning) {
     reused_password_account_type.set_account_type(
         ReusedPasswordAccountType::GMAIL);
     reused_password_account_type.set_is_account_syncing(false);
+// Currently password reuse warnings are only supported for saved passwords on
+// Android.
+#if defined(OS_ANDROID)
+    EXPECT_FALSE(password_protection_service_->ShouldShowModalWarning(
+#else
     EXPECT_TRUE(password_protection_service_->ShouldShowModalWarning(
+#endif
         LoginReputationClientRequest::PASSWORD_REUSE_EVENT,
         reused_password_account_type, LoginReputationClientResponse::PHISHING));
   }
@@ -1211,7 +1217,13 @@ TEST_P(PasswordProtectionServiceTest, VerifyShouldShowModalWarning) {
   reused_password_account_type.set_account_type(
       ReusedPasswordAccountType::GMAIL);
   reused_password_account_type.set_is_account_syncing(true);
+// Currently password reuse warnings are only supported for saved passwords on
+// Android.
+#if defined(OS_ANDROID)
+  EXPECT_FALSE(password_protection_service_->ShouldShowModalWarning(
+#else
   EXPECT_TRUE(password_protection_service_->ShouldShowModalWarning(
+#endif
       LoginReputationClientRequest::PASSWORD_REUSE_EVENT,
       reused_password_account_type, LoginReputationClientResponse::PHISHING));
 
@@ -1235,12 +1247,24 @@ TEST_P(PasswordProtectionServiceTest, VerifyShouldShowModalWarning) {
       PHISHING_REUSE,
       password_protection_service_->GetPasswordProtectionWarningTriggerPref(
           reused_password_account_type));
+// Currently password reuse warnings are only supported for saved passwords on
+// Android.
+#if defined(OS_ANDROID)
+  EXPECT_FALSE(password_protection_service_->ShouldShowModalWarning(
+#else
   EXPECT_TRUE(password_protection_service_->ShouldShowModalWarning(
+#endif
       LoginReputationClientRequest::PASSWORD_REUSE_EVENT,
       reused_password_account_type, LoginReputationClientResponse::PHISHING));
 
   // Modal dialog warning is also shown on LOW_REPUTATION verdict.
+// Currently password reuse warnings are only supported for saved passwords on
+// Android.
+#if defined(OS_ANDROID)
+  EXPECT_FALSE(password_protection_service_->ShouldShowModalWarning(
+#else
   EXPECT_TRUE(password_protection_service_->ShouldShowModalWarning(
+#endif
       LoginReputationClientRequest::PASSWORD_REUSE_EVENT,
       reused_password_account_type,
       LoginReputationClientResponse::LOW_REPUTATION));
@@ -1261,7 +1285,13 @@ TEST_P(PasswordProtectionServiceTest, VerifyShouldShowModalWarning) {
   EXPECT_CALL(*password_protection_service_,
               GetPasswordProtectionWarningTriggerPref(_))
       .WillRepeatedly(Return(PHISHING_REUSE));
+// Currently password reuse warnings are only supported for saved passwords on
+// Android.
+#if defined(OS_ANDROID)
+  EXPECT_FALSE(password_protection_service_->ShouldShowModalWarning(
+#else
   EXPECT_TRUE(password_protection_service_->ShouldShowModalWarning(
+#endif
       LoginReputationClientRequest::PASSWORD_REUSE_EVENT,
       reused_password_account_type, LoginReputationClientResponse::PHISHING));
 }
