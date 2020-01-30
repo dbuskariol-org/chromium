@@ -12,6 +12,7 @@
 
 #include "base/bind.h"
 #include "base/format_macros.h"
+#include "base/guid.h"
 #include "base/logging.h"
 #include "base/strings/stringprintf.h"
 #include "base/threading/thread_restrictions.h"
@@ -559,9 +560,11 @@ void ModelTypeWorker::DeduplicatePendingUpdatesBasedOnOriginatorClientItemId() {
 
   std::map<std::string, size_t> id_to_index;
   for (UpdateResponseData& candidate : candidates) {
-    // Items with empty item ID just get passed through (which is the case for
-    // all datatypes except bookmarks).
-    if (candidate.entity.originator_client_item_id.empty()) {
+    // Entities with an item ID that is not a GUID just get passed through
+    // without deduplication, which is the case for all datatypes except
+    // bookmarks, as well as bookmarks created before 2015, when the item ID was
+    // not globally unique across clients.
+    if (!base::IsValidGUID(candidate.entity.originator_client_item_id)) {
       pending_updates_.push_back(std::move(candidate));
       continue;
     }
