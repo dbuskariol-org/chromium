@@ -5,8 +5,10 @@
 #include "components/autofill_assistant/browser/actions/collect_user_data_action.h"
 
 #include <algorithm>
+#include <array>
 #include <set>
 #include <utility>
+#include <vector>
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/i18n/case_conversion.h"
@@ -32,6 +34,15 @@
 #include "ui/base/l10n/l10n_util.h"
 
 namespace {
+
+static constexpr int kDefaultMaxNumberContactSummaryLines = 1;
+static constexpr std::array<autofill_assistant::AutofillContactField, 2>
+    kDefaultContactSummaryFields = {autofill_assistant::EMAIL_ADDRESS,
+                                    autofill_assistant::NAME_FULL};
+static constexpr int kDefaultMaxNumberContactFullLines = 2;
+static constexpr std::array<autofill_assistant::AutofillContactField, 2>
+    kDefaultContactFullFields = {autofill_assistant::NAME_FULL,
+                                 autofill_assistant::EMAIL_ADDRESS};
 
 using autofill_assistant::CollectUserDataOptions;
 using autofill_assistant::DateTimeProto;
@@ -551,6 +562,43 @@ bool CollectUserDataAction::CreateOptionsFromProto() {
         contact_details.request_payer_name();
     collect_user_data_options_->request_payer_phone =
         contact_details.request_payer_phone();
+    // TODO(b/146405276): Remove legacy support for |summary_fields| and
+    // |full_fields|.
+    if (contact_details.summary_fields().empty()) {
+      collect_user_data_options_->contact_summary_max_lines =
+          kDefaultMaxNumberContactSummaryLines;
+      collect_user_data_options_->contact_summary_fields.assign(
+          kDefaultContactSummaryFields.begin(),
+          kDefaultContactSummaryFields.end());
+    } else {
+      for (const auto& field : contact_details.summary_fields()) {
+        collect_user_data_options_->contact_summary_fields.emplace_back(
+            (AutofillContactField)field);
+      }
+      if (contact_details.max_number_summary_lines() <= 0) {
+        DVLOG(1) << "max_number_summary_lines must be > 0";
+        return false;
+      }
+      collect_user_data_options_->contact_summary_max_lines =
+          contact_details.max_number_summary_lines();
+    }
+    if (contact_details.full_fields().empty()) {
+      collect_user_data_options_->contact_full_max_lines =
+          kDefaultMaxNumberContactFullLines;
+      collect_user_data_options_->contact_full_fields.assign(
+          kDefaultContactFullFields.begin(), kDefaultContactFullFields.end());
+    } else {
+      for (const auto& field : contact_details.full_fields()) {
+        collect_user_data_options_->contact_full_fields.emplace_back(
+            (AutofillContactField)field);
+      }
+      if (contact_details.max_number_full_lines() <= 0) {
+        DVLOG(1) << "max_number_full_lines must be > 0";
+        return false;
+      }
+      collect_user_data_options_->contact_full_max_lines =
+          contact_details.max_number_full_lines();
+    }
     if (collect_user_data_options_->request_payer_email ||
         collect_user_data_options_->request_payer_name ||
         collect_user_data_options_->request_payer_phone) {

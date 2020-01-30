@@ -53,6 +53,7 @@ import org.chromium.chrome.browser.autofill.PersonalDataManager;
 import org.chromium.chrome.browser.autofill_assistant.AutofillAssistantCollectUserDataTestHelper.ViewHolder;
 import org.chromium.chrome.browser.autofill_assistant.user_data.AssistantCollectUserDataCoordinator;
 import org.chromium.chrome.browser.autofill_assistant.user_data.AssistantCollectUserDataModel;
+import org.chromium.chrome.browser.autofill_assistant.user_data.AssistantContactField;
 import org.chromium.chrome.browser.autofill_assistant.user_data.AssistantDateChoiceOptions;
 import org.chromium.chrome.browser.autofill_assistant.user_data.AssistantDateTime;
 import org.chromium.chrome.browser.autofill_assistant.user_data.AssistantLoginChoice;
@@ -86,11 +87,24 @@ public class AutofillAssistantCollectUserDataUiTest {
     public CustomTabActivityTestRule mTestRule = new CustomTabActivityTestRule();
 
     private AutofillAssistantCollectUserDataTestHelper mHelper;
+    AssistantCollectUserDataModel.ContactDescriptionOptions mDefaultContactSummaryOptions;
+    AssistantCollectUserDataModel.ContactDescriptionOptions mDefaultContactFullOptions;
 
     @Before
     public void setUp() throws Exception {
         AutofillAssistantUiTestUtil.startOnBlankPage(mTestRule);
         mHelper = new AutofillAssistantCollectUserDataTestHelper();
+
+        mDefaultContactSummaryOptions =
+                new AssistantCollectUserDataModel.ContactDescriptionOptions();
+        mDefaultContactSummaryOptions.mFields =
+                new int[] {AssistantContactField.EMAIL_ADDRESS, AssistantContactField.NAME_FULL};
+        mDefaultContactSummaryOptions.mMaxNumberLines = 1;
+
+        mDefaultContactFullOptions = new AssistantCollectUserDataModel.ContactDescriptionOptions();
+        mDefaultContactFullOptions.mFields =
+                new int[] {AssistantContactField.NAME_FULL, AssistantContactField.EMAIL_ADDRESS};
+        mDefaultContactFullOptions.mMaxNumberLines = 2;
     }
 
     /** Creates a coordinator for use in UI tests, and adds it to the global view hierarchy. */
@@ -381,6 +395,10 @@ public class AutofillAssistantCollectUserDataUiTest {
             model.set(AssistantCollectUserDataModel.WEB_CONTENTS, mTestRule.getWebContents());
             model.set(AssistantCollectUserDataModel.REQUEST_NAME, true);
             model.set(AssistantCollectUserDataModel.REQUEST_EMAIL, true);
+            model.set(AssistantCollectUserDataModel.CONTACT_SUMMARY_DESCRIPTION_OPTIONS,
+                    mDefaultContactSummaryOptions);
+            model.set(AssistantCollectUserDataModel.CONTACT_FULL_DESCRIPTION_OPTIONS,
+                    mDefaultContactFullOptions);
             model.set(AssistantCollectUserDataModel.AVAILABLE_CONTACTS, Collections.emptyList());
             model.set(AssistantCollectUserDataModel.SELECTED_CONTACT_DETAILS, null);
             model.set(AssistantCollectUserDataModel.VISIBLE, true);
@@ -593,6 +611,10 @@ public class AutofillAssistantCollectUserDataUiTest {
             model.set(AssistantCollectUserDataModel.REQUEST_NAME, true);
             model.set(AssistantCollectUserDataModel.REQUEST_PHONE, true);
             model.set(AssistantCollectUserDataModel.REQUEST_EMAIL, true);
+            model.set(AssistantCollectUserDataModel.CONTACT_SUMMARY_DESCRIPTION_OPTIONS,
+                    mDefaultContactSummaryOptions);
+            model.set(AssistantCollectUserDataModel.CONTACT_FULL_DESCRIPTION_OPTIONS,
+                    mDefaultContactFullOptions);
             model.set(AssistantCollectUserDataModel.REQUEST_PAYMENT, true);
             model.set(AssistantCollectUserDataModel.REQUEST_SHIPPING_ADDRESS, true);
             AutofillContact contact = AssistantCollectUserDataModel.createAutofillContact(
@@ -659,7 +681,8 @@ public class AutofillAssistantCollectUserDataUiTest {
         assertThat(viewHolder.mLoginList.getItemCount(), is(1));
 
         testContact("maggie@simpson.com", "Maggie Simpson\nmaggie@simpson.com",
-                viewHolder.mContactSection.getCollapsedView(), viewHolder.mContactList.getItem(0));
+                viewHolder.mContactSection.getCollapsedView(), viewHolder.mContactList.getItem(0),
+                /* isComplete = */ true);
         testPaymentMethod("1111", "Jon Doe", "12/2050",
                 viewHolder.mPaymentSection.getCollapsedView(),
                 viewHolder.mPaymentMethodList.getItem(0));
@@ -683,6 +706,78 @@ public class AutofillAssistantCollectUserDataUiTest {
         assertThat(delegate.mAddress.getProfile().getStreetAddress(), containsString("123 Main"));
         assertThat(delegate.mTermsStatus, is(AssistantTermsAndConditionsState.NOT_SELECTED));
         assertThat(delegate.mLoginChoice.getIdentifier(), is("id"));
+    }
+
+    /** Tests custom summary options for the contact details section. */
+    @Test
+    @MediumTest
+    public void testContactDetailsCustomSummary() throws Exception {
+        AutofillContact contactFull = AssistantCollectUserDataModel.createAutofillContact(
+                mTestRule.getActivity(),
+                new PersonalDataManager.AutofillProfile("GUID", "https://www.example.com",
+                        "Maggie Simpson", "Acme Inc.", "123 Main", "California", "Los Angeles", "",
+                        "90210", "", "UZ", "555 123-4567", "maggie@simpson.com", ""),
+                /* requestName= */ true,
+                /* requestPhone= */ true, /* requestEmail= */ true);
+
+        AutofillContact contactWithoutEmail =
+                AssistantCollectUserDataModel.createAutofillContact(mTestRule.getActivity(),
+                        new PersonalDataManager.AutofillProfile("GUID", "https://www.example.com",
+                                "John Simpson", "Acme Inc.", "123 Main", "California",
+                                "Los Angeles", "", "90210", "", "UZ", "555 123-4567", "", ""),
+                        /* requestName= */ true,
+                        /* requestPhone= */ true, /* requestEmail= */ true);
+
+        AssistantCollectUserDataModel model = new AssistantCollectUserDataModel();
+        AssistantCollectUserDataCoordinator coordinator = createCollectUserDataCoordinator(model);
+        AutofillAssistantCollectUserDataTestHelper.MockDelegate delegate =
+                new AutofillAssistantCollectUserDataTestHelper.MockDelegate();
+        AutofillAssistantCollectUserDataTestHelper
+                .ViewHolder viewHolder = TestThreadUtils.runOnUiThreadBlocking(
+                () -> new AutofillAssistantCollectUserDataTestHelper.ViewHolder(coordinator));
+
+        AssistantCollectUserDataModel.ContactDescriptionOptions summaryOptions =
+                new AssistantCollectUserDataModel.ContactDescriptionOptions();
+        summaryOptions.mFields = new int[] {AssistantContactField.NAME_FULL,
+                AssistantContactField.EMAIL_ADDRESS, AssistantContactField.PHONE_HOME_WHOLE_NUMBER};
+        summaryOptions.mMaxNumberLines = 3;
+
+        AssistantCollectUserDataModel.ContactDescriptionOptions fullOptions =
+                new AssistantCollectUserDataModel.ContactDescriptionOptions();
+        fullOptions.mFields = new int[] {AssistantContactField.NAME_FULL,
+                AssistantContactField.PHONE_HOME_WHOLE_NUMBER, AssistantContactField.EMAIL_ADDRESS};
+        fullOptions.mMaxNumberLines = 3;
+
+        TestThreadUtils.runOnUiThreadBlocking(() -> {
+            model.set(AssistantCollectUserDataModel.WEB_CONTENTS, mTestRule.getWebContents());
+            model.set(AssistantCollectUserDataModel.DELEGATE, delegate);
+            model.set(AssistantCollectUserDataModel.REQUEST_NAME, true);
+            model.set(AssistantCollectUserDataModel.REQUEST_PHONE, true);
+            model.set(AssistantCollectUserDataModel.REQUEST_EMAIL, true);
+            model.set(AssistantCollectUserDataModel.CONTACT_SUMMARY_DESCRIPTION_OPTIONS,
+                    summaryOptions);
+            model.set(AssistantCollectUserDataModel.CONTACT_FULL_DESCRIPTION_OPTIONS, fullOptions);
+            List<AutofillContact> contacts = new ArrayList<>();
+            contacts.add(contactFull);
+            contacts.add(contactWithoutEmail);
+            model.set(AssistantCollectUserDataModel.AVAILABLE_CONTACTS, contacts);
+            model.set(AssistantCollectUserDataModel.SELECTED_CONTACT_DETAILS, contactFull);
+            model.set(AssistantCollectUserDataModel.VISIBLE, true);
+        });
+
+        testContact("Maggie Simpson\nmaggie@simpson.com\n555 123-4567",
+                "Maggie Simpson\n555 123-4567\nmaggie@simpson.com",
+                viewHolder.mContactSection.getCollapsedView(), viewHolder.mContactList.getItem(0),
+                /* isComplete = */ true);
+
+        TestThreadUtils.runOnUiThreadBlocking(
+                ()
+                        -> model.set(AssistantCollectUserDataModel.SELECTED_CONTACT_DETAILS,
+                                contactWithoutEmail));
+
+        testContact("John Simpson\n555 123-4567", "John Simpson\n555 123-4567",
+                viewHolder.mContactSection.getCollapsedView(), viewHolder.mContactList.getItem(0),
+                /* isComplete = */ false);
     }
 
     @Test
@@ -1267,16 +1362,16 @@ public class AutofillAssistantCollectUserDataUiTest {
     }
 
     private void testContact(String expectedContactSummary, String expectedContactFullDescription,
-            View summaryView, View fullView) {
+            View summaryView, View fullView, boolean isComplete) {
         onView(allOf(withId(R.id.contact_summary), isDescendantOfA(is(summaryView))))
                 .check(matches(withText(expectedContactSummary)));
-        onView(allOf(withId(R.id.incomplete_error), isDescendantOfA(is(summaryView))))
-                .check(matches(not(isDisplayed())));
+        assertThat(summaryView.findViewById(R.id.incomplete_error).getVisibility(),
+                is(isComplete ? View.GONE : View.VISIBLE));
 
         onView(allOf(withId(R.id.contact_full), isDescendantOfA(is(fullView))))
                 .check(matches(withText(expectedContactFullDescription)));
-        onView(allOf(withId(R.id.incomplete_error), isDescendantOfA(is(fullView))))
-                .check(matches(not(isDisplayed())));
+        assertThat(fullView.findViewById(R.id.incomplete_error).getVisibility(),
+                is(isComplete ? View.GONE : View.VISIBLE));
     }
 
     private void testPaymentMethod(String expectedObfuscatedCardNumber, String expectedCardName,

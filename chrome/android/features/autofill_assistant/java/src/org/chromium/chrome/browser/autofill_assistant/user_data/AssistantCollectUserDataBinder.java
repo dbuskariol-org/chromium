@@ -327,6 +327,15 @@ class AssistantCollectUserDataBinder
             view.mDateRangeEndSection.setErrorMessage(
                     model.get(AssistantCollectUserDataModel.DATE_RANGE_INVALID_ERROR_MESSAGE));
             return true;
+        } else if (propertyKey
+                == AssistantCollectUserDataModel.CONTACT_SUMMARY_DESCRIPTION_OPTIONS) {
+            view.mContactDetailsSection.setContactSummaryOptions(
+                    model.get(AssistantCollectUserDataModel.CONTACT_SUMMARY_DESCRIPTION_OPTIONS));
+            return true;
+        } else if (propertyKey == AssistantCollectUserDataModel.CONTACT_FULL_DESCRIPTION_OPTIONS) {
+            view.mContactDetailsSection.setContactFullOptions(
+                    model.get(AssistantCollectUserDataModel.CONTACT_FULL_DESCRIPTION_OPTIONS));
+            return true;
         }
 
         return false;

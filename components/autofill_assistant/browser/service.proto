@@ -1254,6 +1254,14 @@ message PromptProto {
 }
 
 message ContactDetailsProto {
+  // A subset of fields available for autofill profiles. See
+  // |components/autofill/code/browser/field_types.h|.
+  enum AutofillContactField {
+    NAME_FULL = 7;
+    EMAIL_ADDRESS = 9;
+    PHONE_HOME_WHOLE_NUMBER = 14;
+  }
+
   // Data saved under this name can be reused by UseAddressAction.
   optional string contact_details_name = 1;
   // If true asks user for full name.
@@ -1262,6 +1270,19 @@ message ContactDetailsProto {
   optional bool request_payer_email = 3;
   // If true asks user for phone.
   optional bool request_payer_phone = 4;
+  // This controls the summary of the selected contact in the collapsed contact
+  // section (one line per field, in the order specified, up to and including
+  // |max_number_summary_fields| lines).
+  repeated AutofillContactField summary_fields = 5;
+  // The maximum number of lines for the selected contact in the collapsed
+  // contact section.
+  optional int32 max_number_summary_lines = 6;
+  // This controls the full description of contacts in the expanded contact
+  // section (one line per field, in the order specified, up to and including
+  // |max_number_full_lines| lines).
+  repeated AutofillContactField full_fields = 7;
+  // The maximum number of lines for contacts in the expanded contact section.
+  optional int32 max_number_full_lines = 8;
 }
 
 // A generic read-only popup message.

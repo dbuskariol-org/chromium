@@ -38,6 +38,12 @@ import java.util.List;
 public class AssistantCollectUserDataModel extends PropertyModel {
     // TODO(crbug.com/806868): Add |setSelectedLogin|.
 
+    /** Options specifying how to summarize an {@code AutofillContact}. */
+    public static class ContactDescriptionOptions {
+        public @AssistantContactField int[] mFields;
+        public int mMaxNumberLines;
+    }
+
     public static final WritableObjectPropertyKey<AssistantCollectUserDataDelegate> DELEGATE =
             new WritableObjectPropertyKey<>();
 
@@ -152,6 +158,12 @@ public class AssistantCollectUserDataModel extends PropertyModel {
     public static final WritableObjectPropertyKey<View> GENERIC_USER_INTERFACE =
             new WritableObjectPropertyKey<>();
 
+    public static final WritableObjectPropertyKey<ContactDescriptionOptions>
+            CONTACT_SUMMARY_DESCRIPTION_OPTIONS = new WritableObjectPropertyKey<>();
+
+    public static final WritableObjectPropertyKey<ContactDescriptionOptions>
+            CONTACT_FULL_DESCRIPTION_OPTIONS = new WritableObjectPropertyKey<>();
+
     public AssistantCollectUserDataModel() {
         super(DELEGATE, WEB_CONTENTS, VISIBLE, SELECTED_SHIPPING_ADDRESS,
                 SELECTED_PAYMENT_INSTRUMENT, SELECTED_CONTACT_DETAILS, LOGIN_SECTION_TITLE,
@@ -165,7 +177,8 @@ public class AssistantCollectUserDataModel extends PropertyModel {
                 DATE_RANGE_START_LABEL, DATE_RANGE_END, DATE_RANGE_END_LABEL,
                 DATE_RANGE_INVALID_ERROR_MESSAGE, PREPENDED_SECTIONS, APPENDED_SECTIONS,
                 TERMS_REQUIRE_REVIEW_TEXT, PRIVACY_NOTICE_TEXT, INFO_SECTION_TEXT,
-                GENERIC_USER_INTERFACE);
+                GENERIC_USER_INTERFACE, CONTACT_SUMMARY_DESCRIPTION_OPTIONS,
+                CONTACT_FULL_DESCRIPTION_OPTIONS);
 
         /**
          * Set initial state for basic type properties (others are implicitly null).
@@ -524,5 +537,24 @@ public class AssistantCollectUserDataModel extends PropertyModel {
     @CalledByNative
     private void setGenericUserInterface(@Nullable View userInterface) {
         set(GENERIC_USER_INTERFACE, userInterface);
+    }
+
+    @CalledByNative
+    private static ContactDescriptionOptions createContactDescriptionOptions(
+            @AssistantContactField int[] fields, int maxNumberLines) {
+        ContactDescriptionOptions options = new ContactDescriptionOptions();
+        options.mFields = fields;
+        options.mMaxNumberLines = maxNumberLines;
+        return options;
+    }
+
+    @CalledByNative
+    private void setContactSummaryDescriptionOptions(ContactDescriptionOptions options) {
+        set(CONTACT_SUMMARY_DESCRIPTION_OPTIONS, options);
+    }
+
+    @CalledByNative
+    private void setContactFullDescriptionOptions(ContactDescriptionOptions options) {
+        set(CONTACT_FULL_DESCRIPTION_OPTIONS, options);
     }
 }

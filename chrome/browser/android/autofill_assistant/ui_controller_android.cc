@@ -949,6 +949,24 @@ void UiControllerAndroid::OnCollectUserDataOptionsChanged(
       env, jmodel, collect_user_data_options->request_payer_email);
   Java_AssistantCollectUserDataModel_setRequestPhone(
       env, jmodel, collect_user_data_options->request_payer_phone);
+  std::vector<int> contact_summary_fields;
+  for (const auto& field : collect_user_data_options->contact_summary_fields) {
+    contact_summary_fields.emplace_back((int)field);
+  }
+  Java_AssistantCollectUserDataModel_setContactSummaryDescriptionOptions(
+      env, jmodel,
+      Java_AssistantCollectUserDataModel_createContactDescriptionOptions(
+          env, base::android::ToJavaIntArray(env, contact_summary_fields),
+          collect_user_data_options->contact_summary_max_lines));
+  std::vector<int> contact_full_fields;
+  for (const auto& field : collect_user_data_options->contact_full_fields) {
+    contact_full_fields.emplace_back((int)field);
+  }
+  Java_AssistantCollectUserDataModel_setContactFullDescriptionOptions(
+      env, jmodel,
+      Java_AssistantCollectUserDataModel_createContactDescriptionOptions(
+          env, base::android::ToJavaIntArray(env, contact_full_fields),
+          collect_user_data_options->contact_full_max_lines));
   Java_AssistantCollectUserDataModel_setRequestShippingAddress(
       env, jmodel, collect_user_data_options->request_shipping);
   Java_AssistantCollectUserDataModel_setRequestPayment(

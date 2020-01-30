@@ -55,6 +55,7 @@ MATCHER_P(EqualsProto, message, "") {
 
 using ::base::test::RunOnceCallback;
 using ::testing::_;
+using ::testing::ElementsAre;
 using ::testing::Eq;
 using ::testing::Invoke;
 using ::testing::Property;
@@ -416,6 +417,72 @@ TEST_F(CollectUserDataActionTest, SelectContactDetails) {
             base::UTF8ToUTF16("16505678910"));
   EXPECT_EQ(profile->GetRawInfo(autofill::EMAIL_ADDRESS),
             base::UTF8ToUTF16("marion@me.xyz"));
+}
+
+TEST_F(CollectUserDataActionTest,
+       ContactDetailsDescriptionFieldsEnumConversion) {
+  ActionProto action_proto;
+  auto* collect_user_data_proto = action_proto.mutable_collect_user_data();
+  collect_user_data_proto->set_request_terms_and_conditions(false);
+  auto* contact_details_proto =
+      collect_user_data_proto->mutable_contact_details();
+  contact_details_proto->set_contact_details_name(kMemoryLocation);
+  contact_details_proto->set_request_payer_name(true);
+  contact_details_proto->set_request_payer_email(true);
+  contact_details_proto->set_request_payer_phone(true);
+  contact_details_proto->add_summary_fields(ContactDetailsProto::EMAIL_ADDRESS);
+  contact_details_proto->add_summary_fields(
+      ContactDetailsProto::PHONE_HOME_WHOLE_NUMBER);
+  contact_details_proto->set_max_number_summary_lines(2);
+  contact_details_proto->add_full_fields(ContactDetailsProto::NAME_FULL);
+  contact_details_proto->add_full_fields(ContactDetailsProto::EMAIL_ADDRESS);
+  contact_details_proto->add_full_fields(
+      ContactDetailsProto::PHONE_HOME_WHOLE_NUMBER);
+  contact_details_proto->set_max_number_full_lines(3);
+
+  EXPECT_CALL(mock_action_delegate_, CollectUserData(_)).Times(1);
+  ON_CALL(mock_action_delegate_, CollectUserData(_))
+      .WillByDefault(
+          Invoke([=](CollectUserDataOptions* collect_user_data_options) {
+            EXPECT_EQ(collect_user_data_options->contact_summary_max_lines, 2);
+            EXPECT_EQ(collect_user_data_options->contact_full_max_lines, 3);
+            EXPECT_THAT(collect_user_data_options->contact_summary_fields,
+                        ElementsAre(EMAIL_ADDRESS, PHONE_HOME_WHOLE_NUMBER));
+            EXPECT_THAT(
+                collect_user_data_options->contact_full_fields,
+                ElementsAre(NAME_FULL, EMAIL_ADDRESS, PHONE_HOME_WHOLE_NUMBER));
+          }));
+
+  CollectUserDataAction action(&mock_action_delegate_, action_proto);
+  action.ProcessAction(callback_.Get());
+}
+
+TEST_F(CollectUserDataActionTest,
+       ContactDetailsDescriptionDefaultsIfNotSpecified) {
+  ActionProto action_proto;
+  auto* collect_user_data_proto = action_proto.mutable_collect_user_data();
+  collect_user_data_proto->set_request_terms_and_conditions(false);
+  auto* contact_details_proto =
+      collect_user_data_proto->mutable_contact_details();
+  contact_details_proto->set_contact_details_name(kMemoryLocation);
+  contact_details_proto->set_request_payer_name(true);
+  contact_details_proto->set_request_payer_email(true);
+  contact_details_proto->set_request_payer_phone(true);
+
+  EXPECT_CALL(mock_action_delegate_, CollectUserData(_)).Times(1);
+  ON_CALL(mock_action_delegate_, CollectUserData(_))
+      .WillByDefault(
+          Invoke([=](CollectUserDataOptions* collect_user_data_options) {
+            EXPECT_EQ(collect_user_data_options->contact_summary_max_lines, 1);
+            EXPECT_EQ(collect_user_data_options->contact_full_max_lines, 2);
+            EXPECT_THAT(collect_user_data_options->contact_summary_fields,
+                        ElementsAre(EMAIL_ADDRESS, NAME_FULL));
+            EXPECT_THAT(collect_user_data_options->contact_full_fields,
+                        ElementsAre(NAME_FULL, EMAIL_ADDRESS));
+          }));
+
+  CollectUserDataAction action(&mock_action_delegate_, action_proto);
+  action.ProcessAction(callback_.Get());
 }
 
 TEST_F(CollectUserDataActionTest, SelectPaymentMethod) {
