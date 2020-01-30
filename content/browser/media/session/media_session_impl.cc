@@ -1321,6 +1321,13 @@ MediaSessionServiceImpl* MediaSessionImpl::ComputeServiceForRouting() {
   return best_frame ? services_[best_frame] : nullptr;
 }
 
+void MediaSessionImpl::OnPictureInPictureAvailabilityChanged() {
+  if (normal_players_.size() != 1)
+    return;
+
+  RebuildAndNotifyActionsChanged();
+}
+
 bool MediaSessionImpl::ShouldRouteAction(
     media_session::mojom::MediaSessionAction action) const {
   return routed_service_ && base::Contains(routed_service_->actions(), action);
@@ -1354,6 +1361,13 @@ void MediaSessionImpl::RebuildAndNotifyActionsChanged() {
     actions.insert(media_session::mojom::MediaSessionAction::kPlay);
     actions.insert(media_session::mojom::MediaSessionAction::kPause);
     actions.insert(media_session::mojom::MediaSessionAction::kStop);
+  }
+
+  if (IsPictureInPictureAvailable()) {
+    actions.insert(
+        media_session::mojom::MediaSessionAction::kEnterPictureInPicture);
+    actions.insert(
+        media_session::mojom::MediaSessionAction::kExitPictureInPicture);
   }
 
   // If we support kSeekTo then we support kScrubTo as well.
@@ -1422,6 +1436,14 @@ void MediaSessionImpl::RebuildAndNotifyMetadataChanged() {
     if (images_changed)
       observer->MediaSessionImagesChanged(this->images_);
   }
+}
+
+bool MediaSessionImpl::IsPictureInPictureAvailable() const {
+  if (normal_players_.size() != 1)
+    return false;
+
+  auto& first = normal_players_.begin()->first;
+  return first.observer->IsPictureInPictureAvailable(first.player_id);
 }
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(MediaSessionImpl)
