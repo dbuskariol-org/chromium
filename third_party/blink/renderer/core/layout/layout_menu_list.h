@@ -76,7 +76,8 @@ class CORE_EXPORT LayoutMenuList final : public LayoutFlexibleBox {
   void CreateInnerBlock();
   scoped_refptr<ComputedStyle> CreateInnerStyle();
   void UpdateInnerStyle();
-  void AdjustInnerStyle(ComputedStyle&) const;
+  void AdjustInnerStyle(const ComputedStyle& parent_style,
+                        ComputedStyle& inner_style) const;
   bool HasOptionStyleChanged(const ComputedStyle& inner_style) const;
   void UpdateInnerBlockHeight();
   void UpdateOptionsWidth() const;

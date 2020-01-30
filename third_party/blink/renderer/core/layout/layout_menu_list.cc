@@ -65,7 +65,7 @@ scoped_refptr<ComputedStyle> LayoutMenuList::CreateInnerStyle() {
       ComputedStyle::CreateAnonymousStyleWithDisplay(StyleRef(),
                                                      EDisplay::kBlock);
 
-  AdjustInnerStyle(*inner_style);
+  AdjustInnerStyle(StyleRef(), *inner_style);
   return inner_style;
 }
 
@@ -73,7 +73,7 @@ void LayoutMenuList::UpdateInnerStyle() {
   DCHECK(inner_block_);
   scoped_refptr<ComputedStyle> inner_style =
       ComputedStyle::Clone(inner_block_->StyleRef());
-  AdjustInnerStyle(*inner_style);
+  AdjustInnerStyle(StyleRef(), *inner_style);
   inner_block_->SetModifiedStyleOutsideStyleRecalc(std::move(inner_style),
                                                    ApplyStyleChanges::kNo);
   // LayoutMenuList::ControlClipRect() depends on inner_block_->ContentsSize().
@@ -118,7 +118,8 @@ bool LayoutMenuList::HasOptionStyleChanged(
            option_style->GetUnicodeBidi() != inner_style.GetUnicodeBidi()));
 }
 
-void LayoutMenuList::AdjustInnerStyle(ComputedStyle& inner_style) const {
+void LayoutMenuList::AdjustInnerStyle(const ComputedStyle& parent_style,
+                                      ComputedStyle& inner_style) const {
   inner_style.SetFlexGrow(1);
   inner_style.SetFlexShrink(1);
   // min-width: 0; is needed for correct shrinking.
@@ -129,29 +130,30 @@ void LayoutMenuList::AdjustInnerStyle(ComputedStyle& inner_style) const {
   // when the content overflows, treat it the same as align-items: flex-start.
   // But we only do that for the cases where html.css would otherwise use
   // center.
-  if (StyleRef().AlignItemsPosition() == ItemPosition::kCenter) {
+  if (parent_style.AlignItemsPosition() == ItemPosition::kCenter) {
     inner_style.SetMarginTop(Length());
     inner_style.SetMarginBottom(Length());
     inner_style.SetAlignSelfPosition(ItemPosition::kFlexStart);
   }
 
-  Length padding_start = Length::Fixed(
-      LayoutTheme::GetTheme().PopupInternalPaddingStart(StyleRef()));
-  Length padding_end = Length::Fixed(
-      LayoutTheme::GetTheme().PopupInternalPaddingEnd(GetFrame(), StyleRef()));
-  inner_style.SetPaddingLeft(StyleRef().Direction() == TextDirection::kLtr
-                                 ? padding_start
-                                 : padding_end);
-  inner_style.SetPaddingRight(StyleRef().Direction() == TextDirection::kLtr
-                                  ? padding_end
-                                  : padding_start);
-  inner_style.SetPaddingTop(Length::Fixed(
-      LayoutTheme::GetTheme().PopupInternalPaddingTop(StyleRef())));
-  inner_style.SetPaddingBottom(Length::Fixed(
-      LayoutTheme::GetTheme().PopupInternalPaddingBottom(StyleRef())));
-  inner_style.SetTextAlign(StyleRef().IsLeftToRightDirection()
-                               ? ETextAlign::kLeft
-                               : ETextAlign::kRight);
+  LayoutTheme& theme = LayoutTheme::GetTheme();
+  Length padding_start =
+      Length::Fixed(theme.PopupInternalPaddingStart(parent_style));
+  Length padding_end =
+      Length::Fixed(theme.PopupInternalPaddingEnd(GetFrame(), parent_style));
+  if (parent_style.IsLeftToRightDirection()) {
+    inner_style.SetTextAlign(ETextAlign::kLeft);
+    inner_style.SetPaddingLeft(padding_start);
+    inner_style.SetPaddingRight(padding_end);
+  } else {
+    inner_style.SetTextAlign(ETextAlign::kRight);
+    inner_style.SetPaddingLeft(padding_end);
+    inner_style.SetPaddingRight(padding_start);
+  }
+  inner_style.SetPaddingTop(
+      Length::Fixed(theme.PopupInternalPaddingTop(parent_style)));
+  inner_style.SetPaddingBottom(
+      Length::Fixed(theme.PopupInternalPaddingBottom(parent_style)));
 
   if (HasOptionStyleChanged(inner_style)) {
     inner_block_->SetNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
