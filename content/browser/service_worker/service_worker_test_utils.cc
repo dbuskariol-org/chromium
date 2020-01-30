@@ -381,9 +381,8 @@ CreateServiceWorkerRegistrationAndVersion(ServiceWorkerContextCore* context,
   blink::mojom::ServiceWorkerRegistrationOptions options;
   options.scope = scope;
   auto registration = context->registry()->CreateNewRegistration(options);
-  auto version = base::MakeRefCounted<ServiceWorkerVersion>(
-      registration.get(), script, blink::mojom::ScriptType::kClassic,
-      storage->NewVersionId(), context->AsWeakPtr());
+  auto version = context->registry()->CreateNewVersion(
+      registration.get(), script, blink::mojom::ScriptType::kClassic);
   std::vector<ServiceWorkerDatabase::ResourceRecord> records = {
       ServiceWorkerDatabase::ResourceRecord(storage->NewResourceId(), script,
                                             100)};

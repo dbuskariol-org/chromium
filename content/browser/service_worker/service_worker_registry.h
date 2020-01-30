@@ -80,6 +80,14 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   scoped_refptr<ServiceWorkerRegistration> CreateNewRegistration(
       blink::mojom::ServiceWorkerRegistrationOptions options);
 
+  // Create a new instance of ServiceWorkerVersion which is associated with the
+  // given |registration|. Can be null when storage is disabled. This method
+  // must be called after storage is initialized.
+  scoped_refptr<ServiceWorkerVersion> CreateNewVersion(
+      ServiceWorkerRegistration* registration,
+      const GURL& script_url,
+      blink::mojom::ScriptType script_type);
+
   // TODO(crbug.com/1039200): Move corresponding comments from
   // ServiceWorkerStorage.
   void FindRegistrationForClientUrl(const GURL& client_url,

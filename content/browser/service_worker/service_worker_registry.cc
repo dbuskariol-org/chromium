@@ -83,6 +83,18 @@ ServiceWorkerRegistry::CreateNewRegistration(
       std::move(options), registration_id, context_->AsWeakPtr());
 }
 
+scoped_refptr<ServiceWorkerVersion> ServiceWorkerRegistry::CreateNewVersion(
+    ServiceWorkerRegistration* registration,
+    const GURL& script_url,
+    blink::mojom::ScriptType script_type) {
+  DCHECK(registration);
+  int64_t version_id = storage()->NewVersionId();
+  if (version_id == blink::mojom::kInvalidServiceWorkerVersionId)
+    return nullptr;
+  return base::MakeRefCounted<ServiceWorkerVersion>(
+      registration, script_url, script_type, version_id, context_->AsWeakPtr());
+}
+
 void ServiceWorkerRegistry::FindRegistrationForClientUrl(
     const GURL& client_url,
     FindRegistrationCallback callback) {

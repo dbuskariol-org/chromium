@@ -94,12 +94,10 @@ class ServiceWorkerVersionTest : public testing::Test {
     options.scope = scope_;
     registration_ =
         helper_->context()->registry()->CreateNewRegistration(options);
-    version_ = new ServiceWorkerVersion(
+    version_ = helper_->context()->registry()->CreateNewVersion(
         registration_.get(),
         GURL("https://www.example.com/test/service_worker.js"),
-        blink::mojom::ScriptType::kClassic,
-        helper_->context()->storage()->NewVersionId(),
-        helper_->context()->AsWeakPtr());
+        blink::mojom::ScriptType::kClassic);
     EXPECT_EQ(url::Origin::Create(scope_), version_->script_origin());
     std::vector<ServiceWorkerDatabase::ResourceRecord> records;
     records.push_back(WriteToDiskCacheSync(
@@ -1118,12 +1116,10 @@ TEST_F(ServiceWorkerVersionTest, BadOrigin) {
   options.scope = scope;
   auto registration =
       helper_->context()->registry()->CreateNewRegistration(options);
-  auto version = base::MakeRefCounted<ServiceWorkerVersion>(
+  auto version = helper_->context()->registry()->CreateNewVersion(
       registration_.get(),
       GURL("bad-origin://www.example.com/test/service_worker.js"),
-      blink::mojom::ScriptType::kClassic,
-      helper_->context()->storage()->NewVersionId(),
-      helper_->context()->AsWeakPtr());
+      blink::mojom::ScriptType::kClassic);
   ASSERT_EQ(blink::ServiceWorkerStatusCode::kErrorDisallowed,
             StartServiceWorker(version.get()));
 }

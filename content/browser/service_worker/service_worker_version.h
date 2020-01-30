@@ -192,6 +192,8 @@ class CONTENT_EXPORT ServiceWorkerVersion
     virtual ~Observer() {}
   };
 
+  // The constructor should be called only from ServiceWorkerRegistry other than
+  // tests.
   ServiceWorkerVersion(ServiceWorkerRegistration* registration,
                        const GURL& script_url,
                        blink::mojom::ScriptType script_type,
