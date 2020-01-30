@@ -15,7 +15,7 @@
 #include "build/build_config.h"
 #include "chrome/browser/ui/browser_dialogs.h"
 #include "chrome/browser/ui/simple_message_box_internal.h"
-#include "chrome/browser/ui/views/simple_message_box_views.h"
+#include "chrome/browser/ui/views/message_box_dialog.h"
 #include "chrome/grit/generated_resources.h"
 #include "components/constrained_window/constrained_window_views.h"
 #include "components/startup_metric_utils/browser/startup_metric_utils.h"
@@ -59,16 +59,15 @@ chrome::MessageBoxResult ShowSync(gfx::NativeWindow parent,
                                   chrome::MessageBoxType type,
                                   const base::string16& yes_text,
                                   const base::string16& no_text,
-                                  const base::string16& checkbox_text,
-                                  bool can_close) {
+                                  const base::string16& checkbox_text) {
   chrome::MessageBoxResult result = chrome::MESSAGE_BOX_RESULT_NO;
 
   // TODO(pkotwicz): Exit message loop when the dialog is closed by some other
   // means than |Cancel| or |Accept|. crbug.com/404385
   base::RunLoop run_loop(base::RunLoop::Type::kNestableTasksAllowed);
 
-  SimpleMessageBoxViews::Show(
-      parent, title, message, type, yes_text, no_text, checkbox_text, can_close,
+  MessageBoxDialog::Show(
+      parent, title, message, type, yes_text, no_text, checkbox_text,
       base::Bind(
           [](base::RunLoop* run_loop, chrome::MessageBoxResult* out_result,
              chrome::MessageBoxResult messagebox_result) {
@@ -83,10 +82,10 @@ chrome::MessageBoxResult ShowSync(gfx::NativeWindow parent,
 }  // namespace
 
 ////////////////////////////////////////////////////////////////////////////////
-// SimpleMessageBoxViews, public:
+// MessageBoxDialog, public:
 
 // static
-chrome::MessageBoxResult SimpleMessageBoxViews::Show(
+chrome::MessageBoxResult MessageBoxDialog::Show(
     gfx::NativeWindow parent,
     const base::string16& title,
     const base::string16& message,
@@ -94,11 +93,10 @@ chrome::MessageBoxResult SimpleMessageBoxViews::Show(
     const base::string16& yes_text,
     const base::string16& no_text,
     const base::string16& checkbox_text,
-    bool can_close,
-    SimpleMessageBoxViews::MessageBoxResultCallback callback) {
+    MessageBoxDialog::MessageBoxResultCallback callback) {
   if (!callback)
     return ShowSync(parent, title, message, type, yes_text, no_text,
-                    checkbox_text, can_close);
+                    checkbox_text);
 
   startup_metric_utils::SetNonBrowserUIDisplayed();
   if (chrome::internal::g_should_skip_message_box_for_test) {
@@ -146,14 +144,13 @@ chrome::MessageBoxResult SimpleMessageBoxViews::Show(
   bool is_system_modal = !parent;
 
 #if defined(OS_MACOSX)
-  // Mac does not support system modals, so never ask SimpleMessageBoxViews to
+  // Mac does not support system modals, so never ask MessageBoxDialog to
   // be system modal.
   is_system_modal = false;
 #endif
 
-  SimpleMessageBoxViews* dialog =
-      new SimpleMessageBoxViews(title, message, type, yes_text, no_text,
-                                checkbox_text, is_system_modal, can_close);
+  MessageBoxDialog* dialog = new MessageBoxDialog(
+      title, message, type, yes_text, no_text, checkbox_text, is_system_modal);
   views::Widget* widget =
       constrained_window::CreateBrowserModalDialogViews(dialog, parent);
 
@@ -170,77 +167,69 @@ chrome::MessageBoxResult SimpleMessageBoxViews::Show(
   return chrome::MESSAGE_BOX_RESULT_DEFERRED;
 }
 
-bool SimpleMessageBoxViews::Cancel() {
-  result_ = chrome::MESSAGE_BOX_RESULT_NO;
-  Done();
-  return true;
-}
-
-bool SimpleMessageBoxViews::Accept() {
+void MessageBoxDialog::OnDialogAccepted() {
   if (!message_box_view_->HasCheckBox() ||
       message_box_view_->IsCheckBoxSelected()) {
-    result_ = chrome::MESSAGE_BOX_RESULT_YES;
+    Done(chrome::MESSAGE_BOX_RESULT_YES);
   } else {
-    result_ = chrome::MESSAGE_BOX_RESULT_NO;
+    Done(chrome::MESSAGE_BOX_RESULT_NO);
   }
-
-  Done();
-  return true;
 }
 
-bool SimpleMessageBoxViews::Close() {
-  return can_close_ && DialogDelegate::Close();
-}
-
-base::string16 SimpleMessageBoxViews::GetWindowTitle() const {
+base::string16 MessageBoxDialog::GetWindowTitle() const {
   return window_title_;
 }
 
-void SimpleMessageBoxViews::DeleteDelegate() {
+void MessageBoxDialog::DeleteDelegate() {
   delete this;
 }
 
-ui::ModalType SimpleMessageBoxViews::GetModalType() const {
+ui::ModalType MessageBoxDialog::GetModalType() const {
   return is_system_modal_ ? ui::MODAL_TYPE_SYSTEM : ui::MODAL_TYPE_WINDOW;
 }
 
-views::View* SimpleMessageBoxViews::GetContentsView() {
+views::View* MessageBoxDialog::GetContentsView() {
   return message_box_view_;
 }
 
-bool SimpleMessageBoxViews::ShouldShowCloseButton() const {
-  return can_close_;
+bool MessageBoxDialog::ShouldShowCloseButton() const {
+  return true;
 }
 
-void SimpleMessageBoxViews::OnWidgetActivationChanged(views::Widget* widget,
-                                                      bool active) {
+void MessageBoxDialog::OnWidgetActivationChanged(views::Widget* widget,
+                                                 bool active) {
   if (!active)
     GetWidget()->Close();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// SimpleMessageBoxViews, private:
+// MessageBoxDialog, private:
 
-SimpleMessageBoxViews::SimpleMessageBoxViews(
-    const base::string16& title,
-    const base::string16& message,
-    chrome::MessageBoxType type,
-    const base::string16& yes_text,
-    const base::string16& no_text,
-    const base::string16& checkbox_text,
-    bool is_system_modal,
-    bool can_close)
+MessageBoxDialog::MessageBoxDialog(const base::string16& title,
+                                   const base::string16& message,
+                                   chrome::MessageBoxType type,
+                                   const base::string16& yes_text,
+                                   const base::string16& no_text,
+                                   const base::string16& checkbox_text,
+                                   bool is_system_modal)
     : window_title_(title),
       type_(type),
-      result_(chrome::MESSAGE_BOX_RESULT_NO),
       message_box_view_(new views::MessageBoxView(
           views::MessageBoxView::InitParams(message))),
-      is_system_modal_(is_system_modal),
-      can_close_(can_close) {
+      is_system_modal_(is_system_modal) {
   DialogDelegate::set_buttons(type_ == chrome::MESSAGE_BOX_TYPE_QUESTION
                                   ? ui::DIALOG_BUTTON_OK |
                                         ui::DIALOG_BUTTON_CANCEL
                                   : ui::DIALOG_BUTTON_OK);
+
+  DialogDelegate::set_accept_callback(base::BindOnce(
+      &MessageBoxDialog::OnDialogAccepted, base::Unretained(this)));
+  DialogDelegate::set_cancel_callback(
+      base::BindOnce(&MessageBoxDialog::Done, base::Unretained(this),
+                     chrome::MESSAGE_BOX_RESULT_NO));
+  DialogDelegate::set_close_callback(
+      base::BindOnce(&MessageBoxDialog::Done, base::Unretained(this),
+                     chrome::MESSAGE_BOX_RESULT_NO));
 
   base::string16 ok_text = yes_text;
   if (ok_text.empty()) {
@@ -264,21 +253,21 @@ SimpleMessageBoxViews::SimpleMessageBoxViews(
   chrome::RecordDialogCreation(chrome::DialogIdentifier::SIMPLE_MESSAGE_BOX);
 }
 
-SimpleMessageBoxViews::~SimpleMessageBoxViews() {
+MessageBoxDialog::~MessageBoxDialog() {
   GetWidget()->RemoveObserver(this);
 }
 
-void SimpleMessageBoxViews::Run(MessageBoxResultCallback result_callback) {
+void MessageBoxDialog::Run(MessageBoxResultCallback result_callback) {
   GetWidget()->AddObserver(this);
   result_callback_ = std::move(result_callback);
 }
 
-void SimpleMessageBoxViews::Done() {
+void MessageBoxDialog::Done(chrome::MessageBoxResult result) {
   CHECK(!result_callback_.is_null());
-  std::move(result_callback_).Run(result_);
+  std::move(result_callback_).Run(result);
 }
 
-const views::Widget* SimpleMessageBoxViews::GetWidgetImpl() const {
+const views::Widget* MessageBoxDialog::GetWidgetImpl() const {
   return message_box_view_->GetWidget();
 }
 
@@ -286,11 +275,10 @@ namespace chrome {
 
 void ShowWarningMessageBox(gfx::NativeWindow parent,
                            const base::string16& title,
-                           const base::string16& message,
-                           bool can_close) {
-  SimpleMessageBoxViews::Show(
-      parent, title, message, chrome::MESSAGE_BOX_TYPE_WARNING,
-      base::string16(), base::string16(), base::string16(), can_close);
+                           const base::string16& message) {
+  MessageBoxDialog::Show(parent, title, message,
+                         chrome::MESSAGE_BOX_TYPE_WARNING, base::string16(),
+                         base::string16(), base::string16());
 }
 
 void ShowWarningMessageBoxWithCheckbox(
@@ -299,24 +287,24 @@ void ShowWarningMessageBoxWithCheckbox(
     const base::string16& message,
     const base::string16& checkbox_text,
     base::OnceCallback<void(bool checked)> callback) {
-  SimpleMessageBoxViews::Show(
-      parent, title, message, chrome::MESSAGE_BOX_TYPE_WARNING,
-      base::string16(), base::string16(), checkbox_text, /*can_close=*/true,
-      base::Bind(
-          [](base::OnceCallback<void(bool checked)> callback,
-             MessageBoxResult message_box_result) {
-            std::move(callback).Run(message_box_result ==
-                                    MESSAGE_BOX_RESULT_YES);
-          },
-          base::Passed(std::move(callback))));
+  MessageBoxDialog::Show(parent, title, message,
+                         chrome::MESSAGE_BOX_TYPE_WARNING, base::string16(),
+                         base::string16(), checkbox_text,
+                         base::Bind(
+                             [](base::OnceCallback<void(bool checked)> callback,
+                                MessageBoxResult message_box_result) {
+                               std::move(callback).Run(message_box_result ==
+                                                       MESSAGE_BOX_RESULT_YES);
+                             },
+                             base::Passed(std::move(callback))));
 }
 
 MessageBoxResult ShowQuestionMessageBox(gfx::NativeWindow parent,
                                         const base::string16& title,
                                         const base::string16& message) {
-  return SimpleMessageBoxViews::Show(
+  return MessageBoxDialog::Show(
       parent, title, message, chrome::MESSAGE_BOX_TYPE_QUESTION,
-      base::string16(), base::string16(), base::string16(), /*can_close=*/true);
+      base::string16(), base::string16(), base::string16());
 }
 
 MessageBoxResult ShowMessageBoxWithButtonText(gfx::NativeWindow parent,
@@ -324,10 +312,9 @@ MessageBoxResult ShowMessageBoxWithButtonText(gfx::NativeWindow parent,
                                               const base::string16& message,
                                               const base::string16& yes_text,
                                               const base::string16& no_text) {
-  return SimpleMessageBoxViews::Show(parent, title, message,
-                                     chrome::MESSAGE_BOX_TYPE_QUESTION,
-                                     yes_text, no_text, base::string16(),
-                                     /*can_close=*/true);
+  return MessageBoxDialog::Show(parent, title, message,
+                                chrome::MESSAGE_BOX_TYPE_QUESTION, yes_text,
+                                no_text, base::string16());
 }
 
 }  // namespace chrome
