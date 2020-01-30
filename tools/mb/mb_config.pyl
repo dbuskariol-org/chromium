@@ -117,7 +117,7 @@
       'ToTAndroidASan': 'android_clang_tot_asan',
       'ToTAndroid (dbg)': 'android_clang_tot_dbg',
       'ToTAndroidCFI': 'android_clang_tot_cfi_full_cfi_diag_thin_lto_release_static_dcheck_always_on',
-      'ToTAndroidOfficial': 'android_clang_tot_release_minimal_symbols_official_optimize',
+      'ToTAndroidOfficial': 'android_clang_tot_official_arm64',
       'ToTAndroid64': 'android_clang_tot_release_arm64',
       'ToTAndroid x64': 'android_clang_tot_x64',
       'ToTLinuxOfficial': 'clang_tot_official',
@@ -1062,9 +1062,9 @@
       'strip_debug_info', 'clang_tot',
     ],
 
-    'android_clang_tot_release_minimal_symbols_official_optimize': [
+    'android_clang_tot_official_arm64': [
       'android', 'release', 'static', 'minimal_symbols', 'official_optimize',
-      'clang_tot',
+      'clang_tot', 'arm64',
     ],
 
     'android_clang_tot_x64': [
