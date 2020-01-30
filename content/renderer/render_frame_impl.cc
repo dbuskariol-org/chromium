@@ -793,8 +793,7 @@ std::vector<gfx::Size> ConvertToFaviconSizes(
 void RecordSuffixedMemoryMBHistogram(base::StringPiece name,
                                      base::StringPiece suffix,
                                      int sample_mb) {
-  std::string name_with_suffix;
-  name.CopyToString(&name_with_suffix);
+  std::string name_with_suffix(name);
   suffix.AppendToString(&name_with_suffix);
   base::UmaHistogramMemoryMB(name_with_suffix, sample_mb);
 }

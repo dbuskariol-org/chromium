@@ -382,7 +382,7 @@ bool GCMMessageCryptographer::Decrypt(
   if (!encryption_scheme_->ValidateAndRemovePadding(decrypted_record))
     return false;
 
-  decrypted_record.CopyToString(plaintext);
+  plaintext->assign(decrypted_record.data(), decrypted_record.size());
   return true;
 }
 
