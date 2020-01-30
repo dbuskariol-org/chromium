@@ -213,8 +213,8 @@ class PLATFORM_EXPORT Font {
   bool CanShapeWordByWord() const;
 
   void SetCanShapeWordByWordForTesting(bool b) {
-    can_shape_word_by_word_ = b;
-    shape_word_by_word_computed_ = true;
+    if (font_fallback_list_)
+      font_fallback_list_->SetCanShapeWordByWordForTesting(b);
   }
 
   void ReportNotDefGlyph() const;
@@ -223,8 +223,6 @@ class PLATFORM_EXPORT Font {
   enum ForTextEmphasisOrNot { kNotForTextEmphasis, kForTextEmphasis };
 
   GlyphData GetEmphasisMarkGlyphData(const AtomicString&) const;
-
-  bool ComputeCanShapeWordByWord() const;
 
  public:
   FontSelector* GetFontSelector() const;
@@ -246,8 +244,6 @@ class PLATFORM_EXPORT Font {
  private:
   FontDescription font_description_;
   mutable scoped_refptr<FontFallbackList> font_fallback_list_;
-  mutable unsigned can_shape_word_by_word_ : 1;
-  mutable unsigned shape_word_by_word_computed_ : 1;
 
   // For m_fontDescription & m_fontFallbackList access.
   friend class CachingWordShaper;
