@@ -6418,8 +6418,6 @@ crbug.com/1044496 [ Release Mac ] http/tests/devtools/application-panel/resource
 crbug.com/1044496 [ Release Linux ] http/tests/devtools/application-panel/resources-panel-resource-preview.js [ Pass Timeout ]
 crbug.com/1044418 [ Release Mac ] http/tests/devtools/elements/shadow/elements-panel-shadow-selection-on-refresh-2.js [ Pass Timeout ]
 
-crbug.com/1045260 external/wpt/IndexedDB/keypath-exceptions.htm [ Pass Failure ]
-
 crbug.com/1045472 external/wpt/WebCryptoAPI/wrapKey_unwrapKey/test_wrapKey_unwrapKey.https.html [ Pass Failure ]
 crbug.com/1045472 external/wpt/WebCryptoAPI/wrapKey_unwrapKey/wrapKey_unwrapKey.https.worker.html [ Pass Failure ]
 
