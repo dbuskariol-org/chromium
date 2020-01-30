@@ -234,8 +234,8 @@
     // Click the file-list context menu "Get info" command.
     const getInfoMenuItem = '#file-context-menu:not([hidden]) ' +
         ' [command="#get-info"]:not([hidden])';
-    await remoteCall.callRemoteTestUtil(
-        'fakeMouseClick', appId, [getInfoMenuItem]);
+    chrome.test.assertTrue(!!await remoteCall.callRemoteTestUtil(
+        'fakeMouseClick', appId, [getInfoMenuItem]));
 
     // Check: the Quick View dialog should be shown.
     const caller = getCaller();
@@ -276,8 +276,8 @@
     // Click the file-list context menu "Get info" command.
     const getInfoMenuItem = '#file-context-menu:not([hidden]) ' +
         ' [command="#get-info"]:not([hidden])';
-    await remoteCall.callRemoteTestUtil(
-        'fakeMouseClick', appId, [getInfoMenuItem]);
+    chrome.test.assertTrue(!!await remoteCall.callRemoteTestUtil(
+        'fakeMouseClick', appId, [getInfoMenuItem]));
 
     // Check: the Quick View dialog should be shown.
     const caller = getCaller();
