@@ -9,6 +9,7 @@
 
 #import "base/ios/block_types.h"
 #import "components/signin/public/base/signin_metrics.h"
+#import "ios/chrome/browser/ui/authentication/signin/signin_enums.h"
 #import "ios/chrome/browser/ui/coordinators/chrome_coordinator.h"
 
 class Browser;
@@ -17,27 +18,6 @@ class Browser;
 @protocol ApplicationCommands;
 @protocol BrowsingDataCommands;
 @protocol SyncPresenter;
-
-// Sign-in result returned Sign-in result.
-typedef NS_ENUM(NSUInteger, SigninCoordinatorResult) {
-  // Sign-in has been canceled by the user or by another reason.
-  SigninCoordinatorResultCanceledByUser,
-  // Sign-in has been done, but the user didn’t accept nor refuse to sync.
-  SigninCoordinatorResultInterrupted,
-  // Sign-in has been done, the user has been explicitly accepted or refused
-  // sync.
-  SigninCoordinatorResultSuccess,
-};
-
-// Action to do when the sign-in dialog needs to be interrupted.
-typedef NS_ENUM(NSUInteger, SigninCoordinatorInterruptAction) {
-  // Stops the sign-in coordinator without dismissing the view.
-  SigninCoordinatorInterruptActionNoDismiss,
-  // Stops the sign-in coordinator and dismisses the view without animation.
-  SigninCoordinatorInterruptActionDismissWithoutAnimation,
-  // Stops the sign-in coordinator and dismisses the view with animation.
-  SigninCoordinatorInterruptActionDismissWithAnimation,
-};
 
 // Called when the sign-in dialog is closed.
 // |result| is the sign-in result state.

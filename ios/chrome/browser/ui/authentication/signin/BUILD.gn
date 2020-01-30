@@ -13,7 +13,10 @@ group("signin") {
 # Contains public headers.
 source_set("signin_headers") {
   configs += [ "//build/config/compiler:enable_arc" ]
-  sources = [ "signin_coordinator.h" ]
+  sources = [
+    "signin_coordinator.h",
+    "signin_enums.h",
+  ]
   public_deps = [
     "//base",
     "//components/signin/public/base",
