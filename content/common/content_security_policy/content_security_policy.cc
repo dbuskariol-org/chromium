@@ -8,6 +8,7 @@
 #include "base/strings/string_util.h"
 #include "content/common/content_security_policy/csp_context.h"
 #include "content/common/content_security_policy/csp_source.h"
+#include "content/common/content_security_policy/csp_source_list.h"
 #include "services/network/public/cpp/content_security_policy.h"
 
 namespace content {
@@ -138,8 +139,8 @@ bool AllowDirective(CSPContext* context,
                     bool has_followed_redirect,
                     bool is_response_check,
                     const SourceLocation& source_location) {
-  if (CSPSourceList::Allow(directive.source_list, url, context,
-                           has_followed_redirect, is_response_check)) {
+  if (CheckCSPSourceList(directive.source_list, url, context,
+                         has_followed_redirect, is_response_check)) {
     return true;
   }
 

@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "content/common/content_security_policy/csp_directive.h"
+#include "content/common/content_security_policy/csp_source_list.h"
 #include "services/network/public/cpp/content_security_policy.h"
 
 namespace content {
@@ -10,16 +11,17 @@ namespace content {
 CSPDirective::CSPDirective() = default;
 
 CSPDirective::CSPDirective(network::mojom::CSPDirectiveName name,
-                           CSPSourceList source_list)
+                           network::mojom::CSPSourceListPtr source_list)
     : name(name), source_list(std::move(source_list)) {}
 
 CSPDirective::CSPDirective(network::mojom::CSPDirectivePtr directive)
     : name(directive->name), source_list(std::move(directive->source_list)) {}
 CSPDirective::CSPDirective(CSPDirective&&) = default;
+CSPDirective::~CSPDirective() = default;
 
 std::string CSPDirective::ToString() const {
   return network::ContentSecurityPolicy::ToString(name) + " " +
-         source_list.ToString();
+         content::ToString(source_list);
 }
 
 }  // namespace content

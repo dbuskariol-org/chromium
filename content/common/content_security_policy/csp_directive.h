@@ -7,8 +7,7 @@
 
 #include <string>
 #include "content/common/content_export.h"
-#include "content/common/content_security_policy/csp_source_list.h"
-#include "services/network/public/mojom/content_security_policy.mojom-forward.h"
+#include "services/network/public/mojom/content_security_policy.mojom.h"
 
 namespace content {
 
@@ -24,13 +23,14 @@ namespace content {
 struct CONTENT_EXPORT CSPDirective {
   CSPDirective();
   CSPDirective(network::mojom::CSPDirectiveName name,
-               CSPSourceList source_list);
+               network::mojom::CSPSourceListPtr source_list);
   explicit CSPDirective(network::mojom::CSPDirectivePtr directive);
   CSPDirective(const CSPDirective&) = delete;
   CSPDirective(CSPDirective&&);
+  ~CSPDirective();
 
   network::mojom::CSPDirectiveName name;
-  CSPSourceList source_list;
+  network::mojom::CSPSourceListPtr source_list;
 
   std::string ToString() const;
 };

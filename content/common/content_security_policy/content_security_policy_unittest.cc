@@ -46,7 +46,8 @@ ContentSecurityPolicy BuildPolicy(CSPDirectiveName directive_name,
   sources.push_back(std::move(source));
   std::vector<CSPDirective> directives;
   directives.emplace_back(
-      directive_name, CSPSourceList(false, false, false, std::move(sources)));
+      directive_name, network::mojom::CSPSourceList::New(std::move(sources),
+                                                         false, false, false));
   return ContentSecurityPolicy({}, std::move(directives), {}, false);
 }
 
@@ -95,7 +96,8 @@ TEST(ContentSecurityPolicy, DirectiveFallback) {
   auto allow_host = [](const char* host) {
     std::vector<network::mojom::CSPSourcePtr> sources;
     sources.push_back(BuildCSPSource("http", host));
-    return CSPSourceList(false, false, false, std::move(sources));
+    return network::mojom::CSPSourceList::New(std::move(sources), false, false,
+                                              false);
   };
 
   {
@@ -245,7 +247,7 @@ TEST(ContentSecurityPolicy, ShouldUpgradeInsecureRequest) {
   EXPECT_FALSE(ContentSecurityPolicy::ShouldUpgradeInsecureRequest(policy));
 
   policy.directives.emplace_back(CSPDirectiveName::UpgradeInsecureRequests,
-                                 CSPSourceList());
+                                 network::mojom::CSPSourceList::New());
   EXPECT_TRUE(ContentSecurityPolicy::ShouldUpgradeInsecureRequest(policy));
 }
 
@@ -253,9 +255,18 @@ TEST(ContentSecurityPolicy, NavigateToChecks) {
   GURL url_a("https://a");
   GURL url_b("https://b");
   CSPContextTest context;
-  auto allow_none = [] { return CSPSourceList(false, false, false, {}); };
-  auto allow_self = [] { return CSPSourceList(true, false, false, {}); };
-  auto allow_redirect = [] { return CSPSourceList(false, false, true, {}); };
+  auto allow_none = [] {
+    return network::mojom::CSPSourceList::New(
+        std::vector<network::mojom::CSPSourcePtr>(), false, false, false);
+  };
+  auto allow_self = [] {
+    return network::mojom::CSPSourceList::New(
+        std::vector<network::mojom::CSPSourcePtr>(), true, false, false);
+  };
+  auto allow_redirect = [] {
+    return network::mojom::CSPSourceList::New(
+        std::vector<network::mojom::CSPSourcePtr>(), false, false, true);
+  };
   auto source_a = [] {
     return network::mojom::CSPSource::New("https", "a", url::PORT_UNSPECIFIED,
                                           "", false, false);
@@ -263,21 +274,23 @@ TEST(ContentSecurityPolicy, NavigateToChecks) {
   auto allow_a = [&] {
     std::vector<network::mojom::CSPSourcePtr> sources;
     sources.push_back(source_a());
-    return CSPSourceList(false, false, false, std::move(sources));
+    return network::mojom::CSPSourceList::New(std::move(sources), false, false,
+                                              false);
   };
   auto allow_redirect_a = [&] {
     std::vector<network::mojom::CSPSourcePtr> sources;
     sources.push_back(source_a());
-    return CSPSourceList(false, false, true, std::move(sources));
+    return network::mojom::CSPSourceList::New(std::move(sources), false, false,
+                                              true);
   };
   context.SetSelf(source_a());
 
   struct TestCase {
-    CSPSourceList navigate_to_list;
+    network::mojom::CSPSourceListPtr navigate_to_list;
     const GURL& url;
     bool is_response_check;
     bool is_form_submission;
-    base::Optional<CSPSourceList> form_action_list;
+    network::mojom::CSPSourceListPtr form_action_list;
     bool expected;
   } cases[] = {
       // Basic source matching.
@@ -314,7 +327,7 @@ TEST(ContentSecurityPolicy, NavigateToChecks) {
 
     if (test.form_action_list) {
       directives.emplace_back(CSPDirectiveName::FormAction,
-                              std::move(test.form_action_list.value()));
+                              std::move(test.form_action_list));
     }
 
     ContentSecurityPolicy policy({}, std::move(directives), {}, false);

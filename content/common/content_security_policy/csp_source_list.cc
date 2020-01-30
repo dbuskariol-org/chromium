@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "content/common/content_security_policy/csp_source_list.h"
+
 #include "content/common/content_security_policy/csp_context.h"
 #include "content/common/content_security_policy/csp_source.h"
 
@@ -22,37 +24,14 @@ bool AllowFromSources(const GURL& url,
 
 }  // namespace
 
-CSPSourceList::CSPSourceList()
-    : allow_self(false), allow_star(false), allow_response_redirects(false) {}
-
-CSPSourceList::CSPSourceList(CSPSourceList&&) = default;
-
-CSPSourceList::CSPSourceList(bool allow_self,
-                             bool allow_star,
-                             bool allow_response_redirects,
-                             std::vector<network::mojom::CSPSourcePtr> sources)
-    : allow_self(allow_self),
-      allow_star(allow_star),
-      allow_response_redirects(allow_response_redirects),
-      sources(std::move(sources)) {}
-
-CSPSourceList::CSPSourceList(network::mojom::CSPSourceListPtr csp_source_list)
-    : allow_self(csp_source_list->allow_self),
-      allow_star(csp_source_list->allow_star),
-      allow_response_redirects(csp_source_list->allow_response_redirects),
-      sources(std::move(csp_source_list->sources)) {}
-
-CSPSourceList::~CSPSourceList() = default;
-
-// static
-bool CSPSourceList::Allow(const CSPSourceList& source_list,
-                          const GURL& url,
-                          CSPContext* context,
-                          bool has_followed_redirect,
-                          bool is_response_check) {
+bool CheckCSPSourceList(const network::mojom::CSPSourceListPtr& source_list,
+                        const GURL& url,
+                        CSPContext* context,
+                        bool has_followed_redirect,
+                        bool is_response_check) {
   // If the source list allows all redirects, the decision can't be made until
   // the response is received.
-  if (source_list.allow_response_redirects && !is_response_check)
+  if (source_list->allow_response_redirects && !is_response_check)
     return true;
 
   // Wildcards match network schemes ('http', 'https', 'ftp', 'ws', 'wss'), and
@@ -60,7 +39,7 @@ bool CSPSourceList::Allow(const CSPSourceList& source_list,
   // https://w3c.github.io/webappsec-csp/#match-url-to-source-expression. Other
   // schemes, including custom schemes, must be explicitly listed in a source
   // list.
-  if (source_list.allow_star) {
+  if (source_list->allow_star) {
     if (url.SchemeIsHTTPOrHTTPS() || url.SchemeIsWSOrWSS() ||
         url.SchemeIs("ftp")) {
       return true;
@@ -69,41 +48,39 @@ bool CSPSourceList::Allow(const CSPSourceList& source_list,
       return true;
   }
 
-  if (source_list.allow_self && context->self_source() &&
+  if (source_list->allow_self && context->self_source() &&
       CheckCSPSource(context->self_source(), url, context,
                      has_followed_redirect)) {
     return true;
   }
 
-  return AllowFromSources(url, source_list.sources, context,
+  return AllowFromSources(url, source_list->sources, context,
                           has_followed_redirect);
 }
 
-std::string CSPSourceList::ToString() const {
-  if (IsNone())
+std::string ToString(const network::mojom::CSPSourceListPtr& source_list) {
+  bool is_none = !source_list->allow_self && !source_list->allow_star &&
+                 source_list->sources.empty();
+  if (is_none)
     return "'none'";
-  if (allow_star)
+  if (source_list->allow_star)
     return "*";
 
   bool is_empty = true;
   std::stringstream text;
-  if (allow_self) {
+  if (source_list->allow_self) {
     text << "'self'";
     is_empty = false;
   }
 
-  for (const auto& source : sources) {
+  for (const auto& source : source_list->sources) {
     if (!is_empty)
       text << " ";
-    text << content::ToString(source);
+    text << ToString(source);
     is_empty = false;
   }
 
   return text.str();
-}
-
-bool CSPSourceList::IsNone() const {
-  return !allow_self && !allow_star && sources.empty();
 }
 
 }  // namespace content

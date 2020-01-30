@@ -62,7 +62,8 @@ ContentSecurityPolicy BuildPolicy(CSPDirectiveName directive_name,
   sources.push_back(std::move(source));
   std::vector<CSPDirective> directives;
   directives.push_back(CSPDirective(
-      directive_name, CSPSourceList(false, false, false, std::move(sources))));
+      directive_name, network::mojom::CSPSourceList::New(std::move(sources),
+                                                         false, false, false)));
   return ContentSecurityPolicy({}, std::move(directives), {}, false);
 }
 
@@ -74,7 +75,8 @@ ContentSecurityPolicy BuildPolicy(CSPDirectiveName directive_name,
   sources.push_back(std::move(source_2));
   std::vector<CSPDirective> directives;
   directives.push_back(CSPDirective(
-      directive_name, CSPSourceList(false, false, false, std::move(sources))));
+      directive_name, network::mojom::CSPSourceList::New(std::move(sources),
+                                                         false, false, false)));
   return ContentSecurityPolicy({}, std::move(directives), {}, false);
 }
 
