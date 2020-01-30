@@ -1374,6 +1374,24 @@ void AddPrintingStrings(content::WebUIDataSource* html_source) {
       base::FeatureList::IsEnabled(::features::kPrintServerUi));
 }
 
+void AddSearchInSettingsStrings(content::WebUIDataSource* html_source) {
+  static constexpr webui::LocalizedString kLocalizedStrings[] = {
+      {"searchPrompt", IDS_SETTINGS_SEARCH_PROMPT},
+      {"searchNoResults", IDS_SEARCH_NO_RESULTS},
+      {"searchResults", IDS_SEARCH_RESULTS},
+      // TODO(dpapad): IDS_DOWNLOAD_CLEAR_SEARCH and IDS_HISTORY_CLEAR_SEARCH
+      // are identical, merge them to one and re-use here.
+      {"clearSearch", IDS_DOWNLOAD_CLEAR_SEARCH},
+  };
+  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
+
+  html_source->AddString(
+      "searchNoOsResultsHelp",
+      l10n_util::GetStringFUTF16(
+          IDS_SETTINGS_SEARCH_NO_RESULTS_HELP,
+          base::ASCIIToUTF16(chrome::kOsSettingsSearchHelpURL)));
+}
+
 }  // namespace
 
 void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
@@ -1398,6 +1416,7 @@ void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
   AddPersonalizationStrings(html_source);
   AddPluginVmStrings(html_source, profile);
   AddPrintingStrings(html_source);
+  AddSearchInSettingsStrings(html_source);
   AddUsersStrings(html_source);
 }
 
