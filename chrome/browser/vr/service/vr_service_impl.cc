@@ -442,7 +442,7 @@ void VRServiceImpl::ShowConsentPrompt(SessionRequestData request,
   // Skip the consent prompt if the user has already consented for this device,
   // or if consent is not needed.
   if (consent_granted || IsXrDeviceConsentPromptDisabledForTesting()) {
-    DoRequestSession(std::move(request), runtime);
+    EnsureRuntimeInstalled(std::move(request), runtime);
     return;
   }
 
@@ -491,17 +491,6 @@ void VRServiceImpl::OnConsentResult(SessionRequestData request,
     return;
   }
 
-  // Get the runtime again, since we're running in an async context
-  // and the pointer returned from `GetRuntimeForOptions` is non-owning.
-  auto* runtime = runtime_manager_->GetRuntimeForOptions(request.options.get());
-
-  // Ensure that it's the same runtime as the one we expect.
-  if (!runtime || runtime->GetId() != request.runtime_id) {
-    std::move(request.callback)
-        .Run(device::mojom::RequestSessionResult::NewFailureReason(
-            device::mojom::RequestSessionError::UNKNOWN_RUNTIME_ERROR));
-    return;
-  }
   AddConsentGrantedDevice(request.runtime_id, consent_level);
 
   // Re-check for another client instance after a potential user consent.
@@ -513,15 +502,57 @@ void VRServiceImpl::OnConsentResult(SessionRequestData request,
     return;
   }
 
-  DoRequestSession(std::move(request), runtime);
+  EnsureRuntimeInstalled(std::move(request), nullptr);
 }
 
-void VRServiceImpl::DoRequestSession(SessionRequestData request,
-                                     BrowserXRRuntime* runtime) {
+void VRServiceImpl::EnsureRuntimeInstalled(SessionRequestData request,
+                                           BrowserXRRuntime* runtime) {
   DVLOG(2) << __func__;
-  // Get the runtime we'll be creating a session with.
-  DCHECK(runtime);
-  DCHECK_EQ(runtime->GetId(), request.runtime_id);
+
+  // If we were not provided the runtime, try to get it again.
+  if (!runtime)
+    runtime = runtime_manager_->GetRuntimeForOptions(request.options.get());
+
+  // Ensure that it's the same runtime as the one we expect.
+  if (!runtime || runtime->GetId() != request.runtime_id) {
+    std::move(request.callback)
+        .Run(device::mojom::RequestSessionResult::NewFailureReason(
+            device::mojom::RequestSessionError::UNKNOWN_RUNTIME_ERROR));
+    return;
+  }
+
+  runtime->EnsureInstalled(
+      render_frame_host_->GetProcess()->GetID(),
+      render_frame_host_->GetRoutingID(),
+      base::BindOnce(&VRServiceImpl::OnInstallResult,
+                     weak_ptr_factory_.GetWeakPtr(), std::move(request)));
+}
+
+void VRServiceImpl::OnInstallResult(SessionRequestData request,
+                                    bool install_succeeded) {
+  if (!install_succeeded) {
+    std::move(request.callback)
+        .Run(device::mojom::RequestSessionResult::NewFailureReason(
+            device::mojom::RequestSessionError::RUNTIME_INSTALL_FAILURE));
+    return;
+  }
+
+  DoRequestSession(std::move(request));
+}
+
+void VRServiceImpl::DoRequestSession(SessionRequestData request) {
+  DVLOG(2) << __func__;
+  // Get the runtime again, since we're running in an async context
+  // and the pointer returned from `GetRuntimeForOptions` is non-owning.
+  auto* runtime = runtime_manager_->GetRuntimeForOptions(request.options.get());
+
+  // Ensure that it's the same runtime as the one we expect.
+  if (!runtime || runtime->GetId() != request.runtime_id) {
+    std::move(request.callback)
+        .Run(device::mojom::RequestSessionResult::NewFailureReason(
+            device::mojom::RequestSessionError::UNKNOWN_RUNTIME_ERROR));
+    return;
+  }
 
   TRACE_EVENT_INSTANT1("xr", "GetRuntimeForOptions", TRACE_EVENT_SCOPE_THREAD,
                        "id", request.runtime_id);

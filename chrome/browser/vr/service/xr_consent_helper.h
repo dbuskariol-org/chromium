@@ -17,6 +17,9 @@ class XrConsentHelper {
  public:
   virtual ~XrConsentHelper() = default;
 
+  XrConsentHelper(const XrConsentHelper&) = delete;
+  XrConsentHelper& operator=(const XrConsentHelper&) = delete;
+
   virtual void ShowConsentPrompt(int render_process_id,
                                  int render_frame_id,
                                  XrConsentPromptLevel consent_level,
@@ -24,10 +27,6 @@ class XrConsentHelper {
 
  protected:
   XrConsentHelper() = default;
-
- private:
-  XrConsentHelper(const XrConsentHelper&) = delete;
-  XrConsentHelper& operator=(const XrConsentHelper&) = delete;
 };
 
 }  // namespace vr

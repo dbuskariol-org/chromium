@@ -131,9 +131,9 @@ class VRServiceImpl : public device::mojom::VRService,
   // If the WebXrPermissionsAPI is enabled ShowConsentPrompt will result in a
   // call to OnPermissionResult which feeds into OnConsentResult.
   // If ShowConsentPrompt determines that no consent/permission is needed (or
-  // has already been granted), then it will directly call DoRequestSession.
-  // DoRequestSession will continue with OnInline or OnImmersive SessionCreated
-  // depending on the type of SessionCreated.
+  // has already been granted), then it will directly call
+  // EnsureRuntimeInstalled. DoRequestSession will continue with OnInline or
+  // OnImmersive SessionCreated depending on the type of session created.
   void ShowConsentPrompt(SessionRequestData request, BrowserXRRuntime* runtime);
 
   void OnConsentResult(SessionRequestData request,
@@ -143,7 +143,11 @@ class VRServiceImpl : public device::mojom::VRService,
                           XrConsentPromptLevel consent_level,
                           ContentSetting setting_value);
 
-  void DoRequestSession(SessionRequestData request, BrowserXRRuntime* runtime);
+  void EnsureRuntimeInstalled(SessionRequestData request,
+                              BrowserXRRuntime* runtime);
+  void OnInstallResult(SessionRequestData request_data, bool install_succeeded);
+
+  void DoRequestSession(SessionRequestData request);
 
   void OnInlineSessionCreated(
       SessionRequestData request,
