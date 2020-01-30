@@ -98,7 +98,7 @@ class TabListMediator {
          * @see TabContentManager#getTabThumbnailWithCallback
          */
         void getTabThumbnailWithCallback(
-                Tab tab, Callback<Bitmap> callback, boolean forceUpdate, boolean writeToCache);
+                int tabId, Callback<Bitmap> callback, boolean forceUpdate, boolean writeToCache);
     }
 
     /**
@@ -176,8 +176,9 @@ class TabListMediator {
                 callback.onResult(bitmap);
             };
             sFetchCountForTesting++;
+            int tabId = mTab != null ? mTab.getId() : Tab.INVALID_TAB_ID;
             mThumbnailProvider.getTabThumbnailWithCallback(
-                    mTab, forking, mForceUpdate, mWriteToCache);
+                    tabId, forking, mForceUpdate, mWriteToCache);
         }
     }
 
