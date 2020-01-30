@@ -2216,6 +2216,9 @@ void ChromeContentBrowserClient::AppendExtraCommandLineSwitches(
       switches::kEnableNaClNonSfiMode,
 #endif
       switches::kEnableNetBenchmarking,
+#if defined(OS_CHROMEOS)
+      switches::kForceAppMode,
+#endif
 #if BUILDFLAG(ENABLE_NACL)
       switches::kForcePNaClSubzero,
 #endif
