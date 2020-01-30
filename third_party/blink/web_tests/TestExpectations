@@ -6502,3 +6502,6 @@ crbug.com/1046698 external/wpt/html/cross-origin-opener-policy/coep-blob-popup.h
 crbug.com/1041847 virtual/gpu/fast/canvas/color-space/canvas-colorManaged-convertToBlob-roundtrip.html [ Pass Timeout ]
 crbug.com/995663 [ Linux ] http/tests/media/autoplay/document-user-activation-cross-origin-feature-policy-header.html [ Pass Failure Timeout ]
 crbug.com/1041846 [ Mac ] virtual/gpu/fast/canvas/canvas-filter-origin-clean.html [ Pass Timeout ]
+
+# Sheriff 2020-01-30
+crbug.com/1047126 [ Win ] external/wpt/IndexedDB/keypath-exceptions.htm [ Failure ]
