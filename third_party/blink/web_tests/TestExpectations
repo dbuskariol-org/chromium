@@ -5095,7 +5095,6 @@ crbug.com/836783 fast/peerconnection/RTCRtpSender-setParameters.html [ Pass Time
 crbug.com/845610 [ Win ] http/tests/inspector-protocol/target/target-browser-context.js [ Pass Failure ]
 
 # Sheriff 2018-05-25
-crbug.com/846547 fast/webgl/webgl-composite-modes.html [ Pass Failure ]
 crbug.com/846656 external/wpt/css/selectors/focus-visible-002-manual.html [ Pass Timeout ]
 
 # Sheriff 2018-05-28
