@@ -55,6 +55,7 @@ android_library("java") {
     "org/chromium/weblayer_private/WebLayerFactoryImpl.java",
     "org/chromium/weblayer_private/WebLayerImpl.java",
     "org/chromium/weblayer_private/WebLayerNetworkChangeNotifierRegistrationPolicy.java",
+    "org/chromium/weblayer_private/metrics/MetricsServiceClient.java",
     "org/chromium/weblayer_private/metrics/UmaUtils.java",
   ]
 
@@ -72,6 +73,7 @@ android_library("java") {
     "//components/embedder_support/android:application_java",
     "//components/embedder_support/android:web_contents_delegate_java",
     "//components/find_in_page/android:java",
+    "//components/metrics:metrics_java",
     "//components/minidump_uploader:minidump_uploader_java",
     "//components/spellcheck/browser/android:java",
     "//components/version_info/android:version_constants_java",
@@ -127,6 +129,7 @@ generate_jni("jni") {
     "org/chromium/weblayer_private/TabImpl.java",
     "org/chromium/weblayer_private/TopControlsContainerView.java",
     "org/chromium/weblayer_private/WebLayerImpl.java",
+    "org/chromium/weblayer_private/metrics/MetricsServiceClient.java",
     "org/chromium/weblayer_private/metrics/UmaUtils.java",
   ]
 }
@@ -159,7 +162,10 @@ android_library("gms_bridge_java") {
     "org/chromium/weblayer_private/GmsBridgeImpl.java",
   ]
 
-  deps = [ "//base:base_java" ]
+  deps = [
+    "//base:base_java",
+    "//components/embedder_support/android/metrics:java",
+  ]
 
   # The appropriate .class file will be loaded via a dependency to a library
   # like :gms_bridge_upstream_impl_java below.

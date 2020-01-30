@@ -116,6 +116,12 @@ int BrowserMainPartsImpl::PreEarlyInitialization() {
   return service_manager::RESULT_CODE_NORMAL_EXIT;
 }
 
+void BrowserMainPartsImpl::PostEarlyInitialization() {
+#if defined(OS_ANDROID)
+  CreateLocalState();
+#endif
+}
+
 void BrowserMainPartsImpl::PreMainMessageLoopRun() {
   ui::MaterialDesignController::Initialize();
   // It's necessary to have a complete dependency graph of
@@ -140,6 +146,7 @@ void BrowserMainPartsImpl::PreMainMessageLoopRun() {
   // Record collected startup metrics.
   startup_metric_utils::RecordBrowserMainMessageLoopStart(
       base::TimeTicks::Now(), /* is_first_run */ false);
+  memory_metrics_logger_ = std::make_unique<metrics::MemoryMetricsLogger>();
 #endif
 }
 
@@ -157,6 +164,14 @@ void BrowserMainPartsImpl::PreDefaultMainMessageLoopRun(
   // cleanup inside content.
   params_->delegate->SetMainMessageLoopQuitClosure(
       base::BindOnce(StopMessageLoop, std::move(quit_closure)));
+}
+
+void BrowserMainPartsImpl::CreateLocalState() {
+  DCHECK(!local_state_);
+  feature_list_creator_ = std::make_unique<FeatureListCreator>();
+  feature_list_creator_->CreateLocalState();
+  local_state_ = feature_list_creator_->TakePrefService();
+  CHECK(local_state_);
 }
 
 }  // namespace weblayer
