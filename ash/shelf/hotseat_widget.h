@@ -8,6 +8,7 @@
 #include "ash/ash_export.h"
 #include "ash/public/cpp/shelf_config.h"
 #include "ash/public/cpp/shelf_types.h"
+#include "ash/shelf/shelf_component.h"
 #include "base/optional.h"
 #include "ui/views/widget/widget.h"
 
@@ -22,8 +23,9 @@ class Shelf;
 class ShelfView;
 
 // The hotseat widget is part of the shelf and hosts app shortcuts.
-class ASH_EXPORT HotseatWidget : public views::Widget,
-                                 public ShelfConfig::Observer {
+class ASH_EXPORT HotseatWidget : public ShelfComponent,
+                                 public ShelfConfig::Observer,
+                                 public views::Widget {
  public:
   HotseatWidget();
   ~HotseatWidget() override;
@@ -39,7 +41,7 @@ class ASH_EXPORT HotseatWidget : public views::Widget,
   void OnGestureEvent(ui::GestureEvent* event) override;
   bool OnNativeWidgetActivationChanged(bool active) override;
 
-  // ShelfConfig::Observer
+  // ShelfConfig::Observer:
   void OnShelfConfigUpdated() override;
 
   // Whether the overflow menu/bubble is currently being shown.
@@ -65,8 +67,9 @@ class ASH_EXPORT HotseatWidget : public views::Widget,
   // hotseat background.
   void SetTranslucentBackground(const gfx::Rect& background_bounds);
 
-  // Updates this widget's layout according to current conditions.
-  void UpdateLayout(bool animate);
+  // ShelfComponent:
+  void CalculateTargetBounds() override;
+  void UpdateLayout(bool animate) override;
 
   gfx::Size GetTranslucentBackgroundSize() const;
 

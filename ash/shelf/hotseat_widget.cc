@@ -349,6 +349,11 @@ void HotseatWidget::SetTranslucentBackground(
   delegate_view_->SetTranslucentBackground(translucent_background_bounds);
 }
 
+void HotseatWidget::CalculateTargetBounds() {
+  // TODO(manucornet): Move target bounds calculations from the shelf layout
+  // manager.
+}
+
 void HotseatWidget::UpdateLayout(bool animate) {
   const LayoutInputs new_layout_inputs = GetLayoutInputs();
   if (layout_inputs_.has_value() && *layout_inputs_ == new_layout_inputs)
