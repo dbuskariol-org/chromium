@@ -453,7 +453,7 @@ void BlinkTestRunner::TestFinished() {
   // dump and pixels from the compositor.
   auto* web_frame = render_view()->GetWebView()->MainFrame()->ToWebLocalFrame();
   web_frame->FrameWidget()->UpdateAllLifecyclePhases(
-      blink::WebWidget::LifecycleUpdateReason::kTest);
+      blink::DocumentUpdateReason::kTest);
 
   // Initialize a new dump results object which we will populate in the calls
   // below.

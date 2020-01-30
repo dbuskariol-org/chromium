@@ -1392,10 +1392,9 @@ void RenderWidget::UpdateVisualState() {
   // kBeginMainFrame, because this is the calller of UpdateLifecycle
   // for the main frame. Otherwise, set the reason to kTests, which is
   // the only other reason this method is called.
-  WebWidget::LifecycleUpdateReason lifecycle_reason =
-      record_main_frame_metrics
-          ? WebWidget::LifecycleUpdateReason::kBeginMainFrame
-          : WebWidget::LifecycleUpdateReason::kTest;
+  blink::DocumentUpdateReason lifecycle_reason =
+      record_main_frame_metrics ? blink::DocumentUpdateReason::kBeginMainFrame
+                                : blink::DocumentUpdateReason::kTest;
   GetWebWidget()->UpdateLifecycle(WebWidget::LifecycleUpdate::kAll,
                                   lifecycle_reason);
   GetWebWidget()->SetSuppressFrameRequestsWorkaroundFor704763Only(false);

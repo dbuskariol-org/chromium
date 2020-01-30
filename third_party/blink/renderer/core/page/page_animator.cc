@@ -132,9 +132,8 @@ void PageAnimator::ScheduleVisualUpdate(LocalFrame* frame) {
   page_->GetChromeClient().ScheduleAnimation(frame->View());
 }
 
-void PageAnimator::UpdateAllLifecyclePhases(
-    LocalFrame& root_frame,
-    DocumentLifecycle::LifecycleUpdateReason reason) {
+void PageAnimator::UpdateAllLifecyclePhases(LocalFrame& root_frame,
+                                            DocumentUpdateReason reason) {
   LocalFrameView* view = root_frame.View();
   base::AutoReset<bool> servicing(&updating_layout_and_style_for_painting_,
                                   true);
