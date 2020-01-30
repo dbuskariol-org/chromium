@@ -513,7 +513,8 @@ void ServiceWorkerRegistry::DidFindRegistrationForClientUrl(
     int64_t trace_event_id,
     FindRegistrationCallback callback,
     blink::ServiceWorkerStatusCode status,
-    scoped_refptr<ServiceWorkerRegistration> registration) {
+    std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
+    std::unique_ptr<ResourceList> resources) {
   if (status == blink::ServiceWorkerStatusCode::kErrorNotFound) {
     // Look for something currently being installed.
     scoped_refptr<ServiceWorkerRegistration> installing_registration =
@@ -536,6 +537,13 @@ void ServiceWorkerRegistry::DidFindRegistrationForClientUrl(
     }
   }
 
+  scoped_refptr<ServiceWorkerRegistration> registration;
+  if (status == blink::ServiceWorkerStatusCode::kOk) {
+    DCHECK(data);
+    DCHECK(resources);
+    registration = GetOrCreateRegistration(*data, *resources);
+  }
+
   TRACE_EVENT_ASYNC_END1(
       "ServiceWorker", "ServiceWorkerRegistry::FindRegistrationForClientUrl",
       trace_event_id, "Status", blink::ServiceWorkerStatusToString(status));
@@ -545,7 +553,15 @@ void ServiceWorkerRegistry::DidFindRegistrationForClientUrl(
 void ServiceWorkerRegistry::DidFindRegistrationForScope(
     FindRegistrationCallback callback,
     blink::ServiceWorkerStatusCode status,
-    scoped_refptr<ServiceWorkerRegistration> registration) {
+    std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
+    std::unique_ptr<ResourceList> resources) {
+  scoped_refptr<ServiceWorkerRegistration> registration;
+  if (status == blink::ServiceWorkerStatusCode::kOk) {
+    DCHECK(data);
+    DCHECK(resources);
+    registration = GetOrCreateRegistration(*data, *resources);
+  }
+
   CompleteFindNow(std::move(registration), status, std::move(callback));
 }
 
@@ -553,7 +569,8 @@ void ServiceWorkerRegistry::DidFindRegistrationForId(
     int64_t registration_id,
     FindRegistrationCallback callback,
     blink::ServiceWorkerStatusCode status,
-    scoped_refptr<ServiceWorkerRegistration> registration) {
+    std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
+    std::unique_ptr<ResourceList> resources) {
   if (status == blink::ServiceWorkerStatusCode::kErrorNotFound) {
     // Look for something currently being installed.
     scoped_refptr<ServiceWorkerRegistration> installing_registration =
@@ -563,6 +580,13 @@ void ServiceWorkerRegistry::DidFindRegistrationForId(
                       blink::ServiceWorkerStatusCode::kOk, std::move(callback));
       return;
     }
+  }
+
+  scoped_refptr<ServiceWorkerRegistration> registration;
+  if (status == blink::ServiceWorkerStatusCode::kOk) {
+    DCHECK(data);
+    DCHECK(resources);
+    registration = GetOrCreateRegistration(*data, *resources);
   }
 
   CompleteFindNow(std::move(registration), status, std::move(callback));

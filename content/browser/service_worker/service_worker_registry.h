@@ -10,6 +10,7 @@
 #include "base/files/file_path.h"
 #include "base/memory/scoped_refptr.h"
 #include "content/browser/service_worker/service_worker_database.h"
+#include "content/browser/service_worker/service_worker_registration.h"
 #include "content/browser/service_worker/service_worker_storage.h"
 #include "content/common/content_export.h"
 
@@ -25,7 +26,6 @@ class SpecialStoragePolicy;
 namespace content {
 
 class ServiceWorkerContextCore;
-class ServiceWorkerRegistration;
 class ServiceWorkerVersion;
 
 // This class manages in-memory representation of service worker registrations
@@ -41,8 +41,9 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
  public:
   using ResourceList = ServiceWorkerStorage::ResourceList;
   using RegistrationList = ServiceWorkerStorage::RegistrationList;
-  using FindRegistrationCallback =
-      ServiceWorkerStorage::FindRegistrationCallback;
+  using FindRegistrationCallback = base::OnceCallback<void(
+      blink::ServiceWorkerStatusCode status,
+      scoped_refptr<ServiceWorkerRegistration> registration)>;
   using GetRegistrationsCallback = base::OnceCallback<void(
       blink::ServiceWorkerStatusCode status,
       const std::vector<scoped_refptr<ServiceWorkerRegistration>>&
@@ -88,8 +89,16 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       const GURL& script_url,
       blink::mojom::ScriptType script_type);
 
-  // TODO(crbug.com/1039200): Move corresponding comments from
-  // ServiceWorkerStorage.
+  // Finds registration for |client_url| or |scope| or |registration_id|.
+  // The Find methods will find stored and initially installing registrations.
+  // Returns blink::ServiceWorkerStatusCode::kOk with non-null
+  // registration if registration is found, or returns
+  // blink::ServiceWorkerStatusCode::kErrorNotFound if no
+  // matching registration is found.  The FindRegistrationForScope method is
+  // guaranteed to return asynchronously. However, the methods to find
+  // for |client_url| or |registration_id| may complete immediately
+  // (the callback may be called prior to the method returning) or
+  // asynchronously.
   void FindRegistrationForClientUrl(const GURL& client_url,
                                     FindRegistrationCallback callback);
   void FindRegistrationForScope(const GURL& scope,
@@ -101,6 +110,11 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   void FindRegistrationForId(int64_t registration_id,
                              const GURL& origin,
                              FindRegistrationCallback callback);
+  // Generally |FindRegistrationForId| should be used to look up a registration
+  // by |registration_id| since it's more efficient. But if a |registration_id|
+  // is all that is available this method can be used instead.
+  // Like |FindRegistrationForId| this method may complete immediately (the
+  // callback may be called prior to the method returning) or asynchronously.
   void FindRegistrationForIdOnly(int64_t registration_id,
                                  FindRegistrationCallback callback);
 
@@ -183,16 +197,19 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       int64_t trace_event_id,
       FindRegistrationCallback callback,
       blink::ServiceWorkerStatusCode status,
-      scoped_refptr<ServiceWorkerRegistration> registration);
+      std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
+      std::unique_ptr<ResourceList> resources);
   void DidFindRegistrationForScope(
       FindRegistrationCallback callback,
       blink::ServiceWorkerStatusCode status,
-      scoped_refptr<ServiceWorkerRegistration> registration);
+      std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
+      std::unique_ptr<ResourceList> resources);
   void DidFindRegistrationForId(
       int64_t registration_id,
       FindRegistrationCallback callback,
       blink::ServiceWorkerStatusCode status,
-      scoped_refptr<ServiceWorkerRegistration> registration);
+      std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
+      std::unique_ptr<ResourceList> resources);
 
   void DidGetRegistrationsForOrigin(
       GetRegistrationsCallback callback,

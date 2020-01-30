@@ -136,7 +136,7 @@ void ReceiveFindRegistrationStatus(
     RunOrPostTaskOnThread(FROM_HERE, run_quit_thread, std::move(quit));
 }
 
-ServiceWorkerStorage::FindRegistrationCallback CreateFindRegistrationReceiver(
+ServiceWorkerRegistry::FindRegistrationCallback CreateFindRegistrationReceiver(
     BrowserThread::ID run_quit_thread,
     base::OnceClosure quit,
     blink::ServiceWorkerStatusCode* status) {
