@@ -107,6 +107,9 @@
     <message name="IDS_MANAGEMENT_CROSTINI" desc="Message stating that administrators can see Crostini usage">
       Linux apps installed and when they were last used
     </message>
+    <message name="IDS_MANAGEMENT_CROSTINI_CONTAINER_CONFIGURATION" desc="Message stating that administrators can see Crostini usage">
+      Linux activity within the container, and can install and run Linux apps within the container
+    </message>
     <message name="IDS_MANAGEMENT_REPORT_EXTENSIONS" desc="Message stating that administrators can see user's extensions.">
       Which extensions you have installed
     </message>
