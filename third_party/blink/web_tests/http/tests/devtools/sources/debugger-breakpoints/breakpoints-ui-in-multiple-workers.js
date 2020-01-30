@@ -36,8 +36,13 @@
   TestRunner.addResult('Test breakpoint in each worker');
   await SourcesTestRunner.startDebuggerTestPromise();
   for (var i = 0; i < 3; ++i) {
-    TestRunner.evaluateInPageAsync(`window.workers[${i}].postMessage('')`);
-    await new Promise(resolve => SourcesTestRunner.waitUntilPausedAndDumpStackAndResume(resolve));
+    const pausedPromise = SourcesTestRunner.waitUntilPausedPromise();
+
+    await TestRunner.evaluateInPageAsync(`window.workers[${i}].postMessage('')`);
+
+    const callFrames = await pausedPromise;
+    SourcesTestRunner.captureStackTrace(callFrames);
+    await new Promise(resolve => SourcesTestRunner.resumeExecution(resolve));
   }
   SourcesTestRunner.completeDebuggerTest();
 
