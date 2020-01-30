@@ -3302,11 +3302,12 @@ AutotestPrivateSetAppWindowStateFunction::Run() {
     if (expected_state == ash::WindowStateType::kLeftSnapped) {
       ash::SplitViewTestApi().SnapWindow(
           window, ash::SplitViewTestApi::SnapPosition::LEFT);
+      return RespondLater();
     } else if (expected_state == ash::WindowStateType::kRightSnapped) {
       ash::SplitViewTestApi().SnapWindow(
           window, ash::SplitViewTestApi::SnapPosition::RIGHT);
+      return RespondLater();
     }
-    return RespondLater();
   }
 
   const ash::WMEvent event(ToWMEventType(params->change.event_type));
