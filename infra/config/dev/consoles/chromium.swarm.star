@@ -1,5 +1,5 @@
 luci.console_view(
-    name = 'chromium.swarm',
+    name = 'chromium.dev',
     header = '//dev/consoles/chromium-header.textpb',
     repo = 'https://chromium.googlesource.com/chromium/src',
     entries = [
