@@ -4,6 +4,7 @@
 
 module safe_browsing.mojom;
 
+import "components/safe_browsing/core/common/safe_browsing_url_checker.mojom";
 import "content/public/common/resource_type.mojom";
 import "services/network/public/mojom/http_request_headers.mojom";
 import "url/mojom/url.mojom";
@@ -53,17 +54,6 @@ interface SafeBrowsing {
 
   // Bind an additional pipe to this instance of the SafeBrowsing interface.
   Clone(pending_receiver<SafeBrowsing> receiver);
-};
-
-interface SafeBrowsingUrlChecker {
-  CheckUrl(url.mojom.Url url, string method)
-      => (pending_receiver<UrlCheckNotifier>? slow_check_notifier,
-          bool proceed,
-          bool showed_interstitial);
-};
-
-interface UrlCheckNotifier {
-  OnCompleteCheck(bool proceed, bool showed_interstitial);
 };
 
 // Used to store the name and value of an HTML Element's attribute.
