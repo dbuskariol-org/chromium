@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/themes/theme_service_win.h"
+#include "chrome/browser/themes/theme_helper_win.h"
 
 #include "base/bind.h"
 #include "base/win/windows_version.h"
@@ -26,7 +26,7 @@ SkColor GetDefaultInactiveFrameColor() {
 
 }  // namespace
 
-ThemeServiceWin::ThemeServiceWin(Profile* profile) : ThemeService(profile) {
+ThemeHelperWin::ThemeHelperWin() {
   // This just checks for Windows 8+ instead of calling DwmColorsAllowed()
   // because we want to monitor the frame color even when a custom frame is in
   // use, so that it will be correct if at any time the user switches to the
@@ -41,22 +41,27 @@ ThemeServiceWin::ThemeServiceWin(Profile* profile) : ThemeService(profile) {
   }
 }
 
-ThemeServiceWin::~ThemeServiceWin() = default;
+ThemeHelperWin::~ThemeHelperWin() = default;
 
-bool ThemeServiceWin::ShouldUseNativeFrame() const {
+bool ThemeHelperWin::ShouldUseNativeFrame(
+    const CustomThemeSupplier* theme_supplier) const {
   const bool use_native_frame_if_enabled =
-      ShouldCustomDrawSystemTitlebar() || !HasCustomImage(IDR_THEME_FRAME);
+      ShouldCustomDrawSystemTitlebar() ||
+      !HasCustomImage(IDR_THEME_FRAME, theme_supplier);
   return use_native_frame_if_enabled && ui::win::IsAeroGlassEnabled();
 }
 
-bool ThemeServiceWin::ShouldUseIncreasedContrastThemeSupplier(
+bool ThemeHelperWin::ShouldUseIncreasedContrastThemeSupplier(
     ui::NativeTheme* native_theme) const {
   // On Windows the platform provides the high contrast colors, so don't use the
   // IncreasedContrastThemeSupplier.
   return false;
 }
 
-SkColor ThemeServiceWin::GetDefaultColor(int id, bool incognito) const {
+SkColor ThemeHelperWin::GetDefaultColor(
+    int id,
+    bool incognito,
+    const CustomThemeSupplier* theme_supplier) const {
   // In high contrast mode on Windows the platform provides the color. Try to
   // get that color first.
   SkColor color;
@@ -65,7 +70,7 @@ SkColor ThemeServiceWin::GetDefaultColor(int id, bool incognito) const {
     return color;
   }
 
-  if (DwmColorsAllowed()) {
+  if (DwmColorsAllowed(theme_supplier)) {
     if (id == ThemeProperties::COLOR_ACCENT_BORDER)
       return dwm_accent_border_color_;
 
@@ -88,17 +93,25 @@ SkColor ThemeServiceWin::GetDefaultColor(int id, bool incognito) const {
                    ? dwm_inactive_frame_color_.value()
                    : GetDefaultInactiveFrameColor();
       }
+      if (dwm_frame_color_ && !inactive_frame_color_from_registry_) {
+        // Tint to create inactive color. Always use the non-incognito version
+        // of the tint, since the frame should look the same in both modes.
+        return color_utils::HSLShift(
+            dwm_frame_color_.value(),
+            GetTint(ThemeProperties::TINT_FRAME_INACTIVE, false,
+                    theme_supplier));
+      }
       if (dwm_inactive_frame_color_)
         return dwm_inactive_frame_color_.value();
       // Fall through and use default.
     }
   }
 
-  return ThemeService::GetDefaultColor(id, incognito);
+  return ThemeHelper::GetDefaultColor(id, incognito, theme_supplier);
 }
 
-bool ThemeServiceWin::GetPlatformHighContrastColor(int id,
-                                                   SkColor* color) const {
+bool ThemeHelperWin::GetPlatformHighContrastColor(int id,
+                                                  SkColor* color) const {
   ui::NativeTheme::SystemThemeColor system_theme_color =
       ui::NativeTheme::SystemThemeColor::kNotSupported;
 
@@ -189,12 +202,13 @@ bool ThemeServiceWin::GetPlatformHighContrastColor(int id,
   return true;
 }
 
-bool ThemeServiceWin::DwmColorsAllowed() const {
-  return ShouldUseNativeFrame() &&
+bool ThemeHelperWin::DwmColorsAllowed(
+    const CustomThemeSupplier* theme_supplier) const {
+  return ShouldUseNativeFrame(theme_supplier) &&
          (base::win::GetVersion() >= base::win::Version::WIN8);
 }
 
-void ThemeServiceWin::OnDwmKeyUpdated() {
+void ThemeHelperWin::OnDwmKeyUpdated() {
   dwm_accent_border_color_ = GetDefaultInactiveFrameColor();
   DWORD colorization_color, colorization_color_balance;
   if ((dwm_key_->ReadValueDW(L"ColorizationColor", &colorization_color) ==
@@ -247,19 +261,11 @@ void ThemeServiceWin::OnDwmKeyUpdated() {
     }
   }
 
-  if (dwm_frame_color_ && !inactive_frame_color_from_registry_) {
-    // Tint to create inactive color. Always use the non-incognito version of
-    // the tint, since the frame should look the same in both modes.
-    dwm_inactive_frame_color_ = color_utils::HSLShift(
-        dwm_frame_color_.value(),
-        GetTint(ThemeProperties::TINT_FRAME_INACTIVE, false));
-  }
-
   // Notify native theme observers that the native theme has changed.
   ui::NativeTheme::GetInstanceForNativeUi()->NotifyObservers();
 
   // Watch for future changes.
-  if (!dwm_key_->StartWatching(base::Bind(
-          &ThemeServiceWin::OnDwmKeyUpdated, base::Unretained(this))))
+  if (!dwm_key_->StartWatching(base::BindOnce(&ThemeHelperWin::OnDwmKeyUpdated,
+                                              base::Unretained(this))))
     dwm_key_.reset();
 }
