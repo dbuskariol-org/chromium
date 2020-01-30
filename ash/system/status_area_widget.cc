@@ -185,6 +185,11 @@ void StatusAreaWidget::UpdateCollapseState() {
       collapse_state_);
 }
 
+void StatusAreaWidget::CalculateTargetBounds() {
+  // TODO(manucornet): Move target bounds calculations from the shelf layout
+  // manager.
+}
+
 void StatusAreaWidget::UpdateLayout(bool animate) {
   const ShelfLayoutManager* layout_manager = shelf_->shelf_layout_manager();
   ui::Layer* layer = GetNativeView()->layer();
