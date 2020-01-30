@@ -468,7 +468,6 @@ message ActionProto {
     ShowProgressBarProto show_progress_bar = 24;
     HighlightElementProto highlight_element = 31;
     ShowDetailsProto show_details = 32;
-    ResetProto reset = 34;
     StopProto stop = 35;
     CollectUserDataProto collect_user_data = 36;
     SetAttributeProto set_attribute = 37;
@@ -486,7 +485,7 @@ message ActionProto {
   // action sent to the client after this one. Default is false.
   optional bool clean_contextual_ui = 33;
 
-  reserved 47;
+  reserved 34, 47;
 }
 
 // Result of |CollectUserDataProto| to be sent to the server.
@@ -1467,9 +1466,6 @@ message CollectUserDataProto {
   // Text to be shown in a separate info section.
   optional string info_section_text = 24;
 }
-
-// Resets Autofill Assistant: clears any state and server payload.
-message ResetProto {}
 
 // Stop Autofill Assistant.
 message StopProto {

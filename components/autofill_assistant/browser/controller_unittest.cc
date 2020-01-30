@@ -556,40 +556,6 @@ TEST_F(ControllerTest, CloseCustomTab) {
   EXPECT_TRUE(controller_->PerformUserAction(0));
 }
 
-TEST_F(ControllerTest, Reset) {
-  // 1. Fetch scripts for URL, which in contains a single "reset" script.
-  SupportsScriptResponseProto script_response;
-  auto* reset_script = AddRunnableScript(&script_response, "reset");
-  RunOnce(reset_script);
-  std::string script_response_str;
-  script_response.SerializeToString(&script_response_str);
-  EXPECT_CALL(*mock_service_, OnGetScriptsForUrl(_, _, _))
-      .WillRepeatedly(RunOnceCallback<2>(true, script_response_str));
-
-  Start("http://a.example.com/path");
-  EXPECT_THAT(controller_->GetUserActions(),
-              ElementsAre(Property(&UserAction::chip,
-                                   Field(&Chip::text, StrEq("reset")))));
-
-  // 2. Execute the "reset" script, which contains a reset action.
-  ActionsResponseProto actions_response;
-  actions_response.add_actions()->mutable_reset();
-  std::string actions_response_str;
-  actions_response.SerializeToString(&actions_response_str);
-  EXPECT_CALL(*mock_service_, OnGetActions(StrEq("reset"), _, _, _, _, _))
-      .WillOnce(RunOnceCallback<5>(true, actions_response_str));
-
-  GetUserData()->selected_card_ = std::make_unique<autofill::CreditCard>();
-
-  EXPECT_TRUE(controller_->PerformUserAction(0));
-
-  // The reset script should be available again, even though it's marked
-  // RunOnce, as the script state should have been cleared as well.
-  EXPECT_THAT(controller_->GetUserActions(),
-              ElementsAre(Property(&UserAction::chip,
-                                   Field(&Chip::text, StrEq("reset")))));
-}
-
 TEST_F(ControllerTest, RefreshScriptWhenDomainChanges) {
   SupportsScriptResponseProto script_response;
   AddRunnableScript(&script_response, "script");

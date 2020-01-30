@@ -829,12 +829,6 @@ void Controller::OnScriptExecuted(const std::string& script_path,
       end_state = AutofillAssistantState::TRACKING;
       return;
 
-    // TODO(b/148194528): Remove.
-    case ScriptExecutor::RESTART:
-      script_tracker_.reset();
-      script_domain_ = "";
-      break;
-
     case ScriptExecutor::CONTINUE:
       break;
 
