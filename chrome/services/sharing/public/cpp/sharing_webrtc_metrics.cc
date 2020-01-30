@@ -57,4 +57,9 @@ void LogWebRtcSendMessageResult(WebRtcSendMessageResult result) {
       base::StrCat({kMetricsPrefix, "SendMessageResult"}), result);
 }
 
+void LogWebRtcConnectionErrorReason(WebRtcConnectionErrorReason reason) {
+  base::UmaHistogramEnumeration(
+      base::StrCat({kMetricsPrefix, "ConnectionErrorReason"}), reason);
+}
+
 }  // namespace sharing

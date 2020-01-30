@@ -50,6 +50,19 @@ enum class WebRtcSendMessageResult {
   kMaxValue = kDataChannelNotReady,
 };
 
+// Error reason for closing a p2p WebRTC connection.
+// These values are logged to UMA. Entries should not be renumbered and numeric
+// values should never be reused. Please keep in sync with
+// "SharingWebRtcConnectionErrorReason" in
+// src/tools/metrics/histograms/enums.xml.
+enum class WebRtcConnectionErrorReason {
+  kInvalidRemoteOffer = 0,
+  kInvalidRemoteAnswer = 1,
+  kInvalidLocalOffer = 2,
+  kInvalidLocalAnswer = 3,
+  kMaxValue = kInvalidLocalAnswer,
+};
+
 // Converts string |type| to WebRtcConnectionType. The valid strings for
 // |type| are defined in https://tools.ietf.org/html/rfc5245.
 // Note that kInvalid does not have a corresponding valid string.
@@ -69,6 +82,9 @@ void LogWebRtcConnectionType(WebRtcConnectionType type);
 
 // Logs the result of sending a SharingMessage via WebRTC.
 void LogWebRtcSendMessageResult(WebRtcSendMessageResult result);
+
+// Logs the error reason for closing WebRTC connection.
+void LogWebRtcConnectionErrorReason(WebRtcConnectionErrorReason reason);
 
 }  // namespace sharing
 

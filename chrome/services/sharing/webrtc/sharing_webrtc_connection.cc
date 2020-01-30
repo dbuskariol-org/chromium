@@ -263,7 +263,8 @@ void SharingWebRtcConnection::OnOfferReceived(
       webrtc::CreateSessionDescription(webrtc::SdpType::kOffer, offer,
                                        nullptr));
   if (!description) {
-    LOG(ERROR) << "Failed to parse received offer";
+    LogWebRtcConnectionErrorReason(
+        WebRtcConnectionErrorReason::kInvalidRemoteOffer);
     CloseConnection();
     return;
   }
@@ -449,8 +450,8 @@ void SharingWebRtcConnection::CreateAnswer(OnOfferReceivedCallback callback,
                                            webrtc::RTCError error) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (!error.ok()) {
-    LOG(ERROR) << "Failed to set remote description: " << error.message()
-               << " (" << webrtc::ToString(error.type()) << ")";
+    LogWebRtcConnectionErrorReason(
+        WebRtcConnectionErrorReason::kInvalidRemoteOffer);
     CloseConnection();
     return;
   }
@@ -470,12 +471,8 @@ void SharingWebRtcConnection::SetLocalAnswer(
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   std::string sdp;
   if (!error.ok() || !description || !description->ToString(&sdp)) {
-    if (!error.ok()) {
-      LOG(ERROR) << "Failed to create local answer: " << error.message() << " ("
-                 << webrtc::ToString(error.type()) << ")";
-    } else {
-      LOG(ERROR) << "Failed to serialize local answer";
-    }
+    LogWebRtcConnectionErrorReason(
+        WebRtcConnectionErrorReason::kInvalidLocalAnswer);
     CloseConnection();
     return;
   }
@@ -492,8 +489,8 @@ void SharingWebRtcConnection::OnAnswerCreated(OnOfferReceivedCallback callback,
                                               webrtc::RTCError error) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (!error.ok()) {
-    LOG(ERROR) << "Failed to set local description: " << error.message() << " ("
-               << webrtc::ToString(error.type()) << ")";
+    LogWebRtcConnectionErrorReason(
+        WebRtcConnectionErrorReason::kInvalidLocalAnswer);
     CloseConnection();
     return;
   }
@@ -519,12 +516,8 @@ void SharingWebRtcConnection::SetLocalOffer(
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   std::string sdp;
   if (!error.ok() || !description || !description->ToString(&sdp)) {
-    if (!error.ok()) {
-      LOG(ERROR) << "Failed to create local offer: " << error.message() << " ("
-                 << webrtc::ToString(error.type()) << ")";
-    } else {
-      LOG(ERROR) << "Failed to serialize local offer";
-    }
+    LogWebRtcConnectionErrorReason(
+        WebRtcConnectionErrorReason::kInvalidLocalOffer);
     CloseConnection();
     return;
   }
@@ -540,8 +533,8 @@ void SharingWebRtcConnection::OnOfferCreated(const std::string& sdp,
                                              webrtc::RTCError error) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (!error.ok()) {
-    LOG(ERROR) << "Failed to set local description: " << error.message() << " ("
-               << webrtc::ToString(error.type()) << ")";
+    LogWebRtcConnectionErrorReason(
+        WebRtcConnectionErrorReason::kInvalidLocalOffer);
     CloseConnection();
     return;
   }
@@ -557,7 +550,8 @@ void SharingWebRtcConnection::OnAnswerReceived(const std::string& answer) {
       webrtc::CreateSessionDescription(webrtc::SdpType::kAnswer, answer,
                                        nullptr));
   if (!description) {
-    LOG(ERROR) << "Failed to parse received answer";
+    LogWebRtcConnectionErrorReason(
+        WebRtcConnectionErrorReason::kInvalidRemoteAnswer);
     CloseConnection();
     return;
   }
@@ -572,8 +566,8 @@ void SharingWebRtcConnection::OnAnswerReceived(const std::string& answer) {
 void SharingWebRtcConnection::OnRemoteDescriptionSet(webrtc::RTCError error) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (!error.ok()) {
-    LOG(ERROR) << "Failed to set remote description: " << error.message()
-               << " (" << webrtc::ToString(error.type()) << ")";
+    LogWebRtcConnectionErrorReason(
+        WebRtcConnectionErrorReason::kInvalidRemoteAnswer);
     CloseConnection();
     return;
   }
