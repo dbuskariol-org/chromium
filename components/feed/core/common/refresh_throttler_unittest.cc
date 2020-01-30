@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/feed/core/refresh_throttler.h"
+#include "components/feed/core/common/refresh_throttler.h"
 
 #include <limits>
 #include <memory>
 
 #include "base/test/scoped_feature_list.h"
 #include "base/test/simple_test_clock.h"
-#include "components/feed/core/pref_names.h"
-#include "components/feed/core/user_classifier.h"
+#include "components/feed/core/common/pref_names.h"
+#include "components/feed/core/common/user_classifier.h"
 #include "components/feed/feed_feature_list.h"
 #include "components/prefs/testing_pref_service.h"
 #include "testing/gtest/include/gtest/gtest.h"

@@ -804,6 +804,7 @@ jumbo_static_library("ui") {
         "webui/feed_internals/feed_internals_ui.cc",
         "webui/feed_internals/feed_internals_ui.h",
       ]
+      deps += [ "//components/feed/core/common:feed_core_common" ]
     }
     deps += [
       "//chrome/android:jni_headers",

@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_FEED_CORE_REFRESH_THROTTLER_H_
-#define COMPONENTS_FEED_CORE_REFRESH_THROTTLER_H_
+#ifndef COMPONENTS_FEED_CORE_COMMON_REFRESH_THROTTLER_H_
+#define COMPONENTS_FEED_CORE_COMMON_REFRESH_THROTTLER_H_
 
 #include <string>
 
 #include "base/macros.h"
-#include "components/feed/core/user_classifier.h"
+#include "components/feed/core/common/user_classifier.h"
 
 class PrefService;
 
@@ -71,4 +71,4 @@ class RefreshThrottler {
 
 }  // namespace feed
 
-#endif  // COMPONENTS_FEED_CORE_REFRESH_THROTTLER_H_
+#endif  // COMPONENTS_FEED_CORE_COMMON_REFRESH_THROTTLER_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/feed/core/refresh_throttler.h"
+#include "components/feed/core/common/refresh_throttler.h"
 
 #include <limits>
 #include <set>
@@ -14,7 +14,7 @@
 #include "base/metrics/histogram_base.h"
 #include "base/strings/stringprintf.h"
 #include "base/time/clock.h"
-#include "components/feed/core/pref_names.h"
+#include "components/feed/core/common/pref_names.h"
 #include "components/feed/feed_feature_list.h"
 #include "components/prefs/pref_service.h"
 

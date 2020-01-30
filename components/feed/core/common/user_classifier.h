@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_FEED_CORE_USER_CLASSIFIER_H_
-#define COMPONENTS_FEED_CORE_USER_CLASSIFIER_H_
+#ifndef COMPONENTS_FEED_CORE_COMMON_USER_CLASSIFIER_H_
+#define COMPONENTS_FEED_CORE_COMMON_USER_CLASSIFIER_H_
 
 #include <memory>
 #include <string>
@@ -93,4 +93,4 @@ class UserClassifier {
 
 }  // namespace feed
 
-#endif  // COMPONENTS_FEED_CORE_USER_CLASSIFIER_H_
+#endif  // COMPONENTS_FEED_CORE_COMMON_USER_CLASSIFIER_H_

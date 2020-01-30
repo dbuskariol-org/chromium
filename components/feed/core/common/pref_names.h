@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_FEED_CORE_PREF_NAMES_H_
-#define COMPONENTS_FEED_CORE_PREF_NAMES_H_
+#ifndef COMPONENTS_FEED_CORE_COMMON_PREF_NAMES_H_
+#define COMPONENTS_FEED_CORE_COMMON_PREF_NAMES_H_
 
 class PrefRegistrySimple;
 
@@ -56,4 +56,4 @@ void RegisterProfilePrefs(PrefRegistrySimple* registry);
 
 }  // namespace feed
 
-#endif  // COMPONENTS_FEED_CORE_PREF_NAMES_H_
+#endif  // COMPONENTS_FEED_CORE_COMMON_PREF_NAMES_H_

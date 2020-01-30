@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/feed/core/pref_names.h"
+#include "components/feed/core/common/pref_names.h"
 
-#include "components/feed/core/user_classifier.h"
+#include "components/feed/core/common/user_classifier.h"
 #include "components/prefs/pref_registry_simple.h"
 
 namespace feed {

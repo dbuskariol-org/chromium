@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/feed/core/user_classifier.h"
+#include "components/feed/core/common/user_classifier.h"
 
 #include <algorithm>
 #include <cfloat>
@@ -14,8 +14,7 @@
 #include "base/stl_util.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/time/clock.h"
-#include "components/feed/core/pref_names.h"
-#include "components/feed/feed_feature_list.h"
+#include "components/feed/core/common/pref_names.h"
 #include "components/prefs/pref_registry_simple.h"
 #include "components/prefs/pref_service.h"
 
