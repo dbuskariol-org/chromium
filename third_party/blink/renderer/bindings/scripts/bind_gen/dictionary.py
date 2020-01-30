@@ -548,7 +548,7 @@ static ${class_name}* Create(
 ${class_name}() = default;
 ~${class_name}() = default;
 
-void Trace(Visitor* visitor);
+void Trace(Visitor* visitor) override;
 """))
 
     for member in dictionary.own_members:
