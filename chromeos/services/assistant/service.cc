@@ -447,11 +447,12 @@ void Service::RequestAccessToken() {
     return;
 
   VLOG(1) << "Start requesting access token.";
-  GetIdentityAccessor()->GetPrimaryAccountInfo(base::BindOnce(
-      &Service::GetPrimaryAccountInfoCallback, base::Unretained(this)));
+  GetIdentityAccessor()->GetUnconsentedPrimaryAccountInfo(
+      base::BindOnce(&Service::GetUnconsentedPrimaryAccountInfoCallback,
+                     base::Unretained(this)));
 }
 
-void Service::GetPrimaryAccountInfoCallback(
+void Service::GetUnconsentedPrimaryAccountInfoCallback(
     const base::Optional<CoreAccountId>& account_id,
     const base::Optional<std::string>& gaia,
     const base::Optional<std::string>& email,
@@ -459,7 +460,7 @@ void Service::GetPrimaryAccountInfoCallback(
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   // Validate the remotely-supplied parameters before using them below: if
   // |account_id| is non-null, the other two should be non-null as well per
-  // the stated contract of IdentityAccessor::GetPrimaryAccountInfo().
+  // the contract of IdentityAccessor::GetUnconsentedPrimaryAccountInfo().
   CHECK((!account_id.has_value() || (gaia.has_value() && email.has_value())));
 
   if (!account_id.has_value() || !account_state.has_refresh_token ||

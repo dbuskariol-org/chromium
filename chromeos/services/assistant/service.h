@@ -142,7 +142,7 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE) Service
 
   void RequestAccessToken();
 
-  void GetPrimaryAccountInfoCallback(
+  void GetUnconsentedPrimaryAccountInfoCallback(
       const base::Optional<CoreAccountId>& account_id,
       const base::Optional<std::string>& gaia,
       const base::Optional<std::string>& email,
