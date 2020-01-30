@@ -134,6 +134,9 @@ class MockAutofillClient : public autofill::TestAutofillClient {
                     bool autoselect_first_suggestion,
                     PopupType popup_type,
                     base::WeakPtr<autofill::AutofillPopupDelegate> delegate));
+  MOCK_METHOD0(PinPopupViewUntilUpdate, void());
+  MOCK_CONST_METHOD0(GetPopupSuggestions,
+                     base::span<const autofill::Suggestion>());
   MOCK_METHOD2(UpdatePopup,
                void(const std::vector<autofill::Suggestion>&, PopupType));
   MOCK_METHOD1(HideAutofillPopup, void(autofill::PopupHidingReason));
@@ -171,6 +174,35 @@ RespondWithTestIcon(Unused, FaviconImageCallback callback, Unused) {
   image_result.image = kTestFavicon;
   std::move(callback).Run(image_result);
   return 1;
+}
+
+std::vector<autofill::Suggestion> CreateTestSuggestions(bool has_opt_in) {
+  std::vector<Suggestion> suggestions;
+  suggestions.push_back(
+      Suggestion(/*label=*/"User1", /*value=*/"PW1", /*icon=*/"",
+                 /*fronend_id=*/autofill::POPUP_ITEM_ID_PASSWORD_ENTRY));
+  if (!IsPreLollipopAndroid()) {
+    suggestions.push_back(Suggestion(
+        /*label=*/"Show all pwds", /*value=*/"", /*icon=*/"",
+        /*fronend_id=*/autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY));
+  }
+  if (has_opt_in) {
+    suggestions.push_back(Suggestion(
+        /*label=*/"Unlock passwords", /*value=*/"", /*icon=*/"",
+        /*fronend_id=*/autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPTIN));
+  }
+  return suggestions;
+}
+
+std::vector<autofill::PopupItemId> RemoveShowAllBeforeLollipop(
+    std::vector<autofill::PopupItemId> ids) {
+  if (IsPreLollipopAndroid()) {
+    ids.erase(
+        std::remove_if(ids.begin(), ids.end(), [](autofill::PopupItemId id) {
+          return id == autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY;
+        }));
+  }
+  return ids;
 }
 
 }  // namespace
@@ -290,22 +322,18 @@ TEST_F(PasswordAutofillManagerTest, ExternalDelegatePasswordSuggestions) {
         .WillOnce(Invoke(RespondWithTestIcon));
     password_autofill_manager_->OnAddPasswordFillData(data);
 
-    // Assemble IDs we expect: an entry and show all passwords button.
-    std::vector<autofill::PopupItemId> ids = {
-        is_suggestion_on_password_field
-            ? autofill::POPUP_ITEM_ID_PASSWORD_ENTRY
-            : autofill::POPUP_ITEM_ID_USERNAME_ENTRY};
-    if (!IsPreLollipopAndroid()) {
-      ids.push_back(autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY);
-    }
-
     // Show the popup and verify the suggestions.
     std::vector<Suggestion> suggestions;
     EXPECT_CALL(
         *autofill_client,
-        ShowAutofillPopup(_, _, SuggestionVectorIdsAre(ElementsAreArray(ids)),
-                          /*autoselect_first_suggestion=*/false,
-                          PopupType::kPasswords, _))
+        ShowAutofillPopup(
+            _, _,
+            SuggestionVectorIdsAre(ElementsAreArray(RemoveShowAllBeforeLollipop(
+                {is_suggestion_on_password_field
+                     ? autofill::POPUP_ITEM_ID_PASSWORD_ENTRY
+                     : autofill::POPUP_ITEM_ID_USERNAME_ENTRY,
+                 autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY}))),
+            /*autoselect_first_suggestion=*/false, PopupType::kPasswords, _))
         .WillOnce(testing::SaveArg<2>(&suggestions));
 
     int show_suggestion_options =
@@ -343,23 +371,73 @@ TEST_F(PasswordAutofillManagerTest, ShowUnlockButton) {
   InitializePasswordAutofillManager(client.get(), autofill_client.get());
   client->SetAccountStorageOptIn(false);
 
-  // Assemble IDs we expect: an entry, show all passwords and unlock button.
-  std::vector<autofill::PopupItemId> ids = {
-      autofill::POPUP_ITEM_ID_PASSWORD_ENTRY};
-  if (!IsPreLollipopAndroid()) {
-    ids.push_back(autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY);
-  }
-  ids.push_back(autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPTIN);
-
   // Show the popup and verify the suggestions.
   EXPECT_CALL(
       *autofill_client,
-      ShowAutofillPopup(_, _, SuggestionVectorIdsAre(ElementsAreArray(ids)),
-                        /*autoselect_first_suggestion=*/false,
-                        PopupType::kPasswords, _));
+      ShowAutofillPopup(
+          _, _,
+          SuggestionVectorIdsAre(ElementsAreArray(RemoveShowAllBeforeLollipop(
+              {autofill::POPUP_ITEM_ID_PASSWORD_ENTRY,
+               autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY,
+               autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPTIN}))),
+          /*autoselect_first_suggestion=*/false, PopupType::kPasswords, _));
   password_autofill_manager_->OnShowPasswordSuggestions(
       base::i18n::RIGHT_TO_LEFT, base::string16(),
       autofill::SHOW_ALL | autofill::IS_PASSWORD_FIELD, gfx::RectF());
+}
+
+// Test that the popup is updated once remote suggestions are unlocked.
+TEST_F(PasswordAutofillManagerTest, ClickOnUnlockPutsPopupInWaitingState) {
+  auto client = std::make_unique<TestPasswordManagerClient>();
+  auto autofill_client = std::make_unique<NiceMock<MockAutofillClient>>();
+  InitializePasswordAutofillManager(client.get(), autofill_client.get());
+  client->SetAccountStorageOptIn(false);
+  testing::Mock::VerifyAndClearExpectations(autofill_client.get());
+
+  // Accepting a suggestion should trigger a call to update the popup. The first
+  // update removes the unlock button
+  EXPECT_CALL(
+      *autofill_client,
+      UpdatePopup(
+          SuggestionVectorIdsAre(ElementsAreArray(RemoveShowAllBeforeLollipop(
+              {autofill::POPUP_ITEM_ID_PASSWORD_ENTRY,
+               autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY}))),
+          PopupType::kPasswords));
+  EXPECT_CALL(*autofill_client, PinPopupViewUntilUpdate);
+  EXPECT_CALL(*autofill_client, GetPopupSuggestions())
+      .WillOnce(Return(CreateTestSuggestions(/*has_opt_in=*/true)));
+  password_autofill_manager_->DidAcceptSuggestion(
+      test_username_, autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPTIN,
+      1);
+}
+
+// Test that the popup is updated once remote suggestions are unlocked.
+TEST_F(PasswordAutofillManagerTest, AddOnFillDataAfterUnlockPopuplatesPopup) {
+  auto client = std::make_unique<TestPasswordManagerClient>();
+  auto autofill_client = std::make_unique<NiceMock<MockAutofillClient>>();
+  InitializePasswordAutofillManager(client.get(), autofill_client.get());
+  client->SetAccountStorageOptIn(true);
+  testing::Mock::VerifyAndClearExpectations(autofill_client.get());
+
+  // Once the data is loaded, an update fills the new passwords:
+  autofill::PasswordFormFillData new_data = CreateTestFormFillData();
+  new_data.uses_account_store = true;
+  autofill::PasswordAndMetadata additional;
+  additional.realm = "https://foobarrealm.org";
+  base::string16 additional_username(base::ASCIIToUTF16("bar.foo@example.com"));
+  new_data.additional_logins[additional_username] = additional;
+  EXPECT_CALL(*autofill_client, GetPopupSuggestions())
+      .Times(2)
+      .WillRepeatedly(Return(CreateTestSuggestions(/*has_opt_in=*/false)));
+  EXPECT_CALL(
+      *autofill_client,
+      UpdatePopup(
+          SuggestionVectorIdsAre(ElementsAreArray(RemoveShowAllBeforeLollipop(
+              {autofill::POPUP_ITEM_ID_PASSWORD_ENTRY,
+               autofill::POPUP_ITEM_ID_PASSWORD_ENTRY,
+               autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY}))),
+          PopupType::kPasswords));
+  password_autofill_manager_->OnAddPasswordFillData(new_data);
 }
 
 // Test that OnShowPasswordSuggestions correctly matches the given FormFieldData

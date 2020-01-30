@@ -129,6 +129,9 @@ class PasswordAutofillManager : public autofill::AutofillPopupDelegate {
                  base::i18n::TextDirection text_direction,
                  const std::vector<autofill::Suggestion>& suggestions);
 
+  // Validates and forwards the given objects to the autofill client.
+  void UpdatePopup(const std::vector<autofill::Suggestion>& suggestions);
+
   // Attempts to fill the password associated with user name |username|, and
   // returns true if it was successful.
   bool FillSuggestion(const base::string16& username);

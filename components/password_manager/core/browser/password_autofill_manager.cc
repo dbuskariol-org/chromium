@@ -215,6 +215,27 @@ bool ContainsOtherThanManagePasswords(
                      });
 }
 
+bool AreSuggestionForPasswordField(
+    base::span<const autofill::Suggestion> suggestions) {
+  return std::any_of(suggestions.begin(), suggestions.end(),
+                     [](const autofill::Suggestion& suggestion) {
+                       return suggestion.frontend_id ==
+                              autofill::POPUP_ITEM_ID_PASSWORD_ENTRY;
+                     });
+}
+
+std::vector<autofill::Suggestion> CopyWithoutUnlockButton(
+    base::span<const autofill::Suggestion> suggestions) {
+  std::vector<autofill::Suggestion> new_suggestions;
+  std::copy_if(suggestions.begin(), suggestions.end(),
+               std::back_inserter(new_suggestions),
+               [](const autofill::Suggestion& suggestion) {
+                 return suggestion.frontend_id !=
+                        autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPTIN;
+               });
+  return new_suggestions;
+}
+
 }  // namespace
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -277,7 +298,12 @@ void PasswordAutofillManager::DidAcceptSuggestion(const base::string16& value,
     }
   } else if (identifier ==
              autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPTIN) {
+    // TODO(https://crbug.com/1043963): Add loading spinner.
+    UpdatePopup(
+        CopyWithoutUnlockButton(autofill_client_->GetPopupSuggestions()));
+    autofill_client_->PinPopupViewUntilUpdate();
     password_client_->GetPasswordFeatureManager()->SetAccountStorageOptIn(true);
+    return;  // Do not hide the popup while loading data.
   } else {
     metrics_util::LogPasswordDropdownItemSelected(
         PasswordDropdownSelectedOption::kPassword,
@@ -336,6 +362,15 @@ void PasswordAutofillManager::OnAddPasswordFillData(
 
   fill_data_ = std::make_unique<autofill::PasswordFormFillData>(fill_data);
   RequestFavicon(fill_data.origin);
+
+  if (!autofill_client_ || autofill_client_->GetPopupSuggestions().empty())
+    return;
+  // TODO(https://crbug.com/1043963): Add empty state.
+  UpdatePopup(BuildSuggestions(ShowAllPasswords(true),
+                               ForPasswordField(AreSuggestionForPasswordField(
+                                   autofill_client_->GetPopupSuggestions())),
+                               base::string16(), OffersGeneration(false),
+                               ShowPasswordSuggestions(true)));
 }
 
 void PasswordAutofillManager::DeleteFillData() {
@@ -473,6 +508,18 @@ bool PasswordAutofillManager::ShowPopup(
                                       autofill::PopupType::kPasswords,
                                       weak_ptr_factory_.GetWeakPtr());
   return true;
+}
+
+void PasswordAutofillManager::UpdatePopup(
+    const std::vector<autofill::Suggestion>& suggestions) {
+  if (!password_manager_driver_->CanShowAutofillUi())
+    return;
+  if (!ContainsOtherThanManagePasswords(suggestions)) {
+    autofill_client_->HideAutofillPopup(
+        autofill::PopupHidingReason::kNoSuggestions);
+    return;
+  }
+  autofill_client_->UpdatePopup(suggestions, autofill::PopupType::kPasswords);
 }
 
 bool PasswordAutofillManager::FillSuggestion(const base::string16& username) {
