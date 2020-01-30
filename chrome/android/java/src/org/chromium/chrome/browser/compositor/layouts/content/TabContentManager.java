@@ -28,6 +28,7 @@ import org.chromium.base.TraceEvent;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
+import org.chromium.base.metrics.CachedMetrics;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.task.AsyncTask;
 import org.chromium.chrome.R;
@@ -75,8 +76,8 @@ public class TabContentManager {
             "GridTabSwitcher.ThumbnailFetchingResult";
     private Set<Integer> mRefectchedTabIds;
 
-    private final float mThumbnailScale;
-    private final int mFullResThumbnailsMaxSize;
+    private float mThumbnailScale;
+    private int mFullResThumbnailsMaxSize;
     private final ContentOffsetProvider mContentOffsetProvider;
     private int[] mPriorityTabIds;
     private long mNativeTabContentManager;
@@ -86,6 +87,7 @@ public class TabContentManager {
 
     private boolean mSnapshotsEnabled;
     private final TabFinder mTabFinder;
+    private final Context mContext;
 
     /**
      * Listener to receive the "Last Thumbnail" event. "Last Thumbnail" is the first time
@@ -149,33 +151,39 @@ public class TabContentManager {
      */
     public TabContentManager(Context context, ContentOffsetProvider contentOffsetProvider,
             boolean snapshotsEnabled, TabFinder tabFinder) {
+        mContext = context;
         mContentOffsetProvider = contentOffsetProvider;
         mTabFinder = tabFinder;
         mSnapshotsEnabled = snapshotsEnabled;
+    }
 
+    /**
+     * Called after native library is loaded.
+     */
+    public void initWithNative() {
         // Override the cache size on the command line with --thumbnails=100
         int defaultCacheSize = getIntegerResourceWithOverride(
-                context, R.integer.default_thumbnail_cache_size, ChromeSwitches.THUMBNAILS);
+                mContext, R.integer.default_thumbnail_cache_size, ChromeSwitches.THUMBNAILS);
 
         mFullResThumbnailsMaxSize = defaultCacheSize;
 
         int compressionQueueMaxSize =
-                context.getResources().getInteger(R.integer.default_compression_queue_size);
+                mContext.getResources().getInteger(R.integer.default_compression_queue_size);
         int writeQueueMaxSize =
-                context.getResources().getInteger(R.integer.default_write_queue_size);
+                mContext.getResources().getInteger(R.integer.default_write_queue_size);
 
         // Override the cache size on the command line with
         // --approximation-thumbnails=100
-        int approximationCacheSize = getIntegerResourceWithOverride(context,
+        int approximationCacheSize = getIntegerResourceWithOverride(mContext,
                 R.integer.default_approximation_thumbnail_cache_size,
                 ChromeSwitches.APPROXIMATION_THUMBNAILS);
 
         float thumbnailScale = 1.f;
         boolean useApproximationThumbnails;
         boolean saveJpegThumbnails = FeatureUtilities.isGridTabSwitcherEnabled();
-        DisplayAndroid display = DisplayAndroid.getNonMultiDisplay(context);
+        DisplayAndroid display = DisplayAndroid.getNonMultiDisplay(mContext);
         float deviceDensity = display.getDipScale();
-        if (DeviceFormFactor.isNonMultiDisplayContextOnTablet(context)) {
+        if (DeviceFormFactor.isNonMultiDisplayContextOnTablet(mContext)) {
             // Scale all tablets to MDPI.
             thumbnailScale = 1.f / deviceDensity;
             useApproximationThumbnails = false;
@@ -443,6 +451,10 @@ public class TabContentManager {
                     notifyOnLastThumbnail();
                 }
                 if (jpeg != null) {
+                    CachedMetrics.EnumeratedHistogramSample histogram =
+                            new CachedMetrics.EnumeratedHistogramSample(
+                                    UMA_THUMBNAIL_FETCHING_RESULT,
+                                    ThumbnailFetchingResult.NUM_ENTRIES);
                     if (FeatureUtilities.isAllowToRefetchTabThumbnail()) {
                         double jpegAspectRatio = jpeg.getHeight() == 0
                                 ? 0
@@ -452,9 +464,8 @@ public class TabContentManager {
                         if (!mRefectchedTabIds.contains(tabId)
                                 && Math.abs(jpegAspectRatio - mExpectedThumbnailAspectRatio)
                                         >= ASPECT_RATIO_PRECISION) {
-                            RecordHistogram.recordEnumeratedHistogram(UMA_THUMBNAIL_FETCHING_RESULT,
-                                    ThumbnailFetchingResult.GOT_DIFFERENT_ASPECT_RATIO_JPEG,
-                                    ThumbnailFetchingResult.NUM_ENTRIES);
+                            histogram.record(
+                                    ThumbnailFetchingResult.GOT_DIFFERENT_ASPECT_RATIO_JPEG);
                             mRefectchedTabIds.add(tabId);
                             if (mNativeTabContentManager == 0 || !mSnapshotsEnabled) return;
                             TabContentManagerJni.get().getEtc1TabThumbnail(mNativeTabContentManager,
@@ -463,8 +474,7 @@ public class TabContentManager {
                             return;
                         }
                     }
-                    RecordHistogram.recordEnumeratedHistogram(UMA_THUMBNAIL_FETCHING_RESULT,
-                            ThumbnailFetchingResult.GOT_JPEG, ThumbnailFetchingResult.NUM_ENTRIES);
+                    histogram.record(ThumbnailFetchingResult.GOT_JPEG);
 
                     callback.onResult(jpeg);
                     return;

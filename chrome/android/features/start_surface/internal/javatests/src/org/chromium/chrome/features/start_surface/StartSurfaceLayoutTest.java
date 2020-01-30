@@ -676,17 +676,30 @@ public class StartSurfaceLayoutTest {
         int currentFetchCount = mTabListDelegate.getBitmapFetchCountForTesting();
         assertEquals(2, currentFetchCount - oldFetchCount);
         oldFetchCount = currentFetchCount;
+        int oldHistogramRecord = RecordHistogram.getHistogramValueCountForTesting(
+                TabContentManager.UMA_THUMBNAIL_FETCHING_RESULT,
+                TabContentManager.ThumbnailFetchingResult.GOT_JPEG);
 
         for (int i = 0; i < mRepeat; i++) {
             switchTabModel(false);
             currentFetchCount = mTabListDelegate.getBitmapFetchCountForTesting();
+            int currentHistogramRecord = RecordHistogram.getHistogramValueCountForTesting(
+                    TabContentManager.UMA_THUMBNAIL_FETCHING_RESULT,
+                    TabContentManager.ThumbnailFetchingResult.GOT_JPEG);
             assertEquals(1, currentFetchCount - oldFetchCount);
+            assertEquals(1, currentHistogramRecord - oldHistogramRecord);
             oldFetchCount = currentFetchCount;
+            oldHistogramRecord = currentHistogramRecord;
 
             switchTabModel(true);
             currentFetchCount = mTabListDelegate.getBitmapFetchCountForTesting();
+            currentHistogramRecord = RecordHistogram.getHistogramValueCountForTesting(
+                    TabContentManager.UMA_THUMBNAIL_FETCHING_RESULT,
+                    TabContentManager.ThumbnailFetchingResult.GOT_JPEG);
             assertEquals(2, currentFetchCount - oldFetchCount);
+            assertEquals(2, currentHistogramRecord - oldHistogramRecord);
             oldFetchCount = currentFetchCount;
+            oldHistogramRecord = currentHistogramRecord;
         }
         leaveGTSAndVerifyThumbnailsAreReleased();
     }
