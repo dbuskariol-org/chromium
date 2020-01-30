@@ -6265,6 +6265,7 @@ crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same
 crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-to-same-origin.https.html [ Pass Crash ]
 crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-allow-popups-to-same-origin.https.html [ Pass Crash ]
 crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-unsafe-none-to-same-origin.https.html [ Pass Crash ]
+crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-allow-popups-to-same-origin-allow-popups.https.html [ Pass Crash ]
 
 # Broken in https://chromium-review.googlesource.com/c/chromium/src/+/1636716
 crbug.com/963183 http/tests/devtools/sources/debugger-breakpoints/disable-breakpoints.js [ Pass Failure Timeout ]
