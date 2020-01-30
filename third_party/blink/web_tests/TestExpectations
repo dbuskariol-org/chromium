@@ -6508,3 +6508,5 @@ crbug.com/1041846 [ Mac ] virtual/gpu/fast/canvas/canvas-filter-origin-clean.htm
 # Sheriff 2020-01-30
 crbug.com/1047126 [ Win ] external/wpt/IndexedDB/keypath-exceptions.htm [ Failure ]
 crbug.com/1047164 [ Mac ] fast/scroll-snap/snaps-after-keyboard-scrolling.html [ Pass Failure ]
+crbug.com/1047208 virtual/omt-service-worker-startup/http/tests/serviceworker/update-served-from-cache.html [ Pass Failure ]
+crbug.com/1047208 http/tests/serviceworker/update-served-from-cache.html [ Pass Failure ]
