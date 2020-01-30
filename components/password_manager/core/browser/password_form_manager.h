@@ -159,7 +159,8 @@ class PasswordFormManager : public PasswordFormManagerForUI,
   bool IsNewLogin() const;
   FormFetcher* GetFormFetcher();
   bool IsPendingCredentialsPublicSuffixMatch() const;
-  void PresaveGeneratedPassword(const autofill::PasswordForm& form);
+  void PresaveGeneratedPassword(const autofill::FormData& form_data,
+                                const base::string16& generated_password);
   void PasswordNoLongerGenerated();
   bool HasGeneratedPassword() const;
   void SetGenerationPopupWasShown(bool is_manual_generation);

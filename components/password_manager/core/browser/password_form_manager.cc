@@ -405,11 +405,13 @@ bool PasswordFormManager::IsPendingCredentialsPublicSuffixMatch() const {
   return password_save_manager_->GetPendingCredentials().is_public_suffix_match;
 }
 
-void PasswordFormManager::PresaveGeneratedPassword(const PasswordForm& form) {
+void PasswordFormManager::PresaveGeneratedPassword(
+    const FormData& form_data,
+    const base::string16& password_value) {
   // TODO(https://crbug.com/831123): Propagate generated password independently
   // of PasswordForm when PasswordForm goes away from the renderer process.
-  PresaveGeneratedPasswordInternal(form.form_data,
-                                   form.password_value /*generated_password*/);
+  PresaveGeneratedPasswordInternal(form_data,
+                                   password_value /*generated_password*/);
 }
 
 void PasswordFormManager::PasswordNoLongerGenerated() {
