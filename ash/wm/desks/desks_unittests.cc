@@ -2068,13 +2068,18 @@ TEST_F(DesksTest, AutohiddenShelfAnimatesAfterDeskSwitch) {
 
   // Go to the second desk.
   ActivateDesk(DesksController::Get()->desks()[1].get());
-  // The shelf should now want to show itself, but as the shelf animation is
-  // just starting, it should still be hidden. If this fails, the change was
-  // not animated.
+  // The shelf should now want to show itself.
   EXPECT_EQ(SHELF_AUTO_HIDE_SHOWN, shelf->GetAutoHideState());
-  EXPECT_EQ(shelf_widget->GetWindowBoundsInScreen(), hidden_shelf_bounds);
+
+  // Since the layer transform animation is just starting, the transformed
+  // bounds should still be hidden. If this fails, the change was not animated.
+  gfx::RectF transformed_bounds(shelf_widget->GetWindowBoundsInScreen());
+  shelf_widget->GetLayer()->transform().TransformRect(&transformed_bounds);
+  EXPECT_EQ(gfx::ToEnclosedRect(transformed_bounds), hidden_shelf_bounds);
+  EXPECT_EQ(shelf_widget->GetWindowBoundsInScreen(), shown_shelf_bounds);
+
   // Let's wait until the shelf animates to a fully shown state.
-  while (shelf_widget->GetWindowBoundsInScreen() != shown_shelf_bounds) {
+  while (shelf_widget->GetLayer()->transform() != gfx::Transform()) {
     base::RunLoop run_loop;
     base::ThreadTaskRunnerHandle::Get()->PostDelayedTask(
         FROM_HERE, run_loop.QuitClosure(),

@@ -1457,6 +1457,23 @@ void ShelfLayoutManager::UpdateBoundsAndOpacity(bool animate) {
   StatusAreaWidget* status_widget = shelf_widget_->status_area_widget();
   base::AutoReset<bool> auto_reset_updating_bounds(&updating_bounds_, true);
   {
+    gfx::Rect current_shelf_bounds = shelf_widget_->GetWindowBoundsInScreen();
+
+    if (GetLayer(shelf_widget_)->GetAnimator()->is_animating()) {
+      // When the |shelf_widget_| needs to reverse the direction of the current
+      // animation, we must take into account the transform when calculating the
+      // current shelf widget bounds.
+      gfx::RectF transformed_bounds(current_shelf_bounds);
+      shelf_widget_->GetLayer()->transform().TransformRect(&transformed_bounds);
+      current_shelf_bounds = gfx::ToEnclosedRect(transformed_bounds);
+    }
+
+    gfx::Transform shelf_widget_target_transform;
+    shelf_widget_target_transform.Translate(
+        current_shelf_bounds.origin() - target_bounds_.shelf_bounds.origin());
+    shelf_widget_->GetLayer()->SetTransform(shelf_widget_target_transform);
+    shelf_widget_->SetBounds(target_bounds_.shelf_bounds);
+
     ui::ScopedLayerAnimationSettings shelf_animation_setter(
         GetLayer(shelf_widget_)->GetAnimator());
 
@@ -1471,8 +1488,7 @@ void ShelfLayoutManager::UpdateBoundsAndOpacity(bool animate) {
 
     SetupAnimator(&shelf_animation_setter, animation_duration,
                   gfx::Tween::EASE_OUT);
-    gfx::Rect shelf_bounds = target_bounds_.shelf_bounds;
-    shelf_widget_->SetBounds(shelf_bounds);
+    shelf_widget_->GetLayer()->SetTransform(gfx::Transform());
 
     hotseat_widget->UpdateLayout(animate);
 
