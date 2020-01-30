@@ -18,7 +18,6 @@
 #include "ui/events/keycodes/dom/dom_key.h"
 #include "ui/events/keycodes/dom/keycode_converter.h"
 #include "ui/events/test/keyboard_layout.h"
-#include "ui/events/x/x11_event_translation.h"
 
 #if defined(USE_X11)
 #include "ui/events/test/events_test_utils_x11.h"
@@ -82,8 +81,8 @@ TEST(WebInputEventTest, TestMakeWebKeyboardEvent) {
   {
     // Press Ctrl.
     xev.InitKeyEvent(ET_KEY_PRESSED, VKEY_CONTROL, 0);
-    auto event = ui::BuildKeyEventFromXEvent(*xev);
-    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(*event);
+    KeyEvent event(xev);
+    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(event);
     // However, modifier bit for Control in |webkit_event| should be set.
     EXPECT_EQ(blink::WebInputEvent::kControlKey,
               webkit_event.GetModifiers() & ~kLocationModifiers);
@@ -91,8 +90,8 @@ TEST(WebInputEventTest, TestMakeWebKeyboardEvent) {
   {
     // Release Ctrl.
     xev.InitKeyEvent(ET_KEY_RELEASED, VKEY_CONTROL, ControlMask);
-    auto event = ui::BuildKeyEventFromXEvent(*xev);
-    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(*event);
+    KeyEvent event(xev);
+    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(event);
     // However, modifier bit for Control in |webkit_event| shouldn't be set.
     EXPECT_EQ(0, webkit_event.GetModifiers() & ~kLocationModifiers);
   }
@@ -108,8 +107,8 @@ TEST(WebInputEventTest, TestMakeWebKeyboardEventWindowsKeyCode) {
     XEvent* xevent = xev;
     xevent->xkey.keycode =
         KeycodeConverter::DomCodeToNativeKeycode(DomCode::CONTROL_LEFT);
-    auto event = ui::BuildKeyEventFromXEvent(*xev);
-    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(*event);
+    KeyEvent event(xev);
+    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(event);
     EXPECT_EQ(VKEY_CONTROL, webkit_event.windows_key_code);
   }
   {
@@ -118,8 +117,8 @@ TEST(WebInputEventTest, TestMakeWebKeyboardEventWindowsKeyCode) {
     XEvent* xevent = xev;
     xevent->xkey.keycode =
         KeycodeConverter::DomCodeToNativeKeycode(DomCode::CONTROL_RIGHT);
-    auto event = ui::BuildKeyEventFromXEvent(*xev);
-    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(*event);
+    KeyEvent event(xev);
+    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(event);
     EXPECT_EQ(VKEY_CONTROL, webkit_event.windows_key_code);
   }
 #elif defined(OS_WIN)
@@ -226,8 +225,8 @@ TEST(WebInputEventTest, TestMakeWebKeyboardEventKeyPadKeyCode) {
         XKeysymToKeycode(gfx::GetXDisplay(), test_case.x_keysym);
     if (!xevent->xkey.keycode)
       continue;
-    auto event = ui::BuildKeyEventFromXEvent(*xev);
-    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(*event);
+    KeyEvent event(xev);
+    blink::WebKeyboardEvent webkit_event = MakeWebKeyboardEvent(event);
     EXPECT_EQ(test_case.expected_result, (webkit_event.GetModifiers() &
                                           blink::WebInputEvent::kIsKeyPad) != 0)
         << "Failed in " << i << "th test case: "
