@@ -62,6 +62,7 @@ using testing::Mock;
 using testing::NiceMock;
 using testing::Pointee;
 using testing::Return;
+using testing::ReturnRef;
 using testing::SaveArg;
 using testing::SaveArgPointee;
 using testing::UnorderedElementsAre;
@@ -2304,7 +2305,7 @@ class MockPasswordSaveManager : public PasswordSaveManager {
                     const FormFetcher*,
                     scoped_refptr<PasswordFormMetricsRecorder>,
                     VotesUploader*));
-  MOCK_CONST_METHOD0(GetPendingCredentials, const autofill::PasswordForm*());
+  MOCK_CONST_METHOD0(GetPendingCredentials, const autofill::PasswordForm&());
   MOCK_CONST_METHOD0(GetGeneratedPassword, const base::string16&());
   MOCK_CONST_METHOD0(GetFormSaver, FormSaver*());
   MOCK_METHOD5(CreatePendingCredentials,
@@ -2313,6 +2314,7 @@ class MockPasswordSaveManager : public PasswordSaveManager {
                     const autofill::FormData&,
                     bool,
                     bool));
+  MOCK_METHOD0(ResetPendingCrednetials, void());
   MOCK_METHOD2(Save,
                void(const autofill::FormData&, const autofill::PasswordForm&));
   MOCK_METHOD3(Update,
@@ -2378,8 +2380,9 @@ class PasswordFormManagerTestWithMockedSaver : public PasswordFormManagerTest {
   DISALLOW_COPY_AND_ASSIGN(PasswordFormManagerTestWithMockedSaver);
 };
 
-TEST_F(PasswordFormManagerTestWithMockedSaver,
-       ProviosnallySaveShouldCreatePendingCredentials) {
+TEST_F(
+    PasswordFormManagerTestWithMockedSaver,
+    ProviosnallySaveShouldCreatePendingPasswordFormManagerTestWithMockedSaverCredentials) {
   TestMockTimeTaskRunner::ScopedContext scoped_context(task_runner_.get());
   EXPECT_CALL(*mock_password_save_manager(),
               CreatePendingCredentials(_, _, _, _, _));
@@ -2546,7 +2549,9 @@ TEST_F(PasswordFormManagerTestWithMockedSaver, HasGeneratedPassword) {
 }
 
 TEST_F(PasswordFormManagerTestWithMockedSaver, GetPendingCredentials) {
-  EXPECT_CALL(*mock_password_save_manager(), GetPendingCredentials());
+  PasswordForm password_form;
+  EXPECT_CALL(*mock_password_save_manager(), GetPendingCredentials())
+      .WillOnce(ReturnRef(password_form));
   form_manager_->GetPendingCredentials();
 }
 

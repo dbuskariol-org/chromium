@@ -235,7 +235,7 @@ PasswordFormManager::GetFederatedMatches() const {
 }
 
 const PasswordForm& PasswordFormManager::GetPendingCredentials() const {
-  return *password_save_manager_->GetPendingCredentials();
+  return password_save_manager_->GetPendingCredentials();
 }
 
 metrics_util::CredentialSourceType PasswordFormManager::GetCredentialSource()
@@ -402,8 +402,7 @@ FormFetcher* PasswordFormManager::GetFormFetcher() {
 }
 
 bool PasswordFormManager::IsPendingCredentialsPublicSuffixMatch() const {
-  return password_save_manager_->GetPendingCredentials()
-      ->is_public_suffix_match;
+  return password_save_manager_->GetPendingCredentials().is_public_suffix_match;
 }
 
 void PasswordFormManager::PresaveGeneratedPassword(const PasswordForm& form) {
