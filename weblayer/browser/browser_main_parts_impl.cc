@@ -11,6 +11,7 @@
 #include "base/threading/thread_restrictions.h"
 #include "build/build_config.h"
 #include "cc/base/switches.h"
+#include "components/captive_portal/core/buildflags.h"
 #include "components/startup_metric_utils/browser/startup_metric_utils.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/devtools_agent_host.h"
@@ -43,9 +44,22 @@
 #include "ui/base/ime/init/input_method_initializer.h"
 #endif
 
+#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
+#include "weblayer/browser/captive_portal_service_factory.h"
+#endif
+
 namespace weblayer {
 
 namespace {
+
+// Instantiates all weblayer KeyedService factories, which is
+// especially important for services that should be created at profile
+// creation time as compared to lazily on first access.
+static void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
+#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
+  CaptivePortalServiceFactory::GetInstance();
+#endif
+}
 
 void StopMessageLoop(base::OnceClosure quit_closure) {
   for (auto it = content::RenderProcessHost::AllHostsIterator(); !it.IsAtEnd();
@@ -104,6 +118,13 @@ int BrowserMainPartsImpl::PreEarlyInitialization() {
 
 void BrowserMainPartsImpl::PreMainMessageLoopRun() {
   ui::MaterialDesignController::Initialize();
+  // It's necessary to have a complete dependency graph of
+  // BrowserContextKeyedServices before calling out to the delegate (which
+  // will potentially create a profile), so that a profile creation message is
+  // properly dispatched to the factories that want to create their services
+  // at profile creation time.
+  EnsureBrowserContextKeyedServiceFactoriesBuilt();
+
   params_->delegate->PreMainMessageLoopRun();
 
   content::WebUIControllerFactory::RegisterFactory(

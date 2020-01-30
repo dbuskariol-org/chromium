@@ -1,6 +1,7 @@
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+import("//components/captive_portal/core/features.gni")
 
 import("//build/config/features.gni")
 import("//build/config/locales.gni")
@@ -190,6 +191,13 @@ jumbo_static_library("weblayer_lib") {
     ]
   }
 
+  if (enable_captive_portal_detection) {
+    sources += [
+      "browser/captive_portal_service_factory.cc",
+      "browser/captive_portal_service_factory.h",
+    ]
+  }
+
   configs += [
     "//build/config:precompiled_headers",
 
@@ -207,10 +215,12 @@ jumbo_static_library("weblayer_lib") {
     "//components/autofill/content/renderer",
     "//components/autofill/core/browser",
     "//components/base32",
+    "//components/captive_portal/core:buildflags",
     "//components/crash/content/app",
     "//components/crash/content/browser",
     "//components/embedder_support",
     "//components/find_in_page",
+    "//components/keyed_service/content",
     "//components/network_time",
     "//components/prefs",
     "//components/safe_browsing/core:features",
@@ -262,6 +272,10 @@ jumbo_static_library("weblayer_lib") {
     "//weblayer:resources",
     "//weblayer/browser/webui:mojo_bindings",
   ]
+
+  if (enable_captive_portal_detection) {
+    deps += [ "//components/captive_portal/content" ]
+  }
 
   if (use_browser_spellchecker) {
     deps += [
