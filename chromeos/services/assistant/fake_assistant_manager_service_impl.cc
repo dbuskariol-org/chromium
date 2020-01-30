@@ -21,6 +21,7 @@ void FakeAssistantManagerServiceImpl::Start(
     const base::Optional<std::string>& access_token,
     bool enable_hotword) {
   SetStateAndInformObservers(State::STARTING);
+  access_token_ = access_token;
 }
 
 void FakeAssistantManagerServiceImpl::Stop() {
@@ -28,11 +29,15 @@ void FakeAssistantManagerServiceImpl::Stop() {
 }
 
 void FakeAssistantManagerServiceImpl::SetAccessToken(
-    const std::string& access_token) {}
+    const base::Optional<std::string>& access_token) {
+  access_token_ = access_token;
+}
 
 void FakeAssistantManagerServiceImpl::EnableListening(bool enable) {}
 
 void FakeAssistantManagerServiceImpl::EnableHotword(bool enable) {}
+
+void FakeAssistantManagerServiceImpl::EnableAmbientMode(bool enabled) {}
 
 void FakeAssistantManagerServiceImpl::SetArcPlayStoreEnabled(bool enabled) {}
 
