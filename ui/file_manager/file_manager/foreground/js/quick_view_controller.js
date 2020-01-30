@@ -283,6 +283,19 @@ class QuickViewController {
   onFileSelectionChanged_(event) {
     if (event) {
       this.entries_ = event.target.selection.entries;
+
+      if (!this.entries_ || !this.entries_.length) {
+        if (this.quickView_ && this.quickView_.isOpened()) {
+          this.quickView_.close();
+        }
+        return;
+      }
+
+      if (this.currentSelection_ >= this.entries_.length) {
+        this.currentSelection_ = 0;
+      } else if (this.currentSelection_ < 0) {
+        this.currentSelection_ = this.entries_.length - 1;
+      }
     }
 
     if (this.quickView_ && this.quickView_.isOpened()) {
