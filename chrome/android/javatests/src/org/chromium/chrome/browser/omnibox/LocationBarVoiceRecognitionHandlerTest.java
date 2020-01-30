@@ -485,11 +485,16 @@ public class LocationBarVoiceRecognitionHandlerTest {
             mWindowAndroid.setAndroidPermissionDelegate(mPermissionDelegate);
             mTab = new MockTab(0, false);
         });
+
+        TemplateUrlService service = Mockito.mock(TemplateUrlService.class);
+        doReturn(true).when(service).isDefaultSearchEngineGoogle();
+        TemplateUrlServiceFactory.setInstanceForTesting(service);
     }
 
     @After
     public void tearDown() {
         SysUtils.resetForTesting();
+        TemplateUrlServiceFactory.setInstanceForTesting(null);
     }
 
     /**
@@ -571,10 +576,6 @@ public class LocationBarVoiceRecognitionHandlerTest {
                 .getPackageInfo(IntentHandler.PACKAGE_GSA, 0);
         doReturn(testPackageManager).when(testActivity).getPackageManager();
         mWindowAndroid.setActivity(testActivity);
-
-        TemplateUrlService service = Mockito.mock(TemplateUrlService.class);
-        doReturn(true).when(service).isDefaultSearchEngineGoogle();
-        TemplateUrlServiceFactory.setInstanceForTesting(service);
 
         doReturn(true).when(mExternalAuthUtils).isGoogleSigned(IntentHandler.PACKAGE_GSA);
 
