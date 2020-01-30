@@ -625,7 +625,8 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
 
             @Override
             public void onBrowserControlsOffsetChanged(Tab tab, int topControlsOffsetY,
-                    int bottomControlsOffsetY, int contentOffsetY) {
+                    int bottomControlsOffsetY, int contentOffsetY, int topControlsMinHeightOffset,
+                    int bottomControlsMinHeightOffset) {
                 // For now, this is only useful for the offline indicator v2 feature.
                 if (ChromeFeatureList.isInitialized()
                         && !ChromeFeatureList.isEnabled(ChromeFeatureList.OFFLINE_INDICATOR_V2)) {

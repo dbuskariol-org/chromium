@@ -2191,6 +2191,10 @@ RenderFrameMetadata LayerTreeHostImpl::MakeRenderFrameMetadata(
       browser_controls_offset_manager_->BottomControlsHeight();
   metadata.bottom_controls_shown_ratio =
       browser_controls_offset_manager_->BottomControlsShownRatio();
+  metadata.top_controls_min_height_offset =
+      browser_controls_offset_manager_->TopControlsMinHeightOffset();
+  metadata.bottom_controls_min_height_offset =
+      browser_controls_offset_manager_->BottomControlsMinHeightOffset();
   metadata.scrollable_viewport_size = active_tree_->ScrollableViewportSize();
   metadata.min_page_scale_factor = active_tree_->min_page_scale_factor();
   metadata.max_page_scale_factor = active_tree_->max_page_scale_factor();
