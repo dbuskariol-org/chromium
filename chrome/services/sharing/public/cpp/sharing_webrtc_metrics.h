@@ -35,6 +35,21 @@ enum class WebRtcConnectionType {
   kMaxValue = kInvalid,
 };
 
+// Result of sending a SharingMessage via WebRTC.
+// These values are logged to UMA. Entries should not be renumbered and numeric
+// values should never be reused. Please keep in sync with
+// "SharingWebRtcSendMessageResult" in src/tools/metrics/histograms/enums.xml.
+enum class WebRtcSendMessageResult {
+  kInternalError = 0,
+  kSuccess = 1,
+  kEmptyMessage = 2,
+  kPayloadTooLarge = 3,
+  kBufferExceeded = 4,
+  kConnectionClosed = 5,
+  kDataChannelNotReady = 6,
+  kMaxValue = kDataChannelNotReady,
+};
+
 // Converts string |type| to WebRtcConnectionType. The valid strings for
 // |type| are defined in https://tools.ietf.org/html/rfc5245.
 // Note that kInvalid does not have a corresponding valid string.
@@ -51,6 +66,9 @@ void LogWebRtcTimeout(WebRtcTimeoutState state);
 
 // Logs the type of connection used in webrtc.
 void LogWebRtcConnectionType(WebRtcConnectionType type);
+
+// Logs the result of sending a SharingMessage via WebRTC.
+void LogWebRtcSendMessageResult(WebRtcSendMessageResult result);
 
 }  // namespace sharing
 

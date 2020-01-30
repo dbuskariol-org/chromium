@@ -52,4 +52,9 @@ void LogWebRtcConnectionType(WebRtcConnectionType type) {
       base::StrCat({kMetricsPrefix, "ConnectionType"}), type);
 }
 
+void LogWebRtcSendMessageResult(WebRtcSendMessageResult result) {
+  base::UmaHistogramEnumeration(
+      base::StrCat({kMetricsPrefix, "SendMessageResult"}), result);
+}
+
 }  // namespace sharing

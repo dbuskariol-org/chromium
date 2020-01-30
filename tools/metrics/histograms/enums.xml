@@ -58535,6 +58535,15 @@ Called by update_net_trust_anchors.py.-->
   <int value="4" label="Relay"/>
 </enum>
 
+<enum name="SharingWebRtcSendMessageResult">
+  <int value="0" label="Internal error"/>
+  <int value="1" label="Success"/>
+  <int value="2" label="Empty Message"/>
+  <int value="3" label="Payload Too Large"/>
+  <int value="4" label="Buffer Exceeded"/>
+  <int value="5" label="Connection Closed"/>
+</enum>
+
 <enum name="SharingWebRtcTimeoutState">
   <int value="0" label="Connecting"/>
   <int value="1" label="Message received"/>
