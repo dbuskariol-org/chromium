@@ -1236,7 +1236,16 @@ public class SafeBrowsingTest {
         int pageFinishedCount = mContentsClient.getOnPageFinishedHelper().getCallCount();
         clickLinkById(linkId);
         mContentsClient.getOnPageFinishedHelper().waitForCallback(pageFinishedCount);
-        Assert.assertEquals(linkUrl, mAwContents.getUrl());
+        if (AwFeatureList.isEnabled(AwFeatures.SAFE_BROWSING_COMMITTED_INTERSTITIALS)) {
+            // Some click tests involve URLs that redirect and mAwContents.getUrl() sometimes
+            // returns the post-redirect URL, so we instead check with ShouldInterceptRequest.
+            AwContentsClient.AwWebResourceRequest requestsForUrl =
+                    mContentsClient.getShouldInterceptRequestHelper().getRequestsForUrl(linkUrl);
+            // Make sure the URL was seen for a main frame navigation.
+            Assert.assertTrue(requestsForUrl.isMainFrame);
+        } else {
+            Assert.assertEquals(linkUrl, mAwContents.getUrl());
+        }
     }
 
     @Test
