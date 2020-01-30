@@ -426,6 +426,12 @@ This file contains the strings for ash.
       <message name="IDS_UPDATE_NOTIFICATION_MESSAGE_SLOW_BOOT" desc="The additional body of the notification to notify the user that the next reboot is slow.">
         <ph name="UPDATE_TEXT">$1<ex>Learn more about the latest Chromium OS update</ex></ph>. This Chromebook needs to restart to apply an update. This can take up to 1 minute.
       </message>
+      <message name="IDS_DIALOG_TITLE_SLOW_BOOT" desc="The title of the Slow Boot Shutdown Confirmation Dialog.">
+	Restart may take awhile
+      </message>
+      <message name="IDS_DIALOG_MESSAGE_SLOW_BOOT" desc="The body of the Slow Boot Shutdown Confirmation Dialog.">
+        Your screen will go blank for longer than usual (up to a minute) during this update. Please don't press the power button while the update is in progress.
+      </message>
 
       <message name="IDS_ASH_STATUS_TRAY_VOLUME" desc="The accessible text for the toggle volume muted button in the tray.">
         Toggle Volume. <ph name="STATE_TEXT">$1<ex>Volume is muted</ex></ph>

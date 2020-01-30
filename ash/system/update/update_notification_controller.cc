@@ -10,6 +10,7 @@
 #include "ash/shell.h"
 #include "ash/strings/grit/ash_strings.h"
 #include "ash/system/model/system_tray_model.h"
+#include "ash/system/session/shutdown_confirmation_dialog.h"
 #include "base/bind.h"
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
@@ -162,6 +163,19 @@ base::string16 UpdateNotificationController::GetNotificationTitle() const {
              : l10n_util::GetStringUTF16(IDS_UPDATE_NOTIFICATION_TITLE);
 }
 
+void UpdateNotificationController::RestartForUpdate() {
+  confirmation_dialog_ = nullptr;
+  Shell::Get()->system_tray_model()->client()->RequestRestartForUpdate();
+  Shell::Get()->metrics()->RecordUserMetricsAction(
+      UMA_STATUS_AREA_OS_UPDATE_DEFAULT_SELECTED);
+}
+
+void UpdateNotificationController::RestartCancelled() {
+  confirmation_dialog_ = nullptr;
+  // Put the notification back.
+  GenerateUpdateNotification(base::nullopt);
+}
+
 void UpdateNotificationController::HandleNotificationClick(
     base::Optional<int> button_index) {
   DCHECK(ShouldShowUpdate());
@@ -178,9 +192,20 @@ void UpdateNotificationController::HandleNotificationClick(
                                                            false /* by_user */);
 
   if (model_->update_required()) {
-    Shell::Get()->system_tray_model()->client()->RequestRestartForUpdate();
-    Shell::Get()->metrics()->RecordUserMetricsAction(
-        UMA_STATUS_AREA_OS_UPDATE_DEFAULT_SELECTED);
+    if (slow_boot_file_path_exists_) {
+      // An active dialog exists already.
+      if (confirmation_dialog_)
+        return;
+
+      confirmation_dialog_ = new ShutdownConfirmationDialog(
+          IDS_DIALOG_TITLE_SLOW_BOOT, IDS_DIALOG_MESSAGE_SLOW_BOOT,
+          base::BindOnce(&UpdateNotificationController::RestartForUpdate,
+                         weak_ptr_factory_.GetWeakPtr()),
+          base::BindOnce(&UpdateNotificationController::RestartCancelled,
+                         weak_ptr_factory_.GetWeakPtr()));
+    } else {
+      RestartForUpdate();
+    }
   } else {
     // Shows the about chrome OS page and checks for update after the page is
     // loaded.

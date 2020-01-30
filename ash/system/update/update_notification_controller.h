@@ -12,6 +12,8 @@
 
 namespace ash {
 
+class ShutdownConfirmationDialog;
+
 // Controller class to manage update notification.
 class ASH_EXPORT UpdateNotificationController : public UpdateObserver {
  public:
@@ -20,6 +22,12 @@ class ASH_EXPORT UpdateNotificationController : public UpdateObserver {
 
   // UpdateObserver:
   void OnUpdateAvailable() override;
+
+  // Callback functions for Shutdown Confirmation Dialog which is generated
+  // when the device bootup process is occasionally slow - eg. memory training
+  // during the bootup due to a system firmware update.
+  void RestartForUpdate();
+  void RestartCancelled();
 
  private:
   friend class UpdateNotificationControllerTest;
@@ -37,6 +45,7 @@ class ASH_EXPORT UpdateNotificationController : public UpdateObserver {
 
   base::FilePath slow_boot_file_path_;
   bool slow_boot_file_path_exists_ = false;
+  ShutdownConfirmationDialog* confirmation_dialog_ = nullptr;
 
   base::WeakPtrFactory<UpdateNotificationController> weak_ptr_factory_{this};
 

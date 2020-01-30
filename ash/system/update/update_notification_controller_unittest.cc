@@ -7,6 +7,7 @@
 #include "ash/public/cpp/ash_features.h"
 #include "ash/shell.h"
 #include "ash/system/model/system_tray_model.h"
+#include "ash/system/session/shutdown_confirmation_dialog.h"
 #include "ash/system/system_notification_controller.h"
 #include "ash/test/ash_test_base.h"
 #include "base/files/file_path.h"
@@ -84,6 +85,16 @@ class UpdateNotificationControllerTest : public AshTestBase {
         ->update_->slow_boot_file_path_ = file_path;
   }
 
+  const char* GetUpdateNotificationId() {
+    return UpdateNotificationController::kNotificationId;
+  }
+
+  ShutdownConfirmationDialog* GetSlowBootConfirmationDialog() {
+    return Shell::Get()
+        ->system_notification_controller()
+        ->update_->confirmation_dialog_;
+  }
+
  private:
   DISALLOW_COPY_AND_ASSIGN(UpdateNotificationControllerTest);
 };
@@ -141,6 +152,24 @@ TEST_F(UpdateNotificationControllerTest, VisibilityAfterUpdateWithSlowReboot) {
             "This can take up to 1 minute.",
             GetNotificationMessage());
   EXPECT_EQ("Restart to update", GetNotificationButton(0));
+
+  // Ensure Slow Boot Dialog is not open.
+  EXPECT_FALSE(GetSlowBootConfirmationDialog());
+
+  // Trigger Click on "Restart to Update" button in Notification.
+  message_center::MessageCenter::Get()->ClickOnNotificationButton(
+      GetUpdateNotificationId(), 0);
+
+  // Ensure Slow Boot Dialog is open and notification is removed.
+  ASSERT_TRUE(GetSlowBootConfirmationDialog());
+  EXPECT_FALSE(HasNotification());
+
+  // Click the cancel button on Slow Boot Confirmation Dialog.
+  GetSlowBootConfirmationDialog()->CancelDialog();
+
+  // Ensure that the Slow Boot Dialog is closed and notification is visible.
+  EXPECT_FALSE(GetSlowBootConfirmationDialog());
+  EXPECT_TRUE(HasNotification());
 }
 
 #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
