@@ -47,7 +47,6 @@ public class ArCoreInstallUtils implements ModuleInstallUi.FailureUiListener {
                     (ArCoreShim) Class.forName("org.chromium.chrome.browser.vr.ArCoreShimImpl")
                             .newInstance();
         } catch (ClassNotFoundException e) {
-            // shouldn't happen - we should only call this method once AR module is installed.
             throw new RuntimeException(e);
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
@@ -84,13 +83,6 @@ public class ArCoreInstallUtils implements ModuleInstallUi.FailureUiListener {
     }
 
     @CalledByNative
-    private boolean canRequestInstallArModule() {
-        // We can only try to install the AR module if we are in a bundle mode.
-        // Currently, AR DFM is disabled so we should never have to install it.
-        return false;
-    }
-
-    @CalledByNative
     private boolean shouldRequestInstallArModule() {
         try {
             // Try to find class in AR module that has not been obfuscated.
@@ -101,7 +93,12 @@ public class ArCoreInstallUtils implements ModuleInstallUi.FailureUiListener {
         }
     }
 
-    @CalledByNative
+    private boolean canRequestInstallArModule() {
+        // We can only try to install the AR module if we are in a bundle mode.
+        // Currently, AR DFM is disabled so we should never have to install it.
+        return false;
+    }
+
     private void requestInstallArModule(Tab tab) {
         mTab = tab;
 
@@ -120,6 +117,9 @@ public class ArCoreInstallUtils implements ModuleInstallUi.FailureUiListener {
                 // https://developers.google.com/ar/develop/java/enable-arcore
                 // This is as early in the app lifecycle as it gets for us - just after installing
                 // AR module.
+                // In the event that a remote call is required, it will not block on that remote
+                // call per:
+                // https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/ArCoreApk#checkAvailability
                 getArCoreInstallStatus();
             }
 
@@ -138,12 +138,16 @@ public class ArCoreInstallUtils implements ModuleInstallUi.FailureUiListener {
         });
     }
 
-    private @ArCoreShim.Availability int getArCoreInstallStatus() {
-        return getArCoreShimInstance().checkAvailability(ContextUtils.getApplicationContext());
+    private static @ArCoreShim.Availability int getArCoreInstallStatus() {
+        try {
+            return getArCoreShimInstance().checkAvailability(ContextUtils.getApplicationContext());
+        } catch (RuntimeException e) {
+            return ArCoreShim.Availability.UNSUPPORTED_DEVICE_NOT_CAPABLE;
+        }
     }
 
     @CalledByNative
-    private boolean shouldRequestInstallSupportedArCore() {
+    private static boolean shouldRequestInstallSupportedArCore() {
         @ArCoreShim.Availability
         int availability = getArCoreInstallStatus();
         // Skip ARCore installation if we are certain that it is already installed.
