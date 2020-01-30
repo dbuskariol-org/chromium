@@ -3260,7 +3260,7 @@ Unknown properties are collapsed to zero. -->
   <int value="7" label="kStylus"/>
   <int value="8" label="kBackInLauncher"/>
   <int value="9" label="kLauncherClose"/>
-  <int value="10" label="kLauncherOpen"/>
+  <int value="10" label="kLauncher"/>
 </enum>
 
 <enum name="AssistantGestureType">
@@ -47901,6 +47901,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="3" label="Missing glyph path"/>
   <int value="4" label="Missing glyph image, but a fallback was found"/>
   <int value="5" label="Missing glyph path, but a fallback was found"/>
+</enum>
+
+<enum name="OpenBrowserType">
+  <summary>App categories for the app that opens the browser.</summary>
+  <int value="0" label="Arc"/>
+  <int value="1" label="Web"/>
 </enum>
 
 <enum name="OpenFileSystemResult">
