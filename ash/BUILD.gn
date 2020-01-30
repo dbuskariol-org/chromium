@@ -1474,6 +1474,7 @@ component("ash") {
     "//net",
     "//services/content/public/cpp",
     "//services/data_decoder/public/cpp",
+    "//services/metrics/public/cpp:ukm_builders",
     "//services/preferences/public/cpp",
 
     # TODO(msw): Remove this; ash should not depend on blink/webkit.

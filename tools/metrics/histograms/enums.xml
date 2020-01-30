@@ -14577,6 +14577,11 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="2" label="PREF_EMPTY"/>
 </enum>
 
+<enum name="DeviceMode">
+  <int value="1" label="ClamshellMode"/>
+  <int value="2" label="TabletMode"/>
+</enum>
+
 <enum name="DeviceOrientation">
   <int value="0" label="Landscape"/>
   <int value="1" label="Portrait"/>
@@ -46080,6 +46085,13 @@ Called by update_net_trust_anchors.py.-->
   <int value="20" label="PIN_MISSING"/>
 </enum>
 
+<enum name="NetworkStatus">
+  <int value="1" label="Offline"/>
+  <int value="2" label="OnlineWifi"/>
+  <int value="3" label="OnlineCellular"/>
+  <int value="4" label="OnlineOther"/>
+</enum>
+
 <enum name="NetworkTechnology">
   <int value="0" label="Cellular"/>
   <int value="1" label="Ethernet"/>
@@ -58122,6 +58134,17 @@ Called by update_net_trust_anchors.py.-->
   </int>
 </enum>
 
+<enum name="SettingId">
+  <int value="1" label="Wifi"/>
+  <int value="2" label="Cellular"/>
+  <int value="3" label="Bluetooth"/>
+  <int value="4" label="NightLight"/>
+  <int value="5" label="DoNotDisturb"/>
+  <int value="6" label="Accessibility"/>
+  <int value="7" label="Volume"/>
+  <int value="8" label="Brightness"/>
+</enum>
+
 <enum name="SettingsInteractionConcludeReason">
   <int value="0" label="Registry watcher">
     A change to the protocol registry key was detected.
@@ -58253,6 +58276,11 @@ Called by update_net_trust_anchors.py.-->
   <int value="38" label="Prefs Cld Version"/>
   <int value="39" label="Prefs Cld Data Source"/>
   <int value="40" label="Prefs Dump"/>
+</enum>
+
+<enum name="SettingType">
+  <int value="1" label="QuickSettings"/>
+  <int value="2" label="OsSettings"/>
 </enum>
 
 <enum name="SetupInstallResult">
