@@ -231,5 +231,20 @@ bool IsDisplayChangeModalEnabled() {
   return base::FeatureList::IsEnabled(kDisplayChangeModal);
 }
 
+namespace {
+
+// The boolean flag indicating if "WebUITabStrip" feature is enabled in Chrome.
+bool g_webui_tab_strip_enabled = false;
+
+}  // namespace
+
+void SetWebUITabStripEnabled(bool enabled) {
+  g_webui_tab_strip_enabled = enabled;
+}
+
+bool IsWebUITabStripEnabled() {
+  return g_webui_tab_strip_enabled;
+}
+
 }  // namespace features
 }  // namespace ash

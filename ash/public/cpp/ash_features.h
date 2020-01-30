@@ -191,6 +191,11 @@ ASH_PUBLIC_EXPORT bool IsHideShelfControlsInTabletModeEnabled();
 
 ASH_PUBLIC_EXPORT bool IsDisplayChangeModalEnabled();
 
+// These two functions are supposed to be temporary functions to set or get
+// whether "WebUITabStrip" feature is enabled from Chrome.
+ASH_PUBLIC_EXPORT void SetWebUITabStripEnabled(bool enabled);
+ASH_PUBLIC_EXPORT bool IsWebUITabStripEnabled();
+
 }  // namespace features
 }  // namespace ash
 
