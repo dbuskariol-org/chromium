@@ -722,6 +722,7 @@ Polymer({
 
     this.$['offline-ad-auth'].onBeforeShow();
     this.$['signin-frame-dialog'].onBeforeShow();
+    this.$.pinDialog.onBeforeShow();
   },
 
   /**
