@@ -583,15 +583,18 @@ class TabListElement extends CustomElement {
    * @private
    */
   onDragStart_(event) {
-    const draggedItem = event.path[0];
-    if (!isTabElement(draggedItem) && !isTabGroupElement(draggedItem)) {
+    const draggedItem =
+        /** @type {!Array<!Element>} */ (event.composedPath()).find(item => {
+          return isTabElement(item) || isTabGroupElement(item);
+        });
+    if (!draggedItem) {
       return;
     }
 
     this.draggedItem_ = /** @type {!TabElement} */ (draggedItem);
-    this.draggedItem_.setDragging(true);
     event.dataTransfer.effectAllowed = 'move';
     const draggedItemRect = this.draggedItem_.getBoundingClientRect();
+    this.draggedItem_.setDragging(true);
     event.dataTransfer.setDragImage(
         this.draggedItem_.getDragImage(), event.clientX - draggedItemRect.left,
         event.clientY - draggedItemRect.top);
