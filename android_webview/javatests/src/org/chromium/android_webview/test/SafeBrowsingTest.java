@@ -239,6 +239,11 @@ public class SafeBrowsingTest {
         public void didDetachInterstitialPage() {
             mDidDetachInterstitialPageHelper.notifyCalled();
         }
+
+        // This method needs to be overridden to prevent the parent method from being called, which
+        // results in duplicate OnPageFinished notifications.
+        @Override
+        public void didStopLoading(String url) {}
     }
 
     private static class MockAwContents extends TestAwContents {
@@ -705,7 +710,13 @@ public class SafeBrowsingTest {
         loadPathAndWaitForInterstitial(IFRAME_HTML_PATH);
         waitForInterstitialDomToLoad();
         clickVisitUnsafePage();
-        mContentsClient.getOnPageFinishedHelper().waitForCallback(pageFinishedCount);
+        // For subresources, the initial site finishes loading before the interstitial is shown,
+        // causing an extra onPageFinished call if committed interstitials are enabled (since the
+        // proceed action triggers a reload).
+        int numNavigations =
+                AwFeatureList.isEnabled(AwFeatures.SAFE_BROWSING_COMMITTED_INTERSTITIALS) ? 2 : 1;
+        mContentsClient.getOnPageFinishedHelper().waitForCallback(
+                pageFinishedCount, numNavigations);
         assertTargetPageHasLoaded(IFRAME_EMBEDDER_BACKGROUND_COLOR);
     }
 
