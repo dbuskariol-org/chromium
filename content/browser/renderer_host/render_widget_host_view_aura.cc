@@ -1754,7 +1754,6 @@ void RenderWidgetHostViewAura::FocusedNodeChanged(
     virtual_keyboard_requested_ = false;
     if (auto* controller = GetInputMethod()->GetInputMethodKeyboardController())
       controller->DismissVirtualKeyboard();
-    keyboard_observer_.reset(nullptr);
   }
 #elif defined(OS_FUCHSIA)
   if (!editable && window_) {
@@ -2407,8 +2406,6 @@ void RenderWidgetHostViewAura::OnUpdateTextInputStateCalled(
         keyboard_observer_.reset(new WinScreenKeyboardObserver(this));
         GetInputMethod()->ShowVirtualKeyboardIfEnabled();
         virtual_keyboard_requested_ = keyboard_observer_.get();
-      } else {
-        keyboard_observer_.reset(nullptr);
       }
     }
 #endif
