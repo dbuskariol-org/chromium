@@ -9,7 +9,6 @@
 #include <vector>
 
 #include "content/common/content_export.h"
-#include "content/common/content_security_policy/csp_directive.h"
 #include "services/network/public/mojom/content_security_policy.mojom.h"
 #include "url/gurl.h"
 
@@ -26,7 +25,7 @@ struct CONTENT_EXPORT ContentSecurityPolicy {
   ContentSecurityPolicy();
   ContentSecurityPolicy(
       const network::mojom::ContentSecurityPolicyHeader& header,
-      std::vector<CSPDirective> directives,
+      std::vector<network::mojom::CSPDirectivePtr> directives,
       const std::vector<std::string>& report_endpoints,
       bool use_reporting_api);
   explicit ContentSecurityPolicy(network::mojom::ContentSecurityPolicyPtr);
@@ -35,11 +34,9 @@ struct CONTENT_EXPORT ContentSecurityPolicy {
   ~ContentSecurityPolicy();
 
   network::mojom::ContentSecurityPolicyHeader header;
-  std::vector<CSPDirective> directives;
+  std::vector<network::mojom::CSPDirectivePtr> directives;
   std::vector<std::string> report_endpoints;
   bool use_reporting_api;
-
-  std::string ToString() const;
 
   // Return true when the |policy| allows a request to the |url| in relation to
   // the |directive| for a given |context|.
@@ -57,6 +54,8 @@ struct CONTENT_EXPORT ContentSecurityPolicy {
   // upgraded to HTTPS.
   static bool ShouldUpgradeInsecureRequest(const ContentSecurityPolicy& policy);
 };
+
+std::string CONTENT_EXPORT ToString(const network::mojom::CSPDirectivePtr&);
 
 }  // namespace content
 #endif  // CONTENT_COMMON_CONTENT_SECURITY_POLICY_CONTENT_SECURITY_POLICY_H_

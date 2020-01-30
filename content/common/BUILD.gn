@@ -82,8 +82,6 @@ source_set("common") {
     "content_security_policy/content_security_policy.h",
     "content_security_policy/csp_context.cc",
     "content_security_policy/csp_context.h",
-    "content_security_policy/csp_directive.cc",
-    "content_security_policy/csp_directive.h",
     "content_security_policy/csp_source.cc",
     "content_security_policy/csp_source.h",
     "content_security_policy/csp_source_list.cc",

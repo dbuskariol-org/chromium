@@ -44,10 +44,10 @@ ContentSecurityPolicy BuildPolicy(CSPDirectiveName directive_name,
                                   network::mojom::CSPSourcePtr source) {
   std::vector<network::mojom::CSPSourcePtr> sources;
   sources.push_back(std::move(source));
-  std::vector<CSPDirective> directives;
-  directives.emplace_back(
+  std::vector<network::mojom::CSPDirectivePtr> directives;
+  directives.push_back(network::mojom::CSPDirective::New(
       directive_name, network::mojom::CSPSourceList::New(std::move(sources),
-                                                         false, false, false));
+                                                         false, false, false)));
   return ContentSecurityPolicy({}, std::move(directives), {}, false);
 }
 
@@ -102,8 +102,9 @@ TEST(ContentSecurityPolicy, DirectiveFallback) {
 
   {
     CSPContextTest context;
-    std::vector<CSPDirective> directives;
-    directives.emplace_back(CSPDirectiveName::DefaultSrc, allow_host("a.com"));
+    std::vector<network::mojom::CSPDirectivePtr> directives;
+    directives.push_back(network::mojom::CSPDirective::New(
+        CSPDirectiveName::DefaultSrc, allow_host("a.com")));
     ContentSecurityPolicy policy({}, std::move(directives), {}, false);
     EXPECT_FALSE(ContentSecurityPolicy::Allow(
         policy, CSPDirectiveName::FrameSrc, GURL("http://b.com"), false, false,
@@ -121,8 +122,9 @@ TEST(ContentSecurityPolicy, DirectiveFallback) {
   }
   {
     CSPContextTest context;
-    std::vector<CSPDirective> directives;
-    directives.emplace_back(CSPDirectiveName::ChildSrc, allow_host("a.com"));
+    std::vector<network::mojom::CSPDirectivePtr> directives;
+    directives.push_back(network::mojom::CSPDirective::New(
+        CSPDirectiveName::ChildSrc, allow_host("a.com")));
     ContentSecurityPolicy policy({}, std::move(directives), {}, false);
     EXPECT_FALSE(ContentSecurityPolicy::Allow(
         policy, CSPDirectiveName::FrameSrc, GURL("http://b.com"), false, false,
@@ -140,9 +142,11 @@ TEST(ContentSecurityPolicy, DirectiveFallback) {
   }
   {
     CSPContextTest context;
-    std::vector<CSPDirective> directives;
-    directives.emplace_back(CSPDirectiveName::FrameSrc, allow_host("a.com"));
-    directives.emplace_back(CSPDirectiveName::ChildSrc, allow_host("b.com"));
+    std::vector<network::mojom::CSPDirectivePtr> directives;
+    directives.push_back(network::mojom::CSPDirective::New(
+        CSPDirectiveName::FrameSrc, allow_host("a.com")));
+    directives.push_back(network::mojom::CSPDirective::New(
+        CSPDirectiveName::ChildSrc, allow_host("b.com")));
     ContentSecurityPolicy policy({}, std::move(directives), {}, false);
     EXPECT_TRUE(ContentSecurityPolicy::Allow(
         policy, CSPDirectiveName::FrameSrc, GURL("http://a.com"), false, false,
@@ -246,8 +250,9 @@ TEST(ContentSecurityPolicy, ShouldUpgradeInsecureRequest) {
 
   EXPECT_FALSE(ContentSecurityPolicy::ShouldUpgradeInsecureRequest(policy));
 
-  policy.directives.emplace_back(CSPDirectiveName::UpgradeInsecureRequests,
-                                 network::mojom::CSPSourceList::New());
+  policy.directives.push_back(network::mojom::CSPDirective::New(
+      CSPDirectiveName::UpgradeInsecureRequests,
+      network::mojom::CSPSourceList::New()));
   EXPECT_TRUE(ContentSecurityPolicy::ShouldUpgradeInsecureRequest(policy));
 }
 
@@ -321,13 +326,13 @@ TEST(ContentSecurityPolicy, NavigateToChecks) {
   };
 
   for (auto& test : cases) {
-    std::vector<CSPDirective> directives;
-    directives.emplace_back(CSPDirectiveName::NavigateTo,
-                            std::move(test.navigate_to_list));
+    std::vector<network::mojom::CSPDirectivePtr> directives;
+    directives.push_back(network::mojom::CSPDirective::New(
+        CSPDirectiveName::NavigateTo, std::move(test.navigate_to_list)));
 
     if (test.form_action_list) {
-      directives.emplace_back(CSPDirectiveName::FormAction,
-                              std::move(test.form_action_list));
+      directives.push_back(network::mojom::CSPDirective::New(
+          CSPDirectiveName::FormAction, std::move(test.form_action_list)));
     }
 
     ContentSecurityPolicy policy({}, std::move(directives), {}, false);
