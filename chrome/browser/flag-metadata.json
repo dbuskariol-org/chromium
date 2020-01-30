@@ -2190,7 +2190,7 @@
   {
     "name": "enterprise-reporting-in-browser",
     "owners": [ "pastarmovj", "zmin" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 83
   },
   {
     "name": "enterprise-reporting-in-chromeos",
