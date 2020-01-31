@@ -2973,6 +2973,34 @@
             ]
         }
     ],
+    "HistoryServiceAndProfileSyncServiceUseThreadPool": [
+        {
+            "platforms": [
+                "android",
+                "chromeos",
+                "ios",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "all_enabled_20200129",
+                    "enable_features": [
+                        "HistoryServiceUsesTaskScheduler",
+                        "ProfileSyncServiceUsesThreadPool"
+                    ]
+                },
+                {
+                    "name": "all_disabled_20200129",
+                    "disable_features": [
+                        "HistoryServiceUsesTaskScheduler",
+                        "ProfileSyncServiceUsesThreadPool"
+                    ]
+                }
+            ]
+        }
+    ],
     "IDBTombstoneSweeper": [
         {
             "platforms": [
@@ -5136,26 +5164,6 @@
                     },
                     "enable_features": [
                         "ProactivelyThrottleLowPriorityRequests"
-                    ]
-                }
-            ]
-        }
-    ],
-    "ProfileSyncServiceUsesThreadPool": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "ios",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled_20191112",
-                    "enable_features": [
-                        "ProfileSyncServiceUsesThreadPool"
                     ]
                 }
             ]
