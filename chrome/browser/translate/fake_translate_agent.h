@@ -2,16 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/translate/translate_fake_page.h"
+#ifndef CHROME_BROWSER_TRANSLATE_FAKE_TRANSLATE_AGENT_H_
+#define CHROME_BROWSER_TRANSLATE_FAKE_TRANSLATE_AGENT_H_
 
 #include <stddef.h>
 
 #include <memory>
 #include <set>
+#include <string>
 #include <tuple>
 #include <utility>
 #include <vector>
 
+#include "base/optional.h"
 #include "build/build_config.h"
 #include "chrome/browser/infobars/infobar_service.h"
 #include "chrome/browser/translate/chrome_translate_client.h"
@@ -33,46 +36,39 @@
 #include "content/public/common/url_constants.h"
 #include "content/public/test/navigation_simulator.h"
 #include "content/public/test/test_renderer_host.h"
+#include "mojo/public/cpp/bindings/pending_remote.h"
+#include "mojo/public/cpp/bindings/receiver.h"
 #include "url/gurl.h"
 
-FakePageImpl::FakePageImpl()
-    : called_translate_(false), called_revert_translation_(false) {}
+class FakeTranslateAgent : public translate::mojom::TranslateAgent {
+ public:
+  FakeTranslateAgent();
+  ~FakeTranslateAgent() override;
 
-FakePageImpl::~FakePageImpl() {}
+  mojo::PendingRemote<translate::mojom::TranslateAgent> BindToNewPageRemote();
 
-mojo::PendingRemote<translate::mojom::TranslateAgent>
-FakePageImpl::BindToNewPageRemote() {
-  receiver_.reset();
-  translate_callback_pending_.Reset();
-  return receiver_.BindNewPipeAndPassRemote();
-}
+  // translate::mojom::TranslateAgent implementation.
+  void TranslateFrame(const std::string& translate_script,
+                      const std::string& source_lang,
+                      const std::string& target_lang,
+                      TranslateFrameCallback callback) override;
 
-// translate::mojom::TranslateAgent implementation.
-void FakePageImpl::TranslateFrame(const std::string& translate_script,
-                                  const std::string& source_lang,
-                                  const std::string& target_lang,
-                                  TranslateFrameCallback callback) {
-  // Ensure pending callback gets called.
-  if (translate_callback_pending_) {
-    std::move(translate_callback_pending_)
-        .Run(true, "", "", translate::TranslateErrors::NONE);
-  }
+  void RevertTranslation() override;
 
-  called_translate_ = true;
-  source_lang_ = source_lang;
-  target_lang_ = target_lang;
+  void PageTranslated(bool cancelled,
+                      const std::string& source_lang,
+                      const std::string& target_lang,
+                      translate::TranslateErrors::Type error);
 
-  translate_callback_pending_ = std::move(callback);
-}
+  bool called_translate_;
+  base::Optional<std::string> source_lang_;
+  base::Optional<std::string> target_lang_;
+  bool called_revert_translation_;
 
-void FakePageImpl::RevertTranslation() {
-  called_revert_translation_ = true;
-}
+ private:
+  TranslateFrameCallback translate_callback_pending_;
+  mojo::Receiver<translate::mojom::TranslateAgent> receiver_{this};
+  DISALLOW_COPY_AND_ASSIGN(FakeTranslateAgent);
+};
 
-void FakePageImpl::PageTranslated(bool cancelled,
-                                  const std::string& source_lang,
-                                  const std::string& target_lang,
-                                  translate::TranslateErrors::Type error) {
-  std::move(translate_callback_pending_)
-      .Run(cancelled, source_lang, target_lang, error);
-}
+#endif  // CHROME_BROWSER_TRANSLATE_FAKE_TRANSLATE_AGENT_H_
