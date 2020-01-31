@@ -35948,6 +35948,9 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="21" label="LM_AS_WEBAPP_TAB">
     Launched as an installed web application in a browser tab
   </int>
+  <int value="22" label="LM_UNKNOWN_WEBAPP">
+    The requested web application was not installed
+  </int>
 </enum>
 
 <enum name="LaunchType">
