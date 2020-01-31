@@ -23,6 +23,7 @@ import org.chromium.weblayer_private.interfaces.IBrowserClient;
 import org.chromium.weblayer_private.interfaces.IObjectWrapper;
 import org.chromium.weblayer_private.interfaces.IProfile;
 import org.chromium.weblayer_private.interfaces.ITab;
+import org.chromium.weblayer_private.interfaces.IUrlBarController;
 import org.chromium.weblayer_private.interfaces.ObjectWrapper;
 import org.chromium.weblayer_private.interfaces.StrictModeWorkaround;
 
@@ -35,6 +36,8 @@ import java.util.List;
 @JNINamespace("weblayer")
 public class BrowserImpl extends IBrowser.Stub {
     private static final ObserverList<Observer> sLifecycleObservers = new ObserverList<Observer>();
+    private final ObserverList<VisibleSecurityStateObserver> mVisibleSecurityStateObservers =
+            new ObserverList<VisibleSecurityStateObserver>();
 
     // Key used to save the crypto key in instance state.
     public static final String SAVED_STATE_SESSION_SERVICE_CRYPTO_KEY =
@@ -52,6 +55,7 @@ public class BrowserImpl extends IBrowser.Stub {
     private IBrowserClient mClient;
     private LocaleChangedBroadcastReceiver mLocaleReceiver;
     private boolean mInDestroy;
+    private final UrlBarControllerImpl mUrlBarController;
 
     // Created in the constructor from saved state and used in setClient().
     private PersistenceInfo mPersistenceInfo;
@@ -80,6 +84,19 @@ public class BrowserImpl extends IBrowser.Stub {
         sLifecycleObservers.removeObserver(observer);
     }
 
+    /**
+     * Allows observing of visible security state of the active tab.
+     */
+    public static interface VisibleSecurityStateObserver {
+        public void onVisibleSecurityStateOfActiveTabChanged();
+    }
+    public void addVisibleSecurityStateObserver(VisibleSecurityStateObserver observer) {
+        mVisibleSecurityStateObservers.addObserver(observer);
+    }
+    public void removeVisibleSecurityStateObserver(VisibleSecurityStateObserver observer) {
+        mVisibleSecurityStateObservers.removeObserver(observer);
+    }
+
     public BrowserImpl(ProfileImpl profile, String persistenceId, Bundle savedInstanceState,
             Context context, FragmentWindowAndroid windowAndroid) {
         mProfile = profile;
@@ -95,8 +112,8 @@ public class BrowserImpl extends IBrowser.Stub {
                 : null;
 
         createAttachmentState(context, windowAndroid);
-
         mNativeBrowser = BrowserImplJni.get().createBrowser(profile.getNativeProfile(), this);
+        mUrlBarController = new UrlBarControllerImpl(this);
 
         for (Observer observer : sLifecycleObservers) {
             observer.onBrowserCreated();
@@ -242,6 +259,13 @@ public class BrowserImpl extends IBrowser.Stub {
         // destroyed, or switching to a different fragment.
     }
 
+    @CalledByNative
+    private void onVisibleSecurityStateOfActiveTabChanged() {
+        for (VisibleSecurityStateObserver observer : mVisibleSecurityStateObservers) {
+            observer.onVisibleSecurityStateOfActiveTabChanged();
+        }
+    }
+
     @Override
     public boolean setActiveTab(ITab controller) {
         StrictModeWorkaround.apply();
@@ -307,6 +331,12 @@ public class BrowserImpl extends IBrowser.Stub {
         tab.destroy();
     }
 
+    @Override
+    public IUrlBarController getUrlBarController() {
+        StrictModeWorkaround.apply();
+        return mUrlBarController;
+    }
+
     public View getFragmentView() {
         return getViewController().getView();
     }
@@ -323,6 +353,7 @@ public class BrowserImpl extends IBrowser.Stub {
             observer.onBrowserDestroyed();
         }
         BrowserImplJni.get().deleteBrowser(mNativeBrowser);
+        mUrlBarController.destroy();
     }
 
     private void destroyAttachmentState() {
@@ -338,6 +369,8 @@ public class BrowserImpl extends IBrowser.Stub {
             mWindowAndroid.destroy();
             mWindowAndroid = null;
         }
+
+        mVisibleSecurityStateObservers.clear();
     }
 
     private void updateAllTabsAndSetActive() {

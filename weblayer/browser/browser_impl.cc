@@ -297,6 +297,13 @@ void BrowserImpl::RestoreStateIfNecessary(
   }
 }
 
+void BrowserImpl::VisibleSecurityStateOfActiveTabChanged() {
+#if defined(OS_ANDROID)
+  JNIEnv* env = base::android::AttachCurrentThread();
+  Java_BrowserImpl_onVisibleSecurityStateOfActiveTabChanged(env, java_impl_);
+#endif
+}
+
 base::FilePath BrowserImpl::GetSessionServiceDataPath() {
   base::FilePath base_path;
   if (profile_->GetBrowserContext()->IsOffTheRecord()) {

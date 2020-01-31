@@ -98,6 +98,7 @@ class BrowserImpl : public Browser {
   std::vector<uint8_t> GetMinimalPersistenceState() override;
   void AddObserver(BrowserObserver* observer) override;
   void RemoveObserver(BrowserObserver* observer) override;
+  void VisibleSecurityStateOfActiveTabChanged() override;
 
  private:
   // For creation.

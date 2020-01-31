@@ -30,12 +30,19 @@ import java.util.List;
 public final class Browser {
     private final IBrowser mImpl;
     private final ObserverList<TabListCallback> mTabListCallbacks;
+    private final UrlBarController mUrlBarController;
 
     Browser(IBrowser impl) {
         mImpl = impl;
         mTabListCallbacks = new ObserverList<TabListCallback>();
+
         try {
             mImpl.setClient(new BrowserClientImpl());
+            if (WebLayer.getSupportedMajorVersionInternal() >= 81) {
+                mUrlBarController = new UrlBarController(mImpl.getUrlBarController());
+            } else {
+                mUrlBarController = null;
+            }
         } catch (RemoteException e) {
             throw new APICallException(e);
         }
@@ -217,6 +224,19 @@ public final class Browser {
         } catch (RemoteException e) {
             throw new APICallException(e);
         }
+    }
+
+    /**
+     * Returns the UrlBarController.
+     * @since 81
+     */
+    @NonNull
+    public UrlBarController getUrlBarController() {
+        ThreadCheck.ensureOnUiThread();
+        if (WebLayer.getSupportedMajorVersionInternal() < 81) {
+            throw new UnsupportedOperationException();
+        }
+        return mUrlBarController;
     }
 
     private final class BrowserClientImpl extends IBrowserClient.Stub {

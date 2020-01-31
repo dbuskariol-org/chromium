@@ -568,6 +568,13 @@ void TabImpl::OnFindResultAvailable(content::WebContents* web_contents) {
 #endif
 }
 
+void TabImpl::DidChangeVisibleSecurityState() {
+  if (browser_) {
+    if (browser_->GetActiveTab() == this)
+      browser_->VisibleSecurityStateOfActiveTabChanged();
+  }
+}
+
 void TabImpl::OnExitFullscreen() {
   // If |processing_enter_fullscreen_| is true, it means the callback is being
   // called while processing EnterFullscreenModeForTab(). WebContents doesn't
