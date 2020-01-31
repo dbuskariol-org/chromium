@@ -1400,6 +1400,7 @@
     },
     {
       name: "ReducedReferrerGranularity",
+      status: "experimental",
     },
     {
       name: "RemotePlayback",
