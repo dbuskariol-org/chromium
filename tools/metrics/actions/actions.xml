@@ -22330,6 +22330,15 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="TabGroups_TabGroupBubble_NameChanged">
+  <owner>connily@chromium.org</owner>
+  <owner>cyan@chromium.org</owner>
+  <owner>chrome-desktop-ui-sea@google.com</owner>
+  <description>
+    User changed the name of a group through the editor bubble.
+  </description>
+</action>
+
 <action name="TabGroups_TabGroupBubble_NewTabInGroup">
   <owner>connily@chromium.org</owner>
   <owner>cyan@chromium.org</owner>
