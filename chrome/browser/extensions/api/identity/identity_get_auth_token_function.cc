@@ -704,7 +704,7 @@ void IdentityGetAuthTokenFunction::OnGaiaFlowCompleted(
   CompleteFunctionWithResult(access_token);
 }
 
-void IdentityGetAuthTokenFunction::OnGaiaRemoteConsentFlowFailure(
+void IdentityGetAuthTokenFunction::OnGaiaRemoteConsentFlowFailed(
     GaiaRemoteConsentFlow::Failure failure) {
   CompleteMintTokenFlow();
   std::string error;
@@ -721,12 +721,20 @@ void IdentityGetAuthTokenFunction::OnGaiaRemoteConsentFlowFailure(
     case GaiaRemoteConsentFlow::LOAD_FAILED:
       error = identity_constants::kPageLoadFailure;
       break;
+
+    case GaiaRemoteConsentFlow::INVALID_CONSENT_RESULT:
+      error = identity_constants::kInvalidConsentResult;
+      break;
+
+    case GaiaRemoteConsentFlow::NO_GRANT:
+      error = identity_constants::kNoGrant;
+      break;
   }
 
   CompleteFunctionWithError(error);
 }
 
-void IdentityGetAuthTokenFunction::OnGaiaRemoteConsentFlowCompleted(
+void IdentityGetAuthTokenFunction::OnGaiaRemoteConsentFlowApproved(
     const std::string& consent_result) {
   DCHECK(!consent_result.empty());
   consent_result_ = consent_result;
