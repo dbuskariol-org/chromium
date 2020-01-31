@@ -1368,6 +1368,20 @@ crbug.com/824918 virtual/layout_ng_block_frag/printing/setPrinting.html [ Failur
 crbug.com/829804 virtual/layout_ng_block_frag/printing/webgl-oversized-printing.html [ Skip ]
 virtual/layout_ng_block_frag/fragmentation/scrolling-contents-scroll.html [ Crash Failure ]
 
+crbug.com/829028 virtual/layout_ng_fragment_traversal/fast/block/float/4145535Crash.html [ Failure Pass ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/058.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/absolute-in-inline-dynamic.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/absolute-in-inline-ltr-2.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/absolute-in-inline-ltr-3.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/absolute-in-inline-ltr.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/absolute-in-inline-rtl-2.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/absolute-in-inline-rtl-3.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/absolute-in-inline-rtl.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/absolute-in-inline-short-ltr.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/absolute-in-inline-short-rtl.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/hiding-inside-relpositioned-inline.html [ Failure ]
+crbug.com/982194 virtual/layout_ng_fragment_traversal/fast/block/positioning/rel-positioned-inline-changes-width.html [ Failure ]
+
 # Flexbox in NG
 #
 # Fail in NG flex, pass in legacy flex.
