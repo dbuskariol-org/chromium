@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "printing/common/printing_features.h"
+#include "printing/printing_features.h"
 
 namespace printing {
 namespace features {
@@ -17,7 +17,7 @@ const base::Feature kUseXpsForPrinting{"UseXpsForPrinting",
 // GDI for modifiable content.
 const base::Feature kUseXpsForPrintingFromPdf{
     "UseXpsForPrintingFromPdf", base::FEATURE_DISABLED_BY_DEFAULT};
-#endif
+#endif  // defined(OS_WIN)
 
 }  // namespace features
 }  // namespace printing
