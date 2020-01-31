@@ -43761,6 +43761,7 @@ Called by update_use_counter_css.py.-->
   <int value="4" label="Granted"/>
   <int value="5" label="Denied by user"/>
   <int value="6" label="Dismissed by user"/>
+  <int value="7" label="Request was aborted"/>
 </enum>
 
 <enum name="NativeLibraryPreloaderResult">
