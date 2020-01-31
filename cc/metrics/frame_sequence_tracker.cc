@@ -338,9 +338,10 @@ void FrameSequenceTrackerCollection::NotifySubmitFrame(
 }
 
 void FrameSequenceTrackerCollection::NotifyFrameEnd(
-    const viz::BeginFrameArgs& args) {
+    const viz::BeginFrameArgs& args,
+    const viz::BeginFrameArgs& main_args) {
   for (auto& tracker : frame_trackers_) {
-    tracker.second->ReportFrameEnd(args);
+    tracker.second->ReportFrameEnd(args, main_args);
   }
 }
 
@@ -634,14 +635,17 @@ void FrameSequenceTracker::ReportSubmitFrame(
   }
 }
 
-void FrameSequenceTracker::ReportFrameEnd(const viz::BeginFrameArgs& args) {
+void FrameSequenceTracker::ReportFrameEnd(
+    const viz::BeginFrameArgs& args,
+    const viz::BeginFrameArgs& main_args) {
   if (termination_status_ != TerminationStatus::kActive)
     return;
 
   if (ShouldIgnoreBeginFrameSource(args.frame_id.source_id))
     return;
 
-  TRACKER_TRACE_STREAM << "e(" << args.frame_id.sequence_number << ")";
+  TRACKER_TRACE_STREAM << "e(" << args.frame_id.sequence_number << ","
+                       << main_args.frame_id.sequence_number << ")";
 
   bool should_ignore_sequence =
       ShouldIgnoreSequence(args.frame_id.sequence_number);

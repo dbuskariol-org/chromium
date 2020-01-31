@@ -2734,8 +2734,8 @@ bool LayerTreeHostImpl::WillBeginImplFrame(const viz::BeginFrameArgs& args) {
   return true;
 }
 
-void LayerTreeHostImpl::DidFinishImplFrame() {
-  frame_trackers_.NotifyFrameEnd(current_begin_frame_tracker_.Current());
+void LayerTreeHostImpl::DidFinishImplFrame(const viz::BeginFrameArgs& args) {
+  frame_trackers_.NotifyFrameEnd(current_begin_frame_tracker_.Current(), args);
   impl_thread_phase_ = ImplThreadPhase::IDLE;
   current_begin_frame_tracker_.Finish();
 }

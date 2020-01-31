@@ -290,10 +290,11 @@ class LayerTreeHostImplTest : public testing::Test,
             viz::LocalSurfaceId(1, base::UnguessableToken::Deserialize(2u, 3u)),
             base::TimeTicks::Now()));
     // Set the viz::BeginFrameArgs so that methods which use it are able to.
-    host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+    auto args = viz::CreateBeginFrameArgsForTesting(
         BEGINFRAME_FROM_HERE, 0, 1,
-        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
-    host_impl_->DidFinishImplFrame();
+        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+    host_impl_->WillBeginImplFrame(args);
+    host_impl_->DidFinishImplFrame(args);
 
     timeline_ =
         AnimationTimeline::Create(AnimationIdProvider::NextTimelineId());
@@ -625,13 +626,14 @@ class LayerTreeHostImplTest : public testing::Test,
   void DrawFrame() {
     PrepareForUpdateDrawProperties(host_impl_->active_tree());
     TestFrameData frame;
-    host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+    auto args = viz::CreateBeginFrameArgsForTesting(
         BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+    host_impl_->WillBeginImplFrame(args);
     EXPECT_EQ(DRAW_SUCCESS, host_impl_->PrepareToDraw(&frame));
     host_impl_->DrawLayers(&frame);
     host_impl_->DidDrawAllLayers(frame);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(args);
   }
 
   RenderFrameMetadata StartDrawAndProduceRenderFrameMetadata() {
@@ -791,7 +793,7 @@ class LayerTreeHostImplTest : public testing::Test,
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
     host_impl_->UpdateAnimationState(true);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
   }
 
   void InitializeImageWorker(const LayerTreeSettings& settings) {
@@ -3518,7 +3520,7 @@ TEST_F(LayerTreeHostImplTest, PinchZoomTriggersPageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_TRUE(did_request_redraw_);
     EXPECT_TRUE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     did_request_redraw_ = false;
     did_request_next_frame_ = false;
@@ -3528,7 +3530,7 @@ TEST_F(LayerTreeHostImplTest, PinchZoomTriggersPageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_TRUE(did_request_redraw_);
     EXPECT_TRUE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     did_request_redraw_ = false;
     did_request_next_frame_ = false;
@@ -3539,7 +3541,7 @@ TEST_F(LayerTreeHostImplTest, PinchZoomTriggersPageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_TRUE(did_request_commit_);
     EXPECT_FALSE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     std::unique_ptr<ScrollAndScaleSet> scroll_info =
         host_impl_->ProcessScrollDeltas();
@@ -3573,7 +3575,7 @@ TEST_F(LayerTreeHostImplTest, PinchZoomTriggersPageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_FALSE(did_request_redraw_);
     EXPECT_FALSE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     did_request_redraw_ = false;
     did_request_next_frame_ = false;
@@ -3583,7 +3585,7 @@ TEST_F(LayerTreeHostImplTest, PinchZoomTriggersPageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_FALSE(did_request_redraw_);
     EXPECT_FALSE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     did_request_redraw_ = false;
     did_request_next_frame_ = false;
@@ -3594,7 +3596,7 @@ TEST_F(LayerTreeHostImplTest, PinchZoomTriggersPageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_FALSE(did_request_commit_);
     EXPECT_FALSE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     std::unique_ptr<ScrollAndScaleSet> scroll_info =
         host_impl_->ProcessScrollDeltas();
@@ -3647,7 +3649,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_TRUE(did_request_redraw_);
     EXPECT_TRUE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     did_request_redraw_ = false;
     did_request_next_frame_ = false;
@@ -3657,7 +3659,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_TRUE(did_request_redraw_);
     EXPECT_TRUE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     did_request_redraw_ = false;
     did_request_next_frame_ = false;
@@ -3668,7 +3670,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_TRUE(did_request_commit_);
     EXPECT_FALSE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     std::unique_ptr<ScrollAndScaleSet> scroll_info =
         host_impl_->ProcessScrollDeltas();
@@ -3708,7 +3710,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimation) {
     host_impl_->Animate();
     EXPECT_TRUE(did_request_redraw_);
     EXPECT_TRUE(did_request_next_frame_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     did_request_redraw_ = false;
     did_request_commit_ = false;
@@ -3720,7 +3722,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimation) {
     EXPECT_TRUE(did_request_redraw_);
     EXPECT_FALSE(did_request_next_frame_);
     EXPECT_TRUE(did_request_commit_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     std::unique_ptr<ScrollAndScaleSet> scroll_info =
         host_impl_->ProcessScrollDeltas();
@@ -3766,21 +3768,21 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimationNoOp) {
     begin_frame_args.frame_id.sequence_number++;
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     begin_frame_args.frame_time = halfway_through_animation;
     begin_frame_args.frame_id.sequence_number++;
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
     EXPECT_TRUE(did_request_redraw_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     begin_frame_args.frame_time = end_time;
     begin_frame_args.frame_id.sequence_number++;
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
     EXPECT_TRUE(did_request_commit_);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     std::unique_ptr<ScrollAndScaleSet> scroll_info =
         host_impl_->ProcessScrollDeltas();
@@ -3846,7 +3848,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimationTransferedOnSyncTreeActivate) {
   host_impl_->Animate();
   EXPECT_FALSE(did_request_next_frame_);
   EXPECT_FALSE(did_request_redraw_);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   // Activate the sync tree. This should cause the animation to become enabled.
   // It should also clear the pointer on the sync tree.
@@ -3870,7 +3872,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimationTransferedOnSyncTreeActivate) {
   host_impl_->Animate();
   EXPECT_TRUE(did_request_redraw_);
   EXPECT_TRUE(did_request_next_frame_);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   did_request_redraw_ = false;
   did_request_next_frame_ = false;
@@ -3880,7 +3882,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimationTransferedOnSyncTreeActivate) {
   host_impl_->Animate();
   EXPECT_TRUE(did_request_redraw_);
   EXPECT_TRUE(did_request_next_frame_);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   // Another activation shouldn't have any effect on the animation.
   host_impl_->ActivateSyncTree();
@@ -3893,7 +3895,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimationTransferedOnSyncTreeActivate) {
   host_impl_->Animate();
   EXPECT_TRUE(did_request_redraw_);
   EXPECT_TRUE(did_request_next_frame_);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   did_request_redraw_ = false;
   did_request_next_frame_ = false;
@@ -3904,7 +3906,7 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimationTransferedOnSyncTreeActivate) {
   host_impl_->Animate();
   EXPECT_TRUE(did_request_commit_);
   EXPECT_FALSE(did_request_next_frame_);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   std::unique_ptr<ScrollAndScaleSet> scroll_info =
       host_impl_->ProcessScrollDeltas();
@@ -3945,21 +3947,21 @@ TEST_F(LayerTreeHostImplTest, PageScaleAnimationCompletedNotification) {
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->Animate();
   EXPECT_FALSE(did_complete_page_scale_animation_);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time = halfway_through_animation;
   begin_frame_args.frame_id.sequence_number++;
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->Animate();
   EXPECT_FALSE(did_complete_page_scale_animation_);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time = end_time;
   begin_frame_args.frame_id.sequence_number++;
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->Animate();
   EXPECT_TRUE(did_complete_page_scale_animation_);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 }
 
 TEST_F(LayerTreeHostImplTest, MaxScrollOffsetAffectedByViewportBoundsDelta) {
@@ -4240,7 +4242,7 @@ class LayerTreeHostImplTestScrollbarAnimation : public LayerTreeHostImplTest {
     did_request_redraw_ = false;
     EXPECT_EQ(base::TimeDelta(), requested_animation_delay_);
     EXPECT_TRUE(animation_task_.is_null());
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     // After a scroll, a scrollbar animation should be scheduled about 20ms from
     // now.
@@ -4285,7 +4287,7 @@ class LayerTreeHostImplTestScrollbarAnimation : public LayerTreeHostImplTest {
       did_request_next_frame_ = false;
       EXPECT_FALSE(did_request_redraw_);
       did_request_redraw_ = false;
-      host_impl_->DidFinishImplFrame();
+      host_impl_->DidFinishImplFrame(begin_frame_args);
 
       // Start the scrollbar animation.
       fake_now += requested_animation_delay_;
@@ -4306,7 +4308,7 @@ class LayerTreeHostImplTestScrollbarAnimation : public LayerTreeHostImplTest {
       did_request_redraw_ = false;
       EXPECT_EQ(base::TimeDelta(), requested_animation_delay_);
       EXPECT_TRUE(animation_task_.is_null());
-      host_impl_->DidFinishImplFrame();
+      host_impl_->DidFinishImplFrame(begin_frame_args);
     }
 
     // Setting the scroll offset outside a scroll should not cause the
@@ -5255,9 +5257,10 @@ TEST_F(LayerTreeHostImplTest, DamageShouldNotCareAboutContributingLayers) {
 
   {
     TestFrameData frame;
-    host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+    auto args = viz::CreateBeginFrameArgsForTesting(
         BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+    host_impl_->WillBeginImplFrame(args);
     EXPECT_EQ(DRAW_SUCCESS, host_impl_->PrepareToDraw(&frame));
 
     EXPECT_FALSE(frame.has_no_damage);
@@ -5268,7 +5271,7 @@ TEST_F(LayerTreeHostImplTest, DamageShouldNotCareAboutContributingLayers) {
     EXPECT_NE(total_quad_count, 0u);
     host_impl_->DrawLayers(&frame);
     host_impl_->DidDrawAllLayers(frame);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(args);
   }
 
   // Stops the child layer from drawing. We should have damage from this but
@@ -5284,9 +5287,10 @@ TEST_F(LayerTreeHostImplTest, DamageShouldNotCareAboutContributingLayers) {
 
   {
     TestFrameData frame;
-    host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+    auto args = viz::CreateBeginFrameArgsForTesting(
         BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+    host_impl_->WillBeginImplFrame(args);
     EXPECT_EQ(DRAW_SUCCESS, host_impl_->PrepareToDraw(&frame));
 
     EXPECT_FALSE(frame.has_no_damage);
@@ -5297,16 +5301,17 @@ TEST_F(LayerTreeHostImplTest, DamageShouldNotCareAboutContributingLayers) {
     EXPECT_EQ(total_quad_count, 0u);
     host_impl_->DrawLayers(&frame);
     host_impl_->DidDrawAllLayers(frame);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(args);
   }
 
   // Now tries to draw again. Nothing changes, so should have no damage, no
   // render pass, and no quad.
   {
     TestFrameData frame;
-    host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+    auto args = viz::CreateBeginFrameArgsForTesting(
         BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+    host_impl_->WillBeginImplFrame(args);
     EXPECT_EQ(DRAW_SUCCESS, host_impl_->PrepareToDraw(&frame));
 
     EXPECT_TRUE(frame.has_no_damage);
@@ -5317,7 +5322,7 @@ TEST_F(LayerTreeHostImplTest, DamageShouldNotCareAboutContributingLayers) {
     EXPECT_EQ(total_quad_count, 0u);
     host_impl_->DrawLayers(&frame);
     host_impl_->DidDrawAllLayers(frame);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(args);
   }
 }
 
@@ -5611,13 +5616,14 @@ TEST_F(LayerTreeHostImplPrepareToDrawTest, PrepareToDrawSucceedsAndFails) {
       host_impl_->SetRequiresHighResToDraw();
 
     TestFrameData frame;
-    host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+    auto args = viz::CreateBeginFrameArgsForTesting(
         BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+    host_impl_->WillBeginImplFrame(args);
     EXPECT_EQ(testcase.expected_result, host_impl_->PrepareToDraw(&frame));
     host_impl_->DrawLayers(&frame);
     host_impl_->DidDrawAllLayers(frame);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(args);
   }
 }
 
@@ -6716,7 +6722,7 @@ TEST_F(LayerTreeHostImplBrowserControlsTest,
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
     host_impl_->UpdateAnimationState(true);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
     float delta =
         host_impl_->active_tree()->top_controls_shown_ratio()->Delta();
     ASSERT_EQ(delta, 0);
@@ -6730,7 +6736,7 @@ TEST_F(LayerTreeHostImplBrowserControlsTest,
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
     host_impl_->UpdateAnimationState(true);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
   }
 
   // Pull the browser controls delta and get it back to the pending tree so that
@@ -6757,7 +6763,7 @@ TEST_F(LayerTreeHostImplBrowserControlsTest,
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
     host_impl_->UpdateAnimationState(true);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     ASSERT_EQ(50, host_impl_->browser_controls_manager()->ContentTopOffset());
     ASSERT_EQ(1050, outer_scroll->MaxScrollOffset().y());
@@ -7207,7 +7213,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedLatchToChild) {
 
   // Should have started scrolling.
   EXPECT_NE(gfx::ScrollOffset(0, 30), grand_child_layer->CurrentScrollOffset());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(200);
@@ -7218,7 +7224,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedLatchToChild) {
 
   EXPECT_EQ(gfx::ScrollOffset(0, 0), grand_child_layer->CurrentScrollOffset());
   EXPECT_EQ(gfx::ScrollOffset(0, 50), child_layer->CurrentScrollOffset());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   // Second ScrollAnimated should remain latched to the grand_child_layer.
   host_impl_->ScrollUpdate(
@@ -7230,7 +7236,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedLatchToChild) {
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->Animate();
   host_impl_->UpdateAnimationState(true);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(450);
@@ -7241,7 +7247,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedLatchToChild) {
 
   EXPECT_EQ(gfx::ScrollOffset(0, 0), grand_child_layer->CurrentScrollOffset());
   EXPECT_EQ(gfx::ScrollOffset(0, 50), child_layer->CurrentScrollOffset());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   // Tear down the LayerTreeHostImpl before the InputHandlerClient.
   host_impl_->ReleaseLayerTreeFrameSink();
@@ -7940,13 +7946,14 @@ TEST_F(LayerTreeHostImplTest,
 
   // Check scroll delta reflected in layer.
   TestFrameData frame;
-  host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+  auto args = viz::CreateBeginFrameArgsForTesting(
       BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+  host_impl_->WillBeginImplFrame(args);
   EXPECT_EQ(DRAW_SUCCESS, host_impl_->PrepareToDraw(&frame));
   host_impl_->DrawLayers(&frame);
   host_impl_->DidDrawAllLayers(frame);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(args);
   EXPECT_FALSE(frame.has_no_damage);
   CheckLayerScrollDelta(scroll_layer,
                         gfx::ScrollOffsetToVector2dF(scroll_offset));
@@ -9279,13 +9286,14 @@ TEST_F(LayerTreeHostImplTest, BlendingOffWhenDrawingOpaqueLayers) {
 static bool MayContainVideoBitSetOnFrameData(LayerTreeHostImpl* host_impl) {
   host_impl->active_tree()->set_needs_update_draw_properties();
   TestFrameData frame;
-  host_impl->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+  auto args = viz::CreateBeginFrameArgsForTesting(
       BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+  host_impl->WillBeginImplFrame(args);
   EXPECT_EQ(DRAW_SUCCESS, host_impl->PrepareToDraw(&frame));
   host_impl->DrawLayers(&frame);
   host_impl->DidDrawAllLayers(frame);
-  host_impl->DidFinishImplFrame();
+  host_impl->DidFinishImplFrame(args);
   return frame.may_contain_video;
 }
 
@@ -9639,13 +9647,14 @@ TEST_F(LayerTreeHostImplTest, PartialSwapReceivesDamageRect) {
   TestFrameData frame;
 
   // First frame, the entire screen should get swapped.
-  layer_tree_host_impl->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+  auto args = viz::CreateBeginFrameArgsForTesting(
       BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+  layer_tree_host_impl->WillBeginImplFrame(args);
   EXPECT_EQ(DRAW_SUCCESS, layer_tree_host_impl->PrepareToDraw(&frame));
   layer_tree_host_impl->DrawLayers(&frame);
   layer_tree_host_impl->DidDrawAllLayers(frame);
-  layer_tree_host_impl->DidFinishImplFrame();
+  layer_tree_host_impl->DidFinishImplFrame(args);
   gfx::Rect expected_swap_rect(500, 500);
   EXPECT_EQ(expected_swap_rect.ToString(),
             fake_layer_tree_frame_sink->last_swap_rect().ToString());
@@ -9654,13 +9663,14 @@ TEST_F(LayerTreeHostImplTest, PartialSwapReceivesDamageRect) {
   // the union of old and new child rects: gfx::Rect(26, 28).
   child->SetOffsetToTransformParent(gfx::Vector2dF());
   child->NoteLayerPropertyChanged();
-  layer_tree_host_impl->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+  args = viz::CreateBeginFrameArgsForTesting(
       BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+  layer_tree_host_impl->WillBeginImplFrame(args);
   EXPECT_EQ(DRAW_SUCCESS, layer_tree_host_impl->PrepareToDraw(&frame));
   layer_tree_host_impl->DrawLayers(&frame);
   layer_tree_host_impl->DidDrawAllLayers(frame);
-  layer_tree_host_impl->DidFinishImplFrame();
+  layer_tree_host_impl->DidFinishImplFrame(args);
 
   expected_swap_rect = gfx::Rect(26, 28);
   EXPECT_EQ(expected_swap_rect.ToString(),
@@ -9669,13 +9679,14 @@ TEST_F(LayerTreeHostImplTest, PartialSwapReceivesDamageRect) {
   layer_tree_host_impl->active_tree()->SetDeviceViewportRect(gfx::Rect(10, 10));
   // This will damage everything.
   root->SetBackgroundColor(SK_ColorBLACK);
-  layer_tree_host_impl->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+  args = viz::CreateBeginFrameArgsForTesting(
       BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+  layer_tree_host_impl->WillBeginImplFrame(args);
   EXPECT_EQ(DRAW_SUCCESS, layer_tree_host_impl->PrepareToDraw(&frame));
   layer_tree_host_impl->DrawLayers(&frame);
   layer_tree_host_impl->DidDrawAllLayers(frame);
-  layer_tree_host_impl->DidFinishImplFrame();
+  layer_tree_host_impl->DidFinishImplFrame(args);
 
   expected_swap_rect = gfx::Rect(10, 10);
   EXPECT_EQ(expected_swap_rect.ToString(),
@@ -9770,9 +9781,10 @@ TEST_F(LayerTreeHostImplTest, HasTransparentBackground) {
 
   // Verify one quad is drawn when transparent background set is not set.
   TestFrameData frame;
-  host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+  auto args = viz::CreateBeginFrameArgsForTesting(
       BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+  host_impl_->WillBeginImplFrame(args);
   EXPECT_EQ(DRAW_SUCCESS, host_impl_->PrepareToDraw(&frame));
   {
     const auto& root_pass = frame.render_passes.back();
@@ -9782,7 +9794,7 @@ TEST_F(LayerTreeHostImplTest, HasTransparentBackground) {
   }
   host_impl_->DrawLayers(&frame);
   host_impl_->DidDrawAllLayers(frame);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(args);
 
   // Cause damage so we would draw something if possible.
   host_impl_->SetFullViewportDamage();
@@ -9790,9 +9802,10 @@ TEST_F(LayerTreeHostImplTest, HasTransparentBackground) {
   // Verify no quads are drawn when transparent background is set.
   host_impl_->active_tree()->set_background_color(SK_ColorTRANSPARENT);
   host_impl_->SetFullViewportDamage();
-  host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+  args = viz::CreateBeginFrameArgsForTesting(
       BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+  host_impl_->WillBeginImplFrame(args);
   EXPECT_EQ(DRAW_SUCCESS, host_impl_->PrepareToDraw(&frame));
   {
     const auto& root_pass = frame.render_passes.back();
@@ -9800,7 +9813,7 @@ TEST_F(LayerTreeHostImplTest, HasTransparentBackground) {
   }
   host_impl_->DrawLayers(&frame);
   host_impl_->DidDrawAllLayers(frame);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(args);
 
   // Cause damage so we would draw something if possible.
   host_impl_->SetFullViewportDamage();
@@ -9818,7 +9831,7 @@ TEST_F(LayerTreeHostImplTest, HasTransparentBackground) {
   }
   host_impl_->DrawLayers(&frame);
   host_impl_->DidDrawAllLayers(frame);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(args);
 }
 
 class LayerTreeHostImplTestDrawAndTestDamage : public LayerTreeHostImplTest {
@@ -9832,9 +9845,10 @@ class LayerTreeHostImplTestDrawAndTestDamage : public LayerTreeHostImplTest {
     bool expect_to_draw = !expected_damage.IsEmpty();
 
     TestFrameData frame;
-    host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+    auto args = viz::CreateBeginFrameArgsForTesting(
         BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+        base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+    host_impl_->WillBeginImplFrame(args);
     EXPECT_EQ(DRAW_SUCCESS, host_impl_->PrepareToDraw(&frame));
 
     if (!expect_to_draw) {
@@ -9864,7 +9878,7 @@ class LayerTreeHostImplTestDrawAndTestDamage : public LayerTreeHostImplTest {
 
     EXPECT_EQ(expect_to_draw, host_impl_->DrawLayers(&frame));
     host_impl_->DidDrawAllLayers(frame);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(args);
   }
 };
 
@@ -9945,9 +9959,10 @@ TEST_F(LayerTreeHostImplTest, FarAwayQuadsDontNeedAA) {
   ASSERT_EQ(1u, host_impl_->active_tree()->GetRenderSurfaceList().size());
 
   TestFrameData frame;
-  host_impl_->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+  auto args = viz::CreateBeginFrameArgsForTesting(
       BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+  host_impl_->WillBeginImplFrame(args);
   EXPECT_EQ(DRAW_SUCCESS, host_impl_->PrepareToDraw(&frame));
 
   ASSERT_EQ(1u, frame.render_passes.size());
@@ -9967,7 +9982,7 @@ TEST_F(LayerTreeHostImplTest, FarAwayQuadsDontNeedAA) {
 
   host_impl_->DrawLayers(&frame);
   host_impl_->DidDrawAllLayers(frame);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(args);
 }
 
 class CompositorFrameMetadataTest : public LayerTreeHostImplTest {
@@ -10128,16 +10143,17 @@ void ExpectFullDamageAndDraw(LayerTreeHostImpl* host_impl) {
   gfx::Rect full_frame_damage(
       host_impl->active_tree()->GetDeviceViewport().size());
   TestFrameData frame;
-  host_impl->WillBeginImplFrame(viz::CreateBeginFrameArgsForTesting(
+  auto args = viz::CreateBeginFrameArgsForTesting(
       BEGINFRAME_FROM_HERE, viz::BeginFrameArgs::kManualSourceId, 1,
-      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1)));
+      base::TimeTicks() + base::TimeDelta::FromMilliseconds(1));
+  host_impl->WillBeginImplFrame(args);
   EXPECT_EQ(DRAW_SUCCESS, host_impl->PrepareToDraw(&frame));
   ASSERT_EQ(1u, frame.render_passes.size());
   const viz::RenderPass* root_render_pass = frame.render_passes.back().get();
   EXPECT_EQ(full_frame_damage, root_render_pass->damage_rect);
   EXPECT_TRUE(host_impl->DrawLayers(&frame));
   host_impl->DidDrawAllLayers(frame);
-  host_impl->DidFinishImplFrame();
+  host_impl->DidFinishImplFrame(args);
 }
 }  // namespace
 
@@ -10744,7 +10760,7 @@ TEST_F(LayerTreeHostImplWithBrowserControlsTest, NoIdleAnimations) {
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->Animate();
   EXPECT_FALSE(did_request_redraw_);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 }
 
 TEST_F(LayerTreeHostImplWithBrowserControlsTest,
@@ -11006,7 +11022,7 @@ TEST_F(LayerTreeHostImplWithBrowserControlsTest,
       EXPECT_TRUE(host_impl_->browser_controls_manager()->HasAnimation());
       EXPECT_TRUE(did_request_next_frame_);
     }
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
   }
   EXPECT_FALSE(host_impl_->browser_controls_manager()->HasAnimation());
 }
@@ -11087,7 +11103,7 @@ TEST_F(LayerTreeHostImplWithBrowserControlsTest,
       EXPECT_TRUE(did_request_redraw_);
       EXPECT_TRUE(did_request_commit_);
     }
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
   }
   EXPECT_FALSE(host_impl_->browser_controls_manager()->HasAnimation());
   EXPECT_EQ(-top_controls_height_,
@@ -11843,7 +11859,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimated) {
   host_impl_->UpdateAnimationState(true);
 
   EXPECT_NE(gfx::ScrollOffset(), scrolling_layer->CurrentScrollOffset());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(50);
@@ -11873,7 +11889,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimated) {
     EXPECT_EQ(1, set_needs_redraw_count);
   }
 
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(200);
@@ -11886,7 +11902,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimated) {
   EXPECT_TRUE(y > 50 && y < 100);
   EXPECT_EQ(scrolling_layer->scroll_tree_index(),
             host_impl_->CurrentlyScrollingNode()->id);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(250);
@@ -11898,7 +11914,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimated) {
   EXPECT_VECTOR_EQ(gfx::ScrollOffset(0, 100),
                    scrolling_layer->CurrentScrollOffset());
   EXPECT_EQ(nullptr, host_impl_->CurrentlyScrollingNode());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 }
 
 // Tests latching behavior, in particular when a ScrollEnd is received but a
@@ -11937,7 +11953,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimatedLatching) {
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
     host_impl_->UpdateAnimationState(true);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     EXPECT_NE(gfx::ScrollOffset(), outer_scroll->CurrentScrollOffset());
     EXPECT_TRUE(GetImplAnimationHost()->IsImplOnlyScrollAnimating());
@@ -11956,7 +11972,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimatedLatching) {
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
     host_impl_->UpdateAnimationState(true);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     EXPECT_TRUE(GetImplAnimationHost()->IsImplOnlyScrollAnimating());
     EXPECT_EQ(outer_scroll->scroll_tree_index(),
@@ -11985,7 +12001,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimatedLatching) {
     host_impl_->WillBeginImplFrame(begin_frame_args);
     host_impl_->Animate();
     host_impl_->UpdateAnimationState(true);
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
 
     EXPECT_FALSE(GetImplAnimationHost()->IsImplOnlyScrollAnimating());
     EXPECT_EQ(outer_scroll->scroll_tree_index(),
@@ -12058,7 +12074,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimatedWhileZoomed) {
     host_impl_->UpdateAnimationState(true);
 
     EXPECT_NE(0, scrolling_layer->CurrentScrollOffset().y());
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
   }
 
   // Tick ahead to the end of the animation. We scrolled 30 viewport pixels but
@@ -12072,7 +12088,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimatedWhileZoomed) {
     host_impl_->UpdateAnimationState(true);
 
     EXPECT_EQ(15, scrolling_layer->CurrentScrollOffset().y());
-    host_impl_->DidFinishImplFrame();
+    host_impl_->DidFinishImplFrame(begin_frame_args);
   }
 }
 
@@ -12141,7 +12157,7 @@ TEST_F(LayerTreeHostImplTest, SingleGSUForScrollbarThumbDragPerFrame) {
   // accounted for the delta in the first GSU that was not yet dispatched).
   result = host_impl_->MouseMoveAt(gfx::Point(350, 20));
   EXPECT_EQ(result.scroll_offset.y(), 0u);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   // ------------------------- Start frame 1 -------------------------
   begin_frame_args.frame_time =
@@ -12205,7 +12221,7 @@ TEST_F(LayerTreeHostImplTest, AnimatedScrollUpdateTargetBeforeStarting) {
   begin_frame_args.frame_id.sequence_number++;
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->UpdateAnimationState(true);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD,
             host_impl_
@@ -12228,7 +12244,7 @@ TEST_F(LayerTreeHostImplTest, AnimatedScrollUpdateTargetBeforeStarting) {
   // This is when the animation above gets promoted to STARTING.
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->UpdateAnimationState(true);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(300);
@@ -12236,7 +12252,7 @@ TEST_F(LayerTreeHostImplTest, AnimatedScrollUpdateTargetBeforeStarting) {
   // This is when the animation above gets ticked.
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->UpdateAnimationState(true);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   LayerImpl* scrolling_layer = OuterViewportScrollLayer();
   EXPECT_EQ(scrolling_layer->scroll_tree_index(),
@@ -12281,7 +12297,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimatedWithDelay) {
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->UpdateAnimationState(true);
   EXPECT_NE(gfx::ScrollOffset(), scrolling_layer->CurrentScrollOffset());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   // Second tick after 50ms, animation should be half way done since the
   // duration due to delay is 100ms. Subtract off the frame interval since we
@@ -12293,7 +12309,7 @@ TEST_F(LayerTreeHostImplTest, ScrollAnimatedWithDelay) {
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->UpdateAnimationState(true);
   EXPECT_EQ(50, scrolling_layer->CurrentScrollOffset().y());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   // Update target.
   host_impl_->ScrollUpdate(
@@ -12350,7 +12366,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedAborted) {
       scrolling_layer->element_id(), TargetProperty::SCROLL_OFFSET));
 
   EXPECT_NE(gfx::ScrollOffset(), scrolling_layer->CurrentScrollOffset());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(50);
@@ -12392,7 +12408,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedAborted) {
   EXPECT_VECTOR2DF_EQ(gfx::ScrollOffset(0, y + 50),
                       scrolling_layer->CurrentScrollOffset());
   EXPECT_EQ(nullptr, host_impl_->CurrentlyScrollingNode());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 }
 
 // Evolved from LayerTreeHostImplTest.ScrollAnimated.
@@ -12430,7 +12446,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimated) {
   host_impl_->UpdateAnimationState(true);
 
   EXPECT_NE(gfx::ScrollOffset(), scrolling_layer->CurrentScrollOffset());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(50);
@@ -12446,7 +12462,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimated) {
   host_impl_->ScrollUpdate(
       AnimatedUpdateState(gfx::Point(), gfx::Vector2d(0, 50)).get());
   host_impl_->ScrollEnd();
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(200);
@@ -12459,7 +12475,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimated) {
   EXPECT_TRUE(y > 50 && y < 100);
   EXPECT_EQ(scrolling_layer->scroll_tree_index(),
             host_impl_->CurrentlyScrollingNode()->id);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(250);
@@ -12471,7 +12487,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimated) {
   EXPECT_VECTOR_EQ(gfx::ScrollOffset(0, 100),
                    scrolling_layer->CurrentScrollOffset());
   EXPECT_EQ(nullptr, host_impl_->CurrentlyScrollingNode());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 }
 
 // Test that the scroll delta for an animated scroll is distributed correctly
@@ -12679,7 +12695,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedNotUserScrollable) {
   host_impl_->UpdateAnimationState(true);
 
   EXPECT_NE(gfx::ScrollOffset(), scrolling_layer->CurrentScrollOffset());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(50);
@@ -12696,7 +12712,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedNotUserScrollable) {
   // Update target.
   host_impl_->ScrollUpdate(
       AnimatedUpdateState(gfx::Point(), gfx::Vector2d(50, 50)).get());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(200);
@@ -12709,7 +12725,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedNotUserScrollable) {
   EXPECT_TRUE(y > 50 && y < 100);
   EXPECT_EQ(scrolling_layer->scroll_tree_index(),
             host_impl_->CurrentlyScrollingNode()->id);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   begin_frame_args.frame_time =
       start_time + base::TimeDelta::FromMilliseconds(250);
@@ -12723,7 +12739,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedNotUserScrollable) {
   // The CurrentlyScrollingNode shouldn't be cleared until a GestureScrollEnd.
   EXPECT_EQ(scrolling_layer->scroll_tree_index(),
             host_impl_->CurrentlyScrollingNode()->id);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   host_impl_->ScrollEnd();
   EXPECT_EQ(nullptr, host_impl_->CurrentlyScrollingNode());
@@ -12761,7 +12777,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedChangingBounds) {
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->Animate();
   host_impl_->UpdateAnimationState(true);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   content_layer->SetBounds(new_content_size);
   scrolling_layer->SetBounds(new_content_size);
@@ -12773,7 +12789,7 @@ TEST_F(LayerTreeHostImplTimelinesTest, ScrollAnimatedChangingBounds) {
   host_impl_->WillBeginImplFrame(begin_frame_args);
   host_impl_->Animate();
   host_impl_->UpdateAnimationState(true);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   EXPECT_EQ(gfx::ScrollOffset(250, 250),
             scrolling_layer->CurrentScrollOffset());
@@ -13060,7 +13076,7 @@ TEST_F(LayerTreeHostImplTest, AddVideoFrameControllerInsideFrame) {
   EXPECT_FALSE(controller.begin_frame_args().IsValid());
   host_impl_->AddVideoFrameController(&controller);
   EXPECT_TRUE(controller.begin_frame_args().IsValid());
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   EXPECT_FALSE(controller.did_draw_frame());
   TestFrameData frame;
@@ -13080,7 +13096,7 @@ TEST_F(LayerTreeHostImplTest, AddVideoFrameControllerOutsideFrame) {
   FakeVideoFrameController controller;
 
   host_impl_->WillBeginImplFrame(begin_frame_args);
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(begin_frame_args);
 
   EXPECT_FALSE(controller.begin_frame_args().IsValid());
   host_impl_->AddVideoFrameController(&controller);
@@ -14540,13 +14556,13 @@ TEST_F(LayerTreeHostImplTest, ImplThreadPhaseUponImplSideInvalidation) {
   LayerTreeSettings settings = DefaultSettings();
   CreateHostImpl(settings, CreateLayerTreeFrameSink());
   // In general invalidation should never be ran outside the impl frame.
-  host_impl_->WillBeginImplFrame(
-      viz::CreateBeginFrameArgsForTesting(BEGINFRAME_FROM_HERE, 0, 1));
+  auto args = viz::CreateBeginFrameArgsForTesting(BEGINFRAME_FROM_HERE, 0, 1);
+  host_impl_->WillBeginImplFrame(args);
   // Expect no crash because the operation is within an impl frame.
   host_impl_->InvalidateContentOnImplSide();
 
   // Once the impl frame is finished the impl thread phase is set to IDLE.
-  host_impl_->DidFinishImplFrame();
+  host_impl_->DidFinishImplFrame(args);
 
   settings.using_synchronous_renderer_compositor = true;
   CreateHostImpl(settings, CreateLayerTreeFrameSink());
