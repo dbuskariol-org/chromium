@@ -167,6 +167,7 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   void UpdateToActiveState(int64_t registration_id,
                            const GURL& origin,
                            StatusCallback callback);
+  void StoreUncommittedResourceId(int64_t resource_id);
   void GetUserData(int64_t registration_id,
                    const std::vector<std::string>& keys,
                    GetUserDataCallback callback);
@@ -263,6 +264,7 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
 
   void DidUpdateToActiveState(StatusCallback callback,
                               ServiceWorkerDatabase::Status status);
+  void DidWriteUncommittedResourceIds(ServiceWorkerDatabase::Status status);
   void DidGetUserData(GetUserDataCallback callback,
                       const std::vector<std::string>& data,
                       ServiceWorkerDatabase::Status status);

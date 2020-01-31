@@ -194,7 +194,8 @@ class CONTENT_EXPORT ServiceWorkerStorage {
 
   // Adds |resource_id| to the set of resources that are in the disk cache
   // but not yet stored with a registration.
-  void StoreUncommittedResourceId(int64_t resource_id);
+  void StoreUncommittedResourceId(int64_t resource_id,
+                                  DatabaseStatusCallback callback);
 
   // Removes resource ids from uncommitted list, adds them to the purgeable list
   // and purges them.
@@ -391,7 +392,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const ServiceWorkerDatabase::RegistrationData& deleted_version,
       const std::vector<int64_t>& newly_purgeable_resources,
       ServiceWorkerDatabase::Status status);
-  void DidWriteUncommittedResourceIds(ServiceWorkerDatabase::Status status);
   void DidPurgeUncommittedResourceIds(const std::set<int64_t>& resource_ids,
                                       ServiceWorkerDatabase::Status status);
 

@@ -1265,8 +1265,8 @@ class ServiceWorkerResourceStorageTest : public ServiceWorkerStorageTest {
     registration_->waiting_version()->SetStatus(ServiceWorkerVersion::NEW);
 
     // Add the resources ids to the uncommitted list.
-    storage()->StoreUncommittedResourceId(resource_id1_);
-    storage()->StoreUncommittedResourceId(resource_id2_);
+    registry()->StoreUncommittedResourceId(resource_id1_);
+    registry()->StoreUncommittedResourceId(resource_id2_);
 
     std::set<int64_t> verify_ids = GetUncommittedResourceIdsFromDB();
     EXPECT_EQ(2u, verify_ids.size());
@@ -1471,7 +1471,7 @@ TEST_F(ServiceWorkerResourceStorageDiskTest, CleanupOnRestart) {
 
   // Also add an uncommitted resource.
   int64_t kStaleUncommittedResourceId = storage()->NewResourceId();
-  storage()->StoreUncommittedResourceId(kStaleUncommittedResourceId);
+  registry()->StoreUncommittedResourceId(kStaleUncommittedResourceId);
   verify_ids = GetUncommittedResourceIdsFromDB();
   EXPECT_EQ(1u, verify_ids.size());
   WriteBasicResponse(storage(), kStaleUncommittedResourceId);
@@ -1488,7 +1488,7 @@ TEST_F(ServiceWorkerResourceStorageDiskTest, CleanupOnRestart) {
   storage()->SetPurgingCompleteCallbackForTest(loop.QuitClosure());
   int64_t kNewResourceId = storage()->NewResourceId();
   WriteBasicResponse(storage(), kNewResourceId);
-  storage()->StoreUncommittedResourceId(kNewResourceId);
+  registry()->StoreUncommittedResourceId(kNewResourceId);
   loop.Run();
 
   // The stale resources should be purged, but the new resource should persist.

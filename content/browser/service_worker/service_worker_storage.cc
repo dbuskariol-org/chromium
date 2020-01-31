@@ -499,13 +499,19 @@ ServiceWorkerStorage::CreateResponseMetadataWriter(int64_t resource_id) {
       resource_id, disk_cache()->GetWeakPtr()));
 }
 
-void ServiceWorkerStorage::StoreUncommittedResourceId(int64_t resource_id) {
+void ServiceWorkerStorage::StoreUncommittedResourceId(
+    int64_t resource_id,
+    DatabaseStatusCallback callback) {
   DCHECK_NE(ServiceWorkerConsts::kInvalidServiceWorkerResourceId, resource_id);
   DCHECK(STORAGE_STATE_INITIALIZED == state_ ||
          STORAGE_STATE_DISABLED == state_)
       << state_;
-  if (IsDisabled())
+  if (IsDisabled()) {
+    RunSoon(FROM_HERE,
+            base::BindOnce(std::move(callback),
+                           ServiceWorkerDatabase::STATUS_ERROR_DISABLED));
     return;
+  }
 
   if (!has_checked_for_stale_resources_)
     DeleteStaleResources();
@@ -515,8 +521,7 @@ void ServiceWorkerStorage::StoreUncommittedResourceId(int64_t resource_id) {
       base::BindOnce(&ServiceWorkerDatabase::WriteUncommittedResourceIds,
                      base::Unretained(database_.get()),
                      std::set<int64_t>(&resource_id, &resource_id + 1)),
-      base::BindOnce(&ServiceWorkerStorage::DidWriteUncommittedResourceIds,
-                     weak_factory_.GetWeakPtr()));
+      std::move(callback));
 }
 
 void ServiceWorkerStorage::DoomUncommittedResource(int64_t resource_id) {
@@ -1108,12 +1113,6 @@ void ServiceWorkerStorage::DidDeleteRegistration(
   std::move(params->callback)
       .Run(blink::ServiceWorkerStatusCode::kOk, deleted_version.version_id,
            newly_purgeable_resources);
-}
-
-void ServiceWorkerStorage::DidWriteUncommittedResourceIds(
-    ServiceWorkerDatabase::Status status) {
-  if (status != ServiceWorkerDatabase::STATUS_OK)
-    ScheduleDeleteAndStartOver();
 }
 
 void ServiceWorkerStorage::DidPurgeUncommittedResourceIds(

@@ -348,6 +348,13 @@ void ServiceWorkerRegistry::UpdateToActiveState(int64_t registration_id,
                      weak_factory_.GetWeakPtr(), std::move(callback)));
 }
 
+void ServiceWorkerRegistry::StoreUncommittedResourceId(int64_t resource_id) {
+  storage()->StoreUncommittedResourceId(
+      resource_id,
+      base::BindOnce(&ServiceWorkerRegistry::DidWriteUncommittedResourceIds,
+                     weak_factory_.GetWeakPtr()));
+}
+
 void ServiceWorkerRegistry::GetUserData(int64_t registration_id,
                                         const std::vector<std::string>& keys,
                                         GetUserDataCallback callback) {
@@ -921,6 +928,12 @@ void ServiceWorkerRegistry::DidUpdateToActiveState(
   }
   std::move(callback).Run(
       ServiceWorkerStorage::DatabaseStatusToStatusCode(status));
+}
+
+void ServiceWorkerRegistry::DidWriteUncommittedResourceIds(
+    ServiceWorkerDatabase::Status status) {
+  if (status != ServiceWorkerDatabase::STATUS_OK)
+    ScheduleDeleteAndStartOver();
 }
 
 void ServiceWorkerRegistry::DidGetUserData(
