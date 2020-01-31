@@ -2327,8 +2327,8 @@ const char kContextMenuCopyImageDescription[] =
 
 const char kContextualSearchDefinitionsName[] = "Contextual Search definitions";
 const char kContextualSearchDefinitionsDescription[] =
-    "Enables tap-activated contextual definitions of words on a page to be "
-    "presented in the caption of the Tap to Search Bar.";
+    "Enables touch-activated contextual definitions of words on a page to be "
+    "presented in the caption of the Touch to Search Bar.";
 
 const char kContextualSearchLongpressResolveName[] =
     "Contextual Search long-press Resolves";

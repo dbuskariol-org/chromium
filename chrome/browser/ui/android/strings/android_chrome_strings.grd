@@ -661,15 +661,20 @@ CHAR-LIMIT guidelines:
         Sends URLs of some pages you visit to Google, when your security is at risk
       </message>
       <message name="IDS_CONTEXTUAL_SEARCH_TITLE" desc="Name for the Contextual Search feature, which allows users to search for a term in a web page by tapping on it.">
-        Tap to Search
+        Touch to Search
+      </message>
+      <message name="IDS_CONTEXTUAL_SEARCH_TAP_DESCRIPTION" desc="Description for Contextual Search preference">
+        Learn about topics on websites without leaving the page. Touch to Search sends a word and its surrounding context to Google Search, returning definitions, pictures, search results, and other details.
+
+Tap any word to create a search for it. To adjust your search term, long press to select. To refine your search slide the panel open, tap the expand icon to make a new tab, and then tap the search box.
       </message>
       <message name="IDS_CONTEXTUAL_SEARCH_DESCRIPTION" desc="Description for Contextual Search preference">
-        Learn about topics on websites without leaving the page. Tap to Search sends a word and its surrounding context to Google Search, returning definitions, pictures, search results, and other details.
+        Learn about topics on websites without leaving the page. Touch to Search sends a word and its surrounding context to Google Search, returning definitions, pictures, search results, and other details.
 
-To adjust your search term, long press to select. To refine your search, slide the panel all the way up and tap the search box.
+Long-press any word to create a search for it. To refine your search adjust the selection. You can also slide the panel open, tap the expand icon to make a new tab, and then tap the search box.
       </message>
-      <message name="IDS_CONTEXTUAL_SEARCH_SHORT_DESCRIPTION" desc="A promo message shown to users who have Tap to Search enabled to explain the new behavior and provide an option to opt out">
-        Tap to Search sends the selected word and the current page as context to Google Search. You can turn it off in <ph name="BEGIN_LINK">&lt;link&gt;</ph>Settings<ph name="END_LINK">&lt;/link&gt;</ph>.
+      <message name="IDS_CONTEXTUAL_SEARCH_SHORT_DESCRIPTION" desc="A promo message shown to users with Touch to Search to explain the new behavior and provide an option to opt in or out">
+        Touch to Search sends the selected word and the current page as context to Google Search. You can turn it off in <ph name="BEGIN_LINK">&lt;link&gt;</ph>Settings<ph name="END_LINK">&lt;/link&gt;</ph>.
       </message>
       <message name="IDS_CONTEXTUAL_SEARCH_ALLOW_BUTTON" desc="A button to confirm and dismiss opt out promo">
         Allow
