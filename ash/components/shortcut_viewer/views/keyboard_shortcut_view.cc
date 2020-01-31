@@ -37,6 +37,7 @@
 #include "ui/chromeos/events/keyboard_layout_util.h"
 #include "ui/chromeos/search_box/search_box_view_base.h"
 #include "ui/events/event_constants.h"
+#include "ui/events/types/event_type.h"
 #include "ui/gfx/paint_vector_icon.h"
 #include "ui/gfx/presentation_feedback.h"
 #include "ui/views/accessibility/view_accessibility.h"

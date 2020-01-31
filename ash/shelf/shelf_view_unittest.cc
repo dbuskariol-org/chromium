@@ -84,6 +84,7 @@
 #include "ui/events/event_constants.h"
 #include "ui/events/event_utils.h"
 #include "ui/events/test/event_generator.h"
+#include "ui/events/types/event_type.h"
 #include "ui/gfx/geometry/point.h"
 #include "ui/views/animation/bounds_animator.h"
 #include "ui/views/animation/ink_drop_impl.h"
