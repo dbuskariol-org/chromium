@@ -163,7 +163,7 @@ bool FrameSequenceMetrics::HasDataLeftForReporting() const {
          main_throughput_.frames_expected > 0;
 }
 
-void FrameSequenceMetrics::ReportMetrics(std::string debug_trace) {
+void FrameSequenceMetrics::ReportMetrics() {
   DCHECK_LE(impl_throughput_.frames_produced, impl_throughput_.frames_expected);
   DCHECK_LE(main_throughput_.frames_produced, main_throughput_.frames_expected);
   TRACE_EVENT_NESTABLE_ASYNC_END2(
@@ -176,14 +176,6 @@ void FrameSequenceMetrics::ReportMetrics(std::string debug_trace) {
       type_, ThreadType::kCompositor,
       GetIndexForMetric(FrameSequenceMetrics::ThreadType::kCompositor, type_),
       impl_throughput_);
-#if DCHECK_IS_ON()
-  if (impl_throughput_percent.has_value()) {
-    DCHECK_EQ(impl_throughput_.frames_received,
-              impl_throughput_.frames_processed)
-        << debug_trace << " " << type_;
-  }
-#endif
-
   base::Optional<int> main_throughput_percent = ThroughputData::ReportHistogram(
       type_, ThreadType::kMain,
       GetIndexForMetric(FrameSequenceMetrics::ThreadType::kMain, type_),
@@ -367,15 +359,27 @@ void FrameSequenceTrackerCollection::NotifyFramePresented(
         metrics->Merge(std::move(accumulated_metrics_[tracker->type()]));
         accumulated_metrics_.erase(tracker->type());
       }
-      if (metrics->HasEnoughDataForReporting()) {
+
 #if DCHECK_IS_ON()
+      // Handling the case like b(100)s(150)e(100)b(200)n(200), and then
+      // StopSequence() is called which put this tracker in removal_trackers_.
+      // Then P(150). In this case, frame 200 isn't processed yet, because this
+      // no damage impl frame is considered 'processed' at e(200).
+      const bool incomplete_frame_had_no_damage =
+          !tracker->compositor_frame_submitted_ &&
+          tracker->frame_had_no_compositor_damage_;
+      if (tracker->is_inside_frame_ && incomplete_frame_had_no_damage)
+        --metrics->impl_throughput().frames_received;
+
+      if (metrics->impl_throughput().frames_received !=
+          metrics->impl_throughput().frames_processed) {
         std::string output = tracker->frame_sequence_trace_.str().substr(
             tracker->ignored_trace_char_count_);
-        metrics->ReportMetrics(std::move(output));
-#else
-        metrics->ReportMetrics();
-#endif
+        NOTREACHED() << output;
       }
+#endif
+      if (metrics->HasEnoughDataForReporting())
+        metrics->ReportMetrics();
       if (metrics->HasDataLeftForReporting())
         accumulated_metrics_[tracker->type()] = std::move(metrics);
     }
