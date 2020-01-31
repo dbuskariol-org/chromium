@@ -1040,4 +1040,8 @@ std::string LayerImpl::DebugName() const {
   return debug_info_ ? debug_info_->name : "";
 }
 
+gfx::ContentColorUsage LayerImpl::GetContentColorUsage() const {
+  return gfx::ContentColorUsage::kSRGB;
+}
+
 }  // namespace cc
