@@ -108,7 +108,7 @@ jumbo_static_library("ui") {
     "interventions/intervention_delegate.h",
     "interventions/intervention_infobar_delegate.cc",
     "interventions/intervention_infobar_delegate.h",
-    "javascript_dialogs/chrome_javascript_native_app_modal_dialog_factory.h",
+    "javascript_dialogs/chrome_javascript_app_modal_dialog_view_factory.h",
     "javascript_dialogs/javascript_dialog.h",
     "javascript_dialogs/javascript_dialog_tab_helper.cc",
     "javascript_dialogs/javascript_dialog_tab_helper.h",
@@ -420,7 +420,6 @@ jumbo_static_library("ui") {
     "//chrome/installer/util:with_no_strings",
     "//components/about_ui",
     "//components/account_id",
-    "//components/app_modal",
     "//components/autofill/content/browser:risk_proto",
     "//components/autofill/core/browser",
     "//components/bookmarks/browser",
@@ -461,6 +460,7 @@ jumbo_static_library("ui") {
     "//components/image_fetcher/core",
     "//components/infobars/core",
     "//components/invalidation/impl",
+    "//components/javascript_dialogs",
     "//components/keyed_service/content",
     "//components/keyed_service/core",
     "//components/language/core/browser",
@@ -815,8 +815,8 @@ jumbo_static_library("ui") {
       "//chrome/browser/android/thin_webview:thin_webview",
       "//chrome/browser/image_decoder",
       "//chrome/browser/resources/webapks:webapks_ui_resources",
-      "//components/app_modal/android:jni_headers",
       "//components/embedder_support/android:web_contents_delegate",
+      "//components/javascript_dialogs/android:jni_headers",
       "//components/navigation_interception",
       "//components/optimization_guide/proto:optimization_guide_proto",
       "//components/subresource_filter/core/browser",
@@ -4037,7 +4037,7 @@ jumbo_static_library("ui") {
       deps += [ "//apps/ui/views" ]
     }
     if (use_aura) {
-      sources += [ "views/chrome_javascript_native_dialog_factory_views.cc" ]
+      sources += [ "views/chrome_javascript_app_modal_view_factory_views.cc" ]
       deps += [ "//ui/wm/public" ]
     }
   }
