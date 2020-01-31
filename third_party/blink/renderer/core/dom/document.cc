@@ -247,6 +247,7 @@
 #include "third_party/blink/renderer/core/loader/progress_tracker.h"
 #include "third_party/blink/renderer/core/loader/text_resource_decoder_builder.h"
 #include "third_party/blink/renderer/core/mathml/mathml_element.h"
+#include "third_party/blink/renderer/core/mathml/mathml_row_element.h"
 #include "third_party/blink/renderer/core/mathml_element_factory.h"
 #include "third_party/blink/renderer/core/mathml_names.h"
 #include "third_party/blink/renderer/core/origin_trials/origin_trial_context.h"
@@ -1022,10 +1023,11 @@ Element* Document::CreateRawElement(const QualifiedName& qname,
   } else if (RuntimeEnabledFeatures::MathMLCoreEnabled() &&
              qname.NamespaceURI() == mathml_names::kNamespaceURI) {
     element = MathMLElementFactory::Create(qname.LocalName(), *this, flags);
+    // An unknown MathML element is treated like an <mrow> element.
     // TODO(crbug.com/1021837): Determine if we need to introduce a
-    // MathMLUnknownClass.
+    // MathMLUnknownElement IDL.
     if (!element)
-      element = MakeGarbageCollected<MathMLElement>(qname, *this);
+      element = MakeGarbageCollected<MathMLRowElement>(qname, *this);
     saw_elements_in_known_namespaces_ = true;
   } else {
     element = MakeGarbageCollected<Element>(qname, this);
