@@ -1,8 +1,8 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/infobars/overlays/infobar_overlay_request_cancel_handler.h"
+#import "ios/chrome/browser/infobars/overlays/infobar_banner_overlay_request_cancel_handler.h"
 
 #include "components/infobars/core/infobar.h"
 #include "ios/chrome/browser/infobars/infobar_manager_impl.h"
@@ -27,10 +27,11 @@ using infobars::InfoBar;
 using infobars::InfoBarDelegate;
 using infobars::InfoBarManager;
 
-// Test fixture for InfobarOverlayRequestCancelHandler.
-class InfobarOverlayRequestCancelHandlerTest : public PlatformTest {
+// Test fixture for InfobarBannerOverlayRequestCancelHandler.
+class InfobarBannerOverlayRequestCancelHandlerTest : public PlatformTest {
  public:
-  InfobarOverlayRequestCancelHandlerTest() {
+  InfobarBannerOverlayRequestCancelHandlerTest() {
+    // Set up WebState and InfoBarManager.
     web_state_.SetNavigationManager(
         std::make_unique<web::TestNavigationManager>());
     InfobarOverlayRequestInserter::CreateForWebState(
@@ -40,7 +41,7 @@ class InfobarOverlayRequestCancelHandlerTest : public PlatformTest {
 
   OverlayRequestQueue* queue() {
     return OverlayRequestQueue::FromWebState(&web_state_,
-                                             OverlayModality::kInfobarModal);
+                                             OverlayModality::kInfobarBanner);
   }
   InfoBarManager* manager() {
     return InfoBarManagerImpl::FromWebState(&web_state_);
@@ -59,30 +60,21 @@ class InfobarOverlayRequestCancelHandlerTest : public PlatformTest {
   web::TestWebState web_state_;
 };
 
-// Tests that the request is cancelled when its corresponding InfoBar is removed
-// from its InfoBarManager.
-TEST_F(InfobarOverlayRequestCancelHandlerTest, CancelForInfobarRemoval) {
-  std::unique_ptr<InfoBar> added_infobar = std::make_unique<FakeInfobarIOS>();
-  InfoBar* infobar = added_infobar.get();
-  manager()->AddInfoBar(std::move(added_infobar));
-  inserter()->AddOverlayRequest(infobar, InfobarOverlayType::kModal);
-  ASSERT_EQ(infobar, GetFrontRequestInfobar());
-  // Remove the InfoBar from its manager and verify that the request has been
-  // removed from the queue.
-  manager()->RemoveInfoBar(infobar);
-  EXPECT_FALSE(queue()->front_request());
-}
-
-// Tests that the request is cancelled if its corresponding InfoBar is replaced
+// Tests that the request is replaced if its corresponding InfoBar is replaced
 // in its manager.
-TEST_F(InfobarOverlayRequestCancelHandlerTest, CancelForInfobarReplacement) {
+TEST_F(InfobarBannerOverlayRequestCancelHandlerTest,
+       CancelForInfobarReplacement) {
   std::unique_ptr<InfoBar> first_passed_infobar =
       std::make_unique<FakeInfobarIOS>();
   InfoBar* first_infobar = first_passed_infobar.get();
   manager()->AddInfoBar(std::move(first_passed_infobar));
-  inserter()->AddOverlayRequest(first_infobar, InfobarOverlayType::kModal);
+  inserter()->AddOverlayRequest(first_infobar, InfobarOverlayType::kBanner);
   ASSERT_EQ(first_infobar, GetFrontRequestInfobar());
-  // Replace with a new infobar and verify that the request has been cancelled.
-  manager()->ReplaceInfoBar(first_infobar, std::make_unique<FakeInfobarIOS>());
-  EXPECT_FALSE(queue()->front_request());
+  // Replace with a new infobar and verify that the request has been replaced.
+  std::unique_ptr<InfoBar> second_passed_infobar =
+      std::make_unique<FakeInfobarIOS>();
+  InfoBar* second_infobar = second_passed_infobar.get();
+  manager()->ReplaceInfoBar(first_infobar, std::move(second_passed_infobar));
+  EXPECT_EQ(second_infobar, GetFrontRequestInfobar());
+  EXPECT_EQ(1U, queue()->size());
 }
