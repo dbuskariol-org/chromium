@@ -109,6 +109,7 @@ TEST_P(DWriteFontLookupTableBuilderTimeoutTest, TestTimeout) {
   font_lookup_table_builder_->SetSlowDownIndexingForTestingWithTimeout(
       GetParam(), kTestingTimeout);
   font_lookup_table_builder_->SchedulePrepareFontUniqueNameTableIfNeeded();
+
   bool test_callback_executed = false;
   font_lookup_table_builder_->QueueShareMemoryRegionWhenReady(
       base::SequencedTaskRunnerHandle::Get(),

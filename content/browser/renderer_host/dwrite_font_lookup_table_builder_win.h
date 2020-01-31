@@ -176,6 +176,16 @@ class CONTENT_EXPORT DWriteFontLookupTableBuilder {
   // constructed protobuf to disk.
   void FinalizeFontTable();
 
+  // Internal implementation of adding a callback request to the list in order
+  // to sequentialise access to pending_callbacks_.
+  void QueueShareMemoryRegionWhenReadyImpl(
+      scoped_refptr<base::SequencedTaskRunner> task_runner,
+      blink::mojom::DWriteFontProxy::GetUniqueNameLookupTableCallback callback);
+
+  // Internal implementation of posting the callbacks, running on the sequence
+  // that sequentialises access to pending_callbacks_.
+  void PostCallbacksImpl();
+
   void OnTimeout();
 
   bool IsFontUniqueNameTableValid();
@@ -232,6 +242,8 @@ class CONTENT_EXPORT DWriteFontLookupTableBuilder {
 
   std::vector<CallbackOnTaskRunner> pending_callbacks_;
   std::map<HRESULT, unsigned> scanning_error_reasons_;
+  scoped_refptr<base::SequencedTaskRunner> callbacks_access_task_runner_;
+  SEQUENCE_CHECKER(callbacks_access_sequence_checker_);
 
   DISALLOW_COPY_AND_ASSIGN(DWriteFontLookupTableBuilder);
 };
