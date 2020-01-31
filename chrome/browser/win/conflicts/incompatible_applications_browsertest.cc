@@ -12,7 +12,6 @@
 #include "base/scoped_native_library.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
-#include "base/test/bind_test_util.h"
 #include "base/test/scoped_feature_list.h"
 #include "base/test/test_reg_util_win.h"
 #include "base/threading/thread_restrictions.h"
@@ -28,7 +27,6 @@
 #include "chrome/test/base/in_process_browser_test.h"
 #include "components/prefs/pref_change_registrar.h"
 #include "components/prefs/pref_service.h"
-#include "components/services/quarantine/public/cpp/quarantine_features_win.h"
 
 // This class allows to wait until the kIncompatibleApplications preference is
 // modified. This can only happen if a new incompatible application is found,
@@ -94,10 +92,8 @@ class IncompatibleApplicationsBrowserTest : public InProcessBrowserTest {
     ASSERT_NO_FATAL_FAILURE(
         registry_override_manager_.OverrideRegistry(HKEY_CURRENT_USER));
 
-    scoped_feature_list_.InitWithFeatures(
-        {features::kIncompatibleApplicationsWarning,
-         quarantine::kOutOfProcessQuarantine},
-        {});
+    scoped_feature_list_.InitAndEnableFeature(
+        features::kIncompatibleApplicationsWarning);
 
     ASSERT_NO_FATAL_FAILURE(CreateModuleList());
     ASSERT_NO_FATAL_FAILURE(InstallThirdPartyApplication());
@@ -202,27 +198,18 @@ IN_PROC_BROWSER_TEST_F(IncompatibleApplicationsBrowserTest,
   if (base::win::GetVersion() < base::win::Version::WIN10)
     return;
 
+  ModuleDatabase* module_database = ModuleDatabase::GetInstance();
+
+  // Speed up the test.
+  module_database->IncreaseInspectionPriority();
+
   // Create the observer early so the change is guaranteed to be observed.
   auto incompatible_applications_observer =
       std::make_unique<IncompatibleApplicationsObserver>();
 
-  base::RunLoop run_loop;
-  ModuleDatabase::GetTaskRunner()->PostTask(
-      FROM_HERE,
-      base::BindLambdaForTesting([module_list_path = GetModuleListPath(),
-                                  quit_closure = run_loop.QuitClosure()]() {
-        ModuleDatabase* module_database = ModuleDatabase::GetInstance();
-
-        // Speed up the test.
-        module_database->IncreaseInspectionPriority();
-
-        // Simulate the download of the module list component.
-        module_database->third_party_conflicts_manager()->LoadModuleList(
-            module_list_path);
-
-        quit_closure.Run();
-      }));
-  run_loop.Run();
+  // Simulate the download of the module list component.
+  module_database->third_party_conflicts_manager()->LoadModuleList(
+      GetModuleListPath());
 
   // Injects the DLL into the process.
   base::ScopedAllowBlockingForTesting scoped_allow_blocking;
