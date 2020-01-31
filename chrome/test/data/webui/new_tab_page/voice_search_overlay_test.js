@@ -7,7 +7,7 @@ import 'chrome://new-tab-page/voice_search_overlay.js';
 import {BrowserProxy} from 'chrome://new-tab-page/browser_proxy.js';
 import {loadTimeData} from 'chrome://resources/js/load_time_data.m.js';
 import {flushTasks} from 'chrome://test/test_util.m.js';
-import {isVisible, TestProxy} from './test_support.js';
+import {createTestProxy, isVisible} from './test_support.js';
 
 class MockSpeechRecognition {
   constructor() {
@@ -32,7 +32,10 @@ suite('NewTabPageVoiceSearchOverlayTest', () => {
   /** @type {!VoiceSearchOverlayElement} */
   let voiceSearchOverlay;
 
-  /** @type {TestProxy} */
+  /**
+   * @implements {BrowserProxy}
+   * @extends {TestBrowserProxy}
+   */
   let testProxy;
 
   setup(async () => {
@@ -40,7 +43,8 @@ suite('NewTabPageVoiceSearchOverlayTest', () => {
 
     window.webkitSpeechRecognition = MockSpeechRecognition;
 
-    testProxy = new TestProxy();
+    testProxy = createTestProxy();
+    testProxy.setResultFor('setTimeout', 0);
     BrowserProxy.instance_ = testProxy;
 
     voiceSearchOverlay = document.createElement('ntp-voice-search-overlay');
@@ -125,7 +129,7 @@ suite('NewTabPageVoiceSearchOverlayTest', () => {
     });
 
     // Assert.
-    const [href] = await testProxy.whenCalled('navigate');
+    const href = await testProxy.whenCalled('navigate');
     assertEquals(href, `${googleBaseUrl}/search?q=hello+world&gs_ivs=1`);
   });
 
