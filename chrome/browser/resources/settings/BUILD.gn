@@ -91,11 +91,6 @@ group("closure_compile") {
     "settings_ui:closure_compile",
     "site_settings:closure_compile",
     "site_settings_page:closure_compile",
-
-    # Polymer3 related targets
-    ":settings_module_resources",
-    "controls:closure_compile_module",
-    "prefs:closure_compile_module",
   ]
 
   if (is_win) {
@@ -199,7 +194,15 @@ js_library("search_settings") {
 
 # Polymer 3 related rules.
 
-js_type_check("settings_module_resources") {
+group("closure_compile_module") {
+  deps = [
+    ":closure_compile_local_module",
+    "controls:closure_compile_module",
+    "prefs:closure_compile_module",
+  ]
+}
+
+js_type_check("closure_compile_local_module") {
   is_polymer3 = true
   deps = [
     ":extension_control_browser_proxy.m",
