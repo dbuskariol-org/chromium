@@ -959,7 +959,8 @@ TEST_P(FrameThrottlingTest, ThrottleInnerCompositedLayer) {
   inner_div->setAttribute(kStyleAttr, "background: yellow; overflow: hidden");
   // Do an unthrottled style and layout update, simulating the situation
   // triggered by script style/layout access.
-  GetDocument().View()->UpdateLifecycleToLayoutClean();
+  GetDocument().View()->UpdateLifecycleToLayoutClean(
+      DocumentUpdateReason::kTest);
   {
     // And a throttled full lifecycle update.
     DocumentLifecycle::AllowThrottlingScope throttling_scope(
@@ -1338,7 +1339,8 @@ TEST_P(FrameThrottlingTest, LifecycleUpdateAfterUnthrottledCompositingUpdate) {
 
   frame_document->getElementById("div")->setAttribute(kStyleAttr,
                                                       "will-change: transform");
-  GetDocument().View()->UpdateLifecycleToCompositingCleanPlusScrolling();
+  GetDocument().View()->UpdateLifecycleToCompositingCleanPlusScrolling(
+      DocumentUpdateReason::kTest);
 
   {
     // Then do a full lifecycle with throttling enabled. This should not crash.

@@ -1051,7 +1051,8 @@ void LocalFrameView::ForceUpdateViewportIntersections() {
   // update; but we can't wait for a lifecycle update to run them, because a
   // hidden frame won't run lifecycle updates. Force layout and run them now.
   DocumentLifecycle::DisallowThrottlingScope disallow_throttling(Lifecycle());
-  UpdateLifecycleToCompositingCleanPlusScrolling();
+  UpdateLifecycleToCompositingCleanPlusScrolling(
+      DocumentUpdateReason::kIntersectionObservation);
   UpdateViewportIntersectionsForSubtree(
       IntersectionObservation::kImplicitRootObserversNeedUpdate |
       IntersectionObservation::kIgnoreDelay);
@@ -2040,29 +2041,32 @@ bool LocalFrameView::UpdateAllLifecyclePhases(DocumentUpdateReason reason) {
 
 // TODO(schenney): add a scrolling update lifecycle phase.
 // TODO(schenney): Pass a LifecycleUpdateReason in here
-bool LocalFrameView::UpdateLifecycleToCompositingCleanPlusScrolling() {
+bool LocalFrameView::UpdateLifecycleToCompositingCleanPlusScrolling(
+    DocumentUpdateReason reason) {
   if (RuntimeEnabledFeatures::CompositeAfterPaintEnabled())
-    return UpdateAllLifecyclePhasesExceptPaint();
+    return UpdateAllLifecyclePhasesExceptPaint(reason);
   return GetFrame().LocalFrameRoot().View()->UpdateLifecyclePhases(
-      DocumentLifecycle::kCompositingClean, DocumentUpdateReason::kOther);
+      DocumentLifecycle::kCompositingClean, reason);
 }
 
 // TODO(schenney): Pass a LifecycleUpdateReason in here
-bool LocalFrameView::UpdateLifecycleToCompositingInputsClean() {
+bool LocalFrameView::UpdateLifecycleToCompositingInputsClean(
+    DocumentUpdateReason reason) {
   return GetFrame().LocalFrameRoot().View()->UpdateLifecyclePhases(
-      DocumentLifecycle::kCompositingInputsClean, DocumentUpdateReason::kOther);
+      DocumentLifecycle::kCompositingInputsClean, reason);
 }
 
 // TODO(schenney): Pass a LifecycleUpdateReason in here
-bool LocalFrameView::UpdateAllLifecyclePhasesExceptPaint() {
+bool LocalFrameView::UpdateAllLifecyclePhasesExceptPaint(
+    DocumentUpdateReason reason) {
   return GetFrame().LocalFrameRoot().View()->UpdateLifecyclePhases(
-      DocumentLifecycle::kPrePaintClean, DocumentUpdateReason::kOther);
+      DocumentLifecycle::kPrePaintClean, reason);
 }
 
 void LocalFrameView::UpdateLifecyclePhasesForPrinting() {
   auto* local_frame_view_root = GetFrame().LocalFrameRoot().View();
   local_frame_view_root->UpdateLifecyclePhases(
-      DocumentLifecycle::kPrePaintClean, DocumentUpdateReason::kOther);
+      DocumentLifecycle::kPrePaintClean, DocumentUpdateReason::kPrinting);
 
   auto* detached_frame_view = this;
   while (detached_frame_view->IsAttached() &&
@@ -2080,13 +2084,13 @@ void LocalFrameView::UpdateLifecyclePhasesForPrinting() {
   // UpdateLifecyclePhasesnormal()|. We need the subtree to be ready for
   // painting.
   detached_frame_view->UpdateLifecyclePhases(DocumentLifecycle::kPrePaintClean,
-                                             DocumentUpdateReason::kOther);
+                                             DocumentUpdateReason::kPrinting);
 }
 
 // TODO(schenney): Pass a LifecycleUpdateReason in here
-bool LocalFrameView::UpdateLifecycleToLayoutClean() {
+bool LocalFrameView::UpdateLifecycleToLayoutClean(DocumentUpdateReason reason) {
   return GetFrame().LocalFrameRoot().View()->UpdateLifecyclePhases(
-      DocumentLifecycle::kLayoutClean, DocumentUpdateReason::kOther);
+      DocumentLifecycle::kLayoutClean, reason);
 }
 
 void LocalFrameView::ScheduleVisualUpdateForPaintInvalidationIfNeeded() {
