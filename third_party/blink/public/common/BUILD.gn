@@ -63,6 +63,7 @@ source_set("headers") {
     "dom_storage/session_storage_namespace_id.h",
     "experiments/memory_ablation_experiment.h",
     "feature_policy/document_policy.h",
+    "feature_policy/document_policy_features.h",
     "feature_policy/feature_policy.h",
     "feature_policy/policy_value.h",
     "features.h",
