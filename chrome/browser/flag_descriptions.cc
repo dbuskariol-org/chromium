@@ -731,11 +731,6 @@ const char kDisableKeepaliveFetchDescription[] =
     "Disable fetch with keepalive set "
     "(https://fetch.spec.whatwg.org/#request-keepalive-flag).";
 
-const char kExperimentalAccessibilityFeaturesName[] =
-    "Experimental accessibility features";
-const char kExperimentalAccessibilityFeaturesDescription[] =
-    "Enable additional accessibility features in the Settings page.";
-
 const char kExperimentalAccessibilityLanguageDetectionName[] =
     "Experimental accessibility language detection";
 const char kExperimentalAccessibilityLanguageDetectionDescription[] =

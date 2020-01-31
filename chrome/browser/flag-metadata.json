@@ -1305,11 +1305,6 @@
     "expiry_milestone": 82
   },
   {
-    "name": "enable-experimental-accessibility-features",
-    "owners": [ "//ui/accessibility/OWNERS" ],
-    "expiry_milestone": 79
-  },
-  {
     "name": "enable-experimental-accessibility-language-detection",
     "owners": [ "chrishall", "//ui/accessibility/OWNERS" ],
     "expiry_milestone": 82

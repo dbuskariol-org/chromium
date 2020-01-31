@@ -206,9 +206,6 @@ extern const char kEnablePasswordsAccountStorageDescription[];
 extern const char kEnablePasswordsAccountStorageSavingUiName[];
 extern const char kEnablePasswordsAccountStorageSavingUiDescription[];
 
-extern const char kExperimentalAccessibilityFeaturesName[];
-extern const char kExperimentalAccessibilityFeaturesDescription[];
-
 extern const char kExperimentalAccessibilityLanguageDetectionName[];
 extern const char kExperimentalAccessibilityLanguageDetectionDescription[];
 
