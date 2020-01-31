@@ -396,7 +396,7 @@ crbug.com/1042783 external/wpt/css/css-backgrounds/background-size/background-si
 crbug.com/1042783 external/wpt/css/css-backgrounds/background-size/background-size-near-zero-svg.html [ Failure ]
 
 # Most of these fail due to subpixel differences, but a couple are real failures.
-crbug.com/1044742 [ Win7 ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-animation.html [ Failure ]
+crbug.com/1044742 [ Win ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-animation.html [ Failure ]
 crbug.com/1044742 [ Mac ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-animation.html [ Failure ]
 crbug.com/1044742 [ Linux ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-canvas-parent.html [ Failure ]
 crbug.com/1044742 [ Linux ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-canvas-sibling.html [ Failure ]
