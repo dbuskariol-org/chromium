@@ -532,6 +532,12 @@ void Shelf::OnBackgroundUpdated(ShelfBackgroundType background_type,
     observer.OnBackgroundTypeChanged(background_type, change_type);
 }
 
+void Shelf::OnHotseatStateChanged(HotseatState old_state,
+                                  HotseatState new_state) {
+  for (auto& observer : observers_)
+    observer.OnHotseatStateChanged(old_state, new_state);
+}
+
 void Shelf::OnWorkAreaInsetsChanged() {
   for (auto& observer : observers_)
     observer.OnShelfWorkAreaInsetsChanged();
