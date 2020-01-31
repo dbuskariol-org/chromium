@@ -9,6 +9,7 @@
 #include <set>
 #include <utility>
 #include <vector>
+
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/i18n/case_conversion.h"
@@ -691,12 +692,14 @@ bool CollectUserDataAction::CreateOptionsFromProto() {
       collect_user_data.billing_postal_code_missing_text();
   if (collect_user_data_options_->require_billing_postal_code &&
       collect_user_data_options_->billing_postal_code_missing_text.empty()) {
+    VLOG(1) << "Required postal code without error text";
     return false;
   }
   collect_user_data_options_->billing_address_name =
       collect_user_data.billing_address_name();
   if (collect_user_data_options_->request_payment_method &&
       collect_user_data_options_->billing_address_name.empty()) {
+    VLOG(1) << "Required payment method without address name";
     return false;
   }
 
@@ -828,6 +831,7 @@ bool CollectUserDataAction::CreateOptionsFromProto() {
         collect_user_data.show_terms_as_checkbox();
 
     if (collect_user_data.accept_terms_and_conditions_text().empty()) {
+      VLOG(1) << "Required terms and conditions without text";
       return false;
     }
     collect_user_data_options_->accept_terms_and_conditions_text =
@@ -835,6 +839,7 @@ bool CollectUserDataAction::CreateOptionsFromProto() {
 
     if (!collect_user_data.show_terms_as_checkbox() &&
         collect_user_data.terms_require_review_text().empty()) {
+      VLOG(1) << "Required terms review without text";
       return false;
     }
     collect_user_data_options_->terms_require_review_text =
