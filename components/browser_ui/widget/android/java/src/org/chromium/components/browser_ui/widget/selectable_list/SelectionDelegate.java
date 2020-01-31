@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.selection;
+package org.chromium.components.browser_ui.widget.selectable_list;
 
 import org.chromium.base.ObserverList;
 
@@ -100,9 +100,9 @@ public class SelectionDelegate<E> {
         return !mSelectedItems.isEmpty() || mEnableSelectionForZeroItems;
     }
 
-   /**
-    * Clears all selected items.
-    */
+    /**
+     * Clears all selected items.
+     */
     public void clearSelection() {
         mEnableSelectionForZeroItems = false;
         mSelectedItems.clear();

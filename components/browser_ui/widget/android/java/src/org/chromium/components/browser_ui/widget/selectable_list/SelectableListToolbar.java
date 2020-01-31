@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.selection;
+package org.chromium.components.browser_ui.widget.selectable_list;
 
 import android.app.Activity;
 import android.content.Context;
@@ -37,16 +37,16 @@ import androidx.annotation.StringRes;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ApiCompatibilityUtils;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.util.ColorUtils;
-import org.chromium.chrome.browser.widget.NumberRollView;
-import org.chromium.chrome.browser.widget.selection.SelectionDelegate.SelectionObserver;
+import org.chromium.components.browser_ui.widget.NumberRollView;
+import org.chromium.components.browser_ui.widget.R;
 import org.chromium.components.browser_ui.widget.TintedDrawable;
 import org.chromium.components.browser_ui.widget.displaystyle.DisplayStyleObserver;
 import org.chromium.components.browser_ui.widget.displaystyle.HorizontalDisplayStyle;
 import org.chromium.components.browser_ui.widget.displaystyle.UiConfig;
+import org.chromium.components.browser_ui.widget.selectable_list.SelectionDelegate.SelectionObserver;
 import org.chromium.ui.KeyboardVisibilityDelegate;
 import org.chromium.ui.UiUtils;
+import org.chromium.ui.util.ColorUtils;
 import org.chromium.ui.vr.VrModeObserver;
 import org.chromium.ui.vr.VrModeProvider;
 
@@ -201,8 +201,8 @@ public class SelectableListToolbar<E>
                 ApiCompatibilityUtils.getColor(getResources(), R.color.modern_primary_color);
         setBackgroundColor(mNormalBackgroundColor);
 
-        mSelectionBackgroundColor = ApiCompatibilityUtils.getColor(
-                getResources(), R.color.light_active_color);
+        mSelectionBackgroundColor =
+                ApiCompatibilityUtils.getColor(getResources(), R.color.light_active_color);
 
         mDarkIconColorList =
                 AppCompatResources.getColorStateList(getContext(), R.color.standard_mode_tint);
@@ -254,8 +254,8 @@ public class SelectableListToolbar<E>
      *                         hidden when selection is enabled or if the list of selectable items
      *                         associated with this toolbar is empty.
      */
-    public void initializeSearchView(SearchDelegate searchDelegate, int hintStringResId,
-            int searchMenuItemId) {
+    public void initializeSearchView(
+            SearchDelegate searchDelegate, int hintStringResId, int searchMenuItemId) {
         mHasSearchView = true;
         mSearchDelegate = searchDelegate;
         mSearchMenuItemId = searchMenuItemId;
@@ -472,7 +472,7 @@ public class SelectableListToolbar<E>
 
         if (newDisplayStyle.horizontal == HorizontalDisplayStyle.WIDE
                 && !(mIsSearching || mIsSelectionEnabled
-                           || mNavigationButton != NAVIGATION_BUTTON_NONE)) {
+                        || mNavigationButton != NAVIGATION_BUTTON_NONE)) {
             // The title in the wide display should be aligned with the texts of the list elements.
             paddingStartOffset = mWideDisplayStartOffsetPx;
         }

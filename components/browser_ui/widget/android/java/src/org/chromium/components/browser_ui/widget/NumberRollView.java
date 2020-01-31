@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget;
+package org.chromium.components.browser_ui.widget;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
 
-import org.chromium.chrome.R;
 import org.chromium.ui.interpolators.BakedBezierInterpolator;
 
 import java.text.NumberFormat;
@@ -38,16 +37,16 @@ public class NumberRollView extends FrameLayout {
      */
     public static final Property<NumberRollView, Float> NUMBER_PROPERTY =
             new Property<NumberRollView, Float>(Float.class, "") {
-        @Override
-        public void set(NumberRollView view, Float value) {
-            view.setNumberRoll(value);
-        }
+                @Override
+                public void set(NumberRollView view, Float value) {
+                    view.setNumberRoll(value);
+                }
 
-        @Override
-        public Float get(NumberRollView view) {
-            return view.getNumberRoll();
-        }
-    };
+                @Override
+                public Float get(NumberRollView view) {
+                    return view.getNumberRoll();
+                }
+            };
 
     /**
      * Constructor for inflating from XML.
@@ -59,8 +58,8 @@ public class NumberRollView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mUpNumber = (TextView) findViewById(R.id.up);
-        mDownNumber = (TextView) findViewById(R.id.down);
+        mUpNumber = findViewById(R.id.up);
+        mDownNumber = findViewById(R.id.down);
 
         assert mUpNumber != null;
         assert mDownNumber != null;
