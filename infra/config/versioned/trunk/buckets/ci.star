@@ -41,6 +41,74 @@ ci.defaults.triggered_by.set([vars.poller.get()])
 
 
 ci.android_builder(
+    name = 'Android WebView L (dbg)',
+    triggered_by = [vars.bucket.builder('Android arm Builder (dbg)')],
+)
+
+ci.android_builder(
+    name = 'Android arm Builder (dbg)',
+    execution_timeout = 4 * time.hour,
+    triggered_by = [vars.poller.get()],
+)
+
+ci.android_builder(
+    name = 'Cast Android (dbg)',
+    triggered_by = [vars.poller.get()],
+)
+
+ci.android_builder(
+    name = 'KitKat Phone Tester (dbg)',
+    triggered_by = [vars.bucket.builder('Android arm Builder (dbg)')],
+)
+
+ci.android_builder(
+    name = 'KitKat Tablet Tester',
+    # We have limited tablet capacity and thus limited ability to run
+    # tests in parallel, hence the high timeout.
+    execution_timeout = 10 * time.hour,
+    triggered_by = [vars.bucket.builder('Android arm Builder (dbg)')],
+)
+
+ci.android_builder(
+    name = 'Lollipop Phone Tester',
+    triggered_by = [vars.bucket.builder('Android arm Builder (dbg)')],
+)
+
+ci.android_builder(
+    name = 'Lollipop Tablet Tester',
+    # We have limited tablet capacity and thus limited ability to run
+    # tests in parallel, hence the high timeout.
+    execution_timeout = 10 * time.hour,
+    triggered_by = [vars.bucket.builder('Android arm Builder (dbg)')],
+)
+
+ci.android_builder(
+    name = 'Marshmallow Tablet Tester',
+    # We have limited tablet capacity and thus limited ability to run
+    # tests in parallel, hence the high timeout.
+    execution_timeout = 8 * time.hour,
+    triggered_by = [vars.bucket.builder('Android arm Builder (dbg)')],
+)
+
+ci.android_builder(
+    name = 'android-cronet-arm-rel',
+    notifies = ['cronet'],
+    triggered_by = [vars.poller.get()],
+)
+
+ci.android_builder(
+    name = 'android-cronet-kitkat-arm-rel',
+    notifies = ['cronet'],
+    triggered_by = [vars.bucket.builder('android-cronet-arm-rel')],
+)
+
+ci.android_builder(
+    name = 'android-cronet-lollipop-arm-rel',
+    notifies = ['cronet'],
+    triggered_by = [vars.bucket.builder('android-cronet-arm-rel')],
+)
+
+ci.android_builder(
     name = 'android-kitkat-arm-rel',
 )
 
@@ -51,6 +119,16 @@ ci.android_builder(
 
 ci.chromiumos_builder(
     name = 'chromeos-amd64-generic-rel',
+)
+
+ci.chromiumos_builder(
+    name = 'chromeos-arm-generic-rel',
+    triggered_by = [vars.poller.get()],
+)
+
+ci.chromiumos_builder(
+    name = 'linux-chromeos-dbg',
+    triggered_by = [vars.poller.get()],
 )
 
 ci.chromiumos_builder(
@@ -118,6 +196,24 @@ ci.gpu_thin_tester(
 
 
 ci.linux_builder(
+    name = 'Cast Linux',
+    goma_jobs = goma.jobs.J50,
+    triggered_by = [vars.poller.get()],
+)
+
+ci.linux_builder(
+    name = 'Fuchsia ARM64',
+    notifies = ['cr-fuchsia'],
+    triggered_by = [vars.poller.get()],
+)
+
+ci.linux_builder(
+    name = 'Fuchsia x64',
+    notifies = ['cr-fuchsia'],
+    triggered_by = [vars.poller.get()],
+)
+
+ci.linux_builder(
     name = 'Linux Builder',
 )
 
@@ -127,9 +223,20 @@ ci.linux_builder(
     triggered_by = [vars.bucket.builder('Linux Builder')],
 )
 
+ci.linux_builder(
+    name = 'linux-ozone-rel',
+    triggered_by = [vars.poller.get()],
+)
+
 
 ci.mac_builder(
     name = 'Mac Builder',
+)
+
+ci.mac_builder(
+    name = 'Mac Builder (dbg)',
+    os = os.MAC_ANY,
+    triggered_by = [vars.poller.get()],
 )
 
 # The build runs on 10.13, but triggers tests on 10.10 bots.
@@ -157,6 +264,12 @@ ci.mac_builder(
 )
 
 ci.mac_builder(
+    name = 'Mac10.13 Tests (dbg)',
+    os = os.MAC_ANY,
+    triggered_by = [vars.bucket.builder('Mac Builder (dbg)')],
+)
+
+ci.mac_builder(
     name = 'WebKit Mac10.13 (retina)',
     os = os.MAC_10_13,
     triggered_by = [vars.bucket.builder('Mac Builder')],
@@ -168,10 +281,40 @@ ci.mac_ios_builder(
 )
 
 
+ci.memory_builder(
+    name = 'Linux ASan LSan Builder',
+    ssd = True,
+    triggered_by = [vars.poller.get()],
+)
+
+ci.memory_builder(
+    name = 'Linux ASan LSan Tests (1)',
+    triggered_by = [vars.bucket.builder('Linux ASan LSan Builder')],
+)
+
+ci.memory_builder(
+    name = 'Linux ASan Tests (sandboxed)',
+    triggered_by = [vars.bucket.builder('Linux ASan LSan Builder')],
+)
+
+
+ci.win_builder(
+    name = 'Win7 Tests (dbg)(1)',
+    os = os.WINDOWS_7,
+    triggered_by = [vars.bucket.builder('Win Builder (dbg)')],
+)
+
 ci.win_builder(
     name = 'Win 7 Tests x64 (1)',
     os = os.WINDOWS_7,
     triggered_by = [vars.bucket.builder('Win x64 Builder')],
+)
+
+ci.win_builder(
+    name = 'Win Builder (dbg)',
+    cores = 32,
+    os = os.WINDOWS_ANY,
+    triggered_by = [vars.poller.get()],
 )
 
 ci.win_builder(
