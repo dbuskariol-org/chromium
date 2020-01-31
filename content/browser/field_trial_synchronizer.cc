@@ -2,20 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/metrics/field_trial_synchronizer.h"
+#include "content/browser/field_trial_synchronizer.h"
 
 #include "base/bind.h"
 #include "base/logging.h"
 #include "base/task/post_task.h"
 #include "base/threading/thread.h"
-#include "chrome/common/renderer_configuration.mojom.h"
 #include "components/metrics/persistent_system_profile.h"
+#include "content/common/renderer_variations_configuration.mojom.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/render_process_host.h"
 #include "mojo/public/cpp/bindings/associated_remote.h"
 
-using content::BrowserThread;
+namespace content {
 
 namespace {
 
@@ -44,17 +44,17 @@ void FieldTrialSynchronizer::NotifyAllRenderers(
 
   AddFieldTrialToPersistentSystemProfile(field_trial_name, group_name);
 
-  for (content::RenderProcessHost::iterator it(
-          content::RenderProcessHost::AllHostsIterator());
+  for (RenderProcessHost::iterator it(RenderProcessHost::AllHostsIterator());
        !it.IsAtEnd(); it.Advance()) {
     auto* host = it.GetCurrentValue();
     IPC::ChannelProxy* channel = host->GetChannel();
     // channel might be null in tests.
     if (host->IsInitializedAndNotDead() && channel) {
-      mojo::AssociatedRemote<chrome::mojom::RendererConfiguration>
-          renderer_configuration;
-      channel->GetRemoteAssociatedInterface(&renderer_configuration);
-      renderer_configuration->SetFieldTrialGroup(field_trial_name, group_name);
+      mojo::AssociatedRemote<mojom::RendererVariationsConfiguration>
+          renderer_variations_configuration;
+      channel->GetRemoteAssociatedInterface(&renderer_variations_configuration);
+      renderer_variations_configuration->SetFieldTrialGroup(field_trial_name,
+                                                            group_name);
     }
   }
 }
@@ -67,7 +67,7 @@ void FieldTrialSynchronizer::OnFieldTrialGroupFinalized(
   // case there are no child processes to notify yet. But we want to update the
   // persistent system profile, thus the histogram data recorded in the reduced
   // mode will be tagged to its corresponding field trial experiment.
-  if (!content::BrowserThread::IsThreadInitialized(BrowserThread::UI)) {
+  if (!BrowserThread::IsThreadInitialized(BrowserThread::UI)) {
     AddFieldTrialToPersistentSystemProfile(field_trial_name, group_name);
     return;
   }
@@ -81,3 +81,5 @@ void FieldTrialSynchronizer::OnFieldTrialGroupFinalized(
 FieldTrialSynchronizer::~FieldTrialSynchronizer() {
   base::FieldTrialList::RemoveObserver(this);
 }
+
+}  // namespace content

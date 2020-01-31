@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_METRICS_FIELD_TRIAL_SYNCHRONIZER_H_
-#define CHROME_BROWSER_METRICS_FIELD_TRIAL_SYNCHRONIZER_H_
+#ifndef CONTENT_BROWSER_FIELD_TRIAL_SYNCHRONIZER_H_
+#define CONTENT_BROWSER_FIELD_TRIAL_SYNCHRONIZER_H_
 
 #include <string>
 #include <vector>
@@ -11,6 +11,8 @@
 #include "base/macros.h"
 #include "base/memory/ref_counted.h"
 #include "base/metrics/field_trial.h"
+
+namespace content {
 
 // This class is used by the browser process to communicate FieldTrial setting
 // (field trial name and group) to any previously started renderers.
@@ -55,4 +57,6 @@ class FieldTrialSynchronizer
   DISALLOW_COPY_AND_ASSIGN(FieldTrialSynchronizer);
 };
 
-#endif  // CHROME_BROWSER_METRICS_FIELD_TRIAL_SYNCHRONIZER_H_
+}  // namespace content
+
+#endif  // CONTENT_BROWSER_FIELD_TRIAL_SYNCHRONIZER_H_

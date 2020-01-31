@@ -819,8 +819,6 @@ jumbo_static_library("browser") {
     "metrics/chrome_metrics_services_manager_client.h",
     "metrics/chrome_stability_metrics_provider.cc",
     "metrics/chrome_stability_metrics_provider.h",
-    "metrics/field_trial_synchronizer.cc",
-    "metrics/field_trial_synchronizer.h",
     "metrics/google_update_metrics_provider_win.cc",
     "metrics/google_update_metrics_provider_win.h",
     "metrics/https_engagement_metrics_provider.cc",
