@@ -373,6 +373,7 @@ android_library("chrome_java") {
     "//ui/android:ui_java",
     "//ui/base/mojom:mojom_java",
     "//ui/gfx/geometry/mojom:mojom_java",
+    "//url:gurl_java",
     "//url/mojom:url_mojom_gurl_java",
   ]
 
@@ -872,6 +873,7 @@ android_library("chrome_test_java") {
     "//ui/android:ui_java",
     "//ui/android:ui_java_test_support",
     "//ui/base/mojom:mojom_java",
+    "//url:gurl_java",
     "//url/mojom:url_mojom_gurl_java",
   ]
 
@@ -2873,6 +2875,7 @@ android_library("native_java_unittests_java") {
     "//third_party/mockito:mockito_java",
     "//ui/android:ui_java",
     "//ui/android:ui_java_test_support",
+    "//url:gurl_java",
     "//url/mojom:url_mojom_gurl_java",
   ]
   sources = [
