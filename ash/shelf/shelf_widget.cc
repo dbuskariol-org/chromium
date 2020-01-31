@@ -401,7 +401,10 @@ void ShelfWidget::DelegateView::OnHotseatTransitionAnimationEnded(
     HotseatState from_state,
     HotseatState to_state) {
   ShowAnimatingBackground(false);
-  if (from_state == HotseatState::kShown)
+  // NOTE: The from and to state may not match the transition states for which
+  // the background was hidden (if the original animation got interrupted by
+  // another transition, only the later animation end will be reported).
+  if (hide_background_for_transitions_)
     ShowOpaqueBackground();
 }
 
