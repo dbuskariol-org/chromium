@@ -1033,7 +1033,7 @@ void RenderWidget::OnWasHidden() {
 void RenderWidget::OnWasShown(
     base::TimeTicks show_request_timestamp,
     bool was_evicted,
-    const base::Optional<content::RecordTabSwitchTimeRequest>&
+    const base::Optional<content::RecordContentToVisibleTimeRequest>&
         record_tab_switch_time_request) {
   // The frame must be attached to the frame tree (which makes it no longer
   // provisional) before changing visibility.
