@@ -154,7 +154,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // Updates the state of the registration's stored version to active.
   void UpdateToActiveState(int64_t registration_id,
                            const GURL& origin,
-                           StatusCallback callback);
+                           DatabaseStatusCallback callback);
 
   // Updates the stored time to match the value of
   // registration->last_update_check().
@@ -385,8 +385,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const ServiceWorkerDatabase::RegistrationData& deleted_version,
       const std::vector<int64_t>& newly_purgeable_resources,
       ServiceWorkerDatabase::Status status);
-  void DidUpdateToActiveState(StatusCallback callback,
-                              ServiceWorkerDatabase::Status status);
   void DidDeleteRegistration(
       std::unique_ptr<DidDeleteRegistrationParams> params,
       OriginState origin_state,

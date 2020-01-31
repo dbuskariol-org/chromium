@@ -164,6 +164,9 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
 
   // Wrapper functions of ServiceWorkerStorage. These wrappers provide error
   // recovering mechanism when database operations fail.
+  void UpdateToActiveState(int64_t registration_id,
+                           const GURL& origin,
+                           StatusCallback callback);
   void GetUserData(int64_t registration_id,
                    const std::vector<std::string>& keys,
                    GetUserDataCallback callback);
@@ -258,6 +261,8 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       int64_t deleted_version_id,
       const std::vector<int64_t>& newly_purgeable_resources);
 
+  void DidUpdateToActiveState(StatusCallback callback,
+                              ServiceWorkerDatabase::Status status);
   void DidGetUserData(GetUserDataCallback callback,
                       const std::vector<std::string>& data,
                       ServiceWorkerDatabase::Status status);

@@ -339,6 +339,15 @@ void ServiceWorkerRegistry::NotifyDoneUninstallingRegistration(
   uninstalling_registrations_.erase(registration->id());
 }
 
+void ServiceWorkerRegistry::UpdateToActiveState(int64_t registration_id,
+                                                const GURL& origin,
+                                                StatusCallback callback) {
+  storage()->UpdateToActiveState(
+      registration_id, origin,
+      base::BindOnce(&ServiceWorkerRegistry::DidUpdateToActiveState,
+                     weak_factory_.GetWeakPtr(), std::move(callback)));
+}
+
 void ServiceWorkerRegistry::GetUserData(int64_t registration_id,
                                         const std::vector<std::string>& keys,
                                         GetUserDataCallback callback) {
@@ -901,6 +910,17 @@ void ServiceWorkerRegistry::DidDeleteRegistration(
     registration->UnsetStored();
 
   std::move(callback).Run(status);
+}
+
+void ServiceWorkerRegistry::DidUpdateToActiveState(
+    StatusCallback callback,
+    ServiceWorkerDatabase::Status status) {
+  if (status != ServiceWorkerDatabase::STATUS_OK &&
+      status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
+    ScheduleDeleteAndStartOver();
+  }
+  std::move(callback).Run(
+      ServiceWorkerStorage::DatabaseStatusToStatusCode(status));
 }
 
 void ServiceWorkerRegistry::DidGetUserData(

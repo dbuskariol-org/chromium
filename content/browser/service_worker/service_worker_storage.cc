@@ -352,16 +352,17 @@ void ServiceWorkerStorage::StoreRegistrationData(
                          registration_data)));
 }
 
-void ServiceWorkerStorage::UpdateToActiveState(int64_t registration_id,
-                                               const GURL& origin,
-                                               StatusCallback callback) {
+void ServiceWorkerStorage::UpdateToActiveState(
+    int64_t registration_id,
+    const GURL& origin,
+    DatabaseStatusCallback callback) {
   DCHECK(state_ == STORAGE_STATE_INITIALIZED ||
          state_ == STORAGE_STATE_DISABLED)
       << state_;
   if (IsDisabled()) {
     RunSoon(FROM_HERE,
             base::BindOnce(std::move(callback),
-                           blink::ServiceWorkerStatusCode::kErrorAbort));
+                           ServiceWorkerDatabase::STATUS_ERROR_DISABLED));
     return;
   }
 
@@ -370,8 +371,7 @@ void ServiceWorkerStorage::UpdateToActiveState(int64_t registration_id,
       base::BindOnce(&ServiceWorkerDatabase::UpdateVersionToActive,
                      base::Unretained(database_.get()), registration_id,
                      origin),
-      base::BindOnce(&ServiceWorkerStorage::DidUpdateToActiveState,
-                     weak_factory_.GetWeakPtr(), std::move(callback)));
+      std::move(callback));
 }
 
 void ServiceWorkerStorage::UpdateLastUpdateCheckTime(
@@ -1077,16 +1077,6 @@ void ServiceWorkerStorage::DidStoreRegistrationData(
   std::move(callback).Run(blink::ServiceWorkerStatusCode::kOk,
                           deleted_version.version_id,
                           newly_purgeable_resources);
-}
-
-void ServiceWorkerStorage::DidUpdateToActiveState(
-    StatusCallback callback,
-    ServiceWorkerDatabase::Status status) {
-  if (status != ServiceWorkerDatabase::STATUS_OK &&
-      status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
-    ScheduleDeleteAndStartOver();
-  }
-  std::move(callback).Run(DatabaseStatusToStatusCode(status));
 }
 
 void ServiceWorkerStorage::DidDeleteRegistration(
