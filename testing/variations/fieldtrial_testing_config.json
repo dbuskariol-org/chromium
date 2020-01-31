@@ -6838,7 +6838,7 @@
             ],
             "experiments": [
                 {
-                    "name": "UMA_Enabled",
+                    "name": "UMA_Enabled_202002",
                     "enable_features": [
                         "DemographicMetricsReporting"
                     ],
