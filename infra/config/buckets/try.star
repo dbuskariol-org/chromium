@@ -1195,7 +1195,10 @@ def chrome_internal_verifier(
       builder = 'chrome:try/' + builder,
       cq_group = 'cq',
       includable_only = True,
-      owner_whitelist = ["googlers"],
+      owner_whitelist = [
+          "googlers",
+          "project-chromium-robot-committers",
+      ],
   )
 
 chrome_internal_verifier(
