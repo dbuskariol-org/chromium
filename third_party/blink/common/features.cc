@@ -448,5 +448,10 @@ const base::Feature kLowLatencyCanvas2dSwapChain{
 const base::Feature kLowLatencyWebGLSwapChain{"LowLatencyWebGLSwapChain",
                                               base::FEATURE_ENABLED_BY_DEFAULT};
 
+// Enables forcing additional rendering of subframes for the purpose of sticky
+// frame tracking.
+const base::Feature kForceExtraRenderingToTrackStickyFrame{
+    "ForceExtraRenderingToTrackStickyFrame", base::FEATURE_DISABLED_BY_DEFAULT};
+
 }  // namespace features
 }  // namespace blink

@@ -1032,7 +1032,12 @@ void LocalFrameView::RunIntersectionObserverSteps() {
                "LocalFrameView::UpdateViewportIntersectionsForSubtree");
   SCOPED_UMA_AND_UKM_TIMER(EnsureUkmAggregator(),
                            LocalFrameUkmAggregator::kIntersectionObservation);
-  bool needs_occlusion_tracking = UpdateViewportIntersectionsForSubtree(0);
+
+  unsigned flags = 0;
+  if (frame_->CanSkipStickyFrameTracking())
+    flags |= IntersectionObservation::kCanSkipStickyFrameTracking;
+
+  bool needs_occlusion_tracking = UpdateViewportIntersectionsForSubtree(flags);
   if (FrameOwner* owner = frame_->Owner())
     owner->SetNeedsOcclusionTracking(needs_occlusion_tracking);
 #if DCHECK_IS_ON()
@@ -3950,7 +3955,8 @@ bool LocalFrameView::UpdateViewportIntersectionsForSubtree(
     intersection_observation_state_ = kNotNeeded;
   }
 
-  UpdateViewportIntersection(flags, needs_occlusion_tracking);
+  if (UpdateViewportIntersection(flags, needs_occlusion_tracking))
+    flags |= IntersectionObservation::kCanSkipStickyFrameTracking;
 
   for (Frame* child = frame_->Tree().FirstChild(); child;
        child = child->Tree().NextSibling()) {
@@ -4126,6 +4132,9 @@ unsigned LocalFrameView::GetIntersectionObservationFlags(
   // is hidden in the parent document, thus not running lifecycle updates. It
   // applies to the entire frame tree.
   flags |= (parent_flags & IntersectionObservation::kIgnoreDelay);
+
+  flags |=
+      (parent_flags & IntersectionObservation::kCanSkipStickyFrameTracking);
 
   return flags;
 }

@@ -149,6 +149,7 @@ UseCounterPageLoadMetricsObserver::GetAllowedUkmFeatures() {
           WebFeature::kInputTypeRadioRenderedNonSquare,
           WebFeature::kV8MediaSession_Metadata_AttributeSetter,
           WebFeature::kV8MediaSession_SetActionHandler_Method,
+          WebFeature::kLargeStickyAd,
       }));
   return *opt_in_features;
 }
