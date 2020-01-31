@@ -5718,12 +5718,13 @@ void Document::setDomain(const String& raw_domain,
                       GetSecurityOrigin()->Port() == 0
                           ? WebFeature::kDocumentDomainSetWithDefaultPort
                           : WebFeature::kDocumentDomainSetWithNonDefaultPort);
-    bool was_cross_domain = frame_->IsCrossOriginSubframe();
+    bool was_cross_origin_to_main_frame = frame_->IsCrossOriginToMainFrame();
     GetMutableSecurityOrigin()->SetDomainFromDOM(new_domain);
-    bool is_cross_domain = frame_->IsCrossOriginSubframe();
+    bool is_cross_origin_to_main_frame = frame_->IsCrossOriginToMainFrame();
     if (FrameScheduler* frame_scheduler = frame_->GetFrameScheduler())
-      frame_scheduler->SetCrossOrigin(is_cross_domain);
-    if (View() && (was_cross_domain != is_cross_domain))
+      frame_scheduler->SetCrossOriginToMainFrame(is_cross_origin_to_main_frame);
+    if (View() &&
+        (was_cross_origin_to_main_frame != is_cross_origin_to_main_frame))
       View()->CrossOriginStatusChanged();
 
     frame_->GetScriptController().UpdateSecurityOrigin(GetSecurityOrigin());
@@ -8359,7 +8360,7 @@ void Document::CountAnimatedProperty(CSSPropertyID property) const {
 void Document::CountUseOnlyInCrossOriginIframe(
     mojom::WebFeature feature) const {
   LocalFrame* frame = GetFrame();
-  if (frame && frame->IsCrossOriginSubframe())
+  if (frame && frame->IsCrossOriginToMainFrame())
     CountUse(feature);
 }
 
