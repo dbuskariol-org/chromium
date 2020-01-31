@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_INDEXED_DB_INDEXED_DB_BLOB_INFO_H_
-#define CONTENT_BROWSER_INDEXED_DB_INDEXED_DB_BLOB_INFO_H_
+#ifndef CONTENT_BROWSER_INDEXED_DB_INDEXED_DB_EXTERNAL_OBJECT_H_
+#define CONTENT_BROWSER_INDEXED_DB_INDEXED_DB_EXTERNAL_OBJECT_H_
 
 #include <stdint.h>
 
@@ -25,44 +25,48 @@
 
 namespace content {
 
-class CONTENT_EXPORT IndexedDBBlobInfo {
+class CONTENT_EXPORT IndexedDBExternalObject {
  public:
   // Used for files with unknown size.
   const static int64_t kUnknownSize = -1;
 
-  static void ConvertBlobInfo(
-      const std::vector<IndexedDBBlobInfo>& blob_info,
-      std::vector<blink::mojom::IDBBlobInfoPtr>* blob_or_file_info);
+  // Partially converts a list of |objects| to their mojo representation. The
+  // mojo representation won't be complete until later
+  // IndexedDBDispatcherHost::CreateAllExternalObjects is also called with the
+  // same parameters.
+  static void ConvertToMojo(
+      const std::vector<IndexedDBExternalObject>& objects,
+      std::vector<blink::mojom::IDBExternalObjectPtr>* mojo_objects);
 
-  IndexedDBBlobInfo();
+  IndexedDBExternalObject();
   // These two are used for Blobs.
-  IndexedDBBlobInfo(mojo::PendingRemote<blink::mojom::Blob> blob_remote,
-                    const std::string& uuid,
-                    const base::string16& type,
-                    int64_t size);
-  IndexedDBBlobInfo(const base::string16& type,
-                    int64_t size,
-                    int64_t blob_number);
+  IndexedDBExternalObject(mojo::PendingRemote<blink::mojom::Blob> blob_remote,
+                          const std::string& uuid,
+                          const base::string16& type,
+                          int64_t size);
+  IndexedDBExternalObject(const base::string16& type,
+                          int64_t size,
+                          int64_t blob_number);
   // These two are used for Files.
   // The |last_modified| time here is stored in two places - first in the
   // leveldb database, and second as the last_modified time of the file written
   // to disk. If these don't match, then something modified the file on disk and
   // it should be considered corrupt.
-  IndexedDBBlobInfo(mojo::PendingRemote<blink::mojom::Blob> blob_remote,
-                    const std::string& uuid,
-                    const base::string16& file_name,
-                    const base::string16& type,
-                    const base::Time& last_modified,
-                    const int64_t size);
-  IndexedDBBlobInfo(int64_t blob_number,
-                    const base::string16& type,
-                    const base::string16& file_name,
-                    const base::Time& last_modified,
-                    const int64_t size);
+  IndexedDBExternalObject(mojo::PendingRemote<blink::mojom::Blob> blob_remote,
+                          const std::string& uuid,
+                          const base::string16& file_name,
+                          const base::string16& type,
+                          const base::Time& last_modified,
+                          const int64_t size);
+  IndexedDBExternalObject(int64_t blob_number,
+                          const base::string16& type,
+                          const base::string16& file_name,
+                          const base::Time& last_modified,
+                          const int64_t size);
 
-  IndexedDBBlobInfo(const IndexedDBBlobInfo& other);
-  ~IndexedDBBlobInfo();
-  IndexedDBBlobInfo& operator=(const IndexedDBBlobInfo& other);
+  IndexedDBExternalObject(const IndexedDBExternalObject& other);
+  ~IndexedDBExternalObject();
+  IndexedDBExternalObject& operator=(const IndexedDBExternalObject& other);
 
   bool is_file() const { return is_file_; }
   bool is_remote_valid() const { return blob_remote_.is_bound(); }
@@ -107,7 +111,7 @@ class CONTENT_EXPORT IndexedDBBlobInfo {
   // Only populated when reading from the database.
   base::FilePath indexed_db_file_path_;
   // -1 if unknown for File.
-  int64_t size_;
+  int64_t size_ = kUnknownSize;
   // Only for File.
   base::string16 file_name_;
   // Only for File; valid only if size is.
@@ -121,4 +125,4 @@ class CONTENT_EXPORT IndexedDBBlobInfo {
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_INDEXED_DB_INDEXED_DB_BLOB_INFO_H_
+#endif  // CONTENT_BROWSER_INDEXED_DB_INDEXED_DB_EXTERNAL_OBJECT_H_
