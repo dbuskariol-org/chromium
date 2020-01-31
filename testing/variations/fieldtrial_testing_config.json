@@ -3433,6 +3433,24 @@
             ]
         }
     ],
+    "LowPriorityAdProcesses": [
+        {
+            "platforms": [
+                "chromeos",
+                "ios",
+                "linux",
+                "mac"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled0",
+                    "enable_features": [
+                        "UseFramePriorityInRenderProcessHost"
+                    ]
+                }
+            ]
+        }
+    ],
     "LowPriorityIframes2": [
         {
             "platforms": [
@@ -7758,24 +7776,6 @@
                     "name": "libvpx_for_vp8",
                     "disable_features": [
                         "FFmpegDecodeOpaqueVP8"
-                    ]
-                }
-            ]
-        }
-    ],
-    "low-priority-ad-processes": [
-        {
-            "platforms": [
-                "chromeos",
-                "ios",
-                "linux",
-                "mac"
-            ],
-            "experiments": [
-                {
-                    "name": "LowPriorityAdProcesses",
-                    "enable_features": [
-                        "UseFramePriorityInRenderProcessHost"
                     ]
                 }
             ]
