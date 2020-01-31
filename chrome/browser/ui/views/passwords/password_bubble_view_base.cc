@@ -132,7 +132,10 @@ PasswordBubbleViewBase::PasswordBubbleViewBase(
   // bubble controllers.
   if (delegate->GetState() != password_manager::ui::AUTO_SIGNIN_STATE &&
       delegate->GetState() != password_manager::ui::CONFIRMATION_STATE &&
-      delegate->GetState() != password_manager::ui::MANAGE_STATE) {
+      delegate->GetState() != password_manager::ui::MANAGE_STATE &&
+      delegate->GetState() != password_manager::ui::PENDING_PASSWORD_STATE &&
+      delegate->GetState() !=
+          password_manager::ui::PENDING_PASSWORD_UPDATE_STATE) {
     model_ = std::make_unique<ManagePasswordsBubbleModel>(
         delegate, reason == AUTOMATIC
                       ? ManagePasswordsBubbleModel::AUTOMATIC
