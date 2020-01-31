@@ -96,14 +96,15 @@ void IsolatedPrerenderTabHelper::DidFinishNavigation(
   num_prefetches_attempted_ = 0;
 }
 
-std::unique_ptr<PrefetchedResponseContainer>
+std::unique_ptr<PrefetchedMainframeResponseContainer>
 IsolatedPrerenderTabHelper::TakePrefetchResponse(const GURL& url) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   auto it = prefetched_responses_.find(url);
   if (it == prefetched_responses_.end())
     return nullptr;
 
-  std::unique_ptr<PrefetchedResponseContainer> response = std::move(it->second);
+  std::unique_ptr<PrefetchedMainframeResponseContainer> response =
+      std::move(it->second);
   prefetched_responses_.erase(it);
   return response;
 }
@@ -221,9 +222,9 @@ void IsolatedPrerenderTabHelper::HandlePrefetchResponse(
   if (head->mime_type != "text/html") {
     return;
   }
-  std::unique_ptr<PrefetchedResponseContainer> response =
-      std::make_unique<PrefetchedResponseContainer>(std::move(head),
-                                                    std::move(body));
+  std::unique_ptr<PrefetchedMainframeResponseContainer> response =
+      std::make_unique<PrefetchedMainframeResponseContainer>(std::move(head),
+                                                             std::move(body));
   prefetched_responses_.emplace(url, std::move(response));
 }
 
