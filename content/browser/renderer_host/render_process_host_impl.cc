@@ -1524,8 +1524,7 @@ RenderProcessHostImpl::RenderProcessHostImpl(
       indexed_db_factory_(
           new IndexedDBDispatcherHost(
               id_,
-              storage_partition_impl_->GetIndexedDBContext(),
-              ChromeBlobStorageContext::GetRemoteFor(browser_context)),
+              storage_partition_impl_->GetIndexedDBContext()),
           base::OnTaskRunnerDeleter(
               storage_partition_impl_->GetIndexedDBContext()->IDBTaskRunner())),
       channel_connected_(false),
