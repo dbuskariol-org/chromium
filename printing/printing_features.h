@@ -12,6 +12,12 @@
 namespace printing {
 namespace features {
 
+#if defined(OS_CHROMEOS)
+// All features in alphabetical order. The features should be documented
+// alongside the definition of their values in the .cc file.
+PRINTING_EXPORT extern const base::Feature kAdvancedPpdAttributes;
+#endif
+
 #if defined(OS_WIN)
 PRINTING_EXPORT extern const base::Feature kUseXpsForPrinting;
 PRINTING_EXPORT extern const base::Feature kUseXpsForPrintingFromPdf;

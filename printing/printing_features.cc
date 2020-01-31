@@ -7,6 +7,12 @@
 namespace printing {
 namespace features {
 
+#if defined(OS_CHROMEOS)
+// Enables Advanced PPD Attributes.
+const base::Feature kAdvancedPpdAttributes{"AdvancedPpdAttributes",
+                                           base::FEATURE_ENABLED_BY_DEFAULT};
+#endif  // defined(OS_CHROMEOS)
+
 #if defined(OS_WIN)
 // Use XPS for printing instead of GDI.
 const base::Feature kUseXpsForPrinting{"UseXpsForPrinting",

@@ -190,7 +190,6 @@
 #include "chromeos/constants/chromeos_switches.h"
 #include "chromeos/services/assistant/public/features.h"
 #include "components/arc/arc_features.h"
-#include "printing/printing_features_chromeos.h"
 #include "third_party/cros_system_api/switches/chrome_switches.h"
 #include "ui/events/ozone/features.h"
 #endif  // OS_CHROMEOS
@@ -4304,7 +4303,7 @@ const FeatureEntry kFeatureEntries[] = {
     {"enable-advanced-ppd-attributes",
      flag_descriptions::kEnableAdvancedPpdAttributesName,
      flag_descriptions::kEnableAdvancedPpdAttributesDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(printing::kAdvancedPpdAttributes)},
+     FEATURE_VALUE_TYPE(printing::features::kAdvancedPpdAttributes)},
 #endif  // defined(OS_CHROMEOS)
 
     {"allow-sync-xhr-in-page-dismissal",
