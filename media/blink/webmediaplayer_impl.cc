@@ -1089,12 +1089,13 @@ base::TimeDelta WebMediaPlayerImpl::GetCurrentTimeInternal() const {
 double WebMediaPlayerImpl::CurrentTime() const {
   DCHECK(main_task_runner_->BelongsToCurrentThread());
   DCHECK_NE(ready_state_, WebMediaPlayer::kReadyStateHaveNothing);
-  return GetCurrentTimeInternal().InSecondsF();
-}
 
-bool WebMediaPlayerImpl::IsEnded() const {
-  DCHECK(main_task_runner_->BelongsToCurrentThread());
-  return ended_;
+  // TODO(scherkus): Replace with an explicit ended signal to HTMLMediaElement,
+  // see http://crbug.com/409280
+  // Note: Duration() may be infinity.
+  return (ended_ && !std::isinf(Duration()))
+             ? Duration()
+             : GetCurrentTimeInternal().InSecondsF();
 }
 
 WebMediaPlayer::NetworkState WebMediaPlayerImpl::GetNetworkState() const {

@@ -78,10 +78,6 @@ ACTION_P(EnterPendingDecoderInitStateAction, test) {
   test->EnterPendingDecoderInitState(std::move(arg2));
 }
 
-ACTION_P(AssertNotYetEnded, test) {
-  ASSERT_FALSE(test->ended());
-}
-
 class AudioRendererImplTest : public ::testing::Test, public RendererClient {
  public:
   std::vector<std::unique_ptr<AudioDecoder>> CreateAudioDecoderForTest() {
@@ -1135,17 +1131,20 @@ TEST_F(AudioRendererImplTest, RenderingDelayDoesNotOverflow) {
 
 TEST_F(AudioRendererImplTest, ImmediateEndOfStream) {
   Initialize();
+  {
+    SCOPED_TRACE("Preroll()");
+    renderer_->StartPlaying();
+    WaitForPendingRead();
+    EXPECT_CALL(*this, OnBufferingStateChange(BUFFERING_HAVE_ENOUGH,
+                                              BUFFERING_CHANGE_REASON_UNKNOWN));
+    DeliverEndOfStream();
+  }
+  StartTicking();
 
-  renderer_->SetMediaTime(base::TimeDelta());
-  renderer_->StartPlaying();
-  WaitForPendingRead();
-
-  // The buffering state change must occur before the ended signal.
-  EXPECT_CALL(*this, OnBufferingStateChange(BUFFERING_HAVE_ENOUGH,
-                                            BUFFERING_CHANGE_REASON_UNKNOWN))
-      .WillOnce(AssertNotYetEnded(this));
-  DeliverEndOfStream();
-
+  // Read a single frame. We shouldn't be able to satisfy it.
+  EXPECT_FALSE(ended());
+  EXPECT_FALSE(ConsumeBufferedData(OutputFrames(1)));
+  base::RunLoop().RunUntilIdle();
   EXPECT_TRUE(ended());
 }
 

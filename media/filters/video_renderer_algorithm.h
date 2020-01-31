@@ -149,8 +149,6 @@ class MEDIA_EXPORT VideoRendererAlgorithm {
     return frame_queue_.back().end_time;
   }
 
-  const VideoFrame& last_frame() const { return *frame_queue_.back().frame; }
-
   // Current render interval.
   base::TimeDelta render_interval() const { return render_interval_; }
 
